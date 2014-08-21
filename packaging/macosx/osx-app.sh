@@ -111,7 +111,9 @@ done
 
 echo -e "\n\033[1mCREATE INKSCAPE APP BUNDLE\033[0m\n"
 
+
 # Safety tests
+#----------------------------------------------------------
 
 if [ "x$binary" == "x" ]; then
 	echo "Inkscape binary path not specified." >&2
@@ -172,18 +174,24 @@ if [ ! -e "$LIBPREFIX/lib/aspell-0.60/en.dat" ]; then
 fi
 
 
+# OS X version
+#----------------------------------------------------------
+OSXVERSION="$(/usr/bin/sw_vers | grep ProductVersion | cut -f2)"
+OSXMINORVER="$(cut -d. -f 1,2 <<< $OSXVERSION)"
+OSXMINORNO="$(cut -d. -f2 <<< $OSXVERSION)"
+OSXPOINTNO="$(cut -d. -f3 <<< $OSXVERSION)"
+ARCH="$(uname -a | awk '{print $NF;}')"
+
+
+# Setup
+#----------------------------------------------------------
 # Handle some version specific details.
-VERSION=`/usr/bin/sw_vers | grep ProductVersion | cut -f2 -d'.'`
-if [ "$VERSION" -ge "4" ]; then
-	# We're on Tiger (10.4) or later.
-	# XCode behaves a little differently in Tiger and later.
+if [ "$OSXMINORNO" -le "4" ]; then
+	echo "Note: Inkscape packaging requires Mac OS X 10.5 Leopard or later."
+	exit 1
+else # if [ "$OSXMINORNO" -ge "5" ]; then
 	XCODEFLAGS="-configuration Deployment"
 	SCRIPTEXECDIR="ScriptExec/build/Deployment/ScriptExec.app/Contents/MacOS"
-	EXTRALIBS=""
-else
-	# Panther (10.3) or earlier.
-	XCODEFLAGS="-buildstyle Deployment"
-	SCRIPTEXECDIR="ScriptExec/build/ScriptExec.app/Contents/MacOS"
 	EXTRALIBS=""
 fi
 
@@ -212,9 +220,9 @@ fi
 #----------------------------------------------------------
 pkgexec="$package/Contents/MacOS"
 pkgbin="$package/Contents/Resources/bin"
-pkgshare="$package/Contents/Resources/share"
-pkglib="$package/Contents/Resources/lib"
 pkgetc="$package/Contents/Resources/etc"
+pkglib="$package/Contents/Resources/lib"
+pkgshare="$package/Contents/Resources/share"
 pkglocale="$package/Contents/Resources/share/locale"
 pkgpython="$package/Contents/Resources/python/site-packages/"
 pkgresources="$package/Contents/Resources"
@@ -226,6 +234,7 @@ mkdir -p "$pkglib"
 mkdir -p "$pkgshare"
 mkdir -p "$pkglocale"
 mkdir -p "$pkgpython"
+
 
 # Build and add the launcher
 #----------------------------------------------------------

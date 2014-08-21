@@ -151,9 +151,8 @@ do
 	shift 1
 done
 
-# OSXMINORVER=`/usr/bin/sw_vers | grep ProductVersion | cut -d'	' -f2 | cut -f1-2 -d.`
-
 # OS X version
+# ----------------------------------------------------------
 OSXVERSION="$(/usr/bin/sw_vers | grep ProductVersion | cut -f2)"
 OSXMINORVER="$(cut -d. -f 1,2 <<< $OSXVERSION)"
 OSXMINORNO="$(cut -d. -f2 <<< $OSXVERSION)"
@@ -173,53 +172,72 @@ export LDFLAGS="$LDFLAGS -L$LIBPREFIX/lib"
 #  compiler arguments
 export CFLAGS="$CFLAGS -pipe -Os"
 
-# compiler
-# TODO: detailed configure flags for each OS X version (Mavericks!)
-if [ "$OSXMINORNO" -gt "8" ]; then
-	## Apple's clang on Mavericks and later
-	TARGETNAME="MAVERICKS+"
-	TARGETVERSION="10.9"
-	export CC="/usr/bin/clang"
-	export CXX="/usr/bin/clang++"
-	export CLAGS="$CFLAGS -arch $ARCH"
-	export CXXFLAGS="$CLAGS  -Wno-mismatched-tags -Wno-cast-align -std=c++11 -stdlib=libc++"
-elif [ "$OSXMINORNO" -gt "7" ]; then
-	## Apple's clang on Mountain Lion and later
-	TARGETNAME="MOUTAIN LION+"
-	TARGETVERSION="10.8"
-	export CC="/usr/bin/clang"
-	export CXX="/usr/bin/clang++"
-	export CLAGS="$CFLAGS -arch $ARCH"
-	export CXXFLAGS="$CFLAGS  -Wno-mismatched-tags -Wno-cast-align -std=c++11 -stdlib=libstdc++"
-elif [ "$OSXMINORNO" -gt "6" ]; then
-	## Apple's clang on Lion and later
-	TARGETNAME="LION+"
-	TARGETVERSION="10.7"
-	export CC="/usr/bin/clang"
-	export CXX="/usr/bin/clang++"
-	export CLAGS="$CFLAGS -arch $ARCH"
-	export CXXFLAGS="$CFLAGS  -Wno-mismatched-tags -Wno-cast-align" #-stdlib=libstdc++ -std=c++11
-elif [ "$OSXMINORNO" -gt "5" ]; then
-	## Apple's LLVM-GCC 4.2.1 on Snow Leopard and later
-	TARGETNAME="SNOW LEOPARD+"
-	TARGETVERSION="10.6"
-	export CC="/usr/bin/llvm-gcc-4.2"
-	export CXX="/usr/bin/llvm-g++-4.2"
-	export CLAGS="$CFLAGS -arch $ARCH"
-	export CXXFLAGS="$CFLAGS"
-	CONFFLAGS="--disable-openmp $CONFFLAGS"
+# Use system compiler and compiler flags which are known to work:
+if [ "$OSXMINORNO" -le "4" ]; then
+	echo "Note: Inkscape packaging requires Mac OS X 10.5 Leopard or later."
+	exit 1
 elif [ "$OSXMINORNO" -eq "5" ]; then
 	## Apple's GCC 4.2.1 on Leopard
-	TARGETNAME="LEOPARD+"
+	TARGETNAME="LEOPARD"
 	TARGETVERSION="10.5"
 	export CC="/usr/bin/gcc-4.2"
 	export CXX="/usr/bin/g++-4.2"
 	export CLAGS="$CFLAGS -arch $ARCH"
 	export CXXFLAGS="$CFLAGS"
 	CONFFLAGS="--disable-openmp $CONFFLAGS"
-else
-	echo "Unsupported OS X version."
-	exit 1
+elif [ "$OSXMINORNO" -eq "6" ]; then
+	## Apple's LLVM-GCC 4.2.1 on Snow Leopard
+	TARGETNAME="SNOW LEOPARD"
+	TARGETVERSION="10.6"
+	export CC="/usr/bin/llvm-gcc-4.2"
+	export CXX="/usr/bin/llvm-g++-4.2"
+	export CLAGS="$CFLAGS -arch $ARCH"
+	export CXXFLAGS="$CFLAGS"
+	CONFFLAGS="--disable-openmp $CONFFLAGS"
+elif [ "$OSXMINORNO" -eq "7" ]; then
+	## Apple's clang on Lion and later
+	TARGETNAME="LION"
+	TARGETVERSION="10.7"
+	export CC="/usr/bin/clang"
+	export CXX="/usr/bin/clang++"
+	export CLAGS="$CFLAGS -arch $ARCH"
+	export CXXFLAGS="$CFLAGS -Wno-mismatched-tags -Wno-cast-align" #-stdlib=libstdc++ -std=c++11
+elif [ "$OSXMINORNO" -eq "8" ]; then
+	## Apple's clang on Mountain Lion
+	TARGETNAME="MOUTAIN LION"
+	TARGETVERSION="10.8"
+	export CC="/usr/bin/clang"
+	export CXX="/usr/bin/clang++"
+	export CLAGS="$CFLAGS -arch $ARCH"
+	export CXXFLAGS="$CFLAGS -Wno-mismatched-tags -Wno-cast-align -std=c++11 -stdlib=libstdc++"
+elif [ "$OSXMINORNO" -eq "9" ]; then
+	## Apple's clang on Mavericks
+	TARGETNAME="MAVERICKS"
+	TARGETVERSION="10.9"
+	export CC="/usr/bin/clang"
+	export CXX="/usr/bin/clang++"
+	export CLAGS="$CFLAGS -arch $ARCH"
+	export CXXFLAGS="$CLAGS -Wno-mismatched-tags -Wno-cast-align -std=c++11 -stdlib=libc++"
+elif [ "$OSXMINORNO" -eq "10" ]; then
+	## Apple's clang on Yosemite
+	TARGETNAME="YOSEMITE"
+	TARGETVERSION="10.10"
+	export CC="/usr/bin/clang"
+	export CXX="/usr/bin/clang++"
+	export CLAGS="$CFLAGS -arch $ARCH"
+	export CXXFLAGS="$CLAGS -Wno-mismatched-tags -Wno-cast-align -std=c++11 -stdlib=libc++"
+	echo "Note: Detected version of OS X: $TARGETNAME $OSXVERSION"
+	echo "      Inkscape packaging has not been tested on ${TARGETNAME}."
+else # if [ "$OSXMINORNO" -ge "11" ]; then
+	## Apple's clang after Yosemite?
+	TARGETNAME="UNKNOWN"
+	TARGETVERSION="10.XX"
+	export CC="/usr/bin/clang"
+	export CXX="/usr/bin/clang++"
+	export CLAGS="$CFLAGS -arch $ARCH"
+	export CXXFLAGS="$CLAGS -Wno-mismatched-tags -Wno-cast-align -std=c++11 -stdlib=libc++"
+	echo "Note: Detected version of OS X: $TARGETNAME $OSXVERSION"
+	echo "      Inkscape packaging has not been tested on this unknown version of OS X (${OSXVERSION})."
 fi
 
 # Utility functions
