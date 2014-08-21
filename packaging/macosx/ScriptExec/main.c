@@ -227,6 +227,7 @@ static void ShowFirstStartWarningDialog(void)
 
 //////////////////////////////////
 // Handler for when fontconfig caches need to be generated
+// TODO: remove (alert and touch moved to launcher script)
 //////////////////////////////////
 static OSStatus FCCacheFailedHandler(EventHandlerCallRef theHandlerCall, 
                                  EventRef theEvent, void *userData)
@@ -241,7 +242,6 @@ static OSStatus FCCacheFailedHandler(EventHandlerCallRef theHandlerCall,
     ShowFirstStartWarningDialog();
 
     // Note that we've seen the warning.
-    // TODO: somehow make this aware of $XDG_CACHE_HOME as set in the launcher
     system("test -d \"$HOME/.cache/inkscape\" || mkdir -p \"$HOME/.cache/inkscape\"; "
            "touch \"$HOME/.cache/inkscape/.fccache-new\"");
     // Rerun now.

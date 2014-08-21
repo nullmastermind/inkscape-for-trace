@@ -2,8 +2,11 @@
 #
 # Author: Aaron Voisine <aaron@voisine.org>
 # Inkscape Modifications: Michael Wybrow <mjwybrow@users.sourceforge.net>
+# Inkscape Modifications: ~suv <suv-sf@users.sourceforge.net>
 
 CWD="$(cd "$(dirname "$0")" && pwd)"
+
+source "${CWD}/xdg_setup.sh"
 
 BASE="$(echo "$0" | sed -e 's/\/Contents\/Resources\/openDoc/\//')"
 cd "$BASE"

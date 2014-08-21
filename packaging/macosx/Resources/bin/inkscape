@@ -39,17 +39,12 @@ PYTHON_VERS=`python -V 2>&1 | cut -c 8-10`
 export PYTHONPATH="$TOP/python/site-packages/$ARCH/$PYTHON_VERS"
 # NB: we are only preprending some stuff to the default python path so if the directory does not exist it should not harm the rest
 
-export XDG_CACHE_HOME="${HOME}/.cache"
-export XDG_CONFIG_HOME="${HOME}/.config"
-export XDG_DATA_HOME="${HOME}/.local/share"
-
-mkdir -p "$XDG_CACHE_HOME"
-mkdir -p "$XDG_CONFIG_HOME"
-mkdir -p "$XDG_DATA_HOME"
-
-# TODO: keep in sync with ScriptExec and Resources/script
-INK_CACHE_DIR="${XDG_CACHE_HOME}/inkscape"
-mkdir -p "$INK_CACHE_DIR"
+# fallback
+if [ -z "$INK_CACHE_DIR" ]; then
+	INK_CACHE_DIR="${HOME}/.cache/inkscape"
+	mkdir -p "$INK_CACHE_DIR"
+	[ $_DEBUG ] && echo "INK_CACHE_DIR: falling back to $INK_CACHE_DIR"
+fi
 
 export FONTCONFIG_PATH="$TOP/etc/fonts"
 export PANGO_RC_FILE="${INK_CACHE_DIR}/pangorc"
