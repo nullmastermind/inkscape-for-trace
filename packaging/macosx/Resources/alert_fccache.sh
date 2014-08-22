@@ -2,10 +2,14 @@
 
 ALERT_SCRIPT="$(cat << EOM
 try
-	tell application "SystemUIServer"
+	set parent_path to "$CWD"
+	set icon_path to POSIX path of (parent_path & "/Inkscape.icns")
+	set front_app to ((path to frontmost application) as text)
+	tell application front_app
 		display dialog "While Inkscape is open, its windows can be displayed or hidden by displaying or hiding the X11 application.
 
-The first time this version of Inkscape is run it may take several minutes before the main window is displayed while font caches are built." buttons {"OK"} default button 1 with icon 2
+The first time this version of Inkscape is run it may take several minutes before the main window is displayed while font caches are built." buttons {"OK"} default button 1 with title "Inkscape on OS X" with icon POSIX file icon_path
+		activate
 	end tell
 end try
 EOM)"
