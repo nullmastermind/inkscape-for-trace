@@ -5,10 +5,9 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <gtkmm.h>
+#include "ui/widget/registered-widget.h"
 #include <glibmm/i18n.h>
 
-#include "ui/widget/registered-widget.h"
 #include "live_effects/parameter/togglebutton.h"
 #include "live_effects/effect.h"
 #include "svg/svg.h"
@@ -75,7 +74,12 @@ ToggleButtonParam::param_newWidget()
                                                          false,
                                                          param_effect->getRepr(),
                                                          param_effect->getSPDoc()) );
+#if GTK_CHECK_VERSION(3,0,0)
+    GtkWidget * boxButton = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_box_set_homogeneous(GTK_BOX(boxButton), false);
+#else
     GtkWidget * boxButton = gtk_hbox_new (false, 0);
+#endif
     GtkWidget * labelButton = gtk_label_new ("");
     if (!param_label.empty()) {
         if(value || inactiveLabel.empty()){
