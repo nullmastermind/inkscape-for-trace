@@ -2,9 +2,9 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <gtkmm.h>
-
 #include "live_effects/lpe-roughen.h"
+#include <gtkmm/separator.h>
+
 #include "display/curve.h"
 #include "live_effects/parameter/parameter.h"
 #include "helper/geom.h"
@@ -82,7 +82,11 @@ Gtk::Widget *LPERoughen::newWidget() {
             Glib::ustring(_("<b>Roughen unit</b>")), Gtk::ALIGN_START));
         unitLabel->set_use_markup(true);
         vbox->pack_start(*unitLabel, false, false, 2);
+#if WITH_GTKMM_3_0
+        vbox->pack_start(*Gtk::manage(new Gtk::Separator()),
+#else
         vbox->pack_start(*Gtk::manage(new Gtk::HSeparator()),
+#endif
                          Gtk::PACK_EXPAND_WIDGET);
       }
       if (param->param_key == "method") {
@@ -91,7 +95,11 @@ Gtk::Widget *LPERoughen::newWidget() {
             Gtk::ALIGN_START));
         methodLabel->set_use_markup(true);
         vbox->pack_start(*methodLabel, false, false, 2);
+#if WITH_GTKMM_3_0
+        vbox->pack_start(*Gtk::manage(new Gtk::Separator()),
+#else
         vbox->pack_start(*Gtk::manage(new Gtk::HSeparator()),
+#endif
                          Gtk::PACK_EXPAND_WIDGET);
       }
       if (param->param_key == "displaceX") {
@@ -100,7 +108,11 @@ Gtk::Widget *LPERoughen::newWidget() {
             Gtk::ALIGN_START));
         displaceXLabel->set_use_markup(true);
         vbox->pack_start(*displaceXLabel, false, false, 2);
+#if WITH_GTKMM_3_0
+        vbox->pack_start(*Gtk::manage(new Gtk::Separator()),
+#else
         vbox->pack_start(*Gtk::manage(new Gtk::HSeparator()),
+#endif
                          Gtk::PACK_EXPAND_WIDGET);
       }
       Glib::ustring *tip = param->param_getTooltip();
