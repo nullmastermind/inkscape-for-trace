@@ -238,7 +238,11 @@ sp_set_font_size_recursive (GtkWidget *w, gpointer font)
 	PangoFontDescription* pan = pango_font_description_new ();
 	pango_font_description_set_size (pan, size);
 
+#if GTK_CHECK_VERSION(3,0,0)
+	gtk_widget_override_font (w, pan);
+#else
 	gtk_widget_modify_font (w, pan);
+#endif
 
 	if (GTK_IS_CONTAINER(w)) {
 		gtk_container_foreach (GTK_CONTAINER(w), (GtkCallback) sp_set_font_size_recursive, font);
