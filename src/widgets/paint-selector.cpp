@@ -72,8 +72,6 @@ enum {
     LAST_SIGNAL
 };
 
-static void sp_paint_selector_class_init(SPPaintSelectorClass *klass);
-static void sp_paint_selector_init(SPPaintSelector *slider);
 static void sp_paint_selector_dispose(GObject *object);
 
 static GtkWidget *sp_paint_selector_style_button_add(SPPaintSelector *psel, gchar const *px, SPPaintSelector::Mode mode, gchar const *tip);
@@ -92,7 +90,6 @@ static void sp_paint_selector_set_mode_unset(SPPaintSelector *psel);
 
 static void sp_paint_selector_set_style_buttons(SPPaintSelector *psel, GtkWidget *active);
 
-static GtkVBoxClass *parent_class;
 static guint psel_signals[LAST_SIGNAL] = {0};
 
 #ifdef SP_PS_VERBOSE
@@ -140,33 +137,16 @@ static SPGradientSelector *getGradientFromData(SPPaintSelector const *psel)
     return grad;
 }
 
-GType sp_paint_selector_get_type(void)
-{
-    static GType type = 0;
-    if (!type) {
-        GTypeInfo info = {
-            sizeof(SPPaintSelectorClass),
-            0, // base_init
-            0, // base_finalize
-            (GClassInitFunc)sp_paint_selector_class_init,
-            0, // class_finalize
-            0, // class_data
-            sizeof(SPPaintSelector),
-            0, // n_preallocs
-            (GInstanceInitFunc)sp_paint_selector_init,
-            0 // value_table
-        };
-        type = g_type_register_static(GTK_TYPE_VBOX, "SPPaintSelector", &info, static_cast<GTypeFlags>(0));
-    }
-    return type;
-}
+#if GTK_CHECK_VERSION(3,0,0)
+G_DEFINE_TYPE(SPPaintSelector, sp_paint_selector, GTK_TYPE_BOX);
+#else
+G_DEFINE_TYPE(SPPaintSelector, sp_paint_selector, GTK_TYPE_HBOX);
+#endif
 
 static void
 sp_paint_selector_class_init(SPPaintSelectorClass *klass)
 {
     GObjectClass *object_class = G_OBJECT_CLASS(klass);
-
-    parent_class = GTK_VBOX_CLASS(g_type_class_peek_parent(klass));
 
     psel_signals[MODE_CHANGED] = g_signal_new("mode_changed",
                                                 G_TYPE_FROM_CLASS(object_class),
@@ -220,6 +200,10 @@ sp_paint_selector_class_init(SPPaintSelectorClass *klass)
 static void
 sp_paint_selector_init(SPPaintSelector *psel)
 {
+#if GTK_CHECK_VERSION(3,0,0)
+    gtk_orientable_set_orientation(GTK_ORIENTABLE(psel), GTK_ORIENTATION_VERTICAL);
+#endif
+
     psel->mode = static_cast<SPPaintSelector::Mode>(-1); // huh?  do you mean 0xff?  --  I think this means "not in the enum"
 
     /* Paint style button box */
@@ -322,8 +306,8 @@ static void sp_paint_selector_dispose(GObject *object)
     // clean up our long-living pattern menu
     g_object_set_data(G_OBJECT(psel),"patternmenu",NULL);
 
-    if ((G_OBJECT_CLASS(parent_class))->dispose)
-        (* (G_OBJECT_CLASS(parent_class))->dispose)(object);
+    if ((G_OBJECT_CLASS(sp_paint_selector_parent_class))->dispose)
+        (G_OBJECT_CLASS(sp_paint_selector_parent_class))->dispose(object);
 }
 
 static GtkWidget *sp_paint_selector_style_button_add(SPPaintSelector *psel,
@@ -691,8 +675,8 @@ static void sp_paint_selector_set_mode_color(SPPaintSelector *psel, SPPaintSelec
         /* Create new color selector */
         /* Create vbox */
 #if GTK_CHECK_VERSION(3,0,0)
-    GtkWidget *vb = gtk_box_new(GTK_ORIENTATION_VERTICAL, 4);
-    gtk_box_set_homogeneous(GTK_BOX(vb), FALSE);
+        GtkWidget *vb = gtk_box_new(GTK_ORIENTATION_VERTICAL, 4);
+        gtk_box_set_homogeneous(GTK_BOX(vb), FALSE);
 #else
         GtkWidget *vb = gtk_vbox_new(FALSE, 4);
 #endif
@@ -1045,8 +1029,8 @@ static void sp_paint_selector_set_mode_pattern(SPPaintSelector *psel, SPPaintSel
 
         /* Create vbox */
 #if GTK_CHECK_VERSION(3,0,0)
-    tbl = gtk_box_new(GTK_ORIENTATION_VERTICAL, 4);
-    gtk_box_set_homogeneous(GTK_BOX(tbl), FALSE);
+        tbl = gtk_box_new(GTK_ORIENTATION_VERTICAL, 4);
+        gtk_box_set_homogeneous(GTK_BOX(tbl), FALSE);
 #else
         tbl = gtk_vbox_new(FALSE, 4);
 #endif
