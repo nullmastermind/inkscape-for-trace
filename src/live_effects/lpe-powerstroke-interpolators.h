@@ -203,10 +203,17 @@ private:
     CubicBezier calc_bezier(Point p0, Point p1, Point p2, Point p3) const {
         // create interpolating bezier between p1 and p2
 
+        // Part of the code comes from StackOverflow user eriatarka84
+        // http://stackoverflow.com/a/23980479/2929337
+
         // calculate time coords (deltas) of points
+        // the factor 0.25 can be generalized for other Catmull-Rom interpolation types 
+        // see alpha in Yuksel et al. "On the Parameterization of Catmull-Rom Curves", 
+        // --> http://www.cemyuksel.com/research/catmullrom_param/catmullrom.pdf
         double dt0 = powf(distanceSq(p0, p1), 0.25);
         double dt1 = powf(distanceSq(p1, p2), 0.25);
         double dt2 = powf(distanceSq(p2, p3), 0.25);
+
 
         // safety check for repeated points
         double eps = Geom::EPSILON;
