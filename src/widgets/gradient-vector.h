@@ -65,7 +65,11 @@ struct SPGradientVectorSelector {
 };
 
 struct SPGradientVectorSelectorClass {
+#if GTK_CHECK_VERSION(3,0,0)
+    GtkBoxClass parent_class;
+#else
     GtkVBoxClass parent_class;
+#endif
 
     void (* vector_set) (SPGradientVectorSelector *gvs, SPGradient *gr);
 };
