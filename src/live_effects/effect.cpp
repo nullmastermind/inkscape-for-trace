@@ -43,6 +43,7 @@
 #include "live_effects/lpe-ruler.h"
 #include "live_effects/lpe-boolops.h"
 #include "live_effects/lpe-interpolate.h"
+#include "live_effects/lpe-interpolate_points.h"
 #include "live_effects/lpe-text_label.h"
 #include "live_effects/lpe-path_length.h"
 #include "live_effects/lpe-line_segment.h"
@@ -127,6 +128,7 @@ const Util::EnumData<EffectType> LPETypeData[] = {
 /* 0.91 */
     {POWERSTROKE,           N_("Power stroke"),            "powerstroke"},
     {CLONE_ORIGINAL,        N_("Clone original path"),     "clone_original"},
+/* EXPERIMENTAL */    
     {SHOW_HANDLES,          N_("Show handles"),            "show_handles"},
     {ROUGHEN,               N_("Roughen"),                 "roughen"},
     {BSPLINE,               N_("BSpline"),                 "bspline"},
@@ -135,6 +137,7 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     // TRANSLATORS: "Envelope Perspective" should be equivalent to "perspective transformation"
     {ENVELOPE_PERSPECTIVE,  N_("Envelope Perspective"),    "envelope-perspective"},
     {FILLET_CHAMFER,        N_("Fillet/Chamfer"),          "fillet-chamfer"},
+    {INTERPOLATE_POINTS,    N_("Interpolate points"),      "interpolate_points"},
 };
 const Util::EnumDataConverter<EffectType> LPETypeConverter(LPETypeData, sizeof(LPETypeData)/sizeof(*LPETypeData));
 
@@ -230,6 +233,9 @@ Effect::New(EffectType lpenr, LivePathEffectObject *lpeobj)
             break;
         case INTERPOLATE:
             neweffect = static_cast<Effect*> ( new LPEInterpolate(lpeobj) );
+            break;
+        case INTERPOLATE_POINTS:
+            neweffect = static_cast<Effect*> ( new LPEInterpolatePoints(lpeobj) );
             break;
         case TEXT_LABEL:
             neweffect = static_cast<Effect*> ( new LPETextLabel(lpeobj) );
