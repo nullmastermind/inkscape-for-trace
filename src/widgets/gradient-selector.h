@@ -49,7 +49,11 @@ class SPGradient;
 
 
 struct SPGradientSelector {
+#if GTK_CHECK_VERSION(3,0,0)
+    GtkBox  vbox;
+#else
     GtkVBox vbox;
+#endif
 
     enum SelectorMode {
         MODE_LINEAR,
@@ -131,7 +135,11 @@ struct SPGradientSelector {
 };
 
 struct SPGradientSelectorClass {
+#if GTK_CHECK_VERSION(3,0,0)
+    GtkBoxClass parent_class;
+#else
     GtkVBoxClass parent_class;
+#endif
 
     void (* grabbed) (SPGradientSelector *sel);
     void (* dragged) (SPGradientSelector *sel);

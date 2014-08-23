@@ -44,7 +44,7 @@ namespace Dialogs {
 FilletChamferPropertiesDialog::FilletChamferPropertiesDialog()
     : _desktop(NULL), _knotpoint(NULL), _position_visible(false)
 {
-    Gtk::Box *mainVBox = get_vbox();
+    Gtk::Box *mainVBox = get_content_area();
     mainVBox->set_homogeneous(false);
     _layout_table.set_spacings(4);
     _layout_table.resize(2, 2);

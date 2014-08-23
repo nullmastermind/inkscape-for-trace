@@ -43,7 +43,11 @@ class SPGradient;
 class SPStop;
 
 struct SPGradientVectorSelector {
+#if GTK_CHECK_VERSION(3,0,0)
+    GtkBox vbox;
+#else
     GtkVBox vbox;
+#endif
 
     guint idlabel : 1;
 
