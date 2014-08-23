@@ -289,8 +289,13 @@ void ColorNotebook::init()
     sp_set_font_size_smaller (_buttonbox);
 
 #if GTK_CHECK_VERSION(3,0,0)
+    #if GTK_CHECK_VERSION(3,12,0)
+    gtk_widget_set_margin_start(_buttonbox, XPAD);
+    gtk_widget_set_margin_end(_buttonbox, XPAD);
+    #else
     gtk_widget_set_margin_left(_buttonbox, XPAD);
     gtk_widget_set_margin_right(_buttonbox, XPAD);
+    #endif
     gtk_widget_set_margin_top(_buttonbox, YPAD);
     gtk_widget_set_margin_bottom(_buttonbox, YPAD);
     gtk_widget_set_hexpand(_buttonbox, TRUE);
@@ -306,8 +311,13 @@ void ColorNotebook::init()
     row++;
 
 #if GTK_CHECK_VERSION(3,0,0)
+    #if GTK_CHECK_VERSION(3,12,0)
+    gtk_widget_set_margin_start(_book, XPAD*2);
+    gtk_widget_set_margin_end(_book, XPAD*2);
+    #else
     gtk_widget_set_margin_left(_book, XPAD*2);
     gtk_widget_set_margin_right(_book, XPAD*2);
+    #endif
     gtk_widget_set_margin_top(_book, YPAD);
     gtk_widget_set_margin_bottom(_book, YPAD);
     gtk_widget_set_hexpand(_book, TRUE);
@@ -434,8 +444,13 @@ void ColorNotebook::init()
 #endif //defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 
 #if GTK_CHECK_VERSION(3,0,0)
+    #if GTK_CHECK_VERSION(3,12,0)
+    gtk_widget_set_margin_start(rgbabox, XPAD);
+    gtk_widget_set_margin_end(rgbabox, XPAD);
+    #else
     gtk_widget_set_margin_left(rgbabox, XPAD);
     gtk_widget_set_margin_right(rgbabox, XPAD);
+    #endif
     gtk_widget_set_margin_top(rgbabox, YPAD);
     gtk_widget_set_margin_bottom(rgbabox, YPAD);
     gtk_grid_attach(GTK_GRID(table), rgbabox, 0, row, 2, 1);

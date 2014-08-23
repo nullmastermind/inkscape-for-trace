@@ -151,8 +151,13 @@ void ColorScales::init()
 		gtk_widget_show (_l[i]);
 
 #if GTK_CHECK_VERSION(3,0,0)
+  #if GTK_CHECK_VERSION(3,12,0)
+		gtk_widget_set_margin_start(_l[i], XPAD);
+		gtk_widget_set_margin_end(_l[i], XPAD);
+  #else
 		gtk_widget_set_margin_left(_l[i], XPAD);
 		gtk_widget_set_margin_right(_l[i], XPAD);
+  #endif
 		gtk_widget_set_margin_top(_l[i], YPAD);
 		gtk_widget_set_margin_bottom(_l[i], YPAD);
 		gtk_grid_attach(GTK_GRID(t), _l[i], 0, i, 1, 1);
@@ -167,8 +172,13 @@ void ColorScales::init()
 		gtk_widget_show (_s[i]);
 
 #if GTK_CHECK_VERSION(3,0,0)
+  #if GTK_CHECK_VERSION(3,12,0)
+		gtk_widget_set_margin_start(_s[i], XPAD);
+		gtk_widget_set_margin_end(_s[i], XPAD);
+  #else
 		gtk_widget_set_margin_left(_s[i], XPAD);
 		gtk_widget_set_margin_right(_s[i], XPAD);
+  #endif
 		gtk_widget_set_margin_top(_s[i], YPAD);
 		gtk_widget_set_margin_bottom(_s[i], YPAD);
 		gtk_widget_set_hexpand(_s[i], TRUE);
@@ -184,8 +194,13 @@ void ColorScales::init()
 		gtk_widget_show (_b[i]);
 
 #if GTK_CHECK_VERSION(3,0,0)
+  #if GTK_CHECK_VERSION(3,12,0)
+		gtk_widget_set_margin_start(_b[i], XPAD);
+		gtk_widget_set_margin_end(_b[i], XPAD);
+  #else
 		gtk_widget_set_margin_left(_b[i], XPAD);
 		gtk_widget_set_margin_right(_b[i], XPAD);
+  #endif
 		gtk_widget_set_margin_top(_b[i], YPAD);
 		gtk_widget_set_margin_bottom(_b[i], YPAD);
 		gtk_widget_set_halign(_b[i], GTK_ALIGN_CENTER);

@@ -142,8 +142,13 @@ void ColorWheelSelector::init()
     gtk_widget_show (_label);
 
 #if GTK_CHECK_VERSION(3,0,0)
+  #if GTK_CHECK_VERSION(3,12,0)
+    gtk_widget_set_margin_start(_label, XPAD);
+    gtk_widget_set_margin_end(_label, XPAD);
+  #else
     gtk_widget_set_margin_left(_label, XPAD);
     gtk_widget_set_margin_right(_label, XPAD);
+  #endif
     gtk_widget_set_margin_top(_label, YPAD);
     gtk_widget_set_margin_bottom(_label, YPAD);
     gtk_widget_set_halign(_label, GTK_ALIGN_FILL);
@@ -162,8 +167,13 @@ void ColorWheelSelector::init()
     gtk_widget_show (_slider);
 
 #if GTK_CHECK_VERSION(3,0,0)
+  #if GTK_CHECK_VERSION(3,12,0)
+    gtk_widget_set_margin_start(_slider, XPAD);
+    gtk_widget_set_margin_end(_slider, XPAD);
+  #else
     gtk_widget_set_margin_left(_slider, XPAD);
     gtk_widget_set_margin_right(_slider, XPAD);
+  #endif
     gtk_widget_set_margin_top(_slider, YPAD);
     gtk_widget_set_margin_bottom(_slider, YPAD);
     gtk_widget_set_hexpand(_slider, TRUE);
@@ -188,8 +198,13 @@ void ColorWheelSelector::init()
     gtk_widget_show (_sbtn);
 
 #if GTK_CHECK_VERSION(3,0,0)
+  #if GTK_CHECK_VERSION(3,12,0)
+    gtk_widget_set_margin_start(_sbtn, XPAD);
+    gtk_widget_set_margin_end(_sbtn, XPAD);
+  #else
     gtk_widget_set_margin_left(_sbtn, XPAD);
     gtk_widget_set_margin_right(_sbtn, XPAD);
+  #endif
     gtk_widget_set_margin_top(_sbtn, YPAD);
     gtk_widget_set_margin_bottom(_sbtn, YPAD);
     gtk_widget_set_halign(_sbtn, GTK_ALIGN_CENTER);

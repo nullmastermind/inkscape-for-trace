@@ -205,8 +205,14 @@ void attachToGridOrTable(GtkWidget *parent,
                          guint ypadding = YPAD)
 {
 #if GTK_CHECK_VERSION(3,0,0)
+    #if GTK_CHECK_VERSION(3,12,0)
+    gtk_widget_set_margin_start( child, xpadding );
+    gtk_widget_set_margin_end( child, xpadding );
+    #else
     gtk_widget_set_margin_left( child, xpadding );
     gtk_widget_set_margin_right( child, xpadding );
+    #endif
+
     gtk_widget_set_margin_top( child, ypadding );
     gtk_widget_set_margin_bottom( child, ypadding );
     if (hexpand) {

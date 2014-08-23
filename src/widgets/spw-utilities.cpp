@@ -64,8 +64,15 @@ Gtk::Label * spw_label(Gtk::Table *table, const gchar *label_text, int col, int 
   label_widget->set_hexpand();
   label_widget->set_halign(Gtk::ALIGN_FILL);
   label_widget->set_valign(Gtk::ALIGN_CENTER);
+
+  #if GTK_CHECK_VERSION(3,12,0)
+  label_widget->set_margin_start(4);
+  label_widget->set_margin_end(4);
+  #else
   label_widget->set_margin_left(4);
   label_widget->set_margin_right(4);
+  #endif
+
   table->attach(*label_widget, col, row, 1, 1);
 #else
   table->attach(*label_widget, col, col+1, row, row+1, (Gtk::EXPAND | Gtk::FILL), static_cast<Gtk::AttachOptions>(0), 4, 0);
