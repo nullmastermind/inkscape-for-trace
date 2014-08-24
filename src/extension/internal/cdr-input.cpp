@@ -139,9 +139,15 @@ CdrImportDialog::CdrImportDialog(const std::vector<WPXString> &vec)
      _labelTotalPages->set_use_markup(false);
      _labelTotalPages->set_selectable(false);
      vbox2->pack_start(*_previewArea, Gtk::PACK_SHRINK, 0);
+#if WITH_GTKMM_3_0
      this->get_content_area()->set_homogeneous(false);
      this->get_content_area()->set_spacing(0);
      this->get_content_area()->pack_start(*vbox2);
+#else
+     this->get_vbox()->set_homogeneous(false);
+     this->get_vbox()->set_spacing(0);
+     this->get_vbox()->pack_start(*vbox2);
+#endif
      this->set_title(_("Page Selector"));
      this->set_modal(true);
      sp_transientize(GTK_WIDGET(this->gobj()));  //Make transient

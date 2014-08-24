@@ -12,10 +12,10 @@
  #include "config.h"
 #endif
 
+#include <gtkmm/dialog.h>
 #include <2geom/point.h>
 #include "live_effects/parameter/filletchamferpointarray.h"
 
-#include <gtkmm/dialog.h>
 #include <gtkmm/entry.h>
 #include <gtkmm/label.h>
 #include <gtkmm/radiobutton.h>
