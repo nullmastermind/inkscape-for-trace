@@ -10,6 +10,7 @@
 #include <glibmm/i18n.h>
 #include "../dialogs/dialog-events.h"
 #include "sp-color-scales.h"
+#include "sp-color-slider.h"
 #include "svg/svg-icc-color.h"
 
 #define CSC_CHANNEL_R (1 << 0)
@@ -30,8 +31,6 @@
 
 G_BEGIN_DECLS
 
-static void sp_color_scales_class_init (SPColorScalesClass *klass);
-static void sp_color_scales_init (SPColorScales *cs);
 static void sp_color_scales_dispose(GObject *object);
 
 static void sp_color_scales_show_all (GtkWidget *widget);
@@ -41,38 +40,12 @@ static const gchar *sp_color_scales_hue_map (void);
 
 G_END_DECLS
 
-static SPColorSelectorClass *parent_class;
-
 #define XPAD 4
 #define YPAD 1
 
 #define noDUMP_CHANGE_INFO 1
 
-GType
-sp_color_scales_get_type (void)
-{
-	static GType type = 0;
-	if (!type) {
-		static const GTypeInfo info = {
-			sizeof (SPColorScalesClass),
-			NULL, /* base_init */
-			NULL, /* base_finalize */
-			(GClassInitFunc) sp_color_scales_class_init,
-			NULL, /* class_finalize */
-			NULL, /* class_data */
-			sizeof (SPColorScales),
-			0,	  /* n_preallocs */
-			(GInstanceInitFunc) sp_color_scales_init,
-			NULL
-		};
-
-		type = g_type_register_static (SP_TYPE_COLOR_SELECTOR,
-									   "SPColorScales",
-									   &info,
-									   static_cast< GTypeFlags > (0) );
-	}
-	return type;
-}
+G_DEFINE_TYPE(SPColorScales, sp_color_scales, SP_TYPE_COLOR_SELECTOR);
 
 static void
 sp_color_scales_class_init (SPColorScalesClass *klass)
@@ -81,8 +54,6 @@ sp_color_scales_class_init (SPColorScalesClass *klass)
 	GObjectClass *object_class = G_OBJECT_CLASS(klass);
 	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(klass);
 	SPColorSelectorClass *selector_class = SP_COLOR_SELECTOR_CLASS (klass);
-
-	parent_class = SP_COLOR_SELECTOR_CLASS (g_type_class_peek_parent (klass));
 
 	selector_class->name = nameset;
 	selector_class->submode_count = 3;
@@ -229,8 +200,8 @@ void ColorScales::init()
 
 static void sp_color_scales_dispose(GObject *object)
 {
-	if ((G_OBJECT_CLASS(parent_class))->dispose)
-		(* (G_OBJECT_CLASS(parent_class))->dispose) (object);
+	if (G_OBJECT_CLASS(sp_color_scales_parent_class)->dispose)
+            G_OBJECT_CLASS(sp_color_scales_parent_class)->dispose(object);
 }
 
 static void

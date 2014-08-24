@@ -4,12 +4,10 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 
-#include "sp-color-slider.h"
 #include "sp-color-selector.h"
 
-
-
 typedef struct _GimpColorWheel GimpColorWheel;
+struct SPColorSlider;
 struct SPColorWheelSelector;
 struct SPColorWheelSelectorClass;
 
