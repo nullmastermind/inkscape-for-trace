@@ -262,7 +262,14 @@ function getinkscapeinfo () {
 if [[ "$BZRUPDATE" == "t" ]]
 then
 	cd $SRCROOT
-	bzr pull
+	if [ -z "$(bzr info | grep "checkout")" ]; then
+		echo "repo is unbound (branch)"
+		update_cmd="bzr pull"
+	else
+		echo "repo is bound (checkout)"
+		update_cmd="bzr update"
+	fi
+	$update_cmd
 	status=$?
 	if [[ $status -ne 0 ]]; then
 		echo -e "\nBZR update failed"
