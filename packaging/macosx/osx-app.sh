@@ -135,12 +135,19 @@ if [ ! -f "$plist" ]; then
 	exit 1
 fi
 
-# if [ ${add_python} = "true" ]; then
-# 	if [ "x$python_dir" == "x" ]; then
-# 		echo "Python modules directory not specified." >&2
-# 		exit 1
-# 	fi
-# fi
+if [ ${add_python} = "true" ]; then
+	if [ "x$python_dir" == "x" ]; then
+		echo "Python modules will be copied from MacPorts tree."
+	else
+		if [ ! -e "$python_dir" ]; then
+			echo "Python modules directory \""$python_dir"\" not found." >&2
+			exit 1
+		else
+			# TODO: check directoy structure and reject old one based on ppc/i386
+			echo "Python modules will be copied from $python_dir."
+		fi
+	fi
+fi
 
 if [ ! -e "$LIBPREFIX" ]; then
 	echo "Cannot find the directory containing the libraires: $LIBPREFIX" >&2
