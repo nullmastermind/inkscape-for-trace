@@ -6,6 +6,20 @@
 #	Jean-Olivier Irisson <jo.irisson@gmail.com>
 #
 
+if test "x$GTK_DEBUG_LAUNCHER" != x; then
+    set -x
+fi
+
+if test "x$GTK_DEBUG_GDB" != x; then
+    EXEC="gdb --args"
+elif test "x$GTK_DEBUG_LLDB" != x; then
+    EXEC="lldb -- "
+elif test "x$GTK_DEBUG_DTRUSS" != x; then
+    EXEC="dtruss"
+else
+    EXEC=exec
+fi
+
 CWD="`(cd \"\`dirname \\\"$0\\\"\`\"; echo \"$PWD\")`"
 # e.g. /Applications/Inkscape.app/Contents/Resources/bin
 TOP="`dirname \"$CWD\"`"
@@ -132,4 +146,8 @@ sed 's|${CWD}|'"$ESCAPEDTOP|g" "$TOP/lib/gtk-2.0/__gtk_version__/immodules.cache
 sed 's|${CWD}|'"$ESCAPEDTOP|g" "$TOP/lib/gdk-pixbuf-2.0/__gdk_pixbuf_version__/loaders.cache" \
     > "${INK_CACHE_DIR}/loaders.cache"
 
-exec "$CWD/inkscape-bin" "$@"
+if [ "x$GTK_DEBUG_SHELL" != "x" ]; then
+	exec bash
+else
+	$EXEC "$CWD/inkscape-bin" "$@"
+fi
