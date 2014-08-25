@@ -610,12 +610,12 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
     if (dc->sa) {
         SPCurve *s = dc->sa->curve;
         dc->white_curves = g_slist_remove(dc->white_curves, s);
-        if(prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1 || 
-            prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2){
-                s = dc->overwriteCurve;
-        }
         if (dc->sa->start) {
             s = reverse_then_unref(s);
+        }
+        if(prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1 || 
+            prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2){
+                dc->overwriteCurve = s;
         }
         s->append_continuous(c, 0.0625);
         c->unref();
