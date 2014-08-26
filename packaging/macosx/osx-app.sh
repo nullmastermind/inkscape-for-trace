@@ -180,6 +180,20 @@ if [ ! -e "$LIBPREFIX/lib/aspell-0.60/en.dat" ]; then
 	exit 1
 fi
 
+# awk on Leopard fails in fixlib(), test earlier and require gawk if test fails
+awk_test="$(echo "/lib" | awk -F/ '{for (i=1;i<NF;i++) sub($i,".."); sub($NF,"",$0); print $0}')"
+if [ -z "$awk_test" ]; then
+	if [ ! -x "$LIBPREFIX/bin/gawk" ]; then
+		echo "awk provided by system is too old, please install gawk and try again" >&2
+		exit 1
+	else
+		awk_cmd="$LIBPREFIX/bin/gawk"
+	fi
+else
+	awk_cmd="awk"
+fi
+unset awk_test
+
 
 # OS X version
 #----------------------------------------------------------
@@ -491,7 +505,7 @@ fixlib () {
             lib)
                 # TODO: verfiy correct/expected install name for relocated libs
                 to_id="$package/Contents/Resources$filePath/$1"
-                loader_to_res="$(echo $filePath | gawk -F/ '{for (i=1;i<NF;i++) sub($i,".."); sub($NF,"",$0); print $0}')"
+                loader_to_res="$(echo $filePath | $awk_cmd -F/ '{for (i=1;i<NF;i++) sub($i,".."); sub($NF,"",$0); print $0}')"
                 ;;
             bin)
                 loader_to_res="../"
@@ -507,7 +521,7 @@ fixlib () {
         for lib in $fileLibs; do
             first="$(echo $lib | cut -d/ -f1-3)"
             if [ $first != /usr/lib -a $first != /usr/X11 -a $first != /opt/X11 -a $first != /System/Library ]; then
-                lib_prefix_levels="$(echo $lib | awk -F/ '{for (i=NF;i>0;i--) if($i=="lib") j=i; print j}')"
+                lib_prefix_levels="$(echo $lib | $awk_cmd -F/ '{for (i=NF;i>0;i--) if($i=="lib") j=i; print j}')"
                 res_to_lib="$(echo $lib | cut -d/ -f$lib_prefix_levels-)"
                 unset to_path
                 case $fileType in
