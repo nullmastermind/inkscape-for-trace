@@ -1,5 +1,3 @@
-#define INKSCAPE_LPE_BSPLINE_C
-
 /*
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
@@ -8,23 +6,19 @@
 # include <config.h>
 #endif
 
-#if WITH_GLIBMM_2_32 && HAVE_GLIBMM_THREADS_H
+#include <gtkmm.h>
+
+#if WITH_GLIBMM_2_32
 # include <glibmm/threads.h>
 #endif
-
-#include <2geom/bezier-curve.h>
-#include <2geom/point.h>
-
-#include <gtkmm/box.h>
-#include <gtkmm/entry.h>
-#include <gtkmm/box.h>
-#include <gtkmm/button.h>
-#include <gtkmm/checkbutton.h>
 
 #include <glib.h>
 #include <glibmm/i18n.h>
 
+
 #include "display/curve.h"
+#include <2geom/bezier-curve.h>
+#include <2geom/point.h>
 #include "helper/geom-curves.h"
 #include "live_effects/lpe-bspline.h"
 #include "live_effects/lpeobject.h"
@@ -48,8 +42,7 @@
 #include "display/sp-canvas.h"
 #include <typeinfo>
 #include <vector>
-
-// For handling non-contiguous paths:
+// For handling un-continuous paths:
 #include "message-stack.h"
 #include "inkscape.h"
 #include "desktop.h"

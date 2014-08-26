@@ -14,12 +14,11 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <gtkmm.h>
 #include "live_effects/lpe-envelope-perspective.h"
 #include "helper/geom.h"
 #include "display/curve.h"
 #include "svg/svg.h"
-#include <gtkmm/separator.h>
-#include <gtkmm/stock.h>
 #include <tools-switch.h>
 #include <gsl/gsl_linalg.h>
 #include "desktop.h"
