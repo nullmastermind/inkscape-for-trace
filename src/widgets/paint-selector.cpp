@@ -140,7 +140,7 @@ static SPGradientSelector *getGradientFromData(SPPaintSelector const *psel)
 #if GTK_CHECK_VERSION(3,0,0)
 G_DEFINE_TYPE(SPPaintSelector, sp_paint_selector, GTK_TYPE_BOX);
 #else
-G_DEFINE_TYPE(SPPaintSelector, sp_paint_selector, GTK_TYPE_HBOX);
+G_DEFINE_TYPE(SPPaintSelector, sp_paint_selector, GTK_TYPE_VBOX);
 #endif
 
 static void
