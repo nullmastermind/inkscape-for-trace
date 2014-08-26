@@ -29,9 +29,7 @@ class Entry;
 
 class SPDesktop;
 
-namespace Inkscape {
-struct Application;
-} // namespace Inkscape
+struct InkscapeApplication;
  
 typedef struct { 
     GtkWidget *win;
@@ -55,7 +53,7 @@ void sp_transientize             ( GtkWidget *win );
 void on_transientize             ( SPDesktop *desktop, 
                                    win_data *wd );
 
-void sp_transientize_callback    ( Inkscape::Application *inkscape, 
+void sp_transientize_callback    ( InkscapeApplication *inkscape, 
                                    SPDesktop *desktop, 
                                    win_data *wd );
 

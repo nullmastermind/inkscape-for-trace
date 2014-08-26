@@ -41,7 +41,7 @@ namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
-void sp_retransientize(Inkscape::Application */*inkscape*/, SPDesktop *desktop, gpointer dlgPtr)
+void sp_retransientize(InkscapeApplication */*inkscape*/, SPDesktop *desktop, gpointer dlgPtr)
 {
     Dialog *dlg = static_cast<Dialog *>(dlgPtr);
     dlg->onDesktopActivated (desktop);

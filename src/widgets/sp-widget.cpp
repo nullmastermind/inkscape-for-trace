@@ -59,7 +59,7 @@ public:
     static void changeSelectionCB(Application *inkscape, Selection *selection, SPWidget *spw);
     static void setSelectionCB(Application *inkscape, Selection *selection, SPWidget *spw);
 
-    static GtkWidget *constructGlobal(SPWidget *spw, Inkscape::Application *inkscape);
+    static GtkWidget *constructGlobal(SPWidget *spw, InkscapeApplication *inkscape);
 
     void modifySelection(Application *inkscape, Selection *selection, guint flags);
     void changeSelection(Application *inkscape, Selection *selection);
@@ -264,7 +264,7 @@ void SPWidgetImpl::sizeAllocate(GtkWidget *widget, GtkAllocation *allocation)
     }
 }
 
-GtkWidget *SPWidgetImpl::constructGlobal(SPWidget *spw, Inkscape::Application *inkscape)
+GtkWidget *SPWidgetImpl::constructGlobal(SPWidget *spw, InkscapeApplication *inkscape)
 {
     g_return_val_if_fail(!spw->inkscape, NULL);
 
@@ -316,7 +316,7 @@ void SPWidgetImpl::setSelection(Application * /*inkscape*/, Selection *selection
 
 // Methods
 
-GtkWidget *sp_widget_new_global(Inkscape::Application *inkscape)
+GtkWidget *sp_widget_new_global(InkscapeApplication *inkscape)
 {
     SPWidget *spw = reinterpret_cast<SPWidget*>(g_object_new(SP_TYPE_WIDGET, NULL));
 

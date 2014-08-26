@@ -70,13 +70,13 @@ inline Dialog *create() { return PanelDialog<B>::template create<T>(); }
 
 /**
  *  This class is provided as a container for Inkscape's various
- *  dialogs.  This allows Inkscape::Application to treat the various
+ *  dialogs.  This allows InkscapeApplication to treat the various
  *  dialogs it invokes, as abstractions.
  *
  *  DialogManager is essentially a cache of dialogs.  It lets us
  *  initialize dialogs lazily - instead of constructing them during
  *  application startup, they're constructed the first time they're
- *  actually invoked by Inkscape::Application.  The constructed
+ *  actually invoked by InkscapeApplication.  The constructed
  *  dialog is held here after that, so future invokations of the
  *  dialog don't need to get re-constructed each time.  The memory for
  *  the dialogs are then reclaimed when the DialogManager is destroyed.

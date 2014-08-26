@@ -24,20 +24,18 @@
 #define SP_IS_WIDGET(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_WIDGET))
 #define SP_IS_WIDGET_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SP_TYPE_WIDGET))
 
+struct InkscapeApplication;
 
 namespace Inkscape {
-
-struct Application;
 class Selection;
 class SPWidgetImpl;
-
 }
 
 struct SPWidget {
     friend class Inkscape::SPWidgetImpl;
 
     GtkBin bin;
-    Inkscape::Application *inkscape;
+    InkscapeApplication *inkscape;
 
     Inkscape::SPWidgetImpl *_impl;
 };
@@ -56,7 +54,7 @@ struct SPWidgetClass {
 GType sp_widget_get_type();
 
 /** Generic constructor for global widget. */
-GtkWidget *sp_widget_new_global(Inkscape::Application *inkscape);
+GtkWidget *sp_widget_new_global(InkscapeApplication *inkscape);
 
 #endif // SEEN_SP_WIDGET_H
 /*
