@@ -228,18 +228,25 @@ void SPItem::setExplicitlyHidden(bool val) {
 }
 
 /**
- * Sets the transform_center_x and transform_center_y properties to retain the rotation centre
- */
+ * Sets the transform_center_x and transform_center_y properties to retain the rotation center
+*/
 void SPItem::setCenter(Geom::Point const &object_centre) {
     document->ensureUpToDate();
+
+    // Copied from DocumentProperties::onDocUnitChange()
+    gdouble viewscale_w = this->document->getWidth().value("px") / this->document->getRoot()->viewBox.width();
+    gdouble viewscale_h = this->document->getHeight().value("px")/ this->document->getRoot()->viewBox.height();
+    gdouble viewscale = std::min(viewscale_h, viewscale_w);
 
     // FIXME this is seriously wrong
     Geom::OptRect bbox = desktopGeometricBounds();
     if (bbox) {
-        transform_center_x = object_centre[Geom::X] - bbox->midpoint()[Geom::X];
+        // object centre is document coordinates (i.e. in pixels), so we need to consider the viewbox
+        // to translate to user units; transform_center_x/y is in user units
+        transform_center_x = (object_centre[Geom::X] - bbox->midpoint()[Geom::X])/viewscale;
         if (Geom::are_near(transform_center_x, 0)) // rounding error
             transform_center_x = 0;
-        transform_center_y = object_centre[Geom::Y] - bbox->midpoint()[Geom::Y];
+        transform_center_y = (object_centre[Geom::Y] - bbox->midpoint()[Geom::Y])/viewscale;
         if (Geom::are_near(transform_center_y, 0)) // rounding error
             transform_center_y = 0;
     }
@@ -255,16 +262,25 @@ bool SPItem::isCenterSet() const {
     return (transform_center_x != 0 || transform_center_y != 0);
 }
 
+// Get the item's transformation center in document coordinates (i.e. in pixels)
 Geom::Point SPItem::getCenter() const {
     document->ensureUpToDate();
+
+    // Copied from DocumentProperties::onDocUnitChange()
+    gdouble viewscale_w = this->document->getWidth().value("px") / this->document->getRoot()->viewBox.width();
+    gdouble viewscale_h = this->document->getHeight().value("px")/ this->document->getRoot()->viewBox.height();
+    gdouble viewscale = std::min(viewscale_h, viewscale_w);
 
     // FIXME this is seriously wrong
     Geom::OptRect bbox = desktopGeometricBounds();
     if (bbox) {
-        return bbox->midpoint() + Geom::Point (transform_center_x, transform_center_y);
+        // transform_center_x/y are stored in user units, so we have to take the viewbox into account to translate to document coordinates
+        return bbox->midpoint() + Geom::Point (transform_center_x*viewscale, transform_center_y*viewscale);
+
     } else {
         return Geom::Point(0, 0); // something's wrong!
     }
+
 }
 
 void
@@ -778,6 +794,7 @@ Geom::OptRect SPItem::visualBounds(Geom::Affine const &transform) const
     	bbox = const_cast<SPItem*>(this)->bbox(transform, SPItem::VISUAL_BBOX);
     }
     if (clip_ref->getObject()) {
+        SP_ITEM(clip_ref->getOwner())->bbox_valid = FALSE;  // LP Bug 1349018
         bbox.intersectWith(SP_CLIPPATH(clip_ref->getObject())->geometricBounds(transform));
     }
 
@@ -1109,9 +1126,10 @@ void SPItem::invoke_hide(unsigned key)
 
 // Adjusters
 
-void SPItem::adjust_pattern (Geom::Affine const &postmul, bool set)
+void SPItem::adjust_pattern(Geom::Affine const &postmul, bool set, PatternTransform pt)
 {
-    if (style && (style->fill.isPaintserver())) {
+    bool fill = (pt == TRANSFORM_FILL || pt == TRANSFORM_BOTH);
+    if (fill && style && (style->fill.isPaintserver())) {
         SPObject *server = style->getFillPaintServer();
         if ( SP_IS_PATTERN(server) ) {
             SPPattern *pattern = sp_pattern_clone_if_necessary(this, SP_PATTERN(server), "fill");
@@ -1119,7 +1137,8 @@ void SPItem::adjust_pattern (Geom::Affine const &postmul, bool set)
         }
     }
 
-    if (style && (style->stroke.isPaintserver())) {
+    bool stroke = (pt == TRANSFORM_STROKE || pt == TRANSFORM_BOTH);
+    if (stroke && style && (style->stroke.isPaintserver())) {
         SPObject *server = style->getStrokePaintServer();
         if ( SP_IS_PATTERN(server) ) {
             SPPattern *pattern = sp_pattern_clone_if_necessary(this, SP_PATTERN(server), "stroke");
