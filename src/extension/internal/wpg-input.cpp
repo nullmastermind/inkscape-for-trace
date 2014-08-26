@@ -52,8 +52,25 @@
 #include "util/units.h"
 #include <cstring>
 
+// Take a guess and fallback to 0.2.x if no configure has run
+#if !defined(WITH_LIBWPG03) && !defined(WITH_LIBWPG02)
+#define WITH_LIBWPG02 1
+#endif
+
 #include "libwpg/libwpg.h"
-#include "librevenge-stream/librevenge-stream.h"
+#if WITH_LIBWPG03
+  #include <librevenge-stream/librevenge-stream.h>
+
+  using librevenge::RVNGString;
+  using librevenge::RVNGFileStream;
+  using librevenge::RVNGInputStream;
+#else
+  #include "libwpd-stream/libwpd-stream.h"
+
+  typedef WPXString               RVNGString;
+  typedef WPXFileStream           RVNGFileStream;
+  typedef WPXInputStream          RVNGInputStream;
+#endif
 
 using namespace libwpg;
 
@@ -64,9 +81,15 @@ namespace Internal {
 
 SPDocument *WpgInput::open(Inkscape::Extension::Input * /*mod*/, const gchar * uri)
 {
-    librevenge::RVNGInputStream* input = new librevenge::RVNGFileStream(uri);
+    RVNGInputStream* input = new RVNGFileStream(uri);
+#if WITH_LIBWPG03
     if (input->isStructured()) {
-        librevenge::RVNGInputStream* olestream = input->getSubStreamByName("PerfectOffice_MAIN");
+        RVNGInputStream* olestream = input->getSubStreamByName("PerfectOffice_MAIN");
+#else
+    if (input->isOLEStream()) {
+        RVNGInputStream* olestream = input->getDocumentOLEStream("PerfectOffice_MAIN");
+#endif
+
         if (olestream) {
             delete input;
             input = olestream;
@@ -81,17 +104,24 @@ SPDocument *WpgInput::open(Inkscape::Extension::Input * /*mod*/, const gchar * u
         return NULL;
     }
 
-	librevenge::RVNGStringVector vec;
-	librevenge::RVNGSVGDrawingGenerator generator(vec, "");
+#if WITH_LIBWPG03
+    librevenge::RVNGStringVector vec;
+    librevenge::RVNGSVGDrawingGenerator generator(vec, "");
 
-	if (!libwpg::WPGraphics::parse(input, &generator) || vec.empty() || vec[0].empty())
- 	{
+    if (!libwpg::WPGraphics::parse(input, &generator) || vec.empty() || vec[0].empty()) {
         delete input;
         return NULL;
- 	}
+    }
 
-    librevenge::RVNGString output("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n");
-	output.append(vec[0]);
+    RVNGString output("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">\n");
+    output.append(vec[0]);
+#else
+    RVNGString output;
+    if (!libwpg::WPGraphics::generateSVG(input, output)) {
+        delete input;
+        return NULL;
+    }
+#endif
 
     //printf("I've got a doc: \n%s", painter.document.c_str());
 
