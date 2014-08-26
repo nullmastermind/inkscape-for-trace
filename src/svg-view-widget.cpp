@@ -14,7 +14,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <gtkmm.h>
 #include "display/sp-canvas.h"
 #include "display/sp-canvas-group.h"
 #include "display/canvas-arena.h"
@@ -69,7 +68,6 @@ static void sp_svg_view_widget_class_init(SPSVGSPViewWidgetClass *klass)
  */
 static void sp_svg_view_widget_init(SPSVGSPViewWidget *vw)
 {
-	GtkStyle *style;
 	SPCanvasItem *parent;
 
 	/* Settings */
@@ -92,14 +90,22 @@ static void sp_svg_view_widget_init(SPSVGSPViewWidget *vw)
 
 	vw->canvas = SPCanvas::createAA();
 
-#if !GTK_CHECK_VERSION(3,0,0)
+#if GTK_CHECK_VERSION(3,0,0)
+        GdkRGBA white = {1,1,1,0};
+        gtk_widget_override_background_color(vw->canvas, GTK_STATE_FLAG_NORMAL, &white);
+#else
 	gtk_widget_pop_colormap ();
-#endif
-
-	style = gtk_style_copy (gtk_widget_get_style (vw->canvas));
+	GtkStyle *style = gtk_style_copy (gtk_widget_get_style (vw->canvas));
 	style->bg[GTK_STATE_NORMAL] = style->white;
 	gtk_widget_set_style (vw->canvas, style);
+#endif
+
+#if GTK_CHECK_VERSION(3,8,0)
+	gtk_container_add (GTK_CONTAINER (vw->sw), vw->canvas);
+#else
 	gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (vw->sw), vw->canvas);
+#endif
+
 	gtk_widget_show (vw->canvas);
 
 	/* View */
