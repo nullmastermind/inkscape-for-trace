@@ -2,9 +2,7 @@
 #define SEEN_SP_COLOR_SELECTOR_H
 
 #include <gtk/gtk.h>
-#include "../color.h"
-
-#include <glib.h>
+#include "color.h"
 
 struct SPColorSelector;
 

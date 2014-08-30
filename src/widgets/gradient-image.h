@@ -17,7 +17,6 @@
 
 class SPGradient;
 
-#include <glib.h>
 #include <sigc++/connection.h>
 
 #define SP_TYPE_GRADIENT_IMAGE (sp_gradient_image_get_type ())

@@ -13,7 +13,7 @@
 #define SEEN_PROJ_PT_H
 
 #include <2geom/point.h>
-#include <gtk/gtk.h>
+#include <glib.h>
 
 namespace Proj {
 

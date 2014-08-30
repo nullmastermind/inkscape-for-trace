@@ -12,7 +12,6 @@
  *
  */
 
-#include <glib.h>
 #include <gtk/gtk.h>
 
 #include "color.h"

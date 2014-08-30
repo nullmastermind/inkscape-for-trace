@@ -19,16 +19,8 @@
 # include "config.h"
 #endif
 
-#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
-#include <glibmm/threads.h>
-#endif
-
 #include <gtkmm/liststore.h>
-
-#include <stddef.h>
 #include <sigc++/connection.h>
-
-#include <gtk/gtk.h>
 #include "gradient-selector.h"
 
 #define SP_TYPE_GRADIENT_VECTOR_SELECTOR (sp_gradient_vector_selector_get_type ())

@@ -16,8 +16,10 @@
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
+
+#include <gtkmm/treeview.h>
+
 #include "gradient-vector.h"
-#include <gtk/gtk.h>
 
 #include "document.h"
 #include "document-undo.h"

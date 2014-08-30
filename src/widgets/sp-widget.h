@@ -15,7 +15,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <glib.h>
 #include <gtk/gtk.h>
 
 #define SP_TYPE_WIDGET (sp_widget_get_type())

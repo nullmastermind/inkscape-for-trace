@@ -2,9 +2,7 @@
 #define SEEN_SP_COLOR_SCALES_H
 
 #include <glib.h>
-#include <gtk/gtk.h>
 
-#include <color.h>
 #include <widgets/sp-color-selector.h>
 
 struct SPColorScales;

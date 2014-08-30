@@ -17,10 +17,18 @@
 #define SP_IS_BUTTON(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), SP_TYPE_BUTTON))
 
 #include <gtk/gtk.h>
-#include <sigc++/sigc++.h>
-#include "helper/action.h"
+#include <sigc++/connection.h>
 #include "icon-size.h"
 
+struct SPAction;
+
+namespace Inkscape {
+namespace UI {
+namespace View {
+class View;
+}
+}
+}
 
 typedef enum {
 	SP_BUTTON_TYPE_NORMAL,

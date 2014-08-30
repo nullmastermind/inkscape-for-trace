@@ -18,6 +18,7 @@
 #include "helper/action-context.h"
 #include "interface.h"
 #include "shortcuts.h"
+#include "helper/action.h"
 
 #include <gdk/gdkkeysyms.h>
 

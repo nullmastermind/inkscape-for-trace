@@ -14,8 +14,6 @@
 
 #include <config.h>
 #include <gtk/gtk.h>
-#include <glib.h>
-
 
 #define SP_TYPE_XMLVIEW_CONTENT (sp_xmlview_content_get_type ())
 #define SP_XMLVIEW_CONTENT(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_XMLVIEW_CONTENT, SPXMLViewContent))

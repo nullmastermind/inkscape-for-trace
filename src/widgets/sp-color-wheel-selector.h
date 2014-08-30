@@ -1,7 +1,6 @@
 #ifndef SEEN_SP_COLOR_WHEEL_SELECTOR_H
 #define SEEN_SP_COLOR_WHEEL_SELECTOR_H
 
-#include <glib.h>
 #include <gtk/gtk.h>
 
 #include "sp-color-selector.h"
