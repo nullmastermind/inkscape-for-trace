@@ -570,16 +570,6 @@ static void usage()
     exit(1);
 }
 
-#ifdef XXX
-/* TODO !!! make this temporary stub unnecessary */
-InkscapeApplication *inkscape_get_instance() { return NULL; }
-void inkscape_ref (void) {}
-void inkscape_unref (void) {}
-void inkscape_add_document (SPDocument *document) {}
-void inkscape_remove_document (SPDocument *document) {}
-#endif
-
-
 /*
   Local Variables:
   mode:c++
