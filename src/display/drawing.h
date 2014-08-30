@@ -13,7 +13,6 @@
 #define SEEN_INKSCAPE_DISPLAY_DRAWING_H
 
 #include <set>
-#include <glib.h>
 #include <boost/operators.hpp>
 #include <boost/utility.hpp>
 #include <sigc++/sigc++.h>
@@ -23,7 +22,7 @@
 #include "nr-filter-colormatrix.h"
 
 typedef struct _SPCanvasArena SPCanvasArena;
-
+typedef unsigned int guint32;
 
 namespace Inkscape {
 
@@ -65,7 +64,7 @@ public:
 
     OutlineColors const &colors() const { return _colors; }
 
-    void setGrayscaleMatrix(gdouble value_matrix[20]);
+    void setGrayscaleMatrix(double value_matrix[20]);
 
     void update(Geom::IntRect const &area = Geom::IntRect::infinite(), UpdateContext const &ctx = UpdateContext(), unsigned flags = DrawingItem::STATE_ALL, unsigned reset = 0);
     void render(DrawingContext &dc, Geom::IntRect const &area, unsigned flags = 0);
@@ -100,7 +99,7 @@ private:
 
     OutlineColors _colors;
     Filters::FilterColorMatrix::ColorMatrixMatrix _grayscale_colormatrix;
-    SPCanvasArena *_canvasarena; // may be NULL is this arena is not the screen
+    SPCanvasArena *_canvasarena; // may be NULL if this arena is not the screen
                                  // but used for export etc.
 
     friend class DrawingItem;

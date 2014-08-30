@@ -1,3 +1,5 @@
+#include <glibmm.h>
+
 #include "attributes.h"
 #include "display/cairo-utils.h"
 #include "xml/repr.h"

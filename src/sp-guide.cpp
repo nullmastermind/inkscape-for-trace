@@ -341,7 +341,7 @@ void SPGuide::hideSPGuide(SPCanvas *canvas)
     g_assert_not_reached();
 }
 
-void SPGuide::sensitize(SPCanvas *canvas, gboolean sensitive)
+void SPGuide::sensitize(SPCanvas *canvas, bool sensitive)
 {
     g_assert(canvas != NULL);
     g_assert(SP_IS_CANVAS(canvas));

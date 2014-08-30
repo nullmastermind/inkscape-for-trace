@@ -9,6 +9,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <glib.h>
 #include "axis-manip.h"
 
 namespace Proj {
@@ -29,6 +30,14 @@ get_remaining_axes (Axis axis) {
     if (!is_single_axis_direction (axis)) return std::make_pair (NONE, NONE);
     Axis plane = orth_plane_or_axis (axis);
     return std::make_pair (extract_first_axis_direction (plane), extract_second_axis_direction (plane));
+}
+
+char * string_from_axes (Box3D::Axis axis) {
+    GString *pstring = g_string_new("");
+    if (axis & Box3D::X) g_string_append_printf (pstring, "X");
+    if (axis & Box3D::Y) g_string_append_printf (pstring, "Y");
+    if (axis & Box3D::Z) g_string_append_printf (pstring, "Z");
+    return pstring->str;
 }
 
 } // namespace Box3D 

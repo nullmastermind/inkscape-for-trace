@@ -160,7 +160,7 @@ void SPColor::set( guint32 value )
  * Convert SPColor with integer alpha value to 32bit RGBA value.
  * \pre alpha < 256
  */
-guint32 SPColor::toRGBA32( gint alpha ) const
+guint32 SPColor::toRGBA32( int alpha ) const
 {
     g_return_val_if_fail (alpha <= 0xff, 0x0);
 
@@ -175,12 +175,12 @@ guint32 SPColor::toRGBA32( gint alpha ) const
  * Convert SPColor with float alpha value to 32bit RGBA value.
  * \pre color != NULL && 0 <= alpha <= 1
  */
-guint32 SPColor::toRGBA32( gdouble alpha ) const
+guint32 SPColor::toRGBA32( double alpha ) const
 {
     g_return_val_if_fail(alpha >= 0.0, 0x0);
     g_return_val_if_fail(alpha <= 1.0, 0x0);
 
-    return toRGBA32( static_cast<gint>(SP_COLOR_F_TO_U(alpha)) );
+    return toRGBA32( static_cast<int>(SP_COLOR_F_TO_U(alpha)) );
 }
 
 std::string SPColor::toString() const
@@ -284,7 +284,7 @@ sp_color_rgb_to_hsv_floatv (float *hsv, float r, float g, float b)
 void
 sp_color_hsv_to_rgb_floatv (float *rgb, float h, float s, float v)
 {
-    gdouble f, w, q, t, d;
+    double f, w, q, t, d;
 
     d = h * 5.99999999;
     f = d - floor (d);
