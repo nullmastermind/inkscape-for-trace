@@ -23,6 +23,7 @@
 # include "config.h"
 #endif
 
+#include <glibmm.h>
 #include "gradient-vector.h"
 #include "ui/widget/color-preview.h"
 #include "verbs.h"
@@ -30,17 +31,17 @@
 #include "macros.h"
 #include <glibmm/i18n.h>
 #include <set>
-#include "../widgets/gradient-image.h"
-#include "../inkscape.h"
-#include "../document-private.h"
-#include "../gradient-chemistry.h"
-#include "../helper/window.h"
+#include "widgets/gradient-image.h"
+#include "inkscape.h"
+#include "document-private.h"
+#include "gradient-chemistry.h"
+#include "helper/window.h"
 #include "io/resource.h"
 
 #include "xml/repr.h"
 
-#include "../dialogs/dialog-events.h"
-#include "../preferences.h"
+#include "dialogs/dialog-events.h"
+#include "preferences.h"
 #include "svg/css-ostringstream.h"
 #include "sp-stop.h"
 #include "selection-chemistry.h"
@@ -50,8 +51,7 @@
 #include "desktop.h"
 #include "layer-manager.h"
 
-#include <sigc++/functors/ptr_fun.h>
-#include <sigc++/adaptors/bind.h>
+#include <sigc++/sigc++.h>
 #include "document-undo.h"
 
 using Inkscape::DocumentUndo;
@@ -468,10 +468,10 @@ void SPGradientVectorSelector::setSwatched()
   ###                 Vector Editing Widget
   ##################################################################*/
 
-#include "../widgets/sp-color-notebook.h"
-#include "../widgets/widget-sizes.h"
-#include "../xml/node-event-vector.h"
-#include "../svg/svg-color.h"
+#include "widgets/sp-color-notebook.h"
+#include "widgets/widget-sizes.h"
+#include "xml/node-event-vector.h"
+#include "svg/svg-color.h"
 
 
 #define PAD 4
