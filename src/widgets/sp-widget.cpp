@@ -37,8 +37,6 @@ public:
     SPWidgetImpl(SPWidget &target);
     ~SPWidgetImpl();
 
-    static void classInit(SPWidgetClass *klass);
-    static void init(SPWidget *widget);
     static void dispose(GObject *object);
     static void show(GtkWidget *widget);
     static void hide(GtkWidget *widget);
@@ -69,56 +67,19 @@ public:
     void setSelection(Selection *selection);
 
 private:
-    static GtkBinClass *parentClass;
-    static guint signals[LAST_SIGNAL];
-
     SPWidget &_target;
 };
-
-GtkBinClass *SPWidgetImpl::parentClass = 0;
-guint SPWidgetImpl::signals[LAST_SIGNAL] = {0};
-
 } // namespace Inkscape
 
-GType SPWidget::getType()
-{
-    static GType type = 0;
-    if (!type) {
-        static GTypeInfo const info = {
-            sizeof(SPWidgetClass),
-            NULL, NULL,
-            reinterpret_cast<GClassInitFunc>(SPWidgetImpl::classInit),
-            NULL, NULL,
-            sizeof(SPWidget),
-            0,
-            reinterpret_cast<GInstanceInitFunc>(SPWidgetImpl::init),
-            NULL
-        };
-        type = g_type_register_static(GTK_TYPE_BIN,
-                                      "SPWidget",
-                                      &info,
-                                      static_cast<GTypeFlags>(0));
-    }
-    return type;
-}
+G_DEFINE_TYPE(SPWidget, sp_widget, GTK_TYPE_BIN);
 
-namespace Inkscape {
+static guint signals[LAST_SIGNAL] = {0};
 
-SPWidgetImpl::SPWidgetImpl(SPWidget &target) :
-    _target(target)
-{
-}
-
-SPWidgetImpl::~SPWidgetImpl()
-{
-}
-
-void SPWidgetImpl::classInit(SPWidgetClass *klass)
+static void
+sp_widget_class_init(SPWidgetClass *klass)
 {
     GObjectClass *object_class = reinterpret_cast<GObjectClass *>(klass);
     GtkWidgetClass *widget_class = reinterpret_cast<GtkWidgetClass *>(klass);
-
-    parentClass = reinterpret_cast<GtkBinClass *>(g_type_class_peek_parent(klass));
 
     object_class->dispose = SPWidgetImpl::dispose;
 
@@ -170,9 +131,20 @@ void SPWidgetImpl::classInit(SPWidgetClass *klass)
     widget_class->size_allocate = SPWidgetImpl::sizeAllocate;
 }
 
-void SPWidgetImpl::init(SPWidget *spw)
+static void sp_widget_init(SPWidget *spw)
 {
     spw->_impl = new SPWidgetImpl(*spw); // ctor invoked after all other init
+}
+
+namespace Inkscape {
+
+SPWidgetImpl::SPWidgetImpl(SPWidget &target) :
+    _target(target)
+{
+}
+
+SPWidgetImpl::~SPWidgetImpl()
+{
 }
 
 void SPWidgetImpl::dispose(GObject *object)
@@ -189,8 +161,8 @@ void SPWidgetImpl::dispose(GObject *object)
     delete spw->_impl;
     spw->_impl = 0;
 
-    if (reinterpret_cast<GObjectClass *>(parentClass)->dispose) {
-        (*reinterpret_cast<GObjectClass *>(parentClass)->dispose)(object);
+    if (G_OBJECT_CLASS(sp_widget_parent_class)->dispose) {
+        G_OBJECT_CLASS(sp_widget_parent_class)->dispose(object);
     }
 }
 
@@ -214,8 +186,8 @@ void SPWidgetImpl::show(GtkWidget *widget)
         );
     }
 
-    if (reinterpret_cast<GtkWidgetClass *>(parentClass)->show) {
-        (*reinterpret_cast<GtkWidgetClass *>(parentClass)->show)(widget);
+    if (GTK_WIDGET_CLASS(sp_widget_parent_class)->show) {
+        GTK_WIDGET_CLASS(sp_widget_parent_class)->show(widget);
     }
 }
 
@@ -230,8 +202,8 @@ void SPWidgetImpl::hide(GtkWidget *widget)
         spw->selSet.disconnect();
     }
 
-    if (reinterpret_cast<GtkWidgetClass *>(parentClass)->hide) {
-        (*reinterpret_cast<GtkWidgetClass *>(parentClass)->hide)(widget);
+    if (GTK_WIDGET_CLASS(sp_widget_parent_class)->hide) {
+        GTK_WIDGET_CLASS(sp_widget_parent_class)->hide(widget);
     }
 }
 

@@ -40,6 +40,7 @@
 #include <glibmm/i18n.h>
 #include <glibmm/miscutils.h>
 
+#include "document.h"
 #include "extension/input.h"
 #include "extension/output.h"
 #include "extension/db.h"

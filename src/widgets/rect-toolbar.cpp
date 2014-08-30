@@ -44,6 +44,7 @@
 #include "sp-rect.h"
 #include "toolbox.h"
 #include "ui/icon-names.h"
+#include "ui/tools/rect-tool.h"
 #include "ui/uxmanager.h"
 #include "ui/widget/unit-tracker.h"
 #include "util/units.h"
@@ -288,6 +289,7 @@ static void sp_rect_toolbox_selection_changed(Inkscape::Selection *selection, GO
     }
 }
 
+static void rect_toolbox_watch_ec(SPDesktop* dt, Inkscape::UI::Tools::ToolBase* ec, GObject* holder);
 
 void sp_rect_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder)
 {
@@ -394,13 +396,21 @@ void sp_rect_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
     g_object_set_data( holder, "single", GINT_TO_POINTER(TRUE) );
     sp_rtb_sensitivize( holder );
 
-    sigc::connection *connection = new sigc::connection(
-        sp_desktop_selection(desktop)->connectChanged(sigc::bind(sigc::ptr_fun(sp_rect_toolbox_selection_changed), holder))
-        );
-    g_signal_connect( holder, "destroy", G_CALLBACK(delete_connection), connection );
+    desktop->connectEventContextChanged(sigc::bind(sigc::ptr_fun(rect_toolbox_watch_ec), holder));
     g_signal_connect( holder, "destroy", G_CALLBACK(purge_repr_listener), holder );
 }
 
+static void rect_toolbox_watch_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* ec, GObject* holder)
+{
+    static sigc::connection changed;
+
+    if (SP_IS_RECT_CONTEXT(ec)) {
+        changed = sp_desktop_selection(desktop)->connectChanged(sigc::bind(sigc::ptr_fun(sp_rect_toolbox_selection_changed), holder));
+    } else {
+        if (changed)
+            changed.disconnect();
+    }
+}
 
 /*
   Local Variables:
@@ -411,4 +421,4 @@ void sp_rect_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
   fill-column:99
   End:
 */
-// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8 :

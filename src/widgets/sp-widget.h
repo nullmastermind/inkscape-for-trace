@@ -15,11 +15,10 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <glib.h>
 #include <gtk/gtk.h>
 #include "inkscape.h"
 
-#define SP_TYPE_WIDGET (SPWidget::getType())
+#define SP_TYPE_WIDGET (sp_widget_get_type())
 #define SP_WIDGET(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SP_TYPE_WIDGET, SPWidget))
 #define SP_WIDGET_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SP_TYPE_WIDGET, SPWidgetClass))
 #define SP_IS_WIDGET(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SP_TYPE_WIDGET))
@@ -40,11 +39,11 @@ struct SPWidget {
 
     GtkBin bin;
 
+    Inkscape::SPWidgetImpl *_impl;
+private:
     sigc::connection selModified;
     sigc::connection selChanged;
     sigc::connection selSet;
-private:
-    Inkscape::SPWidgetImpl *_impl;
 };
 
 struct SPWidgetClass {
@@ -58,7 +57,7 @@ struct SPWidgetClass {
     void (* set_selection) (SPWidget *spw, Inkscape::Selection *selection);
 };
 
-/* fixme: Think (Lauris) */
+GType sp_widget_get_type();
 
 /** Generic constructor for global widget. */
 GtkWidget *sp_widget_new_global();

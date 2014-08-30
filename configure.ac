@@ -7,8 +7,7 @@ AC_PREREQ([2.64])
 # `dpkg --compare-versions'.  (ii) We don't always know what the next
 # version is going to be called until about the time we release it
 # (whereas we always know what the previous version was called).
-AC_INIT([inkscape],
-        [0.48+devel],
+AC_INIT([inkscape], [0.91pre2],
         [http://bugs.launchpad.net/inkscape/+filebug],
         [inkscape],
         [http://inkscape.org/])
@@ -846,6 +845,13 @@ if test "x$enable_strict_build" != "xno"; then
 	else
 		CPPFLAGS="-DG_DISABLE_DEPRECATED $CPPFLAGS"
 	fi
+fi
+
+# Disable all deprecated symbols if very strict build is requested.
+# TODO: Make this a default option for Gtk+ 2 or 3 builds as soon as
+#       possible.
+if test "x$enable_strict_build" = "xhigh"; then
+        CPPFLAGS="-Werror=deprecated-declarations $CPPFLAGS"
 fi
 
 # Check for Apple Mac OS X Carbon framework

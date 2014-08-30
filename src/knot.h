@@ -17,14 +17,12 @@
 #include <gdk/gdk.h>
 #include <2geom/point.h>
 #include "knot-enums.h"
-#include <stddef.h>
 #include <sigc++/sigc++.h>
 #include "enums.h"
-#include <gtk/gtk.h>
-#include "sp-item.h"
 
 class SPDesktop;
 struct SPCanvasItem;
+class SPItem;
 
 #define SP_KNOT(obj) (dynamic_cast<SPKnot*>(static_cast<SPKnot*>(obj)))
 #define SP_IS_KNOT(obj) (dynamic_cast<const SPKnot*>(static_cast<const SPKnot*>(obj)) != NULL)

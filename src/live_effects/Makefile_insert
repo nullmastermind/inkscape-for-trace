@@ -38,6 +38,8 @@ ink_common_sources += \
 	live_effects/lpe-gears.h	\
 	live_effects/lpe-interpolate.cpp	\
 	live_effects/lpe-interpolate.h	\
+	live_effects/lpe-interpolate_points.cpp	\
+	live_effects/lpe-interpolate_points.h	\
 	live_effects/lpe-test-doEffect-stack.cpp	\
 	live_effects/lpe-test-doEffect-stack.h	\
 	live_effects/lpe-bspline.cpp	\
@@ -48,6 +50,8 @@ ink_common_sources += \
 	live_effects/lpe-lattice2.h	\
 	live_effects/lpe-roughen.cpp	\
 	live_effects/lpe-roughen.h	\
+	live_effects/lpe-show_handles.cpp	\
+	live_effects/lpe-show_handles.h	\
 	live_effects/lpe-simplify.cpp	\
 	live_effects/lpe-simplify.h	\
 	live_effects/lpe-envelope.cpp	\

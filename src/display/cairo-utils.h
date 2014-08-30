@@ -14,7 +14,7 @@
 
 #include <boost/noncopyable.hpp>
 //#include <glibmm/threads.h> // workaround
-#include <glib.h>
+//#include <glib.h>
 #include <cairomm/cairomm.h>
 //#include <gdkmm/pixbuf.h>
 #include <2geom/forward.h>

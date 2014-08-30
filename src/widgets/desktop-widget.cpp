@@ -98,7 +98,6 @@ enum {
 //---------------------------------------------------------------------
 /* SPDesktopWidget */
 
-static void sp_desktop_widget_class_init (SPDesktopWidgetClass *klass);
 static void sp_desktop_widget_dispose(GObject *object);
 
 static void sp_desktop_widget_size_allocate (GtkWidget *widget, GtkAllocation *allocation);
@@ -127,8 +126,6 @@ static void sp_dtw_zoom_page (GtkMenuItem *item, gpointer data);
 static void sp_dtw_zoom_drawing (GtkMenuItem *item, gpointer data);
 static void sp_dtw_zoom_selection (GtkMenuItem *item, gpointer data);
 static void sp_dtw_sticky_zoom_toggled (GtkMenuItem *item, gpointer data);
-
-SPViewWidgetClass *dtw_parent_class;
 
 class CMSPrefWatcher {
 public:
@@ -268,31 +265,19 @@ SPDesktopWidget::window_get_pointer()
 
 static GTimer *overallTimer = 0;
 
-/**
- * Registers SPDesktopWidget class and returns its type number.
- */
-GType SPDesktopWidget::getType(void)
+struct SPDesktopWidgetPrivate
 {
-    static GType type = 0;
-    if (!type) {
-        GTypeInfo info = {
-            sizeof(SPDesktopWidgetClass),
-            0, // base_init
-            0, // base_finalize
-            (GClassInitFunc)sp_desktop_widget_class_init,
-            0, // class_finalize
-            0, // class_data
-            sizeof(SPDesktopWidget),
-            0, // n_preallocs
-            (GInstanceInitFunc)SPDesktopWidget::init,
-            0 // value_table
-        };
-        type = g_type_register_static(SP_TYPE_VIEW_WIDGET, "SPDesktopWidget", &info, static_cast<GTypeFlags>(0));
-        // Begin a timer to watch for the first desktop to appear on-screen
-        overallTimer = g_timer_new();
-    }
-    return type;
-}
+    GtkWidget *tool_toolbox;
+    GtkWidget *aux_toolbox;
+    GtkWidget *commands_toolbox;
+    GtkWidget *snap_toolbox;
+};
+
+G_DEFINE_TYPE_WITH_CODE(SPDesktopWidget, sp_desktop_widget, SP_TYPE_VIEW_WIDGET,
+                        // Begin a timer to watch for the first desktop to appear on-screen
+                        overallTimer = g_timer_new();
+                        G_ADD_PRIVATE(SPDesktopWidget);
+                       );
 
 /**
  * SPDesktopWidget vtable initialization
@@ -300,8 +285,6 @@ GType SPDesktopWidget::getType(void)
 static void
 sp_desktop_widget_class_init (SPDesktopWidgetClass *klass)
 {
-    dtw_parent_class = SP_VIEW_WIDGET_CLASS(g_type_class_peek_parent(klass));
-
     GObjectClass *object_class = G_OBJECT_CLASS(klass);
     GtkWidgetClass *widget_class = GTK_WIDGET_CLASS(klass);
 
@@ -329,9 +312,11 @@ static void canvas_tbl_size_allocate(GtkWidget    * /*widget*/,
 /**
  * Callback for SPDesktopWidget object initialization.
  */
-void SPDesktopWidget::init( SPDesktopWidget *dtw )
+void sp_desktop_widget_init( SPDesktopWidget *dtw )
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+
+    dtw->priv = reinterpret_cast<SPDesktopWidgetPrivate *>(sp_desktop_widget_get_instance_private(dtw));
 
     new (&dtw->modified_connection) sigc::connection();
 
@@ -377,19 +362,19 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     gtk_box_pack_end( GTK_BOX (dtw->vbox), dtw->hbox, TRUE, TRUE, 0 );
     gtk_widget_show(dtw->hbox);
 
-    dtw->aux_toolbox = ToolboxFactory::createAuxToolbox();
-    gtk_box_pack_end (GTK_BOX (dtw->vbox), dtw->aux_toolbox, FALSE, TRUE, 0);
+    dtw->priv->aux_toolbox = ToolboxFactory::createAuxToolbox();
+    gtk_box_pack_end (GTK_BOX (dtw->vbox), dtw->priv->aux_toolbox, FALSE, TRUE, 0);
 
-    dtw->snap_toolbox = ToolboxFactory::createSnapToolbox();
-    ToolboxFactory::setOrientation( dtw->snap_toolbox, GTK_ORIENTATION_VERTICAL );
-    gtk_box_pack_end( GTK_BOX(dtw->hbox), dtw->snap_toolbox, FALSE, TRUE, 0 );
+    dtw->priv->snap_toolbox = ToolboxFactory::createSnapToolbox();
+    ToolboxFactory::setOrientation( dtw->priv->snap_toolbox, GTK_ORIENTATION_VERTICAL );
+    gtk_box_pack_end( GTK_BOX(dtw->hbox), dtw->priv->snap_toolbox, FALSE, TRUE, 0 );
 
-    dtw->commands_toolbox = ToolboxFactory::createCommandsToolbox();
-    gtk_box_pack_end (GTK_BOX (dtw->vbox), dtw->commands_toolbox, FALSE, TRUE, 0);
+    dtw->priv->commands_toolbox = ToolboxFactory::createCommandsToolbox();
+    gtk_box_pack_end (GTK_BOX (dtw->vbox), dtw->priv->commands_toolbox, FALSE, TRUE, 0);
 
-    dtw->tool_toolbox = ToolboxFactory::createToolToolbox();
-    ToolboxFactory::setOrientation( dtw->tool_toolbox, GTK_ORIENTATION_VERTICAL );
-    gtk_box_pack_start( GTK_BOX(dtw->hbox), dtw->tool_toolbox, FALSE, TRUE, 0 );
+    dtw->priv->tool_toolbox = ToolboxFactory::createToolToolbox();
+    ToolboxFactory::setOrientation( dtw->priv->tool_toolbox, GTK_ORIENTATION_VERTICAL );
+    gtk_box_pack_start( GTK_BOX(dtw->hbox), dtw->priv->tool_toolbox, FALSE, TRUE, 0 );
 
     /* Horizontal ruler */
     GtkWidget *eventbox = gtk_event_box_new ();
@@ -804,8 +789,8 @@ static void sp_desktop_widget_dispose(GObject *object)
 
     dtw->modified_connection.~connection();
 
-    if (G_OBJECT_CLASS (dtw_parent_class)->dispose) {
-        (* G_OBJECT_CLASS (dtw_parent_class)->dispose) (object);
+    if (G_OBJECT_CLASS (sp_desktop_widget_parent_class)->dispose) {
+        G_OBJECT_CLASS (sp_desktop_widget_parent_class)->dispose(object);
     }
 }
 
@@ -908,8 +893,8 @@ sp_desktop_widget_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
         (allocation->y == widg_allocation.y) &&
         (allocation->width == widg_allocation.width) &&
         (allocation->height == widg_allocation.height)) {
-        if (GTK_WIDGET_CLASS (dtw_parent_class)->size_allocate)
-            GTK_WIDGET_CLASS (dtw_parent_class)->size_allocate (widget, allocation);
+        if (GTK_WIDGET_CLASS (sp_desktop_widget_parent_class)->size_allocate)
+            GTK_WIDGET_CLASS (sp_desktop_widget_parent_class)->size_allocate (widget, allocation);
         return;
     }
 
@@ -917,8 +902,8 @@ sp_desktop_widget_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
         Geom::Rect const area = dtw->desktop->get_display_area();
         double zoom = dtw->desktop->current_zoom();
 
-        if (GTK_WIDGET_CLASS(dtw_parent_class)->size_allocate) {
-            GTK_WIDGET_CLASS(dtw_parent_class)->size_allocate (widget, allocation);
+        if (GTK_WIDGET_CLASS(sp_desktop_widget_parent_class)->size_allocate) {
+            GTK_WIDGET_CLASS(sp_desktop_widget_parent_class)->size_allocate (widget, allocation);
         }
 
         if (SP_BUTTON_IS_DOWN(dtw->sticky_zoom)) {
@@ -936,8 +921,8 @@ sp_desktop_widget_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
         dtw->desktop->show_dialogs();
 
     } else {
-        if (GTK_WIDGET_CLASS (dtw_parent_class)->size_allocate) {
-            GTK_WIDGET_CLASS (dtw_parent_class)->size_allocate (widget, allocation);
+        if (GTK_WIDGET_CLASS (sp_desktop_widget_parent_class)->size_allocate) {
+            GTK_WIDGET_CLASS (sp_desktop_widget_parent_class)->size_allocate (widget, allocation);
         }
 //            this->size_allocate (widget, allocation);
     }
@@ -952,8 +937,8 @@ sp_desktop_widget_realize (GtkWidget *widget)
 
     SPDesktopWidget *dtw = SP_DESKTOP_WIDGET (widget);
 
-    if (GTK_WIDGET_CLASS (dtw_parent_class)->realize)
-        (* GTK_WIDGET_CLASS (dtw_parent_class)->realize) (widget);
+    if (GTK_WIDGET_CLASS (sp_desktop_widget_parent_class)->realize)
+        GTK_WIDGET_CLASS (sp_desktop_widget_parent_class)->realize(widget);
 
     Geom::Rect d = Geom::Rect::from_xywh(Geom::Point(0,0), (dtw->desktop->doc())->getDimensions());
 
@@ -998,8 +983,8 @@ sp_desktop_widget_event (GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dt
         }
     }
 
-    if (GTK_WIDGET_CLASS (dtw_parent_class)->event) {
-        return (* GTK_WIDGET_CLASS (dtw_parent_class)->event) (widget, event);
+    if (GTK_WIDGET_CLASS (sp_desktop_widget_parent_class)->event) {
+        return GTK_WIDGET_CLASS (sp_desktop_widget_parent_class)->event(widget, event);
     } else {
         // The key press/release events need to be passed to desktop handler explicitly,
         // because otherwise the event contexts only receive key events when the mouse cursor
@@ -1499,29 +1484,29 @@ void SPDesktopWidget::layoutWidgets()
     }
 
     if (!prefs->getBool(pref_root + "commands/state", true)) {
-        gtk_widget_hide (dtw->commands_toolbox);
+        gtk_widget_hide (dtw->priv->commands_toolbox);
     } else {
-        gtk_widget_show_all (dtw->commands_toolbox);
+        gtk_widget_show_all (dtw->priv->commands_toolbox);
     }
 
     if (!prefs->getBool(pref_root + "snaptoolbox/state", true)) {
-        gtk_widget_hide (dtw->snap_toolbox);
+        gtk_widget_hide (dtw->priv->snap_toolbox);
     } else {
-        gtk_widget_show_all (dtw->snap_toolbox);
+        gtk_widget_show_all (dtw->priv->snap_toolbox);
     }
 
     if (!prefs->getBool(pref_root + "toppanel/state", true)) {
-        gtk_widget_hide (dtw->aux_toolbox);
+        gtk_widget_hide (dtw->priv->aux_toolbox);
     } else {
         // we cannot just show_all because that will show all tools' panels;
         // this is a function from toolbox.cpp that shows only the current tool's panel
-        ToolboxFactory::showAuxToolbox(dtw->aux_toolbox);
+        ToolboxFactory::showAuxToolbox(dtw->priv->aux_toolbox);
     }
 
     if (!prefs->getBool(pref_root + "toolbox/state", true)) {
-        gtk_widget_hide (dtw->tool_toolbox);
+        gtk_widget_hide (dtw->priv->tool_toolbox);
     } else {
-        gtk_widget_show_all (dtw->tool_toolbox);
+        gtk_widget_show_all (dtw->priv->tool_toolbox);
     }
 
     if (!prefs->getBool(pref_root + "statusbar/state", true)) {
@@ -1558,7 +1543,7 @@ void SPDesktopWidget::layoutWidgets()
 void
 SPDesktopWidget::setToolboxFocusTo (const gchar* label)
 {
-    gpointer hb = sp_search_by_data_recursive(aux_toolbox, (gpointer) label);
+    gpointer hb = sp_search_by_data_recursive(priv->aux_toolbox, (gpointer) label);
     if (hb && GTK_IS_WIDGET(hb))
     {
         gtk_widget_grab_focus(GTK_WIDGET(hb));
@@ -1569,7 +1554,7 @@ void
 SPDesktopWidget::setToolboxAdjustmentValue (gchar const *id, double value)
 {
     GtkAdjustment *a = NULL;
-    gpointer hb = sp_search_by_data_recursive (aux_toolbox, (gpointer) id);
+    gpointer hb = sp_search_by_data_recursive (priv->aux_toolbox, (gpointer) id);
     if (hb && GTK_IS_WIDGET(hb)) {
         if (GTK_IS_SPIN_BUTTON(hb))
             a = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON(hb));
@@ -1586,7 +1571,7 @@ SPDesktopWidget::setToolboxAdjustmentValue (gchar const *id, double value)
 void
 SPDesktopWidget::setToolboxSelectOneValue (gchar const *id, int value)
 {
-    gpointer hb = sp_search_by_data_recursive(aux_toolbox, (gpointer) id);
+    gpointer hb = sp_search_by_data_recursive(priv->aux_toolbox, (gpointer) id);
     if (hb) {
         ege_select_one_action_set_active(EGE_SELECT_ONE_ACTION(hb), value);
     }
@@ -1597,7 +1582,7 @@ bool
 SPDesktopWidget::isToolboxButtonActive (const gchar* id)
 {
     bool isActive = false;
-    gpointer thing = sp_search_by_data_recursive(aux_toolbox, (gpointer) id);
+    gpointer thing = sp_search_by_data_recursive(priv->aux_toolbox, (gpointer) id);
     if ( !thing ) {
         //g_message( "Unable to locate item for {%s}", id );
     } else if ( GTK_IS_TOGGLE_BUTTON(thing) ) {
@@ -1618,13 +1603,13 @@ void SPDesktopWidget::setToolboxPosition(Glib::ustring const& id, GtkPositionTyp
     // Note - later on these won't be individual member variables.
     GtkWidget* toolbox = 0;
     if (id == "ToolToolbar") {
-        toolbox = tool_toolbox;
+        toolbox = priv->tool_toolbox;
     } else if (id == "AuxToolbar") {
-        toolbox = aux_toolbox;
+        toolbox = priv->aux_toolbox;
     } else if (id == "CommandsToolbar") {
-        toolbox = commands_toolbox;
+        toolbox = priv->commands_toolbox;
     } else if (id == "SnapToolbar") {
-        toolbox = snap_toolbox;
+        toolbox = priv->snap_toolbox;
     }
 
 
@@ -1697,10 +1682,10 @@ SPDesktopWidget* SPDesktopWidget::createInstance(SPNamedView *namedview)
     dtw->layoutWidgets();
 
     std::vector<GtkWidget *> toolboxes;
-    toolboxes.push_back(dtw->tool_toolbox);
-    toolboxes.push_back(dtw->aux_toolbox);
-    toolboxes.push_back(dtw->commands_toolbox);
-    toolboxes.push_back(dtw->snap_toolbox);
+    toolboxes.push_back(dtw->priv->tool_toolbox);
+    toolboxes.push_back(dtw->priv->aux_toolbox);
+    toolboxes.push_back(dtw->priv->commands_toolbox);
+    toolboxes.push_back(dtw->priv->snap_toolbox);
 
     dtw->panels->setDesktop( dtw->desktop );
 
@@ -1754,8 +1739,8 @@ void SPDesktopWidget::namedviewModified(SPObject *obj, guint flags)
          *
          * This should solve: https://bugs.launchpad.net/inkscape/+bug/362995
          */
-        if (GTK_IS_CONTAINER(aux_toolbox)) {
-            GList *ch = gtk_container_get_children (GTK_CONTAINER(aux_toolbox));
+        if (GTK_IS_CONTAINER(priv->aux_toolbox)) {
+            GList *ch = gtk_container_get_children (GTK_CONTAINER(priv->aux_toolbox));
             for (GList *i = ch; i != NULL; i = i->next) {
                 if (GTK_IS_CONTAINER(i->data)) {
                     GList *grch = gtk_container_get_children (GTK_CONTAINER(i->data));
@@ -1781,7 +1766,7 @@ void SPDesktopWidget::namedviewModified(SPObject *obj, guint flags)
         gtk_widget_set_tooltip_text(this->vruler_box, gettext(nv->doc_units->name_plural.c_str()));
 
         sp_desktop_widget_update_rulers(this);
-        ToolboxFactory::updateSnapToolbox(this->desktop, 0, this->snap_toolbox);
+        ToolboxFactory::updateSnapToolbox(this->desktop, 0, priv->snap_toolbox);
     }
 }
 

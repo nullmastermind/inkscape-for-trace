@@ -31,6 +31,7 @@ set(live_effects_SRC
 	lpe-recursiveskeleton.cpp
 	lpe-rough-hatches.cpp
 	lpe-ruler.cpp
+	lpe-show_handles.cpp
 	lpe-simplify.cpp
 	# lpe-skeleton.cpp
 	lpe-sketch.cpp
@@ -99,6 +100,7 @@ set(live_effects_SRC
 	lpe-rough-hatches.h
 	lpe-ruler.h
 	lpe-simplify.h
+	lpe-show_handles.h
 	lpe-skeleton.h
 	lpe-sketch.h
 	lpe-spiro.h

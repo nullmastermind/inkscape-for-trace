@@ -44,20 +44,38 @@ namespace Dialogs {
 FilletChamferPropertiesDialog::FilletChamferPropertiesDialog()
     : _desktop(NULL), _knotpoint(NULL), _position_visible(false)
 {
+#if WITH_GTKMM_3_0
+    Gtk::Box *mainVBox = get_content_area();
+#else
     Gtk::Box *mainVBox = get_vbox();
+#endif
+
     mainVBox->set_homogeneous(false);
+
+#if WITH_GTKMM_3_0
+    _layout_table.set_row_spacing(4);
+    _layout_table.set_column_spacing(4);
+#else
     _layout_table.set_spacings(4);
     _layout_table.resize(2, 2);
+#endif
 
     // Layer name widgets
     _fillet_chamfer_position_entry.set_activates_default(true);
     _fillet_chamfer_position_label.set_label(_("Radius (pixels):"));
     _fillet_chamfer_position_label.set_alignment(1.0, 0.5);
 
+#if WITH_GTKMM_3_0
+    _layout_table.attach(_fillet_chamfer_position_label, 0, 0, 1, 1);
+    _layout_table.attach(_fillet_chamfer_position_entry, 1, 0, 1, 1);
+    _fillet_chamfer_position_entry.set_hexpand();
+#else
     _layout_table.attach(_fillet_chamfer_position_label, 0, 1, 0, 1, Gtk::FILL,
                          Gtk::FILL);
     _layout_table.attach(_fillet_chamfer_position_entry, 1, 2, 0, 1,
                          Gtk::FILL | Gtk::EXPAND, Gtk::FILL);
+#endif
+
     _fillet_chamfer_type_fillet.set_label(_("Fillet"));
     _fillet_chamfer_type_fillet.set_group(_fillet_chamfer_type_group);
     _fillet_chamfer_type_inverse_fillet.set_label(_("Inverse fillet"));

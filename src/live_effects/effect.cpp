@@ -28,6 +28,7 @@
 #include "live_effects/lpe-lattice.h"
 #include "live_effects/lpe-lattice2.h"
 #include "live_effects/lpe-roughen.h"
+#include "live_effects/lpe-show_handles.h"
 #include "live_effects/lpe-simplify.h"
 #include "live_effects/lpe-envelope.h"
 #include "live_effects/lpe-constructgrid.h"
@@ -42,6 +43,7 @@
 #include "live_effects/lpe-ruler.h"
 #include "live_effects/lpe-boolops.h"
 #include "live_effects/lpe-interpolate.h"
+#include "live_effects/lpe-interpolate_points.h"
 #include "live_effects/lpe-text_label.h"
 #include "live_effects/lpe-path_length.h"
 #include "live_effects/lpe-line_segment.h"
@@ -126,13 +128,16 @@ const Util::EnumData<EffectType> LPETypeData[] = {
 /* 0.91 */
     {POWERSTROKE,           N_("Power stroke"),            "powerstroke"},
     {CLONE_ORIGINAL,        N_("Clone original path"),     "clone_original"},
-    {ROUGHEN,               N_("Roughen"),     "roughen"},
+/* EXPERIMENTAL */    
+    {SHOW_HANDLES,          N_("Show handles"),            "show_handles"},
+    {ROUGHEN,               N_("Roughen"),                 "roughen"},
     {BSPLINE,               N_("BSpline"),                 "bspline"},
     {SIMPLIFY,              N_("Simplify"),                "simplify"},
     {LATTICE2,              N_("Lattice Deformation 2"),   "lattice2"},
     // TRANSLATORS: "Envelope Perspective" should be equivalent to "perspective transformation"
     {ENVELOPE_PERSPECTIVE,  N_("Envelope Perspective"),    "envelope-perspective"},
     {FILLET_CHAMFER,        N_("Fillet/Chamfer"),          "fillet-chamfer"},
+    {INTERPOLATE_POINTS,    N_("Interpolate points"),      "interpolate_points"},
 };
 const Util::EnumDataConverter<EffectType> LPETypeConverter(LPETypeData, sizeof(LPETypeData)/sizeof(*LPETypeData));
 
@@ -229,6 +234,9 @@ Effect::New(EffectType lpenr, LivePathEffectObject *lpeobj)
         case INTERPOLATE:
             neweffect = static_cast<Effect*> ( new LPEInterpolate(lpeobj) );
             break;
+        case INTERPOLATE_POINTS:
+            neweffect = static_cast<Effect*> ( new LPEInterpolatePoints(lpeobj) );
+            break;
         case TEXT_LABEL:
             neweffect = static_cast<Effect*> ( new LPETextLabel(lpeobj) );
             break;
@@ -273,6 +281,9 @@ Effect::New(EffectType lpenr, LivePathEffectObject *lpeobj)
             break;
         case ROUGHEN:
             neweffect = static_cast<Effect*> ( new LPERoughen(lpeobj) );
+            break;
+        case SHOW_HANDLES:
+            neweffect = static_cast<Effect*> ( new LPEShowHandles(lpeobj) );
             break;
         default:
             g_warning("LivePathEffect::Effect::New   called with invalid patheffect type (%d)", lpenr);

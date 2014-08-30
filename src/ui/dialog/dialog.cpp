@@ -287,20 +287,8 @@ void Dialog::_apply()
 
 void Dialog::_close()
 {
-    GtkWidget *dlg = GTK_WIDGET(_behavior->gobj());
-
-    GdkEventAny event;
-    event.type = GDK_DELETE;
-    event.window = gtk_widget_get_window(dlg);
-    event.send_event = TRUE;
-
-    if (event.window)
-        g_object_ref(G_OBJECT(event.window));
-
-    gtk_main_do_event ((GdkEvent*)&event);
-
-    if (event.window)
-        g_object_unref(G_OBJECT(event.window));
+    _behavior->hide();
+    _onDeleteEvent(NULL);
 }
 
 void Dialog::_defocus()

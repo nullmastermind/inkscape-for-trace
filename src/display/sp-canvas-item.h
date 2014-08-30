@@ -24,8 +24,6 @@
 #endif
 
 #include <glib-object.h>
-#include <gtk/gtk.h>
-#include <gdk/gdk.h>
 #include <2geom/rect.h>
 #include "ui/control-types.h"
 
@@ -36,6 +34,8 @@ struct SPCanvasBuf;
 struct SPCanvasGroup;
 
 typedef struct _SPCanvasItemClass SPCanvasItemClass;
+typedef union  _GdkEvent          GdkEvent;
+typedef struct _GdkCursor         GdkCursor;
 
 #define SP_TYPE_CANVAS_ITEM (SPCanvasItem::getType())
 #define SP_CANVAS_ITEM(obj) (G_TYPE_CHECK_INSTANCE_CAST((obj), SP_TYPE_CANVAS_ITEM, SPCanvasItem))

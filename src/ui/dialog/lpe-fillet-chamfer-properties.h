@@ -8,9 +8,23 @@
 #ifndef INKSCAPE_DIALOG_FILLET_CHAMFER_PROPERTIES_H
 #define INKSCAPE_DIALOG_FILLET_CHAMFER_PROPERTIES_H
 
+#if HAVE_CONFIG_H
+ #include "config.h"
+#endif
+
+#include <gtkmm/dialog.h>
 #include <2geom/point.h>
-#include <gtkmm.h>
 #include "live_effects/parameter/filletchamferpointarray.h"
+
+#include <gtkmm/entry.h>
+#include <gtkmm/label.h>
+#include <gtkmm/radiobutton.h>
+
+#if WITH_GTKMM_3_0
+ #include <gtkmm/grid.h>
+#else
+ #include <gtkmm/table.h>
+#endif
 
 class SPDesktop;
 
@@ -46,7 +60,12 @@ protected:
     Gtk::RadioButton _fillet_chamfer_type_chamfer;
     Gtk::RadioButton _fillet_chamfer_type_double_chamfer;
 
+#if WITH_GTKMM_3_0
+    Gtk::Grid _layout_table;
+#else
     Gtk::Table _layout_table;
+#endif
+
     bool _position_visible;
     double _index;
 

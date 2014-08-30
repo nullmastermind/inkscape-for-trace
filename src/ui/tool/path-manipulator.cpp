@@ -140,8 +140,8 @@ PathManipulator::PathManipulator(MultiPathManipulator &mpm, SPPath *path,
 
     _selection.signal_update.connect(
         sigc::bind(sigc::mem_fun(*this, &PathManipulator::update), false));
-    _selection.signal_point_changed.connect(
-        sigc::mem_fun(*this, &PathManipulator::_selectionChanged));
+    _selection.signal_selection_changed.connect(
+        sigc::mem_fun(*this, &PathManipulator::_selectionChangedM));
     _desktop->signal_zoom_changed.connect(
         sigc::hide( sigc::mem_fun(*this, &PathManipulator::_updateOutlineOnZoomChange)));
 
@@ -1522,6 +1522,12 @@ bool PathManipulator::_handleClicked(Handle *h, GdkEventButton *event)
         return true;
     }
     return false;
+}
+
+void PathManipulator::_selectionChangedM(std::vector<SelectableControlPoint *> pvec, bool selected) {
+    for (size_t n = 0, e = pvec.size(); n < e; ++n) {
+        _selectionChanged(pvec[n], selected);
+    }
 }
 
 void PathManipulator::_selectionChanged(SelectableControlPoint *p, bool selected)
