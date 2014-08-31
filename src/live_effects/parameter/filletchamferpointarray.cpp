@@ -8,13 +8,13 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include "ui/dialog/lpe-fillet-chamfer-properties.h"
+#include "live_effects/parameter/filletchamferpointarray.h"
 #include <2geom/piecewise.h>
 #include <2geom/sbasis-to-bezier.h>
 #include <2geom/sbasis-geometric.h>
 #include <gtkmm.h>
 
-#include "ui/dialog/lpe-fillet-chamfer-properties.h"
-#include "live_effects/parameter/filletchamferpointarray.h"
 #include "live_effects/effect.h"
 #include "svg/svg.h"
 #include "svg/stringstream.h"

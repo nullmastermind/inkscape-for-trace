@@ -1,5 +1,5 @@
-#ifndef __SP_MARKER_H__
-#define __SP_MARKER_H__
+#ifndef SEEN_SP_MARKER_H
+#define SEEN_SP_MARKER_H
 
 /*
  * SVG <marker> implementation
@@ -12,7 +12,6 @@
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
-
 /*
  * This is quite similar in logic to <svg>
  * Maybe we should merge them somehow (Lauris)
@@ -26,11 +25,18 @@ struct SPMarkerView;
 
 #include <2geom/rect.h>
 #include <2geom/affine.h>
-#include "svg/svg-length.h"
+
 #include "enums.h"
+#include "svg/svg-length.h"
 #include "sp-item-group.h"
 #include "uri-references.h"
 #include "viewbox.h"
+
+enum markerOrient {
+  MARKER_ORIENT_ANGLE,
+  MARKER_ORIENT_AUTO,
+  MARKER_ORIENT_AUTO_START_REVERSE
+};
 
 class SPMarker : public SPGroup, public SPViewBox {
 public:
@@ -51,7 +57,7 @@ public:
 
 	/* orient */
 	unsigned int orient_set : 1;
-	unsigned int orient_auto : 1;
+	markerOrient orient_mode : 2;
 	float orient;
 
 	/* Private views */
@@ -87,7 +93,7 @@ Inkscape::DrawingItem *sp_marker_show_instance (SPMarker *marker, Inkscape::Draw
 				      unsigned int key, unsigned int pos,
 				      Geom::Affine const &base, float linewidth);
 void sp_marker_hide (SPMarker *marker, unsigned int key);
-const gchar *generate_marker (GSList *reprs, Geom::Rect bounds, SPDocument *document, Geom::Point center, Geom::Affine move);
+const char *generate_marker (GSList *reprs, Geom::Rect bounds, SPDocument *document, Geom::Point center, Geom::Affine move);
 SPObject *sp_marker_fork_if_necessary(SPObject *marker);
 
 #endif

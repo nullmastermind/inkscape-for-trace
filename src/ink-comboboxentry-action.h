@@ -19,11 +19,7 @@
 #ifndef SEEN_INK_COMBOBOXENTRY_ACTION
 #define SEEN_INK_COMBOBOXENTRY_ACTION
 
-#include <glib.h>
-#include <glib-object.h>
-
 #include <gtk/gtk.h>
-
 
 #define INK_COMBOBOXENTRY_TYPE_ACTION           (ink_comboboxentry_action_get_type())
 #define INK_COMBOBOXENTRY_ACTION(obj)           (G_TYPE_CHECK_INSTANCE_CAST ((obj), INK_COMBOBOXENTRY_TYPE_ACTION, Ink_ComboBoxEntry_Action))

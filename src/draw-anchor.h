@@ -5,7 +5,6 @@
  * Drawing anchors. 
  */
 
-#include <glib.h>
 #include <2geom/point.h>
 
 namespace Inkscape {
@@ -26,17 +25,17 @@ struct SPCanvasItem;
 struct SPDrawAnchor { 
     Inkscape::UI::Tools::FreehandBase *dc;
     SPCurve *curve;
-    guint start : 1;
-    guint active : 1;
+    unsigned int start : 1;
+    unsigned int active : 1;
     Geom::Point dp;
     SPCanvasItem *ctrl;
 };
 
 
-SPDrawAnchor *sp_draw_anchor_new(Inkscape::UI::Tools::FreehandBase *dc, SPCurve *curve, gboolean start,
+SPDrawAnchor *sp_draw_anchor_new(Inkscape::UI::Tools::FreehandBase *dc, SPCurve *curve, bool start,
                                  Geom::Point delta);
 SPDrawAnchor *sp_draw_anchor_destroy(SPDrawAnchor *anchor);
-SPDrawAnchor *sp_draw_anchor_test(SPDrawAnchor *anchor, Geom::Point w, gboolean activate);
+SPDrawAnchor *sp_draw_anchor_test(SPDrawAnchor *anchor, Geom::Point w, bool activate);
 
 
 #endif /* !SEEN_DRAW_ANCHOR_H */

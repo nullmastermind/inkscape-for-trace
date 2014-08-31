@@ -12,8 +12,9 @@
 #ifndef SEEN_AXIS_MANIP_H
 #define SEEN_AXIS_MANIP_H
 
+#include <cassert>
+#include <string>
 #include <utility>
-#include <gtk/gtk.h>
 
 namespace Proj {
 
@@ -34,7 +35,7 @@ enum Axis {
 
 extern Axis axes[4];
 
-inline gchar const *
+inline char const*
 string_from_axis(Proj::Axis axis) {
     switch (axis) {
     case X: return "X"; break;
@@ -88,7 +89,7 @@ inline int axis_to_int(Box3D::Axis axis) {
         return -1;
         break;
     default:
-        g_assert_not_reached();
+        assert(false);
     }
 }
 
@@ -103,7 +104,7 @@ inline Proj::Axis toProj(Box3D::Axis axis) {
     case Box3D::NONE:
         return Proj::NONE;
     default:
-        g_assert_not_reached();
+        assert(false);
     }
 }
 
@@ -126,7 +127,7 @@ inline Box3D::Axis toAffine(Proj::Axis axis) {
     case Proj::NONE:
         return Box3D::NONE;
     default:
-        g_assert_not_reached();
+        assert(false);
     }
 }
 
@@ -144,7 +145,7 @@ namespace Box3D {
 // (which is normally used to index an array). Return -1 if the bit sequence
 // does not specify a face. A face can either be given by its plane (e.g, XY)
 // or by the axis that is orthogonal to it (e.g., Z).
-inline gint face_to_int (guint face_id) {
+inline int face_to_int (unsigned int face_id) {
     switch (face_id) {
       case 1:  return 0;
       case 2:  return 1;
@@ -164,7 +165,7 @@ inline gint face_to_int (guint face_id) {
     }
 }
 
-inline gint int_to_face (guint id) {
+inline int int_to_face (unsigned id) {
     switch (id) {
     case 0: return Box3D::YZ ^ Box3D::FRONT;
     case 1: return Box3D::XZ ^ Box3D::FRONT;
@@ -176,7 +177,7 @@ inline gint int_to_face (guint id) {
     return Box3D::NONE; // should not be reached
 }
 
-inline bool is_face_id (guint face_id) {
+inline bool is_face_id (unsigned int face_id) {
     return !((face_id & 0x7) == 0x7);
 }
 
@@ -186,8 +187,8 @@ inline gint opposite_face (guint face_id) {
 }
 **/
 
-inline guint number_of_axis_directions (Box3D::Axis axis) {
-    guint num = 0;
+inline unsigned int number_of_axis_directions (Box3D::Axis axis) {
+    unsigned int num = 0;
     if (axis & Box3D::X) num++;
     if (axis & Box3D::Y) num++;
     if (axis & Box3D::Z) num++;
@@ -238,14 +239,7 @@ inline Box3D::Axis get_perpendicular_axis_direction (Box3D::Axis dirs) {
     return Box3D::NONE;
 }
 
-inline gchar * string_from_axes (Box3D::Axis axis) {
-    GString *pstring = g_string_new("");
-    if (axis & Box3D::X) g_string_append_printf (pstring, "X");
-    if (axis & Box3D::Y) g_string_append_printf (pstring, "Y");
-    if (axis & Box3D::Z) g_string_append_printf (pstring, "Z");
-    return pstring->str;
-}
-
+char * string_from_axes (Box3D::Axis axis);
 std::pair <Axis, Axis> get_remaining_axes (Axis axis);
 
 } // namespace Box3D

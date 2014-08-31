@@ -34,14 +34,32 @@ typedef struct _EgeColorProfTracker EgeColorProfTracker;
 struct SPCanvas;
 class SPDesktop;
 struct SPDesktopWidget;
+struct SPDesktopWidgetPrivate;
 class SPObject;
 
+namespace Inkscape {
+    namespace Widgets {
+        class LayerSelector;
+    }
 
-#define SP_TYPE_DESKTOP_WIDGET SPDesktopWidget::getType()
-#define SP_DESKTOP_WIDGET(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_DESKTOP_WIDGET, SPDesktopWidget))
-#define SP_DESKTOP_WIDGET_CLASS(k) (G_TYPE_CHECK_CLASS_CAST ((k), SP_TYPE_DESKTOP_WIDGET, SPDesktopWidgetClass))
-#define SP_IS_DESKTOP_WIDGET(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), SP_TYPE_DESKTOP_WIDGET))
+    namespace UI {
+        namespace Widget {
+            class SelectedStyle;
+        }
+
+        namespace Dialogs {
+            class SwatchesPanel;
+        }
+    }
+}
+
+#define SP_TYPE_DESKTOP_WIDGET        (sp_desktop_widget_get_type ())
+#define SP_DESKTOP_WIDGET(o)          (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_DESKTOP_WIDGET, SPDesktopWidget))
+#define SP_DESKTOP_WIDGET_CLASS(k)    (G_TYPE_CHECK_CLASS_CAST ((k), SP_TYPE_DESKTOP_WIDGET, SPDesktopWidgetClass))
+#define SP_IS_DESKTOP_WIDGET(o)       (G_TYPE_CHECK_INSTANCE_TYPE ((o), SP_TYPE_DESKTOP_WIDGET))
 #define SP_IS_DESKTOP_WIDGET_CLASS(k) (G_TYPE_CHECK_CLASS_TYPE ((k), SP_TYPE_DESKTOP_WIDGET))
+
+GType sp_desktop_widget_get_type();
 
 void sp_desktop_widget_show_decorations(SPDesktopWidget *dtw, gboolean show);
 void sp_desktop_widget_iconify(SPDesktopWidget *dtw);
@@ -61,12 +79,6 @@ bool sp_desktop_widget_color_prof_adj_enabled( SPDesktopWidget *dtw );
 
 void sp_dtw_desktop_activate (SPDesktopWidget *dtw);
 void sp_dtw_desktop_deactivate (SPDesktopWidget *dtw);
-
-namespace Inkscape { namespace Widgets { class LayerSelector; } }
-
-namespace Inkscape { namespace UI { namespace Widget { class SelectedStyle; } } }
-
-namespace Inkscape { namespace UI { namespace Dialogs { class SwatchesPanel; } } }
 
 /// A GtkEventBox on an SPDesktop.
 struct SPDesktopWidget {
@@ -248,22 +260,15 @@ struct SPDesktopWidget {
 
     Inkscape::UI::Widget::Dock* getDock();
 
-    static GType getType();
     static SPDesktopWidget* createInstance(SPNamedView *namedview);
 
     void updateNamedview();
 
+    SPDesktopWidgetPrivate *priv;
 private:
-    GtkWidget *tool_toolbox;
-    GtkWidget *aux_toolbox;
-    GtkWidget *commands_toolbox;
-    GtkWidget *snap_toolbox;
-
-    static void init(SPDesktopWidget *widget);
     void layoutWidgets();
 
     void namedviewModified(SPObject *obj, guint flags);
-
 };
 
 /// The SPDesktopWidget vtable

@@ -10,8 +10,7 @@
  */
 
 #include <climits>
-#include "display/cairo-utils.h"
-#include "display/cairo-templates.h"
+
 #include "display/drawing.h"
 #include "display/drawing-context.h"
 #include "display/drawing-item.h"
@@ -20,6 +19,9 @@
 #include "nr-filter.h"
 #include "preferences.h"
 #include "style.h"
+
+#include "display/cairo-utils.h"
+#include "display/cairo-templates.h"
 
 namespace Inkscape {
 

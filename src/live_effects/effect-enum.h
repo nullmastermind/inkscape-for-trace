@@ -45,6 +45,7 @@ enum EffectType {
     RULER,
     BOOLOPS,
     INTERPOLATE,
+    INTERPOLATE_POINTS,
     TEXT_LABEL,
     PATH_LENGTH,
     LINE_SEGMENT,

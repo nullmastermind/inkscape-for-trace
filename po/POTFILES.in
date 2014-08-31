@@ -140,6 +140,7 @@ src/live_effects/lpe-extrude.cpp
 src/live_effects/lpe-fillet-chamfer.cpp
 src/live_effects/lpe-gears.cpp
 src/live_effects/lpe-interpolate.cpp
+src/live_effects/lpe-interpolate_points.cpp
 src/live_effects/lpe-knot.cpp
 src/live_effects/lpe-lattice2.cpp
 src/live_effects/lpe-patternalongpath.cpp

@@ -22,6 +22,7 @@
 #include "knotholder.h"
 
 #include <glibmm/i18n.h>
+#include <gdk/gdk.h>
 
 #include <2geom/sbasis-to-bezier.h>
 #include <2geom/sbasis.h>

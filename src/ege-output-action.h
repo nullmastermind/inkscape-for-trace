@@ -45,9 +45,7 @@
 
 /* Note: this file should be kept compilable as both .cpp and .c */
 
-#include <glib.h>
 #include <gtk/gtk.h>
-#include <glib-object.h>
 
 G_BEGIN_DECLS
 

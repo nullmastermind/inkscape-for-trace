@@ -829,14 +829,14 @@ private :
 
 
 
-static void on_tool_changed(Inkscape::Application */*inkscape*/, Inkscape::UI::Tools::ToolBase */*context*/, AlignAndDistribute *daad)
+static void on_tool_changed(InkscapeApplication */*inkscape*/, Inkscape::UI::Tools::ToolBase */*context*/, AlignAndDistribute *daad)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (desktop && desktop->getEventContext())
         daad->setMode(tools_active(desktop) == TOOLS_NODES);
 }
 
-static void on_selection_changed(Inkscape::Application */*inkscape*/, Inkscape::Selection */*selection*/, AlignAndDistribute *daad)
+static void on_selection_changed(InkscapeApplication */*inkscape*/, Inkscape::Selection */*selection*/, AlignAndDistribute *daad)
 {
     daad->randomize_bbox = Geom::OptRect();
 }

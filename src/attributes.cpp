@@ -1,9 +1,4 @@
-#define __SP_ATTRIBUTES_C__
-
-/** \file
- * Lookup dictionary for attributes/properties.
- */
-/*
+/**
  * Author:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *
@@ -24,6 +19,10 @@ typedef struct {
     gint code;
     gchar const *name;
 } SPStyleProp;
+
+/**
+ * Lookup dictionary for attributes/properties.
+ */
 
 static SPStyleProp const props[] = {
     {SP_ATTR_INVALID, NULL},
@@ -541,4 +540,4 @@ sp_attribute_name(unsigned int id)
   fill-column:99
   End:
 */
-// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8 :

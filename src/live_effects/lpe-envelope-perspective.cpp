@@ -14,12 +14,11 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <gtkmm.h>
 #include "live_effects/lpe-envelope-perspective.h"
 #include "helper/geom.h"
 #include "display/curve.h"
 #include "svg/svg.h"
-#include <gtkmm/separator.h>
-#include <gtkmm/stock.h>
 #include <tools-switch.h>
 #include <gsl/gsl_linalg.h>
 #include "desktop.h"
@@ -286,12 +285,20 @@ LPEEnvelopePerspective::newWidget()
                         Gtk::Label* handles = Gtk::manage(new Gtk::Label(Glib::ustring(_("Handles:")),Gtk::ALIGN_START));
                         vbox->pack_start(*handles, false, false, 2);
                         hboxUpHandles->pack_start(*widg, true, true, 2);
+#if WITH_GTKMM_3_0
+                        hboxUpHandles->pack_start(*Gtk::manage(new Gtk::Separator(Gtk::ORIENTATION_VERTICAL)), Gtk::PACK_EXPAND_WIDGET);
+#else
                         hboxUpHandles->pack_start(*Gtk::manage(new Gtk::VSeparator()), Gtk::PACK_EXPAND_WIDGET);
+#endif
                     }else if(param->param_key == "Up_Right_Point"){
                         hboxUpHandles->pack_start(*widg, true, true, 2);
                     }else if(param->param_key == "Down_Left_Point"){
                         hboxDownHandles->pack_start(*widg, true, true, 2);
+#if WITH_GTKMM_3_0
+                        hboxDownHandles->pack_start(*Gtk::manage(new Gtk::Separator(Gtk::ORIENTATION_VERTICAL)), Gtk::PACK_EXPAND_WIDGET);
+#else
                         hboxDownHandles->pack_start(*Gtk::manage(new Gtk::VSeparator()), Gtk::PACK_EXPAND_WIDGET);
+#endif
                     }else{
                         hboxDownHandles->pack_start(*widg, true, true, 2);
                     }
@@ -320,8 +327,13 @@ LPEEnvelopePerspective::newWidget()
     }
     vbox->pack_start(*hboxUpHandles,true, true, 2);
     Gtk::HBox * hboxMiddle = Gtk::manage(new Gtk::HBox(true,2));
+#if WITH_GTKMM_3_0
+    hboxMiddle->pack_start(*Gtk::manage(new Gtk::Separator()), Gtk::PACK_EXPAND_WIDGET);
+    hboxMiddle->pack_start(*Gtk::manage(new Gtk::Separator()), Gtk::PACK_EXPAND_WIDGET);
+#else
     hboxMiddle->pack_start(*Gtk::manage(new Gtk::HSeparator()), Gtk::PACK_EXPAND_WIDGET);
     hboxMiddle->pack_start(*Gtk::manage(new Gtk::HSeparator()), Gtk::PACK_EXPAND_WIDGET);
+#endif
     vbox->pack_start(*hboxMiddle, false, true, 2);
     vbox->pack_start(*hboxDownHandles, true, true, 2);
     Gtk::HBox * hbox = Gtk::manage(new Gtk::HBox(false,0));
@@ -422,4 +434,4 @@ LPEEnvelopePerspective::addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::v
   fill-column:99
   End:
 */
-// vim: file_type=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

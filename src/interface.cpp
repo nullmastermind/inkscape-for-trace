@@ -149,7 +149,7 @@ static void injectRenamedIcons();
 static const int MIN_ONSCREEN_DISTANCE = 50;
 
 void
-sp_create_window(SPViewWidget *vw, gboolean editable)
+sp_create_window(SPViewWidget *vw, bool editable)
 {
     g_return_if_fail(vw != NULL);
     g_return_if_fail(SP_IS_VIEW_WIDGET(vw));

@@ -74,7 +74,6 @@ ink_common_sources +=	\
 	inkscape.cpp inkscape.h inkscape-private.h			\
 	interface.cpp interface.h					\
 	isinf.h								\
-	isnormal.h							\
 	knot.cpp knot.h							\
 	knot-enums.h							\
 	knotholder.cpp knotholder.h					\

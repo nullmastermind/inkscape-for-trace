@@ -30,7 +30,7 @@ using Inkscape::ControlManager;
 /**
  * Creates an anchor object and initializes it.
  */
-SPDrawAnchor *sp_draw_anchor_new(Inkscape::UI::Tools::FreehandBase *dc, SPCurve *curve, gboolean start, Geom::Point delta)
+SPDrawAnchor *sp_draw_anchor_new(Inkscape::UI::Tools::FreehandBase *dc, SPCurve *curve, bool start, Geom::Point delta)
 {
     if (SP_IS_LPETOOL_CONTEXT(dc)) {
         // suppress all kinds of anchors in LPEToolContext
@@ -73,7 +73,7 @@ SPDrawAnchor *sp_draw_anchor_destroy(SPDrawAnchor *anchor)
  * Test if point is near anchor, if so fill anchor on canvas and return
  * pointer to it or NULL.
  */
-SPDrawAnchor *sp_draw_anchor_test(SPDrawAnchor *anchor, Geom::Point w, gboolean activate)
+SPDrawAnchor *sp_draw_anchor_test(SPDrawAnchor *anchor, Geom::Point w, bool activate)
 {
     SPCtrl *ctrl = SP_CTRL(anchor->ctrl);
 

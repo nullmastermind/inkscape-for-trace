@@ -14,14 +14,12 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "sp-item.h"
-
 #include <list>
+#include "sp-item.h"
 
 #define SP_LPE_ITEM(obj) (dynamic_cast<SPLPEItem*>((SPObject*)obj))
 #define SP_IS_LPE_ITEM(obj) (dynamic_cast<const SPLPEItem*>((SPObject*)obj) != NULL)
 
-class CLPEItem;
 class LivePathEffectObject;
 class SPCurve;
 class SPDesktop;
@@ -58,7 +56,7 @@ public:
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
 
-	virtual void set(unsigned int key, gchar const* value);
+	virtual void set(unsigned int key, char const* value);
 
 	virtual void update(SPCtx* ctx, unsigned int flags);
 	virtual void modified(unsigned int flags);
@@ -66,7 +64,7 @@ public:
 	virtual void child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref);
 	virtual void remove_child(Inkscape::XML::Node* child);
 
-	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags);
 
 	virtual void update_patheffect(bool write);
 
@@ -90,7 +88,7 @@ public:
     bool setCurrentPathEffect(Inkscape::LivePathEffect::LPEObjectReference* lperef);
     void removeCurrentPathEffect(bool keep_paths);
     void removeAllPathEffects(bool keep_paths);
-    void addPathEffect(gchar *value, bool reset);
+    void addPathEffect(char *value, bool reset);
     void addPathEffect(LivePathEffectObject * new_lpeobj);
 
     bool forkPathEffectsIfNecessary(unsigned int nr_of_allowed_users = 1);

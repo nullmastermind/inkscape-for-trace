@@ -13,11 +13,14 @@
  *
  */
 
+#include <2geom/point.h>
 #include <vector>
 
-#include <2geom/point.h>
 #include "sp-object.h"
 #include "sp-guide-attachment.h"
+
+typedef unsigned int guint32;
+typedef void (*GCallback) (void);
 
 struct SPCanvas;
 struct SPCanvasGroup;
@@ -52,14 +55,14 @@ public:
     static SPGuide *createSPGuide(SPDocument *doc, Geom::Point const &pt1, Geom::Point const &pt2);
     void showSPGuide(SPCanvasGroup *group, GCallback handler);
     void hideSPGuide(SPCanvas *canvas);
-    void sensitize(SPCanvas *canvas, gboolean sensitive);
+    void sensitize(SPCanvas *canvas, bool sensitive);
     Geom::Point getPositionFrom(Geom::Point const &pt) const;
     double getDistanceFrom(Geom::Point const &pt) const;
 
 protected:
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
 	virtual void release();
-	virtual void set(unsigned int key, const gchar* value);
+	virtual void set(unsigned int key, const char* value);
 };
 
 void sp_guide_pt_pairs_to_guides(SPDocument *doc, std::list<std::pair<Geom::Point, Geom::Point> > &pts);

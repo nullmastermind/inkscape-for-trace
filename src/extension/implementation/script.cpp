@@ -1,28 +1,18 @@
-/** \file
- * Code for handling extensions (i.e.\ scripts).
- */
-/*
+/**
+ * Code for handling extensions (i.e. scripts).
+ *
  * Authors:
  *   Bryce Harrington <bryce@osdl.org>
  *   Ted Gould <ted@gould.cx>
  *   Jon A. Cruz <jon@joncruz.org>
  *   Abhishek Sharma
  *
- * Copyright (C) 2002-2005,2007 Authors
+ * Copyright (C) 2002-2007 Authors
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#define __INKSCAPE_EXTENSION_IMPLEMENTATION_SCRIPT_C__
-
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
-
-#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
-#include <glibmm/threads.h>
-#endif
-
+#include <glibmm.h>
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/main.h>
 #include <gtkmm/scrolledwindow.h>
@@ -32,30 +22,28 @@
 #include <unistd.h>
 
 #include <errno.h>
-#include <glib.h>
 #include <glib/gstdio.h>
 
-#include "ui/view/view.h"
 #include "desktop-handles.h"
 #include "desktop.h"
-#include "selection.h"
-#include "sp-namedview.h"
-#include "io/sys.h"
-#include "preferences.h"
-#include "../system.h"
+#include "dialogs/dialog-events.h"
 #include "extension/effect.h"
 #include "extension/output.h"
 #include "extension/input.h"
 #include "extension/db.h"
-#include "script.h"
-#include "dialogs/dialog-events.h"
 #include "inkscape.h"
+#include "io/sys.h"
+#include "preferences.h"
+#include "script.h"
+#include "selection.h"
+#include "sp-namedview.h"
+#include "extension/system.h"
+#include "ui/view/view.h"
 #include "xml/node.h"
 #include "xml/attribute-record.h"
 
 #include "util/glib-list-iterators.h"
 #include "path-prefix.h"
-
 
 #ifdef WIN32
 #include <windows.h>
@@ -63,12 +51,8 @@
 #include "registrytool.h"
 #endif
 
-
-
 /** This is the command buffer that gets allocated from the stack */
 #define BUFSIZE (255)
-
-
 
 /* Namespaces */
 namespace Inkscape {
@@ -1063,4 +1047,4 @@ int Script::execute (const std::list<std::string> &in_command,
   fill-column:99
   End:
 */
-// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8 :

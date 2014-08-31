@@ -1,6 +1,4 @@
-#define __PROJ_PT_C__
-
-/*
+/**
  * 3x4 transformation matrix to map points from projective 3-space into the projective plane
  *
  * Authors:
@@ -117,4 +115,4 @@ Pt3::coord_string() {
   fill-column:99
   End:
 */
-// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8 :

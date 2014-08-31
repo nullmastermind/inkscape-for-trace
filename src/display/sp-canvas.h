@@ -30,7 +30,6 @@
 # endif
 #endif
 
-#include <glib.h>
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>
 #include <glibmm/ustring.h>

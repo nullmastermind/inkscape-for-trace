@@ -2,9 +2,7 @@
 #define SEEN_INK_ACTION
 
 
-#include <glib.h>
 #include <gtk/gtk.h>
-#include <glib-object.h>
 #include "icon-size.h"
 #include "attributes.h"
 
