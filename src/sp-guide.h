@@ -13,9 +13,9 @@
  *
  */
 
+#include <2geom/point.h>
 #include <vector>
 
-#include <2geom/point.h>
 #include "sp-object.h"
 #include "sp-guide-attachment.h"
 

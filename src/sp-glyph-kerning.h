@@ -25,11 +25,11 @@
 
 class GlyphNames {
 public: 
-    GlyphNames(const gchar* value);
+    GlyphNames(char const* value);
     ~GlyphNames();
-    bool contains(const char* name);
+    bool contains(char const* name);
 private:
-    gchar* names;
+    char* names;
 };
 
 class SPGlyphKerning : public SPObject {
@@ -47,9 +47,9 @@ public:
 protected:
     virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
     virtual void release();
-    virtual void set(unsigned int key, const gchar* value);
+    virtual void set(unsigned int key, char const* value);
     virtual void update(SPCtx* ctx, unsigned int flags);
-    virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
+    virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, unsigned int flags);
 };
 
 class SPHkern : public SPGlyphKerning {

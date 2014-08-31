@@ -44,19 +44,6 @@
  * (Lauris Kaplinski)
  */
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
-
-
-#if HAVE_STRING_H
-#endif
-
-
-#if HAVE_STDLIB_H
-#endif
-
 #include <string>
 #include <cstring>
 #include "xml/repr.h"

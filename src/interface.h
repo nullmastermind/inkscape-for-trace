@@ -17,13 +17,9 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
-
-#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
-#include <glibmm/threads.h>
-#endif
+//#ifdef HAVE_CONFIG_H
+//# include <config.h>
+//#endif
 
 #include <gtkmm/menu.h>
 
@@ -50,7 +46,7 @@ class View;
 /**
  *  Create a new document window.
  */
-void sp_create_window (SPViewWidget *vw, gboolean editable);
+void sp_create_window (SPViewWidget *vw, bool editable);
 
 /**
  * \param widget unused
@@ -87,15 +83,15 @@ unsigned int sp_ui_close_all (void);
 GtkWidget *sp_ui_main_menubar (Inkscape::UI::View::View *view);
 
 void sp_menu_append_recent_documents (GtkWidget *menu);
-void sp_ui_dialog_title_string (Inkscape::Verb * verb, gchar* c);
+void sp_ui_dialog_title_string (Inkscape::Verb * verb, char* c);
 
 Glib::ustring getLayoutPrefPath( Inkscape::UI::View::View *view );
 
 /**
  *
  */
-void sp_ui_error_dialog (const gchar * message);
-bool sp_ui_overwrite_file (const gchar * filename);
+void sp_ui_error_dialog (char const* message);
+bool sp_ui_overwrite_file (char const* filename);
 
 
 /**

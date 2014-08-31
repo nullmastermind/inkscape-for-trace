@@ -360,7 +360,7 @@ void SPItem::lowerToBottom() {
  * \param  target - the SPItem to move into or after
  * \param  intoafter - move to after the target (false), move inside (sublayer) of the target (true)
  */
-void SPItem::moveTo(SPItem *target, gboolean intoafter) {
+void SPItem::moveTo(SPItem *target, bool intoafter) {
 
     Inkscape::XML::Node *target_ref = ( target ? target->getRepr() : NULL );
     Inkscape::XML::Node *our_ref = getRepr();

@@ -153,7 +153,7 @@ SPObject *sp_object_unref(SPObject *object, SPObject *owner=NULL);
  * \pre object points to real object
  * @todo need to move this to be a member of SPObject.
  */
-SPObject *sp_object_href(SPObject *object, gpointer owner);
+SPObject *sp_object_href(SPObject *object, void* owner);
 
 /**
  * Decrease weak refcount.
@@ -165,7 +165,7 @@ SPObject *sp_object_href(SPObject *object, gpointer owner);
  * \pre object points to real object and hrefcount>0
  * @todo need to move this to be a member of SPObject.
  */
-SPObject *sp_object_hunref(SPObject *object, gpointer owner);
+SPObject *sp_object_hunref(SPObject *object, void* owner);
 
 /**
  * SPObject is an abstract base class of all of the document nodes at the
@@ -795,7 +795,7 @@ private:
      * content except the tags).
      * Must not be used on anything except elements.
      */
-    GString * textualContent() const;
+    char * textualContent() const;
 
     /* Real handlers of repr signals */
 
@@ -803,17 +803,17 @@ public:
     /**
      * Callback for attr_changed node event.
      */
-    static void repr_attr_changed(Inkscape::XML::Node *repr, char const *key, char const *oldval, char const *newval, bool is_interactive, gpointer data);
+    static void repr_attr_changed(Inkscape::XML::Node *repr, char const *key, char const *oldval, char const *newval, bool is_interactive, void* data);
 
     /**
      * Callback for content_changed node event.
      */
-    static void repr_content_changed(Inkscape::XML::Node *repr, char const *oldcontent, char const *newcontent, gpointer data);
+    static void repr_content_changed(Inkscape::XML::Node *repr, char const *oldcontent, char const *newcontent, void* data);
 
     /**
      * Callback for child_added node event.
      */
-    static void repr_child_added(Inkscape::XML::Node *repr, Inkscape::XML::Node *child, Inkscape::XML::Node *ref, gpointer data);
+    static void repr_child_added(Inkscape::XML::Node *repr, Inkscape::XML::Node *child, Inkscape::XML::Node *ref, void* data);
 
     /**
      * Callback for remove_child node event.
@@ -825,7 +825,7 @@ public:
      *
      * \todo fixme:
      */
-    static void repr_order_changed(Inkscape::XML::Node *repr, Inkscape::XML::Node *child, Inkscape::XML::Node *old, Inkscape::XML::Node *newer, gpointer data);
+    static void repr_order_changed(Inkscape::XML::Node *repr, Inkscape::XML::Node *child, Inkscape::XML::Node *old, Inkscape::XML::Node *newer, void* data);
 
 
     friend class SPObjectImpl;

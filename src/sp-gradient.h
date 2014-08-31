@@ -14,28 +14,17 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <vector>
-#include <glibmm/ustring.h>
 #include <2geom/affine.h>
+#include <cstddef>
+#include <glibmm/ustring.h>
+#include <sigc++/connection.h>
+#include <vector>
+
 #include "sp-paint-server.h"
 #include "sp-gradient-spread.h"
 #include "sp-gradient-units.h"
 #include "sp-gradient-vector.h"
 #include "sp-mesh-array.h"
-
-#include <stddef.h>
-#include <sigc++/connection.h>
-
-
-
-//#include <glib.h>
-//#include <glib-object.h>
-//#include <2geom/forward.h>
-//#include "sp-gradient-spread.h"
-//#include "sp-gradient-units.h"
-//
-//class SPGradient;
-//struct SPMeshGradient;
 
 class SPGradientReference;
 class SPStop;
