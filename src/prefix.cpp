@@ -186,7 +186,7 @@ br_locate_prefix (void *symbol)
  * br_prepend_prefix (&argc, "/share/foo/data.png");   --> Returns "/usr/share/foo/data.png"
  */
 char *
-br_prepend_prefix (void *symbol, char *path)
+br_prepend_prefix (void *symbol, char const *path)
 {
     char *tmp, *newpath;
 
