@@ -299,7 +299,7 @@ binary_name=`basename "$binary"`
 binary_dir=`dirname "$binary"`
 
 # Inkscape's binary
-binpath="$pkgbin/inkscape-bin"
+binpath="$pkgbin/inkscape"
 cp -v "$binary" "$binpath"
 # TODO Add a "$verbose" variable and command line switch, which sets wether these commands are verbose or not
 
@@ -387,7 +387,7 @@ if [ ${add_python} = "true" ]; then
 		cp -rvf "$python_dir"/* "$pkglib"
 	fi
 fi
-sed -e "s,__build_arch__,$ARCH,g" -i "" $pkgbin/inkscape
+sed -e "s,__build_arch__,$ARCH,g" -i "" "$pkgresources/script"
 
 # PkgInfo must match bundle type and creator code from Info.plist
 echo "APPLInks" > $package/Contents/PkgInfo
@@ -433,8 +433,8 @@ gdk_pixbuf_version=`pkg-config --variable=gdk_pixbuf_binary_version gdk-pixbuf-2
 mkdir -p $pkglib/gdk-pixbuf-2.0/$gdk_pixbuf_version/loaders
 cp $LIBPREFIX/lib/gdk-pixbuf-2.0/$gdk_pixbuf_version/loaders/*.so $pkglib/gdk-pixbuf-2.0/$gdk_pixbuf_version/loaders/
 
-sed -e "s,__gtk_version__,$gtk_version,g" -i "" $pkgbin/inkscape
-sed -e "s,__gdk_pixbuf_version__,$gdk_pixbuf_version,g" -i "" $pkgbin/inkscape
+sed -e "s,__gtk_version__,$gtk_version,g" -i "" "$pkgresources/script"
+sed -e "s,__gdk_pixbuf_version__,$gdk_pixbuf_version,g" -i "" "$pkgresources/script"
 sed -e "s,$LIBPREFIX,\${CWD},g" $LIBPREFIX/lib/gtk-2.0/$gtk_version/immodules.cache > $pkglib/gtk-2.0/$gtk_version/immodules.cache
 sed -e "s,$LIBPREFIX,\${CWD},g" $LIBPREFIX/lib/gdk-pixbuf-2.0/$gdk_pixbuf_version/loaders.cache > $pkglib/gdk-pixbuf-2.0/$gdk_pixbuf_version/loaders.cache
 
@@ -461,8 +461,8 @@ done
 for la_file in "$pkglib/ImageMagick-$IMAGEMAGICKVER/modules-Q16/filters"/*.la; do
     sed -e "s,$LIBPREFIX/lib/ImageMagick-$IMAGEMAGICKVER/modules-Q16/filters,,g" -i "" "$la_file"
 done
-sed -e "s,IMAGEMAGICKVER,$IMAGEMAGICKVER,g" -i "" $pkgbin/inkscape
-sed -e "s,IMAGEMAGICKVER_MAJOR,$IMAGEMAGICKVER_MAJOR,g" -i "" $pkgbin/inkscape
+sed -e "s,IMAGEMAGICKVER,$IMAGEMAGICKVER,g" -i "" "$pkgresources/script"
+sed -e "s,IMAGEMAGICKVER_MAJOR,$IMAGEMAGICKVER_MAJOR,g" -i "" "$pkgresources/script"
 
 # Copy aspell dictionary files:
 cp -r "$LIBPREFIX/share/aspell" "$pkgresources/share/"
