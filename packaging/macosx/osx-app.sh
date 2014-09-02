@@ -35,7 +35,7 @@
 
 # Defaults
 strip=false
-add_python=true #false
+add_python=true
 python_dir=""
 
 # If LIBPREFIX is not already set (by osx-build.sh for example) set it to blank (one should use the command line argument to set it correctly)
@@ -136,15 +136,20 @@ if [ ! -f "$plist" ]; then
 fi
 
 if [ ${add_python} = "true" ]; then
-	if [ "x$python_dir" == "x" ]; then
+	if [ -z "$python_dir" ]; then
 		echo "Python modules will be copied from MacPorts tree."
 	else
 		if [ ! -e "$python_dir" ]; then
 			echo "Python modules directory \""$python_dir"\" not found." >&2
 			exit 1
 		else
-			# TODO: check directoy structure and reject old one based on ppc/i386
-			echo "Python modules will be copied from $python_dir."
+			if [ -e "$python_dir/i386" -o -e "$python_dir/ppc" ]; then
+				echo "Outdated structure in custom python modules detected,"
+				echo "not compatible with current packaging."
+				exit 1
+			else
+				echo "Python modules will be copied from $python_dir."
+			fi
 		fi
 	fi
 fi
@@ -332,9 +337,16 @@ if [ ${add_python} = "true" ]; then
 		# lxml
 		$cp_cmd -RL "$packages_path/lxml" "$pkgpython"
 		# numpy
-		$cp_cmd -RL "$packages_path/numpy" "$pkgpython"
 		$cp_cmd -RL "$packages_path/nose" "$pkgpython"
+		$cp_cmd -RL "$packages_path/numpy" "$pkgpython"
 		# UniConvertor
+		$cp_cmd -RL "$packages_path/PIL" "$pkgpython"
+		if [ "$PYTHON_VER" == "2.5" ]; then
+			$cp_cmd -RL "$packages_path/_imaging.so" "$pkgpython"
+			$cp_cmd -RL "$packages_path/_imagingcms.so" "$pkgpython"
+			$cp_cmd -RL "$packages_path/_imagingft.so" "$pkgpython"
+			$cp_cmd -RL "$packages_path/_imagingmath.so" "$pkgpython"
+		fi
 		$cp_cmd -RL "$packages_path/sk1libs" "$pkgpython"
 		$cp_cmd -RL "$packages_path/uniconvertor" "$pkgpython"
 		# cleanup python modules
@@ -348,19 +360,30 @@ if [ ${add_python} = "true" ]; then
 	}
 
 	if [ $OSXMINORNO -eq "5" ]; then
-		PYTHON_VERSIONS=("2.5" "2.6" "2.7")
+		PYTHON_VERSIONS="2.5 2.6 2.7"
 	elif [ $OSXMINORNO -eq "6" ]; then
-		PYTHON_VERSIONS=("2.6" "2.7")
+		PYTHON_VERSIONS="2.6 2.7"
 	else # if [ $OSXMINORNO -ge "7" ]; then
-		PYTHON_VERSIONS=("2.7")
+		PYTHON_VERSIONS="2.7"
 	fi
-	for PYTHON_VER in $PYTHON_VERSIONS; do
-		python_dir="$(${LIBPREFIX}/bin/python${PYTHON_VER}-config --prefix)"
-		packages_path="${python_dir}/lib/python${PYTHON_VER}/site-packages"
-		pkgpython="${pkglib}/python${PYTHON_VER}/site-packages"
-		mkdir -p $pkgpython
-		install_py_modules
-	done
+	if [ -z "$python_dir" ]; then
+		for PYTHON_VER in $PYTHON_VERSIONS; do
+			python_dir="$(${LIBPREFIX}/bin/python${PYTHON_VER}-config --prefix)"
+			packages_path="${python_dir}/lib/python${PYTHON_VER}/site-packages"
+			pkgpython="${pkglib}/python${PYTHON_VER}/site-packages"
+			mkdir -p $pkgpython
+			install_py_modules
+		done
+	else
+		# copy custom python site-packages. 
+		# They need to be organized in a hierarchical set of directories by python major+minor version:
+		#   - ${python_dir}/python2.5/site-packages/lxml
+		#   - ${python_dir}/python2.5/site-packages/nose
+		#   - ${python_dir}/python2.5/site-packages/numpy
+		#   - ${python_dir}/python2.6/site-packages/lxml
+		#   - ...
+		cp -rvf "$python_dir"/* "$pkglib"
+	fi
 fi
 sed -e "s,__build_arch__,$ARCH,g" -i "" $pkgbin/inkscape
 

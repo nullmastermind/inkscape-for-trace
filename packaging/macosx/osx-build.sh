@@ -70,11 +70,11 @@ Compilation script for Inkscape on Mac OS X.
   \033[1m$0 conf build install\033[0m
     configure, build and install a dowloaded version of Inkscape in the default
     directory, keeping debugging information.	
-  \033[1m$0 u a c b -p ~ i -s -py ~/site-packages/ p d\033[0m
+  \033[1m$0 u a c b -p ~ i -s -py ~/python_modules/ p d\033[0m
     update an bzr checkout, prepare configure script, configure,
     build and install Inkscape in the user home directory (~). 	
     Then package Inkscape without debugging information,
-    with python packages from ~/site-packages/ and prepare 
+    with python packages from ~/python_modules/ and prepare 
     a dmg for distribution."
 }
 
