@@ -251,8 +251,10 @@ function getinkscapeinfo () {
 	REVISION="$(bzr revno)"
 	[ $? -ne 0 ] && REVISION="" || REVISION="-r$REVISION"
 
+	gtk_target=`pkg-config --variable=target gtk+-2.0 2>/dev/null`
+
 	TARGETARCH="$ARCH"
-	NEWNAME="Inkscape-$INKVERSION$REVISION-$TARGETVERSION-$TARGETARCH"
+	NEWNAME="Inkscape-$INKVERSION$REVISION-$gtk_target-$TARGETVERSION-$TARGETARCH"
 	DMGFILE="$NEWNAME.dmg"
 	INFOFILE="$NEWNAME-info.txt"
 
@@ -399,7 +401,8 @@ Build system information:
 	OS X Version  $OSXVERSION
 	Architecture  $ARCH
 	MacPorts Ver  `port version | cut -f2 -d \ `
-	GCC           `$CXX --version | grep GCC`
+	GCC           `$CXX --version | head -1`
+	GTK+ backend  $gtk_target
 Included dependency versions:
 	GTK           `checkversion gtk+-2.0`
 	GTKmm         `checkversion gtkmm-2.4`
