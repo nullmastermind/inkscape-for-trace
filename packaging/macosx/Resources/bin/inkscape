@@ -4,6 +4,7 @@
 # Inkscape Modifications:
 #	Michael Wybrow <mjwybrow@users.sourceforge.net>
 #	Jean-Olivier Irisson <jo.irisson@gmail.com>
+#	~suv <suv-sf@users.sourceforge.net>
 #
 
 if test "x$GTK_DEBUG_LAUNCHER" != x; then

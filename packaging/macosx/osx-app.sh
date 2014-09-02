@@ -15,12 +15,14 @@
 #		 Kees Cook <kees@outflux.net>
 #		 Michael Wybrow <mjwybrow@users.sourceforge.net>
 #		 Jean-Olivier Irisson <jo.irisson@gmail.com>
-#                Liam P. White <inkscapebrony@gmail.com>
+#		 Liam P. White <inkscapebrony@gmail.com>
+#		 ~suv <suv-sf@users.sourceforge.net>
 # 
 # Copyright (C) 2005 Kees Cook
 # Copyright (C) 2005-2009 Michael Wybrow
 # Copyright (C) 2007-2009 Jean-Olivier Irisson
 # Copyright (C) 2014 Liam P. White
+# Copyright (C) 2014 ~suv
 #
 # Released under GNU GPL, read the file 'COPYING' for more information
 #
@@ -495,7 +497,7 @@ while $endl; do
         $pkglib/ImageMagick-$IMAGEMAGICK_VER/modules-Q16/{filters,coders}/*.so \
         $pkglib/*.{dylib,so} \
         $pkgbin/*.so \
-	$python_libs \
+        $python_libs \
         $extra_bin \
         2>/dev/null | fgrep compatibility | cut -d\( -f1 | grep $LIBPREFIX | sort | uniq)"
     cp -f $libs "$pkglib"

@@ -8,12 +8,13 @@
 #
 # Authors:
 #	Jean-Olivier Irisson <jo.irisson@gmail.com>
-#       Liam P. White <inkscapebrony@gmail.com>
+#	Liam P. White <inkscapebrony@gmail.com>
+#	~suv <suv-sf@users.sourceforge.net>
 # with information from
 #	Kees Cook
 #	Michael Wybrow
 #
-# Copyright (C) 2006-2010
+# Copyright (C) 2006-2014
 # Released under GNU GPL, read the file 'COPYING' for more information
 #
 
