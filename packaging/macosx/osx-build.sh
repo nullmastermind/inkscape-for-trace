@@ -267,12 +267,12 @@ then
 	cd $SRCROOT
 	if [ -z "$(bzr info | grep "checkout")" ]; then
 		echo "repo is unbound (branch)"
-		update_cmd="bzr pull"
+		bzr pull
 	else
 		echo "repo is bound (checkout)"
-		update_cmd="bzr update"
+		echo '... please update bound branch manually.'
+	       	false
 	fi
-	$update_cmd
 	status=$?
 	if [[ $status -ne 0 ]]; then
 		echo -e "\nBZR update failed"
