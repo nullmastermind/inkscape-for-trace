@@ -25,7 +25,7 @@
 #include <gtk/gtk.h>
 #include <glibmm/i18n.h>
 
-#include "../dialogs/dialog-events.h"
+#include "ui/dialog-events.h"
 #include "../preferences.h"
 #include "sp-color-notebook.h"
 #include "spw-utilities.h"

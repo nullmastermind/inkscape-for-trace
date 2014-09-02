@@ -57,7 +57,7 @@
 #include "helper/gnome-utils.h"
 #include "helper/window.h"
 #include "io/sys.h"
-#include "dialogs/dialog-events.h"
+#include "ui/dialog-events.h"
 #include "message-context.h"
 #include "ui/uxmanager.h"
 #include "ui/clipboard.h"

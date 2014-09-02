@@ -24,7 +24,7 @@
 
 #include "desktop.h"
 #include "desktop-handles.h"
-#include "dialogs/dialog-events.h"
+#include "ui/dialog-events.h"
 #include "document.h"
 #include "document-undo.h"
 #include "ui/tools/tool-base.h"

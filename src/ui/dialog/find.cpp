@@ -31,7 +31,7 @@
 #include "selection.h"
 #include "desktop-handles.h"
 
-#include "dialogs/dialog-events.h"
+#include "ui/dialog-events.h"
 #include "verbs.h"
 #include "interface.h"
 #include "preferences.h"

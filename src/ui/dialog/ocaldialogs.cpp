@@ -27,7 +27,7 @@
 #include "filedialogimpl-gtkmm.h"
 #include "interface.h"
 #include "gc-core.h"
-#include <dialogs/dialog-events.h>
+#include "ui/dialog-events.h"
 #include "io/sys.h"
 #include "preferences.h"
 

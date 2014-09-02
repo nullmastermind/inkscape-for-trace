@@ -24,7 +24,7 @@
 #include "verbs.h"
 #include "dialog.h"
 #include "preferences.h"
-#include "dialogs/dialog-events.h"
+#include "ui/dialog-events.h"
 
 #include <gtkmm/invisible.h>
 #include <gtkmm/label.h>

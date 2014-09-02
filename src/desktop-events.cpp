@@ -25,7 +25,7 @@
 #include "desktop.h"
 #include "desktop-events.h"
 #include "desktop-handles.h"
-#include "dialogs/dialog-events.h"
+#include "ui/dialog-events.h"
 #include "display/canvas-axonomgrid.h"
 #include "display/canvas-grid.h"
 #include "display/guideline.h"

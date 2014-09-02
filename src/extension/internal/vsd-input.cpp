@@ -41,7 +41,7 @@
 #include "inkscape.h"
 #include "util/units.h"
 
-#include "dialogs/dialog-events.h"
+#include "ui/dialog-events.h"
 #include <gtk/gtk.h>
 #include "ui/widget/spinbutton.h"
 #include "ui/widget/frame.h"
