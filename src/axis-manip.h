@@ -15,7 +15,6 @@
 #include <cassert>
 #include <string>
 #include <utility>
-#include <glib.h>
 
 namespace Proj {
 
@@ -79,18 +78,15 @@ inline int axis_to_int(Box3D::Axis axis) {
     switch (axis) {
     case Box3D::X:
         return 0;
-        break;
     case Box3D::Y:
         return 1;
-        break;
     case Box3D::Z:
         return 2;
-        break;
     case Box3D::NONE:
         return -1;
-        break;
     default:
         assert(false);
+        return -1; // help compiler's flow analysis (-Werror=return-value)
     }
 }
 
@@ -105,7 +101,8 @@ inline Proj::Axis toProj(Box3D::Axis axis) {
     case Box3D::NONE:
         return Proj::NONE;
     default:
-        g_assert_not_reached();
+        assert(false);
+        return Proj::NONE; // help compiler's flow analysis (-Werror=return-value)
     }
 }
 
@@ -128,7 +125,8 @@ inline Box3D::Axis toAffine(Proj::Axis axis) {
     case Proj::NONE:
         return Box3D::NONE;
     default:
-        g_assert_not_reached();
+        assert(false);
+        return Box3D::NONE; // help compiler's flow analysis (-Werror=return-value)
     }
 }
 
