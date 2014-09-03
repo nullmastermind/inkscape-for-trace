@@ -1073,7 +1073,6 @@ Makefile
 src/Makefile
 src/check-header-compile
 src/debug/makefile
-src/dialogs/makefile
 src/display/makefile
 src/extension/implementation/makefile
 src/extension/internal/makefile
