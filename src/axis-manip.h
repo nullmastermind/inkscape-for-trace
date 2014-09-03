@@ -15,6 +15,7 @@
 #include <cassert>
 #include <string>
 #include <utility>
+#include <glib.h>
 
 namespace Proj {
 
@@ -104,7 +105,7 @@ inline Proj::Axis toProj(Box3D::Axis axis) {
     case Box3D::NONE:
         return Proj::NONE;
     default:
-        assert(false);
+        g_assert_not_reached();
     }
 }
 
@@ -127,7 +128,7 @@ inline Box3D::Axis toAffine(Proj::Axis axis) {
     case Proj::NONE:
         return Box3D::NONE;
     default:
-        assert(false);
+        g_assert_not_reached();
     }
 }
 
