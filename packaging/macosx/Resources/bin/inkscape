@@ -21,11 +21,23 @@ else
     EXEC=exec
 fi
 
-CWD="`(cd \"\`dirname \\\"$0\\\"\`\"; echo \"$PWD\")`"
+CWD="$(cd "$(dirname "$0")" && pwd)"
 # e.g. /Applications/Inkscape.app/Contents/Resources/bin
-TOP="`dirname \"$CWD\"`"
+TOP="$(dirname "$CWD")"
 # e.g. /Applications/Inkscape.app/Contents/Resources
+BASE="$(echo "$CWD" | sed -e 's/\/Contents\/Resources.*$//')"
+# e.g. /Applications/Inkscape.app
 
+# FIXME: Inkscape needs better relocation support for OS X (get rid of the relative 
+# path hack in src/path-prefix.h for osxapp-enabled builds). Until then, below change
+# of working directory is required:
+#
+# Due to changes after 0.48, we have change working directory in the script named 'inkscape':
+# recursive calls to inkscape from python-based extensions otherwise cause the app to hang or
+# fail (for python-based extensions, inkscape changes the working directory to the 
+# script's directory, and inkscape launched by python script thus can't find resources
+# like the now essential 'units.xml' in INKSCAPE_UIDIR relative to the working directory).
+cd "$BASE"
 
 # Brutally add many things to the PATH. If the directories do not exist, they won't be used anyway. 
 # People should really use ~/.macosx/environment.plist to set environment variables as explained by Apple:

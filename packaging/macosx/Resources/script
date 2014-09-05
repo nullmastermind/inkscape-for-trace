@@ -11,12 +11,11 @@ CWD="$(cd "$(dirname "$0")" && pwd)"
 source "${CWD}/xdg_setup.sh"
 source "${CWD}/alert_fccache.sh"
 
-BASE="$(echo "$0" | sed -e 's/\/Contents\/Resources\/script/\//')"
-cd "$BASE"
-
 # TODO examine whether it would be wisest to move the code from inkscape shell
 # script and getdisplay.sh to here and only keep the real binary in bin. This
 # may make things easier on Leopard and may also help using Inkscape on the
 # command line.
+#
+# See related FIXME in bin/inkscape for requirements to merge the two scripts.
 
 exec "$CWD/bin/inkscape" "$@"
