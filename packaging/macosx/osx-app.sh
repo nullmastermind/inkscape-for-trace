@@ -37,6 +37,7 @@
 
 # Defaults
 strip=false
+add_wrapper=true
 add_python=true
 python_dir=""
 
@@ -331,6 +332,12 @@ done
 
 # Icons and the rest of the script framework
 rsync -av --exclude ".svn" "$resdir"/Resources/* "$pkgresources/"
+
+# activate wrapper scripts for python and gimp (optional)
+if [ $add_wrapper = "true" ]; then
+	mv "$pkgbin/gimp-wrapper.sh" "$pkgbin/gimp"
+	#mv "$pkgbin/python-wrapper.sh" "$pkgbin/python"
+fi
 
 # Add python modules if requested
 if [ ${add_python} = "true" ]; then
