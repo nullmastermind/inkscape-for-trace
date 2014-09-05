@@ -25,7 +25,7 @@ BASE="$(echo "$CWD" | sed -e 's/\/Contents\/Resources.*$//')"
 # fail (for python-based extensions, inkscape changes the working directory to the 
 # script's directory, and inkscape launched by python script thus can't find resources
 # like the now essential 'units.xml' in INKSCAPE_UIDIR relative to the working directory).
-cd "$BASE"
+cd "$BASE" || exit 1
 
 # don't prepend to $PATH in recursive calls:
 if [ -z "$INK_PATH_ORIG" ]; then
