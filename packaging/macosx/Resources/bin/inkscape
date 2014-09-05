@@ -7,19 +7,7 @@
 #	~suv <suv-sf@users.sourceforge.net>
 #
 
-if test "x$GTK_DEBUG_LAUNCHER" != x; then
-    set -x
-fi
-
-if test "x$GTK_DEBUG_GDB" != x; then
-    EXEC="gdb --args"
-elif test "x$GTK_DEBUG_LLDB" != x; then
-    EXEC="lldb -- "
-elif test "x$GTK_DEBUG_DTRUSS" != x; then
-    EXEC="dtruss"
-else
-    EXEC=exec
-fi
+[ -n "$INK_DEBUG_LAUNCHER" ] && set -x
 
 CWD="$(cd "$(dirname "$0")" && pwd)"
 # e.g. /Applications/Inkscape.app/Contents/Resources/bin
@@ -39,20 +27,31 @@ BASE="$(echo "$CWD" | sed -e 's/\/Contents\/Resources.*$//')"
 # like the now essential 'units.xml' in INKSCAPE_UIDIR relative to the working directory).
 cd "$BASE"
 
-# Brutally add many things to the PATH. If the directories do not exist, they won't be used anyway. 
-# People should really use ~/.macosx/environment.plist to set environment variables as explained by Apple:
-#	http://developer.apple.com/qa/qa2001/qa1067.html
-# but since no one does, we correct this by making the 'classic' PATH additions here:
-#	/usr/local/bin which, though standard, doesn't seem to be in the PATH
-# 	newer python as recommended by MacPython http://www.python.org/download/mac/
-#	Fink
-#	MacPorts (former DarwinPorts)
-#	LaTeX distribution for Mac OS X
-export PATH="/usr/texbin:/opt/local/bin:/sw/bin/:/Library/Frameworks/Python.framework/Versions/Current/bin:/usr/local/bin:$CWD:$PATH"
+# don't prepend to $PATH in recursive calls:
+if [ -z "$INK_PATH_ORIG" ]; then
 
-# Put /usr/bin at beginning of path so we make sure we use Apple's python 
-# over one that may be installed be Macports, Fink or some other means.
-export PATH="/usr/bin:$PATH"
+	# Brutally add many things to the PATH. If the directories do not exist, they won't be used anyway. 
+	# the 'classic' PATH additions:
+	#	/usr/local/bin which, though standard, doesn't seem to be in the PATH
+	#	Fink
+	#	MacPorts (former DarwinPorts)
+	#	LaTeX distribution for Mac OS X
+	PATH_OTHER="/usr/texbin:/opt/local/bin:/sw/bin/:/usr/local/bin"
+
+	# Put /usr/bin at beginning of path so we make sure we use Apple's python 
+	# over one that may be installed be Macports, Fink or some other means.
+	PATH_PYTHON="/usr/bin"
+
+	# Put $TOP/bin at beginning of path so we make sure that recursive calls
+	# to inkscape don't pull in other inkscape binaries with different setup.
+	# Also allows to override system python with custom wrapper script, and
+	# e.g. to support GIMP.app or gimp for external editing and GIMP XCF export.
+	PATH_pkgbin="$TOP/bin"
+
+	# save orig, new PATH
+	export INK_PATH_ORIG="$PATH"
+	export PATH="$PATH_pkgbin:$PATH_PYTHON:$PATH_OTHER:$INK_PATH_ORIG"
+fi
 
 # Setup PYTHONPATH to use python modules shipped with Inkscape
 OSXMINORNO="$(/usr/bin/sw_vers -productVersion | cut -d. -f2)"
@@ -93,11 +92,7 @@ export ASPELL_CONF="prefix $TOP;"
 export POPPLER_DATADIR="$TOP/share/poppler"
 
 # Note: This requires the path with the exact ImageMagic version number.
-#        Also, that ImageMagick will only work if it does not find a 
-#        version installed into the same PREFIX as it was originally 
-#        installed.  Luckily, this is very unlikely given the extra long 
-#        and strangely named install prefix we use.
-#        The actual version is inserted by the packaging script.
+#       The actual version is inserted by the packaging script.
 export MAGICK_CONFIGURE_PATH="$TOP/lib/ImageMagick-IMAGEMAGICKVER/config:$TOP/share/ImageMagick-IMAGEMAGICKVER_MAJOR/config"
 export MAGICK_CODER_FILTER_PATH="$TOP/lib/ImageMagick-IMAGEMAGICKVER/modules-Q16/filters"
 export MAGICK_CODER_MODULE_PATH="$TOP/lib/ImageMagick-IMAGEMAGICKVER/modules-Q16/coders"
@@ -159,7 +154,19 @@ sed 's|${CWD}|'"$ESCAPEDTOP|g" "$TOP/lib/gtk-2.0/__gtk_version__/immodules.cache
 sed 's|${CWD}|'"$ESCAPEDTOP|g" "$TOP/lib/gdk-pixbuf-2.0/__gdk_pixbuf_version__/loaders.cache" \
     > "${INK_CACHE_DIR}/loaders.cache"
 
-if [ "x$GTK_DEBUG_SHELL" != "x" ]; then
+case "$INK_DEBUG" in
+	gdb)
+		EXEC="gdb --args" ;;
+	lldb)
+		EXEC="lldb -- " ;;
+	dtruss)
+		EXEC="dtruss" ;;
+	*)
+		EXEC="exec" ;;
+esac
+unset INK_DEBUG # ignore for recursive calls
+
+if [ "x$INK_DEBUG_SHELL" != "x" ]; then
 	exec bash
 else
 	$EXEC "$CWD/inkscape-bin" "$@"
