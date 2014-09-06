@@ -47,9 +47,18 @@ depends_build-append        port:popt \
                             port:lcms2 \
                             port:gtkmm \
                             port:boost \
-                            port:libpng \
                             port:ImageMagick \
+                            port:gtkspell2 \
+                            port:aspell-dict-en \
                             port:poppler
+
+# ports for Inkscape.app
+depends_build-append        port:gnome-icon-theme \
+                            port:gnome-icon-theme-symbolic \
+                            port:icon-naming-utils \
+                            port:gnome-themes-standard \
+                            port:gtk-engines2 \
+                            port:gtk2-murrine
 
 # ports for python extensions
 depends_build-append        port:py27-lxml \
@@ -90,6 +99,20 @@ depends_build-append        port:libcdr-0.1 \
                             port:libwpg-0.3
 }
 
+variant gnome_vfs description {with gnome-vfs (deprecated)} {
+    depends_build-append    port:gnome-vfs
+}
+
+variant gvfs description {with gvfs} {
+    depends_build-append    port:gvfs
+}
+
+variant dbus description {with dbus} {
+    depends_build-append    port:dbus \
+                            port:dbus-glib \
+                            port:dbus-python27
+}
+
 # variants
 universal_variant           no
 
@@ -97,10 +120,10 @@ variant x11 conflicts quartz {}
 
 variant quartz conflicts x11 {}
 
-default_variants            +no_startupitem \
-                            +no_web -atlas -ffmpeg -video \
+default_variants            +no_startupitem +no_web -atlas -ffmpeg -video \
                             +x11 -quartz -no_x11 \
-                            +rsvg +Pillow -tkinter
+                            +rsvg +Pillow -tkinter \
+                            +gnome_vfs
 
 # livecheck
 livecheck.type              none
