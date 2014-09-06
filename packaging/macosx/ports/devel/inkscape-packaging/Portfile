@@ -72,7 +72,7 @@ if {${os.major} == 9} {
                             port:py25-Pillow \
                             port:py25-uniconvertor
 }
-if {${os.major} == 9} {
+if {${os.major} < 9} {
     # we don't support Tiger anymore
     return -code error "Mac OS X <= 10.4 not supported.""
 }
