@@ -171,7 +171,7 @@ export CPATH="$LIBPREFIX/include"
 export CPPFLAGS="$CPPFLAGS -I$LIBPREFIX/include"
 export LDFLAGS="$LDFLAGS -L$LIBPREFIX/lib"
 #  compiler arguments
-export CFLAGS="$CFLAGS -pipe -Os"
+export CFLAGS="$CFLAGS -Os"
 
 # Use system compiler and compiler flags which are known to work:
 if [ "$OSXMINORNO" -le "4" ]; then
