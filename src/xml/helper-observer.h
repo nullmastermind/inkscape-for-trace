@@ -1,12 +1,12 @@
-#ifndef __XML_HELPER_OBSERVER__
-#define __XML_HELPER_OBSERVER__
+#ifndef SEEN_XML_HELPER_OBSERVER
+#define SEEN_XML_HELPER_OBSERVER
+
+#include <cstddef>
+#include <sigc++/sigc++.h>
 
 #include "node-observer.h"
 #include "node.h"
-#include "../sp-object.h"
-//#include "../sp-object-repr.h"
-#include <stddef.h>
-#include <sigc++/sigc++.h>
+#include "sp-object.h"
 
 namespace Inkscape {
     namespace XML {

@@ -12,12 +12,20 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <math.h>
+#include <cmath>
+#include <cstdio>
+
+#define MIN(X,Y) ((X) < (Y) ? (X) : (Y))
+#define MAX(X,Y) ((X) > (Y) ? (X) : (Y))
+
 #include "color.h"
 #include "svg/svg-icc-color.h"
 #include "svg/svg-color.h"
 
 #include "svg/css-ostringstream.h"
+
+#define return_if_fail(x) if (!(x)) { printf("assertion failed: " #x); return; }
+#define return_val_if_fail(x, val) if (!(x)) { printf("assertion failed: " #x); return val; }
 
 using Inkscape::CSSOStringStream;
 using std::vector;
@@ -118,7 +126,7 @@ static bool profileMatches( SVGICCColor const* first, SVGICCColor const* second 
             && (first->colorProfile == second->colorProfile)
             && (first->colors.size() == second->colors.size());
         if ( match ) {
-            for ( guint i = 0; i < first->colors.size(); i++ ) {
+            for ( unsigned i = 0; i < first->colors.size(); i++ ) {
                 match &= (fabs(first->colors[i] - second->colors[i]) < PROFILE_EPSILON);
             }
         }
@@ -132,12 +140,12 @@ static bool profileMatches( SVGICCColor const* first, SVGICCColor const* second 
  */
 void SPColor::set( float r, float g, float b )
 {
-    g_return_if_fail(r >= 0.0);
-    g_return_if_fail(r <= 1.0);
-    g_return_if_fail(g >= 0.0);
-    g_return_if_fail(g <= 1.0);
-    g_return_if_fail(b >= 0.0);
-    g_return_if_fail(b <= 1.0);
+    return_if_fail(r >= 0.0);
+    return_if_fail(r <= 1.0);
+    return_if_fail(g >= 0.0);
+    return_if_fail(g <= 1.0);
+    return_if_fail(b >= 0.0);
+    return_if_fail(b <= 1.0);
 
     // TODO clear icc if set?
     v.c[0] = r;
@@ -162,7 +170,7 @@ void SPColor::set( guint32 value )
  */
 guint32 SPColor::toRGBA32( int alpha ) const
 {
-    g_return_val_if_fail (alpha <= 0xff, 0x0);
+    return_val_if_fail (alpha <= 0xff, 0x0);
 
     guint32 rgba = SP_RGBA32_U_COMPOSE( SP_COLOR_F_TO_U(v.c[0]),
                                         SP_COLOR_F_TO_U(v.c[1]),
@@ -177,8 +185,8 @@ guint32 SPColor::toRGBA32( int alpha ) const
  */
 guint32 SPColor::toRGBA32( double alpha ) const
 {
-    g_return_val_if_fail(alpha >= 0.0, 0x0);
-    g_return_val_if_fail(alpha <= 1.0, 0x0);
+    return_val_if_fail(alpha >= 0.0, 0x0);
+    return_val_if_fail(alpha <= 1.0, 0x0);
 
     return toRGBA32( static_cast<int>(SP_COLOR_F_TO_U(alpha)) );
 }
@@ -215,8 +223,8 @@ std::string SPColor::toString() const
 void
 sp_color_get_rgb_floatv(SPColor const *color, float *rgb)
 {
-    g_return_if_fail (color != NULL);
-    g_return_if_fail (rgb != NULL);
+    return_if_fail (color != NULL);
+    return_if_fail (rgb != NULL);
 
     rgb[0] = color->v.c[0];
     rgb[1] = color->v.c[1];
@@ -230,8 +238,8 @@ sp_color_get_rgb_floatv(SPColor const *color, float *rgb)
 void
 sp_color_get_cmyk_floatv(SPColor const *color, float *cmyk)
 {
-    g_return_if_fail (color != NULL);
-    g_return_if_fail (cmyk != NULL);
+    return_if_fail (color != NULL);
+    return_if_fail (cmyk != NULL);
 
     sp_color_rgb_to_cmyk_floatv( cmyk,
                                  color->v.c[0],

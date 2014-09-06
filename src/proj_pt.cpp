@@ -9,12 +9,14 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <glib.h>
+
 #include "proj_pt.h"
 #include "svg/stringstream.h"
 
 namespace Proj {
 
-Pt2::Pt2(const gchar *coord_str) {
+Pt2::Pt2(const char *coord_str) {
     if (!coord_str) {
         pt[0] = 0.0;
         pt[1] = 0.0;
@@ -22,7 +24,7 @@ Pt2::Pt2(const gchar *coord_str) {
         g_warning ("Coordinate string is empty. Creating default Pt2\n");
         return;
     }
-    gchar **coords = g_strsplit(coord_str, ":", 0);
+    char **coords = g_strsplit(coord_str, ":", 0);
     if (coords[0] == NULL || coords[1] == NULL || coords[2] == NULL) {
         g_strfreev (coords);
         g_warning ("Malformed coordinate string.\n");
@@ -52,7 +54,7 @@ Pt2::affine() {
   return Geom::Point (pt[0]/pt[2], pt[1]/pt[2]);
 }
 
-gchar *
+char *
 Pt2::coord_string() {
     Inkscape::SVGOStringStream os;
     os << pt[0] << " : "
@@ -61,7 +63,7 @@ Pt2::coord_string() {
     return g_strdup(os.str().c_str());
 }
 
-Pt3::Pt3(const gchar *coord_str) {
+Pt3::Pt3(const char *coord_str) {
     if (!coord_str) {
         pt[0] = 0.0;
         pt[1] = 0.0;
@@ -70,7 +72,7 @@ Pt3::Pt3(const gchar *coord_str) {
         g_warning ("Coordinate string is empty. Creating default Pt2\n");
         return;
     }
-    gchar **coords = g_strsplit(coord_str, ":", 0);
+    char **coords = g_strsplit(coord_str, ":", 0);
     if (coords[0] == NULL || coords[1] == NULL ||
         coords[2] == NULL || coords[3] == NULL) {
         g_strfreev (coords);
@@ -94,7 +96,7 @@ Pt3::normalize() {
     pt[3] = 1.0;
 }
 
-gchar *
+char *
 Pt3::coord_string() {
     Inkscape::SVGOStringStream os;
     os << pt[0] << " : "

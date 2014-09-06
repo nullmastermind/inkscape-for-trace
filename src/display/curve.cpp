@@ -48,7 +48,7 @@ SPCurve::new_from_rect(Geom::Rect const &rect, bool all_four_sides)
     Geom::Point p = rect.corner(0);
     c->moveto(p);
 
-    for (int i=3; i>=1; i--) {
+    for (int i=3; i>=1; --i) {
         c->lineto(rect.corner(i));
     }
 
@@ -87,10 +87,10 @@ SPCurve::get_pathvector() const
  * Returns the number of segments of all paths summed
  * This count includes the closing line segment of a closed path.
  */
-guint
+size_t
 SPCurve::get_segment_count() const
 {
-    guint nr = 0;
+    size_t nr = 0;
     for(Geom::PathVector::const_iterator it = _pathv.begin(); it != _pathv.end(); ++it) {
         nr += (*it).size();
 
@@ -200,7 +200,7 @@ SPCurve::reset()
  * Calls SPCurve::moveto() with point made of given coordinates.
  */
 void
-SPCurve::moveto(gdouble x, gdouble y)
+SPCurve::moveto(double x, double y)
 {
     moveto(Geom::Point(x, y));
 }
@@ -229,7 +229,7 @@ SPCurve::lineto(Geom::Point const &p)
  * Calls SPCurve::lineto( Geom::Point(x,y) )
  */
 void
-SPCurve::lineto(gdouble x, gdouble y)
+SPCurve::lineto(double x, double y)
 {
     lineto(Geom::Point(x,y));
 }
@@ -249,7 +249,7 @@ SPCurve::quadto(Geom::Point const &p1, Geom::Point const &p2)
  * All coordinates must be finite.
  */
 void
-SPCurve::quadto(gdouble x1, gdouble y1, gdouble x2, gdouble y2)
+SPCurve::quadto(double x1, double y1, double x2, double y2)
 {
     quadto( Geom::Point(x1,y1), Geom::Point(x2,y2) );
 }
@@ -269,7 +269,7 @@ SPCurve::curveto(Geom::Point const &p0, Geom::Point const &p1, Geom::Point const
  * All coordinates must be finite.
  */
 void
-SPCurve::curveto(gdouble x0, gdouble y0, gdouble x1, gdouble y1, gdouble x2, gdouble y2)
+SPCurve::curveto(double x0, double y0, double x1, double y1, double x2, double y2)
 {
     curveto( Geom::Point(x0,y0), Geom::Point(x1,y1), Geom::Point(x2,y2) );
 }
@@ -520,7 +520,7 @@ SPCurve::append(SPCurve const *curve2,
  * When one of the curves is empty, this curves path becomes the non-empty path.
  */
 SPCurve *
-SPCurve::append_continuous(SPCurve const *c1, gdouble tolerance)
+SPCurve::append_continuous(SPCurve const *c1, double tolerance)
 {
     using Geom::X;
     using Geom::Y;
@@ -630,10 +630,10 @@ SPCurve::move_endpoints(Geom::Point const &new_p0, Geom::Point const &new_p1)
  * Sum of nodes in all the paths. When a path is closed, and its closing line segment is of zero-length,
  * this function will not count the closing knot double (so basically ignores the closing line segment when it has zero length)
  */
-guint
+size_t
 SPCurve::nodes_in_path() const
 {
-    guint nr = 0;
+    size_t nr = 0;
     for(Geom::PathVector::const_iterator it = _pathv.begin(); it != _pathv.end(); ++it) {
         nr += (*it).size();
 

@@ -12,11 +12,12 @@
 #ifndef SEEN_INKSCAPE_DISPLAY_DRAWING_H
 #define SEEN_INKSCAPE_DISPLAY_DRAWING_H
 
-#include <set>
+#include <2geom/rect.h>
 #include <boost/operators.hpp>
 #include <boost/utility.hpp>
+#include <set>
 #include <sigc++/sigc++.h>
-#include <2geom/rect.h>
+
 #include "display/drawing-item.h"
 #include "display/rendermode.h"
 #include "nr-filter-colormatrix.h"

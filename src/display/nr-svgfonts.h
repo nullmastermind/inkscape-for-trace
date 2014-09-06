@@ -1,4 +1,3 @@
-#include "config.h"
 #ifndef NR_SVGFONTS_H_SEEN
 #define NR_SVGFONTS_H_SEEN
 /*
@@ -21,8 +20,7 @@ class SPFont;
 class SPGlyph;
 class SPMissingGlyph;
 
-struct _GdkEventExpose;
-typedef _GdkEventExpose GdkEventExpose;
+extern "C" { typedef struct _GdkEventExpose GdkEventExpose; }
 
 namespace Gtk {
 class Widget;
