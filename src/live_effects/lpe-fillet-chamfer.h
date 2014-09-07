@@ -15,7 +15,13 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <glibmm/threads.h>
+#if HAVE_CONFIG_H
+# include "config.h"
+#endif
+
+#if defined(GLIBMM_DISABLE_DEPRECATED) && defined(HAVE_GLIBMM_THREADS_H)
+# include <glibmm/threads.h>
+#endif
 
 #include "live_effects/parameter/enum.h"
 #include "live_effects/parameter/bool.h"
