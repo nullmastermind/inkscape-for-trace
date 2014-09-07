@@ -10,7 +10,7 @@ $ export PATH="$MP_PREFIX/bin:$MP_PREFIX/sbin:$PATH"
 
 3) add 'ports/' subdirectory as local portfile repository:
 
-$ echo 'file://'"$(pwd)/ports" >> "$MP_PREFIX/etc/macports/sources.conf"
+$ sed -e '/^rsync:/i\'$'\n'"file://$(pwd)/ports" -i "" foo.conf
 
 4) index the new local portfile repository: 
 
