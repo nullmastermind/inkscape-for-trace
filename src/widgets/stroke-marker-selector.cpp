@@ -25,7 +25,7 @@
 
 
 #include "style.h"
-#include "dialogs/dialog-events.h"
+#include "ui/dialog-events.h"
 #include "desktop-handles.h"
 #include "desktop-style.h"
 #include "preferences.h"

@@ -8,7 +8,7 @@
 #include <math.h>
 #include <gtk/gtk.h>
 #include <glibmm/i18n.h>
-#include "../dialogs/dialog-events.h"
+#include "ui/dialog-events.h"
 #include "sp-color-scales.h"
 #include "sp-color-slider.h"
 #include "svg/svg-icc-color.h"

@@ -22,7 +22,7 @@
 #endif
 
 #include "filedialogimpl-gtkmm.h"
-#include "dialogs/dialog-events.h"
+#include "ui/dialog-events.h"
 #include "interface.h"
 #include "io/sys.h"
 #include "path-prefix.h"

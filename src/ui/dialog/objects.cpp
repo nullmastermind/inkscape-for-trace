@@ -25,7 +25,7 @@
 
 #include "desktop.h"
 #include "desktop-style.h"
-#include "dialogs/dialog-events.h"
+#include "ui/dialog-events.h"
 #include "document.h"
 #include "document-undo.h"
 #include "filter-chemistry.h"

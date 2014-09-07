@@ -10,7 +10,7 @@
 #include <set>
 #include <vector>
 
-#include "../dialogs/dialog-events.h"
+#include "ui/dialog-events.h"
 #include "sp-color-icc-selector.h"
 #include "sp-color-scales.h"
 #include "sp-color-slider.h"

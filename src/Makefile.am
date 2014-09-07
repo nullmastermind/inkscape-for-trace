@@ -105,7 +105,6 @@ endif
 
 # Include all partial makefiles from subdirectories
 include Makefile_insert
-include dialogs/Makefile_insert
 include display/Makefile_insert
 include extension/Makefile_insert
 include extension/dbus/Makefile_insert
@@ -144,7 +143,6 @@ include libdepixelize/Makefile_insert
 EXTRA_DIST +=	\
 	2geom/makefile.in	\
 	debug/makefile.in	\
-	dialogs/makefile.in	\
 	display/makefile.in	\
 	extension/implementation/makefile.in	\
 	extension/internal/makefile.in	\

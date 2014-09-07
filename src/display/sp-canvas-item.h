@@ -23,8 +23,9 @@
 # include "config.h"
 #endif
 
-#include <glib-object.h>
 #include <2geom/rect.h>
+#include <glib-object.h>
+
 #include "ui/control-types.h"
 
 G_BEGIN_DECLS

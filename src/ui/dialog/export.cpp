@@ -62,7 +62,7 @@
 #include "sp-namedview.h"
 #include "selection-chemistry.h"
 
-#include "dialogs/dialog-events.h"
+#include "ui/dialog-events.h"
 #include "preferences.h"
 #include "verbs.h"
 #include "interface.h"

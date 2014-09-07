@@ -28,7 +28,7 @@
 #include "ui/tools/tool-base.h"
 #include "widgets/desktop-widget.h"
 #include <glibmm/i18n.h>
-#include "dialogs/dialog-events.h"
+#include "ui/dialog-events.h"
 #include "message-context.h"
 #include "xml/repr.h"
 #include "verbs.h"

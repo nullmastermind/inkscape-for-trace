@@ -26,6 +26,8 @@
 #include <2geom/path.h>
 #include <2geom/transforms.h>
 #include <2geom/sbasis-to-bezier.h>
+#include <gdk-pixbuf/gdk-pixbuf.h>
+
 #include "color.h"
 #include "style.h"
 #include "helper/geom-curves.h"
