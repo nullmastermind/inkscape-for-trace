@@ -10,6 +10,7 @@
  */
 
 #include <cstdlib>
+#include <string>
 
 /** 
  * Returns a form of \a path relative to \a base if that is easy to construct (eg if \a path
