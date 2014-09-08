@@ -36,7 +36,7 @@
 # 
 
 # Defaults
-strip=false
+strip_build=false
 add_wrapper=true
 add_python=true
 python_dir=""
@@ -95,7 +95,7 @@ do
 			python_dir="$2"
 			shift 1 ;;
 		-s)
-			strip=true ;;
+			strip_build=true ;;
 		-l|--libraries)
 			LIBPREFIX="$2"
 			shift 1 ;;
@@ -638,6 +638,15 @@ done
 
 # Some libraries don't seem to have write permission, fix this.
 chmod -R u+w "$package/Contents/Resources/lib"
+
+# Strip libraries and executables if requested
+#----------------------------------------------------------
+if [ "$strip_build" = "true" ]; then
+    echo -e "\n\033[1mStripping debugging symbols...\033[0m\n"
+    chmod +w "$pkglib"/*.dylib
+    strip -x "$pkglib"/*.dylib
+    strip -ur "$binpath"
+fi
 
 # Rewrite id and paths of linked libraries
 #----------------------------------------------------------
