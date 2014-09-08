@@ -63,6 +63,7 @@ Compilation script for Inkscape on Mac OS X.
   \033[1mp,pack,package\033[0m
     package Inkscape in a double clickable .app bundle 
     \033[1m-s,--strip\033[0m	remove debugging information in Inkscape package
+    \033[1m-v,--verbose\033[0m	verbose mode
     \033[1m-py,--with-python\033[0m	specify python modules path for inclusion into the app bundle
   \033[1md,dist,distrib\033[0m
     store Inkscape.app in a disk image (dmg) for distribution
@@ -105,6 +106,7 @@ DISTRIB="f"
 BUILD_INFO="f"
 
 STRIP=""
+VERBOSE=""
 PYTHON_MODULES=""
 
 # Parse command line options
@@ -147,6 +149,8 @@ do
 	-py|--with-python)
 		PYTHON_MODULES="$2"
 		shift 1 ;;
+	-v|--verbose)
+		VERBOSE="-v" ;;
 	info)
 		BUILD_INFO="t" ;;
 	*)
@@ -495,7 +499,7 @@ then
 	fi
 
 	# Create app bundle
-	./osx-app.sh $STRIP -b $INSTALLPREFIX/bin/inkscape -p $BUILDPREFIX/Info.plist $PYTHON_MODULES
+	./osx-app.sh $STRIP $VERBOSE -b $INSTALLPREFIX/bin/inkscape -p $BUILDPREFIX/Info.plist $PYTHON_MODULES
 	status=$?
 	if [[ $status -ne 0 ]]; then
 		echo -e "\nApplication bundle creation failed"

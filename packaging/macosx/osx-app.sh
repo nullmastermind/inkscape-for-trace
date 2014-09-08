@@ -76,6 +76,8 @@ Create an app bundle for OS X
 		specify the path to Info.plist. Info.plist can be found
 		in the base directory of the source code once configure
 		has been run
+	\033[1m-v,--verbose\033[0m
+		Verbose mode.
 
 \033[1mEXAMPLE\033[0m
 	$0 -s -py ~/python-modules -l /opt/local -b ../../Build/bin/inkscape -p ../../Info.plist
@@ -103,6 +105,8 @@ do
 		-p|--plist)
 			plist="$2"
 			shift 1 ;;
+		-v|--verbose)
+			verbose_mode=true ;;
 		-h|--help)
 			help
 			exit 0 ;;
@@ -365,7 +369,7 @@ case $_backend in
 		echo -e "\033[1mBuilding launcher...\033[0m\n"
 		xcodebuild $XCODEFLAGS clean build
 		)
-		cp "$resdir/$SCRIPTEXECDIR/ScriptExec" "$pkgexec/Inkscape"
+		$cp_cmd "$resdir/$SCRIPTEXECDIR/ScriptExec" "$pkgexec/Inkscape"
 		;;
 	quartz)
 		$cp_cmd "$resdir/ScriptExec/launcher-quartz-no-macintegration.sh" "$pkgexec/inkscape"
@@ -390,26 +394,26 @@ else
 	scrpath="$pkgexec/inkscape"
 	binpath="$pkgexec/inkscape-bin"
 fi
-cp -v "$binary" "$binpath"
+$cp_cmd "$binary" "$binpath"
 # TODO Add a "$verbose" variable and command line switch, which sets wether these commands are verbose or not
 
 # Info.plist
-cp "$plist" "$package/Contents/Info.plist"
+$cp_cmd "$plist" "$package/Contents/Info.plist"
 if [ $_backend = "quartz" ]; then
 	/usr/libexec/PlistBuddy -x -c "Set :CGDisableCoalescedUpdates 1" "${package}/Contents/Info.plist"
 fi
 
 # Share files
-rsync -av "$binary_dir/../share/$binary_name"/* "$pkgshare/$binary_name"
-rsync -av "$binary_dir/../share/locale"/* "$pkglocale"
+$rsync_cmd "$binary_dir/../share/$binary_name"/* "$pkgshare/$binary_name"
+$rsync_cmd "$binary_dir/../share/locale"/* "$pkglocale"
 
 # Copy GTK shared mime information
 mkdir -p "$pkgresources/share"
-cp -rp "$LIBPREFIX/share/mime" "$pkgshare/"
+$cp_cmd -rp "$LIBPREFIX/share/mime" "$pkgshare/"
 
 # Copy GTK hicolor icon theme index file
 mkdir -p "$pkgresources/share/icons/hicolor"
-cp "$LIBPREFIX/share/icons/hicolor/index.theme"  "$pkgresources/share/icons/hicolor"
+$cp_cmd "$LIBPREFIX/share/icons/hicolor/index.theme"  "$pkgresources/share/icons/hicolor"
 
 # GTK+ stock icons with legacy icon mapping
 echo "Creating GtkStock icon theme ..."
@@ -418,19 +422,19 @@ stock_src="${custom_res}/src/icons/stock-icons" \
 gtk-update-icon-cache --index-only "${pkgshare}/icons/GtkStock"
 
 # GTK+ themes
-cp -RP "$LIBPREFIX/share/gtk-engines" "$pkgshare/"
+$cp_cmd -RP "$LIBPREFIX/share/gtk-engines" "$pkgshare/"
 for item in Adwaita Clearlooks HighContrast Industrial Raleigh Redmond ThinIce; do
 	mkdir -p "$pkgshare/themes/$item"
-	cp -RP "$LIBPREFIX/share/themes/$item/gtk-2.0" "$pkgshare/themes/$item/"
+	$cp_cmd -RP "$LIBPREFIX/share/themes/$item/gtk-2.0" "$pkgshare/themes/$item/"
 done
 if [ $_backend = "quartz" ]; then
 	for item in Mac; do
-		cp -RP "$LIBPREFIX/share/themes/$item/gtk-2.0"* "$pkgshare/themes/$item/"
+		$cp_cmd -RP "$LIBPREFIX/share/themes/$item/gtk-2.0"* "$pkgshare/themes/$item/"
 	done
 fi
 
 # Icons and the rest of the script framework
-rsync -av --exclude ".svn" "$resdir"/Resources/* "$pkgresources/"
+$rsync_cmd --exclude ".svn" "$resdir"/Resources/* "$pkgresources/"
 
 # remove files not needed with GTK+/Quartz
 if [ $_backend = "quartz" ]; then
@@ -497,7 +501,7 @@ if [ ${add_python} = "true" ]; then
 		#   - ${python_dir}/python2.5/site-packages/numpy
 		#   - ${python_dir}/python2.6/site-packages/lxml
 		#   - ...
-		cp -rvf "$python_dir"/* "$pkglib"
+		$cp_cmd -rf "$python_dir"/* "$pkglib"
 	fi
 fi
 sed -e "s,__build_arch__,$ARCH,g" -i "" "$scrpath"
@@ -517,25 +521,25 @@ END_PANGO
 
 # We use a modified fonts.conf file so only need the dtd
 mkdir -p $pkgshare/xml/fontconfig
-cp $LIBPREFIX/share/xml/fontconfig/fonts.dtd $pkgshare/xml/fontconfig
+$cp_cmd $LIBPREFIX/share/xml/fontconfig/fonts.dtd $pkgshare/xml/fontconfig
 mkdir -p $pkgetc/fonts
-cp -r $LIBPREFIX/etc/fonts/conf.d $pkgetc/fonts/
+$cp_cmd -r $LIBPREFIX/etc/fonts/conf.d $pkgetc/fonts/
 mkdir -p $pkgshare/fontconfig
-cp -r $LIBPREFIX/share/fontconfig/conf.avail $pkgshare/fontconfig/
-(cd $pkgetc/fonts/conf.d && ln -s ../../../share/fontconfig/conf.avail/10-autohint.conf)
-(cd $pkgetc/fonts/conf.d && ln -s ../../../share/fontconfig/conf.avail/70-no-bitmaps.conf)
+$cp_cmd -r $LIBPREFIX/share/fontconfig/conf.avail $pkgshare/fontconfig/
+(cd $pkgetc/fonts/conf.d && $ln_cmd ../../../share/fontconfig/conf.avail/10-autohint.conf)
+(cd $pkgetc/fonts/conf.d && $ln_cmd ../../../share/fontconfig/conf.avail/70-no-bitmaps.conf)
 
 pango_version=`pkg-config --variable=pango_module_version pango`
 mkdir -p $pkglib/pango/$pango_version/modules
-cp $LIBPREFIX/lib/pango/$pango_version/modules/*.so $pkglib/pango/$pango_version/modules/
+$cp_cmd $LIBPREFIX/lib/pango/$pango_version/modules/*.so $pkglib/pango/$pango_version/modules/
 
 gtk_version=`pkg-config --variable=gtk_binary_version gtk+-2.0`
 mkdir -p $pkglib/gtk-2.0/$gtk_version/{engines,immodules,printbackends}
-cp -r $LIBPREFIX/lib/gtk-2.0/$gtk_version/* $pkglib/gtk-2.0/$gtk_version/
+$cp_cmd -r $LIBPREFIX/lib/gtk-2.0/$gtk_version/* $pkglib/gtk-2.0/$gtk_version/
 
 gdk_pixbuf_version=`pkg-config --variable=gdk_pixbuf_binary_version gdk-pixbuf-2.0`
 mkdir -p $pkglib/gdk-pixbuf-2.0/$gdk_pixbuf_version/loaders
-cp $LIBPREFIX/lib/gdk-pixbuf-2.0/$gdk_pixbuf_version/loaders/*.so $pkglib/gdk-pixbuf-2.0/$gdk_pixbuf_version/loaders/
+$cp_cmd $LIBPREFIX/lib/gdk-pixbuf-2.0/$gdk_pixbuf_version/loaders/*.so $pkglib/gdk-pixbuf-2.0/$gdk_pixbuf_version/loaders/
 
 sed -e "s,__gtk_version__,$gtk_version,g" -i "" "$scrpath"
 sed -e "s,__gdk_pixbuf_version__,$gdk_pixbuf_version,g" -i "" "$scrpath"
@@ -560,12 +564,12 @@ IMAGEMAGICKVER_MAJOR="$(cut -d. -f1 <<< "$IMAGEMAGICKVER")"
 # ImageMagick data
 # include *.la files for main libs too
 for item in "$LIBPREFIX/lib/libMagick"*.la; do
-	cp "$item" "$pkglib/"
+	$cp_cmd "$item" "$pkglib/"
 done
 # ImageMagick modules
-cp -r "$LIBPREFIX/lib/ImageMagick-$IMAGEMAGICKVER" "$pkglib/"
-cp -r "$LIBPREFIX/etc/ImageMagick-$IMAGEMAGICKVER_MAJOR" "$pkgetc/"
-cp -r "$LIBPREFIX/share/ImageMagick-$IMAGEMAGICKVER_MAJOR" "$pkgshare/"
+$cp_cmd -r "$LIBPREFIX/lib/ImageMagick-$IMAGEMAGICKVER" "$pkglib/"
+$cp_cmd -r "$LIBPREFIX/etc/ImageMagick-$IMAGEMAGICKVER_MAJOR" "$pkgetc/"
+$cp_cmd -r "$LIBPREFIX/share/ImageMagick-$IMAGEMAGICKVER_MAJOR" "$pkgshare/"
 # REQUIRED: remove hard-coded paths from *.la files
 for la_file in "$pkglib/libMagick"*.la; do
 	sed -e "s,$LIBPREFIX/lib,,g" -i "" "$la_file"
@@ -580,10 +584,10 @@ sed -e "s,IMAGEMAGICKVER,$IMAGEMAGICKVER,g" -i "" "$scrpath"
 sed -e "s,IMAGEMAGICKVER_MAJOR,$IMAGEMAGICKVER_MAJOR,g" -i "" "$scrpath"
 
 # Copy aspell dictionary files:
-cp -r "$LIBPREFIX/share/aspell" "$pkgresources/share/"
+$cp_cmd -r "$LIBPREFIX/share/aspell" "$pkgresources/share/"
 
 # Copy Poppler data:
-cp -r "$LIBPREFIX/share/poppler" "$pkgshare"
+$cp_cmd -r "$LIBPREFIX/share/poppler" "$pkgshare"
 
 # GLib2 schemas
 mkdir -p "$pkgshare/glib-2.0"
@@ -596,9 +600,11 @@ python_libs=""
 for PYTHON_VER in "2.5" "2.6" "2.7"; do
 	python_libs="$python_libs $(find "${pkglib}/python${PYTHON_VER}" -name *.so -or -name *.dylib)"
 done
+[ $verbose_mode ] && echo "Python libs: $python_libs"
 
 # get list of included binary executables
 extra_bin=$(find $pkgbin -exec file {} \; | grep executable | grep -v text | cut -d: -f1)
+[ $verbose_mode ] && echo "Extra binaries: $extra_bin"
 
 # Find out libs we need from MacPorts, Fink, or from a custom install
 # (i.e. $LIBPREFIX), then loop until no changes.
@@ -620,7 +626,7 @@ while $endl; do
 		$extra_bin \
 		$binpath \
 		2>/dev/null | fgrep compatibility | cut -d\( -f1 | grep $LIBPREFIX | sort | uniq)"
-	cp -f $libs "$pkglib"
+	$cp_cmd -f $libs "$pkglib"
 	let "a+=1"	
 	nnfiles="$(ls "$pkglib" | wc -l)"
 	if [ $nnfiles = $nfiles ]; then
@@ -662,6 +668,11 @@ fixlib () {
 				echo "Skipping loader_to_res for $1"
 				;;
 		esac
+		[ $verbose_mode ] && echo "basename:          $1"
+		[ $verbose_mode ] && echo "dirname:           $2"
+		[ $verbose_mode ] && echo "filePath:          $filePath"
+		[ $verbose_mode ] && echo "to_id:             $to_id"
+		[ $verbose_mode ] && echo "loader_to_res:     $loader_to_res"
 		[ $to_id ] && install_name_tool -id "$to_id" "$1"
 		for lib in $fileLibs; do
 			first="$(echo $lib | cut -d/ -f1-3)"
@@ -683,6 +694,11 @@ fixlib () {
 						echo "Skipping to_path for $lib in $1"
 						;;
 				esac
+				[ $verbose_mode ] && echo "lib:               $lib"
+				[ $verbose_mode ] && echo "lib_prefix_levels: $lib_prefix_levels"
+				[ $verbose_mode ] && echo "res_to_lib:        $res_to_lib"
+				[ $verbose_mode ] && echo "to_path:           $to_path"
+				[ $verbose_mode ] && echo "install_name_tool arguments: -change $lib $to_path $1"
 				[ $to_path ] && install_name_tool -change "$lib" "$to_path" "$1"
 			fi
 		done
@@ -710,5 +726,9 @@ rewritelibpaths () {
 }
 
 rewritelibpaths
+
+# All done.
+#----------------------------------------------------------
+echo "Inkscape.app created successfully."
 
 exit 0
