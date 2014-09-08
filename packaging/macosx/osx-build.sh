@@ -66,6 +66,8 @@ Compilation script for Inkscape on Mac OS X.
     \033[1m-py,--with-python\033[0m	specify python modules path for inclusion into the app bundle
   \033[1md,dist,distrib\033[0m
     store Inkscape.app in a disk image (dmg) for distribution
+  \033[1minfo\033[0m
+    create info file for current build
 
 \033[1mEXAMPLES\033[0m
   \033[1m$0 conf build install\033[0m
@@ -100,7 +102,7 @@ NJOBS=1
 INSTALL="f"
 PACKAGE="f"
 DISTRIB="f"
-UNIVERSAL="f"
+BUILD_INFO="f"
 
 STRIP=""
 PYTHON_MODULES=""
@@ -145,6 +147,8 @@ do
 	-py|--with-python)
 		PYTHON_MODULES="$2"
 		shift 1 ;;
+	info)
+		BUILD_INFO="t" ;;
 	*)
 		echo "Invalid command line option: $1" 
 		exit 2 ;;
@@ -152,13 +156,20 @@ do
 	shift 1
 done
 
-# OS X version
+# Checks
 # ----------------------------------------------------------
+# OS X version
 OSXVERSION="$(/usr/bin/sw_vers | grep ProductVersion | cut -f2)"
 OSXMINORVER="$(cut -d. -f 1,2 <<< $OSXVERSION)"
 OSXMINORNO="$(cut -d. -f2 <<< $OSXVERSION)"
 OSXPOINTNO="$(cut -d. -f3 <<< $OSXVERSION)"
 ARCH="$(uname -a | awk '{print $NF;}')"
+
+# MacPorts for dependencies
+[[ -x $LIBPREFIX/bin/port && -d $LIBPREFIX/etc/macports ]] && use_port="t"
+
+# GTK+ backend
+gtk_target="$(pkg-config --variable=target gtk+-2.0 2>/dev/null)"
 
 # Set environment variables
 # ----------------------------------------------------------
@@ -251,13 +262,134 @@ function getinkscapeinfo () {
 	REVISION="$(bzr revno)"
 	[ $? -ne 0 ] && REVISION="" || REVISION="-r$REVISION"
 
-	gtk_target=`pkg-config --variable=target gtk+-2.0 2>/dev/null`
-
 	TARGETARCH="$ARCH"
 	NEWNAME="Inkscape-$INKVERSION$REVISION-$gtk_target-$TARGETVERSION-$TARGETARCH"
 	DMGFILE="$NEWNAME.dmg"
 	INFOFILE="$NEWNAME-info.txt"
 
+}
+
+function checkversion () {
+	DEPVER="$(pkg-config --modversion $1 2>/dev/null)"
+	if [[ "$?" == "1" ]]; then
+		[[ $2 ]] && DEPVER="$(checkversion-port $2)" || unset DEPVER
+	fi
+	if [[ ! -z "$DEPVER" ]]; then
+		[[ $2 ]] && DEPVER="${DEPVER}$(checklicense-port $2)"
+	else
+		DEPVER="---"
+	fi
+	echo "$DEPVER"
+}
+
+function checkversion-port () {
+	if [[ "$use_port" == "t" ]]; then
+		PORTVER="$(port echo $1 and active 2>/dev/null | cut -d@ -f2 | cut -d_ -f1)"
+	else
+		PORTVER=""
+	fi
+	echo "$PORTVER"
+}
+
+function checklicense-port() {
+	if [[ "$use_port" == "t" ]]; then
+		PORTLIC="$(port info --license --line $1 2>/dev/null)"
+		PORTURL="$(port info --homepage --line $1 2>/dev/null)"
+		if [[ -z "$PORTLIC" ]]; then
+			PORTLIC="Unknown"
+		fi
+		_spacer="\t\t"
+		PORTLIC="$(echo -ne "${_spacer}(License: ${PORTLIC}, Homepage: ${PORTURL})")"
+	else
+		PORTLIC="Unknown license"
+	fi
+	echo "$PORTLIC"
+}
+
+function checkversion-py-module () {
+	# python -c "import foo; ..."
+	echo "TODO."
+}
+
+function buildinfofile () {
+	getinkscapeinfo
+	# Prepare information file
+	echo "Build information on $(date) for $(whoami):
+	For OS X Ver          $TARGETNAME ($TARGETVERSION)
+	Architecture          $TARGETARCH
+Build system information:
+	OS X Version          $OSXVERSION
+	Architecture          $ARCH
+	MacPorts Ver          $(port version 2>/dev/null | cut -f2 -d \ )
+	Compiler              $($CXX --version | head -1)
+	GTK+ backend          $gtk_target
+Included dependency versions (build or runtime):
+	Glib                  $(checkversion glib-2.0 glib2)
+	Glibmm                $(checkversion glibmm-2.4 glibmm)
+	GTK                   $(checkversion gtk+-2.0 gtk2)
+	GTKmm                 $(checkversion gtkmm-2.4 gtkmm)
+	GdkPixbuf             $(checkversion gdk-pixbuf-2.0 gdk-pixbuf2)
+	Pixman                $(checkversion pixman-1 libpixman)
+	Cairo                 $(checkversion cairo cairo)
+	Cairomm               $(checkversion cairomm-1.0 cairomm)
+	CairoPDF              $(checkversion cairo-pdf cairo)
+	Poppler               $(checkversion poppler-cairo poppler)
+	Fontconfig            $(checkversion fontconfig fontconfig)
+	Freetype              $(checkversion freetype2 freetype)
+	Pango                 $(checkversion pango pango)
+	Pangoft2              $(checkversion pangoft2 pango)
+	Harfbuzz              $(checkversion harfbuzz harfbuzz)
+	LibXML2               $(checkversion libxml-2.0 libxml2)
+	LibXSLT               $(checkversion libxslt libxslt)
+	LibSigC++             $(checkversion sigc++-2.0 libsigcxx2)
+	Boost                 $(checkversion boost boost)
+	Boehm GC              $(checkversion bdw-gc boehmgc)
+	GSL                   $(checkversion gsl gsl)
+	LibPNG                $(checkversion libpng libpng)
+	Librsvg               $(checkversion librsvg-2.0 librsvg)
+	LittleCMS             $(checkversion lcms lcms)
+	LittleCMS2            $(checkversion lcms2 lcms2)
+	GnomeVFS              $(checkversion gnome-vfs-2.0 gnome-vfs)
+	DBus                  $(checkversion dbus-1 dbus)
+	Gvfs                  $(checkversion gvfs gvfs)
+	ImageMagick           $(checkversion ImageMagick ImageMagick)
+	Libexif               $(checkversion libexif libexif)
+	JPEG                  $(checkversion jpeg jpeg)
+	Icu                   $(checkversion icu-uc icu)
+	LibWPD                $(checkversion libwpd-0.9 libwpd)
+	LibWPG                $(checkversion libwpg-0.2 libwpg)
+	Libcdr                $(checkversion libcdr-0.0 libcdr)
+	Libvisio              $(checkversion libvisio-0.0 libvisio)
+Included python modules:
+	lxml                  $(checkversion py27-lxml py27-lxml)
+	numpy                 $(checkversion py27-numpy py27-numpy)
+	sk1libs               $(checkversion py27-sk1libs py27-sk1libs)
+	UniConvertor          $(checkversion py27-uniconvertor py27-uniconvertor)
+	Pillow                $(checkversion py27-Pillow py27-Pillow)
+" > $INFOFILE
+
+	## TODO: Pending merge adds support for:
+	#LibRevenge            $(checkversion librevenge-0.0 librevenge-devel)
+	#LibWPD                $(checkversion libwpd-0.10 libwpd-10.0)
+	#LibWPG                $(checkversion libwpg-0.3 libwpg-0.3)
+	#Libcdr                $(checkversion libcdr-0.1 libcdr-0.1)
+	#Libvisio              $(checkversion libvisio-0.1 libvisio-0.1)
+
+	## TODO: add support for gtk-mac-integration (see osxmenu branch)
+	#Gtk-mac-integration   $(checkversion gtk-mac-integration gtk-osx-application)
+
+	## TODO: how to realiably add details specific to config and build
+	#if [[ ! -z "$ALLCONFFLAGS" ]]; then
+	#	echo "Configure options:
+	#	$ALLCONFFLAGS" >> $INFOFILE
+	#fi
+	#if [[ "$STRIP" == "-s" ]]; then
+	#	echo "Debug info:
+	#	no" >> $INFOFILE
+	#else
+	#	echo "Debug info:
+	#	yes" >> $INFOFILE
+	#fi
 }
 
 # Actions
@@ -369,16 +501,10 @@ then
 		echo -e "\nApplication bundle creation failed"
 		exit $status
 	fi
+
+	# Prepare information file
+	BUILD_INFO="t"
 fi
-
-function checkversion {
-	DEPVER=`pkg-config --modversion $1 2>/dev/null`
-	if [[ "$?" == "1" ]]; then
-		DEPVER="Not included"
-	fi
-	echo "$DEPVER"
-}
-
 
 if [[ "$DISTRIB" == "t" ]]
 then
@@ -394,42 +520,12 @@ then
 	mv Inkscape.dmg $DMGFILE
 	
 	# Prepare information file
-	echo "Build information on `date` for `whoami`:
-	For OS X Ver  $TARGETNAME ($TARGETVERSION)
-	Architecture  $TARGETARCH
-Build system information:
-	OS X Version  $OSXVERSION
-	Architecture  $ARCH
-	MacPorts Ver  `port version | cut -f2 -d \ `
-	GCC           `$CXX --version | head -1`
-	GTK+ backend  $gtk_target
-Included dependency versions:
-	GTK           `checkversion gtk+-2.0`
-	GTKmm         `checkversion gtkmm-2.4`
-	Cairo         `checkversion cairo`
-	Cairomm       `checkversion cairomm-1.0`
-	CairoPDF      `checkversion cairo-pdf`
-	Fontconfig    `checkversion fontconfig`
-	Pango         `checkversion pango`
-	LibXML2       `checkversion libxml-2.0`
-	LibXSLT       `checkversion libxslt`
-	LibSigC++     `checkversion sigc++-2.0`
-	LibPNG        `checkversion libpng`
-	GSL           `checkversion gsl`
-	ImageMagick   `checkversion ImageMagick`
-	Poppler       `checkversion poppler-cairo`
-	LittleCMS     `checkversion lcms`
-	GnomeVFS      `checkversion gnome-vfs-2.0`
-	LibWPG        `checkversion libwpg-0.2`
-Configure options:
-	$CONFFLAGS" > $INFOFILE
-	if [[ "$STRIP" == "t" ]]; then
-		echo "Debug info
-	no" >> $INFOFILE
-	else
-		echo "Debug info
-	yes" >> $INFOFILE
-	fi	
+	BUILD_INFO="t"
+fi
+
+if [[ "$BUILD_INFO" == "t" ]]
+then
+	buildinfofile
 fi
 
 if [[ "$PACKAGE" == "t" || "$DISTRIB" == "t" ]]; then
