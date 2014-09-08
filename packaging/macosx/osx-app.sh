@@ -396,9 +396,7 @@ cp -v "$binary" "$binpath"
 # Info.plist
 cp "$plist" "$package/Contents/Info.plist"
 if [ $_backend = "quartz" ]; then
-	# FIXME: needs OS X version check (see man page)
-	defaults write "$(cd "$(dirname "$pkgresources")" && pwd)/Info" CGDisableCoalescedUpdates -boolean TRUE
-	plutil -convert xml1 "${package}/Contents/Info.plist"
+	/usr/libexec/PlistBuddy -x -c "Set :CGDisableCoalescedUpdates 1" "${package}/Contents/Info.plist"
 fi
 
 # Share files
