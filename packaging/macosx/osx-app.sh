@@ -30,7 +30,7 @@
 #		https://gnunet.org/svn/GNUnet/contrib/OSX/build_app
 # 
 # NB:
-# When packaging Inkscape for OS X, configure should be run with the 
+# When packaging Inkscape for OS X, configure should be run with the
 # "--enable-osxapp" option which sets the correct paths for support
 # files inside the app bundle.
 # 
@@ -41,7 +41,8 @@ add_wrapper=true
 add_python=true
 python_dir=""
 
-# If LIBPREFIX is not already set (by osx-build.sh for example) set it to blank (one should use the command line argument to set it correctly)
+# If LIBPREFIX is not already set (by osx-build.sh for example) set it to blank
+# (one should use the command line argument to set it correctly)
 if [ -z $LIBPREFIX ]; then
 	LIBPREFIX=""
 fi
@@ -106,7 +107,7 @@ do
 			help
 			exit 0 ;;
 		*)
-			echo "Invalid command line option: $1" 
+			echo "Invalid command line option: $1"
 			exit 2 ;;
 	esac
 	shift 1
@@ -316,7 +317,7 @@ resdir=`pwd`
 
 # Custom resources used to generate resources during app bundle creation.
 if [ -z "$custom_res" ] ; then
-    custom_res="${resdir}/Resources-extras"
+	custom_res="${resdir}/Resources-extras"
 fi
 
 
@@ -328,7 +329,6 @@ pkgetc="$package/Contents/Resources/etc"
 pkglib="$package/Contents/Resources/lib"
 pkgshare="$package/Contents/Resources/share"
 pkglocale="$package/Contents/Resources/share/locale"
-#pkgpython="$package/Contents/Resources/python/site-packages/"
 pkgresources="$package/Contents/Resources"
 
 mkdir -p "$pkgexec"
@@ -337,20 +337,19 @@ mkdir -p "$pkgetc"
 mkdir -p "$pkglib"
 mkdir -p "$pkgshare"
 mkdir -p "$pkglocale"
-#mkdir -p "$pkgpython"
 
 
 # utility
 #----------------------------------------------------------
 
 if [ $verbose_mode ] ; then 
-    cp_cmd="/bin/cp -v"
-    ln_cmd="/bin/ln -sv"
-    rsync_cmd="/usr/bin/rsync -av"
+	cp_cmd="/bin/cp -v"
+	ln_cmd="/bin/ln -sv"
+	rsync_cmd="/usr/bin/rsync -av"
 else
-    cp_cmd="/bin/cp"
-    ln_cmd="/bin/ln -s"
-    rsync_cmd="/usr/bin/rsync -a"
+	cp_cmd="/bin/cp"
+	ln_cmd="/bin/ln -s"
+	rsync_cmd="/usr/bin/rsync -a"
 fi
 
 
@@ -417,14 +416,14 @@ cp "$LIBPREFIX/share/icons/hicolor/index.theme"  "$pkgresources/share/icons/hico
 # GTK+ stock icons with legacy icon mapping
 echo "Creating GtkStock icon theme ..."
 stock_src="${custom_res}/src/icons/stock-icons" \
-    ./create-stock-icon-theme.sh "${pkgshare}/icons/GtkStock"
+	./create-stock-icon-theme.sh "${pkgshare}/icons/GtkStock"
 gtk-update-icon-cache --index-only "${pkgshare}/icons/GtkStock"
 
 # GTK+ themes
 cp -RP "$LIBPREFIX/share/gtk-engines" "$pkgshare/"
 for item in Adwaita Clearlooks HighContrast Industrial Raleigh Redmond ThinIce; do
-    mkdir -p "$pkgshare/themes/$item"
-    cp -RP "$LIBPREFIX/share/themes/$item/gtk-2.0" "$pkgshare/themes/$item/"
+	mkdir -p "$pkgshare/themes/$item"
+	cp -RP "$LIBPREFIX/share/themes/$item/gtk-2.0" "$pkgshare/themes/$item/"
 done
 if [ $_backend = "quartz" ]; then
 	for item in Mac; do
@@ -563,7 +562,7 @@ IMAGEMAGICKVER_MAJOR="$(cut -d. -f1 <<< "$IMAGEMAGICKVER")"
 # ImageMagick data
 # include *.la files for main libs too
 for item in "$LIBPREFIX/lib/libMagick"*.la; do
-    cp "$item" "$pkglib/"
+	cp "$item" "$pkglib/"
 done
 # ImageMagick modules
 cp -r "$LIBPREFIX/lib/ImageMagick-$IMAGEMAGICKVER" "$pkglib/"
@@ -571,13 +570,13 @@ cp -r "$LIBPREFIX/etc/ImageMagick-$IMAGEMAGICKVER_MAJOR" "$pkgetc/"
 cp -r "$LIBPREFIX/share/ImageMagick-$IMAGEMAGICKVER_MAJOR" "$pkgshare/"
 # REQUIRED: remove hard-coded paths from *.la files
 for la_file in "$pkglib/libMagick"*.la; do
-    sed -e "s,$LIBPREFIX/lib,,g" -i "" "$la_file"
+	sed -e "s,$LIBPREFIX/lib,,g" -i "" "$la_file"
 done
 for la_file in "$pkglib/ImageMagick-$IMAGEMAGICKVER/modules-Q16/coders"/*.la; do
-    sed -e "s,$LIBPREFIX/lib/ImageMagick-$IMAGEMAGICKVER/modules-Q16/coders,,g" -i "" "$la_file"
+	sed -e "s,$LIBPREFIX/lib/ImageMagick-$IMAGEMAGICKVER/modules-Q16/coders,,g" -i "" "$la_file"
 done
 for la_file in "$pkglib/ImageMagick-$IMAGEMAGICKVER/modules-Q16/filters"/*.la; do
-    sed -e "s,$LIBPREFIX/lib/ImageMagick-$IMAGEMAGICKVER/modules-Q16/filters,,g" -i "" "$la_file"
+	sed -e "s,$LIBPREFIX/lib/ImageMagick-$IMAGEMAGICKVER/modules-Q16/filters,,g" -i "" "$la_file"
 done
 sed -e "s,IMAGEMAGICKVER,$IMAGEMAGICKVER,g" -i "" "$scrpath"
 sed -e "s,IMAGEMAGICKVER_MAJOR,$IMAGEMAGICKVER_MAJOR,g" -i "" "$scrpath"
@@ -609,28 +608,28 @@ a=1
 nfiles=0
 endl=true
 while $endl; do
-    echo -e "\033[1mLooking for dependencies.\033[0m Round" $a
-    libs="$(otool -L \
-        $pkglib/gtk-2.0/$gtk_version/{engines,immodules,printbackends}/*.{dylib,so} \
-        $pkglib/gdk-pixbuf-2.0/$gtk_version/loaders/*.so \
-        $pkglib/pango/$pango_version/modules/*.so \
-        $pkglib/gnome-vfs-2.0/modules/*.so \
-        $pkglib/gio/modules/*.so \
-        $pkglib/ImageMagick-$IMAGEMAGICK_VER/modules-Q16/{filters,coders}/*.so \
-        $pkglib/*.{dylib,so} \
-        $pkgbin/*.so \
-        $python_libs \
-        $extra_bin \
-        $binpath \
-        2>/dev/null | fgrep compatibility | cut -d\( -f1 | grep $LIBPREFIX | sort | uniq)"
-    cp -f $libs "$pkglib"
-    let "a+=1"	
-    nnfiles="$(ls "$pkglib" | wc -l)"
-    if [ $nnfiles = $nfiles ]; then
-        endl=false
-    else
-        nfiles=$nnfiles
-    fi
+	echo -e "\033[1mLooking for dependencies.\033[0m Round" $a
+	libs="$(otool -L \
+		$pkglib/gtk-2.0/$gtk_version/{engines,immodules,printbackends}/*.{dylib,so} \
+		$pkglib/gdk-pixbuf-2.0/$gtk_version/loaders/*.so \
+		$pkglib/pango/$pango_version/modules/*.so \
+		$pkglib/gnome-vfs-2.0/modules/*.so \
+		$pkglib/gio/modules/*.so \
+		$pkglib/ImageMagick-$IMAGEMAGICK_VER/modules-Q16/{filters,coders}/*.so \
+		$pkglib/*.{dylib,so} \
+		$pkgbin/*.so \
+		$python_libs \
+		$extra_bin \
+		$binpath \
+		2>/dev/null | fgrep compatibility | cut -d\( -f1 | grep $LIBPREFIX | sort | uniq)"
+	cp -f $libs "$pkglib"
+	let "a+=1"	
+	nnfiles="$(ls "$pkglib" | wc -l)"
+	if [ $nnfiles = $nfiles ]; then
+		endl=false
+	else
+		nfiles=$nnfiles
+	fi
 done
 
 # Some libraries don't seem to have write permission, fix this.
@@ -644,72 +643,72 @@ echo -e "\n\033[1mRewriting library paths ...\033[0m\n"
 LIBPREFIX_levels="$(echo "$LIBPREFIX"|awk -F/ '{print NF+1}')"
 
 fixlib () {
-    if [ ! -d "$1" ]; then
-        fileLibs="$(otool -L $1 | fgrep compatibility | cut -d\( -f1)"
-        filePath="$(echo "$2" | sed 's/.*Resources//')"
-        fileType="$3"
-        unset to_id
-        case $fileType in
-            lib)
-                # TODO: verfiy correct/expected install name for relocated libs
-                to_id="$package/Contents/Resources$filePath/$1"
-                loader_to_res="$(echo $filePath | $awk_cmd -F/ '{for (i=1;i<NF;i++) sub($i,".."); sub($NF,"",$0); print $0}')"
-                ;;
-            bin)
-                loader_to_res="../"
-                ;;
-            exec)
-                loader_to_res="../Resources/"
-                ;;
-            *)
-                echo "Skipping loader_to_res for $1"
-                ;;
-        esac
-        [ $to_id ] && install_name_tool -id "$to_id" "$1"
-        for lib in $fileLibs; do
-            first="$(echo $lib | cut -d/ -f1-3)"
-            if [ $first != /usr/lib -a $first != /usr/X11 -a $first != /opt/X11 -a $first != /System/Library ]; then
-                lib_prefix_levels="$(echo $lib | $awk_cmd -F/ '{for (i=NF;i>0;i--) if($i=="lib") j=i; print j}')"
-                res_to_lib="$(echo $lib | cut -d/ -f$lib_prefix_levels-)"
-                unset to_path
-                case $fileType in
-                    lib)
-                        to_path="@loader_path/$loader_to_res$res_to_lib"
-                        ;;
-                    bin)
-                        to_path="@executable_path/$loader_to_res$res_to_lib"
-                        ;;
-                    exec)
-                        to_path="@executable_path/$loader_to_res$res_to_lib"
-                        ;;
-                    *)
-                        echo "Skipping to_path for $lib in $1"
-                        ;;
-                esac
-                [ $to_path ] && install_name_tool -change "$lib" "$to_path" "$1"
-            fi
-        done
-    fi
+	if [ ! -d "$1" ]; then
+		fileLibs="$(otool -L $1 | fgrep compatibility | cut -d\( -f1)"
+		filePath="$(echo "$2" | sed 's/.*Resources//')"
+		fileType="$3"
+		unset to_id
+		case $fileType in
+			lib)
+				# TODO: verfiy correct/expected install name for relocated libs
+				to_id="$package/Contents/Resources$filePath/$1"
+				loader_to_res="$(echo $filePath | $awk_cmd -F/ '{for (i=1;i<NF;i++) sub($i,".."); sub($NF,"",$0); print $0}')"
+				;;
+			bin)
+				loader_to_res="../"
+				;;
+			exec)
+				loader_to_res="../Resources/"
+				;;
+			*)
+				echo "Skipping loader_to_res for $1"
+				;;
+		esac
+		[ $to_id ] && install_name_tool -id "$to_id" "$1"
+		for lib in $fileLibs; do
+			first="$(echo $lib | cut -d/ -f1-3)"
+			if [ $first != /usr/lib -a $first != /usr/X11 -a $first != /opt/X11 -a $first != /System/Library ]; then
+				lib_prefix_levels="$(echo $lib | $awk_cmd -F/ '{for (i=NF;i>0;i--) if($i=="lib") j=i; print j}')"
+				res_to_lib="$(echo $lib | cut -d/ -f$lib_prefix_levels-)"
+				unset to_path
+				case $fileType in
+					lib)
+						to_path="@loader_path/$loader_to_res$res_to_lib"
+						;;
+					bin)
+						to_path="@executable_path/$loader_to_res$res_to_lib"
+						;;
+					exec)
+						to_path="@executable_path/$loader_to_res$res_to_lib"
+						;;
+					*)
+						echo "Skipping to_path for $lib in $1"
+						;;
+				esac
+				[ $to_path ] && install_name_tool -change "$lib" "$to_path" "$1"
+			fi
+		done
+	fi
 }
 
 rewritelibpaths () {
-    if [ $_backend = "quartz" ]; then
-        echo -n "Rewriting dylib paths for executable ... "
-        (cd "$pkgexec"; fixlib "inkscape-bin" "$package/Contents/Resources/../MacOS" "exec")
-        echo "done"
-    fi
-    echo "Rewriting dylib paths for included binaries:"
-    for file in $extra_bin; do
-        echo -n "Rewriting dylib paths for $file ... "
-        (cd "$(dirname $file)" ; fixlib "$(basename $file)" "$(dirname $file)" "bin")
-        echo "done"
-    done
-    echo "Rewriting dylib paths for included libraries:"
-    for file in $(find $package \( -name '*.so' -or -name '*.dylib' \) -and -not -ipath '*.dSYM*'); do
-        echo -n "Rewriting dylib paths for $file ... "
-        (cd "$(dirname $file)" ; fixlib "$(basename $file)" "$(dirname $file)" "lib")
-        echo "done"
-    done
+	if [ $_backend = "quartz" ]; then
+		echo -n "Rewriting dylib paths for executable ... "
+		(cd "$pkgexec"; fixlib "inkscape-bin" "$package/Contents/Resources/../MacOS" "exec")
+		echo "done"
+	fi
+	echo "Rewriting dylib paths for included binaries:"
+	for file in $extra_bin; do
+		echo -n "Rewriting dylib paths for $file ... "
+		(cd "$(dirname $file)" ; fixlib "$(basename $file)" "$(dirname $file)" "bin")
+		echo "done"
+	done
+	echo "Rewriting dylib paths for included libraries:"
+	for file in $(find $package \( -name '*.so' -or -name '*.dylib' \) -and -not -ipath '*.dSYM*'); do
+		echo -n "Rewriting dylib paths for $file ... "
+		(cd "$(dirname $file)" ; fixlib "$(basename $file)" "$(dirname $file)" "lib")
+		echo "done"
+	done
 }
 
 rewritelibpaths
