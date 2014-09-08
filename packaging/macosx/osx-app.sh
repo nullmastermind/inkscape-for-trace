@@ -140,18 +140,18 @@ fi
 
 if [ ${add_python} = "true" ]; then
 	if [ -z "$python_dir" ]; then
-		echo "Python modules will be copied from MacPorts tree."
+		echo "Python modules will be copied from MacPorts tree." >&2
 	else
 		if [ ! -e "$python_dir" ]; then
 			echo "Python modules directory \""$python_dir"\" not found." >&2
 			exit 1
 		else
 			if [ -e "$python_dir/i386" -o -e "$python_dir/ppc" ]; then
-				echo "Outdated structure in custom python modules detected,"
-				echo "not compatible with current packaging."
+				echo "Outdated structure in custom python modules detected," >&2
+				echo "not compatible with current packaging." >&2
 				exit 1
 			else
-				echo "Python modules will be copied from $python_dir."
+				echo "Python modules will be copied from $python_dir." >&2
 			fi
 		fi
 	fi
@@ -162,15 +162,79 @@ if [ ! -e "$LIBPREFIX" ]; then
 	exit 1
 fi
 
+if [ "x$(otool -L "$binary" | grep "libgtk-quartz")" != "x" ]; then
+	if ! pkg-config --exists gtk+-quartz-2.0; then
+		echo "Missing GTK+ backend -- please install gtk2 and its dependencies with variant '+quartz' and try again." >&2
+		exit 1
+	fi
+	_backend="quartz"
+else
+	if ! pkg-config --exists gtk+-x11-2.0; then
+	    echo "Missing GTK+ backend -- please install gtk2 and its dependencies with variant '+x11' and try again." >&2
+		exit 1
+	fi
+	_backend="x11"
+fi
+
 if ! pkg-config --exists gtk-engines-2; then
 	echo "Missing gtk-engines2 -- please install gtk-engines2 and try again." >&2
 	exit 1
 fi
 
-if ! pkg-config --exists gnome-vfs-2.0; then
-	echo "Missing gnome-vfs2 -- please install gnome-vfs2 and try again." >&2
+if [ ! -e "$LIBPREFIX/lib/gtk-2.0/$(pkg-config --variable=gtk_binary_version gtk+-2.0)/engines/libmurrine.so" ]; then
+	echo "Missing gtk2-murrine -- please install gtk2-murrine and try again." >&2
 	exit 1
 fi
+
+if [ ! -e "$LIBPREFIX/lib/gtk-2.0/$(pkg-config --variable=gtk_binary_version gtk+-2.0)/engines/libadwaita.so" ]; then
+	echo "Missing gnome-themes-standard -- please install gnome-themes-standard and try again." >&2
+	exit 1
+fi
+
+if [ ! -e "$LIBPREFIX/share/icons/hicolor/index.theme" ]; then
+	echo "Missing hicolor-icon-theme -- please install hicolor-icon-theme and try again." >&2
+	exit 1
+fi
+
+if [ "$default_theme" != "default" ] ; then
+	if ! pkg-config --exists gnome-icon-theme; then
+		echo "Missing gnome-icon-theme -- please install gnome-icon-theme and try again." >&2
+		exit 1
+	fi
+
+	if ! pkg-config --exists gnome-icon-theme-symbolic; then
+		echo "Missing gnome-icon-theme-symbolic -- please install gnome-icon-theme-symbolic and try again." >&2
+		exit 1
+	fi
+
+	if ! pkg-config --exists icon-naming-utils; then
+		echo "Missing icon-naming-utils -- please install icon-naming-utils and try again." >&2
+		exit 1
+	fi
+fi
+
+unset WITH_GNOME_VFS
+if ! pkg-config --exists gnome-vfs-2.0; then
+	echo "Missing gnome-vfs2 -- some features will be disabled" >&2
+else
+	WITH_GNOME_VFS=true
+fi
+
+# unset WITH_DBUS
+# if ! pkg-config --exists dbus-1; then
+# 	echo "Missing dbus -- some features will be disabled" >&2
+# else
+# 	WITH_DBUS=true
+# fi
+# 
+# unset WITH_GVFS
+# if [ ! -e "$LIBPREFIX/libexec/gvfsd" ]; then
+# 	echo "Missing gvfs -- some features will be disabled" >&2
+# elif [ ! -z "$WITH_DBUS" ]; then
+# 	WITH_GVFS=true
+# else
+# 	echo "Missing dbus for gvfs -- some features will be disabled" >&2
+# fi
 
 if ! pkg-config --exists poppler; then
 	echo "Missing poppler -- please install poppler and try again." >&2
@@ -214,15 +278,26 @@ ARCH="$(uname -a | awk '{print $NF;}')"
 
 # Setup
 #----------------------------------------------------------
-# Handle some version specific details.
-if [ "$OSXMINORNO" -le "4" ]; then
-	echo "Note: Inkscape packaging requires Mac OS X 10.5 Leopard or later."
-	exit 1
-else # if [ "$OSXMINORNO" -ge "5" ]; then
-	XCODEFLAGS="-configuration Deployment"
-	SCRIPTEXECDIR="ScriptExec/build/Deployment/ScriptExec.app/Contents/MacOS"
-	EXTRALIBS=""
-fi
+case $_backend in
+	x11)
+		echo "Building package with GTK+/X11." >&2
+		# Handle some version specific details.
+		if [ "$OSXMINORNO" -le "4" ]; then
+			echo "Note: Inkscape packaging requires Mac OS X 10.5 Leopard or later."
+			exit 1
+		else # if [ "$OSXMINORNO" -ge "5" ]; then
+			XCODEFLAGS="-configuration Deployment"
+			SCRIPTEXECDIR="ScriptExec/build/Deployment/ScriptExec.app/Contents/MacOS"
+			EXTRALIBS=""
+		fi
+		;;
+	quartz)
+		# quartz backend
+		echo "Building package with GTK+/Quartz." >&2
+		;;
+	*)
+		exit 1
+esac
 
 
 # Package always has the same name. Version information is stored in
@@ -281,15 +356,24 @@ fi
 
 # Build and add the launcher
 #----------------------------------------------------------
-(
-	# Build fails if CC happens to be set (to anything other than CompileC)
-	unset CC
-	
-	cd "$resdir/ScriptExec"
-	echo -e "\033[1mBuilding launcher...\033[0m\n"
-	xcodebuild $XCODEFLAGS clean build
-)
-cp "$resdir/$SCRIPTEXECDIR/ScriptExec" "$pkgexec/Inkscape"
+case $_backend in
+	x11)
+		(
+		# Build fails if CC happens to be set (to anything other than CompileC)
+		unset CC
+
+		cd "$resdir/ScriptExec"
+		echo -e "\033[1mBuilding launcher...\033[0m\n"
+		xcodebuild $XCODEFLAGS clean build
+		)
+		cp "$resdir/$SCRIPTEXECDIR/ScriptExec" "$pkgexec/Inkscape"
+		;;
+	quartz)
+		$cp_cmd "$resdir/ScriptExec/launcher-quartz-no-macintegration.sh" "$pkgexec/inkscape"
+		;;
+	*)
+		exit 1
+esac
 
 
 # Copy all files into the bundle
@@ -300,13 +384,26 @@ binary_name=`basename "$binary"`
 binary_dir=`dirname "$binary"`
 
 # Inkscape's binary
-binpath="$pkgbin/inkscape-bin"
+if [ $_backend = "x11" ]; then
+	scrpath="$pkgbin/inkscape"
+	binpath="$pkgbin/inkscape-bin"
+else
+	scrpath="$pkgexec/inkscape"
+	binpath="$pkgexec/inkscape-bin"
+fi
 cp -v "$binary" "$binpath"
 # TODO Add a "$verbose" variable and command line switch, which sets wether these commands are verbose or not
 
+# Info.plist
+cp "$plist" "$package/Contents/Info.plist"
+if [ $_backend = "quartz" ]; then
+	# FIXME: needs OS X version check (see man page)
+	defaults write "$(cd "$(dirname "$pkgresources")" && pwd)/Info" CGDisableCoalescedUpdates -boolean TRUE
+	plutil -convert xml1 "${package}/Contents/Info.plist"
+fi
+
 # Share files
 rsync -av "$binary_dir/../share/$binary_name"/* "$pkgshare/$binary_name"
-cp "$plist" "$package/Contents/Info.plist"
 rsync -av "$binary_dir/../share/locale"/* "$pkglocale"
 
 # Copy GTK shared mime information
@@ -329,9 +426,21 @@ for item in Adwaita Clearlooks HighContrast Industrial Raleigh Redmond ThinIce; 
     mkdir -p "$pkgshare/themes/$item"
     cp -RP "$LIBPREFIX/share/themes/$item/gtk-2.0" "$pkgshare/themes/$item/"
 done
+if [ $_backend = "quartz" ]; then
+	for item in Mac; do
+		cp -RP "$LIBPREFIX/share/themes/$item/gtk-2.0"* "$pkgshare/themes/$item/"
+	done
+fi
 
 # Icons and the rest of the script framework
 rsync -av --exclude ".svn" "$resdir"/Resources/* "$pkgresources/"
+
+# remove files not needed with GTK+/Quartz
+if [ $_backend = "quartz" ]; then
+	rm "$pkgresources/script"
+	rm "$pkgresources/openDoc"
+	rm "$pkgbin/inkscape"
+fi
 
 # activate wrapper scripts for python and gimp (optional)
 if [ $add_wrapper = "true" ]; then
@@ -394,7 +503,7 @@ if [ ${add_python} = "true" ]; then
 		cp -rvf "$python_dir"/* "$pkglib"
 	fi
 fi
-sed -e "s,__build_arch__,$ARCH,g" -i "" $pkgbin/inkscape
+sed -e "s,__build_arch__,$ARCH,g" -i "" "$scrpath"
 
 # PkgInfo must match bundle type and creator code from Info.plist
 echo "APPLInks" > $package/Contents/PkgInfo
@@ -419,12 +528,6 @@ cp -r $LIBPREFIX/share/fontconfig/conf.avail $pkgshare/fontconfig/
 (cd $pkgetc/fonts/conf.d && ln -s ../../../share/fontconfig/conf.avail/10-autohint.conf)
 (cd $pkgetc/fonts/conf.d && ln -s ../../../share/fontconfig/conf.avail/70-no-bitmaps.conf)
 
-
-for item in gnome-vfs-mime-magic gnome-vfs-2.0
-do
-	cp -r $LIBPREFIX/etc/$item $pkgetc/
-done
-
 pango_version=`pkg-config --variable=pango_module_version pango`
 mkdir -p $pkglib/pango/$pango_version/modules
 cp $LIBPREFIX/lib/pango/$pango_version/modules/*.so $pkglib/pango/$pango_version/modules/
@@ -433,17 +536,25 @@ gtk_version=`pkg-config --variable=gtk_binary_version gtk+-2.0`
 mkdir -p $pkglib/gtk-2.0/$gtk_version/{engines,immodules,printbackends}
 cp -r $LIBPREFIX/lib/gtk-2.0/$gtk_version/* $pkglib/gtk-2.0/$gtk_version/
 
-mkdir -p $pkglib/gnome-vfs-2.0/modules
-cp $LIBPREFIX/lib/gnome-vfs-2.0/modules/*.so $pkglib/gnome-vfs-2.0/modules/
-
 gdk_pixbuf_version=`pkg-config --variable=gdk_pixbuf_binary_version gdk-pixbuf-2.0`
 mkdir -p $pkglib/gdk-pixbuf-2.0/$gdk_pixbuf_version/loaders
 cp $LIBPREFIX/lib/gdk-pixbuf-2.0/$gdk_pixbuf_version/loaders/*.so $pkglib/gdk-pixbuf-2.0/$gdk_pixbuf_version/loaders/
 
-sed -e "s,__gtk_version__,$gtk_version,g" -i "" $pkgbin/inkscape
-sed -e "s,__gdk_pixbuf_version__,$gdk_pixbuf_version,g" -i "" $pkgbin/inkscape
+sed -e "s,__gtk_version__,$gtk_version,g" -i "" "$scrpath"
+sed -e "s,__gdk_pixbuf_version__,$gdk_pixbuf_version,g" -i "" "$scrpath"
 sed -e "s,$LIBPREFIX,\${CWD},g" $LIBPREFIX/lib/gtk-2.0/$gtk_version/immodules.cache > $pkglib/gtk-2.0/$gtk_version/immodules.cache
 sed -e "s,$LIBPREFIX,\${CWD},g" $LIBPREFIX/lib/gdk-pixbuf-2.0/$gdk_pixbuf_version/loaders.cache > $pkglib/gdk-pixbuf-2.0/$gdk_pixbuf_version/loaders.cache
+
+# Gnome-vfs modules (deprecated, optional in inkscape)
+if [ $WITH_GNOME_VFS ] ; then
+	for item in gnome-vfs-mime-magic gnome-vfs-2.0; do
+		$cp_cmd -r "$LIBPREFIX/etc/$item" "$pkgetc/"
+	done
+	for item in modules; do
+		mkdir -p "$pkglib/gnome-vfs-2.0/$item"
+		$cp_cmd "$LIBPREFIX/lib/gnome-vfs-2.0/$item"/*.so "$pkglib/gnome-vfs-2.0/$item/"
+	done
+fi
 
 # ImageMagick version
 IMAGEMAGICKVER="$(pkg-config --modversion ImageMagick)"
@@ -468,14 +579,18 @@ done
 for la_file in "$pkglib/ImageMagick-$IMAGEMAGICKVER/modules-Q16/filters"/*.la; do
     sed -e "s,$LIBPREFIX/lib/ImageMagick-$IMAGEMAGICKVER/modules-Q16/filters,,g" -i "" "$la_file"
 done
-sed -e "s,IMAGEMAGICKVER,$IMAGEMAGICKVER,g" -i "" $pkgbin/inkscape
-sed -e "s,IMAGEMAGICKVER_MAJOR,$IMAGEMAGICKVER_MAJOR,g" -i "" $pkgbin/inkscape
+sed -e "s,IMAGEMAGICKVER,$IMAGEMAGICKVER,g" -i "" "$scrpath"
+sed -e "s,IMAGEMAGICKVER_MAJOR,$IMAGEMAGICKVER_MAJOR,g" -i "" "$scrpath"
 
 # Copy aspell dictionary files:
 cp -r "$LIBPREFIX/share/aspell" "$pkgresources/share/"
 
 # Copy Poppler data:
 cp -r "$LIBPREFIX/share/poppler" "$pkgshare"
+
+# GLib2 schemas
+mkdir -p "$pkgshare/glib-2.0"
+$cp_cmd -RP "$LIBPREFIX/share/glib-2.0/schemas" "$pkgshare/glib-2.0/"
 
 # Copy all linked libraries into the bundle
 #----------------------------------------------------------
@@ -506,6 +621,7 @@ while $endl; do
         $pkgbin/*.so \
         $python_libs \
         $extra_bin \
+        $binpath \
         2>/dev/null | fgrep compatibility | cut -d\( -f1 | grep $LIBPREFIX | sort | uniq)"
     cp -f $libs "$pkglib"
     let "a+=1"	
@@ -577,6 +693,11 @@ fixlib () {
 }
 
 rewritelibpaths () {
+    if [ $_backend = "quartz" ]; then
+        echo -n "Rewriting dylib paths for executable ... "
+        (cd "$pkgexec"; fixlib "inkscape-bin" "$package/Contents/Resources/../MacOS" "exec")
+        echo "done"
+    fi
     echo "Rewriting dylib paths for included binaries:"
     for file in $extra_bin; do
         echo -n "Rewriting dylib paths for $file ... "

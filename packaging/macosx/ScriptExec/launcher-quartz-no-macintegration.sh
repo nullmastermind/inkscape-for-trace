@@ -10,11 +10,14 @@
 [ -n "$INK_DEBUG_LAUNCHER" ] && set -x
 
 CWD="$(cd "$(dirname "$0")" && pwd)"
-# e.g. /Applications/Inkscape.app/Contents/Resources/bin
-TOP="$(dirname "$CWD")"
+# e.g. /Applications/Inkscape.app/Contents/MacOS
+TOP="$(dirname "$CWD")/Resources"
 # e.g. /Applications/Inkscape.app/Contents/Resources
 BASE="$(echo "$TOP" | sed -e 's/\/Contents\/Resources.*$//')"
 # e.g. /Applications/Inkscape.app
+
+source "${TOP}/xdg_setup.sh"
+source "${TOP}/alert_fccache.sh"
 
 # FIXME: Inkscape needs better relocation support for OS X (get rid of the relative 
 # path hack in src/path-prefix.h for osxapp-enabled builds). Until then, below change
@@ -46,7 +49,7 @@ if [ -z "$INK_PATH_ORIG" ]; then
 	# to inkscape don't pull in other inkscape binaries with different setup.
 	# Also allows to override system python with custom wrapper script, and
 	# e.g. to support GIMP.app or gimp for external editing and GIMP XCF export.
-	PATH_pkgbin="$TOP/bin"
+	PATH_pkgbin="$CWD:$TOP/bin"
 
 	# save orig, new PATH
 	export INK_PATH_ORIG="$PATH"
