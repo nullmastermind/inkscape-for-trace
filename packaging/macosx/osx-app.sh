@@ -197,22 +197,22 @@ if [ ! -e "$LIBPREFIX/share/icons/hicolor/index.theme" ]; then
 	exit 1
 fi
 
-if [ "$default_theme" != "default" ] ; then
-	if ! pkg-config --exists gnome-icon-theme; then
-		echo "Missing gnome-icon-theme -- please install gnome-icon-theme and try again." >&2
-		exit 1
-	fi
-
-	if ! pkg-config --exists gnome-icon-theme-symbolic; then
-		echo "Missing gnome-icon-theme-symbolic -- please install gnome-icon-theme-symbolic and try again." >&2
-		exit 1
-	fi
-
-	if ! pkg-config --exists icon-naming-utils; then
-		echo "Missing icon-naming-utils -- please install icon-naming-utils and try again." >&2
-		exit 1
-	fi
+if ! pkg-config --exists icon-naming-utils; then
+	echo "Missing icon-naming-utils -- please install icon-naming-utils and try again." >&2
+	exit 1
 fi
+
+# if [ "$default_theme" != "default" ] ; then
+# 	if ! pkg-config --exists gnome-icon-theme; then
+# 		echo "Missing gnome-icon-theme -- please install gnome-icon-theme and try again." >&2
+# 		exit 1
+# 	fi
+# 
+# 	if ! pkg-config --exists gnome-icon-theme-symbolic; then
+# 		echo "Missing gnome-icon-theme-symbolic -- please install gnome-icon-theme-symbolic and try again." >&2
+# 		exit 1
+# 	fi
+# fi
 
 unset WITH_GNOME_VFS
 if ! pkg-config --exists gnome-vfs-2.0; then
@@ -242,7 +242,7 @@ if ! pkg-config --exists poppler; then
 	exit 1
 fi
 
-if ! pkg-config --modversion ImageMagick >/dev/null 2>&1; then
+if ! pkg-config --exists ImageMagick; then
 	echo "Missing ImageMagick -- please install ImageMagick and try again." >&2
 	exit 1
 fi
