@@ -511,13 +511,7 @@ echo "APPLInks" > $package/Contents/PkgInfo
 
 # Pull in extra requirements for Pango and GTK
 mkdir -p $pkgetc/pango
-
-# Need to adjust path and quote in case of spaces in path.
-sed -e "s,$LIBPREFIX,\"\${CWD},g" -e 's,\.so ,.so" ,g' $LIBPREFIX/etc/pango/pango.modules > $pkgetc/pango/pango.modules
-cat > $pkgetc/pango/pangorc <<END_PANGO
-[Pango]
-ModuleFiles=\${INK_CACHE_DIR}/pango.modules
-END_PANGO
+touch "$pkgetc/pango/pangorc"
 
 # We use a modified fonts.conf file so only need the dtd
 mkdir -p $pkgshare/xml/fontconfig
@@ -543,8 +537,28 @@ $cp_cmd $LIBPREFIX/lib/gdk-pixbuf-2.0/$gdk_pixbuf_version/loaders/*.so $pkglib/g
 
 sed -e "s,__gtk_version__,$gtk_version,g" -i "" "$scrpath"
 sed -e "s,__gdk_pixbuf_version__,$gdk_pixbuf_version,g" -i "" "$scrpath"
-sed -e "s,$LIBPREFIX,\${CWD},g" $LIBPREFIX/lib/gtk-2.0/$gtk_version/immodules.cache > $pkglib/gtk-2.0/$gtk_version/immodules.cache
-sed -e "s,$LIBPREFIX,\${CWD},g" $LIBPREFIX/lib/gdk-pixbuf-2.0/$gdk_pixbuf_version/loaders.cache > $pkglib/gdk-pixbuf-2.0/$gdk_pixbuf_version/loaders.cache
+#sed -e "s,$LIBPREFIX,@loader_path/..,g" "$LIBPREFIX/etc/pango/pango.modules" > "$pkgetc/pango/pango.modules"
+#sed -e "s,$LIBPREFIX,@loader_path/..,g" "$LIBPREFIX/lib/gtk-2.0/$gtk_version/immodules.cache" > "$pkglib/gtk-2.0/$gtk_version/immodules.cache"
+#sed -e "s,$LIBPREFIX,@loader_path/..,g" "$LIBPREFIX/lib/gdk-pixbuf-2.0/$gtk_version/loaders.cache" > "$pkglib/gdk-pixbuf-2.0/$gtk_version/loaders.cache"
+
+# recreate loaders and modules caches based on actually included modules
+
+# Pango modules
+pango-querymodules "$pkglib/pango/$pango_version"/modules/*.so \
+    | sed -e "s,$PWD/$pkgresources,@loader_path/..,g" \
+    > "$pkgetc"/pango/pango.modules
+
+# Gtk immodules
+gtk-query-immodules-2.0 "$pkglib/gtk-2.0/$gtk_version"/immodules/*.so \
+    | sed -e "s,$PWD/$pkgresources,@loader_path/..,g" \
+    > "$pkglib/gtk-2.0/$gtk_version/"immodules.cache
+
+# Gdk pixbuf loaders
+GDK_PIXBUF_MODULEDIR="$pkglib/gdk-pixbuf-2.0/$gtk_version/"loaders gdk-pixbuf-query-loaders \
+    | sed -e "s,$pkgresources,@loader_path/..,g" > "$pkglib/gdk-pixbuf-2.0/$gtk_version/"loaders.cache
+
+# GIO modules
+#gio-querymodules "$pkglib/gio/modules" 
 
 # Gnome-vfs modules (deprecated, optional in inkscape)
 if [ $WITH_GNOME_VFS ] ; then
