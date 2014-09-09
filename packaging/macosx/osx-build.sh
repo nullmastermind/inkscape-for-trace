@@ -263,7 +263,7 @@ function getinkscapeinfo () {
 	osxapp_domain="$BUILDPREFIX/Info"
 	INKVERSION="$(defaults read $osxapp_domain CFBundleVersion)"
 	[ $? -ne 0 ] && INKVERSION="devel"
-	REVISION="$(bzr revno)"
+	REVISION="$(bzr revno 2>/dev/null)"
 	[ $? -ne 0 ] && REVISION="" || REVISION="-r$REVISION"
 
 	TARGETARCH="$ARCH"
