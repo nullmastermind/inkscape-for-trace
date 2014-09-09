@@ -116,14 +116,7 @@ variant dbus description {with dbus} {
 # variants
 universal_variant           no
 
-variant x11 conflicts quartz {}
-
-variant quartz conflicts x11 {}
-
-default_variants            +no_startupitem +no_web -atlas -ffmpeg -video \
-                            +x11 -quartz -no_x11 \
-                            +rsvg +Pillow -tkinter \
-                            +gnome_vfs
+default_variants-append     +gnome_vfs
 
 # livecheck
 livecheck.type              none

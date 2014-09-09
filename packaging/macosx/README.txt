@@ -16,12 +16,16 @@ $ sudo sed -e '/^rsync:/i\'$'\n'"file://$(pwd)/ports" -i "" "$MP_PREFIX/etc/macp
 
 $ (cd ports && portindex)
 
-5) install required dependencies: 
+5) add default variants for x11-based package to MacPorts' global variants:
+
+$ sudo echo '+x11 -quartz -no_x11 +rsvg +Pillow -tkinter +gnome_vfs' >> "$MP_PREFIX/etc/macports/variants.conf"
+
+6) install required dependencies: 
 
 $ sudo port install inkscape-packaging
 
-6) compile inkscape, create app bundle and DMG: 
+7) compile inkscape, create app bundle and DMG: 
 
 $ LIBPREFIX="$MP_PREFIX" ./osx-build.sh a c b -j 5 i p -s d
 
-7) upload the DMG.
+8) upload the DMG.

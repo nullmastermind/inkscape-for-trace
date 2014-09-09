@@ -57,6 +57,8 @@ if {$subport != $name} {
     }
 }
 
+default_variants        +Pillow
+
 livecheck.type          regex
 livecheck.url           http://sk1project.org/modules.php?name=Products&product=uniconvertor&op=download
 livecheck.regex         "sk1libs-(\\d+(?:\\.\\d+)*)${extract.suffix}"
