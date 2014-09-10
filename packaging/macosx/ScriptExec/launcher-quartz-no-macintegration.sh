@@ -74,17 +74,11 @@ fi
 PYTHON_VERS="$(python -V 2>&1 | cut -c 8-10)"
 export PYTHONPATH="$TOP/lib/python$PYTHON_VERS/site-packages/"
 
-# fallback for missing $INK_CACHE_DIR
-if [ -z "$INK_CACHE_DIR" ]; then
-	INK_CACHE_DIR="${HOME}/.cache/inkscape"
-	mkdir -p "$INK_CACHE_DIR"
-	[ $_DEBUG ] && echo "INK_CACHE_DIR: falling back to $INK_CACHE_DIR"
-fi
-
 export FONTCONFIG_PATH="$TOP/etc/fonts"
-export PANGO_RC_FILE="${INK_CACHE_DIR}/pangorc"
-export GTK_IM_MODULE_FILE="${INK_CACHE_DIR}/immodules.cache"
-export GDK_PIXBUF_MODULE_FILE="${INK_CACHE_DIR}/loaders.cache"
+export PANGO_RC_FILE="$TOP/etc/pango/pangorc"
+export PANGO_SYSCONFDIR="$TOP/etc"
+export GTK_IM_MODULE_FILE="$TOP/lib/gtk-2.0/__gtk_version__/immodules.cache"
+export GDK_PIXBUF_MODULE_FILE="$TOP/lib/gdk-pixbuf-2.0/__gtk_version__/loaders.cache"
 export GTK_DATA_PREFIX="$TOP"
 export GTK_EXE_PREFIX="$TOP"
 export GTK_PATH="$TOP"
@@ -155,14 +149,6 @@ else
 fi
 [ $_DEBUG ] && echo "Setting Language: $LANG" 1>&2
 export LC_ALL="$LANG"
-
-sed 's|${INK_CACHE_DIR}|'"$INK_CACHE_DIR|g" "$TOP/etc/pango/pangorc" > "${INK_CACHE_DIR}/pangorc"
-sed 's|${CWD}|'"$ESCAPEDTOP|g" "$TOP/etc/pango/pango.modules" \
-    > "${INK_CACHE_DIR}/pango.modules"
-sed 's|${CWD}|'"$ESCAPEDTOP|g" "$TOP/lib/gtk-2.0/__gtk_version__/immodules.cache" \
-    > "${INK_CACHE_DIR}/immodules.cache"
-sed 's|${CWD}|'"$ESCAPEDTOP|g" "$TOP/lib/gdk-pixbuf-2.0/__gdk_pixbuf_version__/loaders.cache" \
-    > "${INK_CACHE_DIR}/loaders.cache"
 
 case "$INK_DEBUG" in
 	gdb)
