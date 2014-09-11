@@ -67,6 +67,8 @@ private:
     BoolParam ignore_radius_0;
     BoolParam only_selected;
     BoolParam flexible;
+    BoolParam force_arcs;
+    BoolParam use_knot_distance;
     UnitParam unit;
     ScalarParam radius;
     ScalarParam helper_size;

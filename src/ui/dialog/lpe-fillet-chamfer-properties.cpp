@@ -12,9 +12,9 @@
 #include <glibmm/threads.h>
 #endif
 
+#include <gtkmm.h>
 #include "lpe-fillet-chamfer-properties.h"
 #include <boost/lexical_cast.hpp>
-#include <gtkmm/stock.h>
 #include <glibmm/main.h>
 #include <glibmm/i18n.h>
 #include "inkscape.h"
@@ -31,9 +31,8 @@
 #include "selection-chemistry.h"
 #include "ui/icon-names.h"
 #include "ui/widget/imagetoggler.h"
-#include <cmath>
-#include <gtkmm/radiobutton.h>
 #include "util/units.h"
+#include <cmath>
 
 //#include "event-context.h"
 
@@ -44,38 +43,24 @@ namespace Dialogs {
 FilletChamferPropertiesDialog::FilletChamferPropertiesDialog()
     : _desktop(NULL), _knotpoint(NULL), _position_visible(false)
 {
-#if WITH_GTKMM_3_0
-    Gtk::Box *mainVBox = get_content_area();
-#else
     Gtk::Box *mainVBox = get_vbox();
-#endif
-
     mainVBox->set_homogeneous(false);
-
-#if WITH_GTKMM_3_0
-    _layout_table.set_row_spacing(4);
-    _layout_table.set_column_spacing(4);
-#else
     _layout_table.set_spacings(4);
     _layout_table.resize(2, 2);
-#endif
 
     // Layer name widgets
-    _fillet_chamfer_position_entry.set_activates_default(true);
+    _fillet_chamfer_position_numeric.set_digits(4);
+    _fillet_chamfer_position_numeric.set_increments(1,1);
+    //todo: get tha max aloable infinity freeze the widget
+    _fillet_chamfer_position_numeric.set_range(0., 999999999999999999.);
+    
     _fillet_chamfer_position_label.set_label(_("Radius (pixels):"));
     _fillet_chamfer_position_label.set_alignment(1.0, 0.5);
 
-#if WITH_GTKMM_3_0
-    _layout_table.attach(_fillet_chamfer_position_label, 0, 0, 1, 1);
-    _layout_table.attach(_fillet_chamfer_position_entry, 1, 0, 1, 1);
-    _fillet_chamfer_position_entry.set_hexpand();
-#else
     _layout_table.attach(_fillet_chamfer_position_label, 0, 1, 0, 1, Gtk::FILL,
                          Gtk::FILL);
-    _layout_table.attach(_fillet_chamfer_position_entry, 1, 2, 0, 1,
+    _layout_table.attach(_fillet_chamfer_position_numeric, 1, 2, 0, 1,
                          Gtk::FILL | Gtk::EXPAND, Gtk::FILL);
-#endif
-
     _fillet_chamfer_type_fillet.set_label(_("Fillet"));
     _fillet_chamfer_type_fillet.set_group(_fillet_chamfer_type_group);
     _fillet_chamfer_type_inverse_fillet.set_label(_("Inverse fillet"));
@@ -115,7 +100,7 @@ FilletChamferPropertiesDialog::FilletChamferPropertiesDialog()
 
     show_all_children();
 
-    set_focus(_fillet_chamfer_position_entry);
+    set_focus(_fillet_chamfer_position_numeric);
 }
 
 FilletChamferPropertiesDialog::~FilletChamferPropertiesDialog()
@@ -128,12 +113,16 @@ void FilletChamferPropertiesDialog::showDialog(
     SPDesktop *desktop, Geom::Point knotpoint,
     const Inkscape::LivePathEffect::
     FilletChamferPointArrayParamKnotHolderEntity *pt,
-    const gchar *unit)
+    const gchar *unit,
+    bool use_distance,
+    bool aprox_radius)
 {
     FilletChamferPropertiesDialog *dialog = new FilletChamferPropertiesDialog();
 
     dialog->_setDesktop(desktop);
     dialog->_setUnit(unit);
+    dialog->_set_use_distance(use_distance);
+    dialog->_set_aprox(aprox_radius);
     dialog->_setKnotPoint(knotpoint);
     dialog->_setPt(pt);
 
@@ -150,9 +139,9 @@ void FilletChamferPropertiesDialog::showDialog(
 
 void FilletChamferPropertiesDialog::_apply()
 {
-    std::istringstream i_pos(_fillet_chamfer_position_entry.get_text());
-    double d_pos, d_width;
-    if (i_pos >> d_pos) {
+    double d_width;
+    double d_pos =  _fillet_chamfer_position_numeric.get_value();
+    if (d_pos) {
         if (_fillet_chamfer_type_fillet.get_active() == true) {
             d_width = 1;
         } else if (_fillet_chamfer_type_inverse_fillet.get_active() == true) {
@@ -203,6 +192,13 @@ void FilletChamferPropertiesDialog::_handleButtonEvent(GdkEventButton *event)
 void FilletChamferPropertiesDialog::_setKnotPoint(Geom::Point knotpoint)
 {
     double position;
+    std::string distance_or_radius = std::string(_("Radius "));
+    if(aprox){
+        distance_or_radius = std::string(_("Radius aproximated "));
+    }
+    if(use_distance){
+        distance_or_radius = std::string(_("Knot distance "));
+    }
     if (knotpoint.x() > 0) {
         double intpart;
         position = modf(knotpoint[Geom::X], &intpart) * 100;
@@ -211,16 +207,13 @@ void FilletChamferPropertiesDialog::_setKnotPoint(Geom::Point knotpoint)
         _fillet_chamfer_position_label.set_label(_("Position (%):"));
     } else {
         _flexible = false;
-        std::string posConcat =
-            std::string(_("Position (")) + std::string(unit) + std::string(")");
+        std::string posConcat = distance_or_radius +
+            std::string(_("(")) + std::string(unit) + std::string(")");
         _fillet_chamfer_position_label.set_label(_(posConcat.c_str()));
         position = knotpoint[Geom::X] * -1;
         position = Inkscape::Util::Quantity::convert(position, "px", unit);
     }
-    std::ostringstream s;
-    s.imbue(std::locale::classic());
-    s << position;
-    _fillet_chamfer_position_entry.set_text(s.str());
+    _fillet_chamfer_position_numeric.set_value(position);
     if (knotpoint.y() == 1) {
         _fillet_chamfer_type_fillet.set_active(true);
     } else if (knotpoint.y() == 2) {
@@ -244,6 +237,16 @@ void FilletChamferPropertiesDialog::_setPt(
 void FilletChamferPropertiesDialog::_setUnit(const gchar *abbr)
 {
     unit = abbr;
+}
+
+void FilletChamferPropertiesDialog::_set_use_distance(bool use_knot_distance)
+{
+    use_distance = use_knot_distance;
+}
+
+void FilletChamferPropertiesDialog::_set_aprox(bool aprox_radius)
+{
+    aprox = aprox_radius;
 }
 
 void FilletChamferPropertiesDialog::_setDesktop(SPDesktop *desktop)
