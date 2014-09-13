@@ -14,7 +14,7 @@
    height="800"
    id="svg13532"
    version="1.1"
-   inkscape:version="0.91pre2 r13550 custom"
+   inkscape:version="0.91pre2 r13554 custom"
    viewBox="0 0 1280 800"
    sodipodi:docname="dmg_background.svg">
   <defs
@@ -129,28 +129,6 @@
          offset="1"
          id="stop5785" />
     </linearGradient>
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath14931">
-      <rect
-         style="opacity:0.25;fill:#0000ff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1"
-         id="rect14933"
-         width="1024"
-         height="676"
-         x="0"
-         y="0" />
-    </clipPath>
-    <clipPath
-       clipPathUnits="userSpaceOnUse"
-       id="clipPath14935">
-      <rect
-         y="178"
-         x="0"
-         height="676"
-         width="1024"
-         id="rect14937"
-         style="opacity:0.25;fill:#0000ff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1" />
-    </clipPath>
     <linearGradient
        gradientUnits="userSpaceOnUse"
        xlink:href="#linearGradient5785-8-9"
@@ -656,38 +634,6 @@
       </cc:Work>
     </rdf:RDF>
   </metadata>
-  <g
-     inkscape:groupmode="layer"
-     id="layer2"
-     inkscape:label="website screenshot"
-     style="display:none"
-     sodipodi:insensitive="true">
-    <g
-       id="g14939">
-      <image
-         sodipodi:absref="/Users/su_v/TEMP/inkscape-repo/osx-packaging-update-quartz/packaging/macosx/_work/inkscape-org-screenshot-upper.png"
-         xlink:href="_work/inkscape-org-screenshot-upper.png"
-         y="-127"
-         x="-57"
-         id="image14889"
-         style="image-rendering:optimizeSpeed"
-         preserveAspectRatio="none"
-         height="882"
-         width="1138"
-         clip-path="url(#clipPath14931)" />
-      <image
-         sodipodi:absref="/Users/su_v/TEMP/inkscape-repo/osx-packaging-update-quartz/packaging/macosx/_work/inkscape-org-screenshot-lower.png"
-         xlink:href="_work/inkscape-org-screenshot-lower.png"
-         y="51"
-         x="-57"
-         id="image14919"
-         style="opacity:1;image-rendering:optimizeSpeed"
-         preserveAspectRatio="none"
-         height="882"
-         width="1138"
-         clip-path="url(#clipPath14935)" />
-    </g>
-  </g>
   <g
      inkscape:groupmode="layer"
      id="layer3"
