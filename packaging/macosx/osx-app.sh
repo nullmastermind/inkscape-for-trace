@@ -282,8 +282,7 @@ ARCH="$(uname -a | awk '{print $NF;}')"
 
 # guess default build_arch (MacPorts)
 if [ "$OSXMINORNO" -ge "6" ]; then
-	_cpu_bits="$(sysctl hw.cpu64bit_capable > /dev/null 2>&1)"
-	if [ $? -eq 0 ]; then
+	if [ "$(sysctl hw.cpu64bit_capable 2>/dev/null | awk '{print $NF;}')" = "1" ]; then
 		_build_arch="x86_64"
 	else
 		_build_arch="i386"
