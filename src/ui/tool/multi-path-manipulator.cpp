@@ -182,7 +182,7 @@ void MultiPathManipulator::setItems(std::set<ShapeRecord> const &s)
         ShapeRecord const &r = *i;
         if (!SP_IS_PATH(r.item) && !IS_LIVEPATHEFFECT(r.item)) continue;
         boost::shared_ptr<PathManipulator> newpm(new PathManipulator(*this, (SPPath*) r.item,
-            r.edit_transform, _getOutlineColor(r.role), r.lpe_key));
+            r.edit_transform, _getOutlineColor(r.role, r.item), r.lpe_key));
         newpm->showHandles(_show_handles);
         // always show outlines for clips and masks
         newpm->showOutline(_show_outline || r.role != SHAPE_ROLE_NORMAL);
@@ -844,7 +844,7 @@ void MultiPathManipulator::_doneWithCleanup(gchar const *reason, bool alert_LPE)
 }
 
 /** Get an outline color based on the shape's role (normal, mask, LPE parameter, etc.). */
-guint32 MultiPathManipulator::_getOutlineColor(ShapeRole role)
+guint32 MultiPathManipulator::_getOutlineColor(ShapeRole role, SPItem *item)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     switch(role) {
@@ -856,7 +856,7 @@ guint32 MultiPathManipulator::_getOutlineColor(ShapeRole role)
         return prefs->getColor("/tools/nodes/lpe_param_color", 0x009000ff);
     case SHAPE_ROLE_NORMAL:
     default:
-        return prefs->getColor("/tools/nodes/outline_color", 0xff0000ff);
+        return item->highlight_color();
     }
 }
 

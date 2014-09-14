@@ -156,6 +156,7 @@ void sp_document_get_export_hints (SPDocument * doc, Glib::ustring &filename, fl
 
 void sp_selection_create_bitmap_copy (SPDesktop *desktop);
 
+void sp_selection_set_clipgroup(SPDesktop *desktop);
 void sp_selection_set_mask(SPDesktop *desktop, bool apply_clip_path, bool apply_to_layer);
 void sp_selection_unset_mask(SPDesktop *desktop, bool apply_clip_path);
 

@@ -1756,6 +1756,13 @@ void ContextMenu::MakeItemMenu (void)
     }
     mi->show();
     append(*mi);
+
+    /*SSet Clip Group */
+    mi = Gtk::manage(new Gtk::MenuItem(_("Create Clip G_roup"),1));
+    mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::CreateGroupClip));
+    mi->set_sensitive(TRUE);
+    mi->show();
+    append(*mi);
     
     /* Set Clip */
     mi = Gtk::manage(new Gtk::MenuItem(_("Set Cl_ip"), 1));
@@ -1867,6 +1874,10 @@ void ContextMenu::ReleaseMask(void)
     sp_selection_unset_mask(_desktop, false);
 }
 
+void ContextMenu::CreateGroupClip(void)
+{
+    sp_selection_set_clipgroup(_desktop);
+}
 
 void ContextMenu::SetClip(void)
 {

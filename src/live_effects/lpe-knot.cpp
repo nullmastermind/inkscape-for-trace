@@ -537,6 +537,10 @@ LPEKnot::doBeforeEffect (SPLPEItem const* lpeitem)
 {
     using namespace Geom;
     original_bbox(lpeitem);
+    
+    if (SP_IS_PATH(lpeitem)) {
+        supplied_path = SP_PATH(lpeitem)->getCurve()->get_pathvector();
+    }
 
     gpaths.clear();
     gstroke_widths.clear();

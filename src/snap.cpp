@@ -116,7 +116,7 @@ void SnapManager::freeSnapReturnByRef(Geom::Point &p,
                                       Inkscape::SnapSourceType const source_type,
                                       Geom::OptRect const &bbox_to_snap) const
 {
-    Inkscape::SnappedPoint const s = freeSnap(Inkscape::SnapCandidatePoint(p, source_type), bbox_to_snap);
+    Inkscape::SnappedPoint const s = freeSnap(Inkscape::SnapCandidatePoint(p, source_type, Inkscape::SNAPTARGET_PATH), bbox_to_snap);
     s.getPointIfSnapped(p);
 }
 

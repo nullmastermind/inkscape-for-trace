@@ -45,6 +45,7 @@ class SPObject;
 #define SP_OBJECT_WRITE_BUILD (1 << 0)
 #define SP_OBJECT_WRITE_EXT (1 << 1)
 #define SP_OBJECT_WRITE_ALL (1 << 2)
+#define SP_OBJECT_WRITE_NO_CHILDREN (1 << 3)
 
 #include <cassert>
 #include <stddef.h>

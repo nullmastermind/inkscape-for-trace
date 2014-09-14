@@ -20,6 +20,9 @@
 struct SPColor;
 typedef struct _GdkPixbuf GdkPixbuf;
 
+void ink_cairo_pixbuf_cleanup(unsigned char *, void *);
+void convert_pixbuf_argb32_to_normal(GdkPixbuf *pb);
+
 namespace Inkscape {
 
 /**

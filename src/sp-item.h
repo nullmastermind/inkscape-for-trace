@@ -35,6 +35,7 @@ class SPClipPathReference;
 class SPMaskReference;
 class SPAvoidRef;
 struct SPPrintContext;
+typedef unsigned int guint32;
 
 namespace Inkscape {
 
@@ -154,6 +155,19 @@ public:
     bool isHidden() const;
     void setHidden(bool hidden);
 
+    /* Objects dialogue */
+    bool isSensitive() const {
+        return sensitive;
+    };
+
+    bool isHighlightSet() const;
+    guint32 highlight_color() const;
+    
+    void setHighlightColor(guint32 color);
+    
+    void unsetHighlightColor();
+    /********************/
+
     bool isEvaluated() const;
     void setEvaluated(bool visible);
     void resetEvaluated();
@@ -225,6 +239,7 @@ public:
     void set_i2d_affine(Geom::Affine const &transform);
     Geom::Affine dt2i_affine() const;
 
+    char *_highlightColor;
 private:
     enum EvaluatedStatus
     {

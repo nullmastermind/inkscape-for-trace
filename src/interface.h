@@ -183,6 +183,7 @@ class ContextMenu : public Gtk::Menu
         void SelectSameStrokeStyle(void);
         void SelectSameObjectType(void);
         void ItemCreateLink(void);
+        void CreateGroupClip(void);
         void SetMask(void);
         void ReleaseMask(void);
         void SetClip(void);

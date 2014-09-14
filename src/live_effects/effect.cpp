@@ -5,6 +5,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+//#define LPE_ENABLE_TEST_EFFECTS //uncomment for toy effects
+
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
@@ -19,7 +21,6 @@
 #include "live_effects/lpe-rough-hatches.h"
 #include "live_effects/lpe-dynastroke.h"
 #include "live_effects/lpe-test-doEffect-stack.h"
-#include "live_effects/lpe-bspline.h"
 #include "live_effects/lpe-gears.h"
 #include "live_effects/lpe-curvestitch.h"
 #include "live_effects/lpe-circle_with_radius.h"
@@ -51,6 +52,14 @@
 #include "live_effects/lpe-extrude.h"
 #include "live_effects/lpe-powerstroke.h"
 #include "live_effects/lpe-clone-original.h"
+#include "live_effects/lpe-bspline.h"
+#include "live_effects/lpe-attach-path.h"
+#include "live_effects/lpe-fill-between-strokes.h"
+#include "live_effects/lpe-fill-between-many.h"
+#include "live_effects/lpe-ellipse_5pts.h"
+#include "live_effects/lpe-bounding-box.h"
+#include "live_effects/lpe-jointype.h"
+#include "live_effects/lpe-taperstroke.h"
 #include "live_effects/lpe-envelope-perspective.h"
 #include "live_effects/lpe-fillet-chamfer.h"
 
@@ -132,10 +141,18 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {SHOW_HANDLES,          N_("Show handles"),            "show_handles"},
     {ROUGHEN,               N_("Roughen"),                 "roughen"},
     {BSPLINE,               N_("BSpline"),                 "bspline"},
-    {SIMPLIFY,              N_("Simplify"),                "simplify"},
-    {LATTICE2,              N_("Lattice Deformation 2"),   "lattice2"},
-    // TRANSLATORS: "Envelope Perspective" should be equivalent to "perspective transformation"
-    {ENVELOPE_PERSPECTIVE,  N_("Envelope Perspective"),    "envelope-perspective"},
+    {JOIN_TYPE,             N_("Join type"),               "join_type"},
+    {TAPER_STROKE,          N_("Taper stroke"),            "taper_stroke"},
+/* Ponyscape */
+    {ATTACH_PATH,           N_("Attach path"),             "attach_path"},
+    {FILL_BETWEEN_STROKES,  N_("Fill between strokes"),    "fill_between_strokes"},
+    {FILL_BETWEEN_MANY,     N_("Fill between many"),       "fill_between_many"},
+    {ELLIPSE_5PTS,          N_("Ellipse by 5 points"),     "ellipse_5pts"},
+    {BOUNDING_BOX,          N_("Bounding Box"),            "bounding_box"},
+/* 0.91 */
+    {SIMPLIFY,               N_("Simplify"),     "simplify"},
+    {LATTICE2,               N_("Lattice Deformation 2"),     "lattice2"},
+    {ENVELOPE_PERSPECTIVE,  N_("Envelope-Perspective"),        "envelope-perspective"},
     {FILLET_CHAMFER,        N_("Fillet/Chamfer"),          "fillet-chamfer"},
     {INTERPOLATE_POINTS,    N_("Interpolate points"),      "interpolate_points"},
 };
@@ -267,6 +284,27 @@ Effect::New(EffectType lpenr, LivePathEffectObject *lpeobj)
         case CLONE_ORIGINAL:
             neweffect = static_cast<Effect*> ( new LPECloneOriginal(lpeobj) );
             break;
+        case ATTACH_PATH:
+            neweffect = static_cast<Effect*> ( new LPEAttachPath(lpeobj) );
+            break;
+        case FILL_BETWEEN_STROKES:
+            neweffect = static_cast<Effect*> ( new LPEFillBetweenStrokes(lpeobj) );
+            break;
+        case FILL_BETWEEN_MANY:
+            neweffect = static_cast<Effect*> ( new LPEFillBetweenMany(lpeobj) );
+            break;
+        case ELLIPSE_5PTS:
+            neweffect = static_cast<Effect*> ( new LPEEllipse5Pts(lpeobj) );
+            break;
+        case BOUNDING_BOX:
+            neweffect = static_cast<Effect*> ( new LPEBoundingBox(lpeobj) );
+            break;
+        case JOIN_TYPE:
+            neweffect = static_cast<Effect*> ( new LPEJoinType(lpeobj) );
+            break;
+        case TAPER_STROKE:
+            neweffect = static_cast<Effect*> ( new LPETaperStroke(lpeobj) );
+            break;
         case SIMPLIFY:
             neweffect = static_cast<Effect*> ( new LPESimplify(lpeobj) );
             break;
@@ -286,7 +324,7 @@ Effect::New(EffectType lpenr, LivePathEffectObject *lpeobj)
             neweffect = static_cast<Effect*> ( new LPEShowHandles(lpeobj) );
             break;
         default:
-            g_warning("LivePathEffect::Effect::New   called with invalid patheffect type (%d)", lpenr);
+            g_warning("LivePathEffect::Effect::New called with invalid patheffect type (%d)", lpenr);
             neweffect = NULL;
             break;
     }
@@ -367,6 +405,33 @@ void
 Effect::doBeforeEffect (SPLPEItem const*/*lpeitem*/)
 {
     //Do nothing for simple effects
+}
+
+void Effect::doAfterEffect (SPLPEItem const* lpeitem)
+{
+}
+
+void Effect::doOnRemove (SPLPEItem const* lpeitem)
+{
+}
+
+//secret impl methods (shhhh!)
+void Effect::doOnApply_impl(SPLPEItem const* lpeitem)
+{
+    sp_lpe_item = const_cast<SPLPEItem *>(lpeitem);
+    /*sp_curve = SP_SHAPE(sp_lpe_item)->getCurve();
+    pathvector_before_effect = sp_curve->get_pathvector();*/
+    doOnApply(lpeitem);
+}
+
+void Effect::doBeforeEffect_impl(SPLPEItem const* lpeitem)
+{
+    sp_lpe_item = const_cast<SPLPEItem *>(lpeitem);
+    //printf("(SPLPEITEM*) %p\n", sp_lpe_item);
+    sp_curve = SP_SHAPE(sp_lpe_item)->getCurve();
+    pathvector_before_effect = sp_curve->get_pathvector();
+    
+    doBeforeEffect(lpeitem);
 }
 
 /**

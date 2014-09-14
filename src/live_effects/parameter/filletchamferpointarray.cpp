@@ -8,6 +8,11 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <glibmm.h>
+
+#include "ui/dialog/lpe-fillet-chamfer-properties.h"
+#include "live_effects/parameter/filletchamferpointarray.h"
+
 #include <2geom/piecewise.h>
 #include <2geom/sbasis-to-bezier.h>
 #include <2geom/sbasis-geometric.h>
