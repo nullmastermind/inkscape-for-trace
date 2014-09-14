@@ -1,7 +1,11 @@
-#include <glib.h> //g_critical
+/* Author:
+ *   Liam P. White <inkscapebrony@gmail.com>
+ *
+ * Copyright (C) 2014 Author
+ *
+ * Released under GNU GPL, read the file 'COPYING' for more information
+ */
 
-#include "pathoutlineprovider.h"
-#include "livarot/path-description.h"
 #include <2geom/angle.h>
 #include <2geom/path.h>
 #include <2geom/circle.h>
@@ -9,8 +13,12 @@
 #include <2geom/shape.h>
 #include <2geom/transforms.h>
 #include <2geom/path-sink.h>
+#include <cstdio>
+
+#include "pathoutlineprovider.h"
+#include "livarot/path-description.h"
 #include "helper/geom-nodetype.h"
-#include <svg/svg.h>
+#include "svg/svg.h"
 
 namespace Geom {
 /**
@@ -22,8 +30,7 @@ namespace Geom {
 * @return 1 if one circle is contained in the other
 * @return 2 if intersections are found (they are written to p0 and p1)
 */
-static int circle_circle_intersection(Circle const &circle0, Circle const &circle1,
-                                      Point & p0, Point & p1)
+static int circle_circle_intersection(Circle const &circle0, Circle const &circle1, Point & p0, Point & p1)
 {
     Point X0 = circle0.center();
     double r0 = circle0.ray();
@@ -163,7 +170,7 @@ bool outside_angle (const Geom::Curve& cbc1, const Geom::Curve& cbc2)
     Geom::Point end_point;
 
     if (cross_point != cbc2.initialPoint()) {
-        g_warning("Non-contiguous path in Outline::outside_angle()");
+        printf("WARNING: Non-contiguous path in Outline::outside_angle()");
         return false;
     }
     
@@ -210,7 +217,8 @@ typedef Geom::BezierCurveN<1u> BezierLine;
  * @param path_builder Contains the incoming segment; result is appended to this
  * @param outgoing The outgoing segment
  */
-void joinInside(Geom::Path& path_builder, Geom::Curve const& outgoing) {
+void joinInside(Geom::Path& path_builder, Geom::Curve const& outgoing)
+{
     Geom::Curve const& incoming = path_builder.back();
 
     // Using Geom::crossings to find intersections between two curves
@@ -243,7 +251,8 @@ void joinInside(Geom::Path& path_builder, Geom::Curve const& outgoing) {
  * @param miter_limit When mitering, don't exceed this length
  * @param line_width The thickness of the line.
  */
-void miter_curves(Geom::Path& path_builder, Geom::Curve const& outgoing, double miter_limit, double line_width) {
+void miter_curves(Geom::Path& path_builder, Geom::Curve const& outgoing, double miter_limit, double line_width)
+{
     using namespace Geom;
     Curve const& incoming = path_builder.back();
     Point tang1 = unitTangentAt(Geom::reverse(incoming.toSBasis()), 0.);
@@ -269,7 +278,8 @@ void miter_curves(Geom::Path& path_builder, Geom::Curve const& outgoing, double 
  * @param miter_limit When mitering, don't exceed this length
  * @param line_width The thickness of the line. Used for miter fallback.
  */
-void extrapolate_curves(Geom::Path& path_builder, Geom::Curve const& outgoing, double miter_limit, double line_width) {
+void extrapolate_curves(Geom::Path& path_builder, Geom::Curve const& outgoing, double miter_limit, double line_width)
+{
     Geom::Curve const& incoming = path_builder.back();
     Geom::Point endPt = outgoing.initialPoint();
 
@@ -318,7 +328,7 @@ void extrapolate_curves(Geom::Path& path_builder, Geom::Curve const& outgoing, d
                 }
 
             } catch (std::exception const & ex) {
-                g_warning("Error extrapolating line join: %s\n", ex.what());
+                printf("WARNING: Error extrapolating line join: %s\n", ex.what());
                 path_builder.appendNew<Geom::LineSegment>(endPt);
             }
         } else {
@@ -378,7 +388,8 @@ typedef void JoinFunc(Geom::Path& /*path_builder*/, Geom::Curve const& /*outgoin
 /**
  * Helper function for repeated logic in outlineHalf.
  */
-static void outlineHelper(Geom::Path& path_builder, Geom::PathVector* path_vec, bool outside, double width, double miter, JoinFunc func) {
+static void outlineHelper(Geom::Path& path_builder, Geom::PathVector* path_vec, bool outside, double width, double miter, JoinFunc func)
+{
     Geom::Curve * cbc2 = path_vec->front()[0].duplicate();
 
     if (outside) {
@@ -411,7 +422,8 @@ static void outlineHelper(Geom::Path& path_builder, Geom::PathVector* path_vec, 
  * @param func Join function to apply at each join.
  */
 
-Geom::Path outlineHalf(const Geom::Path& path_in, double line_width, double miter_limit, JoinFunc func) {
+Geom::Path outlineHalf(const Geom::Path& path_in, double line_width, double miter_limit, JoinFunc func)
+{
     // NOTE: it is important to notice the distinction between a Geom::Path and a livarot ::Path here!
     // if you do not see "Geom::" there is a different function set!
 
@@ -692,6 +704,8 @@ Geom::PathVector outlinePath(const Geom::PathVector& path_in, double line_width,
     return path_out;
 }
 
+#define miter_lim fabs(line_width * miter_limit)
+
 Geom::PathVector PathVectorOutline(Geom::PathVector const & path_in, double line_width, ButtTypeMod linecap_type, LineJoinType linejoin_type, double miter_limit, double start_lean, double end_lean)
 {
     std::vector<Geom::Path> path_out = std::vector<Geom::Path>();
@@ -704,9 +718,7 @@ Geom::PathVector PathVectorOutline(Geom::PathVector const & path_in, double line
         p.LoadPath(path_in[i], Geom::Affine(), false, ( (i==0) ? false : true));
     }
 
-#define miter_lim fabs(line_width * miter_limit)
-
-    //magic!
+    // magic!
     ButtType original_butt;
     switch (linecap_type) {
         case BUTT_STRAIGHT:
@@ -746,14 +758,11 @@ Geom::PathVector PathVectorOutline(Geom::PathVector const & path_in, double line
         path_out = outlinePath(path_in, line_width, LINEJOIN_STRAIGHT, linecap_type, miter_lim, true, start_lean, end_lean);
     }
 
-#undef miter_lim
     return path_out;
 }
 
 Geom::Path PathOutsideOutline(Geom::Path const & path_in, double line_width, LineJoinType linejoin_type, double miter_limit)
 {
-
-#define miter_lim fabs(line_width * miter_limit)
 
     Geom::Path path_out;
 
@@ -777,7 +786,6 @@ Geom::Path PathOutsideOutline(Geom::Path const & path_in, double line_width, Lin
         path_out = outlineHalf(path_in, line_width, miter_lim, extrapolate_curves);
         return path_out;
     }
-#undef miter_lim
     return path_out;
 }
 
