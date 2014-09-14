@@ -1,5 +1,5 @@
 /*
- * Copyright (C) Johan Engelen 2008 <j.b.c.engelen@utwente.nl>
+ * Copyright (C) Theodore Janeczko 2012 <flutterguy317@gmail.com>
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
@@ -419,11 +419,6 @@ void OriginalPathArrayParam::linked_modified(SPObject *linked_obj, guint flags, 
     SP_OBJECT(param_effect->getLPEObj())->requestModified(SP_OBJECT_MODIFIED_FLAG);
     _store->foreach_iter(sigc::bind<PathAndDirection*>(sigc::mem_fun(*this, &OriginalPathArrayParam::_updateLink), to));
 }
-
-//void PathParam::linked_transformed(Geom::Affine const *rel_transf, SPItem *moved_item)
-//{
-//    linked_transformed_callback(rel_transf, moved_item);
-//}
 
 bool OriginalPathArrayParam::param_readSVGValue(const gchar* strvalue)
 {

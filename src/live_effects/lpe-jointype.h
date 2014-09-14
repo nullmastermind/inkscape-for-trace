@@ -5,6 +5,7 @@
  *
  * Released under GNU GPL v2, read the file COPYING for more information
  */
+ 
 #ifndef INKSCAPE_LPE_JOINTYPE_H
 #define INKSCAPE_LPE_JOINTYPE_H
  
@@ -43,3 +44,14 @@ private:
 } //namespace Inkscape
 
 #endif
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8 :

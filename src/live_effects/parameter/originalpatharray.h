@@ -4,7 +4,7 @@
 /*
  * Inkscape::LivePathEffectParameters
  *
-* Copyright (C) Johan Engelen 2008 <j.b.c.engelen@utwente.nl>
+ * Copyright (C) Theodore Janeczko 2012 <flutterguy317@gmail.com>
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */

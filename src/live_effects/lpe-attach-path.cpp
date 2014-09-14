@@ -1,5 +1,5 @@
 /*
- * Copyright (C) Johan Engelen 2012 <j.b.c.engelen@alumnus.utwente.nl>
+ * Copyright (C) Theodore Janeczko 2012 <flutterguy317@gmail.com>
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */

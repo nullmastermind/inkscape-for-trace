@@ -50,7 +50,6 @@ public:
     virtual void param_transform_multiply(Geom::Affine const &postmul, bool set);
 
     void set_vector_oncanvas_looks(SPKnotShapeType shape, SPKnotModeType mode, guint32 color);
-    //void set_origin_oncanvas_looks(SPKnotShapeType shape, SPKnotModeType mode, guint32 color);
     void set_oncanvas_color(guint32 color);
 
     virtual bool providesKnotHolderEntities() const { return true; }
@@ -71,11 +70,7 @@ private:
     SPKnotShapeType vec_knot_shape;
     SPKnotModeType  vec_knot_mode;
     guint32         vec_knot_color;
-//    SPKnotShapeType ori_knot_shape;
-//    SPKnotModeType  ori_knot_mode;
-//    guint32         ori_knot_color;
 
-//    friend class VectorParamKnotHolderEntity_Origin;
     friend class TransformedPointParamKnotHolderEntity_Vector;
 };
 

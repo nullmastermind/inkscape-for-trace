@@ -1,6 +1,3 @@
-/** \file
- * LPE "Join Type" implementation
- */
  /* Authors:
  *  
  *	 Liam P White
@@ -9,8 +6,6 @@
  *
  * Released under GNU GPL v2, read the file 'COPYING' for more information
  */
-
-#include <math.h>
 
 #include "live_effects/parameter/enum.h"
 #include "live_effects/pathoutlineprovider.h"
@@ -62,13 +57,13 @@ LPEJoinType::LPEJoinType(LivePathEffectObject *lpeobject) :
 	attempt_force_join(_("Force miter"), _("Overrides the miter limit and forces a join."), "attempt_force_join", &wr, this, true)
 {
 	show_orig_path = true;
-	registerParameter( dynamic_cast<Parameter *>(&linecap_type) );
-	registerParameter( dynamic_cast<Parameter *>(&line_width) );
-	registerParameter( dynamic_cast<Parameter *>(&linejoin_type) );
-	registerParameter( dynamic_cast<Parameter *>(&start_lean) );
-	registerParameter( dynamic_cast<Parameter *>(&end_lean) );
-	registerParameter( dynamic_cast<Parameter *>(&miter_limit) );
-	registerParameter( dynamic_cast<Parameter *>(&attempt_force_join) );
+	registerParameter(&linecap_type);
+	registerParameter(&line_width);
+	registerParameter(&linejoin_type);
+	registerParameter(&start_lean);
+	registerParameter(&end_lean);
+	registerParameter(&miter_limit);
+	registerParameter(&attempt_force_join);
 	was_initialized = false;
 	start_lean.param_set_range(-1,1);
 	start_lean.param_set_increments(0.1, 0.1);
@@ -169,9 +164,9 @@ void LPEJoinType::doOnRemove(SPLPEItem const* lpeitem)
     }
 }
 
-//NOTE: I originally had all the outliner functions defined in here, but they were actually useful
-//enough for other LPEs so I moved them all into pathoutlineprovider.cpp. The code here is just a 
-//wrapper around it.
+// NOTE: I originally had all the outliner functions defined in here, but they were actually useful
+// enough for other LPEs so I moved them all into pathoutlineprovider.cpp. The code here is just a 
+// wrapper around it.
 std::vector<Geom::Path> LPEJoinType::doEffect_path(std::vector<Geom::Path> const & path_in)
 {       
 	return Outline::PathVectorOutline(path_in, line_width, static_cast<ButtTypeMod>(linecap_type.get_value()), 
@@ -180,5 +175,16 @@ std::vector<Geom::Path> LPEJoinType::doEffect_path(std::vector<Geom::Path> const
                                       start_lean/2 ,end_lean/2);
 }
 
-} //namespace LivePathEffect
-} //namespace Inkscape
+} // namespace LivePathEffect
+} // namespace Inkscape
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8 :
