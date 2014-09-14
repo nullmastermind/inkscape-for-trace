@@ -172,6 +172,22 @@ ARCH="$(uname -a | awk '{print $NF;}')"
 # MacPorts for dependencies
 [[ -x $LIBPREFIX/bin/port && -d $LIBPREFIX/etc/macports ]] && use_port="t"
 
+# guess default build_arch (MacPorts)
+if [ "$OSXMINORNO" -ge "6" ]; then
+	_cpu_bits="$(sysctl hw.cpu64bit_capable > /dev/null 2>&1)"
+	if [ $? -eq 0 ]; then
+		_build_arch="x86_64"
+	else
+		_build_arch="i386"
+	fi
+else
+	if [ $ARCH = "powerpc" ]; then
+		_build_arch="ppc"
+	else
+		_build_arch="i386"
+	fi
+fi
+
 # GTK+ backend
 gtk_target="$(pkg-config --variable=target gtk+-2.0 2>/dev/null)"
 
@@ -198,7 +214,7 @@ elif [ "$OSXMINORNO" -eq "5" ]; then
 	TARGETVERSION="10.5"
 	export CC="/usr/bin/gcc-4.2"
 	export CXX="/usr/bin/g++-4.2"
-	export CLAGS="$CFLAGS -arch $ARCH"
+	#export CLAGS="$CFLAGS -arch $_build_arch"
 	export CXXFLAGS="$CFLAGS"
 	CONFFLAGS="--disable-openmp $CONFFLAGS"
 elif [ "$OSXMINORNO" -eq "6" ]; then
@@ -207,7 +223,7 @@ elif [ "$OSXMINORNO" -eq "6" ]; then
 	TARGETVERSION="10.6"
 	export CC="/usr/bin/llvm-gcc-4.2"
 	export CXX="/usr/bin/llvm-g++-4.2"
-	export CLAGS="$CFLAGS -arch $ARCH"
+	#export CLAGS="$CFLAGS -arch $_build_arch"
 	export CXXFLAGS="$CFLAGS"
 	CONFFLAGS="--disable-openmp $CONFFLAGS"
 elif [ "$OSXMINORNO" -eq "7" ]; then
@@ -216,7 +232,7 @@ elif [ "$OSXMINORNO" -eq "7" ]; then
 	TARGETVERSION="10.7"
 	export CC="/usr/bin/clang"
 	export CXX="/usr/bin/clang++"
-	export CLAGS="$CFLAGS -arch $ARCH"
+	#export CLAGS="$CFLAGS -arch $_build_arch"
 	export CXXFLAGS="$CFLAGS -Wno-mismatched-tags -Wno-cast-align" #-stdlib=libstdc++ -std=c++11
 elif [ "$OSXMINORNO" -eq "8" ]; then
 	## Apple's clang on Mountain Lion
@@ -224,7 +240,7 @@ elif [ "$OSXMINORNO" -eq "8" ]; then
 	TARGETVERSION="10.8"
 	export CC="/usr/bin/clang"
 	export CXX="/usr/bin/clang++"
-	export CLAGS="$CFLAGS -arch $ARCH"
+	#export CLAGS="$CFLAGS -arch $_build_arch"
 	export CXXFLAGS="$CFLAGS -Wno-mismatched-tags -Wno-cast-align -std=c++11 -stdlib=libstdc++"
 elif [ "$OSXMINORNO" -eq "9" ]; then
 	## Apple's clang on Mavericks
@@ -232,7 +248,7 @@ elif [ "$OSXMINORNO" -eq "9" ]; then
 	TARGETVERSION="10.9"
 	export CC="/usr/bin/clang"
 	export CXX="/usr/bin/clang++"
-	export CLAGS="$CFLAGS -arch $ARCH"
+	#export CLAGS="$CFLAGS -arch $_build_arch"
 	export CXXFLAGS="$CLAGS -Wno-mismatched-tags -Wno-cast-align -std=c++11 -stdlib=libc++"
 elif [ "$OSXMINORNO" -eq "10" ]; then
 	## Apple's clang on Yosemite
@@ -240,7 +256,7 @@ elif [ "$OSXMINORNO" -eq "10" ]; then
 	TARGETVERSION="10.10"
 	export CC="/usr/bin/clang"
 	export CXX="/usr/bin/clang++"
-	export CLAGS="$CFLAGS -arch $ARCH"
+	#export CLAGS="$CFLAGS -arch $_build_arch"
 	export CXXFLAGS="$CLAGS -Wno-mismatched-tags -Wno-cast-align -std=c++11 -stdlib=libc++"
 	echo "Note: Detected version of OS X: $TARGETNAME $OSXVERSION"
 	echo "      Inkscape packaging has not been tested on ${TARGETNAME}."
@@ -250,7 +266,7 @@ else # if [ "$OSXMINORNO" -ge "11" ]; then
 	TARGETVERSION="10.XX"
 	export CC="/usr/bin/clang"
 	export CXX="/usr/bin/clang++"
-	export CLAGS="$CFLAGS -arch $ARCH"
+	#export CLAGS="$CFLAGS -arch $_build_arch"
 	export CXXFLAGS="$CLAGS -Wno-mismatched-tags -Wno-cast-align -std=c++11 -stdlib=libc++"
 	echo "Note: Detected version of OS X: $TARGETNAME $OSXVERSION"
 	echo "      Inkscape packaging has not been tested on this unknown version of OS X (${OSXVERSION})."
@@ -266,7 +282,7 @@ function getinkscapeinfo () {
 	REVISION="$(bzr revno 2>/dev/null)"
 	[ $? -ne 0 ] && REVISION="" || REVISION="-r$REVISION"
 
-	TARGETARCH="$ARCH"
+	TARGETARCH="$_build_arch"
 	NEWNAME="Inkscape-$INKVERSION$REVISION-$gtk_target-$TARGETVERSION-$TARGETARCH"
 	DMGFILE="$NEWNAME.dmg"
 	INFOFILE="$NEWNAME-info.txt"
@@ -323,7 +339,7 @@ function buildinfofile () {
 	Architecture          $TARGETARCH
 Build system information:
 	OS X Version          $OSXVERSION
-	Architecture          $ARCH
+	Architecture          $_build_arch
 	MacPorts Ver          $(port version 2>/dev/null | cut -f2 -d \ )
 	Compiler              $($CXX --version | head -1)
 	GTK+ backend          $gtk_target

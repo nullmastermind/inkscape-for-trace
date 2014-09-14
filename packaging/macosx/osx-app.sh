@@ -280,6 +280,21 @@ OSXMINORNO="$(cut -d. -f2 <<< $OSXVERSION)"
 OSXPOINTNO="$(cut -d. -f3 <<< $OSXVERSION)"
 ARCH="$(uname -a | awk '{print $NF;}')"
 
+# guess default build_arch (MacPorts)
+if [ "$OSXMINORNO" -ge "6" ]; then
+	_cpu_bits="$(sysctl hw.cpu64bit_capable > /dev/null 2>&1)"
+	if [ $? -eq 0 ]; then
+		_build_arch="x86_64"
+	else
+		_build_arch="i386"
+	fi
+else
+	if [ $ARCH = "powerpc" ]; then
+		_build_arch="ppc"
+	else
+		_build_arch="i386"
+	fi
+fi
 
 # Setup
 #----------------------------------------------------------
@@ -504,7 +519,8 @@ if [ ${add_python} = "true" ]; then
 		$cp_cmd -rf "$python_dir"/* "$pkglib"
 	fi
 fi
-sed -e "s,__build_arch__,$ARCH,g" -i "" "$scrpath"
+
+sed -e "s,__build_arch__,$_build_arch,g" -i "" "$scrpath"
 
 # PkgInfo must match bundle type and creator code from Info.plist
 echo "APPLInks" > $package/Contents/PkgInfo
