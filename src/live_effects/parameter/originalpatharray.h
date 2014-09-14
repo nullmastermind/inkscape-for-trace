@@ -40,7 +40,6 @@ public:
     }
     gchar *href;
     URIReference ref;
-    //SPItem *obj;
     std::vector<Geom::Path> _pathvector;
     bool reversed;
     
@@ -83,7 +82,7 @@ protected:
     
     void linked_changed(SPObject *old_obj, SPObject *new_obj, PathAndDirection* to);
     void linked_modified(SPObject *linked_obj, guint flags, PathAndDirection* to);
-    void linked_transformed(Geom::Affine const *mp, SPItem *original, PathAndDirection* to);
+    void linked_transformed(Geom::Affine const *, SPItem *, PathAndDirection*) {}
     void linked_delete(SPObject *deleted, PathAndDirection* to);
     
     ModelColumns *_model;

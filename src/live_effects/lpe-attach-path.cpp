@@ -35,15 +35,15 @@ LPEAttachPath::LPEAttachPath(LivePathEffectObject *lpeobject) :
     end_path_curve_start(_("End path curve start:"), _("Starting curve"), "endcurvestart", &wr, this, Geom::Point(20,0)/*, true*/),
     end_path_curve_end(_("End path curve end:"), _("Ending curve"), "endcurveend", &wr, this, Geom::Point(20,0)/*, true*/)
 {
-    registerParameter( dynamic_cast<Parameter *>(&start_path) );
-    registerParameter( dynamic_cast<Parameter *>(&start_path_position) );
-    registerParameter( dynamic_cast<Parameter *>(&start_path_curve_start) );
-    registerParameter( dynamic_cast<Parameter *>(&start_path_curve_end) );
+    registerParameter(&start_path);
+    registerParameter(&start_path_position);
+    registerParameter(&start_path_curve_start);
+    registerParameter(&start_path_curve_end);
     
-    registerParameter( dynamic_cast<Parameter *>(&end_path) );
-    registerParameter( dynamic_cast<Parameter *>(&end_path_position) );
-    registerParameter( dynamic_cast<Parameter *>(&end_path_curve_start) );
-    registerParameter( dynamic_cast<Parameter *>(&end_path_curve_end) );
+    registerParameter(&end_path);
+    registerParameter(&end_path_position);
+    registerParameter(&end_path_curve_start);
+    registerParameter(&end_path_curve_end);
 
     //perceived_path = true;
     show_orig_path = true;
@@ -56,7 +56,7 @@ LPEAttachPath::~LPEAttachPath()
 
 }
 
-void LPEAttachPath::resetDefaults(SPItem const * item)
+void LPEAttachPath::resetDefaults(SPItem const * /*item*/)
 {
     curve_start_previous_origin = start_path_curve_end.getOrigin();
     curve_end_previous_origin = end_path_curve_end.getOrigin();

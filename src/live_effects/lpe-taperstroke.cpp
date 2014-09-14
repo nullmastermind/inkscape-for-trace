@@ -211,7 +211,7 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
         //if so, reset the end offset, but still allow the start offset.
         if ( attach_start >= (size - attach_end) ) {
             attach_end.param_set_value( size - attach_start );
-	    metInMiddle = true;
+        metInMiddle = true;
         }
     }
     
@@ -525,14 +525,14 @@ void LPETaperStroke::addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *de
 {
     {
         KnotHolderEntity *e = new TpS::KnotHolderEntityAttachBegin(this);
-        e->create(  desktop, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN,
-                    _("Start point of the taper"), SP_KNOT_SHAPE_CIRCLE );
+        e->create(desktop, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN,
+                  _("Start point of the taper"), SP_KNOT_SHAPE_CIRCLE );
         knotholder->add(e);
     }
     {
         KnotHolderEntity *e = new TpS::KnotHolderEntityAttachEnd(this);
-        e->create(	desktop, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN,
-                    _("End point of the taper"), SP_KNOT_SHAPE_CIRCLE );
+        e->create(desktop, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN,
+                  _("End point of the taper"), SP_KNOT_SHAPE_CIRCLE );
         knotholder->add(e);
     }
 }

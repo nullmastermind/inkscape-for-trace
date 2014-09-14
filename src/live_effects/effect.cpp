@@ -407,11 +407,11 @@ Effect::doBeforeEffect (SPLPEItem const*/*lpeitem*/)
     //Do nothing for simple effects
 }
 
-void Effect::doAfterEffect (SPLPEItem const* lpeitem)
+void Effect::doAfterEffect (SPLPEItem const* /*lpeitem*/)
 {
 }
 
-void Effect::doOnRemove (SPLPEItem const* lpeitem)
+void Effect::doOnRemove (SPLPEItem const* /*lpeitem*/)
 {
 }
 

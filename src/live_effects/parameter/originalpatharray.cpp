@@ -344,7 +344,7 @@ void OriginalPathArrayParam::remove_link(PathAndDirection* to)
     }
 }
 
-void OriginalPathArrayParam::linked_delete(SPObject */*deleted*/, PathAndDirection* to)
+void OriginalPathArrayParam::linked_delete(SPObject */*deleted*/, PathAndDirection* /*to*/)
 {
     //remove_link(to);
     
@@ -383,12 +383,7 @@ void OriginalPathArrayParam::linked_changed(SPObject */*old_obj*/, SPObject *new
     }
 }
 
-void OriginalPathArrayParam::linked_transformed(Geom::Affine const *mp, SPItem* original, PathAndDirection* to)
-{
-    
-}
-
-void OriginalPathArrayParam::setPathVector(SPObject *linked_obj, guint flags, PathAndDirection* to)
+void OriginalPathArrayParam::setPathVector(SPObject *linked_obj, guint /*flags*/, PathAndDirection* to)
 {
     if (!to) {
         return;
