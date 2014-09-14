@@ -18,7 +18,7 @@ $ (cd ports && portindex)
 
 5) add default variants for x11-based package to MacPorts' global variants:
 
-$ sudo echo '+x11 -quartz -no_x11 +rsvg +Pillow -tkinter +gnome_vfs' >> "$MP_PREFIX/etc/macports/variants.conf"
+$ sudo bash -c "echo '+x11 -quartz -no_x11 +rsvg +Pillow -tkinter +gnome_vfs' >> \"$MP_PREFIX/etc/macports/variants.conf\""
 
 6) install required dependencies: 
 
