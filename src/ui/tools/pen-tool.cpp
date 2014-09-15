@@ -1586,6 +1586,9 @@ void PenTool::_bspline_spiro_motion(bool shift){
     if(this->green_curve->is_empty() && !this->sa){
         this->p[1] = this->p[0] + (1./3)*(this->p[3] - this->p[0]);
         this->p[1] = Geom::Point(this->p[1][X] + handleCubicGap,this->p[1][Y] + handleCubicGap);
+        if(shift){
+            this->p[2] = this->p[3];
+        }
     }else if(!this->green_curve->is_empty()){
         tmpCurve = this->green_curve->copy();
     }else{
@@ -1609,8 +1612,11 @@ void PenTool::_bspline_spiro_motion(bool shift){
                 SBasisWPower = WPower->first_segment()->toSBasis();
                 WPower->reset();
                 this->p[1] = SBasisWPower.valueAt(WP);
-                if(!Geom::are_near(this->p[1],this->p[0]))
+                if(!Geom::are_near(this->p[1],this->p[0])){
                     this->p[1] = Geom::Point(this->p[1][X] + handleCubicGap,this->p[1][Y] + handleCubicGap);
+                } else {
+                    this->p[1] = this->p[0];
+                }
                 if(shift)
                     this->p[2] = this->p[3];
             }else{
