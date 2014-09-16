@@ -1228,7 +1228,7 @@ double PathManipulator::BSplineHandlePosition(Handle *h, Handle *h2){
         lineInsideNodes->moveto(n->position());
         lineInsideNodes->lineto(nextNode->position());
         if(!are_near(h->position(), n->position())){
-            pos = Geom::nearest_point(Geom::Point(h->position()[X] ,h->position()[Y] - handleCubicGap),*lineInsideNodes->first_segment());
+            pos = Geom::nearest_point(Geom::Point(h->position()[X] - handleCubicGap, h->position()[Y] - handleCubicGap), *lineInsideNodes->first_segment());
         }
     }
     if (pos == 0.0000 && !h2){
