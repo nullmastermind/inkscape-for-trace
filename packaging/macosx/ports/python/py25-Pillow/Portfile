@@ -50,10 +50,10 @@ if {$subport == $name} {
     }
 
     livecheck.type      none
-} else {
-    livecheck.type      regex
-    livecheck.url       ${master_sites}
-    livecheck.regex     "Pillow-(\\d+(?:\\.\\d+)*)${extract.suffix}"
+#} else {
+#    livecheck.type      regex
+#    livecheck.url       ${master_sites}
+#    livecheck.regex     "Pillow-(\\d+(?:\\.\\d+)*)${extract.suffix}"
 }
 
 variant quartz conflicts x11 tkinter {

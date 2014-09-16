@@ -23,6 +23,9 @@ checksums               rmd160  16df4216f40b22077e1f14cc41b8c8ae486b45af \
 python.versions         25
 
 if {$subport == $name} {
+
+    revision                100
+
     patchfiles              patch-f2py_setup.py.diff \
                             patch-numpy_distutils_fcompiler___init__.py.diff \
                             patch-fcompiler_g95.diff
@@ -201,6 +204,6 @@ explicitly), one of the +gcc4X variants must be selected.\n"
     }
 
     livecheck.type        none
-} else {
-    livecheck.regex       archive/[join ${github.tag_prefix} ""](\[\\d+(?:\\.\\d+)*"\]+)${extract.suffix}"
+#} else {
+#    livecheck.regex       archive/[join ${github.tag_prefix} ""](\[\\d+(?:\\.\\d+)*"\]+)${extract.suffix}"
 }
