@@ -28,7 +28,7 @@ class KnotHolderEntityAttachEnd;
 class LPETaperStroke : public Effect {
 public:
     LPETaperStroke(LivePathEffectObject *lpeobject);
-    virtual ~LPETaperStroke();
+    virtual ~LPETaperStroke() {}
 
     virtual void doOnApply(SPLPEItem const* lpeitem);
     virtual void doOnRemove(SPLPEItem const* lpeitem);

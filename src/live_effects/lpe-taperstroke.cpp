@@ -18,6 +18,7 @@
 #include <2geom/path.h>
 #include <2geom/circle.h>
 #include <2geom/sbasis-to-bezier.h>
+
 #include "pathoutlineprovider.h"
 #include "display/curve.h"
 #include "sp-shape.h"
@@ -29,10 +30,10 @@
 #include "svg/css-ostringstream.h"
 #include "svg/svg.h"
 
-//#include <glibmm/i18n.h>
-
 #include "knot-holder-entity.h"
 #include "knotholder.h"
+
+#include <glibmm/i18n.h>
 
 template<typename T>
 inline bool withinRange(T value, T low, T high) {
@@ -83,22 +84,16 @@ LPETaperStroke::LPETaperStroke(LivePathEffectObject *lpeobject) :
     attach_start.param_set_digits(3);
     attach_end.param_set_digits(3);
 
-
-    registerParameter( dynamic_cast<Parameter *>(&line_width) );
-    registerParameter( dynamic_cast<Parameter *>(&attach_start) );
-    registerParameter( dynamic_cast<Parameter *>(&attach_end) );
-    registerParameter( dynamic_cast<Parameter *>(&smoothing) );
-    registerParameter( dynamic_cast<Parameter *>(&join_type) );
-    registerParameter( dynamic_cast<Parameter *>(&miter_limit) );
+    registerParameter(&line_width);
+    registerParameter(&attach_start);
+    registerParameter(&attach_end);
+    registerParameter(&smoothing);
+    registerParameter(&join_type);
+    registerParameter(&miter_limit);
 }
 
-LPETaperStroke::~LPETaperStroke()
-{
-
-}
-
-//from LPEPowerStroke -- sets fill if stroke color because we will
-//be converting to a fill to make the new join.
+// from LPEPowerStroke -- sets fill if stroke color because we will
+// be converting to a fill to make the new join.
 
 void LPETaperStroke::doOnApply(SPLPEItem const* lpeitem)
 {
@@ -135,15 +130,14 @@ void LPETaperStroke::doOnApply(SPLPEItem const* lpeitem)
 
         line_width.param_set_value(width);
     } else {
-        g_warning("LPE Join Type can only be applied to paths (not groups).");
+        printf("WARNING: It only makes sense to apply Join Type to paths (not groups).\n");
     }
 }
 
-//from LPEPowerStroke -- sets stroke color from existing fill color
+// from LPEPowerStroke -- sets stroke color from existing fill color
 
 void LPETaperStroke::doOnRemove(SPLPEItem const* lpeitem)
 {
-
     if (SP_IS_SHAPE(lpeitem)) {
         SPLPEItem *item = const_cast<SPLPEItem*>(lpeitem);
 
@@ -177,41 +171,44 @@ void LPETaperStroke::doOnRemove(SPLPEItem const* lpeitem)
 
         sp_desktop_apply_css_recursive(item, css, true);
         sp_repr_css_attr_unref (css);
-        item->updateRepr();
     }
 }
 
-//actual effect impl here
+using Geom::Piecewise;
+using Geom::D2;
+using Geom::SBasis;
+// leave Geom::Path
 
-Geom::Path return_at_first_cusp (Geom::Path const & path_in, double /*smooth_tolerance*/ = 0.05)
-{
+Geom::Path return_at_first_cusp(Geom::Path const & path_in, double /*smooth_tolerance*/ = 0.05) {
     return Geom::split_at_cusps(path_in)[0];
 }
 
-Geom::Piecewise<Geom::D2<Geom::SBasis> > stretch_along(Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2_in, Geom::Path pattern, double width);
+Piecewise<D2<SBasis> > stretch_along(Piecewise<D2<SBasis> > pwd2_in, Geom::Path pattern, double width);
 
-//references to pointers, because magic
+// references to pointers
 void subdivideCurve(Geom::Curve * curve_in, Geom::Coord t, Geom::Curve *& val_first, Geom::Curve *& val_second);
+
+// actual effect
 
 Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
 {
     Geom::Path first_cusp = return_at_first_cusp(path_in[0]);
     Geom::Path last_cusp = return_at_first_cusp(path_in[0].reverse());
 
-    bool zeroStart = false;
-    bool zeroEnd = false;
-    bool metInMiddle = false;
+    bool zeroStart = false; // [distance from start taper knot -> start of path] == 0
+    bool zeroEnd = false; // [distance from end taper knot -> end of path] == 0
+    bool metInMiddle = false; // knots are touching
     
-    //there is a pretty good chance that people will try to drag the knots
-    //on top of each other, so block it
+    // there is a pretty good chance that people will try to drag the knots
+    // on top of each other, so block it
 
     unsigned size = path_in[0].size();
     if (size == first_cusp.size()) {
-        //check to see if the knots were dragged over each other
-        //if so, reset the end offset, but still allow the start offset.
+        // check to see if the knots were dragged over each other
+        // if so, reset the end offset, but still allow the start offset.
         if ( attach_start >= (size - attach_end) ) {
             attach_end.param_set_value( size - attach_start );
-        metInMiddle = true;
+            metInMiddle = true;
         }
     }
     
@@ -222,7 +219,7 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
         metInMiddle = true;
     }
 
-    //don't let it be integer
+    // don't let it be integer (TODO this is stupid!)
     {
         if (double(unsigned(attach_start)) == attach_start) {
             attach_start.param_set_value(attach_start - 0.00001);
@@ -235,7 +232,7 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
     unsigned allowed_start = first_cusp.size();
     unsigned allowed_end = last_cusp.size();
 
-    //don't let the knots be farther than they are allowed to be
+    // don't let the knots be farther than they are allowed to be
     {
         if ((unsigned)attach_start >= allowed_start) {
             attach_start.param_set_value((double)allowed_start - 0.00001);
@@ -245,7 +242,7 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
         }
     }
     
-    //don't let it be zero
+    // don't let it be zero (this is stupid too!)
     if (attach_start < 0.0000001 || withinRange(double(attach_start), 0.00000001, 0.000001)) {
         attach_start.param_set_value( 0.0000001 );
         zeroStart = true;
@@ -255,25 +252,26 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
         zeroEnd = true;
     }
 
-    //remember, Path::operator () means get point at time t
+    // Path::operator () means get point at time t
     start_attach_point = first_cusp(attach_start);
     end_attach_point = last_cusp(attach_end);
     Geom::PathVector pathv_out;
 
-    //the following function just splits it up into three pieces.
+    // the following function just splits it up into three pieces.
     pathv_out = doEffect_simplePath(path_in);
 
-    //now for the actual tapering. We use the stretch_along method to get this done.
+    // now for the actual tapering. the stretch_along method (stolen from PaP) is used to accomplish this
 
     Geom::PathVector real_pathv;
     Geom::Path real_path;
     Geom::PathVector pat_vec;
-    Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2;
+    Piecewise<D2<SBasis> > pwd2;
     Geom::Path throwaway_path;
 
     if (!zeroStart) {
-        //Construct the pattern (pat_str stands for pattern string) (and yes, this is easier, trust me)
+        // Construct the pattern
         std::stringstream pat_str;
+        pat_str.imbue(std::locale::classic());
         pat_str << "M 1,0 C " << 1 - (double)smoothing << ",0 0,0.5 0,0.5 0,0.5 " << 1 - (double)smoothing << ",1 1,1";
 
         pat_vec = sp_svg_read_pathv(pat_str.str().c_str());
@@ -283,12 +281,13 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
         real_path.append(throwaway_path);
     }
     
+    // if this condition happens to evaluate false, i.e. there was no space for a path to be drawn, it is simply skipped.
+    // although this seems obvious, it can probably lead to bugs.
     if (!metInMiddle) {
-        //append the outside outline of the path (with direction)
-        throwaway_path = Outline::PathOutsideOutline(pathv_out[1],
-                         -fabs(line_width), static_cast<LineJoinType>(join_type.get_value()), miter_limit);
+        // append the outside outline of the path (goes with the direction of the path)
+        throwaway_path = Outline::PathOutsideOutline(pathv_out[1], -fabs(line_width), static_cast<LineJoinType>(join_type.get_value()), miter_limit);
         if (!zeroStart && real_path.size() >= 1 && throwaway_path.size() >= 1) {
-            if (Geom::distance(real_path.finalPoint(), throwaway_path.initialPoint()) > 0.0000001) {
+            if (!Geom::are_near(real_path.finalPoint(), throwaway_path.initialPoint())) {
                 real_path.appendNew<Geom::LineSegment>(throwaway_path.initialPoint());
             } else {
                 real_path.setFinal(throwaway_path.initialPoint());
@@ -298,16 +297,17 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
     }
 
     if (!zeroEnd) {
-        //append the ending taper
+        // append the ending taper
         std::stringstream pat_str_1;
+        pat_str_1.imbue(std::locale::classic());
         pat_str_1 << "M 0,1 C " << (double)smoothing << ",1 1,0.5 1,0.5 1,0.5 " << double(smoothing) << ",0 0,0";
         pat_vec = sp_svg_read_pathv(pat_str_1.str().c_str());
 
-        pwd2 = Geom::Piecewise<Geom::D2<Geom::SBasis> > ();
+        pwd2 = Piecewise<D2<SBasis> >();
         pwd2.concat(stretch_along(pathv_out[2].toPwSb(), pat_vec[0], -fabs(line_width)));
 
         throwaway_path = Geom::path_from_piecewise(pwd2, LPE_CONVERSION_TOLERANCE)[0];
-        if (Geom::distance(real_path.finalPoint(), throwaway_path.initialPoint()) > 0.0000001 && real_path.size() >= 1) {
+        if (!Geom::are_near(real_path.finalPoint(), throwaway_path.initialPoint()) && real_path.size() >= 1) {
             real_path.appendNew<Geom::LineSegment>(throwaway_path.initialPoint());
         } else {
             real_path.setFinal(throwaway_path.initialPoint());
@@ -316,11 +316,10 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
     }
     
     if (!metInMiddle) {
-        //append the inside outline of the path (against direction)
-        throwaway_path = Outline::PathOutsideOutline(pathv_out[1].reverse(),
-                         -fabs(line_width), static_cast<LineJoinType>(join_type.get_value()), miter_limit);
+        // append the inside outline of the path (against direction)
+        throwaway_path = Outline::PathOutsideOutline(pathv_out[1].reverse(), -fabs(line_width), static_cast<LineJoinType>(join_type.get_value()), miter_limit);
         
-        if (Geom::distance(real_path.finalPoint(), throwaway_path.initialPoint()) > 0.0000001 && real_path.size() >= 1) {
+        if (!Geom::are_near(real_path.finalPoint(), throwaway_path.initialPoint()) && real_path.size() >= 1) {
             real_path.appendNew<Geom::LineSegment>(throwaway_path.initialPoint());
         } else {
             real_path.setFinal(throwaway_path.initialPoint());
@@ -328,7 +327,7 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
         real_path.append(throwaway_path);
     }
     
-    if (Geom::distance(real_path.finalPoint(), real_path.initialPoint()) > 0.0000001) {
+    if (!Geom::are_near(real_path.finalPoint(), real_path.initialPoint())) {
         real_path.appendNew<Geom::LineSegment>(real_path.initialPoint());
     } else {
         real_path.setFinal(real_path.initialPoint());
@@ -340,12 +339,16 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
     return real_pathv;
 }
 
-//in all cases, this should return a PathVector with three elements.
+/**
+ * @return Always returns a PathVector with three elements.
+ *
+ *  The positions of the effect knots are accessed to determine
+ *  where exactly the input path should be split.
+ */
 Geom::PathVector LPETaperStroke::doEffect_simplePath(Geom::PathVector const & path_in)
 {
-    unsigned size = path_in[0].size();
+    size_t size = path_in[0].size();
 
-    //do subdivision and get out
     unsigned loc = (unsigned)attach_start;
     Geom::Curve * curve_start = path_in[0] [loc].duplicate();
 
@@ -355,7 +358,7 @@ Geom::PathVector LPETaperStroke::doEffect_simplePath(Geom::PathVector const & pa
     Geom::Path trimmed_start = Geom::Path();
     Geom::Path trimmed_end = Geom::Path();
 
-    for (unsigned i = 0; i < loc; i++) {
+    for (size_t i = 0; i < loc; ++i) {
         trimmed_start.append(path_in[0] [i]);
     }
 
@@ -364,20 +367,23 @@ Geom::PathVector LPETaperStroke::doEffect_simplePath(Geom::PathVector const & pa
     trimmed_start.append(*temp);
     if (temp) delete temp; temp = 0;
 
-    //special case: path is one segment long
-    //special case: what if the two knots occupy the same segment?
+    // special case: path is one segment long
+    // special case: what if the two knots occupy the same segment?
     if ((size == 1) || ( size - unsigned(attach_end) - 1 == loc )) {
+
+        // If you look into it, I don't actually think there is a working way to do this
+        // with only point math. So we use nearest_point instead.
         Geom::Coord t = Geom::nearest_point(end_attach_point, *curve_start);
 
-        //it is just a dumb segment
-        //we have to do some shifting here because the value changed when we reduced the length
-        //of the previous segment.
+        // it is just a dumb segment
+        // we have to do some shifting here because the value changed when we reduced the length
+        // of the previous segment.
 
         subdivideCurve(curve_start, t, curve_start, temp);
         trimmed_end.append(*temp);
         if (temp) delete temp; temp = 0;
         
-        for (unsigned j = (size - attach_end) + 1; j < size; j++) {
+        for (size_t j = (size - attach_end) + 1; j < size; ++j) {
             trimmed_end.append(path_in[0] [j]);
         }
 
@@ -390,14 +396,14 @@ Geom::PathVector LPETaperStroke::doEffect_simplePath(Geom::PathVector const & pa
 
     pathv_out.push_back(trimmed_start);
 
-    //append almost all of the rest of the path, ignore the curves that the knot is past (we'll get to it in a minute)
+    // append almost all of the rest of the path, ignore the curves that the knot is past (we'll get to it in a minute)
     path_out.append(*curve_start);
 
-    for (unsigned k = loc + 1; k < (size - unsigned(attach_end)) - 1; k++) {
+    for (size_t k = loc + 1; k < (size - unsigned(attach_end)) - 1; ++k) {
         path_out.append(path_in[0] [k]);
     }
 
-    //deal with the last segment in a very similar fashion to the first
+    // deal with the last segment in a very similar fashion to the first
     loc = size - attach_end;
 
     Geom::Curve * curve_end = path_in[0] [loc].duplicate();
@@ -408,7 +414,7 @@ Geom::PathVector LPETaperStroke::doEffect_simplePath(Geom::PathVector const & pa
     trimmed_end.append(*temp);
     if (temp) delete temp; temp = 0;
 
-    for (unsigned j = (size - attach_end) + 1; j < size; j++) {
+    for (size_t j = (size - attach_end) + 1; j < size; ++j) {
         trimmed_end.append(path_in[0] [j]);
     }
 
@@ -423,9 +429,12 @@ Geom::PathVector LPETaperStroke::doEffect_simplePath(Geom::PathVector const & pa
 }
 
 
-//most of the below code is verbatim from Pattern Along Path. However, it needed a little
-//tweaking to get it to work right in this case.
-Geom::Piecewise<Geom::D2<Geom::SBasis> > stretch_along(Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2_in, Geom::Path pattern, double prop_scale)
+/**
+ * Most of the below function is verbatim from Pattern Along Path. However, it needed a little
+ * tweaking to get it to work right in this case. Also, large portions of the effect have been
+ * stripped out as I deemed them unnecessary for the relative simplicity of this effect.
+ */
+Piecewise<D2<SBasis> > stretch_along(Piecewise<D2<SBasis> > pwd2_in, Geom::Path pattern, double prop_scale)
 {
     using namespace Geom;
 
@@ -436,7 +445,7 @@ Geom::Piecewise<Geom::D2<Geom::SBasis> > stretch_along(Geom::Piecewise<Geom::D2<
 
     /* Much credit should go to jfb and mgsloan of lib2geom development for the code below! */
     Piecewise<D2<SBasis> > output;
-    std::vector<Geom::Piecewise<Geom::D2<Geom::SBasis> > > pre_output;
+    std::vector<Piecewise<D2<SBasis> > > pre_output;
 
     D2<Piecewise<SBasis> > patternd2 = make_cuts_independent(pattern.toPwSb());
     Piecewise<SBasis> x0 = Piecewise<SBasis>(patternd2[0]);
@@ -450,18 +459,18 @@ Geom::Piecewise<Geom::D2<Geom::SBasis> > stretch_along(Geom::Piecewise<Geom::D2<
         double xspace  = 0;
         double noffset = 0;
         double toffset = 0;
-        //Prevent more than 90% overlap...
+        // Prevent more than 90% overlap...
         if (xspace < -pattBndsX->extent()*.9) {
             xspace = -pattBndsX->extent()*.9;
         }
 
         y0+=noffset;
 
-        std::vector<Geom::Piecewise<Geom::D2<Geom::SBasis> > > paths_in;
+        std::vector<Piecewise<D2<SBasis> > > paths_in;
         paths_in = split_at_discontinuities(pwd2_in);
 
         for (unsigned idx = 0; idx < paths_in.size(); idx++) {
-            Geom::Piecewise<Geom::D2<Geom::SBasis> > path_i = paths_in[idx];
+            Piecewise<D2<SBasis> > path_i = paths_in[idx];
             Piecewise<SBasis> x = x0;
             Piecewise<SBasis> y = y0;
             Piecewise<D2<SBasis> > uskeleton = arc_length_parametrization(path_i,2,.1);
@@ -489,8 +498,8 @@ Geom::Piecewise<Geom::D2<Geom::SBasis> > stretch_along(Geom::Piecewise<Geom::D2<
             double offs = 0;
             for (int i=0; i<nbCopies; i++) {
                 if (false) {
-                    Geom::Piecewise<Geom::D2<Geom::SBasis> > output_piece = compose(uskeleton,x+offs)+y*compose(n,x+offs);
-                    std::vector<Geom::Piecewise<Geom::D2<Geom::SBasis> > > splited_output_piece = split_at_discontinuities(output_piece);
+                    Piecewise<D2<SBasis> > output_piece = compose(uskeleton,x+offs)+y*compose(n,x+offs);
+                    std::vector<Piecewise<D2<SBasis> > > splited_output_piece = split_at_discontinuities(output_piece);
                     pre_output.insert(pre_output.end(), splited_output_piece.begin(), splited_output_piece.end() );
                 } else {
                     output.concat(compose(uskeleton,x+offs)+y*compose(n,x+offs));
@@ -507,12 +516,12 @@ Geom::Piecewise<Geom::D2<Geom::SBasis> > stretch_along(Geom::Piecewise<Geom::D2<
 void subdivideCurve(Geom::Curve * curve_in, Geom::Coord t, Geom::Curve *& val_first, Geom::Curve *& val_second)
 {
     if (Geom::LineSegment* linear = dynamic_cast<Geom::LineSegment*>(curve_in)) {
-        //special case for line segments
+        // special case for line segments
         std::pair<Geom::LineSegment, Geom::LineSegment> seg_pair = linear->subdivide(t);
         val_first = seg_pair.first.duplicate();
         val_second = seg_pair.second.duplicate();
     } else {
-        //all other cases:
+        // all other cases:
         Geom::CubicBezier cubic = Geom::sbasis_to_cubicbezier(curve_in->toSBasis());
         std::pair<Geom::CubicBezier, Geom::CubicBezier> cubic_pair = cubic.subdivide(t);
         val_first = cubic_pair.first.duplicate();
@@ -523,22 +532,18 @@ void subdivideCurve(Geom::Curve * curve_in, Geom::Coord t, Geom::Curve *& val_fi
 
 void LPETaperStroke::addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item)
 {
-    {
-        KnotHolderEntity *e = new TpS::KnotHolderEntityAttachBegin(this);
-        e->create(desktop, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN,
-                  _("Start point of the taper"), SP_KNOT_SHAPE_CIRCLE );
-        knotholder->add(e);
-    }
-    {
-        KnotHolderEntity *e = new TpS::KnotHolderEntityAttachEnd(this);
-        e->create(desktop, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN,
-                  _("End point of the taper"), SP_KNOT_SHAPE_CIRCLE );
-        knotholder->add(e);
-    }
+    KnotHolderEntity *e = new TpS::KnotHolderEntityAttachBegin(this);
+    e->create(desktop, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN, _("Start point of the taper"), SP_KNOT_SHAPE_CIRCLE);
+    knotholder->add(e);
+
+    KnotHolderEntity *f = new TpS::KnotHolderEntityAttachEnd(this);
+    f->create(desktop, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN, _("End point of the taper"), SP_KNOT_SHAPE_CIRCLE);
+    knotholder->add(f);
 }
 
 namespace TpS {
-void KnotHolderEntityAttachBegin::knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, guint state)
+
+void KnotHolderEntityAttachBegin::knot_set(Geom::Point const &p, Geom::Point const&/*origin*/, guint state)
 {
     using namespace Geom;
 
@@ -546,19 +551,18 @@ void KnotHolderEntityAttachBegin::knot_set(Geom::Point const &p, Geom::Point con
 
     Geom::Point const s = snap_knot_position(p, state);
 
-    if (!SP_IS_SHAPE(lpe->sp_lpe_item) ) {
-        g_warning("LPEItem is not a path! %s:%d\n", __FILE__, __LINE__);
+    if (!SP_IS_SHAPE(lpe->sp_lpe_item)) {
+        printf("WARNING: LPEItem is not a path!\n");
         return;
     }
     
     SPCurve* curve;
-    if ( !(curve = SP_SHAPE(lpe->sp_lpe_item)->getCurve()) ) {
-        //oops
-        //lpe->attach_start.param_set_value(0);
+    if (!(curve = SP_SHAPE(lpe->sp_lpe_item)->getCurve())) {
+        // oops
         return;
     }
-    //in case you are wondering, the above are simply sanity checks. we never want to actually
-    //use that object.
+    // in case you are wondering, the above are simply sanity checks. we never want to actually
+    // use that object.
     
     Geom::PathVector pathv = lpe->pathvector_before_effect;
     
@@ -570,7 +574,7 @@ void KnotHolderEntityAttachBegin::knot_set(Geom::Point const &p, Geom::Point con
     lpe->attach_start.param_set_value(t0);
 
     // FIXME: this should not directly ask for updating the item. It should write to SVG, which triggers updating.
-    sp_lpe_item_update_patheffect (SP_LPE_ITEM(item), false, true);
+    sp_lpe_item_update_patheffect(SP_LPE_ITEM(item), false, true);
 }
 void KnotHolderEntityAttachEnd::knot_set(Geom::Point const &p, Geom::Point const& /*origin*/, guint state)
 {
@@ -581,14 +585,13 @@ void KnotHolderEntityAttachEnd::knot_set(Geom::Point const &p, Geom::Point const
     Geom::Point const s = snap_knot_position(p, state);
 
     if (!SP_IS_SHAPE(lpe->sp_lpe_item) ) {
-        g_warning("LPEItem is not a path! %s:%d\n", __FILE__, __LINE__);
+        printf("WARNING: LPEItem is not a path!\n");
         return;
     }
     
     SPCurve* curve;
     if ( !(curve = SP_SHAPE(lpe->sp_lpe_item)->getCurve()) ) {
-        //oops
-        //lpe->attach_end.param_set_value(0);
+        // oops
         return;
     }
     Geom::PathVector pathv = lpe->pathvector_before_effect;
@@ -600,20 +603,22 @@ void KnotHolderEntityAttachEnd::knot_set(Geom::Point const &p, Geom::Point const
 
     sp_lpe_item_update_patheffect (SP_LPE_ITEM(item), false, true);
 }
+
 Geom::Point KnotHolderEntityAttachBegin::knot_get() const
 {
     LPETaperStroke const * lpe = dynamic_cast<LPETaperStroke const*> (_effect);
     return lpe->start_attach_point;
 }
+
 Geom::Point KnotHolderEntityAttachEnd::knot_get() const
 {
     LPETaperStroke const * lpe = dynamic_cast<LPETaperStroke const*> (_effect);
     return lpe->end_attach_point;
 }
-}
 
-} //namespace LivePathEffect
-} /* namespace Inkscape */
+} // namespace TpS
+} // namespace LivePathEffect
+} // namespace Inkscape
 
 /*
   Local Variables:
