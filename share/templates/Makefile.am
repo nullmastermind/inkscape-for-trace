@@ -20,6 +20,7 @@ templates_DATA = \
 	default.ca.svg \
 	default.cs.svg \
 	default.de.svg \
+	default.en_US.svg \
 	default.eo.svg \
 	default.eu.svg \
 	default.es.svg \
@@ -33,8 +34,8 @@ templates_DATA = \
 	default.pl.svg \
 	default.pt_BR.svg \
 	default.sk.svg \
-	default_mm.svg \
 	default_pt.svg \
+	default_px.svg \
 	desktop_1024x768.svg \
 	desktop_1600x1200.svg \
 	desktop_640x480.svg \
@@ -75,6 +76,7 @@ templates_i18n = \
 	default.ca.svg \
 	default.cs.svg \
 	default.de.svg \
+	default.en_US.svg \
 	default.eo.svg \
 	default.eu.svg \
 	default.es.svg \
@@ -88,8 +90,8 @@ templates_i18n = \
 	default.pl.svg \
 	default.pt_BR.svg \
 	default.sk.svg \
-	default_mm.svg \
 	default_pt.svg \
+	default_px.svg \
 	desktop_1024x768.svg \
 	desktop_1600x1200.svg \
 	desktop_640x480.svg \
