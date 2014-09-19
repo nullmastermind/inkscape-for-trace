@@ -64,7 +64,8 @@ depends_build-append        port:gnome-icon-theme \
 depends_build-append        port:py27-lxml \
                             port:py27-numpy \
                             port:py27-Pillow \
-                            port:py27-uniconvertor
+                            port:py27-uniconvertor \
+                            port:py27-pygtk
 
 if {${os.major} <= 10} {
     # ports for python extensions on Snow Leopard and Leopard

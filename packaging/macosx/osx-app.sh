@@ -482,9 +482,19 @@ if [ ${add_python} = "true" ]; then
 		fi
 		$cp_cmd -RL "$packages_path/sk1libs" "$pkgpython"
 		$cp_cmd -RL "$packages_path/uniconvertor" "$pkgpython"
+		# PyGTK (Sozi)
+		$cp_cmd -RL "$packages_path/cairo" "$pkgpython"
+		$cp_cmd -RL "$packages_path/glib" "$pkgpython"
+		$cp_cmd -RL "$packages_path/gobject" "$pkgpython"
+		$cp_cmd -RL "$packages_path/../../../share/pygobject" "$pkgshare"
+		$cp_cmd -RL "$packages_path/gtk-2.0" "$pkgpython"
+		$cp_cmd -RL "$packages_path/../../../share/pygtk" "$pkgshare"
+		$cp_cmd -RL "$packages_path/pygtk.pth" "$pkgpython"
+		$cp_cmd -RL "$packages_path/pygtk.py" "$pkgpython"
 		# cleanup python modules
 		find "$pkgpython" -name *.pyc -print0 | xargs -0 rm -f
 		find "$pkgpython" -name *.pyo -print0 | xargs -0 rm -f
+		find "${pkgshare}/pygobject" -name *.pyc -print0 | xargs -0 rm -f		
 
 		# TODO: test whether to remove hard-coded paths from *.la files or to exclude them altogether
 		for la_file in $(find "$pkgpython" -name *.la); do
