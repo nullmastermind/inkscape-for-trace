@@ -402,6 +402,26 @@ EXTRA_DIST = \
 	packaging/macosx/osx-build.sh \
 	packaging/macosx/osx-dmg.sh \
 	packaging/macosx/ports/devel/inkscape-packaging/Portfile \
+	packaging/macosx/ports/lang/python25/Portfile \
+	packaging/macosx/ports/lang/python25/files/_localemodule.c.ed \
+	packaging/macosx/ports/lang/python25/files/locale.py.ed \
+	packaging/macosx/ports/lang/python25/files/patch-64bit.diff \
+	packaging/macosx/ports/lang/python25/files/patch-FSIORefNum.diff \
+	packaging/macosx/ports/lang/python25/files/patch-Lib-cgi.py.diff \
+	packaging/macosx/ports/lang/python25/files/patch-Lib-distutils-dist.py.diff \
+	packaging/macosx/ports/lang/python25/files/patch-Makefile.pre.in.diff \
+	packaging/macosx/ports/lang/python25/files/patch-Misc-setuid-prog.c.diff \
+	packaging/macosx/ports/lang/python25/files/patch-Modules-posixmodule.c.diff \
+	packaging/macosx/ports/lang/python25/files/patch-configure.diff \
+	packaging/macosx/ports/lang/python25/files/patch-fwrapv.diff \
+	packaging/macosx/ports/lang/python25/files/patch-libedit.diff \
+	packaging/macosx/ports/lang/python25/files/patch-mac_ver.diff \
+	packaging/macosx/ports/lang/python25/files/patch-pyconfig.h.in.diff \
+	packaging/macosx/ports/lang/python25/files/patch-setup.py-disabled_modules.diff \
+	packaging/macosx/ports/lang/python25/files/patch-setup.py.diff \
+	packaging/macosx/ports/lang/python25/files/pyconfig.ed \
+	packaging/macosx/ports/lang/python25/files/pyconfig.h-universal.ed \
+	packaging/macosx/ports/lang/python25/files/python25 \
 	packaging/macosx/ports/lang/python26/Portfile \
 	packaging/macosx/ports/lang/python26/files/patch-Lib-cgi.py.diff \
 	packaging/macosx/ports/lang/python26/files/patch-Lib-distutils-dist.py.diff \
@@ -423,6 +443,16 @@ EXTRA_DIST = \
 	packaging/macosx/ports/python/py25-Pillow/Portfile \
 	packaging/macosx/ports/python/py25-Pillow/files/patch-_imagingft.c.diff \
 	packaging/macosx/ports/python/py25-Pillow/files/patch-setup.py-v1.7.8.diff \
+	packaging/macosx/ports/python/py25-lxml/Portfile \
+	packaging/macosx/ports/python/py25-nose/Portfile \
+	packaging/macosx/ports/python/py25-nose/files/nosetests24 \
+	packaging/macosx/ports/python/py25-nose/files/nosetests25 \
+	packaging/macosx/ports/python/py25-nose/files/nosetests26 \
+	packaging/macosx/ports/python/py25-nose/files/nosetests27 \
+	packaging/macosx/ports/python/py25-nose/files/nosetests31 \
+	packaging/macosx/ports/python/py25-nose/files/nosetests32 \
+	packaging/macosx/ports/python/py25-nose/files/nosetests33 \
+	packaging/macosx/ports/python/py25-nose/files/nosetests34 \
 	packaging/macosx/ports/python/py25-numpy/Portfile \
 	packaging/macosx/ports/python/py25-numpy/files/patch-f2py_setup.py.diff \
 	packaging/macosx/ports/python/py25-numpy/files/patch-fcompiler_g95.diff \
@@ -430,6 +460,7 @@ EXTRA_DIST = \
 	packaging/macosx/ports/python/py25-numpy/files/patch-numpy_linalg_setup.py.diff \
 	packaging/macosx/ports/python/py25-numpy/files/patch-setup.py.diff \
 	packaging/macosx/ports/python/py25-numpy/files/wrapper-template \
+	packaging/macosx/ports/python/py25-setuptools/Portfile \
 	packaging/win32/inkscape.nsi	\
 	packaging/win32/inkscape.nsi.uninstall	\
 	packaging/win32/languages/Breton.nsh	\
