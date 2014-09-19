@@ -5,6 +5,7 @@ PortSystem                  1.0
 
 name                        inkscape-packaging
 version                     0.91
+revision                    100
  
 categories                  devel graphics
 platforms                   darwin
