@@ -2,13 +2,13 @@
 
 
 # ---------------------------------------------------------------------
-# a) to use py-gtk (for Sozi or inksmoto) from MacPorts
+# a) to use PyGTK (for Sozi or inksmoto) from MacPorts
 # ---------------------------------------------------------------------
 
-# # unset env used in Inkscape.app
-# unset PYTHONHOME
+# export PYTHONPATH="$INKSCAPE_SHAREDIR"/extensions
+# 
+# # unset other environment variables used in Inkscape.app
 # unset DYLD_LIBRARY_PATH
-# #unset XDG_CONFIG_HOME XDG_DATA_HOME XDG_CACHE_HOME
 # unset XDG_CONFIG_DIRS XDG_DATA_DIRS
 # unset GTK_PATH GTK_DATA_PREFIX GTK_EXE_PREFIX GTK_IM_MODULE_FILE
 # unset FONTCONFIG_FILE FONTCONFIG_PATH HB_SHAPER_LIST PANGO_RC_FILE PANGO_SYSCONFDIR
@@ -21,7 +21,6 @@
 # unset VERSIONER_PYTHON_VERSION VERSIONER_PYTHON_PREFER_32_BIT
 # unset MAGICK_HOME MAGICK_CONFIGURE_PATH MAGICK_CODER_FILTER_PATH MAGICK_CODER_MODULE_PATH
 # unset GS_LIB GS_ICC_PROFILES GS_RESOURCE_DIR GS_LIB GS_FONTPATH GS
-
 # 
 # # set locale (language) explicitly
 # # (not needed with 0.48.5 package)
