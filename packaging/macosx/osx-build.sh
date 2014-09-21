@@ -235,7 +235,7 @@ elif [ "$OSXMINORNO" -eq "7" ]; then
 	export CXXFLAGS="$CFLAGS -Wno-mismatched-tags -Wno-cast-align" #-stdlib=libstdc++ -std=c++11
 elif [ "$OSXMINORNO" -eq "8" ]; then
 	## Apple's clang on Mountain Lion
-	TARGETNAME="MOUTAIN LION"
+	TARGETNAME="MOUNTAIN LION"
 	TARGETVERSION="10.8"
 	export CC="/usr/bin/clang"
 	export CXX="/usr/bin/clang++"
