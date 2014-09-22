@@ -293,6 +293,7 @@ bool Handle::_eventHandler(Inkscape::UI::Tools::ToolBase *event_context, GdkEven
             break;
         default: break;
         }
+        break;
     // new double click event to set the handlers of a node to the default proportion, 0.3334% 
     case GDK_2BUTTON_PRESS:
         handle_2button_press();
