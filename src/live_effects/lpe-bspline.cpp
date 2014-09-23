@@ -53,19 +53,23 @@ namespace Inkscape {
 namespace LivePathEffect {
 
 const double handleCubicGap = 0.01;
+const double noPower = 0.0;
+const double defaultStartPower = 0.3334;
+const double defaultEndPower = 0.6667;
+
 LPEBSpline::LPEBSpline(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
     steps(_("Steps whith CTRL:"), _("Change number of steps whith CTRL pressed"), "steps", &wr, this, 2),
     ignoreCusp(_("Ignore cusp nodes"), _("Change ignoring cusp nodes"), "ignoreCusp", &wr, this, true),
     onlySelected(_("Change only selected nodes"), _("Change only selected nodes"), "onlySelected", &wr, this, false),
-    weight(_("Change weight:"), _("Change weight of the effect"), "weight", &wr, this, 0.3334)
+    weight(_("Change weight:"), _("Change weight of the effect"), "weight", &wr, this, defaultStartPower)
 {
     registerParameter(&weight);
     registerParameter(&steps);
     registerParameter(&ignoreCusp);
     registerParameter(&onlySelected);
 
-    weight.param_set_range(0.0000, 1);
+    weight.param_set_range(noPower, 1);
     weight.param_set_increments(0.1, 0.1);
     weight.param_set_digits(4);
 
@@ -138,12 +142,12 @@ void LPEBSpline::doEffect(SPCurve *curve)
             if (cubic) {
                 SBasisIn = in->first_segment()->toSBasis();
                 if(are_near((*cubic)[1],(*cubic)[0]) && !are_near((*cubic)[2],(*cubic)[3])) {
-                    pointAt1 = SBasisIn.valueAt(0.3334);
+                    pointAt1 = SBasisIn.valueAt(defaultStartPower);
                 } else {
                     pointAt1 = SBasisIn.valueAt(Geom::nearest_point((*cubic)[1], *in->first_segment()));
                 }
                 if(are_near((*cubic)[2],(*cubic)[3]) && !are_near((*cubic)[1],(*cubic)[0])) {
-                    pointAt2 = SBasisIn.valueAt(0.6667);
+                    pointAt2 = SBasisIn.valueAt(defaultEndPower);
                 } else {
                     pointAt2 = SBasisIn.valueAt(Geom::nearest_point((*cubic)[2], *in->first_segment()));
                 }
@@ -161,7 +165,7 @@ void LPEBSpline::doEffect(SPCurve *curve)
                 if (cubic) {
                     SBasisOut = out->first_segment()->toSBasis();
                     if(are_near((*cubic)[1],(*cubic)[0]) && !are_near((*cubic)[2],(*cubic)[3])) {
-                        nextPointAt1 = SBasisIn.valueAt(0.3334);
+                        nextPointAt1 = SBasisIn.valueAt(defaultStartPower);
                     } else {
                         nextPointAt1 = SBasisOut.valueAt(Geom::nearest_point((*cubic)[1], *out->first_segment()));
                     }
@@ -294,22 +298,22 @@ Gtk::Widget *LPEBSpline::newWidget()
 
 void LPEBSpline::toDefaultWeight(Gtk::Widget *widgWeight)
 {
-    weight.param_set_value(0.3334);
-    changeWeight(0.3334);
+    weight.param_set_value(defaultStartPower);
+    changeWeight(defaultStartPower);
     Gtk::HBox * scalarParameter = dynamic_cast<Gtk::HBox *>(widgWeight);
     std::vector< Gtk::Widget* > childList = scalarParameter->get_children();
     Gtk::Entry* entryWidg = dynamic_cast<Gtk::Entry *>(childList[1]);
-    entryWidg->set_text("0.3334");
+    entryWidg->set_text("defaultStartPower");
 }
 
 void LPEBSpline::toMakeCusp(Gtk::Widget *widgWeight)
 {
-    weight.param_set_value(0.0000);
-    changeWeight(0.0000);
+    weight.param_set_value(noPower);
+    changeWeight(noPower);
     Gtk::HBox * scalarParameter = dynamic_cast<Gtk::HBox *>(widgWeight);
     std::vector< Gtk::Widget* > childList = scalarParameter->get_children();
     Gtk::Entry* entryWidg = dynamic_cast<Gtk::Entry *>(childList[1]);
-    entryWidg->set_text("0.0000");
+    entryWidg->set_text("noPower");
 }
 
 void LPEBSpline::toWeight()
@@ -446,7 +450,7 @@ void LPEBSpline::doBSplineFromWidget(SPCurve *curve, double weightValue)
                 if (cubic) {
                     if (!ignoreCusp || !Geom::are_near((*cubic)[1], pointAt0)) {
                         pointAt1 = SBasisIn.valueAt(weightValue);
-                        if (weightValue != 0.0000) {
+                        if (weightValue != noPower) {
                             pointAt1 =
                                 Geom::Point(pointAt1[X] + handleCubicGap, pointAt1[Y] + handleCubicGap);
                         }
@@ -455,7 +459,7 @@ void LPEBSpline::doBSplineFromWidget(SPCurve *curve, double weightValue)
                     }
                     if (!ignoreCusp || !Geom::are_near((*cubic)[2], pointAt3)) {
                         pointAt2 = SBasisIn.valueAt(1 - weightValue);
-                        if (weightValue != 0.0000) {
+                        if (weightValue != noPower) {
                             pointAt2 =
                                 Geom::Point(pointAt2[X] + handleCubicGap, pointAt2[Y] + handleCubicGap);
                         }
@@ -463,14 +467,14 @@ void LPEBSpline::doBSplineFromWidget(SPCurve *curve, double weightValue)
                         pointAt2 = in->first_segment()->finalPoint();
                     }
                 } else {
-                    if (!ignoreCusp && weightValue != 0.0000) {
+                    if (!ignoreCusp && weightValue != noPower) {
                         pointAt1 = SBasisIn.valueAt(weightValue);
-                        if (weightValue != 0.0000) {
+                        if (weightValue != noPower) {
                             pointAt1 =
                                 Geom::Point(pointAt1[X] + handleCubicGap, pointAt1[Y] + handleCubicGap);
                         }
                         pointAt2 = SBasisIn.valueAt(1 - weightValue);
-                        if (weightValue != 0.0000) {
+                        if (weightValue != noPower) {
                             pointAt2 =
                                 Geom::Point(pointAt2[X] + handleCubicGap, pointAt2[Y] + handleCubicGap);
                         }
@@ -484,7 +488,7 @@ void LPEBSpline::doBSplineFromWidget(SPCurve *curve, double weightValue)
                     if (!ignoreCusp || !Geom::are_near((*cubic)[1], pointAt0)) {
                         if (nodeIsSelected(pointAt0)) {
                             pointAt1 = SBasisIn.valueAt(weightValue);
-                            if (weightValue != 0.0000) {
+                            if (weightValue != noPower) {
                                 pointAt1 =
                                     Geom::Point(pointAt1[X] + handleCubicGap, pointAt1[Y] + handleCubicGap);
                             }
@@ -497,7 +501,7 @@ void LPEBSpline::doBSplineFromWidget(SPCurve *curve, double weightValue)
                     if (!ignoreCusp || !Geom::are_near((*cubic)[2], pointAt3)) {
                         if (nodeIsSelected(pointAt3)) {
                             pointAt2 = SBasisIn.valueAt(1 - weightValue);
-                            if (weightValue != 0.0000) {
+                            if (weightValue != noPower) {
                                 pointAt2 =
                                     Geom::Point(pointAt2[X] + handleCubicGap, pointAt2[Y] + handleCubicGap);
                             }
@@ -508,7 +512,7 @@ void LPEBSpline::doBSplineFromWidget(SPCurve *curve, double weightValue)
                         pointAt2 = in->first_segment()->finalPoint();
                     }
                 } else {
-                    if (!ignoreCusp && weightValue != 0.0000) {
+                    if (!ignoreCusp && weightValue != noPower) {
                         if (nodeIsSelected(pointAt0)) {
                             pointAt1 = SBasisIn.valueAt(weightValue);
                             pointAt1 =

@@ -59,6 +59,11 @@ Inkscape::ControlType nodeTypeToCtrlType(Inkscape::UI::NodeType type)
 namespace Inkscape {
 namespace UI {
 
+const double handleCubicGap = 0.01;
+const double noPower = 0.0;
+const double defaultStartPower = 0.3334;
+const double defaultEndPower = 0.6667;
+
 ControlPoint::ColorSet Node::node_colors = {
     {0xbfbfbf00, 0x000000ff}, // normal fill, stroke
     {0xff000000, 0x000000ff}, // mouseover fill, stroke
@@ -294,7 +299,7 @@ bool Handle::_eventHandler(Inkscape::UI::Tools::ToolBase *event_context, GdkEven
         default: break;
         }
         break;
-    // new double click event to set the handlers of a node to the default proportion, 0.3334% 
+    // new double click event to set the handlers of a node to the default proportion, defaultStartPower% 
     case GDK_2BUTTON_PRESS:
         handle_2button_press();
         break;
@@ -305,11 +310,11 @@ bool Handle::_eventHandler(Inkscape::UI::Tools::ToolBase *event_context, GdkEven
     return ControlPoint::_eventHandler(event_context, event);
 }
 
-//this function moves the handler and its oposite to the default proportion of 0.3334
+//this function moves the handler and its oposite to the default proportion of defaultStartPower
 void Handle::handle_2button_press(){
     if(_pm().isBSpline()){
-        setPosition(_pm().BSplineHandleReposition(this,0.3334));
-        this->other()->setPosition(_pm().BSplineHandleReposition(this->other(),0.3334));
+        setPosition(_pm().BSplineHandleReposition(this,defaultStartPower));
+        this->other()->setPosition(_pm().BSplineHandleReposition(this->other(),defaultStartPower));
         _pm().update();
     }
 }
@@ -618,9 +623,9 @@ void Node::move(Geom::Point const &new_pos)
     Geom::Point delta = new_pos - position();
 
     // save the previous nodes strength to apply it again once the node is moved 
-    double nodeWeight = 0.0000;
-    double nextNodeWeight = 0.0000;
-    double prevNodeWeight = 0.0000;
+    double nodeWeight = noPower;
+    double nextNodeWeight = noPower;
+    double prevNodeWeight = noPower;
     Node *n = this;
     Node * nextNode = n->nodeToward(n->front());
     Node * prevNode = n->nodeToward(n->back());
@@ -672,9 +677,9 @@ void Node::transform(Geom::Affine const &m)
     Geom::Point old_pos = position();
 
     // save the previous nodes strength to apply it again once the node is moved 
-    double nodeWeight = 0.0000;
-    double nextNodeWeight = 0.0000;
-    double prevNodeWeight = 0.0000;
+    double nodeWeight = noPower;
+    double nextNodeWeight = noPower;
+    double prevNodeWeight = noPower;
     Node *n = this;
     Node * nextNode = n->nodeToward(n->front());
     Node * prevNode = n->nodeToward(n->back());
@@ -904,12 +909,12 @@ void Node::setType(NodeType type, bool update_handles)
             break;
         default: break;
         }
-        /* in node type changes, about bspline traces, we can mantain them with 0.0000 power in border mode,
+        /* in node type changes, about bspline traces, we can mantain them with noPower power in border mode,
            or we give them the default power in curve mode */
         if(_pm().isBSpline()){
-            double weight = 0.0000;
-            if(_pm().BSplineHandlePosition(this->front()) != 0.0000 ){
-                weight = 0.3334;
+            double weight = noPower;
+            if(_pm().BSplineHandlePosition(this->front()) != noPower ){
+                weight = defaultStartPower;
             }
             _front.setPosition(_pm().BSplineHandleReposition(this->front(),weight));
             _back.setPosition(_pm().BSplineHandleReposition(this->back(),weight));
@@ -1455,7 +1460,7 @@ Glib::ustring Node::_getTip(unsigned state) const
                 "<b>%s</b>: drag to shape the path (more: Shift, Ctrl, Alt)"), nodetype);
         }else if(_selection.size() == 1){
             return format_tip(C_("Path node tip",
-                "<b>BSpline node</b>: %g weight, drag to shape the path (more: Shift, Ctrl, Alt)"),0.0000/*this->bsplineWeight*/);
+                "<b>BSpline node</b>: %g weight, drag to shape the path (more: Shift, Ctrl, Alt)"),noPower/*this->bsplineWeight*/);
         }
         return format_tip(C_("Path node tip",
             "<b>%s</b>: drag to shape the path, click to toggle scale/rotation handles (more: Shift, Ctrl, Alt)"), nodetype);
