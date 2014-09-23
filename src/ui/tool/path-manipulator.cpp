@@ -991,9 +991,37 @@ NodeList::iterator PathManipulator::subdivideSegment(NodeList::iterator first, d
 
         // set new handle positions
         Node *n = new Node(_multi_path_manipulator._path_data.node_data, seg2[0]);
-        n->back()->setPosition(seg1[2]);
-        n->front()->setPosition(seg2[1]);
-        n->setType(NODE_SMOOTH, false);
+        if(!isBSpline()){
+            n->back()->setPosition(seg1[2]);
+            n->front()->setPosition(seg2[1]);
+            n->setType(NODE_SMOOTH, false);
+        } else {
+            const double handleCubicGap = 0.01;
+            Geom::D2< Geom::SBasis > SBasisInsideNodes;
+            SPCurve *lineInsideNodes = new SPCurve();
+            if(second->back()->isDegenerate()){
+                lineInsideNodes->moveto(n->position());
+                lineInsideNodes->lineto(second->position());
+                SBasisInsideNodes = lineInsideNodes->first_segment()->toSBasis();
+                Geom::Point next = SBasisInsideNodes.valueAt(0.3334);
+                next = Geom::Point(next[Geom::X] + handleCubicGap,next[Geom::Y] + handleCubicGap);
+                lineInsideNodes->reset();
+                n->front()->setPosition(next);
+            }else{
+                n->front()->setPosition(seg2[1]);
+            }
+            if(first->front()->isDegenerate()){
+                lineInsideNodes->moveto(n->position());
+                lineInsideNodes->lineto(first->position());
+                SBasisInsideNodes = lineInsideNodes->first_segment()->toSBasis();
+                Geom::Point previous = SBasisInsideNodes.valueAt(0.3334);
+                previous = Geom::Point(previous[Geom::X] + handleCubicGap,previous[Geom::Y] + handleCubicGap);
+                n->back()->setPosition(previous);
+            }else{
+                n->back()->setPosition(seg1[2]);
+            }
+            n->setType(NODE_CUSP, false);
+        }
         inserted = list.insert(insert_at, n);
 
         first->front()->move(seg1[1]);
