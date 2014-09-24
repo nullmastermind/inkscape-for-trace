@@ -803,6 +803,7 @@ void PencilTool::_fitAndSplit() {
     g_assert(is_zero(this->req_tangent)
              || is_unit_vector(this->req_tangent));
     Geom::Point const tHatEnd(0, 0);
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     int const n_segs = Geom::bezier_fit_cubic_full(b, NULL, this->p, this->npoints,
                                                 this->req_tangent, tHatEnd,
                                                 tolerance_sq, 1);
@@ -816,7 +817,6 @@ void PencilTool::_fitAndSplit() {
         using Geom::X;
         using Geom::Y;
             // if we are in BSpline we modify the trace to create adhoc nodes
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         guint mode = prefs->getInt("/tools/freehand/pencil/freehand-mode", 0);
         if(mode == 2){
             Geom::Point B = b[0] + (1./3)*(b[3] - b[0]);
@@ -855,6 +855,13 @@ void PencilTool::_fitAndSplit() {
         /// \todo fixme:
         SPCanvasItem *cshape = sp_canvas_bpath_new(sp_desktop_sketch(this->desktop), curve);
         curve->unref();
+
+        this->highlight_color = SP_ITEM(this->desktop->currentLayer())->highlight_color();
+        if((unsigned int)prefs->getInt("/tools/nodes/highlight_color", 0xff0000ff) == this->highlight_color){
+            this->green_color = 0x00ff007f;
+        } else {
+            this->green_color = this->highlight_color;
+        }
         sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(cshape), this->green_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
 
         this->green_bpaths = g_slist_prepend(this->green_bpaths, cshape);
