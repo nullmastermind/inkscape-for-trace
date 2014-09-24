@@ -181,6 +181,7 @@ void PenTool::_pen_context_set_mode(guint mode) {
     // define the nodes
     this->spiro = (mode == 1);
     this->bspline = (mode == 2);
+    this->_bspline_spiro_color();
 }
 
 /**
