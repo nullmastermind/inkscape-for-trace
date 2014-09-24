@@ -1327,9 +1327,6 @@ void PenTool::_resetColors() {
     // Blue
     this->blue_curve->reset();
     sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->blue_bpath), NULL);
-    // Blue2
-    this->blue2_curve->reset();
-    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->blue2_bpath), NULL);
     // Green
     while (this->green_bpaths) {
         sp_canvas_item_destroy(SP_CANVAS_ITEM(this->green_bpaths->data));
@@ -1407,7 +1404,7 @@ void PenTool::_bspline_spiro_color()
         } else {
             this->green_color = this->highlight_color;
         }
-        sp_canvas_item_hide(this->blue2_bpath);
+        sp_canvas_item_hide(this->blue_bpath);
     }
     //We erase all the "green_bpaths" to recreate them after with the colour
     //transparency recently modified
@@ -1792,11 +1789,11 @@ void PenTool::_bspline_spiro_build()
             this->_spiro_doEffect(curve);
         }
 
-        sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->blue2_bpath), curve);   
-        sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(this->blue2_bpath), this->blue_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
-        sp_canvas_item_show(this->blue2_bpath);
+        sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->blue_bpath), curve);   
+        sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(this->blue_bpath), this->blue_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
+        sp_canvas_item_show(this->blue_bpath);
         curve->unref();
-        this->blue2_curve->reset();
+        this->blue_curve->reset();
         //We hide the holders that doesn't contribute anything
         if(this->spiro){
             sp_canvas_item_show(this->c1);
@@ -1808,7 +1805,7 @@ void PenTool::_bspline_spiro_build()
         sp_canvas_item_hide(this->cl0);
     }else{
         //if the curve is empty
-        sp_canvas_item_hide(this->blue2_bpath);
+        sp_canvas_item_hide(this->blue_bpath);
 
     }
 }

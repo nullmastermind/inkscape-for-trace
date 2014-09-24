@@ -65,10 +65,6 @@ public:
     SPCanvasItem *blue_bpath;
     SPCurve *blue_curve;
 
-    // Blue2
-    SPCanvasItem *blue2_bpath;
-    SPCurve *blue2_curve;
-
     // Green
     GSList *green_bpaths;
     SPCurve *green_curve;
