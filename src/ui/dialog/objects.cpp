@@ -1450,7 +1450,7 @@ void sp_highlight_picker_color_mod(SPColorSelector *csel, GObject * cp)
     guint32 rgba = color.toRGBA32( alpha );
     
     ObjectsPanel *ptr = reinterpret_cast<ObjectsPanel *>(cp);
-    
+
     //Set the highlight color for all items in the _highlight_target (all selected items)
     for (std::vector<SPItem *>::iterator iter = ptr->_highlight_target.begin(); iter != ptr->_highlight_target.end(); ++iter)
     {

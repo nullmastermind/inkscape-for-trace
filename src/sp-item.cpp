@@ -188,7 +188,7 @@ bool SPItem::isHighlightSet() const {
 guint32 SPItem::highlight_color() const {
     if (_highlightColor)
     {
-        return atoi(_highlightColor) | 0x000000ff;
+        return atoi(_highlightColor) | 0x00000000;
     }
     else if (parent && parent != this && SP_IS_ITEM(parent))
     {
@@ -197,7 +197,7 @@ guint32 SPItem::highlight_color() const {
     else
     {
         static Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        return prefs->getInt("/tools/nodes/highlight_color", 0xff0000ff) | 0x000000ff;
+        return prefs->getInt("/tools/nodes/highlight_color", 0xff0000ff) | 0x00000000;
     }
 }
 
