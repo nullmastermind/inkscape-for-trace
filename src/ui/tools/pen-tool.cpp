@@ -188,7 +188,6 @@ void PenTool::_pen_context_set_mode(guint mode) {
  */
 void PenTool::setup() {
     FreehandBase::setup();
-
     ControlManager &mgr = ControlManager::getManager();
 
     // Pen indicators
@@ -435,7 +434,7 @@ bool PenTool::_handleButtonPress(GdkEventButton const &bevent) {
                         // This is allowed, if we just canceled curve
                     case PenTool::POINT:
                         if (this->npoints == 0) {
-
+                            this->_bspline_spiro_color();
                             Geom::Point p;
                             if ((bevent.state & GDK_CONTROL_MASK) && (this->polylines_only || this->polylines_paraxial)) {
                                 p = event_dt;
@@ -702,11 +701,9 @@ bool PenTool::_handleMotionNotify(GdkEventMotion const &mevent) {
     }
     // calls the function "bspline_spiro_motion" when the mouse starts or stops moving
     if(this->bspline){
-        this->_bspline_spiro_color();
         this->_bspline_spiro_motion(mevent.state & GDK_SHIFT_MASK);
     }else{
         if ( Geom::LInfty( event_w - pen_drag_origin_w ) > (tolerance/2) || mevent.time == 0) {
-            this->_bspline_spiro_color();
             this->_bspline_spiro_motion(mevent.state & GDK_SHIFT_MASK);
             pen_drag_origin_w = event_w;
         }
@@ -746,6 +743,7 @@ bool PenTool::_handleButtonRelease(GdkEventButton const &revent) {
                     case PenTool::POINT:
                         if ( this->npoints == 0 ) {
                             // Start new thread only with button release
+                            this->_bspline_spiro_color();
                             if (anchor) {
                                 p = anchor->dp;
                             }
@@ -1387,42 +1385,32 @@ void PenTool::_setAngleDistanceStatusMessage(Geom::Point const p, int pc_point_t
 // this function changes the colors red, green and blue making them transparent or not, depending on if spiro is being used.
 void PenTool::_bspline_spiro_color()
 {
-    bool remake_green_bpaths = false;
+    static Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if(this->spiro){
-        //If the colour is not defined as trasparent, por example when changing
-        //from drawing to spiro mode or when selecting the pen tool
-        if(this->green_color != 0x00ff000){
-            //We change the green and red colours to transparent, so this lines are not necessary
-            //to the drawing with spiro
-            this->red_color = 0xff00000;
-            this->green_color = 0x00ff000;
-            remake_green_bpaths = true;
-        }
+        this->red_color = 0xff00000;
+        this->green_color = 0x00ff000;
     }else if(this->bspline){
-        //If we come from working with the spiro curve and change the mode the "green_curve" colour is transparent
-        if(this->green_color != 0xff00007f){
-            //since we are not im spiro mode, we assign the original colours
-            //to the red and the green curve, removing their transparency 
-            this->red_color = 0xff00007f;
-            //Damos color rojo a la linea verde
+        this->highlight_color = SP_ITEM(this->desktop->currentLayer())->highlight_color();
+        if((unsigned int)prefs->getInt("/tools/nodes/highlight_color", 0xff0000ff) == this->highlight_color){
             this->green_color = 0xff00007f;
-            remake_green_bpaths = true;
+            this->red_color = 0xff00007f;
+        } else {
+            this->green_color = this->highlight_color;
+            this->red_color = this->highlight_color;
         }
     }else{
-        //If we come from working with the spiro curve and change the mode the "green_curve" colour is transparent
-        if(this->green_color != 0x00ff007f){
-            //since we are not im spiro mode, we assign the original colours
-            //to the red and the green curve, removing their transparency 
-            this->red_color = 0xff00007f;
+        this->highlight_color = SP_ITEM(this->desktop->currentLayer())->highlight_color();
+        this->red_color = 0xff00007f;
+        if((unsigned int)prefs->getInt("/tools/nodes/highlight_color", 0xff0000ff) == this->highlight_color){
             this->green_color = 0x00ff007f;
-            remake_green_bpaths = true;
+        } else {
+            this->green_color = this->highlight_color;
         }
-        //we hide the spiro/bspline rests
         sp_canvas_item_hide(this->blue2_bpath);
     }
     //We erase all the "green_bpaths" to recreate them after with the colour
     //transparency recently modified
-    if (this->green_bpaths && remake_green_bpaths) {
+    if (this->green_bpaths) {
         // remove old piecewise green canvasitems
         while (this->green_bpaths) {
             sp_canvas_item_destroy(SP_CANVAS_ITEM(this->green_bpaths->data));

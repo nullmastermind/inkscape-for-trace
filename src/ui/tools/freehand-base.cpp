@@ -80,6 +80,7 @@ FreehandBase::FreehandBase(gchar const *const *cursor_shape, gint hot_x, gint ho
     , red_color(0xff00007f)
     , blue_color(0x0000ff7f)
     , green_color(0x00ff007f)
+    , highlight_color(0x0000007f)
     , red_bpath(NULL)
     , red_curve(NULL)
     , blue_bpath(NULL)

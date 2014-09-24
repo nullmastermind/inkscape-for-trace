@@ -55,6 +55,7 @@ public:
     guint32 red_color;
     guint32 blue_color;
     guint32 green_color;
+    guint32 highlight_color;
 
     // Red
     SPCanvasItem *red_bpath;
