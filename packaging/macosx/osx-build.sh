@@ -61,7 +61,7 @@ Compilation script for Inkscape on Mac OS X.
     install the build products locally, inside the source
     directory (run make install)
   \033[1mp,pack,package\033[0m
-    package Inkscape in a double clickable .app bundle 
+    package Inkscape in a double clickable .app bundle
     \033[1m-s,--strip\033[0m	remove debugging information in Inkscape package
     \033[1m-v,--verbose\033[0m	verbose mode
     \033[1m-py,--with-python\033[0m	specify python modules path for inclusion into the app bundle
@@ -73,12 +73,12 @@ Compilation script for Inkscape on Mac OS X.
 \033[1mEXAMPLES\033[0m
   \033[1m$0 conf build install\033[0m
     configure, build and install a dowloaded version of Inkscape in the default
-    directory, keeping debugging information.	
+    directory, keeping debugging information.
   \033[1m$0 u a c b -p ~ i -s -py ~/python_modules/ p d\033[0m
     update an bzr checkout, prepare configure script, configure,
-    build and install Inkscape in the user home directory (~). 	
+    build and install Inkscape in the user home directory (~).
     Then package Inkscape without debugging information,
-    with python packages from ~/python_modules/ and prepare 
+    with python packages from ~/python_modules/ and prepare
     a dmg for distribution."
 }
 
@@ -115,12 +115,12 @@ while [ "$1" != "" ]
 do
 	case $1 in
 	h|help)
-		help 
+		help
 		exit 1 ;;
-	all)            
+	all)
 		BZRUPDATE="t"
 		CONFIGURE="t"
-		BUILD="t" 
+		BUILD="t"
 		INSTALL="t"
 		PACKAGE="t"
 		DISTRIB="t" ;;
@@ -142,10 +142,10 @@ do
 	d|dist|distrib)
 		DISTRIB="t" ;;
 	-p|--prefix)
-	  	INSTALLPREFIX=$2
-	  	shift 1 ;;
+		INSTALLPREFIX=$2
+		shift 1 ;;
 	-s|--strip)
-	     	STRIP="-s" ;;
+		STRIP="-s" ;;
 	-py|--with-python)
 		PYTHON_MODULES="$2"
 		shift 1 ;;
@@ -154,7 +154,7 @@ do
 	info)
 		BUILD_INFO="t" ;;
 	*)
-		echo "Invalid command line option: $1" 
+		echo "Invalid command line option: $1"
 		exit 2 ;;
 	esac
 	shift 1
@@ -417,11 +417,11 @@ if [[ "$BZRUPDATE" == "t" ]]
 then
 	cd $SRCROOT
 	if [ -z "$(bzr info | grep "checkout")" ]; then
-		echo "repo is unbound (branch)"
+		echo "repo is unbound (branch)" >&2
 		bzr pull
 	else
-		echo "repo is bound (checkout)"
-		echo '... please update bound branch manually.'
+		echo "repo is bound (checkout)" >&2
+		echo '... please update bound branch manually.' >&2
 	       	false
 	fi
 	status=$?
@@ -480,7 +480,7 @@ then
 	cd $HERE
 fi
 
-if [[ "$INSTALL" == "t" ]] 
+if [[ "$INSTALL" == "t" ]]
 then
 	cd $BUILDPREFIX || exit 1
 	make install
@@ -494,7 +494,7 @@ fi
 
 if [[ "$PACKAGE" == "t" ]]
 then
-	
+
 	# Test the existence of required files
 	if [ ! -e $INSTALLPREFIX/bin/inkscape ]
 	then
@@ -506,7 +506,7 @@ then
 		echo "The file \"$BUILDPREFIX/Info.plist\" could not be found, please re-run configure."
 		exit 1
 	fi
-	
+
 	# Set python command line option (if PYTHON_MODULES location is not empty, then add the python call to the command line, otherwise, stay empty)
 	if [[ "$PYTHON_MODULES" != "" ]]; then
 		PYTHON_MODULES="-py $PYTHON_MODULES"
@@ -537,7 +537,7 @@ then
 	fi
 
 	mv Inkscape.dmg $DMGFILE
-	
+
 	# Prepare information file
 	BUILD_INFO="t"
 fi
@@ -547,7 +547,8 @@ then
 	buildinfofile
 fi
 
-if [[ "$PACKAGE" == "t" || "$DISTRIB" == "t" ]]; then
+if [[ "$PACKAGE" == "t" || "$DISTRIB" == "t" ]];
+then
 	# open a Finder window here to admire what we just produced
 	open .
 fi
