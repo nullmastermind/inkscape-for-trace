@@ -1230,7 +1230,7 @@ static void
 sp_canvas_init(SPCanvas *canvas)
 {
     gtk_widget_set_has_window (GTK_WIDGET (canvas), TRUE);
-    //gtk_widget_set_double_buffered (GTK_WIDGET (canvas), TRUE);
+    gtk_widget_set_double_buffered (GTK_WIDGET (canvas), FALSE);
     gtk_widget_set_can_focus (GTK_WIDGET (canvas), TRUE);
 
     canvas->pick_event.type = GDK_LEAVE_NOTIFY;

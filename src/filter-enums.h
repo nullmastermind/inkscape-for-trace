@@ -12,8 +12,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <glibmm.h>
-
 #include "display/nr-filter-blend.h"
 #include "display/nr-filter-colormatrix.h"
 #include "display/nr-filter-component-transfer.h"

@@ -55,6 +55,7 @@ public:
     guint32 red_color;
     guint32 blue_color;
     guint32 green_color;
+    guint32 highlight_color;
 
     // Red
     SPCanvasItem *red_bpath;
@@ -63,10 +64,6 @@ public:
     // Blue
     SPCanvasItem *blue_bpath;
     SPCurve *blue_curve;
-
-    // Blue2
-    SPCanvasItem *blue2_bpath;
-    SPCurve *blue2_curve;
 
     // Green
     GSList *green_bpaths;

@@ -24,7 +24,7 @@
 #define SP_IS_GENERICELLIPSE(obj) (dynamic_cast<const SPGenericEllipse*>((obj)) != NULL)
 
 enum GenericEllipseType {
-    SP_GENERIC_ELLIPSE_UNDEFINED,
+    SP_GENERIC_ELLIPSE_UNDEFINED, // FIXME shouldn't exist
     SP_GENERIC_ELLIPSE_ARC,
     SP_GENERIC_ELLIPSE_CIRCLE,
     SP_GENERIC_ELLIPSE_ELLIPSE
@@ -53,10 +53,10 @@ public:
 
     virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
 
-    virtual void set(unsigned int key, gchar const *value);
+    virtual void set(unsigned int key, char const *value);
     virtual void update(SPCtx *ctx, unsigned int flags);
 
-    virtual Inkscape::XML::Node *write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags);
+    virtual Inkscape::XML::Node *write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags);
     virtual const char *displayName() const;
 
     virtual void set_shape();
@@ -76,7 +76,7 @@ public:
     Geom::Point getPointAtAngle(double arg) const;
 
     bool set_elliptical_path_attribute(Inkscape::XML::Node *repr);
-    void position_set(gdouble x, gdouble y, gdouble rx, gdouble ry);
+    void position_set(double x, double y, double rx, double ry);
 
 protected:
     /**

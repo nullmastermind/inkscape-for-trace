@@ -31,7 +31,7 @@
 
 //Inkscape includes
 #include "inkscape.h"
-#include "dialogs/dialog-events.h"
+#include "ui/dialog-events.h"
 #include "extension/input.h"
 #include "extension/output.h"
 #include "extension/db.h"

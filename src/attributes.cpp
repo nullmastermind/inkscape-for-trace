@@ -40,6 +40,7 @@ static SPStyleProp const props[] = {
     {SP_ATTR_TRANSFORM_CENTER_X, "inkscape:transform-center-x"},
     {SP_ATTR_TRANSFORM_CENTER_Y, "inkscape:transform-center-y"},
     {SP_ATTR_INKSCAPE_PATH_EFFECT, "inkscape:path-effect"},
+    {SP_ATTR_INKSCAPE_HIGHLIGHT_COLOR, "inkscape:highlight-color"},
     /* SPAnchor */
     {SP_ATTR_XLINK_HREF, "xlink:href"},
     {SP_ATTR_XLINK_TYPE, "xlink:type"},
@@ -50,6 +51,7 @@ static SPStyleProp const props[] = {
     {SP_ATTR_XLINK_ACTUATE, "xlink:actuate"},
     {SP_ATTR_TARGET, "target"},
     {SP_ATTR_INKSCAPE_GROUPMODE, "inkscape:groupmode"},
+    {SP_ATTR_INKSCAPE_EXPANDED, "inkscape:expanded"},
     /* SPRoot */
     {SP_ATTR_VERSION, "version"},
     {SP_ATTR_WIDTH, "width"},

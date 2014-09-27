@@ -14,7 +14,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <stddef.h>
+#include <cstddef>
 #include <sigc++/connection.h>
 #include <sigc++/trackable.h>
 
@@ -149,9 +149,9 @@ private:
 /**
  * Resolves an item referenced by a URI in CSS form contained in "url(...)"
  */
-SPObject* sp_css_uri_reference_resolve( SPDocument *document, const gchar *uri );
+SPObject* sp_css_uri_reference_resolve( SPDocument *document, const char *uri );
 
-SPObject *sp_uri_reference_resolve (SPDocument *document, const gchar *uri);
+SPObject *sp_uri_reference_resolve (SPDocument *document, const char *uri);
 
 #endif // SEEN_SP_URI_REFERENCES_H
 

@@ -8,23 +8,9 @@
 #ifndef INKSCAPE_DIALOG_FILLET_CHAMFER_PROPERTIES_H
 #define INKSCAPE_DIALOG_FILLET_CHAMFER_PROPERTIES_H
 
-#if HAVE_CONFIG_H
- #include "config.h"
-#endif
-
-#include <gtkmm/dialog.h>
 #include <2geom/point.h>
+#include <gtkmm.h>
 #include "live_effects/parameter/filletchamferpointarray.h"
-
-#include <gtkmm/entry.h>
-#include <gtkmm/label.h>
-#include <gtkmm/radiobutton.h>
-
-#if WITH_GTKMM_3_0
- #include <gtkmm/grid.h>
-#else
- #include <gtkmm/table.h>
-#endif
 
 class SPDesktop;
 
@@ -44,7 +30,9 @@ public:
     static void showDialog(SPDesktop *desktop, Geom::Point knotpoint,
                            const Inkscape::LivePathEffect::
                            FilletChamferPointArrayParamKnotHolderEntity *pt,
-                           const gchar *unit);
+                           const gchar *unit,
+                           bool use_distance,
+                           bool aprox_radius);
 
 protected:
 
@@ -53,19 +41,14 @@ protected:
     _knotpoint;
 
     Gtk::Label _fillet_chamfer_position_label;
-    Gtk::Entry _fillet_chamfer_position_entry;
+    Gtk::SpinButton _fillet_chamfer_position_numeric;
     Gtk::RadioButton::Group _fillet_chamfer_type_group;
     Gtk::RadioButton _fillet_chamfer_type_fillet;
     Gtk::RadioButton _fillet_chamfer_type_inverse_fillet;
     Gtk::RadioButton _fillet_chamfer_type_chamfer;
     Gtk::RadioButton _fillet_chamfer_type_double_chamfer;
 
-#if WITH_GTKMM_3_0
-    Gtk::Grid _layout_table;
-#else
     Gtk::Table _layout_table;
-#endif
-
     bool _position_visible;
     double _index;
 
@@ -83,10 +66,14 @@ protected:
     void _setPt(const Inkscape::LivePathEffect::
                 FilletChamferPointArrayParamKnotHolderEntity *pt);
     void _setUnit(const gchar *abbr);
+    void _set_use_distance(bool use_knot_distance);
+    void _set_aprox(bool aprox_radius);
     void _apply();
     void _close();
     bool _flexible;
     const gchar *unit;
+    bool use_distance;
+    bool aprox;
     void _setKnotPoint(Geom::Point knotpoint);
     void _prepareLabelRenderer(Gtk::TreeModel::const_iterator const &row);
 

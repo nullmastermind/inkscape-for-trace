@@ -43,9 +43,15 @@ public:
                             guint32 color);
     virtual double to_time(int index, double A);
     virtual double to_len(int index, double A);
+    virtual double rad_to_len(int index, double rad);
+    virtual double len_to_rad(int index, double len);
     virtual double len_to_time(int index, double len);
     virtual double time_to_len(int index, double time);
+    virtual std::pair<std::size_t, std::size_t> get_positions(int index, std::vector<Geom::Path> subpaths);
+    virtual int last_index(int index, std::vector<Geom::Path> subpaths);
+    std::vector<double> get_times(int index, std::vector<Geom::Path> subpaths, bool last);
     virtual void set_helper_size(int hs);
+    virtual void set_use_distance(bool use_knot_distance);
     virtual void set_unit(const gchar *abbr);
     virtual void addCanvasIndicators(SPLPEItem const *lpeitem,
                                      std::vector<Geom::PathVector> &hp_vec);
@@ -79,6 +85,7 @@ private:
     SPKnotModeType knot_mode;
     guint32 knot_color;
     int helper_size;
+    bool use_distance;
     const gchar *unit;
     Geom::PathVector hp;
 
@@ -96,7 +103,6 @@ public:
                           guint state);
     virtual Geom::Point knot_get() const;
     virtual void knot_click(guint state);
-    virtual void knot_doubleclicked(guint state);
     virtual void knot_set_offset(Geom::Point offset);
 
     /*Checks whether the index falls within the size of the parameter's vector*/

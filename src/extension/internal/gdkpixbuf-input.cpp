@@ -1,21 +1,20 @@
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
+#include <gdk-pixbuf/gdk-pixbuf.h>
+
 #include <boost/scoped_ptr.hpp>
 #include <glib/gprintf.h>
 #include <glibmm/i18n.h>
+#include "dir-util.h"
+#include "display/cairo-utils.h"
 #include "document-private.h"
-#include <dir-util.h>
+#include "document-undo.h"
 #include "extension/input.h"
 #include "extension/system.h"
+#include "image-resolution.h"
 #include "gdkpixbuf-input.h"
 #include "preferences.h"
 #include "selection-chemistry.h"
 #include "sp-image.h"
-#include "document-undo.h"
 #include "util/units.h"
-#include "image-resolution.h"
-#include "display/cairo-utils.h"
 #include <set>
 
 namespace Inkscape {

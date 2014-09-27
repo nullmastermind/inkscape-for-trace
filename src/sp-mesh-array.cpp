@@ -37,6 +37,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <glibmm.h>
+
 // For color picking
 #include "display/drawing.h"
 #include "display/drawing-context.h"

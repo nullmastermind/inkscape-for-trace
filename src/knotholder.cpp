@@ -154,8 +154,15 @@ KnotHolder::knot_clicked_handler(SPKnot *knot, guint state)
     }
 
     // for drag, this is done by ungrabbed_handler, but for click we must do it here
-    DocumentUndo::done(saved_item->document, object_verb,
-                       _("Change handle"));
+    
+    if (saved_item) { //increasingly aggressive sanity checks
+       if (saved_item->document) {
+            if (object_verb <= SP_VERB_LAST && object_verb >= SP_VERB_INVALID) {
+                DocumentUndo::done(saved_item->document, object_verb,
+                                   _("Change handle"));
+            }
+       }
+    } // else { abort(); }
 }
 
 void
@@ -203,14 +210,16 @@ KnotHolder::knot_ungrabbed_handler(SPKnot */*knot*/, guint)
         /* do cleanup tasks (e.g., for LPE items write the parameter values
          * that were changed by dragging the handle to SVG)
          */
-        if (SP_IS_LPE_ITEM(object)) {
+        if (dynamic_cast<SPLPEItem*> (object)) {
             // This writes all parameters to SVG. Is this sufficiently efficient or should we only
             // write the ones that were changed?
-
-            Inkscape::LivePathEffect::Effect *lpe = SP_LPE_ITEM(object)->getCurrentLPE();
-            if (lpe) {
-                LivePathEffectObject *lpeobj = lpe->getLPEObj();
-                lpeobj->updateRepr();
+            SPLPEItem * lpeitem = SP_LPE_ITEM(object);
+            if (lpeitem) {
+                Inkscape::LivePathEffect::Effect *lpe = lpeitem->getCurrentLPE();
+                if (lpe) {
+                    LivePathEffectObject *lpeobj = lpe->getLPEObj();
+                    lpeobj->updateRepr();
+                }
             }
         }
 
@@ -232,9 +241,14 @@ KnotHolder::knot_ungrabbed_handler(SPKnot */*knot*/, guint)
             else
                 object_verb = SP_VERB_SELECTION_DYNAMIC_OFFSET;
         }
-
-        DocumentUndo::done(object->document, object_verb,
-                           _("Move handle"));
+        if (object) { //increasingly aggressive sanity checks
+            if (object->document) {
+                if (object_verb <= SP_VERB_LAST && object_verb >= SP_VERB_INVALID) {
+                    DocumentUndo::done(object->document, object_verb,
+                                       _("Move handle"));
+                }
+            }
+        } //else { abort(); }
     }
 }
 

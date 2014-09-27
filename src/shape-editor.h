@@ -12,8 +12,6 @@
  *
  */
 
-#include <glib.h>
-
 namespace Inkscape { namespace XML { class Node; } }
 
 class KnotHolder;
@@ -37,10 +35,10 @@ public:
 
     bool knot_mouseover() const;
     
-    static void blockSetItem(bool b) { _blockSetItem = b; } // kludge?
+    static void blockSetItem(bool b) { _blockSetItem = b; } // kludge
 
-    static void event_attr_changed(Inkscape::XML::Node * /*repr*/, gchar const *name, gchar const * /*old_value*/,
-                                   gchar const * /*new_value*/, bool /*is_interactive*/, void *data);
+    static void event_attr_changed(Inkscape::XML::Node * /*repr*/, char const *name, char const * /*old_value*/,
+                                   char const * /*new_value*/, bool /*is_interactive*/, void *data);
 private:
     bool has_knotholder();
     void reset_item (bool keep_knotholder = true);

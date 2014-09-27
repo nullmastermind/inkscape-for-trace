@@ -2,6 +2,7 @@
 set(ui_SRC
 	clipboard.cpp
 	control-manager.cpp
+	dialog-events.cpp
 	previewholder.cpp
 	uxmanager.cpp
 
@@ -156,6 +157,7 @@ set(ui_SRC
 	clipboard.h
 	control-manager.h
 	control-types.h
+	dialog-events.h
 	icon-names.h
 	previewable.h
 	previewfillable.h

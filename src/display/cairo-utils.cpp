@@ -26,12 +26,12 @@
 #include <2geom/path.h>
 #include <2geom/transforms.h>
 #include <2geom/sbasis-to-bezier.h>
+#include <gdk-pixbuf/gdk-pixbuf.h>
+
 #include "color.h"
 #include "style.h"
 #include "helper/geom-curves.h"
 #include "display/cairo-templates.h"
-
-static void ink_cairo_pixbuf_cleanup(guchar *, void *);
 
 /**
  * Key for cairo_surface_t to keep track of current color interpolation value
@@ -1170,7 +1170,7 @@ GdkPixbuf *ink_pixbuf_create_from_cairo_surface(cairo_surface_t *s)
  * to gdk_pixbuf_new_from_data when creating a GdkPixbuf backed by
  * a Cairo surface.
  */
-static void ink_cairo_pixbuf_cleanup(guchar * /*pixels*/, void *data)
+void ink_cairo_pixbuf_cleanup(guchar * /*pixels*/, void *data)
 {
     cairo_surface_t *surface = static_cast<cairo_surface_t*>(data);
     cairo_surface_destroy(surface);

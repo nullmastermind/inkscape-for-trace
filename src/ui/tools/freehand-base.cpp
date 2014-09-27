@@ -80,12 +80,11 @@ FreehandBase::FreehandBase(gchar const *const *cursor_shape, gint hot_x, gint ho
     , red_color(0xff00007f)
     , blue_color(0x0000ff7f)
     , green_color(0x00ff007f)
+    , highlight_color(0x0000007f)
     , red_bpath(NULL)
     , red_curve(NULL)
     , blue_bpath(NULL)
     , blue_curve(NULL)
-    , blue2_bpath(NULL)
-    , blue2_curve(NULL)
     , green_bpaths(NULL)
     , green_curve(NULL)
     , green_anchor(NULL)
@@ -141,13 +140,6 @@ void FreehandBase::setup() {
 
     // Create blue curve
     this->blue_curve = new SPCurve();
-
-    // Create blue2 bpath
-    this->blue2_bpath = sp_canvas_bpath_new(sp_desktop_sketch(this->desktop), NULL);
-    sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(this->blue2_bpath), this->blue_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
-
-    // Create blue2 curve
-    this->blue2_curve = new SPCurve();
 
     // Create green curve
     this->green_curve = new SPCurve();
@@ -262,8 +254,9 @@ static void spdc_apply_powerstroke_shape(const std::vector<Geom::Point> & points
         sp_style_unref(style);
     }
 
-    char * width_str = new char[50];
-    sprintf(width_str, "0,%f", stroke_width / 2.);
+    std::ostringstream s;
+    s.imbue(std::locale::classic());
+    s << "0," << stroke_width / 2.;
 
     // write powerstroke parameters:
     lpe->getRepr()->setAttribute("start_linecap_type", "zerowidth");
@@ -272,9 +265,7 @@ static void spdc_apply_powerstroke_shape(const std::vector<Geom::Point> & points
     lpe->getRepr()->setAttribute("sort_points", "true");
     lpe->getRepr()->setAttribute("interpolator_type", "CubicBezierJohan");
     lpe->getRepr()->setAttribute("interpolator_beta", "0.2");
-    lpe->getRepr()->setAttribute("offset_points", width_str);
-
-    delete [] width_str;
+    lpe->getRepr()->setAttribute("offset_points", s.str().c_str());
 }
 
 static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item, SPCurve *curve)
@@ -550,10 +541,6 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
     dc->blue_curve->reset();
     sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(dc->blue_bpath), NULL);
 
-    // Blue2
-    dc->blue2_curve->reset();
-    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(dc->blue2_bpath), NULL);
-
     // Red
     if (dc->red_curve_is_valid) {
         c->append_continuous(dc->red_curve, 0.0625);
@@ -610,12 +597,12 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
     if (dc->sa) {
         SPCurve *s = dc->sa->curve;
         dc->white_curves = g_slist_remove(dc->white_curves, s);
-        if (dc->sa->start) {
-            s = reverse_then_unref(s);
-        }
         if(prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1 || 
             prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2){
-                dc->overwriteCurve = s;
+                s = dc->overwriteCurve;
+        }
+        if (dc->sa->start) {
+            s = reverse_then_unref(s);
         }
         s->append_continuous(c, 0.0625);
         c->unref();
@@ -789,15 +776,6 @@ static void spdc_free_colors(FreehandBase *dc)
     }
     if (dc->blue_curve) {
         dc->blue_curve = dc->blue_curve->unref();
-    }
-
-    // Blue2
-    if (dc->blue2_bpath) {
-        sp_canvas_item_destroy(SP_CANVAS_ITEM(dc->blue2_bpath));
-        dc->blue2_bpath = NULL;
-    }
-    if (dc->blue2_curve) {
-        dc->blue2_curve = dc->blue2_curve->unref();
     }
 
     // Green

@@ -2,8 +2,10 @@
 set(live_effects_SRC
 	effect.cpp
 	lpe-angle_bisector.cpp
+	lpe-attach-path.cpp
 	lpe-bendpath.cpp
 	lpe-boolops.cpp
+	lpe-bounding-box.cpp
 	lpe-circle_3pts.cpp
 	lpe-circle_with_radius.cpp
 	lpe-clone-original.cpp
@@ -11,9 +13,12 @@ set(live_effects_SRC
 	lpe-copy_rotate.cpp
 	lpe-curvestitch.cpp
 	lpe-dynastroke.cpp
+	lpe-ellipse-5pts.cpp
 	lpe-envelope.cpp
 	lpe-envelope-perspective.cpp
 	lpe-extrude.cpp
+	lpe-fill-between-many.cpp
+	lpe-fill-between-strokes.cpp
 	lpe-fillet-chamfer.cpp
 	lpe-gears.cpp
 	lpe-interpolate.cpp
@@ -55,11 +60,13 @@ set(live_effects_SRC
 	parameter/parameter.cpp
 	parameter/path.cpp
 	parameter/originalpath.cpp
+	parameter/originalpatharray.cpp
 	parameter/path-reference.cpp
 	parameter/point.cpp
 	parameter/powerstrokepointarray.cpp
 	parameter/random.cpp
 	parameter/text.cpp
+	paramter/transformedpoint.cpp
 	parameter/togglebutton.cpp
 	parameter/unit.cpp
 	parameter/vector.cpp
@@ -70,8 +77,10 @@ set(live_effects_SRC
 	effect-enum.h
 	effect.h
 	lpe-angle_bisector.h
+	lpe-attach-path.h
 	lpe-bendpath.h
 	lpe-boolops.h
+	lpe-bounding-box.h
 	lpe-circle_3pts.h
 	lpe-circle_with_radius.h
 	lpe-clone-original.h
@@ -79,8 +88,11 @@ set(live_effects_SRC
 	lpe-copy_rotate.h
 	lpe-curvestitch.h
 	lpe-dynastroke.h
+	lpe-ellipse-5pts.h
 	lpe-envelope.h
 	lpe-extrude.h
+	lpe-fill-between-many.h
+	lpe-fill-between-strokes.h
 	lpe-fillet-chamfer.h
 	lpe-gears.h
 	lpe-interpolate.h
@@ -125,6 +137,7 @@ set(live_effects_SRC
 	parameter/path-reference.h
 	parameter/path.h
 	parameter/originalpath.h
+	parameter/originalpatharray.h
 	parameter/point.h
 	parameter/powerstrokepointarray.h
 	parameter/random.h

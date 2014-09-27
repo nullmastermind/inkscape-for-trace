@@ -22,6 +22,9 @@
 #include "desktop.h"
 #include "display/curve.h"
 #include "helper/geom-nodetype.h"
+#include "helper/geom-curves.h"
+#include "helper/geom.h"
+
 #include "live_effects/parameter/filletchamferpointarray.h"
 
 // for programmatically updating knots
@@ -49,6 +52,8 @@ LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject) :
     ignore_radius_0(_("Ignore 0 radius knots"), _("Ignore 0 radius knots"), "ignore_radius_0", &wr, this, false),
     only_selected(_("Change only selected nodes"), _("Change only selected nodes"), "only_selected", &wr, this, false),
     flexible(_("Flexible radius size (%)"), _("Flexible radius size (%)"), "flexible", &wr, this, false),
+    force_arcs(_("Use arcs in cubic curves"), _("Use arcs in cubic curves"), "force_arcs", &wr, this, false),
+    use_knot_distance(_("Use knots distance instead radius"), _("Use knots distance instead radius"), "use_knot_distance", &wr, this, false),
     unit(_("Unit"), _("Unit"), "unit", &wr, this),
     radius(_("Radius (unit or %)"), _("Radius, in unit or %"), "radius", &wr, this, 0.),
     helper_size(_("Helper size with direction"), _("Helper size with direction"), "helper_size", &wr, this, 0)
@@ -58,9 +63,11 @@ LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject) :
     registerParameter(&radius);
     registerParameter(&helper_size);
     registerParameter(&flexible);
+    registerParameter(&use_knot_distance);
     registerParameter(&ignore_radius_0);
     registerParameter(&only_selected);
     registerParameter(&hide_knots);
+    registerParameter(&force_arcs);
 
     radius.param_set_range(0., infinity());
     radius.param_set_increments(1, 1);
@@ -270,10 +277,10 @@ void LPEFilletChamfer::doUpdateFillet(std::vector<Geom::Path> const& original_pa
     }
     std::vector<Point> filletChamferData = fillet_chamfer_values.data();
     std::vector<Geom::Point> result;
+    std::vector<Geom::Path> original_pathv_processed = pathv_to_linear_and_cubic_beziers(original_pathv);
     int counter = 0;
-    for (PathVector::const_iterator path_it = original_pathv.begin();
-            path_it != original_pathv.end(); ++path_it) {
-        int pathCounter = 0;
+    for (PathVector::const_iterator path_it = original_pathv_processed.begin();
+            path_it != original_pathv_processed.end(); ++path_it) {
         if (path_it->empty())
             continue;
 
@@ -289,6 +296,9 @@ void LPEFilletChamfer::doUpdateFillet(std::vector<Geom::Path> const& original_pa
         double powerend = 0;
         while (curve_it1 != curve_endit) {
             powerend = power;
+            if (power < 0 && !use_knot_distance) {
+                powerend = fillet_chamfer_values.rad_to_len(counter,powerend);
+            }
             if (power > 0) {
                 powerend = counter + (power / 100);
             }
@@ -306,7 +316,6 @@ void LPEFilletChamfer::doUpdateFillet(std::vector<Geom::Path> const& original_pa
             ++curve_it1;
             ++curve_it2;
             counter++;
-            pathCounter++;
         }
     }
     fillet_chamfer_values.param_set_and_write_new_value(result);
@@ -334,8 +343,9 @@ void LPEFilletChamfer::doChangeType(std::vector<Geom::Path> const& original_path
     }
     std::vector<Point> filletChamferData = fillet_chamfer_values.data();
     std::vector<Geom::Point> result;
+    std::vector<Geom::Path> original_pathv_processed = pathv_to_linear_and_cubic_beziers(original_pathv);
     int counter = 0;
-    for (PathVector::const_iterator path_it = original_pathv.begin(); path_it != original_pathv.end(); ++path_it) {
+    for (PathVector::const_iterator path_it = original_pathv_processed.begin(); path_it != original_pathv_processed.end(); ++path_it) {
         int pathCounter = 0;
         if (path_it->empty())
             continue;
@@ -378,7 +388,7 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
 {
     if (SP_IS_SHAPE(lpeItem)) {
         std::vector<Point> point;
-        PathVector const &original_pathv = SP_SHAPE(lpeItem)->_curve->get_pathvector();
+        PathVector const &original_pathv = pathv_to_linear_and_cubic_beziers(SP_SHAPE(lpeItem)->_curve->get_pathvector());
         Piecewise<D2<SBasis> > pwd2_in = paths_to_pw(original_pathv);
         for (PathVector::const_iterator path_it = original_pathv.begin(); path_it != original_pathv.end(); ++path_it) {
             if (path_it->empty())
@@ -401,10 +411,15 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
             }
             int counter = 0;
             while (curve_it1 != curve_endit) {
+                std::pair<std::size_t, std::size_t> positions = fillet_chamfer_values.get_positions(counter, original_pathv);
                 Geom::NodeType nodetype;
-                if (counter == 0) {
+                if (positions.second == 0) {
                     if (path_it->closed()) {
-                        nodetype = get_nodetype(path_it->back_default(), *curve_it1);
+                        Piecewise<D2<SBasis> > u;
+                        u.push_cut(0);          
+                        u.push(pwd2_in[fillet_chamfer_values.last_index(counter, original_pathv)], 1);
+                        Geom::Curve const * A = path_from_piecewise(u, 0.1)[0][0].duplicate();
+                        nodetype = get_nodetype(*A, *curve_it1);
                     } else {
                         nodetype = NODE_NONE;
                     }
@@ -433,12 +448,15 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
 {
     if (SP_IS_SHAPE(lpeItem)) {
         fillet_chamfer_values.set_helper_size(helper_size);
+        fillet_chamfer_values.set_use_distance(use_knot_distance);
         fillet_chamfer_values.set_unit(unit.get_abbreviation());
-        SPCurve *c = SP_IS_PATH(lpeItem) ? static_cast<SPPath const *>(lpeItem)->get_original_curve() : SP_SHAPE(lpeItem)->getCurve();
+        SPCurve *c = SP_IS_PATH(lpeItem) ? static_cast<SPPath const *>(lpeItem)
+                     ->get_original_curve()
+                     : SP_SHAPE(lpeItem)->getCurve();
         std::vector<Point> filletChamferData = fillet_chamfer_values.data();
         if (!filletChamferData.empty() && getKnotsNumber(c) != (int)
                 filletChamferData.size()) {
-            PathVector const original_pathv = c->get_pathvector();
+            PathVector const original_pathv = pathv_to_linear_and_cubic_beziers(c->get_pathvector());
             Piecewise<D2<SBasis> > pwd2_in = paths_to_pw(original_pathv);
             fillet_chamfer_values.recalculate_controlpoints_for_new_pwd2(pwd2_in);
         }
@@ -450,7 +468,7 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
 int LPEFilletChamfer::getKnotsNumber(SPCurve const *c)
 {
     int nKnots = c->nodes_in_path();
-    PathVector const pv = c->get_pathvector();
+    PathVector const pv =    pathv_to_linear_and_cubic_beziers(c->get_pathvector());
     for (std::vector<Geom::Path>::const_iterator path_it = pv.begin();
             path_it != pv.end(); ++path_it) {
         if (!(*path_it).closed()) {
@@ -464,8 +482,7 @@ void
 LPEFilletChamfer::adjustForNewPath(std::vector<Geom::Path> const &path_in)
 {
     if (!path_in.empty()) {
-        fillet_chamfer_values.recalculate_controlpoints_for_new_pwd2(path_in[0]
-                .toPwSb());
+        fillet_chamfer_values.recalculate_controlpoints_for_new_pwd2(pathv_to_linear_and_cubic_beziers(path_in)[0].toPwSb());
     }
 }
 
@@ -473,17 +490,17 @@ std::vector<Geom::Path>
 LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
 {
     std::vector<Geom::Path> pathvector_out;
-    Piecewise<D2<SBasis> > pwd2_in = paths_to_pw(path_in);
+    Piecewise<D2<SBasis> > pwd2_in = paths_to_pw(pathv_to_linear_and_cubic_beziers(path_in));
     pwd2_in = remove_short_cuts(pwd2_in, .01);
     Piecewise<D2<SBasis> > der = derivative(pwd2_in);
     Piecewise<D2<SBasis> > n = rot90(unitVector(der));
     fillet_chamfer_values.set_pwd2(pwd2_in, n);
     std::vector<Point> filletChamferData = fillet_chamfer_values.data();
     unsigned int counter = 0;
-    //from http://launchpadlibrarian.net/12692602/rcp.svg
     const double K = (4.0 / 3.0) * (sqrt(2.0) - 1.0);
-    for (PathVector::const_iterator path_it = path_in.begin();
-            path_it != path_in.end(); ++path_it) {
+    std::vector<Geom::Path> path_in_processed = pathv_to_linear_and_cubic_beziers(path_in);
+    for (PathVector::const_iterator path_it = path_in_processed.begin();
+            path_it != path_in_processed.end(); ++path_it) {
         if (path_it->empty())
             continue;
         Geom::Path path_out;
@@ -504,81 +521,24 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
         }
         unsigned int counterCurves = 0;
         while (curve_it1 != curve_endit) {
-            Coord it1_length = (*curve_it1).length(tolerance);
-            double time_it1, time_it2, time_it1_B, intpart;
-            time_it1 = modf(
-                           fillet_chamfer_values.to_time(counter, filletChamferData[counter][X]),
-                           &intpart);
-            if (filletChamferData[counter][Y] == 0) {
-                time_it1 = 0;
+            Curve *curve_it2Fixed = (*path_it->begin()).duplicate();
+            if(!path_it->closed() || curve_it2 != curve_endit){
+                curve_it2Fixed = (*curve_it2).duplicate();
             }
-            if (path_it->closed() && curve_it2 == curve_endit) {
-                time_it2 = modf(fillet_chamfer_values.to_time(
-                                    counter - counterCurves,
-                                    filletChamferData[counter - counterCurves][X]),
-                                &intpart);
-            } else if (!path_it->closed() && curve_it2 == curve_endit){
-                time_it2 = 0;
-            } else {
-                time_it2 = modf(fillet_chamfer_values.to_time(
-                                    counter + 1, filletChamferData[counter + 1][X]),
-                                &intpart);
-            }
-            double resultLenght = 0;
-            time_it1_B = 1;
-            if (path_it->closed() && curve_it2 == curve_endit) {
-                resultLenght =
-                    it1_length + fillet_chamfer_values.to_len(
-                        counter - counterCurves,
-                        filletChamferData[counter - counterCurves][X]);
-            } else if (!path_it->closed() && curve_it2 == curve_endit){
-                resultLenght = 0;
-            } else {
-                resultLenght =
-                    it1_length + fillet_chamfer_values.to_len(
-                        counter + 1, filletChamferData[counter + 1][X]);
-            }
-            if (resultLenght > 0 && time_it2 != 0) {
-                time_it1_B = modf(fillet_chamfer_values.to_time(counter, -resultLenght),
-                                  &intpart);
-            } else {
-                if (time_it2 == 0) {
-                    time_it1_B = 1;
-                } else {
-                    time_it1_B = gapHelper;
-                }
-            }
-            if (path_it->closed() && curve_it2 == curve_endit &&
-                    filletChamferData[counter - counterCurves][Y] == 0) {
-                time_it1_B = 1;
-                time_it2 = 0;
-            } else if (path_it->size() > counterCurves + 1 &&
-                       filletChamferData[counter + 1][Y] == 0) {
-                time_it1_B = 1;
-                time_it2 = 0;
-            }
-            if (time_it1_B < time_it1) {
-                time_it1_B = time_it1 + gapHelper;
-            }
-            Curve *knotCurve1 = curve_it1->portion(time_it1, time_it1_B);
+            bool last = curve_it2 == curve_endit;
+            std::vector<double> times = fillet_chamfer_values.get_times(counter, path_in, last);
+            Curve *knotCurve1 = curve_it1->portion(times[0], times[1]);
             if (counterCurves > 0) {
                 knotCurve1->setInitial(path_out.finalPoint());
             } else {
-                path_out.start((*curve_it1).pointAt(time_it1));
+                path_out.start((*curve_it1).pointAt(times[0]));
             }
-            Curve *knotCurve2 = (*path_it).front().portion(time_it2, 1);
-            if (curve_it2 != curve_endit) {
-                knotCurve2 = (*curve_it2).portion(time_it2, 1);
-            }
+            Curve *knotCurve2 = curve_it2Fixed->portion(times[2], 1);
             Point startArcPoint = knotCurve1->finalPoint();
-            Point endArcPoint = (*path_it).front().pointAt(time_it2);
-            if (curve_it2 != curve_endit) {
-                endArcPoint = (*curve_it2).pointAt(time_it2);
-            }
+            Point endArcPoint = curve_it2Fixed->pointAt(times[2]);
             double k1 = distance(startArcPoint, curve_it1->finalPoint()) * K;
             double k2 = distance(endArcPoint, curve_it1->finalPoint()) * K;
-            Geom::CubicBezier const *cubic1 =
-                dynamic_cast<Geom::CubicBezier const *>(&*knotCurve1);
+            Geom::CubicBezier const *cubic1 = dynamic_cast<Geom::CubicBezier const *>(&*knotCurve1);
             Ray ray1(startArcPoint, curve_it1->finalPoint());
             if (cubic1) {
                 ray1.setPoints((*cubic1)[2], startArcPoint);
@@ -591,8 +551,7 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
                 ray2.setPoints(endArcPoint, (*cubic2)[1]);
             }
             Point handle2 = endArcPoint - Point::polar(ray2.angle(),k2);
-            bool ccwToggle = cross(curve_it1->finalPoint() - startArcPoint,
-                                   endArcPoint - startArcPoint) < 0;
+            bool ccwToggle = cross(curve_it1->finalPoint() - startArcPoint, endArcPoint - startArcPoint) < 0;
             double angle = angle_between(ray1, ray2, ccwToggle);
             double handleAngle = ray1.angle() - angle;
             if (ccwToggle) {
@@ -604,14 +563,22 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
                 handleAngle = ray2.angle() - angle;
             }
             Point inverseHandle2 = endArcPoint - Point::polar(handleAngle,k2);
-            if (time_it1_B != 1) {
-                if (time_it1_B != gapHelper && time_it1_B != time_it1 + gapHelper) {
+            //straigth lines arc based
+            Line const x_line(Geom::Point(0,0),Geom::Point(1,0));
+            Line const angled_line(startArcPoint,endArcPoint);
+            double angleArc = Geom::angle_between( x_line,angled_line);
+            double radius = Geom::distance(startArcPoint,middle_point(startArcPoint,endArcPoint))/sin(angle/2.0);
+            Coord rx = radius;
+            Coord ry = rx;
+            
+            if (times[1] != 1) {
+                if (times[1] != gapHelper && times[1] != times[0] + gapHelper) {
                     path_out.append(*knotCurve1);
                 }
                 int type = 0;
-                if(path_it->closed() && curve_it2 == curve_endit){
+                if(path_it->closed() && last){
                     type = abs(filletChamferData[counter - counterCurves][Y]);
-                } else if (!path_it->closed() && curve_it2 == curve_endit){
+                } else if (!path_it->closed() && last){
                     //0
                 } else {
                     type = abs(filletChamferData[counter + 1][Y]);
@@ -624,15 +591,23 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
                     }
                     path_out.appendNew<Geom::LineSegment>(endArcPoint);
                 } else if (type == 2) {
-                    path_out.appendNew<Geom::CubicBezier>(inverseHandle1, inverseHandle2,
-                                                          endArcPoint);
+                    if((is_straight_curve(*curve_it1) && is_straight_curve(*curve_it2Fixed)) || force_arcs){ 
+                        ccwToggle = ccwToggle?0:1;
+                        path_out.appendNew<SVGEllipticalArc>(rx, ry, angleArc, 0, ccwToggle, endArcPoint);
+                    }else{
+                        path_out.appendNew<Geom::CubicBezier>(inverseHandle1, inverseHandle2, endArcPoint);
+                    }
                 } else {
-                    path_out.appendNew<Geom::CubicBezier>(handle1, handle2, endArcPoint);
+                    if((is_straight_curve(*curve_it1) && is_straight_curve(*curve_it2Fixed)) || force_arcs){ 
+                        path_out.appendNew<SVGEllipticalArc>(rx, ry, angleArc, 0, ccwToggle, endArcPoint);
+                    } else {
+                        path_out.appendNew<Geom::CubicBezier>(handle1, handle2, endArcPoint);
+                    }
                 }
             } else {
                 path_out.append(*knotCurve1);
             }
-            if (path_it->closed() && curve_it2 == curve_endit) {
+            if (path_it->closed() && last) {
                 path_out.close();
             }
             ++curve_it1;

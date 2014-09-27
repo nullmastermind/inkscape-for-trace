@@ -29,7 +29,7 @@
 #include "preferences.h"
 #include "ui/tools/tool-base.h"
 
-#include "dialog-events.h"
+#include "ui/dialog-events.h"
 
 
 /**

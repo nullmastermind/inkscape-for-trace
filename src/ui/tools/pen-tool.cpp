@@ -181,6 +181,7 @@ void PenTool::_pen_context_set_mode(guint mode) {
     // define the nodes
     this->spiro = (mode == 1);
     this->bspline = (mode == 2);
+    this->_bspline_spiro_color();
 }
 
 /**
@@ -188,7 +189,6 @@ void PenTool::_pen_context_set_mode(guint mode) {
  */
 void PenTool::setup() {
     FreehandBase::setup();
-
     ControlManager &mgr = ControlManager::getManager();
 
     // Pen indicators
@@ -239,7 +239,9 @@ void PenTool::finish() {
     sp_event_context_discard_delayed_snap_event(this);
 
     if (this->npoints != 0) {
-        this->_cancel();
+        // switching context - finish path
+        this->ea = NULL; // unset end anchor if set (otherwise crashes)
+        this->_finish(false);
     }
 
     FreehandBase::finish();
@@ -433,7 +435,7 @@ bool PenTool::_handleButtonPress(GdkEventButton const &bevent) {
                         // This is allowed, if we just canceled curve
                     case PenTool::POINT:
                         if (this->npoints == 0) {
-
+                            this->_bspline_spiro_color();
                             Geom::Point p;
                             if ((bevent.state & GDK_CONTROL_MASK) && (this->polylines_only || this->polylines_paraxial)) {
                                 p = event_dt;
@@ -700,11 +702,9 @@ bool PenTool::_handleMotionNotify(GdkEventMotion const &mevent) {
     }
     // calls the function "bspline_spiro_motion" when the mouse starts or stops moving
     if(this->bspline){
-        this->_bspline_spiro_color();
         this->_bspline_spiro_motion(mevent.state & GDK_SHIFT_MASK);
     }else{
         if ( Geom::LInfty( event_w - pen_drag_origin_w ) > (tolerance/2) || mevent.time == 0) {
-            this->_bspline_spiro_color();
             this->_bspline_spiro_motion(mevent.state & GDK_SHIFT_MASK);
             pen_drag_origin_w = event_w;
         }
@@ -744,6 +744,7 @@ bool PenTool::_handleButtonRelease(GdkEventButton const &revent) {
                     case PenTool::POINT:
                         if ( this->npoints == 0 ) {
                             // Start new thread only with button release
+                            this->_bspline_spiro_color();
                             if (anchor) {
                                 p = anchor->dp;
                             }
@@ -1326,9 +1327,6 @@ void PenTool::_resetColors() {
     // Blue
     this->blue_curve->reset();
     sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->blue_bpath), NULL);
-    // Blue2
-    this->blue2_curve->reset();
-    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->blue2_bpath), NULL);
     // Green
     while (this->green_bpaths) {
         sp_canvas_item_destroy(SP_CANVAS_ITEM(this->green_bpaths->data));
@@ -1385,42 +1383,32 @@ void PenTool::_setAngleDistanceStatusMessage(Geom::Point const p, int pc_point_t
 // this function changes the colors red, green and blue making them transparent or not, depending on if spiro is being used.
 void PenTool::_bspline_spiro_color()
 {
-    bool remake_green_bpaths = false;
+    static Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if(this->spiro){
-        //If the colour is not defined as trasparent, por example when changing
-        //from drawing to spiro mode or when selecting the pen tool
-        if(this->green_color != 0x00ff000){
-            //We change the green and red colours to transparent, so this lines are not necessary
-            //to the drawing with spiro
-            this->red_color = 0xff00000;
-            this->green_color = 0x00ff000;
-            remake_green_bpaths = true;
-        }
+        this->red_color = 0xff00000;
+        this->green_color = 0x00ff000;
     }else if(this->bspline){
-        //If we come from working with the spiro curve and change the mode the "green_curve" colour is transparent
-        if(this->green_color != 0xff00007f){
-            //since we are not im spiro mode, we assign the original colours
-            //to the red and the green curve, removing their transparency 
-            this->red_color = 0xff00007f;
-            //Damos color rojo a la linea verde
+        this->highlight_color = SP_ITEM(this->desktop->currentLayer())->highlight_color();
+        if((unsigned int)prefs->getInt("/tools/nodes/highlight_color", 0xff0000ff) == this->highlight_color){
             this->green_color = 0xff00007f;
-            remake_green_bpaths = true;
+            this->red_color = 0xff00007f;
+        } else {
+            this->green_color = this->highlight_color;
+            this->red_color = this->highlight_color;
         }
     }else{
-        //If we come from working with the spiro curve and change the mode the "green_curve" colour is transparent
-        if(this->green_color != 0x00ff007f){
-            //since we are not im spiro mode, we assign the original colours
-            //to the red and the green curve, removing their transparency 
-            this->red_color = 0xff00007f;
+        this->highlight_color = SP_ITEM(this->desktop->currentLayer())->highlight_color();
+        this->red_color = 0xff00007f;
+        if((unsigned int)prefs->getInt("/tools/nodes/highlight_color", 0xff0000ff) == this->highlight_color){
             this->green_color = 0x00ff007f;
-            remake_green_bpaths = true;
+        } else {
+            this->green_color = this->highlight_color;
         }
-        //we hide the spiro/bspline rests
-        sp_canvas_item_hide(this->blue2_bpath);
+        sp_canvas_item_hide(this->blue_bpath);
     }
     //We erase all the "green_bpaths" to recreate them after with the colour
     //transparency recently modified
-    if (this->green_bpaths && remake_green_bpaths) {
+    if (this->green_bpaths) {
         // remove old piecewise green canvasitems
         while (this->green_bpaths) {
             sp_canvas_item_destroy(SP_CANVAS_ITEM(this->green_bpaths->data));
@@ -1584,6 +1572,9 @@ void PenTool::_bspline_spiro_motion(bool shift){
     if(this->green_curve->is_empty() && !this->sa){
         this->p[1] = this->p[0] + (1./3)*(this->p[3] - this->p[0]);
         this->p[1] = Geom::Point(this->p[1][X] + handleCubicGap,this->p[1][Y] + handleCubicGap);
+        if(shift){
+            this->p[2] = this->p[3];
+        }
     }else if(!this->green_curve->is_empty()){
         tmpCurve = this->green_curve->copy();
     }else{
@@ -1607,8 +1598,11 @@ void PenTool::_bspline_spiro_motion(bool shift){
                 SBasisWPower = WPower->first_segment()->toSBasis();
                 WPower->reset();
                 this->p[1] = SBasisWPower.valueAt(WP);
-                if(!Geom::are_near(this->p[1],this->p[0]))
+                if(!Geom::are_near(this->p[1],this->p[0])){
                     this->p[1] = Geom::Point(this->p[1][X] + handleCubicGap,this->p[1][Y] + handleCubicGap);
+                } else {
+                    this->p[1] = this->p[0];
+                }
                 if(shift)
                     this->p[2] = this->p[3];
             }else{
@@ -1795,11 +1789,11 @@ void PenTool::_bspline_spiro_build()
             this->_spiro_doEffect(curve);
         }
 
-        sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->blue2_bpath), curve);   
-        sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(this->blue2_bpath), this->blue_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
-        sp_canvas_item_show(this->blue2_bpath);
+        sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->blue_bpath), curve);   
+        sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(this->blue_bpath), this->blue_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
+        sp_canvas_item_show(this->blue_bpath);
         curve->unref();
-        this->blue2_curve->reset();
+        this->blue_curve->reset();
         //We hide the holders that doesn't contribute anything
         if(this->spiro){
             sp_canvas_item_show(this->c1);
@@ -1811,7 +1805,7 @@ void PenTool::_bspline_spiro_build()
         sp_canvas_item_hide(this->cl0);
     }else{
         //if the curve is empty
-        sp_canvas_item_hide(this->blue2_bpath);
+        sp_canvas_item_hide(this->blue_bpath);
 
     }
 }
@@ -1819,155 +1813,145 @@ void PenTool::_bspline_spiro_build()
 void PenTool::_bspline_doEffect(SPCurve * curve)
 {
     // commenting the function doEffect in src/live_effects/lpe-bspline.cpp
-    Geom::PathVector const original_pathv = curve->get_pathvector();
-    if (curve->get_segment_count() < 1)
+    if (curve->get_segment_count() < 1){
         return;
+    }
+    // Make copy of old path as it is changed during processing
+    Geom::PathVector const original_pathv = curve->get_pathvector();
     curve->reset();
 
-    for(Geom::PathVector::const_iterator path_it = original_pathv.begin(); path_it != original_pathv.end(); ++path_it) {
+    //Recorremos todos los paths a los que queremos aplicar el efecto, hasta el
+    //penúltimo
+    for (Geom::PathVector::const_iterator path_it = original_pathv.begin();
+            path_it != original_pathv.end(); ++path_it) {
+        //Si está vacío...
         if (path_it->empty())
             continue;
+        //Itreadores
 
-        Geom::Path::const_iterator curve_it1 = path_it->begin();      // incoming curve
-        Geom::Path::const_iterator curve_it2 = ++(path_it->begin());         // outgoing curve
-        Geom::Path::const_iterator curve_endit = path_it->end_default(); // this determines when the loop has to stop
+        Geom::Path::const_iterator curve_it1 = path_it->begin();
+        Geom::Path::const_iterator curve_it2 = ++(path_it->begin());
+        Geom::Path::const_iterator curve_endit = path_it->end_default(); 
         SPCurve *nCurve = new SPCurve();
-        Geom::Point previousNode(0,0);
-        Geom::Point node(0,0);
-        Geom::Point pointAt1(0,0);
-        Geom::Point pointAt2(0,0);
-        Geom::Point nextPointAt1(0,0);
-        Geom::Point nextPointAt2(0,0);
-        Geom::Point nextPointAt3(0,0);
-        Geom::D2< Geom::SBasis > SBasisIn;
-        Geom::D2< Geom::SBasis > SBasisOut;
-        Geom::D2< Geom::SBasis > SBasisHelper;
+        Geom::Point previousNode(0, 0);
+        Geom::Point node(0, 0);
+        Geom::Point pointAt1(0, 0);
+        Geom::Point pointAt2(0, 0);
+        Geom::Point nextPointAt1(0, 0);
+        Geom::D2<Geom::SBasis> SBasisIn;
+        Geom::D2<Geom::SBasis> SBasisOut;
+        Geom::D2<Geom::SBasis> SBasisHelper;
         Geom::CubicBezier const *cubic = NULL;
         if (path_it->closed()) {
-            const Geom::Curve &closingline = path_it->back_closed(); // the closing line segment is always of type Geom::LineSegment.
+            const Geom::Curve &closingline =
+                path_it->back_closed(); // the closing line segment is always of type
             if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
                 curve_endit = path_it->end_open();
             }
         }
-        while ( curve_it2 != curve_endit )
-        {
-            SPCurve * in = new SPCurve();
+        nCurve->moveto(curve_it1->initialPoint());
+        while (curve_it1 != curve_endit) {
+            SPCurve *in = new SPCurve();
             in->moveto(curve_it1->initialPoint());
             in->lineto(curve_it1->finalPoint());
-            cubic = dynamic_cast<Geom::CubicBezier const*>(&*curve_it1);
-            if(cubic){
+            cubic = dynamic_cast<Geom::CubicBezier const *>(&*curve_it1);
+            if (cubic) {
                 SBasisIn = in->first_segment()->toSBasis();
-                pointAt1 = SBasisIn.valueAt(Geom::nearest_point((*cubic)[1],*in->first_segment()));
-                pointAt2 = SBasisIn.valueAt(Geom::nearest_point((*cubic)[2],*in->first_segment()));
-            }else{
+                if(are_near((*cubic)[1],(*cubic)[0]) && !are_near((*cubic)[2],(*cubic)[3])) {
+                    pointAt1 = SBasisIn.valueAt(0.3334);
+                } else {
+                    pointAt1 = SBasisIn.valueAt(Geom::nearest_point((*cubic)[1], *in->first_segment()));
+                }
+                if(are_near((*cubic)[2],(*cubic)[3]) && !are_near((*cubic)[1],(*cubic)[0])) {
+                    pointAt2 = SBasisIn.valueAt(0.6667);
+                } else {
+                    pointAt2 = SBasisIn.valueAt(Geom::nearest_point((*cubic)[2], *in->first_segment()));
+                }
+            } else {
                 pointAt1 = in->first_segment()->initialPoint();
                 pointAt2 = in->first_segment()->finalPoint();
             }
             in->reset();
             delete in;
-            SPCurve * out = new SPCurve();
-            out->moveto(curve_it2->initialPoint());
-            out->lineto(curve_it2->finalPoint());
-            cubic = dynamic_cast<Geom::CubicBezier const*>(&*curve_it2);
-            if(cubic){
-                SBasisOut = out->first_segment()->toSBasis();
-                nextPointAt1 = SBasisOut.valueAt(Geom::nearest_point((*cubic)[1],*out->first_segment()));
-                nextPointAt2 = SBasisOut.valueAt(Geom::nearest_point((*cubic)[2],*out->first_segment()));;
-                nextPointAt3 = (*cubic)[3];
-            }else{
-                nextPointAt1 = out->first_segment()->initialPoint();
-                nextPointAt2 = out->first_segment()->finalPoint();
-                nextPointAt3 = out->first_segment()->finalPoint();
+            if ( curve_it2 != curve_endit ) {
+                SPCurve *out = new SPCurve();
+                out->moveto(curve_it2->initialPoint());
+                out->lineto(curve_it2->finalPoint());
+                cubic = dynamic_cast<Geom::CubicBezier const *>(&*curve_it2);
+                if (cubic) {
+                    SBasisOut = out->first_segment()->toSBasis();
+                    if(are_near((*cubic)[1],(*cubic)[0]) && !are_near((*cubic)[2],(*cubic)[3])) {
+                        nextPointAt1 = SBasisIn.valueAt(0.3334);
+                    } else {
+                        nextPointAt1 = SBasisOut.valueAt(Geom::nearest_point((*cubic)[1], *out->first_segment()));
+                    }
+                } else {
+                    nextPointAt1 = out->first_segment()->initialPoint();
+                }
+                out->reset();
+                delete out;
             }
-            out->reset();
-            delete out;
-            SPCurve *lineHelper = new SPCurve();
-            lineHelper->moveto(pointAt2);
-            lineHelper->lineto(nextPointAt1);
-            SBasisHelper  = lineHelper->first_segment()->toSBasis();
-            lineHelper->reset();
-            delete lineHelper;
-            previousNode = node;
-            node = SBasisHelper.valueAt(0.5);
-            SPCurve *curveHelper = new SPCurve();
-            curveHelper->moveto(previousNode);
-            curveHelper->curveto(pointAt1, pointAt2, node);
-            nCurve->append_continuous(curveHelper, 0.0625);
-            curveHelper->reset();
-            delete curveHelper;
+            Geom::Point startNode = path_it->begin()->initialPoint();
+            if (path_it->closed() && curve_it2 == curve_endit) {
+                SPCurve *start = new SPCurve();
+                start->moveto(path_it->begin()->initialPoint());
+                start->lineto(path_it->begin()->finalPoint());
+                Geom::D2<Geom::SBasis> SBasisStart = start->first_segment()->toSBasis();
+                SPCurve *lineHelper = new SPCurve();
+                cubic = dynamic_cast<Geom::CubicBezier const *>(&*path_it->begin());
+                if (cubic) {
+                    lineHelper->moveto(SBasisStart.valueAt(
+                                           Geom::nearest_point((*cubic)[1], *start->first_segment())));
+                } else {
+                    lineHelper->moveto(start->first_segment()->initialPoint());
+                }
+                start->reset();
+                delete start;
+
+                SPCurve *end = new SPCurve();
+                end->moveto(curve_it1->initialPoint());
+                end->lineto(curve_it1->finalPoint());
+                Geom::D2<Geom::SBasis> SBasisEnd = end->first_segment()->toSBasis();
+                cubic = dynamic_cast<Geom::CubicBezier const *>(&*curve_it1);
+                if (cubic) {
+                    lineHelper->lineto(SBasisEnd.valueAt(
+                                           Geom::nearest_point((*cubic)[2], *end->first_segment())));
+                } else {
+                    lineHelper->lineto(end->first_segment()->finalPoint());
+                }
+                end->reset();
+                delete end;
+                SBasisHelper = lineHelper->first_segment()->toSBasis();
+                lineHelper->reset();
+                delete lineHelper;
+                startNode = SBasisHelper.valueAt(0.5);
+                nCurve->curveto(pointAt1, pointAt2, startNode);
+                nCurve->move_endpoints(startNode, startNode);
+            } else if ( curve_it2 == curve_endit) {
+                nCurve->curveto(pointAt1, pointAt2, curve_it1->finalPoint());
+                nCurve->move_endpoints(path_it->begin()->initialPoint(), curve_it1->finalPoint());
+            } else {
+                SPCurve *lineHelper = new SPCurve();
+                lineHelper->moveto(pointAt2);
+                lineHelper->lineto(nextPointAt1);
+                SBasisHelper = lineHelper->first_segment()->toSBasis();
+                lineHelper->reset();
+                delete lineHelper;
+                previousNode = node;
+                node = SBasisHelper.valueAt(0.5);
+                Geom::CubicBezier const *cubic2 = dynamic_cast<Geom::CubicBezier const *>(&*curve_it1);
+                if((cubic && are_near((*cubic)[0],(*cubic)[1])) || (cubic2 && are_near((*cubic2)[2],(*cubic2)[3]))) {
+                    node = curve_it1->finalPoint();
+                }
+                nCurve->curveto(pointAt1, pointAt2, node);
+            }
             ++curve_it1;
             ++curve_it2;
         }
-        SPCurve *out = new SPCurve();
-        out->moveto(curve_it1->initialPoint());
-        out->lineto(curve_it1->finalPoint());
-        cubic = dynamic_cast<Geom::CubicBezier const *>(&*curve_it1);
-        if (cubic) {
-            SBasisOut = out->first_segment()->toSBasis();
-            nextPointAt1 = SBasisOut.valueAt(Geom::nearest_point((*cubic)[1], *out->first_segment()));
-            nextPointAt2 = SBasisOut.valueAt(Geom::nearest_point((*cubic)[2], *out->first_segment()));
-            nextPointAt3 = out->first_segment()->finalPoint();
-        } else {
-            nextPointAt1 = out->first_segment()->initialPoint();
-            nextPointAt2 = out->first_segment()->finalPoint();
-            nextPointAt3 = out->first_segment()->finalPoint();
-        }
-        out->reset();
-        delete out;
-        SPCurve *curveHelper = new SPCurve();
-        curveHelper->moveto(node);
-        Geom::Point startNode = path_it->begin()->initialPoint();
-        if (path_it->closed()) {
-            SPCurve * start = new SPCurve();
-            start->moveto(path_it->begin()->initialPoint());
-            start->lineto(path_it->begin()->finalPoint());
-            Geom::D2< Geom::SBasis > SBasisStart = start->first_segment()->toSBasis();
-            SPCurve *lineHelper = new SPCurve();
-            cubic = dynamic_cast<Geom::CubicBezier const*>(&*path_it->begin());
-            if(cubic){
-                lineHelper->moveto(SBasisStart.valueAt(Geom::nearest_point((*cubic)[1],*start->first_segment())));
-            }else{
-                lineHelper->moveto(start->first_segment()->initialPoint());
-            }
-            start->reset();
-            delete start;
-
-            SPCurve * end = new SPCurve();
-            end->moveto(curve_it1->initialPoint());
-            end->lineto(curve_it1->finalPoint());
-            Geom::D2< Geom::SBasis > SBasisEnd = end->first_segment()->toSBasis();
-            cubic = dynamic_cast<Geom::CubicBezier const*>(&*curve_it1);
-            if(cubic){
-                lineHelper->lineto(SBasisEnd.valueAt(Geom::nearest_point((*cubic)[2],*end->first_segment())));
-            }else{
-                lineHelper->lineto(end->first_segment()->finalPoint());
-            }
-            end->reset();
-            delete end;
-            SBasisHelper = lineHelper->first_segment()->toSBasis();
-            lineHelper->reset();
-            delete lineHelper;
-            startNode = SBasisHelper.valueAt(0.5);
-            curveHelper->curveto(nextPointAt1, nextPointAt2, startNode);
-            nCurve->append_continuous(curveHelper, 0.0625);
-            nCurve->move_endpoints(startNode,startNode);
-        }else{
-            SPCurve * start = new SPCurve();
-            start->moveto(path_it->begin()->initialPoint());
-            start->lineto(path_it->begin()->finalPoint());
-            startNode = start->first_segment()->initialPoint();
-            start->reset();
-            delete start;
-            curveHelper->curveto(nextPointAt1, nextPointAt2, nextPointAt3);
-            nCurve->append_continuous(curveHelper, 0.0625);
-            nCurve->move_endpoints(startNode,nextPointAt3);
-        }
-        curveHelper->reset();
-        delete curveHelper;
         if (path_it->closed()) {
             nCurve->closepath_current();
         }
-        curve->append(nCurve,false);
+        curve->append(nCurve, false);
         nCurve->reset();
         delete nCurve;
     }

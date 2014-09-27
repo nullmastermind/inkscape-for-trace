@@ -8,12 +8,20 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <glibmm.h>
+
 #include "ui/dialog/lpe-fillet-chamfer-properties.h"
 #include "live_effects/parameter/filletchamferpointarray.h"
+
 #include <2geom/piecewise.h>
 #include <2geom/sbasis-to-bezier.h>
 #include <2geom/sbasis-geometric.h>
+#include <2geom/svg-elliptical-arc.h>
+#include <2geom/line.h>
+#include <2geom/path-intersection.h>
 
+#include "ui/dialog/lpe-fillet-chamfer-properties.h"
+#include "live_effects/parameter/filletchamferpointarray.h"
 #include "live_effects/effect.h"
 #include "svg/svg.h"
 #include "svg/stringstream.h"
@@ -31,6 +39,7 @@
 // TODO due to internal breakage in glibmm headers,
 // this has to be included last.
 #include <glibmm/i18n.h>
+
 
 using namespace Geom;
 
@@ -165,11 +174,12 @@ void FilletChamferPointArrayParam::recalculate_controlpoints_for_new_pwd2(
                     }
                 }
                 if (last_pathv.size() > pathv.size() ||
-                        (last_pathv[counterPaths].size() > counter - offset &&
+                        (last_pathv.size() > counterPaths && 
+                        last_pathv[counterPaths].size() > counter - offset &&
                          !are_near(curve_it1->initialPoint(),
                                    last_pathv[counterPaths][counter - offset].initialPoint(),
                                    0.1))) {
-                    if (last_pathv.size() > counterPaths && curve_it2 == curve_endit) {
+                    if ( curve_it2 == curve_endit) {
                         if (last_pathv[counterPaths].size() < pathv[counterPaths].size()) {
                             offset = abs(last_pathv[counterPaths].size() -
                                          pathv[counterPaths].size());
@@ -332,10 +342,10 @@ void FilletChamferPointArrayParam::recalculate_knots(
                     result.push_back(Point(xPos, 0));
                 }
                 ++curve_it1;
+                counter++;
                 if (curve_it2 != curve_endit) {
                     ++curve_it2;
                 }
-                counter++;
                 counterCurves++;
             }
         }
@@ -357,6 +367,11 @@ void FilletChamferPointArrayParam::set_pwd2(
 void FilletChamferPointArrayParam::set_helper_size(int hs)
 {
     helper_size = hs;
+}
+
+void FilletChamferPointArrayParam::set_use_distance(bool use_knot_distance )
+{
+    use_distance = use_knot_distance;
 }
 
 void FilletChamferPointArrayParam::set_unit(const gchar *abbr)
@@ -398,6 +413,205 @@ void FilletChamferPointArrayParam::addCanvasIndicators(
     hp_vec.push_back(hp);
 }
 
+double FilletChamferPointArrayParam::rad_to_len(int index, double rad)
+{
+    double len = 0;
+    std::vector<Geom::Path> subpaths = path_from_piecewise(last_pwd2, 0.1);
+    std::pair<std::size_t, std::size_t> positions = get_positions(index, subpaths);
+    D2<SBasis> A = last_pwd2[last_index(index, subpaths)];
+    if(positions.second != 0){
+        A = last_pwd2[index-1];
+    }else{
+        if(!subpaths[positions.first].closed()){
+            return len;
+        }
+    }
+    D2<SBasis> B = last_pwd2[index];
+    Piecewise<D2<SBasis> > offset_curve0 = Piecewise<D2<SBasis> >(A)+rot90(unitVector(derivative(A)))*(rad);
+    Piecewise<D2<SBasis> > offset_curve1 = Piecewise<D2<SBasis> >(B)+rot90(unitVector(derivative(B)))*(rad);
+    Geom::Path p0 = path_from_piecewise(offset_curve0, 0.1)[0];
+    Geom::Path p1 = path_from_piecewise(offset_curve1, 0.1)[0];
+    Geom::Crossings cs = Geom::crossings(p0, p1);
+    if(cs.size() > 0){
+        Point cp =p0(cs[0].ta);
+        double p0pt = nearest_point(cp, B);
+        len = time_to_len(index,p0pt);
+    } else {
+        if(rad < 0){
+            len = rad_to_len(index, rad * -1);
+        }
+    }
+    return len;
+}
+
+double FilletChamferPointArrayParam::len_to_rad(int index, double len)
+{
+    double rad = 0;
+    double tmp_len = _vector[index][X];
+    _vector[index] = Geom::Point(len,_vector[index][Y]);
+    std::vector<Geom::Path> subpaths = path_from_piecewise(last_pwd2, 0.1);
+    std::pair<std::size_t, std::size_t> positions = get_positions(index, subpaths);
+    Piecewise<D2<SBasis> > u;
+    u.push_cut(0);          
+    u.push(last_pwd2[last_index(index, subpaths)], 1);
+    Geom::Curve * A = path_from_piecewise(u, 0.1)[0][0].duplicate();
+    Geom::Curve * B = subpaths[positions.first][positions.second].duplicate();
+    std::vector<double> times;
+    if(positions.second != 0){
+        A = subpaths[positions.first][positions.second-1].duplicate();
+        times = get_times(index-1, subpaths, false);
+    }else{
+        if(!subpaths[positions.first].closed()){
+            return rad;
+        }
+        times = get_times(last_index(index, subpaths), subpaths, true);
+    }
+    _vector[index] = Geom::Point(tmp_len,_vector[index][Y]);
+    Geom::Point startArcPoint = A->toSBasis().valueAt(times[1]);
+    Geom::Point endArcPoint = B->toSBasis().valueAt(times[2]);
+    Curve *knotCurve1 = A->portion(times[0], times[1]);
+    Curve *knotCurve2 = B->portion(times[2], 1);
+    Geom::CubicBezier const *cubic1 = dynamic_cast<Geom::CubicBezier const *>(&*knotCurve1);
+    Ray ray1(startArcPoint, A->finalPoint());
+    if (cubic1) {
+        ray1.setPoints((*cubic1)[2], startArcPoint);
+    }
+    Geom::CubicBezier const *cubic2 = dynamic_cast<Geom::CubicBezier const *>(&*knotCurve2);
+    Ray ray2(B->initialPoint(), endArcPoint);
+    if (cubic2) {
+        ray2.setPoints(endArcPoint, (*cubic2)[1]);
+    }
+    bool ccwToggle = cross(A->finalPoint() - startArcPoint, endArcPoint - startArcPoint) < 0;
+    double distanceArc = Geom::distance(startArcPoint,middle_point(startArcPoint,endArcPoint));
+    double angleBetween = angle_between(ray1, ray2, ccwToggle);
+    rad = distanceArc/sin(angleBetween/2.0);
+    return rad * -1;
+}
+
+std::vector<double> FilletChamferPointArrayParam::get_times(int index, std::vector<Geom::Path> subpaths, bool last)
+{
+    const double tolerance = 0.001;
+    const double gapHelper = 0.00001;
+    std::pair<std::size_t, std::size_t> positions = get_positions(index, subpaths);
+    Curve *curve_it1;
+    curve_it1 = subpaths[positions.first][positions.second].duplicate();
+    Coord it1_length = (*curve_it1).length(tolerance);
+    double time_it1, time_it2, time_it1_B, intpart;
+    time_it1 = modf(to_time(index, _vector[index][X]), &intpart);
+    if (_vector[index][Y] == 0) {
+        time_it1 = 0;
+    }
+    double resultLenght = 0;
+    time_it1_B = 1;
+    if (subpaths[positions.first].closed() && last) {
+        time_it2 = modf(to_time(index - positions.second , _vector[index - positions.second ][X]), &intpart);
+        resultLenght = it1_length + to_len(index - positions.second, _vector[index - positions.second ][X]);
+    } else if (!subpaths[positions.first].closed() && last){
+        time_it2 = 0;
+        resultLenght = 0;
+    } else {
+        time_it2 = modf(to_time(index + 1, _vector[index + 1][X]), &intpart);
+        resultLenght = it1_length + to_len( index + 1, _vector[index + 1][X]);
+    }
+    if (resultLenght > 0 && time_it2 != 0) {
+        time_it1_B = modf(to_time(index, -resultLenght), &intpart);
+    } else {
+        if (time_it2 == 0) {
+            time_it1_B = 1;
+        } else {
+            time_it1_B = gapHelper;
+        }
+    }
+
+    if ((subpaths[positions.first].closed() && last && _vector[index - positions.second][Y] == 0) || (subpaths[positions.first].size() > positions.second + 1 && _vector[index + 1][Y] == 0)) {
+        time_it1_B = 1;
+        time_it2 = 0;
+    }
+    if (time_it1_B < time_it1) {
+        time_it1_B = time_it1 + gapHelper;
+    }
+    std::vector<double> out;
+    out.push_back(time_it1);
+    out.push_back(time_it1_B);
+    out.push_back(time_it2);
+    return out;
+}
+
+std::pair<std::size_t, std::size_t> FilletChamferPointArrayParam::get_positions(int index, std::vector<Geom::Path> subpaths)
+{
+    int counter = -1;
+    std::size_t first = 0;
+    std::size_t second = 0;
+    for (PathVector::const_iterator path_it = subpaths.begin(); path_it != subpaths.end(); ++path_it) {
+        if (path_it->empty())
+            continue;
+        Geom::Path::const_iterator curve_it1 = path_it->begin();
+        Geom::Path::const_iterator curve_endit = path_it->end_default();
+        if (path_it->closed()) {
+          const Geom::Curve &closingline = path_it->back_closed(); 
+          // the closing line segment is always of type 
+          // Geom::LineSegment.
+          if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
+            // closingline.isDegenerate() did not work, because it only checks for
+            // *exact* zero length, which goes wrong for relative coordinates and
+            // rounding errors...
+            // the closing line segment has zero-length. So stop before that one!
+            curve_endit = path_it->end_open();
+          }
+        }
+        first++;
+        second = 0;
+        while (curve_it1 != curve_endit) {
+            counter++;
+            second++;
+            if(counter == index){
+                break;
+            }
+            ++curve_it1;
+        }
+        if(counter == index){
+            break;
+        }
+    }
+    first--;
+    second--;
+    std::pair<std::size_t, std::size_t> out(first, second);
+    return out;
+}
+
+int FilletChamferPointArrayParam::last_index(int index, std::vector<Geom::Path> subpaths)
+{
+    int counter = -1;
+    bool inSubpath = false;
+    for (PathVector::const_iterator path_it = subpaths.begin(); path_it != subpaths.end(); ++path_it) {
+        if (path_it->empty())
+            continue;
+        Geom::Path::const_iterator curve_it1 = path_it->begin();
+        Geom::Path::const_iterator curve_endit = path_it->end_default();
+        if (path_it->closed()) {
+          const Geom::Curve &closingline = path_it->back_closed(); 
+          if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
+            curve_endit = path_it->end_open();
+          }
+        }
+        while (curve_it1 != curve_endit) {
+            counter++;
+            if(counter == index){
+                inSubpath = true;
+            }
+            ++curve_it1;
+        }
+        if(inSubpath){
+            break;
+        }
+    }
+    if(!inSubpath){
+        counter = -1;
+    }
+    return counter;
+}
+
+
 double FilletChamferPointArrayParam::len_to_time(int index, double len)
 {
     double t = 0;
@@ -405,7 +619,7 @@ double FilletChamferPointArrayParam::len_to_time(int index, double len)
         if (len != 0) {
             if (last_pwd2[index][0].degreesOfFreedom() != 2) {
                 Piecewise<D2<SBasis> > u;
-                u.push_cut(0);
+                u.push_cut(0);          
                 u.push(last_pwd2[index], 1);
                 std::vector<double> t_roots = roots(arcLengthSb(u) - std::abs(len));
                 if (t_roots.size() > 0) {
@@ -586,34 +800,34 @@ void FilletChamferPointArrayParamKnotHolderEntity::knot_click(guint state)
             this->knot->tip = g_strdup(tip);
             this->knot->show();
         }
-    } else if ((state & GDK_MOD1_MASK) || (state & GDK_SHIFT_MASK)) {
-        Geom::Point offset = Geom::Point(_pparam->_vector.at(_index).x(),
-                                         _pparam->_vector.at(_index).y());
+    } else if (state & GDK_SHIFT_MASK) {
+        double xModified = _pparam->_vector.at(_index).x(); 
+        if(xModified < 0 && !_pparam->use_distance){
+             xModified = _pparam->len_to_rad(_index, _pparam->_vector.at(_index).x());
+        }
+        std::vector<Geom::Path> subpaths = path_from_piecewise(_pparam->last_pwd2, 0.1);
+        std::pair<std::size_t, std::size_t> positions = _pparam->get_positions(_index, subpaths);
+        D2<SBasis> A = _pparam->last_pwd2[_pparam->last_index(_index, subpaths)];
+        if(positions.second != 0){
+            A = _pparam->last_pwd2[_index-1];
+        }
+        D2<SBasis> B = _pparam->last_pwd2[_index];
+        bool aprox = (A[0].degreesOfFreedom() != 2 || B[0].degreesOfFreedom() != 2) && !_pparam->use_distance?true:false;
+        Geom::Point offset = Geom::Point(xModified, _pparam->_vector.at(_index).y());
         Inkscape::UI::Dialogs::FilletChamferPropertiesDialog::showDialog(
-            this->desktop, offset, this, _pparam->unit);
+            this->desktop, offset, this, _pparam->unit, _pparam->use_distance, aprox);
     }
-
-}
-
-void
-FilletChamferPointArrayParamKnotHolderEntity::knot_doubleclicked(guint state)
-{
-    //todo: fill the double click dialog whith this parameters in the added file
-    //src/ui/dialog/lpe-fillet-chamfer-properties.cpp(.h)
-    //My idea for when have enought time is:
-    //label whith radius in percent
-    //label whith radius in size -maybe handle units-
-    //entry whith actual radius -in flexible % mode or fixed -?px-
-    //2 radio options to switch entry from fixed or flexible, also update the
-    //entry
-    //Checkbox or two radios to swith fillet or chamfer
 
 }
 
 void FilletChamferPointArrayParamKnotHolderEntity::knot_set_offset(
     Geom::Point offset)
 {
-    _pparam->_vector.at(_index) = Geom::Point(offset.x(), offset.y());
+    double xModified = offset.x(); 
+    if(xModified < 0 && !_pparam->use_distance){
+         xModified = _pparam->rad_to_len(_index, offset.x());
+    }
+    _pparam->_vector.at(_index) = Geom::Point(xModified, offset.y());
     this->parent_holder->knot_ungrabbed_handler(this->knot, 0);
 }
 
@@ -644,7 +858,6 @@ void FilletChamferPointArrayParam::addKnotHolderEntities(KnotHolder *knotholder,
                     "<b>Shift+Click</b> open dialog, "
                     "<b>Ctrl+Alt+Click</b> reset");
         }
-        
         FilletChamferPointArrayParamKnotHolderEntity *e =
             new FilletChamferPointArrayParamKnotHolderEntity(this, i);
         e->create(desktop, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN, _(tip),

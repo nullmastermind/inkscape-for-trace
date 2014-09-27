@@ -935,7 +935,7 @@ void SPNamedView::hide(SPDesktop const *desktop)
     views = g_slist_remove(views, desktop);
 }
 
-void SPNamedView::activateGuides(gpointer desktop, gboolean active)
+void SPNamedView::activateGuides(void* desktop, bool active)
 {
     g_assert(desktop != NULL);
     g_assert(g_slist_find(views, desktop));

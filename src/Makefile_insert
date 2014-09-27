@@ -74,7 +74,6 @@ ink_common_sources +=	\
 	inkscape.cpp inkscape.h						\
 	interface.cpp interface.h					\
 	isinf.h								\
-	isnormal.h							\
 	knot.cpp knot.h							\
 	knot-enums.h							\
 	knotholder.cpp knotholder.h					\
@@ -200,6 +199,9 @@ ink_common_sources +=	\
 	sp-style-elem.cpp sp-style-elem.h	\
 	sp-switch.cpp sp-switch.h		\
 	sp-symbol.cpp sp-symbol.h		\
+	sp-tag.cpp sp-tag.h			\
+	sp-tag-use.cpp sp-tag-use.h		\
+	sp-tag-use-reference.cpp sp-tag-use-reference.h			\
 	sp-text.cpp sp-text.h			\
 	sp-textpath.h				\
 	sp-title.cpp sp-title.h			\

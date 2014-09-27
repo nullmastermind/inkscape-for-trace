@@ -40,7 +40,7 @@
 
 #include "xml/repr.h"
 
-#include "dialogs/dialog-events.h"
+#include "ui/dialog-events.h"
 #include "preferences.h"
 #include "svg/css-ostringstream.h"
 #include "sp-stop.h"

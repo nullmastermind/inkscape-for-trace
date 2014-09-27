@@ -15,9 +15,11 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <cairo.h>
 #include <2geom/rect.h>
 #include "sp-object.h"
+
+typedef struct _cairo cairo_t;
+typedef struct _cairo_pattern cairo_pattern_t;
 
 #define SP_PAINT_SERVER(obj) (dynamic_cast<SPPaintServer*>((SPObject*)obj))
 #define SP_IS_PAINT_SERVER(obj) (dynamic_cast<const SPPaintServer*>((SPObject*)obj) != NULL)

@@ -350,7 +350,6 @@ set(inkscape_SRC
 	inkscape.h
 	interface.h
 	isinf.h
-	isnormal.h
 	knot-enums.h
 	knot-holder-entity.h
 	knot.h

@@ -140,6 +140,7 @@ src/live_effects/lpe-extrude.cpp
 src/live_effects/lpe-fillet-chamfer.cpp
 src/live_effects/lpe-gears.cpp
 src/live_effects/lpe-interpolate.cpp
+src/live_effects/lpe-interpolate_points.cpp
 src/live_effects/lpe-knot.cpp
 src/live_effects/lpe-lattice2.cpp
 src/live_effects/lpe-patternalongpath.cpp
@@ -152,7 +153,18 @@ src/live_effects/lpe-show_handles.cpp
 src/live_effects/lpe-skeleton.cpp
 src/live_effects/lpe-sketch.cpp
 src/live_effects/lpe-vonkoch.cpp
+src/live_effects/lpe-envelope-perspective.cpp
+src/live_effects/lpe-attach-path.cpp
+src/live_effects/lpe-bounding-box.cpp
+src/live_effects/lpe-ellipse_5pts.cpp
+src/live_effects/lpe-fill-between-many.cpp
+src/live_effects/lpe-fill-between-strokes.cpp
+src/live_effects/lpe-jointype.cpp
+src/live_effects/lpe-taperstroke.cpp
+src/live_effects/lpe-fillet-chamfer.cpp
 src/live_effects/parameter/filletchamferpointarray.cpp
+src/live_effects/parameter/originalpatharray.cpp
+src/live_effects/parameter/transformedpoint.cpp
 src/live_effects/parameter/pointreseteable.cpp
 src/live_effects/parameter/togglebutton.cpp
 src/live_effects/parameter/bool.cpp
@@ -259,6 +271,10 @@ src/ui/dialog/tile.cpp
 src/ui/dialog/tracedialog.cpp
 src/ui/dialog/transformation.cpp
 src/ui/dialog/xml-tree.cpp
+src/ui/dialog/lpe-fillet-chamfer-properties.cpp
+src/ui/dialog/lpe-powerstroke-properties.cpp
+src/ui/dialog/objects.cpp
+src/ui/dialog/tags.cpp
 src/ui/tool/curve-drag-point.cpp
 src/ui/tool/multi-path-manipulator.cpp
 src/ui/tool/node.cpp

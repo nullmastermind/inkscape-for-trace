@@ -40,7 +40,7 @@ LPEInterpolatePoints::LPEInterpolatePoints(LivePathEffectObject *lpeobject)
 {
     show_orig_path = false;
 
-    registerParameter( dynamic_cast<Parameter *>(&interpolator_type) );
+    registerParameter( &interpolator_type );
 }
 
 LPEInterpolatePoints::~LPEInterpolatePoints()

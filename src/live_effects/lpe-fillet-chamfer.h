@@ -15,7 +15,13 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <glibmm/threads.h>
+#if HAVE_CONFIG_H
+# include "config.h"
+#endif
+
+#if defined(GLIBMM_DISABLE_DEPRECATED) && defined(HAVE_GLIBMM_THREADS_H)
+# include <glibmm/threads.h>
+#endif
 
 #include "live_effects/parameter/enum.h"
 #include "live_effects/parameter/bool.h"
@@ -61,6 +67,8 @@ private:
     BoolParam ignore_radius_0;
     BoolParam only_selected;
     BoolParam flexible;
+    BoolParam force_arcs;
+    BoolParam use_knot_distance;
     UnitParam unit;
     ScalarParam radius;
     ScalarParam helper_size;

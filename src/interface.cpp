@@ -57,7 +57,7 @@
 #include "helper/gnome-utils.h"
 #include "helper/window.h"
 #include "io/sys.h"
-#include "dialogs/dialog-events.h"
+#include "ui/dialog-events.h"
 #include "message-context.h"
 #include "ui/uxmanager.h"
 #include "ui/clipboard.h"
@@ -149,7 +149,7 @@ static void injectRenamedIcons();
 static const int MIN_ONSCREEN_DISTANCE = 50;
 
 void
-sp_create_window(SPViewWidget *vw, gboolean editable)
+sp_create_window(SPViewWidget *vw, bool editable)
 {
     g_return_if_fail(vw != NULL);
     g_return_if_fail(SP_IS_VIEW_WIDGET(vw));
@@ -1756,6 +1756,13 @@ void ContextMenu::MakeItemMenu (void)
     }
     mi->show();
     append(*mi);
+
+    /*SSet Clip Group */
+    mi = Gtk::manage(new Gtk::MenuItem(_("Create Clip G_roup"),1));
+    mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::CreateGroupClip));
+    mi->set_sensitive(TRUE);
+    mi->show();
+    append(*mi);
     
     /* Set Clip */
     mi = Gtk::manage(new Gtk::MenuItem(_("Set Cl_ip"), 1));
@@ -1867,6 +1874,10 @@ void ContextMenu::ReleaseMask(void)
     sp_selection_unset_mask(_desktop, false);
 }
 
+void ContextMenu::CreateGroupClip(void)
+{
+    sp_selection_set_clipgroup(_desktop);
+}
 
 void ContextMenu::SetClip(void)
 {
