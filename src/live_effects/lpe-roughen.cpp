@@ -71,11 +71,14 @@ LPERoughen::LPERoughen(LivePathEffectObject *lpeobject)
 
 LPERoughen::~LPERoughen() {}
 
-void LPERoughen::doBeforeEffect(SPLPEItem const */*lpeitem*/)
+void LPERoughen::doBeforeEffect(SPLPEItem const *lpeitem)
 {
     displaceX.resetRandomizer();
     displaceY.resetRandomizer();
     srand(1);
+    SPLPEItem * item = const_cast<SPLPEItem*>(lpeitem);
+    item->apply_to_clippath(item);
+    item->apply_to_mask(item);
 }
 
 Gtk::Widget *LPERoughen::newWidget()

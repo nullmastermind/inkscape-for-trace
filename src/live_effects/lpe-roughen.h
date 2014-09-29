@@ -38,7 +38,7 @@ public:
     virtual void doEffect(SPCurve *curve);
     virtual double sign(double randNumber);
     virtual Geom::Point randomize();
-    virtual void doBeforeEffect(SPLPEItem const */*lpeitem*/);
+    virtual void doBeforeEffect(SPLPEItem const * lpeitem);
     virtual SPCurve *addNodesAndJitter(const Geom::Curve *A, double t);
     virtual SPCurve *jitter(const Geom::Curve *A);
     virtual Geom::Point tpoint(Geom::Point A, Geom::Point B, double t = 0.5);
