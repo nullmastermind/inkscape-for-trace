@@ -21,9 +21,7 @@
 
 #include <pango/pango.h>
 #include "nr-type-primitives.h"
-#include "nr-type-pos-def.h"
-#include "font-style-to-pos.h"
-#include "style.h"
+#include "../style.h"
 
 /* Freetype */
 #ifdef USE_PANGO_WIN32
@@ -144,7 +142,6 @@ public:
                                int variant=PANGO_VARIANT_NORMAL, int style=PANGO_STYLE_NORMAL,
                                int weight=PANGO_WEIGHT_NORMAL, int stretch=PANGO_STRETCH_NORMAL,
                                int size=10, int spacing=0);
-    font_instance*        Face(char const *family, NRTypePosDef apos);
 
     /// Semi-private: tells the font_factory taht the font_instance 'who' has died and should be removed from loadedFaces
     void                  UnrefFace(font_instance* who);
