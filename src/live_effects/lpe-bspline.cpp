@@ -39,9 +39,11 @@
 #include "desktop-handles.h"
 #include "verbs.h"
 #include "sp-lpe-item.h"
+#include "sp-namedview.h"
 #include "display/sp-canvas.h"
 #include <typeinfo>
 #include <vector>
+#include "util/units.h"
 // For handling un-continuous paths:
 #include "message-stack.h"
 #include "inkscape.h"
@@ -117,8 +119,11 @@ void LPEBSpline::doEffect(SPCurve *curve)
     curve->reset();
 
     double radiusHelperNodes = 6.0;
-    if (SP_ACTIVE_DESKTOP) {
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    if (desktop){
         radiusHelperNodes /= SP_ACTIVE_DESKTOP->current_zoom();
+        SPNamedView *nv = sp_desktop_namedview(desktop);
+        radiusHelperNodes = Inkscape::Util::Quantity::convert(radiusHelperNodes, "px", nv->doc_units->abbr);
     }
 
     for (Geom::PathVector::const_iterator path_it = original_pathv.begin();
@@ -264,7 +269,9 @@ LPEBSpline::drawHandle(Geom::Point p, double radiusHelperNodes)
 {
     char const * svgd = "M 1,0.5 A 0.5,0.5 0 0 1 0.5,1 0.5,0.5 0 0 1 0,0.5 0.5,0.5 0 0 1 0.5,0 0.5,0.5 0 0 1 1,0.5 Z";
     Geom::PathVector pathv = sp_svg_read_pathv(svgd);
-    pathv *= Geom::Affine(radiusHelperNodes,0,0,radiusHelperNodes,0,0);
+    Geom::Affine aff = Geom::Affine();
+    aff *= Geom::Scale(radiusHelperNodes);
+    pathv *= aff;
     pathv += p - Geom::Point(0.5*radiusHelperNodes, 0.5*radiusHelperNodes);
     hp.push_back(pathv[0]);
 }
