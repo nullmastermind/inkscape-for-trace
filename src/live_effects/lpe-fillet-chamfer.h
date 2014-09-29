@@ -33,6 +33,12 @@
 namespace Inkscape {
 namespace LivePathEffect {
 
+enum FilletMethod {
+    FM_AUTO,
+    FM_ARC,
+    FM_BEZIER,
+    FM_END
+};
 
 class LPEFilletChamfer : public Effect {
 public:
@@ -67,9 +73,9 @@ private:
     BoolParam ignore_radius_0;
     BoolParam only_selected;
     BoolParam flexible;
-    BoolParam force_arcs;
     BoolParam use_knot_distance;
     UnitParam unit;
+    EnumParam<FilletMethod> method;
     ScalarParam radius;
     ScalarParam helper_size;
 
