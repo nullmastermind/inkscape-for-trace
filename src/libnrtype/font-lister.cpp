@@ -648,6 +648,11 @@ void FontLister::fill_css(SPCSSAttr *css, Glib::ustring fontspec)
         case PANGO_WEIGHT_LIGHT:
             sp_repr_css_set_property(css, "font-weight", "300");
             break;
+#if PANGO_VERSION_CHECK(1,36,6)
+        case PANGO_WEIGHT_SEMILIGHT:
+            sp_repr_css_set_property(css, "font-weight", "350");
+            break;
+#endif
         case PANGO_WEIGHT_BOOK:
             sp_repr_css_set_property(css, "font-weight", "380");
             break;
