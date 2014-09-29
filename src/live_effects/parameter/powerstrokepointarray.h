@@ -31,7 +31,7 @@ public:
 
     virtual Gtk::Widget * param_newWidget();
 
-    virtual void param_transform_multiply(Geom::Affine const& /*postmul*/, bool /*set*/);
+    virtual void param_transform_multiply(Geom::Affine const& postmul, bool /*set*/);
 
     void set_oncanvas_looks(SPKnotShapeType shape, SPKnotModeType mode, guint32 color);
 
