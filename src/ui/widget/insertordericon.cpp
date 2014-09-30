@@ -7,6 +7,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include "ui/widget/insertordericon.h"
+ 
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
@@ -15,7 +17,6 @@
 #include <glibmm/threads.h>
 #endif
 
-#include "ui/widget/insertordericon.h"
 
 #include <gtkmm/icontheme.h>
 

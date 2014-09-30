@@ -11,13 +11,14 @@
 # include "config.h"
 #endif
 
+#include <gtkmm/icontheme.h>
+ 
 #if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
 #include <glibmm/threads.h>
 #endif
 
 #include "display/cairo-utils.h"
 
-#include <gtkmm/icontheme.h>
 
 #include "highlight-picker.h"
 #include "widgets/icon.h"
