@@ -513,6 +513,12 @@ static bool StyleNameCompareInternal(const StyleNames &style1, const StyleNames 
     return( StyleNameValue( style1.CssName ) < StyleNameValue( style2.CssName ) );
 }
 
+static gint StyleNameCompareInternalGlib(gconstpointer a, gconstpointer b)
+{
+    return( StyleNameValue( ((StyleNames *)a)->CssName  ) <
+            StyleNameValue( ((StyleNames *)b)->CssName  ) ? -1 : 1 );
+}
+
 static bool ustringPairSort(std::pair<PangoFontFamily*, Glib::ustring> const& first, std::pair<PangoFontFamily*, Glib::ustring> const& second)
 {
     // well, this looks weird.
@@ -586,9 +592,12 @@ GList* font_factory::GetUIStyles(PangoFontFamily * in)
         pango_font_description_free(faceDescr);
     }
     g_free(faces);
+
+    ret = g_list_sort( ret, StyleNameCompareInternalGlib );
     return ret;
 }
 
+// Used only by pdfinput/svg-builder.cpp (since rewrite to cache style)
 void font_factory::GetUIFamiliesAndStyles(FamilyToStylesMap *map)
 {
     g_assert(map);
