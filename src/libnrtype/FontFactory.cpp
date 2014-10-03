@@ -260,10 +260,10 @@ static int StyleNameValue( const Glib::ustring &style )
 }
 
 // Determines order in which styles are presented (sorted by CSS style values)
-static bool StyleNameCompareInternal(const StyleNames &style1, const StyleNames &style2)
-{
-    return( StyleNameValue( style1.CssName ) < StyleNameValue( style2.CssName ) );
-}
+//static bool StyleNameCompareInternal(const StyleNames &style1, const StyleNames &style2)
+//{
+//   return( StyleNameValue( style1.CssName ) < StyleNameValue( style2.CssName ) );
+//}
 
 static gint StyleNameCompareInternalGlib(gconstpointer a, gconstpointer b)
 {
@@ -366,7 +366,19 @@ GList* font_factory::GetUIStyles(PangoFontFamily * in)
                 styleUIName.replace( f, 11, "Heavy" );
             }
 
-            if (!familyUIName.empty() && !styleUIName.empty()) {
+            bool exists = false;
+            for(GList *temp = ret; temp; temp = temp->next) {
+                if( ((StyleNames*)temp->data)->CssName.compare( styleUIName ) == 0 ) {
+                    exists = true;
+                    std::cerr << "Warning: Font face with same CSS values already added: "
+                              << familyUIName << " " << styleUIName
+                              << " (" << ((StyleNames*)temp->data)->DisplayName
+                              << ", " << displayName << ")" << std::endl;
+                    break;
+                }
+            }
+
+            if (!exists && !familyUIName.empty() && !styleUIName.empty()) {
                 // Add the style information
                 ret = g_list_append(ret, new StyleNames(styleUIName, displayName));
             }
@@ -375,6 +387,7 @@ GList* font_factory::GetUIStyles(PangoFontFamily * in)
     }
     g_free(faces);
 
+    // Sort the style lists
     ret = g_list_sort( ret, StyleNameCompareInternalGlib );
     return ret;
 }
