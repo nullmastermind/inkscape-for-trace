@@ -49,11 +49,11 @@ using std::vector;
 #include "sp-factory.h"
 
 namespace {
-	SPObject* createGuide() {
-		return new SPGuide();
-	}
+    SPObject* createGuide() {
+        return new SPGuide();
+    }
 
-	bool guideRegistered = SPFactory::instance().registerObject("sodipodi:guide", createGuide);
+    bool guideRegistered = SPFactory::instance().registerObject("sodipodi:guide", createGuide);
 }
 
 SPGuide::SPGuide()
@@ -66,16 +66,18 @@ SPGuide::SPGuide()
     , hicolor(0xff00007f)
 {}
 
-void SPGuide::setColor(guint32 c) {
-	color = c;
+void SPGuide::setColor(guint32 c)
+{
+    color = c;
 
-	for (GSList *l = this->views; l != NULL; l = l->next) {
-		sp_guideline_set_color(SP_GUIDELINE(l->data), this->color);
-	}
+    for (GSList *l = this->views; l != NULL; l = l->next) {
+        sp_guideline_set_color(SP_GUIDELINE(l->data), this->color);
+    }
 }
 
-void SPGuide::build(SPDocument *document, Inkscape::XML::Node *repr) {
-	SPObject::build(document, repr);
+void SPGuide::build(SPDocument *document, Inkscape::XML::Node *repr)
+{
+    SPObject::build(document, repr);
 
     this->readAttr( "inkscape:label" );
     this->readAttr( "orientation" );
@@ -85,7 +87,8 @@ void SPGuide::build(SPDocument *document, Inkscape::XML::Node *repr) {
     document->addResource("guide", this);
 }
 
-void SPGuide::release() {
+void SPGuide::release()
+{
     while (this->views) {
         sp_guideline_delete(SP_GUIDELINE(this->views->data));
         this->views = g_slist_remove(this->views, this->views->data);
@@ -113,64 +116,64 @@ void SPGuide::set(unsigned int key, const gchar *value) {
         this->set_label(this->label, false);
         break;
     case SP_ATTR_ORIENTATION:
-        {
-            if (value && !strcmp(value, "horizontal")) {
-                /* Visual representation of a horizontal line, constrain vertically (y coordinate). */
-                this->normal_to_line = Geom::Point(0., 1.);
-            } else if (value && !strcmp(value, "vertical")) {
-                this->normal_to_line = Geom::Point(1., 0.);
-            } else if (value) {
-                gchar ** strarray = g_strsplit(value, ",", 2);
-                double newx, newy;
-                unsigned int success = sp_svg_number_read_d(strarray[0], &newx);
-                success += sp_svg_number_read_d(strarray[1], &newy);
-                g_strfreev (strarray);
-                if (success == 2 && (fabs(newx) > 1e-6 || fabs(newy) > 1e-6)) {
-                    Geom::Point direction(newx, newy);
-                    direction.normalize();
-                    this->normal_to_line = direction;
-                } else {
-                    // default to vertical line for bad arguments
-                    this->normal_to_line = Geom::Point(1., 0.);
-                }
+    {
+        if (value && !strcmp(value, "horizontal")) {
+            /* Visual representation of a horizontal line, constrain vertically (y coordinate). */
+            this->normal_to_line = Geom::Point(0., 1.);
+        } else if (value && !strcmp(value, "vertical")) {
+            this->normal_to_line = Geom::Point(1., 0.);
+        } else if (value) {
+            gchar ** strarray = g_strsplit(value, ",", 2);
+            double newx, newy;
+            unsigned int success = sp_svg_number_read_d(strarray[0], &newx);
+            success += sp_svg_number_read_d(strarray[1], &newy);
+            g_strfreev (strarray);
+            if (success == 2 && (fabs(newx) > 1e-6 || fabs(newy) > 1e-6)) {
+                Geom::Point direction(newx, newy);
+                direction.normalize();
+                this->normal_to_line = direction;
             } else {
                 // default to vertical line for bad arguments
                 this->normal_to_line = Geom::Point(1., 0.);
             }
-            this->set_normal(this->normal_to_line, false);
+        } else {
+            // default to vertical line for bad arguments
+            this->normal_to_line = Geom::Point(1., 0.);
         }
-        break;
+        this->set_normal(this->normal_to_line, false);
+    }
+    break;
     case SP_ATTR_POSITION:
-        {
-            if (value) {
-                gchar ** strarray = g_strsplit(value, ",", 2);
-                double newx, newy;
-                unsigned int success = sp_svg_number_read_d(strarray[0], &newx);
-                success += sp_svg_number_read_d(strarray[1], &newy);
-                g_strfreev (strarray);
-                if (success == 2) {
-                    this->point_on_line = Geom::Point(newx, newy);
-                } else if (success == 1) {
-                    // before 0.46 style guideline definition.
-                    const gchar *attr = this->getRepr()->attribute("orientation");
-                    if (attr && !strcmp(attr, "horizontal")) {
-                        this->point_on_line = Geom::Point(0, newx);
-                    } else {
-                        this->point_on_line = Geom::Point(newx, 0);
-                    }
+    {
+        if (value) {
+            gchar ** strarray = g_strsplit(value, ",", 2);
+            double newx, newy;
+            unsigned int success = sp_svg_number_read_d(strarray[0], &newx);
+            success += sp_svg_number_read_d(strarray[1], &newy);
+            g_strfreev (strarray);
+            if (success == 2) {
+                this->point_on_line = Geom::Point(newx, newy);
+            } else if (success == 1) {
+                // before 0.46 style guideline definition.
+                const gchar *attr = this->getRepr()->attribute("orientation");
+                if (attr && !strcmp(attr, "horizontal")) {
+                    this->point_on_line = Geom::Point(0, newx);
+                } else {
+                    this->point_on_line = Geom::Point(newx, 0);
                 }
-            } else {
-                // default to (0,0) for bad arguments
-                this->point_on_line = Geom::Point(0,0);
             }
-            // update position in non-committing way
-            // fixme: perhaps we need to add an update method instead, and request_update here
-            this->moveto(this->point_on_line, false);
+        } else {
+            // default to (0,0) for bad arguments
+            this->point_on_line = Geom::Point(0,0);
         }
-        break;
+        // update position in non-committing way
+        // fixme: perhaps we need to add an update method instead, and request_update here
+        this->moveto(this->point_on_line, false);
+    }
+    break;
     default:
     	SPObject::set(key, value);
-            break;
+        break;
     }
 }
 
@@ -195,15 +198,15 @@ SPGuide *SPGuide::createSPGuide(SPDocument *doc, Geom::Point const &pt1, Geom::P
     return guide;
 }
 
-void
-sp_guide_pt_pairs_to_guides(SPDocument *doc, std::list<std::pair<Geom::Point, Geom::Point> > &pts) {
+void sp_guide_pt_pairs_to_guides(SPDocument *doc, std::list<std::pair<Geom::Point, Geom::Point> > &pts)
+{
     for (std::list<std::pair<Geom::Point, Geom::Point> >::iterator i = pts.begin(); i != pts.end(); ++i) {
         SPGuide::createSPGuide(doc, (*i).first, (*i).second);
     }
 }
 
-void
-sp_guide_create_guides_around_page(SPDesktop *dt) {
+void sp_guide_create_guides_around_page(SPDesktop *dt)
+{
     SPDocument *doc=sp_desktop_document(dt);
     std::list<std::pair<Geom::Point, Geom::Point> > pts;
 
@@ -222,8 +225,8 @@ sp_guide_create_guides_around_page(SPDesktop *dt) {
     DocumentUndo::done(doc, SP_VERB_NONE, _("Create Guides Around the Page"));
 }
 
-void
-sp_guide_delete_all_guides(SPDesktop *dt) {
+void sp_guide_delete_all_guides(SPDesktop *dt)
+{
     SPDocument *doc=sp_desktop_document(dt);
     const GSList *current;
     while ( (current = doc->getResourceList("guide")) ) {
