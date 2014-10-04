@@ -430,7 +430,7 @@ void SnapManager::guideConstrainedSnap(Geom::Point &p, SPGuide const &guideline)
     Inkscape::SnapCandidatePoint candidate(p, Inkscape::SNAPSOURCE_GUIDE_ORIGIN, Inkscape::SNAPTARGET_UNDEFINED);
 
     IntermSnapResults isr;
-    Inkscape::Snapper::SnapConstraint cl(guideline.point_on_line, Geom::rot90(guideline.normal_to_line));
+    Inkscape::Snapper::SnapConstraint cl(guideline.getPoint(), Geom::rot90(guideline.getNormal()));
 
     SnapperList snappers = getSnappers();
     for (SnapperList::const_iterator i = snappers.begin(); i != snappers.end(); ++i) {
