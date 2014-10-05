@@ -85,7 +85,6 @@ ink_common_sources +=	\
 	line-snapper.cpp line-snapper.h					\
 	macros.h							\
 	main-cmdlineact.cpp main-cmdlineact.h				\
-	marker.cpp marker.h						\
 	media.cpp media.h						\
 	menus-skeleton.h						\
 	message-context.cpp message-context.h				\
@@ -167,6 +166,7 @@ ink_common_sources +=	\
 	sp-line.cpp sp-line.h						\
 	splivarot.cpp splivarot.h					\
 	sp-lpe-item.cpp sp-lpe-item.h					\
+	sp-marker.cpp sp-marker.h					\
 	sp-marker-loc.h							\
 	sp-mask.cpp sp-mask.h						\
 	sp-metadata.cpp sp-metadata.h					\

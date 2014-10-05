@@ -44,7 +44,7 @@
 #include "helper/stock-items.h"
 #include "inkscape.h"
 #include "io/sys.h"
-#include "marker.h"
+#include "sp-marker.h"
 #include "preferences.h"
 #include "path-prefix.h"
 #include "selection.h"

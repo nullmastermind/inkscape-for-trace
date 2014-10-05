@@ -41,7 +41,7 @@ SPCycleType SP_CYCLING = SP_CYCLE_FOCUS;
 #include "desktop-handles.h"
 #include "message-stack.h"
 #include "sp-item-transform.h"
-#include "marker.h"
+#include "sp-marker.h"
 #include "sp-use.h"
 #include "sp-textpath.h"
 #include "sp-tspan.h"
