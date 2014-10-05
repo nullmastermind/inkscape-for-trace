@@ -40,6 +40,8 @@
 #include <glibmm/i18n.h>
 #include <glibmm/miscutils.h>
 
+#include <glibmm/regex.h>
+
 #include "document.h"
 #include "extension/input.h"
 #include "extension/output.h"
@@ -191,6 +193,40 @@ void SVGPreview::showImage(Glib::ustring &theFileName)
 {
     Glib::ustring fileName = theFileName;
 
+    // Let's get real width and height from SVG file. These are template
+    // files so we assume they are well formed.
+
+    // std::cout << "SVGPreview::showImage: " << theFileName << std::endl;
+    std::ifstream input(theFileName.c_str());
+
+    std::string width;
+    std::string height;
+
+    if( !input ) {
+        std::cout << "SVGPreview::showImage: Failed to open file: " << theFileName << std::endl;
+    } else {
+
+        std::string token;
+
+        Glib::MatchInfo match_info;
+        Glib::RefPtr<Glib::Regex> regex1 = Glib::Regex::create("width=\"(.*)\"");
+        Glib::RefPtr<Glib::Regex> regex2 = Glib::Regex::create("height=\"(.*)\"");
+ 
+        while( !input.eof() && (height.empty() || width.empty()) ) {
+
+            input >> token;
+            // std::cout << "|" << token << "|" << std::endl;
+
+            if (regex1->match(token, match_info)) {
+                width = match_info.fetch(1).raw();
+            }
+
+            if (regex2->match(token, match_info)) {
+                height = match_info.fetch(1).raw();
+            }
+
+        }
+    }
 
     /*#####################################
     # LET'S HAVE SOME FUN WITH SVG!
@@ -270,7 +306,7 @@ void SVGPreview::showImage(Glib::ustring &theFileName)
                            "  style=\"font-size:24.000000;font-style:normal;font-weight:normal;"
                            "    fill:#000000;fill-opacity:1.0000000;stroke:none;"
                            "    font-family:Sans\"\n"
-                           "  x=\"10\" y=\"26\">%d x %d</text>\n" //# VALUES HERE
+                           "  x=\"10\" y=\"26\">%s x %s</text>\n" //# VALUES HERE
                            "</svg>\n\n";
 
     // if (!Glib::get_charset()) //If we are not utf8
@@ -280,7 +316,7 @@ void SVGPreview::showImage(Glib::ustring &theFileName)
     /* FIXME: Do proper XML quoting for fileName. */
     gchar *xmlBuffer =
         g_strdup_printf(xformat, previewWidth, previewHeight, imgX, imgY, scaledImgWidth, scaledImgHeight,
-                        fileName.c_str(), rectX, rectY, rectWidth, rectHeight, imgWidth, imgHeight);
+                        fileName.c_str(), rectX, rectY, rectWidth, rectHeight, width.c_str(), height.c_str() );
 
     // g_message("%s\n", xmlBuffer);
 
