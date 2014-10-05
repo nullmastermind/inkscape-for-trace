@@ -21,6 +21,8 @@
 #include <config.h>
 #endif
 
+#include <iostream>
+
 #include "filedialogimpl-gtkmm.h"
 #include "ui/dialog-events.h"
 #include "ui/interface.h"
@@ -203,7 +205,7 @@ void SVGPreview::showImage(Glib::ustring &theFileName)
     std::string height;
 
     if( !input ) {
-        std::cout << "SVGPreview::showImage: Failed to open file: " << theFileName << std::endl;
+        std::cerr << "SVGPreview::showImage: Failed to open file: " << theFileName << std::endl;
     } else {
 
         std::string token;
