@@ -30,7 +30,7 @@
 #include "ui/tools/tool-base.h"
 #include "helper/window.h"
 #include "inkscape.h"
-#include "interface.h"
+#include "ui/interface.h"
 #include "macros.h"
 #include "message-context.h"
 #include "message-stack.h"

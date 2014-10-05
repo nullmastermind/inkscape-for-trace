@@ -44,7 +44,7 @@
 #include "desktop-style.h"
 #include "sp-namedview.h"
 #include "selection.h"
-#include "interface.h"
+#include "ui/interface.h"
 #include "macros.h"
 #include "tools-switch.h"
 #include "preferences.h"

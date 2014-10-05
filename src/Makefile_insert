@@ -72,7 +72,6 @@ ink_common_sources +=	\
 	ink-comboboxentry-action.cpp					\
 	ink-comboboxentry-action.h					\
 	inkscape.cpp inkscape.h inkscape-private.h			\
-	interface.cpp interface.h					\
 	isinf.h								\
 	knot.cpp knot.h							\
 	knot-enums.h							\

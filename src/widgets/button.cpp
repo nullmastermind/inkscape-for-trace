@@ -16,7 +16,7 @@
 
 #include "button.h"
 #include "helper/action-context.h"
-#include "interface.h"
+#include "ui/interface.h"
 #include "shortcuts.h"
 #include "helper/action.h"
 

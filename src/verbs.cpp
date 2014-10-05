@@ -53,7 +53,7 @@
 #include "helper/action-context.h"
 #include "help.h"
 #include "inkscape-private.h"
-#include "interface.h"
+#include "ui/interface.h"
 #include "layer-fns.h"
 #include "layer-manager.h"
 #include "message-stack.h"

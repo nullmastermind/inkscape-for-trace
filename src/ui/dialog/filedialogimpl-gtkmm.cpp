@@ -23,7 +23,7 @@
 
 #include "filedialogimpl-gtkmm.h"
 #include "ui/dialog-events.h"
-#include "interface.h"
+#include "ui/interface.h"
 #include "io/sys.h"
 #include "path-prefix.h"
 #include "preferences.h"

@@ -9,6 +9,8 @@ ink_common_sources +=		\
 	ui/dialog-events.cpp    \
 	ui/dialog-events.h      \
 	ui/icon-names.h		\
+	ui/interface.cpp	\
+	ui/interface.h		\
 	ui/previewable.h	\
 	ui/previewfillable.h	\
 	ui/previewholder.cpp	\

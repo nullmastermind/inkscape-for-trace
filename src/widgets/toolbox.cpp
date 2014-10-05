@@ -53,7 +53,7 @@
 #include "../ink-action.h"
 #include "../ink-comboboxentry-action.h"
 #include "../inkscape.h"
-#include "../interface.h"
+#include "ui/interface.h"
 #include "../shortcuts.h"
 #include "../sp-namedview.h"
 #include "../tools-switch.h"

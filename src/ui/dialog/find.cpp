@@ -33,7 +33,7 @@
 
 #include "ui/dialog-events.h"
 #include "verbs.h"
-#include "interface.h"
+#include "ui/interface.h"
 #include "preferences.h"
 #include "sp-text.h"
 #include "sp-flowtext.h"

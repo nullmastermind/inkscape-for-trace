@@ -39,7 +39,7 @@
 #include "shortcuts.h"
 #include "document.h"
 #include "desktop-handles.h"
-#include "interface.h"
+#include "ui/interface.h"
 #include "desktop.h"
 #include "selection.h"
 #include "selection-chemistry.h"

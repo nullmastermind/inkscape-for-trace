@@ -46,7 +46,7 @@
 #include "util/units.h"
 #include "ui/widget/unit-tracker.h"
 #include "inkscape-private.h"
-#include "interface.h"
+#include "ui/interface.h"
 #include "macros.h"
 #include "preferences.h"
 #include "sp-image.h"

@@ -55,7 +55,7 @@
 #include "document-undo.h"
 #include "event-log.h"
 #include "helper/action-context.h"
-#include "interface.h"
+#include "ui/interface.h"
 #include "inkscape-private.h"
 #include "layer-fns.h"
 #include "layer-manager.h"
