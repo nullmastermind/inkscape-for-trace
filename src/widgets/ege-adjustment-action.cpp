@@ -46,7 +46,7 @@
 #include <gdk/gdkkeysyms.h>
 
 #include "icon-size.h"
-#include "ege-adjustment-action.h"
+#include "widgets/ege-adjustment-action.h"
 #include "ui/widget/gimpspinscale.h"
 #include "ui/icon-names.h"
 

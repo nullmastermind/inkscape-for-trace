@@ -3,7 +3,7 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
-#include "ink-action.h"
+#include "widgets/ink-action.h"
 
 #include "widgets/button.h"
 

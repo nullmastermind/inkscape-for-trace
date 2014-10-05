@@ -38,7 +38,7 @@
 #include "display/canvas-arena.h"
 #include "document.h"
 #include "ege-color-prof-tracker.h"
-#include "ege-select-one-action.h"
+#include "widgets/ege-select-one-action.h"
 #include <extension/db.h>
 #include "file.h"
 #include "helper/action.h"

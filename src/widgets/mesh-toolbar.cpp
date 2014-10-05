@@ -50,11 +50,11 @@
 #include "selection.h"
 #include "ui/icon-names.h"
 
-#include "ege-adjustment-action.h"
-#include "ege-output-action.h"
-#include "ege-select-one-action.h"
-#include "ink-action.h"
-#include "ink-comboboxentry-action.h"
+#include "widgets/ege-adjustment-action.h"
+#include "widgets/ege-output-action.h"
+#include "widgets/ege-select-one-action.h"
+#include "widgets/ink-action.h"
+#include "widgets/ink-comboboxentry-action.h"
 
 #include "sp-stop.h"
 #include "svg/css-ostringstream.h"

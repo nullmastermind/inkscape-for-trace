@@ -43,7 +43,7 @@
 
 #include <gtk/gtk.h>
 
-#include "ege-select-one-action.h"
+#include "widgets/ege-select-one-action.h"
 
 enum {
     CHANGED = 0,
