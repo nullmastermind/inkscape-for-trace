@@ -171,6 +171,7 @@ set(ui_SRC
 	previewfillable.h
 	previewholder.h
 	shape-editor.h
+	tool-factory.h
 	tools-switch.h
 	uxmanager.h
 
