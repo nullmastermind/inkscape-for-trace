@@ -56,7 +56,7 @@
 #include "ui/interface.h"
 #include "../shortcuts.h"
 #include "../sp-namedview.h"
-#include "../tools-switch.h"
+#include "ui/tools-switch.h"
 #include "../ui/icon-names.h"
 #include "../ui/widget/style-swatch.h"
 #include "../verbs.h"

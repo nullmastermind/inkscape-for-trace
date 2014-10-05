@@ -26,7 +26,7 @@
 #include "desktop-handles.h"
 #include "selection.h"
 #include "selection-chemistry.h"
-#include "draw-anchor.h"
+#include "ui/draw-anchor.h"
 #include "message-stack.h"
 #include "message-context.h"
 #include "preferences.h"
@@ -40,7 +40,7 @@
 #include <glibmm/i18n.h>
 #include "macros.h"
 #include "context-fns.h"
-#include "tools-switch.h"
+#include "ui/tools-switch.h"
 #include "ui/control-manager.h"
 // we include the necessary files for BSpline & Spiro
 #include "live_effects/effect.h"
@@ -70,7 +70,7 @@
 #include "live_effects/lpe-bspline.h"
 #include <2geom/nearest-point.h>
 
-#include "tool-factory.h"
+#include "ui/tool-factory.h"
 
 #include "live_effects/effect.h"
 

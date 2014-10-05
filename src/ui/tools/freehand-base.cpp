@@ -30,7 +30,7 @@
 #include "desktop-handles.h"
 #include "desktop-style.h"
 #include "document.h"
-#include "draw-anchor.h"
+#include "ui/draw-anchor.h"
 #include "macros.h"
 #include "message-stack.h"
 #include "ui/tools/pen-tool.h"

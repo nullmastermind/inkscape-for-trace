@@ -41,7 +41,7 @@
 #include "preferences.h"
 #include "selection.h"
 #include "sp-namedview.h"
-#include "tools-switch.h"
+#include "ui/tools-switch.h"
 #include "ui/tools/lpe-tool.h"
 #include "ui/widget/unit-tracker.h"
 #include "util/units.h"

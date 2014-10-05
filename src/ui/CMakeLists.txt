@@ -3,8 +3,12 @@ set(ui_SRC
 	clipboard.cpp
 	control-manager.cpp
 	dialog-events.cpp
+	draw-anchor.cpp
 	interface.cpp
+	object-edit.cpp
 	previewholder.cpp
+	shape-editor.cpp
+	tools-switch.cpp
 	uxmanager.cpp
 
 	cache/svg_preview_cache.cpp
@@ -159,11 +163,15 @@ set(ui_SRC
 	control-manager.h
 	control-types.h
 	dialog-events.h
+	draw-anchor.h
 	icon-names.h
 	interface.h
+	object-edit.h
 	previewable.h
 	previewfillable.h
 	previewholder.h
+	shape-editor.h
+	tools-switch.h
 	uxmanager.h
 
 	cache/svg_preview_cache.h

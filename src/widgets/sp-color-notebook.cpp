@@ -38,7 +38,7 @@
 #include "../profile-manager.h"
 #include "color-profile.h"
 #include "cms-system.h"
-#include "tools-switch.h"
+#include "ui/tools-switch.h"
 #include "ui/tools/tool-base.h"
 
 using Inkscape::CMSSystem;

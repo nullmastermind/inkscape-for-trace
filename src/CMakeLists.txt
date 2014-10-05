@@ -192,7 +192,6 @@ set(inkscape_SRC
 	document-undo.cpp
 	document.cpp
 	doxygen-main.cpp
-	draw-anchor.cpp
 	ege-color-prof-tracker.cpp
 	event-log.cpp
 	extract-uri.cpp
@@ -226,7 +225,6 @@ set(inkscape_SRC
 	message-context.cpp
 	message-stack.cpp
 	mod360.cpp
-	object-edit.cpp
 	object-hierarchy.cpp
 	object-snapper.cpp
 	path-chemistry.cpp
@@ -249,7 +247,6 @@ set(inkscape_SRC
 	selection.cpp
 	seltrans-handles.cpp
 	seltrans.cpp
-	shape-editor.cpp
 	shortcuts.cpp
 	snap-preferences.cpp
 	snap.cpp
@@ -263,7 +260,6 @@ set(inkscape_SRC
 	svg-view.cpp
 	text-chemistry.cpp
 	text-editing.cpp
-	tools-switch.cpp
 	transf_mat_3x4.cpp
 	unclump.cpp
 	unicoderange.cpp
@@ -309,7 +305,6 @@ set(inkscape_SRC
 	document-subset.h
 	document-undo.h
 	document.h
-	draw-anchor.h
 	ege-color-prof-tracker.h
 	enums.h
 	event-log.h
@@ -364,7 +359,6 @@ set(inkscape_SRC
 	mod360-test.h
 	mod360.h
 	number-opt-number.h
-	object-edit.h
 	object-hierarchy.h
 	object-snapper.h
 	path-chemistry.h
@@ -395,7 +389,6 @@ set(inkscape_SRC
 	selection.h
 	seltrans-handles.h
 	seltrans.h
-	shape-editor.h
 	shortcuts.h
 	snap-candidate.h
 	snap-enums.h
@@ -420,8 +413,6 @@ set(inkscape_SRC
 	text-chemistry.h
 	text-editing.h
 	text-tag-attributes.h
-	tool-factory.h
-	tools-switch.h
 	transf_mat_3x4.h
 	unclump.h
 	undo-stack-observer.h

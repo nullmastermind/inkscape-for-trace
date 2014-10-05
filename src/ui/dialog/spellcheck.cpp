@@ -23,7 +23,7 @@
 #include "selection.h"
 #include "desktop.h"
 #include "desktop-handles.h"
-#include "tools-switch.h"
+#include "ui/tools-switch.h"
 #include "ui/tools/text-tool.h"
 #include "ui/interface.h"
 #include "preferences.h"

@@ -43,7 +43,7 @@
 #include "sp-root.h"
 #include "sp-shape.h"
 #include "style.h"
-#include "tools-switch.h"
+#include "ui/tools-switch.h"
 #include "ui/icon-names.h"
 #include "ui/widget/imagetoggler.h"
 #include "ui/widget/layertypeicon.h"

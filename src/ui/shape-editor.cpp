@@ -18,13 +18,16 @@
 #include "document.h"
 #include "gc-anchored.h"
 #include "knotholder.h"
-#include "object-edit.h"
+#include "ui/object-edit.h"
 #include "sp-item.h"
 #include "sp-object.h"
-#include "shape-editor.h"
+#include "ui/shape-editor.h"
 #include "xml/node-event-vector.h"
 
-using Inkscape::createKnotHolder;
+//using Inkscape::createKnotHolder;
+
+namespace Inkscape {
+namespace UI {
 
 bool ShapeEditor::_blockSetItem = false;
 
@@ -158,6 +161,9 @@ bool ShapeEditor::knot_mouseover() const {
 
     return false;
 }
+
+} // namespace UI
+} // namespace Inkscape
 
 /*
   Local Variables:

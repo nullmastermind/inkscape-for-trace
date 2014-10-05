@@ -23,7 +23,7 @@
 #include "live_effects/lpeobject.h"
 #include "message-context.h"
 #include "selection.h"
-#include "shape-editor.h" // temporary!
+#include "ui/shape-editor.h" // temporary!
 #include "live_effects/effect.h"
 #include "display/curve.h"
 #include "sp-clippath.h"
@@ -107,7 +107,7 @@
 
 using Inkscape::ControlManager;
 
-#include "tool-factory.h"
+#include "ui/tool-factory.h"
 
 namespace Inkscape {
 namespace UI {

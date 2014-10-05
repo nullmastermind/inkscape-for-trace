@@ -39,13 +39,13 @@
 #include "xml/node-event-vector.h"
 #include "preferences.h"
 #include "context-fns.h"
-#include "shape-editor.h"
+#include "ui/shape-editor.h"
 #include "verbs.h"
 #include "display/sp-canvas-item.h"
 
 using Inkscape::DocumentUndo;
 
-#include "tool-factory.h"
+#include "ui/tool-factory.h"
 
 namespace Inkscape {
 namespace UI {

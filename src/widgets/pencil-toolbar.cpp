@@ -38,7 +38,7 @@
 #include "widgets/ink-action.h"
 #include "preferences.h"
 #include "toolbox.h"
-#include "tools-switch.h"
+#include "ui/tools-switch.h"
 #include "ui/icon-names.h"
 #include "ui/tools/pen-tool.h"
 #include "ui/uxmanager.h"

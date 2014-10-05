@@ -36,14 +36,14 @@
 #include "message-stack.h"
 #include "inkscape.h"
 #include "desktop.h"
-#include "shape-editor.h"
+#include "ui/shape-editor.h"
 #include "sp-ellipse.h"
 #include "display/curve.h"
 #include "svg/svg.h"
 #include <2geom/pathvector.h>
 #include "sp-clippath.h"
 #include "sp-mask.h"
-#include "tools-switch.h"
+#include "ui/tools-switch.h"
 #include "ui/tools/node-tool.h"
 #include "ui/tools/tool-base.h"
 

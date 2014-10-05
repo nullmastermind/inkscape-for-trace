@@ -37,7 +37,7 @@ SPCycleType SP_CYCLING = SP_CYCLE_FOCUS;
 #include "dir-util.h"
 #include "layer-model.h"
 #include "selection.h"
-#include "tools-switch.h"
+#include "ui/tools-switch.h"
 #include "desktop-handles.h"
 #include "message-stack.h"
 #include "sp-item-transform.h"
@@ -112,7 +112,7 @@ SPCycleType SP_CYCLING = SP_CYCLE_FOCUS;
 #include "sp-item-group.h"
 
 // For clippath editing
-#include "tools-switch.h"
+#include "ui/tools-switch.h"
 #include "ui/tools/node-tool.h"
 
 #include "ui/clipboard.h"

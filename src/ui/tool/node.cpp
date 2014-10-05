@@ -28,7 +28,7 @@
 #include "ui/tool/node.h"
 #include "ui/tool/path-manipulator.h"
 #include "ui/tools/node-tool.h"
-#include "tools-switch.h"
+#include "ui/tools-switch.h"
 #include <gdk/gdkkeysyms.h>
 #include <cmath>
 

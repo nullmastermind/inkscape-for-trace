@@ -27,7 +27,7 @@
 #include "preferences.h"
 #include "message-stack.h"
 #include "message-context.h"
-#include "tools-switch.h"
+#include "ui/tools-switch.h"
 #include "ui/tools/tool-base.h"
 #include "ui/tools/node-tool.h"
 #include <gtk/gtk.h>

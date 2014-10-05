@@ -40,7 +40,7 @@
 #include "desktop-style.h"
 #include "context-fns.h"
 #include "verbs.h"
-#include "shape-editor.h"
+#include "ui/shape-editor.h"
 #include "ui/tools/tool-base.h"
 
 #include "ui/tools/arc-tool.h"
@@ -48,7 +48,7 @@
 
 using Inkscape::DocumentUndo;
 
-#include "tool-factory.h"
+#include "ui/tool-factory.h"
 
 namespace Inkscape {
 namespace UI {

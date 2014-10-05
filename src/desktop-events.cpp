@@ -40,7 +40,7 @@
 #include "display/sp-canvas.h"
 #include "sp-guide.h"
 #include "sp-namedview.h"
-#include "tools-switch.h"
+#include "ui/tools-switch.h"
 #include "verbs.h"
 #include "widgets/desktop-widget.h"
 #include "xml/repr.h"

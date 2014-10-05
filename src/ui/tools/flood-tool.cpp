@@ -50,7 +50,7 @@
 #include "preferences.h"
 #include "rubberband.h"
 #include "selection.h"
-#include "shape-editor.h"
+#include "ui/shape-editor.h"
 #include "sp-defs.h"
 #include "sp-item.h"
 #include "splivarot.h"
@@ -74,7 +74,7 @@ using Inkscape::Display::ExtractARGB32;
 using Inkscape::Display::ExtractRGB32;
 using Inkscape::Display::AssembleARGB32;
 
-#include "tool-factory.h"
+#include "ui/tool-factory.h"
 
 namespace Inkscape {
 namespace UI {

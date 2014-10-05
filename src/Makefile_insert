@@ -37,7 +37,6 @@ ink_common_sources +=	\
 	document-subset.cpp document-subset.h				\
 	document-undo.cpp document-undo.h \
 	doxygen-main.cpp						\
-	draw-anchor.cpp	draw-anchor.h					\
 	ege-color-prof-tracker.cpp ege-color-prof-tracker.h		\
 	enums.h								\
 	event-log.cpp event-log.h event.h				\
@@ -84,7 +83,6 @@ ink_common_sources +=	\
 	message.h							\
 	message-stack.cpp message-stack.h				\
 	mod360.cpp mod360.h						\
-	object-edit.cpp object-edit.h					\
 	object-hierarchy.cpp object-hierarchy.h				\
 	object-snapper.cpp object-snapper.h				\
 	path-chemistry.cpp path-chemistry.h				\
@@ -111,7 +109,6 @@ ink_common_sources +=	\
 	selection-describer.cpp selection-describer.h			\
 	seltrans.cpp seltrans.h						\
 	seltrans-handles.cpp seltrans-handles.h				\
-	shape-editor.cpp shape-editor.h					\
 	shortcuts.cpp shortcuts.h					\
 	snap.cpp snap.h							\
 	snap-enums.h snap-candidate.h					\
@@ -214,8 +211,6 @@ ink_common_sources +=	\
 	text-chemistry.cpp text-chemistry.h	\
 	text-editing.cpp text-editing.h		\
 	text-tag-attributes.h			\
-	tool-factory.h				\
-	tools-switch.cpp tools-switch.h		\
 	transf_mat_3x4.cpp transf_mat_3x4.h	\
 	unclump.cpp unclump.h			\
 	undo-stack-observer.h			\

@@ -72,7 +72,7 @@
 #include "sp-namedview.h"
 #include "sp-root.h"
 #include "sp-defs.h"
-#include "tool-factory.h"
+#include "ui/tool-factory.h"
 #include "widgets/desktop-widget.h"
 #include "xml/repr.h"
 #include "helper/action.h" //sp_action_perform

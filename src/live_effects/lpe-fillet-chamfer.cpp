@@ -29,7 +29,7 @@
 
 // for programmatically updating knots
 #include "selection.h"
-#include "tools-switch.h"
+#include "ui/tools-switch.h"
 #include "ui/tool/control-point-selection.h"
 #include "ui/tool/selectable-control-point.h"
 #include "ui/tool/node.h"

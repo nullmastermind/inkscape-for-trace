@@ -38,7 +38,7 @@
 #include "sp-item-transform.h"
 #include "sp-text.h"
 #include "text-editing.h"
-#include "tools-switch.h"
+#include "ui/tools-switch.h"
 #include "ui/icon-names.h"
 #include "ui/tools/node-tool.h"
 #include "ui/tool/multi-path-manipulator.h"
