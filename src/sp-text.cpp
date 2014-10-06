@@ -356,6 +356,7 @@ const char* SPText::displayName() const {
 }
 
 gchar* SPText::description() const {
+
     SPStyle *style = this->style;
 
     char *n = xml_quote_strdup( style->font_family.value );
@@ -371,9 +372,8 @@ gchar* SPText::description() const {
     }
 
     char *ret = ( SP_IS_TEXT_TEXTPATH(this)
-                  ? g_strdup_printf(_("on path%s (%s, %s)"), trunc, n, xs->str)
-                  : g_strdup_printf(_("%s (%s, %s)"), trunc, n, xs->str) );
-    g_free(n);
+      ? g_strdup_printf(_("on path%s (%s, %s)"), trunc, n, xs->str)
+      : g_strdup_printf(_("%s (%s, %s)"),        trunc, n, xs->str) );
     return ret;
 }
 

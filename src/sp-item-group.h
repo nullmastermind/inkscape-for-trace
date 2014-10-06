@@ -61,7 +61,7 @@ public:
     LayerMode layerDisplayMode(unsigned int display_key) const;
     void setLayerDisplayMode(unsigned int display_key, LayerMode mode);
     void translateChildItems(Geom::Translate const &tr);
-    void scaleChildItemsRec(Geom::Scale const &sc, Geom::Point const &p);
+    void scaleChildItemsRec(Geom::Scale const &sc, Geom::Point const &p, bool noRecurse);
 
     int getItemCount() const;
     virtual void _showChildren (Inkscape::Drawing &drawing, Inkscape::DrawingItem *ai, unsigned int key, unsigned int flags);
