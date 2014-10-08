@@ -7,18 +7,10 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
+#include <glibmm.h>
 #include <gtkmm/icontheme.h>
- 
-#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
-#include <glibmm/threads.h>
-#endif
 
 #include "display/cairo-utils.h"
-
 
 #include "highlight-picker.h"
 #include "widgets/icon.h"
