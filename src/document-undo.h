@@ -9,6 +9,7 @@ typedef struct _GObject GObject;
 
 class SPDesktop;
 class SPDocument;
+struct InkscapeApplication;
 
 namespace Inkscape {
 

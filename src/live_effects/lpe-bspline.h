@@ -24,6 +24,9 @@ public:
         return SUPPRESS_FLASH;
     }
     virtual void doEffect(SPCurve *curve);
+    virtual void doBeforeEffect(SPLPEItem const* lpeitem);
+    void drawHandle(Geom::Point p, double radiusHelperNodes);
+    void addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec);
 
     void doBSplineFromWidget(SPCurve *curve, double value);
     bool nodeIsSelected(Geom::Point nodePoint);
@@ -43,6 +46,7 @@ private:
     BoolParam ignoreCusp;
     BoolParam onlySelected;
     ScalarParam weight;
+    Geom::PathVector hp;
 
     LPEBSpline(const LPEBSpline &);
     LPEBSpline &operator=(const LPEBSpline &);

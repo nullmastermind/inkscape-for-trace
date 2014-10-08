@@ -8,11 +8,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <glibmm.h>
-
-#include "ui/dialog/lpe-fillet-chamfer-properties.h"
-#include "live_effects/parameter/filletchamferpointarray.h"
-
 #include <2geom/piecewise.h>
 #include <2geom/sbasis-to-bezier.h>
 #include <2geom/sbasis-geometric.h>
@@ -384,25 +379,29 @@ void FilletChamferPointArrayParam::updateCanvasIndicators()
     std::vector<Point> ts = data();
     hp.clear();
     unsigned int i = 0;
-    Piecewise<D2<SBasis> > const &n = get_pwd2_normal();
     for (std::vector<Point>::const_iterator point_it = ts.begin();
             point_it != ts.end(); ++point_it) {
-        double Xvalue = to_time(i, (*point_it)[X]);
-        double XPlusValue = to_time(i, -helper_size) - i;
-        if (Xvalue == i) {
+        double Xvalue = to_time(i, (*point_it)[X]) -i;
+        if (Xvalue == 0) {
             i++;
             continue;
         }
-        Point canvas_point = last_pwd2.valueAt(Xvalue) + 0 * n.valueAt(Xvalue);
-        Point start_point = last_pwd2.valueAt(Xvalue + XPlusValue) +
-                            helper_size * n.valueAt(Xvalue + XPlusValue);
-        Point end_point = last_pwd2.valueAt(Xvalue + XPlusValue) -
-                          helper_size * n.valueAt(Xvalue + XPlusValue);
-        Geom::Path arrow;
-        arrow.start(start_point);
-        arrow.appendNew<Geom::LineSegment>(canvas_point);
-        arrow.appendNew<Geom::LineSegment>(end_point);
-        hp.push_back(arrow);
+        Geom::Point ptA = last_pwd2[i].valueAt(Xvalue);
+        Geom::Point derivA = unit_vector(derivative(last_pwd2[i]).valueAt(Xvalue));
+        Geom::Rotate rot(Geom::Rotate::from_degrees(-90));
+        derivA = derivA * rot;
+        Geom::Point C = ptA - derivA * helper_size;
+        Geom::Point D = ptA + derivA * helper_size;
+        Geom::Ray ray1(C, D);
+        char const * svgd = "M 1,0.25 0.5,0 1,-0.25 M 1,0.5 0,0 1,-0.5";
+        Geom::PathVector pathv = sp_svg_read_pathv(svgd);
+        Geom::Affine aff = Geom::Affine();
+        aff *= Geom::Scale(helper_size);
+        aff *= Geom::Rotate(ray1.angle() - deg_to_rad(270));
+        pathv *= aff;
+        pathv += last_pwd2[i].valueAt(Xvalue);
+        hp.push_back(pathv[0]);
+        hp.push_back(pathv[1]);
         i++;
     }
 }

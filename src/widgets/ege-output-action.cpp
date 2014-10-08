@@ -43,7 +43,7 @@
 
 #include <gtk/gtk.h>
 
-#include "ege-output-action.h"
+#include "widgets/ege-output-action.h"
 
 
 static void ege_output_action_get_property( GObject* obj, guint propId, GValue* value, GParamSpec * pspec );

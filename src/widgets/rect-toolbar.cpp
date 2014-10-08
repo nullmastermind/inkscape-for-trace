@@ -34,9 +34,9 @@
 #include "desktop-handles.h"
 #include "desktop.h"
 #include "document-undo.h"
-#include "ege-adjustment-action.h"
-#include "ege-output-action.h"
-#include "ink-action.h"
+#include "widgets/ege-adjustment-action.h"
+#include "widgets/ege-output-action.h"
+#include "widgets/ink-action.h"
 #include "inkscape.h"
 #include "preferences.h"
 #include "selection.h"
@@ -97,7 +97,7 @@ static void sp_rtb_value_changed(GtkAdjustment *adj, GObject *tbl, gchar const *
     }
 
     // quit if run by the attr_changed listener
-    if (g_object_get_data( tbl, "freeze" )) {
+    if (g_object_get_data( tbl, "freeze" ) || tracker->isUpdating()) {
         return;
     }
 

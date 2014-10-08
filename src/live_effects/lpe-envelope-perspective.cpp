@@ -19,7 +19,7 @@
 #include "helper/geom.h"
 #include "display/curve.h"
 #include "svg/svg.h"
-#include <tools-switch.h>
+#include "ui/tools-switch.h"
 #include <gsl/gsl_linalg.h>
 #include "desktop.h"
 
@@ -350,6 +350,9 @@ LPEEnvelopePerspective::doBeforeEffect (SPLPEItem const* lpeitem)
 {
     original_bbox(lpeitem);
     setDefaults();
+    SPLPEItem * item = const_cast<SPLPEItem*>(lpeitem);
+    item->apply_to_clippath(item);
+    item->apply_to_mask(item);
 }
 
 void

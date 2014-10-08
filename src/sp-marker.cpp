@@ -24,7 +24,7 @@
 #include "display/drawing-group.h"
 #include "xml/repr.h"
 #include "attributes.h"
-#include "marker.h"
+#include "sp-marker.h"
 #include "document.h"
 #include "document-private.h"
 #include "preferences.h"

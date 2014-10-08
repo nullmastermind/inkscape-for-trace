@@ -12,12 +12,13 @@
  *
  */
 
-namespace Inkscape { namespace XML { class Node; } }
-
 class KnotHolder;
 class LivePathEffectObject;
 class SPDesktop;
 class SPItem;
+
+namespace Inkscape { namespace XML { class Node; }
+namespace UI {
 
 class ShapeEditor {
 public:
@@ -50,6 +51,9 @@ private:
     KnotHolder *knotholder;
     Inkscape::XML::Node *knotholder_listener_attached_for;
 };
+
+} // namespace UI
+} // namespace Inkscape
 
 #endif // SEEN_SHAPE_EDITOR_H
 

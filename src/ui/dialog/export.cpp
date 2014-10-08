@@ -65,7 +65,7 @@
 #include "ui/dialog-events.h"
 #include "preferences.h"
 #include "verbs.h"
-#include "interface.h"
+#include "ui/interface.h"
 #include "sp-root.h"
 
 #include "extension/output.h"

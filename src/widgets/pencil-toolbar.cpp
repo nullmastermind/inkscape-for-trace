@@ -33,12 +33,12 @@
 #include "pencil-toolbar.h"
 #include "desktop.h"
 #include "document-undo.h"
-#include "ege-adjustment-action.h"
-#include "ege-select-one-action.h"
-#include "ink-action.h"
+#include "widgets/ege-adjustment-action.h"
+#include "widgets/ege-select-one-action.h"
+#include "widgets/ink-action.h"
 #include "preferences.h"
 #include "toolbox.h"
-#include "tools-switch.h"
+#include "ui/tools-switch.h"
 #include "ui/icon-names.h"
 #include "ui/tools/pen-tool.h"
 #include "ui/uxmanager.h"
@@ -157,7 +157,7 @@ static void freehand_change_shape(EgeSelectOneAction* act, GObject *dataKludge) 
 static GList * freehand_shape_dropdown_items_list() {
     GList *glist = NULL;
 
-    glist = g_list_append (glist, _("None"));
+    glist = g_list_append (glist, const_cast<gchar *>(C_("Freehand shape", "None")));
     glist = g_list_append (glist, _("Triangle in"));
     glist = g_list_append (glist, _("Triangle out"));
     glist = g_list_append (glist, _("Ellipse"));

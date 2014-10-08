@@ -648,6 +648,11 @@ void FontLister::fill_css(SPCSSAttr *css, Glib::ustring fontspec)
         case PANGO_WEIGHT_LIGHT:
             sp_repr_css_set_property(css, "font-weight", "300");
             break;
+#if PANGO_VERSION_CHECK(1,36,6)
+        case PANGO_WEIGHT_SEMILIGHT:
+            sp_repr_css_set_property(css, "font-weight", "350");
+            break;
+#endif
         case PANGO_WEIGHT_BOOK:
             sp_repr_css_set_property(css, "font-weight", "380");
             break;
@@ -814,7 +819,7 @@ Glib::ustring FontLister::fontspec_from_style(SPStyle *style)
             switch (style->font_stretch.computed) {
 
                 case SP_CSS_FONT_STRETCH_ULTRA_CONDENSED:
-                    fontspec += " extra-condensed";
+                    fontspec += " ultra-condensed";
                     break;
 
                 case SP_CSS_FONT_STRETCH_EXTRA_CONDENSED:
@@ -1004,7 +1009,7 @@ Glib::ustring FontLister::get_best_style_match(Glib::ustring family, Glib::ustri
     }
     GList *styles = row[FontList.styles];
     for (GList *l = styles; l; l = l->next) {
-        Glib::ustring fontspec = family + ", " + (char *)l->data;
+        Glib::ustring fontspec = family + ", " + ((StyleNames *)l->data)->CssName;
         PangoFontDescription *candidate = pango_font_description_from_string(fontspec.c_str());
         //font_description_dump( candidate );
         //std::cout << "           " << font_description_better_match( target, best, candidate ) << std::endl;

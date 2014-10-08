@@ -30,7 +30,7 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 
-#include "ink-comboboxentry-action.h"
+#include "widgets/ink-comboboxentry-action.h"
 #include "ui/icon-names.h"
 
 // Must handle both tool and menu items!

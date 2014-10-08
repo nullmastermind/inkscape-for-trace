@@ -47,12 +47,12 @@
 #include "box3d-side.h"
 #include "document-private.h"
 #include "line-geometry.h"
-#include "shape-editor.h"
+#include "ui/shape-editor.h"
 #include "verbs.h"
 
 using Inkscape::DocumentUndo;
 
-#include "tool-factory.h"
+#include "ui/tool-factory.h"
 
 namespace Inkscape {
 namespace UI {

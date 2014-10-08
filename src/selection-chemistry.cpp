@@ -37,11 +37,11 @@ SPCycleType SP_CYCLING = SP_CYCLE_FOCUS;
 #include "dir-util.h"
 #include "layer-model.h"
 #include "selection.h"
-#include "tools-switch.h"
+#include "ui/tools-switch.h"
 #include "desktop-handles.h"
 #include "message-stack.h"
 #include "sp-item-transform.h"
-#include "marker.h"
+#include "sp-marker.h"
 #include "sp-use.h"
 #include "sp-textpath.h"
 #include "sp-tspan.h"
@@ -112,7 +112,7 @@ SPCycleType SP_CYCLING = SP_CYCLE_FOCUS;
 #include "sp-item-group.h"
 
 // For clippath editing
-#include "tools-switch.h"
+#include "ui/tools-switch.h"
 #include "ui/tools/node-tool.h"
 
 #include "ui/clipboard.h"
@@ -762,7 +762,7 @@ void sp_selection_group(Inkscape::Selection *selection, SPDesktop *desktop)
     sp_selection_group_impl(p, group, xml_doc, doc);
 
     DocumentUndo::done(doc, SP_VERB_SELECTION_GROUP,
-                       _("Group"));
+                       C_("Verb", "Group"));
 
     selection->set(group);
     Inkscape::GC::release(group);
@@ -4063,6 +4063,10 @@ void sp_selection_unset_mask(SPDesktop *desktop, bool apply_clip_path) {
         for ( SPObject *child = obj->firstChild() ; child; child = child->getNext() ) {
             // Collect all clipped paths and masks within a single group
             Inkscape::XML::Node *copy = SP_OBJECT(child)->getRepr()->duplicate(xml_doc);
+            if(copy->attribute("inkscape:original-d"))
+            {
+                copy->setAttribute("d", copy->attribute("inkscape:original-d"));
+            }
             items_to_move = g_slist_prepend(items_to_move, copy);
         }
 

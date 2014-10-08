@@ -30,6 +30,7 @@
 #include "ui/widget/spinbutton.h"
 
 class SPDesktop;
+struct InkscapeApplication;
 
 namespace Inkscape {
 

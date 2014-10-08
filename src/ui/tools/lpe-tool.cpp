@@ -28,7 +28,7 @@
 #include "desktop.h"
 #include "message-context.h"
 #include "preferences.h"
-#include "shape-editor.h"
+#include "ui/shape-editor.h"
 #include "selection.h"
 #include "desktop-handles.h"
 #include "document.h"
@@ -59,7 +59,7 @@ SubtoolEntry lpesubtools[] = {
 };
 
 
-#include "tool-factory.h"
+#include "ui/tool-factory.h"
 
 namespace Inkscape {
 namespace UI {

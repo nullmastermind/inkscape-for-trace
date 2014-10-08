@@ -32,7 +32,7 @@
 #include <2geom/d2.h>
 #include <2geom/piecewise.h>
 #include <2geom/transforms.h>
-#include <tools-switch.h>
+#include "ui/tools-switch.h"
 
 #include "desktop.h" // TODO: should be factored out (see below)
 
@@ -254,6 +254,9 @@ LPELattice2::doBeforeEffect (SPLPEItem const* lpeitem)
 {
     original_bbox(lpeitem);
     setDefaults();
+    SPLPEItem * item = const_cast<SPLPEItem*>(lpeitem);
+    item->apply_to_clippath(item);
+    item->apply_to_mask(item);
 }
 
 void

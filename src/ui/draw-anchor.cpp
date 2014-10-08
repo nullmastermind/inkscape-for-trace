@@ -13,7 +13,7 @@
  */
 
 
-#include "draw-anchor.h"
+#include "ui/draw-anchor.h"
 #include "desktop.h"
 #include "desktop-handles.h"
 #include "ui/tools/tool-base.h"

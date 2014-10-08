@@ -68,12 +68,15 @@ PowerStrokePointArrayParam::param_newWidget()
 */
 }
 
-
-void PowerStrokePointArrayParam::param_transform_multiply(Geom::Affine const& /*postmul*/, bool /*set*/)
+void PowerStrokePointArrayParam::param_transform_multiply(Geom::Affine const& postmul, bool /*set*/)
 {
-//    param_set_and_write_new_value( (*this) * postmul );
+    std::vector<Geom::Point> result;
+    for (std::vector<Geom::Point>::const_iterator point_it = _vector.begin(); point_it != _vector.end(); ++point_it) {
+        Geom::Coord A = (*point_it)[Geom::Y] * ((postmul.expansionX() + postmul.expansionY()) / 2);
+        result.push_back(Geom::Point((*point_it)[Geom::X], A));
+    }
+    param_set_and_write_new_value(result);
 }
-
 
 /** call this method to recalculate the controlpoints such that they stay at the same location relative to the new path. Useful after adding/deleting nodes to the path.*/
 void

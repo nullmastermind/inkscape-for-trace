@@ -15,7 +15,7 @@
 #include "verbs.h"
 #include "knotholder.h"
 #include <glibmm/i18n.h>
-#include "tools-switch.h"
+#include "ui/tools-switch.h"
 #include "ui/tools/node-tool.h"
 
 // needed for on-canvas editting:

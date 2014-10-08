@@ -31,7 +31,7 @@
 #include "preferences.h"
 #include "path-prefix.h"
 #include "io/sys.h"
-#include "marker.h"
+#include "sp-marker.h"
 #include "sp-defs.h"
 #include "sp-root.h"
 #include "ui/cache/svg_preview_cache.h"
@@ -385,7 +385,7 @@ void MarkerComboBox::add_markers (GSList *marker_list, SPDocument *source, gbool
     if (history) {
         // add "None"
         Gtk::TreeModel::Row row = *(marker_store->prepend());
-        row[marker_columns.label] = _("None");
+        row[marker_columns.label] = C_("Marker", "None");
         row[marker_columns.stock] = false;
         row[marker_columns.marker] = g_strdup("None");
         row[marker_columns.image] = NULL;

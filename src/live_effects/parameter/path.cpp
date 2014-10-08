@@ -28,8 +28,8 @@
 #include "document-undo.h"
 
 // needed for on-canvas editting:
-#include "tools-switch.h"
-#include "shape-editor.h"
+#include "ui/tools-switch.h"
+#include "ui/shape-editor.h"
 #include "desktop-handles.h"
 #include "selection.h"
 // clipboard support
@@ -143,7 +143,7 @@ gchar *
 PathParam::param_getSVGValue() const
 {
     if (href) {
-        return href;
+        return g_strdup(href);
     } else {
         gchar * svgd = sp_svg_write_path( _pathvector );
         return svgd;

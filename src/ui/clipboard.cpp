@@ -76,7 +76,7 @@
 #include "svg/css-ostringstream.h" // used in copy
 #include "ui/tools/text-tool.h"
 #include "text-editing.h"
-#include "tools-switch.h"
+#include "ui/tools-switch.h"
 #include "path-chemistry.h"
 #include "util/units.h"
 #include "helper/png-write.h"

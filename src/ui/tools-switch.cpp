@@ -10,10 +10,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
+#include <gtkmm.h> // prevents deprecation warnings
 
 #include <cstring>
 #include <string>
@@ -25,40 +22,42 @@
 
 #include <xml/repr.h>
 
-#include "ui/tools/select-tool.h"
-#include "ui/tools/node-tool.h"
-#include "ui/tools/tweak-tool.h"
-#include "ui/tools/spray-tool.h"
-#include "sp-path.h"
-#include "ui/tools/rect-tool.h"
-#include "sp-rect.h"
-#include "ui/tools/box3d-tool.h"
+#include "ui/tools-switch.h"
+
 #include "box3d.h"
-#include "ui/tools/arc-tool.h"
 #include "sp-ellipse.h"
-#include "ui/tools/tweak-tool.h"
+#include "sp-flowtext.h"
+#include "sp-offset.h"
+#include "sp-path.h"
+#include "sp-rect.h"
 #include "sp-star.h"
-#include "ui/tools/spiral-tool.h"
 #include "sp-spiral.h"
+#include "sp-text.h"
+
+// TODO: How many of these are actually needed?
+#include "ui/tools/arc-tool.h"
+#include "ui/tools/box3d-tool.h"
 #include "ui/tools/calligraphic-tool.h"
+#include "ui/tools/connector-tool.h"
+#include "ui/tools/dropper-tool.h"
 #include "ui/tools/eraser-tool.h"
+#include "ui/tools/flood-tool.h"
+#include "ui/tools/gradient-tool.h"
+#include "ui/tools/lpe-tool.h"
+#include "ui/tools/measure-tool.h"
+#include "ui/tools/mesh-tool.h"
+#include "ui/tools/node-tool.h"
 #include "ui/tools/pen-tool.h"
 #include "ui/tools/pencil-tool.h"
-#include "ui/tools/lpe-tool.h"
+#include "ui/tools/rect-tool.h"
+#include "ui/tools/select-tool.h"
+#include "ui/tools/spiral-tool.h"
+#include "ui/tools/spray-tool.h"
 #include "ui/tools/text-tool.h"
-#include "sp-text.h"
-#include "sp-flowtext.h"
-#include "ui/tools/gradient-tool.h"
-#include "ui/tools/mesh-tool.h"
+#include "ui/tools/tweak-tool.h"
 #include "ui/tools/zoom-tool.h"
-#include "ui/tools/measure-tool.h"
-#include "ui/tools/dropper-tool.h"
-#include "ui/tools/connector-tool.h"
-#include "ui/tools/flood-tool.h"
-#include "sp-offset.h"
-#include "message-context.h"
 
-#include "tools-switch.h"
+#include "message-context.h"
 
 static char const *const tool_names[] = {
     NULL,
@@ -86,6 +85,8 @@ static char const *const tool_names[] = {
     "/tools/lpetool",
     NULL
 };
+
+// TODO: HEY! these belong to the tools themselves!
 static char const *const tool_msg[] = {
     NULL,
     N_("<b>Click</b> to Select and Transform objects, <b>Drag</b> to select many objects."),

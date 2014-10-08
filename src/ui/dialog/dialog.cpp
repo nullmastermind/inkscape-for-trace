@@ -28,7 +28,7 @@
 #include "desktop-handles.h"
 #include "shortcuts.h"
 #include "preferences.h"
-#include "interface.h"
+#include "ui/interface.h"
 #include "verbs.h"
 #include "ui/tool/event-utils.h"
 

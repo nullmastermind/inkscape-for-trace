@@ -40,7 +40,7 @@
 #include "rubberband.h"
 #include "selection-chemistry.h"
 #include "selection.h"
-#include "shape-editor.h"
+#include "ui/shape-editor.h"
 #include "sp-flowtext.h"
 #include "sp-namedview.h"
 #include "sp-text.h"
@@ -52,7 +52,7 @@
 #include "xml/node-event-vector.h"
 #include "xml/repr.h"
 #include <gtk/gtk.h>
-#include "tool-factory.h"
+#include "ui/tool-factory.h"
 
 using Inkscape::ControlManager;
 using Inkscape::DocumentUndo;

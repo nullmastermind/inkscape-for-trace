@@ -29,7 +29,7 @@
 
 // for programmatically updating knots
 #include "selection.h"
-#include "tools-switch.h"
+#include "ui/tools-switch.h"
 #include "ui/tool/control-point-selection.h"
 #include "ui/tool/selectable-control-point.h"
 #include "ui/tool/node.h"
@@ -42,6 +42,14 @@ using namespace Geom;
 namespace Inkscape {
 namespace LivePathEffect {
 
+static const Util::EnumData<FilletMethod> FilletMethodData[FM_END] = {
+    { FM_AUTO, N_("Auto"), "auto" },
+    { FM_ARC, N_("Force arc"), "arc" },
+    { FM_BEZIER, N_("Force bezier"), "bezier" }
+};
+static const Util::EnumDataConverter<FilletMethod>
+FMConverter(FilletMethodData, FM_END);
+
 const double tolerance = 0.001;
 const double gapHelper = 0.00001;
 
@@ -52,14 +60,15 @@ LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject) :
     ignore_radius_0(_("Ignore 0 radius knots"), _("Ignore 0 radius knots"), "ignore_radius_0", &wr, this, false),
     only_selected(_("Change only selected nodes"), _("Change only selected nodes"), "only_selected", &wr, this, false),
     flexible(_("Flexible radius size (%)"), _("Flexible radius size (%)"), "flexible", &wr, this, false),
-    force_arcs(_("Use arcs in cubic curves"), _("Use arcs in cubic curves"), "force_arcs", &wr, this, false),
     use_knot_distance(_("Use knots distance instead radius"), _("Use knots distance instead radius"), "use_knot_distance", &wr, this, false),
     unit(_("Unit"), _("Unit"), "unit", &wr, this),
+    method(_("Method"), _("Fillets methods"), "method", FMConverter, &wr, this, FM_AUTO),
     radius(_("Radius (unit or %)"), _("Radius, in unit or %"), "radius", &wr, this, 0.),
     helper_size(_("Helper size with direction"), _("Helper size with direction"), "helper_size", &wr, this, 0)
 {
     registerParameter(&fillet_chamfer_values);
     registerParameter(&unit);
+    registerParameter(&method);
     registerParameter(&radius);
     registerParameter(&helper_size);
     registerParameter(&flexible);
@@ -67,7 +76,6 @@ LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject) :
     registerParameter(&ignore_radius_0);
     registerParameter(&only_selected);
     registerParameter(&hide_knots);
-    registerParameter(&force_arcs);
 
     radius.param_set_range(0., infinity());
     radius.param_set_increments(1, 1);
@@ -447,7 +455,11 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
 void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
 {
     if (SP_IS_SHAPE(lpeItem)) {
-        fillet_chamfer_values.set_helper_size(helper_size);
+        if(hide_knots){
+            fillet_chamfer_values.set_helper_size(0);
+        } else {
+            fillet_chamfer_values.set_helper_size(helper_size);
+        }
         fillet_chamfer_values.set_use_distance(use_knot_distance);
         fillet_chamfer_values.set_unit(unit.get_abbreviation());
         SPCurve *c = SP_IS_PATH(lpeItem) ? static_cast<SPPath const *>(lpeItem)
@@ -591,14 +603,14 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
                     }
                     path_out.appendNew<Geom::LineSegment>(endArcPoint);
                 } else if (type == 2) {
-                    if((is_straight_curve(*curve_it1) && is_straight_curve(*curve_it2Fixed)) || force_arcs){ 
+                    if((is_straight_curve(*curve_it1) && is_straight_curve(*curve_it2Fixed) && method != FM_BEZIER )|| method == FM_ARC){ 
                         ccwToggle = ccwToggle?0:1;
                         path_out.appendNew<SVGEllipticalArc>(rx, ry, angleArc, 0, ccwToggle, endArcPoint);
                     }else{
                         path_out.appendNew<Geom::CubicBezier>(inverseHandle1, inverseHandle2, endArcPoint);
                     }
                 } else {
-                    if((is_straight_curve(*curve_it1) && is_straight_curve(*curve_it2Fixed)) || force_arcs){ 
+                    if((is_straight_curve(*curve_it1) && is_straight_curve(*curve_it2Fixed) && method != FM_BEZIER )|| method == FM_ARC){ 
                         path_out.appendNew<SVGEllipticalArc>(rx, ry, angleArc, 0, ccwToggle, endArcPoint);
                     } else {
                         path_out.appendNew<Geom::CubicBezier>(handle1, handle2, endArcPoint);

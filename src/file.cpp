@@ -46,7 +46,7 @@
 #include "id-clash.h"
 #include "inkscape.h"
 #include "inkscape.h"
-#include "interface.h"
+#include "ui/interface.h"
 #include "io/sys.h"
 #include "message.h"
 #include "message-stack.h"

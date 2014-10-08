@@ -33,7 +33,7 @@
 #include "sp-pattern.h"
 #include "sp-path.h"
 #include <glibmm/i18n.h>
-#include "object-edit.h"
+#include "ui/object-edit.h"
 #include "xml/repr.h"
 #include <2geom/math-utils.h>
 #include "knot-holder-entity.h"
@@ -55,6 +55,7 @@ static KnotHolder *sp_lpe_knot_holder(SPItem *item, SPDesktop *desktop)
 } // namespace
 
 namespace Inkscape {
+namespace UI {
 
 KnotHolder *createKnotHolder(SPItem *item, SPDesktop *desktop)
 {
@@ -88,7 +89,8 @@ KnotHolder *createKnotHolder(SPItem *item, SPDesktop *desktop)
     return knotholder;
 }
 
-} // Inkscape
+}
+} // namespace Inkscape
 
 /* SPRect */
 

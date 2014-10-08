@@ -14,11 +14,12 @@
 
 #include "knotholder.h"
 
-namespace Inkscape
-{
+namespace Inkscape {
+namespace UI {
 
 KnotHolder *createKnotHolder(SPItem *item, SPDesktop *desktop);
 
+}
 }
 
 class RectKnotHolder : public KnotHolder {

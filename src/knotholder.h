@@ -22,6 +22,9 @@
 #include <sigc++/connection.h>
 
 namespace Inkscape {
+namespace UI {
+class ShapeEditor;
+}
 namespace XML {
 class Node;
 }
@@ -58,9 +61,9 @@ public:
 
     bool knot_mouseover() const;
 
-    friend class ShapeEditor;
-    friend class Inkscape::LivePathEffect::PowerStrokePointArrayParamKnotHolderEntity;
-    friend class Inkscape::LivePathEffect::FilletPointArrayParamKnotHolderEntity;
+    friend class Inkscape::UI::ShapeEditor; // FIXME why?
+    friend class Inkscape::LivePathEffect::PowerStrokePointArrayParamKnotHolderEntity; // why?
+    friend class Inkscape::LivePathEffect::FilletPointArrayParamKnotHolderEntity; // why?
 
 protected:
 

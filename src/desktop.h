@@ -72,6 +72,8 @@ typedef struct _GdkEventAny GdkEventAny;
 struct _GdkEventWindowState;
 typedef struct _GdkEventWindowState GdkEventWindowState;
 
+struct InkscapeApplication;
+
 namespace Inkscape {
   class LayerModel;
   class MessageContext;

@@ -91,6 +91,9 @@ LPEPerspectivePath::doBeforeEffect (SPLPEItem const* lpeitem)
         SP_LPE_ITEM(lpeitem)->removeCurrentPathEffect(false);
         return;
     }
+    SPLPEItem * item = const_cast<SPLPEItem*>(lpeitem);
+    item->apply_to_clippath(item);
+    item->apply_to_mask(item);
 }
 
 void LPEPerspectivePath::refresh(Gtk::Entry* perspective) {

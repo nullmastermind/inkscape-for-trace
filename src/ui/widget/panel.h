@@ -45,6 +45,8 @@ namespace Gtk {
 	class MenuItem;
 }
 
+struct InkscapeApplication;
+
 namespace Inkscape {
 
 class Selection;

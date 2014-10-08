@@ -25,7 +25,7 @@
 
 #include "path-prefix.h"
 #include "filedialogimpl-gtkmm.h"
-#include "interface.h"
+#include "ui/interface.h"
 #include "gc-core.h"
 #include "ui/dialog-events.h"
 #include "io/sys.h"

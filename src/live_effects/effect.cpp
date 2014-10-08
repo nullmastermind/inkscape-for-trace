@@ -74,7 +74,7 @@
 #include "xml/document.h"
 #include <glibmm/i18n.h>
 #include "ui/tools/pen-tool.h"
-#include "tools-switch.h"
+#include "ui/tools-switch.h"
 #include "message-stack.h"
 #include "desktop.h"
 #include "knotholder.h"

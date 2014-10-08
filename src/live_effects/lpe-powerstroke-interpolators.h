@@ -206,7 +206,6 @@ private:
     SpiroInterpolator& operator=(const SpiroInterpolator&);
 };
 
-
 // Quick mockup for testing the behavior for powerstroke controlpoint interpolation
 class CentripetalCatmullRomInterpolator : public Interpolator {
 public:

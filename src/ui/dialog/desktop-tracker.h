@@ -12,6 +12,7 @@
 
 typedef struct _GtkWidget GtkWidget;
 class SPDesktop;
+struct InkscapeApplication;
 
 namespace Inkscape {
 

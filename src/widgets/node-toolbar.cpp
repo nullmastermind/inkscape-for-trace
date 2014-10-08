@@ -34,8 +34,8 @@
 #include "desktop-handles.h"
 #include "desktop.h"
 #include "document-undo.h"
-#include "ege-adjustment-action.h"
-#include "ink-action.h"
+#include "widgets/ege-adjustment-action.h"
+#include "widgets/ink-action.h"
 #include "inkscape.h"
 #include "preferences.h"
 #include "selection-chemistry.h"
@@ -270,7 +270,7 @@ static void sp_node_path_value_changed(GtkAdjustment *adj, GObject *tbl, Geom::D
     }
 
     // quit if run by the attr_changed listener
-    if (g_object_get_data( tbl, "freeze" )) {
+    if (g_object_get_data( tbl, "freeze" ) || tracker->isUpdating()) {
         return;
     }
 

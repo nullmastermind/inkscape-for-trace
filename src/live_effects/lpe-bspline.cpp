@@ -39,9 +39,11 @@
 #include "desktop-handles.h"
 #include "verbs.h"
 #include "sp-lpe-item.h"
+#include "sp-namedview.h"
 #include "display/sp-canvas.h"
 #include <typeinfo>
 #include <vector>
+#include "util/units.h"
 // For handling un-continuous paths:
 #include "message-stack.h"
 #include "inkscape.h"
@@ -80,6 +82,13 @@ LPEBSpline::LPEBSpline(LivePathEffectObject *lpeobject) :
 
 LPEBSpline::~LPEBSpline() {}
 
+void LPEBSpline::doBeforeEffect (SPLPEItem const* lpeitem)
+{
+    if(!hp.empty()){
+        hp.clear();
+    }
+}
+
 void LPEBSpline::createAndApply(const char *name, SPDocument *doc, SPItem *item)
 {
     if (!SP_IS_SHAPE(item)) {
@@ -108,6 +117,14 @@ void LPEBSpline::doEffect(SPCurve *curve)
 
     Geom::PathVector const original_pathv = curve->get_pathvector();
     curve->reset();
+
+    double radiusHelperNodes = 6.0;
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    if (desktop){
+        radiusHelperNodes /= SP_ACTIVE_DESKTOP->current_zoom();
+        SPNamedView *nv = sp_desktop_namedview(desktop);
+        radiusHelperNodes = Inkscape::Util::Quantity::convert(radiusHelperNodes, "px", nv->doc_units->abbr);
+    }
 
     for (Geom::PathVector::const_iterator path_it = original_pathv.begin();
             path_it != original_pathv.end(); ++path_it) {
@@ -228,6 +245,9 @@ void LPEBSpline::doEffect(SPCurve *curve)
                     node = curve_it1->finalPoint();
                 }
                 nCurve->curveto(pointAt1, pointAt2, node);
+                if(!are_near(node,curve_it1->finalPoint())){
+                    drawHandle(node, radiusHelperNodes);
+                }
             }
             ++curve_it1;
             ++curve_it2;
@@ -239,7 +259,27 @@ void LPEBSpline::doEffect(SPCurve *curve)
         curve->append(nCurve, false);
         nCurve->reset();
         delete nCurve;
+        Geom::PathVector const pathv = curve->get_pathvector();
+        hp.push_back(pathv[0]);
     }
+}
+
+void
+LPEBSpline::drawHandle(Geom::Point p, double radiusHelperNodes)
+{
+    char const * svgd = "M 1,0.5 A 0.5,0.5 0 0 1 0.5,1 0.5,0.5 0 0 1 0,0.5 0.5,0.5 0 0 1 0.5,0 0.5,0.5 0 0 1 1,0.5 Z";
+    Geom::PathVector pathv = sp_svg_read_pathv(svgd);
+    Geom::Affine aff = Geom::Affine();
+    aff *= Geom::Scale(radiusHelperNodes);
+    pathv *= aff;
+    pathv += p - Geom::Point(0.5*radiusHelperNodes, 0.5*radiusHelperNodes);
+    hp.push_back(pathv[0]);
+}
+
+void
+LPEBSpline::addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec)
+{
+    hp_vec.push_back(hp);
 }
 
 Gtk::Widget *LPEBSpline::newWidget()

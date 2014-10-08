@@ -30,7 +30,7 @@
 #include "style.h"
 #include "document.h"
 #include "util/units.h"
-#include "shape-editor.h"
+#include "ui/shape-editor.h"
 #include "sp-namedview.h"
 #include "document-undo.h"
 #include "inkscape.h"
@@ -202,7 +202,7 @@ void Metafile::setViewBoxIfMissing(SPDocument *doc) {
 
         // Scale and translate objects
         double scale = Inkscape::Util::Quantity::convert(1, "px", doc_unit);
-        ShapeEditor::blockSetItem(true);
+        Inkscape::UI::ShapeEditor::blockSetItem(true);
         double dh;
         if(SP_ACTIVE_DOCUMENT){ // for file menu open or import, or paste from clipboard
             dh = SP_ACTIVE_DOCUMENT->getHeight().value("px");
@@ -222,8 +222,8 @@ void Metafile::setViewBoxIfMissing(SPDocument *doc) {
         prefs->setBool("/options/transform/pattern", true);
         prefs->setBool("/options/transform/gradient", true);
         
-        doc->getRoot()->scaleChildItemsRec(Geom::Scale(scale), Geom::Point(0, dh));
-        ShapeEditor::blockSetItem(false);
+        doc->getRoot()->scaleChildItemsRec(Geom::Scale(scale), Geom::Point(0, dh), true);
+        Inkscape::UI::ShapeEditor::blockSetItem(false);
 
         // restore options
         prefs->setBool("/options/transform/stroke",      transform_stroke);

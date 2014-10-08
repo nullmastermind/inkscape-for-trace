@@ -18,6 +18,7 @@
 #include "floating-behavior.h"
 
 class SPDesktop;
+struct InkscapeApplication;
 
 namespace Inkscape {
 class Selection;

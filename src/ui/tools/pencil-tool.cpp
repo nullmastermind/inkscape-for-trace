@@ -23,7 +23,7 @@
 #include "desktop-handles.h"
 #include "selection.h"
 #include "selection-chemistry.h"
-#include "draw-anchor.h"
+#include "ui/draw-anchor.h"
 #include "message-stack.h"
 #include "message-context.h"
 #include "sp-path.h"
@@ -43,7 +43,7 @@
 #include "display/sp-canvas.h"
 #include "display/curve.h"
 #include "livarot/Path.h"
-#include "tool-factory.h"
+#include "ui/tool-factory.h"
 #include "ui/tool/event-utils.h"
 
 namespace Inkscape {

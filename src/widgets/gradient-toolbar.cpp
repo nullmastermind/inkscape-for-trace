@@ -22,12 +22,12 @@
 #include "desktop.h"
 #include "document-undo.h"
 #include "document.h"
-#include "ege-adjustment-action.h"
-#include "ege-select-one-action.h"
+#include "widgets/ege-adjustment-action.h"
+#include "widgets/ege-select-one-action.h"
 #include "gradient-chemistry.h"
 #include "gradient-drag.h"
 #include "gradient-toolbar.h"
-#include "ink-action.h"
+#include "widgets/ink-action.h"
 #include "macros.h"
 #include "preferences.h"
 #include "selection.h"
@@ -1109,7 +1109,7 @@ void sp_gradient_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, 
 
         GtkTreeIter iter;
         gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter, 0, _("None"), 1, SP_GRADIENT_SPREAD_PAD, -1 );
+        gtk_list_store_set( model, &iter, 0, C_("Gradient repeat type", "None"), 1, SP_GRADIENT_SPREAD_PAD, -1 );
 
         gtk_list_store_append( model, &iter );
         gtk_list_store_set( model, &iter, 0, _("Reflected"), 1, SP_GRADIENT_SPREAD_REFLECT, -1 );

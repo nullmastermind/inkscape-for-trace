@@ -656,14 +656,61 @@ void SPGroup::translateChildItems(Geom::Translate const &tr)
     }
 }
 
-// Recursively scale child items around a point
-void SPGroup::scaleChildItemsRec(Geom::Scale const &sc, Geom::Point const &p)
+// Recursively (or not) scale child items around a point
+void SPGroup::scaleChildItemsRec(Geom::Scale const &sc, Geom::Point const &p, bool noRecurse)
 {
     if ( hasChildren() ) {
         for (SPObject *o = firstChild() ; o ; o = o->getNext() ) {
             if ( SP_IS_ITEM(o) ) {
                 if (SP_IS_GROUP(o) && !SP_IS_BOX3D(o)) {
-                    SP_GROUP(o)->scaleChildItemsRec(sc, p);
+                    /* Using recursion breaks clipping because transforms are applied 
+                       in coordinates for draws but nothing in defs is changed
+                       instead change the transform on the entire group, and the transform
+                       is applied after any references to clipping paths.  However NOT using
+                       recursion apparently breaks as of r13544 other parts of Inkscape
+                       involved with showing/modifying units.  So offer both for use
+                       in different contexts.
+                    */
+                    if(noRecurse) {
+                        // used for EMF import
+                        SPItem *item = SP_ITEM(o);
+                        Geom::Translate const s(p);
+                        Geom::Affine final = s.inverse() * sc * s;
+                        Geom::Affine tAff = item->i2dt_affine() * final;
+                        item->set_i2d_affine(tAff);
+                        tAff = item->transform;
+                        // Eliminate common rounding error affecting EMF/WMF input.
+                        // When the rounding error persists it converts the simple 
+                        //    transform=scale() to transform=matrix().
+                        if(std::abs(tAff[4]) < 1.0e-5 && std::abs(tAff[5]) < 1.0e-5){
+                           tAff[4] = 0.0;
+                           tAff[5] = 0.0;
+                        }
+                        item->doWriteTransform(item->getRepr(), tAff, NULL, true);
+                    } else {
+                        // used for other import
+                        SPItem *item = NULL;
+                        if (SP_ITEM(o)->clip_ref->getObject()) {
+                            item = SP_ITEM(SP_ITEM(o)->clip_ref->getObject()->firstChild());
+                        }
+                        if (item != NULL) {
+                            Geom::Affine tdoc2dt = Geom::Scale(1, -1) * Geom::Translate(p); // re-create doc2dt()
+                            Geom::Affine ti2doc = SP_ITEM(o)->i2doc_affine();
+                            item->set_i2d_affine(ti2doc * sc * ti2doc.inverse() * tdoc2dt);
+                            item->doWriteTransform(item->getRepr(), item->transform, NULL, true);
+                        }
+                        item = NULL;
+                        if (SP_ITEM(o)->mask_ref->getObject()) {
+                            item = SP_ITEM(SP_ITEM(o)->mask_ref->getObject()->firstChild());
+                        }
+                        if (item != NULL) {
+                            Geom::Affine tdoc2dt = Geom::Scale(1, -1) * Geom::Translate(p); // re-create doc2dt()
+                            Geom::Affine ti2doc = SP_ITEM(o)->i2doc_affine();
+                            item->set_i2d_affine(ti2doc * sc * ti2doc.inverse() * tdoc2dt);
+                            item->doWriteTransform(item->getRepr(), item->transform, NULL, true);
+                        }
+                        SP_GROUP(o)->scaleChildItemsRec(sc, p, false);
+                    }
                 } else {
                     SPItem *item = SP_ITEM(o);
                     Geom::OptRect bbox = item->desktopVisualBounds();
@@ -690,7 +737,7 @@ void SPGroup::scaleChildItemsRec(Geom::Scale const &sc, Geom::Point const &p)
                         
                         if (SP_IS_PERSP3D(item)) {
                             persp3d_apply_affine_transformation(SP_PERSP3D(item), final);
-                        } else if ((SP_IS_TEXT_TEXTPATH(item) || SP_IS_FLOWTEXT(item)) && !item->transform.isIdentity()) {
+                        } else if (SP_IS_TEXT_TEXTPATH(item) && !item->transform.isIdentity()) {
                             // Save and reset current transform
                             Geom::Affine tmp(item->transform);
                             item->transform = Geom::Affine();

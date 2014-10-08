@@ -31,13 +31,13 @@
 #include "inkscape.h"
 #include "io/sys.h"
 #include "preferences.h"
-#include "shape-editor.h"
+#include "ui/shape-editor.h"
 #include "sp-namedview.h"
 #include "sp-root.h"
 #include "sp-script.h"
 #include "style.h"
 #include "svg/stringstream.h"
-#include "tools-switch.h"
+#include "ui/tools-switch.h"
 #include "ui/widget/color-picker.h"
 #include "ui/widget/scalar-unit.h"
 #include "ui/dialog/filedialog.h"
@@ -1747,7 +1747,8 @@ void DocumentProperties::onDocUnitChange()
         doc->getRoot()->scaleChildItemsRec(Geom::Scale(scale), Geom::Point(-viewscale*doc->getRoot()->viewBox.min()[Geom::X] +
                                                                             (doc->getWidth().value("px") - viewscale*doc->getRoot()->viewBox.width())/2,
                                                                             viewscale*doc->getRoot()->viewBox.min()[Geom::Y] +
-                                                                            (doc->getHeight().value("px") + viewscale*doc->getRoot()->viewBox.height())/2));
+                                                                            (doc->getHeight().value("px") + viewscale*doc->getRoot()->viewBox.height())/2),
+                                                                            false);
         ShapeEditor::blockSetItem(false);
     }
     prefs->setBool("/options/transform/stroke",      transform_stroke);
