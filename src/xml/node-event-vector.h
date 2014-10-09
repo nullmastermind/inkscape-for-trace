@@ -58,11 +58,7 @@ struct NodeEventVector {
 	void (* attr_changed) (Node *repr, char const *key, char const *oldval, char const *newval, bool is_interactive, void* data);
 	void (* content_changed) (Node *repr, char const *oldcontent, char const *newcontent, void * data);
 	void (* order_changed) (Node *repr, Node *child, Node *oldref, Node *newref, void* data);
-}
-#ifdef __GNUC__
-__attribute__((deprecated))
-#endif
-;
+};
 
 }
 }
