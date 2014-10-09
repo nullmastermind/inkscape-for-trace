@@ -790,6 +790,8 @@ void Script::copy_doc (Inkscape::XML::Node * oldroot, Inkscape::XML::Node * newr
 
     // Question: Why is the "sodipodi:namedview" special? Treating it as a normal
     // elmement results in crashes.
+    // Seems to be a bug:
+    // http://inkscape.13.x6.nabble.com/Effect-that-modifies-the-document-properties-tt2822126.html
 
     std::vector<Inkscape::XML::Node *> delete_list;
     Inkscape::XML::Node * oldroot_namedview = NULL;
