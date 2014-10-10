@@ -465,7 +465,7 @@ fi
 
 # Add python modules if requested
 if [ ${add_python} = "true" ]; then
-	function install_py_modules ()
+	install_py_modules ()
 	{
 		# lxml
 		$cp_cmd -RL "$packages_path/lxml" "$pkgpython"

@@ -273,7 +273,7 @@ fi
 
 # Utility functions
 # ----------------------------------------------------------
-function getinkscapeinfo () {
+getinkscapeinfo () {
 
 	osxapp_domain="$BUILDPREFIX/Info"
 	INKVERSION="$(defaults read $osxapp_domain CFBundleVersion)"
@@ -288,7 +288,7 @@ function getinkscapeinfo () {
 
 }
 
-function checkversion () {
+checkversion () {
 	DEPVER="$(pkg-config --modversion $1 2>/dev/null)"
 	if [[ "$?" == "1" ]]; then
 		[[ $2 ]] && DEPVER="$(checkversion-port $2)" || unset DEPVER
@@ -301,7 +301,7 @@ function checkversion () {
 	echo "$DEPVER"
 }
 
-function checkversion-port () {
+checkversion-port () {
 	if [[ "$use_port" == "t" ]]; then
 		PORTVER="$(port echo $1 and active 2>/dev/null | cut -d@ -f2 | cut -d_ -f1)"
 	else
@@ -310,7 +310,7 @@ function checkversion-port () {
 	echo "$PORTVER"
 }
 
-function checklicense-port() {
+checklicense-port() {
 	if [[ "$use_port" == "t" ]]; then
 		PORTLIC="$(port info --license --line $1 2>/dev/null)"
 		PORTURL="$(port info --homepage --line $1 2>/dev/null)"
@@ -325,12 +325,12 @@ function checklicense-port() {
 	echo "$PORTLIC"
 }
 
-function checkversion-py-module () {
+checkversion-py-module () {
 	# python -c "import foo; ..."
 	echo "TODO."
 }
 
-function buildinfofile () {
+buildinfofile () {
 	getinkscapeinfo
 	# Prepare information file
 	echo "Build information on $(date) for $(whoami):
