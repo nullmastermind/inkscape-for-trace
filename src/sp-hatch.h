@@ -48,6 +48,16 @@ public:
         UNITS_OBJECTBOUNDINGBOX
     };
 
+    struct RenderInfo {
+        Geom::Affine child_transform;
+        Geom::Affine pattern_to_user_transform;
+        Geom::Rect tile_rect;
+
+        int overflow_steps;
+        Geom::Affine overflow_step_transform;
+        Geom::Affine overflow_initial_transform;
+    };
+
     SPHatch();
 	virtual ~SPHatch();
 
@@ -64,12 +74,17 @@ public:
     Geom::Affine const &hatchTransform() const;
     SPHatch *rootHatch(); //TODO: const
 
+    void hatchPaths(std::vector<SPHatchPath*>& l);
+    void hatchPaths(std::vector<SPHatchPath const *>& l) const;
+
     bool isValid() const;
 
-    Inkscape::DrawingPattern *show(Inkscape::Drawing &drawing, unsigned int key);
+    Inkscape::DrawingPattern *show(Inkscape::Drawing &drawing, unsigned int key, Geom::OptRect bbox);
     void hide(unsigned int key);
 	virtual cairo_pattern_t* pattern_new(cairo_t *ct, Geom::OptRect const &bbox, double opacity);
 
+	RenderInfo calculateRenderInfo(unsigned key) const;
+	Geom::Interval bounds() const;
 	void setBBox(unsigned int key, Geom::OptRect const &bbox);
 
 protected:
@@ -89,17 +104,18 @@ private:
         Geom::OptRect bbox;
         unsigned int key;
     };
+
     typedef std::vector<SPHatchPath *>::iterator ChildIterator;
     typedef std::vector<SPHatchPath const *>::const_iterator ConstChildIterator;
     typedef std::list<View>::iterator ViewIterator;
-    void _updateView(View &view);
+    typedef std::list<View>::const_iterator ConstViewIterator;
 
     static bool _hasHatchPatchChildren(SPHatch const* hatch);
 
-	void _children(std::vector<SPHatchPath*>& l);
-	void _children(std::vector<SPHatchPath const *>& l) const;
+    void _updateView(View &view);
+    RenderInfo _calculateRenderInfo(View const &view) const;
+	Geom::OptInterval _calculateStripExtents(Geom::OptRect bbox) const;
 
-	Geom::OptInterval _calculateStripExtents(Geom::OptRect bbox);
 
 	/**
 	Gets called when the hatch is reattached to another <hatch>

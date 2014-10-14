@@ -159,7 +159,6 @@ DrawingPattern::_updateItem(Geom::IntRect const &area, UpdateContext const &ctx,
     }
 
     Geom::Rect pattern_tile = *_tile_rect;
-
     Geom::Coord det_ctm = ctx.ctm.descrim();
     Geom::Coord det_ps2user = _pattern_to_user ? _pattern_to_user->descrim() : 1.0;
     Geom::Coord det_child_transform = _child_transform ? _child_transform->descrim() : 1.0;

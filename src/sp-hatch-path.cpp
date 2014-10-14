@@ -25,6 +25,7 @@
 #include "display/drawing-surface.h"
 #include "display/drawing.h"
 #include "display/drawing-shape.h"
+#include "helper/geom.h"
 #include "attributes.h"
 #include "document-private.h"
 #include "uri.h"
@@ -45,6 +46,7 @@ bool hatchRegistered = SPFactory::instance().registerObject("svg:hatchPath", cre
 
 SPHatchPath::SPHatchPath()
     : _curve(NULL)
+    , _continuous(false)
 {
     offset.unset();
 }
@@ -131,6 +133,8 @@ void SPHatchPath::update(SPCtx* ctx, unsigned int flags) {
 
     if (flags & (SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
         if (this->style->stroke_width.unit == SP_CSS_UNIT_PERCENT) {
+            //TODO: Check specification
+
             SPItemCtx *ictx = (SPItemCtx *) ctx;
             double const aw = 1.0 / ictx->i2vp.descrim();
             this->style->stroke_width.computed = this->style->stroke_width.value * aw;
@@ -155,9 +159,10 @@ bool SPHatchPath::isValid() const {
     return true;
 }
 
-Inkscape::DrawingItem *SPHatchPath::show(Inkscape::Drawing &drawing, unsigned int key) {
+Inkscape::DrawingItem *SPHatchPath::show(Inkscape::Drawing &drawing, unsigned int key, Geom::OptInterval extents) {
     Inkscape::DrawingShape *s = new Inkscape::DrawingShape(drawing);
     _display.push_front(View(s, key));
+    _display.front().extents = extents;
 
     _updateView(_display.front());
 
@@ -185,6 +190,36 @@ void SPHatchPath::setStripExtents(unsigned int key, Geom::OptInterval const &ext
     }
 }
 
+Geom::Interval SPHatchPath::bounds() const {
+    Geom::OptRect bbox;
+    Geom::Interval result;
+
+    Geom::Affine transform = Geom::Translate(offset.computed, 0);
+    if (!this->_curve) {
+        SPCurve test_curve;
+        test_curve.moveto(Geom::Point(0, 0));
+        test_curve.moveto(Geom::Point(0, 1));
+        bbox = bounds_exact_transformed(test_curve.get_pathvector(), transform);
+    } else {
+        bbox = bounds_exact_transformed(this->_curve->get_pathvector(), transform);
+    }
+
+    gdouble stroke_width = style->stroke_width.computed;
+    result.setMin(bbox->left() - stroke_width / 2);
+    result.setMax(bbox->right() + stroke_width / 2);
+    return result;
+}
+
+SPCurve *SPHatchPath::calculateRenderCurve(unsigned key) const {
+    for (ConstViewIterator iter = _display.begin(); iter != _display.end(); iter++) {
+        if (iter->key == key) {
+            return _calculateRenderCurve(*iter);
+        }
+    }
+    g_assert_not_reached();
+    return NULL;
+}
+
 gdouble SPHatchPath::_repeatLength() const {
     if (!_curve) {
         return 0;
@@ -198,10 +233,22 @@ gdouble SPHatchPath::_repeatLength() const {
 }
 
 void SPHatchPath::_updateView(View &view) {
+    SPCurve *calculated_curve = _calculateRenderCurve(view);
+
+    Geom::Affine offset_transform = Geom::Translate(offset.computed, 0);
+    view.arenaitem->setTransform(offset_transform);
+    style->fill.setNone();
+    view.arenaitem->setStyle(this->style);
+    view.arenaitem->setPath(calculated_curve);
+
+    calculated_curve->unref();
+}
+
+SPCurve *SPHatchPath::_calculateRenderCurve(View const &view) const {
     SPCurve *calculated_curve = new SPCurve;
 
     if (!view.extents) {
-        return;
+        return calculated_curve;
     }
 
     if (!_curve) {
@@ -230,15 +277,9 @@ void SPHatchPath::_updateView(View &view) {
             segment->unref();
         }
     }
-
-    Geom::Affine offset_transform = Geom::Translate(offset.computed, 0);
-    view.arenaitem->setTransform(offset_transform);
-    style->fill.setNone();
-    view.arenaitem->setStyle(this->style);
-    view.arenaitem->setPath(calculated_curve);
-
-    calculated_curve->unref();
+    return calculated_curve;
 }
+
 
 void SPHatchPath::_readHatchPathVector(char const *str, Geom::PathVector &pathv, bool &continous_join) {
     if (!str) {

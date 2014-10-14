@@ -615,9 +615,8 @@ void SPItem::fill_ps_ref_changed(SPObject *old_ps, SPObject *ps, SPItem *item) {
                 v->arenaitem->setKey(SPItem::display_key_new(3));
             }
             Inkscape::DrawingPattern *pi = new_fill_ps->show(
-                    v->arenaitem->drawing(), v->arenaitem->key());
+                    v->arenaitem->drawing(), v->arenaitem->key(), bbox);
             v->arenaitem->setFillPattern(pi);
-            new_fill_ps->setBBox(v->arenaitem->key(), bbox);
             if (pi) {
                 new_fill_ps->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             }
@@ -625,8 +624,29 @@ void SPItem::fill_ps_ref_changed(SPObject *old_ps, SPObject *ps, SPItem *item) {
     }
 }
 
-void SPItem::stroke_ps_ref_changed(SPObject *old_clip, SPObject *clip, SPItem *item) {
+void SPItem::stroke_ps_ref_changed(SPObject *old_ps, SPObject *ps, SPItem *item) {
+    SPPaintServer *old_stroke_ps = SP_PAINT_SERVER(old_ps);
+    if (old_stroke_ps) {
+        for (SPItemView *v =item->display; v != NULL; v = v->next) {
+            old_stroke_ps->hide(v->arenaitem->key());
+        }
+    }
 
+    SPPaintServer *new_stroke_ps = SP_PAINT_SERVER(ps);
+    if (new_stroke_ps) {
+        Geom::OptRect bbox = item->geometricBounds();
+        for (SPItemView *v = item->display; v != NULL; v = v->next) {
+            if (!v->arenaitem->key()) {
+                v->arenaitem->setKey(SPItem::display_key_new(3));
+            }
+            Inkscape::DrawingPattern *pi = new_stroke_ps->show(
+                    v->arenaitem->drawing(), v->arenaitem->key(), bbox);
+            v->arenaitem->setStrokePattern(pi);
+            if (pi) {
+                new_stroke_ps->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+            }
+        }
+    }
 }
 
 void SPItem::update(SPCtx* /*ctx*/, guint flags) {
@@ -1142,9 +1162,8 @@ Inkscape::DrawingItem *SPItem::invoke_show(Inkscape::Drawing &drawing, unsigned 
             }
             int fill_key = display->arenaitem->key();
 
-            Inkscape::DrawingPattern *ap = fill_ps->show(drawing, fill_key);
+            Inkscape::DrawingPattern *ap = fill_ps->show(drawing, fill_key, item_bbox);
             ai->setFillPattern(ap);
-            fill_ps->setBBox(fill_key, item_bbox);
             if (ap) {
                 fill_ps->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             }
@@ -1156,9 +1175,8 @@ Inkscape::DrawingItem *SPItem::invoke_show(Inkscape::Drawing &drawing, unsigned 
             }
             int stroke_key = display->arenaitem->key();
 
-            Inkscape::DrawingPattern *ap = stroke_ps->show(drawing, stroke_key);
+            Inkscape::DrawingPattern *ap = stroke_ps->show(drawing, stroke_key, item_bbox);
             ai->setStrokePattern(ap);
-            stroke_ps->setBBox(stroke_key, item_bbox);
             if (ap) {
                 stroke_ps->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             }

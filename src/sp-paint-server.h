@@ -43,7 +43,7 @@ public:
     //on demand by pattern_new method. It is used for gradients. The other one is to add elements
     //representing PaintServer in NR tree. It is used by hatches and patterns.
     //Either pattern new or all three methods show, hide, setBBox need to be implemented
-    virtual Inkscape::DrawingPattern *show(Inkscape::Drawing &drawing, unsigned int key) {return NULL;}
+    virtual Inkscape::DrawingPattern *show(Inkscape::Drawing &drawing, unsigned int key, Geom::OptRect bbox) {return NULL;}
     virtual void hide(unsigned int key) {};
     virtual void setBBox(unsigned int key, Geom::OptRect const &bbox) {};
 

@@ -40,10 +40,13 @@ public:
 
     bool isValid() const;
 
-    Inkscape::DrawingItem *show(Inkscape::Drawing &drawing, unsigned int key);
+    Inkscape::DrawingItem *show(Inkscape::Drawing &drawing, unsigned int key, Geom::OptInterval extents);
     void hide(unsigned int key);
 
 	void setStripExtents(unsigned int key, Geom::OptInterval const &extents);
+	Geom::Interval bounds() const;
+
+	SPCurve *calculateRenderCurve(unsigned key) const;
 
 protected:
 	virtual void build(SPDocument* doc, Inkscape::XML::Node* repr);
@@ -61,10 +64,12 @@ private:
         unsigned int key;
     };
     typedef std::list<SPHatchPath::View>::iterator ViewIterator;
+    typedef std::list<SPHatchPath::View>::const_iterator ConstViewIterator;
     std::list<View> _display;
 
     gdouble _repeatLength() const;
     void _updateView(View &view);
+    SPCurve *_calculateRenderCurve(View const &view) const;
 
     void _readHatchPathVector(char const *str, Geom::PathVector &pathv, bool &continous_join);
 
