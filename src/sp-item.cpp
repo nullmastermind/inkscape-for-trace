@@ -118,6 +118,9 @@ SPItem::SPItem() : SPObject() {
     mask_ref = new SPMaskReference(this);
     mask_ref->changedSignal().connect(sigc::bind(sigc::ptr_fun(mask_ref_changed), this));
 
+    style->signal_fill_ps_changed.connect(sigc::bind(sigc::ptr_fun(fill_ps_ref_changed), this));
+    style->signal_stroke_ps_changed.connect(sigc::bind(sigc::ptr_fun(stroke_ps_ref_changed), this));
+
     avoidRef = new SPAvoidRef(this);
 }
 
@@ -442,7 +445,15 @@ void SPItem::release() {
 
     SPObject::release();
 
+    SPPattern *fill_pattern = SP_PATTERN(style->getFillPaintServer());
+    SPPattern *stroke_pattern = SP_PATTERN(style->getStrokePaintServer());
     while (item->display) {
+        if (fill_pattern) {
+            fill_pattern->hide(item->display->arenaitem->key());
+        }
+        if (stroke_pattern) {
+            stroke_pattern->hide(item->display->arenaitem->key());
+        }
         item->display = sp_item_view_list_remove(item->display, item->display);
     }
 
@@ -588,6 +599,34 @@ void SPItem::mask_ref_changed(SPObject *old_mask, SPObject *mask, SPItem *item)
     }
 }
 
+void SPItem::fill_ps_ref_changed(SPObject *old_ps, SPObject *ps, SPItem *item) {
+    SPPattern *old_fill_pattern = SP_PATTERN(old_ps);
+    if (old_fill_pattern) {
+        for (SPItemView *v =item->display; v != NULL; v = v->next) {
+            old_fill_pattern->hide(v->arenaitem->key());
+        }
+    }
+
+    SPPattern *new_fill_pattern = SP_PATTERN(ps);
+    if (new_fill_pattern) {
+        Geom::OptRect bbox = item->geometricBounds();
+        for (SPItemView *v = item->display; v != NULL; v = v->next) {
+            if (!v->arenaitem->key()) {
+                v->arenaitem->setKey(SPItem::display_key_new(3));
+            }
+            Inkscape::DrawingPattern *pi = new_fill_pattern->show(
+                    v->arenaitem->drawing(), v->arenaitem->key());
+            v->arenaitem->setFillPattern(pi);
+            new_fill_pattern->setBBox(v->arenaitem->key(), bbox);
+            new_fill_pattern->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+        }
+    }
+}
+
+void SPItem::stroke_ps_ref_changed(SPObject *old_clip, SPObject *clip, SPItem *item) {
+
+}
+
 void SPItem::update(SPCtx* /*ctx*/, guint flags) {
     SPItem *item = this;
     SPItem* object = item;
@@ -645,6 +684,9 @@ void SPItem::update(SPCtx* /*ctx*/, guint flags) {
     // Update libavoid with item geometry (for connector routing).
     if (item->avoidRef)
         item->avoidRef->handleSettingChange();
+}
+
+void SPItem::modified(unsigned int flags) {
 }
 
 Inkscape::XML::Node* SPItem::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
@@ -1090,6 +1132,31 @@ Inkscape::DrawingItem *SPItem::invoke_show(Inkscape::Drawing &drawing, unsigned 
             SP_MASK(mask)->sp_mask_set_bbox(mask_key, item_bbox);
             mask->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         }
+
+        SPPattern *fill_pattern = SP_PATTERN(style->getFillPaintServer());
+        if (fill_pattern) {
+            if (!display->arenaitem->key()) {
+                display->arenaitem->setKey(display_key_new(3));
+            }
+            int fill_key = display->arenaitem->key();
+
+            Inkscape::DrawingPattern *ac = fill_pattern->show(drawing, fill_key);
+            ai->setFillPattern(ac);
+            fill_pattern->setBBox(fill_key, item_bbox);
+            fill_pattern->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+        }
+        SPPattern *stroke_pattern = SP_PATTERN(style->getStrokePaintServer());
+        if (stroke_pattern) {
+            if (!display->arenaitem->key()) {
+                display->arenaitem->setKey(display_key_new(3));
+            }
+            int stroke_key = display->arenaitem->key();
+
+            Inkscape::DrawingPattern *ac = stroke_pattern->show(drawing, stroke_key);
+            ai->setStrokePattern(ac);
+            stroke_pattern->setBBox(stroke_key, item_bbox);
+            stroke_pattern->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+        }
         ai->setData(this);
         ai->setItemBounds(geometricBounds());
     }
@@ -1118,6 +1185,14 @@ void SPItem::invoke_hide(unsigned key)
             if (mask_ref->getObject()) {
                 mask_ref->getObject()->sp_mask_hide(v->arenaitem->key());
                 v->arenaitem->setMask(NULL);
+            }
+            SPPattern *fill_pattern = SP_PATTERN(style->getFillPaintServer());
+            if (fill_pattern) {
+                fill_pattern->hide(v->arenaitem->key());
+            }
+            SPPattern *stroke_pattern = SP_PATTERN(style->getStrokePaintServer());
+            if (stroke_pattern) {
+                stroke_pattern->hide(v->arenaitem->key());
             }
             if (!ref) {
                 display = v->next;
