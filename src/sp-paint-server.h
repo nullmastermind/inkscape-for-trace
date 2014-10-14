@@ -29,6 +29,7 @@ public:
 
     bool isSwatch() const;
     bool isSolid() const;
+    virtual bool isValid() const;
 
     virtual cairo_pattern_t* pattern_new(cairo_t *ct, Geom::OptRect const &bbox, double opacity) = 0;
 
