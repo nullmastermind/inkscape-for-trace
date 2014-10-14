@@ -243,6 +243,11 @@ public:
     sigc::connection filter_modified_connection;
     sigc::connection fill_ps_modified_connection;
     sigc::connection stroke_ps_modified_connection;
+    sigc::connection fill_ps_changed_connection;
+    sigc::connection stroke_ps_changed_connection;
+
+    sigc::signal<void, SPObject *, SPObject *> signal_fill_ps_changed;
+    sigc::signal<void, SPObject *, SPObject *> signal_stroke_ps_changed;
 
     SPObject       *getFilter()          { return (filter.href) ? filter.href->getObject() : NULL; }
     SPObject const *getFilter()    const { return (filter.href) ? filter.href->getObject() : NULL; }
