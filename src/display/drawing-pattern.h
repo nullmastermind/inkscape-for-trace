@@ -59,6 +59,7 @@ public:
 protected:
     virtual unsigned _updateItem(Geom::IntRect const &area, UpdateContext const &ctx,
                                      unsigned flags, unsigned reset);
+    Geom::IntPoint _patternDimentions();
 
     Geom::Affine *_pattern_to_user;
     Geom::Affine _overflow_initial_transform;
@@ -66,7 +67,6 @@ protected:
     int _overflow_steps;
     Geom::OptRect _tile_rect;
     bool _debug;
-
     Geom::IntPoint _pattern_resolution;
 };
 
