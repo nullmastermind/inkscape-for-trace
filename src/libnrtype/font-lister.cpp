@@ -2,8 +2,8 @@
 #include <config.h>
 #endif
 
-#include <gtkmm/treemodel.h>
 #include <gtkmm/liststore.h>
+#include <gtkmm/treemodel.h>
 
 #include <libnrtype/font-instance.h>
 #include <libnrtype/TextWrapper.h>
