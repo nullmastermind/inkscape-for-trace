@@ -265,6 +265,12 @@ static int StyleNameValue( const Glib::ustring &style )
 //   return( StyleNameValue( style1.CssName ) < StyleNameValue( style2.CssName ) );
 //}
 
+static gint StyleNameCompareInternalGlib(gconstpointer a, gconstpointer b)
+{
+    return( StyleNameValue( ((StyleNames *)a)->CssName  ) <
+            StyleNameValue( ((StyleNames *)b)->CssName  ) ? -1 : 1 );
+}
+
 static bool ustringPairSort(std::pair<PangoFontFamily*, Glib::ustring> const& first, std::pair<PangoFontFamily*, Glib::ustring> const& second)
 {
     // well, this looks weird.
@@ -319,7 +325,7 @@ GList* font_factory::GetUIStyles(PangoFontFamily * in)
         if (faceDescr) {
             Glib::ustring familyUIName = GetUIFamilyString(faceDescr);
             Glib::ustring styleUIName = GetUIStyleString(faceDescr);
-
+            // std::cout << familyUIName << "  " << styleUIName << "  " << displayName << std::endl;
             // Disable synthesized (faux) font faces except for CSS generic faces
             if (pango_font_face_is_synthesized(faces[currentFace]) ) {
                 if (familyUIName.compare( "sans-serif" ) != 0 &&
@@ -329,6 +335,35 @@ GList* font_factory::GetUIStyles(PangoFontFamily * in)
                     familyUIName.compare( "cursive"    ) != 0 ) {
                     continue;
                 }
+            }
+
+            // Pango breaks the 1 to 1 mapping between Pango weights and CSS weights by
+            // adding Semi-Light (as of 1.36.7), Book (as of 1.24), and Ultra-Heavy (as of
+            // 1.24). We need to map these weights to CSS weights. Book and Ultra-Heavy
+            // are rarely used. Semi-Light (350) is problematic as it is halfway between
+            // Light (300) and Normal (400) and if care is not taken it is converted to
+            // Normal, rather than Light.
+            //
+            // Note: The ultimate solution to handling various weight in the same
+            // font family is to support the @font rules from CSS.
+            //
+            // Additional notes, helpful for debugging:
+            //   Pango's FC backend:
+            //     Weights defined in fontconfig/fontconfig.h
+            //     String equivalents in src/fcfreetype.c
+            //     Weight set from os2->usWeightClass
+            //   Use Fontforge: Element->Font Info...->OS/2->Misc->Weight Class to check font weight
+            size_t f = styleUIName.find( "Book" );
+            if( f != Glib::ustring::npos ) {
+                styleUIName.replace( f, 4, "Normal" );
+            }
+            f = styleUIName.find( "Semi-Light" );
+            if( f != Glib::ustring::npos ) {
+                styleUIName.replace( f, 10, "Light" );
+            }
+            f = styleUIName.find( "Ultra-Heavy" );
+            if( f != Glib::ustring::npos ) {
+                styleUIName.replace( f, 11, "Heavy" );
             }
 
             bool exists = false;
@@ -351,9 +386,11 @@ GList* font_factory::GetUIStyles(PangoFontFamily * in)
         pango_font_description_free(faceDescr);
     }
     g_free(faces);
+
+    // Sort the style lists
+    ret = g_list_sort( ret, StyleNameCompareInternalGlib );
     return ret;
 }
-
 
 font_instance* font_factory::FaceFromStyle(SPStyle const *style)
 {
