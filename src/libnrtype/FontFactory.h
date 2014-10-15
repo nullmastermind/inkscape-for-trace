@@ -21,7 +21,7 @@
 
 #include <pango/pango.h>
 #include "nr-type-primitives.h"
-#include "../style.h"
+#include "style.h"
 
 /* Freetype */
 #ifdef USE_PANGO_WIN32
@@ -121,7 +121,13 @@ public:
 
     // Gathers all strings needed for UI while storing pango information in
     // fontInstanceMap and fontStringMap
+    // don't use this function, it's too slow
     void                  GetUIFamiliesAndStyles(FamilyToStylesMap *map);
+    
+    // Helpfully inserts all font families into the provided vector
+    void                  GetUIFamilies(std::vector<PangoFontFamily *>& out);
+    // Retrieves style information about a family in a newly allocated GList.
+    GList*                GetUIStyles(PangoFontFamily * in);
 
     /// Retrieve a font_instance from a style object, first trying to use the font-specification, the CSS information
     font_instance*        FaceFromStyle(SPStyle const *style);
@@ -174,4 +180,4 @@ private:
   fill-column:99
   End:
 */
-// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8 :
