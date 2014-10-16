@@ -59,17 +59,22 @@ const double noPower = 0.0;
 const double defaultStartPower = 0.3334;
 const double defaultEndPower = 0.6667;
 
-LPEBSpline::LPEBSpline(LivePathEffectObject *lpeobject) :
-    Effect(lpeobject),
-    steps(_("Steps whith CTRL:"), _("Change number of steps whith CTRL pressed"), "steps", &wr, this, 2),
-    ignoreCusp(_("Ignore cusp nodes"), _("Change ignoring cusp nodes"), "ignoreCusp", &wr, this, true),
-    onlySelected(_("Change only selected nodes"), _("Change only selected nodes"), "onlySelected", &wr, this, false),
-    weight(_("Change weight:"), _("Change weight of the effect"), "weight", &wr, this, defaultStartPower)
+LPEBSpline::LPEBSpline(LivePathEffectObject *lpeobject)
+    : Effect(lpeobject),
+      // initialise your parameters here:
+      //testpointA(_("Test Point A"), _("Test A"), "ptA", &wr, this,
+      //Geom::Point(100,100)),
+      steps(_("Steps whith CTRL:"), _("Change number of steps whith CTRL pressed"), "steps", &wr, this, 2),
+      ignoreCusp(_("Ignore cusp nodes"), _("Change ignoring cusp nodes"), "ignoreCusp", &wr, this, true),
+      onlySelected(_("Change only selected nodes"), _("Change only selected nodes"), "onlySelected", &wr, this, false),
+      showHelper(_("Show helper paths"), _("Show helper paths"), "showHelper", &wr, this, false),
+      weight(_("Change weight:"), _("Change weight of the effect"), "weight", &wr, this, defaultStartPower)
 {
-    registerParameter(&weight);
-    registerParameter(&steps);
-    registerParameter(&ignoreCusp);
-    registerParameter(&onlySelected);
+    registerParameter(dynamic_cast<Parameter *>(&weight));
+    registerParameter(dynamic_cast<Parameter *>(&steps));
+    registerParameter(dynamic_cast<Parameter *>(&ignoreCusp));
+    registerParameter(dynamic_cast<Parameter *>(&onlySelected));
+    registerParameter(dynamic_cast<Parameter *>(&showHelper));
 
     weight.param_set_range(noPower, 1);
     weight.param_set_increments(0.1, 0.1);
@@ -89,7 +94,9 @@ void LPEBSpline::doBeforeEffect (SPLPEItem const* lpeitem)
     }
 }
 
-void LPEBSpline::createAndApply(const char *name, SPDocument *doc, SPItem *item)
+
+void LPEBSpline::createAndApply(const char *name, SPDocument *doc,
+                                SPItem *item)
 {
     if (!SP_IS_SHAPE(item)) {
         g_warning("LPE BSpline can only be applied to shapes (not groups).");
@@ -99,7 +106,8 @@ void LPEBSpline::createAndApply(const char *name, SPDocument *doc, SPItem *item)
         Inkscape::XML::Node *repr = xml_doc->createElement("inkscape:path-effect");
         repr->setAttribute("effect", name);
 
-        doc->getDefs()->getRepr()->addChild(repr, NULL); // adds to <defs> and assigns the 'id' attribute
+        doc->getDefs()->getRepr()
+        ->addChild(repr, NULL); // adds to <defs> and assigns the 'id' attribute
         const gchar *repr_id = repr->attribute("id");
         Inkscape::GC::release(repr);
 
@@ -111,13 +119,13 @@ void LPEBSpline::createAndApply(const char *name, SPDocument *doc, SPItem *item)
 
 void LPEBSpline::doEffect(SPCurve *curve)
 {
+
     if (curve->get_segment_count() < 1){
         return;
     }
-
+    // Make copy of old path as it is changed during processing
     Geom::PathVector const original_pathv = curve->get_pathvector();
     curve->reset();
-
     double radiusHelperNodes = 6.0;
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (desktop){
@@ -125,7 +133,6 @@ void LPEBSpline::doEffect(SPCurve *curve)
         SPNamedView *nv = sp_desktop_namedview(desktop);
         radiusHelperNodes = Inkscape::Util::Quantity::convert(radiusHelperNodes, "px", nv->doc_units->abbr);
     }
-
     for (Geom::PathVector::const_iterator path_it = original_pathv.begin();
             path_it != original_pathv.end(); ++path_it) {
         if (path_it->empty())
@@ -133,7 +140,7 @@ void LPEBSpline::doEffect(SPCurve *curve)
 
         Geom::Path::const_iterator curve_it1 = path_it->begin();
         Geom::Path::const_iterator curve_it2 = ++(path_it->begin());
-        Geom::Path::const_iterator curve_endit = path_it->end_default(); 
+        Geom::Path::const_iterator curve_endit = path_it->end_default();
         SPCurve *nCurve = new SPCurve();
         Geom::Point previousNode(0, 0);
         Geom::Point node(0, 0);
@@ -145,13 +152,29 @@ void LPEBSpline::doEffect(SPCurve *curve)
         Geom::D2<Geom::SBasis> SBasisHelper;
         Geom::CubicBezier const *cubic = NULL;
         if (path_it->closed()) {
-            const Geom::Curve &closingline = path_it->back_closed();
+            // if the path is closed, maybe we have to stop a bit earlier because the
+            // closing line segment has zerolength.
+            const Geom::Curve &closingline =
+                path_it->back_closed(); // the closing line segment is always of type
+            // Geom::LineSegment.
             if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
+                // closingline.isDegenerate() did not work, because it only checks for
+                // *exact* zero length, which goes wrong for relative coordinates and
+                // rounding errors...
+                // the closing line segment has zero-length. So stop before that one!
                 curve_endit = path_it->end_open();
             }
         }
+        //Si la curva está cerrada calculamos el punto donde
+        //deveria estar el nodo BSpline de cierre/inicio de la curva
+        //en posible caso de que se cierre con una linea recta creando un nodo
+        //BSPline
         nCurve->moveto(curve_it1->initialPoint());
+        //Recorremos todos los segmentos menos el último
         while (curve_it1 != curve_endit) {
+            //previousPointAt3 = pointAt3;
+            //Calculamos los puntos que dividirían en tres segmentos iguales el path
+            //recto de entrada y de salida
             SPCurve *in = new SPCurve();
             in->moveto(curve_it1->initialPoint());
             in->lineto(curve_it1->finalPoint());
@@ -192,7 +215,6 @@ void LPEBSpline::doEffect(SPCurve *curve)
                 out->reset();
                 delete out;
             }
-            Geom::Point startNode = path_it->begin()->initialPoint();
             if (path_it->closed() && curve_it2 == curve_endit) {
                 SPCurve *start = new SPCurve();
                 start->moveto(path_it->begin()->initialPoint());
@@ -225,9 +247,9 @@ void LPEBSpline::doEffect(SPCurve *curve)
                 SBasisHelper = lineHelper->first_segment()->toSBasis();
                 lineHelper->reset();
                 delete lineHelper;
-                startNode = SBasisHelper.valueAt(0.5);
-                nCurve->curveto(pointAt1, pointAt2, startNode);
-                nCurve->move_endpoints(startNode, startNode);
+                node = SBasisHelper.valueAt(0.5);
+                nCurve->curveto(pointAt1, pointAt2, node);
+                nCurve->move_endpoints(node, node);
             } else if ( curve_it2 == curve_endit) {
                 nCurve->curveto(pointAt1, pointAt2, curve_it1->finalPoint());
                 nCurve->move_endpoints(path_it->begin()->initialPoint(), curve_it1->finalPoint());
@@ -238,17 +260,26 @@ void LPEBSpline::doEffect(SPCurve *curve)
                 SBasisHelper = lineHelper->first_segment()->toSBasis();
                 lineHelper->reset();
                 delete lineHelper;
+                //almacenamos el punto del anterior bucle -o el de cierre- que nos hara de
+                //principio de curva
                 previousNode = node;
+                //Y este hará de final de curva
                 node = SBasisHelper.valueAt(0.5);
                 Geom::CubicBezier const *cubic2 = dynamic_cast<Geom::CubicBezier const *>(&*curve_it1);
                 if((cubic && are_near((*cubic)[0],(*cubic)[1])) || (cubic2 && are_near((*cubic2)[2],(*cubic2)[3]))) {
                     node = curve_it1->finalPoint();
                 }
                 nCurve->curveto(pointAt1, pointAt2, node);
-                if(!are_near(node,curve_it1->finalPoint())){
-                    drawHandle(node, radiusHelperNodes);
-                }
             }
+            if(!are_near(node,curve_it1->finalPoint()) && showHelper){
+                drawHandle(node, radiusHelperNodes);
+            }
+            //La curva BSpline se forma calculando el centro del segmanto de unión
+            //de el punto situado en las 2/3 partes de el segmento de entrada
+            //con el punto situado en la posición 1/3 del segmento de salida
+            //Estos dos puntos ademas estan posicionados en el lugas correspondiente
+            //de los manejadores de la curva
+            //aumentamos los valores para el siguiente paso en el bucle
             ++curve_it1;
             ++curve_it2;
         }
@@ -259,6 +290,8 @@ void LPEBSpline::doEffect(SPCurve *curve)
         curve->append(nCurve, false);
         nCurve->reset();
         delete nCurve;
+    }
+    if(showHelper){
         Geom::PathVector const pathv = curve->get_pathvector();
         hp.push_back(pathv[0]);
     }
@@ -293,32 +326,44 @@ Gtk::Widget *LPEBSpline::newWidget()
     while (it != param_vector.end()) {
         if ((*it)->widget_is_visible) {
             Parameter *param = *it;
-            Gtk::Widget *widg = Gtk::manage(param->param_newWidget());
+            Gtk::Widget *widg = dynamic_cast<Gtk::Widget *>(param->param_newWidget());
             if (param->param_key == "weight") {
-                Gtk::HBox * buttons = Gtk::manage(new Gtk::HBox(true, 0));
-
-                Gtk::Button *defaultWeight = Gtk::manage(new Gtk::Button(Glib::ustring(_("Default weight"))));
-                defaultWeight->signal_clicked().connect(sigc::bind<Gtk::Widget *>(sigc::mem_fun(*this, &LPEBSpline::toDefaultWeight), widg));
+                Gtk::HBox * buttons = Gtk::manage(new Gtk::HBox(true,0));
+                Gtk::Button *defaultWeight =
+                    Gtk::manage(new Gtk::Button(Glib::ustring(_("Default weight"))));
+                defaultWeight->signal_clicked()
+                .connect(sigc::bind<Gtk::Widget *>(sigc::mem_fun(*this, &LPEBSpline::toDefaultWeight), widg));
                 buttons->pack_start(*defaultWeight, true, true, 2);
-
-                Gtk::Button *makeCusp = Gtk::manage(new Gtk::Button(Glib::ustring(_("Make cusp"))));
-                makeCusp->signal_clicked().connect(sigc::bind<Gtk::Widget *>(sigc::mem_fun(*this, &LPEBSpline::toMakeCusp), widg));
+                Gtk::Button *makeCusp =
+                    Gtk::manage(new Gtk::Button(Glib::ustring(_("Make cusp"))));
+                makeCusp->signal_clicked()
+                .connect(sigc::bind<Gtk::Widget *>(sigc::mem_fun(*this, &LPEBSpline::toMakeCusp), widg));
                 buttons->pack_start(*makeCusp, true, true, 2);
-
                 vbox->pack_start(*buttons, true, true, 2);
             }
             if (param->param_key == "weight" || param->param_key == "steps") {
-                Inkscape::UI::Widget::Scalar *widgRegistered = Gtk::manage(dynamic_cast<Inkscape::UI::Widget::Scalar *>(widg));
-                widgRegistered->signal_value_changed().connect(sigc::mem_fun(*this, &LPEBSpline::toWeight));
-
+                Inkscape::UI::Widget::Scalar *widgRegistered =
+                    Gtk::manage(dynamic_cast<Inkscape::UI::Widget::Scalar *>(widg));
+                widgRegistered->signal_value_changed()
+                .connect(sigc::mem_fun(*this, &LPEBSpline::toWeight));
+                widg = dynamic_cast<Gtk::Widget *>(widgRegistered);
                 if (widg) {
                     Gtk::HBox * scalarParameter = dynamic_cast<Gtk::HBox *>(widg);
-                    std::vector<Gtk::Widget *> childList = scalarParameter->get_children();
+                    std::vector< Gtk::Widget* > childList = scalarParameter->get_children();
                     Gtk::Entry* entryWidg = dynamic_cast<Gtk::Entry *>(childList[1]);
                     entryWidg->set_width_chars(6);
                 }
             }
-
+            if (param->param_key == "onlySelected") {
+                Gtk::CheckButton *widgRegistered =
+                    Gtk::manage(dynamic_cast<Gtk::CheckButton *>(widg));
+                widg = dynamic_cast<Gtk::Widget *>(widgRegistered);
+            }
+            if (param->param_key == "ignoreCusp") {
+                Gtk::CheckButton *widgRegistered =
+                    Gtk::manage(dynamic_cast<Gtk::CheckButton *>(widg));
+                widg = dynamic_cast<Gtk::Widget *>(widgRegistered);
+            }
             Glib::ustring *tip = param->param_getTooltip();
             if (widg) {
                 vbox->pack_start(*widg, true, true, 2);
@@ -333,7 +378,7 @@ Gtk::Widget *LPEBSpline::newWidget()
 
         ++it;
     }
-    return vbox;
+    return dynamic_cast<Gtk::Widget *>(vbox);
 }
 
 void LPEBSpline::toDefaultWeight(Gtk::Widget *widgWeight)
@@ -379,7 +424,8 @@ void LPEBSpline::changeWeight(double weightValue)
     g_free(str);
     curve->unref();
     desktop->clearWaitingCursor();
-    DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_CONTEXT_LPE, _("Modified the weight of a BSpline"));
+    DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_CONTEXT_LPE,
+                       _("Modified the weight of the BSpline"));
 }
 
 bool LPEBSpline::nodeIsSelected(Geom::Point nodePoint)
