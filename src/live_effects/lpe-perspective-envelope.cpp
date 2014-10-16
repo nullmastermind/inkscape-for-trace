@@ -1,5 +1,5 @@
 /** \file
- * LPE <envelope-perspective> implementation
+ * LPE <perspective-envelope> implementation
  
  */
 /*
@@ -15,7 +15,7 @@
  */
 
 #include <gtkmm.h>
-#include "live_effects/lpe-envelope-perspective.h"
+#include "live_effects/lpe-perspective-envelope.h"
 #include "helper/geom.h"
 #include "display/curve.h"
 #include "svg/svg.h"
@@ -29,21 +29,21 @@ namespace Inkscape {
 namespace LivePathEffect {
 
 enum DeformationType {
-  DEFORMATION_ENVELOPE,
-  DEFORMATION_PERSPECTIVE
+  DEFORMATION_PERSPECTIVE,
+  DEFORMATION_ENVELOPE
 };
 
 static const Util::EnumData<unsigned> DeformationTypeData[] = {
-    {DEFORMATION_ENVELOPE          , N_("Envelope deformation"), "Envelope deformation"},
-    {DEFORMATION_PERSPECTIVE          , N_("Perspective"), "Perspective"}
+    {DEFORMATION_PERSPECTIVE          , N_("Perspective"), "Perspective"},
+    {DEFORMATION_ENVELOPE          , N_("Envelope deformation"), "Envelope deformation"}
 };
 
 static const Util::EnumDataConverter<unsigned> DeformationTypeConverter(DeformationTypeData, sizeof(DeformationTypeData)/sizeof(*DeformationTypeData));
 
-LPEEnvelopePerspective::LPEEnvelopePerspective(LivePathEffectObject *lpeobject) :
+LPEPerspectiveEnvelope::LPEPerspectiveEnvelope(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
     // initialise your parameters here:
-    deform_type(_("Type"), _("Select the type of deformation"), "deform_type", DeformationTypeConverter, &wr, this, DEFORMATION_ENVELOPE),
+    deform_type(_("Type"), _("Select the type of deformation"), "deform_type", DeformationTypeConverter, &wr, this, DEFORMATION_PERSPECTIVE),
     Up_Left_Point(_("Top Left"), _("Top Left - Ctrl+Alt+Click to reset"), "Up_Left_Point", &wr, this),
     Up_Right_Point(_("Top Right"), _("Top Right - Ctrl+Alt+Click to reset"), "Up_Right_Point", &wr, this),
     Down_Left_Point(_("Down Left"), _("Down Left - Ctrl+Alt+Click to reset"), "Down_Left_Point", &wr, this),
@@ -57,11 +57,11 @@ LPEEnvelopePerspective::LPEEnvelopePerspective(LivePathEffectObject *lpeobject) 
     registerParameter( dynamic_cast<Parameter *>(&Down_Right_Point) );
 }
 
-LPEEnvelopePerspective::~LPEEnvelopePerspective()
+LPEPerspectiveEnvelope::~LPEPerspectiveEnvelope()
 {
 }
 
-void LPEEnvelopePerspective::doEffect(SPCurve *curve) {
+void LPEPerspectiveEnvelope::doEffect(SPCurve *curve) {
     using Geom::X;
     using Geom::Y;
     double projmatrix[3][3];
@@ -135,32 +135,23 @@ void LPEEnvelopePerspective::doEffect(SPCurve *curve) {
           continue;
         //Itreadores
         SPCurve *nCurve = new SPCurve();
-        Geom::Path::const_iterator curve_it1 = path_it->begin(); // incoming curve
-        Geom::Path::const_iterator curve_it2 =
-            ++(path_it->begin());                                // outgoing curve
-        Geom::Path::const_iterator curve_endit =
-            path_it->end_default(); // this determines when the loop has to stop
+        Geom::Path::const_iterator curve_it1 = path_it->begin();
+        Geom::Path::const_iterator curve_it2 = ++(path_it->begin());
+        Geom::Path::const_iterator curve_endit = path_it->end_default();
         
         if (path_it->closed()) {
-          // if the path is closed, maybe we have to stop a bit earlier because the
-          // closing line segment has zerolength.
-          const Geom::Curve &closingline =
-              path_it->back_closed(); // the closing line segment is always of type
-                                      // Geom::LineSegment.
-          if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
-            // closingline.isDegenerate() did not work, because it only checks for
-            // *exact* zero length, which goes wrong for relative coordinates and
-            // rounding errors...
-            // the closing line segment has zero-length. So stop before that one!
-            curve_endit = path_it->end_open();
-          }
+            const Geom::Curve &closingline =
+                path_it->back_closed();
+            if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
+                curve_endit = path_it->end_open();
+            }
         }
         if(deform_type == DEFORMATION_PERSPECTIVE){
             nCurve->moveto(project_point(curve_it1->initialPoint(),projmatrix));
         }else{
             nCurve->moveto(project_point(curve_it1->initialPoint()));
         }
-        while (curve_it2 != curve_endit) {
+        while (curve_it1 != curve_endit) {
           cubic = dynamic_cast<Geom::CubicBezier const *>(&*curve_it1);
           if (cubic) {
             pointAt1 = (*cubic)[1];
@@ -181,34 +172,13 @@ void LPEEnvelopePerspective::doEffect(SPCurve *curve) {
           }
           nCurve->curveto(pointAt1, pointAt2, pointAt3);
           ++curve_it1;
-          ++curve_it2;
-        }
-        cubic = dynamic_cast<Geom::CubicBezier const *>(&*curve_it1);
-        if (cubic) {
-            pointAt1 = (*cubic)[1];
-            pointAt2 = (*cubic)[2];
-        } else {
-            pointAt1 = curve_it1->initialPoint();
-            pointAt2 = curve_it1->finalPoint();
-        }
-        pointAt3 = curve_it1->finalPoint();
-        if(deform_type == DEFORMATION_PERSPECTIVE){
-            pointAt1 = project_point(pointAt1,projmatrix);
-            pointAt2 = project_point(pointAt2,projmatrix);
-            pointAt3 = project_point(pointAt3,projmatrix);
-        }else{
-            pointAt1 = project_point(pointAt1);
-            pointAt2 = project_point(pointAt2);
-            pointAt3 = project_point(pointAt3);
-        }
-        nCurve->curveto(pointAt1, pointAt2, pointAt3);
-        if(deform_type == DEFORMATION_PERSPECTIVE){
-            nCurve->move_endpoints(project_point(path_it->begin()->initialPoint(),projmatrix), pointAt3);
-        }else{
-            nCurve->move_endpoints(project_point(path_it->begin()->initialPoint()), pointAt3);
+          if(curve_it2 != curve_endit) {
+            ++curve_it2;
+          }
         }
         //y cerramos la curva
         if (path_it->closed()) {
+          nCurve->move_endpoints(pointAt3, pointAt3);
           nCurve->closepath_current();
         }
         curve->append(nCurve, false);
@@ -218,11 +188,13 @@ void LPEEnvelopePerspective::doEffect(SPCurve *curve) {
 }
 
 Geom::Point 
-LPEEnvelopePerspective::project_point(Geom::Point p){
+LPEPerspectiveEnvelope::project_point(Geom::Point p){
     double width = boundingbox_X.extent();
     double height = boundingbox_Y.extent();
-    Geom::Coord xratio = abs(Geom::Point(boundingbox_X.min(), boundingbox_Y.max())[X]-p[X])/width;
-    Geom::Coord yratio = abs(Geom::Point(boundingbox_X.min(), boundingbox_Y.max())[Y]-p[Y])/height;
+    double delta_x = boundingbox_X.min() - p[X];
+    double delta_y = boundingbox_Y.max() - p[Y];
+    Geom::Coord xratio = (delta_x * sgn(delta_x)) / width;
+    Geom::Coord yratio = (delta_y * sgn(delta_y)) / height;
     Geom::Line* horiz = new Geom::Line();
     Geom::Line* vert = new Geom::Line();
     vert->setPoints (pointAtRatio(yratio,Down_Left_Point,Up_Left_Point),pointAtRatio(yratio,Down_Right_Point,Up_Right_Point));
@@ -237,7 +209,7 @@ LPEEnvelopePerspective::project_point(Geom::Point p){
 }
 
 Geom::Point 
-LPEEnvelopePerspective::project_point(Geom::Point p, double m[][3]){
+LPEPerspectiveEnvelope::project_point(Geom::Point p, double m[][3]){
     Geom::Coord x = p[0];
     Geom::Coord y = p[1];
     return Geom::Point(
@@ -246,7 +218,7 @@ LPEEnvelopePerspective::project_point(Geom::Point p, double m[][3]){
 }
 
 Geom::Point
-LPEEnvelopePerspective::pointAtRatio(Geom::Coord ratio,Geom::Point A, Geom::Point B){
+LPEPerspectiveEnvelope::pointAtRatio(Geom::Coord ratio,Geom::Point A, Geom::Point B){
         Geom::Coord x = A[X] + (ratio * (B[X]-A[X]));
         Geom::Coord y = A[Y]+ (ratio * (B[Y]-A[Y]));
         return Point(x, y);
@@ -254,7 +226,7 @@ LPEEnvelopePerspective::pointAtRatio(Geom::Coord ratio,Geom::Point A, Geom::Poin
 
 
 Gtk::Widget *
-LPEEnvelopePerspective::newWidget()
+LPEPerspectiveEnvelope::newWidget()
 {
     // use manage here, because after deletion of Effect object, others might still be pointing to this widget.
     Gtk::VBox * vbox = Gtk::manage( new Gtk::VBox(Effect::newWidget()) );
@@ -285,20 +257,12 @@ LPEEnvelopePerspective::newWidget()
                         Gtk::Label* handles = Gtk::manage(new Gtk::Label(Glib::ustring(_("Handles:")),Gtk::ALIGN_START));
                         vbox->pack_start(*handles, false, false, 2);
                         hboxUpHandles->pack_start(*widg, true, true, 2);
-#if WITH_GTKMM_3_0
-                        hboxUpHandles->pack_start(*Gtk::manage(new Gtk::Separator(Gtk::ORIENTATION_VERTICAL)), Gtk::PACK_EXPAND_WIDGET);
-#else
                         hboxUpHandles->pack_start(*Gtk::manage(new Gtk::VSeparator()), Gtk::PACK_EXPAND_WIDGET);
-#endif
                     }else if(param->param_key == "Up_Right_Point"){
                         hboxUpHandles->pack_start(*widg, true, true, 2);
                     }else if(param->param_key == "Down_Left_Point"){
                         hboxDownHandles->pack_start(*widg, true, true, 2);
-#if WITH_GTKMM_3_0
-                        hboxDownHandles->pack_start(*Gtk::manage(new Gtk::Separator(Gtk::ORIENTATION_VERTICAL)), Gtk::PACK_EXPAND_WIDGET);
-#else
                         hboxDownHandles->pack_start(*Gtk::manage(new Gtk::VSeparator()), Gtk::PACK_EXPAND_WIDGET);
-#endif
                     }else{
                         hboxDownHandles->pack_start(*widg, true, true, 2);
                     }
@@ -327,18 +291,13 @@ LPEEnvelopePerspective::newWidget()
     }
     vbox->pack_start(*hboxUpHandles,true, true, 2);
     Gtk::HBox * hboxMiddle = Gtk::manage(new Gtk::HBox(true,2));
-#if WITH_GTKMM_3_0
-    hboxMiddle->pack_start(*Gtk::manage(new Gtk::Separator()), Gtk::PACK_EXPAND_WIDGET);
-    hboxMiddle->pack_start(*Gtk::manage(new Gtk::Separator()), Gtk::PACK_EXPAND_WIDGET);
-#else
     hboxMiddle->pack_start(*Gtk::manage(new Gtk::HSeparator()), Gtk::PACK_EXPAND_WIDGET);
     hboxMiddle->pack_start(*Gtk::manage(new Gtk::HSeparator()), Gtk::PACK_EXPAND_WIDGET);
-#endif
     vbox->pack_start(*hboxMiddle, false, true, 2);
     vbox->pack_start(*hboxDownHandles, true, true, 2);
     Gtk::HBox * hbox = Gtk::manage(new Gtk::HBox(false,0));
     Gtk::Button* resetButton = Gtk::manage(new Gtk::Button(Gtk::Stock::CLEAR));
-    resetButton->signal_clicked().connect(sigc::mem_fun (*this,&LPEEnvelopePerspective::resetGrid));
+    resetButton->signal_clicked().connect(sigc::mem_fun (*this,&LPEPerspectiveEnvelope::resetGrid));
     resetButton->set_size_request(140,45);
     vbox->pack_start(*hbox, true,true,2);
     hbox->pack_start(*resetButton, false, false,2);
@@ -346,17 +305,14 @@ LPEEnvelopePerspective::newWidget()
 }
 
 void
-LPEEnvelopePerspective::doBeforeEffect (SPLPEItem const* lpeitem)
+LPEPerspectiveEnvelope::doBeforeEffect (SPLPEItem const* lpeitem)
 {
     original_bbox(lpeitem);
     setDefaults();
-    SPLPEItem * item = const_cast<SPLPEItem*>(lpeitem);
-    item->apply_to_clippath(item);
-    item->apply_to_mask(item);
 }
 
 void
-LPEEnvelopePerspective::setDefaults()
+LPEPerspectiveEnvelope::setDefaults()
 {
     Geom::Point Up_Left(boundingbox_X.min(), boundingbox_Y.min());
     Geom::Point Up_Right(boundingbox_X.max(), boundingbox_Y.min());
@@ -370,7 +326,7 @@ LPEEnvelopePerspective::setDefaults()
 }
 
 void
-LPEEnvelopePerspective::resetGrid()
+LPEPerspectiveEnvelope::resetGrid()
 {
     Up_Left_Point.param_set_and_write_default();
     Up_Right_Point.param_set_and_write_default();
@@ -384,7 +340,7 @@ LPEEnvelopePerspective::resetGrid()
 }
 
 void
-LPEEnvelopePerspective::resetDefaults(SPItem const* item)
+LPEPerspectiveEnvelope::resetDefaults(SPItem const* item)
 {
     Effect::resetDefaults(item);
     original_bbox(SP_LPE_ITEM(item));
@@ -393,19 +349,7 @@ LPEEnvelopePerspective::resetDefaults(SPItem const* item)
 }
 
 void
-LPEEnvelopePerspective::calculateCurve(Geom::Point a,Geom::Point b, SPCurve* c, bool horizontal, bool move)
-{
-    using Geom::X;
-    using Geom::Y;
-    if(move) c->moveto(a);
-    Geom::Point cubic1 = a + (1./3)* (b - a);
-    Geom::Point cubic2 = b + (1./3)* (a - b);
-    if(horizontal) c->curveto(Geom::Point(cubic1[X],a[Y]),Geom::Point(cubic2[X],b[Y]),b);
-    else c->curveto(Geom::Point(a[X],cubic1[Y]),Geom::Point(b[X],cubic2[Y]),b);
-}
-
-void
-LPEEnvelopePerspective::addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec)
+LPEPerspectiveEnvelope::addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec)
 {
     hp_vec.clear();
 
@@ -437,4 +381,4 @@ LPEEnvelopePerspective::addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::v
   fill-column:99
   End:
 */
-// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+// vim: file_type=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :

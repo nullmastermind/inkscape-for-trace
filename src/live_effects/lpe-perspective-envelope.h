@@ -1,8 +1,8 @@
-#ifndef INKSCAPE_LPE_ENVELOPE_PERSPECTIVE_H
-#define INKSCAPE_LPE_ENVELOPE_PERSPECTIVE_H
+#ifndef INKSCAPE_LPE_PERSPECTIVE_ENVELOPE_H
+#define INKSCAPE_LPE_PERSPECTIVE_ENVELOPE_H
 
 /** \file
- * LPE <envelope-perspective> implementation , see lpe-envelope-perspective.cpp.
+ * LPE <perspective-envelope> implementation , see lpe-perspective-envelope.cpp.
  
  */
 /*
@@ -25,11 +25,12 @@
 namespace Inkscape {
 namespace LivePathEffect {
 
-class LPEEnvelopePerspective : public Effect, GroupBBoxEffect {
+class LPEPerspectiveEnvelope : public Effect, GroupBBoxEffect {
 public:
 
-    LPEEnvelopePerspective(LivePathEffectObject *lpeobject);
-    virtual ~LPEEnvelopePerspective();
+    LPEPerspectiveEnvelope(LivePathEffectObject *lpeobject);
+
+    virtual ~LPEPerspectiveEnvelope();
 
     virtual void doEffect(SPCurve *curve);
 
@@ -37,7 +38,7 @@ public:
 
     virtual Geom::Point project_point(Geom::Point p,  double m[][3]);
 
-    Geom::Point pointAtRatio(Geom::Coord ratio,Geom::Point A, Geom::Point B);
+    virtual Geom::Point pointAtRatio(Geom::Coord ratio,Geom::Point A, Geom::Point B);
 
     virtual void resetDefaults(SPItem const* item);
 
@@ -45,17 +46,10 @@ public:
 
     virtual Gtk::Widget * newWidget();
 
-    virtual void calculateCurve(Geom::Point a,Geom::Point b, SPCurve *c, bool horizontal, bool move);
-
     virtual void setDefaults();
 
     virtual void resetGrid();
 
-    //virtual void original_bbox(SPLPEItem const* lpeitem, bool absolute = false);
-
-    //virtual void addCanvasIndicators(SPLPEItem const*/*lpeitem*/, std::vector<Geom::PathVector> &/*hp_vec*/);
-
-    //virtual std::vector<Geom::PathVector> getHelperPaths(SPLPEItem const* lpeitem);
 protected:
     void addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec);
 private:
@@ -66,8 +60,8 @@ private:
     PointReseteableParam Down_Left_Point;
     PointReseteableParam Down_Right_Point;
 
-    LPEEnvelopePerspective(const LPEEnvelopePerspective&);
-    LPEEnvelopePerspective& operator=(const LPEEnvelopePerspective&);
+    LPEPerspectiveEnvelope(const LPEPerspectiveEnvelope&);
+    LPEPerspectiveEnvelope& operator=(const LPEPerspectiveEnvelope&);
 };
 
 } //namespace LivePathEffect

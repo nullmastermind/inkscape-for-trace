@@ -135,7 +135,7 @@ src/live_effects/lpe-clone-original.cpp
 src/live_effects/lpe-constructgrid.cpp
 src/live_effects/lpe-curvestitch.cpp
 src/live_effects/lpe-envelope.cpp
-src/live_effects/lpe-envelope-perspective.cpp
+src/live_effects/lpe-perspective-envelope.cpp
 src/live_effects/lpe-extrude.cpp
 src/live_effects/lpe-fillet-chamfer.cpp
 src/live_effects/lpe-gears.cpp
@@ -153,7 +153,7 @@ src/live_effects/lpe-show_handles.cpp
 src/live_effects/lpe-skeleton.cpp
 src/live_effects/lpe-sketch.cpp
 src/live_effects/lpe-vonkoch.cpp
-src/live_effects/lpe-envelope-perspective.cpp
+src/live_effects/lpe-perspective-envelope.cpp
 src/live_effects/lpe-attach-path.cpp
 src/live_effects/lpe-bounding-box.cpp
 src/live_effects/lpe-ellipse_5pts.cpp

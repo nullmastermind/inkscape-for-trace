@@ -25,6 +25,7 @@
 #include "live_effects/lpe-curvestitch.h"
 #include "live_effects/lpe-circle_with_radius.h"
 #include "live_effects/lpe-perspective_path.h"
+#include "live_effects/lpe-perspective-envelope.h"
 #include "live_effects/lpe-spiro.h"
 #include "live_effects/lpe-lattice.h"
 #include "live_effects/lpe-lattice2.h"
@@ -60,7 +61,6 @@
 #include "live_effects/lpe-bounding-box.h"
 #include "live_effects/lpe-jointype.h"
 #include "live_effects/lpe-taperstroke.h"
-#include "live_effects/lpe-envelope-perspective.h"
 #include "live_effects/lpe-fillet-chamfer.h"
 
 #include "xml/node-event-vector.h"
@@ -152,7 +152,7 @@ const Util::EnumData<EffectType> LPETypeData[] = {
 /* 0.91 */
     {SIMPLIFY,               N_("Simplify"),     "simplify"},
     {LATTICE2,               N_("Lattice Deformation 2"),     "lattice2"},
-    {ENVELOPE_PERSPECTIVE,  N_("Envelope-Perspective"),        "envelope-perspective"},
+    {PERSPECTIVE_ENVELOPE,  N_("Perspective/Envelope"),        "perspective-envelope"},
     {FILLET_CHAMFER,        N_("Fillet/Chamfer"),          "fillet-chamfer"},
     {INTERPOLATE_POINTS,    N_("Interpolate points"),      "interpolate_points"},
 };
@@ -311,8 +311,8 @@ Effect::New(EffectType lpenr, LivePathEffectObject *lpeobj)
         case LATTICE2:
             neweffect = static_cast<Effect*> ( new LPELattice2(lpeobj) );
             break;
-        case ENVELOPE_PERSPECTIVE:
-            neweffect = static_cast<Effect*> ( new LPEEnvelopePerspective(lpeobj) );
+        case PERSPECTIVE_ENVELOPE:
+            neweffect = static_cast<Effect*> ( new LPEPerspectiveEnvelope(lpeobj) );
             break;
         case FILLET_CHAMFER:
             neweffect = static_cast<Effect*> ( new LPEFilletChamfer(lpeobj) );
