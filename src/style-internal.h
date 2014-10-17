@@ -387,7 +387,7 @@ class SPIString : public SPIBase {
   public:
     SPIString() :
         SPIBase( "anonymous_string" ), value(NULL) {};
-    SPIString( Glib::ustring name, gchar* value_default_in = NULL ) :
+    SPIString( Glib::ustring name, gchar const* value_default_in = NULL ) :
         SPIBase( name ) , value(NULL) , value_default(NULL) {
         value_default = value_default_in?g_strdup(value_default_in):NULL;
     };
