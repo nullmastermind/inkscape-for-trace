@@ -15,7 +15,6 @@ set(live_effects_SRC
 	lpe-dynastroke.cpp
 	lpe-ellipse-5pts.cpp
 	lpe-envelope.cpp
-	lpe-envelope-perspective.cpp
 	lpe-extrude.cpp
 	lpe-fill-between-many.cpp
 	lpe-fill-between-strokes.cpp
@@ -32,6 +31,7 @@ set(live_effects_SRC
 	lpe-patternalongpath.cpp
 	lpe-perp_bisector.cpp
 	lpe-perspective_path.cpp
+	lpe-perspective-envelope.cpp
 	lpe-powerstroke.cpp
 	lpe-recursiveskeleton.cpp
 	lpe-rough-hatches.cpp
@@ -47,7 +47,6 @@ set(live_effects_SRC
 	lpe-bspline.cpp
 	lpe-text_label.cpp
 	lpe-vonkoch.cpp
-	lpe-envelope-perspective.cpp
 	lpegroupbbox.cpp
 	lpeobject-reference.cpp
 	lpeobject.cpp
@@ -106,6 +105,7 @@ set(live_effects_SRC
 	lpe-patternalongpath.h
 	lpe-perp_bisector.h
 	lpe-perspective_path.h
+	lpe-perspective-envelope.h
 	lpe-powerstroke.h
 	lpe-powerstroke-interpolators.h
 	lpe-recursiveskeleton.h
@@ -122,7 +122,6 @@ set(live_effects_SRC
 	lpe-bspline.h
 	lpe-text_label.h
 	lpe-vonkoch.h
-	lpe-envelope-perspective.h
 	lpegroupbbox.h
 	lpeobject-reference.h
 	lpeobject.h

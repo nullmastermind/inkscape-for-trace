@@ -14,6 +14,7 @@
 #include "sp-paint-server.h"
 #include "display/canvas-bpath.h" // contains SPStrokeJoinType, SPStrokeCapType etc. (WTF!)
 #include "display/drawing-context.h"
+#include "display/drawing-pattern.h"
 
 void NRStyle::Paint::clear()
 {
@@ -299,13 +300,16 @@ void NRStyle::set(SPStyle *style)
     update();
 }
 
-bool NRStyle::prepareFill(Inkscape::DrawingContext &dc, Geom::OptRect const &paintbox)
+bool NRStyle::prepareFill(Inkscape::DrawingContext &dc, Geom::OptRect const &paintbox, Inkscape::DrawingPattern *pattern)
 {
     // update fill pattern
     if (!fill_pattern) {
         switch (fill.type) {
-        case PAINT_SERVER: {
-            fill_pattern = fill.server->pattern_new(dc.raw(), paintbox, fill.opacity);
+        case PAINT_SERVER:
+            if (pattern) {
+                fill_pattern = pattern->renderPattern(fill.opacity);
+            } else {
+                fill_pattern = fill.server->pattern_new(dc.raw(), paintbox, fill.opacity);
             } break;
         case PAINT_COLOR: {
             SPColor const &c = fill.color;
@@ -325,14 +329,20 @@ void NRStyle::applyFill(Inkscape::DrawingContext &dc)
     dc.setFillRule(fill_rule);
 }
 
-bool NRStyle::prepareTextDecorationFill(Inkscape::DrawingContext &dc, Geom::OptRect const &paintbox)
+bool NRStyle::prepareTextDecorationFill(Inkscape::DrawingContext &dc, Geom::OptRect const &paintbox, Inkscape::DrawingPattern *pattern)
 {
     // update text decoration pattern
     if (!text_decoration_fill_pattern) {
         switch (text_decoration_fill.type) {
-        case PAINT_SERVER: {
-        	text_decoration_fill_pattern = text_decoration_fill.server->pattern_new(dc.raw(), paintbox, text_decoration_fill.opacity);
-		} break;
+        case PAINT_SERVER:
+            if (pattern) {
+                text_decoration_fill_pattern = pattern->renderPattern(
+                        text_decoration_fill.opacity);
+            } else {
+                text_decoration_fill_pattern = text_decoration_fill.server->pattern_new(dc.raw(),
+                        paintbox, text_decoration_fill.opacity);
+            }
+            break;
         case PAINT_COLOR: {
             SPColor const &c = text_decoration_fill.color;
             text_decoration_fill_pattern = cairo_pattern_create_rgba(
@@ -351,19 +361,25 @@ void NRStyle::applyTextDecorationFill(Inkscape::DrawingContext &dc)
     // Fill rule does not matter, no intersections.
 }
 
-bool NRStyle::prepareStroke(Inkscape::DrawingContext &dc, Geom::OptRect const &paintbox)
+bool NRStyle::prepareStroke(Inkscape::DrawingContext &dc, Geom::OptRect const &paintbox, Inkscape::DrawingPattern *pattern)
 {
     if (!stroke_pattern) {
         switch (stroke.type) {
-        case PAINT_SERVER: {
-        	stroke_pattern = stroke.server->pattern_new(dc.raw(), paintbox, stroke.opacity);
-		} break;
+        case PAINT_SERVER:
+            if (pattern) {
+                stroke_pattern = pattern->renderPattern(stroke.opacity);
+            } else {
+                stroke_pattern = stroke.server->pattern_new(dc.raw(), paintbox, stroke.opacity);
+            }
+            break;
         case PAINT_COLOR: {
             SPColor const &c = stroke.color;
-            stroke_pattern = cairo_pattern_create_rgba(
-                c.v.c[0], c.v.c[1], c.v.c[2], stroke.opacity);
-            } break;
-        default: break;
+            stroke_pattern = cairo_pattern_create_rgba(c.v.c[0], c.v.c[1], c.v.c[2],
+                    stroke.opacity);
+        }
+            break;
+        default:
+            break;
         }
     }
     if (!stroke_pattern) return false;
@@ -380,13 +396,19 @@ void NRStyle::applyStroke(Inkscape::DrawingContext &dc)
     cairo_set_dash(dc.raw(), dash, n_dash, dash_offset); // fixme
 }
 
-bool NRStyle::prepareTextDecorationStroke(Inkscape::DrawingContext &dc, Geom::OptRect const &paintbox)
+bool NRStyle::prepareTextDecorationStroke(Inkscape::DrawingContext &dc, Geom::OptRect const &paintbox, Inkscape::DrawingPattern *pattern)
 {
     if (!text_decoration_stroke_pattern) {
         switch (text_decoration_stroke.type) {
-        case PAINT_SERVER: {
-        	text_decoration_stroke_pattern = text_decoration_stroke.server->pattern_new(dc.raw(), paintbox, text_decoration_stroke.opacity);
-		} break;
+        case PAINT_SERVER:
+            if (pattern) {
+                text_decoration_stroke_pattern = pattern->renderPattern(
+                        text_decoration_stroke.opacity);
+            } else {
+                text_decoration_stroke_pattern = text_decoration_stroke.server->pattern_new(
+                        dc.raw(), paintbox, text_decoration_stroke.opacity);
+            }
+            break;
         case PAINT_COLOR: {
             SPColor const &c = text_decoration_stroke.color;
             text_decoration_stroke_pattern = cairo_pattern_create_rgba(

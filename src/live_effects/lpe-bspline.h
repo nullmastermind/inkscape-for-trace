@@ -24,19 +24,16 @@ public:
         return SUPPRESS_FLASH;
     }
     virtual void doEffect(SPCurve *curve);
-    virtual void doBeforeEffect(SPLPEItem const* lpeitem);
+    virtual void doBeforeEffect (SPLPEItem const* lpeitem);
     void drawHandle(Geom::Point p, double radiusHelperNodes);
     void addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec);
-
-    void doBSplineFromWidget(SPCurve *curve, double value);
-    bool nodeIsSelected(Geom::Point nodePoint);
-
+    virtual void doBSplineFromWidget(SPCurve *curve, double value);
+    virtual bool nodeIsSelected(Geom::Point nodePoint);
     virtual Gtk::Widget *newWidget();
-
-    void changeWeight(double weightValue);
-    void toDefaultWeight(Gtk::Widget *widgWeight);
-    void toMakeCusp(Gtk::Widget *widgWeight);
-    void toWeight();
+    virtual void changeWeight(double weightValue);
+    virtual void toDefaultWeight(Gtk::Widget *widgWeight);
+    virtual void toMakeCusp(Gtk::Widget *widgWeight);
+    virtual void toWeight();
 
     // TODO make this private
     ScalarParam steps;
@@ -45,6 +42,7 @@ private:
     std::vector<Geom::Point> points;
     BoolParam ignoreCusp;
     BoolParam onlySelected;
+    BoolParam showHelper;
     ScalarParam weight;
     Geom::PathVector hp;
 
