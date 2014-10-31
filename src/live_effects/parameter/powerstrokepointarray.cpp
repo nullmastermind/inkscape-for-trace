@@ -8,17 +8,13 @@
 #include "live_effects/parameter/powerstrokepointarray.h"
 
 #include "live_effects/effect.h"
-#include "svg/svg.h"
-#include "svg/stringstream.h"
 #include "knotholder.h"
 #include "sp-lpe-item.h"
 
 #include <2geom/piecewise.h>
 #include <2geom/sbasis-geometric.h>
 
-// needed for on-canvas editting:
-#include "desktop.h"
-#include "live_effects/lpeobject.h"
+#include "preferences.h" // for proportional stroke/path scaling behavior
 
 #include <glibmm/i18n.h>
 
@@ -44,38 +40,25 @@ Gtk::Widget *
 PowerStrokePointArrayParam::param_newWidget()
 {
     return NULL;
-/*
-    Inkscape::UI::Widget::RegisteredTransformedPoint * pointwdg = Gtk::manage(
-        new Inkscape::UI::Widget::RegisteredTransformedPoint( param_label,
-                                                              param_tooltip,
-                                                              param_key,
-                                                              *param_wr,
-                                                              param_effect->getRepr(),
-                                                              param_effect->getSPDoc() ) );
-    // TODO: fix to get correct desktop (don't use SP_ACTIVE_DESKTOP)
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    Geom::Affine transf = desktop->doc2dt();
-    pointwdg->setTransform(transf);
-    pointwdg->setValue( *this );
-    pointwdg->clearProgrammatically();
-    pointwdg->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change point parameter"));
-
-    Gtk::HBox * hbox = Gtk::manage( new Gtk::HBox() );
-    static_cast<Gtk::HBox*>(hbox)->pack_start(*pointwdg, true, true);
-    static_cast<Gtk::HBox*>(hbox)->show_all_children();
-
-    return dynamic_cast<Gtk::Widget *> (hbox);
-*/
 }
 
-void PowerStrokePointArrayParam::param_transform_multiply(Geom::Affine const& postmul, bool /*set*/)
+void PowerStrokePointArrayParam::param_transform_multiply(Geom::Affine const &postmul, bool /*set*/)
 {
-    std::vector<Geom::Point> result;
-    for (std::vector<Geom::Point>::const_iterator point_it = _vector.begin(); point_it != _vector.end(); ++point_it) {
-        Geom::Coord A = (*point_it)[Geom::Y] * ((postmul.expansionX() + postmul.expansionY()) / 2);
-        result.push_back(Geom::Point((*point_it)[Geom::X], A));
+    // Check if proportional stroke-width scaling is on
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool transform_stroke = prefs ? prefs->getBool("/options/transform/stroke", true) : true;
+    if (transform_stroke) {
+        std::vector<Geom::Point> result;
+        result.reserve(_vector.size()); // reserve space for the points that will be added in the for loop
+        for (std::vector<Geom::Point>::const_iterator point_it = _vector.begin(), e = _vector.end();
+             point_it != e; ++point_it)
+        {
+            // scale each width knot with the average scaling in X and Y
+            Geom::Coord const A = (*point_it)[Geom::Y] * ((postmul.expansionX() + postmul.expansionY()) / 2);
+            result.push_back(Geom::Point((*point_it)[Geom::X], A));
+        }
+        param_set_and_write_new_value(result);
     }
-    param_set_and_write_new_value(result);
 }
 
 /** call this method to recalculate the controlpoints such that they stay at the same location relative to the new path. Useful after adding/deleting nodes to the path.*/
