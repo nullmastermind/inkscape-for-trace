@@ -380,7 +380,7 @@ void TagsPanel::_objectsSelected( Selection *sel ) {
     _checkTreeSelection();
 }
 
-bool TagsPanel::_checkForSelected(const Gtk::TreePath &path, const Gtk::TreeIter& iter, SPObject* obj)
+bool TagsPanel::_checkForSelected(const Gtk::TreePath &/*path*/, const Gtk::TreeIter& iter, SPObject* obj)
 {
     Gtk::TreeModel::Row row = *iter;
     SPObject * it = row[_model->_colObject];
@@ -393,6 +393,7 @@ bool TagsPanel::_checkForSelected(const Gtk::TreePath &path, const Gtk::TreeIter
     return false;
 }
 
+// TODO does not look good that we're ignoring the passed in root. Investigate.
 void TagsPanel::_objectsChanged(SPObject* root)
 {
     while (!_objectWatchers.empty())
@@ -754,7 +755,7 @@ void TagsPanel::_storeDragSource(const Gtk::TreeModel::iterator& iter)
  * Drap and drop within the tree
  * Save the drag source and drop target SPObjects and if its a drag between layers or into (sublayer) a layer
  */
-bool TagsPanel::_handleDragDrop(const Glib::RefPtr<Gdk::DragContext>& context, int x, int y, guint time)
+bool TagsPanel::_handleDragDrop(const Glib::RefPtr<Gdk::DragContext>& /*context*/, int x, int y, guint /*time*/)
 {
     int cell_x = 0, cell_y = 0;
     Gtk::TreeModel::Path target_path;
@@ -885,7 +886,7 @@ void TagsPanel::_renameObject(Gtk::TreeModel::Row row, const Glib::ustring& name
     }
 }
 
-bool TagsPanel::_noSelection( Glib::RefPtr<Gtk::TreeModel> const & /*model*/, Gtk::TreeModel::Path const & /*path*/, bool currentlySelected )
+bool TagsPanel::_noSelection( Glib::RefPtr<Gtk::TreeModel> const & /*model*/, Gtk::TreeModel::Path const & /*path*/, bool /*currentlySelected*/ )
 {
     return false;
 }

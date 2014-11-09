@@ -1198,6 +1198,9 @@ take_style_from_item(SPObject *object)
         }
     }
 
+    // Remove black-listed properties (those that should not be used in a default style)
+    css = sp_css_attr_unset_blacklist(css);
+
     if (!(dynamic_cast<SPText *>(object) || dynamic_cast<SPTSpan *>(object) || dynamic_cast<SPTRef *>(object) || dynamic_cast<SPString *>(object))) {
         // do not copy text properties from non-text objects, it's confusing
         css = sp_css_attr_unset_text(css);
@@ -3661,7 +3664,7 @@ void sp_selection_create_bitmap_copy(SPDesktop *desktop)
             if (hint_xdpi != 0) {
                 res = hint_xdpi;
             } else {
-                // if all else fails, take the default 90 dpi
+                // if all else fails, take the default 96 dpi
                 res = Inkscape::Util::Quantity::convert(1, "in", "px");
             }
         }
@@ -3709,7 +3712,7 @@ void sp_selection_create_bitmap_copy(SPDesktop *desktop)
 
     double shift_x = bbox->min()[Geom::X];
     double shift_y = bbox->max()[Geom::Y];
-    if (res == Inkscape::Util::Quantity::convert(1, "in", "px")) { // for default 90 dpi, snap it to pixel grid
+    if (res == Inkscape::Util::Quantity::convert(1, "in", "px")) { // for default 96 dpi, snap it to pixel grid
         shift_x = round(shift_x);
         shift_y = -round(-shift_y); // this gets correct rounding despite coordinate inversion, remove the negations when the inversion is gone
     }
@@ -3744,7 +3747,7 @@ void sp_selection_create_bitmap_copy(SPDesktop *desktop)
         // TODO: avoid unnecessary roundtrip between data URI and decoded pixbuf
         Inkscape::XML::Node * repr = xml_doc->createElement("svg:image");
         sp_embed_image(repr, pb);
-        if (res == Inkscape::Util::Quantity::convert(1, "in", "px")) { // for default 90 dpi, snap it to pixel grid
+        if (res == Inkscape::Util::Quantity::convert(1, "in", "px")) { // for default 96 dpi, snap it to pixel grid
             sp_repr_set_svg_double(repr, "width", width);
             sp_repr_set_svg_double(repr, "height", height);
         } else {

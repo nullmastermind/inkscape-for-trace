@@ -28,12 +28,7 @@
 #include "live_effects/parameter/filletchamferpointarray.h"
 
 // for programmatically updating knots
-#include "selection.h"
 #include "ui/tools-switch.h"
-#include "ui/tool/control-point-selection.h"
-#include "ui/tool/selectable-control-point.h"
-#include "ui/tool/node.h"
-#include "ui/tools/node-tool.h"
 #include <util/units.h>
 
 // TODO due to internal breakage in glibmm headers, this must be last:
@@ -65,12 +60,15 @@ LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject) :
     unit(_("Unit"), _("Unit"), "unit", &wr, this),
     method(_("Method"), _("Fillets methods"), "method", FMConverter, &wr, this, FM_AUTO),
     radius(_("Radius (unit or %)"), _("Radius, in unit or %"), "radius", &wr, this, 0.),
+    chamfer_steps(_("Chamfer steps"), _("Chamfer steps"), "chamfer_steps", &wr, this, 0),
+    
     helper_size(_("Helper size with direction"), _("Helper size with direction"), "helper_size", &wr, this, 0)
 {
     registerParameter(&fillet_chamfer_values);
     registerParameter(&unit);
     registerParameter(&method);
     registerParameter(&radius);
+    registerParameter(&chamfer_steps);
     registerParameter(&helper_size);
     registerParameter(&flexible);
     registerParameter(&use_knot_distance);
@@ -81,9 +79,13 @@ LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject) :
     radius.param_set_range(0., infinity());
     radius.param_set_increments(1, 1);
     radius.param_set_digits(4);
+    chamfer_steps.param_set_range(0, infinity());
+    chamfer_steps.param_set_increments(1, 1);
+    chamfer_steps.param_set_digits(0);
     helper_size.param_set_range(0, infinity());
     helper_size.param_set_increments(5, 5);
     helper_size.param_set_digits(0);
+    fillet_chamfer_values.set_chamfer_steps(3);
 }
 
 LPEFilletChamfer::~LPEFilletChamfer() {}
@@ -111,6 +113,16 @@ Gtk::Widget *LPEFilletChamfer::newWidget()
                     std::vector<Gtk::Widget *> childList = scalarParameter->get_children();
                     Gtk::Entry *entryWidg = dynamic_cast<Gtk::Entry *>(childList[1]);
                     entryWidg->set_width_chars(6);
+                }
+            } else if (param->param_key == "chamfer_steps") {
+                Inkscape::UI::Widget::Scalar *widgRegistered = Gtk::manage(dynamic_cast<Inkscape::UI::Widget::Scalar *>(widg));
+                widgRegistered->signal_value_changed().connect(sigc::mem_fun(*this, &LPEFilletChamfer::chamfer));
+                widg = widgRegistered;
+                if (widg) {
+                    Gtk::HBox *scalarParameter = dynamic_cast<Gtk::HBox *>(widg);
+                    std::vector<Gtk::Widget *> childList = scalarParameter->get_children();
+                    Gtk::Entry *entryWidg = dynamic_cast<Gtk::Entry *>(childList[1]);
+                    entryWidg->set_width_chars(3);
                 }
             } else if (param->param_key == "flexible") {
                 Gtk::CheckButton *widgRegistered = Gtk::manage(dynamic_cast<Gtk::CheckButton *>(widg));
@@ -142,26 +154,20 @@ Gtk::Widget *LPEFilletChamfer::newWidget()
         ++it;
     }
 
-    Gtk::HBox *filletButtonsContainer = Gtk::manage(new Gtk::HBox(true, 0));
+    Gtk::VBox *buttonsContainer = Gtk::manage(new Gtk::VBox(true, 0));
     Gtk::Button *fillet = Gtk::manage(new Gtk::Button(Glib::ustring(_("Fillet"))));
     fillet->signal_clicked().connect(sigc::mem_fun(*this, &LPEFilletChamfer::fillet));
 
-    filletButtonsContainer->pack_start(*fillet, true, true, 2);
+    buttonsContainer->pack_start(*fillet, true, true, 2);
     Gtk::Button *inverse = Gtk::manage(new Gtk::Button(Glib::ustring(_("Inverse fillet"))));
     inverse->signal_clicked().connect(sigc::mem_fun(*this, &LPEFilletChamfer::inverse));
-    filletButtonsContainer->pack_start(*inverse, true, true, 2);
+    buttonsContainer->pack_start(*inverse, true, true, 2);
 
-    Gtk::HBox *chamferButtonsContainer = Gtk::manage(new Gtk::HBox(true, 0));
     Gtk::Button *chamfer = Gtk::manage(new Gtk::Button(Glib::ustring(_("Chamfer"))));
     chamfer->signal_clicked().connect(sigc::mem_fun(*this, &LPEFilletChamfer::chamfer));
+    buttonsContainer->pack_start(*chamfer, true, true, 2);
 
-    chamferButtonsContainer->pack_start(*chamfer, true, true, 2);
-    Gtk::Button *doubleChamfer = Gtk::manage(new Gtk::Button(Glib::ustring(_("Double chamfer"))));
-    doubleChamfer->signal_clicked().connect(sigc::mem_fun(*this, &LPEFilletChamfer::doubleChamfer));
-    chamferButtonsContainer->pack_start(*doubleChamfer, true, true, 2);
-
-    vbox->pack_start(*filletButtonsContainer, true, true, 2);
-    vbox->pack_start(*chamferButtonsContainer, true, true, 2);
+    vbox->pack_start(*buttonsContainer, true, true, 2);
 
     return vbox;
 }
@@ -212,8 +218,7 @@ void LPEFilletChamfer::updateFillet()
 {
     double power = 0;
     if (!flexible) {
-        Inkscape::Util::Unit const *doc_units = SP_ACTIVE_DESKTOP->namedview->doc_units;
-        power = Inkscape::Util::Quantity::convert(radius, unit.get_abbreviation(), doc_units->abbr) * -1;
+        power = Inkscape::Util::Quantity::convert(radius, unit.get_abbreviation(), *defaultUnit) * -1;
     } else {
         power = radius;
     }
@@ -235,14 +240,9 @@ void LPEFilletChamfer::inverse()
 
 void LPEFilletChamfer::chamfer()
 {
+    fillet_chamfer_values.set_chamfer_steps(chamfer_steps + 3);
     Piecewise<D2<SBasis> > const &pwd2 = fillet_chamfer_values.get_pwd2();
-    doChangeType(path_from_piecewise(pwd2, tolerance), 3);
-}
-
-void LPEFilletChamfer::doubleChamfer()
-{
-    Piecewise<D2<SBasis> > const &pwd2 = fillet_chamfer_values.get_pwd2();
-    doChangeType(path_from_piecewise(pwd2, tolerance), 4);
+    doChangeType(path_from_piecewise(pwd2, tolerance), chamfer_steps + 3);
 }
 
 void LPEFilletChamfer::refreshKnots()
@@ -256,35 +256,8 @@ void LPEFilletChamfer::refreshKnots()
     }
 }
 
-bool LPEFilletChamfer::nodeIsSelected(Geom::Point nodePoint, std::vector<Geom::Point> point)
-{
-    if (point.size() > 0) {
-        for (std::vector<Geom::Point>::iterator i = point.begin(); i != point.end();
-                ++i) {
-            Geom::Point p = *i;
-            if (Geom::are_near(p, nodePoint, 2)) {
-                return true;
-            }
-        }
-    }
-    return false;
-}
 void LPEFilletChamfer::doUpdateFillet(std::vector<Geom::Path> const& original_pathv, double power)
 {
-    std::vector<Geom::Point> point;
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    if (INK_IS_NODE_TOOL(desktop->event_context)) {
-        Inkscape::UI::Tools::NodeTool *nodeTool = INK_NODE_TOOL(desktop->event_context);
-        Inkscape::UI::ControlPointSelection::Set &selection = nodeTool->_selected_nodes->allPoints();
-        std::vector<Geom::Point>::iterator pBegin;
-        for (Inkscape::UI::ControlPointSelection::Set::iterator i = selection.begin(); i != selection.end(); ++i) {
-            if ((*i)->selected()) {
-                Inkscape::UI::Node *n = dynamic_cast<Inkscape::UI::Node *>(*i);
-                pBegin = point.begin();
-                point.insert(pBegin, desktop->doc2dt(n->position()));
-            }
-        }
-    }
     std::vector<Point> filletChamferData = fillet_chamfer_values.data();
     std::vector<Geom::Point> result;
     std::vector<Geom::Path> original_pathv_processed = pathv_to_linear_and_cubic_beziers(original_pathv);
@@ -319,7 +292,7 @@ void LPEFilletChamfer::doUpdateFillet(std::vector<Geom::Path> const& original_pa
             if (filletChamferData[counter][Y] == 0) {
                 powerend = filletChamferData[counter][X];
             }
-            if (only_selected && !nodeIsSelected(curve_it1->initialPoint(), point)) {
+            if (only_selected && !isNodePointSelected(curve_it1->initialPoint())) {
                 powerend = filletChamferData[counter][X];
             }
             result.push_back(Point(powerend, filletChamferData[counter][Y]));
@@ -333,24 +306,6 @@ void LPEFilletChamfer::doUpdateFillet(std::vector<Geom::Path> const& original_pa
 
 void LPEFilletChamfer::doChangeType(std::vector<Geom::Path> const& original_pathv, int type)
 {
-    std::vector<Geom::Point> point;
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    if (INK_IS_NODE_TOOL(desktop->event_context)) {
-        Inkscape::UI::Tools::NodeTool *nodeTool =
-            INK_NODE_TOOL(desktop->event_context);
-        Inkscape::UI::ControlPointSelection::Set &selection =
-            nodeTool->_selected_nodes->allPoints();
-        std::vector<Geom::Point>::iterator pBegin;
-        for (Inkscape::UI::ControlPointSelection::Set::iterator i =
-                    selection.begin();
-                i != selection.end(); ++i) {
-            if ((*i)->selected()) {
-                Inkscape::UI::Node *n = dynamic_cast<Inkscape::UI::Node *>(*i);
-                pBegin = point.begin();
-                point.insert(pBegin, desktop->doc2dt(n->position()));
-            }
-        }
-    }
     std::vector<Point> filletChamferData = fillet_chamfer_values.data();
     std::vector<Geom::Point> result;
     std::vector<Geom::Path> original_pathv_processed = pathv_to_linear_and_cubic_beziers(original_pathv);
@@ -373,9 +328,8 @@ void LPEFilletChamfer::doChangeType(std::vector<Geom::Path> const& original_path
             bool toggle = true;
             if (filletChamferData[counter][Y] == 0 ||
                     (ignore_radius_0 && (filletChamferData[counter][X] == 0 ||
-                                         filletChamferData[counter][X] == counter)) ||
-                    (only_selected &&
-                     !nodeIsSelected(curve_it1->initialPoint(), point))) {
+                    filletChamferData[counter][X] == counter)) ||
+                    (only_selected && !isNodePointSelected(curve_it1->initialPoint()))) {
                 toggle = false;
             }
             if (toggle) {
@@ -597,11 +551,19 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
                 } else {
                     type = std::abs(filletChamferData[counter + 1][Y]);
                 }
-                if (type == 3 || type == 4) {
-                    if (type == 4) {
-                        Geom::Point central = middle_point(startArcPoint, endArcPoint);
-                        LineSegment chamferCenter(central, curve_it1->finalPoint());
-                        path_out.appendNew<Geom::LineSegment>(chamferCenter.pointAt(0.5));
+                if (type >= 3) {
+                    unsigned int chamferSubs = type-2;
+                    Geom::Path path_chamfer;
+                    path_chamfer.start(path_out.finalPoint());
+                    if((is_straight_curve(*curve_it1) && is_straight_curve(*curve_it2Fixed) && method != FM_BEZIER )|| method == FM_ARC){ 
+                        path_chamfer.appendNew<SVGEllipticalArc>(rx, ry, angleArc, 0, ccwToggle, endArcPoint);
+                    } else {
+                        path_chamfer.appendNew<Geom::CubicBezier>(handle1, handle2, endArcPoint);
+                    }
+                    double chamfer_stepsTime = 1.0/chamferSubs;
+                    for(unsigned int i = 1; i < chamferSubs; i++){
+                        Geom::Point chamferStep = path_chamfer.pointAt(chamfer_stepsTime * i);
+                        path_out.appendNew<Geom::LineSegment>(chamferStep);
                     }
                     path_out.appendNew<Geom::LineSegment>(endArcPoint);
                 } else if (type == 2) {

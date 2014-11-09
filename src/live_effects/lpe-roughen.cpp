@@ -14,12 +14,13 @@
  */
 
 #include <gtkmm.h>
-
+#include "desktop.h"
 #include "live_effects/lpe-roughen.h"
 #include "display/curve.h"
 #include "live_effects/parameter/parameter.h"
 #include "helper/geom.h"
 #include <glibmm/i18n.h>
+#include <util/units.h>
 #include <cmath>
 
 namespace Inkscape {
@@ -46,6 +47,8 @@ LPERoughen::LPERoughen(LivePathEffectObject *lpeobject)
                 "displaceX", &wr, this, 10.),
       displaceY(_("Max. displacement in Y"), _("Max. displacement in Y"),
                 "displaceY", &wr, this, 10.),
+      globalRandomize(_("Global randomize"), _("Global randomize"),
+                     "globalRandomize", &wr, this, 1.),
       shiftNodes(_("Shift nodes"), _("Shift nodes"), "shiftNodes", &wr, this,
                  true),
       shiftNodeHandles(_("Shift node handles"), _("Shift node handles"),
@@ -57,10 +60,12 @@ LPERoughen::LPERoughen(LivePathEffectObject *lpeobject)
     registerParameter(&segments);
     registerParameter(&displaceX);
     registerParameter(&displaceY);
+    registerParameter(&globalRandomize);
     registerParameter(&shiftNodes);
     registerParameter(&shiftNodeHandles);
     displaceX.param_set_range(0., Geom::infinity());
     displaceY.param_set_range(0., Geom::infinity());
+    globalRandomize.param_set_range(0., Geom::infinity());
     maxSegmentSize.param_set_range(0., Geom::infinity());
     maxSegmentSize.param_set_increments(1, 1);
     maxSegmentSize.param_set_digits(1);
@@ -75,6 +80,7 @@ void LPERoughen::doBeforeEffect(SPLPEItem const *lpeitem)
 {
     displaceX.resetRandomizer();
     displaceY.resetRandomizer();
+    globalRandomize.resetRandomizer();
     srand(1);
     SPLPEItem * item = const_cast<SPLPEItem*>(lpeitem);
     item->apply_to_clippath(item);
@@ -118,6 +124,15 @@ Gtk::Widget *LPERoughen::newWidget()
                 vbox->pack_start(*Gtk::manage(new Gtk::HSeparator()),
                                  Gtk::PACK_EXPAND_WIDGET);
             }
+            if (param->param_key == "globalRandomize") {
+                Gtk::Label *displaceXLabel = Gtk::manage(new Gtk::Label(
+                                                 Glib::ustring(_("<b>Extra roughen</b> Add a extra layer of rough")),
+                                                 Gtk::ALIGN_START));
+                displaceXLabel->set_use_markup(true);
+                vbox->pack_start(*displaceXLabel, false, false, 2);
+                vbox->pack_start(*Gtk::manage(new Gtk::HSeparator()),
+                                 Gtk::PACK_EXPAND_WIDGET);
+            }
             Glib::ustring *tip = param->param_getTooltip();
             if (widg) {
                 vbox->pack_start(*widg, true, true, 2);
@@ -145,10 +160,11 @@ double LPERoughen::sign(double randNumber)
 
 Geom::Point LPERoughen::randomize()
 {
+    Inkscape::Util::Unit const *doc_units = SP_ACTIVE_DESKTOP->namedview->doc_units;
     double displaceXParsed = Inkscape::Util::Quantity::convert(
-                                 displaceX, unit.get_abbreviation(), "px");
+                                 displaceX * globalRandomize, unit.get_abbreviation(), doc_units->abbr);
     double displaceYParsed = Inkscape::Util::Quantity::convert(
-                                 displaceY, unit.get_abbreviation(), "px");
+                                 displaceY * globalRandomize, unit.get_abbreviation(), doc_units->abbr);
 
     Geom::Point output = Geom::Point(sign(displaceXParsed), sign(displaceYParsed));
     return output;
@@ -159,6 +175,7 @@ void LPERoughen::doEffect(SPCurve *curve)
     Geom::PathVector const original_pathv =
         pathv_to_linear_and_cubic_beziers(curve->get_pathvector());
     curve->reset();
+    Inkscape::Util::Unit const *doc_units = SP_ACTIVE_DESKTOP->namedview->doc_units;
     for (Geom::PathVector::const_iterator path_it = original_pathv.begin();
             path_it != original_pathv.end(); ++path_it) {
         if (path_it->empty())
@@ -185,6 +202,7 @@ void LPERoughen::doEffect(SPCurve *curve)
         Geom::Point A1(0, 0);
         Geom::Point A2(0, 0);
         Geom::Point A3(0, 0);
+        bool first = true;
         while (curve_it1 != curve_endit) {
             Geom::CubicBezier const *cubic = NULL;
             A0 = curve_it1->initialPoint();
@@ -194,7 +212,7 @@ void LPERoughen::doEffect(SPCurve *curve)
             cubic = dynamic_cast<Geom::CubicBezier const *>(&*curve_it1);
             if (cubic) {
                 A1 = (*cubic)[1];
-                if (shiftNodes) {
+                if (shiftNodes && first) {
                     A1 = (*cubic)[1] + initialMove;
                 }
                 A2 = (*cubic)[2];
@@ -203,7 +221,7 @@ void LPERoughen::doEffect(SPCurve *curve)
                 nCurve->lineto(A3);
             }
             double length = Inkscape::Util::Quantity::convert(
-                                curve_it1->length(0.001), "px", unit.get_abbreviation());
+                                curve_it1->length(0.001), doc_units->abbr, unit.get_abbreviation());
             std::size_t splits = 0;
             if (method == DM_SEGMENTS) {
                 splits = segments;
@@ -232,6 +250,7 @@ void LPERoughen::doEffect(SPCurve *curve)
             if(curve_it2 != curve_endit) {
                 ++curve_it2;
             }
+            first = false;
         }
         if (path_it->closed()) {
             nCurve->closepath_current();

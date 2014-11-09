@@ -359,6 +359,11 @@ void FilletChamferPointArrayParam::set_helper_size(int hs)
     helper_size = hs;
 }
 
+void FilletChamferPointArrayParam::set_chamfer_steps(int value_chamfer_steps)
+{
+    chamfer_steps = value_chamfer_steps;
+}
+
 void FilletChamferPointArrayParam::set_use_distance(bool use_knot_distance )
 {
     use_distance = use_knot_distance;
@@ -712,8 +717,8 @@ FilletChamferPointArrayParamKnotHolderEntity(
     : _pparam(p), _index(index) {}
 
 void FilletChamferPointArrayParamKnotHolderEntity::knot_set(Point const &p,
-        Point const &origin,
-        guint state)
+                                                            Point const &/*origin*/,
+                                                            guint /*state*/)
 {
     using namespace Geom;
 
@@ -766,15 +771,24 @@ void FilletChamferPointArrayParamKnotHolderEntity::knot_click(guint state)
             sp_lpe_item_update_patheffect(SP_LPE_ITEM(item), false, false);
         }else{
             using namespace Geom;
-            double type = _pparam->_vector.at(_index)[Y] + 1;
-            if (type > 4) {
-                type = 1;
+            int type = (int)_pparam->_vector.at(_index)[Y];
+            
+            switch(type){
+                case 1:
+                    type = 2;
+                    break;
+                case 2:
+                    type =  _pparam->chamfer_steps;
+                    break;
+                default:
+                    type = 1;
+                    break;
             }
-            _pparam->_vector.at(_index) = Point(_pparam->_vector.at(_index)[X], type);
+            _pparam->_vector.at(_index) = Point(_pparam->_vector.at(_index)[X], (double)type);
             _pparam->param_set_and_write_new_value(_pparam->_vector);
             sp_lpe_item_update_patheffect(SP_LPE_ITEM(item), false, false);
             const gchar *tip;
-            if (type == 3) {
+            if (type >= 3) {
                 tip = _("<b>Chamfer</b>: <b>Ctrl+Click</b> toogle type, "
                         "<b>Shift+Click</b> open dialog, "
                         "<b>Ctrl+Alt+Click</b> reset");
@@ -782,12 +796,8 @@ void FilletChamferPointArrayParamKnotHolderEntity::knot_click(guint state)
                 tip = _("<b>Inverse Fillet</b>: <b>Ctrl+Click</b> toogle type, "
                         "<b>Shift+Click</b> open dialog, "
                         "<b>Ctrl+Alt+Click</b> reset");
-            } else if (type == 1) {
-                tip = _("<b>Fillet</b>: <b>Ctrl+Click</b> toogle type, "
-                        "<b>Shift+Click</b> open dialog, "
-                        "<b>Ctrl+Alt+Click</b> reset");
             } else {
-                tip = _("<b>Double Chamfer</b>: <b>Ctrl+Click</b> toogle type, "
+                tip = _("<b>Fillet</b>: <b>Ctrl+Click</b> toogle type, "
                         "<b>Shift+Click</b> open dialog, "
                         "<b>Ctrl+Alt+Click</b> reset");
             }
@@ -835,7 +845,7 @@ void FilletChamferPointArrayParam::addKnotHolderEntities(KnotHolder *knotholder,
             continue;
         }
         const gchar *tip;
-        if (_vector[i][Y] == 3) {
+        if (_vector[i][Y] >= 3) {
             tip = _("<b>Chamfer</b>: <b>Ctrl+Click</b> toogle type, "
                     "<b>Shift+Click</b> open dialog, "
                     "<b>Ctrl+Alt+Click</b> reset");
@@ -843,12 +853,8 @@ void FilletChamferPointArrayParam::addKnotHolderEntities(KnotHolder *knotholder,
             tip = _("<b>Inverse Fillet</b>: <b>Ctrl+Click</b> toogle type, "
                     "<b>Shift+Click</b> open dialog, "
                     "<b>Ctrl+Alt+Click</b> reset");
-        } else if (_vector[i][Y] == 1) {
-            tip = _("<b>Fillet</b>: <b>Ctrl+Click</b> toogle type, "
-                    "<b>Shift+Click</b> open dialog, "
-                    "<b>Ctrl+Alt+Click</b> reset");
         } else {
-            tip = _("<b>Double Chamfer</b>: <b>Ctrl+Click</b> toogle type, "
+            tip = _("<b>Fillet</b>: <b>Ctrl+Click</b> toogle type, "
                     "<b>Shift+Click</b> open dialog, "
                     "<b>Ctrl+Alt+Click</b> reset");
         }
