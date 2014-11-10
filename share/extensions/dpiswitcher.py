@@ -34,8 +34,12 @@ class DPISwitcher(inkex.Effect):
         self.OptionParser.add_option("--switcher", action="store", 
             type="string", dest="switcher", default="0", 
             help="Select the DPI switch you want")
+        self.OptionParser.add_option("--action", action="store",
+            type="string", dest="action",
+            default=None, help="")
         self.factor = 90.0/96.0
-        self.unit = "px"
+        self.units = "px"
+        self.unitExponent = 1.0
 
     def scaleRoot(self, svg):
         widthNumber = re.sub("[a-zA-Z]", "", svg.get('width'))
@@ -43,13 +47,17 @@ class DPISwitcher(inkex.Effect):
         if svg.get('viewBox'):
             widthNumber = svg.get('viewBox').split(" ")[2]
             heightNumber = svg.get('viewBox').split(" ")[3]
-        widthDoc = str(float(widthNumber) * self.factor)
-        heightDoc = str(float(heightNumber) * self.factor)
+        widthDoc = str(float(widthNumber) * self.factor * self.unitExponent)
+        heightDoc = str(float(heightNumber) * self.factor * self.unitExponent)
         if svg.get('height'):
             svg.set('height', heightDoc)
         if svg.get('width'):
             svg.set('width', widthDoc)
         svg.set('viewBox',"0 0 " + widthDoc + " " + heightDoc)
+        self.scaleGuides(svg)
+        self.scaleGrid(svg)
+        if self.options.switcher == "1":
+            self.factor = self.factor * self.unitExponent
         xpathStr = '//svg:rect | //svg:image | //svg:path | //svg:circle | //svg:ellipse | //svg:text'
         elements = svg.xpath(xpathStr, namespaces=inkex.NSS)
         for element in elements:
@@ -58,10 +66,16 @@ class DPISwitcher(inkex.Effect):
                 continue
             if element.get('transform'):
                 if "matrix" in str(element.get('transform')):
-                    result = re.sub(r".*?((matrix).*?\))", self.scaleMatrixElement, str(element.get('transform')))
+                    result = re.sub(r".*?matrix( \(|\()(.*?)\)", self.matrixElement, str(element.get('transform')))
                     element.set('transform', result)
                 if "scale" in str(element.get('transform')):
-                    result = re.sub(r".*?((scale).*?\))", self.scaleElement, str(element.get('transform')))
+                    result = re.sub(r".*?scale( \(|\()(.*?)\)", self.scaleElement, str(element.get('transform')))
+                    element.set('transform', result)
+                if "translate" in str(element.get('transform')):
+                    result = re.sub(r".*?translate( \(|\()(.*?)\)", self.translateElement, str(element.get('transform')))
+                    element.set('transform', result)
+                if "skew" in str(element.get('transform')):
+                    result = re.sub(r".*?skew( \(|\()(.*?)\)", self.skewElement, str(element.get('transform')))
                     element.set('transform', result)
                 if "scale" not in str(element.get('transform')) and "matrix" not in str(element.get('transform')):
                     element.set('transform', str(element.get('transform')) + "scale(" + str(self.factor) + ", " + str(self.factor) + ")")
@@ -72,35 +86,42 @@ class DPISwitcher(inkex.Effect):
         for element in elements:
             if element.get('transform'):
                 if "matrix" in str(element.get('transform')):
-                    result = re.sub(r".*?((matrix).*?\))", self.translateMatrixElement, str(element.get('transform')))
+                    result = re.sub(r".*?matrix( \(|\()(.*?)\)", self.matrixGroupElement, str(element.get('transform')))
                     element.set('transform', result)
                 if "translate" in str(element.get('transform')):
-                    result = re.sub(r".*?((translate).*?\))", self.translateElement, str(element.get('transform')))
+                    result = re.sub(r".*?translate( \(|\()(.*?)\)", self.translateElement, str(element.get('transform')))
                     element.set('transform', result)
-        self.scaleGuides(svg)
-        self.scaleGrid(svg)
-    
-    def scaleGrid(self, svg):
-        xpathStr = '//inkscape:grid'
-        grids = svg.xpath(xpathStr, namespaces=inkex.NSS)
-        for grid in grids:
-            empspacingNumber = float(grid.get("empspacing")) * self.factor
-            spacingxNumber = float(grid.get("spacingx").replace("px", "")) * self.factor
-            spacingyNumber = float(grid.get("spacingy").replace("px", "")) * self.factor
-            originxNumber = float(grid.get("originx").replace("px", "")) * self.factor
-            originyNumber = float(grid.get("originy").replace("px", "")) * self.factor
-            grid.set("empspacing", str(empspacingNumber))
-            grid.set("spacingx", str(spacingxNumber) + "px")
-            grid.set("spacingy", str(spacingyNumber) + "px")
-            grid.set("originx", str(originxNumber) + "px")
-            grid.set("originy", str(originyNumber) + "px")
-   
+                if "skew" in str(element.get('transform')):
+                    result = re.sub(r".*?skew( \(|\()(.*?)\)", self.skewElement, str(element.get('transform')))
+                    element.set('transform', result)
+
     def scaleGuides(self, svg):
         xpathStr = '//sodipodi:guide'
         guides = svg.xpath(xpathStr, namespaces=inkex.NSS)
         for guide in guides:
             point = string.split(guide.get("position"), ",")
-            guide.set("position", str(float(point[0].strip()) * self.factor) + "," + str(float(point[1].strip()) * self.factor))
+            guide.set("position", str(float(point[0].strip()) * self.factor ) + "," + str(float(point[1].strip()) * self.factor ))
+    
+    def scaleGrid(self, svg):
+        xpathStr = '//inkscape:grid'
+        grids = svg.xpath(xpathStr, namespaces=inkex.NSS)
+        for grid in grids:
+            if self.options.switcher == "0":
+                self.unitExponent = 1.0/(self.factor/self.__uuconv[grid.get("units")])
+                self.factor = self.factor * self.unitExponent
+            grid.set("units", "px")
+            if grid.get("spacingx"):
+                spacingx = str(float(re.sub("[a-zA-Z]", "",  grid.get("spacingx"))) * self.factor) + "px"
+                grid.set("spacingx", str(spacingx))
+            if grid.get("spacingy"):
+                spacingy = str(float(re.sub("[a-zA-Z]", "",  grid.get("spacingy"))) * self.factor) + "px"
+                grid.set("spacingy", str(spacingy))
+            if grid.get("originx"):
+                originx = str(float(re.sub("[a-zA-Z]", "",  grid.get("originx"))) * self.factor) + "px"
+                grid.set("originx", str(originx))
+            if grid.get("originy"):
+                originy = str(float(re.sub("[a-zA-Z]", "",  grid.get("originy"))) * self.factor) + "px"
+                grid.set("originy", str(originy))
 
     #a dictionary of unit to user unit conversion factors
     __uuconv = {'in':96.0, 'pt':1.33333333333, 'px':1.0, 'mm':3.77952755913, 'cm':37.7952755913,
@@ -110,38 +131,105 @@ class DPISwitcher(inkex.Effect):
                       'km':3543307.0866, 'pc':15.0, 'yd':3240 , 'ft':1080}
 
     def scaleElement(self, m):
-      scaleVal = m.group(1).replace("scale","").replace(" ","").replace("(","").replace(")","").split(",")
-      return "scale(" + str(float(scaleVal[0]) * self.factor) + "," + str(float(scaleVal[1]) * self.factor) + ")"
+        scaleVal = m.group(2).replace(" ","")
+        total = scaleVal.count(',')
+        if total == 1:
+            scaleVal = scaleVal.split(",")
+            return "scale(" + str(float(scaleVal[0]) * self.factor) + "," + str(float(scaleVal[1]) * self.factor) + ")"
+        else:
+            return "scale(" + str(float(scaleVal) * self.factor) + ")"
 
-    def scaleMatrixElement(self, m):
-      scaleMatrixVal = m.group(1).replace("matrix","").replace(" ","").replace("(","").replace(")","").split(",")
-      return "matrix(" + str(float(scaleMatrixVal[0]) * self.factor) + "," + scaleMatrixVal[1] + "," + scaleMatrixVal[2] + "," + str(float(scaleMatrixVal[3]) * self.factor) + "," + scaleMatrixVal[4] + "," + scaleMatrixVal[5] + ")"
 
     def translateElement(self, m):
-      translateVal = m.group(1).replace("translate","").replace(" ","").replace("(","").replace(")","").split(",")
-      return "translate(" + str(float(translateVal[0]) * self.factor)  + "," + str(float(translateVal[1]) * self.factor) + ")"
+        translateVal = m.group(2).replace(" ","")
+        total = translateVal.count(',')
+        if total == 1:
+            translateVal = translateVal.split(",")
+            return "translate(" + str(float(translateVal[0]) * self.factor)  + "," + str(float(translateVal[1]) * self.factor) + ")"
+        else:
+            return "translate(" + str(float(translateVal) * self.factor)  + ")"
 
-    def translateMatrixElement(self, m):
-      translateMatrixVal = m.group(1).replace("matrix","").replace(" ","").replace("(","").replace(")","").split(",")
-      return "matrix(" + translateMatrixVal[0] + "," + translateMatrixVal[1] + "," + translateMatrixVal[2] + "," + translateMatrixVal[3] + "," + str(float(translateMatrixVal[4]) * self.factor) + "," + str(float(translateMatrixVal[5]) * self.factor) + ")"
+    def skewElement(self, m):
+        skeweVal = m.group(2).replace(" ","")
+        total = skewVal.count(',')
+        if total == 1:
+            skeweVal = skewVal.split(",")
+            return "skew(" + str(float(skewVal[0]) * self.factor)  + "," + str(float(skewVal[1]) * self.factor) + ")"
+        else:
+            return "skew(" + str(float(skewVal) * self.factor)  + ")"
+
+    def matrixElement(self, m):
+        matrixVal = m.group(2).replace(" ","")
+        total = matrixVal.count(',')
+        matrixVal = matrixVal.split(",")
+        if total > 2:
+            return "matrix(" + str(float(matrixVal[0]) * self.factor) + "," + str(float(matrixVal[1]) * self.factor) + "," + str(float(matrixVal[2]) * self.factor) + "," + str(float(matrixVal[3]) * self.factor) + "," + str(float(matrixVal[4]) * self.factor) + "," + str(float(matrixVal[5]) * self.factor) + ")"
+        else:
+            return "matrix(" + str(float(matrixVal[0]) * self.factor) + "," + str(float(matrixVal[1]) * self.factor) + "," + str(float(matrixVal[2]) * self.factor) + ")"
+
+    def matrixGroupElement(self, m):
+        matrixVal = m.group(2).replace(" ","")
+        total = matrixVal.count(',')
+        matrixVal = matrixVal.split(",")
+        if total > 2:
+            return "matrix(" + matrixVal[0] + "," + str(float(matrixVal[1]) * self.factor) + "," + matrixVal[2] + "," + str(float(matrixVal[3]) * self.factor) + "," + str(float(matrixVal[4]) * self.factor) + "," + str(float(matrixVal[5]) * self.factor) + ")"
+        else:
+            return "matrix(" + matrixVal[0] + "," + str(float(matrixVal[1]) * self.factor) + "," + str(float(matrixVal[2]) * self.factor) + ")"
 
     def effect(self):
-        if self.options.switcher == "0":
-            self.factor = 96.0/90.0
+        action = self.options.action.strip("\"") # TODO Is this a bug? (Extra " characters)
         saveout = sys.stdout
         sys.stdout = sys.stderr
         svg = self.document.getroot()
-        namedview = svg.find(inkex.addNS('namedview', 'sodipodi'))
-        self.unit = namedview.get(inkex.addNS('document-units', 'inkscape'))
-        if self.unit and self.unit <> "px":
-            unitExponent = 0.0
+        if action == "page_info":
+            print ":::SVG document related info:::"
+            width = svg.get('width')
+            if width:
+                print "width: " + width
+            height = svg.get('height')
+            if height:
+                print "height: " + height
+            viewBox = svg.get('viewBox')
+            if viewBox:
+                print "viewBox: " + viewBox
+            namedview = svg.find(inkex.addNS('namedview', 'sodipodi'))
+            docunits= namedview.get(inkex.addNS('document-units', 'inkscape'))
+            if docunits:
+                print "document-units: " + docunits
+            units = namedview.get('units')
+            if units:
+                print "units: " + units
+            xpathStr = '//sodipodi:guide'
+            guides = svg.xpath(xpathStr, namespaces=inkex.NSS)
+            xpathStr = '//inkscape:grid'
+            if guides:
+                numberGuides = len(guides)
+                print "Document has " + str(numberGuides) + " guides"
+            grids = svg.xpath(xpathStr, namespaces=inkex.NSS)
+            i = 1
+            for grid in grids:
+                print "Grid number " + str(i) + ": Units: " + grid.get("units")
+                i = i+1
+        else:
             if self.options.switcher == "0":
-                unitExponent = 1.0/(self.factor/self.__uuconv[self.unit])
-            else:
-                unitExponent = 1.0/(self.factor/self.__uuconvLegazy[self.unit])
+                self.factor = 96.0/90.0
+            namedview = svg.find(inkex.addNS('namedview', 'sodipodi'))
             namedview.set(inkex.addNS('document-units', 'inkscape'), "px")
-            self.factor = self.factor * unitExponent
-        self.scaleRoot(svg);
+            self.units = re.sub("[0-9]*\.?[0-9]", "", svg.get('width'))
+            if self.units and self.units <> "px":
+                if self.options.switcher == "0":
+                    self.unitExponent = 1.0/(self.factor/self.__uuconv[self.units])
+                else:
+                    self.unitExponent = 1.0/(self.factor/self.__uuconvLegazy[self.units])
+            '''
+            else:
+                self.scaleGuides(svg)
+                self.unitExponent = 1.0
+                self.scaleGrid(svg)
+                sys.stdout = saveout
+                return
+            '''
+            self.scaleRoot(svg);
         sys.stdout = saveout
 
 effect = DPISwitcher()
