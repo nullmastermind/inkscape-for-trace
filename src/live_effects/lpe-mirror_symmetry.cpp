@@ -97,7 +97,7 @@ LPEMirrorSymmetry::doEffect_path (std::vector<Geom::Path> const & path_in)
     m = m * m2.inverse();
     m = m * m1;
     
-    if(joinPaths){
+    if(joinPaths && !discard_orig_path){
         for (Geom::PathVector::const_iterator path_it = path_in.begin();
             path_it != path_in.end(); ++path_it) {
             if (path_it->empty()){
@@ -123,47 +123,30 @@ LPEMirrorSymmetry::doEffect_path (std::vector<Geom::Path> const & path_in)
                     counter++;
                 }
                 if(counter%2!=0){
-                    if (!discard_orig_path){
-                        if(i==0){
-                            original = portion;
-                        } else {
-                            original.append(portion, (Geom::Path::Stitching)1);
-                        }
-                        original.append(portion.reverse() * m, (Geom::Path::Stitching)1);
-                        if (!path_it->closed()){
-                            path_out.push_back(original);
-                            original.clear();
-                        }
-                    } else {
-                        path_out.push_back(portion * m);
+                    original = portion;
+                    original.append(portion.reverse() * m, (Geom::Path::Stitching)1);
+                    if(i!=0){
+                        original.close();
                     }
+                    path_out.push_back(original);
+                    original.clear();
                 }
                 timeStart = timeEnd;
                 counter++;
             }
             if(cs.size()!=0 && ((cs.size()%2 == 0 && position == -1)||(cs.size()%2 != 0 && position == 1))){
                 Geom::Path portion = path_it->portion(timeStart, nearest_point(path_it->finalPoint(), *path_it));
-                if (!discard_orig_path){
-                    if(!path_it->closed()){
-                        original = portion;
-                    } else {
-                        original.append(portion, (Geom::Path::Stitching)1);
-                    }
-                    original.append(portion.reverse() * m, (Geom::Path::Stitching)1);
-                    if (!path_it->closed()){
-                        path_out.push_back(original);
-                        original.clear();
-                    }
+                original = portion.reverse();
+                original.append(portion * m, (Geom::Path::Stitching)1);
+                if (!path_it->closed()){
+                    path_out.push_back(original);
                 } else {
-                    path_out.push_back(portion * m);
+                    path_out[0].append(original.reverse(), (Geom::Path::Stitching)1);
+                    path_out[0].close();
                 }
-
+                original.clear();
             }
-            if (path_it->closed() && !original.empty() && !discard_orig_path) {
-                original.close();
-                path_out.push_back(original);
-            }
-            if(cs.size() == 0){
+            if(cs.size() == 0 && position == -1){
                 path_out.push_back(*path_it);
                 path_out.push_back(*path_it * m);
             }
