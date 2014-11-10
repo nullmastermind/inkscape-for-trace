@@ -20,10 +20,12 @@
 #include "live_effects/parameter/point.h"
 #include "live_effects/parameter/path.h"
 
+#include "live_effects/lpegroupbbox.h"
+
 namespace Inkscape {
 namespace LivePathEffect {
 
-class LPEMirrorSymmetry : public Effect {
+class LPEMirrorSymmetry : public Effect, GroupBBoxEffect{
 public:
     LPEMirrorSymmetry(LivePathEffectObject *lpeobject);
     virtual ~LPEMirrorSymmetry();
@@ -36,6 +38,7 @@ public:
 
 private:
     BoolParam discard_orig_path;
+    BoolParam joinPaths;
     PathParam reflection_line;
 
     LPEMirrorSymmetry(const LPEMirrorSymmetry&);

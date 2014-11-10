@@ -21,6 +21,7 @@
 #include <svg/path-string.h>
 
 #include <2geom/path.h>
+#include <2geom/path-intersection.h>
 #include <2geom/transforms.h>
 #include <2geom/affine.h>
 
@@ -30,11 +31,13 @@ namespace LivePathEffect {
 LPEMirrorSymmetry::LPEMirrorSymmetry(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
     discard_orig_path(_("Discard original path?"), _("Check this to only keep the mirrored part of the path"), "discard_orig_path", &wr, this, false),
-    reflection_line(_("Reflection line:"), _("Line which serves as 'mirror' for the reflection"), "reflection_line", &wr, this, "M0,0 L100,100")
+    joinPaths(_("Join the paths"), _("Join the resulting paths"), "joinPaths", &wr, this, true),
+    reflection_line(_("Reflection line:"), _("Line which serves as 'mirror' for the reflection"), "reflection_line", &wr, this, "M0,0 L1,0")
 {
     show_orig_path = true;
 
     registerParameter( dynamic_cast<Parameter *>(&discard_orig_path) );
+    registerParameter( dynamic_cast<Parameter *>(&joinPaths) );
     registerParameter( dynamic_cast<Parameter *>(&reflection_line) );
 }
 
@@ -55,15 +58,10 @@ LPEMirrorSymmetry::doOnApply (SPLPEItem const* lpeitem)
 {
     using namespace Geom;
 
-    // fixme: what happens if the bbox is empty?
-    // fixme: this is probably wrong
-    Geom::Affine t = lpeitem->i2dt_affine();
-    Geom::Rect bbox = *lpeitem->desktopVisualBounds();
+    original_bbox(lpeitem);
 
-    Point A(bbox.left(), bbox.bottom());
-    Point B(bbox.left(), bbox.top());
-    A *= t;
-    B *= t;
+    Point A(boundingbox_X.max(), boundingbox_Y.max());
+    Point B(boundingbox_X.max(), boundingbox_Y.min());
     Piecewise<D2<SBasis> > rline = Piecewise<D2<SBasis> >(D2<SBasis>(Linear(A[X], B[X]), Linear(A[Y], B[Y])));
     reflection_line.set_new_value(rline, true);
 }
@@ -77,11 +75,12 @@ LPEMirrorSymmetry::doEffect_path (std::vector<Geom::Path> const & path_in)
     }
 
     std::vector<Geom::Path> path_out;
-    if (!discard_orig_path) {
+    std::vector<Geom::Path> mline(reflection_line.get_pathvector());
+
+    if (!discard_orig_path && !joinPaths) {
         path_out = path_in;
     }
 
-    std::vector<Geom::Path> mline(reflection_line.get_pathvector());
     Geom::Point A(mline.front().initialPoint());
     Geom::Point B(mline.back().finalPoint());
 
@@ -97,9 +96,84 @@ LPEMirrorSymmetry::doEffect_path (std::vector<Geom::Path> const & path_in)
     m = m * sca;
     m = m * m2.inverse();
     m = m * m1;
+    
+    if(joinPaths){
+        for (Geom::PathVector::const_iterator path_it = path_in.begin();
+            path_it != path_in.end(); ++path_it) {
+            if (path_it->empty()){
+                continue;
+            }
+            Geom::Path original;
+            Geom::Path mlineExpanded;
+            Geom::Line lineSeparation;
+            lineSeparation.setPoints(mline[0].initialPoint(),mline[0].finalPoint());
+            mlineExpanded.start( lineSeparation.pointAt(-100000));
+            mlineExpanded.appendNew<Geom::LineSegment>( lineSeparation.pointAt(100000));
+            Geom::Crossings cs = crossings(*path_it, mlineExpanded);
+            double timeStart = 0.0;
+            //http://stackoverflow.com/questions/1560492/how-to-tell-whether-a-point-is-to-the-right-or-left-side-of-a-line
+            double pos =  (lineSeparation.pointAt(100000)[Geom::X]-lineSeparation.pointAt(-100000)[Geom::X])*(path_it->initialPoint()[Geom::Y]-lineSeparation.pointAt(-100000)[Geom::Y]) - (lineSeparation.pointAt(100000)[Geom::Y]-lineSeparation.pointAt(-100000)[Geom::Y])*(path_it->initialPoint()[Geom::X]-lineSeparation.pointAt(-100000)[Geom::X]);
+            int position = (pos < 0) ? -1 : (pos > 0);
+            unsigned int counter = 0;
 
-    for (int i = 0; i < static_cast<int>(path_in.size()); ++i) {
-        path_out.push_back(path_in[i] * m);
+            for(unsigned int i = 0; i < cs.size(); i++) {
+                double timeEnd = cs[i].ta;
+                Geom::Path portion = path_it->portion(timeStart, timeEnd);
+                if(position == -1 && i==0){
+                    counter++;
+                }
+                if(counter%2!=0){
+                    if (!discard_orig_path){
+                        if(i==0){
+                            original = portion;
+                        } else {
+                            original.append(portion, (Geom::Path::Stitching)1);
+                        }
+                        original.append(portion.reverse() * m, (Geom::Path::Stitching)1);
+                        if (!path_it->closed()){
+                            path_out.push_back(original);
+                            original.clear();
+                        }
+                    } else {
+                        path_out.push_back(portion * m);
+                    }
+                }
+                timeStart = timeEnd;
+                counter++;
+            }
+            if(cs.size()!=0 && ((cs.size()%2 == 0 && position == -1)||(cs.size()%2 != 0 && position == 1))){
+                Geom::Path portion = path_it->portion(timeStart, nearest_point(path_it->finalPoint(), *path_it));
+                if (!discard_orig_path){
+                    if(!path_it->closed()){
+                        original = portion;
+                    } else {
+                        original.append(portion, (Geom::Path::Stitching)1);
+                    }
+                    original.append(portion.reverse() * m, (Geom::Path::Stitching)1);
+                    if (!path_it->closed()){
+                        path_out.push_back(original);
+                        original.clear();
+                    }
+                } else {
+                    path_out.push_back(portion * m);
+                }
+
+            }
+            if (path_it->closed() && !original.empty() && !discard_orig_path) {
+                original.close();
+                path_out.push_back(original);
+            }
+            if(cs.size() == 0){
+                path_out.push_back(*path_it);
+                path_out.push_back(*path_it * m);
+            }
+        }
+    }
+    
+    if (!joinPaths) {
+        for (int i = 0; i < static_cast<int>(path_in.size()); ++i) {
+            path_out.push_back(path_in[i] * m);
+        }
     }
 
     return path_out;
