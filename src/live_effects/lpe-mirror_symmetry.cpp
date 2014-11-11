@@ -107,12 +107,14 @@ LPEMirrorSymmetry::doEffect_path (std::vector<Geom::Path> const & path_in)
             Geom::Path mlineExpanded;
             Geom::Line lineSeparation;
             lineSeparation.setPoints(mline[0].initialPoint(),mline[0].finalPoint());
-            mlineExpanded.start( lineSeparation.pointAt(-100000));
-            mlineExpanded.appendNew<Geom::LineSegment>( lineSeparation.pointAt(100000));
+            Geom::Point lineStart = lineSeparation.pointAt(-100000.0);
+            Geom::Point lineEnd = lineSeparation.pointAt(100000.0);
+            mlineExpanded.start( lineStart);
+            mlineExpanded.appendNew<Geom::LineSegment>( lineEnd);
             Geom::Crossings cs = crossings(*path_it, mlineExpanded);
             double timeStart = 0.0;
             //http://stackoverflow.com/questions/1560492/how-to-tell-whether-a-point-is-to-the-right-or-left-side-of-a-line
-            double pos =  (lineSeparation.pointAt(100000)[Geom::X]-lineSeparation.pointAt(-100000)[Geom::X])*(path_it->initialPoint()[Geom::Y]-lineSeparation.pointAt(-100000)[Geom::Y]) - (lineSeparation.pointAt(100000)[Geom::Y]-lineSeparation.pointAt(-100000)[Geom::Y])*(path_it->initialPoint()[Geom::X]-lineSeparation.pointAt(-100000)[Geom::X]);
+            double pos =  (lineEnd[Geom::X]-lineStart[Geom::X])*(path_it->initialPoint()[Geom::Y]-lineStart[Geom::Y]) - (lineEnd[Geom::Y]-lineStart[Geom::Y])*(path_it->initialPoint()[Geom::X]-lineStart[Geom::X]);
             int position = (pos < 0) ? -1 : (pos > 0);
             unsigned int counter = 0;
 
