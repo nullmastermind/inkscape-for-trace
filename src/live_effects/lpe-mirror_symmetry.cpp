@@ -119,6 +119,7 @@ LPEMirrorSymmetry::doEffect_path (std::vector<Geom::Path> const & path_in)
             if (path_it->empty()){
                 continue;
             }
+            std::vector<Geom::Path> temp_path;
             double timeStart = 0.0;
             int position = 0;
             bool end_open = false;
@@ -151,7 +152,7 @@ LPEMirrorSymmetry::doEffect_path (std::vector<Geom::Path> const & path_in)
                         portion.setFinal(portion.initialPoint());
                         portion.close();
                     }
-                    path_out.push_back(portion);
+                    temp_path.push_back(portion);
                 }
                 portion.clear();
                 timeStart = timeEnd;
@@ -168,23 +169,25 @@ LPEMirrorSymmetry::doEffect_path (std::vector<Geom::Path> const & path_in)
                 portion.append(mirror);
                 portion = portion.reverse();
                 if (!original.closed()){
-                    path_out.push_back(portion);
+                    temp_path.push_back(portion);
                 } else {
                     if(cs.size() >1 ){
-                        portion.setFinal(path_out[0].initialPoint());
-                        portion.setInitial(path_out[0].finalPoint());
-                        path_out[0].append(portion);
+                        portion.setFinal(temp_path[0].initialPoint());
+                        portion.setInitial(temp_path[0].finalPoint());
+                        temp_path[0].append(portion);
                     } else {
-                        path_out.push_back(portion);
+                        temp_path.push_back(portion);
                     }
-                    path_out[0].close();
+                    temp_path[0].close();
                 }
                 portion.clear();
             }
             if(cs.size() == 0 && position == -1){
-                path_out.push_back(original);
-                path_out.push_back(original * m);
+                temp_path.push_back(original);
+                temp_path.push_back(original * m);
             }
+            path_out.insert(path_out.end(), temp_path.begin(), temp_path.end());
+            temp_path.clear();
         }
     }
     
