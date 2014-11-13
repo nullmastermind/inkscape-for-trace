@@ -34,12 +34,16 @@ public:
 
     virtual void doBeforeEffect (SPLPEItem const* lpeitem);
 
+    virtual int pointSideOfLine(Geom::Point A, Geom::Point B, Geom::Point X);
+
     virtual std::vector<Geom::Path> doEffect_path (std::vector<Geom::Path> const & path_in);
 
 private:
     BoolParam discard_orig_path;
-    BoolParam joinPaths;
+    BoolParam fusionPaths;
+    BoolParam reverseFusion;
     PathParam reflection_line;
+    Geom::Line lineSeparation;
 
     LPEMirrorSymmetry(const LPEMirrorSymmetry&);
     LPEMirrorSymmetry& operator=(const LPEMirrorSymmetry&);
