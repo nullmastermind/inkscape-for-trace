@@ -16,6 +16,7 @@
 
 #include "live_effects/effect.h"
 #include "live_effects/parameter/point.h"
+#include "live_effects/lpegroupbbox.h"
 
 namespace Inkscape {
 namespace LivePathEffect {
@@ -26,7 +27,7 @@ namespace CR {
   class KnotHolderEntityRotationAngle;
 }
 
-class LPECopyRotate : public Effect {
+class LPECopyRotate : public Effect, GroupBBoxEffect {
 public:
     LPECopyRotate(LivePathEffectObject *lpeobject);
     virtual ~LPECopyRotate();

@@ -76,11 +76,12 @@ LPECopyRotate::~LPECopyRotate()
 void
 LPECopyRotate::doOnApply(SPLPEItem const* lpeitem)
 {
-    SPCurve const *curve = SP_SHAPE(lpeitem)->_curve;
+    using namespace Geom;
 
-    A = *(curve->first_point());
-    B = *(curve->last_point());
+    original_bbox(lpeitem);
 
+    Point A(boundingbox_X.min(), boundingbox_Y.middle());
+    Point B(boundingbox_X.max(), boundingbox_Y.middle());
     origin.param_setValue(A);
 
     dir = unit_vector(B - A);
@@ -123,11 +124,13 @@ LPECopyRotate::addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geo
     Path path(start_pos);
     path.appendNew<LineSegment>((Geom::Point) origin);
     path.appendNew<LineSegment>(rot_pos);
-
+    std::cout << rot_pos << "rot\n";
+    std::cout << origin << "origin\n";
     PathVector pathv;
     pathv.push_back(path);
     hp_vec.push_back(pathv);
 }
+
 
 void LPECopyRotate::addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item) {
     {

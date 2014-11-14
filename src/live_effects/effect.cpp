@@ -112,7 +112,6 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {PATH_LENGTH,           N_("Path length"),             "path_length"},
     {PERP_BISECTOR,         N_("Perpendicular bisector"),  "perp_bisector"},
     {PERSPECTIVE_PATH,      N_("Perspective path"),        "perspective_path"},
-    {COPY_ROTATE,           N_("Rotate copies"),           "copy_rotate"},
     {RECURSIVE_SKELETON,    N_("Recursive skeleton"),      "recursive_skeleton"},
     {TANGENT_TO_CURVE,      N_("Tangent to curve"),        "tangent_to_curve"},
     {TEXT_LABEL,            N_("Text label"),              "text_label"},
@@ -153,6 +152,8 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {PERSPECTIVE_ENVELOPE,  N_("Perspective/Envelope"),        "perspective-envelope"},
     {FILLET_CHAMFER,        N_("Fillet/Chamfer"),          "fillet-chamfer"},
     {INTERPOLATE_POINTS,    N_("Interpolate points"),      "interpolate_points"},
+/* 0.92 */
+    {COPY_ROTATE,           N_("Rotate copies"),           "copy_rotate"},
 };
 const Util::EnumDataConverter<EffectType> LPETypeConverter(LPETypeData, sizeof(LPETypeData)/sizeof(*LPETypeData));
 
