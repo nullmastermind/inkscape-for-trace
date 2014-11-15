@@ -101,7 +101,6 @@ public:
     //       (but spiro lpe still needs it!)
     virtual LPEPathFlashType pathFlashType() const { return DEFAULT; }
     void addHandles(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item);
-    void removeHandles();
     std::vector<Geom::PathVector> getCanvasIndicators(SPLPEItem const* lpeitem);
 
     inline bool providesOwnFlashPaths() const {
@@ -161,7 +160,6 @@ protected:
 
     SPLPEItem * sp_lpe_item; // these get stored in doBeforeEffect_impl, and derived classes may do as they please with them.
     Glib::ustring const * defaultUnit; // these get stored in doBeforeEffect_impl, and derived classes may do as they please with them.
-    KnotHolder *knot_holder;
     double current_zoom;
     std::vector<Geom::Point> selectedNodesPoints;
     SPCurve * sp_curve;

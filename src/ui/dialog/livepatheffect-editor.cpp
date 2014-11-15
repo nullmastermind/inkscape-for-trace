@@ -292,11 +292,8 @@ LivePathEffectEditor::onSelectionChanged(Inkscape::Selection *sel)
     effectlist_store->clear();
     current_lpeitem = NULL;
 
-    if ( sel && (sel->isEmpty() || sel->singleItem())) {
-        SPItem * item= SP_ITEM(current_desktop->currentRoot());
-        if(!sel->isEmpty()){
-            item = sel->singleItem();
-        }
+    if ( sel && !sel->isEmpty() ) {
+        SPItem *item = sel->singleItem();
         if ( item ) {
             SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
             if ( lpeitem ) {
@@ -425,11 +422,8 @@ void
 LivePathEffectEditor::onAdd()
 {
     Inkscape::Selection *sel = _getSelection();
-    if ( sel && (sel->isEmpty() || sel->singleItem())) {
-        SPItem * item= SP_ITEM(current_desktop->currentRoot());
-        if(!sel->isEmpty()){
-            item = sel->singleItem();
-        }
+    if ( sel && !sel->isEmpty() ) {
+        SPItem *item = sel->singleItem();
         if (item) {
             if ( dynamic_cast<SPLPEItem *>(item) ) {
                 // show effectlist dialog
@@ -506,11 +500,8 @@ void
 LivePathEffectEditor::onRemove()
 {
     Inkscape::Selection *sel = _getSelection();
-    if ( sel && (sel->isEmpty() || sel->singleItem())) {
-        SPItem * item= SP_ITEM(current_desktop->currentRoot());
-        if(!sel->isEmpty()){
-            item = sel->singleItem();
-        }
+    if ( sel && !sel->isEmpty() ) {
+        SPItem *item = sel->singleItem();
         SPLPEItem *lpeitem  = dynamic_cast<SPLPEItem *>(item);
         if ( lpeitem ) {
             lpeitem->removeCurrentPathEffect(false);
@@ -527,11 +518,8 @@ LivePathEffectEditor::onRemove()
 void LivePathEffectEditor::onUp()
 {
     Inkscape::Selection *sel = _getSelection();
-    if ( sel && (sel->isEmpty() || sel->singleItem())) {
-        SPItem * item= SP_ITEM(current_desktop->currentRoot());
-        if(!sel->isEmpty()){
-            item = sel->singleItem();
-        }
+    if ( sel && !sel->isEmpty() ) {
+        SPItem *item = sel->singleItem();
         SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
         if ( lpeitem ) {
             lpeitem->upCurrentPathEffect();
@@ -547,11 +535,8 @@ void LivePathEffectEditor::onUp()
 void LivePathEffectEditor::onDown()
 {
     Inkscape::Selection *sel = _getSelection();
-    if ( sel && (sel->isEmpty() || sel->singleItem())) {
-        SPItem * item= SP_ITEM(current_desktop->currentRoot());
-        if(!sel->isEmpty()){
-            item = sel->singleItem();
-        }
+    if ( sel && !sel->isEmpty() ) {
+        SPItem *item = sel->singleItem();
         SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
         if ( lpeitem ) {
             lpeitem->downCurrentPathEffect();

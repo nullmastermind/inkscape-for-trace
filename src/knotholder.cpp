@@ -69,12 +69,6 @@ KnotHolder::KnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderReleasedFun
 }
 
 KnotHolder::~KnotHolder() {
-     if(SP_IS_LPE_ITEM(item)){
-        Inkscape::LivePathEffect::Effect *effect = SP_LPE_ITEM(item)->getCurrentLPE();
-        if(effect){
-            effect->removeHandles();
-        }
-    }
 	sp_object_unref(item);
 
     for (std::list<KnotHolderEntity *>::iterator i = entity.begin(); i != entity.end(); ++i)

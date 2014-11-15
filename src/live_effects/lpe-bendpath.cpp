@@ -137,9 +137,7 @@ LPEBendPath::resetDefaults(SPItem const* item)
 
     Geom::Point start(boundingbox_X.min(), (boundingbox_Y.max()+boundingbox_Y.min())/2);
     Geom::Point end(boundingbox_X.max(), (boundingbox_Y.max()+boundingbox_Y.min())/2);
-    std::cout << start << "start\n";
-    std::cout << start << "end\n";
-    std::cout << boundingbox_X.min() << "boundingbox_X.min\n";
+
     if ( Geom::are_near(start,end) ) {
         end += Geom::Point(1.,0.);
     }

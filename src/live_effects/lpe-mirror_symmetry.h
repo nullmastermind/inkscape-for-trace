@@ -20,17 +20,10 @@
 #include "live_effects/parameter/point.h"
 #include "live_effects/parameter/path.h"
 
-#include "live_effects/lpegroupbbox.h"
-
 namespace Inkscape {
 namespace LivePathEffect {
 
-namespace MS {
-  // we need a separate namespace to avoid clashes with LPEPerpBisector
-  class KnotHolderEntityCenterMirrorSymmetry;
-}
-
-class LPEMirrorSymmetry : public Effect, GroupBBoxEffect{
+class LPEMirrorSymmetry : public Effect {
 public:
     LPEMirrorSymmetry(LivePathEffectObject *lpeobject);
     virtual ~LPEMirrorSymmetry();
@@ -39,26 +32,11 @@ public:
 
     virtual void doBeforeEffect (SPLPEItem const* lpeitem);
 
-    virtual int pointSideOfLine(Geom::Point A, Geom::Point B, Geom::Point X);
-
     virtual std::vector<Geom::Path> doEffect_path (std::vector<Geom::Path> const & path_in);
-
-    /* the knotholder entity classes must be declared friends */
-    friend class MS::KnotHolderEntityCenterMirrorSymmetry;
-    void addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item);
-
-protected:
-    virtual void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec);
 
 private:
     BoolParam discard_orig_path;
-    BoolParam fusionPaths;
-    BoolParam reverseFusion;
-    BoolParam forceX;
-    BoolParam forceY;
     PathParam reflection_line;
-    Geom::Line lineSeparation;
-    PointParam center;
 
     LPEMirrorSymmetry(const LPEMirrorSymmetry&);
     LPEMirrorSymmetry& operator=(const LPEMirrorSymmetry&);
