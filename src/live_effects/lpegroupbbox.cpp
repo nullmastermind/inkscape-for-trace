@@ -8,6 +8,7 @@
 #include "live_effects/lpegroupbbox.h"
 
 #include "sp-item.h"
+#include "sp-item-group.h"
 
 namespace Inkscape {
 namespace LivePathEffect {
@@ -34,9 +35,20 @@ void GroupBBoxEffect::original_bbox(SPLPEItem const* lpeitem, bool absolute)
     }
 
     Geom::OptRect bbox = lpeitem->geometricBounds(transform);
+    std::cout << bbox->hasZeroArea() << "=AREA\n";
+    if(bbox->hasZeroArea() && SP_IS_GROUP(lpeitem)){
+        bbox = (Geom::OptRect)SP_GROUP(lpeitem)->bbox(transform, SPLPEItem::GEOMETRIC_BBOX);
+        //GSList const *items = sp_item_group_item_list(SPGroup * group);
+        //for ( GSList const *i = items ; i != NULL ; i = i->next ) {
+        //    bbox.unionWith(SP_ITEM(i->data)->desktopGeometricBounds());
+        //}
+    }
+    std::cout << bbox->hasZeroArea() << "=AREA222\n";
     if (bbox) {
         boundingbox_X = (*bbox)[Geom::X];
         boundingbox_Y = (*bbox)[Geom::Y];
+        std::cout << boundingbox_X << "=BBOXX\n";
+        std::cout << boundingbox_Y << "=BBOXY\n";
     } else {
         boundingbox_X = Geom::Interval();
         boundingbox_Y = Geom::Interval();

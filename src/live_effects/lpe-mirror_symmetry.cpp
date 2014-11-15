@@ -24,23 +24,43 @@
 #include <2geom/path-intersection.h>
 #include <2geom/transforms.h>
 #include <2geom/affine.h>
+#include "knot-holder-entity.h"
+#include "knotholder.h"
 
 namespace Inkscape {
 namespace LivePathEffect {
+
+namespace MS {
+
+class KnotHolderEntityCenterMirrorSymmetry : public LPEKnotHolderEntity {
+public:
+    KnotHolderEntityCenterMirrorSymmetry(LPEMirrorSymmetry *effect) : LPEKnotHolderEntity(effect) {};
+    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state);
+    virtual Geom::Point knot_get() const;
+};
+
+} // namespace MS
 
 LPEMirrorSymmetry::LPEMirrorSymmetry(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
     discard_orig_path(_("Discard original path?"), _("Check this to only keep the mirrored part of the path"), "discard_orig_path", &wr, this, false),
     fusionPaths(_("Fusioned symetry"), _("Fusion right side whith symm"), "fusionPaths", &wr, this, true),
     reverseFusion(_("Reverse fusion"), _("Reverse fusion"), "reverseFusion", &wr, this, false),
-    reflection_line(_("Reflection line:"), _("Line which serves as 'mirror' for the reflection"), "reflection_line", &wr, this, "M0,0 L1,0")
+    forceX(_("Force horizontal"), _("Force horizontal"), "forceX", &wr, this, false),
+    forceY(_("Force vertical"), _("Force vertical"), "forceY", &wr, this, false),
+    reflection_line(_("Reflection line:"), _("Line which serves as 'mirror' for the reflection"), "reflection_line", &wr, this, "M0,0 L1,0"),
+    center(_("Center of mirroring (X or Y)"), _("Center of the mirror"), "center", &wr, this, "Adjust the center of mirroring")
 {
     show_orig_path = true;
 
     registerParameter( dynamic_cast<Parameter *>(&discard_orig_path) );
     registerParameter( dynamic_cast<Parameter *>(&fusionPaths) );
     registerParameter( dynamic_cast<Parameter *>(&reverseFusion) );
+    registerParameter( dynamic_cast<Parameter *>(&forceX) );
+    registerParameter( dynamic_cast<Parameter *>(&forceY) );
     registerParameter( dynamic_cast<Parameter *>(&reflection_line) );
+    registerParameter( dynamic_cast<Parameter *>(&center) );
+
 }
 
 LPEMirrorSymmetry::~LPEMirrorSymmetry()
@@ -50,9 +70,36 @@ LPEMirrorSymmetry::~LPEMirrorSymmetry()
 void
 LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
 {
+    using namespace Geom;
+
     SPLPEItem * item = const_cast<SPLPEItem*>(lpeitem);
     std::vector<Geom::Path> mline(reflection_line.get_pathvector());
-    lineSeparation.setPoints(mline[0].initialPoint(),mline[0].finalPoint());
+    double dist = distance(mline[0].initialPoint(),mline[0].finalPoint());
+    if( !forceX && !forceY ){
+        center.param_setValue(mline[0].pointAt(0.5));
+    }
+    Point A(0,0);
+    Point B(0,0);
+    if(forceX){
+        A = Geom::Point(center[X]+(dist/2.0),center[Y]);
+        B = Geom::Point(center[X]-(dist/2.0),center[Y]);
+    }
+    if(forceY){
+        A = Geom::Point(center[X],center[Y]+(dist/2.0));
+        B = Geom::Point(center[X],center[Y]-(dist/2.0));
+    }
+    if( forceX || forceY ){
+        lineSeparation.setPoints(A,B);
+        Piecewise<D2<SBasis> > rline = Piecewise<D2<SBasis> >(D2<SBasis>(Linear(A[X], B[X]), Linear(A[Y], B[Y])));
+        reflection_line.set_new_value(rline, true);
+    } else {
+        lineSeparation.setPoints(mline[0].initialPoint(),mline[0].finalPoint());
+    }
+    //Geom::Point const q = lineSeparation.pointAt(0.5)* lpeitem->i2dt_affine().inverse();
+    if(knot_holder){
+        knot_holder->update_knots();
+    }
+    //e->knot_set(q, e->knot->drag_origin * lpeitem->i2dt_affine().inverse(), (guint)1);
     item->apply_to_clippath(item);
     item->apply_to_mask(item);
 }
@@ -199,6 +246,58 @@ LPEMirrorSymmetry::doEffect_path (std::vector<Geom::Path> const & path_in)
 
     return path_out;
 }
+
+void
+LPEMirrorSymmetry::addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec)
+{
+    using namespace Geom;
+
+    PathVector pathv;
+    Geom::Path mlineExpanded;
+    Geom::Point lineStart = lineSeparation.pointAt(-100000.0);
+    Geom::Point lineEnd = lineSeparation.pointAt(100000.0);
+    mlineExpanded.start( lineStart);
+    mlineExpanded.appendNew<Geom::LineSegment>( lineEnd);
+    pathv.push_back(mlineExpanded);
+    hp_vec.push_back(pathv);
+}
+
+void 
+LPEMirrorSymmetry::addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item) {
+    {
+        KnotHolderEntity *e = new MS::KnotHolderEntityCenterMirrorSymmetry(this);
+        e->create( desktop, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN,
+                   _("Adjust the center") );
+        knotholder->add(e);
+    }
+
+};
+
+namespace MS {
+
+using namespace Geom;
+
+void
+KnotHolderEntityCenterMirrorSymmetry::knot_set(Geom::Point const &p, Geom::Point const &origin, guint state)
+{
+    LPEMirrorSymmetry* lpe = dynamic_cast<LPEMirrorSymmetry *>(_effect);
+
+    Geom::Point const s = snap_knot_position(p, state);
+
+    lpe->center.param_setValue(s);
+
+    // FIXME: this should not directly ask for updating the item. It should write to SVG, which triggers updating.
+    sp_lpe_item_update_patheffect (SP_LPE_ITEM(item), false, true);
+}
+
+Geom::Point
+KnotHolderEntityCenterMirrorSymmetry::knot_get() const
+{
+    LPEMirrorSymmetry const *lpe = dynamic_cast<LPEMirrorSymmetry const*>(_effect);
+    return lpe->center;
+}
+
+} // namespace CR
 
 } //namespace LivePathEffect
 } /* namespace Inkscape */

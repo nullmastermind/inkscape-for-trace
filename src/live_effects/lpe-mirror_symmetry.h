@@ -25,6 +25,11 @@
 namespace Inkscape {
 namespace LivePathEffect {
 
+namespace MS {
+  // we need a separate namespace to avoid clashes with LPEPerpBisector
+  class KnotHolderEntityCenterMirrorSymmetry;
+}
+
 class LPEMirrorSymmetry : public Effect, GroupBBoxEffect{
 public:
     LPEMirrorSymmetry(LivePathEffectObject *lpeobject);
@@ -38,12 +43,22 @@ public:
 
     virtual std::vector<Geom::Path> doEffect_path (std::vector<Geom::Path> const & path_in);
 
+    /* the knotholder entity classes must be declared friends */
+    friend class MS::KnotHolderEntityCenterMirrorSymmetry;
+    void addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item);
+
+protected:
+    virtual void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec);
+
 private:
     BoolParam discard_orig_path;
     BoolParam fusionPaths;
     BoolParam reverseFusion;
+    BoolParam forceX;
+    BoolParam forceY;
     PathParam reflection_line;
     Geom::Line lineSeparation;
+    PointParam center;
 
     LPEMirrorSymmetry(const LPEMirrorSymmetry&);
     LPEMirrorSymmetry& operator=(const LPEMirrorSymmetry&);
