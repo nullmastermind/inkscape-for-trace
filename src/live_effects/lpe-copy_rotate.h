@@ -38,7 +38,6 @@ public:
 
     /* the knotholder entity classes must be declared friends */
     friend class CR::KnotHolderEntityStartingAngle;
-    friend class CR::KnotHolderEntityRotationAngle;
     void addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item);
 
 protected:
@@ -48,6 +47,7 @@ private:
     ScalarParam starting_angle;
     ScalarParam rotation_angle;
     ScalarParam num_copies;
+    BoolParam copiesTo360;
 
     PointParam origin;
 
