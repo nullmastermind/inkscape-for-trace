@@ -83,7 +83,6 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
     Point A(boundingbox_X.max(), boundingbox_Y.max());
     Point B(boundingbox_X.max(), boundingbox_Y.min());
     double dist = distance(A,B);
-    Point C = mline[0].pointAt(0.5);
     if(mode == MT_X){
         A = Geom::Point(center[X]+(dist/2.0),center[Y]);
         B = Geom::Point(center[X]-(dist/2.0),center[Y]);
@@ -93,27 +92,29 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
         B = Geom::Point(center[X],center[Y]-(dist/2.0));
     }
     if( mode == MT_X || mode == MT_Y ){
-        Piecewise<D2<SBasis> > rline = Piecewise<D2<SBasis> >(D2<SBasis>(Linear(A[X], B[X]), Linear(A[Y], B[Y])));
-        reflection_line.set_new_value(rline, true);
+        Geom::Path path;
+        path.start( A );
+        path.appendNew<Geom::LineSegment>( B );
+        reflection_line.set_new_value(path.toPwSb(), true);
     } else {
         A = mline[0].initialPoint();
         B = mline[0].finalPoint();
+        Point C = mline[0].pointAt(0.5);
         lineSeparation.setPoints(A,B);
         Geom::Rotate rot = Geom::Rotate(lineSeparation.angle());
         Geom::Translate trans = Geom::Translate(center);
         A = Geom::Point(center[X],center[Y]+(dist/2.0));
         B = Geom::Point(center[X],center[Y]-(dist/2.0));
-        Piecewise<D2<SBasis> > rline = Piecewise<D2<SBasis> >(D2<SBasis>(Linear(A[X], B[X]), Linear(A[Y], B[Y])));
-        rline *= rot;
-        rline *= trans;
-        reflection_line.set_new_value(rline, true);
+        Geom::Path path;
+        path.start( B );
+        path.appendNew<Geom::LineSegment>( A );
+        path *= Geom::Affine(rot);
+        path *= Geom::Affine(trans);
+        reflection_line.set_new_value(path.toPwSb(), true);
         A = mline[0].initialPoint();
         B = mline[0].finalPoint();
     }
     lineSeparation.setPoints(A,B);
-    if(knot_holder){
-        knot_holder->update_knots();
-    }
     item->apply_to_clippath(item);
     item->apply_to_mask(item);
 }
@@ -129,6 +130,8 @@ LPEMirrorSymmetry::doOnApply (SPLPEItem const* lpeitem)
     Point B(boundingbox_X.max(), boundingbox_Y.min());
     Piecewise<D2<SBasis> > rline = Piecewise<D2<SBasis> >(D2<SBasis>(Linear(A[X], B[X]), Linear(A[Y], B[Y])));
     reflection_line.set_new_value(rline, true);
+    Point C = rline[0].pointAt(0.5);
+    center.param_setValue(C);
 }
 
 int 
