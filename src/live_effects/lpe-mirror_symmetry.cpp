@@ -80,10 +80,10 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
 
     SPLPEItem * item = const_cast<SPLPEItem*>(lpeitem);
     std::vector<Geom::Path> mline(reflection_line.get_pathvector());
-    Point A = mline[0].initialPoint();
-    Point B = mline[0].finalPoint();
-    Point C = mline[0].pointAt(0.5);
+    Point A(boundingbox_X.max(), boundingbox_Y.max());
+    Point B(boundingbox_X.max(), boundingbox_Y.min());
     double dist = distance(A,B);
+    Point C = mline[0].pointAt(0.5);
     if(mode == MT_X){
         A = Geom::Point(center[X]+(dist/2.0),center[Y]);
         B = Geom::Point(center[X]-(dist/2.0),center[Y]);
@@ -96,7 +96,19 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
         Piecewise<D2<SBasis> > rline = Piecewise<D2<SBasis> >(D2<SBasis>(Linear(A[X], B[X]), Linear(A[Y], B[Y])));
         reflection_line.set_new_value(rline, true);
     } else {
-        center.param_setValue(C);
+        A = mline[0].initialPoint();
+        B = mline[0].finalPoint();
+        lineSeparation.setPoints(A,B);
+        Geom::Rotate rot = Geom::Rotate(lineSeparation.angle());
+        Geom::Translate trans = Geom::Translate(center);
+        A = Geom::Point(center[X],center[Y]+(dist/2.0));
+        B = Geom::Point(center[X],center[Y]-(dist/2.0));
+        Piecewise<D2<SBasis> > rline = Piecewise<D2<SBasis> >(D2<SBasis>(Linear(A[X], B[X]), Linear(A[Y], B[Y])));
+        rline *= rot;
+        rline *= trans;
+        reflection_line.set_new_value(rline, true);
+        A = mline[0].initialPoint();
+        B = mline[0].finalPoint();
     }
     lineSeparation.setPoints(A,B);
     if(knot_holder){
