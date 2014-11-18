@@ -79,7 +79,6 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
     using namespace Geom;
 
     SPLPEItem * item = const_cast<SPLPEItem*>(lpeitem);
-    std::vector<Geom::Path> mline(reflection_line.get_pathvector());
     Point A(boundingbox_X.max(), boundingbox_Y.max());
     Point B(boundingbox_X.max(), boundingbox_Y.min());
     double dist = distance(A,B);
@@ -97,22 +96,23 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
         path.appendNew<Geom::LineSegment>( B );
         reflection_line.set_new_value(path.toPwSb(), true);
     } else {
+        std::vector<Geom::Path> mline(reflection_line.get_pathvector());
         A = mline[0].initialPoint();
         B = mline[0].finalPoint();
-        Point C = mline[0].pointAt(0.5);
         lineSeparation.setPoints(A,B);
+        //Point C(boundingbox_X.max(), boundingbox_Y.middle());
         Geom::Rotate rot = Geom::Rotate(lineSeparation.angle());
-        Geom::Translate trans = Geom::Translate(center);
+        //Geom::Translate trans = Geom::Translate(center - C);
         A = Geom::Point(center[X],center[Y]+(dist/2.0));
         B = Geom::Point(center[X],center[Y]-(dist/2.0));
         Geom::Path path;
-        path.start( B );
-        path.appendNew<Geom::LineSegment>( A );
+        path.start( A );
+        path.appendNew<Geom::LineSegment>( B );
         path *= Geom::Affine(rot);
-        path *= Geom::Affine(trans);
+        //path *= Geom::Affine(trans);
         reflection_line.set_new_value(path.toPwSb(), true);
-        A = mline[0].initialPoint();
-        B = mline[0].finalPoint();
+        A = path.initialPoint();
+        B = path.finalPoint();
     }
     lineSeparation.setPoints(A,B);
     item->apply_to_clippath(item);
@@ -128,9 +128,11 @@ LPEMirrorSymmetry::doOnApply (SPLPEItem const* lpeitem)
 
     Point A(boundingbox_X.max(), boundingbox_Y.max());
     Point B(boundingbox_X.max(), boundingbox_Y.min());
-    Piecewise<D2<SBasis> > rline = Piecewise<D2<SBasis> >(D2<SBasis>(Linear(A[X], B[X]), Linear(A[Y], B[Y])));
-    reflection_line.set_new_value(rline, true);
-    Point C = rline[0].pointAt(0.5);
+    Point C(boundingbox_X.max(), boundingbox_Y.middle());
+    Geom::Path path;
+    path.start( A );
+    path.appendNew<Geom::LineSegment>( B );
+    reflection_line.set_new_value(path.toPwSb(), true);
     center.param_setValue(C);
 }
 
@@ -152,8 +154,8 @@ LPEMirrorSymmetry::doEffect_path (std::vector<Geom::Path> const & path_in)
     Geom::PathVector const original_pathv = pathv_to_linear_and_cubic_beziers(path_in);
     std::vector<Geom::Path> path_out;
     Geom::Path mlineExpanded;
-    Geom::Point lineStart = lineSeparation.pointAt(-100000.0);
-    Geom::Point lineEnd = lineSeparation.pointAt(100000.0);
+    Geom::Point lineStart = lineSeparation.pointAt(100000.0);
+    Geom::Point lineEnd = lineSeparation.pointAt(-100000.0);
     mlineExpanded.start( lineStart);
     mlineExpanded.appendNew<Geom::LineSegment>( lineEnd);
 
@@ -271,8 +273,8 @@ LPEMirrorSymmetry::addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector
 
     PathVector pathv;
     Geom::Path mlineExpanded;
-    Geom::Point lineStart = lineSeparation.pointAt(-100000.0);
-    Geom::Point lineEnd = lineSeparation.pointAt(100000.0);
+    Geom::Point lineStart = lineSeparation.pointAt(100000.0);
+    Geom::Point lineEnd = lineSeparation.pointAt(-100000.0);
     mlineExpanded.start( lineStart);
     mlineExpanded.appendNew<Geom::LineSegment>( lineEnd);
     pathv.push_back(mlineExpanded);
