@@ -64,6 +64,7 @@ private:
     BoolParam reverseFusion;
     PathParam reflection_line;
     Geom::Line lineSeparation;
+    Geom::Point previousCenter;
     PointParam center;
 
     LPEMirrorSymmetry(const LPEMirrorSymmetry&);

@@ -79,42 +79,48 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
     using namespace Geom;
 
     SPLPEItem * item = const_cast<SPLPEItem*>(lpeitem);
-    Point A(boundingbox_X.max(), boundingbox_Y.max());
-    Point B(boundingbox_X.max(), boundingbox_Y.min());
-    double dist = distance(A,B);
-    if(mode == MT_X){
-        A = Geom::Point(center[X]+(dist/2.0),center[Y]);
-        B = Geom::Point(center[X]-(dist/2.0),center[Y]);
-    }
+    Point A(boundingbox_X.max(), boundingbox_Y.min());
+    Point B(boundingbox_X.max(), boundingbox_Y.max());
+    Point C(boundingbox_X.max(), boundingbox_Y.middle());
     if(mode == MT_Y){
-        A = Geom::Point(center[X],center[Y]+(dist/2.0));
-        B = Geom::Point(center[X],center[Y]-(dist/2.0));
+        A = Geom::Point(boundingbox_X.min(),center[Y]);
+        B = Geom::Point(boundingbox_X.max(),center[Y]);
+    }
+    if(mode == MT_X){
+        A = Geom::Point(center[X],boundingbox_Y.min());
+        B = Geom::Point(center[X],boundingbox_Y.max());
     }
     if( mode == MT_X || mode == MT_Y ){
         Geom::Path path;
         path.start( A );
         path.appendNew<Geom::LineSegment>( B );
         reflection_line.set_new_value(path.toPwSb(), true);
-    } else {
-        std::vector<Geom::Path> mline(reflection_line.get_pathvector());
-        A = mline[0].initialPoint();
-        B = mline[0].finalPoint();
         lineSeparation.setPoints(A,B);
-        //Point C(boundingbox_X.max(), boundingbox_Y.middle());
-        Geom::Rotate rot = Geom::Rotate(lineSeparation.angle());
-        //Geom::Translate trans = Geom::Translate(center - C);
-        A = Geom::Point(center[X],center[Y]+(dist/2.0));
-        B = Geom::Point(center[X],center[Y]-(dist/2.0));
-        Geom::Path path;
-        path.start( A );
-        path.appendNew<Geom::LineSegment>( B );
-        path *= Geom::Affine(rot);
-        //path *= Geom::Affine(trans);
-        reflection_line.set_new_value(path.toPwSb(), true);
-        A = path.initialPoint();
-        B = path.finalPoint();
+        center.param_setValue(path.pointAt(0.5));
+        if(knot_holder){
+            knot_holder->update_knots();
+        }
+    } else if( mode == MT_FREE) {
+        std::vector<Geom::Path> mline(reflection_line.get_pathvector());
+        if(!are_near(previousCenter,center, 0.01)){
+            Geom::Point trans = center - mline[0].pointAt(0.5);
+            mline[0] *= Geom::Affine(1,0,0,1,trans[X],trans[Y]);
+            A = mline[0].initialPoint();
+            B = mline[0].finalPoint();
+            reflection_line.set_new_value(mline[0].toPwSb(), true);
+            lineSeparation.setPoints(A,B);
+        } else {
+            center.param_setValue(mline[0].pointAt(0.5));
+            A = mline[0].initialPoint();
+            B = mline[0].finalPoint();
+            lineSeparation.setPoints(A,B);
+            if(knot_holder){
+                knot_holder->update_knots();
+            }
+        }
+        previousCenter = center;
     }
-    lineSeparation.setPoints(A,B);
+
     item->apply_to_clippath(item);
     item->apply_to_mask(item);
 }
@@ -126,14 +132,15 @@ LPEMirrorSymmetry::doOnApply (SPLPEItem const* lpeitem)
 
     original_bbox(lpeitem);
 
-    Point A(boundingbox_X.max(), boundingbox_Y.max());
-    Point B(boundingbox_X.max(), boundingbox_Y.min());
+    Point A(boundingbox_X.max(), boundingbox_Y.min());
+    Point B(boundingbox_X.max(), boundingbox_Y.max());
     Point C(boundingbox_X.max(), boundingbox_Y.middle());
     Geom::Path path;
     path.start( A );
     path.appendNew<Geom::LineSegment>( B );
     reflection_line.set_new_value(path.toPwSb(), true);
     center.param_setValue(C);
+    previousCenter = center;
 }
 
 int 
@@ -154,8 +161,8 @@ LPEMirrorSymmetry::doEffect_path (std::vector<Geom::Path> const & path_in)
     Geom::PathVector const original_pathv = pathv_to_linear_and_cubic_beziers(path_in);
     std::vector<Geom::Path> path_out;
     Geom::Path mlineExpanded;
-    Geom::Point lineStart = lineSeparation.pointAt(100000.0);
-    Geom::Point lineEnd = lineSeparation.pointAt(-100000.0);
+    Geom::Point lineStart = lineSeparation.pointAt(-100000.0);
+    Geom::Point lineEnd = lineSeparation.pointAt(100000.0);
     mlineExpanded.start( lineStart);
     mlineExpanded.appendNew<Geom::LineSegment>( lineEnd);
 
@@ -210,7 +217,7 @@ LPEMirrorSymmetry::doEffect_path (std::vector<Geom::Path> const & path_in)
                 if(reverseFusion){
                     position *= -1;
                 }
-                if(position == -1){
+                if(position == 1){
                     Geom::Path mirror = portion.reverse() * m;
                     mirror.setInitial(portion.finalPoint());
                     portion.append(mirror);
@@ -227,7 +234,7 @@ LPEMirrorSymmetry::doEffect_path (std::vector<Geom::Path> const & path_in)
             if(reverseFusion){
                 position *= -1;
             }
-            if(cs.size()!=0 && position == -1){
+            if(cs.size()!=0 && position == 1){
                 Geom::Path portion = original.portion(timeStart, original.size());
                 portion = portion.reverse();
                 Geom::Path mirror = portion.reverse() * m;
@@ -248,7 +255,7 @@ LPEMirrorSymmetry::doEffect_path (std::vector<Geom::Path> const & path_in)
                 }
                 portion.clear();
             }
-            if(cs.size() == 0 && position == -1){
+            if(cs.size() == 0 && position == 1){
                 temp_path.push_back(original);
                 temp_path.push_back(original * m);
             }
@@ -273,8 +280,8 @@ LPEMirrorSymmetry::addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector
 
     PathVector pathv;
     Geom::Path mlineExpanded;
-    Geom::Point lineStart = lineSeparation.pointAt(100000.0);
-    Geom::Point lineEnd = lineSeparation.pointAt(-100000.0);
+    Geom::Point lineStart = lineSeparation.pointAt(-100000.0);
+    Geom::Point lineEnd = lineSeparation.pointAt(100000.0);
     mlineExpanded.start( lineStart);
     mlineExpanded.appendNew<Geom::LineSegment>( lineEnd);
     pathv.push_back(mlineExpanded);
@@ -300,9 +307,7 @@ void
 KnotHolderEntityCenterMirrorSymmetry::knot_set(Geom::Point const &p, Geom::Point const &origin, guint state)
 {
     LPEMirrorSymmetry* lpe = dynamic_cast<LPEMirrorSymmetry *>(_effect);
-
     Geom::Point const s = snap_knot_position(p, state);
-
     lpe->center.param_setValue(s);
 
     // FIXME: this should not directly ask for updating the item. It should write to SVG, which triggers updating.
