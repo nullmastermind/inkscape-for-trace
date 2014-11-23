@@ -46,7 +46,7 @@
 #include "id-clash.h"
 #include "inkscape.h"
 #include "inkscape.h"
-#include "interface.h"
+#include "ui/interface.h"
 #include "io/sys.h"
 #include "message.h"
 #include "message-stack.h"
@@ -148,14 +148,14 @@ SPDesktop *sp_file_new(const std::string &templ)
         DocumentUndo::setUndoSensitive(doc, true);
     }
     
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    if (desktop)
-        desktop->setWaitingCursor();
+    SPDesktop *olddesktop = SP_ACTIVE_DESKTOP;
+    if (olddesktop)
+        olddesktop->setWaitingCursor();
     
     SPViewWidget *dtw = sp_desktop_widget_new(sp_document_namedview(doc, NULL)); // TODO this will trigger broken link warnings, etc.
     g_return_val_if_fail(dtw != NULL, NULL);
     sp_create_window(dtw, TRUE);
-    desktop = static_cast<SPDesktop *>(dtw->view);
+    SPDesktop* desktop = static_cast<SPDesktop *>(dtw->view);
 
     doc->doUnref();
 
@@ -166,6 +166,8 @@ SPDesktop *sp_file_new(const std::string &templ)
     Inkscape::Extension::Dbus::dbus_init_desktop_interface(desktop);
 #endif
     
+    if (olddesktop)
+        olddesktop->clearWaitingCursor();
     if (desktop)
         desktop->clearWaitingCursor();
 
@@ -669,7 +671,7 @@ file_save(Gtk::Window &parentWindow, SPDocument *doc, const Glib::ustring &uri,
         sp_ui_error_dialog(text);
         g_free(text);
         g_free(safeUri);
-        return FALSE;
+        return false;
     } catch (Inkscape::Extension::Output::file_read_only &e) {
         gchar *safeUri = Inkscape::IO::sanitizeString(uri.c_str());
         gchar *text = g_strdup_printf(_("File %s is write protected. Please remove write protection and try again."), safeUri);
@@ -677,7 +679,7 @@ file_save(Gtk::Window &parentWindow, SPDocument *doc, const Glib::ustring &uri,
         sp_ui_error_dialog(text);
         g_free(text);
         g_free(safeUri);
-        return FALSE;
+        return false;
     } catch (Inkscape::Extension::Output::save_failed &e) {
         gchar *safeUri = Inkscape::IO::sanitizeString(uri.c_str());
         gchar *text = g_strdup_printf(_("File %s could not be saved."), safeUri);
@@ -685,15 +687,15 @@ file_save(Gtk::Window &parentWindow, SPDocument *doc, const Glib::ustring &uri,
         sp_ui_error_dialog(text);
         g_free(text);
         g_free(safeUri);
-        return FALSE;
+        return false;
     } catch (Inkscape::Extension::Output::save_cancelled &e) {
         SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Document not saved."));
-        return FALSE;
+        return false;
     } catch (Inkscape::Extension::Output::no_overwrite &e) {
         return sp_file_save_dialog(parentWindow, doc, save_method);
     } catch (...) {
         SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Document not saved."));
-        return FALSE;
+        return false;
     }
 
     if (SP_ACTIVE_DESKTOP) {
@@ -1087,9 +1089,9 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place)
     Inkscape::Selection *selection = sp_desktop_selection(desktop);
     selection->setReprList(pasted_objects);
 
-    // invers apply parent transform
+    // Apply inverse of parent transform
     Geom::Affine doc2parent = SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
-    sp_selection_apply_affine(selection, desktop->dt2doc() * doc2parent * desktop->doc2dt(), true, false);
+    sp_selection_apply_affine(selection, desktop->dt2doc() * doc2parent * desktop->doc2dt(), true, false, false);
 
     // Update (among other things) all curves in paths, for bounds() to work
     target_document->ensureUpToDate();
@@ -1226,7 +1228,7 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
             // c2p is identity matrix at this point unless ensureUpToDate is called
             doc->ensureUpToDate();
             Geom::Affine affine = doc->getRoot()->c2p * SP_ITEM(place_to_insert)->i2doc_affine().inverse();
-            sp_selection_apply_affine(selection, desktop->dt2doc() * affine * desktop->doc2dt(), true, false);
+            sp_selection_apply_affine(selection, desktop->dt2doc() * affine * desktop->doc2dt(), true, false, false);
 
             // move to mouse pointer
             {

@@ -19,6 +19,7 @@
 
 #include "inkscape-preferences.h"
 #include <glibmm/i18n.h>
+#include <glibmm/markup.h>
 #include <glibmm/miscutils.h>
 #include <gtkmm/main.h>
 #include <gtkmm/frame.h>
@@ -76,7 +77,8 @@ InkscapePreferences::InkscapePreferences()
     : UI::Widget::Panel ("", "/dialogs/preferences", SP_VERB_DIALOG_DISPLAY),
       _max_dialog_width(0),
       _max_dialog_height(0),
-      _current_page(0)
+      _current_page(0),
+      _init(true)
 {
     //get the width of a spinbutton
     Inkscape::UI::Widget::SpinButton* sb = new Inkscape::UI::Widget::SpinButton;
@@ -232,6 +234,9 @@ static void StyleFromSelectionToTool(Glib::ustring const &prefs_path, StyleSwatc
 
     if (!css) return;
 
+    // remove black-listed properties
+    css = sp_css_attr_unset_blacklist (css);
+
     // only store text style for the text tool
     if (prefs_path != "/tools/text") {
         css = sp_css_attr_unset_text (css);
@@ -329,7 +334,7 @@ void InkscapePreferences::initPageTools()
     _page_selector.add_line( true, "", _t_sel_trans_outl, "",
                             _("Show only a box outline of the objects when moving or transforming"));
     _page_selector.add_group_header( _("Per-object selection cue"));
-    _t_sel_cue_none.init ( _("None"), "/options/selcue/value", Inkscape::SelCue::NONE, false, 0);
+    _t_sel_cue_none.init ( C_("Selection cue", "None"), "/options/selcue/value", Inkscape::SelCue::NONE, false, 0);
     _page_selector.add_line( true, "", _t_sel_cue_none, "",
                             _("No per-object selection indication"));
     _t_sel_cue_mark.init ( _("Mark"), "/options/selcue/value", Inkscape::SelCue::MARK, true, &_t_sel_cue_none);
@@ -500,10 +505,12 @@ void InkscapePreferences::initPageTools()
     _page_connector.add_line(false, "", _connector_ignore_text, "",
             _("If on, connector attachment points will not be shown for text objects"));
 
+#ifdef WITH_LPETOOL
     //LPETool
-    // commented out, because the LPETool is not finished yet.
-    //this->AddPage(_page_lpetool, _("LPE Tool"), iter_tools, PREFS_PAGE_TOOLS_LPETOOL);
-    //this->AddNewObjectsStyle(_page_lpetool, "/tools/lpetool");
+    //disabled, because the LPETool is not finished yet.
+    this->AddPage(_page_lpetool, _("LPE Tool"), iter_tools, PREFS_PAGE_TOOLS_LPETOOL);
+    this->AddNewObjectsStyle(_page_lpetool, "/tools/lpetool");
+#endif // WITH_LPETOOL
 }
 
 void InkscapePreferences::initPageUI()
@@ -522,11 +529,11 @@ void InkscapePreferences::initPageUI()
         _("Mongolian (mn)"), _("Nepali (ne)"), _("Norwegian Bokmål (nb)"), _("Norwegian Nynorsk (nn)"), _("Panjabi (pa)"),
         _("Polish (pl)"), _("Portuguese (pt)"), _("Portuguese/Brazil (pt_BR)"), _("Romanian (ro)"), _("Russian (ru)"),
         _("Serbian (sr)"), _("Serbian in Latin script (sr@latin)"), _("Slovak (sk)"), _("Slovenian (sl)"),  _("Spanish (es)"), _("Spanish/Mexico (es_MX)"),
-        _("Swedish (sv)"),_("Telugu (te_IN)"), _("Thai (th)"), _("Turkish (tr)"), _("Ukrainian (uk)"), _("Vietnamese (vi)")};
+        _("Swedish (sv)"),_("Telugu (te)"), _("Thai (th)"), _("Turkish (tr)"), _("Ukrainian (uk)"), _("Vietnamese (vi)")};
     Glib::ustring langValues[] = {"", "sq", "am", "ar", "hy", "az", "eu", "be", "bg", "bn", "bn_BD", "br", "ca", "ca@valencia", "zh_CN", "zh_TW", "hr", "cs", "da", "nl",
         "dz", "de", "el", "en", "en_AU", "en_CA", "en_GB", "en_US@piglatin", "eo", "et", "fa", "fi", "fr", "ga",
         "gl", "he", "hu", "id", "it", "ja", "km", "rw", "ko", "lt", "lv", "mk", "mn", "ne", "nb", "nn", "pa",
-        "pl", "pt", "pt_BR", "ro", "ru", "sr", "sr@latin", "sk", "sl", "es", "es_MX", "sv", "te_IN", "th", "tr", "uk", "vi" };
+        "pl", "pt", "pt_BR", "ro", "ru", "sr", "sr@latin", "sk", "sl", "es", "es_MX", "sv", "te", "th", "tr", "uk", "vi" };
 
     {
         // sorting languages according to translated name
@@ -638,7 +645,7 @@ void InkscapePreferences::initPageUI()
     _win_save_viewport.init ( _("Save and restore documents viewport"), "/options/savedocviewport/value", true);
     _win_zoom_resize.init ( _("Zoom when window is resized"), "/options/stickyzoom/value", false);
     _win_show_close.init ( _("Show close button on dialogs"), "/dialogs/showclose", false);
-    _win_ontop_none.init ( _("None"), "/options/transientpolicy/value", 0, false, 0);
+    _win_ontop_none.init ( C_("Dialog on top", "None"), "/options/transientpolicy/value", 0, false, 0);
     _win_ontop_normal.init ( _("Normal"), "/options/transientpolicy/value", 1, true, &_win_ontop_none);
     _win_ontop_agressive.init ( _("Aggressive"), "/options/transientpolicy/value", 2, false, &_win_ontop_none);
 
@@ -834,7 +841,7 @@ void InkscapePreferences::initPageIO()
 
     _save_use_current_dir.init( _("Use current directory for \"Save As ...\""), "/dialogs/save_as/use_current_dir", true);
     _page_io.add_line( false, "", _save_use_current_dir, "",
-                         _("When this option is on, the \"Save as...\" and \"Save a Copy\" dialogs will always open in the directory where the currently open document is; when it's off, each will open in the directory where you last saved a file using it"), true);
+                         _("When this option is on, the \"Save as...\" and \"Save a Copy...\" dialogs will always open in the directory where the currently open document is; when it's off, each will open in the directory where you last saved a file using it"), true);
 
     _misc_comment.init( _("Add label comments to printing output"), "/printing/debug/show-label-comments", false);
     _page_io.add_line( false, "", _misc_comment, "",
@@ -1256,7 +1263,7 @@ void InkscapePreferences::initPageBehavior()
     _page_steps.add_line( false, "", _steps_compass, "",
                             _("When on, angles are displayed with 0 at north, 0 to 360 range, positive clockwise; otherwise with 0 at east, -180 to 180 range, positive counterclockwise"));
     int const num_items = 17;
-    Glib::ustring labels[num_items] = {"90", "60", "45", "36", "30", "22.5", "18", "15", "12", "10", "7.5", "6", "3", "2", "1", "0.5", _("None")};
+    Glib::ustring labels[num_items] = {"90", "60", "45", "36", "30", "22.5", "18", "15", "12", "10", "7.5", "6", "3", "2", "1", "0.5", C_("Rotation angle", "None")};
     int values[num_items] = {2, 3, 4, 5, 6, 8, 10, 12, 15, 18, 24, 30, 60, 90, 180, 360, 0};
     _steps_rot_snap.set_size_request(_sb_width);
     _steps_rot_snap.init("/options/rotationsnapsperpi/value", labels, values, num_items, 12);
@@ -1462,6 +1469,11 @@ void InkscapePreferences::initPageBitmaps()
     _importexport_import_res_override.init(_("Override file resolution"), "/dialogs/import/forcexdpi", false);
     _page_bitmaps.add_line( false, "", _importexport_import_res_override, "",
                             _("Use default bitmap resolution in favor of information from file"));
+
+    _page_bitmaps.add_group_header( _("Render"));
+    // rendering outlines for pixmap image tags
+    _rendering_image_outline.init( _("Images in Outline Mode"), "/options/rendering/imageinoutlinemode", false);
+    _page_bitmaps.add_line(false, "", _rendering_image_outline, "", _("When active will render images while in outline mode instead of a red box with an x. This is useful for manual tracing."));
 
     this->AddPage(_page_bitmaps, _("Bitmaps"), PREFS_PAGE_BITMAPS);
 }
@@ -1827,7 +1839,7 @@ void InkscapePreferences::initPageSpellcheck()
     
     AspellDictInfoEnumeration *dels = aspell_dict_info_list_elements(dlist);
     
-    languages.push_back(Glib::ustring(_("None")));
+    languages.push_back(Glib::ustring(C_("Spellchecker language", "None")));
     langValues.push_back(Glib::ustring(""));
     
     const AspellDictInfo *entry;
@@ -1993,6 +2005,7 @@ bool InkscapePreferences::PresentPage(const Gtk::TreeModel::iterator& iter)
     Gtk::TreeModel::Row row = *iter;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     int desired_page = prefs->getInt("/dialogs/preferences/page", 0);
+    _init = false;
     if (desired_page == row[_page_list_columns._col_id])
     {
         if (desired_page >= PREFS_PAGE_TOOLS && desired_page <= PREFS_PAGE_TOOLS_CONNECTOR)
@@ -2042,8 +2055,11 @@ void InkscapePreferences::on_pagelist_selection_changed()
         Gtk::TreeModel::Row row = *iter;
         _current_page = row[_page_list_columns._col_page];
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        prefs->setInt("/dialogs/preferences/page", row[_page_list_columns._col_id]);
-        _page_title.set_markup("<span size='large'><b>" + row[_page_list_columns._col_name] + "</b></span>");
+        if (!_init) {
+            prefs->setInt("/dialogs/preferences/page", row[_page_list_columns._col_id]);
+        }
+        Glib::ustring col_name_escaped = Glib::Markup::escape_text( row[_page_list_columns._col_name] );
+        _page_title.set_markup("<span size='large'><b>" + col_name_escaped + "</b></span>");
         _page_frame.add(*_current_page);
         _current_page->show();
         while (Gtk::Main::events_pending())

@@ -10,20 +10,22 @@
  */
 
 #include <climits>
-#include "display/cairo-utils.h"
-#include "display/cairo-templates.h"
+
 #include "display/drawing.h"
 #include "display/drawing-context.h"
 #include "display/drawing-item.h"
 #include "display/drawing-group.h"
+#include "display/drawing-pattern.h"
 #include "display/drawing-surface.h"
 #include "nr-filter.h"
 #include "preferences.h"
 #include "style.h"
 
+#include "display/cairo-utils.h"
+#include "display/cairo-templates.h"
+
 namespace Inkscape {
 
-#ifdef WITH_CSSBLEND
 void set_cairo_blend_operator( DrawingContext &dc, unsigned blend_mode ) {
 
     // All of the blend modes are implemented in Cairo as of 1.10.
@@ -81,7 +83,6 @@ void set_cairo_blend_operator( DrawingContext &dc, unsigned blend_mode ) {
         break;
     }
 }
-#endif
 
 /**
  * @class DrawingItem
@@ -112,6 +113,8 @@ DrawingItem::DrawingItem(Drawing &drawing)
     , _transform(NULL)
     , _clip(NULL)
     , _mask(NULL)
+    , _fill_pattern(NULL)
+    , _stroke_pattern(NULL)
     , _filter(NULL)
     , _user_data(NULL)
     , _cache(NULL)
@@ -129,7 +132,7 @@ DrawingItem::DrawingItem(Drawing &drawing)
     , _pick_children(0)
     , _antialias(1)
     , _isolation(SP_CSS_ISOLATION_AUTO)
-    , _blend_mode(SP_CSS_BLEND_NORMAL)
+    , _mix_blend_mode(SP_CSS_BLEND_NORMAL)
 {}
 
 DrawingItem::~DrawingItem()
@@ -166,6 +169,12 @@ DrawingItem::~DrawingItem()
     case CHILD_ROOT:
         _drawing._root = NULL;
         break;
+    case CHILD_FILL_PATTERN:
+        _parent->_fill_pattern = NULL;
+        break;
+    case CHILD_STROKE_PATTERN:
+        _parent->_stroke_pattern = NULL;
+        break;
     default: ;
     }
 
@@ -174,6 +183,8 @@ DrawingItem::~DrawingItem()
     }
     clearChildren();
     delete _transform;
+    delete _stroke_pattern;
+    delete _fill_pattern;
     delete _clip;
     delete _mask;
     delete _filter;
@@ -293,10 +304,10 @@ DrawingItem::setIsolation(unsigned isolation)
 }
 
 void
-DrawingItem::setBlendMode(unsigned blend_mode)
+DrawingItem::setBlendMode(unsigned mix_blend_mode)
 {
-    _blend_mode = blend_mode;
-    //if( blend_mode != 0 ) std::cout << "setBlendMode: " << blend_mode << std::endl;
+    _mix_blend_mode = mix_blend_mode;
+    //if( mix_blend_mode != 0 ) std::cout << "setBlendMode: " << mix_blend_mode << std::endl;
     _markForRendering();
 }
 
@@ -368,6 +379,34 @@ DrawingItem::setMask(DrawingItem *item)
     _markForUpdate(STATE_ALL, true);
 }
 
+void
+DrawingItem::setFillPattern(DrawingPattern *pattern)
+{
+    _markForRendering();
+    delete _fill_pattern;
+    _fill_pattern = pattern;
+    if (pattern) {
+        pattern->_parent = this;
+        assert(pattern->_child_type == CHILD_ORPHAN);
+        pattern->_child_type = CHILD_FILL_PATTERN;
+    }
+    _markForUpdate(STATE_ALL, true);
+}
+
+void
+DrawingItem::setStrokePattern(DrawingPattern *pattern)
+{
+    _markForRendering();
+    delete _stroke_pattern;
+    _stroke_pattern = pattern;
+    if (pattern) {
+        pattern->_parent = this;
+        assert(pattern->_child_type == CHILD_ORPHAN);
+        pattern->_child_type = CHILD_STROKE_PATTERN;
+    }
+    _markForUpdate(STATE_ALL, true);
+}
+
 /// Move this item to the given place in the Z order of siblings.
 /// Does nothing if the item has no parent.
 void
@@ -409,7 +448,7 @@ DrawingItem::setItemBounds(Geom::OptRect const &bounds)
  * @param reset State fields that should be reset before processing them. This is
  *              a means to force a recomputation of internal data even if the item
  *              considers it up to date. Mainly for internal use, such as
- *              propagating bunding box recomputation to children when the item's
+ *              propagating bounding box recomputation to children when the item's
  *              transform changes.
  */
 void
@@ -532,6 +571,12 @@ DrawingItem::update(Geom::IntRect const &area, UpdateContext const &ctx, unsigne
     if (to_update & STATE_RENDER) {
         // now that we know drawbox, dirty the corresponding rect on canvas
         // unless filtered, groups do not need to render by themselves, only their members
+        if (_fill_pattern) {
+            _fill_pattern->update(area, child_ctx, flags, reset);
+        }
+        if (_stroke_pattern) {
+            _stroke_pattern->update(area, child_ctx, flags, reset);
+        }
         if (!is_drawing_group(this) || (_filter && render_filters)) {
             _markForRendering();
         }
@@ -594,9 +639,8 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     if (_cached) {
         if (_cache) {
             _cache->prepare();
-#ifdef WITH_CSSBLEND
-            set_cairo_blend_operator( dc, _blend_mode );
-#endif
+            set_cairo_blend_operator( dc, _mix_blend_mode );
+
             _cache->paintFromCache(dc, carea);
             if (!carea) return RENDER_OK;
         } else {
@@ -625,10 +669,8 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     nir |= (_filter != NULL && render_filters); // 3. it has a filter
     nir |= needs_opacity; // 4. it is non-opaque
     nir |= (_cache != NULL); // 5. it is cached
-#ifdef WITH_CSSBLEND
-    nir |= (_blend_mode != SP_CSS_BLEND_NORMAL); // 6. Blend mode not normal
+    nir |= (_mix_blend_mode != SP_CSS_BLEND_NORMAL); // 6. Blend mode not normal
     nir |= (_isolation == SP_CSS_ISOLATION_ISOLATE); // 7. Explicit isolatiom
-#endif
 
     /* How the rendering is done.
      *
@@ -740,9 +782,7 @@ DrawingItem::render(DrawingContext &dc, Geom::IntRect const &area, unsigned flag
     }
     dc.rectangle(*carea);
     dc.setSource(&intermediate);
-#ifdef WITH_CSSBLEND
-    set_cairo_blend_operator( dc, _blend_mode );
-#endif
+    set_cairo_blend_operator( dc, _mix_blend_mode );
     dc.fill();
     dc.setSource(0,0,0,0);
     // the call above is to clear a ref on the intermediate surface held by dc
@@ -974,7 +1014,7 @@ DrawingItem::_setStyleCommon(SPStyle *&_style, SPStyle *style)
     if (_style) sp_style_unref(_style);
     _style = style;
 
-    if (style->filter.set && style->getFilter()) {
+    if (style && style->filter.set && style->getFilter()) {
         if (!_filter) {
             int primitives = sp_filter_primitive_count(SP_FILTER(style->getFilter()));
             _filter = new Inkscape::Filters::Filter(primitives);

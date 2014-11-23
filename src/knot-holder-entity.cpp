@@ -80,13 +80,17 @@ KnotHolderEntity::~KnotHolderEntity()
 void
 KnotHolderEntity::update_knot()
 {
-    Geom::Affine const i2dt(item->i2dt_affine());
+    Geom::Point knot_pos(knot_get());
+    if (knot_pos.isFinite()) {
+        Geom::Point dp(knot_pos * item->i2dt_affine());
 
-    Geom::Point dp(knot_get() * i2dt);
-
-    _moved_connection.block();
-    knot->setPosition(dp, SP_KNOT_STATE_NORMAL);
-    _moved_connection.unblock();
+        _moved_connection.block();
+        knot->setPosition(dp, SP_KNOT_STATE_NORMAL);
+        _moved_connection.unblock();
+    } else {
+        // knot coords are non-finite, hide knot
+        knot->hide();
+    }
 }
 
 Geom::Point
@@ -154,7 +158,7 @@ static Geom::Point sp_pattern_extract_trans(SPPattern const *pat)
 void
 PatternKnotHolderEntityXY::knot_set(Geom::Point const &p, Geom::Point const &origin, guint state)
 {
-    SPPattern *pat = SP_PATTERN(SP_STYLE_FILL_SERVER(SP_OBJECT(item)->style));
+    SPPattern *pat = _fill ? SP_PATTERN(item->style->getFillPaintServer()) : SP_PATTERN(item->style->getStrokePaintServer());
 
     // FIXME: this snapping should be done together with knowing whether control was pressed. If GDK_CONTROL_MASK, then constrained snapping should be used.
     Geom::Point p_snapped = snap_knot_position(p, state);
@@ -169,7 +173,7 @@ PatternKnotHolderEntityXY::knot_set(Geom::Point const &p, Geom::Point const &ori
 
     if (state)  {
         Geom::Point const q = p_snapped - sp_pattern_extract_trans(pat);
-        item->adjust_pattern(Geom::Affine(Geom::Translate(q)));
+        item->adjust_pattern(Geom::Translate(q), false, _fill ? TRANSFORM_FILL : TRANSFORM_STROKE);
     }
 
     item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
@@ -178,14 +182,14 @@ PatternKnotHolderEntityXY::knot_set(Geom::Point const &p, Geom::Point const &ori
 Geom::Point
 PatternKnotHolderEntityXY::knot_get() const
 {
-    SPPattern const *pat = SP_PATTERN(SP_STYLE_FILL_SERVER(SP_OBJECT(item)->style));
+    SPPattern *pat = _fill ? SP_PATTERN(item->style->getFillPaintServer()) : SP_PATTERN(item->style->getStrokePaintServer());
     return sp_pattern_extract_trans(pat);
 }
 
 Geom::Point
 PatternKnotHolderEntityAngle::knot_get() const
 {
-    SPPattern const *pat = SP_PATTERN(SP_STYLE_FILL_SERVER(SP_OBJECT(item)->style));
+    SPPattern *pat = _fill ? SP_PATTERN(item->style->getFillPaintServer()) : SP_PATTERN(item->style->getStrokePaintServer());
 
     gdouble x = pattern_width(pat);
     gdouble y = 0;
@@ -203,7 +207,7 @@ PatternKnotHolderEntityAngle::knot_set(Geom::Point const &p, Geom::Point const &
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     int const snaps = prefs->getInt("/options/rotationsnapsperpi/value", 12);
 
-    SPPattern *pat = SP_PATTERN(SP_STYLE_FILL_SERVER(SP_OBJECT(item)->style));
+    SPPattern *pat = _fill ? SP_PATTERN(item->style->getFillPaintServer()) : SP_PATTERN(item->style->getStrokePaintServer());
 
     // get the angle from pattern 0,0 to the cursor pos
     Geom::Point delta = p - sp_pattern_extract_trans(pat);
@@ -219,14 +223,14 @@ PatternKnotHolderEntityAngle::knot_set(Geom::Point const &p, Geom::Point const &
     Geom::Point const t = sp_pattern_extract_trans(pat);
     rot[4] = t[Geom::X];
     rot[5] = t[Geom::Y];
-    item->adjust_pattern(rot, true);
+    item->adjust_pattern(rot, true, _fill ? TRANSFORM_FILL : TRANSFORM_STROKE);
     item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
 void
 PatternKnotHolderEntityScale::knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, guint state)
 {
-    SPPattern *pat = SP_PATTERN(SP_STYLE_FILL_SERVER(SP_OBJECT(item)->style));
+    SPPattern *pat = _fill ? SP_PATTERN(item->style->getFillPaintServer()) : SP_PATTERN(item->style->getStrokePaintServer());
 
     // FIXME: this snapping should be done together with knowing whether control was pressed. If GDK_CONTROL_MASK, then constrained snapping should be used.
     Geom::Point p_snapped = snap_knot_position(p, state);
@@ -253,7 +257,7 @@ PatternKnotHolderEntityScale::knot_set(Geom::Point const &p, Geom::Point const &
     Geom::Point const t = sp_pattern_extract_trans(pat);
     rot[4] = t[Geom::X];
     rot[5] = t[Geom::Y];
-    item->adjust_pattern(rot, true);
+    item->adjust_pattern(rot, true, _fill ? TRANSFORM_FILL : TRANSFORM_STROKE);
     item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
@@ -261,7 +265,7 @@ PatternKnotHolderEntityScale::knot_set(Geom::Point const &p, Geom::Point const &
 Geom::Point
 PatternKnotHolderEntityScale::knot_get() const
 {
-    SPPattern const *pat = SP_PATTERN(SP_STYLE_FILL_SERVER(SP_OBJECT(item)->style));
+    SPPattern *pat = _fill ? SP_PATTERN(item->style->getFillPaintServer()) : SP_PATTERN(item->style->getStrokePaintServer());
 
     gdouble x = pattern_width(pat);
     gdouble y = pattern_height(pat);

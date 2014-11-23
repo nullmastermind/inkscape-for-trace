@@ -17,6 +17,7 @@
 #include <glib.h>
 #include <glibmm/miscutils.h>
 
+#include "sp-root.h"
 #include "display/curve.h"
 #include "extension/internal/metafile-inout.h" // picks up PNG
 #include "extension/print.h"
@@ -27,6 +28,13 @@
 #include "sp-pattern.h"
 #include "sp-radial-gradient.h"
 #include "style.h"
+#include "document.h"
+#include "util/units.h"
+#include "ui/shape-editor.h"
+#include "sp-namedview.h"
+#include "document-undo.h"
+#include "inkscape.h"
+#include "preferences.h"
 
 namespace Inkscape {
 namespace Extension {
@@ -170,6 +178,88 @@ void Metafile::toPNG(PMEMPNG accum, int width, int height, const char *px){
     png_destroy_write_struct(&png_ptr, &info_ptr);
 
 }
+
+/*  If the viewBox is missing, set one 
+*/
+void Metafile::setViewBoxIfMissing(SPDocument *doc) {
+
+    if (doc && !doc->getRoot()->viewBox_set) {
+        bool saved = Inkscape::DocumentUndo::getUndoSensitive(doc);
+        Inkscape::DocumentUndo::setUndoSensitive(doc, false);
+        
+        doc->ensureUpToDate();
+        
+        // Set document unit
+        Inkscape::XML::Node *repr = sp_document_namedview(doc, 0)->getRepr();
+        Inkscape::SVGOStringStream os;
+        Inkscape::Util::Unit const* doc_unit = doc->getWidth().unit;
+        os << doc_unit->abbr;
+        repr->setAttribute("inkscape:document-units", os.str().c_str());
+
+        // Set viewBox
+        doc->setViewBox(Geom::Rect::from_xywh(0, 0, doc->getWidth().value(doc_unit), doc->getHeight().value(doc_unit)));
+        doc->ensureUpToDate();
+
+        // Scale and translate objects
+        double scale = Inkscape::Util::Quantity::convert(1, "px", doc_unit);
+        Inkscape::UI::ShapeEditor::blockSetItem(true);
+        double dh;
+        if(SP_ACTIVE_DOCUMENT){ // for file menu open or import, or paste from clipboard
+            dh = SP_ACTIVE_DOCUMENT->getHeight().value("px");
+        }
+        else { // for open via --file on command line
+            dh = doc->getHeight().value("px");
+        }
+
+        // These should not affect input, but they do, so set them to a neutral state
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        bool transform_stroke      = prefs->getBool("/options/transform/stroke", true);
+        bool transform_rectcorners = prefs->getBool("/options/transform/rectcorners", true);
+        bool transform_pattern     = prefs->getBool("/options/transform/pattern", true);
+        bool transform_gradient    = prefs->getBool("/options/transform/gradient", true);
+        prefs->setBool("/options/transform/stroke", true);
+        prefs->setBool("/options/transform/rectcorners", true);
+        prefs->setBool("/options/transform/pattern", true);
+        prefs->setBool("/options/transform/gradient", true);
+        
+        doc->getRoot()->scaleChildItemsRec(Geom::Scale(scale), Geom::Point(0, dh), true);
+        Inkscape::UI::ShapeEditor::blockSetItem(false);
+
+        // restore options
+        prefs->setBool("/options/transform/stroke",      transform_stroke);
+        prefs->setBool("/options/transform/rectcorners", transform_rectcorners);
+        prefs->setBool("/options/transform/pattern",     transform_pattern);
+        prefs->setBool("/options/transform/gradient",    transform_gradient);
+
+        Inkscape::DocumentUndo::setUndoSensitive(doc, saved);
+    }
+}
+
+/**
+    \fn Convert EMF/WMF region combining ops to livarot region combining ops
+    \return combination operators in livarot enumeration, or -1 on no match
+    \param  ops      (int) combination operator (Inkscape)
+*/
+int Metafile::combine_ops_to_livarot(const int op)
+{
+    int ret = -1; 
+    switch(op) {
+        case U_RGN_AND:
+           ret = bool_op_inters;
+           break;
+        case U_RGN_OR:
+           ret = bool_op_union;
+           break;
+        case U_RGN_XOR:
+           ret = bool_op_symdiff;
+           break;
+        case U_RGN_DIFF:
+           ret = bool_op_diff;
+           break;
+    }
+    return(ret);
+}
+
 
 
 /* convert an EMF RGB(A) color to 0RGB

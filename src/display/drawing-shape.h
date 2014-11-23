@@ -15,7 +15,7 @@
 #include "display/drawing-item.h"
 #include "display/nr-style.h"
 
-struct SPStyle;
+class SPStyle;
 class SPCurve;
 
 namespace Inkscape {
@@ -39,10 +39,8 @@ protected:
     virtual DrawingItem *_pickItem(Geom::Point const &p, double delta, unsigned flags);
     virtual bool _canClip();
 
-#ifdef WITH_SVG2
     void _renderFill(DrawingContext &dc);
     void _renderStroke(DrawingContext &dc);
-#endif
     void _renderMarkers(DrawingContext &dc, Geom::IntRect const &area, unsigned flags,
                         DrawingItem *stop_at);
 

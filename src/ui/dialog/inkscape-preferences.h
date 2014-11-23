@@ -292,6 +292,7 @@ protected:
     UI::Widget::PrefCheckButton _show_filters_info_box;
     UI::Widget::PrefCombo       _dockbar_style;
     UI::Widget::PrefCombo       _switcher_style;
+    UI::Widget::PrefCheckButton _rendering_image_outline;
     UI::Widget::PrefSpinButton  _rendering_cache_size;
     UI::Widget::PrefSpinButton  _filter_multi_threaded;
 
@@ -531,6 +532,7 @@ private:
     InkscapePreferences();
     InkscapePreferences(InkscapePreferences const &d);
     InkscapePreferences operator=(InkscapePreferences const &d);
+    bool _init;
 };
 
 } // namespace Dialog
@@ -543,9 +545,9 @@ private:
   Local Variables:
   mode:c++
   c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
   indent-tabs-mode:nil
   fill-column:99
   End:
 */
-// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :

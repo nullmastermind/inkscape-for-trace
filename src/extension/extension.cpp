@@ -111,6 +111,14 @@ Extension::Extension (Inkscape::XML::Node * in_repr, Implementation::Implementat
             if (!strcmp(chname, "dependency")) {
                 _deps.push_back(new Dependency(child_repr));
             } /* dependency */
+            if (!strcmp(chname, "script")) {
+                for (Inkscape::XML::Node *child = child_repr->firstChild(); child != NULL ; child = child->next()) {
+                    if (child->type() == Inkscape::XML::ELEMENT_NODE) {
+                        _deps.push_back(new Dependency(child));
+                        break;
+                    } /* skip non-element nodes (see LP #1372200) */
+                }
+            } /* check command as a dependency (see LP #505920) */
             if (!strcmp(chname, "options")) {
                 silent = !strcmp( child_repr->attribute("silent"), "true" );
             }
@@ -262,6 +270,18 @@ Extension::check (void)
 
     const char * inx_failure = _("  This is caused by an improper .inx file for this extension."
                                  "  An improper .inx file could have been caused by a faulty installation of Inkscape.");
+
+    // No need to include Windows only extensions
+    // See LP bug #1307554 for details - https://bugs.launchpad.net/inkscape/+bug/1307554
+#ifndef WIN32
+    const char* win_ext[] = {"com.vaxxine.print.win32"};
+    std::vector<std::string> v (win_ext, win_ext + sizeof(win_ext)/sizeof(win_ext[0]));
+    std::string ext_id(id);
+    if (std::find(v.begin(), v.end(), ext_id) != v.end()) {
+        printFailure(Glib::ustring(_("the extension is designed for Windows only.")) + inx_failure);
+        retval = false;
+    }
+#endif
     if (id == NULL) {
         printFailure(Glib::ustring(_("an ID was not defined for it.")) + inx_failure);
         retval = false;

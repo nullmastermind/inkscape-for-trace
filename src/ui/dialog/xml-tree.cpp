@@ -24,13 +24,13 @@
 
 #include "desktop.h"
 #include "desktop-handles.h"
-#include "dialogs/dialog-events.h"
+#include "ui/dialog-events.h"
 #include "document.h"
 #include "document-undo.h"
 #include "ui/tools/tool-base.h"
 #include "helper/window.h"
 #include "inkscape.h"
-#include "interface.h"
+#include "ui/interface.h"
 #include "macros.h"
 #include "message-context.h"
 #include "message-stack.h"
@@ -1033,6 +1033,7 @@ void XmlTree::cmd_set_attr()
         updated->updateRepr();
     }
 
+    reinterpret_cast<SPObject *>(current_desktop->currentLayer())->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
     DocumentUndo::done(current_document, SP_VERB_DIALOG_XML_EDITOR,
                        _("Change attribute"));
 

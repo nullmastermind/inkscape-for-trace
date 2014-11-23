@@ -1,5 +1,6 @@
 
-/** @file
+/**
+ * @file
  * Clone tiling dialog
  */
 /* Authors:
@@ -38,7 +39,7 @@
 #include "util/units.h"
 #include "helper/window.h"
 #include "inkscape.h"
-#include "interface.h"
+#include "ui/interface.h"
 #include "macros.h"
 #include "message-stack.h"
 #include "preferences.h"
@@ -1349,7 +1350,7 @@ void CloneTiler::on_picker_color_changed(guint rgba)
     is_updating = false;
 }
 
-void CloneTiler::clonetiler_change_selection(Inkscape::Application * /*inkscape*/, Inkscape::Selection *selection, GtkWidget *dlg)
+void CloneTiler::clonetiler_change_selection(InkscapeApplication * /*inkscape*/, Inkscape::Selection *selection, GtkWidget *dlg)
 {
     GtkWidget *buttons = GTK_WIDGET(g_object_get_data (G_OBJECT(dlg), "buttons_on_tiles"));
     GtkWidget *status = GTK_WIDGET(g_object_get_data (G_OBJECT(dlg), "status"));
@@ -1378,7 +1379,7 @@ void CloneTiler::clonetiler_change_selection(Inkscape::Application * /*inkscape*
     }
 }
 
-void CloneTiler::clonetiler_external_change(Inkscape::Application * /*inkscape*/, GtkWidget *dlg)
+void CloneTiler::clonetiler_external_change(InkscapeApplication * /*inkscape*/, GtkWidget *dlg)
 {
     clonetiler_change_selection (NULL, sp_desktop_selection(SP_ACTIVE_DESKTOP), dlg);
 }
@@ -2002,7 +2003,7 @@ bool CloneTiler::clonetiler_is_a_clone_of(SPObject *tile, SPObject *obj)
         id_href = g_strdup_printf("#%s", obj_repr->attribute("id"));
     }
 
-    if (SP_IS_USE(tile) &&
+    if (dynamic_cast<SPUse *>(tile) &&
         tile->getRepr()->attribute("xlink:href") &&
         (!id_href || !strcmp(id_href, tile->getRepr()->attribute("xlink:href"))) &&
         tile->getRepr()->attribute("inkscape:tiled-clone-of") &&
@@ -2025,8 +2026,10 @@ void CloneTiler::clonetiler_trace_hide_tiled_clones_recursively(SPObject *from)
         return;
 
     for (SPObject *o = from->firstChild(); o != NULL; o = o->next) {
-        if (SP_IS_ITEM(o) && clonetiler_is_a_clone_of (o, NULL))
-            SP_ITEM(o)->invoke_hide(trace_visionkey); // FIXME: hide each tiled clone's original too!
+        SPItem *item = dynamic_cast<SPItem *>(o);
+        if (item && clonetiler_is_a_clone_of(o, NULL)) {
+            item->invoke_hide(trace_visionkey); // FIXME: hide each tiled clone's original too!
+        }
         clonetiler_trace_hide_tiled_clones_recursively (o);
     }
 }
@@ -2160,7 +2163,9 @@ void CloneTiler::clonetiler_remove(GtkWidget */*widget*/, GtkWidget *dlg, bool d
         }
     }
     for (GSList *i = to_delete; i; i = i->next) {
-        SP_OBJECT(i->data)->deleteObject();
+        SPObject *obj = reinterpret_cast<SPObject *>(i->data);
+        g_assert(obj != NULL);
+        obj->deleteObject();
     }
     g_slist_free (to_delete);
 
@@ -2235,12 +2240,18 @@ void CloneTiler::clonetiler_apply(GtkWidget */*widget*/, GtkWidget *dlg)
     gdk_window_process_all_updates();
 
     SPObject *obj = selection->singleItem();
-    SPItem *item = SP_IS_ITEM(obj) ? SP_ITEM(obj) : 0;
+    if (!obj) {
+        // Should never happen (empty selection checked above).
+        std::cerr << "CloneTiler::clonetile_apply(): No object in single item selection!!!" << std::endl;
+        return;
+    }
     Inkscape::XML::Node *obj_repr = obj->getRepr();
     const char *id_href = g_strdup_printf("#%s", obj_repr->attribute("id"));
     SPObject *parent = obj->parent;
 
     clonetiler_remove (NULL, dlg, false);
+
+    double scale_units = Inkscape::Util::Quantity::convert(1, "px", sp_desktop_document(desktop)->getDefaultUnit());
 
     double shiftx_per_i = 0.01 * prefs->getDoubleLimited(prefs_path + "shiftx_per_i", 0, -10000, 10000);
     double shifty_per_i = 0.01 * prefs->getDoubleLimited(prefs_path + "shifty_per_i", 0, -10000, 10000);
@@ -2311,8 +2322,8 @@ void CloneTiler::clonetiler_apply(GtkWidget */*widget*/, GtkWidget *dlg)
     int    jmax = prefs->getInt(prefs_path + "jmax", 2);
 
     bool   fillrect = prefs->getBool(prefs_path + "fillrect");
-    double fillwidth = prefs->getDoubleLimited(prefs_path + "fillwidth", 50, 0, 1e6);
-    double fillheight = prefs->getDoubleLimited(prefs_path + "fillheight", 50, 0, 1e6);
+    double fillwidth = scale_units*prefs->getDoubleLimited(prefs_path + "fillwidth", 50, 0, 1e6);
+    double fillheight = scale_units*prefs->getDoubleLimited(prefs_path + "fillheight", 50, 0, 1e6);
 
     bool   dotrace = prefs->getBool(prefs_path + "dotrace");
     int    pick = prefs->getInt(prefs_path + "pick");
@@ -2324,6 +2335,7 @@ void CloneTiler::clonetiler_apply(GtkWidget */*widget*/, GtkWidget *dlg)
     bool   invert_picked = prefs->getBool(prefs_path + "invert_picked");
     double gamma_picked = prefs->getDoubleLimited(prefs_path + "gamma_picked", 0, -10, 10);
 
+    SPItem *item = dynamic_cast<SPItem *>(obj);
     if (dotrace) {
         clonetiler_trace_setup (sp_desktop_document(desktop), 1.0, item);
     }
@@ -2358,11 +2370,11 @@ void CloneTiler::clonetiler_apply(GtkWidget */*widget*/, GtkWidget *dlg)
             SPItem::VISUAL_BBOX : SPItem::GEOMETRIC_BBOX );
         Geom::OptRect r = item->documentBounds(bbox_type);
         if (r) {
-            w = r->dimensions()[Geom::X];
-            h = r->dimensions()[Geom::Y];
-            x0 = r->min()[Geom::X];
-            y0 = r->min()[Geom::Y];
-            center = desktop->dt2doc(item->getCenter());
+            w = scale_units*r->dimensions()[Geom::X];
+            h = scale_units*r->dimensions()[Geom::Y];
+            x0 = scale_units*r->min()[Geom::X];
+            y0 = scale_units*r->min()[Geom::Y];
+            center = scale_units*desktop->dt2doc(item->getCenter());
 
             sp_repr_set_svg_double(obj_repr, "inkscape:tile-cx", center[Geom::X]);
             sp_repr_set_svg_double(obj_repr, "inkscape:tile-cy", center[Geom::Y]);
@@ -2578,7 +2590,7 @@ void CloneTiler::clonetiler_apply(GtkWidget */*widget*/, GtkWidget *dlg)
             Geom::Point new_center;
             bool center_set = false;
             if (obj_repr->attribute("inkscape:transform-center-x") || obj_repr->attribute("inkscape:transform-center-y")) {
-                new_center = desktop->dt2doc(item->getCenter()) * t;
+                new_center = scale_units*desktop->dt2doc(item->getCenter()) * t;
                 center_set = true;
             }
 
@@ -2614,9 +2626,10 @@ void CloneTiler::clonetiler_apply(GtkWidget */*widget*/, GtkWidget *dlg)
 
             if (center_set) {
                 SPObject *clone_object = sp_desktop_document(desktop)->getObjectByRepr(clone);
-                if (clone_object && SP_IS_ITEM(clone_object)) {
+                SPItem *item = dynamic_cast<SPItem *>(clone_object);
+                if (clone_object && item) {
                     clone_object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-                    SP_ITEM(clone_object)->setCenter(desktop->doc2dt(new_center));
+                    item->setCenter(desktop->doc2dt(new_center));
                     clone_object->updateRepr();
                 }
             }

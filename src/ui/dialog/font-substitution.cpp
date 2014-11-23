@@ -27,7 +27,7 @@
 #include "document.h"
 #include "selection.h"
 
-#include "dialogs/dialog-events.h"
+#include "ui/dialog-events.h"
 #include "desktop-handles.h"
 #include "selection-chemistry.h"
 #include "preferences.h"
@@ -200,16 +200,16 @@ GSList * FontSubstitution::getFontReplacedItems(SPDocument* doc, Glib::ustring *
              }
         }
 
-        if (style && style->text) {
+        if (style) {
             gchar const *style_font = NULL;
-            if (style->text->font_family.set)
-                style_font = style->text->font_family.value;
-            else if (style->text->font_specification.set)
-                style_font = style->text->font_specification.value;
-            else if (style->text->font_family.value)
-                style_font = style->text->font_family.value;
-            else if (style->text->font_specification.value)
-                style_font = style->text->font_specification.value;
+            if (style->font_family.set)
+                style_font = style->font_family.value;
+            else if (style->font_specification.set)
+                style_font = style->font_specification.value;
+            else if (style->font_family.value)
+                style_font = style->font_family.value;
+            else if (style->font_specification.value)
+                style_font = style->font_specification.value;
 
             if (style_font) {
                 if (has_visible_text(item)) {

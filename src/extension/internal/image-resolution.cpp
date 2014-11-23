@@ -353,18 +353,20 @@ void ImageResolution::readmagick(char const *fn) {
         g_warning("ImageResolution::readmagick: Unknown error");
         return;
     }
-    Magick::Geometry geo = image.density();
-    std::string type = image.magick();
 
-    if (type == "PNG") { // PNG only supports pixelspercentimeter 
-        x_ = Inkscape::Util::Quantity::convert((double)geo.width(), "in", "cm");
-        y_ = Inkscape::Util::Quantity::convert((double)geo.height(), "in", "cm");
-    } else {
-        x_ = (double)geo.width();
-        y_ = (double)geo.height();
+    std::string const type = image.magick();
+    x_ = image.xResolution();
+    y_ = image.yResolution();
+
+// TODO: find out why the hell the following convertion is necessary
+    if (type == "BMP") {
+        x_ = Inkscape::Util::Quantity::convert(x_, "in", "cm");
+        y_ = Inkscape::Util::Quantity::convert(y_, "in", "cm");
     }
-
-    ok_ = true;
+    
+    if (x_ != 0 && y_ != 0) {
+        ok_ = true;
+    }
 }
 
 #else

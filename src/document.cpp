@@ -229,7 +229,6 @@ SPDocument::~SPDocument() {
     // This is at the end of the destructor, because preceding code adds new orphans to the queue
     collectOrphans();
 
-    //delete this->_whiteboard_session_manager;
 }
 
 sigc::connection SPDocument::connectDestroy(sigc::signal<void>::slot_type slot)
@@ -619,7 +618,10 @@ Inkscape::Util::Quantity SPDocument::getWidth() const
 
 void SPDocument::setWidth(const Inkscape::Util::Quantity &width)
 {
-    gdouble old_computed = root->width.computed;
+    Inkscape::Util::Unit const *old_units = unit_table.getUnit("px");
+    if (root->width.unit)
+        old_units = unit_table.getUnit(root->width.unit);
+    gdouble old_converted = Inkscape::Util::Quantity::convert(root->width.value, old_units, width.unit);
     root->width.computed = width.value("px");
     /* SVG does not support meters as a unit, so we must translate meters to
      * cm when writing */
@@ -632,7 +634,7 @@ void SPDocument::setWidth(const Inkscape::Util::Quantity &width)
     }
 
     if (root->viewBox_set)
-        root->viewBox.setMax(Geom::Point(root->viewBox.left() + (root->width.computed / old_computed) * root->viewBox.width(), root->viewBox.bottom()));
+        root->viewBox.setMax(Geom::Point(root->viewBox.left() + (root->width.value / old_converted) * root->viewBox.width(), root->viewBox.bottom()));
 
     root->updateRepr();
 }
@@ -657,7 +659,10 @@ Inkscape::Util::Quantity SPDocument::getHeight() const
 
 void SPDocument::setHeight(const Inkscape::Util::Quantity &height)
 {
-    gdouble old_computed = root->height.computed;
+    Inkscape::Util::Unit const *old_units = unit_table.getUnit("px");
+    if (root->height.unit)
+        old_units = unit_table.getUnit(root->height.unit);
+    gdouble old_converted = Inkscape::Util::Quantity::convert(root->height.value, old_units, height.unit);
     root->height.computed = height.value("px");
     /* SVG does not support meters as a unit, so we must translate meters to
      * cm when writing */
@@ -670,7 +675,7 @@ void SPDocument::setHeight(const Inkscape::Util::Quantity &height)
     }
 
     if (root->viewBox_set)
-        root->viewBox.setMax(Geom::Point(root->viewBox.right(), root->viewBox.top() + (root->height.computed / old_computed) * root->viewBox.height()));
+        root->viewBox.setMax(Geom::Point(root->viewBox.right(), root->viewBox.top() + (root->height.value / old_converted) * root->viewBox.height()));
 
     root->updateRepr();
 }
@@ -707,7 +712,10 @@ void SPDocument::fitToRect(Geom::Rect const &rect, bool with_margins)
     double const h = rect.height();
 
     double const old_height = getHeight().value("px");
-    Inkscape::Util::Unit const *px = unit_table.getUnit("px");
+    Inkscape::Util::Unit const *nv_units = unit_table.getUnit("px");
+    if (root->height.unit)
+        nv_units = unit_table.getUnit(root->height.unit);
+    SPNamedView *nv = sp_document_namedview(this, NULL);
     
     /* in px */
     double margin_top = 0.0;
@@ -715,22 +723,16 @@ void SPDocument::fitToRect(Geom::Rect const &rect, bool with_margins)
     double margin_right = 0.0;
     double margin_bottom = 0.0;
     
-    SPNamedView *nv = sp_document_namedview(this, NULL);
-    
     if (with_margins && nv) {
         if (nv != NULL) {
-            gchar const * const units_abbr = nv->getAttribute("units");
-            Inkscape::Util::Unit const *margin_units = NULL;
-            if (units_abbr) {
-                margin_units = unit_table.getUnit(units_abbr);
-            }
-            if (!margin_units) {
-                margin_units = px;
-            }
-            margin_top = nv->getMarginLength("fit-margin-top",margin_units, px, w, h, false);
-            margin_left = nv->getMarginLength("fit-margin-left",margin_units, px, w, h, true);
-            margin_right = nv->getMarginLength("fit-margin-right",margin_units, px, w, h, true);
-            margin_bottom = nv->getMarginLength("fit-margin-bottom",margin_units, px, w, h, false);
+            margin_top = nv->getMarginLength("fit-margin-top", nv_units, unit_table.getUnit("px"), w, h, false);
+            margin_left = nv->getMarginLength("fit-margin-left", nv_units, unit_table.getUnit("px"), w, h, true);
+            margin_right = nv->getMarginLength("fit-margin-right", nv_units, unit_table.getUnit("px"), w, h, true);
+            margin_bottom = nv->getMarginLength("fit-margin-bottom", nv_units, unit_table.getUnit("px"), w, h, false);
+            margin_top = Inkscape::Util::Quantity::convert(margin_top, nv_units, "px");
+            margin_left = Inkscape::Util::Quantity::convert(margin_left, nv_units, "px");
+            margin_right = Inkscape::Util::Quantity::convert(margin_right, nv_units, "px");
+            margin_bottom = Inkscape::Util::Quantity::convert(margin_bottom, nv_units, "px");
         }
     }
     
@@ -739,8 +741,8 @@ void SPDocument::fitToRect(Geom::Rect const &rect, bool with_margins)
             rect.max() + Geom::Point(margin_right, margin_top));
     
     
-    setWidth(Inkscape::Util::Quantity(rect_with_margins.width(), px));
-    setHeight(Inkscape::Util::Quantity(rect_with_margins.height(), px));
+    setWidth(Inkscape::Util::Quantity(Inkscape::Util::Quantity::convert(rect_with_margins.width(), "px", nv_units), nv_units));
+    setHeight(Inkscape::Util::Quantity(Inkscape::Util::Quantity::convert(rect_with_margins.height(), "px", nv_units), nv_units));
 
     Geom::Translate const tr(
             Geom::Point(0, old_height - rect_with_margins.height())
@@ -1370,7 +1372,7 @@ GSList *SPDocument::getItemsAtPoints(unsigned const key, std::vector<Geom::Point
 }
 
 SPItem *SPDocument::getItemAtPoint( unsigned const key, Geom::Point const &p,
-                                    gboolean const into_groups, SPItem *upto) const
+                                    bool const into_groups, SPItem *upto) const
 {
     g_return_val_if_fail(this->priv != NULL, NULL);
 
@@ -1529,7 +1531,7 @@ void SPDocument::setModifiedSinceSave(bool modified) {
 
 
 /**
- * Paste SVG defs from the document retrieved from the clipboard into the active document.
+ * Paste SVG defs from the document retrieved from the clipboard or imported document into the active document.
  * @param clipdoc The document to paste.
  * @pre @c clipdoc != NULL and pasting into the active document is possible.
  */
@@ -1540,27 +1542,117 @@ void SPDocument::importDefs(SPDocument *source)
     Inkscape::XML::Node *target_defs = this->getDefs()->getRepr();
 
     prevent_id_clashes(source, this);
+    
+    int stagger=0;
 
+    /*  Note, "clipboard" throughout the comments means "the document that is either the clipboard
+        or an imported document", as importDefs is called in both contexts.
+        
+        The order of the records in the clipboard is unpredictable and there may be both
+        forward and backwards references to other records within it.  There may be definitions in
+        the clipboard that duplicate definitions in the present document OR that duplicate other
+        definitions in the clipboard.  (Inkscape will not have created these, but they may be read
+        in from other SVG sources.)
+         
+        There are 3 passes to clean this up:
+
+        In the first find and mark definitions in the clipboard that are duplicates of those in the
+        present document.  Change the ID to "RESERVED_FOR_INKSCAPE_DUPLICATE_DEF_XXXXXXXXX".
+        (Inkscape will not reuse an ID, and the XXXXXXXXX keeps it from automatically creating new ones.)
+        References in the clipboard to the old clipboard name are converted to the name used
+        in the current document. 
+
+        In the second find and mark definitions in the clipboard that are duplicates of earlier 
+        definitions in the clipbard.  Unfortunately this is O(n^2) and could be very slow for a large
+        SVG with thousands of definitions.  As before, references are adjusted to reflect the name
+        going forward.
+
+        In the final cycle copy over those records not marked with that ID.
+
+        If an SVG file uses the special ID it will cause problems!
+        
+        If this function is called because of the paste of a true clipboard the caller will have passed in a
+        COPY of the clipboard items.  That is good, because this routine modifies that document.  If the calling
+        behavior ever changes, so that the same document is passed in on multiple pastes, this routine will break
+        as in the following example:
+        1.  Paste clipboard containing B same as A into document containing A.  Result, B is dropped
+        and all references to it will point to A.
+        2.  Paste same clipboard into a new document.  It will not contain A, so there will be unsatisfied
+        references in that window.
+    */
+
+    std::string DuplicateDefString = "RESERVED_FOR_INKSCAPE_DUPLICATE_DEF";
+    
+    /* First pass: remove duplicates in clipboard of definitions in document */
     for (Inkscape::XML::Node *def = defs->firstChild() ; def ; def = def->next()) {
 
-        gboolean duplicate = false;
+        /* If this  clipboard has been pasted into one document, and is now being pasted into another,
+        or pasted again into the same, it will already have been processed.  If we detect that then 
+        skip the rest of this pass. */
+
+        Glib::ustring defid = def->attribute("id");
+        if( defid.find( DuplicateDefString ) != Glib::ustring::npos )break;
+
         SPObject *src = source->getObjectByRepr(def);
 
         // Prevent duplicates of solid swatches by checking if equivalent swatch already exists
         if (src && SP_IS_GRADIENT(src)) {
-            SPGradient *gr = SP_GRADIENT(src);
+            SPGradient *s_gr = SP_GRADIENT(src);
             for (SPObject *trg = this->getDefs()->firstChild() ; trg ; trg = trg->getNext()) {
-                if (trg && SP_IS_GRADIENT(trg) && src != trg) {
-                    if (gr->isEquivalent(SP_GRADIENT(trg)) &&
-                        gr->isAligned(SP_GRADIENT(trg))) {
-                        // Change object references to the existing equivalent gradient
-                        change_def_references(src, trg);
-                        duplicate = true;
-                        break;
+                if (trg && (src != trg) && SP_IS_GRADIENT(trg)) {
+                    SPGradient *t_gr = SP_GRADIENT(trg);
+                    if (t_gr && s_gr->isEquivalent(t_gr)) {
+                         // Change object references to the existing equivalent gradient
+                         Glib::ustring newid = trg->getId();
+                         if(newid != defid){  // id could be the same if it is a second paste into the same document
+                             change_def_references(src, trg);
+                         }
+                         gchar *longid = g_strdup_printf("%s_%9.9d", DuplicateDefString.c_str(), stagger++);
+                         def->setAttribute("id", longid );
+                         g_free(longid);
+                         // do NOT break here, there could be more than 1 duplicate!
                     }
                 }
             }
         }
+    }
+
+    /* Second pass: remove duplicates in clipboard of earlier definitions in clipboard */
+    for (Inkscape::XML::Node *def = defs->firstChild() ; def ; def = def->next()) {
+        Glib::ustring defid = def->attribute("id");
+        if( defid.find( DuplicateDefString ) != Glib::ustring::npos )continue; // this one already handled
+        SPObject *src = source->getObjectByRepr(def);
+        if (src && SP_IS_GRADIENT(src)) {
+            SPGradient *s_gr = SP_GRADIENT(src);
+            for (Inkscape::XML::Node *laterDef = def->next() ; laterDef ; laterDef = laterDef->next()) {
+                SPObject *trg = source->getObjectByRepr(laterDef);
+                if(trg && (src != trg) && SP_IS_GRADIENT(trg)) {
+                     Glib::ustring newid = trg->getId();
+                     if( newid.find( DuplicateDefString ) != Glib::ustring::npos )continue; // this one already handled
+                     SPGradient *t_gr = SP_GRADIENT(trg);
+                     if (t_gr && s_gr->isEquivalent(t_gr)) {
+                         // Change object references to the existing equivalent gradient
+                         // two id's in the clipboard should never be the same, so always change references
+                         change_def_references(trg, src);
+                         gchar *longid = g_strdup_printf("%s_%9.9d", DuplicateDefString.c_str(), stagger++);
+                         laterDef->setAttribute("id", longid );
+                         g_free(longid);
+                         // do NOT break here, there could be more than 1 duplicate!
+                     }
+                }
+            }
+        }
+    }
+
+    /* Final pass: copy over those parts which are not duplicates  */
+    for (Inkscape::XML::Node *def = defs->firstChild() ; def ; def = def->next()) {
+
+        /* Ignore duplicate defs marked in the first pass */
+        Glib::ustring defid = def->attribute("id");
+        if( defid.find( DuplicateDefString ) != Glib::ustring::npos )continue;
+
+        bool duplicate = false;
+        SPObject *src = source->getObjectByRepr(def);
 
         // Prevent duplication of symbols... could be more clever.
         // The tag "_inkscape_duplicate" is added to "id" by ClipboardManagerImpl::copySymbol(). 
@@ -1597,7 +1689,6 @@ void SPDocument::importDefs(SPDocument *source)
             Inkscape::GC::release(dup);
         }
     }
-
 }
 
 /*

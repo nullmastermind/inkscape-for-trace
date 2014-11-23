@@ -442,11 +442,11 @@ void ConnRef::makeActive(void)
 
 void ConnRef::makeInactive(void)
 {
-    COLA_ASSERT(_active);
-    
-    // Remove from connRefs list.
-    _router->connRefs.erase(_pos);
-    _active = false;
+    if (_active) {
+        // Remove from connRefs list.
+        _router->connRefs.erase(_pos);
+        _active = false;
+    }
 }
 
 
@@ -553,8 +553,12 @@ void ConnRef::unInitialise(void)
 
 void ConnRef::removeFromGraph(void)
 {
-    _srcVert->removeFromGraph();
-    _dstVert->removeFromGraph();
+    if (_srcVert) {
+        _srcVert->removeFromGraph();
+    }
+    if (_dstVert) {
+        _dstVert->removeFromGraph();
+    }
 }
 
 
@@ -841,7 +845,10 @@ bool ConnRef::generatePath(void)
             break;
         }
         // Check we don't have an apparent infinite connector path.
-        COLA_ASSERT(pathlen < 200);
+//#ifdef PATHDEBUG
+        db_printf("Path length: %i\n", pathlen);
+//#endif
+        COLA_ASSERT(pathlen < 10000);
     }
     std::vector<Point> path(pathlen);
 

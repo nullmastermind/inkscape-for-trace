@@ -42,7 +42,7 @@
     </description>
 
   <!-- set global properties for this build -->
-  <property name="version"       value="0.48+devel"/>
+  <property name="version"       value="0.91+devel"/>
   <property name="src"           location="src"/>
   <property name="lib"           location="lib"/>
   <property name="build"         location="build"/>
@@ -177,10 +177,6 @@
         /* internal interpreter */
         #define WITH_PYTHON                   1
 
-        /* shared whiteboard */
-        #undef WITH_INKBOARD
-        #undef HAVE_SSL
-
         /* use poppler for pdf import? */
         #define HAVE_POPPLER                  1
         #define HAVE_POPPLER_GLIB             1
@@ -211,6 +207,12 @@
         /* Do we want experimental, unsupported, unguaranteed, etc., LivePathEffects enabled? */
         //#define LPE_ENABLE_TEST_EFFECTS    1
 
+        /* Do we want experimental, unsupported, unguaranteed, etc., SVG2 features enabled? */
+        //#define WITH_SVG2                  1
+        //#define WITH_CSSCOMPOSITE          1
+        //#define WITH_CSSBLEND              1
+        //#define WITH_MESH                  1
+
         #define HAVE_ASPELL                   1
 
         #endif /* _CONFIG_H_ */
@@ -235,6 +237,7 @@
             <include name="extract-uri-test.h"/>
             <include name="marker-test.h"/>
             <include name="mod360-test.h"/>
+            <include name="object-test.h"/>
             <include name="preferences-test.h"/>
             <include name="round-test.h"/>
             <include name="sp-gradient-test.h"/>
@@ -350,8 +353,7 @@
             <file name="extension/param"/>
         </excludeinc>
         <flags>
-            <!-- -std=gnu++0x -DCPP11  -Wno-unused-local-typedefs -->
-            -Wall -Wformat -Werror=format-security -Wextra -Wpointer-arith -Wcast-align -Wsign-compare -Woverloaded-virtual -Wswitch
+            -Wall -Wformat -Werror=format-security -Wextra -Wpointer-arith -Wcast-align -Wsign-compare -Wswitch
             -Werror=return-type
             <!-- - ->  -Werror <!-- -->
             <!-- A list of warnings that should not error *yet*, any help is welcome in fixing the code generating these warnings! -->
@@ -364,6 +366,10 @@
             -mms-bitfields
             -fopenmp
         </flags>
+        <cxxflags>
+            <!-- -std=gnu++0x -DCPP11  -Wno-unused-local-typedefs -->
+            -Woverloaded-virtual 
+        </cxxflags>
         <defines>
             -DVERSION=\"${version}\"
             -DHAVE_CONFIG_H
@@ -444,7 +450,7 @@
               stripcommand="${archutil}strip"
               objcopycommand="${archutil}objcopy">
        <flags>
-           -mconsole
+           -mwindows
            -mthreads
        </flags>
        <fileset dir="${build}/obj">
@@ -653,14 +659,12 @@
     <copy todir="${dist}" file="${devlibs}/bin/libgio-2.0-0.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libcairo-2.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libpixman-1-0.dll"/>
-    <copy todir="${dist}" file="${devlibs}/bin/libgcc_s_sjlj-1.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libpoppler-5.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libpoppler-glib-4.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libpangocairo-1.0-0.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libpango-1.0-0.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libpangoft2-1.0-0.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libpangowin32-1.0-0.dll"/>
-    <copy todir="${dist}" file="${devlibs}/bin/freetype6.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libfontconfig-1.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libxml2.dll"/>
     <copy todir="${dist}" file="${devlibs}/bin/libxslt.dll"/>
@@ -833,7 +837,8 @@
   -->
   <target name="check" depends="linkcxxtests,distbase"
       description="perform unit tests">
-    <cxxtestrun command="${build}/cxxtests" workingdir="${dist}" />
+    <copy todir="${dist}" file="${build}/cxxtests.exe"/>
+    <cxxtestrun command="${dist}/cxxtests" workingdir="${dist}" />
   </target>
 
   <!--

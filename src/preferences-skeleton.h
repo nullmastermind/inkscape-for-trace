@@ -1,8 +1,9 @@
 #ifndef SEEN_PREFERENCES_SKELETON_H
 #define SEEN_PREFERENCES_SKELETON_H
 
-#include <inkscape-version.h>
+#include "inkscape-version.h"
 
+// FIXME why is this here?
 #ifdef N_
 #undef N_
 #endif
@@ -292,6 +293,9 @@ static char const preferences_skeleton[] =
 "    <group id=\"dialogsskiptaskbar\" value=\"1\"/>\n"
 #ifdef WIN32 // FIXME: Temporary Win32 special code to enable transient dialogs
 "    <group id=\"dialogsontopwin32\" value=\"0\"/>\n"
+#endif
+#if !defined(GDK_WINDOWING_QUARTZ) // No maximise for Quartz, see lp:1302627
+ "    <group id=\"defaultwindowsize\" value=\"2\" />\n"
 #endif
 "    <group id=\"arenatilescachesize\" value=\"8192\"/>\n"
 "    <group id=\"preservetransform\" value=\"0\"/>\n"

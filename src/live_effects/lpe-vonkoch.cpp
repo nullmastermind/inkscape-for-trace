@@ -4,11 +4,10 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <cstdio>
+#include "live_effects/lpe-vonkoch.h"
 
 #include <glibmm/i18n.h>
 
-#include "live_effects/lpe-vonkoch.h"
 #include <2geom/transforms.h>
 
 //using std::vector;
@@ -133,8 +132,8 @@ LPEVonKoch::doEffect_path (std::vector<Geom::Path> const & path_in)
     int path_in_complexity = 0;
     for (unsigned k = 0; k < path_in.size(); k++){
             path_in_complexity+=path_in[k].size();
-    }    
-    double complexity = std::pow(transforms.size(),nbgenerations)*path_in_complexity;
+    }
+    double complexity = std::pow(transforms.size(), nbgenerations) * path_in_complexity;
     if (drawall.get_value()){
         int k = transforms.size();
         if(k>1){
@@ -142,8 +141,6 @@ LPEVonKoch::doEffect_path (std::vector<Geom::Path> const & path_in)
         }else{
             complexity = nbgenerations*k*path_in_complexity;
         }
-    }else{
-        complexity = std::pow(transforms.size(),nbgenerations)*path_in_complexity;
     }
     if (complexity > double(maxComplexity)){
         g_warning("VonKoch lpe's output too complex. Effect bypassed.");
@@ -265,6 +262,9 @@ LPEVonKoch::doBeforeEffect (SPLPEItem const* lpeitem)
         tmp_pathv.push_back(tmp_path);
         ref_path.set_new_value(tmp_pathv,true);
     }
+    SPLPEItem * item = const_cast<SPLPEItem*>(lpeitem);
+    item->apply_to_clippath(item);
+    item->apply_to_mask(item);
 }
 
 

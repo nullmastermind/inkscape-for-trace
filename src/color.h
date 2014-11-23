@@ -13,8 +13,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <gdk/gdk.h>
 #include <string>
+typedef unsigned int guint32; // uint is guaranteed to hold up to 2^32 − 1
 
 /* Useful composition macros */
 
@@ -46,13 +46,14 @@ struct SPColor {
     SPColor& operator= (SPColor const& other);
 
     bool operator == ( SPColor const& other ) const;
+    bool operator != ( SPColor const& other ) const { return !(*this == other); };
     bool isClose( SPColor const& other, float epsilon ) const;
 
     void set( float r, float g, float b );
     void set( guint32 value );
 
-    guint32 toRGBA32( gint alpha ) const;
-    guint32 toRGBA32( gdouble alpha ) const;
+    guint32 toRGBA32( int alpha ) const;
+    guint32 toRGBA32( double alpha ) const;
 
     std::string toString() const;
 

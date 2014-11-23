@@ -13,7 +13,7 @@
 #include <gtkmm/separator.h>
 #include <glibmm/i18n.h>
 
-#include "../dialogs/dialog-events.h"
+#include "ui/dialog-events.h"
 #include "xml/repr.h"
 
 // Used to get SP_ACTIVE_DESKTOP
@@ -90,6 +90,10 @@ PrefDialog::PrefDialog (Glib::ustring name, gchar const * help, Gtk::Widget * co
     if (_effect != NULL && !_effect->no_live_preview) {
         if (_param_preview == NULL) {
             XML::Document * doc = sp_repr_read_mem(live_param_xml, strlen(live_param_xml), NULL);
+            if (doc == NULL) {
+                std::cout << "Error encountered loading live parameter XML !!!" << std::endl;
+                return;
+            }
             _param_preview = Parameter::make(doc->root(), _effect);
         }
 
@@ -212,6 +216,9 @@ PrefDialog::preview_toggle (void) {
 void
 PrefDialog::param_change (void) {
     if (_exEnv != NULL) {
+        if (!_effect->loaded()) {
+            _effect->set_state(Extension::STATE_LOADED);
+        }
         _timersig.disconnect();
         _timersig = Glib::signal_timeout().connect(sigc::mem_fun(this, &PrefDialog::param_timer_expire),
                                                    250, /* ms */

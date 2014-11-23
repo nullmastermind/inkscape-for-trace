@@ -33,9 +33,9 @@
 #include <stdint.h>
 #include <libuemf/symbol_convert.h>
 
-#include "sp-root.h"
+#include "document.h"
+#include "sp-root.h" // even though it is included indirectly by wmf-inout.h
 #include "sp-path.h"
-#include "style.h"
 #include "print.h"
 #include "extension/system.h"
 #include "extension/print.h"
@@ -44,13 +44,10 @@
 #include "extension/output.h"
 #include "display/drawing.h"
 #include "display/drawing-item.h"
-#include "util/units.h"
 #include "clear-n_.h"
-#include "document.h"
-#include "shape-editor.h"
-#include "sp-namedview.h"
-#include "document-undo.h"
-#include "inkscape.h"
+#include "svg/svg.h"
+#include "util/units.h" // even though it is included indirectly by wmf-inout.h
+#include "inkscape.h" // even though it is included indirectly by wmf-inout.h
 
 
 #include "wmf-inout.h"
@@ -67,7 +64,6 @@ namespace Extension {
 namespace Internal {
 
 
-static U_RECT16 rc_old;
 static bool clipset = false;
 static uint32_t BLTmode=0;
 
@@ -251,54 +247,54 @@ uint32_t Wmf::add_hatch(PWMF_CALLBACK_DATA d, uint32_t hatchType, U_COLORREF hat
         if(d->hatches.count == d->hatches.size){  enlarge_hatches(d); }
         d->hatches.strings[d->hatches.count++]=strdup(hpathname);
 
-        *(d->defs) += "\n";
+        d->defs += "\n";
         switch(hatchType){
             case U_HS_HORIZONTAL:
-                *(d->defs) += "   <path id=\"";
-                *(d->defs) += hpathname;
-                *(d->defs) += "\" d=\"M 0 0 6 0\" style=\"fill:none;stroke:#";
-                *(d->defs) += tmpcolor;
-                *(d->defs) += "\" />\n";
+                d->defs += "   <path id=\"";
+                d->defs += hpathname;
+                d->defs += "\" d=\"M 0 0 6 0\" style=\"fill:none;stroke:#";
+                d->defs += tmpcolor;
+                d->defs += "\" />\n";
                 break;
             case U_HS_VERTICAL:
-                *(d->defs) += "   <path id=\"";
-                *(d->defs) += hpathname;
-                *(d->defs) += "\" d=\"M 0 0 0 6\" style=\"fill:none;stroke:#";
-                *(d->defs) += tmpcolor;
-                *(d->defs) += "\" />\n";
+                d->defs += "   <path id=\"";
+                d->defs += hpathname;
+                d->defs += "\" d=\"M 0 0 0 6\" style=\"fill:none;stroke:#";
+                d->defs += tmpcolor;
+                d->defs += "\" />\n";
                 break;
             case U_HS_FDIAGONAL:
-                *(d->defs) += "   <line  id=\"sub";
-                *(d->defs) += hpathname;
-                *(d->defs) += "\" x1=\"-1\" y1=\"-1\" x2=\"7\" y2=\"7\" stroke=\"#";
-                *(d->defs) += tmpcolor;
-                *(d->defs) += "\"/>\n";
+                d->defs += "   <line  id=\"sub";
+                d->defs += hpathname;
+                d->defs += "\" x1=\"-1\" y1=\"-1\" x2=\"7\" y2=\"7\" stroke=\"#";
+                d->defs += tmpcolor;
+                d->defs += "\"/>\n";
                 break;
             case U_HS_BDIAGONAL:
-                *(d->defs) += "   <line  id=\"sub";
-                *(d->defs) += hpathname;
-                *(d->defs) += "\" x1=\"-1\" y1=\"7\" x2=\"7\" y2=\"-1\" stroke=\"#";
-                *(d->defs) += tmpcolor;
-                *(d->defs) += "\"/>\n";
+                d->defs += "   <line  id=\"sub";
+                d->defs += hpathname;
+                d->defs += "\" x1=\"-1\" y1=\"7\" x2=\"7\" y2=\"-1\" stroke=\"#";
+                d->defs += tmpcolor;
+                d->defs += "\"/>\n";
                 break;
             case U_HS_CROSS:
-                *(d->defs) += "   <path   id=\"";
-                *(d->defs) += hpathname;
-                *(d->defs) += "\" d=\"M 0 0 6 0 M 0 0 0 6\" style=\"fill:none;stroke:#";
-                *(d->defs) += tmpcolor;
-                *(d->defs) += "\" />\n";
+                d->defs += "   <path   id=\"";
+                d->defs += hpathname;
+                d->defs += "\" d=\"M 0 0 6 0 M 0 0 0 6\" style=\"fill:none;stroke:#";
+                d->defs += tmpcolor;
+                d->defs += "\" />\n";
                  break;
             case U_HS_DIAGCROSS:
-                *(d->defs) += "   <line   id=\"subfd";
-                *(d->defs) += hpathname;
-                *(d->defs) += "\" x1=\"-1\" y1=\"-1\" x2=\"7\" y2=\"7\" stroke=\"#";
-                *(d->defs) += tmpcolor;
-                *(d->defs) += "\"/>\n";
-                *(d->defs) += "   <line   id=\"subbd";
-                *(d->defs) += hpathname;
-                *(d->defs) += "\" x1=\"-1\" y1=\"7\" x2=\"7\" y2=\"-1\" stroke=\"#";
-                *(d->defs) += tmpcolor;
-                *(d->defs) += "\"/>\n";
+                d->defs += "   <line   id=\"subfd";
+                d->defs += hpathname;
+                d->defs += "\" x1=\"-1\" y1=\"-1\" x2=\"7\" y2=\"7\" stroke=\"#";
+                d->defs += tmpcolor;
+                d->defs += "\"/>\n";
+                d->defs += "   <line   id=\"subbd";
+                d->defs += hpathname;
+                d->defs += "\" x1=\"-1\" y1=\"7\" x2=\"7\" y2=\"-1\" stroke=\"#";
+                d->defs += tmpcolor;
+                d->defs += "\"/>\n";
                 break;
             case U_HS_SOLIDCLR:
             case U_HS_DITHEREDCLR:
@@ -307,12 +303,12 @@ uint32_t Wmf::add_hatch(PWMF_CALLBACK_DATA d, uint32_t hatchType, U_COLORREF hat
             case U_HS_SOLIDBKCLR:
             case U_HS_DITHEREDBKCLR:
             default:
-                *(d->defs) += "   <path   id=\"";
-                *(d->defs) += hpathname;
-                *(d->defs) += "\" d=\"M 0 0 6 0 6 6 0 6 z\" style=\"fill:#";
-                *(d->defs) += tmpcolor;
-                *(d->defs) += ";stroke:none";
-                *(d->defs) += "\" />\n";
+                d->defs += "   <path   id=\"";
+                d->defs += hpathname;
+                d->defs += "\" d=\"M 0 0 6 0 6 6 0 6 z\" style=\"fill:#";
+                d->defs += tmpcolor;
+                d->defs += ";stroke:none";
+                d->defs += "\" />\n";
                 break;
         }
     }
@@ -374,12 +370,12 @@ uint32_t Wmf::add_hatch(PWMF_CALLBACK_DATA d, uint32_t hatchType, U_COLORREF hat
         if(!idx){  // add it if not already present
             if(d->hatches.count == d->hatches.size){  enlarge_hatches(d); }
             d->hatches.strings[d->hatches.count++]=strdup(hatchname);
-            *(d->defs) += "\n";
-            *(d->defs) += "   <pattern id=\"";
-            *(d->defs) += hatchname;
-            *(d->defs) += "\"  xlink:href=\"#WMFhbasepattern\">\n";
-            *(d->defs) += refpath;
-            *(d->defs) += "   </pattern>\n";
+            d->defs += "\n";
+            d->defs += "   <pattern id=\"";
+            d->defs += hatchname;
+            d->defs += "\"  xlink:href=\"#WMFhbasepattern\">\n";
+            d->defs += refpath;
+            d->defs += "   </pattern>\n";
             idx = d->hatches.count;
         }
     }
@@ -392,12 +388,12 @@ uint32_t Wmf::add_hatch(PWMF_CALLBACK_DATA d, uint32_t hatchType, U_COLORREF hat
             if(d->hatches.count == d->hatches.size){  enlarge_hatches(d); }
             d->hatches.strings[d->hatches.count++]=strdup(hbkname);
 
-            *(d->defs) += "\n";
-            *(d->defs) += "   <rect id=\"";
-            *(d->defs) += hbkname;
-            *(d->defs) += "\" x=\"0\" y=\"0\" width=\"6\" height=\"6\" fill=\"#";
-            *(d->defs) += bkcolor;
-            *(d->defs) += "\" />\n";
+            d->defs += "\n";
+            d->defs += "   <rect id=\"";
+            d->defs += hbkname;
+            d->defs += "\" x=\"0\" y=\"0\" width=\"6\" height=\"6\" fill=\"#";
+            d->defs += bkcolor;
+            d->defs += "\" />\n";
         }
 
         // this is the pattern, its name will show up in Inkscape's pattern selector
@@ -406,15 +402,15 @@ uint32_t Wmf::add_hatch(PWMF_CALLBACK_DATA d, uint32_t hatchType, U_COLORREF hat
         if(!idx){  // add it if not already present
             if(d->hatches.count == d->hatches.size){  enlarge_hatches(d); }
             d->hatches.strings[d->hatches.count++]=strdup(hatchname);
-            *(d->defs) += "\n";
-            *(d->defs) += "   <pattern id=\"";
-            *(d->defs) += hatchname;
-            *(d->defs) += "\"  xlink:href=\"#WMFhbasepattern\">\n";
-            *(d->defs) += "      <use xlink:href=\"#";
-            *(d->defs) += hbkname;
-            *(d->defs) += "\" />\n";
-            *(d->defs) += refpath;
-            *(d->defs) += "   </pattern>\n";
+            d->defs += "\n";
+            d->defs += "   <pattern id=\"";
+            d->defs += hatchname;
+            d->defs += "\"  xlink:href=\"#WMFhbasepattern\">\n";
+            d->defs += "      <use xlink:href=\"#";
+            d->defs += hbkname;
+            d->defs += "\" />\n";
+            d->defs += refpath;
+            d->defs += "   </pattern>\n";
             idx = d->hatches.count;
         }
     }
@@ -503,35 +499,35 @@ uint32_t Wmf::add_dib_image(PWMF_CALLBACK_DATA d, const char *dib, uint32_t iUsa
         sprintf(imagename,"WMFimage%d",idx++);
         sprintf(xywh," x=\"0\" y=\"0\" width=\"%d\" height=\"%d\" ",width,height); // reuse this buffer
 
-        *(d->defs) += "\n";
-        *(d->defs) += "   <image id=\"";
-        *(d->defs) += imagename;
-        *(d->defs) += "\"\n      ";
-        *(d->defs) += xywh;
-        *(d->defs) += "\n";
-        if(dibparams == U_BI_JPEG){    *(d->defs) += "       xlink:href=\"data:image/jpeg;base64,"; }
-        else {                         *(d->defs) += "       xlink:href=\"data:image/png;base64,";  }
-        *(d->defs) += base64String;
-        *(d->defs) += "\"\n";
-        *(d->defs) += " preserveAspectRatio=\"none\"\n";
-        *(d->defs) += "   />\n";
+        d->defs += "\n";
+        d->defs += "   <image id=\"";
+        d->defs += imagename;
+        d->defs += "\"\n      ";
+        d->defs += xywh;
+        d->defs += "\n";
+        if(dibparams == U_BI_JPEG){    d->defs += "       xlink:href=\"data:image/jpeg;base64,"; }
+        else {                         d->defs += "       xlink:href=\"data:image/png;base64,";  }
+        d->defs += base64String;
+        d->defs += "\"\n";
+        d->defs += " preserveAspectRatio=\"none\"\n";
+        d->defs += "   />\n";
 
 
-        *(d->defs) += "\n";
-        *(d->defs) += "   <pattern id=\"";
-        *(d->defs) += imagename;
-        *(d->defs) += "_ref\"\n      ";
-        *(d->defs) += xywh;
-        *(d->defs) += "\n       patternUnits=\"userSpaceOnUse\"";
-        *(d->defs) += " >\n";
-        *(d->defs) += "      <use id=\"";
-        *(d->defs) += imagename;
-        *(d->defs) += "_ign\" ";
-        *(d->defs) += " xlink:href=\"#";
-        *(d->defs) += imagename;
-        *(d->defs) += "\" />\n";
-        *(d->defs) += "    ";
-        *(d->defs) += "   </pattern>\n";
+        d->defs += "\n";
+        d->defs += "   <pattern id=\"";
+        d->defs += imagename;
+        d->defs += "_ref\"\n      ";
+        d->defs += xywh;
+        d->defs += "\n       patternUnits=\"userSpaceOnUse\"";
+        d->defs += " >\n";
+        d->defs += "      <use id=\"";
+        d->defs += imagename;
+        d->defs += "_ign\" ";
+        d->defs += " xlink:href=\"#";
+        d->defs += imagename;
+        d->defs += "\" />\n";
+        d->defs += "    ";
+        d->defs += "   </pattern>\n";
     }
     g_free(base64String); //wait until this point to free because it might be a duplicate image
     return(idx-1);
@@ -599,37 +595,98 @@ uint32_t Wmf::add_bm16_image(PWMF_CALLBACK_DATA d, U_BITMAP16 Bm16, const char *
         sprintf(imagename,"WMFimage%d",idx++);
         sprintf(xywh," x=\"0\" y=\"0\" width=\"%d\" height=\"%d\" ",width,height); // reuse this buffer
 
-        *(d->defs) += "\n";
-        *(d->defs) += "   <image id=\"";
-        *(d->defs) += imagename;
-        *(d->defs) += "\"\n      ";
-        *(d->defs) += xywh;
-        *(d->defs) += "\n";
-        *(d->defs) += "       xlink:href=\"data:image/png;base64,";
-        *(d->defs) += base64String;
-        *(d->defs) += "\"\n";
-        *(d->defs) += " preserveAspectRatio=\"none\"\n";
-        *(d->defs) += "   />\n";
+        d->defs += "\n";
+        d->defs += "   <image id=\"";
+        d->defs += imagename;
+        d->defs += "\"\n      ";
+        d->defs += xywh;
+        d->defs += "\n";
+        d->defs += "       xlink:href=\"data:image/png;base64,";
+        d->defs += base64String;
+        d->defs += "\"\n";
+        d->defs += " preserveAspectRatio=\"none\"\n";
+        d->defs += "   />\n";
 
 
-        *(d->defs) += "\n";
-        *(d->defs) += "   <pattern id=\"";
-        *(d->defs) += imagename;
-        *(d->defs) += "_ref\"\n      ";
-        *(d->defs) += xywh;
-        *(d->defs) += "\n       patternUnits=\"userSpaceOnUse\"";
-        *(d->defs) += " >\n";
-        *(d->defs) += "      <use id=\"";
-        *(d->defs) += imagename;
-        *(d->defs) += "_ign\" ";
-        *(d->defs) += " xlink:href=\"#";
-        *(d->defs) += imagename;
-        *(d->defs) += "\" />\n";
-        *(d->defs) += "   </pattern>\n";
+        d->defs += "\n";
+        d->defs += "   <pattern id=\"";
+        d->defs += imagename;
+        d->defs += "_ref\"\n      ";
+        d->defs += xywh;
+        d->defs += "\n       patternUnits=\"userSpaceOnUse\"";
+        d->defs += " >\n";
+        d->defs += "      <use id=\"";
+        d->defs += imagename;
+        d->defs += "_ign\" ";
+        d->defs += " xlink:href=\"#";
+        d->defs += imagename;
+        d->defs += "\" />\n";
+        d->defs += "   </pattern>\n";
     }
     g_free(base64String); //wait until this point to free because it might be a duplicate image
     return(idx-1);
 }
+
+/*  Add another 100 blank slots to the clips array.
+*/
+void Wmf::enlarge_clips(PWMF_CALLBACK_DATA d){
+    d->clips.size += 100;
+    d->clips.strings = (char **) realloc(d->clips.strings,d->clips.size * sizeof(char *));
+}
+
+/*  See if the pattern name is already in the list.  If it is return its position (1->n, not 1-n-1)
+*/
+int Wmf::in_clips(PWMF_CALLBACK_DATA d, const char *test){
+    int i;
+    for(i=0; i<d->clips.count; i++){
+        if(strcmp(test,d->clips.strings[i])==0)return(i+1);
+    }
+    return(0);
+}
+
+/*  (Conditionally) add a clip.  
+    If a matching clip already exists nothing happens  
+    If one does exist it is added to the clips list, entered into <defs>.
+*/
+void Wmf::add_clips(PWMF_CALLBACK_DATA d, const char *clippath, unsigned int logic){
+    int op = combine_ops_to_livarot(logic);
+    Geom::PathVector combined_vect;
+    char *combined = NULL;
+    if (op >= 0 && d->dc[d->level].clip_id) {
+        unsigned int real_idx = d->dc[d->level].clip_id - 1;
+        Geom::PathVector old_vect = sp_svg_read_pathv(d->clips.strings[real_idx]);
+        Geom::PathVector new_vect = sp_svg_read_pathv(clippath);
+        combined_vect = sp_pathvector_boolop(new_vect, old_vect, (bool_op) op , (FillRule) fill_oddEven, (FillRule) fill_oddEven);
+        combined = sp_svg_write_path(combined_vect);
+    }
+    else {
+        combined = strdup(clippath);  // COPY operation, erases everything and starts a new one
+    }
+
+    uint32_t  idx = in_clips(d, combined);
+    if(!idx){  // add clip if not already present
+        if(d->clips.count == d->clips.size){  enlarge_clips(d); }
+        d->clips.strings[d->clips.count++]=strdup(combined);
+        d->dc[d->level].clip_id = d->clips.count;  // one more than the slot where it is actually stored
+        SVGOStringStream tmp_clippath;
+        tmp_clippath << "\n<clipPath";
+        tmp_clippath << "\n\tclipPathUnits=\"userSpaceOnUse\" ";
+        tmp_clippath << "\n\tid=\"clipWmfPath" << d->dc[d->level].clip_id << "\"";
+        tmp_clippath << " >";
+        tmp_clippath << "\n\t<path d=\"";
+        tmp_clippath << combined;
+        tmp_clippath << "\"";
+        tmp_clippath << "\n\t/>";
+        tmp_clippath << "\n</clipPath>";
+        d->outdef += tmp_clippath.str().c_str();
+    }
+    else {
+        d->dc[d->level].clip_id = idx;
+    }
+    free(combined);
+}
+
+
 
 void
 Wmf::output_style(PWMF_CALLBACK_DATA d)
@@ -714,8 +771,8 @@ Wmf::output_style(PWMF_CALLBACK_DATA d)
 
 
 //    tmp_id << "\n\tid=\"" << (d->id++) << "\"";
-//    *(d->outsvg) += tmp_id.str().c_str();
-    *(d->outsvg) += "\n\tstyle=\"";
+//    d->outsvg += tmp_id.str().c_str();
+    d->outsvg += "\n\tstyle=\"";
     if (!d->dc[d->level].fill_set ||  ( d->mask & U_DRAW_NOFILL)) { // nofill are lines and arcs
         tmp_style << "fill:none;";
     } else {
@@ -838,11 +895,10 @@ Wmf::output_style(PWMF_CALLBACK_DATA d)
         tmp_style << "stroke-opacity:1;";
     }
     tmp_style << "\" ";
-    if (clipset)
-        tmp_style << "\n\tclip-path=\"url(#clipWmfPath" << d->id << ")\" ";
-    clipset = false;
+    if (d->dc[d->level].clip_id)
+        tmp_style << "\n\tclip-path=\"url(#clipWmfPath" << d->dc[d->level].clip_id << ")\" ";
 
-    *(d->outsvg) += tmp_style.str().c_str();
+    d->outsvg += tmp_style.str().c_str();
 }
 
 
@@ -1326,8 +1382,8 @@ void Wmf::common_dib_to_image(PWMF_CALLBACK_DATA d, const char *dib,
     tmp_image << " preserveAspectRatio=\"none\"\n";
     tmp_image << "/> \n";
 
-    *(d->outsvg) += tmp_image.str().c_str();
-    *(d->path) = "";
+    d->outsvg += tmp_image.str().c_str();
+    d->path = "";
 }
 
 /**
@@ -1418,8 +1474,8 @@ void Wmf::common_bm16_to_image(PWMF_CALLBACK_DATA d, U_BITMAP16 Bm16, const char
     tmp_image << " preserveAspectRatio=\"none\"\n";
     tmp_image << "/> \n";
 
-    *(d->outsvg) += tmp_image.str().c_str();
-    *(d->path) = "";
+    d->outsvg += tmp_image.str().c_str();
+    d->path = "";
 }
 
 /**
@@ -1579,7 +1635,7 @@ int Wmf::myMetaFileProc(const char *contents, unsigned int length, PWMF_CALLBACK
         d->dc[0].style.stroke_width.value =  pix_to_abs_size( d, 1 ); // This could not be set until the size of the WMF was known
         dbg_str << "<!-- U_WMR_HEADER -->\n";
 
-        *(d->outdef) += "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n";
+        d->outdef += "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n";
 
         SVGOStringStream tmp_outdef;
         tmp_outdef << "<svg\n";
@@ -1592,8 +1648,8 @@ int Wmf::myMetaFileProc(const char *contents, unsigned int length, PWMF_CALLBACK
         tmp_outdef <<
             "  width=\"" << Inkscape::Util::Quantity::convert(d->PixelsOutX, "px", "mm") << "mm\"\n" <<
             "  height=\"" << Inkscape::Util::Quantity::convert(d->PixelsOutY, "px", "mm")  << "mm\">\n";
-        *(d->outdef) += tmp_outdef.str().c_str();
-        *(d->outdef) += "<defs>";                           // temporary end of header
+        d->outdef += tmp_outdef.str().c_str();
+        d->outdef += "<defs>";                           // temporary end of header
 
         // d->defs holds any defines which are read in.
 
@@ -1633,11 +1689,19 @@ int Wmf::myMetaFileProc(const char *contents, unsigned int length, PWMF_CALLBACK
     // next record is valid type and forces pending text to be drawn immediately
     if ((d->dc[d->level].dirty & DIRTY_TEXT) || ((wmr_mask != U_WMR_INVALID) && (wmr_mask & U_DRAW_TEXT) && d->tri->dirty)){
         TR_layout_analyze(d->tri);
+        if (d->dc[d->level].clip_id){
+           SVGOStringStream tmp_clip;
+           tmp_clip << "\n<g\n\tclip-path=\"url(#clipWmfPath" << d->dc[d->level].clip_id << ")\"\n>";
+           d->outsvg += tmp_clip.str().c_str();
+        }
         TR_layout_2_svg(d->tri);
         SVGOStringStream ts;
         ts << d->tri->out;
-        *(d->outsvg) += ts.str().c_str();
+        d->outsvg += ts.str().c_str();
         d->tri = trinfo_clear(d->tri);
+        if (d->dc[d->level].clip_id){
+           d->outsvg += "\n</g>\n";
+        }        
     }
     if(d->dc[d->level].dirty){  //Apply the delayed background changes, clear the flag
         d->dc[d->level].bkMode = tbkMode;
@@ -1688,13 +1752,13 @@ std::cout << "BEFORE DRAW"
         )
     ){
 //  std::cout << "PATH DRAW at TOP <<+++++++++++++++++++++++++++++++++++++" << std::endl;
-        *(d->outsvg) += "   <path ";    // this is the ONLY place <path should be used!!!!
+        d->outsvg += "   <path ";    // this is the ONLY place <path should be used!!!!
         output_style(d);
-        *(d->outsvg) += "\n\t";
-        *(d->outsvg) += "\n\td=\"";      // this is the ONLY place d=" should be used!!!!
-        *(d->outsvg) += *(d->path);
-        *(d->outsvg) += " \" /> \n";
-        *(d->path) = ""; //reset the path
+        d->outsvg += "\n\t";
+        d->outsvg += "\n\td=\"";      // this is the ONLY place d=" should be used!!!!
+        d->outsvg += d->path;
+        d->outsvg += " \" /> \n";
+        d->path = ""; //reset the path
         // reset the flags
         d->mask = 0;
         d->drawtype = 0;
@@ -1706,7 +1770,7 @@ std::cout << "BEFORE DRAW"
         {
             dbg_str << "<!-- U_WMR_EOF -->\n";
 
-            *(d->outsvg) = *(d->outdef) + *(d->defs) + "\n</defs>\n\n" + *(d->outsvg) + "</svg>\n";
+            d->outsvg = d->outdef + d->defs + "\n</defs>\n\n" + d->outsvg + "</svg>\n";
             OK=0;
             break;
         }
@@ -1918,34 +1982,51 @@ std::cout << "BEFORE DRAW"
                 "\n\tM " << pix_to_xy( d, pt16.x, pt16.y ) << " ";
             break;
         }
-        case U_WMR_EXCLUDECLIPRECT:       dbg_str << "<!-- U_WMR_EXCLUDECLIPRECT -->\n";    break;
+        case U_WMR_EXCLUDECLIPRECT:
+        {
+            dbg_str << "<!-- U_WMR_EXCLUDECLIPRECT -->\n";
+
+            U_RECT16   rc;
+            nSize = U_WMREXCLUDECLIPRECT_get(contents, &rc);
+
+            SVGOStringStream tmp_path;
+            float faraway = 10000000; // hopefully well outside any real drawing!
+            //outer rect, clockwise 
+            tmp_path << "M " <<  faraway << "," <<  faraway << " ";
+            tmp_path << "L " <<  faraway << "," << -faraway << " ";
+            tmp_path << "L " << -faraway << "," << -faraway << " ";
+            tmp_path << "L " << -faraway << "," <<  faraway << " ";
+            tmp_path << "z ";
+            //inner rect, counterclockwise (sign of Y is reversed)
+            tmp_path << "M " << pix_to_xy( d, rc.left , rc.top )     << " ";
+            tmp_path << "L " << pix_to_xy( d, rc.right, rc.top )     << " ";
+            tmp_path << "L " << pix_to_xy( d, rc.right, rc.bottom )  << " ";
+            tmp_path << "L " << pix_to_xy( d, rc.left,  rc.bottom )  << " ";
+            tmp_path << "z";
+            
+            add_clips(d, tmp_path.str().c_str(), U_RGN_AND);
+
+            d->path = "";
+            d->drawtype = 0;
+            break;
+        }
         case U_WMR_INTERSECTCLIPRECT:
         {
             dbg_str << "<!-- U_WMR_INTERSECTCLIPRECT -->\n";
 
             nSize = U_WMRINTERSECTCLIPRECT_get(contents, &rc);
-            clipset = true;
-            if ((rc.left == rc_old.left) && (rc.top == rc_old.top) && (rc.right == rc_old.right) && (rc.bottom == rc_old.bottom))
-                break;
-            rc_old = rc;
 
-            double dx = pix_to_x_point(  d, rc.left,    rc.top     );
-            double dy = pix_to_y_point(  d, rc.left,    rc.top     );
-            double dw = pix_to_abs_size( d, rc.right  - rc.left + 1);
-            double dh = pix_to_abs_size( d, rc.bottom - rc.top  + 1);
+            SVGOStringStream tmp_path;
+            tmp_path << "M " << pix_to_xy( d, rc.left , rc.top )     << " ";
+            tmp_path << "L " << pix_to_xy( d, rc.right, rc.top )     << " ";
+            tmp_path << "L " << pix_to_xy( d, rc.right, rc.bottom )  << " ";
+            tmp_path << "L " << pix_to_xy( d, rc.left,  rc.bottom )  << " ";
+            tmp_path << "z";
+            
+            add_clips(d, tmp_path.str().c_str(), U_RGN_AND);
 
-            SVGOStringStream tmp_rectangle;
-            tmp_rectangle << "\n<clipPath\n\tclipPathUnits=\"userSpaceOnUse\" ";
-            tmp_rectangle << "\nid=\"clipWmfPath" << ++(d->id) << "\" >";
-            tmp_rectangle << "\n<rect ";
-            tmp_rectangle << "\n   x=\""      << dx << "\" ";
-            tmp_rectangle << "\n   y=\""      << dy << "\" ";
-            tmp_rectangle << "\n   width=\""  << dw << "\" ";
-            tmp_rectangle << "\n   height=\"" << dh << "\" />";
-            tmp_rectangle << "\n</clipPath>";
-
-            *(d->outdef) += tmp_rectangle.str().c_str();
-            *(d->path) = "";
+            d->path = "";
+            d->drawtype = 0;
             break;
         }
         case U_WMR_ARC:
@@ -1981,8 +2062,8 @@ std::cout << "BEFORE DRAW"
 
             double cx = pix_to_x_point( d, (rc.left + rc.right)/2.0, (rc.bottom + rc.top)/2.0 );
             double cy = pix_to_y_point( d, (rc.left + rc.right)/2.0, (rc.bottom + rc.top)/2.0 );
-            double rx = pix_to_abs_size( d, fabs(rc.right - rc.left  )/2.0 );
-            double ry = pix_to_abs_size( d, fabs(rc.top   - rc.bottom)/2.0 );
+            double rx = pix_to_abs_size( d, std::abs(rc.right - rc.left  )/2.0 );
+            double ry = pix_to_abs_size( d, std::abs(rc.top   - rc.bottom)/2.0 );
 
             SVGOStringStream tmp_ellipse;
             tmp_ellipse << "cx=\"" << cx << "\" ";
@@ -1992,12 +2073,12 @@ std::cout << "BEFORE DRAW"
 
             d->mask |= wmr_mask;
 
-            *(d->outsvg) += "   <ellipse ";
+            d->outsvg += "   <ellipse ";
             output_style(d);
-            *(d->outsvg) += "\n\t";
-            *(d->outsvg) += tmp_ellipse.str().c_str();
-            *(d->outsvg) += "/> \n";
-            *(d->path) = "";
+            d->outsvg += "\n\t";
+            d->outsvg += tmp_ellipse.str().c_str();
+            d->outsvg += "/> \n";
+            d->path = "";
             break;
         }
         case U_WMR_FLOODFILL:             dbg_str << "<!-- U_WMR_EXTFLOODFILL -->\n";         break;
@@ -2139,7 +2220,24 @@ std::cout << "BEFORE DRAW"
             break;
         }
         case U_WMR_SETPIXEL:              dbg_str << "<!-- U_WMR_SETPIXEL -->\n";                break;
-        case U_WMR_OFFSETCLIPRGN:         dbg_str << "<!-- U_WMR_OFFSETCLIPRGN/POLYLINE -->\n";  break;
+        case U_WMR_OFFSETCLIPRGN:
+        {
+            dbg_str << "<!-- U_EMR_OFFSETCLIPRGN -->\n"; 
+            U_POINT16  off;
+            nSize = U_WMROFFSETCLIPRGN_get(contents,&off);
+            if (d->dc[d->level].clip_id) { // can only offset an existing clipping path
+                unsigned int real_idx = d->dc[d->level].clip_id - 1;
+                Geom::PathVector tmp_vect = sp_svg_read_pathv(d->clips.strings[real_idx]);
+                double ox = pix_to_x_point(d, off.x, off.y) - pix_to_x_point(d, 0, 0); // take into account all active transforms
+                double oy = pix_to_y_point(d, off.x, off.y) - pix_to_y_point(d, 0, 0);
+                Geom::Affine tf = Geom::Translate(ox,oy);
+                tmp_vect *= tf;
+                char *tmp_path = sp_svg_write_path(tmp_vect);
+                add_clips(d, tmp_path, U_RGN_COPY);
+                free(tmp_path);
+            }
+            break;
+        }
         // U_WMR_TEXTOUT should be here, but has been moved down to merge with U_WMR_EXTTEXTOUT
         case U_WMR_BITBLT:
         {
@@ -2501,11 +2599,19 @@ std::cout << "BEFORE DRAW"
                 status = trinfo_load_textrec(d->tri, &tsp, tsp.ori,TR_EMFBOT);  // ori is actually escapement
                 if(status==-1){ // change of escapement, emit what we have and reset
                     TR_layout_analyze(d->tri);
+                    if (d->dc[d->level].clip_id){
+                       SVGOStringStream tmp_clip;
+                       tmp_clip << "\n<g\n\tclip-path=\"url(#clipWmfPath" << d->dc[d->level].clip_id << ")\"\n>";
+                       d->outsvg += tmp_clip.str().c_str();
+                    }
                     TR_layout_2_svg(d->tri);
                     ts << d->tri->out;
-                    *(d->outsvg) += ts.str().c_str();
+                    d->outsvg += ts.str().c_str();
                     d->tri = trinfo_clear(d->tri);
                     (void) trinfo_load_textrec(d->tri, &tsp, tsp.ori,TR_EMFBOT); // ignore return status, it must work
+                    if (d->dc[d->level].clip_id){
+                       d->outsvg += "\n</g>\n";
+                    }        
                 }
 
                 g_free(escaped_text);
@@ -2910,13 +3016,13 @@ std::cout << "BEFORE DRAW"
             break;
     }  //end of switch
 // When testing, uncomment the following to place a comment for each processed WMR record in the SVG
-//    *(d->outsvg) += dbg_str.str().c_str();
-    *(d->path)   += tmp_path.str().c_str();
+//    d->outsvg += dbg_str.str().c_str();
+    d->path   += tmp_path.str().c_str();
     if(!nSize){ OK=0; std::cout << "nSize == 0, oops!!!" << std::endl; }     // There was some problem with this record, it is not safe to continue
 
     }  //end of while
 // When testing, uncomment the following to show the final SVG derived from the WMF
-// std::cout << *(d->outsvg) << std::endl;
+// std::cout << d->outsvg << std::endl;
     (void) U_wmr_properties(U_WMR_INVALID);  // force the release of the lookup table memory, returned value is irrelevant
 
     return 1;
@@ -2927,6 +3033,8 @@ void Wmf::free_wmf_strings(WMF_STRINGS name){
         for(int i=0; i< name.count; i++){ free(name.strings[i]); }
         free(name.strings);
     }
+    name.count = 0;
+    name.size = 0;
 }
 
 SPDocument *
@@ -2935,70 +3043,38 @@ Wmf::open( Inkscape::Extension::Input * /*mod*/, const gchar *uri )
 
     WMF_CALLBACK_DATA d;
 
-    memset(&d, 0, sizeof(WMF_CALLBACK_DATA));
-
-    for(int i = 0; i < WMF_MAX_DC+1; i++){  // be sure all values and pointers are empty to start with
-        memset(&(d.dc[i]),0,sizeof(WMF_DEVICE_CONTEXT));
-    }
-    // set default drawing objects, these are active if no object has been selected
-    d.dc[0].active_pen                         = -1;  // -1 when the default is used instead of a selected object
-    d.dc[0].active_brush                       = -1;
-    d.dc[0].active_font                        = -1;
-    // Default font, WMF spec says device can pick whatever it wants.  WMF files that do not specify a font are unlikely to look very good!
-    d.dc[0].font_name = strdup("Arial");
+    // Default font, WMF spec says device can pick whatever it wants. 
+    // WMF files that do not specify a  font are unlikely to look very good!
     d.dc[0].style.font_size.computed           = 16.0;
     d.dc[0].style.font_weight.value            = SP_CSS_FONT_WEIGHT_400;
     d.dc[0].style.font_style.value             = SP_CSS_FONT_STYLE_NORMAL;
     d.dc[0].style.text_decoration_line.underline    = 0;
     d.dc[0].style.text_decoration_line.line_through = 0;
     d.dc[0].style.baseline_shift.value         = 0;
-    d.dc[0].textColor                          = U_RGB(0, 0, 0);        // default foreground color (black)
-    d.dc[0].bkColor                            = U_RGB(255, 255, 255);  // default background color (white)
-    d.dc[0].bkMode                             = U_TRANSPARENT;
-    d.dc[0].dirty                              = 0;
+
     // Default pen, WMF files that do not specify a pen are unlikely to look very good!
     d.dc[0].style.stroke_dasharray.set         = 0;
     d.dc[0].style.stroke_linecap.computed      = 2; // U_PS_ENDCAP_SQUARE;
     d.dc[0].style.stroke_linejoin.computed     = 0; // U_PS_JOIN_MITER;
-    d.dc[0].stroke_set                         = true;
     d.dc[0].style.stroke_width.value           = 1.0; // will be reset to something reasonable once WMF draying size is known
     d.dc[0].style.stroke.value.color.set( 0, 0, 0 );
-    // Default brush = none, WMF files that do not specify a brush are unlikely to look very good!
-    d.dc[0].fill_set                           = false;
 
     if (uri == NULL) {
         return NULL;
     }
 
-    d.outsvg            = new Glib::ustring("");
-    d.path              = new Glib::ustring("");
-    d.outdef            = new Glib::ustring("");
-    d.defs              = new Glib::ustring("");
-    d.mask              = 0;
-    d.drawtype          = 0;
-    d.arcdir            = U_AD_COUNTERCLOCKWISE;
-    d.dwRop2            = U_R2_COPYPEN;
-    d.dwRop3            = 0;
-    d.E2IdirY           = 1.0;
-    d.D2PscaleX         = 1.0;
-    d.D2PscaleY         = 1.0;
-    d.hatches.size      = 0;
-    d.hatches.count     = 0;
-    d.hatches.strings   = NULL;
-    d.images.size       = 0;
-    d.images.count      = 0;
-    d.images.strings    = NULL;
+    d.dc[0].font_name = strdup("Arial"); // Default font, set only on lowest level, it copies up from there WMF spec says device can pick whatever it wants
 
     // set up the size default for patterns in defs.  This might not be referenced if there are no patterns defined in the drawing.
 
-    *(d.defs) += "\n";
-    *(d.defs) += "   <pattern id=\"WMFhbasepattern\"     \n";
-    *(d.defs) += "        patternUnits=\"userSpaceOnUse\"\n";
-    *(d.defs) += "        width=\"6\"                    \n";
-    *(d.defs) += "        height=\"6\"                   \n";
-    *(d.defs) += "        x=\"0\"                        \n";
-    *(d.defs) += "        y=\"0\">                       \n";
-    *(d.defs) += "   </pattern>                          \n";
+    d.defs += "\n";
+    d.defs += "   <pattern id=\"WMFhbasepattern\"     \n";
+    d.defs += "        patternUnits=\"userSpaceOnUse\"\n";
+    d.defs += "        width=\"6\"                    \n";
+    d.defs += "        height=\"6\"                   \n";
+    d.defs += "        x=\"0\"                        \n";
+    d.defs += "        y=\"0\">                       \n";
+    d.defs += "   </pattern>                          \n";
 
 
     size_t length;
@@ -3014,16 +3090,13 @@ Wmf::open( Inkscape::Extension::Input * /*mod*/, const gchar *uri )
     (void) myMetaFileProc(contents,length, &d);
     free(contents);
 
-//    std::cout << "SVG Output: " << std::endl << *(d.outsvg) << std::endl;
+//    std::cout << "SVG Output: " << std::endl << d.outsvg << std::endl;
 
-    SPDocument *doc = SPDocument::createNewDocFromMem(d.outsvg->c_str(), strlen(d.outsvg->c_str()), TRUE);
+    SPDocument *doc = SPDocument::createNewDocFromMem(d.outsvg.c_str(), strlen(d.outsvg.c_str()), TRUE);
 
-    delete d.outsvg;
-    delete d.path;
-    delete d.outdef;
-    delete d.defs;
     free_wmf_strings(d.hatches);
     free_wmf_strings(d.images);
+    free_wmf_strings(d.clips);
 
     if (d.wmf_obj) {
         int i;
@@ -3034,45 +3107,13 @@ Wmf::open( Inkscape::Extension::Input * /*mod*/, const gchar *uri )
 
     d.dc[0].style.stroke_dasharray.values.clear();
 
-    for(int i=0; i<=d.level;i++){
+    for(int i=0; i<=WMF_MAX_DC; i++){
       if(d.dc[i].font_name)free(d.dc[i].font_name);
     }
 
     d.tri = trinfo_release_except_FC(d.tri);
 
-    // Set viewBox if it doesn't exist
-    if (doc && !doc->getRoot()->viewBox_set) {
-        bool saved = Inkscape::DocumentUndo::getUndoSensitive(doc);
-        Inkscape::DocumentUndo::setUndoSensitive(doc, false);
-        
-        doc->ensureUpToDate();
-        
-        // Set document unit
-        Inkscape::XML::Node *repr = sp_document_namedview(doc, 0)->getRepr();
-        Inkscape::SVGOStringStream os;
-        Inkscape::Util::Unit const* doc_unit = doc->getWidth().unit;
-        os << doc_unit->abbr;
-        repr->setAttribute("inkscape:document-units", os.str().c_str());
-        
-        // Set viewBox
-        doc->setViewBox(Geom::Rect::from_xywh(0, 0, doc->getWidth().value(doc_unit), doc->getHeight().value(doc_unit)));
-        doc->ensureUpToDate();
-
-        // Scale and translate objects
-        double scale = Inkscape::Util::Quantity::convert(1, "px", doc_unit);
-        ShapeEditor::blockSetItem(true);
-        double dh;
-        if(SP_ACTIVE_DOCUMENT){ // for file menu open or import, or paste from clipboard
-            dh = SP_ACTIVE_DOCUMENT->getHeight().value("px");
-        }
-        else { // for open via --file on command line
-            dh = doc->getHeight().value("px");
-        }
-        doc->getRoot()->scaleChildItemsRec(Geom::Scale(scale), Geom::Point(0, dh));
-        ShapeEditor::blockSetItem(false);
-
-        Inkscape::DocumentUndo::setUndoSensitive(doc, saved);
-    }
+    setViewBoxIfMissing(doc);
 
     return doc;
 }

@@ -200,6 +200,42 @@ push @{$properties{ "paint-order" }->{elements}}, @graphics_elements;
 $properties{ "paint-order" }->{default} = "normal";
 $properties{ "paint-order" }->{inherit} = "yes";
 
+push @{$properties{ "solid-color" }->{elements}}, @container_elements;
+push @{$properties{ "solid-color" }->{elements}}, @graphics_elements;
+$properties{ "solid-color" }->{default} = "#000000";
+$properties{ "solid-color" }->{inherit} = "no";
+
+push @{$properties{ "solid-opacity" }->{elements}}, @container_elements;
+push @{$properties{ "solid-opacity" }->{elements}}, @graphics_elements;
+$properties{ "solid-opacity" }->{default} = "1.0";
+$properties{ "solid-opacity" }->{inherit} = "no";
+
+# CSS Text Decoration
+push @{$properties{ "text-decoration-line" }->{elements}}, @container_elements;
+push @{$properties{ "text-decoration-line" }->{elements}}, @text_content_elements;
+$properties{ "text-decoration-line" }->{default} = "none";
+$properties{ "text-decoration-line" }->{inherit} = "no";
+
+push @{$properties{ "text-decoration-color" }->{elements}}, @container_elements;
+push @{$properties{ "text-decoration-color" }->{elements}}, @text_content_elements;
+$properties{ "text-decoration-color" }->{default} = "NO_DEFAULT";
+$properties{ "text-decoration-color" }->{inherit} = "no";
+
+push @{$properties{ "text-decoration-style" }->{elements}}, @container_elements;
+push @{$properties{ "text-decoration-style" }->{elements}}, @text_content_elements;
+$properties{ "text-decoration-color" }->{default} = "solid";
+$properties{ "text-decoration-color" }->{inherit} = "no";
+
+push @{$properties{ "text-decoration-fill" }->{elements}}, @container_elements;
+push @{$properties{ "text-decoration-fill" }->{elements}}, @text_content_elements;
+$properties{ "text-decoration-fill" }->{default} = "NO_DEFAULT";
+$properties{ "text-decoration-fill" }->{inherit} = "no";
+
+push @{$properties{ "text-decoration-stroke" }->{elements}}, @container_elements;
+push @{$properties{ "text-decoration-stroke" }->{elements}}, @text_content_elements;
+$properties{ "text-decoration-stroke" }->{default} = "NO_DEFAULT";
+$properties{ "text-decoration-stroke" }->{inherit} = "no";
+
 
 # Output
 

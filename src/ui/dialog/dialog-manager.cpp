@@ -54,6 +54,8 @@
 #include "ui/dialog/xml-tree.h"
 #include "ui/dialog/clonetiler.h"
 #include "ui/dialog/svg-fonts-dialog.h"
+#include "ui/dialog/objects.h"
+#include "ui/dialog/tags.h"
 
 namespace Inkscape {
 namespace UI {
@@ -70,13 +72,13 @@ inline Dialog *create() { return PanelDialog<B>::template create<T>(); }
 
 /**
  *  This class is provided as a container for Inkscape's various
- *  dialogs.  This allows Inkscape::Application to treat the various
+ *  dialogs.  This allows InkscapeApplication to treat the various
  *  dialogs it invokes, as abstractions.
  *
  *  DialogManager is essentially a cache of dialogs.  It lets us
  *  initialize dialogs lazily - instead of constructing them during
  *  application startup, they're constructed the first time they're
- *  actually invoked by Inkscape::Application.  The constructed
+ *  actually invoked by InkscapeApplication.  The constructed
  *  dialog is held here after that, so future invokations of the
  *  dialog don't need to get re-constructed each time.  The memory for
  *  the dialogs are then reclaimed when the DialogManager is destroyed.
@@ -96,6 +98,9 @@ DialogManager::DialogManager() {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     int dialogs_type = prefs->getIntLimited("/options/dialogtype/value", DOCK, 0, 1);
 
+    // The preferences dialog is broken, the DockBehavior code resizes it's floating window to the smallest size
+    registerFactory("InkscapePreferences", &create<InkscapePreferences,  FloatingBehavior>);
+
     if (dialogs_type == FLOATING) {
         registerFactory("AlignAndDistribute",  &create<AlignAndDistribute,   FloatingBehavior>);
         registerFactory("DocumentMetadata",    &create<DocumentMetadata,     FloatingBehavior>);
@@ -106,8 +111,9 @@ DialogManager::DialogManager() {
         registerFactory("Find",                &create<Find,                 FloatingBehavior>);
         registerFactory("Glyphs",              &create<GlyphsPanel,          FloatingBehavior>);
         registerFactory("IconPreviewPanel",    &create<IconPreviewPanel,     FloatingBehavior>);
-        registerFactory("InkscapePreferences", &create<InkscapePreferences,  FloatingBehavior>);
         registerFactory("LayersPanel",         &create<LayersPanel,          FloatingBehavior>);
+        registerFactory("ObjectsPanel",        &create<ObjectsPanel,         FloatingBehavior>);
+        registerFactory("TagsPanel",           &create<TagsPanel,            FloatingBehavior>);
         registerFactory("LivePathEffect",      &create<LivePathEffectEditor, FloatingBehavior>);
         registerFactory("Memory",              &create<Memory,               FloatingBehavior>);
         registerFactory("Messages",            &create<Messages,             FloatingBehavior>);
@@ -126,8 +132,8 @@ DialogManager::DialogManager() {
         registerFactory("TextFont",            &create<TextEdit,             FloatingBehavior>);
         registerFactory("SpellCheck",          &create<SpellCheck,           FloatingBehavior>);
         registerFactory("Export",              &create<Export,               FloatingBehavior>);
-        registerFactory("XmlTree",             &create<XmlTree,              FloatingBehavior>);
         registerFactory("CloneTiler",          &create<CloneTiler,           FloatingBehavior>);
+        registerFactory("XmlTree",             &create<XmlTree,              FloatingBehavior>);
 
     } else {
 
@@ -140,8 +146,9 @@ DialogManager::DialogManager() {
         registerFactory("Find",                &create<Find,                 DockBehavior>);
         registerFactory("Glyphs",              &create<GlyphsPanel,          DockBehavior>);
         registerFactory("IconPreviewPanel",    &create<IconPreviewPanel,     DockBehavior>);
-        registerFactory("InkscapePreferences", &create<InkscapePreferences,  DockBehavior>);
         registerFactory("LayersPanel",         &create<LayersPanel,          DockBehavior>);
+        registerFactory("ObjectsPanel",        &create<ObjectsPanel,         DockBehavior>);
+        registerFactory("TagsPanel",           &create<TagsPanel,            DockBehavior>);
         registerFactory("LivePathEffect",      &create<LivePathEffectEditor, DockBehavior>);
         registerFactory("Memory",              &create<Memory,               DockBehavior>);
         registerFactory("Messages",            &create<Messages,             DockBehavior>);
@@ -160,8 +167,8 @@ DialogManager::DialogManager() {
         registerFactory("TextFont",            &create<TextEdit,             DockBehavior>);
         registerFactory("SpellCheck",          &create<SpellCheck,           DockBehavior>);
         registerFactory("Export",              &create<Export,               DockBehavior>);
-        registerFactory("XmlTree",             &create<XmlTree,              DockBehavior>);
         registerFactory("CloneTiler",          &create<CloneTiler,           DockBehavior>);
+        registerFactory("XmlTree",             &create<XmlTree,              DockBehavior>);
 
     }
 }
@@ -250,7 +257,7 @@ void DialogManager::showDialog(gchar const *name, bool grabfocus) {
 /**
  * Shows the named dialog, creating it if necessary.
  */
-void DialogManager::showDialog(GQuark name, bool grabfocus) {
+void DialogManager::showDialog(GQuark name, bool /*grabfocus*/) {
     bool wantTiming = Inkscape::Preferences::get()->getBool("/dialogs/debug/trackAppear", false);
     GTimer *timer = (wantTiming) ? g_timer_new() : 0; // if needed, must be created/started before getDialog()
     Dialog *dialog = getDialog(name);
@@ -261,8 +268,8 @@ void DialogManager::showDialog(GQuark name, bool grabfocus) {
             tracker->setAutodelete(true);
             timer = 0;
         }
-        if (grabfocus)
-            dialog->present();
+        // should check for grabfocus, but lp:1348927 prevents it
+        dialog->present();
     }
 
     if ( timer ) {

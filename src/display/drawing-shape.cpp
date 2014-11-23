@@ -9,7 +9,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <glib.h>
+#include <glibmm.h>
 #include <2geom/curves.h>
 #include <2geom/pathvector.h>
 #include <2geom/path-sink.h>
@@ -149,14 +149,13 @@ DrawingShape::_updateItem(Geom::IntRect const &area, UpdateContext const &ctx, u
     return STATE_ALL;
 }
 
-#ifdef WITH_SVG2
 void
 DrawingShape::_renderFill(DrawingContext &dc)
 {
     Inkscape::DrawingContext::Save save(dc);
     dc.transform(_ctm);
 
-    bool has_fill =  _nrstyle.prepareFill(dc, _item_bbox);
+    bool has_fill =  _nrstyle.prepareFill(dc, _item_bbox, _fill_pattern);
 
     if( has_fill ) {
         dc.path(_curve->get_pathvector());
@@ -172,7 +171,7 @@ DrawingShape::_renderStroke(DrawingContext &dc)
     Inkscape::DrawingContext::Save save(dc);
     dc.transform(_ctm);
 
-    bool has_stroke = _nrstyle.prepareStroke(dc, _item_bbox);
+    bool has_stroke = _nrstyle.prepareStroke(dc, _item_bbox, _stroke_pattern);
     has_stroke &= (_nrstyle.stroke_width != 0);
 
     if( has_stroke ) {
@@ -183,7 +182,6 @@ DrawingShape::_renderStroke(DrawingContext &dc)
         dc.newPath(); // clear path
     }
 }
-#endif
 
 void
 DrawingShape::_renderMarkers(DrawingContext &dc, Geom::IntRect const &area, unsigned flags, DrawingItem *stop_at)
@@ -222,10 +220,9 @@ DrawingShape::_renderItem(DrawingContext &dc, Geom::IntRect const &area, unsigne
 
     }
 
-#ifdef WITH_SVG2
     if( _nrstyle.paint_order_layer[0] == NRStyle::PAINT_ORDER_NORMAL ) {
         // This is the most common case, special case so we don't call get_pathvector(), etc. twice
-#endif
+
         {
             // we assume the context has no path
             Inkscape::DrawingContext::Save save(dc);
@@ -234,8 +231,8 @@ DrawingShape::_renderItem(DrawingContext &dc, Geom::IntRect const &area, unsigne
             // update fill and stroke paints.
             // this cannot be done during nr_arena_shape_update, because we need a Cairo context
             // to render svg:pattern
-            bool has_fill   = _nrstyle.prepareFill(dc, _item_bbox);
-            bool has_stroke = _nrstyle.prepareStroke(dc, _item_bbox);
+            bool has_fill   = _nrstyle.prepareFill(dc, _item_bbox, _fill_pattern);
+            bool has_stroke = _nrstyle.prepareStroke(dc, _item_bbox, _stroke_pattern);
             has_stroke &= (_nrstyle.stroke_width != 0);
 
             if (has_fill || has_stroke) {
@@ -255,7 +252,6 @@ DrawingShape::_renderItem(DrawingContext &dc, Geom::IntRect const &area, unsigne
         _renderMarkers(dc, area, flags, stop_at);
         return RENDER_OK;
 
-#ifdef WITH_SVG2
     }
 
     // Handle different paint orders
@@ -276,7 +272,6 @@ DrawingShape::_renderItem(DrawingContext &dc, Geom::IntRect const &area, unsigne
         }
     }
     return RENDER_OK;
-#endif
 }
 
 void DrawingShape::_clipItem(DrawingContext &dc, Geom::IntRect const & /*area*/)

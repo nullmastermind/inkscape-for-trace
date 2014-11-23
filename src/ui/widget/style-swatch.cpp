@@ -261,7 +261,7 @@ void StyleSwatch::setStyle(SPCSSAttr *css)
     Glib::ustring css_string;
     sp_repr_css_write_string (_css, css_string);
     SPStyle *temp_spstyle = sp_style_new(SP_ACTIVE_DOCUMENT);
-    if (~css_string.empty()) {
+    if (!css_string.empty()) {
         sp_style_merge_from_style_string (temp_spstyle, css_string.c_str());
     }
     
@@ -386,9 +386,9 @@ void StyleSwatch::setStyle(SPStyle *query)
   Local Variables:
   mode:c++
   c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0)(inline-open . 0))
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
   indent-tabs-mode:nil
   fill-column:99
   End:
 */
-// vim: filetype=c++:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :

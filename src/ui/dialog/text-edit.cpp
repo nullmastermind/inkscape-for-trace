@@ -32,7 +32,6 @@ extern "C" {
 
 #include <gtkmm/stock.h>
 #include <libnrtype/font-instance.h>
-#include <libnrtype/font-style-to-pos.h>
 #include <libnrtype/font-lister.h>
 #include <xml/repr.h>
 
@@ -52,7 +51,7 @@ extern "C" {
 #include "ui/icon-names.h"
 #include "preferences.h"
 #include "verbs.h"
-#include "interface.h"
+#include "ui/interface.h"
 #include "svg/css-ostringstream.h"
 #include "widgets/icon.h"
 #include "widgets/font-selector.h"
@@ -344,9 +343,9 @@ void TextEdit::onReadSelection ( gboolean dostyle, gboolean /*docontent*/ )
 
         Inkscape::FontLister* fontlister = Inkscape::FontLister::get_instance();
 
-        // This is done for us by text-toolbar. No need to do it twice.
-        // fontlister->update_font_list( sp_desktop_document( SP_ACTIVE_DESKTOP ));
-        // fontlister->selection_update();
+        // This is normally done for us by text-toolbar but only when we are in text editing context
+        fontlister->update_font_list(sp_desktop_document(this->desktop));
+        fontlister->selection_update();
 
         Glib::ustring fontspec = fontlister->get_fontspec();
 
@@ -404,12 +403,12 @@ void TextEdit::setPreviewText (Glib::ustring font_spec, Glib::ustring phrase)
     double pt_size = Inkscape::Util::Quantity::convert(sp_style_css_size_units_to_px(sp_font_selector_get_size(fsel), unit), "px", "pt");
 
     // Pango font size is in 1024ths of a point
-    // C++11: Glib::ustring size = std::to_string( pt_size * PANGO_SCALE );
+    // C++11: Glib::ustring size = std::to_string( int(pt_size * PANGO_SCALE) );
     std::ostringstream size_st;
-    size_st << pt_size * PANGO_SCALE;
+    size_st << int(pt_size * PANGO_SCALE); // Markup code expects integers
 
-    Glib::ustring markup = "<span font=\"" + font_spec +
-        "\" size=\"" + size_st.str() + "\">" + phrase_escaped + "</span>";
+    Glib::ustring markup = "<span font=\'" + font_spec +
+        "\' size=\'" + size_st.str() + "\'>" + phrase_escaped + "</span>";
 
     preview_label.set_markup(markup.c_str());
 }

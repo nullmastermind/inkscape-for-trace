@@ -64,7 +64,8 @@ public:
   void addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item);
 
 protected:
-    virtual void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec);
+  virtual void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec);
+  std::vector<Geom::Path> supplied_path; //for knotholder business
   
 private:
   void updateSwitcher();
@@ -74,7 +75,6 @@ private:
   BoolParam  add_stroke_width;
   BoolParam  add_other_stroke_width;
   ScalarParam switcher_size;
-  double stroke_width;
   ArrayParam<double> crossing_points_vector;//svg storage of crossing_points
   
   LPEKnotNS::CrossingPoints crossing_points;//topology representation of the knot.

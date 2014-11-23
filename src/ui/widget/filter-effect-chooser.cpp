@@ -23,6 +23,8 @@ namespace Widget {
 
 SimpleFilterModifier::SimpleFilterModifier(int flags)
     : _lb_blend(_("Blend mode:")),
+      _lb_blur(_("_Blur:")),
+      _lb_blur_unit(_("%")),
       _blend(BlendModeConverter, SP_ATTR_INVALID, false),
       _blur(_("Blur (%)"), 0, 0, 100, 1, 0.01, 1)
 {
@@ -56,15 +58,12 @@ const Glib::ustring SimpleFilterModifier::get_blend_mode()
     if (!(_flags & BLEND)) {
         return "normal";
     }
-    if (_blend.get_active_row_number() == 5) {
+
+    const Util::EnumData<Inkscape::Filters::FilterBlendMode> *d = _blend.get_active_data();
+    if (d) {
+        return _blend.get_active_data()->key;
+    } else
         return "normal";
-    } else {
-        const Util::EnumData<Inkscape::Filters::FilterBlendMode> *d = _blend.get_active_data();
-        if (d) {
-            return _blend.get_active_data()->key;
-        } else
-            return "normal";
-    }
 }
 
 void SimpleFilterModifier::set_blend_mode(const int val)

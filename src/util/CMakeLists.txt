@@ -5,6 +5,7 @@ set(util_SRC
 	expression-evaluator.cpp
 	share.cpp
 	units.cpp
+	ziptool.cpp
 
 
 	# -------
@@ -34,10 +35,12 @@ set(util_SRC
 	reference.h
 	reverse-list.h
 	share.h
+	signal-blocker.h
 	tuple.h
 	ucompose.hpp
 	units.h
 	unordered-containers.h
+	ziptool.h
 )
 
 # add_inkscape_lib(util_LIB "${util_SRC}")

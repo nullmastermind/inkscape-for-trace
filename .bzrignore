@@ -160,6 +160,7 @@ src/algorithms/makefile
 src/application/makefile
 src/bind/makefile
 src/check-header-compile
+src/cxxtests.cpp
 src/debug/makefile
 src/dialogs/makefile
 src/display/makefile
@@ -218,3 +219,8 @@ Inkscape.creator
 Inkscape.creator.user
 Inkscape.files
 Inkscape.includes
+# osxapp (X11)
+build-osxapp
+inst-osxapp
+packaging/macosx/ScriptExec/build
+packaging/macosx/Inkscape.app

@@ -31,16 +31,15 @@
 #include "libnrtype/font-lister.h"
 #include <glibmm/i18n.h>
 #include "text-toolbar.h"
-#include "connection-pool.h"
 #include "desktop-handles.h"
 #include "desktop-style.h"
 #include "desktop.h"
 #include "document-undo.h"
 #include "document.h"
-#include "ege-adjustment-action.h"
-#include "ege-select-one-action.h"
-#include "ink-action.h"
-#include "ink-comboboxentry-action.h"
+#include "widgets/ege-adjustment-action.h"
+#include "widgets/ege-select-one-action.h"
+#include "widgets/ink-action.h"
+#include "widgets/ink-comboboxentry-action.h"
 #include "inkscape.h"
 #include "preferences.h"
 #include "selection-chemistry.h"
@@ -54,6 +53,7 @@
 #include "toolbox.h"
 #include "ui/icon-names.h"
 #include "ui/tools/text-tool.h"
+#include "ui/tools/tool-base.h"
 #include "verbs.h"
 #include "xml/repr.h"
 
@@ -72,20 +72,20 @@ using Inkscape::UI::PrefPusher;
 
 static void       sp_print_font( SPStyle *query ) {
 
-    bool family_set   = query->text->font_family.set;
+    bool family_set   = query->font_family.set;
     bool style_set    = query->font_style.set;
-    bool fontspec_set = query->text->font_specification.set;
+    bool fontspec_set = query->font_specification.set;
 
     std::cout << "    Family set? " << family_set
               << "    Style set? "  << style_set
               << "    FontSpec set? " << fontspec_set
               << std::endl;
     std::cout << "    Family: "
-              << (query->text->font_family.value ? query->text->font_family.value : "No value")
+              << (query->font_family.value ? query->font_family.value : "No value")
               << "    Style: "    <<  query->font_style.computed
               << "    Weight: "   <<  query->font_weight.computed
               << "    FontSpec: "
-              << (query->text->font_specification.value ? query->text->font_specification.value : "No value")
+              << (query->font_specification.value ? query->font_specification.value : "No value")
               << std::endl;
     std::cout << "    LineHeight: "    << query->line_height.computed
               << "    WordSpacing: "   << query->word_spacing.computed
@@ -134,6 +134,7 @@ static void sp_text_fontfamily_value_changed( Ink_ComboBoxEntry_Action *act, GOb
     g_object_set_data( tbl, "freeze", GINT_TO_POINTER(TRUE) );
 
     Glib::ustring new_family = ink_comboboxentry_action_get_active_text( act );
+    css_font_family_unquote( new_family ); // Remove quotes around font family names.
 
     // TODO: Think about how to handle handle multiple selections. While
     // the font-family may be the same for all, the styles might be different.
@@ -146,6 +147,13 @@ static void sp_text_fontfamily_value_changed( Ink_ComboBoxEntry_Action *act, GOb
     std::cout << "  New active: " << act->active << std::endl;
 #endif
     if( new_family.compare( fontlister->get_font_family() ) != 0 ) {
+        // Changed font-family
+
+        if( act->active == -1 ) {
+            // New font-family, not in document, not on system (could be fallback list)
+            fontlister->insert_font_family( new_family );
+            act->active = 0; // New family is always at top of list.
+        }
 
         std::pair<Glib::ustring,Glib::ustring> ui = fontlister->set_font_family( act->active );
         // active text set in sp_text_toolbox_selection_changed()
@@ -811,7 +819,7 @@ static void sp_text_set_sizes(GtkListStore* model_size, int unit)
  * It is called whenever a text selection is changed, including stepping cursor
  * through text, or setting focus to text.
  */
-static void sp_text_toolbox_selection_changed(Inkscape::Selection */*selection*/, GObject *tbl)
+static void sp_text_toolbox_selection_changed(Inkscape::Selection */*selection*/, GObject *tbl, bool subselection = false) // don't bother to update font list if subsel changed
 {
 #ifdef DEBUG_TEXT
     static int count = 0;
@@ -851,7 +859,9 @@ static void sp_text_toolbox_selection_changed(Inkscape::Selection */*selection*/
         INK_COMBOBOXENTRY_ACTION( g_object_get_data( tbl, "TextFontStyleAction"  ) );
 
     Inkscape::FontLister* fontlister = Inkscape::FontLister::get_instance();
-    fontlister->update_font_list( sp_desktop_document( SP_ACTIVE_DESKTOP ));
+    if (!subselection) {
+        fontlister->update_font_list( sp_desktop_document( SP_ACTIVE_DESKTOP ));
+    }
     fontlister->selection_update();
 
     // Update font list, but only if widget already created.
@@ -923,7 +933,6 @@ static void sp_text_toolbox_selection_changed(Inkscape::Selection */*selection*/
     }
 
     // If we have valid query data for text (font-family, font-specification) set toolbar accordingly.
-    if (query->text)
     {
         // Size (average of text selected)
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -1051,11 +1060,11 @@ static void sp_text_toolbox_selection_changed(Inkscape::Selection */*selection*/
         ege_select_one_action_set_active( textOrientationAction, activeButton2 );
 
 
-    } // if( query->text )
+    }
 
 #ifdef DEBUG_TEXT
     std::cout << "    GUI: fontfamily.value: "
-              << (query->text->font_family.value ? query->text->font_family.value : "No value")
+              << (query->font_family.value ? query->font_family.value : "No value")
               << std::endl;
     std::cout << "    GUI: font_size.computed: "   << query->font_size.computed   << std::endl;
     std::cout << "    GUI: font_weight.computed: " << query->font_weight.computed << std::endl;
@@ -1147,7 +1156,7 @@ static void sp_text_toolbox_selection_modified(Inkscape::Selection *selection, g
 static void
 sp_text_toolbox_subselection_changed (gpointer /*tc*/, GObject *tbl)
 {
-    sp_text_toolbox_selection_changed (NULL, tbl);
+    sp_text_toolbox_selection_changed (NULL, tbl, true);
 }
 
 // TODO: possibly share with font-selector by moving most code to font-lister (passing family name)
@@ -1167,15 +1176,15 @@ static void sp_text_toolbox_select_cb( GtkEntry* entry, GtkEntryIconPosition /*p
     SPItem *item = SP_ITEM(i->data);
     SPStyle *style = item->style;
 
-    if (style && style->text) {
+    if (style) {
 
       Glib::ustring family_style;
-      if (style->text->font_family.set) {
-	family_style = style->text->font_family.value;
+      if (style->font_family.set) {
+	family_style = style->font_family.value;
 	//std::cout << " family style from font_family: " << family_style << std::endl;
       }
-      else if (style->text->font_specification.set) {
-	family_style = style->text->font_specification.value;
+      else if (style->font_specification.set) {
+	family_style = style->font_specification.value;
 	//std::cout << " family style from font_spec: " << family_style << std::endl;
       }
 
@@ -1193,6 +1202,7 @@ static void sp_text_toolbox_select_cb( GtkEntry* entry, GtkEntryIconPosition /*p
   selection->setList(selectList);
 }
 
+static void text_toolbox_watch_ec(SPDesktop* dt, Inkscape::UI::Tools::ToolBase* ec, GObject* holder);
 
 // Define all the "widgets" in the toolbar.
 void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder)
@@ -1615,31 +1625,35 @@ void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
     // Is this necessary to call? Shouldn't hurt.
     sp_text_toolbox_selection_changed(sp_desktop_selection(desktop), holder);
 
-    // Watch selection
-    Inkscape::ConnectionPool* pool = Inkscape::ConnectionPool::new_connection_pool ("ISTextToolboxGTK");
-
-    sigc::connection *c_selection_changed =
-        new sigc::connection (sp_desktop_selection (desktop)->connectChanged
-                              (sigc::bind (sigc::ptr_fun (sp_text_toolbox_selection_changed), holder)));
-    pool->add_connection ("selection-changed", c_selection_changed);
-
-    sigc::connection *c_selection_modified =
-        new sigc::connection (sp_desktop_selection (desktop)->connectModified
-                              (sigc::bind (sigc::ptr_fun (sp_text_toolbox_selection_modified), holder)));
-    pool->add_connection ("selection-modified", c_selection_modified);
-
-    sigc::connection *c_subselection_changed =
-        new sigc::connection (desktop->connectToolSubselectionChanged
-                              (sigc::bind (sigc::ptr_fun (sp_text_toolbox_subselection_changed), holder)));
-    pool->add_connection ("tool-subselection-changed", c_subselection_changed);
-
-    Inkscape::ConnectionPool::connect_destroy (G_OBJECT (holder), pool);
+    desktop->connectEventContextChanged(sigc::bind(sigc::ptr_fun(text_toolbox_watch_ec), holder));
 
     g_signal_connect( holder, "destroy", G_CALLBACK(purge_repr_listener), holder );
 
 }
 
+static void text_toolbox_watch_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* ec, GObject* holder) {
+    using sigc::connection;
+    using sigc::bind;
+    using sigc::ptr_fun;
 
+    static connection c_selection_changed;
+    static connection c_selection_modified;
+    static connection c_subselection_changed;
+
+    if (SP_IS_TEXT_CONTEXT(ec)) {
+        // Watch selection
+        c_selection_changed = sp_desktop_selection(desktop)->connectChanged(bind(ptr_fun(sp_text_toolbox_selection_changed), holder, false));
+        c_selection_modified = sp_desktop_selection (desktop)->connectModified(bind(ptr_fun(sp_text_toolbox_selection_modified), holder));
+        c_subselection_changed = desktop->connectToolSubselectionChanged(bind(ptr_fun(sp_text_toolbox_subselection_changed), holder));
+    } else {
+        if (c_selection_changed)
+            c_selection_changed.disconnect();
+        if (c_selection_modified)
+            c_selection_modified.disconnect();
+        if (c_subselection_changed)
+            c_subselection_changed.disconnect();
+    }
+}
 /*
   Local Variables:
   mode:c++
@@ -1649,4 +1663,4 @@ void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
   fill-column:99
   End:
 */
-// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8 :

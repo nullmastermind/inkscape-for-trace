@@ -31,13 +31,13 @@
 #include "inkscape.h"
 #include "io/sys.h"
 #include "preferences.h"
-#include "shape-editor.h"
+#include "ui/shape-editor.h"
 #include "sp-namedview.h"
 #include "sp-root.h"
 #include "sp-script.h"
 #include "style.h"
 #include "svg/stringstream.h"
-#include "tools-switch.h"
+#include "ui/tools-switch.h"
 #include "ui/widget/color-picker.h"
 #include "ui/widget/scalar-unit.h"
 #include "ui/dialog/filedialog.h"
@@ -45,6 +45,7 @@
 #include "widgets/icon.h"
 #include "xml/node-event-vector.h"
 #include "xml/repr.h"
+#include <algorithm>    // std::min
 
 #include "rdf.h"
 #include "ui/widget/entity-entry.h"
@@ -596,6 +597,7 @@ void DocumentProperties::removeSelectedProfile(){
             //XML Tree being used directly here while it shouldn't be.
             sp_repr_unparent(obj->getRepr());
             DocumentUndo::done(SP_ACTIVE_DOCUMENT, SP_VERB_EDIT_REMOVE_COLOR_PROFILE, _("Remove linked color profile"));
+            break; // removing the color profile likely invalidates part of the traversed list, stop traversing here.
         }
         current = g_slist_next(current);
     }
@@ -1203,10 +1205,10 @@ void DocumentProperties::removeExternalScript(){
 
     const GSList *current = SP_ACTIVE_DOCUMENT->getResourceList( "script" );
     while ( current ) {
-        if (current->data && SP_IS_OBJECT(current->data)) {
-            SPObject* obj = SP_OBJECT(current->data);
-            SPScript* script = SP_SCRIPT(obj);
-            if (name == script->xlinkhref){
+        SPObject* obj = reinterpret_cast<SPObject *>(current->data);
+        if (obj) {
+            SPScript* script = dynamic_cast<SPScript *>(obj);
+            if (script && (name == script->xlinkhref)) {
 
                 //XML Tree being used directly here while it shouldn't be.
                 Inkscape::XML::Node *repr = obj->getRepr();
@@ -1236,23 +1238,16 @@ void DocumentProperties::removeEmbeddedScript(){
         }
     }
 
-    const GSList *current = SP_ACTIVE_DOCUMENT->getResourceList( "script" );
-    while ( current ) {
-        if (current->data && SP_IS_OBJECT(current->data)) {
-            SPObject* obj = SP_OBJECT(current->data);
-            if (id == obj->getId()){
+    SPObject* obj = SP_ACTIVE_DOCUMENT->getObjectById(id);
+    if (obj) {
+        //XML Tree being used directly here while it shouldn't be.
+        Inkscape::XML::Node *repr = obj->getRepr();
+        if (repr){
+            sp_repr_unparent(repr);
 
-                //XML Tree being used directly here while it shouldn't be.
-                Inkscape::XML::Node *repr = obj->getRepr();
-                if (repr){
-                    sp_repr_unparent(repr);
-
-                    // inform the document, so we can undo
-                    DocumentUndo::done(SP_ACTIVE_DOCUMENT, SP_VERB_EDIT_REMOVE_EMBEDDED_SCRIPT, _("Remove embedded script"));
-                }
-            }
+            // inform the document, so we can undo
+            DocumentUndo::done(SP_ACTIVE_DOCUMENT, SP_VERB_EDIT_REMOVE_EMBEDDED_SCRIPT, _("Remove embedded script"));
         }
-        current = g_slist_next(current);
     }
 
     populate_script_lists();
@@ -1359,10 +1354,15 @@ void DocumentProperties::populate_script_lists(){
     _ExternalScriptsListStore->clear();
     _EmbeddedScriptsListStore->clear();
     const GSList *current = SP_ACTIVE_DOCUMENT->getResourceList( "script" );
-    if (current) _scripts_observer.set(SP_OBJECT(current->data)->parent);
+    if (current) {
+        SPObject *obj = reinterpret_cast<SPObject *>(current->data);
+        g_assert(obj != NULL);
+        _scripts_observer.set(obj->parent);
+    }
     while ( current ) {
-        SPObject* obj = SP_OBJECT(current->data);
-        SPScript* script = SP_SCRIPT(obj);
+        SPObject* obj = reinterpret_cast<SPObject *>(current->data);
+        SPScript* script = dynamic_cast<SPScript *>(obj);
+        g_assert(script != NULL);
         if (script->xlinkhref)
         {
             Gtk::TreeModel::Row row = *(_ExternalScriptsListStore->append());
@@ -1599,7 +1599,7 @@ void DocumentProperties::_handleDocumentReplaced(SPDesktop* desktop, SPDocument 
     update();
 }
 
-void DocumentProperties::_handleActivateDesktop(Inkscape::Application *, SPDesktop *desktop)
+void DocumentProperties::_handleActivateDesktop(InkscapeApplication *, SPDesktop *desktop)
 {
     Inkscape::XML::Node *repr = sp_desktop_namedview(desktop)->getRepr();
     repr->addListener(&_repr_events, this);
@@ -1608,7 +1608,7 @@ void DocumentProperties::_handleActivateDesktop(Inkscape::Application *, SPDeskt
     update();
 }
 
-void DocumentProperties::_handleDeactivateDesktop(Inkscape::Application *, SPDesktop *desktop)
+void DocumentProperties::_handleDeactivateDesktop(InkscapeApplication *, SPDesktop *desktop)
 {
     Inkscape::XML::Node *repr = sp_desktop_namedview(desktop)->getRepr();
     repr->removeListenerByData(this);
@@ -1741,14 +1741,19 @@ void DocumentProperties::onDocUnitChange()
     prefs->setBool("/options/transform/gradient", true);
     {
         ShapeEditor::blockSetItem(true);
-        gdouble viewscale = doc->getWidth().value("px")/doc->getRoot()->viewBox.width();
-        if (doc->getHeight().value("px")/doc->getRoot()->viewBox.height() < viewscale)
-            viewscale = doc->getHeight().value("px")/doc->getRoot()->viewBox.height();
+        gdouble viewscale = 1.0;
+        Geom::Rect vb = doc->getRoot()->viewBox;
+        if ( !vb.hasZeroArea() ) {
+            gdouble viewscale_w = doc->getWidth().value("px") / vb.width();
+            gdouble viewscale_h = doc->getHeight().value("px")/ vb.height();
+            viewscale = std::min(viewscale_h, viewscale_w);
+        }
         gdouble scale = Inkscape::Util::Quantity::convert(1, old_doc_unit, doc_unit);
         doc->getRoot()->scaleChildItemsRec(Geom::Scale(scale), Geom::Point(-viewscale*doc->getRoot()->viewBox.min()[Geom::X] +
                                                                             (doc->getWidth().value("px") - viewscale*doc->getRoot()->viewBox.width())/2,
                                                                             viewscale*doc->getRoot()->viewBox.min()[Geom::Y] +
-                                                                            (doc->getHeight().value("px") + viewscale*doc->getRoot()->viewBox.height())/2));
+                                                                            (doc->getHeight().value("px") + viewscale*doc->getRoot()->viewBox.height())/2),
+                                                                            false);
         ShapeEditor::blockSetItem(false);
     }
     prefs->setBool("/options/transform/stroke",      transform_stroke);

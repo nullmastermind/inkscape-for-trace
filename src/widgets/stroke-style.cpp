@@ -18,7 +18,7 @@
 #define noSP_SS_VERBOSE
 
 #include "stroke-style.h"
-#include "../gradient-chemistry.h"
+#include "gradient-chemistry.h"
 #include "sp-gradient.h"
 #include "sp-stop.h"
 #include "svg/svg-color.h"
@@ -581,7 +581,8 @@ StrokeStyle::forkMarker(SPObject *marker, int loc, SPItem *item)
     Glib::ustring urlId = Glib::ustring::format("url(#", marker->getRepr()->attribute("id"), ")");
     unsigned int refs = 0;
     for (int i = SP_MARKER_LOC_START; i < SP_MARKER_LOC_QTY; i++) {
-        if (item->style->marker[i].set && !strcmp(urlId.c_str(), item->style->marker[i].value)) {
+        if (item->style->marker_ptrs[i]->set &&
+            !strcmp(urlId.c_str(), item->style->marker_ptrs[i]->value)) {
             refs++;
         }
     }
@@ -762,6 +763,9 @@ StrokeStyle::setJoinType (unsigned const jointype)
             tb = joinBevel;
             break;
         default:
+            // Should not happen
+            std::cerr << "StrokeStyle::setJoinType(): Invalid value: " << jointype << std::endl;
+            tb = joinMiter;
             break;
     }
     setJoinButtons(tb);
@@ -785,6 +789,9 @@ StrokeStyle::setCapType (unsigned const captype)
             tb = capSquare;
             break;
         default:
+            // Should not happen
+            std::cerr << "StrokeStyle::setCapType(): Invalid value: " << captype << std::endl;
+            tb = capButt;
             break;
     }
     setCapButtons(tb);
@@ -877,13 +884,15 @@ StrokeStyle::updateLine()
         miterLimitAdj->set_value(query->stroke_miterlimit.value); // TODO: reflect averagedness?
 #endif
 
-    if (result_join != QUERY_STYLE_MULTIPLE_DIFFERENT) {
+    if (result_join != QUERY_STYLE_MULTIPLE_DIFFERENT &&
+        result_join != QUERY_STYLE_NOTHING ) {
         setJoinType(query->stroke_linejoin.value);
     } else {
         setJoinButtons(NULL);
     }
 
-    if (result_cap != QUERY_STYLE_MULTIPLE_DIFFERENT) {
+    if (result_cap != QUERY_STYLE_MULTIPLE_DIFFERENT &&
+        result_cap != QUERY_STYLE_NOTHING ) {
         setCapType (query->stroke_linecap.value);
     } else {
         setCapButtons(NULL);
@@ -1176,11 +1185,11 @@ StrokeStyle::updateAllMarkers(GSList const *objects)
 
         combo->setDesktop(desktop);
 
-        if (object->style->marker[keyloc[i].loc].value != NULL && !all_texts) {
+        if (object->style->marker_ptrs[keyloc[i].loc]->value != NULL && !all_texts) {
             // If the object has this type of markers,
 
             // Extract the name of the marker that the object uses
-            SPObject *marker = getMarkerObj(object->style->marker[keyloc[i].loc].value, object->document);
+            SPObject *marker = getMarkerObj(object->style->marker_ptrs[keyloc[i].loc]->value, object->document);
             // Scroll the combobox to that marker
             combo->set_current(marker);
 

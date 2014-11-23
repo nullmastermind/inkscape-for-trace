@@ -173,6 +173,7 @@ static SPSVGColor const sp_svg_color_named[] = {
     { 0xDDA0DD, "plum" },
     { 0xB0E0E6, "powderblue" },
     { 0x800080, "purple" },
+    { 0x663399, "rebeccapurple" },
     { 0xFF0000, "red" },
     { 0xBC8F8F, "rosybrown" },
     { 0x4169E1, "royalblue" },
@@ -309,6 +310,59 @@ static guint32 internal_sp_svg_read_color(gchar const *str, gchar const **end_pt
             *end_ptr = s;
         }
         return val;
+    } else if (strneq(str, "hsl(", 4)) {
+
+        gchar *ptr = (gchar *) str + 4;
+
+        gchar *e; // ptr after read
+
+        double h = g_ascii_strtod(ptr, &e); // Read h (0-360)
+        if (ptr == e) return def; // Read failed
+        ptr = e;
+
+        while (*ptr && g_ascii_isspace(*ptr)) ptr += 1; // Remove any white space
+        if (*ptr != ',') return def; // Need comma
+        ptr += 1;
+        while (*ptr && g_ascii_isspace(*ptr)) ptr += 1; // Remove any white space
+
+        double s = g_ascii_strtod(ptr, &e); // Read s (percent)
+        if (ptr == e) return def; // Read failed
+        ptr = e;
+        while (*ptr && g_ascii_isspace(*ptr)) ptr += 1; // Remove any white space
+        if (*ptr != '%') return def; // Need %
+        ptr += 1;
+
+        while (*ptr && g_ascii_isspace(*ptr)) ptr += 1; // Remove any white space
+        if (*ptr != ',') return def; // Need comma
+        ptr += 1;
+        while (*ptr && g_ascii_isspace(*ptr)) ptr += 1; // Remove any white space
+
+        double l = g_ascii_strtod(ptr, &e); // Read l (percent)
+        if (ptr == e) return def; // Read failed
+        ptr = e;
+        while (*ptr && g_ascii_isspace(*ptr)) ptr += 1; // Remove any white space
+        if (*ptr != '%') return def; // Need %
+        ptr += 1;
+
+        if (end_ptr) {
+            *end_ptr = ptr;
+        }
+
+
+        // Normalize to 0..1
+        h /= 360.0;
+        s /= 100.0;
+        l /= 100.0;
+
+        gfloat rgb[3];
+
+        sp_color_hsl_to_rgb_floatv( rgb, h, s, l );
+
+        val  =  static_cast<guint>(floor(CLAMP(rgb[0], 0.0, 1.0) * 255.9999)) << 24;
+        val |= (static_cast<guint>(floor(CLAMP(rgb[1], 0.0, 1.0) * 255.9999)) << 16);
+        val |= (static_cast<guint>(floor(CLAMP(rgb[2], 0.0, 1.0) * 255.9999)) << 8);
+        return val;
+
     } else {
         gint i;
         if (colors.empty()) {
@@ -457,18 +511,18 @@ sp_svg_create_color_hash()
 
 void icc_color_to_sRGB(SVGICCColor* icc, guchar* r, guchar* g, guchar* b)
 {
-    guchar color_out[4];
-    guchar color_in[4];
     if (icc) {
 g_message("profile name: %s", icc->colorProfile.c_str());
         Inkscape::ColorProfile* prof = SP_ACTIVE_DOCUMENT->profileManager->find(icc->colorProfile.c_str());
         if ( prof ) {
+            guchar color_out[4] = {0,0,0,0};
             cmsHTRANSFORM trans = prof->getTransfToSRGB8();
             if ( trans ) {
                 std::vector<colorspace::Component> comps = colorspace::getColorSpaceInfo( prof );
 
                 size_t count = CMSSystem::getChannelCount( prof );
                 size_t cap = std::min(count, comps.size());
+                guchar color_in[4];
                 for (size_t i = 0; i < cap; i++) {
                     color_in[i] = static_cast<guchar>((((gdouble)icc->colors[i]) * 256.0) * (gdouble)comps[i].scale);
                     g_message("input[%d]: %d", (int)i, (int)color_in[i]);

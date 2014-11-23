@@ -12,13 +12,13 @@
 #ifndef SEEN_INKSCAPE_DISPLAY_DRAWING_CONTEXT_H
 #define SEEN_INKSCAPE_DISPLAY_DRAWING_CONTEXT_H
 
-#include <boost/utility.hpp>
-#include <glib.h>
-#include <cairo.h>
 #include <2geom/affine.h>
 #include <2geom/angle.h>
 #include <2geom/rect.h>
 #include <2geom/transforms.h>
+#include <boost/utility.hpp>
+#include <cairo.h>
+typedef unsigned int guint32;
 
 namespace Inkscape {
 
@@ -61,6 +61,7 @@ public:
         cairo_curve_to(_ct, p1[Geom::X], p1[Geom::Y], p2[Geom::X], p2[Geom::Y], p3[Geom::X], p3[Geom::Y]);
     }
     void arc(Geom::Point const &center, double radius, Geom::AngleInterval const &angle);
+    void closePath() { cairo_close_path(_ct); }
     void rectangle(Geom::Rect const &r) {
         cairo_rectangle(_ct, r.left(), r.top(), r.width(), r.height());
     }

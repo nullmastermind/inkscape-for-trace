@@ -25,7 +25,7 @@
 #include "sp-path.h"
 #include "sp-shape.h"
 #include "sp-image.h"
-#include "marker.h"
+#include "sp-marker.h"
 #include "enums.h"
 #include "sp-text.h"
 #include "sp-flowtext.h"
@@ -960,16 +960,17 @@ Geom::PathVector* item_outline(SPItem const *item, bool bbox_only)
     Geom::Affine const transform(item->transform);
     float const scale = transform.descrim();
 
-    float o_width, o_miter;
+    float o_width = i_style->stroke_width.computed;
+    if (o_width < Geom::EPSILON) {
+        // This may result in rounding errors for very small stroke widths (happens e.g. when user unit is large).
+        // See bug lp:1244861
+        o_width = Geom::EPSILON;
+    }
+    float o_miter = i_style->stroke_miterlimit.value * o_width;
+
     JoinType o_join;
     ButtType o_butt;
     {
-        o_width = i_style->stroke_width.computed;
-        if (o_width < 0.01) {
-            o_width = 0.01;
-        }
-        o_miter = i_style->stroke_miterlimit.value * o_width;
-
         switch (i_style->stroke_linejoin.computed) {
             case SP_STROKE_LINEJOIN_MITER:
                 o_join = join_pointy;
@@ -1456,13 +1457,21 @@ sp_selected_path_outline(SPDesktop *desktop)
                                                              g_repr, xml_doc, doc );
                     }
                 }
+                //bug lp:1290573 : completely destroy the old object first
+                curve->unref();
+                selection->remove(item);
+                item->deleteObject(false);
 
                 selection->add(g_repr);
 
                 Inkscape::GC::release(g_repr);
 
-
-            } else {
+            } else
+            {
+                //lp:1290573
+                curve->unref();
+                selection->remove(item);
+                item->deleteObject(false);
 
                 // add the new repr to the parent
                 parent->appendChild(repr);
@@ -1487,10 +1496,6 @@ sp_selected_path_outline(SPDesktop *desktop)
             }
 
             Inkscape::GC::release(repr);
-
-            curve->unref();
-            selection->remove(item);
-            item->deleteObject(false);
 
         }
         if (title) {

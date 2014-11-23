@@ -24,6 +24,7 @@
 #include "document.h"
 #include "document-undo.h"
 #include "file.h"
+#include "sp-namedview.h"
 #include "extension/implementation/implementation.h"
 #include "inkscape.h"
 
@@ -69,7 +70,10 @@ void TemplateWidget::create()
         _current_template.tpl_effect->effect(desc);
         DocumentUndo::clearUndo(sp_desktop_document(desc));
         sp_desktop_document(desc)->setModifiedSinceSave(false);
-        
+
+	// Apply cx,cy etc. from document
+	sp_namedview_window_from_document( desc );
+
         if (desktop)
             desktop->clearWaitingCursor();
     }
@@ -120,7 +124,7 @@ void TemplateWidget::_displayTemplateDetails()
     
     if (_current_template.long_description != "")
         message += _("Description: ") + _current_template.long_description + "\n\n";
-    if (~_current_template.keywords.empty()){
+    if (!_current_template.keywords.empty()){
         message += _("Keywords: ");
         for (std::set<Glib::ustring>::iterator it = _current_template.keywords.begin(); it != _current_template.keywords.end(); ++it)
             message += *it + " ";

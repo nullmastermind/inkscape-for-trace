@@ -12,7 +12,7 @@
  * changing an item in the List. Utility functions are provided to go back and forth between the
  * two ways of representing properties (by a string or by a list).
  *
- * Use sp_repr_write_string to go from a property list to a style string.
+ * Use sp_repr_css_write_string to go from a property list to a style string.
  *
  */
 
@@ -283,14 +283,7 @@ void sp_repr_css_write_string(SPCSSAttr *css, Glib::ustring &str)
 
         str.append(g_quark_to_string(iter->key));
         str.push_back(':');
-        if (!strcmp(g_quark_to_string(iter->key), "font-family")
-                || !strcmp(g_quark_to_string(iter->key), "-inkscape-font-specification")) {
-            // we only quote font-family/font-specification, as SPStyle does
-            Glib::ustring val_quoted = css2_escape_quote (iter->value);
-            str.append(val_quoted);
-        } else {
-            str.append(iter->value); // unquoted
-        }
+        str.append(iter->value); // Any necessary quoting to be done by calling routine.
 
         if (rest(iter)) {
             str.push_back(';');
@@ -346,13 +339,24 @@ void sp_repr_css_merge(SPCSSAttr *dst, SPCSSAttr *src)
 
 /**
  * Merges style properties as parsed by libcroco into an existing SPCSSAttr.
+ * libcroco converts all single quotes to double quotes, which needs to be
+ * undone as we always use single quotes inside our 'style' strings since
+ * double quotes are used outside: e.g.:
+ *   style="font-family:'DejaVu Sans'"
  */
 static void sp_repr_css_merge_from_decl(SPCSSAttr *css, CRDeclaration const *const decl)
 {
     guchar *const str_value_unsigned = cr_term_to_string(decl->value);
-    gchar *const str_value = reinterpret_cast<gchar *>(str_value_unsigned);
-    gchar *value_unquoted = attribute_unquote (str_value); // libcroco returns strings quoted in ""
-    Glib::ustring value_unquoted2 = value_unquoted ? value_unquoted : Glib::ustring();
+
+    Glib::ustring value( reinterpret_cast<gchar *>(str_value_unsigned ) );
+    g_free(str_value_unsigned);
+
+    Glib::ustring::size_type pos = 0;
+    while( (pos=value.find("\"",pos)) != Glib::ustring::npos) {
+        value.replace(pos,1,"'");
+        ++pos;
+    }
+
     Glib::ustring units;
 
     /*
@@ -362,11 +366,11 @@ static void sp_repr_css_merge_from_decl(SPCSSAttr *css, CRDeclaration const *con
     *
     * HACK for now is to strip off em and ex units and add them back at the end
     */
-    int le = value_unquoted2.length();
+    int le = value.length();
     if (le > 2) {
-        units = value_unquoted2.substr(le-2, 2);
+        units = value.substr(le-2, 2);
         if ((units == "em") || (units == "ex")) {
-            value_unquoted2 = value_unquoted2.substr(0, le-2);
+            value = value.substr(0, le-2);
         }
         else {
             units.clear();
@@ -377,12 +381,15 @@ static void sp_repr_css_merge_from_decl(SPCSSAttr *css, CRDeclaration const *con
     // CSSOStringStream is used here to write valid CSS (as in sp_style_write_string). This has
     // the additional benefit of respecting the numerical precission set in the SVG Output
     // preferences. We assume any numerical part comes first (if not, the whole string is copied).
-    std::stringstream ss( value_unquoted2 );
+    std::stringstream ss( value );
     double number = 0;
     std::string characters;
     std::string temp;
     bool number_valid = !(ss >> number).fail();
-    if( !number_valid ) ss.clear();
+    if (!number_valid) {
+        ss.clear();
+        ss.seekg(0); // work-around for a bug in libc++ (see lp:1300271)
+    }
     while( !(ss >> temp).eof() ) {
         characters += temp;
         characters += " ";
@@ -396,8 +403,6 @@ static void sp_repr_css_merge_from_decl(SPCSSAttr *css, CRDeclaration const *con
         //g_message("sp_repr_css_merge_from_decl looks like em or ex units %s --> %s", str_value, os.str().c_str());
     }
     ((Node *) css)->setAttribute(decl->property->stryng->str, os.str().c_str(), false);
-    g_free(value_unquoted);
-    g_free(str_value);
 }
 
 /**

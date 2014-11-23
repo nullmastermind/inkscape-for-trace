@@ -1,5 +1,5 @@
-#ifndef __NR_FILTER_BLEND_H__
-#define __NR_FILTER_BLEND_H__
+#ifndef SEEN_NR_FILTER_BLEND_H
+#define SEEN_NR_FILTER_BLEND_H
 
 /*
  * SVG feBlend renderer
@@ -28,7 +28,6 @@ enum FilterBlendMode {
     BLEND_SCREEN,
     BLEND_DARKEN,
     BLEND_LIGHTEN,
-#ifdef WITH_CSSBLEND
     // New in CSS Compositing and Blending Level 1
     BLEND_OVERLAY,   
     BLEND_COLORDODGE,
@@ -41,7 +40,6 @@ enum FilterBlendMode {
     BLEND_SATURATION,
     BLEND_COLOR,
     BLEND_LUMINOSITY,
-#endif
     BLEND_ENDMODE,
 };
 

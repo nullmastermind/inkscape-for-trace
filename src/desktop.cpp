@@ -55,7 +55,7 @@
 #include "document-undo.h"
 #include "event-log.h"
 #include "helper/action-context.h"
-#include "interface.h"
+#include "ui/interface.h"
 #include "inkscape-private.h"
 #include "layer-fns.h"
 #include "layer-manager.h"
@@ -72,7 +72,7 @@
 #include "sp-namedview.h"
 #include "sp-root.h"
 #include "sp-defs.h"
-#include "tool-factory.h"
+#include "ui/tool-factory.h"
 #include "widgets/desktop-widget.h"
 #include "xml/repr.h"
 #include "helper/action.h" //sp_action_perform
@@ -138,6 +138,7 @@ SPDesktop::SPDesktop() :
     _w2d(),
     _d2w(),
     _doc2dt( Geom::Scale(1, -1) ),
+    _image_render_observer(this, "/options/rendering/imageinoutlinemode"),
     grids_visible( false )
 {
     _d2w.setIdentity();
@@ -499,11 +500,15 @@ SPDesktop::remove_temporary_canvasitem (Inkscape::Display::TemporaryItem * tempi
     }
 }
 
+void SPDesktop::redrawDesktop() {
+    sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (main), _d2w); // redraw
+}
+
 void SPDesktop::_setDisplayMode(Inkscape::RenderMode mode) {
     SP_CANVAS_ARENA (drawing)->drawing.setRenderMode(mode);
     canvas->rendermode = mode;
     _display_mode = mode;
-    sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (main), _d2w); // redraw
+    redrawDesktop();
     _widget->setTitle( sp_desktop_document(this)->getName() );
 }
 void SPDesktop::_setDisplayColorMode(Inkscape::ColorMode mode) {
@@ -524,7 +529,7 @@ void SPDesktop::_setDisplayColorMode(Inkscape::ColorMode mode) {
     SP_CANVAS_ARENA (drawing)->drawing.setColorMode(mode);
     canvas->colorrendermode = mode;
     _display_color_mode = mode;
-    sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (main), _d2w); // redraw
+    redrawDesktop();
     _widget->setTitle( sp_desktop_document(this)->getName() );
 }
 
@@ -819,7 +824,7 @@ SPDesktop::set_display_area (double x0, double y0, double x1, double y1, double 
         // zoom changed - set new zoom factors
         _d2w = Geom::Scale(newscale, -newscale);
         _w2d = Geom::Scale(1/newscale, 1/-newscale);
-        sp_canvas_item_affine_absolute(SP_CANVAS_ITEM(main), _d2w);
+        redrawDesktop();
         clear = TRUE;
         zoomChanged = true;
     }
@@ -1699,7 +1704,6 @@ _layer_hierarchy_changed(SPObject */*top*/, SPObject *bottom,
 /// Called when document is starting to be rebuilt.
 static void _reconstruction_start(SPDesktop * desktop)
 {
-    g_debug("Desktop, starting reconstruction\n");
     desktop->_reconstruction_old_layer_id = desktop->currentLayer()->getId() ? desktop->currentLayer()->getId() : "";
     desktop->layers->reset();
 
@@ -1710,8 +1714,6 @@ static void _reconstruction_start(SPDesktop * desktop)
     }
     */
     desktop->selection->clear();
-
-    g_debug("Desktop, starting reconstruction end\n");
 }
 
 /// Called when document rebuild is finished.

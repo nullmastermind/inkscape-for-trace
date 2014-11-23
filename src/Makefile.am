@@ -64,6 +64,8 @@ BUILT_SOURCES =
 EXTRA_DIST =
 
 AM_CPPFLAGS =	\
+	-I$(top_srcdir)/cxxtest \
+	-I$(builddir)/extension/dbus   \
 	$(EXIF_CFLAGS) \
 	$(FREETYPE_CFLAGS)	\
 	$(GNOME_PRINT_CFLAGS)	\
@@ -80,9 +82,7 @@ AM_CPPFLAGS =	\
 	$(POPPLER_GLIB_CFLAGS)	\
 	-DPOTRACE=\"potrace\"	\
 	$(INKSCAPE_CFLAGS) \
-	-I$(top_srcdir)/cxxtest \
 	$(WIN32_CFLAGS) \
-	-I$(builddir)/extension/dbus   \
 	$(X11_CFLAGS)
 
 CXXTEST_TEMPLATE = $(srcdir)/cxxtest-template.tpl
@@ -105,7 +105,6 @@ endif
 
 # Include all partial makefiles from subdirectories
 include Makefile_insert
-include dialogs/Makefile_insert
 include display/Makefile_insert
 include extension/Makefile_insert
 include extension/dbus/Makefile_insert
@@ -144,7 +143,6 @@ include libdepixelize/Makefile_insert
 EXTRA_DIST +=	\
 	2geom/makefile.in	\
 	debug/makefile.in	\
-	dialogs/makefile.in	\
 	display/makefile.in	\
 	extension/implementation/makefile.in	\
 	extension/internal/makefile.in	\
@@ -220,7 +218,7 @@ endif
 # someone updates the BZR working directory.
 inkscape-version.cpp: $(inkscape_version_deps)
 	VER_PREFIX="$(VERSION)";\
-	VER_BZRREV=" r`bzr revno --tree`"; \
+	VER_BZRREV=" r`bzr revno --tree $(top_srcdir)`"; \
 	if test ! -z "`bzr status -S -V $(srcdir)`"; then \
 	    VER_CUSTOM=" custom"; \
 	fi; \
@@ -250,7 +248,9 @@ check_PROGRAMS = cxxtests
 # "make distcheck".
 
 # List of all tests to be run.
-TESTS = $(check_PROGRAMS) ../share/extensions/test/run-all-extension-tests
+TESTS = $(check_PROGRAMS)
+check-local:
+	$(top_srcdir)/share/extensions/test/run-all-extension-tests
 
 # FIXME: Currently, a number of cxxtest tests fail.  These should be fixed and
 #        the XFAIL_TESTS build target should be removed.

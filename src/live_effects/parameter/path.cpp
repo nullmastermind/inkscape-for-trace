@@ -28,8 +28,8 @@
 #include "document-undo.h"
 
 // needed for on-canvas editting:
-#include "tools-switch.h"
-#include "shape-editor.h"
+#include "ui/tools-switch.h"
+#include "ui/shape-editor.h"
 #include "desktop-handles.h"
 #include "selection.h"
 // clipboard support
@@ -118,6 +118,11 @@ PathParam::param_readSVGValue(const gchar * strvalue)
             // Now do the attaching, which emits the changed signal.
             try {
                 ref.attach(Inkscape::URI(href));
+                //lp:1299948
+                SPItem* i = ref.getObject();
+                if (i) {
+                    linked_modified_callback(i, SP_OBJECT_MODIFIED_FLAG);
+                } // else: document still processing new events. Repr of the linked object not created yet.
             } catch (Inkscape::BadURIException &e) {
                 g_warning("%s", e.what());
                 ref.detach();
@@ -138,7 +143,7 @@ gchar *
 PathParam::param_getSVGValue() const
 {
     if (href) {
-        return href;
+        return g_strdup(href);
     } else {
         gchar * svgd = sp_svg_write_path( _pathvector );
         return svgd;
@@ -192,7 +197,7 @@ PathParam::param_newWidget()
     pButton->show();
     pButton->signal_clicked().connect(sigc::mem_fun(*this, &PathParam::on_link_button_click));
     static_cast<Gtk::HBox*>(_widget)->pack_start(*pButton, true, true);
-    pButton->set_tooltip_text(_("Link to path"));
+    pButton->set_tooltip_text(_("Link to path on clipboard"));
 
     static_cast<Gtk::HBox*>(_widget)->show_all_children();
 

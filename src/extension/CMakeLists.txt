@@ -49,7 +49,6 @@ set(extension_SRC
 	internal/metafile-print.cpp
 	internal/odf.cpp
 	internal/latex-text-renderer.cpp
-	internal/pdf-input-cairo.cpp
 	internal/pov-out.cpp
 	internal/javafx-out.cpp
 	internal/svg.cpp
@@ -130,9 +129,9 @@ set(extension_SRC
 	internal/latex-pstricks-out.h
 	internal/latex-pstricks.h
 	internal/latex-text-renderer.h
+	internal/metafile-inout.h
 	internal/metafile-print.h
 	internal/odf.h
-	internal/pdf-input-cairo.h
 	internal/pdfinput/pdf-input.h
 	internal/pdfinput/pdf-parser.h
 	internal/pdfinput/svg-builder.h

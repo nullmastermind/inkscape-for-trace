@@ -10,12 +10,14 @@
  */
 
 #include <2geom/bezier-curve.h>
-#include "display/cairo-utils.h"
+
 #include "display/drawing.h"
 #include "display/drawing-context.h"
 #include "display/drawing-image.h"
 #include "preferences.h"
 #include "style.h"
+
+#include "display/cairo-utils.h"
 
 namespace Inkscape {
 
@@ -106,7 +108,10 @@ unsigned DrawingImage::_renderItem(DrawingContext &dc, Geom::IntRect const &/*ar
 {
     bool outline = _drawing.outline();
 
-    if (!outline) {
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool imgoutline = prefs->getBool("/options/rendering/imageinoutlinemode", false);
+
+    if (!outline || imgoutline) {
         if (!_pixbuf) return RENDER_OK;
 
         Inkscape::DrawingContext::Save save(dc);
@@ -141,7 +146,7 @@ unsigned DrawingImage::_renderItem(DrawingContext &dc, Geom::IntRect const &/*ar
         dc.paint(_opacity);
 
     } else { // outline; draw a rect instead
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+
         guint32 rgba = prefs->getInt("/options/wireframecolors/images", 0xff0000ff);
 
         {   Inkscape::DrawingContext::Save save(dc);

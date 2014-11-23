@@ -116,7 +116,7 @@ void SnapManager::freeSnapReturnByRef(Geom::Point &p,
                                       Inkscape::SnapSourceType const source_type,
                                       Geom::OptRect const &bbox_to_snap) const
 {
-    Inkscape::SnappedPoint const s = freeSnap(Inkscape::SnapCandidatePoint(p, source_type), bbox_to_snap);
+    Inkscape::SnappedPoint const s = freeSnap(Inkscape::SnapCandidatePoint(p, source_type, Inkscape::SNAPTARGET_PATH), bbox_to_snap);
     s.getPointIfSnapped(p);
 }
 
@@ -239,7 +239,7 @@ Inkscape::SnappedPoint SnapManager::constrainedSnap(Inkscape::SnapCandidatePoint
         // Snapping the mouse pointer instead of the constrained position of the knot allows
         // to snap to things which don't intersect with the constraint line; this is basically
         // then just a freesnap with the constraint applied afterwards
-        // We'll only to this if we're dragging a single handle, and for example not when transforming an object in the selector tool
+        // We'll only do this if we're dragging a single handle, and for example not when transforming an object in the selector tool
         result = freeSnap(p, bbox_to_snap);
         if (result.getSnapped()) {
             // only change the snap indicator if we really snapped to something
@@ -274,7 +274,7 @@ Inkscape::SnappedPoint SnapManager::constrainedSnap(Inkscape::SnapCandidatePoint
 
 /* See the documentation for constrainedSnap() directly above for more details.
  * The difference is that multipleConstrainedSnaps() will take a list of constraints instead of a single one,
- * and will try to snap the SnapCandidatePoint to all of the provided constraints and see which one fits best
+ * and will try to snap the SnapCandidatePoint to only the closest constraint
  *  \param p Source point to be snapped
  *  \param constraints List of directions or lines along which snapping must occur
  *  \param dont_snap If true then we will only apply the constraint, without snapping
@@ -293,16 +293,11 @@ Inkscape::SnappedPoint SnapManager::multipleConstrainedSnaps(Inkscape::SnapCandi
         return no_snap;
     }
 
-    IntermSnapResults isr;
-    SnapperList const snappers = getSnappers();
+    // We haven't tried to snap yet; we will first determine which constraint is closest to where we are now,
+    // i.e. lets find out which of the constraints yields the closest projection of point p
+
+    // Project the mouse pointer on each of the constraints
     std::vector<Geom::Point> projections;
-    bool snapping_is_futile = !someSnapperMightSnap() || dont_snap;
-
-    Inkscape::SnappedPoint result = no_snap;
-
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    bool snap_mouse = prefs->getBool("/options/snapmousepointer/value", false);
-
     for (std::vector<Inkscape::Snapper::SnapConstraint>::const_iterator c = constraints.begin(); c != constraints.end(); ++c) {
         // Project the mouse pointer onto the constraint; In case we don't snap then we will
         // return the projection onto the constraint, such that the constraint is always enforced
@@ -310,55 +305,47 @@ Inkscape::SnappedPoint SnapManager::multipleConstrainedSnaps(Inkscape::SnapCandi
         projections.push_back(pp);
     }
 
-    if (snap_mouse && p.isSingleHandle() && !dont_snap) {
+    // Select the closest constraint
+    no_snap.setPoint(projections.front());
+    Inkscape::Snapper::SnapConstraint cc = constraints.front(); //closest constraint
+
+    std::vector<Inkscape::Snapper::SnapConstraint>::const_iterator c = constraints.begin();
+    std::vector<Geom::Point>::iterator pp = projections.begin();
+    for (; pp != projections.end(); ++pp) {
+        if (Geom::L2(*pp - p.getPoint()) < Geom::L2(no_snap.getPoint() - p.getPoint())) {
+            no_snap.setPoint(*pp); // Remember the projection onto the closest constraint
+            cc = *c; // Remember the closest constraint itself
+        }
+        ++c;
+    }
+
+    if (!someSnapperMightSnap() || dont_snap) {
+        return no_snap;
+    }
+
+    IntermSnapResults isr;
+    SnapperList const snappers = getSnappers();
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool snap_mouse = prefs->getBool("/options/snapmousepointer/value", false);
+
+    Inkscape::SnappedPoint result = no_snap;
+    if (snap_mouse && p.isSingleHandle()) {
         // Snapping the mouse pointer instead of the constrained position of the knot allows
         // to snap to things which don't intersect with the constraint line; this is basically
         // then just a freesnap with the constraint applied afterwards
         // We'll only to this if we're dragging a single handle, and for example not when transforming an object in the selector tool
         result = freeSnap(p, bbox_to_snap);
+        // Now apply the constraint afterwards
+        result.setPoint(cc.projection(result.getPoint()));
     } else {
-        // Iterate over the constraints
-        for (std::vector<Inkscape::Snapper::SnapConstraint>::const_iterator c = constraints.begin(); c != constraints.end(); ++c) {
-            // Try to snap to the constraint
-            if (!snapping_is_futile) {
-                for (SnapperList::const_iterator i = snappers.begin(); i != snappers.end(); ++i) {
-                    (*i)->constrainedSnap(isr, p, bbox_to_snap, *c, &_items_to_ignore,_unselected_nodes);
-                }
-            }
+        // Try to snap along the closest constraint
+        for (SnapperList::const_iterator i = snappers.begin(); i != snappers.end(); ++i) {
+            (*i)->constrainedSnap(isr, p, bbox_to_snap, cc, &_items_to_ignore,_unselected_nodes);
         }
         result = findBestSnap(p, isr, true);
     }
 
-    if (result.getSnapped()) {
-        if (snap_mouse) {
-            // If "snap_mouse" then we still have to apply the constraint, because so far we only tried a freeSnap
-            Geom::Point result_closest;
-            for (std::vector<Inkscape::Snapper::SnapConstraint>::const_iterator c = constraints.begin(); c != constraints.end(); ++c) {
-                // Project the mouse pointer onto the constraint; In case we don't snap then we will
-                // return the projection onto the constraint, such that the constraint is always enforced
-                Geom::Point result_p = (*c).projection(result.getPoint());
-                if (c == constraints.begin() || (Geom::L2(result_p - p.getPoint()) < Geom::L2(result_closest - p.getPoint()))) {
-                    result_closest = result_p;
-                }
-            }
-            result.setPoint(result_closest);
-        }
-        return result;
-    }
-
-    // So we didn't snap, but we still need to return a point on one of the constraints
-    // Find out which of the constraints yielded the closest projection of point p
-    for (std::vector<Geom::Point>::iterator pp = projections.begin(); pp != projections.end(); ++pp) {
-        if (pp != projections.begin()) {
-            if (Geom::L2(*pp - p.getPoint()) < Geom::L2(no_snap.getPoint() - p.getPoint())) {
-                no_snap.setPoint(*pp);
-            }
-        } else {
-            no_snap.setPoint(projections.front());
-        }
-    }
-
-    return no_snap;
+    return result.getSnapped() ? result : no_snap;
 }
 
 Inkscape::SnappedPoint SnapManager::constrainedAngularSnap(Inkscape::SnapCandidatePoint const &p,
@@ -443,7 +430,7 @@ void SnapManager::guideConstrainedSnap(Geom::Point &p, SPGuide const &guideline)
     Inkscape::SnapCandidatePoint candidate(p, Inkscape::SNAPSOURCE_GUIDE_ORIGIN, Inkscape::SNAPTARGET_UNDEFINED);
 
     IntermSnapResults isr;
-    Inkscape::Snapper::SnapConstraint cl(guideline.point_on_line, Geom::rot90(guideline.normal_to_line));
+    Inkscape::Snapper::SnapConstraint cl(guideline.getPoint(), Geom::rot90(guideline.getNormal()));
 
     SnapperList snappers = getSnappers();
     for (SnapperList::const_iterator i = snappers.begin(); i != snappers.end(); ++i) {
@@ -570,7 +557,7 @@ Inkscape::SnappedPoint SnapManager::_snapTransformed(
                 // be collected. Therefore we enforce that the first SnapCandidatePoint that is to be freeSnapped always
                 // has source_num == 0;
                 // TODO: This is a bit ugly so fix this; do we need sourcenum for anything else? if we don't then get rid
-                // of it and explicitely communicate to the object snapper that this is a first point
+                // of it and explicitly communicate to the object snapper that this is a first point
                 if (first_free_snap) {
                     (*j).setSourceNum(0);
                     first_free_snap = false;
@@ -616,8 +603,8 @@ Inkscape::SnappedPoint SnapManager::_snapTransformed(
                 // and the scaling factor for the other direction should remain
                 // untouched (unless scaling is uniform of course)
                 for (int index = 0; index < 2; index++) {
-                    if (fabs(b[index]) > 1e-6) { // if SCALING CAN occur in this direction
-                        if (fabs(fabs(a[index]/b[index]) - fabs(transformation[index])) > 1e-12) { // if SNAPPING DID occur in this direction
+                    if (fabs(b[index]) > 1e-4) { // if SCALING CAN occur in this direction
+                        if (fabs(fabs(a[index]/b[index]) - fabs(transformation[index])) > 1e-7) { // if SNAPPING DID occur in this direction
                             result[index] = a[index] / b[index]; // then calculate it!
                         }
                         // we might have left result[1-index] = Geom::infinity()
@@ -669,7 +656,7 @@ Inkscape::SnappedPoint SnapManager::_snapTransformed(
             case ROTATE:
                 // a is vector to snapped point; b is vector to original point; now lets calculate angle between a and b
                 result[0] = atan2(Geom::dot(Geom::rot90(b), a), Geom::dot(b, a));
-                result[1] = result[1]; // how else should we store an angle in a point ;-)
+                result[1] = result[0]; // dummy value; how else should we store an angle in a point ;-)
                 if (Geom::L2(b) < 1e-9) { // points too close to the rotation center will not move. Don't try to snap these
                     // as they will always yield a perfect snap result if they're already snapped beforehand (e.g.
                     // when the transformation center has been snapped to a grid intersection in the selector tool)

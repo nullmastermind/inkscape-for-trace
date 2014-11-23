@@ -96,23 +96,18 @@ static Inkscape::Filters::FilterBlendMode sp_feBlend_readmode(gchar const *value
         case 's':
             if (strncmp(value, "screen", 6) == 0)
                 return Inkscape::Filters::BLEND_SCREEN;
-#ifdef WITH_CSSBLEND
             if (strncmp(value, "saturation", 6) == 0)
                 return Inkscape::Filters::BLEND_SATURATION;
-#endif
             break;
         case 'd':
             if (strncmp(value, "darken", 6) == 0)
                 return Inkscape::Filters::BLEND_DARKEN;
-#ifdef WITH_CSSBLEND
             if (strncmp(value, "difference", 10) == 0)
                 return Inkscape::Filters::BLEND_DIFFERENCE;
-#endif
             break;
         case 'l':
             if (strncmp(value, "lighten", 7) == 0)
                 return Inkscape::Filters::BLEND_LIGHTEN;
-#ifdef WITH_CSSBLEND
             if (strncmp(value, "luminosity", 10) == 0)
                 return Inkscape::Filters::BLEND_LUMINOSITY;
             break;
@@ -137,7 +132,6 @@ static Inkscape::Filters::FilterBlendMode sp_feBlend_readmode(gchar const *value
         case 'e':
             if (strncmp(value, "exclusion", 10) == 0)
                 return Inkscape::Filters::BLEND_EXCLUSION;
-#endif
         default:
             std::cout << "Inkscape::Filters::FilterBlendMode: Unimplemented mode: " << value << std::endl;
             // do nothing by default
@@ -189,6 +183,8 @@ void SPFeBlend::update(SPCtx *ctx, guint flags) {
 
     /* Unlike normal in, in2 is required attribute. Make sure, we can call
      * it by some name. */
+    /* This may not be true.... see issue at 
+     * http://www.w3.org/TR/filter-effects/#feBlendElement (but it doesn't hurt). */
     if (this->in2 == Inkscape::Filters::NR_FILTER_SLOT_NOT_SET ||
         this->in2 == Inkscape::Filters::NR_FILTER_UNNAMED_SLOT)
     {
@@ -212,24 +208,28 @@ Inkscape::XML::Node* SPFeBlend::write(Inkscape::XML::Document *doc, Inkscape::XM
         repr = doc->createElement("svg:feBlend");
     }
 
-    gchar const *out_name = sp_filter_name_for_image(parent, this->in2);
+    gchar const *in2_name = sp_filter_name_for_image(parent, this->in2);
 
-    if (out_name) {
-        repr->setAttribute("in2", out_name);
-    } else {
+    if( !in2_name ) {
+
+        // This code is very similar to sp_filter_primtive_name_previous_out()
         SPObject *i = parent->children;
 
+        // Find previous filter primitive
         while (i && i->next != this) {
         	i = i->next;
         }
 
-        SPFilterPrimitive *i_prim = SP_FILTER_PRIMITIVE(i);
-        out_name = sp_filter_name_for_image(parent, i_prim->image_out);
-        repr->setAttribute("in2", out_name);
-
-        if (!out_name) {
-            g_warning("Unable to set in2 for feBlend");
+        if( i ) {
+            SPFilterPrimitive *i_prim = SP_FILTER_PRIMITIVE(i);
+            in2_name = sp_filter_name_for_image(parent, i_prim->image_out);
         }
+    }
+
+    if (in2_name) {
+        repr->setAttribute("in2", in2_name);
+    } else {
+        g_warning("Unable to set in2 for feBlend");
     }
 
     char const *mode;
@@ -244,7 +244,6 @@ Inkscape::XML::Node* SPFeBlend::write(Inkscape::XML::Document *doc, Inkscape::XM
             mode = "darken";      break;
         case Inkscape::Filters::BLEND_LIGHTEN:
             mode = "lighten";     break;
-#ifdef WITH_CSSBLEND
         // New
         case Inkscape::Filters::BLEND_OVERLAY:
             mode = "overlay";     break;
@@ -268,7 +267,6 @@ Inkscape::XML::Node* SPFeBlend::write(Inkscape::XML::Document *doc, Inkscape::XM
             mode = "color";       break;
         case Inkscape::Filters::BLEND_LUMINOSITY:
             mode = "luminosity";  break;
-#endif
         default:
             mode = 0;
     }

@@ -2,7 +2,13 @@
 set(ui_SRC
 	clipboard.cpp
 	control-manager.cpp
+	dialog-events.cpp
+	draw-anchor.cpp
+	interface.cpp
+	object-edit.cpp
 	previewholder.cpp
+	shape-editor.cpp
+	tools-switch.cpp
 	uxmanager.cpp
 
 	cache/svg_preview_cache.cpp
@@ -78,6 +84,7 @@ set(ui_SRC
 	dialog/layers.cpp
 	dialog/livepatheffect-add.cpp
 	dialog/livepatheffect-editor.cpp
+	dialog/lpe-fillet-chamfer-properties.cpp
 	dialog/memory.cpp
 	dialog/messages.cpp
 	dialog/new-from-template.cpp
@@ -89,7 +96,6 @@ set(ui_SRC
 	dialog/print.cpp
 	dialog/symbols.cpp
 	dialog/xml-tree.cpp
-	# dialog/session-player.cpp
 	dialog/spellcheck.cpp
 	dialog/svg-fonts-dialog.cpp
 	dialog/swatches.cpp
@@ -101,9 +107,6 @@ set(ui_SRC
 	dialog/pixelartdialog.cpp
 	dialog/transformation.cpp
 	dialog/undo-history.cpp
-	# dialog/whiteboard-connect.cpp
-	# dialog/whiteboard-sharewithchat.cpp
-	# dialog/whiteboard-sharewithuser.cpp
 
 	widget/anchor-selector.cpp
 	widget/button.cpp
@@ -155,10 +158,17 @@ set(ui_SRC
 	clipboard.h
 	control-manager.h
 	control-types.h
+	dialog-events.h
+	draw-anchor.h
 	icon-names.h
+	interface.h
+	object-edit.h
 	previewable.h
 	previewfillable.h
 	previewholder.h
+	shape-editor.h
+	tool-factory.h
+	tools-switch.h
 	uxmanager.h
 
 	cache/svg_preview_cache.h
@@ -198,6 +208,7 @@ set(ui_SRC
 	dialog/layers.h
 	dialog/livepatheffect-add.h
 	dialog/livepatheffect-editor.h
+	dialog/lpe-fillet-chamfer-properties.h
 	dialog/memory.h
 	dialog/messages.h
 	dialog/new-from-template.h

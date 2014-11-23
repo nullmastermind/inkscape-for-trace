@@ -9,7 +9,7 @@
  *   Abhishek Sharma
  *
  * Copyright (C) 1999-2002 Lauris Kaplinski
- * Copyright (C) 1999-2008 Authors
+ * Copyright (C) 1999-2014 Authors
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
@@ -304,6 +304,7 @@ void Inkscape::SelTrans::grab(Geom::Point const &p, gdouble x, gdouble y, bool s
         /* Snapping a huge number of nodes will take way too long, so limit the number of snappable nodes
         A typical user would rarely ever try to snap such a large number of nodes anyway, because
         (s)he would hardly be able to discern which node would be snapping */
+        std::cout << "Warning: limit of 200 snap sources reached, some will be ignored" << std::endl;
         _snap_points.resize(200);
         // Unfortunately, by now we will have lost the font-baseline snappoints :-(
     }
@@ -389,6 +390,7 @@ void Inkscape::SelTrans::transform(Geom::Affine const &rel_affine, Geom::Point c
             }
             Geom::Affine const &prev_transform = _items_affines[i];
             item.set_i2d_affine(prev_transform * affine);
+            // The new affine will only have been applied if the transformation is different from the previous one, see SPItem::set_item_transform
         }
     } else {
         if (_bbox) {
@@ -439,21 +441,25 @@ void Inkscape::SelTrans::ungrab()
     _message_context.clear();
 
     if (!_empty && _changed) {
-        sp_selection_apply_affine(selection, _current_relative_affine, (_show == SHOW_OUTLINE)? true : false);
-        if (_center) {
-            *_center *= _current_relative_affine;
-            _center_is_set = true;
-        }
+        if (!_current_relative_affine.isIdentity()) { // we can have a identity affine
+            // when trying to stretch a perfectly vertical line in horizontal direction, which will not be allowed by the handles;
 
-// If dragging showed content live, sp_selection_apply_affine cannot change the centers
-// appropriately - it does not know the original positions of the centers (all objects already have
-// the new bboxes). So we need to reset the centers from our saved array.
-        if (_show != SHOW_OUTLINE && !_current_relative_affine.isTranslation()) {
-            for (unsigned i = 0; i < _items_centers.size(); i++) {
-                SPItem *currentItem = _items[i];
-                if (currentItem->isCenterSet()) { // only if it's already set
-                    currentItem->setCenter (_items_centers[i] * _current_relative_affine);
-                    currentItem->updateRepr();
+            sp_selection_apply_affine(selection, _current_relative_affine, (_show == SHOW_OUTLINE)? true : false);
+            if (_center) {
+                *_center *= _current_relative_affine;
+                _center_is_set = true;
+            }
+
+            // If dragging showed content live, sp_selection_apply_affine cannot change the centers
+            // appropriately - it does not know the original positions of the centers (all objects already have
+            // the new bboxes). So we need to reset the centers from our saved array.
+            if (_show != SHOW_OUTLINE && !_current_relative_affine.isTranslation()) {
+                for (unsigned i = 0; i < _items_centers.size(); i++) {
+                    SPItem *currentItem = _items[i];
+                    if (currentItem->isCenterSet()) { // only if it's already set
+                        currentItem->setCenter (_items_centers[i] * _current_relative_affine);
+                        currentItem->updateRepr();
+                    }
                 }
             }
         }
@@ -463,18 +469,22 @@ void Inkscape::SelTrans::ungrab()
         _items_affines.clear();
         _items_centers.clear();
 
-        if (_current_relative_affine.isTranslation()) {
-            DocumentUndo::done(sp_desktop_document(_desktop), SP_VERB_CONTEXT_SELECT,
-                               _("Move"));
-        } else if (_current_relative_affine.withoutTranslation().isScale()) {
-            DocumentUndo::done(sp_desktop_document(_desktop), SP_VERB_CONTEXT_SELECT,
-                               _("Scale"));
-        } else if (_current_relative_affine.withoutTranslation().isRotation()) {
-            DocumentUndo::done(sp_desktop_document(_desktop), SP_VERB_CONTEXT_SELECT,
-                               _("Rotate"));
-        } else {
-            DocumentUndo::done(sp_desktop_document(_desktop), SP_VERB_CONTEXT_SELECT,
-                               _("Skew"));
+        if (!_current_relative_affine.isIdentity()) { // we can have a identity affine
+            // when trying to stretch a perfectly vertical line in horizontal direction, which will not be allowed
+            // by the handles; this would be identified as a (zero) translation by isTranslation()
+            if (_current_relative_affine.isTranslation()) {
+                DocumentUndo::done(sp_desktop_document(_desktop), SP_VERB_CONTEXT_SELECT,
+                                   _("Move"));
+            } else if (_current_relative_affine.withoutTranslation().isScale()) {
+                DocumentUndo::done(sp_desktop_document(_desktop), SP_VERB_CONTEXT_SELECT,
+                                   _("Scale"));
+            } else if (_current_relative_affine.withoutTranslation().isRotation()) {
+                DocumentUndo::done(sp_desktop_document(_desktop), SP_VERB_CONTEXT_SELECT,
+                                   _("Rotate"));
+            } else {
+                DocumentUndo::done(sp_desktop_document(_desktop), SP_VERB_CONTEXT_SELECT,
+                                   _("Skew"));
+            }
         }
 
     } else {
@@ -506,7 +516,7 @@ void Inkscape::SelTrans::stamp()
 
     bool fixup = !_grabbed;
     if ( fixup && _stamp_cache ) {
-        // TODO - give a proper fix. Simple temproary work-around for the grab() issue
+        // TODO - give a proper fix. Simple temporary work-around for the grab() issue
         g_slist_free(_stamp_cache);
         _stamp_cache = NULL;
     }
@@ -565,7 +575,7 @@ void Inkscape::SelTrans::stamp()
     }
 
     if ( fixup && _stamp_cache ) {
-        // TODO - give a proper fix. Simple temproary work-around for the grab() issue
+        // TODO - give a proper fix. Simple temporary work-around for the grab() issue
         g_slist_free(_stamp_cache);
         _stamp_cache = NULL;
     }
@@ -641,7 +651,7 @@ void Inkscape::SelTrans::_makeHandles()
 {
     for (int i = 0; i < NUMHANDS; i++) {
         SPSelTransTypeInfo info = handtypes[hands[i].type];
-        knots[i] = new SPKnot(_desktop, info.tip);
+        knots[i] = new SPKnot(_desktop, _(info.tip));
 
         knots[i]->setShape(SP_CTRL_SHAPE_BITMAP);
         knots[i]->setSize(13);
@@ -914,23 +924,28 @@ gboolean Inkscape::SelTrans::scaleRequest(Geom::Point &pt, guint state)
             sn = m.freeSnapScale(_snap_points, _point, geom_scale, _origin_for_specpoints);
         }
 
-        if (!(bb.getSnapped() || sn.getSnapped())) {
+        // These lines below are duplicated in stretchRequest
+        if (bb.getSnapped() || sn.getSnapped()) {
+            if (bb.getSnapped()) {
+                if (!bb.isOtherSnapBetter(sn, false)) {
+                    // We snapped the bbox (which is either visual or geometric)
+                    _desktop->snapindicator->set_new_snaptarget(bb);
+                    default_scale = Geom::Scale(bb.getTransformation());
+                    // Calculate the new transformation and update the handle position
+                    pt = _calcAbsAffineDefault(default_scale);
+                }
+            } else if (sn.getSnapped()) {
+                _desktop->snapindicator->set_new_snaptarget(sn);
+                // We snapped the special points (e.g. nodes), which are not at the visual bbox
+                // The handle location however (pt) might however be at the visual bbox, so we
+                // will have to calculate pt taking the stroke width into account
+                geom_scale = Geom::Scale(sn.getTransformation());
+                pt = _calcAbsAffineGeom(geom_scale);
+            }
+        } else {
             // We didn't snap at all! Don't update the handle position, just calculate the new transformation
             _calcAbsAffineDefault(default_scale);
             _desktop->snapindicator->remove_snaptarget();
-        } else if (bb.getSnapped() && !bb.isOtherSnapBetter(sn, false)) {
-            // We snapped the bbox (which is either visual or geometric)
-            _desktop->snapindicator->set_new_snaptarget(bb);
-            default_scale = Geom::Scale(bb.getTransformation());
-            // Calculate the new transformation and update the handle position
-            pt = _calcAbsAffineDefault(default_scale);
-        } else {
-            _desktop->snapindicator->set_new_snaptarget(sn);
-            // We snapped the special points (e.g. nodes), which are not at the visual bbox
-            // The handle location however (pt) might however be at the visual bbox, so we
-            // will have to calculate pt taking the stroke width into account
-            geom_scale = Geom::Scale(sn.getTransformation());
-            pt = _calcAbsAffineGeom(geom_scale);
         }
         m.unSetup();
     }
@@ -1013,20 +1028,28 @@ gboolean Inkscape::SelTrans::stretchRequest(SPSelTransHandle const &handle, Geom
             geom_scale[perp] = fabs(geom_scale[axis]);
         }
 
-        if (!(bb.getSnapped() || sn.getSnapped())) {
+        // These lines below are duplicated in scaleRequest
+        if (bb.getSnapped() || sn.getSnapped()) {
+            if (bb.getSnapped()) {
+                if (!bb.isOtherSnapBetter(sn, false)) {
+                    // We snapped the bbox (which is either visual or geometric)
+                    _desktop->snapindicator->set_new_snaptarget(bb);
+                    default_scale = Geom::Scale(bb.getTransformation());
+                    // Calculate the new transformation and update the handle position
+                    pt = _calcAbsAffineDefault(default_scale);
+                }
+            } else if (sn.getSnapped()) {
+                _desktop->snapindicator->set_new_snaptarget(sn);
+                // We snapped the special points (e.g. nodes), which are not at the visual bbox
+                // The handle location however (pt) might however be at the visual bbox, so we
+                // will have to calculate pt taking the stroke width into account
+                geom_scale = Geom::Scale(sn.getTransformation());
+                pt = _calcAbsAffineGeom(geom_scale);
+            }
+        } else {
             // We didn't snap at all! Don't update the handle position, just calculate the new transformation
             _calcAbsAffineDefault(default_scale);
             _desktop->snapindicator->remove_snaptarget();
-        } else if (bb.getSnapped() && !bb.isOtherSnapBetter(sn, false)) {
-            _desktop->snapindicator->set_new_snaptarget(bb);
-            // Calculate the new transformation and update the handle position
-            pt = _calcAbsAffineDefault(default_scale);
-        } else {
-            _desktop->snapindicator->set_new_snaptarget(sn);
-            // We snapped the special points (e.g. nodes), which are not at the visual bbox
-            // The handle location however (pt) might however be at the visual bbox, so we
-            // will have to calculate pt taking the stroke width into account
-            pt = _calcAbsAffineGeom(geom_scale);
         }
 
         m.unSetup();
@@ -1086,10 +1109,17 @@ gboolean Inkscape::SelTrans::skewRequest(SPSelTransHandle const &handle, Geom::P
             break;
     }
 
+    // _point and _origin are noisy, ranging from 1 to 1e-9 or even smaller; this is due to the
+    // limited SVG output precision, which can be arbitrarily set in the preferences
     Geom::Point const initial_delta = _point - _origin;
 
-    if (fabs(initial_delta[dim_a]) < 1e-15) {
-        return false;
+    // The handle and the origin shouldn't be too close to each other; let's check for that!
+    // Due to the limited resolution though (see above), we'd better use a relative error here
+    if (_bbox) {
+        Geom::Coord d = (*_bbox).dimensions()[dim_a];
+        if (fabs(initial_delta[dim_a]/d) < 1e-4) {
+            return false;
+        }
     }
 
     // Calculate the scale factors, which can be either visual or geometric
