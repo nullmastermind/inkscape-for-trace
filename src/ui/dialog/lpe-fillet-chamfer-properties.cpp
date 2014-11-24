@@ -64,7 +64,7 @@ FilletChamferPropertiesDialog::FilletChamferPropertiesDialog()
     _fillet_chamfer_chamfer_subdivisions.set_digits(0);
     _fillet_chamfer_chamfer_subdivisions.set_increments(1,1);
     //todo: get tha max aloable infinity freeze the widget
-    _fillet_chamfer_chamfer_subdivisions.set_range(0, 999999999999999999);
+    _fillet_chamfer_chamfer_subdivisions.set_range(0, 999999999999999999.0);
     
     _fillet_chamfer_chamfer_subdivisions_label.set_label(_("Chamfer subdivisions:"));
     _fillet_chamfer_chamfer_subdivisions_label.set_alignment(1.0, 0.5);
@@ -79,12 +79,15 @@ FilletChamferPropertiesDialog::FilletChamferPropertiesDialog()
     _fillet_chamfer_type_inverse_fillet.set_group(_fillet_chamfer_type_group);
     _fillet_chamfer_type_chamfer.set_label(_("Chamfer"));
     _fillet_chamfer_type_chamfer.set_group(_fillet_chamfer_type_group);
+    _fillet_chamfer_type_inverse_chamfer.set_label(_("Inverse chamfer"));
+    _fillet_chamfer_type_inverse_chamfer.set_group(_fillet_chamfer_type_group);
 
 
     mainVBox->pack_start(_layout_table, true, true, 4);
     mainVBox->pack_start(_fillet_chamfer_type_fillet, true, true, 4);
     mainVBox->pack_start(_fillet_chamfer_type_inverse_fillet, true, true, 4);
     mainVBox->pack_start(_fillet_chamfer_type_chamfer, true, true, 4);
+    mainVBox->pack_start(_fillet_chamfer_type_inverse_chamfer, true, true, 4);
 
     // Buttons
     _close_button.set_use_stock(true);
@@ -116,7 +119,7 @@ FilletChamferPropertiesDialog::FilletChamferPropertiesDialog()
 FilletChamferPropertiesDialog::~FilletChamferPropertiesDialog()
 {
 
-    _setDesktop(NULL);
+    _set_desktop(NULL);
 }
 
 void FilletChamferPropertiesDialog::showDialog(
@@ -125,16 +128,18 @@ void FilletChamferPropertiesDialog::showDialog(
     FilletChamferPointArrayParamKnotHolderEntity *pt,
     const gchar *unit,
     bool use_distance,
-    bool aprox_radius)
+    bool aprox_radius,
+    Glib::ustring const * documentUnit)
 {
     FilletChamferPropertiesDialog *dialog = new FilletChamferPropertiesDialog();
 
-    dialog->_setDesktop(desktop);
-    dialog->_setUnit(unit);
+    dialog->_set_desktop(desktop);
+    dialog->_set_unit(unit);
     dialog->_set_use_distance(use_distance);
     dialog->_set_aprox(aprox_radius);
-    dialog->_setKnotPoint(knotpoint);
-    dialog->_setPt(pt);
+    dialog->_set_document_unit(documentUnit);
+    dialog->_set_knot_point(knotpoint);
+    dialog->_set_pt(pt);
 
     dialog->set_title(_("Modify Fillet-Chamfer"));
     dialog->_apply_button.set_label(_("_Modify"));
@@ -156,8 +161,10 @@ void FilletChamferPropertiesDialog::_apply()
             d_width = 1;
         } else if (_fillet_chamfer_type_inverse_fillet.get_active() == true) {
             d_width = 2;
+        } else if (_fillet_chamfer_type_inverse_chamfer.get_active() == true) {
+            d_width = _fillet_chamfer_chamfer_subdivisions.get_value() + 4000;
         } else {
-            d_width = _fillet_chamfer_chamfer_subdivisions.get_value() + 3;
+            d_width = _fillet_chamfer_chamfer_subdivisions.get_value() + 3000;
         }
         if (_flexible) {
             if (d_pos > 99.99999 || d_pos < 0) {
@@ -165,7 +172,7 @@ void FilletChamferPropertiesDialog::_apply()
             }
             d_pos = _index + (d_pos / 100);
         } else {
-            d_pos = Inkscape::Util::Quantity::convert(d_pos, unit, "px");
+            d_pos = Inkscape::Util::Quantity::convert(d_pos, unit, *document_unit);
             d_pos = d_pos * -1;
         }
         _knotpoint->knot_set_offset(Geom::Point(d_pos, d_width));
@@ -175,7 +182,7 @@ void FilletChamferPropertiesDialog::_apply()
 
 void FilletChamferPropertiesDialog::_close()
 {
-    _setDesktop(NULL);
+    _set_desktop(NULL);
     destroy_();
     Glib::signal_idle().connect(
         sigc::bind_return(
@@ -197,7 +204,7 @@ void FilletChamferPropertiesDialog::_handleButtonEvent(GdkEventButton *event)
     }
 }
 
-void FilletChamferPropertiesDialog::_setKnotPoint(Geom::Point knotpoint)
+void FilletChamferPropertiesDialog::_set_knot_point(Geom::Point knotpoint)
 {
     double position;
     std::string distance_or_radius = std::string(_("Radius "));
@@ -219,19 +226,24 @@ void FilletChamferPropertiesDialog::_setKnotPoint(Geom::Point knotpoint)
             std::string(_("(")) + std::string(unit) + std::string(")");
         _fillet_chamfer_position_label.set_label(_(posConcat.c_str()));
         position = knotpoint[Geom::X] * -1;
-        position = Inkscape::Util::Quantity::convert(position, "px", unit);
+        
+        position = Inkscape::Util::Quantity::convert(position, *document_unit, unit);
     }
     _fillet_chamfer_position_numeric.set_value(position);
     if (knotpoint.y() == 1) {
         _fillet_chamfer_type_fillet.set_active(true);
     } else if (knotpoint.y() == 2) {
         _fillet_chamfer_type_inverse_fillet.set_active(true);
-    } else if (knotpoint.y() >= 3) {
-        _fillet_chamfer_chamfer_subdivisions.set_value(knotpoint.y() - 3);
+    } else if (knotpoint.y() >= 3000 && knotpoint.y() < 4000) {
+        _fillet_chamfer_chamfer_subdivisions.set_value(knotpoint.y() - 3000);
+        _fillet_chamfer_type_chamfer.set_active(true);
+    } else if (knotpoint.y() >= 4000 && knotpoint.y() < 5000) {
+        _fillet_chamfer_chamfer_subdivisions.set_value(knotpoint.y() - 4000);
+        _fillet_chamfer_type_inverse_chamfer.set_active(true);
     }
 }
 
-void FilletChamferPropertiesDialog::_setPt(
+void FilletChamferPropertiesDialog::_set_pt(
     const Inkscape::LivePathEffect::
     FilletChamferPointArrayParamKnotHolderEntity *pt)
 {
@@ -240,9 +252,14 @@ void FilletChamferPropertiesDialog::_setPt(
                      pt);
 }
 
-void FilletChamferPropertiesDialog::_setUnit(const gchar *abbr)
+void FilletChamferPropertiesDialog::_set_unit(const gchar *abbr)
 {
     unit = abbr;
+}
+
+void FilletChamferPropertiesDialog::_set_document_unit(Glib::ustring const *abbr)
+{
+    document_unit = abbr;
 }
 
 void FilletChamferPropertiesDialog::_set_use_distance(bool use_knot_distance)
@@ -255,7 +272,7 @@ void FilletChamferPropertiesDialog::_set_aprox(bool aprox_radius)
     aprox = aprox_radius;
 }
 
-void FilletChamferPropertiesDialog::_setDesktop(SPDesktop *desktop)
+void FilletChamferPropertiesDialog::_set_desktop(SPDesktop *desktop)
 {
     if (desktop) {
         Inkscape::GC::anchor(desktop);

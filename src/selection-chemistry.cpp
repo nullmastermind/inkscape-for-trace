@@ -1643,7 +1643,7 @@ void sp_selection_apply_affine(Inkscape::Selection *selection, Geom::Affine cons
                     item->doWriteTransform(item->getRepr(), move, &move, compensate);
 
                 } else if (prefs_unmoved) {
-                    //if (SP_IS_USE(sp_use_get_original(SP_USE(item))))
+                    //if (dynamic_cast<SPUse *>(sp_use_get_original(dynamic_cast<SPUse *>(item))))
                     //    clone_move = Geom::identity();
                     Geom::Affine move = result * clone_move;
                     item->doWriteTransform(item->getRepr(), move, &t, compensate);
@@ -4186,7 +4186,7 @@ void sp_selection_unset_mask(SPDesktop *desktop, bool apply_clip_path) {
         for ( SPObject *child = obj->firstChild() ; child; child = child->getNext() ) {
             // Collect all clipped paths and masks within a single group
             Inkscape::XML::Node *copy = SP_OBJECT(child)->getRepr()->duplicate(xml_doc);
-            if(copy->attribute("inkscape:original-d"))
+            if(copy->attribute("inkscape:original-d") && copy->attribute("inkscape:path-effect"))
             {
                 copy->setAttribute("d", copy->attribute("inkscape:original-d"));
             }
