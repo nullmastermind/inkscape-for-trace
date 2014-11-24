@@ -385,12 +385,16 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
             case BEND_CLIPBOARD:
             {
                 Inkscape::UI::ClipboardManager *cm = Inkscape::UI::ClipboardManager::get();
-                if(cm->paste(SP_ACTIVE_DESKTOP,false) == true){
+                if(cm->paste(SP_ACTIVE_DESKTOP,true) == true){
                     item->transform = SP_ITEM(SP_ACTIVE_DESKTOP->currentLayer())->i2doc_affine().inverse();
                     gchar const *svgd = item->getRepr()->attribute("d");
                     bendItem = dc->selection->singleItem();
+                    bendItem->moveTo(item,false);
                     spdc_apply_bend_shape(svgd, dc, bendItem);
-                    dc->selection->set(bendItem,true);
+                    bendItem->transform = Geom::Affine(1,0,0,1,0,0);
+                    dc->selection->add(SP_OBJECT(bendItem));
+                } else {
+                    shape = NONE;
                 }
                 break;
             }
@@ -410,13 +414,14 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
                     if(bendItem != NULL && bendItem->getRepr() != NULL){
                         item->transform = SP_ITEM(SP_ACTIVE_DESKTOP->currentLayer())->i2doc_affine().inverse();
                         gchar const *svgd = item->getRepr()->attribute("d");
-                        Inkscape::Selection *selection = sp_desktop_selection(dc->desktop);
-                        selection->add(SP_OBJECT(bendItem));
+                        dc->selection->add(SP_OBJECT(bendItem));
                         sp_selection_duplicate(dc->desktop);
-                        selection->remove(SP_OBJECT(bendItem));
+                        dc->selection->remove(SP_OBJECT(bendItem));
                         bendItem = dc->selection->singleItem();
+                        bendItem->moveTo(item,false);
                         spdc_apply_bend_shape(svgd, dc, bendItem);
-                        dc->selection->set(bendItem,true);
+                        bendItem->transform = Geom::Affine(1,0,0,1,0,0);
+                        dc->selection->add(SP_OBJECT(bendItem));
                     }
                     shape = BEND_CLIPBOARD;
                 }
@@ -441,9 +446,7 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
             sp_repr_css_attr_unref(css);
             return;
         }
-        if(previous_shape_type == LAST_APPLIED){
-            return;
-        }
+
         if (dc->waiting_LPE_type != INVALID_LPE) {
             Effect::createAndApply(dc->waiting_LPE_type, dc->desktop->doc(), item);
             dc->waiting_LPE_type = INVALID_LPE;
