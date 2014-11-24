@@ -257,7 +257,7 @@ static void spdc_apply_powerstroke_shape(const std::vector<Geom::Point> & points
 
     std::ostringstream s;
     s.imbue(std::locale::classic());
-    s << "0," << stroke_width / 2.;
+    s << points[0][Geom::X] << "," << stroke_width / 2.;
 
     // write powerstroke parameters:
     lpe->getRepr()->setAttribute("start_linecap_type", "zerowidth");
@@ -285,9 +285,11 @@ static void spdc_apply_bend_shape(gchar const *svgd, FreehandBase *dc, SPItem *i
     lpe->getRepr()->setAttribute("scale_y_rel", "false");
     lpe->getRepr()->setAttribute("vertical", "false");
 }
-static int previous_shape_type = -1;
-static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item, SPCurve *curve)
 
+enum shapeType { NONE, TRIANGLE_IN, TRIANGLE_OUT, ELLIPSE, CLIPBOARD, BEND_CLIPBOARD, LAST_APPLIED };
+static shapeType previous_shape_type = NONE;
+
+static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item, SPCurve *curve)
 {
     using namespace Inkscape::LivePathEffect;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -304,8 +306,7 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
         //Store the clipboard path to apply in the future without the use of clipboard
 
         static Geom::PathVector previous_shape_pathv;
-        enum shapeType { NONE, TRIANGLE_IN, TRIANGLE_OUT, ELLIPSE, CLIPBOARD, BEND_CLIPBOARD, LAST_APPLIED };
-        static shapeType previous_shape_type = NONE;
+        
 
 
         shapeType shape = (shapeType)prefs->getInt(tool_name(dc) + "/shape", 0);
@@ -385,14 +386,11 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
             {
                 Inkscape::UI::ClipboardManager *cm = Inkscape::UI::ClipboardManager::get();
                 if(cm->paste(SP_ACTIVE_DESKTOP,false) == true){
+                    item->transform = SP_ITEM(SP_ACTIVE_DESKTOP->currentLayer())->i2doc_affine().inverse();
                     gchar const *svgd = item->getRepr()->attribute("d");
-                    item->getRepr()->setAttribute("d", "");
                     bendItem = dc->selection->singleItem();
-                    item->setSuccessor(bendItem);
-                    item = bendItem;
-                    g_assert(item != NULL);
-                    spdc_apply_bend_shape(svgd, dc, item);
-                    dc->selection->set(item,true);
+                    spdc_apply_bend_shape(svgd, dc, bendItem);
+                    dc->selection->set(bendItem,true);
                 }
                 break;
             }
@@ -407,30 +405,28 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
 
                         shape_applied = true;
                     }
+                    shape = CLIPBOARD;
                 } else {
                     if(bendItem != NULL && bendItem->getRepr() != NULL){
+                        item->transform = SP_ITEM(SP_ACTIVE_DESKTOP->currentLayer())->i2doc_affine().inverse();
                         gchar const *svgd = item->getRepr()->attribute("d");
-                        item->getRepr()->setAttribute("d", "");
                         Inkscape::Selection *selection = sp_desktop_selection(dc->desktop);
                         selection->add(SP_OBJECT(bendItem));
                         sp_selection_duplicate(dc->desktop);
                         selection->remove(SP_OBJECT(bendItem));
                         bendItem = dc->selection->singleItem();
-                        item->setSuccessor(bendItem);
-                        item = bendItem;
-                        g_assert(item != NULL);
-                        spdc_apply_bend_shape(svgd, dc, item);
-                        dc->selection->set(item,true);
+                        spdc_apply_bend_shape(svgd, dc, bendItem);
+                        dc->selection->set(bendItem,true);
                     }
+                    shape = BEND_CLIPBOARD;
                 }
                 break;
             }
             default:
                 break;
         }
-        if(shape != LAST_APPLIED){
-            previous_shape_type = shape;
-        }
+        previous_shape_type = shape;
+
         if (shape_applied) {
             // apply original stroke color as fill and unset stroke; then return
             SPCSSAttr *css = sp_repr_css_attr_new();
@@ -445,7 +441,7 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
             sp_repr_css_attr_unref(css);
             return;
         }
-        if(previous_shape_type == 5 || previous_shape_type == 6 || previous_shape_type == 7){
+        if(previous_shape_type == LAST_APPLIED){
             return;
         }
         if (dc->waiting_LPE_type != INVALID_LPE) {
@@ -754,19 +750,17 @@ static void spdc_flush_white(FreehandBase *dc, SPCurve *gc)
             // Attach repr
             SPItem *item = SP_ITEM(desktop->currentLayer()->appendChildRepr(repr));
 
-            // we finished the path; now apply any waiting LPEs or freehand shapes
             spdc_check_for_and_apply_waiting_LPE(dc, item, c);
-            if(previous_shape_type == -1 || previous_shape_type == 5 || previous_shape_type == 6){
-                return;
-            }
-            if(previous_shape_type != 7){
+            if(previous_shape_type != BEND_CLIPBOARD){
                 dc->selection->set(repr);
             }
-            
             Inkscape::GC::release(repr);
             item->transform = SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
             item->updateRepr();
             item->doWriteTransform(item->getRepr(), item->transform, NULL, true);
+            if(previous_shape_type == BEND_CLIPBOARD){
+                repr->parent()->removeChild(repr);
+            }
         }
 
         DocumentUndo::done(doc, SP_IS_PEN_CONTEXT(dc)? SP_VERB_CONTEXT_PEN : SP_VERB_CONTEXT_PENCIL,
