@@ -521,11 +521,9 @@ void sp_selection_duplicate(SPDesktop *desktop, bool suppressDone)
                     if (!strcmp(orig->getId(), old_ids[j])) {
                         // we have both orig and clone in selection, relink
                         // std::cout << id  << " old, its ori: " << orig->getId() << "; will relink:" << new_ids[i] << " to " << new_ids[j] << "\n";
-                        gchar *newref = g_strdup_printf("#%s", new_ids[j]);
                         SPObject *new_clone = doc->getObjectById(new_ids[i]);
-                        new_clone->getRepr()->setAttribute("xlink:href", newref);
+                        new_clone->getRepr()->setAttribute("xlink:href", '#' + new_ids[j]);
                         new_clone->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-                        g_free(newref);
                     }
                 }
             } else {
@@ -534,9 +532,7 @@ void sp_selection_duplicate(SPDesktop *desktop, bool suppressDone)
                     for (guint j = 0; j < old_ids.size(); j++) {
                         gchar *source_href = offset->sourceHref;
                         if (source_href && source_href[0]=='#' && !strcmp(source_href+1, old_ids[j])) {
-                            gchar *newref = g_strdup_printf("#%s", new_ids[j]);
-                            doc->getObjectById(new_ids[i])->getRepr()->setAttribute("xlink:href", newref);
-                            g_free(newref);
+                            doc->getObjectById(new_ids[i])->getRepr()->setAttribute("xlink:href", '#' + new_ids[j]);
                         }
                     }
                 }
@@ -2884,10 +2880,12 @@ void sp_selection_clone_original_path_lpe(SPDesktop *desktop)
     if (desktop == NULL) {
         return;
     }
-    
+
+    Inkscape::Selection *selection = sp_desktop_selection(desktop);
+
     Inkscape::SVGOStringStream os;
     SPObject * firstItem = NULL;
-    for (const GSList * item = desktop->selection->itemList(); item != NULL; item = item->next) {
+    for (const GSList * item = selection->itemList(); item != NULL; item = item->next) {
         if (SP_IS_SHAPE(item->data) || SP_IS_TEXT(item->data)) {
             if (firstItem) {
                 os << "|";
@@ -2905,10 +2903,10 @@ void sp_selection_clone_original_path_lpe(SPDesktop *desktop)
         Inkscape::XML::Node *lpe_repr = xml_doc->createElement("inkscape:path-effect");
         {
             lpe_repr->setAttribute("effect", "fill_between_many");
-            lpe_repr->setAttribute("linkedpaths", os.str().c_str());
+            lpe_repr->setAttribute("linkedpaths", os.str());
             desktop->doc()->getDefs()->getRepr()->addChild(lpe_repr, NULL); // adds to <defs> and assigns the 'id' attribute
         }
-        const gchar * lpe_id = lpe_repr->attribute("id");
+        std::string lpe_id_href = '#' + lpe_repr->attribute("id");
         Inkscape::GC::release(lpe_repr);
 
         // create the new path
@@ -2920,13 +2918,15 @@ void sp_selection_clone_original_path_lpe(SPDesktop *desktop)
             SPObject *clone_obj = desktop->doc()->getObjectById(clone->attribute("id"));
             SPLPEItem *clone_lpeitem = dynamic_cast<SPLPEItem *>(clone_obj);
             if (clone_lpeitem) {
-                gchar *href = g_strdup_printf("#%s", lpe_id);
-                clone_lpeitem->addPathEffect(href, false);
-                g_free(href);
+                clone_lpeitem->addPathEffect(lpe_id_href, false);
             }
         }
 
         DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_EDIT_CLONE_ORIGINAL_PATH_LPE, _("Fill between many"));
+        // select the new object:
+        selection->set(clone);
+
+        Inkscape::GC::release(clone);
     } else {
         desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select path(s) to fill."));
     }
@@ -3174,7 +3174,7 @@ void sp_selection_symbol(SPDesktop *desktop, bool /*apply*/ )
         the_group->setAttribute("style", NULL);
         std::string id = symbol_repr->attribute("id");
         id += "_transform";
-        the_group->setAttribute("id", id.c_str());
+        the_group->setAttribute("id", id);
 
     }
 
@@ -3192,10 +3192,7 @@ void sp_selection_symbol(SPDesktop *desktop, bool /*apply*/ )
     // Create <use> pointing to new symbol (to replace the moved objects).
     Inkscape::XML::Node *clone = xml_doc->createElement("svg:use");
 
-    const gchar *symbol_id = symbol_repr->attribute("id");
-    gchar *href_str = g_strdup_printf("#%s", symbol_id);
-    clone->setAttribute("xlink:href", href_str, false);
-    g_free(href_str);
+    clone->setAttribute("xlink:href", '#'+symbol_repr->attribute("id"), false);
 
     the_parent_repr->appendChild(clone);
 
@@ -3286,7 +3283,7 @@ void sp_selection_unsymbol(SPDesktop *desktop)
     // Need to delete <symbol>; all <use> elements that referenced <symbol> should
     // auto-magically reference <g> (if <symbol> deleted after setting <g> 'id').
     Glib::ustring id = symbol->getAttribute("id");
-    group->setAttribute("id",id.c_str());
+    group->setAttribute("id", id);
     symbol->deleteObject(true);
 
     // Change selection to new <g> element.
@@ -4084,9 +4081,7 @@ void sp_selection_set_mask(SPDesktop *desktop, bool apply_clip_path, bool apply_
             Inkscape::GC::release(group);
         }
 
-        gchar *value_str = g_strdup_printf("url(#%s)", mask_id);
-        apply_mask_to->setAttribute(attributeName, value_str);
-        g_free(value_str);
+        apply_mask_to->setAttribute(attributeName, Glib::ustring("url(#") + mask_id + ')');
 
     }
 
