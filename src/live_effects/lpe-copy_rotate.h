@@ -48,6 +48,7 @@ private:
     ScalarParam rotation_angle;
     ScalarParam num_copies;
     BoolParam copiesTo360;
+    BoolParam fusionPaths;
 
     PointParam origin;
 
