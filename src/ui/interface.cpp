@@ -29,7 +29,7 @@
 #include <gtkmm/imagemenuitem.h>
 #include <gtkmm/separatormenuitem.h>
 
-#include "inkscape-private.h"
+#include "inkscape.h"
 #include "extension/db.h"
 #include "extension/effect.h"
 #include "extension/input.h"
@@ -270,7 +270,7 @@ sp_create_window(SPViewWidget *vw, bool editable)
 
     // needed because the first ACTIVATE_DESKTOP was sent when there was no window yet
     if ( SP_IS_DESKTOP_WIDGET(vw) ) {
-        inkscape_reactivate_desktop(SP_DESKTOP_WIDGET(vw)->desktop);
+        INKSCAPE.reactivate_desktop(SP_DESKTOP_WIDGET(vw)->desktop);
     }
 }
 
@@ -318,13 +318,13 @@ sp_ui_close_view(GtkWidget */*widget*/)
 
     // If closing the last document, open a new document so Inkscape doesn't quit.
     std::list<SPDesktop *> desktops;
-    inkscape_get_all_desktops(desktops);
+    INKSCAPE.get_all_desktops(desktops);
     if (desktops.size() == 1) {
         Glib::ustring templateUri = sp_file_default_template_uri();
         SPDocument *doc = SPDocument::createNewDoc( templateUri.c_str() , TRUE, true );
         // Set viewBox if it doesn't exist
         if (!doc->getRoot()->viewBox_set) {
-            doc->setViewBox(Geom::Rect::from_xywh(0, 0, doc->getWidth().value(doc->getDefaultUnit()), doc->getHeight().value(doc->getDefaultUnit())));
+            doc->setViewBox(Geom::Rect::from_xywh(0, 0, doc->getWidth().value(doc->getDisplayUnit()), doc->getHeight().value(doc->getDisplayUnit())));
         }
         dt->change_document(doc);
         sp_namedview_window_from_document(dt);
@@ -921,7 +921,7 @@ static void sp_ui_build_dyn_menus(Inkscape::XML::Node *menus, GtkWidget *menu, I
 GtkWidget *sp_ui_main_menubar(Inkscape::UI::View::View *view)
 {
     GtkWidget *mbar = gtk_menu_bar_new();
-    sp_ui_build_dyn_menus(inkscape_get_menus(INKSCAPE), mbar, view);
+    sp_ui_build_dyn_menus(INKSCAPE.get_menus(), mbar, view);
     return mbar;
 }
 
@@ -2117,13 +2117,13 @@ void ContextMenu::ImageEdit(void)
 
 void ContextMenu::ImageTraceBitmap(void)
 {
-    inkscape_dialogs_unhide();
+    INKSCAPE.dialogs_unhide();
     _desktop->_dlg_mgr->showDialog("Trace");
 }
 
 void ContextMenu::ImageTracePixelArt(void)
 {
-    inkscape_dialogs_unhide();
+    INKSCAPE.dialogs_unhide();
     _desktop->_dlg_mgr->showDialog("PixelArt");
 }
 

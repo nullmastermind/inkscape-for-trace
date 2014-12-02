@@ -48,6 +48,7 @@ LPECopyRotate::LPECopyRotate(LivePathEffectObject *lpeobject) :
     num_copies(_("Number of copies:"), _("Number of copies of the original path"), "num_copies", &wr, this, 5),
     copiesTo360(_("360º Copies"), _("No rotation angle, fixed to 360º"), "copiesTo360", &wr, this, true),
     fusionPaths(_("Fusioned paths"), _("Fusion paths"), "fusionPaths", &wr, this, true),
+
     origin(_("Origin"), _("Origin of the rotation"), "origin", &wr, this, "Adjust the origin of the rotation"),
     dist_angle_handle(100)
 {

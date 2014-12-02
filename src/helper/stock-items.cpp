@@ -195,7 +195,7 @@ SPObject *get_stock_item(gchar const *urn, gboolean stock)
         
         gchar * base = g_strndup(e, a);
 
-        SPDesktop *desktop = inkscape_active_desktop();
+        SPDesktop *desktop = SP_ACTIVE_DESKTOP;
         SPDocument *doc = sp_desktop_document(desktop);
         SPDefs *defs = doc->getDefs();
         if (!defs) {
@@ -265,7 +265,7 @@ SPObject *get_stock_item(gchar const *urn, gboolean stock)
     
     else {
         
-        SPDesktop *desktop = inkscape_active_desktop();
+        SPDesktop *desktop = SP_ACTIVE_DESKTOP;
         SPDocument *doc = sp_desktop_document(desktop);
         SPObject *object = doc->getObjectById(urn);
 

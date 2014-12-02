@@ -406,9 +406,9 @@ void SPObject::requestOrphanCollection() {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     // do not remove style or script elements (Bug #276244)
-    if (SP_IS_STYLE_ELEM(this)) {
+    if (dynamic_cast<SPStyleElem *>(this)) {
         // leave it
-    } else if (SP_IS_SCRIPT(this)) {
+    } else if (dynamic_cast<SPScript *>(this)) {
         // leave it
   
     } else if ((! prefs->getBool("/options/cleanupswatches/value", false)) && SP_IS_PAINT_SERVER(this) && static_cast<SPPaintServer*>(this)->isSwatch() ) {
@@ -1254,6 +1254,16 @@ void SPObject::setAttribute(gchar const *key, gchar const *value, SPException *e
     //XML Tree being used here.
     getRepr()->setAttribute(key, value, false);
 }
+void SPObject::setAttribute(char const *key, Glib::ustring const &value, SPException *ex)
+{
+    setAttribute(key, value.empty() ? NULL : value.c_str(), ex);
+}
+void SPObject::setAttribute(Glib::ustring const &key, Glib::ustring const &value, SPException *ex)
+{
+    setAttribute( key.empty()   ? NULL : key.c_str(),
+                  value.empty() ? NULL : value.c_str(), ex);
+}
+
 
 void SPObject::removeAttribute(gchar const *key, SPException *ex)
 {

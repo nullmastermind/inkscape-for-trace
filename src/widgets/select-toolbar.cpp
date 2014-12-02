@@ -470,7 +470,7 @@ void sp_select_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
     contextActions->push_back( act );
 
     // Create the parent widget for x y w h tracker.
-    GtkWidget *spw = sp_widget_new_global(INKSCAPE);
+    GtkWidget *spw = sp_widget_new_global();
 
     // Remember the desktop's canvas widget, to be used for defocusing.
     g_object_set_data(G_OBJECT(spw), "dtw", sp_desktop_canvas(desktop));
@@ -488,7 +488,7 @@ void sp_select_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
     // Create the units menu.
     UnitTracker* tracker = new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR);
     tracker->addUnit(unit_table.getUnit("%"));
-    tracker->setActiveUnit( sp_desktop_namedview(desktop)->doc_units );
+    tracker->setActiveUnit( sp_desktop_namedview(desktop)->display_units );
 
     g_object_set_data( G_OBJECT(spw), "tracker", tracker );
     g_signal_connect( G_OBJECT(spw), "destroy", G_CALLBACK(destroy_tracker), spw );
