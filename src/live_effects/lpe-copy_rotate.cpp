@@ -17,11 +17,14 @@
 #include "live_effects/lpe-copy_rotate.h"
 #include "sp-shape.h"
 #include "display/curve.h"
-
+#include <2geom/path.h>
+#include <2geom/path-intersection.h>
+#include <2geom/sbasis-to-bezier.h>
 #include <2geom/path.h>
 #include <2geom/transforms.h>
 #include <2geom/d2-sbasis.h>
 #include <2geom/angle.h>
+#include <cmath>  
 
 #include "knot-holder-entity.h"
 #include "knotholder.h"
@@ -110,60 +113,57 @@ LPECopyRotate::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & p
 
     Affine pre = Translate(-origin) * Rotate(-deg_to_rad(starting_angle));
     if(fusionPaths){
-            // I first suspected the minus sign to be a bug in 2geom but it is
-            // likely due to SVG's choice of coordinate system orientation (max)
-            Rotate rot(-deg_to_rad(-starting_angle));
-            Rotate rot2(-deg_to_rad(rotation_angle_end-starting_angle));
-            //Affine t = pre * rot * Translate(origin);
-            Geom::Path mlineExpanded;
-            Geom::Point lineStart(0,0);
-            Geom::Point lineStart[Geom::X] = cos(rot) * 100000.0;
-            Geom::Point lineStart[Geom::Y] = sin(rot) * 100000.0;
-            Geom::Point lineEnd(0,0);
-            Geom::Point lineEnd[Geom::X] = cos(rot2) * 100000.0;
-            Geom::Point lineEnd[Geom::Y] = sin(rot2) * 100000.0;
-            mlineExpanded.start( lineStart);
-            mlineExpanded.appendNew<Geom::LineSegment>( origin);
-            mlineExpanded.appendNew<Geom::LineSegment>( lineEnd);
-            PathVector const original_pathv = path_from_piecewise(remove_short_cuts(pwd2_in, 0.1), 0.001);
-            for (Geom::PathVector::const_iterator path_it = original_pathv.begin(); path_it != original_pathv.end(); ++path_it) {
-                if (path_it->empty()){
-                    continue;
+        // I first suspected the minus sign to be a bug in 2geom but it is
+        // likely due to SVG's choice of coordinate system orientation (max)
+        std::vector<Geom::Path> path_out;
+        PathVector const original_pathv = path_from_piecewise(remove_short_cuts(pwd2_in * t, 0.1), 0.001);
+        for (Geom::PathVector::const_iterator path_it = original_pathv.begin(); path_it != original_pathv.end(); ++path_it) {
+            if (path_it->empty()){
+                continue;
+            }
+            bool end_open = false;
+            std::vector<Geom::Path> temp_path;
+            double timeStart = 0.0;
+            int position = 0;
+            if (path_it->closed()) {
+                const Geom::Curve &closingline = path_it->back_closed();
+                if (!are_near(closingline.initialPoint(), closingline.finalPoint())) {
+                    end_open = true;
                 }
-                std::vector<Geom::Path> temp_path;
-                double timeStart = 0.0;
-                int position = 0;
-                bool end_open = false;
-                if (path_it->closed()) {
-                    const Geom::Curve &closingline = path_it->back_closed();
-                    if (!are_near(closingline.initialPoint(), closingline.finalPoint())) {
-                        end_open = true;
-                    }
-                }
-                Geom::Path original = (Geom::Path)(*path_it);
-                if(end_open && path_it->closed()){
-                    original.close(false);
-                    original.appendNew<Geom::LineSegment>( original.initialPoint() );
-                    original.close(true);
-                }
-                Geom::Crossings cs = crossings(original, mlineExpanded);
+            }
+            Geom::Path original = (Geom::Path)(*path_it);
+            if(end_open && path_it2->closed()){
+                original.close(false);
+                original.appendNew<Geom::LineSegment>( original.initialPoint() );
+                original.close(true);
+            }
+            //for (int i = 0; i < num_copies; ++i) {
+                double rotAngle = -deg_to_rad(rotation_angle_end-starting_angle);
+                Rotate rot(rotAngle * i);
+                Affine t = pre * rot * Translate(origin);
+                Geom::Point lineEnd(0,0);
+                lineEnd[Geom::X] = cos((rotAngle * i) - rotAngle/2.0) * 100000.0;
+                lineEnd[Geom::Y] = sin((rotAngle * i) - rotAngle/2.0) * 100000.0;
+                Geom::Path kline;
+                kline.start((Geom::Point)origin);
+                kline.appendNew<Geom::LineSegment>(lineEnd);
+                Geom::Crossings cs = crossings(original, kline);
                 for(unsigned int i = 0; i < cs.size(); i++) {
                     double timeEnd = cs[i].ta;
                     Geom::Path portion = original.portion(timeStart, timeEnd);
                     Geom::Point middle = portion.pointAt((double)portion.size()/2.0);
-                    position = pointSideOfLine(lineStart, lineEnd, middle);
-                    Geom::line middleLine;
-                    middleLine->setPoints(origin,middle);
-                    if(middleLine.angle > rot && middleLine < rot2){
-                        Geom::Path kaleidoscope;
-                        for (int j = 0; j < num_copies; ++j) {
-                            // I first suspected the minus sign to be a bug in 2geom but it is
-                            // likely due to SVG's choice of coordinate system orientation (max)
-                            Rotate rot(-deg_to_rad(rotation_angle_end * j));
+                    position = pointSideOfLine((Geom::Point)origin, lineEnd, middle);
+                    if(reverseFusion){
+                        position *= -1;
+                    }
+                    if(position == 1){
+                        for (int i = 0; i < num_copies; ++i) {
+                            double rotAngle = -deg_to_rad(rotation_angle_end-starting_angle);
+                            Rotate rot(rotAngle * i);
                             Affine t = pre * rot * Translate(origin);
-                            kaleidoscope = portion.reverse() *  t);
-                            kaleidoscope.setInitial(portion.finalPoint());
-                            portion.append(kaleidoscope);
+                            Geom::Path kaleidoscope = portion * t;
+                            mirror.setInitial(portion.finalPoint());
+                            portion.append(mirror);
                         }
                         if(i!=0){
                             portion.setFinal(portion.initialPoint());
@@ -174,23 +174,20 @@ LPECopyRotate::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & p
                     portion.clear();
                     timeStart = timeEnd;
                 }
-                Geom::line middleLine;
-                middleLine->setPoints(origin,original.finalPoint());
-                if(cs.size()!=0 && middleLine.angle > rot && middleLine < rot2){
-                    Geom::Path portion = original.portion(timeStart, original.size());
-                    portion = portion.reverse();
-                    
-                    Geom::Path kaleidoscope;
+                position = pointSideOfLine((Geom::Point)origin, lineEnd, original.finalPoint());
+                if(reverseFusion){
+                    position *= -1;
+                }
+                if(cs.size()!=0 && position == 1){
                     for (int i = 0; i < num_copies; ++i) {
-                        // I first suspected the minus sign to be a bug in 2geom but it is
-                        // likely due to SVG's choice of coordinate system orientation (max)
-                        Rotate rot(-deg_to_rad(rotation_angle_end * i));
+                        double rotAngle = -deg_to_rad(rotation_angle_end-starting_angle);
+                        Rotate rot(rotAngle * i);
                         Affine t = pre * rot * Translate(origin);
-                        kaleidoscope = portion.reverse() *  t);
+                        Geom::Path portion = original.portion(timeStart, original.size());
+                        Geom::Path kaleidoscope = portion * t;
                         kaleidoscope.setInitial(portion.finalPoint());
                         portion.append(kaleidoscope);
                     }
-                    portion = portion.reverse();
                     if (!original.closed()){
                         temp_path.push_back(portion);
                     } else {
@@ -205,22 +202,28 @@ LPECopyRotate::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & p
                     }
                     portion.clear();
                 }
-                if(cs.size() == 0 && position == 1){
-                    temp_path.push_back(original);
-                    temp_path.push_back(original * m);
-                }
-                path_out.insert(path_out.end(), temp_path.begin(), temp_path.end());
-                temp_path.clear();
             }
-            output = path_out.toPwSb();
-        } else {
-            for (int i = 0; i < num_copies; ++i) {
-                // I first suspected the minus sign to be a bug in 2geom but it is
-                // likely due to SVG's choice of coordinate system orientation (max)
-                Rotate rot(-deg_to_rad(rotation_angle_end * i));
-                Affine t = pre * rot * Translate(origin);
-                output.concat(pwd2_in * t);
+            if(cs.size() == 0 && position == 1){
+                for (int i = 0; i < num_copies; ++i) {
+                    // I first suspected the minus sign to be a bug in 2geom but it is
+                    // likely due to SVG's choice of coordinate system orientation (max)
+                    Rotate rot(-deg_to_rad(rotation_angle_end * i));
+                    Affine t = pre * rot * Translate(origin);
+                    temp_path.push_back((Geom::Path)(*path_it) * t);
+               }
             }
+            path_out.insert(path_out.end(), temp_path.begin(), temp_path.end());
+            temp_path.clear();
+            if(path_out.size() > 0){
+                output.concat(paths_to_pw(path_out));
+            }
+    } else {
+        for (int i = 0; i < num_copies; ++i) {
+            // I first suspected the minus sign to be a bug in 2geom but it is
+            // likely due to SVG's choice of coordinate system orientation (max)
+            Rotate rot(-deg_to_rad(rotation_angle_end * i));
+            Affine t = pre * rot * Translate(origin);
+            output.concat(pwd2_in * t);
         }
     }
     return output;
