@@ -576,7 +576,13 @@ SPStyle::read( SPObject *object, Inkscape::XML::Node *repr ) {
     }
 }
 
-// Matches void sp_style_read_from_object(SPStyle *style, SPObject *object);
+/**
+ * Read style properties from object's repr.
+ *
+ * 1. Reset existing object style
+ * 2. Load current effective object style
+ * 3. Load i attributes from immediate parent (which has to be up-to-date)
+ */
 void
 SPStyle::readFromObject( SPObject *object ) {
 
@@ -1213,30 +1219,6 @@ sp_style_unref(SPStyle *style)
         return NULL;
     }
     return style;
-}
-
-
-
-// Called in: sp-clippath.cpp, sp-item.cpp (suspicious), sp-object.cpp, sp-style-elem.cpp
-/**
- * Read style properties from object's repr.
- *
- * 1. Reset existing object style
- * 2. Load current effective object style
- * 3. Load i attributes from immediate parent (which has to be up-to-date)
- */
-void
-sp_style_read_from_object(SPStyle *style, SPObject *object)
-{
-    // std::cout << "sp_style_read_from_object: " << (object->getId()?object->getId():"null") << std::endl;
-    g_return_if_fail(style != NULL);
-    g_return_if_fail(object != NULL);
-    g_return_if_fail(SP_IS_OBJECT(object));
-
-    Inkscape::XML::Node *repr = object->getRepr();
-    g_return_if_fail(repr != NULL);
-
-    style->read( object, repr );
 }
 
 static CRSelEng *
