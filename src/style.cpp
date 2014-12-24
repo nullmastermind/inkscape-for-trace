@@ -591,6 +591,34 @@ SPStyle::readFromObject( SPObject *object ) {
     read( object, repr );
 }
 
+/**
+ * Read style properties from preferences.
+ * @param path Preferences directory from which the style should be read
+ */
+void
+SPStyle::readFromPrefs(Glib::ustring const &path) {
+
+    g_return_if_fail(!path.empty());
+
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+
+    // not optimal: we reconstruct the node based on the prefs, then pass it to
+    // sp_style_read for actual processing.
+    Inkscape::XML::SimpleDocument *tempdoc = new Inkscape::XML::SimpleDocument;
+    Inkscape::XML::Node *tempnode = tempdoc->createElement("prefs");
+
+    std::vector<Inkscape::Preferences::Entry> attrs = prefs->getAllEntries(path);
+    for (std::vector<Inkscape::Preferences::Entry>::iterator i = attrs.begin(); i != attrs.end(); ++i) {
+        tempnode->setAttribute(i->getEntryName().data(), i->getString().data());
+    }
+
+    read( NULL, tempnode );
+
+    Inkscape::GC::release(tempnode);
+    Inkscape::GC::release(tempdoc);
+    delete tempdoc;
+}
+
 // Matches sp_style_merge_property(SPStyle *style, gint id, gchar const *val)
 void
 SPStyle::readIfUnset( gint id, gchar const *val ) {
@@ -1210,40 +1238,6 @@ sp_style_read_from_object(SPStyle *style, SPObject *object)
 
     style->read( object, repr );
 }
-
-// Called in: libnrtype/font-lister.cpp, widgets/dash-selector.cpp, widgets/text-toolbar.cpp,
-// ui/dialog/text-edit.cpp
-// Why is this called when draging a gradient handle?
-/**
- * Read style properties from preferences.
- * @param style The style to write to
- * @param path Preferences directory from which the style should be read
- */
-void
-sp_style_read_from_prefs(SPStyle *style, Glib::ustring const &path)
-{
-    g_return_if_fail(style != NULL);
-    g_return_if_fail(path != "");
-
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-
-    // not optimal: we reconstruct the node based on the prefs, then pass it to
-    // sp_style_read for actual processing.
-    Inkscape::XML::SimpleDocument *tempdoc = new Inkscape::XML::SimpleDocument;
-    Inkscape::XML::Node *tempnode = tempdoc->createElement("prefs");
-
-    std::vector<Inkscape::Preferences::Entry> attrs = prefs->getAllEntries(path);
-    for (std::vector<Inkscape::Preferences::Entry>::iterator i = attrs.begin(); i != attrs.end(); ++i) {
-        tempnode->setAttribute(i->getEntryName().data(), i->getString().data());
-    }
-
-    style->read( NULL, tempnode );
-
-    Inkscape::GC::release(tempnode);
-    Inkscape::GC::release(tempdoc);
-    delete tempdoc;
-}
-
 
 static CRSelEng *
 sp_repr_sel_eng()
