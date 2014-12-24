@@ -284,8 +284,6 @@ public:
 
 SPStyle *sp_style_new(SPDocument *document); // SPStyle::SPStyle( SPDocument *document = NULL );
 
-SPStyle *sp_style_new_from_object(SPObject *object); // SPStyle::SPStyle( SPObject *object );
-
 SPStyle *sp_style_ref(SPStyle *style); // SPStyle::ref();
 
 SPStyle *sp_style_unref(SPStyle *style); // SPStyle::unref();

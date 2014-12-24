@@ -476,7 +476,7 @@ SPStyle::clear() {
     //     (this->*(i->second)).clear();
     // }
 
-    // Release connection to object, created in sp_style_new_from_object()
+    // Release connection to object, created in constructor.
     release_connection.disconnect();
 
     // href->detach() called in fill->clear()...
@@ -899,7 +899,7 @@ SPStyle::write( guint const flags, SPStyle const *const base ) const {
 // Corresponds to sp_style_merge_from_parent()
 void
 SPStyle::cascade( SPStyle const *const parent ) {
-    // std::cout << "SPStyle::cascade" << std::endl;
+    // std::cout << "SPStyle::cascade: " << (object->getId()?object->getId():"null") << std::endl;
     for(std::vector<SPIBase*>::size_type i = 0; i != _properties.size(); ++i) {
         _properties[i]->cascade( parent->_properties[i] );
     }
@@ -1154,20 +1154,6 @@ SPStyle *
 sp_style_new(SPDocument *document)
 {
     SPStyle *const style = new SPStyle( document );
-    return style;
-}
-
-// Called in: sp-object.cpp
-/**
- * Creates a new SPStyle object, and attaches it to the specified SPObject.
- */
-SPStyle *
-sp_style_new_from_object(SPObject *object)
-{
-    g_return_val_if_fail(object != NULL, NULL);
-    g_return_val_if_fail(SP_IS_OBJECT(object), NULL);
-
-    SPStyle *const style = new SPStyle( NULL, object );
     return style;
 }
 

@@ -130,7 +130,7 @@ SPObject::SPObject()
     // vg, g, defs, desc, title, symbol, use, image, switch, path, rect, circle, ellipse, line, polyline,
     // polygon, text, tspan, tref, textPath, altGlyph, glyphRef, marker, linearGradient, radialGradient,
     // stop, pattern, clipPath, mask, filter, feImage, a, font, glyph, missing-glyph, foreignObject
-    this->style = sp_style_new_from_object(this);
+    this->style = new SPStyle( NULL, this ); // Is it necessary to call with "this"?
     this->context_style = NULL;
 }
 
