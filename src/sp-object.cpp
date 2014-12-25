@@ -1007,9 +1007,8 @@ Inkscape::XML::Node* SPObject::write(Inkscape::XML::Document *doc, Inkscape::XML
             repr->setAttribute("inkscape:collect", NULL);
         }
 
-        SPStyle const *const obj_style = this->style;
-        if (obj_style) {
-            gchar *s = sp_style_write_string(obj_style, SP_STYLE_FLAG_IFSET);
+        if (style) {
+            Glib::ustring s = style->write(SP_STYLE_FLAG_IFSET);
 
             // Check for valid attributes. This may be time consuming.
             // It is useful, though, for debugging Inkscape code.
@@ -1017,17 +1016,14 @@ Inkscape::XML::Node* SPObject::write(Inkscape::XML::Document *doc, Inkscape::XML
             if( prefs->getBool("/options/svgoutput/check_on_editing") ) {
 
                 unsigned int flags = sp_attribute_clean_get_prefs();
-                Glib::ustring s_cleaned = sp_attribute_clean_style( repr, s, flags ); 
-                g_free( s );
-                s = (s_cleaned.empty() ? NULL : g_strdup (s_cleaned.c_str()));
+                Glib::ustring s_cleaned = sp_attribute_clean_style( repr, s.c_str(), flags ); 
             }
 
-            if( s == NULL || strcmp(s,"") == 0 ) {
+            if( s.empty() ) {
                 repr->setAttribute("style", NULL);
             } else {
-                repr->setAttribute("style", s);
+                repr->setAttribute("style", s.c_str());
             }
-            g_free(s);
 
         } else {
             /** \todo I'm not sure what to do in this case.  Bug #1165868

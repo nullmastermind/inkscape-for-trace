@@ -458,7 +458,10 @@ SPStyle::~SPStyle() {
 
     _properties.clear();
 
-    // std::cout << "SPStyle::~SPstyle(): Exit\n" << std::endl;
+    if( _refcount > 1 ) {
+        std::cerr << "SPStyle::~SPStyle: ref count greater than 1! " << _refcount << std::endl;
+    }
+    // std::cout << "SPStyle::~SPStyle(): Exit\n" << std::endl;
 }
 
 // Used in SPStyle::clear()
@@ -902,6 +905,19 @@ SPStyle::readIfUnset( gint id, gchar const *val ) {
     }
 }
 
+/**
+ * Outputs the style to a CSS string.
+ *
+ * Use with SP_STYLE_FLAG_ALWAYS for copying an object's complete cascaded style to
+ * style_clipboard.
+ *
+ * Use with SP_STYLE_FLAG_IFDIFF and a pointer to the parent class when you need a CSS string for
+ * an object in the document tree.
+ *
+ * \pre flags in {IFSET, ALWAYS, IFDIFF}.
+ * \pre base.
+ * \post ret != NULL.
+ */
 Glib::ustring
 SPStyle::write( guint const flags, SPStyle const *const base ) const {
 
@@ -952,6 +968,14 @@ SPStyle::merge( SPStyle const *const parent ) {
     // for(SPPropMap::iterator i = _propmap.begin(); i != _propmap.end(); ++i ) {
     //     (this->*(i->second)).cascade( &(parent->*(i->second)) );
     // }
+}
+
+/**
+ * Parses a style="..." string and merges it with an existing SPStyle.
+ */
+void
+SPStyle::mergeString( gchar const *const p ) {
+    _mergeString( p );
 }
 
 // Mostly for unit testing
@@ -1246,25 +1270,6 @@ sp_repr_sel_eng()
 
 
 // Called in text-editting.cpp, ui/tools/frehand-base.cpp, ui/widget/style-swatch.cpp
-/**
- * Parses a style="..." string and merges it with an existing SPStyle.
- */
-void
-sp_style_merge_from_style_string(SPStyle *const style, gchar const *const p)
-{
-    // std::cout << "sp_style_merge_from_style_string: " << (p?p:"null") <<std::endl;
-    /*
-     * Reference: http://www.w3.org/TR/SVG11/styling.html#StyleAttribute:
-     * ``When CSS styling is used, CSS inline style is specified by including
-     * semicolon-separated property declarations of the form "name : value"
-     * within the style attribute''.
-     *
-     * That's fairly ambiguous.  Is a `value' allowed to contain semicolons?
-     * Why does it say "including", what else is allowed in the style
-     * attribute value?
-     */
-    style->_mergeString( p );
-}
 
 /** Indexed by SP_CSS_FONT_SIZE_blah.   These seem a bit small */
 static float const font_size_table[] = {6.0, 8.0, 10.0, 12.0, 14.0, 18.0, 24.0};
@@ -1435,50 +1440,6 @@ sp_style_css_size_units_to_px(double size, int unit)
     return size * (size / sp_style_css_size_px_to_units(size, unit));;
 }
 
-// Called in style.cpp, text-editing.cpp
-/**
- * Dumps the style to a CSS string, with either SP_STYLE_FLAG_IFSET or
- * SP_STYLE_FLAG_ALWAYS flags. Used with Always for copying an object's
- * complete cascaded style to style_clipboard. When you need a CSS string
- * for an object in the document tree, you normally call
- * sp_style_write_difference instead to take into account the object's parent.
- *
- * \pre style != NULL.
- * \pre flags in {IFSET, ALWAYS}.
- * \post ret != NULL.
- */
-gchar *
-sp_style_write_string(SPStyle const *const style, guint const flags)
-{
-    /** \todo
-     * Merge with write_difference, much duplicate code!
-     */
-    g_return_val_if_fail(style != NULL, NULL);
-    g_return_val_if_fail(((flags == SP_STYLE_FLAG_IFSET) ||
-                          (flags == SP_STYLE_FLAG_ALWAYS)  ),
-                         NULL);
-
-    return g_strdup( style->write( flags ).c_str() );
-}
-
-
-// Called in style.cpp, path-chemistry, NOT in text-editting.cpp (because of bug)
-/**
- * Dumps style to CSS string, see sp_style_write_string()
- *
- * \pre from != NULL.
- * \pre to != NULL.
- * \post ret != NULL.
- */
-gchar *
-sp_style_write_difference(SPStyle const *const from, SPStyle const *const to)
-{
-    g_return_val_if_fail(from != NULL, NULL);
-    g_return_val_if_fail(to != NULL, NULL);
-
-    return g_strdup( from->write( SP_STYLE_FLAG_IFDIFF, to ).c_str() );
-}
-
 
 // FIXME: Everything below this line belongs in a different file - css-chemistry?
 
@@ -1639,10 +1600,9 @@ sp_css_attr_from_style(SPStyle const *const style, guint const flags)
     g_return_val_if_fail(((flags == SP_STYLE_FLAG_IFSET) ||
                           (flags == SP_STYLE_FLAG_ALWAYS)  ),
                          NULL);
-    gchar *style_str = sp_style_write_string(style, flags);
+    Glib::ustring style_str = style->write(flags);
     SPCSSAttr *css = sp_repr_css_attr_new();
-    sp_repr_css_attr_add_from_string(css, style_str);
-    g_free(style_str);
+    sp_repr_css_attr_add_from_string(css, style_str.c_str());
     return css;
 }
 
