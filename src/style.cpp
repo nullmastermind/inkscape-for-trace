@@ -947,6 +947,17 @@ SPStyle::write( guint const flags, SPStyle const *const base ) const {
 }
 
 // Corresponds to sp_style_merge_from_parent()
+/**
+ * Sets computed values in \a style, which may involve inheriting from (or in some other way
+ * calculating from) corresponding computed values of \a parent.
+ *
+ * References: http://www.w3.org/TR/SVG11/propidx.html shows what properties inherit by default.
+ * http://www.w3.org/TR/SVG11/styling.html#Inheritance gives general rules as to what it means to
+ * inherit a value.  http://www.w3.org/TR/REC-CSS2/cascade.html#computed-value is more precise
+ * about what the computed value is (not obvious for lengths).
+ *
+ * \pre \a parent's computed values are already up-to-date.
+ */
 void
 SPStyle::cascade( SPStyle const *const parent ) {
     // std::cout << "SPStyle::cascade: " << (object->getId()?object->getId():"null") << std::endl;
@@ -959,6 +970,23 @@ SPStyle::cascade( SPStyle const *const parent ) {
 }
 
 // Corresponds to sp_style_merge_from_dying_parent()
+/**
+ * Combine \a style and \a parent style specifications into a single style specification that
+ * preserves (as much as possible) the effect of the existing \a style being a child of \a parent.
+ *
+ * Called when the parent repr is to be removed (e.g. the parent is a \<use\> element that is being
+ * unlinked), in which case we copy/adapt property values that are explicitly set in \a parent,
+ * trying to retain the same visual appearance once the parent is removed.  Interesting cases are
+ * when there is unusual interaction with the parent's value (opacity, display) or when the value
+ * can be specified as relative to the parent computed value (font-size, font-weight etc.).
+ *
+ * Doesn't update computed values of \a style.  For correctness, you should subsequently call
+ * sp_style_merge_from_parent against the new parent (presumably \a parent's parent) even if \a
+ * style was previously up-to-date wrt \a parent.
+ *
+ * \pre \a parent's computed values are already up-to-date.
+ *   (\a style's computed values needn't be up-to-date.)
+ */
 void
 SPStyle::merge( SPStyle const *const parent ) {
     // std::cout << "SPStyle::merge" << std::endl;
@@ -1268,61 +1296,8 @@ sp_repr_sel_eng()
     return ret;
 }
 
-
-// Called in text-editting.cpp, ui/tools/frehand-base.cpp, ui/widget/style-swatch.cpp
-
 /** Indexed by SP_CSS_FONT_SIZE_blah.   These seem a bit small */
 static float const font_size_table[] = {6.0, 8.0, 10.0, 12.0, 14.0, 18.0, 24.0};
-
-// Called in sp-object.cpp, sp-tref.cpp, sp-use.cpp
-/**
- * Sets computed values in \a style, which may involve inheriting from (or in some other way
- * calculating from) corresponding computed values of \a parent.
- *
- * References: http://www.w3.org/TR/SVG11/propidx.html shows what properties inherit by default.
- * http://www.w3.org/TR/SVG11/styling.html#Inheritance gives general rules as to what it means to
- * inherit a value.  http://www.w3.org/TR/REC-CSS2/cascade.html#computed-value is more precise
- * about what the computed value is (not obvious for lengths).
- *
- * \pre \a parent's computed values are already up-to-date.
- */
-void
-sp_style_merge_from_parent(SPStyle *const style, SPStyle const *const parent)
-{
-    // std::cout << "sp_style_merge_from_parent" << std::endl;
-    g_return_if_fail(style != NULL);
-
-    if (!parent)
-        return;
-
-    style->cascade( parent );
-    return;
-}
-
-// Called in: sp-use.cpp, sp-tref.cpp, sp-item.cpp
-/**
- * Combine \a style and \a parent style specifications into a single style specification that
- * preserves (as much as possible) the effect of the existing \a style being a child of \a parent.
- *
- * Called when the parent repr is to be removed (e.g. the parent is a \<use\> element that is being
- * unlinked), in which case we copy/adapt property values that are explicitly set in \a parent,
- * trying to retain the same visual appearance once the parent is removed.  Interesting cases are
- * when there is unusual interaction with the parent's value (opacity, display) or when the value
- * can be specified as relative to the parent computed value (font-size, font-weight etc.).
- *
- * Doesn't update computed values of \a style.  For correctness, you should subsequently call
- * sp_style_merge_from_parent against the new parent (presumably \a parent's parent) even if \a
- * style was previously up-to-date wrt \a parent.
- *
- * \pre \a parent's computed values are already up-to-date.
- *   (\a style's computed values needn't be up-to-date.)
- */
-void
-sp_style_merge_from_dying_parent(SPStyle *const style, SPStyle const *const parent)
-{
-    // std::cout << "sp_style_merge_from_dying_parent" << std::endl;
-    style->merge( parent );
-}
 
 // The following functions should be incorporated into SPIPaint. FIXME
 // Called in: style.cpp, style-internal.cpp

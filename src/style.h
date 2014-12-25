@@ -288,10 +288,6 @@ SPStyle *sp_style_ref(SPStyle *style); // SPStyle::ref();
 
 SPStyle *sp_style_unref(SPStyle *style); // SPStyle::unref();
 
-void sp_style_merge_from_parent(SPStyle *style, SPStyle const *parent); // SPStyle::cascade( ... );
-
-void sp_style_merge_from_dying_parent(SPStyle *style, SPStyle const *parent); // SPStyle::merge( ... )
-
 void sp_style_set_to_uri_string (SPStyle *style, bool isfill, const char *uri); // ?
 
 char const *sp_style_get_css_unit_string(int unit);  // No change?

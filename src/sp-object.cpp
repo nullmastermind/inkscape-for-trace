@@ -1145,7 +1145,7 @@ void SPObject::updateDisplay(SPCtx *ctx, unsigned int flags)
      */
     if ((flags & SP_OBJECT_STYLE_MODIFIED_FLAG) && (flags & SP_OBJECT_PARENT_MODIFIED_FLAG)) {
         if (this->style && this->parent) {
-            sp_style_merge_from_parent(this->style, this->parent->style);
+            style->cascade( this->parent->style );
         }
     }
 
