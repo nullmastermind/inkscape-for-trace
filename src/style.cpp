@@ -1228,21 +1228,6 @@ sp_style_stroke_paint_server_ref_changed(SPObject *old_ref, SPObject *ref, SPSty
     sp_style_paint_server_ref_modified(ref, 0, style);
 }
 
-// Called in: desktop-style.cpp, gradient-chemistry.cpp, sp-object.cpp, sp-stop.cpp, style.cpp
-// text-editing.cpp, libnrtype/font-lister.cpp, widgets/dash-selector.cpp, widgets/fill-style.cpp,
-// widgets/stroke-style.cpp, widgets/text-toolbar.cpp, ui/dialog/glyphs.cpp, ui/dialog/swatches.cpp,
-// ui/dialog/swatches.cpp, ui/dialog/text-edit.cpp. ui/tools/freehand-base.cpp,
-// ui/widget/object-composite-settings.cpp, ui/widget/selected-style.cpp, ui/widget/style-swatch.cpp
-/**
- * Returns a new SPStyle object with default settings.
- */
-SPStyle *
-sp_style_new(SPDocument *document)
-{
-    SPStyle *const style = new SPStyle( document );
-    return style;
-}
-
 // Called in display/drawing-item.cpp, display/nr-filter-primitive.cpp, libnrtype/Layout-TNG-Input.cpp
 /**
  * Increase refcount of style.
@@ -1257,8 +1242,7 @@ sp_style_ref(SPStyle *style)
     return style;
 }
 
-// Called in style.cpp, desktop-style.cpp, sp-object.cpp, sp-stop.cpp, text-editing.cpp
-// display/drawing-group.cpp, ...
+// Called in display/drawing-item.cpp, display/nr-filter-primitive.cpp, libnrtype/Layout-TNG-Input.cpp
 /**
  * Decrease refcount of style with possible destruction.
  */

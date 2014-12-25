@@ -145,6 +145,8 @@ SPObject::~SPObject() {
         sp_object_unref(this->_successor, NULL);
         this->_successor = NULL;
     }
+
+    delete this->style;
 }
 
 // CPPIFY: make pure virtual
