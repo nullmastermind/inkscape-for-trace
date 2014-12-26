@@ -55,6 +55,7 @@ LPEMirrorSymmetry::LPEMirrorSymmetry(LivePathEffectObject *lpeobject) :
     discard_orig_path(_("Discard original path?"), _("Check this to only keep the mirrored part of the path"), "discard_orig_path", &wr, this, false),
     fusionPaths(_("Fusioned symetry"), _("Fusion right side whith symm"), "fusionPaths", &wr, this, true),
     reverseFusion(_("Reverse fusion"), _("Reverse fusion"), "reverseFusion", &wr, this, false),
+    reflectionFromPage(_("Use page as relecion base"), _("Use page as relecion base"), "reflectionFromPage", &wr, this, false),
     reflection_line(_("Reflection line:"), _("Line which serves as 'mirror' for the reflection"), "reflection_line", &wr, this, "M0,0 L1,0"),
     center(_("Center of mirroring (X or Y)"), _("Center of the mirror"), "center", &wr, this, "Adjust the center of mirroring")
 {
@@ -64,6 +65,7 @@ LPEMirrorSymmetry::LPEMirrorSymmetry(LivePathEffectObject *lpeobject) :
     registerParameter( &discard_orig_path);
     registerParameter( &fusionPaths);
     registerParameter( &reverseFusion);
+    registerParameter( &reflectionFromPage);
     registerParameter( &reflection_line);
     registerParameter( &center);
 
@@ -71,6 +73,21 @@ LPEMirrorSymmetry::LPEMirrorSymmetry(LivePathEffectObject *lpeobject) :
 
 LPEMirrorSymmetry::~LPEMirrorSymmetry()
 {
+}
+
+void LPEMirrorSymmetry::doOnApply(SPLPEItem const* lpeitem)
+{
+    SPDocument *doc = lpeitem->document();
+    Inkscape::XML::Document *xml_doc = doc->getReprDoc();
+    sp_selection_group_impl(GSList *p, group, xml_doc, doc);
+    Inkscape::XML::Node *group = xml_doc->createElement("svg:g");
+    group->setAttribute("inkscape:groupmode", "layer");
+    sp_selection_group_impl(p, group, xml_doc, doc);
+    gchar *href = g_strdup_printf("#%s", this->lpeobject_href);
+    SP_LPE_ITEM(group)->addPathEffect(href, true);
+    lpeitem->removeCurrentPathEffect(false)
+    g_free(href);
+    Inkscape::GC::release(group);
 }
 
 void

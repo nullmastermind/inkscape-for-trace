@@ -44,6 +44,8 @@ public:
 
     virtual void doOnApply (SPLPEItem const* lpeitem);
 
+    virtual void doOnApply(SPLPEItem const* lpeitem);
+
     virtual void doBeforeEffect (SPLPEItem const* lpeitem);
 
     virtual int pointSideOfLine(Geom::Point A, Geom::Point B, Geom::Point X);
@@ -62,6 +64,7 @@ private:
     BoolParam discard_orig_path;
     BoolParam fusionPaths;
     BoolParam reverseFusion;
+    BoolParam reflectionFromPage;
     PathParam reflection_line;
     Geom::Line lineSeparation;
     Geom::Point previousCenter;
