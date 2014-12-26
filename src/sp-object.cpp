@@ -146,7 +146,18 @@ SPObject::~SPObject() {
         this->_successor = NULL;
     }
 
-    delete this->style;
+    if( style == NULL ) {
+        // style pointer could be NULL if unreffed too many times.
+        // Conjecture: style pointer is never NULL.
+        std::cerr << "SPObject::~SPObject(): style pointer is NULL" << std::endl;
+    } else if( style->refCount() > 1 ) {
+        // Several classes ref style.
+        // Conjecture: style pointer should be unreffed by other classes before reaching here.
+        std::cerr << "SPObject::~SPObject(): someone else still holding ref to style" << std::endl;
+        sp_style_unref( this->style );
+    } else {
+        delete this->style;
+    }
 }
 
 // CPPIFY: make pure virtual
@@ -798,9 +809,10 @@ void SPObject::releaseReferences() {
         g_assert(!this->id);
     }
 
-    if (this->style) {
-        this->style = sp_style_unref(this->style);
-    }
+    // style belongs to SPObject, we should not need to unref here.
+    // if (this->style) {
+    //     this->style = sp_style_unref(this->style);
+    // }
 
     this->document = NULL;
     this->repr = NULL;

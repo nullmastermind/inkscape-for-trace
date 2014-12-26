@@ -58,8 +58,9 @@ public:
     void mergeString( char const *const p );
     bool operator==(const SPStyle& rhs);
 
-    int ref()   { ++_refcount; return _refcount; }
-    int unref() { --_refcount; return _refcount; }
+    int style_ref()   { ++_refcount; return _refcount; }
+    int style_unref() { --_refcount; return _refcount; }
+    int refCount() { return _refcount; }
 
 private:
     void _mergeString( char const *const p );

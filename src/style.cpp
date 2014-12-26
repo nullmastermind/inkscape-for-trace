@@ -458,6 +458,10 @@ SPStyle::~SPStyle() {
 
     _properties.clear();
 
+    // Conjecture: all this SPStyle ref counting is not needed. SPObject creates an instance of
+    // SPStyle when it is constructed and deletes it when it is destructed. The refcount is
+    // incremented and decremented only in the files: display/drawing-item.cpp,
+    // display/nr-filter-primitive.cpp, and libnrtype/Layout-TNG-Input.cpp.
     if( _refcount > 1 ) {
         std::cerr << "SPStyle::~SPStyle: ref count greater than 1! " << _refcount << std::endl;
     }
@@ -1237,7 +1241,7 @@ sp_style_ref(SPStyle *style)
 {
     g_return_val_if_fail(style != NULL, NULL);
 
-    style->ref(); // Increase ref count
+    style->style_ref(); // Increase ref count
 
     return style;
 }
@@ -1250,7 +1254,7 @@ SPStyle *
 sp_style_unref(SPStyle *style)
 {
     g_return_val_if_fail(style != NULL, NULL);
-    if (style->unref() < 1) {
+    if (style->style_unref() < 1) {
         delete style;
         return NULL;
     }
