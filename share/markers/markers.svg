@@ -4,7 +4,8 @@ NOTE: this file is currently (0.48+) edited manually.
 Insert the new markers into the <defs>. 
 -->
 <svg xmlns="http://www.w3.org/2000/svg"
-     xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape">
+     xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+     id="InkscapeMarkers">
   <defs id="defs3">
 
     <!-- Arrows -->
@@ -298,6 +299,10 @@ Insert the new markers into the <defs>.
         <circle cx="6.5" cy="0" r="0.8"/>
         <circle cx="10" cy="0" r="0.8"/>
       </g>
+    </marker>
+
+    <marker id="ExperimentalArrow" refX="5.0" refY="3.0" orient="auto-start-reverse" inkscape:stockid="ExperimentalArrow">
+      <path style="fill:context-stroke" d="m 10,3 -10,3 0,-6 z"/>
     </marker>
 
   </defs>

@@ -25,7 +25,7 @@
 #include "inkscape.h"
 #include "ui/tools/tool-base.h"
 #include "desktop.h"
-#include "desktop-handles.h"
+
 #include "shortcuts.h"
 #include "preferences.h"
 #include "ui/interface.h"
@@ -310,7 +310,7 @@ void Dialog::_defocus()
 Inkscape::Selection*
 Dialog::_getSelection()
 {
-    return sp_desktop_selection(SP_ACTIVE_DESKTOP);
+    return SP_ACTIVE_DESKTOP->getSelection();
 }
 
 } // namespace Dialog
