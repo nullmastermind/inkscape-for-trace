@@ -103,6 +103,7 @@ EXTRA_DIST = \
 	cxxtest/cxxtest/YesNoRunner.h \
 	packaging/autopackage/default.apspec.in	\
 	packaging/macosx/README.txt \
+	packaging/macosx/Resources/Inkscape-Generic.icns \
 	packaging/macosx/Resources/Inkscape.icns \
 	packaging/macosx/Resources/MenuBar.nib/classes.nib \
 	packaging/macosx/Resources/MenuBar.nib/info.nib \
