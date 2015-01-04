@@ -20,6 +20,9 @@ checksums               rmd160  c043ce0045166762e36c513458abc499d36bbcf5 \
 python.versions         27 32 33 34
 
 if {${name} ne ${subport}} {
+
+    revision                100
+
     patchfiles              patch-f2py_setup.py.diff \
                             patch-fcompiler_g95.diff \
                             patch-numpy_core_setup.py.diff
