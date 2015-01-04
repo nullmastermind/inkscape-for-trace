@@ -438,6 +438,12 @@ EXTRA_DIST = \
 	packaging/macosx/ports/lang/python26/files/version.plist \
 	packaging/macosx/ports/python/py-Pillow/Portfile \
 	packaging/macosx/ports/python/py-Pillow/files/patch-setup.py.diff \
+	packaging/macosx/ports/python/py-numpy/Portfile \
+	packaging/macosx/ports/python/py-numpy/files/patch-f2py_setup.py.diff \
+	packaging/macosx/ports/python/py-numpy/files/patch-fcompiler_g95.diff \
+	packaging/macosx/ports/python/py-numpy/files/patch-numpy_core_setup.py.diff \
+	packaging/macosx/ports/python/py-numpy/files/patch-numpy_linalg_setup.py.diff \
+	packaging/macosx/ports/python/py-numpy/files/wrapper-template \
 	packaging/macosx/ports/python/py-sk1libs/Portfile \
 	packaging/macosx/ports/python/py-sk1libs/files/patch-src-imaging-libimagingft-_imagingft.c.diff \
 	packaging/macosx/ports/python/py-sk1libs/files/patch-src-utils-fs.py.diff \
