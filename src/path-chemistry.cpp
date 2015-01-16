@@ -35,7 +35,7 @@
 #include "document-undo.h"
 #include "message-stack.h"
 #include "selection.h"
-#include "desktop-handles.h"
+
 #include "box3d.h"
 #include <2geom/pathvector.h>
 #include "selection-chemistry.h"
@@ -47,11 +47,11 @@ using Inkscape::DocumentUndo;
 void
 sp_selected_path_combine(SPDesktop *desktop)
 {
-    Inkscape::Selection *selection = sp_desktop_selection(desktop);
-    SPDocument *doc = sp_desktop_document(desktop);
+    Inkscape::Selection *selection = desktop->getSelection();
+    SPDocument *doc = desktop->getDocument();
     
     if (g_slist_length((GSList *) selection->itemList()) < 1) {
-        sp_desktop_message_stack(desktop)->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to combine."));
+        desktop->getMessageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to combine."));
         return;
     }
 
@@ -170,7 +170,7 @@ sp_selected_path_combine(SPDesktop *desktop)
         // move to the position of the topmost, reduced by the number of deleted items
         repr->setPosition(position > 0 ? position : 0);
 
-        DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_SELECTION_COMBINE, 
+        DocumentUndo::done(desktop->getDocument(), SP_VERB_SELECTION_COMBINE, 
                            _("Combine"));
 
         selection->set(repr);
@@ -178,7 +178,7 @@ sp_selected_path_combine(SPDesktop *desktop)
         Inkscape::GC::release(repr);
 
     } else {
-        sp_desktop_message_stack(desktop)->flash(Inkscape::ERROR_MESSAGE, _("<b>No path(s)</b> to combine in the selection."));
+        desktop->getMessageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No path(s)</b> to combine in the selection."));
     }
 
     desktop->clearWaitingCursor();
@@ -187,10 +187,10 @@ sp_selected_path_combine(SPDesktop *desktop)
 void
 sp_selected_path_break_apart(SPDesktop *desktop)
 {
-    Inkscape::Selection *selection = sp_desktop_selection(desktop);
+    Inkscape::Selection *selection = desktop->getSelection();
 
     if (selection->isEmpty()) {
-        sp_desktop_message_stack(desktop)->flash(Inkscape::WARNING_MESSAGE, _("Select <b>path(s)</b> to break apart."));
+        desktop->getMessageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>path(s)</b> to break apart."));
         return;
     }
 
@@ -283,10 +283,10 @@ sp_selected_path_break_apart(SPDesktop *desktop)
     desktop->clearWaitingCursor();
 
     if (did) {
-        DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_SELECTION_BREAK_APART, 
+        DocumentUndo::done(desktop->getDocument(), SP_VERB_SELECTION_BREAK_APART, 
                            _("Break apart"));
     } else {
-        sp_desktop_message_stack(desktop)->flash(Inkscape::ERROR_MESSAGE, _("<b>No path(s)</b> to break apart in the selection."));
+        desktop->getMessageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No path(s)</b> to break apart in the selection."));
     }
 }
 
@@ -296,7 +296,7 @@ sp_selected_path_to_curves(Inkscape::Selection *selection, SPDesktop *desktop, b
 {
     if (selection->isEmpty()) {
         if (interactive && desktop)
-            sp_desktop_message_stack(desktop)->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to convert to path."));
+            desktop->getMessageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to convert to path."));
         return;
     }
 
@@ -323,10 +323,10 @@ sp_selected_path_to_curves(Inkscape::Selection *selection, SPDesktop *desktop, b
     if (interactive && desktop) {
         desktop->clearWaitingCursor();
         if (did) {
-            DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_OBJECT_TO_CURVE, 
+            DocumentUndo::done(desktop->getDocument(), SP_VERB_OBJECT_TO_CURVE, 
                                _("Object to path"));
         } else {
-            sp_desktop_message_stack(desktop)->flash(Inkscape::ERROR_MESSAGE, _("<b>No objects</b> to convert to path in the selection."));
+            desktop->getMessageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No objects</b> to convert to path in the selection."));
             return;
         }
     }
@@ -335,7 +335,7 @@ sp_selected_path_to_curves(Inkscape::Selection *selection, SPDesktop *desktop, b
 /** Converts the selected items to LPEItems if they are not already so; e.g. SPRects) */
 void sp_selected_to_lpeitems(SPDesktop *desktop)
 {
-    Inkscape::Selection *selection = sp_desktop_selection(desktop);
+    Inkscape::Selection *selection = desktop->getSelection();
 
     if (selection->isEmpty()) {
         return;
@@ -500,11 +500,12 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
         /* Rotation center */
         g_repr->setAttribute("inkscape:transform-center-x", item->getRepr()->attribute("inkscape:transform-center-x"), false);
         g_repr->setAttribute("inkscape:transform-center-y", item->getRepr()->attribute("inkscape:transform-center-y"), false);
+
         /* Whole text's style */
-        gchar *style_str = sp_style_write_difference(item->style,
-                                                     item->parent ? item->parent->style : NULL); // TODO investigate posibility
-        g_repr->setAttribute("style", style_str);
-        g_free(style_str);
+        Glib::ustring style_str =
+            item->style->write( SP_STYLE_FLAG_IFDIFF, item->parent ? item->parent->style : NULL); // TODO investigate posibility
+        g_repr->setAttribute("style", style_str.c_str());
+
         Inkscape::Text::Layout::iterator iter = te_get_layout(item)->begin(); 
         do {
             Inkscape::Text::Layout::iterator iter_next = iter;
@@ -522,19 +523,17 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
             while (dynamic_cast<SPString const *>(pos_obj) && pos_obj->parent) {
                pos_obj = pos_obj->parent;   // SPStrings don't have style
             }
-            gchar *style_str = sp_style_write_difference(pos_obj->style,
-                                                         pos_obj->parent ? pos_obj->parent->style : NULL); // TODO investigate posibility
+            Glib::ustring style_str =
+                pos_obj->style->write( SP_STYLE_FLAG_IFDIFF, pos_obj->parent ? pos_obj->parent->style : NULL); // TODO investigate posibility
 
             // get path from iter to iter_next:
             SPCurve *curve = te_get_layout(item)->convertToCurves(iter, iter_next);
             iter = iter_next; // shift to next glyph
             if (!curve) { // error converting this glyph
-                g_free (style_str);
                 continue;
             }
             if (curve->is_empty()) { // whitespace glyph?
                 curve->unref();
-                g_free (style_str);
                 continue;
             }
 
@@ -545,8 +544,7 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
             g_free(def_str);
             curve->unref();
 
-            p_repr->setAttribute("style", style_str);
-            g_free(style_str);
+            p_repr->setAttribute("style", style_str.c_str());
 
             g_repr->appendChild(p_repr);
             Inkscape::GC::release(p_repr);
@@ -565,7 +563,7 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
         if (shape) {
             curve = shape->getCurve();
         }
-    } 
+    }
 
     if (!curve)
         return NULL;
@@ -581,11 +579,11 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
     Inkscape::XML::Node *repr = xml_doc->createElement("svg:path");
     /* Transformation */
     repr->setAttribute("transform", item->getRepr()->attribute("transform"));
+
     /* Style */
-    gchar *style_str = sp_style_write_difference(item->style,
-                                                 item->parent ? item->parent->style : NULL); // TODO investigate posibility
-    repr->setAttribute("style", style_str);
-    g_free(style_str);
+    Glib::ustring style_str =
+        item->style->write( SP_STYLE_FLAG_IFDIFF, item->parent ? item->parent->style : NULL); // TODO investigate posibility
+    repr->setAttribute("style", style_str.c_str());
 
     /* Mask */
     gchar *mask_str = (gchar *) item->getRepr()->attribute("mask");
@@ -613,11 +611,11 @@ sp_selected_item_to_curved_repr(SPItem *item, guint32 /*text_grouping_policy*/)
 void
 sp_selected_path_reverse(SPDesktop *desktop)
 {
-    Inkscape::Selection *selection = sp_desktop_selection(desktop);
+    Inkscape::Selection *selection = desktop->getSelection();
     GSList *items = (GSList *) selection->itemList();
 
     if (!items) {
-        sp_desktop_message_stack(desktop)->flash(Inkscape::WARNING_MESSAGE, _("Select <b>path(s)</b> to reverse."));
+        desktop->getMessageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>path(s)</b> to reverse."));
         return;
     }
 
@@ -660,10 +658,10 @@ sp_selected_path_reverse(SPDesktop *desktop)
     desktop->clearWaitingCursor();
 
     if (did) {
-        DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_SELECTION_REVERSE,
+        DocumentUndo::done(desktop->getDocument(), SP_VERB_SELECTION_REVERSE,
                            _("Reverse path"));
     } else {
-        sp_desktop_message_stack(desktop)->flash(Inkscape::ERROR_MESSAGE, _("<b>No paths</b> to reverse in the selection."));
+        desktop->getMessageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No paths</b> to reverse in the selection."));
     }
 }
 

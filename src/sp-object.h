@@ -267,6 +267,11 @@ public:
      */
     SPStyle *style;
 
+    /**
+     * Represents the style that should be used to resolve 'context-fill' and 'context-stroke'
+     */
+    SPStyle *context_style;
+
     /// Switch containing next() method.
     struct ParentIteratorStrategy {
         static SPObject const *next(SPObject const *object) {
@@ -854,6 +859,8 @@ protected:
 
 public:
 	virtual void read_content();
+
+    void recursivePrintTree(unsigned level = 0);  // For debugging
 };
 
 

@@ -16,7 +16,7 @@
 #include <glibmm/i18n.h>
 
 #include "vanishing-point.h"
-#include "desktop-handles.h"
+
 #include "desktop.h"
 #include "display/sp-canvas-item.h"
 #include "display/sp-ctrlline.h"
@@ -110,7 +110,7 @@ vp_knot_moved_handler (SPKnot *knot, Geom::Point const &ppointer, guint state, g
             for (std::set<VanishingPoint*, less_ptr>::iterator vp = sel_vps.begin(); vp != sel_vps.end(); ++vp) {
                 // for each VP that has selected boxes:
                 Persp3D *old_persp = (*vp)->get_perspective();
-                sel_boxes = (*vp)->selectedBoxes(sp_desktop_selection(SP_ACTIVE_DESKTOP));
+                sel_boxes = (*vp)->selectedBoxes(SP_ACTIVE_DESKTOP->getSelection());
 
                 // we create a new perspective ...
                 Persp3D *new_persp = persp3d_create_xml_element (dragger->parent->document, old_persp->perspective_impl);
@@ -129,7 +129,7 @@ vp_knot_moved_handler (SPKnot *knot, Geom::Point const &ppointer, guint state, g
             }
             // FIXME: Do we need to create a new dragger as well?
             dragger->updateZOrders ();
-            DocumentUndo::done(sp_desktop_document (SP_ACTIVE_DESKTOP), SP_VERB_CONTEXT_3DBOX,
+            DocumentUndo::done(SP_ACTIVE_DESKTOP->getDocument(), SP_VERB_CONTEXT_3DBOX,
 			       _("Split vanishing points"));
             return;
         }
@@ -174,7 +174,7 @@ vp_knot_moved_handler (SPKnot *knot, Geom::Point const &ppointer, guint state, g
                 //       deleted according to changes in the svg representation, not based on any user input
                 //       as is currently the case.
 
-                DocumentUndo::done(sp_desktop_document (SP_ACTIVE_DESKTOP), SP_VERB_CONTEXT_3DBOX,
+                DocumentUndo::done(SP_ACTIVE_DESKTOP->getDocument(), SP_VERB_CONTEXT_3DBOX,
 				   _("Merge vanishing points"));
 
                 return;
@@ -394,7 +394,7 @@ VPDragger::VPsOfSelectedBoxes() {
     std::set<VanishingPoint*, less_ptr> sel_vps;
     VanishingPoint *vp;
     // FIXME: Should we take the selection from the parent VPDrag? I guess it shouldn't make a difference.
-    Inkscape::Selection *sel = sp_desktop_selection(SP_ACTIVE_DESKTOP);
+    Inkscape::Selection *sel = SP_ACTIVE_DESKTOP->getSelection();
     for (GSList const* i = sel->itemList(); i != NULL; i = i->next) {
         SPItem *item = static_cast<SPItem *>(i->data);
         SPBox3D *box = dynamic_cast<SPBox3D *>(item);
@@ -488,7 +488,7 @@ VPDragger::printVPs() {
 VPDrag::VPDrag (SPDocument *document)
 {
     this->document = document;
-    this->selection = sp_desktop_selection(SP_ACTIVE_DESKTOP);
+    this->selection = SP_ACTIVE_DESKTOP->getSelection();
 
     this->draggers = NULL;
     this->lines = NULL;
@@ -782,7 +782,7 @@ VPDrag::swap_perspectives_of_VPs(Persp3D *persp2, Persp3D *persp1)
 
 void VPDrag::addLine(Geom::Point const &p1, Geom::Point const &p2, Inkscape::CtrlLineType type)
 {
-    SPCtrlLine *line = ControlManager::getManager().createControlLine(sp_desktop_controls(SP_ACTIVE_DESKTOP), p1, p2, type);
+    SPCtrlLine *line = ControlManager::getManager().createControlLine(SP_ACTIVE_DESKTOP->getControls(), p1, p2, type);
     sp_canvas_item_show(line);
     this->lines = g_slist_append(this->lines, line);
 }

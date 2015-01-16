@@ -54,7 +54,7 @@
 #include <string>
 
 #include "desktop.h"
-#include "desktop-handles.h"
+
 #include "device-manager.h"
 #include "document.h"
 #include "extension/db.h"
@@ -815,8 +815,8 @@ Application::add_desktop (SPDesktop * desktop)
 
     signal_activate_desktop.emit(desktop);
     signal_eventcontext_set.emit(desktop->getEventContext());
-    signal_selection_set.emit(sp_desktop_selection(desktop));
-    signal_selection_changed.emit(sp_desktop_selection(desktop));
+    signal_selection_set.emit(desktop->getSelection());
+    signal_selection_changed.emit(desktop->getSelection());
 }
 
 
@@ -839,12 +839,12 @@ Application::remove_desktop (SPDesktop * desktop)
             
             signal_activate_desktop.emit(new_desktop);
             signal_eventcontext_set.emit(new_desktop->getEventContext());
-            signal_selection_set.emit(sp_desktop_selection(new_desktop));
-            signal_selection_changed.emit(sp_desktop_selection(new_desktop));
+            signal_selection_set.emit(new_desktop->getSelection());
+            signal_selection_changed.emit(new_desktop->getSelection());
         } else {
             signal_eventcontext_set.emit(NULL);
-            if (sp_desktop_selection(desktop))
-                sp_desktop_selection(desktop)->clear();
+            if (desktop->getSelection())
+                desktop->getSelection()->clear();
         }
     }
 
@@ -884,8 +884,8 @@ Application::activate_desktop (SPDesktop * desktop)
 
     signal_activate_desktop.emit(desktop);
     signal_eventcontext_set.emit(desktop->getEventContext());
-    signal_selection_set(sp_desktop_selection(desktop));
-    signal_selection_changed(sp_desktop_selection(desktop));
+    signal_selection_set(desktop->getSelection());
+    signal_selection_changed(desktop->getSelection());
 }
 
 
@@ -1110,7 +1110,7 @@ SPDocument *
 Application::active_document()
 {
     if (SP_ACTIVE_DESKTOP) {
-        return sp_desktop_document (SP_ACTIVE_DESKTOP);
+        return SP_ACTIVE_DESKTOP->getDocument();
     } else if (!_document_set.empty()) {
         // If called from the command line there will be no desktop
         // So 'fall back' to take the first listed document in the Inkscape instance

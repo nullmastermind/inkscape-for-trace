@@ -38,7 +38,7 @@
 #include "path-prefix.h"
 #include "shortcuts.h"
 #include "document.h"
-#include "desktop-handles.h"
+
 #include "ui/interface.h"
 #include "desktop.h"
 #include "selection.h"
@@ -1232,12 +1232,12 @@ sp_ui_drag_data_received(GtkWidget *widget,
             SPObject *new_obj = NULL;
             new_obj = desktop->currentLayer()->appendChildRepr(newgroup);
 
-            Inkscape::Selection *selection = sp_desktop_selection(desktop);
+            Inkscape::Selection *selection = desktop->getSelection();
             selection->set(SP_ITEM(new_obj));
 
             // move to mouse pointer
             {
-                sp_desktop_document(desktop)->ensureUpToDate();
+                desktop->getDocument()->ensureUpToDate();
                 Geom::OptRect sel_bbox = selection->visualBounds();
                 if (sel_bbox) {
                     Geom::Point m( desktop->point() - sel_bbox->midpoint() );

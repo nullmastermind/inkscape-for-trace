@@ -24,7 +24,7 @@
 
 #include "desktop.h"
 #include "desktop-events.h"
-#include "desktop-handles.h"
+
 #include "ui/dialog-events.h"
 #include "display/canvas-axonomgrid.h"
 #include "display/canvas-grid.h"
@@ -232,7 +232,7 @@ static gint sp_dt_ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidge
                     sp_repr_set_point(repr, "orientation", normal);
                     desktop->namedview->appendChild(repr);
                     Inkscape::GC::release(repr);
-                    DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_NONE,
+                    DocumentUndo::done(desktop->getDocument(), SP_VERB_NONE,
                                      _("Create guide"));
                 }
                 desktop->set_coordinate_status(event_dt);
@@ -240,7 +240,7 @@ static gint sp_dt_ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidge
                 if (!dragged) {
                     // Ruler click (without drag) toggle the guide visibility on and off
                     Inkscape::XML::Node *repr = desktop->namedview->getRepr();
-                    sp_namedview_toggle_guides(sp_desktop_document(desktop), repr);
+                    sp_namedview_toggle_guides(desktop->getDocument(), repr);
                     
                 }
 
@@ -488,14 +488,14 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
                                 assert(false);
                                 break;
                         }
-                        DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_NONE,
+                        DocumentUndo::done(desktop->getDocument(), SP_VERB_NONE,
                                          _("Move guide"));
                     } else {
                         /* Undo movement of any attached shapes. */
                         guide->moveto(guide->getPoint(), false);
                         guide->set_normal(guide->getNormal(), false);
                         sp_guide_remove(guide);
-                        DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_NONE,
+                        DocumentUndo::done(desktop->getDocument(), SP_VERB_NONE,
                                      _("Delete guide"));
                     }
                     moved = false;
@@ -516,7 +516,7 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
             if ((event->crossing.state & GDK_SHIFT_MASK) && (drag_type != SP_DRAG_MOVE_ORIGIN)) {
                 GdkCursor *guide_cursor;
                 guide_cursor = gdk_cursor_new (GDK_EXCHANGE);
-                gdk_window_set_cursor(gtk_widget_get_window (GTK_WIDGET(sp_desktop_canvas(desktop))), guide_cursor);
+                gdk_window_set_cursor(gtk_widget_get_window (GTK_WIDGET(desktop->getCanvas())), guide_cursor);
 #if GTK_CHECK_VERSION(3,0,0)
                 g_object_unref(guide_cursor);
 #else
@@ -525,7 +525,7 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
             } else {
                 GdkCursor *guide_cursor;
                 guide_cursor = gdk_cursor_new (GDK_HAND1);
-                gdk_window_set_cursor(gtk_widget_get_window (GTK_WIDGET(sp_desktop_canvas(desktop))), guide_cursor);
+                gdk_window_set_cursor(gtk_widget_get_window (GTK_WIDGET(desktop->getCanvas())), guide_cursor);
 #if GTK_CHECK_VERSION(3,0,0)
                 g_object_unref(guide_cursor);
 #else
@@ -542,7 +542,7 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
             sp_guideline_set_color(SP_GUIDELINE(item), guide->getColor());
 
             // restore event context's cursor
-            gdk_window_set_cursor(gtk_widget_get_window (GTK_WIDGET(sp_desktop_canvas(desktop))), desktop->event_context->cursor);
+            gdk_window_set_cursor(gtk_widget_get_window (GTK_WIDGET(desktop->getCanvas())), desktop->event_context->cursor);
 
             desktop->guidesMessageContext()->clear();
             break;
@@ -564,7 +564,7 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
                     if (drag_type != SP_DRAG_MOVE_ORIGIN) {
                         GdkCursor *guide_cursor;
                         guide_cursor = gdk_cursor_new (GDK_EXCHANGE);
-                        gdk_window_set_cursor(gtk_widget_get_window (GTK_WIDGET(sp_desktop_canvas(desktop))), guide_cursor);
+                        gdk_window_set_cursor(gtk_widget_get_window (GTK_WIDGET(desktop->getCanvas())), guide_cursor);
 #if GTK_CHECK_VERSION(3,0,0)
             g_object_unref(guide_cursor);
 #else
@@ -585,7 +585,7 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
                 case GDK_KEY_Shift_R:
                     GdkCursor *guide_cursor;
                     guide_cursor = gdk_cursor_new (GDK_EXCHANGE);
-                    gdk_window_set_cursor(gtk_widget_get_window (GTK_WIDGET(sp_desktop_canvas(desktop))), guide_cursor);
+                    gdk_window_set_cursor(gtk_widget_get_window (GTK_WIDGET(desktop->getCanvas())), guide_cursor);
 #if GTK_CHECK_VERSION(3,0,0)
             g_object_unref(guide_cursor);
 #else

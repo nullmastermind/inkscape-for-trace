@@ -25,7 +25,7 @@
 #include "uri.h"
 #include "inkscape.h"
 #include "desktop.h"
-#include "desktop-handles.h"
+
 
 #include "style.h"
 #include <glibmm/i18n.h>
@@ -555,7 +555,7 @@ void SPItem::set(unsigned int key, gchar const* value) {
             }
         default:
             if (SP_ATTRIBUTE_IS_CSS(key)) {
-                sp_style_read_from_object(object->style, object);
+                style->readFromObject( this );
                 object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
             } else {
                 SPObject::set(key, value);
@@ -1299,7 +1299,7 @@ void SPItem::adjust_stroke( gdouble ex )
 
     SPStyle *style = this->style;
 
-    if (style && !style->stroke.isNone() && !Geom::are_near(ex, 1.0, Geom::EPSILON)) {
+    if (style && !Geom::are_near(ex, 1.0, Geom::EPSILON)) {
         style->stroke_width.computed *= ex;
         style->stroke_width.set = TRUE;
 

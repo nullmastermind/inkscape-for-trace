@@ -31,7 +31,7 @@
 #include "verbs.h"
 #include "preferences.h"
 #include "inkscape.h"
-#include "desktop-handles.h"
+
 #include "selection.h"
 #include "document.h"
 #include "document-undo.h"
@@ -165,9 +165,9 @@ void GridArrangeTab::arrange()
     grid_top = 99999;
 
     SPDesktop *desktop = Parent->getDesktop();
-    sp_desktop_document(desktop)->ensureUpToDate();
+    desktop->getDocument()->ensureUpToDate();
 
-    Inkscape::Selection *selection = sp_desktop_selection (desktop);
+    Inkscape::Selection *selection = desktop->getSelection();
     const GSList *items = selection ? selection->itemList() : 0;
     cnt=0;
     for (; items != NULL; items = items->next) {
@@ -347,7 +347,7 @@ g_print("\n row = %f     col = %f selection x= %f selection y = %f", total_row_h
              g_slist_free (current_row);
     }
 
-    DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_SELECTION_ARRANGE,
+    DocumentUndo::done(desktop->getDocument(), SP_VERB_SELECTION_ARRANGE,
                        _("Arrange in a grid"));
 
 }

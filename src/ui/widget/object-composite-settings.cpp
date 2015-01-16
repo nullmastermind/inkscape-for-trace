@@ -17,7 +17,7 @@
 #include <glibmm/i18n.h>
 
 #include "desktop.h"
-#include "desktop-handles.h"
+
 #include "desktop-style.h"
 #include "document.h"
 #include "document-undo.h"
@@ -104,14 +104,14 @@ ObjectCompositeSettings::_blendBlurValueChanged()
     if (!desktop) {
         return;
     }
-    SPDocument *document = sp_desktop_document (desktop);
+    SPDocument *document = desktop->getDocument();
 
     if (_blocked)
         return;
     _blocked = true;
 
     // FIXME: fix for GTK breakage, see comment in SelectedStyle::on_opacity_changed; here it results in crash 1580903
-    //sp_canvas_force_full_redraw_after_interruptions(sp_desktop_canvas(desktop), 0);
+    //sp_canvas_force_full_redraw_after_interruptions(desktop->getCanvas(), 0);
 
     Geom::OptRect bbox = _subject->getBounds(SPItem::GEOMETRIC_BBOX);
     double radius;
@@ -159,7 +159,7 @@ ObjectCompositeSettings::_blendBlurValueChanged()
                             _("Change blur"));
 
     // resume interruptibility
-    //sp_canvas_end_forced_full_redraws(sp_desktop_canvas(desktop));
+    //sp_canvas_end_forced_full_redraws(desktop->getCanvas());
 
     _blocked = false;
 }
@@ -183,7 +183,7 @@ ObjectCompositeSettings::_opacityValueChanged()
     // FIXME: fix for GTK breakage, see comment in SelectedStyle::on_opacity_changed; here it results in crash 1580903
     // UPDATE: crash fixed in GTK+ 2.10.7 (bug 374378), remove this as soon as it's reasonably common
     // (though this only fixes the crash, not the multiple change events)
-    //sp_canvas_force_full_redraw_after_interruptions(sp_desktop_canvas(desktop), 0);
+    //sp_canvas_force_full_redraw_after_interruptions(desktop->getCanvas(), 0);
 
     SPCSSAttr *css = sp_repr_css_attr_new ();
 
@@ -195,11 +195,11 @@ ObjectCompositeSettings::_opacityValueChanged()
 
     sp_repr_css_attr_unref (css);
 
-    DocumentUndo::maybeDone(sp_desktop_document (desktop), _opacity_tag.c_str(), _verb_code,
+    DocumentUndo::maybeDone(desktop->getDocument(), _opacity_tag.c_str(), _verb_code,
                             _("Change opacity"));
 
     // resume interruptibility
-    //sp_canvas_end_forced_full_redraws(sp_desktop_canvas(desktop));
+    //sp_canvas_end_forced_full_redraws(desktop->getCanvas());
 
     _blocked = false;
 }
@@ -219,8 +219,8 @@ ObjectCompositeSettings::_subjectChanged() {
         return;
     _blocked = true;
 
-    SPStyle *query = sp_style_new (sp_desktop_document(desktop));
-    int result = _subject->queryStyle(query, QUERY_STYLE_PROPERTY_MASTEROPACITY);
+    SPStyle query(desktop->getDocument());
+    int result = _subject->queryStyle(&query, QUERY_STYLE_PROPERTY_MASTEROPACITY);
 
     switch (result) {
         case QUERY_STYLE_NOTHING:
@@ -231,19 +231,19 @@ ObjectCompositeSettings::_subjectChanged() {
         case QUERY_STYLE_MULTIPLE_AVERAGED: // TODO: treat this slightly differently
         case QUERY_STYLE_MULTIPLE_SAME:
             _opacity_vbox.set_sensitive(true);
-            _opacity_scale.get_adjustment()->set_value(100 * SP_SCALE24_TO_FLOAT(query->opacity.value));
+            _opacity_scale.get_adjustment()->set_value(100 * SP_SCALE24_TO_FLOAT(query.opacity.value));
             break;
     }
 
     //query now for current filter mode and average blurring of selection
-    const int blend_result = _subject->queryStyle(query, QUERY_STYLE_PROPERTY_BLEND);
+    const int blend_result = _subject->queryStyle(&query, QUERY_STYLE_PROPERTY_BLEND);
     switch(blend_result) {
         case QUERY_STYLE_NOTHING:
             _fe_cb.set_sensitive(false);
             break;
         case QUERY_STYLE_SINGLE:
         case QUERY_STYLE_MULTIPLE_SAME:
-            _fe_cb.set_blend_mode(query->filter_blend_mode.value);
+            _fe_cb.set_blend_mode(query.filter_blend_mode.value);
             _fe_cb.set_sensitive(true);
             break;
         case QUERY_STYLE_MULTIPLE_DIFFERENT:
@@ -253,7 +253,7 @@ ObjectCompositeSettings::_subjectChanged() {
     }
 
     if(blend_result == QUERY_STYLE_SINGLE || blend_result == QUERY_STYLE_MULTIPLE_SAME) {
-        int blur_result = _subject->queryStyle(query, QUERY_STYLE_PROPERTY_BLUR);
+        int blur_result = _subject->queryStyle(&query, QUERY_STYLE_PROPERTY_BLUR);
         switch (blur_result) {
             case QUERY_STYLE_NOTHING: //no blurring
                 _fe_cb.set_blur_sensitive(false);
@@ -266,15 +266,13 @@ ObjectCompositeSettings::_subjectChanged() {
                     double perimeter = bbox->dimensions()[Geom::X] + bbox->dimensions()[Geom::Y];   // fixme: this is only half the perimeter, is that correct?
                     _fe_cb.set_blur_sensitive(true);
                     //update blur widget value
-                    float radius = query->filter_gaussianBlur_deviation.value;
+                    float radius = query.filter_gaussianBlur_deviation.value;
                     float percent = radius * 400 / perimeter; // so that for a square, 100% == half side
                     _fe_cb.set_blur_value(percent);
                 }
                 break;
         }
     }
-
-    sp_style_unref(query);
 
     _blocked = false;
 }

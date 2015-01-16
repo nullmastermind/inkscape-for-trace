@@ -16,7 +16,7 @@
 #include "verbs.h"
 #include "preferences.h"
 #include "inkscape.h"
-#include "desktop-handles.h"
+
 #include "selection.h"
 #include "document.h"
 #include "document-undo.h"
@@ -38,12 +38,12 @@ PolarArrangeTab::PolarArrangeTab(ArrangeDialog *parent_)
 #else
 	  parametersTable(3, 3, false),
 #endif
-	  centerY("", "Y coordinate of the center", UNIT_TYPE_LINEAR),
-	  centerX("", "X coordinate of the center", centerY),
-	  radiusY("", "Y coordinate of the radius", UNIT_TYPE_LINEAR),
-	  radiusX("", "X coordinate of the radius", radiusY),
-	  angleY("", "Starting angle", UNIT_TYPE_RADIAL),
-	  angleX("", "End angle", angleY)
+	  centerY("", C_("Polar arrange tab", "Y coordinate of the center"), UNIT_TYPE_LINEAR),
+	  centerX("", C_("Polar arrange tab", "X coordinate of the center"), centerY),
+	  radiusY("", C_("Polar arrange tab", "Y coordinate of the radius"), UNIT_TYPE_LINEAR),
+	  radiusX("", C_("Polar arrange tab", "X coordinate of the radius"), radiusY),
+	  angleY("", C_("Polar arrange tab", "Starting angle"), UNIT_TYPE_RADIAL),
+	  angleX("", C_("Polar arrange tab", "End angle"), angleY)
 {
 	anchorPointLabel.set_text(C_("Polar arrange tab", "Anchor point:"));
 	anchorPointLabel.set_alignment(Gtk::ALIGN_START);
@@ -80,7 +80,7 @@ PolarArrangeTab::PolarArrangeTab(ArrangeDialog *parent_)
 	arrangeOnParametersRadio.signal_toggled().connect(sigc::mem_fun(*this, &PolarArrangeTab::on_arrange_radio_changed));
 	pack_start(arrangeOnParametersRadio, false, false);
 
-	centerLabel.set_text(_("Center X/Y:"));
+	centerLabel.set_text(C_("Polar arrange tab", "Center X/Y:"));
 #if WITH_GTKMM_3_0
 	parametersTable.attach(centerLabel, 0, 0, 1, 1);
 #else
@@ -102,7 +102,7 @@ PolarArrangeTab::PolarArrangeTab(ArrangeDialog *parent_)
 	parametersTable.attach(centerY, 2, 3, 0, 1, Gtk::FILL);
 #endif
 
-	radiusLabel.set_text(_("Radius X/Y:"));
+	radiusLabel.set_text(C_("Polar arrange tab", "Radius X/Y:"));
 #if WITH_GTKMM_3_0
 	parametersTable.attach(radiusLabel, 0, 1, 1, 1);
 #else
@@ -296,7 +296,7 @@ static void moveToPoint(int anchor, SPItem *item, Geom::Point p)
 
 void PolarArrangeTab::arrange()
 {
-	Inkscape::Selection *selection = sp_desktop_selection(parent->getDesktop());
+	Inkscape::Selection *selection = parent->getDesktop()->getSelection();
 	const GSList *items, *tmp;
 	tmp = items = selection->itemList();
 	SPGenericEllipse *referenceEllipse = NULL; // Last ellipse in selection
@@ -399,7 +399,7 @@ void PolarArrangeTab::arrange()
 		tmp = tmp->next;
 	}
 
-    DocumentUndo::done(sp_desktop_document(parent->getDesktop()), SP_VERB_SELECTION_ARRANGE,
+    DocumentUndo::done(parent->getDesktop()->getDocument(), SP_VERB_SELECTION_ARRANGE,
                        _("Arrange on ellipse"));
 }
 
