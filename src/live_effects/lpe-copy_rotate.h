@@ -36,6 +36,10 @@ public:
 
     virtual Geom::Piecewise<Geom::D2<Geom::SBasis> > doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in);
 
+    virtual void kaleidoscope(std::vector<Geom::Path> &path_in);
+
+    virtual void split(std::vector<Geom::Path> &path_in,Geom:Path divider,bool start);
+
     /* the knotholder entity classes must be declared friends */
     friend class CR::KnotHolderEntityStartingAngle;
     void addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item);
@@ -48,7 +52,7 @@ private:
     ScalarParam rotation_angle;
     ScalarParam num_copies;
     BoolParam copiesTo360;
-    BoolParam fusionPaths;
+    BoolParam setKaleidoscope;
 
     PointParam origin;
 
