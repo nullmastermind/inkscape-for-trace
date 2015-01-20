@@ -24,7 +24,8 @@
 #include <2geom/transforms.h>
 #include <2geom/d2-sbasis.h>
 #include <2geom/angle.h>
-#include <cmath>  
+#include <2geom/line.h>
+#include <cmath>
 
 #include "knot-holder-entity.h"
 #include "knotholder.h"
@@ -41,30 +42,35 @@ public:
     virtual Geom::Point knot_get() const;
 };
 
+class KnotHolderEntityRotationAngle : public LPEKnotHolderEntity {
+public:
+    KnotHolderEntityRotationAngle(LPECopyRotate *effect) : LPEKnotHolderEntity(effect) {};
+    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state);
+    virtual Geom::Point knot_get() const;
+};
 
 } // namespace CR
 
 LPECopyRotate::LPECopyRotate(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
+    origin(_("Origin"), _("Origin of the rotation"), "origin", &wr, this, "Adjust the origin of the rotation"),
     starting_angle(_("Starting:"), _("Angle of the first copy"), "starting_angle", &wr, this, 0.0),
     rotation_angle(_("Rotation angle:"), _("Angle between two successive copies"), "rotation_angle", &wr, this, 30.0),
     num_copies(_("Number of copies:"), _("Number of copies of the original path"), "num_copies", &wr, this, 5),
     copiesTo360(_("360º Copies"), _("No rotation angle, fixed to 360º"), "copiesTo360", &wr, this, true),
-    kaleidoscope(_("kaleidoscope"), _("kaleidoscope"), "kaleidoscope", &wr, this, true),
-
-    origin(_("Origin"), _("Origin of the rotation"), "origin", &wr, this, "Adjust the origin of the rotation"),
-    dist_angle_handle(100)
+    kaleidoscope(_("kaleidoscope"), _("kaleidoscope"), "kaleidoscope", &wr, this, false),
+    dist_angle_handle(100.0)
 {
     show_orig_path = true;
     _provides_knotholder_entities = true;
 
     // register all your parameters here, so Inkscape knows which parameters this effect has:
-    registerParameter( dynamic_cast<Parameter *>(&copiesTo360) );
-    registerParameter( dynamic_cast<Parameter *>(&kaleidoscope) );
-    registerParameter( dynamic_cast<Parameter *>(&starting_angle) );
-    registerParameter( dynamic_cast<Parameter *>(&rotation_angle) );
-    registerParameter( dynamic_cast<Parameter *>(&num_copies) );
-    registerParameter( dynamic_cast<Parameter *>(&origin) );
+    registerParameter(&copiesTo360);
+    registerParameter(&kaleidoscope);
+    registerParameter(&starting_angle);
+    registerParameter(&rotation_angle);
+    registerParameter(&num_copies);
+    registerParameter(&origin);
 
     num_copies.param_make_integer(true);
     num_copies.param_set_range(0, 1000);
@@ -79,44 +85,108 @@ void
 LPECopyRotate::doOnApply(SPLPEItem const* lpeitem)
 {
     using namespace Geom;
-
     original_bbox(lpeitem);
 
-    Point A(boundingbox_X.min(), boundingbox_Y.middle());
-    Point B(boundingbox_X.max(), boundingbox_Y.middle());
-    Point C(boundingbox_X.middle(), boundingbox_Y.middle());
-    origin.param_setValue(A);
-
-    dir = unit_vector(B - A);
+    A = Point(boundingbox_X.min(), boundingbox_Y.middle());
+    B = Point(boundingbox_X.middle(), boundingbox_Y.middle());
+    origin.param_set_value(A);
     dist_angle_handle = L2(B - A);
+    dir = unit_vector(B - A);
+}
+
+
+void
+LPECopyRotate::doBeforeEffect (SPLPEItem const* lpeitem)
+{
+    using namespace Geom;
+    original_bbox(lpeitem);
+    if( kaleidoscope || copiesTo360 ){
+        rotation_angle.param_set_value(360.0/(double)num_copies);
+    } 
+    A = Point(boundingbox_X.min(), boundingbox_Y.middle());
+    B = Point(boundingbox_X.middle(), boundingbox_Y.middle());
+    dir = unit_vector(B - A);
+    // I first suspected the minus sign to be a bug in 2geom but it is
+    // likely due to SVG's choice of coordinate system orientation (max)
+    start_pos = origin + dir * Rotate(-deg_to_rad(starting_angle)) * dist_angle_handle;
+    rot_pos = origin + dir * Rotate(-deg_to_rad(rotation_angle+starting_angle)) * dist_angle_handle;
+    if( kaleidoscope || copiesTo360 ){
+        rot_pos = origin;
+    }
+    SPLPEItem * item = const_cast<SPLPEItem*>(lpeitem);
+    item->apply_to_clippath(item);
+    item->apply_to_mask(item);
+}
+
+bool
+LPECopyRotate::side(Geom::Point p1, Geom::Point p2, Geom::Point p)
+{
+    using Geom::X;
+    using Geom::Y;
+    return (p2[Y] - p1[Y])*(p[X] - p1[X]) + (-p2[X] + p1[X])*(p[Y] - p1[Y]) >= 0;
+}
+
+bool
+LPECopyRotate::pointInTriangle(Geom::Point p, Geom::Point p1, Geom::Point p2, Geom::Point p3)
+{
+    using Geom::X;
+    using Geom::Y;
+    double denominator = (p1[X]*(p2[Y] - p3[Y]) + p1[Y]*(p3[X] - p2[X]) + p2[X]*p3[Y] - p2[Y]*p3[X]);
+    double t1 = (p[X]*(p3[Y] - p1[Y]) + p[Y]*(p1[X] - p3[X]) - p1[X]*p3[Y] + p1[Y]*p3[X]) / denominator;
+    double t2 = (p[X]*(p2[Y] - p1[Y]) + p[Y]*(p1[X] - p2[X]) - p1[X]*p2[Y] + p1[Y]*p2[X]) / -denominator;
+    double s = t1 + t2;
+
+    return 0 <= t1 && t1 <= 1 && 0 <= t2 && t2 <= 1 && s <= 1;
 }
 
 void
-LPECopyRotate::split(std::vector<Geom::Path> &path_in,Geom:Path divider,bool start){
+LPECopyRotate::split(std::vector<Geom::Path> &path_in,Geom::Path divider){
     double timeStart = 0.0;
+    std::vector<Geom::Path> temp_path;
     for (Geom::PathVector::const_iterator path_it = path_in.begin(); path_it != path_in.end(); ++path_it) {
         if (path_it->empty()){
             continue;
         }
-        Geom::Path original = path_it;
-        std::vector<Geom::Path> temp_path;
+        Geom::Path original = *path_it;
+        int position = 0;
         Geom::Crossings cs = crossings(original, divider);
         for(unsigned int i = 0; i < cs.size(); i++) {
             double timeEnd = cs[i].ta;
             Geom::Path portion = original.portion(timeStart, timeEnd);
-            Geom::Point middle = portion.pointAt((double)portion.size()/2.0);
-            position = pointSideOfLine(divider.initialPoint(), divider.finalPoint(), middle);
-            if(position == 1 || (!start && position== -1)){
+            Geom::Point sideChecker = portion.pointAt(portion.size()-0.001);
+            position = side(divider.initialPoint(),  divider.finalPoint(), sideChecker);
+            if(num_copies > 2){
+                position = pointInTriangle(sideChecker, divider.initialPoint(), divider[0].finalPoint(), divider.finalPoint());
+            }
+            std::cout << position << "\n";
+            if(position == true){
                 temp_path.push_back(portion);
             }
             portion.clear();
             timeStart = timeEnd;
         }
-        position = pointSideOfLine(divider.initialPoint(), divider.finalPoint(), original.finalPoint());
-        if(cs.size()!=0 && (position == 1 || (!start && position== -1))){
+        position = side(divider.initialPoint(), divider.finalPoint(), original.finalPoint());
+        if(num_copies > 2){
+            position = pointInTriangle(original.finalPoint(), divider.initialPoint(), divider[0].finalPoint(), divider.finalPoint());
+        }
+        if(cs.size()!=0 && position == true){
             Geom::Path portion = original.portion(timeStart, original.size());
-            temp_path.push_back(portion);
+            if (!original.closed()){
+                temp_path.push_back(portion);
+            } else {
+                if(cs.size() > 1 && temp_path[0].size() > 0 ){
+                    portion.setFinal(temp_path[0].initialPoint());
+                    portion.append(temp_path[0]);
+                    temp_path[0]=portion;
+                } else {
+                    temp_path.push_back(portion);
+                }
+                //temp_path[0].close();
+            }
             portion.clear();
+        }
+        if(cs.size()==0){
+            temp_path.push_back(original);
         }
     }
     path_in = temp_path;
@@ -124,20 +194,8 @@ LPECopyRotate::split(std::vector<Geom::Path> &path_in,Geom:Path divider,bool sta
 
 void
 LPECopyRotate::setKaleidoscope(std::vector<Geom::Path> &path_in){
-    Geom::Point lineStart(0,0);
-    lineStart[Geom::X] = cos(starting_angle) * 100000.0;
-    lineStart[Geom::Y] = sin(starting_angle) * 100000.0;
-    Geom::Point lineEnd(0,0);
-    lineEnd[Geom::X] = cos(starting_angle + rotAngle) * 100000.0;
-    lineEnd[Geom::Y] = sin(starting_angle + rotAngle) * 100000.0;
-    Geom::Path klineA;
-    klineA.start(origin);
-    klineA.appendNew<Geom::LineSegment>(lineStart);
-    path_in = split(path_in,klineA,true);
-    Geom::Path klineB;
-    klineB.start(origin);
-    klineB.appendNew<Geom::LineSegment>(lineEnd);
-    path_in = split(path_in,klineB,false);
+    
+    split(path_in,hp);
     for (int i = 0; i < num_copies; ++i) {
     
     }
@@ -148,30 +206,21 @@ LPECopyRotate::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & p
 {
     using namespace Geom;
 
-    // I first suspected the minus sign to be a bug in 2geom but it is
-    // likely due to SVG's choice of coordinate system orientation (max)
-    start_pos = origin + dir * Rotate(-deg_to_rad(starting_angle)) * dist_angle_handle;
-    double rotation_angle_end = rotation_angle;
-    if(copiesTo360 || kaleidoscope){
-        rotation_angle_end = 360.0/(double)num_copies;
+    if(num_copies == 1){
+        return pwd2_in;
     }
-    rot_pos = origin + dir * Rotate(-deg_to_rad(starting_angle + rotation_angle_end)) * dist_angle_handle;
-
-    A = pwd2_in.firstValue();
-    B = pwd2_in.lastValue();
-    dir = unit_vector(B - A);
 
     Piecewise<D2<SBasis> > output;
-
     Affine pre = Translate(-origin) * Rotate(-deg_to_rad(starting_angle));
     if(kaleidoscope){
         std::vector<Geom::Path> path_out;
         std::vector<Geom::Path> tmp_path;
-        PathVector const original_pathv = path_from_piecewise(remove_short_cuts(pwd2_in * t, 0.1), 0.001);
+        PathVector const original_pathv = path_from_piecewise(remove_short_cuts(pwd2_in, 0.1), 0.001);
         for (Geom::PathVector::const_iterator path_it = original_pathv.begin(); path_it != original_pathv.end(); ++path_it) {
             if (path_it->empty()){
                 continue;
             }
+            bool end_open = false;
             if (path_it->closed()) {
                 const Geom::Curve &closingline = path_it->back_closed();
                 if (!are_near(closingline.initialPoint(), closingline.finalPoint())) {
@@ -179,24 +228,25 @@ LPECopyRotate::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & p
                 }
             }
             Geom::Path original = (Geom::Path)(*path_it);
-            if(end_open && path_it2->closed()){
+            if(end_open && path_it->closed()){
                 original.close(false);
                 original.appendNew<Geom::LineSegment>( original.initialPoint() );
                 original.close(true);
             }
             tmp_path.push_back(original);
             setKaleidoscope(tmp_path);
-            path_out.push_back(tmp_path);
+            path_out.insert(path_out.end(), tmp_path.begin(), tmp_path.end());
             tmp_path.clear();
         }
-        output = path_out.toPwSb();
+        if(path_out.size()>0){
+            output = paths_to_pw(path_out);
+        }
     } else {
         for (int i = 0; i < num_copies; ++i) {
-        // I first suspected the minus sign to be a bug in 2geom but it is
-        // likely due to SVG's choice of coordinate system orientation (max)
-        Rotate rot(-deg_to_rad(rotation_angle_end * i));
-        Affine t = pre * rot * Translate(origin);
-        output.concat(pwd2_in * t);
+            Rotate rot(-deg_to_rad(rotation_angle * i));
+            Affine t = pre * rot * Translate(origin);
+            output.concat(pwd2_in * t);
+        }
     }
     return output;
 }
@@ -205,21 +255,40 @@ void
 LPECopyRotate::addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec)
 {
     using namespace Geom;
-
-    Path path(start_pos);
-    path.appendNew<LineSegment>((Geom::Point) origin);
-    path.appendNew<LineSegment>(rot_pos);
-    PathVector pathv;
-    pathv.push_back(path);
+    hp_vec.clear();
+    double diagonal = Geom::distance(Geom::Point(boundingbox_X.min(),boundingbox_Y.min()),Geom::Point(boundingbox_X.max(),boundingbox_Y.max()));
+    Geom::Rect bbox(Geom::Point(boundingbox_X.min(),boundingbox_Y.min()),Geom::Point(boundingbox_X.max(),boundingbox_Y.max())); 
+    double sizeDivider = Geom::distance(origin,bbox) + diagonal + 20;
+    Geom::Point lineStart  = origin + dir * Rotate(-deg_to_rad(starting_angle)) * sizeDivider;
+    Geom::Point lineEnd = origin + dir * Rotate(-deg_to_rad(rotation_angle+starting_angle)) * sizeDivider;
+    hp.start(lineStart);
+    hp.appendNew<Geom::LineSegment>((Geom::Point)origin);
+    hp.appendNew<Geom::LineSegment>(lineEnd);
+    Geom::PathVector pathv;
+    pathv.push_back(hp);
     hp_vec.push_back(pathv);
 }
 
+void
+LPECopyRotate::resetDefaults(SPItem const* item)
+{
+    Effect::resetDefaults(item);
+    original_bbox(SP_LPE_ITEM(item));
+    hp.clear();
+}
 
-void LPECopyRotate::addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item) {
+void 
+LPECopyRotate::addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item) {
     {
         KnotHolderEntity *e = new CR::KnotHolderEntityStartingAngle(this);
         e->create( desktop, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN,
-                   _("Adjust the starting angle") );
+                   _("Adjust the starting angle"));
+        knotholder->add(e);
+    }
+    {
+        KnotHolderEntity *e = new CR::KnotHolderEntityRotationAngle(this);
+        e->create( desktop, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN,
+                   _("Adjust the rotation angle"));
         knotholder->add(e);
     }
 };
@@ -248,6 +317,26 @@ KnotHolderEntityStartingAngle::knot_set(Geom::Point const &p, Geom::Point const 
     sp_lpe_item_update_patheffect (SP_LPE_ITEM(item), false, true);
 }
 
+void
+KnotHolderEntityRotationAngle::knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, guint state)
+{
+    LPECopyRotate* lpe = dynamic_cast<LPECopyRotate *>(_effect);
+
+    Geom::Point const s = snap_knot_position(p, state);
+
+    // I first suspected the minus sign to be a bug in 2geom but it is
+    // likely due to SVG's choice of coordinate system orientation (max)
+    lpe->rotation_angle.param_set_value(rad_to_deg(-angle_between(lpe->dir, s - lpe->origin)) - lpe->starting_angle);
+    if (state & GDK_SHIFT_MASK) {
+        lpe->dist_angle_handle = L2(lpe->B - lpe->A);
+    } else {
+        lpe->dist_angle_handle = L2(p - lpe->origin);
+    }
+
+    // FIXME: this should not directly ask for updating the item. It should write to SVG, which triggers updating.
+    sp_lpe_item_update_patheffect (SP_LPE_ITEM(item), false, true);
+}
+
 Geom::Point
 KnotHolderEntityStartingAngle::knot_get() const
 {
@@ -255,9 +344,14 @@ KnotHolderEntityStartingAngle::knot_get() const
     return lpe->start_pos;
 }
 
+Geom::Point
+KnotHolderEntityRotationAngle::knot_get() const
+{
+    LPECopyRotate const *lpe = dynamic_cast<LPECopyRotate const*>(_effect);
+    return lpe->rot_pos;
+}
+
 } // namespace CR
-
-
 
 /* ######################## */
 

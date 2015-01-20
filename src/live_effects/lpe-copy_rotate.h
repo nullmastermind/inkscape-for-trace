@@ -36,29 +36,38 @@ public:
 
     virtual Geom::Piecewise<Geom::D2<Geom::SBasis> > doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in);
 
-    virtual void kaleidoscope(std::vector<Geom::Path> &path_in);
+    virtual void doBeforeEffect (SPLPEItem const* lpeitem);
 
-    virtual void split(std::vector<Geom::Path> &path_in,Geom:Path divider,bool start);
+    virtual void setKaleidoscope(std::vector<Geom::Path> &path_in);
+
+    virtual bool pointInTriangle(Geom::Point p, Geom::Point p0, Geom::Point p1, Geom::Point p2);
+
+    virtual bool side(Geom::Point p1, Geom::Point p2, Geom::Point p);
+
+    virtual void split(std::vector<Geom::Path> &path_in,Geom::Path divider);
+
+    virtual void resetDefaults(SPItem const* item);
 
     /* the knotholder entity classes must be declared friends */
     friend class CR::KnotHolderEntityStartingAngle;
+    friend class CR::KnotHolderEntityRotationAngle;
     void addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item);
 
 protected:
     virtual void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec);
 
 private:
+    PointParam origin;
     ScalarParam starting_angle;
     ScalarParam rotation_angle;
     ScalarParam num_copies;
     BoolParam copiesTo360;
-    BoolParam setKaleidoscope;
-
-    PointParam origin;
+    BoolParam kaleidoscope;
 
     Geom::Point A;
     Geom::Point B;
     Geom::Point dir;
+    Geom::Path hp;
 
     Geom::Point start_pos;
     Geom::Point rot_pos;
