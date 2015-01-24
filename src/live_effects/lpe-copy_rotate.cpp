@@ -89,7 +89,7 @@ LPECopyRotate::doOnApply(SPLPEItem const* lpeitem)
 
     A = Point(boundingbox_X.min(), boundingbox_Y.middle());
     B = Point(boundingbox_X.middle(), boundingbox_Y.middle());
-    origin.param_set_value(A);
+    origin.param_setValue(A);
     dist_angle_handle = L2(B - A);
     dir = unit_vector(B - A);
 }
@@ -102,7 +102,10 @@ LPECopyRotate::doBeforeEffect (SPLPEItem const* lpeitem)
     original_bbox(lpeitem);
     if( kaleidoscope || copiesTo360 ){
         rotation_angle.param_set_value(360.0/(double)num_copies);
-    } 
+    }
+    if(dist_angle_handle < 1.0){
+        dist_angle_handle = 1.0;
+    }
     A = Point(boundingbox_X.min(), boundingbox_Y.middle());
     B = Point(boundingbox_X.middle(), boundingbox_Y.middle());
     dir = unit_vector(B - A);
@@ -118,17 +121,18 @@ LPECopyRotate::doBeforeEffect (SPLPEItem const* lpeitem)
     item->apply_to_mask(item);
 }
 
-bool
-LPECopyRotate::side(Geom::Point p1, Geom::Point p2, Geom::Point p)
+int 
+LPECopyRotate::pointSideOfLine(Geom::Point A, Geom::Point B, Geom::Point X)
 {
-    using Geom::X;
-    using Geom::Y;
-    return (p2[Y] - p1[Y])*(p[X] - p1[X]) + (-p2[X] + p1[X])*(p[Y] - p1[Y]) >= 0;
+    //http://stackoverflow.com/questions/1560492/how-to-tell-whether-a-point-is-to-the-right-or-left-side-of-a-line
+    double pos =  (B[Geom::X]-A[Geom::X])*(X[Geom::Y]-A[Geom::Y]) - (B[Geom::Y]-A[Geom::Y])*(X[Geom::X]-A[Geom::X]);
+    return (pos < 0) ? -1 : (pos > 0);
 }
 
 bool
 LPECopyRotate::pointInTriangle(Geom::Point p, Geom::Point p1, Geom::Point p2, Geom::Point p3)
 {
+    //http://totologic.blogspot.com.es/2014/01/accurate-point-in-triangle-test.html
     using Geom::X;
     using Geom::Y;
     double denominator = (p1[X]*(p2[Y] - p3[Y]) + p1[Y]*(p3[X] - p2[X]) + p2[X]*p3[Y] - p2[Y]*p3[X]);
@@ -140,62 +144,60 @@ LPECopyRotate::pointInTriangle(Geom::Point p, Geom::Point p1, Geom::Point p2, Ge
 }
 
 void
-LPECopyRotate::split(std::vector<Geom::Path> &path_in,Geom::Path divider){
+LPECopyRotate::split(std::vector<Geom::Path> &path_on,Geom::Path divider){
+    std::vector<Geom::Path> tmp_path;
     double timeStart = 0.0;
-    std::vector<Geom::Path> temp_path;
-    for (Geom::PathVector::const_iterator path_it = path_in.begin(); path_it != path_in.end(); ++path_it) {
-        if (path_it->empty()){
-            continue;
-        }
-        Geom::Path original = *path_it;
-        int position = 0;
-        Geom::Crossings cs = crossings(original, divider);
-        for(unsigned int i = 0; i < cs.size(); i++) {
-            double timeEnd = cs[i].ta;
-            Geom::Path portion = original.portion(timeStart, timeEnd);
-            Geom::Point sideChecker = portion.pointAt(portion.size()-0.001);
-            position = side(divider.initialPoint(),  divider.finalPoint(), sideChecker);
-            if(num_copies > 2){
-                position = pointInTriangle(sideChecker, divider.initialPoint(), divider[0].finalPoint(), divider.finalPoint());
-            }
-            std::cout << position << "\n";
-            if(position == true){
-                temp_path.push_back(portion);
-            }
-            portion.clear();
-            timeStart = timeEnd;
-        }
-        position = side(divider.initialPoint(), divider.finalPoint(), original.finalPoint());
-        if(num_copies > 2){
-            position = pointInTriangle(original.finalPoint(), divider.initialPoint(), divider[0].finalPoint(), divider.finalPoint());
-        }
-        if(cs.size()!=0 && position == true){
-            Geom::Path portion = original.portion(timeStart, original.size());
-            if (!original.closed()){
-                temp_path.push_back(portion);
-            } else {
-                if(cs.size() > 1 && temp_path[0].size() > 0 ){
-                    portion.setFinal(temp_path[0].initialPoint());
-                    portion.append(temp_path[0]);
-                    temp_path[0]=portion;
-                } else {
-                    temp_path.push_back(portion);
-                }
-                //temp_path[0].close();
-            }
-            portion.clear();
-        }
-        if(cs.size()==0){
-            temp_path.push_back(original);
-        }
+    Geom::Path original = path_on[0];
+    int position = 0;
+    Geom::Crossings cs = crossings(original,divider);
+    std::vector<double> crossed;
+    for(unsigned int i = 0; i < cs.size(); i++) {
+        crossed.push_back(cs[i].ta);
     }
-    path_in = temp_path;
+    std::sort (crossed.begin(), crossed.end());
+    for(unsigned int i = 0; i < crossed.size(); i++) {
+        double timeEnd = crossed[i];
+        Geom::Path portionOriginal = original.portion(timeStart,timeEnd);
+        Geom::Point sideChecker = portionOriginal.pointAt(0.001);
+        position = pointSideOfLine(divider[0].finalPoint(),  divider[1].finalPoint(), sideChecker);
+        if(num_copies > 2){
+            position = pointInTriangle(sideChecker, divider.initialPoint(), divider[0].finalPoint(), divider[1].finalPoint());
+        }
+        if(position == 1){
+            tmp_path.push_back(portionOriginal);
+        }
+        portionOriginal.clear();
+        timeStart = timeEnd;
+    }
+    position = pointSideOfLine(divider[0].finalPoint(), divider[1].finalPoint(), original.finalPoint());
+    if(num_copies > 2){
+        position = pointInTriangle(original.finalPoint(), divider.initialPoint(), divider[0].finalPoint(), divider[1].finalPoint());
+    }
+    if(cs.size() > 0 && position == 1){
+        Geom::Path portionOriginal = original.portion(timeStart, original.size());
+        if (!original.closed()){
+            tmp_path.push_back(portionOriginal);
+        } else {
+            if(tmp_path.size() > 0 && tmp_path[0].size() > 0 ){
+                portionOriginal.setFinal(tmp_path[0].initialPoint());
+                portionOriginal.append(tmp_path[0]);
+                tmp_path[0] = portionOriginal;
+            } else {
+                tmp_path.push_back(portionOriginal);
+            }
+            //temp_path[0].close();
+        }
+        portionOriginal.clear();
+    }
+    if(cs.size()==0  && position == 1){
+        tmp_path.push_back(original);
+    }
+    path_on = tmp_path;
 }
 
 void
-LPECopyRotate::setKaleidoscope(std::vector<Geom::Path> &path_in){
-    
-    split(path_in,hp);
+LPECopyRotate::setKaleidoscope(std::vector<Geom::Path> &path_on, Geom::Path divider){
+    split(path_on,divider);
     for (int i = 0; i < num_copies; ++i) {
     
     }
@@ -210,6 +212,16 @@ LPECopyRotate::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & p
         return pwd2_in;
     }
 
+    double diagonal = Geom::distance(Geom::Point(boundingbox_X.min(),boundingbox_Y.min()),Geom::Point(boundingbox_X.max(),boundingbox_Y.max()));
+    Geom::Rect bbox(Geom::Point(boundingbox_X.min(),boundingbox_Y.min()),Geom::Point(boundingbox_X.max(),boundingbox_Y.max())); 
+    double sizeDivider = Geom::distance(origin,bbox) + (diagonal * 2);
+    Geom::Point lineStart  = origin + dir * Rotate(-deg_to_rad(starting_angle)) * sizeDivider;
+    Geom::Point lineEnd = origin + dir * Rotate(-deg_to_rad(rotation_angle+starting_angle)) * sizeDivider;
+    //Note:: beter way to do this
+    //Whith AppendNew have problems whith the crossing order
+    Geom::Path divider = Geom::Path(lineStart);
+    divider.appendNew<Geom::LineSegment>((Geom::Point)origin);
+    divider.appendNew<Geom::LineSegment>(lineEnd);
     Piecewise<D2<SBasis> > output;
     Affine pre = Translate(-origin) * Rotate(-deg_to_rad(starting_angle));
     if(kaleidoscope){
@@ -234,7 +246,7 @@ LPECopyRotate::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & p
                 original.close(true);
             }
             tmp_path.push_back(original);
-            setKaleidoscope(tmp_path);
+            setKaleidoscope(tmp_path,divider);
             path_out.insert(path_out.end(), tmp_path.begin(), tmp_path.end());
             tmp_path.clear();
         }
@@ -256,14 +268,10 @@ LPECopyRotate::addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geo
 {
     using namespace Geom;
     hp_vec.clear();
-    double diagonal = Geom::distance(Geom::Point(boundingbox_X.min(),boundingbox_Y.min()),Geom::Point(boundingbox_X.max(),boundingbox_Y.max()));
-    Geom::Rect bbox(Geom::Point(boundingbox_X.min(),boundingbox_Y.min()),Geom::Point(boundingbox_X.max(),boundingbox_Y.max())); 
-    double sizeDivider = Geom::distance(origin,bbox) + diagonal + 20;
-    Geom::Point lineStart  = origin + dir * Rotate(-deg_to_rad(starting_angle)) * sizeDivider;
-    Geom::Point lineEnd = origin + dir * Rotate(-deg_to_rad(rotation_angle+starting_angle)) * sizeDivider;
-    hp.start(lineStart);
+    Geom::Path hp;
+    hp.start(start_pos);
     hp.appendNew<Geom::LineSegment>((Geom::Point)origin);
-    hp.appendNew<Geom::LineSegment>(lineEnd);
+    hp.appendNew<Geom::LineSegment>(origin + dir * Rotate(-deg_to_rad(rotation_angle+starting_angle)) * dist_angle_handle);
     Geom::PathVector pathv;
     pathv.push_back(hp);
     hp_vec.push_back(pathv);
@@ -274,7 +282,6 @@ LPECopyRotate::resetDefaults(SPItem const* item)
 {
     Effect::resetDefaults(item);
     original_bbox(SP_LPE_ITEM(item));
-    hp.clear();
 }
 
 void 
