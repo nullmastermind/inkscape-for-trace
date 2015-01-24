@@ -13,7 +13,8 @@
 
 #include <glibmm/i18n.h>
 #include <gdk/gdk.h>
-
+#include <2geom/path-intersection.h>
+#include <2geom/sbasis-to-bezier.h>
 #include "live_effects/lpe-copy_rotate.h"
 #include <2geom/path.h>
 #include <2geom/transforms.h>
@@ -191,8 +192,13 @@ LPECopyRotate::split(std::vector<Geom::Path> &path_on,Geom::Path divider){
 void
 LPECopyRotate::setKaleidoscope(std::vector<Geom::Path> &path_on, Geom::Path divider){
     split(path_on,divider);
-    for (int i = 0; i < num_copies; ++i) {
-    
+    for (Geom::PathVector::const_iterator path_it = path_on.begin(); path_it != path_on.end(); ++path_it) {
+            if (path_it->empty()){
+                continue;
+            }
+            for (int i = 0; i < num_copies; ++i) {
+            
+            }
     }
 }
 
