@@ -94,9 +94,18 @@ LPECopyRotate::doBeforeEffect (SPLPEItem const* lpeitem)
 {
     using namespace Geom;
     original_bbox(lpeitem);
-    if( kaleidoscope || copiesTo360 ){
+    if(kaleidoscope || copiesTo360 ){
         rotation_angle.param_set_value(360.0/(double)num_copies);
     }
+    if(kaleidoscope){
+        num_copies.param_set_increments(2,2);
+        if((int)num_copies%2 !=0){
+            num_copies.param_set_value(num_copies+1);
+        }
+    } else {
+        num_copies.param_set_increments(1,1);
+    }
+
     if(dist_angle_handle < 1.0){
         dist_angle_handle = 1.0;
     }
@@ -190,21 +199,58 @@ LPECopyRotate::split(std::vector<Geom::Path> &path_on,Geom::Path divider){
 }
 
 void
-LPECopyRotate::setKaleidoscope(std::vector<Geom::Path> &path_on, Geom::Path divider){
+LPECopyRotate::setKaleidoscope(std::vector<Geom::Path> &path_on, Geom::Path divider, double sizeDivider){
     split(path_on,divider);
-    Geom::Affine pre = Geom::Translate(-origin) * Geom::Rotate(-Geom::deg_to_rad(starting_angle));
+    std::vector<Geom::Path> tmp_path;
+    Geom::Affine pre = Geom::Translate(-origin);
     for (Geom::PathVector::const_iterator path_it = path_on.begin(); path_it != path_on.end(); ++path_it) {
-            if (path_it->empty()){
-                continue;
-            }
-            for (int i = 0; i < num_copies; ++i) {
-                Geom::Rotate rot(-Geom::deg_to_rad(rotation_angle * i));
-                Geom::Affine t = pre * rot * Geom::Translate(origin);
+        Geom::Path original = *path_it;
+        if (path_it->empty()){
+            continue;
+        }
+        std::vector<Geom::Path> tmp_path2;
+        Geom::Path appendPath = original;
+        for (int i = 0; i < num_copies; ++i) {
+            Geom::Rotate rot(-Geom::deg_to_rad(rotation_angle * (i)));
+            Geom::Affine m = pre * rot * Geom::Translate(origin);
+            if(i%2 != 0){
+                Geom::Point A = (Geom::Point)origin;
+                Geom::Point B = origin + dir * Geom::Rotate(-Geom::deg_to_rad((rotation_angle*i)+starting_angle)) * sizeDivider;
+                Geom::Affine m1(1.0, 0.0, 0.0, 1.0, A[0], A[1]);
+                double hyp = Geom::distance(A, B);
+                double c = (B[0] - A[0]) / hyp; // cos(alpha)
+                double s = (B[1] - A[1]) / hyp; // sin(alpha)
+
+                Geom::Affine m2(c, -s, s, c, 0.0, 0.0);
                 Geom::Affine sca(1.0, 0.0, 0.0, -1.0, 0.0, 0.0);
-                Geom::Path append = *path_it * sca * t;
-                path_on.push_back(append);
+
+                Geom::Affine tmpM = m1.inverse() * m2;
+                m = tmpM;
+                m = m * sca;
+                m = m * m2.inverse();
+                m = m * m1;
+            } else {
+                appendPath = original;
             }
+            appendPath *= m;
+            if(i != 0 && tmp_path2.size() > 0 && Geom::are_near(tmp_path2[tmp_path2.size()-1].finalPoint(),appendPath.finalPoint())){
+                tmp_path2[tmp_path2.size()-1].append(appendPath.reverse());
+            } else if(i != 0 && tmp_path2.size() > 0 && Geom::are_near(tmp_path2[tmp_path2.size()-1].initialPoint(),appendPath.initialPoint())){
+                tmp_path2[tmp_path2.size()-1] = tmp_path2[tmp_path2.size()-1].reverse();
+                tmp_path2[tmp_path2.size()-1].append(appendPath);
+                tmp_path2[tmp_path2.size()-1] = tmp_path2[tmp_path2.size()-1].reverse();
+            } else { 
+                tmp_path2.push_back(appendPath);
+            }
+            if(tmp_path2.size() > 0 && Geom::are_near(tmp_path2[tmp_path2.size()-1].finalPoint(),tmp_path2[tmp_path2.size()-1].initialPoint())){
+                tmp_path2[tmp_path2.size()-1].close();
+            }
+        }
+        tmp_path.insert(tmp_path.end(), tmp_path2.begin(), tmp_path2.end());
+        tmp_path2.clear();
     }
+    path_on = tmp_path;
+    tmp_path.clear();
 }
 
 Geom::Piecewise<Geom::D2<Geom::SBasis> >
@@ -250,7 +296,7 @@ LPECopyRotate::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & p
                 original.close(true);
             }
             tmp_path.push_back(original);
-            setKaleidoscope(tmp_path,divider);
+            setKaleidoscope(tmp_path,divider,sizeDivider);
             path_out.insert(path_out.end(), tmp_path.begin(), tmp_path.end());
             tmp_path.clear();
         }
