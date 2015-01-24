@@ -192,12 +192,17 @@ LPECopyRotate::split(std::vector<Geom::Path> &path_on,Geom::Path divider){
 void
 LPECopyRotate::setKaleidoscope(std::vector<Geom::Path> &path_on, Geom::Path divider){
     split(path_on,divider);
+    Geom::Affine pre = Geom::Translate(-origin) * Geom::Rotate(-Geom::deg_to_rad(starting_angle));
     for (Geom::PathVector::const_iterator path_it = path_on.begin(); path_it != path_on.end(); ++path_it) {
             if (path_it->empty()){
                 continue;
             }
             for (int i = 0; i < num_copies; ++i) {
-            
+                Geom::Rotate rot(-Geom::deg_to_rad(rotation_angle * i));
+                Geom::Affine t = pre * rot * Geom::Translate(origin);
+                Geom::Affine sca(1.0, 0.0, 0.0, -1.0, 0.0, 0.0);
+                Geom::Path append = *path_it * sca * t;
+                path_on.push_back(append);
             }
     }
 }
