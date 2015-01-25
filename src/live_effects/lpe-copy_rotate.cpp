@@ -5,7 +5,7 @@
  * Authors:
  *   Maximilian Albert <maximilian.albert@gmail.com>
  *   Johan Engelen <j.b.c.engelen@alumnus.utwente.nl>
- *
+ *   Jabiertxo Arraiza Cenoz <jabier.arraiza@marker.es>
  * Copyright (C) Authors 2007-2012
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
@@ -233,18 +233,45 @@ LPECopyRotate::setKaleidoscope(std::vector<Geom::Path> &path_on, Geom::Path divi
                 appendPath = original;
             }
             appendPath *= m;
-            if(i != 0 && tmp_path2.size() > 0 && Geom::are_near(tmp_path2[tmp_path2.size()-1].finalPoint(),appendPath.finalPoint())){
-                tmp_path2[tmp_path2.size()-1].append(appendPath.reverse());
+            if(i != 0 && tmp_path2.size() > 0 &&( Geom::are_near(tmp_path2[tmp_path2.size()-1].finalPoint(),appendPath.finalPoint()))){
+                Geom::Path tmpAppend = appendPath.reverse();
+                tmpAppend.setInitial(tmp_path2[tmp_path2.size()-1].finalPoint());
+                tmp_path2[tmp_path2.size()-1].append(tmpAppend);
             } else if(i != 0 && tmp_path2.size() > 0 && Geom::are_near(tmp_path2[tmp_path2.size()-1].initialPoint(),appendPath.initialPoint())){
+                Geom::Path tmpAppend = appendPath;
                 tmp_path2[tmp_path2.size()-1] = tmp_path2[tmp_path2.size()-1].reverse();
-                tmp_path2[tmp_path2.size()-1].append(appendPath);
+                tmpAppend.setInitial(tmp_path2[tmp_path2.size()-1].finalPoint());
+                tmp_path2[tmp_path2.size()-1].append(tmpAppend);
                 tmp_path2[tmp_path2.size()-1] = tmp_path2[tmp_path2.size()-1].reverse();
+            } else if(i != 0 && tmp_path2.size() > 0 && Geom::are_near(tmp_path2[tmp_path2.size()-1].finalPoint(),appendPath.initialPoint())){
+                Geom::Path tmpAppend = appendPath;
+                tmpAppend.setInitial(tmp_path2[tmp_path2.size()-1].finalPoint());
+                tmp_path2[tmp_path2.size()-1].append(tmpAppend);
+            } else if(i != 0 && tmp_path2.size() > 0 && Geom::are_near(tmp_path2[tmp_path2.size()-1].initialPoint(),appendPath.finalPoint())){
+                Geom::Path tmpAppend = appendPath.reverse();
+                tmp_path2[tmp_path2.size()-1] = tmp_path2[tmp_path2.size()-1].reverse();
+                tmpAppend.setInitial(tmp_path2[tmp_path2.size()-1].finalPoint());
+                tmp_path2[tmp_path2.size()-1].append(tmpAppend);
+                tmp_path2[tmp_path2.size()-1] = tmp_path2[tmp_path2.size()-1].reverse();
+            } else if(i != 0 && tmp_path2.size() > 0 && Geom::are_near(tmp_path2[0].finalPoint(),appendPath.finalPoint())){
+                Geom::Path tmpAppend = appendPath.reverse();
+                tmpAppend.setInitial(tmp_path2[0].finalPoint());
+                tmp_path2[0].append(tmpAppend);
+            } else if(i != 0 && tmp_path2.size() > 0 && Geom::are_near(tmp_path2[0].initialPoint(),appendPath.initialPoint())){
+                Geom::Path tmpAppend = appendPath;
+                tmp_path2[0] = tmp_path2[0].reverse();
+                tmpAppend.setInitial(tmp_path2[0].finalPoint());
+                tmp_path2[0].append(tmpAppend);
+                tmp_path2[0] = tmp_path2[0].reverse();
             } else { 
                 tmp_path2.push_back(appendPath);
             }
             if(tmp_path2.size() > 0 && Geom::are_near(tmp_path2[tmp_path2.size()-1].finalPoint(),tmp_path2[tmp_path2.size()-1].initialPoint())){
                 tmp_path2[tmp_path2.size()-1].close();
             }
+        }
+        if(tmp_path2.size() > 0 && Geom::are_near(tmp_path2[0].finalPoint(),tmp_path2[0].initialPoint())){
+            tmp_path2[0].close();
         }
         tmp_path.insert(tmp_path.end(), tmp_path2.begin(), tmp_path2.end());
         tmp_path2.clear();
