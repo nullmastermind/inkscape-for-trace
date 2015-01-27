@@ -7,6 +7,7 @@ set(live_effects_SRC
 	lpe-boolops.cpp
 	lpe-bounding-box.cpp
 	lpe-circle_3pts.cpp
+	lpe-transform_2pts.cpp
 	lpe-circle_with_radius.cpp
 	lpe-clone-original.cpp
 	lpe-constructgrid.cpp
@@ -81,6 +82,7 @@ set(live_effects_SRC
 	lpe-boolops.h
 	lpe-bounding-box.h
 	lpe-circle_3pts.h
+	lpe-transform_2pts.h
 	lpe-circle_with_radius.h
 	lpe-clone-original.h
 	lpe-constructgrid.h
