@@ -24,6 +24,7 @@
 #include "ui/widget/registered-widget.h"
 
 #include "live_effects/effect.h"
+#include "live_effects/parameter/togglebutton.h"
 #include "live_effects/parameter/pointreseteable.h"
 #include "live_effects/lpegroupbbox.h"
 
@@ -51,13 +52,15 @@ protected:
     virtual void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec);
 
 private:
-    BoolParam fromOriginalWidth;
+    ToggleButtonParam fromOriginalWidth;
     PointReseteableParam start;
     PointReseteableParam end;
     ScalarParam firstKnot;
     ScalarParam lastKnot;
     Geom::Point A;
     Geom::Point B;
+
+    bool fromOriginalWidthToogler;
 
     LPETransform2Pts(const LPETransform2Pts&);
     LPETransform2Pts& operator=(const LPETransform2Pts&);
