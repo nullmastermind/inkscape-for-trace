@@ -32,7 +32,7 @@
 #include "document-undo.h"
 #include "layer-manager.h"
 #include "message-stack.h"
-#include "desktop-handles.h"
+
 #include "sp-object.h"
 #include "sp-item.h"
 #include "verbs.h"
@@ -152,7 +152,7 @@ PowerstrokePropertiesDialog::_close()
     );
 }
 
-bool PowerstrokePropertiesDialog::_handleKeyEvent(GdkEventKey *event)
+bool PowerstrokePropertiesDialog::_handleKeyEvent(GdkEventKey * /*event*/)
 {
 
     /*switch (get_group0_keyval(event)) {

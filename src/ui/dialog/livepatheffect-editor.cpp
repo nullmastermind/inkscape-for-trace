@@ -23,7 +23,7 @@
 #include <vector>
 
 #include "desktop.h"
-#include "desktop-handles.h"
+
 #include "document.h"
 #include "document-undo.h"
 #include "gtkmm/widget.h"
@@ -295,9 +295,8 @@ LivePathEffectEditor::onSelectionChanged(Inkscape::Selection *sel)
     if ( sel && !sel->isEmpty() ) {
         SPItem *item = sel->singleItem();
         if ( item ) {
-            if ( SP_IS_LPE_ITEM(item) ) {
-                SPLPEItem *lpeitem = SP_LPE_ITEM(item);
-
+            SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
+            if ( lpeitem ) {
                 effect_list_reload(lpeitem);
 
                 current_lpeitem = lpeitem;
@@ -318,25 +317,28 @@ LivePathEffectEditor::onSelectionChanged(Inkscape::Selection *sel)
                     button_up.set_sensitive(false);
                     button_down.set_sensitive(false);
                 }
-            } else if ( SP_IS_USE(item) ) {
-                // test whether linked object is supported by the CLONE_ORIGINAL LPE
-                SPItem *orig = SP_USE(item)->get_original();
-                if ( SP_IS_SHAPE(orig) ||
-                     SP_IS_TEXT(orig) )
-                {
-                    // Note that an SP_USE cannot have an LPE applied, so we only need to worry about the "add effect" case.
-                    set_sensitize_all(true);
-                    showText(_("Click add button to convert clone"));
-                    button_remove.set_sensitive(false);
-                    button_up.set_sensitive(false);
-                    button_down.set_sensitive(false);
+            } else {
+                SPUse *use = dynamic_cast<SPUse *>(item);
+                if ( use ) {
+                    // test whether linked object is supported by the CLONE_ORIGINAL LPE
+                    SPItem *orig = use->get_original();
+                    if ( dynamic_cast<SPShape *>(orig) ||
+                         dynamic_cast<SPText *>(orig) )
+                    {
+                        // Note that an SP_USE cannot have an LPE applied, so we only need to worry about the "add effect" case.
+                        set_sensitize_all(true);
+                        showText(_("Click add button to convert clone"));
+                        button_remove.set_sensitive(false);
+                        button_up.set_sensitive(false);
+                        button_down.set_sensitive(false);
+                    } else {
+                        showText(_("Select a path or shape"));
+                        set_sensitize_all(false);
+                    }
                 } else {
                     showText(_("Select a path or shape"));
                     set_sensitize_all(false);
                 }
-            } else {
-                showText(_("Select a path or shape"));
-                set_sensitize_all(false);
             }
         } else {
             showText(_("Only one item can be selected"));
@@ -396,7 +398,7 @@ LivePathEffectEditor::setDesktop(SPDesktop *desktop)
     lpe_list_locked = false;
     current_desktop = desktop;
     if (desktop) {
-        Inkscape::Selection *selection = sp_desktop_selection(desktop);
+        Inkscape::Selection *selection = desktop->getSelection();
         selection_changed_connection = selection->connectChanged(
             sigc::bind (sigc::ptr_fun(&lpeeditor_selection_changed), this ) );
         selection_modified_connection = selection->connectModified(
@@ -423,7 +425,7 @@ LivePathEffectEditor::onAdd()
     if ( sel && !sel->isEmpty() ) {
         SPItem *item = sel->singleItem();
         if (item) {
-            if ( SP_IS_LPE_ITEM(item) ) {
+            if ( dynamic_cast<SPLPEItem *>(item) ) {
                 // show effectlist dialog
                 using Inkscape::UI::Dialog::LivePathEffectAdd;
                 LivePathEffectAdd::show(current_desktop);
@@ -439,7 +441,7 @@ LivePathEffectEditor::onAdd()
                 }
 
                 // If item is a SPRect, convert it to path first:
-                if ( SP_IS_RECT(item) ) {
+                if ( dynamic_cast<SPRect *>(item) ) {
                     sp_selected_path_to_curves(sel, current_desktop, false);
                     item = sel->singleItem(); // get new item
                 }
@@ -451,41 +453,47 @@ LivePathEffectEditor::onAdd()
 
                 lpe_list_locked = false;
                 onSelectionChanged(sel);
-            }
-            else if ( SP_IS_USE(item) ) {
-                // item is a clone. do not show effectlist dialog.
-                // convert to path, apply CLONE_ORIGINAL LPE, link it to the cloned path
+            } else {
+                SPUse *use = dynamic_cast<SPUse *>(item);
+                if ( use ) {
+                    // item is a clone. do not show effectlist dialog.
+                    // convert to path, apply CLONE_ORIGINAL LPE, link it to the cloned path
 
-                // test whether linked object is supported by the CLONE_ORIGINAL LPE
-                SPItem *orig = SP_USE(item)->get_original();
-                if ( SP_IS_SHAPE(orig) ||
-                     SP_IS_TEXT(orig) )
-                {
-                    // select original
-                    sel->set(orig);
+                    // test whether linked object is supported by the CLONE_ORIGINAL LPE
+                    SPItem *orig = use->get_original();
+                    if ( dynamic_cast<SPShape *>(orig) ||
+                         dynamic_cast<SPText *>(orig) )
+                    {
+                        // select original
+                        sel->set(orig);
 
-                    // delete clone but remember its id and transform
-                    gchar *id = g_strdup(item->getRepr()->attribute("id"));
-                    gchar *transform = g_strdup(item->getRepr()->attribute("transform"));
-                    item->deleteObject(false);
-                    item = NULL;
+                        // delete clone but remember its id and transform
+                        gchar *id = g_strdup(item->getRepr()->attribute("id"));
+                        gchar *transform = g_strdup(item->getRepr()->attribute("transform"));
+                        item->deleteObject(false);
+                        item = NULL;
 
-                    // run sp_selection_clone_original_path_lpe 
-                    sp_selection_clone_original_path_lpe(current_desktop);
-                    SPItem *new_item = sel->singleItem();
-                    new_item->getRepr()->setAttribute("id", id);
-                    new_item->getRepr()->setAttribute("transform", transform);
-                    g_free(id);
-                    g_free(transform);
+                        // run sp_selection_clone_original_path_lpe 
+                        sp_selection_clone_original_path_lpe(current_desktop);
 
-                    /// \todo Add the LPE stack of the original path?
+                        SPItem *new_item = sel->singleItem();
+                        // Check that the cloning was successful. We don't want to change the ID of the original referenced path!
+                        if (new_item && (new_item != orig)) {
+                            new_item->getRepr()->setAttribute("id", id);
+                            new_item->getRepr()->setAttribute("transform", transform);
+                        }
+                        g_free(id);
+                        g_free(transform);
 
-                    SPDocument *doc = current_desktop->doc();
-                    DocumentUndo::done(doc, SP_VERB_DIALOG_LIVE_PATH_EFFECT,
-                                       _("Create and apply Clone original path effect"));
+                        /// \todo Add the LPE stack of the original path?
 
-                    lpe_list_locked = false;
-                    onSelectionChanged(sel);
+                        SPDocument *doc = current_desktop->doc();
+                        DocumentUndo::done(doc, SP_VERB_DIALOG_LIVE_PATH_EFFECT,
+                                           _("Create and apply Clone original path effect"));
+
+                        lpe_list_locked = false;
+                        onSelectionChanged(sel);
+                    }
                 }
             }
         }
@@ -498,13 +506,14 @@ LivePathEffectEditor::onRemove()
     Inkscape::Selection *sel = _getSelection();
     if ( sel && !sel->isEmpty() ) {
         SPItem *item = sel->singleItem();
-        if ( item && SP_IS_LPE_ITEM(item) ) {
-            SP_LPE_ITEM(item)->removeCurrentPathEffect(false);
+        SPLPEItem *lpeitem  = dynamic_cast<SPLPEItem *>(item);
+        if ( lpeitem ) {
+            lpeitem->removeCurrentPathEffect(false);
 
-            DocumentUndo::done( sp_desktop_document(current_desktop), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
+            DocumentUndo::done( current_desktop->getDocument(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
                                 _("Remove path effect") );
 
-            effect_list_reload(SP_LPE_ITEM(item));
+            effect_list_reload(lpeitem);
         }
     }
 
@@ -515,10 +524,11 @@ void LivePathEffectEditor::onUp()
     Inkscape::Selection *sel = _getSelection();
     if ( sel && !sel->isEmpty() ) {
         SPItem *item = sel->singleItem();
-        if ( SPLPEItem *lpeitem = SP_LPE_ITEM(item) ) {
+        SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
+        if ( lpeitem ) {
             lpeitem->upCurrentPathEffect();
 
-            DocumentUndo::done( sp_desktop_document(current_desktop), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
+            DocumentUndo::done( current_desktop->getDocument(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
                                 _("Move path effect up") );
 
             effect_list_reload(lpeitem);
@@ -531,10 +541,11 @@ void LivePathEffectEditor::onDown()
     Inkscape::Selection *sel = _getSelection();
     if ( sel && !sel->isEmpty() ) {
         SPItem *item = sel->singleItem();
-        if ( SPLPEItem *lpeitem = SP_LPE_ITEM(item) ) {
+        SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
+        if ( lpeitem ) {
             lpeitem->downCurrentPathEffect();
 
-            DocumentUndo::done( sp_desktop_document(current_desktop), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
+            DocumentUndo::done( current_desktop->getDocument(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
                                 _("Move path effect down") );
 
             effect_list_reload(lpeitem);
@@ -573,7 +584,7 @@ void LivePathEffectEditor::on_visibility_toggled( Glib::ustring const& str )
         /* FIXME: this explicit writing to SVG is wrong. The lpe_item should have a method to disable/enable an effect within its stack.
          * So one can call:  lpe_item->setActive(lpeobjref->lpeobject); */
         lpeobjref->lpeobject->get_lpe()->getRepr()->setAttribute("is_visible", newValue ? "true" : "false");
-        DocumentUndo::done( sp_desktop_document(current_desktop), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
+        DocumentUndo::done( current_desktop->getDocument(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
                             newValue ? _("Activate path effect") : _("Deactivate path effect"));
     }
 }

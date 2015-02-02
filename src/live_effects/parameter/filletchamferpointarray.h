@@ -52,6 +52,8 @@ public:
     std::vector<double> get_times(int index, std::vector<Geom::Path> subpaths, bool last);
     virtual void set_helper_size(int hs);
     virtual void set_use_distance(bool use_knot_distance);
+    virtual void set_chamfer_steps(int value_chamfer_steps);
+    virtual void set_document_unit(Glib::ustring const * value_document_unit);
     virtual void set_unit(const gchar *abbr);
     virtual void addCanvasIndicators(SPLPEItem const *lpeitem,
                                      std::vector<Geom::PathVector> &hp_vec);
@@ -85,8 +87,10 @@ private:
     SPKnotModeType knot_mode;
     guint32 knot_color;
     int helper_size;
+    int chamfer_steps;
     bool use_distance;
     const gchar *unit;
+    Glib::ustring const * documentUnit;
     Geom::PathVector hp;
 
     Geom::Piecewise<Geom::D2<Geom::SBasis> > last_pwd2;

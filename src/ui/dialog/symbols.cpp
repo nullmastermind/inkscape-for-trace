@@ -52,7 +52,7 @@
 
 #include "selection.h"
 #include "desktop.h"
-#include "desktop-handles.h"
+
 #include "document.h"
 #include "inkscape.h"
 #include "sp-root.h"
@@ -287,8 +287,8 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   ++row;
 
   /**********************************************************/
-  currentDesktop  = inkscape_active_desktop();
-  currentDocument = sp_desktop_document(currentDesktop);
+  currentDesktop  = SP_ACTIVE_DESKTOP;
+  currentDocument = currentDesktop->getDocument();
 
   previewDocument = symbols_preview_doc(); /* Template to render symbols in */
   previewDocument->ensureUpToDate(); /* Necessary? */
@@ -298,8 +298,7 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
 
   // This might need to be a global variable so setTargetDesktop can modify it
   SPDefs *defs = currentDocument->getDefs();
-  sigc::connection defsModifiedConn = (SP_OBJECT(defs))->connectModified(
-          sigc::mem_fun(*this, &SymbolsDialog::defsModified));
+  sigc::connection defsModifiedConn = defs->connectModified(sigc::mem_fun(*this, &SymbolsDialog::defsModified));
   instanceConns.push_back(defsModifiedConn);
 
   sigc::connection selectionChangedConn = currentDesktop->selection->connectChanged(
@@ -499,7 +498,7 @@ void SymbolsDialog::iconChanged() {
     }
 
     ClipboardManager *cm = ClipboardManager::get();
-    cm->copySymbol(symbol->getRepr(), style);
+    cm->copySymbol(symbol->getRepr(), style, symbolDocument == currentDocument);
   }
 }
 
@@ -586,13 +585,15 @@ void SymbolsDialog::get_symbols() {
 
   std::list<Glib::ustring> directories;
 
+// \TODO optimize this
+
   if( Inkscape::IO::file_test( INKSCAPE_SYMBOLSDIR, G_FILE_TEST_EXISTS ) &&
       Inkscape::IO::file_test( INKSCAPE_SYMBOLSDIR, G_FILE_TEST_IS_DIR ) ) {
     directories.push_back( INKSCAPE_SYMBOLSDIR );
   }
-  if( Inkscape::IO::file_test( profile_path("symbols"), G_FILE_TEST_EXISTS ) &&
-      Inkscape::IO::file_test( profile_path("symbols"), G_FILE_TEST_IS_DIR ) ) {
-    directories.push_back( profile_path("symbols") );
+  if( Inkscape::IO::file_test( Inkscape::Application::profile_path("symbols"), G_FILE_TEST_EXISTS ) &&
+      Inkscape::IO::file_test( Inkscape::Application::profile_path("symbols"), G_FILE_TEST_IS_DIR ) ) {
+    directories.push_back( Inkscape::Application::profile_path("symbols") );
   }
 
   std::list<Glib::ustring>::iterator it;
@@ -658,11 +659,11 @@ GSList* SymbolsDialog::symbols_in_doc_recursive (SPObject *r, GSList *l)
   g_return_val_if_fail(r != NULL, l);
 
   // Stop multiple counting of same symbol
-  if( SP_IS_USE(r) ) {
+  if ( dynamic_cast<SPUse *>(r) ) {
     return l;
   }
 
-  if( SP_IS_SYMBOL(r) ) {
+  if ( dynamic_cast<SPSymbol *>(r) ) {
     l = g_slist_prepend (l, r);
   }
 
@@ -684,7 +685,7 @@ GSList* SymbolsDialog::symbols_in_doc( SPDocument* symbolDocument ) {
 GSList* SymbolsDialog::use_in_doc_recursive (SPObject *r, GSList *l)
 { 
 
-  if( SP_IS_USE(r) ) {
+  if ( dynamic_cast<SPUse *>(r) ) {
     l = g_slist_prepend (l, r);
   }
 
@@ -709,8 +710,9 @@ gchar const* SymbolsDialog::style_from_use( gchar const* id, SPDocument* documen
   gchar const* style = 0;
   GSList* l = use_in_doc( document );
   for( ; l != NULL; l = l->next ) {
-    SPObject* use = SP_OBJECT(l->data);
-    if( SP_IS_USE( use ) ) {
+    SPObject *obj = reinterpret_cast<SPObject *>(l->data);
+    SPUse *use = dynamic_cast<SPUse *>(obj);
+    if ( use ) {
       gchar const *href = use->getRepr()->attribute("xlink:href");
       if( href ) {
         Glib::ustring href2(href);
@@ -730,8 +732,9 @@ void SymbolsDialog::add_symbols( SPDocument* symbolDocument ) {
 
   GSList* l = symbols_in_doc( symbolDocument );
   for( ; l != NULL; l = l->next ) {
-    SPObject* symbol = SP_OBJECT(l->data);
-    if (SP_IS_SYMBOL(symbol)) {
+    SPObject *obj = reinterpret_cast<SPObject *>(l->data);
+    SPSymbol *symbol = dynamic_cast<SPSymbol *>(obj);
+    if (symbol) {
       add_symbol( symbol );
     }
   }
@@ -820,7 +823,8 @@ SymbolsDialog::draw_symbol(SPObject *symbol)
   previewDocument->getRoot()->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
   previewDocument->ensureUpToDate();
 
-  SPItem *item = SP_ITEM(object_temp);
+  SPItem *item = dynamic_cast<SPItem *>(object_temp);
+  g_assert(item != NULL);
   unsigned psize = SYMBOL_ICON_SIZES[pack_size];
 
   Glib::RefPtr<Gdk::Pixbuf> pixbuf(NULL);

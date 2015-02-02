@@ -75,8 +75,6 @@
 #include <glibmm/i18n.h>
 #include "ui/tools/pen-tool.h"
 #include "ui/tools-switch.h"
-#include "message-stack.h"
-#include "desktop.h"
 #include "knotholder.h"
 #include "sp-lpe-item.h"
 #include "live_effects/lpeobject.h"
@@ -370,6 +368,7 @@ Effect::Effect(LivePathEffectObject *lpeobject)
 {
     registerParameter( dynamic_cast<Parameter *>(&is_visible) );
     is_visible.widget_is_visible = false;
+    current_zoom = 0.0;
 }
 
 Effect::~Effect()
@@ -398,6 +397,38 @@ Effect::doOnApply (SPLPEItem const*/*lpeitem*/)
 {
 }
 
+void
+Effect::setSelectedNodePoints(std::vector<Geom::Point> sNP)
+{
+    selectedNodesPoints = sNP;
+}
+
+void
+Effect::setCurrentZoom(double cZ)
+{
+    current_zoom = cZ;
+}
+
+bool
+Effect::isNodePointSelected(Geom::Point const &nodePoint) const
+{
+    if (selectedNodesPoints.size() > 0) {
+        using Geom::X;
+        using Geom::Y; 
+        for (std::vector<Geom::Point>::const_iterator i = selectedNodesPoints.begin();
+                i != selectedNodesPoints.end(); ++i) {
+            Geom::Point p = *i;
+            Geom::Affine transformCoordinate = sp_lpe_item->i2dt_affine();
+            Geom::Point p2(nodePoint[X],nodePoint[Y]);
+            p2 *= transformCoordinate;
+            if (Geom::are_near(p, p2, 0.01)) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 /**
  * Is performed each time before the effect is updated.
  */
@@ -419,6 +450,7 @@ void Effect::doOnRemove (SPLPEItem const* /*lpeitem*/)
 void Effect::doOnApply_impl(SPLPEItem const* lpeitem)
 {
     sp_lpe_item = const_cast<SPLPEItem *>(lpeitem);
+    defaultUnit = &sp_lpe_item->document->getDisplayUnit()->abbr;
     /*sp_curve = SP_SHAPE(sp_lpe_item)->getCurve();
     pathvector_before_effect = sp_curve->get_pathvector();*/
     doOnApply(lpeitem);
@@ -427,6 +459,7 @@ void Effect::doOnApply_impl(SPLPEItem const* lpeitem)
 void Effect::doBeforeEffect_impl(SPLPEItem const* lpeitem)
 {
     sp_lpe_item = const_cast<SPLPEItem *>(lpeitem);
+    defaultUnit = &sp_lpe_item->document->getDisplayUnit()->abbr;
     //printf("(SPLPEITEM*) %p\n", sp_lpe_item);
     sp_curve = SP_SHAPE(sp_lpe_item)->getCurve();
     pathvector_before_effect = sp_curve->get_pathvector();
@@ -443,7 +476,7 @@ void
 Effect::doAcceptPathPreparations(SPLPEItem *lpeitem)
 {
     // switch to pen context
-    SPDesktop *desktop = inkscape_active_desktop(); // TODO: Is there a better method to find the item's desktop?
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP; // TODO: Is there a better method to find the item's desktop?
     if (!tools_isactive(desktop, TOOLS_FREEHAND_PEN)) {
         tools_switch(desktop, TOOLS_FREEHAND_PEN);
     }

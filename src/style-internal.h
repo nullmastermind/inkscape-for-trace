@@ -36,6 +36,12 @@ static const unsigned SP_STYLE_FLAG_ALWAYS (1 << 2);
 static const unsigned SP_STYLE_FLAG_IFSET  (1 << 0);
 static const unsigned SP_STYLE_FLAG_IFDIFF (1 << 1);
 
+enum SPStyleSrc {
+    SP_STYLE_SRC_UNSET,
+    SP_STYLE_SRC_STYLE_PROP,
+    SP_STYLE_SRC_STYLE_SHEET,
+    SP_STYLE_SRC_ATTRIBUTE
+};
 
 /* General comments:
  *
@@ -113,7 +119,7 @@ public:
           inherits(inherits),
           set(false),
           inherit(false),
-          style_att(false),
+          style_src(SP_STYLE_SRC_UNSET),
           style(NULL)
     {}
 
@@ -150,7 +156,7 @@ public:
         inherits    = rhs.inherits;
         set         = rhs.set;
         inherit     = rhs.inherit;
-        style_att   = rhs.style_att;
+        style_src   = rhs.style_src;
         style       = rhs.style;
         return *this;
     }
@@ -170,7 +176,7 @@ public:
     unsigned inherits : 1;    // Property inherits by default from parent.
     unsigned set : 1;         // Property has been explicitly set (vs. inherited).
     unsigned inherit : 1;     // Property value set to 'inherit'.
-    unsigned style_att : 2;   // Source (attribute, style attribute, style-sheet). NOT USED YET FIX ME
+    SPStyleSrc style_src : 2; // Source (attribute, style attribute, style-sheet). NOT USED YET FIX ME
 
   // To do: make private after g_asserts removed
 public:
@@ -622,6 +628,15 @@ public:
 #define SP_STYLE_FILL_SERVER(s) ((const_cast<SPStyle *> (s))->getFillPaintServer())
 #define SP_STYLE_STROKE_SERVER(s) ((const_cast<SPStyle *> (s))->getStrokePaintServer())
 
+// SVG 2
+enum SPPaintOrigin {
+    SP_CSS_PAINT_ORIGIN_NORMAL,
+    SP_CSS_PAINT_ORIGIN_CURRENT_COLOR,
+    SP_CSS_PAINT_ORIGIN_CONTEXT_FILL,
+    SP_CSS_PAINT_ORIGIN_CONTEXT_STROKE
+};
+
+
 /// Paint type internal to SPStyle.
 class SPIPaint : public SPIBase
 {
@@ -629,7 +644,7 @@ class SPIPaint : public SPIBase
 public:
     SPIPaint()
         : SPIBase( "anonymous_paint" ),
-          currentcolor(false),
+          paintOrigin( SP_CSS_PAINT_ORIGIN_NORMAL ),
           colorSet(false),
           noneSet(false) {
         value.href = NULL;
@@ -638,7 +653,6 @@ public:
 
     SPIPaint( Glib::ustring const &name )
         : SPIBase( name ),
-          currentcolor(false),
           colorSet(false),
           noneSet(false) {
         value.href = NULL;
@@ -657,7 +671,7 @@ public:
 
     SPIPaint& operator=(const SPIPaint& rhs) {
         SPIBase::operator=(rhs);
-        currentcolor    = rhs.currentcolor;
+        paintOrigin     = rhs.paintOrigin;
         colorSet        = rhs.colorSet;
         noneSet         = rhs.noneSet;
         value.color     = rhs.value.color;
@@ -671,7 +685,7 @@ public:
     }
 
     bool isSameType( SPIPaint const & other ) const {
-        return (isPaintserver() == other.isPaintserver()) && (colorSet == other.colorSet) && (currentcolor == other.currentcolor);
+        return (isPaintserver() == other.isPaintserver()) && (colorSet == other.colorSet) && (paintOrigin == other.paintOrigin);
     }
 
     bool isNoneSet() const {
@@ -679,7 +693,7 @@ public:
     }
 
     bool isNone() const {
-        return !currentcolor && !colorSet && !isPaintserver();
+        return (paintOrigin == SP_CSS_PAINT_ORIGIN_NORMAL) && !colorSet && !isPaintserver();
     } // TODO refine
 
     bool isColor() const {
@@ -706,7 +720,7 @@ public:
 
   // To do: make private
 public:
-    bool currentcolor : 1;
+    SPPaintOrigin paintOrigin : 2;
     bool colorSet : 1;
     bool noneSet : 1;
     struct {

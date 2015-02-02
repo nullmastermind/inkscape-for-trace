@@ -41,7 +41,7 @@ extern "C" {
 #include "document.h"
 #include "desktop.h"
 #include "desktop-style.h"
-#include "desktop-handles.h"
+
 #include "document-undo.h"
 #include "selection.h"
 #include "style.h"
@@ -325,18 +325,18 @@ void TextEdit::onReadSelection ( gboolean dostyle, gboolean /*docontent*/ )
 
     if (dostyle) {
         // create temporary style
-        SPStyle *query = sp_style_new (SP_ACTIVE_DOCUMENT);
+        SPStyle query(SP_ACTIVE_DOCUMENT);
         // query style from desktop into it. This returns a result flag and fills query with the style of subselection, if any, or selection
-        //int result_fontspec = sp_desktop_query_style (SP_ACTIVE_DESKTOP, query, QUERY_STYLE_PROPERTY_FONT_SPECIFICATION);
-        int result_family = sp_desktop_query_style (SP_ACTIVE_DESKTOP, query, QUERY_STYLE_PROPERTY_FONTFAMILY);
-        int result_style = sp_desktop_query_style (SP_ACTIVE_DESKTOP, query, QUERY_STYLE_PROPERTY_FONTSTYLE);
-        int result_numbers = sp_desktop_query_style (SP_ACTIVE_DESKTOP, query, QUERY_STYLE_PROPERTY_FONTNUMBERS);
+        //int result_fontspec = sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_FONT_SPECIFICATION);
+        int result_family = sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_FONTFAMILY);
+        int result_style = sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_FONTSTYLE);
+        int result_numbers = sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_FONTNUMBERS);
 
         // If querying returned nothing, read the style from the text tool prefs (default style for new texts)
         // (Ok to not get a font specification - must just rely on the family and style in that case)
         if (result_family == QUERY_STYLE_NOTHING || result_style == QUERY_STYLE_NOTHING
                 || result_numbers == QUERY_STYLE_NOTHING) {
-            sp_style_read_from_prefs(query, "/tools/text");
+            query.readFromPrefs("/tools/text");
         }
 
         // FIXME: process result_family/style == QUERY_STYLE_MULTIPLE_DIFFERENT by showing "Many" in the lists
@@ -344,47 +344,46 @@ void TextEdit::onReadSelection ( gboolean dostyle, gboolean /*docontent*/ )
         Inkscape::FontLister* fontlister = Inkscape::FontLister::get_instance();
 
         // This is normally done for us by text-toolbar but only when we are in text editing context
-        fontlister->update_font_list(sp_desktop_document(this->desktop));
+        fontlister->update_font_list(this->desktop->getDocument());
         fontlister->selection_update();
 
         Glib::ustring fontspec = fontlister->get_fontspec();
 
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         int unit = prefs->getInt("/options/font/unitType", SP_CSS_UNIT_PT);
-        double size = sp_style_css_size_px_to_units(query->font_size.computed, unit); 
+        double size = sp_style_css_size_px_to_units(query.font_size.computed, unit); 
         sp_font_selector_set_fontspec(fsel, fontspec, size );
 
         setPreviewText (fontspec, phrase);
 
-        if (query->text_anchor.computed == SP_CSS_TEXT_ANCHOR_START) {
-            if (query->text_align.computed == SP_CSS_TEXT_ALIGN_JUSTIFY) {
+        if (query.text_anchor.computed == SP_CSS_TEXT_ANCHOR_START) {
+            if (query.text_align.computed == SP_CSS_TEXT_ALIGN_JUSTIFY) {
                 align_justify.set_active();
             } else {
                 align_left.set_active();
             }
-        } else if (query->text_anchor.computed == SP_CSS_TEXT_ANCHOR_MIDDLE) {
+        } else if (query.text_anchor.computed == SP_CSS_TEXT_ANCHOR_MIDDLE) {
             align_center.set_active();
         } else {
             align_right.set_active();
         }
 
-        if (query->writing_mode.computed == SP_CSS_WRITING_MODE_LR_TB) {
+        if (query.writing_mode.computed == SP_CSS_WRITING_MODE_LR_TB) {
             text_horizontal.set_active();
         } else {
             text_vertical.set_active();
         }
 
         double height;
-        if (query->line_height.normal) height = Inkscape::Text::Layout::LINE_HEIGHT_NORMAL;
-        else if (query->line_height.unit == SP_CSS_UNIT_PERCENT)
-            height = query->line_height.value;
-        else height = query->line_height.computed;
+        if (query.line_height.normal) height = Inkscape::Text::Layout::LINE_HEIGHT_NORMAL;
+        else if (query.line_height.unit == SP_CSS_UNIT_PERCENT)
+            height = query.line_height.value;
+        else height = query.line_height.computed;
         gchar *sstr = g_strdup_printf ("%d%%", (int) floor(height * 100 + 0.5));
 
         gtk_entry_set_text ((GtkEntry *) gtk_bin_get_child ((GtkBin *) spacing_combo), sstr);
         g_free(sstr);
 
-        sp_style_unref(query);
     }
     blocked = false;
 }
@@ -419,7 +418,7 @@ SPItem *TextEdit::getSelectedTextItem (void)
     if (!SP_ACTIVE_DESKTOP)
         return NULL;
 
-    for (const GSList *item = sp_desktop_selection(SP_ACTIVE_DESKTOP)->itemList();
+    for (const GSList *item = SP_ACTIVE_DESKTOP->getSelection()->itemList();
          item != NULL;
          item = item->next)
     {
@@ -438,7 +437,7 @@ unsigned TextEdit::getSelectedTextCount (void)
 
     unsigned int items = 0;
 
-    for (const GSList *item = sp_desktop_selection(SP_ACTIVE_DESKTOP)->itemList();
+    for (const GSList *item = SP_ACTIVE_DESKTOP->getSelection()->itemList();
          item != NULL;
          item = item->next)
     {
@@ -543,7 +542,7 @@ void TextEdit::onApply()
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 
     unsigned items = 0;
-    const GSList *item_list = sp_desktop_selection(desktop)->itemList();
+    const GSList *item_list = desktop->getSelection()->itemList();
     SPCSSAttr *css = fillTextStyle ();
     sp_desktop_set_style(desktop, css, true);
 
@@ -569,7 +568,7 @@ void TextEdit::onApply()
 
     } else if (items == 1) {
         // exactly one text object; now set its text, too
-        SPItem *item = sp_desktop_selection(SP_ACTIVE_DESKTOP)->singleItem();
+        SPItem *item = SP_ACTIVE_DESKTOP->getSelection()->singleItem();
         if (SP_IS_TEXT (item) || SP_IS_FLOWTEXT(item)) {
             updateObjectText (item);
         }
@@ -583,7 +582,7 @@ void TextEdit::onApply()
     }
 
     // complete the transaction
-    DocumentUndo::done(sp_desktop_document(SP_ACTIVE_DESKTOP), SP_VERB_CONTEXT_TEXT,
+    DocumentUndo::done(SP_ACTIVE_DESKTOP->getDocument(), SP_VERB_CONTEXT_TEXT,
                        _("Set text style"));
     apply_button.set_sensitive ( false );
 
@@ -658,7 +657,7 @@ void TextEdit::onStartOffsetChange(GtkTextBuffer * /*text_buffer*/, TextEdit *se
         const gchar *sstr = gtk_combo_box_text_get_active_text(reinterpret_cast<GtkComboBoxText *>(self->startOffset));
         tp->setAttribute("startOffset", sstr);
 
-        DocumentUndo::maybeDone(sp_desktop_document(SP_ACTIVE_DESKTOP), "startOffset", SP_VERB_CONTEXT_TEXT, _("Set text style"));
+        DocumentUndo::maybeDone(SP_ACTIVE_DESKTOP->getDocument(), "startOffset", SP_VERB_CONTEXT_TEXT, _("Set text style"));
     }
 }
 

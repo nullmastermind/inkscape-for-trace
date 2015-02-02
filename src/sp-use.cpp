@@ -35,6 +35,7 @@
 #include "preferences.h"
 #include "style.h"
 #include "sp-symbol.h"
+#include "sp-root.h"
 #include "sp-use.h"
 #include "sp-use-reference.h"
 #include "sp-shape.h"
@@ -50,10 +51,17 @@ namespace {
 }
 
 SPUse::SPUse()
-    : SPItem()
-    , child(NULL)
-    , href(NULL)
-    , ref(new SPUseReference(this))
+    : SPItem(),
+      child(NULL),
+      x(),
+      y(),
+      width(),
+      height(),
+      href(NULL),
+      ref(new SPUseReference(this)),
+      _delete_connection(),
+      _changed_connection(),
+      _transformed_connection()
 {
     this->x.unset();
     this->y.unset();
@@ -87,7 +95,7 @@ void SPUse::build(SPDocument *document, Inkscape::XML::Node *repr) {
 
     // We don't need to create child here:
     // reading xlink:href will attach ref, and that will cause the changed signal to be emitted,
-    // which will call sp_use_href_changed, and that will take care of the child
+    // which will call SPUse::href_changed, and that will take care of the child
 }
 
 void SPUse::release() {
@@ -138,7 +146,7 @@ void SPUse::set(unsigned int key, const gchar* value) {
                 this->href = NULL;
 
                 if (value) {
-                    // First, set the href field, because sp_use_href_changed will need it.
+                    // First, set the href field, because SPUse::href_changed will need it.
                     this->href = g_strdup(value);
 
                     // Now do the attaching, which emits the changed signal.
@@ -179,14 +187,23 @@ Inkscape::XML::Node* SPUse::write(Inkscape::XML::Document *xml_doc, Inkscape::XM
         g_free(uri_string);
     }
 
-    if (SP_IS_SHAPE(this->child)) {
-        SP_SHAPE(this->child)->set_shape(); // evaluate SPCurve of child
-    } else if (SP_IS_TEXT(this->child)) {
-        SP_TEXT(this->child)->rebuildLayout(); // refresh Layout, LP Bug 1339305
-    } else if (SP_IS_FLOWTEXT(this->child)) {
-        if (SP_IS_FLOWREGION(SP_FLOWTEXT(this->child)->firstChild()))
-            SP_FLOWREGION(SP_FLOWTEXT(this->child)->firstChild())->UpdateComputed();
-        SP_FLOWTEXT(this->child)->rebuildLayout();
+    SPShape *shape = dynamic_cast<SPShape *>(child);
+    if (shape) {
+        shape->set_shape(); // evaluate SPCurve of child
+    } else {
+        SPText *text = dynamic_cast<SPText *>(child);
+        if (text) {
+            text->rebuildLayout(); // refresh Layout, LP Bug 1339305
+        } else {
+            SPFlowtext *flowtext = dynamic_cast<SPFlowtext *>(child);
+            if (flowtext) {
+                SPFlowregion *flowregion = dynamic_cast<SPFlowregion *>(flowtext->firstChild());
+                if (flowregion) {
+                    flowregion->UpdateComputed();
+                }
+                flowtext->rebuildLayout();
+            }
+        }
     }
 
     return repr;
@@ -223,18 +240,20 @@ void SPUse::print(SPPrintContext* ctx) {
 }
 
 const char* SPUse::displayName() const {
-    if (this->child && SP_IS_SYMBOL( this->child )) {
+    if (dynamic_cast<SPSymbol *>(child)) {
         return _("Symbol");
+    } else {
+        return _("Clone");
     }
-
-    return _("Clone");
 }
 
 gchar* SPUse::description() const {
-    if (this->child) {
-        if( SP_IS_SYMBOL( this->child ) ) {
-            if (this->child->title()) {
-                return g_strdup_printf(_("called %s"), Glib::Markup::escape_text(Glib::ustring( g_dpgettext2(NULL, "Symbol", this->child->title()))).c_str());
+    if (child) {
+        if ( dynamic_cast<SPSymbol *>(child) ) {
+            if (child->title()) {
+                return g_strdup_printf(_("called %s"), Glib::Markup::escape_text(Glib::ustring( g_dpgettext2(NULL, "Symbol", child->title()))).c_str());
+            } else if (child->getAttribute("id")) {
+                return g_strdup_printf(_("called %s"), Glib::Markup::escape_text(Glib::ustring( g_dpgettext2(NULL, "Symbol", child->getAttribute("id")))).c_str());
             } else {
                 return g_strdup_printf(_("called %s"), _("Unnamed Symbol"));
             }
@@ -264,10 +283,13 @@ gchar* SPUse::description() const {
 }
 
 Inkscape::DrawingItem* SPUse::show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) {
+
+    // std::cout << "SPUse::show: " << (getId()?getId():"null") << std::endl;
     Inkscape::DrawingGroup *ai = new Inkscape::DrawingGroup(drawing);
     ai->setPickChildren(false);
-    ai->setStyle(this->style);
-
+    this->context_style = this->style;
+    ai->setStyle(this->style, this->context_style);
+    
     if (this->child) {
         Inkscape::DrawingItem *ac = this->child->invoke_show(drawing, key, flags);
 
@@ -302,12 +324,10 @@ void SPUse::hide(unsigned int key) {
 SPItem *SPUse::root() {
     SPItem *orig = this->child;
 
-    while (orig && SP_IS_USE(orig)) {
-        orig = SP_USE(orig)->child;
-    }
-
-    if (!orig) {
-        return NULL;
+    SPUse *use = dynamic_cast<SPUse *>(orig);
+    while (orig && use) {
+        orig = use->child;
+        use = dynamic_cast<SPUse *>(orig);
     }
 
     return orig;
@@ -325,13 +345,16 @@ int SPUse::cloneDepth() const {
     unsigned depth = 1;
     SPItem *orig = this->child;
 
-    while (orig && SP_IS_USE(orig)) {
+    while (orig && dynamic_cast<SPUse *>(orig)) {
         ++depth;
-        orig = SP_USE(orig)->child;
+        orig = dynamic_cast<SPUse *>(orig)->child;
     }
 
-    if (!orig) return -1;
-    return depth;
+    if (!orig) {
+        return -1;
+    } else {
+        return depth;
+    }
 }
 
 /**
@@ -345,9 +368,9 @@ Geom::Affine SPUse::get_root_transform() {
     GSList *chain = NULL;
     chain = g_slist_prepend(chain, this);
 
-    while (SP_IS_USE(orig)) {
+    while (dynamic_cast<SPUse *>(orig)) {
         chain = g_slist_prepend(chain, orig);
-        orig = SP_USE(orig)->child;
+        orig = dynamic_cast<SPUse *>(orig)->child;
     }
 
     chain = g_slist_prepend(chain, orig);
@@ -357,14 +380,13 @@ Geom::Affine SPUse::get_root_transform() {
     Geom::Affine t(Geom::identity());
 
     for (GSList *i = chain; i != NULL; i = i->next) {
-        SPItem *i_tem = SP_ITEM(i->data);
+        SPItem *i_tem = reinterpret_cast<SPItem *>(i->data);
 
         // "An additional transformation translate(x,y) is appended to the end (i.e.,
         // right-side) of the transform attribute on the generated 'g', where x and y
         // represent the values of the x and y attributes on the 'use' element." - http://www.w3.org/TR/SVG11/struct.html#UseElement
-        if (SP_IS_USE(i_tem)) {
-            SPUse *i_use = SP_USE(i_tem);
-
+        SPUse *i_use = dynamic_cast<SPUse *>(i_tem);
+        if (i_use) {
             if ((i_use->x._set && i_use->x.computed != 0) || (i_use->y._set && i_use->y.computed != 0)) {
                 t = t * Geom::Translate(i_use->x._set ? i_use->x.computed : 0, i_use->y._set ? i_use->y.computed : 0);
             }
@@ -405,7 +427,7 @@ void SPUse::move_compensate(Geom::Affine const *mp) {
     }
 
     // never compensate uses which are used in flowtext
-    if (this->parent && SP_IS_FLOWREGION(this->parent)) {
+    if (parent && dynamic_cast<SPFlowregion *>(parent)) {
         return;
     }
 
@@ -462,8 +484,9 @@ void SPUse::href_changed() {
 
             SPObject* obj = SPFactory::instance().createObject(NodeTraits::get_type_string(*childrepr));
 
-            if (SP_IS_ITEM(obj)) {
-                this->child = SP_ITEM(obj);
+            SPItem *item = dynamic_cast<SPItem *>(obj);
+            if (item) {
+                child = item;
 
                 this->attach(this->child, this->lastChild());
                 sp_object_unref(this->child, this);
@@ -495,8 +518,8 @@ void SPUse::href_changed() {
 
 void SPUse::delete_self() {
     // always delete uses which are used in flowtext
-    if (this->parent && SP_IS_FLOWREGION(this->parent)) {
-        this->deleteObject();
+    if (parent && dynamic_cast<SPFlowregion *>(parent)) {
+        deleteObject();
         return;
     }
 
@@ -512,6 +535,7 @@ void SPUse::delete_self() {
 }
 
 void SPUse::update(SPCtx *ctx, unsigned flags) {
+    // std::cout << "SPUse::update: " << (getId()?getId():"null") << std::endl;
     SPItemCtx *ictx = (SPItemCtx *) ctx;
     SPItemCtx cctx = *ictx;
 
@@ -539,17 +563,22 @@ void SPUse::update(SPCtx *ctx, unsigned flags) {
         this->height.computed = this->height.value * ictx->viewport.height();
     }
 
-    cctx.viewport = Geom::Rect::from_xywh(0, 0, this->width.computed, this->height.computed);
-    cctx.i2vp = Geom::identity();
     childflags &= ~SP_OBJECT_USER_MODIFIED_FLAG_B;
 
     if (this->child) {
         sp_object_ref(this->child);
 
+        // viewport is only changed if referencing a symbol or svg element
+        if( SP_IS_SYMBOL(this->child) || SP_IS_ROOT(this->child) ) {
+            cctx.viewport = Geom::Rect::from_xywh(0, 0, this->width.computed, this->height.computed);
+            cctx.i2vp = Geom::identity();
+        }
+        
         if (childflags || (this->child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
-            SPItem const &chi = *SP_ITEM(this->child);
-            cctx.i2doc = chi.transform * ictx->i2doc;
-            cctx.i2vp = chi.transform * ictx->i2vp;
+            SPItem const *chi = dynamic_cast<SPItem const *>(child);
+            g_assert(chi != NULL);
+            cctx.i2doc = chi->transform * ictx->i2doc;
+            cctx.i2vp = chi->transform * ictx->i2vp;
             this->child->updateDisplay((SPCtx *)&cctx, childflags);
         }
 
@@ -561,7 +590,8 @@ void SPUse::update(SPCtx *ctx, unsigned flags) {
     if (flags & SP_OBJECT_STYLE_MODIFIED_FLAG) {
         for (SPItemView *v = this->display; v != NULL; v = v->next) {
             Inkscape::DrawingGroup *g = dynamic_cast<Inkscape::DrawingGroup *>(v->arenaitem);
-            g->setStyle(this->style);
+            this->context_style = this->style;
+            g->setStyle(this->style, this->context_style);
         }
     }
 
@@ -574,6 +604,7 @@ void SPUse::update(SPCtx *ctx, unsigned flags) {
 }
 
 void SPUse::modified(unsigned int flags) {
+    // std::cout << "SPUse::modified: " << (getId()?getId():"null") << std::endl;
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
     }
@@ -583,7 +614,8 @@ void SPUse::modified(unsigned int flags) {
     if (flags & SP_OBJECT_STYLE_MODIFIED_FLAG) {
       for (SPItemView *v = this->display; v != NULL; v = v->next) {
         Inkscape::DrawingGroup *g = dynamic_cast<Inkscape::DrawingGroup *>(v->arenaitem);
-        g->setStyle(this->style);
+        this->context_style = this->style;
+        g->setStyle(this->style, this->context_style);
       }
     }
 
@@ -621,7 +653,7 @@ SPItem *SPUse::unlink() {
 
     Inkscape::XML::Node *copy = NULL;
 
-    if (SP_IS_SYMBOL(orig)) { // make a group, copy children
+    if (dynamic_cast<SPSymbol *>(orig)) { // make a group, copy children
         copy = xml_doc->createElement("svg:g");
 
         for (Inkscape::XML::Node *child = orig->getRepr()->firstChild() ; child != NULL; child = child->next()) {
@@ -639,11 +671,8 @@ SPItem *SPUse::unlink() {
     SPObject *unlinked = document->getObjectByRepr(copy);
 
     // Merge style from the use.
-    SPStyle *unli_sty = unlinked->style;
-    SPStyle const *use_sty = this->style;
-    sp_style_merge_from_dying_parent(unli_sty, use_sty);
-    sp_style_merge_from_parent(unli_sty, unlinked->parent->style);
-
+    unlinked->style->merge( this->style );
+    unlinked->style->cascade( unlinked->parent->style );
     unlinked->updateRepr();
 
     // Hold onto our SPObject and repr for now.
@@ -669,7 +698,8 @@ SPItem *SPUse::unlink() {
     this->setSuccessor(unlinked);
     sp_object_unref(this, NULL);
 
-    SPItem *item = SP_ITEM(unlinked);
+    SPItem *item = dynamic_cast<SPItem *>(unlinked);
+    g_assert(item != NULL);
 
     // Set the accummulated transform.
     {

@@ -16,6 +16,7 @@
 
 #include "live_effects/effect.h"
 #include "live_effects/parameter/point.h"
+#include "live_effects/lpegroupbbox.h"
 
 namespace Inkscape {
 namespace LivePathEffect {
@@ -26,7 +27,7 @@ namespace CR {
   class KnotHolderEntityRotationAngle;
 }
 
-class LPECopyRotate : public Effect {
+class LPECopyRotate : public Effect, GroupBBoxEffect {
 public:
     LPECopyRotate(LivePathEffectObject *lpeobject);
     virtual ~LPECopyRotate();
@@ -34,6 +35,10 @@ public:
     virtual void doOnApply (SPLPEItem const* lpeitem);
 
     virtual Geom::Piecewise<Geom::D2<Geom::SBasis> > doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in);
+
+    virtual void doBeforeEffect (SPLPEItem const* lpeitem);
+
+    virtual void resetDefaults(SPItem const* item);
 
     /* the knotholder entity classes must be declared friends */
     friend class CR::KnotHolderEntityStartingAngle;
@@ -44,11 +49,11 @@ protected:
     virtual void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec);
 
 private:
+    PointParam origin;
     ScalarParam starting_angle;
     ScalarParam rotation_angle;
     ScalarParam num_copies;
-
-    PointParam origin;
+    BoolParam copiesTo360;
 
     Geom::Point A;
     Geom::Point B;

@@ -105,10 +105,10 @@ if test "$GCC" = "yes"; then
   fi
 
   # Uncomment for SVG2 stuff
-  # CPPFLAGS="-DWITH_MESH -DWITH_CSSBLEND -DWITH_CSSCOMPOSITE -DWITH_SVG2 $CPPFLAGS"
+  CPPFLAGS="-DWITH_MESH -DWITH_CSSBLEND -DWITH_CSSCOMPOSITE -DWITH_SVG2 $CPPFLAGS"
 
   # Uncomment for LPE Tool and All LPEs
-  # CPPFLAGS="-DWITH_LPETOOL -DLPE_ENABLE_TEST_EFFECTS $CPPFLAGS"
+  CPPFLAGS="-DWITH_LPETOOL -DLPE_ENABLE_TEST_EFFECTS $CPPFLAGS"
 
   ####
   # C-specific flags...
@@ -495,6 +495,11 @@ fi
 PKG_CHECK_MODULES(POPPLER_EVEN_NEWER_COLOR_SPACE_API, poppler >= 0.26.0, popplernewercolorspaceapi=yes, popplernewercolorspaceapi=no)
 if test "x$popplernewercolorspaceapi" = "xyes"; then
 	AC_DEFINE(POPPLER_EVEN_NEWER_COLOR_SPACE_API, 1, [Use even newer color space API from Poppler >= 0.26.0])
+fi
+
+PKG_CHECK_MODULES(POPPLER_EVEN_NEWER_NEW_COLOR_SPACE_API, poppler >= 0.29.0, popplernewernewcolorspaceapi=yes, popplernewernewcolorspaceapi=no)
+if test "x$popplernewernewcolorspaceapi" = "xyes"; then
+	AC_DEFINE(POPPLER_EVEN_NEWER_NEW_COLOR_SPACE_API, 1, [Use even newer new color space API from Poppler >= 0.29.0])
 fi
 
 # Poppler's b604a008 commit changes this

@@ -23,7 +23,7 @@
 #include <glibmm/i18n.h>
 #include "ui/tool/path-manipulator.h"
 #include "desktop.h"
-#include "desktop-handles.h"
+
 #include "display/sp-canvas.h"
 #include "display/sp-canvas-util.h"
 #include "display/curve.h"
@@ -59,7 +59,7 @@ enum PathChange {
 const double handleCubicGap = 0.01;
 const double noPower = 0.0;
 const double defaultStartPower = 0.3334;
-const double defaultEndPower = 0.6667;
+
 
 /**
  * Notifies the path manipulator when something changes the path being edited
@@ -972,6 +972,10 @@ NodeList::iterator PathManipulator::subdivideSegment(NodeList::iterator first, d
     NodeList &list = NodeList::get(first);
     NodeList::iterator second = first.next();
     if (!second) throw std::invalid_argument("Subdivide after last node in open path");
+    if (first->type() == NODE_SYMMETRIC)
+        first->setType(NODE_SMOOTH, false);
+    if (second->type() == NODE_SYMMETRIC)
+        second->setType(NODE_SMOOTH, false);
 
     // We need to insert the segment after 'first'. We can't simply use 'second'
     // as the point of insertion, because when 'first' is the last node of closed path,
@@ -1000,7 +1004,6 @@ NodeList::iterator PathManipulator::subdivideSegment(NodeList::iterator first, d
             n->front()->setPosition(seg2[1]);
             n->setType(NODE_SMOOTH, false);
         } else {
-            const double handleCubicGap = 0.01;
             Geom::D2< Geom::SBasis > SBasisInsideNodes;
             SPCurve *lineInsideNodes = new SPCurve();
             if(second->back()->isDegenerate()){
@@ -1251,7 +1254,6 @@ double PathManipulator::BSplineHandlePosition(Handle *h, Handle *h2){
         h = h2;
     }
     double pos = noPower;
-    const double handleCubicGap = 0.01;
     Node *n = h->parent();
     Node * nextNode = NULL;
     nextNode = n->nodeToward(h);
@@ -1279,7 +1281,6 @@ Geom::Point PathManipulator::BSplineHandleReposition(Handle *h, Handle *h2){
 Geom::Point PathManipulator::BSplineHandleReposition(Handle *h,double pos){
     using Geom::X;
     using Geom::Y;
-    const double handleCubicGap = 0.01;
     Geom::Point ret = h->position();
     Node *n = h->parent();
     Geom::D2< Geom::SBasis > SBasisInsideNodes;
@@ -1620,13 +1621,13 @@ void PathManipulator::_removeNodesFromSelection()
 void PathManipulator::_commit(Glib::ustring const &annotation)
 {
     writeXML();
-    DocumentUndo::done(sp_desktop_document(_desktop), SP_VERB_CONTEXT_NODE, annotation.data());
+    DocumentUndo::done(_desktop->getDocument(), SP_VERB_CONTEXT_NODE, annotation.data());
 }
 
 void PathManipulator::_commit(Glib::ustring const &annotation, gchar const *key)
 {
     writeXML();
-    DocumentUndo::maybeDone(sp_desktop_document(_desktop), key, SP_VERB_CONTEXT_NODE,
+    DocumentUndo::maybeDone(_desktop->getDocument(), key, SP_VERB_CONTEXT_NODE,
                             annotation.data());
 }
 
