@@ -10,14 +10,9 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
-
 #include <gtkmm.h>
 
 #include "live_effects/lpe-transform_2pts.h"
-#include <glibmm/i18n.h>
 #include "display/curve.h"
 #include <2geom/transforms.h>
 #include <2geom/path.h>
@@ -25,6 +20,8 @@
 #include "ui/tools-switch.h"
 #include "ui/icon-names.h"
 #include "inkscape.h"
+
+#include <glibmm/i18n.h>
 
 namespace Inkscape {
 namespace LivePathEffect {
@@ -35,7 +32,10 @@ LPETransform2Pts::LPETransform2Pts(LivePathEffectObject *lpeobject) :
     start(_("Start"), _("Start point"), "start", &wr, this, "Start point"),
     end(_("End"), _("End point"), "end", &wr, this, "End point"),
     firstKnot(_("First Knot"), _("First Knot"), "firstKnot", &wr, this, 1),
-    lastKnot(_("Last Knot"), _("Last Knot"), "lastKnot", &wr, this, 1)
+    lastKnot(_("Last Knot"), _("Last Knot"), "lastKnot", &wr, this, 1),
+    fromOriginalWidthToogler(true),
+    A(Geom::Point(0,0)),
+    B(Geom::Point(0,0))
 {
     registerParameter(&start);
     registerParameter(&end);
@@ -59,38 +59,40 @@ LPETransform2Pts::doOnApply(SPLPEItem const* lpeitem)
 
     A = Point(boundingbox_X.min(), boundingbox_Y.middle());
     B = Point(boundingbox_X.max(), boundingbox_Y.middle());
-    SPLPEItem* item = const_cast<SPLPEItem*>(lpeitem);
-    SPPath *path = dynamic_cast<SPPath *>(item);
+    SPLPEItem * splpeitem = const_cast<SPLPEItem *>(lpeitem);
+    SPCurve * c = NULL;
+    SPPath *path = dynamic_cast<SPPath *>(splpeitem);
     if (path) {
-        SPCurve * c = NULL;
         c = path->get_original_curve();
-        if(!c->is_closed() && c->first_path() == c->last_path()){
-            A = *(c->first_point());
-            B = *(c->last_point());
-            int nnodes = (int)c->nodes_in_path();
-            lastKnot.param_set_value(nnodes);
-        }
     }
-    start.param_setValue(A);
-    end.param_setValue(B);
+    if(c && !c->is_closed() && c->first_path() == c->last_path()){
+        A = *(c->first_point());
+        B = *(c->last_point());
+        int nnodes = (int)c->nodes_in_path();
+        lastKnot.param_set_value(nnodes);
+    }
+    start.param_update_default(A);
+    start.param_set_and_write_default();
+    end.param_update_default(B);
+    end.param_set_and_write_default();
 }
 
 void
 LPETransform2Pts::doBeforeEffect (SPLPEItem const* lpeitem)
 {
     using namespace Geom;
-    if(fromOriginalWidthToogler != fromOriginalWidth){
-        fromOriginalWidthToogler = fromOriginalWidth;
-        reset();
-    }
+
     original_bbox(lpeitem);
-    SPLPEItem* item = const_cast<SPLPEItem*>(lpeitem);
-    SPPath *path = dynamic_cast<SPPath *>(item);
     A = Point(boundingbox_X.min(), boundingbox_Y.middle());
     B = Point(boundingbox_X.max(), boundingbox_Y.middle());
-    if(path && !fromOriginalWidth){
-        SPCurve * c = NULL;
+
+    SPLPEItem * splpeitem = const_cast<SPLPEItem *>(lpeitem);
+    SPCurve * c = NULL;
+    SPPath *path = dynamic_cast<SPPath *>(splpeitem);
+    if (path) {
         c = path->get_original_curve();
+    }
+    if(c && !fromOriginalWidth){
         if(!c->is_closed() && c->first_path() == c->last_path()){
             Geom::PathVector const originalPV = c->get_pathvector();
             A = originalPV[0][0].initialPoint();
@@ -119,53 +121,62 @@ LPETransform2Pts::doBeforeEffect (SPLPEItem const* lpeitem)
         lastKnot.param_set_range(2,2);
         fromOriginalWidth.param_setValue(true);
     }
-    item->apply_to_clippath(item);
-    item->apply_to_mask(item);
+    if(fromOriginalWidthToogler != fromOriginalWidth){
+        fromOriginalWidthToogler = fromOriginalWidth;
+        reset();
+    }
+    splpeitem->apply_to_clippath(splpeitem);
+    splpeitem->apply_to_mask(splpeitem);
 }
 
 void
 LPETransform2Pts::updateIndex()
 {
-    SPPath *path = dynamic_cast<SPPath *>(sp_lpe_item);
-    if(path && !fromOriginalWidth){
-        SPCurve * c = NULL;
-        c = path->get_original_curve();
-        if(!c->is_closed() && c->first_path() == c->last_path()){
-            c->reset();
-            c = path->getCurve();
-            Geom::PathVector const originalPV = c->get_pathvector();
-            Geom::Point C = originalPV[0][0].initialPoint();
-            Geom::Point D = originalPV[0][0].initialPoint();
-            if((int)firstKnot > 1){
-                C = originalPV[0][(int)firstKnot-2].finalPoint();
-            }
-            if((int)lastKnot > 1){
-                D = originalPV[0][(int)lastKnot-2].finalPoint();
-            }
-            start.param_update_default(C);
-            start.param_set_and_write_default();
-            end.param_update_default(D);
-            end.param_set_and_write_default();
-            start.param_update_default(A);
-            end.param_update_default(B);
-            start.param_set_and_write_default();
-            end.param_set_and_write_default();
-            SPDesktop * desktop = SP_ACTIVE_DESKTOP;
-            tools_switch(desktop, TOOLS_SELECT);
-            tools_switch(desktop, TOOLS_NODES);
+    SPCurve * c = NULL;
+    SPCurve * c2 = NULL;
+    SPShape *shape = SP_SHAPE(sp_lpe_item);
+    if (shape) {
+        c = shape->getCurve();
+        SPPath *path = dynamic_cast<SPPath *>(shape);
+        if (path) {
+            c2 = path->get_original_curve();
         }
+    }
+    if(c && c2 && !fromOriginalWidth && !c2->is_closed() && c2->first_path() == c2->last_path()){
+        Geom::PathVector const originalPV = c->get_pathvector();
+        Geom::Point C = originalPV[0][0].initialPoint();
+        Geom::Point D = originalPV[0][0].initialPoint();
+        if((int)firstKnot > 1){
+            C = originalPV[0][(int)firstKnot-2].finalPoint();
+        }
+        if((int)lastKnot > 1){
+            D = originalPV[0][(int)lastKnot-2].finalPoint();
+        }
+        start.param_update_default(C);
+        start.param_set_and_write_default();
+        end.param_update_default(D);
+        end.param_set_and_write_default();
+        start.param_update_default(A);
+        end.param_update_default(B);
+        start.param_set_and_write_default();
+        end.param_set_and_write_default();
+        SPDesktop * desktop = SP_ACTIVE_DESKTOP;
+        tools_switch(desktop, TOOLS_SELECT);
+        tools_switch(desktop, TOOLS_NODES);
     }
 }
 
 void
 LPETransform2Pts::reset()
 {
-    SPPath *path = dynamic_cast<SPPath *>(sp_lpe_item);
     A = Geom::Point(boundingbox_X.min(), boundingbox_Y.middle());
     B = Geom::Point(boundingbox_X.max(), boundingbox_Y.middle());
-    if(path && !fromOriginalWidth){
-        SPCurve * c = NULL;
+    SPCurve * c = NULL;
+    SPPath *path = dynamic_cast<SPPath *>(sp_lpe_item);
+    if (path) {
         c = path->get_original_curve();
+    }
+    if(c && !fromOriginalWidth){
         int nnodes = (int)c->nodes_in_path();
         firstKnot.param_set_range(1, lastKnot-1);
         lastKnot.param_set_range(firstKnot+1, nnodes);
@@ -212,10 +223,15 @@ Gtk::Widget *LPETransform2Pts::newWidget()
                     std::vector<Gtk::Widget *> childList = scalarParameter->get_children();
                     Gtk::Entry *entryWidg = dynamic_cast<Gtk::Entry *>(childList[1]);
                     entryWidg->set_width_chars(3);
+                    vbox->pack_start(*widg, true, true, 2);
+                    if (tip) {
+                        widg->set_tooltip_text(*tip);
+                    } else {
+                        widg->set_tooltip_text("");
+                        widg->set_has_tooltip(false);
+                    }
                 }
-            }
-            if (param->param_key == "fromOriginalWidth")
-            {
+            } else if (param->param_key == "fromOriginalWidth"){
                 Glib::ustring * tip = param->param_getTooltip();
                 if (widg) {
                     button->pack_start(*widg, true, true, 2);
@@ -226,8 +242,7 @@ Gtk::Widget *LPETransform2Pts::newWidget()
                         widg->set_has_tooltip(false);
                     }
                 }
-            }
-            if (widg) {
+            } else if (widg) {
                 vbox->pack_start(*widg, true, true, 2);
                 if (tip) {
                     widg->set_tooltip_text(*tip);
