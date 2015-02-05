@@ -33,9 +33,11 @@ LPETransform2Pts::LPETransform2Pts(LivePathEffectObject *lpeobject) :
     end(_("End"), _("End point"), "end", &wr, this, "End point"),
     firstKnot(_("First Knot"), _("First Knot"), "firstKnot", &wr, this, 1),
     lastKnot(_("Last Knot"), _("Last Knot"), "lastKnot", &wr, this, 1),
-    fromOriginalWidthToogler(true),
+    fromOriginalWidthToogler(false),
     A(Geom::Point(0,0)),
-    B(Geom::Point(0,0))
+    B(Geom::Point(0,0)),
+    c(NULL),
+    appandedPath(false)
 {
     registerParameter(&start);
     registerParameter(&end);
@@ -60,7 +62,6 @@ LPETransform2Pts::doOnApply(SPLPEItem const* lpeitem)
     A = Point(boundingbox_X.min(), boundingbox_Y.middle());
     B = Point(boundingbox_X.max(), boundingbox_Y.middle());
     SPLPEItem * splpeitem = const_cast<SPLPEItem *>(lpeitem);
-    SPCurve * c = NULL;
     SPPath *path = dynamic_cast<SPPath *>(splpeitem);
     if (path) {
         c = path->get_original_curve();
@@ -81,19 +82,22 @@ void
 LPETransform2Pts::doBeforeEffect (SPLPEItem const* lpeitem)
 {
     using namespace Geom;
-
     original_bbox(lpeitem);
     A = Point(boundingbox_X.min(), boundingbox_Y.middle());
     B = Point(boundingbox_X.max(), boundingbox_Y.middle());
 
     SPLPEItem * splpeitem = const_cast<SPLPEItem *>(lpeitem);
-    SPCurve * c = NULL;
     SPPath *path = dynamic_cast<SPPath *>(splpeitem);
     if (path) {
         c = path->get_original_curve();
     }
+    if(fromOriginalWidthToogler != fromOriginalWidth){
+        fromOriginalWidthToogler = fromOriginalWidth;
+        reset();
+    }
     if(c && !fromOriginalWidth){
         if(!c->is_closed() && c->first_path() == c->last_path()){
+            appandedPath = false;
             Geom::PathVector const originalPV = c->get_pathvector();
             A = originalPV[0][0].initialPoint();
             if((int)firstKnot > 1){
@@ -112,7 +116,11 @@ LPETransform2Pts::doBeforeEffect (SPLPEItem const* lpeitem)
             lastKnot.param_set_value(2);
             firstKnot.param_set_range(1,1);
             lastKnot.param_set_range(2,2);
-            fromOriginalWidth.param_setValue(true);
+            if(appandedPath == false){
+                appandedPath = true;
+            } else {
+                fromOriginalWidth.param_setValue(true);
+            }
         }
     } else {
         firstKnot.param_set_value(1);
@@ -120,10 +128,7 @@ LPETransform2Pts::doBeforeEffect (SPLPEItem const* lpeitem)
         firstKnot.param_set_range(1,1);
         lastKnot.param_set_range(2,2);
         fromOriginalWidth.param_setValue(true);
-    }
-    if(fromOriginalWidthToogler != fromOriginalWidth){
-        fromOriginalWidthToogler = fromOriginalWidth;
-        reset();
+        appandedPath = false;
     }
     splpeitem->apply_to_clippath(splpeitem);
     splpeitem->apply_to_mask(splpeitem);
@@ -132,18 +137,13 @@ LPETransform2Pts::doBeforeEffect (SPLPEItem const* lpeitem)
 void
 LPETransform2Pts::updateIndex()
 {
-    SPCurve * c = NULL;
     SPCurve * c2 = NULL;
     SPShape *shape = SP_SHAPE(sp_lpe_item);
     if (shape) {
-        c = shape->getCurve();
-        SPPath *path = dynamic_cast<SPPath *>(shape);
-        if (path) {
-            c2 = path->get_original_curve();
-        }
+        c2 = shape->getCurve();
     }
-    if(c && c2 && !fromOriginalWidth && !c2->is_closed() && c2->first_path() == c2->last_path()){
-        Geom::PathVector const originalPV = c->get_pathvector();
+    if(c2 && !fromOriginalWidth && !c->is_closed() && c->first_path() == c->last_path()){
+        Geom::PathVector const originalPV = c2->get_pathvector();
         Geom::Point C = originalPV[0][0].initialPoint();
         Geom::Point D = originalPV[0][0].initialPoint();
         if((int)firstKnot > 1){
@@ -171,12 +171,7 @@ LPETransform2Pts::reset()
 {
     A = Geom::Point(boundingbox_X.min(), boundingbox_Y.middle());
     B = Geom::Point(boundingbox_X.max(), boundingbox_Y.middle());
-    SPCurve * c = NULL;
-    SPPath *path = dynamic_cast<SPPath *>(sp_lpe_item);
-    if (path) {
-        c = path->get_original_curve();
-    }
-    if(c && !fromOriginalWidth){
+    if(c && !c->is_closed() && c->first_path() == c->last_path() && !fromOriginalWidth){
         int nnodes = (int)c->nodes_in_path();
         firstKnot.param_set_range(1, lastKnot-1);
         lastKnot.param_set_range(firstKnot+1, nnodes);

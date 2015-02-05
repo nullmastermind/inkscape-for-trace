@@ -33,11 +33,11 @@ public:
 
     virtual void doBeforeEffect (SPLPEItem const* lpeitem);
 
-    virtual void updateIndex();
+    void updateIndex();
 
     virtual Gtk::Widget *newWidget();
 
-    virtual void reset();
+    void reset();
 
 protected:
     virtual void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec);
@@ -51,7 +51,8 @@ private:
     bool fromOriginalWidthToogler;
     Geom::Point A;
     Geom::Point B;
-
+    SPCurve * c;
+    bool appandedPath;
     LPETransform2Pts(const LPETransform2Pts&);
     LPETransform2Pts& operator=(const LPETransform2Pts&);
 };
