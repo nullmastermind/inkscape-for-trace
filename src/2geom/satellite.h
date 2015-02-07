@@ -33,7 +33,21 @@
 #ifndef LIB2GEOM_SEEN_SATELLITE_H
 #define LIB2GEOM_SEEN_SATELLITE_H
 
+#include <2geom/satellite-enum.h>
+
 namespace Geom {
+
+const Util::EnumData<SatelliteType> SATELLITETypeData[] = {
+    // {constant defined in satellite-enum.h, N_("name of satellite_type"), "name of your satellite type on SVG"}
+/* 0.92 */
+    {FILLET,                N_("Fillet"),               "fillet"},
+    {INVERSE_FILLET,        N_("Inverse Fillet"),       "inverse_fillet"},
+    {CHAMFER,               N_("Chamfer"),              "chamfer"},
+    {INVERSE_CHAMFER,       N_("Inverse Chamfer"),      "inverse_chamfer"},
+    {INTERPOLATE_POINTS,    N_("Interpolate points"),   "interpolate_points"},
+};
+const Util::EnumDataConverter<SatelliteType> SATELLITETypeConverter(SATELLITETypeData, sizeof(SATELLITETypeData)/sizeof(*SATELLITETypeData));
+
 
 class Satellite
 {
@@ -43,14 +57,14 @@ class Satellite
 
     virtual ~Sattelite();
 
-    Satellite(typeSatellite ts, bool isTime, bool active, bool after, bool hidden, double size, double time)
-        : _ts(ts), _time(time), _active(active), _after(after), _hidden(hidden), _size(size), _time(time)
+    Satellite(SatelliteType satellitetype, bool isTime, bool active, bool mirror, bool after, bool hidden, double size, double time)
+        : _satellitetype(satellitetype), _time(time), _active(active), _mirror(mirror), _after(after), _hidden(hidden), _size(size), _time(time)
     {
     }
 
-    void setTypeSatellite(typeSatellite A)
+    void setSatelliteType(SatelliteType A)
     {
-        _ts = A;
+        _satellitetype = A;
     }
 
     void setActive(bool A)
@@ -58,9 +72,9 @@ class Satellite
         _active = A;
     }
 
-    void setAfter(bool A)
+    void setHasMirror(bool A)
     {
-        _after = A;
+        _mirror = A;
     }
 
     void setHidden(bool A)
@@ -80,7 +94,7 @@ class Satellite
         _size = A;
     }
 
-    typeSatellite ts() const
+    SatelliteType satellitetype() const
     {
         return _ts;
     }
@@ -95,9 +109,9 @@ class Satellite
         return _active;
     }
 
-    bool after() const
+    bool hasMirror() const
     {
-        return _after;
+        return _mirror;
     }
 
     bool hidden() const
@@ -115,16 +129,28 @@ class Satellite
         return _time;
     }
 
+    double toTime(double A,D2<SBasis> curve) const
+    {
+        //todo make the process
+        return _time;
+    }
+
+    double toSize(double A,D2<SBasis> curve) const
+    {
+        //todo make the process
+        return _size;
+    }
+
     bool isDegenerate() const
     {
         return _size = 0 && _time = 0;
     }
 
   private:
-    typeSatellite _ts;
+    SatelliteType _satellitetype;
     bool _isTime;
     bool _active;
-    bool _after;
+    bool _hasMirror;
     bool _hidden;
     double _size;
     double _time;

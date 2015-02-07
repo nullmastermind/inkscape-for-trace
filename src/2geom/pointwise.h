@@ -59,18 +59,15 @@ class Pointwise
         
         virtual ~Pointwise();
         
-        std::pair<int,satelite> findSatellites(int A) const;
-
-        double toTime(std::pair<int,satelite> A, double B);
-        double toSize(std::pair<int,satelite> A, double B);
-        double len_to_rad(int index, double len);
-        double rad_to_len(int index, double rad);
-        std::vector<double> get_times(int index, bool last);
-        std::pair<std::size_t, std::size_t> get_positions(int index)
-        int last_index(int index);
-        double time_to_len(int index, double time);
-        double len_to_time(int index, double len);
+        std::vector<satelite> findSatellites(int A) const;
         Pointwise recalculate_for_new_pwd2(Piecewise<D2<SBasis> > A);
+        Pointwise pwd2_reverse(int index);
+        Pointwise pwd2_append(int index);
+        Pointwise pwd2_prepend(int index);
+        Pointwise pwd2_add(int index);
+        Pointwise pwd2_del(int index);
+        Pointwise satellite_add(int index,satelite sat);
+        Pointwise satellite_del(int index,satelite sat);
 
     private:
         std::vector<std::pair<int,satelite> > _satellites;
