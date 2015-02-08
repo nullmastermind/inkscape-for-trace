@@ -3,8 +3,8 @@
  * \brief Satellite
  *//*
  * Authors:
- *
- * Copyright 2014  authors
+ * 2015 Jabier Arraiza Cenoz<jabier.arraiza@marker.es>
+ * Copyright 2015  authors
  *
  * This library is free software; you can redistribute it and/or
  * modify it either under the terms of the GNU Lesser General Public
@@ -129,16 +129,30 @@ class Satellite
         return _time;
     }
 
-    double toTime(double A,D2<SBasis> curve) const
+    double time(D2<SBasis> curve) const
     {
         //todo make the process
         return _time;
     }
 
-    double toSize(double A,D2<SBasis> curve) const
-    {
-        //todo make the process
-        return _size;
+    void setPosition(Geom::Point p, D2<SBasis> curve){
+        _time = Geom::nearestPoint(p, curve);
+        if(!_isTime){
+            if (curve.degreesOfFreedom() != 2) {
+                Piecewise<D2<SBasis> > u;
+                u.push_cut(0);
+                u.push(curve, 1);
+                u = portion(u, 0, _time);
+                _size = length(u, 0.001) * -1;
+            } else {
+                lenghtPart = length(last_pwd2[index], EPSILON);
+                _size = (time * lenghtPart) * -1;
+            }
+        }
+    }
+
+    Geom::Point getPosition(D2<SBasis> curve){
+       return curve.pointAt(_time);
     }
 
     bool isDegenerate() const

@@ -27,58 +27,23 @@
 #include "live_effects/parameter/bool.h"
 #include "live_effects/parameter/unit.h"
 
-#include "live_effects/parameter/filletchamferpointarray.h"
+#include "live_effects/parameter/pointwise.h"
 #include "live_effects/effect.h"
 
 namespace Inkscape {
 namespace LivePathEffect {
 
-enum FilletMethod {
-    FM_AUTO,
-    FM_ARC,
-    FM_BEZIER,
-    FM_END
-};
 
 class LPEFilletChamfer : public Effect {
 public:
     LPEFilletChamfer(LivePathEffectObject *lpeobject);
     virtual ~LPEFilletChamfer();
 
-    virtual std::vector<Geom::Path> doEffect_path(std::vector<Geom::Path> const &path_in);
-
     virtual void doOnApply(SPLPEItem const *lpeItem);
-    virtual void doBeforeEffect(SPLPEItem const *lpeItem);
-    virtual void adjustForNewPath(std::vector<Geom::Path> const &path_in);
-    virtual Gtk::Widget* newWidget();
 
-    int getKnotsNumber(SPCurve const *c);
-    void toggleHide();
-    void toggleFlexFixed();
-    void chamfer();
-    void chamferSubdivisions();
-    void inverseChamfer();
-    void fillet();
-    void inverseFillet();
-    void updateFillet();
-    void doUpdateFillet(std::vector<Geom::Path> const& original_pathv, double power);
-    void doChangeType(std::vector<Geom::Path> const& original_pathv, int type);
-    void refreshKnots();
-
-    FilletChamferPointArrayParam fillet_chamfer_values;
+    PointwiseArrayParam pointwise_values;
 
 private:
-
-    BoolParam hide_knots;
-    BoolParam ignore_radius_0;
-    BoolParam only_selected;
-    BoolParam flexible;
-    BoolParam use_knot_distance;
-    UnitParam unit;
-    EnumParam<FilletMethod> method;
-    ScalarParam radius;
-    ScalarParam chamfer_steps;
-    ScalarParam helper_size;
 
     LPEFilletChamfer(const LPEFilletChamfer &);
     LPEFilletChamfer &operator=(const LPEFilletChamfer &);

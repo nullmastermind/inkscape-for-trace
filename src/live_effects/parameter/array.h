@@ -93,7 +93,14 @@ protected:
                 // separate items with pipe symbol
                 str << " | ";
             }
-            str << vector[i];
+            std::pair<int,Geom::satellite> pointwiseElement = dynamic_cast<std::pair<int,Geom::satellite> ><(_vector[i]);
+            if(pointwiseElement){
+                str << vector[i].first;
+                str << " , ";
+                str << vector[i].second;
+            } else {
+                str << vector[i];
+            }
         }
     }
 

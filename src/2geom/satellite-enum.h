@@ -20,7 +20,7 @@ enum SatelliteType {
     INVERSE_CHAMFER,
     INVALID_SATELLITE // This must be last (I made it such that it is not needed anymore I think..., Don't trust on it being last. - johan)
 };
-
+std::map<gchar const *value, SatelliteType> SatelliteTypeMap = boost::map_list_of("FILLET", FILLET)("INVERSE_FILLET", INVERSE_FILLET)("CHAMFER",CHAMFER)("INVERSE_CHAMFER",INVERSE_CHAMFER)("INVALID_SATELLITE",INVALID_SATELLITE);
 extern const Util::EnumData<SatelliteType> SATELLITETypeData[];  /// defined in satelite.cpp
 extern const Util::EnumDataConverter<SateliteType> SATELLITETypeConverter; /// defined in sattelite.cpp
 

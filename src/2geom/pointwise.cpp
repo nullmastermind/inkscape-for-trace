@@ -1,6 +1,8 @@
 /*
- * pointwise.cpp - Pointwise function class
- *
+ * pointwise.cpp
+ * Authors:
+ * 2015 Jabier Arraiza Cenoz<jabier.arraiza@marker.es>
+ * Copyright 2015  authors
  *
  * This library is free software; you can redistribute it and/or
  * modify it either under the terms of the GNU Lesser General Public

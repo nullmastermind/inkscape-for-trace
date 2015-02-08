@@ -48,6 +48,38 @@ ArrayParam<Geom::Point>::readsvg(const gchar * str)
     }
     return Geom::Point(Geom::infinity(),Geom::infinity());
 }
+void
+sp_svg_satellite_read_d(gchar const *str, satellite *sat){
+    gchar ** strarray = g_strsplit(str, "*", 0);
+    if(strarray.size() != 6){
+        g_strfreev (strarray);
+        return NULL;
+    }
+    sat->setSatelliteType(SatelliteTypeMap[strarray[0]]);
+    sat->setActive(helperfns_read_bool(strarray[1], true));
+    sat->sethasMirror(helperfns_read_bool(strarray[2], false));
+    sat->setHidden(helperfns_read_bool(strarray[3], false));
+    sat->setHidden(helperfns_read_bool(strarray[3], false));
+    sat->setTime(sp_svg_number_read_d(strarray[4], 0.0));
+    sat->setSize(sp_svg_number_read_d(strarray[5], 0.0));
+    g_strfreev (strarray);
+}
+
+template <>
+std::pair<int, satellite>
+ArrayParam<Geom::Point>::readsvg(const gchar * str)
+{
+    gchar ** strarray = g_strsplit(str, ",", 2);
+    int index;
+    Geom::satellite sat = NULL;
+    unsigned int success = sp_svg_number_read_d(strarray[0], &index);
+    success += sp_svg_satellite_read_d(strarray[1], &sat);
+    g_strfreev (strarray);
+    if (success == 2) {
+        return std::pair<index, sat>;
+    }
+    return std::pair<Geom::infinity(),NULL>;
+}
 
 } /* namespace LivePathEffect */
 

@@ -3,10 +3,20 @@
  * \brief Pointwise
  *//*
  * Authors:
+ * 2015 Jabier Arraiza Cenoz<jabier.arraiza@marker.es>
+ * Copyright 2015  authors
  *
- * Copyright 2014  authors
- *
- *
+ * Pointwise maintains a set of "Satellite" positions along a curve/pathvector.
+ * The positions are specified as arc length distances along the curve or by 
+ * time in the curve. Splicing operations automatically update the satellite 
+ * positions to preserve the intent.
+ * The data is serialised to SVG using a specialiced pointwise LPE parameter to 
+ * handle it in th future can be a inkscape based property to paths 
+ * //all operations are O(1) per satellite, with the exception of .., .., and .., which
+ * //need to use binary search to find the locations.
+ * Anywhere a Piecewise is used, a Pointwise can be substituted, allowing
+ * existing algorithms to correctly update satellite positions.
+
  * This library is free software; you can redistribute it and/or
  * modify it either under the terms of the GNU Lesser General Public
  * License version 2.1 as published by the Free Software Foundation

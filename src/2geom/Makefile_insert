@@ -80,6 +80,8 @@
 	2geom/point.cpp \
 	2geom/point.h \
 	2geom/point-ops.h \
+	2geom/pointwise.cpp \
+	2geom/pointwise.h \
 	2geom/poly.cpp \
 	2geom/poly.h \
 	2geom/quadtree.cpp \
@@ -90,6 +92,7 @@
 	2geom/recursive-bezier-intersection.cpp \
 	2geom/region.cpp \
 	2geom/region.h \
+	2geom/satellite.h \
 	2geom/sbasis-2d.cpp \
 	2geom/sbasis-2d.h \
 	2geom/sbasis.cpp \
