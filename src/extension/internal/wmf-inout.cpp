@@ -1309,7 +1309,7 @@ void Wmf::common_dib_to_image(PWMF_CALLBACK_DATA d, const char *dib,
 
     tmp_image << "\n\t <image\n";
     if (d->dc[d->level].clip_id){
-        tmp_image << "\tclip-path=\"url(#clipEmfPath" << d->dc[d->level].clip_id << ")\"\n";
+        tmp_image << "\tclip-path=\"url(#clipWmfPath" << d->dc[d->level].clip_id << ")\"\n";
     }
     tmp_image << " y=\"" << dy << "\"\n x=\"" << dx <<"\"\n ";
 
@@ -1409,7 +1409,7 @@ void Wmf::common_bm16_to_image(PWMF_CALLBACK_DATA d, U_BITMAP16 Bm16, const char
 
     tmp_image << "\n\t <image\n";
     if (d->dc[d->level].clip_id){
-        tmp_image << "\tclip-path=\"url(#clipEmfPath" << d->dc[d->level].clip_id << ")\"\n";
+        tmp_image << "\tclip-path=\"url(#clipWmfPath" << d->dc[d->level].clip_id << ")\"\n";
     }
     tmp_image << " y=\"" << dy << "\"\n x=\"" << dx <<"\"\n ";
 
