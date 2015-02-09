@@ -45,8 +45,8 @@
 #include "display/drawing-item.h"
 #include "clear-n_.h"
 #include "svg/svg.h"
-#include "util/units.h" // even though it is included indirectly by wmf-inout.h
-#include "inkscape.h" // even though it is included indirectly by wmf-inout.h
+#include "util/units.h" // even though it is included indirectly by emf-inout.h
+#include "inkscape.h"   // even though it is included indirectly by emf-inout.h
 
 #include "emf-print.h"
 #include "emf-inout.h"
@@ -3538,7 +3538,7 @@ Emf::open( Inkscape::Extension::Input * /*mod*/, const gchar *uri )
 
     d.tri = trinfo_release_except_FC(d.tri);
 
-    setViewBoxIfMissing(doc);
+    // in earlier versions no viewbox was generated and a call to setViewBoxIfMissing() was needed here.
 
     return doc;
 }
