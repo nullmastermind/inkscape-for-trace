@@ -26,11 +26,13 @@ set(2geom_SRC
 	pathvector.cpp
 	piecewise.cpp
 	point.cpp
+	pointwise.cpp
 	poly.cpp
 	quadtree.cpp
 	rect.cpp
 	# recursive-bezier-intersection.cpp
 	region.cpp
+	satellite.cpp
 	sbasis-2d.cpp
 	sbasis-geometric.cpp
 	sbasis-math.cpp
@@ -100,11 +102,13 @@ set(2geom_SRC
 	piecewise.h
 	point-ops.h
 	point.h
+	pointwise.h
 	poly.h
 	quadtree.h
 	ray.h
 	rect.h
 	region.h
+	satellite.h
 	sbasis-2d.h
 	sbasis-curve.h
 	sbasis-geometric.h

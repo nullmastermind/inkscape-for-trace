@@ -14,20 +14,28 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "live_effects/parameter/pointwise.h"
 
+#include "live_effects/lpe-fillet-chamfer.h"
+#include <sp-shape.h>
+#include <2geom/pointwise.h>
+#include <2geom/satellite.h>
+#include <2geom/satellite-enum.h>
+#include "helper/geom-nodetype.h"
+#include "helper/geom.h"
+#include "display/curve.h"
+#include <vector>
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
 
-using namespace Geom;
+
 namespace Inkscape {
 namespace LivePathEffect {
 
 LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
-    pointwise_values(_("Fillet point"), _("Fillet point"), "pointwise_values", &wr, this)
+    satellitepairarrayparam_values(_("Fillet point"), _("Fillet point"), "satellitepairarrayparam_values", &wr, this)
 {
-    registerParameter(&pointwise_values);
+    registerParameter(&satellitepairarrayparam_values);
 }
 
 LPEFilletChamfer::~LPEFilletChamfer() {}
@@ -35,12 +43,17 @@ LPEFilletChamfer::~LPEFilletChamfer() {}
 
 void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
 {
-    SPShape * shape = dynamic_cast<SPshape *>(lpeItem);
+    SPLPEItem * splpeitem = const_cast<SPLPEItem *>(lpeItem);
+    SPShape * shape = dynamic_cast<SPShape *>(splpeitem);
     if (shape) {
-        std::vector<std::pair<int,GeomSatellite> pointwise;
-        PathVector const &original_pathv = pathv_to_linear_and_cubic_beziers(shape->gerCurve->get_pathvector());
-        //Piecewise<D2<SBasis> > pwd2_in = paths_to_pw(original_pathv);
-        for (PathVector::const_iterator path_it = original_pathv.begin(); path_it != original_pathv.end(); ++path_it) {
+        Geom::PathVector const &original_pathv = pathv_to_linear_and_cubic_beziers(shape->getCurve()->get_pathvector());
+        std::vector<std::pair<int,Geom::Satellite> > satellites;
+        Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2_in = paths_to_pw(original_pathv);
+        pwd2_in = remove_short_cuts(pwd2_in, .01);
+        Geom::Piecewise<Geom::D2<Geom::SBasis> > der = derivative(pwd2_in);
+        Geom::Piecewise<Geom::D2<Geom::SBasis> > n = rot90(unitVector(der));
+        satellitepairarrayparam_values.set_pwd2(pwd2_in, n);
+        for (Geom::PathVector::const_iterator path_it = original_pathv.begin(); path_it != original_pathv.end(); ++path_it) {
             if (path_it->empty())
                 continue;
 
@@ -61,16 +74,15 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
             }
             int counter = 0;
             while (curve_it1 != curve_endit) {
-                Geom::Saltellite sat(FILLET, true, true, false, false, false, 0, 0.2);
-                std::pair<std::size_t, std::size_t> positions = pointwise_values.get_positions(counter, original_pathv);
+                Geom::Satellite satellite(Geom::FILLET, true, true, false, false, 0.0, 0.2);
                 Geom::NodeType nodetype;
-                if (positions.second == 0) {
-                    nodetype = NODE_NONE;
-                } else {
+                if(counter!=0){
                     nodetype = get_nodetype((*path_it)[counter - 1], *curve_it1);
+                } else {
+                    nodetype = Geom::NODE_NONE;
                 }
-                if (nodetype == NODE_CUSP) {
-                    pointwise.push_back(std::pair<counter,sat>);
+                if (nodetype == Geom::NODE_CUSP) {
+                    satellites.push_back(std::make_pair(counter, satellite));
                 }
                 ++curve_it1;
                 if (curve_it2 != curve_endit) {
@@ -79,11 +91,19 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
                 counter++;
             }
         }
-        pointwise_values.param_set_and_write_new_value(pointwise);
+        satellitepairarrayparam_values.param_set_and_write_new_value(satellites);
     } else {
         g_warning("LPE Fillet/Chamfer can only be applied to shapes (not groups).");
         SPLPEItem * item = const_cast<SPLPEItem*>(lpeItem);
         item->removeCurrentPathEffect(false);
+    }
+}
+
+void
+LPEFilletChamfer::adjustForNewPath(std::vector<Geom::Path> const &path_in)
+{
+    if (!path_in.empty()) {
+        //fillet_chamfer_values.recalculate_controlpoints_for_new_pwd2(pathv_to_linear_and_cubic_beziers(path_in)[0].toPwSb());
     }
 }
 

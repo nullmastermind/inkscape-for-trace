@@ -33,12 +33,19 @@
 
 namespace Geom {
 
-std::vector<satellite> 
-pointwise::findSatellites(int A) const
+Pointwise::Pointwise(Piecewise<D2<SBasis> > pwd2, std::vector<std::pair<int,Satellite> > satellites)
+        : _pwd2(pwd2), _satellites(satellites)
 {
-    std::vector<satelite> ret;
+};
+
+Pointwise::~Pointwise(){};
+
+std::vector<Satellite> 
+Pointwise::findSatellites(int A) const
+{
+    std::vector<Satellite> ret;
     for(unsigned i = 0; i < _satellites.size(); i++){
-        if(_satellites[i].first() == A){
+        if(_satellites[i].first == A){
             ret.push_back(_satellites[i].second);
         }
     }

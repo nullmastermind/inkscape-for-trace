@@ -59,6 +59,8 @@
 #include <2geom/sbasis.h>
 
 // others
+#include <2geom/pointwise.h>
+#include <2geom/satellite.h>
 #include <2geom/math-utils.h>
 #include <2geom/utils.h>
 

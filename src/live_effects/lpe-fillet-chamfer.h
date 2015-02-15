@@ -15,19 +15,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#if HAVE_CONFIG_H
-# include "config.h"
-#endif
-
-#if defined(GLIBMM_DISABLE_DEPRECATED) && defined(HAVE_GLIBMM_THREADS_H)
-# include <glibmm/threads.h>
-#endif
-
-#include "live_effects/parameter/enum.h"
-#include "live_effects/parameter/bool.h"
-#include "live_effects/parameter/unit.h"
-
-#include "live_effects/parameter/pointwise.h"
+#include "2geom/pointwise.h"
+#include "live_effects/parameter/satellitepairarray.h"
 #include "live_effects/effect.h"
 
 namespace Inkscape {
@@ -40,8 +29,9 @@ public:
     virtual ~LPEFilletChamfer();
 
     virtual void doOnApply(SPLPEItem const *lpeItem);
+    virtual void adjustForNewPath(std::vector<Geom::Path> const &path_in);
 
-    PointwiseArrayParam pointwise_values;
+    SatellitePairArrayParam satellitepairarrayparam_values;
 
 private:
 

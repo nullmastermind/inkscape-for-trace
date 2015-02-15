@@ -26,8 +26,8 @@ ink_common_sources += \
 	live_effects/parameter/powerstrokepointarray.h	\
 	live_effects/parameter/filletchamferpointarray.cpp	\
 	live_effects/parameter/filletchamferpointarray.h	\
-	live_effects/parameter/pointwise.cpp	\
-	live_effects/parameter/pointwise.h	\
+	live_effects/parameter/satellitepairarray.cpp	\
+	live_effects/parameter/satellitepairarray.h	\
 	live_effects/parameter/text.cpp	\
 	live_effects/parameter/text.h	\
 	live_effects/parameter/transformedpoint.cpp	\

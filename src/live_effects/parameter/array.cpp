@@ -6,8 +6,7 @@
 
 #include "live_effects/parameter/array.h"
 
-#include "svg/svg.h"
-#include "svg/stringstream.h"
+#include "helper-fns.h"
 
 #include <2geom/coord.h>
 #include <2geom/point.h>
@@ -48,37 +47,47 @@ ArrayParam<Geom::Point>::readsvg(const gchar * str)
     }
     return Geom::Point(Geom::infinity(),Geom::infinity());
 }
-void
-sp_svg_satellite_read_d(gchar const *str, satellite *sat){
-    gchar ** strarray = g_strsplit(str, "*", 0);
-    if(strarray.size() != 6){
-        g_strfreev (strarray);
-        return NULL;
+//TODO: move maybe to svg-lenght.cpp
+unsigned int
+sp_svg_satellite_read_d(gchar const *str, Geom::Satellite *sat){
+    if (!str) {
+        return 0;
     }
-    sat->setSatelliteType(SatelliteTypeMap[strarray[0]]);
-    sat->setActive(helperfns_read_bool(strarray[1], true));
-    sat->sethasMirror(helperfns_read_bool(strarray[2], false));
-    sat->setHidden(helperfns_read_bool(strarray[3], false));
-    sat->setHidden(helperfns_read_bool(strarray[3], false));
-    sat->setTime(sp_svg_number_read_d(strarray[4], 0.0));
-    sat->setSize(sp_svg_number_read_d(strarray[5], 0.0));
+    gchar ** strarray = g_strsplit(str, " * ", 0);
+    if(strarray[6] && !strarray[7]){
+        std::map< gchar const *, Geom::SatelliteType> gts = sat->GcharMapToSatelliteType;
+        sat->setSatelliteType(gts[strarray[0]]);
+        sat->setIsTime(helperfns_read_bool(strarray[1], true));
+        sat->setActive(helperfns_read_bool(strarray[2], true));
+        sat->setHasMirror(helperfns_read_bool(strarray[3], false));
+        sat->setHidden(helperfns_read_bool(strarray[4], false));
+        double time,size;
+        sp_svg_number_read_d(strarray[5], &time);
+        sp_svg_number_read_d(strarray[6], &size);
+        sat->setTime(time);
+        sat->setSize(size);
+        g_strfreev (strarray);
+        return 1;
+    }
     g_strfreev (strarray);
+    return 0;
 }
 
 template <>
-std::pair<int, satellite>
-ArrayParam<Geom::Point>::readsvg(const gchar * str)
+std::pair<int, Geom::Satellite>
+ArrayParam<std::pair<int, Geom::Satellite> >::readsvg(const gchar * str)
 {
     gchar ** strarray = g_strsplit(str, ",", 2);
-    int index;
-    Geom::satellite sat = NULL;
-    unsigned int success = sp_svg_number_read_d(strarray[0], &index);
+    double index;
+    std::pair<int, Geom::Satellite> result;
+    unsigned int success = (int)sp_svg_number_read_d(strarray[0], &index);
+    Geom::Satellite sat;
     success += sp_svg_satellite_read_d(strarray[1], &sat);
     g_strfreev (strarray);
     if (success == 2) {
-        return std::pair<index, sat>;
+        return std::make_pair(index, sat);
     }
-    return std::pair<Geom::infinity(),NULL>;
+    return std::make_pair((int)Geom::infinity(),sat);
 }
 
 } /* namespace LivePathEffect */

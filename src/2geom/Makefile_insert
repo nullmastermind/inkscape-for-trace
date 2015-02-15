@@ -92,6 +92,7 @@
 	2geom/recursive-bezier-intersection.cpp \
 	2geom/region.cpp \
 	2geom/region.h \
+	2geom/satellite.cpp \
 	2geom/satellite.h \
 	2geom/sbasis-2d.cpp \
 	2geom/sbasis-2d.h \

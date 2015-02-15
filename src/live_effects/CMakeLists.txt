@@ -63,7 +63,7 @@ set(live_effects_SRC
 	parameter/path-reference.cpp
 	parameter/point.cpp
 	parameter/powerstrokepointarray.cpp
-	parameter/pointwise.cpp
+	parameter/satellitepairarray.cpp
 	parameter/random.cpp
 	parameter/text.cpp
 	paramter/transformedpoint.cpp
@@ -140,7 +140,7 @@ set(live_effects_SRC
 	parameter/originalpatharray.h
 	parameter/point.h
 	parameter/powerstrokepointarray.h
-	parameter/pointwise.h
+	parameter/satellitepairarray.h
 	parameter/random.h
 	parameter/text.h
 	parameter/togglebutton.h

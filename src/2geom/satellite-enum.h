@@ -10,6 +10,8 @@
  */
 
 #include "util/enums.h"
+/*#include <boost/bimap.hpp>
+*/
 
 namespace Geom {
 
@@ -18,11 +20,20 @@ enum SatelliteType {
     INVERSE_FILLET,
     CHAMFER,
     INVERSE_CHAMFER,
-    INVALID_SATELLITE // This must be last (I made it such that it is not needed anymore I think..., Don't trust on it being last. - johan)
+    INVALID_SATELLITE // This must be last)
 };
-std::map<gchar const *value, SatelliteType> SatelliteTypeMap = boost::map_list_of("FILLET", FILLET)("INVERSE_FILLET", INVERSE_FILLET)("CHAMFER",CHAMFER)("INVERSE_CHAMFER",INVERSE_CHAMFER)("INVALID_SATELLITE",INVALID_SATELLITE);
-extern const Util::EnumData<SatelliteType> SATELLITETypeData[];  /// defined in satelite.cpp
-extern const Util::EnumDataConverter<SateliteType> SATELLITETypeConverter; /// defined in sattelite.cpp
+
+/* TODO maybe is best do next by bimap
+    typedef boost::bimap< Geom::SatelliteType,gchar const *> map_type ;
+
+    map_type SatelliteTypeBimap;
+
+    SatelliteTypeBimap.insert( map_type::value_type(FILLET, "FILLET"));
+    SatelliteTypeBimap.insert( map_type::value_type(INVERSE_FILLET, "INVERSE_FILLET"));
+    SatelliteTypeBimap.insert( map_type::value_type(CHAMFER, "CHAMFER")) );
+    SatelliteTypeBimap.insert( map_type::value_type(INVERSE_CHAMFER, "INVERSE_CHAMFER"));
+    SatelliteTypeBimap.insert( map_type::value_type(INVALID_SATELLITE, "INVALID_SATELLITE"));
+*/
 
 } //namespace Geom
 

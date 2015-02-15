@@ -34,37 +34,29 @@
 #define LIB2GEOM_SEEN_SATELLITE_H
 
 #include <2geom/satellite-enum.h>
+#include <2geom/d2.h>
+#include <map>
+#include <boost/assign.hpp>
 
 namespace Geom {
-
-const Util::EnumData<SatelliteType> SATELLITETypeData[] = {
-    // {constant defined in satellite-enum.h, N_("name of satellite_type"), "name of your satellite type on SVG"}
-/* 0.92 */
-    {FILLET,                N_("Fillet"),               "fillet"},
-    {INVERSE_FILLET,        N_("Inverse Fillet"),       "inverse_fillet"},
-    {CHAMFER,               N_("Chamfer"),              "chamfer"},
-    {INVERSE_CHAMFER,       N_("Inverse Chamfer"),      "inverse_chamfer"},
-    {INTERPOLATE_POINTS,    N_("Interpolate points"),   "interpolate_points"},
-};
-const Util::EnumDataConverter<SatelliteType> SATELLITETypeConverter(SATELLITETypeData, sizeof(SATELLITETypeData)/sizeof(*SATELLITETypeData));
-
 
 class Satellite
 {
   public:
-    Satellite()
-    {}
 
-    virtual ~Sattelite();
+    Satellite();
+    Satellite(SatelliteType satellitetype, bool isTime, bool active, bool hasMirror, bool hidden, double size, double time);
 
-    Satellite(SatelliteType satellitetype, bool isTime, bool active, bool mirror, bool after, bool hidden, double size, double time)
-        : _satellitetype(satellitetype), _time(time), _active(active), _mirror(mirror), _after(after), _hidden(hidden), _size(size), _time(time)
-    {
-    }
+    virtual ~Satellite();
 
     void setSatelliteType(SatelliteType A)
     {
         _satellitetype = A;
+    }
+
+    void setIsTime(bool A)
+    {
+        _isTime = A;
     }
 
     void setActive(bool A)
@@ -74,7 +66,7 @@ class Satellite
 
     void setHasMirror(bool A)
     {
-        _mirror = A;
+        _hasMirror = A;
     }
 
     void setHidden(bool A)
@@ -84,19 +76,17 @@ class Satellite
 
     void setTime(double A)
     {
-        _isTime = true;
         _time = A;
     }
 
     void setSize(double A)
     {
-        _isTime = false;
         _size = A;
     }
 
     SatelliteType satellitetype() const
     {
-        return _ts;
+        return _satellitetype;
     }
 
     bool isTime() const
@@ -111,7 +101,7 @@ class Satellite
 
     bool hasMirror() const
     {
-        return _mirror;
+        return _hasMirror;
     }
 
     bool hidden() const
@@ -129,36 +119,19 @@ class Satellite
         return _time;
     }
 
-    double time(D2<SBasis> curve) const
+    double time(Geom::D2<Geom::SBasis> curve) const
     {
         //todo make the process
         return _time;
     }
 
-    void setPosition(Geom::Point p, D2<SBasis> curve){
-        _time = Geom::nearestPoint(p, curve);
-        if(!_isTime){
-            if (curve.degreesOfFreedom() != 2) {
-                Piecewise<D2<SBasis> > u;
-                u.push_cut(0);
-                u.push(curve, 1);
-                u = portion(u, 0, _time);
-                _size = length(u, 0.001) * -1;
-            } else {
-                lenghtPart = length(last_pwd2[index], EPSILON);
-                _size = (time * lenghtPart) * -1;
-            }
-        }
-    }
+    void setPosition(Geom::Point p, Geom::D2<Geom::SBasis> curve);
 
-    Geom::Point getPosition(D2<SBasis> curve){
-       return curve.pointAt(_time);
-    }
+    Geom::Point getPosition(Geom::D2<Geom::SBasis> curve);
 
-    bool isDegenerate() const
-    {
-        return _size = 0 && _time = 0;
-    }
+    static const std::map<SatelliteType,gchar const *> SatelliteTypeToGcharMap;
+
+    static const std::map<gchar const *,SatelliteType> GcharMapToSatelliteType;
 
   private:
     SatelliteType _satellitetype;

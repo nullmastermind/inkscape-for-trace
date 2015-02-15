@@ -50,7 +50,6 @@
 #include <2geom/sbasis-2d.h>
 #include <2geom/piecewise.h>
 #include <2geom/satellite.h>
-#include <2geom/affine.h>
 
 namespace Geom {
 /**
@@ -60,31 +59,28 @@ namespace Geom {
 class Pointwise
 {
     public:
-        Pointwise(){}
-        
-        Pointwise(Piecewise<D2<SBasis> > pwd2, std::vector<std::pair<int,satelite> > satellites)
-        : _pwd2(pwd2), _satellites(satellites)
-        {
-        }
-        
+        Pointwise(){};
+        Pointwise(Piecewise<D2<SBasis> > pwd2, std::vector<std::pair<int,Satellite> > satellites);
         virtual ~Pointwise();
-        
-        std::vector<satelite> findSatellites(int A) const;
+        std::vector<Satellite> findSatellites(int A) const;
         Pointwise recalculate_for_new_pwd2(Piecewise<D2<SBasis> > A);
         Pointwise pwd2_reverse(int index);
         Pointwise pwd2_append(int index);
         Pointwise pwd2_prepend(int index);
         Pointwise pwd2_add(int index);
         Pointwise pwd2_del(int index);
-        Pointwise satellite_add(int index,satelite sat);
-        Pointwise satellite_del(int index,satelite sat);
+        Pointwise satellite_add(int index,Satellite sat);
+        Pointwise satellite_del(int index,Satellite sat);
 
     private:
-        std::vector<std::pair<int,satelite> > _satellites;
         Piecewise<D2<SBasis> > _pwd2;
+        std::vector<std::pair<int,Satellite> > _satellites;
+
 };
 
-#endif //SEEN_GEOM_PW_SB_H
+} // end namespace Geom
+
+#endif //SEEN_GEOM_POINTWISE_H
 /*
   Local Variables:
   mode:c++

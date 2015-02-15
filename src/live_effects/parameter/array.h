@@ -15,6 +15,9 @@
 
 #include "live_effects/parameter/parameter.h"
 
+#include <2geom/satellite.h>
+#include <2geom/satellite-enum.h>
+#include <2geom/pointwise.h>
 #include "svg/svg.h"
 #include "svg/stringstream.h"
 
@@ -93,15 +96,39 @@ protected:
                 // separate items with pipe symbol
                 str << " | ";
             }
-            std::pair<int,Geom::satellite> pointwiseElement = dynamic_cast<std::pair<int,Geom::satellite> ><(_vector[i]);
-            if(pointwiseElement){
-                str << vector[i].first;
-                str << " , ";
-                str << vector[i].second;
-            } else {
-                str << vector[i];
-            }
+            writesvgData(str,vector[i]);
         }
+    }
+    
+    void writesvgData(SVGOStringStream &str, float const &nVector) const {
+        str << nVector;
+    }
+
+    void writesvgData(SVGOStringStream &str, double const &nVector) const {
+        str << nVector;
+    }
+
+    void writesvgData(SVGOStringStream &str, Geom::Point const &nVector) const {
+        str << nVector;
+    }
+
+    void writesvgData(SVGOStringStream &str, std::pair<int, Geom::Satellite> const &nVector) const {
+        str << nVector.first;
+        str << " , ";
+        std::map<Geom::SatelliteType, gchar const *> stg = nVector.second.SatelliteTypeToGcharMap;
+        str <<   stg[nVector.second.satellitetype()];
+        str << " * ";
+        str << nVector.second.isTime();
+        str << " * ";
+        str << nVector.second.active();
+        str << " * ";
+        str << nVector.second.hasMirror();
+        str << " * ";
+        str << nVector.second.hidden();
+        str << " * ";
+        str << nVector.second.size();
+        str << " * ";
+        str <<nVector.second.time();
     }
 
     StorageType readsvg(const gchar * str);
