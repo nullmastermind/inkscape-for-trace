@@ -93,7 +93,7 @@ void SatellitePairArrayParamKnotHolderEntity::knot_set(Point const &p,
 Geom::Point 
 SatellitePairArrayParamKnotHolderEntity::knot_get() const
 {
-    Geom::Point const canvas_point = _pparam->_vector.at(_index).second.getPosition(_pparam->last_pwd2[_pparam->_vector.at(_index).second]);
+    Geom::Point const canvas_point = _pparam->_vector.at(_index).second.getPosition(_pparam->last_pwd2[_pparam->_vector.at(_index).first]);
     return canvas_point;
 }
 

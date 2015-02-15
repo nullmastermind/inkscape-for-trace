@@ -54,11 +54,10 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
         Geom::Piecewise<Geom::D2<Geom::SBasis> > n = rot90(unitVector(der));
         satellitepairarrayparam_values.set_pwd2(pwd2_in, n);
         for (Geom::PathVector::const_iterator path_it = original_pathv.begin(); path_it != original_pathv.end(); ++path_it) {
-            if (path_it->empty())
+            if (path_it->empty()){
                 continue;
-
+            }
             Geom::Path::const_iterator curve_it1 = path_it->begin();
-            Geom::Path::const_iterator curve_it2 = ++(path_it->begin());
             Geom::Path::const_iterator curve_endit = path_it->end_default();
             if (path_it->closed()) {
               const Geom::Curve &closingline = path_it->back_closed(); 
@@ -72,22 +71,25 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
                 curve_endit = path_it->end_open();
               }
             }
+            Geom::Path::const_iterator curve_end = curve_endit;
+            --curve_end;
             int counter = 0;
             while (curve_it1 != curve_endit) {
                 Geom::Satellite satellite(Geom::FILLET, true, true, false, false, 0.0, 0.2);
                 Geom::NodeType nodetype;
-                if(counter!=0){
-                    nodetype = get_nodetype((*path_it)[counter - 1], *curve_it1);
+                if (counter==0) {
+                    if (path_it->closed()) {
+                        nodetype = Geom::get_nodetype(*curve_end, *curve_it1);
+                    } else {
+                        nodetype = Geom::NODE_NONE;
+                    }
                 } else {
-                    nodetype = Geom::NODE_NONE;
+                    nodetype = get_nodetype((*path_it)[counter - 1], *curve_it1);
                 }
                 if (nodetype == Geom::NODE_CUSP) {
                     satellites.push_back(std::make_pair(counter, satellite));
                 }
                 ++curve_it1;
-                if (curve_it2 != curve_endit) {
-                    ++curve_it2;
-                }
                 counter++;
             }
         }

@@ -53,7 +53,7 @@ sp_svg_satellite_read_d(gchar const *str, Geom::Satellite *sat){
     if (!str) {
         return 0;
     }
-    gchar ** strarray = g_strsplit(str, " * ", 0);
+    gchar ** strarray = g_strsplit(str, "*", 0);
     if(strarray[6] && !strarray[7]){
         std::map< gchar const *, Geom::SatelliteType> gts = sat->GcharMapToSatelliteType;
         sat->setSatelliteType(gts[strarray[0]]);

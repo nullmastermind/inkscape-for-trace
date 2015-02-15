@@ -114,20 +114,20 @@ protected:
 
     void writesvgData(SVGOStringStream &str, std::pair<int, Geom::Satellite> const &nVector) const {
         str << nVector.first;
-        str << " , ";
+        str << ",";
         std::map<Geom::SatelliteType, gchar const *> stg = nVector.second.SatelliteTypeToGcharMap;
         str <<   stg[nVector.second.satellitetype()];
-        str << " * ";
+        str << "*";
         str << nVector.second.isTime();
-        str << " * ";
+        str << "*";
         str << nVector.second.active();
-        str << " * ";
+        str << "*";
         str << nVector.second.hasMirror();
-        str << " * ";
+        str << "*";
         str << nVector.second.hidden();
-        str << " * ";
+        str << "*";
         str << nVector.second.size();
-        str << " * ";
+        str << "*";
         str <<nVector.second.time();
     }
 
