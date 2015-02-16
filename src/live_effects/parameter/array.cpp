@@ -55,17 +55,16 @@ sp_svg_satellite_read_d(gchar const *str, Geom::Satellite *sat){
     }
     gchar ** strarray = g_strsplit(str, "*", 0);
     if(strarray[6] && !strarray[7]){
-        std::map< gchar const *, Geom::SatelliteType> gts = sat->GcharMapToSatelliteType;
-        sat->setSatelliteType(gts[strarray[0]]);
+        sat->setSatelliteType(strarray[0]);
         sat->setIsTime(helperfns_read_bool(strarray[1], true));
         sat->setActive(helperfns_read_bool(strarray[2], true));
         sat->setHasMirror(helperfns_read_bool(strarray[3], false));
         sat->setHidden(helperfns_read_bool(strarray[4], false));
         double time,size;
-        sp_svg_number_read_d(strarray[5], &time);
-        sp_svg_number_read_d(strarray[6], &size);
-        sat->setTime(time);
+        sp_svg_number_read_d(strarray[5], &size);
+        sp_svg_number_read_d(strarray[6], &time);
         sat->setSize(size);
+        sat->setTime(time);
         g_strfreev (strarray);
         return 1;
     }

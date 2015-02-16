@@ -14,27 +14,35 @@
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
-
+#include "live_effects/parameter/enum.h"
 #include "2geom/pointwise.h"
 #include "live_effects/parameter/satellitepairarray.h"
 #include "live_effects/effect.h"
 
+using namespace Geom;
 namespace Inkscape {
 namespace LivePathEffect {
 
+enum FilletMethod {
+    FM_AUTO,
+    FM_ARC,
+    FM_BEZIER,
+    FM_END
+};
 
 class LPEFilletChamfer : public Effect {
 public:
     LPEFilletChamfer(LivePathEffectObject *lpeobject);
     virtual ~LPEFilletChamfer();
-
+    virtual void doBeforeEffect(SPLPEItem const *lpeItem);
+    virtual std::vector<Geom::Path> doEffect_path(std::vector<Geom::Path> const &path_in);
     virtual void doOnApply(SPLPEItem const *lpeItem);
     virtual void adjustForNewPath(std::vector<Geom::Path> const &path_in);
 
     SatellitePairArrayParam satellitepairarrayparam_values;
 
 private:
-
+    EnumParam<FilletMethod> method;
     LPEFilletChamfer(const LPEFilletChamfer &);
     LPEFilletChamfer &operator=(const LPEFilletChamfer &);
 

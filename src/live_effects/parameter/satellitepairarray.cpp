@@ -45,11 +45,9 @@ void SatellitePairArrayParam::set_oncanvas_looks(SPKnotShapeType shape,
 }
 
 void SatellitePairArrayParam::set_pwd2(
-    Piecewise<D2<SBasis> > const &pwd2_in,
-    Piecewise<D2<SBasis> > const &pwd2_normal_in)
+    Piecewise<D2<SBasis> > const &pwd2_in)
 {
     last_pwd2 = pwd2_in;
-    last_pwd2_normal = pwd2_normal_in;
 }
 
 void SatellitePairArrayParam::addKnotHolderEntities(KnotHolder *knotholder,

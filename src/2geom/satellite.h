@@ -54,6 +54,12 @@ class Satellite
         _satellitetype = A;
     }
 
+    void setSatelliteType(gchar const * A)
+    {
+        std::map<gchar const *,SatelliteType> GcharMapToSatelliteType = boost::assign::map_list_of("FILLET", FILLET)("INVERSE_FILLET", INVERSE_FILLET)("CHAMFER",CHAMFER)("INVERSE_CHAMFER",INVERSE_CHAMFER)("INVALID_SATELLITE",INVALID_SATELLITE);
+        _satellitetype = GcharMapToSatelliteType[A];
+    }
+
     void setIsTime(bool A)
     {
         _isTime = A;
@@ -84,42 +90,48 @@ class Satellite
         _size = A;
     }
 
-    SatelliteType satellitetype() const
+    SatelliteType getSatelliteType() const
     {
         return _satellitetype;
     }
 
-    bool isTime() const
+    gchar const * getSatelliteTypeGchar() const
+    {
+        std::map<SatelliteType,gchar const *> SatelliteTypeToGcharMap = boost::assign::map_list_of(FILLET, "FILLET")(INVERSE_FILLET, "INVERSE_FILLET")(CHAMFER,"CHAMFER")(INVERSE_CHAMFER,"INVERSE_CHAMFER")(INVALID_SATELLITE,"INVALID_SATELLITE");
+        return SatelliteTypeToGcharMap[_satellitetype];
+    }
+
+    bool getIsTime() const
     {
         return _isTime;
     }
 
-    bool active() const
+    bool getActive() const
     {
         return _active;
     }
 
-    bool hasMirror() const
+    bool getHasMirror() const
     {
         return _hasMirror;
     }
 
-    bool hidden() const
+    bool getHidden() const
     {
         return _hidden;
     }
 
-    double size() const
+    double getSize() const
     {
         return _size;
     }
 
-    double time() const
+    double getTime() const
     {
         return _time;
     }
 
-    double time(Geom::D2<Geom::SBasis> curve) const
+    double getTime(Geom::D2<Geom::SBasis> curve) const
     {
         //todo make the process
         return _time;
@@ -133,7 +145,10 @@ class Satellite
 
     static const std::map<gchar const *,SatelliteType> GcharMapToSatelliteType;
 
+    static double getOpositeTime(Geom::D2<Geom::SBasis> SBasisCurve, double time);
+
   private:
+
     SatelliteType _satellitetype;
     bool _isTime;
     bool _active;

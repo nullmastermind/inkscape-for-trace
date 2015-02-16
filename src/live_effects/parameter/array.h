@@ -116,19 +116,19 @@ protected:
         str << nVector.first;
         str << ",";
         std::map<Geom::SatelliteType, gchar const *> stg = nVector.second.SatelliteTypeToGcharMap;
-        str <<   stg[nVector.second.satellitetype()];
+        str <<   nVector.second.getSatelliteTypeGchar();
         str << "*";
-        str << nVector.second.isTime();
+        str << nVector.second.getIsTime();
         str << "*";
-        str << nVector.second.active();
+        str << nVector.second.getActive();
         str << "*";
-        str << nVector.second.hasMirror();
+        str << nVector.second.getHasMirror();
         str << "*";
-        str << nVector.second.hidden();
+        str << nVector.second.getHidden();
         str << "*";
-        str << nVector.second.size();
+        str << nVector.second.getSize();
         str << "*";
-        str <<nVector.second.time();
+        str <<nVector.second.getTime();
     }
 
     StorageType readsvg(const gchar * str);
