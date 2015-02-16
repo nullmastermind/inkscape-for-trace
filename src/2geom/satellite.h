@@ -145,7 +145,7 @@ class Satellite
 
     static const std::map<gchar const *,SatelliteType> GcharMapToSatelliteType;
 
-    static double getOpositeTime(Geom::D2<Geom::SBasis> SBasisCurve, double time);
+    double getOpositeTime(Geom::D2<Geom::SBasis> SBasisCurve);
 
   private:
 

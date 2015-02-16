@@ -174,7 +174,7 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
             bool last = curve_it2 == curve_endit;
             std::vector<double> times;
             times.push_back(filletChamferData[counter].second.getTime());
-            times.push_back(filletChamferData[indexFix].second.getOpositeTime((*curve_it1).toSBasis(),filletChamferData[indexFix].second.getTime()));
+            times.push_back(filletChamferData[indexFix].second.getOpositeTime((*curve_it1).toSBasis()));
             times.push_back(filletChamferData[indexFix].second.getTime());
             Curve *knotCurve1 = curve_it1->portion(times[0], times[1]);
             if (counterCurves > 0) {

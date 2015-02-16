@@ -115,7 +115,6 @@ protected:
     void writesvgData(SVGOStringStream &str, std::pair<int, Geom::Satellite> const &nVector) const {
         str << nVector.first;
         str << ",";
-        std::map<Geom::SatelliteType, gchar const *> stg = nVector.second.SatelliteTypeToGcharMap;
         str <<   nVector.second.getSatelliteTypeGchar();
         str << "*";
         str << nVector.second.getIsTime();

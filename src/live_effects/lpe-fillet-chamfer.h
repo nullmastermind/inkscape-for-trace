@@ -19,7 +19,6 @@
 #include "live_effects/parameter/satellitepairarray.h"
 #include "live_effects/effect.h"
 
-using namespace Geom;
 namespace Inkscape {
 namespace LivePathEffect {
 
