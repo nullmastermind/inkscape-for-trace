@@ -578,9 +578,10 @@ void GlyphsPanel::setTargetDesktop(SPDesktop *desktop)
 void GlyphsPanel::insertText()
 {
     SPItem *textItem = 0;
-    for (const GSList *item = targetDesktop->selection->itemList(); item; item = item->next ) {
-        if (SP_IS_TEXT(item->data) || SP_IS_FLOWTEXT(item->data)) {
-            textItem = SP_ITEM(item->data);
+        SelContainer itemlist=targetDesktop->selection->itemList();
+        for(SelContainer::const_iterator i=itemlist.begin(); itemlist.end() != i; i++) {
+            if (SP_IS_TEXT(*i) || SP_IS_FLOWTEXT(*i)) {
+            textItem = SP_ITEM(*i);
             break;
         }
     }
@@ -687,8 +688,9 @@ void GlyphsPanel::selectionModifiedCB(guint flags)
 void GlyphsPanel::calcCanInsert()
 {
     int items = 0;
-    for (const GSList *item = targetDesktop->selection->itemList(); item; item = item->next ) {
-        if (SP_IS_TEXT(item->data) || SP_IS_FLOWTEXT(item->data)) {
+    SelContainer itemlist=targetDesktop->selection->itemList();
+    for(SelContainer::const_iterator i=itemlist.begin(); itemlist.end() != i; i++) {
+        if (SP_IS_TEXT(*i) || SP_IS_FLOWTEXT(*i)) {
             ++items;
         }
     }

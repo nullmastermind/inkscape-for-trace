@@ -15,6 +15,6 @@
 
 typedef struct _GSList GSList;
 
-void removeoverlap(GSList const *items, double xGap, double yGap);
+void removeoverlap(SelContainer const &items, double xGap, double yGap);
 
 #endif // SEEN_REMOVEOVERLAP_H

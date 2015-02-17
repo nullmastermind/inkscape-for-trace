@@ -244,11 +244,10 @@ void SPFilter::update(SPCtx *ctx, guint flags) {
       childflags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
     }
     childflags &= SP_OBJECT_MODIFIED_CASCADE;
-
-    GSList *l = g_slist_reverse(this->childList(true, SPObject::ActionUpdate));
-    while (l) {
-        SPObject *child = SP_OBJECT (l->data);
-        l = g_slist_remove (l, child);
+    SelContainer l(this->childList(true, SPObject::ActionUpdate));
+    l.reverse();
+    for(SelContainer::const_iterator i=l.begin();i!=l.end();i++){
+        SPObject *child = SP_OBJECT (*i);
         if( SP_IS_FILTER_PRIMITIVE( child ) ) {
             child->updateDisplay(ctx, childflags);
         }

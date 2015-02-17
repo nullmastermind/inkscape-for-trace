@@ -47,11 +47,14 @@ class SPObject;
 #define SP_OBJECT_WRITE_ALL (1 << 2)
 #define SP_OBJECT_WRITE_NO_CHILDREN (1 << 3)
 
+
+
 #include <cassert>
 #include <stddef.h>
 #include <sigc++/connection.h>
 #include <sigc++/functors/slot.h>
 #include <sigc++/signal.h>
+#include <list>
 
 #include "version.h"
 #include "util/forward-pointer-iterator.h"
@@ -59,6 +62,11 @@ class SPObject;
 class SPCSSAttr;
 class SPStyle;
 typedef struct _GSList GSList;
+
+//should be in selection.h
+typedef std::list<SPObject*> SelContainer;
+
+
 
 namespace Inkscape {
 namespace XML {
@@ -330,7 +338,7 @@ public:
      * Retrieves the children as a GSList object, optionally ref'ing the children
      * in the process, if add_ref is specified.
      */
-    GSList *childList(bool add_ref, Action action = ActionGeneral);
+    SelContainer childList(bool add_ref, Action action = ActionGeneral);
 
     /**
      * Append repr as child of this object.

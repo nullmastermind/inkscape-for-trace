@@ -19,6 +19,7 @@
 
 #include <2geom/forward.h>
 #include "sp-item.h"
+#include "selection.h"
 
 class SPCSSAttr;
 class SPDesktop;
@@ -142,9 +143,9 @@ enum SPSelectStrokeStyleType {
 void sp_select_same_fill_stroke_style(SPDesktop *desktop, gboolean fill, gboolean strok, gboolean style);
 void sp_select_same_stroke_style(SPDesktop *desktop);
 void sp_select_same_object_type(SPDesktop *desktop);
-GSList *sp_get_same_fill_or_stroke_color(SPItem *sel, GSList *src, SPSelectStrokeStyleType type);
-GSList *sp_get_same_stroke_style(SPItem *sel, GSList *src, SPSelectStrokeStyleType type);
-GSList *sp_get_same_object_type(SPItem *sel, GSList *src);
+SelContainer sp_get_same_fill_or_stroke_color(SPItem *sel, SelContainer &src, SPSelectStrokeStyleType type);
+SelContainer sp_get_same_stroke_style(SPItem *sel, SelContainer &src, SPSelectStrokeStyleType type);
+SelContainer sp_get_same_object_type(SPItem *sel, SelContainer &src);
 
 void scroll_to_show_item(SPDesktop *desktop, SPItem *item);
 
@@ -171,9 +172,9 @@ void unlock_all_in_all_layers(SPDesktop *dt);
 void unhide_all(SPDesktop *dt);
 void unhide_all_in_all_layers(SPDesktop *dt);
 
-GSList *get_all_items(GSList *list, SPObject *from, SPDesktop *desktop, bool onlyvisible, bool onlysensitive, bool ingroups, GSList const *exclude);
+SelContainer &get_all_items(SelContainer &list, SPObject *from, SPDesktop *desktop, bool onlyvisible, bool onlysensitive, bool ingroups, SelContainer const &exclude);
 
-GSList *sp_degroup_list (GSList *items);
+SelContainer sp_degroup_list (SelContainer &items);
 
 /* selection cycling */
 typedef enum

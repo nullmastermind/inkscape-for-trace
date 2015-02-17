@@ -48,11 +48,10 @@ Gtk::Widget *Implementation::prefs_effect(Inkscape::Extension::Effect *module, I
     SPDocument * current_document = view->doc();
 
     using Inkscape::Util::GSListConstIterator;
-    // FIXME very unsafe cast
-    GSListConstIterator<SPItem *> selected = ((SPDesktop *)view)->getSelection()->itemList();
+    SelContainer selected = ((SPDesktop *)view)->getSelection()->itemList();
     Inkscape::XML::Node const* first_select = NULL;
-    if (selected != NULL) {
-        const SPItem * item = *selected;
+    if (!selected.empty()) {
+        const SPItem * item = SP_ITEM(selected.front());
         first_select = item->getRepr();
     }
 

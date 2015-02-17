@@ -408,7 +408,7 @@ sp_pattern_transform_multiply (SPPattern *pattern, Geom::Affine postmul, bool se
     g_free(c);
 }
 
-const gchar *pattern_tile(GSList *reprs, Geom::Rect bounds, SPDocument *document, Geom::Affine transform, Geom::Affine move)
+const gchar *pattern_tile(const SelContainer &reprs, Geom::Rect bounds, SPDocument *document, Geom::Affine transform, Geom::Affine move)
 {
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
     Inkscape::XML::Node *defsrepr = document->getDefs()->getRepr();
@@ -426,8 +426,8 @@ const gchar *pattern_tile(GSList *reprs, Geom::Rect bounds, SPDocument *document
     const gchar *pat_id = repr->attribute("id");
     SPObject *pat_object = document->getObjectById(pat_id);
 
-    for (GSList *i = reprs; i != NULL; i = i->next) {
-            Inkscape::XML::Node *node = (Inkscape::XML::Node *)(i->data);
+    for (SelContainer::const_iterator i=reprs.begin();i!=reprs.end();i++){
+            Inkscape::XML::Node *node = (Inkscape::XML::Node *)(*i);
         SPItem *copy = SP_ITEM(pat_object->appendChildRepr(node));
 
         Geom::Affine dup_transform;

@@ -15,6 +15,7 @@
 
 #include <map>
 #include "sp-lpe-item.h"
+#include "selection.h"//SelContainer
 
 #define SP_GROUP(obj) (dynamic_cast<SPGroup*>((SPObject*)obj))
 #define SP_IS_GROUP(obj) (dynamic_cast<const SPGroup*>((SPObject*)obj) != NULL)
@@ -95,10 +96,10 @@ public:
     virtual void update_patheffect(bool write);
 };
 
-void sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done = true);
+void sp_item_group_ungroup (SPGroup *group, SelContainer &children, bool do_done = true);
 
 
-GSList *sp_item_group_item_list (SPGroup *group);
+SelContainer sp_item_group_item_list (SPGroup *group);
 SPObject *sp_item_group_get_child_by_name (SPGroup *group, SPObject *ref, const char *name);
 
 #endif

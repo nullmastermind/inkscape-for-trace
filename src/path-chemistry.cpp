@@ -44,13 +44,22 @@
 
 using Inkscape::DocumentUndo;
 
+
+inline bool less_than_objects(SPObject const *first, SPObject const *second)
+{
+    return sp_repr_compare_position(first->getRepr(),
+                                    second->getRepr())<0;
+}
+
 void
 sp_selected_path_combine(SPDesktop *desktop)
 {
     Inkscape::Selection *selection = desktop->getSelection();
     SPDocument *doc = desktop->getDocument();
+
+    SelContainer items(selection->itemList());
     
-    if (g_slist_length((GSList *) selection->itemList()) < 1) {
+    if (items.size() < 1) {
         desktop->getMessageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to combine."));
         return;
     }
@@ -59,28 +68,26 @@ sp_selected_path_combine(SPDesktop *desktop)
     // set "busy" cursor
     desktop->setWaitingCursor();
 
-    GSList *items = g_slist_copy((GSList *) selection->itemList());
-
     items = sp_degroup_list (items); // descend into any groups in selection
 
-    GSList *to_paths = NULL;
-    for (GSList *i = items; i != NULL; i = i->next) {
-        SPItem *item = (SPItem *) i->data;
+    SelContainer to_paths;
+    for (SelContainer::const_iterator i=items.begin();i!=items.end();i++) {
+        SPItem *item = (SPItem *) (*i);
         if (!dynamic_cast<SPPath *>(item) && !dynamic_cast<SPGroup *>(item)) {
-            to_paths = g_slist_prepend(to_paths, item);
+            to_paths.push_front(item);
         }
     }
-    GSList *converted = NULL;
-    bool did = sp_item_list_to_curves(to_paths, &items, &converted);
-    g_slist_free(to_paths);
-    for (GSList *i = converted; i != NULL; i = i->next)
-        items = g_slist_prepend(items, doc->getObjectByRepr((Inkscape::XML::Node*)(i->data)));
+    SelContainer converted;
+    bool did = sp_item_list_to_curves(to_paths, items, converted);
+    to_paths.clear();
+    for (SelContainer::const_iterator i=converted.begin();i!=converted.end();i++)
+        items.push_front(doc->getObjectByRepr((Inkscape::XML::Node*)(*i)));
 
     items = sp_degroup_list (items); // converting to path may have added more groups, descend again
 
-    items = g_slist_sort(items, (GCompareFunc) sp_item_repr_compare_position);
-    items = g_slist_reverse(items);
-    assert(items); // cannot be NULL because of list length check at top of function
+    items.sort(less_than_objects);
+    items.reverse();
+    assert(!items.empty()); // cannot be NULL because of list length check at top of function
 
     // remember the position, id, transform and style of the topmost path, they will be assigned to the combined one
     gint position = 0;
@@ -97,9 +104,9 @@ sp_selected_path_combine(SPDesktop *desktop)
         selection->clear();
     }
 
-    for (GSList *i = items; i != NULL; i = i->next) {  // going from top to bottom
+    for (SelContainer::const_iterator i=items.begin();i!=items.end();i++){
 
-        SPItem *item = (SPItem *) i->data;
+        SPItem *item = (SPItem *) (*i);
         SPPath *path = dynamic_cast<SPPath *>(item);
         if (!path) {
             continue;
@@ -136,7 +143,6 @@ sp_selected_path_combine(SPDesktop *desktop)
         }
     }
 
-    g_slist_free(items);
 
     if (did) {
         first->deleteObject(false);
@@ -200,11 +206,10 @@ sp_selected_path_break_apart(SPDesktop *desktop)
 
     bool did = false;
 
-    for (GSList *items = g_slist_copy((GSList *) selection->itemList());
-         items != NULL;
-         items = items->next) {
+    SelContainer itemlist(selection->itemList());
+    for (SelContainer::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
 
-        SPItem *item = (SPItem *) items->data;
+        SPItem *item = (SPItem *) (*i);
 
         SPPath *path = dynamic_cast<SPPath *>(item);
         if (!path) {
@@ -241,7 +246,7 @@ sp_selected_path_break_apart(SPDesktop *desktop)
 
         curve->unref();
 
-        GSList *reprs = NULL;
+        SelContainer reprs;
         for (GSList *l = list; l != NULL; l = l->next) {
             curve = (SPCurve *) l->data;
 
@@ -267,14 +272,14 @@ sp_selected_path_break_apart(SPDesktop *desktop)
             if (l == list)
                 repr->setAttribute("id", id);
 
-            reprs = g_slist_prepend (reprs, repr);
+            reprs.push_front(dynamic_cast<SPObject*>(repr));
 
             Inkscape::GC::release(repr);
         }
 
         selection->setReprList(reprs);
 
-        g_slist_free(reprs);
+        reprs.clear();
         g_slist_free(list);
         g_free(style);
         g_free(path_effect);
@@ -307,18 +312,18 @@ sp_selected_path_to_curves(Inkscape::Selection *selection, SPDesktop *desktop, b
         desktop->setWaitingCursor();
     }
 
-    GSList *selected = g_slist_copy((GSList *) selection->itemList());
-    GSList *to_select = NULL;
+    SelContainer selected(selection->itemList());
+    SelContainer to_select;
     selection->clear();
-    GSList *items = g_slist_copy(selected);
+    SelContainer items(selected);
 
-    did = sp_item_list_to_curves(items, &selected, &to_select);
+    did = sp_item_list_to_curves(items, selected, to_select);
 
-    g_slist_free (items);
+    items.clear();
     selection->setReprList(to_select);
     selection->addList(selected);
-    g_slist_free (to_select);
-    g_slist_free (selected);
+    to_select.clear();
+    selected.clear();
 
     if (interactive && desktop) {
         desktop->clearWaitingCursor();
@@ -341,33 +346,29 @@ void sp_selected_to_lpeitems(SPDesktop *desktop)
         return;
     }
 
-    GSList *selected = g_slist_copy((GSList *) selection->itemList());
-    GSList *to_select = NULL;
+    SelContainer selected(selection->itemList());
+    SelContainer to_select;
     selection->clear();
-    GSList *items = g_slist_copy(selected);
+    SelContainer items(selected);
 
-    sp_item_list_to_curves(items, &selected, &to_select, true);
 
-    g_slist_free(items);
-    items = 0;
+    sp_item_list_to_curves(items, selected, to_select, true);
+
+    items.clear();
     selection->setReprList(to_select);
     selection->addList(selected);
-    g_slist_free(to_select);
-    to_select = 0;
-    g_slist_free(selected);
-    selected = 0;
+    to_select.clear();
+    selected.clear();
 }
 
 bool
-sp_item_list_to_curves(const GSList *items, GSList **selected, GSList **to_select, bool skip_all_lpeitems)
+sp_item_list_to_curves(const SelContainer &items, SelContainer& selected, SelContainer &to_select, bool skip_all_lpeitems)
 {
     bool did = false;
     
-    for (;
-         items != NULL;
-         items = items->next) {
+    for (SelContainer::const_iterator i=items.begin();i!=items.end();i++){
 
-        SPItem *item = dynamic_cast<SPItem *>(static_cast<SPObject *>(items->data));
+        SPItem *item = dynamic_cast<SPItem *>(static_cast<SPObject *>(*i));
         g_assert(item != NULL);
         SPDocument *document = item->document;
 
@@ -398,9 +399,9 @@ sp_item_list_to_curves(const GSList *items, GSList **selected, GSList **to_selec
             Inkscape::XML::Node *repr = box3d_convert_to_group(box)->getRepr();
             
             if (repr) {
-                *to_select = g_slist_prepend (*to_select, repr);
+                to_select.push_front(dynamic_cast<SPObject *>(repr));
                 did = true;
-                *selected = g_slist_remove (*selected, item);
+                selected.remove(item);
             }
 
             continue;
@@ -408,17 +409,17 @@ sp_item_list_to_curves(const GSList *items, GSList **selected, GSList **to_selec
         
         if (group) {
             group->removeAllPathEffects(true);
-            GSList *item_list = sp_item_group_item_list(group);
+            SelContainer item_list = sp_item_group_item_list(group);
             
-            GSList *item_to_select = NULL;
-            GSList *item_selected = NULL;
+            SelContainer item_to_select;
+            SelContainer item_selected;
             
-            if (sp_item_list_to_curves(item_list, &item_selected, &item_to_select))
+            if (sp_item_list_to_curves(item_list, item_selected, item_to_select))
                 did = true;
 
-            g_slist_free(item_list);
-            g_slist_free(item_to_select);
-            g_slist_free(item_selected);
+            item_list.clear();
+            item_to_select.clear();
+            item_selected.clear();
 
             continue;
         }
@@ -428,7 +429,7 @@ sp_item_list_to_curves(const GSList *items, GSList **selected, GSList **to_selec
             continue;
 
         did = true;
-        *selected = g_slist_remove (*selected, item);
+        selected.remove(item);
 
         // remember the position of the item
         gint pos = item->getRepr()->position();
@@ -470,7 +471,7 @@ sp_item_list_to_curves(const GSList *items, GSList **selected, GSList **to_selec
 
         /* Buglet: We don't re-add the (new version of the) object to the selection of any other
          * desktops where it was previously selected. */
-        *to_select = g_slist_prepend (*to_select, repr);
+        to_select.push_front(dynamic_cast<SPObject *>(repr));
         Inkscape::GC::release(repr);
     }
     
@@ -612,9 +613,9 @@ void
 sp_selected_path_reverse(SPDesktop *desktop)
 {
     Inkscape::Selection *selection = desktop->getSelection();
-    GSList *items = (GSList *) selection->itemList();
+    SelContainer items = selection->itemList();
 
-    if (!items) {
+    if (items.empty()) {
         desktop->getMessageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>path(s)</b> to reverse."));
         return;
     }
@@ -626,9 +627,9 @@ sp_selected_path_reverse(SPDesktop *desktop)
     bool did = false;
     desktop->messageStack()->flash(Inkscape::IMMEDIATE_MESSAGE, _("Reversing paths..."));
 
-    for (GSList *i = items; i != NULL; i = i->next) {
+    for (SelContainer::const_iterator i=items.begin();i!=items.end();i++){
 
-        SPPath *path = dynamic_cast<SPPath *>(static_cast<SPObject *>(i->data));
+        SPPath *path = dynamic_cast<SPPath *>(static_cast<SPObject *>(*i));
         if (!path) {
             continue;
         }

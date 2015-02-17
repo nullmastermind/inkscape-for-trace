@@ -125,17 +125,15 @@ void Filter::effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::Vie
 	//printf("Calling filter effect\n");
     Inkscape::Selection * selection = ((SPDesktop *)document)->selection;
 
-    using Inkscape::Util::GSListConstIterator;
     // TODO need to properly refcount the items, at least
-    std::list<SPItem *> items;
-    items.insert<GSListConstIterator<SPItem *> >(items.end(), selection->itemList(), NULL);
+    SelContainer items(selection->itemList());
 
 	Inkscape::XML::Document * xmldoc = document->doc()->getReprDoc();
 	Inkscape::XML::Node * defsrepr = document->doc()->getDefs()->getRepr();
 
-    for(std::list<SPItem *>::iterator item = items.begin();
+    for(SelContainer::iterator item = items.begin();
             item != items.end(); ++item) {
-        SPItem * spitem = *item;
+        SPItem * spitem = static_cast<SPItem*>(*item);
 	Inkscape::XML::Node * node = spitem->getRepr();
 
 		SPCSSAttr * css = sp_repr_css_attr(node, "style");

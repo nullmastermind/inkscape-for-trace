@@ -194,10 +194,10 @@ sp_desktop_set_style(SPDesktop *desktop, SPCSSAttr *css, bool change, bool write
         sp_repr_css_merge(css_write, css);
         sp_css_attr_unset_uris(css_write);
         prefs->mergeStyle("/desktop/style", css_write);
-
-        for (const GSList *i = desktop->selection->itemList(); i != NULL; i = i->next) {
+        SelContainer const itemlist = desktop->selection->itemList();
+        for (SelContainer::const_iterator i=itemlist.begin();i!=itemlist.end();i++) {
             /* last used styles for 3D box faces are stored separately */
-            SPObject *obj = reinterpret_cast<SPObject *>(i->data); // TODO unsafe until Selection is refactored.
+            SPObject *obj = reinterpret_cast<SPObject *>(*i); // TODO unsafe until Selection is refactored.
             Box3DSide *side = dynamic_cast<Box3DSide *>(obj);
             if (side) {
                 const char * descr  = box3d_side_axes_string(side);
@@ -234,8 +234,9 @@ sp_desktop_set_style(SPDesktop *desktop, SPCSSAttr *css, bool change, bool write
         sp_repr_css_merge(css_no_text, css);
         css_no_text = sp_css_attr_unset_text(css_no_text);
 
-        for (GSList const *i = desktop->selection->itemList(); i != NULL; i = i->next) {
-            SPItem *item = reinterpret_cast<SPItem *>(i->data);
+        SelContainer const itemlist = desktop->selection->itemList();
+        for (SelContainer::const_iterator i=itemlist.begin();i!=itemlist.end();i++) {
+            SPItem *item = reinterpret_cast<SPItem *>(*i);
 
             // If not text, don't apply text attributes (can a group have text attributes? Yes! FIXME)
             if (isTextualItem(item)) {
@@ -438,17 +439,16 @@ sp_desktop_get_font_size_tool(SPDesktop *desktop)
 /** Determine average stroke width, simple method */
 // see TODO in dialogs/stroke-style.cpp on how to get rid of this eventually
 gdouble
-stroke_average_width (GSList const *objects)
+stroke_average_width (const SelContainer &objects)
 {
-    if (g_slist_length ((GSList *) objects) == 0)
+    if (objects.empty())
         return Geom::infinity();
 
     gdouble avgwidth = 0.0;
     bool notstroked = true;
     int n_notstroked = 0;
-
-    for (GSList const *l = objects; l != NULL; l = l->next) {
-        SPObject *obj = reinterpret_cast<SPObject *>(l->data);
+    for (SelContainer::const_iterator i=objects.begin();i!=objects.end();i++) {
+        SPObject *obj = reinterpret_cast<SPObject *>(*i);
         SPItem *item = dynamic_cast<SPItem *>(obj);
         if (!item) {
             continue;
@@ -471,7 +471,7 @@ stroke_average_width (GSList const *objects)
     if (notstroked)
         return Geom::infinity();
 
-    return avgwidth / (g_slist_length ((GSList *) objects) - n_notstroked);
+    return avgwidth / (objects.size() - n_notstroked);
 }
 
 static bool vectorsClose( std::vector<double> const &lhs, std::vector<double> const &rhs )
@@ -492,9 +492,9 @@ static bool vectorsClose( std::vector<double> const &lhs, std::vector<double> co
  * Write to style_res the average fill or stroke of list of objects, if applicable.
  */
 int
-objects_query_fillstroke (GSList *objects, SPStyle *style_res, bool const isfill)
+objects_query_fillstroke (const SelContainer &objects, SPStyle *style_res, bool const isfill)
 {
-    if (g_slist_length(objects) == 0) {
+    if (objects.empty()) {
         /* No objects, set empty */
         return QUERY_STYLE_NOTHING;
     }
@@ -514,8 +514,8 @@ objects_query_fillstroke (GSList *objects, SPStyle *style_res, bool const isfill
     prev[0] = prev[1] = prev[2] = 0.0;
     bool same_color = true;
 
-    for (GSList const *i = objects; i != NULL; i = i->next) {
-        SPObject *obj = reinterpret_cast<SPObject *>(i->data);
+    for (SelContainer::const_iterator i=objects.begin();i!=objects.end();i++) {
+        SPObject *obj = reinterpret_cast<SPObject *>(*i);
         if (!obj) {
             continue;
         }
@@ -674,7 +674,7 @@ objects_query_fillstroke (GSList *objects, SPStyle *style_res, bool const isfill
     }
 
     // Not color
-    if (g_slist_length(objects) > 1) {
+    if (objects.size() > 1) {
         return QUERY_STYLE_MULTIPLE_SAME;
     } else {
         return QUERY_STYLE_SINGLE;
@@ -685,9 +685,9 @@ objects_query_fillstroke (GSList *objects, SPStyle *style_res, bool const isfill
  * Write to style_res the average opacity of a list of objects.
  */
 int
-objects_query_opacity (GSList *objects, SPStyle *style_res)
+objects_query_opacity (const SelContainer &objects, SPStyle *style_res)
 {
-    if (g_slist_length(objects) == 0) {
+    if (objects.empty()) {
         /* No objects, set empty */
         return QUERY_STYLE_NOTHING;
     }
@@ -698,8 +698,8 @@ objects_query_opacity (GSList *objects, SPStyle *style_res)
     guint opacity_items = 0;
 
 
-    for (GSList const *i = objects; i != NULL; i = i->next) {
-        SPObject *obj = reinterpret_cast<SPObject *>(i->data);
+    for (SelContainer::const_iterator i=objects.begin();i!=objects.end();i++) {
+        SPObject *obj = reinterpret_cast<SPObject *>(*i);
         if (!obj) {
             continue;
         }
@@ -739,9 +739,9 @@ objects_query_opacity (GSList *objects, SPStyle *style_res)
  * Write to style_res the average stroke width of a list of objects.
  */
 int
-objects_query_strokewidth (GSList *objects, SPStyle *style_res)
+objects_query_strokewidth (const SelContainer &objects, SPStyle *style_res)
 {
-    if (g_slist_length(objects) == 0) {
+    if (objects.empty()) {
         /* No objects, set empty */
         return QUERY_STYLE_NOTHING;
     }
@@ -754,8 +754,8 @@ objects_query_strokewidth (GSList *objects, SPStyle *style_res)
 
     int n_stroked = 0;
 
-    for (GSList const *i = objects; i != NULL; i = i->next) {
-        SPObject *obj = reinterpret_cast<SPObject *>(i->data);
+    for (SelContainer::const_iterator i=objects.begin();i!=objects.end();i++) {
+        SPObject *obj = reinterpret_cast<SPObject *>(*i);
         if (!obj) {
             continue;
         }
@@ -815,9 +815,9 @@ objects_query_strokewidth (GSList *objects, SPStyle *style_res)
  * Write to style_res the average miter limit of a list of objects.
  */
 int
-objects_query_miterlimit (GSList *objects, SPStyle *style_res)
+objects_query_miterlimit (const SelContainer &objects, SPStyle *style_res)
 {
-    if (g_slist_length(objects) == 0) {
+    if (objects.empty()) {
         /* No objects, set empty */
         return QUERY_STYLE_NOTHING;
     }
@@ -828,8 +828,8 @@ objects_query_miterlimit (GSList *objects, SPStyle *style_res)
     gdouble prev_ml = -1;
     bool same_ml = true;
 
-    for (GSList const *i = objects; i != NULL; i = i->next) {
-        SPObject *obj = reinterpret_cast<SPObject *>(i->data);
+    for (SelContainer::const_iterator i=objects.begin();i!=objects.end();i++) {
+        SPObject *obj = reinterpret_cast<SPObject *>(*i);
         if (!dynamic_cast<SPItem *>(obj)) {
             continue;
         }
@@ -875,9 +875,9 @@ objects_query_miterlimit (GSList *objects, SPStyle *style_res)
  * Write to style_res the stroke cap of a list of objects.
  */
 int
-objects_query_strokecap (GSList *objects, SPStyle *style_res)
+objects_query_strokecap (const SelContainer &objects, SPStyle *style_res)
 {
-    if (g_slist_length(objects) == 0) {
+    if (objects.empty()) {
         /* No objects, set empty */
         return QUERY_STYLE_NOTHING;
     }
@@ -887,8 +887,8 @@ objects_query_strokecap (GSList *objects, SPStyle *style_res)
     bool same_cap = true;
     int n_stroked = 0;
 
-    for (GSList const *i = objects; i != NULL; i = i->next) {
-        SPObject *obj = reinterpret_cast<SPObject *>(i->data);
+    for (SelContainer::const_iterator i=objects.begin();i!=objects.end();i++) {
+        SPObject *obj = reinterpret_cast<SPObject *>(*i);
         if (!dynamic_cast<SPItem *>(obj)) {
             continue;
         }
@@ -929,9 +929,9 @@ objects_query_strokecap (GSList *objects, SPStyle *style_res)
  * Write to style_res the stroke join of a list of objects.
  */
 int
-objects_query_strokejoin (GSList *objects, SPStyle *style_res)
+objects_query_strokejoin (const SelContainer &objects, SPStyle *style_res)
 {
-    if (g_slist_length(objects) == 0) {
+    if (objects.empty()) {
         /* No objects, set empty */
         return QUERY_STYLE_NOTHING;
     }
@@ -941,8 +941,8 @@ objects_query_strokejoin (GSList *objects, SPStyle *style_res)
     bool same_join = true;
     int n_stroked = 0;
 
-    for (GSList const *i = objects; i != NULL; i = i->next) {
-        SPObject *obj = reinterpret_cast<SPObject *>(i->data);
+    for (SelContainer::const_iterator i=objects.begin();i!=objects.end();i++) {
+        SPObject *obj = reinterpret_cast<SPObject *>(*i);
         if (!dynamic_cast<SPItem *>(obj)) {
             continue;
         }
@@ -984,7 +984,7 @@ objects_query_strokejoin (GSList *objects, SPStyle *style_res)
  * Write to style_res the average font size and spacing of objects.
  */
 int
-objects_query_fontnumbers (GSList *objects, SPStyle *style_res)
+objects_query_fontnumbers (const SelContainer &objects, SPStyle *style_res)
 {
     bool different = false;
 
@@ -1004,8 +1004,8 @@ objects_query_fontnumbers (GSList *objects, SPStyle *style_res)
     int texts = 0;
     int no_size = 0;
 
-    for (GSList const *i = objects; i != NULL; i = i->next) {
-        SPObject *obj = reinterpret_cast<SPObject *>(i->data);
+    for (SelContainer::const_iterator i=objects.begin();i!=objects.end();i++) {
+        SPObject *obj = reinterpret_cast<SPObject *>(*i);
 
         if (!isTextualItem(obj)) {
             continue;
@@ -1116,15 +1116,15 @@ objects_query_fontnumbers (GSList *objects, SPStyle *style_res)
  * Write to style_res the average font style of objects.
  */
 int
-objects_query_fontstyle (GSList *objects, SPStyle *style_res)
+objects_query_fontstyle (const SelContainer &objects, SPStyle *style_res)
 {
     bool different = false;
     bool set = false;
 
     int texts = 0;
 
-    for (GSList const *i = objects; i != NULL; i = i->next) {
-        SPObject *obj = reinterpret_cast<SPObject *>(i->data);
+    for (SelContainer::const_iterator i=objects.begin();i!=objects.end();i++) {
+        SPObject *obj = reinterpret_cast<SPObject *>(*i);
 
         if (!isTextualItem(obj)) {
             continue;
@@ -1173,7 +1173,7 @@ objects_query_fontstyle (GSList *objects, SPStyle *style_res)
  * Write to style_res the baseline numbers.
  */
 static int
-objects_query_baselines (GSList *objects, SPStyle *style_res)
+objects_query_baselines (const SelContainer &objects, SPStyle *style_res)
 {
     bool different = false;
 
@@ -1192,8 +1192,8 @@ objects_query_baselines (GSList *objects, SPStyle *style_res)
 
     int texts = 0;
 
-    for (GSList const *i = objects; i != NULL; i = i->next) {
-        SPObject *obj = reinterpret_cast<SPObject *>(i->data);
+    for (SelContainer::const_iterator i=objects.begin();i!=objects.end();i++) {
+        SPObject *obj = reinterpret_cast<SPObject *>(*i);
 
         if (!isTextualItem(obj)) {
             continue;
@@ -1269,7 +1269,7 @@ objects_query_baselines (GSList *objects, SPStyle *style_res)
  * Write to style_res the average font family of objects.
  */
 int
-objects_query_fontfamily (GSList *objects, SPStyle *style_res)
+objects_query_fontfamily (const SelContainer &objects, SPStyle *style_res)
 {
     bool different = false;
     int texts = 0;
@@ -1280,8 +1280,8 @@ objects_query_fontfamily (GSList *objects, SPStyle *style_res)
     }
     style_res->font_family.set = FALSE;
 
-    for (GSList const *i = objects; i != NULL; i = i->next) {
-        SPObject *obj = reinterpret_cast<SPObject *>(i->data);
+    for (SelContainer::const_iterator i=objects.begin();i!=objects.end();i++) {
+        SPObject *obj = reinterpret_cast<SPObject *>(*i);
 
         // std::cout << "  " << reinterpret_cast<SPObject*>(i->data)->getId() << std::endl;
         if (!isTextualItem(obj)) {
@@ -1325,7 +1325,7 @@ objects_query_fontfamily (GSList *objects, SPStyle *style_res)
 }
 
 static int
-objects_query_fontspecification (GSList *objects, SPStyle *style_res)
+objects_query_fontspecification (const SelContainer &objects, SPStyle *style_res)
 {
     bool different = false;
     int texts = 0;
@@ -1336,8 +1336,8 @@ objects_query_fontspecification (GSList *objects, SPStyle *style_res)
     }
     style_res->font_specification.set = FALSE;
 
-    for (GSList const *i = objects; i != NULL; i = i->next) {
-        SPObject *obj = reinterpret_cast<SPObject *>(i->data);
+    for (SelContainer::const_iterator i=objects.begin();i!=objects.end();i++) {
+        SPObject *obj = reinterpret_cast<SPObject *>(*i);
 
         // std::cout << "  " << reinterpret_cast<SPObject*>(i->data)->getId() << std::endl;
         if (!isTextualItem(obj)) {
@@ -1385,7 +1385,7 @@ objects_query_fontspecification (GSList *objects, SPStyle *style_res)
 }
 
 static int
-objects_query_blend (GSList *objects, SPStyle *style_res)
+objects_query_blend (const SelContainer &objects, SPStyle *style_res)
 {
     const int empty_prev = -2;
     const int complex_filter = 5;
@@ -1394,8 +1394,8 @@ objects_query_blend (GSList *objects, SPStyle *style_res)
     bool same_blend = true;
     guint items = 0;
 
-    for (GSList const *i = objects; i != NULL; i = i->next) {
-        SPObject *obj = reinterpret_cast<SPObject *>(i->data);
+    for (SelContainer::const_iterator i=objects.begin();i!=objects.end();i++) {
+        SPObject *obj = reinterpret_cast<SPObject *>(*i);
         if (!obj) {
             continue;
         }
@@ -1471,9 +1471,9 @@ objects_query_blend (GSList *objects, SPStyle *style_res)
  * Write to style_res the average blurring of a list of objects.
  */
 int
-objects_query_blur (GSList *objects, SPStyle *style_res)
+objects_query_blur (const SelContainer &objects, SPStyle *style_res)
 {
-   if (g_slist_length(objects) == 0) {
+   if (objects.empty()) {
         /* No objects, set empty */
         return QUERY_STYLE_NOTHING;
     }
@@ -1484,8 +1484,8 @@ objects_query_blur (GSList *objects, SPStyle *style_res)
     guint blur_items = 0;
     guint items = 0;
 
-    for (GSList const *i = objects; i != NULL; i = i->next) {
-        SPObject *obj = reinterpret_cast<SPObject *>(i->data);
+    for (SelContainer::const_iterator i=objects.begin();i!=objects.end();i++) {
+        SPObject *obj = reinterpret_cast<SPObject *>(*i);
         if (!obj) {
             continue;
         }
@@ -1553,7 +1553,7 @@ objects_query_blur (GSList *objects, SPStyle *style_res)
  * the result to style, return appropriate flag.
  */
 int
-sp_desktop_query_style_from_list (GSList *list, SPStyle *style, int property)
+sp_desktop_query_style_from_list (const SelContainer &list, SPStyle *style, int property)
 {
     if (property == QUERY_STYLE_PROPERTY_FILL) {
         return objects_query_fillstroke (list, style, true);
@@ -1606,7 +1606,7 @@ sp_desktop_query_style(SPDesktop *desktop, SPStyle *style, int property)
 
     // otherwise, do querying and averaging over selection
     if (desktop->selection != NULL) {
-        return sp_desktop_query_style_from_list ((GSList *) desktop->selection->itemList(), style, property);
+        return sp_desktop_query_style_from_list (desktop->selection->itemList(), style, property);
     }
 
     return QUERY_STYLE_NOTHING;

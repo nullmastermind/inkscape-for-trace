@@ -16,6 +16,7 @@
 # include <config.h>
 #endif
 
+#include "selection.h"
 #include "ui/widget/panel.h"
 #include "ui/widget/button.h"
 #include "ui/widget/entry.h" 
@@ -148,10 +149,10 @@ protected:
     /**
      * Function to filter a list of items based on the item type by calling each item_XXX_match function
      */
-    GSList *    filter_fields (GSList *l, bool exact, bool casematch);
+    SelContainer    filter_fields (SelContainer &l, bool exact, bool casematch);
     bool        item_type_match (SPItem *item);
-    GSList *    filter_types (GSList *l);
-    GSList *    filter_list (GSList *l, bool exact, bool casematch);
+    SelContainer    filter_types (SelContainer &l);
+    SelContainer &    filter_list (SelContainer &l, bool exact, bool casematch);
 
     /**
      * Find a string within a string and returns true if found with options for exact and casematching
@@ -172,12 +173,12 @@ protected:
      * recursive function to return a list of all the items in the SPObject tree
      *
      */
-    GSList *    all_items (SPObject *r, GSList *l, bool hidden, bool locked);
+    SelContainer &    all_items (SPObject *r, SelContainer &l, bool hidden, bool locked);
     /**
      * to return a list of all the selected items
      *
      */
-    GSList *    all_selection_items (Inkscape::Selection *s, GSList *l, SPObject *ancestor, bool hidden, bool locked);
+    SelContainer &    all_selection_items (Inkscape::Selection *s, SelContainer &l, SPObject *ancestor, bool hidden, bool locked);
 
     /**
      * Shrink the dialog size when the expander widget is closed

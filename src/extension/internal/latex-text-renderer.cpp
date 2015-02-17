@@ -228,14 +228,14 @@ LaTeXTextRenderer::writePostamble()
 
 void LaTeXTextRenderer::sp_group_render(SPGroup *group)
 {
-    GSList *l = g_slist_reverse(group->childList(false));
-    while (l) {
-        SPObject *o = reinterpret_cast<SPObject *>(l->data);
+    SelContainer l = (group->childList(false));
+    l.reverse();
+    for(SelContainer::const_iterator x=l.begin();x!=l.end();x++){
+        SPObject *o = reinterpret_cast<SPObject *>(*x);
         SPItem *item = dynamic_cast<SPItem *>(o);
         if (item) {
             renderItem(item);
         }
-        l = g_slist_remove (l, o);
     }
 }
 

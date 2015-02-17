@@ -42,9 +42,9 @@
 namespace Inkscape {
 
 Selection::Selection(LayerModel *layers, SPDesktop *desktop) :
-    _objs(NULL),
-    _reprs(NULL),
-    _items(NULL),
+    _objs(SelContainer()),
+    _reprs(SelContainer()),
+    _items(SelContainer()),
     _layers(layers),
     _desktop(desktop),
     _selection_context(NULL),
@@ -121,17 +121,14 @@ Selection::_releaseContext(SPObject *obj)
 }
 
 void Selection::_invalidateCachedLists() {
-    g_slist_free(_items);
-    _items = NULL;
-
-    g_slist_free(_reprs);
-    _reprs = NULL;
+    _items.clear();
+    _reprs.clear();
 }
 
 void Selection::_clear() {
     _invalidateCachedLists();
-    while (_objs) {
-        SPObject *obj=reinterpret_cast<SPObject *>(_objs->data);
+    while (!_objs.empty()) {
+        SPObject *obj=reinterpret_cast<SPObject *>(_objs.front());
         _remove(obj);
     }
 }
@@ -148,7 +145,7 @@ bool Selection::includes(SPObject *obj) const {
 
     g_return_val_if_fail(SP_IS_OBJECT(obj), FALSE);
 
-    return ( g_slist_find(_objs, obj) != NULL );
+    return ( find(_objs.begin(),_objs.end(),obj)!=_objs.end() );
 }
 
 void Selection::add(SPObject *obj, bool persist_selection_context/* = false */) {
@@ -180,7 +177,7 @@ void Selection::_add(SPObject *obj) {
     _removeObjectDescendants(obj);
     _removeObjectAncestors(obj);
 
-    _objs = g_slist_prepend(_objs, obj);
+    _objs.push_front(obj);
 
     add_3D_boxes_recursively(obj);
 
@@ -234,26 +231,26 @@ void Selection::_remove(SPObject *obj) {
 
     remove_3D_boxes_recursively(obj);
 
-    _objs = g_slist_remove(_objs, obj);
+    _objs.remove(obj);
 }
 
-void Selection::setList(GSList const *list) {
+void Selection::setList(SelContainer const &list) {
     // Clear and add, or just clear with emit.
-    if (list != NULL) {
+    if (!list.empty()) {
         _clear();
         addList(list);
     } else clear();
 }
 
-void Selection::addList(GSList const *list) {
+void Selection::addList(SelContainer const &list) {
 
-    if (list == NULL)
+    if (list.empty())
         return;
 
     _invalidateCachedLists();
 
-    for ( GSList const *iter = list ; iter != NULL ; iter = iter->next ) {
-        SPObject *obj = reinterpret_cast<SPObject *>(iter->data);
+    for ( SelContainer::const_iterator iter=list.begin();iter!=list.end();iter++ ) {
+        SPObject *obj = reinterpret_cast<SPObject *>(*iter);
         if (includes(obj)) continue;
         _add (obj);
     }
@@ -261,11 +258,11 @@ void Selection::addList(GSList const *list) {
     _emitChanged();
 }
 
-void Selection::setReprList(GSList const *list) {
+void Selection::setReprList(SelContainer const &list) {
     _clear();
 
-    for ( GSList const *iter = list ; iter != NULL ; iter = iter->next ) {
-        SPObject *obj=_objectForXMLNode(reinterpret_cast<Inkscape::XML::Node *>(iter->data));
+    for ( SelContainer::const_iterator iter=list.begin();iter!=list.end();iter++ ) {
+        SPObject *obj=_objectForXMLNode(reinterpret_cast<Inkscape::XML::Node *>(*iter));
         if (obj) {
             _add(obj);
         }
@@ -279,34 +276,34 @@ void Selection::clear() {
     _emitChanged();
 }
 
-GSList const *Selection::list() {
+SelContainer const &Selection::list() {
     return _objs;
 }
 
-GSList const *Selection::itemList() {
-    if (_items) {
+SelContainer const &Selection::itemList() {
+    if (!_items.empty()) {
         return _items;
     }
 
-    for ( GSList const *iter=_objs ; iter != NULL ; iter = iter->next ) {
-        SPObject *obj=reinterpret_cast<SPObject *>(iter->data);
+    for ( SelContainer::const_iterator iter=_objs.begin();iter!=_objs.end();iter++ ) {
+        SPObject *obj=reinterpret_cast<SPObject *>(*iter);
         if (SP_IS_ITEM(obj)) {
-            _items = g_slist_prepend(_items, SP_ITEM(obj));
+            _items.push_front(SP_ITEM(obj));
         }
     }
-    _items = g_slist_reverse(_items);
+    _items.reverse();
 
     return _items;
 }
 
-GSList const *Selection::reprList() {
-    if (_reprs) { return _reprs; }
-
-    for ( GSList const *iter=itemList() ; iter != NULL ; iter = iter->next ) {
-        SPObject *obj=reinterpret_cast<SPObject *>(iter->data);
-        _reprs = g_slist_prepend(_reprs, obj->getRepr());
+SelContainer const &Selection::reprList() {
+    if (!_reprs.empty()) { return _reprs; }
+    SelContainer list = itemList();
+    for ( SelContainer::const_iterator iter=list.begin();iter!=list.end();iter++ ) {
+        SPObject *obj=reinterpret_cast<SPObject *>(*iter);
+        _reprs.push_front(dynamic_cast<SPObject*>(obj->getRepr()));
     }
-    _reprs = g_slist_reverse(_reprs);
+    _reprs.reverse();
 
     return _reprs;
 }
@@ -337,17 +334,17 @@ std::list<SPBox3D *> const Selection::box3DList(Persp3D *persp) {
 }
 
 SPObject *Selection::single() {
-    if ( _objs != NULL && _objs->next == NULL ) {
-        return reinterpret_cast<SPObject *>(_objs->data);
+    if ( _objs.size() == 1 ) {
+        return reinterpret_cast<SPObject *>(_objs.front());
     } else {
         return NULL;
     }
 }
 
 SPItem *Selection::singleItem() {
-    GSList const *items=itemList();
-    if ( items != NULL && items->next == NULL ) {
-        return reinterpret_cast<SPItem *>(items->data);
+	SelContainer const items=itemList();
+    if ( !items.size()==1) {
+        return reinterpret_cast<SPItem *>(items.front());
     } else {
         return NULL;
     }
@@ -362,12 +359,12 @@ SPItem *Selection::largestItem(Selection::CompareSize compare) {
 }
 
 SPItem *Selection::_sizeistItem(bool sml, Selection::CompareSize compare) {
-    GSList const *items = const_cast<Selection *>(this)->itemList();
+	SelContainer const items = const_cast<Selection *>(this)->itemList();
     gdouble max = sml ? 1e18 : 0;
     SPItem *ist = NULL;
 
-    for ( GSList const *i = items; i != NULL ; i = i->next ) {
-        Geom::OptRect obox = SP_ITEM(i->data)->desktopPreferredBounds();
+    for ( SelContainer::const_iterator i=items.begin();i!=items.end();i++ ) {
+        Geom::OptRect obox = SP_ITEM(*i)->desktopPreferredBounds();
         if (!obox || obox.isEmpty()) continue;
         Geom::Rect bbox = *obox;
 
@@ -376,7 +373,7 @@ SPItem *Selection::_sizeistItem(bool sml, Selection::CompareSize compare) {
         size = sml ? size : size * -1;
         if (size < max) {
             max = size;
-            ist = SP_ITEM(i->data);
+            ist = SP_ITEM(*i);
         }
     }
     return ist;
@@ -395,22 +392,22 @@ Geom::OptRect Selection::bounds(SPItem::BBoxType type) const
 
 Geom::OptRect Selection::geometricBounds() const
 {
-    GSList const *items = const_cast<Selection *>(this)->itemList();
+	SelContainer const items = const_cast<Selection *>(this)->itemList();
 
     Geom::OptRect bbox;
-    for ( GSList const *i = items ; i != NULL ; i = i->next ) {
-        bbox.unionWith(SP_ITEM(i->data)->desktopGeometricBounds());
+    for ( SelContainer::const_iterator iter=items.begin();iter!=items.end();iter++ ) {
+        bbox.unionWith(SP_ITEM(*iter)->desktopGeometricBounds());
     }
     return bbox;
 }
 
 Geom::OptRect Selection::visualBounds() const
 {
-    GSList const *items = const_cast<Selection *>(this)->itemList();
+	SelContainer const items = const_cast<Selection *>(this)->itemList();
 
     Geom::OptRect bbox;
-    for ( GSList const *i = items ; i != NULL ; i = i->next ) {
-        bbox.unionWith(SP_ITEM(i->data)->desktopVisualBounds());
+    for ( SelContainer::const_iterator iter=items.begin();iter!=items.end();iter++ ) {
+        bbox.unionWith(SP_ITEM(*iter)->desktopVisualBounds());
     }
     return bbox;
 }
@@ -427,11 +424,11 @@ Geom::OptRect Selection::preferredBounds() const
 Geom::OptRect Selection::documentBounds(SPItem::BBoxType type) const
 {
     Geom::OptRect bbox;
-    GSList const *items = const_cast<Selection *>(this)->itemList();
-    if (!items) return bbox;
+    SelContainer const items = const_cast<Selection *>(this)->itemList();
+    if (items.empty()) return bbox;
 
-    for ( GSList const *iter=items ; iter != NULL ; iter = iter->next ) {
-        SPItem *item = SP_ITEM(iter->data);
+    for ( SelContainer::const_iterator iter=items.begin();iter!=items.end();iter++ ) {
+        SPItem *item = SP_ITEM(*iter);
         bbox |= item->documentBounds(type);
     }
 
@@ -441,9 +438,9 @@ Geom::OptRect Selection::documentBounds(SPItem::BBoxType type) const
 // If we have a selection of multiple items, then the center of the first item
 // will be returned; this is also the case in SelTrans::centerRequest()
 boost::optional<Geom::Point> Selection::center() const {
-    GSList *items = (GSList *) const_cast<Selection *>(this)->itemList();
-    if (items) {
-        SPItem *first = reinterpret_cast<SPItem*>(g_slist_last(items)->data); // from the first item in selection
+	SelContainer const items = const_cast<Selection *>(this)->itemList();
+    if (!items.empty()) {
+        SPItem *first = reinterpret_cast<SPItem*>(items.back()); // from the first item in selection
         if (first->isCenterSet()) { // only if set explicitly
             return first->getCenter();
         }
@@ -457,13 +454,13 @@ boost::optional<Geom::Point> Selection::center() const {
 }
 
 std::vector<Inkscape::SnapCandidatePoint> Selection::getSnapPoints(SnapPreferences const *snapprefs) const {
-    GSList const *items = const_cast<Selection *>(this)->itemList();
+	SelContainer const items = const_cast<Selection *>(this)->itemList();
 
     SnapPreferences snapprefs_dummy = *snapprefs; // create a local copy of the snapping prefs
     snapprefs_dummy.setTargetSnappable(Inkscape::SNAPTARGET_ROTATION_CENTER, false); // locally disable snapping to the item center
     std::vector<Inkscape::SnapCandidatePoint> p;
-    for (GSList const *iter = items; iter != NULL; iter = iter->next) {
-        SPItem *this_item = SP_ITEM(iter->data);
+    for ( SelContainer::const_iterator iter=items.begin();iter!=items.end();iter++ ) {
+        SPItem *this_item = SP_ITEM(*iter);
         this_item->getSnappoints(p, &snapprefs_dummy);
 
         //Include the transformation origin for snapping
@@ -477,10 +474,8 @@ std::vector<Inkscape::SnapCandidatePoint> Selection::getSnapPoints(SnapPreferenc
 }
 
 void Selection::_removeObjectDescendants(SPObject *obj) {
-    GSList *iter, *next;
-    for ( iter = _objs ; iter ; iter = next ) {
-        next = iter->next;
-        SPObject *sel_obj=reinterpret_cast<SPObject *>(iter->data);
+    for ( SelContainer::const_iterator iter=_objs.begin();iter!=_objs.end();iter++ ) {
+        SPObject *sel_obj=reinterpret_cast<SPObject *>(*iter);
         SPObject *parent = sel_obj->parent;
         while (parent) {
             if ( parent == obj ) {
@@ -511,32 +506,24 @@ SPObject *Selection::_objectForXMLNode(Inkscape::XML::Node *repr) const {
     return object;
 }
 
-guint Selection::numberOfLayers() {
-    GSList const *items = const_cast<Selection *>(this)->itemList();
-    GSList *layers = NULL;
-    for (GSList const *iter = items; iter != NULL; iter = iter->next) {
-        SPObject *layer = _layers->layerForObject(SP_OBJECT(iter->data));
-        if (g_slist_find (layers, layer) == NULL) {
-            layers = g_slist_prepend (layers, layer);
-        }
+uint Selection::numberOfLayers() {
+	SelContainer const items = const_cast<Selection *>(this)->itemList();
+	std::set<SPObject*> layers;
+    for ( SelContainer::const_iterator iter=items.begin();iter!=items.end();iter++ ) {
+        SPObject *layer = _layers->layerForObject(SP_OBJECT(*iter));
+        layers.insert(layer);
     }
-    guint ret = g_slist_length (layers);
-    g_slist_free (layers);
-    return ret;
+    return layers.size();
 }
 
 guint Selection::numberOfParents() {
-    GSList const *items = const_cast<Selection *>(this)->itemList();
-    GSList *parents = NULL;
-    for (GSList const *iter = items; iter != NULL; iter = iter->next) {
-        SPObject *parent = SP_OBJECT(iter->data)->parent;
-        if (g_slist_find (parents, parent) == NULL) {
-            parents = g_slist_prepend (parents, parent);
-        }
+	SelContainer const items = const_cast<Selection *>(this)->itemList();
+	std::set<SPObject*> parents;
+    for ( SelContainer::const_iterator iter=items.begin();iter!=items.end();iter++ ) {
+        SPObject *parent = SP_OBJECT(*iter)->parent;
+        parents.insert(parent);
     }
-    guint ret = g_slist_length (parents);
-    g_slist_free (parents);
-    return ret;
+    return parents.size();
 }
 
 }

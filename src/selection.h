@@ -19,6 +19,11 @@
 #include <stddef.h>
 #include <sigc++/sigc++.h>
 
+#include <boost/multi_index_container.hpp>
+#include <boost/multi_index/ordered_index.hpp>
+#include <boost/multi_index/identity.hpp>
+#include <boost/multi_index/member.hpp>
+
 #include "gc-managed.h"
 #include "gc-finalized.h"
 #include "gc-anchored.h"
@@ -26,11 +31,13 @@
 #include "sp-item.h"
 
 
+
 class SPDesktop;
 class SPItem;
 class SPBox3D;
 class Persp3D;
-typedef struct _GSList GSList;
+
+typedef std::list<SPObject*> SelContainer;
 
 namespace Inkscape {
 class LayerModel;
@@ -38,6 +45,15 @@ namespace XML {
 class Node;
 }
 }
+
+/*template<typename T>
+const GSList* std_list_to_GS_list(const std::list<T *> list) const
+{
+    gpointer l=NULL;
+    for(auto x:list){
+
+    }
+}*/
 
 namespace Inkscape {
 
@@ -154,21 +170,21 @@ public:
      *
      * @param objs the objects to select
      */
-    void setList(GSList const *objs);
+    void setList(SelContainer const &objs);
 
     /**
      * Adds the specified objects to selection, without deselecting first.
      *
      * @param objs the objects to select
      */
-    void addList(GSList const *objs);
+    void addList(SelContainer const &objs);
 
     /**
      * Clears the selection and selects the specified objects.
      *
      * @param repr a list of xml nodes for the items to select
      */
-    void setReprList(GSList const *reprs);
+    void setReprList(std::list<SPObject*> const &reprs);
 
     /**  Add items from an STL iterator range to the selection.
      *  \param  from the begin iterator
@@ -192,7 +208,7 @@ public:
     /**
      * Returns true if no items are selected.
      */
-    bool isEmpty() const { return _objs == NULL; }
+    bool isEmpty() const { return _objs.empty(); }
 
     /**
      * Returns true if the given object is selected.
@@ -238,13 +254,13 @@ public:
     XML::Node *singleRepr();
 
     /** Returns the list of selected objects. */
-    GSList const *list();
+    std::list<SPObject*> const &list();
     /** Returns the list of selected SPItems. */
-    GSList const *itemList();
+    std::list<SPObject*> const &itemList();
     /** Returns a list of the xml nodes of all selected objects. */
     /// \todo only returns reprs of SPItems currently; need a separate
     ///      method for that
-    GSList const *reprList();
+    std::list<SPObject*> const &reprList();
 
     /** Returns a list of all perspectives which have a 3D box in the current selection.
        (these may also be nested in groups) */
@@ -360,9 +376,9 @@ private:
     /** Releases an active layer object that is being removed. */
     void _releaseContext(SPObject *obj);
 
-    mutable GSList *_objs;
-    mutable GSList *_reprs;
-    mutable GSList *_items;
+    mutable std::list<SPObject*> _objs;
+    mutable std::list<SPObject*> _reprs;
+    mutable std::list<SPObject*> _items;
 
     void add_box_perspective(SPBox3D *box);
     void add_3D_boxes_recursively(SPObject *obj);

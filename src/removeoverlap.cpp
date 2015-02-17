@@ -38,20 +38,20 @@ namespace {
 * such that rectangular bounding boxes are separated by at least xGap
 * horizontally and yGap vertically
 */
-void removeoverlap(GSList const *const items, double const xGap, double const yGap) {
+void removeoverlap(SelContainer const &items, double const xGap, double const yGap) {
 	using Inkscape::Util::GSListConstIterator;
-	std::list<SPItem *> selected;
-	selected.insert<GSListConstIterator<SPItem *> >(selected.end(), items, NULL);
+	SelContainer selected(items);
 	std::vector<Record> records;
 	std::vector<Rectangle *> rs;
 
 	Geom::Point const gap(xGap, yGap);
-	for (std::list<SPItem *>::iterator it(selected.begin());
+	for (SelContainer::iterator it(selected.begin());
 		it != selected.end();
 		++it)
 	{
+    	SPItem* item=static_cast<SPItem*>(*it);
 		using Geom::X; using Geom::Y;
-		Geom::OptRect item_box((*it)->desktopVisualBounds());
+		Geom::OptRect item_box((item)->desktopVisualBounds());
 		if (item_box) {
 			Geom::Point min(item_box->min() - .5*gap);
 			Geom::Point max(item_box->max() + .5*gap);
@@ -67,7 +67,7 @@ void removeoverlap(GSList const *const items, double const xGap, double const yG
 				min[Y] = max[Y] = (min[Y] + max[Y])/2;
 			}
 			Rectangle *vspc_rect = new Rectangle(min[X], max[X], min[Y], max[Y]);
-			records.push_back(Record(*it, item_box->midpoint(), vspc_rect));
+			records.push_back(Record(item, item_box->midpoint(), vspc_rect));
 			rs.push_back(vspc_rect);
 		}
 	}

@@ -12,8 +12,9 @@
 #define SEEN_DIALOGS_UNCLUMP_H
 
 typedef struct _GSList GSList;
+#include "selection.h"
 
-void unclump(GSList *items);
+void unclump(SelContainer &items);
 
 #endif /* !UNCLUMP_H_SEEN */
 

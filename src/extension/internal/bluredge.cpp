@@ -65,13 +65,12 @@ BlurEdge::effect (Inkscape::Extension::Effect *module, Inkscape::UI::View::View 
 
     using Inkscape::Util::GSListConstIterator;
     // TODO need to properly refcount the items, at least
-    std::list<SPItem *> items;
-    items.insert<GSListConstIterator<SPItem *> >(items.end(), selection->itemList(), NULL);
+    SelContainer items(selection->itemList());
     selection->clear();
 
-    for(std::list<SPItem *>::iterator item = items.begin();
+    for(SelContainer::iterator item = items.begin();
             item != items.end(); ++item) {
-        SPItem * spitem = *item;
+        SPItem * spitem = static_cast<SPItem*>(*item);
 
         std::vector<Inkscape::XML::Node *> new_items(steps);
         Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();

@@ -98,8 +98,7 @@ void ActionAlign::do_action(SPDesktop *desktop, int index)
     bool sel_as_group = prefs->getBool("/dialogs/align/sel-as-groups");
 
     using Inkscape::Util::GSListConstIterator;
-    std::list<SPItem *> selected;
-    selected.insert<GSListConstIterator<SPItem *> >(selected.end(), selection->itemList(), NULL);
+    SelContainer selected(selection->itemList());
     if (selected.empty()) return;
 
     const Coeffs &a = _allCoeffs[index];
@@ -149,18 +148,19 @@ void ActionAlign::do_action(SPDesktop *desktop, int index)
         b = selection->preferredBounds();
 
     //Move each item in the selected list separately
-    for (std::list<SPItem *>::iterator it(selected.begin());
+    for (SelContainer::iterator it(selected.begin());
          it != selected.end(); ++it)
     {
+    	SPItem* item=static_cast<SPItem*> (*it);
         desktop->getDocument()->ensureUpToDate();
         if (!sel_as_group)
-            b = (*it)->desktopPreferredBounds();
-        if (b && (!focus || (*it) != focus)) {
+            b = (item)->desktopPreferredBounds();
+        if (b && (!focus || (item) != focus)) {
             Geom::Point const sp(a.sx0 * b->min()[Geom::X] + a.sx1 * b->max()[Geom::X],
                                  a.sy0 * b->min()[Geom::Y] + a.sy1 * b->max()[Geom::Y]);
             Geom::Point const mp_rel( mp - sp );
             if (LInfty(mp_rel) > 1e-9) {
-                sp_item_move_rel(*it, Geom::Translate(mp_rel));
+                sp_item_move_rel(item, Geom::Translate(mp_rel));
                 changed = true;
             }
         }
@@ -251,25 +251,24 @@ private :
         if (!selection) return;
 
         using Inkscape::Util::GSListConstIterator;
-        std::list<SPItem *> selected;
-        selected.insert<GSListConstIterator<SPItem *> >(selected.end(), selection->itemList(), NULL);
+        SelContainer selected(selection->itemList());
         if (selected.empty()) return;
 
         //Check 2 or more selected objects
-        std::list<SPItem *>::iterator second(selected.begin());
+        SelContainer::iterator second(selected.begin());
         ++second;
         if (second == selected.end()) return;
 
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         int prefs_bbox = prefs->getBool("/tools/bounding_box");
         std::vector< BBoxSort  > sorted;
-        for (std::list<SPItem *>::iterator it(selected.begin());
+        for (SelContainer::iterator it(selected.begin());
             it != selected.end();
             ++it)
-        {
-            Geom::OptRect bbox = !prefs_bbox ? (*it)->desktopVisualBounds() : (*it)->desktopGeometricBounds();
+        {SPItem *item=static_cast<SPItem*>(*it);
+            Geom::OptRect bbox = !prefs_bbox ? (item)->desktopVisualBounds() : (item)->desktopGeometricBounds();
             if (bbox) {
-                sorted.push_back(BBoxSort(*it, *bbox, _orientation, _kBegin, _kEnd));
+                sorted.push_back(BBoxSort(item, *bbox, _orientation, _kBegin, _kEnd));
             }
         }
         //sort bbox by anchors
@@ -541,6 +540,10 @@ private :
         return (a->isSiblingOf(b));
     }
 
+    static bool local_obj_compare(SPObject* a,SPObject* b){
+    	return ActionExchangePositions::sort_compare(static_cast<SPItem*>(a),static_cast<SPItem*>(b));
+    }
+
     virtual void on_button_click()
     {
         SPDesktop *desktop = _dialog.getDesktop();
@@ -550,8 +553,7 @@ private :
         if (!selection) return;
 
         using Inkscape::Util::GSListConstIterator;
-        std::list<SPItem *> selected;
-        selected.insert<GSListConstIterator<SPItem *> >(selected.end(), selection->itemList(), NULL);
+        SelContainer selected(selection->itemList());
         if (selected.empty()) return;
 
         //Check 2 or more selected objects
@@ -569,20 +571,22 @@ private :
 		} else { // sorting by ZOrder is outomatically done by not setting the center
 			center.reset();
 		}
-		selected.sort(ActionExchangePositions::sort_compare);
+		selected.sort(local_obj_compare);
 	}
-	std::list<SPItem *>::iterator it(selected.begin());
-	Geom::Point p1 =  (*it)->getCenter();
+	SelContainer::iterator it(selected.begin());
+	SPItem* item=static_cast<SPItem*>(*it);
+	Geom::Point p1 =  (item)->getCenter();
 	for (++it ;it != selected.end(); ++it)
 	{
-		Geom::Point p2 = (*it)->getCenter();
+		item=static_cast<SPItem*>(*it);
+		Geom::Point p2 = (item)->getCenter();
 		Geom::Point delta = p1 - p2;
-		sp_item_move_rel((*it),Geom::Translate(delta[Geom::X],delta[Geom::Y] ));
+		sp_item_move_rel((item),Geom::Translate(delta[Geom::X],delta[Geom::Y] ));
 		p1 = p2;
 	}
-	Geom::Point p2 = selected.front()->getCenter();
+	Geom::Point p2 = static_cast<SPItem*>(selected.front())->getCenter();
 	Geom::Point delta = p1 - p2;
-	sp_item_move_rel(selected.front(),Geom::Translate(delta[Geom::X],delta[Geom::Y] ));
+	sp_item_move_rel(static_cast<SPItem*>(selected.front()),Geom::Translate(delta[Geom::X],delta[Geom::Y] ));
 
         // restore compensation setting
         prefs->setInt("/options/clonecompensation/value", saved_compensation);
@@ -615,8 +619,8 @@ private :
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         int saved_compensation = prefs->getInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
         prefs->setInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
-
-        unclump ((GSList *) _dialog.getDesktop()->getSelection()->itemList());
+        SelContainer x(_dialog.getDesktop()->getSelection()->itemList());
+        unclump (x);
 
         // restore compensation setting
         prefs->setInt("/options/clonecompensation/value", saved_compensation);
@@ -647,8 +651,7 @@ private :
         if (!selection) return;
 
         using Inkscape::Util::GSListConstIterator;
-        std::list<SPItem *> selected;
-        selected.insert<GSListConstIterator<SPItem *> >(selected.end(), selection->itemList(), NULL);
+        SelContainer selected(selection->itemList());
         if (selected.empty()) return;
 
         //Check 2 or more selected objects
@@ -672,12 +675,13 @@ private :
         int saved_compensation = prefs->getInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
         prefs->setInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
 
-        for (std::list<SPItem *>::iterator it(selected.begin());
+        for (SelContainer::iterator it(selected.begin());
             it != selected.end();
             ++it)
         {
+        	SPItem* item=static_cast<SPItem*>(*it);
             desktop->getDocument()->ensureUpToDate();
-            Geom::OptRect item_box = !prefs_bbox ? (*it)->desktopVisualBounds() : (*it)->desktopGeometricBounds();
+            Geom::OptRect item_box = !prefs_bbox ? (item)->desktopVisualBounds() : (item)->desktopGeometricBounds();
             if (item_box) {
                 // find new center, staying within bbox
                 double x = _dialog.randomize_bbox->min()[Geom::X] + (*item_box)[Geom::X].extent() /2 +
@@ -686,7 +690,7 @@ private :
                     g_random_double_range (0, (*_dialog.randomize_bbox)[Geom::Y].extent() - (*item_box)[Geom::Y].extent());
                 // displacement is the new center minus old:
                 Geom::Point t = Geom::Point (x, y) - 0.5*(item_box->max() + item_box->min());
-                sp_item_move_rel(*it, Geom::Translate(t));
+                sp_item_move_rel(item, Geom::Translate(t));
             }
         }
 
@@ -746,8 +750,7 @@ private :
         if (!selection) return;
 
         using Inkscape::Util::GSListConstIterator;
-        std::list<SPItem *> selected;
-        selected.insert<GSListConstIterator<SPItem *> >(selected.end(), selection->itemList(), NULL);
+        SelContainer selected(selection->itemList());
         if (selected.empty()) return;
 
         //Check 2 or more selected objects
@@ -758,20 +761,21 @@ private :
 
         std::vector<Baselines> sorted;
 
-        for (std::list<SPItem *>::iterator it(selected.begin());
+        for (SelContainer::iterator it(selected.begin());
             it != selected.end();
             ++it)
         {
-            if (SP_IS_TEXT (*it) || SP_IS_FLOWTEXT (*it)) {
-                Inkscape::Text::Layout const *layout = te_get_layout(*it);
+        	SPItem* item=static_cast<SPItem*>(*it);
+            if (SP_IS_TEXT (item) || SP_IS_FLOWTEXT (item)) {
+                Inkscape::Text::Layout const *layout = te_get_layout(item);
                 boost::optional<Geom::Point> pt = layout->baselineAnchorPoint();
                 if (pt) {
-                    Geom::Point base = *pt * (*it)->i2dt_affine();
+                    Geom::Point base = *pt * (item)->i2dt_affine();
                     if (base[Geom::X] < b_min[Geom::X]) b_min[Geom::X] = base[Geom::X];
                     if (base[Geom::Y] < b_min[Geom::Y]) b_min[Geom::Y] = base[Geom::Y];
                     if (base[Geom::X] > b_max[Geom::X]) b_max[Geom::X] = base[Geom::X];
                     if (base[Geom::Y] > b_max[Geom::Y]) b_max[Geom::Y] = base[Geom::Y];
-                    Baselines b (*it, base, _orientation);
+                    Baselines b (item, base, _orientation);
                     sorted.push_back(b);
                 }
             }
@@ -801,18 +805,19 @@ private :
             }
 
         } else {
-            for (std::list<SPItem *>::iterator it(selected.begin());
+            for (SelContainer::iterator it(selected.begin());
                  it != selected.end();
                  ++it)
             {
-                if (SP_IS_TEXT (*it) || SP_IS_FLOWTEXT (*it)) {
-                    Inkscape::Text::Layout const *layout = te_get_layout(*it);
+            	SPItem* item=static_cast<SPItem*>(*it);
+                if (SP_IS_TEXT (item) || SP_IS_FLOWTEXT (item)) {
+                    Inkscape::Text::Layout const *layout = te_get_layout(item);
                     boost::optional<Geom::Point> pt = layout->baselineAnchorPoint();
                     if (pt) {
-                        Geom::Point base = *pt * (*it)->i2dt_affine();
+                        Geom::Point base = *pt * (item)->i2dt_affine();
                         Geom::Point t(0.0, 0.0);
                         t[_orientation] = b_min[_orientation] - base[_orientation];
-                        sp_item_move_rel(*it, Geom::Translate(t));
+                        sp_item_move_rel(item, Geom::Translate(t));
                         changed = true;
                     }
                 }
