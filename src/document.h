@@ -27,6 +27,7 @@
 #include <glibmm/ustring.h>
 #include <boost/ptr_container/ptr_list.hpp>
 #include <vector>
+#include "selection.h"
 
 namespace Avoid {
 class Router;
@@ -232,7 +233,7 @@ public:
     /**
      * Returns the bottommost item from the list which is at the point, or NULL if none.
      */
-    static SPItem *getItemFromListAtPointBottom(unsigned int dkey, SPGroup *group, const GSList *list, Geom::Point const &p, bool take_insensitive = false);
+    static SPItem *getItemFromListAtPointBottom(unsigned int dkey, SPGroup *group, const SelContainer &list, Geom::Point const &p, bool take_insensitive = false);
 
     static SPDocument *createDoc(Inkscape::XML::Document *rdoc, char const *uri,
             char const *base, char const *name, unsigned int keepalive,
@@ -256,10 +257,10 @@ public:
     bool addResource(char const *key, SPObject *object);
     bool removeResource(char const *key, SPObject *object);
     const GSList *getResourceList(char const *key) const;
-    GSList *getItemsInBox(unsigned int dkey, Geom::Rect const &box) const;
-    GSList *getItemsPartiallyInBox(unsigned int dkey, Geom::Rect const &box) const;
+    SelContainer getItemsInBox(unsigned int dkey, Geom::Rect const &box) const;
+    SelContainer getItemsPartiallyInBox(unsigned int dkey, Geom::Rect const &box) const;
     SPItem *getItemAtPoint(unsigned int key, Geom::Point const &p, bool into_groups, SPItem *upto = NULL) const;
-    GSList *getItemsAtPoints(unsigned const key, std::vector<Geom::Point> points) const;
+    SelContainer getItemsAtPoints(unsigned const key, std::vector<Geom::Point> points) const;
     SPItem *getGroupAtPoint(unsigned int key,  Geom::Point const &p) const;
 
     void changeUriAndHrefs(char const *uri);

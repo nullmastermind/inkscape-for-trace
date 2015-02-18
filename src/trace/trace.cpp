@@ -74,13 +74,13 @@ SPImage *Tracer::getSelectedSPImage()
            them as bottom-to-top so that we can discover the image and any
            SPItems above it
         */
-        for(SelContainer::const_iterator x=list.begin();x!=list.end();x++){
+        for (SelContainer::const_iterator i=list.begin() ; list.end()!=i ; i++)
             {
-            if (!SP_IS_ITEM(*x))
+            if (!SP_IS_ITEM(*i))
                 {
                 continue;
                 }
-            SPItem *item = SP_ITEM(*x);
+            SPItem *item = SP_ITEM(*i);
             items.insert(items.begin(), item);
             }
         std::vector<SPItem *>::iterator iter;

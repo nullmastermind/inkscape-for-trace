@@ -18,6 +18,7 @@
 #include <stddef.h>
 #include <sigc++/sigc++.h>
 #include "ui/tools/tool-base.h"
+class SPObject;//kill it
 
 #define SP_GRADIENT_CONTEXT(obj) (dynamic_cast<Inkscape::UI::Tools::GradientTool*>((Inkscape::UI::Tools::ToolBase*)obj))
 #define SP_IS_GRADIENT_CONTEXT(obj) (dynamic_cast<const Inkscape::UI::Tools::GradientTool*>((const Inkscape::UI::Tools::ToolBase*)obj) != NULL)
@@ -25,12 +26,12 @@
 namespace Inkscape {
 namespace UI {
 namespace Tools {
+int sp_item_repr_compare_position_obj(SPObject const *first, SPObject const *second);//kill it
 
 class GradientTool : public ToolBase {
 public:
 	GradientTool();
 	virtual ~GradientTool();
-
     Geom::Point origin;
 
     bool cursor_addnode;

@@ -371,9 +371,10 @@ void TagsPanel::_objectsSelected( Selection *sel ) {
     
     _selectedConnection.block();
     _tree.get_selection()->unselect_all();
-    for (const GSList * iter = sel->list(); iter != NULL; iter = iter->next)
+    SelContainer tmp=sel->list();
+	for(SelContainer::const_iterator i=tmp.begin();i!=tmp.end();i++)
     {
-        SPObject *obj = reinterpret_cast<SPObject *>(iter->data);
+        SPObject *obj = reinterpret_cast<SPObject *>(*i);
         _store->foreach(sigc::bind<SPObject *>( sigc::mem_fun(*this, &TagsPanel::_checkForSelected), obj));
     }
     _selectedConnection.unblock();
@@ -668,9 +669,9 @@ bool TagsPanel::_handleButtonEvent(GdkEventButton* event)
                     if (col == _tree.get_column(COL_ADD - 1) && down_at_add) {
                         if (SP_IS_TAG(obj)) {
                             bool wasadded = false;
-                            for (const GSList * iter = _desktop->selection->itemList(); iter != NULL; iter = iter->next)
-                            {
-                                SPObject *newobj = reinterpret_cast<SPObject *>(iter->data);
+                            SelContainer items=_desktop->selection->itemList();
+                        	for(SelContainer::const_iterator i=items.begin();i!=items.end();i++){
+                                SPObject *newobj = reinterpret_cast<SPObject *>(*i);
                                 bool addchild = true;
                                 for ( SPObject *child = obj->children; child != NULL; child = child->next) {
                                     if (SP_IS_TAG_USE(child) && SP_TAG_USE(child)->ref->getObject() == newobj) {

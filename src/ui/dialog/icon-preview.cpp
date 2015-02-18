@@ -366,16 +366,14 @@ void IconPreviewPanel::refreshPreview()
                 if ( sel ) {
                     //g_message("found a selection to play with");
 
-                    GSList const *items = sel->itemList();
-                    while ( items && !target ) {
-                        SPItem* item = SP_ITEM( items->data );
+                    SelContainer const items = sel->itemList();
+                    for(SelContainer::const_iterator i=items.begin();!target && i!=items.end();i++){
+                        SPItem* item = SP_ITEM( *i);
                         gchar const *id = item->getId();
                         if ( id ) {
                             targetId = id;
                             target = item;
                         }
-
-                        items = g_slist_next(items);
                     }
                 }
             }

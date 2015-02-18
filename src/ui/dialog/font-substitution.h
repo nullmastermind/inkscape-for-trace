@@ -13,7 +13,7 @@
 #define INKSCAPE_UI_FONT_SUBSTITUTION_H
 
 #include <glibmm/ustring.h>
-
+#include "selection.h"
 class SPDocument;
 
 namespace Inkscape {
@@ -25,13 +25,13 @@ public:
     FontSubstitution();
     virtual ~FontSubstitution();
     void checkFontSubstitutions(SPDocument* doc);
-    void show(Glib::ustring out, GSList *l);
+    void show(Glib::ustring out, SelContainer &l);
 
     static FontSubstitution &getInstance() { return *new FontSubstitution(); }
     Glib::ustring getSubstituteFontName (Glib::ustring font);
 
 protected:
-    GSList *getFontReplacedItems(SPDocument* doc, Glib::ustring *out);
+    SelContainer getFontReplacedItems(SPDocument* doc, Glib::ustring *out);
 
 private:
     FontSubstitution(FontSubstitution const &d);

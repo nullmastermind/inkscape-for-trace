@@ -420,10 +420,9 @@ void NodeTool::selection_changed(Inkscape::Selection *sel) {
 
     std::set<ShapeRecord> shapes;
 
-    GSList const *ilist = sel->itemList();
-
-    for (GSList *i = const_cast<GSList*>(ilist); i; i = i->next) {
-        SPObject *obj = static_cast<SPObject*>(i->data);
+    SelContainer items=sel->itemList();
+    for(SelContainer::const_iterator i=items.begin();i!=items.end();i++){
+        SPObject *obj = static_cast<SPObject*>(*i);
 
         if (SP_IS_ITEM(obj)) {
             gather_items(this, NULL, static_cast<SPItem*>(obj), SHAPE_ROLE_NORMAL, shapes);
@@ -668,9 +667,8 @@ void NodeTool::select_area(Geom::Rect const &sel, GdkEventButton *event) {
     if (this->_multipath->empty()) {
         // if multipath is empty, select rubberbanded items rather than nodes
         Inkscape::Selection *selection = this->desktop->selection;
-        GSList *items = this->desktop->getDocument()->getItemsInBox(this->desktop->dkey, sel);
+        SelContainer items = this->desktop->getDocument()->getItemsInBox(this->desktop->dkey, sel);
         selection->setList(items);
-        g_slist_free(items);
     } else {
         if (!held_shift(*event)) {
         	this->_selected_nodes->clear();

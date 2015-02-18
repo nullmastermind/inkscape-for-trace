@@ -1235,7 +1235,7 @@ static bool overlaps(Geom::Rect const &area, Geom::Rect const &box)
     return area.intersects(box);
 }
 
-static GSList *find_items_in_area(GSList *s, SPGroup *group, unsigned int dkey, Geom::Rect const &area,
+static SelContainer &find_items_in_area(SelContainer &s, SPGroup *group, unsigned int dkey, Geom::Rect const &area,
                                   bool (*test)(Geom::Rect const &, Geom::Rect const &), bool take_insensitive = false)
 {
     g_return_val_if_fail(SP_IS_GROUP(group), s);
@@ -1248,7 +1248,7 @@ static GSList *find_items_in_area(GSList *s, SPGroup *group, unsigned int dkey, 
                 SPItem *child = SP_ITEM(o);
                 Geom::OptRect box = child->desktopVisualBounds();
                 if ( box && test(area, *box) && (take_insensitive || child->isVisibleAndUnlocked(dkey))) {
-                    s = g_slist_append(s, child);
+                    s.push_back(child);
                 }
             }
         }
@@ -1275,7 +1275,7 @@ static bool item_is_in_group(SPItem *item, SPGroup *group)
     return inGroup;
 }
 
-SPItem *SPDocument::getItemFromListAtPointBottom(unsigned int dkey, SPGroup *group, GSList const *list,Geom::Point const &p, bool take_insensitive)
+SPItem *SPDocument::getItemFromListAtPointBottom(unsigned int dkey, SPGroup *group, SelContainer const &list,Geom::Point const &p, bool take_insensitive)
 {
     g_return_val_if_fail(group, NULL);
     SPItem *bottomMost = 0;
@@ -1289,7 +1289,7 @@ SPItem *SPDocument::getItemFromListAtPointBottom(unsigned int dkey, SPGroup *gro
             Inkscape::DrawingItem *arenaitem = item->get_arenaitem(dkey);
             if (arenaitem && arenaitem->pick(p, delta, 1) != NULL
                 && (take_insensitive || item->isVisibleAndUnlocked(dkey))) {
-                if (g_slist_find((GSList *) list, item) != NULL) {
+                if (find(list.begin(),list.end(),item)==list.end() ) {
                     bottomMost = item;
                 }
             }
@@ -1391,11 +1391,11 @@ static SPItem *find_group_at_point(unsigned int dkey, SPGroup *group, Geom::Poin
  * Assumes box is normalized (and g_asserts it!)
  *
  */
-GSList *SPDocument::getItemsInBox(unsigned int dkey, Geom::Rect const &box) const
+SelContainer SPDocument::getItemsInBox(unsigned int dkey, Geom::Rect const &box) const
 {
-    g_return_val_if_fail(this->priv != NULL, NULL);
-
-    return find_items_in_area(NULL, SP_GROUP(this->root), dkey, box, is_within);
+    SelContainer x;
+    g_return_val_if_fail(this->priv != NULL, x);
+    return find_items_in_area(x, SP_GROUP(this->root), dkey, box, is_within);
 }
 
 /*
@@ -1405,16 +1405,16 @@ GSList *SPDocument::getItemsInBox(unsigned int dkey, Geom::Rect const &box) cons
  *
  */
 
-GSList *SPDocument::getItemsPartiallyInBox(unsigned int dkey, Geom::Rect const &box) const
+SelContainer SPDocument::getItemsPartiallyInBox(unsigned int dkey, Geom::Rect const &box) const
 {
-    g_return_val_if_fail(this->priv != NULL, NULL);
-
-    return find_items_in_area(NULL, SP_GROUP(this->root), dkey, box, overlaps);
+    SelContainer x;
+    g_return_val_if_fail(this->priv != NULL, x);
+    return find_items_in_area(x, SP_GROUP(this->root), dkey, box, overlaps);
 }
 
-GSList *SPDocument::getItemsAtPoints(unsigned const key, std::vector<Geom::Point> points) const
+SelContainer SPDocument::getItemsAtPoints(unsigned const key, std::vector<Geom::Point> points) const
 {
-    GSList *items = NULL;
+    SelContainer items;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     // When picking along the path, we don't want small objects close together
@@ -1426,8 +1426,8 @@ GSList *SPDocument::getItemsAtPoints(unsigned const key, std::vector<Geom::Point
     for(unsigned int i = 0; i < points.size(); i++) {
         SPItem *item = getItemAtPoint(key, points[i],
                                                  false, NULL);
-        if (item && !g_slist_find(items, item))
-            items = g_slist_prepend (items, item);
+        if (item && items.end()==find(items.begin(),items.end(), item))
+            items.push_front(item);
     }
 
     // and now we restore it back

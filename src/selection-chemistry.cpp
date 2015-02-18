@@ -442,10 +442,10 @@ static void add_ids_recursive(std::vector<const gchar *> &ids, SPObject *obj)
         }
     }
 }
-
+/*
 bool sp_repr_compare_position_obj(SPObject* &a,SPObject* &b){
 	return sp_repr_compare_position(dynamic_cast<Inkscape::XML::Node*>(a),dynamic_cast<Inkscape::XML::Node*>(b));
-}
+}*/
 
 void sp_selection_duplicate(SPDesktop *desktop, bool suppressDone)
 {
@@ -2301,7 +2301,7 @@ sp_selection_move_screen(Inkscape::Selection *selection, gdouble dx, gdouble dy)
 namespace {
 
 template <typename D>
-SPItem *next_item(SPDesktop *desktop, SelContainer &path, SPObject *root,
+SPItem *next_item(SPDesktop *desktop, GSList *path, SPObject *root,
                   bool only_in_viewport, PrefsSelectionContext inlayer, bool onlyvisible, bool onlysensitive);
 
 template <typename D>
@@ -2481,19 +2481,18 @@ void sp_selection_edit_clip_or_mask(SPDesktop * /*dt*/, bool /*clip*/)
 namespace {
 
 template <typename D>
-SPItem *next_item_from_list(SPDesktop *desktop, GSList const *items,
+SPItem *next_item_from_list(SPDesktop *desktop, SelContainer const items,
                             SPObject *root, bool only_in_viewport, PrefsSelectionContext inlayer, bool onlyvisible, bool onlysensitive)
 {
     SPObject *current=root;
-    while (items) {
-        SPItem *item = dynamic_cast<SPItem *>(static_cast<SPObject *>(items->data));
+    for(SelContainer::const_iterator i = items.begin();i!=items.end();i++) {
+        SPItem *item = dynamic_cast<SPItem *>(static_cast<SPObject *>(*i));
         if ( root->isAncestorOf(item) &&
              ( !only_in_viewport || desktop->isWithinViewport(item) ) )
         {
             current = item;
             break;
         }
-        items = items->next;
     }
 
     GSList *path=NULL;

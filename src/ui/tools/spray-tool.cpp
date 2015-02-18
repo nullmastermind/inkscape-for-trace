@@ -188,7 +188,7 @@ void SprayTool::update_cursor(bool /*with_shift*/) {
     gchar *sel_message = NULL;
 
     if (!desktop->selection->isEmpty()) {
-        num = g_slist_length(const_cast<GSList *>(desktop->selection->itemList()));
+        num = desktop->selection->itemList().size();
         sel_message = g_strdup_printf(ngettext("<b>%i</b> object selected","<b>%i</b> objects selected",num), num);
     } else {
         sel_message = g_strdup_printf("%s", _("<b>Nothing</b> selected"));
@@ -436,11 +436,9 @@ static bool sp_spray_recursive(SPDesktop *desktop,
         SPItem *unionResult = NULL;    // Previous union
 
         int i=1;
-        for (GSList *items = g_slist_copy(const_cast<GSList *>(selection->itemList()));
-                items != NULL;
-                items = items->next) {
-
-            SPItem *item1 = dynamic_cast<SPItem *>(static_cast<SPObject *>(items->data));
+        SelContainer items=selection->itemList();
+        for(SelContainer::const_iterator it=items.begin();it!=items.end();it++){
+            SPItem *item1 = dynamic_cast<SPItem *>(static_cast<SPObject *>(*it));
             if (i == 1) {
                 parent_item = item1;
             }
@@ -552,20 +550,16 @@ static bool sp_spray_dilate(SprayTool *tc, Geom::Point /*event_p*/, Geom::Point 
     double move_standard_deviation = get_move_standard_deviation(tc);
 
     {
-        GSList *const original_selection = g_slist_copy(const_cast<GSList *>(selection->itemList()));
+        SelContainer const items(selection->itemList());
 
-        for (GSList *items = original_selection;
-                items != NULL;
-                items = items->next) {
-            SPItem *item = dynamic_cast<SPItem *>(static_cast<SPObject *>(items->data));
+        for(SelContainer::const_iterator i=items.begin();i!=items.end();i++){
+            SPItem *item = dynamic_cast<SPItem *>(static_cast<SPObject *>(*i));
             g_assert(item != NULL);
             sp_object_ref(item);
         }
 
-        for (GSList *items = original_selection;
-                items != NULL;
-                items = items->next) {
-            SPItem *item = dynamic_cast<SPItem *>(static_cast<SPObject *>(items->data));
+        for(SelContainer::const_iterator i=items.begin();i!=items.end();i++){
+            SPItem *item = dynamic_cast<SPItem *>(static_cast<SPObject *>(*i));
             g_assert(item != NULL);
 
             if (is_transform_modes(tc->mode)) {
@@ -579,10 +573,8 @@ static bool sp_spray_dilate(SprayTool *tc, Geom::Point /*event_p*/, Geom::Point 
             }
         }
 
-        for (GSList *items = original_selection;
-                items != NULL;
-                items = items->next) {
-            SPItem *item = dynamic_cast<SPItem *>(static_cast<SPObject *>(items->data));
+        for(SelContainer::const_iterator i=items.begin();i!=items.end();i++){
+            SPItem *item = dynamic_cast<SPItem *>(static_cast<SPObject *>(*i));
             g_assert(item != NULL);
             sp_object_unref(item);
         }
@@ -658,7 +650,7 @@ bool SprayTool::root_handler(GdkEvent* event) {
 
             guint num = 0;
             if (!desktop->selection->isEmpty()) {
-                num = g_slist_length(const_cast<GSList *>(desktop->selection->itemList()));
+                num = desktop->selection->itemList().size();
             }
             if (num == 0) {
                 this->message_context->flash(Inkscape::ERROR_MESSAGE, _("<b>Nothing selected!</b> Select objects to spray."));

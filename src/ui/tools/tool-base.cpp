@@ -1178,11 +1178,9 @@ SPItem *sp_event_context_find_item(SPDesktop *desktop, Geom::Point const &p,
 SPItem *
 sp_event_context_over_item(SPDesktop *desktop, SPItem *item,
         Geom::Point const &p) {
-    GSList *temp = NULL;
-    temp = g_slist_prepend(temp, item);
+    SelContainer temp;
+    temp.push_front(static_cast<SPObject*>(item));
     SPItem *item_at_point = desktop->getItemFromListAtPointBottom(temp, p);
-    g_slist_free(temp);
-
     return item_at_point;
 }
 

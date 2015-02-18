@@ -48,6 +48,7 @@
 
 // Mesh specific
 #include "ui/tools/mesh-tool.h"
+#include "ui/tools/gradient-tool.h"//not needed
 #include "sp-mesh-gradient.h"
 #include "display/sp-ctrlcurve.h"
 
@@ -113,7 +114,7 @@ void MeshTool::selection_changed(Inkscape::Selection* /*sel*/) {
         return;
     }
 
-    guint n_obj = g_slist_length((GSList *) selection->itemList());
+    guint n_obj = selection->itemList().size();
 
     if (!drag->isNonEmpty() || selection->isEmpty()) {
         return;
@@ -477,11 +478,12 @@ bool MeshTool::root_handler(GdkEvent* event) {
             if (over_line) {
                 // We take the first item in selection, because with doubleclick, the first click
                 // always resets selection to the single object under cursor
-                sp_mesh_context_split_near_point(this, SP_ITEM(selection->itemList()->data), this->mousepoint_doc, event->button.time);
+                sp_mesh_context_split_near_point(this, SP_ITEM(selection->itemList().front()), this->mousepoint_doc, event->button.time);
             } else {
                 // Create a new gradient with default coordinates.
-                for (GSList const* i = selection->itemList(); i != NULL; i = i->next) {
-                    SPItem *item = SP_ITEM(i->data);
+                SelContainer items=selection->itemList();
+                for(SelContainer::const_iterator i=items.begin();i!=items.end();i++){
+                    SPItem *item = SP_ITEM(*i);
                     SPGradientType new_type = SP_GRADIENT_TYPE_MESH;
                     Inkscape::PaintTarget fsmode = (prefs->getInt("/tools/gradient/newfillorstroke", 1) != 0) ? Inkscape::FOR_FILL : Inkscape::FOR_STROKE;
 
@@ -930,6 +932,12 @@ bool MeshTool::root_handler(GdkEvent* event) {
 
     return ret;
 }
+/*
+int sp_item_repr_compare_position_obj(SPObject const *first, SPObject const *second)
+{
+    return sp_repr_compare_position(((SPItem*)first)->getRepr(),
+    		((SPItem*)second)->getRepr())<0;
+}*/
 
 static void sp_mesh_drag(MeshTool &rc, Geom::Point const /*pt*/, guint /*state*/, guint32 /*etime*/) {
     SPDesktop *desktop = SP_EVENT_CONTEXT(&rc)->desktop;
@@ -950,27 +958,27 @@ static void sp_mesh_drag(MeshTool &rc, Geom::Point const /*pt*/, guint /*state*/
         } else {
             // Starting from empty space:
             // Sort items so that the topmost comes last
-            GSList *items = g_slist_copy ((GSList *) selection->itemList());
-            items = g_slist_sort(items, (GCompareFunc) sp_item_repr_compare_position);
+            SelContainer items(selection->itemList());
+            items.sort(sp_item_repr_compare_position_obj);
             // take topmost
-            vector = sp_gradient_vector_for_object(document, desktop, SP_ITEM(g_slist_last(items)->data), fill_or_stroke);
-            g_slist_free (items);
+            vector = sp_gradient_vector_for_object(document, desktop, SP_ITEM(items.back()), fill_or_stroke);
         }
 
         // HACK: reset fill-opacity - that 0.75 is annoying; BUT remove this when we have an opacity slider for all tabs
         SPCSSAttr *css = sp_repr_css_attr_new();
         sp_repr_css_set_property(css, "fill-opacity", "1.0");
 
-        for (GSList const *i = selection->itemList(); i != NULL; i = i->next) {
+        SelContainer items=selection->itemList();
+        for(SelContainer::const_iterator i=items.begin();i!=items.end();i++){
 
             //FIXME: see above
-            sp_repr_css_change_recursive(SP_OBJECT(i->data)->getRepr(), css, "style");
+            sp_repr_css_change_recursive(SP_OBJECT(*i)->getRepr(), css, "style");
 
-            sp_item_set_gradient(SP_ITEM(i->data), vector, (SPGradientType) type, fill_or_stroke);
+            sp_item_set_gradient(SP_ITEM(*i), vector, (SPGradientType) type, fill_or_stroke);
 
             // We don't need to do anything. Mesh is already sized appropriately.
  
-            SP_OBJECT(i->data)->requestModified(SP_OBJECT_MODIFIED_FLAG);
+            SP_OBJECT(*i)->requestModified(SP_OBJECT_MODIFIED_FLAG);
         }
         // if (ec->_grdrag) {
         //     ec->_grdrag->updateDraggers();
@@ -988,7 +996,7 @@ static void sp_mesh_drag(MeshTool &rc, Geom::Point const /*pt*/, guint /*state*/
 
         // status text; we do not track coords because this branch is run once, not all the time
         // during drag
-        int n_objects = g_slist_length((GSList *) selection->itemList());
+        int n_objects = selection->itemList().size();
         rc.message_context->setF(Inkscape::NORMAL_MESSAGE,
                                   ngettext("<b>Gradient</b> for %d object; with <b>Ctrl</b> to snap angle",
                                            "<b>Gradient</b> for %d objects; with <b>Ctrl</b> to snap angle", n_objects),
