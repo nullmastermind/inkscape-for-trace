@@ -2298,17 +2298,9 @@ sp_selection_move_screen(Inkscape::Selection *selection, gdouble dx, gdouble dy)
     }
 }
 
-namespace {
 
-template <typename D>
-SPItem *next_item(SPDesktop *desktop, GSList *path, SPObject *root,
-                  bool only_in_viewport, PrefsSelectionContext inlayer, bool onlyvisible, bool onlysensitive);
 
-template <typename D>
-SPItem *next_item_from_list(SPDesktop *desktop, SelContainer const &items, SPObject *root,
-                  bool only_in_viewport, PrefsSelectionContext inlayer, bool onlyvisible, bool onlysensitive);
-
-struct Forward {
+typedef struct Forward {
     typedef SPObject *Iterator;
 
     static Iterator children(SPObject *o) { return o->firstChild(); }
@@ -2317,9 +2309,9 @@ struct Forward {
 
     static SPObject *object(Iterator i) { return i; }
     static Iterator next(Iterator i) { return i->getNext(); }
-};
+} Forward;
 
-struct ListReverse {
+typedef struct ListReverse {
     typedef GSList *Iterator;
 
     static Iterator children(SPObject *o) {
@@ -2350,8 +2342,87 @@ private:
         }
         return list;
     }
-};
+} ListReverse;
 
+
+
+template <typename D>
+SPItem *next_item(SPDesktop *desktop, GSList *path, SPObject *root,
+                  bool only_in_viewport, PrefsSelectionContext inlayer, bool onlyvisible, bool onlysensitive)
+{
+    typename D::Iterator children;
+    typename D::Iterator iter;
+
+    SPItem *found=NULL;
+
+    if (path) {
+        SPObject *object=reinterpret_cast<SPObject *>(path->data);
+        g_assert(object->parent == root);
+        if (desktop->isLayer(object)) {
+            found = next_item<D>(desktop, path->next, object, only_in_viewport, inlayer, onlyvisible, onlysensitive);
+        }
+        iter = children = D::siblings_after(object);
+    } else {
+        iter = children = D::children(root);
+    }
+
+    while ( iter && !found ) {
+        SPObject *object=D::object(iter);
+        if (desktop->isLayer(object)) {
+            if (PREFS_SELECTION_LAYER != inlayer) { // recurse into sublayers
+                found = next_item<D>(desktop, NULL, object, only_in_viewport, inlayer, onlyvisible, onlysensitive);
+            }
+        } else {
+            SPItem *item = dynamic_cast<SPItem *>(object);
+            if ( item &&
+                 ( !only_in_viewport || desktop->isWithinViewport(item) ) &&
+                 ( !onlyvisible || !desktop->itemIsHidden(item)) &&
+                 ( !onlysensitive || !item->isLocked()) &&
+                 !desktop->isLayer(item) )
+            {
+                found = item;
+            }
+        }
+        iter = D::next(iter);
+    }
+
+    D::dispose(children);
+
+    return found;
+}
+
+
+template <typename D>
+SPItem *next_item_from_list(SPDesktop *desktop, SelContainer const items,
+                            SPObject *root, bool only_in_viewport, PrefsSelectionContext inlayer, bool onlyvisible, bool onlysensitive)
+{
+    SPObject *current=root;
+    for(SelContainer::const_iterator i = items.begin();i!=items.end();i++) {
+        SPItem *item = dynamic_cast<SPItem *>(static_cast<SPObject *>(*i));
+        if ( root->isAncestorOf(item) &&
+             ( !only_in_viewport || desktop->isWithinViewport(item) ) )
+        {
+            current = item;
+            break;
+        }
+    }
+
+    GSList *path=NULL;
+    while ( current != root ) {
+        path = g_slist_prepend(path, current);
+        current = current->parent;
+    }
+
+    SPItem *next;
+    // first, try from the current object
+    next = next_item<D>(desktop, path, root, only_in_viewport, inlayer, onlyvisible, onlysensitive);
+    g_slist_free(path);
+
+    if (!next) { // if we ran out of objects, start over at the root
+        next = next_item<D>(desktop, NULL, root, only_in_viewport, inlayer, onlyvisible, onlysensitive);
+    }
+
+    return next;
 }
 
 void
@@ -2478,87 +2549,8 @@ void sp_selection_edit_clip_or_mask(SPDesktop * /*dt*/, bool /*clip*/)
 }
 
 
-namespace {
 
-template <typename D>
-SPItem *next_item_from_list(SPDesktop *desktop, SelContainer const items,
-                            SPObject *root, bool only_in_viewport, PrefsSelectionContext inlayer, bool onlyvisible, bool onlysensitive)
-{
-    SPObject *current=root;
-    for(SelContainer::const_iterator i = items.begin();i!=items.end();i++) {
-        SPItem *item = dynamic_cast<SPItem *>(static_cast<SPObject *>(*i));
-        if ( root->isAncestorOf(item) &&
-             ( !only_in_viewport || desktop->isWithinViewport(item) ) )
-        {
-            current = item;
-            break;
-        }
-    }
 
-    GSList *path=NULL;
-    while ( current != root ) {
-        path = g_slist_prepend(path, current);
-        current = current->parent;
-    }
-
-    SPItem *next;
-    // first, try from the current object
-    next = next_item<D>(desktop, path, root, only_in_viewport, inlayer, onlyvisible, onlysensitive);
-    g_slist_free(path);
-
-    if (!next) { // if we ran out of objects, start over at the root
-        next = next_item<D>(desktop, NULL, root, only_in_viewport, inlayer, onlyvisible, onlysensitive);
-    }
-
-    return next;
-}
-
-template <typename D>
-SPItem *next_item(SPDesktop *desktop, GSList *path, SPObject *root,
-                  bool only_in_viewport, PrefsSelectionContext inlayer, bool onlyvisible, bool onlysensitive)
-{
-    typename D::Iterator children;
-    typename D::Iterator iter;
-
-    SPItem *found=NULL;
-
-    if (path) {
-        SPObject *object=reinterpret_cast<SPObject *>(path->data);
-        g_assert(object->parent == root);
-        if (desktop->isLayer(object)) {
-            found = next_item<D>(desktop, path->next, object, only_in_viewport, inlayer, onlyvisible, onlysensitive);
-        }
-        iter = children = D::siblings_after(object);
-    } else {
-        iter = children = D::children(root);
-    }
-
-    while ( iter && !found ) {
-        SPObject *object=D::object(iter);
-        if (desktop->isLayer(object)) {
-            if (PREFS_SELECTION_LAYER != inlayer) { // recurse into sublayers
-                found = next_item<D>(desktop, NULL, object, only_in_viewport, inlayer, onlyvisible, onlysensitive);
-            }
-        } else {
-            SPItem *item = dynamic_cast<SPItem *>(object);
-            if ( item &&
-                 ( !only_in_viewport || desktop->isWithinViewport(item) ) &&
-                 ( !onlyvisible || !desktop->itemIsHidden(item)) &&
-                 ( !onlysensitive || !item->isLocked()) &&
-                 !desktop->isLayer(item) )
-            {
-                found = item;
-            }
-        }
-        iter = D::next(iter);
-    }
-
-    D::dispose(children);
-
-    return found;
-}
-
-}
 
 /**
  * If \a item is not entirely visible then adjust visible area to centre on the centre on of
