@@ -817,9 +817,9 @@ void Export::onAreaToggled ()
                    one that's nice */
                 if (filename.empty()) {
                     const gchar * id = "object";
-                    const SelContainer reprlst = SP_ACTIVE_DESKTOP->getSelection()->reprList();
-                    for(SelContainer::const_iterator i=reprlst.begin(); reprlst.end() != i; i++) {
-                        Inkscape::XML::Node * repr = (Inkscape::XML::Node *)(*i);
+                    const std::vector<XML::Node*> reprlst = SP_ACTIVE_DESKTOP->getSelection()->reprList();
+                    for(std::vector<XML::Node*>::const_iterator i=reprlst.begin(); reprlst.end() != i; i++) {
+                        Inkscape::XML::Node * repr = (*i);
                         if (repr->attribute("id")) {
                             id = repr->attribute("id");
                             break;
@@ -1226,7 +1226,7 @@ void Export::onExport ()
             break;
         }
         case SELECTION_SELECTION: {
-            SelContainer reprlst;
+        	std::vector<XML::Node*> reprlst;
             SPDocument * doc = SP_ACTIVE_DOCUMENT;
             bool modified = false;
 
@@ -1234,8 +1234,8 @@ void Export::onExport ()
             DocumentUndo::setUndoSensitive(doc, false);
             reprlst = desktop->getSelection()->reprList();
 
-            for(SelContainer::const_iterator i=reprlst.begin(); reprlst.end() != i; i++) {
-                Inkscape::XML::Node * repr = dynamic_cast<Inkscape::XML::Node *>(*i);
+            for(std::vector<Inkscape::XML::Node*>::const_iterator i=reprlst.begin(); reprlst.end() != i; i++) {
+                Inkscape::XML::Node * repr = *i;
                 const gchar * temp_string;
                 Glib::ustring dir = Glib::path_get_dirname(filename.c_str());
                 const gchar* docURI=SP_ACTIVE_DOCUMENT->getURI();

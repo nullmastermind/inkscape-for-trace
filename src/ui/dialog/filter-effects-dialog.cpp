@@ -690,7 +690,7 @@ private:
     void select_svg_element(){
         Inkscape::Selection* sel = _desktop->getSelection();
         if (sel->isEmpty()) return;
-        Inkscape::XML::Node* node = (Inkscape::XML::Node*) sel->reprList().front();
+        Inkscape::XML::Node* node = sel->reprList().front();
         if (!node || !node->matchAttributeName("id")) return;
 
         std::ostringstream xlikhref;

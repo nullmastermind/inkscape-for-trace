@@ -43,7 +43,7 @@ namespace Inkscape {
 
 Selection::Selection(LayerModel *layers, SPDesktop *desktop) :
     _objs(SelContainer()),
-    _reprs(SelContainer()),
+    _reprs(std::vector<XML::Node*>()),
     _items(SelContainer()),
     _layers(layers),
     _desktop(desktop),
@@ -296,15 +296,13 @@ SelContainer const &Selection::itemList() {
     return _items;
 }
 
-SelContainer const &Selection::reprList() {
+std::vector<XML::Node*> const &Selection::reprList() {
     if (!_reprs.empty()) { return _reprs; }
     SelContainer list = itemList();
     for ( SelContainer::const_iterator iter=list.begin();iter!=list.end();iter++ ) {
         SPObject *obj=reinterpret_cast<SPObject *>(*iter);
-        _reprs.push_front(dynamic_cast<SPObject*>(obj->getRepr()));
+        _reprs.push_back(obj->getRepr());
     }
-    _reprs.reverse();
-
     return _reprs;
 }
 
@@ -343,7 +341,7 @@ SPObject *Selection::single() {
 
 SPItem *Selection::singleItem() {
 	SelContainer const items=itemList();
-    if ( !items.size()==1) {
+    if ( items.size()==1) {
         return reinterpret_cast<SPItem *>(items.front());
     } else {
         return NULL;

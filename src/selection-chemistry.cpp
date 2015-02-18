@@ -462,13 +462,13 @@ void sp_selection_duplicate(SPDesktop *desktop, bool suppressDone)
         desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to duplicate."));
         return;
     }
-    SelContainer reprs(selection->reprList());
+    std::vector<Inkscape::XML::Node*> reprs(selection->reprList());
 
     selection->clear();
 
     // sorting items from different parents sorts each parent's subset without possibly mixing
     // them, just what we need
-    reprs.sort(sp_repr_compare_position_obj);
+    sort(reprs.begin(),reprs.end(),sp_repr_compare_position);
 
     SelContainer newsel;
 
@@ -478,8 +478,8 @@ void sp_selection_duplicate(SPDesktop *desktop, bool suppressDone)
     bool relink_clones = prefs->getBool("/options/relinkclonesonduplicate/value");
     const bool fork_livepatheffects = prefs->getBool("/options/forklpeonduplicate/value", true);
 
-    while (!reprs.empty()) {
-        Inkscape::XML::Node *old_repr = dynamic_cast<Inkscape::XML::Node *>(reprs.front());
+    for(std::vector<Inkscape::XML::Node*>::const_iterator i=reprs.begin();i!=reprs.end();i++){
+        Inkscape::XML::Node *old_repr = (*i);
         Inkscape::XML::Node *parent = old_repr->parent();
         Inkscape::XML::Node *copy = old_repr->duplicate(xml_doc);
 
@@ -501,7 +501,6 @@ void sp_selection_duplicate(SPDesktop *desktop, bool suppressDone)
         }
 
         newsel.push_front(dynamic_cast<SPObject*>(copy));
-        reprs.pop_front();
         Inkscape::GC::release(copy);
     }
 
@@ -692,16 +691,16 @@ void sp_edit_invert_in_all_layers(SPDesktop *desktop)
     sp_edit_select_all_full(desktop, true, true);
 }
 
-static void sp_selection_group_impl(SelContainer p, Inkscape::XML::Node *group, Inkscape::XML::Document *xml_doc, SPDocument *doc) {
+static void sp_selection_group_impl(std::vector<Inkscape::XML::Node*> p, Inkscape::XML::Node *group, Inkscape::XML::Document *xml_doc, SPDocument *doc) {
 
-    p.sort(sp_repr_compare_position_obj);
+    sort(p.begin(),p.end(),sp_repr_compare_position);
 
     // Remember the position and parent of the topmost object.
     gint topmost = (dynamic_cast<Inkscape::XML::Node *>(p.back()))->position();
     Inkscape::XML::Node *topmost_parent = (dynamic_cast<Inkscape::XML::Node *>(p.back()))->parent();
 
-    while (!p.empty()) {
-        Inkscape::XML::Node *current = dynamic_cast<Inkscape::XML::Node *>(p.front());
+    for(std::vector<Inkscape::XML::Node*>::const_iterator i=p.begin();i!=p.end();i++){
+        Inkscape::XML::Node *current = (*i);
 
         if (current->parent() == topmost_parent) {
             Inkscape::XML::Node *spnew = current->duplicate(xml_doc);
@@ -745,7 +744,6 @@ static void sp_selection_group_impl(SelContainer p, Inkscape::XML::Node *group, 
                 copied.clear();
             }
         }
-        p.pop_front();
     }
 
     // Add the new group to the topmost members' parent
@@ -766,7 +764,7 @@ void sp_selection_group(Inkscape::Selection *selection, SPDesktop *desktop)
         return;
     }
 
-    SelContainer p (selection->reprList());
+    std::vector<Inkscape::XML::Node*> p (selection->reprList());
 
     selection->clear();
 
@@ -1027,15 +1025,13 @@ void sp_selection_raise_to_top(Inkscape::Selection *selection, SPDesktop *deskto
         return;
     }
 
-    SelContainer rl(selection->reprList());
-    rl.sort(sp_repr_compare_position_obj);
+    std::vector<Inkscape::XML::Node*> rl(selection->reprList());
+    sort(rl.begin(),rl.end(),sp_repr_compare_position);
 
-    for (SelContainer::iterator l=rl.begin(); l!=rl.end();l++) {
-        Inkscape::XML::Node *repr = dynamic_cast<Inkscape::XML::Node *>(*l);
+    for (std::vector<Inkscape::XML::Node*>::const_iterator l=rl.begin(); l!=rl.end();l++) {
+        Inkscape::XML::Node *repr =(*l);
         repr->setPosition(-1);
     }
-
-    rl.clear();
 
     DocumentUndo::done(document, SP_VERB_SELECTION_TO_FRONT,
                        _("Raise to top"));
@@ -1117,14 +1113,13 @@ void sp_selection_lower_to_bottom(Inkscape::Selection *selection, SPDesktop *des
         return;
     }
 
-    SelContainer rl(selection->reprList());
-    rl.sort(sp_repr_compare_position_obj);
-    rl.reverse();
+    std::vector<Inkscape::XML::Node*> rl(selection->reprList());
+    sort(rl.begin(),rl.end(),sp_repr_compare_position);
 
-    for (SelContainer::const_iterator l=rl.begin();l!=rl.end();l++) {
+    for (std::vector<Inkscape::XML::Node*>::const_reverse_iterator l=rl.rbegin();l!=rl.rend();l++) {
         gint minpos;
         SPObject *pp, *pc;
-        Inkscape::XML::Node *repr = dynamic_cast<Inkscape::XML::Node *>(*l);
+        Inkscape::XML::Node *repr = (*l);
         pp = document->getObjectByRepr(repr->parent());
         minpos = 0;
         g_assert(dynamic_cast<SPGroup *>(pp));
@@ -1135,8 +1130,6 @@ void sp_selection_lower_to_bottom(Inkscape::Selection *selection, SPDesktop *des
         }
         repr->setPosition(minpos);
     }
-
-    rl.clear();
 
     DocumentUndo::done(document, SP_VERB_SELECTION_TO_BACK,
                        _("Lower to bottom"));
@@ -1691,9 +1684,9 @@ void sp_selection_remove_transform(SPDesktop *desktop)
 
     Inkscape::Selection *selection = desktop->getSelection();
 
-    SelContainer items = selection->itemList();
-    for (SelContainer::const_iterator l=items.begin();l!=items.end() ;l++) {
-        ((Inkscape::XML::Node*)*l)->setAttribute("transform", NULL, false);
+    std::vector<Inkscape::XML::Node*> items = selection->reprList();
+    for (std::vector<Inkscape::XML::Node*>::const_iterator l=items.begin();l!=items.end() ;l++) {
+        (*l)->setAttribute("transform", NULL, false);
     }
 
     DocumentUndo::done(desktop->getDocument(), SP_VERB_OBJECT_FLATTEN,
@@ -2590,17 +2583,17 @@ void sp_selection_clone(SPDesktop *desktop)
         return;
     }
 
-    SelContainer reprs (selection->reprList());
+    std::vector<Inkscape::XML::Node*> reprs (selection->reprList());
 
     selection->clear();
 
     // sorting items from different parents sorts each parent's subset without possibly mixing them, just what we need
-    reprs.sort(sp_repr_compare_position_obj);
+    sort(reprs.begin(),reprs.end(),sp_repr_compare_position);
 
     SelContainer newsel;
 
-    while (!reprs.empty()) {
-        Inkscape::XML::Node *sel_repr = dynamic_cast<Inkscape::XML::Node *>(reprs.front());
+    for(std::vector<Inkscape::XML::Node*>::const_iterator i=reprs.begin();i!=reprs.end();i++){
+    	Inkscape::XML::Node *sel_repr = *i;
         Inkscape::XML::Node *parent = sel_repr->parent();
 
         Inkscape::XML::Node *clone = xml_doc->createElement("svg:use");
@@ -2617,7 +2610,6 @@ void sp_selection_clone(SPDesktop *desktop)
         parent->appendChild(clone);
 
         newsel.push_front(dynamic_cast<SPObject*>(clone));
-        reprs.pop_front();
         Inkscape::GC::release(clone);
     }
 
@@ -3462,14 +3454,14 @@ void sp_selection_get_export_hints(Inkscape::Selection *selection, Glib::ustring
         return;
     }
 
-    SelContainer const reprlst = selection->reprList();
+    std::vector<Inkscape::XML::Node*> const reprlst = selection->reprList();
     bool filename_search = TRUE;
     bool xdpi_search = TRUE;
     bool ydpi_search = TRUE;
 
-    for (SelContainer::const_iterator i=reprlst.begin();filename_search&&xdpi_search&&ydpi_search&&i!=reprlst.end();i++){
+    for (std::vector<Inkscape::XML::Node*>::const_iterator i=reprlst.begin();filename_search&&xdpi_search&&ydpi_search&&i!=reprlst.end();i++){
         gchar const *dpi_string;
-        Inkscape::XML::Node * repr = dynamic_cast<Inkscape::XML::Node *>(*i);
+        Inkscape::XML::Node * repr = (*i);
 
         if (filename_search) {
             const gchar* tmp = repr->attribute("inkscape:export-filename");
@@ -3756,22 +3748,20 @@ void sp_selection_set_clipgroup(SPDesktop *desktop)
         return;
     }
         
-    SelContainer l=selection->reprList();
-
-    SelContainer p(l);
+    std::vector<Inkscape::XML::Node*> p(selection->reprList());
     
-    p.sort(sp_repr_compare_position_obj);
+    sort(p.begin(),p.end(),sp_repr_compare_position);
 
     selection->clear();
 
-    gint topmost = (dynamic_cast<Inkscape::XML::Node *>(p.back()))->position();
-    Inkscape::XML::Node *topmost_parent = (dynamic_cast<Inkscape::XML::Node *>(p.back()))->parent();
+    int topmost = (p.back())->position();
+    Inkscape::XML::Node *topmost_parent = (p.back())->parent();
 
     Inkscape::XML::Node *inner = xml_doc->createElement("svg:g");
     inner->setAttribute("inkscape:label", "Clip");
     
-    while (!p.empty()) {
-        Inkscape::XML::Node *current = dynamic_cast<Inkscape::XML::Node *>(p.front());
+    for(std::vector<Inkscape::XML::Node*>::const_iterator i=p.begin();i!=p.end();i++){
+    	Inkscape::XML::Node *current = *i;
 
         if (current->parent() == topmost_parent) {
             Inkscape::XML::Node *spnew = current->duplicate(xml_doc);
@@ -3813,7 +3803,6 @@ void sp_selection_set_clipgroup(SPDesktop *desktop)
                 Inkscape::GC::release(spnew);
             }
         }
-        p.pop_front();
     }
     
     Inkscape::XML::Node *outer = xml_doc->createElement("svg:g");
@@ -3960,13 +3949,12 @@ void sp_selection_set_mask(SPDesktop *desktop, bool apply_clip_path, bool apply_
         // make a note we should ungroup this when unsetting mask
         group->setAttribute("inkscape:groupmode", "maskhelper");
 
-        SelContainer reprs_to_group;
+        std::vector<Inkscape::XML::Node*> reprs_to_group;
 
         for (GSList *i = apply_to_items ; NULL != i ; i = i->next) {
-            reprs_to_group.push_front(dynamic_cast<SPObject*>(SP_OBJECT(i->data)->getRepr()));
+            reprs_to_group.push_back(static_cast<SPObject*>(i->data)->getRepr());
             items_to_select.remove(static_cast<SPObject*>(i->data));
         }
-        reprs_to_group.reverse();
 
         sp_selection_group_impl(reprs_to_group, group, xml_doc, doc);
 

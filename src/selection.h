@@ -260,7 +260,7 @@ public:
     /** Returns a list of the xml nodes of all selected objects. */
     /// \todo only returns reprs of SPItems currently; need a separate
     ///      method for that
-    std::list<SPObject*> const &reprList();
+    std::vector<XML::Node*> const &reprList();
 
     /** Returns a list of all perspectives which have a 3D box in the current selection.
        (these may also be nested in groups) */
@@ -377,7 +377,7 @@ private:
     void _releaseContext(SPObject *obj);
 
     mutable std::list<SPObject*> _objs;
-    mutable std::list<SPObject*> _reprs;
+    mutable std::vector<XML::Node*> _reprs;
     mutable std::list<SPObject*> _items;
 
     void add_box_perspective(SPBox3D *box);

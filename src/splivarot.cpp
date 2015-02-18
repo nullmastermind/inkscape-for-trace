@@ -691,11 +691,11 @@ sp_selected_path_boolop(Inkscape::Selection *selection, SPDesktop *desktop, bool
         }
     } else {
         // find out the bottom object
-        SelContainer sorted(selection->reprList());
+    	std::vector<Inkscape::XML::Node*> sorted(selection->reprList());
 
-        sorted.sort(sp_repr_compare_position_obj);
+        sort(sorted.begin(),sorted.end(),sp_repr_compare_position);
 
-        source = doc->getObjectByRepr((Inkscape::XML::Node *)sorted.front());
+        source = doc->getObjectByRepr(sorted.front());
     }
 
     // adjust style properties that depend on a possible transform in the source object in order
