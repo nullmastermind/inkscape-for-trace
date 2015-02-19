@@ -62,7 +62,7 @@ class Pointwise
         Pointwise(){};
         Pointwise(Piecewise<D2<SBasis> > pwd2, std::vector<std::pair<int,Satellite> > satellites);
         virtual ~Pointwise();
-        std::vector<Satellite> findSatellites(int A) const;
+        std::vector<Satellite> findSatellites(int A, int B = -1) const;
         Pointwise recalculate_for_new_pwd2(Piecewise<D2<SBasis> > A);
         Pointwise pwd2_reverse(int index);
         Pointwise pwd2_append(int index);

@@ -41,12 +41,17 @@ Pointwise::Pointwise(Piecewise<D2<SBasis> > pwd2, std::vector<std::pair<int,Sate
 Pointwise::~Pointwise(){};
 
 std::vector<Satellite> 
-Pointwise::findSatellites(int A) const
+Pointwise::findSatellites(int A, int B) const
 {
     std::vector<Satellite> ret;
+    int counter = 0;
     for(unsigned i = 0; i < _satellites.size(); i++){
         if(_satellites[i].first == A){
+            if(counter >= B && B != -1){
+                return ret;
+            }
             ret.push_back(_satellites[i].second);
+            counter++;
         }
     }
     return ret;
