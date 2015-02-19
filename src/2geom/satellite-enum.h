@@ -16,11 +16,11 @@
 namespace Geom {
 
 enum SatelliteType {
-    FILLET=0,
-    INVERSE_FILLET,
-    CHAMFER,
-    INVERSE_CHAMFER,
-    INVALID_SATELLITE // This must be last)
+    F=0, //Fillet
+    IF, //Inverse Fillet
+    C, //Chamfer
+    IC, //Inverse Chamfer
+    KO // Invalid Satellite)
 };
 
 /* TODO maybe is best do next by bimap

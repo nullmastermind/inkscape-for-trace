@@ -262,11 +262,11 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
                 if (times[1] != times[0] + gapHelper) {
                     path_out.append(*knotCurve1);
                 }
-                SatelliteType type = FILLET;
+                SatelliteType type = F;
                 type = sat.getSatelliteType();
                 if(are_near(middle_point(startArcPoint,endArcPoint),curve_it1->finalPoint(), 0.0001)){
                     //path_out.appendNew<Geom::LineSegment>(endArcPoint);
-                } else if (type == CHAMFER) {
+                } else if (type == C) {
                 /*
                     unsigned int chamferSubs = type-3000;
                     Geom::Path path_chamfer;
@@ -283,7 +283,7 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
                     }
                     path_out.appendNew<Geom::LineSegment>(endArcPoint);
                 /*/
-                } else if (type == INVERSE_CHAMFER) {
+                } else if (type == IC) {
                    /*
                     unsigned int chamferSubs = type-4000;
                     Geom::Path path_chamfer;
@@ -301,14 +301,14 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
                     }
                     path_out.appendNew<Geom::LineSegment>(endArcPoint);
                 */
-                } else if (type == INVERSE_FILLET) {
+                } else if (type == IF) {
                     if((is_straight_curve(*curve_it1) && is_straight_curve(*curve_it2Fixed) && method != FM_BEZIER )|| method == FM_ARC){ 
                         ccwToggle = ccwToggle?0:1;
                         path_out.appendNew<SVGEllipticalArc>(rx, ry, angleArc, 0, ccwToggle, endArcPoint);
                     }else{
                         path_out.appendNew<Geom::CubicBezier>(inverseHandle1, inverseHandle2, endArcPoint);
                     }
-                } else if (type == FILLET){
+                } else if (type == F){
                     if((is_straight_curve(*curve_it1) && is_straight_curve(*curve_it2Fixed) && method != FM_BEZIER )|| method == FM_ARC){ 
                         path_out.appendNew<SVGEllipticalArc>(rx, ry, angleArc, 0, ccwToggle, endArcPoint);
                     } else {
