@@ -558,7 +558,7 @@ void sp_edit_clear_all(Inkscape::Selection *selection)
     g_return_if_fail(group != NULL);
     std::vector<SPItem*> items = sp_item_group_item_list(group);
 
-    for(int i=0;i<items.size();i++){
+    for(unsigned int i=0;i<items.size();i++){
         reinterpret_cast<SPObject*>(items[i])->deleteObject();
     }
 
@@ -3061,7 +3061,7 @@ void sp_selection_symbol(SPDesktop *desktop, bool /*apply*/ )
 
     doc->ensureUpToDate();
 
-    SelContainer items(selection->list());
+    std::vector<SPObject*> items(selection->list());
 
     // Keep track of parent, this is where <use> will be inserted.
     Inkscape::XML::Node *the_first_repr = reinterpret_cast<SPObject *>( items.front() )->getRepr();
@@ -3128,7 +3128,7 @@ void sp_selection_symbol(SPDesktop *desktop, bool /*apply*/ )
     }
 
     // Move selected items to new <symbol>
-    for (SelContainer::const_iterator i=items.begin();i!=items.end();i++){
+    for (std::vector<SPObject*>::const_iterator i=items.begin();i!=items.end();i++){
       Inkscape::XML::Node *repr = SP_OBJECT(*i)->getRepr();
       repr->parent()->removeChild(repr);
       symbol_repr->addChild(repr,NULL);
@@ -3195,7 +3195,7 @@ void sp_selection_unsymbol(SPDesktop *desktop)
     desktop->currentLayer()->getRepr()->appendChild(group);
 
     // Move all children of symbol to group
-    SelContainer children = symbol->childList(false);
+    std::vector<SPObject*> children = symbol->childList(false);
 
     // Converting a group to a symbol inserts a group for non-translational transform.
     // In converting a symbol back to a group we strip out the inserted group (or any other
@@ -3212,7 +3212,7 @@ void sp_selection_unsymbol(SPDesktop *desktop)
         }
     }
         
-    for (SelContainer::const_iterator i=children.begin();i!=children.end();i++){
+    for (std::vector<SPObject*>::const_iterator i=children.begin();i!=children.end();i++){
         Inkscape::XML::Node *repr = SP_OBJECT(*i)->getRepr();
         repr->parent()->removeChild(repr);
         group->addChild(repr,NULL);

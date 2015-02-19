@@ -55,13 +55,13 @@ SPObject *SPSwitch::_evaluateFirst() {
     return first;
 }
 
-SelContainer SPSwitch::_childList(bool add_ref, SPObject::Action action) {
+std::vector<SPObject*> SPSwitch::_childList(bool add_ref, SPObject::Action action) {
     if ( action != SPObject::ActionGeneral ) {
         return this->childList(add_ref, action);
     }
 
     SPObject *child = _evaluateFirst();
-    SelContainer x;
+    std::vector<SPObject*> x;
     if (NULL == child)
         return x;
 
@@ -69,7 +69,7 @@ SelContainer SPSwitch::_childList(bool add_ref, SPObject::Action action) {
         //g_object_ref (G_OBJECT (child));
     	sp_object_ref(child);
     }
-    x.push_front(child);
+    x.push_back(child);
     return x;
 }
 
@@ -110,8 +110,8 @@ void SPSwitch::_reevaluate(bool /*add_to_drawing*/) {
 
     _releaseLastItem(_cached_item);
 
-    SelContainer item_list = _childList(false, SPObject::ActionShow);
-    for ( SelContainer::const_iterator iter=item_list.begin();iter!=item_list.end();iter++) {
+    std::vector<SPObject*> item_list = _childList(false, SPObject::ActionShow);
+    for ( std::vector<SPObject*>::const_reverse_iterator iter=item_list.rbegin();iter!=item_list.rend();iter++) {
         SPObject *o = SP_OBJECT (*iter);
         if ( !SP_IS_ITEM (o) ) {
             continue;
@@ -144,9 +144,9 @@ void SPSwitch::_releaseLastItem(SPObject *obj)
 void SPSwitch::_showChildren (Inkscape::Drawing &drawing, Inkscape::DrawingItem *ai, unsigned int key, unsigned int flags) {
     SPObject *evaluated_child = this->_evaluateFirst();
 
-    SelContainer l = this->_childList(false, SPObject::ActionShow);
+    std::vector<SPObject*> l = this->_childList(false, SPObject::ActionShow);
 
-    for ( SelContainer::const_iterator iter=l.begin();iter!=l.end();iter++) {
+    for ( std::vector<SPObject*>::const_reverse_iterator iter=l.rbegin();iter!=l.rend();iter++) {
         SPObject *o = SP_OBJECT (*iter);
 
         if (SP_IS_ITEM (o)) {

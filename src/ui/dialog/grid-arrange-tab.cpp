@@ -48,7 +48,7 @@
  *    0  *elem1 == *elem2
  *    >0  *elem1 goes after *elem2
  */
-static int sp_compare_x_position(SPItem *first, SPItem *second)
+static bool sp_compare_x_position(SPItem *first, SPItem *second)
 {
     using Geom::X;
     using Geom::Y;
@@ -58,7 +58,7 @@ static int sp_compare_x_position(SPItem *first, SPItem *second)
 
     if ( !a || !b ) {
         // FIXME?
-        return 0;
+        return false;
     }
 
     double const a_height = a->dimensions()[Y];
@@ -76,44 +76,38 @@ static int sp_compare_x_position(SPItem *first, SPItem *second)
     }
 
     if (!a_in_b_vert) {
-        return -1;
+        return true;
     }
     if (a_in_b_vert && a->min()[X] > b->min()[X]) {
-        return 1;
+        return false;
     }
     if (a_in_b_vert && a->min()[X] < b->min()[X]) {
-        return -1;
+        return true;
     }
-    return 0;
+    return false;
 }
 
 /*
  *    Sort items by their y co-ordinates.
  */
-static int sp_compare_y_position(SPItem *first, SPItem *second)
+static bool sp_compare_y_position(SPItem *first, SPItem *second)
 {
     Geom::OptRect a = first->documentVisualBounds();
     Geom::OptRect b = second->documentVisualBounds();
 
     if ( !a || !b ) {
         // FIXME?
-        return 0;
+        return false;
     }
 
     if (a->min()[Geom::Y] > b->min()[Geom::Y]) {
-        return 1;
+        return false;
     }
     if (a->min()[Geom::Y] < b->min()[Geom::Y]) {
-        return -1;
+        return true;
     }
 
-    return 0;
-}
-static bool sp_compare_y_position_obj(SPObject *first, SPObject *second){
-	return sp_compare_y_position(static_cast<SPItem*>(first),static_cast<SPItem*>(second))<0;
-}
-static bool sp_compare_x_position_obj(SPObject *first, SPObject *second){
-	return sp_compare_x_position(static_cast<SPItem*>(first),static_cast<SPItem*>(second))<0;
+    return false;
 }
 
 

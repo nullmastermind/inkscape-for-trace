@@ -371,8 +371,8 @@ void TagsPanel::_objectsSelected( Selection *sel ) {
     
     _selectedConnection.block();
     _tree.get_selection()->unselect_all();
-    SelContainer tmp=sel->list();
-	for(SelContainer::const_iterator i=tmp.begin();i!=tmp.end();i++)
+    std::vector<SPObject*> tmp=sel->list();
+	for(std::vector<SPObject*>::const_iterator i=tmp.begin();i!=tmp.end();i++)
     {
         SPObject *obj = reinterpret_cast<SPObject *>(*i);
         _store->foreach(sigc::bind<SPObject *>( sigc::mem_fun(*this, &TagsPanel::_checkForSelected), obj));

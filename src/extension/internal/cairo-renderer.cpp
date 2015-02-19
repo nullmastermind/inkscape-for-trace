@@ -294,9 +294,8 @@ static void sp_group_render(SPGroup *group, CairoRenderContext *ctx)
     CairoRenderer *renderer = ctx->getRenderer();
     TRACE(("sp_group_render opacity: %f\n", SP_SCALE24_TO_FLOAT(item->style->opacity.value)));
 
-    SelContainer l(group->childList(false));
-    l.reverse();
-    for(SelContainer::const_iterator x=l.begin();x!=l.end();x++){
+    std::vector<SPObject*> l(group->childList(false));
+    for(std::vector<SPObject*>::const_iterator x=l.begin();x!=l.end();x++){
         SPObject *o = reinterpret_cast<SPObject *>(*x);
         SPItem *item = dynamic_cast<SPItem *>(o);
         if (item) {

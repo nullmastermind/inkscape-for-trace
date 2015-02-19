@@ -16,13 +16,9 @@
 #include <vector>
 #include <map>
 #include <list>
+#include <set>
 #include <stddef.h>
 #include <sigc++/sigc++.h>
-
-#include <boost/multi_index_container.hpp>
-#include <boost/multi_index/ordered_index.hpp>
-#include <boost/multi_index/identity.hpp>
-#include <boost/multi_index/member.hpp>
 
 #include "gc-managed.h"
 #include "gc-finalized.h"
@@ -254,7 +250,7 @@ public:
     XML::Node *singleRepr();
 
     /** Returns the list of selected objects. */
-    std::list<SPObject*> const &list();
+    std::vector<SPObject*> const &list();
     /** Returns the list of selected SPItems. */
     std::vector<SPItem*> const &itemList();
     /** Returns a list of the xml nodes of all selected objects. */
@@ -376,7 +372,9 @@ private:
     /** Releases an active layer object that is being removed. */
     void _releaseContext(SPObject *obj);
 
-    mutable std::list<SPObject*> _objs;
+    mutable std::list<SPObject*> _objs; //to more efficiently remove arbitrary elements
+    mutable std::vector<SPObject*> _objs_vector; // to be returned by list();
+    mutable std::set<SPObject*> _objs_set; //to efficiently test if object is selected
     mutable std::vector<XML::Node*> _reprs;
     mutable std::vector<SPItem*> _items;
 

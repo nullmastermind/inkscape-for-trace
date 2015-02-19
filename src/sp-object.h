@@ -55,6 +55,7 @@ class SPObject;
 #include <sigc++/functors/slot.h>
 #include <sigc++/signal.h>
 #include <list>
+#include <vector>
 
 #include "version.h"
 #include "util/forward-pointer-iterator.h"
@@ -335,10 +336,10 @@ public:
     enum Action { ActionGeneral, ActionBBox, ActionUpdate, ActionShow };
 
     /**
-     * Retrieves the children as a GSList object, optionally ref'ing the children
+     * Retrieves the children as a std vector object, optionally ref'ing the children
      * in the process, if add_ref is specified.
      */
-    SelContainer childList(bool add_ref, Action action = ActionGeneral);
+    std::vector<SPObject*> childList(bool add_ref, Action action = ActionGeneral);
 
     /**
      * Append repr as child of this object.

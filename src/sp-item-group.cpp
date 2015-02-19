@@ -171,9 +171,8 @@ void SPGroup::update(SPCtx *ctx, unsigned int flags) {
       childflags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
     }
     childflags &= SP_OBJECT_MODIFIED_CASCADE;
-    SelContainer l=this->childList(true, SPObject::ActionUpdate);
-    l.reverse();
-    for(SelContainer::const_iterator i=l.begin();i!=l.end();i++){
+    std::vector<SPObject*> l=this->childList(true, SPObject::ActionUpdate);
+    for(std::vector<SPObject*> ::const_iterator i=l.begin();i!=l.end();i++){
         SPObject *child = SP_OBJECT (*i);
 
         if (childflags || (child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
@@ -216,9 +215,8 @@ void SPGroup::modified(guint flags) {
 
     flags &= SP_OBJECT_MODIFIED_CASCADE;
 
-    SelContainer l=this->childList(true);
-    l.reverse();
-    for(SelContainer::const_iterator i=l.begin();i!=l.end();i++){
+    std::vector<SPObject*> l=this->childList(true);
+    for(std::vector<SPObject*>::const_iterator i=l.begin();i!=l.end();i++){
         SPObject *child = SP_OBJECT (*i);
 
         if (flags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
@@ -291,8 +289,8 @@ Geom::OptRect SPGroup::bbox(Geom::Affine const &transform, SPItem::BBoxType bbox
     Geom::OptRect bbox;
 
     // TODO CPPIFY: replace this const_cast later
-    SelContainer l=const_cast<SPGroup*>(this)->childList(false, SPObject::ActionBBox);
-    for(SelContainer::const_iterator i=l.begin();i!=l.end();i++){
+    std::vector<SPObject*> l=const_cast<SPGroup*>(this)->childList(false, SPObject::ActionBBox);
+    for(std::vector<SPObject*>::const_iterator i=l.begin();i!=l.end();i++){
         SPObject *o = SP_OBJECT (*i);
         SPItem *item = dynamic_cast<SPItem *>(o);
         if (item && !item->isHidden()) {
@@ -305,9 +303,8 @@ Geom::OptRect SPGroup::bbox(Geom::Affine const &transform, SPItem::BBoxType bbox
 }
 
 void SPGroup::print(SPPrintContext *ctx) {
-    SelContainer l=this->childList(false);
-    l.reverse();
-    for(SelContainer::const_iterator i=l.begin();i!=l.end();i++){
+	std::vector<SPObject*> l=this->childList(false);
+    for(std::vector<SPObject*>::const_iterator i=l.begin();i!=l.end();i++){
         SPObject *o = SP_OBJECT (*i);
         SPItem *item = dynamic_cast<SPItem *>(o);
         if (item) {
@@ -360,9 +357,8 @@ Inkscape::DrawingItem *SPGroup::show (Inkscape::Drawing &drawing, unsigned int k
 }
 
 void SPGroup::hide (unsigned int key) {
-    SelContainer l=this->childList(false, SPObject::ActionShow);
-    l.reverse();
-    for(SelContainer::const_iterator i=l.begin();i!=l.end();i++){
+	std::vector<SPObject*> l=this->childList(false, SPObject::ActionShow);
+    for(std::vector<SPObject*>::const_iterator i=l.begin();i!=l.end();i++){
         SPObject *o = SP_OBJECT (*i);
 
         SPItem *item = dynamic_cast<SPItem *>(o);
@@ -793,9 +789,8 @@ gint SPGroup::getItemCount() const {
 
 void SPGroup::_showChildren (Inkscape::Drawing &drawing, Inkscape::DrawingItem *ai, unsigned int key, unsigned int flags) {
     Inkscape::DrawingItem *ac = NULL;
-    SelContainer l=this->childList(false, SPObject::ActionShow);
-    l.reverse();
-    for(SelContainer::const_iterator i=l.begin();i!=l.end();i++){
+    std::vector<SPObject*> l=this->childList(false, SPObject::ActionShow);
+    for(std::vector<SPObject*>::const_iterator i=l.begin();i!=l.end();i++){
         SPObject *o = SP_OBJECT (*i);
         SPItem * child = dynamic_cast<SPItem *>(o);
         if (child) {

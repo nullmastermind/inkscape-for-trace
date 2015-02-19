@@ -42,7 +42,9 @@
 namespace Inkscape {
 
 Selection::Selection(LayerModel *layers, SPDesktop *desktop) :
-    _objs(SelContainer()),
+    	    _objs(std::list<SPObject*>()),
+		    _objs_vector(std::vector<SPObject*>()),
+		    _objs_set(std::set<SPObject*>()),
     _reprs(std::vector<XML::Node*>()),
     _items(std::vector<SPItem*>()),
     _layers(layers),
@@ -145,7 +147,7 @@ bool Selection::includes(SPObject *obj) const {
 
     g_return_val_if_fail(SP_IS_OBJECT(obj), FALSE);
 
-    return ( find(_objs.begin(),_objs.end(),obj)!=_objs.end() );
+    return ( _objs_set.find(obj)!=_objs_set.end() );
 }
 
 void Selection::add(SPObject *obj, bool persist_selection_context/* = false */) {
@@ -178,6 +180,7 @@ void Selection::_add(SPObject *obj) {
     _removeObjectAncestors(obj);
 
     _objs.push_front(obj);
+    _objs_set.insert(obj);
 
     add_3D_boxes_recursively(obj);
 
@@ -232,6 +235,7 @@ void Selection::_remove(SPObject *obj) {
     remove_3D_boxes_recursively(obj);
 
     _objs.remove(obj);
+    _objs_set.erase(obj);
 }
 
 void Selection::setList(std::vector<SPItem*> const &list) {
@@ -276,8 +280,15 @@ void Selection::clear() {
     _emitChanged();
 }
 
-SelContainer const &Selection::list() {
-    return _objs;
+std::vector<SPObject*> const &Selection::list() {
+	if(!_objs_vector.empty())
+    return _objs_vector;
+
+	for ( std::list<SPObject*>::const_iterator iter=_objs.begin();iter!=_objs.end();iter++ ) {
+            _objs_vector.push_back(*iter);
+    }
+    return _objs_vector;
+
 }
 
 std::vector<SPItem*> const &Selection::itemList() {
@@ -285,7 +296,7 @@ std::vector<SPItem*> const &Selection::itemList() {
         return _items;
     }
 
-    for ( SelContainer::const_iterator iter=_objs.begin();iter!=_objs.end();iter++ ) {
+    for ( std::list<SPObject*>::const_iterator iter=_objs.begin();iter!=_objs.end();iter++ ) {
         SPObject *obj=reinterpret_cast<SPObject *>(*iter);
         if (SP_IS_ITEM(obj)) {
             _items.push_back(SP_ITEM(obj));
@@ -470,7 +481,7 @@ std::vector<Inkscape::SnapCandidatePoint> Selection::getSnapPoints(SnapPreferenc
 }
 
 void Selection::_removeObjectDescendants(SPObject *obj) {
-    for ( SelContainer::const_iterator iter=_objs.begin();iter!=_objs.end();iter++ ) {
+    for ( std::list<SPObject*>::const_iterator iter=_objs.begin();iter!=_objs.end();iter++ ) {
         SPObject *sel_obj=reinterpret_cast<SPObject *>(*iter);
         SPObject *parent = sel_obj->parent;
         while (parent) {
