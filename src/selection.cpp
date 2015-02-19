@@ -44,7 +44,7 @@ namespace Inkscape {
 Selection::Selection(LayerModel *layers, SPDesktop *desktop) :
     _objs(SelContainer()),
     _reprs(std::vector<XML::Node*>()),
-    _items(SelContainer()),
+    _items(std::vector<SPItem*>()),
     _layers(layers),
     _desktop(desktop),
     _selection_context(NULL),
@@ -234,7 +234,7 @@ void Selection::_remove(SPObject *obj) {
     _objs.remove(obj);
 }
 
-void Selection::setList(SelContainer const &list) {
+void Selection::setList(std::vector<SPItem*> const &list) {
     // Clear and add, or just clear with emit.
     if (!list.empty()) {
         _clear();
@@ -242,14 +242,14 @@ void Selection::setList(SelContainer const &list) {
     } else clear();
 }
 
-void Selection::addList(SelContainer const &list) {
+void Selection::addList(std::vector<SPItem*> const &list) {
 
     if (list.empty())
         return;
 
     _invalidateCachedLists();
 
-    for ( SelContainer::const_iterator iter=list.begin();iter!=list.end();iter++ ) {
+    for ( std::vector<SPItem*>::const_iterator iter=list.begin();iter!=list.end();iter++ ) {
         SPObject *obj = reinterpret_cast<SPObject *>(*iter);
         if (includes(obj)) continue;
         _add (obj);
@@ -258,11 +258,11 @@ void Selection::addList(SelContainer const &list) {
     _emitChanged();
 }
 
-void Selection::setReprList(SelContainer const &list) {
+void Selection::setReprList(std::vector<XML::Node*> const &list) {
     _clear();
 
-    for ( SelContainer::const_iterator iter=list.begin();iter!=list.end();iter++ ) {
-        SPObject *obj=_objectForXMLNode(reinterpret_cast<Inkscape::XML::Node *>(*iter));
+    for ( std::vector<XML::Node*>::const_reverse_iterator iter=list.rbegin();iter!=list.rend();iter++ ) {
+        SPObject *obj=_objectForXMLNode(*iter);
         if (obj) {
             _add(obj);
         }
@@ -280,7 +280,7 @@ SelContainer const &Selection::list() {
     return _objs;
 }
 
-SelContainer const &Selection::itemList() {
+std::vector<SPItem*> const &Selection::itemList() {
     if (!_items.empty()) {
         return _items;
     }
@@ -288,18 +288,16 @@ SelContainer const &Selection::itemList() {
     for ( SelContainer::const_iterator iter=_objs.begin();iter!=_objs.end();iter++ ) {
         SPObject *obj=reinterpret_cast<SPObject *>(*iter);
         if (SP_IS_ITEM(obj)) {
-            _items.push_front(SP_ITEM(obj));
+            _items.push_back(SP_ITEM(obj));
         }
     }
-    _items.reverse();
-
     return _items;
 }
 
 std::vector<XML::Node*> const &Selection::reprList() {
     if (!_reprs.empty()) { return _reprs; }
-    SelContainer list = itemList();
-    for ( SelContainer::const_iterator iter=list.begin();iter!=list.end();iter++ ) {
+    std::vector<SPItem*> list = itemList();
+    for ( std::vector<SPItem*>::const_iterator iter=list.begin();iter!=list.end();iter++ ) {
         SPObject *obj=reinterpret_cast<SPObject *>(*iter);
         _reprs.push_back(obj->getRepr());
     }
@@ -340,7 +338,7 @@ SPObject *Selection::single() {
 }
 
 SPItem *Selection::singleItem() {
-	SelContainer const items=itemList();
+	std::vector<SPItem*> const items=itemList();
     if ( items.size()==1) {
         return reinterpret_cast<SPItem *>(items.front());
     } else {
@@ -357,11 +355,11 @@ SPItem *Selection::largestItem(Selection::CompareSize compare) {
 }
 
 SPItem *Selection::_sizeistItem(bool sml, Selection::CompareSize compare) {
-	SelContainer const items = const_cast<Selection *>(this)->itemList();
+	std::vector<SPItem*> const items = const_cast<Selection *>(this)->itemList();
     gdouble max = sml ? 1e18 : 0;
     SPItem *ist = NULL;
 
-    for ( SelContainer::const_iterator i=items.begin();i!=items.end();i++ ) {
+    for ( std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++ ) {
         Geom::OptRect obox = SP_ITEM(*i)->desktopPreferredBounds();
         if (!obox || obox.isEmpty()) continue;
         Geom::Rect bbox = *obox;
@@ -390,10 +388,10 @@ Geom::OptRect Selection::bounds(SPItem::BBoxType type) const
 
 Geom::OptRect Selection::geometricBounds() const
 {
-	SelContainer const items = const_cast<Selection *>(this)->itemList();
+	std::vector<SPItem*> const items = const_cast<Selection *>(this)->itemList();
 
     Geom::OptRect bbox;
-    for ( SelContainer::const_iterator iter=items.begin();iter!=items.end();iter++ ) {
+    for ( std::vector<SPItem*>::const_iterator iter=items.begin();iter!=items.end();iter++ ) {
         bbox.unionWith(SP_ITEM(*iter)->desktopGeometricBounds());
     }
     return bbox;
@@ -401,10 +399,10 @@ Geom::OptRect Selection::geometricBounds() const
 
 Geom::OptRect Selection::visualBounds() const
 {
-	SelContainer const items = const_cast<Selection *>(this)->itemList();
+	std::vector<SPItem*> const items = const_cast<Selection *>(this)->itemList();
 
     Geom::OptRect bbox;
-    for ( SelContainer::const_iterator iter=items.begin();iter!=items.end();iter++ ) {
+    for ( std::vector<SPItem*>::const_iterator iter=items.begin();iter!=items.end();iter++ ) {
         bbox.unionWith(SP_ITEM(*iter)->desktopVisualBounds());
     }
     return bbox;
@@ -422,10 +420,10 @@ Geom::OptRect Selection::preferredBounds() const
 Geom::OptRect Selection::documentBounds(SPItem::BBoxType type) const
 {
     Geom::OptRect bbox;
-    SelContainer const items = const_cast<Selection *>(this)->itemList();
+    std::vector<SPItem*> const items = const_cast<Selection *>(this)->itemList();
     if (items.empty()) return bbox;
 
-    for ( SelContainer::const_iterator iter=items.begin();iter!=items.end();iter++ ) {
+    for ( std::vector<SPItem*>::const_iterator iter=items.begin();iter!=items.end();iter++ ) {
         SPItem *item = SP_ITEM(*iter);
         bbox |= item->documentBounds(type);
     }
@@ -436,7 +434,7 @@ Geom::OptRect Selection::documentBounds(SPItem::BBoxType type) const
 // If we have a selection of multiple items, then the center of the first item
 // will be returned; this is also the case in SelTrans::centerRequest()
 boost::optional<Geom::Point> Selection::center() const {
-	SelContainer const items = const_cast<Selection *>(this)->itemList();
+	std::vector<SPItem*> const items = const_cast<Selection *>(this)->itemList();
     if (!items.empty()) {
         SPItem *first = reinterpret_cast<SPItem*>(items.back()); // from the first item in selection
         if (first->isCenterSet()) { // only if set explicitly
@@ -452,12 +450,12 @@ boost::optional<Geom::Point> Selection::center() const {
 }
 
 std::vector<Inkscape::SnapCandidatePoint> Selection::getSnapPoints(SnapPreferences const *snapprefs) const {
-	SelContainer const items = const_cast<Selection *>(this)->itemList();
+	std::vector<SPItem*> const items = const_cast<Selection *>(this)->itemList();
 
     SnapPreferences snapprefs_dummy = *snapprefs; // create a local copy of the snapping prefs
     snapprefs_dummy.setTargetSnappable(Inkscape::SNAPTARGET_ROTATION_CENTER, false); // locally disable snapping to the item center
     std::vector<Inkscape::SnapCandidatePoint> p;
-    for ( SelContainer::const_iterator iter=items.begin();iter!=items.end();iter++ ) {
+    for ( std::vector<SPItem*>::const_iterator iter=items.begin();iter!=items.end();iter++ ) {
         SPItem *this_item = SP_ITEM(*iter);
         this_item->getSnappoints(p, &snapprefs_dummy);
 
@@ -505,9 +503,9 @@ SPObject *Selection::_objectForXMLNode(Inkscape::XML::Node *repr) const {
 }
 
 uint Selection::numberOfLayers() {
-	SelContainer const items = const_cast<Selection *>(this)->itemList();
+	std::vector<SPItem*> const items = const_cast<Selection *>(this)->itemList();
 	std::set<SPObject*> layers;
-    for ( SelContainer::const_iterator iter=items.begin();iter!=items.end();iter++ ) {
+    for ( std::vector<SPItem*>::const_iterator iter=items.begin();iter!=items.end();iter++ ) {
         SPObject *layer = _layers->layerForObject(SP_OBJECT(*iter));
         layers.insert(layer);
     }
@@ -515,9 +513,9 @@ uint Selection::numberOfLayers() {
 }
 
 guint Selection::numberOfParents() {
-	SelContainer const items = const_cast<Selection *>(this)->itemList();
+	std::vector<SPItem*> const items = const_cast<Selection *>(this)->itemList();
 	std::set<SPObject*> parents;
-    for ( SelContainer::const_iterator iter=items.begin();iter!=items.end();iter++ ) {
+    for ( std::vector<SPItem*>::const_iterator iter=items.begin();iter!=items.end();iter++ ) {
         SPObject *parent = SP_OBJECT(*iter)->parent;
         parents.insert(parent);
     }

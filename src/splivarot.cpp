@@ -331,7 +331,7 @@ void
 sp_selected_path_boolop(Inkscape::Selection *selection, SPDesktop *desktop, bool_op bop, const unsigned int verb, const Glib::ustring description)
 {
     SPDocument *doc = selection->layers()->getDocument();
-    SelContainer il= selection->itemList();
+    std::vector<SPItem*> il= selection->itemList();
     
     // allow union on a single object for the purpose of removing self overlapse (svn log, revision 13334)
     if ( (il.size() < 2) && (bop != bool_op_union)) {
@@ -403,7 +403,7 @@ sp_selected_path_boolop(Inkscape::Selection *selection, SPDesktop *desktop, bool
 
     // first check if all the input objects have shapes
     // otherwise bail out
-    for (SelContainer::const_iterator l = il.begin(); l != il.end(); l++)
+    for (std::vector<SPItem*>::const_iterator l = il.begin(); l != il.end(); l++)
     {
         SPItem *item = SP_ITEM(*l);
         if (!SP_IS_SHAPE(item) && !SP_IS_TEXT(item) && !SP_IS_FLOWTEXT(item))
@@ -421,7 +421,7 @@ sp_selected_path_boolop(Inkscape::Selection *selection, SPDesktop *desktop, bool
     int curOrig;
     {
         curOrig = 0;
-        for (SelContainer::const_iterator l = il.begin(); l != il.end(); l++)
+        for (std::vector<SPItem*>::const_iterator l = il.begin(); l != il.end(); l++)
         {
             // apply live path effects prior to performing boolean operation
             if (SP_IS_LPE_ITEM(*l)) {
@@ -474,7 +474,7 @@ sp_selected_path_boolop(Inkscape::Selection *selection, SPDesktop *desktop, bool
         theShapeA->ConvertToShape(theShape, origWind[0]);
 
         curOrig = 1;
-        for (SelContainer::const_iterator l = il.begin(); l != il.end(); l++){
+        for (std::vector<SPItem*>::const_iterator l = il.begin(); l != il.end(); l++){
             if(*l==il.front())continue;
             originaux[curOrig]->ConvertWithBackData(0.1);
 
@@ -671,7 +671,7 @@ sp_selected_path_boolop(Inkscape::Selection *selection, SPDesktop *desktop, bool
     if (res->descr_cmd.size() <= 1)
     {
         // only one command, presumably a moveto: it isn't a path
-        for (SelContainer::const_iterator l = il.begin(); l != il.end(); l++){
+        for (std::vector<SPItem*>::const_iterator l = il.begin(); l != il.end(); l++){
             SP_OBJECT(*l)->deleteObject();
         }
         DocumentUndo::done(doc, SP_VERB_NONE, description);
@@ -720,7 +720,7 @@ sp_selected_path_boolop(Inkscape::Selection *selection, SPDesktop *desktop, bool
     gchar *desc = source->desc();
     // remove source paths
     selection->clear();
-    for (SelContainer::const_iterator l = il.begin(); l != il.end(); l++){
+    for (std::vector<SPItem*>::const_iterator l = il.begin(); l != il.end(); l++){
         // if this is the bottommost object,
         if (!strcmp(reinterpret_cast<SPObject *>(*l)->getRepr()->attribute("id"), id)) {
             // delete it so that its clones don't get alerted; this object will be restored shortly, with the same id
@@ -1157,8 +1157,8 @@ sp_selected_path_outline(SPDesktop *desktop)
     }
 
     bool did = false;
-    SelContainer il(selection->itemList());
-    for (SelContainer::const_iterator l = il.begin(); l != il.end(); l++){
+    std::vector<SPItem*> il(selection->itemList());
+    for (std::vector<SPItem*>::const_iterator l = il.begin(); l != il.end(); l++){
         SPItem *item = SP_ITEM(*l);
 
         if (!SP_IS_SHAPE(item) && !SP_IS_TEXT(item))
@@ -1769,8 +1769,8 @@ sp_selected_path_do_offset(SPDesktop *desktop, bool expand, double prefOffset)
     }
 
     bool did = false;
-    SelContainer il(selection->itemList());
-    for (SelContainer::const_iterator l = il.begin(); l != il.end(); l++){
+    std::vector<SPItem*> il(selection->itemList());
+    for (std::vector<SPItem*>::const_iterator l = il.begin(); l != il.end(); l++){
         SPItem *item = SP_ITEM(*l);
         SPCurve *curve = NULL;
 
@@ -1967,7 +1967,7 @@ sp_selected_path_do_offset(SPDesktop *desktop, bool expand, double prefOffset)
 
 static bool
 sp_selected_path_simplify_items(SPDesktop *desktop,
-                                Inkscape::Selection *selection, SelContainer &items,
+                                Inkscape::Selection *selection, std::vector<SPItem*> &items,
                                 float threshold,  bool justCoalesce,
                                 float angleLimit, bool breakableAngles,
                                 bool modifySelection);
@@ -1986,7 +1986,7 @@ sp_selected_path_simplify_item(SPDesktop *desktop,
 
     //If this is a group, do the children instead
     if (SP_IS_GROUP(item)) {
-        SelContainer items = sp_item_group_item_list(SP_GROUP(item));
+    	std::vector<SPItem*> items = sp_item_group_item_list(SP_GROUP(item));
         
         return sp_selected_path_simplify_items(desktop, selection, items,
                                                threshold, justCoalesce,
@@ -2111,7 +2111,7 @@ sp_selected_path_simplify_item(SPDesktop *desktop,
 
 bool
 sp_selected_path_simplify_items(SPDesktop *desktop,
-                                Inkscape::Selection *selection, SelContainer &items,
+                                Inkscape::Selection *selection, std::vector<SPItem*> &items,
                                 float threshold,  bool justCoalesce,
                                 float angleLimit, bool breakableAngles,
                                 bool modifySelection)
@@ -2142,7 +2142,7 @@ sp_selected_path_simplify_items(SPDesktop *desktop,
     // set "busy" cursor
     desktop->setWaitingCursor();
 
-    for (SelContainer::const_iterator l = items.begin(); l != items.end(); l++){
+    for (std::vector<SPItem*>::const_iterator l = items.begin(); l != items.end(); l++){
         SPItem *item = SP_ITEM(*l);
 
         if (!(SP_IS_GROUP(item) || SP_IS_SHAPE(item) || SP_IS_TEXT(item)))
@@ -2191,7 +2191,7 @@ sp_selected_path_simplify_selection(SPDesktop *desktop, float threshold, bool ju
         return;
     }
 
-    SelContainer items(selection->itemList());
+    std::vector<SPItem*> items(selection->itemList());
 
     bool didSomething = sp_selected_path_simplify_items(desktop, selection,
                                                         items, threshold,

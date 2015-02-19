@@ -1470,7 +1470,7 @@ int TextTool::_styleQueried(SPStyle *style, int property)
     }
     sp_text_context_validate_cursor_iterators(this);
 
-    SelContainer styles_list;
+    std::vector<SPItem*> styles_list;
 
     Inkscape::Text::Layout::iterator begin_it, end_it;
     if (this->text_sel_start < this->text_sel_end) {
@@ -1496,7 +1496,7 @@ int TextTool::_styleQueried(SPStyle *style, int property)
         while (SP_IS_STRING(pos_obj) && pos_obj->parent) {
            pos_obj = pos_obj->parent;   // SPStrings don't have style
         }
-        styles_list.push_front(pos_obj);
+        styles_list.insert(styles_list.begin(),(SPItem*)pos_obj);
     }
 
     int result = sp_desktop_query_style_from_list (styles_list, style, property);

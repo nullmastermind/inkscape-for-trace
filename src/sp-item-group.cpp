@@ -387,7 +387,7 @@ void SPGroup::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape:
 
 
 void
-sp_item_group_ungroup (SPGroup *group, SelContainer &children, bool do_done)
+sp_item_group_ungroup (SPGroup *group, std::vector<SPItem*> &children, bool do_done)
 {
     g_return_if_fail (group != NULL);
 
@@ -547,7 +547,7 @@ sp_item_group_ungroup (SPGroup *group, SelContainer &children, bool do_done)
 
         Inkscape::GC::release(repr);
         if (!children.empty() && item) {
-            children.push_front(dynamic_cast<SPObject*>(item));
+            children.insert(children.begin(),item);
         }
 
         items = g_slist_remove (items, items->data);
@@ -562,17 +562,16 @@ sp_item_group_ungroup (SPGroup *group, SelContainer &children, bool do_done)
  * some API for list aspect of SPGroup
  */
 
-SelContainer sp_item_group_item_list(SPGroup * group)
+std::vector<SPItem*> sp_item_group_item_list(SPGroup * group)
 {
-    SelContainer s;
+    std::vector<SPItem*> s;
     g_return_val_if_fail(group != NULL, s);
 
     for (SPObject *o = group->firstChild() ; o ; o = o->getNext() ) {
         if ( dynamic_cast<SPItem *>(o) ) {
-            s.push_front(o);
+            s.push_back((SPItem*)o);
         }
     }
-    s.reverse();
     return s;
 }
 
@@ -813,9 +812,9 @@ void SPGroup::update_patheffect(bool write) {
     g_message("sp_group_update_patheffect: %p\n", lpeitem);
 #endif
 
-    SelContainer const item_list = sp_item_group_item_list(this);
+    std::vector<SPItem*> const item_list = sp_item_group_item_list(this);
 
-    for ( SelContainer::const_iterator iter=item_list.begin();iter!=item_list.end();iter++) {
+    for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();iter++) {
         SPObject *subitem = static_cast<SPObject *>(*iter);
 
         SPLPEItem *lpeItem = dynamic_cast<SPLPEItem *>(subitem);
@@ -841,9 +840,9 @@ void SPGroup::update_patheffect(bool write) {
 static void
 sp_group_perform_patheffect(SPGroup *group, SPGroup *topgroup, bool write)
 {
-    SelContainer const item_list = sp_item_group_item_list(group);
+    std::vector<SPItem*> const item_list = sp_item_group_item_list(group);
 
-    for ( SelContainer::const_iterator iter=item_list.begin();iter!=item_list.end();iter++) {
+    for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();iter++) {
         SPObject *subitem = static_cast<SPObject *>(*iter);
 
         SPGroup *subGroup = dynamic_cast<SPGroup *>(subitem);

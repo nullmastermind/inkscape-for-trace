@@ -297,14 +297,14 @@ static void moveToPoint(int anchor, SPItem *item, Geom::Point p)
 void PolarArrangeTab::arrange()
 {
 	Inkscape::Selection *selection = parent->getDesktop()->getSelection();
-	const SelContainer tmp(selection->itemList());
+	const std::vector<SPItem*> tmp(selection->itemList());
 	SPGenericEllipse *referenceEllipse = NULL; // Last ellipse in selection
 
 	bool arrangeOnEllipse = !arrangeOnParametersRadio.get_active();
 	bool arrangeOnFirstEllipse = arrangeOnEllipse && arrangeOnFirstCircleRadio.get_active();
 
 	int count = 0;
-	for(SelContainer::const_iterator i=tmp.begin();i!=tmp.end();i++)
+	for(std::vector<SPItem*>::const_iterator i=tmp.begin();i!=tmp.end();i++)
 	{
 		if(arrangeOnEllipse)
 		{
@@ -373,7 +373,7 @@ void PolarArrangeTab::arrange()
 	Geom::Point realCenter = Geom::Point(cx, cy) * transformation;
 
 	int i = 0;
-	for(SelContainer::const_iterator it=tmp.begin();it!=tmp.end();it++)
+	for(std::vector<SPItem*>::const_iterator it=tmp.begin();it!=tmp.end();it++)
 	{
 		SPItem *item = SP_ITEM(*it);
 

@@ -1024,8 +1024,8 @@ void Export::onExport ()
 
         gint export_count = 0;
 
-        SelContainer itemlist=desktop->getSelection()->itemList();
-        for(SelContainer::const_iterator i = itemlist.begin();i!=itemlist.end() && !interrupted ;i++){
+        std::vector<SPItem*> itemlist=desktop->getSelection()->itemList();
+        for(std::vector<SPItem*>::const_iterator i = itemlist.begin();i!=itemlist.end() && !interrupted ;i++){
             SPItem *item = reinterpret_cast<SPItem *>(*i);
 
             prog_dlg->set_data("current", GINT_TO_POINTER(n));
@@ -1064,7 +1064,7 @@ void Export::onExport ()
                                               _("Exporting file <b>%s</b>..."), safeFile), desktop);
                     MessageCleaner msgFlashCleanup(desktop->messageStack()->flashF(Inkscape::IMMEDIATE_MESSAGE,
                                                    _("Exporting file <b>%s</b>..."), safeFile), desktop);
-                    SelContainer x;
+                    std::vector<SPItem*> x;
                     if (!sp_export_png_file (doc, path.c_str(),
                                              *area, width, height, dpi, dpi,
                                              nv->pagecolor,
@@ -1154,7 +1154,7 @@ void Export::onExport ()
         prog_dlg->set_data("total", GINT_TO_POINTER(0));
 
         /* Do export */
-        SelContainer x;
+        std::vector<SPItem*> x;
         ExportResult status = sp_export_png_file(desktop->getDocument(), path.c_str(),
                               Geom::Rect(Geom::Point(x0, y0), Geom::Point(x1, y1)), width, height, xdpi, ydpi,
                               nv->pagecolor,

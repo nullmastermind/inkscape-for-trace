@@ -481,8 +481,8 @@ bool MeshTool::root_handler(GdkEvent* event) {
                 sp_mesh_context_split_near_point(this, SP_ITEM(selection->itemList().front()), this->mousepoint_doc, event->button.time);
             } else {
                 // Create a new gradient with default coordinates.
-                SelContainer items=selection->itemList();
-                for(SelContainer::const_iterator i=items.begin();i!=items.end();i++){
+            	std::vector<SPItem*> items=selection->itemList();
+                for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
                     SPItem *item = SP_ITEM(*i);
                     SPGradientType new_type = SP_GRADIENT_TYPE_MESH;
                     Inkscape::PaintTarget fsmode = (prefs->getInt("/tools/gradient/newfillorstroke", 1) != 0) ? Inkscape::FOR_FILL : Inkscape::FOR_STROKE;
@@ -958,8 +958,8 @@ static void sp_mesh_drag(MeshTool &rc, Geom::Point const /*pt*/, guint /*state*/
         } else {
             // Starting from empty space:
             // Sort items so that the topmost comes last
-            SelContainer items(selection->itemList());
-            items.sort(sp_item_repr_compare_position_obj);
+        	std::vector<SPItem*> items(selection->itemList());
+            sort(items.begin(),items.end(),sp_item_repr_compare_position);
             // take topmost
             vector = sp_gradient_vector_for_object(document, desktop, SP_ITEM(items.back()), fill_or_stroke);
         }
@@ -968,8 +968,8 @@ static void sp_mesh_drag(MeshTool &rc, Geom::Point const /*pt*/, guint /*state*/
         SPCSSAttr *css = sp_repr_css_attr_new();
         sp_repr_css_set_property(css, "fill-opacity", "1.0");
 
-        SelContainer items=selection->itemList();
-        for(SelContainer::const_iterator i=items.begin();i!=items.end();i++){
+        std::vector<SPItem*> items=selection->itemList();
+        for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
 
             //FIXME: see above
             sp_repr_css_change_recursive(SP_OBJECT(*i)->getRepr(), css, "style");

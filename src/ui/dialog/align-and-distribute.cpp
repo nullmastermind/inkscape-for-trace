@@ -98,7 +98,7 @@ void ActionAlign::do_action(SPDesktop *desktop, int index)
     bool sel_as_group = prefs->getBool("/dialogs/align/sel-as-groups");
 
     using Inkscape::Util::GSListConstIterator;
-    SelContainer selected(selection->itemList());
+    std::vector<SPItem*> selected(selection->itemList());
     if (selected.empty()) return;
 
     const Coeffs &a = _allCoeffs[index];
@@ -148,7 +148,7 @@ void ActionAlign::do_action(SPDesktop *desktop, int index)
         b = selection->preferredBounds();
 
     //Move each item in the selected list separately
-    for (SelContainer::iterator it(selected.begin());
+    for (std::vector<SPItem*>::iterator it(selected.begin());
          it != selected.end(); ++it)
     {
     	SPItem* item=static_cast<SPItem*> (*it);
@@ -251,18 +251,18 @@ private :
         if (!selection) return;
 
         using Inkscape::Util::GSListConstIterator;
-        SelContainer selected(selection->itemList());
+        std::vector<SPItem*> selected(selection->itemList());
         if (selected.empty()) return;
 
         //Check 2 or more selected objects
-        SelContainer::iterator second(selected.begin());
+        std::vector<SPItem*>::iterator second(selected.begin());
         ++second;
         if (second == selected.end()) return;
 
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         int prefs_bbox = prefs->getBool("/tools/bounding_box");
         std::vector< BBoxSort  > sorted;
-        for (SelContainer::iterator it(selected.begin());
+        for (std::vector<SPItem*>::iterator it(selected.begin());
             it != selected.end();
             ++it)
         {SPItem *item=static_cast<SPItem*>(*it);
@@ -540,10 +540,6 @@ private :
         return (a->isSiblingOf(b));
     }
 
-    static bool local_obj_compare(SPObject* a,SPObject* b){
-    	return ActionExchangePositions::sort_compare(static_cast<SPItem*>(a),static_cast<SPItem*>(b));
-    }
-
     virtual void on_button_click()
     {
         SPDesktop *desktop = _dialog.getDesktop();
@@ -553,7 +549,7 @@ private :
         if (!selection) return;
 
         using Inkscape::Util::GSListConstIterator;
-        SelContainer selected(selection->itemList());
+        std::vector<SPItem*> selected(selection->itemList());
         if (selected.empty()) return;
 
         //Check 2 or more selected objects
@@ -571,9 +567,9 @@ private :
 		} else { // sorting by ZOrder is outomatically done by not setting the center
 			center.reset();
 		}
-		selected.sort(local_obj_compare);
+		sort(selected.begin(),selected.end(),sort_compare);
 	}
-	SelContainer::iterator it(selected.begin());
+	std::vector<SPItem*>::iterator it(selected.begin());
 	SPItem* item=static_cast<SPItem*>(*it);
 	Geom::Point p1 =  (item)->getCenter();
 	for (++it ;it != selected.end(); ++it)
@@ -619,7 +615,7 @@ private :
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         int saved_compensation = prefs->getInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
         prefs->setInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
-        SelContainer x(_dialog.getDesktop()->getSelection()->itemList());
+        std::vector<SPItem*> x(_dialog.getDesktop()->getSelection()->itemList());
         unclump (x);
 
         // restore compensation setting
@@ -651,7 +647,7 @@ private :
         if (!selection) return;
 
         using Inkscape::Util::GSListConstIterator;
-        SelContainer selected(selection->itemList());
+        std::vector<SPItem*> selected(selection->itemList());
         if (selected.empty()) return;
 
         //Check 2 or more selected objects
@@ -675,7 +671,7 @@ private :
         int saved_compensation = prefs->getInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
         prefs->setInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
 
-        for (SelContainer::iterator it(selected.begin());
+        for (std::vector<SPItem*>::iterator it(selected.begin());
             it != selected.end();
             ++it)
         {
@@ -750,7 +746,7 @@ private :
         if (!selection) return;
 
         using Inkscape::Util::GSListConstIterator;
-        SelContainer selected(selection->itemList());
+        std::vector<SPItem*> selected(selection->itemList());
         if (selected.empty()) return;
 
         //Check 2 or more selected objects
@@ -761,7 +757,7 @@ private :
 
         std::vector<Baselines> sorted;
 
-        for (SelContainer::iterator it(selected.begin());
+        for (std::vector<SPItem*>::iterator it(selected.begin());
             it != selected.end();
             ++it)
         {
@@ -805,7 +801,7 @@ private :
             }
 
         } else {
-            for (SelContainer::iterator it(selected.begin());
+            for (std::vector<SPItem*>::iterator it(selected.begin());
                  it != selected.end();
                  ++it)
             {

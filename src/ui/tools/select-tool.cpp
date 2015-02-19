@@ -718,7 +718,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
 
                     if (r->is_started() && !within_tolerance) {
                         // this was a rubberband drag
-                        SelContainer items;
+                    	std::vector<SPItem*> items;
 
                         if (r->getMode() == RUBBERBAND_MODE_RECT) {
                             Geom::OptRect const b = r->getRectangle();

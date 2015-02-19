@@ -43,8 +43,8 @@ using Inkscape::DocumentUndo;
 static SPItem *
 flowtext_in_selection(Inkscape::Selection *selection)
 {
-    SelContainer items = selection->itemList();
-    for(SelContainer::const_iterator i=items.begin();i!=items.end();i++){
+	std::vector<SPItem*> items = selection->itemList();
+    for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
         if (SP_IS_FLOWTEXT(*i))
             return ((SPItem *) *i);
     }
@@ -54,8 +54,8 @@ flowtext_in_selection(Inkscape::Selection *selection)
 static SPItem *
 text_or_flowtext_in_selection(Inkscape::Selection *selection)
 {
-    SelContainer items = selection->itemList();
-    for(SelContainer::const_iterator i=items.begin();i!=items.end();i++){
+	std::vector<SPItem*> items = selection->itemList();
+    for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
         if (SP_IS_TEXT(*i) || SP_IS_FLOWTEXT(*i))
             return ((SPItem *) *i);
     }
@@ -65,8 +65,8 @@ text_or_flowtext_in_selection(Inkscape::Selection *selection)
 static SPItem *
 shape_in_selection(Inkscape::Selection *selection)
 {
-    SelContainer items = selection->itemList();
-    for(SelContainer::const_iterator i=items.begin();i!=items.end();i++){
+	std::vector<SPItem*> items = selection->itemList();
+    for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
         if (SP_IS_SHAPE(*i))
             return ((SPItem *) *i);
     }
@@ -196,8 +196,8 @@ text_remove_from_path()
     }
 
     bool did = false;
-    SelContainer items(selection->itemList());
-    for(SelContainer::const_iterator i=items.begin();i!=items.end();i++){
+    std::vector<SPItem*> items(selection->itemList());
+    for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
         SPObject *obj = SP_OBJECT(*i);
 
         if (SP_IS_TEXT_TEXTPATH(obj)) {
@@ -260,8 +260,8 @@ text_remove_all_kerns()
 
     bool did = false;
 
-    SelContainer items = selection->itemList();
-    for(SelContainer::const_iterator i=items.begin();i!=items.end();i++){
+    std::vector<SPItem*> items = selection->itemList();
+    for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
         SPObject *obj = SP_OBJECT(*i);
 
         if (!SP_IS_TEXT(obj) && !SP_IS_TSPAN(obj) && !SP_IS_FLOWTEXT(obj)) {
@@ -320,8 +320,8 @@ text_flow_into_shape()
     g_return_if_fail(SP_IS_FLOWREGION(object));
 
     /* Add clones */
-    SelContainer items = selection->itemList();
-    for(SelContainer::const_iterator i=items.begin();i!=items.end();i++){
+    std::vector<SPItem*> items = selection->itemList();
+    for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
         SPItem *item = SP_ITEM(*i);
         if (SP_IS_SHAPE(item)){
             Inkscape::XML::Node *clone = xml_doc->createElement("svg:use");
@@ -392,11 +392,11 @@ text_unflow ()
         return;
     }
 
-    SelContainer new_objs;
+    std::vector<SPItem*> new_objs;
     GSList *old_objs = NULL;
 
-    SelContainer items = selection->itemList();
-    for(SelContainer::const_iterator i=items.begin();i!=items.end();i++){
+    std::vector<SPItem*> items = selection->itemList();
+    for(std::vector<SPItem*>::const_reverse_iterator i=items.rbegin();i!=items.rend();i++){
 
         if (!SP_IS_FLOWTEXT(SP_OBJECT(*i))) {
             continue;
@@ -443,7 +443,7 @@ text_unflow ()
         SPText *text = SP_TEXT(text_object);
         text->_adjustFontsizeRecursive(text, ex);
 
-        new_objs.push_front(text_object);
+        new_objs.push_back((SPItem*)text_object);
         old_objs = g_slist_prepend (old_objs, flowtext);
 
         Inkscape::GC::release(rtext);
@@ -478,9 +478,9 @@ flowtext_to_text()
 
     bool did = false;
 
-    SelContainer reprs;
-    SelContainer items(selection->itemList());
-    for(SelContainer::const_iterator i=items.begin();i!=items.end();i++){
+    std::vector<Inkscape::XML::Node*> reprs;
+    std::vector<SPItem*> items(selection->itemList());
+    for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
         
         SPItem *item = (SPItem *) *i;
 
@@ -510,7 +510,7 @@ flowtext_to_text()
         Inkscape::GC::release(repr);
         item->deleteObject();
 
-        reprs.push_front(dynamic_cast<SPObject*>(repr));
+        reprs.push_back(repr);
     }
 
 

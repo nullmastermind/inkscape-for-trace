@@ -407,8 +407,8 @@ lpetool_create_measuring_items(LpeTool *lc, Inkscape::Selection *selection)
     SPCanvasGroup *tmpgrp = lc->desktop->getTempGroup();
     gchar *arc_length;
     double lengthval;
-    SelContainer items=selection->itemList();
-    for(SelContainer::const_iterator i=items.begin();i!=items.end();i++){
+    std::vector<SPItem*> items=selection->itemList();
+    for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
         if (SP_IS_PATH(*i)) {
             path = SP_PATH(*i);
             curve = path->getCurve();

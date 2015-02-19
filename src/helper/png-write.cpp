@@ -361,7 +361,7 @@ sp_export_get_rows(guchar const **rows, void **to_free, int row, int num_rows, v
 /**
  * Hide all items that are not listed in list, recursively, skipping groups and defs.
  */
-static void hide_other_items_recursively(SPObject *o, const SelContainer &list, unsigned dkey)
+static void hide_other_items_recursively(SPObject *o, const std::vector<SPItem*> &list, unsigned dkey)
 {
     if ( SP_IS_ITEM(o)
          && !SP_IS_DEFS(o)
@@ -387,7 +387,7 @@ ExportResult sp_export_png_file(SPDocument *doc, gchar const *filename,
                                 unsigned long bgcolor,
                                 unsigned int (*status) (float, void *),
                                 void *data, bool force_overwrite,
-                                const SelContainer &items_only)
+                                const std::vector<SPItem*> &items_only)
 {
     return sp_export_png_file(doc, filename, Geom::Rect(Geom::Point(x0,y0),Geom::Point(x1,y1)),
                               width, height, xdpi, ydpi, bgcolor, status, data, force_overwrite, items_only);
@@ -399,7 +399,7 @@ ExportResult sp_export_png_file(SPDocument *doc, gchar const *filename,
                                 unsigned long bgcolor,
                                 unsigned (*status)(float, void *),
                                 void *data, bool force_overwrite,
-                                const SelContainer &items_only)
+                                const std::vector<SPItem*> &items_only)
 {
     g_return_val_if_fail(doc != NULL, EXPORT_ERROR);
     g_return_val_if_fail(filename != NULL, EXPORT_ERROR);

@@ -38,14 +38,14 @@ namespace {
 * such that rectangular bounding boxes are separated by at least xGap
 * horizontally and yGap vertically
 */
-void removeoverlap(SelContainer const &items, double const xGap, double const yGap) {
+void removeoverlap(std::vector<SPItem*> const &items, double const xGap, double const yGap) {
 	using Inkscape::Util::GSListConstIterator;
-	SelContainer selected(items);
+	std::vector<SPItem*> selected(items);
 	std::vector<Record> records;
 	std::vector<Rectangle *> rs;
 
 	Geom::Point const gap(xGap, yGap);
-	for (SelContainer::iterator it(selected.begin());
+	for (std::vector<SPItem*>::iterator it(selected.begin());
 		it != selected.end();
 		++it)
 	{

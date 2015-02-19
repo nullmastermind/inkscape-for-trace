@@ -429,7 +429,7 @@ sp_marker_hide (SPMarker *marker, unsigned int key)
 }
 
 
-const gchar *generate_marker(SelContainer &reprs, Geom::Rect bounds, SPDocument *document, Geom::Point center, Geom::Affine move)
+const gchar *generate_marker(std::vector<Inkscape::XML::Node*> &reprs, Geom::Rect bounds, SPDocument *document, Geom::Point center, Geom::Affine move)
 {
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
     Inkscape::XML::Node *defsrepr = document->getDefs()->getRepr();
@@ -452,8 +452,8 @@ const gchar *generate_marker(SelContainer &reprs, Geom::Rect bounds, SPDocument 
     const gchar *mark_id = repr->attribute("id");
     SPObject *mark_object = document->getObjectById(mark_id);
 
-    for (SelContainer::const_iterator i=reprs.begin();i!=reprs.end();i++){
-        Inkscape::XML::Node *node = (Inkscape::XML::Node *)(*i);
+    for (std::vector<Inkscape::XML::Node*>::const_iterator i=reprs.begin();i!=reprs.end();i++){
+        Inkscape::XML::Node *node = (*i);
         SPItem *copy = SP_ITEM(mark_object->appendChildRepr(node));
 
         Geom::Affine dup_transform;

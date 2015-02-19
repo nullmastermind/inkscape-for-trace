@@ -256,8 +256,8 @@ VanishingPoint::set_pos(Proj::Pt2 const &pt) {
 std::list<SPBox3D *>
 VanishingPoint::selectedBoxes(Inkscape::Selection *sel) {
     std::list<SPBox3D *> sel_boxes;
-    SelContainer itemlist=sel->itemList();
-    for (SelContainer::const_iterator i=itemlist.begin();i!=itemlist.end();i++) {
+    std::vector<SPItem*> itemlist=sel->itemList();
+    for (std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();i++) {
         SPItem *item = static_cast<SPItem *>(*i);
         SPBox3D *box = dynamic_cast<SPBox3D *>(item);
         if (box && this->hasBox(box)) {
@@ -396,8 +396,8 @@ VPDragger::VPsOfSelectedBoxes() {
     VanishingPoint *vp;
     // FIXME: Should we take the selection from the parent VPDrag? I guess it shouldn't make a difference.
     Inkscape::Selection *sel = SP_ACTIVE_DESKTOP->getSelection();
-    SelContainer itemlist=sel->itemList();
-    for (SelContainer::const_iterator i=itemlist.begin();i!=itemlist.end();i++) {
+    std::vector<SPItem*> itemlist=sel->itemList();
+    for (std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();i++) {
         SPItem *item = static_cast<SPItem *>(*i);
         SPBox3D *box = dynamic_cast<SPBox3D *>(item);
         if (box) {
@@ -579,8 +579,8 @@ VPDrag::updateDraggers ()
 
     g_return_if_fail (this->selection != NULL);
 
-    SelContainer itemlist=this->selection->itemList();
-    for (SelContainer::const_iterator i=itemlist.begin();i!=itemlist.end();i++) {
+    std::vector<SPItem*> itemlist=this->selection->itemList();
+    for (std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();i++) {
         SPItem *item = static_cast<SPItem *>(*i);
         SPBox3D *box = dynamic_cast<SPBox3D *>(item);
         if (box) {
@@ -612,8 +612,8 @@ VPDrag::updateLines ()
 
     g_return_if_fail (this->selection != NULL);
 
-    SelContainer itemlist=this->selection->itemList();
-    for (SelContainer::const_iterator i=itemlist.begin();i!=itemlist.end();i++) {
+    std::vector<SPItem*> itemlist=this->selection->itemList();
+    for (std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();i++) {
         SPItem *item = static_cast<SPItem *>(*i);
         SPBox3D *box = dynamic_cast<SPBox3D *>(item);
         if (box) {
@@ -630,7 +630,7 @@ VPDrag::updateBoxHandles ()
     // FIXME: Is there a way to update the knots without accessing the
     //        (previously) statically linked function KnotHolder::update_knots?
 
-    SelContainer sel = selection->itemList();
+	std::vector<SPItem*> sel = selection->itemList();
     if (sel.empty())
         return; // no selection
 

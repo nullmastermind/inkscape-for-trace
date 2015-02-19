@@ -168,11 +168,11 @@ unclump_dist (SPItem *item1, SPItem *item2)
 /**
 Average unclump_dist from item to others
 */
-static double unclump_average (SPItem *item, SelContainer &others)
+static double unclump_average (SPItem *item, std::list<SPItem*> &others)
 {
     int n = 0;
     double sum = 0;
-    for (SelContainer::const_iterator i = others.begin(); i != others.end();i++) {
+    for (std::list<SPItem*>::const_iterator i = others.begin(); i != others.end();i++) {
         SPItem *other = SP_ITEM (*i);
 
         if (other == item)
@@ -191,12 +191,12 @@ static double unclump_average (SPItem *item, SelContainer &others)
 /**
 Closest to item among others
  */
-static SPItem *unclump_closest (SPItem *item, SelContainer &others)
+static SPItem *unclump_closest (SPItem *item, std::list<SPItem*> &others)
 {
     double min = HUGE_VAL;
     SPItem *closest = NULL;
 
-    for (SelContainer::const_iterator i = others.begin(); i != others.end();i++) {
+    for (std::list<SPItem*>::const_iterator i = others.begin(); i != others.end();i++) {
     	SPItem *other = SP_ITEM (*i);
 
         if (other == item)
@@ -215,11 +215,11 @@ static SPItem *unclump_closest (SPItem *item, SelContainer &others)
 /**
 Most distant from item among others
  */
-static SPItem *unclump_farest (SPItem *item, SelContainer &others)
+static SPItem *unclump_farest (SPItem *item, std::list<SPItem*> &others)
 {
     double max = -HUGE_VAL;
     SPItem *farest = NULL;
-    for (SelContainer::const_iterator i = others.begin(); i != others.end();i++) {
+    for (std::list<SPItem*>::const_iterator i = others.begin(); i != others.end();i++) {
         SPItem *other = SP_ITEM (*i);
 
         if (other == item)
@@ -240,8 +240,8 @@ Removes from the \a rest list those items that are "behind" \a closest as seen f
 i.e. those on the other side of the line through \a closest perpendicular to the direction from \a
 item to \a closest. Returns a newly created list which must be freed.
  */
-static SelContainer
-unclump_remove_behind (SPItem *item, SPItem *closest, SelContainer &rest)
+static std::vector<SPItem*>
+unclump_remove_behind (SPItem *item, SPItem *closest, std::list<SPItem*> &rest)
 {
     Geom::Point it = unclump_center (item);
     Geom::Point p1 = unclump_center (closest);
@@ -258,8 +258,8 @@ unclump_remove_behind (SPItem *item, SPItem *closest, SelContainer &rest)
     // substitute the item into it:
     double val_item = A * it[Geom::X] + B * it[Geom::Y] + C;
 
-    SelContainer out;
-    for (SelContainer::const_iterator i = rest.begin(); i != rest.end();i++) {
+    std::vector<SPItem*> out;
+    for (std::list<SPItem*>::const_reverse_iterator i = rest.rbegin(); i != rest.rend();i++) {
         SPItem *other = SP_ITEM (*i);
 
         if (other == item)
@@ -271,7 +271,7 @@ unclump_remove_behind (SPItem *item, SPItem *closest, SelContainer &rest)
         if (val_item * val_other <= 1e-6) {
             // different signs, which means item and other are on the different sides of p1-p2 line; skip
         } else {
-            out.push_front(other);
+            out.push_back(other);
         }
     }
 
@@ -331,17 +331,18 @@ similar to "engraver dots". The only distribution which is unchanged by unclumpi
 grid. May be called repeatedly for stronger effect.
  */
 void
-unclump (SelContainer &items)
+unclump (std::vector<SPItem*> &items)
 {
     c_cache.clear();
     wh_cache.clear();
 
-    for (SelContainer::const_iterator i = items.begin(); i != items.end();i++) { //  for each original/clone x:
+    for (std::vector<SPItem*>::const_iterator i = items.begin(); i != items.end();i++) { //  for each original/clone x:
         SPItem *item = SP_ITEM (*i);
 
-        SelContainer nei;
+        std::list<SPItem*> nei;
 
-        SelContainer rest(items);
+        std::list<SPItem*> rest;
+        for(int i=0;i<items.size();i++)rest.push_front(items[items.size()-i-1]);
         rest.remove(item);
 
         while (!rest.empty()) {
@@ -349,8 +350,9 @@ unclump (SelContainer &items)
             if (closest) {
                 nei.push_front(closest);
                 rest.remove(closest);
-                SelContainer new_rest = unclump_remove_behind (item, closest, rest);
-                rest = new_rest;
+                std::vector<SPItem*> new_rest = unclump_remove_behind (item, closest, rest);
+                rest.clear();
+                for(int i=0;i<new_rest.size();i++)rest.push_front(new_rest[new_rest.size()-i-1]);
             } else {
                 break;
             }

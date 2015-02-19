@@ -97,8 +97,8 @@ static void sp_connector_orthogonal_toggled( GtkToggleAction* act, GObject *tbl 
     gchar *value = is_orthog ? orthog_str : polyline_str ;
 
     bool modmade = false;
-    SelContainer itemlist=desktop->getSelection()->itemList();
-    for(SelContainer::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
+    std::vector<SPItem*> itemlist=desktop->getSelection()->itemList();
+    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
         SPItem *item = SP_ITEM(*i);
 
         if (Inkscape::UI::Tools::cc_item_is_connector(item)) {
@@ -144,8 +144,8 @@ static void connector_curvature_changed(GtkAdjustment *adj, GObject* tbl)
     g_ascii_dtostr(value, G_ASCII_DTOSTR_BUF_SIZE, newValue);
 
     bool modmade = false;
-    SelContainer itemlist=desktop->getSelection()->itemList();
-    for(SelContainer::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
+    std::vector<SPItem*> itemlist=desktop->getSelection()->itemList();
+    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
         SPItem *item = SP_ITEM(*i);
 
         if (Inkscape::UI::Tools::cc_item_is_connector(item)) {

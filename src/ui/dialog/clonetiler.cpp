@@ -2104,16 +2104,17 @@ void CloneTiler::clonetiler_unclump(GtkWidget */*widget*/, void *)
     SPObject *obj = selection->singleItem();
     SPObject *parent = obj->parent;
 
-    SelContainer to_unclump; // not including the original
+    std::vector<SPItem*> to_unclump; // not including the original
 
     for (SPObject *child = parent->firstChild(); child != NULL; child = child->next) {
         if (clonetiler_is_a_clone_of (child, obj)) {
-            to_unclump.push_front(child);
+            to_unclump.push_back((SPItem*)child);
         }
     }
 
     desktop->getDocument()->ensureUpToDate();
-
+    std::vector<SPItem*> tu2(to_unclump);
+    for(int i=0;i<tu2.size();i++)to_unclump[i]=tu2[tu2.size()-i-1];
     unclump (to_unclump);
 
     DocumentUndo::done(desktop->getDocument(), SP_VERB_DIALOG_CLONETILER,

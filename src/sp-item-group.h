@@ -96,10 +96,10 @@ public:
     virtual void update_patheffect(bool write);
 };
 
-void sp_item_group_ungroup (SPGroup *group, SelContainer &children, bool do_done = true);
+void sp_item_group_ungroup (SPGroup *group, std::vector<SPItem*> &children, bool do_done = true);
 
 
-SelContainer sp_item_group_item_list (SPGroup *group);
+std::vector<SPItem*> sp_item_group_item_list (SPGroup *group);
 SPObject *sp_item_group_get_child_by_name (SPGroup *group, SPObject *ref, const char *name);
 
 #endif

@@ -504,8 +504,8 @@ bool GradientTool::root_handler(GdkEvent* event) {
                 // always resets selection to the single object under cursor
                 sp_gradient_context_add_stop_near_point(this, SP_ITEM(selection->itemList().front()), this->mousepoint_doc, event->button.time);
             } else {
-            	SelContainer items=selection->itemList();
-                for (SelContainer::const_iterator i = items.begin();i!=items.end();i++) {
+            	std::vector<SPItem*>  items=selection->itemList();
+                for (std::vector<SPItem*>::const_iterator i = items.begin();i!=items.end();i++) {
                     SPItem *item = SP_ITEM(*i);
                     SPGradientType new_type = (SPGradientType) prefs->getInt("/tools/gradient/newgradient", SP_GRADIENT_TYPE_LINEAR);
                     Inkscape::PaintTarget fsmode = (prefs->getInt("/tools/gradient/newfillorstroke", 1) != 0) ? Inkscape::FOR_FILL : Inkscape::FOR_STROKE;
@@ -915,8 +915,8 @@ static void sp_gradient_drag(GradientTool &rc, Geom::Point const pt, guint /*sta
         } else {
             // Starting from empty space:
             // Sort items so that the topmost comes last
-            SelContainer items(selection->itemList());
-            items.sort(sp_item_repr_compare_position_obj);
+        	std::vector<SPItem*> items(selection->itemList());
+            sort(items.begin(),items.end(),sp_item_repr_compare_position);
             // take topmost
             vector = sp_gradient_vector_for_object(document, desktop, SP_ITEM(items.back()), fill_or_stroke);
         }
@@ -925,8 +925,8 @@ static void sp_gradient_drag(GradientTool &rc, Geom::Point const pt, guint /*sta
         SPCSSAttr *css = sp_repr_css_attr_new();
         sp_repr_css_set_property(css, "fill-opacity", "1.0");
 
-        SelContainer itemlist = selection->itemList();
-        for (SelContainer::const_iterator i = itemlist.begin();i!=itemlist.end();i++) {
+        std::vector<SPItem*> itemlist = selection->itemList();
+        for (std::vector<SPItem*>::const_iterator i = itemlist.begin();i!=itemlist.end();i++) {
 
             //FIXME: see above
             sp_repr_css_change_recursive(SP_OBJECT(*i)->getRepr(), css, "style");

@@ -170,21 +170,21 @@ public:
      *
      * @param objs the objects to select
      */
-    void setList(SelContainer const &objs);
+    void setList(std::vector<SPItem*> const &objs);
 
     /**
      * Adds the specified objects to selection, without deselecting first.
      *
      * @param objs the objects to select
      */
-    void addList(SelContainer const &objs);
+    void addList(std::vector<SPItem*> const &objs);
 
     /**
      * Clears the selection and selects the specified objects.
      *
      * @param repr a list of xml nodes for the items to select
      */
-    void setReprList(std::list<SPObject*> const &reprs);
+    void setReprList(std::vector<XML::Node*> const &reprs);
 
     /**  Add items from an STL iterator range to the selection.
      *  \param  from the begin iterator
@@ -256,7 +256,7 @@ public:
     /** Returns the list of selected objects. */
     std::list<SPObject*> const &list();
     /** Returns the list of selected SPItems. */
-    std::list<SPObject*> const &itemList();
+    std::vector<SPItem*> const &itemList();
     /** Returns a list of the xml nodes of all selected objects. */
     /// \todo only returns reprs of SPItems currently; need a separate
     ///      method for that
@@ -378,7 +378,7 @@ private:
 
     mutable std::list<SPObject*> _objs;
     mutable std::vector<XML::Node*> _reprs;
-    mutable std::list<SPObject*> _items;
+    mutable std::vector<SPItem*> _items;
 
     void add_box_perspective(SPBox3D *box);
     void add_3D_boxes_recursively(SPObject *obj);

@@ -676,8 +676,7 @@ void EraserTool::set_to_accumulated() {
             Geom::OptRect eraserBbox = acid->visualBounds();
             Geom::Rect bounds = (*eraserBbox) * desktop->doc2dt();
             std::vector<SPItem*> remainingItems;
-            SelContainer toWorkOn;
-
+            std::vector<SPItem*> toWorkOn;
             if (selection->isEmpty()) {
                 if ( eraserMode ) {
                     toWorkOn = desktop->getDocument()->getItemsPartiallyInBox(desktop->dkey, bounds);
@@ -685,16 +684,15 @@ void EraserTool::set_to_accumulated() {
                     Inkscape::Rubberband *r = Inkscape::Rubberband::get(desktop);
                     toWorkOn = desktop->getDocument()->getItemsAtPoints(desktop->dkey, r->getPoints());
                 }
-
-                toWorkOn.remove(static_cast<SPObject*>(acid) );
+                toWorkOn.erase(find(toWorkOn.begin(),toWorkOn.end(),acid));
             } else {
-                toWorkOn = selection->itemList();
+                toWorkOn= selection->itemList();
                 wasSelection = true;
             }
 
             if ( !toWorkOn.empty() ) {
                 if ( eraserMode ) {
-                    for (SelContainer::const_iterator i = toWorkOn.begin();i!=toWorkOn.end();i++) {
+                    for (std::vector<SPItem*>::const_iterator i = toWorkOn.begin();i!=toWorkOn.end();i++) {
                         SPItem *item = SP_ITEM(*i);
 
                         if ( eraserMode ) {
@@ -712,8 +710,8 @@ void EraserTool::set_to_accumulated() {
 
                                 if ( !selection->isEmpty() ) {
                                     // If the item was not completely erased, track the new remainder.
-                                    SelContainer nowSel(selection->itemList());
-                                    for (SelContainer::const_iterator i2 = nowSel.begin();i!=nowSel.end();i++) {
+                                	std::vector<SPItem*> nowSel(selection->itemList());
+                                    for (std::vector<SPItem*>::const_iterator i2 = nowSel.begin();i!=nowSel.end();i2++) {
                                         remainingItems.push_back(SP_ITEM(*i2));
                                     }
                                 }
@@ -723,11 +721,11 @@ void EraserTool::set_to_accumulated() {
                         }
                     }
                 } else {
-                    for (SelContainer::const_iterator i = toWorkOn.begin();i!=toWorkOn.end();i++) {
+                    for (std::vector<SPItem*> ::const_iterator i = toWorkOn.begin();i!=toWorkOn.end();i++) {
                         sp_object_ref( SP_ITEM(*i), 0 );
                     }
 
-                    for (SelContainer::const_iterator i = toWorkOn.begin();i!=toWorkOn.end();i++) {
+                    for (std::vector<SPItem*>::const_iterator i = toWorkOn.begin();i!=toWorkOn.end();i++) {
                         SPItem *item = SP_ITEM(*i);
                         item->deleteObject(true);
                         sp_object_unref(item);

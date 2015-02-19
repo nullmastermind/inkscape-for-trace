@@ -25,13 +25,13 @@ public:
     FontSubstitution();
     virtual ~FontSubstitution();
     void checkFontSubstitutions(SPDocument* doc);
-    void show(Glib::ustring out, SelContainer &l);
+    void show(Glib::ustring out, std::vector<SPItem*> &l);
 
     static FontSubstitution &getInstance() { return *new FontSubstitution(); }
     Glib::ustring getSubstituteFontName (Glib::ustring font);
 
 protected:
-    SelContainer getFontReplacedItems(SPDocument* doc, Glib::ustring *out);
+    std::vector<SPItem*> getFontReplacedItems(SPDocument* doc, Glib::ustring *out);
 
 private:
     FontSubstitution(FontSubstitution const &d);

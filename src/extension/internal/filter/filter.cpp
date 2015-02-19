@@ -126,12 +126,12 @@ void Filter::effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::Vie
     Inkscape::Selection * selection = ((SPDesktop *)document)->selection;
 
     // TODO need to properly refcount the items, at least
-    SelContainer items(selection->itemList());
+    std::vector<SPItem*> items(selection->itemList());
 
 	Inkscape::XML::Document * xmldoc = document->doc()->getReprDoc();
 	Inkscape::XML::Node * defsrepr = document->doc()->getDefs()->getRepr();
 
-    for(SelContainer::iterator item = items.begin();
+    for(std::vector<SPItem*>::iterator item = items.begin();
             item != items.end(); ++item) {
         SPItem * spitem = static_cast<SPItem*>(*item);
 	Inkscape::XML::Node * node = spitem->getRepr();

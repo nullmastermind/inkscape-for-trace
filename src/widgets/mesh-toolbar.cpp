@@ -87,8 +87,8 @@ void ms_read_selection( Inkscape::Selection *selection,
     bool first = true;
     ms_smooth = SP_MESH_SMOOTH_NONE;
     
-    SelContainer itemlist=selection->itemList();
-    for(SelContainer::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
+    std::vector<SPItem*> itemlist=selection->itemList();
+    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
         SPItem *item = SP_ITEM(*i);
         SPStyle *style = item->style;
 
@@ -214,8 +214,8 @@ void ms_get_dt_selected_gradient(Inkscape::Selection *selection, SPMeshGradient 
 {
     SPMeshGradient *gradient = 0;
 
-    SelContainer itemlist=selection->itemList();
-    for(SelContainer::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
+    std::vector<SPItem*> itemlist=selection->itemList();
+    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
         SPItem *item = SP_ITEM(*i);// get the items gradient, not the getVector() version
          SPStyle *style = item->style;
          SPPaintServer *server = 0;

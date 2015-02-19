@@ -192,7 +192,7 @@ Grid::prefs_effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::View
 
     using Inkscape::Util::GSListConstIterator;
 
-    SelContainer selected = ((SPDesktop *)view)->getSelection()->itemList();
+    std::vector<SPItem*> selected = ((SPDesktop *)view)->getSelection()->itemList();
     Inkscape::XML::Node * first_select = NULL;
     if (!selected.empty()) {
         first_select = (selected.front())->getRepr();

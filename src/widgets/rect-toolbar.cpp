@@ -106,8 +106,8 @@ static void sp_rtb_value_changed(GtkAdjustment *adj, GObject *tbl, gchar const *
 
     bool modmade = false;
     Inkscape::Selection *selection = desktop->getSelection();
-    SelContainer itemlist=selection->itemList();
-    for(SelContainer::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
+    std::vector<SPItem*> itemlist=selection->itemList();
+    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
         if (SP_IS_RECT(*i)) {
             if (gtk_adjustment_get_value(adj) != 0) {
                 (SP_RECT(*i)->*setter)(Quantity::convert(gtk_adjustment_get_value(adj), unit, desktop->getNamedView()->svg_units));
@@ -244,8 +244,8 @@ static void sp_rect_toolbox_selection_changed(Inkscape::Selection *selection, GO
     }
     purge_repr_listener( tbl, tbl );
 
-    SelContainer itemlist=selection->itemList();
-    for(SelContainer::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
+    std::vector<SPItem*> itemlist=selection->itemList();
+    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
         if (SP_IS_RECT(reinterpret_cast<SPItem *>(*i))) {
             n_selected++;
             item = reinterpret_cast<SPItem *>(*i);

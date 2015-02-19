@@ -112,7 +112,7 @@ Inkscape::SelTrans::SelTrans(SPDesktop *desktop) :
     _opposite_for_bboxpoints(Geom::Point(0,0)),
     _origin_for_specpoints(Geom::Point(0,0)),
     _origin_for_bboxpoints(Geom::Point(0,0)),
-    _stamp_cache(SelContainer()),
+    _stamp_cache(std::vector<SPItem*>()),
     _message_context(desktop->messageStack()),
     _bounding_box_prefs_observer(*this)
 {
@@ -239,8 +239,8 @@ void Inkscape::SelTrans::setCenter(Geom::Point const &p)
     _center_is_set = true;
 
     // Write the new center position into all selected items
-    SelContainer items=_desktop->selection->itemList();
-    for ( SelContainer::const_iterator iter=items.begin();iter!=items.end();iter++ ) {
+    std::vector<SPItem*> items=_desktop->selection->itemList();
+    for ( std::vector<SPItem*>::const_iterator iter=items.begin();iter!=items.end();iter++ ) {
         SPItem *it = SP_ITEM(*iter);
         it->setCenter(p);
         // only set the value; updating repr and document_done will be done once, on ungrab
@@ -269,8 +269,8 @@ void Inkscape::SelTrans::grab(Geom::Point const &p, gdouble x, gdouble y, bool s
         return;
     }
 
-    SelContainer items=_desktop->selection->itemList();
-    for ( SelContainer::const_iterator iter=items.begin();iter!=items.end();iter++ ) {
+    std::vector<SPItem*> items=_desktop->selection->itemList();
+    for ( std::vector<SPItem*>::const_iterator iter=items.begin();iter!=items.end();iter++ ) {
         SPItem *it = reinterpret_cast<SPItem*>(sp_object_ref(SP_ITEM(*iter), NULL));
         _items.push_back(it);
         _items_const.push_back(it);
@@ -492,8 +492,8 @@ void Inkscape::SelTrans::ungrab()
 
         if (_center_is_set) {
             // we were dragging center; update reprs and commit undoable action
-            SelContainer items=_desktop->selection->itemList();
-            for ( SelContainer::const_iterator iter=items.begin();iter!=items.end();iter++ ) {
+        	std::vector<SPItem*> items=_desktop->selection->itemList();
+            for ( std::vector<SPItem*>::const_iterator iter=items.begin();iter!=items.end();iter++ ) {
                 SPItem *it = SP_ITEM(*iter);
                 it->updateRepr();
             }
@@ -524,17 +524,17 @@ void Inkscape::SelTrans::stamp()
 
     /* stamping mode */
     if (!_empty) {
-        SelContainer l;
+    	std::vector<SPItem*> l;
         if (!_stamp_cache.empty()) {
             l = _stamp_cache;
         } else {
             /* Build cache */
             l = selection->itemList();
-            l.sort(sp_object_compare_position);
+            sort(l.begin(),l.end(),sp_object_compare_position);
             _stamp_cache = l;
         }
 
-        for(SelContainer::const_iterator x=l.begin();x!=l.end();x++) {
+        for(std::vector<SPItem*>::const_iterator x=l.begin();x!=l.end();x++) {
             SPItem *original_item = SP_ITEM(*x);
             Inkscape::XML::Node *original_repr = original_item->getRepr();
 
@@ -711,8 +711,8 @@ void Inkscape::SelTrans::handleClick(SPKnot */*knot*/, guint state, SPSelTransHa
         case HANDLE_CENTER:
             if (state & GDK_SHIFT_MASK) {
                 // Unset the  center position for all selected items
-                SelContainer items=_desktop->selection->itemList();
-                for ( SelContainer::const_iterator iter=items.begin();iter!=items.end();iter++ ) {
+            	std::vector<SPItem*> items=_desktop->selection->itemList();
+                for ( std::vector<SPItem*>::const_iterator iter=items.begin();iter!=items.end();iter++ ) {
                     SPItem *it = SP_ITEM(*iter);
                     it->unsetCenter();
                     it->updateRepr();
@@ -1283,7 +1283,7 @@ gboolean Inkscape::SelTrans::centerRequest(Geom::Point &pt, guint state)
     // items will share a single center. While dragging that single center, it should never snap to the
     // centers of any of the selected objects. Therefore we will have to pass the list of selected items
     // to the snapper, to avoid self-snapping of the rotation center
-    SelContainer items = const_cast<Selection *>(_selection)->itemList();
+	std::vector<SPItem*> items = const_cast<Selection *>(_selection)->itemList();
     SnapManager &m = _desktop->namedview->snap_manager;
     m.setup(_desktop);
     m.setRotationCenterSource(items);

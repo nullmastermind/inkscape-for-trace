@@ -70,7 +70,7 @@ ImageMagickDocCache::ImageMagickDocCache(Inkscape::UI::View::View * view) :
     _imageItems(NULL)
 {
     SPDesktop *desktop = (SPDesktop*)view;
-    const SelContainer selectedItemList = desktop->selection->itemList();
+    const std::vector<SPItem*> selectedItemList = desktop->selection->itemList();
     int selectCount = selectedItemList.size();
     
     // Init the data-holders
@@ -83,7 +83,7 @@ ImageMagickDocCache::ImageMagickDocCache(Inkscape::UI::View::View * view) :
     _imageItems = new SPItem*[selectCount];
 
     // Loop through selected items
-    for (SelContainer::const_iterator i=selectedItemList.begin();i!=selectedItemList.end();i++) {
+    for (std::vector<SPItem*>::const_iterator i=selectedItemList.begin();i!=selectedItemList.end();i++) {
         SPItem *item = static_cast<SPItem *>(*i);
         Inkscape::XML::Node *node = reinterpret_cast<Inkscape::XML::Node *>(item->getRepr());
         if (!strcmp(node->name(), "image") || !strcmp(node->name(), "svg:image"))
@@ -242,7 +242,7 @@ ImageMagick::prefs_effect(Inkscape::Extension::Effect *module, Inkscape::UI::Vie
 
     using Inkscape::Util::GSListConstIterator;
 
-    SelContainer selected = ((SPDesktop *)view)->getSelection()->itemList();
+    std::vector<SPItem*> selected = ((SPDesktop *)view)->getSelection()->itemList();
     Inkscape::XML::Node * first_select = NULL;
     if (!selected.empty()) {
         first_select = (selected.front())->getRepr();

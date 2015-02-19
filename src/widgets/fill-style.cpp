@@ -481,7 +481,7 @@ void FillNStroke::updateFromPaint()
     SPDocument *document = desktop->getDocument();
     Inkscape::Selection *selection = desktop->getSelection();
 
-    SelContainer const items = selection->itemList();
+    std::vector<SPItem*> const items = selection->itemList();
 
     switch (psel->mode) {
         case SPPaintSelector::MODE_EMPTY:
@@ -576,7 +576,7 @@ void FillNStroke::updateFromPaint()
                         }
                     }
 
-                    for(SelContainer::const_iterator i=items.begin();i!=items.end();i++){
+                    for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
                         //FIXME: see above
                         if (kind == FILL) {
                             sp_repr_css_change_recursive(reinterpret_cast<SPObject*>(*i)->getRepr(), css, "style");
@@ -602,7 +602,7 @@ void FillNStroke::updateFromPaint()
                     // We have changed from another gradient type, or modified spread/units within
                     // this gradient type.
                     vector = sp_gradient_ensure_vector_normalized(vector);
-                    for(SelContainer::const_iterator i=items.begin();i!=items.end();i++){
+                    for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
                         //FIXME: see above
                         if (kind == FILL) {
                             sp_repr_css_change_recursive(reinterpret_cast<SPObject*>(*i)->getRepr(), css, "style");
@@ -648,7 +648,7 @@ void FillNStroke::updateFromPaint()
                     // cannot just call sp_desktop_set_style, because we don't want to touch those
                     // objects who already have the same root pattern but through a different href
                     // chain. FIXME: move this to a sp_item_set_pattern
-                    for(SelContainer::const_iterator i=items.begin();i!=items.end();i++){
+                    for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
                         Inkscape::XML::Node *selrepr = reinterpret_cast<SPObject*>(*i)->getRepr();
                         if ( (kind == STROKE) && !selrepr) {
                             continue;

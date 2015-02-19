@@ -1316,8 +1316,8 @@ void cc_selection_set_avoid(bool const set_avoid)
 
     int changes = 0;
 
-    SelContainer l = selection->itemList();
-    for(SelContainer::const_iterator i=l.begin();i!=l.end();i++) {
+    std::vector<SPItem*> l = selection->itemList();
+    for(std::vector<SPItem*>::const_iterator i=l.begin();i!=l.end();i++) {
         SPItem *item = SP_ITEM(*i);
 
         char const *value = (set_avoid) ? "true" : NULL;

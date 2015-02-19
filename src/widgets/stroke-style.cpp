@@ -475,8 +475,8 @@ void StrokeStyle::markerSelectCB(MarkerComboBox *marker_combo, StrokeStyle *spw,
     //spw->updateMarkerHist(which);
 
     Inkscape::Selection *selection = spw->desktop->getSelection();
-    SelContainer itemlist=selection->itemList();
-    for(SelContainer::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
+    std::vector<SPItem*> itemlist=selection->itemList();
+    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
         SPItem *item = SP_ITEM(*i);
         if (!SP_IS_SHAPE(item) || SP_IS_RECT(item)) { // can't set marker to rect, until it's converted to using <path>
             continue;
@@ -901,7 +901,7 @@ StrokeStyle::updateLine()
     if (!sel || sel->isEmpty())
         return;
 
-    SelContainer const objects = sel->itemList();
+    std::vector<SPItem*> const objects = sel->itemList();
     SPObject * const object = SP_OBJECT(objects.front());
     SPStyle * const style = object->style;
 
@@ -957,7 +957,7 @@ StrokeStyle::scaleLine()
     
     SPDocument *document = desktop->getDocument();
     Inkscape::Selection *selection = desktop->getSelection();
-    SelContainer items=selection->itemList();
+    std::vector<SPItem*> items=selection->itemList();
 
     /* TODO: Create some standardized method */
     SPCSSAttr *css = sp_repr_css_attr_new();
@@ -977,7 +977,7 @@ StrokeStyle::scaleLine()
         int ndash;
         dashSelector->get_dash(&ndash, &dash, &offset);
 
-        for(SelContainer::const_iterator i=items.begin();i!=items.end();i++){
+        for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
             /* Set stroke width */
             double width;
             if (unit->type == Inkscape::Util::UNIT_TYPE_LINEAR) {
@@ -1143,7 +1143,7 @@ StrokeStyle::setCapButtons(Gtk::ToggleButton *active)
  * that marker.
  */
 void
-StrokeStyle::updateAllMarkers(SelContainer const &objects)
+StrokeStyle::updateAllMarkers(std::vector<SPItem*> const &objects)
 {
     struct { MarkerComboBox *key; int loc; } const keyloc[] = {
             { startMarkerCombo, SP_MARKER_LOC_START },
@@ -1152,7 +1152,7 @@ StrokeStyle::updateAllMarkers(SelContainer const &objects)
     };
 
     bool all_texts = true;
-    for(SelContainer::const_iterator i=objects.begin();i!=objects.end();i++){
+    for(std::vector<SPItem*>::const_iterator i=objects.begin();i!=objects.end();i++){
         if (!SP_IS_TEXT (*i)) {
             all_texts = false;
         }

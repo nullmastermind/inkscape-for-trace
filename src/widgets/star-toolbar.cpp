@@ -83,8 +83,8 @@ static void sp_stb_magnitude_value_changed( GtkAdjustment *adj, GObject *dataKlu
     bool modmade = false;
 
     Inkscape::Selection *selection = desktop->getSelection();
-    SelContainer itemlist=selection->itemList();
-    for(SelContainer::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
+    std::vector<SPItem*> itemlist=selection->itemList();
+    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
         SPItem *item = SP_ITEM(*i);
         if (SP_IS_STAR(item)) {
             Inkscape::XML::Node *repr = item->getRepr();
@@ -128,8 +128,8 @@ static void sp_stb_proportion_value_changed( GtkAdjustment *adj, GObject *dataKl
 
     bool modmade = false;
     Inkscape::Selection *selection = desktop->getSelection();
-    SelContainer itemlist=selection->itemList();
-    for(SelContainer::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
+    std::vector<SPItem*> itemlist=selection->itemList();
+    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
         SPItem *item = SP_ITEM(*i);
         if (SP_IS_STAR(item)) {
             Inkscape::XML::Node *repr = item->getRepr();
@@ -185,8 +185,8 @@ static void sp_stb_sides_flat_state_changed( EgeSelectOneAction *act, GObject *d
         gtk_action_set_sensitive( prop_action, !flat );
     }
 
-    SelContainer itemlist=selection->itemList();
-    for(SelContainer::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
+    std::vector<SPItem*> itemlist=selection->itemList();
+    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
         SPItem *item = SP_ITEM(*i);
         if (SP_IS_STAR(item)) {
             Inkscape::XML::Node *repr = item->getRepr();
@@ -224,8 +224,8 @@ static void sp_stb_rounded_value_changed( GtkAdjustment *adj, GObject *dataKludg
     bool modmade = false;
 
     Inkscape::Selection *selection = desktop->getSelection();
-    SelContainer itemlist=selection->itemList();
-    for(SelContainer::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
+    std::vector<SPItem*> itemlist=selection->itemList();
+    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
         SPItem *item = SP_ITEM(*i);
         if (SP_IS_STAR(item)) {
             Inkscape::XML::Node *repr = item->getRepr();
@@ -264,8 +264,8 @@ static void sp_stb_randomized_value_changed( GtkAdjustment *adj, GObject *dataKl
     bool modmade = false;
 
     Inkscape::Selection *selection = desktop->getSelection();
-    SelContainer itemlist=selection->itemList();
-    for(SelContainer::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
+    std::vector<SPItem*> itemlist=selection->itemList();
+    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
         SPItem *item = SP_ITEM(*i);
         if (SP_IS_STAR(item)) {
             Inkscape::XML::Node *repr = item->getRepr();
@@ -367,8 +367,8 @@ sp_star_toolbox_selection_changed(Inkscape::Selection *selection, GObject *tbl)
 
     purge_repr_listener( tbl, tbl );
 
-    SelContainer itemlist=selection->itemList();
-    for(SelContainer::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
+    std::vector<SPItem*> itemlist=selection->itemList();
+    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
         SPItem *item = SP_ITEM(*i);
         if (SP_IS_STAR(item)) {
             n_selected++;

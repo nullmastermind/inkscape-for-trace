@@ -65,21 +65,21 @@ guint32 sp_desktop_get_color_tool(SPDesktop *desktop, Glib::ustring const &tool,
 double sp_desktop_get_font_size_tool (SPDesktop *desktop);
 void sp_desktop_apply_style_tool(SPDesktop *desktop, Inkscape::XML::Node *repr, Glib::ustring const &tool, bool with_text);
 
-gdouble stroke_average_width (const SelContainer &objects);
+gdouble stroke_average_width (const std::vector<SPItem*> &objects);
 
-int objects_query_fillstroke (const SelContainer &objects, SPStyle *style_res, bool const isfill);
-int objects_query_fontnumbers (const SelContainer &objects, SPStyle *style_res);
-int objects_query_fontstyle (const SelContainer &objects, SPStyle *style_res);
-int objects_query_fontfamily (const SelContainer &objects, SPStyle *style_res);
-int objects_query_opacity (const SelContainer &objects, SPStyle *style_res);
-int objects_query_strokewidth (const SelContainer &objects, SPStyle *style_res);
-int objects_query_miterlimit (const SelContainer &objects, SPStyle *style_res);
-int objects_query_strokecap (const SelContainer &objects, SPStyle *style_res);
-int objects_query_strokejoin (const SelContainer &objects, SPStyle *style_res);
+int objects_query_fillstroke (const std::vector<SPItem*> &objects, SPStyle *style_res, bool const isfill);
+int objects_query_fontnumbers (const std::vector<SPItem*> &objects, SPStyle *style_res);
+int objects_query_fontstyle (const std::vector<SPItem*> &objects, SPStyle *style_res);
+int objects_query_fontfamily (const std::vector<SPItem*> &objects, SPStyle *style_res);
+int objects_query_opacity (const std::vector<SPItem*> &objects, SPStyle *style_res);
+int objects_query_strokewidth (const std::vector<SPItem*> &objects, SPStyle *style_res);
+int objects_query_miterlimit (const std::vector<SPItem*> &objects, SPStyle *style_res);
+int objects_query_strokecap (const std::vector<SPItem*> &objects, SPStyle *style_res);
+int objects_query_strokejoin (const std::vector<SPItem*> &objects, SPStyle *style_res);
 
-int objects_query_blur (const SelContainer &objects, SPStyle *style_res);
+int objects_query_blur (const std::vector<SPItem*> &objects, SPStyle *style_res);
 
-int sp_desktop_query_style_from_list (const SelContainer &list, SPStyle *style, int property);
+int sp_desktop_query_style_from_list (const std::vector<SPItem*> &list, SPStyle *style, int property);
 int sp_desktop_query_style(SPDesktop *desktop, SPStyle *style, int property);
 bool sp_desktop_query_style_all (SPDesktop *desktop, SPStyle *query);
 

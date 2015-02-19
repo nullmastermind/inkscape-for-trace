@@ -436,9 +436,9 @@ static bool sp_spray_recursive(SPDesktop *desktop,
         SPItem *unionResult = NULL;    // Previous union
 
         int i=1;
-        SelContainer items=selection->itemList();
-        for(SelContainer::const_iterator it=items.begin();it!=items.end();it++){
-            SPItem *item1 = dynamic_cast<SPItem *>(static_cast<SPObject *>(*it));
+        std::vector<SPItem*> items=selection->itemList();
+        for(std::vector<SPItem*>::const_iterator it=items.begin();it!=items.end();it++){
+            SPItem *item1 = *it;
             if (i == 1) {
                 parent_item = item1;
             }
@@ -550,15 +550,15 @@ static bool sp_spray_dilate(SprayTool *tc, Geom::Point /*event_p*/, Geom::Point 
     double move_standard_deviation = get_move_standard_deviation(tc);
 
     {
-        SelContainer const items(selection->itemList());
+    	std::vector<SPItem*> const items(selection->itemList());
 
-        for(SelContainer::const_iterator i=items.begin();i!=items.end();i++){
+        for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
             SPItem *item = dynamic_cast<SPItem *>(static_cast<SPObject *>(*i));
             g_assert(item != NULL);
             sp_object_ref(item);
         }
 
-        for(SelContainer::const_iterator i=items.begin();i!=items.end();i++){
+        for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
             SPItem *item = dynamic_cast<SPItem *>(static_cast<SPObject *>(*i));
             g_assert(item != NULL);
 
@@ -573,7 +573,7 @@ static bool sp_spray_dilate(SprayTool *tc, Geom::Point /*event_p*/, Geom::Point 
             }
         }
 
-        for(SelContainer::const_iterator i=items.begin();i!=items.end();i++){
+        for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
             SPItem *item = dynamic_cast<SPItem *>(static_cast<SPObject *>(*i));
             g_assert(item != NULL);
             sp_object_unref(item);

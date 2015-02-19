@@ -149,10 +149,10 @@ protected:
     /**
      * Function to filter a list of items based on the item type by calling each item_XXX_match function
      */
-    SelContainer    filter_fields (SelContainer &l, bool exact, bool casematch);
+    std::vector<SPItem*>    filter_fields (std::vector<SPItem*> &l, bool exact, bool casematch);
     bool        item_type_match (SPItem *item);
-    SelContainer    filter_types (SelContainer &l);
-    SelContainer &    filter_list (SelContainer &l, bool exact, bool casematch);
+    std::vector<SPItem*>    filter_types (std::vector<SPItem*> &l);
+    std::vector<SPItem*> &    filter_list (std::vector<SPItem*> &l, bool exact, bool casematch);
 
     /**
      * Find a string within a string and returns true if found with options for exact and casematching
@@ -173,12 +173,12 @@ protected:
      * recursive function to return a list of all the items in the SPObject tree
      *
      */
-    SelContainer &    all_items (SPObject *r, SelContainer &l, bool hidden, bool locked);
+    std::vector<SPItem*> &    all_items (SPObject *r, std::vector<SPItem*> &l, bool hidden, bool locked);
     /**
      * to return a list of all the selected items
      *
      */
-    SelContainer &    all_selection_items (Inkscape::Selection *s, SelContainer &l, SPObject *ancestor, bool hidden, bool locked);
+    std::vector<SPItem*> &    all_selection_items (Inkscape::Selection *s, std::vector<SPItem*> &l, SPObject *ancestor, bool hidden, bool locked);
 
     /**
      * Shrink the dialog size when the expander widget is closed

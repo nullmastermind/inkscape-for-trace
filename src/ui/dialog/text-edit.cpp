@@ -418,8 +418,8 @@ SPItem *TextEdit::getSelectedTextItem (void)
     if (!SP_ACTIVE_DESKTOP)
         return NULL;
 
-    SelContainer tmp=SP_ACTIVE_DESKTOP->getSelection()->itemList();
-	for(SelContainer::const_iterator i=tmp.begin();i!=tmp.end();i++)
+    std::vector<SPItem*> tmp=SP_ACTIVE_DESKTOP->getSelection()->itemList();
+	for(std::vector<SPItem*>::const_iterator i=tmp.begin();i!=tmp.end();i++)
     {
         if (SP_IS_TEXT(*i) || SP_IS_FLOWTEXT(*i))
             return SP_ITEM (*i);
@@ -436,8 +436,8 @@ unsigned TextEdit::getSelectedTextCount (void)
 
     unsigned int items = 0;
 
-    SelContainer tmp=SP_ACTIVE_DESKTOP->getSelection()->itemList();
-	for(SelContainer::const_iterator i=tmp.begin();i!=tmp.end();i++)
+    std::vector<SPItem*> tmp=SP_ACTIVE_DESKTOP->getSelection()->itemList();
+	for(std::vector<SPItem*>::const_iterator i=tmp.begin();i!=tmp.end();i++)
     {
         if (SP_IS_TEXT(*i) || SP_IS_FLOWTEXT(*i))
             ++items;
@@ -540,11 +540,11 @@ void TextEdit::onApply()
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 
     unsigned items = 0;
-    const SelContainer item_list = desktop->getSelection()->itemList();
+    const std::vector<SPItem*> item_list = desktop->getSelection()->itemList();
     SPCSSAttr *css = fillTextStyle ();
     sp_desktop_set_style(desktop, css, true);
 
-	for(SelContainer::const_iterator i=item_list.begin();i!=item_list.end();i++){
+	for(std::vector<SPItem*>::const_iterator i=item_list.begin();i!=item_list.end();i++){
         // apply style to the reprs of all text objects in the selection
         if (SP_IS_TEXT (*i)) {
 

@@ -669,8 +669,8 @@ bool TagsPanel::_handleButtonEvent(GdkEventButton* event)
                     if (col == _tree.get_column(COL_ADD - 1) && down_at_add) {
                         if (SP_IS_TAG(obj)) {
                             bool wasadded = false;
-                            SelContainer items=_desktop->selection->itemList();
-                        	for(SelContainer::const_iterator i=items.begin();i!=items.end();i++){
+                            std::vector<SPItem*> items=_desktop->selection->itemList();
+                        	for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
                                 SPObject *newobj = reinterpret_cast<SPObject *>(*i);
                                 bool addchild = true;
                                 for ( SPObject *child = obj->children; child != NULL; child = child->next) {

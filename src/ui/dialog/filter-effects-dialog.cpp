@@ -1465,8 +1465,8 @@ void FilterEffectsDialog::FilterModifier::update_selection(Selection *sel)
     }
 
     std::set<SPObject*> used;
-    SelContainer itemlist=sel->itemList();
-    for(SelContainer::const_iterator i=itemlist.begin(); itemlist.end() != i; i++) {
+    std::vector<SPItem*> itemlist=sel->itemList();
+    for(std::vector<SPItem*>::const_iterator i=itemlist.begin(); itemlist.end() != i; i++) {
         SPObject *obj = SP_OBJECT (*i);
         SPStyle *style = obj->style;
         if (!style || !SP_IS_ITEM(obj)) {
@@ -1545,8 +1545,8 @@ void FilterEffectsDialog::FilterModifier::on_selection_toggled(const Glib::ustri
         if((*iter)[_columns.sel] == 1)
             filter = 0;
 
-        SelContainer itemlist=sel->itemList();
-        for(SelContainer::const_iterator i=itemlist.begin(); itemlist.end() != i; i++) {
+        std::vector<SPItem*> itemlist=sel->itemList();
+        for(std::vector<SPItem*>::const_iterator i=itemlist.begin(); itemlist.end() != i; i++) {
             SPItem * item = SP_ITEM(*i);
             SPStyle *style = item->style;
             g_assert(style != NULL);
@@ -1649,9 +1649,9 @@ void FilterEffectsDialog::FilterModifier::remove_filter()
         SPDocument* doc = filter->document;
 
         // Delete all references to this filter
-        SelContainer x,y;
-        SelContainer all = get_all_items(x, _desktop->currentRoot(), _desktop, false, false, true, y);
-        for(SelContainer::const_iterator i=all.begin(); all.end() != i; i++) {
+        std::vector<SPItem*> x,y;
+        std::vector<SPItem*> all = get_all_items(x, _desktop->currentRoot(), _desktop, false, false, true, y);
+        for(std::vector<SPItem*>::const_iterator i=all.begin(); all.end() != i; i++) {
             if (!SP_IS_ITEM(*i)) {
                 continue;
             }

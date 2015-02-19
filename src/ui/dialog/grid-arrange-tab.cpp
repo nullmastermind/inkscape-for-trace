@@ -175,9 +175,9 @@ void GridArrangeTab::arrange()
     desktop->getDocument()->ensureUpToDate();
 
     Inkscape::Selection *selection = desktop->getSelection();
-    const SelContainer items = selection ? selection->itemList() : SelContainer();
+    const std::vector<SPItem*> items = selection ? selection->itemList() : std::vector<SPItem*>();
     cnt=0;
-    for(SelContainer::const_iterator i = items.begin();i!=items.end();i++){
+    for(std::vector<SPItem*>::const_iterator i = items.begin();i!=items.end();i++){
         SPItem *item = SP_ITEM(*i);
         Geom::OptRect b = item->documentVisualBounds();
         if (!b) {
@@ -205,18 +205,17 @@ void GridArrangeTab::arrange()
     // require the sorting done before we can calculate row heights etc.
 
     g_return_if_fail(selection);
-    SelContainer rev(selection->itemList());
-    rev.sort(sp_compare_y_position_obj);
-    SelContainer sorted(rev);
-    sorted.sort(sp_compare_x_position_obj);
+    std::vector<SPItem*> sorted(selection->itemList());
+    sort(sorted.begin(),sorted.end(),sp_compare_y_position);
+    sort(sorted.begin(),sorted.end(),sp_compare_x_position);
 
 
     // Calculate individual Row and Column sizes if necessary
 
 
         cnt=0;
-        const SelContainer sizes(sorted);
-        for (SelContainer::const_iterator i = sizes.begin();i!=sizes.end();i++) {
+        const std::vector<SPItem*> sizes(sorted);
+        for (std::vector<SPItem*>::const_iterator i = sizes.begin();i!=sizes.end();i++) {
             SPItem *item = SP_ITEM(*i);
             Geom::OptRect b = item->documentVisualBounds();
             if (b) {
@@ -314,7 +313,7 @@ g_print("\n row = %f     col = %f selection x= %f selection y = %f", total_row_h
     }
 
     cnt=0;
-    SelContainer::iterator it = sorted.begin();
+    std::vector<SPItem*>::iterator it = sorted.begin();
     for (row_cnt=0; ((it != sorted.end()) && (row_cnt<NoOfRows)); row_cnt++) {
 
              GSList *current_row = NULL;
@@ -382,7 +381,7 @@ void GridArrangeTab::on_row_spinbutton_changed()
     Inkscape::Selection *selection = desktop ? desktop->selection : 0;
     g_return_if_fail( selection );
 
-    SelContainer const items = selection->itemList();
+    std::vector<SPItem*> const items = selection->itemList();
     int selcount = items.size();
 
     double PerCol = ceil(selcount / NoOfColsSpinner.get_value());
@@ -545,7 +544,7 @@ void GridArrangeTab::updateSelection()
     updating = true;
     SPDesktop *desktop = Parent->getDesktop();
     Inkscape::Selection *selection = desktop ? desktop->selection : 0;
-    SelContainer const items = selection ? selection->itemList() : SelContainer();
+    std::vector<SPItem*> const items = selection ? selection->itemList() : std::vector<SPItem*>();
 
     if (!items.empty()) {
         int selcount = items.size();

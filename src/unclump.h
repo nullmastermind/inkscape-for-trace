@@ -14,7 +14,7 @@
 typedef struct _GSList GSList;
 #include "selection.h"
 
-void unclump(SelContainer &items);
+void unclump(std::vector<SPItem*> &items);
 
 #endif /* !UNCLUMP_H_SEEN */
 

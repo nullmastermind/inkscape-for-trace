@@ -40,13 +40,13 @@
 #include "sp-spiral.h"
 
 // Returns a list of terms for the items to be used in the statusbar
-char* collect_terms (const SelContainer &items)
+char* collect_terms (const std::vector<SPItem*> &items)
 {
     GSList *check = NULL;
     std::stringstream ss;
     bool first = true;
 
-    for ( SelContainer::const_iterator iter=items.begin();iter!=items.end();iter++ ) {
+    for ( std::vector<SPItem*>::const_iterator iter=items.begin();iter!=items.end();iter++ ) {
         SPItem *item = dynamic_cast<SPItem *>(reinterpret_cast<SPObject *>(*iter));
         if (item) {
             const char *term = item->displayName();
@@ -61,11 +61,11 @@ char* collect_terms (const SelContainer &items)
 }
 
 // Returns the number of terms in the list
-static int count_terms (const SelContainer &items)
+static int count_terms (const std::vector<SPItem*> &items)
 {
     GSList *check = NULL;
     int count=0;
-    for ( SelContainer::const_iterator iter=items.begin();iter!=items.end();iter++ ) {
+    for ( std::vector<SPItem*>::const_iterator iter=items.begin();iter!=items.end();iter++ ) {
         SPItem *item = dynamic_cast<SPItem *>(reinterpret_cast<SPObject *>(*iter));
         if (item) {
             const char *term = item->displayName();
@@ -79,10 +79,10 @@ static int count_terms (const SelContainer &items)
 }
 
 // Returns the number of filtered items in the list
-static int count_filtered (const SelContainer &items)
+static int count_filtered (const std::vector<SPItem*> &items)
 {
     int count=0;
-    for ( SelContainer::const_iterator iter=items.begin();iter!=items.end();iter++ ) {
+    for ( std::vector<SPItem*>::const_iterator iter=items.begin();iter!=items.end();iter++ ) {
         SPItem *item = dynamic_cast<SPItem *>(reinterpret_cast<SPObject *>((*iter)));
         if (item) {
             count += item->isFiltered();
@@ -122,7 +122,7 @@ void SelectionDescriber::_selectionModified(Inkscape::Selection *selection, guin
 }
 
 void SelectionDescriber::_updateMessageFromSelection(Inkscape::Selection *selection) {
-    SelContainer const items = selection->itemList();
+	std::vector<SPItem*> const items = selection->itemList();
 
     if (items.empty()) { // no items
         _context.set(Inkscape::NORMAL_MESSAGE, _when_nothing);

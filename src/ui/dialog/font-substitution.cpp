@@ -70,7 +70,7 @@ FontSubstitution::checkFontSubstitutions(SPDocument* doc)
     int show_dlg = prefs->getInt("/options/font/substitutedlg", 0);
     if (show_dlg) {
         Glib::ustring out;
-        SelContainer l =  getFontReplacedItems(doc, &out);
+        std::vector<SPItem*> l =  getFontReplacedItems(doc, &out);
         if (out.length() > 0) {
             show(out, l);
         }
@@ -78,7 +78,7 @@ FontSubstitution::checkFontSubstitutions(SPDocument* doc)
 }
 
 void
-FontSubstitution::show(Glib::ustring out, SelContainer &l)
+FontSubstitution::show(Glib::ustring out, std::vector<SPItem*> &l)
 {
    Gtk::MessageDialog warning(_("\nSome fonts are not available and have been substituted."),
                        false, Gtk::MESSAGE_INFO, Gtk::BUTTONS_OK, true);
@@ -148,17 +148,17 @@ FontSubstitution::show(Glib::ustring out, SelContainer &l)
  * b. Build up a list of the objects rendered fonts - taken for the objects layout/spans
  * If there are fonts in a. that are not in b. then those fonts have been substituted.
  */
-SelContainer FontSubstitution::getFontReplacedItems(SPDocument* doc, Glib::ustring *out)
+std::vector<SPItem*> FontSubstitution::getFontReplacedItems(SPDocument* doc, Glib::ustring *out)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    SelContainer allList;
-    SelContainer outList,x,y;
+    std::vector<SPItem*> allList;
+    std::vector<SPItem*> outList,x,y;
     std::set<Glib::ustring> setErrors;
     std::set<Glib::ustring> setFontSpans;
     std::map<SPItem *, Glib::ustring> mapFontStyles;
 
     allList = get_all_items(x, doc->getRoot(), desktop, false, false, true, y);
-    for(SelContainer::const_iterator i = allList.begin();i!=allList.end();i++){
+    for(std::vector<SPItem*>::const_iterator i = allList.begin();i!=allList.end();i++){
         SPItem *item = SP_ITEM(*i);
         SPStyle *style = item->style;
         Glib::ustring family = "";
@@ -214,8 +214,8 @@ SelContainer FontSubstitution::getFontReplacedItems(SPDocument* doc, Glib::ustri
     }
 
     // Check if any document styles are not in the actual layout
-    std::map<SPItem *, Glib::ustring>::const_iterator mapIter;
-    for (mapIter = mapFontStyles.begin(); mapIter != mapFontStyles.end(); ++mapIter) {
+    std::map<SPItem *, Glib::ustring>::const_reverse_iterator mapIter;
+    for (mapIter = mapFontStyles.rbegin(); mapIter != mapFontStyles.rend(); ++mapIter) {
         SPItem *item = mapIter->first;
         Glib::ustring fonts = mapIter->second;
 
@@ -248,7 +248,7 @@ SelContainer FontSubstitution::getFontReplacedItems(SPDocument* doc, Glib::ustri
             Glib::ustring err = Glib::ustring::compose(
                     _("Font '%1' substituted with '%2'"), fonts.c_str(), subName.c_str());
             setErrors.insert(err);
-            outList.push_front(item);
+            outList.push_back(item);
         }
     }
 

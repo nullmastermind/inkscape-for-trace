@@ -1906,7 +1906,7 @@ void ContextMenu::ActivateGroup(void)
 
 void ContextMenu::ActivateUngroup(void)
 {
-    SelContainer children;
+	std::vector<SPItem*> children;
 
     sp_item_group_ungroup(static_cast<SPGroup*>(_item), children);
     _desktop->selection->setList(children);
@@ -1958,7 +1958,7 @@ void ContextMenu::AnchorLinkFollow(void)
 
 void ContextMenu::AnchorLinkRemove(void)
 {
-    SelContainer children;
+	std::vector<SPItem*> children;
     sp_item_group_ungroup(static_cast<SPAnchor*>(_item), children, false);
     DocumentUndo::done(_desktop->doc(), SP_VERB_NONE, _("Remove link"));
 }
@@ -2075,8 +2075,8 @@ void ContextMenu::ImageEdit(void)
     }
 #endif
 
-    SelContainer itemlist=_desktop->selection->itemList();
-    for(SelContainer::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
+    std::vector<SPItem*> itemlist=_desktop->selection->itemList();
+    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
         Inkscape::XML::Node *ir = SP_ITEM(*i)->getRepr();
         const gchar *href = ir->attribute("xlink:href");
         

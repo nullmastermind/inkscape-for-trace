@@ -523,8 +523,8 @@ bool ClipboardManagerImpl::pasteSize(SPDesktop *desktop, bool separately, bool a
 
         // resize each object in the selection
         if (separately) {
-            SelContainer itemlist=selection->itemList();
-            for(SelContainer::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
+        	std::vector<SPItem*> itemlist=selection->itemList();
+            for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
                 SPItem *item = SP_ITEM(*i);
                 if (item) {
                     Geom::OptRect obj_size = item->desktopVisualBounds();
@@ -579,8 +579,8 @@ bool ClipboardManagerImpl::pastePathEffect(SPDesktop *desktop)
                 desktop->doc()->importDefs(tempdoc);
                 // make sure all selected items are converted to paths first (i.e. rectangles)
                 sp_selected_to_lpeitems(desktop);
-                SelContainer itemlist=selection->itemList();
-                for(SelContainer::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
+                std::vector<SPItem*> itemlist=selection->itemList();
+                for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
                     SPItem *item = SP_ITEM(*i);
                     _applyPathEffect(item, effectstack);
                 }
@@ -662,8 +662,8 @@ Glib::ustring ClipboardManagerImpl::getShapeOrTextObjectId(SPDesktop *desktop)
 void ClipboardManagerImpl::_copySelection(Inkscape::Selection *selection)
 {
     // copy the defs used by all items
-    SelContainer itemlist=selection->itemList();
-    for(SelContainer::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
+	std::vector<SPItem*> itemlist=selection->itemList();
+    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
         SPItem *item = SP_ITEM(*i);
         if (item) {
             _copyUsedDefs(item);
@@ -673,10 +673,10 @@ void ClipboardManagerImpl::_copySelection(Inkscape::Selection *selection)
     }
 
     // copy the representation of the items
-    SelContainer sorted_items(itemlist);
-    sorted_items.sort(sp_object_compare_position);
+    std::vector<SPItem*> sorted_items(itemlist);
+    sort(sorted_items.begin(),sorted_items.end(),sp_object_compare_position);
 
-    for(SelContainer::const_iterator i=sorted_items.begin();i!=sorted_items.end();i++){
+    for(std::vector<SPItem*>::const_iterator i=sorted_items.begin();i!=sorted_items.end();i++){
         SPItem *item = SP_ITEM(*i);
         if (item) {
             Inkscape::XML::Node *obj = item->getRepr();
@@ -1157,7 +1157,7 @@ void ClipboardManagerImpl::_onGet(Gtk::SelectionData &sel, guint /*info*/)
                 sp_repr_get_double(nv, "inkscape:pageopacity", &opacity);
                 bgcolor |= SP_COLOR_F_TO_U(opacity);
             }
-            SelContainer x;
+            std::vector<SPItem*> x;
             sp_export_png_file(_clipboardSPDoc, filename, area, width, height, dpi, dpi, bgcolor, NULL, NULL, true, x);
         }
         else

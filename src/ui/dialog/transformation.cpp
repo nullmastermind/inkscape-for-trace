@@ -741,12 +741,12 @@ void Transformation::applyPageMove(Inkscape::Selection *selection)
         if (_check_move_relative.get_active()) {
             // shift each object relatively to the previous one
             using Inkscape::Util::GSListConstIterator;
-            SelContainer selected(selection->itemList());
+            std::vector<SPItem*> selected(selection->itemList());
             if (selected.empty()) return;
 
             if (fabs(x) > 1e-6) {
                 std::vector< BBoxSort  > sorted;
-                for (SelContainer::iterator it(selected.begin());
+                for (std::vector<SPItem*>::iterator it(selected.begin());
                      it != selected.end();
                      ++it)
                 {
@@ -771,7 +771,7 @@ void Transformation::applyPageMove(Inkscape::Selection *selection)
             }
             if (fabs(y) > 1e-6) {
                 std::vector< BBoxSort  > sorted;
-                for (SelContainer::iterator it(selected.begin());
+                for (std::vector<SPItem*>::iterator it(selected.begin());
                      it != selected.end();
                      ++it)
                 {
@@ -816,8 +816,8 @@ void Transformation::applyPageScale(Inkscape::Selection *selection)
     bool transform_stroke = prefs->getBool("/options/transform/stroke", true);
     bool preserve = prefs->getBool("/options/preservetransform/value", false);
     if (prefs->getBool("/dialogs/transformation/applyseparately")) {
-        SelContainer tmp=selection->itemList();
-    	for(SelContainer::const_iterator i=tmp.begin();i!=tmp.end();i++){
+    	std::vector<SPItem*> tmp=selection->itemList();
+    	for(std::vector<SPItem*>::const_iterator i=tmp.begin();i!=tmp.end();i++){
             SPItem *item = SP_ITEM(*i);
             Geom::OptRect bbox_pref = item->desktopPreferredBounds();
             Geom::OptRect bbox_geom = item->desktopGeometricBounds();
@@ -880,8 +880,8 @@ void Transformation::applyPageRotate(Inkscape::Selection *selection)
     }
 
     if (prefs->getBool("/dialogs/transformation/applyseparately")) {
-        SelContainer tmp=selection->itemList();
-    	for(SelContainer::const_iterator i=tmp.begin();i!=tmp.end();i++){
+    	std::vector<SPItem*> tmp=selection->itemList();
+    	for(std::vector<SPItem*>::const_iterator i=tmp.begin();i!=tmp.end();i++){
             SPItem *item = SP_ITEM(*i);
             sp_item_rotate_rel(item, Geom::Rotate (angle*M_PI/180.0));
         }
@@ -900,8 +900,8 @@ void Transformation::applyPageSkew(Inkscape::Selection *selection)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (prefs->getBool("/dialogs/transformation/applyseparately")) {
-    	SelContainer items=selection->itemList();
-    	for(SelContainer::const_iterator i = items.begin();i!=items.end();i++){
+    	std::vector<SPItem*> items=selection->itemList();
+    	for(std::vector<SPItem*>::const_iterator i = items.begin();i!=items.end();i++){
             SPItem *item = SP_ITEM(*i);
 
             if (!_units_skew.isAbsolute()) { // percentage
@@ -1002,8 +1002,8 @@ void Transformation::applyPageTransform(Inkscape::Selection *selection)
     }
 
     if (_check_replace_matrix.get_active()) {
-        SelContainer tmp=selection->itemList();
-    	for(SelContainer::const_iterator i=tmp.begin();i!=tmp.end();i++){
+    	std::vector<SPItem*> tmp=selection->itemList();
+    	for(std::vector<SPItem*>::const_iterator i=tmp.begin();i!=tmp.end();i++){
             SPItem *item = SP_ITEM(*i);
             item->set_item_transform(displayed);
             SP_OBJECT(item)->updateRepr();

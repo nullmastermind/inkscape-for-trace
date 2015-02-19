@@ -237,8 +237,8 @@ void Inkscape::ObjectSnapper::_collectNodes(SnapSourceType const &t,
                 // current selection (see the comment in SelTrans::centerRequest())
                 bool old_pref2 = _snapmanager->snapprefs.isTargetSnappable(SNAPTARGET_ROTATION_CENTER);
                 if (old_pref2) {
-                	SelContainer rotationSource=_snapmanager->getRotationCenterSource();
-                    for ( SelContainer::const_iterator itemlist=rotationSource.begin();itemlist!=rotationSource.end();itemlist++) {
+                	std::vector<SPItem*> rotationSource=_snapmanager->getRotationCenterSource();
+                    for ( std::vector<SPItem*>::const_iterator itemlist=rotationSource.begin();itemlist!=rotationSource.end();itemlist++) {
                         if ((*i).item == reinterpret_cast<SPItem*>(*itemlist)) {
                             // don't snap to this item's rotation center
                             _snapmanager->snapprefs.setTargetSnappable(SNAPTARGET_ROTATION_CENTER, false);

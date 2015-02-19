@@ -43,7 +43,7 @@ SnapManager::SnapManager(SPNamedView const *v) :
     object(this, 0),
     snapprefs(),
     _named_view(v),
-    _rotation_center_source_items(SelContainer()),
+    _rotation_center_source_items(std::vector<SPItem*>()),
     _guide_to_ignore(NULL),
     _desktop(NULL),
     _snapindicator(true),
@@ -1053,8 +1053,8 @@ void SnapManager::setupIgnoreSelection(SPDesktop const *desktop,
     _items_to_ignore.clear();
 
     Inkscape::Selection *sel = _desktop->selection;
-    SelContainer const items = sel->itemList();
-    for (SelContainer::const_iterator i=items.begin();i!=items.end();i++) {
+    std::vector<SPItem*> const items = sel->itemList();
+    for (std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++) {
         _items_to_ignore.push_back(static_cast<SPItem const *>(*i));
     }
 }

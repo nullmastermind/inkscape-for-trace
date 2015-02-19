@@ -148,10 +148,10 @@ Geom::OptRect StyleSubject::CurrentLayer::getBounds(SPItem::BBoxType type) {
 }
 
 int StyleSubject::CurrentLayer::queryStyle(SPStyle *query, int property) {
-    SelContainer list;
+	std::vector<SPItem*> list;
     SPObject* i=_getLayerSList();
     if (i) {
-		list.push_back(i);
+		list.push_back((SPItem*)i);
         return sp_desktop_query_style_from_list(list, query, property);
     } else {
         return QUERY_STYLE_NOTHING;
