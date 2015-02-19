@@ -87,7 +87,7 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
             --curve_end;
             int counter = 0;
             while (curve_it1 != curve_endit) {
-                Satellite satellite(FILLET, true, true, false, false, 0.0, 0.0);
+                Satellite satellite(F, true, true, false, false, 0.0, 0.0);
                 Geom::NodeType nodetype;
                 if (counter==0) {
                     if (path_it->closed()) {
@@ -173,7 +173,7 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
         double time0 = 0;
         while (curve_it1 != curve_endit) {
             std::vector<Satellite> satVector;
-            Satellite sat(FILLET, true, true, false, false, 0.0, 0.0);
+            Satellite sat(F, true, true, false, false, 0.0, 0.0);
             Curve *curve_it2Fixed = (*path_it->begin()).duplicate();
             if(!path_it->closed() || curve_it2 != curve_endit){
                 curve_it2Fixed = (*curve_it2).duplicate();

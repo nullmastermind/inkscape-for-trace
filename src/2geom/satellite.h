@@ -56,7 +56,7 @@ class Satellite
 
     void setSatelliteType(gchar const * A)
     {
-        std::map<gchar const *,SatelliteType> GcharMapToSatelliteType = boost::assign::map_list_of("FILLET", FILLET)("INVERSE_FILLET", INVERSE_FILLET)("CHAMFER",CHAMFER)("INVERSE_CHAMFER",INVERSE_CHAMFER)("INVALID_SATELLITE",INVALID_SATELLITE);
+        std::map<gchar const *,SatelliteType> GcharMapToSatelliteType = boost::assign::map_list_of("F", F)("IF", IF)("C",C)("IC",IC)("KO",KO);
         _satellitetype = GcharMapToSatelliteType[A];
     }
 
@@ -97,7 +97,7 @@ class Satellite
 
     gchar const * getSatelliteTypeGchar() const
     {
-        std::map<SatelliteType,gchar const *> SatelliteTypeToGcharMap = boost::assign::map_list_of(FILLET, "FILLET")(INVERSE_FILLET, "INVERSE_FILLET")(CHAMFER,"CHAMFER")(INVERSE_CHAMFER,"INVERSE_CHAMFER")(INVALID_SATELLITE,"INVALID_SATELLITE");
+        std::map<SatelliteType,gchar const *> SatelliteTypeToGcharMap = boost::assign::map_list_of(F, "F")(IF, "IF")(C,"C")(IC,"IC")(KO,"KO");
         return SatelliteTypeToGcharMap[_satellitetype];
     }
 
