@@ -202,7 +202,7 @@ void SelectionHelper::selectSameStrokeColor(SPDesktop *dt)
 
 void SelectionHelper::selectSameStrokeStyle(SPDesktop *dt)
 {
-    sp_select_same_stroke_style(dt);
+    sp_select_same_fill_stroke_style(dt, false, false, true);
 }
 
 void SelectionHelper::selectSameObjectType(SPDesktop *dt)
@@ -1311,6 +1311,25 @@ void sp_selection_paste_size_separately(SPDesktop *desktop, bool apply_x, bool a
     }
 }
 
+/**
+ * Ensures that the clones of objects are not modified when moving objects between layers.
+ * Calls the same function as ungroup
+ */
+void sp_selection_change_layer_maintain_clones(std::vector<SPItem*> const &items,SPObject *where)
+{
+    for (std::vector<SPItem*>::const_iterator i = items.begin(); i != items.end(); i++) {
+        SPItem *item = dynamic_cast<SPItem *>(SP_OBJECT(*i));
+        if (item) {
+            SPItem *oldparent = dynamic_cast<SPItem *>(item->parent);
+            SPItem *newparent = dynamic_cast<SPItem *>(where);
+            sp_item_group_ungroup_handle_clones(item,
+                    (oldparent->i2doc_affine())
+                    *((newparent->i2doc_affine()).inverse()));
+        }
+    }
+}
+
+
 void sp_selection_to_next_layer(SPDesktop *dt, bool suppressDone)
 {
     Inkscape::Selection *selection = dt->getSelection();
@@ -1326,6 +1345,7 @@ void sp_selection_to_next_layer(SPDesktop *dt, bool suppressDone)
     bool no_more = false; // Set to true, if no more layers above
     SPObject *next=Inkscape::next_layer(dt->currentRoot(), dt->currentLayer());
     if (next) {
+        sp_selection_change_layer_maintain_clones(items,next);
         std::vector<SPItem*> temp_clip;
         sp_selection_copy_impl(items, temp_clip, dt->doc()->getReprDoc());
         sp_selection_delete_impl(items, false, false);
@@ -1371,6 +1391,7 @@ void sp_selection_to_prev_layer(SPDesktop *dt, bool suppressDone)
     bool no_more = false; // Set to true, if no more layers below
     SPObject *next=Inkscape::previous_layer(dt->currentRoot(), dt->currentLayer());
     if (next) {
+        sp_selection_change_layer_maintain_clones(items,next);
         std::vector<SPItem*> temp_clip;
         sp_selection_copy_impl(items, temp_clip, dt->doc()->getReprDoc()); // we're in the same doc, so no need to copy defs
         sp_selection_delete_impl(items, false, false);
@@ -1412,6 +1433,7 @@ void sp_selection_to_layer(SPDesktop *dt, SPObject *moveto, bool suppressDone)
     std::vector<SPItem*> items(selection->itemList());
 
     if (moveto) {
+        sp_selection_change_layer_maintain_clones(items,moveto);
         std::vector<SPItem*> temp_clip;
         sp_selection_copy_impl(items, temp_clip, dt->doc()->getReprDoc()); // we're in the same doc, so no need to copy defs
         sp_selection_delete_impl(items, false, false);
@@ -1843,16 +1865,17 @@ void sp_select_same_fill_stroke_style(SPDesktop *desktop, gboolean fill, gboolea
     for (std::vector<SPItem*>::const_iterator sel_iter=items.begin();sel_iter!=items.end();sel_iter++) {
         SPItem *sel = dynamic_cast<SPItem *>(static_cast<SPObject *>(*sel_iter));
         std::vector<SPItem*> matches = all_list;
-        if (fill) {
-            matches = sp_get_same_fill_or_stroke_color(sel, matches, SP_FILL_COLOR);
+        if (fill && stroke && style) {
+            matches = sp_get_same_style(sel, matches);
         }
-        if (stroke) {
-            matches = sp_get_same_fill_or_stroke_color(sel, matches, SP_STROKE_COLOR);
+        else if (fill) {
+            matches = sp_get_same_style(sel, matches, SP_FILL_COLOR);
         }
-        if (style) {
-            matches = sp_get_same_stroke_style(sel, matches, SP_STROKE_STYLE_WIDTH);
-            matches = sp_get_same_stroke_style(sel, matches, SP_STROKE_STYLE_DASHES);
-            matches = sp_get_same_stroke_style(sel, matches, SP_STROKE_STYLE_MARKERS);
+        else if (stroke) {
+            matches = sp_get_same_style(sel, matches, SP_STROKE_COLOR);
+        }
+        else if (style) {
+            matches = sp_get_same_style(sel, matches,SP_STROKE_STYLE_ALL);
         }
         all_matches.insert(all_matches.end(), matches.begin(),matches.end());
     }
@@ -1901,44 +1924,7 @@ void sp_select_same_object_type(SPDesktop *desktop)
 
 }
 
-/*
- * Selects all the visible items with the same stroke style as the items in the current selection
- *
- * Params:
- * desktop - set the selection on this desktop
- */
-void sp_select_same_stroke_style(SPDesktop *desktop)
-{
-    if (!desktop) {
-        return;
-    }
 
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    bool onlyvisible = prefs->getBool("/options/kbselection/onlyvisible", true);
-    bool onlysensitive = prefs->getBool("/options/kbselection/onlysensitive", true);
-    bool ingroups = TRUE;
-
-    std::vector<SPItem*> x,y;
-    std::vector<SPItem*> matches = get_all_items(x, desktop->currentRoot(), desktop, onlyvisible, onlysensitive, ingroups, y);
-
-    Inkscape::Selection *selection = desktop->getSelection();
-    std::vector<SPItem*> items=selection->itemList();
-
-    for (std::vector<SPItem*>::const_iterator sel_iter=items.begin();sel_iter!=items.end();sel_iter++) {
-        SPItem *sel = dynamic_cast<SPItem *>(static_cast<SPObject *>(*sel_iter));
-        if (sel) {
-            matches = sp_get_same_stroke_style(sel, matches, SP_STROKE_STYLE_WIDTH);
-            matches = sp_get_same_stroke_style(sel, matches, SP_STROKE_STYLE_DASHES);
-            matches = sp_get_same_stroke_style(sel, matches, SP_STROKE_STYLE_MARKERS);
-        } else {
-            g_assert_not_reached();
-        }
-    }
-
-    selection->clear();
-    selection->setList(matches);
-
-}
 
 /*
  * Find all items in src list that have the same fill or stroke style as sel
@@ -2048,26 +2034,31 @@ std::vector<SPItem*> sp_get_same_object_type(SPItem *sel, std::vector<SPItem*> &
 
     for (std::vector<SPItem*>::const_reverse_iterator i=src.rbegin();i!=src.rend();i++) {
         SPItem *item = dynamic_cast<SPItem *>(static_cast<SPObject *>(*i));
-        if (item && item_type_match(sel, item)) {
+        if (item && item_type_match(sel, item) && !item->cloned) {
             matches.push_back(item);
         }
     }
     return matches;
 }
 
+GSList *sp_get_same_fill_or_stroke_color(SPItem *sel, GSList *src, SPSelectStrokeStyleType type);
+
 /*
  * Find all items in src list that have the same stroke style as sel by type
  * Return the list of matching items
  */
-std::vector<SPItem*> sp_get_same_stroke_style(SPItem *sel, std::vector<SPItem*> &src, SPSelectStrokeStyleType type)
+std::vector<SPItem*> sp_get_same_style(SPItem *sel, std::vector<SPItem*> &src, SPSelectStrokeStyleType type)
 {
     std::vector<SPItem*> matches;
-    gboolean match = false;
+    bool match = false;
 
     SPStyle *sel_style = sel->style;
 
-    if (type == SP_FILL_COLOR || type == SP_STROKE_COLOR) {
-        return sp_get_same_fill_or_stroke_color(sel, src, type);
+    if (type == SP_FILL_COLOR || type == SP_STYLE_ALL) {
+        src = sp_get_same_fill_or_stroke_color(sel, src, SP_FILL_COLOR);
+    }
+    if (type == SP_STROKE_COLOR || type == SP_STYLE_ALL) {
+        src = sp_get_same_fill_or_stroke_color(sel, src, SP_STROKE_COLOR);
     }
 
     /*
@@ -2076,18 +2067,20 @@ std::vector<SPItem*> sp_get_same_stroke_style(SPItem *sel, std::vector<SPItem*> 
      */
     std::vector<SPItem*> objects;
     SPStyle *sel_style_for_width = NULL;
-    if (type == SP_STROKE_STYLE_WIDTH) {
+    if (type == SP_STROKE_STYLE_WIDTH || type == SP_STROKE_STYLE_ALL || type==SP_STYLE_ALL ) {
         objects.push_back(sel);
         sel_style_for_width = new SPStyle(SP_ACTIVE_DOCUMENT);
         objects_query_strokewidth (objects, sel_style_for_width);
     }
+	    bool match_g;
     for (std::vector<SPItem*>::const_iterator i=src.begin();i!=src.end();i++) {
         SPItem *iter = dynamic_cast<SPItem *>(static_cast<SPObject *>(*i));
         if (iter) {
+            match_g=true;
             SPStyle *iter_style = iter->style;
-            match = false;
+            match = true;
 
-            if (type == SP_STROKE_STYLE_WIDTH) {
+            if (type == SP_STROKE_STYLE_WIDTH|| type == SP_STROKE_STYLE_ALL|| type==SP_STYLE_ALL) {
                 match = (sel_style->stroke_width.set == iter_style->stroke_width.set);
                 if (sel_style->stroke_width.set && iter_style->stroke_width.set) {
                     std::vector<SPItem*> objects;
@@ -2101,13 +2094,15 @@ std::vector<SPItem*> sp_get_same_stroke_style(SPItem *sel, std::vector<SPItem*> 
                     objects.clear();
                 }
             }
-            else if (type == SP_STROKE_STYLE_DASHES ) {
+            match_g = match_g && match;
+            if (type == SP_STROKE_STYLE_DASHES|| type == SP_STROKE_STYLE_ALL || type==SP_STYLE_ALL) {
                 match = (sel_style->stroke_dasharray.set == iter_style->stroke_dasharray.set);
                 if (sel_style->stroke_dasharray.set && iter_style->stroke_dasharray.set) {
                     match = (sel_style->stroke_dasharray.values == iter_style->stroke_dasharray.values);
                 }
             }
-            else if (type == SP_STROKE_STYLE_MARKERS) {
+            match_g = match_g && match;
+            if (type == SP_STROKE_STYLE_MARKERS|| type == SP_STROKE_STYLE_ALL|| type==SP_STYLE_ALL) {
                 match = true;
                 int len = sizeof(sel_style->marker)/sizeof(SPIString);
                 for (int i = 0; i < len; i++) {
@@ -2119,8 +2114,9 @@ std::vector<SPItem*> sp_get_same_stroke_style(SPItem *sel, std::vector<SPItem*> 
                     }
                 }
             }
-
-            if (match) {
+			match_g = match_g && match;
+            if (match_g) {
+                while (iter->cloned) iter=dynamic_cast<SPItem *>(iter->parent);
                 matches.insert(matches.begin(),iter);
             }
         } else {

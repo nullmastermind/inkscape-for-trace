@@ -381,6 +381,22 @@ void SPGroup::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape:
     }
 }
 
+void sp_item_group_ungroup_handle_clones(SPItem *parent, Geom::Affine const g)
+{
+    for(std::list<SPObject*>::const_iterator refd=parent->hrefList.begin();refd!=parent->hrefList.end();refd++){
+        SPItem *citem = dynamic_cast<SPItem *>(*refd);
+        if (citem) {
+            SPUse *useitem = dynamic_cast<SPUse *>(citem);
+            if (useitem && useitem->get_original() == parent) {
+                Geom::Affine ctrans;
+                ctrans = g.inverse() * citem->transform;
+                gchar *affinestr = sp_svg_transform_write(ctrans);
+                citem->setAttribute("transform", affinestr);
+                g_free(affinestr);
+            }
+        }
+    }
+}
 
 void
 sp_item_group_ungroup (SPGroup *group, std::vector<SPItem*> &children, bool do_done)
@@ -417,8 +433,14 @@ sp_item_group_ungroup (SPGroup *group, std::vector<SPItem*> &children, bool do_d
     /* Step 1 - generate lists of children objects */
     GSList *items = NULL;
     GSList *objects = NULL;
-    for (SPObject *child = group->firstChild() ; child; child = child->getNext() ) {
+    Geom::Affine const g(group->transform);
 
+    for (SPObject *child = group->firstChild() ; child; child = child->getNext() )
+        if (SPItem *citem = dynamic_cast<SPItem *>(child))
+            sp_item_group_ungroup_handle_clones(citem,g);
+
+
+    for (SPObject *child = group->firstChild() ; child; child = child->getNext() ) {
         SPItem *citem = dynamic_cast<SPItem *>(child);
         if (citem) {
             /* Merging of style */
@@ -454,13 +476,6 @@ sp_item_group_ungroup (SPGroup *group, std::vector<SPItem*> &children, bool do_d
 
             // Merging transform
             Geom::Affine ctrans;
-            Geom::Affine const g(group->transform);
-            SPUse *useitem = dynamic_cast<SPUse *>(citem);
-            if (useitem && useitem->get_original() &&
-                useitem->get_original()->parent == dynamic_cast<SPObject *>(group)) {
-                // make sure a clone's effective transform is the same as was under group
-                ctrans = g.inverse() * citem->transform * g;
-            } else {
                 // We should not apply the group's transformation to both a linked offset AND to its source
                 if (dynamic_cast<SPOffset *>(citem)) { // Do we have an offset at hand (whether it's dynamic or linked)?
                     SPItem *source = sp_offset_get_source(dynamic_cast<SPOffset *>(citem));
@@ -479,7 +494,6 @@ sp_item_group_ungroup (SPGroup *group, std::vector<SPItem*> &children, bool do_d
                 } else {
                     ctrans = citem->transform * g;
                 }
-            }
 
             // FIXME: constructing a transform that would fully preserve the appearance of a
             // textpath if it is ungrouped with its path seems to be impossible in general
@@ -689,21 +703,16 @@ void SPGroup::scaleChildItemsRec(Geom::Scale const &sc, Geom::Point const &p, bo
                             subItem = dynamic_cast<SPItem *>(item->clip_ref->getObject()->firstChild());
                         }
                         if (subItem != NULL) {
-                            Geom::Affine tdoc2dt = Geom::Scale(1, -1) * Geom::Translate(p); // re-create doc2dt()
-                            Geom::Affine ti2doc = item->i2doc_affine();
-                            subItem->set_i2d_affine(ti2doc * sc * ti2doc.inverse() * tdoc2dt);
-                            subItem->doWriteTransform(subItem->getRepr(), subItem->transform, NULL, true);
+                            subItem->doWriteTransform(subItem->getRepr(), subItem->transform*sc, NULL, true);
                         }
                         subItem = NULL;
                         if (item->mask_ref->getObject()) {
                             subItem = dynamic_cast<SPItem *>(item->mask_ref->getObject()->firstChild());
                         }
                         if (subItem != NULL) {
-                            Geom::Affine tdoc2dt = Geom::Scale(1, -1) * Geom::Translate(p); // re-create doc2dt()
-                            Geom::Affine ti2doc = item->i2doc_affine();
-                            subItem->set_i2d_affine(ti2doc * sc * ti2doc.inverse() * tdoc2dt);
-                            subItem->doWriteTransform(item->getRepr(), item->transform, NULL, true);
+                            subItem->doWriteTransform(subItem->getRepr(), subItem->transform*sc, NULL, true);
                         }
+                        item->doWriteTransform(item->getRepr(), sc.inverse()*item->transform*sc, NULL, true);
                         group->scaleChildItemsRec(sc, p, false);
                     }
                 } else {
@@ -757,8 +766,7 @@ void SPGroup::scaleChildItemsRec(Geom::Scale const &sc, Geom::Point const &p, bo
                             Geom::Affine move = final.inverse() * item->transform * final;
                             item->doWriteTransform(item->getRepr(), move, &move, true);
                         } else {
-                            item->set_i2d_affine(item->i2dt_affine() * final);
-                            item->doWriteTransform(item->getRepr(), item->transform, NULL, true);
+                            item->doWriteTransform(item->getRepr(), item->transform*sc, NULL, true);
                         }
                         
                         if (conn_type != NULL) {

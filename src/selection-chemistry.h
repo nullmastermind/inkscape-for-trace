@@ -137,14 +137,15 @@ enum SPSelectStrokeStyleType {
     SP_STROKE_COLOR  = 1,
     SP_STROKE_STYLE_WIDTH = 2,
     SP_STROKE_STYLE_DASHES = 3,
-    SP_STROKE_STYLE_MARKERS = 4
+    SP_STROKE_STYLE_MARKERS = 4,
+    SP_STROKE_STYLE_ALL = 5,
+    SP_STYLE_ALL = 6
 };
 
 void sp_select_same_fill_stroke_style(SPDesktop *desktop, gboolean fill, gboolean strok, gboolean style);
-void sp_select_same_stroke_style(SPDesktop *desktop);
 void sp_select_same_object_type(SPDesktop *desktop);
-std::vector<SPItem*> sp_get_same_fill_or_stroke_color(SPItem *sel, std::vector<SPItem*> &src, SPSelectStrokeStyleType type);
-std::vector<SPItem*> sp_get_same_stroke_style(SPItem *sel, std::vector<SPItem*> &src, SPSelectStrokeStyleType type);
+
+std::vector<SPItem*> sp_get_same_style(SPItem *sel, std::vector<SPItem*> &src, SPSelectStrokeStyleType type=SP_STYLE_ALL);
 std::vector<SPItem*> sp_get_same_object_type(SPItem *sel, std::vector<SPItem*> &src);
 
 void scroll_to_show_item(SPDesktop *desktop, SPItem *item);
