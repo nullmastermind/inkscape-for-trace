@@ -208,6 +208,7 @@ public:
         end = clock();
 
         std::cout << "Took " << double(end - begin) / double(CLOCKS_PER_SEC) << " seconds to ungroup a <g> with " << num_elements << " elements\n";
+        std::cout << "  Note: sp_item_group_ungroup_handle_clones() is responsible\n  for most of the time as it is linear in number of elements\n  which results in quadratic behavior for ungrouping." << std::endl;
 
         begin = clock();
         // Remove those elements
