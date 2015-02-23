@@ -14,11 +14,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <glib.h>
 #include <2geom/forward.h>
-
-//should be in selection.h
-typedef std::list<SPObject*> SelContainer;
 
 
 class SPDocument;

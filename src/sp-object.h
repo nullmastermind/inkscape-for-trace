@@ -64,9 +64,6 @@ class SPCSSAttr;
 class SPStyle;
 typedef struct _GSList GSList;
 
-//should be in selection.h
-typedef std::list<SPObject*> SelContainer;
-
 
 
 namespace Inkscape {

@@ -33,8 +33,6 @@ class SPItem;
 class SPBox3D;
 class Persp3D;
 
-typedef std::list<SPObject*> SelContainer;
-
 namespace Inkscape {
 class LayerModel;
 namespace XML {
