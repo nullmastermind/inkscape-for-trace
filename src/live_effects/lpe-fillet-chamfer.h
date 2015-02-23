@@ -42,6 +42,9 @@ public:
 
 private:
     EnumParam<FilletMethod> method;
+    BoolParam flexible;
+    Geom::Pointwise *pointwise;
+
     LPEFilletChamfer(const LPEFilletChamfer &);
     LPEFilletChamfer &operator=(const LPEFilletChamfer &);
 

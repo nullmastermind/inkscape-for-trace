@@ -45,10 +45,13 @@ FMConverter(FilletMethodData, FM_END);
 LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
     satellitepairarrayparam_values(_("Fillet point"), _("Fillet point"), "satellitepairarrayparam_values", &wr, this),
-    method(_("Method:"), _("Fillets methods"), "method", FMConverter, &wr, this, FM_AUTO)
+    method(_("Method:"), _("Fillets methods"), "method", FMConverter, &wr, this, FM_AUTO),
+    flexible(_("Flexible radius size (%)"), _("Flexible radius size (%)"), "flexible", &wr, this, false),
+    pointwise()
 {
     registerParameter(&satellitepairarrayparam_values);
     registerParameter(&method);
+    registerParameter(&flexible);
 }
 
 LPEFilletChamfer::~LPEFilletChamfer() {}
@@ -60,11 +63,11 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
     SPShape * shape = dynamic_cast<SPShape *>(splpeitem);
     if (shape) {
         PathVector const &original_pathv = pathv_to_linear_and_cubic_beziers(shape->getCurve()->get_pathvector());
-        std::vector<std::pair<int,Satellite> > satellites;
         Piecewise<D2<SBasis> > pwd2_in = paths_to_pw(original_pathv);
         pwd2_in = remove_short_cuts(pwd2_in, .01);
         satellitepairarrayparam_values.set_pwd2(pwd2_in);
         int counterTotal = 0;
+        std::vector<std::pair<int,Geom::Satellite> >  satellites;
         for (PathVector::const_iterator path_it = original_pathv.begin(); path_it != original_pathv.end(); ++path_it) {
             if (path_it->empty()){
                 continue;
@@ -87,7 +90,7 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
             --curve_end;
             int counter = 0;
             while (curve_it1 != curve_endit) {
-                Satellite satellite(F, true, true, false, false, 0.0, 0.0);
+                Satellite satellite(F, flexible, true, false, false, 0.0, 0.0);
                 Geom::NodeType nodetype;
                 if (counter==0) {
                     if (path_it->closed()) {
@@ -114,7 +117,6 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
     }
 }
 
-
 void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
 {
     SPLPEItem * splpeitem = const_cast<SPLPEItem *>(lpeItem);
@@ -126,9 +128,23 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
             c = path->get_original_curve();
         }
         PathVector const &original_pathv = pathv_to_linear_and_cubic_beziers(c->get_pathvector());
-        Piecewise<D2<SBasis> > pwd2_in = paths_to_pw(original_pathv);
+        Piecewise<D2<SBasis> > pwd2_in = paths_to_pw(pathv_to_linear_and_cubic_beziers(original_pathv));
         pwd2_in = remove_short_cuts(pwd2_in, .01);
+        //wating to recalculate
+        //recalculate_controlpoints_for_new_pwd2(pwd2_in);
         satellitepairarrayparam_values.set_pwd2(pwd2_in);
+        std::vector<std::pair<int,Geom::Satellite> >  satellites = satellitepairarrayparam_values.data();
+        pointwise = new Pointwise( pwd2_in,satellites);
+        bool changed = false;
+        for (std::vector<std::pair<int,Geom::Satellite> >::iterator it = satellites.begin(); it != satellites.end(); ++it) {
+            if(it->second.getIsTime() != flexible){
+                it->second.setIsTime(flexible);
+                changed = true;
+            }
+        }
+        if(changed){
+            satellitepairarrayparam_values.param_set_and_write_new_value(satellites);
+        }
     } else {
         g_warning("LPE Fillet can only be applied to shapes (not groups).");
     }
@@ -140,18 +156,14 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
 {
     const double gapHelper = 0.00001;
     std::vector<Geom::Path> pathvector_out;
-    Piecewise<D2<SBasis> > pwd2_in = paths_to_pw(pathv_to_linear_and_cubic_beziers(path_in));
-    pwd2_in = remove_short_cuts(pwd2_in, .01);
-    satellitepairarrayparam_values.set_pwd2(pwd2_in);
-    std::vector<std::pair<int, Satellite> > filletChamferData = satellitepairarrayparam_values.data();
-    Pointwise *pointwise = new Pointwise( pwd2_in, filletChamferData);
     unsigned int counter = 0;
     const double K = (4.0 / 3.0) * (sqrt(2.0) - 1.0);
     std::vector<Geom::Path> path_in_processed = pathv_to_linear_and_cubic_beziers(path_in);
     for (PathVector::const_iterator path_it = path_in_processed.begin();
             path_it != path_in_processed.end(); ++path_it) {
-        if (path_it->empty())
+        if (path_it->empty()){
             continue;
+        }
         Geom::Path path_out;
         Geom::Path::const_iterator curve_it1 = path_it->begin();
         Geom::Path::const_iterator curve_it2 = ++(path_it->begin());
@@ -172,9 +184,13 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
         unsigned int first = counter;
         double time0 = 0;
         while (curve_it1 != curve_endit) {
+            if((*curve_it1).isDegenerate() || (*curve_it1).isDegenerate()){
+                g_warning("LPE Fillet not handle degenerate curves.");
+                return path_in;
+            }
             std::vector<Satellite> satVector;
-            Satellite sat(F, true, true, false, false, 0.0, 0.0);
-            Curve *curve_it2Fixed = (*path_it->begin()).duplicate();
+            Satellite sat;
+            Curve *curve_it2Fixed = path_it->begin()->duplicate();
             if(!path_it->closed() || curve_it2 != curve_endit){
                 curve_it2Fixed = (*curve_it2).duplicate();
                 satVector = pointwise->findSatellites(counter+1,1);
@@ -193,33 +209,38 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
                     time0 = satVector[0].getTime();
                 }
             }
+
             bool last = curve_it2 == curve_endit;
             double time1 = sat.getOpositeTime((*curve_it1).toSBasis());
             double time2 = sat.getTime();
             if(time1 <= time0){
-                time1 = time0 + gapHelper;
-            }
-            if(time0 == 1){
-                time0 = time0 - gapHelper;
-            }
-            if(time2 == 1){
-                time2 = time2 - gapHelper;
+                time1 = time0;
             }
             std::vector<double> times;
             times.push_back(time0);
             times.push_back(time1);
             times.push_back(time2);
+            std::cout << ":::" << counter    << ":::::::::::::::\n";
+            std::cout << time0 << "::Time 0\n";
+            std::cout << time1 << "::Time 1\n";
+            std::cout << time2 << "::Time 2\n";
             Curve *knotCurve1 = curve_it1->portion(times[0], times[1]);
             if (counterCurves > 0) {
                 knotCurve1->setInitial(path_out.finalPoint());
             } else {
                 path_out.start((*curve_it1).pointAt(times[0]));
             }
-            Curve *knotCurve2 = curve_it2Fixed->portion(times[2], 1);
+            
             Point startArcPoint = knotCurve1->finalPoint();
             Point endArcPoint = curve_it2Fixed->pointAt(times[2]);
+            if(times[2] == 1){
+                endArcPoint = curve_it2Fixed->pointAt(times[2]-gapHelper);
+            }
+            if(times[1] == times[0]){
+                startArcPoint = knotCurve1->pointAt(1-gapHelper);
+            }
             double k1 = distance(startArcPoint, curve_it1->finalPoint()) * K;
-            double k2 = distance(endArcPoint, curve_it1->finalPoint()) * K;
+            double k2 = distance(endArcPoint, curve_it2Fixed->initialPoint()) * K;
             Geom::CubicBezier const *cubic1 = dynamic_cast<Geom::CubicBezier const *>(&*knotCurve1);
             Ray ray1(startArcPoint, curve_it1->finalPoint());
             if (cubic1) {
@@ -229,13 +250,14 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
             if(time0 == 1){
                 handle1 =  startArcPoint;
             }
-            Geom::CubicBezier const *cubic2 =
-                dynamic_cast<Geom::CubicBezier const *>(&*knotCurve2);
-            Ray ray2(curve_it1->finalPoint(), endArcPoint);
+            Curve *knotCurve2 = curve_it2Fixed->portion(times[2], 1);
+            Geom::CubicBezier const *cubic2 =  dynamic_cast<Geom::CubicBezier const *>(&*knotCurve2);
+            Ray ray2(curve_it2Fixed->initialPoint(), endArcPoint);
             if (cubic2) {
                 ray2.setPoints(endArcPoint, (*cubic2)[1]);
             }
             Point handle2 = endArcPoint - Point::polar(ray2.angle(),k2);
+            
             bool ccwToggle = cross(curve_it1->finalPoint() - startArcPoint, endArcPoint - startArcPoint) < 0;
             double angle = angle_between(ray1, ray2, ccwToggle);
             double handleAngle = ray1.angle() - angle;
@@ -251,21 +273,28 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
                 handleAngle = ray2.angle() - angle;
             }
             Point inverseHandle2 = endArcPoint - Point::polar(handleAngle,k2);
+            if(times[2] == 1){
+                endArcPoint = curve_it2Fixed->pointAt(times[2]);
+            }
+            if(times[1] == times[0]){
+                startArcPoint = knotCurve1->pointAt(1);
+            }
             Line const x_line(Geom::Point(0,0),Geom::Point(1,0));
             Line const angled_line(startArcPoint,endArcPoint);
             double angleArc = Geom::angle_between( x_line,angled_line);
             double radius = Geom::distance(startArcPoint,middle_point(startArcPoint,endArcPoint))/sin(angle/2.0);
             Coord rx = radius;
             Coord ry = rx;
-            
-            if (times[1] != 1 || (times[1] == 1 && times[0] == times[1] - gapHelper )) {
-                if (times[1] != times[0] + gapHelper) {
-                    path_out.append(*knotCurve1);
+            if (times[1] != 1) {
+                if (times[1] != times[0] || times[1] == times[0] == 1) {
+                    if(!knotCurve1->isDegenerate()){
+                        path_out.append(*knotCurve1);
+                    }
                 }
                 SatelliteType type = F;
                 type = sat.getSatelliteType();
                 if(are_near(middle_point(startArcPoint,endArcPoint),curve_it1->finalPoint(), 0.0001)){
-                    //path_out.appendNew<Geom::LineSegment>(endArcPoint);
+                   // path_out.appendNew<Geom::LineSegment>(endArcPoint);
                 } else if (type == C) {
                 /*
                     unsigned int chamferSubs = type-3000;
@@ -316,11 +345,20 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
                     }
                 }
             } else {
-                path_out.append(*knotCurve1);
+                if(!knotCurve1->isDegenerate()){
+                    path_out.append(*knotCurve1);
+                }
             }
             if (path_it->closed() && last) {
                 path_out.close();
             }
+            /*
+            if(!path_it->closed() || curve_it2 != curve_endit){
+                satellites[counter + 1] = std::make_pair(counter + 1, sat);
+            } else {
+                satellites[first] = std::make_pair(first, sat);
+            }
+            */
             ++curve_it1;
             if (curve_it2 != curve_endit) {
                 ++curve_it2;

@@ -131,11 +131,7 @@ class Satellite
         return _time;
     }
 
-    double getTime(Geom::D2<Geom::SBasis> curve) const
-    {
-        //todo make the process
-        return _time;
-    }
+    void updateSizeTime(Geom::D2<Geom::SBasis> d2_in);
 
     void setPosition(Geom::Point p, Geom::D2<Geom::SBasis> curve);
 

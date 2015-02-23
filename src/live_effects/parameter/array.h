@@ -115,15 +115,15 @@ protected:
     void writesvgData(SVGOStringStream &str, std::pair<int, Geom::Satellite> const &nVector) const {
         str << nVector.first;
         str << ",";
-        str <<   nVector.second.getSatelliteTypeGchar();
+        str << nVector.second.getSatelliteTypeGchar();
         str << "*";
-        str << nVector.second.getIsTime();
+        str << g_strdup(nVector.second.getIsTime() ? "true" : "false");
         str << "*";
-        str << nVector.second.getActive();
+        str << g_strdup(nVector.second.getActive() ? "true" : "false");
         str << "*";
-        str << nVector.second.getHasMirror();
+        str << g_strdup(nVector.second.getHasMirror() ? "true" : "false");
         str << "*";
-        str << nVector.second.getHidden();
+        str << g_strdup(nVector.second.getHidden() ? "true" : "false");
         str << "*";
         str << nVector.second.getSize();
         str << "*";
