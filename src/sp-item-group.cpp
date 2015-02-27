@@ -818,7 +818,7 @@ void SPGroup::update_patheffect(bool write) {
     std::vector<SPItem*> const item_list = sp_item_group_item_list(this);
 
     for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();iter++) {
-        SPObject *subitem = static_cast<SPObject *>(*iter);
+        SPObject *subitem = *iter;
 
         SPLPEItem *lpeItem = dynamic_cast<SPLPEItem *>(subitem);
         if (lpeItem) {
@@ -846,7 +846,7 @@ sp_group_perform_patheffect(SPGroup *group, SPGroup *topgroup, bool write)
     std::vector<SPItem*> const item_list = sp_item_group_item_list(group);
 
     for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();iter++) {
-        SPObject *subitem = static_cast<SPObject *>(*iter);
+        SPObject *subitem = *iter;
 
         SPGroup *subGroup = dynamic_cast<SPGroup *>(subitem);
         if (subGroup) {

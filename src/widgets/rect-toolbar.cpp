@@ -112,7 +112,7 @@ static void sp_rtb_value_changed(GtkAdjustment *adj, GObject *tbl, gchar const *
             if (gtk_adjustment_get_value(adj) != 0) {
                 (SP_RECT(*i)->*setter)(Quantity::convert(gtk_adjustment_get_value(adj), unit, desktop->getNamedView()->svg_units));
             } else {
-                SP_OBJECT(*i)->getRepr()->setAttribute(value_name, NULL);
+                (*i)->getRepr()->setAttribute(value_name, NULL);
             }
             modmade = true;
         }

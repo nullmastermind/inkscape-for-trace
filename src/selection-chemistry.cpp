@@ -555,7 +555,7 @@ void sp_edit_clear_all(Inkscape::Selection *selection)
     std::vector<SPItem*> items = sp_item_group_item_list(group);
 
     for(unsigned int i = 0; i < items.size(); i++){
-        reinterpret_cast<SPObject*>(items[i])->deleteObject();
+        items[i]->deleteObject();
     }
 
     DocumentUndo::done(doc, SP_VERB_EDIT_CLEAR_ALL,
@@ -627,7 +627,7 @@ static void sp_edit_select_all_full(SPDesktop *dt, bool force_all_layers, bool i
         std::vector<SPItem*> all_items = sp_item_group_item_list(dynamic_cast<SPGroup *>(dt->currentLayer()));
 
         for (std::vector<SPItem*>::const_reverse_iterator i=all_items.rbegin();i!=all_items.rend();i++) {
-            SPItem *item = dynamic_cast<SPItem *>(static_cast<SPObject *>(*i));
+            SPItem *item = *i;
 
             if (item && (!onlysensitive || !item->isLocked())) {
                 if (!onlyvisible || !dt->itemIsHidden(item)) {
@@ -683,8 +683,8 @@ static void sp_selection_group_impl(std::vector<Inkscape::XML::Node*> p, Inkscap
     sort(p.begin(),p.end(),sp_repr_compare_position);
 
     // Remember the position and parent of the topmost object.
-    gint topmost = (dynamic_cast<Inkscape::XML::Node *>(p.back()))->position();
-    Inkscape::XML::Node *topmost_parent = (dynamic_cast<Inkscape::XML::Node *>(p.back()))->parent();
+    gint topmost = p.back()->position();
+    Inkscape::XML::Node *topmost_parent = p.back()->parent();
 
     for(std::vector<Inkscape::XML::Node*>::const_iterator i = p.begin(); i != p.end(); i++){
         Inkscape::XML::Node *current = *i;
@@ -791,7 +791,7 @@ void sp_selection_ungroup(Inkscape::Selection *selection, SPDesktop *desktop)
     std::vector<SPItem*> new_select;
     GSList *groups = NULL;
     for (std::vector<SPItem*>::const_iterator item = old_select.begin(); item!=old_select.end(); item++) {
-        SPItem *obj = static_cast<SPItem*>(*item);
+        SPItem *obj = *item;
         if (dynamic_cast<SPGroup *>(obj)) {
             groups = g_slist_prepend(groups, obj);
         }
@@ -810,7 +810,7 @@ void sp_selection_ungroup(Inkscape::Selection *selection, SPDesktop *desktop)
     // in the items list.
     GSList *clones_to_unlink = NULL;
     for (std::vector<SPItem*>::const_iterator item = items.begin(); item != items.end(); item++) {
-        SPUse *use = dynamic_cast<SPUse *>(static_cast<SPItem *>(*item));
+        SPUse *use = dynamic_cast<SPUse *>(*item);
 
         SPItem *original = use;
         while (dynamic_cast<SPUse *>(original)) {
@@ -864,7 +864,7 @@ sp_degroup_list(std::vector<SPItem*> &items)
 	std::vector<SPItem*> out;
     bool has_groups = false;
     for (std::vector<SPItem*>::const_iterator item=items.begin();item!=items.end();item++) {
-        SPGroup *group = dynamic_cast<SPGroup *>(static_cast<SPObject *>(*item));
+        SPGroup *group = dynamic_cast<SPGroup *>(*item);
         if (!group) {
             out.push_back(*item);
         } else {
@@ -915,7 +915,7 @@ enclose_items(std::vector<SPItem*> const &items)
 
     Geom::OptRect r;
     for (std::vector<SPItem*>::const_iterator i = items.begin();i!=items.end();i++) {
-        r.unionWith(static_cast<SPItem *>(*i)->desktopVisualBounds());
+        r.unionWith((*i)->desktopVisualBounds());
     }
     return r;
 }
@@ -963,7 +963,7 @@ sp_selection_raise(Inkscape::Selection *selection, SPDesktop *desktop)
     // Iterate over all objects in the selection (starting from top).
     if (selected) {
         for (std::vector<SPItem*>::const_iterator item=rev.begin();item!=rev.end();item++) {
-            SPObject *child = reinterpret_cast<SPObject*>(*item);
+            SPObject *child = *item;
             // for each selected object, find the next sibling
             for (SPObject *newref = child->next; newref; newref = newref->next) {
                 // if the sibling is an item AND overlaps our selection,
@@ -1042,7 +1042,7 @@ void sp_selection_lower(Inkscape::Selection *selection, SPDesktop *desktop)
     // Iterate over all objects in the selection (starting from top).
     if (selected) {
         for (std::vector<SPItem*>::const_reverse_iterator item=rev.rbegin();item!=rev.rend();item++) {
-            SPObject *child = reinterpret_cast<SPObject*>(*item);
+            SPObject *child = *item;
             // for each selected object, find the prev sibling
             for (SPObject *newref = prev_sibling(child); newref; newref = prev_sibling(newref)) {
                 // if the sibling is an item AND overlaps our selection,
@@ -2053,7 +2053,7 @@ std::vector<SPItem*> sp_get_same_style(SPItem *sel, std::vector<SPItem*> &src, S
     }
 	    bool match_g;
     for (std::vector<SPItem*>::const_iterator i=src.begin();i!=src.end();i++) {
-        SPItem *iter = dynamic_cast<SPItem *>(static_cast<SPObject *>(*i));
+        SPItem *iter = *i;
         if (iter) {
             match_g=true;
             SPStyle *iter_style = iter->style;
@@ -2356,7 +2356,7 @@ SPItem *next_item_from_list(SPDesktop *desktop, std::vector<SPItem*> const items
 {
     SPObject *current=root;
     for(std::vector<SPItem*>::const_iterator i = items.begin();i!=items.end();i++) {
-        SPItem *item = dynamic_cast<SPItem *>(static_cast<SPObject *>(*i));
+        SPItem *item = *i;
         if ( root->isAncestorOf(item) &&
              ( !only_in_viewport || desktop->isWithinViewport(item) ) )
         {
@@ -2925,7 +2925,7 @@ void sp_selection_to_marker(SPDesktop *desktop, bool apply)
         // Delete objects so that their clones don't get alerted;
         // the objects will be restored inside the marker element.
         for (std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
-            SPObject *item = reinterpret_cast<SPObject*>(*i);
+            SPObject *item = *i;
             item->deleteObject(false);
         }
     }
@@ -3280,7 +3280,7 @@ sp_selection_tile(SPDesktop *desktop, bool apply)
     if (apply) {
         // delete objects so that their clones don't get alerted; this object will be restored shortly
         for (std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
-            SPObject *item = reinterpret_cast<SPObject*>(*i);
+            SPObject *item = *i;
             item->deleteObject(false);
         }
     }
@@ -3354,7 +3354,7 @@ void sp_selection_untile(SPDesktop *desktop)
 
     std::vector<SPItem*> items(selection->itemList());
     for (std::vector<SPItem*>::const_reverse_iterator i=items.rbegin();i!=items.rend();i++){
-        SPItem *item = static_cast<SPItem *>(*i);
+        SPItem *item = *i;
 
         SPStyle *style = item->style;
 
@@ -3864,7 +3864,7 @@ void sp_selection_set_mask(SPDesktop *desktop, bool apply_clip_path, bool apply_
             Inkscape::XML::Node *dup = SP_OBJECT(*i)->getRepr()->duplicate(xml_doc);
             mask_items = g_slist_prepend(mask_items, dup);
 
-            SPObject *item = reinterpret_cast<SPObject*>(*i);
+            SPObject *item = *i;
             if (remove_original) {
                 items_to_delete = g_slist_prepend(items_to_delete, item);
             }
@@ -3878,7 +3878,7 @@ void sp_selection_set_mask(SPDesktop *desktop, bool apply_clip_path, bool apply_
         mask_items = g_slist_prepend(mask_items, dup);
 
         if (remove_original) {
-            SPObject *item = reinterpret_cast<SPObject*>(items.front());
+            SPObject *item = items.front();
             items_to_delete = g_slist_prepend(items_to_delete, item);
         }
 
@@ -4055,7 +4055,7 @@ void sp_selection_unset_mask(SPDesktop *desktop, bool apply_clip_path) {
 
         SP_OBJECT(*i)->getRepr()->setAttribute(attributeName, "none");
 
-        SPGroup *group = dynamic_cast<SPGroup *>(static_cast<SPObject *>(*i));
+        SPGroup *group = dynamic_cast<SPGroup *>(*i);
         if (ungroup_masked && group) {
                 // if we had previously enclosed masked object in group,
                 // add it to list so we can ungroup it later

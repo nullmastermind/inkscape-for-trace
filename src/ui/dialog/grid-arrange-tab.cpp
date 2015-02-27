@@ -210,7 +210,7 @@ void GridArrangeTab::arrange()
         cnt=0;
         const std::vector<SPItem*> sizes(sorted);
         for (std::vector<SPItem*>::const_iterator i = sizes.begin();i!=sizes.end();i++) {
-            SPItem *item = SP_ITEM(*i);
+            SPItem *item = *i;
             Geom::OptRect b = item->documentVisualBounds();
             if (b) {
                 width = b->dimensions()[Geom::X];

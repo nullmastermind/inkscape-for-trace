@@ -203,7 +203,7 @@ void Inkscape::SelCue::_newTextBaselines()
 
     std::vector<SPItem*> ll = _selection->itemList();
     for (std::vector<SPItem*>::const_iterator l=ll.begin();l!=ll.end();l++) {
-        SPItem *item = static_cast<SPItem *>(*l);
+        SPItem *item = *l;
 
         SPCanvasItem* baseline_point = NULL;
         if (SP_IS_TEXT(item) || SP_IS_FLOWTEXT(item)) { // visualize baseline

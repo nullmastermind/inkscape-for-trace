@@ -522,7 +522,7 @@ static void sp_text_lineheight_value_changed( GtkAdjustment *adj, GObject *tbl )
     std::vector<SPItem*> itemlist=selection->itemList();
     for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
         if (SP_IS_TEXT (*i)) {
-            SP_OBJECT(*i)->getRepr()->setAttribute("sodipodi:linespacing", sp_repr_css_property (css, "line-height", NULL));
+            (*i)->getRepr()->setAttribute("sodipodi:linespacing", sp_repr_css_property (css, "line-height", NULL));
             modmade = true;
         }
     }

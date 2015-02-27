@@ -422,7 +422,7 @@ void NodeTool::selection_changed(Inkscape::Selection *sel) {
 
     std::vector<SPItem*> items=sel->itemList();
     for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
-        SPObject *obj = static_cast<SPObject*>(*i);
+        SPObject *obj = *i;
 
         if (SP_IS_ITEM(obj)) {
             gather_items(this, NULL, static_cast<SPItem*>(obj), SHAPE_ROLE_NORMAL, shapes);

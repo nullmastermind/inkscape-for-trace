@@ -198,7 +198,7 @@ text_remove_from_path()
     bool did = false;
     std::vector<SPItem*> items(selection->itemList());
     for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
-        SPObject *obj = SP_OBJECT(*i);
+        SPObject *obj = *i;
 
         if (SP_IS_TEXT_TEXTPATH(obj)) {
             SPObject *tp = obj->firstChild();
@@ -262,7 +262,7 @@ text_remove_all_kerns()
 
     std::vector<SPItem*> items = selection->itemList();
     for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
-        SPObject *obj = SP_OBJECT(*i);
+        SPObject *obj = *i;
 
         if (!SP_IS_TEXT(obj) && !SP_IS_TSPAN(obj) && !SP_IS_FLOWTEXT(obj)) {
             continue;
@@ -322,7 +322,7 @@ text_flow_into_shape()
     /* Add clones */
     std::vector<SPItem*> items = selection->itemList();
     for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
-        SPItem *item = SP_ITEM(*i);
+        SPItem *item = *i;
         if (SP_IS_SHAPE(item)){
             Inkscape::XML::Node *clone = xml_doc->createElement("svg:use");
             clone->setAttribute("x", "0");
@@ -398,7 +398,7 @@ text_unflow ()
     std::vector<SPItem*> items = selection->itemList();
     for(std::vector<SPItem*>::const_reverse_iterator i=items.rbegin();i!=items.rend();i++){
 
-        if (!SP_IS_FLOWTEXT(SP_OBJECT(*i))) {
+        if (!SP_IS_FLOWTEXT(*i)) {
             continue;
         }
 

@@ -48,7 +48,7 @@ using Inkscape::DocumentUndo;
 inline bool less_than_items(SPItem const *first, SPItem const *second)
 {
     return sp_repr_compare_position(first->getRepr(),
-                                    second->getRepr())>0;
+                                    second->getRepr())<0;
 }
 
 void
@@ -615,7 +615,7 @@ sp_selected_path_reverse(SPDesktop *desktop)
 
     for (std::vector<SPItem*>::const_iterator i = items.begin(); i != items.end(); i++){
 
-        SPPath *path = dynamic_cast<SPPath *>(static_cast<SPObject *>(*i));
+        SPPath *path = dynamic_cast<SPPath *>(*i);
         if (!path) {
             continue;
         }

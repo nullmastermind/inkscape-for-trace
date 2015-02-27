@@ -706,7 +706,7 @@ void ClipboardManagerImpl::_copySelection(Inkscape::Selection *selection)
 
     // copy style for Paste Style action
     if (!sorted_items.empty()) {
-        SPObject *object = static_cast<SPObject *>(sorted_items[0]);
+        SPObject *object = sorted_items[0];
         SPItem *item = dynamic_cast<SPItem *>(object);
         if (item) {
             SPCSSAttr *style = take_style_from_item(item);

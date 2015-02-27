@@ -549,7 +549,7 @@ void TextEdit::onApply()
         if (SP_IS_TEXT (*i)) {
 
             // backwards compatibility:
-            reinterpret_cast<SPObject*>(*i)->getRepr()->setAttribute("sodipodi:linespacing", sp_repr_css_property (css, "line-height", NULL));
+            (*i)->getRepr()->setAttribute("sodipodi:linespacing", sp_repr_css_property (css, "line-height", NULL));
 
             ++items;
         }

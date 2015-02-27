@@ -667,7 +667,7 @@ sp_selected_path_boolop(Inkscape::Selection *selection, SPDesktop *desktop, bool
     {
         // only one command, presumably a moveto: it isn't a path
         for (std::vector<SPItem*>::const_iterator l = il.begin(); l != il.end(); l++){
-            SP_OBJECT(*l)->deleteObject();
+            (*l)->deleteObject();
         }
         DocumentUndo::done(doc, SP_VERB_NONE, description);
         selection->clear();
@@ -680,9 +680,9 @@ sp_selected_path_boolop(Inkscape::Selection *selection, SPDesktop *desktop, bool
     SPObject *source;
     if ( bop == bool_op_diff || bop == bool_op_cut || bop == bool_op_slice ) {
         if (reverseOrderForOp) {
-             source = SP_OBJECT(il[0]);
+             source = il[0];
         } else {
-             source = SP_OBJECT(il.back());
+             source = il.back();
         }
     } else {
         // find out the bottom object
@@ -719,10 +719,10 @@ sp_selected_path_boolop(Inkscape::Selection *selection, SPDesktop *desktop, bool
         // if this is the bottommost object,
         if (!strcmp(reinterpret_cast<SPObject *>(*l)->getRepr()->attribute("id"), id)) {
             // delete it so that its clones don't get alerted; this object will be restored shortly, with the same id
-            SP_OBJECT(*l)->deleteObject(false);
+            (*l)->deleteObject(false);
         } else {
             // delete the object for real, so that its clones can take appropriate action
-            SP_OBJECT(*l)->deleteObject();
+            (*l)->deleteObject();
         }
     }
 

@@ -296,8 +296,7 @@ static void sp_group_render(SPGroup *group, CairoRenderContext *ctx)
 
     std::vector<SPObject*> l(group->childList(false));
     for(std::vector<SPObject*>::const_iterator x = l.begin(); x!= l.end(); x++){
-        SPObject *o = reinterpret_cast<SPObject *>(*x);
-        SPItem *item = dynamic_cast<SPItem *>(o);
+        SPItem *item = static_cast<SPItem*>(*x);
         if (item) {
             renderer->renderItem(ctx, item);
         }

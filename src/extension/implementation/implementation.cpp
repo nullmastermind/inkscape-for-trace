@@ -51,7 +51,7 @@ Gtk::Widget *Implementation::prefs_effect(Inkscape::Extension::Effect *module, I
     std::vector<SPItem*> selected = ((SPDesktop *)view)->getSelection()->itemList();
     Inkscape::XML::Node const* first_select = NULL;
     if (!selected.empty()) {
-        const SPItem * item = selected.front();
+        const SPItem * item = selected[0];
         first_select = item->getRepr();
     }
 

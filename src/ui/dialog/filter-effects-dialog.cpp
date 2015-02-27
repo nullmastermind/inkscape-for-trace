@@ -1467,7 +1467,7 @@ void FilterEffectsDialog::FilterModifier::update_selection(Selection *sel)
     std::set<SPObject*> used;
     std::vector<SPItem*> itemlist=sel->itemList();
     for(std::vector<SPItem*>::const_iterator i=itemlist.begin(); itemlist.end() != i; i++) {
-        SPObject *obj = SP_OBJECT (*i);
+        SPObject *obj = *i;
         SPStyle *style = obj->style;
         if (!style || !SP_IS_ITEM(obj)) {
             continue;

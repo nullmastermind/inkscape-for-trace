@@ -309,7 +309,7 @@ std::vector<XML::Node*> const &Selection::reprList() {
     if (!_reprs.empty()) { return _reprs; }
     std::vector<SPItem*> list = itemList();
     for ( std::vector<SPItem*>::const_iterator iter=list.begin();iter!=list.end();iter++ ) {
-        SPObject *obj=reinterpret_cast<SPObject *>(*iter);
+        SPObject *obj = *iter;
         _reprs.push_back(obj->getRepr());
     }
     return _reprs;

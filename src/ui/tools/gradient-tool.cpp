@@ -934,7 +934,7 @@ static void sp_gradient_drag(GradientTool &rc, Geom::Point const pt, guint /*sta
                 sp_item_gradient_set_coords (*i, POINT_RG_CENTER, 0, rc.origin, fill_or_stroke, true, false);
                 sp_item_gradient_set_coords (*i, POINT_RG_R1, 0, pt, fill_or_stroke, true, false);
             }
-            SP_OBJECT(*i)->requestModified(SP_OBJECT_MODIFIED_FLAG);
+            (*i)->requestModified(SP_OBJECT_MODIFIED_FLAG);
         }
         if (ec->_grdrag) {
             ec->_grdrag->updateDraggers();

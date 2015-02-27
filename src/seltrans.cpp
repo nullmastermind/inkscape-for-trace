@@ -271,7 +271,7 @@ void Inkscape::SelTrans::grab(Geom::Point const &p, gdouble x, gdouble y, bool s
 
     std::vector<SPItem*> items=_desktop->selection->itemList();
     for ( std::vector<SPItem*>::const_iterator iter=items.begin();iter!=items.end();iter++ ) {
-        SPItem *it = reinterpret_cast<SPItem*>(sp_object_ref(SP_ITEM(*iter), NULL));
+        SPItem *it = static_cast<SPItem*>(sp_object_ref(*iter, NULL));
         _items.push_back(it);
         _items_const.push_back(it);
         _items_affines.push_back(it->i2dt_affine());

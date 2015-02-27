@@ -579,7 +579,7 @@ void FillNStroke::updateFromPaint()
                     for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
                         //FIXME: see above
                         if (kind == FILL) {
-                            sp_repr_css_change_recursive(reinterpret_cast<SPObject*>(*i)->getRepr(), css, "style");
+                            sp_repr_css_change_recursive((*i)->getRepr(), css, "style");
                         }
 
                         if (!vector) {
@@ -605,7 +605,7 @@ void FillNStroke::updateFromPaint()
                     for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
                         //FIXME: see above
                         if (kind == FILL) {
-                            sp_repr_css_change_recursive(reinterpret_cast<SPObject*>(*i)->getRepr(), css, "style");
+                            sp_repr_css_change_recursive((*i)->getRepr(), css, "style");
                         }
 
                         SPGradient *gr = sp_item_set_gradient(*i, vector, gradient_type, (kind == FILL) ? Inkscape::FOR_FILL : Inkscape::FOR_STROKE);
@@ -649,11 +649,11 @@ void FillNStroke::updateFromPaint()
                     // objects who already have the same root pattern but through a different href
                     // chain. FIXME: move this to a sp_item_set_pattern
                     for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
-                        Inkscape::XML::Node *selrepr = reinterpret_cast<SPObject*>(*i)->getRepr();
+                        Inkscape::XML::Node *selrepr = (*i)->getRepr();
                         if ( (kind == STROKE) && !selrepr) {
                             continue;
                         }
-                        SPObject *selobj = reinterpret_cast<SPObject*>(*i);
+                        SPObject *selobj = *i;
 
                         SPStyle *style = selobj->style;
                         if (style && ((kind == FILL) ? style->fill : style->stroke).isPaintserver()) {

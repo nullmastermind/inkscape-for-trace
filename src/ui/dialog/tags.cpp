@@ -652,7 +652,7 @@ bool TagsPanel::_handleButtonEvent(GdkEventButton* event)
                             bool wasadded = false;
                             std::vector<SPItem*> items=_desktop->selection->itemList();
                         	for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
-                                SPObject *newobj = reinterpret_cast<SPObject *>(*i);
+                                SPObject *newobj = *i;
                                 bool addchild = true;
                                 for ( SPObject *child = obj->children; child != NULL; child = child->next) {
                                     if (SP_IS_TAG_USE(child) && SP_TAG_USE(child)->ref->getObject() == newobj) {

@@ -983,7 +983,7 @@ StrokeStyle::scaleLine()
             if (unit->type == Inkscape::Util::UNIT_TYPE_LINEAR) {
                 width = Inkscape::Util::Quantity::convert(width_typed, unit, "px");
             } else { // percentage
-                gdouble old_w = SP_OBJECT(*i)->style->stroke_width.computed;
+                gdouble old_w = (*i)->style->stroke_width.computed;
                 width = old_w * width_typed / 100;
             }
 
@@ -1167,7 +1167,7 @@ StrokeStyle::updateAllMarkers(std::vector<SPItem*> const &objects)
 
     // We show markers of the first object in the list only
     // FIXME: use the first in the list that has the marker of each type, if any
-    SPObject *object = SP_OBJECT(objects[0]);
+    SPObject *object = objects[0];
 
     for (unsigned i = 0; i < G_N_ELEMENTS(keyloc); ++i) {
         // For all three marker types,

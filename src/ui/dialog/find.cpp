@@ -562,7 +562,7 @@ std::vector<SPItem*> Find::filter_fields (std::vector<SPItem*> &l, bool exact, b
 
     if (check_searchin_text.get_active()) {
         for(std::vector<SPItem*>::const_reverse_iterator i=in.rbegin(); in.rend() != i; i++) {
-            SPObject *obj = SP_OBJECT (*i);
+            SPObject *obj = *i;
             SPItem *item = dynamic_cast<SPItem *>(obj);
             g_assert(item != NULL);
             if (item_text_match(item, text, exact, casematch)) {
@@ -585,7 +585,7 @@ std::vector<SPItem*> Find::filter_fields (std::vector<SPItem*> &l, bool exact, b
 
         if (ids) {
             for(std::vector<SPItem*>::const_reverse_iterator i=in.rbegin(); in.rend() != i; i++) {
-                SPObject *obj = SP_OBJECT (*i);
+                SPObject *obj = *i;
                 SPItem *item = dynamic_cast<SPItem *>(obj);
                 if (item_id_match(item, text, exact, casematch)) {
                     if (out.end()==find(out.begin(),out.end(), *i)) {
@@ -601,7 +601,7 @@ std::vector<SPItem*> Find::filter_fields (std::vector<SPItem*> &l, bool exact, b
 
         if (style) {
             for(std::vector<SPItem*>::const_reverse_iterator i=in.rbegin(); in.rend() != i; i++) {
-                SPObject *obj = SP_OBJECT (*i);
+                SPObject *obj = *i;
                 SPItem *item = dynamic_cast<SPItem *>(obj);
                 g_assert(item != NULL);
                 if (item_style_match(item, text, exact, casematch)) {
@@ -618,7 +618,7 @@ std::vector<SPItem*> Find::filter_fields (std::vector<SPItem*> &l, bool exact, b
 
         if (attrname) {
             for(std::vector<SPItem*>::const_reverse_iterator i=in.rbegin(); in.rend() != i; i++) {
-                SPObject *obj = SP_OBJECT (*i);
+                SPObject *obj = *i;
                 SPItem *item = dynamic_cast<SPItem *>(obj);
                 g_assert(item != NULL);
                 if (item_attr_match(item, text, exact, casematch)) {
@@ -635,7 +635,7 @@ std::vector<SPItem*> Find::filter_fields (std::vector<SPItem*> &l, bool exact, b
 
         if (attrvalue) {
             for(std::vector<SPItem*>::const_reverse_iterator i=in.rbegin(); in.rend() != i; i++) {
-                SPObject *obj = SP_OBJECT (*i);
+                SPObject *obj = *i;
                 SPItem *item = dynamic_cast<SPItem *>(obj);
                 g_assert(item != NULL);
                 if (item_attrvalue_match(item, text, exact, casematch)) {
@@ -652,7 +652,7 @@ std::vector<SPItem*> Find::filter_fields (std::vector<SPItem*> &l, bool exact, b
 
         if (font) {
             for(std::vector<SPItem*>::const_reverse_iterator i=in.rbegin(); in.rend() != i; i++) {
-                SPObject *obj = SP_OBJECT (*i);
+                SPObject *obj = *i;
                 SPItem *item = dynamic_cast<SPItem *>(obj);
                 g_assert(item != NULL);
                 if (item_font_match(item, text, exact, casematch)) {
@@ -719,7 +719,7 @@ std::vector<SPItem*> Find::filter_types (std::vector<SPItem*> &l)
 {
     std::vector<SPItem*> n;
     for(std::vector<SPItem*>::const_reverse_iterator i=l.rbegin(); l.rend() != i; i++) {
-        SPObject *obj = SP_OBJECT (*i);
+        SPObject *obj = *i;
         SPItem *item = dynamic_cast<SPItem *>(obj);
         g_assert(item != NULL);
         if (item_type_match(item)) {
@@ -763,7 +763,7 @@ std::vector<SPItem*> &Find::all_selection_items (Inkscape::Selection *s, std::ve
 {
 	std::vector<SPItem*> itemlist=s->itemList();
     for(std::vector<SPItem*>::const_iterator i=itemlist.begin(); itemlist.end() != i; i++) {
-        SPObject *obj = SP_OBJECT (*i);
+        SPObject *obj = *i;
         SPItem *item = dynamic_cast<SPItem *>(obj);
         g_assert(item != NULL);
         if (item && !item->cloned && !desktop->isLayer(item)) {
@@ -857,7 +857,7 @@ void Find::onAction()
         Inkscape::Selection *selection = desktop->getSelection();
         selection->clear();
         selection->setList(n);
-        SPObject *obj = reinterpret_cast<SPObject *>(n[0]);
+        SPObject *obj = n[0];
         SPItem *item = dynamic_cast<SPItem *>(obj);
         g_assert(item != NULL);
         scroll_to_show_item(desktop, item);

@@ -114,7 +114,7 @@ void StyleSubject::CurrentLayer::_setLayer(SPObject *layer) {
     _layer_release.disconnect();
     _layer_modified.disconnect();
     if (_element) {
-        sp_object_unref(static_cast<SPObject *>(_element), NULL);
+        sp_object_unref(_element, NULL);
     }
     _element = layer;
     if (layer) {
@@ -126,7 +126,7 @@ void StyleSubject::CurrentLayer::_setLayer(SPObject *layer) {
 }
 
 SPObject *StyleSubject::CurrentLayer::_getLayer() const {
-    return static_cast<SPObject *>(_element);
+    return _element;
 }
 
 SPObject *StyleSubject::CurrentLayer::_getLayerSList() const {

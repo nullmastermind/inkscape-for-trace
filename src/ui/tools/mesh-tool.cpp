@@ -965,13 +965,13 @@ static void sp_mesh_drag(MeshTool &rc, Geom::Point const /*pt*/, guint /*state*/
         for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
 
             //FIXME: see above
-            sp_repr_css_change_recursive(SP_OBJECT(*i)->getRepr(), css, "style");
+            sp_repr_css_change_recursive((*i)->getRepr(), css, "style");
 
-            sp_item_set_gradient(SP_ITEM(*i), vector, (SPGradientType) type, fill_or_stroke);
+            sp_item_set_gradient(*i, vector, (SPGradientType) type, fill_or_stroke);
 
             // We don't need to do anything. Mesh is already sized appropriately.
  
-            SP_OBJECT(*i)->requestModified(SP_OBJECT_MODIFIED_FLAG);
+            (*i)->requestModified(SP_OBJECT_MODIFIED_FLAG);
         }
         // if (ec->_grdrag) {
         //     ec->_grdrag->updateDraggers();
