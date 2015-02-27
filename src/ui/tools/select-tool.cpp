@@ -481,7 +481,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
         case GDK_2BUTTON_PRESS:
             if (event->button.button == 1) {
                 if (!selection->isEmpty()) {
-                    SPItem *clicked_item = static_cast<SPItem *>(selection->itemList().front());
+                    SPItem *clicked_item = selection->itemList()[0];
 
                     if (dynamic_cast<SPGroup *>(clicked_item) && !dynamic_cast<SPBox3D *>(clicked_item)) { // enter group if it's not a 3D box
                         desktop->setCurrentLayer(clicked_item);

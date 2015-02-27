@@ -13,11 +13,11 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "selection.h" // SelContainer
 class ColorRGBA;
 class SPCSSAttr;
 class SPDesktop;
 class SPObject;
+class SPItem;
 class SPStyle;
 typedef struct _GSList GSList;
 namespace Inkscape {

@@ -47,7 +47,7 @@ char* collect_terms (const std::vector<SPItem*> &items)
     bool first = true;
 
     for ( std::vector<SPItem*>::const_iterator iter=items.begin();iter!=items.end();iter++ ) {
-        SPItem *item = dynamic_cast<SPItem *>(reinterpret_cast<SPObject *>(*iter));
+        SPItem *item = *iter;
         if (item) {
             const char *term = item->displayName();
             if (term != NULL && g_slist_find (check, term) == NULL) {
@@ -66,7 +66,7 @@ static int count_terms (const std::vector<SPItem*> &items)
     GSList *check = NULL;
     int count=0;
     for ( std::vector<SPItem*>::const_iterator iter=items.begin();iter!=items.end();iter++ ) {
-        SPItem *item = dynamic_cast<SPItem *>(reinterpret_cast<SPObject *>(*iter));
+        SPItem *item = *iter;
         if (item) {
             const char *term = item->displayName();
             if (term != NULL && g_slist_find (check, term) == NULL) {
@@ -83,7 +83,7 @@ static int count_filtered (const std::vector<SPItem*> &items)
 {
     int count=0;
     for ( std::vector<SPItem*>::const_iterator iter=items.begin();iter!=items.end();iter++ ) {
-        SPItem *item = dynamic_cast<SPItem *>(reinterpret_cast<SPObject *>((*iter)));
+        SPItem *item = *iter;
         if (item) {
             count += item->isFiltered();
         }
@@ -127,7 +127,7 @@ void SelectionDescriber::_updateMessageFromSelection(Inkscape::Selection *select
     if (items.empty()) { // no items
         _context.set(Inkscape::NORMAL_MESSAGE, _when_nothing);
     } else {
-        SPItem *item = dynamic_cast<SPItem *>(reinterpret_cast<SPObject *>(items.front()));
+        SPItem *item = items[0];
         g_assert(item != NULL);
         SPObject *layer = selection->layers()->layerForObject(item);
         SPObject *root = selection->layers()->currentRoot();

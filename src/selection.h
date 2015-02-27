@@ -40,14 +40,6 @@ class Node;
 }
 }
 
-/*template<typename T>
-const GSList* std_list_to_GS_list(const std::list<T *> list) const
-{
-    gpointer l=NULL;
-    for(auto x:list){
-
-    }
-}*/
 
 namespace Inkscape {
 

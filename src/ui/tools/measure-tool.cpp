@@ -444,7 +444,7 @@ bool MeasureTool::root_handler(GdkEvent* event) {
                 std::vector<SPItem*> items = desktop->getDocument()->getItemsAtPoints(desktop->dkey, points);
                 std::vector<double> intersection_times;
                 for (std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++) {
-                    SPItem *item = static_cast<SPItem*>(*i);
+                    SPItem *item = *i;
 
                     if (SP_IS_SHAPE(item)) {
                        calculate_intersections(desktop, item, lineseg, SP_SHAPE(item)->getCurve(), intersection_times);

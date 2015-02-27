@@ -857,7 +857,7 @@ void Find::onAction()
         Inkscape::Selection *selection = desktop->getSelection();
         selection->clear();
         selection->setList(n);
-        SPObject *obj = reinterpret_cast<SPObject *>(n.front());
+        SPObject *obj = reinterpret_cast<SPObject *>(n[0]);
         SPItem *item = dynamic_cast<SPItem *>(obj);
         g_assert(item != NULL);
         scroll_to_show_item(desktop, item);

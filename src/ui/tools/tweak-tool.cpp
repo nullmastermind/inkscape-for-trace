@@ -1089,7 +1089,7 @@ sp_tweak_dilate (TweakTool *tc, Geom::Point event_p, Geom::Point p, Geom::Point 
 
     std::vector<SPItem*> items=selection->itemList();
     for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
-        SPItem *item = dynamic_cast<SPItem *>(static_cast<SPObject *>(*i));
+        SPItem *item = *i;
 
         if (is_color_mode (tc->mode)) {
             if (do_fill || do_stroke || do_opacity) {

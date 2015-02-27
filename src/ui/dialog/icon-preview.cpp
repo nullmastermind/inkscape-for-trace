@@ -368,7 +368,7 @@ void IconPreviewPanel::refreshPreview()
 
                 	std::vector<SPItem*> const items = sel->itemList();
                     for(std::vector<SPItem*>::const_iterator i=items.begin();!target && i!=items.end();i++){
-                        SPItem* item = SP_ITEM( *i);
+                        SPItem* item = *i;
                         gchar const *id = item->getId();
                         if ( id ) {
                             targetId = id;

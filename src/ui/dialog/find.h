@@ -16,7 +16,6 @@
 # include <config.h>
 #endif
 
-#include "selection.h"
 #include "ui/widget/panel.h"
 #include "ui/widget/button.h"
 #include "ui/widget/entry.h" 

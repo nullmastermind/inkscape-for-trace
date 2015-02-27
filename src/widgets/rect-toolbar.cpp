@@ -246,9 +246,9 @@ static void sp_rect_toolbox_selection_changed(Inkscape::Selection *selection, GO
 
     std::vector<SPItem*> itemlist=selection->itemList();
     for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
-        if (SP_IS_RECT(reinterpret_cast<SPItem *>(*i))) {
+        if (SP_IS_RECT(*i)) {
             n_selected++;
-            item = reinterpret_cast<SPItem *>(*i);
+            item = *i;
             repr = item->getRepr();
         }
     }

@@ -655,7 +655,7 @@ void Transformation::updatePageTransform(Inkscape::Selection *selection)
 {
     if (selection && !selection->isEmpty()) {
         if (_check_replace_matrix.get_active()) {
-            Geom::Affine current (SP_ITEM(selection->itemList().front())->transform); // take from the first item in selection
+            Geom::Affine current (selection->itemList()[0]->transform); // take from the first item in selection
 
             Geom::Affine new_displayed = current;
 
@@ -750,8 +750,8 @@ void Transformation::applyPageMove(Inkscape::Selection *selection)
                      it != selected.end();
                      ++it)
                 {
-                	SPItem* item=static_cast<SPItem*>(*it);
-                    Geom::OptRect bbox = (item)->desktopPreferredBounds();
+                	SPItem* item = *it;
+                    Geom::OptRect bbox = item->desktopPreferredBounds();
                     if (bbox) {
                         sorted.push_back(BBoxSort(item, *bbox, Geom::X, x > 0? 1. : 0., x > 0? 0. : 1.));
                     }
@@ -775,8 +775,8 @@ void Transformation::applyPageMove(Inkscape::Selection *selection)
                      it != selected.end();
                      ++it)
                 {
-                	SPItem* item=static_cast<SPItem*>(*it);
-                	Geom::OptRect bbox = (item)->desktopPreferredBounds();
+                	SPItem* item = *it;
+                	Geom::OptRect bbox = item->desktopPreferredBounds();
                     if (bbox) {
                         sorted.push_back(BBoxSort(item, *bbox, Geom::Y, y > 0? 1. : 0., y > 0? 0. : 1.));
                     }
@@ -818,7 +818,7 @@ void Transformation::applyPageScale(Inkscape::Selection *selection)
     if (prefs->getBool("/dialogs/transformation/applyseparately")) {
     	std::vector<SPItem*> tmp=selection->itemList();
     	for(std::vector<SPItem*>::const_iterator i=tmp.begin();i!=tmp.end();i++){
-            SPItem *item = SP_ITEM(*i);
+            SPItem *item = *i;
             Geom::OptRect bbox_pref = item->desktopPreferredBounds();
             Geom::OptRect bbox_geom = item->desktopGeometricBounds();
             if (bbox_pref && bbox_geom) {
@@ -882,7 +882,7 @@ void Transformation::applyPageRotate(Inkscape::Selection *selection)
     if (prefs->getBool("/dialogs/transformation/applyseparately")) {
     	std::vector<SPItem*> tmp=selection->itemList();
     	for(std::vector<SPItem*>::const_iterator i=tmp.begin();i!=tmp.end();i++){
-            SPItem *item = SP_ITEM(*i);
+            SPItem *item = *i;
             sp_item_rotate_rel(item, Geom::Rotate (angle*M_PI/180.0));
         }
     } else {
@@ -902,7 +902,7 @@ void Transformation::applyPageSkew(Inkscape::Selection *selection)
     if (prefs->getBool("/dialogs/transformation/applyseparately")) {
     	std::vector<SPItem*> items=selection->itemList();
     	for(std::vector<SPItem*>::const_iterator i = items.begin();i!=items.end();i++){
-            SPItem *item = SP_ITEM(*i);
+            SPItem *item = *i;
 
             if (!_units_skew.isAbsolute()) { // percentage
                 double skewX = _scalar_skew_horizontal.getValue("%");
@@ -1004,7 +1004,7 @@ void Transformation::applyPageTransform(Inkscape::Selection *selection)
     if (_check_replace_matrix.get_active()) {
     	std::vector<SPItem*> tmp=selection->itemList();
     	for(std::vector<SPItem*>::const_iterator i=tmp.begin();i!=tmp.end();i++){
-            SPItem *item = SP_ITEM(*i);
+            SPItem *item = *i;
             item->set_item_transform(displayed);
             SP_OBJECT(item)->updateRepr();
         }
@@ -1155,7 +1155,7 @@ void Transformation::onReplaceMatrixToggled()
     double f = _scalar_transform_f.getValue();
 
     Geom::Affine displayed (a, b, c, d, e, f);
-    Geom::Affine current = SP_ITEM(selection->itemList().front())->transform; // take from the first item in selection
+    Geom::Affine current = selection->itemList()[0]->transform; // take from the first item in selection
 
     Geom::Affine new_displayed;
     if (_check_replace_matrix.get_active()) {

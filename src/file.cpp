@@ -1088,7 +1088,7 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place)
         target_parent->appendChild(obj_copy);
         Inkscape::GC::release(obj_copy);
 
-        pasted_objects.push_back((obj_copy));
+        pasted_objects.push_back(obj_copy);
     }
 
     // Change the selection to the freshly pasted objects

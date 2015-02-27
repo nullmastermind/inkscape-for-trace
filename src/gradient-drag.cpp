@@ -2083,8 +2083,8 @@ void GrDrag::updateDraggers()
 
     g_return_if_fail(this->selection != NULL);
     std::vector<SPItem*> list = this->selection->itemList();
-    for (std::vector<SPItem*>::const_iterator i=list.begin();i!=list.end();i++) {
-        SPItem *item = SP_ITEM(*i);
+    for (std::vector<SPItem*>::const_iterator i = list.begin(); i != list.end(); i++) {
+        SPItem *item = *i;
         SPStyle *style = item->style;
 
         if (style && (style->fill.isPaintserver())) {
@@ -2152,8 +2152,8 @@ void GrDrag::updateLines()
     g_return_if_fail(this->selection != NULL);
 
     std::vector<SPItem*> list = this->selection->itemList();
-    for (std::vector<SPItem*>::const_iterator i=list.begin();i!=list.end();i++) {
-        SPItem *item = SP_ITEM(*i);
+    for (std::vector<SPItem*>::const_iterator i = list.begin(); i != list.end(); i++) {
+        SPItem *item = *i;
 
         SPStyle *style = item->style;
 
@@ -2296,8 +2296,8 @@ void GrDrag::updateLevels()
     g_return_if_fail (this->selection != NULL);
 
     std::vector<SPItem*> list = this->selection->itemList();
-    for (std::vector<SPItem*>::const_iterator i=list.begin();i!=list.end();i++) {
-        SPItem *item = SP_ITEM(*i);
+    for (std::vector<SPItem*>::const_iterator i = list.begin(); i != list.end(); i++) {
+        SPItem *item = *i;
         Geom::OptRect rect = item->desktopVisualBounds();
         if (rect) {
             // Remember the edges of the bbox and the center axis

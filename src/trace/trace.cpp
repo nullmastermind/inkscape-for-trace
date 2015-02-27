@@ -80,7 +80,7 @@ SPImage *Tracer::getSelectedSPImage()
                 {
                 continue;
                 }
-            SPItem *item = SP_ITEM(*i);
+            SPItem *item = *i;
             items.insert(items.begin(), item);
             }
         std::vector<SPItem *>::iterator iter;

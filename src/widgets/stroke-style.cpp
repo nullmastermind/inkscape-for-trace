@@ -477,7 +477,7 @@ void StrokeStyle::markerSelectCB(MarkerComboBox *marker_combo, StrokeStyle *spw,
     Inkscape::Selection *selection = spw->desktop->getSelection();
     std::vector<SPItem*> itemlist=selection->itemList();
     for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
-        SPItem *item = SP_ITEM(*i);
+        SPItem *item = *i;
         if (!SP_IS_SHAPE(item) || SP_IS_RECT(item)) { // can't set marker to rect, until it's converted to using <path>
             continue;
         }
@@ -902,7 +902,7 @@ StrokeStyle::updateLine()
         return;
 
     std::vector<SPItem*> const objects = sel->itemList();
-    SPObject * const object = SP_OBJECT(objects.front());
+    SPObject * const object = SP_OBJECT(objects[0]);
     SPStyle * const style = object->style;
 
     /* Markers */
@@ -1155,6 +1155,7 @@ StrokeStyle::updateAllMarkers(std::vector<SPItem*> const &objects)
     for(std::vector<SPItem*>::const_iterator i=objects.begin();i!=objects.end();i++){
         if (!SP_IS_TEXT (*i)) {
             all_texts = false;
+            break;
         }
     }
 
@@ -1166,7 +1167,7 @@ StrokeStyle::updateAllMarkers(std::vector<SPItem*> const &objects)
 
     // We show markers of the first object in the list only
     // FIXME: use the first in the list that has the marker of each type, if any
-    SPObject *object = SP_OBJECT(objects.front());
+    SPObject *object = SP_OBJECT(objects[0]);
 
     for (unsigned i = 0; i < G_N_ELEMENTS(keyloc); ++i) {
         // For all three marker types,

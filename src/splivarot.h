@@ -10,7 +10,6 @@
 #include <2geom/forward.h>
 #include <2geom/path.h>
 #include "livarot/Path.h"
-#include "sp-object.h"//kill it
 
 class SPCurve;
 class SPDesktop;
@@ -19,7 +18,7 @@ class SPItem;
 namespace Inkscape {
     class Selection;
 }
-bool sp_repr_compare_position_obj(SPObject* &a,SPObject* &b);//kill it with fire
+
 // boolean operations
 // work on the current selection
 // selection has 2 contain exactly 2 items

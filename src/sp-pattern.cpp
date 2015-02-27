@@ -427,7 +427,7 @@ const gchar *pattern_tile(const std::vector<Inkscape::XML::Node*> &reprs, Geom::
     SPObject *pat_object = document->getObjectById(pat_id);
 
     for (std::vector<Inkscape::XML::Node*>::const_iterator i=reprs.begin();i!=reprs.end();i++){
-            Inkscape::XML::Node *node = (Inkscape::XML::Node *)(*i);
+        Inkscape::XML::Node *node = *i;
         SPItem *copy = SP_ITEM(pat_object->appendChildRepr(node));
 
         Geom::Affine dup_transform;

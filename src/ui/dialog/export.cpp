@@ -819,7 +819,7 @@ void Export::onAreaToggled ()
                     const gchar * id = "object";
                     const std::vector<XML::Node*> reprlst = SP_ACTIVE_DESKTOP->getSelection()->reprList();
                     for(std::vector<XML::Node*>::const_iterator i=reprlst.begin(); reprlst.end() != i; i++) {
-                        Inkscape::XML::Node * repr = (*i);
+                        Inkscape::XML::Node * repr = *i;
                         if (repr->attribute("id")) {
                             id = repr->attribute("id");
                             break;
@@ -1026,7 +1026,7 @@ void Export::onExport ()
 
         std::vector<SPItem*> itemlist=desktop->getSelection()->itemList();
         for(std::vector<SPItem*>::const_iterator i = itemlist.begin();i!=itemlist.end() && !interrupted ;i++){
-            SPItem *item = reinterpret_cast<SPItem *>(*i);
+            SPItem *item = *i;
 
             prog_dlg->set_data("current", GINT_TO_POINTER(n));
             prog_dlg->set_data("total", GINT_TO_POINTER(num));

@@ -506,7 +506,7 @@ bool GradientTool::root_handler(GdkEvent* event) {
             } else {
             	std::vector<SPItem*>  items=selection->itemList();
                 for (std::vector<SPItem*>::const_iterator i = items.begin();i!=items.end();i++) {
-                    SPItem *item = SP_ITEM(*i);
+                    SPItem *item = *i;
                     SPGradientType new_type = (SPGradientType) prefs->getInt("/tools/gradient/newgradient", SP_GRADIENT_TYPE_LINEAR);
                     Inkscape::PaintTarget fsmode = (prefs->getInt("/tools/gradient/newfillorstroke", 1) != 0) ? Inkscape::FOR_FILL : Inkscape::FOR_STROKE;
 
@@ -890,12 +890,6 @@ bool GradientTool::root_handler(GdkEvent* event) {
     return ret;
 }
 
-int sp_item_repr_compare_position_obj(SPObject const *first, SPObject const *second)
-{
-    return sp_repr_compare_position(((SPItem*)first)->getRepr(),
-    		((SPItem*)second)->getRepr())<0;
-}
-
 static void sp_gradient_drag(GradientTool &rc, Geom::Point const pt, guint /*state*/, guint32 etime)
 {
     SPDesktop *desktop = SP_EVENT_CONTEXT(&rc)->desktop;
@@ -931,14 +925,14 @@ static void sp_gradient_drag(GradientTool &rc, Geom::Point const pt, guint /*sta
             //FIXME: see above
             sp_repr_css_change_recursive(SP_OBJECT(*i)->getRepr(), css, "style");
 
-            sp_item_set_gradient(SP_ITEM(*i), vector, (SPGradientType) type, fill_or_stroke);
+            sp_item_set_gradient(*i, vector, (SPGradientType) type, fill_or_stroke);
 
             if (type == SP_GRADIENT_TYPE_LINEAR) {
-                sp_item_gradient_set_coords (SP_ITEM(*i), POINT_LG_BEGIN, 0, rc.origin, fill_or_stroke, true, false);
-                sp_item_gradient_set_coords (SP_ITEM(*i), POINT_LG_END, 0, pt, fill_or_stroke, true, false);
+                sp_item_gradient_set_coords (*i, POINT_LG_BEGIN, 0, rc.origin, fill_or_stroke, true, false);
+                sp_item_gradient_set_coords (*i, POINT_LG_END, 0, pt, fill_or_stroke, true, false);
             } else if (type == SP_GRADIENT_TYPE_RADIAL) {
-                sp_item_gradient_set_coords (SP_ITEM(*i), POINT_RG_CENTER, 0, rc.origin, fill_or_stroke, true, false);
-                sp_item_gradient_set_coords (SP_ITEM(*i), POINT_RG_R1, 0, pt, fill_or_stroke, true, false);
+                sp_item_gradient_set_coords (*i, POINT_RG_CENTER, 0, rc.origin, fill_or_stroke, true, false);
+                sp_item_gradient_set_coords (*i, POINT_RG_R1, 0, pt, fill_or_stroke, true, false);
             }
             SP_OBJECT(*i)->requestModified(SP_OBJECT_MODIFIED_FLAG);
         }
@@ -949,7 +943,7 @@ static void sp_gradient_drag(GradientTool &rc, Geom::Point const pt, guint /*sta
             ec->_grdrag->local_change = true;
             // give the grab out-of-bounds values of xp/yp because we're already dragging
             // and therefore are already out of tolerance
-            ec->_grdrag->grabKnot (SP_ITEM(selection->itemList().front()),
+            ec->_grdrag->grabKnot (selection->itemList()[0],
                                    type == SP_GRADIENT_TYPE_LINEAR? POINT_LG_END : POINT_RG_R1,
                                    -1, // ignore number (though it is always 1)
                                    fill_or_stroke, 99999, 99999, etime);

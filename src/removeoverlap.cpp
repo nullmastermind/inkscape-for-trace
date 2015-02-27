@@ -49,7 +49,7 @@ void removeoverlap(std::vector<SPItem*> const &items, double const xGap, double 
 		it != selected.end();
 		++it)
 	{
-    	SPItem* item=static_cast<SPItem*>(*it);
+    	SPItem* item = *it;
 		using Geom::X; using Geom::Y;
 		Geom::OptRect item_box((item)->desktopVisualBounds());
 		if (item_box) {

@@ -690,7 +690,7 @@ private:
     void select_svg_element(){
         Inkscape::Selection* sel = _desktop->getSelection();
         if (sel->isEmpty()) return;
-        Inkscape::XML::Node* node = sel->reprList().front();
+        Inkscape::XML::Node* node = sel->reprList()[0];
         if (!node || !node->matchAttributeName("id")) return;
 
         std::ostringstream xlikhref;
@@ -1547,7 +1547,7 @@ void FilterEffectsDialog::FilterModifier::on_selection_toggled(const Glib::ustri
 
         std::vector<SPItem*> itemlist=sel->itemList();
         for(std::vector<SPItem*>::const_iterator i=itemlist.begin(); itemlist.end() != i; i++) {
-            SPItem * item = SP_ITEM(*i);
+            SPItem * item = *i;
             SPStyle *style = item->style;
             g_assert(style != NULL);
 
@@ -1655,7 +1655,7 @@ void FilterEffectsDialog::FilterModifier::remove_filter()
             if (!SP_IS_ITEM(*i)) {
                 continue;
             }
-            SPItem *item = SP_ITEM(*i);
+            SPItem *item = *i;
             if (!item->style) {
                 continue;
             }

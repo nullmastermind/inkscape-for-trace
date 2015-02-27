@@ -45,16 +45,10 @@
 using Inkscape::DocumentUndo;
 
 
-inline bool less_than_objects(SPObject const *first, SPObject const *second)
-{
-    return sp_repr_compare_position(first->getRepr(),
-                                    second->getRepr())<0;
-}
-
 inline bool less_than_items(SPItem const *first, SPItem const *second)
 {
     return sp_repr_compare_position(first->getRepr(),
-                                    second->getRepr())<0;
+                                    second->getRepr())>0;
 }
 
 void
@@ -77,21 +71,19 @@ sp_selected_path_combine(SPDesktop *desktop)
     items = sp_degroup_list (items); // descend into any groups in selection
 
     std::vector<SPItem*> to_paths;
-    for (std::vector<SPItem*>::const_reverse_iterator i=items.rbegin();i!=items.rend();i++) {
-        SPItem *item = (SPItem *) (*i);
-        if (!dynamic_cast<SPPath *>(item) && !dynamic_cast<SPGroup *>(item)) {
-            to_paths.push_back(item);
+    for (std::vector<SPItem*>::const_reverse_iterator i = items.rbegin(); i != items.rend(); i++) {
+        if (!dynamic_cast<SPPath *>(*i) && !dynamic_cast<SPGroup *>(*i)) {
+            to_paths.push_back(*i);
         }
     }
     std::vector<Inkscape::XML::Node*> converted;
     bool did = sp_item_list_to_curves(to_paths, items, converted);
-    to_paths.clear();
-    for (std::vector<Inkscape::XML::Node*>::const_iterator i=converted.begin();i!=converted.end();i++)
-        items.push_back((SPItem*)doc->getObjectByRepr((Inkscape::XML::Node*)(*i)));
+    for (std::vector<Inkscape::XML::Node*>::const_iterator i = converted.begin(); i != converted.end(); i++)
+        items.push_back((SPItem*)doc->getObjectByRepr(*i));
 
     items = sp_degroup_list (items); // converting to path may have added more groups, descend again
 
-    sort(items.begin(),items.end(),less_than_objects);
+    sort(items.begin(),items.end(),less_than_items);
     assert(!items.empty()); // cannot be NULL because of list length check at top of function
 
     // remember the position, id, transform and style of the topmost path, they will be assigned to the combined one
@@ -109,9 +101,9 @@ sp_selected_path_combine(SPDesktop *desktop)
         selection->clear();
     }
 
-    for (std::vector<SPItem*>::const_reverse_iterator i=items.rbegin();i!=items.rend();i++){
+    for (std::vector<SPItem*>::const_reverse_iterator i = items.rbegin(); i != items.rend(); i++){
 
-        SPItem *item = (SPItem *) (*i);
+        SPItem *item = *i;
         SPPath *path = dynamic_cast<SPPath *>(item);
         if (!path) {
             continue;
@@ -212,9 +204,9 @@ sp_selected_path_break_apart(SPDesktop *desktop)
     bool did = false;
 
     std::vector<SPItem*> itemlist(selection->itemList());
-    for (std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
+    for (std::vector<SPItem*>::const_iterator i = itemlist.begin(); i != itemlist.end(); i++){
 
-        SPItem *item = (SPItem *) (*i);
+        SPItem *item = *i;
 
         SPPath *path = dynamic_cast<SPPath *>(item);
         if (!path) {
@@ -277,11 +269,10 @@ sp_selected_path_break_apart(SPDesktop *desktop)
             if (l == list)
                 repr->setAttribute("id", id);
 
-            reprs.push_back(repr);
+            reprs.insert(reprs.begin(),repr);
 
             Inkscape::GC::release(repr);
         }
-        //reverse
         selection->setReprList(reprs);
 
         g_slist_free(list);
@@ -323,11 +314,8 @@ sp_selected_path_to_curves(Inkscape::Selection *selection, SPDesktop *desktop, b
 
     did = sp_item_list_to_curves(items, selected, to_select);
 
-    items.clear();
     selection->setReprList(to_select);
     selection->addList(selected);
-    to_select.clear();
-    selected.clear();
 
     if (interactive && desktop) {
         desktop->clearWaitingCursor();
@@ -367,9 +355,9 @@ sp_item_list_to_curves(const std::vector<SPItem*> &items, std::vector<SPItem*>& 
 {
     bool did = false;
     
-    for (std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
+    for (std::vector<SPItem*>::const_iterator i = items.begin(); i != items.end(); i++){
 
-        SPItem *item = dynamic_cast<SPItem *>(static_cast<SPObject *>(*i));
+        SPItem *item = *i;
         g_assert(item != NULL);
         SPDocument *document = item->document;
 
@@ -400,7 +388,7 @@ sp_item_list_to_curves(const std::vector<SPItem*> &items, std::vector<SPItem*>& 
             Inkscape::XML::Node *repr = box3d_convert_to_group(box)->getRepr();
             
             if (repr) {
-                to_select.push_back(repr);
+                to_select.insert(to_select.begin(),repr);
                 did = true;
                 selected.erase(find(selected.begin(),selected.end(),item));
             }
@@ -418,9 +406,6 @@ sp_item_list_to_curves(const std::vector<SPItem*> &items, std::vector<SPItem*>& 
             if (sp_item_list_to_curves(item_list, item_selected, item_to_select))
                 did = true;
 
-            item_list.clear();
-            item_to_select.clear();
-            item_selected.clear();
 
             continue;
         }
@@ -472,7 +457,7 @@ sp_item_list_to_curves(const std::vector<SPItem*> &items, std::vector<SPItem*>& 
 
         /* Buglet: We don't re-add the (new version of the) object to the selection of any other
          * desktops where it was previously selected. */
-        to_select.push_back(repr);
+        to_select.insert(to_select.begin(),repr);
         Inkscape::GC::release(repr);
     }
     
@@ -628,7 +613,7 @@ sp_selected_path_reverse(SPDesktop *desktop)
     bool did = false;
     desktop->messageStack()->flash(Inkscape::IMMEDIATE_MESSAGE, _("Reversing paths..."));
 
-    for (std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
+    for (std::vector<SPItem*>::const_iterator i = items.begin(); i != items.end(); i++){
 
         SPPath *path = dynamic_cast<SPPath *>(static_cast<SPObject *>(*i));
         if (!path) {

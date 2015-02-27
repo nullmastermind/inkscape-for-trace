@@ -308,7 +308,7 @@ void PolarArrangeTab::arrange()
 	{
 		if(arrangeOnEllipse)
 		{
-			SPItem *item = SP_ITEM(*i);
+			SPItem *item = *i;
 
 			if(arrangeOnFirstEllipse)
 			{
@@ -375,7 +375,7 @@ void PolarArrangeTab::arrange()
 	int i = 0;
 	for(std::vector<SPItem*>::const_iterator it=tmp.begin();it!=tmp.end();it++)
 	{
-		SPItem *item = SP_ITEM(*it);
+		SPItem *item = *it;
 
 		// Ignore the reference ellipse if any
 		if(item != referenceEllipse)

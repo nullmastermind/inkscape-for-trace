@@ -434,8 +434,7 @@ void Inkscape::SelTrans::ungrab()
         for (int i = 0; i < 4; i++)
             sp_canvas_item_hide(_l[i]);
     }
-
-    if (!_stamp_cache.empty()) {
+    if(!_stamp_cache.empty()){
         _stamp_cache.clear();
     }
 
@@ -494,7 +493,7 @@ void Inkscape::SelTrans::ungrab()
             // we were dragging center; update reprs and commit undoable action
         	std::vector<SPItem*> items=_desktop->selection->itemList();
             for ( std::vector<SPItem*>::const_iterator iter=items.begin();iter!=items.end();iter++ ) {
-                SPItem *it = SP_ITEM(*iter);
+                SPItem *it = *iter;
                 it->updateRepr();
             }
             DocumentUndo::done(_desktop->getDocument(), SP_VERB_CONTEXT_SELECT,
@@ -535,7 +534,7 @@ void Inkscape::SelTrans::stamp()
         }
 
         for(std::vector<SPItem*>::const_iterator x=l.begin();x!=l.end();x++) {
-            SPItem *original_item = SP_ITEM(*x);
+            SPItem *original_item = *x;
             Inkscape::XML::Node *original_repr = original_item->getRepr();
 
             // remember the position of the item
@@ -713,7 +712,7 @@ void Inkscape::SelTrans::handleClick(SPKnot */*knot*/, guint state, SPSelTransHa
                 // Unset the  center position for all selected items
             	std::vector<SPItem*> items=_desktop->selection->itemList();
                 for ( std::vector<SPItem*>::const_iterator iter=items.begin();iter!=items.end();iter++ ) {
-                    SPItem *it = SP_ITEM(*iter);
+                    SPItem *it = *iter;
                     it->unsetCenter();
                     it->updateRepr();
                     _center_is_set = false;  // center has changed

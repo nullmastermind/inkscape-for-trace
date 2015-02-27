@@ -27,7 +27,6 @@
 #include <glibmm/ustring.h>
 #include <boost/ptr_container/ptr_list.hpp>
 #include <vector>
-#include "selection.h"
 
 namespace Avoid {
 class Router;

@@ -60,11 +60,6 @@ using Inkscape::DocumentUndo;
 
 bool   Ancetre(Inkscape::XML::Node *a, Inkscape::XML::Node *who);
 
-//SHOULD DISAPPEAR
-bool sp_repr_compare_position_obj(SPObject* &a,SPObject* &b){
-	return sp_repr_compare_position(dynamic_cast<Inkscape::XML::Node*>(a),dynamic_cast<Inkscape::XML::Node*>(b));
-}
-
 void sp_selected_path_boolop(Inkscape::Selection *selection, SPDesktop *desktop, bool_op bop, const unsigned int verb=SP_VERB_NONE, const Glib::ustring description="");
 void sp_selected_path_do_offset(SPDesktop *desktop, bool expand, double prefOffset);
 void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool updating);
@@ -405,7 +400,7 @@ sp_selected_path_boolop(Inkscape::Selection *selection, SPDesktop *desktop, bool
     // otherwise bail out
     for (std::vector<SPItem*>::const_iterator l = il.begin(); l != il.end(); l++)
     {
-        SPItem *item = SP_ITEM(*l);
+        SPItem *item = *l;
         if (!SP_IS_SHAPE(item) && !SP_IS_TEXT(item) && !SP_IS_FLOWTEXT(item))
         {
             boolop_display_error_message(desktop, _("One of the objects is <b>not a path</b>, cannot perform boolean operation."));
@@ -428,7 +423,7 @@ sp_selected_path_boolop(Inkscape::Selection *selection, SPDesktop *desktop, bool
                 SP_LPE_ITEM(*l)->removeAllPathEffects(true);
             }
 
-            SPCSSAttr *css = sp_repr_css_attr(reinterpret_cast<SPObject *>(il.front())->getRepr(), "style");
+            SPCSSAttr *css = sp_repr_css_attr(reinterpret_cast<SPObject *>(il[0])->getRepr(), "style");
             gchar const *val = sp_repr_css_property(css, "fill-rule", NULL);
             if (val && strcmp(val, "nonzero") == 0) {
                 origWind[curOrig]= fill_nonZero;
@@ -438,7 +433,7 @@ sp_selected_path_boolop(Inkscape::Selection *selection, SPDesktop *desktop, bool
                 origWind[curOrig]= fill_nonZero;
             }
 
-            originaux[curOrig] = Path_for_item((SPItem *) (*l), true, true);
+            originaux[curOrig] = Path_for_item(*l, true, true);
             if (originaux[curOrig] == NULL || originaux[curOrig]->descr_cmd.size() <= 1)
             {
                 for (int i = curOrig; i >= 0; i--) delete originaux[i];
@@ -475,7 +470,7 @@ sp_selected_path_boolop(Inkscape::Selection *selection, SPDesktop *desktop, bool
 
         curOrig = 1;
         for (std::vector<SPItem*>::const_iterator l = il.begin(); l != il.end(); l++){
-            if(*l==il.front())continue;
+            if(*l==il[0])continue;
             originaux[curOrig]->ConvertWithBackData(0.1);
 
             originaux[curOrig]->Fill(theShape, curOrig);
@@ -685,7 +680,7 @@ sp_selected_path_boolop(Inkscape::Selection *selection, SPDesktop *desktop, bool
     SPObject *source;
     if ( bop == bool_op_diff || bop == bool_op_cut || bop == bool_op_slice ) {
         if (reverseOrderForOp) {
-             source = SP_OBJECT(il.front());
+             source = SP_OBJECT(il[0]);
         } else {
              source = SP_OBJECT(il.back());
         }
@@ -1159,7 +1154,7 @@ sp_selected_path_outline(SPDesktop *desktop)
     bool did = false;
     std::vector<SPItem*> il(selection->itemList());
     for (std::vector<SPItem*>::const_iterator l = il.begin(); l != il.end(); l++){
-        SPItem *item = SP_ITEM(*l);
+        SPItem *item = *l;
 
         if (!SP_IS_SHAPE(item) && !SP_IS_TEXT(item))
             continue;
@@ -1771,7 +1766,7 @@ sp_selected_path_do_offset(SPDesktop *desktop, bool expand, double prefOffset)
     bool did = false;
     std::vector<SPItem*> il(selection->itemList());
     for (std::vector<SPItem*>::const_iterator l = il.begin(); l != il.end(); l++){
-        SPItem *item = SP_ITEM(*l);
+        SPItem *item = *l;
         SPCurve *curve = NULL;
 
         if (!SP_IS_SHAPE(item) && !SP_IS_TEXT(item))
@@ -2143,7 +2138,7 @@ sp_selected_path_simplify_items(SPDesktop *desktop,
     desktop->setWaitingCursor();
 
     for (std::vector<SPItem*>::const_iterator l = items.begin(); l != items.end(); l++){
-        SPItem *item = SP_ITEM(*l);
+        SPItem *item = *l;
 
         if (!(SP_IS_GROUP(item) || SP_IS_SHAPE(item) || SP_IS_TEXT(item)))
           continue;

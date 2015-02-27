@@ -368,8 +368,8 @@ static void sp_text_align_mode_changed( EgeSelectOneAction *act, GObject *tbl )
     Inkscape::Selection *selection = desktop->getSelection();
     std::vector<SPItem*> itemlist=selection->itemList();
     for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
-        if (SP_IS_TEXT(SP_ITEM(*i))) {
-            SPItem *item = SP_ITEM(*i);
+        if (SP_IS_TEXT(*i)) {
+            SPItem *item = *i;
 
             unsigned writing_mode = item->style->writing_mode.value;
             // below, variable names suggest horizontal move, but we check the writing direction
@@ -868,7 +868,7 @@ static void sp_text_toolbox_selection_changed(Inkscape::Selection */*selection*/
     for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
         // const gchar* id = reinterpret_cast<SPItem *>(items->data)->getId();
         // std::cout << "    " << id << std::endl;
-        if( SP_IS_FLOWTEXT(SP_ITEM(*i))) {
+        if( SP_IS_FLOWTEXT(*i)) {
             isFlow = true;
             // std::cout << "   Found flowed text" << std::endl;
             break;
@@ -1160,7 +1160,7 @@ static void sp_text_toolbox_select_cb( GtkEntry* entry, GtkEntryIconPosition /*p
   std::vector<SPItem*> x,y;
   std::vector<SPItem*> allList = get_all_items(x, document->getRoot(), desktop, false, false, true, y);
   for(std::vector<SPItem*>::const_reverse_iterator i=allList.rbegin();i!=allList.rend();i++){
-      SPItem *item = SP_ITEM(*i);
+      SPItem *item = *i;
     SPStyle *style = item->style;
 
     if (style) {

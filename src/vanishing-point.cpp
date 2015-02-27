@@ -258,7 +258,7 @@ VanishingPoint::selectedBoxes(Inkscape::Selection *sel) {
     std::list<SPBox3D *> sel_boxes;
     std::vector<SPItem*> itemlist=sel->itemList();
     for (std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();i++) {
-        SPItem *item = static_cast<SPItem *>(*i);
+        SPItem *item = *i;
         SPBox3D *box = dynamic_cast<SPBox3D *>(item);
         if (box && this->hasBox(box)) {
             sel_boxes.push_back(box);
@@ -398,7 +398,7 @@ VPDragger::VPsOfSelectedBoxes() {
     Inkscape::Selection *sel = SP_ACTIVE_DESKTOP->getSelection();
     std::vector<SPItem*> itemlist=sel->itemList();
     for (std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();i++) {
-        SPItem *item = static_cast<SPItem *>(*i);
+        SPItem *item = *i;
         SPBox3D *box = dynamic_cast<SPBox3D *>(item);
         if (box) {
             vp = this->findVPWithBox(box);
@@ -581,7 +581,7 @@ VPDrag::updateDraggers ()
 
     std::vector<SPItem*> itemlist=this->selection->itemList();
     for (std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();i++) {
-        SPItem *item = static_cast<SPItem *>(*i);
+        SPItem *item = *i;
         SPBox3D *box = dynamic_cast<SPBox3D *>(item);
         if (box) {
             VanishingPoint vp;
@@ -614,7 +614,7 @@ VPDrag::updateLines ()
 
     std::vector<SPItem*> itemlist=this->selection->itemList();
     for (std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();i++) {
-        SPItem *item = static_cast<SPItem *>(*i);
+        SPItem *item = *i;
         SPBox3D *box = dynamic_cast<SPBox3D *>(item);
         if (box) {
             this->drawLinesForFace (box, Proj::X);

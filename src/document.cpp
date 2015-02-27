@@ -1289,7 +1289,7 @@ SPItem *SPDocument::getItemFromListAtPointBottom(unsigned int dkey, SPGroup *gro
             Inkscape::DrawingItem *arenaitem = item->get_arenaitem(dkey);
             if (arenaitem && arenaitem->pick(p, delta, 1) != NULL
                 && (take_insensitive || item->isVisibleAndUnlocked(dkey))) {
-                if (find(list.begin(),list.end(),item)==list.end() ) {
+                if (find(list.begin(),list.end(),item)!=list.end() ) {
                     bottomMost = item;
                 }
             }

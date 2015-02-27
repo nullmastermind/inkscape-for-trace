@@ -15,7 +15,6 @@
 
 #include <map>
 #include "sp-lpe-item.h"
-#include "selection.h"//SelContainer
 
 #define SP_GROUP(obj) (dynamic_cast<SPGroup*>((SPObject*)obj))
 #define SP_IS_GROUP(obj) (dynamic_cast<const SPGroup*>((SPObject*)obj) != NULL)

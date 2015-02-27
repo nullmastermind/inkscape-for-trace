@@ -23,9 +23,9 @@
 
 #include "filter-chemistry.h"
 #include "filter-enums.h"
+
 #include "filters/blend.h"
 #include "filters/gaussian-blur.h"
-#include "selection.h"
 #include "sp-filter.h"
 #include "sp-filter-reference.h"
 #include "svg/css-ostringstream.h"

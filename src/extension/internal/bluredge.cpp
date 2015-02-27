@@ -70,7 +70,7 @@ BlurEdge::effect (Inkscape::Extension::Effect *module, Inkscape::UI::View::View 
 
     for(std::vector<SPItem*>::iterator item = items.begin();
             item != items.end(); ++item) {
-        SPItem * spitem = static_cast<SPItem*>(*item);
+        SPItem * spitem = *item;
 
         std::vector<Inkscape::XML::Node *> new_items(steps);
         Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();

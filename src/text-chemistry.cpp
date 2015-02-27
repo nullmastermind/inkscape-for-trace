@@ -46,7 +46,7 @@ flowtext_in_selection(Inkscape::Selection *selection)
 	std::vector<SPItem*> items = selection->itemList();
     for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
         if (SP_IS_FLOWTEXT(*i))
-            return ((SPItem *) *i);
+            return *i;
     }
     return NULL;
 }
@@ -57,7 +57,7 @@ text_or_flowtext_in_selection(Inkscape::Selection *selection)
 	std::vector<SPItem*> items = selection->itemList();
     for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
         if (SP_IS_TEXT(*i) || SP_IS_FLOWTEXT(*i))
-            return ((SPItem *) *i);
+            return *i;
     }
     return NULL;
 }
@@ -68,7 +68,7 @@ shape_in_selection(Inkscape::Selection *selection)
 	std::vector<SPItem*> items = selection->itemList();
     for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
         if (SP_IS_SHAPE(*i))
-            return ((SPItem *) *i);
+            return *i;
     }
     return NULL;
 }
@@ -402,7 +402,7 @@ text_unflow ()
             continue;
         }
 
-        SPItem *flowtext = SP_ITEM(*i);
+        SPItem *flowtext = *i;
 
         // we discard transform when unflowing, but we must preserve expansion which is visible as
         // font size multiplier
@@ -482,7 +482,7 @@ flowtext_to_text()
     std::vector<SPItem*> items(selection->itemList());
     for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
         
-        SPItem *item = (SPItem *) *i;
+        SPItem *item = *i;
 
         if (!SP_IS_FLOWTEXT(item))
             continue;

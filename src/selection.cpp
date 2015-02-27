@@ -130,7 +130,7 @@ void Selection::_invalidateCachedLists() {
 void Selection::_clear() {
     _invalidateCachedLists();
     while (!_objs.empty()) {
-        SPObject *obj=reinterpret_cast<SPObject *>(_objs.front());
+        SPObject *obj=_objs.front();
         _remove(obj);
     }
 }
@@ -254,7 +254,7 @@ void Selection::addList(std::vector<SPItem*> const &list) {
     _invalidateCachedLists();
 
     for ( std::vector<SPItem*>::const_iterator iter=list.begin();iter!=list.end();iter++ ) {
-        SPObject *obj = reinterpret_cast<SPObject *>(*iter);
+        SPObject *obj = *iter;
         if (includes(obj)) continue;
         _add (obj);
     }
@@ -297,7 +297,7 @@ std::vector<SPItem*> const &Selection::itemList() {
     }
 
     for ( std::list<SPObject*>::const_iterator iter=_objs.begin();iter!=_objs.end();iter++ ) {
-        SPObject *obj=reinterpret_cast<SPObject *>(*iter);
+        SPObject *obj=*iter;
         if (SP_IS_ITEM(obj)) {
             _items.push_back(SP_ITEM(obj));
         }
@@ -342,7 +342,7 @@ std::list<SPBox3D *> const Selection::box3DList(Persp3D *persp) {
 
 SPObject *Selection::single() {
     if ( _objs.size() == 1 ) {
-        return reinterpret_cast<SPObject *>(_objs.front());
+        return _objs.front();
     } else {
         return NULL;
     }
@@ -351,7 +351,7 @@ SPObject *Selection::single() {
 SPItem *Selection::singleItem() {
 	std::vector<SPItem*> const items=itemList();
     if ( items.size()==1) {
-        return reinterpret_cast<SPItem *>(items.front());
+        return items[0];
     } else {
         return NULL;
     }
@@ -447,7 +447,7 @@ Geom::OptRect Selection::documentBounds(SPItem::BBoxType type) const
 boost::optional<Geom::Point> Selection::center() const {
 	std::vector<SPItem*> const items = const_cast<Selection *>(this)->itemList();
     if (!items.empty()) {
-        SPItem *first = reinterpret_cast<SPItem*>(items.back()); // from the first item in selection
+        SPItem *first = items.back(); // from the first item in selection
         if (first->isCenterSet()) { // only if set explicitly
             return first->getCenter();
         }
@@ -467,7 +467,7 @@ std::vector<Inkscape::SnapCandidatePoint> Selection::getSnapPoints(SnapPreferenc
     snapprefs_dummy.setTargetSnappable(Inkscape::SNAPTARGET_ROTATION_CENTER, false); // locally disable snapping to the item center
     std::vector<Inkscape::SnapCandidatePoint> p;
     for ( std::vector<SPItem*>::const_iterator iter=items.begin();iter!=items.end();iter++ ) {
-        SPItem *this_item = SP_ITEM(*iter);
+        SPItem *this_item = *iter;
         this_item->getSnappoints(p, &snapprefs_dummy);
 
         //Include the transformation origin for snapping
@@ -482,7 +482,7 @@ std::vector<Inkscape::SnapCandidatePoint> Selection::getSnapPoints(SnapPreferenc
 
 void Selection::_removeObjectDescendants(SPObject *obj) {
     for ( std::list<SPObject*>::const_iterator iter=_objs.begin();iter!=_objs.end();iter++ ) {
-        SPObject *sel_obj=reinterpret_cast<SPObject *>(*iter);
+        SPObject *sel_obj= *iter;
         SPObject *parent = sel_obj->parent;
         while (parent) {
             if ( parent == obj ) {

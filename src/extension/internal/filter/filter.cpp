@@ -133,7 +133,7 @@ void Filter::effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::Vie
 
     for(std::vector<SPItem*>::iterator item = items.begin();
             item != items.end(); ++item) {
-        SPItem * spitem = static_cast<SPItem*>(*item);
+        SPItem * spitem = *item;
 	Inkscape::XML::Node * node = spitem->getRepr();
 
 		SPCSSAttr * css = sp_repr_css_attr(node, "style");

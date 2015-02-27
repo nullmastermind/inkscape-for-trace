@@ -47,8 +47,6 @@ class SPObject;
 #define SP_OBJECT_WRITE_ALL (1 << 2)
 #define SP_OBJECT_WRITE_NO_CHILDREN (1 << 3)
 
-
-
 #include <cassert>
 #include <stddef.h>
 #include <sigc++/connection.h>
@@ -63,8 +61,6 @@ class SPObject;
 class SPCSSAttr;
 class SPStyle;
 typedef struct _GSList GSList;
-
-
 
 namespace Inkscape {
 namespace XML {

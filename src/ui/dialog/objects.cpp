@@ -479,7 +479,7 @@ void ObjectsPanel::_objectsSelected( Selection *sel ) {
     SPItem *item = NULL;
     std::vector<SPItem*> const items = sel->itemList();
     for(std::vector<SPItem*>::const_iterator i=items.begin(); i!=items.end();i++){
-        item = reinterpret_cast<SPItem *>(*i);
+        item = *i;
         if (setOpacity)
         {
             _setCompositingValues(item);

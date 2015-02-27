@@ -12,7 +12,6 @@
 #define SEEN_DIALOGS_UNCLUMP_H
 
 typedef struct _GSList GSList;
-#include "selection.h"
 
 void unclump(std::vector<SPItem*> &items);
 

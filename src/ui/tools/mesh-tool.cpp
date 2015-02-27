@@ -48,7 +48,6 @@
 
 // Mesh specific
 #include "ui/tools/mesh-tool.h"
-#include "ui/tools/gradient-tool.h"//not needed
 #include "sp-mesh-gradient.h"
 #include "display/sp-ctrlcurve.h"
 
@@ -478,12 +477,12 @@ bool MeshTool::root_handler(GdkEvent* event) {
             if (over_line) {
                 // We take the first item in selection, because with doubleclick, the first click
                 // always resets selection to the single object under cursor
-                sp_mesh_context_split_near_point(this, SP_ITEM(selection->itemList().front()), this->mousepoint_doc, event->button.time);
+                sp_mesh_context_split_near_point(this, selection->itemList()[0], this->mousepoint_doc, event->button.time);
             } else {
                 // Create a new gradient with default coordinates.
             	std::vector<SPItem*> items=selection->itemList();
                 for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
-                    SPItem *item = SP_ITEM(*i);
+                    SPItem *item = *i;
                     SPGradientType new_type = SP_GRADIENT_TYPE_MESH;
                     Inkscape::PaintTarget fsmode = (prefs->getInt("/tools/gradient/newfillorstroke", 1) != 0) ? Inkscape::FOR_FILL : Inkscape::FOR_STROKE;
 
@@ -932,12 +931,6 @@ bool MeshTool::root_handler(GdkEvent* event) {
 
     return ret;
 }
-/*
-int sp_item_repr_compare_position_obj(SPObject const *first, SPObject const *second)
-{
-    return sp_repr_compare_position(((SPItem*)first)->getRepr(),
-    		((SPItem*)second)->getRepr())<0;
-}*/
 
 static void sp_mesh_drag(MeshTool &rc, Geom::Point const /*pt*/, guint /*state*/, guint32 /*etime*/) {
     SPDesktop *desktop = SP_EVENT_CONTEXT(&rc)->desktop;

@@ -13,7 +13,8 @@
 #define INKSCAPE_UI_FONT_SUBSTITUTION_H
 
 #include <glibmm/ustring.h>
-#include "selection.h"
+
+class SPItem;
 class SPDocument;
 
 namespace Inkscape {

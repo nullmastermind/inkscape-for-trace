@@ -151,7 +151,7 @@ void ActionAlign::do_action(SPDesktop *desktop, int index)
     for (std::vector<SPItem*>::iterator it(selected.begin());
          it != selected.end(); ++it)
     {
-    	SPItem* item=static_cast<SPItem*> (*it);
+    	SPItem* item= *it;
         desktop->getDocument()->ensureUpToDate();
         if (!sel_as_group)
             b = (item)->desktopPreferredBounds();
@@ -264,8 +264,8 @@ private :
         std::vector< BBoxSort  > sorted;
         for (std::vector<SPItem*>::iterator it(selected.begin());
             it != selected.end();
-            ++it)
-        {SPItem *item=static_cast<SPItem*>(*it);
+            ++it){
+            SPItem *item = *it;
             Geom::OptRect bbox = !prefs_bbox ? (item)->desktopVisualBounds() : (item)->desktopGeometricBounds();
             if (bbox) {
                 sorted.push_back(BBoxSort(item, *bbox, _orientation, _kBegin, _kEnd));
@@ -570,19 +570,19 @@ private :
 		sort(selected.begin(),selected.end(),sort_compare);
 	}
 	std::vector<SPItem*>::iterator it(selected.begin());
-	SPItem* item=static_cast<SPItem*>(*it);
-	Geom::Point p1 =  (item)->getCenter();
+	SPItem* item = *it;
+	Geom::Point p1 =  item->getCenter();
 	for (++it ;it != selected.end(); ++it)
 	{
-		item=static_cast<SPItem*>(*it);
-		Geom::Point p2 = (item)->getCenter();
+		item = *it;
+		Geom::Point p2 = item->getCenter();
 		Geom::Point delta = p1 - p2;
-		sp_item_move_rel((item),Geom::Translate(delta[Geom::X],delta[Geom::Y] ));
+		sp_item_move_rel(item,Geom::Translate(delta[Geom::X],delta[Geom::Y] ));
 		p1 = p2;
 	}
-	Geom::Point p2 = static_cast<SPItem*>(selected.front())->getCenter();
+	Geom::Point p2 = selected.front()->getCenter();
 	Geom::Point delta = p1 - p2;
-	sp_item_move_rel(static_cast<SPItem*>(selected.front()),Geom::Translate(delta[Geom::X],delta[Geom::Y] ));
+	sp_item_move_rel(selected.front(),Geom::Translate(delta[Geom::X],delta[Geom::Y] ));
 
         // restore compensation setting
         prefs->setInt("/options/clonecompensation/value", saved_compensation);
@@ -675,7 +675,7 @@ private :
             it != selected.end();
             ++it)
         {
-        	SPItem* item=static_cast<SPItem*>(*it);
+        	SPItem* item = *it;
             desktop->getDocument()->ensureUpToDate();
             Geom::OptRect item_box = !prefs_bbox ? (item)->desktopVisualBounds() : (item)->desktopGeometricBounds();
             if (item_box) {
@@ -761,7 +761,7 @@ private :
             it != selected.end();
             ++it)
         {
-        	SPItem* item=static_cast<SPItem*>(*it);
+        	SPItem* item = *it;
             if (SP_IS_TEXT (item) || SP_IS_FLOWTEXT (item)) {
                 Inkscape::Text::Layout const *layout = te_get_layout(item);
                 boost::optional<Geom::Point> pt = layout->baselineAnchorPoint();
@@ -805,7 +805,7 @@ private :
                  it != selected.end();
                  ++it)
             {
-            	SPItem* item=static_cast<SPItem*>(*it);
+            	SPItem* item = *it;
                 if (SP_IS_TEXT (item) || SP_IS_FLOWTEXT (item)) {
                     Inkscape::Text::Layout const *layout = te_get_layout(item);
                     boost::optional<Geom::Point> pt = layout->baselineAnchorPoint();

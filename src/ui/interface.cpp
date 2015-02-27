@@ -2077,7 +2077,7 @@ void ContextMenu::ImageEdit(void)
 
     std::vector<SPItem*> itemlist=_desktop->selection->itemList();
     for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
-        Inkscape::XML::Node *ir = SP_ITEM(*i)->getRepr();
+        Inkscape::XML::Node *ir = (*i)->getRepr();
         const gchar *href = ir->attribute("xlink:href");
         
         if (strncmp (href,"file:",5) == 0) {

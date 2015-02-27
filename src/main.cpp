@@ -1174,9 +1174,6 @@ static int sp_process_file_list(GSList *fl)
 
                     sp_item_list_to_curves(items, selected, to_select);
 
-                    items.clear();
-                    selected.clear();
-                    to_select.clear();
                 }
                 if(sp_export_id) {
                     doc->ensureUpToDate();

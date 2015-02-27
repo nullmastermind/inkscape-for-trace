@@ -19,7 +19,6 @@
 
 #include <2geom/forward.h>
 #include "sp-item.h"
-#include "selection.h"
 
 class SPCSSAttr;
 class SPDesktop;

@@ -553,13 +553,13 @@ static bool sp_spray_dilate(SprayTool *tc, Geom::Point /*event_p*/, Geom::Point 
     	std::vector<SPItem*> const items(selection->itemList());
 
         for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
-            SPItem *item = dynamic_cast<SPItem *>(static_cast<SPObject *>(*i));
+            SPItem *item = *i;
             g_assert(item != NULL);
             sp_object_ref(item);
         }
 
         for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
-            SPItem *item = dynamic_cast<SPItem *>(static_cast<SPObject *>(*i));
+            SPItem *item = *i;
             g_assert(item != NULL);
 
             if (is_transform_modes(tc->mode)) {
@@ -574,7 +574,7 @@ static bool sp_spray_dilate(SprayTool *tc, Geom::Point /*event_p*/, Geom::Point 
         }
 
         for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
-            SPItem *item = dynamic_cast<SPItem *>(static_cast<SPObject *>(*i));
+            SPItem *item = *i;
             g_assert(item != NULL);
             sp_object_unref(item);
         }

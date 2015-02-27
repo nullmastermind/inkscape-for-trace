@@ -692,8 +692,8 @@ void EraserTool::set_to_accumulated() {
 
             if ( !toWorkOn.empty() ) {
                 if ( eraserMode ) {
-                    for (std::vector<SPItem*>::const_iterator i = toWorkOn.begin();i!=toWorkOn.end();i++) {
-                        SPItem *item = SP_ITEM(*i);
+                    for (std::vector<SPItem*>::const_iterator i = toWorkOn.begin(); i != toWorkOn.end(); i++){
+                    SPItem *item = *i;
 
                         if ( eraserMode ) {
                             Geom::OptRect bbox = item->visualBounds();
@@ -712,7 +712,7 @@ void EraserTool::set_to_accumulated() {
                                     // If the item was not completely erased, track the new remainder.
                                 	std::vector<SPItem*> nowSel(selection->itemList());
                                     for (std::vector<SPItem*>::const_iterator i2 = nowSel.begin();i2!=nowSel.end();i2++) {
-                                        remainingItems.push_back(SP_ITEM(*i2));
+                                        remainingItems.push_back(*i2);
                                     }
                                 }
                             } else {
@@ -722,11 +722,11 @@ void EraserTool::set_to_accumulated() {
                     }
                 } else {
                     for (std::vector<SPItem*> ::const_iterator i = toWorkOn.begin();i!=toWorkOn.end();i++) {
-                        sp_object_ref( SP_ITEM(*i), 0 );
+                        sp_object_ref( *i, 0 );
                     }
 
                     for (std::vector<SPItem*>::const_iterator i = toWorkOn.begin();i!=toWorkOn.end();i++) {
-                        SPItem *item = SP_ITEM(*i);
+                        SPItem *item = *i;
                         item->deleteObject(true);
                         sp_object_unref(item);
                         workDone = true;

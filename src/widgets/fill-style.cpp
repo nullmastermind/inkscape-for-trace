@@ -591,11 +591,11 @@ void FillNStroke::updateFromPaint()
                             if ( gr && createSwatch ) {
                                 gr->setSwatch();
                             }
-                            sp_item_set_gradient(SP_ITEM(*i),
+                            sp_item_set_gradient(*i,
                                                  gr,
                                                  gradient_type, (kind == FILL) ? Inkscape::FOR_FILL : Inkscape::FOR_STROKE);
                         } else {
-                            sp_item_set_gradient(SP_ITEM(*i), vector, gradient_type, (kind == FILL) ? Inkscape::FOR_FILL : Inkscape::FOR_STROKE);
+                            sp_item_set_gradient(*i, vector, gradient_type, (kind == FILL) ? Inkscape::FOR_FILL : Inkscape::FOR_STROKE);
                         }
                     }
                 } else {
@@ -608,7 +608,7 @@ void FillNStroke::updateFromPaint()
                             sp_repr_css_change_recursive(reinterpret_cast<SPObject*>(*i)->getRepr(), css, "style");
                         }
 
-                        SPGradient *gr = sp_item_set_gradient(SP_ITEM(*i), vector, gradient_type, (kind == FILL) ? Inkscape::FOR_FILL : Inkscape::FOR_STROKE);
+                        SPGradient *gr = sp_item_set_gradient(*i, vector, gradient_type, (kind == FILL) ? Inkscape::FOR_FILL : Inkscape::FOR_STROKE);
                         psel->pushAttrsToGradient( gr );
                     }
                 }

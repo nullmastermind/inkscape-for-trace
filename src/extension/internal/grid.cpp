@@ -195,7 +195,7 @@ Grid::prefs_effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::View
     std::vector<SPItem*> selected = ((SPDesktop *)view)->getSelection()->itemList();
     Inkscape::XML::Node * first_select = NULL;
     if (!selected.empty()) {
-        first_select = (selected.front())->getRepr();
+        first_select = selected[0]->getRepr();
     }
 
     return module->autogui(current_document, first_select, changeSignal);

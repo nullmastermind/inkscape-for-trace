@@ -422,7 +422,7 @@ SPItem *TextEdit::getSelectedTextItem (void)
 	for(std::vector<SPItem*>::const_iterator i=tmp.begin();i!=tmp.end();i++)
     {
         if (SP_IS_TEXT(*i) || SP_IS_FLOWTEXT(*i))
-            return SP_ITEM (*i);
+            return *i;
     }
 
     return NULL;

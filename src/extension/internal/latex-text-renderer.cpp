@@ -229,8 +229,8 @@ LaTeXTextRenderer::writePostamble()
 void LaTeXTextRenderer::sp_group_render(SPGroup *group)
 {
 	std::vector<SPObject*> l = (group->childList(false));
-    for(std::vector<SPObject*>::const_iterator x=l.begin();x!=l.end();x++){
-        SPObject *o = reinterpret_cast<SPObject *>(*x);
+    for(std::vector<SPObject*>::const_iterator x = l.begin(); x != l.end(); x++){
+        SPObject *o = *x;
         SPItem *item = dynamic_cast<SPItem *>(o);
         if (item) {
             renderItem(item);

@@ -581,7 +581,7 @@ void GlyphsPanel::insertText()
     std::vector<SPItem*> itemlist=targetDesktop->selection->itemList();
         for(std::vector<SPItem*>::const_iterator i=itemlist.begin(); itemlist.end() != i; i++) {
             if (SP_IS_TEXT(*i) || SP_IS_FLOWTEXT(*i)) {
-            textItem = SP_ITEM(*i);
+            textItem = *i;
             break;
         }
     }
