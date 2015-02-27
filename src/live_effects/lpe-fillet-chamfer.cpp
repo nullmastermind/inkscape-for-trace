@@ -120,6 +120,15 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
 void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
 {
     SPLPEItem * splpeitem = const_cast<SPLPEItem *>(lpeItem);
+    if (splpeitem) {
+        // This writes all parameters to SVG. Is this sufficiently efficient or should we only
+        // write the ones that were changed?
+        Inkscape::LivePathEffect::Effect *lpe = splpeitem->getCurrentLPE();
+        if (lpe) {
+            LivePathEffectObject *lpeobj = lpe->getLPEObj();
+            lpeobj->updateRepr();
+        }
+    }
     SPShape * shape = dynamic_cast<SPShape *>(splpeitem);
     if (shape) {
         SPCurve *c = shape->getCurve();
