@@ -79,7 +79,6 @@ class Satellite
     {
         _hidden = A;
     }
-
     void setTime(double A)
     {
         _time = A;
@@ -131,18 +130,13 @@ class Satellite
         return _time;
     }
 
-    void updateSizeTime(Geom::D2<Geom::SBasis> d2_in);
-
     void setPosition(Geom::Point p, Geom::D2<Geom::SBasis> curve);
 
     Geom::Point getPosition(Geom::D2<Geom::SBasis> curve);
 
-    static const std::map<SatelliteType,gchar const *> SatelliteTypeToGcharMap;
-
-    static const std::map<gchar const *,SatelliteType> GcharMapToSatelliteType;
-
     double getOpositeTime(Geom::D2<Geom::SBasis> SBasisCurve);
-
+    double toSize(double A,Geom::D2<Geom::SBasis> d2_in);
+    double toTime(double A,Geom::D2<Geom::SBasis> d2_in);
   private:
 
     SatelliteType _satellitetype;

@@ -117,13 +117,13 @@ protected:
         str << ",";
         str << nVector.second.getSatelliteTypeGchar();
         str << "*";
-        str << g_strdup(nVector.second.getIsTime() ? "true" : "false");
+        str << nVector.second.getIsTime();
         str << "*";
-        str << g_strdup(nVector.second.getActive() ? "true" : "false");
+        str << nVector.second.getActive();
         str << "*";
-        str << g_strdup(nVector.second.getHasMirror() ? "true" : "false");
+        str << nVector.second.getHasMirror();
         str << "*";
-        str << g_strdup(nVector.second.getHidden() ? "true" : "false");
+        str << nVector.second.getHidden();
         str << "*";
         str << nVector.second.getSize();
         str << "*";

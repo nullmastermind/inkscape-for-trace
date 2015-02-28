@@ -56,10 +56,10 @@ sp_svg_satellite_read_d(gchar const *str, Geom::Satellite *sat){
     gchar ** strarray = g_strsplit(str, "*", 0);
     if(strarray[6] && !strarray[7]){
         sat->setSatelliteType(strarray[0]);
-        sat->setIsTime(helperfns_read_bool(strarray[1], true));
-        sat->setActive(helperfns_read_bool(strarray[2], true));
-        sat->setHasMirror(helperfns_read_bool(strarray[3], false));
-        sat->setHidden(helperfns_read_bool(strarray[4], false));
+        sat->setIsTime(strncmp(strarray[1],"1",1) == 0);
+        sat->setActive(strncmp(strarray[2],"1",1) == 0);
+        sat->setHasMirror(strncmp(strarray[3],"1",1) == 0);
+        sat->setHidden(strncmp(strarray[4],"1",1) == 0);
         double time,size;
         sp_svg_number_read_d(strarray[5], &size);
         sp_svg_number_read_d(strarray[6], &time);

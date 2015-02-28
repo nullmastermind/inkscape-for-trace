@@ -45,119 +45,86 @@ Satellite::Satellite(SatelliteType satellitetype, bool isTime, bool active, bool
 
 Satellite::~Satellite() {};
 
-void
-Satellite::setPosition(Geom::Point p, Geom::D2<Geom::SBasis> d2_in)
+double
+Satellite::toTime(double A,Geom::D2<Geom::SBasis> d2_in)
 {
     if(!d2_in.isFinite() ||  d2_in.isZero()){
         _time = 0;
         _size = 0;
-        return;
+        return 0;
     }
+    double t = 0;
     double lenghtPart = Geom::length(d2_in, Geom::EPSILON);
-    _time =  Geom::nearest_point(p, d2_in);
+    if (A > lenghtPart) {
+        t = 1;
+    } else if (d2_in[0].degreesOfFreedom() != 2) {
+        Geom::Piecewise<Geom::D2<Geom::SBasis> > u;
+        u.push_cut(0);
+        u.push(d2_in, 1);
+        std::vector<double> t_roots = roots(arcLengthSb(u) - A);
+        if (t_roots.size() > 0) {
+            t = t_roots[0];
+        }
+    } else {
+        //to be sure
+        if (lenghtPart != 0) {
+            t = A / lenghtPart;
+        }
+    }
+    if(t > 0.998){
+        t = 1;
+    }
+    return t;
+}
+
+double
+Satellite::toSize(double A,Geom::D2<Geom::SBasis> d2_in)
+{
+    if(!d2_in.isFinite() ||  d2_in.isZero()){
+        _time = 0;
+        _size = 0;
+        return 0;
+    }
+    double s = 0;
+    double lenghtPart = Geom::length(d2_in, Geom::EPSILON);
     if (d2_in[0].degreesOfFreedom() != 2) {
         Geom::Piecewise<Geom::D2<Geom::SBasis> > u;
         u.push_cut(0);
         u.push(d2_in, 1);
-        u = Geom::portion(u, 0.0, _time);
-        _size = Geom::length(u, 0.001);
+        u = Geom::portion(u, 0.0, A);
+        s = Geom::length(u, 0.001);
     } else {
-        _size = (_time * lenghtPart);
+        s = (A * lenghtPart);
     }
-    if(_time > 0.998){
-        _time = 1;
-    }
+    return s;
 }
 
 double
 Satellite::getOpositeTime(Geom::D2<Geom::SBasis> d2_in)
 {
-    if(!d2_in.isFinite() ||  d2_in.isZero()){
+    double s = getSize();
+    if(s == 0){
         return 1;
     }
-    double t = 0;
     double lenghtPart = Geom::length(d2_in, Geom::EPSILON);
-    if(_size == 0){
-        return 1;
-    }
-    double size = lenghtPart - _size;
-    if (d2_in[0].degreesOfFreedom() != 2) {
-        Geom::Piecewise<Geom::D2<Geom::SBasis> > u;
-        u.push_cut(0);
-        u.push(d2_in, 1);
-        std::vector<double> t_roots = roots(arcLengthSb(u) - size);
-        if (t_roots.size() > 0) {
-            t = t_roots[0];
-        }
-    } else {
-        if (size < lenghtPart && lenghtPart != 0) {
-            t = size / lenghtPart;
-        }
-    }
-    if(_time > 0.999){
-        _time = 1;
-    }
-    return t;
-}
-
-void 
-Satellite::updateSizeTime(Geom::D2<Geom::SBasis> d2_in)
-{
-    if(!d2_in.isFinite() ||  d2_in.isZero()){
-        _time = 0;
-        _size = 0;
-        return;
-    }
-    double lenghtPart = Geom::length(d2_in, Geom::EPSILON);
-    if(!_isTime){
-        if (_size != 0) {
-            if(lenghtPart <= _size){
-                _time = 1;
-                _size = lenghtPart;
-            } else if (d2_in[0].degreesOfFreedom() != 2) {
-                Piecewise<D2<SBasis> > u;
-                u.push_cut(0);
-                u.push(d2_in, 1);
-                std::vector<double> t_roots = roots(arcLengthSb(u) - _size);
-                if (t_roots.size() > 0) {
-                    _time = t_roots[0];
-                }
-            } else {
-                if (_size < lenghtPart && lenghtPart != 0) {
-                    _time = _size / lenghtPart;
-                }
-            }
-        } else {
-            _time = 0;
-        }
-    } else {
-        if (_time != 0) {
-            if (d2_in[0].degreesOfFreedom() != 2) {
-                Piecewise<D2<SBasis> > u;
-                u.push_cut(0);
-                u.push(d2_in, 1);
-                u = portion(u, 0, _time);
-                _size = length(u, 0.001);
-            } else {
-                lenghtPart = length(d2_in, EPSILON);
-                _size = _time * lenghtPart;
-            }
-        } else {
-            _size = 0;
-        }
-    }
-    if(_time > 0.999){
-        _time = 1;
-    }
+    double size = lenghtPart - s;
+    return toTime(size, d2_in);
 }
 
 Geom::Point 
 Satellite::getPosition(Geom::D2<Geom::SBasis> d2_in){
-    if(!d2_in.isFinite() ||  d2_in.isZero()){
-        return Geom::Point(9999999999.0,9999999999.0);
+    double t = getTime();
+    if(!_isTime){
+        t = toTime(getSize(), d2_in);
     }
-    updateSizeTime(d2_in);
-    return d2_in.valueAt(_time);
+    return d2_in.valueAt(t);
+}
+
+void
+Satellite::setPosition(Geom::Point p, Geom::D2<Geom::SBasis> d2_in)
+{
+    setTime(Geom::nearest_point(p, d2_in));
+    setSize(toSize(getTime(),d2_in));
 }
 
 } // end namespace Geom
