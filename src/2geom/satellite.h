@@ -45,7 +45,7 @@ class Satellite
   public:
 
     Satellite();
-    Satellite(SatelliteType satellitetype, bool isTime, bool active, bool hasMirror, bool hidden, double ammount, double angle);
+    Satellite(SatelliteType satellitetype, bool isTime, bool isClosing, bool isStart, bool active, bool hasMirror, bool hidden, double ammount, double angle);
 
     virtual ~Satellite();
 
@@ -63,6 +63,16 @@ class Satellite
     void setIsTime(bool A)
     {
         _isTime = A;
+    }
+
+    void setIsClosing(bool A)
+    {
+        _isClosing = A;
+    }
+
+    void setIsStart(bool A)
+    {
+        _isStart = A;
     }
 
     void setActive(bool A)
@@ -105,6 +115,16 @@ class Satellite
         return _isTime;
     }
 
+    bool getIsClosing() const
+    {
+        return _isClosing;
+    }
+
+    bool getIsStart() const
+    {
+        return _isStart;
+    }
+
     bool getActive() const
     {
         return _active;
@@ -133,7 +153,7 @@ class Satellite
     void setPosition(Geom::Point p, Geom::D2<Geom::SBasis> d2_in);
     Geom::Point getPosition(Geom::D2<Geom::SBasis> curve);
     double getTime(Geom::D2<Geom::SBasis> d2_in);
-    double getOpositeTime(Geom::D2<Geom::SBasis> SBasisCurve);
+    double getOpositeTime(double A,Geom::D2<Geom::SBasis> SBasisCurve);
     double toSize(double A,Geom::D2<Geom::SBasis> d2_in);
     double toTime(double A,Geom::D2<Geom::SBasis> d2_in);
 
@@ -141,6 +161,8 @@ class Satellite
 
     SatelliteType _satellitetype;
     bool _isTime;
+    bool _isClosing;
+    bool _isStart;
     bool _active;
     bool _hasMirror;
     bool _hidden;

@@ -119,6 +119,10 @@ protected:
         str << "*";
         str << nVector.second.getIsTime();
         str << "*";
+        str << nVector.second.getIsClosing();
+        str << "*";
+        str << nVector.second.getIsStart();
+        str << "*";
         str << nVector.second.getActive();
         str << "*";
         str << nVector.second.getHasMirror();

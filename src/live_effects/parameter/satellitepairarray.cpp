@@ -54,7 +54,9 @@ void SatellitePairArrayParam::addKnotHolderEntities(KnotHolder *knotholder,
         SPItem *item)
 {
     for (unsigned int i = 0; i < _vector.size(); ++i) {
-        addKnotHolderEntitieMirrored(knotholder, desktop, item, i);
+        if(_vector[i].second.getHasMirror()){
+            addKnotHolderEntitieMirrored(knotholder, desktop, item, i);
+        }
         const gchar *tip;
         tip = _("<b>Fillet</b>: <b>Ctrl+Click</b> toggle type, "
                 "<b>Shift+Click</b> open dialog, "
@@ -105,10 +107,20 @@ void SatellitePairArrayParamKnotHolderEntity::knot_set(Point const &p,
         boost::optional<Geom::D2<Geom::SBasis> > d2_in = pointwise->getCurveIn(satellite);
         if(d2_in){
             double mirrorTime = Geom::nearest_point(s, *d2_in);
+            double timeStart = 0;
+            std::vector<Satellite> satVector = pointwise->findPeviousSatellites(satellite.first,1);
+            if(satVector.size()>0){
+                timeStart =  satVector[0].getTime(*d2_in);
+            }
+            if(timeStart > mirrorTime){
+                mirrorTime = timeStart;
+            }
             double size = satellite.second.toSize(mirrorTime, *d2_in);
             double lenght = Geom::length(*d2_in, Geom::EPSILON) - size;
             double time = satellite.second.toTime(lenght,pwd2[satellite.first]);
+            std::cout << time << "time\n";
             s = pwd2[satellite.first].valueAt(time);
+            std::cout << s << "s\n";
             satellite.second.setPosition(s,pwd2[satellite.first]);
         }
     } else {
@@ -136,7 +148,26 @@ SatellitePairArrayParamKnotHolderEntity::knot_get() const
         tmpPoint = satellite.second.getPosition(pwd2[satellite.first]);
         boost::optional<Geom::D2<Geom::SBasis> > d2_in = pointwise->getCurveIn(satellite);
         if(d2_in){
-            tmpPoint = (*d2_in).valueAt(satellite.second.getOpositeTime(*d2_in));
+            double s = satellite.second.getAmmount();
+            if(satellite.second.getIsTime()){
+                s = satellite.second.toSize(s, pwd2[satellite.first]);
+            }
+            double t = satellite.second.getOpositeTime(s,*d2_in);
+            if(t > 1){
+                t = 1;
+            }
+            if(t < 0){
+                t = 0;
+            }
+            double timeStart = 0;
+            std::vector<Satellite> satVector = pointwise->findPeviousSatellites(satellite.first,1);
+            if(satVector.size()>0){
+                timeStart =  satVector[0].getTime(*d2_in);
+            }
+            if(timeStart > t){
+                t = timeStart;
+            }
+            tmpPoint = (*d2_in).valueAt(t);
         }
     } else {
         tmpPoint = satellite.second.getPosition(pwd2[satellite.first]);

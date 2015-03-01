@@ -123,6 +123,41 @@ Pointwise::findSatellites(int A, int B) const
     return ret;
 }
 
+std::vector<Satellite> 
+Pointwise::findClosingSatellites(int A, int B) const
+{
+    std::vector<Satellite> ret;
+    bool finded = false;
+    for(unsigned i = 0; i < _satellites.size(); i++){
+        if(finded && _satellites[i].second.getIsStart()){
+            return ret;
+        }
+        if(finded && _satellites[i].second.getIsClosing()){
+            ret.push_back(_satellites[i].second);
+        }
+        if(_satellites[i].first == A){
+            finded = true;
+        }
+    }
+    return ret;
+}
+
+std::vector<Satellite> 
+Pointwise::findPeviousSatellites(int A, int B) const
+{
+    std::vector<Satellite> ret;
+    for(unsigned i = 0; i < _satellites.size(); i++){
+        if(_satellites[i].first == A){
+            if(!_satellites[i].second.getIsStart()){
+                ret = findSatellites(_satellites[i-1].first, B);
+            } else {
+                ret = findClosingSatellites(_satellites[i].first, B);
+            }
+        }
+    }
+    return ret;
+}
+
 }
 /*
   Local Variables:

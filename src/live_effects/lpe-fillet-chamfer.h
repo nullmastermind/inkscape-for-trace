@@ -43,6 +43,7 @@ public:
 private:
     EnumParam<FilletMethod> method;
     BoolParam flexible;
+    BoolParam mirrorKnots;
     Geom::Pointwise *pointwise;
 
     LPEFilletChamfer(const LPEFilletChamfer &);

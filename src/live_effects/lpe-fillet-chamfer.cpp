@@ -48,11 +48,13 @@ LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject) :
     satellitepairarrayparam_values(_("Fillet point"), _("Fillet point"), "satellitepairarrayparam_values", &wr, this),
     method(_("Method:"), _("Fillets methods"), "method", FMConverter, &wr, this, FM_AUTO),
     flexible(_("Flexible radius size (%)"), _("Flexible radius size (%)"), "flexible", &wr, this, false),
+    mirrorKnots(_("Mirror Knots"), _("Mirror Knots"), "mirrorKnots", &wr, this, true),
     pointwise()
 {
     registerParameter(&satellitepairarrayparam_values);
     registerParameter(&method);
     registerParameter(&flexible);
+    registerParameter(&mirrorKnots);
 }
 
 LPEFilletChamfer::~LPEFilletChamfer() {}
@@ -90,23 +92,35 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
             --curve_end;
             int counter = 0;
             while (curve_it1 != curve_endit) {
-                Satellite satellite(F, flexible, true, false, false, 0.0, 0.0);
-                Geom::NodeType nodetype;
+                bool isStart = false;
+                if(counter == 0){
+                    isStart = true;
+                }
+                bool isClosing = false;
+                if(path_it->closed() && curve_it1 == curve_end){
+                    isClosing = true;
+                }
+                bool active = true;
+                bool hidden = false;
                 if (counter==0) {
                     if (path_it->closed()) {
-                        nodetype = get_nodetype(*curve_end, *curve_it1);
                     } else {
-                        nodetype = NODE_NONE;
+                        active = false;
                     }
-                } else {
-                    nodetype = get_nodetype((*path_it)[counter - 1], *curve_it1);
                 }
-                if (nodetype == NODE_CUSP) {
-                    satellites.push_back(std::make_pair(counterTotal, satellite));
-                }
+                Satellite satellite(F, flexible, isClosing, isStart, active, mirrorKnots, hidden, 0.0, 0.0);
+                satellites.push_back(std::make_pair(counterTotal, satellite));
                 ++curve_it1;
                 counter++;
                 counterTotal++;
+            }
+            if (!path_it->closed()){
+                bool active = false;
+                bool isClosing = false;
+                bool isStart = false;
+                bool hidden = false;
+                Satellite satellite(F, flexible, isClosing, isStart, active, mirrorKnots, hidden, 0.0, 0.0);
+                satellites.push_back(std::make_pair(counterTotal, satellite));
             }
         }
         pointwise = new Pointwise( pwd2_in,satellites);
@@ -150,6 +164,10 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
                     double size = it->second.toSize(ammount,d2_in);
                     it->second.setAmmount(size);
                 }
+                changed = true;
+            }
+            if(it->second.getHasMirror() != mirrorKnots){
+                it->second.setHasMirror(mirrorKnots);
                 changed = true;
             }
         }
@@ -218,12 +236,16 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
             if(first == counter){
                 satVector = pointwise->findSatellites(first,1);
                 if(satVector.size()>0){
-                    time0 = satVector[0].getTime(curve_it2Fixed->toSBasis());
+                    time0 = satVector[0].getTime(path_it->begin()->duplicate()->toSBasis());
                 }
             }
 
             bool last = curve_it2 == curve_endit;
-            double time1 = sat.getOpositeTime((*curve_it1).toSBasis());
+            double s = sat.getAmmount();
+            if(sat.getIsTime()){
+                s = sat.toSize(s, curve_it2Fixed->toSBasis());
+            }
+            double time1 = sat.getOpositeTime(s,(*curve_it1).toSBasis());
             double time2 = sat.getTime(curve_it2Fixed->toSBasis());
             if(time1 <= time0){
                 time1 = time0;
@@ -249,7 +271,7 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
                 endArcPoint = curve_it2Fixed->pointAt(times[2]-gapHelper);
             }
             if(times[1] == times[0]){
-                startArcPoint = knotCurve1->pointAt(1-gapHelper);
+                startArcPoint = curve_it1->pointAt(times[0]+gapHelper);
             }
             double k1 = distance(startArcPoint, curve_it1->finalPoint()) * K;
             double k2 = distance(endArcPoint, curve_it2Fixed->initialPoint()) * K;
@@ -289,7 +311,7 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
                 endArcPoint = curve_it2Fixed->pointAt(times[2]);
             }
             if(times[1] == times[0]){
-                startArcPoint = knotCurve1->pointAt(1);
+                startArcPoint = curve_it1->pointAt(times[0]);
             }
             Line const x_line(Geom::Point(0,0),Geom::Point(1,0));
             Line const angled_line(startArcPoint,endArcPoint);

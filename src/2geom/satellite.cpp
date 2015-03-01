@@ -40,8 +40,8 @@ namespace Geom {
 
 Satellite::Satellite(){};
 
-Satellite::Satellite(SatelliteType satellitetype, bool isTime, bool active, bool hasMirror, bool hidden, double ammount, double angle)
-        : _satellitetype(satellitetype), _isTime(isTime), _active(active), _hasMirror(hasMirror), _hidden(hidden), _ammount(ammount), _angle(angle){};
+Satellite::Satellite(SatelliteType satellitetype, bool isTime, bool isClosing, bool isStart, bool active, bool hasMirror, bool hidden, double ammount, double angle)
+        : _satellitetype(satellitetype), _isTime(isTime), _isClosing(isClosing), _isStart(isStart), _active(active), _hasMirror(hasMirror), _hidden(hidden), _ammount(ammount), _angle(angle){};
 
 Satellite::~Satellite() {};
 
@@ -98,12 +98,8 @@ Satellite::toSize(double A,Geom::D2<Geom::SBasis> d2_in)
 }
 
 double
-Satellite::getOpositeTime(Geom::D2<Geom::SBasis> d2_in)
+Satellite::getOpositeTime(double s, Geom::D2<Geom::SBasis> d2_in)
 {
-    double s = getAmmount();
-    if(getIsTime()){
-        s = toSize(s, d2_in);
-    }
     if(s == 0){
         return 1;
     }
