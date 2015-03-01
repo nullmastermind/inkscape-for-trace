@@ -125,9 +125,9 @@ protected:
         str << "*";
         str << nVector.second.getHidden();
         str << "*";
-        str << nVector.second.getSize();
+        str << nVector.second.getAmmount();
         str << "*";
-        str <<nVector.second.getTime();
+        str << nVector.second.getAngle();
     }
 
     StorageType readsvg(const gchar * str);

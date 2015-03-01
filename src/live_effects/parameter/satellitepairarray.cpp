@@ -44,10 +44,9 @@ void SatellitePairArrayParam::set_oncanvas_looks(SPKnotShapeType shape,
     knot_color = color;
 }
 
-void SatellitePairArrayParam::set_pwd2(
-    Piecewise<D2<SBasis> > const &pwd2_in)
+void SatellitePairArrayParam::set_pointwise(Geom::Pointwise *pointwise)
 {
-    last_pwd2 = pwd2_in;
+    last_pointwise = pointwise;
 }
 
 void SatellitePairArrayParam::addKnotHolderEntities(KnotHolder *knotholder,
@@ -55,6 +54,7 @@ void SatellitePairArrayParam::addKnotHolderEntities(KnotHolder *knotholder,
         SPItem *item)
 {
     for (unsigned int i = 0; i < _vector.size(); ++i) {
+        addKnotHolderEntitieMirrored(knotholder, desktop, item, i);
         const gchar *tip;
         tip = _("<b>Fillet</b>: <b>Ctrl+Click</b> toggle type, "
                 "<b>Shift+Click</b> open dialog, "
@@ -65,6 +65,19 @@ void SatellitePairArrayParam::addKnotHolderEntities(KnotHolder *knotholder,
                   knot_shape, knot_mode, knot_color);
         knotholder->add(e);
     }
+}
+
+void SatellitePairArrayParam::addKnotHolderEntitieMirrored(KnotHolder *knotholder,
+        SPDesktop *desktop,
+        SPItem *item, int i)
+{
+        const gchar *tip;
+        tip = _("<b>Mirror</b> ppp");
+        SatellitePairArrayParamKnotHolderEntity *e =
+            new SatellitePairArrayParamKnotHolderEntity(this, i + _vector.size());
+        e->create(desktop, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN, _(tip),
+                  knot_shape, knot_mode, knot_color);
+        knotholder->add(e);
 }
 
 
@@ -80,8 +93,28 @@ void SatellitePairArrayParamKnotHolderEntity::knot_set(Point const &p,
                                               Point const &/*origin*/,
                                               guint state)
 {
-    Geom::Point const s = snap_knot_position(p, state);
-    _pparam->_vector.at(_index).second.setPosition(s,_pparam->last_pwd2[_pparam->_vector.at(_index).first]);
+    Geom::Point s = snap_knot_position(p, state);
+    int index = _index;
+    if( _index >= _pparam->_vector.size()){
+        index = _index-_pparam->_vector.size();
+    }
+    std::pair<int,Geom::Satellite> satellite = _pparam->_vector.at(index);
+    Geom::Pointwise* pointwise = _pparam->last_pointwise;
+    Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = pointwise->getPwd2();
+    if(_pparam->_vector.size() <= _index){
+        boost::optional<Geom::D2<Geom::SBasis> > d2_in = pointwise->getCurveIn(satellite);
+        if(d2_in){
+            double mirrorTime = Geom::nearest_point(s, *d2_in);
+            double size = satellite.second.toSize(mirrorTime, *d2_in);
+            double lenght = Geom::length(*d2_in, Geom::EPSILON) - size;
+            double time = satellite.second.toTime(lenght,pwd2[satellite.first]);
+            s = pwd2[satellite.first].valueAt(time);
+            satellite.second.setPosition(s,pwd2[satellite.first]);
+        }
+    } else {
+        satellite.second.setPosition(s,pwd2[satellite.first]);
+    }
+     _pparam->_vector.at(index) = satellite;
     SPLPEItem * splpeitem = dynamic_cast<SPLPEItem *>(item);
     if(splpeitem){
         sp_lpe_item_update_patheffect(splpeitem, false, false);
@@ -91,7 +124,24 @@ void SatellitePairArrayParamKnotHolderEntity::knot_set(Point const &p,
 Geom::Point 
 SatellitePairArrayParamKnotHolderEntity::knot_get() const
 {
-    Geom::Point const canvas_point = _pparam->_vector.at(_index).second.getPosition(_pparam->last_pwd2[_pparam->_vector.at(_index).first]);
+    Geom::Point tmpPoint;
+    int index = _index;
+    if( _index >= _pparam->_vector.size()){
+        index = _index-_pparam->_vector.size();
+    }
+    std::pair<int,Geom::Satellite> satellite = _pparam->_vector.at(index);
+    Geom::Pointwise* pointwise = _pparam->last_pointwise;
+    Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = pointwise->getPwd2();
+    if( _index >= _pparam->_vector.size()){
+        tmpPoint = satellite.second.getPosition(pwd2[satellite.first]);
+        boost::optional<Geom::D2<Geom::SBasis> > d2_in = pointwise->getCurveIn(satellite);
+        if(d2_in){
+            tmpPoint = (*d2_in).valueAt(satellite.second.getOpositeTime(*d2_in));
+        }
+    } else {
+        tmpPoint = satellite.second.getPosition(pwd2[satellite.first]);
+    }
+    Geom::Point const canvas_point = tmpPoint;
     return canvas_point;
 }
 

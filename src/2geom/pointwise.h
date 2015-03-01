@@ -50,6 +50,10 @@
 #include <2geom/sbasis-2d.h>
 #include <2geom/piecewise.h>
 #include <2geom/satellite.h>
+#include <2geom/sbasis-to-bezier.h>
+#include <2geom/path.h>
+#include "helper/geom.h"
+#include <boost/optional.hpp>
 
 namespace Geom {
 /**
@@ -64,7 +68,10 @@ class Pointwise
         virtual ~Pointwise();
         std::vector<Satellite> findSatellites(int A, int B = -1) const;
         std::vector<std::pair<int,Satellite> > getSatellites();
-        
+        void setSatellites(std::vector<std::pair<int,Satellite> > sat);
+        Piecewise<D2<SBasis> > getPwd2();
+        void setPwd2(Piecewise<D2<SBasis> > pwd2_in);
+        boost::optional<Geom::D2<Geom::SBasis> > getCurveIn(std::pair<int,Satellite> sat);
         Pointwise recalculate_for_new_pwd2(Piecewise<D2<SBasis> > A);
         Pointwise pwd2_reverse(int index);
         Pointwise pwd2_append(int index);

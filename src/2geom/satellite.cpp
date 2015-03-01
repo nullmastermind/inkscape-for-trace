@@ -40,17 +40,16 @@ namespace Geom {
 
 Satellite::Satellite(){};
 
-Satellite::Satellite(SatelliteType satellitetype, bool isTime, bool active, bool hasMirror, bool hidden, double size, double time)
-        : _satellitetype(satellitetype), _isTime(isTime), _active(active), _hasMirror(hasMirror), _hidden(hidden), _size(size), _time(time){};
+Satellite::Satellite(SatelliteType satellitetype, bool isTime, bool active, bool hasMirror, bool hidden, double ammount, double angle)
+        : _satellitetype(satellitetype), _isTime(isTime), _active(active), _hasMirror(hasMirror), _hidden(hidden), _ammount(ammount), _angle(angle){};
 
 Satellite::~Satellite() {};
 
 double
 Satellite::toTime(double A,Geom::D2<Geom::SBasis> d2_in)
 {
-    if(!d2_in.isFinite() ||  d2_in.isZero()){
-        _time = 0;
-        _size = 0;
+    if(!d2_in.isFinite() ||  d2_in.isZero() || A == 0){
+        _ammount = 0;
         return 0;
     }
     double t = 0;
@@ -80,9 +79,8 @@ Satellite::toTime(double A,Geom::D2<Geom::SBasis> d2_in)
 double
 Satellite::toSize(double A,Geom::D2<Geom::SBasis> d2_in)
 {
-    if(!d2_in.isFinite() ||  d2_in.isZero()){
-        _time = 0;
-        _size = 0;
+    if(!d2_in.isFinite() ||  d2_in.isZero() || A == 0){
+        _ammount = 0;
         return 0;
     }
     double s = 0;
@@ -102,7 +100,10 @@ Satellite::toSize(double A,Geom::D2<Geom::SBasis> d2_in)
 double
 Satellite::getOpositeTime(Geom::D2<Geom::SBasis> d2_in)
 {
-    double s = getSize();
+    double s = getAmmount();
+    if(getIsTime()){
+        s = toSize(s, d2_in);
+    }
     if(s == 0){
         return 1;
     }
@@ -111,20 +112,29 @@ Satellite::getOpositeTime(Geom::D2<Geom::SBasis> d2_in)
     return toTime(size, d2_in);
 }
 
+double
+Satellite::getTime(Geom::D2<Geom::SBasis> d2_in){
+    double t = getAmmount();
+    if(!getIsTime()){
+        t = toTime(t, d2_in);
+    }
+    return t;
+}
+
+
 Geom::Point 
 Satellite::getPosition(Geom::D2<Geom::SBasis> d2_in){
-    double t = getTime();
-    if(!_isTime){
-        t = toTime(getSize(), d2_in);
-    }
-    return d2_in.valueAt(t);
+    return d2_in.valueAt(getTime(d2_in));
 }
 
 void
 Satellite::setPosition(Geom::Point p, Geom::D2<Geom::SBasis> d2_in)
 {
-    setTime(Geom::nearest_point(p, d2_in));
-    setSize(toSize(getTime(),d2_in));
+    double A = Geom::nearest_point(p, d2_in);
+    if(!getIsTime()){
+        A = toSize(A, d2_in);
+    }
+    setAmmount(A);
 }
 
 } // end namespace Geom

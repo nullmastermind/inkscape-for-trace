@@ -45,6 +45,67 @@ Pointwise::getSatellites(){
     return _satellites;
 }
 
+void
+Pointwise::setSatellites(std::vector<std::pair<int,Satellite> > sat){
+    _satellites = sat;
+}
+
+Piecewise<D2<SBasis> >
+Pointwise::getPwd2(){
+    return _pwd2;
+}
+
+void
+Pointwise::setPwd2(Piecewise<D2<SBasis> > pwd2_in){
+    _pwd2 = pwd2_in;
+}
+
+boost::optional<Geom::D2<Geom::SBasis> >
+Pointwise::getCurveIn(std::pair<int,Satellite> sat){
+    //curve out = sat.first;
+    std::vector<Geom::Path> path_in_processed = pathv_to_linear_and_cubic_beziers(path_from_piecewise(_pwd2, 0.001));
+    int counterTotal = 0;
+    for (PathVector::const_iterator path_it = path_in_processed.begin(); path_it != path_in_processed.end(); ++path_it) {
+        if (path_it->empty()){
+            continue;
+        }
+        Geom::Path::const_iterator curve_it1 = path_it->begin();
+        Geom::Path::const_iterator curve_endit = path_it->end_default();
+        if (path_it->closed()) {
+          const Curve &closingline = path_it->back_closed(); 
+          // the closing line segment is always of type 
+          // LineSegment.
+          if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
+            // closingline.isDegenerate() did not work, because it only checks for
+            // *exact* zero length, which goes wrong for relative coordinates and
+            // rounding errors...
+            // the closing line segment has zero-length. So stop before that one!
+            curve_endit = path_it->end_open();
+          }
+        }
+        Geom::Path::const_iterator curve_end = curve_endit;
+        --curve_end;
+        int counter = 0;
+        while (curve_it1 != curve_endit) {
+            if(counterTotal == sat.first){
+                if (counter==0) {
+                    if (path_it->closed()) {
+                        return (*curve_end).toSBasis();
+                    } else {
+                        return boost::none;
+                    }
+                } else {
+                        return (*path_it)[counter - 1].toSBasis();
+                }
+            }
+            ++curve_it1;
+            counter++;
+            counterTotal++;
+        }
+    }
+    return boost::none;
+}
+
 std::vector<Satellite> 
 Pointwise::findSatellites(int A, int B) const
 {

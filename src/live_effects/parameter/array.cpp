@@ -60,11 +60,11 @@ sp_svg_satellite_read_d(gchar const *str, Geom::Satellite *sat){
         sat->setActive(strncmp(strarray[2],"1",1) == 0);
         sat->setHasMirror(strncmp(strarray[3],"1",1) == 0);
         sat->setHidden(strncmp(strarray[4],"1",1) == 0);
-        double time,size;
-        sp_svg_number_read_d(strarray[5], &size);
-        sp_svg_number_read_d(strarray[6], &time);
-        sat->setSize(size);
-        sat->setTime(time);
+        double ammount,angle;
+        sp_svg_number_read_d(strarray[5], &ammount);
+        sp_svg_number_read_d(strarray[6], &angle);
+        sat->setAmmount(ammount);
+        sat->setAngle(angle);
         g_strfreev (strarray);
         return 1;
     }

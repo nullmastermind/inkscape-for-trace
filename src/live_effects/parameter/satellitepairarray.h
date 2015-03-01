@@ -21,6 +21,7 @@
 #include <glib.h>
 #include "live_effects/parameter/array.h"
 #include "knot-holder-entity.h"
+#include <2geom/pointwise.h>
 
 namespace Inkscape {
 
@@ -47,10 +48,8 @@ public:
         return true;
     }
     virtual void addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item);
-    void set_pwd2(Geom::Piecewise<Geom::D2<Geom::SBasis> > const &pwd2_in);
-    Geom::Piecewise<Geom::D2<Geom::SBasis> > const &get_pwd2() const {
-        return last_pwd2;
-    }
+    virtual void addKnotHolderEntitieMirrored(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item, int i);
+    void set_pointwise(Geom::Pointwise *pointwise);
     friend class SatellitePairArrayParamKnotHolderEntity;
 
 private:
@@ -60,8 +59,8 @@ private:
     SPKnotShapeType knot_shape;
     SPKnotModeType knot_mode;
     guint32 knot_color;
-    
-    Geom::Piecewise<Geom::D2<Geom::SBasis> > last_pwd2;
+
+    Geom::Pointwise *last_pointwise;
 
 };
 

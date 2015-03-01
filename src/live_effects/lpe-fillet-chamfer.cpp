@@ -65,8 +65,7 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
     if (shape) {
         PathVector const &original_pathv = pathv_to_linear_and_cubic_beziers(shape->getCurve()->get_pathvector());
         Piecewise<D2<SBasis> > pwd2_in = paths_to_pw(original_pathv);
-        pwd2_in = remove_short_cuts(pwd2_in, .01);
-        satellitepairarrayparam_values.set_pwd2(pwd2_in);
+        pwd2_in = remove_short_cuts(pwd2_in, 0.01);
         int counterTotal = 0;
         std::vector<std::pair<int,Geom::Satellite> >  satellites;
         for (PathVector::const_iterator path_it = original_pathv.begin(); path_it != original_pathv.end(); ++path_it) {
@@ -110,6 +109,7 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
                 counterTotal++;
             }
         }
+        pointwise = new Pointwise( pwd2_in,satellites);
         satellitepairarrayparam_values.param_set_and_write_new_value(satellites);
     } else {
         g_warning("LPE Fillet/Chamfer can only be applied to shapes (not groups).");
@@ -130,20 +130,31 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
         }
         PathVector const &original_pathv = pathv_to_linear_and_cubic_beziers(c->get_pathvector());
         Piecewise<D2<SBasis> > pwd2_in = paths_to_pw(pathv_to_linear_and_cubic_beziers(original_pathv));
-        pwd2_in = remove_short_cuts(pwd2_in, .01);
+        pwd2_in = remove_short_cuts(pwd2_in, 0.01);
         //wating to recalculate
         //recalculate_controlpoints_for_new_pwd2(pwd2_in);
-        satellitepairarrayparam_values.set_pwd2(pwd2_in);
         std::vector<std::pair<int,Geom::Satellite> >  satellites = satellitepairarrayparam_values.data();
-        pointwise = new Pointwise( pwd2_in,satellites);
+        pointwise->setPwd2(pwd2_in);
+        pointwise->setSatellites(satellites);
+        satellitepairarrayparam_values.set_pointwise(pointwise);
         bool changed = false;
         for (std::vector<std::pair<int,Geom::Satellite> >::iterator it = satellites.begin(); it != satellites.end(); ++it) {
             if(it->second.getIsTime() != flexible){
                 it->second.setIsTime(flexible);
+                double ammount = it->second.getAmmount();
+                D2<SBasis> d2_in = pwd2_in[it->first];
+                if(it->second.getIsTime()){
+                    double time = it->second.toTime(ammount,d2_in);
+                    it->second.setAmmount(time);
+                } else {
+                    double size = it->second.toSize(ammount,d2_in);
+                    it->second.setAmmount(size);
+                }
                 changed = true;
             }
         }
         if(changed){
+            pointwise->setSatellites(satellites);
             satellitepairarrayparam_values.param_set_and_write_new_value(satellites);
         }
     } else {
@@ -207,13 +218,13 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
             if(first == counter){
                 satVector = pointwise->findSatellites(first,1);
                 if(satVector.size()>0){
-                    time0 = satVector[0].getTime();
+                    time0 = satVector[0].getTime(curve_it2Fixed->toSBasis());
                 }
             }
 
             bool last = curve_it2 == curve_endit;
             double time1 = sat.getOpositeTime((*curve_it1).toSBasis());
-            double time2 = sat.getTime();
+            double time2 = sat.getTime(curve_it2Fixed->toSBasis());
             if(time1 <= time0){
                 time1 = time0;
             }

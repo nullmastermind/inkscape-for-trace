@@ -45,7 +45,7 @@ class Satellite
   public:
 
     Satellite();
-    Satellite(SatelliteType satellitetype, bool isTime, bool active, bool hasMirror, bool hidden, double size, double time);
+    Satellite(SatelliteType satellitetype, bool isTime, bool active, bool hasMirror, bool hidden, double ammount, double angle);
 
     virtual ~Satellite();
 
@@ -79,14 +79,14 @@ class Satellite
     {
         _hidden = A;
     }
-    void setTime(double A)
+    void setAmmount(double A)
     {
-        _time = A;
+        _ammount = A;
     }
 
-    void setSize(double A)
+    void setAngle(double A)
     {
-        _size = A;
+        _angle = A;
     }
 
     SatelliteType getSatelliteType() const
@@ -120,23 +120,23 @@ class Satellite
         return _hidden;
     }
 
-    double getSize() const
+    double getAmmount() const
     {
-        return _size;
+        return _ammount;
     }
 
-    double getTime() const
+    double getAngle() const
     {
-        return _time;
+        return _angle;
     }
 
-    void setPosition(Geom::Point p, Geom::D2<Geom::SBasis> curve);
-
+    void setPosition(Geom::Point p, Geom::D2<Geom::SBasis> d2_in);
     Geom::Point getPosition(Geom::D2<Geom::SBasis> curve);
-
+    double getTime(Geom::D2<Geom::SBasis> d2_in);
     double getOpositeTime(Geom::D2<Geom::SBasis> SBasisCurve);
     double toSize(double A,Geom::D2<Geom::SBasis> d2_in);
     double toTime(double A,Geom::D2<Geom::SBasis> d2_in);
+
   private:
 
     SatelliteType _satellitetype;
@@ -144,8 +144,8 @@ class Satellite
     bool _active;
     bool _hasMirror;
     bool _hidden;
-    double _size;
-    double _time;
+    double _ammount;
+    double _angle;
 };
 
 } // end namespace Geom
