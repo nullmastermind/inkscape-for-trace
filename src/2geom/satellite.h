@@ -56,8 +56,8 @@ class Satellite
 
     void setSatelliteType(gchar const * A)
     {
-        std::map<gchar const *,SatelliteType> GcharMapToSatelliteType = boost::assign::map_list_of("F", F)("IF", IF)("C",C)("IC",IC)("KO",KO);
-        _satellitetype = GcharMapToSatelliteType[A];
+        std::map<std::string,SatelliteType> GcharMapToSatelliteType = boost::assign::map_list_of("F", F)("IF", IF)("C",C)("IC",IC)("KO",KO);
+        _satellitetype = GcharMapToSatelliteType.find(std::string(A))->second;
     }
 
     void setIsTime(bool A)
@@ -107,7 +107,7 @@ class Satellite
     gchar const * getSatelliteTypeGchar() const
     {
         std::map<SatelliteType,gchar const *> SatelliteTypeToGcharMap = boost::assign::map_list_of(F, "F")(IF, "IF")(C,"C")(IC,"IC")(KO,"KO");
-        return SatelliteTypeToGcharMap[_satellitetype];
+        return SatelliteTypeToGcharMap.at(_satellitetype);
     }
 
     bool getIsTime() const

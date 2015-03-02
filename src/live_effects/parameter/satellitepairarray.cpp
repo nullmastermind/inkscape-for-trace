@@ -54,6 +54,9 @@ void SatellitePairArrayParam::addKnotHolderEntities(KnotHolder *knotholder,
         SPItem *item)
 {
     for (unsigned int i = 0; i < _vector.size(); ++i) {
+        if(!_vector[i].second.getActive() || !_vector[i].second.getHidden()){
+            continue;
+        }
         if(_vector[i].second.getHasMirror()){
             addKnotHolderEntitieMirrored(knotholder, desktop, item, i);
         }
@@ -118,9 +121,7 @@ void SatellitePairArrayParamKnotHolderEntity::knot_set(Point const &p,
             double size = satellite.second.toSize(mirrorTime, *d2_in);
             double lenght = Geom::length(*d2_in, Geom::EPSILON) - size;
             double time = satellite.second.toTime(lenght,pwd2[satellite.first]);
-            std::cout << time << "time\n";
             s = pwd2[satellite.first].valueAt(time);
-            std::cout << s << "s\n";
             satellite.second.setPosition(s,pwd2[satellite.first]);
         }
     } else {

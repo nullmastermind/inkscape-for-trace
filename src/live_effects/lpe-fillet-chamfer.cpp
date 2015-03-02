@@ -27,6 +27,8 @@
 #include "helper/geom-curves.h"
 #include "helper/geom.h"
 #include "display/curve.h"
+#include "ui/tools-switch.h"
+#include <2geom/path-intersection.h>
 #include <vector>
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
@@ -45,16 +47,37 @@ FMConverter(FilletMethodData, FM_END);
 
 LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
-    satellitepairarrayparam_values(_("Fillet point"), _("Fillet point"), "satellitepairarrayparam_values", &wr, this),
+    satellitepairarrayparam_values(_("pair_array_param"), _("pair_array_param"), "satellitepairarrayparam_values", &wr, this),
+    unit(_("Unit:"), _("Unit"), "unit", &wr, this),
     method(_("Method:"), _("Fillets methods"), "method", FMConverter, &wr, this, FM_AUTO),
+    radius(_("Radius (unit or %):"), _("Radius, in unit or %"), "radius", &wr, this, 0.),
+    chamfer_steps(_("Chamfer steps:"), _("Chamfer steps"), "chamfer_steps", &wr, this, 3),
     flexible(_("Flexible radius size (%)"), _("Flexible radius size (%)"), "flexible", &wr, this, false),
-    mirrorKnots(_("Mirror Knots"), _("Mirror Knots"), "mirrorKnots", &wr, this, true),
+    mirror_knots(_("Mirror Knots"), _("Mirror Knots"), "mirror_knots", &wr, this, true),
+    only_selected(_("Change only selected nodes"), _("Change only selected nodes"), "only_selected", &wr, this, false),
+    use_knot_distance(_("Use knots distance instead radius"), _("Use knots distance instead radius"), "use_knot_distance", &wr, this, false),
+    hide_knots(_("Hide knots"), _("Hide knots"), "hide_knots", &wr, this, false),
+    ignore_radius_0(_("Ignore 0 radius knots"), _("Ignore 0 radius knots"), "ignore_radius_0", &wr, this, false),
     pointwise()
 {
     registerParameter(&satellitepairarrayparam_values);
+    registerParameter(&unit);
     registerParameter(&method);
+    registerParameter(&radius);
+    registerParameter(&chamfer_steps);
     registerParameter(&flexible);
-    registerParameter(&mirrorKnots);
+    registerParameter(&use_knot_distance);
+    registerParameter(&mirror_knots);
+    registerParameter(&ignore_radius_0);
+    registerParameter(&only_selected);
+    registerParameter(&hide_knots);
+
+    radius.param_set_range(0., infinity());
+    radius.param_set_increments(1, 1);
+    radius.param_set_digits(4);
+    chamfer_steps.param_set_range(1, 999);
+    chamfer_steps.param_set_increments(1, 1);
+    chamfer_steps.param_set_digits(0);
 }
 
 LPEFilletChamfer::~LPEFilletChamfer() {}
@@ -108,7 +131,7 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
                         active = false;
                     }
                 }
-                Satellite satellite(F, flexible, isClosing, isStart, active, mirrorKnots, hidden, 0.0, 0.0);
+                Satellite satellite(F, flexible, isClosing, isStart, active, mirror_knots, hidden, 0.0, 0.0);
                 satellites.push_back(std::make_pair(counterTotal, satellite));
                 ++curve_it1;
                 counter++;
@@ -119,7 +142,7 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
                 bool isClosing = false;
                 bool isStart = false;
                 bool hidden = false;
-                Satellite satellite(F, flexible, isClosing, isStart, active, mirrorKnots, hidden, 0.0, 0.0);
+                Satellite satellite(F, flexible, isClosing, isStart, active, mirror_knots, hidden, 0.0, 0.0);
                 satellites.push_back(std::make_pair(counterTotal, satellite));
             }
         }
@@ -130,6 +153,222 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
         SPLPEItem * item = const_cast<SPLPEItem*>(lpeItem);
         item->removeCurrentPathEffect(false);
     }
+}
+
+Gtk::Widget *LPEFilletChamfer::newWidget()
+{
+    // use manage here, because after deletion of Effect object, others might
+    // still be pointing to this widget.
+    Gtk::VBox *vbox = Gtk::manage(new Gtk::VBox(Effect::newWidget()));
+
+    vbox->set_border_width(5);
+    vbox->set_homogeneous(false);
+    vbox->set_spacing(2);
+    std::vector<Parameter *>::iterator it = param_vector.begin();
+    while (it != param_vector.end()) {
+        if ((*it)->widget_is_visible) {
+            Parameter *param = *it;
+            Gtk::Widget *widg = param->param_newWidget();
+            if (param->param_key == "radius") {
+                Inkscape::UI::Widget::Scalar *widgRegistered = Gtk::manage(dynamic_cast<Inkscape::UI::Widget::Scalar *>(widg));
+                widgRegistered->signal_value_changed().connect(sigc::mem_fun(*this, &LPEFilletChamfer::updateFillet));
+                widg = widgRegistered;
+                if (widg) {
+                    Gtk::HBox *scalarParameter = dynamic_cast<Gtk::HBox *>(widg);
+                    std::vector<Gtk::Widget *> childList = scalarParameter->get_children();
+                    Gtk::Entry *entryWidg = dynamic_cast<Gtk::Entry *>(childList[1]);
+                    entryWidg->set_width_chars(6);
+                }
+            /*} else if (param->param_key == "chamfer_steps") {
+                Inkscape::UI::Widget::Scalar *widgRegistered = Gtk::manage(dynamic_cast<Inkscape::UI::Widget::Scalar *>(widg));
+                widgRegistered->signal_value_changed().connect(sigc::mem_fun(*this, &LPEFilletChamfer::chamferSubdivisions));
+                widg = widgRegistered;
+                if (widg) {
+                    Gtk::HBox *scalarParameter = dynamic_cast<Gtk::HBox *>(widg);
+                    std::vector<Gtk::Widget *> childList = scalarParameter->get_children();
+                    Gtk::Entry *entryWidg = dynamic_cast<Gtk::Entry *>(childList[1]);
+                    entryWidg->set_width_chars(3);
+                }
+                
+            } else if (param->param_key == "helper_size") {
+                Inkscape::UI::Widget::Scalar *widgRegistered = Gtk::manage(dynamic_cast<Inkscape::UI::Widget::Scalar *>(widg));
+                widgRegistered->signal_value_changed().connect(sigc::mem_fun(*this, &LPEFilletChamfer::refreshKnots));
+            */
+            } else if (param->param_key == "only_selected") {
+                Gtk::manage(widg);
+            }/* else if (param->param_key == "ignore_radius_0") {
+                Gtk::manage(widg);
+            }
+            */
+            Glib::ustring *tip = param->param_getTooltip();
+            if (widg) {
+                vbox->pack_start(*widg, true, true, 2);
+                if (tip) {
+                    widg->set_tooltip_text(*tip);
+                } else {
+                    widg->set_tooltip_text("");
+                    widg->set_has_tooltip(false);
+                }
+            }
+        }
+
+        ++it;
+    }
+    
+    Gtk::HBox *filletContainer = Gtk::manage(new Gtk::HBox(true, 0));
+    Gtk::Button *fillet = Gtk::manage(new Gtk::Button(Glib::ustring(_("Fillet"))));
+    fillet->signal_clicked().connect(sigc::mem_fun(*this, &LPEFilletChamfer::fillet));
+
+    filletContainer->pack_start(*fillet, true, true, 2);
+    Gtk::Button *inverseFillet = Gtk::manage(new Gtk::Button(Glib::ustring(_("Inverse fillet"))));
+    inverseFillet->signal_clicked().connect(sigc::mem_fun(*this, &LPEFilletChamfer::inverseFillet));
+    filletContainer->pack_start(*inverseFillet, true, true, 2);
+    
+    Gtk::HBox *chamferContainer = Gtk::manage(new Gtk::HBox(true, 0));
+    Gtk::Button *chamfer = Gtk::manage(new Gtk::Button(Glib::ustring(_("Chamfer"))));
+    chamfer->signal_clicked().connect(sigc::mem_fun(*this, &LPEFilletChamfer::chamfer));
+
+    chamferContainer->pack_start(*chamfer, true, true, 2);
+    Gtk::Button *inverseChamfer = Gtk::manage(new Gtk::Button(Glib::ustring(_("Inverse chamfer"))));
+    inverseChamfer->signal_clicked().connect(sigc::mem_fun(*this, &LPEFilletChamfer::inverseChamfer));
+    chamferContainer->pack_start(*inverseChamfer, true, true, 2);
+
+    vbox->pack_start(*filletContainer, true, true, 2);
+    vbox->pack_start(*chamferContainer, true, true, 2);
+
+    return vbox;
+}
+
+
+void LPEFilletChamfer::fillet()
+{
+    updateSatelliteType(F);
+}
+
+void LPEFilletChamfer::inverseFillet()
+{
+    updateSatelliteType(IF);
+}
+
+void LPEFilletChamfer::chamfer()
+{
+    updateSatelliteType(C);
+}
+
+void LPEFilletChamfer::inverseChamfer()
+{
+    updateSatelliteType(IC);
+}
+
+/*
+double LPEFilletChamfer::len_to_rad(double A,  std::pair<int,Geom::Satellite> satellite)
+{
+    Piecewise<Geom::D2<Geom::SBasis> > pwd2 = pointwise->getPwd2();
+    boost::optional<Geom::D2<Geom::SBasis> > d2_in = pointwise->getCurveIn(satellite);
+    if(d2_in){
+        Geom::D2<Geom::SBasis> d2_out = pwd2[satellite.first];
+        double time_in = satellite.second.getOpositeTime(A, *d2_in);
+        double time_out = satellite.second.toTime(A,d2_out);
+        Geom::Point startArcPoint = (*d2_in).valueAt(time_in);
+        Geom::Point endArcPoint = d2_out.valueAt(time_out);
+        Ray ray1(startArcPoint, (*d2_in).valueAt(1));
+        Ray ray2(d2_out.valueAt(0), endArcPoint);
+        bool ccwToggle = cross((*d2_in).valueAt(1) - startArcPoint, endArcPoint - startArcPoint) < 0;
+        double distanceArc = Geom::distance(startArcPoint,middle_point(startArcPoint,endArcPoint));
+        double angleBetween = angle_between(ray1, ray2, ccwToggle);
+        return distanceArc/sin(angleBetween/2.0);
+    }
+    return 0;
+}
+*/
+
+double LPEFilletChamfer::rad_to_len(double A,  std::pair<int,Geom::Satellite> satellite)
+{
+    double len = 0;
+    Piecewise<Geom::D2<Geom::SBasis> > pwd2 = pointwise->getPwd2();
+    boost::optional<Geom::D2<Geom::SBasis> > d2_in = pointwise->getCurveIn(satellite);
+    if(d2_in){
+        Geom::D2<Geom::SBasis> d2_out = pwd2[satellite.first];
+        Piecewise<D2<SBasis> > offset_curve0 = Piecewise<D2<SBasis> >(*d2_in)+rot90(unitVector(derivative((*d2_in))))*(A);
+        Piecewise<D2<SBasis> > offset_curve1 = Piecewise<D2<SBasis> >(d2_out)+rot90(unitVector(derivative(d2_out)))*(A);
+        Geom::Path p0 = path_from_piecewise(offset_curve0, 0.1)[0];
+        Geom::Path p1 = path_from_piecewise(offset_curve1, 0.1)[0];
+        Geom::Crossings cs = Geom::crossings(p0, p1);
+        if(cs.size() > 0){
+            Point cp =p0(cs[0].ta);
+            double p0pt = nearest_point(cp, d2_out);
+            len = satellite.second.toSize(p0pt,d2_out);
+        } else {
+            if(A < 0){
+                len = rad_to_len(A * -1, satellite);
+            }
+        }
+    }
+    return len;
+}
+
+
+void LPEFilletChamfer::refreshKnots()
+{
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    if (tools_isactive(desktop, TOOLS_NODES)) {
+        tools_switch(desktop, TOOLS_SELECT);
+        tools_switch(desktop, TOOLS_NODES);
+    }
+}
+
+void LPEFilletChamfer::updateFillet()
+{
+    double power = 0;
+    if (!flexible) {
+        power = Inkscape::Util::Quantity::convert(radius, unit.get_abbreviation(), *defaultUnit);
+    } else {
+        power = radius/100;
+    }
+    std::vector<std::pair<int,Geom::Satellite> > satellites = pointwise->getSatellites();
+    Piecewise<D2<SBasis> > pwd2 = pointwise->getPwd2();
+    for (std::vector<std::pair<int,Geom::Satellite> >::iterator it = satellites.begin(); it != satellites.end(); ++it) {
+        if(ignore_radius_0 && it->second.getAmmount() == 0){
+            continue;
+        }
+        if(only_selected){
+            Geom::Point satPoint = pwd2.valueAt(it->first);
+            if(isNodePointSelected(satPoint)){
+                it->second.setAmmount(power);
+            }
+            if(!use_knot_distance && !flexible){
+                it->second.setAmmount(rad_to_len(power,*it));
+            }
+        } else {
+            it->second.setAmmount(power);
+            if(!use_knot_distance && !flexible){
+                it->second.setAmmount(rad_to_len(power,*it));
+            }
+        }
+    }
+    pointwise->setSatellites(satellites);
+    satellitepairarrayparam_values.param_set_and_write_new_value(satellites);
+}
+
+void LPEFilletChamfer::updateSatelliteType(Geom::SatelliteType satellitetype)
+{
+    std::vector<std::pair<int,Geom::Satellite> > satellites = pointwise->getSatellites();
+    Piecewise<D2<SBasis> > pwd2 = pointwise->getPwd2();
+    for (std::vector<std::pair<int,Geom::Satellite> >::iterator it = satellites.begin(); it != satellites.end(); ++it) {
+        if(ignore_radius_0 && it->second.getAmmount() == 0){
+            continue;
+        }
+        if(only_selected){
+            Geom::Point satPoint = pwd2.valueAt(it->first);
+            if(isNodePointSelected(satPoint)){
+                it->second.setSatelliteType(satellitetype);
+            }
+        } else {
+            it->second.setSatelliteType(satellitetype);
+        }
+    }
+    pointwise->setSatellites(satellites);
+    satellitepairarrayparam_values.param_set_and_write_new_value(satellites);
 }
 
 void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
@@ -152,6 +391,7 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
         pointwise->setSatellites(satellites);
         satellitepairarrayparam_values.set_pointwise(pointwise);
         bool changed = false;
+        bool refresh = false;
         for (std::vector<std::pair<int,Geom::Satellite> >::iterator it = satellites.begin(); it != satellites.end(); ++it) {
             if(it->second.getIsTime() != flexible){
                 it->second.setIsTime(flexible);
@@ -166,14 +406,24 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
                 }
                 changed = true;
             }
-            if(it->second.getHasMirror() != mirrorKnots){
-                it->second.setHasMirror(mirrorKnots);
+            if(it->second.getHasMirror() != mirror_knots){
+                it->second.setHasMirror(mirror_knots);
                 changed = true;
+                refresh = true;
+            }
+            bool hide = !hide_knots;
+            if(it->second.getHidden() != hide){
+                it->second.setHidden(hide);
+                changed = true;
+                refresh = true;
             }
         }
         if(changed){
             pointwise->setSatellites(satellites);
             satellitepairarrayparam_values.param_set_and_write_new_value(satellites);
+        }
+        if(refresh){
+            refreshKnots();
         }
     } else {
         g_warning("LPE Fillet can only be applied to shapes (not groups).");
@@ -219,18 +469,18 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
                 return path_in;
             }
             std::vector<Satellite> satVector;
-            Satellite sat;
+            Satellite satellite;
             Curve *curve_it2Fixed = path_it->begin()->duplicate();
             if(!path_it->closed() || curve_it2 != curve_endit){
                 curve_it2Fixed = (*curve_it2).duplicate();
                 satVector = pointwise->findSatellites(counter+1,1);
                 if(satVector.size()>0){
-                    sat = satVector[0];
+                    satellite = satVector[0];
                 }
             } else {
                 satVector = pointwise->findSatellites(first,1);
                 if(satVector.size()>0){
-                    sat = satVector[0];
+                    satellite = satVector[0];
                 }
             }
             if(first == counter){
@@ -241,12 +491,12 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
             }
 
             bool last = curve_it2 == curve_endit;
-            double s = sat.getAmmount();
-            if(sat.getIsTime()){
-                s = sat.toSize(s, curve_it2Fixed->toSBasis());
+            double s = satellite.getAmmount();
+            if(satellite.getIsTime()){
+                s = satellite.toSize(s, curve_it2Fixed->toSBasis());
             }
-            double time1 = sat.getOpositeTime(s,(*curve_it1).toSBasis());
-            double time2 = sat.getTime(curve_it2Fixed->toSBasis());
+            double time1 = satellite.getOpositeTime(s,(*curve_it1).toSBasis());
+            double time2 = satellite.getTime(curve_it2Fixed->toSBasis());
             if(time1 <= time0){
                 time1 = time0;
             }
@@ -254,10 +504,6 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
             times.push_back(time0);
             times.push_back(time1);
             times.push_back(time2);
-            std::cout << ":::" << counter    << ":::::::::::::::\n";
-            std::cout << time0 << "::Time 0\n";
-            std::cout << time1 << "::Time 1\n";
-            std::cout << time2 << "::Time 2\n";
             Curve *knotCurve1 = curve_it1->portion(times[0], times[1]);
             if (counterCurves > 0) {
                 knotCurve1->setInitial(path_out.finalPoint());
@@ -325,13 +571,8 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
                         path_out.append(*knotCurve1);
                     }
                 }
-                SatelliteType type = F;
-                type = sat.getSatelliteType();
-                if(are_near(middle_point(startArcPoint,endArcPoint),curve_it1->finalPoint(), 0.0001)){
-                   // path_out.appendNew<Geom::LineSegment>(endArcPoint);
-                } else if (type == C) {
-                /*
-                    unsigned int chamferSubs = type-3000;
+                SatelliteType type = satellite.getSatelliteType();
+                if (type == C) {
                     Geom::Path path_chamfer;
                     path_chamfer.start(path_out.finalPoint());
                     if((is_straight_curve(*curve_it1) && is_straight_curve(*curve_it2Fixed) && method != FM_BEZIER )|| method == FM_ARC){ 
@@ -339,16 +580,13 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
                     } else {
                         path_chamfer.appendNew<Geom::CubicBezier>(handle1, handle2, endArcPoint);
                     }
-                    double chamfer_stepsTime = 1.0/chamferSubs;
-                    for(unsigned int i = 1; i < chamferSubs; i++){
+                    double chamfer_stepsTime = 1.0/chamfer_steps;
+                    for(unsigned int i = 1; i < chamfer_steps; i++){
                         Geom::Point chamferStep = path_chamfer.pointAt(chamfer_stepsTime * i);
                         path_out.appendNew<Geom::LineSegment>(chamferStep);
                     }
                     path_out.appendNew<Geom::LineSegment>(endArcPoint);
-                /*/
                 } else if (type == IC) {
-                   /*
-                    unsigned int chamferSubs = type-4000;
                     Geom::Path path_chamfer;
                     path_chamfer.start(path_out.finalPoint());
                     if((is_straight_curve(*curve_it1) && is_straight_curve(*curve_it2Fixed) && method != FM_BEZIER )|| method == FM_ARC){ 
@@ -357,13 +595,12 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
                     }else{
                         path_chamfer.appendNew<Geom::CubicBezier>(inverseHandle1, inverseHandle2, endArcPoint);
                     }
-                    double chamfer_stepsTime = 1.0/chamferSubs;
-                    for(unsigned int i = 1; i < chamferSubs; i++){
+                    double chamfer_stepsTime = 1.0/chamfer_steps;
+                    for(unsigned int i = 1; i < chamfer_steps; i++){
                         Geom::Point chamferStep = path_chamfer.pointAt(chamfer_stepsTime * i);
                         path_out.appendNew<Geom::LineSegment>(chamferStep);
                     }
                     path_out.appendNew<Geom::LineSegment>(endArcPoint);
-                */
                 } else if (type == IF) {
                     if((is_straight_curve(*curve_it1) && is_straight_curve(*curve_it2Fixed) && method != FM_BEZIER )|| method == FM_ARC){ 
                         ccwToggle = ccwToggle?0:1;
@@ -386,13 +623,6 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
             if (path_it->closed() && last) {
                 path_out.close();
             }
-            /*
-            if(!path_it->closed() || curve_it2 != curve_endit){
-                satellites[counter + 1] = std::make_pair(counter + 1, sat);
-            } else {
-                satellites[first] = std::make_pair(first, sat);
-            }
-            */
             ++curve_it1;
             if (curve_it2 != curve_endit) {
                 ++curve_it2;

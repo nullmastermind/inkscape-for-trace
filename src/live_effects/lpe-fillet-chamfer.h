@@ -15,6 +15,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 #include "live_effects/parameter/enum.h"
+#include "live_effects/parameter/unit.h"
 #include "2geom/pointwise.h"
 #include "live_effects/parameter/satellitepairarray.h"
 #include "live_effects/effect.h"
@@ -37,13 +38,31 @@ public:
     virtual std::vector<Geom::Path> doEffect_path(std::vector<Geom::Path> const &path_in);
     virtual void doOnApply(SPLPEItem const *lpeItem);
     virtual void adjustForNewPath(std::vector<Geom::Path> const &path_in);
-
+    virtual Gtk::Widget* newWidget();
+    /*double len_to_rad(double A, std::pair<int,Geom::Satellite> sat);*/
+    double rad_to_len(double A,  std::pair<int,Geom::Satellite> satellite);
+    void updateSatelliteType(Geom::SatelliteType satellitetype);
+    void updateFillet();
+    void refreshKnots();
+    void chamfer();
+    void inverseChamfer();
+    void fillet();
+    void inverseFillet();
+    
     SatellitePairArrayParam satellitepairarrayparam_values;
 
 private:
+    UnitParam unit;
     EnumParam<FilletMethod> method;
+    ScalarParam radius;
+    ScalarParam chamfer_steps;
     BoolParam flexible;
-    BoolParam mirrorKnots;
+    BoolParam mirror_knots;
+    BoolParam only_selected;
+    BoolParam use_knot_distance;
+    BoolParam hide_knots;
+    BoolParam ignore_radius_0;
+
     Geom::Pointwise *pointwise;
 
     LPEFilletChamfer(const LPEFilletChamfer &);
