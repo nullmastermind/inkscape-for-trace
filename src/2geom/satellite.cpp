@@ -117,6 +117,15 @@ Satellite::getTime(Geom::D2<Geom::SBasis> d2_in){
     return t;
 }
 
+double
+Satellite::getSize(Geom::D2<Geom::SBasis> d2_in){
+    double s = getAmmount();
+    if(getIsTime()){
+        s = toSize(s, d2_in);
+    }
+    return s;
+}
+
 
 Geom::Point 
 Satellite::getPosition(Geom::D2<Geom::SBasis> d2_in){

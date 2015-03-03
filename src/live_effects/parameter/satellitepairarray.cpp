@@ -31,6 +31,14 @@ SatellitePairArrayParam::SatellitePairArrayParam(
     knot_shape = SP_KNOT_SHAPE_DIAMOND;
     knot_mode = SP_KNOT_MODE_XOR;
     knot_color = 0x00ff0000;
+    /*
+    std::vector<std::pair<int,Geom::Satellite> >  satellites;
+    Geom::Path path;
+    path.start(Geom::Point(0,0));
+    path.appendNew<Geom::LineSegment>(Geom::Point(0,1));
+    last_pointwise = new Pointwise(path.toPwSb(),satellites);
+    */
+    last_pointwise = NULL;
 }
 
 SatellitePairArrayParam::~SatellitePairArrayParam() {}
@@ -47,6 +55,74 @@ void SatellitePairArrayParam::set_oncanvas_looks(SPKnotShapeType shape,
 void SatellitePairArrayParam::set_pointwise(Geom::Pointwise *pointwise)
 {
     last_pointwise = pointwise;
+}
+
+void SatellitePairArrayParam::set_helper_size(int hs)
+{
+    helper_size = hs;
+    updateCanvasIndicators();
+}
+
+void SatellitePairArrayParam::updateCanvasIndicators()
+{
+    Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = last_pointwise->getPwd2();
+    hp.clear();
+    bool mirrorPass = false;
+    for (unsigned int i = 0; i < _vector.size(); ++i) {
+        if(!_vector[i].second.getActive() || !_vector[i].second.getHidden()){
+            continue;
+        }
+        double pos = 0;
+        if(pwd2.size() <= _vector[i].first){
+            break;
+        }
+        Geom::D2<Geom::SBasis> d2 = pwd2[_vector[i].first];
+        if(mirrorPass == true){
+            double size = _vector[i].second.getSize(pwd2[_vector[i].first]);
+            boost::optional<Geom::D2<Geom::SBasis> > curve_in = last_pointwise->getCurveIn(_vector[i]);
+            if(curve_in){
+                d2 = *curve_in;
+                pos = _vector[i].second.getOpositeTime(size,*curve_in);
+            }
+        } else {
+            pos = _vector[i].second.getTime(pwd2[_vector[i].first]);
+        }
+        if (pos == 0) {
+            continue;
+        }
+        Geom::Point ptA = d2.valueAt(pos);
+        Geom::Point derivA = unit_vector(derivative(d2).valueAt(pos));
+        Geom::Rotate rot(Geom::Rotate::from_degrees(-90));
+        derivA = derivA * rot;
+        Geom::Point C = ptA - derivA * helper_size;
+        Geom::Point D = ptA + derivA * helper_size;
+        Geom::Ray ray1(C, D);
+        char const * svgd = "M 1,0.25 0.5,0 1,-0.25 M 1,0.5 0,0 1,-0.5";
+        Geom::PathVector pathv = sp_svg_read_pathv(svgd);
+        Geom::Affine aff = Geom::Affine();
+        aff *= Geom::Scale(helper_size);
+        if(mirrorPass == true){
+            aff *= Geom::Rotate(ray1.angle() - deg_to_rad(90));
+        } else {
+            aff *= Geom::Rotate(ray1.angle() - deg_to_rad(270));
+        }
+        pathv *= aff;
+        pathv += d2.valueAt(pos);
+        hp.push_back(pathv[0]);
+        hp.push_back(pathv[1]);
+        if(_vector[i].second.getHasMirror() && mirrorPass == false){
+            mirrorPass = true;
+            i--;
+        } else {
+            mirrorPass = false;
+        }
+    }
+}
+
+void SatellitePairArrayParam::addCanvasIndicators(
+    SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec)
+{
+    hp_vec.push_back(hp);
 }
 
 void SatellitePairArrayParam::addKnotHolderEntities(KnotHolder *knotholder,
@@ -103,6 +179,9 @@ void SatellitePairArrayParamKnotHolderEntity::knot_set(Point const &p,
     if( _index >= _pparam->_vector.size()){
         index = _index-_pparam->_vector.size();
     }
+    if( _pparam->last_pointwise == NULL){
+        return;
+    }
     std::pair<int,Geom::Satellite> satellite = _pparam->_vector.at(index);
     Geom::Pointwise* pointwise = _pparam->last_pointwise;
     Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = pointwise->getPwd2();
@@ -143,16 +222,16 @@ SatellitePairArrayParamKnotHolderEntity::knot_get() const
         index = _index-_pparam->_vector.size();
     }
     std::pair<int,Geom::Satellite> satellite = _pparam->_vector.at(index);
+    if( _pparam->last_pointwise == NULL){
+        return Geom::Point(0,0);
+    }
     Geom::Pointwise* pointwise = _pparam->last_pointwise;
     Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = pointwise->getPwd2();
     if( _index >= _pparam->_vector.size()){
         tmpPoint = satellite.second.getPosition(pwd2[satellite.first]);
         boost::optional<Geom::D2<Geom::SBasis> > d2_in = pointwise->getCurveIn(satellite);
         if(d2_in){
-            double s = satellite.second.getAmmount();
-            if(satellite.second.getIsTime()){
-                s = satellite.second.toSize(s, pwd2[satellite.first]);
-            }
+            double s = satellite.second.getSize(pwd2[satellite.first]);
             double t = satellite.second.getOpositeTime(s,*d2_in);
             if(t > 1){
                 t = 1;

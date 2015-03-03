@@ -124,7 +124,7 @@ Pointwise::findSatellites(int A, int B) const
 }
 
 std::vector<Satellite> 
-Pointwise::findClosingSatellites(int A, int B) const
+Pointwise::findClosingSatellites(int A) const
 {
     std::vector<Satellite> ret;
     bool finded = false;
@@ -151,7 +151,7 @@ Pointwise::findPeviousSatellites(int A, int B) const
             if(!_satellites[i].second.getIsStart()){
                 ret = findSatellites(_satellites[i-1].first, B);
             } else {
-                ret = findClosingSatellites(_satellites[i].first, B);
+                ret = findClosingSatellites(_satellites[i].first);
             }
         }
     }

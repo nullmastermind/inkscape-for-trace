@@ -44,11 +44,14 @@ public:
 
     void set_oncanvas_looks(SPKnotShapeType shape, SPKnotModeType mode,
                             guint32 color);
+    virtual void set_helper_size(int hs);
+    virtual void addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item);
+    virtual void addKnotHolderEntitieMirrored(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item, int i);
+    virtual void addCanvasIndicators(SPLPEItem const *lpeitem,std::vector<Geom::PathVector> &hp_vec);
     virtual bool providesKnotHolderEntities() const {
         return true;
     }
-    virtual void addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item);
-    virtual void addKnotHolderEntitieMirrored(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item, int i);
+    virtual void updateCanvasIndicators();
     void set_pointwise(Geom::Pointwise *pointwise);
     friend class SatellitePairArrayParamKnotHolderEntity;
 
@@ -59,6 +62,8 @@ private:
     SPKnotShapeType knot_shape;
     SPKnotModeType knot_mode;
     guint32 knot_color;
+    Geom::PathVector hp;
+    int helper_size;
 
     Geom::Pointwise *last_pointwise;
 

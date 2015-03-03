@@ -152,6 +152,7 @@ class Satellite
 
     void setPosition(Geom::Point p, Geom::D2<Geom::SBasis> d2_in);
     Geom::Point getPosition(Geom::D2<Geom::SBasis> curve);
+    double getSize(Geom::D2<Geom::SBasis> d2_in);
     double getTime(Geom::D2<Geom::SBasis> d2_in);
     double getOpositeTime(double A,Geom::D2<Geom::SBasis> SBasisCurve);
     double toSize(double A,Geom::D2<Geom::SBasis> d2_in);

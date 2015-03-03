@@ -68,7 +68,7 @@ class Pointwise
         virtual ~Pointwise();
         std::vector<Satellite> findSatellites(int A, int B = -1) const;
         std::vector<Satellite> findPeviousSatellites(int A, int B) const;
-        std::vector<Satellite> findClosingSatellites(int A, int B) const;
+        std::vector<Satellite> findClosingSatellites(int A) const;
         std::vector<std::pair<int,Satellite> > getSatellites();
         void setSatellites(std::vector<std::pair<int,Satellite> > sat);
         Piecewise<D2<SBasis> > getPwd2();
