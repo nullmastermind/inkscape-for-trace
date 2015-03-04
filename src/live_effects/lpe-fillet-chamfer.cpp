@@ -145,7 +145,7 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
                 bool active = false;
                 bool isClosing = false;
                 bool isStart = false;
-                bool hidden = false;
+                bool hidden = true;
                 Satellite satellite(F, flexible, isClosing, isStart, active, mirror_knots, hidden, 0.0, 0.0);
                 satellites.push_back(std::make_pair(counterTotal, satellite));
             }
@@ -290,6 +290,10 @@ double LPEFilletChamfer::rad_to_len(double A,  std::pair<int,Geom::Satellite> sa
             std::cout << cp << "cp\n";
             double p0pt = nearest_point(cp, d2_out);
             len = satellite.second.toSize(p0pt,d2_out);
+        } else {
+            if(A > 0){
+                len = rad_to_len(A * -1, satellite);
+            }
         }
         std::cout << len << "len\n";
     }
@@ -491,6 +495,10 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
             double s = satellite.getSize(curve_it2Fixed->toSBasis());
             double time1 = satellite.getOpositeTime(s,(*curve_it1).toSBasis());
             double time2 = satellite.getTime(curve_it2Fixed->toSBasis());
+            if(!satellite.getActive()){
+                time1 = 1;
+                time0 = 0;
+            }
             if(time1 <= time0){
                 time1 = time0;
             }
