@@ -54,7 +54,7 @@ sp_svg_satellite_read_d(gchar const *str, Geom::Satellite *sat){
         return 0;
     }
     gchar ** strarray = g_strsplit(str, "*", 0);
-    if(strarray[8] && !strarray[9]){
+    if(strarray[9] && !strarray[10]){
         sat->setSatelliteType(strarray[0]);
         sat->setIsTime(strncmp(strarray[1],"1",1) == 0);
         sat->setIsClosing(strncmp(strarray[2],"1",1) == 0);
@@ -63,10 +63,14 @@ sp_svg_satellite_read_d(gchar const *str, Geom::Satellite *sat){
         sat->setHasMirror(strncmp(strarray[5],"1",1) == 0);
         sat->setHidden(strncmp(strarray[6],"1",1) == 0);
         double ammount,angle;
+        float stepsTmp;
         sp_svg_number_read_d(strarray[7], &ammount);
         sp_svg_number_read_d(strarray[8], &angle);
+        sp_svg_number_read_f(strarray[9], &stepsTmp);
+        unsigned int steps = (unsigned int)stepsTmp;
         sat->setAmmount(ammount);
         sat->setAngle(angle);
+        sat->setSteps(steps);
         g_strfreev (strarray);
         return 1;
     }
@@ -75,12 +79,12 @@ sp_svg_satellite_read_d(gchar const *str, Geom::Satellite *sat){
 }
 
 template <>
-std::pair<int, Geom::Satellite>
-ArrayParam<std::pair<int, Geom::Satellite> >::readsvg(const gchar * str)
+std::pair<unsigned int, Geom::Satellite>
+ArrayParam<std::pair<unsigned int, Geom::Satellite> >::readsvg(const gchar * str)
 {
     gchar ** strarray = g_strsplit(str, ",", 2);
     double index;
-    std::pair<int, Geom::Satellite> result;
+    std::pair<unsigned int, Geom::Satellite> result;
     unsigned int success = (int)sp_svg_number_read_d(strarray[0], &index);
     Geom::Satellite sat;
     success += sp_svg_satellite_read_d(strarray[1], &sat);

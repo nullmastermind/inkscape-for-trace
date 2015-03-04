@@ -112,7 +112,7 @@ protected:
         str << nVector;
     }
 
-    void writesvgData(SVGOStringStream &str, std::pair<int, Geom::Satellite> const &nVector) const {
+    void writesvgData(SVGOStringStream &str, std::pair<unsigned int, Geom::Satellite> const &nVector) const {
         str << nVector.first;
         str << ",";
         str << nVector.second.getSatelliteTypeGchar();
@@ -132,6 +132,8 @@ protected:
         str << nVector.second.getAmmount();
         str << "*";
         str << nVector.second.getAngle();
+        str << "*";
+        str << nVector.second.getSteps();
     }
 
     StorageType readsvg(const gchar * str);

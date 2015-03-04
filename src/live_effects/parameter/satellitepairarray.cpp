@@ -9,6 +9,7 @@
  */
 
 #include "knotholder.h"
+#include "ui/dialog/lpe-fillet-chamfer-properties.h"
 #include "live_effects/parameter/satellitepairarray.h"
 #include "sp-lpe-item.h"
 // TODO due to internal breakage in glibmm headers,
@@ -26,18 +27,14 @@ SatellitePairArrayParam::SatellitePairArrayParam(
     const Glib::ustring &label, const Glib::ustring &tip,
     const Glib::ustring &key, Inkscape::UI::Widget::Registry *wr,
     Effect *effect)
-    : ArrayParam<std::pair<int,Geom::Satellite> >(label, tip, key, wr, effect, 0)
+    : ArrayParam<std::pair<unsigned int,Geom::Satellite> >(label, tip, key, wr, effect, 0)
 {
     knot_shape = SP_KNOT_SHAPE_DIAMOND;
     knot_mode = SP_KNOT_MODE_XOR;
     knot_color = 0x00ff0000;
-    /*
-    std::vector<std::pair<int,Geom::Satellite> >  satellites;
-    Geom::Path path;
-    path.start(Geom::Point(0,0));
-    path.appendNew<Geom::LineSegment>(Geom::Point(0,1));
-    last_pointwise = new Pointwise(path.toPwSb(),satellites);
-    */
+    helper_size = 0;
+    use_distance = false;
+
     last_pointwise = NULL;
 }
 
@@ -57,6 +54,21 @@ void SatellitePairArrayParam::set_pointwise(Geom::Pointwise *pointwise)
     last_pointwise = pointwise;
 }
 
+void SatellitePairArrayParam::set_document_unit(Glib::ustring const * value_document_unit)
+{
+    documentUnit = value_document_unit;
+}
+
+void SatellitePairArrayParam::set_use_distance(bool use_knot_distance )
+{
+    use_distance = use_knot_distance;
+}
+
+void SatellitePairArrayParam::set_unit(const gchar *abbr)
+{
+    unit = abbr;
+}
+
 void SatellitePairArrayParam::set_helper_size(int hs)
 {
     helper_size = hs;
@@ -73,7 +85,7 @@ void SatellitePairArrayParam::updateCanvasIndicators()
             continue;
         }
         double pos = 0;
-        if(pwd2.size() <= _vector[i].first){
+        if(pwd2.size() <= (unsigned)_vector[i].first){
             break;
         }
         Geom::D2<Geom::SBasis> d2 = pwd2[_vector[i].first];
@@ -136,10 +148,26 @@ void SatellitePairArrayParam::addKnotHolderEntities(KnotHolder *knotholder,
         if(_vector[i].second.getHasMirror()){
             addKnotHolderEntitieMirrored(knotholder, desktop, item, i);
         }
+        using namespace Geom;
+        SatelliteType type = _vector[i].second.getSatelliteType();
         const gchar *tip;
-        tip = _("<b>Fillet</b>: <b>Ctrl+Click</b> toggle type, "
-                "<b>Shift+Click</b> open dialog, "
-                "<b>Ctrl+Alt+Click</b> reset");
+        if (type == C){
+             tip = _("<b>Chamfer</b>: <b>Ctrl+Click</b> toggle type, "
+                    "<b>Shift+Click</b> open dialog, "
+                    "<b>Ctrl+Alt+Click</b> reset");
+        } else if (type == IC) {
+            tip = _("<b>Inverse Chamfer</b>: <b>Ctrl+Click</b> toggle type, "
+                    "<b>Shift+Click</b> open dialog, "
+                    "<b>Ctrl+Alt+Click</b> reset");
+        } else if (type == IF) {
+            tip = _("<b>Inverse Fillet</b>: <b>Ctrl+Click</b> toggle type, "
+                    "<b>Shift+Click</b> open dialog, "
+                    "<b>Ctrl+Alt+Click</b> reset");
+        } else {
+            tip = _("<b>Fillet</b>: <b>Ctrl+Click</b> toggle type, "
+                    "<b>Shift+Click</b> open dialog, "
+                    "<b>Ctrl+Alt+Click</b> reset");
+        }
         SatellitePairArrayParamKnotHolderEntity *e =
             new SatellitePairArrayParamKnotHolderEntity(this, i);
         e->create(desktop, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN, _(tip),
@@ -152,8 +180,26 @@ void SatellitePairArrayParam::addKnotHolderEntitieMirrored(KnotHolder *knotholde
         SPDesktop *desktop,
         SPItem *item, int i)
 {
+        using namespace Geom;
+        SatelliteType type = _vector[i].second.getSatelliteType();
         const gchar *tip;
-        tip = _("<b>Mirror</b> ppp");
+        if (type == C){
+             tip = _("<b>Chamfer</b>: <b>Ctrl+Click</b> toggle type, "
+                    "<b>Shift+Click</b> open dialog, "
+                    "<b>Ctrl+Alt+Click</b> reset");
+        } else if (type == IC) {
+            tip = _("<b>Inverse Chamfer</b>: <b>Ctrl+Click</b> toggle type, "
+                    "<b>Shift+Click</b> open dialog, "
+                    "<b>Ctrl+Alt+Click</b> reset");
+        } else if (type == IF) {
+            tip = _("<b>Inverse Fillet</b>: <b>Ctrl+Click</b> toggle type, "
+                    "<b>Shift+Click</b> open dialog, "
+                    "<b>Ctrl+Alt+Click</b> reset");
+        } else {
+            tip = _("<b>Fillet</b>: <b>Ctrl+Click</b> toggle type, "
+                    "<b>Shift+Click</b> open dialog, "
+                    "<b>Ctrl+Alt+Click</b> reset");
+        }
         SatellitePairArrayParamKnotHolderEntity *e =
             new SatellitePairArrayParamKnotHolderEntity(this, i + _vector.size());
         e->create(desktop, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN, _(tip),
@@ -256,6 +302,95 @@ SatellitePairArrayParamKnotHolderEntity::knot_get() const
     return canvas_point;
 }
 
+
+void SatellitePairArrayParamKnotHolderEntity::knot_click(guint state)
+{
+    int index = _index;
+    if( _index >= _pparam->_vector.size()){
+        index = _index-_pparam->_vector.size();
+    }
+    if (state & GDK_CONTROL_MASK) {
+        if (state & GDK_MOD1_MASK) {
+            _pparam->_vector.at(index).second.setAmmount(0.0);
+            _pparam->param_set_and_write_new_value(_pparam->_vector);
+            sp_lpe_item_update_patheffect(SP_LPE_ITEM(item), false, false);
+        }else{
+            using namespace Geom;
+            SatelliteType type = _pparam->_vector.at(index).second.getSatelliteType();
+            switch(type){
+                case F:
+                    type = IF;
+                    break;
+                case IF:
+                    type =  C;
+                    break;
+                case C:
+                    type =  IC;
+                    break;
+                default:
+                    type = F;
+                    break;
+            }
+            _pparam->_vector.at(index).second.setSatelliteType(type);
+            _pparam->param_set_and_write_new_value(_pparam->_vector);
+            sp_lpe_item_update_patheffect(SP_LPE_ITEM(item), false, false);
+            const gchar *tip;
+            if (type == C){
+                 tip = _("<b>Chamfer</b>: <b>Ctrl+Click</b> toggle type, "
+                        "<b>Shift+Click</b> open dialog, "
+                        "<b>Ctrl+Alt+Click</b> reset");
+            } else if (type == IC) {
+                tip = _("<b>Inverse Chamfer</b>: <b>Ctrl+Click</b> toggle type, "
+                        "<b>Shift+Click</b> open dialog, "
+                        "<b>Ctrl+Alt+Click</b> reset");
+            } else if (type == IF) {
+                tip = _("<b>Inverse Fillet</b>: <b>Ctrl+Click</b> toggle type, "
+                        "<b>Shift+Click</b> open dialog, "
+                        "<b>Ctrl+Alt+Click</b> reset");
+            } else {
+                tip = _("<b>Fillet</b>: <b>Ctrl+Click</b> toggle type, "
+                        "<b>Shift+Click</b> open dialog, "
+                        "<b>Ctrl+Alt+Click</b> reset");
+            }
+            this->knot->tip = g_strdup(tip);
+            this->knot->show();
+        }
+    } else if (state & GDK_SHIFT_MASK) {
+        double ammount = _pparam->_vector.at(index).second.getAmmount(); 
+        if(!_pparam->use_distance && !_pparam->_vector.at(index).second.getIsTime()){
+             ammount = _pparam->last_pointwise->len_to_rad(ammount, _pparam->_vector.at(index));
+        }
+        boost::optional<Geom::D2<Geom::SBasis> > d2_in = _pparam->last_pointwise->getCurveIn(_pparam->_vector.at(index));
+        bool aprox = false;
+        D2<SBasis> d2_out = _pparam->last_pointwise->getPwd2()[index];
+        if(d2_in){
+            aprox = ((*d2_in)[0].degreesOfFreedom() != 2 || d2_out[0].degreesOfFreedom() != 2) && !_pparam->use_distance?true:false;
+        }
+        Inkscape::UI::Dialogs::FilletChamferPropertiesDialog::showDialog(
+            this->desktop, ammount , this, _pparam->unit, _pparam->use_distance, aprox, _pparam->documentUnit,_pparam->_vector.at(index).second);
+    
+    }
+}
+
+void SatellitePairArrayParamKnotHolderEntity::knot_set_offset(Geom::Satellite satellite)
+{
+    int index = _index;
+    if( _index >= _pparam->_vector.size()){
+        index = _index-_pparam->_vector.size();
+    }
+    double ammount = satellite.getAmmount(); 
+    if(!_pparam->use_distance && !satellite.getIsTime()){
+         ammount = _pparam->last_pointwise->rad_to_len(ammount, _pparam->_vector.at(index));
+    }
+    satellite.setAmmount(ammount);
+    _pparam->_vector.at(index).second = satellite;
+    this->parent_holder->knot_ungrabbed_handler(this->knot, 0);
+    _pparam->param_set_and_write_new_value(_pparam->_vector);
+    SPLPEItem * splpeitem = dynamic_cast<SPLPEItem *>(item);
+    if(splpeitem){
+        sp_lpe_item_update_patheffect(splpeitem, false, false);
+    }
+}
 
 } /* namespace LivePathEffect */
 

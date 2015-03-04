@@ -64,29 +64,32 @@ class Pointwise
 {
     public:
         Pointwise(){};
-        Pointwise(Piecewise<D2<SBasis> > pwd2, std::vector<std::pair<int,Satellite> > satellites);
+        Pointwise(Piecewise<D2<SBasis> > pwd2, std::vector<std::pair<unsigned int,Satellite> > satellites);
         virtual ~Pointwise();
-        std::vector<Satellite> findSatellites(int A, int B = -1) const;
-        std::vector<Satellite> findPeviousSatellites(int A, int B) const;
-        std::vector<Satellite> findClosingSatellites(int A) const;
-        std::vector<std::pair<int,Satellite> > getSatellites();
-        void setSatellites(std::vector<std::pair<int,Satellite> > sat);
+        std::vector<Satellite> findSatellites(unsigned int A, int B = -1) const;
+        std::vector<Satellite> findPeviousSatellites(unsigned int A, int B) const;
+        std::vector<Satellite> findClosingSatellites(unsigned int A) const;
+        double rad_to_len(double A,  std::pair<unsigned int,Geom::Satellite> satellite);
+        double len_to_rad(double A,  std::pair<unsigned int,Geom::Satellite> satellite);
+        std::vector<std::pair<unsigned int,Satellite> > getSatellites();
+        void setSatellites(std::vector<std::pair<unsigned int,Satellite> > sat);
         Piecewise<D2<SBasis> > getPwd2();
         void setPwd2(Piecewise<D2<SBasis> > pwd2_in);
-        boost::optional<Geom::D2<Geom::SBasis> > getCurveIn(std::pair<int,Satellite> sat);
+        boost::optional<Geom::D2<Geom::SBasis> > getCurveIn(std::pair<unsigned int,Satellite> sat);
         Pointwise recalculate_for_new_pwd2(Piecewise<D2<SBasis> > A);
+        /*
         Pointwise pwd2_reverse(int index);
         Pointwise pwd2_append(int index);
         Pointwise pwd2_prepend(int index);
         Pointwise pwd2_add(int index);
         Pointwise pwd2_del(int index);
-        Pointwise satellite_add(int index,Satellite sat);
-        Pointwise satellite_del(int index,Satellite sat);
-        
+        Pointwise satellite_add(unsigned int index,Satellite sat);
+        Pointwise satellite_del(unsigned int index,Satellite sat);
+        */
 
     private:
         Piecewise<D2<SBasis> > _pwd2;
-        std::vector<std::pair<int,Satellite> > _satellites;
+        std::vector<std::pair<unsigned int,Satellite> > _satellites;
 
 };
 

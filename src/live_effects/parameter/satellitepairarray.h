@@ -29,7 +29,7 @@ namespace LivePathEffect {
 
 class SatellitePairArrayParamKnotHolderEntity;
 
-class SatellitePairArrayParam : public ArrayParam<std::pair<int, Geom::Satellite> > {
+class SatellitePairArrayParam : public ArrayParam<std::pair<unsigned int, Geom::Satellite> > {
 public:
     SatellitePairArrayParam(const Glib::ustring &label,
                                  const Glib::ustring &tip,
@@ -51,6 +51,9 @@ public:
     virtual bool providesKnotHolderEntities() const {
         return true;
     }
+    void set_document_unit(Glib::ustring const * value_document_unit);
+    void set_use_distance(bool use_knot_distance );
+    void set_unit(const gchar *abbr);
     virtual void updateCanvasIndicators();
     void set_pointwise(Geom::Pointwise *pointwise);
     friend class SatellitePairArrayParamKnotHolderEntity;
@@ -64,7 +67,9 @@ private:
     guint32 knot_color;
     Geom::PathVector hp;
     int helper_size;
-
+    bool use_distance;
+    const gchar *unit;
+    Glib::ustring const * documentUnit;
     Geom::Pointwise *last_pointwise;
 
 };
@@ -76,7 +81,8 @@ public:
 
     virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state);
     virtual Geom::Point knot_get() const;
-
+    virtual void knot_click(guint state);
+    void knot_set_offset(Geom::Satellite);
     /** Checks whether the index falls within the size of the parameter's vector */
     bool valid_index(unsigned int index) const {
         return (_pparam->_vector.size() > index);

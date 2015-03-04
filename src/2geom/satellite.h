@@ -45,7 +45,7 @@ class Satellite
   public:
 
     Satellite();
-    Satellite(SatelliteType satellitetype, bool isTime, bool isClosing, bool isStart, bool active, bool hasMirror, bool hidden, double ammount, double angle);
+    Satellite(SatelliteType satellitetype, bool isTime, bool isClosing, bool isStart, bool active, bool hasMirror, bool hidden, double ammount, double angle, unsigned int steps);
 
     virtual ~Satellite();
 
@@ -99,6 +99,11 @@ class Satellite
         _angle = A;
     }
 
+    void setSteps(int A)
+    {
+        _steps = A;
+    }
+
     SatelliteType getSatelliteType() const
     {
         return _satellitetype;
@@ -150,6 +155,11 @@ class Satellite
         return _angle;
     }
 
+    int getSteps() const
+    {
+        return _steps;
+    }
+
     void setPosition(Geom::Point p, Geom::D2<Geom::SBasis> d2_in);
     Geom::Point getPosition(Geom::D2<Geom::SBasis> curve);
     double getSize(Geom::D2<Geom::SBasis> d2_in);
@@ -169,6 +179,7 @@ class Satellite
     bool _hidden;
     double _ammount;
     double _angle;
+    unsigned int _steps;
 };
 
 } // end namespace Geom

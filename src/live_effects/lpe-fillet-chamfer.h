@@ -40,9 +40,9 @@ public:
     virtual void adjustForNewPath(std::vector<Geom::Path> const &path_in);
     virtual Gtk::Widget* newWidget();
     /*double len_to_rad(double A, std::pair<int,Geom::Satellite> sat);*/
-    double rad_to_len(double A,  std::pair<int,Geom::Satellite> satellite);
     void updateSatelliteType(Geom::SatelliteType satellitetype);
-    void updateFillet();
+    void updateChamferSteps();
+    void updateAmmount();
     void refreshKnots();
     void chamfer();
     void inverseChamfer();

@@ -40,8 +40,8 @@ namespace Geom {
 
 Satellite::Satellite(){};
 
-Satellite::Satellite(SatelliteType satellitetype, bool isTime, bool isClosing, bool isStart, bool active, bool hasMirror, bool hidden, double ammount, double angle)
-        : _satellitetype(satellitetype), _isTime(isTime), _isClosing(isClosing), _isStart(isStart), _active(active), _hasMirror(hasMirror), _hidden(hidden), _ammount(ammount), _angle(angle){};
+Satellite::Satellite(SatelliteType satellitetype, bool isTime, bool isClosing, bool isStart, bool active, bool hasMirror, bool hidden, double ammount, double angle, unsigned int steps)
+        : _satellitetype(satellitetype), _isTime(isTime), _isClosing(isClosing), _isStart(isStart), _active(active), _hasMirror(hasMirror), _hidden(hidden), _ammount(ammount), _angle(angle), _steps(steps){};
 
 Satellite::~Satellite() {};
 
