@@ -62,13 +62,13 @@ sp_svg_satellite_read_d(gchar const *str, Geom::Satellite *sat){
         sat->setActive(strncmp(strarray[4],"1",1) == 0);
         sat->setHasMirror(strncmp(strarray[5],"1",1) == 0);
         sat->setHidden(strncmp(strarray[6],"1",1) == 0);
-        double ammount,angle;
+        double amount,angle;
         float stepsTmp;
-        sp_svg_number_read_d(strarray[7], &ammount);
+        sp_svg_number_read_d(strarray[7], &amount);
         sp_svg_number_read_d(strarray[8], &angle);
         sp_svg_number_read_f(strarray[9], &stepsTmp);
         unsigned int steps = (unsigned int)stepsTmp;
-        sat->setAmmount(ammount);
+        sat->setAmount(amount);
         sat->setAngle(angle);
         sat->setSteps(steps);
         g_strfreev (strarray);

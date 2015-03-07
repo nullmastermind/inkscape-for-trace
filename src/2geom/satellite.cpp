@@ -40,8 +40,8 @@ namespace Geom {
 
 Satellite::Satellite(){};
 
-Satellite::Satellite(SatelliteType satellitetype, bool isTime, bool isClosing, bool isStart, bool active, bool hasMirror, bool hidden, double ammount, double angle, unsigned int steps)
-        : _satellitetype(satellitetype), _isTime(isTime), _isClosing(isClosing), _isStart(isStart), _active(active), _hasMirror(hasMirror), _hidden(hidden), _ammount(ammount), _angle(angle), _steps(steps){};
+Satellite::Satellite(SatelliteType satellitetype, bool isTime, bool isClosing, bool isStart, bool active, bool hasMirror, bool hidden, double amount, double angle, unsigned int steps)
+        : _satellitetype(satellitetype), _isTime(isTime), _isClosing(isClosing), _isStart(isStart), _active(active), _hasMirror(hasMirror), _hidden(hidden), _amount(amount), _angle(angle), _steps(steps){};
 
 Satellite::~Satellite() {};
 
@@ -49,13 +49,14 @@ double
 Satellite::toTime(double A,Geom::D2<Geom::SBasis> d2_in)
 {
     if(!d2_in.isFinite() ||  d2_in.isZero() || A == 0){
-        _ammount = 0;
         return 0;
     }
     double t = 0;
     double lenghtPart = Geom::length(d2_in, Geom::EPSILON);
-    if (A > lenghtPart) {
-        t = 1;
+    if (A > lenghtPart || d2_in[0].degreesOfFreedom() == 2) {
+        if (lenghtPart != 0) {
+            t = A / lenghtPart;
+        }
     } else if (d2_in[0].degreesOfFreedom() != 2) {
         Geom::Piecewise<Geom::D2<Geom::SBasis> > u;
         u.push_cut(0);
@@ -64,15 +65,8 @@ Satellite::toTime(double A,Geom::D2<Geom::SBasis> d2_in)
         if (t_roots.size() > 0) {
             t = t_roots[0];
         }
-    } else {
-        //to be sure
-        if (lenghtPart != 0) {
-            t = A / lenghtPart;
-        }
     }
-    if(t > 0.998){
-        t = 1;
-    }
+
     return t;
 }
 
@@ -80,19 +74,18 @@ double
 Satellite::toSize(double A,Geom::D2<Geom::SBasis> d2_in)
 {
     if(!d2_in.isFinite() ||  d2_in.isZero() || A == 0){
-        _ammount = 0;
         return 0;
     }
     double s = 0;
     double lenghtPart = Geom::length(d2_in, Geom::EPSILON);
-    if (d2_in[0].degreesOfFreedom() != 2) {
+    if (A > lenghtPart || d2_in[0].degreesOfFreedom() == 2) {
+        s = (A * lenghtPart);
+    } else if (d2_in[0].degreesOfFreedom() != 2) {
         Geom::Piecewise<Geom::D2<Geom::SBasis> > u;
         u.push_cut(0);
         u.push(d2_in, 1);
         u = Geom::portion(u, 0.0, A);
         s = Geom::length(u, 0.001);
-    } else {
-        s = (A * lenghtPart);
     }
     return s;
 }
@@ -110,16 +103,19 @@ Satellite::getOpositeTime(double s, Geom::D2<Geom::SBasis> d2_in)
 
 double
 Satellite::getTime(Geom::D2<Geom::SBasis> d2_in){
-    double t = getAmmount();
+    double t = getAmount();
     if(!getIsTime()){
         t = toTime(t, d2_in);
+    }
+    if(t > 1){
+        t = 1;
     }
     return t;
 }
 
 double
 Satellite::getSize(Geom::D2<Geom::SBasis> d2_in){
-    double s = getAmmount();
+    double s = getAmount();
     if(getIsTime()){
         s = toSize(s, d2_in);
     }
@@ -129,7 +125,8 @@ Satellite::getSize(Geom::D2<Geom::SBasis> d2_in){
 
 Geom::Point 
 Satellite::getPosition(Geom::D2<Geom::SBasis> d2_in){
-    return d2_in.valueAt(getTime(d2_in));
+    double t = getTime(d2_in);
+    return d2_in.valueAt(t);
 }
 
 void
@@ -139,7 +136,7 @@ Satellite::setPosition(Geom::Point p, Geom::D2<Geom::SBasis> d2_in)
     if(!getIsTime()){
         A = toSize(A, d2_in);
     }
-    setAmmount(A);
+    setAmount(A);
 }
 
 } // end namespace Geom

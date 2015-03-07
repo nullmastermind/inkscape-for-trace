@@ -45,7 +45,7 @@ class Satellite
   public:
 
     Satellite();
-    Satellite(SatelliteType satellitetype, bool isTime, bool isClosing, bool isStart, bool active, bool hasMirror, bool hidden, double ammount, double angle, unsigned int steps);
+    Satellite(SatelliteType satellitetype, bool isTime, bool isClosing, bool isStart, bool active, bool hasMirror, bool hidden, double amount, double angle, unsigned int steps);
 
     virtual ~Satellite();
 
@@ -89,9 +89,9 @@ class Satellite
     {
         _hidden = A;
     }
-    void setAmmount(double A)
+    void setAmount(double A)
     {
-        _ammount = A;
+        _amount = A;
     }
 
     void setAngle(double A)
@@ -145,9 +145,9 @@ class Satellite
         return _hidden;
     }
 
-    double getAmmount() const
+    double getAmount() const
     {
-        return _ammount;
+        return _amount;
     }
 
     double getAngle() const
@@ -177,7 +177,7 @@ class Satellite
     bool _active;
     bool _hasMirror;
     bool _hidden;
-    double _ammount;
+    double _amount;
     double _angle;
     unsigned int _steps;
 };

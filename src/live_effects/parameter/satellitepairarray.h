@@ -20,6 +20,7 @@
 
 #include <glib.h>
 #include "live_effects/parameter/array.h"
+#include "live_effects/effect-enum.h"
 #include "knot-holder-entity.h"
 #include <2geom/pointwise.h>
 
@@ -27,7 +28,7 @@ namespace Inkscape {
 
 namespace LivePathEffect {
 
-class SatellitePairArrayParamKnotHolderEntity;
+class FilletChamferKnotHolderEntity;
 
 class SatellitePairArrayParam : public ArrayParam<std::pair<unsigned int, Geom::Satellite> > {
 public:
@@ -46,7 +47,7 @@ public:
                             guint32 color);
     virtual void set_helper_size(int hs);
     virtual void addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item);
-    virtual void addKnotHolderEntitieMirrored(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item, int i);
+    virtual void addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item, bool mirror);
     virtual void addCanvasIndicators(SPLPEItem const *lpeitem,std::vector<Geom::PathVector> &hp_vec);
     virtual bool providesKnotHolderEntities() const {
         return true;
@@ -54,9 +55,11 @@ public:
     void set_document_unit(Glib::ustring const * value_document_unit);
     void set_use_distance(bool use_knot_distance );
     void set_unit(const gchar *abbr);
+    void set_effect_type(EffectType et);
     virtual void updateCanvasIndicators();
+    virtual void updateCanvasIndicators(bool mirror);
     void set_pointwise(Geom::Pointwise *pointwise);
-    friend class SatellitePairArrayParamKnotHolderEntity;
+    friend class FilletChamferKnotHolderEntity;
 
 private:
     SatellitePairArrayParam(const SatellitePairArrayParam &);
@@ -70,14 +73,15 @@ private:
     bool use_distance;
     const gchar *unit;
     Glib::ustring const * documentUnit;
+    EffectType _effectType;
     Geom::Pointwise *last_pointwise;
 
 };
 
-class SatellitePairArrayParamKnotHolderEntity : public KnotHolderEntity {
+class FilletChamferKnotHolderEntity : public KnotHolderEntity {
 public:
-    SatellitePairArrayParamKnotHolderEntity(SatellitePairArrayParam *p, unsigned int index);
-    virtual ~SatellitePairArrayParamKnotHolderEntity() {}
+    FilletChamferKnotHolderEntity(SatellitePairArrayParam *p, unsigned int index);
+    virtual ~FilletChamferKnotHolderEntity() {}
 
     virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state);
     virtual Geom::Point knot_get() const;

@@ -132,7 +132,7 @@ Pointwise::len_to_rad(double A,  std::pair<unsigned int,Geom::Satellite> satelli
 boost::optional<Geom::D2<Geom::SBasis> >
 Pointwise::getCurveIn(std::pair<unsigned int,Satellite> sat){
     //curve out = sat.first;
-    std::vector<Geom::Path> path_in_processed = pathv_to_linear_and_cubic_beziers(path_from_piecewise(_pwd2, 0.001));
+    std::vector<Geom::Path> path_in_processed = path_from_piecewise(_pwd2, 0.001);
     unsigned int counterTotal = 0;
     for (PathVector::const_iterator path_it = path_in_processed.begin(); path_it != path_in_processed.end(); ++path_it) {
         if (path_it->empty()){

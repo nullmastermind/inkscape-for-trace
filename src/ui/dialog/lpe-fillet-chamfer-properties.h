@@ -27,9 +27,9 @@ public:
         return "LayerPropertiesDialog";
     }
 
-    static void showDialog(SPDesktop *desktop, double ammount,
+    static void showDialog(SPDesktop *desktop, double amount,
                            const Inkscape::LivePathEffect::
-                           SatellitePairArrayParamKnotHolderEntity *pt,
+                           FilletChamferKnotHolderEntity *pt,
                            const gchar *unit,
                            bool use_distance,
                            bool aprox_radius,
@@ -39,7 +39,7 @@ public:
 protected:
 
     SPDesktop *_desktop;
-    Inkscape::LivePathEffect::SatellitePairArrayParamKnotHolderEntity *
+    Inkscape::LivePathEffect::FilletChamferKnotHolderEntity *
     _knotpoint;
 
     Gtk::Label _fillet_chamfer_position_label;
@@ -67,7 +67,7 @@ protected:
 
     void _set_desktop(SPDesktop *desktop);
     void _set_pt(const Inkscape::LivePathEffect::
-                SatellitePairArrayParamKnotHolderEntity *pt);
+                FilletChamferKnotHolderEntity *pt);
     void _set_unit(const gchar *abbr);
     void _set_document_unit(Glib::ustring const * abbr);
     void _set_use_distance(bool use_knot_distance);
@@ -79,9 +79,9 @@ protected:
     const gchar *unit;
     Glib::ustring const * document_unit;
     bool use_distance;
-    double ammount;
+    double amount;
     bool aprox;
-    void _set_ammount(double ammount);
+    void _set_amount(double amount);
     void _set_satellite(Geom::Satellite satellite);
     void _prepareLabelRenderer(Gtk::TreeModel::const_iterator const &row);
 
@@ -89,7 +89,7 @@ protected:
     void _handleButtonEvent(GdkEventButton *event);
 
     friend class Inkscape::LivePathEffect::
-            SatellitePairArrayParamKnotHolderEntity;
+            FilletChamferKnotHolderEntity;
 
 private:
     FilletChamferPropertiesDialog(

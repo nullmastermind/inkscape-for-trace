@@ -123,9 +123,9 @@ FilletChamferPropertiesDialog::~FilletChamferPropertiesDialog()
 }
 
 void FilletChamferPropertiesDialog::showDialog(
-    SPDesktop *desktop, double ammount,
+    SPDesktop *desktop, double amount,
     const Inkscape::LivePathEffect::
-    SatellitePairArrayParamKnotHolderEntity *pt,
+    FilletChamferKnotHolderEntity *pt,
     const gchar *unit,
     bool use_distance,
     bool aprox_radius,
@@ -139,7 +139,7 @@ void FilletChamferPropertiesDialog::showDialog(
     dialog->_set_use_distance(use_distance);
     dialog->_set_aprox(aprox_radius);
     dialog->_set_document_unit(documentUnit);
-    dialog->_set_ammount(ammount);
+    dialog->_set_amount(amount);
     dialog->_set_satellite(satellite);
     dialog->_set_pt(pt);
 
@@ -176,7 +176,7 @@ void FilletChamferPropertiesDialog::_apply()
         } else {
             d_pos = Inkscape::Util::Quantity::convert(d_pos, unit, *document_unit);
         }
-        _satellite.setAmmount( d_pos);
+        _satellite.setAmount( d_pos);
         unsigned int steps = (unsigned int)_fillet_chamfer_chamfer_subdivisions.get_value();
         if(steps < 1){
             steps = 1;
@@ -222,14 +222,14 @@ void FilletChamferPropertiesDialog::_set_satellite(Geom::Satellite satellite)
         distance_or_radius = std::string(_("Knot distance"));
     }
     if (satellite.getIsTime()) {
-        position = ammount * 100;
+        position = amount * 100;
         _flexible = true;
         _fillet_chamfer_position_label.set_label(_("Position (%):"));
     } else {
         _flexible = false;
         std::string posConcat = Glib::ustring::compose (_("%1 (%2):"), distance_or_radius, unit);
         _fillet_chamfer_position_label.set_label(_(posConcat.c_str()));
-        position = ammount;
+        position = amount;
         position = Inkscape::Util::Quantity::convert(position, *document_unit, unit);
     }
     _fillet_chamfer_position_numeric.set_value(position);
@@ -249,10 +249,10 @@ void FilletChamferPropertiesDialog::_set_satellite(Geom::Satellite satellite)
 
 void FilletChamferPropertiesDialog::_set_pt(
     const Inkscape::LivePathEffect::
-    SatellitePairArrayParamKnotHolderEntity *pt)
+    FilletChamferKnotHolderEntity *pt)
 {
     _knotpoint = const_cast<
-                 Inkscape::LivePathEffect::SatellitePairArrayParamKnotHolderEntity *>(
+                 Inkscape::LivePathEffect::FilletChamferKnotHolderEntity *>(
                      pt);
 }
 
@@ -261,9 +261,9 @@ void FilletChamferPropertiesDialog::_set_unit(const gchar *abbr)
     unit = abbr;
 }
 
-void FilletChamferPropertiesDialog::_set_ammount(double amm)
+void FilletChamferPropertiesDialog::_set_amount(double amm)
 {
-    ammount = amm;
+    amount = amm;
 }
 
 

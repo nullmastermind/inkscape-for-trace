@@ -129,7 +129,7 @@ protected:
         str << "*";
         str << nVector.second.getHidden();
         str << "*";
-        str << nVector.second.getAmmount();
+        str << nVector.second.getAmount();
         str << "*";
         str << nVector.second.getAngle();
         str << "*";

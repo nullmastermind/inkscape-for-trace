@@ -42,7 +42,7 @@ public:
     /*double len_to_rad(double A, std::pair<int,Geom::Satellite> sat);*/
     void updateSatelliteType(Geom::SatelliteType satellitetype);
     void updateChamferSteps();
-    void updateAmmount();
+    void updateAmount();
     void refreshKnots();
     void chamfer();
     void inverseChamfer();
