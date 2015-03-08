@@ -57,7 +57,7 @@ LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject) :
     use_knot_distance(_("Use knots distance instead radius"), _("Use knots distance instead radius"), "use_knot_distance", &wr, this, false),
     hide_knots(_("Hide knots"), _("Hide knots"), "hide_knots", &wr, this, false),
     ignore_radius_0(_("Ignore 0 radius knots"), _("Ignore 0 radius knots"), "ignore_radius_0", &wr, this, false),
-    helper_size(_("Helper size with direction:"), _("Helper size with direction"), "helper_size", &wr, this, 0),
+    helper(_("Show helper lines"), _("Show helper lines"), "helper", &wr, this, false),
     pointwise()
 {
     registerParameter(&satellitepairarrayparam_values);
@@ -65,13 +65,13 @@ LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject) :
     registerParameter(&method);
     registerParameter(&radius);
     registerParameter(&chamfer_steps);
-    registerParameter(&helper_size);
     registerParameter(&flexible);
     registerParameter(&use_knot_distance);
     registerParameter(&mirror_knots);
     registerParameter(&ignore_radius_0);
     registerParameter(&only_selected);
     registerParameter(&hide_knots);
+    registerParameter(&helper);
 
     radius.param_set_range(0., infinity());
     radius.param_set_increments(1, 1);
@@ -79,9 +79,6 @@ LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject) :
     chamfer_steps.param_set_range(1, 999);
     chamfer_steps.param_set_increments(1, 1);
     chamfer_steps.param_set_digits(0);
-    helper_size.param_set_range(0, 999);
-    helper_size.param_set_increments(5, 5);
-    helper_size.param_set_digits(0);
 }
 
 LPEFilletChamfer::~LPEFilletChamfer() {}
@@ -193,9 +190,6 @@ Gtk::Widget *LPEFilletChamfer::newWidget()
                     Gtk::Entry *entryWidg = dynamic_cast<Gtk::Entry *>(childList[1]);
                     entryWidg->set_width_chars(3);
                 }
-            } else if (param->param_key == "helper_size") {
-                Inkscape::UI::Widget::Scalar *widgRegistered = Gtk::manage(dynamic_cast<Inkscape::UI::Widget::Scalar *>(widg));
-                widgRegistered->signal_value_changed().connect(sigc::mem_fun(*this, &LPEFilletChamfer::refreshKnots));
             } else if (param->param_key == "only_selected") {
                 Gtk::manage(widg);
             }
@@ -374,10 +368,15 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
         //mandatory call
         satellitepairarrayparam_values.set_pointwise(pointwise);
         //optional call
-        if(hide_knots){
+        if(hide_knots || !helper){
             satellitepairarrayparam_values.set_helper_size(0);
         } else {
-            satellitepairarrayparam_values.set_helper_size(helper_size);
+            double radiusHelperNodes = 6.0;
+            if(current_zoom != 0){
+                radiusHelperNodes *= 1/current_zoom;
+                radiusHelperNodes = Inkscape::Util::Quantity::convert(radiusHelperNodes, "px", *defaultUnit);
+            }
+            satellitepairarrayparam_values.set_helper_size(radiusHelperNodes);
         }
         bool changed = false;
         bool refresh = false;
