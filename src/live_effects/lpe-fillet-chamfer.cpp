@@ -57,7 +57,7 @@ LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject) :
     use_knot_distance(_("Use knots distance instead radius"), _("Use knots distance instead radius"), "use_knot_distance", &wr, this, false),
     hide_knots(_("Hide knots"), _("Hide knots"), "hide_knots", &wr, this, false),
     ignore_radius_0(_("Ignore 0 radius knots"), _("Ignore 0 radius knots"), "ignore_radius_0", &wr, this, false),
-    helper(_("Show helper lines"), _("Show helper lines"), "helper", &wr, this, false),
+    helper_size(_("Helper size with direction:"), _("Helper size with direction"), "helper_size", &wr, this, 0),
     pointwise()
 {
     registerParameter(&satellitepairarrayparam_values);
@@ -65,13 +65,13 @@ LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject) :
     registerParameter(&method);
     registerParameter(&radius);
     registerParameter(&chamfer_steps);
+    registerParameter(&helper_size);
     registerParameter(&flexible);
     registerParameter(&use_knot_distance);
     registerParameter(&mirror_knots);
     registerParameter(&ignore_radius_0);
     registerParameter(&only_selected);
     registerParameter(&hide_knots);
-    registerParameter(&helper);
 
     radius.param_set_range(0., infinity());
     radius.param_set_increments(1, 1);
@@ -79,6 +79,9 @@ LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject) :
     chamfer_steps.param_set_range(1, 999);
     chamfer_steps.param_set_increments(1, 1);
     chamfer_steps.param_set_digits(0);
+    helper_size.param_set_range(0, 999);
+    helper_size.param_set_increments(5, 5);
+    helper_size.param_set_digits(0);
 }
 
 LPEFilletChamfer::~LPEFilletChamfer() {}
@@ -190,6 +193,9 @@ Gtk::Widget *LPEFilletChamfer::newWidget()
                     Gtk::Entry *entryWidg = dynamic_cast<Gtk::Entry *>(childList[1]);
                     entryWidg->set_width_chars(3);
                 }
+            } else if (param->param_key == "helper_size") {
+                Inkscape::UI::Widget::Scalar *widgRegistered = Gtk::manage(dynamic_cast<Inkscape::UI::Widget::Scalar *>(widg));
+                widgRegistered->signal_value_changed().connect(sigc::mem_fun(*this, &LPEFilletChamfer::refreshKnots));
             } else if (param->param_key == "only_selected") {
                 Gtk::manage(widg);
             }
@@ -231,60 +237,6 @@ Gtk::Widget *LPEFilletChamfer::newWidget()
     return vbox;
 }
 
-void LPEFilletChamfer::toggleHide()
-{
-    std::vector<Point> filletChamferData = fillet_chamfer_values.data();
-    std::vector<Geom::Point> result;
-    for (std::vector<Point>::const_iterator point_it = filletChamferData.begin();
-            point_it != filletChamferData.end(); ++point_it) {
-        if (hide_knots) {
-            result.push_back(Point((*point_it)[X], std::abs((*point_it)[Y]) * -1));
-        } else {
-            result.push_back(Point((*point_it)[X], std::abs((*point_it)[Y])));
-        }
-    }
-    fillet_chamfer_values.param_set_and_write_new_value(result);
-    refreshKnots();
-}
-
-void LPEFilletChamfer::toggleFlexFixed()
-{
-    std::vector<Point> filletChamferData = fillet_chamfer_values.data();
-    std::vector<Geom::Point> result;
-    unsigned int i = 0;
-    for (std::vector<Point>::const_iterator point_it = filletChamferData.begin();
-            point_it != filletChamferData.end(); ++point_it) {
-        if (flexible) {
-            result.push_back(Point(fillet_chamfer_values.to_time(i, (*point_it)[X]),
-                                   (*point_it)[Y]));
-        } else {
-            result.push_back(Point(fillet_chamfer_values.to_len(i, (*point_it)[X]),
-                                   (*point_it)[Y]));
-        }
-        i++;
-    }
-    if (flexible) {
-        radius.param_set_range(0., 100);
-        radius.param_set_value(0);
-    } else {
-        radius.param_set_range(0., infinity());
-        radius.param_set_value(0);
-    }
-    fillet_chamfer_values.param_set_and_write_new_value(result);
-}
-
-void LPEFilletChamfer::updateFillet()
-{
-    double power = 0;
-    if (!flexible) {
-        power = Inkscape::Util::Quantity::convert(radius, unit.get_abbreviation(), defaultUnit) * -1;
-    } else {
-        power = radius;
-    }
-    Piecewise<D2<SBasis> > const &pwd2 = fillet_chamfer_values.get_pwd2();
-    doUpdateFillet(path_from_piecewise(pwd2, tolerance), power);
-}
->>>>>>> MERGE-SOURCE
 
 void LPEFilletChamfer::fillet()
 {
@@ -422,26 +374,10 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
         //mandatory call
         satellitepairarrayparam_values.set_pointwise(pointwise);
         //optional call
-        if(hide_knots || !helper){
+        if(hide_knots){
             satellitepairarrayparam_values.set_helper_size(0);
         } else {
-            double radiusHelperNodes = 12.0;
-            if(current_zoom != 0){
-                if(current_zoom < 0.5){
-                    radiusHelperNodes *= current_zoom + 0.4;
-                } else if(current_zoom > 1) {
-                    radiusHelperNodes *=  1/current_zoom;
-                }
-                Geom::Affine i2doc = i2anc_affine(SP_ITEM(lpeItem), SP_OBJECT(SP_ITEM(lpeItem)->document->getRoot()));
-                double expand = (i2doc.expansionX() + i2doc.expansionY())/2;
-                if(expand != 0){
-                    radiusHelperNodes /= expand;
-                }
-                radiusHelperNodes = Inkscape::Util::Quantity::convert(radiusHelperNodes, "px", defaultUnit);
-            } else {
-                radiusHelperNodes = 0;
-            }
-            satellitepairarrayparam_values.set_helper_size(radiusHelperNodes);
+            satellitepairarrayparam_values.set_helper_size(helper_size);
         }
         bool changed = false;
         bool refresh = false;

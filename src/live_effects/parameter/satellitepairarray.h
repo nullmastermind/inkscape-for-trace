@@ -52,7 +52,7 @@ public:
     virtual bool providesKnotHolderEntities() const {
         return true;
     }
-    void set_document_unit(Glib::ustring const * value_document_unit);
+    void set_document_unit(Glib::ustring value_document_unit);
     void set_use_distance(bool use_knot_distance );
     void set_unit(const gchar *abbr);
     void set_effect_type(EffectType et);
@@ -72,7 +72,7 @@ private:
     int helper_size;
     bool use_distance;
     const gchar *unit;
-    Glib::ustring const * documentUnit;
+    Glib::ustring documentUnit;
     EffectType _effectType;
     Geom::Pointwise *last_pointwise;
 

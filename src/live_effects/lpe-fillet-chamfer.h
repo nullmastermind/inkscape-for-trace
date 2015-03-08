@@ -62,7 +62,7 @@ private:
     BoolParam use_knot_distance;
     BoolParam hide_knots;
     BoolParam ignore_radius_0;
-    BoolParam helper;
+    ScalarParam helper_size;
 
     Geom::Pointwise *pointwise;
 

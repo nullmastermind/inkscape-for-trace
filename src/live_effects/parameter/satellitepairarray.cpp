@@ -54,7 +54,7 @@ void SatellitePairArrayParam::set_pointwise(Geom::Pointwise *pointwise)
     last_pointwise = pointwise;
 }
 
-void SatellitePairArrayParam::set_document_unit(Glib::ustring const * value_document_unit)
+void SatellitePairArrayParam::set_document_unit(Glib::ustring value_document_unit)
 {
     documentUnit = value_document_unit;
 }
