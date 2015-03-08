@@ -24,7 +24,7 @@ public:
 
   virtual void doBeforeEffect (SPLPEItem const* lpeitem);
 
-  virtual void generateHelperPath(Geom::PathVector result);
+  virtual void generateHelperPathAndSmooth(Geom::PathVector &result);
 
   virtual Gtk::Widget * newWidget();
 
@@ -40,11 +40,13 @@ protected:
 private:
   ScalarParam steps;
   ScalarParam threshold;
-  ScalarParam helper_size;
+  ScalarParam smooth_angles;
+  ToggleButtonParam helper;
   ToggleButtonParam nodes;
   ToggleButtonParam handles;
   ToggleButtonParam simplifyindividualpaths;
   ToggleButtonParam simplifyJustCoalesce;
+  double radiusHelperNodes;
 
   Geom::PathVector hp;
   Geom::OptRect bbox;

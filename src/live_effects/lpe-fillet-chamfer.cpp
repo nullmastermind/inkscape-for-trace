@@ -231,6 +231,60 @@ Gtk::Widget *LPEFilletChamfer::newWidget()
     return vbox;
 }
 
+void LPEFilletChamfer::toggleHide()
+{
+    std::vector<Point> filletChamferData = fillet_chamfer_values.data();
+    std::vector<Geom::Point> result;
+    for (std::vector<Point>::const_iterator point_it = filletChamferData.begin();
+            point_it != filletChamferData.end(); ++point_it) {
+        if (hide_knots) {
+            result.push_back(Point((*point_it)[X], std::abs((*point_it)[Y]) * -1));
+        } else {
+            result.push_back(Point((*point_it)[X], std::abs((*point_it)[Y])));
+        }
+    }
+    fillet_chamfer_values.param_set_and_write_new_value(result);
+    refreshKnots();
+}
+
+void LPEFilletChamfer::toggleFlexFixed()
+{
+    std::vector<Point> filletChamferData = fillet_chamfer_values.data();
+    std::vector<Geom::Point> result;
+    unsigned int i = 0;
+    for (std::vector<Point>::const_iterator point_it = filletChamferData.begin();
+            point_it != filletChamferData.end(); ++point_it) {
+        if (flexible) {
+            result.push_back(Point(fillet_chamfer_values.to_time(i, (*point_it)[X]),
+                                   (*point_it)[Y]));
+        } else {
+            result.push_back(Point(fillet_chamfer_values.to_len(i, (*point_it)[X]),
+                                   (*point_it)[Y]));
+        }
+        i++;
+    }
+    if (flexible) {
+        radius.param_set_range(0., 100);
+        radius.param_set_value(0);
+    } else {
+        radius.param_set_range(0., infinity());
+        radius.param_set_value(0);
+    }
+    fillet_chamfer_values.param_set_and_write_new_value(result);
+}
+
+void LPEFilletChamfer::updateFillet()
+{
+    double power = 0;
+    if (!flexible) {
+        power = Inkscape::Util::Quantity::convert(radius, unit.get_abbreviation(), defaultUnit) * -1;
+    } else {
+        power = radius;
+    }
+    Piecewise<D2<SBasis> > const &pwd2 = fillet_chamfer_values.get_pwd2();
+    doUpdateFillet(path_from_piecewise(pwd2, tolerance), power);
+}
+>>>>>>> MERGE-SOURCE
 
 void LPEFilletChamfer::fillet()
 {
@@ -265,7 +319,7 @@ void LPEFilletChamfer::updateAmount()
 {
     double power = 0;
     if (!flexible) {
-        power = Inkscape::Util::Quantity::convert(radius, unit.get_abbreviation(), *defaultUnit);
+        power = Inkscape::Util::Quantity::convert(radius, unit.get_abbreviation(), defaultUnit);
     } else {
         power = radius/100;
     }
@@ -371,10 +425,21 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
         if(hide_knots || !helper){
             satellitepairarrayparam_values.set_helper_size(0);
         } else {
-            double radiusHelperNodes = 6.0;
+            double radiusHelperNodes = 12.0;
             if(current_zoom != 0){
-                radiusHelperNodes *= 1/current_zoom;
-                radiusHelperNodes = Inkscape::Util::Quantity::convert(radiusHelperNodes, "px", *defaultUnit);
+                if(current_zoom < 0.5){
+                    radiusHelperNodes *= current_zoom + 0.4;
+                } else if(current_zoom > 1) {
+                    radiusHelperNodes *=  1/current_zoom;
+                }
+                Geom::Affine i2doc = i2anc_affine(SP_ITEM(lpeItem), SP_OBJECT(SP_ITEM(lpeItem)->document->getRoot()));
+                double expand = (i2doc.expansionX() + i2doc.expansionY())/2;
+                if(expand != 0){
+                    radiusHelperNodes /= expand;
+                }
+                radiusHelperNodes = Inkscape::Util::Quantity::convert(radiusHelperNodes, "px", defaultUnit);
+            } else {
+                radiusHelperNodes = 0;
             }
             satellitepairarrayparam_values.set_helper_size(radiusHelperNodes);
         }

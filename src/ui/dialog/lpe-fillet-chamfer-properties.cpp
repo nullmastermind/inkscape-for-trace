@@ -129,8 +129,12 @@ void FilletChamferPropertiesDialog::showDialog(
     const gchar *unit,
     bool use_distance,
     bool aprox_radius,
+<<<<<<< TREE
     Glib::ustring const * documentUnit,
     Geom::Satellite satellite)
+=======
+    Glib::ustring documentUnit)
+>>>>>>> MERGE-SOURCE
 {
     FilletChamferPropertiesDialog *dialog = new FilletChamferPropertiesDialog();
 
@@ -174,7 +178,7 @@ void FilletChamferPropertiesDialog::_apply()
             }
             d_pos = d_pos / 100;
         } else {
-            d_pos = Inkscape::Util::Quantity::convert(d_pos, unit, *document_unit);
+            d_pos = Inkscape::Util::Quantity::convert(d_pos, unit, document_unit);
         }
         _satellite.setAmount( d_pos);
         unsigned int steps = (unsigned int)_fillet_chamfer_chamfer_subdivisions.get_value();
@@ -230,7 +234,7 @@ void FilletChamferPropertiesDialog::_set_satellite(Geom::Satellite satellite)
         std::string posConcat = Glib::ustring::compose (_("%1 (%2):"), distance_or_radius, unit);
         _fillet_chamfer_position_label.set_label(_(posConcat.c_str()));
         position = amount;
-        position = Inkscape::Util::Quantity::convert(position, *document_unit, unit);
+        position = Inkscape::Util::Quantity::convert(position, document_unit, unit);
     }
     _fillet_chamfer_position_numeric.set_value(position);
     if (satellite.getSatelliteType() == Geom::F) {
@@ -261,6 +265,7 @@ void FilletChamferPropertiesDialog::_set_unit(const gchar *abbr)
     unit = abbr;
 }
 
+<<<<<<< TREE
 void FilletChamferPropertiesDialog::_set_amount(double amm)
 {
     amount = amm;
@@ -270,6 +275,9 @@ void FilletChamferPropertiesDialog::_set_amount(double amm)
 
 
 void FilletChamferPropertiesDialog::_set_document_unit(Glib::ustring const *abbr)
+=======
+void FilletChamferPropertiesDialog::_set_document_unit(Glib::ustring abbr)
+>>>>>>> MERGE-SOURCE
 {
     document_unit = abbr;
 }

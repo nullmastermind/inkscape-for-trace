@@ -33,7 +33,7 @@ public:
                            const gchar *unit,
                            bool use_distance,
                            bool aprox_radius,
-                           Glib::ustring const * documentUnit,
+                           Glib::ustring documentUnit,
                            Geom::Satellite satellite);
 
 protected:
@@ -69,7 +69,7 @@ protected:
     void _set_pt(const Inkscape::LivePathEffect::
                 FilletChamferKnotHolderEntity *pt);
     void _set_unit(const gchar *abbr);
-    void _set_document_unit(Glib::ustring const * abbr);
+    void _set_document_unit(Glib::ustring abbr);
     void _set_use_distance(bool use_knot_distance);
     void _set_aprox(bool aprox_radius);
     void _apply();
@@ -77,7 +77,7 @@ protected:
     bool _flexible;
     Geom::Satellite _satellite;
     const gchar *unit;
-    Glib::ustring const * document_unit;
+    Glib::ustring document_unit;
     bool use_distance;
     double amount;
     bool aprox;
