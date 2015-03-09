@@ -277,6 +277,7 @@ static void spdc_apply_simplify(std::string threshold, FreehandBase *dc, SPItem 
     lpe->getRepr()->setAttribute("steps", "1");
     lpe->getRepr()->setAttribute("threshold", threshold);
     lpe->getRepr()->setAttribute("smooth_angles", "360");
+    lpe->getRepr()->setAttribute("helper_size", "0");
     lpe->getRepr()->setAttribute("nodes", "false");
     lpe->getRepr()->setAttribute("handles", "false");
     lpe->getRepr()->setAttribute("simplifyindividualpaths", "false");
