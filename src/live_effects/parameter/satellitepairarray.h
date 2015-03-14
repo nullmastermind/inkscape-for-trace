@@ -56,6 +56,7 @@ public:
     void set_use_distance(bool use_knot_distance );
     void set_unit(const gchar *abbr);
     void set_effect_type(EffectType et);
+    void recalculate_knots();
     virtual void updateCanvasIndicators();
     virtual void updateCanvasIndicators(bool mirror);
     void set_pointwise(Geom::Pointwise *pointwise);

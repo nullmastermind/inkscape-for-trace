@@ -39,7 +39,7 @@ public:
     virtual void doOnApply(SPLPEItem const *lpeItem);
     virtual void adjustForNewPath(std::vector<Geom::Path> const &path_in);
     virtual Gtk::Widget* newWidget();
-    /*double len_to_rad(double A, std::pair<int,Geom::Satellite> sat);*/
+     /*double len_to_rad(double A, std::pair<int,Geom::Satellite> sat);*/
     void updateSatelliteType(Geom::SatelliteType satellitetype);
     void updateChamferSteps();
     void updateAmount();

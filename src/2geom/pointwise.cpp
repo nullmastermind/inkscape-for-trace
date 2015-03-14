@@ -63,6 +63,95 @@ Pointwise::setPwd2(Piecewise<D2<SBasis> > pwd2_in){
     _pwd2 = pwd2_in;
 }
 
+void
+Pointwise::recalculate_for_new_pwd2(Piecewise<D2<SBasis> > A)
+{
+    if( _pwd2.size() > A.size()){
+        new_pwd_sustract(A);
+    } else if ( _pwd2.size() < A.size()){
+        new_pwd_append(A);
+    }
+}
+
+void 
+Pointwise::new_pwd_append(Piecewise<D2<SBasis> > A)
+{
+    int counter = 0;
+    double last = -1;
+    std::vector<std::pair<unsigned int,Satellite> > satellites;
+        std::cout << _pwd2.size() << "pwsize\n";
+        std::cout << A.size() << "Asize\n";
+    for(unsigned i = 0; i < _satellites.size(); i++){
+        std::cout << _satellites[i].first << "firat\n";
+        std::cout << _satellites[i].first-counter << "firat\n";
+        
+        if(_satellites.size() > i+1 && !_satellites[i+1].second.getIsStart() && !are_near(_pwd2[_satellites[i].first].at0(),A[_satellites[i].first-counter].at0(),0.001)){
+        std::cout << "removed\n";
+            if(last != _satellites[i].first){
+                std::cout << "removedtrue\n";
+                counter++;
+                last = _satellites[i].first;
+            }
+        } else{
+            std::cout << "added\n";
+            satellites.push_back(std::make_pair(_satellites[i].first-counter,_satellites[i].second));
+        }
+    }
+    _pwd2 = A;
+    _satellites = satellites;
+}
+void
+Pointwise::new_pwd_sustract(Piecewise<D2<SBasis> > A)
+{
+    int counter = 0;
+    double last = -1;
+    double start = false;
+    double hideLast = false;
+    std::vector<std::pair<unsigned int,Satellite> > satellites;
+        std::cout << _pwd2.size() << "pwsize\n";
+        std::cout << A.size() << "Asize\n";
+    for(unsigned i = 0; i < _satellites.size(); i++){
+        std::cout << _satellites[i].first << "firat\n";
+        std::cout << _satellites[i].first-counter << "firat\n";
+        if((_satellites[i].first != findLastIndex(i) && !_satellites[findLastIndex(i)].second.getIsClosing()) && !are_near(_pwd2[_satellites[i].first].at0(),A[_satellites[i].first-counter].at0(),0.001)){
+        std::cout << "removed\n";
+            if(last != _satellites[i].first){
+                std::cout << "removedtrue\n";
+                counter++;
+                last = _satellites[i].first;
+                if(_satellites[i].second.getIsClosing()){
+                    satellites = setBackClosing(satellites);
+                }
+                if(_satellites[i].second.getIsStart()){
+                    start = true;
+                }
+                if(_satellites[i].second.getHidden()){
+                    hideLast = true;
+                } else {
+                    hideLast = false;
+                }
+            }
+        } else{
+            std::cout << "added\n";
+            if(start){
+                setStarting(_satellites[i].first);
+                start = false;
+            }
+            if(_satellites[i].second.getIsStart() && hideLast){
+                satellites = setBackHidden(satellites);
+                hideLast = false;
+            }
+            if(last != _satellites[i].first && _satellites[i].first == findLastIndex(i) && !_satellites[findLastIndex(i)].second.getIsClosing()){
+                last = _satellites[i].first;
+                counter++;
+            }
+            satellites.push_back(std::make_pair(_satellites[i].first-counter,_satellites[i].second));
+        }
+    }
+    _pwd2 = A;
+    _satellites = satellites;
+}
+
 double 
 Pointwise::rad_to_len(double A,  std::pair<unsigned int,Geom::Satellite> satellite)
 {
@@ -192,6 +281,49 @@ Pointwise::findSatellites(unsigned int A, int B) const
     return ret;
 }
 
+std::vector<std::pair<unsigned int,Satellite> >
+Pointwise::setBackHidden(std::vector<std::pair<unsigned int,Satellite> > sat)
+{
+    for(unsigned i = 0; i < sat.size(); i++){
+        if(sat[i].first == sat.back().first ){
+            sat[i].second.setHidden(true);
+        }
+    }
+    return sat;
+}
+
+std::vector<std::pair<unsigned int,Satellite> >
+Pointwise::setBackInactive(std::vector<std::pair<unsigned int,Satellite> > sat)
+{
+    for(unsigned i = 0; i < sat.size(); i++){
+        if(sat[i].first == sat.back().first ){
+            sat[i].second.setHidden(true);
+        }
+    }
+    return sat;
+}
+
+std::vector<std::pair<unsigned int,Satellite> >
+Pointwise::setBackClosing(std::vector<std::pair<unsigned int,Satellite> > sat)
+{
+    for(unsigned i = 0; i < sat.size(); i++){
+        if(sat[i].first == sat.back().first ){
+            sat[i].second.setIsClosing(true);
+        }
+    }
+    return sat;
+}
+
+void 
+Pointwise::setStarting(unsigned int A)
+{
+    for(unsigned i = 0; i < _satellites.size(); i++){
+        if(_satellites[i].first == A){
+            _satellites[i].second.setIsStart(true);
+        }
+    }
+}
+
 std::vector<Satellite> 
 Pointwise::findClosingSatellites(unsigned int A) const
 {
@@ -203,6 +335,22 @@ Pointwise::findClosingSatellites(unsigned int A) const
         }
         if(finded && _satellites[i].second.getIsClosing()){
             ret.push_back(_satellites[i].second);
+        }
+        if(_satellites[i].first == A){
+            finded = true;
+        }
+    }
+    return ret;
+}
+
+double 
+Pointwise::findLastIndex(unsigned int A) const
+{
+    double ret = -1;
+    bool finded = false;
+    for(unsigned i = 0; i < _satellites.size(); i++){
+        if(finded && _satellites[i].second.getIsStart()){
+            return _satellites[i].first;
         }
         if(_satellites[i].first == A){
             finded = true;

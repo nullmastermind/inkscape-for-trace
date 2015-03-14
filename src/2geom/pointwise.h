@@ -76,16 +76,14 @@ class Pointwise
         Piecewise<D2<SBasis> > getPwd2();
         void setPwd2(Piecewise<D2<SBasis> > pwd2_in);
         boost::optional<Geom::D2<Geom::SBasis> > getCurveIn(std::pair<unsigned int,Satellite> sat);
-        Pointwise recalculate_for_new_pwd2(Piecewise<D2<SBasis> > A);
-        /*
-        Pointwise pwd2_reverse(int index);
-        Pointwise pwd2_append(int index);
-        Pointwise pwd2_prepend(int index);
-        Pointwise pwd2_add(int index);
-        Pointwise pwd2_del(int index);
-        Pointwise satellite_add(unsigned int index,Satellite sat);
-        Pointwise satellite_del(unsigned int index,Satellite sat);
-        */
+        void recalculate_for_new_pwd2(Piecewise<D2<SBasis> > A);
+        void new_pwd_append(Piecewise<D2<SBasis> > A);
+        void new_pwd_sustract(Piecewise<D2<SBasis> > A);
+        std::vector<std::pair<unsigned int,Satellite> > setBackClosing(std::vector<std::pair<unsigned int,Satellite> > sat);
+        std::vector<std::pair<unsigned int,Satellite> > setBackHidden(std::vector<std::pair<unsigned int,Satellite> > sat);
+        void setStarting(unsigned int A);
+        double findLastIndex(unsigned int A) const;
+
 
     private:
         Piecewise<D2<SBasis> > _pwd2;

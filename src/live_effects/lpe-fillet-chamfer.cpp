@@ -58,7 +58,7 @@ LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject) :
     hide_knots(_("Hide knots"), _("Hide knots"), "hide_knots", &wr, this, false),
     ignore_radius_0(_("Ignore 0 radius knots"), _("Ignore 0 radius knots"), "ignore_radius_0", &wr, this, false),
     helper_size(_("Helper size with direction:"), _("Helper size with direction"), "helper_size", &wr, this, 0),
-    pointwise()
+    pointwise(NULL)
 {
     registerParameter(&satellitepairarrayparam_values);
     registerParameter(&unit);
@@ -400,9 +400,8 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
                 changed = true;
                 refresh = true;
             }
-            bool hide = !hide_knots;
-            if(it->second.getHidden() != hide){
-                it->second.setHidden(hide);
+            if(it->second.getHidden() != hide_knots){
+                it->second.setHidden(hide_knots);
                 changed = true;
                 refresh = true;
             }
@@ -419,6 +418,17 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
     }
 }
 
+void
+LPEFilletChamfer::adjustForNewPath(std::vector<Geom::Path> const &path_in)
+{
+    if (!path_in.empty() && pointwise) {
+        std::cout << pointwise->getSatellites().size() << "sizefirst\n";
+        pointwise->recalculate_for_new_pwd2(pathv_to_linear_and_cubic_beziers(path_in)[0].toPwSb());
+        std::cout << pointwise->getSatellites().size() << "sizesecond\n";
+        satellitepairarrayparam_values.set_pointwise(pointwise);
+        satellitepairarrayparam_values.param_set_and_write_new_value(pointwise->getSatellites());
+    }
+}
 
 std::vector<Geom::Path>
 LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
@@ -633,15 +643,6 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
     }
     return pathvector_out;
 }
-
-void
-LPEFilletChamfer::adjustForNewPath(std::vector<Geom::Path> const &path_in)
-{   
-    if (!path_in.empty()) {
-        //satellitepairarrayparam_values.recalculate_controlpoints_for_new_pwd2(pathv_to_linear_and_cubic_beziers(path_in)[0].toPwSb());
-    }
-}
-
 
 }; //namespace LivePathEffect
 }; /* namespace Inkscape */
