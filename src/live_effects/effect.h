@@ -101,7 +101,6 @@ public:
     //       (but spiro lpe still needs it!)
     virtual LPEPathFlashType pathFlashType() const { return DEFAULT; }
     void addHandles(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item);
-    void removeHandles();
     std::vector<Geom::PathVector> getCanvasIndicators(SPLPEItem const* lpeitem);
 
     inline bool providesOwnFlashPaths() const {

@@ -68,14 +68,9 @@ KnotHolder::KnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderReleasedFun
     sizeUpdatedConn = ControlManager::getManager().connectCtrlSizeChanged(sigc::mem_fun(*this, &KnotHolder::updateControlSizes));
 }
 
-KnotHolder::~KnotHolder() {
-     if(SP_IS_LPE_ITEM(item)){
-        Inkscape::LivePathEffect::Effect *effect = SP_LPE_ITEM(item)->getCurrentLPE();
-        if(effect){
-            effect->removeHandles();
-        }
-    }
-	sp_object_unref(item);
+KnotHolder::~KnotHolder() 
+{
+    sp_object_unref(item);
 
     for (std::list<KnotHolderEntity *>::iterator i = entity.begin(); i != entity.end(); ++i)
     {

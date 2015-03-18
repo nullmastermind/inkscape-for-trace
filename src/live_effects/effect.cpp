@@ -373,7 +373,6 @@ Effect::Effect(LivePathEffectObject *lpeobject)
     registerParameter( dynamic_cast<Parameter *>(&is_visible) );
     is_visible.widget_is_visible = false;
     current_zoom = 0.0;
-    knot_holder = NULL;
 }
 
 Effect::~Effect()
@@ -620,7 +619,7 @@ Effect::registerParameter(Parameter * param)
 void
 Effect::addHandles(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item) {
     using namespace Inkscape::LivePathEffect;
-    knot_holder = knotholder;
+
     // add handles provided by the effect itself
     addKnotHolderEntities(knotholder, desktop, item);
 
@@ -630,12 +629,6 @@ Effect::addHandles(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item) {
     }
 }
 
-void
-Effect::removeHandles(){
-    if(knot_holder){
-        knot_holder = NULL;
-    }
-}
 /**
  * Return a vector of PathVectors which contain all canvas indicators for this effect.
  * This is the function called by external code to get all canvas indicators (effect and its parameters)

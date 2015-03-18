@@ -62,11 +62,11 @@ private:
     BoolParam discard_orig_path;
     BoolParam fusionPaths;
     BoolParam reverseFusion;
-    BoolParam fixedReflectionLine;
     PathParam reflection_line;
     Geom::Line lineSeparation;
     Geom::Point previousCenter;
     PointParam center;
+    KnotHolder *knoth;
 
     LPEMirrorSymmetry(const LPEMirrorSymmetry&);
     LPEMirrorSymmetry& operator=(const LPEMirrorSymmetry&);

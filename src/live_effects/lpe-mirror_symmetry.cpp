@@ -27,7 +27,6 @@
 #include "knot-holder-entity.h"
 #include "knotholder.h"
 
-
 namespace Inkscape {
 namespace LivePathEffect {
 
@@ -43,9 +42,12 @@ namespace MS {
 
 class KnotHolderEntityCenterMirrorSymmetry : public LPEKnotHolderEntity {
 public:
-    KnotHolderEntityCenterMirrorSymmetry(LPEMirrorSymmetry *effect) : LPEKnotHolderEntity(effect) {};
+    KnotHolderEntityCenterMirrorSymmetry(LPEMirrorSymmetry *effect) : LPEKnotHolderEntity(effect) {this->knoth = effect->knoth;};
+    virtual ~KnotHolderEntityCenterMirrorSymmetry() { this->knoth = NULL;}
     virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state);
     virtual Geom::Point knot_get() const;
+private:
+    KnotHolder *knoth;
 };
 
 } // namespace MS
@@ -56,19 +58,19 @@ LPEMirrorSymmetry::LPEMirrorSymmetry(LivePathEffectObject *lpeobject) :
     discard_orig_path(_("Discard original path?"), _("Check this to only keep the mirrored part of the path"), "discard_orig_path", &wr, this, false),
     fusionPaths(_("Fusioned symetry"), _("Fusion right side whith symm"), "fusionPaths", &wr, this, true),
     reverseFusion(_("Reverse fusion"), _("Reverse fusion"), "reverseFusion", &wr, this, false),
-    fixedReflectionLine(_("Fixed reflection line"), _("Fixed reflection line"), "fixedReflectionLine", &wr, this, false),
     reflection_line(_("Reflection line:"), _("Line which serves as 'mirror' for the reflection"), "reflection_line", &wr, this, "M0,0 L1,0"),
-    center(_("Center of mirroring (X or Y)"), _("Center of the mirror"), "center", &wr, this, "Adjust the center of mirroring")
+    center(_("Center of mirroring (X or Y)"), _("Center of the mirror"), "center", &wr, this, "Adjust the center of mirroring"),
+    knoth(NULL)
 {
     show_orig_path = true;
+
     registerParameter(&mode);
     registerParameter( &discard_orig_path);
     registerParameter( &fusionPaths);
     registerParameter( &reverseFusion);
-    registerParameter( &distanceToX);
-    registerParameter( &distanceToY);
     registerParameter( &reflection_line);
     registerParameter( &center);
+
 }
 
 LPEMirrorSymmetry::~LPEMirrorSymmetry()
@@ -81,7 +83,6 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
     using namespace Geom;
 
     SPLPEItem * item = const_cast<SPLPEItem*>(lpeitem);
-    SPObject *subitem = static_cast<SPObject *>(item);
     Point A(boundingbox_X.max(), boundingbox_Y.min());
     Point B(boundingbox_X.max(), boundingbox_Y.max());
     Point C(boundingbox_X.max(), boundingbox_Y.middle());
@@ -93,15 +94,15 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
         A = Geom::Point(center[X],boundingbox_Y.min());
         B = Geom::Point(center[X],boundingbox_Y.max());
     }
-    if( mode == MT_X || mode == MT_Y || mode == MT_FIXED_X || mode == MT_FIXED_Y ){
+    if( mode == MT_X || mode == MT_Y ){
         Geom::Path path;
         path.start( A );
         path.appendNew<Geom::LineSegment>( B );
         reflection_line.set_new_value(path.toPwSb(), true);
         lineSeparation.setPoints(A,B);
         center.param_setValue(path.pointAt(0.5));
-        if(knot_holder){
-            knot_holder->update_knots();
+        if(knoth){
+            knoth->update_knots();
         }
     } else if( mode == MT_FREE) {
         std::vector<Geom::Path> mline(reflection_line.get_pathvector());
@@ -117,8 +118,8 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
             A = mline[0].initialPoint();
             B = mline[0].finalPoint();
             lineSeparation.setPoints(A,B);
-            if(knot_holder){
-                knot_holder->update_knots();
+            if(knoth){
+                knoth->update_knots();
             }
         }
         previousCenter = center;
@@ -133,27 +134,6 @@ LPEMirrorSymmetry::doOnApply (SPLPEItem const* lpeitem)
 {
     using namespace Geom;
 
-    /*
-    SPDocument *doc = lpeitem->document;
-    Inkscape::XML::Document *xml_doc = doc->getReprDoc();
-    Inkscape::XML::Node *group = xml_doc->createElement("svg:g");
-    group->setAttribute("inkscape:groupmode", "layer");
-    SPLPEItem* item = const_cast<SPLPEItem*>(lpeitem);
-    Inkscape::XML::Node *current = item->getRepr();
-    gint topmost = current->position();
-    Inkscape::XML::Node *top_current = current->parent();
-    Inkscape::XML::Node *spnew = current->duplicate(xml_doc);
-    sp_repr_unparent(current);
-    group->appendChild(spnew);
-    Inkscape::GC::release(spnew);
-    top_current->appendChild(group);
-    group->setPosition(topmost + 1);
-    gchar *href = g_strdup_printf("#%s", item->getCurrentLPE()->getRepr()->attribute("id"));
-    SP_LPE_ITEM(group)->addPathEffect(href, true);
-    item->removeCurrentPathEffect(false);
-    g_free(href);
-    Inkscape::GC::release(group);
-    */
     original_bbox(lpeitem);
 
     Point A(boundingbox_X.max(), boundingbox_Y.min());
@@ -315,6 +295,7 @@ LPEMirrorSymmetry::addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector
 void 
 LPEMirrorSymmetry::addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item) {
     {
+        knoth = knotholder;
         KnotHolderEntity *e = new MS::KnotHolderEntityCenterMirrorSymmetry(this);
         e->create( desktop, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN,
                    _("Adjust the center") );
