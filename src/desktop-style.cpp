@@ -428,10 +428,9 @@ sp_desktop_get_font_size_tool(SPDesktop *desktop)
 
     double ret = 12;
     if (!style_str.empty()) {
-        SPStyle *style = sp_style_new(SP_ACTIVE_DOCUMENT);
-        sp_style_merge_from_style_string(style, style_str.data());
-        ret = style->font_size.computed;
-        sp_style_unref(style);
+        SPStyle style(SP_ACTIVE_DOCUMENT);
+        style.mergeString(style_str.data());
+        ret = style.font_size.computed;
     }
     return ret;
 }
@@ -626,7 +625,7 @@ objects_query_fillstroke (GSList *objects, SPStyle *style_res, bool const isfill
 
        paintImpossible = false;
        paint_res->colorSet = paint->colorSet;
-       paint_res->currentcolor = paint->currentcolor;
+       paint_res->paintOrigin = paint->paintOrigin;
        if (paint_res->set && paint_effectively_set && paint->isPaintserver()) { // copy the server
            gchar const *string = NULL; // memory leak results if style->get* called inside sp_style_set_to_uri_string.
            if (isfill) {

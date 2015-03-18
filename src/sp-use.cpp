@@ -94,7 +94,7 @@ void SPUse::build(SPDocument *document, Inkscape::XML::Node *repr) {
 
     // We don't need to create child here:
     // reading xlink:href will attach ref, and that will cause the changed signal to be emitted,
-    // which will call sp_use_href_changed, and that will take care of the child
+    // which will call SPUse::href_changed, and that will take care of the child
 }
 
 void SPUse::release() {
@@ -145,7 +145,7 @@ void SPUse::set(unsigned int key, const gchar* value) {
                 this->href = NULL;
 
                 if (value) {
-                    // First, set the href field, because sp_use_href_changed will need it.
+                    // First, set the href field, because SPUse::href_changed will need it.
                     this->href = g_strdup(value);
 
                     // Now do the attaching, which emits the changed signal.
@@ -280,10 +280,13 @@ gchar* SPUse::description() const {
 }
 
 Inkscape::DrawingItem* SPUse::show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) {
+
+    // std::cout << "SPUse::show: " << (getId()?getId():"null") << std::endl;
     Inkscape::DrawingGroup *ai = new Inkscape::DrawingGroup(drawing);
     ai->setPickChildren(false);
-    ai->setStyle(this->style);
-
+    this->context_style = this->style;
+    ai->setStyle(this->style, this->context_style);
+    
     if (this->child) {
         Inkscape::DrawingItem *ac = this->child->invoke_show(drawing, key, flags);
 
@@ -529,6 +532,7 @@ void SPUse::delete_self() {
 }
 
 void SPUse::update(SPCtx *ctx, unsigned flags) {
+    // std::cout << "SPUse::update: " << (getId()?getId():"null") << std::endl;
     SPItemCtx *ictx = (SPItemCtx *) ctx;
     SPItemCtx cctx = *ictx;
 
@@ -579,7 +583,8 @@ void SPUse::update(SPCtx *ctx, unsigned flags) {
     if (flags & SP_OBJECT_STYLE_MODIFIED_FLAG) {
         for (SPItemView *v = this->display; v != NULL; v = v->next) {
             Inkscape::DrawingGroup *g = dynamic_cast<Inkscape::DrawingGroup *>(v->arenaitem);
-            g->setStyle(this->style);
+            this->context_style = this->style;
+            g->setStyle(this->style, this->context_style);
         }
     }
 
@@ -592,6 +597,7 @@ void SPUse::update(SPCtx *ctx, unsigned flags) {
 }
 
 void SPUse::modified(unsigned int flags) {
+    // std::cout << "SPUse::modified: " << (getId()?getId():"null") << std::endl;
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
     }
@@ -601,7 +607,8 @@ void SPUse::modified(unsigned int flags) {
     if (flags & SP_OBJECT_STYLE_MODIFIED_FLAG) {
       for (SPItemView *v = this->display; v != NULL; v = v->next) {
         Inkscape::DrawingGroup *g = dynamic_cast<Inkscape::DrawingGroup *>(v->arenaitem);
-        g->setStyle(this->style);
+        this->context_style = this->style;
+        g->setStyle(this->style, this->context_style);
       }
     }
 
@@ -657,11 +664,8 @@ SPItem *SPUse::unlink() {
     SPObject *unlinked = document->getObjectByRepr(copy);
 
     // Merge style from the use.
-    SPStyle *unli_sty = unlinked->style;
-    SPStyle const *use_sty = this->style;
-    sp_style_merge_from_dying_parent(unli_sty, use_sty);
-    sp_style_merge_from_parent(unli_sty, unlinked->parent->style);
-
+    unlinked->style->merge( this->style );
+    unlinked->style->cascade( unlinked->parent->style );
     unlinked->updateRepr();
 
     // Hold onto our SPObject and repr for now.

@@ -67,6 +67,9 @@ struct Document;
 }
 }
 
+namespace Glib {
+    class ustring;
+}
 
 typedef enum {
     SP_NO_EXCEPTION,
@@ -263,6 +266,11 @@ public:
      * and need to inherit properties even through other non-SPItem parents like \<defs\>.
      */
     SPStyle *style;
+
+    /**
+     * Represents the style that should be used to resolve 'context-fill' and 'context-stroke'
+     */
+    SPStyle *context_style;
 
     /// Switch containing next() method.
     struct ParentIteratorStrategy {
@@ -703,7 +711,9 @@ public:
      */
     void setKeyValue(unsigned int key, char const *value);
 
-    void setAttribute(char const *key, char const *value, SPException *ex=NULL);
+    void setAttribute(         char const *key,          char const *value, SPException *ex=NULL);
+    void setAttribute(         char const *key, Glib::ustring const &value, SPException *ex=NULL);
+    void setAttribute(Glib::ustring const &key, Glib::ustring const &value, SPException *ex=NULL);
 
     /**
      * Read value of key attribute from XML node into object.
@@ -849,6 +859,8 @@ protected:
 
 public:
 	virtual void read_content();
+
+    void recursivePrintTree(unsigned level = 0);  // For debugging
 };
 
 

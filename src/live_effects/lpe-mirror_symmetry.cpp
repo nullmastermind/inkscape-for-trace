@@ -27,6 +27,7 @@
 #include "knot-holder-entity.h"
 #include "knotholder.h"
 
+
 namespace Inkscape {
 namespace LivePathEffect {
 
@@ -55,39 +56,23 @@ LPEMirrorSymmetry::LPEMirrorSymmetry(LivePathEffectObject *lpeobject) :
     discard_orig_path(_("Discard original path?"), _("Check this to only keep the mirrored part of the path"), "discard_orig_path", &wr, this, false),
     fusionPaths(_("Fusioned symetry"), _("Fusion right side whith symm"), "fusionPaths", &wr, this, true),
     reverseFusion(_("Reverse fusion"), _("Reverse fusion"), "reverseFusion", &wr, this, false),
-    reflectionFromPage(_("Use page as relecion base"), _("Use page as relecion base"), "reflectionFromPage", &wr, this, false),
+    fixedReflectionLine(_("Fixed reflection line"), _("Fixed reflection line"), "fixedReflectionLine", &wr, this, false),
     reflection_line(_("Reflection line:"), _("Line which serves as 'mirror' for the reflection"), "reflection_line", &wr, this, "M0,0 L1,0"),
     center(_("Center of mirroring (X or Y)"), _("Center of the mirror"), "center", &wr, this, "Adjust the center of mirroring")
 {
     show_orig_path = true;
-
     registerParameter(&mode);
     registerParameter( &discard_orig_path);
     registerParameter( &fusionPaths);
     registerParameter( &reverseFusion);
-    registerParameter( &reflectionFromPage);
+    registerParameter( &distanceToX);
+    registerParameter( &distanceToY);
     registerParameter( &reflection_line);
     registerParameter( &center);
-
 }
 
 LPEMirrorSymmetry::~LPEMirrorSymmetry()
 {
-}
-
-void LPEMirrorSymmetry::doOnApply(SPLPEItem const* lpeitem)
-{
-    SPDocument *doc = lpeitem->document();
-    Inkscape::XML::Document *xml_doc = doc->getReprDoc();
-    sp_selection_group_impl(GSList *p, group, xml_doc, doc);
-    Inkscape::XML::Node *group = xml_doc->createElement("svg:g");
-    group->setAttribute("inkscape:groupmode", "layer");
-    sp_selection_group_impl(p, group, xml_doc, doc);
-    gchar *href = g_strdup_printf("#%s", this->lpeobject_href);
-    SP_LPE_ITEM(group)->addPathEffect(href, true);
-    lpeitem->removeCurrentPathEffect(false)
-    g_free(href);
-    Inkscape::GC::release(group);
 }
 
 void
@@ -96,6 +81,7 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
     using namespace Geom;
 
     SPLPEItem * item = const_cast<SPLPEItem*>(lpeitem);
+    SPObject *subitem = static_cast<SPObject *>(item);
     Point A(boundingbox_X.max(), boundingbox_Y.min());
     Point B(boundingbox_X.max(), boundingbox_Y.max());
     Point C(boundingbox_X.max(), boundingbox_Y.middle());
@@ -107,7 +93,7 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
         A = Geom::Point(center[X],boundingbox_Y.min());
         B = Geom::Point(center[X],boundingbox_Y.max());
     }
-    if( mode == MT_X || mode == MT_Y ){
+    if( mode == MT_X || mode == MT_Y || mode == MT_FIXED_X || mode == MT_FIXED_Y ){
         Geom::Path path;
         path.start( A );
         path.appendNew<Geom::LineSegment>( B );
@@ -147,6 +133,27 @@ LPEMirrorSymmetry::doOnApply (SPLPEItem const* lpeitem)
 {
     using namespace Geom;
 
+    /*
+    SPDocument *doc = lpeitem->document;
+    Inkscape::XML::Document *xml_doc = doc->getReprDoc();
+    Inkscape::XML::Node *group = xml_doc->createElement("svg:g");
+    group->setAttribute("inkscape:groupmode", "layer");
+    SPLPEItem* item = const_cast<SPLPEItem*>(lpeitem);
+    Inkscape::XML::Node *current = item->getRepr();
+    gint topmost = current->position();
+    Inkscape::XML::Node *top_current = current->parent();
+    Inkscape::XML::Node *spnew = current->duplicate(xml_doc);
+    sp_repr_unparent(current);
+    group->appendChild(spnew);
+    Inkscape::GC::release(spnew);
+    top_current->appendChild(group);
+    group->setPosition(topmost + 1);
+    gchar *href = g_strdup_printf("#%s", item->getCurrentLPE()->getRepr()->attribute("id"));
+    SP_LPE_ITEM(group)->addPathEffect(href, true);
+    item->removeCurrentPathEffect(false);
+    g_free(href);
+    Inkscape::GC::release(group);
+    */
     original_bbox(lpeitem);
 
     Point A(boundingbox_X.max(), boundingbox_Y.min());
