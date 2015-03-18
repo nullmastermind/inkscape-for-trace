@@ -923,7 +923,9 @@ void PdfParser::opSetExtGState(Object args[], int /*numArgs*/)
 	  GBool isolated = gFalse;
 	  GBool knockout = gFalse;
 	  if (!obj4.dictLookup(const_cast<char*>("CS"), &obj5)->isNull()) {
-#if defined(POPPLER_EVEN_NEWER_COLOR_SPACE_API)
+#if defined(POPPLER_EVEN_NEWER_NEW_COLOR_SPACE_API)
+	    blendingColorSpace = GfxColorSpace::parse(NULL, &obj5, NULL, NULL);
+#elif defined(POPPLER_EVEN_NEWER_COLOR_SPACE_API)
 	    blendingColorSpace = GfxColorSpace::parse(&obj5, NULL, NULL);
 #elif defined(POPPLER_NEW_COLOR_SPACE_API) || defined(POPPLER_NEW_ERRORAPI)
 	    blendingColorSpace = GfxColorSpace::parse(&obj5, NULL);
@@ -1159,7 +1161,13 @@ void PdfParser::opSetFillColorSpace(Object args[], int /*numArgs*/)
   res->lookupColorSpace(args[0].getName(), &obj);
 
   GfxColorSpace *colorSpace = 0;
-#if defined(POPPLER_EVEN_NEWER_COLOR_SPACE_API)
+#if defined(POPPLER_EVEN_NEWER_NEW_COLOR_SPACE_API)
+  if (obj.isNull()) {
+    colorSpace = GfxColorSpace::parse(NULL, &args[0], NULL, NULL);
+  } else {
+    colorSpace = GfxColorSpace::parse(NULL, &obj, NULL, NULL);
+  }
+#elif defined(POPPLER_EVEN_NEWER_COLOR_SPACE_API)
   if (obj.isNull()) {
     colorSpace = GfxColorSpace::parse(&args[0], NULL, NULL);
   } else {
@@ -1202,7 +1210,13 @@ void PdfParser::opSetStrokeColorSpace(Object args[], int /*numArgs*/)
 
   state->setStrokePattern(NULL);
   res->lookupColorSpace(args[0].getName(), &obj);
-#if defined(POPPLER_EVEN_NEWER_COLOR_SPACE_API)
+#if defined(POPPLER_EVEN_NEWER_NEW_COLOR_SPACE_API)
+  if (obj.isNull()) {
+    colorSpace = GfxColorSpace::parse(NULL, &args[0], NULL, NULL);
+  } else {
+    colorSpace = GfxColorSpace::parse(NULL, &obj, NULL, NULL);
+  }
+#elif defined(POPPLER_EVEN_NEWER_COLOR_SPACE_API)
   if (obj.isNull()) {
     colorSpace = GfxColorSpace::parse(&args[0], NULL, NULL);
   } else {
@@ -2572,24 +2586,12 @@ void PdfParser::opShowSpaceText(Object args[], int /*numArgs*/)
   }
 }
 
-
-
-/*
- * The `POPPLER_NEW_GFXFONT' stuff is for the change to GfxFont's getNextChar() call.
- * Thanks to tsdgeos for the fix.
- * Miklos, does this look ok?
- */   
-
 void PdfParser::doShowText(GooString *s) {
   GfxFont *font;
   int wMode;
   double riseX, riseY;
   CharCode code;
-#ifdef POPPLER_NEW_GFXFONT
   Unicode *u = NULL;
-#else
-  Unicode u[8];
-#endif
   double x, y, dx, dy, tdx, tdy;
   double originX, originY, tOriginX, tOriginY;
   double oldCTM[6], newCTM[6];
@@ -2637,11 +2639,7 @@ void PdfParser::doShowText(GooString *s) {
     len = s->getLength();
     while (len > 0) {
       n = font->getNextChar(p, len, &code,
-#ifdef POPPLER_NEW_GFXFONT
 			    &u, &uLen,  /* TODO: This looks like a memory leak for u. */
-#else
-			    u, (int)(sizeof(u) / sizeof(Unicode)), &uLen,
-#endif
 			    &dx, &dy, &originX, &originY);
       dx = dx * state->getFontSize() + state->getCharSpace();
       if (n == 1 && *p == ' ') {
@@ -2694,11 +2692,7 @@ void PdfParser::doShowText(GooString *s) {
     len = s->getLength();
     while (len > 0) {
       n = font->getNextChar(p, len, &code,
-#ifdef POPPLER_NEW_GFXFONT
 			    &u, &uLen,  /* TODO: This looks like a memory leak for u. */
-#else
-			    u, (int)(sizeof(u) / sizeof(Unicode)), &uLen,
-#endif
 			    &dx, &dy, &originX, &originY);
       
       if (wMode) {
@@ -2910,7 +2904,9 @@ void PdfParser::doImage(Object * /*ref*/, Stream *str, GBool inlineImg)
             }
         }
         if (!obj1.isNull()) {
-#if defined(POPPLER_EVEN_NEWER_COLOR_SPACE_API)
+#if defined(POPPLER_EVEN_NEWER_NEW_COLOR_SPACE_API)
+            colorSpace = GfxColorSpace::parse(NULL, &obj1, NULL, NULL);
+#elif defined(POPPLER_EVEN_NEWER_COLOR_SPACE_API)
             colorSpace = GfxColorSpace::parse(&obj1, NULL, NULL);
 #elif defined(POPPLER_NEW_COLOR_SPACE_API) || defined(POPPLER_NEW_ERRORAPI)
             colorSpace = GfxColorSpace::parse(&obj1, NULL);
@@ -3004,7 +3000,9 @@ void PdfParser::doImage(Object * /*ref*/, Stream *str, GBool inlineImg)
 	                obj2.free();
 	            }
             }
-#if defined(POPPLER_EVEN_NEWER_COLOR_SPACE_API)
+#if defined(POPPLER_EVEN_NEWER_NEW_COLOR_SPACE_API)
+            GfxColorSpace *maskColorSpace = GfxColorSpace::parse(NULL, &obj1, NULL, NULL);
+#elif defined(POPPLER_EVEN_NEWER_COLOR_SPACE_API)
             GfxColorSpace *maskColorSpace = GfxColorSpace::parse(&obj1, NULL, NULL);
 #elif defined(POPPLER_NEW_COLOR_SPACE_API) || defined(POPPLER_NEW_ERRORAPI)
             GfxColorSpace *maskColorSpace = GfxColorSpace::parse(&obj1, NULL);
@@ -3196,7 +3194,9 @@ void PdfParser::doForm(Object *str) {
     if (obj1.dictLookup(const_cast<char*>("S"), &obj2)->isName(const_cast<char*>("Transparency"))) {
       transpGroup = gTrue;
       if (!obj1.dictLookup(const_cast<char*>("CS"), &obj3)->isNull()) {
-#if defined(POPPLER_EVEN_NEWER_COLOR_SPACE_API)
+#if defined(POPPLER_EVEN_NEWER_NEW_COLOR_SPACE_API)
+	blendingColorSpace = GfxColorSpace::parse(NULL, &obj3, NULL, NULL);
+#elif defined(POPPLER_EVEN_NEWER_COLOR_SPACE_API)
 	blendingColorSpace = GfxColorSpace::parse(&obj3, NULL, NULL);
 #elif defined(POPPLER_NEW_COLOR_SPACE_API) || defined(POPPLER_NEW_ERRORAPI)
 	blendingColorSpace = GfxColorSpace::parse(&obj3, NULL);

@@ -23,10 +23,11 @@
 #include <vector>
 
 #include "desktop.h"
-#include "desktop-handles.h"
+
 #include "document.h"
 #include "document-undo.h"
 #include "gtkmm/widget.h"
+#include "helper/action.h"
 #include "inkscape.h"
 #include "live_effects/effect.h"
 #include "live_effects/lpeobject.h"
@@ -44,6 +45,7 @@
 #include "ui/icon-names.h"
 #include "ui/widget/imagetoggler.h"
 #include "verbs.h"
+#include "widgets/icon.h"
 #include "xml/node.h"
 #include "livepatheffect-add.h"
 
@@ -66,6 +68,14 @@ static void lpeeditor_selection_modified (Inkscape::Selection * selection, guint
 {
     LivePathEffectEditor *lpeeditor = static_cast<LivePathEffectEditor *>(data);
     lpeeditor->onSelectionChanged(selection);
+}
+
+static void lpe_style_button(Gtk::Button& btn, char const* iconName)
+{
+    GtkWidget *child = sp_icon_new(Inkscape::ICON_SIZE_SMALL_TOOLBAR, iconName);
+    gtk_widget_show( child );
+    btn.add(*Gtk::manage(Glib::wrap(child)));
+    btn.set_relief(Gtk::RELIEF_NONE);
 }
 
 
@@ -107,43 +117,19 @@ LivePathEffectEditor::LivePathEffectEditor()
     effectcontrol_frame.add(effectcontrol_vbox);
 
     button_add.set_tooltip_text(_("Add path effect"));
-#if WITH_GTKMM_3_10
-    button_add.set_image_from_icon_name(INKSCAPE_ICON("list-add"), Gtk::ICON_SIZE_SMALL_TOOLBAR);
-#else
-    Gtk::Image *image_add = Gtk::manage(new Gtk::Image());
-    image_add->set_from_icon_name(INKSCAPE_ICON("list-add"), Gtk::ICON_SIZE_SMALL_TOOLBAR);
-    button_add.set_image(*image_add);
-#endif
+    lpe_style_button(button_add, INKSCAPE_ICON("list-add"));
     button_add.set_relief(Gtk::RELIEF_NONE);
 
     button_remove.set_tooltip_text(_("Delete current path effect"));
-#if WITH_GTKMM_3_10
-    button_remove.set_image_from_icon_name(INKSCAPE_ICON("list-remove"), Gtk::ICON_SIZE_SMALL_TOOLBAR);
-#else
-    Gtk::Image *image_remove = Gtk::manage(new Gtk::Image());
-    image_remove->set_from_icon_name(INKSCAPE_ICON("list-remove"), Gtk::ICON_SIZE_SMALL_TOOLBAR);
-    button_remove.set_image(*image_remove);
-#endif
+    lpe_style_button(button_remove, INKSCAPE_ICON("list-remove"));
     button_remove.set_relief(Gtk::RELIEF_NONE);
 
     button_up.set_tooltip_text(_("Raise the current path effect"));
-#if WITH_GTKMM_3_10
-    button_up.set_image_from_icon_name(INKSCAPE_ICON("go-up"), Gtk::ICON_SIZE_SMALL_TOOLBAR);
-#else
-    Gtk::Image *image_up = Gtk::manage(new Gtk::Image());
-    image_up->set_from_icon_name(INKSCAPE_ICON("go-up"), Gtk::ICON_SIZE_SMALL_TOOLBAR);
-    button_up.set_image(*image_up);
-#endif
+    lpe_style_button(button_up, INKSCAPE_ICON("go-up"));
     button_up.set_relief(Gtk::RELIEF_NONE);
 
     button_down.set_tooltip_text(_("Lower the current path effect"));
-#if WITH_GTKMM_3_10
-    button_down.set_image_from_icon_name(INKSCAPE_ICON("go-down"), Gtk::ICON_SIZE_SMALL_TOOLBAR);
-#else
-    Gtk::Image *image_down = Gtk::manage(new Gtk::Image());
-    image_down->set_from_icon_name(INKSCAPE_ICON("go-down"), Gtk::ICON_SIZE_SMALL_TOOLBAR);
-    button_down.set_image(*image_down);
-#endif
+    lpe_style_button(button_down, INKSCAPE_ICON("go-down"));
     button_down.set_relief(Gtk::RELIEF_NONE);
 
     // Add toolbar items to toolbar
@@ -398,7 +384,7 @@ LivePathEffectEditor::setDesktop(SPDesktop *desktop)
     lpe_list_locked = false;
     current_desktop = desktop;
     if (desktop) {
-        Inkscape::Selection *selection = sp_desktop_selection(desktop);
+        Inkscape::Selection *selection = desktop->getSelection();
         selection_changed_connection = selection->connectChanged(
             sigc::bind (sigc::ptr_fun(&lpeeditor_selection_changed), this ) );
         selection_modified_connection = selection->connectModified(
@@ -475,9 +461,13 @@ LivePathEffectEditor::onAdd()
 
                         // run sp_selection_clone_original_path_lpe 
                         sp_selection_clone_original_path_lpe(current_desktop);
+
                         SPItem *new_item = sel->singleItem();
-                        new_item->getRepr()->setAttribute("id", id);
-                        new_item->getRepr()->setAttribute("transform", transform);
+                        // Check that the cloning was successful. We don't want to change the ID of the original referenced path!
+                        if (new_item && (new_item != orig)) {
+                            new_item->getRepr()->setAttribute("id", id);
+                            new_item->getRepr()->setAttribute("transform", transform);
+                        }
                         g_free(id);
                         g_free(transform);
 
@@ -506,7 +496,7 @@ LivePathEffectEditor::onRemove()
         if ( lpeitem ) {
             lpeitem->removeCurrentPathEffect(false);
 
-            DocumentUndo::done( sp_desktop_document(current_desktop), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
+            DocumentUndo::done( current_desktop->getDocument(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
                                 _("Remove path effect") );
 
             effect_list_reload(lpeitem);
@@ -524,7 +514,7 @@ void LivePathEffectEditor::onUp()
         if ( lpeitem ) {
             lpeitem->upCurrentPathEffect();
 
-            DocumentUndo::done( sp_desktop_document(current_desktop), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
+            DocumentUndo::done( current_desktop->getDocument(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
                                 _("Move path effect up") );
 
             effect_list_reload(lpeitem);
@@ -541,7 +531,7 @@ void LivePathEffectEditor::onDown()
         if ( lpeitem ) {
             lpeitem->downCurrentPathEffect();
 
-            DocumentUndo::done( sp_desktop_document(current_desktop), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
+            DocumentUndo::done( current_desktop->getDocument(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
                                 _("Move path effect down") );
 
             effect_list_reload(lpeitem);
@@ -580,7 +570,7 @@ void LivePathEffectEditor::on_visibility_toggled( Glib::ustring const& str )
         /* FIXME: this explicit writing to SVG is wrong. The lpe_item should have a method to disable/enable an effect within its stack.
          * So one can call:  lpe_item->setActive(lpeobjref->lpeobject); */
         lpeobjref->lpeobject->get_lpe()->getRepr()->setAttribute("is_visible", newValue ? "true" : "false");
-        DocumentUndo::done( sp_desktop_document(current_desktop), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
+        DocumentUndo::done( current_desktop->getDocument(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
                             newValue ? _("Activate path effect") : _("Deactivate path effect"));
     }
 }

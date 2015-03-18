@@ -25,7 +25,7 @@
 #include "uri.h"
 #include "inkscape.h"
 #include "desktop.h"
-#include "desktop-handles.h"
+
 
 #include "style.h"
 #include <glibmm/i18n.h>
@@ -75,18 +75,6 @@ static SPItemView*          sp_item_view_list_remove(SPItemView     *list,
 
 
 SPItem::SPItem() : SPObject() {
-	this->sensitive = 0;
-	this->clip_ref = NULL;
-	this->avoidRef = NULL;
-	this->_is_evaluated = false;
-	this->stop_paint = 0;
-	this->_evaluated_status = StatusUnknown;
-	this->bbox_valid = 0;
-	this->freeze_stroke_width = false;
-	this->transform_center_x = 0;
-	this->transform_center_y = 0;
-	this->display = NULL;
-	this->mask_ref = NULL;
 
     sensitive = TRUE;
     bbox_valid = FALSE;
@@ -96,12 +84,13 @@ SPItem::SPItem() : SPObject() {
     transform_center_x = 0;
     transform_center_y = 0;
 
+    freeze_stroke_width = false;
+
     _is_evaluated = true;
     _evaluated_status = StatusUnknown;
 
     transform = Geom::identity();
-    doc_bbox = Geom::OptRect();
-    freeze_stroke_width = false;
+    // doc_bbox = Geom::OptRect();
 
     display = NULL;
 
@@ -555,7 +544,7 @@ void SPItem::set(unsigned int key, gchar const* value) {
             }
         default:
             if (SP_ATTRIBUTE_IS_CSS(key)) {
-                sp_style_read_from_object(object->style, object);
+                style->readFromObject( this );
                 object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
             } else {
                 SPObject::set(key, value);
@@ -670,54 +659,56 @@ void SPItem::stroke_ps_ref_changed(SPObject *old_ps, SPObject *ps, SPItem *item)
     }
 }
 
-void SPItem::update(SPCtx* /*ctx*/, guint flags) {
-    SPItem *item = this;
-    SPItem* object = item;
+void SPItem::update(SPCtx* ctx, guint flags) {
 
-//    SPObject::onUpdate(ctx, flags);
+    SPItemCtx const *ictx = reinterpret_cast<SPItemCtx const *>(ctx);
 
-    // any of the modifications defined in sp-object.h might change bbox,
+    // Any of the modifications defined in sp-object.h might change bbox,
     // so we invalidate it unconditionally
-    item->bbox_valid = FALSE;
+    bbox_valid = FALSE;
 
-    if (flags & (SP_OBJECT_CHILD_MODIFIED_FLAG | SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG)) {
+    viewport = ictx->viewport; // Cache viewport
+
+    if (flags & (SP_OBJECT_CHILD_MODIFIED_FLAG |
+                 SP_OBJECT_MODIFIED_FLAG |
+                 SP_OBJECT_STYLE_MODIFIED_FLAG) ) {
         if (flags & SP_OBJECT_MODIFIED_FLAG) {
-            for (SPItemView *v = item->display; v != NULL; v = v->next) {
-                v->arenaitem->setTransform(item->transform);
+            for (SPItemView *v = display; v != NULL; v = v->next) {
+                v->arenaitem->setTransform(transform);
             }
         }
 
-        SPClipPath *clip_path = item->clip_ref ? item->clip_ref->getObject() : NULL;
-        SPMask *mask = item->mask_ref ? item->mask_ref->getObject() : NULL;
+        SPClipPath *clip_path = clip_ref ? clip_ref->getObject() : NULL;
+        SPMask *mask = mask_ref ? mask_ref->getObject() : NULL;
 
         if ( clip_path || mask ) {
-            Geom::OptRect bbox = item->geometricBounds();
+            Geom::OptRect bbox = geometricBounds();
             if (clip_path) {
-                for (SPItemView *v = item->display; v != NULL; v = v->next) {
+                for (SPItemView *v = display; v != NULL; v = v->next) {
                     clip_path->setBBox(v->arenaitem->key(), bbox);
                 }
             }
             if (mask) {
-                for (SPItemView *v = item->display; v != NULL; v = v->next) {
+                for (SPItemView *v = display; v != NULL; v = v->next) {
                     mask->sp_mask_set_bbox(v->arenaitem->key(), bbox);
                 }
             }
         }
 
         if (flags & SP_OBJECT_STYLE_MODIFIED_FLAG) {
-            for (SPItemView *v = item->display; v != NULL; v = v->next) {
-                v->arenaitem->setOpacity(SP_SCALE24_TO_FLOAT(object->style->opacity.value));
-                v->arenaitem->setAntialiasing(object->style->shape_rendering.computed != SP_CSS_SHAPE_RENDERING_CRISPEDGES);
-                v->arenaitem->setIsolation( object->style->isolation.value );
-                v->arenaitem->setBlendMode( object->style->mix_blend_mode.value );
-                v->arenaitem->setVisible(!item->isHidden());
+            for (SPItemView *v = display; v != NULL; v = v->next) {
+                v->arenaitem->setOpacity(SP_SCALE24_TO_FLOAT(style->opacity.value));
+                v->arenaitem->setAntialiasing(style->shape_rendering.computed != SP_CSS_SHAPE_RENDERING_CRISPEDGES);
+                v->arenaitem->setIsolation( style->isolation.value );
+                v->arenaitem->setBlendMode( style->mix_blend_mode.value );
+                v->arenaitem->setVisible(!isHidden());
             }
         }
     }
     /* Update bounding box in user space, used for filter and objectBoundingBox units */
-    if (item->style->filter.set && item->display) {
-        Geom::OptRect item_bbox = item->geometricBounds();
-        SPItemView *itemview = item->display;
+    if (style->filter.set && display) {
+        Geom::OptRect item_bbox = geometricBounds();
+        SPItemView *itemview = display;
         do {
             if (itemview->arenaitem)
                 itemview->arenaitem->setItemBounds(item_bbox);
@@ -725,8 +716,8 @@ void SPItem::update(SPCtx* /*ctx*/, guint flags) {
     }
 
     // Update libavoid with item geometry (for connector routing).
-    if (item->avoidRef)
-        item->avoidRef->handleSettingChange();
+    if (avoidRef)
+        avoidRef->handleSettingChange();
 }
 
 void SPItem::modified(unsigned int /*flags*/)
@@ -1006,7 +997,7 @@ void SPItem::getSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscap
     clips_and_masks.push_back(clip_ref->getObject());
     clips_and_masks.push_back(mask_ref->getObject());
 
-    SPDesktop *desktop = inkscape_active_desktop();
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     for (std::list<SPObject const *>::const_iterator o = clips_and_masks.begin(); o != clips_and_masks.end(); ++o) {
         if (*o) {
             // obj is a group object, the children are the actual clippers
@@ -1299,7 +1290,7 @@ void SPItem::adjust_stroke( gdouble ex )
 
     SPStyle *style = this->style;
 
-    if (style && !style->stroke.isNone() && !Geom::are_near(ex, 1.0, Geom::EPSILON)) {
+    if (style && !Geom::are_near(ex, 1.0, Geom::EPSILON)) {
         style->stroke_width.computed *= ex;
         style->stroke_width.set = TRUE;
 
@@ -1607,7 +1598,7 @@ Geom::Affine SPItem::i2doc_affine() const
 Geom::Affine SPItem::i2dt_affine() const
 {
     Geom::Affine ret;
-    SPDesktop const *desktop = inkscape_active_desktop();
+    SPDesktop const *desktop = SP_ACTIVE_DESKTOP;
     if ( desktop ) {
         ret = i2doc_affine() * desktop->doc2dt();
     } else {
@@ -1625,7 +1616,7 @@ void SPItem::set_i2d_affine(Geom::Affine const &i2dt)
     if (parent) {
         dt2p = static_cast<SPItem *>(parent)->i2dt_affine().inverse();
     } else {
-        SPDesktop *dt = inkscape_active_desktop();
+        SPDesktop *dt = SP_ACTIVE_DESKTOP;
         dt2p = dt->dt2doc();
     }
 

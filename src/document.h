@@ -21,7 +21,7 @@
 #include <sigc++/sigc++.h>
 #include "libcroco/cr-cascade.h"
 #include <2geom/forward.h>
-#include "gc-managed.h"
+#include "inkgc/gc-managed.h"
 #include "gc-finalized.h"
 #include "gc-anchored.h"
 #include <glibmm/ustring.h>
@@ -38,7 +38,6 @@ class SPGroup;
 class SPRoot;
 
 namespace Inkscape {
-    struct Application;
     class Selection; 
     class UndoStackObserver;
     class EventLog;
@@ -241,14 +240,18 @@ public:
 
     SPDocument *doRef();
     SPDocument *doUnref();
-    Inkscape::Util::Unit const* getDefaultUnit() const;
+    Inkscape::Util::Unit const* getDisplayUnit() const;
     Inkscape::Util::Unit const& getSVGUnit() const;
+    void setDocumentScale( const double scaleX, const double scaleY );
+    void setDocumentScale( const double scale );
+    Geom::Scale getDocumentScale() const;
     Inkscape::Util::Quantity getWidth() const;
     Inkscape::Util::Quantity getHeight() const;
     Geom::Point getDimensions() const;
     Geom::OptRect preferredBounds() const;
-    void setWidth(const Inkscape::Util::Quantity &width);
-    void setHeight(const Inkscape::Util::Quantity &height);
+    void setWidthAndHeight(const Inkscape::Util::Quantity &width, const Inkscape::Util::Quantity &height, bool changeSize=true);
+    void setWidth(const Inkscape::Util::Quantity &width, bool changeSize=true);
+    void setHeight(const Inkscape::Util::Quantity &height, bool changeSize=true);
     void setViewBox(const Geom::Rect &viewBox);
     void requestModified();
     int ensureUpToDate();

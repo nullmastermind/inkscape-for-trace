@@ -26,13 +26,14 @@
 #include <cmath>
 #include <string>
 #include <string.h>
+#include <sstream>
 #include <vector>
 
 #include <glibmm/i18n.h>
 
 #include <2geom/transforms.h>
 
-#include "desktop-handles.h"
+
 #include "document.h"
 #include "desktop.h"
 #include "helper/action.h"
@@ -240,6 +241,8 @@ PageSizer::PageSizer(Registry & _wr)
       _marginRight( _("Ri_ght:"), _("Right margin"), "fit-margin-right", _wr),
       _marginBottom( _("Botto_m:"), _("Bottom margin"), "fit-margin-bottom", _wr),
       _lockMarginUpdate(false),
+      _scaleX(_("Scale _x:"), _("Scale X"), "scale-x", _wr),
+      _lockScaleUpdate(false),
       _widgetRegistry(&_wr)
 {
     // set precision of scalar entry boxes
@@ -250,6 +253,8 @@ PageSizer::PageSizer(Registry & _wr)
     _marginLeft.setDigits(5);
     _marginRight.setDigits(5);
     _marginBottom.setDigits(5);
+    _scaleX.setDigits(5);
+    _scaleX.setRange( 0.00001, 100000 );
     _wr.setUpdating (false);
 
     //# Set up the Paper Size combo box
@@ -309,7 +314,7 @@ PageSizer::PageSizer(Registry & _wr)
 
     // Setting default custom unit to document unit
     SPDesktop *dt = SP_ACTIVE_DESKTOP;
-    SPNamedView *nv = sp_desktop_namedview(dt);
+    SPNamedView *nv = dt->getNamedView();
     _wr.setUpdating (true);
     if (nv->page_size_units) {
         _dimensionUnits.setUnit(nv->page_size_units->abbr);
@@ -318,6 +323,7 @@ PageSizer::PageSizer(Registry & _wr)
     }
     _wr.setUpdating (false);
     
+
     //## Set up custom size frame
     _customFrame.set_label(_("Custom size"));
     pack_start (_customFrame, false, false, 0);
@@ -419,6 +425,34 @@ PageSizer::PageSizer(Registry & _wr)
     _fitPageButton.set_label(_("_Resize page to drawing or selection"));
     _fitPageButton.set_tooltip_text(_("Resize the page to fit the current selection, or the entire drawing if there is no selection"));
 
+    _scaleFrame.set_label(_("Scale"));
+    pack_start (_scaleFrame, false, false, 0);
+    _scaleFrame.add(_scaleTable);
+
+    _scaleTable.set_border_width(4);
+
+#if WITH_GTKMM_3_0
+    _scaleTable.set_row_spacing(4);
+    _scaleTable.set_column_spacing(4);
+
+    _dimensionWidth.set_hexpand();
+    _dimensionWidth.set_vexpand();
+    _scaleTable.attach(_scaleX,        0, 0, 1, 1);
+
+    _dimensionUnits.set_hexpand();
+    _dimensionUnits.set_vexpand();
+    _scaleTable.attach(_scaleLabel,    1, 0, 1, 1);
+#else
+    _scaleTable.resize(2, 1);
+    _scaleTable.set_row_spacings(4);
+    _scaleTable.set_col_spacings(4);
+    _scaleTable.attach(_scaleX,        0,1, 0,1);
+    _scaleTable.attach(_scaleLabel,    1,2, 0,1);
+#endif
+    
+    _wr.setUpdating (true);
+    updateScaleUI();
+    _wr.setUpdating (false);
 }
 
 
@@ -444,7 +478,7 @@ PageSizer::init ()
     _changedh_connection = _dimensionHeight.signal_value_changed().connect (sigc::mem_fun (*this, &PageSizer::on_value_changed));
     _changedu_connection = _dimensionUnits.getUnitMenu()->signal_changed().connect (sigc::mem_fun (*this, &PageSizer::on_units_changed));
     _fitPageButton.signal_clicked().connect(sigc::mem_fun(*this, &PageSizer::fire_fit_canvas_to_selection_or_drawing));
-
+    _changeds_connection = _scaleX.signal_value_changed().connect (sigc::mem_fun (*this, &PageSizer::on_scale_changed));
     show_all_children();
 }
 
@@ -459,7 +493,7 @@ PageSizer::init ()
  * \param changeList whether to modify the paper size list
  */
 void
-PageSizer::setDim (Inkscape::Util::Quantity w, Inkscape::Util::Quantity h, bool changeList)
+PageSizer::setDim (Inkscape::Util::Quantity w, Inkscape::Util::Quantity h, bool changeList, bool changeSize)
 {
     static bool _called = false;
     if (_called) {
@@ -477,14 +511,15 @@ PageSizer::setDim (Inkscape::Util::Quantity w, Inkscape::Util::Quantity h, bool 
     _unit = w.unit->abbr;
 
     if (SP_ACTIVE_DESKTOP && !_widgetRegistry->isUpdating()) {
-        SPDocument *doc = sp_desktop_document(SP_ACTIVE_DESKTOP);
+        SPDocument *doc = SP_ACTIVE_DESKTOP->getDocument();
         Inkscape::Util::Quantity const old_height = doc->getHeight();
-        doc->setWidth (w);
-        doc->setHeight (h);
+        doc->setWidthAndHeight (w, h, changeSize);
         // The origin for the user is in the lower left corner; this point should remain stationary when
         // changing the page size. The SVG's origin however is in the upper left corner, so we must compensate for this
-        Geom::Translate const vert_offset(Geom::Point(0, (old_height.value("px") - h.value("px"))));
-        doc->getRoot()->translateChildItems(vert_offset);
+        if (changeSize) {
+            Geom::Translate const vert_offset(Geom::Point(0, (old_height.value("px") - h.value("px"))));
+            doc->getRoot()->translateChildItems(vert_offset);
+        }
         DocumentUndo::done(doc, SP_VERB_NONE, _("Set page size"));
     }
 
@@ -510,6 +545,7 @@ PageSizer::setDim (Inkscape::Util::Quantity w, Inkscape::Util::Quantity h, bool 
     _dimensionWidth.setValue (w.quantity);
     _dimensionHeight.setUnit(h.unit->abbr);
     _dimensionHeight.setValue (h.quantity);
+
 
     _paper_size_list_connection.unblock();
     _landscape_connection.unblock();
@@ -606,7 +642,7 @@ PageSizer::fire_fit_canvas_to_selection_or_drawing()
     SPNamedView *nv;
     Inkscape::XML::Node *nv_repr;
   
-    if ((doc = sp_desktop_document(SP_ACTIVE_DESKTOP))
+    if ((doc = SP_ACTIVE_DESKTOP->getDocument())
         && (nv = sp_document_namedview(doc, 0))
         && (nv_repr = nv->getRepr())) {
         _lockMarginUpdate = true;
@@ -700,6 +736,60 @@ PageSizer::on_landscape()
     }
 }
 
+
+/**
+ * Update scale widgets
+ */
+void
+PageSizer::updateScaleUI()
+{
+
+    if (_lockScaleUpdate) {
+        return;
+    }
+
+    static bool _called = false;
+    if (_called) {
+        return;
+    }
+
+    _called = true;
+
+    _changeds_connection.block();
+
+    SPDesktop *dt = SP_ACTIVE_DESKTOP;
+    if (dt) {
+        SPDocument *doc = dt->getDocument();
+        Geom::Scale scale = doc->getDocumentScale();
+            
+        SPNamedView *nv = dt->getNamedView();
+
+        std::stringstream ss;
+        ss << _("User units per ") << nv->display_units->abbr << "." ;
+        _scaleLabel.set_text( ss.str() );
+
+        double scaleX_inv =
+            Inkscape::Util::Quantity::convert( scale[Geom::X], "px", nv->display_units );
+        if( scaleX_inv > 0 ) {
+            _scaleX.setValue(1.0/scaleX_inv);
+        } else {
+            // Should never happen
+            std::cerr << "PageSizer::updateScaleUI(): Invalid scale value: " << scaleX_inv << std::endl;
+            _scaleX.setValue(1.0);
+        }
+
+    } else {
+        // Should never happen
+        std::cerr << "PageSizer::updateScaleUI(): No active desktop." << std::endl;
+        _scaleLabel.set_text( "Unknown scale" );
+    }
+
+    _changeds_connection.unblock();
+
+    _called = false;
+}
+
+
 /**
  * Callback for the dimension widgets
  */
@@ -717,7 +807,34 @@ PageSizer::on_units_changed()
     if (_widgetRegistry->isUpdating()) return;
     _unit = _dimensionUnits.getUnit()->abbr;
     setDim (Inkscape::Util::Quantity(_dimensionWidth.getValue(""), _dimensionUnits.getUnit()),
-            Inkscape::Util::Quantity(_dimensionHeight.getValue(""), _dimensionUnits.getUnit()));
+            Inkscape::Util::Quantity(_dimensionHeight.getValue(""), _dimensionUnits.getUnit()),
+            true, false);
+}
+
+/**
+ * Callback for scale widgets
+ */
+void
+PageSizer::on_scale_changed()
+{
+    if (_widgetRegistry->isUpdating()) return;
+
+    double value = _scaleX.getValue();
+    if( value > 0 ) {
+
+        SPDesktop *dt = SP_ACTIVE_DESKTOP;
+        if (dt) {
+            SPDocument *doc = dt->getDocument();
+            SPNamedView *nv = dt->getNamedView();
+
+            double scaleX_inv = Inkscape::Util::Quantity(1.0/value, nv->display_units ).value("px");
+
+            _lockScaleUpdate = true;
+            doc->setDocumentScale( 1.0/scaleX_inv );                               
+            _lockScaleUpdate = false;
+            DocumentUndo::done(doc, SP_VERB_NONE, _("Set page scale"));
+        }
+    }
 }
 
 } // namespace Widget

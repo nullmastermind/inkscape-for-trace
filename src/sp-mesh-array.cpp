@@ -32,7 +32,7 @@
  * Authors:
  *   Tavmjong Bah <tavmjong@free.fr>
  *
- * Copyrigt  (C) 2012 Tavmjong Bah
+ * Copyright  (C) 2012, 2015 Tavmjong Bah
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
@@ -46,8 +46,8 @@
 #include "document.h"
 #include "sp-root.h"
 
+#include "sp-mesh.h"
 #include "sp-mesh-array.h"
-#include "sp-mesh-gradient.h"
 #include "sp-mesh-row.h"
 #include "sp-mesh-patch.h"
 #include "sp-stop.h"
@@ -289,7 +289,7 @@ bool SPMeshPatchI::tensorIsSet() {
 /**
    Return if tensor control point for "corner" i is set.
  */
-bool SPMeshPatchI::tensorIsSet( guint i ) {
+bool SPMeshPatchI::tensorIsSet( unsigned int i ) {
 
     assert( i < 4 );
 
@@ -574,13 +574,54 @@ void SPMeshPatchI::setOpacity( guint i, gdouble opacity ) {
 };
 
 
-SPMeshNodeArray::SPMeshNodeArray( SPMeshGradient *mg ) {
+SPMeshNodeArray::SPMeshNodeArray( SPMesh *mg ) {
 
     read( mg );
 
 };
 
-void SPMeshNodeArray::read( SPMeshGradient *mg_in ) {
+
+// Copy constructor
+SPMeshNodeArray::SPMeshNodeArray( const SPMeshNodeArray& rhs ) {
+
+    built = false;
+    mg = NULL;
+    drag_valid = false;
+
+    nodes = rhs.nodes; // This only copies the pointers but it does size the vector of vectors.
+
+    for( unsigned i=0; i < nodes.size(); ++i ) {
+        for( unsigned j=0; j < nodes[i].size(); ++j ) {
+            nodes[i][j] = new SPMeshNode( *rhs.nodes[i][j] ); // Copy data.
+        }
+    }
+};
+
+
+// Copy assignment operator
+SPMeshNodeArray& SPMeshNodeArray::operator=( const SPMeshNodeArray& rhs ) {
+
+    if( this == &rhs ) return *this;
+
+    clear(); // Clear any existing array.
+
+    built = false;
+    mg = NULL;
+    drag_valid = false;
+
+    nodes = rhs.nodes; // This only copies the pointers but it does size the vector of vectors.
+
+    for( unsigned i=0; i < nodes.size(); ++i ) {
+        for( unsigned j=0; j < nodes[i].size(); ++j ) {
+            nodes[i][j] = new SPMeshNode( *rhs.nodes[i][j] ); // Copy data.
+        }
+    }
+    
+    return *this;
+};
+
+
+void SPMeshNodeArray::read( SPMesh *mg_in ) {
 
     mg = mg_in;
 
@@ -600,7 +641,7 @@ void SPMeshNodeArray::read( SPMeshGradient *mg_in ) {
 
                 if (SP_IS_MESHPATCH(po)) {
 
-                    SPMeshPatch *patch = SP_MESHPATCH(po);
+                    SPMeshpatch *patch = SP_MESHPATCH(po);
 
                     // std::cout << "SPMeshNodeArray::read: row size: " << nodes.size() << std::endl;
                     SPMeshPatchI new_patch( &nodes, irow, icolumn ); // Adds new nodes.
@@ -797,7 +838,7 @@ void SPMeshNodeArray::read( SPMeshGradient *mg_in ) {
 /**
    Write repr using our array.
 */
-void SPMeshNodeArray::write( SPMeshGradient *mg ) {
+void SPMeshNodeArray::write( SPMesh *mg ) {
 
     // std::cout << "SPMeshNodeArray::write: entrance:" << std::endl;
     // print();
@@ -848,14 +889,14 @@ void SPMeshNodeArray::write( SPMeshGradient *mg ) {
     for( guint i = 0; i < rows; ++i ) {
 
         // Write row
-        Inkscape::XML::Node *row = xml_doc->createElement("svg:meshRow");
+        Inkscape::XML::Node *row = xml_doc->createElement("svg:meshrow");
         mesh->appendChild( row );  // No attributes
 
         guint columns = array->patch_columns();
         for( guint j = 0; j < columns; ++j ) {
 
             // Write patch
-            Inkscape::XML::Node *patch = xml_doc->createElement("svg:meshPatch");
+            Inkscape::XML::Node *patch = xml_doc->createElement("svg:meshpatch");
 
             SPMeshPatchI patchi( &(array->nodes), i, j );
 
@@ -926,10 +967,10 @@ void SPMeshNodeArray::write( SPMeshGradient *mg ) {
                         break;
                     case 'z':
                     case 'Z':
-                        std::cout << "sp_meshgradient_repr_write: bad path type" << path_type << std::endl;
+                        std::cout << "sp_mesh_repr_write: bad path type" << path_type << std::endl;
                         break;
                     default:
-                        std::cout << "sp_meshgradient_repr_write: unhandled path type" << path_type << std::endl;
+                        std::cout << "sp_mesh_repr_write: unhandled path type" << path_type << std::endl;
                 }
                 stop->setAttribute("path", is.str().c_str());
                 // std::cout << "SPMeshNodeArray::write: path:  " << is.str().c_str() << std::endl;
@@ -998,7 +1039,7 @@ static SPColor default_color( SPItem *item ) {
 /**
    Create a default mesh.
 */
-void SPMeshNodeArray::create( SPMeshGradient *mg, SPItem *item, Geom::OptRect bbox ) {
+void SPMeshNodeArray::create( SPMesh *mg, SPItem *item, Geom::OptRect bbox ) {
 
     // std::cout << "SPMeshNodeArray::create: Entrance" << std::endl;
 
@@ -1036,10 +1077,10 @@ void SPMeshNodeArray::create( SPMeshGradient *mg, SPItem *item, Geom::OptRect bb
     guint prows = prefs->getInt("/tools/mesh/mesh_rows", 1);
     guint pcols = prefs->getInt("/tools/mesh/mesh_cols", 1);
 
-    SPGradientMeshType mesh_type =
-        (SPGradientMeshType) prefs->getInt("/tools/mesh/mesh_type", SP_GRADIENT_MESH_TYPE_NORMAL);
+    SPMeshGeometry mesh_type =
+        (SPMeshGeometry) prefs->getInt("/tools/mesh/mesh_geometry", SP_MESH_GEOMETRY_NORMAL);
 
-    if( mesh_type == SP_GRADIENT_MESH_TYPE_CONICAL ) {
+    if( mesh_type == SP_MESH_GEOMETRY_CONICAL ) {
 
         // Conical gradient.. for any shape/path using geometric bounding box.
 
@@ -1381,6 +1422,346 @@ void SPMeshNodeArray::print() {
     } // Loop over rows
 };
 
+
+
+/*
+double hermite( const double p0, const double p1, const double m0, const double m1, const double t ) {
+    double t2 = t*t;
+    double t3 = t2*t;
+
+    double result = (2.0*t3 - 3.0*t2 +1.0) * p0
+                  + (t3 - 2.0*t2 + t)      * m0
+                  + (-2.0*t3 + 3.0*t2)     * p1
+                  + (t3 -t2)               * m1;
+
+    return result;
+}
+*/
+
+class SPMeshSmoothCorner {
+
+    enum {
+        AMP,
+        DX_LEFT,
+        DX_RIGHT,
+        DY_TOP,
+        DY_BOTTOM,
+        DXY_LT,
+        DXY_RT,
+        DXY_LB,
+        DXY_RB
+    };
+        
+public:
+    SPMeshSmoothCorner() {
+        for( unsigned i = 0; i < 3; ++i ) {
+            for( unsigned j = 0; j < 4; ++j ) {
+                g[i][j] = 0;
+            }
+        }
+    }
+    
+    double g[3][8]; // 3 colors, 8 parameters: see enum.
+    Geom::Point p;  // Location of point
+};
+
+// Find slope at point 1 given values at previous and next points
+// Return value is slope in user space
+double find_slope1( const double &p0, const double &p1, const double &p2,
+                    const double &d01, const double &d12 ) {
+
+    double slope = 0;
+
+    if( d01 > 0 && d12 > 0 ) {
+        slope = 0.5 * ( (p1 - p0)/d01 + (p2 - p1)/d12 );
+
+        if( ( p0 > p1 && p1 < p2 ) ||
+            ( p0 < p1 && p1 > p2 ) ) {
+            // At minimum or maximum, use slope of zero
+            slope = 0;
+        } else {
+            // Ensure we don't overshoot
+            if( fabs(slope) > fabs(3*(p1-p0)/d01) ) {
+                slope = 3*(p1-p0)/d01;
+            }
+            if( fabs(slope) > fabs(3*(p2-p1)/d12) ) {
+                slope = 3*(p2-p1)/d12;
+            }
+        }
+    } else {
+        // Do something clever
+    }
+    return slope;
+};
+
+
+/*
+// Find slope at point 0 given values at previous and next points
+// TO DO: TAKE DISTANCE BETWEEN POINTS INTO ACCOUNT
+double find_slope2( double pmm, double ppm, double pmp, double ppp, double p0 ) {
+
+    // pmm == d[i-1][j-1], ...  'm' is minus, 'p' is plus
+    double slope = (ppp - ppm - pmp + pmm)/2.0;
+    if( (ppp > p0 && ppm > p0 && pmp > p0 && pmm > 0) ||
+        (ppp < p0 && ppm < p0 && pmp < p0 && pmm < 0) ) {
+        // At minimum or maximum, use slope of zero
+        slope = 0;
+    } else {
+        // Don't really know what to do here
+        if( fabs(slope) > fabs(3*(ppp-p0)) ) {
+            slope = 3*(ppp-p0);
+        }
+        if( fabs(slope) > fabs(3*(pmp-p0)) ) {
+            slope = 3*(pmp-p0);
+        }
+        if( fabs(slope) > fabs(3*(ppm-p0)) ) {
+            slope = 3*(ppm-p0);
+        }
+        if( fabs(slope) > fabs(3*(pmm-p0)) ) {
+            slope = 3*(pmm-p0);
+        }
+    }
+    return slope;
+}
+*/
+
+// https://en.wikipedia.org/wiki/Bicubic_interpolation
+void invert( const double v[16], double alpha[16] ) {
+
+    const double  A[16][16] = {
+
+        { 1, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0 },
+        { 0, 0, 0, 0,  1, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0 },
+        {-3, 3, 0, 0, -2,-1, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0 },
+        { 2,-2, 0, 0,  1, 1, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0 },
+        { 0, 0, 0, 0,  0, 0, 0, 0,  1, 0, 0, 0,  0, 0, 0, 0 },
+        { 0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0,  1, 0, 0, 0 },
+        { 0, 0, 0, 0,  0, 0, 0, 0, -3, 3, 0, 0, -2,-1, 0, 0 },
+        { 0, 0, 0, 0,  0, 0, 0, 0,  2,-2, 0, 0,  1, 1, 0, 0 },
+        {-3, 0, 3, 0,  0, 0, 0, 0, -2, 0,-1, 0,  0, 0, 0, 0 },
+        { 0, 0, 0, 0, -3, 0, 3, 0,  0, 0, 0, 0, -2, 0,-1, 0 },
+        { 9,-9,-9, 9,  6, 3,-6,-3,  6,-6, 3,-3,  4, 2, 2, 1 },
+        {-6, 6, 6,-6, -3,-3, 3, 3, -4, 4,-2, 2, -2,-2,-1,-1 },
+        { 2, 0,-2, 0,  0, 0, 0, 0,  1, 0, 1, 0,  0, 0, 0, 0 },
+        { 0, 0, 0, 0,  2, 0,-2, 0,  0, 0, 0, 0,  1, 0, 1, 0 },
+        {-6, 6, 6,-6, -4,-2, 4, 2, -3, 3,-3, 3, -2,-1,-2,-1 },
+        { 4,-4,-4, 4,  2, 2,-2,-2,  2,-2, 2,-2,  1, 1, 1, 1 }
+    };
+
+    for( unsigned i = 0; i < 16; ++i ) {
+        alpha[i] = 0;
+        for( unsigned j = 0; j < 16; ++j ) {
+            alpha[i] += A[i][j]*v[j];
+        }
+    }
+}
+
+double sum( const double alpha[16], const double& x, const double& y ) {
+
+    double result = 0;
+    
+    double xx = x*x;
+    double xxx = xx * x;
+    double yy = y*y;
+    double yyy = yy * y;
+
+    result += alpha[  0 ];
+    result += alpha[  1 ] * x;
+    result += alpha[  2 ] * xx;
+    result += alpha[  3 ] * xxx;
+    result += alpha[  4 ] * y;
+    result += alpha[  5 ] * y * x;
+    result += alpha[  6 ] * y * xx;
+    result += alpha[  7 ] * y * xxx;
+    result += alpha[  8 ] * yy;
+    result += alpha[  9 ] * yy * x;
+    result += alpha[ 10 ] * yy * xx;
+    result += alpha[ 11 ] * yy * xxx;
+    result += alpha[ 12 ] * yyy;
+    result += alpha[ 13 ] * yyy * x;
+    result += alpha[ 14 ] * yyy * xx;
+    result += alpha[ 15 ] * yyy * xxx;
+    
+    return result;
+}
+
+/**
+   Fill 'smooth' with a smoothed version of the array by subdividing each patch into smaller patches.
+*/
+void SPMeshNodeArray::bicubic( SPMeshNodeArray* smooth, SPMeshType type ) {
+
+    
+    *smooth = *this;  // Deep copy via copy assignment constructor, smooth cleared before copy
+    // std::cout << "SPMeshNodeArray::smooth2(): " << this->patch_rows() << " " << smooth->patch_columns() << std::endl;
+    // std::cout << "  " << smooth << " " << this << std::endl;
+
+    // Find derivatives at corners
+
+    // Create array of corner points
+    std::vector< std::vector <SPMeshSmoothCorner> > d; 
+    d.resize( smooth->patch_rows() + 1 );
+    for( unsigned i = 0; i < d.size(); ++i ) {
+        d[i].resize( smooth->patch_columns() + 1 );
+        for( unsigned j = 0; j < d[i].size(); ++j ) {
+            float rgb_color[3];
+            sp_color_get_rgb_floatv( &this->nodes[ i*3 ][ j*3 ]->color, rgb_color );
+            d[i][j].g[0][0] =  rgb_color[ 0 ];
+            d[i][j].g[1][0] =  rgb_color[ 1 ];
+            d[i][j].g[2][0] =  rgb_color[ 2 ];
+            d[i][j].p = this->nodes[ i*3 ][ j*3 ]->p;
+        }
+    }
+
+    // Calculate interior derivatives
+    for( unsigned i = 0; i < d.size(); ++i ) {
+        for( unsigned j = 0; j < d[i].size(); ++j ) {
+            for( unsigned k = 0; k < 3; ++k ) { // Loop over colors
+
+                // dx
+
+                if( i != 0 && i != d.size()-1 ) {
+                    double lm = Geom::distance(  d[i-1][j].p, d[i][j].p );
+                    double lp = Geom::distance(  d[i+1][j].p, d[i][j].p );
+                    d[i][j].g[k][1] = find_slope1( d[i-1][j].g[k][0], d[i][j].g[k][0], d[i+1][j].g[k][0], lm, lp );
+                }
+
+                // dy
+                if( j != 0 && j != d[i].size()-1 ) {
+                    double lm = Geom::distance(  d[i][j-1].p, d[i][j].p );
+                    double lp = Geom::distance(  d[i][j+1].p, d[i][j].p );
+                    d[i][j].g[k][2] = find_slope1( d[i][j-1].g[k][0], d[i][j].g[k][0], d[i][j+1].g[k][0], lm, lp );
+                }
+
+                // dxdy  if needed, need to take lengths into account
+                // if( i != 0 && i != d.size()-1 && j != 0 && j != d[i].size()-1 ) {
+                //     d[i][j].g[k][3] = find_slope2( d[i-1][j-1].g[k][0], d[i+1][j-1].g[k][0],
+                //                                    d[i-1][j+1].g[k][0], d[i-1][j-1].g[k][0],
+                //                                    d[i][j].g[k][0] );
+                // }
+
+            }
+        }
+    }
+    
+    // Calculate exterior derivatives
+    // We need to do this after calculating interior derivatives as we need to already
+    // have the non-exterior derivative calculated for finding the parabola.
+    for( unsigned j = 0; j< d[0].size(); ++j ) {
+        for( unsigned k = 0; k < 3; ++k ) { // Loop over colors
+
+            // Parabolic
+            double d0 = Geom::distance( d[1][j].p, d[0  ][j].p );
+            if( d0 > 0 ) {
+                d[0][j].g[k][1] = 2.0*(d[1][j].g[k][0] - d[0  ][j].g[k][0])/d0 - d[1][j].g[k][1];
+            } else {
+                d[0][j].g[k][1] = 0;
+            }
+
+            unsigned z = d.size()-1;
+            double dz = Geom::distance( d[z][j].p, d[z-1][j].p );
+            if( dz > 0 ) {
+                d[z][j].g[k][1] = 2.0*(d[z][j].g[k][0] - d[z-1][j].g[k][0])/dz - d[z-1][j].g[k][1];
+            } else {
+                d[z][j].g[k][1] = 0;
+            }
+        }
+    }
+
+    for( unsigned i = 0; i< d.size(); ++i ) {
+        for( unsigned k = 0; k < 3; ++k ) { // Loop over colors
+
+            // Parabolic
+            double d0 = Geom::distance( d[i][1].p, d[i][0  ].p );
+            if( d0 > 0 ) {
+                d[i][0].g[k][2] = 2.0*(d[i][1].g[k][0] - d[i][0  ].g[k][0])/d0 - d[i][1].g[k][2];
+            } else {
+                d[i][0].g[k][2] = 0;
+            }
+
+            unsigned z = d[0].size()-1;
+            double dz = Geom::distance( d[i][z].p, d[i][z-1].p );
+            if( dz > 0 ) {
+                d[i][z].g[k][2] = 2.0*(d[i][z].g[k][0] - d[i][z-1].g[k][0])/dz - d[i][z-1].g[k][2];
+            } else {
+                d[i][z].g[k][2] = 0;
+            }
+        }
+    }
+
+    // Leave outside corner cross-derivatives at zero.
+    
+    // Next split each patch into 8x8 smaller patches.
+    
+    // Split each row into eight rows.
+    // Must do it from end so inserted rows don't mess up indexing 
+    for( int i = smooth->patch_rows() - 1; i >= 0; --i ) {
+        smooth->split_row( i, unsigned(8) );
+    }
+
+    // Split each column into eight columns.
+    // Must do it from end so inserted columns don't mess up indexing 
+    for( int i = smooth->patch_columns() - 1; i >= 0; --i ) {
+        smooth->split_column( i, (unsigned)8 );
+    }
+
+    // Fill new patches
+    for( unsigned i = 0; i < this->patch_rows(); ++i ) {
+        for( unsigned j = 0; j < this->patch_columns(); ++j ) {
+
+            double dx0 = Geom::distance( d[i  ][j  ].p, d[i+1][j  ].p );
+            double dx1 = Geom::distance( d[i  ][j+1].p, d[i+1][j+1].p );
+            double dy0 = Geom::distance( d[i  ][j  ].p, d[i  ][j+1].p );
+            double dy1 = Geom::distance( d[i+1][j  ].p, d[i+1][j+1].p );
+
+            // Temp loop over 0..8 to get last column/row edges
+            float r[3][9][9]; // result
+            for( unsigned m = 0; m < 3; ++m ) {
+
+                double v[16];
+                v[ 0] = d[i  ][j  ].g[m][0];
+                v[ 1] = d[i+1][j  ].g[m][0];
+                v[ 2] = d[i  ][j+1].g[m][0];
+                v[ 3] = d[i+1][j+1].g[m][0];
+                v[ 4] = d[i  ][j  ].g[m][1]*dx0;
+                v[ 5] = d[i+1][j  ].g[m][1]*dx0;
+                v[ 6] = d[i  ][j+1].g[m][1]*dx1;
+                v[ 7] = d[i+1][j+1].g[m][1]*dx1;
+                v[ 8] = d[i  ][j  ].g[m][2]*dy0;
+                v[ 9] = d[i+1][j  ].g[m][2]*dy1;
+                v[10] = d[i  ][j+1].g[m][2]*dy0;
+                v[11] = d[i+1][j+1].g[m][2]*dy1;
+                v[12] = d[i  ][j  ].g[m][3];
+                v[13] = d[i+1][j  ].g[m][3];
+                v[14] = d[i  ][j+1].g[m][3];
+                v[15] = d[i+1][j+1].g[m][3];
+
+                double alpha[16];
+                invert( v, alpha );
+                
+                for( unsigned k = 0; k < 9; ++k ) {
+                    for( unsigned l = 0; l < 9; ++l ) {
+                        double x = k/8.0;
+                        double y = l/8.0;
+                        r[m][k][l] = sum( alpha, x, y );
+                        // Clamp to allowed values
+                        if( r[m][k][l] > 1.0 )
+                            r[m][k][l] = 1.0;
+                        if( r[m][k][l] < 0.0 )
+                            r[m][k][l] = 0.0;
+                    }
+                }
+
+            } // Loop over colors
+
+            for( unsigned k = 0; k < 9; ++k ) {
+                for( unsigned l = 0; l < 9; ++l ) {
+                    // Every third node is a corner node
+                    smooth->nodes[ (i*8+k)*3 ][(j*8+l)*3 ]->color.set( r[0][k][l], r[1][k][l], r[2][k][l] );
+                }
+            }
+        }
+    }
+}
 
 /**
    Number of patch rows.
@@ -2239,7 +2620,7 @@ guint32 average_color(guint32 c1, guint32 c2, gdouble p);
 /**
    Split a row into n equal parts.
 */
-void SPMeshNodeArray::split_row( guint row, guint n ) {
+void SPMeshNodeArray::split_row( unsigned int row, unsigned int n ) {
 
     double nn = n;
     if( n > 1 ) split_row( row, (nn-1)/nn );
@@ -2249,7 +2630,7 @@ void SPMeshNodeArray::split_row( guint row, guint n ) {
 /**
    Split a column into n equal parts.
 */
-void SPMeshNodeArray::split_column( guint col, guint n ) {
+void SPMeshNodeArray::split_column( unsigned int col, unsigned int n ) {
 
     double nn = n;
     if( n > 1 ) split_column( col, (nn-1)/nn );
@@ -2259,7 +2640,7 @@ void SPMeshNodeArray::split_column( guint col, guint n ) {
 /**
    Split a row into two rows at coord (fraction of row height).
 */
-void SPMeshNodeArray::split_row( guint row, double coord ) {
+void SPMeshNodeArray::split_row( unsigned int row, double coord ) {
 
     // std::cout << "Splitting row: " << row << " at " << coord << std::endl;
     // print();
@@ -2382,7 +2763,7 @@ void SPMeshNodeArray::split_row( guint row, double coord ) {
 /**
    Split a column into two columns at coord (fraction of column width).
 */
-void SPMeshNodeArray::split_column( guint col, double coord ) {
+void SPMeshNodeArray::split_column( unsigned int col, double coord ) {
 
     // std::cout << "Splitting column: " << col << " at " << coord << std::endl;
     // print();

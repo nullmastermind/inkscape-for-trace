@@ -29,7 +29,7 @@
 #include "document.h"
 #include "document-undo.h"
 #include "selection.h"
-#include "desktop-handles.h"
+
 
 #include "ui/dialog-events.h"
 #include "verbs.h"
@@ -37,6 +37,7 @@
 #include "preferences.h"
 #include "sp-text.h"
 #include "sp-flowtext.h"
+#include "sp-flowdiv.h"
 #include "text-editing.h"
 #include "sp-tspan.h"
 #include "sp-tref.h"
@@ -238,7 +239,7 @@ Find::Find()
 
     show_all_children();
 
-    Inkscape::Selection *selection = sp_desktop_selection (SP_ACTIVE_DESKTOP);
+    Inkscape::Selection *selection = SP_ACTIVE_DESKTOP->getSelection();
     SPItem *item = selection->singleItem();
     if (item) {
         if (dynamic_cast<SPText *>(item) || dynamic_cast<SPFlowtext *>(item)) {
@@ -693,7 +694,10 @@ bool Find::item_type_match (SPItem *item)
     } else if (dynamic_cast<SPPath *>(item) || dynamic_cast<SPLine *>(item) || dynamic_cast<SPPolyLine *>(item)) {
         return (all || check_paths.get_active());
 
-    } else if (dynamic_cast<SPText *>(item) || dynamic_cast<SPTSpan *>(item) || dynamic_cast<SPTRef *>(item) || dynamic_cast<SPString *>(item)) {
+    } else if (dynamic_cast<SPText *>(item) || dynamic_cast<SPTSpan *>(item) || 
+	           dynamic_cast<SPTRef *>(item) || dynamic_cast<SPString *>(item) ||
+			   dynamic_cast<SPFlowtext *>(item) || dynamic_cast<SPFlowdiv *>(item) ||
+			   dynamic_cast<SPFlowtspan *>(item) || dynamic_cast<SPFlowpara *>(item)) {
         return (all || check_texts.get_active());
 
     } else if (dynamic_cast<SPGroup *>(item) && !desktop->isLayer(item) ) { // never select layers!
@@ -824,7 +828,7 @@ void Find::onAction()
         if (check_scope_layer.get_active()) {
             l = all_items (desktop->currentLayer(), l, hidden, locked);
         } else {
-            l = all_items(sp_desktop_document(desktop)->getRoot(), l, hidden, locked);
+            l = all_items(desktop->getDocument()->getRoot(), l, hidden, locked);
         }
     }
     guint all = g_slist_length (l);
@@ -850,7 +854,7 @@ void Find::onAction()
             button_replace.set_sensitive(attributenameyok);
         }
 
-        Inkscape::Selection *selection = sp_desktop_selection (desktop);
+        Inkscape::Selection *selection = desktop->getSelection();
         selection->clear();
         selection->setList(n);
         SPObject *obj = reinterpret_cast<SPObject *>(n->data);
@@ -859,13 +863,13 @@ void Find::onAction()
         scroll_to_show_item(desktop, item);
 
         if (_action_replace) {
-            DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_CONTEXT_TEXT, _("Replace text or property"));
+            DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_TEXT, _("Replace text or property"));
         }
 
     } else {
         status.set_text(_("Nothing found"));
         if (!check_scope_selection.get_active()) {
-            Inkscape::Selection *selection = sp_desktop_selection (desktop);
+            Inkscape::Selection *selection = desktop->getSelection();
             selection->clear();
         }
         desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("No objects found"));

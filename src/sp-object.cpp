@@ -61,14 +61,6 @@ using std::strstr;
 # define debug(f, a...) /* */
 #endif
 
-namespace {
-    SPObject* createObject() {
-        return new SPObject();
-    }
-
-    bool gridRegistered = SPFactory::instance().registerObject("inkscape:grid", createObject);
-}
-
 guint update_in_progress = 0; // guard against update-during-update
 
 Inkscape::XML::NodeEventVector object_event_vector = {
@@ -115,7 +107,7 @@ static gchar *sp_object_get_unique_id(SPObject    *object,
 SPObject::SPObject()
     : cloned(0), uflags(0), mflags(0), hrefcount(0), _total_hrefcount(0),
       document(NULL), parent(NULL), children(NULL), _last_child(NULL),
-      next(NULL), id(NULL), repr(NULL), refCount(1),
+      next(NULL), id(NULL), repr(NULL), refCount(1),hrefList(std::list<SPObject*>()),
       _successor(NULL), _collection_policy(SPObject::COLLECT_WITH_PARENT),
       _label(NULL), _default_label(NULL)
 {
@@ -130,7 +122,8 @@ SPObject::SPObject()
     // vg, g, defs, desc, title, symbol, use, image, switch, path, rect, circle, ellipse, line, polyline,
     // polygon, text, tspan, tref, textPath, altGlyph, glyphRef, marker, linearGradient, radialGradient,
     // stop, pattern, clipPath, mask, filter, feImage, a, font, glyph, missing-glyph, foreignObject
-    this->style = sp_style_new_from_object(this);
+    this->style = new SPStyle( NULL, this ); // Is it necessary to call with "this"?
+    this->context_style = NULL;
 }
 
 SPObject::~SPObject() {
@@ -143,6 +136,24 @@ SPObject::~SPObject() {
     if (this->_successor) {
         sp_object_unref(this->_successor, NULL);
         this->_successor = NULL;
+    }
+
+    if( style == NULL ) {
+        // style pointer could be NULL if unreffed too many times.
+        // Conjecture: style pointer is never NULL.
+        std::cerr << "SPObject::~SPObject(): style pointer is NULL" << std::endl;
+    } else if( style->refCount() > 1 ) {
+        // Conjecture: style pointer should be unreffed by other classes before reaching here.
+        // Conjecture is false for SPTSpan where ref is held by InputStreamTextSource.
+        // As an additional note:
+        //   The outer tspan of a nested tspan will result in a ref count of five: one for the
+        //   TSpan itself, one for the InputStreamTextSource instance before the inner tspan and
+        //   one for the one after, along with one for each corresponding DrawingText instance.
+        // std::cerr << "SPObject::~SPObject(): someone else still holding ref to style" << std::endl;
+        //
+        sp_style_unref( this->style );
+    } else {
+        delete this->style;
     }
 }
 
@@ -235,7 +246,7 @@ SPObject *sp_object_unref(SPObject *object, SPObject *owner)
     return NULL;
 }
 
-SPObject *sp_object_href(SPObject *object, gpointer /*owner*/)
+SPObject *sp_object_href(SPObject *object, SPObject* owner)
 {
     g_return_val_if_fail(object != NULL, NULL);
     g_return_val_if_fail(SP_IS_OBJECT(object), NULL);
@@ -243,10 +254,13 @@ SPObject *sp_object_href(SPObject *object, gpointer /*owner*/)
     object->hrefcount++;
     object->_updateTotalHRefCount(1);
 
+    if(owner)
+        object->hrefList.push_front(owner);
+
     return object;
 }
 
-SPObject *sp_object_hunref(SPObject *object, gpointer /*owner*/)
+SPObject *sp_object_hunref(SPObject *object, SPObject* owner)
 {
     g_return_val_if_fail(object != NULL, NULL);
     g_return_val_if_fail(SP_IS_OBJECT(object), NULL);
@@ -254,6 +268,9 @@ SPObject *sp_object_hunref(SPObject *object, gpointer /*owner*/)
 
     object->hrefcount--;
     object->_updateTotalHRefCount(-1);
+
+    if(owner)
+        object->hrefList.remove(owner);
 
     return NULL;
 }
@@ -604,7 +621,7 @@ void SPObject::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
 
     const std::string type_string = NodeTraits::get_type_string(*child);
 
-    SPObject* ochild = SPFactory::instance().createObject(type_string);
+    SPObject* ochild = SPFactory::createObject(type_string);
     if (ochild == NULL) {
         // Currenty, there are many node types that do not have
         // corresponding classes in the SPObject tree.
@@ -663,7 +680,7 @@ void SPObject::build(SPDocument *document, Inkscape::XML::Node *repr) {
     for (Inkscape::XML::Node *rchild = repr->firstChild() ; rchild != NULL; rchild = rchild->next()) {
         const std::string typeString = NodeTraits::get_type_string(*rchild);
 
-        SPObject* child = SPFactory::instance().createObject(typeString);
+        SPObject* child = SPFactory::createObject(typeString);
         if (child == NULL) {
             // Currenty, there are many node types that do not have
             // corresponding classes in the SPObject tree.
@@ -795,9 +812,10 @@ void SPObject::releaseReferences() {
         g_assert(!this->id);
     }
 
-    if (this->style) {
-        this->style = sp_style_unref(this->style);
-    }
+    // style belongs to SPObject, we should not need to unref here.
+    // if (this->style) {
+    //     this->style = sp_style_unref(this->style);
+    // }
 
     this->document = NULL;
     this->repr = NULL;
@@ -914,7 +932,7 @@ void SPObject::set(unsigned int key, gchar const* value) {
             object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
             break;
         case SP_ATTR_STYLE:
-            sp_style_read_from_object(object->style, object);
+            object->style->readFromObject( object );
             object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
             break;
         default:
@@ -1006,9 +1024,8 @@ Inkscape::XML::Node* SPObject::write(Inkscape::XML::Document *doc, Inkscape::XML
             repr->setAttribute("inkscape:collect", NULL);
         }
 
-        SPStyle const *const obj_style = this->style;
-        if (obj_style) {
-            gchar *s = sp_style_write_string(obj_style, SP_STYLE_FLAG_IFSET);
+        if (style) {
+            Glib::ustring s = style->write(SP_STYLE_FLAG_IFSET);
 
             // Check for valid attributes. This may be time consuming.
             // It is useful, though, for debugging Inkscape code.
@@ -1016,17 +1033,14 @@ Inkscape::XML::Node* SPObject::write(Inkscape::XML::Document *doc, Inkscape::XML
             if( prefs->getBool("/options/svgoutput/check_on_editing") ) {
 
                 unsigned int flags = sp_attribute_clean_get_prefs();
-                Glib::ustring s_cleaned = sp_attribute_clean_style( repr, s, flags ); 
-                g_free( s );
-                s = (s_cleaned.empty() ? NULL : g_strdup (s_cleaned.c_str()));
+                Glib::ustring s_cleaned = sp_attribute_clean_style( repr, s.c_str(), flags ); 
             }
 
-            if( s == NULL || strcmp(s,"") == 0 ) {
+            if( s.empty() ) {
                 repr->setAttribute("style", NULL);
             } else {
-                repr->setAttribute("style", s);
+                repr->setAttribute("style", s.c_str());
             }
-            g_free(s);
 
         } else {
             /** \todo I'm not sure what to do in this case.  Bug #1165868
@@ -1148,7 +1162,7 @@ void SPObject::updateDisplay(SPCtx *ctx, unsigned int flags)
      */
     if ((flags & SP_OBJECT_STYLE_MODIFIED_FLAG) && (flags & SP_OBJECT_PARENT_MODIFIED_FLAG)) {
         if (this->style && this->parent) {
-            sp_style_merge_from_parent(this->style, this->parent->style);
+            style->cascade( this->parent->style );
         }
     }
 
@@ -1254,6 +1268,16 @@ void SPObject::setAttribute(gchar const *key, gchar const *value, SPException *e
     //XML Tree being used here.
     getRepr()->setAttribute(key, value, false);
 }
+void SPObject::setAttribute(char const *key, Glib::ustring const &value, SPException *ex)
+{
+    setAttribute(key, value.empty() ? NULL : value.c_str(), ex);
+}
+void SPObject::setAttribute(Glib::ustring const &key, Glib::ustring const &value, SPException *ex)
+{
+    setAttribute( key.empty()   ? NULL : key.c_str(),
+                  value.empty() ? NULL : value.c_str(), ex);
+}
+
 
 void SPObject::removeAttribute(gchar const *key, SPException *ex)
 {
@@ -1511,6 +1535,22 @@ char* SPObject::textualContent() const
         }
     }
     return g_string_free(text, FALSE);
+}
+
+// For debugging: Print SP tree structure.
+void SPObject::recursivePrintTree( unsigned level )
+{
+    if (level == 0) {
+        std::cout << "SP Object Tree" << std::endl;
+    }
+    std::cout << "SP: ";
+    for (unsigned i = 0; i < level; ++i) {
+        std::cout << "  ";
+    }
+    std::cout << (getId()?getId():"No object id") << std::endl;
+    for (SPObject *child = children; child; child = child->next) {
+        child->recursivePrintTree( level+1 );
+    }
 }
 
 /*

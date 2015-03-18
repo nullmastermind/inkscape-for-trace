@@ -14,7 +14,7 @@
 #include "inkscape.h"
 #include "document.h"
 #include "selection.h"
-#include "desktop-handles.h"
+
 #include "desktop.h"
 
 #include "xml/repr.h"
@@ -33,16 +33,6 @@
 #include "livarot/Shape.h"
 
 #include "display/drawing-text.h"
-
-#include "sp-factory.h"
-
-namespace {
-	SPObject* createFlowtext() {
-		return new SPFlowtext();
-	}
-
-	bool flowtextRegistered = SPFactory::instance().registerObject("svg:flowRoot", createFlowtext);
-}
 
 SPFlowtext::SPFlowtext() : SPItem() {
     this->par_indent = 0;
@@ -525,10 +515,10 @@ Inkscape::XML::Node *SPFlowtext::getAsText()
             Glib::ustring::iterator span_text_start_iter;
             this->layout.getSourceOfCharacter(it, &rawptr, &span_text_start_iter);
             SPObject *source_obj = reinterpret_cast<SPObject *>(rawptr);
-            gchar *style_text = sp_style_write_difference((dynamic_cast<SPString *>(source_obj) ? source_obj->parent : source_obj)->style, this->style);
-            if (style_text && *style_text) {
-                span_tspan->setAttribute("style", style_text);
-                g_free(style_text);
+
+            Glib::ustring style_text = (dynamic_cast<SPString *>(source_obj) ? source_obj->parent : source_obj)->style->write( SP_STYLE_FLAG_IFDIFF, this->style);
+            if (!style_text.empty()) {
+                span_tspan->setAttribute("style", style_text.c_str());
             }
 
             SPString *str = dynamic_cast<SPString *>(source_obj);
@@ -620,7 +610,7 @@ bool SPFlowtext::has_internal_frame() const
 
 SPItem *create_flowtext_with_internal_frame (SPDesktop *desktop, Geom::Point p0, Geom::Point p1)
 {
-    SPDocument *doc = sp_desktop_document (desktop);
+    SPDocument *doc = desktop->getDocument();
 
     Inkscape::XML::Document *xml_doc = doc->getReprDoc();
     Inkscape::XML::Node *root_repr = xml_doc->createElement("svg:flowRoot");

@@ -32,7 +32,7 @@
 #include "util/units.h"
 #include <iostream>
 #include "enums.h"
-#include "desktop-handles.h"
+
 #include "extension/internal/gdkpixbuf-input.h"
 #include "message-stack.h"
 #include "style.h"
@@ -213,10 +213,10 @@ static void StyleFromSelectionToTool(Glib::ustring const &prefs_path, StyleSwatc
     if (desktop == NULL)
         return;
 
-    Inkscape::Selection *selection = sp_desktop_selection(desktop);
+    Inkscape::Selection *selection = desktop->getSelection();
 
     if (selection->isEmpty()) {
-        sp_desktop_message_stack(desktop)->flash(Inkscape::ERROR_MESSAGE,
+        desktop->getMessageStack()->flash(Inkscape::ERROR_MESSAGE,
                                        _("<b>No objects selected</b> to take the style from."));
         return;
     }
@@ -225,7 +225,7 @@ static void StyleFromSelectionToTool(Glib::ustring const &prefs_path, StyleSwatc
         /* TODO: If each item in the selection has the same style then don't consider it an error.
          * Maybe we should try to handle multiple selections anyway, e.g. the intersection of the
          * style attributes for the selected items. */
-        sp_desktop_message_stack(desktop)->flash(Inkscape::ERROR_MESSAGE,
+        desktop->getMessageStack()->flash(Inkscape::ERROR_MESSAGE,
                                        _("<b>More than one object selected.</b>  Cannot take style from multiple objects."));
         return;
     }
@@ -279,9 +279,13 @@ void InkscapePreferences::AddNewObjectsStyle(DialogPage &p, Glib::ustring const 
     p.add_line( true, "", *hb, "", "");
 
     // style swatch
-    Gtk::Button* button = Gtk::manage( new Gtk::Button(_("Take from selection"),true));
+    Gtk::Button* button = Gtk::manage( new Gtk::Button(_("Take from selection"), true));
     StyleSwatch *swatch = 0;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+
+    if (prefs->getInt(prefs_path + "/usecurrent")) {
+        button->set_sensitive(false);
+    }
 
     SPCSSAttr *css = prefs->getStyle(prefs_path + "/style");
     swatch = new StyleSwatch(css, _("This tool's style of new objects"));
@@ -461,7 +465,7 @@ void InkscapePreferences::initPageTools()
     _page_text.add_line( false, _("Text size unit type:"), _font_unit_type, "",
                        _("Set the type of unit used in the text toolbar and text dialogs"), false);
     _font_output_px.init ( _("Always output text size in pixels (px)"), "/options/font/textOutputPx", true);
-    _page_text.add_line( false, "", _font_output_px, "", _("Always convert the text size units above into pixels (px) before saving to file"));
+//    _page_text.add_line( false, "", _font_output_px, "", _("Always convert the text size units above into pixels (px) before saving to file"));
 
     this->AddNewObjectsStyle(_page_text, "/tools/text");
 
@@ -525,14 +529,14 @@ void InkscapePreferences::initPageUI()
         _("English/Canada (en_CA)"), _("English/Great Britain (en_GB)"), _("Pig Latin (en_US@piglatin)"),
         _("Esperanto (eo)"), _("Estonian (et)"), _("Farsi (fa)"), _("Finnish (fi)"),
         _("French (fr)"), _("Irish (ga)"), _("Galician (gl)"), _("Hebrew (he)"), _("Hungarian (hu)"),
-        _("Indonesian (id)"), _("Italian (it)"), _("Japanese (ja)"), _("Khmer (km)"), _("Kinyarwanda (rw)"), _("Korean (ko)"), _("Lithuanian (lt)"), _("Latvian (lv)"), _("Macedonian (mk)"),
+        _("Indonesian (id)"), _("Icelandic (is)"), _("Italian (it)"), _("Japanese (ja)"), _("Khmer (km)"), _("Kinyarwanda (rw)"), _("Korean (ko)"), _("Lithuanian (lt)"), _("Latvian (lv)"), _("Macedonian (mk)"),
         _("Mongolian (mn)"), _("Nepali (ne)"), _("Norwegian Bokmål (nb)"), _("Norwegian Nynorsk (nn)"), _("Panjabi (pa)"),
         _("Polish (pl)"), _("Portuguese (pt)"), _("Portuguese/Brazil (pt_BR)"), _("Romanian (ro)"), _("Russian (ru)"),
         _("Serbian (sr)"), _("Serbian in Latin script (sr@latin)"), _("Slovak (sk)"), _("Slovenian (sl)"),  _("Spanish (es)"), _("Spanish/Mexico (es_MX)"),
         _("Swedish (sv)"),_("Telugu (te)"), _("Thai (th)"), _("Turkish (tr)"), _("Ukrainian (uk)"), _("Vietnamese (vi)")};
     Glib::ustring langValues[] = {"", "sq", "am", "ar", "hy", "az", "eu", "be", "bg", "bn", "bn_BD", "br", "ca", "ca@valencia", "zh_CN", "zh_TW", "hr", "cs", "da", "nl",
         "dz", "de", "el", "en", "en_AU", "en_CA", "en_GB", "en_US@piglatin", "eo", "et", "fa", "fi", "fr", "ga",
-        "gl", "he", "hu", "id", "it", "ja", "km", "rw", "ko", "lt", "lv", "mk", "mn", "ne", "nb", "nn", "pa",
+        "gl", "he", "hu", "id", "is", "it", "ja", "km", "rw", "ko", "lt", "lv", "mk", "mn", "ne", "nb", "nn", "pa",
         "pl", "pt", "pt_BR", "ro", "ru", "sr", "sr@latin", "sk", "sl", "es", "es_MX", "sv", "te", "th", "tr", "uk", "vi" };
 
     {
@@ -1487,7 +1491,7 @@ void InkscapePreferences::initKeyboardShortcuts(Gtk::TreeModel::iterator iter_ui
 
     _kb_filelist.init( "/options/kbshortcuts/shortcutfile", &fileLabels[0], &fileNames[0], fileLabels.size(), fileNames[0]);
 
-    Glib::ustring tooltip(_("Select a file of predefined shortcuts to use. Any customized shortcuts you create will be added seperately to "));
+    Glib::ustring tooltip(_("Select a file of predefined shortcuts to use. Any customized shortcuts you create will be added separately to "));
     tooltip += Glib::ustring(IO::Resource::get_path(IO::Resource::USER, IO::Resource::KEYS, "default.xml"));
 
     _page_keyshortcuts.add_line( false, _("Shortcut file:"), _kb_filelist, "", tooltip.c_str(), false);
@@ -1742,6 +1746,10 @@ void InkscapePreferences::onKBListKeyboardShortcuts()
 
         // Find this group in the tree
         Glib::ustring group = verb->get_group() ? _(verb->get_group()) : _("Misc");
+        Glib::ustring verb_id = verb->get_id();
+        if (verb_id .compare(0,26,"org.inkscape.effect.filter") == 0) {
+            group = _("Filters");
+        }
         Gtk::TreeStore::iterator iter_group;
         bool found = false;
         while (path) {
@@ -1913,7 +1921,7 @@ void InkscapePreferences::initPageSystem()
 
         _page_system.add_group_header( _("System info"));
 
-        _sys_user_config.set_text((char const *)profile_path(""));
+        _sys_user_config.set_text((char const *)Inkscape::Application::profile_path(""));
         _sys_user_config.set_editable(false);
         _page_system.add_line(true, _("User config: "), _sys_user_config, "", _("Location of users configuration"), true);
 

@@ -204,8 +204,8 @@ StrokeStyle::StrokeStyle() :
     unitSelector->addUnit(*unit_table.getUnit("%"));
     _old_unit = unitSelector->getUnit();
     if (desktop) {
-        unitSelector->setUnit(sp_desktop_namedview(desktop)->svg_units->abbr);
-        _old_unit = sp_desktop_namedview(desktop)->svg_units;
+        unitSelector->setUnit(desktop->getNamedView()->display_units->abbr);
+        _old_unit = desktop->getNamedView()->display_units;
     }
     widthSpin->setUnitMenu(unitSelector);
     unitChangedConn = unitSelector->signal_changed().connect(sigc::mem_fun(*this, &StrokeStyle::unitChangedCB));
@@ -456,7 +456,7 @@ void StrokeStyle::markerSelectCB(MarkerComboBox *marker_combo, StrokeStyle *spw,
 
     spw->update = true;
 
-    SPDocument *document = sp_desktop_document(spw->desktop);
+    SPDocument *document = spw->desktop->getDocument();
     if (!document) {
         return;
     }
@@ -471,10 +471,10 @@ void StrokeStyle::markerSelectCB(MarkerComboBox *marker_combo, StrokeStyle *spw,
 
     // Also update the marker combobox, so the document's markers
     // show up at the top of the combobox
-//    sp_stroke_style_line_update( SP_WIDGET(spw), desktop ? sp_desktop_selection(desktop) : NULL);
+//    sp_stroke_style_line_update( SP_WIDGET(spw), desktop ? desktop->getSelection() : NULL);
     //spw->updateMarkerHist(which);
 
-    Inkscape::Selection *selection = sp_desktop_selection(spw->desktop);
+    Inkscape::Selection *selection = spw->desktop->getSelection();
     GSList const *items = selection->itemList();
     for (; items != NULL; items = items->next) {
         SPItem *item = reinterpret_cast<SPItem *>(items->data);
@@ -810,18 +810,18 @@ StrokeStyle::updateLine()
 
     update = true;
 
-    Inkscape::Selection *sel = desktop ? sp_desktop_selection(desktop) : NULL;
+    Inkscape::Selection *sel = desktop ? desktop->getSelection() : NULL;
 
     FillOrStroke kind = GPOINTER_TO_INT(get_data("kind")) ? FILL : STROKE;
 
     // create temporary style
-    SPStyle *query = sp_style_new (SP_ACTIVE_DOCUMENT);
+    SPStyle query(SP_ACTIVE_DOCUMENT);
     // query into it
-    int result_sw = sp_desktop_query_style (SP_ACTIVE_DESKTOP, query, QUERY_STYLE_PROPERTY_STROKEWIDTH);
-    int result_ml = sp_desktop_query_style (SP_ACTIVE_DESKTOP, query, QUERY_STYLE_PROPERTY_STROKEMITERLIMIT);
-    int result_cap = sp_desktop_query_style (SP_ACTIVE_DESKTOP, query, QUERY_STYLE_PROPERTY_STROKECAP);
-    int result_join = sp_desktop_query_style (SP_ACTIVE_DESKTOP, query, QUERY_STYLE_PROPERTY_STROKEJOIN);
-    SPIPaint &targPaint = (kind == FILL) ? query->fill : query->stroke;
+    int result_sw = sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_STROKEWIDTH);
+    int result_ml = sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_STROKEMITERLIMIT);
+    int result_cap = sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_STROKECAP);
+    int result_join = sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_STROKEJOIN);
+    SPIPaint &targPaint = (kind == FILL) ? query.fill : query.stroke;
 
     if (!sel || sel->isEmpty()) {
         // Nothing selected, grey-out all controls in the stroke-style dialog
@@ -839,14 +839,14 @@ StrokeStyle::updateLine()
             // same width, or only one object; no sense to keep percent, switch to absolute
             Inkscape::Util::Unit const *tempunit = unitSelector->getUnit();
             if (tempunit->type != Inkscape::Util::UNIT_TYPE_LINEAR) {
-                unitSelector->setUnit(sp_desktop_namedview(SP_ACTIVE_DESKTOP)->display_units->abbr);
+                unitSelector->setUnit(SP_ACTIVE_DESKTOP->getNamedView()->display_units->abbr);
             }
         }
 
         Inkscape::Util::Unit const *unit = unitSelector->getUnit();
 
         if (unit->type == Inkscape::Util::UNIT_TYPE_LINEAR) {
-            double avgwidth = Inkscape::Util::Quantity::convert(query->stroke_width.computed, "px", unit);
+            double avgwidth = Inkscape::Util::Quantity::convert(query.stroke_width.computed, "px", unit);
 #if WITH_GTKMM_3_0
             (*widthAdj)->set_value(avgwidth);
 #else
@@ -879,26 +879,24 @@ StrokeStyle::updateLine()
 
     if (result_ml != QUERY_STYLE_NOTHING)
 #if WITH_GTKMM_3_0
-        (*miterLimitAdj)->set_value(query->stroke_miterlimit.value); // TODO: reflect averagedness?
+        (*miterLimitAdj)->set_value(query.stroke_miterlimit.value); // TODO: reflect averagedness?
 #else
-        miterLimitAdj->set_value(query->stroke_miterlimit.value); // TODO: reflect averagedness?
+        miterLimitAdj->set_value(query.stroke_miterlimit.value); // TODO: reflect averagedness?
 #endif
 
     if (result_join != QUERY_STYLE_MULTIPLE_DIFFERENT &&
         result_join != QUERY_STYLE_NOTHING ) {
-        setJoinType(query->stroke_linejoin.value);
+        setJoinType(query.stroke_linejoin.value);
     } else {
         setJoinButtons(NULL);
     }
 
     if (result_cap != QUERY_STYLE_MULTIPLE_DIFFERENT &&
         result_cap != QUERY_STYLE_NOTHING ) {
-        setCapType (query->stroke_linecap.value);
+        setCapType (query.stroke_linecap.value);
     } else {
         setCapButtons(NULL);
     }
-
-    sp_style_unref(query);
 
     if (!sel || sel->isEmpty())
         return;
@@ -957,8 +955,8 @@ StrokeStyle::scaleLine()
 
     update = true;
     
-    SPDocument *document = sp_desktop_document (desktop);
-    Inkscape::Selection *selection = sp_desktop_selection (desktop);
+    SPDocument *document = desktop->getDocument();
+    Inkscape::Selection *selection = desktop->getSelection();
 
     GSList const *items = selection->itemList();
 
@@ -1113,8 +1111,7 @@ void StrokeStyle::buttonToggledCB(StrokeStyleButton *tb, StrokeStyle *spw)
         sp_repr_css_attr_unref(css);
         css = 0;
 
-        DocumentUndo::done(sp_desktop_document(spw->desktop), SP_VERB_DIALOG_FILL_STROKE,
-                           _("Set stroke style"));
+        DocumentUndo::done(spw->desktop->getDocument(), SP_VERB_DIALOG_FILL_STROKE, _("Set stroke style"));
     }
 }
 
@@ -1200,7 +1197,7 @@ StrokeStyle::updateAllMarkers(GSList const *objects)
             if (update) {
                 setMarkerColor(marker, combo->get_loc(), SP_ITEM(object));
 
-                SPDocument *document = sp_desktop_document(desktop);
+                SPDocument *document = desktop->getDocument();
                 DocumentUndo::done(document, SP_VERB_DIALOG_FILL_STROKE,
                                    _("Set marker color"));
             }

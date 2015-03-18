@@ -38,13 +38,13 @@
 #include "document-private.h"
 #include "document-undo.h"
 #include "desktop.h"
-#include "desktop-handles.h"
+
 #include <glibmm/i18n.h>
 
 #include "ui/tools/gradient-tool.h"
 #include "ui/tools/mesh-tool.h"
 #include "gradient-drag.h"
-#include "sp-mesh-gradient.h"
+#include "sp-mesh.h"
 #include "gradient-chemistry.h"
 #include "gradient-selector.h"
 #include "selection.h"
@@ -74,34 +74,117 @@ static bool blocked = false;
 //########################
 
 /*
+ * Get the current selection and dragger status from the desktop
+ */
+void ms_read_selection( Inkscape::Selection *selection,
+                        SPMesh *&ms_selected,
+                        bool &ms_selected_multi,
+                        SPMeshType &ms_type,
+                        bool &ms_type_multi )
+{
+
+    // Read desktop selection
+    bool first = true;
+    ms_type = SP_MESH_TYPE_COONS;
+    
+    for (GSList const* i = selection->itemList(); i; i = i->next) {
+        SPItem *item = SP_ITEM(i->data);
+        SPStyle *style = item->style;
+
+        if (style && (style->fill.isPaintserver())) {
+            SPPaintServer *server = item->style->getFillPaintServer();
+            if ( SP_IS_MESH(server) ) {
+
+                SPMesh *gradient = SP_MESH(server); // ->getVector();
+                SPMeshType type = gradient->type;
+
+                if (gradient != ms_selected) {
+                    if (ms_selected) {
+                        ms_selected_multi = true;
+                    } else {
+                        ms_selected = gradient;
+                    }
+                }
+                if( type != ms_type ) {
+                    if (ms_type != SP_MESH_TYPE_COONS && !first) {
+                        ms_type_multi = true;
+                    } else {
+                        ms_type = type;
+                    }
+                }
+                first = false;
+            }
+        }
+
+        if (style && (style->stroke.isPaintserver())) {
+            SPPaintServer *server = item->style->getStrokePaintServer();
+            if ( SP_IS_MESH(server) ) {
+
+                SPMesh *gradient = SP_MESH(server); // ->getVector();
+                SPMeshType type = gradient->type;
+
+                if (gradient != ms_selected) {
+                    if (ms_selected) {
+                        ms_selected_multi = true;
+                    } else {
+                        ms_selected = gradient;
+                    }
+                }
+                if( type != ms_type ) {
+                    if (ms_type != SP_MESH_TYPE_COONS && !first) {
+                        ms_type_multi = true;
+                    } else {
+                        ms_type = type;
+                    }
+                }
+                first = false;
+            }
+        }
+    }
+ }
+
+/*
  * Core function, setup all the widgets whenever something changes on the desktop
  */
-static void ms_tb_selection_changed(Inkscape::Selection * /*selection*/, gpointer /*data*/)
+static void ms_tb_selection_changed(Inkscape::Selection * /*selection*/, gpointer data)
 {
-    // DOES NOTHING AT MOMENT
 
     // std::cout << "ms_tb_selection_changed" << std::endl;
 
-    // if (blocked)
-    //     return;
+    if (blocked)
+        return;
 
-    // GtkWidget *widget = GTK_WIDGET(data);
+    GtkWidget *widget = GTK_WIDGET(data);
 
-    // SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data(G_OBJECT(widget), "desktop"));
-    // if (!desktop) {
-    //     return;
-    // }
+    SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data(G_OBJECT(widget), "desktop"));
+    if (!desktop) {
+        return;
+    }
 
-    // Inkscape::Selection *selection = sp_desktop_selection(desktop); // take from desktop, not from args
-    // if (selection) {
-    //     ToolBase *ev = sp_desktop_event_context(desktop);
-    //     GrDrag *drag = NULL;
-    //     if (ev) {
-    //         drag = ev->get_drag();
-    //         // Hide/show handles?
-    //     }
+    Inkscape::Selection *selection = desktop->getSelection(); // take from desktop, not from args
+    if (selection) {
+        // ToolBase *ev = sp_desktop_event_context(desktop);
+        // GrDrag *drag = NULL;
+        // if (ev) {
+        //     drag = ev->get_drag();
+        //     // Hide/show handles?
+        // }
 
-    // }
+        SPMesh *ms_selected = 0;
+        SPMeshType ms_type = SP_MESH_TYPE_COONS;
+        bool ms_selected_multi = false;
+        bool ms_type_multi = false; 
+        ms_read_selection( selection, ms_selected, ms_selected_multi, ms_type, ms_type_multi );
+        // std::cout << "   type: " << ms_type << std::endl;
+        
+        EgeSelectOneAction* type = (EgeSelectOneAction *) g_object_get_data(G_OBJECT(widget), "mesh_select_type_action");
+        gtk_action_set_sensitive( GTK_ACTION(type), (ms_selected && !ms_selected_multi) );
+        if (ms_selected) {
+            blocked = TRUE;
+            ege_select_one_action_set_active( type, ms_type );
+            blocked = FALSE;
+        }
+    }
 }
 
 
@@ -126,15 +209,42 @@ static void ms_defs_modified(SPObject * /*defs*/, guint /*flags*/, GObject *widg
     ms_tb_selection_changed(NULL, widget);
 }
 
+void ms_get_dt_selected_gradient(Inkscape::Selection *selection, SPMesh *&ms_selected)
+{
+    SPMesh *gradient = 0;
+
+    for (GSList const* i = selection->itemList(); i; i = i->next) {
+         SPItem *item = SP_ITEM(i->data); // get the items gradient, not the getVector() version
+         SPStyle *style = item->style;
+         SPPaintServer *server = 0;
+
+         if (style && (style->fill.isPaintserver())) {
+             server = item->style->getFillPaintServer();
+         }
+         if (style && (style->stroke.isPaintserver())) {
+             server = item->style->getStrokePaintServer();
+         }
+
+         if ( SP_IS_MESH(server) ) {
+             gradient = SP_MESH(server);
+         }
+    }
+
+    if (gradient) {
+        ms_selected = gradient;
+    }
+}
+
+
 /*
  * Callback functions for user actions
  */
 
-static void ms_new_type_changed( EgeSelectOneAction *act, GObject * /*tbl*/ )
+static void ms_new_geometry_changed( EgeSelectOneAction *act, GObject * /*tbl*/ )
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    gint typemode = ege_select_one_action_get_active( act ) == 0 ? SP_GRADIENT_MESH_TYPE_NORMAL : SP_GRADIENT_MESH_TYPE_CONICAL;
-    prefs->setInt("/tools/mesh/mesh_type", typemode);
+    gint geometrymode = ege_select_one_action_get_active( act ) == 0 ? SP_MESH_GEOMETRY_NORMAL : SP_MESH_GEOMETRY_CONICAL;
+    prefs->setInt("/tools/mesh/mesh_geometry", geometrymode);
 }
 
 static void ms_new_fillstroke_changed( EgeSelectOneAction *act, GObject * /*tbl*/ )
@@ -178,6 +288,30 @@ static void ms_col_changed(GtkAdjustment *adj, GObject * /*tbl*/ )
     blocked = FALSE;
 }
 
+static void ms_type_changed(EgeSelectOneAction *act, GtkWidget *widget)
+{
+    // std::cout << "ms_type_changed" << std::endl;
+    if (blocked) {
+        return;
+    }
+
+    SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data(G_OBJECT(widget), "desktop"));
+    Inkscape::Selection *selection = desktop->getSelection();
+    SPMesh *gradient = 0;
+    ms_get_dt_selected_gradient(selection, gradient);
+
+    if (gradient) {
+        SPMeshType type = (SPMeshType) ege_select_one_action_get_active(act);
+        // std::cout << "   type: " << type << std::endl;
+        gradient->type = type;
+        gradient->type_set = true;
+        gradient->updateRepr();
+
+        DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_GRADIENT,
+                   _("Set mesh type"));
+    }
+}
+
 static void mesh_toolbox_watch_ec(SPDesktop* dt, Inkscape::UI::Tools::ToolBase* ec, GObject* holder);
 
 /**
@@ -215,9 +349,9 @@ void sp_mesh_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, GObj
         ege_select_one_action_set_tooltip_column( act, 1  );
 
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        gint mode = prefs->getInt("/tools/mesh/mesh_type", SP_GRADIENT_MESH_TYPE_NORMAL) != SP_GRADIENT_MESH_TYPE_NORMAL;
+        gint mode = prefs->getInt("/tools/mesh/mesh_geometry", SP_MESH_GEOMETRY_NORMAL) != SP_MESH_GEOMETRY_NORMAL;
         ege_select_one_action_set_active( act, mode );
-        g_signal_connect_after( G_OBJECT(act), "changed", G_CALLBACK(ms_new_type_changed), holder );
+        g_signal_connect_after( G_OBJECT(act), "changed", G_CALLBACK(ms_new_geometry_changed), holder );
     }
 
     /* New gradient on fill or stroke*/
@@ -322,6 +456,35 @@ void sp_mesh_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, GObj
     g_object_set_data(holder, "desktop", desktop);
 
     desktop->connectEventContextChanged(sigc::bind(sigc::ptr_fun(mesh_toolbox_watch_ec), holder));
+
+    /* Warning */
+    {
+        GtkAction* act = gtk_action_new( "MeshWarningAction",
+          _("WARNING: Mesh SVG Syntax Subject to Change"), NULL, NULL );
+        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
+    }
+
+    /* Typeing method */
+    {
+        GtkListStore* model = gtk_list_store_new( 2, G_TYPE_STRING, G_TYPE_INT );
+
+        GtkTreeIter iter;
+        gtk_list_store_append( model, &iter );
+        gtk_list_store_set( model, &iter, 0, C_("Type", "Coons"), 1, SP_MESH_TYPE_COONS, -1 );
+
+        gtk_list_store_append( model, &iter );
+        gtk_list_store_set( model, &iter, 0, _("Bicubic"), 1, SP_MESH_TYPE_BICUBIC, -1 );
+
+        EgeSelectOneAction* act = ege_select_one_action_new( "MeshSmoothAction", _("Coons"),
+               _("Coons: no smoothing. Bicubic: smoothing across patch boundaries."),
+                NULL, GTK_TREE_MODEL(model) );
+        g_object_set( act, "short_label", _("Smoothing:"), NULL );
+        ege_select_one_action_set_appearance( act, "compact" );
+        gtk_action_set_sensitive( GTK_ACTION(act), FALSE );
+        g_signal_connect( G_OBJECT(act), "changed", G_CALLBACK(ms_type_changed), holder );
+        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
+        g_object_set_data( holder, "mesh_select_type_action", act );
+    }
 }
 
 static void mesh_toolbox_watch_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolBase* ec, GObject* holder)
@@ -334,8 +497,8 @@ static void mesh_toolbox_watch_ec(SPDesktop* desktop, Inkscape::UI::Tools::ToolB
 
     if (SP_IS_MESH_CONTEXT(ec)) {
         // connect to selection modified and changed signals
-        Inkscape::Selection *selection = sp_desktop_selection (desktop);
-        SPDocument *document = sp_desktop_document (desktop);
+        Inkscape::Selection *selection = desktop->getSelection();
+        SPDocument *document = desktop->getDocument();
 
         c_selection_changed = selection->connectChanged(sigc::bind(sigc::ptr_fun(&ms_tb_selection_changed), holder));
         c_selection_modified = selection->connectModified(sigc::bind(sigc::ptr_fun(&ms_tb_selection_modified), holder));

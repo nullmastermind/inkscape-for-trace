@@ -26,7 +26,7 @@
 #include "document-properties.h"
 #include "display/canvas-grid.h"
 #include "document.h"
-#include "desktop-handles.h"
+
 #include "desktop.h"
 #include "inkscape.h"
 #include "io/sys.h"
@@ -87,6 +87,13 @@ static Inkscape::XML::NodeEventVector const _repr_events = {
     NULL  // order_changed
 };
 
+static void docprops_style_button(Gtk::Button& btn, char const* iconName)
+{
+    GtkWidget *child = sp_icon_new(Inkscape::ICON_SIZE_SMALL_TOOLBAR, iconName);
+    gtk_widget_show( child );
+    btn.add(*Gtk::manage(Glib::wrap(child)));
+    btn.set_relief(Gtk::RELIEF_NONE);
+}
 
 DocumentProperties& DocumentProperties::getInstance()
 {
@@ -186,9 +193,9 @@ void DocumentProperties::init()
 {
     update();
 
-    Inkscape::XML::Node *repr = sp_desktop_namedview(getDesktop())->getRepr();
+    Inkscape::XML::Node *repr = getDesktop()->getNamedView()->getRepr();
     repr->addListener (&_repr_events, this);
-    Inkscape::XML::Node *root = sp_desktop_document(getDesktop())->getRoot()->getRepr();
+    Inkscape::XML::Node *root = getDesktop()->getDocument()->getRoot()->getRepr();
     root->addListener (&_repr_events, this);
 
     show_all_children();
@@ -197,9 +204,9 @@ void DocumentProperties::init()
 
 DocumentProperties::~DocumentProperties()
 {
-    Inkscape::XML::Node *repr = sp_desktop_namedview(getDesktop())->getRepr();
+    Inkscape::XML::Node *repr = getDesktop()->getNamedView()->getRepr();
     repr->removeListenerByData (this);
-    Inkscape::XML::Node *root = sp_desktop_document(getDesktop())->getRoot()->getRepr();
+    Inkscape::XML::Node *root = getDesktop()->getDocument()->getRoot()->getRepr();
     root->removeListenerByData (this);
 
     for (RDElist::iterator it = _rdflist.begin(); it != _rdflist.end(); ++it)
@@ -615,22 +622,10 @@ void DocumentProperties::build_cms()
     label_avail->set_markup (_("<b>Available Color Profiles:</b>"));
 
     _link_btn.set_tooltip_text(_("Link Profile"));
-#if WITH_GTKMM_3_10
-    _link_btn.set_image_from_icon_name(INKSCAPE_ICON("list-add"), Gtk::ICON_SIZE_SMALL_TOOLBAR);
-#else
-    Gtk::Image *image_link = Gtk::manage(new Gtk::Image());
-    image_link->set_from_icon_name(INKSCAPE_ICON("list-add"), Gtk::ICON_SIZE_SMALL_TOOLBAR);
-    _link_btn.set_image(*image_link);
-#endif
+    docprops_style_button(_link_btn, INKSCAPE_ICON("list-add"));
 
     _unlink_btn.set_tooltip_text(_("Unlink Profile"));
-#if WITH_GTKMM_3_10
-    _unlink_btn.set_image_from_icon_name(INKSCAPE_ICON("list-remove"), Gtk::ICON_SIZE_SMALL_TOOLBAR);
-#else
-    Gtk::Image *image_unlink = Gtk::manage(new Gtk::Image());
-    image_unlink->set_from_icon_name(INKSCAPE_ICON("list-remove"), Gtk::ICON_SIZE_SMALL_TOOLBAR);
-    _unlink_btn.set_image(*image_unlink);
-#endif
+    docprops_style_button(_unlink_btn, INKSCAPE_ICON("list-remove"));
 
     _page_cms->set_spacing(4);
     gint row = 0;
@@ -752,22 +747,10 @@ void DocumentProperties::build_scripting()
     label_external->set_markup (_("<b>External script files:</b>"));
 
     _external_add_btn.set_tooltip_text(_("Add the current file name or browse for a file"));
-#if WITH_GTKMM_3_10
-    _external_add_btn.set_image_from_icon_name(INKSCAPE_ICON("list-add"), Gtk::ICON_SIZE_SMALL_TOOLBAR);
-#else
-    Gtk::Image *image_ext_add = Gtk::manage(new Gtk::Image());
-    image_ext_add->set_from_icon_name(INKSCAPE_ICON("list-add"), Gtk::ICON_SIZE_SMALL_TOOLBAR);
-    _external_add_btn.set_image(*image_ext_add);
-#endif
+    docprops_style_button(_external_add_btn, INKSCAPE_ICON("list-add"));
 
     _external_remove_btn.set_tooltip_text(_("Remove"));
-#if WITH_GTKMM_3_10
-    _external_remove_btn.set_image_from_icon_name(INKSCAPE_ICON("list-remove"), Gtk::ICON_SIZE_SMALL_TOOLBAR);
-#else
-    Gtk::Image *image_ext_rm = Gtk::manage(new Gtk::Image());
-    image_ext_rm->set_from_icon_name(INKSCAPE_ICON("list-remove"), Gtk::ICON_SIZE_SMALL_TOOLBAR);
-    _external_remove_btn.set_image(*image_ext_rm);
-#endif
+    docprops_style_button(_external_remove_btn, INKSCAPE_ICON("list-remove"));
 
     _page_external_scripts->set_spacing(4);
     gint row = 0;
@@ -841,22 +824,10 @@ void DocumentProperties::build_scripting()
     label_embedded->set_markup (_("<b>Embedded script files:</b>"));
 
     _embed_new_btn.set_tooltip_text(_("New"));
-#if WITH_GTKMM_3_10
-    _embed_new_btn.set_image_from_icon_name(INKSCAPE_ICON("list-add"), Gtk::ICON_SIZE_SMALL_TOOLBAR);
-#else
-    Gtk::Image *image_embed_new = Gtk::manage(new Gtk::Image());
-    image_embed_new->set_from_icon_name(INKSCAPE_ICON("list-add"), Gtk::ICON_SIZE_SMALL_TOOLBAR);
-    _embed_new_btn.set_image(*image_embed_new);
-#endif
+    docprops_style_button(_embed_new_btn, INKSCAPE_ICON("list-add"));
 
     _embed_remove_btn.set_tooltip_text(_("Remove"));
-#if WITH_GTKMM_3_10
-    _embed_remove_btn.set_image_from_icon_name(INKSCAPE_ICON("list-remove"), Gtk::ICON_SIZE_SMALL_TOOLBAR);
-#else
-    Gtk::Image *image_embed_rm = Gtk::manage(new Gtk::Image());
-    image_embed_rm->set_from_icon_name(INKSCAPE_ICON("list-remove"), Gtk::ICON_SIZE_SMALL_TOOLBAR);
-    _embed_remove_btn.set_image(*image_embed_rm);
-#endif
+    docprops_style_button(_embed_remove_btn, INKSCAPE_ICON("list-remove"));
 
 #if !WITH_GTKMM_3_0
     // TODO: This has been removed from Gtkmm 3.0. Check that
@@ -1384,7 +1355,7 @@ void DocumentProperties::populate_script_lists(){
 void DocumentProperties::update_gridspage()
 {
     SPDesktop *dt = getDesktop();
-    SPNamedView *nv = sp_desktop_namedview(dt);
+    SPNamedView *nv = dt->getNamedView();
 
     //remove all tabs
     while (_grids_notebook.get_n_pages() != 0) {
@@ -1428,7 +1399,7 @@ void DocumentProperties::build_gridspage()
     /// Dissenting view: you want snapping without grid.
 
     SPDesktop *dt = getDesktop();
-    SPNamedView *nv = sp_desktop_namedview(dt);
+    SPNamedView *nv = dt->getNamedView();
     (void)nv;
 
     _grids_label_crea.set_markup(_("<b>Creation</b>"));
@@ -1464,7 +1435,7 @@ void DocumentProperties::update()
     if (_wr.isUpdating()) return;
 
     SPDesktop *dt = getDesktop();
-    SPNamedView *nv = sp_desktop_namedview(dt);
+    SPNamedView *nv = dt->getNamedView();
 
     _wr.setUpdating (true);
     set_sensitive (true);
@@ -1484,24 +1455,25 @@ void DocumentProperties::update()
         _rum_deflt.setUnit (nv->display_units->abbr);
     }
 
-    double doc_w = sp_desktop_document(dt)->getRoot()->width.value;
-    Glib::ustring doc_w_unit = unit_table.getUnit(sp_desktop_document(dt)->getRoot()->width.unit)->abbr;
+    double doc_w = dt->getDocument()->getRoot()->width.value;
+    Glib::ustring doc_w_unit = unit_table.getUnit(dt->getDocument()->getRoot()->width.unit)->abbr;
     if (doc_w_unit == "") {
         doc_w_unit = "px";
-    } else if (doc_w_unit == "%" && sp_desktop_document(dt)->getRoot()->viewBox_set) {
+    } else if (doc_w_unit == "%" && dt->getDocument()->getRoot()->viewBox_set) {
         doc_w_unit = "px";
-        doc_w = sp_desktop_document(dt)->getRoot()->viewBox.width();
+        doc_w = dt->getDocument()->getRoot()->viewBox.width();
     }
-    double doc_h = sp_desktop_document(dt)->getRoot()->height.value;
-    Glib::ustring doc_h_unit = unit_table.getUnit(sp_desktop_document(dt)->getRoot()->height.unit)->abbr;
+    double doc_h = dt->getDocument()->getRoot()->height.value;
+    Glib::ustring doc_h_unit = unit_table.getUnit(dt->getDocument()->getRoot()->height.unit)->abbr;
     if (doc_h_unit == "") {
         doc_h_unit = "px";
-    } else if (doc_h_unit == "%" && sp_desktop_document(dt)->getRoot()->viewBox_set) {
+    } else if (doc_h_unit == "%" && dt->getDocument()->getRoot()->viewBox_set) {
         doc_h_unit = "px";
-        doc_h = sp_desktop_document(dt)->getRoot()->viewBox.height();
+        doc_h = dt->getDocument()->getRoot()->viewBox.height();
     }
     _page_sizer.setDim(Inkscape::Util::Quantity(doc_w, doc_w_unit), Inkscape::Util::Quantity(doc_h, doc_h_unit));
     _page_sizer.updateFitMarginsUI(nv->getRepr());
+    _page_sizer.updateScaleUI();
 
     //-----------------------------------------------------------guide page
 
@@ -1592,27 +1564,27 @@ void DocumentProperties::save_default_metadata()
 
 void DocumentProperties::_handleDocumentReplaced(SPDesktop* desktop, SPDocument *document)
 {
-    Inkscape::XML::Node *repr = sp_desktop_namedview(desktop)->getRepr();
+    Inkscape::XML::Node *repr = desktop->getNamedView()->getRepr();
     repr->addListener(&_repr_events, this);
     Inkscape::XML::Node *root = document->getRoot()->getRepr();
     root->addListener(&_repr_events, this);
     update();
 }
 
-void DocumentProperties::_handleActivateDesktop(InkscapeApplication *, SPDesktop *desktop)
+void DocumentProperties::_handleActivateDesktop(SPDesktop *desktop)
 {
-    Inkscape::XML::Node *repr = sp_desktop_namedview(desktop)->getRepr();
+    Inkscape::XML::Node *repr = desktop->getNamedView()->getRepr();
     repr->addListener(&_repr_events, this);
-    Inkscape::XML::Node *root = sp_desktop_document(desktop)->getRoot()->getRepr();
+    Inkscape::XML::Node *root = desktop->getDocument()->getRoot()->getRepr();
     root->addListener(&_repr_events, this);
     update();
 }
 
-void DocumentProperties::_handleDeactivateDesktop(InkscapeApplication *, SPDesktop *desktop)
+void DocumentProperties::_handleDeactivateDesktop(SPDesktop *desktop)
 {
-    Inkscape::XML::Node *repr = sp_desktop_namedview(desktop)->getRepr();
+    Inkscape::XML::Node *repr = desktop->getNamedView()->getRepr();
     repr->removeListenerByData(this);
-    Inkscape::XML::Node *root = sp_desktop_document(desktop)->getRoot()->getRepr();
+    Inkscape::XML::Node *root = desktop->getDocument()->getRoot()->getRepr();
     root->removeListenerByData(this);
 }
 
@@ -1647,8 +1619,8 @@ static void on_repr_attr_changed(Inkscape::XML::Node *, gchar const *, gchar con
 void DocumentProperties::onNewGrid()
 {
     SPDesktop *dt = getDesktop();
-    Inkscape::XML::Node *repr = sp_desktop_namedview(dt)->getRepr();
-    SPDocument *doc = sp_desktop_document(dt);
+    Inkscape::XML::Node *repr = dt->getNamedView()->getRepr();
+    SPDocument *doc = dt->getDocument();
 
     Glib::ustring typestring = _grids_combo_gridtype.get_active_text();
     CanvasGrid::writeNewGridToRepr(repr, doc, CanvasGrid::getGridTypeFromName(typestring.c_str()));
@@ -1665,7 +1637,7 @@ void DocumentProperties::onRemoveGrid()
       return;
 
     SPDesktop *dt = getDesktop();
-    SPNamedView *nv = sp_desktop_namedview(dt);
+    SPNamedView *nv = dt->getNamedView();
     Inkscape::CanvasGrid * found_grid = NULL;
     int i = 0;
     for (GSList const * l = nv->grids; l != NULL; l = l->next, i++) {  // not a very nice fix, but works.
@@ -1679,11 +1651,13 @@ void DocumentProperties::onRemoveGrid()
         // delete the grid that corresponds with the selected tab
         // when the grid is deleted from SVG, the SPNamedview handler automatically deletes the object, so found_grid becomes an invalid pointer!
         found_grid->repr->parent()->removeChild(found_grid->repr);
-        DocumentUndo::done(sp_desktop_document(dt), SP_VERB_DIALOG_NAMEDVIEW, _("Remove grid"));
+        DocumentUndo::done(dt->getDocument(), SP_VERB_DIALOG_NAMEDVIEW, _("Remove grid"));
     }
 }
 
 /** Callback for document unit change. */
+/* This should not effect anything in the SVG tree (other than "inkscape:document-units").
+   This should only effect values displayed in the GUI. */
 void DocumentProperties::onDocUnitChange()
 {
     SPDocument *doc = SP_ACTIVE_DOCUMENT;
@@ -1697,7 +1671,7 @@ void DocumentProperties::onDocUnitChange()
     }
 
 
-    Inkscape::XML::Node *repr = sp_desktop_namedview(getDesktop())->getRepr();
+    Inkscape::XML::Node *repr = getDesktop()->getNamedView()->getRepr();
     Inkscape::Util::Unit const *old_doc_unit = unit_table.getUnit("px");
     if(repr->attribute("inkscape:document-units")) {
         old_doc_unit = unit_table.getUnit(repr->attribute("inkscape:document-units"));
@@ -1708,6 +1682,8 @@ void DocumentProperties::onDocUnitChange()
     Inkscape::SVGOStringStream os;
     os << doc_unit->abbr;
     repr->setAttribute("inkscape:document-units", os.str().c_str());
+
+    _page_sizer.updateScaleUI();
 
     // Disable changing of SVG Units. The intent here is to change the units in the UI, not the units in SVG.
     // This code should be moved (and fixed) once we have an "SVG Units" setting that sets what units are used in SVG data.

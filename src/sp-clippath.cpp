@@ -40,16 +40,6 @@ struct SPClipPathView {
 static SPClipPathView*      sp_clippath_view_new_prepend(SPClipPathView *list, unsigned int key, Inkscape::DrawingItem *arenaitem);
 static SPClipPathView*      sp_clippath_view_list_remove(SPClipPathView *list, SPClipPathView *view);
 
-#include "sp-factory.h"
-
-namespace {
-	SPObject* createClipPath() {
-		return new SPClipPath();
-	}
-
-	bool clipPathRegistered = SPFactory::instance().registerObject("svg:clipPath", createClipPath);
-}
-
 SPClipPath::SPClipPath() : SPObjectGroup() {
     this->clipPathUnits_set = FALSE;
     this->clipPathUnits = SP_CONTENT_UNITS_USERSPACEONUSE;
@@ -103,7 +93,7 @@ void SPClipPath::set(unsigned int key, const gchar* value) {
             break;
         default:
             if (SP_ATTRIBUTE_IS_CSS(key)) {
-                sp_style_read_from_object(this->style, this);
+                this->style->readFromObject( this );
                 this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
             } else {
                 SPObjectGroup::set(key, value);

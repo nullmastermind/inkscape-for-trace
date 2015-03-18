@@ -4,10 +4,11 @@ set(ui_SRC
 	control-manager.cpp
 	dialog-events.cpp
 	draw-anchor.cpp
-	interface.cpp
-	object-edit.cpp
+	interface.cpp 
+	object-edit.cpp 
 	previewholder.cpp
 	shape-editor.cpp
+	tool-factory.cpp
 	tools-switch.cpp
 	uxmanager.cpp
 

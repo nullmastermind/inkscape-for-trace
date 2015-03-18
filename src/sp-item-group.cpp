@@ -40,7 +40,7 @@
 #include "box3d.h"
 #include "persp3d.h"
 #include "inkscape.h"
-#include "desktop-handles.h"
+
 #include "selection.h"
 #include "live_effects/effect.h"
 #include "live_effects/lpeobject.h"
@@ -57,16 +57,6 @@
 using Inkscape::DocumentUndo;
 
 static void sp_group_perform_patheffect(SPGroup *group, SPGroup *topgroup, bool write);
-
-#include "sp-factory.h"
-
-namespace {
-	SPObject* createGroup() {
-		return new SPGroup();
-	}
-
-	bool groupRegistered = SPFactory::instance().registerObject("svg:g", createGroup);
-}
 
 SPGroup::SPGroup() : SPLPEItem() {
     this->_layer_mode = SPGroup::GROUP;
@@ -159,6 +149,7 @@ void SPGroup::order_changed (Inkscape::XML::Node *child, Inkscape::XML::Node *ol
 }
 
 void SPGroup::update(SPCtx *ctx, unsigned int flags) {
+    // std::cout << "SPGroup::update(): " << (getId()?getId():"null") << std::endl;
     SPItemCtx *ictx, cctx;
 
     ictx = (SPItemCtx *) ctx;
@@ -199,12 +190,16 @@ void SPGroup::update(SPCtx *ctx, unsigned int flags) {
     if (flags & SP_OBJECT_STYLE_MODIFIED_FLAG) {
         for (SPItemView *v = this->display; v != NULL; v = v->next) {
             Inkscape::DrawingGroup *group = dynamic_cast<Inkscape::DrawingGroup *>(v->arenaitem);
-            group->setStyle(this->style);
+            if( this->parent ) {
+                this->context_style = this->parent->context_style;
+            }
+            group->setStyle(this->style, this->context_style);
         }
     }
 }
 
 void SPGroup::modified(guint flags) {
+    // std::cout << "SPGroup::modified(): " << (getId()?getId():"null") << std::endl;
     SPLPEItem::modified(flags);
 
     SPObject *child;
@@ -352,11 +347,15 @@ void SPGroup::set(unsigned int key, gchar const* value) {
 }
 
 Inkscape::DrawingItem *SPGroup::show (Inkscape::Drawing &drawing, unsigned int key, unsigned int flags) {
+    // std::cout << "SPGroup::show(): " << (getId()?getId():"null") << std::endl;
     Inkscape::DrawingGroup *ai;
 
     ai = new Inkscape::DrawingGroup(drawing);
     ai->setPickChildren(this->effectiveLayerMode(key) == SPGroup::LAYER);
-    ai->setStyle(this->style);
+    if( this->parent ) {
+        this->context_style = this->parent->context_style;
+    }
+    ai->setStyle(this->style, this->context_style);
 
     this->_showChildren(drawing, ai, key, flags);
     return ai;
@@ -390,6 +389,22 @@ void SPGroup::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape:
     }
 }
 
+void sp_item_group_ungroup_handle_clones(SPItem *parent, Geom::Affine const g)
+{
+    for(std::list<SPObject*>::const_iterator refd=parent->hrefList.begin();refd!=parent->hrefList.end();refd++){
+        SPItem *citem = dynamic_cast<SPItem *>(*refd);
+        if (citem) {
+            SPUse *useitem = dynamic_cast<SPUse *>(citem);
+            if (useitem && useitem->get_original() == parent) {
+                Geom::Affine ctrans;
+                ctrans = g.inverse() * citem->transform;
+                gchar *affinestr = sp_svg_transform_write(ctrans);
+                citem->setAttribute("transform", affinestr);
+                g_free(affinestr);
+            }
+        }
+    }
+}
 
 void
 sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
@@ -426,8 +441,14 @@ sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
     /* Step 1 - generate lists of children objects */
     GSList *items = NULL;
     GSList *objects = NULL;
-    for (SPObject *child = group->firstChild() ; child; child = child->getNext() ) {
+    Geom::Affine const g(group->transform);
 
+    for (SPObject *child = group->firstChild() ; child; child = child->getNext() )
+        if (SPItem *citem = dynamic_cast<SPItem *>(child))
+            sp_item_group_ungroup_handle_clones(citem,g);
+
+
+    for (SPObject *child = group->firstChild() ; child; child = child->getNext() ) {
         SPItem *citem = dynamic_cast<SPItem *>(child);
         if (citem) {
             /* Merging of style */
@@ -435,7 +456,7 @@ sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
             // it here _before_ the new transform is set, so as to use the pre-transform bbox
             citem->adjust_paint_recursive (Geom::identity(), Geom::identity(), false);
 
-            sp_style_merge_from_dying_parent(child->style, group->style);
+            child->style->merge( group->style );
             /*
              * fixme: We currently make no allowance for the case where child is cloned
              * and the group has any style settings.
@@ -444,9 +465,8 @@ sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
              * version of inkscape without using the XML editor: we usually apply group
              * style changes to children rather than to the group itself.)
              *
-             * If the group has no style settings, then
-             * sp_style_merge_from_dying_parent should be a no-op.  Otherwise (i.e. if
-             * we change the child's style to compensate for its parent going away)
+             * If the group has no style settings, then style->merge() should be a no-op. Otherwise
+             * (i.e. if we change the child's style to compensate for its parent going away)
              * then those changes will typically be reflected in any clones of child,
              * whereas we'd prefer for Ungroup not to affect the visual appearance.
              *
@@ -464,13 +484,6 @@ sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
 
             // Merging transform
             Geom::Affine ctrans;
-            Geom::Affine const g(group->transform);
-            SPUse *useitem = dynamic_cast<SPUse *>(citem);
-            if (useitem && useitem->get_original() &&
-                useitem->get_original()->parent == dynamic_cast<SPObject *>(group)) {
-                // make sure a clone's effective transform is the same as was under group
-                ctrans = g.inverse() * citem->transform * g;
-            } else {
                 // We should not apply the group's transformation to both a linked offset AND to its source
                 if (dynamic_cast<SPOffset *>(citem)) { // Do we have an offset at hand (whether it's dynamic or linked)?
                     SPItem *source = sp_offset_get_source(dynamic_cast<SPOffset *>(citem));
@@ -489,7 +502,6 @@ sp_item_group_ungroup (SPGroup *group, GSList **children, bool do_done)
                 } else {
                     ctrans = citem->transform * g;
                 }
-            }
 
             // FIXME: constructing a transform that would fully preserve the appearance of a
             // textpath if it is ungrouped with its path seems to be impossible in general
@@ -701,26 +713,21 @@ void SPGroup::scaleChildItemsRec(Geom::Scale const &sc, Geom::Point const &p, bo
                             subItem = dynamic_cast<SPItem *>(item->clip_ref->getObject()->firstChild());
                         }
                         if (subItem != NULL) {
-                            Geom::Affine tdoc2dt = Geom::Scale(1, -1) * Geom::Translate(p); // re-create doc2dt()
-                            Geom::Affine ti2doc = item->i2doc_affine();
-                            subItem->set_i2d_affine(ti2doc * sc * ti2doc.inverse() * tdoc2dt);
-                            subItem->doWriteTransform(subItem->getRepr(), subItem->transform, NULL, true);
+                            subItem->doWriteTransform(subItem->getRepr(), subItem->transform*sc, NULL, true);
                         }
                         subItem = NULL;
                         if (item->mask_ref->getObject()) {
                             subItem = dynamic_cast<SPItem *>(item->mask_ref->getObject()->firstChild());
                         }
                         if (subItem != NULL) {
-                            Geom::Affine tdoc2dt = Geom::Scale(1, -1) * Geom::Translate(p); // re-create doc2dt()
-                            Geom::Affine ti2doc = item->i2doc_affine();
-                            subItem->set_i2d_affine(ti2doc * sc * ti2doc.inverse() * tdoc2dt);
-                            subItem->doWriteTransform(item->getRepr(), item->transform, NULL, true);
+                            subItem->doWriteTransform(subItem->getRepr(), subItem->transform*sc, NULL, true);
                         }
+                        item->doWriteTransform(item->getRepr(), sc.inverse()*item->transform*sc, NULL, true);
                         group->scaleChildItemsRec(sc, p, false);
                     }
                 } else {
-                    Geom::OptRect bbox = item->desktopVisualBounds();
-                    if (bbox) {
+//                    Geom::OptRect bbox = item->desktopVisualBounds();
+//                    if (bbox) {  // test not needed, this was causing a failure to scale <circle> and <rect> in the clipboard, see LP Bug 1365451
                         // Scale item
                         Geom::Translate const s(p);
                         Geom::Affine final = s.inverse() * sc * s;
@@ -769,8 +776,7 @@ void SPGroup::scaleChildItemsRec(Geom::Scale const &sc, Geom::Point const &p, bo
                             Geom::Affine move = final.inverse() * item->transform * final;
                             item->doWriteTransform(item->getRepr(), move, &move, true);
                         } else {
-                            item->set_i2d_affine(item->i2dt_affine() * final);
-                            item->doWriteTransform(item->getRepr(), item->transform, NULL, true);
+                            item->doWriteTransform(item->getRepr(), item->transform*sc, NULL, true);
                         }
                         
                         if (conn_type != NULL) {
@@ -781,7 +787,7 @@ void SPGroup::scaleChildItemsRec(Geom::Scale const &sc, Geom::Point const &p, bo
                             item->scaleCenter(sc); // All coordinates have been scaled, so also the center must be scaled
                             item->updateRepr();
                         }
-                    }
+//                    }
                 }
             }
         }
@@ -837,7 +843,7 @@ void SPGroup::update_patheffect(bool write) {
             LivePathEffectObject *lpeobj = (*it)->lpeobject;
 
             if (lpeobj && lpeobj->get_lpe()) {
-                lpeobj->get_lpe()->doBeforeEffect(this);
+                lpeobj->get_lpe()->doBeforeEffect_impl(this);
             }
         }
 

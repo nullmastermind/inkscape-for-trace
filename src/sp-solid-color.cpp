@@ -16,17 +16,8 @@
 #include "style.h"
 #include "xml/repr.h"
 
-#include "sp-factory.h"
 #include "sp-item.h"
 #include "style-internal.h"
-
-namespace {
-     SPObject* createSolidColor() {
-         return new SPSolidColor();
-     }
-
-     bool solidColorRegistered = SPFactory::instance().registerObject("svg:solidColor", createSolidColor);
-}
 
 
 /*
@@ -53,7 +44,7 @@ void SPSolidColor::build(SPDocument* doc, Inkscape::XML::Node* repr) {
 void SPSolidColor::set(unsigned int key, const gchar* value) {
 
     if (SP_ATTRIBUTE_IS_CSS(key)) {
-        sp_style_read_from_object(this->style, this);
+        style->readFromObject( this );
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
     } else {
         SPPaintServer::set(key, value);

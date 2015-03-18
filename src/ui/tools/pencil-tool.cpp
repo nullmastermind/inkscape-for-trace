@@ -20,7 +20,7 @@
 
 #include "ui/tools/pencil-tool.h"
 #include "desktop.h"
-#include "desktop-handles.h"
+
 #include "selection.h"
 #include "selection-chemistry.h"
 #include "ui/draw-anchor.h"
@@ -43,7 +43,6 @@
 #include "display/sp-canvas.h"
 #include "display/curve.h"
 #include "livarot/Path.h"
-#include "ui/tool-factory.h"
 #include "ui/tool/event-utils.h"
 
 namespace Inkscape {
@@ -54,14 +53,6 @@ static Geom::Point pencil_drag_origin_w(0, 0);
 static bool pencil_within_tolerance = false;
 
 static bool in_svg_plane(Geom::Point const &p) { return Geom::LInfty(p) < 1e18; }
-
-namespace {
-	ToolBase* createPencilContext() {
-		return new PencilTool();
-	}
-
-	bool pencilContextRegistered = ToolFactory::instance().registerObject("/tools/freehand/pencil", createPencilContext);
-}
 
 const std::string& PencilTool::getPrefsPath() {
 	return PencilTool::prefsPath;
@@ -153,7 +144,7 @@ bool PencilTool::_handleButtonPress(GdkEventButton const &bevent) {
     bool ret = false;
 
     if ( bevent.button == 1  && !this->space_panning) {
-        Inkscape::Selection *selection = sp_desktop_selection(desktop);
+        Inkscape::Selection *selection = desktop->getSelection();
 
         if (Inkscape::have_viable_layer(desktop, this->message_context) == false) {
             return true;
@@ -853,7 +844,7 @@ void PencilTool::_fitAndSplit() {
         SPCurve *curve = this->red_curve->copy();
 
         /// \todo fixme:
-        SPCanvasItem *cshape = sp_canvas_bpath_new(sp_desktop_sketch(this->desktop), curve);
+        SPCanvasItem *cshape = sp_canvas_bpath_new(this->desktop->getSketch(), curve);
         curve->unref();
 
         this->highlight_color = SP_ITEM(this->desktop->currentLayer())->highlight_color();

@@ -29,7 +29,7 @@
 #include "document.h"
 #include "document-undo.h"
 #include "desktop-events.h"
-#include "desktop-handles.h"
+
 #include "sp-guide.h"
 #include "sp-item-group.h"
 #include "sp-namedview.h"
@@ -55,16 +55,6 @@ static void sp_namedview_show_single_guide(SPGuide* guide, bool show);
 
 static gboolean sp_str_to_bool(const gchar *str);
 static gboolean sp_nv_read_opacity(const gchar *str, guint32 *color);
-
-#include "sp-factory.h"
-
-namespace {
-	SPObject* createNamedView() {
-		return new SPNamedView();
-	}
-
-	bool namedViewRegistered = SPFactory::instance().registerObject("sodipodi:namedview", createNamedView);
-}
 
 SPNamedView::SPNamedView() : SPObjectGroup(), snap_manager(this) {
 	this->zoom = 0;
@@ -271,6 +261,8 @@ void SPNamedView::build(SPDocument *document, Inkscape::XML::Node *repr) {
         Geom::Rect viewbox = document->getRoot()->viewBox;
         double factor = svgwidth.value(unit_table.primary(Inkscape::Util::UNIT_TYPE_LINEAR)) / viewbox.width(); 
         svg_units = unit_table.findUnit(factor, Inkscape::Util::UNIT_TYPE_LINEAR);
+    } else {  // force the document units to be px
+        repr->setAttribute("inkscape:document-units", "px");
     }
 }
 
@@ -561,7 +553,7 @@ void SPNamedView::set(unsigned int key, const gchar* value) {
             static Inkscape::Util::Unit const *px = unit_table.getUnit("px");
             Inkscape::Util::Unit const *new_unit = px;
 
-            if (value) {
+            if (value && document->getRoot()->viewBox_set) {
                 Inkscape::Util::Unit const *const req_unit = unit_table.getUnit(value);
                 if ( !unit_table.hasUnit(value) ) {
                     g_warning("Unrecognized unit `%s'", value);
@@ -676,7 +668,7 @@ void SPNamedView::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *r
                     g->SPGuide::showSPGuide(static_cast<SPDesktop*>(l->data)->guides, (GCallback) sp_dt_guide_event);
 
                     if (static_cast<SPDesktop*>(l->data)->guides_active) {
-                        g->sensitize(sp_desktop_canvas(static_cast<SPDesktop*> (l->data)), TRUE);
+                        g->sensitize((static_cast<SPDesktop*> (l->data))->getCanvas(), TRUE);
                     }
 
                     sp_namedview_show_single_guide(SP_GUIDE(g), this->showguides);
@@ -734,7 +726,7 @@ void SPNamedView::show(SPDesktop *desktop)
     for (GSList *l = guides; l != NULL; l = l->next) {
         SP_GUIDE(l->data)->showSPGuide( desktop->guides, (GCallback) sp_dt_guide_event);
         if (desktop->guides_active) {
-            SP_GUIDE(l->data)->sensitize(sp_desktop_canvas(desktop), TRUE);
+            SP_GUIDE(l->data)->sensitize(desktop->getCanvas(), TRUE);
         }
         sp_namedview_show_single_guide(SP_GUIDE(l->data), showguides);
     }
@@ -840,7 +832,7 @@ void sp_namedview_window_from_document(SPDesktop *desktop)
         && nv->cx != HUGE_VAL && !IS_NAN(nv->cx)
         && nv->cy != HUGE_VAL && !IS_NAN(nv->cy)) {
         desktop->zoom_absolute(nv->cx, nv->cy, nv->zoom);
-    } else if (sp_desktop_document(desktop)) { // document without saved zoom, zoom to its page
+    } else if (desktop->getDocument()) { // document without saved zoom, zoom to its page
         desktop->zoom_page();
     }
 
@@ -900,8 +892,8 @@ void sp_namedview_document_from_window(SPDesktop *desktop)
     Geom::Rect const r = desktop->get_display_area();
 
     // saving window geometry is not undoable
-    bool saved = DocumentUndo::getUndoSensitive(sp_desktop_document(desktop));
-    DocumentUndo::setUndoSensitive(sp_desktop_document(desktop), false);
+    bool saved = DocumentUndo::getUndoSensitive(desktop->getDocument());
+    DocumentUndo::setUndoSensitive(desktop->getDocument(), false);
 
     if (save_viewport_in_file) {
         sp_repr_set_svg_double(view, "inkscape:zoom", desktop->current_zoom());
@@ -922,7 +914,7 @@ void sp_namedview_document_from_window(SPDesktop *desktop)
     view->setAttribute("inkscape:current-layer", desktop->currentLayer()->getId());
 
     // restore undoability
-    DocumentUndo::setUndoSensitive(sp_desktop_document(desktop), saved);
+    DocumentUndo::setUndoSensitive(desktop->getDocument(), saved);
 }
 
 void SPNamedView::hide(SPDesktop const *desktop)
@@ -931,7 +923,7 @@ void SPNamedView::hide(SPDesktop const *desktop)
     g_assert(g_slist_find(views, desktop));
 
     for (GSList *l = guides; l != NULL; l = l->next) {
-        SP_GUIDE(l->data)->hideSPGuide(sp_desktop_canvas(desktop));
+        SP_GUIDE(l->data)->hideSPGuide(desktop->getCanvas());
     }
 
     views = g_slist_remove(views, desktop);
@@ -945,7 +937,7 @@ void SPNamedView::activateGuides(void* desktop, bool active)
     SPDesktop *dt = static_cast<SPDesktop*>(desktop);
 
     for (GSList *l = guides; l != NULL; l = l->next) {
-        SP_GUIDE(l->data)->sensitize( sp_desktop_canvas(dt), active);
+        SP_GUIDE(l->data)->sensitize(dt->getCanvas(), active);
     }
 }
 
@@ -1130,11 +1122,11 @@ double SPNamedView::getMarginLength(gchar const * const key,
 
 /**
  * Returns namedview's default unit.
- * If no default unit is set, "pt" is returned
+ * If no default unit is set, "px" is returned
  */
-Inkscape::Util::Unit const * SPNamedView::getDefaultUnit() const
+Inkscape::Util::Unit const * SPNamedView::getDisplayUnit() const
 {
-    return display_units ? display_units : unit_table.getUnit("pt");
+    return display_units ? display_units : unit_table.getUnit("px");
 }
 
 Inkscape::Util::Unit const & SPNamedView::getSVGUnit() const

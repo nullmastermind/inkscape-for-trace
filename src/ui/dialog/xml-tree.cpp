@@ -23,7 +23,7 @@
 #include <gtkmm/stock.h>
 
 #include "desktop.h"
-#include "desktop-handles.h"
+
 #include "ui/dialog-events.h"
 #include "document.h"
 #include "document-undo.h"
@@ -71,10 +71,10 @@ XmlTree::XmlTree (void) :
     xml_text_new_button ( _("New text node")),
     xml_node_delete_button ( Q_("nodeAsInXMLdialogTooltip|Delete node")),
     xml_node_duplicate_button ( _("Duplicate node")),
-    unindent_node_button (Gtk::Stock::UNINDENT),
-    indent_node_button (Gtk::Stock::INDENT),
-    raise_node_button (Gtk::Stock::GO_UP),
-    lower_node_button (Gtk::Stock::GO_DOWN),
+    unindent_node_button(),
+    indent_node_button(),
+    raise_node_button(),
+    lower_node_button(),
     attr_toolbar(),
     xml_attribute_delete_button (_("Delete attribute")),
     text_container (),
@@ -149,21 +149,29 @@ XmlTree::XmlTree (void) :
 
     tree_toolbar.add(separator2);
 
+    unindent_node_button.set_icon_widget(*Gtk::manage(Glib::wrap(
+            sp_icon_new (Inkscape::ICON_SIZE_LARGE_TOOLBAR, INKSCAPE_ICON("format-indent-less")))));
     unindent_node_button.set_label(_("Unindent node"));
     unindent_node_button.set_tooltip_text(_("Unindent node"));
     unindent_node_button.set_sensitive(false);
     tree_toolbar.add(unindent_node_button);
 
+    indent_node_button.set_icon_widget(*Gtk::manage(Glib::wrap(
+            sp_icon_new (Inkscape::ICON_SIZE_LARGE_TOOLBAR, INKSCAPE_ICON("format-indent-more")))));
     indent_node_button.set_label(_("Indent node"));
     indent_node_button.set_tooltip_text(_("Indent node"));
     indent_node_button.set_sensitive(false);
     tree_toolbar.add(indent_node_button);
 
+    raise_node_button.set_icon_widget(*Gtk::manage(Glib::wrap(
+            sp_icon_new (Inkscape::ICON_SIZE_LARGE_TOOLBAR, INKSCAPE_ICON("go-up")))));
     raise_node_button.set_label(_("Raise node"));
     raise_node_button.set_tooltip_text(_("Raise node"));
     raise_node_button.set_sensitive(false);
     tree_toolbar.add(raise_node_button);
 
+    lower_node_button.set_icon_widget(*Gtk::manage(Glib::wrap(
+            sp_icon_new (Inkscape::ICON_SIZE_LARGE_TOOLBAR, INKSCAPE_ICON("go-down")))));
     lower_node_button.set_label(_("Lower node"));
     lower_node_button.set_tooltip_text(_("Lower node"));
     lower_node_button.set_sensitive(false);
@@ -360,10 +368,10 @@ void XmlTree::set_tree_desktop(SPDesktop *desktop)
     }
     current_desktop = desktop;
     if (desktop) {
-        sel_changed_connection = sp_desktop_selection(desktop)->connectChanged(sigc::hide(sigc::mem_fun(this, &XmlTree::on_desktop_selection_changed)));
+        sel_changed_connection = desktop->getSelection()->connectChanged(sigc::hide(sigc::mem_fun(this, &XmlTree::on_desktop_selection_changed)));
         document_replaced_connection = desktop->connectDocumentReplaced(sigc::mem_fun(this, &XmlTree::on_document_replaced));
 
-        set_tree_document(sp_desktop_document(desktop));
+        set_tree_document(desktop->getDocument());
     } else {
         set_tree_document(NULL);
     }
@@ -472,7 +480,7 @@ Inkscape::XML::Node *XmlTree::get_dt_select()
     if (!current_desktop) {
         return NULL;
     }
-    return sp_desktop_selection(current_desktop)->singleRepr();
+    return current_desktop->getSelection()->singleRepr();
 }
 
 
@@ -483,7 +491,7 @@ void XmlTree::set_dt_select(Inkscape::XML::Node *repr)
         return;
     }
 
-    Inkscape::Selection *selection = sp_desktop_selection(current_desktop);
+    Inkscape::Selection *selection = current_desktop->getSelection();
 
     SPObject *object;
     if (repr) {
@@ -493,7 +501,7 @@ void XmlTree::set_dt_select(Inkscape::XML::Node *repr)
             repr = repr->parent();
         } // end of while loop
 
-        object = sp_desktop_document(current_desktop)->getObjectByRepr(repr);
+        object = current_desktop->getDocument()->getObjectByRepr(repr);
     } else {
         object = NULL;
     }
@@ -827,7 +835,7 @@ void XmlTree::on_document_replaced(SPDesktop *dt, SPDocument *doc)
     if (current_desktop)
         sel_changed_connection.disconnect();
 
-    sel_changed_connection = sp_desktop_selection(dt)->connectChanged(sigc::hide(sigc::mem_fun(this, &XmlTree::on_desktop_selection_changed)));
+    sel_changed_connection = dt->getSelection()->connectChanged(sigc::hide(sigc::mem_fun(this, &XmlTree::on_desktop_selection_changed)));
     set_tree_document(doc);
 }
 

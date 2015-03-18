@@ -22,11 +22,11 @@
 #include <cstring>
 #include <string>
 
-#include "desktop-handles.h"
+
 #include "selection.h"
 #include "desktop.h"
 #include "desktop-style.h"
-#include "desktop-handles.h"
+
 #include "document.h"
 #include "document-undo.h"
 #include "display/sp-ctrlline.h"
@@ -43,7 +43,7 @@
 #include "knot.h"
 #include "sp-linear-gradient.h"
 #include "sp-radial-gradient.h"
-#include "sp-mesh-gradient.h"
+#include "sp-mesh.h"
 #include "sp-mesh-row.h"
 #include "sp-mesh-patch.h"
 #include "gradient-chemistry.h"
@@ -414,7 +414,7 @@ SPStop *GrDrag::addStopNearPoint(SPItem *item, Geom::Point mouse_p, double toler
                     //r1_knot = false;
                 }
             }
-        } else if (SP_IS_MESHGRADIENT(gradient)) {
+        } else if (SP_IS_MESH(gradient)) {
 
             // add_stop_near_point()
             // Find out which curve pointer is over and use that curve to determine
@@ -422,7 +422,7 @@ SPStop *GrDrag::addStopNearPoint(SPItem *item, Geom::Point mouse_p, double toler
             // This is silly as we already should know which line we are over...
             // but that information is not saved (sp_gradient_context_is_over_line).
 
-            SPMeshGradient *mg = SP_MESHGRADIENT(gradient);
+            SPMesh *mg = SP_MESH(gradient);
             Geom::Affine transform = Geom::Affine(mg->gradientTransform)*(Geom::Affine)item->i2dt_affine();
 
             guint rows    = mg->array.patch_rows();
@@ -550,7 +550,7 @@ SPStop *GrDrag::addStopNearPoint(SPItem *item, Geom::Point mouse_p, double toler
 
         } else {
 
-            SPMeshGradient *mg = SP_MESHGRADIENT(gradient);
+            SPMesh *mg = SP_MESH(gradient);
 
             if( divide_row > -1 ) {
                 mg->array.split_row( divide_row, divide_coord );
@@ -559,11 +559,11 @@ SPStop *GrDrag::addStopNearPoint(SPItem *item, Geom::Point mouse_p, double toler
             }
 
             // Update repr
-            sp_meshgradient_repr_write( mg );
+            sp_mesh_repr_write( mg );
             mg->array.built = false;
             mg->ensureArray();
             // How do we do this?
-            DocumentUndo::done(sp_desktop_document (desktop), SP_VERB_CONTEXT_MESH,
+            DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_MESH,
                                _("Added patch row or column"));
 
         } // Mesh
@@ -631,7 +631,7 @@ GrDrag::GrDrag(SPDesktop *desktop) :
     vert_levels(),
     draggers(0),
     lines(0),
-    selection(sp_desktop_selection(desktop)),
+    selection(desktop->getSelection()),
     sel_changed_connection(),
     sel_modified_connection(),
     style_set_connection(),
@@ -796,7 +796,7 @@ static void gr_knot_moved_handler(SPKnot *knot, Geom::Point const &ppointer, gui
                 d_new->updateKnotShape ();
                 d_new->updateTip ();
                 d_new->updateDependencies(true);
-                DocumentUndo::done(sp_desktop_document (d_new->parent->desktop), SP_VERB_CONTEXT_GRADIENT, _("Merge gradient handles"));
+                DocumentUndo::done(d_new->parent->desktop->getDocument(), SP_VERB_CONTEXT_GRADIENT, _("Merge gradient handles"));
                 return;
             }
         }
@@ -1102,8 +1102,7 @@ static void gr_knot_ungrabbed_handler(SPKnot *knot, unsigned int state, gpointer
     dragger->updateDependencies(true);
 
     // we did an undoable action
-    DocumentUndo::done(sp_desktop_document (dragger->parent->desktop), SP_VERB_CONTEXT_GRADIENT,
-                       _("Move gradient handle"));
+    DocumentUndo::done(dragger->parent->desktop->getDocument(), SP_VERB_CONTEXT_GRADIENT, _("Move gradient handle"));
 }
 
 /**
@@ -1350,7 +1349,7 @@ GrDragger::updateHandles ( Geom::Point pc_old,  MeshNodeOperation op )
 
                 // Must be a mesh gradient
                 SPGradient *gradient = getGradient(draggable->item, draggable->fill_or_stroke);
-                if ( !SP_IS_MESHGRADIENT( gradient ) ) continue;
+                if ( !SP_IS_MESH( gradient ) ) continue;
 
                 selected_corners[ gradient ].push_back( draggable->point_i );
             }
@@ -1375,8 +1374,8 @@ GrDragger::updateHandles ( Geom::Point pc_old,  MeshNodeOperation op )
 
         // Must be a mesh gradient
         SPGradient *gradient = getGradient(item, fill_or_stroke);
-        if ( !SP_IS_MESHGRADIENT( gradient ) ) continue;
-        SPMeshGradient *mg = SP_MESHGRADIENT( gradient );
+        if ( !SP_IS_MESH( gradient ) ) continue;
+        SPMesh *mg = SP_MESH( gradient );
 
         // pc_old is the old corner position in desktop coordinates, we need it in gradient coordinate.
         gradient = sp_gradient_convert_to_userspace (gradient, item, (fill_or_stroke == Inkscape::FOR_FILL) ? "fill" : "stroke");
@@ -1869,7 +1868,7 @@ void GrDrag::setDeselected(GrDragger *dragger)
 void GrDrag::addLine(SPItem *item, Geom::Point p1, Geom::Point p2, Inkscape::PaintTarget fill_or_stroke)
 {
     CtrlLineType type = (fill_or_stroke == Inkscape::FOR_FILL) ? CTLINE_PRIMARY : CTLINE_SECONDARY;
-    SPCtrlLine *line = ControlManager::getManager().createControlLine(sp_desktop_controls(this->desktop), p1, p2, type);
+    SPCtrlLine *line = ControlManager::getManager().createControlLine(this->desktop->getControls(), p1, p2, type);
 
     sp_canvas_item_move_to_z(line, 0);
     line->item = item;
@@ -1885,7 +1884,7 @@ void GrDrag::addLine(SPItem *item, Geom::Point p1, Geom::Point p2, Inkscape::Pai
 void GrDrag::addCurve(SPItem *item, Geom::Point p0, Geom::Point p1, Geom::Point p2, Geom::Point p3, Inkscape::PaintTarget fill_or_stroke)
 {
     CtrlLineType type = (fill_or_stroke == Inkscape::FOR_FILL) ? CTLINE_PRIMARY : CTLINE_SECONDARY;
-    SPCtrlCurve *line = ControlManager::getManager().createControlCurve(sp_desktop_controls(this->desktop), p0, p1, p2, p3, type); 
+    SPCtrlCurve *line = ControlManager::getManager().createControlCurve(this->desktop->getControls(), p0, p1, p2, p3, type); 
 
     sp_canvas_item_move_to_z(line, 0);
     line->item = item;
@@ -1959,7 +1958,7 @@ void GrDrag::addDraggersLinear(SPLinearGradient *lg, SPItem *item, Inkscape::Pai
 /**
  *Add draggers for the mesh gradient mg on item
  */
-void GrDrag::addDraggersMesh(SPMeshGradient *mg, SPItem *item, Inkscape::PaintTarget fill_or_stroke)
+void GrDrag::addDraggersMesh(SPMesh *mg, SPItem *item, Inkscape::PaintTarget fill_or_stroke)
 {
     std::vector< std::vector< SPMeshNode* > > nodes = mg->array.nodes;
 
@@ -1978,7 +1977,7 @@ void GrDrag::addDraggersMesh(SPMeshGradient *mg, SPItem *item, Inkscape::PaintTa
     // Make sure we have at least one patch defined.
     if( mg->array.patch_rows() == 0 || mg->array.patch_columns() == 0 ) {
 
-        std::cout << "Empty Mesh Gradient, No Draggers to Add" << std::endl;
+        std::cout << "Empty Mesh, No Draggers to Add" << std::endl;
         return;
     }
 
@@ -2033,7 +2032,7 @@ void GrDrag::addDraggersMesh(SPMeshGradient *mg, SPItem *item, Inkscape::PaintTa
                     }
 
                     default:
-                        std::cout << "Bad Mesh Gradient draggable type" << std::endl;
+                        std::cout << "Bad Mesh draggable type" << std::endl;
                         break;
                 }
             }
@@ -2098,8 +2097,8 @@ void GrDrag::updateDraggers()
                     addDraggersLinear( SP_LINEARGRADIENT(server), item, Inkscape::FOR_FILL );
                 } else if ( SP_IS_RADIALGRADIENT(server) ) {
                     addDraggersRadial( SP_RADIALGRADIENT(server), item, Inkscape::FOR_FILL );
-                } else if ( SP_IS_MESHGRADIENT(server) ) {
-                    addDraggersMesh(   SP_MESHGRADIENT(server),   item, Inkscape::FOR_FILL );
+                } else if ( SP_IS_MESH(server) ) {
+                    addDraggersMesh(   SP_MESH(server),           item, Inkscape::FOR_FILL );
                 }
             }
         }
@@ -2114,8 +2113,8 @@ void GrDrag::updateDraggers()
                     addDraggersLinear( SP_LINEARGRADIENT(server), item, Inkscape::FOR_STROKE );
                 } else if ( SP_IS_RADIALGRADIENT(server) ) {
                     addDraggersRadial( SP_RADIALGRADIENT(server), item, Inkscape::FOR_STROKE );
-                } else if ( SP_IS_MESHGRADIENT(server) ) {
-                    addDraggersMesh(   SP_MESHGRADIENT(server),   item, Inkscape::FOR_STROKE );
+                } else if ( SP_IS_MESH(server) ) {
+                    addDraggersMesh(   SP_MESH(server),           item, Inkscape::FOR_STROKE );
                 }
             }
         }
@@ -2170,9 +2169,9 @@ void GrDrag::updateLines()
                     Geom::Point center = getGradientCoords(item, POINT_RG_CENTER, 0, Inkscape::FOR_FILL);
                     addLine(item, center, getGradientCoords(item, POINT_RG_R1, 0, Inkscape::FOR_FILL), Inkscape::FOR_FILL);
                     addLine(item, center, getGradientCoords(item, POINT_RG_R2, 0, Inkscape::FOR_FILL), Inkscape::FOR_FILL);
-                } else if ( SP_IS_MESHGRADIENT(server) ) {
+                } else if ( SP_IS_MESH(server) ) {
 
-                    SPMeshGradient *mg = SP_MESHGRADIENT(server);
+                    SPMesh *mg = SP_MESH(server);
 
                     guint rows    = mg->array.patch_rows();
                     guint columns = mg->array.patch_columns();
@@ -2232,10 +2231,10 @@ void GrDrag::updateLines()
                     Geom::Point center = getGradientCoords(item, POINT_RG_CENTER, 0, Inkscape::FOR_STROKE);
                     addLine(item, center, getGradientCoords(item, POINT_RG_R1, 0, Inkscape::FOR_STROKE), Inkscape::FOR_STROKE);
                     addLine(item, center, getGradientCoords(item, POINT_RG_R2, 0, Inkscape::FOR_STROKE), Inkscape::FOR_STROKE);
-                } else if ( SP_IS_MESHGRADIENT(server) ) {
+                } else if ( SP_IS_MESH(server) ) {
 
                     // MESH FIXME: TURN ROUTINE INTO FUNCTION AND CALL FOR BOTH FILL AND STROKE.
-                    SPMeshGradient *mg = SP_MESHGRADIENT(server);
+                    SPMesh *mg = SP_MESH(server);
 
                     guint rows    = mg->array.patch_rows();
                     guint columns = mg->array.patch_columns();
@@ -2375,7 +2374,7 @@ void GrDrag::selected_move(double x, double y, bool write_repr, bool scale_radia
 
     if (write_repr && did) {
         // we did an undoable action
-        DocumentUndo::maybeDone(sp_desktop_document (desktop), "grmoveh", SP_VERB_CONTEXT_GRADIENT,
+        DocumentUndo::maybeDone(desktop->getDocument(), "grmoveh", SP_VERB_CONTEXT_GRADIENT,
                                 _("Move gradient handle(s)"));
         return;
     }
@@ -2411,7 +2410,7 @@ void GrDrag::selected_move(double x, double y, bool write_repr, bool scale_radia
 
         if (write_repr && did) {
             // we did an undoable action
-            DocumentUndo::maybeDone(sp_desktop_document (desktop), "grmovem", SP_VERB_CONTEXT_GRADIENT,
+            DocumentUndo::maybeDone(desktop->getDocument(), "grmovem", SP_VERB_CONTEXT_GRADIENT,
                                     _("Move gradient mid stop(s)"));
         }
     }

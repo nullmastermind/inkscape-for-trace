@@ -135,8 +135,8 @@ GdkpixbufInput::open(Inkscape::Extension::Input *mod, char const *uri)
         
         // Set viewBox if it doesn't exist
         if (!doc->getRoot()->viewBox_set) {
-            std::cout << "Viewbox not set, setting" << std::endl;
-            doc->setViewBox(Geom::Rect::from_xywh(0, 0, doc->getWidth().value(doc->getDefaultUnit()), doc->getHeight().value(doc->getDefaultUnit())));
+            // std::cerr << "Viewbox not set, setting" << std::endl;
+            doc->setViewBox(Geom::Rect::from_xywh(0, 0, doc->getWidth().value(doc->getDisplayUnit()), doc->getHeight().value(doc->getDisplayUnit())));
         }
         
         // restore undo, as now this document may be shown to the user if a bitmap was opened

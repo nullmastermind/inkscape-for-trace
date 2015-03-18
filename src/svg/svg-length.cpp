@@ -14,6 +14,7 @@
 #include <cstring>
 #include <string>
 #include <glib.h>
+#include <iostream>
 
 #include "svg.h"
 #include "stringstream.h"
@@ -462,6 +463,51 @@ unsigned int sp_svg_length_read_ldd(gchar const *str, SVGLength::Unit *unit, dou
     return r;
 }
 
+std::string const SVGLength::write()
+{
+    return sp_svg_length_write_with_units(*this);
+}
+
+void SVGLength::set(SVGLength::Unit u, float v)
+{
+    _set = true;
+    unit = u;
+    Glib::ustring hack("px");
+    switch( unit ) {
+        case NONE:
+        case PX:
+        case EM:
+        case EX:
+        case PERCENT:
+            break;
+        case PT:
+            hack = "pt";
+            break;
+        case PC:
+            hack = "pc";
+            break;
+        case MM:
+            hack = "pt";
+            break;
+        case CM:
+            hack = "pt";
+            break;
+        case INCH:
+            hack = "pt";
+            break;
+        case FOOT:
+            hack = "pt";
+            break;
+        case MITRE:
+            hack = "m";
+            break;
+        default:
+            break;
+    }
+    value = v;
+    computed =  Inkscape::Util::Quantity::convert(v, hack, "px");
+}
+
 void SVGLength::set(SVGLength::Unit u, float v, float c)
 {
     _set = true;
@@ -476,6 +522,12 @@ void SVGLength::unset(SVGLength::Unit u, float v, float c)
     unit = u;
     value = v;
     computed = c;
+}
+
+void SVGLength::scale(double scale)
+{
+    value *= scale;
+    computed *= scale;
 }
 
 void SVGLength::update(double em, double ex, double scale)
@@ -520,7 +572,8 @@ gchar const *sp_svg_length_get_css_units(SVGLength::Unit unit)
         case SVGLength::MM: return "mm";
         case SVGLength::CM: return "cm";
         case SVGLength::INCH: return "in";
-        case SVGLength::FOOT: return ""; // Does not have a "foot" unit string in the SVG spec
+        case SVGLength::FOOT: return "";  // Not in SVG/CSS specification.
+        case SVGLength::MITRE: return ""; // Not in SVG/CSS specification.
         case SVGLength::EM: return "em";
         case SVGLength::EX: return "ex";
         case SVGLength::PERCENT: return "%";
@@ -539,6 +592,8 @@ std::string sp_svg_length_write_with_units(SVGLength const &length)
         os << 100*length.value << sp_svg_length_get_css_units(length.unit);
     } else if (length.unit == SVGLength::FOOT) {
         os << 12*length.value << sp_svg_length_get_css_units(SVGLength::INCH);
+    } else if (length.unit == SVGLength::MITRE) {
+        os << 100*length.value << sp_svg_length_get_css_units(SVGLength::CM);
     } else {
         os << length.value << sp_svg_length_get_css_units(length.unit);
     }

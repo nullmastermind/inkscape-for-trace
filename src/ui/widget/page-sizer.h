@@ -161,7 +161,7 @@ public:
      * Set the page size to the given dimensions.  If 'changeList' is
      * true, then reset the paper size list to the closest match
      */
-    void setDim (Inkscape::Util::Quantity w, Inkscape::Util::Quantity h, bool changeList=true);
+    void setDim (Inkscape::Util::Quantity w, Inkscape::Util::Quantity h, bool changeList=true, bool changeSize=true);
     
     /**
      * Updates the scalar widgets for the fit margins.  (Just changes the value
@@ -169,6 +169,11 @@ public:
      */
     void updateFitMarginsUI(Inkscape::XML::Node *nv_repr);
  
+    /**
+     * Updates the scale widgets. (Just changes the values of the ui widgets.)
+     */
+    void updateScaleUI();
+
 protected:
 
     /**
@@ -250,12 +255,26 @@ protected:
     Gtk::Button          _fitPageButton;
     bool                 _lockMarginUpdate;
 
+    // Document scale
+    Gtk::Frame           _scaleFrame;
+#if WITH_GTKMM_3_0
+    Gtk::Grid            _scaleTable;
+#else
+    Gtk::Table           _scaleTable;
+#endif
+
+    Gtk::Label           _scaleLabel;
+    RegisteredScalar     _scaleX;
+    bool                 _lockScaleUpdate;
+
     //callback
     void on_value_changed();
     void on_units_changed();
+    void on_scale_changed();
     sigc::connection    _changedw_connection;
     sigc::connection    _changedh_connection;
     sigc::connection    _changedu_connection;
+    sigc::connection    _changeds_connection;
 
     Registry            *_widgetRegistry;
 

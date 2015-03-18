@@ -33,7 +33,7 @@
 #include "selection.h"
 #include "desktop.h"
 #include "desktop-events.h"
-#include "desktop-handles.h"
+
 #include "message-context.h"
 #include "pixmaps/cursor-spray.xpm"
 #include <boost/optional.hpp>
@@ -84,19 +84,9 @@ using namespace std;
 // Please enable again when working on 1.0
 #define ENABLE_SPRAY_MODE_SINGLE_PATH
 
-#include "ui/tool-factory.h"
-
 namespace Inkscape {
 namespace UI {
 namespace Tools {
-
-namespace {
-    ToolBase* createSprayContext() {
-        return new SprayTool();
-    }
-
-    bool sprayContextRegistered = ToolFactory::instance().registerObject("/tools/spray", createSprayContext);
-}
 
 const std::string& SprayTool::getPrefsPath() {
     return SprayTool::prefsPath;
@@ -222,7 +212,7 @@ void SprayTool::setup() {
 
         SPCurve *c = new SPCurve(path);
 
-        this->dilate_area = sp_canvas_bpath_new(sp_desktop_controls(this->desktop), c);
+        this->dilate_area = sp_canvas_bpath_new(this->desktop->getControls(), c);
         c->unref();
         sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(this->dilate_area), 0x00000000,(SPWindRule)0);
         sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(this->dilate_area), 0xff9900ff, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
@@ -449,39 +439,41 @@ static bool sp_spray_recursive(SPDesktop *desktop,
             }
             i++;
         }
-        SPDocument *doc = parent_item->document;
-        Inkscape::XML::Document* xml_doc = doc->getReprDoc();
-        Inkscape::XML::Node *old_repr = parent_item->getRepr();
-        Inkscape::XML::Node *parent = old_repr->parent();
+        if (parent_item) {
+            SPDocument *doc = parent_item->document;
+            Inkscape::XML::Document* xml_doc = doc->getReprDoc();
+            Inkscape::XML::Node *old_repr = parent_item->getRepr();
+            Inkscape::XML::Node *parent = old_repr->parent();
 
-        Geom::OptRect a = parent_item->documentVisualBounds();
-        if (a) {
-            if (_fid <= population) { // Rules the population of objects sprayed
-                // Duplicates the parent item
-                Inkscape::XML::Node *copy = old_repr->duplicate(xml_doc);
-                parent->appendChild(copy);
-                SPObject *new_obj = doc->getObjectByRepr(copy);
-                item_copied = dynamic_cast<SPItem *>(new_obj);
+            Geom::OptRect a = parent_item->documentVisualBounds();
+            if (a) {
+                if (_fid <= population) { // Rules the population of objects sprayed
+                    // Duplicates the parent item
+                    Inkscape::XML::Node *copy = old_repr->duplicate(xml_doc);
+                    parent->appendChild(copy);
+                    SPObject *new_obj = doc->getObjectByRepr(copy);
+                    item_copied = dynamic_cast<SPItem *>(new_obj);
 
-                // Move around the cursor
-                Geom::Point move = (Geom::Point(cos(tilt)*cos(dp)*dr/(1-ratio)+sin(tilt)*sin(dp)*dr/(1+ratio), -sin(tilt)*cos(dp)*dr/(1-ratio)+cos(tilt)*sin(dp)*dr/(1+ratio)))+(p-a->midpoint()); 
+                    // Move around the cursor
+                    Geom::Point move = (Geom::Point(cos(tilt)*cos(dp)*dr/(1-ratio)+sin(tilt)*sin(dp)*dr/(1+ratio), -sin(tilt)*cos(dp)*dr/(1-ratio)+cos(tilt)*sin(dp)*dr/(1+ratio)))+(p-a->midpoint()); 
 
-                Geom::Point center = parent_item->getCenter();
-                sp_spray_scale_rel(center, desktop, item_copied, Geom::Scale(_scale, _scale));
-                sp_spray_scale_rel(center, desktop, item_copied, Geom::Scale(scale, scale));
-                sp_spray_rotate_rel(center, desktop, item_copied, Geom::Rotate(angle));
-                sp_item_move_rel(item_copied, Geom::Translate(move[Geom::X], -move[Geom::Y]));
+                    Geom::Point center = parent_item->getCenter();
+                    sp_spray_scale_rel(center, desktop, item_copied, Geom::Scale(_scale, _scale));
+                    sp_spray_scale_rel(center, desktop, item_copied, Geom::Scale(scale, scale));
+                    sp_spray_rotate_rel(center, desktop, item_copied, Geom::Rotate(angle));
+                    sp_item_move_rel(item_copied, Geom::Translate(move[Geom::X], -move[Geom::Y]));
 
-                // Union and duplication
-                selection->clear();
-                selection->add(item_copied);
-                if (unionResult) { // No need to add the very first item (initialized with NULL).
-                    selection->add(unionResult);
+                    // Union and duplication
+                    selection->clear();
+                    selection->add(item_copied);
+                    if (unionResult) { // No need to add the very first item (initialized with NULL).
+                        selection->add(unionResult);
+                    }
+                    sp_selected_path_union_skip_undo(selection, selection->desktop());
+                    selection->add(parent_item);
+                    Inkscape::GC::release(copy);
+                    did = true;
                 }
-                sp_selected_path_union_skip_undo(selection, selection->desktop());
-                selection->add(parent_item);
-                Inkscape::GC::release(copy);
-                did = true;
             }
         }
 #endif
@@ -527,7 +519,7 @@ static bool sp_spray_recursive(SPDesktop *desktop,
 static bool sp_spray_dilate(SprayTool *tc, Geom::Point /*event_p*/, Geom::Point p, Geom::Point vector, bool reverse)
 {
     SPDesktop *desktop = tc->desktop;
-    Inkscape::Selection *selection = sp_desktop_selection(desktop);
+    Inkscape::Selection *selection = desktop->getSelection();
 
     if (selection->isEmpty()) {
         return false;
@@ -735,15 +727,15 @@ bool SprayTool::root_handler(GdkEvent* event) {
                 this->has_dilated = false;
                 switch (this->mode) {
                     case SPRAY_MODE_COPY:
-                        DocumentUndo::done(sp_desktop_document(SP_EVENT_CONTEXT(this)->desktop),
+                        DocumentUndo::done(this->desktop->getDocument(),
                                            SP_VERB_CONTEXT_SPRAY, _("Spray with copies"));
                         break;
                     case SPRAY_MODE_CLONE:
-                        DocumentUndo::done(sp_desktop_document(SP_EVENT_CONTEXT(this)->desktop),
+                        DocumentUndo::done(this->desktop->getDocument(),
                                            SP_VERB_CONTEXT_SPRAY, _("Spray with clones"));
                         break;
                     case SPRAY_MODE_SINGLE_PATH:
-                        DocumentUndo::done(sp_desktop_document(SP_EVENT_CONTEXT(this)->desktop),
+                        DocumentUndo::done(this->desktop->getDocument(),
                                            SP_VERB_CONTEXT_SPRAY, _("Spray in single path"));
                         break;
                 }

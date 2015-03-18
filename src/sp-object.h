@@ -67,6 +67,9 @@ struct Document;
 }
 }
 
+namespace Glib {
+    class ustring;
+}
 
 typedef enum {
     SP_NO_EXCEPTION,
@@ -154,7 +157,7 @@ SPObject *sp_object_unref(SPObject *object, SPObject *owner=NULL);
  * \pre object points to real object
  * @todo need to move this to be a member of SPObject.
  */
-SPObject *sp_object_href(SPObject *object, void* owner);
+SPObject *sp_object_href(SPObject *object, SPObject* owner);
 
 /**
  * Decrease weak refcount.
@@ -166,7 +169,7 @@ SPObject *sp_object_href(SPObject *object, void* owner);
  * \pre object points to real object and hrefcount>0
  * @todo need to move this to be a member of SPObject.
  */
-SPObject *sp_object_hunref(SPObject *object, void* owner);
+SPObject *sp_object_hunref(SPObject *object, SPObject* owner);
 
 /**
  * SPObject is an abstract base class of all of the document nodes at the
@@ -215,6 +218,7 @@ private:
     Inkscape::XML::Node *repr; /* Our xml representation */
 public:
     int refCount;
+    std::list<SPObject*> hrefList;
 
     /**
      * Returns the objects current ID string.
@@ -263,6 +267,11 @@ public:
      * and need to inherit properties even through other non-SPItem parents like \<defs\>.
      */
     SPStyle *style;
+
+    /**
+     * Represents the style that should be used to resolve 'context-fill' and 'context-stroke'
+     */
+    SPStyle *context_style;
 
     /// Switch containing next() method.
     struct ParentIteratorStrategy {
@@ -703,7 +712,9 @@ public:
      */
     void setKeyValue(unsigned int key, char const *value);
 
-    void setAttribute(char const *key, char const *value, SPException *ex=NULL);
+    void setAttribute(         char const *key,          char const *value, SPException *ex=NULL);
+    void setAttribute(         char const *key, Glib::ustring const &value, SPException *ex=NULL);
+    void setAttribute(Glib::ustring const &key, Glib::ustring const &value, SPException *ex=NULL);
 
     /**
      * Read value of key attribute from XML node into object.
@@ -849,6 +860,8 @@ protected:
 
 public:
 	virtual void read_content();
+
+    void recursivePrintTree(unsigned level = 0);  // For debugging
 };
 
 

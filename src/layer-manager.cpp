@@ -11,11 +11,11 @@
 #include <set>
 #include <sigc++/functors/mem_fun.h>
 #include <sigc++/adaptors/hide.h>
-#include "gc-managed.h"
+#include "inkgc/gc-managed.h"
 #include "gc-finalized.h"
 #include "document.h"
 #include "desktop.h"
-#include "desktop-handles.h"
+
 #include "layer-manager.h"
 #include "preferences.h"
 #include "ui/view/view.h"
@@ -154,7 +154,7 @@ void LayerManager::setCurrentLayer( SPObject* obj )
 
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         if (prefs->getBool("/options/selection/layerdeselect", true)) {
-            sp_desktop_selection( _desktop )->clear();
+            _desktop->getSelection()->clear();
         }
     }
 }

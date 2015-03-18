@@ -29,7 +29,7 @@
 #include "document-undo.h"
 #include "sp-namedview.h"
 #include "selection.h"
-#include "desktop-handles.h"
+
 #include "snap.h"
 #include "pixmaps/cursor-ellipse.xpm"
 #include "xml/repr.h"
@@ -48,19 +48,9 @@
 
 using Inkscape::DocumentUndo;
 
-#include "ui/tool-factory.h"
-
 namespace Inkscape {
 namespace UI {
 namespace Tools {
-
-namespace {
-	ToolBase* createArcContext() {
-		return new ArcTool();
-	}
-
-	bool arcContextRegistered = ToolFactory::instance().registerObject("/tools/shapes/arc", createArcContext);
-}
 
 const std::string& ArcTool::getPrefsPath() {
 	return ArcTool::prefsPath;
@@ -109,11 +99,11 @@ void ArcTool::selection_changed(Inkscape::Selection* selection) {
 void ArcTool::setup() {
     ToolBase::setup();
 
-    Inkscape::Selection *selection = sp_desktop_selection(this->desktop);
+    Inkscape::Selection *selection = this->desktop->getSelection();
 
     this->shape_editor = new ShapeEditor(this->desktop);
 
-    SPItem *item = sp_desktop_selection(this->desktop)->singleItem();
+    SPItem *item = this->desktop->getSelection()->singleItem();
     if (item) {
         this->shape_editor->set_item(item);
     }
@@ -151,7 +141,7 @@ bool ArcTool::item_handler(SPItem* item, GdkEvent* event) {
 bool ArcTool::root_handler(GdkEvent* event) {
     static bool dragging;
 
-    Inkscape::Selection *selection = sp_desktop_selection(desktop);
+    Inkscape::Selection *selection = desktop->getSelection();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     this->tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
@@ -442,16 +432,16 @@ void ArcTool::finishItem() {
 
         desktop->canvas->endForcedFullRedraws();
 
-        sp_desktop_selection(desktop)->set(this->arc);
+        desktop->getSelection()->set(this->arc);
 
-		DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_CONTEXT_ARC, _("Create ellipse"));
+		DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_ARC, _("Create ellipse"));
 
         this->arc = NULL;
     }
 }
 
 void ArcTool::cancel() {
-    sp_desktop_selection(desktop)->clear();
+    desktop->getSelection()->clear();
     sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate), 0);
 
     if (this->arc != NULL) {
@@ -466,7 +456,7 @@ void ArcTool::cancel() {
 
     desktop->canvas->endForcedFullRedraws();
 
-    DocumentUndo::cancel(sp_desktop_document(desktop));
+    DocumentUndo::cancel(desktop->getDocument());
 }
 
 }

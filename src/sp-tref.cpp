@@ -16,10 +16,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
 #include <glibmm/i18n.h>
 
 #include "attributes.h"
@@ -34,14 +30,6 @@
 
 #include "xml/node.h"
 #include "xml/repr.h"
-
-namespace {
-	SPObject* createTRef() {
-		return new SPTRef();
-	}
-
-	bool trefRegistered = SPFactory::instance().registerObject("svg:tref", createTRef);
-}
 
 //#define DEBUG_TREF
 #ifdef DEBUG_TREF
@@ -413,7 +401,7 @@ void sp_tref_update_text(SPTRef *tref)
         Inkscape::XML::Document *xml_doc = tref->document->getReprDoc();
 
         Inkscape::XML::Node *newStringRepr = xml_doc->createTextNode(charData.c_str());
-        tref->stringChild = SPFactory::instance().createObject(NodeTraits::get_type_string(*newStringRepr));
+        tref->stringChild = SPFactory::createObject(NodeTraits::get_type_string(*newStringRepr));
 
         // Add this SPString as a child of the tref
         tref->attach(tref->stringChild, tref->lastChild());
@@ -492,12 +480,8 @@ sp_tref_convert_to_tspan(SPObject *obj)
             //SPObject * new_string_child = document->getObjectByRepr(new_string_repr);
 
             // Merge style from the tref
-            SPStyle *new_tspan_sty = new_tspan->style;
-            SPStyle const *tref_sty = tref->style;
-            sp_style_merge_from_dying_parent(new_tspan_sty, tref_sty);
-            sp_style_merge_from_parent(new_tspan_sty, new_tspan->parent->style);
-
-
+            new_tspan->style->merge( tref->style );
+            new_tspan->style->cascade( new_tspan->parent->style );
             new_tspan->updateRepr();
 
             // Hold onto our SPObject and repr for now.

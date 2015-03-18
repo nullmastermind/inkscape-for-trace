@@ -27,7 +27,7 @@
 #include <gtkmm/adjustment.h>
 
 #include "desktop.h"
-#include "desktop-handles.h"
+
 #include "display/cairo-utils.h"
 #include "display/drawing.h"
 #include "display/drawing-context.h"
@@ -76,15 +76,12 @@ static gdouble trace_zoom;
 static SPDocument *trace_doc = NULL;
 
 
-CloneTiler::CloneTiler (void) :
+CloneTiler::CloneTiler () :
     UI::Widget::Panel ("", "/dialogs/clonetiler/", SP_VERB_DIALOG_CLONETILER),
     dlg(NULL),
     desktop(NULL),
     deskTrack(),
-    table_row_labels(NULL),
-    selectChangedConn(),
-    subselChangedConn(),
-    selectModifiedConn()
+    table_row_labels(NULL)
 {
     Gtk::Box *contents = _getContents();
     contents->set_spacing(0);
@@ -1096,7 +1093,7 @@ CloneTiler::CloneTiler (void) :
                 // unitmenu
                 unit_menu = new Inkscape::UI::Widget::UnitMenu();
                 unit_menu->setUnitType(Inkscape::Util::UNIT_TYPE_LINEAR);
-                unit_menu->setUnit(sp_desktop_namedview(SP_ACTIVE_DESKTOP)->display_units->abbr);
+                unit_menu->setUnit(SP_ACTIVE_DESKTOP->getNamedView()->display_units->abbr);
                 unitChangedConn = unit_menu->signal_changed().connect(sigc::mem_fun(*this, &CloneTiler::clonetiler_unit_changed));
 
                 {
@@ -1273,12 +1270,13 @@ CloneTiler::CloneTiler (void) :
 
                 // connect to global selection changed signal (so we can change desktops) and
                 // external_change (so we're not fooled by undo)
-                g_signal_connect (G_OBJECT (INKSCAPE), "change_selection", G_CALLBACK (clonetiler_change_selection), dlg);
-                g_signal_connect (G_OBJECT (INKSCAPE), "external_change", G_CALLBACK (clonetiler_external_change), dlg);
-                g_signal_connect(G_OBJECT(dlg), "destroy", G_CALLBACK(clonetiler_disconnect_gsignal), G_OBJECT (INKSCAPE));
+                selectChangedConn = INKSCAPE.signal_selection_changed.connect(sigc::bind(sigc::ptr_fun(&CloneTiler::clonetiler_change_selection), dlg));
+                externChangedConn = INKSCAPE.signal_external_change.connect   (sigc::bind(sigc::ptr_fun(&CloneTiler::clonetiler_external_change), dlg));
+
+                g_signal_connect(G_OBJECT(dlg), "destroy", G_CALLBACK(clonetiler_disconnect_gsignal), this);
 
                 // update now
-                clonetiler_change_selection (NULL, sp_desktop_selection(SP_ACTIVE_DESKTOP), dlg);
+                clonetiler_change_selection (SP_ACTIVE_DESKTOP->getSelection(), dlg);
             }
 
             {
@@ -1350,7 +1348,7 @@ void CloneTiler::on_picker_color_changed(guint rgba)
     is_updating = false;
 }
 
-void CloneTiler::clonetiler_change_selection(InkscapeApplication * /*inkscape*/, Inkscape::Selection *selection, GtkWidget *dlg)
+void CloneTiler::clonetiler_change_selection(Inkscape::Selection *selection, GtkWidget *dlg)
 {
     GtkWidget *buttons = GTK_WIDGET(g_object_get_data (G_OBJECT(dlg), "buttons_on_tiles"));
     GtkWidget *status = GTK_WIDGET(g_object_get_data (G_OBJECT(dlg), "status"));
@@ -1379,16 +1377,18 @@ void CloneTiler::clonetiler_change_selection(InkscapeApplication * /*inkscape*/,
     }
 }
 
-void CloneTiler::clonetiler_external_change(InkscapeApplication * /*inkscape*/, GtkWidget *dlg)
+void CloneTiler::clonetiler_external_change(GtkWidget *dlg)
 {
-    clonetiler_change_selection (NULL, sp_desktop_selection(SP_ACTIVE_DESKTOP), dlg);
+    clonetiler_change_selection (SP_ACTIVE_DESKTOP->getSelection(), dlg);
 }
 
-void CloneTiler::clonetiler_disconnect_gsignal(GObject *widget, gpointer source)
+void CloneTiler::clonetiler_disconnect_gsignal(GObject *, gpointer source)
 {
-    if (source && G_IS_OBJECT(source)) {
-        sp_signal_disconnect_by_data (source, widget);
-    }
+    g_return_if_fail(source != NULL);
+
+    CloneTiler* dlg = reinterpret_cast<CloneTiler*>(source);
+    dlg->selectChangedConn.disconnect();
+    dlg->externChangedConn.disconnect();
 }
 
 Geom::Affine CloneTiler::clonetiler_get_transform(
@@ -2093,11 +2093,11 @@ void CloneTiler::clonetiler_unclump(GtkWidget */*widget*/, void *)
         return;
     }
 
-    Inkscape::Selection *selection = sp_desktop_selection(desktop);
+    Inkscape::Selection *selection = desktop->getSelection();
 
     // check if something is selected
     if (selection->isEmpty() || g_slist_length((GSList *) selection->itemList()) > 1) {
-        sp_desktop_message_stack(desktop)->flash(Inkscape::WARNING_MESSAGE, _("Select <b>one object</b> whose tiled clones to unclump."));
+        desktop->getMessageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>one object</b> whose tiled clones to unclump."));
         return;
     }
 
@@ -2112,13 +2112,13 @@ void CloneTiler::clonetiler_unclump(GtkWidget */*widget*/, void *)
         }
     }
 
-    sp_desktop_document(desktop)->ensureUpToDate();
+    desktop->getDocument()->ensureUpToDate();
 
     unclump (to_unclump);
 
     g_slist_free (to_unclump);
 
-    DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_DIALOG_CLONETILER,
+    DocumentUndo::done(desktop->getDocument(), SP_VERB_DIALOG_CLONETILER,
                        _("Unclump tiled clones"));
 }
 
@@ -2144,11 +2144,11 @@ void CloneTiler::clonetiler_remove(GtkWidget */*widget*/, GtkWidget *dlg, bool d
         return;
     }
 
-    Inkscape::Selection *selection = sp_desktop_selection(desktop);
+    Inkscape::Selection *selection = desktop->getSelection();
 
     // check if something is selected
     if (selection->isEmpty() || g_slist_length((GSList *) selection->itemList()) > 1) {
-        sp_desktop_message_stack(desktop)->flash(Inkscape::WARNING_MESSAGE, _("Select <b>one object</b> whose tiled clones to remove."));
+        desktop->getMessageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>one object</b> whose tiled clones to remove."));
         return;
     }
 
@@ -2169,10 +2169,10 @@ void CloneTiler::clonetiler_remove(GtkWidget */*widget*/, GtkWidget *dlg, bool d
     }
     g_slist_free (to_delete);
 
-    clonetiler_change_selection (NULL, selection, dlg);
+    clonetiler_change_selection (selection, dlg);
 
     if (do_undo) {
-        DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_DIALOG_CLONETILER,
+        DocumentUndo::done(desktop->getDocument(), SP_VERB_DIALOG_CLONETILER,
                            _("Delete tiled clones"));
     }
 }
@@ -2216,17 +2216,17 @@ void CloneTiler::clonetiler_apply(GtkWidget */*widget*/, GtkWidget *dlg)
         return;
     }
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    Inkscape::Selection *selection = sp_desktop_selection(desktop);
+    Inkscape::Selection *selection = desktop->getSelection();
 
     // check if something is selected
     if (selection->isEmpty()) {
-        sp_desktop_message_stack(desktop)->flash(Inkscape::WARNING_MESSAGE, _("Select an <b>object</b> to clone."));
+        desktop->getMessageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select an <b>object</b> to clone."));
         return;
     }
 
     // Check if more than one object is selected.
     if (g_slist_length((GSList *) selection->itemList()) > 1) {
-        sp_desktop_message_stack(desktop)->flash(Inkscape::ERROR_MESSAGE, _("If you want to clone several objects, <b>group</b> them and <b>clone the group</b>."));
+        desktop->getMessageStack()->flash(Inkscape::ERROR_MESSAGE, _("If you want to clone several objects, <b>group</b> them and <b>clone the group</b>."));
         return;
     }
 
@@ -2251,7 +2251,7 @@ void CloneTiler::clonetiler_apply(GtkWidget */*widget*/, GtkWidget *dlg)
 
     clonetiler_remove (NULL, dlg, false);
 
-    double scale_units = Inkscape::Util::Quantity::convert(1, "px", &sp_desktop_document(desktop)->getSVGUnit());
+    double scale_units = Inkscape::Util::Quantity::convert(1, "px", &desktop->getDocument()->getSVGUnit());
 
     double shiftx_per_i = 0.01 * prefs->getDoubleLimited(prefs_path + "shiftx_per_i", 0, -10000, 10000);
     double shifty_per_i = 0.01 * prefs->getDoubleLimited(prefs_path + "shifty_per_i", 0, -10000, 10000);
@@ -2337,7 +2337,7 @@ void CloneTiler::clonetiler_apply(GtkWidget */*widget*/, GtkWidget *dlg)
 
     SPItem *item = dynamic_cast<SPItem *>(obj);
     if (dotrace) {
-        clonetiler_trace_setup (sp_desktop_document(desktop), 1.0, item);
+        clonetiler_trace_setup (desktop->getDocument(), 1.0, item);
     }
 
     Geom::Point center;
@@ -2409,7 +2409,7 @@ void CloneTiler::clonetiler_apply(GtkWidget */*widget*/, GtkWidget *dlg)
             // Note: We create a clone at 0,0 too, right over the original, in case our clones are colored
 
             // Get transform from symmetry, shift, scale, rotation
-            Geom::Affine t = clonetiler_get_transform (type, i, j, center[Geom::X], center[Geom::Y], w, h,
+            Geom::Affine orig_t = clonetiler_get_transform (type, i, j, center[Geom::X], center[Geom::Y], w, h,
                                                        shiftx_per_i,     shifty_per_i,
                                                        shiftx_per_j,     shifty_per_j,
                                                        shiftx_rand,      shifty_rand,
@@ -2428,7 +2428,8 @@ void CloneTiler::clonetiler_apply(GtkWidget */*widget*/, GtkWidget *dlg)
                                                        rotate_rand,
                                                        rotate_alternatei, rotate_alternatej,
                                                        rotate_cumulatei,  rotate_cumulatej      );
-
+            Geom::Affine parent_transform = (((SPItem*)item->parent)->i2doc_affine())*(item->document->getRoot()->c2p.inverse());
+            Geom::Affine t = parent_transform*orig_t*parent_transform.inverse();
             cur = center * t - center;
             if (fillrect) {
                 if ((cur[Geom::X] > fillwidth) || (cur[Geom::Y] > fillheight)) { // off limits
@@ -2562,7 +2563,9 @@ void CloneTiler::clonetiler_apply(GtkWidget */*widget*/, GtkWidget *dlg)
                     }
                 }
                 if (pick_to_size) {
-                    t = Geom::Translate(-center[Geom::X], -center[Geom::Y]) * Geom::Scale (val, val) * Geom::Translate(center[Geom::X], center[Geom::Y]) * t;
+                    t = parent_transform * Geom::Translate(-center[Geom::X], -center[Geom::Y]) 
+                    * Geom::Scale (val, val) * Geom::Translate(center[Geom::X], center[Geom::Y]) 
+                    * parent_transform.inverse() * t;
                 }
                 if (pick_to_opacity) {
                     opacity *= val;
@@ -2590,7 +2593,7 @@ void CloneTiler::clonetiler_apply(GtkWidget */*widget*/, GtkWidget *dlg)
             Geom::Point new_center;
             bool center_set = false;
             if (obj_repr->attribute("inkscape:transform-center-x") || obj_repr->attribute("inkscape:transform-center-y")) {
-                new_center = scale_units*desktop->dt2doc(item->getCenter()) * t;
+                new_center = scale_units*desktop->dt2doc(item->getCenter()) * orig_t;
                 center_set = true;
             }
 
@@ -2611,21 +2614,21 @@ void CloneTiler::clonetiler_apply(GtkWidget */*widget*/, GtkWidget *dlg)
             parent->getRepr()->appendChild(clone);
 
             if (blur > 0.0) {
-                SPObject *clone_object = sp_desktop_document(desktop)->getObjectByRepr(clone);
+                SPObject *clone_object = desktop->getDocument()->getObjectByRepr(clone);
                 double perimeter = perimeter_original * t.descrim();
                 double radius = blur * perimeter;
                 // this is necessary for all newly added clones to have correct bboxes,
                 // otherwise filters won't work:
-                sp_desktop_document(desktop)->ensureUpToDate();
+                desktop->getDocument()->ensureUpToDate();
                 // it's hard to figure out exact width/height of the tile without having an object
                 // that we can take bbox of; however here we only need a lower bound so that blur
                 // margins are not too small, and the perimeter should work
-                SPFilter *constructed = new_filter_gaussian_blur(sp_desktop_document(desktop), radius, t.descrim(), t.expansionX(), t.expansionY(), perimeter, perimeter);
+                SPFilter *constructed = new_filter_gaussian_blur(desktop->getDocument(), radius, t.descrim(), t.expansionX(), t.expansionY(), perimeter, perimeter);
                 sp_style_set_property_url (clone_object, "filter", constructed, false);
             }
 
             if (center_set) {
-                SPObject *clone_object = sp_desktop_document(desktop)->getObjectByRepr(clone);
+                SPObject *clone_object = desktop->getDocument()->getObjectByRepr(clone);
                 SPItem *item = dynamic_cast<SPItem *>(clone_object);
                 if (clone_object && item) {
                     clone_object->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
@@ -2643,11 +2646,11 @@ void CloneTiler::clonetiler_apply(GtkWidget */*widget*/, GtkWidget *dlg)
         clonetiler_trace_finish ();
     }
 
-    clonetiler_change_selection (NULL, selection, dlg);
+    clonetiler_change_selection (selection, dlg);
 
     desktop->clearWaitingCursor();
 
-    DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_DIALOG_CLONETILER,
+    DocumentUndo::done(desktop->getDocument(), SP_VERB_DIALOG_CLONETILER,
                        _("Create tiled clones"));
 }
 

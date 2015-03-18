@@ -12,10 +12,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#ifdef HAVE_CONFIG_H
-# include "config.h"
-#endif
-
 #include <cstring>
 #include <string>
 #include <2geom/path.h>
@@ -36,19 +32,6 @@
 #include "sp-hatch-path.h"
 #include "svg/css-ostringstream.h"
 #include "xml/repr.h"
-
-#include "sp-factory.h"
-
-namespace {
-
-SPObject* createHatchPath()
-{
-    return new SPHatchPath();
-}
-
-bool hatchRegistered = SPFactory::instance().registerObject("svg:hatchPath", createHatchPath);
-
-} // namespace
 
 SPHatchPath::SPHatchPath()
     : offset(),
@@ -128,7 +111,7 @@ void SPHatchPath::set(unsigned int key, const gchar* value)
 
     default:
         if (SP_ATTRIBUTE_IS_CSS(key)) {
-            sp_style_read_from_object(style, this);
+            style->readFromObject( this );
             requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
         } else {
             SPObject::set(key, value);

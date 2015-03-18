@@ -17,14 +17,20 @@
 #endif
 #include <map>
 #include <string>
+
 #include "ui/dialog/guides.h"
+#include "desktop-events.h"
+
+#if WITH_GTKMM_3_0
+# include <gdkmm/devicemanager.h>
+#endif
+
 #include <2geom/line.h>
 #include <2geom/angle.h>
 #include <glibmm/i18n.h>
 
 #include "desktop.h"
-#include "desktop-events.h"
-#include "desktop-handles.h"
+
 #include "ui/dialog-events.h"
 #include "display/canvas-axonomgrid.h"
 #include "display/canvas-grid.h"
@@ -40,6 +46,7 @@
 #include "display/sp-canvas.h"
 #include "sp-guide.h"
 #include "sp-namedview.h"
+#include "sp-root.h"
 #include "ui/tools-switch.h"
 #include "verbs.h"
 #include "widgets/desktop-widget.h"
@@ -217,11 +224,21 @@ static gint sp_dt_ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidge
                 if ((horiz ? wy : wx) >= 0) {
                     Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
                     Inkscape::XML::Node *repr = xml_doc->createElement("sodipodi:guide");
+
+                    // If root viewBox set, interpret guides in terms of viewBox (90/96)
+                    double newx = event_dt.x();
+                    double newy = event_dt.y();
+
+                    SPRoot *root = desktop->doc()->getRoot();
+                    if( root->viewBox_set ) {
+                        newx = newx * root->viewBox.width()  / root->width.computed;
+                        newy = newy * root->viewBox.height() / root->height.computed;
+                    }
+                    sp_repr_set_point(repr, "position", Geom::Point( newx, newy ));
                     sp_repr_set_point(repr, "orientation", normal);
-                    sp_repr_set_point(repr, "position", event_dt);
                     desktop->namedview->appendChild(repr);
                     Inkscape::GC::release(repr);
-                    DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_NONE,
+                    DocumentUndo::done(desktop->getDocument(), SP_VERB_NONE,
                                      _("Create guide"));
                 }
                 desktop->set_coordinate_status(event_dt);
@@ -229,7 +246,7 @@ static gint sp_dt_ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidge
                 if (!dragged) {
                     // Ruler click (without drag) toggle the guide visibility on and off
                     Inkscape::XML::Node *repr = desktop->namedview->getRepr();
-                    sp_namedview_toggle_guides(sp_desktop_document(desktop), repr);
+                    sp_namedview_toggle_guides(desktop->getDocument(), repr);
                     
                 }
 
@@ -477,14 +494,14 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
                                 assert(false);
                                 break;
                         }
-                        DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_NONE,
+                        DocumentUndo::done(desktop->getDocument(), SP_VERB_NONE,
                                          _("Move guide"));
                     } else {
                         /* Undo movement of any attached shapes. */
                         guide->moveto(guide->getPoint(), false);
                         guide->set_normal(guide->getNormal(), false);
                         sp_guide_remove(guide);
-                        DocumentUndo::done(sp_desktop_document(desktop), SP_VERB_NONE,
+                        DocumentUndo::done(desktop->getDocument(), SP_VERB_NONE,
                                      _("Delete guide"));
                     }
                     moved = false;
@@ -505,7 +522,7 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
             if ((event->crossing.state & GDK_SHIFT_MASK) && (drag_type != SP_DRAG_MOVE_ORIGIN)) {
                 GdkCursor *guide_cursor;
                 guide_cursor = gdk_cursor_new (GDK_EXCHANGE);
-                gdk_window_set_cursor(gtk_widget_get_window (GTK_WIDGET(sp_desktop_canvas(desktop))), guide_cursor);
+                gdk_window_set_cursor(gtk_widget_get_window (GTK_WIDGET(desktop->getCanvas())), guide_cursor);
 #if GTK_CHECK_VERSION(3,0,0)
                 g_object_unref(guide_cursor);
 #else
@@ -514,7 +531,7 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
             } else {
                 GdkCursor *guide_cursor;
                 guide_cursor = gdk_cursor_new (GDK_HAND1);
-                gdk_window_set_cursor(gtk_widget_get_window (GTK_WIDGET(sp_desktop_canvas(desktop))), guide_cursor);
+                gdk_window_set_cursor(gtk_widget_get_window (GTK_WIDGET(desktop->getCanvas())), guide_cursor);
 #if GTK_CHECK_VERSION(3,0,0)
                 g_object_unref(guide_cursor);
 #else
@@ -531,7 +548,7 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
             sp_guideline_set_color(SP_GUIDELINE(item), guide->getColor());
 
             // restore event context's cursor
-            gdk_window_set_cursor(gtk_widget_get_window (GTK_WIDGET(sp_desktop_canvas(desktop))), desktop->event_context->cursor);
+            gdk_window_set_cursor(gtk_widget_get_window (GTK_WIDGET(desktop->getCanvas())), desktop->event_context->cursor);
 
             desktop->guidesMessageContext()->clear();
             break;
@@ -553,7 +570,7 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
                     if (drag_type != SP_DRAG_MOVE_ORIGIN) {
                         GdkCursor *guide_cursor;
                         guide_cursor = gdk_cursor_new (GDK_EXCHANGE);
-                        gdk_window_set_cursor(gtk_widget_get_window (GTK_WIDGET(sp_desktop_canvas(desktop))), guide_cursor);
+                        gdk_window_set_cursor(gtk_widget_get_window (GTK_WIDGET(desktop->getCanvas())), guide_cursor);
 #if GTK_CHECK_VERSION(3,0,0)
             g_object_unref(guide_cursor);
 #else
@@ -574,7 +591,7 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
                 case GDK_KEY_Shift_R:
                     GdkCursor *guide_cursor;
                     guide_cursor = gdk_cursor_new (GDK_EXCHANGE);
-                    gdk_window_set_cursor(gtk_widget_get_window (GTK_WIDGET(sp_desktop_canvas(desktop))), guide_cursor);
+                    gdk_window_set_cursor(gtk_widget_get_window (GTK_WIDGET(desktop->getCanvas())), guide_cursor);
 #if GTK_CHECK_VERSION(3,0,0)
             g_object_unref(guide_cursor);
 #else
@@ -600,36 +617,35 @@ static GdkInputSource lastType = GDK_SOURCE_MOUSE;
 
 static void init_extended()
 {
-    std::string avoidName = "pad";
+    Glib::ustring avoidName("pad");
+    Glib::RefPtr<Gdk::Display> display = Gdk::Display::get_default();
 
 #if GTK_CHECK_VERSION(3,0,0)
-    GdkDisplay *display = gdk_display_get_default();
-    GdkDeviceManager *dm = gdk_display_get_device_manager(display);
-    GList* devices = gdk_device_manager_list_devices(dm, GDK_DEVICE_TYPE_SLAVE);	
+    Glib::RefPtr<const Gdk::DeviceManager> dm = display->get_device_manager();
+    std::vector< Glib::RefPtr<const Gdk::Device> > devices = dm->list_devices(Gdk::DEVICE_TYPE_SLAVE);	
 #else
-    GList* devices = gdk_devices_list();
+    std::vector< Glib::RefPtr<const Gdk::Device> > devices = display->list_devices();
 #endif
     
-    if ( devices ) {
-        for ( GList* curr = devices; curr; curr = g_list_next(curr) ) {
-            GdkDevice* dev = reinterpret_cast<GdkDevice*>(curr->data);
-            gchar const *devName = gdk_device_get_name(dev);
-            GdkInputSource devSrc = gdk_device_get_source(dev);
+    if ( !devices.empty() ) {
+        for ( std::vector< Glib::RefPtr<const Gdk::Device> >::const_iterator dev = devices.begin(); dev != devices.end(); ++dev ) {
+            Glib::ustring const devName = (*dev)->get_name();
+            Gdk::InputSource devSrc = (*dev)->get_source();
             
-            if ( devName
+            if ( !devName.empty()
                  && (avoidName != devName)
-                 && (devSrc != GDK_SOURCE_MOUSE) ) {
+                 && (devSrc != Gdk::SOURCE_MOUSE) ) {
 //                 g_message("Adding '%s' as [%d]", devName, devSrc);
 
                 // Set the initial tool for the device
                 switch ( devSrc ) {
-                    case GDK_SOURCE_PEN:
+                    case Gdk::SOURCE_PEN:
                         toolToUse[devName] = TOOLS_CALLIGRAPHIC;
                         break;
-                    case GDK_SOURCE_ERASER:
+                    case Gdk::SOURCE_ERASER:
                         toolToUse[devName] = TOOLS_ERASER;
                         break;
-                    case GDK_SOURCE_CURSOR:
+                    case Gdk::SOURCE_CURSOR:
                         toolToUse[devName] = TOOLS_SELECT;
                         break;
                     default:
@@ -640,10 +656,6 @@ static void init_extended()
             }
         }
     }
-
-#if GTK_CHECK_VERSION(3,0,0)
-    g_list_free(devices);
-#endif
 }
 
 

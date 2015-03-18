@@ -26,7 +26,7 @@
 
 #include "style.h"
 #include "ui/dialog-events.h"
-#include "desktop-handles.h"
+
 #include "desktop-style.h"
 #include "preferences.h"
 #include "path-prefix.h"
@@ -64,8 +64,8 @@ MarkerComboBox::MarkerComboBox(gchar const *id, int l) :
         sp_pixbuf_new( Inkscape::ICON_SIZE_SMALL_TOOLBAR, INKSCAPE_ICON("no-marker") ) ) );
 
     sandbox = ink_markers_preview_doc ();
-    desktop = inkscape_active_desktop();
-    doc = sp_desktop_document(desktop);
+    desktop = SP_ACTIVE_DESKTOP;
+    doc = desktop->getDocument();
 
     modified_connection = doc->getDefs()->connectModified( sigc::hide(sigc::hide(sigc::bind(sigc::ptr_fun(&MarkerComboBox::handleDefsModified), this))) );
 
@@ -92,7 +92,7 @@ void MarkerComboBox::setDesktop(SPDesktop *desktop)
         }
 
         this->desktop = desktop;
-        doc = sp_desktop_document(desktop);
+        doc = desktop->getDocument();
 
         if (doc) {
             modified_connection = doc->getDefs()->connectModified( sigc::hide(sigc::hide(sigc::bind(sigc::ptr_fun(&MarkerComboBox::handleDefsModified), this))) );
@@ -578,25 +578,25 @@ gboolean MarkerComboBox::separator_cb (GtkTreeModel *model, GtkTreeIter *iter, g
  */
 SPDocument *MarkerComboBox::ink_markers_preview_doc ()
 {
-gchar const *buffer = "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\" xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">"
+gchar const *buffer = "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\" xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" id=\"MarkerSample\">"
 "  <defs id=\"defs\" />"
 
 "  <g id=\"marker-start\">"
-"    <path style=\"fill:none;stroke:black;stroke-width:1.7;marker-start:url(#sample);marker-mid:none;marker-end:none\""
+"    <path style=\"fill:gray;stroke:darkgray;stroke-width:1.7;marker-start:url(#sample);marker-mid:none;marker-end:none\""
 "       d=\"M 12.5,13 L 25,13\" id=\"path1\" />"
 "    <rect style=\"fill:none;stroke:none\" id=\"rect2\""
 "       width=\"25\" height=\"25\" x=\"0\" y=\"0\" />"
 "  </g>"
 
 "  <g id=\"marker-mid\">"
-"    <path style=\"fill:none;stroke:black;stroke-width:1.7;marker-start:none;marker-mid:url(#sample);marker-end:none\""
+"    <path style=\"fill:gray;stroke:darkgray;stroke-width:1.7;marker-start:none;marker-mid:url(#sample);marker-end:none\""
 "       d=\"M 0,113 L 12.5,113 L 25,113\" id=\"path11\" />"
 "    <rect style=\"fill:none;stroke:none\" id=\"rect22\""
 "       width=\"25\" height=\"25\" x=\"0\" y=\"100\" />"
 "  </g>"
 
 "  <g id=\"marker-end\">"
-"    <path style=\"fill:none;stroke:black;stroke-width:1.7;marker-start:none;marker-mid:none;marker-end:url(#sample)\""
+"    <path style=\"fill:gray;stroke:darkgray;stroke-width:1.7;marker-start:none;marker-mid:none;marker-end:url(#sample)\""
 "       d=\"M 0,213 L 12.5,213\" id=\"path111\" />"
 "    <rect style=\"fill:none;stroke:none\" id=\"rect222\""
 "       width=\"25\" height=\"25\" x=\"0\" y=\"200\" />"
