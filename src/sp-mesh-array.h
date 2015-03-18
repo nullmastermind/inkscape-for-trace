@@ -45,6 +45,16 @@
 // For color picking
 #include "sp-item.h"
 
+enum SPMeshType {
+  SP_MESH_TYPE_COONS,
+  SP_MESH_TYPE_BICUBIC
+};
+
+enum SPMeshGeometry {
+  SP_MESH_GEOMETRY_NORMAL,
+  SP_MESH_GEOMETRY_CONICAL
+};
+
 enum NodeType {
   MG_NODE_TYPE_UNKNOWN,
   MG_NODE_TYPE_CORNER,
@@ -125,14 +135,14 @@ public:
   void    setOpacity( unsigned int i, double o );
 };
 
-class SPMeshGradient;
+class SPMesh;
 
 // An array of mesh nodes.
 class SPMeshNodeArray {
 
 // Should be private
 public:
-  SPMeshGradient *mg;
+  SPMesh *mg;
   std::vector< std::vector< SPMeshNode* > > nodes;
 
 public:
@@ -147,15 +157,21 @@ public:
   friend class SPMeshPatchI;
 
   SPMeshNodeArray() { built = false; mg = NULL; drag_valid = false; };
-  SPMeshNodeArray( SPMeshGradient *mg );
+  SPMeshNodeArray( SPMesh *mg );
+  SPMeshNodeArray( const SPMeshNodeArray& rhs );
+  SPMeshNodeArray& operator=(const SPMeshNodeArray& rhs);
+
   ~SPMeshNodeArray() { clear(); };
   bool built;
 
-  void read( SPMeshGradient *mg );
-  void write( SPMeshGradient *mg );
-  void create( SPMeshGradient *mg, SPItem *item, Geom::OptRect bbox );
+  void read( SPMesh *mg );
+  void write( SPMesh *mg );
+  void create( SPMesh *mg, SPItem *item, Geom::OptRect bbox );
   void clear();
   void print();
+
+  // Fill 'smooth' with a smoothed version by subdividing each patch.
+  void bicubic( SPMeshNodeArray* smooth, SPMeshType type);
 
   // Get size of patch
   unsigned int patch_rows();

@@ -50,7 +50,7 @@
 #include "svg/svg-color.h"
 #include "2geom/line.h"
 #include "2geom/angle.h"
-#include "util/mathfns.h"
+#include "helper/mathfns.h"
 #include "round.h"
 #include "util/units.h"
 
@@ -220,6 +220,14 @@ CanvasAxonomGrid::readRepr()
     if( root->viewBox_set ) {
         scale_x = root->width.computed  / root->viewBox.width();
         scale_y = root->height.computed / root->viewBox.height();
+        if (Geom::are_near(scale_x / scale_y, 1.0, Geom::EPSILON)) {
+            // scaling is uniform, try to reduce numerical error
+            scale_x = (scale_x + scale_y)/2.0;
+            double scale_none = Inkscape::Util::Quantity::convert(1, doc->getDisplayUnit(), "px");
+            if (Geom::are_near(scale_x / scale_none, 1.0, Geom::EPSILON))
+                scale_x = scale_none; // objects are same size, reduce numerical error
+            scale_y = scale_x;
+        }
     }
 
     gchar const *value;
