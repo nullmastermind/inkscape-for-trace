@@ -74,19 +74,9 @@ using Inkscape::Display::ExtractARGB32;
 using Inkscape::Display::ExtractRGB32;
 using Inkscape::Display::AssembleARGB32;
 
-#include "ui/tool-factory.h"
-
 namespace Inkscape {
 namespace UI {
 namespace Tools {
-
-namespace {
-	ToolBase* createPaintbucketContext() {
-		return new FloodTool();
-	}
-
-	bool paintbucketContextRegistered = ToolFactory::instance().registerObject("/tools/paintbucket", createPaintbucketContext);
-}
 
 const std::string& FloodTool::getPrefsPath() {
 	return FloodTool::prefsPath;
@@ -1097,8 +1087,8 @@ bool FloodTool::item_handler(SPItem* item, GdkEvent* event) {
             desktop->applyCurrentOrToolStyle(item, "/tools/paintbucket", false);
 
             DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_PAINTBUCKET, _("Set style on object"));
-
-            ret = TRUE;
+            // Dead assignment: Value stored to 'ret' is never read
+            //ret = TRUE;
         }
         break;
 

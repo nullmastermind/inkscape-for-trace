@@ -251,7 +251,11 @@ unsigned int PrintEmf::begin(Inkscape::Extension::Print *mod, SPDocument *doc)
             g_error("Fatal programming error in PrintEmf::begin at textcomment_set 1");
         }
 
+        char *oldlocale = g_strdup(setlocale(LC_NUMERIC, NULL));
+        setlocale(LC_NUMERIC, "C");
         snprintf(buff, sizeof(buff) - 1, "Drawing=%.1lfx%.1lfpx, %.1lfx%.1lfmm", _width, _height, Inkscape::Util::Quantity::convert(dwInchesX, "in", "mm"), Inkscape::Util::Quantity::convert(dwInchesY, "in", "mm"));
+        setlocale(LC_NUMERIC, oldlocale);
+        g_free(oldlocale);
         rec = textcomment_set(buff);
         if (!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)) {
             g_error("Fatal programming error in PrintEmf::begin at textcomment_set 1");
@@ -706,7 +710,7 @@ int PrintEmf::create_pen(SPStyle const *style, const Geom::Affine &transform)
                     n_dash = style->stroke_dasharray.values.size();
                     dash = new uint32_t[n_dash];
                     for (i = 0; i < n_dash; i++) {
-                        dash[i] = (uint32_t)(Inkscape::Util::Quantity::convert(1, "mm", "px") * style->stroke_dasharray.values[i]);
+                        dash[i] = style->stroke_dasharray.values[i];
                     }
                 }
             }

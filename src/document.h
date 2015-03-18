@@ -21,7 +21,7 @@
 #include <sigc++/sigc++.h>
 #include "libcroco/cr-cascade.h"
 #include <2geom/forward.h>
-#include "gc-managed.h"
+#include "inkgc/gc-managed.h"
 #include "gc-finalized.h"
 #include "gc-anchored.h"
 #include <glibmm/ustring.h>
@@ -242,6 +242,8 @@ public:
     SPDocument *doUnref();
     Inkscape::Util::Unit const* getDisplayUnit() const;
     Inkscape::Util::Unit const& getSVGUnit() const;
+    void setDocumentScale( const double scaleX, const double scaleY );
+    void setDocumentScale( const double scale );
     Geom::Scale getDocumentScale() const;
     Inkscape::Util::Quantity getWidth() const;
     Inkscape::Util::Quantity getHeight() const;
