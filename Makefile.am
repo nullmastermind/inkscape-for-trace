@@ -31,6 +31,7 @@ man_MANS = \
 
 EXTRA_DIST = \
 	acinclude.m4 \
+	autogen.sh   \
 	fix-roff-punct	\
 	intltool-extract.in	\
 	intltool-merge.in	\
@@ -103,6 +104,7 @@ EXTRA_DIST = \
 	cxxtest/cxxtest/YesNoRunner.h \
 	packaging/autopackage/default.apspec.in	\
 	packaging/macosx/README.txt \
+	packaging/macosx/Resources/Inkscape-Generic.icns \
 	packaging/macosx/Resources/Inkscape.icns \
 	packaging/macosx/Resources/MenuBar.nib/classes.nib \
 	packaging/macosx/Resources/MenuBar.nib/info.nib \
@@ -400,6 +402,8 @@ EXTRA_DIST = \
 	packaging/macosx/osx-app.sh \
 	packaging/macosx/osx-build.sh \
 	packaging/macosx/osx-dmg.sh \
+	packaging/macosx/ports/_resources/port1.0/group/python-1.0.tcl \
+	packaging/macosx/ports/devel/dbus-python/Portfile \
 	packaging/macosx/ports/devel/inkscape-packaging/Portfile \
 	packaging/macosx/ports/lang/python25/Portfile \
 	packaging/macosx/ports/lang/python25/files/_localemodule.c.ed \
@@ -435,6 +439,17 @@ EXTRA_DIST = \
 	packaging/macosx/ports/lang/python26/files/version.plist \
 	packaging/macosx/ports/python/py-Pillow/Portfile \
 	packaging/macosx/ports/python/py-Pillow/files/patch-setup.py.diff \
+	packaging/macosx/ports/python/py-gobject/Portfile \
+	packaging/macosx/ports/python/py-gobject/files/00git_class_init.patch \
+	packaging/macosx/ports/python/py-gobject/files/00git_fix_qdata_warning.patch \
+	packaging/macosx/ports/python/py-gobject/files/00git_gio_flag_type.patch \
+	packaging/macosx/ports/python/py-gobject/files/patch-pygi-info.c-p1.diff \
+	packaging/macosx/ports/python/py-numpy/Portfile \
+	packaging/macosx/ports/python/py-numpy/files/patch-f2py_setup.py.diff \
+	packaging/macosx/ports/python/py-numpy/files/patch-fcompiler_g95.diff \
+	packaging/macosx/ports/python/py-numpy/files/patch-numpy_core_setup.py.diff \
+	packaging/macosx/ports/python/py-numpy/files/patch-numpy_linalg_setup.py.diff \
+	packaging/macosx/ports/python/py-numpy/files/wrapper-template \
 	packaging/macosx/ports/python/py-sk1libs/Portfile \
 	packaging/macosx/ports/python/py-sk1libs/files/patch-src-imaging-libimagingft-_imagingft.c.diff \
 	packaging/macosx/ports/python/py-sk1libs/files/patch-src-utils-fs.py.diff \
@@ -460,6 +475,32 @@ EXTRA_DIST = \
 	packaging/macosx/ports/python/py25-numpy/files/patch-setup.py.diff \
 	packaging/macosx/ports/python/py25-numpy/files/wrapper-template \
 	packaging/macosx/ports/python/py25-setuptools/Portfile \
+	packaging/macosx/ports/python/py26-cython/Portfile \
+	packaging/macosx/ports/python/py26-cython/files/cython24 \
+	packaging/macosx/ports/python/py26-cython/files/cython25 \
+	packaging/macosx/ports/python/py26-cython/files/cython26 \
+	packaging/macosx/ports/python/py26-cython/files/cython27 \
+	packaging/macosx/ports/python/py26-cython/files/cython31 \
+	packaging/macosx/ports/python/py26-cython/files/cython32 \
+	packaging/macosx/ports/python/py26-cython/files/cython33 \
+	packaging/macosx/ports/python/py26-cython/files/cython34 \
+	packaging/macosx/ports/python/py26-lxml/Portfile \
+	packaging/macosx/ports/python/py26-nose/Portfile \
+	packaging/macosx/ports/python/py26-nose/files/nosetests24 \
+	packaging/macosx/ports/python/py26-nose/files/nosetests25 \
+	packaging/macosx/ports/python/py26-nose/files/nosetests26 \
+	packaging/macosx/ports/python/py26-nose/files/nosetests27 \
+	packaging/macosx/ports/python/py26-nose/files/nosetests31 \
+	packaging/macosx/ports/python/py26-nose/files/nosetests32 \
+	packaging/macosx/ports/python/py26-nose/files/nosetests33 \
+	packaging/macosx/ports/python/py26-nose/files/nosetests34 \
+	packaging/macosx/ports/python/py26-numpy/Portfile \
+	packaging/macosx/ports/python/py26-numpy/files/patch-f2py_setup.py.diff \
+	packaging/macosx/ports/python/py26-numpy/files/patch-fcompiler_g95.diff \
+	packaging/macosx/ports/python/py26-numpy/files/patch-numpy_core_setup.py.diff \
+	packaging/macosx/ports/python/py26-numpy/files/patch-numpy_linalg_setup.py.diff \
+	packaging/macosx/ports/python/py26-numpy/files/wrapper-template \
+	packaging/macosx/ports/python/py26-setuptools/Portfile \
 	packaging/win32/inkscape.nsi	\
 	packaging/win32/inkscape.nsi.uninstall	\
 	packaging/win32/languages/Breton.nsh	\
@@ -474,6 +515,7 @@ EXTRA_DIST = \
 	packaging/win32/languages/Greek.nsh	\
 	packaging/win32/languages/Hebrew.nsh	\
 	packaging/win32/languages/Indonesian.nsh \
+	packaging/win32/languages/Icelandic.nsh \
 	packaging/win32/languages/Italian.nsh	\
 	packaging/win32/languages/Japanese.nsh	\
 	packaging/win32/languages/Polish.nsh	\

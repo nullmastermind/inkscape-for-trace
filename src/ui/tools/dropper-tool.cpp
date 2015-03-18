@@ -52,19 +52,9 @@ using Inkscape::DocumentUndo;
 static GdkCursor *cursor_dropper_fill = NULL;
 static GdkCursor *cursor_dropper_stroke = NULL;
 
-#include "ui/tool-factory.h"
-
 namespace Inkscape {
 namespace UI {
 namespace Tools {
-
-namespace {
-	ToolBase* createDropperContext() {
-		return new DropperTool();
-	}
-
-	bool dropperContextRegistered = ToolFactory::instance().registerObject("/tools/dropper", createDropperContext);
-}
 
 const std::string& DropperTool::getPrefsPath() {
 	return DropperTool::prefsPath;
@@ -73,7 +63,7 @@ const std::string& DropperTool::getPrefsPath() {
 const std::string DropperTool::prefsPath = "/tools/dropper";
 
 DropperTool::DropperTool()
-    : ToolBase(cursor_dropper_f_xpm, 7, 7)
+    : ToolBase(cursor_dropper_f_xpm, 5, 5)
 	, R(0)
 	, G(0)
 	, B(0)
@@ -83,8 +73,8 @@ DropperTool::DropperTool()
 	, area(NULL)
 	, centre(0, 0)
 {
-    cursor_dropper_fill = sp_cursor_new_from_xpm(cursor_dropper_f_xpm , 7, 7);
-    cursor_dropper_stroke = sp_cursor_new_from_xpm(cursor_dropper_s_xpm , 7, 7);
+    cursor_dropper_fill = sp_cursor_new_from_xpm(cursor_dropper_f_xpm , 5, 5);
+    cursor_dropper_stroke = sp_cursor_new_from_xpm(cursor_dropper_s_xpm , 5, 5);
 }
 
 DropperTool::~DropperTool() {

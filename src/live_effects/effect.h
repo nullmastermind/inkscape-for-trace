@@ -160,8 +160,7 @@ protected:
     bool concatenate_before_pwd2;
 
     SPLPEItem * sp_lpe_item; // these get stored in doBeforeEffect_impl, and derived classes may do as they please with them.
-    Glib::ustring const * defaultUnit; // these get stored in doBeforeEffect_impl, and derived classes may do as they please with them.
-    KnotHolder *knot_holder;
+    Glib::ustring defaultUnit; // these get stored in doBeforeEffect_impl, and derived classes may do as they please with them.
     double current_zoom;
     std::vector<Geom::Point> selectedNodesPoints;
     SPCurve * sp_curve;

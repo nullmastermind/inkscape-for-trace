@@ -13,10 +13,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
-
 #include <cstring>
 #include <string>
 
@@ -35,19 +31,12 @@
 #include "preferences.h"
 #include "style.h"
 #include "sp-symbol.h"
+#include "sp-root.h"
 #include "sp-use.h"
 #include "sp-use-reference.h"
 #include "sp-shape.h"
 #include "sp-text.h"
 #include "sp-flowtext.h"
-
-namespace {
-    SPObject* createUse() {
-        return new SPUse();
-    }
-
-    bool useRegistered = SPFactory::instance().registerObject("svg:use", createUse);
-}
 
 SPUse::SPUse()
     : SPItem(),
@@ -251,6 +240,8 @@ gchar* SPUse::description() const {
         if ( dynamic_cast<SPSymbol *>(child) ) {
             if (child->title()) {
                 return g_strdup_printf(_("called %s"), Glib::Markup::escape_text(Glib::ustring( g_dpgettext2(NULL, "Symbol", child->title()))).c_str());
+            } else if (child->getAttribute("id")) {
+                return g_strdup_printf(_("called %s"), Glib::Markup::escape_text(Glib::ustring( g_dpgettext2(NULL, "Symbol", child->getAttribute("id")))).c_str());
             } else {
                 return g_strdup_printf(_("called %s"), _("Unnamed Symbol"));
             }
@@ -479,7 +470,7 @@ void SPUse::href_changed() {
         if (refobj) {
             Inkscape::XML::Node *childrepr = refobj->getRepr();
 
-            SPObject* obj = SPFactory::instance().createObject(NodeTraits::get_type_string(*childrepr));
+            SPObject* obj = SPFactory::createObject(NodeTraits::get_type_string(*childrepr));
 
             SPItem *item = dynamic_cast<SPItem *>(obj);
             if (item) {
@@ -560,13 +551,17 @@ void SPUse::update(SPCtx *ctx, unsigned flags) {
         this->height.computed = this->height.value * ictx->viewport.height();
     }
 
-    cctx.viewport = Geom::Rect::from_xywh(0, 0, this->width.computed, this->height.computed);
-    cctx.i2vp = Geom::identity();
     childflags &= ~SP_OBJECT_USER_MODIFIED_FLAG_B;
 
     if (this->child) {
         sp_object_ref(this->child);
 
+        // viewport is only changed if referencing a symbol or svg element
+        if( SP_IS_SYMBOL(this->child) || SP_IS_ROOT(this->child) ) {
+            cctx.viewport = Geom::Rect::from_xywh(0, 0, this->width.computed, this->height.computed);
+            cctx.i2vp = Geom::identity();
+        }
+        
         if (childflags || (this->child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             SPItem const *chi = dynamic_cast<SPItem const *>(child);
             g_assert(chi != NULL);

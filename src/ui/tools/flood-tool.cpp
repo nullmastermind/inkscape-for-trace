@@ -74,19 +74,9 @@ using Inkscape::Display::ExtractARGB32;
 using Inkscape::Display::ExtractRGB32;
 using Inkscape::Display::AssembleARGB32;
 
-#include "ui/tool-factory.h"
-
 namespace Inkscape {
 namespace UI {
 namespace Tools {
-
-namespace {
-	ToolBase* createPaintbucketContext() {
-		return new FloodTool();
-	}
-
-	bool paintbucketContextRegistered = ToolFactory::instance().registerObject("/tools/paintbucket", createPaintbucketContext);
-}
 
 const std::string& FloodTool::getPrefsPath() {
 	return FloodTool::prefsPath;
@@ -621,7 +611,7 @@ static ScanlineCheckResult perform_bitmap_scanline_check(std::deque<Geom::Point>
     bool currently_painting_top = false;
     bool currently_painting_bottom = false;
 
-    unsigned int top_ty = bci.y - 1;
+    unsigned int top_ty = (bci.y > 0) ? bci.y - 1 : 0;
     unsigned int bottom_ty = bci.y + 1;
 
     bool can_paint_top = (top_ty > 0);
@@ -1097,8 +1087,8 @@ bool FloodTool::item_handler(SPItem* item, GdkEvent* event) {
             desktop->applyCurrentOrToolStyle(item, "/tools/paintbucket", false);
 
             DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_PAINTBUCKET, _("Set style on object"));
-
-            ret = TRUE;
+            // Dead assignment: Value stored to 'ret' is never read
+            //ret = TRUE;
         }
         break;
 

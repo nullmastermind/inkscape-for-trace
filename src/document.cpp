@@ -368,7 +368,7 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
 
     // Create SPRoot element
     const std::string typeString = NodeTraits::get_type_string(*rroot);
-    SPObject* rootObj = SPFactory::instance().createObject(typeString);
+    SPObject* rootObj = SPFactory::createObject(typeString);
     document->root = dynamic_cast<SPRoot*>(rootObj);
 
     if (document->root == 0) {
@@ -604,10 +604,87 @@ Inkscape::Util::Unit const* SPDocument::getDisplayUnit() const
 
 /// guaranteed not to return nullptr
 // returns 'px' units as default, like legacy Inkscape
+// THIS SHOULD NOT BE USED... INSTEAD USE DOCUMENT SCALE
 Inkscape::Util::Unit const& SPDocument::getSVGUnit() const
 {
     SPNamedView const* nv = sp_document_namedview(this, NULL);
     return nv ? nv->getSVGUnit() : *unit_table.getUnit("px");
+}
+
+/// Sets document scale (by changing viewBox)
+void SPDocument::setDocumentScale( double scaleX, double scaleY ) {
+
+    root->viewBox = Geom::Rect::from_xywh(
+        root->viewBox.left(),
+        root->viewBox.top(),
+        root->width.computed  * scaleX,
+        root->height.computed * scaleY );
+    root->viewBox_set = true;
+    root->updateRepr();
+}
+
+/// Sets document scale (by changing viewBox, x and y scaling equal) 
+void SPDocument::setDocumentScale( double scale ) {
+    setDocumentScale( scale, scale );
+}
+
+/// Returns document scale as defined by width/height (in pixels) and viewBox (real world to
+/// user-units).
+Geom::Scale SPDocument::getDocumentScale() const
+{
+    Geom::Scale scale;
+    if( root->viewBox_set ) {
+        double scale_x = 1.0;
+        double scale_y = 1.0;
+        if( root->viewBox.width() > 0.0 ) {
+            scale_x = root->width.computed / root->viewBox.width();
+        }
+        if( root->viewBox.height() > 0.0 ) {
+            scale_y = root->height.computed / root->viewBox.height();
+        }
+        scale = Geom::Scale(scale_x, scale_y);
+    }
+    // std::cout << "SPDocument::getDocumentScale():\n" << scale << std::endl;
+    return scale;
+}
+
+// Avoid calling root->updateRepr() twice by combining setting width and height.
+// (As done on every delete as clipboard calls this via fitToRect(). Also called in page-sizer.cpp)
+void SPDocument::setWidthAndHeight(const Inkscape::Util::Quantity &width, const Inkscape::Util::Quantity &height, bool changeSize)
+{
+    Inkscape::Util::Unit const *old_width_units = unit_table.getUnit("px");
+    if (root->width.unit)
+        old_width_units = unit_table.getUnit(root->width.unit);
+    gdouble old_width_converted;  // old width converted to new units
+    if (root->width.unit == SVGLength::PERCENT)
+        old_width_converted = Inkscape::Util::Quantity::convert(root->width.computed, "px", width.unit);
+    else
+        old_width_converted = Inkscape::Util::Quantity::convert(root->width.value, old_width_units, width.unit);
+
+    root->width.computed = width.value("px");
+    root->width.value = width.quantity;
+    root->width.unit = (SVGLength::Unit) width.unit->svgUnit();
+
+    Inkscape::Util::Unit const *old_height_units = unit_table.getUnit("px");
+    if (root->height.unit)
+        old_height_units = unit_table.getUnit(root->height.unit);
+    gdouble old_height_converted;  // old height converted to new units
+    if (root->height.unit == SVGLength::PERCENT)
+        old_height_converted = Inkscape::Util::Quantity::convert(root->height.computed, "px", height.unit);
+    else
+        old_height_converted = Inkscape::Util::Quantity::convert(root->height.value, old_height_units, height.unit);
+
+    root->height.computed = height.value("px");
+    root->height.value = height.quantity;
+    root->height.unit = (SVGLength::Unit) height.unit->svgUnit();
+
+    // viewBox scaled by relative change in page size (maintains document scale).
+    if (root->viewBox_set && changeSize) {
+        root->viewBox.setMax(Geom::Point(
+        root->viewBox.left() + (root->width.value /  old_width_converted ) * root->viewBox.width(),
+        root->viewBox.top()  + (root->height.value / old_height_converted) * root->viewBox.height()));
+    }
+    root->updateRepr();
 }
 
 Inkscape::Util::Quantity SPDocument::getWidth() const
@@ -629,17 +706,21 @@ Inkscape::Util::Quantity SPDocument::getWidth() const
 
 void SPDocument::setWidth(const Inkscape::Util::Quantity &width, bool changeSize)
 {
-    Inkscape::Util::Unit const *old_units = unit_table.getUnit("px");
+    Inkscape::Util::Unit const *old_width_units = unit_table.getUnit("px");
     if (root->width.unit)
-        old_units = unit_table.getUnit(root->width.unit);
-    gdouble old_converted = Inkscape::Util::Quantity::convert(root->width.value, old_units, width.unit);
+        old_width_units = unit_table.getUnit(root->width.unit);
+    gdouble old_width_converted;  // old width converted to new units
+    if (root->width.unit == SVGLength::PERCENT)
+        old_width_converted = Inkscape::Util::Quantity::convert(root->width.computed, "px", width.unit);
+    else
+        old_width_converted = Inkscape::Util::Quantity::convert(root->width.value, old_width_units, width.unit);
 
     root->width.computed = width.value("px");
     root->width.value = width.quantity;
     root->width.unit = (SVGLength::Unit) width.unit->svgUnit();
 
     if (root->viewBox_set && changeSize)
-        root->viewBox.setMax(Geom::Point(root->viewBox.left() + (root->width.value / old_converted) * root->viewBox.width(), root->viewBox.bottom()));
+        root->viewBox.setMax(Geom::Point(root->viewBox.left() + (root->width.value / old_width_converted) * root->viewBox.width(), root->viewBox.bottom()));
 
     root->updateRepr();
 }
@@ -664,17 +745,21 @@ Inkscape::Util::Quantity SPDocument::getHeight() const
 
 void SPDocument::setHeight(const Inkscape::Util::Quantity &height, bool changeSize)
 {
-    Inkscape::Util::Unit const *old_units = unit_table.getUnit("px");
+    Inkscape::Util::Unit const *old_height_units = unit_table.getUnit("px");
     if (root->height.unit)
-        old_units = unit_table.getUnit(root->height.unit);
-    gdouble old_converted = Inkscape::Util::Quantity::convert(root->height.value, old_units, height.unit);
+        old_height_units = unit_table.getUnit(root->height.unit);
+    gdouble old_height_converted;  // old height converted to new units
+    if (root->height.unit == SVGLength::PERCENT)
+        old_height_converted = Inkscape::Util::Quantity::convert(root->height.computed, "px", height.unit);
+    else
+        old_height_converted = Inkscape::Util::Quantity::convert(root->height.value, old_height_units, height.unit);
 
     root->height.computed = height.value("px");
     root->height.value = height.quantity;
     root->height.unit = (SVGLength::Unit) height.unit->svgUnit();
 
     if (root->viewBox_set && changeSize)
-        root->viewBox.setMax(Geom::Point(root->viewBox.right(), root->viewBox.top() + (root->height.value / old_converted) * root->viewBox.height()));
+        root->viewBox.setMax(Geom::Point(root->viewBox.right(), root->viewBox.top() + (root->height.value / old_height_converted) * root->viewBox.height()));
 
     root->updateRepr();
 }
@@ -712,7 +797,7 @@ void SPDocument::fitToRect(Geom::Rect const &rect, bool with_margins)
 
     double const old_height = getHeight().value("px");
     Inkscape::Util::Unit const *nv_units = unit_table.getUnit("px");
-    if (root->height.unit)
+    if (root->height.unit && (root->height.unit != SVGLength::PERCENT))
         nv_units = unit_table.getUnit(root->height.unit);
     SPNamedView *nv = sp_document_namedview(this, NULL);
     
@@ -739,9 +824,10 @@ void SPDocument::fitToRect(Geom::Rect const &rect, bool with_margins)
             rect.min() - Geom::Point(margin_left, margin_bottom),
             rect.max() + Geom::Point(margin_right, margin_top));
     
-    
-    setWidth(Inkscape::Util::Quantity(Inkscape::Util::Quantity::convert(rect_with_margins.width(), "px", nv_units), nv_units));
-    setHeight(Inkscape::Util::Quantity(Inkscape::Util::Quantity::convert(rect_with_margins.height(), "px", nv_units), nv_units));
+    setWidthAndHeight(
+        Inkscape::Util::Quantity(Inkscape::Util::Quantity::convert(rect_with_margins.width(),  "px", nv_units), nv_units),
+        Inkscape::Util::Quantity(Inkscape::Util::Quantity::convert(rect_with_margins.height(), "px", nv_units), nv_units)
+        );
 
     Geom::Translate const tr(
             Geom::Point(0, old_height - rect_with_margins.height())
