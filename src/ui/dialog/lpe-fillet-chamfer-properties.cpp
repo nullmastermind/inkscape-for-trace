@@ -233,16 +233,15 @@ void FilletChamferPropertiesDialog::_set_satellite(Geom::Satellite satellite)
         position = Inkscape::Util::Quantity::convert(position, document_unit, unit);
     }
     _fillet_chamfer_position_numeric.set_value(position);
+    _fillet_chamfer_chamfer_subdivisions.set_value(satellite.getSteps());
     if (satellite.getSatelliteType() == Geom::F) {
         _fillet_chamfer_type_fillet.set_active(true);
     } else if (satellite.getSatelliteType() == Geom::IF) {
         _fillet_chamfer_type_inverse_fillet.set_active(true);
     } else if (satellite.getSatelliteType() == Geom::C) {
         _fillet_chamfer_type_chamfer.set_active(true);
-        _fillet_chamfer_chamfer_subdivisions.set_value(satellite.getSteps());
     } else if (satellite.getSatelliteType() == Geom::IC) {
         _fillet_chamfer_type_inverse_chamfer.set_active(true);
-        _fillet_chamfer_chamfer_subdivisions.set_value(satellite.getSteps());
     }
     _satellite = satellite;
 }

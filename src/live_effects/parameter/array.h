@@ -17,7 +17,6 @@
 
 #include <2geom/satellite.h>
 #include <2geom/satellite-enum.h>
-#include <2geom/pointwise.h>
 #include "svg/svg.h"
 #include "svg/stringstream.h"
 
@@ -132,7 +131,6 @@ protected:
         str << nVector.second.getAngle();
         str << "*";
         str << nVector.second.getSteps();
-        std::cout << str.str() << "SATEEELIITE\n";
     }
 
     StorageType readsvg(const gchar * str);

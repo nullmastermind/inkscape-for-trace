@@ -37,7 +37,7 @@
 namespace Geom {
 
 Pointwise::Pointwise(Piecewise<D2<SBasis> > pwd2)
-        : _pwd2(pwd2),_pathInfo(NULL), _satellites(NULL)
+        : _pwd2(pwd2)
 {
     setPathInfo();
 };
@@ -273,35 +273,39 @@ Pointwise::new_pwd_sustract(Piecewise<D2<SBasis> > A)
             sats.push_back(std::make_pair(_satellites[i].first-counter,_satellites[i].second));
         }
     }
+    set_extremes(sats,false,true,0.0,0.0);
     setSatellites(sats);
 }
 
 void
-Pointwise::set_extremes(bool active, bool hidden, double amount, double angle)
+Pointwise::set_extremes(std::vector<std::pair<unsigned int,Satellite> > sats, bool active, bool hidden, double amount, double angle)
 {
     for(unsigned int i = 0; i < _pathInfo.size(); i++){
         unsigned int firstNode = getFirst(_pathInfo[i].first);
         unsigned int lastNode = getLast(_pathInfo[i].first);
-        std::cout << firstNode << "FIRSTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT\n";
-        std::cout << lastNode << "LASTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT\n";
         if(!getIsClosed(lastNode)){
-            std::cout << "CLOSSEDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD\n";
             bool endOpen = false;
-            for(unsigned i = 0; i < _satellites.size(); i++){
-                _satellites[i].second.setIsEndOpen(false);
-                if(_satellites[i].first == firstNode || _satellites[i].first == lastNode){
-                    _satellites[i].second.setActive(active);
-                    _satellites[i].second.setHidden(hidden);
-                    if(_satellites[i].first == lastNode){
+            for(unsigned i = 0; i < sats.size(); i++){
+                sats[i].second.setIsEndOpen(false);
+                if(sats[i].first > lastNode){
+                    break;
+                }
+                if(sats[i].first == firstNode || sats[i].first == lastNode){
+                    sats[i].second.setActive(active);
+                    sats[i].second.setHidden(hidden);
+                    if(sats[i].first == lastNode){
                         if(!endOpen){
                             endOpen = true;
                         } else {
                             endOpen = false;
-                            std::cout << "ENNNNNNNNNNNDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDOPEN\n";
-                            _satellites[i].second.setIsEndOpen(true);
-                            _satellites[i].second.setAmount(amount);
-                            _satellites[i].second.setAngle(angle);
+                            sats[i].second.setIsEndOpen(true);
+                            sats[i].second.setAmount(amount);
+                            sats[i].second.setAngle(angle);
                         }
+                    }
+                    if(sats[i].first == firstNode){
+                        sats[i].second.setAmount(amount);
+                        sats[i].second.setAngle(angle);
                     }
                 }
             }

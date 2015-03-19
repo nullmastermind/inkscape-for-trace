@@ -76,7 +76,7 @@ class Pointwise
         void recalculate_for_new_pwd2(Piecewise<D2<SBasis> > A);
         void new_pwd_append(Piecewise<D2<SBasis> > A);
         void new_pwd_sustract(Piecewise<D2<SBasis> > A);
-        void set_extremes(bool active, bool hidden, double amount, double angle);
+        void set_extremes(std::vector<std::pair<unsigned int,Satellite> > sats, bool active, bool hidden, double amount, double angle);
         void setPathInfo();
         void setPathInfo(Piecewise<D2<SBasis> >);
         unsigned int getSubPathIndex(unsigned int index) const;

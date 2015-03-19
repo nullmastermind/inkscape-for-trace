@@ -119,7 +119,7 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
             Geom::Path::const_iterator curve_end = curve_endit;
             --curve_end;
             int counter = 0;
-            unsigned int steps = 0;
+            unsigned int steps = chamfer_steps;
             while (curve_it1 != curve_endit) {
                 if((*curve_it1).isDegenerate() || (*curve_it1).isDegenerate()){
                     g_warning("LPE Fillet not handle degenerate curves.");
@@ -354,7 +354,6 @@ void LPEFilletChamfer::updateSatelliteType(Geom::SatelliteType satellitetype)
 
 void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
 {
-    std::cout << "dobeforestart\n";
     SPLPEItem * splpeitem = const_cast<SPLPEItem *>(lpeItem);
     SPShape * shape = dynamic_cast<SPShape *>(splpeitem);
     if (shape) {
@@ -422,7 +421,6 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
     } else {
         g_warning("LPE Fillet can only be applied to shapes (not groups).");
     }
-    std::cout << "dobeforeend\n";
 }
 
 void
@@ -430,7 +428,6 @@ LPEFilletChamfer::adjustForNewPath(std::vector<Geom::Path> const &path_in)
 {
     if (!path_in.empty() && pointwise) {
         pointwise->recalculate_for_new_pwd2(paths_to_pw(pathv_to_linear_and_cubic_beziers(path_in)));
-        pointwise->set_extremes(false,true,0.0,0.0);
         satellitepairarrayparam_values.set_pointwise(pointwise);
     }
 }
@@ -438,7 +435,6 @@ LPEFilletChamfer::adjustForNewPath(std::vector<Geom::Path> const &path_in)
 std::vector<Geom::Path>
 LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
 {
-    std::cout << "doEffect_pathstart\n";
     const double gapHelper = 0.00001;
     std::vector<Geom::Path> pathvector_out;
     unsigned int counter = 0;
@@ -677,7 +673,6 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
         }
         pathvector_out.push_back(path_out);
     }
-    std::cout << "doEffect_pathendt\n";
     return pathvector_out;
 }
 
