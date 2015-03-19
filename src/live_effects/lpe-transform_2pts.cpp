@@ -17,9 +17,7 @@
 #include <2geom/transforms.h>
 #include <2geom/path.h>
 #include "sp-path.h"
-#include "ui/tools-switch.h"
 #include "ui/icon-names.h"
-#include "inkscape.h"
 
 #include <glibmm/i18n.h>
 
@@ -73,9 +71,9 @@ LPETransform2Pts::doOnApply(SPLPEItem const* lpeitem)
         lastKnot.param_set_value(nnodes);
     }
     start.param_update_default(A);
-    start.param_set_and_write_default();
+    start.param_set_default();
     end.param_update_default(B);
-    end.param_set_and_write_default();
+    end.param_set_default();
 }
 
 void
@@ -153,16 +151,13 @@ LPETransform2Pts::updateIndex()
             D = originalPV[0][(int)lastKnot-2].finalPoint();
         }
         start.param_update_default(C);
-        start.param_set_and_write_default();
+        start.param_set_default();
         end.param_update_default(D);
-        end.param_set_and_write_default();
+        end.param_set_default();
         start.param_update_default(A);
         end.param_update_default(B);
-        start.param_set_and_write_default();
-        end.param_set_and_write_default();
-        SPDesktop * desktop = SP_ACTIVE_DESKTOP;
-        tools_switch(desktop, TOOLS_SELECT);
-        tools_switch(desktop, TOOLS_NODES);
+        start.param_set_default();
+        end.param_set_default();
     }
 }
 
@@ -185,11 +180,8 @@ LPETransform2Pts::reset()
     }
     start.param_update_default(A);
     end.param_update_default(B);
-    start.param_set_and_write_default();
-    end.param_set_and_write_default();
-    SPDesktop * desktop = SP_ACTIVE_DESKTOP;
-    tools_switch(desktop, TOOLS_SELECT);
-    tools_switch(desktop, TOOLS_NODES);
+    start.param_set_default();
+    end.param_set_default();
 }
 
 Gtk::Widget *LPETransform2Pts::newWidget()
