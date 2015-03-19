@@ -17,7 +17,7 @@
 #include "live_effects/lpegroupbbox.h"
 #include "live_effects/parameter/parameter.h"
 #include "live_effects/parameter/togglebutton.h"
-#include "live_effects/parameter/pointreseteable.h"
+#include "live_effects/parameter/point.h"
 
 namespace Inkscape {
 namespace LivePathEffect {
@@ -44,8 +44,8 @@ protected:
 
 private:
     ToggleButtonParam fromOriginalWidth;
-    PointReseteableParam start;
-    PointReseteableParam end;
+    PointParam start;
+    PointParam end;
     ScalarParam firstKnot;
     ScalarParam lastKnot;
     bool fromOriginalWidthToogler;
