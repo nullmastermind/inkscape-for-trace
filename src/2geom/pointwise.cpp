@@ -36,32 +36,148 @@
 
 namespace Geom {
 
-Pointwise::Pointwise(Piecewise<D2<SBasis> > pwd2, std::vector<std::pair<unsigned int,Satellite> > satellites)
-        : _pwd2(pwd2), _satellites(satellites)
+Pointwise::Pointwise(Piecewise<D2<SBasis> > pwd2)
+        : _pwd2(pwd2),_pathInfo(NULL), _satellites(NULL)
 {
+    setPathInfo();
 };
 
 Pointwise::~Pointwise(){};
 
-std::vector<std::pair<unsigned int,Satellite> > 
-Pointwise::getSatellites(){
-    return _satellites;
-}
-
-void
-Pointwise::setSatellites(std::vector<std::pair<unsigned int,Satellite> > sat){
-    _satellites = sat;
-}
-
 Piecewise<D2<SBasis> >
-Pointwise::getPwd2(){
+Pointwise::getPwd2() const
+{
     return _pwd2;
 }
 
 void
-Pointwise::setPwd2(Piecewise<D2<SBasis> > pwd2_in){
+Pointwise::setPwd2(Piecewise<D2<SBasis> > pwd2_in)
+{
     _pwd2 = pwd2_in;
+    setPathInfo();
 }
+
+std::vector<std::pair<unsigned int,Satellite> >
+Pointwise::getSatellites() const
+{
+    return _satellites;
+}
+
+void
+Pointwise::setSatellites(std::vector<std::pair<unsigned int,Satellite> > sats)
+{
+    _satellites = sats;
+}
+
+//START QUESTION Next functions maybe is beter land outside the class?
+void
+Pointwise::setPathInfo()
+{
+    setPathInfo(_pwd2);
+}
+
+void
+Pointwise::setPathInfo(Piecewise<D2<SBasis> > pwd2)
+{
+    _pathInfo.clear();
+    std::vector<Geom::Path> path_in = path_from_piecewise(remove_short_cuts(pwd2,0.1), 0.001);
+    unsigned int counter = 0;
+    for (PathVector::const_iterator path_it = path_in.begin(); path_it != path_in.end(); ++path_it) {
+        if (path_it->empty()){
+            continue;
+        }
+        Geom::Path::const_iterator curve_it1 = path_it->begin();
+        Geom::Path::const_iterator curve_endit = path_it->end_default();
+        if (path_it->closed()) {
+          const Curve &closingline = path_it->back_closed(); 
+          if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
+            curve_endit = path_it->end_open();
+          }
+        }
+        while (curve_it1 != curve_endit) {
+            ++curve_it1;
+            counter++;
+        }
+        if(path_it->closed()){
+            _pathInfo.push_back(std::make_pair(counter-1,true));
+        } else {
+            _pathInfo.push_back(std::make_pair(counter-1,false));
+        }
+    }
+}
+
+unsigned int
+Pointwise::getSubPathIndex(unsigned int index) const
+{
+    for(unsigned int i = 0; i < _pathInfo.size(); i++){
+        if(index <= _pathInfo[i].first){
+            return i;
+        }
+    }
+    return 0;
+}
+
+unsigned int
+Pointwise::getLast(unsigned int index) const
+{
+    for(unsigned int i = 0; i < _pathInfo.size(); i++){
+        if(index <= _pathInfo[i].first){
+            return _pathInfo[i].first;
+        }
+    }
+    return 0;
+}
+
+unsigned int
+Pointwise::getFirst(unsigned int index) const
+{
+    for(unsigned int i = 0; i < _pathInfo.size(); i++){
+        if(index <= _pathInfo[i].first){
+            if(i==0){
+                return 0;
+            } else {
+                return _pathInfo[i-1].first + 1;
+            }
+        }
+    }
+    return 0;
+}
+
+boost::optional<unsigned int>
+Pointwise::getPrevious(unsigned int index) const
+{
+    if(getFirst(index) == index && getIsClosed(index)){
+        return getLast(index);
+    }
+    if(getFirst(index) == index && !getIsClosed(index)){
+        return boost::none;
+    }
+    return index - 1;
+}
+
+boost::optional<unsigned int>
+Pointwise::getNext(unsigned int index) const
+{
+    if(getLast(index) == index && getIsClosed(index)){
+        return getFirst(index);
+    }
+    if(getLast(index) == index && !getIsClosed(index)){
+        return boost::none;
+    }
+    return index + 1;
+}
+
+bool
+Pointwise::getIsClosed(unsigned int index) const
+{
+    for(unsigned int i = 0; i < _pathInfo.size(); i++){
+        if(index <= _pathInfo[i].first){
+            return _pathInfo[i].second;
+        }
+    }
+    return false;
+}
+//END QUESTION
 
 void
 Pointwise::recalculate_for_new_pwd2(Piecewise<D2<SBasis> > A)
@@ -76,90 +192,132 @@ Pointwise::recalculate_for_new_pwd2(Piecewise<D2<SBasis> > A)
 void 
 Pointwise::new_pwd_append(Piecewise<D2<SBasis> > A)
 {
-    int counter = 0;
-    double last = -1;
-    std::vector<std::pair<unsigned int,Satellite> > satellites;
-        std::cout << _pwd2.size() << "pwsize\n";
-        std::cout << A.size() << "Asize\n";
-    for(unsigned i = 0; i < _satellites.size(); i++){
-        std::cout << _satellites[i].first << "firat\n";
-        std::cout << _satellites[i].first-counter << "firat\n";
-        
-        if(_satellites.size() > i+1 && !_satellites[i+1].second.getIsStart() && !are_near(_pwd2[_satellites[i].first].at0(),A[_satellites[i].first-counter].at0(),0.001)){
-        std::cout << "removed\n";
-            if(last != _satellites[i].first){
-                std::cout << "removedtrue\n";
-                counter++;
-                last = _satellites[i].first;
+    //not working
+    PathVector pathv = path_from_piecewise(remove_short_cuts(_pwd2, 0.1), 0.001);
+    PathVector pathv_new =  path_from_piecewise(remove_short_cuts(A, 0.1), 0.001);
+    unsigned int counter = 0;
+    unsigned int counterPaths = 0;
+    unsigned int counterCurves = 0;
+    for (PathVector::const_iterator path_it = pathv.begin();
+         path_it != pathv.end(); ++path_it) {
+        if (path_it->empty()) {
+            counterPaths++;
+            counter++;
+            continue;
+        }
+        Geom::Path::const_iterator curve_it1 = path_it->begin();
+        Geom::Path::const_iterator curve_it2 = ++(path_it->begin());
+        Geom::Path::const_iterator curve_endit = path_it->end_default();
+        if (path_it->closed() && path_it->back_closed().isDegenerate()) {
+            const Curve &closingline = path_it->back_closed();
+            if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
+                curve_endit = path_it->end_open();
             }
-        } else{
-            std::cout << "added\n";
-            satellites.push_back(std::make_pair(_satellites[i].first-counter,_satellites[i].second));
+        }
+        counterCurves = 0;
+        while (curve_it2 != curve_endit) {
+            counter++;
+            counterCurves++;
+            ++curve_it1;
+            ++curve_it2;
+        }
+        if(!are_near(curve_it2->pointAt(1),pathv_new[counterPaths].finalPoint(),0.001)){
+            pathv_new[counterPaths] = pathv_new[counterPaths].reverse();
+        }
+        counterPaths++;
+    }
+    A = paths_to_pw(pathv_new);
+    
+    counter = 0;
+    std::vector<std::pair<unsigned int,Satellite> > sats;
+    unsigned int start = 0;
+    for(unsigned i = 0; i < A.size(); i++){
+        if(/*getIsStart(i, A) &&/*/ i!=0 ){
+            if(!are_near(A[i-1].at0(),A[start].at0(),0.001)){
+                sats.back().second.setIsEndOpen(true);
+            }
+            start = i;
+        }
+        if(!are_near(_pwd2[i-counter].at0(),A[i].at0(),0.001)){
+            counter++;
+            bool isEndOpen = false;
+            bool active = true;
+            bool hidden = false;
+            bool flexible = true;
+            bool mirror_knots = true;
+            double amount = 0.0;
+            double degrees = 0.0;
+            int steps = 0;
+            Satellite sat(F, flexible, isEndOpen, active, mirror_knots, hidden, amount, degrees, steps);
+            sats.push_back(std::make_pair(i,sat));
+        } else {
+            sats[i-counter].second.setIsEndOpen(false);
+            sats.push_back(std::make_pair(i,_satellites[i-counter].second));
         }
     }
-    _pwd2 = A;
-    _satellites = satellites;
+    setPwd2(A);
+    setSatellites(sats);
 }
+
 void
 Pointwise::new_pwd_sustract(Piecewise<D2<SBasis> > A)
 {
     int counter = 0;
-    double last = -1;
-    double start = false;
-    double hideLast = false;
-    std::vector<std::pair<unsigned int,Satellite> > satellites;
-        std::cout << _pwd2.size() << "pwsize\n";
-        std::cout << A.size() << "Asize\n";
+    std::vector<std::pair<unsigned int,Satellite> > sats;
+    Piecewise<D2<SBasis> > pwd2 = _pwd2;
+    setPwd2(A);
     for(unsigned i = 0; i < _satellites.size(); i++){
-        std::cout << _satellites[i].first << "firat\n";
-        std::cout << _satellites[i].first-counter << "firat\n";
-        if((_satellites[i].first != findLastIndex(i) && !_satellites[findLastIndex(i)].second.getIsClosing()) && !are_near(_pwd2[_satellites[i].first].at0(),A[_satellites[i].first-counter].at0(),0.001)){
-        std::cout << "removed\n";
-            if(last != _satellites[i].first){
-                std::cout << "removedtrue\n";
-                counter++;
-                last = _satellites[i].first;
-                if(_satellites[i].second.getIsClosing()){
-                    satellites = setBackClosing(satellites);
-                }
-                if(_satellites[i].second.getIsStart()){
-                    start = true;
-                }
-                if(_satellites[i].second.getHidden()){
-                    hideLast = true;
-                } else {
-                    hideLast = false;
-                }
-            }
-        } else{
-            std::cout << "added\n";
-            if(start){
-                setStarting(_satellites[i].first);
-                start = false;
-            }
-            if(_satellites[i].second.getIsStart() && hideLast){
-                satellites = setBackHidden(satellites);
-                hideLast = false;
-            }
-            if(last != _satellites[i].first && _satellites[i].first == findLastIndex(i) && !_satellites[findLastIndex(i)].second.getIsClosing()){
-                last = _satellites[i].first;
-                counter++;
-            }
-            satellites.push_back(std::make_pair(_satellites[i].first-counter,_satellites[i].second));
+        if(!_satellites[i].second.getIsEndOpen() && (getLast(_satellites[i].first-counter) < _satellites[i].first-counter || !are_near(pwd2[_satellites[i].first].at0(),A[_satellites[i].first-counter].at0(),0.001))){
+            counter++;
+        } else {
+            sats.push_back(std::make_pair(_satellites[i].first-counter,_satellites[i].second));
         }
     }
-    _pwd2 = A;
-    _satellites = satellites;
+    setSatellites(sats);
+}
+
+void
+Pointwise::set_extremes(bool active, bool hidden, double amount, double angle)
+{
+    for(unsigned int i = 0; i < _pathInfo.size(); i++){
+        unsigned int firstNode = getFirst(_pathInfo[i].first);
+        unsigned int lastNode = getLast(_pathInfo[i].first);
+        std::cout << firstNode << "FIRSTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT\n";
+        std::cout << lastNode << "LASTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT\n";
+        if(!getIsClosed(lastNode)){
+            std::cout << "CLOSSEDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD\n";
+            bool endOpen = false;
+            for(unsigned i = 0; i < _satellites.size(); i++){
+                _satellites[i].second.setIsEndOpen(false);
+                if(_satellites[i].first == firstNode || _satellites[i].first == lastNode){
+                    _satellites[i].second.setActive(active);
+                    _satellites[i].second.setHidden(hidden);
+                    if(_satellites[i].first == lastNode){
+                        if(!endOpen){
+                            endOpen = true;
+                        } else {
+                            endOpen = false;
+                            std::cout << "ENNNNNNNNNNNDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDOPEN\n";
+                            _satellites[i].second.setIsEndOpen(true);
+                            _satellites[i].second.setAmount(amount);
+                            _satellites[i].second.setAngle(angle);
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 double 
-Pointwise::rad_to_len(double A,  std::pair<unsigned int,Geom::Satellite> satellite)
+Pointwise::rad_to_len(double A,  std::pair<unsigned int,Geom::Satellite> sat) const
 {
     double len = 0;
-    boost::optional<Geom::D2<Geom::SBasis> > d2_in = getCurveIn(satellite);
-    if(d2_in){
-        Geom::D2<Geom::SBasis> d2_out = _pwd2[satellite.first];
-        Piecewise<D2<SBasis> > offset_curve0 = Piecewise<D2<SBasis> >(*d2_in)+rot90(unitVector(derivative(*d2_in)))*(A);
+    boost::optional<unsigned int> d2_prev_index = getPrevious(sat.first);
+    if(d2_prev_index){
+        Geom::D2<Geom::SBasis> d2_in =  _pwd2[*d2_prev_index];
+        Geom::D2<Geom::SBasis> d2_out = _pwd2[sat.first];
+        Piecewise<D2<SBasis> > offset_curve0 = Piecewise<D2<SBasis> >(d2_in)+rot90(unitVector(derivative(d2_in)))*(A);
         Piecewise<D2<SBasis> > offset_curve1 = Piecewise<D2<SBasis> >(d2_out)+rot90(unitVector(derivative(d2_out)))*(A);
         Geom::Path p0 = path_from_piecewise(offset_curve0, 0.1)[0];
         Geom::Path p1 = path_from_piecewise(offset_curve1, 0.1)[0];
@@ -167,10 +325,10 @@ Pointwise::rad_to_len(double A,  std::pair<unsigned int,Geom::Satellite> satelli
         if(cs.size() > 0){
             Point cp =p0(cs[0].ta);
             double p0pt = nearest_point(cp, d2_out);
-            len = satellite.second.toSize(p0pt,d2_out);
+            len = sat.second.toSize(p0pt,d2_out);
         } else {
             if(A > 0){
-                len = rad_to_len(A * -1, satellite);
+                len = rad_to_len(A * -1, sat);
             }
         }
     }
@@ -178,18 +336,19 @@ Pointwise::rad_to_len(double A,  std::pair<unsigned int,Geom::Satellite> satelli
 }
 
 double 
-Pointwise::len_to_rad(double A,  std::pair<unsigned int,Geom::Satellite> satellite)
+Pointwise::len_to_rad(double A,  std::pair<unsigned int,Geom::Satellite> sat) const
 {
-    boost::optional<Geom::D2<Geom::SBasis> > d2_in = getCurveIn(satellite);
-    if(d2_in){
-        Geom::D2<Geom::SBasis> d2_out = _pwd2[satellite.first];
-        double time_in = satellite.second.getOpositeTime(A, *d2_in);
-        double time_out = satellite.second.toTime(A,d2_out);
-        Geom::Point startArcPoint = (*d2_in).valueAt(time_in);
+    boost::optional<unsigned int> d2_prev_index = getPrevious(sat.first);
+    if(d2_prev_index){
+        Geom::D2<Geom::SBasis> d2_in =  _pwd2[*d2_prev_index];
+        Geom::D2<Geom::SBasis> d2_out = _pwd2[sat.first];
+        double time_in = sat.second.getOpositeTime(A, d2_in);
+        double time_out = sat.second.toTime(A,d2_out);
+        Geom::Point startArcPoint = (d2_in).valueAt(time_in);
         Geom::Point endArcPoint = d2_out.valueAt(time_out);
         Piecewise<D2<SBasis> > u;
         u.push_cut(0);
-        u.push((*d2_in), 1);
+        u.push((d2_in), 1);
         Geom::Curve * A = path_from_piecewise(u, 0.1)[0][0].duplicate();
         Piecewise<D2<SBasis> > u2;
         u2.push_cut(0);
@@ -198,7 +357,7 @@ Pointwise::len_to_rad(double A,  std::pair<unsigned int,Geom::Satellite> satelli
         Curve *knotCurve1 = A->portion(0, time_in);
         Curve *knotCurve2 = B->portion(time_out, 1);
         Geom::CubicBezier const *cubic1 = dynamic_cast<Geom::CubicBezier const *>(&*knotCurve1);
-        Ray ray1(startArcPoint, (*d2_in).valueAt(1));
+        Ray ray1(startArcPoint, (d2_in).valueAt(1));
         if (cubic1) {
             ray1.setPoints((*cubic1)[2], startArcPoint);
         }
@@ -207,7 +366,7 @@ Pointwise::len_to_rad(double A,  std::pair<unsigned int,Geom::Satellite> satelli
         if (cubic2) {
             ray2.setPoints(endArcPoint, (*cubic2)[1]);
         }
-        bool ccwToggle = cross((*d2_in).valueAt(1) - startArcPoint, endArcPoint - startArcPoint) < 0;
+        bool ccwToggle = cross((d2_in).valueAt(1) - startArcPoint, endArcPoint - startArcPoint) < 0;
         double distanceArc = Geom::distance(startArcPoint,middle_point(startArcPoint,endArcPoint));
         double angleBetween = angle_between(ray1, ray2, ccwToggle);
         double divisor = std::sin(angleBetween/2.0);
@@ -216,52 +375,6 @@ Pointwise::len_to_rad(double A,  std::pair<unsigned int,Geom::Satellite> satelli
         }
     }
     return 0;
-}
-
-boost::optional<Geom::D2<Geom::SBasis> >
-Pointwise::getCurveIn(std::pair<unsigned int,Satellite> sat){
-    //curve out = sat.first;
-    std::vector<Geom::Path> path_in_processed = path_from_piecewise(_pwd2, 0.001);
-    unsigned int counterTotal = 0;
-    for (PathVector::const_iterator path_it = path_in_processed.begin(); path_it != path_in_processed.end(); ++path_it) {
-        if (path_it->empty()){
-            continue;
-        }
-        Geom::Path::const_iterator curve_it1 = path_it->begin();
-        Geom::Path::const_iterator curve_endit = path_it->end_default();
-        if (path_it->closed()) {
-          const Curve &closingline = path_it->back_closed(); 
-          // the closing line segment is always of type 
-          // LineSegment.
-          if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
-            // closingline.isDegenerate() did not work, because it only checks for
-            // *exact* zero length, which goes wrong for relative coordinates and
-            // rounding errors...
-            // the closing line segment has zero-length. So stop before that one!
-            curve_endit = path_it->end_open();
-          }
-        }
-        Geom::Path::const_iterator curve_end = curve_endit;
-        --curve_end;
-        unsigned int counter = 0;
-        while (curve_it1 != curve_endit) {
-            if(counterTotal == sat.first){
-                if (counter==0) {
-                    if (path_it->closed()) {
-                        return (*curve_end).toSBasis();
-                    } else {
-                        return boost::none;
-                    }
-                } else {
-                        return (*path_it)[counter - 1].toSBasis();
-                }
-            }
-            ++curve_it1;
-            counter++;
-            counterTotal++;
-        }
-    }
-    return boost::none;
 }
 
 std::vector<Satellite> 
@@ -281,96 +394,13 @@ Pointwise::findSatellites(unsigned int A, int B) const
     return ret;
 }
 
-std::vector<std::pair<unsigned int,Satellite> >
-Pointwise::setBackHidden(std::vector<std::pair<unsigned int,Satellite> > sat)
-{
-    for(unsigned i = 0; i < sat.size(); i++){
-        if(sat[i].first == sat.back().first ){
-            sat[i].second.setHidden(true);
-        }
-    }
-    return sat;
-}
-
-std::vector<std::pair<unsigned int,Satellite> >
-Pointwise::setBackInactive(std::vector<std::pair<unsigned int,Satellite> > sat)
-{
-    for(unsigned i = 0; i < sat.size(); i++){
-        if(sat[i].first == sat.back().first ){
-            sat[i].second.setHidden(true);
-        }
-    }
-    return sat;
-}
-
-std::vector<std::pair<unsigned int,Satellite> >
-Pointwise::setBackClosing(std::vector<std::pair<unsigned int,Satellite> > sat)
-{
-    for(unsigned i = 0; i < sat.size(); i++){
-        if(sat[i].first == sat.back().first ){
-            sat[i].second.setIsClosing(true);
-        }
-    }
-    return sat;
-}
-
-void 
-Pointwise::setStarting(unsigned int A)
-{
-    for(unsigned i = 0; i < _satellites.size(); i++){
-        if(_satellites[i].first == A){
-            _satellites[i].second.setIsStart(true);
-        }
-    }
-}
-
-std::vector<Satellite> 
-Pointwise::findClosingSatellites(unsigned int A) const
-{
-    std::vector<Satellite> ret;
-    bool finded = false;
-    for(unsigned i = 0; i < _satellites.size(); i++){
-        if(finded && _satellites[i].second.getIsStart()){
-            return ret;
-        }
-        if(finded && _satellites[i].second.getIsClosing()){
-            ret.push_back(_satellites[i].second);
-        }
-        if(_satellites[i].first == A){
-            finded = true;
-        }
-    }
-    return ret;
-}
-
-double 
-Pointwise::findLastIndex(unsigned int A) const
-{
-    double ret = -1;
-    bool finded = false;
-    for(unsigned i = 0; i < _satellites.size(); i++){
-        if(finded && _satellites[i].second.getIsStart()){
-            return _satellites[i].first;
-        }
-        if(_satellites[i].first == A){
-            finded = true;
-        }
-    }
-    return ret;
-}
-
 std::vector<Satellite> 
 Pointwise::findPeviousSatellites(unsigned int A, int B) const
 {
+    boost::optional<unsigned int> previous = getPrevious(A);
     std::vector<Satellite> ret;
-    for(unsigned i = 0; i < _satellites.size(); i++){
-        if(_satellites[i].first == A){
-            if(!_satellites[i].second.getIsStart()){
-                ret = findSatellites(_satellites[i-1].first, B);
-            } else {
-                ret = findClosingSatellites(_satellites[i].first);
-            }
-        }
+    if(previous){
+        ret = findSatellites(*previous,B);
     }
     return ret;
 }

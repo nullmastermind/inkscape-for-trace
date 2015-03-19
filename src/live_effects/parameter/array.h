@@ -119,9 +119,7 @@ protected:
         str << "*";
         str << nVector.second.getIsTime();
         str << "*";
-        str << nVector.second.getIsClosing();
-        str << "*";
-        str << nVector.second.getIsStart();
+        str << nVector.second.getIsEndOpen();
         str << "*";
         str << nVector.second.getActive();
         str << "*";
@@ -134,6 +132,7 @@ protected:
         str << nVector.second.getAngle();
         str << "*";
         str << nVector.second.getSteps();
+        std::cout << str.str() << "SATEEELIITE\n";
     }
 
     StorageType readsvg(const gchar * str);

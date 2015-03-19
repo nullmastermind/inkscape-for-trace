@@ -54,19 +54,18 @@ sp_svg_satellite_read_d(gchar const *str, Geom::Satellite *sat){
         return 0;
     }
     gchar ** strarray = g_strsplit(str, "*", 0);
-    if(strarray[9] && !strarray[10]){
+    if(strarray[8] && !strarray[9]){
         sat->setSatelliteType(strarray[0]);
         sat->setIsTime(strncmp(strarray[1],"1",1) == 0);
-        sat->setIsClosing(strncmp(strarray[2],"1",1) == 0);
-        sat->setIsStart(strncmp(strarray[3],"1",1) == 0);
-        sat->setActive(strncmp(strarray[4],"1",1) == 0);
-        sat->setHasMirror(strncmp(strarray[5],"1",1) == 0);
-        sat->setHidden(strncmp(strarray[6],"1",1) == 0);
+        sat->setIsEndOpen(strncmp(strarray[2],"1",1) == 0);
+        sat->setActive(strncmp(strarray[3],"1",1) == 0);
+        sat->setHasMirror(strncmp(strarray[4],"1",1) == 0);
+        sat->setHidden(strncmp(strarray[5],"1",1) == 0);
         double amount,angle;
         float stepsTmp;
-        sp_svg_number_read_d(strarray[7], &amount);
-        sp_svg_number_read_d(strarray[8], &angle);
-        sp_svg_number_read_f(strarray[9], &stepsTmp);
+        sp_svg_number_read_d(strarray[6], &amount);
+        sp_svg_number_read_d(strarray[7], &angle);
+        sp_svg_number_read_f(strarray[8], &stepsTmp);
         unsigned int steps = (unsigned int)stepsTmp;
         sat->setAmount(amount);
         sat->setAngle(angle);

@@ -52,7 +52,7 @@ void SatellitePairArrayParam::set_oncanvas_looks(SPKnotShapeType shape,
 void SatellitePairArrayParam::set_pointwise(Geom::Pointwise *pointwise)
 {
     last_pointwise = pointwise;
-    std::cout << pointwise->getSatellites().size() << "setted\n";
+    param_set_and_write_new_value(last_pointwise->getSatellites());
 }
 
 void SatellitePairArrayParam::set_document_unit(Glib::ustring value_document_unit)
@@ -106,20 +106,19 @@ void SatellitePairArrayParam::updateCanvasIndicators(bool mirror)
         double size_out = _vector[i].second.getSize(pwd2[_vector[i].first]);
         double lenght_out = Geom::length(pwd2[_vector[i].first], Geom::EPSILON);
         double lenght_in = 0;
-        boost::optional<Geom::D2<Geom::SBasis> > curve_in = last_pointwise->getCurveIn(_vector[i]);
-        if(curve_in){
-            lenght_in = Geom::length(*curve_in, Geom::EPSILON);
+        boost::optional<unsigned int> d2_prev_index = last_pointwise->getPrevious(_vector[i].first);
+        if(d2_prev_index){
+            lenght_in = Geom::length(pwd2[*d2_prev_index], Geom::EPSILON);
         }
         if(mirror == true){
-            if(curve_in){
-                d2 = *curve_in;
-                pos = _vector[i].second.getOpositeTime(size_out,*curve_in);
+            if(d2_prev_index){
+                pos = _vector[i].second.getOpositeTime(size_out,pwd2[*d2_prev_index]);
                 if(lenght_out < size_out){
                     overflow = true;
                 }
             }
         } else {
-            pos = _vector[i].second.getTime(pwd2[_vector[i].first]);
+            pos = _vector[i].second.getTime(d2);
             if(lenght_in < size_out){
                 overflow = true;
             }
@@ -202,19 +201,17 @@ void SatellitePairArrayParam::addKnotHolderEntities(KnotHolder *knotholder,
         SPItem *item,
         bool mirror)
 {
-    std::cout << _vector.size() << "recalculated\n";
     recalculate_knots();
-    std::cout << _vector.size() << "recalculated\n";
     for (unsigned int i = 0; i < _vector.size(); ++i) {
+        int iPlus = i;
+        if( mirror == true){
+            iPlus = i + _vector.size();
+        }
         if(!_vector[i].second.getActive() || _vector[i].second.getHidden()){
             continue;
         }
         if(!_vector[i].second.getHasMirror() && mirror == true){
             continue;
-        }
-        int iPlus = i;
-        if( mirror == true){
-            iPlus = i + _vector.size();
         }
         using namespace Geom;
         SatelliteType type = _vector[i].second.getSatelliteType();
@@ -289,19 +286,20 @@ void FilletChamferKnotHolderEntity::knot_set(Point const &p,
     Geom::Pointwise* pointwise = _pparam->last_pointwise;
     Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = pointwise->getPwd2();
     if(_pparam->_vector.size() <= _index){
-        boost::optional<Geom::D2<Geom::SBasis> > d2_in = pointwise->getCurveIn(satellite);
-        if(d2_in){
-            double mirrorTime = Geom::nearest_point(s, *d2_in);
+        boost::optional<unsigned int> d2_prev_index = pointwise->getPrevious(satellite.first);
+        if(d2_prev_index){
+            Geom::D2<Geom::SBasis> d2_in = pwd2[*d2_prev_index];
+            double mirrorTime = Geom::nearest_point(s, d2_in);
             double timeStart = 0;
             std::vector<Satellite> satVector = pointwise->findPeviousSatellites(satellite.first,1);
             if(satVector.size()>0){
-                timeStart =  satVector[0].getTime(*d2_in);
+                timeStart =  satVector[0].getTime(d2_in);
             }
             if(timeStart > mirrorTime){
                 mirrorTime = timeStart;
             }
-            double size = satellite.second.toSize(mirrorTime, *d2_in);
-            double amount = Geom::length(*d2_in, Geom::EPSILON) - size;
+            double size = satellite.second.toSize(mirrorTime, d2_in);
+            double amount = Geom::length(d2_in, Geom::EPSILON) - size;
             if(satellite.second.getIsTime()){
                 amount = satellite.second.toTime(amount,pwd2[satellite.first]);
             }
@@ -337,15 +335,13 @@ FilletChamferKnotHolderEntity::knot_get() const
     }
     Geom::Pointwise* pointwise = _pparam->last_pointwise;
     Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = pointwise->getPwd2();
-    std::cout << pointwise->getSatellites().size() << "knotGet\n";
-    std::cout << satellite.first << "sindex\n";
-    std::cout << _index << "index\n";
     if( _index >= _pparam->_vector.size()){
         tmpPoint = satellite.second.getPosition(pwd2[satellite.first]);
-        boost::optional<Geom::D2<Geom::SBasis> > d2_in = pointwise->getCurveIn(satellite);
-        if(d2_in){
+        boost::optional<unsigned int> d2_prev_index = pointwise->getPrevious(satellite.first);
+        if(d2_prev_index){
+            Geom::D2<Geom::SBasis> d2_in =  pwd2[*d2_prev_index];
             double s = satellite.second.getSize(pwd2[satellite.first]);
-            double t = satellite.second.getOpositeTime(s,*d2_in);
+            double t = satellite.second.getOpositeTime(s,d2_in);
             if(t > 1){
                 t = 1;
             }
@@ -355,12 +351,12 @@ FilletChamferKnotHolderEntity::knot_get() const
             double timeStart = 0;
             std::vector<Satellite> satVector = pointwise->findPeviousSatellites(satellite.first,1);
             if(satVector.size()>0){
-                timeStart =  satVector[0].getTime(*d2_in);
+                timeStart =  satVector[0].getTime(d2_in);
             }
             if(timeStart > t){
                 t = timeStart;
             }
-            tmpPoint = (*d2_in).valueAt(t);
+            tmpPoint = (d2_in).valueAt(t);
         }
     } else {
         tmpPoint = satellite.second.getPosition(pwd2[satellite.first]);
@@ -430,11 +426,12 @@ void FilletChamferKnotHolderEntity::knot_click(guint state)
         if(!_pparam->use_distance && !_pparam->_vector.at(index).second.getIsTime()){
              amount = _pparam->last_pointwise->len_to_rad(amount, _pparam->_vector.at(index));
         }
-        boost::optional<Geom::D2<Geom::SBasis> > d2_in = _pparam->last_pointwise->getCurveIn(_pparam->_vector.at(index));
         bool aprox = false;
         D2<SBasis> d2_out = _pparam->last_pointwise->getPwd2()[index];
-        if(d2_in){
-            aprox = ((*d2_in)[0].degreesOfFreedom() != 2 || d2_out[0].degreesOfFreedom() != 2) && !_pparam->use_distance?true:false;
+        boost::optional<unsigned int> d2_prev_index = _pparam->last_pointwise->getPrevious(_pparam->_vector.at(index).first);
+        if(d2_prev_index){
+            Geom::D2<Geom::SBasis> d2_in =  _pparam->last_pointwise->getPwd2()[*d2_prev_index];
+            aprox = ((d2_in)[0].degreesOfFreedom() != 2 || d2_out[0].degreesOfFreedom() != 2) && !_pparam->use_distance?true:false;
         }
         Inkscape::UI::Dialogs::FilletChamferPropertiesDialog::showDialog(
             this->desktop, amount , this, _pparam->unit, _pparam->use_distance, aprox, _pparam->documentUnit,_pparam->_vector.at(index).second);

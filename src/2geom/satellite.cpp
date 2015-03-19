@@ -40,13 +40,13 @@ namespace Geom {
 
 Satellite::Satellite(){};
 
-Satellite::Satellite(SatelliteType satellitetype, bool isTime, bool isClosing, bool isStart, bool active, bool hasMirror, bool hidden, double amount, double angle, unsigned int steps)
-        : _satellitetype(satellitetype), _isTime(isTime), _isClosing(isClosing), _isStart(isStart), _active(active), _hasMirror(hasMirror), _hidden(hidden), _amount(amount), _angle(angle), _steps(steps){};
+Satellite::Satellite(SatelliteType satellitetype, bool isTime, bool isEndOpen, bool active, bool hasMirror, bool hidden, double amount, double angle, unsigned int steps)
+        : _satellitetype(satellitetype), _isTime(isTime), _isEndOpen(isEndOpen), _active(active), _hasMirror(hasMirror), _hidden(hidden), _amount(amount), _angle(angle), _steps(steps){};
 
 Satellite::~Satellite() {};
 
 double
-Satellite::toTime(double A,Geom::D2<Geom::SBasis> d2_in)
+Satellite::toTime(double A,Geom::D2<Geom::SBasis> d2_in) const
 {
     if(!d2_in.isFinite() ||  d2_in.isZero() || A == 0){
         return 0;
@@ -71,7 +71,7 @@ Satellite::toTime(double A,Geom::D2<Geom::SBasis> d2_in)
 }
 
 double
-Satellite::toSize(double A,Geom::D2<Geom::SBasis> d2_in)
+Satellite::toSize(double A,Geom::D2<Geom::SBasis> d2_in) const
 {
     if(!d2_in.isFinite() ||  d2_in.isZero() || A == 0){
         return 0;
@@ -91,7 +91,7 @@ Satellite::toSize(double A,Geom::D2<Geom::SBasis> d2_in)
 }
 
 double
-Satellite::getOpositeTime(double s, Geom::D2<Geom::SBasis> d2_in)
+Satellite::getOpositeTime(double s, Geom::D2<Geom::SBasis> d2_in) const
 {
     if(s == 0){
         return 1;
@@ -102,7 +102,8 @@ Satellite::getOpositeTime(double s, Geom::D2<Geom::SBasis> d2_in)
 }
 
 double
-Satellite::getTime(Geom::D2<Geom::SBasis> d2_in){
+Satellite::getTime(Geom::D2<Geom::SBasis> d2_in) const
+{
     double t = getAmount();
     if(!getIsTime()){
         t = toTime(t, d2_in);
@@ -114,7 +115,8 @@ Satellite::getTime(Geom::D2<Geom::SBasis> d2_in){
 }
 
 double
-Satellite::getSize(Geom::D2<Geom::SBasis> d2_in){
+Satellite::getSize(Geom::D2<Geom::SBasis> d2_in) const
+{
     double s = getAmount();
     if(getIsTime()){
         s = toSize(s, d2_in);
@@ -124,7 +126,8 @@ Satellite::getSize(Geom::D2<Geom::SBasis> d2_in){
 
 
 Geom::Point 
-Satellite::getPosition(Geom::D2<Geom::SBasis> d2_in){
+Satellite::getPosition(Geom::D2<Geom::SBasis> d2_in) const
+{
     double t = getTime(d2_in);
     return d2_in.valueAt(t);
 }
