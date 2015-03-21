@@ -36,8 +36,8 @@
 
 namespace Geom {
 
-Pointwise::Pointwise(Piecewise<D2<SBasis> > pwd2)
-        : _pwd2(pwd2)
+Pointwise::Pointwise(Piecewise<D2<SBasis> > pwd2, std::vector<std::pair<unsigned int,Satellite> > satellites)
+        : _pwd2(pwd2),_satellites(satellites),_pathInfo()
 {
     setPathInfo();
 };
@@ -239,36 +239,34 @@ Pointwise::new_pwd_sustract(Piecewise<D2<SBasis> > A)
             sats.push_back(std::make_pair(_satellites[i].first-counter,_satellites[i].second));
         }
     }
-    std::cout << sats.size() << "SAAAAAAAAAAAAAAAAAAAAAAAATTSSIZE\n";
-    std::cout << sats.size() << "SAAAAAAAAAAAAAAAAAAAAAAAATTSSIZE\n";
     setSatellites(sats);
 }
 
 void
-Pointwise::set_extremes(std::vector<std::pair<unsigned int,Satellite> > &sats, bool active, bool hidden, double amount, double angle)
+Pointwise::set_extremes(bool active, bool hidden, double amount, double angle)
 {
     for(unsigned int i = 0; i < _pathInfo.size(); i++){
         unsigned int firstNode = getFirst(_pathInfo[i].first);
         unsigned int lastNode = getLast(_pathInfo[i].first);
         if(!getIsClosed(lastNode)){
             unsigned int lastIndex = 0;
-            for(unsigned i = 0; i < sats.size(); i++){
-                sats[i].second.setIsEndOpen(false);
-                if(sats[i].first > lastNode){
+            for(unsigned j = 0; j < _satellites.size();j++){
+                _satellites[j].second.setIsEndOpen(false);
+                if(_satellites[j].first > lastNode){
                     break;
                 }
-                if(sats[i].first == firstNode){
-                    sats[i].second.setActive(active);
-                    sats[i].second.setHidden(hidden);
-                    sats[i].second.setAmount(amount);
-                    sats[i].second.setAngle(angle);
+                if(_satellites[j].first == firstNode){
+                    _satellites[j].second.setActive(active);
+                    _satellites[j].second.setHidden(hidden);
+                    _satellites[j].second.setAmount(amount);
+                    _satellites[j].second.setAngle(angle);
                 }
-                if(sats[i].first == lastNode){
-                    lastIndex = i;
+                if(_satellites[j].first == lastNode){
+                    lastIndex = j;
                 }
             }
-            Satellite sat(sats[0].second.getSatelliteType(), sats[0].second.getIsTime(), true, active, sats[0].second.getHasMirror(), hidden, amount, angle, sats[0].second.getSteps());
-            sats.insert(sats.begin() + lastIndex,std::make_pair(lastNode,sat));
+            Satellite sat(_satellites[0].second.getSatelliteType(), _satellites[0].second.getIsTime(), true, active, _satellites[0].second.getHasMirror(), hidden, amount, angle, _satellites[0].second.getSteps());
+            _satellites.insert(_satellites.begin() + lastIndex,std::make_pair(lastNode,sat));
         }
     }
 }

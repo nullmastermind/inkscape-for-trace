@@ -63,7 +63,7 @@ namespace Geom {
 class Pointwise
 {
     public:
-        Pointwise(Piecewise<D2<SBasis> > pwd2);
+        Pointwise(Piecewise<D2<SBasis> > pwd2, std::vector<std::pair<unsigned int,Satellite> > satellites);
         virtual ~Pointwise();
         std::vector<unsigned int> findSatellites(unsigned int A, int B = -1) const;
         std::vector<unsigned int> findPeviousSatellites(unsigned int A, int B) const;
@@ -76,7 +76,7 @@ class Pointwise
         void recalculate_for_new_pwd2(Piecewise<D2<SBasis> > A);
         void new_pwd_append(Piecewise<D2<SBasis> > A);
         void new_pwd_sustract(Piecewise<D2<SBasis> > A);
-        void set_extremes(std::vector<std::pair<unsigned int,Satellite> > &sats, bool active, bool hidden, double amount, double angle);
+        void set_extremes(bool active, bool hidden, double amount, double angle);
         void reverse(unsigned int start,unsigned int end);
         void setPathInfo();
         void setPathInfo(Piecewise<D2<SBasis> >);

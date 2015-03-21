@@ -11,6 +11,7 @@
  */
 
 #include "live_effects/lpe-powerstroke.h"
+#include "live_effects/lpe-bspline.h"
 #include "live_effects/lpe-fillet-chamfer.h"
 #include <string>
 #include <sstream>
@@ -20,7 +21,7 @@
 #include <2geom/bezier-curve.h>
 #include <2geom/bezier-utils.h>
 #include <2geom/path-sink.h>
-#include <glibmm/i18n.h>
+
 #include "ui/tool/path-manipulator.h"
 #include "desktop.h"
 
@@ -33,6 +34,7 @@
 #include "live_effects/lpeobject.h"
 #include "live_effects/lpeobject-reference.h"
 #include "live_effects/parameter/path.h"
+
 #include "sp-path.h"
 #include "helper/geom.h"
 #include "preferences.h"
@@ -43,7 +45,7 @@
 #include "ui/tool/multi-path-manipulator.h"
 #include "xml/node.h"
 #include "xml/node-observer.h"
-#include "live_effects/lpe-bspline.h"
+#include <glibmm/i18n.h>
 
 namespace Inkscape {
 namespace UI {
@@ -151,7 +153,7 @@ PathManipulator::PathManipulator(MultiPathManipulator &mpm, SPPath *path,
 
     _createControlPointsFromGeometry();
     //Define if the path is BSpline on construction
-    isBSpline(true);
+    recalculateIsBSpline();
 }
 
 PathManipulator::~PathManipulator()
@@ -1238,22 +1240,18 @@ int PathManipulator::BSplineGetSteps() const {
 }
 
 // determines if the trace has bspline effect
-bool PathManipulator::isBSpline(bool recalculate){
-    if(recalculate){
-        SPLPEItem * path = dynamic_cast<SPLPEItem *>(_path);
-        if (path){
-            if(path->hasPathEffect()){
-                Inkscape::LivePathEffect::Effect const *thisEffect = path->getPathEffectOfType(Inkscape::LivePathEffect::BSPLINE);
-                if(thisEffect){
-                    _is_bspline = true;
-                    return _is_bspline;
-                }
+void PathManipulator::recalculateIsBSpline(){
+    SPLPEItem * path = dynamic_cast<SPLPEItem *>(_path);
+    if (path){
+        if(path->hasPathEffect()){
+            Inkscape::LivePathEffect::Effect const *thisEffect = path->getPathEffectOfType(Inkscape::LivePathEffect::BSPLINE);
+            if(thisEffect){
+                _is_bspline = true;
+                return;
             }
         }
-        
     }
     _is_bspline = false;
-    return  _is_bspline;
 }
 
 bool PathManipulator::isBSpline() const {
@@ -1325,7 +1323,7 @@ void PathManipulator::_createGeometryFromControlPoints(bool alert_LPE)
 {
     Geom::PathBuilder builder;
     //Refresh if is bspline some times -think on path change selection, this value get lost
-    isBSpline(true);
+    recalculateIsBSpline();
     for (std::list<SubpathPtr>::iterator spi = _subpaths.begin(); spi != _subpaths.end(); ) {
         SubpathPtr subpath = *spi;
         if (subpath->empty()) {
