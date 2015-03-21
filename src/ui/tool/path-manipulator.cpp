@@ -670,7 +670,7 @@ unsigned PathManipulator::_deleteStretch(NodeList::iterator start, NodeList::ite
         start = next;
     }
     // if we are removing, we readjust the handlers
-    if(isBSpline(false)){
+    if(isBSpline()){
         if(start.prev()){
             start.prev()->front()->setPosition(BSplineHandleReposition(start.prev()->front(),start.prev()->back()));
         }
@@ -999,7 +999,7 @@ NodeList::iterator PathManipulator::subdivideSegment(NodeList::iterator first, d
 
         // set new handle positions
         Node *n = new Node(_multi_path_manipulator._path_data.node_data, seg2[0]);
-        if(!isBSpline(false)){
+        if(!isBSpline()){
             n->back()->setPosition(seg1[2]);
             n->front()->setPosition(seg2[1]);
             n->setType(NODE_SMOOTH, false);
@@ -1240,17 +1240,29 @@ int PathManipulator::BSplineGetSteps() const {
 // determines if the trace has bspline effect
 bool PathManipulator::isBSpline(bool recalculate){
     if(recalculate){
-        _is_bspline = this->BSplineGetSteps() > 0;
+        SPLPEItem * path = dynamic_cast<SPLPEItem *>(_path);
+        if (path){
+            if(path->hasPathEffect()){
+                Inkscape::LivePathEffect::Effect const *thisEffect = path->getPathEffectOfType(Inkscape::LivePathEffect::BSPLINE);
+                if(thisEffect){
+                    _is_bspline = true;
+                    return _is_bspline;
+                }
+            }
+        }
+        
     }
+    _is_bspline = false;
     return  _is_bspline;
 }
 
-bool PathManipulator::isBSpline(false) const {
-    return BSplineGetSteps() > 0;
+bool PathManipulator::isBSpline() const {
+    return  _is_bspline;
 }
 
 // returns the corresponding strength to the position of the handlers
-double PathManipulator::BSplineHandlePosition(Handle *h, Handle *h2){
+double PathManipulator::BSplineHandlePosition(Handle *h, Handle *h2)
+{
     using Geom::X;
     using Geom::Y;
     if(h2){
@@ -1275,7 +1287,8 @@ double PathManipulator::BSplineHandlePosition(Handle *h, Handle *h2){
 }
 
 // give the location for the handler in the corresponding position
-Geom::Point PathManipulator::BSplineHandleReposition(Handle *h, Handle *h2){
+Geom::Point PathManipulator::BSplineHandleReposition(Handle *h, Handle *h2)
+{
     double pos = this->BSplineHandlePosition(h, h2);
     return BSplineHandleReposition(h,pos);
 }
