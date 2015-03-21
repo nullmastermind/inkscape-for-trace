@@ -175,7 +175,7 @@ void Handle::move(Geom::Point const &new_pos)
         setPosition(new_pos);
 
         //move the handler and its oposite the same proportion
-        if(_pm().isBSpline()){
+        if(_pm().isBSpline(false)){
             setPosition(_pm().BSplineHandleReposition(this,this));
             this->other()->setPosition(_pm().BSplineHandleReposition(this->other(),this));
         }
@@ -192,7 +192,7 @@ void Handle::move(Geom::Point const &new_pos)
         setRelativePos(new_delta);
 
         //move the handler and its oposite the same proportion
-        if(_pm().isBSpline()){
+        if(_pm().isBSpline(false)){
             setPosition(_pm().BSplineHandleReposition(this,this));
             this->other()->setPosition(_pm().BSplineHandleReposition(this->other(),this));
         }
@@ -218,7 +218,7 @@ void Handle::move(Geom::Point const &new_pos)
     setPosition(new_pos);
 
     // moves the handler and its oposite the same proportion
-    if(_pm().isBSpline()){
+    if(_pm().isBSpline(false)){
         setPosition(_pm().BSplineHandleReposition(this,this));
         this->other()->setPosition(_pm().BSplineHandleReposition(this->other(),this));
     }
@@ -313,7 +313,7 @@ bool Handle::_eventHandler(Inkscape::UI::Tools::ToolBase *event_context, GdkEven
 
 //this function moves the handler and its oposite to the default proportion of defaultStartPower
 void Handle::handle_2button_press(){
-    if(_pm().isBSpline()){
+    if(_pm().isBSpline(false)){
         setPosition(_pm().BSplineHandleReposition(this,defaultStartPower));
         this->other()->setPosition(_pm().BSplineHandleReposition(this->other(),defaultStartPower));
         _pm().update();
@@ -373,7 +373,7 @@ void Handle::dragged(Geom::Point &new_pos, GdkEventMotion *event)
         new_pos = result;
         // moves the handler and its oposite in X fixed positions depending on parameter "steps with control" 
         // by default in live BSpline
-        if(_pm().isBSpline()){
+        if(_pm().isBSpline(false)){
             setPosition(new_pos);
             int steps = _pm().BSplineGetSteps();
             new_pos=_pm().BSplineHandleReposition(this,ceilf(_pm().BSplineHandlePosition(this,this)*steps)/steps);
@@ -423,7 +423,7 @@ void Handle::dragged(Geom::Point &new_pos, GdkEventMotion *event)
         }
     }
     //if it is bspline but SHIFT or CONTROL are not pressed it fixes it in the original position
-    if(_pm().isBSpline() && !held_shift(*event) && !held_control(*event)){
+    if(_pm().isBSpline(false) && !held_shift(*event) && !held_control(*event)){
         new_pos=_last_drag_origin();
     }
     move(new_pos); // needed for correct update, even though it's redundant
@@ -656,7 +656,7 @@ void Node::move(Geom::Point const &new_pos)
     _fixNeighbors(old_pos, new_pos);
 
     // move the affected handlers. First the node ones, later the adjoining ones.
-    if(_pm().isBSpline()){
+    if(_pm().isBSpline(false)){
         _front.setPosition(_pm().BSplineHandleReposition(this->front(),nodeWeight));
         _back.setPosition(_pm().BSplineHandleReposition(this->back(),nodeWeight));
         if(prevNode){
@@ -709,7 +709,7 @@ void Node::transform(Geom::Affine const &m)
     _fixNeighbors(old_pos, position());
 
     // move the involved handlers, first the node ones, later the adjoining ones 
-    if(_pm().isBSpline()){
+    if(_pm().isBSpline(false)){
         _front.setPosition(_pm().BSplineHandleReposition(this->front(),nodeWeight));
         _back.setPosition(_pm().BSplineHandleReposition(this->back(),nodeWeight));
         if(prevNode){
@@ -916,7 +916,7 @@ void Node::setType(NodeType type, bool update_handles)
         }
         /* in node type changes, about bspline traces, we can mantain them with noPower power in border mode,
            or we give them the default power in curve mode */
-        if(_pm().isBSpline()){
+        if(_pm().isBSpline(false)){
             double weight = noPower;
             if(_pm().BSplineHandlePosition(this->front()) != noPower ){
                 weight = defaultStartPower;
@@ -1172,7 +1172,7 @@ void Node::_setState(State state)
             mgr.setActive(_canvas_item, true);
             mgr.setPrelight(_canvas_item, false);
             //this shows the handlers when selecting the nodes
-            if(_pm().isBSpline()){
+            if(_pm().isBSpline(false)){
                 this->front()->setPosition(_pm().BSplineHandleReposition(this->front()));
                 this->back()->setPosition(_pm().BSplineHandleReposition(this->back()));
             }

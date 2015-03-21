@@ -65,8 +65,8 @@ class Pointwise
     public:
         Pointwise(Piecewise<D2<SBasis> > pwd2);
         virtual ~Pointwise();
-        std::vector<Satellite> findSatellites(unsigned int A, int B = -1) const;
-        std::vector<Satellite> findPeviousSatellites(unsigned int A, int B) const;
+        std::vector<unsigned int> findSatellites(unsigned int A, int B = -1) const;
+        std::vector<unsigned int> findPeviousSatellites(unsigned int A, int B) const;
         double rad_to_len(double A, std::pair<unsigned int,Geom::Satellite> sat) const;
         double len_to_rad(double A, std::pair<unsigned int,Geom::Satellite> sat) const;
         std::vector<std::pair<unsigned int,Satellite> > getSatellites() const;
@@ -76,7 +76,8 @@ class Pointwise
         void recalculate_for_new_pwd2(Piecewise<D2<SBasis> > A);
         void new_pwd_append(Piecewise<D2<SBasis> > A);
         void new_pwd_sustract(Piecewise<D2<SBasis> > A);
-        void set_extremes(std::vector<std::pair<unsigned int,Satellite> > sats, bool active, bool hidden, double amount, double angle);
+        void set_extremes(std::vector<std::pair<unsigned int,Satellite> > &sats, bool active, bool hidden, double amount, double angle);
+        void reverse(unsigned int start,unsigned int end);
         void setPathInfo();
         void setPathInfo(Piecewise<D2<SBasis> >);
         unsigned int getSubPathIndex(unsigned int index) const;

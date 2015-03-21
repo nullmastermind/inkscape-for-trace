@@ -192,66 +192,27 @@ Pointwise::recalculate_for_new_pwd2(Piecewise<D2<SBasis> > A)
 void 
 Pointwise::new_pwd_append(Piecewise<D2<SBasis> > A)
 {
-    //not working
-    PathVector pathv = path_from_piecewise(remove_short_cuts(_pwd2, 0.1), 0.001);
-    PathVector pathv_new =  path_from_piecewise(remove_short_cuts(A, 0.1), 0.001);
     unsigned int counter = 0;
-    unsigned int counterPaths = 0;
-    unsigned int counterCurves = 0;
-    for (PathVector::const_iterator path_it = pathv.begin();
-         path_it != pathv.end(); ++path_it) {
-        if (path_it->empty()) {
-            counterPaths++;
-            counter++;
-            continue;
-        }
-        Geom::Path::const_iterator curve_it1 = path_it->begin();
-        Geom::Path::const_iterator curve_it2 = ++(path_it->begin());
-        Geom::Path::const_iterator curve_endit = path_it->end_default();
-        if (path_it->closed() && path_it->back_closed().isDegenerate()) {
-            const Curve &closingline = path_it->back_closed();
-            if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
-                curve_endit = path_it->end_open();
-            }
-        }
-        counterCurves = 0;
-        while (curve_it2 != curve_endit) {
-            counter++;
-            counterCurves++;
-            ++curve_it1;
-            ++curve_it2;
-        }
-        if(!are_near(curve_it2->pointAt(1),pathv_new[counterPaths].finalPoint(),0.001)){
-            pathv_new[counterPaths] = pathv_new[counterPaths].reverse();
-        }
-        counterPaths++;
-    }
-    A = paths_to_pw(pathv_new);
-    
-    counter = 0;
     std::vector<std::pair<unsigned int,Satellite> > sats;
-    unsigned int start = 0;
-    for(unsigned i = 0; i < A.size(); i++){
-        if(/*getIsStart(i, A) &&/*/ i!=0 ){
-            if(!are_near(A[i-1].at0(),A[start].at0(),0.001)){
-                sats.back().second.setIsEndOpen(true);
-            }
-            start = i;
+    for(unsigned i = 0; i < _satellites.size(); i++){
+        if(_satellites[i].second.getIsEndOpen()){
+            _satellites.erase(_satellites.begin() + i);
         }
+    }
+    for(unsigned i = 0; i < A.size(); i++){
         if(!are_near(_pwd2[i-counter].at0(),A[i].at0(),0.001)){
             counter++;
             bool isEndOpen = false;
             bool active = true;
             bool hidden = false;
-            bool flexible = true;
-            bool mirror_knots = true;
+            bool isTime = sats[0].second.getIsTime();
+            bool mirror_knots = sats[0].second.getHasMirror();
             double amount = 0.0;
             double degrees = 0.0;
             int steps = 0;
-            Satellite sat(F, flexible, isEndOpen, active, mirror_knots, hidden, amount, degrees, steps);
+            Satellite sat(sats[0].second.getSatelliteType(), isTime, isEndOpen, active, mirror_knots, hidden, amount, degrees, steps);
             sats.push_back(std::make_pair(i,sat));
         } else {
-            sats[i-counter].second.setIsEndOpen(false);
             sats.push_back(std::make_pair(i,_satellites[i-counter].second));
         }
     }
@@ -267,49 +228,57 @@ Pointwise::new_pwd_sustract(Piecewise<D2<SBasis> > A)
     Piecewise<D2<SBasis> > pwd2 = _pwd2;
     setPwd2(A);
     for(unsigned i = 0; i < _satellites.size(); i++){
-        if(!_satellites[i].second.getIsEndOpen() && (getLast(_satellites[i].first-counter) < _satellites[i].first-counter || !are_near(pwd2[_satellites[i].first].at0(),A[_satellites[i].first-counter].at0(),0.001))){
+        if(_satellites[i].second.getIsEndOpen()){
+            _satellites.erase(_satellites.begin() + i);
+        }
+    }
+    for(unsigned i = 0; i < _satellites.size(); i++){
+        if(getLast(_satellites[i].first-counter) < _satellites[i].first-counter || !are_near(pwd2[_satellites[i].first].at0(),A[_satellites[i].first-counter].at0(),0.001)){
             counter++;
         } else {
             sats.push_back(std::make_pair(_satellites[i].first-counter,_satellites[i].second));
         }
     }
-    set_extremes(sats,false,true,0.0,0.0);
+    std::cout << sats.size() << "SAAAAAAAAAAAAAAAAAAAAAAAATTSSIZE\n";
+    std::cout << sats.size() << "SAAAAAAAAAAAAAAAAAAAAAAAATTSSIZE\n";
     setSatellites(sats);
 }
 
 void
-Pointwise::set_extremes(std::vector<std::pair<unsigned int,Satellite> > sats, bool active, bool hidden, double amount, double angle)
+Pointwise::set_extremes(std::vector<std::pair<unsigned int,Satellite> > &sats, bool active, bool hidden, double amount, double angle)
 {
     for(unsigned int i = 0; i < _pathInfo.size(); i++){
         unsigned int firstNode = getFirst(_pathInfo[i].first);
         unsigned int lastNode = getLast(_pathInfo[i].first);
         if(!getIsClosed(lastNode)){
-            bool endOpen = false;
+            unsigned int lastIndex = 0;
             for(unsigned i = 0; i < sats.size(); i++){
                 sats[i].second.setIsEndOpen(false);
                 if(sats[i].first > lastNode){
                     break;
                 }
-                if(sats[i].first == firstNode || sats[i].first == lastNode){
+                if(sats[i].first == firstNode){
                     sats[i].second.setActive(active);
                     sats[i].second.setHidden(hidden);
-                    if(sats[i].first == lastNode){
-                        if(!endOpen){
-                            endOpen = true;
-                        } else {
-                            endOpen = false;
-                            sats[i].second.setIsEndOpen(true);
-                            sats[i].second.setAmount(amount);
-                            sats[i].second.setAngle(angle);
-                        }
-                    }
-                    if(sats[i].first == firstNode){
-                        sats[i].second.setAmount(amount);
-                        sats[i].second.setAngle(angle);
-                    }
+                    sats[i].second.setAmount(amount);
+                    sats[i].second.setAngle(angle);
+                }
+                if(sats[i].first == lastNode){
+                    lastIndex = i;
                 }
             }
+            Satellite sat(sats[0].second.getSatelliteType(), sats[0].second.getIsTime(), true, active, sats[0].second.getHasMirror(), hidden, amount, angle, sats[0].second.getSteps());
+            sats.insert(sats.begin() + lastIndex,std::make_pair(lastNode,sat));
         }
+    }
+}
+
+void
+Pointwise::reverse(unsigned int start,unsigned int end){
+    for(unsigned int i = start; i < end / 2; i++){
+      std::pair<unsigned int,Satellite> tmp = _satellites[i];
+      _satellites[i] = _satellites[end - start - i - 1];
+      _satellites[end - start - i - 1] = tmp;
     }
 }
 
@@ -381,28 +350,28 @@ Pointwise::len_to_rad(double A,  std::pair<unsigned int,Geom::Satellite> sat) co
     return 0;
 }
 
-std::vector<Satellite> 
+std::vector<unsigned int> 
 Pointwise::findSatellites(unsigned int A, int B) const
 {
-    std::vector<Satellite> ret;
+    std::vector<unsigned int> ret;
     int counter = 0;
     for(unsigned i = 0; i < _satellites.size(); i++){
         if(_satellites[i].first == A){
             if(counter >= B && B != -1){
                 return ret;
             }
-            ret.push_back(_satellites[i].second);
+            ret.push_back(i);
             counter++;
         }
     }
     return ret;
 }
 
-std::vector<Satellite> 
+std::vector<unsigned int >
 Pointwise::findPeviousSatellites(unsigned int A, int B) const
 {
     boost::optional<unsigned int> previous = getPrevious(A);
-    std::vector<Satellite> ret;
+    std::vector<unsigned int> ret;
     if(previous){
         ret = findSatellites(*previous,B);
     }

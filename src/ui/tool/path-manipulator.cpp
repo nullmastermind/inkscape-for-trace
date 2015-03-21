@@ -670,7 +670,7 @@ unsigned PathManipulator::_deleteStretch(NodeList::iterator start, NodeList::ite
         start = next;
     }
     // if we are removing, we readjust the handlers
-    if(isBSpline()){
+    if(isBSpline(false)){
         if(start.prev()){
             start.prev()->front()->setPosition(BSplineHandleReposition(start.prev()->front(),start.prev()->back()));
         }
@@ -999,7 +999,7 @@ NodeList::iterator PathManipulator::subdivideSegment(NodeList::iterator first, d
 
         // set new handle positions
         Node *n = new Node(_multi_path_manipulator._path_data.node_data, seg2[0]);
-        if(!isBSpline()){
+        if(!isBSpline(false)){
             n->back()->setPosition(seg1[2]);
             n->front()->setPosition(seg2[1]);
             n->setType(NODE_SMOOTH, false);
@@ -1245,7 +1245,7 @@ bool PathManipulator::isBSpline(bool recalculate){
     return  _is_bspline;
 }
 
-bool PathManipulator::isBSpline() const {
+bool PathManipulator::isBSpline(false) const {
     return BSplineGetSteps() > 0;
 }
 

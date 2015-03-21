@@ -291,9 +291,9 @@ void FilletChamferKnotHolderEntity::knot_set(Point const &p,
             Geom::D2<Geom::SBasis> d2_in = pwd2[*d2_prev_index];
             double mirrorTime = Geom::nearest_point(s, d2_in);
             double timeStart = 0;
-            std::vector<Satellite> satVector = pointwise->findPeviousSatellites(satellite.first,1);
-            if(satVector.size()>0){
-                timeStart =  satVector[0].getTime(d2_in);
+            std::vector<unsigned int> satIndexes = pointwise->findPeviousSatellites(satellite.first,1);
+            if(satIndexes.size()>0){
+                timeStart =  pointwise->getSatellites()[satIndexes[0]].second.getTime(d2_in);
             }
             if(timeStart > mirrorTime){
                 mirrorTime = timeStart;
@@ -349,9 +349,9 @@ FilletChamferKnotHolderEntity::knot_get() const
                 t = 0;
             }
             double timeStart = 0;
-            std::vector<Satellite> satVector = pointwise->findPeviousSatellites(satellite.first,1);
-            if(satVector.size()>0){
-                timeStart =  satVector[0].getTime(d2_in);
+            std::vector<unsigned int> satIndexes = pointwise->findPeviousSatellites(satellite.first,1);
+            if(satIndexes.size()>0){
+                timeStart =  pointwise->getSatellites()[satIndexes[0]].second.getTime(d2_in);
             }
             if(timeStart > t){
                 t = timeStart;
