@@ -21,7 +21,7 @@
 #include <2geom/bezier-curve.h>
 #include <2geom/bezier-utils.h>
 #include <2geom/path-sink.h>
-
+#include <glibmm/i18n.h>
 #include "ui/tool/path-manipulator.h"
 #include "desktop.h"
 
@@ -45,7 +45,6 @@
 #include "ui/tool/multi-path-manipulator.h"
 #include "xml/node.h"
 #include "xml/node-observer.h"
-#include <glibmm/i18n.h>
 
 namespace Inkscape {
 namespace UI {
