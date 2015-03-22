@@ -30,7 +30,7 @@ namespace LivePathEffect {
 
 class FilletChamferKnotHolderEntity;
 
-class SatellitePairArrayParam : public ArrayParam<std::pair<unsigned int, Geom::Satellite> > {
+class SatellitePairArrayParam : public ArrayParam<std::pair<size_t, Geom::Satellite> > {
 public:
     SatellitePairArrayParam(const Glib::ustring &label,
                                  const Glib::ustring &tip,
@@ -81,7 +81,7 @@ private:
 
 class FilletChamferKnotHolderEntity : public KnotHolderEntity {
 public:
-    FilletChamferKnotHolderEntity(SatellitePairArrayParam *p, unsigned int index);
+    FilletChamferKnotHolderEntity(SatellitePairArrayParam *p, size_t index);
     virtual ~FilletChamferKnotHolderEntity() {}
 
     virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state);
@@ -89,13 +89,13 @@ public:
     virtual void knot_click(guint state);
     void knot_set_offset(Geom::Satellite);
     /** Checks whether the index falls within the size of the parameter's vector */
-    bool valid_index(unsigned int index) const {
+    bool valid_index(size_t index) const {
         return (_pparam->_vector.size() > index);
     };
 
 private:
     SatellitePairArrayParam *_pparam;
-    unsigned int _index;
+    size_t _index;
 };
 
 } //namespace LivePathEffect

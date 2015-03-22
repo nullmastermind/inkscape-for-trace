@@ -78,20 +78,20 @@ sp_svg_satellite_read_d(gchar const *str, Geom::Satellite *sat){
 }
 
 template <>
-std::pair<unsigned int, Geom::Satellite>
-ArrayParam<std::pair<unsigned int, Geom::Satellite> >::readsvg(const gchar * str)
+std::pair<size_t, Geom::Satellite>
+ArrayParam<std::pair<size_t, Geom::Satellite> >::readsvg(const gchar * str)
 {
     gchar ** strarray = g_strsplit(str, ",", 2);
     double index;
-    std::pair<unsigned int, Geom::Satellite> result;
+    std::pair<size_t, Geom::Satellite> result;
     unsigned int success = (int)sp_svg_number_read_d(strarray[0], &index);
     Geom::Satellite sat;
     success += sp_svg_satellite_read_d(strarray[1], &sat);
     g_strfreev (strarray);
     if (success == 2) {
-        return std::make_pair(index, sat);
+        return std::make_pair((size_t)index, sat);
     }
-    return std::make_pair((int)Geom::infinity(),sat);
+    return std::make_pair((size_t)0,sat);
 }
 
 } /* namespace LivePathEffect */

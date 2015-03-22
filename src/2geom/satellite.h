@@ -45,7 +45,7 @@ class Satellite
   public:
 
     Satellite();
-    Satellite(SatelliteType satellitetype, bool isTime, bool isEndOpen, bool active, bool hasMirror, bool hidden, double amount, double angle, unsigned int steps);
+    Satellite(SatelliteType satellitetype, bool isTime, bool isEndOpen, bool active, bool hasMirror, bool hidden, double amount, double angle, size_t steps);
 
     virtual ~Satellite();
 
@@ -169,7 +169,7 @@ class Satellite
     bool _hidden;
     double _amount;
     double _angle;
-    unsigned int _steps;
+    size_t _steps;
 };
 
 } // end namespace Geom

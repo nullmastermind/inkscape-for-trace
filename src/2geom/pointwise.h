@@ -63,34 +63,34 @@ namespace Geom {
 class Pointwise
 {
     public:
-        Pointwise(Piecewise<D2<SBasis> > pwd2, std::vector<std::pair<unsigned int,Satellite> > satellites);
+        Pointwise(Piecewise<D2<SBasis> > pwd2, std::vector<std::pair<size_t,Satellite> > satellites);
         virtual ~Pointwise();
-        std::vector<unsigned int> findSatellites(unsigned int A, int B = -1) const;
-        std::vector<unsigned int> findPeviousSatellites(unsigned int A, int B) const;
-        double rad_to_len(double A, std::pair<unsigned int,Geom::Satellite> sat) const;
-        double len_to_rad(double A, std::pair<unsigned int,Geom::Satellite> sat) const;
-        std::vector<std::pair<unsigned int,Satellite> > getSatellites() const;
-        void setSatellites(std::vector<std::pair<unsigned int,Satellite> > sats);
+        std::vector<size_t> findSatellites(size_t A, long B = -1) const;
+        std::vector<size_t> findPeviousSatellites(size_t A, long  B) const;
+        double rad_to_len(double A, std::pair<size_t,Geom::Satellite> sat) const;
+        double len_to_rad(double A, std::pair<size_t,Geom::Satellite> sat) const;
+        std::vector<std::pair<size_t,Satellite> > getSatellites() const;
+        void setSatellites(std::vector<std::pair<size_t,Satellite> > sats);
         Piecewise<D2<SBasis> > getPwd2() const;
         void setPwd2(Piecewise<D2<SBasis> > pwd2_in);
         void recalculate_for_new_pwd2(Piecewise<D2<SBasis> > A);
         void new_pwd_append(Piecewise<D2<SBasis> > A);
         void new_pwd_sustract(Piecewise<D2<SBasis> > A);
-        void set_extremes(bool active, bool hidden, double amount, double angle);
-        void reverse(unsigned int start,unsigned int end);
+        void set_extremes(bool endOpenSat, bool active, bool hidden, double amount = -1, double angle = -1);
+        void reverse(size_t start,size_t end);
         void setPathInfo();
         void setPathInfo(Piecewise<D2<SBasis> >);
-        unsigned int getSubPathIndex(unsigned int index) const;
-        unsigned int getLast(unsigned int index) const;
-        unsigned int getFirst(unsigned int index) const;
-        boost::optional<unsigned int> getPrevious(unsigned int index) const;
-        boost::optional<unsigned int> getNext(unsigned int index) const;
-        bool getIsClosed(unsigned int index) const;
+        size_t getSubPathIndex(size_t index) const;
+        size_t getLast(size_t index) const;
+        size_t getFirst(size_t index) const;
+        boost::optional<size_t> getPrevious(size_t index) const;
+        boost::optional<size_t> getNext(size_t index) const;
+        bool getIsClosed(size_t index) const;
 
     private:
         Piecewise<D2<SBasis> > _pwd2;
-        std::vector<std::pair<unsigned int,Satellite> > _satellites;
-        std::vector<std::pair<unsigned int, bool> > _pathInfo;
+        std::vector<std::pair<size_t,Satellite> > _satellites;
+        std::vector<std::pair<size_t, bool> > _pathInfo;
 };
 
 } // end namespace Geom

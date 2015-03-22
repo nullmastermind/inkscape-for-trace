@@ -90,7 +90,7 @@ protected:
     size_t _default_size;
 
     void writesvg(SVGOStringStream &str, std::vector<StorageType> const &vector) const {
-        for (unsigned int i = 0; i < vector.size(); ++i) {
+        for (size_t i = 0; i < vector.size(); ++i) {
             if (i != 0) {
                 // separate items with pipe symbol
                 str << " | ";
@@ -111,7 +111,7 @@ protected:
         str << nVector;
     }
 
-    void writesvgData(SVGOStringStream &str, std::pair<unsigned int, Geom::Satellite> const &nVector) const {
+    void writesvgData(SVGOStringStream &str, std::pair<size_t, Geom::Satellite> const &nVector) const {
         str << nVector.first;
         str << ",";
         str << nVector.second.getSatelliteTypeGchar();

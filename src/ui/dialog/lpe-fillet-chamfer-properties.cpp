@@ -177,7 +177,7 @@ void FilletChamferPropertiesDialog::_apply()
             d_pos = Inkscape::Util::Quantity::convert(d_pos, unit, document_unit);
         }
         _satellite.setAmount( d_pos);
-        unsigned int steps = (unsigned int)_fillet_chamfer_chamfer_subdivisions.get_value();
+        size_t steps = (size_t)_fillet_chamfer_chamfer_subdivisions.get_value();
         if(steps < 1){
             steps = 1;
         }
