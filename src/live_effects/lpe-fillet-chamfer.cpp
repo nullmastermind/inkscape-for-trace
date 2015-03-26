@@ -421,8 +421,10 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
 void
 LPEFilletChamfer::adjustForNewPath(std::vector<Geom::Path> const &path_in)
 {
+    std::cout << "1111111111111111111111111111111111111111\n";
     if (!path_in.empty() && pointwise) {
-        pointwise->recalculate_for_new_pwd2(remove_short_cuts(paths_to_pw(pathv_to_linear_and_cubic_beziers(path_in)),0.01));
+        std::cout << "222222222222222222222222222222222222222222222\n";
+        pointwise->recalculate_for_new_pwd2(pathv_to_linear_and_cubic_beziers(path_in)[0].toPwSb());
         pointwise->set_extremes(true, false, true, 0.0, 0.0);
         satellitepairarrayparam_values.set_pointwise(pointwise);
     }

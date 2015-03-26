@@ -34,7 +34,6 @@
 #include "live_effects/lpeobject.h"
 #include "live_effects/lpeobject-reference.h"
 #include "live_effects/parameter/path.h"
-
 #include "sp-path.h"
 #include "helper/geom.h"
 #include "preferences.h"

@@ -183,45 +183,48 @@ void
 Pointwise::recalculate_for_new_pwd2(Piecewise<D2<SBasis> > A)
 {
     if( _pwd2.size() > A.size()){
-        new_pwd_sustract(A);
+        std::cout << "bbbbbbbbbbbbbbbbbbbbbbbbb\n";
+        pwd2_sustract(A);
     } else if ( _pwd2.size() < A.size()){
-        new_pwd_append(A);
+        pwd2_append(A);
+        std::cout << "aaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n";
     }
+    std::cout << "cccccccccccccccccccccccccccccccccc\n";
 }
 
 void 
-Pointwise::new_pwd_append(Piecewise<D2<SBasis> > A)
+Pointwise::pwd2_append(Piecewise<D2<SBasis> > A)
 {
     size_t counter = 0;
     std::vector<std::pair<size_t,Satellite> > sats;
-    for(size_t i = 0; i < _satellites.size(); i++){
-        if(_satellites[i].second.getIsEndOpen()){
-            _satellites.erase(_satellites.begin() + i);
-        }
-    }
+    Piecewise<D2<SBasis> > pwd2 = _pwd2;
+    setPwd2(A);
+    std::cout << A.size() << "ASIZE\n";
+    std::cout << pwd2.size() << "PWD2SIZE\n";
     for(size_t i = 0; i < A.size(); i++){
-        if(!are_near(_pwd2[i-counter].at0(),A[i].at0(),0.001)){
+        std::cout << i << "indes\n";
+        std::cout << counter << "counter\n";
+        if(pwd2.size() <= i-counter || !are_near(pwd2[i-counter].at0(),A[i].at0(),0.001)){
             counter++;
             bool isEndOpen = false;
             bool active = true;
             bool hidden = false;
-            bool isTime = sats[0].second.getIsTime();
-            bool mirror_knots = sats[0].second.getHasMirror();
+            bool isTime = _satellites[0].second.getIsTime();
+            bool mirror_knots = _satellites[0].second.getHasMirror();
             double amount = 0.0;
             double degrees = 0.0;
             int steps = 0;
-            Satellite sat(sats[0].second.getSatelliteType(), isTime, isEndOpen, active, mirror_knots, hidden, amount, degrees, steps);
+            Satellite sat(_satellites[0].second.getSatelliteType(), isTime, isEndOpen, active, mirror_knots, hidden, amount, degrees, steps);
             sats.push_back(std::make_pair(i,sat));
         } else {
             sats.push_back(std::make_pair(i,_satellites[i-counter].second));
         }
     }
-    setPwd2(A);
     setSatellites(sats);
 }
 
 void
-Pointwise::new_pwd_sustract(Piecewise<D2<SBasis> > A)
+Pointwise::pwd2_sustract(Piecewise<D2<SBasis> > A)
 {
     size_t counter = 0;
     std::vector<std::pair<size_t,Satellite> > sats;

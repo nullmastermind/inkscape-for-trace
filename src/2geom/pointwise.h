@@ -74,8 +74,8 @@ class Pointwise
         Piecewise<D2<SBasis> > getPwd2() const;
         void setPwd2(Piecewise<D2<SBasis> > pwd2_in);
         void recalculate_for_new_pwd2(Piecewise<D2<SBasis> > A);
-        void new_pwd_append(Piecewise<D2<SBasis> > A);
-        void new_pwd_sustract(Piecewise<D2<SBasis> > A);
+        void pwd2_append(Piecewise<D2<SBasis> > A);
+        void pwd2_sustract(Piecewise<D2<SBasis> > A);
         void set_extremes(bool endOpenSat, bool active, bool hidden, double amount = -1, double angle = -1);
         void reverse(size_t start,size_t end);
         void setPathInfo();
