@@ -89,6 +89,24 @@ LPECopyRotate::doOnApply(SPLPEItem const* lpeitem)
     dir = unit_vector(B - A);
 }
 
+void
+LPECopyRotate::transform_multiply(Geom::Affine const& postmul, bool set)
+{
+    if(postmul->isRotation()){
+        Geom::Point rot = (Geom::Rotate)postmul::vector();
+        coord angle = rad_to_deg(atan2(rot));
+        starting_angle.param_setValue(starting_angle + angle);
+        starting_angle.param_update_default(starting_angle + angle);
+        rotation_angle.param_setValue(rotation_angle + angle);
+        rotation_angle.param_update_default(rotation_angle + angle);
+    }
+    // cycle through all parameters. Most parameters will not need transformation, but path and point params do.
+    
+    for (std::vector<Parameter *>::iterator it = param_vector.begin(); it != param_vector.end(); ++it) {
+        Parameter * param = *it;
+        param->param_transform_multiply(postmul, set);
+    }
+}
 
 void
 LPECopyRotate::doBeforeEffect (SPLPEItem const* lpeitem)

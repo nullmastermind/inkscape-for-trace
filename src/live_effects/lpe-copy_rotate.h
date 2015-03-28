@@ -48,6 +48,8 @@ public:
 
     virtual void resetDefaults(SPItem const* item);
 
+    virtual void transform_multiply(Geom::Affine const& postmul, bool set);
+
     /* the knotholder entity classes must be declared friends */
     friend class CR::KnotHolderEntityStartingAngle;
     friend class CR::KnotHolderEntityRotationAngle;
