@@ -372,7 +372,6 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
         Piecewise<D2<SBasis> > pwd2_in = paths_to_pw(original_pathv);
         pwd2_in = remove_short_cuts(pwd2_in, 0.01);
         std::vector<std::pair<size_t,Geom::Satellite> >  sats = satellitepairarrayparam_values.data();
-
         //optional call
         if(hide_knots){
             satellitepairarrayparam_values.set_helper_size(0);
@@ -413,6 +412,11 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
         if(refresh){
             refreshKnots();
         }
+        if(c->nodes_in_path() != sats.size()){
+            pointwise->recalculate_for_new_pwd2(pwd2_in);
+            pointwise->set_extremes(true, false, true, 0.0, 0.0);
+            satellitepairarrayparam_values.set_pointwise(pointwise);
+        }
     } else {
         g_warning("LPE Fillet can only be applied to shapes (not groups).");
     }
@@ -421,9 +425,7 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
 void
 LPEFilletChamfer::adjustForNewPath(std::vector<Geom::Path> const &path_in)
 {
-    std::cout << "1111111111111111111111111111111111111111\n";
     if (!path_in.empty() && pointwise) {
-        std::cout << "222222222222222222222222222222222222222222222\n";
         pointwise->recalculate_for_new_pwd2(pathv_to_linear_and_cubic_beziers(path_in)[0].toPwSb());
         pointwise->set_extremes(true, false, true, 0.0, 0.0);
         satellitepairarrayparam_values.set_pointwise(pointwise);
