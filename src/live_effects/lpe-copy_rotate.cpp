@@ -92,13 +92,10 @@ LPECopyRotate::doOnApply(SPLPEItem const* lpeitem)
 void
 LPECopyRotate::transform_multiply(Geom::Affine const& postmul, bool set)
 {
-    if(postmul->isRotation()){
-        Geom::Point rot = (Geom::Rotate)postmul::vector();
-        coord angle = rad_to_deg(atan2(rot));
-        starting_angle.param_setValue(starting_angle + angle);
-        starting_angle.param_update_default(starting_angle + angle);
-        rotation_angle.param_setValue(rotation_angle + angle);
-        rotation_angle.param_update_default(rotation_angle + angle);
+    if(kaleidoscope){
+        Geom::Coord angle  = Geom::rad_to_deg(atan(-postmul[1]/postmul[0]));
+        angle += starting_angle;
+        starting_angle.param_set_value(angle);
     }
     // cycle through all parameters. Most parameters will not need transformation, but path and point params do.
     
