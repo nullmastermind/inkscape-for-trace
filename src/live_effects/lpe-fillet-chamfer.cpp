@@ -16,9 +16,6 @@
 
 
 #include "live_effects/lpe-fillet-chamfer.h"
-#include "live_effects/lpeobject.h"
-#include <sp-shape.h>
-#include <sp-path.h>
 #include <2geom/pointwise.h>
 #include <2geom/satellite.h>
 #include <2geom/satellite-enum.h>
@@ -28,7 +25,7 @@
 #include "helper/geom-curves.h"
 #include "helper/geom.h"
 #include "display/curve.h"
-#include "ui/tools-switch.h"
+#include "knotholder.h"
 #include <vector>
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
@@ -260,10 +257,8 @@ void LPEFilletChamfer::inverseChamfer()
 
 void LPEFilletChamfer::refreshKnots()
 {
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    if (tools_isactive(desktop, TOOLS_NODES)) {
-        tools_switch(desktop, TOOLS_SELECT);
-        tools_switch(desktop, TOOLS_NODES);
+    if(satellitepairarrayparam_values.knoth){
+        satellitepairarrayparam_values.knoth->update_knots();
     }
 }
 

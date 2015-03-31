@@ -29,7 +29,8 @@ SatellitePairArrayParam::SatellitePairArrayParam(
     const Glib::ustring &label, const Glib::ustring &tip,
     const Glib::ustring &key, Inkscape::UI::Widget::Registry *wr,
     Effect *effect)
-    : ArrayParam<std::pair<size_t,Geom::Satellite> >(label, tip, key, wr, effect, 0)
+    : ArrayParam<std::pair<size_t,Geom::Satellite> >(label, tip, key, wr, effect, 0),
+    knoth(NULL)
 {
     knot_shape = SP_KNOT_SHAPE_DIAMOND;
     knot_mode = SP_KNOT_MODE_XOR;
@@ -271,6 +272,7 @@ void SatellitePairArrayParam::addKnotHolderEntities(KnotHolder *knotholder,
         SPDesktop *desktop,
         SPItem *item)
 {
+        knoth = knotholder;
         addKnotHolderEntities(knotholder, desktop, item, true);
 }
 

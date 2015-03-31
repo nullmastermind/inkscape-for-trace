@@ -62,7 +62,9 @@ public:
     virtual void updateCanvasIndicators(bool mirror);
     void set_pointwise(Geom::Pointwise *pointwise);
     friend class FilletChamferKnotHolderEntity;
-
+    friend class LPEFilletChamfer;
+protected:
+    KnotHolder *knoth;
 private:
     SatellitePairArrayParam(const SatellitePairArrayParam &);
     SatellitePairArrayParam &operator=(const SatellitePairArrayParam &);
@@ -83,7 +85,7 @@ private:
 class FilletChamferKnotHolderEntity : public KnotHolderEntity {
 public:
     FilletChamferKnotHolderEntity(SatellitePairArrayParam *p, size_t index);
-    virtual ~FilletChamferKnotHolderEntity() {}
+    virtual ~FilletChamferKnotHolderEntity() {_pparam->knoth = NULL;}
 
     virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state);
     virtual Geom::Point knot_get() const;
