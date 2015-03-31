@@ -12,8 +12,6 @@
  * positions to preserve the intent.
  * The data is serialised to SVG using a specialiced pointwise LPE parameter to 
  * handle it in th future can be a inkscape based property to paths 
- * //all operations are O(1) per satellite, with the exception of .., .., and .., which
- * //need to use binary search to find the locations.
  * Anywhere a Piecewise is used, a Pointwise can be substituted, allowing
  * existing algorithms to correctly update satellite positions.
 
