@@ -16,17 +16,13 @@
 
 
 #include "live_effects/lpe-fillet-chamfer.h"
-#include <2geom/pointwise.h>
 #include <2geom/satellite.h>
 #include <2geom/satellite-enum.h>
-#include <2geom/svg-elliptical-arc.h>
-#include <2geom/sbasis-to-bezier.h>
-#include "helper/geom-nodetype.h"
-#include "helper/geom-curves.h"
 #include "helper/geom.h"
 #include "display/curve.h"
+#include "helper/geom-curves.h"
+#include <2geom/svg-elliptical-arc.h>
 #include "knotholder.h"
-#include <vector>
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
 
@@ -46,7 +42,7 @@ LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
     satellitepairarrayparam_values(_("pair_array_param"), _("pair_array_param"), "satellitepairarrayparam_values", &wr, this),
     unit(_("Unit:"), _("Unit"), "unit", &wr, this),
-    method(_("Method:"), _("Fillets methods"), "method", FMConverter, &wr, this, FM_AUTO),
+    method(_("Method:"), _("Methods to calculate the fillet or chamfer"), "method", FMConverter, &wr, this, FM_AUTO),
     radius(_("Radius (unit or %):"), _("Radius, in unit or %"), "radius", &wr, this, 0.),
     chamfer_steps(_("Chamfer steps:"), _("Chamfer steps"), "chamfer_steps", &wr, this, 1),
     flexible(_("Flexible radius size (%)"), _("Flexible radius size (%)"), "flexible", &wr, this, false),

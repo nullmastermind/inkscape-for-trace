@@ -195,7 +195,7 @@ void SatellitePairArrayParam::addCanvasIndicators(
 void SatellitePairArrayParam::recalculate_knots()
 {
     if(last_pointwise){
-        //_vector = last_pointwise->getSatellites();
+        _vector = last_pointwise->getSatellites();
     }
 }
 
@@ -222,13 +222,13 @@ void SatellitePairArrayParam::addKnotHolderEntities(KnotHolder *knotholder,
         SPItem *item,
         bool mirror)
 {
-    recalculate_knots();
+    //recalculate_knots();
     for (size_t i = 0; i < _vector.size(); ++i) {
         size_t iPlus = i;
         if( mirror == true){
             iPlus = i + _vector.size();
         }
-        if(!_vector[i].second.getActive() || _vector[i].second.getHidden()){
+        if(!_vector[i].second.getActive()){
             continue;
         }
         if(!_vector[i].second.getHasMirror() && mirror == true){
@@ -281,8 +281,6 @@ FilletChamferKnotHolderEntity::FilletChamferKnotHolderEntity(SatellitePairArrayP
     _index(index)
 { 
 }
-
-
 
 void FilletChamferKnotHolderEntity::knot_set(Point const &p,
                                               Point const &/*origin*/,
@@ -353,6 +351,7 @@ FilletChamferKnotHolderEntity::knot_get() const
     if(!_pparam->last_pointwise){
         return Point(infinity(), infinity());
     }
+    std::cout << satellite.second.getHidden() << "hiddden\n";
     if(!satellite.second.getActive() || satellite.second.getHidden()){
         return Point(infinity(), infinity());
     }
@@ -361,6 +360,8 @@ FilletChamferKnotHolderEntity::knot_get() const
     if(pwd2.size() <= (unsigned)satellite.first){
         return Point(infinity(), infinity());
     }
+    this->knot->show();
+    std::cout << satellite.second.getHidden() << "show\n";
     if( _index >= _pparam->_vector.size()){
         tmpPoint = satellite.second.getPosition(pwd2[satellite.first]);
         boost::optional<size_t> d2_prev_index = pointwise->getPrevious(satellite.first);
