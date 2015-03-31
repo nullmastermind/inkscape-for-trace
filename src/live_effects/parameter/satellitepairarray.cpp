@@ -351,7 +351,6 @@ FilletChamferKnotHolderEntity::knot_get() const
     if(!_pparam->last_pointwise){
         return Point(infinity(), infinity());
     }
-    std::cout << satellite.second.getHidden() << "hiddden\n";
     if(!satellite.second.getActive() || satellite.second.getHidden()){
         return Point(infinity(), infinity());
     }
@@ -361,7 +360,6 @@ FilletChamferKnotHolderEntity::knot_get() const
         return Point(infinity(), infinity());
     }
     this->knot->show();
-    std::cout << satellite.second.getHidden() << "show\n";
     if( _index >= _pparam->_vector.size()){
         tmpPoint = satellite.second.getPosition(pwd2[satellite.first]);
         boost::optional<size_t> d2_prev_index = pointwise->getPrevious(satellite.first);
