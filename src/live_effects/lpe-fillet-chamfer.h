@@ -65,6 +65,7 @@ private:
     ScalarParam helper_size;
 
     Geom::Pointwise *pointwise;
+    double segCount;
 
     LPEFilletChamfer(const LPEFilletChamfer &);
     LPEFilletChamfer &operator=(const LPEFilletChamfer &);

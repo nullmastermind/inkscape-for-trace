@@ -13,6 +13,7 @@
 #include "live_effects/parameter/satellitepairarray.h"
 #include "live_effects/effect.h"
 #include "sp-lpe-item.h"
+#include <preferences.h>
 // TODO due to internal breakage in glibmm headers,
 // this has to be included last.
 #include <glibmm/i18n.h>
@@ -113,7 +114,8 @@ void SatellitePairArrayParam::updateCanvasIndicators(bool mirror)
         }
         if(mirror == true){
             if(d2_prev_index){
-                pos = _vector[i].second.getOpositeTime(size_out,pwd2[*d2_prev_index]);
+                d2 = pwd2[*d2_prev_index];
+                pos = _vector[i].second.getOpositeTime(size_out,d2);
                 if(lenght_out < size_out){
                     overflow = true;
                 }
@@ -194,6 +196,24 @@ void SatellitePairArrayParam::recalculate_knots()
     if(last_pointwise){
         //_vector = last_pointwise->getSatellites();
     }
+}
+
+void
+SatellitePairArrayParam::param_transform_multiply(Geom::Affine const &postmul,
+        bool /*set*/)
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+
+    if (prefs->getBool("/options/transform/rectcorners", true)) {
+        for (size_t i = 0; i < _vector.size(); ++i) {
+            if(!_vector[i].second.getIsTime() && _vector[i].second.getAmount() > 0){
+                _vector[i].second.setAmount(_vector[i].second.getAmount() * ((postmul.expansionX() + postmul.expansionY()) / 2));
+            }
+        }
+        param_set_and_write_new_value(_vector);
+    }
+
+    //    param_set_and_write_new_value( (*this) * postmul );
 }
 
 void SatellitePairArrayParam::addKnotHolderEntities(KnotHolder *knotholder,
@@ -314,6 +334,7 @@ void FilletChamferKnotHolderEntity::knot_set(Point const &p,
         sp_lpe_item_update_patheffect(splpeitem, false, false);
     }
 }
+
 
 Geom::Point 
 FilletChamferKnotHolderEntity::knot_get() const

@@ -52,6 +52,7 @@ public:
     virtual bool providesKnotHolderEntities() const {
         return true;
     }
+    void param_transform_multiply(Geom::Affine const &postmul, bool /*set*/);
     void set_document_unit(Glib::ustring value_document_unit);
     void set_use_distance(bool use_knot_distance );
     void set_unit(const gchar *abbr);

@@ -76,7 +76,9 @@ class Pointwise
         void recalculate_for_new_pwd2(Piecewise<D2<SBasis> > A);
         void pwd2_append(Piecewise<D2<SBasis> > A);
         void pwd2_sustract(Piecewise<D2<SBasis> > A);
-        void set_extremes(bool endOpenSat, bool active, bool hidden, double amount = -1, double angle = -1);
+        void set_extremes(bool active, bool hidden, double amount = -1, double angle = -1);
+        void deleteSatellites(size_t A);
+        void subpath_append_reorder(size_t subpath);
         void reverse(size_t start,size_t end);
         void setPathInfo();
         void setPathInfo(Piecewise<D2<SBasis> >);

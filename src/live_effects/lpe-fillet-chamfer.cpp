@@ -59,7 +59,8 @@ LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject) :
     hide_knots(_("Hide knots"), _("Hide knots"), "hide_knots", &wr, this, false),
     ignore_radius_0(_("Ignore 0 radius knots"), _("Ignore 0 radius knots"), "ignore_radius_0", &wr, this, false),
     helper_size(_("Helper size with direction:"), _("Helper size with direction"), "helper_size", &wr, this, 0),
-    pointwise(NULL)
+    pointwise(NULL),
+    segCount(0)
 {
     registerParameter(&satellitepairarrayparam_values);
     registerParameter(&unit);
@@ -380,42 +381,51 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
         }
         bool refresh = false;
         bool hide = true;
-        for(unsigned i = 0; i < sats.size(); i++){
-            if(sats[i].second.getIsTime() != flexible){
-                sats[i].second.setIsTime(flexible);
-                double amount = sats[i].second.getAmount();
-                D2<SBasis> d2_in = pwd2_in[sats[i].first];
-                if(sats[i].second.getIsTime()){
-                    double time = sats[i].second.toTime(amount,d2_in);
-                    sats[i].second.setAmount(time);
+        for (std::vector<std::pair<size_t,Satellite> >::iterator it = sats.begin(); it != sats.end();)
+    {
+            if(it->second.getIsTime() != flexible){
+                it->second.setIsTime(flexible);
+                double amount = it->second.getAmount();
+                D2<SBasis> d2_in = pwd2_in[it->first];
+                if(it->second.getIsTime()){
+                    double time = it->second.toTime(amount,d2_in);
+                    it->second.setAmount(time);
                 } else {
-                    double size = sats[i].second.toSize(amount,d2_in);
-                    sats[i].second.setAmount(size);
+                    double size = it->second.toSize(amount,d2_in);
+                    it->second.setAmount(size);
                 }
             }
-            if(sats[i].second.getHasMirror() != mirror_knots){
-                sats[i].second.setHasMirror(mirror_knots);
+            if(it->second.getHasMirror() != mirror_knots){
+                it->second.setHasMirror(mirror_knots);
                 refresh = true;
             }
-            if(sats[i].second.getHidden() == false){
+            if(it->second.getHidden() == false){
                 hide = false;
             }
-            sats[i].second.setHidden(hide_knots);
+            it->second.setHidden(hide_knots);
+            if(it->second.getIsEndOpen()){
+                it = sats.erase(it);
+            } else {
+                ++it;
+            }
         }
         if(hide != hide_knots){
             refresh = true;
         }
-        pointwise = new Pointwise(pwd2_in, sats);
-        //mandatory call
-        pointwise->set_extremes(false, false, true);
+        
+        if(pointwise && c->get_segment_count() != segCount && segCount != 0){
+            pointwise->recalculate_for_new_pwd2(pwd2_in);
+            pointwise->set_extremes(false, true, 0.0, 0.0);
+            segCount = c->get_segment_count();
+        } else {
+            pointwise = new Pointwise(pwd2_in, sats);
+            //mandatory call
+            pointwise->set_extremes(false, true);
+            segCount = c->get_segment_count();
+        }
         satellitepairarrayparam_values.set_pointwise(pointwise);
         if(refresh){
             refreshKnots();
-        }
-        if(c->nodes_in_path() != sats.size()){
-            pointwise->recalculate_for_new_pwd2(pwd2_in);
-            pointwise->set_extremes(true, false, true, 0.0, 0.0);
-            satellitepairarrayparam_values.set_pointwise(pointwise);
         }
     } else {
         g_warning("LPE Fillet can only be applied to shapes (not groups).");
@@ -426,8 +436,8 @@ void
 LPEFilletChamfer::adjustForNewPath(std::vector<Geom::Path> const &path_in)
 {
     if (!path_in.empty() && pointwise) {
-        pointwise->recalculate_for_new_pwd2(pathv_to_linear_and_cubic_beziers(path_in)[0].toPwSb());
-        pointwise->set_extremes(true, false, true, 0.0, 0.0);
+        pointwise->recalculate_for_new_pwd2(remove_short_cuts(paths_to_pw(pathv_to_linear_and_cubic_beziers(path_in)),0.01));
+        pointwise->set_extremes(false, true, 0.0, 0.0);
         satellitepairarrayparam_values.set_pointwise(pointwise);
     }
 }
@@ -532,10 +542,6 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
             if(time1 <= time0){
                 time1 = time0;
             }
-            std::cout << counter << ":::::::::::::::::::::::::::::\n";
-            std::cout << time0 << "time0\n";
-            std::cout << time1 << "time1\n";
-            std::cout << time2 << "time2\n";
             std::vector<double> times;
             times.push_back(time0);
             times.push_back(time1);
