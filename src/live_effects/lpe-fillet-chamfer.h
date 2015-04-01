@@ -52,7 +52,7 @@ public:
     void fillet();
     void inverseFillet();
 
-    SatelliteArrayParam satellitearrayparam_values;
+    SatelliteArrayParam satellites_param;
 
 private:
     UnitParam unit;

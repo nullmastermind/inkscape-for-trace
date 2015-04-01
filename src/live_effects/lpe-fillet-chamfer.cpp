@@ -41,8 +41,8 @@ static const Util::EnumDataConverter<FilletMethod> FMConverter(FilletMethodData,
 
 LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject)
     : Effect(lpeobject),
-      satellitearrayparam_values(_("pair_array_param"), _("pair_array_param"),
-                                 "satellitearrayparam_values", &wr, this),
+      satellites_param(_("pair_array_param"), _("pair_array_param"),
+                                 "satellites_param", &wr, this),
       unit(_("Unit:"), _("Unit"), "unit", &wr, this),
       method(_("Method:"), _("Methods to calculate the fillet or chamfer"),
              "method", FMConverter, &wr, this, FM_AUTO),
@@ -68,7 +68,7 @@ LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject)
                   _("Helper size with direction"), "helper_size", &wr, this, 0),
       pointwise(NULL), segment_size(0)
 {
-    registerParameter(&satellitearrayparam_values);
+    registerParameter(&satellites_param);
     registerParameter(&unit);
     registerParameter(&method);
     registerParameter(&radius);
@@ -151,7 +151,7 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
             }
         }
         pointwise = new Pointwise(pwd2_in, satellites);
-        satellitearrayparam_values.setPointwise(pointwise);
+        satellites_param.setPointwise(pointwise);
     } else {
         g_warning("LPE Fillet/Chamfer can only be applied to shapes (not groups).");
         SPLPEItem *item = const_cast<SPLPEItem *>(lpeItem);
@@ -275,8 +275,8 @@ void LPEFilletChamfer::inverseChamfer()
 
 void LPEFilletChamfer::refreshKnots()
 {
-    if (satellitearrayparam_values.knoth) {
-        satellitearrayparam_values.knoth->update_knots();
+    if (satellites_param.knoth) {
+        satellites_param.knoth->update_knots();
     }
 }
 
@@ -331,7 +331,7 @@ void LPEFilletChamfer::updateAmount()
         }
     }
     pointwise->setSatellites(satellites);
-    satellitearrayparam_values.setPointwise(pointwise);
+    satellites_param.setPointwise(pointwise);
 }
 
 void LPEFilletChamfer::updateChamferSteps()
@@ -353,7 +353,7 @@ void LPEFilletChamfer::updateChamferSteps()
         }
     }
     pointwise->setSatellites(satellites);
-    satellitearrayparam_values.setPointwise(pointwise);
+    satellites_param.setPointwise(pointwise);
 }
 
 void LPEFilletChamfer::updateSatelliteType(Geom::SatelliteType satellitetype)
@@ -375,7 +375,7 @@ void LPEFilletChamfer::updateSatelliteType(Geom::SatelliteType satellitetype)
         }
     }
     pointwise->setSatellites(satellites);
-    satellitearrayparam_values.setPointwise(pointwise);
+    satellites_param.setPointwise(pointwise);
 }
 
 void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
@@ -389,22 +389,26 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
             c = path->get_original_curve();
         }
         //fillet chamfer specific calls
-        satellitearrayparam_values.setDocumentUnit(defaultUnit);
-        satellitearrayparam_values.setUseDistance(use_knot_distance);
-        satellitearrayparam_values.setUnit(unit.get_abbreviation());
+        satellites_param.setDocumentUnit(defaultUnit);
+        satellites_param.setUseDistance(use_knot_distance);
+        satellites_param.setUnit(unit.get_abbreviation());
         //mandatory call
-        satellitearrayparam_values.setEffectType(effectType());
+        satellites_param.setEffectType(effectType());
 
         PathVector const &original_pathv =
             pathv_to_linear_and_cubic_beziers(c->get_pathvector());
         Piecewise<D2<SBasis> > pwd2_in = paths_to_pw(original_pathv);
         pwd2_in = remove_short_cuts(pwd2_in, 0.01);
-        std::vector<Geom::Satellite> sats = satellitearrayparam_values.data();
+        std::vector<Geom::Satellite> sats = satellites_param.data();
+        if(sats.empty()){
+            doOnApply(lpeItem);
+            sats = satellites_param.data();
+        }
         //optional call
         if (hide_knots) {
-            satellitearrayparam_values.setHelperSize(0);
+            satellites_param.setHelperSize(0);
         } else {
-            satellitearrayparam_values.setHelperSize(helper_size);
+            satellites_param.setHelperSize(helper_size);
         }
         bool refresh = false;
         bool hide = true;
@@ -443,7 +447,7 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
             pointwise = new Pointwise(pwd2_in, sats);
             segment_size = c->get_segment_count();
         }
-        satellitearrayparam_values.setPointwise(pointwise);
+        satellites_param.setPointwise(pointwise);
         if (refresh) {
             refreshKnots();
         }
@@ -458,7 +462,7 @@ LPEFilletChamfer::adjustForNewPath(std::vector<Geom::Path> const &path_in)
     if (!path_in.empty() && pointwise) {
         pointwise->recalculateForNewPwd2(remove_short_cuts(
                                              paths_to_pw(pathv_to_linear_and_cubic_beziers(path_in)), 0.01));
-        satellitearrayparam_values.setPointwise(pointwise);
+        satellites_param.setPointwise(pointwise);
     }
 }
 
