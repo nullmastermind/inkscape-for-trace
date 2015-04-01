@@ -10,7 +10,8 @@
  * Special thanks to Johan Engelen for the base of the effect -powerstroke-
  * Also to ScislaC for point me to the idea
  * Also su_v for his construvtive feedback and time
- * and finaly to Liam P. White for his big help on coding, that save me a lot of hours
+ * and finaly to Liam P. White for his big help on coding, that save me a lot of
+ * hours
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
@@ -36,10 +37,11 @@ public:
     LPEFilletChamfer(LivePathEffectObject *lpeobject);
     virtual ~LPEFilletChamfer();
     virtual void doBeforeEffect(SPLPEItem const *lpeItem);
-    virtual std::vector<Geom::Path> doEffect_path(std::vector<Geom::Path> const &path_in);
+    virtual std::vector<Geom::Path>
+    doEffect_path(std::vector<Geom::Path> const &path_in);
     virtual void doOnApply(SPLPEItem const *lpeItem);
     virtual void adjustForNewPath(std::vector<Geom::Path> const &path_in);
-    virtual Gtk::Widget* newWidget();
+    virtual Gtk::Widget *newWidget();
 
     void updateSatelliteType(Geom::SatelliteType satellitetype);
     void updateChamferSteps();
@@ -49,7 +51,7 @@ public:
     void inverseChamfer();
     void fillet();
     void inverseFillet();
-    
+
     SatelliteArrayParam satellitearrayparam_values;
 
 private:
@@ -66,7 +68,7 @@ private:
     ScalarParam helper_size;
 
     Geom::Pointwise *pointwise;
-    double segCount;
+    double segment_size;
 
     LPEFilletChamfer(const LPEFilletChamfer &);
     LPEFilletChamfer &operator=(const LPEFilletChamfer &);

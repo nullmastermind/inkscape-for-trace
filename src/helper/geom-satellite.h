@@ -1,12 +1,12 @@
 /**
  * \file
  * \brief Satellite a per ?node/curve holder of data.
- *//*
- * Authors:
- * 2015 Jabier Arraiza Cenoz<jabier.arraiza@marker.es>
- *
- * This code is in public domain
- */
+ */ /*
+    * Authors:
+    * 2015 Jabier Arraiza Cenoz<jabier.arraiza@marker.es>
+    *
+    * This code is in public domain
+    */
 
 #ifndef LIB2GEOM_SEEN_SATELLITE_H
 #define LIB2GEOM_SEEN_SATELLITE_H
@@ -21,29 +21,34 @@ namespace Geom {
 /**
  * @brief Satellite a per ?node/curve holder of data.
  */
-class Satellite
-{
-  public:
+class Satellite {
+public:
 
     Satellite();
-    Satellite(SatelliteType satelliteType, bool isTime, bool active, bool hasMirror, bool hidden, double amount, double angle, size_t steps);
+    Satellite(SatelliteType satelliteType, bool isTime, bool active,
+              bool hasMirror, bool hidden, double amount, double angle,
+              size_t steps);
 
     virtual ~Satellite();
 
-    double toSize(double A,Geom::D2<Geom::SBasis> d2_in) const;
-    double toTime(double A,Geom::D2<Geom::SBasis> d2_in) const;
-    double len_to_rad(double A, boost::optional<Geom::D2<Geom::SBasis> > d2_in, Geom::D2<Geom::SBasis> d2_out, boost::optional<Geom::Satellite> previousSatellite) const;
-    double rad_to_len(double A, boost::optional<Geom::D2<Geom::SBasis> > d2_in, Geom::D2<Geom::SBasis> d2_out, boost::optional<Geom::Satellite> previousSatellite) const;
+    double toSize(double A, Geom::D2<Geom::SBasis> d2_in) const;
+    double toTime(double A, Geom::D2<Geom::SBasis> d2_in) const;
+    double lenToRad(double A, boost::optional<Geom::D2<Geom::SBasis> > d2_in,
+                    Geom::D2<Geom::SBasis> d2_out,
+                    boost::optional<Geom::Satellite> previousSatellite) const;
+    double radToLen(double A, boost::optional<Geom::D2<Geom::SBasis> > d2_in,
+                    Geom::D2<Geom::SBasis> d2_out,
+                    boost::optional<Geom::Satellite> previousSatellite) const;
 
-    double getTime(Geom::D2<Geom::SBasis> d2_in) const;
-    double getTime(double A, bool I, Geom::D2<Geom::SBasis> d2_in) const;
-    double getSize(Geom::D2<Geom::SBasis> d2_in) const;
+    double time(Geom::D2<Geom::SBasis> d2_in) const;
+    double time(double A, bool I, Geom::D2<Geom::SBasis> d2_in) const;
+    double size(Geom::D2<Geom::SBasis> d2_in) const;
 
     void setPosition(Geom::Point p, Geom::D2<Geom::SBasis> d2_in);
     Geom::Point getPosition(Geom::D2<Geom::SBasis> d2_in) const;
 
-    void setSatelliteType(gchar const * A);
-    gchar const * getSatelliteTypeGchar() const;
+    void setSatelliteType(gchar const *A);
+    gchar const *getSatelliteTypeGchar() const;
     //TODO: maybe make after variables protected?
     SatelliteType satelliteType;
     bool isTime;
@@ -68,4 +73,6 @@ class Satellite
   fill-column:99
   End:
 */
-// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :
+// vim:
+// filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99
+// :

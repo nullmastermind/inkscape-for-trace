@@ -1,12 +1,12 @@
 /**
  * \file
  * \brief Pointwise a class to manage a vector of satellites per piecewise curve
- *//*
- * Authors:
- * 2015 Jabier Arraiza Cenoz<jabier.arraiza@marker.es>
- *
- * This code is in public domain
- */
+ */ /*
+    * Authors:
+    * 2015 Jabier Arraiza Cenoz<jabier.arraiza@marker.es>
+    *
+    * This code is in public domain
+    */
 
 #ifndef SEEN_GEOM_POINTWISE_H
 #define SEEN_GEOM_POINTWISE_H
@@ -26,7 +26,7 @@ namespace Geom {
  * @brief Pointwise a class to manage a vector of satellites per piecewise curve
  *
  * For the moment is a per curve satellite holder not per node. This is ok for
- * much cases but not a real node satellite on open paths 
+ * much cases but not a real node satellite on open paths
  * To implement this we can:
  * add extra satellite in open paths, and take notice of current open paths
  * or put extra satellites on back for each open subpath
@@ -35,30 +35,29 @@ namespace Geom {
  * optional satellites, and remove the active variable in satellites.
  *
  */
-class Pointwise
-{
-    public:
-        Pointwise(Piecewise<D2<SBasis> > pwd2, std::vector<Satellite> satellites);
-        virtual ~Pointwise();
+class Pointwise {
+public:
+    Pointwise(Piecewise<D2<SBasis> > pwd2, std::vector<Satellite> satellites);
+    virtual ~Pointwise();
 
-        Piecewise<D2<SBasis> > getPwd2() const;
-        void setPwd2(Piecewise<D2<SBasis> > pwd2_in);
+    Piecewise<D2<SBasis> > getPwd2() const;
+    void setPwd2(Piecewise<D2<SBasis> > pwd2_in);
 
-        std::vector<Satellite> getSatellites() const;
-        void setSatellites(std::vector<Satellite> sats);
+    std::vector<Satellite> getSatellites() const;
+    void setSatellites(std::vector<Satellite> sats);
 
-        void setStart();
+    void setStart();
 
-        void recalculate_for_new_pwd2(Piecewise<D2<SBasis> > A);
-        void pwd2_sustract(Piecewise<D2<SBasis> > A);
-        void pwd2_append(Piecewise<D2<SBasis> > A);
-        void subpath_to_back(size_t subpath);
-        void subpath_reverse(size_t start,size_t end);
+    void recalculateForNewPwd2(Piecewise<D2<SBasis> > A);
+    void pwd2Sustract(Piecewise<D2<SBasis> > A);
+    void pwd2Append(Piecewise<D2<SBasis> > A);
+    void subpathToBack(size_t subpath);
+    void subpathReverse(size_t start, size_t end);
 
-    private:
-        Piecewise<D2<SBasis> > _pwd2;
-        std::vector<Satellite> _satellites;
-        Pathinfo _pathInfo;
+private:
+    Piecewise<D2<SBasis> > _pwd2;
+    std::vector<Satellite> _satellites;
+    Pathinfo _path_info;
 };
 
 } // end namespace Geom
@@ -73,4 +72,6 @@ class Pointwise
   fill-column:99
   End:
 */
-// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :
+// vim:
+// filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99
+// :

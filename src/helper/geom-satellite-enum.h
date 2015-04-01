@@ -4,23 +4,23 @@
 /**
  * \file
  * \brief Satellite types enum
- *//*
- * Authors:
- * 2015 Jabier Arraiza Cenoz<jabier.arraiza@marker.es>
- *
- * This code is in public domain
- */
+ */ /*
+    * Authors:
+    * 2015 Jabier Arraiza Cenoz<jabier.arraiza@marker.es>
+    *
+    * This code is in public domain
+    */
 
 #include "util/enums.h"
 
 namespace Geom {
 
 enum SatelliteType {
-    F=0, //Fillet
-    IF, //Inverse Fillet
-    C, //Chamfer
-    IC, //Inverse Chamfer
-    KO // Invalid Satellite)
+    F = 0, //Fillet
+    IF,    //Inverse Fillet
+    C,     //Chamfer
+    IC,    //Inverse Chamfer
+    KO     // Invalid Satellite)
 };
 
 } //namespace Geom

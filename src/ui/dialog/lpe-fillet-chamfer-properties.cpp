@@ -53,7 +53,7 @@ FilletChamferPropertiesDialog::FilletChamferPropertiesDialog()
     _fillet_chamfer_position_numeric.set_increments(1,1);
     //todo: get tha max aloable infinity freeze the widget
     _fillet_chamfer_position_numeric.set_range(0., 999999999999999999.);
-    
+
     _fillet_chamfer_position_label.set_label(_("Radius (pixels):"));
     _fillet_chamfer_position_label.set_alignment(1.0, 0.5);
 
@@ -65,7 +65,7 @@ FilletChamferPropertiesDialog::FilletChamferPropertiesDialog()
     _fillet_chamfer_chamfer_subdivisions.set_increments(1,1);
     //todo: get tha max aloable infinity freeze the widget
     _fillet_chamfer_chamfer_subdivisions.set_range(1, 4294967295);
-    
+
     _fillet_chamfer_chamfer_subdivisions_label.set_label(_("Chamfer subdivisions:"));
     _fillet_chamfer_chamfer_subdivisions_label.set_alignment(1.0, 0.5);
 
@@ -119,29 +119,29 @@ FilletChamferPropertiesDialog::FilletChamferPropertiesDialog()
 FilletChamferPropertiesDialog::~FilletChamferPropertiesDialog()
 {
 
-    _set_desktop(NULL);
+    _setDesktop(NULL);
 }
 
 void FilletChamferPropertiesDialog::showDialog(
-    SPDesktop *desktop, double amount,
+    SPDesktop *desktop, double _amount,
     const Inkscape::LivePathEffect::
     FilletChamferKnotHolderEntity *pt,
-    const gchar *unit,
-    bool use_distance,
-    bool aprox_radius,
-    Glib::ustring documentUnit,
-    Geom::Satellite satellite)
+    const gchar *_unit,
+    bool _use_distance,
+    bool _aprox_radius,
+    Glib::ustring _documentUnit,
+    Geom::Satellite _satellite)
 {
     FilletChamferPropertiesDialog *dialog = new FilletChamferPropertiesDialog();
 
-    dialog->_set_desktop(desktop);
-    dialog->_set_unit(unit);
-    dialog->_set_use_distance(use_distance);
-    dialog->_set_aprox(aprox_radius);
-    dialog->_set_document_unit(documentUnit);
-    dialog->_set_amount(amount);
-    dialog->_set_satellite(satellite);
-    dialog->_set_pt(pt);
+    dialog->_setDesktop(desktop);
+    dialog->_setUnit(_unit);
+    dialog->_setUseDistance(_use_distance);
+    dialog->_setAprox(_aprox_radius);
+    dialog->_setDocumentUnit(_documentUnit);
+    dialog->_setAmount(_amount);
+    dialog->_setSatellite(_satellite);
+    dialog->_setPt(pt);
 
     dialog->set_title(_("Modify Fillet-Chamfer"));
     dialog->_apply_button.set_label(_("_Modify"));
@@ -156,7 +156,7 @@ void FilletChamferPropertiesDialog::showDialog(
 
 void FilletChamferPropertiesDialog::_apply()
 {
-   
+
     double d_pos =  _fillet_chamfer_position_numeric.get_value();
     if (d_pos >= 0) {
         if (_fillet_chamfer_type_fillet.get_active() == true) {
@@ -174,11 +174,11 @@ void FilletChamferPropertiesDialog::_apply()
             }
             d_pos = d_pos / 100;
         } else {
-            d_pos = Inkscape::Util::Quantity::convert(d_pos, unit, document_unit);
+            d_pos = Inkscape::Util::Quantity::convert(d_pos, _unit, _document_unit);
         }
         _satellite.amount = d_pos;
         size_t steps = (size_t)_fillet_chamfer_chamfer_subdivisions.get_value();
-        if(steps < 1){
+        if(steps < 1) {
             steps = 1;
         }
         _satellite.steps = steps;
@@ -189,7 +189,7 @@ void FilletChamferPropertiesDialog::_apply()
 
 void FilletChamferPropertiesDialog::_close()
 {
-    _set_desktop(NULL);
+    _setDesktop(NULL);
     destroy_();
     Glib::signal_idle().connect(
         sigc::bind_return(
@@ -211,26 +211,26 @@ void FilletChamferPropertiesDialog::_handleButtonEvent(GdkEventButton *event)
     }
 }
 
-void FilletChamferPropertiesDialog::_set_satellite(Geom::Satellite satellite)
+void FilletChamferPropertiesDialog::_setSatellite(Geom::Satellite satellite)
 {
     double position;
     std::string distance_or_radius = std::string(_("Radius"));
-    if(aprox){
+    if(_aprox) {
         distance_or_radius = std::string(_("Radius approximated"));
     }
-    if(use_distance){
+    if(_use_distance) {
         distance_or_radius = std::string(_("Knot distance"));
     }
     if (satellite.isTime) {
-        position = amount * 100;
+        position = _amount * 100;
         _flexible = true;
         _fillet_chamfer_position_label.set_label(_("Position (%):"));
     } else {
         _flexible = false;
-        std::string posConcat = Glib::ustring::compose (_("%1 (%2):"), distance_or_radius, unit);
+        std::string posConcat = Glib::ustring::compose (_("%1 (%2):"), distance_or_radius, _unit);
         _fillet_chamfer_position_label.set_label(_(posConcat.c_str()));
-        position = amount;
-        position = Inkscape::Util::Quantity::convert(position, document_unit, unit);
+        position = _amount;
+        position = Inkscape::Util::Quantity::convert(position, _document_unit, _unit);
     }
     _fillet_chamfer_position_numeric.set_value(position);
     _fillet_chamfer_chamfer_subdivisions.set_value(satellite.steps);
@@ -246,7 +246,7 @@ void FilletChamferPropertiesDialog::_set_satellite(Geom::Satellite satellite)
     _satellite = satellite;
 }
 
-void FilletChamferPropertiesDialog::_set_pt(
+void FilletChamferPropertiesDialog::_setPt(
     const Inkscape::LivePathEffect::
     FilletChamferKnotHolderEntity *pt)
 {
@@ -255,35 +255,35 @@ void FilletChamferPropertiesDialog::_set_pt(
                      pt);
 }
 
-void FilletChamferPropertiesDialog::_set_unit(const gchar *abbr)
+void FilletChamferPropertiesDialog::_setUnit(const gchar *abbr)
 {
-    unit = abbr;
+    _unit = abbr;
 }
 
-void FilletChamferPropertiesDialog::_set_amount(double amm)
+void FilletChamferPropertiesDialog::_setAmount(double amm)
 {
-    amount = amm;
+    _amount = amm;
 }
 
 
 
 
-void FilletChamferPropertiesDialog::_set_document_unit(Glib::ustring abbr)
+void FilletChamferPropertiesDialog::_setDocumentUnit(Glib::ustring abbr)
 {
-    document_unit = abbr;
+    _document_unit = abbr;
 }
 
-void FilletChamferPropertiesDialog::_set_use_distance(bool use_knot_distance)
+void FilletChamferPropertiesDialog::_setUseDistance(bool use_knot_distance)
 {
-    use_distance = use_knot_distance;
+    _use_distance = use_knot_distance;
 }
 
-void FilletChamferPropertiesDialog::_set_aprox(bool aprox_radius)
+void FilletChamferPropertiesDialog::_setAprox(bool _aprox_radius)
 {
-    aprox = aprox_radius;
+    _aprox = _aprox_radius;
 }
 
-void FilletChamferPropertiesDialog::_set_desktop(SPDesktop *desktop)
+void FilletChamferPropertiesDialog::_setDesktop(SPDesktop *desktop)
 {
     if (desktop) {
         Inkscape::GC::anchor(desktop);
