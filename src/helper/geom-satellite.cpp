@@ -1,33 +1,11 @@
 /**
  * \file
- * \brief Satellite
+ * \brief Satellite a per ?node/curve holder of data.
  *//*
  * Authors:
  * 2015 Jabier Arraiza Cenoz<jabier.arraiza@marker.es>
- * Copyright 2015  authors
  *
- * This library is free software; you can redistribute it and/or
- * modify it either under the terms of the GNU Lesser General Public
- * License version 2.1 as published by the Free Software Foundation
- * (the "LGPL") or, at your option, under the terms of the Mozilla
- * Public License Version 1.1 (the "MPL"). If you do not alter this
- * notice, a recipient may use your version of this file under either
- * the MPL or the LGPL.
- *
- * You should have received a copy of the LGPL along with this library
- * in the file COPYING-LGPL-2.1; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- * You should have received a copy of the MPL along with this library
- * in the file COPYING-MPL-1.1
- *
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- *
- * This software is distributed on an "AS IS" basis, WITHOUT WARRANTY
- * OF ANY KIND, either express or implied. See the LGPL or the MPL for
- * the specific language governing rights and limitations.
+ * This code is in public domain
  */
 
 #include <helper/geom-satellite.h>
@@ -42,6 +20,9 @@
 
 namespace Geom {
 
+/**
+ * @brief Satellite a per ?node/curve holder of data.
+ */
 Satellite::Satellite(){};
 
 Satellite::Satellite(SatelliteType satelliteType, bool isTime, bool active, bool hasMirror, bool hidden, double amount, double angle, size_t steps)
@@ -49,6 +30,9 @@ Satellite::Satellite(SatelliteType satelliteType, bool isTime, bool active, bool
 
 Satellite::~Satellite() {};
 
+/**
+ * Calculate the time in d2_in with a size of A
+ */
 double
 Satellite::toTime(double A,Geom::D2<Geom::SBasis> d2_in) const
 {
@@ -74,6 +58,9 @@ Satellite::toTime(double A,Geom::D2<Geom::SBasis> d2_in) const
     return t;
 }
 
+/**
+ * Calculate the size in d2_in with a point at A
+ */
 double
 Satellite::toSize(double A,Geom::D2<Geom::SBasis> d2_in) const
 {
@@ -94,7 +81,9 @@ Satellite::toSize(double A,Geom::D2<Geom::SBasis> d2_in) const
     return s;
 }
 
-
+/**
+ * Calculate the lenght of a satellite from a radious A input.
+ */
 double 
 Satellite::rad_to_len(double A, boost::optional<Geom::D2<Geom::SBasis> > d2_in, Geom::D2<Geom::SBasis> d2_out, boost::optional<Geom::Satellite> previousSatellite) const
 {
@@ -118,6 +107,9 @@ Satellite::rad_to_len(double A, boost::optional<Geom::D2<Geom::SBasis> > d2_in, 
     return len;
 }
 
+ /**
+ * Calculate the radious of a satellite from a lenght A input.
+ */
 double 
 Satellite::len_to_rad(double A, boost::optional<Geom::D2<Geom::SBasis> > d2_in, Geom::D2<Geom::SBasis> d2_out, boost::optional<Geom::Satellite> previousSatellite) const
 {
@@ -157,17 +149,9 @@ Satellite::len_to_rad(double A, boost::optional<Geom::D2<Geom::SBasis> > d2_in, 
     return 0;
 }
 
-double
-Satellite::getOpositeTime(double s, Geom::D2<Geom::SBasis> d2_in) const
-{
-    if(s == 0){
-        return 1;
-    }
-    double lenghtPart = Geom::length(d2_in, Geom::EPSILON);
-    double size = lenghtPart - s;
-    return toTime(size, d2_in);
-}
-
+/**
+ * Get the time position of the satellite in d2_in
+ */
 double
 Satellite::getTime(Geom::D2<Geom::SBasis> d2_in) const
 {
@@ -181,6 +165,29 @@ Satellite::getTime(Geom::D2<Geom::SBasis> d2_in) const
     return t;
 }
 
+/**.
+ * Get the time from a lenght A in other curve, a bolean I gived to reverse time
+ */
+double
+Satellite::getTime(double A, bool I, Geom::D2<Geom::SBasis> d2_in) const
+{
+    if(A == 0 && I){
+        return 1;
+    }
+    if(A == 0 && !I){
+        return 0;
+    }
+    if(!I){
+        return toTime(A, d2_in);
+    }
+    double lenghtPart = Geom::length(d2_in, Geom::EPSILON);
+    A = lenghtPart - A;
+    return toTime(A, d2_in);
+}
+
+/**
+ * Get the lenght of the satellite in d2_in
+ */
 double
 Satellite::getSize(Geom::D2<Geom::SBasis> d2_in) const
 {
@@ -191,7 +198,9 @@ Satellite::getSize(Geom::D2<Geom::SBasis> d2_in) const
     return s;
 }
 
-
+/**
+ * Get the point position of the satellite
+ */
 Geom::Point 
 Satellite::getPosition(Geom::D2<Geom::SBasis> d2_in) const
 {
@@ -199,6 +208,9 @@ Satellite::getPosition(Geom::D2<Geom::SBasis> d2_in) const
     return d2_in.valueAt(t);
 }
 
+/**
+ * Set the position of the satellite from a gived point P
+ */
 void
 Satellite::setPosition(Geom::Point p, Geom::D2<Geom::SBasis> d2_in)
 {
@@ -209,6 +221,9 @@ Satellite::setPosition(Geom::Point p, Geom::D2<Geom::SBasis> d2_in)
     amount = A;
 }
 
+/**
+ * Map a satellite type with gchar
+ */
 void 
 Satellite::setSatelliteType(gchar const * A)
 {
@@ -216,6 +231,10 @@ Satellite::setSatelliteType(gchar const * A)
     satelliteType = GcharMapToSatelliteType.find(std::string(A))->second;
 }
 
+
+/**
+ * Map a gchar with satelliteType
+ */
 gchar const *
 Satellite::getSatelliteTypeGchar() const
 {

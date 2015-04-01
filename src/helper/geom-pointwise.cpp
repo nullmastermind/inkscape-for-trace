@@ -1,32 +1,11 @@
-/*
- * pointwise.cpp
+/**
+ * \file
+ * \brief Pointwise a class to manage a vector of satellites per piecewise curve
+ *//*
  * Authors:
  * 2015 Jabier Arraiza Cenoz<jabier.arraiza@marker.es>
- * Copyright 2015  authors
  *
- * This library is free software; you can redistribute it and/or
- * modify it either under the terms of the GNU Lesser General Public
- * License version 2.1 as published by the Free Software Foundation
- * (the "LGPL") or, at your option, under the terms of the Mozilla
- * Public License Version 1.1 (the "MPL"). If you do not alter this
- * notice, a recipient may use your version of this file under either
- * the MPL or the LGPL.
- *
- * You should have received a copy of the LGPL along with this library
- * in the file COPYING-LGPL-2.1; if not, output to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- * You should have received a copy of the MPL along with this library
- * in the file COPYING-MPL-1.1
- *
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- *
- * This software is distributed on an "AS IS" basis, WITHOUT WARRANTY
- * OF ANY KIND, either express or implied. See the LGPL or the MPL for
- * the specific language governing rights and limitations.
- *
+ * This code is in public domain
  */
 
 #include <helper/geom-pointwise.h>
@@ -34,6 +13,19 @@
 
 namespace Geom {
 
+/**
+ * @brief Pointwise a class to manage a vector of satellites per piecewise curve
+ *
+ * For the moment is a per curve satellite holder not per node. This is ok for
+ * much cases but not a real node satellite on open paths 
+ * To implement this we can:
+ * add extra satellite in open paths, and take notice of current open paths
+ * or put extra satellites on back for each open subpath
+ *
+ * Also maybe the vector of satellites become a vector of
+ * optional satellites, and remove the active variable in satellites.
+ *
+ */
 Pointwise::Pointwise(Piecewise<D2<SBasis> > pwd2, std::vector<Satellite> satellites)
         : _pwd2(pwd2), _satellites(satellites), _pathInfo(pwd2)
 {
@@ -68,6 +60,8 @@ Pointwise::setSatellites(std::vector<Satellite> sats)
     setStart();
 }
 
+/** Update the start satellite on ope/closed paths.
+ */
 void
 Pointwise::setStart()
 {
@@ -85,6 +79,8 @@ Pointwise::setStart()
     }
 }
 
+/** Fired when a path is modified.
+ */
 void
 Pointwise::recalculate_for_new_pwd2(Piecewise<D2<SBasis> > A)
 {
@@ -95,6 +91,8 @@ Pointwise::recalculate_for_new_pwd2(Piecewise<D2<SBasis> > A)
     }
 }
 
+/** Some nodes/subpaths are removed.
+ */
 void
 Pointwise::pwd2_sustract(Piecewise<D2<SBasis> > A)
 {
@@ -112,7 +110,8 @@ Pointwise::pwd2_sustract(Piecewise<D2<SBasis> > A)
     setSatellites(sats);
 }
 
-
+/** Append nodes/subpaths to current pointwise
+ */
 void 
 Pointwise::pwd2_append(Piecewise<D2<SBasis> > A)
 {
@@ -123,6 +122,7 @@ Pointwise::pwd2_append(Piecewise<D2<SBasis> > A)
     for(size_t i = 0; i < A.size(); i++){
         size_t first = _pathInfo.getFirst(i-counter);
         size_t last = _pathInfo.getLast(i-counter);
+        //Check for subpath closed. If a subpath is closed, is not reversed or moved to back
         _pathInfo.setPwd2(A);
         size_t subpathAIndex = _pathInfo.getSubPathIndex(i);
         _pathInfo.setPwd2(_pwd2);
@@ -133,7 +133,8 @@ Pointwise::pwd2_append(Piecewise<D2<SBasis> > A)
             changedSubpath = subpathAIndex != _pathInfo.getSubPathIndex(i-counter);
         }
         if(!reorder && first == i-counter && !are_near(_pwd2[i-counter].at0(),A[i].at0(),0.001) && !changedSubpath){
-            subpath_to_top(_pathInfo.getSubPathIndex(first));
+            //Send the modified subpath to back
+            subpath_to_back(_pathInfo.getSubPathIndex(first));
             reorder = true;
             i--;
             continue;
@@ -161,8 +162,9 @@ Pointwise::pwd2_append(Piecewise<D2<SBasis> > A)
     setSatellites(sats);
 }
 
+
 void
-Pointwise::subpath_to_top(size_t subpath){
+Pointwise::subpath_to_back(size_t subpath){
     std::vector<Geom::Path> path_in = path_from_piecewise(remove_short_cuts(_pwd2,0.1), 0.001);
     size_t nSubpath = 0;
     size_t counter = 0;

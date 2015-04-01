@@ -1,17 +1,17 @@
 #ifndef LIB2GEOM_SEEN_SATELLITE_ENUM_H
 #define LIB2GEOM_SEEN_SATELLITE_ENUM_H
 
-/*
+/**
+ * \file
+ * \brief Satellite types enum
+ *//*
+ * Authors:
+ * 2015 Jabier Arraiza Cenoz<jabier.arraiza@marker.es>
  *
- *
-* Copyright (C) Jabier Arraiza Cenoz <jabier.arraiza@marker.es>
- *
- * Released under GNU GPL, read the file 'COPYING' for more information
+ * This code is in public domain
  */
 
 #include "util/enums.h"
-/*#include <boost/bimap.hpp>
-*/
 
 namespace Geom {
 
@@ -22,18 +22,6 @@ enum SatelliteType {
     IC, //Inverse Chamfer
     KO // Invalid Satellite)
 };
-
-/* TODO maybe is best do next by bimap
-    typedef boost::bimap< Geom::SatelliteType,gchar const *> map_type ;
-
-    map_type SatelliteTypeBimap;
-
-    SatelliteTypeBimap.insert( map_type::value_type(FILLET, "FILLET"));
-    SatelliteTypeBimap.insert( map_type::value_type(INVERSE_FILLET, "INVERSE_FILLET"));
-    SatelliteTypeBimap.insert( map_type::value_type(CHAMFER, "CHAMFER")) );
-    SatelliteTypeBimap.insert( map_type::value_type(INVERSE_CHAMFER, "INVERSE_CHAMFER"));
-    SatelliteTypeBimap.insert( map_type::value_type(INVALID_SATELLITE, "INVALID_SATELLITE"));
-*/
 
 } //namespace Geom
 

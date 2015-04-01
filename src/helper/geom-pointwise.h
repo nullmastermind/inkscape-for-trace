@@ -1,43 +1,11 @@
 /**
  * \file
- * \brief Pointwise
+ * \brief Pointwise a class to manage a vector of satellites per piecewise curve
  *//*
  * Authors:
  * 2015 Jabier Arraiza Cenoz<jabier.arraiza@marker.es>
- * Copyright 2015  authors
  *
- * Pointwise maintains a set of "Satellite" positions along a curve/pathvector.
- * The positions are specified as arc length distances along the curve or by 
- * time in the curve. Splicing operations automatically update the satellite 
- * positions to preserve the intent.
- * The data is serialised to SVG using a specialiced pointwise LPE parameter to 
- * handle it in th future can be a inkscape based property to paths 
- * Anywhere a Piecewise is used, a Pointwise can be substituted, allowing
- * existing algorithms to correctly update satellite positions.
-
- * This library is free software; you can redistribute it and/or
- * modify it either under the terms of the GNU Lesser General Public
- * License version 2.1 as published by the Free Software Foundation
- * (the "LGPL") or, at your option, under the terms of the Mozilla
- * Public License Version 1.1 (the "MPL"). If you do not alter this
- * notice, a recipient may use your version of this file under either
- * the MPL or the LGPL.
- *
- * You should have received a copy of the LGPL along with this library
- * in the file COPYING-LGPL-2.1; if not, output to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- * You should have received a copy of the MPL along with this library
- * in the file COPYING-MPL-1.1
- *
- * The contents of this file are subject to the Mozilla Public License
- * Version 1.1 (the "License"); you may not use this file except in
- * compliance with the License. You may obtain a copy of the License at
- * http://www.mozilla.org/MPL/
- *
- * This software is distributed on an "AS IS" basis, WITHOUT WARRANTY
- * OF ANY KIND, either express or implied. See the LGPL or the MPL for
- * the specific language governing rights and limitations.
- *
+ * This code is in public domain
  */
 
 #ifndef SEEN_GEOM_POINTWISE_H
@@ -53,28 +21,39 @@
 #include <boost/optional.hpp>
 
 namespace Geom {
-/**
- * %Pointwise function class.
- */
 
+/**
+ * @brief Pointwise a class to manage a vector of satellites per piecewise curve
+ *
+ * For the moment is a per curve satellite holder not per node. This is ok for
+ * much cases but not a real node satellite on open paths 
+ * To implement this we can:
+ * add extra satellite in open paths, and take notice of current open paths
+ * or put extra satellites on back for each open subpath
+ *
+ * Also maybe the vector of satellites become a vector of
+ * optional satellites, and remove the active variable in satellites.
+ *
+ */
 class Pointwise
 {
     public:
         Pointwise(Piecewise<D2<SBasis> > pwd2, std::vector<Satellite> satellites);
         virtual ~Pointwise();
 
-        std::vector<Satellite> getSatellites() const;
-        void setSatellites(std::vector<Satellite> sats);
         Piecewise<D2<SBasis> > getPwd2() const;
         void setPwd2(Piecewise<D2<SBasis> > pwd2_in);
+
+        std::vector<Satellite> getSatellites() const;
+        void setSatellites(std::vector<Satellite> sats);
+
         void setStart();
 
         void recalculate_for_new_pwd2(Piecewise<D2<SBasis> > A);
         void pwd2_sustract(Piecewise<D2<SBasis> > A);
         void pwd2_append(Piecewise<D2<SBasis> > A);
-        void subpath_to_top(size_t subpath);
+        void subpath_to_back(size_t subpath);
         void subpath_reverse(size_t start,size_t end);
-
 
     private:
         Piecewise<D2<SBasis> > _pwd2;
