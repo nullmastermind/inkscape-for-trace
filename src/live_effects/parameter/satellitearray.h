@@ -18,11 +18,11 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <glib.h>
 #include "live_effects/parameter/array.h"
 #include "live_effects/effect-enum.h"
+#include "helper/geom-pointwise.h"
 #include "knot-holder-entity.h"
-#include <2geom/pointwise.h>
+#include <glib.h>
 
 namespace Inkscape {
 
@@ -30,14 +30,14 @@ namespace LivePathEffect {
 
 class FilletChamferKnotHolderEntity;
 
-class SatellitePairArrayParam : public ArrayParam<std::pair<size_t, Geom::Satellite> > {
+class SatelliteArrayParam : public ArrayParam<Geom::Satellite> {
 public:
-    SatellitePairArrayParam(const Glib::ustring &label,
+    SatelliteArrayParam(const Glib::ustring &label,
                                  const Glib::ustring &tip,
                                  const Glib::ustring &key,
                                  Inkscape::UI::Widget::Registry *wr,
                                  Effect *effect);
-    virtual ~SatellitePairArrayParam();
+    virtual ~SatelliteArrayParam();
 
     virtual Gtk::Widget * param_newWidget() {
         return NULL;
@@ -66,8 +66,8 @@ public:
 protected:
     KnotHolder *knoth;
 private:
-    SatellitePairArrayParam(const SatellitePairArrayParam &);
-    SatellitePairArrayParam &operator=(const SatellitePairArrayParam &);
+    SatelliteArrayParam(const SatelliteArrayParam &);
+    SatelliteArrayParam &operator=(const SatelliteArrayParam &);
 
     SPKnotShapeType knot_shape;
     SPKnotModeType knot_mode;
@@ -84,7 +84,7 @@ private:
 
 class FilletChamferKnotHolderEntity : public KnotHolderEntity {
 public:
-    FilletChamferKnotHolderEntity(SatellitePairArrayParam *p, size_t index);
+    FilletChamferKnotHolderEntity(SatelliteArrayParam *p, size_t index);
     virtual ~FilletChamferKnotHolderEntity() {_pparam->knoth = NULL;}
 
     virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state);
@@ -97,7 +97,7 @@ public:
     };
 
 private:
-    SatellitePairArrayParam *_pparam;
+    SatelliteArrayParam *_pparam;
     size_t _index;
 };
 

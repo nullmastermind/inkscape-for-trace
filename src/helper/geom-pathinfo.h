@@ -1,20 +1,12 @@
 /**
  * \file
- * \brief Pointwise
+ * \brief Pathinfo
  *//*
  * Authors:
  * 2015 Jabier Arraiza Cenoz<jabier.arraiza@marker.es>
  * Copyright 2015  authors
  *
- * Pointwise maintains a set of "Satellite" positions along a curve/pathvector.
- * The positions are specified as arc length distances along the curve or by 
- * time in the curve. Splicing operations automatically update the satellite 
- * positions to preserve the intent.
- * The data is serialised to SVG using a specialiced pointwise LPE parameter to 
- * handle it in th future can be a inkscape based property to paths 
- * Anywhere a Piecewise is used, a Pointwise can be substituted, allowing
- * existing algorithms to correctly update satellite positions.
-
+ * Pathinfo maintains ....
  * This library is free software; you can redistribute it and/or
  * modify it either under the terms of the GNU Lesser General Public
  * License version 2.1 as published by the Free Software Foundation
@@ -40,62 +32,43 @@
  *
  */
 
-#ifndef SEEN_GEOM_POINTWISE_H
-#define SEEN_GEOM_POINTWISE_H
+#ifndef SEEN_GEOM_PATHINFO_H
+#define SEEN_GEOM_PATHINFO_H
 
-#include <vector>
-#include <2geom/sbasis.h>
-#include <2geom/sbasis-2d.h>
-#include <2geom/piecewise.h>
-#include <2geom/satellite.h>
-#include <2geom/sbasis-to-bezier.h>
 #include <2geom/path.h>
-#include "helper/geom.h"
 #include <boost/optional.hpp>
 
 namespace Geom {
+
 /**
- * %Pointwise function class.
+ * %Pathinfo function class.
  */
 
-class Pointwise
+class Pathinfo
 {
     public:
-        Pointwise(Piecewise<D2<SBasis> > pwd2, std::vector<std::pair<size_t,Satellite> > satellites);
-        virtual ~Pointwise();
-        std::vector<size_t> findSatellites(size_t A, long B = -1) const;
-        std::vector<size_t> findPeviousSatellites(size_t A, long  B) const;
-        double rad_to_len(double A, std::pair<size_t,Geom::Satellite> sat) const;
-        double len_to_rad(double A, std::pair<size_t,Geom::Satellite> sat) const;
-        std::vector<std::pair<size_t,Satellite> > getSatellites() const;
-        void setSatellites(std::vector<std::pair<size_t,Satellite> > sats);
+        Pathinfo(Piecewise<D2<SBasis> > pwd2);
+        virtual ~Pathinfo();
         Piecewise<D2<SBasis> > getPwd2() const;
         void setPwd2(Piecewise<D2<SBasis> > pwd2_in);
-        void recalculate_for_new_pwd2(Piecewise<D2<SBasis> > A);
-        void pwd2_append(Piecewise<D2<SBasis> > A);
-        void pwd2_sustract(Piecewise<D2<SBasis> > A);
-        void set_extremes(bool active, bool hidden, double amount = -1, double angle = -1);
-        void deleteSatellites(size_t A);
-        void subpath_append_reorder(size_t subpath);
-        void reverse(size_t start,size_t end);
-        void setPathInfo();
-        void setPathInfo(Piecewise<D2<SBasis> >);
         size_t getSubPathIndex(size_t index) const;
         size_t getLast(size_t index) const;
         size_t getFirst(size_t index) const;
         boost::optional<size_t> getPrevious(size_t index) const;
         boost::optional<size_t> getNext(size_t index) const;
         bool getIsClosed(size_t index) const;
+        std::vector<std::pair<size_t, bool> > getPathInfo() const;
 
     private:
+        void setPathInfo();
         Piecewise<D2<SBasis> > _pwd2;
-        std::vector<std::pair<size_t,Satellite> > _satellites;
         std::vector<std::pair<size_t, bool> > _pathInfo;
 };
 
-} // end namespace Geom
+} //namespace Geom
 
-#endif //SEEN_GEOM_POINTWISE_H
+
+#endif //SEEN_GEOM_PATHINFO_H
 /*
   Local Variables:
   mode:c++

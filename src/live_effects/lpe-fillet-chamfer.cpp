@@ -16,13 +16,15 @@
 
 
 #include "live_effects/lpe-fillet-chamfer.h"
-#include <2geom/satellite.h>
-#include <2geom/satellite-enum.h>
 #include "helper/geom.h"
 #include "display/curve.h"
 #include "helper/geom-curves.h"
+#include "helper/geom-satellite.h"
+#include "helper/geom-satellite-enum.h"
+#include "helper/geom-pathinfo.h"
 #include <2geom/svg-elliptical-arc.h>
 #include "knotholder.h"
+#include <boost/optional.hpp>
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
 
@@ -40,7 +42,7 @@ FMConverter(FilletMethodData, FM_END);
 
 LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
-    satellitepairarrayparam_values(_("pair_array_param"), _("pair_array_param"), "satellitepairarrayparam_values", &wr, this),
+    satellitearrayparam_values(_("pair_array_param"), _("pair_array_param"), "satellitearrayparam_values", &wr, this),
     unit(_("Unit:"), _("Unit"), "unit", &wr, this),
     method(_("Method:"), _("Methods to calculate the fillet or chamfer"), "method", FMConverter, &wr, this, FM_AUTO),
     radius(_("Radius (unit or %):"), _("Radius, in unit or %"), "radius", &wr, this, 0.),
@@ -55,7 +57,7 @@ LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject) :
     pointwise(NULL),
     segCount(0)
 {
-    registerParameter(&satellitepairarrayparam_values);
+    registerParameter(&satellitearrayparam_values);
     registerParameter(&unit);
     registerParameter(&method);
     registerParameter(&radius);
@@ -91,7 +93,7 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
         Piecewise<D2<SBasis> > pwd2_in = paths_to_pw(original_pathv);
         pwd2_in = remove_short_cuts(pwd2_in, 0.01);
         int counterTotal = 0;
-        std::vector<std::pair<size_t,Geom::Satellite> >  satellites;
+        std::vector<Geom::Satellite>  satellites;
         for (PathVector::const_iterator path_it = original_pathv.begin(); path_it != original_pathv.end(); ++path_it) {
             if (path_it->empty()){
                 continue;
@@ -121,7 +123,6 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
                     item->removeCurrentPathEffect(false);
                     return;
                 }
-                bool isEndOpen = false;
                 bool active = true;
                 bool hidden = false;
                 if (counter==0) {
@@ -129,22 +130,15 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
                         active = false;
                     }
                 }
-                Satellite satellite(F, flexible, isEndOpen, active, mirror_knots, hidden, 0.0, 0.0, steps);
-                satellites.push_back(std::make_pair(counterTotal, satellite));
+                Satellite satellite(F, flexible, active, mirror_knots, hidden, 0.0, 0.0, steps);
+                satellites.push_back(satellite);
                 ++curve_it1;
                 counter++;
                 counterTotal++;
             }
-            if (!path_it->closed()){
-                bool active = false;
-                bool isEndOpen = true;
-                bool hidden = true;
-                Satellite satellite(F, flexible, isEndOpen, active, mirror_knots, hidden, 0.0, 0.0, steps);
-                satellites.push_back(std::make_pair(counterTotal-1, satellite));
-            }
         }
         pointwise = new Pointwise( pwd2_in,satellites);
-        satellitepairarrayparam_values.set_pointwise(pointwise);
+        satellitearrayparam_values.set_pointwise(pointwise);
     } else {
         g_warning("LPE Fillet/Chamfer can only be applied to shapes (not groups).");
         SPLPEItem * item = const_cast<SPLPEItem*>(lpeItem);
@@ -253,8 +247,8 @@ void LPEFilletChamfer::inverseChamfer()
 
 void LPEFilletChamfer::refreshKnots()
 {
-    if(satellitepairarrayparam_values.knoth){
-        satellitepairarrayparam_values.knoth->update_knots();
+    if(satellitearrayparam_values.knoth){
+        satellitearrayparam_values.knoth->update_knots();
     }
 }
 
@@ -266,81 +260,85 @@ void LPEFilletChamfer::updateAmount()
     } else {
         power = radius/100;
     }
-    std::vector<std::pair<size_t,Geom::Satellite> > satellites = pointwise->getSatellites();
+    std::vector<Geom::Satellite> satellites = pointwise->getSatellites();
     Piecewise<D2<SBasis> > pwd2 = pointwise->getPwd2();
-    for (std::vector<std::pair<size_t,Geom::Satellite> >::iterator it = satellites.begin(); it != satellites.end(); ++it) {
-        if(!pointwise->getIsClosed(it->first) && pointwise->getFirst(it->first) == it->first){
-            it->second.setAmount(0);
+    Pathinfo pathInfo(pwd2);
+    for (std::vector<Geom::Satellite>::iterator it = satellites.begin(); it != satellites.end(); ++it) {
+        if(!pathInfo.getIsClosed(it - satellites.begin()) && pathInfo.getFirst(it - satellites.begin()) == (unsigned)(it - satellites.begin())){
+            it->amount = 0;
             continue;
         }
-        if(ignore_radius_0 && it->second.getAmount() == 0){
+        if(ignore_radius_0 && it->amount == 0){
             continue;
         }
-        
+        boost::optional<size_t> prev = pathInfo.getPrevious(it - satellites.begin());
+        boost::optional<Geom::D2<Geom::SBasis> > prevPwd2 = boost::none;
+        boost::optional<Geom::Satellite > prevSat = boost::none;
+        if(prev){
+            prevPwd2 = pwd2[*prev];
+            prevSat = satellites[*prev];
+        }
         if(only_selected){
-            Geom::Point satPoint = pwd2.valueAt(it->first);
+            Geom::Point satPoint = pwd2.valueAt(it - satellites.begin());
             if(isNodePointSelected(satPoint)){
                 if(!use_knot_distance && !flexible){
-                    it->second.setAmount(pointwise->rad_to_len(power,*it));
+                    it->amount = it->rad_to_len(power, prevPwd2, pwd2[it - satellites.begin()], prevSat);
                 } else {
-                    it->second.setAmount(power);
+                    it->amount = power;
                 }
             }
         } else {
             if(!use_knot_distance && !flexible){
-                it->second.setAmount(pointwise->rad_to_len(power,*it));
+                it->amount = it->rad_to_len(power, prevPwd2, pwd2[it - satellites.begin()], prevSat);
             } else {
-                it->second.setAmount(power);
+                it->amount = power;
             }
-        }
-        if(it->second.getIsEndOpen()){
-            it->second.setAmount(0);
         }
     }
     pointwise->setSatellites(satellites);
-    satellitepairarrayparam_values.set_pointwise(pointwise);
+    satellitearrayparam_values.set_pointwise(pointwise);
 }
 
 void LPEFilletChamfer::updateChamferSteps()
 {
-    std::vector<std::pair<size_t,Geom::Satellite> > satellites = pointwise->getSatellites();
+    std::vector<Geom::Satellite> satellites = pointwise->getSatellites();
     Piecewise<D2<SBasis> > pwd2 = pointwise->getPwd2();
-    for (std::vector<std::pair<size_t,Geom::Satellite> >::iterator it = satellites.begin(); it != satellites.end(); ++it) {
-        if(ignore_radius_0 && it->second.getAmount() == 0){
+    for (std::vector<Geom::Satellite>::iterator it = satellites.begin(); it != satellites.end(); ++it) {
+        if(ignore_radius_0 && it->amount == 0){
             continue;
         }
         if(only_selected){
-            Geom::Point satPoint = pwd2.valueAt(it->first);
+            Geom::Point satPoint = pwd2.valueAt(it - satellites.begin());
             if(isNodePointSelected(satPoint)){
-               it->second.setSteps(chamfer_steps);
+               it->steps = chamfer_steps;
             }
         } else {
-            it->second.setSteps(chamfer_steps);
+            it->steps = chamfer_steps;
         }
     }
     pointwise->setSatellites(satellites);
-    satellitepairarrayparam_values.set_pointwise(pointwise);
+    satellitearrayparam_values.set_pointwise(pointwise);
 }
 
 void LPEFilletChamfer::updateSatelliteType(Geom::SatelliteType satellitetype)
 {
-    std::vector<std::pair<size_t,Geom::Satellite> > satellites = pointwise->getSatellites();
+    std::vector<Geom::Satellite> satellites = pointwise->getSatellites();
     Piecewise<D2<SBasis> > pwd2 = pointwise->getPwd2();
-    for (std::vector<std::pair<size_t,Geom::Satellite> >::iterator it = satellites.begin(); it != satellites.end(); ++it) {
-        if(ignore_radius_0 && it->second.getAmount() == 0){
+    for (std::vector<Geom::Satellite>::iterator it = satellites.begin(); it != satellites.end(); ++it) {
+        if(ignore_radius_0 && it->amount == 0){
             continue;
         }
         if(only_selected){
-            Geom::Point satPoint = pwd2.valueAt(it->first);
+            Geom::Point satPoint = pwd2.valueAt(it - satellites.begin());
             if(isNodePointSelected(satPoint)){
-                it->second.setSatelliteType(satellitetype);
+                it->satelliteType = satellitetype;
             }
         } else {
-            it->second.setSatelliteType(satellitetype);
+            it->satelliteType = satellitetype;
         }
     }
     pointwise->setSatellites(satellites);
-    satellitepairarrayparam_values.set_pointwise(pointwise);
+    satellitearrayparam_values.set_pointwise(pointwise);
 }
 
 void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
@@ -354,51 +352,47 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
             c = path->get_original_curve();
         }
         //fillet chamfer specific calls
-        satellitepairarrayparam_values.set_document_unit(defaultUnit);
-        satellitepairarrayparam_values.set_use_distance(use_knot_distance);
-        satellitepairarrayparam_values.set_unit(unit.get_abbreviation());
+        satellitearrayparam_values.set_document_unit(defaultUnit);
+        satellitearrayparam_values.set_use_distance(use_knot_distance);
+        satellitearrayparam_values.set_unit(unit.get_abbreviation());
         //mandatory call
-        satellitepairarrayparam_values.set_effect_type(this->effectType());
+        satellitearrayparam_values.set_effect_type(this->effectType());
         
         PathVector const &original_pathv = pathv_to_linear_and_cubic_beziers(c->get_pathvector());
         Piecewise<D2<SBasis> > pwd2_in = paths_to_pw(original_pathv);
         pwd2_in = remove_short_cuts(pwd2_in, 0.01);
-        std::vector<std::pair<size_t,Geom::Satellite> >  sats = satellitepairarrayparam_values.data();
+        std::vector<Geom::Satellite>  sats = satellitearrayparam_values.data();
         //optional call
         if(hide_knots){
-            satellitepairarrayparam_values.set_helper_size(0);
+            satellitearrayparam_values.set_helper_size(0);
         } else {
-            satellitepairarrayparam_values.set_helper_size(helper_size);
+            satellitearrayparam_values.set_helper_size(helper_size);
         }
         bool refresh = false;
         bool hide = true;
-        for (std::vector<std::pair<size_t,Satellite> >::iterator it = sats.begin(); it != sats.end();)
+        for (std::vector<Satellite>::iterator it = sats.begin(); it != sats.end();)
     {
-            if(it->second.getIsTime() != flexible){
-                it->second.setIsTime(flexible);
-                double amount = it->second.getAmount();
-                D2<SBasis> d2_in = pwd2_in[it->first];
-                if(it->second.getIsTime()){
-                    double time = it->second.toTime(amount,d2_in);
-                    it->second.setAmount(time);
+            if(it->isTime != flexible){
+                it->isTime = flexible;
+                double amount = it->amount;
+                D2<SBasis> d2_in = pwd2_in[it - sats.begin()];
+                if(it->isTime){
+                    double time = it->toTime(amount,d2_in);
+                    it->amount = time;
                 } else {
-                    double size = it->second.toSize(amount,d2_in);
-                    it->second.setAmount(size);
+                    double size = it->toSize(amount,d2_in);
+                    it->amount = size;
                 }
             }
-            if(it->second.getHasMirror() != mirror_knots){
-                it->second.setHasMirror(mirror_knots);
+            if(it->hasMirror != mirror_knots){
+                it->hasMirror = mirror_knots;
                 refresh = true;
             }
-            if(it->second.getHidden() == false){
+            if(it->hidden == false){
                 hide = false;
             }
-            it->second.setHidden(hide_knots);
-            if(it->second.getIsEndOpen()){
-                it = sats.erase(it);
-            } else {
-                ++it;
-            }
+            it->hidden = hide_knots;
+            ++it;
         }
         if(hide != hide_knots){
             refresh = true;
@@ -414,7 +408,7 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
             pointwise->set_extremes(false, true);
             segCount = c->get_segment_count();
         }
-        satellitepairarrayparam_values.set_pointwise(pointwise);
+        satellitearrayparam_values.set_pointwise(pointwise);
         if(refresh){
             refreshKnots();
         }
@@ -429,7 +423,7 @@ LPEFilletChamfer::adjustForNewPath(std::vector<Geom::Path> const &path_in)
     if (!path_in.empty() && pointwise) {
         pointwise->recalculate_for_new_pwd2(remove_short_cuts(paths_to_pw(pathv_to_linear_and_cubic_beziers(path_in)),0.01));
         pointwise->set_extremes(false, true, 0.0, 0.0);
-        satellitepairarrayparam_values.set_pointwise(pointwise);
+        satellitearrayparam_values.set_pointwise(pointwise);
     }
 }
 
@@ -472,20 +466,19 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
         size_t counterCurves = 0;
         size_t first = counter;
         double time0 = 0;
+        std::vector<Geom::Satellite> sats = pointwise->getSatellites();
         while (curve_it1 != curve_endit) {
             if((*curve_it1).isDegenerate() || (*curve_it1).isDegenerate()){
                 g_warning("LPE Fillet not handle degenerate curves.");
                 return path_in;
             }
-            std::vector<size_t> satIndexes;
             Satellite satellite;
             Curve *curve_it2Fixed = path_it->begin()->duplicate();
             if(!path_it->closed()){
                 if(curve_it2 != curve_endit){
                     curve_it2Fixed = (*curve_it2).duplicate();
-                    satIndexes = pointwise->findSatellites(counter+1,1);
-                    if(satIndexes.size()>0){
-                        satellite = pointwise->getSatellites()[satIndexes[0]].second;
+                    if(sats.size()> counter+1 ){
+                        satellite = sats[counter+1];
                     }
                 } else {
                     if(time0 != 1){
@@ -501,21 +494,19 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
             } else {
                 if(curve_it2 != curve_endit){
                     curve_it2Fixed = (*curve_it2).duplicate();
-                    satIndexes = pointwise->findSatellites(counter+1,1);
-                    if(satIndexes.size()>0){
-                        satellite = pointwise->getSatellites()[satIndexes[0]].second;
+                    if(sats.size()> counter+1 ){
+                        satellite = sats[counter+1];
                     }
+
                 } else {
-                    satIndexes = pointwise->findSatellites(first,1);
-                    if(satIndexes.size()>0){
-                        satellite = pointwise->getSatellites()[satIndexes[0]].second;
+                    if(sats.size()> first ){
+                        satellite = sats[first];
                     }
                 }
             }
             if(first == counter){
-                satIndexes = pointwise->findSatellites(first,1);
-                if(satIndexes.size()>0 && pointwise->getSatellites()[satIndexes[0]].second.getActive()){
-                    time0 = pointwise->getSatellites()[satIndexes[0]].second.getTime(path_it->begin()->duplicate()->toSBasis());
+                if(sats.size() > first && sats[first].active){
+                    time0 = sats[first].getTime(path_it->begin()->duplicate()->toSBasis());
                 } else {
                     time0 = 0;
                 }
@@ -525,7 +516,7 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
             double s = satellite.getSize(curve_it2Fixed->toSBasis());
             double time1 = satellite.getOpositeTime(s,(*curve_it1).toSBasis());
             double time2 = satellite.getTime(curve_it2Fixed->toSBasis());
-            if(!satellite.getActive()){
+            if(!satellite.active){
                 time1 = 1;
                 time2 = 0;
             }
@@ -604,8 +595,8 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
                         path_out.append(*knotCurve1);
                     }
                 }
-                SatelliteType type = satellite.getSatelliteType();
-                size_t steps = satellite.getSteps();
+                SatelliteType type = satellite.satelliteType;
+                size_t steps = satellite.steps;
                 if(steps < 1){
                     steps = 1;
                 }

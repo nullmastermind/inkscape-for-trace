@@ -160,7 +160,7 @@ src/live_effects/lpe-taperstroke.cpp
 src/live_effects/lpe-vonkoch.cpp
 src/live_effects/parameter/bool.cpp
 src/live_effects/parameter/enum.h
-src/live_effects/parameter/satellitepairarray.cpp
+src/live_effects/parameter/satellitearray.cpp
 src/live_effects/parameter/originalpath.cpp
 src/live_effects/parameter/originalpatharray.cpp
 src/live_effects/parameter/parameter.cpp

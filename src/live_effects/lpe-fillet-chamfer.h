@@ -14,11 +14,12 @@
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
+
 #include "live_effects/parameter/enum.h"
 #include "live_effects/parameter/unit.h"
-#include "2geom/pointwise.h"
-#include "live_effects/parameter/satellitepairarray.h"
+#include "live_effects/parameter/satellitearray.h"
 #include "live_effects/effect.h"
+#include "helper/geom-pointwise.h"
 
 namespace Inkscape {
 namespace LivePathEffect {
@@ -39,7 +40,7 @@ public:
     virtual void doOnApply(SPLPEItem const *lpeItem);
     virtual void adjustForNewPath(std::vector<Geom::Path> const &path_in);
     virtual Gtk::Widget* newWidget();
-     /*double len_to_rad(double A, std::pair<int,Geom::Satellite> sat);*/
+
     void updateSatelliteType(Geom::SatelliteType satellitetype);
     void updateChamferSteps();
     void updateAmount();
@@ -49,7 +50,7 @@ public:
     void fillet();
     void inverseFillet();
     
-    SatellitePairArrayParam satellitepairarrayparam_values;
+    SatelliteArrayParam satellitearrayparam_values;
 
 private:
     UnitParam unit;

@@ -15,8 +15,8 @@
 
 #include "live_effects/parameter/parameter.h"
 
-#include <2geom/satellite.h>
-#include <2geom/satellite-enum.h>
+#include "helper/geom-satellite.h"
+#include "helper/geom-satellite-enum.h"
 #include "svg/svg.h"
 #include "svg/stringstream.h"
 
@@ -111,26 +111,22 @@ protected:
         str << nVector;
     }
 
-    void writesvgData(SVGOStringStream &str, std::pair<size_t, Geom::Satellite> const &nVector) const {
-        str << nVector.first;
+    void writesvgData(SVGOStringStream &str, Geom::Satellite const &nVector) const {
+        str << nVector.getSatelliteTypeGchar();
         str << ",";
-        str << nVector.second.getSatelliteTypeGchar();
-        str << "*";
-        str << nVector.second.getIsTime();
-        str << "*";
-        str << nVector.second.getIsEndOpen();
-        str << "*";
-        str << nVector.second.getActive();
-        str << "*";
-        str << nVector.second.getHasMirror();
-        str << "*";
-        str << nVector.second.getHidden();
-        str << "*";
-        str << nVector.second.getAmount();
-        str << "*";
-        str << nVector.second.getAngle();
-        str << "*";
-        str << nVector.second.getSteps();
+        str << nVector.isTime;
+        str << ",";
+        str << nVector.active;
+        str << ",";
+        str << nVector.hasMirror;
+        str << ",";
+        str << nVector.hidden;
+        str << ",";
+        str << nVector.amount;
+        str << ",";
+        str << nVector.angle;
+        str << ",";
+        str << nVector.steps;
     }
 
     StorageType readsvg(const gchar * str);

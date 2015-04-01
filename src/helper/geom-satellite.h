@@ -33,7 +33,7 @@
 #ifndef LIB2GEOM_SEEN_SATELLITE_H
 #define LIB2GEOM_SEEN_SATELLITE_H
 
-#include <2geom/satellite-enum.h>
+#include <helper/geom-satellite-enum.h>
 #include <2geom/d2.h>
 #include <map>
 #include <boost/assign.hpp>
@@ -45,131 +45,30 @@ class Satellite
   public:
 
     Satellite();
-    Satellite(SatelliteType satellitetype, bool isTime, bool isEndOpen, bool active, bool hasMirror, bool hidden, double amount, double angle, size_t steps);
+    Satellite(SatelliteType satelliteType, bool isTime, bool active, bool hasMirror, bool hidden, double amount, double angle, size_t steps);
 
     virtual ~Satellite();
 
-    void setSatelliteType(SatelliteType A)
-    {
-        _satellitetype = A;
-    }
-
-    void setSatelliteType(gchar const * A)
-    {
-        std::map<std::string,SatelliteType> GcharMapToSatelliteType = boost::assign::map_list_of("F", F)("IF", IF)("C",C)("IC",IC)("KO",KO);
-        _satellitetype = GcharMapToSatelliteType.find(std::string(A))->second;
-    }
-
-    void setIsTime(bool A)
-    {
-        _isTime = A;
-    }
-
-    void setIsEndOpen(bool A)
-    {
-        _isEndOpen = A;
-    }
-
-
-    void setActive(bool A)
-    {
-        _active = A;
-    }
-
-    void setHasMirror(bool A)
-    {
-        _hasMirror = A;
-    }
-
-    void setHidden(bool A)
-    {
-        _hidden = A;
-    }
-    void setAmount(double A)
-    {
-        _amount = A;
-    }
-
-    void setAngle(double A)
-    {
-        _angle = A;
-    }
-
-    void setSteps(int A)
-    {
-        _steps = A;
-    }
-
-    SatelliteType getSatelliteType() const
-    {
-        return _satellitetype;
-    }
-
-    gchar const * getSatelliteTypeGchar() const
-    {
-        std::map<SatelliteType,gchar const *> SatelliteTypeToGcharMap = boost::assign::map_list_of(F, "F")(IF, "IF")(C,"C")(IC,"IC")(KO,"KO");
-        return SatelliteTypeToGcharMap.at(_satellitetype);
-    }
-
-    bool getIsTime() const
-    {
-        return _isTime;
-    }
-
-    bool getIsEndOpen() const
-    {
-        return _isEndOpen;
-    }
-
-    bool getActive() const
-    {
-        return _active;
-    }
-
-    bool getHasMirror() const
-    {
-        return _hasMirror;
-    }
-
-    bool getHidden() const
-    {
-        return _hidden;
-    }
-
-    double getAmount() const
-    {
-        return _amount;
-    }
-
-    double getAngle() const
-    {
-        return _angle;
-    }
-
-    int getSteps() const
-    {
-        return _steps;
-    }
-
     void setPosition(Geom::Point p, Geom::D2<Geom::SBasis> d2_in);
-    Geom::Point getPosition(Geom::D2<Geom::SBasis> curve) const;
+    Geom::Point getPosition(Geom::D2<Geom::SBasis> d2_in) const;
     double getSize(Geom::D2<Geom::SBasis> d2_in) const;
     double getTime(Geom::D2<Geom::SBasis> d2_in) const;
     double getOpositeTime(double A,Geom::D2<Geom::SBasis> SBasisCurve) const;
     double toSize(double A,Geom::D2<Geom::SBasis> d2_in) const;
     double toTime(double A,Geom::D2<Geom::SBasis> d2_in) const;
+    double len_to_rad(double A, boost::optional<Geom::D2<Geom::SBasis> > d2_in, Geom::D2<Geom::SBasis> d2_out, boost::optional<Geom::Satellite> previousSatellite) const;
+    double rad_to_len(double A, boost::optional<Geom::D2<Geom::SBasis> > d2_in, Geom::D2<Geom::SBasis> d2_out, boost::optional<Geom::Satellite> previousSatellite) const;
+    void setSatelliteType(gchar const * A);
+    gchar const * getSatelliteTypeGchar() const;
 
-  private:
-
-    SatelliteType _satellitetype;
-    bool _isTime;
-    bool _isEndOpen;
-    bool _active;
-    bool _hasMirror;
-    bool _hidden;
-    double _amount;
-    double _angle;
-    size_t _steps;
+    SatelliteType satelliteType;
+    bool isTime;
+    bool active;
+    bool hasMirror;
+    bool hidden;
+    double amount;
+    double angle;
+    size_t steps;
 };
 
 } // end namespace Geom
