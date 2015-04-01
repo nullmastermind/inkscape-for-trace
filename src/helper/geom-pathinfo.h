@@ -49,7 +49,6 @@ class Pathinfo
     public:
         Pathinfo(Piecewise<D2<SBasis> > pwd2);
         virtual ~Pathinfo();
-        Piecewise<D2<SBasis> > getPwd2() const;
         void setPwd2(Piecewise<D2<SBasis> > pwd2_in);
         size_t getSubPathIndex(size_t index) const;
         size_t getLast(size_t index) const;

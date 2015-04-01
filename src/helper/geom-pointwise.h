@@ -43,12 +43,11 @@
 #ifndef SEEN_GEOM_POINTWISE_H
 #define SEEN_GEOM_POINTWISE_H
 
-#include <vector>
+#include <helper/geom-satellite.h>
+#include <helper/geom-pathinfo.h>
 #include <2geom/sbasis.h>
 #include <2geom/sbasis-2d.h>
 #include <2geom/piecewise.h>
-#include <helper/geom-satellite.h>
-#include <helper/geom-pathinfo.h>
 #include <2geom/sbasis-to-bezier.h>
 #include <2geom/path.h>
 #include <boost/optional.hpp>
@@ -63,17 +62,19 @@ class Pointwise
     public:
         Pointwise(Piecewise<D2<SBasis> > pwd2, std::vector<Satellite> satellites);
         virtual ~Pointwise();
+
         std::vector<Satellite> getSatellites() const;
         void setSatellites(std::vector<Satellite> sats);
         Piecewise<D2<SBasis> > getPwd2() const;
         void setPwd2(Piecewise<D2<SBasis> > pwd2_in);
+        void setStart();
+
         void recalculate_for_new_pwd2(Piecewise<D2<SBasis> > A);
-        void pwd2_append(Piecewise<D2<SBasis> > A);
         void pwd2_sustract(Piecewise<D2<SBasis> > A);
-        void set_extremes(bool active, bool hidden, double amount = -1, double angle = -1);
-        void deleteSatellite(size_t A);
-        void subpath_append_reorder(size_t subpath);
-        void reverse(size_t start,size_t end);
+        void pwd2_append(Piecewise<D2<SBasis> > A);
+        void subpath_to_top(size_t subpath);
+        void subpath_reverse(size_t start,size_t end);
+
 
     private:
         Piecewise<D2<SBasis> > _pwd2;

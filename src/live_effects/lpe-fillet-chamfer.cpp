@@ -400,12 +400,9 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
         
         if(pointwise && c->get_segment_count() != segCount && segCount != 0){
             pointwise->recalculate_for_new_pwd2(pwd2_in);
-            pointwise->set_extremes(false, true, 0.0, 0.0);
             segCount = c->get_segment_count();
         } else {
             pointwise = new Pointwise(pwd2_in, sats);
-            //mandatory call
-            pointwise->set_extremes(false, true);
             segCount = c->get_segment_count();
         }
         satellitearrayparam_values.set_pointwise(pointwise);
@@ -422,7 +419,6 @@ LPEFilletChamfer::adjustForNewPath(std::vector<Geom::Path> const &path_in)
 {
     if (!path_in.empty() && pointwise) {
         pointwise->recalculate_for_new_pwd2(remove_short_cuts(paths_to_pw(pathv_to_linear_and_cubic_beziers(path_in)),0.01));
-        pointwise->set_extremes(false, true, 0.0, 0.0);
         satellitearrayparam_values.set_pointwise(pointwise);
     }
 }

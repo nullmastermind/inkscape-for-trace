@@ -30,13 +30,14 @@
  */
 
 #include <helper/geom-pointwise.h>
-#include <cmath>
+
 
 namespace Geom {
 
 Pointwise::Pointwise(Piecewise<D2<SBasis> > pwd2, std::vector<Satellite> satellites)
         : _pwd2(pwd2), _satellites(satellites), _pathInfo(pwd2)
 {
+    setStart();
 };
 
 Pointwise::~Pointwise(){};
@@ -64,6 +65,24 @@ void
 Pointwise::setSatellites(std::vector<Satellite> sats)
 {
     _satellites = sats;
+    setStart();
+}
+
+void
+Pointwise::setStart()
+{
+    std::vector<std::pair<size_t, bool> > pathInfo = _pathInfo.getPathInfo();
+    for(size_t i = 0; i < pathInfo.size(); i++){
+        size_t firstNode = _pathInfo.getFirst(pathInfo[i].first);
+        size_t lastNode = _pathInfo.getLast(pathInfo[i].first);
+        if(!_pathInfo.getIsClosed(lastNode)){
+            _satellites[firstNode].hidden = true;
+            _satellites[firstNode].active = false;
+        } else {
+            _satellites[firstNode].active = true;
+            _satellites[firstNode].hidden = _satellites[firstNode + 1].hidden;
+        }
+    }
 }
 
 void
@@ -75,6 +94,24 @@ Pointwise::recalculate_for_new_pwd2(Piecewise<D2<SBasis> > A)
         pwd2_append(A);
     }
 }
+
+void
+Pointwise::pwd2_sustract(Piecewise<D2<SBasis> > A)
+{
+    size_t counter = 0;
+    std::vector<Satellite> sats;
+    Piecewise<D2<SBasis> > pwd2 = _pwd2;
+    setPwd2(A);
+    for(size_t i = 0; i < _satellites.size(); i++){
+        if(_pathInfo.getLast(i-counter) < i-counter || !are_near(pwd2[i].at0(),A[i-counter].at0(),0.001)){
+            counter++;
+        } else {
+            sats.push_back(_satellites[i-counter]);
+        }
+    }
+    setSatellites(sats);
+}
+
 
 void 
 Pointwise::pwd2_append(Piecewise<D2<SBasis> > A)
@@ -96,13 +133,13 @@ Pointwise::pwd2_append(Piecewise<D2<SBasis> > A)
             changedSubpath = subpathAIndex != _pathInfo.getSubPathIndex(i-counter);
         }
         if(!reorder && first == i-counter && !are_near(_pwd2[i-counter].at0(),A[i].at0(),0.001) && !changedSubpath){
-            subpath_append_reorder(_pathInfo.getSubPathIndex(first));
+            subpath_to_top(_pathInfo.getSubPathIndex(first));
             reorder = true;
             i--;
             continue;
         }
         if(!reversed && first == i-counter && !are_near(_pwd2[i-counter].at0(),A[i].at0(),0.001) && !changedSubpath){
-            reverse(first, last);
+            subpath_reverse(first, last);
             reversed = true;
         }
         if(_pwd2.size() <= i-counter || !are_near(_pwd2[i-counter].at0(),A[i].at0(),0.001)){
@@ -125,62 +162,7 @@ Pointwise::pwd2_append(Piecewise<D2<SBasis> > A)
 }
 
 void
-Pointwise::pwd2_sustract(Piecewise<D2<SBasis> > A)
-{
-    size_t counter = 0;
-    std::vector<Satellite> sats;
-    Piecewise<D2<SBasis> > pwd2 = _pwd2;
-    setPwd2(A);
-    for(size_t i = 0; i < _satellites.size(); i++){
-        if(_pathInfo.getLast(i-counter) < i-counter || !are_near(pwd2[i].at0(),A[i-counter].at0(),0.001)){
-            counter++;
-        } else {
-            sats.push_back(_satellites[i-counter]);
-        }
-    }
-    setSatellites(sats);
-}
-
-void
-Pointwise::set_extremes(bool active, bool hidden, double amount, double angle)
-{
-    std::vector<std::pair<size_t, bool> > pathInfo = _pathInfo.getPathInfo();
-    for(size_t i = 0; i < pathInfo.size(); i++){
-        size_t firstNode = _pathInfo.getFirst(pathInfo[i].first);
-        size_t lastNode = _pathInfo.getLast(pathInfo[i].first);
-        if(!_pathInfo.getIsClosed(lastNode)){
-            for(size_t j = 0; j < _satellites.size(); j++){
-                if(j < firstNode || j > lastNode){
-                    continue;
-                }
-                if(j == firstNode){
-                    _satellites[j].active = active;
-                    _satellites[j].hidden = hidden;
-                    if(amount >= 0){
-                        _satellites[j].amount = amount;
-                    }
-                    if(angle >= 0){
-                        _satellites[j].angle = angle;
-                    }
-                }
-            }
-        } else {
-            for(size_t j = 0; j < _satellites.size(); j++){
-                if(j < firstNode){
-                    continue;
-                }
-                if(j == firstNode && !_satellites[j].active){
-                    _satellites[j].active = true;
-                    _satellites[j].hidden = _satellites[j+1].hidden;
-                }
-
-            }
-        }
-    }
-}
-
-void
-Pointwise::subpath_append_reorder(size_t subpath){
+Pointwise::subpath_to_top(size_t subpath){
     std::vector<Geom::Path> path_in = path_from_piecewise(remove_short_cuts(_pwd2,0.1), 0.001);
     size_t nSubpath = 0;
     size_t counter = 0;
@@ -199,7 +181,7 @@ Pointwise::subpath_append_reorder(size_t subpath){
         while (curve_it1 != curve_endit) {
             if(nSubpath == subpath){
                 _satellites.push_back(_satellites[counter]);
-                deleteSatellite(counter);
+                _satellites.erase(_satellites.begin() + counter);
             } else {
                 counter++;
             }
@@ -217,11 +199,11 @@ Pointwise::subpath_append_reorder(size_t subpath){
 }
 
 void
-Pointwise::reverse(size_t start,size_t end){
+Pointwise::subpath_reverse(size_t start,size_t end){
     start ++;
     for(size_t i = end; i >= start; i--){
         _satellites.push_back(_satellites[i]);
-        deleteSatellite(i);
+        _satellites.erase(_satellites.begin() + i);
     }
     std::vector<Geom::Path> path_in = path_from_piecewise(remove_short_cuts(_pwd2,0.1), 0.001);
     size_t counter = 0;
@@ -242,17 +224,6 @@ Pointwise::reverse(size_t start,size_t end){
         nSubpath++;
     }
     setPwd2(remove_short_cuts(paths_to_pw(tmp_path),0.01));
-}
-
-void
-Pointwise::deleteSatellite(size_t A)
-{
-    for (std::vector<Satellite>::iterator it = _satellites.begin(); it != _satellites.end();)
-    {
-        if((unsigned)(it - _satellites.begin()) == A){
-            it = _satellites.erase(it);
-        }
-    }
 }
 
 } // namespace Geom

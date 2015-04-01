@@ -42,12 +42,6 @@ Pathinfo::Pathinfo(Piecewise<D2<SBasis> > pwd2)
 
 Pathinfo::~Pathinfo(){};
 
-Piecewise<D2<SBasis> >
-Pathinfo::getPwd2() const
-{
-    return _pwd2;
-}
-
 void
 Pathinfo::setPwd2(Piecewise<D2<SBasis> > pwd2_in)
 {
