@@ -129,12 +129,6 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
             int counter = 0;
             size_t steps = chamfer_steps;
             while (curve_it1 != curve_endit) {
-                if ((*curve_it1).isDegenerate() || (*curve_it1).isDegenerate()) {
-                    g_warning("LPE Fillet not handle degenerate curves.");
-                    SPLPEItem *item = const_cast<SPLPEItem *>(lpeItem);
-                    item->removeCurrentPathEffect(false);
-                    return;
-                }
                 bool active = true;
                 bool hidden = false;
                 if (counter == 0) {
@@ -380,6 +374,9 @@ void LPEFilletChamfer::updateSatelliteType(Geom::SatelliteType satellitetype)
 
 void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
 {
+    if(!_hp.empty()){
+        _hp.clear();
+    }
     SPLPEItem *splpeitem = const_cast<SPLPEItem *>(lpeItem);
     SPShape *shape = dynamic_cast<SPShape *>(splpeitem);
     if (shape) {
@@ -469,6 +466,12 @@ LPEFilletChamfer::adjustForNewPath(std::vector<Geom::Path> const &path_in)
     }
 }
 
+void
+LPEFilletChamfer::addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec)
+{
+    hp_vec.push_back(_hp);
+}
+
 std::vector<Geom::Path>
 LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
 {
@@ -483,6 +486,7 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
         if (path_it->empty()) {
             continue;
         }
+        _hp.push_back(*path_it);
         Geom::Path tmp_path;
         Geom::Path::const_iterator curve_it1 = path_it->begin();
         Geom::Path::const_iterator curve_it2 = ++(path_it->begin());
@@ -511,9 +515,15 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
         double time0 = 0;
         std::vector<Geom::Satellite> sats = pointwise->getSatellites();
         while (curve_it1 != curve_endit) {
-            if ((*curve_it1).isDegenerate() || (*curve_it1).isDegenerate()) {
-                g_warning("LPE Fillet not handle degenerate curves.");
-                return path_in;
+            if ((*curve_it1).isDegenerate() || (curve_it2 != curve_endit && (*curve_it2).isDegenerate())) {
+                ++curve_it1;
+                if (curve_it2 != curve_endit) {
+                    ++curve_it2;
+                }
+                counter++;
+                counter_curves++;
+                time0 = 0.0;
+                continue;
             }
             Satellite satellite;
             Curve *curve_it2_fixed = path_it->begin()->duplicate();

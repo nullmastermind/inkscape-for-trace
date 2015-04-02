@@ -123,28 +123,26 @@ void Pointwise::pwd2Append(Piecewise<D2<SBasis> > A)
         size_t new_subpath_index = _path_info.subPathIndex(i);
         _path_info.setPwd2(_pwd2);
         bool subpath_is_changed = false;
+        bool not_exist = ;
         if (_pwd2.size() <= i - counter) {
             subpath_is_changed = false;
         } else {
             subpath_is_changed = new_subpath_index != _path_info.subPathIndex(i - counter);
         }
-        if (!reorder && first == i - counter &&
-                !are_near(_pwd2[i - counter].at0(), A[i].at0(), 0.001) &&
-                !subpath_is_changed) {
+        if (!reorder && first == i - counter && !are_near(_pwd2[i - counter].at0(), A[i].at0(), 0.001) && !subpath_is_changed) {
             //Send the modified subpath to back
             subpathToBack(_path_info.subPathIndex(first));
             reorder = true;
             i--;
             continue;
         }
-        if (!reversed && first == i - counter &&
-                !are_near(_pwd2[i - counter].at0(), A[i].at0(), 0.001) &&
-                !subpath_is_changed) {
+        if (!reversed && first == i - counter && !are_near(_pwd2[i - counter].at0(), A[i].at0(), 0.001) && !subpath_is_changed) {
             subpathReverse(first, last);
             reversed = true;
         }
-        if (_pwd2.size() <= i - counter ||
-                !are_near(_pwd2[i - counter].at0(), A[i].at0(), 0.001)) {
+        if (_pwd2.size() <= i - counter || !are_near(_pwd2[i - counter].at0(), A[i].at0(), 0.001) ||
+                /*this condition for duplicate node Shift+d*/(i > 0 && are_near(A[i - 1].at0(), A[i].at0(), 0.001) &&
+                !are_near(_pwd2[i - counter].at0(), _pwd2[i - counter - 1].at0(), 0.001))){
             counter++;
             bool active = true;
             bool hidden = false;

@@ -42,7 +42,7 @@ public:
     virtual void doOnApply(SPLPEItem const *lpeItem);
     virtual void adjustForNewPath(std::vector<Geom::Path> const &path_in);
     virtual Gtk::Widget *newWidget();
-
+    void addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec);
     void updateSatelliteType(Geom::SatelliteType satellitetype);
     void updateChamferSteps();
     void updateAmount();
@@ -69,6 +69,7 @@ private:
 
     Geom::Pointwise *pointwise;
     double segment_size;
+    Geom::PathVector _hp;
 
     LPEFilletChamfer(const LPEFilletChamfer &);
     LPEFilletChamfer &operator=(const LPEFilletChamfer &);
