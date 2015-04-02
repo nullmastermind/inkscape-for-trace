@@ -34,7 +34,7 @@ SatelliteArrayParam::SatelliteArrayParam(const Glib::ustring &label,
 {
     _knot_shape = SP_KNOT_SHAPE_DIAMOND;
     _knot_mode = SP_KNOT_MODE_XOR;
-    _knot_color = 0x00ff0000;
+    _knot_color = 0xAAFF8800;
     _helper_size = 0;
     _use_distance = false;
     _effectType = FILLET_CHAMFER;

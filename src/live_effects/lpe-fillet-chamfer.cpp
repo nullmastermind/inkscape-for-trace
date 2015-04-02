@@ -405,6 +405,9 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
             sats = satellites_param.data();
         }
         //optional call
+        if (satellites_param.knoth) {
+            satellites_param.knoth->update_knots();
+        }
         if (hide_knots) {
             satellites_param.setHelperSize(0);
         } else {
