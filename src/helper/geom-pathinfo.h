@@ -23,10 +23,10 @@ namespace Geom {
 class Pathinfo {
 public:
     Pathinfo(Piecewise<D2<SBasis> > pwd2);
-    Pathinfo(Geom::PathVector path_vector);
+    Pathinfo(Geom::PathVector path_vector, bool skip_degenerate = false);
     virtual ~Pathinfo();
     void setPwd2(Piecewise<D2<SBasis> > pwd2);
-    void setPathVector(Geom::PathVector path_vector);
+    void setPathVector(Geom::PathVector path_vector, bool skip_degenerate = false);
     size_t numberCurves() const;
     size_t subPathIndex(size_t index) const;
     size_t last(size_t index) const;
@@ -37,8 +37,8 @@ public:
     std::vector<std::pair<size_t, bool> > data;
 
 private:
-    void _setPathInfo(Geom::PathVector path_vector);
     void _setPathInfo(Piecewise<D2<SBasis> > pwd2);
+    void _setPathInfo(Geom::PathVector path_vector, bool skip_degenerate = false);
     Piecewise<D2<SBasis> > _pwd2;
     Geom::PathVector _path_vector;
 };

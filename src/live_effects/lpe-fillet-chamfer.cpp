@@ -487,11 +487,11 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
         double time0 = 0;
         std::vector<Geom::Satellite> sats = pointwise->getSatellites();
         while (curve_it1 != curve_endit) {
-            if ((*curve_it1).isDegenerate() || (curve_it2 != curve_endit && (*curve_it2).isDegenerate())) {
+            if (curve_it2 != curve_endit && (*curve_it2).isDegenerate()) {
+                ++curve_it2;
+            }
+            if ((*curve_it1).isDegenerate()) {
                 ++curve_it1;
-                if (curve_it2 != curve_endit) {
-                    ++curve_it2;
-                }
                 counter++;
                 counter_curves++;
                 time0 = 0.0;

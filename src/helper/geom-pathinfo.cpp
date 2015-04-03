@@ -22,9 +22,9 @@ Pathinfo::Pathinfo(Piecewise<D2<SBasis> > pwd2) : _pwd2(pwd2)
     _setPathInfo(pwd2);
 }
 ;
-Pathinfo::Pathinfo(Geom::PathVector path_vector) : _path_vector(path_vector)
+Pathinfo::Pathinfo(Geom::PathVector path_vector, bool skip_degenerate) : _path_vector(path_vector)
 {
-    _setPathInfo(path_vector);
+    _setPathInfo(path_vector, skip_degenerate);
 }
 ;
 
@@ -37,10 +37,10 @@ void Pathinfo::setPwd2(Piecewise<D2<SBasis> > pwd2)
     _setPathInfo(pwd2);
 }
 
-void Pathinfo::setPathVector(Geom::PathVector path_vector)
+void Pathinfo::setPathVector(Geom::PathVector path_vector, bool skip_degenerate)
 {
     _path_vector = path_vector;
-    _setPathInfo(path_vector);
+    _setPathInfo(path_vector, skip_degenerate);
 }
 
 void Pathinfo::_setPathInfo(Piecewise<D2<SBasis> > pwd2)
@@ -49,7 +49,7 @@ void Pathinfo::_setPathInfo(Piecewise<D2<SBasis> > pwd2)
 }
 /** Store the base path data
  */
-void Pathinfo::_setPathInfo(Geom::PathVector path_vector)
+void Pathinfo::_setPathInfo(Geom::PathVector path_vector, bool skip_degenerate)
 {
     data.clear();
     Geom::PathVector path_in =
@@ -69,6 +69,10 @@ void Pathinfo::_setPathInfo(Geom::PathVector path_vector)
             }
         }
         while (curve_it1 != curve_endit) {
+            if(curve_it1->isDegenerate() && skip_degenerate ){
+                ++curve_it1;
+                continue;
+            }
             ++curve_it1;
             counter++;
         }

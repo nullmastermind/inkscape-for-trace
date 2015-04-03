@@ -99,7 +99,7 @@ void Pointwise::pwd2Sustract(Piecewise<D2<SBasis> > A)
     setPwd2(A);
     for (size_t i = 0; i < _satellites.size(); i++) {
         if (_path_info.last(i - counter) < i - counter ||
-                !are_near(pwd2[i].at0(), A[i - counter].at0(), 0.001)) {
+                !are_near(pwd2[i].at0(), A[i - counter].at0())) {
             counter++;
         } else {
             sats.push_back(_satellites[i - counter]);
@@ -130,19 +130,19 @@ void Pointwise::pwd2Append(Piecewise<D2<SBasis> > A)
         } else {
             subpath_is_changed = new_subpath_index != _path_info.subPathIndex(i - counter);
         }
-        if (!reorder && first == i - counter && !are_near(_pwd2[i - counter].at0(), A[i].at0(), 0.001) && !subpath_is_changed) {
+        if (!reorder && first == i - counter && !are_near(_pwd2[i - counter].at0(), A[i].at0()) && !subpath_is_changed) {
             //Send the modified subpath to back
             subpathToBack(_path_info.subPathIndex(first));
             reorder = true;
             i--;
             continue;
         }
-        if (!reversed && first == i - counter && !are_near(_pwd2[i - counter].at0(), A[i].at0(), 0.001) && !subpath_is_changed) {
+        if (!reversed && first == i - counter && !are_near(_pwd2[i - counter].at0(), A[i].at0()) && !subpath_is_changed) {
             subpathReverse(first, last);
             reversed = true;
         }
 
-        if (_pwd2.size() <= i - counter || !are_near(_pwd2[i - counter].at0(), A[i].at0(), 0.001)){
+        if (_pwd2.size() <= i - counter || !are_near(_pwd2[i - counter].at0(), A[i].at0())){
             counter++;
             bool active = true;
             bool hidden = false;
@@ -270,7 +270,7 @@ void Pointwise::insertDegenerateSatellites(Piecewise<D2<SBasis> > A, Geom::PathV
                 int steps = 0;
                 Satellite sat(_satellites[0].satelliteType, is_time, active, mirror_knots,
                               hidden, amount, degrees, steps);
-                _satellites.insert(_satellites.begin() + counter ,sat);
+                _satellites.insert(_satellites.begin() + counter + 1 ,sat);
             }
             ++curve_it1;
             counter++;
