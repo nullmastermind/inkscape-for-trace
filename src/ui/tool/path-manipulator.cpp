@@ -1356,13 +1356,6 @@ void PathManipulator::_createGeometryFromControlPoints(bool alert_LPE)
                     lpe_pwr->adjustForNewPath(pathv);
                 }
             }
-            thisEffect = _path->getPathEffectOfType(Inkscape::LivePathEffect::FILLET_CHAMFER);
-            if(thisEffect){
-                LivePathEffect::LPEFilletChamfer *lpe_fll = dynamic_cast<LivePathEffect::LPEFilletChamfer*>(thisEffect->getLPEObj()->get_lpe());
-                if (lpe_fll) {
-                    lpe_fll->adjustForNewPath(pathv);
-                }
-            }
         }
     }
 

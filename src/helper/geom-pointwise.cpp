@@ -66,7 +66,7 @@ void Pointwise::setStart()
     for (size_t i = 0; i < path_info.size(); i++) {
         size_t firstNode = _path_info.first(path_info[i].first);
         size_t lastNode = _path_info.last(path_info[i].first);
-        if (!_path_info.isClosed(lastNode)) {
+        if (!_path_info.closed(lastNode)) {
             _satellites[firstNode].hidden = true;
             _satellites[firstNode].active = false;
         } else {
@@ -78,12 +78,14 @@ void Pointwise::setStart()
 
 /** Fired when a path is modified.
  */
-void Pointwise::recalculateForNewPwd2(Piecewise<D2<SBasis> > A)
+void Pointwise::recalculateForNewPwd2(Piecewise<D2<SBasis> > A, Geom::PathVector B)
 {
     if (_pwd2.size() > A.size()) {
         pwd2Sustract(A);
     } else if (_pwd2.size() < A.size()) {
         pwd2Append(A);
+    } else {
+        insertDegenerateSatellites(A,B);
     }
 }
 
@@ -123,7 +125,6 @@ void Pointwise::pwd2Append(Piecewise<D2<SBasis> > A)
         size_t new_subpath_index = _path_info.subPathIndex(i);
         _path_info.setPwd2(_pwd2);
         bool subpath_is_changed = false;
-        bool not_exist = ;
         if (_pwd2.size() <= i - counter) {
             subpath_is_changed = false;
         } else {
@@ -140,9 +141,8 @@ void Pointwise::pwd2Append(Piecewise<D2<SBasis> > A)
             subpathReverse(first, last);
             reversed = true;
         }
-        if (_pwd2.size() <= i - counter || !are_near(_pwd2[i - counter].at0(), A[i].at0(), 0.001) ||
-                /*this condition for duplicate node Shift+d*/(i > 0 && are_near(A[i - 1].at0(), A[i].at0(), 0.001) &&
-                !are_near(_pwd2[i - counter].at0(), _pwd2[i - counter - 1].at0(), 0.001))){
+
+        if (_pwd2.size() <= i - counter || !are_near(_pwd2[i - counter].at0(), A[i].at0(), 0.001)){
             counter++;
             bool active = true;
             bool hidden = false;
@@ -229,6 +229,56 @@ void Pointwise::subpathReverse(size_t start, size_t end)
         subpath_counter++;
     }
     setPwd2(remove_short_cuts(paths_to_pw(tmp_path), 0.01));
+}
+
+
+/** Fired when a path is modified duplicating a node. Piecewise ignore degenerated curves.
+ */
+void Pointwise::insertDegenerateSatellites(Piecewise<D2<SBasis> > A, Geom::PathVector B)
+{
+    size_t size_A = A.size();
+    _path_info.setPathVector(B);
+    size_t size_B = _path_info.numberCurves();
+    size_t satellite_gap = size_B - size_A;
+    if (satellite_gap == 0){
+        return;
+    }
+    size_t counter = 0;
+    size_t counter_added = 0;
+    for (PathVector::const_iterator path_it = B.begin();
+            path_it != B.end(); ++path_it) {
+        if (path_it->empty()) {
+            continue;
+        }
+        Geom::Path::const_iterator curve_it1 = path_it->begin();
+        Geom::Path::const_iterator curve_endit = path_it->end_default();
+        if (path_it->closed()) {
+            const Curve &closingline = path_it->back_closed();
+            if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
+                curve_endit = path_it->end_open();
+            }
+        }
+        while (curve_it1 != curve_endit) {
+            if ((*curve_it1).isDegenerate() && counter_added < satellite_gap){
+                counter_added++;
+                bool active = true;
+                bool hidden = false;
+                bool is_time = _satellites[0].isTime;
+                bool mirror_knots = _satellites[0].hasMirror;
+                double amount = 0.0;
+                double degrees = 0.0;
+                int steps = 0;
+                Satellite sat(_satellites[0].satelliteType, is_time, active, mirror_knots,
+                              hidden, amount, degrees, steps);
+                _satellites.insert(_satellites.begin() + counter ,sat);
+            }
+            ++curve_it1;
+            counter++;
+        }
+    }
+
+    _path_info.setPwd2(A);
+    setPwd2(A);
 }
 
 } // namespace Geom

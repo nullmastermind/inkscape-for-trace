@@ -48,11 +48,12 @@ public:
 
     void setStart();
 
-    void recalculateForNewPwd2(Piecewise<D2<SBasis> > A);
+    void recalculateForNewPwd2(Piecewise<D2<SBasis> > A, Geom::PathVector B);
     void pwd2Sustract(Piecewise<D2<SBasis> > A);
     void pwd2Append(Piecewise<D2<SBasis> > A);
     void subpathToBack(size_t subpath);
     void subpathReverse(size_t start, size_t end);
+    void insertDegenerateSatellites(Piecewise<D2<SBasis> > A, Geom::PathVector B);
 
 private:
     Piecewise<D2<SBasis> > _pwd2;

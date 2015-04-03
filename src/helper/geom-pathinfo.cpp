@@ -19,25 +19,40 @@ namespace Geom {
  */
 Pathinfo::Pathinfo(Piecewise<D2<SBasis> > pwd2) : _pwd2(pwd2)
 {
-    _setPathInfo();
+    _setPathInfo(pwd2);
+}
+;
+Pathinfo::Pathinfo(Geom::PathVector path_vector) : _path_vector(path_vector)
+{
+    _setPathInfo(path_vector);
 }
 ;
 
 Pathinfo::~Pathinfo() {}
 ;
 
-void Pathinfo::setPwd2(Piecewise<D2<SBasis> > pwd2_in)
+void Pathinfo::setPwd2(Piecewise<D2<SBasis> > pwd2)
 {
-    _pwd2 = pwd2_in;
-    _setPathInfo();
+    _pwd2 = pwd2;
+    _setPathInfo(pwd2);
 }
 
+void Pathinfo::setPathVector(Geom::PathVector path_vector)
+{
+    _path_vector = path_vector;
+    _setPathInfo(path_vector);
+}
+
+void Pathinfo::_setPathInfo(Piecewise<D2<SBasis> > pwd2)
+{
+    _setPathInfo(path_from_piecewise(remove_short_cuts(pwd2, 0.1), 0.001));
+}
 /** Store the base path data
  */
-void Pathinfo::_setPathInfo()
+void Pathinfo::_setPathInfo(Geom::PathVector path_vector)
 {
     data.clear();
-    std::vector<Geom::Path> path_in =
+    Geom::PathVector path_in =
         path_from_piecewise(remove_short_cuts(_pwd2, 0.1), 0.001);
     size_t counter = 0;
     for (PathVector::const_iterator path_it = path_in.begin();
@@ -63,6 +78,11 @@ void Pathinfo::_setPathInfo()
             data.push_back(std::make_pair(counter - 1, false));
         }
     }
+}
+
+size_t Pathinfo::numberCurves() const
+{
+    return data.back().first;
 }
 
 size_t Pathinfo::subPathIndex(size_t index) const
@@ -101,10 +121,10 @@ size_t Pathinfo::first(size_t index) const
 
 boost::optional<size_t> Pathinfo::previous(size_t index) const
 {
-    if (first(index) == index && isClosed(index)) {
+    if (first(index) == index && closed(index)) {
         return last(index);
     }
-    if (first(index) == index && !isClosed(index)) {
+    if (first(index) == index && !closed(index)) {
         return boost::none;
     }
     return index - 1;
@@ -112,16 +132,16 @@ boost::optional<size_t> Pathinfo::previous(size_t index) const
 
 boost::optional<size_t> Pathinfo::next(size_t index) const
 {
-    if (last(index) == index && isClosed(index)) {
+    if (last(index) == index && closed(index)) {
         return first(index);
     }
-    if (last(index) == index && !isClosed(index)) {
+    if (last(index) == index && !closed(index)) {
         return boost::none;
     }
     return index + 1;
 }
 
-bool Pathinfo::isClosed(size_t index) const
+bool Pathinfo::closed(size_t index) const
 {
     for (size_t i = 0; i < data.size(); i++) {
         if (index <= data[i].first) {

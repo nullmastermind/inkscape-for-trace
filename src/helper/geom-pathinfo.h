@@ -23,20 +23,24 @@ namespace Geom {
 class Pathinfo {
 public:
     Pathinfo(Piecewise<D2<SBasis> > pwd2);
+    Pathinfo(Geom::PathVector path_vector);
     virtual ~Pathinfo();
-    void setPwd2(Piecewise<D2<SBasis> > pwd2_in);
+    void setPwd2(Piecewise<D2<SBasis> > pwd2);
+    void setPathVector(Geom::PathVector path_vector);
+    size_t numberCurves() const;
     size_t subPathIndex(size_t index) const;
     size_t last(size_t index) const;
     size_t first(size_t index) const;
     boost::optional<size_t> previous(size_t index) const;
     boost::optional<size_t> next(size_t index) const;
-    bool isClosed(size_t index) const;
-    std::vector<std::pair<size_t, bool> > pathInfo() const;
+    bool closed(size_t index) const;
     std::vector<std::pair<size_t, bool> > data;
 
 private:
-    void _setPathInfo();
+    void _setPathInfo(Geom::PathVector path_vector);
+    void _setPathInfo(Piecewise<D2<SBasis> > pwd2);
     Piecewise<D2<SBasis> > _pwd2;
+    Geom::PathVector _path_vector;
 };
 
 } //namespace Geom

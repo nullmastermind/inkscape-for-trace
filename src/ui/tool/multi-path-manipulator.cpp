@@ -330,20 +330,20 @@ void MultiPathManipulator::insertNodes()
 {
     if (_selection.empty()) return;
     invokeForAll(&PathManipulator::insertNodes);
-    _done(_("Add nodes"));
+    _done(_("Add nodes"), true);
 }
 void MultiPathManipulator::insertNodesAtExtrema(ExtremumType extremum)
 {
     if (_selection.empty()) return;
     invokeForAll(&PathManipulator::insertNodeAtExtremum, extremum);
-    _done(_("Add extremum nodes"));
+    _done(_("Add extremum nodes"), true);
 }
 
 void MultiPathManipulator::duplicateNodes()
 {
     if (_selection.empty()) return;
     invokeForAll(&PathManipulator::duplicateNodes);
-    _done(_("Duplicate nodes"));
+    _done(_("Duplicate nodes"), true);
 }
 
 void MultiPathManipulator::joinNodes()
@@ -483,10 +483,10 @@ void MultiPathManipulator::reverseSubpaths()
 {
     if (_selection.empty()) {
         invokeForAll(&PathManipulator::reverseSubpaths, false);
-        _done("Reverse subpaths");
+        _done("Reverse subpaths", true);
     } else {
         invokeForAll(&PathManipulator::reverseSubpaths, true);
-        _done("Reverse selected subpaths");
+        _done("Reverse selected subpaths", true);
     }
 }
 

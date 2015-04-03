@@ -66,7 +66,7 @@ LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject)
                       "ignore_radius_0", &wr, this, false),
       helper_size(_("Helper size with direction:"),
                   _("Helper size with direction"), "helper_size", &wr, this, 0),
-      pointwise(NULL), segment_size(0)
+      pointwise(NULL)
 {
     registerParameter(&satellites_param);
     registerParameter(&unit);
@@ -288,7 +288,7 @@ void LPEFilletChamfer::updateAmount()
     Pathinfo path_info(pwd2);
     for (std::vector<Geom::Satellite>::iterator it = satellites.begin();
             it != satellites.end(); ++it) {
-        if (!path_info.isClosed(it - satellites.begin()) &&
+        if (!path_info.closed(it - satellites.begin()) &&
                 path_info.first(it - satellites.begin()) ==
                 (unsigned)(it - satellites.begin())) {
             it->amount = 0;
@@ -401,17 +401,11 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
             doOnApply(lpeItem);
             sats = satellites_param.data();
         }
-        //optional call
-        if (satellites_param.knoth) {
-            satellites_param.knoth->update_knots();
-        }
         if (hide_knots) {
             satellites_param.setHelperSize(0);
         } else {
             satellites_param.setHelperSize(helper_size);
         }
-        bool refresh = false;
-        bool hide = true;
         for (std::vector<Satellite>::iterator it = sats.begin();
                 it != sats.end();) {
             if (it->isTime != flexible) {
@@ -428,41 +422,19 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
             }
             if (it->hasMirror != mirror_knots) {
                 it->hasMirror = mirror_knots;
-                refresh = true;
-            }
-            if (it->hidden == false) {
-                hide = false;
             }
             it->hidden = hide_knots;
             ++it;
         }
-        if (hide != hide_knots) {
-            refresh = true;
-        }
-
-        if (pointwise && c->get_segment_count() != segment_size && segment_size != 0) {
-            pointwise->recalculateForNewPwd2(pwd2_in);
-            segment_size = c->get_segment_count();
+        if (pointwise && c->get_segment_count() != sats.size()) {
+            pointwise->recalculateForNewPwd2(pwd2_in, original_pathv);
         } else {
             pointwise = new Pointwise(pwd2_in, sats);
-            segment_size = c->get_segment_count();
         }
         satellites_param.setPointwise(pointwise);
-        if (refresh) {
-            refreshKnots();
-        }
+        refreshKnots();
     } else {
         g_warning("LPE Fillet can only be applied to shapes (not groups).");
-    }
-}
-
-void
-LPEFilletChamfer::adjustForNewPath(std::vector<Geom::Path> const &path_in)
-{
-    if (!path_in.empty() && pointwise) {
-        pointwise->recalculateForNewPwd2(remove_short_cuts(
-                                             paths_to_pw(pathv_to_linear_and_cubic_beziers(path_in)), 0.01));
-        satellites_param.setPointwise(pointwise);
     }
 }
 
