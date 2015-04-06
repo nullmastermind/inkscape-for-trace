@@ -132,6 +132,7 @@ void Pointwise::pwd2Append(Piecewise<D2<SBasis> > A, Satellite S)
 
         if (!reorder && first == i - counter && !are_near(_pwd2[i - counter].at0(), A[i].at0()) && !subpath_is_changed) {
             //Send the modified subpath to back
+            //TODO: change subpathToBack to subpath move for the case of multiple subpath reverse
             subpathToBack(_path_info.subPathIndex(first));
             reorder = true;
             i--;
