@@ -45,7 +45,7 @@ void Pathinfo::setPathVector(Geom::PathVector path_vector, bool skip_degenerate)
 
 void Pathinfo::_setPathInfo(Piecewise<D2<SBasis> > pwd2)
 {
-    _setPathInfo(path_from_piecewise(remove_short_cuts(pwd2, 0.1), 0.001));
+    _setPathInfo(path_from_piecewise(remove_short_cuts(pwd2, 0.1), 0.001), true);
 }
 /** Store the base path data
  */
