@@ -429,7 +429,16 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
         Pathinfo path_info(original_pathv);
         size_t number_curves = path_info.size();
         if (pointwise && number_curves != sats.size()) {
-            pointwise->recalculateForNewPwd2(pwd2_in, original_pathv);
+            bool active = true;
+            bool hidden = false;
+            bool is_time = sats[0].isTime;
+            bool mirror_knots = sats[0].hasMirror;
+            double amount = 0.0;
+            double degrees = 0.0;
+            int steps = 0;
+            Satellite sat(sats[0].satelliteType, is_time, active, mirror_knots,
+                          hidden, amount, degrees, steps);
+            pointwise->recalculateForNewPwd2(pwd2_in, original_pathv, sat);
         } else {
             pointwise = new Pointwise(pwd2_in, sats);
         }

@@ -78,14 +78,14 @@ void Pointwise::setStart()
 
 /** Fired when a path is modified.
  */
-void Pointwise::recalculateForNewPwd2(Piecewise<D2<SBasis> > A, Geom::PathVector B)
+void Pointwise::recalculateForNewPwd2(Piecewise<D2<SBasis> > A, Geom::PathVector B, Satellite S)
 {
     if (_pwd2.size() > A.size()) {
         pwd2Sustract(A);
     } else if (_pwd2.size() < A.size()) {
-        pwd2Append(A);
+        pwd2Append(A, S);
     } else {
-        insertDegenerateSatellites(A,B);
+        insertDegenerateSatellites(A, B, S);
     }
 }
 
@@ -110,11 +110,10 @@ void Pointwise::pwd2Sustract(Piecewise<D2<SBasis> > A)
 
 /** Append nodes/subpaths to current pointwise
  */
-void Pointwise::pwd2Append(Piecewise<D2<SBasis> > A)
+void Pointwise::pwd2Append(Piecewise<D2<SBasis> > A, Satellite S)
 {
     size_t counter = 0;
     std::vector<Satellite> sats;
-    bool reversed = false;
     bool reorder = false;
     for (size_t i = 0; i < A.size(); i++) {
         size_t first = _path_info.first(i - counter);
@@ -130,6 +129,7 @@ void Pointwise::pwd2Append(Piecewise<D2<SBasis> > A)
         } else {
             subpath_is_changed = new_subpath_index != _path_info.subPathIndex(i - counter);
         }
+
         if (!reorder && first == i - counter && !are_near(_pwd2[i - counter].at0(), A[i].at0()) && !subpath_is_changed) {
             //Send the modified subpath to back
             subpathToBack(_path_info.subPathIndex(first));
@@ -137,23 +137,14 @@ void Pointwise::pwd2Append(Piecewise<D2<SBasis> > A)
             i--;
             continue;
         }
-        if (!reversed && first == i - counter && !are_near(_pwd2[i - counter].at0(), A[i].at0()) && !subpath_is_changed) {
+
+        if (first == i - counter && !are_near(_pwd2[i - counter].at0(), A[i].at0()) && !subpath_is_changed) {
             subpathReverse(first, last);
-            reversed = true;
         }
 
         if (_pwd2.size() <= i - counter || !are_near(_pwd2[i - counter].at0(), A[i].at0())){
             counter++;
-            bool active = true;
-            bool hidden = false;
-            bool is_time = _satellites[0].isTime;
-            bool mirror_knots = _satellites[0].hasMirror;
-            double amount = 0.0;
-            double degrees = 0.0;
-            int steps = 0;
-            Satellite sat(_satellites[0].satelliteType, is_time, active, mirror_knots,
-                          hidden, amount, degrees, steps);
-            sats.push_back(sat);
+            sats.push_back(S);
         } else {
             sats.push_back(_satellites[i - counter]);
         }
@@ -205,7 +196,7 @@ void Pointwise::subpathReverse(size_t start, size_t end)
 {
     start++;
     for (size_t i = end; i >= start; i--) {
-        _satellites.push_back(_satellites[i]);
+        _satellites.insert(_satellites.begin() + end + 1, _satellites[i]);
         _satellites.erase(_satellites.begin() + i);
     }
     std::vector<Geom::Path> path_in =
@@ -234,7 +225,7 @@ void Pointwise::subpathReverse(size_t start, size_t end)
 
 /** Fired when a path is modified duplicating a node. Piecewise ignore degenerated curves.
  */
-void Pointwise::insertDegenerateSatellites(Piecewise<D2<SBasis> > A, Geom::PathVector B)
+void Pointwise::insertDegenerateSatellites(Piecewise<D2<SBasis> > A, Geom::PathVector B, Satellite S)
 {
     size_t size_A = A.size();
     _path_info.setPathVector(B);
@@ -261,16 +252,7 @@ void Pointwise::insertDegenerateSatellites(Piecewise<D2<SBasis> > A, Geom::PathV
         while (curve_it1 != curve_endit) {
             if ((*curve_it1).isDegenerate() && counter_added < satellite_gap){
                 counter_added++;
-                bool active = true;
-                bool hidden = false;
-                bool is_time = _satellites[0].isTime;
-                bool mirror_knots = _satellites[0].hasMirror;
-                double amount = 0.0;
-                double degrees = 0.0;
-                int steps = 0;
-                Satellite sat(_satellites[0].satelliteType, is_time, active, mirror_knots,
-                              hidden, amount, degrees, steps);
-                _satellites.insert(_satellites.begin() + counter + 1 ,sat);
+                _satellites.insert(_satellites.begin() + counter + 1 ,S);
             }
             ++curve_it1;
             counter++;
