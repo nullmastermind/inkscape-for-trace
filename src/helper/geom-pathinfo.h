@@ -27,7 +27,7 @@ public:
     virtual ~Pathinfo();
     void setPwd2(Piecewise<D2<SBasis> > pwd2);
     void setPathVector(Geom::PathVector path_vector, bool skip_degenerate = false);
-    size_t numberCurves() const;
+    size_t size() const;
     size_t subPathIndex(size_t index) const;
     size_t last(size_t index) const;
     size_t first(size_t index) const;

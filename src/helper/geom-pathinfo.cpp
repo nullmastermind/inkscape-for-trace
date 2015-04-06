@@ -80,9 +80,9 @@ void Pathinfo::_setPathInfo(Geom::PathVector path_vector, bool skip_degenerate)
     }
 }
 
-size_t Pathinfo::numberCurves() const
+size_t Pathinfo::size() const
 {
-    return data.back().first;
+    return data.back().first + 1;
 }
 
 size_t Pathinfo::subPathIndex(size_t index) const

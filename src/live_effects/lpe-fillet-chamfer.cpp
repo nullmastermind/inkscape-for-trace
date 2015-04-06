@@ -427,7 +427,7 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
             ++it;
         }
         Pathinfo path_info(original_pathv);
-        size_t number_curves = path_info.numberCurves() + 1;
+        size_t number_curves = path_info.size();
         if (pointwise && number_curves != sats.size()) {
             pointwise->recalculateForNewPwd2(pwd2_in, original_pathv);
         } else {

@@ -238,7 +238,7 @@ void Pointwise::insertDegenerateSatellites(Piecewise<D2<SBasis> > A, Geom::PathV
 {
     size_t size_A = A.size();
     _path_info.setPathVector(B);
-    size_t size_B = _path_info.numberCurves();
+    size_t size_B = _path_info.size();
     size_t satellite_gap = size_B - size_A;
     if (satellite_gap == 0){
         return;
