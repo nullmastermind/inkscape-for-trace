@@ -411,7 +411,7 @@ void join_inside(Geom::Path& res, Geom::Curve const& outgoing)
 bool decide(Geom::Curve const& incoming, Geom::Curve const& outgoing)
 {
     Geom::Point tang1 = Geom::unitTangentAt(reverse(incoming.toSBasis()), 0.);
-    Geom::Point tang2 =  outgoing.unitTangentAt(0.);
+    Geom::Point tang2 = outgoing.unitTangentAt(0.);
     return (Geom::cross(tang1, tang2) < 0);
 }
 
@@ -720,7 +720,7 @@ Geom::Path half_outline(Geom::Path const& input, double width, double miter, Lin
         if (u == 0) {
             res.append(temp);
         } else {
-            bool on_outside = decide(input[u], input[u-1]);
+            bool on_outside = decide(input[u-1], input[u]);
             outline_helper(res, temp, width, on_outside, miter, join);
             if (temp.size() > 0)
                 res.insert(res.end(), ++temp.begin(), temp.end());
