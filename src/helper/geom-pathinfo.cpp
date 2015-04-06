@@ -17,12 +17,12 @@ namespace Geom {
  * @brief Pathinfo store the data of a pathvector and allow get info about it
  *
  */
-Pathinfo::Pathinfo(Piecewise<D2<SBasis> > pwd2) : _pwd2(pwd2)
+Pathinfo::Pathinfo(Piecewise<D2<SBasis> > pwd2)
 {
     _setPathInfo(pwd2);
 }
 ;
-Pathinfo::Pathinfo(Geom::PathVector path_vector, bool skip_degenerate) : _path_vector(path_vector)
+Pathinfo::Pathinfo(Geom::PathVector path_vector, bool skip_degenerate)
 {
     _setPathInfo(path_vector, skip_degenerate);
 }
@@ -33,13 +33,11 @@ Pathinfo::~Pathinfo() {}
 
 void Pathinfo::setPwd2(Piecewise<D2<SBasis> > pwd2)
 {
-    _pwd2 = pwd2;
     _setPathInfo(pwd2);
 }
 
 void Pathinfo::setPathVector(Geom::PathVector path_vector, bool skip_degenerate)
 {
-    _path_vector = path_vector;
     _setPathInfo(path_vector, skip_degenerate);
 }
 
@@ -52,11 +50,9 @@ void Pathinfo::_setPathInfo(Piecewise<D2<SBasis> > pwd2)
 void Pathinfo::_setPathInfo(Geom::PathVector path_vector, bool skip_degenerate)
 {
     data.clear();
-    Geom::PathVector path_in =
-        path_from_piecewise(remove_short_cuts(_pwd2, 0.1), 0.001);
     size_t counter = 0;
-    for (PathVector::const_iterator path_it = path_in.begin();
-            path_it != path_in.end(); ++path_it) {
+    for (PathVector::const_iterator path_it = path_vector.begin();
+            path_it != path_vector.end(); ++path_it) {
         if (path_it->empty()) {
             continue;
         }

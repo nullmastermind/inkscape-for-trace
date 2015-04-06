@@ -426,8 +426,9 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
             it->hidden = hide_knots;
             ++it;
         }
-        if (pointwise && c->get_segment_count() != sats.size()) {
-            std::cout << "recalculta\n";
+        Pathinfo path_info(original_pathv);
+        size_t number_curves = path_info.numberCurves() + 1;
+        if (pointwise && number_curves != sats.size()) {
             pointwise->recalculateForNewPwd2(pwd2_in, original_pathv);
         } else {
             pointwise = new Pointwise(pwd2_in, sats);

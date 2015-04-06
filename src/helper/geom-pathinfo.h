@@ -39,8 +39,6 @@ public:
 private:
     void _setPathInfo(Piecewise<D2<SBasis> > pwd2);
     void _setPathInfo(Geom::PathVector path_vector, bool skip_degenerate = false);
-    Piecewise<D2<SBasis> > _pwd2;
-    Geom::PathVector _path_vector;
 };
 
 } //namespace Geom
