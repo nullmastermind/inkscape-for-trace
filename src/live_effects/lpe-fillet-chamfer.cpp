@@ -427,6 +427,7 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
             ++it;
         }
         if (pointwise && c->get_segment_count() != sats.size()) {
+            std::cout << "recalculta\n";
             pointwise->recalculateForNewPwd2(pwd2_in, original_pathv);
         } else {
             pointwise = new Pointwise(pwd2_in, sats);
