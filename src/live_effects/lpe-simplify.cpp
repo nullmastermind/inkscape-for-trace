@@ -188,7 +188,7 @@ LPESimplify::generateHelperPathAndSmooth(Geom::PathVector &result)
             }
         }
         if(helper_size > 0) {
-            draw_node(curve_it1->initialPoint());
+            drawNode(curve_it1->initialPoint());
         }
         nCurve->moveto(curve_it1->initialPoint());
         Geom::Point start = Geom::Point(0,0);
@@ -242,7 +242,7 @@ LPESimplify::generateHelperPathAndSmooth(Geom::PathVector &result)
                 }
             }
             if(helper_size > 0) {
-                draw_node(curve_it1->finalPoint());
+                drawNode(curve_it1->finalPoint());
             }
             ++curve_it1;
             ++curve_it2;
@@ -258,7 +258,7 @@ LPESimplify::generateHelperPathAndSmooth(Geom::PathVector &result)
 }
 
 void
-LPESimplify::draw_node(Geom::Point p)
+LPESimplify::drawNode(Geom::Point p)
 {
     double r = radius_helper_nodes;
     char const * svgd;
