@@ -63,7 +63,7 @@ private:
     ScalarParam starting_angle;
     ScalarParam rotation_angle;
     ScalarParam num_copies;
-    BoolParam copiesTo360;
+    BoolParam copies_to_360;
     BoolParam kaleidoscope;
 
     Geom::Point A;
