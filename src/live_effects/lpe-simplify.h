@@ -42,10 +42,10 @@ private:
     ScalarParam threshold;
     ScalarParam smooth_angles;
     ScalarParam helper_size;
-    ToggleButtonParam simplifyindividualpaths;
-    ToggleButtonParam simplifyJustCoalesce;
+    ToggleButtonParam simplify_individual_paths;
+    ToggleButtonParam simplify_just_coalesce;
 
-    double radiusHelperNodes;
+    double radius_helper_nodes;
     Geom::PathVector hp;
     Geom::OptRect bbox;
 
