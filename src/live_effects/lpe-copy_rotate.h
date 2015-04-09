@@ -22,9 +22,9 @@ namespace Inkscape {
 namespace LivePathEffect {
 
 namespace CR {
-  // we need a separate namespace to avoid clashes with LPEPerpBisector
-  class KnotHolderEntityStartingAngle;
-  class KnotHolderEntityRotationAngle;
+// we need a separate namespace to avoid clashes with LPEPerpBisector
+class KnotHolderEntityStartingAngle;
+class KnotHolderEntityRotationAngle;
 }
 
 class LPECopyRotate : public Effect, GroupBBoxEffect {
