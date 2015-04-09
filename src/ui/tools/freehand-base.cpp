@@ -311,7 +311,7 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
         bool shape_applied = false;
         SPCSSAttr *css_item = sp_css_attr_from_object(item, SP_STYLE_FLAG_ALWAYS);
         const char *cstroke = sp_repr_css_property(css_item, "stroke", "none");
-        static SPItem *bendItem;
+        static SPItem *bend_item;
 
 #define SHAPE_LENGTH 10
 #define SHAPE_HEIGHT 10
@@ -386,11 +386,11 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
                 if(cm->paste(SP_ACTIVE_DESKTOP,true) == true){
                     item->transform = SP_ITEM(SP_ACTIVE_DESKTOP->currentLayer())->i2doc_affine().inverse();
                     gchar const *svgd = item->getRepr()->attribute("d");
-                    bendItem = dc->selection->singleItem();
-                    bendItem->moveTo(item,false);
-                    spdc_apply_bend_shape(svgd, dc, bendItem);
-                    bendItem->transform = Geom::Affine(1,0,0,1,0,0);
-                    dc->selection->add(SP_OBJECT(bendItem));
+                    bend_item = dc->selection->singleItem();
+                    bend_item->moveTo(item,false);
+                    spdc_apply_bend_shape(svgd, dc, bend_item);
+                    bend_item->transform = Geom::Affine(1,0,0,1,0,0);
+                    dc->selection->add(SP_OBJECT(bend_item));
                 } else {
                     shape = NONE;
                 }
@@ -409,17 +409,17 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
                     }
                     shape = CLIPBOARD;
                 } else {
-                    if(bendItem != NULL && bendItem->getRepr() != NULL){
+                    if(bend_item != NULL && bend_item->getRepr() != NULL){
                         item->transform = SP_ITEM(SP_ACTIVE_DESKTOP->currentLayer())->i2doc_affine().inverse();
                         gchar const *svgd = item->getRepr()->attribute("d");
-                        dc->selection->add(SP_OBJECT(bendItem));
+                        dc->selection->add(SP_OBJECT(bend_item));
                         sp_selection_duplicate(dc->desktop);
-                        dc->selection->remove(SP_OBJECT(bendItem));
-                        bendItem = dc->selection->singleItem();
-                        bendItem->moveTo(item,false);
-                        spdc_apply_bend_shape(svgd, dc, bendItem);
-                        bendItem->transform = Geom::Affine(1,0,0,1,0,0);
-                        dc->selection->add(SP_OBJECT(bendItem));
+                        dc->selection->remove(SP_OBJECT(bend_item));
+                        bend_item = dc->selection->singleItem();
+                        bend_item->moveTo(item,false);
+                        spdc_apply_bend_shape(svgd, dc, bend_item);
+                        bend_item->transform = Geom::Affine(1,0,0,1,0,0);
+                        dc->selection->add(SP_OBJECT(bend_item));
                     }
                     shape = BEND_CLIPBOARD;
                 }
