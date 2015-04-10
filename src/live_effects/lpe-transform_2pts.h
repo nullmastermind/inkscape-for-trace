@@ -7,7 +7,7 @@
 
 /*
  * Authors:
- *   
+ *
  *
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
@@ -43,16 +43,16 @@ protected:
     virtual void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec);
 
 private:
-    ToggleButtonParam fromOriginalWidth;
+    ToggleButtonParam from_original_width;
     PointParam start;
     PointParam end;
-    ScalarParam firstKnot;
-    ScalarParam lastKnot;
-    bool fromOriginalWidthToogler;
-    Geom::Point A;
-    Geom::Point B;
-    SPCurve * c;
-    bool appandedPath;
+    ScalarParam first_knot;
+    ScalarParam last_knot;
+    bool from_original_width_toogler;
+    Geom::Point point_a;
+    Geom::Point point_b;
+    SPCurve * curve_c;
+    bool append_path;
     LPETransform2Pts(const LPETransform2Pts&);
     LPETransform2Pts& operator=(const LPETransform2Pts&);
 };
