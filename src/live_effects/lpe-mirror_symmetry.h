@@ -26,8 +26,8 @@ namespace Inkscape {
 namespace LivePathEffect {
 
 namespace MS {
-  // we need a separate namespace to avoid clashes with LPEPerpBisector
-  class KnotHolderEntityCenterMirrorSymmetry;
+// we need a separate namespace to avoid clashes with LPEPerpBisector
+class KnotHolderEntityCenterMirrorSymmetry;
 }
 
 enum ModeType {
@@ -37,7 +37,7 @@ enum ModeType {
     MT_END
 };
 
-class LPEMirrorSymmetry : public Effect, GroupBBoxEffect{
+class LPEMirrorSymmetry : public Effect, GroupBBoxEffect {
 public:
     LPEMirrorSymmetry(LivePathEffectObject *lpeobject);
     virtual ~LPEMirrorSymmetry();
@@ -60,11 +60,11 @@ protected:
 private:
     EnumParam<ModeType> mode;
     BoolParam discard_orig_path;
-    BoolParam fusionPaths;
-    BoolParam reverseFusion;
+    BoolParam fusion_paths;
+    BoolParam reverse_fusion;
     PathParam reflection_line;
-    Geom::Line lineSeparation;
-    Geom::Point previousCenter;
+    Geom::Line line_separation;
+    Geom::Point previous_center;
     PointParam center;
     KnotHolder *knoth;
 
