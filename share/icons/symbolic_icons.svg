@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
-<svg xmlns:osb="http://www.openswatchbook.org/uri/2009/osb" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width="1320" height="660" id="svg15638" version="1.1" inkscape:version="0.91+devel r14027" sodipodi:docname="symbolic_icons.svg" viewBox="0 0 1320 660">
+<svg xmlns:osb="http://www.openswatchbook.org/uri/2009/osb" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width="1320" height="660" id="svg15638" version="1.1" inkscape:version="0.91+devel r14057" sodipodi:docname="symbolic_icons.svg" viewBox="0 0 1320 660">
 <title id="title9623">Inkscape Icon Theme</title>
 <defs id="defs15640">
 <inkscape:path-effect effect="spiro" id="path-effect36695" is_visible="true" />
@@ -3374,61 +3374,61 @@
 <g id="boundingbox_top_left" transform="translate(738,743.3622)">
 <title id="title40670">boundingbox_top_left</title>
 <rect style="fill:none" id="rect40672" width="16" height="16" x="0" y="0" />
-<circle cy="5" cx="5" id="circle40674" style="fill-opacity:0.3;stroke-opacity:0.8;fill:url(#linearGradient19282);stroke:url(#linearGradient19282)" r="4.5" />
 <path style="fill:url(#linearGradient19282)" inkscape:connector-curvature="0" id="path40676" d="M 4,14 4,4 14,4 14,6 6,6 6,14 Z" />
+<circle cy="5" cx="5" id="circle40674" style="fill-opacity:0.3;stroke-opacity:0.8;fill:url(#linearGradient19282);stroke:url(#linearGradient19282)" r="4.5" />
 </g>
 <g id="boundingbox_top" transform="translate(758,743.3622)">
 <title id="title40660">boundingbox_top</title>
 <rect style="fill:none" id="rect40662" width="16" height="16" x="0" y="0" />
+<path style="fill:url(#linearGradient19282)" d="M 0,4 16,4 16,6 0,6 Z" id="path40666" inkscape:connector-curvature="0" />
 <circle cy="5" cx="8" style="fill-opacity:0.3;stroke-opacity:0.8;fill:url(#linearGradient19282);stroke:url(#linearGradient19282)" id="circle40664" r="4.5" />
-<path style="fill:url(#linearGradient19282)" d="M 1,4 15,4 15,6 1,6 Z" id="path40666" inkscape:connector-curvature="0" />
 </g>
 <g id="boundingbox_top_right" transform="translate(778,743.3622)">
 <title id="title40648">boundingbox_top_right</title>
 <g transform="rotate(90,8,8)" id="g40650">
 <rect style="fill:none" id="rect40652" width="16" height="16" x="0" y="0" />
-<circle r="4.5" id="circle40654" style="fill-opacity:0.3;stroke-opacity:0.8;fill:url(#linearGradient19282);stroke:url(#linearGradient19282)" cx="5" cy="5" />
 <path style="fill:url(#linearGradient19282)" inkscape:connector-curvature="0" id="path40656" d="M 4,14 4,4 14,4 14,6 6,6 6,14 Z" />
+<circle r="4.5" id="circle40654" style="fill-opacity:0.3;stroke-opacity:0.8;fill:url(#linearGradient19282);stroke:url(#linearGradient19282)" cx="5" cy="5" />
 </g>
 </g>
 <g id="boundingbox_left" transform="translate(738,763.3622)">
 <title id="title40636">boundingbox_left</title>
 <g transform="rotate(-90,8,8)" id="g40638">
 <rect style="fill:none" id="rect40640" width="16" height="16" x="0" y="0" />
+<path style="fill:url(#linearGradient19282)" d="M 0,4 16,4 16,6 0,6 Z" id="path40644" inkscape:connector-curvature="0" />
 <circle r="4.5" cy="5" cx="8" style="fill-opacity:0.3;stroke-opacity:0.8;fill:url(#linearGradient19282);stroke:url(#linearGradient19282)" id="circle40642" />
-<path style="fill:url(#linearGradient19282)" d="M 1,4 15,4 15,6 1,6 Z" id="path40644" inkscape:connector-curvature="0" />
 </g>
 </g>
 <g id="boundingbox_right" transform="translate(778,763.3622)">
 <title id="title40624">boundingbox_right</title>
 <g transform="rotate(90,8,8)" id="g40626">
 <rect style="fill:none" id="rect40628" width="16" height="16" x="0" y="0" />
+<path style="fill:url(#linearGradient19282)" d="M 0,4 16,4 16,6 0,6 Z" id="path40632" inkscape:connector-curvature="0" />
 <circle r="4.5" style="fill-opacity:0.3;stroke-opacity:0.8;fill:url(#linearGradient19282);stroke:url(#linearGradient19282)" id="circle40630" cx="8" cy="5" />
-<path style="fill:url(#linearGradient19282)" d="m 1.5,4 13,0 0,2 -13,0 z" id="path40632" inkscape:connector-curvature="0" />
 </g>
 </g>
 <g id="boundingbox_bottom_left" transform="translate(738,783.3622)">
 <title id="title40612">boundingbox_bottom_left</title>
 <g transform="rotate(-90,8,8)" id="g40614">
 <rect style="fill:none" id="rect40616" width="16" height="16" x="0" y="0" />
-<circle r="4.5" id="circle40618" style="fill-opacity:0.3;stroke-opacity:0.8;fill:url(#linearGradient19282);stroke:url(#linearGradient19282)" cx="5" cy="5" />
 <path style="fill:url(#linearGradient19282)" inkscape:connector-curvature="0" id="path40620" d="M 4,14 4,4 14,4 14,6 6,6 6,14 Z" />
+<circle r="4.5" id="circle40618" style="fill-opacity:0.3;stroke-opacity:0.8;fill:url(#linearGradient19282);stroke:url(#linearGradient19282)" cx="5" cy="5" />
 </g>
 </g>
 <g id="boundingbox_bottom" transform="translate(758,783.3622)">
 <title id="title40600">boundingbox_bottom</title>
 <g transform="rotate(180,8,8)" id="g40602">
 <rect style="fill:none" id="rect40604" width="16" height="16" x="0" y="0" />
+<path style="fill:url(#linearGradient19282)" inkscape:connector-curvature="0" id="path40608" d="M 0,4 16,4 16,6 0,6 Z" />
 <circle r="4.5" id="circle40606" style="fill-opacity:0.3;stroke-opacity:0.8;fill:url(#linearGradient19282);stroke:url(#linearGradient19282)" cx="8" cy="5" />
-<path style="fill:url(#linearGradient19282)" inkscape:connector-curvature="0" id="path40608" d="M 1,4 15,4 15,6 1,6 Z" />
 </g>
 </g>
 <g id="boundingbox_bottom_right" transform="translate(778,783.3622)">
 <title id="title40588">boundingbox_bottom_right</title>
 <g transform="rotate(180,8,8)" id="g40590">
 <rect style="fill:none" id="rect40592" width="16" height="16" x="0" y="0" />
-<circle r="4.5" style="fill-opacity:0.3;stroke-opacity:0.8;fill:url(#linearGradient19282);stroke:url(#linearGradient19282)" id="circle40594" cx="5" cy="5" />
 <path style="fill:url(#linearGradient19282)" d="M 4,14 4,4 14,4 14,6 6,6 6,14 Z" id="path40596" inkscape:connector-curvature="0" />
+<circle r="4.5" style="fill-opacity:0.3;stroke-opacity:0.8;fill:url(#linearGradient19282);stroke:url(#linearGradient19282)" id="circle40594" cx="5" cy="5" />
 </g>
 </g>
 <g id="boundingbox_center" transform="translate(758,763.3622)">
