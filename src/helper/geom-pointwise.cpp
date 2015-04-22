@@ -223,6 +223,26 @@ void Pointwise::subpathReverse(size_t start, size_t end)
     setPwd2(remove_short_cuts(paths_to_pw(tmp_path), 0.01));
 }
 
+void Pointwise::pathReverse()
+{
+    start++;
+    for (size_t i = _satellites.size()-1; i >= 0; i--) {
+        _satellites.insert(_satellites.begin() + _satellites.size(), _satellites[i]);
+        _satellites.erase(_satellites.begin() + i);
+    }
+    std::vector<Geom::Path> path_in =
+        path_from_piecewise(remove_short_cuts(_pwd2, 0.1), 0.001);
+    std::vector<Geom::Path> tmp_path;
+    for (PathVector::const_iterator path_it = path_in.begin();
+            path_it != path_in.end(); ++path_it) {
+        if (path_it->empty()) {
+            continue;
+        }
+        tmp_path.push_back(path_it->reverse());
+    }
+    setPwd2(remove_short_cuts(paths_to_pw(tmp_path), 0.01));
+}
+
 
 /** Fired when a path is modified duplicating a node. Piecewise ignore degenerated curves.
  */
@@ -233,6 +253,10 @@ void Pointwise::insertDegenerateSatellites(Piecewise<D2<SBasis> > A, Geom::PathV
     size_t size_B = _path_info.size();
     size_t satellite_gap = size_B - size_A;
     if (satellite_gap == 0){
+        if(_path_info.subPathSize(1) > 0 && !are_near(_pwd2[0].initialPoint(), A[0].initialPoint()) &&
+            !are_near(_pwd2[size_A-1].finalPoint(), A[size_A-1].finalPoint())){
+            pathReverse();
+        }
         return;
     }
     size_t counter = 0;

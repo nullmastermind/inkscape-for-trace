@@ -87,7 +87,11 @@ size_t Pathinfo::size() const
 
 size_t Pathinfo::subPathSize(size_t index) const
 {
-    return data[index].first + 1;
+    size_t size = 0;
+    if( data.size() > index){
+        size = data[index].first + 1;
+    }
+    return size;
 }
 
 size_t Pathinfo::subPathIndex(size_t index) const
