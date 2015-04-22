@@ -52,7 +52,6 @@ public:
     void pwd2Sustract(Piecewise<D2<SBasis> > A);
     void pwd2Append(Piecewise<D2<SBasis> > A, Satellite S);
     void subpathToBack(size_t subpath);
-    void pathReverse();
     void subpathReverse(size_t start, size_t end);
     void insertDegenerateSatellites(Piecewise<D2<SBasis> > A, Geom::PathVector B, Satellite S);
 
