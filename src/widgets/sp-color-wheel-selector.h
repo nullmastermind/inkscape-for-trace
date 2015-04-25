@@ -13,6 +13,7 @@
 #include <gtk/gtk.h>
 
 #include "sp-color-selector.h"
+#include "ui/selected-color.h"
 
 typedef struct _GimpColorWheel GimpColorWheel;
 struct SPColorWheelSelector;
@@ -31,6 +32,8 @@ class ColorSlider;
 class ColorWheelSelector: public ColorSelector
 {
 public:
+	static const gchar* MODE_NAME;
+
     ColorWheelSelector( SPColorSelector* csel );
     virtual ~ColorWheelSelector();
 
@@ -86,6 +89,12 @@ GType sp_color_wheel_selector_get_type (void);
 
 GtkWidget *sp_color_wheel_selector_new (void);
 
+
+class ColorWheelSelectorFactory: public Inkscape::UI::ColorSelectorFactory {
+public:
+    Gtk::Widget *createWidget(Inkscape::UI::SelectedColor &color) const;
+    Glib::ustring modeName() const;
+};
 
 
 #endif // SEEN_SP_COLOR_WHEEL_SELECTOR_H

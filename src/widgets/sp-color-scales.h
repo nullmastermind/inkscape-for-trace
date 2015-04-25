@@ -5,6 +5,8 @@
 
 #include <widgets/sp-color-selector.h>
 
+#include "ui/selected-color.h"
+
 struct SPColorScales;
 struct SPColorScalesClass;
 
@@ -30,6 +32,8 @@ typedef enum {
 class ColorScales: public ColorSelector
 {
 public:
+    static const gchar* SUBMODE_NAMES[];
+
     static gfloat getScaled( const GtkAdjustment *a );
     static void setScaled( GtkAdjustment *a, gfloat v);
 
@@ -96,6 +100,20 @@ struct SPColorScalesClass {
 GType sp_color_scales_get_type();
 
 GtkWidget *sp_color_scales_new();
+
+
+class ColorScalesFactory: public Inkscape::UI::ColorSelectorFactory {
+public:
+    ColorScalesFactory(SPColorScalesMode submode);
+    ~ColorScalesFactory();
+
+    Gtk::Widget *createWidget(Inkscape::UI::SelectedColor &color) const;
+    Glib::ustring modeName() const;
+
+private:
+    SPColorScalesMode _submode;
+};
+
 
 #endif /* !SEEN_SP_COLOR_SCALES_H */
 

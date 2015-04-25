@@ -250,6 +250,7 @@ static void sp_color_icc_selector_class_init(SPColorICCSelectorClass *klass)
     widget_class->hide = sp_color_icc_selector_hide;
 }
 
+const gchar* ColorICCSelector::MODE_NAME = N_("CMS");
 
 ColorICCSelector::ColorICCSelector( SPColorSelector* csel )
     : ColorSelector( csel ),
@@ -1101,6 +1102,16 @@ void ColorICCSelectorImpl::_sliderChanged()
 //     ColorICCSelector* iccSelector = dynamic_cast<ColorICCSelector*>(SP_COLOR_SELECTOR(cs)->base);
 
 //     iccSelector->_updateInternals( iccSelector->_color, ColorScales::getScaled( iccSelector->_adj ), iccSelector->_dragging );
+}
+
+Gtk::Widget *ColorICCSelectorFactory::createWidget(Inkscape::UI::SelectedColor &color) const {
+    GtkWidget *w = sp_color_selector_new(SP_TYPE_COLOR_ICC_SELECTOR);
+    Gtk::Widget *wrapped = Glib::wrap(w);
+    return wrapped;
+}
+
+Glib::ustring ColorICCSelectorFactory::modeName() const {
+    return gettext(ColorICCSelector::MODE_NAME);
 }
 
 
