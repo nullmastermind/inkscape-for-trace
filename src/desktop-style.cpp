@@ -577,8 +577,8 @@ objects_query_fillstroke (GSList *objects, SPStyle *style_res, bool const isfill
                    return QUERY_STYLE_MULTIPLE_DIFFERENT;  // different kind of server
                 }
 
-                SPPattern *pat = pattern_getroot (pattern);
-                SPPattern *pat_res = pattern_getroot (pattern_res);
+                SPPattern *pat = SP_PATTERN (server)->get_root();
+                SPPattern *pat_res = SP_PATTERN (server_res)->get_root();
                 if (pat_res != pat) {
                    return QUERY_STYLE_MULTIPLE_DIFFERENT;  // different pattern roots
                 }

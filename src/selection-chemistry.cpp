@@ -1990,8 +1990,8 @@ GSList *sp_get_same_fill_or_stroke_color(SPItem *sel, GSList *src, SPSelectStrok
                     }
 
                 } else if (dynamic_cast<SPPattern *>(sel_server) && dynamic_cast<SPPattern *>(iter_server)) {
-                    SPPattern *sel_pat = pattern_getroot(dynamic_cast<SPPattern *>(sel_server));
-                    SPPattern *iter_pat = pattern_getroot(dynamic_cast<SPPattern *>(iter_server));
+                    SPPattern *sel_pat = SP_PATTERN(sel_server)->get_root();
+                    SPPattern *iter_pat = SP_PATTERN(iter_server)->get_root();
                     if (sel_pat == iter_pat) {
                         match = true;
                     }
@@ -3340,13 +3340,11 @@ sp_selection_tile(SPDesktop *desktop, bool apply)
     gint pos = SP_OBJECT(items->data)->getRepr()->position();
 
     // create a list of duplicates
-    GSList *repr_copies = NULL;
+    std::list<Inkscape::XML::Node*> repr_copies;
     for (GSList *i = items; i != NULL; i = i->next) {
         Inkscape::XML::Node *dup = SP_OBJECT(i->data)->getRepr()->duplicate(xml_doc);
-        repr_copies = g_slist_prepend(repr_copies, dup);
+        repr_copies.push_back(dup);
     }
-    // restore the z-order after prepends
-    repr_copies = g_slist_reverse(repr_copies);
 
     Geom::Rect bbox(desktop->dt2doc(r->min()), desktop->dt2doc(r->max()));
 
@@ -3365,11 +3363,11 @@ sp_selection_tile(SPDesktop *desktop, bool apply)
     int saved_compensation = prefs->getInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
     prefs->setInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
 
-    gchar const *pat_id = pattern_tile(repr_copies, bbox, doc,
-                                       ( Geom::Affine(Geom::Translate(desktop->dt2doc(Geom::Point(r->min()[Geom::X],
-                                                                                            r->max()[Geom::Y]))))
-                                         * parent_transform.inverse() ),
-                                       parent_transform * move);
+    gchar const *pat_id = SPPattern::produce(repr_copies, bbox, doc,
+                                        ( Geom::Affine(Geom::Translate(desktop->dt2doc(Geom::Point(r->min()[Geom::X],
+                                                                                             r->max()[Geom::Y]))))
+                                          * parent_transform.inverse() ),
+                                        parent_transform * move);
 
     // restore compensation setting
     prefs->setInt("/options/clonecompensation/value", saved_compensation);
@@ -3446,9 +3444,9 @@ void sp_selection_untile(SPDesktop *desktop)
 
         did = true;
 
-        SPPattern *pattern = pattern_getroot(basePat);
+        SPPattern *pattern = basePat->get_root();
 
-        Geom::Affine pat_transform = pattern_patternTransform(basePat);
+        Geom::Affine pat_transform = pattern->get_transform();
         pat_transform *= item->transform;
 
         for (SPObject *child = pattern->firstChild() ; child != NULL; child = child->next ) {
