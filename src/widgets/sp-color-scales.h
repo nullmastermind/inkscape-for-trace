@@ -7,7 +7,16 @@
 
 struct SPColorScales;
 struct SPColorScalesClass;
-struct SPColorSlider;
+
+namespace Inkscape {
+namespace UI {
+namespace Widget {
+
+class ColorSlider;
+
+}
+}
+}
 
 typedef enum {
     SP_COLOR_SCALES_MODE_NONE = 0,
@@ -40,9 +49,9 @@ protected:
     virtual void _colorChanged();
 
     static void _adjustmentAnyChanged(GtkAdjustment *adjustment, SPColorScales *cs);
-    static void _sliderAnyGrabbed(SPColorSlider *slider, SPColorScales *cs);
-    static void _sliderAnyReleased(SPColorSlider *slider, SPColorScales *cs);
-    static void _sliderAnyChanged(SPColorSlider *slider, SPColorScales *cs);
+    void _sliderAnyGrabbed();
+    void _sliderAnyReleased();
+    void _sliderAnyChanged();
     static void _adjustmentChanged(SPColorScales *cs, guint channel);
 
     void _getRgbaFloatv(gfloat *rgba);
@@ -58,7 +67,7 @@ protected:
     gboolean _updating : 1;
     gboolean _dragging : 1;
     GtkAdjustment *_a[5]; /* Channel adjustments */
-    GtkWidget *_s[5]; /* Channel sliders */
+    Inkscape::UI::Widget::ColorSlider *_s[5]; /* Channel sliders */
     GtkWidget *_b[5]; /* Spinbuttons */
     GtkWidget *_l[5]; /* Labels */
 

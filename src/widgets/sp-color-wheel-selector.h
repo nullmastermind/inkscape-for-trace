@@ -1,14 +1,32 @@
 #ifndef SEEN_SP_COLOR_WHEEL_SELECTOR_H
 #define SEEN_SP_COLOR_WHEEL_SELECTOR_H
 
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
+
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
+#include <glib.h>
 #include <gtk/gtk.h>
 
 #include "sp-color-selector.h"
 
 typedef struct _GimpColorWheel GimpColorWheel;
-struct SPColorSlider;
 struct SPColorWheelSelector;
 struct SPColorWheelSelectorClass;
+
+namespace Inkscape {
+namespace UI {
+namespace Widget {
+
+class ColorSlider;
+
+}
+}
+}
 
 class ColorWheelSelector: public ColorSelector
 {
@@ -23,9 +41,9 @@ protected:
 
     static void _adjustmentChanged ( GtkAdjustment *adjustment, SPColorWheelSelector *cs );
 
-    static void _sliderGrabbed( SPColorSlider *slider, SPColorWheelSelector *cs );
-    static void _sliderReleased( SPColorSlider *slider, SPColorWheelSelector *cs );
-    static void _sliderChanged( SPColorSlider *slider, SPColorWheelSelector *cs );
+    void _sliderGrabbed();
+    void _sliderReleased();
+    void _sliderChanged();
     static void _wheelChanged( GimpColorWheel *wheel, SPColorWheelSelector *cs );
 
     static void _fooChanged( GtkWidget foo, SPColorWheelSelector *cs );
@@ -36,7 +54,7 @@ protected:
     gboolean _dragging : 1;
     GtkAdjustment* _adj; // Channel adjustment
     GtkWidget* _wheel;
-    GtkWidget* _slider;
+    Inkscape::UI::Widget::ColorSlider* _slider;
     GtkWidget* _sbtn; // Spinbutton
     GtkWidget* _label; // Label
 
@@ -44,6 +62,8 @@ private:
     // By default, disallow copy constructor and assignment operator
     ColorWheelSelector( const ColorWheelSelector& obj );
     ColorWheelSelector& operator=( const ColorWheelSelector& obj );
+
+    void _preserve_icc(SPColor *color) const;
 };
 
 

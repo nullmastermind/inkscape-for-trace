@@ -117,6 +117,7 @@ set(ui_SRC
 	widget/clipmaskicon.cpp
 	widget/color-picker.cpp
 	widget/color-preview.cpp
+	widget/color-slider.cpp
 	widget/dock-item.cpp
 	widget/dock.cpp
 	widget/entity-entry.cpp
@@ -289,6 +290,7 @@ set(ui_SRC
 	widget/button.h
 	widget/color-picker.h
 	widget/color-preview.h
+	widget/color-slider.h
 	widget/combo-enums.h
 	widget/dock-item.h
 	widget/dock.h

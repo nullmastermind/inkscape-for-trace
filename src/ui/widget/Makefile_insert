@@ -10,6 +10,8 @@ ink_common_sources +=	\
 	ui/widget/color-picker.h        \
 	ui/widget/color-preview.cpp     \
 	ui/widget/color-preview.h       \
+	ui/widget/color-slider.cpp      \
+	ui/widget/color-slider.h       \
 	ui/widget/combo-enums.h \
 	ui/widget/dock.h		\
 	ui/widget/dock.cpp		\
