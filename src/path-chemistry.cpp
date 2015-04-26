@@ -269,7 +269,7 @@ sp_selected_path_break_apart(SPDesktop *desktop)
             if (l == list)
                 repr->setAttribute("id", id);
 
-            reprs.insert(reprs.begin(),repr);
+            reprs.push_back(repr);
 
             Inkscape::GC::release(repr);
         }

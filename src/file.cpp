@@ -1090,7 +1090,6 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place)
 
         pasted_objects.push_back(obj_copy);
     }
-
     // Change the selection to the freshly pasted objects
     Inkscape::Selection *selection = desktop->getSelection();
     selection->setReprList(pasted_objects);

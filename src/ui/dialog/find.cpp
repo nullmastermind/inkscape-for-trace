@@ -762,7 +762,7 @@ std::vector<SPItem*> &Find::all_items (SPObject *r, std::vector<SPItem*> &l, boo
 std::vector<SPItem*> &Find::all_selection_items (Inkscape::Selection *s, std::vector<SPItem*> &l, SPObject *ancestor, bool hidden, bool locked)
 {
 	std::vector<SPItem*> itemlist=s->itemList();
-    for(std::vector<SPItem*>::const_iterator i=itemlist.begin(); itemlist.end() != i; i++) {
+    for(std::vector<SPItem*>::const_reverse_iterator i=itemlist.rbegin(); itemlist.rend() != i; i++) {
         SPObject *obj = *i;
         SPItem *item = dynamic_cast<SPItem *>(obj);
         g_assert(item != NULL);

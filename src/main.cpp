@@ -1641,7 +1641,9 @@ static int sp_do_export_png(SPDocument *doc)
         g_print("Background RRGGBBAA: %08x\n", bgcolor);
 
         g_print("Area %g:%g:%g:%g exported to %lu x %lu pixels (%g dpi)\n", area[Geom::X][0], area[Geom::Y][0], area[Geom::X][1], area[Geom::Y][1], width, height, dpi);
-
+        
+        reverse(items.begin(),items.end());
+        
         if ((width >= 1) && (height >= 1) && (width <= PNG_UINT_31_MAX) && (height <= PNG_UINT_31_MAX)) {
             if( sp_export_png_file(doc, path.c_str(), area, width, height, dpi,
               dpi, bgcolor, NULL, NULL, true, sp_export_id_only ? items : std::vector<SPItem*>()) == 1 ) {

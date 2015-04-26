@@ -378,7 +378,7 @@ sp_tweak_dilate_recursive (Inkscape::Selection *selection, SPItem *item, Geom::P
         std::vector<Inkscape::XML::Node*> to_select;
         SPDocument *doc = item->document;
         sp_item_list_to_curves (items, selected, to_select);
-        SPObject* newObj = doc->getObjectByRepr(to_select.back());
+        SPObject* newObj = doc->getObjectByRepr(to_select[0]);
         item = dynamic_cast<SPItem *>(newObj);
         g_assert(item != NULL);
         selection->add(item);

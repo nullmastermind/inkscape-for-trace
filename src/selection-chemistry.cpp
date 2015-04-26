@@ -337,10 +337,7 @@ static void sp_selection_copy_impl(std::vector<SPItem*> const &items, std::vecto
             g_assert_not_reached();
         }
     }
-    std::vector<Inkscape::XML::Node*> tmp(clip);
-    for(int i=0;i<tmp.size();i++){
-        clip[i]=tmp[tmp.size()-i-1];
-    }
+    reverse(clip.begin(),clip.end());
 }
 
 // TODO check if parent parameter should be changed to SPItem, of if the code should handle non-items.
@@ -1418,7 +1415,6 @@ void sp_selection_to_layer(SPDesktop *dt, SPObject *moveto, bool suppressDone)
         sp_selection_delete_impl(items, false, false);
         std::vector<Inkscape::XML::Node*> copied = sp_selection_paste_impl(dt->getDocument(), moveto, temp_clip);
         selection->setReprList(copied);
-        copied.clear();
         if (!temp_clip.empty()) temp_clip.clear();
         if (moveto) dt->setCurrentLayer(moveto);
         if ( !suppressDone ) {
@@ -2051,7 +2047,7 @@ std::vector<SPItem*> sp_get_same_style(SPItem *sel, std::vector<SPItem*> &src, S
         sel_style_for_width = new SPStyle(SP_ACTIVE_DOCUMENT);
         objects_query_strokewidth (objects, sel_style_for_width);
     }
-	    bool match_g;
+    bool match_g;
     for (std::vector<SPItem*>::const_iterator i=src.begin();i!=src.end();i++) {
         SPItem *iter = *i;
         if (iter) {
@@ -3186,7 +3182,7 @@ void sp_selection_unsymbol(SPDesktop *desktop)
         }
     }
         
-    for (std::vector<SPObject*>::const_iterator i=children.begin();i!=children.end();i++){
+    for (std::vector<SPObject*>::const_reverse_iterator i=children.rbegin();i!=children.rend();i++){
         Inkscape::XML::Node *repr = (*i)->getRepr();
         repr->parent()->removeChild(repr);
         group->addChild(repr,NULL);

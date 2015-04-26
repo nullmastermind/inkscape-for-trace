@@ -2113,8 +2113,7 @@ void CloneTiler::clonetiler_unclump(GtkWidget */*widget*/, void *)
     }
 
     desktop->getDocument()->ensureUpToDate();
-    std::vector<SPItem*> tu2(to_unclump);
-    for(int i=0;i<tu2.size();i++)to_unclump[i]=tu2[tu2.size()-i-1];
+    reverse(to_unclump.begin(),to_unclump.end());
     unclump (to_unclump);
 
     DocumentUndo::done(desktop->getDocument(), SP_VERB_DIALOG_CLONETILER,

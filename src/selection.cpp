@@ -42,9 +42,9 @@
 namespace Inkscape {
 
 Selection::Selection(LayerModel *layers, SPDesktop *desktop) :
-    	    _objs(std::list<SPObject*>()),
-		    _objs_vector(std::vector<SPObject*>()),
-		    _objs_set(std::set<SPObject*>()),
+    _objs(std::list<SPObject*>()),
+    _objs_vector(std::vector<SPObject*>()),
+    _objs_set(std::set<SPObject*>()),
     _reprs(std::vector<XML::Node*>()),
     _items(std::vector<SPItem*>()),
     _layers(layers),
@@ -281,10 +281,10 @@ void Selection::clear() {
 }
 
 std::vector<SPObject*> const &Selection::list() {
-	if(!_objs_vector.empty())
+    if(!_objs_vector.empty())
     return _objs_vector;
 
-	for ( std::list<SPObject*>::const_iterator iter=_objs.begin();iter!=_objs.end();iter++ ) {
+    for ( std::list<SPObject*>::const_iterator iter=_objs.begin();iter!=_objs.end();iter++ ) {
             _objs_vector.push_back(*iter);
     }
     return _objs_vector;
@@ -349,7 +349,7 @@ SPObject *Selection::single() {
 }
 
 SPItem *Selection::singleItem() {
-	std::vector<SPItem*> const items=itemList();
+    std::vector<SPItem*> const items=itemList();
     if ( items.size()==1) {
         return items[0];
     } else {
@@ -366,7 +366,7 @@ SPItem *Selection::largestItem(Selection::CompareSize compare) {
 }
 
 SPItem *Selection::_sizeistItem(bool sml, Selection::CompareSize compare) {
-	std::vector<SPItem*> const items = const_cast<Selection *>(this)->itemList();
+    std::vector<SPItem*> const items = const_cast<Selection *>(this)->itemList();
     gdouble max = sml ? 1e18 : 0;
     SPItem *ist = NULL;
 
@@ -399,7 +399,7 @@ Geom::OptRect Selection::bounds(SPItem::BBoxType type) const
 
 Geom::OptRect Selection::geometricBounds() const
 {
-	std::vector<SPItem*> const items = const_cast<Selection *>(this)->itemList();
+    std::vector<SPItem*> const items = const_cast<Selection *>(this)->itemList();
 
     Geom::OptRect bbox;
     for ( std::vector<SPItem*>::const_iterator iter=items.begin();iter!=items.end();iter++ ) {
@@ -410,7 +410,7 @@ Geom::OptRect Selection::geometricBounds() const
 
 Geom::OptRect Selection::visualBounds() const
 {
-	std::vector<SPItem*> const items = const_cast<Selection *>(this)->itemList();
+    std::vector<SPItem*> const items = const_cast<Selection *>(this)->itemList();
 
     Geom::OptRect bbox;
     for ( std::vector<SPItem*>::const_iterator iter=items.begin();iter!=items.end();iter++ ) {
@@ -445,7 +445,7 @@ Geom::OptRect Selection::documentBounds(SPItem::BBoxType type) const
 // If we have a selection of multiple items, then the center of the first item
 // will be returned; this is also the case in SelTrans::centerRequest()
 boost::optional<Geom::Point> Selection::center() const {
-	std::vector<SPItem*> const items = const_cast<Selection *>(this)->itemList();
+    std::vector<SPItem*> const items = const_cast<Selection *>(this)->itemList();
     if (!items.empty()) {
         SPItem *first = items.back(); // from the first item in selection
         if (first->isCenterSet()) { // only if set explicitly
@@ -461,7 +461,7 @@ boost::optional<Geom::Point> Selection::center() const {
 }
 
 std::vector<Inkscape::SnapCandidatePoint> Selection::getSnapPoints(SnapPreferences const *snapprefs) const {
-	std::vector<SPItem*> const items = const_cast<Selection *>(this)->itemList();
+    std::vector<SPItem*> const items = const_cast<Selection *>(this)->itemList();
 
     SnapPreferences snapprefs_dummy = *snapprefs; // create a local copy of the snapping prefs
     snapprefs_dummy.setTargetSnappable(Inkscape::SNAPTARGET_ROTATION_CENTER, false); // locally disable snapping to the item center
@@ -514,8 +514,8 @@ SPObject *Selection::_objectForXMLNode(Inkscape::XML::Node *repr) const {
 }
 
 uint Selection::numberOfLayers() {
-	std::vector<SPItem*> const items = const_cast<Selection *>(this)->itemList();
-	std::set<SPObject*> layers;
+    std::vector<SPItem*> const items = const_cast<Selection *>(this)->itemList();
+    std::set<SPObject*> layers;
     for ( std::vector<SPItem*>::const_iterator iter=items.begin();iter!=items.end();iter++ ) {
         SPObject *layer = _layers->layerForObject(SP_OBJECT(*iter));
         layers.insert(layer);
@@ -524,8 +524,8 @@ uint Selection::numberOfLayers() {
 }
 
 guint Selection::numberOfParents() {
-	std::vector<SPItem*> const items = const_cast<Selection *>(this)->itemList();
-	std::set<SPObject*> parents;
+    std::vector<SPItem*> const items = const_cast<Selection *>(this)->itemList();
+    std::set<SPObject*> parents;
     for ( std::vector<SPItem*>::const_iterator iter=items.begin();iter!=items.end();iter++ ) {
         SPObject *parent = SP_OBJECT(*iter)->parent;
         parents.insert(parent);

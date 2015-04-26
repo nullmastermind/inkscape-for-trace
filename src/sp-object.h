@@ -52,7 +52,6 @@ class SPObject;
 #include <sigc++/connection.h>
 #include <sigc++/functors/slot.h>
 #include <sigc++/signal.h>
-#include <list>
 #include <vector>
 
 #include "version.h"

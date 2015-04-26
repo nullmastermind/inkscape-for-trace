@@ -396,7 +396,7 @@ text_unflow ()
     GSList *old_objs = NULL;
 
     std::vector<SPItem*> items = selection->itemList();
-    for(std::vector<SPItem*>::const_reverse_iterator i=items.rbegin();i!=items.rend();i++){
+    for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
 
         if (!SP_IS_FLOWTEXT(*i)) {
             continue;
@@ -452,6 +452,7 @@ text_unflow ()
     }
 
     selection->clear();
+    reverse(new_objs.begin(),new_objs.end());
     selection->setList(new_objs);
     for (GSList *i = old_objs; i; i = i->next) {
         SP_OBJECT(i->data)->deleteObject (true);
