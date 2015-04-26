@@ -6,9 +6,8 @@
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
-
 #include "live_effects/effect.h"
-#include "live_effects/parameter/bool.h"
+
 #include <vector>
 
 namespace Inkscape {
@@ -19,7 +18,8 @@ public:
     LPEBSpline(LivePathEffectObject *lpeobject);
     virtual ~LPEBSpline();
 
-    virtual LPEPathFlashType pathFlashType() const {
+    virtual LPEPathFlashType pathFlashType() const
+    {
         return SUPPRESS_FLASH;
     }
     virtual void doOnApply(SPLPEItem const* lpeitem);
@@ -38,9 +38,9 @@ public:
     ScalarParam steps;
 
 private:
-    BoolParam ignoreCusp;
-    BoolParam onlySelected;
-    BoolParam showHelper;
+    ScalarParam helper_size;
+    BoolParam ignore_cusp;
+    BoolParam only_selected;
     ScalarParam weight;
     Geom::PathVector hp;
 

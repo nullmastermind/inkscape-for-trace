@@ -19,7 +19,8 @@
 #include <2geom/circle.h>
 #include <2geom/sbasis-to-bezier.h>
 
-#include "pathoutlineprovider.h"
+#include "helper/geom-nodetype.h"
+#include "helper/geom-pathstroke.h"
 #include "display/curve.h"
 #include "sp-shape.h"
 #include "style.h"
@@ -60,11 +61,10 @@ namespace TpS {
 } // TpS
 
 static const Util::EnumData<unsigned> JoinType[] = {
-    {LINEJOIN_STRAIGHT,         N_("Beveled"),          "bevel"},
-    {LINEJOIN_ROUND,            N_("Rounded"),          "round"},
-    {LINEJOIN_REFLECTED,        N_("Reflected"),        "reflected"},
-    {LINEJOIN_POINTY,           N_("Miter"),            "miter"},
-    {LINEJOIN_EXTRAPOLATED,     N_("Extrapolated"),     "extrapolated"}
+    {JOIN_BEVEL,          N_("Beveled"),         "bevel"},
+    {JOIN_ROUND,          N_("Rounded"),         "round"},
+    {JOIN_MITER,          N_("Miter"),           "miter"},
+    {JOIN_EXTRAPOLATE,    N_("Extrapolated"),    "extrapolated"},
 };
 
 static const Util::EnumDataConverter<unsigned> JoinTypeConverter(JoinType, sizeof (JoinType)/sizeof(*JoinType));
@@ -75,7 +75,7 @@ LPETaperStroke::LPETaperStroke(LivePathEffectObject *lpeobject) :
     attach_start(_("Start offset:"), _("Taper distance from path start"), "attach_start", &wr, this, 0.2),
     attach_end(_("End offset:"), _("The ending position of the taper"), "end_offset", &wr, this, 0.2),
     smoothing(_("Taper smoothing:"), _("Amount of smoothing to apply to the tapers"), "smoothing", &wr, this, 0.5),
-    join_type(_("Join type:"), _("Join type for non-smooth nodes"), "jointype", JoinTypeConverter, &wr, this, LINEJOIN_EXTRAPOLATED),
+    join_type(_("Join type:"), _("Join type for non-smooth nodes"), "jointype", JoinTypeConverter, &wr, this, JOIN_EXTRAPOLATE),
     miter_limit(_("Miter limit:"), _("Limit for miter joins"), "miter_limit", &wr, this, 100.)
 {
     show_orig_path = true;
@@ -102,27 +102,24 @@ void LPETaperStroke::doOnApply(SPLPEItem const* lpeitem)
         double width = (lpeitem && lpeitem->style) ? lpeitem->style->stroke_width.computed : 1.;
 
         SPCSSAttr *css = sp_repr_css_attr_new ();
-        if (true) {
-            if (lpeitem->style->stroke.isPaintserver()) {
-                SPPaintServer * server = lpeitem->style->getStrokePaintServer();
-                if (server) {
-                    Glib::ustring str;
-                    str += "url(#";
-                    str += server->getId();
-                    str += ")";
-                    sp_repr_css_set_property (css, "fill", str.c_str());
-                }
-            } else if (lpeitem->style->stroke.isColor()) {
-                gchar c[64];
-                sp_svg_write_color (c, sizeof(c), lpeitem->style->stroke.value.color.toRGBA32(SP_SCALE24_TO_FLOAT(lpeitem->style->stroke_opacity.value)));
-                sp_repr_css_set_property (css, "fill", c);
-            } else {
-                sp_repr_css_set_property (css, "fill", "none");
+        if (lpeitem->style->stroke.isPaintserver()) {
+            SPPaintServer * server = lpeitem->style->getStrokePaintServer();
+            if (server) {
+                Glib::ustring str;
+                str += "url(#";
+                str += server->getId();
+                str += ")";
+                sp_repr_css_set_property (css, "fill", str.c_str());
             }
+        } else if (lpeitem->style->stroke.isColor()) {
+            gchar c[64];
+            sp_svg_write_color (c, sizeof(c), lpeitem->style->stroke.value.color.toRGBA32(SP_SCALE24_TO_FLOAT(lpeitem->style->stroke_opacity.value)));
+            sp_repr_css_set_property (css, "fill", c);
         } else {
-            sp_repr_css_unset_property (css, "fill");
+            sp_repr_css_set_property (css, "fill", "none");
         }
 
+        sp_repr_css_set_property(css, "fill-rule", "nonzero");
         sp_repr_css_set_property(css, "stroke", "none");
 
         sp_desktop_apply_css_recursive(item, css, true);
@@ -130,7 +127,7 @@ void LPETaperStroke::doOnApply(SPLPEItem const* lpeitem)
 
         line_width.param_set_value(width);
     } else {
-        printf("WARNING: It only makes sense to apply Join Type to paths (not groups).\n");
+        printf("WARNING: It only makes sense to apply Taper stroke to paths (not groups).\n");
     }
 }
 
@@ -142,25 +139,21 @@ void LPETaperStroke::doOnRemove(SPLPEItem const* lpeitem)
         SPLPEItem *item = const_cast<SPLPEItem*>(lpeitem);
 
         SPCSSAttr *css = sp_repr_css_attr_new ();
-        if (true) {
-            if (lpeitem->style->fill.isPaintserver()) {
-                SPPaintServer * server = lpeitem->style->getFillPaintServer();
-                if (server) {
-                    Glib::ustring str;
-                    str += "url(#";
-                    str += server->getId();
-                    str += ")";
-                    sp_repr_css_set_property (css, "stroke", str.c_str());
-                }
-            } else if (lpeitem->style->fill.isColor()) {
-                gchar c[64];
-                sp_svg_write_color (c, sizeof(c), lpeitem->style->stroke.value.color.toRGBA32(SP_SCALE24_TO_FLOAT(lpeitem->style->stroke_opacity.value)));
-                sp_repr_css_set_property (css, "stroke", c);
-            } else {
-                sp_repr_css_set_property (css, "stroke", "none");
+        if (lpeitem->style->fill.isPaintserver()) {
+            SPPaintServer * server = lpeitem->style->getFillPaintServer();
+            if (server) {
+                Glib::ustring str;
+                str += "url(#";
+                str += server->getId();
+                str += ")";
+                sp_repr_css_set_property (css, "stroke", str.c_str());
             }
+        } else if (lpeitem->style->fill.isColor()) {
+            gchar c[64];
+            sp_svg_write_color (c, sizeof(c), lpeitem->style->fill.value.color.toRGBA32(SP_SCALE24_TO_FLOAT(lpeitem->style->fill_opacity.value)));
+            sp_repr_css_set_property (css, "stroke", c);
         } else {
-            sp_repr_css_unset_property (css, "stroke");
+            sp_repr_css_set_property (css, "stroke", "none");
         }
 
         Inkscape::CSSOStringStream os;
@@ -179,14 +172,21 @@ using Geom::D2;
 using Geom::SBasis;
 // leave Geom::Path
 
-Geom::Path return_at_first_cusp(Geom::Path const & path_in, double /*smooth_tolerance*/ = 0.05) {
-    return Geom::split_at_cusps(path_in)[0];
+static Geom::Path return_at_first_cusp(Geom::Path const & path_in, double /*smooth_tolerance*/ = 0.05)
+{
+    Geom::Path temp;
+
+    for (unsigned i = 0; i < path_in.size(); i++) {
+        temp.append(path_in[i]);
+        if (Geom::get_nodetype(path_in[i], path_in[i + 1]) != Geom::NODE_SMOOTH ) {
+            break;
+        }
+    }
+    
+    return temp;
 }
 
 Piecewise<D2<SBasis> > stretch_along(Piecewise<D2<SBasis> > pwd2_in, Geom::Path pattern, double width);
-
-// references to pointers
-void subdivideCurve(Geom::Curve * curve_in, Geom::Coord t, Geom::Curve *& val_first, Geom::Curve *& val_second);
 
 // actual effect
 
@@ -285,7 +285,7 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
     // although this seems obvious, it can probably lead to bugs.
     if (!metInMiddle) {
         // append the outside outline of the path (goes with the direction of the path)
-        throwaway_path = Outline::PathOutsideOutline(pathv_out[1], -fabs(line_width), static_cast<LineJoinType>(join_type.get_value()), miter_limit);
+        throwaway_path = half_outline(pathv_out[1], fabs(line_width)/2., miter_limit, static_cast<LineJoinType>(join_type.get_value()));
         if (!zeroStart && real_path.size() >= 1 && throwaway_path.size() >= 1) {
             if (!Geom::are_near(real_path.finalPoint(), throwaway_path.initialPoint())) {
                 real_path.appendNew<Geom::LineSegment>(throwaway_path.initialPoint());
@@ -317,7 +317,7 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
     
     if (!metInMiddle) {
         // append the inside outline of the path (against direction)
-        throwaway_path = Outline::PathOutsideOutline(pathv_out[1].reverse(), -fabs(line_width), static_cast<LineJoinType>(join_type.get_value()), miter_limit);
+        throwaway_path = half_outline(pathv_out[1].reverse(), fabs(line_width)/2., miter_limit, static_cast<LineJoinType>(join_type.get_value()));
         
         if (!Geom::are_near(real_path.finalPoint(), throwaway_path.initialPoint()) && real_path.size() >= 1) {
             real_path.appendNew<Geom::LineSegment>(throwaway_path.initialPoint());
@@ -347,85 +347,18 @@ Geom::PathVector LPETaperStroke::doEffect_path(Geom::PathVector const& path_in)
  */
 Geom::PathVector LPETaperStroke::doEffect_simplePath(Geom::PathVector const & path_in)
 {
-    size_t size = path_in[0].size();
+    Geom::Coord endTime = path_in[0].size() - attach_end;
 
-    unsigned loc = (unsigned)attach_start;
-    Geom::Curve * curve_start = path_in[0] [loc].duplicate();
-
-    std::vector<Geom::Path> pathv_out;
-    Geom::Path path_out = Geom::Path();
-
-    Geom::Path trimmed_start = Geom::Path();
-    Geom::Path trimmed_end = Geom::Path();
-
-    for (size_t i = 0; i < loc; ++i) {
-        trimmed_start.append(path_in[0] [i]);
-    }
-
-    Geom::Curve * temp;
-    subdivideCurve(curve_start, attach_start - loc, temp, curve_start);
-    trimmed_start.append(*temp);
-    if (temp) delete temp; temp = 0;
-
-    // special case: path is one segment long
-    // special case: what if the two knots occupy the same segment?
-    if ((size == 1) || ( size - unsigned(attach_end) - 1 == loc )) {
-
-        // If you look into it, I don't actually think there is a working way to do this
-        // with only point math. So we use nearest_point instead.
-        Geom::Coord t = Geom::nearest_point(end_attach_point, *curve_start);
-
-        // it is just a dumb segment
-        // we have to do some shifting here because the value changed when we reduced the length
-        // of the previous segment.
-
-        subdivideCurve(curve_start, t, curve_start, temp);
-        trimmed_end.append(*temp);
-        if (temp) delete temp; temp = 0;
-        
-        for (size_t j = (size - attach_end) + 1; j < size; ++j) {
-            trimmed_end.append(path_in[0] [j]);
-        }
-
-        path_out.append(*curve_start);
-        pathv_out.push_back(trimmed_start);
-        pathv_out.push_back(path_out);
-        pathv_out.push_back(trimmed_end);
-        return pathv_out;
-    }
-
-    pathv_out.push_back(trimmed_start);
-
-    // append almost all of the rest of the path, ignore the curves that the knot is past (we'll get to it in a minute)
-    path_out.append(*curve_start);
-
-    for (size_t k = loc + 1; k < (size - unsigned(attach_end)) - 1; ++k) {
-        path_out.append(path_in[0] [k]);
-    }
-
-    // deal with the last segment in a very similar fashion to the first
-    loc = size - attach_end;
-
-    Geom::Curve * curve_end = path_in[0] [loc].duplicate();
-
-    Geom::Coord t = Geom::nearest_point(end_attach_point, *curve_end);
-
-    subdivideCurve(curve_end, t, curve_end, temp);
-    trimmed_end.append(*temp);
-    if (temp) delete temp; temp = 0;
-
-    for (size_t j = (size - attach_end) + 1; j < size; ++j) {
-        trimmed_end.append(path_in[0] [j]);
-    }
-
-    path_out.append(*curve_end);
-    pathv_out.push_back(path_out);
-
-    pathv_out.push_back(trimmed_end);
-
-    if (curve_end) delete curve_end;
-    if (curve_start) delete curve_start;
-    return pathv_out;
+    Geom::Path p1 = path_in[0].portion(0., attach_start);
+    Geom::Path p2 = path_in[0].portion(attach_start, endTime);
+    Geom::Path p3 = path_in[0].portion(endTime, path_in[0].size());
+    
+    Geom::PathVector out;
+    out.push_back(p1);
+    out.push_back(p2);
+    out.push_back(p3);
+    
+    return out;
 }
 
 
@@ -512,23 +445,6 @@ Piecewise<D2<SBasis> > stretch_along(Piecewise<D2<SBasis> > pwd2_in, Geom::Path 
         return pwd2_in;
     }
 }
-
-void subdivideCurve(Geom::Curve * curve_in, Geom::Coord t, Geom::Curve *& val_first, Geom::Curve *& val_second)
-{
-    if (Geom::LineSegment* linear = dynamic_cast<Geom::LineSegment*>(curve_in)) {
-        // special case for line segments
-        std::pair<Geom::LineSegment, Geom::LineSegment> seg_pair = linear->subdivide(t);
-        val_first = seg_pair.first.duplicate();
-        val_second = seg_pair.second.duplicate();
-    } else {
-        // all other cases:
-        Geom::CubicBezier cubic = Geom::sbasis_to_cubicbezier(curve_in->toSBasis());
-        std::pair<Geom::CubicBezier, Geom::CubicBezier> cubic_pair = cubic.subdivide(t);
-        val_first = cubic_pair.first.duplicate();
-        val_second = cubic_pair.second.duplicate();
-    }
-}
-
 
 void LPETaperStroke::addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item)
 {

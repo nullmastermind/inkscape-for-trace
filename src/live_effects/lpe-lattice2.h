@@ -18,10 +18,10 @@
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
-
+#include <gtkmm.h>
 #include "live_effects/parameter/enum.h"
 #include "live_effects/effect.h"
-#include "live_effects/parameter/pointreseteable.h"
+#include "live_effects/parameter/point.h"
 #include "live_effects/lpegroupbbox.h"
 
 namespace Inkscape {
@@ -34,7 +34,7 @@ public:
     virtual ~LPELattice2();
 
     virtual Geom::Piecewise<Geom::D2<Geom::SBasis> > doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in);
-    
+
     virtual void resetDefaults(SPItem const* item);
 
     virtual void doBeforeEffect(SPLPEItem const* lpeitem);
@@ -43,44 +43,50 @@ public:
 
     virtual void calculateCurve(Geom::Point a,Geom::Point b, SPCurve *c, bool horizontal, bool move);
 
+    virtual void vertical(PointParam &paramA,PointParam &paramB, Geom::Line vert);
+
+    virtual void horizontal(PointParam &paramA,PointParam &paramB,Geom::Line horiz);
+
     virtual void setDefaults();
+
+    virtual void onExpanderChanged();
 
     virtual void resetGrid();
 
-    //virtual void original_bbox(SPLPEItem const* lpeitem, bool absolute = false);
-
-    //virtual void addCanvasIndicators(SPLPEItem const*/*lpeitem*/, std::vector<Geom::PathVector> &/*hp_vec*/);
-
-    //virtual std::vector<Geom::PathVector> getHelperPaths(SPLPEItem const* lpeitem);
 protected:
     void addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec);
 private:
 
-    PointReseteableParam grid_point0;
-    PointReseteableParam grid_point1;
-    PointReseteableParam grid_point2;
-    PointReseteableParam grid_point3;
-    PointReseteableParam grid_point4;
-    PointReseteableParam grid_point5;
-    PointReseteableParam grid_point6;
-    PointReseteableParam grid_point7;
-    PointReseteableParam grid_point8x9;
-    PointReseteableParam grid_point10x11;
-    PointReseteableParam grid_point12;
-    PointReseteableParam grid_point13;
-    PointReseteableParam grid_point14;
-    PointReseteableParam grid_point15;
-    PointReseteableParam grid_point16;
-    PointReseteableParam grid_point17;
-    PointReseteableParam grid_point18;
-    PointReseteableParam grid_point19;
-    PointReseteableParam grid_point20x21;
-    PointReseteableParam grid_point22x23;
-    PointReseteableParam grid_point24x26;
-    PointReseteableParam grid_point25x27;
-    PointReseteableParam grid_point28x30;
-    PointReseteableParam grid_point29x31;
-    PointReseteableParam grid_point32x33x34x35; 
+    BoolParam horizontal_mirror;
+    BoolParam vertical_mirror;
+    PointParam grid_point_0;
+    PointParam grid_point_1;
+    PointParam grid_point_2;
+    PointParam grid_point_3;
+    PointParam grid_point_4;
+    PointParam grid_point_5;
+    PointParam grid_point_6;
+    PointParam grid_point_7;
+    PointParam grid_point_8x9;
+    PointParam grid_point_10x11;
+    PointParam grid_point_12;
+    PointParam grid_point_13;
+    PointParam grid_point_14;
+    PointParam grid_point_15;
+    PointParam grid_point_16;
+    PointParam grid_point_17;
+    PointParam grid_point_18;
+    PointParam grid_point_19;
+    PointParam grid_point_20x21;
+    PointParam grid_point_22x23;
+    PointParam grid_point_24x26;
+    PointParam grid_point_25x27;
+    PointParam grid_point_28x30;
+    PointParam grid_point_29x31;
+    PointParam grid_point_32x33x34x35;
+
+    bool expanded;
+    Gtk::Expander * expander;
 
     LPELattice2(const LPELattice2&);
     LPELattice2& operator=(const LPELattice2&);

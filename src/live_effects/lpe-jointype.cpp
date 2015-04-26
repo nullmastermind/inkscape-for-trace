@@ -8,7 +8,7 @@
 */
 
 #include "live_effects/parameter/enum.h"
-#include "live_effects/pathoutlineprovider.h"
+#include "helper/geom-pathstroke.h"
 
 #include "sp-shape.h"
 #include "style.h"
@@ -28,19 +28,19 @@ namespace Inkscape {
 namespace LivePathEffect {
 
 static const Util::EnumData<unsigned> JoinTypeData[] = {
-    {LINEJOIN_STRAIGHT, N_("Beveled"), "bevel"},
-    {LINEJOIN_ROUND, N_("Rounded"), "round"},
-    {LINEJOIN_POINTY, N_("Miter"), "miter"},
-    {LINEJOIN_REFLECTED,  N_("Reflected"), "extrapolated"},
-    {LINEJOIN_EXTRAPOLATED, N_("Extrapolated arc"), "extrp_arc"}
+    {JOIN_BEVEL,       N_("Beveled"),    "bevel"},
+    {JOIN_ROUND,       N_("Rounded"),    "round"},
+    {JOIN_MITER,       N_("Miter"),      "miter"},
+    {JOIN_MITER_CLIP,  N_("Miter Clip"), "miter-clip"},
+    {JOIN_EXTRAPOLATE, N_("Extrapolated arc"), "extrp_arc"},
 };
 
 static const Util::EnumData<unsigned> CapTypeData[] = {
-    {BUTT_STRAIGHT, N_("Butt"), "butt"},
+    {BUTT_FLAT, N_("Butt"), "butt"},
     {BUTT_ROUND, N_("Rounded"), "round"},
     {BUTT_SQUARE, N_("Square"), "square"},
-    {BUTT_POINTY, N_("Peak"), "peak"},
-    {BUTT_LEANED, N_("Leaned"), "leaned"}
+    {BUTT_PEAK, N_("Peak"), "peak"},
+    //{BUTT_LEANED, N_("Leaned"), "leaned"}
 };
 
 static const Util::EnumDataConverter<unsigned> CapTypeConverter(CapTypeData, sizeof(CapTypeData)/sizeof(*CapTypeData));
@@ -50,9 +50,9 @@ LPEJoinType::LPEJoinType(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
     line_width(_("Line width"), _("Thickness of the stroke"), "line_width", &wr, this, 1.),
     linecap_type(_("Line cap"), _("The end shape of the stroke"), "linecap_type", CapTypeConverter, &wr, this, butt_straight),
-    linejoin_type(_("Join:"), _("Determines the shape of the path's corners"),  "linejoin_type", JoinTypeConverter, &wr, this, LINEJOIN_EXTRAPOLATED),
-    start_lean(_("Start path lean"), _("Start path lean"), "start_lean", &wr, this, 0.),
-    end_lean(_("End path lean"), _("End path lean"), "end_lean", &wr, this, 0.),
+    linejoin_type(_("Join:"), _("Determines the shape of the path's corners"),  "linejoin_type", JoinTypeConverter, &wr, this, JOIN_EXTRAPOLATE),
+    //start_lean(_("Start path lean"), _("Start path lean"), "start_lean", &wr, this, 0.),
+    //end_lean(_("End path lean"), _("End path lean"), "end_lean", &wr, this, 0.),
     miter_limit(_("Miter limit:"), _("Maximum length of the miter join (in units of stroke width)"), "miter_limit", &wr, this, 100.),
     attempt_force_join(_("Force miter"), _("Overrides the miter limit and forces a join."), "attempt_force_join", &wr, this, true)
 {
@@ -60,17 +60,16 @@ LPEJoinType::LPEJoinType(LivePathEffectObject *lpeobject) :
     registerParameter(&linecap_type);
     registerParameter(&line_width);
     registerParameter(&linejoin_type);
-    registerParameter(&start_lean);
-    registerParameter(&end_lean);
+    //registerParameter(&start_lean);
+    //registerParameter(&end_lean);
     registerParameter(&miter_limit);
     registerParameter(&attempt_force_join);
-    was_initialized = false;
-    start_lean.param_set_range(-1,1);
-    start_lean.param_set_increments(0.1, 0.1);
-    start_lean.param_set_digits(4);
-    end_lean.param_set_range(-1,1);
-    end_lean.param_set_increments(0.1, 0.1);
-    end_lean.param_set_digits(4);
+    //start_lean.param_set_range(-1,1);
+    //start_lean.param_set_increments(0.1, 0.1);
+    //start_lean.param_set_digits(4);
+    //end_lean.param_set_range(-1,1);
+    //end_lean.param_set_increments(0.1, 0.1);
+    //end_lean.param_set_digits(4);
 }
 
 LPEJoinType::~LPEJoinType()
@@ -87,38 +86,30 @@ void LPEJoinType::doOnApply(SPLPEItem const* lpeitem)
         double width = (lpeitem && lpeitem->style) ? lpeitem->style->stroke_width.computed : 1.;
 
         SPCSSAttr *css = sp_repr_css_attr_new ();
-        if (true) {
-            if (lpeitem->style->stroke.isPaintserver()) {
-                SPPaintServer * server = lpeitem->style->getStrokePaintServer();
-                if (server) {
-                    Glib::ustring str;
-                    str += "url(#";
-                    str += server->getId();
-                    str += ")";
-                    sp_repr_css_set_property (css, "fill", str.c_str());
-                }
-            } else if (lpeitem->style->stroke.isColor()) {
-                gchar c[64];
-                sp_svg_write_color (c, sizeof(c), lpeitem->style->stroke.value.color.toRGBA32(SP_SCALE24_TO_FLOAT(lpeitem->style->stroke_opacity.value)));
-                sp_repr_css_set_property (css, "fill", c);
-            } else {
-                sp_repr_css_set_property (css, "fill", "none");
+        if (lpeitem->style->stroke.isPaintserver()) {
+            SPPaintServer * server = lpeitem->style->getStrokePaintServer();
+            if (server) {
+                Glib::ustring str;
+                str += "url(#";
+                str += server->getId();
+                str += ")";
+                sp_repr_css_set_property (css, "fill", str.c_str());
             }
+        } else if (lpeitem->style->stroke.isColor()) {
+            gchar c[64];
+            sp_svg_write_color (c, sizeof(c), lpeitem->style->stroke.value.color.toRGBA32(SP_SCALE24_TO_FLOAT(lpeitem->style->stroke_opacity.value)));
+            sp_repr_css_set_property (css, "fill", c);
         } else {
-            sp_repr_css_unset_property (css, "fill");
+            sp_repr_css_set_property (css, "fill", "none");
         }
 
+        sp_repr_css_set_property(css, "fill-rule", "nonzero");
         sp_repr_css_set_property(css, "stroke", "none");
 
         sp_desktop_apply_css_recursive(item, css, true);
         sp_repr_css_attr_unref (css);
-        if (!was_initialized)
-        {
-            was_initialized = true;
-            line_width.param_set_value(width);
-        }
-    } else {
-        g_warning("LPE Join Type can only be applied to paths (not groups).");
+
+        line_width.param_set_value(width);
     }
 }
 
@@ -126,30 +117,25 @@ void LPEJoinType::doOnApply(SPLPEItem const* lpeitem)
 
 void LPEJoinType::doOnRemove(SPLPEItem const* lpeitem)
 {
-
     if (SP_IS_SHAPE(lpeitem)) {
         SPLPEItem *item = const_cast<SPLPEItem*>(lpeitem);
 
         SPCSSAttr *css = sp_repr_css_attr_new ();
-        if (true) {
-            if (lpeitem->style->fill.isPaintserver()) {
-                SPPaintServer * server = lpeitem->style->getFillPaintServer();
-                if (server) {
-                    Glib::ustring str;
-                    str += "url(#";
-                    str += server->getId();
-                    str += ")";
-                    sp_repr_css_set_property (css, "stroke", str.c_str());
-                }
-            } else if (lpeitem->style->fill.isColor()) {
-                gchar c[64];
-                sp_svg_write_color (c, sizeof(c), lpeitem->style->stroke.value.color.toRGBA32(SP_SCALE24_TO_FLOAT(lpeitem->style->stroke_opacity.value)));
-                sp_repr_css_set_property (css, "stroke", c);
-            } else {
-                sp_repr_css_set_property (css, "stroke", "none");
+        if (lpeitem->style->fill.isPaintserver()) {
+            SPPaintServer * server = lpeitem->style->getFillPaintServer();
+            if (server) {
+                Glib::ustring str;
+                str += "url(#";
+                str += server->getId();
+                str += ")";
+                sp_repr_css_set_property (css, "stroke", str.c_str());
             }
+        } else if (lpeitem->style->fill.isColor()) {
+            gchar c[64];
+            sp_svg_write_color (c, sizeof(c), lpeitem->style->fill.value.color.toRGBA32(SP_SCALE24_TO_FLOAT(lpeitem->style->fill_opacity.value)));
+            sp_repr_css_set_property (css, "stroke", c);
         } else {
-            sp_repr_css_unset_property (css, "stroke");
+            sp_repr_css_set_property (css, "stroke", "none");
         }
 
         Inkscape::CSSOStringStream os;
@@ -164,15 +150,18 @@ void LPEJoinType::doOnRemove(SPLPEItem const* lpeitem)
     }
 }
 
-// NOTE: I originally had all the outliner functions defined in here, but they were actually useful
-// enough for other LPEs so I moved them all into pathoutlineprovider.cpp. The code here is just a
-// wrapper around it.
 std::vector<Geom::Path> LPEJoinType::doEffect_path(std::vector<Geom::Path> const & path_in)
 {
-    return Outline::PathVectorOutline(path_in, line_width, static_cast<ButtTypeMod>(linecap_type.get_value()),
-                                      static_cast<LineJoinType>(linejoin_type.get_value()),
-                                      (attempt_force_join ? std::numeric_limits<double>::max() : miter_limit),
-                                      start_lean/2 ,end_lean/2);
+    Geom::PathVector ret;
+    for (size_t i = 0; i < path_in.size(); ++i) {
+        Geom::PathVector tmp = Inkscape::outline(path_in[i], line_width, 
+                                                 (attempt_force_join ? std::numeric_limits<double>::max() : miter_limit),
+                                                 static_cast<LineJoinType>(linejoin_type.get_value()),
+                                                 static_cast<LineCapType>(linecap_type.get_value()));
+        ret.insert(ret.begin(), tmp.begin(), tmp.end());
+    }
+
+    return ret;
 }
 
 } // namespace LivePathEffect
