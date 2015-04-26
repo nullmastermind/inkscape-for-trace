@@ -300,9 +300,9 @@ sp_paint_selector_init(SPPaintSelector *psel)
     psel->updating_color = false;
 
     psel->selected_color->signal_grabbed.connect(sigc::mem_fun(psel, &SPPaintSelector::onSelectedColorGrabbed));
-    psel->selected_color->signal_grabbed.connect(sigc::mem_fun(psel, &SPPaintSelector::onSelectedColorDragged));
-    psel->selected_color->signal_grabbed.connect(sigc::mem_fun(psel, &SPPaintSelector::onSelectedColorReleased));
-    psel->selected_color->signal_grabbed.connect(sigc::mem_fun(psel, &SPPaintSelector::onSelectedColorChanged));
+    psel->selected_color->signal_dragged.connect(sigc::mem_fun(psel, &SPPaintSelector::onSelectedColorDragged));
+    psel->selected_color->signal_released.connect(sigc::mem_fun(psel, &SPPaintSelector::onSelectedColorReleased));
+    psel->selected_color->signal_changed.connect(sigc::mem_fun(psel, &SPPaintSelector::onSelectedColorChanged));
 }
 
 static void sp_paint_selector_dispose(GObject *object)
