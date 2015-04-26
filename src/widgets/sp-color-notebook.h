@@ -63,6 +63,9 @@ protected:
     virtual void _colorChanged();
 
     virtual void _onSelectedColorChanged();
+    virtual void _onSelectedColorDragged();
+    virtual void _onSelectedColorGrabbed();
+    virtual void _onSelectedColorReleased();
 
     void _updateRgbaEntry( const SPColor& color, gfloat alpha );
     void _setCurrentPage(int i);

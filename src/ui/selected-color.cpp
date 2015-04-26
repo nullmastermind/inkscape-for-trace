@@ -22,6 +22,7 @@
 #include <glib.h>
 
 #include "selected-color.h"
+#include "svg/svg-icc-color.h"
 
 namespace Inkscape {
 namespace UI {
@@ -31,8 +32,8 @@ double const SelectedColor::_EPSILON = 1e-4;
 SelectedColor::SelectedColor()
 	: _color(0)
     , _alpha(1.0)
-    , _virgin(true)
     , _held(false)
+    , _virgin(true)
 {
 
 }
@@ -43,7 +44,7 @@ SelectedColor::~SelectedColor() {
 
 void SelectedColor::setColor(SPColor const &color)
 {
-    setColorAlpha( color, _alpha );
+    setColorAlpha( color, _alpha, true);
 }
 
 SPColor SelectedColor::color() const
@@ -54,7 +55,7 @@ SPColor SelectedColor::color() const
 void SelectedColor::setAlpha(gfloat alpha)
 {
     g_return_if_fail( ( 0.0 <= alpha ) && ( alpha <= 1.0 ) );
-    setColorAlpha( _color, alpha );
+    setColorAlpha( _color, alpha, true);
 }
 
 gfloat SelectedColor::alpha() const
@@ -118,7 +119,12 @@ void SelectedColor::setHeld(bool held) {
 
     if (released) {
         signal_released.emit();
+        signal_changed.emit();
     }
+}
+
+void SelectedColor::preserveICC() {
+    _color.icc = _color.icc ? new SVGICCColor(*_color.icc) : 0;
 }
 
 }

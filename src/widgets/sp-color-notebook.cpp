@@ -36,7 +36,6 @@
 #include "spw-utilities.h"
 #include "sp-color-scales.h"
 #include "sp-color-icc-selector.h"
-#include "sp-color-wheel-selector.h"
 #include "svg/svg-icc-color.h"
 #include "../inkscape.h"
 #include "../document.h"
@@ -46,6 +45,7 @@
 #include "ui/tools-switch.h"
 #include "ui/tools/tool-base.h"
 #include "ui/widget/color-entry.h"
+#include "ui/widget/color-wheel-selector.h"
 
 using Inkscape::CMSSystem;
 
@@ -109,13 +109,17 @@ void ColorNotebook::switchPage(GtkNotebook*,
     if ( gtk_notebook_get_current_page (GTK_NOTEBOOK (_book)) >= 0 )
     {
         csel = getCurrentSelector();
-        csel->base->getColorAlpha(_color, _alpha);
+        if (csel) {
+            csel->base->getColorAlpha(_color, _alpha);
+        }
     }
     widget = gtk_notebook_get_nth_page (GTK_NOTEBOOK (_book), page_num);
     if ( widget && SP_IS_COLOR_SELECTOR(widget) )
     {
         csel = SP_COLOR_SELECTOR (widget);
-        csel->base->setColorAlpha( _color, _alpha );
+        if (csel) {
+            csel->base->setColorAlpha( _color, _alpha );
+        }
 
         // Temporary workaround to undo a spurious GRABBED
         _released();
@@ -352,6 +356,9 @@ void ColorNotebook::init()
                                  G_CALLBACK (sp_color_notebook_switch_page), SP_COLOR_NOTEBOOK(_csel));
 
     _selected_color.signal_changed.connect(sigc::mem_fun(this, &ColorNotebook::_onSelectedColorChanged));
+    _selected_color.signal_dragged.connect(sigc::mem_fun(this, &ColorNotebook::_onSelectedColorDragged));
+    _selected_color.signal_grabbed.connect(sigc::mem_fun(this, &ColorNotebook::_onSelectedColorGrabbed));
+    _selected_color.signal_released.connect(sigc::mem_fun(this, &ColorNotebook::_onSelectedColorReleased));
 }
 
 static void sp_color_notebook_dispose(GObject *object)
@@ -587,8 +594,36 @@ void ColorNotebook::_onSelectedColorChanged() {
     SPColor color;
     gfloat alpha = 1.0;
 
+    _updating = true;
     _selected_color.colorAlpha(color, alpha);
     _updateInternals(color, alpha, _dragging);
+    _updating = false;
+}
+
+void ColorNotebook::_onSelectedColorDragged() {
+    if (_updating) {
+        return;
+    }
+    bool oldState = _dragging;
+
+    _dragging = TRUE;
+    SPColor color;
+    gfloat alpha = 1.0;
+
+    _updating = true;
+    _selected_color.colorAlpha(color, alpha);
+    _updateInternals(color, alpha, _dragging);
+    _updating = false;
+
+    _dragging = oldState;
+}
+
+void ColorNotebook::_onSelectedColorGrabbed() {
+    _grabbed();
+}
+
+void ColorNotebook::_onSelectedColorReleased() {
+    _released();
 }
 
 GtkWidget* ColorNotebook::_addPage(Page& page) {
@@ -613,11 +648,13 @@ GtkWidget* ColorNotebook::_addPage(Page& page) {
 
         g_signal_connect (G_OBJECT (_buttons[page_num]), "clicked", G_CALLBACK (_buttonClicked), _csel);
 
-        //Connect glib signals of non-refactored widgets
-        g_signal_connect (selector_widget->gobj(), "grabbed", G_CALLBACK (_entryGrabbed), _csel);
-        g_signal_connect (selector_widget->gobj(), "dragged", G_CALLBACK (_entryDragged), _csel);
-        g_signal_connect (selector_widget->gobj(), "released", G_CALLBACK (_entryReleased), _csel);
-        g_signal_connect (selector_widget->gobj(), "changed", G_CALLBACK (_entryChanged), _csel);
+        if (SP_IS_COLOR_SELECTOR(selector_widget->gobj())) {
+            //Connect glib signals of non-refactored widgets
+            g_signal_connect (selector_widget->gobj(), "grabbed", G_CALLBACK (_entryGrabbed), _csel);
+            g_signal_connect (selector_widget->gobj(), "dragged", G_CALLBACK (_entryDragged), _csel);
+            g_signal_connect (selector_widget->gobj(), "released", G_CALLBACK (_entryReleased), _csel);
+            g_signal_connect (selector_widget->gobj(), "changed", G_CALLBACK (_entryChanged), _csel);
+        }
     }
 
     return selector_widget->gobj();

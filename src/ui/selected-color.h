@@ -44,6 +44,8 @@ public:
 
     void setHeld(bool held);
 
+    void preserveICC();
+
     sigc::signal<void> signal_grabbed;
     sigc::signal<void> signal_dragged;
     sigc::signal<void> signal_released;
