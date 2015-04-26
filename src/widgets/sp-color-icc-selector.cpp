@@ -1106,7 +1106,7 @@ void ColorICCSelectorImpl::_sliderChanged()
 
 Gtk::Widget *ColorICCSelectorFactory::createWidget(Inkscape::UI::SelectedColor &color) const {
     GtkWidget *w = sp_color_selector_new(SP_TYPE_COLOR_ICC_SELECTOR);
-    Gtk::Widget *wrapped = Glib::wrap(w);
+    Gtk::Widget *wrapped = Gtk::manage(Glib::wrap(w));
     return wrapped;
 }
 

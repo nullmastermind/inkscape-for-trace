@@ -55,6 +55,7 @@ G_END_DECLS
 #define noDUMP_CHANGE_INFO 1
 
 const gchar* ColorScales::SUBMODE_NAMES[] = {
+    N_("None"),
     N_("RGB"),
     N_("HSL"),
     N_("CMYK")
@@ -761,7 +762,15 @@ ColorScalesFactory::~ColorScalesFactory() {
 
 Gtk::Widget *ColorScalesFactory::createWidget(Inkscape::UI::SelectedColor &color) const {
     GtkWidget *w = sp_color_selector_new(SP_TYPE_COLOR_SCALES);
-    Gtk::Widget *wrapped = Glib::wrap(w);
+    SPColorSelector* csel;
+
+    csel = SP_COLOR_SELECTOR (w);
+    if ( _submode > 0 )
+    {
+        csel->base->setSubmode( _submode - 1 );
+    }
+
+    Gtk::Widget *wrapped = Gtk::manage(Glib::wrap(w));
     return wrapped;
 }
 

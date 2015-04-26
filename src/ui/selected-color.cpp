@@ -26,7 +26,7 @@
 namespace Inkscape {
 namespace UI {
 
-double SelectedColor::_epsilon = 1e-4;
+double const SelectedColor::_EPSILON = 1e-4;
 
 SelectedColor::SelectedColor()
 	: _color(0)
@@ -40,28 +40,28 @@ SelectedColor::~SelectedColor() {
 
 }
 
-void SelectedColor::set_color(const SPColor& color)
+void SelectedColor::setColor(SPColor const &color)
 {
-    set_color_alpha( color, _alpha );
+    setColorAlpha( color, _alpha );
 }
 
-SPColor SelectedColor::get_color() const
+SPColor SelectedColor::color() const
 {
     return _color;
 }
 
-void SelectedColor::set_alpha(gfloat alpha)
+void SelectedColor::setAlpha(gfloat alpha)
 {
     g_return_if_fail( ( 0.0 <= alpha ) && ( alpha <= 1.0 ) );
-    set_color_alpha( _color, alpha );
+    setColorAlpha( _color, alpha );
 }
 
-gfloat SelectedColor::get_alpha() const
+gfloat SelectedColor::alpha() const
 {
     return _alpha;
 }
 
-void SelectedColor::set_color_alpha(const SPColor& color, gfloat alpha, bool emit)
+void SelectedColor::setColorAlpha(SPColor const &color, gfloat alpha, bool emit)
 {
 #ifdef DUMP_CHANGE_INFO
     g_message("SelectedColor::setColorAlpha( this=%p, %f, %f, %f, %s,   %f,   %s) in %s", this, color.v.c[0], color.v.c[1], color.v.c[2], (color.icc?color.icc->colorProfile.c_str():"<null>"), alpha, (emit?"YES":"no"), FOO_NAME(_csel));
@@ -77,8 +77,8 @@ void SelectedColor::set_color_alpha(const SPColor& color, gfloat alpha, bool emi
               );
 #endif
 
-    if ( _virgin || !color.isClose( _color, _epsilon ) ||
-         (fabs((_alpha) - (alpha)) >= _epsilon )) {
+    if ( _virgin || !color.isClose( _color, _EPSILON ) ||
+         (fabs((_alpha) - (alpha)) >= _EPSILON )) {
 
         _virgin = false;
 
@@ -96,7 +96,7 @@ void SelectedColor::set_color_alpha(const SPColor& color, gfloat alpha, bool emi
     }
 }
 
-void SelectedColor::get_color_alpha(SPColor &color, gfloat &alpha) const {
+void SelectedColor::colorAlpha(SPColor &color, gfloat &alpha) const {
 	color = _color;
 	alpha = _alpha;
 }
@@ -104,3 +104,13 @@ void SelectedColor::get_color_alpha(SPColor &color, gfloat &alpha) const {
 }
 }
 
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :
