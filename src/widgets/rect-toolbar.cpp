@@ -110,7 +110,7 @@ static void sp_rtb_value_changed(GtkAdjustment *adj, GObject *tbl, gchar const *
     for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
         if (SP_IS_RECT(*i)) {
             if (gtk_adjustment_get_value(adj) != 0) {
-                (SP_RECT(items->data)->*setter)(Quantity::convert(gtk_adjustment_get_value(adj), unit, "px"));
+                (SP_RECT(*i)->*setter)(Quantity::convert(gtk_adjustment_get_value(adj), unit, "px"));
             } else {
                 (*i)->getRepr()->setAttribute(value_name, NULL);
             }
