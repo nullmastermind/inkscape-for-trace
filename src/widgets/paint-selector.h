@@ -12,12 +12,22 @@
  *
  */
 
+#ifdef HAVE_CONFIG_H
+# include <config.h>
+#endif
+
+#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
+#include <glibmm/threads.h>
+#endif
+
+#include <glib.h>
 #include <gtk/gtk.h>
 
 #include "color.h"
 #include "fill-or-stroke.h"
 #include "sp-gradient-spread.h"
 #include "sp-gradient-units.h"
+#include "ui/selected-color.h"
 
 class SPGradient;
 class SPDesktop;
@@ -83,9 +93,8 @@ struct SPPaintSelector {
     GtkWidget *frame, *selector;
     GtkWidget *label;
 
-    SPColor color;
-    float alpha;
-
+    Inkscape::UI::SelectedColor *selected_color;
+    bool updating_color;
 
     static Mode getModeForStyle(SPStyle const & style, FillOrStroke kind);
 
@@ -114,6 +123,11 @@ struct SPPaintSelector {
 
     // TODO move this elsewhere:
     void setFlatColor( SPDesktop *desktop, const gchar *color_property, const gchar *opacity_property );
+
+    void onSelectedColorGrabbed();
+    void onSelectedColorDragged();
+    void onSelectedColorReleased();
+    void onSelectedColorChanged();
 };
 
 enum {COMBO_COL_LABEL=0, COMBO_COL_STOCK=1, COMBO_COL_PATTERN=2, COMBO_COL_SEP=3, COMBO_N_COLS=4};

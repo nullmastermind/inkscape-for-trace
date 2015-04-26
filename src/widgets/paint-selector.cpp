@@ -35,7 +35,6 @@
 #include "widgets/widget-sizes.h"
 #include "xml/repr.h"
 
-#include "sp-color-notebook.h"
 #include "sp-linear-gradient.h"
 #include "sp-radial-gradient.h"
 #include "sp-mesh.h"
@@ -51,6 +50,7 @@
 #include "io/sys.h"
 #include "helper/stock-items.h"
 #include "ui/icon-names.h"
+#include "ui/widget/color-notebook.h"
 
 #include "paint-selector.h"
 
@@ -61,6 +61,7 @@
 #include <gtk/gtk.h>
 
 using Inkscape::Widgets::SwatchSelector;
+using Inkscape::UI::SelectedColor;
 
 enum {
     MODE_CHANGED,
@@ -295,8 +296,13 @@ sp_paint_selector_init(SPPaintSelector *psel)
 
 
     /* Last used color */
-    psel->color.set( 0.0, 0.0, 0.0 );
-    psel->alpha = 1.0;
+    psel->selected_color = new SelectedColor;
+    psel->updating_color = false;
+
+    psel->selected_color->signal_grabbed.connect(sigc::mem_fun(psel, &SPPaintSelector::onSelectedColorGrabbed));
+    psel->selected_color->signal_grabbed.connect(sigc::mem_fun(psel, &SPPaintSelector::onSelectedColorDragged));
+    psel->selected_color->signal_grabbed.connect(sigc::mem_fun(psel, &SPPaintSelector::onSelectedColorReleased));
+    psel->selected_color->signal_grabbed.connect(sigc::mem_fun(psel, &SPPaintSelector::onSelectedColorChanged));
 }
 
 static void sp_paint_selector_dispose(GObject *object)
@@ -305,6 +311,11 @@ static void sp_paint_selector_dispose(GObject *object)
 
     // clean up our long-living pattern menu
     g_object_set_data(G_OBJECT(psel),"patternmenu",NULL);
+
+    if (psel->selected_color) {
+        delete psel->selected_color;
+        psel->selected_color = NULL;
+    }
 
     if ((G_OBJECT_CLASS(sp_paint_selector_parent_class))->dispose)
         (G_OBJECT_CLASS(sp_paint_selector_parent_class))->dispose(object);
@@ -441,7 +452,6 @@ void SPPaintSelector::setFillrule(FillRule fillrule)
 void SPPaintSelector::setColorAlpha(SPColor const &color, float alpha)
 {
     g_return_if_fail( ( 0.0 <= alpha ) && ( alpha <= 1.0 ) );
-    SPColorSelector *csel = 0;
 /*
     guint32 rgba = 0;
 
@@ -461,9 +471,10 @@ void SPPaintSelector::setColorAlpha(SPColor const &color, float alpha)
         setMode(MODE_COLOR_RGB);
     }
 
-    csel = reinterpret_cast<SPColorSelector*>(g_object_get_data(G_OBJECT(selector), "color-selector"));
+    updating_color = true;
+    selected_color->setColorAlpha(color, alpha);
+    updating_color = false;
     //rgba = color.toRGBA32( alpha );
-    csel->base->setColorAlpha( color, alpha );
 }
 
 void SPPaintSelector::setSwatch(SPGradient *vector )
@@ -544,11 +555,7 @@ void SPPaintSelector::getGradientProperties( SPGradientUnits &units, SPGradientS
  */
 void SPPaintSelector::getColorAlpha(SPColor &color, gfloat &alpha) const
 {
-    SPColorSelector *csel;
-
-    csel = reinterpret_cast<SPColorSelector*>(g_object_get_data(G_OBJECT(selector), "color-selector"));
-
-    csel->base->getColorAlpha( color, alpha );
+    selected_color->colorAlpha(color, alpha);
 
     g_assert( ( 0.0 <= alpha )
               && ( alpha <= 1.0 ) );
@@ -636,69 +643,60 @@ sp_paint_selector_set_mode_none(SPPaintSelector *psel)
 
 /* Color paint */
 
-static void sp_paint_selector_color_grabbed(SPColorSelector * /*csel*/, SPPaintSelector *psel)
-{
-    g_signal_emit(G_OBJECT(psel), psel_signals[GRABBED], 0);
+void SPPaintSelector::onSelectedColorGrabbed() {
+    g_signal_emit(G_OBJECT(this), psel_signals[GRABBED], 0);
 }
 
-static void sp_paint_selector_color_dragged(SPColorSelector * /*csel*/, SPPaintSelector *psel)
-{
-    g_signal_emit(G_OBJECT(psel), psel_signals[DRAGGED], 0);
+void SPPaintSelector::onSelectedColorDragged() {
+    if (updating_color) {
+        return;
+    }
+    g_signal_emit(G_OBJECT(this), psel_signals[DRAGGED], 0);
 }
 
-static void sp_paint_selector_color_released(SPColorSelector * /*csel*/, SPPaintSelector *psel)
-{
-    g_signal_emit(G_OBJECT(psel), psel_signals[RELEASED], 0);
+void SPPaintSelector::onSelectedColorReleased() {
+    g_signal_emit(G_OBJECT(this), psel_signals[RELEASED], 0);
 }
 
-static void
-sp_paint_selector_color_changed(SPColorSelector *csel, SPPaintSelector *psel)
-{
-    csel->base->getColorAlpha( psel->color, psel->alpha );
-
-    g_signal_emit(G_OBJECT(psel), psel_signals[CHANGED], 0);
+void SPPaintSelector::onSelectedColorChanged() {
+    if (updating_color) {
+        return;
+    }
+    g_signal_emit(G_OBJECT(this), psel_signals[CHANGED], 0);
 }
 
 static void sp_paint_selector_set_mode_color(SPPaintSelector *psel, SPPaintSelector::Mode /*mode*/)
 {
-    GtkWidget *csel;
+    using Inkscape::UI::Widget::ColorNotebook;
 
     sp_paint_selector_set_style_buttons(psel, psel->solid);
     gtk_widget_set_sensitive(psel->style, TRUE);
 
     if ((psel->mode == SPPaintSelector::MODE_COLOR_RGB) || (psel->mode == SPPaintSelector::MODE_COLOR_CMYK)) {
         /* Already have color selector */
-        csel = GTK_WIDGET(g_object_get_data(G_OBJECT(psel->selector), "color-selector"));
+        // Do nothing
     } else {
 
         sp_paint_selector_clear_frame(psel);
         /* Create new color selector */
         /* Create vbox */
 #if GTK_CHECK_VERSION(3,0,0)
-        GtkWidget *vb = gtk_box_new(GTK_ORIENTATION_VERTICAL, 4);
-        gtk_box_set_homogeneous(GTK_BOX(vb), FALSE);
+    GtkWidget *vb = gtk_box_new(GTK_ORIENTATION_VERTICAL, 4);
+    gtk_box_set_homogeneous(GTK_BOX(vb), FALSE);
 #else
         GtkWidget *vb = gtk_vbox_new(FALSE, 4);
 #endif
         gtk_widget_show(vb);
 
         /* Color selector */
-        csel = sp_color_selector_new( SP_TYPE_COLOR_NOTEBOOK );
-        gtk_widget_show(csel);
-        g_object_set_data(G_OBJECT(vb), "color-selector", csel);
-        gtk_box_pack_start(GTK_BOX(vb), csel, TRUE, TRUE, 0);
-        g_signal_connect(G_OBJECT(csel), "grabbed", G_CALLBACK(sp_paint_selector_color_grabbed), psel);
-        g_signal_connect(G_OBJECT(csel), "dragged", G_CALLBACK(sp_paint_selector_color_dragged), psel);
-        g_signal_connect(G_OBJECT(csel), "released", G_CALLBACK(sp_paint_selector_color_released), psel);
-        g_signal_connect(G_OBJECT(csel), "changed", G_CALLBACK(sp_paint_selector_color_changed), psel);
+        Gtk::Widget *color_selector = Gtk::manage(new ColorNotebook(*(psel->selected_color)));
+        color_selector->show();
+        gtk_box_pack_start(GTK_BOX(vb), color_selector->gobj(), TRUE, TRUE, 0);
+
         /* Pack everything to frame */
         gtk_container_add(GTK_CONTAINER(psel->frame), vb);
 
         psel->selector = vb;
-
-        /* Set color */
-        SP_COLOR_SELECTOR( csel )->base->setColorAlpha( psel->color, psel->alpha );
-
     }
 
     gtk_label_set_markup(GTK_LABEL(psel->label), _("<b>Flat color</b>"));
@@ -710,22 +708,22 @@ static void sp_paint_selector_set_mode_color(SPPaintSelector *psel, SPPaintSelec
 
 /* Gradient */
 
-static void sp_paint_selector_gradient_grabbed(SPColorSelector * /*csel*/, SPPaintSelector *psel)
+static void sp_paint_selector_gradient_grabbed(SPGradientSelector * /*csel*/, SPPaintSelector *psel)
 {
     g_signal_emit(G_OBJECT(psel), psel_signals[GRABBED], 0);
 }
 
-static void sp_paint_selector_gradient_dragged(SPColorSelector * /*csel*/, SPPaintSelector *psel)
+static void sp_paint_selector_gradient_dragged(SPGradientSelector * /*csel*/, SPPaintSelector *psel)
 {
     g_signal_emit(G_OBJECT(psel), psel_signals[DRAGGED], 0);
 }
 
-static void sp_paint_selector_gradient_released(SPColorSelector * /*csel*/, SPPaintSelector *psel)
+static void sp_paint_selector_gradient_released(SPGradientSelector * /*csel*/, SPPaintSelector *psel)
 {
     g_signal_emit(G_OBJECT(psel), psel_signals[RELEASED], 0);
 }
 
-static void sp_paint_selector_gradient_changed(SPColorSelector * /*csel*/, SPPaintSelector *psel)
+static void sp_paint_selector_gradient_changed(SPGradientSelector * /*csel*/, SPPaintSelector *psel)
 {
     g_signal_emit(G_OBJECT(psel), psel_signals[CHANGED], 0);
 }

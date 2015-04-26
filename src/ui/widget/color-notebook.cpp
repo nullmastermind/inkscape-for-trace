@@ -1,11 +1,13 @@
-/*
- * A notebook with RGB, CMYK, CMS, HSL, and Wheel pages
- *
- * Author:
+/**
+ * @file
+ * A notebook with RGB, CMYK, CMS, HSL, and Wheel pages - implementation
+ */
+/* Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *   bulia byak <buliabyak@users.sf.net>
+ *   Tomasz Boczkowski <penginsbacon@gmail.com> (c++-sification)
  *
- * Copyright (C) 2001-2002 Lauris Kaplinski
+ * Copyright (C) 2001-2014 Authors
  *
  * This code is in public domain
  */
@@ -29,126 +31,91 @@
 #include <gtk/gtk.h>
 #include <glibmm/i18n.h>
 #include <gtkmm/label.h>
+#include <gtkmm/notebook.h>
 
-#include "ui/dialog-events.h"
-#include "../preferences.h"
-#include "sp-color-notebook.h"
-#include "spw-utilities.h"
+#include "preferences.h"
+#include "widgets/spw-utilities.h"
 #include "svg/svg-icc-color.h"
-#include "../inkscape.h"
-#include "../document.h"
-#include "../profile-manager.h"
+#include "inkscape.h"
+#include "document.h"
+#include "profile-manager.h"
 #include "color-profile.h"
 #include "cms-system.h"
+#include "ui/dialog-events.h"
 #include "ui/tools-switch.h"
 #include "ui/tools/tool-base.h"
 #include "ui/widget/color-entry.h"
 #include "ui/widget/color-icc-selector.h"
+#include "ui/widget/color-notebook.h"
 #include "ui/widget/color-scales.h"
 #include "ui/widget/color-wheel-selector.h"
 
 using Inkscape::CMSSystem;
 
-using namespace Inkscape::UI::Widget;
-
-struct SPColorNotebookTracker {
-    const gchar* name;
-    const gchar* className;
-    GType type;
-    guint submode;
-    gboolean enabledFull;
-    gboolean enabledBrief;
-    SPColorNotebook *backPointer;
-};
-
-static void sp_color_notebook_dispose(GObject *object);
-
-static void sp_color_notebook_show_all (GtkWidget *widget);
-static void sp_color_notebook_hide(GtkWidget *widget);
-
 #define XPAD 4
 #define YPAD 1
 
-G_DEFINE_TYPE(SPColorNotebook, sp_color_notebook, SP_TYPE_COLOR_SELECTOR);
+namespace Inkscape {
+namespace UI {
+namespace Widget {
 
-static void sp_color_notebook_class_init(SPColorNotebookClass *klass)
+
+ColorNotebook::ColorNotebook(SelectedColor &color)
+#if GTK_CHECK_VERSION(3,0,0)
+    : Gtk::Grid()
+#else
+    : Gtk::Table(2, 3, false)
+#endif
+    , _selected_color(color)
+
 {
-    GObjectClass *object_class = reinterpret_cast<GObjectClass *>(klass);
-    GtkWidgetClass *widget_class = reinterpret_cast<GtkWidgetClass *>(klass);
+    Page *page;
 
-    object_class->dispose = sp_color_notebook_dispose;
+    page = new Page(new ColorScalesFactory(SP_COLOR_SCALES_MODE_RGB), true);
+    _available_pages.push_back(page);
+    page = new Page(new ColorScalesFactory(SP_COLOR_SCALES_MODE_HSV), true);
+    _available_pages.push_back(page);
+    page = new Page(new ColorScalesFactory(SP_COLOR_SCALES_MODE_CMYK), true);
+    _available_pages.push_back(page);
+    page = new Page(new ColorWheelSelectorFactory, true);
+    _available_pages.push_back(page);
+#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+    page = new Page(new ColorICCSelectorFactory, true);
+    _available_pages.push_back(page);
+#endif
 
-    widget_class->show_all = sp_color_notebook_show_all;
-    widget_class->hide = sp_color_notebook_hide;
+    _initUI();
+
+    _selected_color.signal_changed.connect(sigc::mem_fun(this, &ColorNotebook::_onSelectedColorChanged));
+    _selected_color.signal_dragged.connect(sigc::mem_fun(this, &ColorNotebook::_onSelectedColorChanged));
 }
 
-static void
-sp_color_notebook_switch_page(GtkNotebook *notebook,
-                              GtkWidget   *page,
-                              guint page_num,
-                              SPColorNotebook *colorbook)
+ColorNotebook::~ColorNotebook()
 {
-    if ( colorbook )
+    if ( _buttons )
     {
-        ColorNotebook* nb = dynamic_cast<ColorNotebook*>(SP_COLOR_SELECTOR(colorbook)->base);
-        nb->switchPage( notebook, page, page_num );
-
-        // remember the page we switched to
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        prefs->setInt("/colorselector/page", page_num);
+        delete [] _buttons;
+        _buttons = 0;
     }
+
 }
 
-void ColorNotebook::switchPage(GtkNotebook*,
-                              GtkWidget*,
-                              guint page_num)
+ColorNotebook::Page::Page(Inkscape::UI::ColorSelectorFactory *selector_factory, bool enabled_full)
+    : selector_factory(selector_factory)
+    , enabled_full(enabled_full)
 {
-    SPColorSelector* csel;
-    GtkWidget* widget;
-
-    if ( gtk_notebook_get_current_page (GTK_NOTEBOOK (_book)) >= 0 )
-    {
-        csel = getCurrentSelector();
-        if (csel) {
-            csel->base->getColorAlpha(_color, _alpha);
-        }
-    }
-    widget = gtk_notebook_get_nth_page (GTK_NOTEBOOK (_book), page_num);
-    if ( widget && SP_IS_COLOR_SELECTOR(widget) )
-    {
-        csel = SP_COLOR_SELECTOR (widget);
-        if (csel) {
-            csel->base->setColorAlpha( _color, _alpha );
-        }
-
-        // Temporary workaround to undo a spurious GRABBED
-        _released();
-    }
 }
 
-static void
-sp_color_notebook_init (SPColorNotebook *colorbook)
-{
-    SP_COLOR_SELECTOR(colorbook)->base = new ColorNotebook( SP_COLOR_SELECTOR(colorbook) );
 
-    if ( SP_COLOR_SELECTOR(colorbook)->base )
-    {
-        SP_COLOR_SELECTOR(colorbook)->base->init();
-    }
-}
-
-void ColorNotebook::init()
+void ColorNotebook::_initUI()
 {
     guint row = 0;
 
-    _updating = false;
-
-    _book = gtk_notebook_new ();
-    gtk_widget_show (_book);
-
-    // Dont show the notebook tabs, use radiobuttons instead
-    gtk_notebook_set_show_border (GTK_NOTEBOOK (_book), false);
-    gtk_notebook_set_show_tabs (GTK_NOTEBOOK (_book), false);
+    Gtk::Notebook *notebook = Gtk::manage(new Gtk::Notebook);
+    notebook->show();
+    notebook->set_show_border(false);
+    notebook->set_show_tabs(false);
+    _book = GTK_WIDGET(notebook->gobj());
 
 #if GTK_CHECK_VERSION(3,0,0)
     _buttonbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 2);
@@ -165,16 +132,6 @@ void ColorNotebook::init()
         _addPage(_available_pages[i]);
     }
 
-#if GTK_CHECK_VERSION(3,0,0)
-    GtkWidget* table = gtk_grid_new();
-#else
-    GtkWidget* table = gtk_table_new(2, 3, FALSE);
-#endif
-
-    gtk_widget_show (table);
-
-    gtk_box_pack_start (GTK_BOX (_csel), table, TRUE, TRUE, 0);
-
     sp_set_font_size_smaller (_buttonbox);
 
 #if GTK_CHECK_VERSION(3,0,0)
@@ -189,12 +146,9 @@ void ColorNotebook::init()
     gtk_widget_set_margin_bottom(_buttonbox, YPAD);
     gtk_widget_set_hexpand(_buttonbox, TRUE);
     gtk_widget_set_valign(_buttonbox, GTK_ALIGN_CENTER);
-    gtk_grid_attach(GTK_GRID(table), _buttonbox, 0, row, 2, 1);
+    attach(*Glib::wrap(_buttonbox), 0, row, 2, 1);
 #else
-    gtk_table_attach (GTK_TABLE (table), _buttonbox, 0, 2, row, row + 1,
-                      static_cast<GtkAttachOptions>(GTK_EXPAND|GTK_FILL),
-                      static_cast<GtkAttachOptions>(0),
-                      XPAD, YPAD);
+    attach(*Glib::wrap(_buttonbox), 0, 2, row, row+1, Gtk::EXPAND | Gtk::FILL, static_cast<Gtk::AttachOptions>(0), XPAD, YPAD);
 #endif
 
     row++;
@@ -211,12 +165,9 @@ void ColorNotebook::init()
     gtk_widget_set_margin_bottom(_book, YPAD);
     gtk_widget_set_hexpand(_book, TRUE);
     gtk_widget_set_vexpand(_book, TRUE);
-    gtk_grid_attach(GTK_GRID(table), _book, 0, row, 2, 1);
+    attach(*notebook, 0, row, 2, 1);
 #else
-    gtk_table_attach (GTK_TABLE (table), _book, 0, 2, row, row + 1,
-                      static_cast<GtkAttachOptions>(GTK_EXPAND|GTK_FILL),
-                      static_cast<GtkAttachOptions>(GTK_EXPAND|GTK_FILL),
-                      XPAD*2, YPAD);
+    attach(*notebook, 0, 2, row, row+1, Gtk::EXPAND | Gtk::FILL, Gtk::EXPAND | Gtk::FILL, XPAD * 2, YPAD);
 #endif
 
     // restore the last active page
@@ -311,7 +262,7 @@ void ColorNotebook::init()
     gtk_container_add (GTK_CONTAINER (_btn_picker), picker);
     gtk_widget_set_tooltip_text (_btn_picker, _("Pick colors from image"));
     gtk_box_pack_start(GTK_BOX(rgbabox), _btn_picker, FALSE, FALSE, 2);
-    g_signal_connect(G_OBJECT(_btn_picker), "clicked", G_CALLBACK(ColorNotebook::_picker_clicked), _csel);
+    g_signal_connect(G_OBJECT(_btn_picker), "clicked", G_CALLBACK(ColorNotebook::_onPickerClicked), this);
 
     /* Create RGBA entry and color preview */
     _rgbal = gtk_label_new_with_mnemonic (_("RGBA_:"));
@@ -341,125 +292,22 @@ void ColorNotebook::init()
     #endif
     gtk_widget_set_margin_top(rgbabox, YPAD);
     gtk_widget_set_margin_bottom(rgbabox, YPAD);
-    gtk_grid_attach(GTK_GRID(table), rgbabox, 0, row, 2, 1);
+    attach(*Glib::wrap(rgbabox), 0, row, 2, 1);
 #else
-    gtk_table_attach (GTK_TABLE (table), rgbabox, 0, 2, row, row + 1, GTK_FILL, GTK_SHRINK, XPAD, YPAD);
+    attach(*Glib::wrap(rgbabox), 0, 2, row, row + 1, Gtk::FILL, Gtk::SHRINK, XPAD, YPAD);
 #endif
 
 #ifdef SPCS_PREVIEW
     _p = sp_color_preview_new (0xffffffff);
     gtk_widget_show (_p);
-    gtk_table_attach (GTK_TABLE (table), _p, 2, 3, row, row + 1, GTK_FILL, GTK_FILL, XPAD, YPAD);
+    attach(*Glib::wrap(_p), 2, 3, row, row + 1, Gtk::FILL, Gtk::FILL, XPAD, YPAD);
 #endif
 
-    _switchId = g_signal_connect(G_OBJECT (_book), "switch-page",
-                                 G_CALLBACK (sp_color_notebook_switch_page), SP_COLOR_NOTEBOOK(_csel));
-
-    _selected_color.signal_changed.connect(sigc::mem_fun(this, &ColorNotebook::_onSelectedColorChanged));
-    _selected_color.signal_dragged.connect(sigc::mem_fun(this, &ColorNotebook::_onSelectedColorDragged));
-    _selected_color.signal_grabbed.connect(sigc::mem_fun(this, &ColorNotebook::_onSelectedColorGrabbed));
-    _selected_color.signal_released.connect(sigc::mem_fun(this, &ColorNotebook::_onSelectedColorReleased));
+    g_signal_connect(G_OBJECT (_book), "switch-page",
+                                 G_CALLBACK (ColorNotebook::_onPageSwitched), this);
 }
 
-static void sp_color_notebook_dispose(GObject *object)
-{
-    if (G_OBJECT_CLASS(sp_color_notebook_parent_class)->dispose)
-        G_OBJECT_CLASS(sp_color_notebook_parent_class)->dispose(object);
-}
-
-ColorNotebook::~ColorNotebook()
-{
-    if ( _switchId )
-    {
-        if ( _book )
-        {
-            g_signal_handler_disconnect (_book, _switchId);
-            _switchId = 0;
-        }
-    }
-
-    if ( _buttons )
-    {
-        delete [] _buttons;
-        _buttons = 0;
-    }
-
-}
-
-static void
-sp_color_notebook_show_all (GtkWidget *widget)
-{
-    gtk_widget_show (widget);
-}
-
-static void sp_color_notebook_hide(GtkWidget *widget)
-{
-    gtk_widget_hide(widget);
-}
-
-GtkWidget *sp_color_notebook_new()
-{
-    SPColorNotebook *colorbook = SP_COLOR_NOTEBOOK(g_object_new (SP_TYPE_COLOR_NOTEBOOK, NULL));
-
-    return GTK_WIDGET(colorbook);
-}
-
-ColorNotebook::ColorNotebook( SPColorSelector* csel )
-    : ColorSelector( csel )
-{
-    Page *page;
-
-    page = new Page(new ColorScalesFactory(SP_COLOR_SCALES_MODE_RGB), true);
-    _available_pages.push_back(page);
-    page = new Page(new ColorScalesFactory(SP_COLOR_SCALES_MODE_HSV), true);
-    _available_pages.push_back(page);
-    page = new Page(new ColorScalesFactory(SP_COLOR_SCALES_MODE_CMYK), true);
-    _available_pages.push_back(page);
-    page = new Page(new ColorWheelSelectorFactory, true);
-    _available_pages.push_back(page);
-#if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-    page = new Page(new ColorICCSelectorFactory, true);
-    _available_pages.push_back(page);
-#endif
-}
-
-SPColorSelector* ColorNotebook::getCurrentSelector()
-{
-    SPColorSelector* csel = NULL;
-    gint current_page = gtk_notebook_get_current_page (GTK_NOTEBOOK (_book));
-
-    if ( current_page >= 0 )
-    {
-        GtkWidget* widget = gtk_notebook_get_nth_page (GTK_NOTEBOOK (_book), current_page);
-        if ( SP_IS_COLOR_SELECTOR (widget) )
-        {
-            csel = SP_COLOR_SELECTOR (widget);
-        }
-    }
-
-    return csel;
-}
-
-ColorNotebook::Page::Page(Inkscape::UI::ColorSelectorFactory *selector_factory, bool enabled_full)
-    : selector_factory(selector_factory)
-    , enabled_full(enabled_full)
-{
-}
-
-void ColorNotebook::_colorChanged()
-{
-    _updating = true;
-    _selected_color.setColorAlpha(_color, _alpha, true);
-    _updating = false;
-
-    SPColorSelector* cselPage = getCurrentSelector();
-    if ( cselPage )
-    {
-        cselPage->base->setColorAlpha( _color, _alpha );
-    }
-}
-
-void ColorNotebook::_picker_clicked(GtkWidget * /*widget*/, SPColorNotebook * /*colorbook*/)
+void ColorNotebook::_onPickerClicked(GtkWidget * /*widget*/, ColorNotebook * /*colorbook*/)
 {
     // Set the dropper into a "one click" mode, so it reverts to the previous tool after a click
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -467,9 +315,42 @@ void ColorNotebook::_picker_clicked(GtkWidget * /*widget*/, SPColorNotebook * /*
     Inkscape::UI::Tools::sp_toggle_dropper(SP_ACTIVE_DESKTOP);
 }
 
-// TODO pass in param so as to avoid the need for SP_ACTIVE_DOCUMENT
-void ColorNotebook::_updateRgbaEntry( const SPColor& color, gfloat alpha )
+void ColorNotebook::_onButtonClicked(GtkWidget *widget,  ColorNotebook *nb)
 {
+    if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(widget))) {
+        return;
+    }
+
+    for(gint i = 0; i < gtk_notebook_get_n_pages (GTK_NOTEBOOK (nb->_book)); i++) {
+        if (nb->_buttons[i] == widget) {
+            gtk_notebook_set_current_page (GTK_NOTEBOOK (nb->_book), i);
+        }
+    }
+}
+
+void ColorNotebook::_onSelectedColorChanged() {
+    _updateICCButtons();
+}
+
+void ColorNotebook::_onPageSwitched(GtkNotebook *notebook,
+        GtkWidget   *page,
+        guint page_num,
+        ColorNotebook *colorbook)
+{
+    if (colorbook) {
+        // remember the page we switched to
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        prefs->setInt("/colorselector/page", page_num);
+    }
+}
+
+
+// TODO pass in param so as to avoid the need for SP_ACTIVE_DOCUMENT
+void ColorNotebook::_updateICCButtons()
+{
+    SPColor color = _selected_color.color();
+    gfloat alpha = _selected_color.alpha();
+
     g_return_if_fail( ( 0.0 <= alpha ) && ( alpha <= 1.0 ) );
 
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
@@ -516,119 +397,7 @@ void ColorNotebook::_setCurrentPage(int i)
     }
 }
 
-void ColorNotebook::_buttonClicked(GtkWidget *widget,  SPColorNotebook *colorbook)
-{
-    ColorNotebook* nb = dynamic_cast<ColorNotebook*>(SP_COLOR_SELECTOR(colorbook)->base);
-
-    if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(widget))) {
-        return;
-    }
-
-    for(gint i = 0; i < gtk_notebook_get_n_pages (GTK_NOTEBOOK (nb->_book)); i++) {
-        if (nb->_buttons[i] == widget) {
-            gtk_notebook_set_current_page (GTK_NOTEBOOK (nb->_book), i);
-        }
-    }
-}
-
-void ColorNotebook::_entryGrabbed (SPColorSelector *, SPColorNotebook *colorbook)
-{
-    ColorNotebook* nb = dynamic_cast<ColorNotebook*>(SP_COLOR_SELECTOR(colorbook)->base);
-    nb->_grabbed();
-}
-
-void ColorNotebook::_entryDragged (SPColorSelector *csel, SPColorNotebook *colorbook)
-{
-    gboolean oldState;
-    ColorNotebook* nb = dynamic_cast<ColorNotebook*>(SP_COLOR_SELECTOR(colorbook)->base);
-
-    oldState = nb->_dragging;
-
-    nb->_dragging = TRUE;
-    nb->_entryModified( csel, colorbook );
-
-    nb->_dragging = oldState;
-}
-
-void ColorNotebook::_entryReleased (SPColorSelector *, SPColorNotebook *colorbook)
-{
-    ColorNotebook* nb = dynamic_cast<ColorNotebook*>(SP_COLOR_SELECTOR(colorbook)->base);
-    nb->_released();
-}
-
-void ColorNotebook::_entryChanged (SPColorSelector *csel, SPColorNotebook *colorbook)
-{
-    gboolean oldState;
-    ColorNotebook* nb = dynamic_cast<ColorNotebook*>(SP_COLOR_SELECTOR(colorbook)->base);
-
-    oldState = nb->_dragging;
-
-    nb->_dragging = FALSE;
-    nb->_entryModified( csel, colorbook );
-
-    nb->_dragging = oldState;
-}
-
-void ColorNotebook::_entryModified (SPColorSelector *csel, SPColorNotebook *colorbook)
-{
-    g_return_if_fail (colorbook != NULL);
-    g_return_if_fail (SP_IS_COLOR_NOTEBOOK (colorbook));
-    g_return_if_fail (csel != NULL);
-    g_return_if_fail (SP_IS_COLOR_SELECTOR (csel));
-
-    ColorNotebook* nb = dynamic_cast<ColorNotebook*>(SP_COLOR_SELECTOR(colorbook)->base);
-    SPColor color;
-    gfloat alpha = 1.0;
-
-    csel->base->getColorAlpha( color, alpha );
-
-    nb->_updating = true;
-    nb->_selected_color.setColorAlpha(color, alpha, true);
-    nb->_updating = false;
-    nb->_updateInternals( color, alpha, nb->_dragging );
-}
-
-void ColorNotebook::_onSelectedColorChanged() {
-    if (_updating) {
-        return;
-    }
-
-    SPColor color;
-    gfloat alpha = 1.0;
-
-    _updating = true;
-    _selected_color.colorAlpha(color, alpha);
-    _updateInternals(color, alpha, _dragging);
-    _updating = false;
-}
-
-void ColorNotebook::_onSelectedColorDragged() {
-    if (_updating) {
-        return;
-    }
-    bool oldState = _dragging;
-
-    _dragging = true;
-    SPColor color;
-    gfloat alpha = 1.0;
-
-    _updating = true;
-    _selected_color.colorAlpha(color, alpha);
-    _updateInternals(color, alpha, true);
-    _updating = false;
-
-    _dragging = oldState;
-}
-
-void ColorNotebook::_onSelectedColorGrabbed() {
-    _grabbed();
-}
-
-void ColorNotebook::_onSelectedColorReleased() {
-    _released();
-}
-
-GtkWidget* ColorNotebook::_addPage(Page& page) {
+void ColorNotebook::_addPage(Page& page) {
     Gtk::Widget *selector_widget;
 
     selector_widget = page.selector_factory->createWidget(_selected_color);
@@ -648,20 +417,13 @@ GtkWidget* ColorNotebook::_addPage(Page& page) {
         gtk_widget_show (_buttons[page_num]);
         gtk_box_pack_start (GTK_BOX (_buttonbox), _buttons[page_num], TRUE, TRUE, 0);
 
-        g_signal_connect (G_OBJECT (_buttons[page_num]), "clicked", G_CALLBACK (_buttonClicked), _csel);
-
-        if (SP_IS_COLOR_SELECTOR(selector_widget->gobj())) {
-            //Connect glib signals of non-refactored widgets
-            g_signal_connect (selector_widget->gobj(), "grabbed", G_CALLBACK (_entryGrabbed), _csel);
-            g_signal_connect (selector_widget->gobj(), "dragged", G_CALLBACK (_entryDragged), _csel);
-            g_signal_connect (selector_widget->gobj(), "released", G_CALLBACK (_entryReleased), _csel);
-            g_signal_connect (selector_widget->gobj(), "changed", G_CALLBACK (_entryChanged), _csel);
-        }
+        g_signal_connect (G_OBJECT (_buttons[page_num]), "clicked", G_CALLBACK (_onButtonClicked), this);
     }
-
-    return selector_widget->gobj();
 }
 
+}
+}
+}
 
 /* Commented out: see comment at the bottom of the header file
 

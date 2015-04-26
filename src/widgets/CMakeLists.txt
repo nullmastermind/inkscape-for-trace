@@ -41,7 +41,6 @@ set(widgets_SRC
 	select-toolbar.cpp
 	shrink-wrap-button.cpp
 	sp-attribute-widget.cpp
-	sp-color-notebook.cpp
 	sp-color-selector.cpp
 	sp-widget.cpp
 	sp-xmlview-attr-list.cpp
@@ -99,7 +98,6 @@ set(widgets_SRC
 	select-toolbar.h
 	shrink-wrap-button.h
 	sp-attribute-widget.h
-	sp-color-notebook.h
 	sp-color-selector.h
 	sp-widget.h
 	sp-xmlview-attr-list.h

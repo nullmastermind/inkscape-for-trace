@@ -20,6 +20,7 @@
 # include <glibmm/threads.h>
 #endif
 
+#include <boost/scoped_ptr.hpp>
 #include <gtkmm/box.h>
 #include <gtkmm/treeview.h>
 #include <gtkmm/treestore.h>
@@ -40,6 +41,9 @@ struct SPColorSelector;
 namespace Inkscape {
 
 namespace UI {
+
+class SelectedColor;
+
 namespace Dialog {
 
 
@@ -170,8 +174,7 @@ private:
     Gtk::Alignment  _blur_alignment;
 
     Gtk::Dialog _colorSelectorDialog;
-    SPColorSelector *_colorSelector;
-
+    boost::scoped_ptr<Inkscape::UI::SelectedColor> _selectedColor;
     
     //Methods:
     
@@ -237,7 +240,7 @@ private:
     
     void setupDialog(const Glib::ustring &title);
     
-    friend void sp_highlight_picker_color_mod(SPColorSelector *csel, GObject *cp);
+    void _highlightPickerColorMod();
 
 };
 

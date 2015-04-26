@@ -30,8 +30,7 @@
 #include "document-private.h"
 #include "sp-object.h"
 #include <color.h>
-#include "widgets/sp-color-selector.h"
-#include "widgets/sp-color-notebook.h"
+#include "ui/widget/color-notebook.h"
 
 #include "parameter.h"
 #include "bool.h"

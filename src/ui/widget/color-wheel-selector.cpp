@@ -176,10 +176,8 @@ void ColorWheelSelector::_colorChanged()
 #ifdef DUMP_CHANGE_INFO
     g_message("ColorWheelSelector::_colorChanged( this=%p, %f, %f, %f,   %f)", this, _color.color().v.c[0], _color.color().v.c[1], _color.color().v.c[2], alpha );
 #endif
-    if (_updating) {
-        return;
-    }
 
+    bool oldval = _updating;
     _updating = true;
     {
         float hsv[3] = {0,0,0};
@@ -195,7 +193,7 @@ void ColorWheelSelector::_colorChanged()
 
     ColorScales::setScaled(_alpha_adjustment->gobj(), _color.alpha());
 
-    _updating = false;
+    _updating = oldval;
 }
 
 void ColorWheelSelector::_adjustmentChanged()
@@ -203,7 +201,6 @@ void ColorWheelSelector::_adjustmentChanged()
     if (_updating) {
         return;
     }
-    _updating = true;
 
     // TODO check this. It looks questionable:
     // if a value is entered between 0 and 1 exclusive, normalize it to (int) 0..255  or 0..100
@@ -215,8 +212,6 @@ void ColorWheelSelector::_adjustmentChanged()
 
     _color.preserveICC();
     _color.setAlpha(ColorScales::getScaled(_alpha_adjustment->gobj()));
-
-    _updating = false;
 }
 
 void ColorWheelSelector::_sliderGrabbed()
@@ -237,10 +232,8 @@ void ColorWheelSelector::_sliderChanged()
         return;
     }
 
-    _updating = true;
     _color.preserveICC();
     _color.setAlpha(ColorScales::getScaled(_alpha_adjustment->gobj()));
-    _updating = false;
 }
 
 void ColorWheelSelector::_wheelChanged(GimpColorWheel *wheel, ColorWheelSelector *wheelSelector)
@@ -248,7 +241,6 @@ void ColorWheelSelector::_wheelChanged(GimpColorWheel *wheel, ColorWheelSelector
     if (wheelSelector->_updating){
         return;
     }
-    wheelSelector->_updating = true;
 
     gdouble h = 0;
     gdouble s = 0;
@@ -270,8 +262,6 @@ void ColorWheelSelector::_wheelChanged(GimpColorWheel *wheel, ColorWheelSelector
 
     wheelSelector->_color.setHeld(gimp_color_wheel_is_adjusting(wheel));
     wheelSelector->_color.setColor(color);
-
-    wheelSelector->_updating = false;
 }
 
 

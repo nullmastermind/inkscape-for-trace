@@ -1017,7 +1017,7 @@ void ColorICCSelectorImpl::_adjustmentChanged( GtkAdjustment *adjustment, ColorI
          }
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
      }
-     iccSelector->_impl->_color.setColorAlpha(newColor, scaled, true);
+     iccSelector->_impl->_color.setColorAlpha(newColor, scaled);
      //iccSelector->_updateInternals( newColor, scaled, iccSelector->_impl->_dragging );
      iccSelector->_impl->_updateSliders( match );
 

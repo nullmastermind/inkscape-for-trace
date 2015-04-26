@@ -71,23 +71,17 @@ void ColorEntry::on_changed() {
         if (len < 8) {
             rgba = rgba << (4 * (8 - len));
         }
-        _updating = true;
         if (changed) {
             set_text(str);
         }
         SPColor color(rgba);
-        _color.setColorAlpha(color, SP_RGBA32_A_F(rgba), true);
-        _updating = false;
+        _color.setColorAlpha(color, SP_RGBA32_A_F(rgba));
     }
     g_free(str);
 }
 
 
 void ColorEntry::_onColorChanged() {
-    if (_updating) {
-        return;
-    }
-
     SPColor color = _color.color();
     gdouble alpha = _color.alpha();
 
