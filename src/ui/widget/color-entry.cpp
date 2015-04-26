@@ -30,6 +30,7 @@ ColorEntry::ColorEntry(SelectedColor &color)
     , _updating(false)
 {
     _color_changed_connection = color.signal_changed.connect(sigc::mem_fun(this, &ColorEntry::_onColorChanged));
+    _color_dragged_connection = color.signal_dragged.connect(sigc::mem_fun(this, &ColorEntry::_onColorChanged));
     _onColorChanged();
 
     set_max_length(8);
@@ -39,6 +40,7 @@ ColorEntry::ColorEntry(SelectedColor &color)
 
 ColorEntry::~ColorEntry() {
     _color_changed_connection.disconnect();
+    _color_dragged_connection.disconnect();
 }
 
 void ColorEntry::on_changed() {

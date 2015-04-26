@@ -42,6 +42,11 @@ public:
     void setColorAlpha(SPColor const &color, gfloat alpha, bool emit = false);
     void colorAlpha(SPColor &color, gfloat &alpha) const;
 
+    void setHeld(bool held);
+
+    sigc::signal<void> signal_grabbed;
+    sigc::signal<void> signal_dragged;
+    sigc::signal<void> signal_released;
     sigc::signal<void> signal_changed;
 private:
     // By default, disallow copy constructor and assignment operator
@@ -54,6 +59,7 @@ private:
      */
     gfloat _alpha;
 
+    bool _held;
     /**
      * This flag is true if no color is set yet
      */

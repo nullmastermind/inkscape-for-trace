@@ -555,7 +555,7 @@ void ColorICCSelector::init()
 
     attachToGridOrTable(t, _impl->_slider->gobj(), 1, row, 1, 1, true);
 
-    _impl->_slider->set_colors(SP_RGBA32_F_COMPOSE( 1.0, 1.0, 1.0, 0.0 ),
+    _impl->_slider->setColors(SP_RGBA32_F_COMPOSE( 1.0, 1.0, 1.0, 0.0 ),
                                SP_RGBA32_F_COMPOSE( 1.0, 1.0, 1.0, 0.5 ),
                                SP_RGBA32_F_COMPOSE( 1.0, 1.0, 1.0, 1.0 ) );
 
@@ -886,7 +886,7 @@ void ColorICCSelectorImpl::_setProfile( SVGICCColor* profile )
                     _compUI[i]._slider->set_tooltip_text((i < things.size()) ?  things[i].tip.c_str() : "");
                     gtk_widget_set_tooltip_text( _compUI[i]._btn, (i < things.size()) ?  things[i].tip.c_str() : "" );
 
-                    _compUI[i]._slider->set_colors(SPColor(0.0, 0.0, 0.0).toRGBA32(0xff),
+                    _compUI[i]._slider->setColors(SPColor(0.0, 0.0, 0.0).toRGBA32(0xff),
                                                    SPColor(0.5, 0.5, 0.5).toRGBA32(0xff),
                                                    SPColor(1.0, 1.0, 1.0).toRGBA32(0xff) );
 /*
@@ -962,7 +962,7 @@ void ColorICCSelectorImpl::_updateSliders( gint ignore )
                         cmsHTRANSFORM trans = _prof->getTransfToSRGB8();
                         if ( trans ) {
                             cmsDoTransform( trans, scratch, _compUI[i]._map, 1024 );
-                            _compUI[i]._slider->set_map(_compUI[i]._map);
+                            _compUI[i]._slider->setMap(_compUI[i]._map);
                         }
                     }
                 }
@@ -977,7 +977,7 @@ void ColorICCSelectorImpl::_updateSliders( gint ignore )
     guint32 mid = _owner->_color.toRGBA32( 0x7f );
     guint32 end = _owner->_color.toRGBA32( 0xff );
 
-    _slider->set_colors(start, mid, end);
+    _slider->setColors(start, mid, end);
 }
 
 

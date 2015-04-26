@@ -160,7 +160,7 @@ void ColorWheelSelector::init()
     gtk_table_attach(GTK_TABLE (t), _slider->gobj(), 1, 2, row, row + 1, (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), GTK_FILL, XPAD, YPAD);
 #endif
 
-    _slider->set_colors(SP_RGBA32_F_COMPOSE (1.0, 1.0, 1.0, 0.0),
+    _slider->setColors(SP_RGBA32_F_COMPOSE (1.0, 1.0, 1.0, 0.0),
                         SP_RGBA32_F_COMPOSE (1.0, 1.0, 1.0, 0.5),
                         SP_RGBA32_F_COMPOSE (1.0, 1.0, 1.0, 1.0));
 
@@ -246,7 +246,7 @@ void ColorWheelSelector::_colorChanged()
     guint32 mid = _color.toRGBA32( 0x7f );
     guint32 end = _color.toRGBA32( 0xff );
 
-    _slider->set_colors(start, mid, end);
+    _slider->setColors(start, mid, end);
 
     ColorScales::setScaled(_adj, _alpha);
 
@@ -321,7 +321,7 @@ void ColorWheelSelector::_wheelChanged( GimpColorWheel *wheel, SPColorWheelSelec
     guint32 mid = color.toRGBA32( 0x7f );
     guint32 end = color.toRGBA32( 0xff );
 
-    wheelSelector->_slider->set_colors(start, mid, end);
+    wheelSelector->_slider->setColors(start, mid, end);
 
     wheelSelector->_preserve_icc(&color);
     wheelSelector->_updateInternals( color, wheelSelector->_alpha, gimp_color_wheel_is_adjusting(wheel) );

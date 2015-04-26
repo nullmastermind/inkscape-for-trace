@@ -32,6 +32,7 @@ SelectedColor::SelectedColor()
 	: _color(0)
     , _alpha(1.0)
     , _virgin(true)
+    , _held(false)
 {
 
 }
@@ -86,7 +87,11 @@ void SelectedColor::setColorAlpha(SPColor const &color, gfloat alpha, bool emit)
         _alpha = alpha;
 
         if (emit) {
-        	signal_changed.emit();
+            if (_held) {
+                signal_dragged.emit();
+            } else {
+                signal_changed.emit();
+            }
         }
 #ifdef DUMP_CHANGE_INFO
     } else {
@@ -99,6 +104,21 @@ void SelectedColor::setColorAlpha(SPColor const &color, gfloat alpha, bool emit)
 void SelectedColor::colorAlpha(SPColor &color, gfloat &alpha) const {
 	color = _color;
 	alpha = _alpha;
+}
+
+void SelectedColor::setHeld(bool held) {
+    bool grabbed = held && !_held;
+    bool released = !held && _held;
+
+    _held = held;
+
+    if (grabbed) {
+        signal_grabbed.emit();
+    }
+
+    if (released) {
+        signal_released.emit();
+    }
 }
 
 }
