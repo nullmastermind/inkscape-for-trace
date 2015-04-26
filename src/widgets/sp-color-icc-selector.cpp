@@ -17,7 +17,7 @@
 
 #include "ui/dialog-events.h"
 #include "sp-color-icc-selector.h"
-#include "sp-color-scales.h"
+#include "ui/widget/color-scales.h"
 #include "ui/widget/color-slider.h"
 #include "svg/svg-icc-color.h"
 #include "colorspace.h"
@@ -36,6 +36,9 @@
 #include "preferences.h"
 #endif // DEBUG_LCMS
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+
+
+using namespace Inkscape::UI::Widget;
 
 
 #ifdef DEBUG_LCMS

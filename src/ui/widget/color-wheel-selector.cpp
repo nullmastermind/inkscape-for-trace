@@ -10,10 +10,10 @@
 #include <gtkmm/adjustment.h>
 #include <gtkmm/label.h>
 #include <gtkmm/spinbutton.h>
-#include "widgets/sp-color-scales.h"
 #include "svg/svg-icc-color.h"
 #include "ui/dialog-events.h"
 #include "ui/selected-color.h"
+#include "ui/widget/color-scales.h"
 #include "ui/widget/color-slider.h"
 #include "ui/widget/gimpcolorwheel.h"
 

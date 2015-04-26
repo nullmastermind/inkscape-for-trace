@@ -28,7 +28,7 @@
 #include <gtkmm/style.h>
 #endif
 
-#include "widgets/sp-color-scales.h"
+#include "ui/widget/color-scales.h"
 #include "preferences.h"
 
 static const gint SLIDER_WIDTH = 96;

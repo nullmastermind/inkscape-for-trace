@@ -34,7 +34,6 @@
 #include "../preferences.h"
 #include "sp-color-notebook.h"
 #include "spw-utilities.h"
-#include "sp-color-scales.h"
 #include "sp-color-icc-selector.h"
 #include "svg/svg-icc-color.h"
 #include "../inkscape.h"
@@ -45,6 +44,7 @@
 #include "ui/tools-switch.h"
 #include "ui/tools/tool-base.h"
 #include "ui/widget/color-entry.h"
+#include "ui/widget/color-scales.h"
 #include "ui/widget/color-wheel-selector.h"
 
 using Inkscape::CMSSystem;
@@ -448,7 +448,9 @@ ColorNotebook::Page::Page(Inkscape::UI::ColorSelectorFactory *selector_factory, 
 
 void ColorNotebook::_colorChanged()
 {
+    _updating = true;
     _selected_color.setColorAlpha(_color, _alpha, true);
+    _updating = false;
 
     SPColorSelector* cselPage = getCurrentSelector();
     if ( cselPage )
@@ -606,13 +608,13 @@ void ColorNotebook::_onSelectedColorDragged() {
     }
     bool oldState = _dragging;
 
-    _dragging = TRUE;
+    _dragging = true;
     SPColor color;
     gfloat alpha = 1.0;
 
     _updating = true;
     _selected_color.colorAlpha(color, alpha);
-    _updateInternals(color, alpha, _dragging);
+    _updateInternals(color, alpha, true);
     _updating = false;
 
     _dragging = oldState;
