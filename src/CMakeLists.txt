@@ -19,6 +19,7 @@ set(sp_SRC
 	sp-defs.cpp
 	sp-desc.cpp
 	sp-ellipse.cpp
+	sp-factory.cpp
 	sp-filter-primitive.cpp
 	sp-filter-reference.cpp
 	sp-filter.cpp
@@ -194,7 +195,6 @@ set(inkscape_SRC
 	document-subset.cpp
 	document-undo.cpp
 	document.cpp
-	doxygen-main.cpp
 	ege-color-prof-tracker.cpp
 	event-log.cpp
 	extract-uri.cpp
@@ -491,6 +491,7 @@ add_subdirectory(2geom)
 add_subdirectory(libavoid)
 add_subdirectory(libcola)
 add_subdirectory(libcroco)
+add_subdirectory(inkgc)
 add_subdirectory(libgdl)
 add_subdirectory(libuemf)
 add_subdirectory(libvpsc)
