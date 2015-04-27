@@ -913,7 +913,7 @@ static void sp_gradient_drag(GradientTool &rc, Geom::Point const pt, guint /*sta
         for (std::vector<SPItem*>::const_iterator i = itemlist.begin();i!=itemlist.end();i++) {
 
             //FIXME: see above
-            sp_repr_css_change_recursive(SP_OBJECT(*i)->getRepr(), css, "style");
+            sp_repr_css_change_recursive((*i)->getRepr(), css, "style");
 
             sp_item_set_gradient(*i, vector, (SPGradientType) type, fill_or_stroke);
 

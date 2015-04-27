@@ -1005,7 +1005,7 @@ void Transformation::applyPageTransform(Inkscape::Selection *selection)
     	for(std::vector<SPItem*>::const_iterator i=tmp.begin();i!=tmp.end();i++){
             SPItem *item = *i;
             item->set_item_transform(displayed);
-            SP_OBJECT(item)->updateRepr();
+            item->updateRepr();
         }
     } else {
         sp_selection_apply_affine(selection, displayed); // post-multiply each object's transform

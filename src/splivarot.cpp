@@ -354,8 +354,8 @@ sp_selected_path_boolop(Inkscape::Selection *selection, SPDesktop *desktop, bool
 
     if (bop == bool_op_diff || bop == bool_op_cut || bop == bool_op_slice) {
         // check in the tree to find which element of the selection list is topmost (for 2-operand commands only)
-        Inkscape::XML::Node *a = SP_OBJECT(il.front())->getRepr();
-        Inkscape::XML::Node *b = SP_OBJECT(il.back())->getRepr();
+        Inkscape::XML::Node *a = il.front()->getRepr();
+        Inkscape::XML::Node *b = il.back()->getRepr();
 
         if (a == NULL || b == NULL) {
             boolop_display_error_message(desktop, _("Unable to determine the <b>z-order</b> of the objects selected for difference, XOR, division, or path cut."));

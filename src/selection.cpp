@@ -517,7 +517,7 @@ uint Selection::numberOfLayers() {
     std::vector<SPItem*> const items = const_cast<Selection *>(this)->itemList();
     std::set<SPObject*> layers;
     for ( std::vector<SPItem*>::const_iterator iter=items.begin();iter!=items.end();iter++ ) {
-        SPObject *layer = _layers->layerForObject(SP_OBJECT(*iter));
+        SPObject *layer = _layers->layerForObject(*iter);
         layers.insert(layer);
     }
     return layers.size();
@@ -527,7 +527,7 @@ guint Selection::numberOfParents() {
     std::vector<SPItem*> const items = const_cast<Selection *>(this)->itemList();
     std::set<SPObject*> parents;
     for ( std::vector<SPItem*>::const_iterator iter=items.begin();iter!=items.end();iter++ ) {
-        SPObject *parent = SP_OBJECT(*iter)->parent;
+        SPObject *parent = (*iter)->parent;
         parents.insert(parent);
     }
     return parents.size();

@@ -889,14 +889,14 @@ sp_item_list_common_parent_group(std::vector<SPItem*> const items)
     if (items.empty()) {
         return NULL;
     }
-    SPObject *parent = SP_OBJECT(items[0])->parent;
+    SPObject *parent = items[0]->parent;
     // Strictly speaking this CAN happen, if user selects <svg> from Inkscape::XML editor
     if (!dynamic_cast<SPGroup *>(parent)) {
         return NULL;
     }
     for (std::vector<SPItem*>::const_iterator item=items.begin();item!=items.end();item++) {
     	if((*item)==items[0])continue;
-        if (SP_OBJECT(*item)->parent != parent) {
+        if ((*item)->parent != parent) {
             return NULL;
         }
     }
@@ -2896,7 +2896,7 @@ void sp_selection_to_marker(SPDesktop *desktop, bool apply)
     //items = g_slist_sort(items, (GCompareFunc) sp_object_compare_position);  // Why needed?
 
     // bottommost object, after sorting
-    SPObject *parent = SP_OBJECT(items[0])->parent;
+    SPObject *parent = items[0]->parent;
 
     Geom::Affine parent_transform;
     {
@@ -2911,7 +2911,7 @@ void sp_selection_to_marker(SPDesktop *desktop, bool apply)
     // Create a list of duplicates, to be pasted inside marker element.
     std::vector<Inkscape::XML::Node*> repr_copies;
     for (std::vector<SPItem*>::const_reverse_iterator i=items.rbegin();i!=items.rend();i++){
-        Inkscape::XML::Node *dup = SP_OBJECT(*i)->getRepr()->duplicate(xml_doc);
+        Inkscape::XML::Node *dup = (*i)->getRepr()->duplicate(xml_doc);
         repr_copies.push_back(dup);
     }
 
@@ -3248,7 +3248,7 @@ sp_selection_tile(SPDesktop *desktop, bool apply)
     sort(items.begin(),items.end(),sp_object_compare_position);
 
     // bottommost object, after sorting
-    SPObject *parent = SP_OBJECT(items[0])->parent;
+    SPObject *parent = items[0]->parent;
     
 
     Geom::Affine parent_transform;
@@ -3262,12 +3262,12 @@ sp_selection_tile(SPDesktop *desktop, bool apply)
     }
 
     // remember the position of the first item
-    gint pos = SP_OBJECT(items[0])->getRepr()->position();
+    gint pos = items[0]->getRepr()->position();
 
     // create a list of duplicates
     std::vector<Inkscape::XML::Node*> repr_copies;
     for (std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
-        Inkscape::XML::Node *dup = SP_OBJECT(*i)->getRepr()->duplicate(xml_doc);
+        Inkscape::XML::Node *dup = (*i)->getRepr()->duplicate(xml_doc);
         repr_copies.push_back(dup);
     }
 
@@ -3520,7 +3520,7 @@ void sp_selection_create_bitmap_copy(SPDesktop *desktop)
     // Create the filename.
     gchar *const basename = g_strdup_printf("%s-%s-%u.png",
                                             document->getName(),
-                                            SP_OBJECT(items[0])->getRepr()->attribute("id"),
+                                            items[0]->getRepr()->attribute("id"),
                                             current);
     // Imagemagick is known not to handle spaces in filenames, so we replace anything but letters,
     // digits, and a few other chars, with "_"
@@ -3540,8 +3540,8 @@ void sp_selection_create_bitmap_copy(SPDesktop *desktop)
     //g_print("%s\n", filepath);
 
     // Remember parent and z-order of the topmost one
-    gint pos = SP_OBJECT(items.back())->getRepr()->position();
-    SPObject *parent_object = SP_OBJECT(items.back())->parent;
+    gint pos = items.back()->getRepr()->position();
+    SPObject *parent_object = items.back()->parent;
     Inkscape::XML::Node *parent = parent_object->getRepr();
 
     // Calculate resolution
@@ -3857,7 +3857,7 @@ void sp_selection_set_mask(SPDesktop *desktop, bool apply_clip_path, bool apply_
         apply_to_items = g_slist_prepend(apply_to_items, desktop->currentLayer());
 
         for (std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++) {
-            Inkscape::XML::Node *dup = SP_OBJECT(*i)->getRepr()->duplicate(xml_doc);
+            Inkscape::XML::Node *dup = (*i)->getRepr()->duplicate(xml_doc);
             mask_items = g_slist_prepend(mask_items, dup);
 
             SPObject *item = *i;
@@ -3870,7 +3870,7 @@ void sp_selection_set_mask(SPDesktop *desktop, bool apply_clip_path, bool apply_
         }
     } else if (!topmost) {
         // topmost item is used as a mask, which is applied to other items in a selection
-        Inkscape::XML::Node *dup = SP_OBJECT(items[0])->getRepr()->duplicate(xml_doc);
+        Inkscape::XML::Node *dup = items[0]->getRepr()->duplicate(xml_doc);
         mask_items = g_slist_prepend(mask_items, dup);
 
         if (remove_original) {
@@ -4049,7 +4049,7 @@ void sp_selection_unset_mask(SPDesktop *desktop, bool apply_clip_path) {
             }
         }
 
-        SP_OBJECT(*i)->getRepr()->setAttribute(attributeName, "none");
+        (*i)->getRepr()->setAttribute(attributeName, "none");
 
         SPGroup *group = dynamic_cast<SPGroup *>(*i);
         if (ungroup_masked && group) {
@@ -4070,7 +4070,7 @@ void sp_selection_unset_mask(SPDesktop *desktop, bool apply_clip_path) {
         GSList *items_to_move = NULL;
         for ( SPObject *child = obj->firstChild() ; child; child = child->getNext() ) {
             // Collect all clipped paths and masks within a single group
-            Inkscape::XML::Node *copy = SP_OBJECT(child)->getRepr()->duplicate(xml_doc);
+            Inkscape::XML::Node *copy = child->getRepr()->duplicate(xml_doc);
             if(copy->attribute("inkscape:original-d") && copy->attribute("inkscape:path-effect"))
             {
                 copy->setAttribute("d", copy->attribute("inkscape:original-d"));

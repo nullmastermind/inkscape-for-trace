@@ -902,7 +902,7 @@ StrokeStyle::updateLine()
         return;
 
     std::vector<SPItem*> const objects = sel->itemList();
-    SPObject * const object = SP_OBJECT(objects[0]);
+    SPObject * const object = objects[0];
     SPStyle * const style = object->style;
 
     /* Markers */
@@ -1002,7 +1002,7 @@ StrokeStyle::scaleLine()
             /* Set dash */
             setScaledDash(css, ndash, dash, offset, width);
 
-            sp_desktop_apply_css_recursive (SP_OBJECT(*i), css, true);
+            sp_desktop_apply_css_recursive ((*i), css, true);
         }
 
         g_free(dash);
