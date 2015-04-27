@@ -39,7 +39,6 @@ namespace {
 * horizontally and yGap vertically
 */
 void removeoverlap(std::vector<SPItem*> const &items, double const xGap, double const yGap) {
-	using Inkscape::Util::GSListConstIterator;
 	std::vector<SPItem*> selected(items);
 	std::vector<Record> records;
 	std::vector<Rectangle *> rs;

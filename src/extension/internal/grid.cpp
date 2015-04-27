@@ -190,8 +190,6 @@ Grid::prefs_effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::View
 {
     SPDocument * current_document = view->doc();
 
-    using Inkscape::Util::GSListConstIterator;
-
     std::vector<SPItem*> selected = ((SPDesktop *)view)->getSelection()->itemList();
     Inkscape::XML::Node * first_select = NULL;
     if (!selected.empty()) {

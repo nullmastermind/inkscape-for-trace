@@ -97,7 +97,6 @@ void ActionAlign::do_action(SPDesktop *desktop, int index)
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool sel_as_group = prefs->getBool("/dialogs/align/sel-as-groups");
 
-    using Inkscape::Util::GSListConstIterator;
     std::vector<SPItem*> selected(selection->itemList());
     if (selected.empty()) return;
 
@@ -250,7 +249,6 @@ private :
         Inkscape::Selection *selection = desktop->getSelection();
         if (!selection) return;
 
-        using Inkscape::Util::GSListConstIterator;
         std::vector<SPItem*> selected(selection->itemList());
         if (selected.empty()) return;
 
@@ -548,7 +546,6 @@ private :
         Inkscape::Selection *selection = desktop->getSelection();
         if (!selection) return;
 
-        using Inkscape::Util::GSListConstIterator;
         std::vector<SPItem*> selected(selection->itemList());
         if (selected.empty()) return;
 
@@ -646,7 +643,6 @@ private :
         Inkscape::Selection *selection = desktop->getSelection();
         if (!selection) return;
 
-        using Inkscape::Util::GSListConstIterator;
         std::vector<SPItem*> selected(selection->itemList());
         if (selected.empty()) return;
 
@@ -745,7 +741,6 @@ private :
         Inkscape::Selection *selection = desktop->getSelection();
         if (!selection) return;
 
-        using Inkscape::Util::GSListConstIterator;
         std::vector<SPItem*> selected(selection->itemList());
         if (selected.empty()) return;
 

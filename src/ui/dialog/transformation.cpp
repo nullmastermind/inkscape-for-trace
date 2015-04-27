@@ -740,7 +740,6 @@ void Transformation::applyPageMove(Inkscape::Selection *selection)
 
         if (_check_move_relative.get_active()) {
             // shift each object relatively to the previous one
-            using Inkscape::Util::GSListConstIterator;
             std::vector<SPItem*> selected(selection->itemList());
             if (selected.empty()) return;
 
