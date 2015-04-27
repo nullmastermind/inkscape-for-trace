@@ -275,11 +275,11 @@ void LPEFilletChamfer::refreshKnots()
     }
 }
 
-void LPEFilletChamfer::doUpdateFillet(std::vector<Geom::Path> const& original_pathv, double power)
+void LPEFilletChamfer::doUpdateFillet(Geom::PathVector const &original_pathv, double power)
 {
     std::vector<Point> filletChamferData = fillet_chamfer_values.data();
     std::vector<Geom::Point> result;
-    std::vector<Geom::Path> original_pathv_processed = pathv_to_linear_and_cubic_beziers(original_pathv);
+    Geom::PathVector original_pathv_processed = pathv_to_linear_and_cubic_beziers(original_pathv);
     int counter = 0;
     for (PathVector::const_iterator path_it = original_pathv_processed.begin();
             path_it != original_pathv_processed.end(); ++path_it) {
@@ -323,11 +323,11 @@ void LPEFilletChamfer::doUpdateFillet(std::vector<Geom::Path> const& original_pa
     fillet_chamfer_values.param_set_and_write_new_value(result);
 }
 
-void LPEFilletChamfer::doChangeType(std::vector<Geom::Path> const& original_pathv, int type)
+void LPEFilletChamfer::doChangeType(Geom::PathVector const &original_pathv, int type)
 {
     std::vector<Point> filletChamferData = fillet_chamfer_values.data();
     std::vector<Geom::Point> result;
-    std::vector<Geom::Path> original_pathv_processed = pathv_to_linear_and_cubic_beziers(original_pathv);
+    Geom::PathVector original_pathv_processed = pathv_to_linear_and_cubic_beziers(original_pathv);
     int counter = 0;
     for (PathVector::const_iterator path_it = original_pathv_processed.begin(); path_it != original_pathv_processed.end(); ++path_it) {
         int pathCounter = 0;
@@ -466,7 +466,7 @@ int LPEFilletChamfer::getKnotsNumber(SPCurve const *c)
 {
     int nKnots = c->nodes_in_path();
     PathVector const pv =    pathv_to_linear_and_cubic_beziers(c->get_pathvector());
-    for (std::vector<Geom::Path>::const_iterator path_it = pv.begin();
+    for (Geom::PathVector::const_iterator path_it = pv.begin();
             path_it != pv.end(); ++path_it) {
         if (!(*path_it).closed()) {
             nKnots--;
@@ -476,17 +476,17 @@ int LPEFilletChamfer::getKnotsNumber(SPCurve const *c)
 }
 
 void
-LPEFilletChamfer::adjustForNewPath(std::vector<Geom::Path> const &path_in)
+LPEFilletChamfer::adjustForNewPath(Geom::PathVector const &path_in)
 {
     if (!path_in.empty()) {
         fillet_chamfer_values.recalculate_controlpoints_for_new_pwd2(pathv_to_linear_and_cubic_beziers(path_in)[0].toPwSb());
     }
 }
 
-std::vector<Geom::Path>
-LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
+Geom::PathVector
+LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
 {
-    std::vector<Geom::Path> pathvector_out;
+    Geom::PathVector pathvector_out;
     Piecewise<D2<SBasis> > pwd2_in = paths_to_pw(pathv_to_linear_and_cubic_beziers(path_in));
     pwd2_in = remove_short_cuts(pwd2_in, .01);
     Piecewise<D2<SBasis> > der = derivative(pwd2_in);
@@ -495,7 +495,7 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
     std::vector<Point> filletChamferData = fillet_chamfer_values.data();
     unsigned int counter = 0;
     const double K = (4.0 / 3.0) * (sqrt(2.0) - 1.0);
-    std::vector<Geom::Path> path_in_processed = pathv_to_linear_and_cubic_beziers(path_in);
+    Geom::PathVector path_in_processed = pathv_to_linear_and_cubic_beziers(path_in);
     for (PathVector::const_iterator path_it = path_in_processed.begin();
             path_it != path_in_processed.end(); ++path_it) {
         if (path_it->empty())

@@ -106,9 +106,9 @@ static int circle_circle_intersection(Circle const &circle0, Circle const &circl
                                       Point & p0, Point & p1)
 {
     Point X0 = circle0.center();
-    double r0 = circle0.ray();
+    double r0 = circle0.radius();
     Point X1 = circle1.center();
-    double r1 = circle1.ray();
+    double r1 = circle1.radius();
 
     /* dx and dy are the vertical and horizontal distances between
     * the circle centers.
@@ -313,7 +313,7 @@ LPEPowerStroke::doOnApply(SPLPEItem const* lpeitem)
             Geom::Path const &path = pathv.front();
             Geom::Path::size_type const size = path.size_default();
             if (!path.closed()) {
-            	points.push_back( Geom::Point(0.2,width) );
+                points.push_back( Geom::Point(0.2,width) );
             }
             points.push_back( Geom::Point(0.5*size,width) );
             if (!path.closed()) {
@@ -362,7 +362,7 @@ void LPEPowerStroke::doOnRemove(SPLPEItem const* lpeitem)
 }
 
 void
-LPEPowerStroke::adjustForNewPath(std::vector<Geom::Path> const & path_in)
+LPEPowerStroke::adjustForNewPath(Geom::PathVector const & path_in)
 {
     if (!path_in.empty()) {
         offset_points.recalculate_controlpoints_for_new_pwd2(path_in[0].toPwSb());
@@ -386,6 +386,8 @@ static Geom::Path path_from_piecewise_fix_cusps( Geom::Piecewise<Geom::D2<Geom::
     if (B.size() == 0) {
         return pb.peek().front();
     }
+
+    pb.setStitching(true);
 
     Geom::Point start = B[0].at0();
     pb.moveTo(start);
@@ -446,7 +448,7 @@ static Geom::Path path_from_piecewise_fix_cusps( Geom::Piecewise<Geom::D2<Geom::
                          break;
                     }
 
-                    pb.arcTo( ellipse.ray(Geom::X), ellipse.ray(Geom::Y), ellipse.rot_angle(),
+                    pb.arcTo( ellipse.ray(Geom::X), ellipse.ray(Geom::Y), ellipse.rotationAngle(),
                               false, width < 0, B[i].at0() );
 
                     break;
@@ -574,7 +576,7 @@ static Geom::Path path_from_piecewise_fix_cusps( Geom::Piecewise<Geom::D2<Geom::
 
                     Geom::Path spiro;
                     Spiro::spiro_run(controlpoints, 4, spiro);
-                    pb.append(spiro.portion(1,spiro.size_open()-1), Geom::Path::STITCH_DISCONTINUOUS);
+                    pb.append(spiro.portion(1, spiro.size_open() - 1));
                     break;
                 }
                 case LINEJOIN_BEVEL:
@@ -593,15 +595,15 @@ static Geom::Path path_from_piecewise_fix_cusps( Geom::Piecewise<Geom::D2<Geom::
                 if (cross.size() != 1) {
                     // empty crossing or too many crossings: default to bevel
                     pb.lineTo(B[i].at0());
-                    pb.append(bzr2, Geom::Path::STITCH_DISCONTINUOUS);
+                    pb.append(bzr2);
                 } else {
                     // :-) quick hack:
                     for (unsigned i=0; i < bzr1.size_open(); ++i) {
                         pb.backspace();
                     }
 
-                    pb.append( bzr1.portion(0, cross[0].ta), Geom::Path::STITCH_DISCONTINUOUS );
-                    pb.append( bzr2.portion(cross[0].tb, bzr2.size_open()), Geom::Path::STITCH_DISCONTINUOUS );
+                    pb.append( bzr1.portion(0, cross[0].ta) );
+                    pb.append( bzr2.portion(cross[0].tb, bzr2.size_open()) );
                 }
             }
         } else {
@@ -615,12 +617,12 @@ static Geom::Path path_from_piecewise_fix_cusps( Geom::Piecewise<Geom::D2<Geom::
 }
 
 
-std::vector<Geom::Path>
-LPEPowerStroke::doEffect_path (std::vector<Geom::Path> const & path_in)
+Geom::PathVector
+LPEPowerStroke::doEffect_path (Geom::PathVector const & path_in)
 {
     using namespace Geom;
 
-    std::vector<Geom::Path> path_out;
+    Geom::PathVector path_out;
     if (path_in.empty()) {
         return path_out;
     }
@@ -742,7 +744,7 @@ LPEPowerStroke::doEffect_path (std::vector<Geom::Path> const & path_in)
             }
         }
 
-        fixed_path.append(fixed_mirrorpath, Geom::Path::STITCH_DISCONTINUOUS);
+        fixed_path.append(fixed_mirrorpath);
 
         switch (start_linecap) {
             case LINECAP_ZERO_WIDTH:

@@ -1,7 +1,6 @@
-/**
- * \file
- * \brief Conic Section
- *
+/** @file
+ * @brief Conic Section
+ *//*
  * Authors:
  *      Nathan Hurst <njh@njhurst.com>
  *
@@ -32,8 +31,8 @@
  */
 
 
-#ifndef _2GEOM_CONIC_SECTION_H_
-#define _2GEOM_CONIC_SECTION_H_
+#ifndef LIB2GEOM_SEEN_CONICSEC_H
+#define LIB2GEOM_SEEN_CONICSEC_H
 
 #include <2geom/exception.h>
 #include <2geom/angle.h>
@@ -474,22 +473,22 @@ public:
 
     Rect arc_bound (const Point & P1, const Point & Q, const Point & P2) const;
 
-    std::vector<Point> allNearestPoints (const Point &P) const;
+    std::vector<Point> allNearestTimes (const Point &P) const;
 
     /*
      *  Return the point on the conic section nearest to the passed point "P".
      *
      *  P: the point to compute the nearest one
      */
-    Point nearestPoint (const Point &P) const
+    Point nearestTime (const Point &P) const
     {
-        std::vector<Point> points = allNearestPoints (P);
+        std::vector<Point> points = allNearestTimes (P);
         if ( !points.empty() )
         {
             return points.front();
         }
         // else
-        THROW_LOGICALERROR ("nearestPoint: no nearest point found");
+        THROW_LOGICALERROR ("nearestTime: no nearest point found");
         return Point();
     }
 
@@ -509,8 +508,7 @@ inline std::ostream &operator<< (std::ostream &out_file, const xAx &x) {
 };
 
 
-#endif // _2GEOM_CONIC_SECTION_H_
-
+#endif // LIB2GEOM_SEEN_CONICSEC_H
 
 /*
   Local Variables:

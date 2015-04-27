@@ -2,23 +2,27 @@
 set(2geom_SRC
 	affine.cpp
 	basic-intersection.cpp
+	bezier.cpp
 	bezier-clipping.cpp
 	bezier-curve.cpp
 	bezier-utils.cpp
+	cairo-path-sink.cpp
 	circle-circle.cpp
 	circle.cpp
 	# conic_section_clipper_impl.cpp
 	# conicsec.cpp
 	conjugate_gradient.cpp
-	convex-cover.cpp
+	convex-hull.cpp
+	coord.cpp
 	crossing.cpp
 	curve.cpp
 	d2-sbasis.cpp
 	ellipse.cpp
 	elliptical-arc.cpp
 	geom.cpp
+	intersection-graph.cpp
 	line.cpp
-	nearest-point.cpp
+	nearest-time.cpp
 	numeric/matrix.cpp
 	path-intersection.cpp
 	path-sink.cpp
@@ -48,6 +52,7 @@ set(2geom_SRC
 	toposweep.cpp
 	transforms.cpp
 	utils.cpp
+	viewbox.cpp
 
 
 	# -------

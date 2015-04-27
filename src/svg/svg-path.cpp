@@ -61,10 +61,17 @@ Geom::PathVector sp_svg_read_pathv(char const * str)
 }
 
 static void sp_svg_write_curve(Inkscape::SVG::PathString & str, Geom::Curve const * c) {
+    // TODO: this code needs to removed and replaced by appropriate path sink
     if(Geom::LineSegment const *line_segment = dynamic_cast<Geom::LineSegment const  *>(c)) {
         // don't serialize stitch segments
         if (!dynamic_cast<Geom::Path::StitchSegment const *>(c)) {
-            str.lineTo( (*line_segment)[1][0], (*line_segment)[1][1] );
+            if (line_segment->initialPoint()[Geom::X] == line_segment->finalPoint()[Geom::X]) {
+                str.verticalLineTo( line_segment->finalPoint()[Geom::Y] );
+            } else if (line_segment->initialPoint()[Geom::Y] == line_segment->finalPoint()[Geom::Y]) {
+                str.horizontalLineTo( line_segment->finalPoint()[Geom::X] );
+            } else {
+                str.lineTo( (*line_segment)[1][0], (*line_segment)[1][1] );
+            }
         }
     }
     else if(Geom::QuadraticBezier const *quadratic_bezier = dynamic_cast<Geom::QuadraticBezier const  *>(c)) {
@@ -81,12 +88,6 @@ static void sp_svg_write_curve(Inkscape::SVG::PathString & str, Geom::Curve cons
                    Geom::rad_to_deg(svg_elliptical_arc->rotationAngle()),
                    svg_elliptical_arc->largeArc(), svg_elliptical_arc->sweep(),
                    svg_elliptical_arc->finalPoint() );
-    }
-    else if(Geom::HLineSegment const *hline_segment = dynamic_cast<Geom::HLineSegment const  *>(c)) {
-        str.horizontalLineTo( hline_segment->finalPoint()[0] );
-    }
-    else if(Geom::VLineSegment const *vline_segment = dynamic_cast<Geom::VLineSegment const  *>(c)) {
-        str.verticalLineTo( vline_segment->finalPoint()[1] );
     } else { 
         //this case handles sbasis as well as all other curve types
         Geom::Path sbasis_path = Geom::cubicbezierpath_from_sbasis(c->toSBasis(), 0.1);

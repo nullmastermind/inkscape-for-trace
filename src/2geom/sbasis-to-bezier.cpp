@@ -37,7 +37,7 @@
 #include <2geom/choose.h>
 #include <2geom/path-sink.h>
 #include <2geom/exception.h>
-#include <2geom/convex-cover.h>
+#include <2geom/convex-hull.h>
 
 #include <iostream>
 
@@ -153,6 +153,15 @@ void sbasis_to_bezier (Bezier & bz, SBasis const& sb, size_t sz)
     bz[n] = sb[0][1];
 }
 
+void sbasis_to_bezier(D2<Bezier> &bz, D2<SBasis> const &sb, size_t sz)
+{
+    if (sz == 0) {
+        sz = std::max(sb[X].size(), sb[Y].size())*2;
+    }
+    sbasis_to_bezier(bz[X], sb[X], sz);
+    sbasis_to_bezier(bz[Y], sb[Y], sz);
+}
+
 /** Changes the basis of p to be Bernstein.
  \param p the D2 Symmetric basis polynomial
  \returns the D2 Bernstein basis polynomial
@@ -161,24 +170,9 @@ void sbasis_to_bezier (Bezier & bz, SBasis const& sb, size_t sz)
 */
 void sbasis_to_bezier (std::vector<Point> & bz, D2<SBasis> const& sb, size_t sz)
 {
-    Bezier bzx, bzy;
-    if(sz == 0) {
-        sz = std::max(sb[X].size(), sb[Y].size())*2;
-    }
-    sbasis_to_bezier(bzx, sb[X], sz);
-    sbasis_to_bezier(bzy, sb[Y], sz);
-    assert(bzx.size() == bzy.size());
-    size_t n = (bzx.size() >= bzy.size()) ? bzx.size() : bzy.size();
-
-    bz.resize(n, Point(0,0));
-    for (size_t i = 0; i < bzx.size(); ++i)
-    {
-        bz[i][X] = bzx[i];
-    }
-    for (size_t i = 0; i < bzy.size(); ++i)
-    {
-        bz[i][Y] = bzy[i];
-    }
+    D2<Bezier> bez;
+    sbasis_to_bezier(bez, sb, sz);
+    bz = bezier_points(bez);
 }
 
 /** Changes the basis of p to be Bernstein.
@@ -238,7 +232,7 @@ void sbasis_to_cubic_bezier (std::vector<Point> & bz, D2<SBasis> const& sb)
 
 //  is midpoint in hull: if not, the solution will be ill-conditioned, LP Bug 1428683
 
-    if (!bezhull.contains_point(Geom::Point(midx, midy)))
+    if (!bezhull.contains(Geom::Point(midx, midy)))
         return;
 
 //  calculate Bezier control arms
@@ -264,11 +258,11 @@ void sbasis_to_cubic_bezier (std::vector<Point> & bz, D2<SBasis> const& sb)
         dely[1] = 0;
     } else if  (std::abs(xprime[1]*yprime[0] - yprime[1]*xprime[0]) >  // general case : fit mid fxn value
         0.002 * std::abs(xprime[1]*xprime[0] + yprime[1]*yprime[0])) { // approx. 0.1 degree of angle
-        denom = xprime[1]*yprime[0] - yprime[1]*xprime[0];
+        denom = 3.0*(xprime[1]*yprime[0] - yprime[1]*xprime[0]);
         for (int i = 0; i < 2; ++i) {
             numer = xprime[1 - i]*midy - yprime[1 - i]*midx;
-            delx[i] = xprime[i]*numer/denom/3;
-            dely[i] = yprime[i]*numer/denom/3;
+            delx[i] = xprime[i]*numer/denom;
+            dely[i] = yprime[i]*numer/denom;
         }
     } else if ((xprime[0]*xprime[1] < 0) || (yprime[0]*yprime[1] < 0)) { // symmetric case : use distance of closest approach
         numer = midx*xprime[0] + midy*yprime[0];
@@ -514,7 +508,7 @@ path_from_sbasis(D2<SBasis> const &B, double tol, bool only_cubicbeziers) {
   If only_cubicbeziers is true, the resulting path may only contain CubicBezier curves.
  TODO: some of this logic should be lifted into svg-path
 */
-std::vector<Geom::Path>
+PathVector
 path_from_piecewise(Geom::Piecewise<Geom::D2<Geom::SBasis> > const &B, double tol, bool only_cubicbeziers) {
     Geom::PathBuilder pb;
     if(B.size() == 0) return pb.peek();

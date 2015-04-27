@@ -32,10 +32,8 @@
  * the specific language governing rights and limitations.
  */
 
-#ifndef SEEN_GEOM_FORWARD_H
-#define SEEN_GEOM_FORWARD_H
-
-#include <vector>   // include this dependency so PathVector can be defined more explicitly
+#ifndef LIB2GEOM_SEEN_FORWARD_H
+#define LIB2GEOM_SEEN_FORWARD_H
 
 namespace Geom {
 
@@ -79,7 +77,10 @@ class SVGEllipticalArc;
 
 // paths and path sequences
 class Path;
-typedef std::vector<Path> PathVector;
+class PathVector;
+struct PathPosition;
+class PathInterval;
+struct PathVectorPosition;
 
 // errors
 class Exception;
@@ -102,11 +103,6 @@ class Zoom;
 // templates
 template <typename> class D2;
 template <typename> class Piecewise;
-
-class Shape;
-class Region;
-class Hat;
-class Tri;
 
 // misc
 class SVGPathSink;

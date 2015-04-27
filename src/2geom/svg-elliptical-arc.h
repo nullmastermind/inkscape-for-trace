@@ -70,59 +70,57 @@ public:
         _updateCenterAndAngles(true);
     }
 
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
     virtual Curve *duplicate() const {
         return new SVGEllipticalArc(*this);
     }
     virtual Coord valueAt(Coord t, Dim2 d) const {
-        if (isDegenerate()) return chord().valueAt(t, d);
+        if (isChord()) return chord().valueAt(t, d);
         return EllipticalArc::valueAt(t, d);
     }
     virtual Point pointAt(Coord t) const {
-        if (isDegenerate()) return chord().pointAt(t);
+        if (isChord()) return chord().pointAt(t);
         return EllipticalArc::pointAt(t);
     }
     virtual std::vector<Point> pointAndDerivatives(Coord t, unsigned int n) const {
-        if (isDegenerate()) return chord().pointAndDerivatives(t, n);
+        if (isChord()) return chord().pointAndDerivatives(t, n);
         return EllipticalArc::pointAndDerivatives(t, n);
     }
     virtual Rect boundsExact() const {
-        if (isDegenerate()) return chord().boundsExact();
+        if (isChord()) return chord().boundsExact();
         return EllipticalArc::boundsExact();
     }
     virtual OptRect boundsLocal(OptInterval const &i, unsigned int deg) const {
-        if (isDegenerate()) return chord().boundsLocal(i, deg);
+        if (isChord()) return chord().boundsLocal(i, deg);
         return EllipticalArc::boundsLocal(i, deg);
     }
 
     virtual Curve *derivative() const {
-        if (isDegenerate()) return chord().derivative();
+        if (isChord()) return chord().derivative();
         return EllipticalArc::derivative();
     }
 
     virtual std::vector<Coord> roots(Coord v, Dim2 d) const {
-        if (isDegenerate()) return chord().roots(v, d);
+        if (isChord()) return chord().roots(v, d);
         return EllipticalArc::roots(v, d);
     }
 #ifdef HAVE_GSL
-    virtual std::vector<Coord> allNearestPoints( Point const& p, double from = 0, double to = 1 ) const {
-        if (isDegenerate()) {
+    virtual std::vector<Coord> allNearestTimes( Point const& p, double from = 0, double to = 1 ) const {
+        if (isChord()) {
             std::vector<Coord> result;
-            result.push_back(chord().nearestPoint(p, from, to));
+            result.push_back(chord().nearestTime(p, from, to));
             return result;
         }
-        return EllipticalArc::allNearestPoints(p, from, to);
+        return EllipticalArc::allNearestTimes(p, from, to);
     }
 #endif
     virtual D2<SBasis> toSBasis() const {
-        if (isDegenerate()) return chord().toSBasis();
+        if (isChord()) return chord().toSBasis();
         return EllipticalArc::toSBasis();
     }
     virtual bool isSVGCompliant() const { return true; }
     // TODO move SVG-specific behavior here.
 //protected:
     //virtual void _updateCenterAndAngles();
-#endif
 }; // end class SVGEllipticalArc
 
 /*

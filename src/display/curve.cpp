@@ -476,7 +476,7 @@ SPCurve::last_point() const
 SPCurve *
 SPCurve::create_reverse() const
 {
-    SPCurve *new_curve = new SPCurve(Geom::reverse_paths_and_order(_pathv));
+    SPCurve *new_curve = new SPCurve(_pathv.reversed());
 
     return new_curve;
 }

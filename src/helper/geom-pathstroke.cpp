@@ -34,7 +34,7 @@ int circle_circle_intersection(Point X0, double r0, Point X1, double r1, Point &
 static int circle_line_intersection(Circle C0, Point X0, Point X1, Point &p0, Point &p1)
 {
     /* equation of a circle: (x - h)^2 + (y - k)^2 = r^2 */
-    Coord r = C0.ray();
+    Coord r = C0.radius();
     Coord h = C0.center()[X];
     Coord k = C0.center()[Y];
 
@@ -252,8 +252,8 @@ void extrapolate_join(Geom::Path& res, Geom::Curve const& outgoing, double miter
 
     if (!inc_ls && !out_ls) {
         // Two circles
-        solutions = Geom::circle_circle_intersection(circle1.center(), circle1.ray(),
-                                                     circle2.center(), circle2.ray(),
+        solutions = Geom::circle_circle_intersection(circle1.center(), circle1.radius(),
+                                                     circle2.center(), circle2.radius(),
                                                      points[0], points[1]);
         if (solutions == 2) {
             sol = pick_solution(points, tang2, endPt);
@@ -486,7 +486,7 @@ void get_cubic_data(Geom::CubicBezier const& bez, double time, double& len, doub
             if (Geom::are_near(l, 0)) {
                 return; // this isn't a segment...
             }
-	    rad = 1e8;
+        rad = 1e8;
         } else {
             rad = -l * (Geom::dot(der2, der2) / Geom::cross(der3, der2));
         }
@@ -538,7 +538,7 @@ void offset_cubic(Geom::Path& p, Geom::CubicBezier const& bez, double width, dou
     // reached maximum recursive depth
     // don't bother with any more correction
     if (levels == 0) {
-        p.append(c, Geom::Path::STITCH_DISCONTINUOUS);
+        p.append(c);
         return;
     }
 
@@ -570,7 +570,7 @@ void offset_quadratic(Geom::Path& p, Geom::QuadraticBezier const& bez, double wi
     // cheat
     // it's faster
     // seriously
-    std::vector<Geom::Point> points = bez.points();
+    std::vector<Geom::Point> points = bez.controlPoints();
     Geom::Point b1 = points[0] + (2./3) * (points[1] - points[0]);
     Geom::Point b2 = b1 + (1./3) * (points[2] - points[0]);
     Geom::CubicBezier cub = Geom::CubicBezier(points[0], b1, b2, points[2]);
@@ -658,7 +658,7 @@ Geom::PathVector outline(Geom::Path const& input, double width, double miter, Li
 
     Geom::PathBuilder res;
     Geom::Path with_dir = half_outline(input, width/2., miter, join);
-    Geom::Path against_dir = half_outline(input.reverse(), width/2., miter, join);
+    Geom::Path against_dir = half_outline(input.reversed(), width/2., miter, join);
 
     res.moveTo(with_dir[0].initialPoint());
     res.append(with_dir);
@@ -705,6 +705,9 @@ Geom::Path half_outline(Geom::Path const& input, double width, double miter, Lin
     Geom::Point tang1 = input[0].unitTangentAt(0);
     Geom::Point start = input.initialPoint() + tang1 * width;
     Geom::Path temp;
+
+    res.setStitching(true);
+    temp.setStitching(true);
 
     res.start(start);
 

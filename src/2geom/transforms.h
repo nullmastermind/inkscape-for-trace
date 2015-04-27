@@ -199,6 +199,7 @@ public:
     /** @brief Get the characteristic vector of the rotation.
      * @return A vector that would be obtained by applying this transform to the X versor. */
     Point vector() const { return vec; }
+    Coord angle() const { return atan2(vec); }
     Coord operator[](Dim2 dim) const { return vec[dim]; }
     Coord operator[](unsigned dim) const { return vec[dim]; }
     Rotate &operator*=(Rotate const &o) { vec *= o; return *this; }
@@ -343,6 +344,8 @@ inline Translate pow(Translate const &t, int n) {
 
 /** @brief Reflects objects about line.
  * The line, defined by a vector along the line and a point on it, acts as a mirror.
+ * @ingroup Transforms
+ * @see Line::reflection()
  */
 Affine reflection(Point const & vector, Point const & origin);
 

@@ -32,6 +32,9 @@
  *
  */
 
+#ifndef LIB2GEOM_SEEN_QUADTREE_H
+#define LIB2GEOM_SEEN_QUADTREE_H
+
 #include <vector>
 #include <cassert>
 
@@ -64,6 +67,8 @@ public:
                  * this case should be never reached */
                 assert(false);
         }        
+        assert(false);
+        return Rect();
     }
 };
 
@@ -87,6 +92,7 @@ private:
 
 };
 
+#endif
 /*
   Local Variables:
   mode:c++

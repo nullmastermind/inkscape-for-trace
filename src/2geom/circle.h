@@ -1,11 +1,11 @@
-/**
- * \file
- * \brief Circles
+/** @file
+ * @brief Circle shape
  *//*
  * Authors:
- *      Marco Cecchetti <mrcekets at gmail.com>
+ *   Marco Cecchetti <mrcekets at gmail.com>
+ *   Krzysztof Kosiński <tweenk.pl@gmail.com>
  *
- * Copyright 2008  authors
+ * Copyright 2008-2014 Authors
  *
  * This library is free software; you can redistribute it and/or
  * modify it either under the terms of the GNU Lesser General Public
@@ -34,83 +34,72 @@
 #ifndef LIB2GEOM_SEEN_CIRCLE_H
 #define LIB2GEOM_SEEN_CIRCLE_H
 
-#include <vector>
 #include <2geom/point.h>
-#include <2geom/exception.h>
-#include <2geom/path.h>
+#include <2geom/forward.h>
+#include <2geom/transforms.h>
 
 namespace Geom {
 
 class EllipticalArc;
 
+/** @brief Set of all points at a fixed distance from the center
+ * @ingroup Shapes */
 class Circle
+    : MultipliableNoncommutative< Circle, Translate
+    , MultipliableNoncommutative< Circle, Rotate
+    , MultipliableNoncommutative< Circle, Zoom
+      > > >
 {
-  public:
-    Circle()
+    Point _center;
+    Coord _radius;
+
+public:
+    Circle() {}
+    Circle(Coord cx, Coord cy, Coord r)
+        : _center(cx, cy), _radius(r)
+    {}
+    Circle(Point const &center, Coord r)
+        : _center(center), _radius(r)
     {}
 
-    Circle(double cx, double cy, double r)
-        : m_centre(cx, cy), m_ray(r)
-    {
+    Circle(Coord A, Coord B, Coord C, Coord D) {
+        setCoefficients(A, B, C, D);
     }
-
-    Circle(Point center, double r)
-        : m_centre(center), m_ray(r)
-    {
-    }
-
-    Circle(double A, double B, double C, double D)
-    {
-        set(A, B, C, D);
-    }
-
-    Circle(std::vector<Point> const& points)
-    {
-        set(points);
-    }
-
-    void set(double cx, double cy, double r)
-    {
-        m_centre[X] = cx;
-        m_centre[Y] = cy;
-        m_ray = r;
-    }
-
 
     // build a circle by its implicit equation:
     // Ax^2 + Ay^2 + Bx + Cy + D = 0
-    void set(double A, double B, double C, double D);
+    void setCoefficients(Coord A, Coord B, Coord C, Coord D);
 
-    // build up the best fitting circle wrt the passed points
-    // prerequisite: at least 3 points must be passed
-    void set(std::vector<Point> const& points);
+    /** @brief Fit the circle to the passed points using the least squares method.
+     * @param points Samples at the perimeter of the circle */
+    void fit(std::vector<Point> const &points);
 
     EllipticalArc *
     arc(Point const& initial, Point const& inner, Point const& final,
-        bool _svg_compliant = true);
+        bool svg_compliant = true);
 
     D2<SBasis> toSBasis();
-    void getPath(std::vector<Path> &path_out);
+    void getPath(PathVector &path_out);
 
-    Point center() const
-    {
-        return m_centre;
+    Point center() const { return _center; }
+    Coord center(Dim2 d) const { return _center[d]; }
+    Coord radius() const { return _radius; }
+
+    void setCenter(Point const &p) { _center = p; }
+    void setRadius(Coord c) { _radius = c; }
+
+    Circle &operator*=(Translate const &t) {
+        _center *= t;
+        return *this;
     }
-
-    Coord center(Dim2 d) const
-    {
-        return m_centre[d];
+    Circle &operator*=(Rotate const &) {
+        return *this;
     }
-
-    Coord ray() const
-    {
-        return m_ray;
+    Circle &operator*=(Zoom const &z) {
+        _center *= z;
+        _radius *= z.scale();
+        return *this;
     }
-
-
-  private:
-    Point m_centre;
-    Coord m_ray;
 };
 
 } // end namespace Geom

@@ -305,8 +305,7 @@ sp_pathvector_boolop(Geom::PathVector const &pathva, Geom::PathVector const &pat
     delete originaux[0];
     delete originaux[1];
 
-    std::vector<Geom::Path> outres =  Geom::parse_svg_path(res->svg_dump_path());
-
+    Geom::PathVector outres =  Geom::parse_svg_path(res->svg_dump_path());
 
     delete res;
     return outres;
@@ -315,7 +314,7 @@ sp_pathvector_boolop(Geom::PathVector const &pathva, Geom::PathVector const &pat
 
 /* Convert from a livarot path to a 2geom PathVector */
 Geom::PathVector pathliv_to_pathvector(Path *pathliv){
-    std::vector<Geom::Path> outres =  Geom::parse_svg_path(pathliv->svg_dump_path());
+    Geom::PathVector outres =  Geom::parse_svg_path(pathliv->svg_dump_path());
     return outres;
 }
 
@@ -2273,15 +2272,11 @@ Ancetre(Inkscape::XML::Node *a, Inkscape::XML::Node *who)
 }
 
 // derived from Path_for_item
-// there must be some other way to load dest directly from epathv,  without going through pathv...
 Path *
 Path_for_pathvector(Geom::PathVector const &epathv)
 {
-    Geom::PathVector *pathv = new Geom::PathVector;
-    std::copy(epathv.begin(), epathv.end(), std::back_inserter(*pathv)); 
-    
     Path *dest = new Path;
-    dest->LoadPathVector(*pathv);    
+    dest->LoadPathVector(epathv);    
     delete pathv;
     
     return dest;

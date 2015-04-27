@@ -34,8 +34,8 @@
  * the specific language governing rights and limitations.
  */
 
-#ifndef _2GEOM_ELLIPTICAL_ARC_H_
-#define _2GEOM_ELLIPTICAL_ARC_H_
+#ifndef LIB2GEOM_SEEN_ELLIPTICAL_ARC_H
+#define LIB2GEOM_SEEN_ELLIPTICAL_ARC_H
 
 #include <algorithm>
 #include <2geom/angle.h>
@@ -71,9 +71,9 @@ public:
      * @param sweep If true, the clockwise arc is chosen, otherwise the counter-clockwise
      *              arc is chosen
      * @param fp Final point of the arc */
-    EllipticalArc( Point ip, Coord rx, Coord ry,
+    EllipticalArc( Point const &ip, Coord rx, Coord ry,
                    Coord rot_angle, bool large_arc, bool sweep,
-                   Point fp
+                   Point const &fp
                  )
         : AngleInterval(0,0,sweep)
         , _initial_point(ip)
@@ -137,7 +137,7 @@ public:
      * recalculations of the center and extreme angles.
      * @param ip New initial point
      * @param fp New final point */
-    void setExtremes(Point const &ip, Point const &fp) {
+    void setEndpoints(Point const &ip, Point const &fp) {
         _initial_point = ip;
         _final_point = fp;
         _updateCenterAndAngles(isSVGCompliant());
@@ -182,6 +182,11 @@ public:
     /** @brief Check whether the arc adheres to SVG 1.1 implementation guidelines */
     virtual bool isSVGCompliant() const { return false; }
 
+    /// Check whether both rays are nonzero
+    bool isChord() const {
+        return _rays[0] == 0 || _rays[Y] == 0;
+    }
+
     std::pair<EllipticalArc, EllipticalArc> subdivide(Coord t) const {
         EllipticalArc* arc1 = static_cast<EllipticalArc*>(portion(0, t));
         EllipticalArc* arc2 = static_cast<EllipticalArc*>(portion(t, 1));
@@ -193,7 +198,6 @@ public:
     }
 
     // implementation of overloads goes here
-#ifndef DOXYGEN_SHOULD_SKIP_THIS
     virtual Point initialPoint() const { return _initial_point; }
     virtual Point finalPoint() const { return _final_point; }
     virtual Curve* duplicate() const { return new EllipticalArc(*this); }
@@ -206,7 +210,7 @@ public:
         _updateCenterAndAngles(isSVGCompliant());
     }
     virtual bool isDegenerate() const {
-        return ( are_near(ray(X), 0) || are_near(ray(Y), 0) );
+        return _initial_point == _final_point;
     }
     virtual Rect boundsFast() const {
         return boundsExact();
@@ -218,17 +222,17 @@ public:
     }
     virtual std::vector<double> roots(double v, Dim2 d) const;
 #ifdef HAVE_GSL
-    virtual std::vector<double> allNearestPoints( Point const& p, double from = 0, double to = 1 ) const;
+    virtual std::vector<double> allNearestTimes( Point const& p, double from = 0, double to = 1 ) const;
 #endif
-    virtual double nearestPoint( Point const& p, double from = 0, double to = 1 ) const {
+    virtual double nearestTime( Point const& p, double from = 0, double to = 1 ) const {
         if ( are_near(ray(X), ray(Y)) && are_near(center(), p) ) {
             return from;
         }
-        return allNearestPoints(p, from, to).front();
+        return allNearestTimes(p, from, to).front();
     }
     virtual int degreesOfFreedom() const { return 7; }
     virtual Curve *derivative() const;
-    virtual Curve *transformed(Affine const &m) const;
+    virtual void transform(Affine const &m);
     virtual Curve &operator*=(Translate const &m) {
         _initial_point += m.vector();
         _final_point += m.vector();
@@ -251,7 +255,8 @@ public:
     }
     virtual Curve* portion(double f, double t) const;
     virtual Curve* reverse() const;
-#endif
+    virtual bool operator==(Curve const &c) const;
+    virtual void feed(PathSink &sink, bool moveto_initial) const;
 
 protected:
     void _updateCenterAndAngles(bool svg);
@@ -267,7 +272,7 @@ private:
 
 } // end namespace Geom
 
-#endif // _2GEOM_ELLIPTICAL_ARC_H_
+#endif // LIB2GEOM_SEEN_ELLIPTICAL_ARC_H
 
 /*
   Local Variables:

@@ -205,7 +205,7 @@ void FilletChamferPointArrayParam::recalculate_controlpoints_for_new_pwd2(
                         //delete temp vector
                         std::vector<Point>().swap(tmp);
                         if (last_pathv.size() > counterPaths) {
-                            last_pathv[counterPaths] = last_pathv[counterPaths].reverse();
+                            last_pathv[counterPaths] = last_pathv[counterPaths].reversed();
                         }
                     } else {
                         if (last_pathv.size() > counterPaths) {
@@ -223,7 +223,7 @@ void FilletChamferPointArrayParam::recalculate_controlpoints_for_new_pwd2(
                     }
                     double xPos = 0;
                     if (_vector[1][X] > 0) {
-                        xPos = nearest_point(curve_it1->initialPoint(), pwd2_in);
+                        xPos = nearest_time(curve_it1->initialPoint(), pwd2_in);
                     }
                     if (nodetype == NODE_CUSP) {
                         result.push_back(Point(xPos, 1));
@@ -234,7 +234,7 @@ void FilletChamferPointArrayParam::recalculate_controlpoints_for_new_pwd2(
                     double xPos = _vector[counter - offset][X];
                     if (_vector.size() <= (unsigned)(counter - offset)) {
                         if (_vector[1][X] > 0) {
-                            xPos = nearest_point(curve_it1->initialPoint(), pwd2_in);
+                            xPos = nearest_time(curve_it1->initialPoint(), pwd2_in);
                         } else {
                             xPos = 0;
                         }
@@ -403,8 +403,8 @@ void FilletChamferPointArrayParam::updateCanvasIndicators()
         Geom::Affine aff = Geom::Affine();
         aff *= Geom::Scale(helper_size);
         aff *= Geom::Rotate(ray1.angle() - deg_to_rad(270));
+        aff *= Geom::Translate(last_pwd2[i].valueAt(Xvalue));
         pathv *= aff;
-        pathv += last_pwd2[i].valueAt(Xvalue);
         hp.push_back(pathv[0]);
         hp.push_back(pathv[1]);
         i++;
@@ -420,7 +420,7 @@ void FilletChamferPointArrayParam::addCanvasIndicators(
 double FilletChamferPointArrayParam::rad_to_len(int index, double rad)
 {
     double len = 0;
-    std::vector<Geom::Path> subpaths = path_from_piecewise(last_pwd2, 0.1);
+    Geom::PathVector subpaths = path_from_piecewise(last_pwd2, 0.1);
     std::pair<std::size_t, std::size_t> positions = get_positions(index, subpaths);
     D2<SBasis> A = last_pwd2[last_index(index, subpaths)];
     if(positions.second != 0){
@@ -438,7 +438,7 @@ double FilletChamferPointArrayParam::rad_to_len(int index, double rad)
     Geom::Crossings cs = Geom::crossings(p0, p1);
     if(cs.size() > 0){
         Point cp =p0(cs[0].ta);
-        double p0pt = nearest_point(cp, B);
+        double p0pt = nearest_time(cp, B);
         len = time_to_len(index,p0pt);
     } else {
         if(rad < 0){
@@ -453,7 +453,7 @@ double FilletChamferPointArrayParam::len_to_rad(int index, double len)
     double rad = 0;
     double tmp_len = _vector[index][X];
     _vector[index] = Geom::Point(len,_vector[index][Y]);
-    std::vector<Geom::Path> subpaths = path_from_piecewise(last_pwd2, 0.1);
+    Geom::PathVector subpaths = path_from_piecewise(last_pwd2, 0.1);
     std::pair<std::size_t, std::size_t> positions = get_positions(index, subpaths);
     Piecewise<D2<SBasis> > u;
     u.push_cut(0);          
@@ -492,7 +492,7 @@ double FilletChamferPointArrayParam::len_to_rad(int index, double len)
     return rad * -1;
 }
 
-std::vector<double> FilletChamferPointArrayParam::get_times(int index, std::vector<Geom::Path> subpaths, bool last)
+std::vector<double> FilletChamferPointArrayParam::get_times(int index, Geom::PathVector subpaths, bool last)
 {
     const double tolerance = 0.001;
     const double gapHelper = 0.00001;
@@ -541,7 +541,7 @@ std::vector<double> FilletChamferPointArrayParam::get_times(int index, std::vect
     return out;
 }
 
-std::pair<std::size_t, std::size_t> FilletChamferPointArrayParam::get_positions(int index, std::vector<Geom::Path> subpaths)
+std::pair<std::size_t, std::size_t> FilletChamferPointArrayParam::get_positions(int index, Geom::PathVector subpaths)
 {
     int counter = -1;
     std::size_t first = 0;
@@ -583,7 +583,7 @@ std::pair<std::size_t, std::size_t> FilletChamferPointArrayParam::get_positions(
     return out;
 }
 
-int FilletChamferPointArrayParam::last_index(int index, std::vector<Geom::Path> subpaths)
+int FilletChamferPointArrayParam::last_index(int index, Geom::PathVector subpaths)
 {
     int counter = -1;
     bool inSubpath = false;
@@ -709,9 +709,9 @@ void FilletChamferPointArrayParamKnotHolderEntity::knot_set(Point const &p,
         return;
     }
     Piecewise<D2<SBasis> > const &pwd2 = _pparam->get_pwd2();
-    double t = nearest_point(p, pwd2[_index]);
+    double t = nearest_time(p, pwd2[_index]);
     Geom::Point const s = snap_knot_position(pwd2[_index].valueAt(t), state);
-    t = nearest_point(s, pwd2[_index]);
+    t = nearest_time(s, pwd2[_index]);
     if (t == 1) {
         t = 0.9999;
     }
@@ -803,7 +803,7 @@ void FilletChamferPointArrayParamKnotHolderEntity::knot_click(guint state)
         if(xModified < 0 && !_pparam->use_distance){
              xModified = _pparam->len_to_rad(_index, _pparam->_vector.at(_index).x());
         }
-        std::vector<Geom::Path> subpaths = path_from_piecewise(_pparam->last_pwd2, 0.1);
+        Geom::PathVector subpaths = path_from_piecewise(_pparam->last_pwd2, 0.1);
         std::pair<std::size_t, std::size_t> positions = _pparam->get_positions(_index, subpaths);
         D2<SBasis> A = _pparam->last_pwd2[_pparam->last_index(_index, subpaths)];
         if(positions.second != 0){

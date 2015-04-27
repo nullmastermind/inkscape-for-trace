@@ -40,10 +40,10 @@ LPECircleWithRadius::~LPECircleWithRadius()
 
 }
 
-std::vector<Geom::Path>
-LPECircleWithRadius::doEffect_path (std::vector<Geom::Path> const & path_in)
+Geom::PathVector
+LPECircleWithRadius::doEffect_path (Geom::PathVector const & path_in)
 {
-    std::vector<Geom::Path> path_out = std::vector<Geom::Path>();
+    Geom::PathVector path_out = Geom::PathVector();
 
     Geom::Point center = path_in[0].initialPoint();
     Geom::Point pt = path_in[0].finalPoint();

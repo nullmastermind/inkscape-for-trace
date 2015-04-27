@@ -34,18 +34,18 @@
 #include <limits>
 #include <memory>
 
-#include <2geom/elliptical-arc.h>
-#include <2geom/ellipse.h>
-#include <2geom/sbasis-geometric.h>
 #include <2geom/bezier-curve.h>
+#include <2geom/ellipse.h>
+#include <2geom/elliptical-arc.h>
+#include <2geom/path-sink.h>
 #include <2geom/poly.h>
+#include <2geom/sbasis-geometric.h>
 #include <2geom/transforms.h>
 #include <2geom/utils.h>
 
 #include <2geom/numeric/vector.h>
 #include <2geom/numeric/fitting-tool.h>
 #include <2geom/numeric/fitting-model.h>
-
 
 namespace Geom
 {
@@ -93,6 +93,8 @@ namespace Geom
 
 Rect EllipticalArc::boundsExact() const
 {
+    using std::swap;
+
     double extremes[4];
     double sinrot, cosrot;
     sincos(_rot_angle, sinrot, cosrot);
@@ -109,11 +111,11 @@ Rect EllipticalArc::boundsExact() const
     arc_extremes[0] = initialPoint()[X];
     arc_extremes[1] = finalPoint()[X];
     if ( arc_extremes[0] < arc_extremes[1] )
-        std::swap(arc_extremes[0], arc_extremes[1]);
+        swap(arc_extremes[0], arc_extremes[1]);
     arc_extremes[2] = initialPoint()[Y];
     arc_extremes[3] = finalPoint()[Y];
     if ( arc_extremes[2] < arc_extremes[3] )
-        std::swap(arc_extremes[2], arc_extremes[3]);
+        swap(arc_extremes[2], arc_extremes[3]);
 
     if ( !are_near(initialPoint(), finalPoint()) ) {
         for (unsigned i = 0; i < 4; ++i) {
@@ -266,8 +268,12 @@ std::vector<Coord> EllipticalArc::roots(Coord v, Dim2 d) const
     }
 
     double rotx, roty;
-    sincos(_rot_angle, roty, rotx); /// \todo sin and cos are calculated in many places in this function, optimize this a bit!
-    if (d == X) roty = -roty;
+    if (d == X) {
+        sincos(_rot_angle, roty, rotx);
+        roty = -roty;
+    } else {
+        sincos(_rot_angle, rotx, roty);
+    }
 
     double rxrotx = ray(X) * rotx;
     double c_v = center(d) - v;
@@ -428,7 +434,7 @@ Curve *EllipticalArc::reverse() const {
 }
 
 #ifdef HAVE_GSL  // GSL is required for function "solve_reals"
-std::vector<double> EllipticalArc::allNearestPoints( Point const& p, double from, double to ) const
+std::vector<double> EllipticalArc::allNearestTimes( Point const& p, double from, double to ) const
 {
     std::vector<double> result;
 
@@ -446,7 +452,7 @@ std::vector<double> EllipticalArc::allNearestPoints( Point const& p, double from
     else if ( are_near(ray(X), 0) || are_near(ray(Y), 0) )
     {
         LineSegment seg(pointAt(from), pointAt(to));
-        Point np = seg.pointAt( seg.nearestPoint(p) );
+        Point np = seg.pointAt( seg.nearestTime(p) );
         if ( are_near(ray(Y), 0) )
         {
             if ( are_near(_rot_angle, M_PI/2)
@@ -570,7 +576,7 @@ std::vector<double> EllipticalArc::allNearestPoints( Point const& p, double from
 
     double mindistsq1 = std::numeric_limits<double>::max();
     double mindistsq2 = std::numeric_limits<double>::max();
-    double dsq;
+    double dsq = 0;
     unsigned int mi1 = 0, mi2 = 0;
     for ( unsigned int i = 0; i < real_sol.size(); ++i )
     {
@@ -887,16 +893,50 @@ D2<SBasis> EllipticalArc::toSBasis() const
     return arc;
 }
 
-
-Curve *EllipticalArc::transformed(Affine const& m) const
+void EllipticalArc::transform(Affine const& m)
 {
+    if (isChord()) {
+        _initial_point *= m;
+        _final_point *= m;
+        _center = middle_point(_initial_point, _final_point);
+        _rays = Point(0,0);
+        _rot_angle = 0;
+        return;
+    }
+
+    // TODO avoid allocating a new arc here
     Ellipse e(center(X), center(Y), ray(X), ray(Y), _rot_angle);
-    Ellipse et = e.transformed(m);
+    e *= m;
     Point inner_point = pointAt(0.5);
-    return et.arc( initialPoint() * m,
-                                  inner_point * m,
-                                  finalPoint() * m,
-                                  isSVGCompliant() );
+    EllipticalArc *arc = e.arc(initialPoint() * m,
+                               inner_point * m,
+                               finalPoint() * m,
+                               isSVGCompliant());
+    *this = *arc;
+    delete arc;
+}
+
+bool EllipticalArc::operator==(Curve const &c) const
+{
+    EllipticalArc const *other = dynamic_cast<EllipticalArc const *>(&c);
+    if (!other) return false;
+    if (_initial_point != other->_initial_point) return false;
+    if (_final_point != other->_final_point) return false;
+    // TODO: all arcs with ellipse rays which are too small
+    //       and fall back to a line should probably be equal
+    if (_rays != other->_rays) return false;
+    if (_rot_angle != other->_rot_angle) return false;
+    if (_large_arc != other->_large_arc) return false;
+    if (_sweep != other->_sweep) return false;
+    return true;
+}
+
+void EllipticalArc::feed(PathSink &sink, bool moveto_initial) const
+{
+    if (moveto_initial) {
+        sink.moveTo(_initial_point);
+    }
+    sink.arcTo(_rays[X], _rays[Y], _rot_angle, _large_arc, _sweep, _final_point);
 }
 
 Coord EllipticalArc::map_to_01(Coord angle) const

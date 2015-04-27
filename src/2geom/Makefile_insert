@@ -15,10 +15,13 @@
 	2geom/bezier-clipping.cpp \
 	2geom/bezier-curve.cpp \
 	2geom/bezier-curve.h \
+	2geom/bezier.cpp \
 	2geom/bezier.h \
 	2geom/bezier-to-sbasis.h \
 	2geom/bezier-utils.cpp \
 	2geom/bezier-utils.h \
+	2geom/cairo-path-sink.cpp \
+	2geom/cairo-path-sink.h \
 	2geom/choose.h \
 	2geom/circle-circle.cpp \
 	2geom/circle.cpp \
@@ -32,10 +35,9 @@
 	2geom/conic_section_clipper.h \
 	2geom/conic_section_clipper_impl.cpp \
 	2geom/conic_section_clipper_impl.h \
-	2geom/conjugate_gradient.cpp \
-	2geom/conjugate_gradient.h \
-	2geom/convex-cover.cpp \
-	2geom/convex-cover.h \
+	2geom/convex-hull.cpp \
+	2geom/convex-hull.h \
+	2geom/coord.cpp \
 	2geom/coord.h \
 	2geom/crossing.cpp \
 	2geom/crossing.h \
@@ -56,6 +58,9 @@
 	2geom/geom.cpp \
 	2geom/geom.h \
 	2geom/hvlinesegment.h \
+	2geom/intersection.h \
+	2geom/intersection-graph.cpp \
+	2geom/intersection-graph.h \
 	2geom/interval.h \
 	2geom/int-interval.h \
 	2geom/int-point.h \
@@ -64,8 +69,8 @@
 	2geom/line.cpp \
 	2geom/line.h \
 	2geom/math-utils.h \
-	2geom/nearest-point.cpp \
-	2geom/nearest-point.h \
+	2geom/nearest-time.cpp \
+	2geom/nearest-time.h \
 	2geom/ord.h \
 	2geom/path.cpp \
 	2geom/path.h \
@@ -88,8 +93,6 @@
 	2geom/rect.cpp \
 	2geom/rect.h \
 	2geom/recursive-bezier-intersection.cpp \
-	2geom/region.cpp \
-	2geom/region.h \
 	2geom/sbasis-2d.cpp \
 	2geom/sbasis-2d.h \
 	2geom/sbasis.cpp \
@@ -104,8 +107,6 @@
 	2geom/sbasis-roots.cpp \
 	2geom/sbasis-to-bezier.cpp \
 	2geom/sbasis-to-bezier.h \
-	2geom/shape.cpp \
-	2geom/shape.h \
 	2geom/solve-bezier.cpp \
 	2geom/solve-bezier-one-d.cpp \
 	2geom/solve-bezier-parametric.cpp \
@@ -114,6 +115,8 @@
 	2geom/svg-elliptical-arc.h \
 	2geom/svg-path-parser.cpp \
 	2geom/svg-path-parser.h \
+	2geom/svg-path-writer.cpp \
+	2geom/svg-path-writer.h \
 	2geom/sweep.cpp \
 	2geom/sweep.h \
 	2geom/toposweep.cpp \
@@ -122,6 +125,8 @@
 	2geom/transforms.h \
 	2geom/utils.cpp \
 	2geom/utils.h \
+	2geom/viewbox.cpp \
+	2geom/viewbox.h \
 	2geom/numeric/fitting-model.h \
 	2geom/numeric/fitting-tool.h \
 	2geom/numeric/linear_system.h \

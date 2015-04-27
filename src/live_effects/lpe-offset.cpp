@@ -72,7 +72,7 @@ LPEOffset::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_
 
     Piecewise<D2<SBasis> > output;
 
-    double t = nearest_point(offset_pt, pwd2_in);
+    double t = nearest_time(offset_pt, pwd2_in);
     Point A = pwd2_in.valueAt(t);
     double offset = L2(A - offset_pt);
 

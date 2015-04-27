@@ -1,10 +1,11 @@
-/*
- * Circle Curve
- *
+/** @file
+ * @brief Circle shape
+ *//*
  * Authors:
- *      Marco Cecchetti <mrcekets at gmail.com>
+ *   Marco Cecchetti <mrcekets at gmail.com>
+ *   Krzysztof Kosiński <tweenk.pl@gmail.com>
  *
- * Copyright 2008  authors
+ * Copyright 2008-2014 Authors
  *
  * This library is free software; you can redistribute it and/or
  * modify it either under the terms of the GNU Lesser General Public
@@ -30,56 +31,54 @@
  * the specific language governing rights and limitations.
  */
 
-
 #include <2geom/circle.h>
 #include <2geom/ellipse.h>
 #include <2geom/svg-elliptical-arc.h>
 #include <2geom/numeric/fitting-tool.h>
 #include <2geom/numeric/fitting-model.h>
 
+namespace Geom {
 
-
-namespace Geom
+void Circle::setCoefficients(Coord A, Coord B, Coord C, Coord D)
 {
-
-void Circle::set(double A, double B, double C, double D)
-{
-    if (A == 0)
-    {
+    if (A == 0) {
         THROW_RANGEERROR("square term coefficient == 0");
     }
 
     //std::cerr << "B = " << B << "  C = " << C << "  D = " << D << std::endl;
 
-    double b = B / A;
-    double c = C / A;
-    double d = D / A;
+    Coord b = B / A;
+    Coord c = C / A;
+    Coord d = D / A;
 
-    m_centre[X] = -b/2;
-    m_centre[Y] = -c/2;
-    double r2 = m_centre[X] * m_centre[X] + m_centre[Y] * m_centre[Y] - d;
+    _center[X] = -b/2;
+    _center[Y] = -c/2;
+    Coord r2 = _center[X] * _center[X] + _center[Y] * _center[Y] - d;
 
-    if (r2 < 0)
-    {
+    if (r2 < 0) {
         THROW_RANGEERROR("ray^2 < 0");
     }
 
-    m_ray = std::sqrt(r2);
+    _radius = std::sqrt(r2);
 }
 
 
-void Circle::set(std::vector<Point> const& points)
+void Circle::fit(std::vector<Point> const& points)
 {
     size_t sz = points.size();
-    if (sz < 3)
-    {
+    if (sz < 2) {
         THROW_RANGEERROR("fitting error: too few points passed");
     }
+    if (sz == 2) {
+        _center = points[0] * 0.5 + points[1] * 0.5;
+        _radius = distance(points[0], points[1]) / 2;
+        return;
+    }
+
     NL::LFMCircle model;
     NL::least_squeares_fitter<NL::LFMCircle> fitter(model, sz);
 
-    for (size_t i = 0; i < sz; ++i)
-    {
+    for (size_t i = 0; i < sz; ++i) {
         fitter.append(points[i]);
     }
     fitter.update();
@@ -93,11 +92,11 @@ void Circle::set(std::vector<Point> const& points)
  */
 EllipticalArc *
 Circle::arc(Point const& initial, Point const& inner, Point const& final,
-             bool _svg_compliant)
+             bool svg_compliant)
 {
     // TODO native implementation!
-    Ellipse e(center(X), center(Y), ray(), ray(), 0);
-    return e.arc(initial, inner, final, _svg_compliant);
+    Ellipse e(_center[X], _center[Y], _radius, _radius, 0);
+    return e.arc(initial, inner, final, svg_compliant);
 }
 
 D2<SBasis> Circle::toSBasis()
@@ -108,13 +107,13 @@ D2<SBasis> Circle::toSBasis()
     B[0] = cos(bo,4);
     B[1] = sin(bo,4);
 
-    B = B * m_ray + m_centre;
+    B = B * _radius + _center;
 
     return B;
 }
 
 void
-Circle::getPath(std::vector<Path> &path_out) {
+Circle::getPath(PathVector &path_out) {
     Path pb;
 
     D2<SBasis> B = toSBasis();

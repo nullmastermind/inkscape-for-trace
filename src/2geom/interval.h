@@ -91,18 +91,22 @@ public:
     }
     /// @}
 
-    /// @name Inspect endpoints.
+    /// @name Inspect contained values.
     /// @{
-    /** @brief Access endpoints by value.
-     * @deprecated Use min() and max() instead */
-    Coord operator[](unsigned i) const { return _b[i]; }
-    /** @brief Access endpoints by reference.
-     * @deprecated Use min() and max() instead
-     * @todo Remove Interval index operator, which can be used to break the invariant */
-    Coord& operator[](unsigned i) { return _b[i]; }
-
+    /** @brief Check whether both endpoints are finite. */
     bool isFinite() const {
         return IS_FINITE(min()) && IS_FINITE(max());
+    }
+    /** @brief Map the interval [0,1] onto this one.
+     * This method simply performs 1D linear interpolation between endpoints. */
+    Coord valueAt(Coord t) {
+        return lerp(t, min(), max());
+    }
+    /** @brief Find closest time in [0,1] that maps to the given value. */
+    Coord nearestTime(Coord t) {
+        if (t < min()) return 0;
+        if (t > max()) return 1;
+        return (t - min()) / extent();
     }
     /// @}
 
@@ -114,7 +118,16 @@ public:
     /** @brief Check whether the interior of the interval includes the given interval.
      * Interior means all numbers in the interval except its ends. */
     bool interiorContains(Interval const &val) const { return min() < val.min() && val.max() < max(); }
-    /** @brief Check whether the interiors of the intervals have any common elements.  A single point in common is not considered an intersection. */
+    /// Check whether the number is contained in the union of the interior and the lower boundary.
+    bool lowerContains(Coord val) { return min() <= val && val < max(); }
+    /// Check whether the given interval is contained in the union of the interior and the lower boundary.
+    bool lowerContains(Interval const &val) const { return min() <= val.min() && val.max() < max(); }
+    /// Check whether the number is contained in the union of the interior and the upper boundary.
+    bool upperContains(Coord val) { return min() < val && val <= max(); }
+    /// Check whether the given interval is contained in the union of the interior and the upper boundary.
+    bool upperContains(Interval const &val) const { return min() < val.min() && val.max() <= max(); }
+    /** @brief Check whether the interiors of the intervals have any common elements.
+     * A single point in common is not considered an intersection. */
     bool interiorIntersects(Interval const &val) const {
         return std::max(min(), val.min()) < std::min(max(), val.max());
     }
@@ -125,16 +138,18 @@ public:
     // IMPL: ScalableConcept
     /** @brief Scale an interval */
     Interval &operator*=(Coord s) {
+        using std::swap;
         _b[0] *= s;
         _b[1] *= s;
-        if(s < 0) std::swap(_b[0], _b[1]);
+        if(s < 0) swap(_b[0], _b[1]);
         return *this;
     }
     /** @brief Scale an interval by the inverse of the specified value */
     Interval &operator/=(Coord s) {
+        using std::swap;
         _b[0] /= s;
         _b[1] /= s;
-        if(s < 0) std::swap(_b[0], _b[1]);
+        if(s < 0) swap(_b[0], _b[1]);
         return *this;
     }
     /** @brief Multiply two intervals.
