@@ -760,6 +760,16 @@ void Path::replace(iterator first, iterator last, Path const &path)
     replace(first, last, path.begin(), path.end());
 }
 
+void Path::snapEnds(Coord precision)
+{
+    if (!_closed) return;
+    if (_curves->size() > 1 && are_near(_closing_seg->length(precision), 0, precision)) {
+        _unshare();
+        _closing_seg->setInitial(_closing_seg->finalPoint());
+        (_curves->end() - 1)->setFinal(_closing_seg->finalPoint());
+    }
+}
+
 // replace curves between first and last with contents of source,
 // 
 void Path::do_update(Sequence::iterator first, Sequence::iterator last, Sequence &source)

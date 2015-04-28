@@ -90,9 +90,9 @@ static int circle_line_intersection(Circle C0, Point X0, Point X1, Point &p0, Po
 
 static Point intersection_point(Point origin_a, Point vector_a, Point origin_b, Point vector_b)
 {
-    Coord denom = cross(vector_b, vector_a);
+    Coord denom = cross(vector_a, vector_b);
     if (!are_near(denom,0.)) {
-        Coord t = (cross(origin_a,vector_b) + cross(vector_b,origin_b)) / denom;
+        Coord t = (cross(vector_b, origin_a) + cross(origin_b, vector_b)) / denom;
         return origin_a + vector_a*t;
     }
     return Point(infinity(), infinity());
@@ -322,7 +322,7 @@ void extrapolate_join(Geom::Path& res, Geom::Curve const& outgoing, double miter
         Geom::Ray end_ray(center, sol);
         Geom::Line limit_line(center, 0); // Angle set below
 
-        if (Geom::cross(start_ray.versor(), end_ray.versor()) > 0) {
+        if (Geom::cross(start_ray.versor(), end_ray.versor()) < 0) {
             limit_line.setAngle(start_ray.angle() - limit_angle);
         } else {
             limit_line.setAngle(start_ray.angle() + limit_angle);
@@ -412,7 +412,7 @@ bool decide(Geom::Curve const& incoming, Geom::Curve const& outgoing)
 {
     Geom::Point tang1 = Geom::unitTangentAt(reverse(incoming.toSBasis()), 0.);
     Geom::Point tang2 = outgoing.unitTangentAt(0.);
-    return (Geom::cross(tang1, tang2) < 0);
+    return (Geom::cross(tang1, tang2) > 0);
 }
 
 void outline_helper(Geom::Path& res, Geom::Path const& to_add, double width, bool on_outside, double miter, Inkscape::LineJoinType join)
@@ -488,10 +488,10 @@ void get_cubic_data(Geom::CubicBezier const& bez, double time, double& len, doub
             }
         rad = 1e8;
         } else {
-            rad = -l * (Geom::dot(der2, der2) / Geom::cross(der3, der2));
+            rad = -l * (Geom::dot(der2, der2) / Geom::cross(der2, der3));
         }
     } else {
-        rad = -l * (Geom::dot(der1, der1) / Geom::cross(der2, der1));
+        rad = -l * (Geom::dot(der1, der1) / Geom::cross(der1, der2));
     }
     len = l;
 }

@@ -548,7 +548,7 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
                 ray2.setPoints(endArcPoint, (*cubic2)[1]);
             }
             Point handle2 = endArcPoint - Point::polar(ray2.angle(),k2);
-            bool ccwToggle = cross(curve_it1->finalPoint() - startArcPoint, endArcPoint - startArcPoint) < 0;
+            bool ccwToggle = cross(curve_it1->finalPoint() - startArcPoint, endArcPoint - startArcPoint) > 0;
             double angle = angle_between(ray1, ray2, ccwToggle);
             double handleAngle = ray1.angle() - angle;
             if (ccwToggle) {

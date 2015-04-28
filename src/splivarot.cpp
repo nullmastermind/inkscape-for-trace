@@ -47,6 +47,7 @@
 #include "xml/repr.h"
 #include "xml/repr-sorting.h"
 #include <2geom/pathvector.h>
+#include <2geom/svg-path-writer.h>
 #include "helper/geom.h"
 
 #include "livarot/Path.h"
@@ -305,7 +306,9 @@ sp_pathvector_boolop(Geom::PathVector const &pathva, Geom::PathVector const &pat
     delete originaux[0];
     delete originaux[1];
 
-    Geom::PathVector outres =  Geom::parse_svg_path(res->svg_dump_path());
+    gchar *result_str = res->svg_dump_path();
+    Geom::PathVector outres =  Geom::parse_svg_path(result_str);
+    g_free(result_str);
 
     delete res;
     return outres;
@@ -447,8 +450,9 @@ sp_selected_path_boolop(Inkscape::Selection *selection, SPDesktop *desktop, bool
     // reverse if needed
     // note that the selection list keeps its order
     if ( reverseOrderForOp ) {
-        Path* swap=originaux[0];originaux[0]=originaux[1];originaux[1]=swap;
-        FillRule swai=origWind[0]; origWind[0]=origWind[1]; origWind[1]=swai;
+        using std::swap;
+        swap(originaux[0], originaux[1]);
+        swap(origWind[0], origWind[1]);
     }
 
     // and work
@@ -2275,10 +2279,14 @@ Ancetre(Inkscape::XML::Node *a, Inkscape::XML::Node *who)
 Path *
 Path_for_pathvector(Geom::PathVector const &epathv)
 {
+    /*std::cout << "converting to Livarot path" << std::endl;
+
+    Geom::SVGPathWriter wr;
+    wr.feed(epathv);
+    std::cout << wr.str() << std::endl;*/
+
     Path *dest = new Path;
-    dest->LoadPathVector(epathv);    
-    delete pathv;
-    
+    dest->LoadPathVector(epathv);
     return dest;
 }
 
@@ -2289,14 +2297,26 @@ Path_for_item(SPItem *item, bool doTransformation, bool transformFull)
 
     if (curve == NULL)
         return NULL;
-    
+
     Geom::PathVector *pathv = pathvector_for_curve(item, curve, doTransformation, transformFull, Geom::identity(), Geom::identity());
     curve->unref();
-    
+
+    /*std::cout << "converting to Livarot path" << std::endl;
+
+    Geom::SVGPathWriter wr;
+    if (pathv) {
+        wr.feed(*pathv);
+    }
+    std::cout << wr.str() << std::endl;*/
+
     Path *dest = new Path;
     dest->LoadPathVector(*pathv);    
     delete pathv;
-    
+
+    /*gchar *str = dest->svg_dump_path();
+    std::cout << "After conversion:\n" << str << std::endl;
+    g_free(str);*/
+
     return dest;
 }
 
@@ -2343,7 +2363,7 @@ pathvector_for_curve(SPItem *item, SPCurve *curve, bool doTransformation, bool t
     } else {
         *dest *= extraPreAffine * extraPostAffine;
     }
-    
+
     return dest;
 }
 

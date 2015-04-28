@@ -46,9 +46,9 @@ namespace Geom {
 static boost::optional<Point> intersection_point( Point const & origin_a, Point const & vector_a,
                                            Point const & origin_b, Point const & vector_b)
 {
-    Coord denom = cross(vector_b, vector_a);
+    Coord denom = cross(vector_a, vector_b);
     if (!are_near(denom,0.)){
-        Coord t = (cross(origin_a,vector_b) + cross(vector_b,origin_b)) / denom;
+        Coord t = (cross(origin_b, vector_a) + cross(origin_b, vector_b)) / denom;
         return origin_a + t * vector_a;
     }
     return boost::none;

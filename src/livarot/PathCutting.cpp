@@ -513,10 +513,10 @@ double Path::Surface()
     for (std::vector<path_lineto>::const_iterator i = pts.begin(); i != pts.end(); ++i) {
 
         if ( i->isMoveTo == polyline_moveto ) {
-            surf += Geom::cross(lastM - lastP, lastM);
+            surf += Geom::cross(lastM, lastM - lastP);
             lastP = lastM = i->p;
         } else {
-            surf += Geom::cross(i->p - lastP, i->p);
+            surf += Geom::cross(i->p, i->p - lastP);
             lastP = i->p;
         }
         

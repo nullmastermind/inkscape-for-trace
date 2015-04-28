@@ -433,7 +433,7 @@ LPEKnot::doEffect_path (Geom::PathVector const &path_in)
                 std::vector<Point> flag_j = gpaths[j][curveidx].pointAndDerivatives(t,1);
 
 
-                int geom_sign = ( cross(flag_i[1],flag_j[1]) > 0 ? 1 : -1);
+                int geom_sign = ( cross(flag_i[1], flag_j[1]) < 0 ? 1 : -1);
 
                 bool i0_is_under = false;
                 if ( crossing_points[p].sign * geom_sign > 0 ){

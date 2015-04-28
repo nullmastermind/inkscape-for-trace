@@ -485,7 +485,7 @@ double FilletChamferPointArrayParam::len_to_rad(int index, double len)
     if (cubic2) {
         ray2.setPoints(endArcPoint, (*cubic2)[1]);
     }
-    bool ccwToggle = cross(A->finalPoint() - startArcPoint, endArcPoint - startArcPoint) < 0;
+    bool ccwToggle = cross(A->finalPoint() - startArcPoint, endArcPoint - startArcPoint) > 0;
     double distanceArc = Geom::distance(startArcPoint,middle_point(startArcPoint,endArcPoint));
     double angleBetween = angle_between(ray1, ray2, ccwToggle);
     rad = distanceArc/sin(angleBetween/2.0);
