@@ -384,8 +384,10 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
             {
                 Inkscape::UI::ClipboardManager *cm = Inkscape::UI::ClipboardManager::get();
                 if(cm->paste(SP_ACTIVE_DESKTOP,true) == true){
-                    item->transform = SP_ITEM(SP_ACTIVE_DESKTOP->currentLayer())->i2doc_affine().inverse();
                     gchar const *svgd = item->getRepr()->attribute("d");
+                    Geom::PathVector path =  sp_svg_read_pathv(svgd);
+                    path *= item->i2doc_affine().inverse();
+                    svgd = sp_svg_write_path( path );
                     bend_item = dc->selection->singleItem();
                     bend_item->moveTo(item,false);
                     spdc_apply_bend_shape(svgd, dc, bend_item);
@@ -410,8 +412,10 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
                     shape = CLIPBOARD;
                 } else {
                     if(bend_item != NULL && bend_item->getRepr() != NULL){
-                        item->transform = SP_ITEM(SP_ACTIVE_DESKTOP->currentLayer())->i2doc_affine().inverse();
                         gchar const *svgd = item->getRepr()->attribute("d");
+                        Geom::PathVector path =  sp_svg_read_pathv(svgd);
+                        path *= item->i2doc_affine().inverse();
+                        svgd = sp_svg_write_path( path );
                         dc->selection->add(SP_OBJECT(bend_item));
                         sp_selection_duplicate(dc->desktop);
                         dc->selection->remove(SP_OBJECT(bend_item));
