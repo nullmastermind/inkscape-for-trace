@@ -1649,14 +1649,14 @@ void PathManipulator::_updateDragPoint(Geom::Point const &evp)
     Geom::PathVector pv = _spcurve->get_pathvector();
     if (pv.empty()) return;
 
-    boost::optional<Geom::PathVectorPosition> pvp =
-        pv.nearestPosition(_desktop->w2d(evp) * to_desktop.inverse());
+    boost::optional<Geom::PathVectorTime> pvp =
+        pv.nearestTime(_desktop->w2d(evp) * to_desktop.inverse());
     Geom::Point nearest_pt = _desktop->d2w(pv.pointAt(*pvp) * to_desktop);
     
     double fracpart = pvp->t;
     std::list<SubpathPtr>::iterator spi = _subpaths.begin();
     for (unsigned i = 0; i < pvp->path_index; ++i, ++spi) {}
-    NodeList::iterator first = (*spi)->before(pvp->asPathPosition());
+    NodeList::iterator first = (*spi)->before(pvp->asPathTime());
     
     double stroke_tolerance = _getStrokeTolerance();
     if (first && first.next() &&

@@ -1567,7 +1567,7 @@ NodeList::iterator NodeList::before(double t, double *fracpart)
     return ret;
 }
 
-NodeList::iterator NodeList::before(Geom::PathPosition const &pvp)
+NodeList::iterator NodeList::before(Geom::PathTime const &pvp)
 {
     iterator ret = begin();
     std::advance(ret, pvp.curve_index);

@@ -84,7 +84,6 @@
 	2geom/piecewise.h \
 	2geom/point.cpp \
 	2geom/point.h \
-	2geom/point-ops.h \
 	2geom/poly.cpp \
 	2geom/poly.h \
 	2geom/quadtree.cpp \

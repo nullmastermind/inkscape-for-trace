@@ -87,7 +87,7 @@ void LPEAttachPath::doEffect (SPCurve * curve)
                     Geom::Coord length = derivs[deriv_n].length();
                     if ( ! Geom::are_near(length, 0) ) {
                         if (set_start_end) {
-                            start_path_position.param_set_value(transformedpath.nearestTime(start_path_curve_end.getOrigin()));
+                            start_path_position.param_set_value(transformedpath.nearestTime(start_path_curve_end.getOrigin()).asFlatTime());
                         }
                         
                         if (start_path_position > transformedpath.size()) {
@@ -142,7 +142,7 @@ void LPEAttachPath::doEffect (SPCurve * curve)
                     Geom::Coord length = derivs[deriv_n].length();
                     if ( ! Geom::are_near(length, 0) ) {
                         if (set_end_end) {
-                            end_path_position.param_set_value(transformedpath.nearestTime(end_path_curve_end.getOrigin()));
+                            end_path_position.param_set_value(transformedpath.nearestTime(end_path_curve_end.getOrigin()).asFlatTime());
                         }
                         
                         if (end_path_position > transformedpath.size()) {
