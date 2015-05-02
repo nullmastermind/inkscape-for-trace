@@ -13,17 +13,13 @@
 #ifndef SEEN_SELECTED_COLOR
 #define SEEN_SELECTED_COLOR
 
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
-
-#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
-#include <glibmm/threads.h>
-#endif
-
 #include <sigc++/signal.h>
-#include <gtkmm/widget.h>
 #include "color.h"
+
+namespace Gtk
+{
+  class Widget;
+}
 
 namespace Inkscape {
 namespace UI {

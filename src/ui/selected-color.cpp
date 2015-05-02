@@ -14,15 +14,11 @@
 # include "config.h"
 #endif
 
-#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
-#include <glibmm/threads.h>
-#endif
-
+#include <glibmm/ustring.h>
 #include <cmath>
-#include <glib.h>
 
-#include "selected-color.h"
 #include "svg/svg-icc-color.h"
+#include "ui/selected-color.h"
 
 namespace Inkscape {
 namespace UI {

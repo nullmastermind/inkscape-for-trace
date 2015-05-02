@@ -18,18 +18,14 @@
 # include <config.h>
 #endif
 
-#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
-#include <glibmm/threads.h>
-#endif
-
 #include <boost/ptr_container/ptr_vector.hpp>
-#include <gtk/gtk.h>
-#include <glib.h>
-#if GTK_CHECK_VERSION(3,0,0)
+#if WITH_GTKMM_3_0
 #include <gtkmm/grid.h>
 #else
 #include <gtkmm/table.h>
 #endif
+#include <gtk/gtk.h>
+#include <glib.h>
 
 #include "color.h"
 #include "ui/selected-color.h"
