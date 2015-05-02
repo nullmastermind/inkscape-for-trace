@@ -3,8 +3,7 @@ set(INKSCAPE_LIBS "")
 set(INKSCAPE_INCS "")
 set(INKSCAPE_INCS_SYS "")
 
-list(APPEND INKSCAPE_INCS
-	${PROJECT_SOURCE_DIR}
+list(APPEND INKSCAPE_INCS ${PROJECT_SOURCE_DIR}
 	${PROJECT_SOURCE_DIR}/src
 
 	# generated includes
@@ -25,6 +24,31 @@ if (WIN32)
 	list(APPEND INKSCAPE_LIBS "-lpangoft2-1.0.dll")  # FIXME
 	list(APPEND INKSCAPE_LIBS "-lpangowin32-1.0.dll")  # FIXME
 	list(APPEND INKSCAPE_LIBS "-lgthread-2.0.dll")  # FIXME
+elseif(APPLE)
+	if(DEFINED ENV{CMAKE_PREFIX_PATH})
+		# Adding the library search path explicitly seems not required
+		# if MacPorts is installed in default prefix ('/opt/local') - 
+		# Cmake then can rely on the hard-coded paths in its modules.
+		# Only prepend search path if $CMAKE_PREFIX_PATH is defined:
+		list(APPEND INKSCAPE_LIBS "-L$ENV{CMAKE_PREFIX_PATH}/lib")  # FIXME
+		# TODO: verify whether linking the next two libs explicitly is always
+	  	# required, or only if MacPorts is installed in custom prefix:
+		list(APPEND INKSCAPE_LIBS "-liconv")  # FIXME
+		list(APPEND INKSCAPE_LIBS "-lintl")  # FIXME
+	endif()
+	list(APPEND INKSCAPE_LIBS "-lpangocairo-1.0")  # FIXME
+	list(APPEND INKSCAPE_LIBS "-lpangoft2-1.0")  # FIXME
+	list(APPEND INKSCAPE_LIBS "-lfontconfig")  # FIXME
+	# GTK+ backend
+	if(${GTK+_2.0_TARGET} MATCHES "x11")
+		# only link X11 if using X11 backend of GTK2
+		list(APPEND INKSCAPE_LIBS "-lX11")  # FIXME
+	elseif(${GTK+_2.0_TARGET} MATCHES "quartz")
+		# TODO: gtk-mac-integration (currently only useful for osxmenu branch)
+		# 1) add configure option (ON/OFF) for gtk-mac-integration
+		# 2) add checks (GTK+ backend must be "quartz")
+		# 3) link relevant lib(s)
+	endif()
 else()
 	list(APPEND INKSCAPE_LIBS "-ldl")  # FIXME
 	list(APPEND INKSCAPE_LIBS "-lpangocairo-1.0")  # FIXME
@@ -33,6 +57,10 @@ else()
 	list(APPEND INKSCAPE_LIBS "-lX11")  # FIXME
 endif()
 
+if(NOT APPLE)
+	# FIXME: should depend on availability of OpenMP support (see below) (?)
+	list(APPEND INKSCAPE_LIBS "-lgomp")  # FIXME
+endif()
 list(APPEND INKSCAPE_LIBS "-lgslcblas")  # FIXME
 
 if(WITH_GNOME_VFS)
@@ -117,8 +145,8 @@ add_definitions(${POPPLER_DEFINITIONS})
 if(WITH_LIBWPG)
 	find_package(LibWPG)
 	if(LIBWPG_FOUND)
-		set(WITH_LIBWPG01 ${LIBWPG01_FOUND})
-		set(WITH_LIBWPG02 ${LIBWPG02_FOUND})
+		set(WITH_LIBWPG-0.1 ${LIBWPG-0.1_FOUND})
+		set(WITH_LIBWPG-0.2 ${LIBWPG-0.2_FOUND})
 		list(APPEND INKSCAPE_INCS_SYS ${LIBWPG_INCLUDE_DIRS})
 		list(APPEND INKSCAPE_LIBS     ${LIBWPG_LIBRARIES})
 		add_definitions(${LIBWPG_DEFINITIONS})
@@ -126,6 +154,14 @@ if(WITH_LIBWPG)
 		set(WITH_LIBWPG OFF)
 	endif()
 endif()
+
+FIND_PACKAGE(JPEG REQUIRED)
+#IF(JPEG_FOUND)
+  #INCLUDE_DIRECTORIES(${JPEG_INCLUDE_DIR})
+  #TARGET_LINK_LIBRARIES(mpo ${JPEG_LIBRARIES})
+#ENDIF()
+list(APPEND INKSCAPE_INCS_SYS ${JPEG_INCLUDE_DIR})
+list(APPEND INKSCAPE_LIBS ${JPEG_LIBRARIES})
 
 find_package(PNG REQUIRED)
 list(APPEND INKSCAPE_INCS_SYS ${PNG_PNG_INCLUDE_DIR})
@@ -227,9 +263,9 @@ if(WITH_GTKSPELL)
 	set(WITH_GTKSPELL ${GTKSPELL_FOUND})
 endif()
 
-find_package(OpenSSL)
-list(APPEND INKSCAPE_INCS_SYS ${OPENSSL_INCLUDE_DIR})
-list(APPEND INKSCAPE_LIBS ${OPENSSL_LIBRARIES})
+#find_package(OpenSSL)
+#list(APPEND INKSCAPE_INCS_SYS ${OPENSSL_INCLUDE_DIR})
+#list(APPEND INKSCAPE_LIBS ${OPENSSL_LIBRARIES})
 
 find_package(LibXslt REQUIRED)
 list(APPEND INKSCAPE_INCS_SYS ${LIBXSLT_INCLUDE_DIR})

@@ -363,10 +363,10 @@ void SPPattern::transform_multiply(Geom::Affine postmul, bool set) {
     getRepr()->setAttribute("patternTransform", c);
 }
 
-const gchar *SPPattern::produce(const std::list<Inkscape::XML::Node*> &reprs, Geom::Rect bounds,
+const gchar *SPPattern::produce(const std::vector<Inkscape::XML::Node*> &reprs, Geom::Rect bounds,
         SPDocument *document, Geom::Affine transform, Geom::Affine move)
 {
-    typedef std::list<Inkscape::XML::Node*>::const_iterator NodePtrIterator;
+    typedef std::vector<Inkscape::XML::Node*>::const_iterator NodePtrIterator;
 
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
     Inkscape::XML::Node *defsrepr = document->getDefs()->getRepr();

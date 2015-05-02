@@ -1,6 +1,7 @@
 # CMake TODO
-# - Remove hard coded defines (see bwelow)
-# - Test on MinGW and OSX
+# - Remove hard coded defines (see below)
+# - Test on MinGW
+# √ Test on OSX
 # - Add configurable options for Python/Perl, see configure --help
 #
 # ideasman42
@@ -29,6 +30,30 @@ if(CMAKE_COMPILER_IS_GNUCC)
 	endif()
 endif()
 
+#
+# Set platform defaults (originally copied from darktable)
+#
+if(APPLE)
+	message("-- Mac OS X build detected, setting default features")
+	# prefer macports and/or user-installed libraries over system ones
+	#LIST(APPEND CMAKE_PREFIX_PATH /opt/local /usr/local)
+	set(CMAKE_FIND_FRAMEWORK "LAST")
+
+	# test and display relevant env variables
+	if(DEFINED ENV{CMAKE_PREFIX_PATH})
+		message("CMAKE_PREFIX_PATH: $ENV{CMAKE_PREFIX_PATH}")
+	endif()
+	if(DEFINED ENV{GTKMM_BASEPATH})
+		message("GTKMM_BASEPATH: $ENV{GTKMM_BASEPATH}")
+	endif()
+
+	# detect current GTK+ backend
+	include(${CMAKE_SOURCE_DIR}/CMakeScripts/HelperFunctions.cmake)
+	pkg_check_variable(gtk+-2.0 target)
+	message("GTK2 backend: ${GTK+_2.0_TARGET}")
+
+endif(APPLE)
+
 #-----------------------------------------------------------------------------
 # Redirect output files
 
@@ -39,14 +64,14 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib CACHE INTERNAL "" FORCE )
 # Options
 # -----------------------------------------------------------------------------
 option(WITH_DBUS "Compile with support for DBus interface" OFF)
-option(ENABLE_LCMS "Compile with LCMS support" OFF)
-option(WITH_GNOME_VFS "Compile with support for Gnome VFS" OFF)
+option(ENABLE_LCMS "Compile with LCMS support" ON)
+option(WITH_GNOME_VFS "Compile with support for Gnome VFS" ON)
 #option(WITH_INKJAR "Enable support for openoffice files (SVG jars)" ON)
 
 option(WITH_PROFILING "Turn on profiling" OFF) # Set to true if compiler/linker should enable profiling
 
 option(WITH_GTKSPELL "Compile with support for GTK spelling widget" ON)
-option(WITH_LIBWPG "Compile with support of libpoppler-cairo for WordPrefect Graphics" ON)
+option(WITH_LIBWPG "Compile with support of libpoppler-cairo for WordPerfect Graphics" ON)
 option(ENABLE_POPPLER "Compile with support of libpoppler" ON)
 option(ENABLE_POPPLER_CAIRO "Compile with support of libpoppler-cairo for rendering PDF preview (depends on ENABLE_POPPLER)" ON)
 

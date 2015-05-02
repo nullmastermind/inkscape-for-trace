@@ -68,7 +68,7 @@ public:
      * @brief create a new pattern in XML tree
      * @return created pattern id
      */
-    static const gchar *produce(const std::list<Inkscape::XML::Node*> &reprs,
+    static const gchar *produce(const std::vector<Inkscape::XML::Node*> &reprs,
     		Geom::Rect bounds, SPDocument *document, Geom::Affine transform, Geom::Affine move);
 
     bool isValid() const;
