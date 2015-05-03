@@ -82,21 +82,6 @@ private:
     // By default, disallow copy constructor and assignment operator
     ColorNotebook( const ColorNotebook& obj );
     ColorNotebook& operator=( const ColorNotebook& obj );
-
-    /* Following methods support the pop-up menu to choose
-     * active color selectors (notebook tabs). This function
-     * is not used in Inkscape. If you want to re-enable it you have to
-     *  * port the code to c++
-     *  * fix it so it remembers its settings in prefs
-     *  * fix it so it does not take that much space (entire vertical column!)
-     * Current class design supports dynamic addtion and removal of color selectors
-     *
-    GtkWidget* addPage( GType page_type, guint submode );
-    void removePage( GType page_type, guint submode );
-    GtkWidget* getPage( GType page_type, guint submode );
-    gint menuHandler( GdkEvent* event );
-
-    */
 };
 
 }
