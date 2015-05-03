@@ -1008,16 +1008,16 @@ CairoRenderContext::_createPatternPainter(SPPaintServer const *const paintserver
     ps2user = Geom::identity();
     pcs2dev = Geom::identity();
 
-    double x = pat->get_x();
-    double y = pat->get_y();
-    double width = pat->get_width();
-    double height = pat->get_height();
+    double x = pat->x();
+    double y = pat->y();
+    double width = pat->width();
+    double height = pat->height();
     double bbox_width_scaler;
     double bbox_height_scaler;
 
     TRACE(("%f x %f pattern\n", width, height));
 
-    if (pbox && pat->get_pattern_units() == SPPattern::UNITS_OBJECTBOUNDINGBOX) {
+    if (pbox && pat->patternUnits() == SPPattern::UNITS_OBJECTBOUNDINGBOX) {
         bbox_width_scaler = pbox->width();
         bbox_height_scaler = pbox->height();
         ps2user[4] = x * bbox_width_scaler + pbox->left();
@@ -1030,13 +1030,13 @@ CairoRenderContext::_createPatternPainter(SPPaintServer const *const paintserver
     }
 
     // apply pattern transformation
-    Geom::Affine pattern_transform(pat->get_transform());
+    Geom::Affine pattern_transform(pat->getTransform());
     ps2user *= pattern_transform;
     Geom::Point ori (ps2user[4], ps2user[5]);
 
     // create pattern contents coordinate system
     if (pat->viewBox_set) {
-        Geom::Rect view_box = *pat->get_viewbox();
+        Geom::Rect view_box = *pat->viewbox();
 
         double x, y, w, h;
         x = 0;
@@ -1049,7 +1049,7 @@ CairoRenderContext::_createPatternPainter(SPPaintServer const *const paintserver
         pcs2dev[3] = h / view_box.height();
         pcs2dev[4] = x - view_box.left() * pcs2dev[0];
         pcs2dev[5] = y - view_box.top() * pcs2dev[3];
-    } else if (pbox && pat->get_pattern_content_units() == SPPattern::UNITS_OBJECTBOUNDINGBOX) {
+    } else if (pbox && pat->patternContentUnits() == SPPattern::UNITS_OBJECTBOUNDINGBOX) {
         pcs2dev[0] = pbox->width();
         pcs2dev[3] = pbox->height();
     }

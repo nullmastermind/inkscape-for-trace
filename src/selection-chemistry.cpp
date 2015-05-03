@@ -1939,8 +1939,8 @@ std::vector<SPItem*> sp_get_same_fill_or_stroke_color(SPItem *sel, std::vector<S
                     }
 
                 } else if (dynamic_cast<SPPattern *>(sel_server) && dynamic_cast<SPPattern *>(iter_server)) {
-                    SPPattern *sel_pat = dynamic_cast<SPPattern *>(sel_server)->get_root();
-                    SPPattern *iter_pat = dynamic_cast<SPPattern *>(iter_server)->get_root();
+                    SPPattern *sel_pat = dynamic_cast<SPPattern *>(sel_server)->rootPattern();
+                    SPPattern *iter_pat = dynamic_cast<SPPattern *>(iter_server)->rootPattern();
                     if (sel_pat == iter_pat) {
                         match = true;
                     }
@@ -3366,9 +3366,9 @@ void sp_selection_untile(SPDesktop *desktop)
 
         did = true;
 
-        SPPattern *pattern = basePat->get_root();
+        SPPattern *pattern = basePat->rootPattern();
 
-        Geom::Affine pat_transform = basePat->get_transform();
+        Geom::Affine pat_transform = basePat->getTransform();
         pat_transform *= item->transform;
 
         for (SPObject *child = pattern->firstChild() ; child != NULL; child = child->next ) {

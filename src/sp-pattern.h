@@ -47,15 +47,15 @@ public:
     Glib::ustring href;
     SPPatternReference *ref;
 
-    gdouble get_x() const;
-    gdouble get_y() const;
-    gdouble get_width() const;
-    gdouble get_height() const;
-    Geom::OptRect get_viewbox() const;
-    SPPattern::PatternUnits get_pattern_units() const;
-    SPPattern::PatternUnits get_pattern_content_units() const;
-    Geom::Affine const &get_transform() const;
-    SPPattern *get_root(); // TODO: const
+    gdouble x() const;
+    gdouble y() const;
+    gdouble width() const;
+    gdouble height() const;
+    Geom::OptRect viewbox() const;
+    SPPattern::PatternUnits patternUnits() const;
+    SPPattern::PatternUnits patternContentUnits() const;
+    Geom::Affine const &getTransform() const;
+    SPPattern *rootPattern(); // TODO: const
 
     SPPattern *clone_if_necessary(SPItem *item, const gchar *property);
     void transform_multiply(Geom::Affine postmul, bool set);
@@ -79,40 +79,40 @@ protected:
     virtual void modified(unsigned int flags);
 
 private:
-    bool _has_item_children() const;
-    void _get_children(std::list<SPObject *> &l);
+    bool _hasItemChildren() const;
+    void _getChildren(std::list<SPObject *> &l);
     SPPattern *_chain() const;
 
     /**
     Count how many times pattern is used by the styles of o and its descendants
     */
-    guint _count_hrefs(SPObject *o) const;
+    guint _countHrefs(SPObject *o) const;
 
     /**
     Gets called when the pattern is reattached to another <pattern>
     */
-    void _on_ref_changed(SPObject *old_ref, SPObject *ref);
+    void _onRefChanged(SPObject *old_ref, SPObject *ref);
 
     /**
     Gets called when the referenced <pattern> is changed
     */
-    void _on_ref_modified(SPObject *ref, guint flags);
+    void _onRefModified(SPObject *ref, guint flags);
 
     /* patternUnits and patternContentUnits attribute */
-    PatternUnits patternUnits : 1;
-    bool patternUnits_set : 1;
-    PatternUnits patternContentUnits : 1;
-    bool patternContentUnits_set : 1;
+    PatternUnits _pattern_units : 1;
+    bool _pattern_units_set : 1;
+    PatternUnits _pattern_content_units : 1;
+    bool _pattern_content_units_set : 1;
     /* patternTransform attribute */
-    Geom::Affine patternTransform;
-    bool patternTransform_set : 1;
+    Geom::Affine _pattern_transform;
+    bool _pattern_transform_set : 1;
     /* Tile rectangle */
-    SVGLength x;
-    SVGLength y;
-    SVGLength width;
-    SVGLength height;
+    SVGLength _x;
+    SVGLength _y;
+    SVGLength _width;
+    SVGLength _height;
 
-    sigc::connection modified_connection;
+    sigc::connection _modified_connection;
 };
 
 

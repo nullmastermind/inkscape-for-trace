@@ -822,7 +822,7 @@ ink_pattern_list_get (SPDocument *source)
     GSList *pl = NULL;
     GSList const *patterns = source->getResourceList("pattern");
     for (GSList *l = const_cast<GSList *>(patterns); l != NULL; l = l->next) {
-        if (SP_PATTERN(l->data) == SP_PATTERN(l->data)->get_root()) {  // only if this is a root pattern
+        if (SP_PATTERN(l->data) == SP_PATTERN(l->data)->rootPattern()) {  // only if this is a root pattern
             pl = g_slist_prepend(pl, l->data);
         }
     }
@@ -1142,7 +1142,7 @@ SPPattern *SPPaintSelector::getPattern()
         }
         g_free(paturn);
     } else {
-        pat = SP_PATTERN(patid)->get_root();
+        pat = SP_PATTERN(patid)->rootPattern();
     }
 
     if (pat && !SP_IS_PATTERN(pat)) {

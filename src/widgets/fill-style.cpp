@@ -300,7 +300,7 @@ void FillNStroke::performUpdate()
                     psel->setGradientProperties( rg->getUnits(),
                                                  rg->getSpread() );
                 } else if (SP_IS_PATTERN(server)) {
-                    SPPattern *pat = SP_PATTERN(server)->get_root();
+                    SPPattern *pat = SP_PATTERN(server)->rootPattern();
                     psel->updatePatternList( pat );
                 }
             }
@@ -656,7 +656,7 @@ void FillNStroke::updateFromPaint()
                             SPPaintServer *server = (kind == FILL) ?
                                 selobj->style->getFillPaintServer() :
                                 selobj->style->getStrokePaintServer();
-                            if (SP_IS_PATTERN(server) && SP_PATTERN(server)->get_root() == pattern)
+                            if (SP_IS_PATTERN(server) && SP_PATTERN(server)->rootPattern() == pattern)
                                 // only if this object's pattern is not rooted in our selected pattern, apply
                                 continue;
                         }
