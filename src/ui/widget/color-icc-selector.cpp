@@ -236,23 +236,6 @@ std::vector<colorspace::Component> colorspace::getColorSpaceInfo( Inkscape::Colo
 
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 namespace Inkscape {
 namespace UI {
 namespace Widget {
@@ -263,23 +246,23 @@ namespace Widget {
 class ComponentUI
 {
 public:
-    ComponentUI() :
-        _component(),
-        _adj(0),
-        _slider(0),
-        _btn(0),
-        _label(0),
-        _map(0)
+    ComponentUI()
+        : _component()
+        , _adj(0)
+        , _slider(0)
+        , _btn(0)
+        , _label(0)
+        , _map(0)
     {
     }
 
-    ComponentUI(colorspace::Component const &component) :
-        _component(component),
-        _adj(0),
-        _slider(0),
-        _btn(0),
-        _label(0),
-        _map(0)
+    ComponentUI(colorspace::Component const &component)
+        : _component(component)
+        , _adj(0)
+        , _slider(0)
+        , _btn(0)
+        , _label(0)
+        , _map(0)
     {
     }
 

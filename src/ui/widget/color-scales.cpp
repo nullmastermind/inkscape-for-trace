@@ -176,43 +176,36 @@ void ColorScales::_initUI(SPColorScalesMode mode)
 	setMode(mode);
 }
 
-void ColorScales::_recalcColor( gboolean changing )
+void ColorScales::_recalcColor()
 {
-    if ( changing )
+    SPColor color;
+    gfloat alpha = 1.0;
+    gfloat c[5];
+
+    switch (_mode) {
+    case SP_COLOR_SCALES_MODE_RGB:
+    case SP_COLOR_SCALES_MODE_HSV:
+        _getRgbaFloatv(c);
+        color.set( c[0], c[1], c[2] );
+        alpha = c[3];
+        break;
+    case SP_COLOR_SCALES_MODE_CMYK:
     {
-        SPColor color;
-        gfloat alpha = 1.0;
-        gfloat c[5];
+        _getCmykaFloatv( c );
 
-        switch (_mode) {
-        case SP_COLOR_SCALES_MODE_RGB:
-        case SP_COLOR_SCALES_MODE_HSV:
-            _getRgbaFloatv(c);
-            color.set( c[0], c[1], c[2] );
-            alpha = c[3];
-            break;
-        case SP_COLOR_SCALES_MODE_CMYK:
-        {
-            _getCmykaFloatv( c );
-
-            float rgb[3];
-            sp_color_cmyk_to_rgb_floatv( rgb, c[0], c[1], c[2], c[3] );
-            color.set( rgb[0], rgb[1], rgb[2] );
-            alpha = c[4];
-            break;
-        }
-        default:
-            g_warning ("file %s: line %d: Illegal color selector mode %d", __FILE__, __LINE__, _mode);
-            break;
-        }
-
-        _color.preserveICC();
-        _color.setColorAlpha(color, alpha);
+        float rgb[3];
+        sp_color_cmyk_to_rgb_floatv( rgb, c[0], c[1], c[2], c[3] );
+        color.set( rgb[0], rgb[1], rgb[2] );
+        alpha = c[4];
+        break;
     }
-    else
-    {
-        // _updateInternals( _color, _alpha, _dragging );
+    default:
+        g_warning ("file %s: line %d: Illegal color selector mode %d", __FILE__, __LINE__, _mode);
+        break;
     }
+
+    _color.preserveICC();
+    _color.setColorAlpha(color, alpha);
 }
 
 /* Helpers for setting color value */
@@ -479,7 +472,6 @@ void ColorScales::_sliderAnyGrabbed()
 	if (!_dragging) {
 		_dragging = TRUE;
         _color.setHeld(true);
-        _recalcColor( FALSE );
 	}
 }
 
@@ -491,7 +483,6 @@ void ColorScales::_sliderAnyReleased()
 	if (_dragging) {
 		_dragging = FALSE;
         _color.setHeld(false);
-        _recalcColor( FALSE );
 	}
 }
 
@@ -500,7 +491,7 @@ void ColorScales::_sliderAnyChanged()
     if (_updating) {
         return;
     }
-    _recalcColor( TRUE );
+    _recalcColor();
 }
 
 void ColorScales::_adjustmentChanged( ColorScales *scales, guint channel )
@@ -510,7 +501,7 @@ void ColorScales::_adjustmentChanged( ColorScales *scales, guint channel )
 	}
 
 	scales->_updateSliders( (1 << channel) );
-	scales->_recalcColor (TRUE);
+	scales->_recalcColor();
 }
 
 void ColorScales::_updateSliders( guint channels )
@@ -627,7 +618,7 @@ void ColorScales::_updateSliders( guint channels )
 	// Force the internal color to be updated
     if ( !_updating )
     {
-        _recalcColor( TRUE );
+        _recalcColor();
     }
 
 #ifdef SPCS_PREVIEW

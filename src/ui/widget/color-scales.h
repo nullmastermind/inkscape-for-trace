@@ -63,7 +63,7 @@ protected:
     void _getCmykaFloatv(gfloat *cmyka);
     guint32 _getRgba32();
     void _updateSliders(guint channels);
-    void _recalcColor(gboolean changing);
+    void _recalcColor();
 
     void _setRangeLimit( gdouble upper );
 

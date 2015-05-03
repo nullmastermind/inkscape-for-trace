@@ -78,7 +78,7 @@ ParamColor::ParamColor (const gchar * name, const gchar * guitext, const gchar *
 void ParamColor::string(std::string &string) const
 {
     char str[16];
-    sprintf(str, "%i", _color.value());
+    snprintf(str, 16, "%i", _color.value());
     string += str;
 }
 

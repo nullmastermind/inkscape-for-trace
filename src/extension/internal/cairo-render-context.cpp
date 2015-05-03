@@ -1018,7 +1018,6 @@ CairoRenderContext::_createPatternPainter(SPPaintServer const *const paintserver
     TRACE(("%f x %f pattern\n", width, height));
 
     if (pbox && pat->get_pattern_units() == SPPattern::UNITS_OBJECTBOUNDINGBOX) {
-        //Geom::Affine bbox2user (pbox->x1 - pbox->x0, 0.0, 0.0, pbox->y1 - pbox->y0, pbox->x0, pbox->y0);
         bbox_width_scaler = pbox->width();
         bbox_height_scaler = pbox->height();
         ps2user[4] = x * bbox_width_scaler + pbox->left();

@@ -49,9 +49,8 @@ void ColorEntry::on_changed() {
         text.erase(0, 1);
         if (text.size() == 6) {
             // it was a standard RGB hex
-            unsigned int alph = SP_COLOR_F_TO_U(_color.alpha());
-            Glib::ustring tmp = Glib::ustring::format(std::hex, std::setw(2), std::setfill(L'0'), alph);
-            text += tmp;
+            unsigned int alpha = SP_COLOR_F_TO_U(_color.alpha());
+            text += Glib::ustring::format(std::hex, std::setw(2), std::setfill(L'0'), alpha);
         }
     }
 
