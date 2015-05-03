@@ -2,7 +2,7 @@
 #define SEEN_SP_COLOR_SCALES_H
 
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+#include <config.h>
 #endif
 
 #if WITH_GTKMM_3_0
@@ -19,7 +19,6 @@ namespace Widget {
 
 class ColorSlider;
 
-
 typedef enum {
     SP_COLOR_SCALES_MODE_NONE = 0,
     SP_COLOR_SCALES_MODE_RGB = 1,
@@ -27,20 +26,18 @@ typedef enum {
     SP_COLOR_SCALES_MODE_CMYK = 3
 } SPColorScalesMode;
 
-
-
 class ColorScales
-#if GTK_CHECK_VERSION(3,0,0)
+#if GTK_CHECK_VERSION(3, 0, 0)
     : public Gtk::Grid
 #else
     : public Gtk::Table
 #endif
 {
 public:
-    static const gchar* SUBMODE_NAMES[];
+    static const gchar *SUBMODE_NAMES[];
 
-    static gfloat getScaled( const GtkAdjustment *a );
-    static void setScaled( GtkAdjustment *a, gfloat v);
+    static gfloat getScaled(const GtkAdjustment *a);
+    static void setScaled(GtkAdjustment *a, gfloat v);
 
     ColorScales(SelectedColor &color, SPColorScalesMode mode);
     virtual ~ColorScales();
@@ -65,26 +62,26 @@ protected:
     void _updateSliders(guint channels);
     void _recalcColor();
 
-    void _setRangeLimit( gdouble upper );
+    void _setRangeLimit(gdouble upper);
 
     SelectedColor &_color;
     SPColorScalesMode _mode;
     gdouble _rangeLimit;
     gboolean _updating : 1;
     gboolean _dragging : 1;
-    GtkAdjustment *_a[5]; /* Channel adjustments */
+    GtkAdjustment *_a[5];                     /* Channel adjustments */
     Inkscape::UI::Widget::ColorSlider *_s[5]; /* Channel sliders */
-    GtkWidget *_b[5]; /* Spinbuttons */
-    GtkWidget *_l[5]; /* Labels */
+    GtkWidget *_b[5];                         /* Spinbuttons */
+    GtkWidget *_l[5];                         /* Labels */
 
 private:
     // By default, disallow copy constructor and assignment operator
     ColorScales(ColorScales const &obj);
-    ColorScales &operator=(ColorScales const &obj );
+    ColorScales &operator=(ColorScales const &obj);
 };
 
-
-class ColorScalesFactory: public Inkscape::UI::ColorSelectorFactory {
+class ColorScalesFactory : public Inkscape::UI::ColorSelectorFactory
+{
 public:
     ColorScalesFactory(SPColorScalesMode submode);
     ~ColorScalesFactory();

@@ -15,26 +15,23 @@
 #include <gtkmm/widget.h>
 #include <sigc++/signal.h>
 
-namespace Inkscape
-{
-namespace UI
-{
-namespace Widget
-{
+namespace Inkscape {
+namespace UI {
+namespace Widget {
 
 /*
  * A slider with colored background
  */
-class ColorSlider: public Gtk::Widget {
+class ColorSlider : public Gtk::Widget {
 public:
-#if GTK_CHECK_VERSION(3,0,0)
+#if GTK_CHECK_VERSION(3, 0, 0)
     ColorSlider(Glib::RefPtr<Gtk::Adjustment> adjustment);
 #else
     ColorSlider(Gtk::Adjustment *adjustment);
 #endif
     ~ColorSlider();
 
-#if GTK_CHECK_VERSION(3,0,0)
+#if GTK_CHECK_VERSION(3, 0, 0)
     void setAdjustment(Glib::RefPtr<Gtk::Adjustment> adjustment);
 #else
     void setAdjustment(Gtk::Adjustment *adjustment);
@@ -42,7 +39,7 @@ public:
 
     void setColors(guint32 start, guint32 mid, guint32 end);
 
-    void setMap(const guchar* map);
+    void setMap(const guchar *map);
 
     void setBackground(guint dark, guint light, guint size);
 
@@ -52,22 +49,22 @@ public:
     sigc::signal<void> signal_value_changed;
 
 protected:
-    void on_size_allocate(Gtk::Allocation& allocation);
+    void on_size_allocate(Gtk::Allocation &allocation);
     void on_realize();
     void on_unrealize();
     bool on_button_press_event(GdkEventButton *event);
     bool on_button_release_event(GdkEventButton *event);
     bool on_motion_notify_event(GdkEventMotion *event);
-    bool on_draw(const Cairo::RefPtr<Cairo::Context>& cr);
+    bool on_draw(const Cairo::RefPtr<Cairo::Context> &cr);
 
-#if GTK_CHECK_VERSION(3,0,0)
-    void get_preferred_width_vfunc(int& minimum_width, int& natural_width) const;
-    void get_preferred_width_for_height_vfunc(int height, int& minimum_width, int& natural_width) const;
-    void get_preferred_height_vfunc(int& minimum_height, int& natural_height) const;
-    void get_preferred_height_for_width_vfunc(int width, int& minimum_height, int& natural_height) const;
+#if GTK_CHECK_VERSION(3, 0, 0)
+    void get_preferred_width_vfunc(int &minimum_width, int &natural_width) const;
+    void get_preferred_width_for_height_vfunc(int height, int &minimum_width, int &natural_width) const;
+    void get_preferred_height_vfunc(int &minimum_height, int &natural_height) const;
+    void get_preferred_height_for_width_vfunc(int width, int &minimum_height, int &natural_height) const;
 #else
-    void on_size_request(Gtk::Requisition* requisition);
-    bool on_expose_event(GdkEventExpose* event);
+    void on_size_request(Gtk::Requisition *requisition);
+    bool on_expose_event(GdkEventExpose *event);
 #endif
 
 private:
@@ -76,7 +73,7 @@ private:
 
     bool _dragging;
 
-#if GTK_CHECK_VERSION(3,0,0)
+#if GTK_CHECK_VERSION(3, 0, 0)
     Glib::RefPtr<Gtk::Adjustment> _adjustment;
 #else
     Gtk::Adjustment *_adjustment;
@@ -96,9 +93,9 @@ private:
     Glib::RefPtr<Gdk::Window> _gdk_window;
 };
 
-}//namespace Widget
-}//namespace UI
-}//namespace Inkscape
+} // namespace Widget
+} // namespace UI
+} // namespace Inkscape
 
 #endif
 /*

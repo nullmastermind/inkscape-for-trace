@@ -30,12 +30,14 @@ ColorEntry::ColorEntry(SelectedColor &color)
     set_tooltip_text(_("Hexadecimal RGBA value of the color"));
 }
 
-ColorEntry::~ColorEntry() {
+ColorEntry::~ColorEntry()
+{
     _color_changed_connection.disconnect();
     _color_dragged_connection.disconnect();
 }
 
-void ColorEntry::on_changed() {
+void ColorEntry::on_changed()
+{
     if (_updating) {
         return;
     }
@@ -43,7 +45,7 @@ void ColorEntry::on_changed() {
     Glib::ustring text = get_text();
     bool changed = false;
 
-    //Coerce the value format to eight hex digits
+    // Coerce the value format to eight hex digits
     if (!text.empty() && text[0] == '#') {
         changed = true;
         text.erase(0, 1);
@@ -54,8 +56,8 @@ void ColorEntry::on_changed() {
         }
     }
 
-    gchar* str = g_strdup(text.c_str());
-    gchar* end = 0;
+    gchar *str = g_strdup(text.c_str());
+    gchar *end = 0;
     guint64 rgba = g_ascii_strtoull(str, &end, 16);
     if (end != str) {
         ptrdiff_t len = end - str;
@@ -72,11 +74,12 @@ void ColorEntry::on_changed() {
 }
 
 
-void ColorEntry::_onColorChanged() {
+void ColorEntry::_onColorChanged()
+{
     SPColor color = _color.color();
     gdouble alpha = _color.alpha();
 
-    guint32 rgba = color.toRGBA32( alpha );
+    guint32 rgba = color.toRGBA32(alpha);
     Glib::ustring text = Glib::ustring::format(std::hex, std::setw(8), std::setfill(L'0'), rgba);
 
     Glib::ustring old_text = get_text();
@@ -86,7 +89,6 @@ void ColorEntry::_onColorChanged() {
         _updating = false;
     }
 }
-
 }
 }
 }

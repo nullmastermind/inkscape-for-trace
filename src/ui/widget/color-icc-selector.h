@@ -2,7 +2,7 @@
 #define SEEN_SP_COLOR_ICC_SELECTOR_H
 
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+#include <config.h>
 #endif
 
 #include <gtkmm/widget.h>
@@ -24,42 +24,41 @@ namespace Widget {
 class ColorICCSelectorImpl;
 
 class ColorICCSelector
-#if GTK_CHECK_VERSION(3,0,0)
+#if GTK_CHECK_VERSION(3, 0, 0)
     : public Gtk::Grid
 #else
     : public Gtk::Table
 #endif
-{
-public:
-    static const gchar* MODE_NAME;
+      {
+  public:
+    static const gchar *MODE_NAME;
 
     ColorICCSelector(SelectedColor &color);
     virtual ~ColorICCSelector();
 
     virtual void init();
 
-protected:
+  protected:
     virtual void _colorChanged();
 
-    void _recalcColor( gboolean changing );
+    void _recalcColor(gboolean changing);
 
-private:
+  private:
     friend class ColorICCSelectorImpl;
 
     // By default, disallow copy constructor and assignment operator
-    ColorICCSelector( const ColorICCSelector& obj );
-    ColorICCSelector& operator=( const ColorICCSelector& obj );
+    ColorICCSelector(const ColorICCSelector &obj);
+    ColorICCSelector &operator=(const ColorICCSelector &obj);
 
     ColorICCSelectorImpl *_impl;
 };
 
 
-class ColorICCSelectorFactory: public ColorSelectorFactory {
-public:
-    Gtk::Widget* createWidget(SelectedColor &color) const;
+class ColorICCSelectorFactory : public ColorSelectorFactory {
+  public:
+    Gtk::Widget *createWidget(SelectedColor &color) const;
     Glib::ustring modeName() const;
 };
-
 }
 }
 }

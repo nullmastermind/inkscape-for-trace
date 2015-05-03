@@ -18,7 +18,8 @@ namespace Inkscape {
 namespace UI {
 namespace Widget {
 
-class ColorEntry: public Gtk::Entry {
+class ColorEntry : public Gtk::Entry
+{
 public:
     ColorEntry(SelectedColor &color);
     virtual ~ColorEntry();

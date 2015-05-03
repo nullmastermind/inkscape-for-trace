@@ -13,7 +13,7 @@
 #define SEEN_SP_COLOR_WHEEL_SELECTOR_H
 
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+#include <config.h>
 #endif
 
 #if WITH_GTKMM_3_0
@@ -33,14 +33,14 @@ namespace Widget {
 class ColorSlider;
 
 class ColorWheelSelector
-#if GTK_CHECK_VERSION(3,0,0)
+#if GTK_CHECK_VERSION(3, 0, 0)
     : public Gtk::Grid
 #else
     : public Gtk::Table
 #endif
 {
 public:
-	static const gchar* MODE_NAME;
+    static const gchar *MODE_NAME;
 
     ColorWheelSelector(SelectedColor &color);
     virtual ~ColorWheelSelector();
@@ -59,30 +59,28 @@ protected:
 
     SelectedColor &_color;
     bool _updating;
-#if GTK_CHECK_VERSION(3,0,0)
+#if GTK_CHECK_VERSION(3, 0, 0)
     Glib::RefPtr<Gtk::Adjustment> _alpha_adjustment;
 #else
-    Gtk::Adjustment* _alpha_adjustment;
+    Gtk::Adjustment *_alpha_adjustment;
 #endif
-    GtkWidget* _wheel;
-    Inkscape::UI::Widget::ColorSlider* _slider;
+    GtkWidget *_wheel;
+    Inkscape::UI::Widget::ColorSlider *_slider;
 
 private:
     // By default, disallow copy constructor and assignment operator
-    ColorWheelSelector( const ColorWheelSelector& obj );
-    ColorWheelSelector& operator=( const ColorWheelSelector& obj );
+    ColorWheelSelector(const ColorWheelSelector &obj);
+    ColorWheelSelector &operator=(const ColorWheelSelector &obj);
 
     sigc::connection _color_changed_connection;
     sigc::connection _color_dragged_connection;
 };
 
-
-class ColorWheelSelectorFactory: public ColorSelectorFactory {
+class ColorWheelSelectorFactory : public ColorSelectorFactory {
 public:
     Gtk::Widget *createWidget(SelectedColor &color) const;
     Glib::ustring modeName() const;
 };
-
 }
 }
 }

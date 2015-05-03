@@ -15,7 +15,7 @@
 #define SEEN_SP_COLOR_NOTEBOOK_H
 
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+#include <config.h>
 #endif
 
 #include <boost/ptr_container/ptr_vector.hpp>
@@ -35,7 +35,7 @@ namespace UI {
 namespace Widget {
 
 class ColorNotebook
-#if GTK_CHECK_VERSION(3,0,0)
+#if GTK_CHECK_VERSION(3, 0, 0)
     : public Gtk::Grid
 #else
     : public Gtk::Table
@@ -54,12 +54,11 @@ protected:
     };
 
     virtual void _initUI();
-    void _addPage(Page& page);
+    void _addPage(Page &page);
 
     static void _onButtonClicked(GtkWidget *widget, ColorNotebook *colorbook);
     static void _onPickerClicked(GtkWidget *widget, ColorNotebook *colorbook);
-    static void _onPageSwitched(GtkNotebook *notebook, GtkWidget *page,
-            guint page_num, ColorNotebook *colorbook);
+    static void _onPageSwitched(GtkNotebook *notebook, GtkWidget *page, guint page_num, ColorNotebook *colorbook);
     virtual void _onSelectedColorChanged();
 
     void _updateICCButtons();
@@ -73,17 +72,16 @@ protected:
     GtkWidget *_rgbal; /* RGBA entry */
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
     GtkWidget *_box_outofgamut, *_box_colormanaged, *_box_toomuchink;
-#endif //defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+#endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
     GtkWidget *_btn_picker;
     GtkWidget *_p; /* Color preview */
     boost::ptr_vector<Page> _available_pages;
 
 private:
     // By default, disallow copy constructor and assignment operator
-    ColorNotebook( const ColorNotebook& obj );
-    ColorNotebook& operator=( const ColorNotebook& obj );
+    ColorNotebook(const ColorNotebook &obj);
+    ColorNotebook &operator=(const ColorNotebook &obj);
 };
-
 }
 }
 }
