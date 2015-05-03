@@ -12,14 +12,6 @@
 #ifndef SEEN_COLOR_SLIDER_H
 #define SEEN_COLOR_SLIDER_H
 
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
-
-#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
-#include <glibmm/threads.h>
-#endif
-
 #include <gtkmm/widget.h>
 #include <sigc++/signal.h>
 

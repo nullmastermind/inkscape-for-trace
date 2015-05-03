@@ -19,16 +19,11 @@
 # include "config.h"
 #endif
 
-#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
-#include <glibmm/threads.h>
-#endif
-
 #include "widgets/icon.h"
 #include <cstring>
 #include <string>
 #include <cstdlib>
 #include <cstddef>
-#include <gtk/gtk.h>
 #include <glibmm/i18n.h>
 #include <gtkmm/label.h>
 #include <gtkmm/notebook.h>

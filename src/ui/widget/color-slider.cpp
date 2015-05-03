@@ -15,20 +15,19 @@
 # include "config.h"
 #endif
 
-#include "color-slider.h"
-
-#include <gtk/gtk.h>
 #include <gdkmm/cursor.h>
 #include <gdkmm/screen.h>
 #include <gdkmm/general.h>
 #include <gtkmm/adjustment.h>
-#if GTK_CHECK_VERSION(3,0,0)
+#if WITH_GTKMM_3_0
 #include <gtkmm/stylecontext.h>
 #else
 #include <gtkmm/style.h>
 #endif
+#include <gtk/gtk.h>
 
 #include "ui/widget/color-scales.h"
+#include "ui/widget/color-slider.h"
 #include "preferences.h"
 
 static const gint SLIDER_WIDTH = 96;

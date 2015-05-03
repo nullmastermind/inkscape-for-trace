@@ -16,13 +16,7 @@
 # include <config.h>
 #endif
 
-#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
-#include <glibmm/threads.h>
-#endif
-
-#include <glib.h>
-#include <gtk/gtk.h>
-#if GTK_CHECK_VERSION(3,0,0)
+#if WITH_GTKMM_3_0
 #include <gtkmm/grid.h>
 #else
 #include <gtkmm/table.h>

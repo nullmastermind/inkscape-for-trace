@@ -11,14 +11,6 @@
 #ifndef SEEN_COLOR_ENTRY_H
 #define SEEN_COLOR_ENTRY_H_
 
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif
-
-#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
-#include <glibmm/threads.h>
-#endif
-
 #include <gtkmm/entry.h>
 #include "ui/selected-color.h"
 
