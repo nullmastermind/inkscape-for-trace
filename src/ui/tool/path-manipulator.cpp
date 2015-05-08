@@ -1148,15 +1148,15 @@ void PathManipulator::_createControlPointsFromGeometry()
 
         Node *previous_node = new Node(_multi_path_manipulator._path_data.node_data, pit->initialPoint());
         subpath->push_back(previous_node);
-        Geom::Curve const &cseg = pit->back_closed();
-        bool fuse_ends = pit->closed()
-            && Geom::are_near(cseg.initialPoint(), cseg.finalPoint());
-        for (Geom::Path::iterator cit = pit->begin(); cit != pit->end_open(); ++cit) {
+
+        bool closed = pit->closed();
+
+        for (Geom::Path::iterator cit = pit->begin(); cit != pit->end(); ++cit) {
             Geom::Point pos = cit->finalPoint();
             Node *current_node;
             // if the closing segment is degenerate and the path is closed, we need to move
             // the handle of the first node instead of creating a new one
-            if (fuse_ends && cit == --(pit->end_open())) {
+            if (closed && cit == --(pit->end())) {
                 current_node = subpath->begin().get_pointer();
             } else {
                 /* regardless of segment type, create a new node at the end

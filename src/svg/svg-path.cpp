@@ -43,16 +43,15 @@ Geom::PathVector sp_svg_read_pathv(char const * str)
     if (!str)
         return pathv;  // return empty pathvector when str == NULL
 
-
-    typedef std::back_insert_iterator<Geom::PathVector> Inserter;
-    Inserter iter(pathv);
-    Geom::PathIteratorSink<Inserter> generator(iter);
+    Geom::PathBuilder builder(pathv);
+    Geom::SVGPathParser parser(builder);
+    parser.setZSnapThreshold(Geom::EPSILON);
 
     try {
-        Geom::parse_svg_path(str, generator);
+        parser.parse(str);
     }
     catch (Geom::SVGPathParseError &e) {
-        generator.flush();
+        builder.flush();
         // This warning is extremely annoying when testing
         //g_warning("Malformed SVG path, truncated path up to where error was found.\n Input path=\"%s\"\n Parsed path=\"%s\"", str, sp_svg_write_path(pathv));
     }
