@@ -180,7 +180,6 @@ Ellipse::arc(Point const &ip, Point const &inner, Point const &fp,
     // The arc is larger than half of the ellipse if the inner point
     // is on the same side of the line going from the initial
     // to the final point as the center of the ellipse
-    Line chord(ip, fp);
     Point versor = fp - ip;
     double sdist_c = cross(versor, _center - ip);
     double sdist_inner = cross(versor, inner - ip);
@@ -225,9 +224,11 @@ Ellipse &Ellipse::operator*=(Rotate const &r)
 
 Ellipse &Ellipse::operator*=(Affine const& m)
 {
-    Rotate a(_angle);
+    Affine a = Scale(ray(X), ray(Y)) * Rotate(_angle);
     Affine mwot = m.withoutTranslation();
     Affine am = a * mwot;
+    Point new_center = _center * m;
+
     if (are_near(am.descrim(), 0)) {
         double angle;
         if (am[0] != 0) {
@@ -237,13 +238,11 @@ Ellipse &Ellipse::operator*=(Affine const& m)
         } else {
             angle = M_PI/2;
         }
-        Point v;
-        sincos(angle, v[X], v[Y]);
-        v *= am;
-        _angle = atan2(v);
-        _center *= m;
+        Point v = Point::polar(angle) * am;
+        _center = new_center;
         _rays[X] = L2(v);
         _rays[Y] = 0;
+        _angle = atan2(v);
         return *this;
     }
 
@@ -257,7 +256,7 @@ Ellipse &Ellipse::operator*=(Affine const& m)
     std::swap(invm[1], invm[2]);
     q *= invm;
     setCoefficients(q[0], 2*q[1], q[3], 0, 0, -1);
-    _center *= m;
+    _center = new_center;
 
     return *this;
 }
