@@ -855,29 +855,6 @@ recursive_bezier4(const double x1, const double y1,
         recursive_bezier4(x1234, y1234, x234, y234, x34, y34, x4, y4, m_points, level + 1); 
 }
 
-
-namespace Geom {
-
-bool transform_equalp(Geom::Affine const &m0, Geom::Affine const &m1, Geom::Coord const epsilon) {
-    return
-        Geom::are_near(m0[0], m1[0], epsilon) &&
-        Geom::are_near(m0[1], m1[1], epsilon) &&
-        Geom::are_near(m0[2], m1[2], epsilon) &&
-        Geom::are_near(m0[3], m1[3], epsilon);
-}
-
-
-bool translate_equalp(Geom::Affine const &m0, Geom::Affine const &m1, Geom::Coord const epsilon) {
-    return Geom::are_near(m0[4], m1[4], epsilon) && Geom::are_near(m0[5], m1[5], epsilon);
-}
-
-
-bool matrix_equalp(Geom::Affine const &m0, Geom::Affine const &m1, Geom::Coord const epsilon) {
-    return transform_equalp(m0, m1, epsilon) && translate_equalp(m0, m1, epsilon);
-}
-
-} //end namespace Geom
-
 /*
   Local Variables:
   mode:c++
