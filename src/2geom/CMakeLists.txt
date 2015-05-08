@@ -11,7 +11,6 @@ set(2geom_SRC
 	circle.cpp
 	# conic_section_clipper_impl.cpp
 	# conicsec.cpp
-	conjugate_gradient.cpp
 	convex-hull.cpp
 	coord.cpp
 	crossing.cpp
@@ -34,7 +33,6 @@ set(2geom_SRC
 	quadtree.cpp
 	rect.cpp
 	# recursive-bezier-intersection.cpp
-	region.cpp
 	sbasis-2d.cpp
 	sbasis-geometric.cpp
 	sbasis-math.cpp
@@ -42,7 +40,6 @@ set(2geom_SRC
 	sbasis-roots.cpp
 	sbasis-to-bezier.cpp
 	sbasis.cpp
-	shape.cpp
 	solve-bezier.cpp
 	solve-bezier-one-d.cpp
 	solve-bezier-parametric.cpp
@@ -67,7 +64,6 @@ set(2geom_SRC
 	bezier.h
 	choose.h
 	circle.h
-	circulator.h
 	concepts.h
 	conic_section_clipper.h
 	conic_section_clipper_cr.h
