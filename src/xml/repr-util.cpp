@@ -310,6 +310,11 @@ int sp_repr_compare_position(Inkscape::XML::Node const *first, Inkscape::XML::No
        pjrm */
 }
 
+bool sp_repr_compare_position_bool(Inkscape::XML::Node const *first, Inkscape::XML::Node const *second){
+    return sp_repr_compare_position(first, second)<0;
+}
+
+
 /**
  * Find an element node using an unique attribute.
  *

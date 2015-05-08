@@ -127,87 +127,104 @@ static Circle touching_circle( D2<SBasis> const &curve, double t, double tol=0.0
 
 namespace {
 
-// Join functions may:
-// - inspect any curve of the current path
-// - append any type of curve to the current path
-// - inspect the outgoing path
-// 
-// Join functions must:
-// - append the outgoing curve
-// OR
-// - end at outgoing.finalPoint
+// Internal data structure
 
-typedef void join_func(Geom::Path& res, Geom::Curve const& outgoing, double miter, double width);
-
-void bevel_join(Geom::Path& res, Geom::Curve const& outgoing, double /*miter*/, double /*width*/)
+struct join_data
 {
-    res.appendNew<Geom::LineSegment>(outgoing.initialPoint());
-    res.append(outgoing);
+    join_data(Geom::Path &_res, Geom::Path const&_outgoing, Geom::Point _in_tang, Geom::Point _out_tang, double _miter, double _width)
+        : res(_res), outgoing(_outgoing), in_tang(_in_tang)
+        , out_tang(_out_tang), miter(_miter), width(_width) {}
+
+    // I/O
+    Geom::Path &res;
+    Geom::Path const& outgoing;
+
+    // input tangents
+    Geom::Point in_tang;
+    Geom::Point out_tang;
+
+    // line parameters
+    double miter;
+    double width;
+};
+
+// Join functions must append the outgoing path
+
+typedef void join_func(join_data jd);
+
+void bevel_join(join_data jd)
+{
+    jd.res.appendNew<Geom::LineSegment>(jd.outgoing.initialPoint());
+    jd.res.append(jd.outgoing);
 }
 
-void round_join(Geom::Path& res, Geom::Curve const& outgoing, double /*miter*/, double width)
+void round_join(join_data jd)
 {
-    res.appendNew<Geom::SVGEllipticalArc>(width, width, 0, false, width <= 0, outgoing.initialPoint());
-    res.append(outgoing);
+    jd.res.appendNew<Geom::SVGEllipticalArc>(jd.width, jd.width, 0, false, jd.width <= 0, jd.outgoing.initialPoint());
+    jd.res.append(jd.outgoing);
 }
 
-void miter_join_internal(Geom::Path& res, Geom::Curve const& outgoing, double miter, double width, bool clip)
+void miter_join_internal(join_data jd, bool clip)
 {
-    Geom::Curve const& incoming = res.back();
-    Geom::Point tang1 = Geom::unitTangentAt(reverse(incoming.toSBasis()), 0.);
-    Geom::Point tang2 = outgoing.unitTangentAt(0);
-    Geom::Point p = Geom::intersection_point(incoming.finalPoint(), tang1, outgoing.initialPoint(), tang2);
+    using namespace Geom;
+
+    Curve const& incoming = jd.res.back();
+    Curve const& outgoing = jd.outgoing.front();
+    Path &res = jd.res;
+    double width = jd.width, miter = jd.miter;
+
+    Point tang1 = jd.in_tang;
+    Point tang2 = jd.out_tang;
+    Point p = intersection_point(incoming.finalPoint(), tang1, outgoing.initialPoint(), tang2);
 
     bool satisfied = false;
     bool inc_ls = res.back_open().degreesOfFreedom() <= 4;
 
     if (p.isFinite()) {
         // check size of miter
-        Geom::Point point_on_path = incoming.finalPoint() + Geom::rot90(tang1)*width;
-        satisfied = Geom::distance(p, point_on_path) <= miter * 2.0 * width;
+        Point point_on_path = incoming.finalPoint() + rot90(tang1)*width;
+        satisfied = distance(p, point_on_path) <= miter * 2.0 * width;
         if (satisfied) {
             // miter OK, check to see if we can do a relocation
             if (inc_ls) {
                 res.setFinal(p);
             } else {
-                res.appendNew<Geom::LineSegment>(p);
+                res.appendNew<LineSegment>(p);
             }
         } else if (clip) {
             // miter needs clipping, find two points
-            Geom::Point bisector_versor = Geom::Line(point_on_path, p).versor();
-            Geom::Point point_limit = point_on_path + miter * 2.0 * width * bisector_versor;
+            Point bisector_versor = Line(point_on_path, p).versor();
+            Point point_limit = point_on_path + miter * 2.0 * width * bisector_versor;
 
-            Geom::Point p1 = Geom::intersection_point(incoming.finalPoint(), tang1, point_limit, bisector_versor.cw());
-            Geom::Point p2 = Geom::intersection_point(outgoing.initialPoint(), tang2, point_limit, bisector_versor.cw());
+            Point p1 = intersection_point(incoming.finalPoint(), tang1, point_limit, bisector_versor.cw());
+            Point p2 = intersection_point(outgoing.initialPoint(), tang2, point_limit, bisector_versor.cw());
 
             if (inc_ls) {
                 res.setFinal(p1);
             } else {
-                res.appendNew<Geom::LineSegment>(p1);
+                res.appendNew<LineSegment>(p1);
             }
-            res.appendNew<Geom::LineSegment>(p2);
+            res.appendNew<LineSegment>(p2);
         }
     }
 
-    res.appendNew<Geom::LineSegment>(outgoing.initialPoint());
+    res.appendNew<LineSegment>(outgoing.initialPoint());
 
     // check if we can do another relocation
     bool out_ls = outgoing.degreesOfFreedom() <= 4;
 
-    if ( (satisfied || clip) && out_ls) {
+    if ((satisfied || clip) && out_ls) {
         res.setFinal(outgoing.finalPoint());
     } else {
         res.append(outgoing);
     }
+
+    // either way, add the rest of the path
+    res.insert(res.end(), ++jd.outgoing.begin(), jd.outgoing.end());
 }
 
-void miter_join(Geom::Path& res, Geom::Curve const& outgoing, double miter, double width) {
-    miter_join_internal( res, outgoing, miter, width, false );
-}
-
-void miter_clip_join(Geom::Path& res, Geom::Curve const& outgoing, double miter, double width) {
-    miter_join_internal( res, outgoing, miter, width, true );
-}
+void miter_join(join_data jd) { miter_join_internal(jd, false); }
+void miter_clip_join(join_data jd) { miter_join_internal(jd, true); }
 
 Geom::Point pick_solution(Geom::Point points[2], Geom::Point tang2, Geom::Point endPt)
 {
@@ -225,15 +242,18 @@ Geom::Point pick_solution(Geom::Point points[2], Geom::Point tang2, Geom::Point 
     return sol;
 }
 
-void extrapolate_join(Geom::Path& res, Geom::Curve const& outgoing, double miter, double width)
+void extrapolate_join(join_data jd)
 {
     using namespace Geom;
 
+    Geom::Path &res = jd.res;
     Geom::Curve const& incoming = res.back();
+    Geom::Curve const& outgoing = jd.outgoing.front();
     Geom::Point startPt = incoming.finalPoint();
     Geom::Point endPt = outgoing.initialPoint();
-    Geom::Point tang1 = Geom::unitTangentAt(reverse(incoming.toSBasis()), 0.);
-    Geom::Point tang2 = outgoing.unitTangentAt(0);
+    Geom::Point tang1 = jd.in_tang;
+    Geom::Point tang2 = jd.out_tang;
+    double width = jd.width, miter = jd.miter;
 
     Geom::Circle circle1 = Geom::touching_circle(Geom::reverse(incoming.toSBasis()), 0.);
     Geom::Circle circle2 = Geom::touching_circle(outgoing.toSBasis(), 0);
@@ -280,7 +300,7 @@ void extrapolate_join(Geom::Path& res, Geom::Curve const& outgoing, double miter
 
     if (solutions != 2)
         // no solutions available, fall back to miter
-        return miter_clip_join(res, outgoing, miter, width);
+        return miter_clip_join(jd);
 
     // We have a solution, thus sol is defined.
     p1 = sol;
@@ -381,52 +401,77 @@ void extrapolate_join(Geom::Path& res, Geom::Curve const& outgoing, double miter
         // Straight line segment:
         res.appendNew<Geom::LineSegment>(outgoing.finalPoint());
     }
-    
+
+    // add the rest of the path
+    res.insert(res.end(), ++jd.outgoing.begin(), jd.outgoing.end());
+
     delete arc1;
     delete arc2;
 }
 
-void join_inside(Geom::Path& res, Geom::Curve const& outgoing)
+void join_inside(join_data jd)
 {
-    Geom::Curve const& incoming = res.back_open();
-    Geom::Crossings cross = Geom::crossings(incoming, outgoing);
-    
-    if (!cross.empty()) {
-        // yeah if we could avoid allocing that'd be great
-        Geom::Curve *d1 = incoming.portion(0., cross[0].ta);
-        res.erase_last();
-        res.append(*d1);
-        delete d1;
+    Geom::Path &res = jd.res;
+    Geom::Path const& temp = jd.outgoing;
+    Geom::Crossings cross = Geom::crossings(res, temp);
 
-        Geom::Curve *d2 = outgoing.portion(cross[0].tb, 1.);
-        res.setFinal(d2->initialPoint());
-        res.append(*d2);
-        delete d2;
+    int solution = -1; // lol, really hope there aren't more than INT_MAX crossings
+    if (cross.size() == 1) solution = 0;
+    else if (cross.size() > 1) {
+        // I am not sure how well this will work -- we pick the join node closest
+        // to the cross point of the paths
+        Geom::Point original = res.finalPoint()+Geom::rot90(jd.in_tang)*jd.width;
+        Geom::Coord trial = Geom::L2(res.pointAt(cross[0].ta)-original);
+        solution = 0;
+        for (size_t i = 1; i < cross.size(); ++i) {
+            //printf("Trying %d\n", i);
+            Geom::Coord test = Geom::L2(res.pointAt(cross[i].ta)-original);
+            if (test < trial) {
+                trial = test;
+                solution = i;
+                //printf("Found improved solution: %f\n", trial);
+            }
+        }
+    }
+
+    if (solution != -1) {
+        Geom::Path d1 = res.portion(0., cross[solution].ta);
+        Geom::Path d2 = temp.portion(cross[solution].tb, temp.size());
+
+        // Watch for bugs in 2geom crossing regarding severe inflection points
+        res.clear();
+        res.append(d1);
+        res.setFinal(d2.initialPoint());
+        res.append(d2);
     } else {
-        res.appendNew<Geom::LineSegment>(outgoing.initialPoint());
-        res.append(outgoing);
+        res.appendNew<Geom::LineSegment>(temp.initialPoint());
+        res.append(temp);
     }
 }
 
-bool decide(Geom::Curve const& incoming, Geom::Curve const& outgoing)
+void tangents(Geom::Point tang[2], Geom::Curve const& incoming, Geom::Curve const& outgoing)
 {
     Geom::Point tang1 = Geom::unitTangentAt(reverse(incoming.toSBasis()), 0.);
     Geom::Point tang2 = outgoing.unitTangentAt(0.);
-    return (Geom::cross(tang1, tang2) > 0);
+    tang[0] = tang1, tang[1] = tang2;
 }
 
-void outline_helper(Geom::Path& res, Geom::Path const& to_add, double width, bool on_outside, double miter, Inkscape::LineJoinType join)
+void outline_helper(Geom::Path &res, Geom::Path const& temp, Geom::Point in_tang, Geom::Point out_tang, double width, double miter, Inkscape::LineJoinType join)
 {
-    if (res.size() == 0 || to_add.size() == 0)
+    if (res.size() == 0 || temp.size() == 0)
         return;
 
-    Geom::Curve const& outgoing = to_add[0];
+    Geom::Curve const& outgoing = temp.front();
     if (Geom::are_near(res.finalPoint(), outgoing.initialPoint())) {
         // if the points are /that/ close, just ignore this one
-        res.setFinal(outgoing.initialPoint());
-        res.append(outgoing);
+        res.setFinal(temp.initialPoint());
+        res.append(temp);
         return;
     }
+
+    join_data jd(res, temp, in_tang, out_tang, miter, width);
+
+    bool on_outside = (Geom::cross(in_tang, out_tang) > 0);
 
     if (on_outside) {
         join_func *jf;
@@ -446,9 +491,9 @@ void outline_helper(Geom::Path& res, Geom::Path const& to_add, double width, boo
             default:
                 jf = &miter_join;
         }
-        jf(res, outgoing, miter, width);
+        jf(jd);
     } else {
-        join_inside(res, outgoing);
+        join_inside(jd);
     }
 }
 
@@ -579,7 +624,7 @@ void offset_quadratic(Geom::Path& p, Geom::QuadraticBezier const& bez, double wi
 
 void offset_curve(Geom::Path& res, Geom::Curve const* current, double width)
 {
-    double const tolerance = 0.005;
+    double const tolerance = 0.0025;
     size_t levels = 8;
 
     if (current->isDegenerate()) return; // don't do anything
@@ -705,6 +750,7 @@ Geom::Path half_outline(Geom::Path const& input, double width, double miter, Lin
     Geom::Point tang1 = input[0].unitTangentAt(0);
     Geom::Point start = input.initialPoint() + tang1 * width;
     Geom::Path temp;
+    Geom::Point tang[2];
 
     res.setStitching(true);
     temp.setStitching(true);
@@ -723,20 +769,16 @@ Geom::Path half_outline(Geom::Path const& input, double width, double miter, Lin
         if (u == 0) {
             res.append(temp);
         } else {
-            bool on_outside = decide(input[u-1], input[u]);
-            outline_helper(res, temp, width, on_outside, miter, join);
-            if (temp.size() > 0)
-                res.insert(res.end(), ++temp.begin(), temp.end());
+            tangents(tang, input[u-1], input[u]);
+            outline_helper(res, temp, tang[0], tang[1], width, miter, join);
         }
 
         // odd number of paths
         if (u < k - 1) {
             temp = Geom::Path();
             offset_curve(temp, &input[u+1], width);
-            bool on_outside = decide(input[u], input[u+1]);
-            outline_helper(res, temp, width, on_outside, miter, join);
-            if (temp.size() > 0)
-                res.insert(res.end(), ++temp.begin(), temp.end());
+            tangents(tang, input[u], input[u+1]);
+            outline_helper(res, temp, tang[0], tang[1], width, miter, join);
         }
     }
 
@@ -747,8 +789,8 @@ Geom::Path half_outline(Geom::Path const& input, double width, double miter, Lin
         temp.append(c1);
         Geom::Path temp2;
         temp2.append(c2);
-        bool on_outside = decide(input.back(), input.front());
-        outline_helper(temp, temp2, width, on_outside, miter, join);
+        tangents(tang, input.back(), input.front());
+        outline_helper(temp, temp2, tang[0], tang[1], width, miter, join);
         res.erase(res.begin());
         res.erase_last();
         //
