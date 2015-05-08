@@ -856,18 +856,6 @@ recursive_bezier4(const double x1, const double y1,
 }
 
 
-/**
- * rounds all corners of the rectangle 'outwards', i.e. x0 and y0 are floored, x1 and y1 are ceiled.
- */
-void round_rectangle_outwards(Geom::Rect & rect) {
-    Geom::Interval ints[2];
-    for (int i=0; i < 2; i++) {
-        ints[i] = Geom::Interval(std::floor(rect[i][0]), std::ceil(rect[i][1]));
-    }
-    rect = Geom::Rect(ints[0], ints[1]);
-}
-
-
 namespace Geom {
 
 bool transform_equalp(Geom::Affine const &m0, Geom::Affine const &m1, Geom::Coord const epsilon) {
