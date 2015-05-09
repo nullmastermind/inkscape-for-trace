@@ -34,6 +34,7 @@
 #include "sp-linear-gradient.h"
 #include "sp-radial-gradient.h"
 #include "sp-mesh.h"
+#include "sp-stop.h"
 /* fixme: Move it from dialogs to here */
 #include "gradient-selector.h"
 #include <inkscape.h>
@@ -664,6 +665,18 @@ void SPPaintSelector::onSelectedColorChanged() {
 static void sp_paint_selector_set_mode_color(SPPaintSelector *psel, SPPaintSelector::Mode /*mode*/)
 {
     using Inkscape::UI::Widget::ColorNotebook;
+
+    if ((psel->mode == SPPaintSelector::MODE_SWATCH) 
+            || (psel->mode == SPPaintSelector::MODE_GRADIENT_LINEAR)
+            || (psel->mode == SPPaintSelector::MODE_GRADIENT_RADIAL) ) {
+        SPGradientSelector *gsel = getGradientFromData(psel);
+        if (gsel) {
+            SPGradient *gradient = gsel->getVector();
+            SPColor color = gradient->getFirstStop()->specified_color;
+            float alpha = gradient->getFirstStop()->opacity;
+            psel->selected_color->setColorAlpha(color, alpha);
+        }
+    }
 
     sp_paint_selector_set_style_buttons(psel, psel->solid);
     gtk_widget_set_sensitive(psel->style, TRUE);

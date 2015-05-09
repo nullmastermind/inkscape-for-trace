@@ -19,7 +19,6 @@ list(APPEND INKSCAPE_INCS_SYS ${GSL_INCLUDE_DIRS})
 list(APPEND INKSCAPE_LIBS ${GSL_LIBRARIES})
 if (WIN32)
 	list(APPEND INKSCAPE_LIBS "-L$ENV{DEVLIBS_PATH}/lib")  # FIXME
-	list(APPEND INKSCAPE_LIBS "-lintl.dll")  # FIXME
 	list(APPEND INKSCAPE_LIBS "-lpangocairo-1.0.dll")  # FIXME
 	list(APPEND INKSCAPE_LIBS "-lpangoft2-1.0.dll")  # FIXME
 	list(APPEND INKSCAPE_LIBS "-lpangowin32-1.0.dll")  # FIXME
@@ -31,23 +30,13 @@ elseif(APPLE)
 		# Cmake then can rely on the hard-coded paths in its modules.
 		# Only prepend search path if $CMAKE_PREFIX_PATH is defined:
 		list(APPEND INKSCAPE_LIBS "-L$ENV{CMAKE_PREFIX_PATH}/lib")  # FIXME
-		# TODO: verify whether linking the next two libs explicitly is always
-	  	# required, or only if MacPorts is installed in custom prefix:
-		list(APPEND INKSCAPE_LIBS "-liconv")  # FIXME
-		list(APPEND INKSCAPE_LIBS "-lintl")  # FIXME
 	endif()
 	list(APPEND INKSCAPE_LIBS "-lpangocairo-1.0")  # FIXME
 	list(APPEND INKSCAPE_LIBS "-lpangoft2-1.0")  # FIXME
 	list(APPEND INKSCAPE_LIBS "-lfontconfig")  # FIXME
-	# GTK+ backend
 	if(${GTK+_2.0_TARGET} MATCHES "x11")
 		# only link X11 if using X11 backend of GTK2
 		list(APPEND INKSCAPE_LIBS "-lX11")  # FIXME
-	elseif(${GTK+_2.0_TARGET} MATCHES "quartz")
-		# TODO: gtk-mac-integration (currently only useful for osxmenu branch)
-		# 1) add configure option (ON/OFF) for gtk-mac-integration
-		# 2) add checks (GTK+ backend must be "quartz")
-		# 3) link relevant lib(s)
 	endif()
 else()
 	list(APPEND INKSCAPE_LIBS "-ldl")  # FIXME
@@ -92,6 +81,16 @@ if(ENABLE_LCMS)
         endif()
     endif()
 endif()
+
+find_package(Iconv REQUIRED)
+list(APPEND INKSCAPE_INCS_SYS ${ICONV_INCLUDE_DIRS})
+list(APPEND INKSCAPE_LIBS ${ICONV_LIBRARIES})
+add_definitions(${ICONV_DEFINITIONS})
+
+find_package(Intl REQUIRED)
+list(APPEND INKSCAPE_INCS_SYS ${Intl_INCLUDE_DIRS})
+list(APPEND INKSCAPE_LIBS ${Intl_LIBRARIES})
+add_definitions(${Intl_DEFINITIONS})
 
 find_package(BoehmGC REQUIRED)
 list(APPEND INKSCAPE_INCS_SYS ${BOEHMGC_INCLUDE_DIRS})
@@ -176,8 +175,8 @@ endif()
 if(WITH_LIBCDR)
 	find_package(LibCDR)
 	if(LIBCDR_FOUND)
-		set(WITH_LIBCDR00 ${LIBVISIO-0.0_FOUND})
-		set(WITH_LIBCDR01 ${LIBVISIO-0.1_FOUND})
+		set(WITH_LIBCDR00 ${LIBCDR-0.0_FOUND})
+		set(WITH_LIBCDR01 ${LIBCDR-0.1_FOUND})
 		list(APPEND INKSCAPE_INCS_SYS ${LIBCDR_INCLUDE_DIRS})
 		list(APPEND INKSCAPE_LIBS     ${LIBCDR_LIBRARIES})
 		add_definitions(${LIBCDR_DEFINITIONS})
@@ -211,6 +210,14 @@ if(WITH_DBUS)
 		list(APPEND INKSCAPE_LIBS ${DBUS_LIBRARIES})
 	else()
 		set(WITH_DBUS OFF)
+	endif()
+endif()
+
+if(WITH_GTEST)
+	if(EXISTS "${GMOCK_DIR}" AND IS_DIRECTORY "${GMOCK_DIR}")
+	
+	else()
+		set(WITH_GTEST off)
 	endif()
 endif()
 
@@ -290,8 +297,9 @@ if(WITH_GTKSPELL)
 		list(APPEND INKSCAPE_INCS_SYS ${GTKSPELL_INCLUDE_DIR})
 		list(APPEND INKSCAPE_LIBS     ${GTKSPELL_LIBRARIES})
 		add_definitions(${GTKSPELL_DEFINITIONS})
+	else()
+		set(WITH_GTKSPELL OFF)
 	endif()
-	set(WITH_GTKSPELL ${GTKSPELL_FOUND})
 endif()
 
 #find_package(OpenSSL)
@@ -323,21 +331,29 @@ find_package(ZLIB REQUIRED)
 list(APPEND INKSCAPE_INCS_SYS ${ZLIB_INCLUDE_DIRS})
 list(APPEND INKSCAPE_LIBS ${ZLIB_LIBRARIES})
 
-find_package(ImageMagick COMPONENTS MagickCore Magick++)
-if(ImageMagick_FOUND)
-	list(APPEND INKSCAPE_INCS_SYS ${ImageMagick_MagickCore_INCLUDE_DIR})
-	list(APPEND INKSCAPE_LIBS ${ImageMagick_Magick++_LIBRARY})
-	set(WITH_IMAGE_MAGICK ON)  # enable 'Extensions > Raster'
-	# TODO: Cmake's ImageMagick module misses required defines for newer
-	# versions of ImageMagick. See also:
-	# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=776832
-	#add_definitions(-DMAGICKCORE_HDRI_ENABLE=0)  # FIXME (version check?)
-	#add_definitions(-DMAGICKCORE_QUANTUM_DEPTH=16)  # FIXME (version check?)
+if(WITH_IMAGE_MAGICK)
+	find_package(ImageMagick COMPONENTS MagickCore Magick++)
+	if(ImageMagick_FOUND)
+		# the component-specific paths apparently fail to get detected correctly
+		# on some linux distros (or with older Cmake versions).
+		# Use variables which list all include dirs and libraries instead:
+		list(APPEND INKSCAPE_INCS_SYS ${ImageMagick_INCLUDE_DIRS})
+		list(APPEND INKSCAPE_LIBS ${ImageMagick_LIBRARIES})
+		# TODO: Cmake's ImageMagick module misses required defines for newer
+		# versions of ImageMagick. See also:
+		# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=776832
+		#add_definitions(-DMAGICKCORE_HDRI_ENABLE=0)  # FIXME (version check?)
+		#add_definitions(-DMAGICKCORE_QUANTUM_DEPTH=16)  # FIXME (version check?)
+	else()
+		set(WITH_IMAGE_MAGICK OFF)  # enable 'Extensions > Raster'
+	endif()
 endif()
 
 include(${CMAKE_CURRENT_LIST_DIR}/IncludeJava.cmake)
 # end Dependencies
 
+list(REMOVE_DUPLICATES INKSCAPE_LIBS)
+list(REMOVE_DUPLICATES INKSCAPE_INCS_SYS)
 
 # C/C++ Flags
 include_directories(${INKSCAPE_INCS})

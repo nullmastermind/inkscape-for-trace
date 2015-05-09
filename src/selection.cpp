@@ -178,6 +178,7 @@ void Selection::_add(SPObject *obj) {
     // (to prevent double-selection)
     _removeObjectDescendants(obj);
     _removeObjectAncestors(obj);
+    g_return_if_fail(SP_IS_OBJECT(obj));
 
     _objs.push_front(obj);
     _objs_set.insert(obj);
@@ -481,16 +482,20 @@ std::vector<Inkscape::SnapCandidatePoint> Selection::getSnapPoints(SnapPreferenc
 }
 
 void Selection::_removeObjectDescendants(SPObject *obj) {
+    std::vector<SPObject*> toremove;
     for ( std::list<SPObject*>::const_iterator iter=_objs.begin();iter!=_objs.end();iter++ ) {
-        SPObject *sel_obj= *iter;
+        SPObject *sel_obj= dynamic_cast<SPObject*>(*iter);
         SPObject *parent = sel_obj->parent;
         while (parent) {
             if ( parent == obj ) {
-                _remove(sel_obj);
+                toremove.push_back(sel_obj);
                 break;
             }
             parent = parent->parent;
         }
+    }
+    for ( std::vector<SPObject*>::const_iterator iter=toremove.begin();iter!=toremove.end();iter++ ) {
+        _remove(*iter);
     }
 }
 
