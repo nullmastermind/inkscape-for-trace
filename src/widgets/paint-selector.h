@@ -50,8 +50,7 @@ struct SPPaintSelector {
         MODE_EMPTY,
         MODE_MULTIPLE,
         MODE_NONE,
-        MODE_COLOR_RGB,
-        MODE_COLOR_CMYK,
+        MODE_SOLID_COLOR,
         MODE_GRADIENT_LINEAR,
         MODE_GRADIENT_RADIAL,
 #ifdef WITH_MESH

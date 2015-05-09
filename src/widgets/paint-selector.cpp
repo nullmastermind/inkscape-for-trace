@@ -95,8 +95,7 @@ static gchar const* modeStrings[] = {
     "MODE_EMPTY",
     "MODE_MULTIPLE",
     "MODE_NONE",
-    "MODE_COLOR_RGB",
-    "MODE_COLOR_CMYK",
+    "MODE_SOLID_COLOR",
     "MODE_GRADIENT_LINEAR",
     "MODE_GRADIENT_RADIAL",
     "MODE_PATTERN",
@@ -219,7 +218,7 @@ sp_paint_selector_init(SPPaintSelector *psel)
     psel->none = sp_paint_selector_style_button_add(psel, INKSCAPE_ICON("paint-none"),
                                                     SPPaintSelector::MODE_NONE, _("No paint"));
     psel->solid = sp_paint_selector_style_button_add(psel, INKSCAPE_ICON("paint-solid"),
-                                                     SPPaintSelector::MODE_COLOR_RGB, _("Flat color"));
+                                                     SPPaintSelector::MODE_SOLID_COLOR, _("Flat color"));
     psel->gradient = sp_paint_selector_style_button_add(psel, INKSCAPE_ICON("paint-gradient-linear"),
                                                         SPPaintSelector::MODE_GRADIENT_LINEAR, _("Linear gradient"));
     psel->radial = sp_paint_selector_style_button_add(psel, INKSCAPE_ICON("paint-gradient-radial"),
@@ -407,8 +406,7 @@ void SPPaintSelector::setMode(Mode mode)
             case MODE_NONE:
                 sp_paint_selector_set_mode_none(this);
                 break;
-            case MODE_COLOR_RGB:
-            case MODE_COLOR_CMYK:
+            case MODE_SOLID_COLOR:
                 sp_paint_selector_set_mode_color(this, mode);
                 break;
             case MODE_GRADIENT_LINEAR:
@@ -465,7 +463,7 @@ void SPPaintSelector::setColorAlpha(SPColor const &color, float alpha)
 #ifdef SP_PS_VERBOSE
         g_print("PaintSelector set RGBA\n");
 #endif
-        setMode(MODE_COLOR_RGB);
+        setMode(MODE_SOLID_COLOR);
     }
 
     updating_color = true;
@@ -681,7 +679,7 @@ static void sp_paint_selector_set_mode_color(SPPaintSelector *psel, SPPaintSelec
     sp_paint_selector_set_style_buttons(psel, psel->solid);
     gtk_widget_set_sensitive(psel->style, TRUE);
 
-    if ((psel->mode == SPPaintSelector::MODE_COLOR_RGB) || (psel->mode == SPPaintSelector::MODE_COLOR_CMYK)) {
+    if ((psel->mode == SPPaintSelector::MODE_SOLID_COLOR)) {
         /* Already have color selector */
         // Do nothing
     } else {
@@ -1262,7 +1260,7 @@ SPPaintSelector::Mode SPPaintSelector::getModeForStyle(SPStyle const & style, Fi
         }
     } else if ( target.isColor() ) {
         // TODO this is no longer a valid assertion:
-        mode = MODE_COLOR_RGB; // so far only rgb can be read from svg
+        mode = MODE_SOLID_COLOR; // so far only rgb can be read from svg
     } else if ( target.isNone() ) {
         mode = MODE_NONE;
     } else {
