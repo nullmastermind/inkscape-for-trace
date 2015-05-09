@@ -123,7 +123,7 @@ void FilletChamferPropertiesDialog::showDialog(
     FilletChamferKnotHolderEntity *pt,
     bool _use_distance,
     bool _aprox_radius,
-    Geom::Satellite _satellite)
+    Satellite _satellite)
 {
     FilletChamferPropertiesDialog *dialog = new FilletChamferPropertiesDialog();
 
@@ -200,7 +200,7 @@ void FilletChamferPropertiesDialog::_handleButtonEvent(GdkEventButton *event)
     }
 }
 
-void FilletChamferPropertiesDialog::_setSatellite(Geom::Satellite satellite)
+void FilletChamferPropertiesDialog::_setSatellite(Satellite satellite)
 {
     double position;
     std::string distance_or_radius = std::string(_("Radius"));

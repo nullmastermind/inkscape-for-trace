@@ -298,10 +298,10 @@ void FilletChamferKnotHolderEntity::knot_set(Point const &p,
             if (time_start > mirror_time) {
                 mirror_time = time_start;
             }
-            double size = satellite.toSize(mirror_time, d2_in);
+            double size = satellite.arcLengthAt(mirror_time, d2_in);
             double amount = Geom::length(d2_in, Geom::EPSILON) - size;
             if (satellite.isTime) {
-                amount = satellite.toTime(amount, pwd2[index]);
+                amount = satellite.timeAtArcLength(amount, pwd2[index]);
             }
             satellite.amount = amount;
         }
@@ -428,14 +428,11 @@ void FilletChamferKnotHolderEntity::knot_click(guint state)
         double amount = _pparam->_vector.at(index).amount;
         if (!_pparam->_use_distance && !_pparam->_vector.at(index).isTime) {
             boost::optional<size_t> prev = path_info.previous(index);
-            boost::optional<Geom::D2<Geom::SBasis> > prevPwd2 = boost::none;
-            boost::optional<Satellite> prevSat = boost::none;
             if (prev) {
-                prevPwd2 = pwd2[*prev];
-                prevSat = _pparam->_vector.at(*prev);
+                amount = _pparam->_vector.at(index).lenToRad(amount, pwd2[*prev], pwd2[index],_pparam->_vector.at(*prev));
+            } else {
+                amount = 0.0;
             }
-            amount = _pparam->_vector.at(index)
-                     .lenToRad(amount, prevPwd2, pwd2[index], prevSat);
         }
         bool aprox = false;
         D2<SBasis> d2_out = _pparam->_last_pointwise->getPwd2()[index];
@@ -471,14 +468,11 @@ void FilletChamferKnotHolderEntity::knot_set_offset(Satellite satellite)
         Piecewise<D2<SBasis> > pwd2 = _pparam->_last_pointwise->getPwd2();
         Pathinfo path_info(pwd2);
         boost::optional<size_t> prev = path_info.previous(index);
-        boost::optional<Geom::D2<Geom::SBasis> > prevPwd2 = boost::none;
-        boost::optional<Satellite> prevSat = boost::none;
         if (prev) {
-            prevPwd2 = pwd2[*prev];
-            prevSat = _pparam->_vector.at(*prev);
+            amount = _pparam->_vector.at(index).radToLen(amount, pwd2[*prev], pwd2[index], _pparam->_vector.at(*prev));
+        } else {
+            amount = 0.0;
         }
-        amount = _pparam->_vector.at(index)
-                 .radToLen(amount, prevPwd2, pwd2[index], prevSat);
         if (max_amount > 0 && amount == 0) {
             amount = _pparam->_vector.at(index).amount;
         }

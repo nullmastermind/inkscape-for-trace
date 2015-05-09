@@ -14,6 +14,7 @@
 #include <2geom/d2.h>
 #include <map>
 #include <boost/assign.hpp>
+#include <2geom/sbasis-geometric.h>
 #include "util/enums.h"
 
 
@@ -22,7 +23,7 @@ enum SatelliteType {
     INVERSE_FILLET,    //Inverse Fillet
     CHAMFER,     //Chamfer
     INVERSE_CHAMFER,    //Inverse Chamfer
-    INVALID_SATELLITE     // Invalid Satellite)
+    INVALID_SATELLITE     // Invalid Satellite
 };
 /**
  * @brief Satellite a per ?node/curve holder of data.
@@ -67,6 +68,57 @@ public:
     double angle;
     size_t steps;
 };
+
+/**
+ * Calculate the time in d2_in with a size of A
+ * TODO: find a better place to it
+ */
+double timeAtArcLength(double A, Geom::D2<Geom::SBasis> const d2_in)
+{
+    if (!d2_in.isFinite() || d2_in.isZero() || A == 0) {
+        return 0;
+    }
+    double t = 0;
+    double length_part = Geom::length(d2_in, Geom::EPSILON);
+    if (A > length_part || d2_in[0].degreesOfFreedom() == 2) {
+        if (length_part != 0) {
+            t = A / length_part;
+        }
+    } else if (d2_in[0].degreesOfFreedom() != 2) {
+        Geom::Piecewise<Geom::D2<Geom::SBasis> > u;
+        u.push_cut(0);
+        u.push(d2_in, 1);
+        std::vector<double> t_roots = roots(arcLengthSb(u) - A);
+        if (t_roots.size() > 0) {
+            t = t_roots[0];
+        }
+    }
+
+    return t;
+}
+
+/**
+ * Calculate the size in d2_in with a point at A
+ * TODO: find a better place to it
+ */
+double arcLengthAt(double A, Geom::D2<Geom::SBasis> const d2_in)
+{
+    if (!d2_in.isFinite() || d2_in.isZero() || A == 0) {
+        return 0;
+    }
+    double s = 0;
+    double length_part = Geom::length(d2_in, Geom::EPSILON);
+    if (A > length_part || d2_in[0].degreesOfFreedom() == 2) {
+        s = (A * length_part);
+    } else if (d2_in[0].degreesOfFreedom() != 2) {
+        Geom::Piecewise<Geom::D2<Geom::SBasis> > u;
+        u.push_cut(0);
+        u.push(d2_in, 1);
+        u = Geom::portion(u, 0.0, A);
+        s = Geom::length(u, 0.001);
+    }
+    return s;
+}
 
 #endif // SEEN_SATELLITE_H
 

@@ -33,7 +33,7 @@ public:
                            FilletChamferKnotHolderEntity *pt,
                            bool _use_distance,
                            bool _aprox_radius,
-                           Geom::Satellite _satellite);
+                           Satellite _satellite);
 
 protected:
 
@@ -71,7 +71,7 @@ protected:
     void _setUseDistance(bool use_knot_distance);
     void _setAprox(bool aprox_radius);
     void _setAmount(double amount);
-    void _setSatellite(Geom::Satellite satellite);
+    void _setSatellite(Satellite satellite);
     void _prepareLabelRenderer(Gtk::TreeModel::const_iterator const &row);
 
     bool _handleKeyEvent(GdkEventKey *event);
@@ -80,7 +80,7 @@ protected:
     void _apply();
     void _close();
     bool _flexible;
-    Geom::Satellite _satellite;
+    Satellite _satellite;
     bool _use_distance;
     double _amount;
     bool _aprox;

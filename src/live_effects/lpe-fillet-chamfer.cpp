@@ -20,7 +20,6 @@
 #include "display/curve.h"
 #include "helper/geom-curves.h"
 #include "helper/geom-satellite.h"
-#include "helper/geom-satellite-enum.h"
 #include "helper/geom-pathinfo.h"
 #include <2geom/svg-elliptical-arc.h>
 #include "knotholder.h"
@@ -134,8 +133,14 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
                         active = false;
                     }
                 }
-                Satellite satellite(F, flexible, active, mirror_knots, hidden, 0.0, 0.0,
-                                    steps);
+                Satellite satellite(F);
+                satellite.setIsTime(flexible);
+                satellite.setActive(active)
+                satellite.setMirror(mirror_knots)
+                satellite.setHidden(hidden)
+                satellite.setAmount(0.0);
+                satellite.setAngle(0.0);
+                satellite.setSteps(steps);
                 satellites.push_back(satellite);
                 ++curve_it1;
                 counter++;
@@ -282,10 +287,12 @@ void LPEFilletChamfer::updateAmount()
     Piecewise<D2<SBasis> > pwd2 = pointwise->getPwd2();
     Pathinfo path_info(pwd2);
     for (std::vector<Satellite>::iterator it = satellites.begin();
-            it != satellites.end(); ++it) {
+            it != satellites.end(); ++it) 
+    {
         if (!path_info.closed(it - satellites.begin()) &&
                 path_info.first(it - satellites.begin()) ==
-                (unsigned)(it - satellites.begin())) {
+                (unsigned)(it - satellites.begin())) 
+        {
             it->amount = 0;
             continue;
         }
@@ -294,26 +301,28 @@ void LPEFilletChamfer::updateAmount()
         }
         boost::optional<size_t> previous =
             path_info.previous(it - satellites.begin());
-        boost::optional<Geom::D2<Geom::SBasis> > previous_d2 = boost::none;
-        boost::optional<Satellite> previous_satellite = boost::none;
-        if (previous) {
-            previous_d2 = pwd2[*previous];
-            previous_satellite = satellites[*previous];
-        }
         if (only_selected) {
             Geom::Point satellite_point = pwd2.valueAt(it - satellites.begin());
             if (isNodePointSelected(satellite_point)) {
                 if (!use_knot_distance && !flexible) {
-                    it->amount = it->radToLen(power, previous_d2,
-                                              pwd2[it - satellites.begin()], previous_satellite);
+                    if(previous){
+                        it->amount = it->radToLen(power, pwd2[*previous],
+                                                pwd2[it - satellites.begin()], satellites[*previous]);
+                    } else {
+                        it->amount = 0.0;
+                    }
                 } else {
                     it->amount = power;
                 }
             }
         } else {
             if (!use_knot_distance && !flexible) {
-                it->amount = it->radToLen(power, previous_d2,
-                                          pwd2[it - satellites.begin()], previous_satellite);
+                if(previous){
+                    it->amount = it->radToLen(power, pwd2[*previous],
+                                            pwd2[it - satellites.begin()], satellites[*previous]);
+                    } else {
+                        it->amount = 0.0;
+                    }
             } else {
                 it->amount = power;
             }
@@ -406,10 +415,10 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
                 double amount = it->amount;
                 D2<SBasis> d2_in = pwd2_in[it - sats.begin()];
                 if (it->isTime) {
-                    double time = it->toTime(amount, d2_in);
+                    double time = it->timeAtArcLength(amount, d2_in);
                     it->amount = time;
                 } else {
-                    double size = it->toSize(amount, d2_in);
+                    double size = it->arcLengthAt(amount, d2_in);
                     it->amount = size;
                 }
             }
