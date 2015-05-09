@@ -376,8 +376,8 @@ void ColorScales::setMode(SPColorScalesMode mode)
             setScaled(_a[1], rgba[1]);
             setScaled(_a[2], rgba[2]);
             setScaled(_a[3], rgba[3]);
-            _updating = FALSE;
             _updateSliders(CSC_CHANNELS_ALL);
+            _updating = FALSE;
             break;
         case SP_COLOR_SCALES_MODE_HSV:
             _setRangeLimit(255.0);
@@ -404,8 +404,8 @@ void ColorScales::setMode(SPColorScalesMode mode)
             setScaled(_a[1], c[1]);
             setScaled(_a[2], c[2]);
             setScaled(_a[3], rgba[3]);
-            _updating = FALSE;
             _updateSliders(CSC_CHANNELS_ALL);
+            _updating = FALSE;
             break;
         case SP_COLOR_SCALES_MODE_CMYK:
             _setRangeLimit(100.0);
@@ -437,8 +437,8 @@ void ColorScales::setMode(SPColorScalesMode mode)
             setScaled(_a[3], c[3]);
 
             setScaled(_a[4], rgba[3]);
-            _updating = FALSE;
             _updateSliders(CSC_CHANNELS_ALL);
+            _updating = FALSE;
             break;
         default:
             g_warning("file %s: line %d: Illegal color selector mode", __FILE__, __LINE__);
@@ -605,11 +605,6 @@ void ColorScales::_updateSliders(guint channels)
         default:
             g_warning("file %s: line %d: Illegal color selector mode", __FILE__, __LINE__);
             break;
-    }
-
-    // Force the internal color to be updated
-    if (!_updating) {
-        _recalcColor();
     }
 
 #ifdef SPCS_PREVIEW

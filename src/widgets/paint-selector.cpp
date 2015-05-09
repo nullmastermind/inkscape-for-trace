@@ -657,7 +657,12 @@ void SPPaintSelector::onSelectedColorChanged() {
     if (updating_color) {
         return;
     }
-    g_signal_emit(G_OBJECT(this), psel_signals[CHANGED], 0);
+
+    if (mode == MODE_SOLID_COLOR) {
+        g_signal_emit(G_OBJECT(this), psel_signals[CHANGED], 0);
+    } else {
+        g_warning("SPPaintSelector::onSelectedColorChanged(): selected color changed while not in color selection mode");
+    }
 }
 
 static void sp_paint_selector_set_mode_color(SPPaintSelector *psel, SPPaintSelector::Mode /*mode*/)
@@ -670,9 +675,14 @@ static void sp_paint_selector_set_mode_color(SPPaintSelector *psel, SPPaintSelec
         SPGradientSelector *gsel = getGradientFromData(psel);
         if (gsel) {
             SPGradient *gradient = gsel->getVector();
-            SPColor color = gradient->getFirstStop()->specified_color;
-            float alpha = gradient->getFirstStop()->opacity;
-            psel->selected_color->setColorAlpha(color, alpha);
+
+            // Gradient can be null if object paint is changed externally (ie. with a color picker tool)
+            if (gradient)
+            {
+                SPColor color = gradient->getFirstStop()->specified_color;
+                float alpha = gradient->getFirstStop()->opacity;
+                psel->selected_color->setColorAlpha(color, alpha, false);
+            }
         }
     }
 

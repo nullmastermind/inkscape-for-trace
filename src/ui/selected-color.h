@@ -38,7 +38,7 @@ public:
     void setValue(guint32 value);
     guint32 value() const;
 
-    void setColorAlpha(SPColor const &color, gfloat alpha);
+    void setColorAlpha(SPColor const &color, gfloat alpha, bool emit_signal = true);
     void colorAlpha(SPColor &color, gfloat &alpha) const;
 
     void setHeld(bool held);

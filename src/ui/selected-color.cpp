@@ -72,7 +72,7 @@ guint32 SelectedColor::value() const
     return color().toRGBA32(_alpha);
 }
 
-void SelectedColor::setColorAlpha(SPColor const &color, gfloat alpha)
+void SelectedColor::setColorAlpha(SPColor const &color, gfloat alpha, bool emit_signal)
 {
 #ifdef DUMP_CHANGE_INFO
     g_message("SelectedColor::setColorAlpha( this=%p, %f, %f, %f, %s,   %f,   %s) in %s", this, color.v.c[0], color.v.c[1], color.v.c[2], (color.icc?color.icc->colorProfile.c_str():"<null>"), alpha, (emit?"YES":"no"), FOO_NAME(_csel));
@@ -100,13 +100,16 @@ void SelectedColor::setColorAlpha(SPColor const &color, gfloat alpha)
         _color = color;
         _alpha = alpha;
 
-        _updating = true;
-        if (_held) {
-            signal_dragged.emit();
-        } else {
-            signal_changed.emit();
+        if (emit_signal)
+        {
+            _updating = true;
+            if (_held) {
+                signal_dragged.emit();
+            } else {
+                signal_changed.emit();
+            }
+            _updating = false;
         }
-        _updating = false;
 
 #ifdef DUMP_CHANGE_INFO
     } else {
