@@ -43,7 +43,6 @@ LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject)
     : Effect(lpeobject),
       satellites_param(_("pair_array_param"), _("pair_array_param"),
                                  "satellites_param", &wr, this),
-      unit(_("Unit:"), _("Unit"), "unit", &wr, this),
       method(_("Method:"), _("Methods to calculate the fillet or chamfer"),
              "method", FMConverter, &wr, this, FM_AUTO),
       radius(_("Radius (unit or %):"), _("Radius, in unit or %"), "radius", &wr,
@@ -69,7 +68,6 @@ LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject)
       pointwise(NULL)
 {
     registerParameter(&satellites_param);
-    registerParameter(&unit);
     registerParameter(&method);
     registerParameter(&radius);
     registerParameter(&chamfer_steps);
@@ -278,8 +276,7 @@ void LPEFilletChamfer::updateAmount()
 {
     double power = 0;
     if (!flexible) {
-        power = Inkscape::Util::Quantity::convert(radius, unit.get_abbreviation(),
-                defaultUnit);
+        power = radius;
     } else {
         power = radius / 100;
     }
@@ -386,9 +383,7 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
             c = path->get_original_curve();
         }
         //fillet chamfer specific calls
-        satellites_param.setDocumentUnit(defaultUnit);
         satellites_param.setUseDistance(use_knot_distance);
-        satellites_param.setUnit(unit.get_abbreviation());
         //mandatory call
         satellites_param.setEffectType(effectType());
 

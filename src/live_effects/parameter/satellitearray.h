@@ -55,9 +55,7 @@ public:
         return true;
     }
     void param_transform_multiply(Geom::Affine const &postmul, bool /*set*/);
-    void setDocumentUnit(Glib::ustring value_document__unit);
     void setUseDistance(bool use_knot_distance);
-    void setUnit(const gchar *abbr);
     void setEffectType(EffectType et);
     void setPointwise(Geom::Pointwise *pointwise);
     void set_oncanvas_looks(SPKnotShapeType shape, SPKnotModeType mode,
@@ -79,8 +77,6 @@ private:
     Geom::PathVector _hp;
     int _helper_size;
     bool _use_distance;
-    const gchar *_unit;
-    Glib::ustring _documentUnit;
     EffectType _effectType;
     Geom::Pointwise *_last_pointwise;
 

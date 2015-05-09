@@ -31,10 +31,8 @@ public:
     static void showDialog(SPDesktop *desktop, double _amount,
                            const Inkscape::LivePathEffect::
                            FilletChamferKnotHolderEntity *pt,
-                           const gchar *_unit,
                            bool _use_distance,
                            bool _aprox_radius,
-                           Glib::ustring _documentUnit,
                            Geom::Satellite _satellite);
 
 protected:
@@ -70,8 +68,6 @@ protected:
     void _setDesktop(SPDesktop *desktop);
     void _setPt(const Inkscape::LivePathEffect::
                 FilletChamferKnotHolderEntity *pt);
-    void _setUnit(const gchar *abbr);
-    void _setDocumentUnit(Glib::ustring abbr);
     void _setUseDistance(bool use_knot_distance);
     void _setAprox(bool aprox_radius);
     void _setAmount(double amount);
@@ -85,12 +81,9 @@ protected:
     void _close();
     bool _flexible;
     Geom::Satellite _satellite;
-    const gchar *_unit;
-    Glib::ustring _document_unit;
     bool _use_distance;
     double _amount;
     bool _aprox;
-
 
     friend class Inkscape::LivePathEffect::
         FilletChamferKnotHolderEntity;

@@ -17,7 +17,6 @@
  */
 
 #include "live_effects/parameter/enum.h"
-#include "live_effects/parameter/unit.h"
 #include "live_effects/parameter/satellitearray.h"
 #include "live_effects/effect.h"
 #include "helper/geom-pointwise.h"
@@ -54,7 +53,6 @@ public:
     SatelliteArrayParam satellites_param;
 
 private:
-    UnitParam unit;
     EnumParam<FilletMethod> method;
     ScalarParam radius;
     ScalarParam chamfer_steps;

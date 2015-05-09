@@ -8,10 +8,6 @@
 #include <config.h>
 #endif
 
-#if GLIBMM_DISABLE_DEPRECATED &&HAVE_GLIBMM_THREADS_H
-#include <glibmm/threads.h>
-#endif
-
 #include <gtkmm.h>
 #include "lpe-fillet-chamfer-properties.h"
 #include <boost/lexical_cast.hpp>
@@ -31,7 +27,6 @@
 #include "selection-chemistry.h"
 #include "ui/icon-names.h"
 #include "ui/widget/imagetoggler.h"
-#include "util/units.h"
 #include <cmath>
 
 //#include "event-context.h"
@@ -126,19 +121,15 @@ void FilletChamferPropertiesDialog::showDialog(
     SPDesktop *desktop, double _amount,
     const Inkscape::LivePathEffect::
     FilletChamferKnotHolderEntity *pt,
-    const gchar *_unit,
     bool _use_distance,
     bool _aprox_radius,
-    Glib::ustring _documentUnit,
     Geom::Satellite _satellite)
 {
     FilletChamferPropertiesDialog *dialog = new FilletChamferPropertiesDialog();
 
     dialog->_setDesktop(desktop);
-    dialog->_setUnit(_unit);
     dialog->_setUseDistance(_use_distance);
     dialog->_setAprox(_aprox_radius);
-    dialog->_setDocumentUnit(_documentUnit);
     dialog->_setAmount(_amount);
     dialog->_setSatellite(_satellite);
     dialog->_setPt(pt);
@@ -173,8 +164,6 @@ void FilletChamferPropertiesDialog::_apply()
                 d_pos = 0;
             }
             d_pos = d_pos / 100;
-        } else {
-            d_pos = Inkscape::Util::Quantity::convert(d_pos, _unit, _document_unit);
         }
         _satellite.amount = d_pos;
         size_t steps = (size_t)_fillet_chamfer_chamfer_subdivisions.get_value();
@@ -227,10 +216,9 @@ void FilletChamferPropertiesDialog::_setSatellite(Geom::Satellite satellite)
         _fillet_chamfer_position_label.set_label(_("Position (%):"));
     } else {
         _flexible = false;
-        std::string posConcat = Glib::ustring::compose (_("%1 (%2):"), distance_or_radius, _unit);
+        std::string posConcat = Glib::ustring::compose (_("%1:"), distance_or_radius);
         _fillet_chamfer_position_label.set_label(_(posConcat.c_str()));
         position = _amount;
-        position = Inkscape::Util::Quantity::convert(position, _document_unit, _unit);
     }
     _fillet_chamfer_position_numeric.set_value(position);
     _fillet_chamfer_chamfer_subdivisions.set_value(satellite.steps);
@@ -255,10 +243,6 @@ void FilletChamferPropertiesDialog::_setPt(
                      pt);
 }
 
-void FilletChamferPropertiesDialog::_setUnit(const gchar *abbr)
-{
-    _unit = abbr;
-}
 
 void FilletChamferPropertiesDialog::_setAmount(double amm)
 {
@@ -266,12 +250,6 @@ void FilletChamferPropertiesDialog::_setAmount(double amm)
 }
 
 
-
-
-void FilletChamferPropertiesDialog::_setDocumentUnit(Glib::ustring abbr)
-{
-    _document_unit = abbr;
-}
 
 void FilletChamferPropertiesDialog::_setUseDistance(bool use_knot_distance)
 {

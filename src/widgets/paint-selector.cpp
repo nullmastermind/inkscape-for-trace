@@ -24,10 +24,6 @@
 #include <cstring>
 #include <string>
 
-#if GLIBMM_DISABLE_DEPRECATED && HAVE_GLIBMM_THREADS_H
-#include <glibmm/threads.h>
-#endif
-
 #include "widgets/swatch-selector.h"
 #include "sp-pattern.h"
 #include <glibmm/i18n.h>
@@ -39,6 +35,7 @@
 #include "sp-linear-gradient.h"
 #include "sp-radial-gradient.h"
 #include "sp-mesh.h"
+#include "sp-stop.h"
 /* fixme: Move it from dialogs to here */
 #include "gradient-selector.h"
 #include <inkscape.h>
@@ -662,6 +659,20 @@ sp_paint_selector_color_changed(SPColorSelector *csel, SPPaintSelector *psel)
 static void sp_paint_selector_set_mode_color(SPPaintSelector *psel, SPPaintSelector::Mode /*mode*/)
 {
     GtkWidget *csel;
+    
+    SPColor newcolor = psel->color;
+    float newalpha = psel->alpha;
+    
+    if ((psel->mode == SPPaintSelector::MODE_SWATCH) 
+            || (psel->mode == SPPaintSelector::MODE_GRADIENT_LINEAR)
+            || (psel->mode == SPPaintSelector::MODE_GRADIENT_RADIAL) ) {
+        SPGradientSelector *gsel = getGradientFromData(psel);
+        if (gsel) {
+            SPGradient *gradient = gsel->getVector();
+            newcolor = gradient->getFirstStop()->specified_color;
+            newalpha = gradient->getFirstStop()->opacity;
+        }
+    }
 
     sp_paint_selector_set_style_buttons(psel, psel->solid);
     gtk_widget_set_sensitive(psel->style, TRUE);
@@ -697,8 +708,7 @@ static void sp_paint_selector_set_mode_color(SPPaintSelector *psel, SPPaintSelec
         psel->selector = vb;
 
         /* Set color */
-        SP_COLOR_SELECTOR( csel )->base->setColorAlpha( psel->color, psel->alpha );
-
+        SP_COLOR_SELECTOR( csel )->base->setColorAlpha( newcolor, newalpha );
     }
 
     gtk_label_set_markup(GTK_LABEL(psel->label), _("<b>Flat color</b>"));

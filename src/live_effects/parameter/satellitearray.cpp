@@ -58,19 +58,9 @@ void SatelliteArrayParam::setPointwise(Geom::Pointwise *pointwise)
     param_set_and_write_new_value(_last_pointwise->getSatellites());
 }
 
-void SatelliteArrayParam::setDocumentUnit(Glib::ustring value_document_unit)
-{
-    _documentUnit = value_document_unit;
-}
-
 void SatelliteArrayParam::setUseDistance(bool use_knot_distance)
 {
     _use_distance = use_knot_distance;
-}
-
-void SatelliteArrayParam::setUnit(const gchar *abbr)
-{
-    _unit = abbr;
 }
 
 void SatelliteArrayParam::setEffectType(EffectType et)
@@ -460,8 +450,8 @@ void FilletChamferKnotHolderEntity::knot_click(guint state)
                     : false;
         }
         Inkscape::UI::Dialogs::FilletChamferPropertiesDialog::showDialog(
-            this->desktop, amount, this, _pparam->_unit, _pparam->_use_distance,
-            aprox, _pparam->_documentUnit, _pparam->_vector.at(index));
+            this->desktop, amount, this, _pparam->_use_distance,
+            aprox, _pparam->_vector.at(index));
 
     }
 }
