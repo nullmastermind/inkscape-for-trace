@@ -1,6 +1,7 @@
 /**
  * \file
- * \brief Pathinfo store the data of a pathvector and allow get info about it
+ * \brief Pathinfo store data of a pathvector and allow get info about it
+ * \
  */ /*
     * Authors:
     * 2015 Jabier Arraiza Cenoz<jabier.arraiza@marker.es>
@@ -8,26 +9,26 @@
     * This code is in public domain
     */
 
-#ifndef SEEN_GEOM_PATHINFO_H
-#define SEEN_GEOM_PATHINFO_H
+#ifndef SEEN_PATHINFO_H
+#define SEEN_PATHINFO_H
 
 #include <2geom/path.h>
 #include <boost/optional.hpp>
-
-namespace Geom {
 
 /**
  * @brief Pathinfo store the data of a pathvector and allow get info about it
  *
  */
+using namespace Geom;
 class Pathinfo {
 public:
     Pathinfo(Piecewise<D2<SBasis> > pwd2);
     Pathinfo(Geom::PathVector path_vector, bool skip_degenerate = false);
     virtual ~Pathinfo();
-    void setPwd2(Piecewise<D2<SBasis> > pwd2);
-    void setPathVector(Geom::PathVector path_vector, bool skip_degenerate = false);
-    size_t size() const;
+    void set(Piecewise<D2<SBasis> > pwd2);
+    void set(Geom::PathVector path_vector, bool skip_degenerate = false);
+    std::vector<std::pair<size_t, bool> > get(){return _data;};
+    size_t subPathCounter() const;
     size_t subPathSize(size_t index) const;
     size_t subPathIndex(size_t index) const;
     size_t last(size_t index) const;
@@ -35,16 +36,12 @@ public:
     boost::optional<size_t> previous(size_t index) const;
     boost::optional<size_t> next(size_t index) const;
     bool closed(size_t index) const;
-    std::vector<std::pair<size_t, bool> > data;
 
 private:
-    void _setPathInfo(Piecewise<D2<SBasis> > pwd2);
-    void _setPathInfo(Geom::PathVector path_vector, bool skip_degenerate = false);
+    std::vector<std::pair<size_t, bool> > _data;
 };
 
-} //namespace Geom
-
-#endif //SEEN_GEOM_PATHINFO_H
+#endif //SEEN_PATHINFO_H
 /*
   Local Variables:
   mode:c++

@@ -16,7 +16,6 @@
 #include "live_effects/parameter/parameter.h"
 
 #include "helper/geom-satellite.h"
-#include "helper/geom-satellite-enum.h"
 #include "svg/svg.h"
 #include "svg/stringstream.h"
 
@@ -111,14 +110,14 @@ protected:
         str << nVector;
     }
 
-    void writesvgData(SVGOStringStream &str, Geom::Satellite const &nVector) const {
+    void writesvgData(SVGOStringStream &str, Satellite const &nVector) const {
         str << nVector.getSatelliteTypeGchar();
         str << ",";
-        str << nVector.isTime;
+        str << nVector.is_time;
         str << ",";
         str << nVector.active;
         str << ",";
-        str << nVector.hasMirror;
+        str << nVector.has_mirror;
         str << ",";
         str << nVector.hidden;
         str << ",";

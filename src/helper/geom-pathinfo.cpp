@@ -1,6 +1,6 @@
 /**
  * \file
- * \brief Pathinfo store the data of a pathvector and allow get info about it
+ * \brief Pathinfo store the _data of a pathvector and allow get info about it
  */ /*
     * Authors:
     * 2015 Jabier Arraiza Cenoz<jabier.arraiza@marker.es>
@@ -11,48 +11,37 @@
 #include <helper/geom-pathinfo.h>
 #include <2geom/sbasis-to-bezier.h>
 
-namespace Geom {
-
 /**
- * @brief Pathinfo store the data of a pathvector and allow get info about it
+ * @brief Pathinfo store the _data of a pathvector and allow get info about it
  *
  */
 Pathinfo::Pathinfo(Piecewise<D2<SBasis> > pwd2)
 {
-    _setPathInfo(pwd2);
+    set(pwd2);
 }
-;
+
 Pathinfo::Pathinfo(Geom::PathVector path_vector, bool skip_degenerate)
 {
-    _setPathInfo(path_vector, skip_degenerate);
+    set(path_vector, skip_degenerate);
 }
-;
+
 
 Pathinfo::~Pathinfo() {}
-;
 
-void Pathinfo::setPwd2(Piecewise<D2<SBasis> > pwd2)
-{
-    _setPathInfo(pwd2);
-}
 
-void Pathinfo::setPathVector(Geom::PathVector path_vector, bool skip_degenerate)
+void Pathinfo::set(Piecewise<D2<SBasis> > pwd2)
 {
-    _setPathInfo(path_vector, skip_degenerate);
+    set(path_from_piecewise(remove_short_cuts(pwd2, 0.1), 0.001));
 }
-
-void Pathinfo::_setPathInfo(Piecewise<D2<SBasis> > pwd2)
-{
-    _setPathInfo(path_from_piecewise(remove_short_cuts(pwd2, 0.1), 0.001));
-}
-/** Store the base path data
+/** Store the base path _data
  */
-void Pathinfo::_setPathInfo(Geom::PathVector path_vector, bool skip_degenerate)
+void Pathinfo::set(Geom::PathVector path_vector, bool skip_degenerate)
 {
-    data.clear();
+    _data.clear();
     size_t counter = 0;
     for (PathVector::const_iterator path_it = path_vector.begin();
-            path_it != path_vector.end(); ++path_it) {
+            path_it != path_vector.end(); ++path_it) 
+    {
         if (path_it->empty()) {
             continue;
         }
@@ -73,31 +62,31 @@ void Pathinfo::_setPathInfo(Geom::PathVector path_vector, bool skip_degenerate)
             counter++;
         }
         if (path_it->closed()) {
-            data.push_back(std::make_pair(counter - 1, true));
+            _data.push_back(std::make_pair(counter - 1, true));
         } else {
-            data.push_back(std::make_pair(counter - 1, false));
+            _data.push_back(std::make_pair(counter - 1, false));
         }
     }
 }
 
-size_t Pathinfo::size() const
+size_t Pathinfo::subPathCounter() const
 {
-    return data.back().first + 1;
+    return _data.back().first + 1;
 }
 
 size_t Pathinfo::subPathSize(size_t index) const
 {
     size_t size = 0;
-    if( data.size() > index){
-        size = data[index].first + 1;
+    if( _data.size() > index){
+        size = _data[index].first + 1;
     }
     return size;
 }
 
 size_t Pathinfo::subPathIndex(size_t index) const
 {
-    for (size_t i = 0; i < data.size(); i++) {
-        if (index <= data[i].first) {
+    for (size_t i = 0; i < _data.size(); i++) {
+        if (index <= _data[i].first) {
             return i;
         }
     }
@@ -106,9 +95,9 @@ size_t Pathinfo::subPathIndex(size_t index) const
 
 size_t Pathinfo::last(size_t index) const
 {
-    for (size_t i = 0; i < data.size(); i++) {
-        if (index <= data[i].first) {
-            return data[i].first;
+    for (size_t i = 0; i < _data.size(); i++) {
+        if (index <= _data[i].first) {
+            return _data[i].first;
         }
     }
     return 0;
@@ -116,12 +105,12 @@ size_t Pathinfo::last(size_t index) const
 
 size_t Pathinfo::first(size_t index) const
 {
-    for (size_t i = 0; i < data.size(); i++) {
-        if (index <= data[i].first) {
+    for (size_t i = 0; i < _data.size(); i++) {
+        if (index <= _data[i].first) {
             if (i == 0) {
                 return 0;
             } else {
-                return data[i - 1].first + 1;
+                return _data[i - 1].first + 1;
             }
         }
     }
@@ -152,15 +141,13 @@ boost::optional<size_t> Pathinfo::next(size_t index) const
 
 bool Pathinfo::closed(size_t index) const
 {
-    for (size_t i = 0; i < data.size(); i++) {
-        if (index <= data[i].first) {
-            return data[i].second;
+    for (size_t i = 0; i < _data.size(); i++) {
+        if (index <= _data[i].first) {
+            return _data[i].second;
         }
     }
     return false;
 }
-
-}; // namespace Geom
 
 /*
   Local Variables:

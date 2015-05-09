@@ -10,8 +10,6 @@
 
 #include <helper/geom-pointwise.h>
 
-namespace Geom {
-
 /**
  * @brief Pointwise a class to manage a vector of satellites per piecewise curve
  *
@@ -31,20 +29,20 @@ Pointwise::Pointwise(Piecewise<D2<SBasis> > pwd2,
 {
     setStart();
 }
-;
+
 
 Pointwise::~Pointwise() {}
-;
+
 
 Piecewise<D2<SBasis> > Pointwise::getPwd2() const
 {
     return _pwd2;
 }
 
-void Pointwise::setPwd2(Piecewise<D2<SBasis> > pwd2_in)
+void Pointwise::setPwd2(Piecewise<D2<SBasis> > const pwd2_in)
 {
     _pwd2 = pwd2_in;
-    _path_info.setPwd2(_pwd2);
+    _path_info.set(_pwd2);
 }
 
 std::vector<Satellite> Pointwise::getSatellites() const
@@ -52,7 +50,7 @@ std::vector<Satellite> Pointwise::getSatellites() const
     return _satellites;
 }
 
-void Pointwise::setSatellites(std::vector<Satellite> sats)
+void Pointwise::setSatellites(std::vector<Satellite> const sats)
 {
     _satellites = sats;
     setStart();
@@ -62,7 +60,7 @@ void Pointwise::setSatellites(std::vector<Satellite> sats)
  */
 void Pointwise::setStart()
 {
-    std::vector<std::pair<size_t, bool> > path_info = _path_info.data;
+    std::vector<std::pair<size_t, bool> > path_info = _path_info.get();
     for (size_t i = 0; i < path_info.size(); i++) {
         size_t firstNode = _path_info.first(path_info[i].first);
         size_t lastNode = _path_info.last(path_info[i].first);
@@ -78,7 +76,7 @@ void Pointwise::setStart()
 
 /** Fired when a path is modified.
  */
-void Pointwise::recalculateForNewPwd2(Piecewise<D2<SBasis> > A, Geom::PathVector B, Satellite S)
+void Pointwise::recalculateForNewPwd2(Piecewise<D2<SBasis> > const A, Geom::PathVector const B, Satellite const S)
 {
     if (_pwd2.size() > A.size()) {
         pwd2Sustract(A);
@@ -91,7 +89,7 @@ void Pointwise::recalculateForNewPwd2(Piecewise<D2<SBasis> > A, Geom::PathVector
 
 /** Some nodes/subpaths are removed.
  */
-void Pointwise::pwd2Sustract(Piecewise<D2<SBasis> > A)
+void Pointwise::pwd2Sustract(Piecewise<D2<SBasis> > const A)
 {
     size_t counter = 0;
     std::vector<Satellite> sats;
@@ -99,7 +97,8 @@ void Pointwise::pwd2Sustract(Piecewise<D2<SBasis> > A)
     setPwd2(A);
     for (size_t i = 0; i < _satellites.size(); i++) {
         if (_path_info.last(i - counter) < i - counter ||
-                !are_near(pwd2[i].at0(), A[i - counter].at0())) {
+                !are_near(pwd2[i].at0(), A[i - counter].at0())) 
+        {
             counter++;
         } else {
             sats.push_back(_satellites[i - counter]);
@@ -110,7 +109,7 @@ void Pointwise::pwd2Sustract(Piecewise<D2<SBasis> > A)
 
 /** Append nodes/subpaths to current pointwise
  */
-void Pointwise::pwd2Append(Piecewise<D2<SBasis> > A, Satellite S)
+void Pointwise::pwd2Append(Piecewise<D2<SBasis> > const A, Satellite const S)
 {
     size_t counter = 0;
     std::vector<Satellite> sats;
@@ -120,9 +119,9 @@ void Pointwise::pwd2Append(Piecewise<D2<SBasis> > A, Satellite S)
         size_t last = _path_info.last(i - counter);
         //Check for subpath closed. If a subpath is closed, is not reversed or moved
         //to back
-        _path_info.setPwd2(A);
+        _path_info.set(A);
         size_t new_subpath_index = _path_info.subPathIndex(i);
-        _path_info.setPwd2(_pwd2);
+        _path_info.set(_pwd2);
         bool subpath_is_changed = false;
         if (_pwd2.size() <= i - counter) {
             subpath_is_changed = false;
@@ -163,7 +162,8 @@ void Pointwise::subpathToBack(size_t subpath)
     std::vector<Geom::Path> tmp_path;
     Geom::Path to_back;
     for (PathVector::const_iterator path_it = path_in.begin();
-            path_it != path_in.end(); ++path_it) {
+            path_it != path_in.end(); ++path_it) 
+    {
         if (path_it->empty()) {
             continue;
         }
@@ -208,7 +208,8 @@ void Pointwise::subpathReverse(size_t start, size_t end)
     std::vector<Geom::Path> tmp_path;
     Geom::Path rev;
     for (PathVector::const_iterator path_it = path_in.begin();
-            path_it != path_in.end(); ++path_it) {
+            path_it != path_in.end(); ++path_it)
+    {
         if (path_it->empty()) {
             continue;
         }
@@ -225,11 +226,11 @@ void Pointwise::subpathReverse(size_t start, size_t end)
 
 /** Fired when a path is modified duplicating a node. Piecewise ignore degenerated curves.
  */
-void Pointwise::insertDegenerateSatellites(Piecewise<D2<SBasis> > A, Geom::PathVector B, Satellite S)
+void Pointwise::insertDegenerateSatellites(Piecewise<D2<SBasis> > const A, Geom::PathVector const B, Satellite const S)
 {
     size_t size_A = A.size();
-    _path_info.setPathVector(B);
-    size_t size_B = _path_info.size();
+    _path_info.set(B);
+    size_t size_B = _path_info.subPathCounter();
     size_t satellite_gap = size_B - size_A;
     if (satellite_gap == 0){
         return;
@@ -237,7 +238,8 @@ void Pointwise::insertDegenerateSatellites(Piecewise<D2<SBasis> > A, Geom::PathV
     size_t counter = 0;
     size_t counter_added = 0;
     for (PathVector::const_iterator path_it = B.begin();
-            path_it != B.end(); ++path_it) {
+            path_it != B.end(); ++path_it) 
+    {
         if (path_it->empty()) {
             continue;
         }
@@ -259,11 +261,10 @@ void Pointwise::insertDegenerateSatellites(Piecewise<D2<SBasis> > A, Geom::PathV
         }
     }
 
-    _path_info.setPwd2(A);
+    _path_info.set(A);
     setPwd2(A);
 }
 
-} // namespace Geom
 /*
   Local Variables:
   mode:c++

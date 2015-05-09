@@ -15,16 +15,16 @@ namespace LivePathEffect {
 
 //TODO: move maybe to svg-lenght.cpp
 unsigned int
-sp_svg_satellite_read_d(gchar const *str, Geom::Satellite *sat){
+sp_svg_satellite_read_d(gchar const *str, Satellite *sat){
     if (!str) {
         return 0;
     }
     gchar ** strarray = g_strsplit(str, ",", 8);
     if(strarray[7] && !strarray[8]){
         sat->setSatelliteType(g_strstrip(strarray[0]));
-        sat->isTime = strncmp(strarray[1],"1",1) == 0;
+        sat->is_time = strncmp(strarray[1],"1",1) == 0;
         sat->active = strncmp(strarray[2],"1",1) == 0;
-        sat->hasMirror = strncmp(strarray[3],"1",1) == 0;
+        sat->has_mirror = strncmp(strarray[3],"1",1) == 0;
         sat->hidden = strncmp(strarray[4],"1",1) == 0;
         double amount,angle;
         float stepsTmp;
@@ -76,14 +76,14 @@ ArrayParam<Geom::Point>::readsvg(const gchar * str)
 }
 
 template <>
-Geom::Satellite
-ArrayParam<Geom::Satellite >::readsvg(const gchar * str)
+Satellite
+ArrayParam<Satellite >::readsvg(const gchar * str)
 {
-    Geom::Satellite sat;
+    Satellite sat;
     if (sp_svg_satellite_read_d(str, &sat)) {
         return sat;
     }
-    Geom::Satellite satellite(Geom::F, true, false, false, true, 0.0, 0.0, 0);
+    Satellite satellite(Geom::F, true, false, false, true, 0.0, 0.0, 0);
     return satellite;
 }
 

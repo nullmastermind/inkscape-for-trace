@@ -8,61 +8,67 @@
     * This code is in public domain
     */
 
-#ifndef LIB2GEOM_SEEN_SATELLITE_H
-#define LIB2GEOM_SEEN_SATELLITE_H
+#ifndef SEEN_SATELLITE_H
+#define SEEN_SATELLITE_H
 
-#include <helper/geom-satellite-enum.h>
 #include <2geom/d2.h>
 #include <map>
 #include <boost/assign.hpp>
+#include "util/enums.h"
 
-namespace Geom {
 
+enum SatelliteType {
+    FILLET = 0, //Fillet
+    INVERSE_FILLET,    //Inverse Fillet
+    CHAMFER,     //Chamfer
+    INVERSE_CHAMFER,    //Inverse Chamfer
+    INVALID_SATELLITE     // Invalid Satellite)
+};
 /**
  * @brief Satellite a per ?node/curve holder of data.
  */
+using namespace Geom;
 class Satellite {
 public:
 
     Satellite();
-    Satellite(SatelliteType satelliteType, bool isTime, bool active,
-              bool hasMirror, bool hidden, double amount, double angle,
-              size_t steps);
+    Satellite(SatelliteType satellite_type);
 
     virtual ~Satellite();
-
-    double toSize(double A, Geom::D2<Geom::SBasis> d2_in) const;
-    double toTime(double A, Geom::D2<Geom::SBasis> d2_in) const;
-    double lenToRad(double A, boost::optional<Geom::D2<Geom::SBasis> > d2_in,
+    void setIsTime(bool set_is_time){is_time = set_is_time;}
+    void setActive(bool set_active){active = set_active;}
+    void setHasMirror(bool set_has_mirror){has_mirror = set_has_mirror;}
+    void setHidden(bool set_hidden){hidden = set_hidden;}
+    void setAmount(bool set_amount){amount = set_amount;}
+    void setAngle(bool set_angle){angle = set_angle;}
+    void setSteps(bool set_steps){steps = set_steps;}
+    double lenToRad(double A, Geom::D2<Geom::SBasis> d2_in,
                     Geom::D2<Geom::SBasis> d2_out,
-                    boost::optional<Geom::Satellite> previousSatellite) const;
-    double radToLen(double A, boost::optional<Geom::D2<Geom::SBasis> > d2_in,
+                    Satellite previousSatellite) const;
+    double radToLen(double A, Geom::D2<Geom::SBasis> d2_in,
                     Geom::D2<Geom::SBasis> d2_out,
-                    boost::optional<Geom::Satellite> previousSatellite) const;
+                    Satellite previousSatellite) const;
 
     double time(Geom::D2<Geom::SBasis> d2_in) const;
     double time(double A, bool I, Geom::D2<Geom::SBasis> d2_in) const;
-    double size(Geom::D2<Geom::SBasis> d2_in) const;
+    double arcDistance(Geom::D2<Geom::SBasis> d2_in) const;
 
     void setPosition(Geom::Point p, Geom::D2<Geom::SBasis> d2_in);
     Geom::Point getPosition(Geom::D2<Geom::SBasis> d2_in) const;
 
     void setSatelliteType(gchar const *A);
     gchar const *getSatelliteTypeGchar() const;
-    //TODO: maybe make after variables protected?
-    SatelliteType satelliteType;
-    bool isTime;
+    SatelliteType satellite_type;
+    bool is_time;
     bool active;
-    bool hasMirror;
+    bool has_mirror;
     bool hidden;
     double amount;
     double angle;
     size_t steps;
 };
 
-} // end namespace Geom
-
-#endif // LIB2GEOM_SEEN_SATELLITE_H
+#endif // SEEN_SATELLITE_H
 
 /*
   Local Variables:

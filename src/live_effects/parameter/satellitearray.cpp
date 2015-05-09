@@ -30,7 +30,7 @@ SatelliteArrayParam::SatelliteArrayParam(const Glib::ustring &label,
         const Glib::ustring &key,
         Inkscape::UI::Widget::Registry *wr,
         Effect *effect)
-    : ArrayParam<Geom::Satellite>(label, tip, key, wr, effect, 0), knoth(NULL)
+    : ArrayParam<Satellite>(label, tip, key, wr, effect, 0), knoth(NULL)
 {
     _knot_shape = SP_KNOT_SHAPE_DIAMOND;
     _knot_mode = SP_KNOT_MODE_XOR;
@@ -52,7 +52,7 @@ void SatelliteArrayParam::set_oncanvas_looks(SPKnotShapeType shape,
     _knot_color = color;
 }
 
-void SatelliteArrayParam::setPointwise(Geom::Pointwise *pointwise)
+void SatelliteArrayParam::setPointwise(Pointwise *pointwise)
 {
     _last_pointwise = pointwise;
     param_set_and_write_new_value(_last_pointwise->getSatellites());
@@ -280,11 +280,11 @@ void FilletChamferKnotHolderEntity::knot_set(Point const &p,
         return;
     }
 
-    Geom::Satellite satellite = _pparam->_vector.at(index);
+    Satellite satellite = _pparam->_vector.at(index);
     if (!satellite.active || satellite.hidden) {
         return;
     }
-    Geom::Pointwise *pointwise = _pparam->_last_pointwise;
+    Pointwise *pointwise = _pparam->_last_pointwise;
     Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = pointwise->getPwd2();
     Pathinfo path_info(pwd2);
     if (_pparam->_vector.size() <= _index) {
@@ -293,7 +293,7 @@ void FilletChamferKnotHolderEntity::knot_set(Point const &p,
             Geom::D2<Geom::SBasis> d2_in = pwd2[*d2_prev_index];
             double mirror_time = Geom::nearest_point(s, d2_in);
             double time_start = 0;
-            std::vector<Geom::Satellite> sats = pointwise->getSatellites();
+            std::vector<Satellite> sats = pointwise->getSatellites();
             time_start = sats[*d2_prev_index].time(d2_in);
             if (time_start > mirror_time) {
                 mirror_time = time_start;
@@ -325,14 +325,14 @@ Geom::Point FilletChamferKnotHolderEntity::knot_get() const
     if (!valid_index(index)) {
         return Point(infinity(), infinity());
     }
-    Geom::Satellite satellite = _pparam->_vector.at(index);
+    Satellite satellite = _pparam->_vector.at(index);
     if (!_pparam->_last_pointwise) {
         return Point(infinity(), infinity());
     }
     if (!satellite.active || satellite.hidden) {
         return Point(infinity(), infinity());
     }
-    Geom::Pointwise *pointwise = _pparam->_last_pointwise;
+    Pointwise *pointwise = _pparam->_last_pointwise;
     Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = pointwise->getPwd2();
     Pathinfo path_info(pwd2);
     if (pwd2.size() <= index) {
@@ -429,7 +429,7 @@ void FilletChamferKnotHolderEntity::knot_click(guint state)
         if (!_pparam->_use_distance && !_pparam->_vector.at(index).isTime) {
             boost::optional<size_t> prev = path_info.previous(index);
             boost::optional<Geom::D2<Geom::SBasis> > prevPwd2 = boost::none;
-            boost::optional<Geom::Satellite> prevSat = boost::none;
+            boost::optional<Satellite> prevSat = boost::none;
             if (prev) {
                 prevPwd2 = pwd2[*prev];
                 prevSat = _pparam->_vector.at(*prev);
@@ -456,7 +456,7 @@ void FilletChamferKnotHolderEntity::knot_click(guint state)
     }
 }
 
-void FilletChamferKnotHolderEntity::knot_set_offset(Geom::Satellite satellite)
+void FilletChamferKnotHolderEntity::knot_set_offset(Satellite satellite)
 {
     if (!_pparam->_last_pointwise) {
         return;
@@ -472,7 +472,7 @@ void FilletChamferKnotHolderEntity::knot_set_offset(Geom::Satellite satellite)
         Pathinfo path_info(pwd2);
         boost::optional<size_t> prev = path_info.previous(index);
         boost::optional<Geom::D2<Geom::SBasis> > prevPwd2 = boost::none;
-        boost::optional<Geom::Satellite> prevSat = boost::none;
+        boost::optional<Satellite> prevSat = boost::none;
         if (prev) {
             prevPwd2 = pwd2[*prev];
             prevSat = _pparam->_vector.at(*prev);

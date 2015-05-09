@@ -30,7 +30,7 @@ namespace LivePathEffect {
 
 class FilletChamferKnotHolderEntity;
 
-class SatelliteArrayParam : public ArrayParam<Geom::Satellite> {
+class SatelliteArrayParam : public ArrayParam<Satellite> {
 public:
     SatelliteArrayParam(const Glib::ustring &label, const Glib::ustring &tip,
                         const Glib::ustring &key,
@@ -57,7 +57,7 @@ public:
     void param_transform_multiply(Geom::Affine const &postmul, bool /*set*/);
     void setUseDistance(bool use_knot_distance);
     void setEffectType(EffectType et);
-    void setPointwise(Geom::Pointwise *pointwise);
+    void setPointwise(Pointwise *pointwise);
     void set_oncanvas_looks(SPKnotShapeType shape, SPKnotModeType mode,
                             guint32 color);
 
@@ -78,7 +78,7 @@ private:
     int _helper_size;
     bool _use_distance;
     EffectType _effectType;
-    Geom::Pointwise *_last_pointwise;
+    Pointwise *_last_pointwise;
 
 };
 
@@ -94,7 +94,7 @@ public:
                           guint state);
     virtual Geom::Point knot_get() const;
     virtual void knot_click(guint state);
-    void knot_set_offset(Geom::Satellite);
+    void knot_set_offset(Satellite);
     /** Checks whether the index falls within the size of the parameter's vector
      */
     bool valid_index(size_t index) const

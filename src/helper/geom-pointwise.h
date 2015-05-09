@@ -8,8 +8,8 @@
     * This code is in public domain
     */
 
-#ifndef SEEN_GEOM_POINTWISE_H
-#define SEEN_GEOM_POINTWISE_H
+#ifndef SEEN_POINTWISE_H
+#define SEEN_POINTWISE_H
 
 #include <helper/geom-satellite.h>
 #include <helper/geom-pathinfo.h>
@@ -19,8 +19,6 @@
 #include <2geom/sbasis-to-bezier.h>
 #include <2geom/path.h>
 #include <boost/optional.hpp>
-
-namespace Geom {
 
 /**
  * @brief Pointwise a class to manage a vector of satellites per piecewise curve
@@ -35,25 +33,26 @@ namespace Geom {
  * optional satellites, and remove the active variable in satellites.
  *
  */
+using namespace Geom;
 class Pointwise {
 public:
     Pointwise(Piecewise<D2<SBasis> > pwd2, std::vector<Satellite> satellites);
     virtual ~Pointwise();
 
     Piecewise<D2<SBasis> > getPwd2() const;
-    void setPwd2(Piecewise<D2<SBasis> > pwd2_in);
+    void setPwd2(Piecewise<D2<SBasis> > const pwd2_in);
 
     std::vector<Satellite> getSatellites() const;
-    void setSatellites(std::vector<Satellite> sats);
+    void setSatellites(std::vector<Satellite> const sats);
 
     void setStart();
 
-    void recalculateForNewPwd2(Piecewise<D2<SBasis> > A, Geom::PathVector B, Satellite S);
-    void pwd2Sustract(Piecewise<D2<SBasis> > A);
-    void pwd2Append(Piecewise<D2<SBasis> > A, Satellite S);
+    void recalculateForNewPwd2(Piecewise<D2<SBasis> > const A, Geom::PathVector const B, Satellite const S);
+    void pwd2Sustract(Piecewise<D2<SBasis> > const A);
+    void pwd2Append(Piecewise<D2<SBasis> > const A, Satellite const S);
     void subpathToBack(size_t subpath);
     void subpathReverse(size_t start, size_t end);
-    void insertDegenerateSatellites(Piecewise<D2<SBasis> > A, Geom::PathVector B, Satellite S);
+    void insertDegenerateSatellites(Piecewise<D2<SBasis> > const A, Geom::PathVector const B, Satellite const S);
 
 private:
     Piecewise<D2<SBasis> > _pwd2;
@@ -61,9 +60,7 @@ private:
     Pathinfo _path_info;
 };
 
-} // end namespace Geom
-
-#endif //SEEN_GEOM_POINTWISE_H
+#endif //SEEN_POINTWISE_H
 /*
   Local Variables:
   mode:c++
