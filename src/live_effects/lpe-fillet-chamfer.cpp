@@ -565,6 +565,9 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
             if (time1 <= time0) {
                 time1 = time0;
             }
+            if (time2 > 1) {
+                time2 = 1;
+            }
             std::vector<double> times;
             times.push_back(time0);
             times.push_back(time1);
@@ -632,7 +635,7 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
             double arc_angle = Geom::angle_between(x_line, angled_line);
             double radius = Geom::distance(start_arc_point,
                                            middle_point(start_arc_point, end_arc_point)) /
-                            sin(angle / 2.0);
+                                           sin(angle / 2.0);
             Geom::Coord rx = radius;
             Geom::Coord ry = rx;
             if (times[1] != 1) {

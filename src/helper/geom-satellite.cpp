@@ -39,7 +39,7 @@ double timeAtArcLength(double A, Geom::D2<Geom::SBasis> const d2_in)
     }
     double t = 0;
     double length_part = Geom::length(d2_in, Geom::EPSILON);
-    if (A > length_part || d2_in[0].degreesOfFreedom() == 2) {
+    if (A >= length_part || d2_in[0].degreesOfFreedom() == 2) {
         if (length_part != 0) {
             t = A / length_part;
         }
