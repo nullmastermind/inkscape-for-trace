@@ -80,8 +80,7 @@ double arcLengthAt(double A, Geom::D2<Geom::SBasis> const d2_in)
 }
 
 /**
- * Calculate the length of a satellite from a radious A input.
- * convert a arc radius to a satellite length
+ * Convert a arc radius of a fillet/chamfer to his satellite length -point position where fillet/chamferknot be on original curve
  */
 double Satellite::radToLen(
     double A, Geom::D2<Geom::SBasis> const d2_in,
@@ -111,8 +110,7 @@ double Satellite::radToLen(
 }
 
 /**
-* Calculate the radious of a satellite from a length A input.
-* convert a satellite length to a arc radius
+* Convert a satelite length -point position where fillet/chamfer knot be on original curve- to a arc radius of fillet/chamfer
 */
 double Satellite::lenToRad(
     double A, Geom::D2<Geom::SBasis> const d2_in,

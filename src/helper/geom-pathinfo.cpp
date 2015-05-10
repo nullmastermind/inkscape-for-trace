@@ -1,6 +1,8 @@
 /**
  * \file
- * \brief Pathinfo store the _data of a Geom::PathVector and allow get info about it
+ * \brief Pathinfo iterate a Geom::PathVector and allow get info about it.
+ * \Usualy need a curve index to get the results
+ * \TODO: migrate more Inkscape loops to use it.
  */ /*
     * Authors:
     * 2015 Jabier Arraiza Cenoz<jabier.arraiza@marker.es>
@@ -69,24 +71,30 @@ void Pathinfo::set(Geom::PathVector path_vector, bool skip_degenerate)
     }
 }
 
+/** Size of pathvector
+ */
 size_t Pathinfo::size() const
 {
     return _data.back().first + 1;
 }
 
-size_t Pathinfo::subPathSize(size_t index) const
+/** Size of subpath
+ */
+size_t Pathinfo::subPathSize(size_t subpath_index) const
 {
     size_t size = 0;
-    if( _data.size() > index){
+    if( _data.size() > subpath_index){
         double prev = 0;
-        if(index != 0){
-            prev = _data[index - 1].first;
+        if(subpath_index != 0){
+            prev = _data[subpath_index - 1].first;
         }
-        size = prev - _data[index].first + 1;
+        size = prev - _data[subpath_index].first + 1;
     }
     return size;
 }
 
+/** Get subpath index from a curve index
+ */
 size_t Pathinfo::subPathIndex(size_t index) const
 {
     for (size_t i = 0; i < _data.size(); i++) {
@@ -97,6 +105,8 @@ size_t Pathinfo::subPathIndex(size_t index) const
     return 0;
 }
 
+/** Get subpath last index given a curve index
+ */
 size_t Pathinfo::last(size_t index) const
 {
     for (size_t i = 0; i < _data.size(); i++) {
@@ -107,6 +117,8 @@ size_t Pathinfo::last(size_t index) const
     return 0;
 }
 
+/** Get subpath first index given a curve index
+ */
 size_t Pathinfo::first(size_t index) const
 {
     for (size_t i = 0; i < _data.size(); i++) {
@@ -121,6 +133,8 @@ size_t Pathinfo::first(size_t index) const
     return 0;
 }
 
+/** Get previous index given a curve index
+ */
 boost::optional<size_t> Pathinfo::previous(size_t index) const
 {
     if (first(index) == index && closed(index)) {
@@ -132,6 +146,8 @@ boost::optional<size_t> Pathinfo::previous(size_t index) const
     return index - 1;
 }
 
+/** Get next index given a curve index
+ */
 boost::optional<size_t> Pathinfo::next(size_t index) const
 {
     if (last(index) == index && closed(index)) {
@@ -143,6 +159,8 @@ boost::optional<size_t> Pathinfo::next(size_t index) const
     return index + 1;
 }
 
+/** Get if subpath is closed given a curve index
+ */
 bool Pathinfo::closed(size_t index) const
 {
     for (size_t i = 0; i < _data.size(); i++) {

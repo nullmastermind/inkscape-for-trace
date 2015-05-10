@@ -1,6 +1,6 @@
 /**
  * \file
- * \brief Pathinfo store data of a Geom::PathVector and allow get info about it
+ * \brief Pathinfo iterate a Geom::PathVector and allow get info about it.
  * \
  */ /*
     * Authors:
@@ -29,7 +29,7 @@ public:
     void set(Geom::PathVector path_vector, bool skip_degenerate = false);
     std::vector<std::pair<size_t, bool> > get(){return _data;};
     size_t size() const;
-    size_t subPathSize(size_t index) const;
+    size_t subPathSize(size_t subpath_index) const;
     size_t subPathIndex(size_t index) const;
     size_t last(size_t index) const;
     size_t first(size_t index) const;

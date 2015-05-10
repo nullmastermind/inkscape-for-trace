@@ -1,6 +1,6 @@
 /**
  * \file
- * \brief Pointwise a class to manage a vector of satellites per piecewise curve
+ * \brief Pointwise a class to manage a vector of satellites, once per piecewise curve
  */ /*
     * Authors:
     * 2015 Jabier Arraiza Cenoz<jabier.arraiza@marker.es>
