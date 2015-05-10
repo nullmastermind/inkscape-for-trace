@@ -3,8 +3,14 @@
  * \brief Pointwise a class to manage a vector of satellites per piecewise curve
  */ /*
     * Authors:
-    * 2015 Jabier Arraiza Cenoz<jabier.arraiza@marker.es>
-    *
+    * Jabiertxof
+    * Johan Engelen
+    * Josh Andler
+    * suv
+    * Mc-
+    * Liam P. White
+    * Nathan Hurst
+    * Krzysztof Kosiński
     * This code is in public domain
     */
 
@@ -23,12 +29,7 @@
  * optional satellites, and remove the active variable in satellites.
  *
  */
-Pointwise::Pointwise(Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2,
-                     std::vector<Satellite> satellites)
-    : _pwd2(pwd2), _satellites(satellites), _path_info(pwd2)
-{
-    setStart();
-}
+Pointwise::Pointwise() {}
 
 
 Pointwise::~Pointwise() {}
@@ -48,7 +49,6 @@ void Pointwise::setPwd2(Geom::Piecewise<Geom::D2<Geom::SBasis> > const pwd2_in)
 void Pointwise::setPathInfo(Geom::PathVector const pv)
 {
     _path_info.set(pv);
-    setStart();
 }
 
 std::vector<Satellite> Pointwise::getSatellites() const
@@ -59,10 +59,9 @@ std::vector<Satellite> Pointwise::getSatellites() const
 void Pointwise::setSatellites(std::vector<Satellite> const sats)
 {
     _satellites = sats;
-    setStart();
 }
 
-/** Update the start satellite on ope/closed paths.
+/** Update the start satellite on open/closed paths.
  */
 void Pointwise::setStart()
 {
@@ -137,7 +136,6 @@ void Pointwise::pwd2Append(Geom::Piecewise<Geom::D2<Geom::SBasis> > const A, Sat
 
         if (!reorder && first == i - counter && !are_near(_pwd2[i - counter].at0(), A[i].at0()) && !subpath_is_changed) {
             //Send the modified subpath to back
-            //TODO: change subpathToBack to subpath move for the case of multiple subpath reverse
             subpathToBack(_path_info.subPathIndex(first));
             reorder = true;
             i--;
@@ -145,6 +143,7 @@ void Pointwise::pwd2Append(Geom::Piecewise<Geom::D2<Geom::SBasis> > const A, Sat
         }
 
         if (first == i - counter && !are_near(_pwd2[i - counter].at0(), A[i].at0()) && !subpath_is_changed) {
+            //reverse subpath
             subpathReverse(first, last);
         }
 

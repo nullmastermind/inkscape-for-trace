@@ -1,10 +1,16 @@
 /**
  * \file
- * \brief Pointwise a class to manage a vector of satellites, once per piecewise curve
+ * \brief Pointwise a class to manage a vector of satellites per piecewise curve
  */ /*
     * Authors:
-    * 2015 Jabier Arraiza Cenoz<jabier.arraiza@marker.es>
-    *
+    * Jabiertxof
+    * Johan Engelen
+    * Josh Andler
+    * suv
+    * Mc-
+    * Liam P. White
+    * Nathan Hurst
+    * Krzysztof Kosiński
     * This code is in public domain
     */
 
@@ -36,7 +42,7 @@
 
 class Pointwise {
 public:
-    Pointwise(Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2, std::vector<Satellite> satellites);
+    Pointwise();
     virtual ~Pointwise();
 
     Geom::Piecewise<Geom::D2<Geom::SBasis> > getPwd2() const;

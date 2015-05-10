@@ -139,8 +139,11 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
                 global_counter++;
             }
         }
-        pointwise = new Pointwise(pwd2_in, satellites);
+        pointwise = new Pointwise();
+        pointwise->setPwd2(pwd2_in);
+        pointwise->setSatellites(satellites);
         pointwise->setPathInfo(original_pathv);
+        pointwise->setStart();
         satellites_param.setPointwise(pointwise);
     } else {
         g_warning("LPE Fillet/Chamfer can only be applied to shapes (not groups).");
@@ -278,12 +281,13 @@ void LPEFilletChamfer::updateAmount()
     }
     std::vector<Satellite> satellites = pointwise->getSatellites();
     Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = pointwise->getPwd2();
-    Pathinfo path_info(pwd2);
+    Pathinfo* path_info = new Pathinfo();
+    path_info->set(pwd2);
     for (std::vector<Satellite>::iterator it = satellites.begin();
             it != satellites.end(); ++it) 
     {
-        if (!path_info.closed(it - satellites.begin()) &&
-                path_info.first(it - satellites.begin()) ==
+        if (!path_info->closed(it - satellites.begin()) &&
+                path_info->first(it - satellites.begin()) ==
                 (unsigned)(it - satellites.begin())) 
         {
             it->amount = 0;
@@ -293,7 +297,7 @@ void LPEFilletChamfer::updateAmount()
             continue;
         }
         boost::optional<size_t> previous =
-            path_info.previous(it - satellites.begin());
+            path_info->previous(it - satellites.begin());
         if (only_selected) {
             Geom::Point satellite_point = pwd2.valueAt(it - satellites.begin());
             if (isNodePointSelected(satellite_point)) {
@@ -421,8 +425,10 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
             it->hidden = hide_knots;
             ++it;
         }
-        Pathinfo path_info(original_pathv);
-        size_t number_curves = path_info.size();
+        Pathinfo* path_info = new Pathinfo();
+        path_info->set(original_pathv);
+        size_t number_curves = path_info->size();
+        //if are diferent sizes call to poinwise recalculate
         if (pointwise && number_curves != sats.size()) {
             Satellite sat(sats[0].satellite_type);
             sat.setIsTime(sats[0].is_time);
@@ -434,9 +440,12 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
             sat.setSteps(0);
             pointwise->recalculateForNewPwd2(pwd2_in, original_pathv, sat);
         } else {
-            pointwise = new Pointwise(pwd2_in, sats);
+            pointwise = new Pointwise();
+            pointwise->setPwd2(pwd2_in);
+            pointwise->setSatellites(sats);
         }
         pointwise->setPathInfo(original_pathv);
+        pointwise->setStart();
         satellites_param.setPointwise(pointwise);
         refreshKnots();
     } else {

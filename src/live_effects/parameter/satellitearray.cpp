@@ -76,7 +76,8 @@ void SatelliteArrayParam::updateCanvasIndicators(bool mirror)
         return;
     }
     Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = _last_pointwise->getPwd2();
-    Pathinfo path_info(pwd2);
+    Pathinfo* path_info = new Pathinfo();
+    path_info->set(pwd2);
     if (mirror == true) {
         _hp.clear();
     }
@@ -96,7 +97,7 @@ void SatelliteArrayParam::updateCanvasIndicators(bool mirror)
         double size_out = _vector[i].arcDistance(pwd2[i]);
         double lenght_out = Geom::length(pwd2[i], Geom::EPSILON);
         double lenght_in = 0;
-        boost::optional<size_t> d2_prev_index = path_info.previous(i);
+        boost::optional<size_t> d2_prev_index = path_info->previous(i);
         if (d2_prev_index) {
             lenght_in = Geom::length(pwd2[*d2_prev_index], Geom::EPSILON);
         }
@@ -282,9 +283,10 @@ void FilletChamferKnotHolderEntity::knot_set(Geom::Point const &p,
     }
     Pointwise *pointwise = _pparam->_last_pointwise;
     Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = pointwise->getPwd2();
-    Pathinfo path_info(pwd2);
+    Pathinfo* path_info = new Pathinfo();
+    path_info->set(pwd2);
     if (_pparam->_vector.size() <= _index) {
-        boost::optional<size_t> d2_prev_index = path_info.previous(index);
+        boost::optional<size_t> d2_prev_index = path_info->previous(index);
         if (d2_prev_index) {
             Geom::D2<Geom::SBasis> d2_in = pwd2[*d2_prev_index];
             double mirror_time = Geom::nearest_point(s, d2_in);
@@ -330,14 +332,15 @@ Geom::Point FilletChamferKnotHolderEntity::knot_get() const
     }
     Pointwise *pointwise = _pparam->_last_pointwise;
     Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = pointwise->getPwd2();
-    Pathinfo path_info(pwd2);
+    Pathinfo* path_info = new Pathinfo();
+    path_info->set(pwd2);
     if (pwd2.size() <= index) {
         return Geom::Point(Geom::infinity(), Geom::infinity());
     }
     this->knot->show();
     if (_index >= _pparam->_vector.size()) {
         tmp_point = satellite.getPosition(pwd2[index]);
-        boost::optional<size_t> d2_prev_index = path_info.previous(index);
+        boost::optional<size_t> d2_prev_index = path_info->previous(index);
         if (d2_prev_index) {
             Geom::D2<Geom::SBasis> d2_in = pwd2[*d2_prev_index];
             double s = satellite.arcDistance(pwd2[index]);
@@ -420,10 +423,11 @@ void FilletChamferKnotHolderEntity::knot_click(guint state)
         }
     } else if (state & GDK_SHIFT_MASK) {
         Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = _pparam->_last_pointwise->getPwd2();
-        Pathinfo path_info(pwd2);
+        Pathinfo* path_info = new Pathinfo();
+        path_info->set(pwd2);
         double amount = _pparam->_vector.at(index).amount;
         if (!_pparam->_use_distance && !_pparam->_vector.at(index).is_time) {
-            boost::optional<size_t> prev = path_info.previous(index);
+            boost::optional<size_t> prev = path_info->previous(index);
             if (prev) {
                 amount = _pparam->_vector.at(index).lenToRad(amount, pwd2[*prev], pwd2[index],_pparam->_vector.at(*prev));
             } else {
@@ -432,7 +436,7 @@ void FilletChamferKnotHolderEntity::knot_click(guint state)
         }
         bool aprox = false;
         Geom::D2<Geom::SBasis> d2_out = _pparam->_last_pointwise->getPwd2()[index];
-        boost::optional<size_t> d2_prev_index = path_info.previous(index);
+        boost::optional<size_t> d2_prev_index = path_info->previous(index);
         if (d2_prev_index) {
             Geom::D2<Geom::SBasis> d2_in =
                 _pparam->_last_pointwise->getPwd2()[*d2_prev_index];
@@ -462,8 +466,9 @@ void FilletChamferKnotHolderEntity::knot_set_offset(Satellite satellite)
     double max_amount = amount;
     if (!_pparam->_use_distance && !satellite.is_time) {
         Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = _pparam->_last_pointwise->getPwd2();
-        Pathinfo path_info(pwd2);
-        boost::optional<size_t> prev = path_info.previous(index);
+        Pathinfo* path_info = new Pathinfo();
+        path_info->set(pwd2);
+        boost::optional<size_t> prev = path_info->previous(index);
         if (prev) {
             amount = _pparam->_vector.at(index).radToLen(amount, pwd2[*prev], pwd2[index], _pparam->_vector.at(*prev));
         } else {

@@ -22,8 +22,7 @@
 
 class Pathinfo {
 public:
-    Pathinfo(Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2);
-    Pathinfo(Geom::PathVector path_vector, bool skip_degenerate = false);
+    Pathinfo();
     virtual ~Pathinfo();
     void set(Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2);
     void set(Geom::PathVector path_vector, bool skip_degenerate = false);

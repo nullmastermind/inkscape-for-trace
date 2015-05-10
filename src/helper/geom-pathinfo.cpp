@@ -17,16 +17,7 @@
  * @brief Pathinfo store the _data of a Geom::PathVector and allow get info about it
  *
  */
-Pathinfo::Pathinfo(Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2)
-{
-    set(pwd2);
-}
-
-Pathinfo::Pathinfo(Geom::PathVector path_vector, bool skip_degenerate)
-{
-    set(path_vector, skip_degenerate);
-}
-
+Pathinfo::Pathinfo() {}
 
 Pathinfo::~Pathinfo() {}
 

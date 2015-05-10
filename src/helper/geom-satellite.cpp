@@ -80,7 +80,7 @@ double arcLengthAt(double A, Geom::D2<Geom::SBasis> const d2_in)
 }
 
 /**
- * Convert a arc radius of a fillet/chamfer to his satellite length -point position where fillet/chamferknot be on original curve
+ * Convert a arc radius of a fillet/chamfer to his satellite length -point position where fillet/chamfer knot be on original curve
  */
 double Satellite::radToLen(
     double A, Geom::D2<Geom::SBasis> const d2_in,
