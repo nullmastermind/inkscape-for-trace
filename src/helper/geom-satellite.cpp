@@ -28,7 +28,56 @@ Satellite::Satellite(SatelliteType satellite_type)
 
 Satellite::~Satellite() {}
 
+/**
+ * Calculate the time in d2_in with a size of A
+ * TODO: find a better place to it
+ */
+double timeAtArcLength(double A, Geom::D2<Geom::SBasis> const d2_in)
+{
+    if (!d2_in.isFinite() || d2_in.isZero() || A == 0) {
+        return 0;
+    }
+    double t = 0;
+    double length_part = Geom::length(d2_in, Geom::EPSILON);
+    if (A > length_part || d2_in[0].degreesOfFreedom() == 2) {
+        if (length_part != 0) {
+            t = A / length_part;
+        }
+    } else if (d2_in[0].degreesOfFreedom() != 2) {
+        Geom::Piecewise<Geom::D2<Geom::SBasis> > u;
+        u.push_cut(0);
+        u.push(d2_in, 1);
+        std::vector<double> t_roots = roots(arcLengthSb(u) - A);
+        if (t_roots.size() > 0) {
+            t = t_roots[0];
+        }
+    }
 
+    return t;
+}
+
+/**
+ * Calculate the size in d2_in with a point at A
+ * TODO: find a better place to it
+ */
+double arcLengthAt(double A, Geom::D2<Geom::SBasis> const d2_in)
+{
+    if (!d2_in.isFinite() || d2_in.isZero() || A == 0) {
+        return 0;
+    }
+    double s = 0;
+    double length_part = Geom::length(d2_in, Geom::EPSILON);
+    if (A > length_part || d2_in[0].degreesOfFreedom() == 2) {
+        s = (A * length_part);
+    } else if (d2_in[0].degreesOfFreedom() != 2) {
+        Geom::Piecewise<Geom::D2<Geom::SBasis> > u;
+        u.push_cut(0);
+        u.push(d2_in, 1);
+        u = Geom::portion(u, 0.0, A);
+        s = Geom::length(u, 0.001);
+    }
+    return s;
+}
 
 /**
  * Calculate the length of a satellite from a radious A input.
@@ -40,17 +89,17 @@ double Satellite::radToLen(
     Satellite const previousSatellite) const
 {
     double len = 0;
-    Piecewise<D2<SBasis> > offset_curve0 =
-        Piecewise<D2<SBasis> >(d2_in) +
+    Geom::Piecewise<Geom::D2<Geom::SBasis> > offset_curve0 =
+        Geom::Piecewise<Geom::D2<Geom::SBasis> >(d2_in) +
         rot90(unitVector(derivative(d2_in))) * (A);
-    Piecewise<D2<SBasis> > offset_curve1 =
-        Piecewise<D2<SBasis> >(d2_out) +
+    Geom::Piecewise<Geom::D2<Geom::SBasis> > offset_curve1 =
+        Geom::Piecewise<Geom::D2<Geom::SBasis> >(d2_out) +
         rot90(unitVector(derivative(d2_out))) * (A);
     Geom::Path p0 = path_from_piecewise(offset_curve0, 0.1)[0];
     Geom::Path p1 = path_from_piecewise(offset_curve1, 0.1)[0];
     Geom::Crossings cs = Geom::crossings(p0, p1);
     if (cs.size() > 0) {
-        Point cp = p0(cs[0].ta);
+        Geom::Point cp = p0(cs[0].ta);
         double p0pt = nearest_point(cp, d2_out);
         len = arcLengthAt(p0pt, d2_out);
     } else {
@@ -74,25 +123,25 @@ double Satellite::lenToRad(
     double time_out = timeAtArcLength(A, d2_out);
     Geom::Point startArcPoint = (d2_in).valueAt(time_in);
     Geom::Point endArcPoint = d2_out.valueAt(time_out);
-    Piecewise<D2<SBasis> > u;
+    Geom::Piecewise<Geom::D2<Geom::SBasis> > u;
     u.push_cut(0);
     u.push(d2_in, 1);
     Geom::Curve *C = path_from_piecewise(u, 0.1)[0][0].duplicate();
-    Piecewise<D2<SBasis> > u2;
+    Geom::Piecewise<Geom::D2<Geom::SBasis> > u2;
     u2.push_cut(0);
     u2.push(d2_out, 1);
     Geom::Curve *D = path_from_piecewise(u2, 0.1)[0][0].duplicate();
-    Curve *knotCurve1 = C->portion(0, time_in);
-    Curve *knotCurve2 = D->portion(time_out, 1);
+    Geom::Curve *knotCurve1 = C->portion(0, time_in);
+    Geom::Curve *knotCurve2 = D->portion(time_out, 1);
     Geom::CubicBezier const *cubic1 =
         dynamic_cast<Geom::CubicBezier const *>(&*knotCurve1);
-    Ray ray1(startArcPoint, (d2_in).valueAt(1));
+    Geom::Ray ray1(startArcPoint, (d2_in).valueAt(1));
     if (cubic1) {
         ray1.setPoints((*cubic1)[2], startArcPoint);
     }
     Geom::CubicBezier const *cubic2 =
         dynamic_cast<Geom::CubicBezier const *>(&*knotCurve2);
-    Ray ray2(d2_out.valueAt(0), endArcPoint);
+    Geom::Ray ray2(d2_out.valueAt(0), endArcPoint);
     if (cubic2) {
         ray2.setPoints(endArcPoint, (*cubic2)[1]);
     }

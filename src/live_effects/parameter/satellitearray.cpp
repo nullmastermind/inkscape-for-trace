@@ -1,10 +1,8 @@
 /*
- * Copyright (C) Jabiertxo Arraiza Cenoz <jabier.arraiza@marker.es>
- * Special thanks to Johan Engelen for the base of the effect -powerstroke-
- * Also to ScislaC for point me to the idea
- * Also su_v for his construvtive feedback and time
- * and finaly to Liam P. White for his big help on coding, that save me a lot of
- * hours
+ * Author(s):
+ *   Jabiertxo Arraiza Cenoz <jabier.arraiza@marker.es>
+ *
+ * Copyright (C) 2014 Author(s)
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
@@ -18,8 +16,6 @@
 // TODO due to internal breakage in glibmm headers,
 // this has to be included last.
 #include <glibmm/i18n.h>
-
-using namespace Geom;
 
 namespace Inkscape {
 
@@ -88,7 +84,7 @@ void SatelliteArrayParam::updateCanvasIndicators(bool mirror)
         if (!_vector[i].active || _vector[i].hidden) {
             continue;
         }
-        if ((!_vector[i].hasMirror && mirror == true) || _vector[i].amount == 0) {
+        if ((!_vector[i].has_mirror && mirror == true) || _vector[i].amount == 0) {
             continue;
         }
         double pos = 0;
@@ -97,7 +93,7 @@ void SatelliteArrayParam::updateCanvasIndicators(bool mirror)
         }
         Geom::D2<Geom::SBasis> d2 = pwd2[i];
         bool overflow = false;
-        double size_out = _vector[i].size(pwd2[i]);
+        double size_out = _vector[i].arcDistance(pwd2[i]);
         double lenght_out = Geom::length(pwd2[i], Geom::EPSILON);
         double lenght_in = 0;
         boost::optional<size_t> d2_prev_index = path_info.previous(i);
@@ -133,9 +129,9 @@ void SatelliteArrayParam::updateCanvasIndicators(bool mirror)
         Geom::Affine aff = Geom::Affine();
         aff *= Geom::Scale(_helper_size);
         if (mirror == true) {
-            aff *= Geom::Rotate(ray_1.angle() - deg_to_rad(90));
+            aff *= Geom::Rotate(ray_1.angle() - Geom::deg_to_rad(90));
         } else {
-            aff *= Geom::Rotate(ray_1.angle() - deg_to_rad(270));
+            aff *= Geom::Rotate(ray_1.angle() - Geom::deg_to_rad(270));
         }
         pathv *= aff;
         pathv += d2.valueAt(pos);
@@ -161,9 +157,9 @@ void SatelliteArrayParam::updateCanvasIndicators(bool mirror)
                 aff = Geom::Affine();
                 aff *= Geom::Scale(_helper_size / 2.0);
                 if (mirror == true) {
-                    aff *= Geom::Rotate(ray_1.angle() - deg_to_rad(90));
+                    aff *= Geom::Rotate(ray_1.angle() - Geom::deg_to_rad(90));
                 } else {
-                    aff *= Geom::Rotate(ray_1.angle() - deg_to_rad(270));
+                    aff *= Geom::Rotate(ray_1.angle() - Geom::deg_to_rad(270));
                 }
                 pathv *= aff;
                 pathv += d2.valueAt(pos);
@@ -193,7 +189,7 @@ void SatelliteArrayParam::param_transform_multiply(Geom::Affine const &postmul,
 
     if (prefs->getBool("/options/transform/rectcorners", true)) {
         for (size_t i = 0; i < _vector.size(); ++i) {
-            if (!_vector[i].isTime && _vector[i].amount > 0) {
+            if (!_vector[i].is_time && _vector[i].amount > 0) {
                 _vector[i].amount = _vector[i].amount *
                                     ((postmul.expansionX() + postmul.expansionY()) / 2);
             }
@@ -214,23 +210,23 @@ void SatelliteArrayParam::addKnotHolderEntities(KnotHolder *knotholder,
         if (!_vector[i].active) {
             continue;
         }
-        if (!_vector[i].hasMirror && mirror == true) {
+        if (!_vector[i].has_mirror && mirror == true) {
             continue;
         }
         using namespace Geom;
-        SatelliteType type = _vector[i].satelliteType;
+        SatelliteType type = _vector[i].satellite_type;
         //IF is for filletChamfer effect...
         if (_effectType == FILLET_CHAMFER) {
             const gchar *tip;
-            if (type == C) {
+            if (type == CHAMFER) {
                 tip = _("<b>Chamfer</b>: <b>Ctrl+Click</b> toggle type, "
                         "<b>Shift+Click</b> open dialog, "
                         "<b>Ctrl+Alt+Click</b> reset");
-            } else if (type == IC) {
+            } else if (type == INVERSE_CHAMFER) {
                 tip = _("<b>Inverse Chamfer</b>: <b>Ctrl+Click</b> toggle type, "
                         "<b>Shift+Click</b> open dialog, "
                         "<b>Ctrl+Alt+Click</b> reset");
-            } else if (type == IF) {
+            } else if (type == INVERSE_FILLET) {
                 tip = _("<b>Inverse Fillet</b>: <b>Ctrl+Click</b> toggle type, "
                         "<b>Shift+Click</b> open dialog, "
                         "<b>Ctrl+Alt+Click</b> reset");
@@ -263,8 +259,8 @@ FilletChamferKnotHolderEntity::FilletChamferKnotHolderEntity(
     SatelliteArrayParam *p, size_t index)
     : _pparam(p), _index(index) {}
 
-void FilletChamferKnotHolderEntity::knot_set(Point const &p,
-        Point const &/*origin*/,
+void FilletChamferKnotHolderEntity::knot_set(Geom::Point const &p,
+        Geom::Point const &/*origin*/,
         guint state)
 {
     Geom::Point s = snap_knot_position(p, state);
@@ -298,10 +294,10 @@ void FilletChamferKnotHolderEntity::knot_set(Point const &p,
             if (time_start > mirror_time) {
                 mirror_time = time_start;
             }
-            double size = satellite.arcLengthAt(mirror_time, d2_in);
+            double size = arcLengthAt(mirror_time, d2_in);
             double amount = Geom::length(d2_in, Geom::EPSILON) - size;
-            if (satellite.isTime) {
-                amount = satellite.timeAtArcLength(amount, pwd2[index]);
+            if (satellite.is_time) {
+                amount = timeAtArcLength(amount, pwd2[index]);
             }
             satellite.amount = amount;
         }
@@ -323,20 +319,20 @@ Geom::Point FilletChamferKnotHolderEntity::knot_get() const
         index = _index - _pparam->_vector.size();
     }
     if (!valid_index(index)) {
-        return Point(infinity(), infinity());
+        return Geom::Point(Geom::infinity(), Geom::infinity());
     }
     Satellite satellite = _pparam->_vector.at(index);
     if (!_pparam->_last_pointwise) {
-        return Point(infinity(), infinity());
+        return Geom::Point(Geom::infinity(), Geom::infinity());
     }
     if (!satellite.active || satellite.hidden) {
-        return Point(infinity(), infinity());
+        return Geom::Point(Geom::infinity(), Geom::infinity());
     }
     Pointwise *pointwise = _pparam->_last_pointwise;
     Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = pointwise->getPwd2();
     Pathinfo path_info(pwd2);
     if (pwd2.size() <= index) {
-        return Point(infinity(), infinity());
+        return Geom::Point(Geom::infinity(), Geom::infinity());
     }
     this->knot->show();
     if (_index >= _pparam->_vector.size()) {
@@ -344,7 +340,7 @@ Geom::Point FilletChamferKnotHolderEntity::knot_get() const
         boost::optional<size_t> d2_prev_index = path_info.previous(index);
         if (d2_prev_index) {
             Geom::D2<Geom::SBasis> d2_in = pwd2[*d2_prev_index];
-            double s = satellite.size(pwd2[index]);
+            double s = satellite.arcDistance(pwd2[index]);
             double t = satellite.time(s, true, d2_in);
             if (t > 1) {
                 t = 1;
@@ -383,34 +379,34 @@ void FilletChamferKnotHolderEntity::knot_click(guint state)
             sp_lpe_item_update_patheffect(SP_LPE_ITEM(item), false, false);
         } else {
             using namespace Geom;
-            SatelliteType type = _pparam->_vector.at(index).satelliteType;
+            SatelliteType type = _pparam->_vector.at(index).satellite_type;
             switch (type) {
-            case F:
-                type = IF;
+            case FILLET:
+                type = INVERSE_FILLET;
                 break;
-            case IF:
-                type = C;
+            case INVERSE_FILLET:
+                type = CHAMFER;
                 break;
-            case C:
-                type = IC;
+            case CHAMFER:
+                type = INVERSE_CHAMFER;
                 break;
             default:
-                type = F;
+                type = FILLET;
                 break;
             }
-            _pparam->_vector.at(index).satelliteType = type;
+            _pparam->_vector.at(index).satellite_type = type;
             _pparam->param_set_and_write_new_value(_pparam->_vector);
             sp_lpe_item_update_patheffect(SP_LPE_ITEM(item), false, false);
             const gchar *tip;
-            if (type == C) {
+            if (type == CHAMFER) {
                 tip = _("<b>Chamfer</b>: <b>Ctrl+Click</b> toggle type, "
                         "<b>Shift+Click</b> open dialog, "
                         "<b>Ctrl+Alt+Click</b> reset");
-            } else if (type == IC) {
+            } else if (type == INVERSE_CHAMFER) {
                 tip = _("<b>Inverse Chamfer</b>: <b>Ctrl+Click</b> toggle type, "
                         "<b>Shift+Click</b> open dialog, "
                         "<b>Ctrl+Alt+Click</b> reset");
-            } else if (type == IF) {
+            } else if (type == INVERSE_FILLET) {
                 tip = _("<b>Inverse Fillet</b>: <b>Ctrl+Click</b> toggle type, "
                         "<b>Shift+Click</b> open dialog, "
                         "<b>Ctrl+Alt+Click</b> reset");
@@ -423,10 +419,10 @@ void FilletChamferKnotHolderEntity::knot_click(guint state)
             this->knot->show();
         }
     } else if (state & GDK_SHIFT_MASK) {
-        Piecewise<D2<SBasis> > pwd2 = _pparam->_last_pointwise->getPwd2();
+        Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = _pparam->_last_pointwise->getPwd2();
         Pathinfo path_info(pwd2);
         double amount = _pparam->_vector.at(index).amount;
-        if (!_pparam->_use_distance && !_pparam->_vector.at(index).isTime) {
+        if (!_pparam->_use_distance && !_pparam->_vector.at(index).is_time) {
             boost::optional<size_t> prev = path_info.previous(index);
             if (prev) {
                 amount = _pparam->_vector.at(index).lenToRad(amount, pwd2[*prev], pwd2[index],_pparam->_vector.at(*prev));
@@ -435,7 +431,7 @@ void FilletChamferKnotHolderEntity::knot_click(guint state)
             }
         }
         bool aprox = false;
-        D2<SBasis> d2_out = _pparam->_last_pointwise->getPwd2()[index];
+        Geom::D2<Geom::SBasis> d2_out = _pparam->_last_pointwise->getPwd2()[index];
         boost::optional<size_t> d2_prev_index = path_info.previous(index);
         if (d2_prev_index) {
             Geom::D2<Geom::SBasis> d2_in =
@@ -464,8 +460,8 @@ void FilletChamferKnotHolderEntity::knot_set_offset(Satellite satellite)
     }
     double amount = satellite.amount;
     double max_amount = amount;
-    if (!_pparam->_use_distance && !satellite.isTime) {
-        Piecewise<D2<SBasis> > pwd2 = _pparam->_last_pointwise->getPwd2();
+    if (!_pparam->_use_distance && !satellite.is_time) {
+        Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = _pparam->_last_pointwise->getPwd2();
         Pathinfo path_info(pwd2);
         boost::optional<size_t> prev = path_info.previous(index);
         if (prev) {

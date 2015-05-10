@@ -7,11 +7,7 @@
  *
  * Copyright (C) 2014 Author(s)
  *
- * Special thanks to Johan Engelen for the base of the effect -powerstroke-
- * Also to ScislaC for point me to the idea
- * Also su_v for his construvtive feedback and time
- * and finaly to Liam P. White for his big help on coding, that save me a lot of
- * hours
+ * Jabiertxof:Thanks to all people help me
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */

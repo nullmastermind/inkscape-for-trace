@@ -1,6 +1,6 @@
 /**
  * \file
- * \brief Pathinfo store data of a pathvector and allow get info about it
+ * \brief Pathinfo store data of a Geom::PathVector and allow get info about it
  * \
  */ /*
     * Authors:
@@ -16,19 +16,19 @@
 #include <boost/optional.hpp>
 
 /**
- * @brief Pathinfo store the data of a pathvector and allow get info about it
+ * @brief Pathinfo store the data of a Geom::PathVector and allow get info about it
  *
  */
-using namespace Geom;
+
 class Pathinfo {
 public:
-    Pathinfo(Piecewise<D2<SBasis> > pwd2);
+    Pathinfo(Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2);
     Pathinfo(Geom::PathVector path_vector, bool skip_degenerate = false);
     virtual ~Pathinfo();
-    void set(Piecewise<D2<SBasis> > pwd2);
+    void set(Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2);
     void set(Geom::PathVector path_vector, bool skip_degenerate = false);
     std::vector<std::pair<size_t, bool> > get(){return _data;};
-    size_t subPathCounter() const;
+    size_t size() const;
     size_t subPathSize(size_t index) const;
     size_t subPathIndex(size_t index) const;
     size_t last(size_t index) const;

@@ -151,13 +151,13 @@ void FilletChamferPropertiesDialog::_apply()
     double d_pos =  _fillet_chamfer_position_numeric.get_value();
     if (d_pos >= 0) {
         if (_fillet_chamfer_type_fillet.get_active() == true) {
-            _satellite.satelliteType = Geom::F;
+            _satellite.satellite_type = FILLET;
         } else if (_fillet_chamfer_type_inverse_fillet.get_active() == true) {
-            _satellite.satelliteType = Geom::IF;
+            _satellite.satellite_type = INVERSE_FILLET;
         } else if (_fillet_chamfer_type_inverse_chamfer.get_active() == true) {
-            _satellite.satelliteType = Geom::IC;
+            _satellite.satellite_type = INVERSE_CHAMFER;
         } else {
-            _satellite.satelliteType = Geom::C;
+            _satellite.satellite_type = CHAMFER;
         }
         if (_flexible) {
             if (d_pos > 99.99999 || d_pos < 0) {
@@ -210,7 +210,7 @@ void FilletChamferPropertiesDialog::_setSatellite(Satellite satellite)
     if(_use_distance) {
         distance_or_radius = std::string(_("Knot distance"));
     }
-    if (satellite.isTime) {
+    if (satellite.is_time) {
         position = _amount * 100;
         _flexible = true;
         _fillet_chamfer_position_label.set_label(_("Position (%):"));
@@ -222,13 +222,13 @@ void FilletChamferPropertiesDialog::_setSatellite(Satellite satellite)
     }
     _fillet_chamfer_position_numeric.set_value(position);
     _fillet_chamfer_chamfer_subdivisions.set_value(satellite.steps);
-    if (satellite.satelliteType == Geom::F) {
+    if (satellite.satellite_type == FILLET) {
         _fillet_chamfer_type_fillet.set_active(true);
-    } else if (satellite.satelliteType == Geom::IF) {
+    } else if (satellite.satellite_type == INVERSE_FILLET) {
         _fillet_chamfer_type_inverse_fillet.set_active(true);
-    } else if (satellite.satelliteType == Geom::C) {
+    } else if (satellite.satellite_type == CHAMFER) {
         _fillet_chamfer_type_chamfer.set_active(true);
-    } else if (satellite.satelliteType == Geom::IC) {
+    } else if (satellite.satellite_type == INVERSE_CHAMFER) {
         _fillet_chamfer_type_inverse_chamfer.set_active(true);
     }
     _satellite = satellite;

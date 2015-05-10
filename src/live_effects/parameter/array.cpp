@@ -83,7 +83,14 @@ ArrayParam<Satellite >::readsvg(const gchar * str)
     if (sp_svg_satellite_read_d(str, &sat)) {
         return sat;
     }
-    Satellite satellite(Geom::F, true, false, false, true, 0.0, 0.0, 0);
+    Satellite satellite(FILLET);
+    satellite.setIsTime(true);
+    satellite.setActive(false);
+    satellite.setHasMirror(false);
+    satellite.setHidden(true);
+    satellite.setAmount(0.0);
+    satellite.setAngle(0.0);
+    satellite.setSteps(0);
     return satellite;
 }
 

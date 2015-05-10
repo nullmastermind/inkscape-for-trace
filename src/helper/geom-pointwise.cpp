@@ -23,7 +23,7 @@
  * optional satellites, and remove the active variable in satellites.
  *
  */
-Pointwise::Pointwise(Piecewise<D2<SBasis> > pwd2,
+Pointwise::Pointwise(Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2,
                      std::vector<Satellite> satellites)
     : _pwd2(pwd2), _satellites(satellites), _path_info(pwd2)
 {
@@ -34,15 +34,21 @@ Pointwise::Pointwise(Piecewise<D2<SBasis> > pwd2,
 Pointwise::~Pointwise() {}
 
 
-Piecewise<D2<SBasis> > Pointwise::getPwd2() const
+Geom::Piecewise<Geom::D2<Geom::SBasis> > Pointwise::getPwd2() const
 {
     return _pwd2;
 }
 
-void Pointwise::setPwd2(Piecewise<D2<SBasis> > const pwd2_in)
+void Pointwise::setPwd2(Geom::Piecewise<Geom::D2<Geom::SBasis> > const pwd2_in)
 {
     _pwd2 = pwd2_in;
     _path_info.set(_pwd2);
+}
+
+void Pointwise::setPathInfo(Geom::PathVector const pv)
+{
+    _path_info.set(pv);
+    setStart();
 }
 
 std::vector<Satellite> Pointwise::getSatellites() const
@@ -76,7 +82,7 @@ void Pointwise::setStart()
 
 /** Fired when a path is modified.
  */
-void Pointwise::recalculateForNewPwd2(Piecewise<D2<SBasis> > const A, Geom::PathVector const B, Satellite const S)
+void Pointwise::recalculateForNewPwd2(Geom::Piecewise<Geom::D2<Geom::SBasis> > const A, Geom::PathVector const B, Satellite const S)
 {
     if (_pwd2.size() > A.size()) {
         pwd2Sustract(A);
@@ -89,11 +95,11 @@ void Pointwise::recalculateForNewPwd2(Piecewise<D2<SBasis> > const A, Geom::Path
 
 /** Some nodes/subpaths are removed.
  */
-void Pointwise::pwd2Sustract(Piecewise<D2<SBasis> > const A)
+void Pointwise::pwd2Sustract(Geom::Piecewise<Geom::D2<Geom::SBasis> > const A)
 {
     size_t counter = 0;
     std::vector<Satellite> sats;
-    Piecewise<D2<SBasis> > pwd2 = _pwd2;
+    Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = _pwd2;
     setPwd2(A);
     for (size_t i = 0; i < _satellites.size(); i++) {
         if (_path_info.last(i - counter) < i - counter ||
@@ -109,7 +115,7 @@ void Pointwise::pwd2Sustract(Piecewise<D2<SBasis> > const A)
 
 /** Append nodes/subpaths to current pointwise
  */
-void Pointwise::pwd2Append(Piecewise<D2<SBasis> > const A, Satellite const S)
+void Pointwise::pwd2Append(Geom::Piecewise<Geom::D2<Geom::SBasis> > const A, Satellite const S)
 {
     size_t counter = 0;
     std::vector<Satellite> sats;
@@ -161,7 +167,7 @@ void Pointwise::subpathToBack(size_t subpath)
     size_t counter = 0;
     std::vector<Geom::Path> tmp_path;
     Geom::Path to_back;
-    for (PathVector::const_iterator path_it = path_in.begin();
+    for (Geom::PathVector::const_iterator path_it = path_in.begin();
             path_it != path_in.end(); ++path_it) 
     {
         if (path_it->empty()) {
@@ -169,7 +175,7 @@ void Pointwise::subpathToBack(size_t subpath)
         }
         Geom::Path::const_iterator curve_it1 = path_it->begin();
         Geom::Path::const_iterator curve_endit = path_it->end_default();
-        const Curve &closingline = path_it->back_closed();
+        Geom::Curve const &closingline = path_it->back_closed();
         if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
             curve_endit = path_it->end_open();
         }
@@ -207,7 +213,7 @@ void Pointwise::subpathReverse(size_t start, size_t end)
     size_t subpath = _path_info.subPathIndex(start);
     std::vector<Geom::Path> tmp_path;
     Geom::Path rev;
-    for (PathVector::const_iterator path_it = path_in.begin();
+    for (Geom::PathVector::const_iterator path_it = path_in.begin();
             path_it != path_in.end(); ++path_it)
     {
         if (path_it->empty()) {
@@ -226,18 +232,18 @@ void Pointwise::subpathReverse(size_t start, size_t end)
 
 /** Fired when a path is modified duplicating a node. Piecewise ignore degenerated curves.
  */
-void Pointwise::insertDegenerateSatellites(Piecewise<D2<SBasis> > const A, Geom::PathVector const B, Satellite const S)
+void Pointwise::insertDegenerateSatellites(Geom::Piecewise<Geom::D2<Geom::SBasis> > const A, Geom::PathVector const B, Satellite const S)
 {
     size_t size_A = A.size();
     _path_info.set(B);
-    size_t size_B = _path_info.subPathCounter();
+    size_t size_B = _path_info.size();
     size_t satellite_gap = size_B - size_A;
     if (satellite_gap == 0){
         return;
     }
     size_t counter = 0;
     size_t counter_added = 0;
-    for (PathVector::const_iterator path_it = B.begin();
+    for (Geom::PathVector::const_iterator path_it = B.begin();
             path_it != B.end(); ++path_it) 
     {
         if (path_it->empty()) {
@@ -246,7 +252,7 @@ void Pointwise::insertDegenerateSatellites(Piecewise<D2<SBasis> > const A, Geom:
         Geom::Path::const_iterator curve_it1 = path_it->begin();
         Geom::Path::const_iterator curve_endit = path_it->end_default();
         if (path_it->closed()) {
-            const Curve &closingline = path_it->back_closed();
+            Geom::Curve const &closingline = path_it->back_closed();
             if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
                 curve_endit = path_it->end_open();
             }

@@ -20,7 +20,6 @@ ink_common_sources +=	\
 	helper/geom-pointwise.h	\
 	helper/geom-satellite.cpp	\
 	helper/geom-satellite.h	\
-	helper/geom-satellite-enum.h	\
 	helper/gnome-utils.cpp	\
 	helper/gnome-utils.h	\
 	helper/mathfns.h \

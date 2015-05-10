@@ -58,11 +58,11 @@ set(live_effects_SRC
 
 	parameter/array.cpp
 	parameter/bool.cpp
-	parameter/parameter.cpp
-	parameter/path.cpp
 	parameter/originalpath.cpp
 	parameter/originalpatharray.cpp
+	parameter/parameter.cpp
 	parameter/path-reference.cpp
+	parameter/path.cpp
 	parameter/point.cpp
 	parameter/powerstrokepointarray.cpp
 	parameter/satellitearray.cpp

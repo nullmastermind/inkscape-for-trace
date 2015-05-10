@@ -33,29 +33,29 @@
  * optional satellites, and remove the active variable in satellites.
  *
  */
-using namespace Geom;
+
 class Pointwise {
 public:
-    Pointwise(Piecewise<D2<SBasis> > pwd2, std::vector<Satellite> satellites);
+    Pointwise(Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2, std::vector<Satellite> satellites);
     virtual ~Pointwise();
 
-    Piecewise<D2<SBasis> > getPwd2() const;
-    void setPwd2(Piecewise<D2<SBasis> > const pwd2_in);
+    Geom::Piecewise<Geom::D2<Geom::SBasis> > getPwd2() const;
+    void setPwd2(Geom::Piecewise<Geom::D2<Geom::SBasis> > const pwd2_in);
 
     std::vector<Satellite> getSatellites() const;
     void setSatellites(std::vector<Satellite> const sats);
-
+    void setPathInfo(Geom::PathVector const pv);
     void setStart();
 
-    void recalculateForNewPwd2(Piecewise<D2<SBasis> > const A, Geom::PathVector const B, Satellite const S);
-    void pwd2Sustract(Piecewise<D2<SBasis> > const A);
-    void pwd2Append(Piecewise<D2<SBasis> > const A, Satellite const S);
+    void recalculateForNewPwd2(Geom::Piecewise<Geom::D2<Geom::SBasis> > const A, Geom::PathVector const B, Satellite const S);
+    void pwd2Sustract(Geom::Piecewise<Geom::D2<Geom::SBasis> > const A);
+    void pwd2Append(Geom::Piecewise<Geom::D2<Geom::SBasis> > const A, Satellite const S);
     void subpathToBack(size_t subpath);
     void subpathReverse(size_t start, size_t end);
-    void insertDegenerateSatellites(Piecewise<D2<SBasis> > const A, Geom::PathVector const B, Satellite const S);
+    void insertDegenerateSatellites(Geom::Piecewise<Geom::D2<Geom::SBasis> > const A, Geom::PathVector const B, Satellite const S);
 
 private:
-    Piecewise<D2<SBasis> > _pwd2;
+    Geom::Piecewise<Geom::D2<Geom::SBasis> > _pwd2;
     std::vector<Satellite> _satellites;
     Pathinfo _path_info;
 };
