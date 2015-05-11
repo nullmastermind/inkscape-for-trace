@@ -586,6 +586,9 @@ sp_paint_selector_clear_frame(SPPaintSelector *psel)
 
     if (psel->selector) {
 
+        //This is a hack to work around GtkNotebook bug in ColorSelector. Is sends signal switch-page on destroy
+        //The widget is hidden firts so it can recognize that it should not process signals from notebook child
+        gtk_widget_set_visible(psel->selector, false);
         gtk_widget_destroy(psel->selector);
         psel->selector = NULL;
     }

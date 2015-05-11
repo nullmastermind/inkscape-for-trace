@@ -275,7 +275,7 @@ void ColorNotebook::_onSelectedColorChanged() { _updateICCButtons(); }
 
 void ColorNotebook::_onPageSwitched(GtkNotebook *notebook, GtkWidget *page, guint page_num, ColorNotebook *colorbook)
 {
-    if (colorbook) {
+    if (colorbook->get_visible()) {
         // remember the page we switched to
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         prefs->setInt("/colorselector/page", page_num);
