@@ -433,6 +433,7 @@ void ColorICCSelector::init()
         _impl->_compUI[i]._label = gtk_label_new_with_mnemonic(labelStr.c_str());
         gtk_misc_set_alignment(GTK_MISC(_impl->_compUI[i]._label), 1.0, 0.5);
         gtk_widget_show(_impl->_compUI[i]._label);
+        gtk_widget_set_no_show_all(_impl->_compUI[i]._label, TRUE);
 
         attachToGridOrTable(t, _impl->_compUI[i]._label, 0, row, 1, 1);
 
@@ -452,6 +453,7 @@ void ColorICCSelector::init()
         _impl->_compUI[i]._slider->set_tooltip_text(".");
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
         _impl->_compUI[i]._slider->show();
+        _impl->_compUI[i]._slider->set_no_show_all();
 
         attachToGridOrTable(t, _impl->_compUI[i]._slider->gobj(), 1, row, 1, 1, true);
 
@@ -464,6 +466,7 @@ void ColorICCSelector::init()
         sp_dialog_defocus_on_enter(_impl->_compUI[i]._btn);
         gtk_label_set_mnemonic_widget(GTK_LABEL(_impl->_compUI[i]._label), _impl->_compUI[i]._btn);
         gtk_widget_show(_impl->_compUI[i]._btn);
+        gtk_widget_set_no_show_all(_impl->_compUI[i]._btn, TRUE);
 
         attachToGridOrTable(t, _impl->_compUI[i]._btn, 2, row, 1, 1, false, true);
 
