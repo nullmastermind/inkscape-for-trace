@@ -165,6 +165,11 @@ void ColorScales::_initUI(SPColorScalesMode mode)
         _s[i]->signal_value_changed.connect(sigc::mem_fun(this, &ColorScales::_sliderAnyChanged));
     }
 
+    //Prevent 5th bar from being shown by PanelDialog::show_all_children
+    gtk_widget_set_no_show_all(_l[4], TRUE);
+    _s[4]->set_no_show_all(true);
+    gtk_widget_set_no_show_all(_b[4], TRUE);
+
     /* Initial mode is none, so it works */
     setMode(mode);
 }
