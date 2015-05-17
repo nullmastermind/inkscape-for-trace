@@ -137,6 +137,23 @@ public:
             TestCase("font-weight:bolder"),
             TestCase("font-stretch:condensed"),                  // SPIEnum
 
+            TestCase("font-variant-ligatures:none"),             // SPILigatures
+            TestCase("font-variant-ligatures:normal"),
+            TestCase("font-variant-ligatures:no-common-ligatures"),
+            TestCase("font-variant-ligatures:discretionary-ligatures"),
+            TestCase("font-variant-ligatures:historical-ligatures"),
+            TestCase("font-variant-ligatures:no-contextual"),
+            TestCase("font-variant-ligatures:common-ligatures", "font-variant-ligatures:normal"),
+            TestCase("font-variant-ligatures:contextual", "font-variant-ligatures:normal"),
+            TestCase("font-variant-ligatures:no-common-ligatures historical-ligatures"),
+            TestCase("font-variant-ligatures:historical-ligatures no-contextual"),
+            TestCase("font-variant-position:normal"),
+            TestCase("font-variant-position:sub"),
+            TestCase("font-variant-position:super"),
+            TestCase("font-variant-caps:normal"),
+            TestCase("font-variant-caps:small-caps"),
+            TestCase("font-variant-caps:all-small-caps"),
+
             // Should be moved down
             TestCase("text-indent:12em"),                        // SPILength?
             TestCase("text-align:center"),                       // SPIEnum

@@ -129,6 +129,7 @@ set(ui_SRC
 	widget/entity-entry.cpp
 	widget/entry.cpp
 	widget/filter-effect-chooser.cpp
+	widget/font-variants.cpp
 	widget/frame.cpp
 	widget/gimpcolorwheel.c
 	widget/gimpspinscale.c
@@ -309,6 +310,7 @@ set(ui_SRC
 	widget/entity-entry.h
 	widget/entry.h
 	widget/filter-effect-chooser.h
+	widget/font-variants.h
 	widget/frame.h
 	widget/gimpspinscale.h
 	widget/gimpcolorwheel.h
