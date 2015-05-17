@@ -205,34 +205,8 @@ void ColorScales::_recalcColor()
     _color.setColorAlpha(color, alpha);
 }
 
-/* Helpers for setting color value */
-gfloat ColorScales::getScaled(const GtkAdjustment *a)
+void ColorScales::_updateDisplay()
 {
-    gfloat val = gtk_adjustment_get_value(const_cast<GtkAdjustment *>(a)) /
-                 gtk_adjustment_get_upper(const_cast<GtkAdjustment *>(a));
-    return val;
-}
-
-void ColorScales::setScaled(GtkAdjustment *a, gfloat v)
-{
-    gfloat val = v * gtk_adjustment_get_upper(a);
-    gtk_adjustment_set_value(a, val);
-}
-
-void ColorScales::_setRangeLimit(gdouble upper)
-{
-    _rangeLimit = upper;
-    for (gint i = 0; i < static_cast<gint>(G_N_ELEMENTS(_a)); i++) {
-        gtk_adjustment_set_upper(_a[i], upper);
-        gtk_adjustment_changed(_a[i]);
-    }
-}
-
-void ColorScales::_onColorChanged()
-{
-    if (!get_visible()) {
-        return;
-    }
 #ifdef DUMP_CHANGE_INFO
     g_message("ColorScales::_onColorChanged( this=%p, %f, %f, %f,   %f)", this, _color.color().v.c[0],
               _color.color().v.c[1], _color.color().v.c[2], _color.alpha());
@@ -271,6 +245,47 @@ void ColorScales::_onColorChanged()
     setScaled(_a[4], c[4]);
     _updateSliders(CSC_CHANNELS_ALL);
     _updating = FALSE;
+}
+
+/* Helpers for setting color value */
+gfloat ColorScales::getScaled(const GtkAdjustment *a)
+{
+    gfloat val = gtk_adjustment_get_value(const_cast<GtkAdjustment *>(a)) /
+                 gtk_adjustment_get_upper(const_cast<GtkAdjustment *>(a));
+    return val;
+}
+
+void ColorScales::setScaled(GtkAdjustment *a, gfloat v)
+{
+    gfloat val = v * gtk_adjustment_get_upper(a);
+    gtk_adjustment_set_value(a, val);
+}
+
+void ColorScales::_setRangeLimit(gdouble upper)
+{
+    _rangeLimit = upper;
+    for (gint i = 0; i < static_cast<gint>(G_N_ELEMENTS(_a)); i++) {
+        gtk_adjustment_set_upper(_a[i], upper);
+        gtk_adjustment_changed(_a[i]);
+    }
+}
+
+void ColorScales::_onColorChanged()
+{
+    if (!get_visible()) {
+        return;
+    }
+    _updateDisplay();
+}
+
+void ColorScales::on_show()
+{
+#if GTK_CHECK_VERSION(3, 0, 0)
+    Gtk::Grid::on_show();
+#else
+    Gtk::Table::on_show();
+#endif
+    _updateDisplay();
 }
 
 void ColorScales::_getRgbaFloatv(gfloat *rgba)

@@ -366,8 +366,6 @@ void ColorICCSelector::init()
 
     GtkWidget *t = GTK_WIDGET(gobj());
 
-    gtk_widget_show(t);
-
     _impl->_compUI.clear();
 
     // Create components
@@ -523,6 +521,8 @@ void ColorICCSelector::init()
     _impl->_slider->signal_grabbed.connect(sigc::mem_fun(_impl, &ColorICCSelectorImpl::_sliderGrabbed));
     _impl->_slider->signal_released.connect(sigc::mem_fun(_impl, &ColorICCSelectorImpl::_sliderReleased));
     _impl->_slider->signal_value_changed.connect(sigc::mem_fun(_impl, &ColorICCSelectorImpl::_sliderChanged));
+
+    gtk_widget_show(t);
 }
 
 void ColorICCSelectorImpl::_fixupHit(GtkWidget * /*src*/, gpointer data)
@@ -695,6 +695,16 @@ void ColorICCSelectorImpl::_profilesChanged(std::string const &name)
 #else
 void ColorICCSelectorImpl::_profilesChanged(std::string const & /*name*/) {}
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+
+void ColorICCSelector::on_show()
+{
+#if GTK_CHECK_VERSION(3, 0, 0)
+    Gtk::Grid::on_show();
+#else
+    Gtk::Table::on_show();
+#endif
+    _colorChanged();
+}
 
 // Helpers for setting color value
 
@@ -894,7 +904,10 @@ void ColorICCSelectorImpl::_updateSliders(gint ignore)
                         cmsHTRANSFORM trans = _prof->getTransfToSRGB8();
                         if (trans) {
                             cmsDoTransform(trans, scratch, _compUI[i]._map, 1024);
-                            _compUI[i]._slider->setMap(_compUI[i]._map);
+                            if (_compUI[i]._slider)
+                            {
+                                _compUI[i]._slider->setMap(_compUI[i]._map);
+                            }
                         }
                     }
                 }

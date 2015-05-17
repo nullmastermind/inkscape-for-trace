@@ -75,7 +75,7 @@ guint32 SelectedColor::value() const
 void SelectedColor::setColorAlpha(SPColor const &color, gfloat alpha, bool emit_signal)
 {
 #ifdef DUMP_CHANGE_INFO
-    g_message("SelectedColor::setColorAlpha( this=%p, %f, %f, %f, %s,   %f,   %s) in %s", this, color.v.c[0], color.v.c[1], color.v.c[2], (color.icc?color.icc->colorProfile.c_str():"<null>"), alpha, (emit?"YES":"no"), FOO_NAME(_csel));
+    g_message("SelectedColor::setColorAlpha( this=%p, %f, %f, %f, %s,   %f,   %s)", this, color.v.c[0], color.v.c[1], color.v.c[2], (color.icc?color.icc->colorProfile.c_str():"<null>"), alpha, (emit_signal?"YES":"no"));
 #endif
     g_return_if_fail( ( 0.0 <= alpha ) && ( alpha <= 1.0 ) );
 
@@ -84,11 +84,10 @@ void SelectedColor::setColorAlpha(SPColor const &color, gfloat alpha, bool emit_
     }
 
 #ifdef DUMP_CHANGE_INFO
-    g_message("---- SelectedColor::setColorAlpha    virgin:%s   !close:%s    alpha is:%s in %s",
+    g_message("---- SelectedColor::setColorAlpha    virgin:%s   !close:%s    alpha is:%s",
               (_virgin?"YES":"no"),
-              (!color.isClose( _color, _epsilon )?"YES":"no"),
-              ((fabs((_alpha) - (alpha)) >= _epsilon )?"YES":"no"),
-              FOO_NAME(_csel)
+              (!color.isClose( _color, _EPSILON )?"YES":"no"),
+              ((fabs((_alpha) - (alpha)) >= _EPSILON )?"YES":"no")
               );
 #endif
 
@@ -113,8 +112,8 @@ void SelectedColor::setColorAlpha(SPColor const &color, gfloat alpha, bool emit_
 
 #ifdef DUMP_CHANGE_INFO
     } else {
-        g_message("++++ SelectedColor::setColorAlpha   color:%08x  ==>  _color:%08X   isClose:%s   in %s", color.toRGBA32(alpha), _color.toRGBA32(_alpha),
-                  (color.isClose( _color, _epsilon )?"YES":"no"), FOO_NAME(_csel));
+        g_message("++++ SelectedColor::setColorAlpha   color:%08x  ==>  _color:%08X   isClose:%s", color.toRGBA32(alpha), _color.toRGBA32(_alpha),
+                  (color.isClose( _color, _EPSILON )?"YES":"no"));
 #endif
     }
 }

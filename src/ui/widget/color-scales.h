@@ -49,6 +49,7 @@ public:
 
 protected:
     void _onColorChanged();
+    void on_show();
 
     static void _adjustmentAnyChanged(GtkAdjustment *adjustment, ColorScales *cs);
     void _sliderAnyGrabbed();
@@ -61,6 +62,7 @@ protected:
     guint32 _getRgba32();
     void _updateSliders(guint channels);
     void _recalcColor();
+    void _updateDisplay();
 
     void _setRangeLimit(gdouble upper);
 

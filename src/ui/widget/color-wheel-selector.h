@@ -48,6 +48,8 @@ public:
 protected:
     void _initUI();
 
+    void on_show();
+
     void _colorChanged();
     void _adjustmentChanged();
     void _sliderGrabbed();
@@ -55,7 +57,7 @@ protected:
     void _sliderChanged();
     static void _wheelChanged(GimpColorWheel *wheel, ColorWheelSelector *cs);
 
-    void _recalcColor(gboolean changing);
+    void _updateDisplay();
 
     SelectedColor &_color;
     bool _updating;

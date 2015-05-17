@@ -39,6 +39,8 @@ class ColorICCSelector
     virtual void init();
 
   protected:
+    void on_show();
+
     virtual void _colorChanged();
 
     void _recalcColor(gboolean changing);

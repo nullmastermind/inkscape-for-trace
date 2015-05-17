@@ -170,30 +170,19 @@ void ColorWheelSelector::_initUI()
     g_signal_connect(G_OBJECT(_wheel), "changed", G_CALLBACK(_wheelChanged), this);
 }
 
+void ColorWheelSelector::on_show()
+{
+#if GTK_CHECK_VERSION(3, 0, 0)
+    Gtk::Grid::on_show();
+#else
+    Gtk::Table::on_show();
+#endif
+    _updateDisplay();
+}
+
 void ColorWheelSelector::_colorChanged()
 {
-#ifdef DUMP_CHANGE_INFO
-    g_message("ColorWheelSelector::_colorChanged( this=%p, %f, %f, %f,   %f)", this, _color.color().v.c[0],
-              _color.color().v.c[1], _color.color().v.c[2], alpha);
-#endif
-
-    bool oldval = _updating;
-    _updating = true;
-    {
-        float hsv[3] = { 0, 0, 0 };
-        sp_color_rgb_to_hsv_floatv(hsv, _color.color().v.c[0], _color.color().v.c[1], _color.color().v.c[2]);
-        gimp_color_wheel_set_color(GIMP_COLOR_WHEEL(_wheel), hsv[0], hsv[1], hsv[2]);
-    }
-
-    guint32 start = _color.color().toRGBA32(0x00);
-    guint32 mid = _color.color().toRGBA32(0x7f);
-    guint32 end = _color.color().toRGBA32(0xff);
-
-    _slider->setColors(start, mid, end);
-
-    ColorScales::setScaled(_alpha_adjustment->gobj(), _color.alpha());
-
-    _updating = oldval;
+    _updateDisplay();
 }
 
 void ColorWheelSelector::_adjustmentChanged()
@@ -262,6 +251,32 @@ void ColorWheelSelector::_wheelChanged(GimpColorWheel *wheel, ColorWheelSelector
 
     wheelSelector->_color.setHeld(gimp_color_wheel_is_adjusting(wheel));
     wheelSelector->_color.setColor(color);
+}
+
+void ColorWheelSelector::_updateDisplay()
+{
+#ifdef DUMP_CHANGE_INFO
+    g_message("ColorWheelSelector::_colorChanged( this=%p, %f, %f, %f,   %f)", this, _color.color().v.c[0],
+              _color.color().v.c[1], _color.color().v.c[2], alpha);
+#endif
+
+    bool oldval = _updating;
+    _updating = true;
+    {
+        float hsv[3] = { 0, 0, 0 };
+        sp_color_rgb_to_hsv_floatv(hsv, _color.color().v.c[0], _color.color().v.c[1], _color.color().v.c[2]);
+        gimp_color_wheel_set_color(GIMP_COLOR_WHEEL(_wheel), hsv[0], hsv[1], hsv[2]);
+    }
+
+    guint32 start = _color.color().toRGBA32(0x00);
+    guint32 mid = _color.color().toRGBA32(0x7f);
+    guint32 end = _color.color().toRGBA32(0xff);
+
+    _slider->setColors(start, mid, end);
+
+    ColorScales::setScaled(_alpha_adjustment->gobj(), _color.alpha());
+
+    _updating = oldval;
 }
 
 
