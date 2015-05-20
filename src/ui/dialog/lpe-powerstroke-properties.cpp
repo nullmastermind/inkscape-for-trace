@@ -36,6 +36,7 @@
 #include "selection-chemistry.h"
 #include "ui/icon-names.h"
 #include "ui/widget/imagetoggler.h"
+#include "live_effects/parameter/parameter.h"
 //#include "event-context.h"
 
 namespace Inkscape {
@@ -54,14 +55,14 @@ PowerstrokePropertiesDialog::PowerstrokePropertiesDialog()
     _powerstroke_position_entry.set_activates_default(true);
     _powerstroke_position_entry.set_digits(4);
     _powerstroke_position_entry.set_increments(1,1);
-    _powerstroke_position_entry.set_range(-999999999999999999., 999999999999999999.);
+    _powerstroke_position_entry.set_range(-SCALARPARAM_G_MAXDOUBLE, SCALARPARAM_G_MAXDOUBLE);
     _powerstroke_position_label.set_label(_("Position:"));
     _powerstroke_position_label.set_alignment(1.0, 0.5);
 
     _powerstroke_width_entry.set_activates_default(true);
     _powerstroke_width_entry.set_digits(4);
     _powerstroke_width_entry.set_increments(1,1);
-    _powerstroke_width_entry.set_range(-999999999999999999., 999999999999999999.);
+    _powerstroke_width_entry.set_range(-SCALARPARAM_G_MAXDOUBLE, SCALARPARAM_G_MAXDOUBLE);
     _powerstroke_width_label.set_label(_("Width:"));
     _powerstroke_width_label.set_alignment(1.0, 0.5);
 
