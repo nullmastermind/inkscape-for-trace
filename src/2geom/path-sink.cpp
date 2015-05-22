@@ -31,6 +31,8 @@
 #include <2geom/sbasis-to-bezier.h>
 #include <2geom/path-sink.h>
 #include <2geom/exception.h>
+#include <2geom/circle.h>
+#include <2geom/ellipse.h>
 
 namespace Geom {
 
@@ -65,6 +67,26 @@ void PathSink::feed(Rect const &r) {
     lineTo(r.corner(1));
     lineTo(r.corner(2));
     lineTo(r.corner(3));
+    closePath();
+}
+
+void PathSink::feed(Circle const &e) {
+    Coord r = e.radius();
+    Point c = e.center();
+    Point a = c + Point(0, c[Y] + r);
+    Point b = c + Point(0, c[Y] - r);
+
+    moveTo(a);
+    arcTo(r, r, 0, false, false, b);
+    arcTo(r, r, 0, false, false, a);
+    closePath();
+}
+
+void PathSink::feed(Ellipse const &e) {
+    Point s = e.pointAt(0);
+    moveTo(s);
+    arcTo(e.ray(X), e.ray(Y), e.rotationAngle(), false, false, e.pointAt(M_PI));
+    arcTo(e.ray(X), e.ray(Y), e.rotationAngle(), false, false, s);
     closePath();
 }
 

@@ -82,11 +82,11 @@ static void sp_svg_write_curve(Inkscape::SVG::PathString & str, Geom::Curve cons
                      (*cubic_bezier)[2][0], (*cubic_bezier)[2][1],
                      (*cubic_bezier)[3][0], (*cubic_bezier)[3][1] );
     }
-    else if(Geom::SVGEllipticalArc const *svg_elliptical_arc = dynamic_cast<Geom::SVGEllipticalArc const *>(c)) {
-        str.arcTo( svg_elliptical_arc->ray(Geom::X), svg_elliptical_arc->ray(Geom::Y),
-                   Geom::rad_to_deg(svg_elliptical_arc->rotationAngle()),
-                   svg_elliptical_arc->largeArc(), svg_elliptical_arc->sweep(),
-                   svg_elliptical_arc->finalPoint() );
+    else if(Geom::EllipticalArc const *elliptical_arc = dynamic_cast<Geom::EllipticalArc const *>(c)) {
+        str.arcTo( elliptical_arc->ray(Geom::X), elliptical_arc->ray(Geom::Y),
+                   Geom::rad_to_deg(elliptical_arc->rotationAngle()),
+                   elliptical_arc->largeArc(), elliptical_arc->sweep(),
+                   elliptical_arc->finalPoint() );
     } else { 
         //this case handles sbasis as well as all other curve types
         Geom::Path sbasis_path = Geom::cubicbezierpath_from_sbasis(c->toSBasis(), 0.1);

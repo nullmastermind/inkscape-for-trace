@@ -19,6 +19,7 @@
 #include <2geom/rect.h>
 #include <2geom/line.h>
 #include <2geom/circle.h>
+#include <2geom/path-sink.h>
 #include "document.h"
 #include "sp-namedview.h"
 #include "sp-image.h"
@@ -626,7 +627,10 @@ void Inkscape::ObjectSnapper::_snapPathsConstrained(IntermSnapResults &isr,
     Geom::PathVector constraint_path;
     if (c.isCircular()) {
         Geom::Circle constraint_circle(dt->dt2doc(c.getPoint()), c.getRadius());
-        constraint_circle.getPath(constraint_path);
+        Geom::PathBuilder pb;
+        pb.feed(constraint_circle);
+        pb.flush();
+        constraint_path = pb.peek();
     } else {
         Geom::Path constraint_line;
         constraint_line.start(p_min_on_cl);

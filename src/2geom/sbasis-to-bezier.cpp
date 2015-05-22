@@ -239,8 +239,6 @@ void sbasis_to_cubic_bezier (std::vector<Point> & bz, D2<SBasis> const& sb)
 
     midx = 8*midx - 4*bz[0][X] - 4*bz[3][X];  // re-define relative to center
     midy = 8*midy - 4*bz[0][Y] - 4*bz[3][Y];
-    if ((std::abs(midx) < EPSILON) && (std::abs(midy) < EPSILON))
-        return;
 
     if ((std::abs(xprime[0]) < EPSILON) && (std::abs(yprime[0]) < EPSILON)
     && ((std::abs(xprime[1]) > EPSILON) || (std::abs(yprime[1]) > EPSILON)))  { // degenerate handle at 0 : use distance of closest approach
@@ -264,11 +262,11 @@ void sbasis_to_cubic_bezier (std::vector<Point> & bz, D2<SBasis> const& sb)
         double test2 = (bz[2][Y] - bz[0][Y])*(bz[3][X] - bz[0][X]) - (bz[2][X] - bz[0][X])*(bz[3][Y] - bz[0][Y]);
         if (test1*test2 < 0) // reject anti-symmetric case, LP Bug 1428267 & Bug 1428683
             return;
-        denom = xprime[1]*yprime[0] - yprime[1]*xprime[0];
+        denom = 3.0*(xprime[1]*yprime[0] - yprime[1]*xprime[0]);
         for (int i = 0; i < 2; ++i) {
             numer = xprime[1 - i]*midy - yprime[1 - i]*midx;
-            delx[i] = xprime[i]*numer/denom/3;
-            dely[i] = yprime[i]*numer/denom/3;
+            delx[i] = xprime[i]*numer/denom;
+            dely[i] = yprime[i]*numer/denom;
         }
     } else if ((xprime[0]*xprime[1] < 0) || (yprime[0]*yprime[1] < 0)) { // symmetric case : use distance of closest approach
         numer = midx*xprime[0] + midy*yprime[0];
@@ -515,10 +513,10 @@ path_from_sbasis(D2<SBasis> const &B, double tol, bool only_cubicbeziers) {
  TODO: some of this logic should be lifted into svg-path
 */
 PathVector
-path_from_piecewise(Piecewise<D2<SBasis> > const &B, double tol, bool only_cubicbeziers) {
-    PathBuilder pb;
+path_from_piecewise(Geom::Piecewise<Geom::D2<Geom::SBasis> > const &B, double tol, bool only_cubicbeziers) {
+    Geom::PathBuilder pb;
     if(B.size() == 0) return pb.peek();
-    Point start = B[0].at0();
+    Geom::Point start = B[0].at0();
     pb.moveTo(start);
     for(unsigned i = 0; ; i++) {
         if ( (i+1 == B.size()) 

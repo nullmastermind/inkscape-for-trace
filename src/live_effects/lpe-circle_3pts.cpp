@@ -17,6 +17,7 @@
 // You might need to include other 2geom files. You can add them here:
 #include <2geom/path.h>
 #include <2geom/circle.h>
+#include <2geom/path-sink.h>
 
 namespace Inkscape {
 namespace LivePathEffect {
@@ -47,7 +48,7 @@ static void _circle3(Geom::Point const &A, Geom::Point const &B, Geom::Point con
     double radius = L2(M - A);
 
     Geom::Circle c(M, radius);
-    c.getPath(path_out);
+    path_out = Geom::Path(c);
 }
 
 Geom::PathVector

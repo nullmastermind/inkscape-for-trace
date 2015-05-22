@@ -35,6 +35,7 @@
 #include <2geom/path.h>
 #include <2geom/pathvector.h>
 #include <iostream>
+#include <iterator>
 
 namespace Geom {
 
@@ -157,6 +158,41 @@ PathVector PathIntersectionGraph::getIntersection()
     return result;
 }
 
+PathVector PathIntersectionGraph::getAminusB()
+{
+    PathVector result = _getResult(false, true);
+    _handleNonintersectingPaths(result, 0, false);
+    return result;
+}
+
+PathVector PathIntersectionGraph::getBminusA()
+{
+    PathVector result = _getResult(true, false);
+    _handleNonintersectingPaths(result, 1, false);
+    return result;
+}
+
+PathVector PathIntersectionGraph::getXOR()
+{
+    PathVector r1 = getAminusB();
+    PathVector r2 = getBminusA();
+    std::copy(r2.begin(), r2.end(), std::back_inserter(r1));
+    return r1;
+}
+
+std::vector<Point> PathIntersectionGraph::intersectionPoints() const
+{
+    std::vector<Point> result;
+
+    typedef IntersectionList::const_iterator Iter;
+    for (std::size_t i = 0; i < _xalists.size(); ++i) {
+        for (Iter j = _xalists[i].begin(); j != _xalists[i].end(); ++j) {
+            result.push_back(j->p);
+        }
+    }
+    return result;
+}
+
 PathVector PathIntersectionGraph::_getResult(bool enter_a, bool enter_b)
 {
     typedef IntersectionList::iterator Iter;
@@ -231,6 +267,7 @@ PathVector PathIntersectionGraph::_getResult(bool enter_a, bool enter_b)
             std::swap(lscur, lsother);
             std::swap(cur, other);
         }
+        result.back().close(true);
 
         assert(!result.back().empty());
     }

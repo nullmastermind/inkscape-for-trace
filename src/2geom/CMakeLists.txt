@@ -7,7 +7,6 @@ set(2geom_SRC
 	bezier-curve.cpp
 	bezier-utils.cpp
 	cairo-path-sink.cpp
-	circle-circle.cpp
 	circle.cpp
 	# conic_section_clipper_impl.cpp
 	# conicsec.cpp
@@ -18,6 +17,7 @@ set(2geom_SRC
 	d2-sbasis.cpp
 	ellipse.cpp
 	elliptical-arc.cpp
+	elliptical-arc-from-sbasis.cpp
 	geom.cpp
 	intersection-graph.cpp
 	line.cpp
@@ -29,8 +29,7 @@ set(2geom_SRC
 	pathvector.cpp
 	piecewise.cpp
 	point.cpp
-	poly.cpp
-	quadtree.cpp
+	polynomial.cpp
 	rect.cpp
 	# recursive-bezier-intersection.cpp
 	sbasis-2d.cpp
@@ -43,8 +42,8 @@ set(2geom_SRC
 	solve-bezier.cpp
 	solve-bezier-one-d.cpp
 	solve-bezier-parametric.cpp
-	svg-elliptical-arc.cpp
 	svg-path-parser.cpp
+	svg-path-writer.cpp
 	sweep.cpp
 	toposweep.cpp
 	transforms.cpp
@@ -101,8 +100,7 @@ set(2geom_SRC
 	piecewise.h
 	point-ops.h
 	point.h
-	poly.h
-	quadtree.h
+	polynomial.h
 	ray.h
 	rect.h
 	region.h
@@ -115,8 +113,8 @@ set(2geom_SRC
 	sbasis.h
 	shape.h
 	solver.h
-	svg-elliptical-arc.h
 	svg-path-parser.h
+	svg-path-writer.h
 	sweep.h
 	toposweep.h
 	transforms.h

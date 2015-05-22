@@ -37,7 +37,7 @@
 
 namespace Geom {
 
-// basic types
+// primitives
 typedef double Coord;
 typedef int IntCoord;
 class Point;
@@ -61,6 +61,12 @@ typedef GenericOptRect<IntCoord> OptIntRect;
 class Linear;
 class Bezier;
 class SBasis;
+class Poly;
+
+// shapes
+class Circle;
+class Ellipse;
+class ConvexHull;
 
 // curves
 class Curve;
@@ -73,7 +79,6 @@ typedef BezierCurveN<1> LineSegment;
 typedef BezierCurveN<2> QuadraticBezier;
 typedef BezierCurveN<3> CubicBezier;
 class EllipticalArc;
-class SVGEllipticalArc;
 
 // paths and path sequences
 class Path;

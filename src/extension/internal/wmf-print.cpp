@@ -30,7 +30,7 @@
 
 
 #include <2geom/sbasis-to-bezier.h>
-#include <2geom/svg-elliptical-arc.h>
+#include <2geom/elliptical-arc.h>
 
 #include <2geom/path.h>
 #include <2geom/pathvector.h>

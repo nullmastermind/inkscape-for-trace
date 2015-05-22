@@ -63,11 +63,13 @@ namespace Geom {
  */
 class Angle
     : boost::additive< Angle
+    , boost::additive< Angle, Coord
     , boost::equality_comparable< Angle
-      > >
+    , boost::equality_comparable< Angle, Coord
+      > > > >
 {
 public:
-    Angle() : _angle(0) {} //added default constructor because of cython
+    Angle() : _angle(0) {}
     Angle(Coord v) : _angle(v) { _normalize(); } // this can be called implicitly
     explicit Angle(Point const &p) : _angle(atan2(p)) { _normalize(); }
     Angle(Point const &a, Point const &b) : _angle(angle_between(a, b)) { _normalize(); }
@@ -82,8 +84,19 @@ public:
         _normalize();
         return *this;
     }
+    Angle &operator+=(Coord a) {
+        *this += Angle(a);
+        return *this;
+    }
+    Angle &operator-=(Coord a) {
+        *this -= Angle(a);
+        return *this;
+    }
     bool operator==(Angle const &o) const {
         return _angle == o._angle;
+    }
+    bool operator==(Coord c) const {
+        return _angle == Angle(c)._angle;
     }
 
     /** @brief Get the angle as radians.
@@ -136,11 +149,21 @@ public:
 private:
 
     void _normalize() {
-        _angle -= floor(_angle * (1.0/(2*M_PI))) * 2*M_PI;
+        _angle = std::fmod(_angle, 2*M_PI);
+        if (_angle < 0) _angle += 2*M_PI;
+        //_angle -= floor(_angle * (1.0/(2*M_PI))) * 2*M_PI;
     }
     Coord _angle; // this is always in [0, 2pi)
     friend class AngleInterval;
 };
+
+inline Angle distance(Angle const &a, Angle const &b) {
+    // the distance cannot be larger than M_PI.
+    Coord ac = a.radians0();
+    Coord bc = b.radians0();
+    Coord d = fabs(ac - bc);
+    return Angle(d > M_PI ? 2*M_PI - d : d);
+}
 
 /** @brief Directed angular interval.
  *
@@ -149,7 +172,11 @@ private:
  * in the interval (it is a closed interval). Angular intervals can also be interptered
  * as functions \f$f: [0, 1] \to [-\pi, \pi)\f$, which return the start angle for 0,
  * the end angle for 1, and interpolate linearly for other values. Note that such functions
- * are not continuous if the interval contains the zero angle.
+ * are not continuous if the interval crosses the angle \f$\pi\f$.
+ *
+ * It is currently not possible to represent the full angle with this class.
+ * If you specify the same start and end angle, the interval will be treated as empty
+ * except for that value.
  *
  * This class is immutable - you cannot change the values of start and end angles
  * without creating a new instance of this class.
@@ -158,39 +185,58 @@ private:
  */
 class AngleInterval {
 public:
+    /** @brief Create an angular interval.
+     * @param s Starting angle
+     * @param e Ending angle
+     * @param cw Which direction the interval goes. True means that it goes
+     *   in the direction of increasing angles, while false means in the direction
+     *   of decreasing angles. */
     AngleInterval(Angle const &s, Angle const &e, bool cw = false)
         : _start_angle(s), _end_angle(e), _sweep(cw)
     {}
     AngleInterval(double s, double e, bool cw = false)
         : _start_angle(s), _end_angle(e), _sweep(cw)
     {}
-    /** @brief Get the angular coordinate of the interval's initial point
-     * @return Angle in range \f$[0,2\pi)\f$ corresponding to the start of arc */
+
+    /// Get the start angle.
     Angle const &initialAngle() const { return _start_angle; }
-    /** @brief Get the angular coordinate of the interval's final point
-     * @return Angle in range \f$[0,2\pi)\f$ corresponding to the end of arc */
+    /// Get the end angle.
     Angle const &finalAngle() const { return _end_angle; }
+    /// Check whether the interval contains only a single angle.
     bool isDegenerate() const { return initialAngle() == finalAngle(); }
-    /** @brief Get an angle corresponding to the specified time value. */
+
+    /// Get an angle corresponding to the specified time value.
     Angle angleAt(Coord t) const {
         Coord span = extent();
         Angle ret = _start_angle.radians0() + span * (_sweep ? t : -t);
         return ret;
     }
     Angle operator()(Coord t) const { return angleAt(t); }
-#if 0
-    /** @brief Find an angle nearest to the specified time value.
-     * @param a Query angle
-     * @return If the interval contains the query angle, a number from the range [0, 1]
-     *         such that a = angleAt(t); otherwise, 0 or 1, depending on which extreme
-     *         angle is nearer. */
-    Coord nearestAngle(Angle const &a) const {
-        Coord dist = distance(_start_angle, a, _sweep).radians0();
-        Coord span = distance(_start_angle, _end_angle, _sweep).radians0();
-        if (dist <= span) return dist / span;
-        else return distance_abs(_start_angle, a).radians0() > distance_abs(_end_angle, a).radians0() ? 1.0 : 0.0;
+
+    /** @brief Compute a time value that would evaluate to the given angle.
+     * If the start and end angle are exactly the same, NaN will be returned. */
+    Coord timeAtAngle(Angle const &a) const {
+        Coord ex = extent();
+        Coord outex = 2*M_PI - ex;
+        if (_sweep) {
+            Angle midout = _start_angle - outex / 2;
+            Angle acmp = a - midout, scmp = _start_angle - midout;
+            if (acmp.radians0() >= scmp.radians0()) {
+                return (a - _start_angle).radians0() / ex;
+            } else {
+                return -(_start_angle - a).radians0() / ex;
+            }
+        } else {
+            Angle midout = _start_angle + outex / 2;
+            Angle acmp = a - midout, scmp = _start_angle - midout;
+            if (acmp.radians0() <= scmp.radians0()) {
+                return (_start_angle - a).radians0() / ex;
+            } else {
+                return -(a - _start_angle).radians0() / ex;
+            }
+        }
     }
-#endif
+
     /** @brief Check whether the interval includes the given angle. */
     bool contains(Angle const &a) const {
         Coord s = _start_angle.radians0();
@@ -205,12 +251,22 @@ public:
         }
     }
     /** @brief Extent of the angle interval.
-     * @return Extent in range \f$[0, 2\pi)\f$ */
+     * Equivalent to the absolute value of the sweep angle.
+     * @return Extent in range \f$[0, 2\pi)\f$. */
     Coord extent() const {
-        Coord d = _end_angle - _start_angle;
-        if (!_sweep) d = -d;
-        if (d < 0) d += 2*M_PI;
-        return d;
+        return _sweep
+            ? (_end_angle - _start_angle).radians0()
+            : (_start_angle - _end_angle).radians0();
+    }
+    /** @brief Get the sweep angle of the interval.
+     * This is the value you need to add to the initial angle to get the final angle.
+     * It is positive when sweep is true. Denoted as \f$\Delta\theta\f$ in the SVG
+     * elliptical arc implementation notes. */
+    Coord sweepAngle() const {
+        Coord sa = _end_angle.radians0() - _start_angle.radians0();
+        if (_sweep && sa < 0) sa += 2*M_PI;
+        if (!_sweep && sa > 0) sa -= 2*M_PI;
+        return sa;
     }
 protected:
     AngleInterval() {}
@@ -307,6 +363,10 @@ bool arc_contains (double a, double sa, double ia, double ea)
 }
 
 } // end namespace Geom
+
+namespace std {
+template <> class iterator_traits<Geom::Angle> {};
+}
 
 #endif // LIB2GEOM_SEEN_ANGLE_H
 

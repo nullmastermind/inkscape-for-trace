@@ -11,7 +11,6 @@
 #include <2geom/piecewise.h>
 #include <2geom/sbasis-to-bezier.h>
 #include <2geom/sbasis-geometric.h>
-#include <2geom/svg-elliptical-arc.h>
 #include <2geom/line.h>
 #include <2geom/path-intersection.h>
 

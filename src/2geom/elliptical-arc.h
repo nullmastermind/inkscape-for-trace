@@ -38,10 +38,11 @@
 #define LIB2GEOM_SEEN_ELLIPTICAL_ARC_H
 
 #include <algorithm>
+#include <2geom/affine.h>
 #include <2geom/angle.h>
 #include <2geom/bezier-curve.h>
 #include <2geom/curve.h>
-#include <2geom/affine.h>
+#include <2geom/ellipse.h>
 #include <2geom/sbasis-curve.h>  // for non-native methods
 #include <2geom/utils.h>
 
@@ -56,21 +57,30 @@ public:
         : AngleInterval(0, 0, true)
         , _initial_point(0,0)
         , _final_point(0,0)
-        , _rays(0,0)
-        , _center(0,0)
-        , _rot_angle(0)
         , _large_arc(true)
     {}
     /** @brief Create a new elliptical arc.
      * @param ip Initial point of the arc
-     * @param rx First ray of the ellipse
-     * @param ry Second ray of the ellipse
+     * @param r Rays of the ellipse as a point
      * @param rot Angle of rotation of the X axis of the ellipse in radians
      * @param large If true, the large arc is chosen (always >= 180 degrees), otherwise
      *              the smaller arc is chosen
      * @param sweep If true, the clockwise arc is chosen, otherwise the counter-clockwise
      *              arc is chosen
      * @param fp Final point of the arc */
+    EllipticalArc( Point const &ip, Point const &r,
+                   Coord rot_angle, bool large_arc, bool sweep,
+                   Point const &fp
+                 )
+        : AngleInterval(0,0,sweep)
+        , _initial_point(ip)
+        , _final_point(fp)
+        , _ellipse(0, 0, r[X], r[Y], rot_angle)
+        , _large_arc(large_arc)
+    {
+        _updateCenterAndAngles();
+    }
+
     EllipticalArc( Point const &ip, Coord rx, Coord ry,
                    Coord rot_angle, bool large_arc, bool sweep,
                    Point const &fp
@@ -78,11 +88,10 @@ public:
         : AngleInterval(0,0,sweep)
         , _initial_point(ip)
         , _final_point(fp)
-        , _rays(rx, ry)
-        , _rot_angle(rot_angle)
+        , _ellipse(0, 0, rx, ry, rot_angle)
         , _large_arc(large_arc)
     {
-        _updateCenterAndAngles(false);
+        _updateCenterAndAngles();
     }
 
     // methods new to EllipticalArc go here
@@ -98,15 +107,15 @@ public:
     /** @brief Get the defining ellipse's rotation
      * @return Angle between the +X ray of the ellipse and the +X axis */
     Angle rotationAngle() const {
-        return _rot_angle;
+        return _ellipse.rotationAngle();
     }
     /** @brief Get one of the ellipse's rays
      * @param d Dimension to retrieve
      * @return The selected ray of the ellipse */
-    Coord ray(Dim2 d) const { return _rays[d]; }
+    Coord ray(Dim2 d) const { return _ellipse.ray(d); }
     /** @brief Get both rays as a point
      * @return Point with X equal to the X ray and Y to Y ray */
-    Point rays() const { return _rays; }
+    Point rays() const { return _ellipse.rays(); }
     /** @brief Whether the arc is larger than half an ellipse.
      * @return True if the arc is larger than \f$\pi\f$, false otherwise */
     bool largeArc() const { return _large_arc; }
@@ -125,12 +134,11 @@ public:
     {
         _initial_point = ip;
         _final_point = fp;
-        _rays[X] = rx;
-        _rays[Y] = ry;
-        _rot_angle = Angle(rot_angle);
+        _ellipse.setRays(rx, ry);
+        _ellipse.setRotationAngle(rot_angle);
         _large_arc = large_arc;
         _sweep = sweep;
-        _updateCenterAndAngles(isSVGCompliant());
+        _updateCenterAndAngles();
     }
     /** @brief Change the initial and final point in one operation.
      * This method exists because modifying any of the endpoints causes rather costly
@@ -140,21 +148,16 @@ public:
     void setEndpoints(Point const &ip, Point const &fp) {
         _initial_point = ip;
         _final_point = fp;
-        _updateCenterAndAngles(isSVGCompliant());
+        _updateCenterAndAngles();
     }
     /// @}
 
     /// @name Access computed parameters of the arc
     /// @{
-    Coord center(Dim2 d) const { return _center[d]; }
+    Coord center(Dim2 d) const { return _ellipse.center(d); }
     /** @brief Get the arc's center
      * @return The arc's center, situated on the intersection of the ellipse's rays */
-    Point center() const { return _center; }
-    /** @brief Get the extent of the arc
-     * @return The angle between the initial and final point, in arc's angular coordinates */
-    Coord sweepAngle() const {
-        return extent();
-    }
+    Point center() const { return _ellipse.center(); }
     /// @}
     
     /// @name Angular evaluation
@@ -177,14 +180,13 @@ public:
      * This function returns the transform that maps the unit circle to the arc's ellipse.
      * @return Transform from unit circle to the arc's ellipse */
     Affine unitCircleTransform() const;
+    Affine inverseUnitCircleTransform() const;
     /// @}
 
-    /** @brief Check whether the arc adheres to SVG 1.1 implementation guidelines */
-    virtual bool isSVGCompliant() const { return false; }
-
-    /// Check whether both rays are nonzero
+    /** @brief Check whether both rays are nonzero.
+     * If they are not, the arc is represented as a line segment instead. */
     bool isChord() const {
-        return _rays[0] == 0 || _rays[Y] == 0;
+        return ray(X) == 0 || ray(Y) == 0;
     }
 
     std::pair<EllipticalArc, EllipticalArc> subdivide(Coord t) const {
@@ -203,15 +205,16 @@ public:
     virtual Curve* duplicate() const { return new EllipticalArc(*this); }
     virtual void setInitial(Point const &p) {
         _initial_point = p;
-        _updateCenterAndAngles(isSVGCompliant());
+        _updateCenterAndAngles();
     }
     virtual void setFinal(Point const &p) {
         _final_point = p;
-        _updateCenterAndAngles(isSVGCompliant());
+        _updateCenterAndAngles();
     }
     virtual bool isDegenerate() const {
         return _initial_point == _final_point;
     }
+    virtual bool isLineSegment() const { return isChord(); }
     virtual Rect boundsFast() const {
         return boundsExact();
     }
@@ -230,13 +233,14 @@ public:
         }
         return allNearestTimes(p, from, to).front();
     }
+    virtual std::vector<CurveIntersection> intersect(Curve const &other, Coord eps=EPSILON) const;
     virtual int degreesOfFreedom() const { return 7; }
     virtual Curve *derivative() const;
     virtual void transform(Affine const &m);
     virtual Curve &operator*=(Translate const &m) {
-        _initial_point += m.vector();
-        _final_point += m.vector();
-        _center += m.vector();
+        _initial_point *= m;
+        _final_point *= m;
+        _ellipse *= m;
         return *this;
     }
 
@@ -248,27 +252,33 @@ public:
 
     virtual D2<SBasis> toSBasis() const;
     virtual double valueAt(Coord t, Dim2 d) const {
-    	return valueAtAngle(angleAt(t), d);
+        if (isChord()) return chord().valueAt(t, d);
+        return valueAtAngle(angleAt(t), d);
     }
-    virtual Point pointAt(Coord t) const {
-        return pointAtAngle(angleAt(t));
-    }
+    virtual Point pointAt(Coord t) const;
     virtual Curve* portion(double f, double t) const;
     virtual Curve* reverse() const;
     virtual bool operator==(Curve const &c) const;
     virtual void feed(PathSink &sink, bool moveto_initial) const;
 
 protected:
-    void _updateCenterAndAngles(bool svg);
+    void _updateCenterAndAngles();
+    void _filterIntersections(std::vector<ShapeIntersection> &xs, bool is_first) const;
 
     Point _initial_point, _final_point;
-    Point _rays, _center;
-    Angle _rot_angle;
+    Ellipse _ellipse;
     bool _large_arc;
 
 private:
     Coord map_to_01(Coord angle) const; 
 }; // end class EllipticalArc
+
+
+// implemented in elliptical-arc-from-sbasis.cpp
+bool arc_from_sbasis(EllipticalArc &ea, D2<SBasis> const &in,
+                     double tolerance = EPSILON, unsigned num_samples = 20);
+
+std::ostream &operator<<(std::ostream &out, EllipticalArc const &ea);
 
 } // end namespace Geom
 

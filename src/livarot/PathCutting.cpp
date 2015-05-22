@@ -308,7 +308,7 @@ Path::MakePathVector()
             {
                 /* TODO: add testcase for this descr_arcto case */
                 PathDescrArcTo *nData = dynamic_cast<PathDescrArcTo *>(descr_cmd[i]);
-                currentpath->appendNew<Geom::SVGEllipticalArc>( nData->rx, nData->ry, nData->angle*M_PI/180.0, nData->large, !nData->clockwise, nData->p );
+                currentpath->appendNew<Geom::EllipticalArc>( nData->rx, nData->ry, nData->angle*M_PI/180.0, nData->large, !nData->clockwise, nData->p );
                 lastP = nData->p;
             }
             break;
@@ -400,11 +400,11 @@ void  Path::AddCurve(Geom::Curve const &c)
         Geom::Point tme = 3 * ((*cubic_bezier)[3] - (*cubic_bezier)[2]);
         CubicTo (tmp, tms, tme);
     }
-    else if(Geom::SVGEllipticalArc const *svg_elliptical_arc = dynamic_cast<Geom::SVGEllipticalArc const *>(&c)) {
-        ArcTo( svg_elliptical_arc->finalPoint(),
-               svg_elliptical_arc->ray(Geom::X), svg_elliptical_arc->ray(Geom::Y),
-               svg_elliptical_arc->rotationAngle()*180.0/M_PI,  // convert from radians to degrees
-               svg_elliptical_arc->largeArc(), !svg_elliptical_arc->sweep() );
+    else if(Geom::EllipticalArc const *elliptical_arc = dynamic_cast<Geom::EllipticalArc const *>(&c)) {
+        ArcTo( elliptical_arc->finalPoint(),
+               elliptical_arc->ray(Geom::X), elliptical_arc->ray(Geom::Y),
+               elliptical_arc->rotationAngle()*180.0/M_PI,  // convert from radians to degrees
+               elliptical_arc->largeArc(), !elliptical_arc->sweep() );
     } else { 
         //this case handles sbasis as well as all other curve types
         Geom::Path sbasis_path = Geom::cubicbezierpath_from_sbasis(c.toSBasis(), 0.1);

@@ -49,9 +49,15 @@ namespace Geom
 
 // class docs in cpp file
 class Line
-    : boost::equality_comparable1<Line
-    , MultipliableNoncommutative<Line, Affine
-      > >
+    : boost::equality_comparable1< Line
+    , MultipliableNoncommutative< Line, Translate
+    , MultipliableNoncommutative< Line, Scale
+    , MultipliableNoncommutative< Line, Rotate
+    , MultipliableNoncommutative< Line, HShear
+    , MultipliableNoncommutative< Line, VShear
+    , MultipliableNoncommutative< Line, Zoom
+    , MultipliableNoncommutative< Line, Affine
+      > > > > > > > >
 {
 private:
     Point _initial;
@@ -187,6 +193,14 @@ public:
      * @return True if the line has no points or exactly one point */
     bool isDegenerate() const {
         return _initial == _final;
+    }
+    /// Check if the line is horizontal (y is constant).
+    bool isHorizontal() const {
+        return _initial[Y] == _final[Y];
+    }
+    /// Check if the line is vertical (x is constant).
+    bool isVertical() const {
+        return _initial[X] == _final[X];
     }
 
     /** @brief Reparametrize the line so that it has unit speed. */
@@ -349,19 +363,33 @@ public:
     }
     /// @}
 
-    //std::vector<LineIntersection> intersect(Line const &other, Coord precision = EPSILON) const;
+    std::vector<ShapeIntersection> intersect(Line const &other) const;
+    std::vector<ShapeIntersection> intersect(Ray const &r) const;
+    std::vector<ShapeIntersection> intersect(LineSegment const &ls) const;
 
-    Line &operator*=(Affine const &m) {
-        _initial *= m;
-        _final *= m;
+    template <typename T>
+    Line &operator*=(T const &tr) {
+        BOOST_CONCEPT_ASSERT((TransformConcept<T>));
+        _initial *= tr;
+        _final *= tr;
         return *this;
     }
+
     bool operator==(Line const &other) const {
         if (distance(pointAt(nearestTime(other._initial)), other._initial) != 0) return false;
         if (distance(pointAt(nearestTime(other._final)), other._final) != 0) return false;
         return true;
     }
 }; // end class Line
+
+/** @brief Removes intersections outside of the unit interval.
+ * A helper used to implement line segment intersections.
+ * @param xs Line intersections
+ * @param a Whether the first time value has to be in the unit interval
+ * @param b Whether the second time value has to be in the unit interval
+ * @return Appropriately filtered intersections */
+void filter_line_segment_intersections(std::vector<ShapeIntersection> &xs, bool a=false, bool b=true);
+void filter_ray_intersections(std::vector<ShapeIntersection> &xs, bool a=false, bool b=true);
 
 /// @brief Compute distance from point to line.
 /// @relates Line

@@ -94,6 +94,9 @@ public:
      *         no other points (its value set contains only one element). */
     virtual bool isDegenerate() const = 0;
 
+    /// Check whether the curve is a line segment.
+    virtual bool isLineSegment() const { return false; }
+
     /** @brief Get the interval of allowed time values.
      * @return \f$[0, 1]\f$ */
     virtual Interval timeRange() const {
@@ -294,13 +297,7 @@ public:
      * derivative could be found.
      * @param t Time value
      * @param n The maximum order of derivative to consider
-     * @return Unit tangent vector \f$\mathbf{v}(t)\f$
-     * @bug This method might currently break for the case of t being exactly 1. A workaround
-     *      is to reverse the curve and use the negated unit tangent at 0 like this:
-     * @code
-        Curve *c_reverse = c.reverse();
-        Point tangent = - c_reverse->unitTangentAt(0);
-        delete c_reverse; @endcode */
+     * @return Unit tangent vector \f$\mathbf{v}(t)\f$ */
     virtual Point unitTangentAt(Coord t, unsigned n = 3) const;
 
     /** @brief Convert the curve to a symmetric power basis polynomial.

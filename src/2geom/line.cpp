@@ -62,7 +62,7 @@ void Line::setCoefficients (Coord a, Coord b, Coord c)
 {
     if (a == 0 && b == 0) {
         if (c != 0) {
-            THROW_LOGICALERROR("the passed coefficients gives the empty set");
+            THROW_LOGICALERROR("the passed coefficients give the empty set");
         }
         _initial = Point(0,0);
         _final = Point(0,0);
@@ -70,20 +70,20 @@ void Line::setCoefficients (Coord a, Coord b, Coord c)
     }
     if (a == 0) {
         // b must be nonzero
-        _initial = Point(0, c / b);
+        _initial = Point(0, -c / b);
         _final = _initial;
         _final[X] = 1;
         return;
     }
     if (b == 0) {
-        _initial = Point(c / a, 0);
+        _initial = Point(-c / a, 0);
         _final = _initial;
         _final[Y] = 1;
         return;
     }
 
-    _initial = Point(c / a, 0);
-    _final = Point(0, c / b);
+    _initial = Point(-c / a, 0);
+    _final = Point(0, -c / b);
 }
 
 void Line::coefficients(Coord &a, Coord &b, Coord &c) const
@@ -214,6 +214,66 @@ Coord Line::timeAt(Point const &p) const
         return (p[X] - _initial[X]) / v[X];
     } else {
         return (p[Y] - _initial[Y]) / v[Y];
+    }
+}
+
+std::vector<ShapeIntersection> Line::intersect(Line const &other) const
+{
+    std::vector<ShapeIntersection> result;
+
+    Point v1 = versor();
+    Point v2 = other.versor();
+    Coord cp = cross(v1, v2);
+    if (cp == 0) return result;
+
+    Point odiff = other.initialPoint() - initialPoint();
+    Coord t1 = cross(odiff, v2) / cp;
+    Coord t2 = cross(odiff, v1) / cp;
+    result.push_back(ShapeIntersection(*this, other, t1, t2));
+    return result;
+}
+
+std::vector<ShapeIntersection> Line::intersect(Ray const &r) const
+{
+    Line other(r);
+    std::vector<ShapeIntersection> result = intersect(other);
+    filter_ray_intersections(result, false, true);
+    return result;
+}
+
+std::vector<ShapeIntersection> Line::intersect(LineSegment const &ls) const
+{
+    Line other(ls);
+    std::vector<ShapeIntersection> result = intersect(other);
+    filter_line_segment_intersections(result, false, true);
+    return result;
+}
+
+
+
+void filter_line_segment_intersections(std::vector<ShapeIntersection> &xs, bool a, bool b)
+{
+    Interval unit(0, 1);
+    std::vector<ShapeIntersection>::reverse_iterator i = xs.rbegin(), last = xs.rend();
+    while (i != last) {
+        if ((a && !unit.contains(i->first)) || (b && !unit.contains(i->second))) {
+            xs.erase((++i).base());
+        } else {
+            ++i;
+        }
+    }
+}
+
+void filter_ray_intersections(std::vector<ShapeIntersection> &xs, bool a, bool b)
+{
+    Interval unit(0, 1);
+    std::vector<ShapeIntersection>::reverse_iterator i = xs.rbegin(), last = xs.rend();
+    while (i != last) {
+        if ((a && i->first < 0) || (b && i->second < 0)) {
+            xs.erase((++i).base());
+        } else {
+            ++i;
+        }
     }
 }
 

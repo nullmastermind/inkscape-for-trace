@@ -16,7 +16,7 @@
 #include "live_effects/lpe-fillet-chamfer.h"
  
 #include <2geom/sbasis-to-bezier.h>
-#include <2geom/svg-elliptical-arc.h>
+#include <2geom/elliptical-arc.h>
 #include <2geom/line.h>
 
 #include "desktop.h"
@@ -582,7 +582,7 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
                     Geom::Path path_chamfer;
                     path_chamfer.start(path_out.finalPoint());
                     if((is_straight_curve(*curve_it1) && is_straight_curve(*curve_it2Fixed) && method != FM_BEZIER )|| method == FM_ARC){ 
-                        path_chamfer.appendNew<SVGEllipticalArc>(rx, ry, angleArc, 0, ccwToggle, endArcPoint);
+                        path_chamfer.appendNew<EllipticalArc>(rx, ry, angleArc, 0, ccwToggle, endArcPoint);
                     } else {
                         path_chamfer.appendNew<Geom::CubicBezier>(handle1, handle2, endArcPoint);
                     }
@@ -598,7 +598,7 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
                     path_chamfer.start(path_out.finalPoint());
                     if((is_straight_curve(*curve_it1) && is_straight_curve(*curve_it2Fixed) && method != FM_BEZIER )|| method == FM_ARC){ 
                         ccwToggle = ccwToggle?0:1;
-                        path_chamfer.appendNew<SVGEllipticalArc>(rx, ry, angleArc, 0, ccwToggle, endArcPoint);
+                        path_chamfer.appendNew<EllipticalArc>(rx, ry, angleArc, 0, ccwToggle, endArcPoint);
                     }else{
                         path_chamfer.appendNew<Geom::CubicBezier>(inverseHandle1, inverseHandle2, endArcPoint);
                     }
@@ -611,13 +611,13 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
                 } else if (type == 2) {
                     if((is_straight_curve(*curve_it1) && is_straight_curve(*curve_it2Fixed) && method != FM_BEZIER )|| method == FM_ARC){ 
                         ccwToggle = ccwToggle?0:1;
-                        path_out.appendNew<SVGEllipticalArc>(rx, ry, angleArc, 0, ccwToggle, endArcPoint);
+                        path_out.appendNew<EllipticalArc>(rx, ry, angleArc, 0, ccwToggle, endArcPoint);
                     }else{
                         path_out.appendNew<Geom::CubicBezier>(inverseHandle1, inverseHandle2, endArcPoint);
                     }
                 } else if (type == 1){
                     if((is_straight_curve(*curve_it1) && is_straight_curve(*curve_it2Fixed) && method != FM_BEZIER )|| method == FM_ARC){ 
-                        path_out.appendNew<SVGEllipticalArc>(rx, ry, angleArc, 0, ccwToggle, endArcPoint);
+                        path_out.appendNew<EllipticalArc>(rx, ry, angleArc, 0, ccwToggle, endArcPoint);
                     } else {
                         path_out.appendNew<Geom::CubicBezier>(handle1, handle2, endArcPoint);
                     }
