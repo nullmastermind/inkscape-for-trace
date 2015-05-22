@@ -44,7 +44,7 @@ set(2geom_SRC
 	solve-bezier-parametric.cpp
 	svg-path-parser.cpp
 	svg-path-writer.cpp
-	sweep.cpp
+	sweep-bounds.cpp
 	toposweep.cpp
 	transforms.cpp
 	utils.cpp
@@ -115,7 +115,8 @@ set(2geom_SRC
 	solver.h
 	svg-path-parser.h
 	svg-path-writer.h
-	sweep.h
+	sweeper.h
+	sweep-bounds.h
 	toposweep.h
 	transforms.h
 	utils.h
