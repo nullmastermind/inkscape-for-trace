@@ -576,8 +576,8 @@ objects_query_fillstroke (const std::vector<SPItem*> &objects, SPStyle *style_re
                    return QUERY_STYLE_MULTIPLE_DIFFERENT;  // different kind of server
                 }
 
-                SPPattern *pat = pattern_getroot (pattern);
-                SPPattern *pat_res = pattern_getroot (pattern_res);
+                SPPattern *pat = SP_PATTERN (server)->rootPattern();
+                SPPattern *pat_res = SP_PATTERN (server_res)->rootPattern();
                 if (pat_res != pat) {
                    return QUERY_STYLE_MULTIPLE_DIFFERENT;  // different pattern roots
                 }
@@ -1168,6 +1168,94 @@ objects_query_fontstyle (const std::vector<SPItem*> &objects, SPStyle *style_res
     }
 }
 
+int
+objects_query_fontvariants (const std::vector<SPItem*> &objects, SPStyle *style_res)
+{
+    bool set = false;
+
+    int texts = 0;
+
+    SPILigatures* ligatures_res = &(style_res->font_variant_ligatures);
+    SPIEnum* position_res       = &(style_res->font_variant_position);
+    SPIEnum* caps_res           = &(style_res->font_variant_caps);
+    SPINumeric* numeric_res     = &(style_res->font_variant_numeric);
+    
+    // Stores 'and' of all values
+    ligatures_res->computed = SP_CSS_FONT_VARIANT_LIGATURES_NORMAL;
+    position_res->computed  = SP_CSS_FONT_VARIANT_POSITION_NORMAL;
+    caps_res->computed      = SP_CSS_FONT_VARIANT_CAPS_NORMAL;
+    numeric_res->computed   = SP_CSS_FONT_VARIANT_NUMERIC_NORMAL;
+
+    // Stores only differences
+    ligatures_res->value = 0;
+    position_res->value  = 0;
+    caps_res->value      = 0;
+    numeric_res->value   = 0;
+    
+    for (std::vector<SPItem*>::const_iterator i = objects.begin(); i != objects.end(); i++) {
+        SPObject *obj = *i;
+
+        if (!isTextualItem(obj)) {
+            continue;
+        }
+
+        SPStyle *style = obj->style;
+        if (!style) {
+            continue;
+        }
+
+        texts ++;
+
+        SPILigatures* ligatures_in = &(style->font_variant_ligatures);
+        SPIEnum*      position_in  = &(style->font_variant_position);
+        SPIEnum*      caps_in      = &(style->font_variant_caps);
+        SPINumeric*   numeric_in   = &(style->font_variant_numeric);
+        // computed stores which bits are on/off, only valid if same between all selected objects.
+        // value stores which bits are different between objects. This is a bit of an abuse of
+        // the values but then we don't need to add new variables to class.
+        if (set) {
+            ligatures_res->value  |= (ligatures_res->computed ^ ligatures_in->computed );
+            ligatures_res->computed &= ligatures_in->computed;
+
+            position_res->value  |= (position_res->computed ^ position_in->computed );
+            position_res->computed &= position_in->computed;
+
+            caps_res->value  |= (caps_res->computed ^ caps_in->computed );
+            caps_res->computed &= caps_in->computed;
+
+            numeric_res->value  |= (numeric_res->computed ^ numeric_in->computed );
+            numeric_res->computed &= numeric_in->computed;
+
+        } else {
+            ligatures_res->computed  = ligatures_in->computed;
+            position_res->computed   = position_in->computed;
+            caps_res->computed       = caps_in->computed;
+            numeric_res->computed    = numeric_in->computed;
+        }
+
+        set = true;
+    }
+
+    bool different = (style_res->font_variant_ligatures.value != 0 || 
+                      style_res->font_variant_position.value  != 0 ||
+                      style_res->font_variant_caps.value      != 0 ||
+                      style_res->font_variant_numeric.value   != 0 );
+
+    if (texts == 0 || !set)
+        return QUERY_STYLE_NOTHING;
+
+    if (texts > 1) {
+        if (different) {
+            return QUERY_STYLE_MULTIPLE_DIFFERENT;
+        } else {
+            return QUERY_STYLE_MULTIPLE_SAME;
+        }
+    } else {
+        return QUERY_STYLE_SINGLE;
+    }
+}
+
+
 /**
  * Write to style_res the baseline numbers.
  */
@@ -1577,6 +1665,8 @@ sp_desktop_query_style_from_list (const std::vector<SPItem*> &list, SPStyle *sty
         return objects_query_fontfamily (list, style);
     } else if (property == QUERY_STYLE_PROPERTY_FONTSTYLE) {
         return objects_query_fontstyle (list, style);
+    } else if (property == QUERY_STYLE_PROPERTY_FONTVARIANTS) {
+        return objects_query_fontvariants (list, style);
     } else if (property == QUERY_STYLE_PROPERTY_FONTNUMBERS) {
         return objects_query_fontnumbers (list, style);
     } else if (property == QUERY_STYLE_PROPERTY_BASELINES) {
@@ -1598,6 +1688,7 @@ sp_desktop_query_style_from_list (const std::vector<SPItem*> &list, SPStyle *sty
 int
 sp_desktop_query_style(SPDesktop *desktop, SPStyle *style, int property)
 {
+    // Used by text tool and in gradient dragging
     int ret = desktop->_query_style_signal.emit(style, property);
 
     if (ret != QUERY_STYLE_NOTHING)

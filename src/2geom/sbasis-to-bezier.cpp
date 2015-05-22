@@ -239,6 +239,8 @@ void sbasis_to_cubic_bezier (std::vector<Point> & bz, D2<SBasis> const& sb)
 
     midx = 8*midx - 4*bz[0][X] - 4*bz[3][X];  // re-define relative to center
     midy = 8*midy - 4*bz[0][Y] - 4*bz[3][Y];
+    if ((std::abs(midx) < EPSILON) && (std::abs(midy) < EPSILON))
+        return;
 
     if ((std::abs(xprime[0]) < EPSILON) && (std::abs(yprime[0]) < EPSILON)
     && ((std::abs(xprime[1]) > EPSILON) || (std::abs(yprime[1]) > EPSILON)))  { // degenerate handle at 0 : use distance of closest approach
@@ -258,11 +260,15 @@ void sbasis_to_cubic_bezier (std::vector<Point> & bz, D2<SBasis> const& sb)
         dely[1] = 0;
     } else if  (std::abs(xprime[1]*yprime[0] - yprime[1]*xprime[0]) >  // general case : fit mid fxn value
         0.002 * std::abs(xprime[1]*xprime[0] + yprime[1]*yprime[0])) { // approx. 0.1 degree of angle
-        denom = 3.0*(xprime[1]*yprime[0] - yprime[1]*xprime[0]);
+        double test1 = (bz[1][Y] - bz[0][Y])*(bz[3][X] - bz[0][X]) - (bz[1][X] - bz[0][X])*(bz[3][Y] - bz[0][Y]);
+        double test2 = (bz[2][Y] - bz[0][Y])*(bz[3][X] - bz[0][X]) - (bz[2][X] - bz[0][X])*(bz[3][Y] - bz[0][Y]);
+        if (test1*test2 < 0) // reject anti-symmetric case, LP Bug 1428267 & Bug 1428683
+            return;
+        denom = xprime[1]*yprime[0] - yprime[1]*xprime[0];
         for (int i = 0; i < 2; ++i) {
             numer = xprime[1 - i]*midy - yprime[1 - i]*midx;
-            delx[i] = xprime[i]*numer/denom;
-            dely[i] = yprime[i]*numer/denom;
+            delx[i] = xprime[i]*numer/denom/3;
+            dely[i] = yprime[i]*numer/denom/3;
         }
     } else if ((xprime[0]*xprime[1] < 0) || (yprime[0]*yprime[1] < 0)) { // symmetric case : use distance of closest approach
         numer = midx*xprime[0] + midy*yprime[0];
@@ -509,10 +515,10 @@ path_from_sbasis(D2<SBasis> const &B, double tol, bool only_cubicbeziers) {
  TODO: some of this logic should be lifted into svg-path
 */
 PathVector
-path_from_piecewise(Geom::Piecewise<Geom::D2<Geom::SBasis> > const &B, double tol, bool only_cubicbeziers) {
-    Geom::PathBuilder pb;
+path_from_piecewise(Piecewise<D2<SBasis> > const &B, double tol, bool only_cubicbeziers) {
+    PathBuilder pb;
     if(B.size() == 0) return pb.peek();
-    Geom::Point start = B[0].at0();
+    Point start = B[0].at0();
     pb.moveTo(start);
     for(unsigned i = 0; ; i++) {
         if ( (i+1 == B.size()) 

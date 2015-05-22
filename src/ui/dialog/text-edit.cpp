@@ -69,6 +69,7 @@ TextEdit::TextEdit()
       font_label(_("_Font"), true),
       layout_frame(),
       text_label(_("_Text"), true),
+      vari_label(_("_Variants"), true),
       setasdefault_button(_("Set as _default")),
       close_button(Gtk::Stock::CLOSE),
       apply_button(Gtk::Stock::APPLY),
@@ -195,7 +196,8 @@ TextEdit::TextEdit()
 
     notebook.append_page(font_vbox, font_label);
     notebook.append_page(text_vbox, text_label);
-
+    notebook.append_page(vari_vbox, vari_label);
+    
     /* Buttons */
     setasdefault_button.set_use_underline(true);
     apply_button.set_can_default();
@@ -216,6 +218,7 @@ TextEdit::TextEdit()
     setasdefault_button.signal_clicked().connect(sigc::mem_fun(*this, &TextEdit::onSetDefault));
     apply_button.signal_clicked().connect(sigc::mem_fun(*this, &TextEdit::onApply));
     close_button.signal_clicked().connect(sigc::bind(_signal_response.make_slot(), GTK_RESPONSE_CLOSE));
+    fontVariantChangedConn = vari_vbox.connectChanged(sigc::bind(sigc::ptr_fun(&onFontVariantChange),  this));
 
     desktopChangeConn = deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &TextEdit::setTargetDesktop) );
     deskTrack.connect(GTK_WIDGET(gobj()));
@@ -230,6 +233,7 @@ TextEdit::~TextEdit()
     selectChangedConn.disconnect();
     desktopChangeConn.disconnect();
     deskTrack.disconnect();
+    fontVariantChangedConn.disconnect();
 }
 
 void TextEdit::styleButton(Gtk::RadioButton *button, gchar const *tooltip, gchar const *icon_name, Gtk::RadioButton *group_button )
@@ -384,6 +388,11 @@ void TextEdit::onReadSelection ( gboolean dostyle, gboolean /*docontent*/ )
         gtk_entry_set_text ((GtkEntry *) gtk_bin_get_child ((GtkBin *) spacing_combo), sstr);
         g_free(sstr);
 
+        // Update font variant widget
+        //int result_variants =
+        sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_FONTVARIANTS);
+        vari_vbox.update( &query );
+
     }
     blocked = false;
 }
@@ -510,11 +519,14 @@ SPCSSAttr *TextEdit::fillTextStyle ()
             sp_repr_css_set_property (css, "writing-mode", "tb");
         }
 
-        // Note that CSS 1.1 does not support line-height; we set it for consistency, but also set
+        // Note that SVG 1.1 does not support line-height; we set it for consistency, but also set
         // sodipodi:linespacing for backwards compatibility; in 1.2 we use line-height for flowtext
 
         const gchar *sstr = gtk_combo_box_text_get_active_text ((GtkComboBoxText *) spacing_combo);
         sp_repr_css_set_property (css, "line-height", sstr);
+
+        // Font variants
+        vari_vbox.fill_css( css );
 
         return css;
 }
@@ -644,6 +656,19 @@ void TextEdit::onFontChange(SPFontSelector * /*fontsel*/, gchar* fontspec, TextE
     }
     self->setasdefault_button.set_sensitive ( true );
 
+}
+
+void TextEdit::onFontVariantChange(TextEdit *self)
+{
+    if( self->blocked )
+        return;
+
+    SPItem *text = self->getSelectedTextItem ();
+
+    if (text) {
+        self->apply_button.set_sensitive ( true );
+    }
+    self->setasdefault_button.set_sensitive ( true );
 }
 
 void TextEdit::onStartOffsetChange(GtkTextBuffer * /*text_buffer*/, TextEdit *self)

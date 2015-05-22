@@ -113,13 +113,13 @@ public:
 
     /* Font variants -------------------- */
     /** Font variant ligatures */
-    SPIEnum font_variant_ligatures;
+    SPILigatures font_variant_ligatures;
     /** Font variant position (subscript/superscript) */
     SPIEnum font_variant_position;
     /** Font variant caps (small caps) */
     SPIEnum font_variant_caps;
     /** Font variant numeric (numerical formatting) */
-    SPIEnum font_variant_numeric;
+    SPINumeric font_variant_numeric;
     /** Font variant alternates (alternates/swatches) */
     SPIEnum font_variant_alternates;
     /** Font variant East Asian */
