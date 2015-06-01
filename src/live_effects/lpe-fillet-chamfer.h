@@ -15,14 +15,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#if HAVE_CONFIG_H
-# include "config.h"
-#endif
-
-#if defined(GLIBMM_DISABLE_DEPRECATED) && defined(HAVE_GLIBMM_THREADS_H)
-# include <glibmm/threads.h>
-#endif
-
 #include "live_effects/parameter/enum.h"
 #include "live_effects/parameter/bool.h"
 #include "live_effects/parameter/unit.h"
@@ -74,7 +66,6 @@ private:
     BoolParam only_selected;
     BoolParam flexible;
     BoolParam use_knot_distance;
-    UnitParam unit;
     EnumParam<FilletMethod> method;
     ScalarParam radius;
     ScalarParam chamfer_steps;

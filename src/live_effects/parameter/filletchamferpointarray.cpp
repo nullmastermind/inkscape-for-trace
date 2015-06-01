@@ -354,11 +354,6 @@ void FilletChamferPointArrayParam::set_pwd2(
     last_pwd2_normal = pwd2_normal_in;
 }
 
-void FilletChamferPointArrayParam::set_document_unit(Glib::ustring value_document_unit)
-{
-    documentUnit = value_document_unit;
-}
-
 void FilletChamferPointArrayParam::set_helper_size(int hs)
 {
     helper_size = hs;
@@ -372,11 +367,6 @@ void FilletChamferPointArrayParam::set_chamfer_steps(int value_chamfer_steps)
 void FilletChamferPointArrayParam::set_use_distance(bool use_knot_distance )
 {
     use_distance = use_knot_distance;
-}
-
-void FilletChamferPointArrayParam::set_unit(const gchar *abbr)
-{
-    unit = abbr;
 }
 
 void FilletChamferPointArrayParam::updateCanvasIndicators()
@@ -506,7 +496,6 @@ std::vector<double> FilletChamferPointArrayParam::get_times(int index, std::vect
         time_it1 = 0;
     }
     double resultLenght = 0;
-    time_it1_B = 1;
     if (subpaths[positions.first].closed() && last) {
         time_it2 = modf(to_time(index - positions.second , _vector[index - positions.second ][X]), &intpart);
         resultLenght = it1_length + to_len(index - positions.second, _vector[index - positions.second ][X]);
@@ -813,7 +802,7 @@ void FilletChamferPointArrayParamKnotHolderEntity::knot_click(guint state)
         bool aprox = (A[0].degreesOfFreedom() != 2 || B[0].degreesOfFreedom() != 2) && !_pparam->use_distance?true:false;
         Geom::Point offset = Geom::Point(xModified, _pparam->_vector.at(_index).y());
         Inkscape::UI::Dialogs::FilletChamferPropertiesDialog::showDialog(
-            this->desktop, offset, this, _pparam->unit, _pparam->use_distance, aprox, _pparam->documentUnit);
+            this->desktop, offset, this, _pparam->use_distance, aprox);
     }
 
 }
