@@ -38,7 +38,7 @@ public:
 
     virtual void doBeforeEffect (SPLPEItem const* lpeitem);
 
-    virtual void setKaleidoscope(std::vector<Geom::Path> &path_in, Geom::Path divider, Geom::Path divider_start, double sizeDivider);
+    virtual void setFusion(std::vector<Geom::Path> &path_in, Geom::Path divider, Geom::Path divider_start, double sizeDivider);
 
     virtual bool pointInTriangle(Geom::Point p, Geom::Point p0, Geom::Point p1, Geom::Point p2);
 
@@ -64,7 +64,7 @@ private:
     ScalarParam rotation_angle;
     ScalarParam num_copies;
     BoolParam copies_to_360;
-    BoolParam kaleidoscope;
+    BoolParam fusion_paths;
 
     Geom::Point A;
     Geom::Point B;

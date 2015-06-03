@@ -52,7 +52,7 @@ LPECopyRotate::LPECopyRotate(LivePathEffectObject *lpeobject) :
     rotation_angle(_("Rotation angle:"), _("Angle between two successive copies"), "rotation_angle", &wr, this, 30.0),
     num_copies(_("Number of copies:"), _("Number of copies of the original path"), "num_copies", &wr, this, 5),
     copies_to_360(_("360º Copies"), _("No rotation angle, fixed to 360º"), "copies_to_360", &wr, this, true),
-    kaleidoscope(_("kaleidoscope"), _("kaleidoscope"), "kaleidoscope", &wr, this, false),
+    fusion_paths(_("Fusioned paths"), _("Fusion paths by helper line"), "fusion_paths", &wr, this, false),
     dist_angle_handle(100.0)
 {
     show_orig_path = true;
@@ -60,7 +60,7 @@ LPECopyRotate::LPECopyRotate(LivePathEffectObject *lpeobject) :
 
     // register all your parameters here, so Inkscape knows which parameters this effect has:
     registerParameter(&copies_to_360);
-    registerParameter(&kaleidoscope);
+    registerParameter(&fusion_paths);
     registerParameter(&starting_angle);
     registerParameter(&rotation_angle);
     registerParameter(&num_copies);
@@ -92,7 +92,7 @@ LPECopyRotate::doOnApply(SPLPEItem const* lpeitem)
 void
 LPECopyRotate::transform_multiply(Geom::Affine const& postmul, bool set)
 {
-    if(kaleidoscope) {
+    if(fusion_paths) {
         Geom::Coord angle  = Geom::rad_to_deg(atan(-postmul[1]/postmul[0]));
         angle += starting_angle;
         starting_angle.param_set_value(angle);
@@ -113,10 +113,10 @@ LPECopyRotate::doBeforeEffect (SPLPEItem const* lpeitem)
     if(copies_to_360 ) {
         rotation_angle.param_set_value(360.0/(double)num_copies);
     }
-    if(kaleidoscope && rotation_angle * num_copies > 360 && rotation_angle > 0){
+    if(fusion_paths && rotation_angle * num_copies > 360 && rotation_angle > 0){
         num_copies.param_set_value(floor(360/rotation_angle));
     }
-    if(kaleidoscope || copies_to_360) {
+    if(fusion_paths || copies_to_360) {
         num_copies.param_set_increments(2,2);
         if((int)num_copies%2 !=0) {
             num_copies.param_set_value(num_copies+1);
@@ -135,7 +135,7 @@ LPECopyRotate::doBeforeEffect (SPLPEItem const* lpeitem)
     // likely due to SVG's choice of coordinate system orientation (max)
     start_pos = origin + dir * Rotate(-deg_to_rad(starting_angle)) * dist_angle_handle;
     rot_pos = origin + dir * Rotate(-deg_to_rad(rotation_angle+starting_angle)) * dist_angle_handle;
-    if( kaleidoscope || copies_to_360 ) {
+    if( fusion_paths || copies_to_360 ) {
         rot_pos = origin;
     }
     SPLPEItem * item = const_cast<SPLPEItem*>(lpeitem);
@@ -189,7 +189,7 @@ LPECopyRotate::split(std::vector<Geom::Path> &path_on,Geom::Path divider)
         }
         if(position == 1) {
             if(!Geom::are_near(portion_original.pointAt(0),divider_line)){
-                portion_original = portion_original.reverse();
+                //portion_original = portion_original.reverse();
             }
             tmp_path.push_back(portion_original);
         }
@@ -203,7 +203,7 @@ LPECopyRotate::split(std::vector<Geom::Path> &path_on,Geom::Path divider)
     if(cs.size() > 0 && position == 1) {
         Geom::Path portion_original = original.portion(time_start, original.size());
         if(!Geom::are_near(portion_original.pointAt(0),divider_line)){
-            portion_original = portion_original.reverse();
+           // portion_original = portion_original.reverse();
         }
         if (!original.closed()) {
             tmp_path.push_back(portion_original);
@@ -226,7 +226,7 @@ LPECopyRotate::split(std::vector<Geom::Path> &path_on,Geom::Path divider)
 }
 
 void
-LPECopyRotate::setKaleidoscope(std::vector<Geom::Path> &path_on, Geom::Path divider, Geom::Path divider_start, double size_divider)
+LPECopyRotate::setFusion(std::vector<Geom::Path> &path_on, Geom::Path divider, Geom::Path divider_start, double size_divider)
 {
     std::vector<Geom::Path> path_on_start = path_on;
     split(path_on,divider);
@@ -359,7 +359,7 @@ LPECopyRotate::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & p
     Geom::Rect bbox(Geom::Point(boundingbox_X.min(),boundingbox_Y.min()),Geom::Point(boundingbox_X.max(),boundingbox_Y.max()));
     double size_divider = Geom::distance(origin,bbox) + (diagonal * 2);
     Geom::Point line_start  = origin + dir * Rotate(-deg_to_rad(starting_angle)) * size_divider;
-    Geom::Point line_end = origin + dir * Rotate(-deg_to_rad(rotation_angle+starting_angle)) * size_divider;
+    Geom::Point line_end = origin + dir * Rotate(-deg_to_rad(rotation_angle + starting_angle)) * size_divider;
     //Note:: beter way to do this
     //Whith AppendNew have problems whith the crossing order
     Geom::Path divider = Geom::Path(line_start);
@@ -371,7 +371,7 @@ LPECopyRotate::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & p
     divider_start.appendNew<Geom::LineSegment>(line_oposite);
     Piecewise<D2<SBasis> > output;
     Affine pre = Translate(-origin) * Rotate(-deg_to_rad(starting_angle));
-    if(kaleidoscope) {
+    if(fusion_paths) {
         std::vector<Geom::Path> path_out;
         std::vector<Geom::Path> tmp_path;
         PathVector const original_pathv = path_from_piecewise(remove_short_cuts(pwd2_in, 0.1), 0.001);
@@ -393,7 +393,7 @@ LPECopyRotate::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & p
                 original.close(true);
             }
             tmp_path.push_back(original);
-            setKaleidoscope(tmp_path,divider, divider_start, size_divider);
+            setFusion(tmp_path,divider, divider_start, size_divider);
             path_out.insert(path_out.end(), tmp_path.begin(), tmp_path.end());
             tmp_path.clear();
         }
