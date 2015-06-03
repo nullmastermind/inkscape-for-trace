@@ -113,7 +113,10 @@ LPECopyRotate::doBeforeEffect (SPLPEItem const* lpeitem)
     if(copies_to_360 ) {
         rotation_angle.param_set_value(360.0/(double)num_copies);
     }
-    if(kaleidoscope && copies_to_360) {
+    if(kaleidoscope && rotation_angle * num_copies > 360 && rotation_angle > 0){
+        num_copies.param_set_value(floor(360/rotation_angle));
+    }
+    if(kaleidoscope || copies_to_360) {
         num_copies.param_set_increments(2,2);
         if((int)num_copies%2 !=0) {
             num_copies.param_set_value(num_copies+1);
@@ -169,6 +172,7 @@ LPECopyRotate::split(std::vector<Geom::Path> &path_on,Geom::Path divider)
     double time_start = 0.0;
     Geom::Path original = path_on[0];
     int position = 0;
+    Geom::Line divider_line(divider.pointAt(0),divider.pointAt(1));
     Geom::Crossings cs = crossings(original,divider);
     std::vector<double> crossed;
     for(unsigned int i = 0; i < cs.size(); i++) {
@@ -184,6 +188,9 @@ LPECopyRotate::split(std::vector<Geom::Path> &path_on,Geom::Path divider)
             position = pointInTriangle(side_checker, divider.initialPoint(), divider[0].finalPoint(), divider[1].finalPoint());
         }
         if(position == 1) {
+            if(!Geom::are_near(portion_original.pointAt(0),divider_line)){
+                portion_original = portion_original.reverse();
+            }
             tmp_path.push_back(portion_original);
         }
         portion_original.clear();
@@ -195,68 +202,8 @@ LPECopyRotate::split(std::vector<Geom::Path> &path_on,Geom::Path divider)
     }
     if(cs.size() > 0 && position == 1) {
         Geom::Path portion_original = original.portion(time_start, original.size());
-        if (!original.closed()) {
-            tmp_path.push_back(portion_original);
-        } else {
-            if(tmp_path.size() > 0 && tmp_path[0].size() > 0 ) {
-                portion_original.setFinal(tmp_path[0].initialPoint());
-                portion_original.append(tmp_path[0]);
-                tmp_path[0] = portion_original;
-            } else {
-                tmp_path.push_back(portion_original);
-            }
-            //temp_path[0].close();
-        }
-        portion_original.clear();
-    }
-    if(cs.size()==0  && position == 1) {
-        tmp_path.push_back(original);
-    }
-    path_on = tmp_path;
-}
-
-void
-LPECopyRotate::split_extreme(std::vector<Geom::Path> &path_on,Geom::Path divider_extreme)
-{
-    std::vector<Geom::Path> tmp_path;
-    double time_start = 0.0;
-    Geom::Path original = path_on[0];
-    int position = 0;
-    Geom::Crossings cs = crossings(original,divider_extreme);
-    std::vector<double> crossed;
-    for(unsigned int i = 0; i < cs.size(); i++) {
-        crossed.push_back(cs[i].ta);
-    }
-    std::sort (crossed.begin(), crossed.end());
-    for(unsigned int i = 0; i < crossed.size(); i++) {
-        double timeEnd = crossed[i];
-        Geom::Path portion_original = original.portion(time_start,timeEnd);
-        Geom::Point side_checker = portion_original.pointAt(0.001);
-        position = pointSideOfLine(divider_extreme[0].finalPoint(),  divider_extreme[1].finalPoint(), side_checker);
-        if(num_copies > 2) {
-            position = pointInTriangle(side_checker, divider_extreme.initialPoint(), divider_extreme[0].finalPoint(), divider_extreme[1].finalPoint());
-        }
-        if(position == 1) {
-            Geom::Path start = Geom::Path(divider_extreme.pointAt(0));
-            start.appendNew<Geom::LineSegment>(divider_extreme.pointAt(1));
-            if(!are_near(start.pointAt(nearest_point(portion_original.initialPoint(),start)),portion_original.initialPoint())){
-                portion_original.reverse();
-            }
-            tmp_path.push_back(portion_original);
-        }
-        portion_original.clear();
-        time_start = timeEnd;
-    }
-    position = pointSideOfLine(divider_extreme[0].finalPoint(), divider_extreme[1].finalPoint(), original.finalPoint());
-    if(num_copies > 2) {
-        position = pointInTriangle(original.finalPoint(), divider_extreme.initialPoint(), divider_extreme[0].finalPoint(), divider_extreme[1].finalPoint());
-    }
-    if(cs.size() > 0 && position == 1) {
-        Geom::Path portion_original = original.portion(time_start, original.size());
-        Geom::Path start = Geom::Path(divider_extreme.pointAt(0));
-        start.appendNew<Geom::LineSegment>(divider_extreme.pointAt(1));
-        if(!are_near(start.pointAt(nearest_point(portion_original.initialPoint(),start)),portion_original.initialPoint())){
-            portion_original.reverse();
+        if(!Geom::are_near(portion_original.pointAt(0),divider_line)){
+            portion_original = portion_original.reverse();
         }
         if (!original.closed()) {
             tmp_path.push_back(portion_original);
@@ -279,7 +226,7 @@ LPECopyRotate::split_extreme(std::vector<Geom::Path> &path_on,Geom::Path divider
 }
 
 void
-LPECopyRotate::setKaleidoscope(std::vector<Geom::Path> &path_on, Geom::Path divider, Geom::Path divider_start, Geom::Path divider_end, double size_divider)
+LPECopyRotate::setKaleidoscope(std::vector<Geom::Path> &path_on, Geom::Path divider, Geom::Path divider_start, double size_divider)
 {
     std::vector<Geom::Path> path_on_start = path_on;
     split(path_on,divider);
@@ -346,26 +293,49 @@ LPECopyRotate::setKaleidoscope(std::vector<Geom::Path> &path_on, Geom::Path divi
                 tmp_path_helper[0].append(tmp_append);
                 tmp_path_helper[0] = tmp_path_helper[0].reverse();
             } else {
-                if(rotation_angle * num_copies != 360){
-                    split_extreme(path_on_start,divider_start);
-                    for (Geom::PathVector::const_iterator path_it_start = path_on_start.begin(); path_it_start != path_on_start.end(); ++path_it_start) {
-                        Geom::Path original_start = *path_it_start;
-                        if (path_it->empty()) {
-                            continue;
-                        }
-                        if(Geom::are_near(append_path.initialPoint(),original_start.initialPoint())) {
-                            original_start.reverse();
-                        }
-                        original_start.append(append_path);
-                        append_path = original_start;
-                    }
-                }
                 tmp_path_helper.push_back(append_path);
             }
             if(tmp_path_helper.size() > 0 && Geom::are_near(tmp_path_helper[tmp_path_helper.size()-1].finalPoint(),tmp_path_helper[tmp_path_helper.size()-1].initialPoint())) {
                 tmp_path_helper[tmp_path_helper.size()-1].close();
             }
         }
+        if(rotation_angle * num_copies != 360 && tmp_path_helper.size() > 0){
+            split(path_on_start,divider_start);
+            for (Geom::PathVector::const_iterator path_it_start = path_on_start.begin(); path_it_start != path_on_start.end(); ++path_it_start) {
+                Geom::Path original_start = *path_it_start;
+                if (path_it->empty()) {
+                    continue;
+                }
+
+                if( Geom::are_near(tmp_path_helper[0].initialPoint(),original_start.initialPoint())){
+                    Geom::Point A(divider_start.pointAt(1));
+                    Geom::Point B(divider_start.pointAt(2));
+
+                    Geom::Affine m1(1.0, 0.0, 0.0, 1.0, A[0], A[1]);
+                    double hyp = Geom::distance(A, B);
+                    double c = (B[0] - A[0]) / hyp; // cos(alpha)
+                    double s = (B[1] - A[1]) / hyp; // sin(alpha)
+
+                    Geom::Affine m2(c, -s, s, c, 0.0, 0.0);
+                    Geom::Affine sca(1.0, 0.0, 0.0, -1.0, 0.0, 0.0);
+
+                    Geom::Affine m = m1.inverse() * m2;
+                    m = m * sca;
+                    m = m * m2.inverse();
+                    m = m * m1;
+                    original_start.setInitial(tmp_path_helper[0].initialPoint());
+                    Geom::Path mirror = original_start * m;
+                    mirror = mirror.reverse();
+                    mirror.setInitial(original_start.finalPoint());
+                    original_start.append(mirror);
+                    original_start = original_start.reverse();
+                    original_start.setFinal(tmp_path_helper[0].initialPoint());
+                    original_start.append(tmp_path_helper[0]);
+                    tmp_path_helper[0] = original_start;
+                }
+            }
+        }
+
         if(tmp_path_helper.size() > 0 && Geom::are_near(tmp_path_helper[0].finalPoint(),tmp_path_helper[0].initialPoint())) {
             tmp_path_helper[0].close();
         }
@@ -395,14 +365,10 @@ LPECopyRotate::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & p
     Geom::Path divider = Geom::Path(line_start);
     divider.appendNew<Geom::LineSegment>((Geom::Point)origin);
     divider.appendNew<Geom::LineSegment>(line_end);
-    Geom::Point line_oposite  = origin + dir * Rotate(-deg_to_rad((rotation_angle/2)+starting_angle)) * size_divider;
+    Geom::Point line_oposite  = origin + dir * Rotate(-deg_to_rad((rotation_angle * num_copies /2)+starting_angle + 180)) * size_divider;
     Geom::Path divider_start = Geom::Path(line_start);
     divider_start.appendNew<Geom::LineSegment>((Geom::Point)origin);
     divider_start.appendNew<Geom::LineSegment>(line_oposite);
-    Geom::Path divider_end = Geom::Path(line_end);
-    divider_end.appendNew<Geom::LineSegment>((Geom::Point)origin);
-    divider_end.appendNew<Geom::LineSegment>(line_oposite);
-    
     Piecewise<D2<SBasis> > output;
     Affine pre = Translate(-origin) * Rotate(-deg_to_rad(starting_angle));
     if(kaleidoscope) {
@@ -427,7 +393,7 @@ LPECopyRotate::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & p
                 original.close(true);
             }
             tmp_path.push_back(original);
-            setKaleidoscope(tmp_path,divider, divider_start, divider_end, size_divider);
+            setKaleidoscope(tmp_path,divider, divider_start, size_divider);
             path_out.insert(path_out.end(), tmp_path.begin(), tmp_path.end());
             tmp_path.clear();
         }

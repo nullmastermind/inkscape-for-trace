@@ -38,15 +38,13 @@ public:
 
     virtual void doBeforeEffect (SPLPEItem const* lpeitem);
 
-    virtual void setKaleidoscope(std::vector<Geom::Path> &path_in, Geom::Path divider, Geom::Path divider_start, Geom::Path divider_end, double sizeDivider);
+    virtual void setKaleidoscope(std::vector<Geom::Path> &path_in, Geom::Path divider, Geom::Path divider_start, double sizeDivider);
 
     virtual bool pointInTriangle(Geom::Point p, Geom::Point p0, Geom::Point p1, Geom::Point p2);
 
     virtual int pointSideOfLine(Geom::Point A, Geom::Point B, Geom::Point X);
 
     virtual void split(std::vector<Geom::Path> &path_in,Geom::Path divider);
-
-    virtual void split_extreme(std::vector<Geom::Path> &path_on,Geom::Path divider_extreme);
 
     virtual void resetDefaults(SPItem const* item);
 
