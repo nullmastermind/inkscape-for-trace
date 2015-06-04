@@ -110,7 +110,7 @@ LPECopyRotate::doBeforeEffect (SPLPEItem const* lpeitem)
 {
     using namespace Geom;
     original_bbox(lpeitem);
-    if(copies_to_360 ) {
+    if( copies_to_360 ) {
         rotation_angle.param_set_value(360.0/(double)num_copies);
     }
     if(fusion_paths && rotation_angle * num_copies > 360 && rotation_angle > 0){
@@ -181,16 +181,18 @@ LPECopyRotate::split(std::vector<Geom::Path> &path_on,Geom::Path divider)
     for(unsigned int i = 0; i < crossed.size(); i++) {
         double timeEnd = crossed[i];
         Geom::Path portion_original = original.portion(time_start,timeEnd);
-        Geom::Point side_checker = portion_original.pointAt(0.001);
-        position = pointSideOfLine(divider[0].finalPoint(),  divider[1].finalPoint(), side_checker);
-        if(rotation_angle != 180) {
-            position = pointInTriangle(side_checker, divider.initialPoint(), divider[0].finalPoint(), divider[1].finalPoint());
+        if(!portion_original.empty()){
+            Geom::Point side_checker = portion_original.pointAt(0.001);
+            position = pointSideOfLine(divider[0].finalPoint(),  divider[1].finalPoint(), side_checker);
+            if(rotation_angle != 180) {
+                position = pointInTriangle(side_checker, divider.initialPoint(), divider[0].finalPoint(), divider[1].finalPoint());
+            }
+            if(position == 1) {
+                tmp_path.push_back(portion_original);
+            }
+            portion_original.clear();
+            time_start = timeEnd;
         }
-        if(position == 1) {
-            tmp_path.push_back(portion_original);
-        }
-        portion_original.clear();
-        time_start = timeEnd;
     }
     position = pointSideOfLine(divider[0].finalPoint(), divider[1].finalPoint(), original.finalPoint());
     if(rotation_angle != 180) {
@@ -198,18 +200,20 @@ LPECopyRotate::split(std::vector<Geom::Path> &path_on,Geom::Path divider)
     }
     if(cs.size() > 0 && position == 1) {
         Geom::Path portion_original = original.portion(time_start, original.size());
-        if (!original.closed()) {
-            tmp_path.push_back(portion_original);
-        } else {
-            if(tmp_path.size() > 0 && tmp_path[0].size() > 0 ) {
-                portion_original.setFinal(tmp_path[0].initialPoint());
-                portion_original.append(tmp_path[0]);
-                tmp_path[0] = portion_original;
-            } else {
+        if(!portion_original.empty()){
+            if (!original.closed()) {
                 tmp_path.push_back(portion_original);
+            } else {
+                if(tmp_path.size() > 0 && tmp_path[0].size() > 0 ) {
+                    portion_original.setFinal(tmp_path[0].initialPoint());
+                    portion_original.append(tmp_path[0]);
+                    tmp_path[0] = portion_original;
+                } else {
+                    tmp_path.push_back(portion_original);
+                }
             }
+            portion_original.clear();
         }
-        portion_original.clear();
     }
     if(cs.size()==0  && position == 1) {
         tmp_path.push_back(original);
