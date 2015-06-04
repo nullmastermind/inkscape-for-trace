@@ -116,7 +116,7 @@ LPECopyRotate::doBeforeEffect (SPLPEItem const* lpeitem)
     if(fusion_paths && rotation_angle * num_copies > 360 && rotation_angle > 0){
         num_copies.param_set_value(floor(360/rotation_angle));
     }
-    if(fusion_paths || copies_to_360) {
+    if(fusion_paths && copies_to_360) {
         num_copies.param_set_increments(2,2);
         if((int)num_copies%2 !=0) {
             num_copies.param_set_value(num_copies+1);
@@ -172,7 +172,6 @@ LPECopyRotate::split(std::vector<Geom::Path> &path_on,Geom::Path divider)
     double time_start = 0.0;
     Geom::Path original = path_on[0];
     int position = 0;
-    Geom::Line divider_line(divider.pointAt(0),divider.pointAt(1));
     Geom::Crossings cs = crossings(original,divider);
     std::vector<double> crossed;
     for(unsigned int i = 0; i < cs.size(); i++) {
@@ -184,27 +183,21 @@ LPECopyRotate::split(std::vector<Geom::Path> &path_on,Geom::Path divider)
         Geom::Path portion_original = original.portion(time_start,timeEnd);
         Geom::Point side_checker = portion_original.pointAt(0.001);
         position = pointSideOfLine(divider[0].finalPoint(),  divider[1].finalPoint(), side_checker);
-        if(num_copies > 2) {
+        if(rotation_angle != 180) {
             position = pointInTriangle(side_checker, divider.initialPoint(), divider[0].finalPoint(), divider[1].finalPoint());
         }
         if(position == 1) {
-            if(!Geom::are_near(portion_original.pointAt(0),divider_line)){
-                //portion_original = portion_original.reverse();
-            }
             tmp_path.push_back(portion_original);
         }
         portion_original.clear();
         time_start = timeEnd;
     }
     position = pointSideOfLine(divider[0].finalPoint(), divider[1].finalPoint(), original.finalPoint());
-    if(num_copies > 2) {
+    if(rotation_angle != 180) {
         position = pointInTriangle(original.finalPoint(), divider.initialPoint(), divider[0].finalPoint(), divider[1].finalPoint());
     }
     if(cs.size() > 0 && position == 1) {
         Geom::Path portion_original = original.portion(time_start, original.size());
-        if(!Geom::are_near(portion_original.pointAt(0),divider_line)){
-           // portion_original = portion_original.reverse();
-        }
         if (!original.closed()) {
             tmp_path.push_back(portion_original);
         } else {
@@ -215,7 +208,6 @@ LPECopyRotate::split(std::vector<Geom::Path> &path_on,Geom::Path divider)
             } else {
                 tmp_path.push_back(portion_original);
             }
-            //temp_path[0].close();
         }
         portion_original.clear();
     }
@@ -226,9 +218,8 @@ LPECopyRotate::split(std::vector<Geom::Path> &path_on,Geom::Path divider)
 }
 
 void
-LPECopyRotate::setFusion(std::vector<Geom::Path> &path_on, Geom::Path divider, Geom::Path divider_start, double size_divider)
+LPECopyRotate::setFusion(std::vector<Geom::Path> &path_on, Geom::Path divider, double size_divider)
 {
-    std::vector<Geom::Path> path_on_start = path_on;
     split(path_on,divider);
     std::vector<Geom::Path> tmp_path;
     Geom::Affine pre = Geom::Translate(-origin);
@@ -300,39 +291,29 @@ LPECopyRotate::setFusion(std::vector<Geom::Path> &path_on, Geom::Path divider, G
             }
         }
         if(rotation_angle * num_copies != 360 && tmp_path_helper.size() > 0){
-            split(path_on_start,divider_start);
-            for (Geom::PathVector::const_iterator path_it_start = path_on_start.begin(); path_it_start != path_on_start.end(); ++path_it_start) {
-                Geom::Path original_start = *path_it_start;
-                if (path_it->empty()) {
-                    continue;
+            Geom::Ray base_a(divider.pointAt(1),divider.pointAt(0));
+            double diagonal = Geom::distance(Geom::Point(boundingbox_X.min(),boundingbox_Y.min()),Geom::Point(boundingbox_X.max(),boundingbox_Y.max()));
+            Geom::Rect bbox(Geom::Point(boundingbox_X.min(),boundingbox_Y.min()),Geom::Point(boundingbox_X.max(),boundingbox_Y.max()));
+            double size_divider = Geom::distance(origin,bbox) + (diagonal * 2);
+            Geom::Point base_point = origin + dir * Geom::Rotate(-Geom::deg_to_rad((rotation_angle * num_copies) + starting_angle)) * size_divider;
+            Geom::Ray base_b(divider.pointAt(1), base_point);
+            if(Geom::are_near(tmp_path_helper[0].initialPoint(),base_a) && Geom::are_near(tmp_path_helper[0].finalPoint(),base_a)){
+                tmp_path_helper[0].close();
+                if(tmp_path_helper.size() > 1){
+                    tmp_path_helper[tmp_path_helper.size()-1].close();
                 }
-
-                if( Geom::are_near(tmp_path_helper[0].initialPoint(),original_start.initialPoint())){
-                    Geom::Point A(divider_start.pointAt(1));
-                    Geom::Point B(divider_start.pointAt(2));
-
-                    Geom::Affine m1(1.0, 0.0, 0.0, 1.0, A[0], A[1]);
-                    double hyp = Geom::distance(A, B);
-                    double c = (B[0] - A[0]) / hyp; // cos(alpha)
-                    double s = (B[1] - A[1]) / hyp; // sin(alpha)
-
-                    Geom::Affine m2(c, -s, s, c, 0.0, 0.0);
-                    Geom::Affine sca(1.0, 0.0, 0.0, -1.0, 0.0, 0.0);
-
-                    Geom::Affine m = m1.inverse() * m2;
-                    m = m * sca;
-                    m = m * m2.inverse();
-                    m = m * m1;
-                    original_start.setInitial(tmp_path_helper[0].initialPoint());
-                    Geom::Path mirror = original_start * m;
-                    mirror = mirror.reverse();
-                    mirror.setInitial(original_start.finalPoint());
-                    original_start.append(mirror);
-                    original_start = original_start.reverse();
-                    original_start.setFinal(tmp_path_helper[0].initialPoint());
-                    original_start.append(tmp_path_helper[0]);
-                    tmp_path_helper[0] = original_start;
+            } else if(Geom::are_near(tmp_path_helper[tmp_path_helper.size()-1].initialPoint(),base_b) && 
+                Geom::are_near(tmp_path_helper[tmp_path_helper.size()-1].finalPoint(),base_b)){
+                tmp_path_helper[0].close();
+                if(tmp_path_helper.size() > 1){
+                    tmp_path_helper[tmp_path_helper.size()-1].close();
                 }
+            } else if((Geom::are_near(tmp_path_helper[0].initialPoint(),base_a) && Geom::are_near(tmp_path_helper[tmp_path_helper.size()-1].finalPoint(),base_b)) ||
+                (Geom::are_near(tmp_path_helper[0].initialPoint(),base_b) && Geom::are_near(tmp_path_helper[tmp_path_helper.size()-1].finalPoint(),base_a))){
+                Geom::Path close_path = Geom::Path(tmp_path_helper[tmp_path_helper.size()-1].finalPoint());
+                close_path.appendNew<Geom::LineSegment>((Geom::Point)origin);
+                close_path.appendNew<Geom::LineSegment>(tmp_path_helper[0].initialPoint());
+                tmp_path_helper[0].append(close_path);
             }
         }
 
@@ -351,7 +332,7 @@ LPECopyRotate::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & p
 {
     using namespace Geom;
 
-    if(num_copies == 1) {
+    if(num_copies == 1 && !fusion_paths) {
         return pwd2_in;
     }
 
@@ -365,10 +346,6 @@ LPECopyRotate::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & p
     Geom::Path divider = Geom::Path(line_start);
     divider.appendNew<Geom::LineSegment>((Geom::Point)origin);
     divider.appendNew<Geom::LineSegment>(line_end);
-    Geom::Point line_oposite  = origin + dir * Rotate(-deg_to_rad((rotation_angle * num_copies /2)+starting_angle + 180)) * size_divider;
-    Geom::Path divider_start = Geom::Path(line_start);
-    divider_start.appendNew<Geom::LineSegment>((Geom::Point)origin);
-    divider_start.appendNew<Geom::LineSegment>(line_oposite);
     Piecewise<D2<SBasis> > output;
     Affine pre = Translate(-origin) * Rotate(-deg_to_rad(starting_angle));
     if(fusion_paths) {
@@ -393,7 +370,7 @@ LPECopyRotate::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & p
                 original.close(true);
             }
             tmp_path.push_back(original);
-            setFusion(tmp_path,divider, divider_start, size_divider);
+            setFusion(tmp_path, divider, size_divider);
             path_out.insert(path_out.end(), tmp_path.begin(), tmp_path.end());
             tmp_path.clear();
         }
