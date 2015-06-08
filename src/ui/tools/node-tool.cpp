@@ -665,9 +665,32 @@ void NodeTool::update_tip(GdkEvent *event) {
     unsigned total = this->_selected_nodes->allPoints().size();
 
     if (sz != 0) {
-        char *nodestring = g_strdup_printf(
-            ngettext("<b>%u of %u</b> node selected.", "<b>%u of %u</b> nodes selected.", total),
-            sz, total);
+        char *nodestring; 
+        if (sz == 2) {
+            Inkscape::UI::ControlPointSelection::Set &selectionNodes = this->_selected_nodes->allPoints();
+            std::vector<Geom::Point> selectedNodesPositions;
+            for (Inkscape::UI::ControlPointSelection::Set::iterator i = selectionNodes.begin(); i != selectionNodes.end(); ++i) {
+                if ((*i)->selected()) {
+                    Inkscape::UI::Node *n = dynamic_cast<Inkscape::UI::Node *>(*i);
+                    selectedNodesPositions.push_back(n->position());
+                }
+            }
+            g_assert(selectedNodesPositions.size() == 2);
+            Geom::Point difference = selectedNodesPositions[0] - selectedNodesPositions[1];
+            double angle = Geom::atan2(difference);
+            if (angle < 0) {
+                angle += 2*M_PI;
+            }
+            angle *= 180.0/M_PI;
+            nodestring = g_strdup_printf(
+                "<b>%u of %u</b> nodes selected, angle: %.2f°.",
+                sz, total, angle);
+        }
+        else {
+            nodestring = g_strdup_printf(
+                ngettext("<b>%u of %u</b> node selected.", "<b>%u of %u</b> nodes selected.", total),
+                sz, total);
+        }
 
         if (this->_last_over) {
             // TRANSLATORS: The %s below is where the "%u of %u nodes selected" sentence gets put
