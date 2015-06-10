@@ -677,9 +677,7 @@ void NodeTool::update_tip(GdkEvent *event) {
             }
             g_assert(positions.size() == 2);
             const double angle = Geom::rad_to_deg(Geom::Line(positions[0], positions[1]).angle());
-            nodestring = g_strdup_printf(
-                "<b>%u of %u</b> nodes selected, angle: %.2f°.",
-                sz, total, angle);
+            nodestring = g_strdup_printf("<b>%u of %u</b> nodes selected, angle: %.2f°.", sz, total, angle);
         }
         else {
             nodestring = g_strdup_printf(
