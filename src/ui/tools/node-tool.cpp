@@ -667,21 +667,16 @@ void NodeTool::update_tip(GdkEvent *event) {
     if (sz != 0) {
         char *nodestring; 
         if (sz == 2) {
-            Inkscape::UI::ControlPointSelection::Set &selectionNodes = this->_selected_nodes->allPoints();
-            std::vector<Geom::Point> selectedNodesPositions;
-            for (Inkscape::UI::ControlPointSelection::Set::iterator i = selectionNodes.begin(); i != selectionNodes.end(); ++i) {
+            Inkscape::UI::ControlPointSelection::Set &selection_nodes = this->_selected_nodes->allPoints();
+            std::vector<Geom::Point> positions;
+            for (Inkscape::UI::ControlPointSelection::Set::iterator i = selection_nodes.begin(); i != selection_nodes.end(); ++i) {
                 if ((*i)->selected()) {
                     Inkscape::UI::Node *n = dynamic_cast<Inkscape::UI::Node *>(*i);
-                    selectedNodesPositions.push_back(n->position());
+                    positions.push_back(n->position());
                 }
             }
-            g_assert(selectedNodesPositions.size() == 2);
-            Geom::Point difference = selectedNodesPositions[0] - selectedNodesPositions[1];
-            double angle = Geom::atan2(difference);
-            if (angle < 0) {
-                angle += 2*M_PI;
-            }
-            angle *= 180.0/M_PI;
+            g_assert(positions.size() == 2);
+            const double angle = Geom::rad_to_deg(Geom::Line(positions[0], positions[1]).angle());
             nodestring = g_strdup_printf(
                 "<b>%u of %u</b> nodes selected, angle: %.2f°.",
                 sz, total, angle);
