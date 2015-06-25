@@ -119,10 +119,10 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     font_specification( "-inkscape-font-specification"       ),  // SPIString
 
     // Font variants
-    font_variant_ligatures( "font-variant-ligatures",  enum_font_variant_ligatures,  SP_CSS_FONT_VARIANT_LIGATURES_NORMAL  ),
+    font_variant_ligatures( "font-variant-ligatures",  enum_font_variant_ligatures ),
     font_variant_position(  "font-variant-position",   enum_font_variant_position,   SP_CSS_FONT_VARIANT_POSITION_NORMAL   ),
     font_variant_caps(      "font-variant-caps",       enum_font_variant_caps,       SP_CSS_FONT_VARIANT_CAPS_NORMAL       ),
-    font_variant_numeric(   "font-variant-numeric",    enum_font_variant_numeric,    SP_CSS_FONT_VARIANT_NUMERIC_NORMAL    ),
+    font_variant_numeric(   "font-variant-numeric",    enum_font_variant_numeric ),
     font_variant_alternates("font-variant-alternates", enum_font_variant_alternates, SP_CSS_FONT_VARIANT_ALTERNATES_NORMAL ),
     font_variant_east_asian("font-variant-east_asian", enum_font_variant_east_asian, SP_CSS_FONT_VARIANT_EAST_ASIAN_NORMAL ),
     font_feature_settings(  "font-feature-settings",   "normal" ),
@@ -1190,6 +1190,92 @@ SPStyle::_mergeObjectStylesheet( SPObject const *const object ) {
     }
 }
 
+std::string
+SPStyle::getFontFeatureString() {
+
+    std::string feature_string;
+
+    if ( !(font_variant_ligatures.value & SP_CSS_FONT_VARIANT_LIGATURES_COMMON) )
+        feature_string += "liga 0, clig 0, ";
+    if (   font_variant_ligatures.value & SP_CSS_FONT_VARIANT_LIGATURES_DISCRETIONARY )
+        feature_string += "dlig, ";
+    if (   font_variant_ligatures.value & SP_CSS_FONT_VARIANT_LIGATURES_HISTORICAL )
+        feature_string += "hlig, ";
+    if ( !(font_variant_ligatures.value & SP_CSS_FONT_VARIANT_LIGATURES_CONTEXTUAL) )
+        feature_string += "calt 0, ";
+
+    if ( font_variant_position.value & SP_CSS_FONT_VARIANT_POSITION_SUB )
+        feature_string += "subs, ";
+    if ( font_variant_position.value & SP_CSS_FONT_VARIANT_POSITION_SUPER )
+        feature_string += "sups, ";
+
+    if ( font_variant_caps.value & SP_CSS_FONT_VARIANT_CAPS_SMALL )
+        feature_string += "smcp, ";
+    if ( font_variant_caps.value & SP_CSS_FONT_VARIANT_CAPS_ALL_SMALL )
+        feature_string += "smcp, c2sc, ";
+    if ( font_variant_caps.value & SP_CSS_FONT_VARIANT_CAPS_PETITE )
+        feature_string += "pcap, ";
+    if ( font_variant_caps.value & SP_CSS_FONT_VARIANT_CAPS_ALL_PETITE )
+        feature_string += "pcap, c2pc, ";
+    if ( font_variant_caps.value & SP_CSS_FONT_VARIANT_CAPS_UNICASE )
+        feature_string += "unic, ";
+    if ( font_variant_caps.value & SP_CSS_FONT_VARIANT_CAPS_TITLING )
+        feature_string += "titl, ";
+
+    if ( font_variant_numeric.value & SP_CSS_FONT_VARIANT_NUMERIC_LINING_NUMS )
+        feature_string += "lnum, ";
+    if ( font_variant_numeric.value & SP_CSS_FONT_VARIANT_NUMERIC_OLDSTYLE_NUMS )
+        feature_string += "onum, ";
+    if ( font_variant_numeric.value & SP_CSS_FONT_VARIANT_NUMERIC_PROPORTIONAL_NUMS )
+        feature_string += "pnum, ";
+    if ( font_variant_numeric.value & SP_CSS_FONT_VARIANT_NUMERIC_TABULAR_NUMS )
+        feature_string += "tnum, ";
+    if ( font_variant_numeric.value & SP_CSS_FONT_VARIANT_NUMERIC_DIAGONAL_FRACTIONS )
+        feature_string += "frac, ";
+    if ( font_variant_numeric.value & SP_CSS_FONT_VARIANT_NUMERIC_STACKED_FRACTIONS )
+        feature_string += "afrc, ";
+    if ( font_variant_numeric.value & SP_CSS_FONT_VARIANT_NUMERIC_ORDINAL )
+        feature_string += "ordn, ";
+    if ( font_variant_numeric.value & SP_CSS_FONT_VARIANT_NUMERIC_SLASHED_ZERO )
+        feature_string += "zero, ";
+
+    if( font_variant_east_asian.value & SP_CSS_FONT_VARIANT_EAST_ASIAN_JIS78 )
+        feature_string += "jp78, ";
+    if( font_variant_east_asian.value & SP_CSS_FONT_VARIANT_EAST_ASIAN_JIS83 )
+        feature_string += "jp83, ";
+    if( font_variant_east_asian.value & SP_CSS_FONT_VARIANT_EAST_ASIAN_JIS90 )
+        feature_string += "jp90, ";
+    if( font_variant_east_asian.value & SP_CSS_FONT_VARIANT_EAST_ASIAN_JIS04 )
+        feature_string += "jp04, ";
+    if( font_variant_east_asian.value & SP_CSS_FONT_VARIANT_EAST_ASIAN_SIMPLIFIED )
+        feature_string += "smpl, ";
+    if( font_variant_east_asian.value & SP_CSS_FONT_VARIANT_EAST_ASIAN_TRADITIONAL )
+        feature_string += "trad, ";
+    if( font_variant_east_asian.value & SP_CSS_FONT_VARIANT_EAST_ASIAN_FULL_WIDTH )
+        feature_string += "fwid, ";
+    if( font_variant_east_asian.value & SP_CSS_FONT_VARIANT_EAST_ASIAN_PROPORTIONAL_WIDTH )
+        feature_string += "pwid, ";
+    if( font_variant_east_asian.value & SP_CSS_FONT_VARIANT_EAST_ASIAN_RUBY )
+        feature_string += "ruby, ";
+
+    if ( strcmp( font_feature_settings.value, "normal") ) {
+        // We do no sanity checking...
+        feature_string += font_feature_settings.value; 
+        feature_string += ", ";
+    }
+
+    if (feature_string.empty()) {
+        feature_string = "normal";
+    } else {
+        // Remove last ", "
+        feature_string.erase( feature_string.size() - 1 );
+        feature_string.erase( feature_string.size() - 1 );
+    }
+
+    return feature_string;
+}
+
+
 // Internal
 /**
  * Release callback.
@@ -1710,6 +1796,14 @@ sp_css_attr_unset_text(SPCSSAttr *css)
     sp_repr_css_set_property(css, "text-decoration-line", NULL);
     sp_repr_css_set_property(css, "text-decoration-color", NULL);
     sp_repr_css_set_property(css, "text-decoration-style", NULL);
+
+    sp_repr_css_set_property(css, "font-variant-ligatures", NULL);
+    sp_repr_css_set_property(css, "font-variant-position", NULL);
+    sp_repr_css_set_property(css, "font-variant-caps", NULL);
+    sp_repr_css_set_property(css, "font-variant-numeric", NULL);
+    sp_repr_css_set_property(css, "font-variant-alternates", NULL);
+    sp_repr_css_set_property(css, "font-variant-east-asian", NULL);
+    sp_repr_css_set_property(css, "font-feature-settings", NULL);
 
     return css;
 }

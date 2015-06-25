@@ -21,8 +21,8 @@
 
 /*
 File:      upmf.c
-Version:   0.0.9
-Date:      25-MAR-2015
+Version:   0.0.11
+Date:      28-MAY-2015
 Author:    David Mathog, Biology Division, Caltech
 email:     mathog@caltech.edu
 Copyright: 2015 David Mathog and California Institute of Technology (Caltech)
@@ -3077,7 +3077,7 @@ U_PSEUDO_OBJ *U_PMF_POINTR_set(uint32_t Elements, const U_PMF_POINTF *Coords){
    poi = U_PMF_4NUM_set(Elements);
    po = U_PO_append(po, poi->Data, poi->Used);      
    U_PO_free(&poi);
-   if(po)goto end;
+   if(!po)goto end;
 
    for(Xf = Yf = 0.0 ;Elements; Elements--, Coords++){
       Xf = U_ROUND(Coords->X) - Xf;
@@ -6575,15 +6575,17 @@ int U_PMF_VARPOINTS_get(const char *contents, uint16_t Flags, int Elements, U_PM
       }
    }
    else if(Flags & U_PPF_C){
-      for(XFS = YFS = 0.0; Elements; Elements--, pts++){
+      for(XF = YF = 0.0; Elements; Elements--, pts++){
          if(!U_PMF_POINT_get(&contents, &XF, &XF, blimit))break; /* this should never happen */
          pts->X    = XF;
          pts->Y    = YF; 
       }
    }
    else {
-      for(XFS = YFS = 0.0; Elements; Elements--, pts++){
-         (void) U_PMF_POINTF_get(&contents, &(pts->X), &(pts->Y), blimit); 
+      for(XF = YF = 0.0; Elements; Elements--, pts++){
+         (void) U_PMF_POINTF_get(&contents, &XF, &YF, blimit); 
+         pts->X    = XF;
+         pts->Y    = YF; 
       }
    }
    if(Elements){ /* some error in the preceding */
