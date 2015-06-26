@@ -429,6 +429,9 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
         path_info->set(original_pathv);
         size_t number_curves = path_info->size();
         //if are diferent sizes call to poinwise recalculate
+        //TODO: fire a reverse satellites on reverse path. Maybe a new method 
+        //like "are_similar" to avoid precission issues on reverse a pointwise
+        // and after convert to Pathvector
         if (pointwise && number_curves != sats.size()) {
             Satellite sat(sats[0].satellite_type);
             sat.setIsTime(sats[0].is_time);

@@ -83,11 +83,7 @@ void Pointwise::setStart()
  */
 void Pointwise::recalculateForNewPwd2(Geom::Piecewise<Geom::D2<Geom::SBasis> > const A, Geom::PathVector const B, Satellite const S)
 {
-    Geom::PathVector const reversed = path_from_piecewise(remove_short_cuts(reverse(_pwd2), 0.1), 0.001);
-    Geom::PathVector const original = path_from_piecewise(remove_short_cuts(reverse(A), 0.1), 0.001);
-    if (reversed == original) {
-        pwd2Reverse(A);
-    } else if (_pwd2.size() > A.size()) {
+    if (_pwd2.size() > A.size()) {
         pwd2Sustract(A);
     } else if (_pwd2.size() < A.size()) {
         pwd2Append(A, S);
@@ -114,14 +110,6 @@ void Pointwise::pwd2Sustract(Geom::Piecewise<Geom::D2<Geom::SBasis> > const A)
         }
     }
     setSatellites(sats);
-}
-
-/** Reverse a path
- */
-void Pointwise::pwd2Reverse(Geom::Piecewise<Geom::D2<Geom::SBasis> > const A){
-    std::reverse(_satellites.begin(), _satellites.end());
-    setPwd2(A);
-    setSatellites(_satellites);
 }
 
 /** Append nodes/subpaths to current pointwise

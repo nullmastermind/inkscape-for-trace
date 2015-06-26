@@ -54,7 +54,6 @@ public:
     void setStart();
 
     void recalculateForNewPwd2(Geom::Piecewise<Geom::D2<Geom::SBasis> > const A, Geom::PathVector const B, Satellite const S);
-    void pwd2Reverse(Geom::Piecewise<Geom::D2<Geom::SBasis> > const A);
     void pwd2Sustract(Geom::Piecewise<Geom::D2<Geom::SBasis> > const A);
     void pwd2Append(Geom::Piecewise<Geom::D2<Geom::SBasis> > const A, Satellite const S);
     void subpathToBack(size_t subpath);
