@@ -380,20 +380,6 @@ bool Path::operator==(Path const &other) const
     return *_curves == *other._curves;
 }
 
-Path &Path::operator*=(Affine const &m)
-{
-    _unshare();
-    Sequence::iterator last = _curves->end() - 1;
-    Sequence::iterator it;
-
-    for (it = _curves->begin(); it != last; ++it) {
-        it->transform(m);
-    }
-    _closing_seg->transform(m);
-    checkContinuity();
-    return *this;
-}
-
 void Path::start(Point const &p) {
     if (_curves->size() > 1) {
         clear();
@@ -507,7 +493,7 @@ protected:
             int ib = i->bound.index;
 
             if (which == 0) {
-                cx = record.item->intersect(*i->item);
+                cx = record.item->intersect(*i->item, _precision);
             } else {
                 cx = i->item->intersect(*record.item, _precision);
                 std::swap(ia, ib);
@@ -535,7 +521,14 @@ std::vector<PathIntersection> Path::intersect(Path const &other, Coord precision
     CurveSweeper sweeper(*this, other, result, precision);
     sweeper.process();
 
-    // TODO: remove multiple intersections within precision of each other?
+    // preprocessing to remove duplicate intersections at endpoints
+    for (std::size_t i = 0; i < result.size(); ++i) {
+        result[i].first.normalizeForward(size());
+        result[i].second.normalizeForward(other.size());
+    }
+    std::sort(result.begin(), result.end());
+    result.erase(std::unique(result.begin(), result.end()), result.end());
+
     return result;
 }
 
