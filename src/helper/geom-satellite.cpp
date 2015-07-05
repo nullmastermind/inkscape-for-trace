@@ -10,7 +10,7 @@
 
 #include <helper/geom-satellite.h>
 #include <2geom/curve.h>
-#include <2geom/nearest-point.h>
+#include <2geom/nearest-time.h>
 #include <2geom/path-intersection.h>
 #include <2geom/sbasis-to-bezier.h>
 #include <2geom/ray.h>
@@ -84,8 +84,7 @@ double arcLengthAt(double A, Geom::D2<Geom::SBasis> const d2_in)
  */
 double Satellite::radToLen(
     double A, Geom::D2<Geom::SBasis> const d2_in,
-    Geom::D2<Geom::SBasis> const d2_out,
-    Satellite const previousSatellite) const
+    Geom::D2<Geom::SBasis> const d2_out) const
 {
     double len = 0;
     Geom::Piecewise<Geom::D2<Geom::SBasis> > offset_curve0 =
@@ -99,11 +98,11 @@ double Satellite::radToLen(
     Geom::Crossings cs = Geom::crossings(p0, p1);
     if (cs.size() > 0) {
         Geom::Point cp = p0(cs[0].ta);
-        double p0pt = nearest_point(cp, d2_out);
+        double p0pt = nearest_time(cp, d2_out);
         len = arcLengthAt(p0pt, d2_out);
     } else {
         if (A > 0) {
-            len = radToLen(A * -1, d2_in, d2_out, previousSatellite);
+            len = radToLen(A * -1, d2_in, d2_out);
         }
     }
     return len;
@@ -216,7 +215,7 @@ Geom::Point Satellite::getPosition(Geom::D2<Geom::SBasis> d2_in) const
  */
 void Satellite::setPosition(Geom::Point p, Geom::D2<Geom::SBasis> d2_in)
 {
-    double A = Geom::nearest_point(p, d2_in);
+    double A = Geom::nearest_time(p, d2_in);
     if (!is_time) {
         A = arcLengthAt(A, d2_in);
     }

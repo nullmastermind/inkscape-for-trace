@@ -160,11 +160,11 @@ void Pointwise::pwd2Append(Geom::Piecewise<Geom::D2<Geom::SBasis> > const A, Sat
 
 void Pointwise::subpathToBack(size_t subpath)
 {
-    std::vector<Geom::Path> path_in =
+    Geom::PathVector path_in =
         path_from_piecewise(remove_short_cuts(_pwd2, 0.1), 0.001);
     size_t subpath_counter = 0;
     size_t counter = 0;
-    std::vector<Geom::Path> tmp_path;
+    Geom::PathVector tmp_path;
     Geom::Path to_back;
     for (Geom::PathVector::const_iterator path_it = path_in.begin();
             path_it != path_in.end(); ++path_it) 
@@ -205,12 +205,12 @@ void Pointwise::subpathReverse(size_t start, size_t end)
         _satellites.insert(_satellites.begin() + end + 1, _satellites[i]);
         _satellites.erase(_satellites.begin() + i);
     }
-    std::vector<Geom::Path> path_in =
+    Geom::PathVector path_in =
         path_from_piecewise(remove_short_cuts(_pwd2, 0.1), 0.001);
     size_t counter = 0;
     size_t subpath_counter = 0;
     size_t subpath = _path_info.subPathIndex(start);
-    std::vector<Geom::Path> tmp_path;
+    Geom::PathVector tmp_path;
     Geom::Path rev;
     for (Geom::PathVector::const_iterator path_it = path_in.begin();
             path_it != path_in.end(); ++path_it)
@@ -220,7 +220,7 @@ void Pointwise::subpathReverse(size_t start, size_t end)
         }
         counter++;
         if (subpath_counter == subpath) {
-            tmp_path.push_back(path_it->reverse());
+            tmp_path.push_back(path_it->reversed());
         } else {
             tmp_path.push_back(*path_it);
         }

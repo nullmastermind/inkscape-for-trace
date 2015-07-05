@@ -47,8 +47,7 @@ public:
                     Geom::D2<Geom::SBasis> d2_out,
                     Satellite previousSatellite) const;
     double radToLen(double A, Geom::D2<Geom::SBasis> d2_in,
-                    Geom::D2<Geom::SBasis> d2_out,
-                    Satellite previousSatellite) const;
+                    Geom::D2<Geom::SBasis> d2_out) const;
 
     double time(Geom::D2<Geom::SBasis> d2_in) const;
     double time(double A, bool I, Geom::D2<Geom::SBasis> d2_in) const;

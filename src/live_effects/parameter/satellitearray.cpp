@@ -134,8 +134,8 @@ void SatelliteArrayParam::updateCanvasIndicators(bool mirror)
         } else {
             aff *= Geom::Rotate(ray_1.angle() - Geom::deg_to_rad(270));
         }
+        aff *= Geom::Translate(d2.valueAt(pos));
         pathv *= aff;
-        pathv += d2.valueAt(pos);
         _hp.push_back(pathv[0]);
         _hp.push_back(pathv[1]);
         if (overflow) {
@@ -146,8 +146,10 @@ void SatelliteArrayParam::updateCanvasIndicators(bool mirror)
                 svgd = "M 0.7,0.35 A 0.35,0.35 0 0 1 0.35,0.7 0.35,0.35 0 0 1 0,0.35 "
                        "0.35,0.35 0 0 1 0.35,0 0.35,0.35 0 0 1 0.7,0.35 Z";
                 Geom::PathVector pathv = sp_svg_read_pathv(svgd);
-                pathv *= Geom::Scale(diameter);
-                pathv += point_a - Geom::Point(diameter * 0.35, diameter * 0.35);
+                aff = Geom::Affine();
+                aff *= Geom::Scale(diameter);
+                aff *= Geom::Translate(point_a - Geom::Point(diameter * 0.35, diameter * 0.35));
+                pathv *= aff;
                 _hp.push_back(pathv[0]);
             } else {
                 char const *svgd;
@@ -162,8 +164,8 @@ void SatelliteArrayParam::updateCanvasIndicators(bool mirror)
                 } else {
                     aff *= Geom::Rotate(ray_1.angle() - Geom::deg_to_rad(270));
                 }
+                aff *= Geom::Translate(d2.valueAt(pos));
                 pathv *= aff;
-                pathv += d2.valueAt(pos);
                 _hp.push_back(pathv[0]);
             }
         }
@@ -289,7 +291,7 @@ void FilletChamferKnotHolderEntity::knot_set(Geom::Point const &p,
         boost::optional<size_t> d2_prev_index = path_info->previous(index);
         if (d2_prev_index) {
             Geom::D2<Geom::SBasis> d2_in = pwd2[*d2_prev_index];
-            double mirror_time = Geom::nearest_point(s, d2_in);
+            double mirror_time = Geom::nearest_time(s, d2_in);
             double time_start = 0;
             std::vector<Satellite> sats = pointwise->getSatellites();
             time_start = sats[*d2_prev_index].time(d2_in);
@@ -470,7 +472,7 @@ void FilletChamferKnotHolderEntity::knot_set_offset(Satellite satellite)
         path_info->set(pwd2);
         boost::optional<size_t> prev = path_info->previous(index);
         if (prev) {
-            amount = _pparam->_vector.at(index).radToLen(amount, pwd2[*prev], pwd2[index], _pparam->_vector.at(*prev));
+            amount = _pparam->_vector.at(index).radToLen(amount, pwd2[*prev], pwd2[index]);
         } else {
             amount = 0.0;
         }
