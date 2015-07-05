@@ -659,6 +659,7 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
                             is_straight_curve(*curve_it2_fixed) && method != FM_BEZIER) ||
                             method == FM_ARC) 
                     {
+                        ccw_toggle = ccw_toggle ? 0 : 1;
                         path_chamfer.appendNew<Geom::EllipticalArc>(rx, ry, arc_angle, 0,
                                 ccw_toggle, end_arc_point);
                     } else {
@@ -678,7 +679,6 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
                             is_straight_curve(*curve_it2_fixed) && method != FM_BEZIER) ||
                             method == FM_ARC) 
                     {
-                        ccw_toggle = ccw_toggle ? 0 : 1;
                         path_chamfer.appendNew<Geom::EllipticalArc>(rx, ry, arc_angle, 0,
                                 ccw_toggle, end_arc_point);
                     } else {
@@ -697,7 +697,6 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
                             is_straight_curve(*curve_it2_fixed) && method != FM_BEZIER) ||
                             method == FM_ARC)
                     {
-                        ccw_toggle = ccw_toggle ? 0 : 1;
                         tmp_path.appendNew<Geom::EllipticalArc>(rx, ry, arc_angle, 0, ccw_toggle,
                                                              end_arc_point);
                     } else {
@@ -709,6 +708,7 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
                             is_straight_curve(*curve_it2_fixed) && method != FM_BEZIER) ||
                             method == FM_ARC) 
                     {
+                        ccw_toggle = ccw_toggle ? 0 : 1;
                         tmp_path.appendNew<Geom::EllipticalArc>(rx, ry, arc_angle, 0, ccw_toggle,
                                                              end_arc_point);
                     } else {
