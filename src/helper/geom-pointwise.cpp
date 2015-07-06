@@ -57,7 +57,7 @@ void Pointwise::setStart()
     Geom::PathVector pointwise_pv = path_from_piecewise(Geom::remove_short_cuts(_pwd2,0.01),0.01);
     int counter = 0;
     for (Geom::PathVector::const_iterator path_it = pointwise_pv.begin();
-                path_it != pointwise_pv.end(); ++path_it) {
+            path_it != pointwise_pv.end(); ++path_it) {
         if (path_it->empty()) {
             continue;
         }
@@ -65,7 +65,7 @@ void Pointwise::setStart()
         Geom::Path::const_iterator curve_endit = path_it->end_default();
         int index = 0;
         while (curve_it != curve_endit) {
-            if(index == 0){
+            if(index == 0) {
                 if (!path_it->closed()) {
                     _satellites[counter].hidden = true;
                     _satellites[counter].active = false;
@@ -108,8 +108,7 @@ void Pointwise::pwd2Subtract(pwd2sb const &A)
         Geom::PathTime sat_curve_time = sat_path.nearestTime(pointwise_pv.curveAt(i - counter).initialPoint());
         Geom::PathTime sat_curve_time_start = sat_path.nearestTime(sat_path.initialPoint());
         if (sat_curve_time_start.curve_index < sat_curve_time.curve_index||
-                !are_near(pwd2[i].at0(), A[i - counter].at0())) 
-        {
+                !are_near(pwd2[i].at0(), A[i - counter].at0())) {
             counter++;
         } else {
             sats.push_back(_satellites[i - counter]);
@@ -130,14 +129,14 @@ void Pointwise::pwd2Append(pwd2sb const &A, Satellite const &S)
         Geom::Path sat_path = pointwise_pv.pathAt(i - counter);
         boost::optional< Geom::PathVectorTime > sat_curve_time_optional = pointwise_pv.nearestTime(pointwise_pv.curveAt(i-counter).initialPoint());
         Geom::PathVectorTime sat_curve_time;
-        if(sat_curve_time_optional){
+        if(sat_curve_time_optional) {
             sat_curve_time = *sat_curve_time_optional;
         }
         sat_curve_time.normalizeForward(sat_path.size());
         size_t first = Geom::nearest_time(sat_path.initialPoint(),_pwd2);
         size_t last = first + sat_path.size() - 1;
         bool is_start = false;
-        if(sat_curve_time.curve_index == 0){
+        if(sat_curve_time.curve_index == 0) {
             is_start = true;
         }
         //Check for subpath closed. If a subpath is closed, is not reversed or moved
@@ -146,7 +145,7 @@ void Pointwise::pwd2Append(pwd2sb const &A, Satellite const &S)
         pointwise_pv = path_from_piecewise(Geom::remove_short_cuts(A,0.01),0.01);
         sat_path = pointwise_pv.pathAt(i);
         sat_curve_time_optional = pointwise_pv.nearestTime(pointwise_pv.curveAt(i).initialPoint());
-        if(sat_curve_time_optional){
+        if(sat_curve_time_optional) {
             sat_curve_time = *sat_curve_time_optional;
         }
         sat_curve_time.normalizeForward(sat_path.size());
@@ -168,7 +167,7 @@ void Pointwise::pwd2Append(pwd2sb const &A, Satellite const &S)
             subpathReverse(first, last);
         }
 
-        if (_pwd2.size() <= i - counter || !are_near(_pwd2[i - counter].at0(), A[i].at0())){
+        if (_pwd2.size() <= i - counter || !are_near(_pwd2[i - counter].at0(), A[i].at0())) {
             counter++;
             sats.push_back(S);
         } else {
@@ -188,8 +187,7 @@ void Pointwise::subpathToBack(size_t subpath)
     Geom::PathVector tmp_path;
     Geom::Path to_back;
     for (Geom::PathVector::const_iterator path_it = path_in.begin();
-            path_it != path_in.end(); ++path_it) 
-    {
+            path_it != path_in.end(); ++path_it) {
         if (path_it->empty()) {
             continue;
         }
@@ -233,7 +231,7 @@ void Pointwise::subpathReverse(size_t start, size_t end)
     Geom::Path sat_path = path_in.pathAt(start);
     boost::optional< Geom::PathVectorTime > sat_curve_time_optional = path_in.nearestTime(path_in.curveAt(start).initialPoint());
     Geom::PathVectorTime sat_curve_time;
-    if(sat_curve_time_optional){
+    if(sat_curve_time_optional) {
         sat_curve_time = *sat_curve_time_optional;
     }
     sat_curve_time.normalizeForward(sat_path.size());
@@ -241,8 +239,7 @@ void Pointwise::subpathReverse(size_t start, size_t end)
     Geom::PathVector tmp_path;
     Geom::Path rev;
     for (Geom::PathVector::const_iterator path_it = path_in.begin();
-            path_it != path_in.end(); ++path_it)
-    {
+            path_it != path_in.end(); ++path_it) {
         if (path_it->empty()) {
             continue;
         }
@@ -264,14 +261,13 @@ void Pointwise::insertDegenerateSatellites(pwd2sb const &A, Geom::PathVector con
     size_t size_A = A.size();
     size_t size_B = B.curveCount();
     size_t satellite_gap = size_B - size_A;
-    if (satellite_gap == 0){
+    if (satellite_gap == 0) {
         return;
     }
     size_t counter = 0;
     size_t counter_added = 0;
     for (Geom::PathVector::const_iterator path_it = B.begin();
-            path_it != B.end(); ++path_it) 
-    {
+            path_it != B.end(); ++path_it) {
         if (path_it->empty()) {
             continue;
         }
@@ -284,7 +280,7 @@ void Pointwise::insertDegenerateSatellites(pwd2sb const &A, Geom::PathVector con
             }
         }
         while (curve_it1 != curve_endit) {
-            if ((*curve_it1).isDegenerate() && counter_added < satellite_gap){
+            if ((*curve_it1).isDegenerate() && counter_added < satellite_gap) {
                 counter_added++;
                 _satellites.insert(_satellites.begin() + counter + 1 ,S);
             }

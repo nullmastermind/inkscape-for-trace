@@ -230,9 +230,8 @@ void Satellite::setSatelliteType(gchar const *A)
     std::map<std::string, SatelliteType> gchar_map_to_satellite_type =
         boost::assign::map_list_of("F", FILLET)("IF", INVERSE_FILLET)("C", CHAMFER)("IC", INVERSE_CHAMFER)("KO", INVALID_SATELLITE);
     std::map<std::string, SatelliteType>::iterator it = gchar_map_to_satellite_type.find(std::string(A));
-    if(it != gchar_map_to_satellite_type.end())
-    {
-       satellite_type = it->second;
+    if(it != gchar_map_to_satellite_type.end()) {
+        satellite_type = it->second;
     }
 }
 

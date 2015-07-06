@@ -36,13 +36,34 @@ public:
     Satellite(SatelliteType satellite_type);
 
     virtual ~Satellite();
-    void setIsTime(bool set_is_time){is_time = set_is_time;}
-    void setActive(bool set_active){active = set_active;}
-    void setHasMirror(bool set_has_mirror){has_mirror = set_has_mirror;}
-    void setHidden(bool set_hidden){hidden = set_hidden;}
-    void setAmount(bool set_amount){amount = set_amount;}
-    void setAngle(bool set_angle){angle = set_angle;}
-    void setSteps(bool set_steps){steps = set_steps;}
+    void setIsTime(bool set_is_time)
+    {
+        is_time = set_is_time;
+    }
+    void setActive(bool set_active)
+    {
+        active = set_active;
+    }
+    void setHasMirror(bool set_has_mirror)
+    {
+        has_mirror = set_has_mirror;
+    }
+    void setHidden(bool set_hidden)
+    {
+        hidden = set_hidden;
+    }
+    void setAmount(bool set_amount)
+    {
+        amount = set_amount;
+    }
+    void setAngle(bool set_angle)
+    {
+        angle = set_angle;
+    }
+    void setSteps(bool set_steps)
+    {
+        steps = set_steps;
+    }
     double lenToRad(double A, Geom::D2<Geom::SBasis> d2_in,
                     Geom::D2<Geom::SBasis> d2_out,
                     Satellite previousSatellite) const;

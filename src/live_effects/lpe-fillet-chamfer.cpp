@@ -32,7 +32,7 @@ static const Util::EnumDataConverter<FilletMethod> FMConverter(FilletMethodData,
 LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject)
     : Effect(lpeobject),
       satellites_param(_("pair_array_param"), _("pair_array_param"),
-                                 "satellites_param", &wr, this),
+                       "satellites_param", &wr, this),
       method(_("Method:"), _("Methods to calculate the fillet or chamfer"),
              "method", FMConverter, &wr, this, FM_AUTO),
       radius(_("Radius (unit or %):"), _("Radius, in unit or %"), "radius", &wr,
@@ -264,13 +264,11 @@ void LPEFilletChamfer::updateAmount()
     std::vector<Satellite> satellites = pointwise->getSatellites();
     Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = pointwise->getPwd2();
     for (std::vector<Satellite>::iterator it = satellites.begin();
-            it != satellites.end(); ++it) 
-    {
+            it != satellites.end(); ++it) {
         Geom::Path sat_path = pathvector_before_effect.pathAt(it - satellites.begin());
         size_t sat_curve_time = Geom::nearest_time(pathvector_before_effect.curveAt(it - satellites.begin()).initialPoint() , pwd2);
         size_t first = Geom::nearest_time(sat_path.initialPoint() , pwd2);
-        if (!sat_path.closed() && sat_curve_time == first) 
-        {
+        if (!sat_path.closed() && sat_curve_time == first) {
             it->amount = 0;
             continue;
         }
@@ -278,19 +276,19 @@ void LPEFilletChamfer::updateAmount()
             continue;
         }
         boost::optional<size_t> previous = boost::none;
-        if (sat_path.closed() && sat_curve_time == first){
+        if (sat_path.closed() && sat_curve_time == first) {
             sat_curve_time = Geom::nearest_time(sat_path.initialPoint(),pwd2);
             previous = sat_curve_time + sat_path.size() - 1;
-        } else if(!sat_path.closed() || sat_curve_time != first){
+        } else if(!sat_path.closed() || sat_curve_time != first) {
             previous = sat_curve_time - 1;
         }
         if (only_selected) {
             Geom::Point satellite_point = pwd2.valueAt(it - satellites.begin());
             if (isNodePointSelected(satellite_point)) {
                 if (!use_knot_distance && !flexible) {
-                    if(previous){
+                    if(previous) {
                         it->amount = it->radToLen(power, pwd2[*previous],
-                                                pwd2[it - satellites.begin()]);
+                                                  pwd2[it - satellites.begin()]);
                     } else {
                         it->amount = 0.0;
                     }
@@ -300,12 +298,12 @@ void LPEFilletChamfer::updateAmount()
             }
         } else {
             if (!use_knot_distance && !flexible) {
-                if(previous){
+                if(previous) {
                     it->amount = it->radToLen(power, pwd2[*previous],
-                                            pwd2[it - satellites.begin()]);
-                    } else {
-                        it->amount = 0.0;
-                    }
+                                              pwd2[it - satellites.begin()]);
+                } else {
+                    it->amount = 0.0;
+                }
             } else {
                 it->amount = power;
             }
@@ -361,7 +359,7 @@ void LPEFilletChamfer::updateSatelliteType(SatelliteType satellitetype)
 
 void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
 {
-    if(!_hp.empty()){
+    if(!_hp.empty()) {
         _hp.clear();
     }
     SPLPEItem *splpeitem = const_cast<SPLPEItem *>(lpeItem);
@@ -382,7 +380,7 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
         Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2_in = paths_to_pw(original_pathv);
         pwd2_in = remove_short_cuts(pwd2_in, 0.01);
         std::vector<Satellite> sats = satellites_param.data();
-        if(sats.empty()){
+        if(sats.empty()) {
             doOnApply(lpeItem);
             sats = satellites_param.data();
         }
@@ -413,7 +411,7 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
         }
         size_t number_curves = original_pathv.curveCount();
         //if are diferent sizes call to poinwise recalculate
-        //todo: fire a reverse satellites on reverse path. Maybe a new method 
+        //todo: fire a reverse satellites on reverse path. Maybe a new method
         //like "are_similar" to avoid precission issues on reverse a pointwise
         //and after convert to Pathvector
         if (pointwise && number_curves != sats.size()) {
@@ -609,7 +607,7 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
             double arc_angle = Geom::angle_between(x_line, angled_line);
             double radius = Geom::distance(start_arc_point,
                                            middle_point(start_arc_point, end_arc_point)) /
-                                           sin(angle / 2.0);
+                            sin(angle / 2.0);
             Geom::Coord rx = radius;
             Geom::Coord ry = rx;
             if (times[1] != 1) {
@@ -628,8 +626,7 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
                     path_chamfer.start(tmp_path.finalPoint());
                     if ((is_straight_curve(*curve_it1) &&
                             is_straight_curve(*curve_it2_fixed) && method != FM_BEZIER) ||
-                            method == FM_ARC) 
-                    {
+                            method == FM_ARC) {
                         ccw_toggle = ccw_toggle ? 0 : 1;
                         path_chamfer.appendNew<Geom::EllipticalArc>(rx, ry, arc_angle, 0,
                                 ccw_toggle, end_arc_point);
@@ -648,8 +645,7 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
                     path_chamfer.start(tmp_path.finalPoint());
                     if ((is_straight_curve(*curve_it1) &&
                             is_straight_curve(*curve_it2_fixed) && method != FM_BEZIER) ||
-                            method == FM_ARC) 
-                    {
+                            method == FM_ARC) {
                         path_chamfer.appendNew<Geom::EllipticalArc>(rx, ry, arc_angle, 0,
                                 ccw_toggle, end_arc_point);
                     } else {
@@ -666,10 +662,9 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
                 } else if (type == INVERSE_FILLET) {
                     if ((is_straight_curve(*curve_it1) &&
                             is_straight_curve(*curve_it2_fixed) && method != FM_BEZIER) ||
-                            method == FM_ARC)
-                    {
+                            method == FM_ARC) {
                         tmp_path.appendNew<Geom::EllipticalArc>(rx, ry, arc_angle, 0, ccw_toggle,
-                                                             end_arc_point);
+                                                                end_arc_point);
                     } else {
                         tmp_path.appendNew<Geom::CubicBezier>(inverse_handle_1,
                                                               inverse_handle_2, end_arc_point);
@@ -677,11 +672,10 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
                 } else if (type == FILLET) {
                     if ((is_straight_curve(*curve_it1) &&
                             is_straight_curve(*curve_it2_fixed) && method != FM_BEZIER) ||
-                            method == FM_ARC) 
-                    {
+                            method == FM_ARC) {
                         ccw_toggle = ccw_toggle ? 0 : 1;
                         tmp_path.appendNew<Geom::EllipticalArc>(rx, ry, arc_angle, 0, ccw_toggle,
-                                                             end_arc_point);
+                                                                end_arc_point);
                     } else {
                         tmp_path.appendNew<Geom::CubicBezier>(handle_1, handle_2,
                                                               end_arc_point);
