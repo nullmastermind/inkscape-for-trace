@@ -30,7 +30,6 @@ enum FilletMethod {
 class LPEFilletChamfer : public Effect {
 public:
     LPEFilletChamfer(LivePathEffectObject *lpeobject);
-    virtual ~LPEFilletChamfer();
     virtual void doBeforeEffect(SPLPEItem const *lpeItem);
     virtual Geom::PathVector
     doEffect_path(Geom::PathVector const &path_in);

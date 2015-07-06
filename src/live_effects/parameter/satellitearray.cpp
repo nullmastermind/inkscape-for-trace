@@ -37,8 +37,6 @@ SatelliteArrayParam::SatelliteArrayParam(const Glib::ustring &label,
     _last_pointwise = NULL;
 }
 
-SatelliteArrayParam::~SatelliteArrayParam() {}
-
 void SatelliteArrayParam::set_oncanvas_looks(SPKnotShapeType shape,
         SPKnotModeType mode,
         guint32 color)
@@ -76,8 +74,7 @@ void SatelliteArrayParam::updateCanvasIndicators(bool mirror)
         return;
     }
     Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = _last_pointwise->getPwd2();
-    Pathinfo* path_info = new Pathinfo();
-    path_info->set(pwd2);
+    Geom::PathVector pointwise_pv = path_from_piecewise(Geom::remove_short_cuts(pwd2,0.01),0.01);
     if (mirror == true) {
         _hp.clear();
     }
@@ -97,7 +94,17 @@ void SatelliteArrayParam::updateCanvasIndicators(bool mirror)
         double size_out = _vector[i].arcDistance(pwd2[i]);
         double lenght_out = Geom::length(pwd2[i], Geom::EPSILON);
         double lenght_in = 0;
-        boost::optional<size_t> d2_prev_index = path_info->previous(i);
+        
+        Geom::Path sat_path = pointwise_pv.pathAt(i);
+        boost::optional<size_t> d2_prev_index = boost::none;
+        size_t sat_curve_time = Geom::nearest_time(pointwise_pv.curveAt(i).initialPoint() , pwd2);
+        size_t first = Geom::nearest_time(sat_path.initialPoint() , pwd2);
+        if (sat_path.closed() && sat_curve_time == first){
+            sat_curve_time = Geom::nearest_time(sat_path.initialPoint(),pwd2);
+            d2_prev_index = sat_curve_time + sat_path.size() - 1;
+        } else if(!sat_path.closed() || sat_curve_time != first){
+            d2_prev_index = sat_curve_time - 1;
+        }
         if (d2_prev_index) {
             lenght_in = Geom::length(pwd2[*d2_prev_index], Geom::EPSILON);
         }
@@ -285,10 +292,18 @@ void FilletChamferKnotHolderEntity::knot_set(Geom::Point const &p,
     }
     Pointwise *pointwise = _pparam->_last_pointwise;
     Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = pointwise->getPwd2();
-    Pathinfo* path_info = new Pathinfo();
-    path_info->set(pwd2);
-    if (_pparam->_vector.size() <= _index) {
-        boost::optional<size_t> d2_prev_index = path_info->previous(index);
+    Geom::PathVector pointwise_pv = path_from_piecewise(Geom::remove_short_cuts(pwd2,0.01),0.01);
+    if (_index >= _pparam->_vector.size() ) {
+        Geom::Path sat_path = pointwise_pv.pathAt(index);
+        boost::optional<size_t> d2_prev_index = boost::none;
+        size_t sat_curve_time = Geom::nearest_time(pointwise_pv.curveAt(index).initialPoint(),pwd2);
+        size_t first = Geom::nearest_time(sat_path.initialPoint() , pwd2);
+        if (sat_path.closed() && sat_curve_time == first){
+            sat_curve_time = Geom::nearest_time(sat_path.initialPoint(),pwd2);
+            d2_prev_index = sat_curve_time + sat_path.size() - 1;
+        } else if(!sat_path.closed() || sat_curve_time != first){
+            d2_prev_index = sat_curve_time - 1;
+        }
         if (d2_prev_index) {
             Geom::D2<Geom::SBasis> d2_in = pwd2[*d2_prev_index];
             double mirror_time = Geom::nearest_time(s, d2_in);
@@ -334,15 +349,23 @@ Geom::Point FilletChamferKnotHolderEntity::knot_get() const
     }
     Pointwise *pointwise = _pparam->_last_pointwise;
     Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = pointwise->getPwd2();
-    Pathinfo* path_info = new Pathinfo();
-    path_info->set(pwd2);
+    Geom::PathVector pointwise_pv = path_from_piecewise(Geom::remove_short_cuts(pwd2,0.01),0.01);
     if (pwd2.size() <= index) {
         return Geom::Point(Geom::infinity(), Geom::infinity());
     }
     this->knot->show();
     if (_index >= _pparam->_vector.size()) {
         tmp_point = satellite.getPosition(pwd2[index]);
-        boost::optional<size_t> d2_prev_index = path_info->previous(index);
+        Geom::Path sat_path = pointwise_pv.pathAt(index);
+        boost::optional<size_t> d2_prev_index = boost::none;
+        size_t sat_curve_time = Geom::nearest_time(pointwise_pv.curveAt(index).initialPoint(),pwd2);
+        size_t first = Geom::nearest_time(sat_path.initialPoint() , pwd2);
+        if (sat_path.closed() && sat_curve_time == first){
+            sat_curve_time = Geom::nearest_time(sat_path.initialPoint(),pwd2);
+            d2_prev_index = sat_curve_time + sat_path.size() - 1;
+        } else if(!sat_path.closed() || sat_curve_time != first){
+            d2_prev_index = sat_curve_time - 1;
+        }
         if (d2_prev_index) {
             Geom::D2<Geom::SBasis> d2_in = pwd2[*d2_prev_index];
             double s = satellite.arcDistance(pwd2[index]);
@@ -425,20 +448,28 @@ void FilletChamferKnotHolderEntity::knot_click(guint state)
         }
     } else if (state & GDK_SHIFT_MASK) {
         Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = _pparam->_last_pointwise->getPwd2();
-        Pathinfo* path_info = new Pathinfo();
-        path_info->set(pwd2);
+        Geom::PathVector pointwise_pv = path_from_piecewise(Geom::remove_short_cuts(pwd2,0.01),0.01);
         double amount = _pparam->_vector.at(index).amount;
+        Geom::Path sat_path = pointwise_pv.pathAt(index);
+        boost::optional<size_t> d2_prev_index = boost::none;
+        size_t sat_curve_time = Geom::nearest_time(pointwise_pv.curveAt(index).initialPoint(),pwd2);
+        size_t first = Geom::nearest_time(sat_path.initialPoint() , pwd2);
+        if (sat_path.closed() && sat_curve_time == first){
+            sat_curve_time = Geom::nearest_time(sat_path.initialPoint(),pwd2);
+            d2_prev_index = sat_curve_time + sat_path.size() - 1;
+        } else if(!sat_path.closed() || sat_curve_time != first){
+            d2_prev_index = sat_curve_time - 1;
+        }
+        
         if (!_pparam->_use_distance && !_pparam->_vector.at(index).is_time) {
-            boost::optional<size_t> prev = path_info->previous(index);
-            if (prev) {
-                amount = _pparam->_vector.at(index).lenToRad(amount, pwd2[*prev], pwd2[index],_pparam->_vector.at(*prev));
+            if (d2_prev_index) {
+                amount = _pparam->_vector.at(index).lenToRad(amount, pwd2[*d2_prev_index], pwd2[index],_pparam->_vector.at(*d2_prev_index));
             } else {
                 amount = 0.0;
             }
         }
         bool aprox = false;
         Geom::D2<Geom::SBasis> d2_out = _pparam->_last_pointwise->getPwd2()[index];
-        boost::optional<size_t> d2_prev_index = path_info->previous(index);
         if (d2_prev_index) {
             Geom::D2<Geom::SBasis> d2_in =
                 _pparam->_last_pointwise->getPwd2()[*d2_prev_index];
@@ -468,9 +499,17 @@ void FilletChamferKnotHolderEntity::knot_set_offset(Satellite satellite)
     double max_amount = amount;
     if (!_pparam->_use_distance && !satellite.is_time) {
         Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = _pparam->_last_pointwise->getPwd2();
-        Pathinfo* path_info = new Pathinfo();
-        path_info->set(pwd2);
-        boost::optional<size_t> prev = path_info->previous(index);
+        Geom::PathVector pointwise_pv = path_from_piecewise(Geom::remove_short_cuts(pwd2,0.01),0.01);
+        Geom::Path sat_path = pointwise_pv.pathAt(index);
+        boost::optional<size_t> prev = boost::none;
+        size_t sat_curve_time = Geom::nearest_time(pointwise_pv.curveAt(index).initialPoint(),pwd2);
+        size_t first = Geom::nearest_time(sat_path.initialPoint() , pwd2);
+        if (sat_path.closed() && sat_curve_time == first){
+            sat_curve_time = Geom::nearest_time(sat_path.initialPoint(),pwd2);
+            prev = sat_curve_time + sat_path.size() - 1;
+        } else if(!sat_path.closed() || sat_curve_time != first){
+            prev = sat_curve_time - 1;
+        }
         if (prev) {
             amount = _pparam->_vector.at(index).radToLen(amount, pwd2[*prev], pwd2[index]);
         } else {

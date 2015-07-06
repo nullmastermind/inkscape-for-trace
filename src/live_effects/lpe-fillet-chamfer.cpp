@@ -13,7 +13,6 @@
 #include "display/curve.h"
 #include "helper/geom-curves.h"
 #include "helper/geom-satellite.h"
-#include "helper/geom-pathinfo.h"
 #include <2geom/elliptical-arc.h>
 #include "knotholder.h"
 #include <boost/optional.hpp>
@@ -81,8 +80,6 @@ LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject)
     helper_size.param_set_digits(0);
 }
 
-LPEFilletChamfer::~LPEFilletChamfer() {}
-
 void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
 {
     SPLPEItem *splpeitem = const_cast<SPLPEItem *>(lpeItem);
@@ -101,20 +98,6 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
             }
             Geom::Path::const_iterator curve_it1 = path_it->begin();
             Geom::Path::const_iterator curve_endit = path_it->end_default();
-            if (path_it->closed()) {
-                Geom::Curve const &closingline = path_it->back_closed();
-                // the closing line segment is always of type
-                // LineSegment.
-                if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
-                    // closingline.isDegenerate() did not work, because it only checks for
-                    // *exact* zero length, which goes wrong for relative coordinates and
-                    // rounding errors...
-                    // the closing line segment has zero-length. So stop before that one!
-                    curve_endit = path_it->end_open();
-                }
-            }
-            Geom::Path::const_iterator curve_end = curve_endit;
-            --curve_end;
             int counter = 0;
             size_t steps = chamfer_steps;
             while (curve_it1 != curve_endit) {
@@ -142,7 +125,6 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
         pointwise = new Pointwise();
         pointwise->setPwd2(pwd2_in);
         pointwise->setSatellites(satellites);
-        pointwise->setPathInfo(original_pathv);
         pointwise->setStart();
         satellites_param.setPointwise(pointwise);
     } else {
@@ -281,14 +263,13 @@ void LPEFilletChamfer::updateAmount()
     }
     std::vector<Satellite> satellites = pointwise->getSatellites();
     Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = pointwise->getPwd2();
-    Pathinfo* path_info = new Pathinfo();
-    path_info->set(pwd2);
     for (std::vector<Satellite>::iterator it = satellites.begin();
             it != satellites.end(); ++it) 
     {
-        if (!path_info->closed(it - satellites.begin()) &&
-                path_info->first(it - satellites.begin()) ==
-                (unsigned)(it - satellites.begin())) 
+        Geom::Path sat_path = pathvector_before_effect.pathAt(it - satellites.begin());
+        size_t sat_curve_time = Geom::nearest_time(pathvector_before_effect.curveAt(it - satellites.begin()).initialPoint() , pwd2);
+        size_t first = Geom::nearest_time(sat_path.initialPoint() , pwd2);
+        if (!sat_path.closed() && sat_curve_time == first) 
         {
             it->amount = 0;
             continue;
@@ -296,8 +277,13 @@ void LPEFilletChamfer::updateAmount()
         if (ignore_radius_0 && it->amount == 0) {
             continue;
         }
-        boost::optional<size_t> previous =
-            path_info->previous(it - satellites.begin());
+        boost::optional<size_t> previous = boost::none;
+        if (sat_path.closed() && sat_curve_time == first){
+            sat_curve_time = Geom::nearest_time(sat_path.initialPoint(),pwd2);
+            previous = sat_curve_time + sat_path.size() - 1;
+        } else if(!sat_path.closed() || sat_curve_time != first){
+            previous = sat_curve_time - 1;
+        }
         if (only_selected) {
             Geom::Point satellite_point = pwd2.valueAt(it - satellites.begin());
             if (isNodePointSelected(satellite_point)) {
@@ -425,13 +411,11 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
             it->hidden = hide_knots;
             ++it;
         }
-        Pathinfo* path_info = new Pathinfo();
-        path_info->set(original_pathv);
-        size_t number_curves = path_info->size();
+        size_t number_curves = original_pathv.curveCount();
         //if are diferent sizes call to poinwise recalculate
-        //TODO: fire a reverse satellites on reverse path. Maybe a new method 
+        //todo: fire a reverse satellites on reverse path. Maybe a new method 
         //like "are_similar" to avoid precission issues on reverse a pointwise
-        // and after convert to Pathvector
+        //and after convert to Pathvector
         if (pointwise && number_curves != sats.size()) {
             Satellite sat(sats[0].satellite_type);
             sat.setIsTime(sats[0].is_time);
@@ -447,7 +431,6 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
             pointwise->setPwd2(pwd2_in);
             pointwise->setSatellites(sats);
         }
-        pointwise->setPathInfo(original_pathv);
         pointwise->setStart();
         satellites_param.setPointwise(pointwise);
         refreshKnots();
@@ -487,18 +470,6 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
             tmp_path.append(*curve_it1);
             path_out.push_back(tmp_path);
             continue;
-        }
-        if (path_it->closed()) {
-            const Geom::Curve &closingline = path_it->back_closed();
-            // the closing line segment is always of type
-            // Geom::LineSegment.
-            if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
-                // closingline.isDegenerate() did not work, because it only checks for
-                // *exact* zero length, which goes wrong for relative coordinates and
-                // rounding errors...
-                // the closing line segment has zero-length. So stop before that one!
-                curve_endit = path_it->end_open();
-            }
         }
         size_t counter_curves = 0;
         size_t first = counter;

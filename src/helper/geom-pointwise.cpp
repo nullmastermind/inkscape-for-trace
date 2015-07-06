@@ -29,26 +29,15 @@
  * optional satellites, and remove the active variable in satellites.
  *
  */
-Pointwise::Pointwise() {}
 
-
-Pointwise::~Pointwise() {}
-
-
-Geom::Piecewise<Geom::D2<Geom::SBasis> > Pointwise::getPwd2() const
+pwd2sb Pointwise::getPwd2() const
 {
     return _pwd2;
 }
 
-void Pointwise::setPwd2(Geom::Piecewise<Geom::D2<Geom::SBasis> > const pwd2_in)
+void Pointwise::setPwd2(pwd2sb const &pwd2_in)
 {
     _pwd2 = pwd2_in;
-    _path_info.set(_pwd2);
-}
-
-void Pointwise::setPathInfo(Geom::PathVector const pv)
-{
-    _path_info.set(pv);
 }
 
 std::vector<Satellite> Pointwise::getSatellites() const
@@ -56,7 +45,7 @@ std::vector<Satellite> Pointwise::getSatellites() const
     return _satellites;
 }
 
-void Pointwise::setSatellites(std::vector<Satellite> const sats)
+void Pointwise::setSatellites(std::vector<Satellite> const &sats)
 {
     _satellites = sats;
 }
@@ -65,26 +54,39 @@ void Pointwise::setSatellites(std::vector<Satellite> const sats)
  */
 void Pointwise::setStart()
 {
-    std::vector<std::pair<size_t, bool> > path_info = _path_info.get();
-    for (size_t i = 0; i < path_info.size(); i++) {
-        size_t firstNode = _path_info.first(path_info[i].first);
-        size_t lastNode = _path_info.last(path_info[i].first);
-        if (!_path_info.closed(lastNode)) {
-            _satellites[firstNode].hidden = true;
-            _satellites[firstNode].active = false;
-        } else {
-            _satellites[firstNode].active = true;
-            _satellites[firstNode].hidden = _satellites[firstNode + 1].hidden;
+    Geom::PathVector pointwise_pv = path_from_piecewise(Geom::remove_short_cuts(_pwd2,0.01),0.01);
+    int counter = 0;
+    for (Geom::PathVector::const_iterator path_it = pointwise_pv.begin();
+                path_it != pointwise_pv.end(); ++path_it) {
+        if (path_it->empty()) {
+            continue;
+        }
+        Geom::Path::const_iterator curve_it = path_it->begin();
+        Geom::Path::const_iterator curve_endit = path_it->end_default();
+        int index = 0;
+        while (curve_it != curve_endit) {
+            if(index == 0){
+                if (!path_it->closed()) {
+                    _satellites[counter].hidden = true;
+                    _satellites[counter].active = false;
+                } else {
+                    _satellites[counter].active = true;
+                    _satellites[counter].hidden = _satellites[counter].hidden;
+                }
+            }
+            ++index;
+            ++counter;
+            ++curve_it;
         }
     }
 }
 
 /** Fired when a path is modified.
  */
-void Pointwise::recalculateForNewPwd2(Geom::Piecewise<Geom::D2<Geom::SBasis> > const A, Geom::PathVector const B, Satellite const S)
+void Pointwise::recalculateForNewPwd2(pwd2sb const &A, Geom::PathVector const &B, Satellite const &S)
 {
     if (_pwd2.size() > A.size()) {
-        pwd2Sustract(A);
+        pwd2Subtract(A);
     } else if (_pwd2.size() < A.size()) {
         pwd2Append(A, S);
     } else {
@@ -94,14 +96,18 @@ void Pointwise::recalculateForNewPwd2(Geom::Piecewise<Geom::D2<Geom::SBasis> > c
 
 /** Some nodes/subpaths are removed.
  */
-void Pointwise::pwd2Sustract(Geom::Piecewise<Geom::D2<Geom::SBasis> > const A)
+void Pointwise::pwd2Subtract(pwd2sb const &A)
 {
     size_t counter = 0;
     std::vector<Satellite> sats;
-    Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = _pwd2;
+    pwd2sb pwd2 = _pwd2;
     setPwd2(A);
+    Geom::PathVector pointwise_pv = path_from_piecewise(Geom::remove_short_cuts(_pwd2,0.01),0.01);
     for (size_t i = 0; i < _satellites.size(); i++) {
-        if (_path_info.last(i - counter) < i - counter ||
+        Geom::Path sat_path = pointwise_pv.pathAt(i - counter);
+        Geom::PathTime sat_curve_time = sat_path.nearestTime(pointwise_pv.curveAt(i - counter).initialPoint());
+        Geom::PathTime sat_curve_time_start = sat_path.nearestTime(sat_path.initialPoint());
+        if (sat_curve_time_start.curve_index < sat_curve_time.curve_index||
                 !are_near(pwd2[i].at0(), A[i - counter].at0())) 
         {
             counter++;
@@ -114,36 +120,53 @@ void Pointwise::pwd2Sustract(Geom::Piecewise<Geom::D2<Geom::SBasis> > const A)
 
 /** Append nodes/subpaths to current pointwise
  */
-void Pointwise::pwd2Append(Geom::Piecewise<Geom::D2<Geom::SBasis> > const A, Satellite const S)
+void Pointwise::pwd2Append(pwd2sb const &A, Satellite const &S)
 {
     size_t counter = 0;
     std::vector<Satellite> sats;
     bool reorder = false;
     for (size_t i = 0; i < A.size(); i++) {
-        size_t first = _path_info.first(i - counter);
-        size_t last = _path_info.last(i - counter);
+        Geom::PathVector pointwise_pv = path_from_piecewise(Geom::remove_short_cuts(_pwd2,0.01),0.01);
+        Geom::Path sat_path = pointwise_pv.pathAt(i - counter);
+        boost::optional< Geom::PathVectorTime > sat_curve_time_optional = pointwise_pv.nearestTime(pointwise_pv.curveAt(i-counter).initialPoint());
+        Geom::PathVectorTime sat_curve_time;
+        if(sat_curve_time_optional){
+            sat_curve_time = *sat_curve_time_optional;
+        }
+        sat_curve_time.normalizeForward(sat_path.size());
+        size_t first = Geom::nearest_time(sat_path.initialPoint(),_pwd2);
+        size_t last = first + sat_path.size() - 1;
+        bool is_start = false;
+        if(sat_curve_time.curve_index == 0){
+            is_start = true;
+        }
         //Check for subpath closed. If a subpath is closed, is not reversed or moved
         //to back
-        _path_info.set(A);
-        size_t new_subpath_index = _path_info.subPathIndex(i);
-        _path_info.set(_pwd2);
+        size_t old_subpath_index = sat_curve_time.path_index;
+        pointwise_pv = path_from_piecewise(Geom::remove_short_cuts(A,0.01),0.01);
+        sat_path = pointwise_pv.pathAt(i);
+        sat_curve_time_optional = pointwise_pv.nearestTime(pointwise_pv.curveAt(i).initialPoint());
+        if(sat_curve_time_optional){
+            sat_curve_time = *sat_curve_time_optional;
+        }
+        sat_curve_time.normalizeForward(sat_path.size());
+        size_t new_subpath_index = sat_curve_time.path_index;
         bool subpath_is_changed = false;
-        if (_pwd2.size() <= i - counter) {
-            subpath_is_changed = false;
-        } else {
-            subpath_is_changed = new_subpath_index != _path_info.subPathIndex(i - counter);
+        if (_pwd2.size() > i - counter) {
+            subpath_is_changed = old_subpath_index != new_subpath_index;
         }
 
-        if (!reorder && first == i - counter && !are_near(_pwd2[i - counter].at0(), A[i].at0()) && !subpath_is_changed) {
+        if (!reorder && is_start && !are_near(_pwd2[i - counter].at0(), A[i].at0()) && !subpath_is_changed) {
             //Send the modified subpath to back
-            subpathToBack(_path_info.subPathIndex(first));
+            subpathToBack(old_subpath_index);
             reorder = true;
             i--;
             continue;
         }
 
-        if (first == i - counter && !are_near(_pwd2[i - counter].at0(), A[i].at0()) && !subpath_is_changed) {
-            //reverse subpath
+        if (is_start && !are_near(_pwd2[i - counter].at0(), A[i].at0()) && !subpath_is_changed) {
+            //Krzysztof this code is hiden because i need a clean way to acced to the first and last index of a subpath based in
+            //his position on pathvector. Maybe the result Geom::PathVectorTime of nearestTime method can also return the time in the pathvector without calling two times to nearestTime
             subpathReverse(first, last);
         }
 
@@ -209,7 +232,14 @@ void Pointwise::subpathReverse(size_t start, size_t end)
         path_from_piecewise(remove_short_cuts(_pwd2, 0.1), 0.001);
     size_t counter = 0;
     size_t subpath_counter = 0;
-    size_t subpath = _path_info.subPathIndex(start);
+    Geom::Path sat_path = path_in.pathAt(start);
+    boost::optional< Geom::PathVectorTime > sat_curve_time_optional = path_in.nearestTime(path_in.curveAt(start).initialPoint());
+    Geom::PathVectorTime sat_curve_time;
+    if(sat_curve_time_optional){
+        sat_curve_time = *sat_curve_time_optional;
+    }
+    sat_curve_time.normalizeForward(sat_path.size());
+    size_t subpath = sat_curve_time.path_index;
     Geom::PathVector tmp_path;
     Geom::Path rev;
     for (Geom::PathVector::const_iterator path_it = path_in.begin();
@@ -231,11 +261,10 @@ void Pointwise::subpathReverse(size_t start, size_t end)
 
 /** Fired when a path is modified duplicating a node. Piecewise ignore degenerated curves.
  */
-void Pointwise::insertDegenerateSatellites(Geom::Piecewise<Geom::D2<Geom::SBasis> > const A, Geom::PathVector const B, Satellite const S)
+void Pointwise::insertDegenerateSatellites(pwd2sb const &A, Geom::PathVector const &B, Satellite const &S)
 {
     size_t size_A = A.size();
-    _path_info.set(B);
-    size_t size_B = _path_info.size();
+    size_t size_B = B.curveCount();
     size_t satellite_gap = size_B - size_A;
     if (satellite_gap == 0){
         return;
@@ -266,7 +295,6 @@ void Pointwise::insertDegenerateSatellites(Geom::Piecewise<Geom::D2<Geom::SBasis
         }
     }
 
-    _path_info.set(A);
     setPwd2(A);
 }
 

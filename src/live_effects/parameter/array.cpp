@@ -20,7 +20,7 @@ sp_svg_satellite_read_d(gchar const *str, Satellite *sat){
         return 0;
     }
     gchar ** strarray = g_strsplit(str, ",", 8);
-    if(strarray[7] && !strarray[8]){
+    if(strlen(str) > 0 && strarray[7] && !strarray[8]){
         sat->setSatelliteType(g_strstrip(strarray[0]));
         sat->is_time = strncmp(strarray[1],"1",1) == 0;
         sat->active = strncmp(strarray[2],"1",1) == 0;
