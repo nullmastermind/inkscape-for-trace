@@ -165,8 +165,6 @@ void Pointwise::pwd2Append(pwd2sb const &A, Satellite const &S)
         }
 
         if (is_start && !are_near(_pwd2[i - counter].at0(), A[i].at0()) && !subpath_is_changed) {
-            //Krzysztof this code is hiden because i need a clean way to acced to the first and last index of a subpath based in
-            //his position on pathvector. Maybe the result Geom::PathVectorTime of nearestTime method can also return the time in the pathvector without calling two times to nearestTime
             subpathReverse(first, last);
         }
 
