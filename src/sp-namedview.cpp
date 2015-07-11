@@ -247,7 +247,10 @@ void SPNamedView::build(SPDocument *document, Inkscape::XML::Node *repr) {
             SPGuide * g = SP_GUIDE(o);
             this->guides = g_slist_prepend(this->guides, g);
             //g_object_set(G_OBJECT(g), "color", nv->guidecolor, "hicolor", nv->guidehicolor, NULL);
+            g->setColor(this->guidecolor);
             g->setHiColor(this->guidehicolor);
+
+            g->readAttr( "inkscape:color" );
         }
     }
 
