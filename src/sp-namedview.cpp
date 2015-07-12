@@ -249,7 +249,6 @@ void SPNamedView::build(SPDocument *document, Inkscape::XML::Node *repr) {
             //g_object_set(G_OBJECT(g), "color", nv->guidecolor, "hicolor", nv->guidehicolor, NULL);
             g->setColor(this->guidecolor);
             g->setHiColor(this->guidehicolor);
-
             g->readAttr( "inkscape:color" );
         }
     }
@@ -327,8 +326,9 @@ void SPNamedView::set(unsigned int key, const gchar* value) {
             }
 
             for (GSList *l = this->guides; l != NULL; l = l->next) {
-                //g_object_set(G_OBJECT(l->data), "color", nv->guidecolor, NULL);
-            	SP_GUIDE(l->data)->setColor(this->guidecolor);
+                SPGuide * g = SP_GUIDE(l->data);
+                g->setColor(this->guidecolor);
+                g->readAttr("inkscape:color");
             }
 
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
@@ -338,8 +338,9 @@ void SPNamedView::set(unsigned int key, const gchar* value) {
             sp_nv_read_opacity(value, &this->guidecolor);
 
             for (GSList *l = this->guides; l != NULL; l = l->next) {
-                //g_object_set(G_OBJECT(l->data), "color", nv->guidecolor, NULL);
-            	SP_GUIDE(l->data)->setColor(this->guidecolor);
+                SPGuide * g = SP_GUIDE(l->data);
+                g->setColor(this->guidecolor);
+                g->readAttr("inkscape:color");
             }
 
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
