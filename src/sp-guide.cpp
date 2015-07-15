@@ -71,6 +71,7 @@ void SPGuide::build(SPDocument *document, Inkscape::XML::Node *repr)
 {
     SPObject::build(document, repr);
 
+    this->readAttr( "inkscape:color" );
     this->readAttr( "inkscape:label" );
     this->readAttr( "orientation" );
     this->readAttr( "position" );

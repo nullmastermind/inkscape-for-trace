@@ -665,6 +665,7 @@ void SPNamedView::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *r
             //g_object_set(G_OBJECT(g), "color", this->guidecolor, "hicolor", this->guidehicolor, NULL);
             g->setColor(this->guidecolor);
             g->setHiColor(this->guidehicolor);
+            g->readAttr("inkscape:color");
 
             if (this->editable) {
                 for (GSList *l = this->views; l != NULL; l = l->next) {
