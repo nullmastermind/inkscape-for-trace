@@ -45,7 +45,7 @@ public:
     unsigned int clipPathUnits : 1;
 
     SPClipPathView *display;
-    static char const *create(GSList *reprs, SPDocument *document, Geom::Affine const* applyTransform);
+    static char const *create(std::vector<Inkscape::XML::Node*> &reprs, SPDocument *document, Geom::Affine const* applyTransform);
     //static GType sp_clippath_get_type(void);
 
     Inkscape::DrawingItem *show(Inkscape::Drawing &drawing, unsigned int key);
@@ -88,7 +88,7 @@ protected:
             return false;
         }
         SPObject * const owner = this->getOwner();
-        if (obj->isAncestorOf(owner)) {
+        if (!URIReference::_acceptObject(obj)) {
             //XML Tree being used directly here while it shouldn't be...
             Inkscape::XML::Node * const owner_repr = owner->getRepr();
             //XML Tree being used directly here while it shouldn't be...

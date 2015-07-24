@@ -15,14 +15,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#if HAVE_CONFIG_H
-# include "config.h"
-#endif
-
-#if defined(GLIBMM_DISABLE_DEPRECATED) && defined(HAVE_GLIBMM_THREADS_H)
-# include <glibmm/threads.h>
-#endif
-
 #include "live_effects/parameter/enum.h"
 #include "live_effects/parameter/bool.h"
 #include "live_effects/parameter/unit.h"
@@ -45,11 +37,11 @@ public:
     LPEFilletChamfer(LivePathEffectObject *lpeobject);
     virtual ~LPEFilletChamfer();
 
-    virtual std::vector<Geom::Path> doEffect_path(std::vector<Geom::Path> const &path_in);
+    virtual Geom::PathVector doEffect_path(Geom::PathVector const &path_in);
 
     virtual void doOnApply(SPLPEItem const *lpeItem);
     virtual void doBeforeEffect(SPLPEItem const *lpeItem);
-    virtual void adjustForNewPath(std::vector<Geom::Path> const &path_in);
+    virtual void adjustForNewPath(Geom::PathVector const &path_in);
     virtual Gtk::Widget* newWidget();
 
     int getKnotsNumber(SPCurve const *c);
@@ -61,8 +53,8 @@ public:
     void fillet();
     void inverseFillet();
     void updateFillet();
-    void doUpdateFillet(std::vector<Geom::Path> const& original_pathv, double power);
-    void doChangeType(std::vector<Geom::Path> const& original_pathv, int type);
+    void doUpdateFillet(Geom::PathVector const& original_pathv, double power);
+    void doChangeType(Geom::PathVector const& original_pathv, int type);
     void refreshKnots();
 
     FilletChamferPointArrayParam fillet_chamfer_values;
@@ -74,7 +66,6 @@ private:
     BoolParam only_selected;
     BoolParam flexible;
     BoolParam use_knot_distance;
-    UnitParam unit;
     EnumParam<FilletMethod> method;
     ScalarParam radius;
     ScalarParam chamfer_steps;

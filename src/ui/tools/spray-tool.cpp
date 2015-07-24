@@ -133,14 +133,13 @@ SprayTool::SprayTool()
     : ToolBase(cursor_spray_xpm, 4, 4, false)
     , pressure(TC_DEFAULT_PRESSURE)
     , dragging(false)
-    , usepressure(0)
-    , usetilt(0)
+    , usepressure(false)
+    , usetilt(false)
     , usetext(false)
     , width(0.2)
     , ratio(0)
     , tilt(0)
     , rotation_variation(0)
-    , force(0.2)
     , population(0)
     , scale_variation(1)
     , scale(1)
@@ -165,20 +164,12 @@ SprayTool::~SprayTool() {
     }
 }
 
-static bool is_transform_modes(gint mode)
-{
-    return (mode == SPRAY_MODE_COPY ||
-            mode == SPRAY_MODE_CLONE ||
-            mode == SPRAY_MODE_SINGLE_PATH ||
-            mode == SPRAY_OPTION);
-}
-
 void SprayTool::update_cursor(bool /*with_shift*/) {
     guint num = 0;
     gchar *sel_message = NULL;
 
     if (!desktop->selection->isEmpty()) {
-        num = g_slist_length(const_cast<GSList *>(desktop->selection->itemList()));
+        num = desktop->selection->itemList().size();
         sel_message = g_strdup_printf(ngettext("<b>%i</b> object selected","<b>%i</b> objects selected",num), num);
     } else {
         sel_message = g_strdup_printf("%s", _("<b>Nothing</b> selected"));
@@ -207,8 +198,7 @@ void SprayTool::setup() {
 
     {
         /* TODO: have a look at sp_dyna_draw_context_setup where the same is done.. generalize? at least make it an arcto! */
-        Geom::PathVector path;
-        Geom::Circle(0, 0, 1).getPath(path);
+        Geom::PathVector path = Geom::Path(Geom::Circle(0,0,1));
 
         SPCurve *c = new SPCurve(path);
 
@@ -229,7 +219,6 @@ void SprayTool::setup() {
     sp_event_context_read(this, "scale_variation");
     sp_event_context_read(this, "mode");
     sp_event_context_read(this, "population");
-    sp_event_context_read(this, "force");
     sp_event_context_read(this, "mean");
     sp_event_context_read(this, "standard_deviation");
     sp_event_context_read(this, "usepressure");
@@ -271,9 +260,7 @@ void SprayTool::set(const Inkscape::Preferences::Entry& val) {
         this->tilt = CLAMP(val.getDouble(0.1), 0, 1000.0);
     } else if (path == "ratio") {
         this->ratio = CLAMP(val.getDouble(), 0.0, 0.9);
-    } else if (path == "force") {
-        this->force = CLAMP(val.getDouble(1.0), 0, 1.0);
-    } 
+    }
 }
 
 static void sp_spray_extinput(SprayTool *tc, GdkEvent *event)
@@ -290,16 +277,6 @@ static double get_dilate_radius(SprayTool *tc)
     return 250 * tc->width/SP_EVENT_CONTEXT(tc)->desktop->current_zoom();
 }
 
-static double get_path_force(SprayTool *tc)
-{
-    double force = 8 * (tc->usepressure? tc->pressure : TC_DEFAULT_PRESSURE)
-        /sqrt(SP_EVENT_CONTEXT(tc)->desktop->current_zoom());
-    if (force > 3) {
-        force += 4 * (force - 3);
-    }
-    return force * tc->force;
-}
-
 static double get_path_mean(SprayTool *tc)
 {
     return tc->mean;
@@ -310,10 +287,11 @@ static double get_path_standard_deviation(SprayTool *tc)
     return tc->standard_deviation;
 }
 
-static double get_move_force(SprayTool *tc)
+static double get_population(SprayTool *tc)
 {
-    double force = (tc->usepressure? tc->pressure : TC_DEFAULT_PRESSURE);
-    return force * tc->force;
+    double pressure = (tc->usepressure? tc->pressure / TC_DEFAULT_PRESSURE : 1);
+    //g_warning("Pressure, population: %f, %f", pressure, pressure * tc->population);
+    return pressure * tc->population;
 }
 
 static double get_move_mean(SprayTool *tc)
@@ -361,7 +339,6 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                                Geom::Point /*vector*/,
                                gint mode,
                                double radius,
-                               double /*force*/,
                                double population,
                                double &scale,
                                double scale_variation,
@@ -426,11 +403,9 @@ static bool sp_spray_recursive(SPDesktop *desktop,
         SPItem *unionResult = NULL;    // Previous union
 
         int i=1;
-        for (GSList *items = g_slist_copy(const_cast<GSList *>(selection->itemList()));
-                items != NULL;
-                items = items->next) {
-
-            SPItem *item1 = dynamic_cast<SPItem *>(static_cast<SPObject *>(items->data));
+        std::vector<SPItem*> items=selection->itemList();
+        for(std::vector<SPItem*>::const_iterator it=items.begin();it!=items.end();it++){
+            SPItem *item1 = *it;
             if (i == 1) {
                 parent_item = item1;
             }
@@ -527,8 +502,8 @@ static bool sp_spray_dilate(SprayTool *tc, Geom::Point /*event_p*/, Geom::Point 
 
     bool did = false;
     double radius = get_dilate_radius(tc);
-    double path_force = get_path_force(tc);
-    if (radius == 0 || path_force == 0) {
+    double population = get_population(tc);
+    if (radius == 0 || population == 0) {
         return false;
     }
     double path_mean = get_path_mean(tc);
@@ -539,42 +514,29 @@ static bool sp_spray_dilate(SprayTool *tc, Geom::Point /*event_p*/, Geom::Point 
     if (radius == 0 || path_standard_deviation == 0) {
         return false;
     }
-    double move_force = get_move_force(tc);
     double move_mean = get_move_mean(tc);
     double move_standard_deviation = get_move_standard_deviation(tc);
 
     {
-        GSList *const original_selection = g_slist_copy(const_cast<GSList *>(selection->itemList()));
+        std::vector<SPItem*> const items(selection->itemList());
 
-        for (GSList *items = original_selection;
-                items != NULL;
-                items = items->next) {
-            SPItem *item = dynamic_cast<SPItem *>(static_cast<SPObject *>(items->data));
+        for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
+            SPItem *item = *i;
             g_assert(item != NULL);
             sp_object_ref(item);
         }
 
-        for (GSList *items = original_selection;
-                items != NULL;
-                items = items->next) {
-            SPItem *item = dynamic_cast<SPItem *>(static_cast<SPObject *>(items->data));
+        for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
+            SPItem *item = *i;
             g_assert(item != NULL);
 
-            if (is_transform_modes(tc->mode)) {
-                if (sp_spray_recursive(desktop, selection, item, p, vector, tc->mode, radius, move_force, tc->population, tc->scale, tc->scale_variation, reverse, move_mean, move_standard_deviation, tc->ratio, tc->tilt, tc->rotation_variation, tc->distrib)) {
-                    did = true;
-                }
-            } else {
-                if (sp_spray_recursive(desktop, selection, item, p, vector, tc->mode, radius, path_force, tc->population, tc->scale, tc->scale_variation, reverse, path_mean, path_standard_deviation, tc->ratio, tc->tilt, tc->rotation_variation, tc->distrib)) {
-                    did = true;
-                }
+            if (sp_spray_recursive(desktop, selection, item, p, vector, tc->mode, radius, population, tc->scale, tc->scale_variation, reverse, move_mean, move_standard_deviation, tc->ratio, tc->tilt, tc->rotation_variation, tc->distrib)) {
+                did = true;
             }
         }
 
-        for (GSList *items = original_selection;
-                items != NULL;
-                items = items->next) {
-            SPItem *item = dynamic_cast<SPItem *>(static_cast<SPObject *>(items->data));
+        for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
+            SPItem *item = *i;
             g_assert(item != NULL);
             sp_object_unref(item);
         }
@@ -650,7 +612,7 @@ bool SprayTool::root_handler(GdkEvent* event) {
 
             guint num = 0;
             if (!desktop->selection->isEmpty()) {
-                num = g_slist_length(const_cast<GSList *>(desktop->selection->itemList()));
+                num = desktop->selection->itemList().size();
             }
             if (num == 0) {
                 this->message_context->flash(Inkscape::ERROR_MESSAGE, _("<b>Nothing selected!</b> Select objects to spray."));
