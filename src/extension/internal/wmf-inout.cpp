@@ -95,7 +95,6 @@ Wmf::print_document_to_file(SPDocument *doc, const gchar *filename)
     SPPrintContext context;
     const gchar *oldconst;
     gchar *oldoutput;
-    unsigned int ret;
 
     doc->ensureUpToDate();
 
@@ -114,13 +113,12 @@ Wmf::print_document_to_file(SPDocument *doc, const gchar *filename)
     mod->root = mod->base->invoke_show(drawing, mod->dkey, SP_ITEM_SHOW_DISPLAY);
     drawing.setRoot(mod->root);
     /* Print document */
-    ret = mod->begin(doc);
-    if (ret) {
+    if (mod->begin(doc)) {
         g_free(oldoutput);
         throw Inkscape::Extension::Output::save_failed();
     }
     mod->base->invoke_print(&context);
-    ret = mod->finish();
+    mod->finish();
     /* Release arena */
     mod->base->invoke_hide(mod->dkey);
     mod->base = NULL;
@@ -451,7 +449,8 @@ uint32_t Wmf::add_dib_image(PWMF_CALLBACK_DATA d, const char *dib, uint32_t iUsa
     char            *rgba_px = NULL;     // RGBA pixels
     const char      *px      = NULL;     // DIB pixels
     const U_RGBQUAD *ct      = NULL;     // DIB color table
-    int32_t  width, height, colortype, numCt, invert; // if needed these values will be set by wget_DIB_params
+    uint32_t numCt;
+    int32_t  width, height, colortype, invert; // if needed these values will be set by wget_DIB_params
     if(iUsage == U_DIB_RGB_COLORS){
         // next call returns pointers and values, but allocates no memory
         dibparams = wget_DIB_params(dib, &px, &ct, &numCt, &width, &height, &colortype, &invert);
@@ -1320,7 +1319,8 @@ void Wmf::common_dib_to_image(PWMF_CALLBACK_DATA d, const char *dib,
     char            *sub_px  = NULL;        // RGBA pixels, subarray
     const char      *px      = NULL;        // DIB pixels
     const U_RGBQUAD *ct      = NULL;        // color table
-    int32_t width, height, colortype, numCt, invert;  // if needed these values will be set in wget_DIB_params
+    uint32_t numCt;
+    int32_t width, height, colortype, invert;  // if needed these values will be set in wget_DIB_params
     if(iUsage == U_DIB_RGB_COLORS){
         // next call returns pointers and values, but allocates no memory
         dibparams = wget_DIB_params(dib, &px, &ct, &numCt, &width, &height, &colortype, &invert);

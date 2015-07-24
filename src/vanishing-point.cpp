@@ -130,7 +130,7 @@ vp_knot_moved_handler (SPKnot *knot, Geom::Point const &ppointer, guint state, g
             // FIXME: Do we need to create a new dragger as well?
             dragger->updateZOrders ();
             DocumentUndo::done(SP_ACTIVE_DESKTOP->getDocument(), SP_VERB_CONTEXT_3DBOX,
-			       _("Split vanishing points"));
+                   _("Split vanishing points"));
             return;
         }
     }
@@ -175,22 +175,24 @@ vp_knot_moved_handler (SPKnot *knot, Geom::Point const &ppointer, guint state, g
                 //       as is currently the case.
 
                 DocumentUndo::done(SP_ACTIVE_DESKTOP->getDocument(), SP_VERB_CONTEXT_3DBOX,
-				   _("Merge vanishing points"));
+                   _("Merge vanishing points"));
 
                 return;
             }
         }
+    }
 
-        // We didn't snap to another dragger, so we'll try a regular snap
-        SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-        SnapManager &m = desktop->namedview->snap_manager;
-        m.setup(desktop);
-        Inkscape::SnappedPoint s = m.freeSnap(Inkscape::SnapCandidatePoint(p, Inkscape::SNAPSOURCE_OTHER_HANDLE));
-        m.unSetup();
-        if (s.getSnapped()) {
-            p = s.getPoint();
-            knot->moveto(p);
-        }
+    // We didn't hit the return statement above, so we didn't snap to another dragger. Therefore we'll now try a regular snap
+    // Regardless of the status of the SHIFT key, we will try to snap; Here SHIFT does not disable snapping, as the shift key
+    // has a different purpose in this context (see above)
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    SnapManager &m = desktop->namedview->snap_manager;
+    m.setup(desktop);
+    Inkscape::SnappedPoint s = m.freeSnap(Inkscape::SnapCandidatePoint(p, Inkscape::SNAPSOURCE_OTHER_HANDLE));
+    m.unSetup();
+    if (s.getSnapped()) {
+        p = s.getPoint();
+        knot->moveto(p);
     }
 
     dragger->point = p; // FIXME: Is dragger->point being used at all?
@@ -241,7 +243,7 @@ vp_knot_ungrabbed_handler (SPKnot *knot, guint /*state*/, gpointer data)
     g_return_if_fail (dragger->parent);
     g_return_if_fail (dragger->parent->document);
     DocumentUndo::done(dragger->parent->document, SP_VERB_CONTEXT_3DBOX,
-		       _("3D box: Move vanishing point"));
+               _("3D box: Move vanishing point"));
 }
 
 unsigned int VanishingPoint::global_counter = 0;
@@ -256,8 +258,9 @@ VanishingPoint::set_pos(Proj::Pt2 const &pt) {
 std::list<SPBox3D *>
 VanishingPoint::selectedBoxes(Inkscape::Selection *sel) {
     std::list<SPBox3D *> sel_boxes;
-    for (GSList const* i = sel->itemList(); i != NULL; i = i->next) {
-        SPItem *item = static_cast<SPItem *>(i->data);
+    std::vector<SPItem*> itemlist=sel->itemList();
+    for (std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();i++) {
+        SPItem *item = *i;
         SPBox3D *box = dynamic_cast<SPBox3D *>(item);
         if (box && this->hasBox(box)) {
             sel_boxes.push_back(box);
@@ -395,8 +398,9 @@ VPDragger::VPsOfSelectedBoxes() {
     VanishingPoint *vp;
     // FIXME: Should we take the selection from the parent VPDrag? I guess it shouldn't make a difference.
     Inkscape::Selection *sel = SP_ACTIVE_DESKTOP->getSelection();
-    for (GSList const* i = sel->itemList(); i != NULL; i = i->next) {
-        SPItem *item = static_cast<SPItem *>(i->data);
+    std::vector<SPItem*> itemlist=sel->itemList();
+    for (std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();i++) {
+        SPItem *item = *i;
         SPBox3D *box = dynamic_cast<SPBox3D *>(item);
         if (box) {
             vp = this->findVPWithBox(box);
@@ -577,8 +581,9 @@ VPDrag::updateDraggers ()
 
     g_return_if_fail (this->selection != NULL);
 
-    for (GSList const* i = this->selection->itemList(); i != NULL; i = i->next) {
-        SPItem *item = static_cast<SPItem *>(i->data);
+    std::vector<SPItem*> itemlist=this->selection->itemList();
+    for (std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();i++) {
+        SPItem *item = *i;
         SPBox3D *box = dynamic_cast<SPBox3D *>(item);
         if (box) {
             VanishingPoint vp;
@@ -609,8 +614,9 @@ VPDrag::updateLines ()
 
     g_return_if_fail (this->selection != NULL);
 
-    for (GSList const* i = this->selection->itemList(); i != NULL; i = i->next) {
-        SPItem *item = static_cast<SPItem *>(i->data);
+    std::vector<SPItem*> itemlist=this->selection->itemList();
+    for (std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();i++) {
+        SPItem *item = *i;
         SPBox3D *box = dynamic_cast<SPBox3D *>(item);
         if (box) {
             this->drawLinesForFace (box, Proj::X);
@@ -626,11 +632,11 @@ VPDrag::updateBoxHandles ()
     // FIXME: Is there a way to update the knots without accessing the
     //        (previously) statically linked function KnotHolder::update_knots?
 
-    GSList *sel = (GSList *) selection->itemList();
-    if (!sel)
+    std::vector<SPItem*> sel = selection->itemList();
+    if (sel.empty())
         return; // no selection
 
-    if (g_slist_length (sel) > 1) {
+    if (sel.size() > 1) {
         // Currently we only show handles if a single box is selected
         return;
     }

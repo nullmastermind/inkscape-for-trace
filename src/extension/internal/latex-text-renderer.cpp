@@ -228,14 +228,12 @@ LaTeXTextRenderer::writePostamble()
 
 void LaTeXTextRenderer::sp_group_render(SPGroup *group)
 {
-    GSList *l = g_slist_reverse(group->childList(false));
-    while (l) {
-        SPObject *o = reinterpret_cast<SPObject *>(l->data);
-        SPItem *item = dynamic_cast<SPItem *>(o);
+	std::vector<SPObject*> l = (group->childList(false));
+    for(std::vector<SPObject*>::const_iterator x = l.begin(); x != l.end(); x++){
+        SPItem *item = dynamic_cast<SPItem*>(*x);
         if (item) {
             renderItem(item);
         }
-        l = g_slist_remove (l, o);
     }
 }
 
@@ -411,7 +409,8 @@ Flowing in rectangle is possible, not in arb shape.
         return; // don't know how to handle non-rect frames yet. is quite uncommon for latex users i think
     }
 
-    Geom::Rect framebox = frame->getRect() * transform();
+	// We will transform the coordinates
+    Geom::Rect framebox = frame->getRect();
 
     // get position and alignment
     // Align on topleft corner.
@@ -431,7 +430,10 @@ Flowing in rectangle is possible, not in arb shape.
         // no need to add LaTeX code for standard justified output :)
         break;
     }
-    Geom::Point pos(framebox.corner(3)); //topleft corner
+
+	// The topleft Corner was calculated after rotating the text which results in a wrong Coordinate.
+	// Now, the topleft Corner is rotated after calculating it
+    Geom::Point pos(framebox.corner(0) * transform()); //topleft corner
 
     // determine color and transparency (for now, use rgb color model as it is most native to Inkscape)
     bool has_color = false; // if the item has no color set, don't force black color
@@ -474,7 +476,9 @@ Flowing in rectangle is possible, not in arb shape.
         os << "\\rotatebox{" << degrees << "}{";
     }
     os << "\\makebox(0,0)" << alignment << "{";
-    os << "\\begin{minipage}{" << framebox.width() << "\\unitlength}";
+
+	// Scale the x width correctly
+    os << "\\begin{minipage}{" << framebox.width() * transform().expansionX() << "\\unitlength}";
     os << justification;
 
         // Walk through all spans in the text object.

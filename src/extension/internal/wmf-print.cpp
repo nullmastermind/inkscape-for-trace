@@ -29,14 +29,13 @@
 #endif
 
 
-#include "2geom/sbasis-to-bezier.h"
-#include "2geom/svg-elliptical-arc.h"
+#include <2geom/sbasis-to-bezier.h>
+#include <2geom/elliptical-arc.h>
 
-#include "2geom/path.h"
-#include "2geom/pathvector.h"
-#include "2geom/rect.h"
-#include "2geom/bezier-curve.h"
-#include "2geom/hvlinesegment.h"
+#include <2geom/path.h>
+#include <2geom/pathvector.h>
+#include <2geom/rect.h>
+#include <2geom/curves.h>
 #include "helper/geom.h"
 #include "helper/geom-curves.h"
 #include "sp-item.h"
@@ -59,7 +58,7 @@
 #include "display/cairo-utils.h"
 
 #include "splivarot.h"             // pieces for union on shapes
-#include "2geom/svg-path-parser.h" // to get from SVG text to Geom::Path
+#include <2geom/svg-path-parser.h> // to get from SVG text to Geom::Path
 #include "display/canvas-bpath.h"  // for SPWindRule
 #include "display/cairo-utils.h"  // for Inkscape::Pixbuf::PF_CAIRO
 
@@ -380,8 +379,8 @@ int PrintWmf::create_brush(SPStyle const *style, U_COLORREF *fcolor)
         } else if (SP_IS_PATTERN(SP_STYLE_FILL_SERVER(style))) { // must be paint-server
             SPPaintServer *paintserver = style->fill.value.href->getObject();
             SPPattern *pat = SP_PATTERN(paintserver);
-            double dwidth  = pattern_width(pat);
-            double dheight = pattern_height(pat);
+            double dwidth  = pat->width();
+            double dheight = pat->height();
             width  = dwidth;
             height = dheight;
             brush_classify(pat, 0, &pixbuf, &hatchType, &hatchColor, &bkColor);
@@ -984,7 +983,7 @@ bool PrintWmf::print_simple_shape(Geom::PathVector const &pathv, const Geom::Aff
                 lpPoints[i].y = y1;
                 i = i + 1;
             } else if (Geom::CubicBezier const *cubic = dynamic_cast<Geom::CubicBezier const *>(&*cit)) {
-                std::vector<Geom::Point> points = cubic->points();
+                std::vector<Geom::Point> points = cubic->controlPoints();
                 //Geom::Point p0 = points[0];
                 Geom::Point p1 = points[1];
                 Geom::Point p2 = points[2];

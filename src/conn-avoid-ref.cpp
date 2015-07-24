@@ -19,7 +19,7 @@
 #include "display/curve.h"
 #include "2geom/line.h"
 #include "2geom/crossing.h"
-#include "2geom/convex-cover.h"
+#include "2geom/convex-hull.h"
 #include "helper/geom-curves.h"
 #include "svg/stringstream.h"
 #include "conn-avoid-ref.h"
@@ -252,8 +252,9 @@ static std::vector<Geom::Point> approxItemWithPoints(SPItem const *item, const G
     {
         SPGroup* group = SP_GROUP(item);
         // consider all first-order children
-        for (GSList const* i = sp_item_group_item_list(group); i != NULL; i = i->next) {
-            SPItem* child_item = SP_ITEM(i->data);
+        std::vector<SPItem*> itemlist = sp_item_group_item_list(group);
+        for (std::vector<SPItem*>::const_iterator i = itemlist.begin(); i != itemlist.end(); i++) {
+            SPItem* child_item = *i;
             std::vector<Geom::Point> child_points = approxItemWithPoints(child_item, item_transform * child_item->transform);
             poly_points.insert(poly_points.end(), child_points.begin(), child_points.end());
         }
@@ -296,7 +297,7 @@ static Avoid::Polygon avoid_item_poly(SPItem const *item)
     Geom::Line prev_parallel_hull_edge;
     prev_parallel_hull_edge.setOrigin(hull_edge.origin()+hull_edge.versor().ccw()*spacing);
     prev_parallel_hull_edge.setVersor(hull_edge.versor());
-    int hull_size = hull.boundary.size();
+    int hull_size = hull.size();
     for (int i = 0; i < hull_size; ++i)
     {
         hull_edge.setPoints(hull[i], hull[i+1]);

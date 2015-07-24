@@ -16,7 +16,7 @@
 #include "live_effects/lpe-fillet-chamfer.h"
  
 #include <2geom/sbasis-to-bezier.h>
-#include <2geom/svg-elliptical-arc.h>
+#include <2geom/elliptical-arc.h>
 #include <2geom/line.h>
 
 #include "desktop.h"
@@ -29,7 +29,6 @@
 
 // for programmatically updating knots
 #include "ui/tools-switch.h"
-#include <util/units.h>
 
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
@@ -57,7 +56,6 @@ LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject) :
     only_selected(_("Change only selected nodes"), _("Change only selected nodes"), "only_selected", &wr, this, false),
     flexible(_("Flexible radius size (%)"), _("Flexible radius size (%)"), "flexible", &wr, this, false),
     use_knot_distance(_("Use knots distance instead radius"), _("Use knots distance instead radius"), "use_knot_distance", &wr, this, false),
-    unit(_("Unit:"), _("Unit"), "unit", &wr, this),
     method(_("Method:"), _("Fillets methods"), "method", FMConverter, &wr, this, FM_AUTO),
     radius(_("Radius (unit or %):"), _("Radius, in unit or %"), "radius", &wr, this, 0.),
     chamfer_steps(_("Chamfer steps:"), _("Chamfer steps"), "chamfer_steps", &wr, this, 0),
@@ -65,7 +63,6 @@ LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject) :
     helper_size(_("Helper size with direction:"), _("Helper size with direction"), "helper_size", &wr, this, 0)
 {
     registerParameter(&fillet_chamfer_values);
-    registerParameter(&unit);
     registerParameter(&method);
     registerParameter(&radius);
     registerParameter(&chamfer_steps);
@@ -223,7 +220,7 @@ void LPEFilletChamfer::updateFillet()
 {
     double power = 0;
     if (!flexible) {
-        power = Inkscape::Util::Quantity::convert(radius, unit.get_abbreviation(), defaultUnit) * -1;
+        power = radius * -1;
     } else {
         power = radius;
     }
@@ -275,11 +272,11 @@ void LPEFilletChamfer::refreshKnots()
     }
 }
 
-void LPEFilletChamfer::doUpdateFillet(std::vector<Geom::Path> const& original_pathv, double power)
+void LPEFilletChamfer::doUpdateFillet(Geom::PathVector const &original_pathv, double power)
 {
     std::vector<Point> filletChamferData = fillet_chamfer_values.data();
     std::vector<Geom::Point> result;
-    std::vector<Geom::Path> original_pathv_processed = pathv_to_linear_and_cubic_beziers(original_pathv);
+    Geom::PathVector original_pathv_processed = pathv_to_linear_and_cubic_beziers(original_pathv);
     int counter = 0;
     for (PathVector::const_iterator path_it = original_pathv_processed.begin();
             path_it != original_pathv_processed.end(); ++path_it) {
@@ -323,11 +320,11 @@ void LPEFilletChamfer::doUpdateFillet(std::vector<Geom::Path> const& original_pa
     fillet_chamfer_values.param_set_and_write_new_value(result);
 }
 
-void LPEFilletChamfer::doChangeType(std::vector<Geom::Path> const& original_pathv, int type)
+void LPEFilletChamfer::doChangeType(Geom::PathVector const &original_pathv, int type)
 {
     std::vector<Point> filletChamferData = fillet_chamfer_values.data();
     std::vector<Geom::Point> result;
-    std::vector<Geom::Path> original_pathv_processed = pathv_to_linear_and_cubic_beziers(original_pathv);
+    Geom::PathVector original_pathv_processed = pathv_to_linear_and_cubic_beziers(original_pathv);
     int counter = 0;
     for (PathVector::const_iterator path_it = original_pathv_processed.begin(); path_it != original_pathv_processed.end(); ++path_it) {
         int pathCounter = 0;
@@ -444,9 +441,7 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
         } else {
             fillet_chamfer_values.set_helper_size(helper_size);
         }
-        fillet_chamfer_values.set_document_unit(defaultUnit);
         fillet_chamfer_values.set_use_distance(use_knot_distance);
-        fillet_chamfer_values.set_unit(unit.get_abbreviation());
         SPCurve *c = SP_IS_PATH(lpeItem) ? static_cast<SPPath const *>(lpeItem)
                      ->get_original_curve()
                      : SP_SHAPE(lpeItem)->getCurve();
@@ -466,7 +461,7 @@ int LPEFilletChamfer::getKnotsNumber(SPCurve const *c)
 {
     int nKnots = c->nodes_in_path();
     PathVector const pv =    pathv_to_linear_and_cubic_beziers(c->get_pathvector());
-    for (std::vector<Geom::Path>::const_iterator path_it = pv.begin();
+    for (Geom::PathVector::const_iterator path_it = pv.begin();
             path_it != pv.end(); ++path_it) {
         if (!(*path_it).closed()) {
             nKnots--;
@@ -476,17 +471,17 @@ int LPEFilletChamfer::getKnotsNumber(SPCurve const *c)
 }
 
 void
-LPEFilletChamfer::adjustForNewPath(std::vector<Geom::Path> const &path_in)
+LPEFilletChamfer::adjustForNewPath(Geom::PathVector const &path_in)
 {
     if (!path_in.empty()) {
         fillet_chamfer_values.recalculate_controlpoints_for_new_pwd2(pathv_to_linear_and_cubic_beziers(path_in)[0].toPwSb());
     }
 }
 
-std::vector<Geom::Path>
-LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
+Geom::PathVector
+LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
 {
-    std::vector<Geom::Path> pathvector_out;
+    Geom::PathVector pathvector_out;
     Piecewise<D2<SBasis> > pwd2_in = paths_to_pw(pathv_to_linear_and_cubic_beziers(path_in));
     pwd2_in = remove_short_cuts(pwd2_in, .01);
     Piecewise<D2<SBasis> > der = derivative(pwd2_in);
@@ -495,7 +490,7 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
     std::vector<Point> filletChamferData = fillet_chamfer_values.data();
     unsigned int counter = 0;
     const double K = (4.0 / 3.0) * (sqrt(2.0) - 1.0);
-    std::vector<Geom::Path> path_in_processed = pathv_to_linear_and_cubic_beziers(path_in);
+    Geom::PathVector path_in_processed = pathv_to_linear_and_cubic_beziers(path_in);
     for (PathVector::const_iterator path_it = path_in_processed.begin();
             path_it != path_in_processed.end(); ++path_it) {
         if (path_it->empty())
@@ -548,7 +543,7 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
                 ray2.setPoints(endArcPoint, (*cubic2)[1]);
             }
             Point handle2 = endArcPoint - Point::polar(ray2.angle(),k2);
-            bool ccwToggle = cross(curve_it1->finalPoint() - startArcPoint, endArcPoint - startArcPoint) < 0;
+            bool ccwToggle = cross(curve_it1->finalPoint() - startArcPoint, endArcPoint - startArcPoint) > 0;
             double angle = angle_between(ray1, ray2, ccwToggle);
             double handleAngle = ray1.angle() - angle;
             if (ccwToggle) {
@@ -587,7 +582,7 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
                     Geom::Path path_chamfer;
                     path_chamfer.start(path_out.finalPoint());
                     if((is_straight_curve(*curve_it1) && is_straight_curve(*curve_it2Fixed) && method != FM_BEZIER )|| method == FM_ARC){ 
-                        path_chamfer.appendNew<SVGEllipticalArc>(rx, ry, angleArc, 0, ccwToggle, endArcPoint);
+                        path_chamfer.appendNew<EllipticalArc>(rx, ry, angleArc, 0, ccwToggle, endArcPoint);
                     } else {
                         path_chamfer.appendNew<Geom::CubicBezier>(handle1, handle2, endArcPoint);
                     }
@@ -603,7 +598,7 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
                     path_chamfer.start(path_out.finalPoint());
                     if((is_straight_curve(*curve_it1) && is_straight_curve(*curve_it2Fixed) && method != FM_BEZIER )|| method == FM_ARC){ 
                         ccwToggle = ccwToggle?0:1;
-                        path_chamfer.appendNew<SVGEllipticalArc>(rx, ry, angleArc, 0, ccwToggle, endArcPoint);
+                        path_chamfer.appendNew<EllipticalArc>(rx, ry, angleArc, 0, ccwToggle, endArcPoint);
                     }else{
                         path_chamfer.appendNew<Geom::CubicBezier>(inverseHandle1, inverseHandle2, endArcPoint);
                     }
@@ -616,13 +611,13 @@ LPEFilletChamfer::doEffect_path(std::vector<Geom::Path> const &path_in)
                 } else if (type == 2) {
                     if((is_straight_curve(*curve_it1) && is_straight_curve(*curve_it2Fixed) && method != FM_BEZIER )|| method == FM_ARC){ 
                         ccwToggle = ccwToggle?0:1;
-                        path_out.appendNew<SVGEllipticalArc>(rx, ry, angleArc, 0, ccwToggle, endArcPoint);
+                        path_out.appendNew<EllipticalArc>(rx, ry, angleArc, 0, ccwToggle, endArcPoint);
                     }else{
                         path_out.appendNew<Geom::CubicBezier>(inverseHandle1, inverseHandle2, endArcPoint);
                     }
                 } else if (type == 1){
                     if((is_straight_curve(*curve_it1) && is_straight_curve(*curve_it2Fixed) && method != FM_BEZIER )|| method == FM_ARC){ 
-                        path_out.appendNew<SVGEllipticalArc>(rx, ry, angleArc, 0, ccwToggle, endArcPoint);
+                        path_out.appendNew<EllipticalArc>(rx, ry, angleArc, 0, ccwToggle, endArcPoint);
                     } else {
                         path_out.appendNew<Geom::CubicBezier>(handle1, handle2, endArcPoint);
                     }
