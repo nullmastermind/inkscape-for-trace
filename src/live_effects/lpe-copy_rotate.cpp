@@ -166,9 +166,9 @@ LPECopyRotate::pointInTriangle(Geom::Point p, Geom::Point p1, Geom::Point p2, Ge
 }
 
 void
-LPECopyRotate::split(std::vector<Geom::Path> &path_on,Geom::Path divider)
+LPECopyRotate::split(Geom::PathVector &path_on,Geom::Path divider)
 {
-    std::vector<Geom::Path> tmp_path;
+    Geom::PathVector tmp_path;
     double time_start = 0.0;
     Geom::Path original = path_on[0];
     int position = 0;
@@ -222,17 +222,17 @@ LPECopyRotate::split(std::vector<Geom::Path> &path_on,Geom::Path divider)
 }
 
 void
-LPECopyRotate::setFusion(std::vector<Geom::Path> &path_on, Geom::Path divider, double size_divider)
+LPECopyRotate::setFusion(Geom::PathVector &path_on, Geom::Path divider, double size_divider)
 {
     split(path_on,divider);
-    std::vector<Geom::Path> tmp_path;
+    Geom::PathVector tmp_path;
     Geom::Affine pre = Geom::Translate(-origin);
     for (Geom::PathVector::const_iterator path_it = path_on.begin(); path_it != path_on.end(); ++path_it) {
         Geom::Path original = *path_it;
         if (path_it->empty()) {
             continue;
         }
-        std::vector<Geom::Path> tmp_path_helper;
+        Geom::PathVector tmp_path_helper;
         Geom::Path append_path = original;
         for (int i = 0; i < num_copies; ++i) {
             Geom::Rotate rot(-Geom::deg_to_rad(rotation_angle * (i)));
@@ -258,35 +258,35 @@ LPECopyRotate::setFusion(std::vector<Geom::Path> &path_on, Geom::Path divider, d
             }
             append_path *= m;
             if(i != 0 && tmp_path_helper.size() > 0 &&( Geom::are_near(tmp_path_helper[tmp_path_helper.size()-1].finalPoint(),append_path.finalPoint()))) {
-                Geom::Path tmp_append = append_path.reverse();
+                Geom::Path tmp_append = append_path.reversed();
                 tmp_append.setInitial(tmp_path_helper[tmp_path_helper.size()-1].finalPoint());
                 tmp_path_helper[tmp_path_helper.size()-1].append(tmp_append);
             } else if(i != 0 && tmp_path_helper.size() > 0 && Geom::are_near(tmp_path_helper[tmp_path_helper.size()-1].initialPoint(),append_path.initialPoint())) {
                 Geom::Path tmp_append = append_path;
-                tmp_path_helper[tmp_path_helper.size()-1] = tmp_path_helper[tmp_path_helper.size()-1].reverse();
+                tmp_path_helper[tmp_path_helper.size()-1] = tmp_path_helper[tmp_path_helper.size()-1].reversed();
                 tmp_append.setInitial(tmp_path_helper[tmp_path_helper.size()-1].finalPoint());
                 tmp_path_helper[tmp_path_helper.size()-1].append(tmp_append);
-                tmp_path_helper[tmp_path_helper.size()-1] = tmp_path_helper[tmp_path_helper.size()-1].reverse();
+                tmp_path_helper[tmp_path_helper.size()-1] = tmp_path_helper[tmp_path_helper.size()-1].reversed();
             } else if(i != 0 && tmp_path_helper.size() > 0 && Geom::are_near(tmp_path_helper[tmp_path_helper.size()-1].finalPoint(),append_path.initialPoint())) {
                 Geom::Path tmp_append = append_path;
                 tmp_append.setInitial(tmp_path_helper[tmp_path_helper.size()-1].finalPoint());
                 tmp_path_helper[tmp_path_helper.size()-1].append(tmp_append);
             } else if(i != 0 && tmp_path_helper.size() > 0 && Geom::are_near(tmp_path_helper[tmp_path_helper.size()-1].initialPoint(),append_path.finalPoint())) {
-                Geom::Path tmp_append = append_path.reverse();
-                tmp_path_helper[tmp_path_helper.size()-1] = tmp_path_helper[tmp_path_helper.size()-1].reverse();
+                Geom::Path tmp_append = append_path.reversed();
+                tmp_path_helper[tmp_path_helper.size()-1] = tmp_path_helper[tmp_path_helper.size()-1].reversed();
                 tmp_append.setInitial(tmp_path_helper[tmp_path_helper.size()-1].finalPoint());
                 tmp_path_helper[tmp_path_helper.size()-1].append(tmp_append);
-                tmp_path_helper[tmp_path_helper.size()-1] = tmp_path_helper[tmp_path_helper.size()-1].reverse();
+                tmp_path_helper[tmp_path_helper.size()-1] = tmp_path_helper[tmp_path_helper.size()-1].reversed();
             } else if(i != 0 && tmp_path_helper.size() > 0 && Geom::are_near(tmp_path_helper[0].finalPoint(),append_path.finalPoint())) {
-                Geom::Path tmp_append = append_path.reverse();
+                Geom::Path tmp_append = append_path.reversed();
                 tmp_append.setInitial(tmp_path_helper[0].finalPoint());
                 tmp_path_helper[0].append(tmp_append);
             } else if(i != 0 && tmp_path_helper.size() > 0 && Geom::are_near(tmp_path_helper[0].initialPoint(),append_path.initialPoint())) {
                 Geom::Path tmp_append = append_path;
-                tmp_path_helper[0] = tmp_path_helper[0].reverse();
+                tmp_path_helper[0] = tmp_path_helper[0].reversed();
                 tmp_append.setInitial(tmp_path_helper[0].finalPoint());
                 tmp_path_helper[0].append(tmp_append);
-                tmp_path_helper[0] = tmp_path_helper[0].reverse();
+                tmp_path_helper[0] = tmp_path_helper[0].reversed();
             } else {
                 tmp_path_helper.push_back(append_path);
             }
@@ -353,8 +353,8 @@ LPECopyRotate::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & p
     Piecewise<D2<SBasis> > output;
     Affine pre = Translate(-origin) * Rotate(-deg_to_rad(starting_angle));
     if(fusion_paths) {
-        std::vector<Geom::Path> path_out;
-        std::vector<Geom::Path> tmp_path;
+        Geom::PathVector path_out;
+        Geom::PathVector tmp_path;
         PathVector const original_pathv = path_from_piecewise(remove_short_cuts(pwd2_in, 0.1), 0.001);
         for (Geom::PathVector::const_iterator path_it = original_pathv.begin(); path_it != original_pathv.end(); ++path_it) {
             if (path_it->empty()) {
