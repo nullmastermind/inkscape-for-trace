@@ -15,6 +15,8 @@
 #include "ui/tool/multi-path-manipulator.h"
 #include "ui/tool/path-manipulator.h"
 #include "ui/tool/node.h"
+#include "sp-namedview.h"
+#include "snap.h"
 
 namespace Inkscape {
 namespace UI {
@@ -75,6 +77,16 @@ void CurveDragPoint::dragged(Geom::Point &new_pos, GdkEventMotion *event)
         second->back()->retract();
         _pm.update();
         return;
+    }
+
+    if (_drag_initiated && !(event->state & GDK_SHIFT_MASK)) {
+        SnapManager &m = _desktop->namedview->snap_manager;
+        SPItem *path = static_cast<SPItem *>(_pm._path);
+        m.setup(_desktop, true, path); // We will not try to snap to "path" itself
+        Inkscape::SnapCandidatePoint scp(new_pos, Inkscape::SNAPSOURCE_OTHER_HANDLE);
+        Inkscape::SnappedPoint sp = m.freeSnap(scp, Geom::OptRect(), false);
+        new_pos = sp.getPoint();
+        m.unSetup();
     }
 
     // Magic Bezier Drag Equations follow!
@@ -166,14 +178,8 @@ void CurveDragPoint::_insertNode(bool take_selection)
     // Otherwise clicks on the new node would only work after the user moves the mouse a bit.
     // PathManipulator will restore visibility when necessary.
     setVisible(false);
-    NodeList::iterator inserted = _pm.subdivideSegment(first, _t);
-    if (take_selection) {
-        _pm._selection.clear();
-    }
-    _pm._selection.insert(inserted.ptr());
 
-    _pm.update(true);
-    _pm._commit(_("Add node"));
+    _pm.insertNode(first, _t, take_selection);
 }
 
 Glib::ustring CurveDragPoint::_getTip(unsigned state) const
@@ -181,6 +187,10 @@ Glib::ustring CurveDragPoint::_getTip(unsigned state) const
     if (_pm.empty()) return "";
     if (!first || !first.next()) return "";
     bool linear = first->front()->isDegenerate() && first.next()->back()->isDegenerate();
+    if(state_held_shift(state) && _pm._isBSpline()){
+        return C_("Path segment tip",
+            "<b>Shift</b>: drag to open or move BSpline handles");
+    }
     if (state_held_shift(state)) {
         return C_("Path segment tip",
             "<b>Shift</b>: click to toggle segment selection");
@@ -188,6 +198,11 @@ Glib::ustring CurveDragPoint::_getTip(unsigned state) const
     if (state_held_control(state) && state_held_alt(state)) {
         return C_("Path segment tip",
             "<b>Ctrl+Alt</b>: click to insert a node");
+    }
+    if(_pm._isBSpline()){
+        return C_("Path segment tip",
+            "<b>BSpline segment</b>: drag to shape the segment, doubleclick to insert node, "
+            "click to select (more: Shift, Ctrl+Alt)");
     }
     if (linear) {
         return C_("Path segment tip",

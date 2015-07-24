@@ -45,6 +45,7 @@
 #include "style.h"
 #include "ui/tools-switch.h"
 #include "ui/icon-names.h"
+#include "ui/selected-color.h"
 #include "ui/widget/imagetoggler.h"
 #include "ui/widget/layertypeicon.h"
 #include "ui/widget/insertordericon.h"
@@ -53,7 +54,7 @@
 #include "ui/tools/node-tool.h"
 #include "ui/tools/tool-base.h"
 #include "verbs.h"
-#include "widgets/sp-color-notebook.h"
+#include "ui/widget/color-notebook.h"
 #include "widgets/icon.h"
 #include "xml/node.h"
 #include "xml/node-observer.h"
@@ -477,15 +478,15 @@ void ObjectsPanel::_objectsSelected( Selection *sel ) {
     _selectedConnection.block();
     _tree.get_selection()->unselect_all();
     SPItem *item = NULL;
-    for (const GSList * iter = sel->itemList(); iter != NULL; iter = iter->next)
-    {
-        item = reinterpret_cast<SPItem *>(iter->data);
+    std::vector<SPItem*> const items = sel->itemList();
+    for(std::vector<SPItem*>::const_iterator i=items.begin(); i!=items.end();i++){
+        item = *i;
         if (setOpacity)
         {
             _setCompositingValues(item);
             setOpacity = false;
         }
-        _store->foreach(sigc::bind<SPItem *, bool>( sigc::mem_fun(*this, &ObjectsPanel::_checkForSelected), item, iter->next == NULL));
+        _store->foreach(sigc::bind<SPItem *, bool>( sigc::mem_fun(*this, &ObjectsPanel::_checkForSelected), item, (*i)==items.back()));
     }
     if (!item) {
         if (_desktop->currentLayer() && SP_IS_ITEM(_desktop->currentLayer())) {
@@ -928,12 +929,12 @@ bool ObjectsPanel::_handleButtonEvent(GdkEventButton* event)
                             //If the current item is not selected, store only it in the highlight source
                             _storeHighlightTarget(iter);
                         }
-                        if (_colorSelector)
+                        if (_selectedColor)
                         {
                             //Set up the color selector
                             SPColor color;
                             color.set( row[_model->_colHighlight] );
-                            _colorSelector->base->setColorAlpha(color, SP_RGBA32_A_F(row[_model->_colHighlight]));
+                            _selectedColor->setColorAlpha(color, SP_RGBA32_A_F(row[_model->_colHighlight]));
                         }
                         //Show the color selector dialog
                         _colorSelectorDialog.show();
@@ -1440,17 +1441,16 @@ void ObjectsPanel::_setExpanded(const Gtk::TreeModel::iterator& iter, const Gtk:
  * @param csel Color selector
  * @param cp Objects panel
  */
-void sp_highlight_picker_color_mod(SPColorSelector *csel, GObject * cp)
+void ObjectsPanel::_highlightPickerColorMod()
 {
     SPColor color;
     float alpha = 0;
-    csel->base->getColorAlpha(color, alpha);
+    _selectedColor->colorAlpha(color, alpha);
+
     guint32 rgba = color.toRGBA32( alpha );
-    
-    ObjectsPanel *ptr = reinterpret_cast<ObjectsPanel *>(cp);
 
     //Set the highlight color for all items in the _highlight_target (all selected items)
-    for (std::vector<SPItem *>::iterator iter = ptr->_highlight_target.begin(); iter != ptr->_highlight_target.end(); ++iter)
+    for (std::vector<SPItem *>::iterator iter = _highlight_target.begin(); iter != _highlight_target.end(); ++iter)
     {
         SPItem * target = *iter;
         target->setHighlightColor(rgba);
@@ -1614,6 +1614,12 @@ ObjectsPanel::ObjectsPanel() :
     _pending(0),
     _toggleEvent(0),
     _defer_target(),
+    _visibleHeader(_("V")),
+    _lockHeader(_("L")),
+    _typeHeader(_("T")),
+    _clipmaskHeader(_("CM")),
+    _highlightHeader(_("HL")),
+    _nameHeader(_("Label")),
     _composite_vbox(false, 0),
     _opacity_vbox(false, 0),
     _opacity_label(_("Opacity:")),
@@ -1641,7 +1647,7 @@ ObjectsPanel::ObjectsPanel() :
 
     //Set up the tree
     _tree.set_model( _store );
-    _tree.set_headers_visible(false);
+    _tree.set_headers_visible(true);
     _tree.set_reorderable(true);
     _tree.enable_model_drag_dest (Gdk::ACTION_MOVE);
 
@@ -1654,6 +1660,10 @@ ObjectsPanel::ObjectsPanel() :
     Gtk::TreeViewColumn* col = _tree.get_column(visibleColNum);
     if ( col ) {
         col->add_attribute( eyeRenderer->property_active(), _model->_colVisible );
+        // In order to get tooltips on header, we must create our own label.
+        _visibleHeader.set_tooltip_text(_("Toggle visibility of Layer, Group, or Object."));
+        _visibleHeader.show();
+        col->set_widget( _visibleHeader );
     }
 
     //Locked
@@ -1664,6 +1674,9 @@ ObjectsPanel::ObjectsPanel() :
     col = _tree.get_column(lockedColNum);
     if ( col ) {
         col->add_attribute( renderer->property_active(), _model->_colLocked );
+        _lockHeader.set_tooltip_text(_("Toggle lock of Layer, Group, or Object."));
+        _lockHeader.show();
+        col->set_widget( _lockHeader );
     }
     
     //Type
@@ -1673,6 +1686,9 @@ ObjectsPanel::ObjectsPanel() :
     col = _tree.get_column(typeColNum);
     if ( col ) {
         col->add_attribute( typeRenderer->property_active(), _model->_colType );
+        _typeHeader.set_tooltip_text(_("Type: Layer, Group, or Object. Clicking on Layer or Group icon, toggles between the two types."));
+        _typeHeader.show();
+        col->set_widget( _typeHeader );
     }
 
     //Insert order (LiamW: unused)
@@ -1689,6 +1705,9 @@ ObjectsPanel::ObjectsPanel() :
     col = _tree.get_column(clipColNum);
     if ( col ) {
         col->add_attribute( clipRenderer->property_active(), _model->_colClipMask );
+        _clipmaskHeader.set_tooltip_text(_("Is object clipped and/or masked?"));
+        _clipmaskHeader.show();
+        col->set_widget( _clipmaskHeader );
     }
     
     //Highlight
@@ -1697,13 +1716,21 @@ ObjectsPanel::ObjectsPanel() :
     col = _tree.get_column(highlightColNum);
     if ( col ) {
         col->add_attribute( highlightRenderer->property_active(), _model->_colHighlight );
+        _highlightHeader.set_tooltip_text(_("Highlight color of outline in Node tool. Click to set. If alpha is zero, use inherited color."));
+        _highlightHeader.show();
+        col->set_widget( _highlightHeader );
     }
 
     //Label
     _text_renderer = Gtk::manage(new Gtk::CellRendererText());
     int nameColNum = _tree.append_column("Name", *_text_renderer) - 1;
     _name_column = _tree.get_column(nameColNum);
-    _name_column->add_attribute(_text_renderer->property_text(), _model->_colLabel);
+    if( _name_column ) {
+        _name_column->add_attribute(_text_renderer->property_text(), _model->_colLabel);
+        _nameHeader.set_tooltip_text(_("Layer/Group/Object label (inkscape:label). Double-click to set. Default value is object 'id'."));
+        _nameHeader.show();
+        _name_column->set_widget( _nameHeader );
+    }
 
     //Set the expander and search columns
     _tree.set_expander_column( *_tree.get_column(nameColNum) );
@@ -1858,46 +1885,46 @@ ObjectsPanel::ObjectsPanel() :
     //Set up the pop-up menu
     // -------------------------------------------------------
     {
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_RENAME, 0, "Rename", (int)BUTTON_RENAME ) );
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_EDIT_DUPLICATE, 0, "Duplicate", (int)BUTTON_DUPLICATE ) );
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_NEW, 0, "New", (int)BUTTON_NEW ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_RENAME, 0, _("Rename"), (int)BUTTON_RENAME ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_EDIT_DUPLICATE, 0, _("Duplicate"), (int)BUTTON_DUPLICATE ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_NEW, 0, _("New"), (int)BUTTON_NEW ) );
 
         _popupMenu.append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
 
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_SOLO, 0, "Solo", (int)BUTTON_SOLO ) );
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_SHOW_ALL, 0, "Show All", (int)BUTTON_SHOW_ALL ) );
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_HIDE_ALL, 0, "Hide All", (int)BUTTON_HIDE_ALL ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_SOLO, 0, _("Solo"), (int)BUTTON_SOLO ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_SHOW_ALL, 0, _("Show All"), (int)BUTTON_SHOW_ALL ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_HIDE_ALL, 0, _("Hide All"), (int)BUTTON_HIDE_ALL ) );
 
         _popupMenu.append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
 
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_LOCK_OTHERS, 0, "Lock Others", (int)BUTTON_LOCK_OTHERS ) );
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_LOCK_ALL, 0, "Lock All", (int)BUTTON_LOCK_ALL ) );
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_UNLOCK_ALL, 0, "Unlock All", (int)BUTTON_UNLOCK_ALL ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_LOCK_OTHERS, 0, _("Lock Others"), (int)BUTTON_LOCK_OTHERS ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_LOCK_ALL, 0, _("Lock All"), (int)BUTTON_LOCK_ALL ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_LAYER_UNLOCK_ALL, 0, _("Unlock All"), (int)BUTTON_UNLOCK_ALL ) );
 
         _popupMenu.append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
 
-        _watchingNonTop.push_back( &_addPopupItem( targetDesktop, SP_VERB_SELECTION_RAISE, GTK_STOCK_GO_UP, "Up", (int)BUTTON_UP ) );
-        _watchingNonBottom.push_back( &_addPopupItem( targetDesktop, SP_VERB_SELECTION_LOWER, GTK_STOCK_GO_DOWN, "Down", (int)BUTTON_DOWN ) );
+        _watchingNonTop.push_back( &_addPopupItem( targetDesktop, SP_VERB_SELECTION_RAISE, GTK_STOCK_GO_UP, _("Up"), (int)BUTTON_UP ) );
+        _watchingNonBottom.push_back( &_addPopupItem( targetDesktop, SP_VERB_SELECTION_LOWER, GTK_STOCK_GO_DOWN, _("Down"), (int)BUTTON_DOWN ) );
 
-        _popupMenu.append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
-        
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_SELECTION_GROUP, 0, "Group", (int)BUTTON_GROUP ) );
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_SELECTION_UNGROUP, 0, "Ungroup", (int)BUTTON_UNGROUP ) );
-        
         _popupMenu.append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
         
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_SET_CLIPPATH, 0, "Set Clip", (int)BUTTON_SETCLIP ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_SELECTION_GROUP, 0, _("Group"), (int)BUTTON_GROUP ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_SELECTION_UNGROUP, 0, _("Ungroup"), (int)BUTTON_UNGROUP ) );
         
-	_watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_CREATE_CLIP_GROUP, 0, "Create Clip Group", (int)BUTTON_CLIPGROUP ) );
+        _popupMenu.append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
+        
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_SET_CLIPPATH, 0, _("Set Clip"), (int)BUTTON_SETCLIP ) );
+        
+	_watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_CREATE_CLIP_GROUP, 0, _("Create Clip Group"), (int)BUTTON_CLIPGROUP ) );
 
         //will never be implemented
         //_watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_SET_INVERSE_CLIPPATH, 0, "Set Inverse Clip", (int)BUTTON_SETINVCLIP ) );
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_UNSET_CLIPPATH, 0, "Unset Clip", (int)BUTTON_UNSETCLIP ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_UNSET_CLIPPATH, 0, _("Unset Clip"), (int)BUTTON_UNSETCLIP ) );
 
         _popupMenu.append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
         
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_SET_MASK, 0, "Set Mask", (int)BUTTON_SETMASK ) );
-        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_UNSET_MASK, 0, "Unset Mask", (int)BUTTON_UNSETMASK ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_SET_MASK, 0, _("Set Mask"), (int)BUTTON_SETMASK ) );
+        _watching.push_back( &_addPopupItem( targetDesktop, SP_VERB_OBJECT_UNSET_MASK, 0, _("Unset Mask"), (int)BUTTON_UNSETMASK ) );
         
         _popupMenu.show_all_children();
     }
@@ -1922,18 +1949,16 @@ ObjectsPanel::ObjectsPanel() :
     _colorSelectorDialog.set_title (_("Select Highlight Color"));
     _colorSelectorDialog.set_border_width (4);
     _colorSelectorDialog.property_modal() = true;
-    _colorSelector = SP_COLOR_SELECTOR(sp_color_selector_new(SP_TYPE_COLOR_NOTEBOOK));
+    _selectedColor.reset(new Inkscape::UI::SelectedColor);
+    Gtk::Widget *color_selector = Gtk::manage(new Inkscape::UI::Widget::ColorNotebook(*_selectedColor));
     _colorSelectorDialog.get_vbox()->pack_start (
-              *Glib::wrap(&_colorSelector->vbox), true, true, 0);
+              *color_selector, true, true, 0);
 
-    g_signal_connect(G_OBJECT(_colorSelector), "dragged",
-                         G_CALLBACK(sp_highlight_picker_color_mod), (void *)this);
-    g_signal_connect(G_OBJECT(_colorSelector), "released",
-                         G_CALLBACK(sp_highlight_picker_color_mod), (void *)this);
-    g_signal_connect(G_OBJECT(_colorSelector), "changed",
-                         G_CALLBACK(sp_highlight_picker_color_mod), (void *)this);
+    _selectedColor->signal_dragged.connect(sigc::mem_fun(*this, &ObjectsPanel::_highlightPickerColorMod));
+    _selectedColor->signal_released.connect(sigc::mem_fun(*this, &ObjectsPanel::_highlightPickerColorMod));
+    _selectedColor->signal_changed.connect(sigc::mem_fun(*this, &ObjectsPanel::_highlightPickerColorMod));
 
-    gtk_widget_show(GTK_WIDGET(_colorSelector));
+    color_selector->show();
     
     setDesktop( targetDesktop );
 
@@ -1951,7 +1976,6 @@ ObjectsPanel::~ObjectsPanel()
 {
     //Close the highlight selection dialog
     _colorSelectorDialog.hide();
-    _colorSelector = NULL;
     
     //Set the desktop to null, which will disconnect all object watchers
     setDesktop(NULL);

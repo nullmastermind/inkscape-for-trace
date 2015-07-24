@@ -356,8 +356,8 @@ void Handle::dragged(Geom::Point &new_pos, GdkEventMotion *event)
         Geom::Line perp_line(parent_pos, parent_pos + Geom::rot90(origin - parent_pos));
         Geom::Point snap_pos = parent_pos + Geom::constrain_angle(
             Geom::Point(0,0), new_pos - parent_pos, snaps, Geom::Point(1,0));
-        Geom::Point orig_pos = original_line.pointAt(original_line.nearestPoint(new_pos));
-        Geom::Point perp_pos = perp_line.pointAt(perp_line.nearestPoint(new_pos));
+        Geom::Point orig_pos = original_line.pointAt(original_line.nearestTime(new_pos));
+        Geom::Point perp_pos = perp_line.pointAt(perp_line.nearestTime(new_pos));
 
         Geom::Point result = snap_pos;
         ctrl_constraint = Inkscape::Snapper::SnapConstraint(parent_pos, parent_pos - snap_pos);
@@ -1464,13 +1464,14 @@ Glib::ustring Node::_getTip(unsigned state) const
 
     // No modifiers: assemble tip from node type
     char const *nodetype = node_type_to_localized_string(_type);
+    double power = _pm()._bsplineHandlePosition(h,h2);
     if (_selection.transformHandlesEnabled() && selected()) {
         if (_selection.size() == 1 && !isBSpline) {
             return format_tip(C_("Path node tip",
                 "<b>%s</b>: drag to shape the path (more: Shift, Ctrl, Alt)"), nodetype);
         }else if(_selection.size() == 1){
             return format_tip(C_("Path node tip",
-                "<b>BSpline node</b>: drag to shape the path (more: Shift, Ctrl, Alt). %g power"),_pm()._bsplineHandlePosition(h,h2));
+                "<b>BSpline node</b>: drag to shape the path (more: Shift, Ctrl, Alt). %g power"), power);
         }
         return format_tip(C_("Path node tip",
             "<b>%s</b>: drag to shape the path, click to toggle scale/rotation handles (more: Shift, Ctrl, Alt)"), nodetype);
@@ -1480,7 +1481,7 @@ Glib::ustring Node::_getTip(unsigned state) const
             "<b>%s</b>: drag to shape the path, click to select only this node (more: Shift, Ctrl, Alt)"), nodetype);
     }else{
         return format_tip(C_("Path node tip",
-            "<b>BSpline node</b>: drag to shape the path, click to select only this node (more: Shift, Ctrl, Alt). %g power"),_pm()._bsplineHandlePosition(h,h2));
+            "<b>BSpline node</b>: drag to shape the path, click to select only this node (more: Shift, Ctrl, Alt). %g power"), power);
     
     }
 }
@@ -1564,6 +1565,13 @@ NodeList::iterator NodeList::before(double t, double *fracpart)
 
     iterator ret = begin();
     std::advance(ret, index);
+    return ret;
+}
+
+NodeList::iterator NodeList::before(Geom::PathTime const &pvp)
+{
+    iterator ret = begin();
+    std::advance(ret, pvp.curve_index);
     return ret;
 }
 

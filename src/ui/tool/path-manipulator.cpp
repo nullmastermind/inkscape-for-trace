@@ -174,7 +174,8 @@ bool PathManipulator::event(Inkscape::UI::Tools::ToolBase * /*event_context*/, G
     case GDK_MOTION_NOTIFY:
         _updateDragPoint(event_point(event->motion));
         break;
-    default: break;
+    default:
+        break;
     }
     return false;
 }
@@ -274,6 +275,27 @@ void PathManipulator::insertNodes()
         }
     }
 }
+
+void PathManipulator::insertNode(Geom::Point pt)
+{
+    Geom::Coord dist = _updateDragPoint(pt);
+    if (dist < 1e-5) { // 1e-6 is too small, as observed occasionally when inserting a node at a snapped intersection of paths
+        insertNode(_dragpoint->getIterator(), _dragpoint->getTimeValue(), true);
+    }
+}
+
+void PathManipulator::insertNode(NodeList::iterator first, double t, bool take_selection)
+{
+    NodeList::iterator inserted = subdivideSegment(first, t);
+    if (take_selection) {
+        _selection.clear();
+    }
+    _selection.insert(inserted.ptr());
+
+    update(true);
+    _commit(_("Add node"));
+}
+
 
 static void
 add_or_replace_if_extremum(std::vector< std::pair<NodeList::iterator, double> > &vec,
@@ -996,7 +1018,7 @@ NodeList::iterator PathManipulator::subdivideSegment(NodeList::iterator first, d
         Geom::CubicBezier temp(first->position(), first->front()->position(),
             second->back()->position(), second->position());
         std::pair<Geom::CubicBezier, Geom::CubicBezier> div = temp.subdivide(t);
-        std::vector<Geom::Point> seg1 = div.first.points(), seg2 = div.second.points();
+        std::vector<Geom::Point> seg1 = div.first.controlPoints(), seg2 = div.second.controlPoints();
 
         // set new handle positions
         Node *n = new Node(_multi_path_manipulator._path_data.node_data, seg2[0]);
@@ -1141,22 +1163,22 @@ void PathManipulator::_createControlPointsFromGeometry()
     pathv *= (_edit_transform * _i2d_transform);
 
     // in this loop, we know that there are no zero-segment subpaths
-    for (Geom::PathVector::const_iterator pit = pathv.begin(); pit != pathv.end(); ++pit) {
+    for (Geom::PathVector::iterator pit = pathv.begin(); pit != pathv.end(); ++pit) {
         // prepare new subpath
         SubpathPtr subpath(new NodeList(_subpaths));
         _subpaths.push_back(subpath);
 
         Node *previous_node = new Node(_multi_path_manipulator._path_data.node_data, pit->initialPoint());
         subpath->push_back(previous_node);
-        Geom::Curve const &cseg = pit->back_closed();
-        bool fuse_ends = pit->closed()
-            && Geom::are_near(cseg.initialPoint(), cseg.finalPoint());
-        for (Geom::Path::const_iterator cit = pit->begin(); cit != pit->end_open(); ++cit) {
+
+        bool closed = pit->closed();
+
+        for (Geom::Path::iterator cit = pit->begin(); cit != pit->end(); ++cit) {
             Geom::Point pos = cit->finalPoint();
             Node *current_node;
             // if the closing segment is degenerate and the path is closed, we need to move
             // the handle of the first node instead of creating a new one
-            if (fuse_ends && cit == --(pit->end_open())) {
+            if (closed && cit == --(pit->end())) {
                 current_node = subpath->begin().get_pointer();
             } else {
                 /* regardless of segment type, create a new node at the end
@@ -1271,7 +1293,7 @@ double PathManipulator::_bsplineHandlePosition(Handle *h, Handle *h2)
         line_inside_nodes->moveto(n->position());
         line_inside_nodes->lineto(next_node->position());
         if(!are_near(h->position(), n->position())){
-            pos = Geom::nearest_point(Geom::Point(h->position()[X] - HANDLE_CUBIC_GAP, h->position()[Y] - HANDLE_CUBIC_GAP), *line_inside_nodes->first_segment());
+            pos = Geom::nearest_time(Geom::Point(h->position()[X] - HANDLE_CUBIC_GAP, h->position()[Y] - HANDLE_CUBIC_GAP), *line_inside_nodes->first_segment());
         }
     }
     if (pos == NO_POWER && !h2){
@@ -1425,7 +1447,7 @@ void PathManipulator::_updateOutline()
         Geom::PathVector arrows;
         for (Geom::PathVector::iterator i = pv.begin(); i != pv.end(); ++i) {
             Geom::Path &path = *i;
-            for (Geom::Path::const_iterator j = path.begin(); j != path.end_default(); ++j) {
+            for (Geom::Path::iterator j = path.begin(); j != path.end_default(); ++j) {
                 Geom::Point at = j->pointAt(0.5);
                 Geom::Point ut = j->unitTangentAt(0.5);
                 // rotate the point 
@@ -1643,33 +1665,40 @@ void PathManipulator::_commit(Glib::ustring const &annotation, gchar const *key)
 
 /** Update the position of the curve drag point such that it is over the nearest
  * point of the path. */
-void PathManipulator::_updateDragPoint(Geom::Point const &evp)
+Geom::Coord PathManipulator::_updateDragPoint(Geom::Point const &evp)
 {
+    Geom::Coord dist = HUGE_VAL;
+
     Geom::Affine to_desktop = _edit_transform * _i2d_transform;
     Geom::PathVector pv = _spcurve->get_pathvector();
-    boost::optional<Geom::PathVectorPosition> pvp
-        = Geom::nearestPoint(pv, _desktop->w2d(evp) * to_desktop.inverse());
-    if (!pvp) return;
-    Geom::Point nearest_point = _desktop->d2w(pv.at(pvp->path_nr).pointAt(pvp->t) * to_desktop);
-    
-    double fracpart;
+
+    boost::optional<Geom::PathVectorTime> pvp =
+        pv.nearestTime(_desktop->w2d(evp) * to_desktop.inverse());
+    if (!pvp) return dist;
+    Geom::Point nearest_pt = _desktop->d2w(pv.pointAt(*pvp) * to_desktop);
+
+    double fracpart = pvp->t;
     std::list<SubpathPtr>::iterator spi = _subpaths.begin();
-    for (unsigned i = 0; i < pvp->path_nr; ++i, ++spi) {}
-    NodeList::iterator first = (*spi)->before(pvp->t, &fracpart);
+    for (unsigned i = 0; i < pvp->path_index; ++i, ++spi) {}
+    NodeList::iterator first = (*spi)->before(pvp->asPathTime());
     
+    dist = Geom::distance(evp, nearest_pt);
+
     double stroke_tolerance = _getStrokeTolerance();
     if (first && first.next() &&
         fracpart != 0.0 &&
-        Geom::distance(evp, nearest_point) < stroke_tolerance)
+        dist < stroke_tolerance)
     {
         _dragpoint->setVisible(true);
-        _dragpoint->setPosition(_desktop->w2d(nearest_point));
+        _dragpoint->setPosition(_desktop->w2d(nearest_pt));
         _dragpoint->setSize(2 * stroke_tolerance);
         _dragpoint->setTimeValue(fracpart);
         _dragpoint->setIterator(first);
     } else {
         _dragpoint->setVisible(false);
     }
+
+    return dist;
 }
 
 /// This is called on zoom change to update the direction arrows

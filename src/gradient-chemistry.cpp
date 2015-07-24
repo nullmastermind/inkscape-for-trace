@@ -1068,7 +1068,7 @@ void sp_item_gradient_set_coords(SPItem *item, GrPointType point_type, guint poi
                 // using X-coordinates only to determine the offset, assuming p has been snapped to the vector from begin to end.
                 Geom::Point begin(lg->x1.computed, lg->y1.computed);
                 Geom::Point end(lg->x2.computed, lg->y2.computed);
-                double offset = Geom::LineSegment(begin, end).nearestPoint(p);
+                double offset = Geom::LineSegment(begin, end).nearestTime(p);
                 SPGradient *vector = sp_gradient_get_forked_vector_if_necessary (lg, false);
                 lg->ensureVector();
                 lg->vector.stops.at(point_i).offset = offset;
@@ -1163,7 +1163,7 @@ void sp_item_gradient_set_coords(SPItem *item, GrPointType point_type, guint poi
             {
                 Geom::Point start = Geom::Point (rg->cx.computed, rg->cy.computed);
                 Geom::Point end   = Geom::Point (rg->cx.computed + rg->r.computed, rg->cy.computed);
-                double offset = Geom::LineSegment(start, end).nearestPoint(p);
+                double offset = Geom::LineSegment(start, end).nearestTime(p);
                 SPGradient *vector = sp_gradient_get_forked_vector_if_necessary (rg, false);
                 rg->ensureVector();
                 rg->vector.stops.at(point_i).offset = offset;
@@ -1180,7 +1180,7 @@ void sp_item_gradient_set_coords(SPItem *item, GrPointType point_type, guint poi
             {
                 Geom::Point start = Geom::Point (rg->cx.computed, rg->cy.computed);
                 Geom::Point end   = Geom::Point (rg->cx.computed, rg->cy.computed - rg->r.computed);
-                double offset = Geom::LineSegment(start, end).nearestPoint(p);
+                double offset = Geom::LineSegment(start, end).nearestTime(p);
                 SPGradient *vector = sp_gradient_get_forked_vector_if_necessary(rg, false);
                 rg->ensureVector();
                 rg->vector.stops.at(point_i).offset = offset;
@@ -1570,8 +1570,9 @@ void sp_gradient_invert_selected_gradients(SPDesktop *desktop, Inkscape::PaintTa
 {
     Inkscape::Selection *selection = desktop->getSelection();
 
-    for (GSList const* i = selection->itemList(); i != NULL; i = i->next) {
-        sp_item_gradient_invert_vector_color(SP_ITEM(i->data), fill_or_stroke);
+    const std::vector<SPItem*> list=selection->itemList();
+    for (std::vector<SPItem*>::const_iterator i = list.begin(); i != list.end(); i++) {
+        sp_item_gradient_invert_vector_color(*i, fill_or_stroke);
     }
 
     // we did an undoable action
@@ -1594,9 +1595,10 @@ void sp_gradient_reverse_selected_gradients(SPDesktop *desktop)
     if (drag && drag->selected) {
         drag->selected_reverse_vector();
     } else { // If no drag or no dragger selected, act on selection (both fill and stroke gradients)
-        for (GSList const* i = selection->itemList(); i != NULL; i = i->next) {
-            sp_item_gradient_reverse_vector(SP_ITEM(i->data), Inkscape::FOR_FILL);
-            sp_item_gradient_reverse_vector(SP_ITEM(i->data), Inkscape::FOR_STROKE);
+        const std::vector<SPItem*> list=selection->itemList();
+        for (std::vector<SPItem*>::const_iterator i = list.begin(); i != list.end(); i++) {
+            sp_item_gradient_reverse_vector(*i, Inkscape::FOR_FILL);
+            sp_item_gradient_reverse_vector(*i, Inkscape::FOR_STROKE);
         }
     }
 

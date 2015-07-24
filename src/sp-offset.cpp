@@ -83,7 +83,7 @@ static void sp_offset_source_modified (SPObject *iSource, guint flags, SPItem *i
 // fast is not mathematically correct, because computing the offset of a single
 // cubic bezier patch is not trivial; in particular, there are problems with holes
 // reappearing in offset when the radius becomes too large
-static bool   use_slow_but_correct_offset_method=false;
+static bool   use_slow_but_correct_offset_method=true;
 
 SPOffset::SPOffset() : SPShape() {
     this->rad = 1.0;
@@ -890,7 +890,7 @@ sp_offset_distance_to_original (SPOffset * offset, Geom::Point px)
                 if (ab > 0 && ab < len * len)
                 {
                     // we're in the zone of influence of the segment
-                    double ndist = (cross(pxsx,nx)) / len;
+                    double ndist = (cross(nx, pxsx)) / len;
 
                     if (arSet == false || fabs (ndist) < fabs (arDist))
                     {

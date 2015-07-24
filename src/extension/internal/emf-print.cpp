@@ -60,6 +60,7 @@
 #include "splivarot.h"             // pieces for union on shapes
 #include "2geom/svg-path-parser.h" // to get from SVG text to Geom::Path
 #include "display/canvas-bpath.h"  // for SPWindRule
+#include "display/cairo-utils.h"  // for Inkscape::Pixbuf::PF_CAIRO
 
 #include "emf-print.h"
 
@@ -69,7 +70,6 @@ namespace Extension {
 namespace Internal {
 
 #define PXPERMETER 2835
-
 
 /* globals */
 static double       PX2WORLD;
@@ -388,8 +388,8 @@ int PrintEmf::create_brush(SPStyle const *style, PU_COLORREF fcolor)
         } else if (SP_IS_PATTERN(SP_STYLE_FILL_SERVER(style))) { // must be paint-server
             SPPaintServer *paintserver = style->fill.value.href->getObject();
             SPPattern *pat = SP_PATTERN(paintserver);
-            double dwidth  = pattern_width(pat);
-            double dheight = pattern_height(pat);
+            double dwidth  = pat->width();
+            double dheight = pat->height();
             width  = dwidth;
             height = dheight;
             brush_classify(pat, 0, &pixbuf, &hatchType, &hatchColor, &bkColor);
@@ -481,9 +481,8 @@ int PrintEmf::create_brush(SPStyle const *style, PU_COLORREF fcolor)
         rgba_px = (char *) pixbuf->pixels(); // Do NOT free this!!!
         colortype = U_BCBM_COLOR32;
         (void) RGBA_to_DIB(&px, &cbPx, &ct, &numCt,  rgba_px,  width, height, width * 4, colortype, 0, 1);
-        // Not sure why the next swap is needed because the preceding does it, and the code is identical
-        // to that in stretchdibits_set, which does not need this.
-        swapRBinRGBA(px, width * height);
+        // pixbuf can be either PF_CAIRO or PF_GDK, and these have R and B bytes swapped
+        if (pixbuf->pixelFormat() == Inkscape::Pixbuf::PF_CAIRO) { swapRBinRGBA(px, width * height); }
         Bmih = bitmapinfoheader_set(width, height, 1, colortype, U_BI_RGB, 0, PXPERMETER, PXPERMETER, numCt, 0);
         Bmi = bitmapinfo_set(Bmih, ct);
         rec = createdibpatternbrushpt_set(&brush, eht, U_DIB_RGB_COLORS, Bmi, cbPx, px);
@@ -574,8 +573,8 @@ int PrintEmf::create_pen(SPStyle const *style, const Geom::Affine &transform)
         if (SP_IS_PATTERN(SP_STYLE_STROKE_SERVER(style))) { // must be paint-server
             SPPaintServer *paintserver = style->stroke.value.href->getObject();
             SPPattern *pat = SP_PATTERN(paintserver);
-            double dwidth  = pattern_width(pat);
-            double dheight = pattern_height(pat);
+            double dwidth  = pat->width();
+            double dheight = pat->height();
             width  = dwidth;
             height = dheight;
             brush_classify(pat, 0, &pixbuf, &hatchType, &hatchColor, &bkColor);
@@ -584,9 +583,8 @@ int PrintEmf::create_pen(SPStyle const *style, const Geom::Affine &transform)
                 rgba_px = (char *) pixbuf->pixels(); // Do NOT free this!!!
                 colortype = U_BCBM_COLOR32;
                 (void) RGBA_to_DIB(&px, &cbPx, &ct, &numCt,  rgba_px,  width, height, width * 4, colortype, 0, 1);
-                // Not sure why the next swap is needed because the preceding does it, and the code is identical
-                // to that in stretchdibits_set, which does not need this.
-                swapRBinRGBA(px, width * height);
+                // pixbuf can be either PF_CAIRO or PF_GDK, and these have R and B bytes swapped
+                if (pixbuf->pixelFormat() == Inkscape::Pixbuf::PF_CAIRO) { swapRBinRGBA(px, width * height); }
                 Bmih = bitmapinfoheader_set(width, height, 1, colortype, U_BI_RGB, 0, PXPERMETER, PXPERMETER, numCt, 0);
                 Bmi = bitmapinfo_set(Bmih, ct);
             } else { // pattern
@@ -862,7 +860,7 @@ Geom::Path PrintEmf::pathv_to_rect(Geom::PathVector const &pathv, bool *is_rect,
         /* Get the ends of the LAST line segment.
            Find minimum rotation to align rectangle with X,Y axes.  (Very degenerate if it is rotated 45 degrees.) */
         *angle = 10.0;  /* must be > than the actual angle in radians. */
-        for(Geom::Path::const_iterator cit  = pR.begin(); cit != pR.end_open(); ++cit){
+        for(Geom::Path::iterator cit  = pR.begin(); cit != pR.end_open(); ++cit){
             P1_trail = cit->initialPoint();
             P1       = cit->finalPoint();
             v1 = unit_vector(P1 - P1_trail);
@@ -876,7 +874,7 @@ Geom::Path PrintEmf::pathv_to_rect(Geom::PathVector const &pathv, bool *is_rect,
         double convert = 36000.0/ (2.0 * M_PI);
         *angle = round(*angle * convert)/convert;
 
-        for(Geom::Path::const_iterator cit  = pR.begin(); cit != pR.end_open();++cit) {
+        for(Geom::Path::iterator cit  = pR.begin(); cit != pR.end_open();++cit) {
             P1_lead = cit->finalPoint();
             v1 = unit_vector(P1      - P1_trail);
             v2 = unit_vector(P1_lead - P1      );
@@ -926,7 +924,7 @@ int PrintEmf::vector_rect_alignment(double angle, Geom::Point vtest){
 */
 Geom::Point PrintEmf::get_pathrect_corner(Geom::Path pathRect, double angle, int corner){
     Geom::Point center(0,0);
-    for(Geom::Path::const_iterator cit = pathRect.begin(); cit != pathRect.end_open(); ++cit) {
+    for(Geom::Path::iterator cit = pathRect.begin(); cit != pathRect.end_open(); ++cit) {
         center += cit->initialPoint()/4.0;
     }
 
@@ -954,7 +952,7 @@ Geom::Point PrintEmf::get_pathrect_corner(Geom::Path pathRect, double angle, int
     Geom::Point v1 = Geom::Point(1,0) * Geom::Rotate(-angle);  // unit horizontal side (sign change because Y increases DOWN)
     Geom::Point v2 = Geom::Point(0,1) * Geom::Rotate(-angle);  // unit vertical side (sign change because Y increases DOWN)
     Geom::Point P1;
-    for(Geom::Path::const_iterator cit = pathRect.begin(); cit != pathRect.end_open(); ++cit) {
+    for(Geom::Path::iterator cit = pathRect.begin(); cit != pathRect.end_open(); ++cit) {
         P1 = cit->initialPoint();
 
         if (   ( LR == (dot(P1 - center,v1) > 0 ? 0 : 1) )
@@ -1496,11 +1494,11 @@ bool PrintEmf::print_simple_shape(Geom::PathVector const &pathv, const Geom::Aff
     int curves = 0;
     char *rec  = NULL;
 
-    for (Geom::PathVector::const_iterator pit = pv.begin(); pit != pv.end(); ++pit) {
+    for (Geom::PathVector::iterator pit = pv.begin(); pit != pv.end(); ++pit) {
         moves++;
         nodes++;
 
-        for (Geom::Path::const_iterator cit = pit->begin(); cit != pit->end_open(); ++cit) {
+        for (Geom::Path::iterator cit = pit->begin(); cit != pit->end_open(); ++cit) {
             nodes++;
 
             if (is_straight_curve(*cit)) {
@@ -1521,7 +1519,7 @@ bool PrintEmf::print_simple_shape(Geom::PathVector const &pathv, const Geom::Aff
     /**
      * For all Subpaths in the <path>
      */
-    for (Geom::PathVector::const_iterator pit = pv.begin(); pit != pv.end(); ++pit) {
+    for (Geom::PathVector::iterator pit = pv.begin(); pit != pv.end(); ++pit) {
         using Geom::X;
         using Geom::Y;
 
@@ -1540,7 +1538,7 @@ bool PrintEmf::print_simple_shape(Geom::PathVector const &pathv, const Geom::Aff
         /**
          * For all segments in the subpath
          */
-        for (Geom::Path::const_iterator cit = pit->begin(); cit != pit->end_open(); ++cit) {
+        for (Geom::Path::iterator cit = pit->begin(); cit != pit->end_open(); ++cit) {
             if (is_straight_curve(*cit)) {
                 //Geom::Point p0 = cit->initialPoint();
                 Geom::Point p1 = cit->finalPoint();
@@ -1559,7 +1557,7 @@ bool PrintEmf::print_simple_shape(Geom::PathVector const &pathv, const Geom::Aff
                 lpPoints[i].y = y1;
                 i = i + 1;
             } else if (Geom::CubicBezier const *cubic = dynamic_cast<Geom::CubicBezier const *>(&*cit)) {
-                std::vector<Geom::Point> points = cubic->points();
+                std::vector<Geom::Point> points = cubic->controlPoints();
                 //Geom::Point p0 = points[0];
                 Geom::Point p1 = points[1];
                 Geom::Point p2 = points[2];
@@ -1848,7 +1846,7 @@ unsigned int PrintEmf::draw_pathv_to_EMF(Geom::PathVector const &pathv, const Ge
                     g_error("Fatal programming error in PrintEmf::print_pathv at U_EMRLINETO_set");
                 }
             } else if (Geom::CubicBezier const *cubic = dynamic_cast<Geom::CubicBezier const *>(&*cit)) {
-                std::vector<Geom::Point> points = cubic->points();
+                std::vector<Geom::Point> points = cubic->controlPoints();
                 //Geom::Point p0 = points[0];
                 Geom::Point p1 = points[1];
                 Geom::Point p2 = points[2];

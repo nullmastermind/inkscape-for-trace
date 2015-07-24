@@ -111,7 +111,7 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
             knoth->update_knots();
         }
     } else if( mode == MT_FREE) {
-        std::vector<Geom::Path> line_m(reflection_line.get_pathvector());
+        Geom::PathVector line_m(reflection_line.get_pathvector());
         if(!are_near(previous_center,center, 0.01)) {
             Geom::Point trans = center - line_m[0].pointAt(0.5);
             line_m[0] *= Geom::Affine(1,0,0,1,trans[X],trans[Y]);
@@ -161,15 +161,15 @@ LPEMirrorSymmetry::pointSideOfLine(Geom::Point point_a, Geom::Point point_b, Geo
     return (pos < 0) ? -1 : (pos > 0);
 }
 
-std::vector<Geom::Path>
-LPEMirrorSymmetry::doEffect_path (std::vector<Geom::Path> const & path_in)
+Geom::PathVector
+LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
 {
     // Don't allow empty path parameter:
     if ( reflection_line.get_pathvector().empty() ) {
         return path_in;
     }
     Geom::PathVector const original_pathv = pathv_to_linear_and_cubic_beziers(path_in);
-    std::vector<Geom::Path> path_out;
+    Geom::PathVector path_out;
     Geom::Path line_m_expanded;
     Geom::Point line_start = line_separation.pointAt(-100000.0);
     Geom::Point line_end = line_separation.pointAt(100000.0);
@@ -202,7 +202,7 @@ LPEMirrorSymmetry::doEffect_path (std::vector<Geom::Path> const & path_in)
             if (path_it->empty()) {
                 continue;
             }
-            std::vector<Geom::Path> temp_path;
+            Geom::PathVector temp_path;
             double time_start = 0.0;
             int position = 0;
             bool end_open = false;

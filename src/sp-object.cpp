@@ -357,6 +357,10 @@ int sp_object_compare_position(SPObject const *first, SPObject const *second)
     return result;
 }
 
+bool sp_object_compare_position_bool(SPObject const *first, SPObject const *second){
+    return sp_object_compare_position(first,second)<0;
+}
+
 
 SPObject *SPObject::appendChildRepr(Inkscape::XML::Node *repr) {
     if ( !cloned ) {
@@ -380,14 +384,14 @@ void SPObject::changeCSS(SPCSSAttr *css, gchar const *attr)
     sp_repr_css_change(this->getRepr(), css, attr);
 }
 
-GSList *SPObject::childList(bool add_ref, Action) {
-    GSList *l = NULL;
+std::vector<SPObject*> SPObject::childList(bool add_ref, Action) {
+	 std::vector<SPObject*> l;
     for ( SPObject *child = firstChild() ; child; child = child->getNext() ) {
         if (add_ref) {
             sp_object_ref (child);
         }
 
-        l = g_slist_prepend (l, child);
+        l.push_back(child);
     }
     return l;
 
@@ -717,6 +721,9 @@ void SPObject::invoke_build(SPDocument *document, Inkscape::XML::Node *repr, uns
     }
     this->cloned = cloned;
 
+    /* Invoke derived methods, if any */
+    this->build(document, repr);
+
     if ( !cloned ) {
         this->document->bindObjectToRepr(this->repr, this);
 
@@ -750,8 +757,6 @@ void SPObject::invoke_build(SPDocument *document, Inkscape::XML::Node *repr, uns
         g_assert(this->getId() == NULL);
     }
 
-    /* Invoke derived methods, if any */
-    this->build(document, repr);
 
     /* Signalling (should be connected AFTER processing derived methods */
     sp_repr_add_listener(repr, &object_event_vector, this);

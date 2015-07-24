@@ -48,7 +48,7 @@ public:
 
     virtual int pointSideOfLine(Geom::Point A, Geom::Point B, Geom::Point X);
 
-    virtual std::vector<Geom::Path> doEffect_path (std::vector<Geom::Path> const & path_in);
+    virtual Geom::PathVector doEffect_path (Geom::PathVector const & path_in);
 
     /* the knotholder entity classes must be declared friends */
     friend class MS::KnotHolderEntityCenterMirrorSymmetry;
