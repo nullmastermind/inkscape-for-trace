@@ -129,9 +129,9 @@ protected:
     // of what kind of input/output parameters he desires.
     // the order in which they appear is the order in which they are
     // called by this base class. (i.e. doEffect(SPCurve * curve) defaults to calling
-    // doEffect(std::vector<Geom::Path> )
-    virtual std::vector<Geom::Path>
-            doEffect_path (std::vector<Geom::Path> const & path_in);
+    // doEffect(Geom::PathVector )
+    virtual Geom::PathVector
+            doEffect_path (Geom::PathVector const & path_in);
     virtual Geom::Piecewise<Geom::D2<Geom::SBasis> >
             doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in);
 
@@ -159,11 +159,10 @@ protected:
     bool concatenate_before_pwd2;
 
     SPLPEItem * sp_lpe_item; // these get stored in doBeforeEffect_impl, and derived classes may do as they please with them.
-    Glib::ustring defaultUnit; // these get stored in doBeforeEffect_impl, and derived classes may do as they please with them.
     double current_zoom;
     std::vector<Geom::Point> selectedNodesPoints;
     SPCurve * sp_curve;
-    std::vector<Geom::Path> pathvector_before_effect;
+    Geom::PathVector pathvector_before_effect;
 private:
     bool provides_own_flash_paths; // if true, the standard flash path is suppressed
 

@@ -20,7 +20,7 @@
 #include "display/curve.h"
 
 #include <2geom/path.h>
-#include <2geom/svg-elliptical-arc.h>
+#include <2geom/elliptical-arc.h>
 
 #include "lpe-jointype.h"
 
@@ -110,6 +110,7 @@ void LPEJoinType::doOnApply(SPLPEItem const* lpeitem)
         sp_repr_css_attr_unref (css);
 
         line_width.param_set_value(width);
+        line_width.write_to_SVG();
     }
 }
 
@@ -150,7 +151,7 @@ void LPEJoinType::doOnRemove(SPLPEItem const* lpeitem)
     }
 }
 
-std::vector<Geom::Path> LPEJoinType::doEffect_path(std::vector<Geom::Path> const & path_in)
+Geom::PathVector LPEJoinType::doEffect_path(Geom::PathVector const & path_in)
 {
     Geom::PathVector ret;
     for (size_t i = 0; i < path_in.size(); ++i) {
