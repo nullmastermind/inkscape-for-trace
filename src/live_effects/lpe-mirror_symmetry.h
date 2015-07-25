@@ -8,6 +8,7 @@
  * Authors:
  *   Maximilian Albert
  *   Johan Engelen
+ *   Jabiertxof
  *
  * Copyright (C) Johan Engelen 2007 <j.b.c.engelen@utwente.nl>
  * Copyright (C) Maximilin Albert 2008 <maximilian.albert@gmail.com>
