@@ -66,7 +66,6 @@ private:
     Geom::Line line_separation;
     Geom::Point previous_center;
     PointParam center;
-    KnotHolder *knoth;
 
     LPEMirrorSymmetry(const LPEMirrorSymmetry&);
     LPEMirrorSymmetry& operator=(const LPEMirrorSymmetry&);

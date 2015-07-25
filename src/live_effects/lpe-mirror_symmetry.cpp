@@ -42,18 +42,9 @@ namespace MS {
 
 class KnotHolderEntityCenterMirrorSymmetry : public LPEKnotHolderEntity {
 public:
-    KnotHolderEntityCenterMirrorSymmetry(LPEMirrorSymmetry *effect) : LPEKnotHolderEntity(effect)
-    {
-        this->knoth = effect->knoth;
-    };
-    virtual ~KnotHolderEntityCenterMirrorSymmetry()
-    {
-        this->knoth = NULL;
-    }
+    KnotHolderEntityCenterMirrorSymmetry(LPEMirrorSymmetry *effect) : LPEKnotHolderEntity(effect){};
     virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state);
     virtual Geom::Point knot_get() const;
-private:
-    KnotHolder *knoth;
 };
 
 } // namespace MS
@@ -65,8 +56,7 @@ LPEMirrorSymmetry::LPEMirrorSymmetry(LivePathEffectObject *lpeobject) :
     fusion_paths(_("Fusioned symetry"), _("Fusion right side whith symm"), "fusion_paths", &wr, this, true),
     reverse_fusion(_("Reverse fusion"), _("Reverse fusion"), "reverse_fusion", &wr, this, false),
     reflection_line(_("Reflection line:"), _("Line which serves as 'mirror' for the reflection"), "reflection_line", &wr, this, "M0,0 L1,0"),
-    center(_("Center of mirroring (X or Y)"), _("Center of the mirror"), "center", &wr, this, "Adjust the center of mirroring"),
-    knoth(NULL)
+    center(_("Center of mirroring (X or Y)"), _("Center of the mirror"), "center", &wr, this, "Adjust the center of mirroring")
 {
     show_orig_path = true;
 
@@ -106,10 +96,7 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
         path.appendNew<Geom::LineSegment>( point_b );
         reflection_line.set_new_value(path.toPwSb(), true);
         line_separation.setPoints(point_a, point_b);
-        center.param_setValue(path.pointAt(0.5));
-        if(knoth) {
-            knoth->update_knots();
-        }
+        center.param_setValue(path.pointAt(0.5), true);
     } else if( mode == MT_FREE) {
         Geom::PathVector line_m(reflection_line.get_pathvector());
         if(!are_near(previous_center,center, 0.01)) {
@@ -120,13 +107,10 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
             reflection_line.set_new_value(line_m[0].toPwSb(), true);
             line_separation.setPoints(point_a, point_b);
         } else {
-            center.param_setValue(line_m[0].pointAt(0.5));
+            center.param_setValue(line_m[0].pointAt(0.5), true);
             point_a = line_m[0].initialPoint();
             point_b = line_m[0].finalPoint();
             line_separation.setPoints(point_a, point_b);
-            if(knoth) {
-                knoth->update_knots();
-            }
         }
         previous_center = center;
     }
@@ -228,7 +212,7 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
                     position *= -1;
                 }
                 if(position == 1) {
-                    Geom::Path mirror = portion.reverse() * m;
+                    Geom::Path mirror = portion.reversed() * m;
                     mirror.setInitial(portion.finalPoint());
                     portion.append(mirror);
                     if(i!=0) {
@@ -246,11 +230,11 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
             }
             if(cs.size()!=0 && position == 1) {
                 Geom::Path portion = original.portion(time_start, original.size());
-                portion = portion.reverse();
-                Geom::Path mirror = portion.reverse() * m;
+                portion = portion.reversed();
+                Geom::Path mirror = portion.reversed() * m;
                 mirror.setInitial(portion.finalPoint());
                 portion.append(mirror);
-                portion = portion.reverse();
+                portion = portion.reversed();
                 if (!original.closed()) {
                     temp_path.push_back(portion);
                 } else {
@@ -287,22 +271,14 @@ void
 LPEMirrorSymmetry::addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec)
 {
     using namespace Geom;
-
-    PathVector pathv;
-    Geom::Path line_m_expanded;
-    Geom::Point line_start = line_separation.pointAt(-100000.0);
-    Geom::Point line_end = line_separation.pointAt(100000.0);
-    line_m_expanded.start( line_start);
-    line_m_expanded.appendNew<Geom::LineSegment>( line_end);
-    pathv.push_back(line_m_expanded);
-    hp_vec.push_back(pathv);
+    hp_vec.clear();
+    hp_vec.push_back(reflection_line.get_pathvector());
 }
 
 void
 LPEMirrorSymmetry::addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item)
 {
     {
-        knoth = knotholder;
         KnotHolderEntity *e = new MS::KnotHolderEntityCenterMirrorSymmetry(this);
         e->create( desktop, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN,
                    _("Adjust the center") );
