@@ -247,20 +247,18 @@ static void sp_pencil_tb_tolerance_value_changed(GtkAdjustment *adj, GObject *tb
     g_object_set_data( tbl, "freeze", GINT_TO_POINTER(FALSE) );
     SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data(tbl, "desktop"));
     std::vector<SPItem *> selected = desktop->getSelection()->itemList();
-    if(!selected.empty()){
-        for (std::vector<SPItem *>::iterator it(selected.begin()); it != selected.end(); ++it){
-            SPLPEItem* lpeitem = dynamic_cast<SPLPEItem*>(*it);
-            if (lpeitem && lpeitem->hasPathEffect()){
-                Inkscape::LivePathEffect::Effect* thisEffect = lpeitem->getPathEffectOfType(Inkscape::LivePathEffect::SIMPLIFY);
-                if(thisEffect){
-                    Inkscape::LivePathEffect::LPESimplify *lpe = dynamic_cast<Inkscape::LivePathEffect::LPESimplify*>(thisEffect->getLPEObj()->get_lpe());
-                    if (lpe) {
-                        double tol = prefs->getDoubleLimited("/tools/freehand/pencil/tolerance", 10.0, 1.0, 100.0);
-                        tol = tol/(100.0*(101.0-tol));
-                        std::ostringstream ss;
-                        ss << tol;
-                        lpe->getRepr()->setAttribute("threshold", ss.str());
-                    }
+    for (std::vector<SPItem *>::iterator it(selected.begin()); it != selected.end(); ++it){
+        SPLPEItem* lpeitem = dynamic_cast<SPLPEItem*>(*it);
+        if (lpeitem && lpeitem->hasPathEffect()){
+            Inkscape::LivePathEffect::Effect* thisEffect = lpeitem->getPathEffectOfType(Inkscape::LivePathEffect::SIMPLIFY);
+            if(thisEffect){
+                Inkscape::LivePathEffect::LPESimplify *lpe = dynamic_cast<Inkscape::LivePathEffect::LPESimplify*>(thisEffect->getLPEObj()->get_lpe());
+                if (lpe) {
+                    double tol = prefs->getDoubleLimited("/tools/freehand/pencil/tolerance", 10.0, 1.0, 100.0);
+                    tol = tol/(100.0*(101.0-tol));
+                    std::ostringstream ss;
+                    ss << tol;
+                    lpe->getRepr()->setAttribute("threshold", ss.str());
                 }
             }
         }
