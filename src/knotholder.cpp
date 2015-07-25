@@ -68,9 +68,8 @@ KnotHolder::KnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderReleasedFun
     sizeUpdatedConn = ControlManager::getManager().connectCtrlSizeChanged(sigc::mem_fun(*this, &KnotHolder::updateControlSizes));
 }
 
-KnotHolder::~KnotHolder() 
-{
-    sp_object_unref(item);
+KnotHolder::~KnotHolder() {
+	sp_object_unref(item);
 
     for (std::list<KnotHolderEntity *>::iterator i = entity.begin(); i != entity.end(); ++i)
     {
