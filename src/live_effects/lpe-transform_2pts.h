@@ -33,9 +33,15 @@ public:
 
     virtual void doBeforeEffect (SPLPEItem const* lpeitem);
 
+    virtual Gtk::Widget *newWidget();
+
     void updateIndex();
 
-    virtual Gtk::Widget *newWidget();
+    size_t nodeCount(Geom::PathVector pathvector) const;
+    
+    Geom::Point pointAtNodeIndex(Geom::PathVector pathvector, size_t index) const;
+    
+    Geom::Path pathAtNodeIndex(Geom::PathVector pathvector, size_t index) const;
 
     void reset();
 
@@ -48,10 +54,10 @@ private:
     PointParam end;
     ScalarParam first_knot;
     ScalarParam last_knot;
-    bool from_original_width_toogler;
+    bool from_original_width_toggler;
     Geom::Point point_a;
     Geom::Point point_b;
-    SPCurve * curve_c;
+    Geom::PathVector pathvector;
     bool append_path;
     LPETransform2Pts(const LPETransform2Pts&);
     LPETransform2Pts& operator=(const LPETransform2Pts&);

@@ -15,7 +15,7 @@
 #include "live_effects/lpe-transform_2pts.h"
 #include "display/curve.h"
 #include <2geom/transforms.h>
-#include <2geom/path.h>
+#include <2geom/pathvector.h>
 #include "sp-path.h"
 #include "ui/icon-names.h"
 
@@ -31,10 +31,10 @@ LPETransform2Pts::LPETransform2Pts(LivePathEffectObject *lpeobject) :
     end(_("End"), _("End point"), "end", &wr, this, "End point"),
     first_knot(_("First Knot"), _("First Knot"), "first_knot", &wr, this, 1),
     last_knot(_("Last Knot"), _("Last Knot"), "last_knot", &wr, this, 1),
-    from_original_width_toogler(false),
-    point_a(Geom::Point(0,0)),
-    point_b(Geom::Point(0,0)),
-    curve_c(NULL),
+    from_original_width_toggler(false),
+    point_a(Geom::Point()),
+    point_b(Geom::Point()),
+    pathvector(),
     append_path(false)
 {
     registerParameter(&start);
@@ -60,14 +60,14 @@ LPETransform2Pts::doOnApply(SPLPEItem const* lpeitem)
     point_a = Point(boundingbox_X.min(), boundingbox_Y.middle());
     point_b = Point(boundingbox_X.max(), boundingbox_Y.middle());
     SPLPEItem * splpeitem = const_cast<SPLPEItem *>(lpeitem);
-    SPPath *path = dynamic_cast<SPPath *>(splpeitem);
-    if (path) {
-        curve_c = path->get_original_curve();
+    SPPath *sp_path = dynamic_cast<SPPath *>(splpeitem);
+    if (sp_path) {
+        pathvector = sp_path->get_original_curve()->get_pathvector();
     }
-    if(curve_c && !curve_c->is_closed() && curve_c->first_path() == curve_c->last_path()) {
-        point_a = *(curve_c->first_point());
-        point_b = *(curve_c->last_point());
-        int nnodes = (int)curve_c->nodes_in_path();
+    if(!pathvector.empty()) {
+        point_a = pathvector.initialPoint();
+        point_b = pathvector.finalPoint();
+        size_t nnodes = nodeCount(pathvector);
         last_knot.param_set_value(nnodes);
     }
     start.param_update_default(point_a);
@@ -85,41 +85,22 @@ LPETransform2Pts::doBeforeEffect (SPLPEItem const* lpeitem)
     point_b = Point(boundingbox_X.max(), boundingbox_Y.middle());
 
     SPLPEItem * splpeitem = const_cast<SPLPEItem *>(lpeitem);
-    SPPath *path = dynamic_cast<SPPath *>(splpeitem);
-    if (path) {
-        curve_c = path->get_original_curve();
+    SPPath *sp_path = dynamic_cast<SPPath *>(splpeitem);
+    if (sp_path) {
+        pathvector = sp_path->get_original_curve()->get_pathvector();
     }
-    if(from_original_width_toogler != from_original_width) {
-        from_original_width_toogler = from_original_width;
+    if(from_original_width_toggler != from_original_width) {
+        from_original_width_toggler = from_original_width;
         reset();
     }
-    if(curve_c && !from_original_width) {
-        if(!curve_c->is_closed() && curve_c->first_path() == curve_c->last_path()) {
-            append_path = false;
-            Geom::PathVector const originalPV = curve_c->get_pathvector();
-            point_a = originalPV[0][0].initialPoint();
-            if((int)first_knot > 1) {
-                point_a = originalPV[0][(int)first_knot-2].finalPoint();
-            }
-            point_b = originalPV[0][0].initialPoint();
-            if((int)last_knot > 1) {
-                point_b = originalPV[0][(int)last_knot-2].finalPoint();
-            }
-            int nnodes = (int)curve_c->nodes_in_path();
-            first_knot.param_set_range(1, last_knot-1);
-            last_knot.param_set_range(first_knot+1, nnodes);
-            from_original_width.param_setValue(false);
-        } else {
-            first_knot.param_set_value(1);
-            last_knot.param_set_value(2);
-            first_knot.param_set_range(1,1);
-            last_knot.param_set_range(2,2);
-            if(append_path == false) {
-                append_path = true;
-            } else {
-                from_original_width.param_setValue(true);
-            }
-        }
+    if(!pathvector.empty() && !from_original_width) {
+        append_path = false;
+        point_a = pointAtNodeIndex(pathvector,(size_t)first_knot-1);
+        point_b = pointAtNodeIndex(pathvector,(size_t)last_knot-1);
+        size_t nnodes = nodeCount(pathvector);
+        first_knot.param_set_range(1, last_knot-1);
+        last_knot.param_set_range(first_knot+1, nnodes);
+        from_original_width.param_setValue(false);
     } else {
         first_knot.param_set_value(1);
         last_knot.param_set_value(2);
@@ -135,24 +116,17 @@ LPETransform2Pts::doBeforeEffect (SPLPEItem const* lpeitem)
 void
 LPETransform2Pts::updateIndex()
 {
-    SPCurve * curve2 = NULL;
-    SPShape *shape = SP_SHAPE(sp_lpe_item);
-    if (shape) {
-        curve2 = shape->getCurve();
+    SPLPEItem * splpeitem = const_cast<SPLPEItem *>(sp_lpe_item);
+    SPPath *sp_path = dynamic_cast<SPPath *>(splpeitem);
+    if (sp_path) {
+        pathvector = sp_path->get_original_curve()->get_pathvector();
     }
-    if(curve2 && !from_original_width && !curve_c->is_closed() && curve_c->first_path() == curve_c->last_path()) {
-        Geom::PathVector const originalPV = curve2->get_pathvector();
-        Geom::Point point_c = originalPV[0][0].initialPoint();
-        Geom::Point point_d = originalPV[0][0].initialPoint();
-        if((int)first_knot > 1) {
-            point_c = originalPV[0][(int)first_knot-2].finalPoint();
-        }
-        if((int)last_knot > 1) {
-            point_d = originalPV[0][(int)last_knot-2].finalPoint();
-        }
-        start.param_update_default(point_c);
+    if(!pathvector.empty() && !from_original_width) {
+        point_a = pointAtNodeIndex(pathvector,(size_t)first_knot-1);
+        point_b = pointAtNodeIndex(pathvector,(size_t)last_knot-1);
+        start.param_update_default(point_a);
         start.param_set_default();
-        end.param_update_default(point_d);
+        end.param_update_default(point_b);
         end.param_set_default();
         start.param_update_default(point_a);
         end.param_update_default(point_b);
@@ -160,20 +134,61 @@ LPETransform2Pts::updateIndex()
         end.param_set_default();
     }
 }
+//todo migrate to PathVector class?
+size_t
+LPETransform2Pts::nodeCount(Geom::PathVector pathvector) const
+{
+    size_t n = 0;
+    for (Geom::PathVector::iterator it = pathvector.begin(); it != pathvector.end(); ++it) {
+        n += it->size_closed();
+    }
+    return n;
+}
+//todo migrate to PathVector class?
+Geom::Point
+LPETransform2Pts::pointAtNodeIndex(Geom::PathVector pathvector, size_t index) const
+{
+    size_t n = 0;
+    for (Geom::PathVector::iterator pv_it = pathvector.begin(); pv_it != pathvector.end(); ++pv_it) {
+        for (Geom::Path::iterator curve_it = pv_it->begin(); curve_it != pv_it->end_closed(); ++curve_it) {
+            if(index == n){
+                return curve_it->initialPoint();
+            }
+            n++;
+        }
+    }
+    return Geom::Point();
+}
+//todo migrate to PathVector class? Not used
+Geom::Path
+LPETransform2Pts::pathAtNodeIndex(Geom::PathVector pathvector, size_t index) const
+{
+    size_t n = 0;
+    for (Geom::PathVector::iterator pv_it = pathvector.begin(); pv_it != pathvector.end(); ++pv_it) {
+        for (Geom::Path::iterator curve_it = pv_it->begin(); curve_it != pv_it->end_closed(); ++curve_it) {
+            if(index == n){
+                return *pv_it;
+            }
+            n++;
+        }
+    }
+    return Geom::Path();
+}
+
 
 void
 LPETransform2Pts::reset()
 {
     point_a = Geom::Point(boundingbox_X.min(), boundingbox_Y.middle());
     point_b = Geom::Point(boundingbox_X.max(), boundingbox_Y.middle());
-    if(curve_c && !curve_c->is_closed() && curve_c->first_path() == curve_c->last_path() && !from_original_width) {
-        int nnodes = (int)curve_c->nodes_in_path();
+    if(!pathvector.empty() && !from_original_width) {
+        size_t nnodes = nodeCount(pathvector);
         first_knot.param_set_range(1, last_knot-1);
         last_knot.param_set_range(first_knot+1, nnodes);
         first_knot.param_set_value(1);
         last_knot.param_set_value(nnodes);
-        point_a = *(curve_c->first_point());
-        point_b = *(curve_c->last_point());
+        point_a = pathvector.initialPoint();
+        point_b = pathvector.finalPoint();
     } else {
         first_knot.param_set_value(1);
         last_knot.param_set_value(2);
