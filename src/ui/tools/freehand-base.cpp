@@ -22,6 +22,7 @@
 
 #include "live_effects/lpe-bendpath.h"
 #include "live_effects/lpe-patternalongpath.h"
+#include "live_effects/lpe-simplify.h"
 #include "display/canvas-bpath.h"
 #include "xml/repr.h"
 #include "svg/svg.h"
@@ -267,11 +268,9 @@ static void spdc_apply_powerstroke_shape(const std::vector<Geom::Point> & points
     lpe->getRepr()->setAttribute("offset_points", s.str().c_str());
 }
 
-
 static void spdc_apply_bend_shape(gchar const *svgd, FreehandBase *dc, SPItem *item)
 {
     using namespace Inkscape::LivePathEffect;
-
     if(!SP_LPE_ITEM(item)->hasPathEffectOfType(BEND_PATH)){
         Effect::createAndApply(BEND_PATH, dc->desktop->doc(), item);
     }
@@ -284,6 +283,21 @@ static void spdc_apply_bend_shape(gchar const *svgd, FreehandBase *dc, SPItem *i
     lpe->getRepr()->setAttribute("vertical", "false");
 }
 
+static void spdc_apply_simplify(std::string threshold, FreehandBase *dc, SPItem *item)
+{
+    using namespace Inkscape::LivePathEffect;
+
+    Effect::createAndApply(SIMPLIFY, dc->desktop->doc(), item);
+    Effect* lpe = SP_LPE_ITEM(item)->getCurrentLPE();
+    // write powerstroke parameters:
+    lpe->getRepr()->setAttribute("steps", "1");
+    lpe->getRepr()->setAttribute("threshold", threshold);
+    lpe->getRepr()->setAttribute("smooth_angles", "360");
+    lpe->getRepr()->setAttribute("helper_size", "0");
+    lpe->getRepr()->setAttribute("simplifyindividualpaths", "false");
+    lpe->getRepr()->setAttribute("simplifyJustCoalesce", "false");
+}
+
 enum shapeType { NONE, TRIANGLE_IN, TRIANGLE_OUT, ELLIPSE, CLIPBOARD, BEND_CLIPBOARD, LAST_APPLIED };
 static shapeType previous_shape_type = NONE;
 
@@ -293,6 +307,14 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     if (item && SP_IS_LPE_ITEM(item)) {
+        bool simplify = prefs->getInt(tool_name(dc) + "/simplify", 0);
+        if(simplify){
+            double tol = prefs->getDoubleLimited("/tools/freehand/pencil/tolerance", 10.0, 1.0, 100.0);
+            tol = tol/(100.0*(102.0-tol));
+            std::ostringstream ss;
+            ss << tol;
+            spdc_apply_simplify(ss.str(), dc, item);
+        }
         if (prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1) {
             Effect::createAndApply(SPIRO, dc->desktop->doc(), item);
         }
