@@ -14,6 +14,7 @@
 #include "live_effects/effect.h"
 #include "live_effects/parameter/path.h"
 #include "live_effects/parameter/bool.h"
+#include "live_effects/parameter/point.h"
 
 #include <2geom/sbasis.h>
 #include <2geom/sbasis-geometric.h>
@@ -27,6 +28,7 @@
 namespace Inkscape {
 namespace LivePathEffect {
 
+
 //for Bend path on group : we need information concerning the group Bounding box
 class LPEBendPath : public Effect, GroupBBoxEffect {
 public:
@@ -39,15 +41,21 @@ public:
 
     virtual void resetDefaults(SPItem const* item);
 
+    void addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec);
 
 private:
-    PathParam  bend_path;
-    ScalarParam  prop_scale;
+    PathParam bend_path;
+    ScalarParam prop_scale;
     BoolParam scale_y_rel;
-    BoolParam    vertical_pattern;
+    BoolParam vertical_pattern;
+    PointParam width;
+    double height;
+    double original_height;
+    double prop_scale_previous;
 
     Geom::Piecewise<Geom::D2<Geom::SBasis> > uskeleton;
     Geom::Piecewise<Geom::D2<Geom::SBasis> > n;
+    Geom::PathVector hp;
 
     void on_pattern_pasted();
 

@@ -75,7 +75,11 @@ LPEPatternAlongPath::LPEPatternAlongPath(LivePathEffectObject *lpeobject) :
     vertical_pattern(_("Pattern is _vertical"), _("Rotate pattern 90 deg before applying"),
         "vertical_pattern", &wr, this, false),
     fuse_tolerance(_("_Fuse nearby ends:"), _("Fuse ends closer than this number. 0 means don't fuse."),
-        "fuse_tolerance", &wr, this, 0)
+        "fuse_tolerance", &wr, this, 0),
+    width(_("Width distance"), _("Change the width of pattern path - <b>Ctrl+Alt+Click</b>: reset"), "width", &wr, this),
+    height(0),
+    original_height(0),
+    prop_scale_previous(1)
 {
     registerParameter( dynamic_cast<Parameter *>(&pattern) );
     registerParameter( dynamic_cast<Parameter *>(&copytype) );
@@ -87,7 +91,7 @@ LPEPatternAlongPath::LPEPatternAlongPath(LivePathEffectObject *lpeobject) :
     registerParameter( dynamic_cast<Parameter *>(&prop_units) );
     registerParameter( dynamic_cast<Parameter *>(&vertical_pattern) );
     registerParameter( dynamic_cast<Parameter *>(&fuse_tolerance) );
-
+    registerParameter( dynamic_cast<Parameter *>(&width) );
     prop_scale.param_set_digits(3);
     prop_scale.param_set_increments(0.01, 0.10);
 }
@@ -95,6 +99,48 @@ LPEPatternAlongPath::LPEPatternAlongPath(LivePathEffectObject *lpeobject) :
 LPEPatternAlongPath::~LPEPatternAlongPath()
 {
 
+}
+
+void
+LPEPatternAlongPath::doBeforeEffect (SPLPEItem const* lpeitem)
+{
+    hp.clear();
+    // get the pattern bounding box
+    Geom::OptRect bbox = pattern.get_pathvector().boundsFast();
+    if (bbox) {
+        original_height = (*bbox)[Geom::Y].max() - (*bbox)[Geom::Y].min();
+        bool prop_scale_modified = false;
+        SPShape const *sp_shape = dynamic_cast<SPShape const *>(lpeitem);
+        if (sp_shape) {
+            Geom::Path const *path_in = sp_shape->getCurveBeforeLPE()->first_path();
+            Geom::Point ptA = path_in->pointAt(Geom::PathTime(0, 0.0));
+            Geom::Point B = path_in->pointAt(Geom::PathTime(1, 0.0));
+            Geom::Curve const *first_curve = &path_in->curveAt(Geom::PathTime(0, 0.0));
+            Geom::CubicBezier const *cubic = dynamic_cast<Geom::CubicBezier const *>(&*first_curve);
+            Geom::Ray ray(ptA, B);
+            if (cubic) {
+                ray.setPoints((*cubic)[1], ptA);
+            }
+            if(height == 0){
+                height = original_height;
+                width.param_setValue(Geom::Point::polar(ray.angle() + Geom::deg_to_rad(90), (original_height/2.0)) + ptA);
+                prop_scale.param_set_value(1);
+            }
+            if( prop_scale_previous != prop_scale ){
+                prop_scale_modified = true;
+            }
+            height = Geom::distance(width,ptA) * 2;
+            if(!prop_scale_modified){
+                prop_scale.param_set_value(height/original_height);
+            }
+            width.param_setValue(Geom::Point::polar(ray.angle() + Geom::deg_to_rad(90), ((original_height*prop_scale)/2.0)) + ptA);
+            width.param_update_default(Geom::Point::polar(ray.angle() + Geom::deg_to_rad(90), (original_height/2.0)) + ptA);
+            prop_scale_previous = prop_scale;
+            Geom::Path hp_path(width);
+            hp_path.appendNew<Geom::LineSegment>(ptA);
+            hp.push_back(hp_path);
+        }
+    }
 }
 
 Geom::Piecewise<Geom::D2<Geom::SBasis> >
@@ -236,6 +282,12 @@ LPEPatternAlongPath::transform_multiply(Geom::Affine const& postmul, bool set)
     if (postmul.isTranslation()) {
         pattern.param_transform_multiply(postmul, set);
     }
+}
+
+void
+LPEPatternAlongPath::addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec)
+{
+    hp_vec.push_back(hp);
 }
 
 } // namespace LivePathEffect

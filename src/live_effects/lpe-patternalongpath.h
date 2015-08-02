@@ -13,6 +13,7 @@
 #include "live_effects/effect.h"
 #include "live_effects/parameter/path.h"
 #include "live_effects/parameter/bool.h"
+#include "live_effects/parameter/point.h"
 
 namespace Inkscape {
 namespace LivePathEffect {
@@ -30,9 +31,14 @@ public:
     LPEPatternAlongPath(LivePathEffectObject *lpeobject);
     virtual ~LPEPatternAlongPath();
 
+    virtual void doBeforeEffect (SPLPEItem const* lpeitem);
+
     virtual Geom::Piecewise<Geom::D2<Geom::SBasis> > doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in);
 
     virtual void transform_multiply(Geom::Affine const& postmul, bool set);
+
+    void addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec);
+
 
     PathParam  pattern;
 private:
@@ -45,7 +51,11 @@ private:
     BoolParam    prop_units;
     BoolParam    vertical_pattern;
     ScalarParam  fuse_tolerance;
-
+    PointParam width;
+    double height;
+    double original_height;
+    double prop_scale_previous;
+    Geom::PathVector hp;
     void on_pattern_pasted();
 
     LPEPatternAlongPath(const LPEPatternAlongPath&);

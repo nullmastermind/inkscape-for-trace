@@ -48,17 +48,23 @@ first) but I think we can first forget about them.
 namespace Inkscape {
 namespace LivePathEffect {
 
+
 LPEBendPath::LPEBendPath(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
     bend_path(_("Bend path:"), _("Path along which to bend the original path"), "bendpath", &wr, this, "M0,0 L1,0"),
     prop_scale(_("_Width:"), _("Width of the path"), "prop_scale", &wr, this, 1),
     scale_y_rel(_("W_idth in units of length"), _("Scale the width of the path in units of its length"), "scale_y_rel", &wr, this, false),
-    vertical_pattern(_("_Original path is vertical"), _("Rotates the original 90 degrees, before bending it along the bend path"), "vertical", &wr, this, false)
+    vertical_pattern(_("_Original path is vertical"), _("Rotates the original 90 degrees, before bending it along the bend path"), "vertical", &wr, this, false),
+    width(_("Width distance"), _("Change the width of bend path - <b>Ctrl+Alt+Click</b>: reset"), "width", &wr, this),
+    height(0),
+    original_height(0),
+    prop_scale_previous(1)
 {
     registerParameter( dynamic_cast<Parameter *>(&bend_path) );
     registerParameter( dynamic_cast<Parameter *>(&prop_scale) );
     registerParameter( dynamic_cast<Parameter *>(&scale_y_rel) );
     registerParameter( dynamic_cast<Parameter *>(&vertical_pattern) );
+    registerParameter( dynamic_cast<Parameter *>(&width) );
 
     prop_scale.param_set_digits(3);
     prop_scale.param_set_increments(0.01, 0.10);
@@ -74,8 +80,38 @@ LPEBendPath::~LPEBendPath()
 void
 LPEBendPath::doBeforeEffect (SPLPEItem const* lpeitem)
 {
+    hp.clear();
     // get the item bounding box
     original_bbox(lpeitem);
+    original_height = boundingbox_Y.max() - boundingbox_Y.min();
+    bool prop_scale_modified = false;
+
+    Geom::Path path_in = bend_path.get_pathvector().pathAt(Geom::PathVectorTime(0, 0, 0.0));
+    Geom::Point ptA = path_in.pointAt(Geom::PathTime(0, 0.0));
+    Geom::Point B = path_in.pointAt(Geom::PathTime(1, 0.0));
+    Geom::Curve const *first_curve = &path_in.curveAt(Geom::PathTime(0, 0.0));
+    Geom::CubicBezier const *cubic = dynamic_cast<Geom::CubicBezier const *>(&*first_curve);
+    Geom::Ray ray(ptA, B);
+    if (cubic) {
+        ray.setPoints((*cubic)[1], ptA);
+    }
+    if(height == 0){
+        height = original_height;
+        width.param_setValue(Geom::Point::polar(ray.angle() + Geom::deg_to_rad(90), (original_height/2.0)) + ptA);
+    }
+    if( prop_scale_previous != prop_scale ){
+        prop_scale_modified = true;
+    }
+    if(!prop_scale_modified){
+        prop_scale.param_set_value(height/original_height);
+    }
+    height = Geom::distance(width,ptA) * 2;
+    width.param_setValue(Geom::Point::polar(ray.angle() + Geom::deg_to_rad(90), ((original_height*prop_scale)/2.0)) + ptA);
+    width.param_update_default(Geom::Point::polar(ray.angle() + Geom::deg_to_rad(90), (original_height/2.0)) + ptA);
+    prop_scale_previous = prop_scale;
+    Geom::Path hp_path(width);
+    hp_path.appendNew<Geom::LineSegment>(ptA);
+    hp.push_back(hp_path);
     SPLPEItem * item = const_cast<SPLPEItem*>(lpeitem);
     item->apply_to_clippath(item);
     item->apply_to_mask(item);
@@ -148,6 +184,11 @@ LPEBendPath::resetDefaults(SPItem const* item)
     bend_path.set_new_value( path.toPwSb(), true );
 }
 
+void
+LPEBendPath::addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec)
+{
+    hp_vec.push_back(hp);
+}
 
 } // namespace LivePathEffect
 } /* namespace Inkscape */
