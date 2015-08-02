@@ -46,6 +46,7 @@
 #include "live_effects/lpe-powerstroke.h"
 #include "style.h"
 #include "ui/control-manager.h"
+#include "util/units.h"
 // clipboard support
 #include "ui/clipboard.h"
 #include "ui/tools/freehand-base.h"
@@ -289,7 +290,7 @@ static void spdc_apply_simplify(std::string threshold, FreehandBase *dc, SPItem 
 
     Effect::createAndApply(SIMPLIFY, dc->desktop->doc(), item);
     Effect* lpe = SP_LPE_ITEM(item)->getCurrentLPE();
-    // write powerstroke parameters:
+    // write simplify parameters:
     lpe->getRepr()->setAttribute("steps", "1");
     lpe->getRepr()->setAttribute("threshold", threshold);
     lpe->getRepr()->setAttribute("smooth_angles", "360");
@@ -314,20 +315,22 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
             std::ostringstream ss;
             ss << tol;
             spdc_apply_simplify(ss.str(), dc, item);
+            sp_lpe_item_update_patheffect(SP_LPE_ITEM(item), false, false);
         }
         if (prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1) {
             Effect::createAndApply(SPIRO, dc->desktop->doc(), item);
         }
-        //add the bspline node in the waiting effects
+
         if (prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2) {
             Effect::createAndApply(BSPLINE, dc->desktop->doc(), item);
         }
+        SPShape *sp_shape = dynamic_cast<SPShape *>(item);
+        if (sp_shape) {
+            curve = sp_shape->getCurve();
+        }
 
         //Store the clipboard path to apply in the future without the use of clipboard
-
         static Geom::PathVector previous_shape_pathv;
-        
-
 
         shapeType shape = (shapeType)prefs->getInt(tool_name(dc) + "/shape", 0);
         bool shape_applied = false;
@@ -391,15 +394,24 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
             }
             case CLIPBOARD:
             {
-                // take shape from clipboard; TODO: catch the case where clipboard is empty
-                Effect::createAndApply(PATTERN_ALONG_PATH, dc->desktop->doc(), item);
-                Effect* lpe = SP_LPE_ITEM(item)->getCurrentLPE();
-                static_cast<LPEPatternAlongPath*>(lpe)->pattern.on_paste_button_click();
+                // take shape from clipboard;
                 Inkscape::UI::ClipboardManager *cm = Inkscape::UI::ClipboardManager::get();
                 Glib::ustring svgd = cm->getPathParameter(SP_ACTIVE_DESKTOP);
-                previous_shape_pathv = sp_svg_read_pathv(svgd.data());
-
-                shape_applied = true;
+                if(svgd != ""){
+                    previous_shape_pathv =  sp_svg_read_pathv(svgd.data());
+                    Inkscape::XML::Node *nv_repr = SP_ACTIVE_DESKTOP->getNamedView()->getRepr();
+                    if (nv_repr->attribute("inkscape:document-units")){
+                        double scale_units = Inkscape::Util::Quantity::convert(1, "px", nv_repr->attribute("inkscape:document-units"));
+                        if (!Geom::are_near(scale_units, 1.0, Geom::EPSILON)) {
+                            previous_shape_pathv *= Geom::Scale(scale_units);
+                        }
+                    }
+                    SPCurve const *c = new SPCurve(previous_shape_pathv);
+                    spdc_paste_curve_as_freehand_shape(c, dc, item);
+                    shape_applied = true;
+                } else {
+                    shape = NONE;
+                }
                 break;
             }
             case BEND_CLIPBOARD:
@@ -411,10 +423,14 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
                     path *= item->i2doc_affine().inverse();
                     svgd = sp_svg_write_path( path );
                     bend_item = dc->selection->singleItem();
-                    bend_item->moveTo(item,false);
-                    spdc_apply_bend_shape(svgd, dc, bend_item);
-                    bend_item->transform = Geom::Affine(1,0,0,1,0,0);
-                    dc->selection->add(SP_OBJECT(bend_item));
+                    if(bend_item){
+                        bend_item->moveTo(item,false);
+                        spdc_apply_bend_shape(svgd, dc, bend_item);
+                        bend_item->transform = Geom::Affine(1,0,0,1,0,0);
+                        dc->selection->add(SP_OBJECT(bend_item));
+                    } else {
+                        shape = NONE;
+                    }
                 } else {
                     shape = NONE;
                 }
@@ -442,10 +458,12 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
                         sp_selection_duplicate(dc->desktop);
                         dc->selection->remove(SP_OBJECT(bend_item));
                         bend_item = dc->selection->singleItem();
-                        bend_item->moveTo(item,false);
-                        spdc_apply_bend_shape(svgd, dc, bend_item);
-                        bend_item->transform = Geom::Affine(1,0,0,1,0,0);
-                        dc->selection->add(SP_OBJECT(bend_item));
+                        if(bend_item){
+                            bend_item->moveTo(item,false);
+                            spdc_apply_bend_shape(svgd, dc, bend_item);
+                            bend_item->transform = Geom::Affine(1,0,0,1,0,0);
+                            dc->selection->add(SP_OBJECT(bend_item));
+                        }
                     }
                     shape = BEND_CLIPBOARD;
                 }
