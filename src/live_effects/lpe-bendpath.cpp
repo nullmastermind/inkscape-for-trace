@@ -52,13 +52,13 @@ namespace LivePathEffect {
 LPEBendPath::LPEBendPath(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
     bend_path(_("Bend path:"), _("Path along which to bend the original path"), "bendpath", &wr, this, "M0,0 L1,0"),
-    prop_scale(_("_Width:"), _("Width of the path"), "prop_scale", &wr, this, 1),
+    prop_scale(_("_Width:"), _("Width of the path"), "prop_scale", &wr, this, 1.0),
+    width(_("Width distance"), _("Change the width of bend path - <b>Ctrl+Alt+Click</b>: reset"), "width", &wr, this),
     scale_y_rel(_("W_idth in units of length"), _("Scale the width of the path in units of its length"), "scale_y_rel", &wr, this, false),
     vertical_pattern(_("_Original path is vertical"), _("Rotates the original 90 degrees, before bending it along the bend path"), "vertical", &wr, this, false),
-    width(_("Width distance"), _("Change the width of bend path - <b>Ctrl+Alt+Click</b>: reset"), "width", &wr, this),
-    height(0),
-    original_height(0),
-    prop_scale_previous(1)
+    height(0.0),
+    original_height(0.0),
+    prop_scale_from_widget(1.0)
 {
     registerParameter( dynamic_cast<Parameter *>(&bend_path) );
     registerParameter( dynamic_cast<Parameter *>(&prop_scale) );
@@ -84,8 +84,6 @@ LPEBendPath::doBeforeEffect (SPLPEItem const* lpeitem)
     // get the item bounding box
     original_bbox(lpeitem);
     original_height = boundingbox_Y.max() - boundingbox_Y.min();
-    bool prop_scale_modified = false;
-
     Geom::Path path_in = bend_path.get_pathvector().pathAt(Geom::PathVectorTime(0, 0, 0.0));
     Geom::Point ptA = path_in.pointAt(Geom::PathTime(0, 0.0));
     Geom::Point B = path_in.pointAt(Geom::PathTime(1, 0.0));
@@ -95,20 +93,29 @@ LPEBendPath::doBeforeEffect (SPLPEItem const* lpeitem)
     if (cubic) {
         ray.setPoints((*cubic)[1], ptA);
     }
-    if(height == 0){
+    //This Hack is to fix a boring bug in the first call to the function, we have
+    //a wrong "ptA"
+    if(height == 0.0 && Geom::are_near(width, Geom::Point())){
+        height = 0.1;
+        std::cout << ptA << "ptA0.5\n";
+    } else if(height == 0.1 && Geom::are_near(width, Geom::Point())){
+        Geom::Point default_point = Geom::Point::polar(ray.angle() + Geom::deg_to_rad(90), (original_height/2.0)) + ptA;
+        prop_scale.param_set_value(1.0);
         height = original_height;
-        width.param_setValue(Geom::Point::polar(ray.angle() + Geom::deg_to_rad(90), (original_height/2.0)) + ptA);
+        width.param_setValue(default_point);
+        width.param_update_default(default_point);
+    } else {
+        double distance_knot =  Geom::distance(width , ptA);
+        width.param_setValue(Geom::Point::polar(ray.angle() + Geom::deg_to_rad(90), distance_knot) + ptA);
+        height = distance_knot * 2;
+        if(prop_scale_from_widget == prop_scale){
+            prop_scale.param_set_value(height/original_height);
+        } else {
+            height = original_height * prop_scale;
+            width.param_setValue(Geom::Point::polar(ray.angle() + Geom::deg_to_rad(90), height/2.0) + ptA);
+        }
     }
-    if( prop_scale_previous != prop_scale ){
-        prop_scale_modified = true;
-    }
-    if(!prop_scale_modified){
-        prop_scale.param_set_value(height/original_height);
-    }
-    height = Geom::distance(width,ptA) * 2;
-    width.param_setValue(Geom::Point::polar(ray.angle() + Geom::deg_to_rad(90), ((original_height*prop_scale)/2.0)) + ptA);
-    width.param_update_default(Geom::Point::polar(ray.angle() + Geom::deg_to_rad(90), (original_height/2.0)) + ptA);
-    prop_scale_previous = prop_scale;
+    prop_scale_from_widget = prop_scale;
     Geom::Path hp_path(width);
     hp_path.appendNew<Geom::LineSegment>(ptA);
     hp.push_back(hp_path);

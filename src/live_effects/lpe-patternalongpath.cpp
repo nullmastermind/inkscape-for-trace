@@ -59,7 +59,8 @@ LPEPatternAlongPath::LPEPatternAlongPath(LivePathEffectObject *lpeobject) :
     pattern(_("Pattern source:"), _("Path to put along the skeleton path"), "pattern", &wr, this, "M0,0 L1,0"),
     copytype(_("Pattern copies:"), _("How many pattern copies to place along the skeleton path"),
         "copytype", PAPCopyTypeConverter, &wr, this, PAPCT_SINGLE_STRETCHED),
-    prop_scale(_("_Width:"), _("Width of the pattern"), "prop_scale", &wr, this, 1),
+    prop_scale(_("_Width:"), _("Width of the pattern"), "prop_scale", &wr, this, 1.0),
+    width(_("Width distance"), _("Change the width of pattern path - <b>Ctrl+Alt+Click</b>: reset"), "width", &wr, this),
     scale_y_rel(_("Wid_th in units of length"),
         _("Scale the width of the pattern in units of its length"),
         "scale_y_rel", &wr, this, false),
@@ -76,10 +77,9 @@ LPEPatternAlongPath::LPEPatternAlongPath(LivePathEffectObject *lpeobject) :
         "vertical_pattern", &wr, this, false),
     fuse_tolerance(_("_Fuse nearby ends:"), _("Fuse ends closer than this number. 0 means don't fuse."),
         "fuse_tolerance", &wr, this, 0),
-    width(_("Width distance"), _("Change the width of pattern path - <b>Ctrl+Alt+Click</b>: reset"), "width", &wr, this),
     height(0),
     original_height(0),
-    prop_scale_previous(1)
+    prop_scale_from_widget(1)
 {
     registerParameter( dynamic_cast<Parameter *>(&pattern) );
     registerParameter( dynamic_cast<Parameter *>(&copytype) );
@@ -109,7 +109,6 @@ LPEPatternAlongPath::doBeforeEffect (SPLPEItem const* lpeitem)
     Geom::OptRect bbox = pattern.get_pathvector().boundsFast();
     if (bbox) {
         original_height = (*bbox)[Geom::Y].max() - (*bbox)[Geom::Y].min();
-        bool prop_scale_modified = false;
         SPShape const *sp_shape = dynamic_cast<SPShape const *>(lpeitem);
         if (sp_shape) {
             Geom::Path const *path_in = sp_shape->getCurveBeforeLPE()->first_path();
@@ -121,21 +120,29 @@ LPEPatternAlongPath::doBeforeEffect (SPLPEItem const* lpeitem)
             if (cubic) {
                 ray.setPoints((*cubic)[1], ptA);
             }
-            if(height == 0){
+            //This Hack is to fix a boring bug in the first call to the function, we have
+            //a wrong "ptA"
+            if(height == 0.0 && Geom::are_near(width, Geom::Point())){
+                height = 0.1;
+                std::cout << ptA << "ptA0.5\n";
+            } else if(height == 0.1 && Geom::are_near(width, Geom::Point())){
+                Geom::Point default_point = Geom::Point::polar(ray.angle() + Geom::deg_to_rad(90), (original_height/2.0)) + ptA;
+                prop_scale.param_set_value(1.0);
                 height = original_height;
-                width.param_setValue(Geom::Point::polar(ray.angle() + Geom::deg_to_rad(90), (original_height/2.0)) + ptA);
-                prop_scale.param_set_value(1);
+                width.param_setValue(default_point);
+                width.param_update_default(default_point);
+            } else {
+                double distance_knot =  Geom::distance(width , ptA);
+                width.param_setValue(Geom::Point::polar(ray.angle() + Geom::deg_to_rad(90), distance_knot) + ptA);
+                height = distance_knot * 2;
+                if(prop_scale_from_widget == prop_scale){
+                    prop_scale.param_set_value(height/original_height);
+                } else {
+                    height = original_height * prop_scale;
+                    width.param_setValue(Geom::Point::polar(ray.angle() + Geom::deg_to_rad(90), height/2.0) + ptA);
+                }
             }
-            if( prop_scale_previous != prop_scale ){
-                prop_scale_modified = true;
-            }
-            height = Geom::distance(width,ptA) * 2;
-            if(!prop_scale_modified){
-                prop_scale.param_set_value(height/original_height);
-            }
-            width.param_setValue(Geom::Point::polar(ray.angle() + Geom::deg_to_rad(90), ((original_height*prop_scale)/2.0)) + ptA);
-            width.param_update_default(Geom::Point::polar(ray.angle() + Geom::deg_to_rad(90), (original_height/2.0)) + ptA);
-            prop_scale_previous = prop_scale;
+            prop_scale_from_widget = prop_scale;
             Geom::Path hp_path(width);
             hp_path.appendNew<Geom::LineSegment>(ptA);
             hp.push_back(hp_path);

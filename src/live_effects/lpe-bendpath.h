@@ -43,15 +43,15 @@ public:
 
     void addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec);
 
-private:
     PathParam bend_path;
+private:
     ScalarParam prop_scale;
+    PointParam width;
     BoolParam scale_y_rel;
     BoolParam vertical_pattern;
-    PointParam width;
     double height;
     double original_height;
-    double prop_scale_previous;
+    double prop_scale_from_widget;
 
     Geom::Piecewise<Geom::D2<Geom::SBasis> > uskeleton;
     Geom::Piecewise<Geom::D2<Geom::SBasis> > n;
