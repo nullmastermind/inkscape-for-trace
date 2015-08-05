@@ -44,6 +44,7 @@ public:
     void addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec);
 
     PathParam bend_path;
+
 private:
     ScalarParam prop_scale;
     PointParam width;
