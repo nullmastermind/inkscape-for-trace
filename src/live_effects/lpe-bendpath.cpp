@@ -58,7 +58,9 @@ LPEBendPath::LPEBendPath(LivePathEffectObject *lpeobject) :
     vertical_pattern(_("_Original path is vertical"), _("Rotates the original 90 degrees, before bending it along the bend path"), "vertical", &wr, this, false),
     height(0.0),
     original_height(0.0),
-    prop_scale_from_widget(1.0)
+    prop_scale_from_widget(1.0),
+    firstTime(false),
+    secondTime(false)
 {
     registerParameter( dynamic_cast<Parameter *>(&bend_path) );
     registerParameter( dynamic_cast<Parameter *>(&prop_scale) );
@@ -91,28 +93,38 @@ LPEBendPath::doBeforeEffect (SPLPEItem const* lpeitem)
     Geom::CubicBezier const *cubic = dynamic_cast<Geom::CubicBezier const *>(&*first_curve);
     Geom::Ray ray(ptA, B);
     if (cubic) {
-        ray.setPoints((*cubic)[1], ptA);
+        ray.setPoints(ptA,(*cubic)[1]);
     }
+    
+    Geom::Angle first_curve_angle = ray.transformed(Geom::Rotate(Geom::deg_to_rad(90))).angle();
     //This Hack is to fix a boring bug in the first call to the function, we have
     //a wrong "ptA"
-    if(height == 0.0 && Geom::are_near(width, Geom::Point())){
-        height = 0.1;
-        std::cout << ptA << "ptA0.5\n";
-    } else if(height == 0.1 && Geom::are_near(width, Geom::Point())){
-        Geom::Point default_point = Geom::Point::polar(ray.angle() + Geom::deg_to_rad(90), (original_height/2.0)) + ptA;
+    if(!firstTime && Geom::are_near(width, Geom::Point())){
+        firstTime = true;
+    } else if(firstTime && Geom::are_near(width, Geom::Point())){
+        Geom::Point default_point = Geom::Point::polar(first_curve_angle, original_height/2.0) + ptA;
         prop_scale.param_set_value(1.0);
         height = original_height;
         width.param_setValue(default_point);
         width.param_update_default(default_point);
     } else {
         double distance_knot =  Geom::distance(width , ptA);
-        width.param_setValue(Geom::Point::polar(ray.angle() + Geom::deg_to_rad(90), distance_knot) + ptA);
+        width.param_setValue(Geom::Point::polar(first_curve_angle, distance_knot) + ptA);
         height = distance_knot * 2;
-        if(prop_scale_from_widget == prop_scale){
+        if(secondTime){
+            prop_scale.param_set_value(1);
+            height = original_height;
+            width.param_setValue(Geom::Point::polar(first_curve_angle, height/2.0) + ptA);
+            secondTime = false;
+        } else if(prop_scale_from_widget == prop_scale){
             prop_scale.param_set_value(height/original_height);
         } else {
             height = original_height * prop_scale;
-            width.param_setValue(Geom::Point::polar(ray.angle() + Geom::deg_to_rad(90), height/2.0) + ptA);
+            width.param_setValue(Geom::Point::polar(first_curve_angle, height/2.0) + ptA);
+        }
+        if(firstTime){
+            firstTime = false;
+            secondTime = true;
         }
     }
     prop_scale_from_widget = prop_scale;

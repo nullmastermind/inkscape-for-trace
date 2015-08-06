@@ -53,7 +53,8 @@ private:
     double height;
     double original_height;
     double prop_scale_from_widget;
-
+    bool firstTime;
+    bool secondTime;
     Geom::Piecewise<Geom::D2<Geom::SBasis> > uskeleton;
     Geom::Piecewise<Geom::D2<Geom::SBasis> > n;
     Geom::PathVector hp;
