@@ -18,6 +18,10 @@
 namespace Inkscape {
 namespace LivePathEffect {
 
+namespace WPAP {
+class KnotHolderEntityWidthPatternAlongPath;
+}
+
 enum PAPCopyType {
     PAPCT_SINGLE = 0,
     PAPCT_SINGLE_STRETCHED,
@@ -39,12 +43,17 @@ public:
 
     void addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec);
 
+    virtual void addKnotHolderEntities(KnotHolder * knotholder, SPDesktop * desktop, SPItem * item);
 
     PathParam  pattern;
+
+    friend class WPAP::KnotHolderEntityWidthPatternAlongPath;
+protected:
+    double original_height;
+    ScalarParam prop_scale;
+
 private:
     EnumParam<PAPCopyType> copytype;
-    ScalarParam  prop_scale;
-    PointParam width;
     BoolParam scale_y_rel;
     ScalarParam  spacing;
     ScalarParam  normal_offset;
@@ -52,10 +61,6 @@ private:
     BoolParam    prop_units;
     BoolParam    vertical_pattern;
     ScalarParam  fuse_tolerance;
-    double height;
-    double original_height;
-    double prop_scale_from_widget;
-    Geom::PathVector hp;
     void on_pattern_pasted();
 
     LPEPatternAlongPath(const LPEPatternAlongPath&);

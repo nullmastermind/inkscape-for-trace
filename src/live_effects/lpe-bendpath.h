@@ -14,7 +14,6 @@
 #include "live_effects/effect.h"
 #include "live_effects/parameter/path.h"
 #include "live_effects/parameter/bool.h"
-#include "live_effects/parameter/point.h"
 
 #include <2geom/sbasis.h>
 #include <2geom/sbasis-geometric.h>
@@ -28,6 +27,9 @@
 namespace Inkscape {
 namespace LivePathEffect {
 
+namespace BeP {
+class KnotHolderEntityWidthBendPath;
+}
 
 //for Bend path on group : we need information concerning the group Bounding box
 class LPEBendPath : public Effect, GroupBBoxEffect {
@@ -43,21 +45,19 @@ public:
 
     void addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec);
 
+    virtual void addKnotHolderEntities(KnotHolder * knotholder, SPDesktop * desktop, SPItem * item);
+
     PathParam bend_path;
 
-private:
+    friend class BeP::KnotHolderEntityWidthBendPath;
+protected:
+    double original_height;
     ScalarParam prop_scale;
-    PointParam width;
+private:
     BoolParam scale_y_rel;
     BoolParam vertical_pattern;
-    double height;
-    double original_height;
-    double prop_scale_from_widget;
-    bool firstTime;
-    bool secondTime;
     Geom::Piecewise<Geom::D2<Geom::SBasis> > uskeleton;
     Geom::Piecewise<Geom::D2<Geom::SBasis> > n;
-    Geom::PathVector hp;
 
     void on_pattern_pasted();
 
