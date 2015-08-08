@@ -193,6 +193,7 @@ KnotHolderEntityWidthBendPath::knot_set(Geom::Point const &p, Geom::Point const&
     Geom::Path path_in = lpe->bend_path.get_pathvector().pathAt(Geom::PathVectorTime(0, 0, 0.0));
     Geom::Point ptA = path_in.pointAt(Geom::PathTime(0, 0.0));
     lpe->prop_scale.param_set_value(Geom::distance(s , ptA)/(lpe->original_height/2.0));
+
     sp_lpe_item_update_patheffect (SP_LPE_ITEM(item), false, true);
 }
 
@@ -201,7 +202,6 @@ KnotHolderEntityWidthBendPath::knot_get() const
 {
     LPEBendPath *lpe = dynamic_cast<LPEBendPath *> (_effect);
 
-    bp_helper_path.clear();
     Geom::Path path_in = lpe->bend_path.get_pathvector().pathAt(Geom::PathVectorTime(0, 0, 0.0));
     Geom::Point ptA = path_in.pointAt(Geom::PathTime(0, 0.0));
     Geom::Point B = path_in.pointAt(Geom::PathTime(1, 0.0));
@@ -213,9 +213,13 @@ KnotHolderEntityWidthBendPath::knot_get() const
     }
     Geom::Angle first_curve_angle = ray.transformed(Geom::Rotate(Geom::deg_to_rad(90))).angle();
     Geom::Point result_point = Geom::Point::polar(first_curve_angle, (lpe->original_height * lpe->prop_scale)/2.0) + ptA;
-    Geom::Path hp_path(result_point);
-    hp_path.appendNew<Geom::LineSegment>(ptA);
-    bp_helper_path.push_back(hp_path);
+
+    bp_helper_path.clear();
+    Geom::Path hp(result_point);
+    hp.appendNew<Geom::LineSegment>(ptA);
+    bp_helper_path.push_back(hp);
+    hp.clear();
+
     return result_point;
 }
 } // namespace BeP

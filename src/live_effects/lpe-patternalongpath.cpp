@@ -285,7 +285,7 @@ void
 KnotHolderEntityWidthPatternAlongPath::knot_set(Geom::Point const &p, Geom::Point const& /*origin*/, guint state)
 {
     LPEPatternAlongPath *lpe = dynamic_cast<LPEPatternAlongPath *> (_effect);
-
+    
     Geom::Point const s = snap_knot_position(p, state);
     SPShape const *sp_shape = dynamic_cast<SPShape const *>(SP_LPE_ITEM(item));
     if (sp_shape) {
@@ -303,7 +303,6 @@ KnotHolderEntityWidthPatternAlongPath::knot_get() const
 
     SPShape const *sp_shape = dynamic_cast<SPShape const *>(SP_LPE_ITEM(item));
     if (sp_shape) {
-        pap_helper_path.clear();
         Geom::Path const *path_in = sp_shape->getCurveBeforeLPE()->first_path();
         Geom::Point ptA = path_in->pointAt(Geom::PathTime(0, 0.0));
         Geom::Point B = path_in->pointAt(Geom::PathTime(1, 0.0));
@@ -315,9 +314,13 @@ KnotHolderEntityWidthPatternAlongPath::knot_get() const
         }
         Geom::Angle first_curve_angle = ray.transformed(Geom::Rotate(Geom::deg_to_rad(90))).angle();
         Geom::Point result_point = Geom::Point::polar(first_curve_angle, (lpe->original_height * lpe->prop_scale)/2.0) + ptA;
-        Geom::Path hp_path(result_point);
-        hp_path.appendNew<Geom::LineSegment>(ptA);
-        pap_helper_path.push_back(hp_path);
+
+        pap_helper_path.clear();
+        Geom::Path hp(result_point);
+        hp.appendNew<Geom::LineSegment>(ptA);
+        pap_helper_path.push_back(hp);
+        hp.clear();
+        
         return result_point;
     }
     return Geom::Point();
