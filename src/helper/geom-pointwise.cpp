@@ -44,7 +44,6 @@ std::vector<Satellite> Pointwise::getSatellites(bool curve_based)
                     if(path_it->size_closed()-1 == counter){
                         _satellites.erase(_satellites.begin() + (global_counter - 1 - satellite_gap));
                         satellite_gap++;
-                        std::cout << counter << "get satellites" << "\n";
                     }
                 }
                 counter++;
@@ -77,7 +76,6 @@ void Pointwise::setSatellites(std::vector<Satellite> const &sats, bool curve_bas
                         } else {
                             _satellites.insert(_satellites.begin() + global_counter + 1,_satellites[start]);
                         }
-                        std::cout << counter << "set satellites" << "\n";
                     }
                 }
                 counter++;
