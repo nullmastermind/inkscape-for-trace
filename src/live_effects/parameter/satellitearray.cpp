@@ -361,8 +361,7 @@ Geom::Point FilletChamferKnotHolderEntity::knot_get() const
         size_t sat_curve_time = Geom::nearest_time(pointwise_pv.curveAt(index).initialPoint(),pwd2);
         size_t first = Geom::nearest_time(sat_path.initialPoint() , pwd2);
         if (sat_path.closed() && sat_curve_time == first) {
-            sat_curve_time = Geom::nearest_time(sat_path.initialPoint(),pwd2);
-            d2_prev_index = sat_curve_time + sat_path.size() - 1;
+            d2_prev_index = first + sat_path.size() - 1;
         } else if(!sat_path.closed() || sat_curve_time != first) {
             d2_prev_index = sat_curve_time - 1;
         }

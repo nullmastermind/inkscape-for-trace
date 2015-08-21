@@ -23,7 +23,14 @@ Satellite::Satellite() {}
 
 
 Satellite::Satellite(SatelliteType satellite_type)
-    : satellite_type(satellite_type)
+    : satellite_type(satellite_type),
+    is_time(false),
+    active(false),
+    has_mirror(false),
+    hidden(true),
+    amount(0.0),
+    angle(0.0),
+    steps(0)
 {}
 
 Satellite::~Satellite() {}

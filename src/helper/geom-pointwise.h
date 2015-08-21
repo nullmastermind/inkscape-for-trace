@@ -1,15 +1,15 @@
 /**
  * \file
- * \brief Pointwise a class to manage a vector of satellites per piecewise curve
+ * \brief Pointwise a class to manage a vector of satellites per piecewise node
  */ /*
     * Authors:
     * Jabiertxof
+    * Nathan Hurst
     * Johan Engelen
     * Josh Andler
     * suv
     * Mc-
     * Liam P. White
-    * Nathan Hurst
     * Krzysztof Kosiński
     * This code is in public domain
     */
@@ -27,16 +27,6 @@
 
 /**
  * @brief Pointwise a class to manage a vector of satellites per piecewise curve
- *
- * For the moment is a per curve satellite holder not per node. This is ok for
- * much cases but not a real node satellite on open paths
- * To implement this we can:
- * add extra satellite in open paths, and take notice of current open paths
- * or put extra satellites on back for each open subpath
- *
- * Also maybe the vector of satellites become a vector of
- * optional satellites, and remove the active variable in satellites.
- *
  */
 typedef Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2sb;
 class Pointwise {
@@ -44,15 +34,32 @@ public:
     pwd2sb getPwd2() const;
     void setPwd2(pwd2sb const &pwd2_in);
 
-    std::vector<Satellite> getSatellites() const;
-    void setSatellites(std::vector<Satellite> const &sats);
+    /**
+     * @parameter curve_based allow the use of a satellite on last node of open paths
+     * if not curve based
+     */
+    std::vector<Satellite> getSatellites(bool curve_based = true);
+    void setSatellites(std::vector<Satellite> const &sats, bool curve_based = true);
+    /** Update the start satellite on open/closed paths.
+    */
     void setStart();
-
+    /** Fired when a path is modified.
+    */
     void recalculateForNewPwd2(pwd2sb const &A, Geom::PathVector const &B, Satellite const &S);
+    /** Some nodes/subpaths are removed.
+    */
     void pwd2Subtract(pwd2sb const &A);
+    /** Append nodes/subpaths to current pointwise
+    */
     void pwd2Append(pwd2sb const &A, Satellite const &S);
+    /** Send a subpath to end and update satellites
+    */
     void subpathToBack(size_t subpath);
+    /** Reverse a subpath and update satellites
+    */
     void subpathReverse(size_t start, size_t end);
+    /** Fired when a path is modified duplicating a node. Piecewise ignore degenerated curves.
+    */
     void insertDegenerateSatellites(pwd2sb const &A, Geom::PathVector const &B, Satellite const &S);
 
 private:
