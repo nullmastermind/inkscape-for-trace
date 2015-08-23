@@ -87,38 +87,37 @@ void SatelliteArrayParam::updateCanvasIndicators(bool mirror)
             continue;
         }
         double pos = 0;
-        if (pathv.size() <= i) {
+        if (pwd2.size() <= i) {
             break;
         }
-        Geom::Curve &curve = const_cast<Geom::Curve &>(pathv.curveAt(i));
+        Geom::Curve *curve_in = pathv.curveAt(i).duplicate();
         bool overflow = false;
-        double size_out = _vector[i].arcDistance(pathv.curveAt(i));
-        double lenght_out = pathv.curveAt(i).length( Geom::EPSILON);
+        double size_out = _vector[i].arcDistance(*curve_in);
+        double lenght_out = curve_in->length();
         double lenght_in = 0;
 
         Geom::Path sat_path = pathv.pathAt(i);
-        boost::optional<size_t> d2_prev_index = boost::none;
+        boost::optional<size_t> curve_prev_index = boost::none;
         size_t sat_curve_time = Geom::nearest_time(pathv.curveAt(i).initialPoint() , pwd2);
         size_t first = Geom::nearest_time(sat_path.initialPoint() , pwd2);
         if (sat_path.closed() && sat_curve_time == first) {
-            //sat_curve_time = Geom::nearest_time(sat_path.initialPoint(),pwd2);
-            d2_prev_index = sat_curve_time + sat_path.size() - 1;
+            curve_prev_index = sat_curve_time + sat_path.size() - 1;
         } else if(!sat_path.closed() || sat_curve_time != first) {
-            d2_prev_index = sat_curve_time - 1;
+            curve_prev_index = sat_curve_time - 1;
         }
-        if (d2_prev_index) {
-            lenght_in = Geom::length(pwd2[*d2_prev_index], Geom::EPSILON);
+        if (curve_prev_index) {
+            lenght_in = pathv.curveAt(*curve_prev_index).length();
         }
         if (mirror == true) {
-            if (d2_prev_index) {
-                curve = pathv.curveAt(*d2_prev_index);
-                pos = _vector[i].time(size_out, true, curve);
+            if (curve_prev_index) {
+                curve_in = const_cast<Geom::Curve *>(&pathv.curveAt(*curve_prev_index));
+                pos = _vector[i].time(size_out, true, *curve_in);
                 if (lenght_out < size_out) {
                     overflow = true;
                 }
             }
         } else {
-            pos = _vector[i].time(curve);
+            pos = _vector[i].time(*curve_in);
             if (lenght_in < size_out) {
                 overflow = true;
             }
@@ -126,8 +125,8 @@ void SatelliteArrayParam::updateCanvasIndicators(bool mirror)
         if (pos <= 0 || pos >= 1) {
             continue;
         }
-        Geom::Point point_a = curve.pointAt(pos);
-        Geom::Point deriv_a = unit_vector(derivative(curve.toSBasis()).valueAt(pos));
+        Geom::Point point_a = curve_in->pointAt(pos);
+        Geom::Point deriv_a = unit_vector(derivative(curve_in->toSBasis()).pointAt(pos));
         Geom::Rotate rot(Geom::Rotate::from_degrees(-90));
         deriv_a = deriv_a * rot;
         Geom::Point point_c = point_a - deriv_a * _helper_size;
@@ -142,7 +141,7 @@ void SatelliteArrayParam::updateCanvasIndicators(bool mirror)
         } else {
             aff *= Geom::Rotate(ray_1.angle() - Geom::deg_to_rad(270));
         }
-        aff *= Geom::Translate(curve.pointAt(pos));
+        aff *= Geom::Translate(curve_in->pointAt(pos));
         pathv *= aff;
         _hp.push_back(pathv[0]);
         _hp.push_back(pathv[1]);
@@ -172,7 +171,7 @@ void SatelliteArrayParam::updateCanvasIndicators(bool mirror)
                 } else {
                     aff *= Geom::Rotate(ray_1.angle() - Geom::deg_to_rad(270));
                 }
-                aff *= Geom::Translate(curve.pointAt(pos));
+                aff *= Geom::Translate(curve_in->pointAt(pos));
                 pathv *= aff;
                 _hp.push_back(pathv[0]);
             }
@@ -296,10 +295,29 @@ void FilletChamferKnotHolderEntity::knot_set(Geom::Point const &p,
     Geom::PathVector pathv = path_from_piecewise(Geom::remove_short_cuts(pwd2,0.01),0.01);
     if (_index >= _pparam->_vector.size() ) {
         Geom::Path sat_path = pathv.pathAt(index);
-        if (sat_path.closed() && sat_path.front() == pathv.curveAt(index)) {
-            satellite.setPosition(s, sat_path.back(), true);
-        } else {
-            satellite.setPosition(s, pathv.curveAt(index-1), true);
+        boost::optional<size_t> curve_prev_index = boost::none;
+        size_t sat_curve_time = Geom::nearest_time(pathv.curveAt(index).initialPoint(),pwd2);
+        size_t first = Geom::nearest_time(sat_path.initialPoint() , pwd2);
+        if (sat_path.closed() && sat_curve_time == first) {
+            curve_prev_index = sat_curve_time + sat_path.size() - 1;
+        } else if(!sat_path.closed() || sat_curve_time != first) {
+            curve_prev_index = sat_curve_time - 1;
+        }
+        if (curve_prev_index) {
+            Geom::Curve const &curve_in = pathv.curveAt(*curve_prev_index);
+            double mirror_time = Geom::nearest_time(s, curve_in);
+            double time_start = 0;
+            std::vector<Satellite> sats = pointwise->getSatellites();
+            time_start = sats[*curve_prev_index].time(curve_in);
+            if (time_start > mirror_time) {
+                mirror_time = time_start;
+            }
+            double size = arcLengthAt(mirror_time, curve_in);
+            double amount = curve_in.length() - size;
+            if (satellite.is_time) {
+                amount = timeAtArcLength(amount, pathv.curveAt(index));
+            }
+            satellite.amount = amount;
         }
     } else {
         satellite.setPosition(s, pathv.curveAt(index));
@@ -336,11 +354,32 @@ Geom::Point FilletChamferKnotHolderEntity::knot_get() const
     }
     this->knot->show();
     if (_index >= _pparam->_vector.size()) {
+        tmp_point = satellite.getPosition(pathv.curveAt(index));
         Geom::Path sat_path = pathv.pathAt(index);
-        if (sat_path.closed() && sat_path.front() == pathv.curveAt(index)) {
-            tmp_point = satellite.getPosition(sat_path.back(), true);
-        } else {
-            tmp_point = satellite.getPosition(pathv.curveAt(index - 1), true);
+        boost::optional<size_t> curve_prev_index = boost::none;
+        size_t sat_curve_time = Geom::nearest_time(pathv.curveAt(index).initialPoint(),pwd2);
+        size_t first = Geom::nearest_time(sat_path.initialPoint(), pwd2);
+        if (sat_path.closed() && sat_curve_time == first) {
+            curve_prev_index = sat_curve_time + sat_path.size() - 1;
+        } else if(!sat_path.closed() || sat_curve_time != first) {
+            curve_prev_index = sat_curve_time - 1;
+        }
+        if (curve_prev_index) {
+            Geom::Curve const &curve_in = pathv.curveAt(*curve_prev_index);
+            double s = satellite.arcDistance(pathv.curveAt(index));
+            double t = satellite.time(s, true, curve_in);
+            if (t > 1) {
+                t = 1;
+            }
+            if (t < 0) {
+                t = 0;
+            }
+            double time_start = 0;
+            time_start = pointwise->getSatellites()[*curve_prev_index].time(curve_in);
+            if (time_start > t) {
+                t = time_start;
+            }
+            tmp_point = (curve_in).pointAt(t);
         }
     } else {
         tmp_point = satellite.getPosition(pathv.curveAt(index));
@@ -410,29 +449,28 @@ void FilletChamferKnotHolderEntity::knot_click(guint state)
         Geom::PathVector pathv = path_from_piecewise(Geom::remove_short_cuts(pwd2,0.01),0.01);
         double amount = _pparam->_vector.at(index).amount;
         Geom::Path sat_path = pathv.pathAt(index);
-        boost::optional<size_t> d2_prev_index = boost::none;
+        boost::optional<size_t> curve_prev_index = boost::none;
         size_t sat_curve_time = Geom::nearest_time(pathv.curveAt(index).initialPoint(),pwd2);
         size_t first = Geom::nearest_time(sat_path.initialPoint() , pwd2);
         if (sat_path.closed() && sat_curve_time == first) {
-            sat_curve_time = Geom::nearest_time(sat_path.initialPoint(),pwd2);
-            d2_prev_index = sat_curve_time + sat_path.size() - 1;
+            curve_prev_index = sat_curve_time + sat_path.size() - 1;
         } else if(!sat_path.closed() || sat_curve_time != first) {
-            d2_prev_index = sat_curve_time - 1;
+            curve_prev_index = sat_curve_time - 1;
         }
-
         if (!_pparam->_use_distance && !_pparam->_vector.at(index).is_time) {
-            if (d2_prev_index) {
-                amount = _pparam->_vector.at(index).lenToRad(amount, pathv.curveAt(*d2_prev_index), pathv.curveAt(index),_pparam->_vector.at(*d2_prev_index));
+            if (curve_prev_index) {
+                amount = _pparam->_vector.at(index).lenToRad(amount, pathv.curveAt(*curve_prev_index), pathv.curveAt(index), _pparam->_vector.at(*curve_prev_index));
             } else {
                 amount = 0.0;
             }
         }
         bool aprox = false;
-        Geom::Curve const &curve_out =  pathv.curveAt(index);
-        if (d2_prev_index) {
-            Geom::Curve const &curve_in = pathv.curveAt(*d2_prev_index);
-            aprox = (curve_in.degreesOfFreedom() != 2 ||
-                     curve_out.degreesOfFreedom() != 2) &&
+        Geom::D2<Geom::SBasis> d2_out = _pparam->_last_pointwise->getPwd2()[index];
+        if (curve_prev_index) {
+            Geom::D2<Geom::SBasis> d2_in =
+                _pparam->_last_pointwise->getPwd2()[*curve_prev_index];
+            aprox = ((d2_in)[0].degreesOfFreedom() != 2 ||
+                     d2_out[0].degreesOfFreedom() != 2) &&
                     !_pparam->_use_distance
                     ? true
                     : false;
@@ -463,7 +501,6 @@ void FilletChamferKnotHolderEntity::knot_set_offset(Satellite satellite)
         size_t sat_curve_time = Geom::nearest_time(pathv.curveAt(index).initialPoint(),pwd2);
         size_t first = Geom::nearest_time(sat_path.initialPoint() , pwd2);
         if (sat_path.closed() && sat_curve_time == first) {
-            //sat_curve_time = Geom::nearest_time(sat_path.initialPoint(),pwd2);
             prev = sat_curve_time + sat_path.size() - 1;
         } else if(!sat_path.closed() || sat_curve_time != first) {
             prev = sat_curve_time - 1;

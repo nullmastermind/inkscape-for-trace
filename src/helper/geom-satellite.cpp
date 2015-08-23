@@ -115,7 +115,7 @@ double arcLengthAt(double const A, Geom::Curve const &curve_in, size_t cache_lim
         s = (A * length_part);
     } else if (!curve_in.isLineSegment()) {
         Geom::Curve *curve = curve_in.portion(0.0, A);
-        s = curve->length(0.001);
+        s = curve->length();
     }
     deque_cache.push_front(std::make_pair(s, std::make_pair(A, d2_in)));
     return s;
@@ -261,7 +261,7 @@ void Satellite::setPosition(Geom::Point const p, Geom::Curve const &curve_in, bo
     if (!is_time) {
         A = arcLengthAt(A, *curve);
     }
-    this->setAmount(A);
+    amount = A;
 }
 
 /**

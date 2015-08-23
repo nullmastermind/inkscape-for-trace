@@ -94,7 +94,7 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
                 continue;
             }
             Geom::Path::const_iterator curve_it1 = path_it->begin();
-            Geom::Path::const_iterator curve_endit = path_it->end_closed();
+            Geom::Path::const_iterator curve_endit = path_it->end_default();
             int counter = 0;
             size_t steps = chamfer_steps;
             while (curve_it1 != curve_endit) {
@@ -121,8 +121,8 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
             }
         }
         pointwise = new Pointwise();
-        pointwise->setPathVector(pathv);
-        pointwise->setSatellites(satellites, false);
+        pointwise->setPwd2(paths_to_pw(pathv));
+        pointwise->setSatellites(satellites);
         //pointwise->setStart();
         satellites_param.setPointwise(pointwise);
     } else {
@@ -260,10 +260,10 @@ void LPEFilletChamfer::updateAmount()
         power = radius / 100;
     }
     std::vector<Satellite> satellites = pointwise->getSatellites();
-    Geom::PathVector const pathv = pointwise->getPathVector();
     //todo 2GEOM I want to substiturte all Piecewise<D2<SBasis> > whith a PathVector
     //but is very dificult know the index of a curve inside a pathvector with current API
     Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = pointwise->getPwd2();
+    Geom::PathVector pathv = path_from_piecewise(Geom::remove_short_cuts(pwd2,0.01),0.01);
     for (std::vector<Satellite>::iterator it = satellites.begin();
             it != satellites.end(); ++it) {
         Geom::Path sat_path = pathv.pathAt(it - satellites.begin());
@@ -367,10 +367,10 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
             pathv_to_linear_and_cubic_beziers(c->get_pathvector());
         Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = paths_to_pw(pathv);
         pwd2 = remove_short_cuts(pwd2, 0.01);
-        std::vector<Satellite> sats = normalizeSatellites(pathv, satellites_param.data());
+        std::vector<Satellite> sats = satellites_param.data();
         if(sats.empty()) {
             doOnApply(lpeItem);
-            sats = normalizeSatellites(pathv, satellites_param.data());
+            sats = satellites_param.data();
         }
         if (hide_knots) {
             satellites_param.setHelperSize(0);

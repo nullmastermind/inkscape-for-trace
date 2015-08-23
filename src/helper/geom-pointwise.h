@@ -64,6 +64,7 @@ public:
 
 private:
     pwd2sb _pwd2;
+    Geom::PathVector _pathvector;
     std::vector<Satellite> _satellites;
 };
 

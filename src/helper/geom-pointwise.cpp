@@ -27,7 +27,7 @@ void Pointwise::setPwd2(pwd2sb const &pwd2_in)
     _pwd2 = pwd2_in;
 }
 
-std::vector<Satellite> Pointwise::getSatellites(e)
+std::vector<Satellite> Pointwise::getSatellites()
 {
     return _satellites;
 }
@@ -80,10 +80,10 @@ void Pointwise::pwd2Subtract(pwd2sb const &A)
     std::vector<Satellite> sats;
     pwd2sb pwd2 = _pwd2;
     setPwd2(A);
-    Geom::PathVector pointwise_pv = path_from_piecewise(Geom::remove_short_cuts(_pwd2,0.01),0.01);
+    Geom::PathVector pathv = path_from_piecewise(Geom::remove_short_cuts(_pwd2,0.01),0.01);
     for (size_t i = 0; i < _satellites.size(); i++) {
-        Geom::Path sat_path = pointwise_pv.pathAt(i - counter);
-        Geom::PathTime sat_curve_time = sat_path.nearestTime(pointwise_pv.curveAt(i - counter).initialPoint());
+        Geom::Path sat_path = pathv.pathAt(i - counter);
+        Geom::PathTime sat_curve_time = sat_path.nearestTime(pathv.curveAt(i - counter).initialPoint());
         Geom::PathTime sat_curve_time_start = sat_path.nearestTime(sat_path.initialPoint());
         if (sat_curve_time_start.curve_index < sat_curve_time.curve_index||
                 !are_near(pwd2[i].at0(), A[i - counter].at0())) {
@@ -101,9 +101,9 @@ void Pointwise::pwd2Append(pwd2sb const &A, Satellite const &S)
     std::vector<Satellite> sats;
     bool reorder = false;
     for (size_t i = 0; i < A.size(); i++) {
-        Geom::PathVector pointwise_pv = path_from_piecewise(Geom::remove_short_cuts(_pwd2,0.01),0.01);
-        Geom::Path sat_path = pointwise_pv.pathAt(i - counter);
-        boost::optional< Geom::PathVectorTime > sat_curve_time_optional = pointwise_pv.nearestTime(pointwise_pv.curveAt(i-counter).initialPoint());
+        Geom::PathVector pathv = path_from_piecewise(Geom::remove_short_cuts(_pwd2,0.01),0.01);
+        Geom::Path sat_path = pathv.pathAt(i - counter);
+        boost::optional< Geom::PathVectorTime > sat_curve_time_optional = pathv.nearestTime(pathv.curveAt(i-counter).initialPoint());
         Geom::PathVectorTime sat_curve_time;
         if(sat_curve_time_optional) {
             sat_curve_time = *sat_curve_time_optional;
@@ -118,9 +118,9 @@ void Pointwise::pwd2Append(pwd2sb const &A, Satellite const &S)
         //Check for subpath closed. If a subpath is closed, is not reversed or moved
         //to back
         size_t old_subpath_index = sat_curve_time.path_index;
-        pointwise_pv = path_from_piecewise(Geom::remove_short_cuts(A,0.01),0.01);
-        sat_path = pointwise_pv.pathAt(i);
-        sat_curve_time_optional = pointwise_pv.nearestTime(pointwise_pv.curveAt(i).initialPoint());
+        pathv = path_from_piecewise(Geom::remove_short_cuts(A,0.01),0.01);
+        sat_path = pathv.pathAt(i);
+        sat_curve_time_optional = pathv.nearestTime(pathv.curveAt(i).initialPoint());
         if(sat_curve_time_optional) {
             sat_curve_time = *sat_curve_time_optional;
         }
