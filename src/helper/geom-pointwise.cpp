@@ -23,76 +23,25 @@ pwd2sb Pointwise::getPwd2() const
 
 void Pointwise::setPwd2(pwd2sb const &pwd2_in)
 {
+    _pathvector = path_from_piecewise(Geom::remove_short_cuts(_pwd2,0.01),0.01);
     _pwd2 = pwd2_in;
 }
 
-std::vector<Satellite> Pointwise::getSatellites(bool curve_based)
+std::vector<Satellite> Pointwise::getSatellites(e)
 {
-    if(curve_based){
-        size_t global_counter = 0;
-        size_t satellite_gap = 0;
-        Geom::PathVector pathvector = path_from_piecewise(Geom::remove_short_cuts(_pwd2,0.01),0.01);
-        for (Geom::PathVector::const_iterator path_it = pathvector.begin();
-            path_it != pathvector.end(); ++path_it) {
-            if (path_it->empty()) {
-                continue;
-            }
-            size_t counter = 0;
-            for (Geom::Path::const_iterator curve_it =  path_it->begin();
-                curve_it !=  path_it->end_closed(); ++curve_it) {
-                if(!path_it->closed()){
-                    if(path_it->size_closed()-1 == counter){
-                        _satellites.erase(_satellites.begin() + (global_counter - 1 - satellite_gap));
-                        satellite_gap++;
-                    }
-                }
-                counter++;
-                global_counter++;
-            }
-        }
-    }
     return _satellites;
 }
 
-void Pointwise::setSatellites(std::vector<Satellite> const &sats, bool curve_based)
+void Pointwise::setSatellites(std::vector<Satellite> const &sats)
 {
     _satellites = sats;
-    if(curve_based){
-        size_t global_counter = 0;
-        Geom::PathVector pathvector = path_from_piecewise(Geom::remove_short_cuts(_pwd2,0.01),0.01);
-        for (Geom::PathVector::const_iterator path_it = pathvector.begin();
-            path_it != pathvector.end(); ++path_it) {
-            if (path_it->empty()) {
-                continue;
-            }
-            size_t counter = 0;
-            size_t start = global_counter;
-            for (Geom::Path::const_iterator curve_it =  path_it->begin();
-                curve_it !=  path_it->end_closed(); ++curve_it) {
-                if(!path_it->closed()){
-                    if(path_it->size_closed()-1 == counter){
-                        if(global_counter == _satellites.size()){
-                            _satellites.push_back(_satellites[start]);
-                        } else {
-                            _satellites.insert(_satellites.begin() + global_counter + 1,_satellites[start]);
-                        }
-                    }
-                }
-                counter++;
-                global_counter++;
-            }
-        }
-    }
 }
-
-
 
 void Pointwise::setStart()
 {
-    Geom::PathVector pointwise_pv = path_from_piecewise(Geom::remove_short_cuts(_pwd2,0.01),0.01);
     int counter = 0;
-    for (Geom::PathVector::const_iterator path_it = pointwise_pv.begin();
-            path_it != pointwise_pv.end(); ++path_it) {
+    for (Geom::PathVector::const_iterator path_it = _pathvector.begin();
+            path_it != _pathvector.end(); ++path_it) {
         if (path_it->empty()) {
             continue;
         }

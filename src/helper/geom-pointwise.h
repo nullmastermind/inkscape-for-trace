@@ -33,13 +33,13 @@ class Pointwise {
 public:
     pwd2sb getPwd2() const;
     void setPwd2(pwd2sb const &pwd2_in);
-
     /**
      * @parameter curve_based allow the use of a satellite on last node of open paths
      * if not curve based
      */
-    std::vector<Satellite> getSatellites(bool curve_based = true);
-    void setSatellites(std::vector<Satellite> const &sats, bool curve_based = true);
+    std::vector<Satellite> getSatellites();
+    void setSatellites(std::vector<Satellite> const &sats);
+
     /** Update the start satellite on open/closed paths.
     */
     void setStart();

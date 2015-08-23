@@ -11,7 +11,6 @@
 #ifndef SEEN_SATELLITE_H
 #define SEEN_SATELLITE_H
 
-#include <2geom/d2.h>
 #include <map>
 #include <boost/assign.hpp>
 #include <2geom/sbasis-geometric.h>
@@ -64,18 +63,18 @@ public:
     {
         steps = set_steps;
     }
-    double lenToRad(double A, Geom::D2<Geom::SBasis> d2_in,
-                    Geom::D2<Geom::SBasis> d2_out,
-                    Satellite previousSatellite) const;
-    double radToLen(double A, Geom::D2<Geom::SBasis> d2_in,
-                    Geom::D2<Geom::SBasis> d2_out) const;
+    double lenToRad(double const A, Geom::Curve const &curve_in,
+                    Geom::Curve const &curve_out,
+                    Satellite const previousSatellite) const;
+    double radToLen(double const A, Geom::Curve const &curve_in,
+                    Geom::Curve const &curve_out) const;
 
-    double time(Geom::D2<Geom::SBasis> d2_in) const;
-    double time(double A, bool I, Geom::D2<Geom::SBasis> d2_in) const;
-    double arcDistance(Geom::D2<Geom::SBasis> d2_in) const;
+    double time(Geom::Curve const &curve_in, bool const I = false) const;
+    double time(double A, bool const I, Geom::Curve const &curve_in) const;
+    double arcDistance(Geom::Curve const &curve_in) const;
 
-    void setPosition(Geom::Point p, Geom::D2<Geom::SBasis> d2_in);
-    Geom::Point getPosition(Geom::D2<Geom::SBasis> d2_in) const;
+    void setPosition(Geom::Point const p, Geom::Curve const &curve_in, bool const I = false);
+    Geom::Point getPosition(Geom::Curve const &curve_in, bool const I = false) const;
 
     void setSatelliteType(gchar const *A);
     gchar const *getSatelliteTypeGchar() const;
@@ -88,8 +87,8 @@ public:
     double angle;
     size_t steps;
 };
-double timeAtArcLength(double A, Geom::D2<Geom::SBasis> const d2_in);
-double arcLengthAt(double A, Geom::D2<Geom::SBasis> const d2_in);
+double timeAtArcLength(double const A, Geom::Curve const &curve_in, size_t cache_limit = 0);
+double arcLengthAt(double const A, Geom::Curve const &curve_in, size_t cache_limit = 0);
 
 #endif // SEEN_SATELLITE_H
 
