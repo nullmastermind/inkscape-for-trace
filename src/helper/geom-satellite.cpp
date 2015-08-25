@@ -15,6 +15,13 @@
 #include <2geom/sbasis-to-bezier.h>
 #include <2geom/ray.h>
 #include <boost/optional.hpp>
+//log cache
+#ifdef _WIN32
+#include <Windows.h>
+#else
+#include <sys/time.h>
+#include <ctime>
+#endif
 
 /**
  * @brief Satellite a per ?node/curve holder of data.
@@ -39,6 +46,49 @@ Satellite::~Satellite() {}
  * Calculate the time in curve_in with a size of A
  * TODO: find a better place to it
  */
+ 
+//http://stackoverflow.com/questions/1861294/how-to-calculate-execution-time-of-a-code-snippet-in-c
+/* Remove if already defined */
+typedef long long int64; typedef unsigned long long uint64;
+
+/* Returns the amount of milliseconds elapsed since the UNIX epoch. Works on both
+ * windows and linux. */
+
+uint64 GetTimeMs64()
+{
+#ifdef _WIN32
+ /* Windows */
+ FILETIME ft;
+ LARGE_INTEGER li;
+
+ /* Get the amount of 100 nano seconds intervals elapsed since January 1, 1601 (UTC) and copy it
+  * to a LARGE_INTEGER structure. */
+ GetSystemTimeAsFileTime(&ft);
+ li.LowPart = ft.dwLowDateTime;
+ li.HighPart = ft.dwHighDateTime;
+
+ uint64 ret = li.QuadPart;
+ ret -= 116444736000000000LL; /* Convert from file time to UNIX epoch time. */
+ ret /= 10000; /* From 100 nano seconds (10^-7) to 1 millisecond (10^-3) intervals */
+
+ return ret;
+#else
+ /* Linux */
+ struct timeval tv;
+
+ gettimeofday(&tv, NULL);
+
+ uint64 ret = tv.tv_usec;
+ /* Convert from micro seconds (10^-6) to milliseconds (10^-3) */
+ ret /= 1000;
+
+ /* Adds the seconds (10^0) after converting them to milliseconds (10^-3) */
+ ret += (tv.tv_sec * 1000);
+
+ return ret;
+#endif
+}
+
 double timeAtArcLength(double const A, Geom::Curve const &curve_in, size_t cache_limit)
 {
     if ( A == 0 || curve_in.isDegenerate()) {
@@ -47,19 +97,34 @@ double timeAtArcLength(double const A, Geom::Curve const &curve_in, size_t cache
 
     //using "d2_in" for curve comparation, using directly "curve_in" crash in bezier compare function- dynamic_cast-
     Geom::D2<Geom::SBasis> d2_in = curve_in.toSBasis();
-    static std::deque<std::pair<double, std::pair<double, Geom::D2<Geom::SBasis> > > > deque_cache;
-    if(cache_limit > 0 && deque_cache.size() > cache_limit){
-        std::deque<std::pair<double, std::pair<double, Geom::D2<Geom::SBasis> > > > deque_cache_split(deque_cache.begin(), deque_cache.begin() + cache_limit);
-        deque_cache = deque_cache_split;
+
+    static bool cached = false;
+    if(cache_limit == 0){
+        cached = false;
+    } else if(cache_limit > 1){
+        cached = true;
     }
-    if(cache_limit > 0){
+    static size_t count = 0;
+    static uint64 start = GetTimeMs64();
+    static uint64 time_diff = GetTimeMs64();
+    static cache_item cache_value = std::make_pair(0.0, std::make_pair(A, d2_in));
+    if(cache_limit > 1 || cache_limit == 0){
+        uint64 end = GetTimeMs64();
+        uint64 elapsed_ms = end-start;
+        if(count == 0){
+            time_diff = 0;
+        } else if(elapsed_ms < 1000){
+            time_diff += elapsed_ms;
+        }
+        std::cout << "counter:" << count << ", cached:" << cached << ", function:timeAtArcLength" << ", miliseconds:" << elapsed_ms << ", acumulated ms:" << time_diff << "\n";
+        start = end;
+        count++;
         return 1;
     }
-    std::deque<std::pair<double, std::pair<double, Geom::D2<Geom::SBasis> > > >::iterator it;
-    for (it = deque_cache.begin() ; it != deque_cache.end(); ++it){
-        if(it->second.first == A){
-            if(it->second.second == d2_in){
-                return it->first;
+    if(cached){
+        if(cache_value.second.first == A){
+            if(cache_value.second.second == d2_in ){
+                return cache_value.first;
             }
         }
     }
@@ -77,7 +142,9 @@ double timeAtArcLength(double const A, Geom::Curve const &curve_in, size_t cache
             t = t_roots[0];
         }
     }
-    deque_cache.push_front(std::make_pair(t, std::make_pair(A, d2_in)));
+    if(cached){
+        cache_value = std::make_pair(t, std::make_pair(A, d2_in));
+    }
     return t;
 }
 
@@ -85,7 +152,7 @@ double timeAtArcLength(double const A, Geom::Curve const &curve_in, size_t cache
  * Calculate the size in curve_in with a point at A
  * TODO: find a better place to it
  */
-double arcLengthAt(double const A, Geom::Curve const &curve_in, size_t cache_limit)
+double arcLengthAt(double const A, Geom::Curve const &curve_in)
 {
     if ( A == 0 || curve_in.isDegenerate()) {
         return 0;
@@ -93,22 +160,6 @@ double arcLengthAt(double const A, Geom::Curve const &curve_in, size_t cache_lim
 
     //using "d2_in" for curve comparation, using directly "curve_in" crash in bezier compare function- dynamic_cast-
     Geom::D2<Geom::SBasis> d2_in = curve_in.toSBasis();
-    static std::deque<std::pair<double, std::pair<double, Geom::D2<Geom::SBasis> > > > deque_cache;
-    if(cache_limit > 0 && deque_cache.size() > cache_limit){
-        std::deque<std::pair<double, std::pair<double, Geom::D2<Geom::SBasis> > > > deque_cache_split(deque_cache.begin(), deque_cache.begin() + cache_limit);
-        deque_cache = deque_cache_split;
-    }
-    if(cache_limit > 0){
-        return 1;
-    }
-    std::deque<std::pair<double, std::pair<double, Geom::D2<Geom::SBasis> > > >::iterator it;
-    for (it = deque_cache.begin() ; it != deque_cache.end(); ++it){
-        if(it->second.first == A){
-            if(it->second.second == d2_in){
-                return it->first;
-            }
-        }
-    }
     double s = 0;
     double length_part = curve_in.length();
     if (A > length_part || curve_in.isLineSegment()) {
@@ -117,7 +168,6 @@ double arcLengthAt(double const A, Geom::Curve const &curve_in, size_t cache_lim
         Geom::Curve *curve = curve_in.portion(0.0, A);
         s = curve->length();
     }
-    deque_cache.push_front(std::make_pair(s, std::make_pair(A, d2_in)));
     return s;
 }
 

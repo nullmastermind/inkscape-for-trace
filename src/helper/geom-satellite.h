@@ -27,7 +27,7 @@ enum SatelliteType {
 /**
  * @brief Satellite a per ?node/curve holder of data.
  */
-
+typedef std::pair<double, std::pair<double, Geom::D2<Geom::SBasis> > > cache_item;
 class Satellite {
 public:
 
@@ -87,8 +87,9 @@ public:
     double angle;
     size_t steps;
 };
-double timeAtArcLength(double const A, Geom::Curve const &curve_in, size_t cache_limit = 0);
-double arcLengthAt(double const A, Geom::Curve const &curve_in, size_t cache_limit = 0);
+//cache_limit never called as 1
+double timeAtArcLength(double const A, Geom::Curve const &curve_in, size_t cache_limit = 1);
+double arcLengthAt(double const A, Geom::Curve const &curve_in);
 
 #endif // SEEN_SATELLITE_H
 

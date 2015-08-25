@@ -58,6 +58,7 @@ private:
     BoolParam hide_knots;
     BoolParam ignore_radius_0;
     ScalarParam helper_size;
+    ScalarParam cache;
 
     Pointwise *pointwise;
     Geom::PathVector _hp;

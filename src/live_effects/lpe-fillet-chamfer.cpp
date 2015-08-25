@@ -55,6 +55,7 @@ LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject)
                       "ignore_radius_0", &wr, this, false),
       helper_size(_("Helper size with direction:"),
                   _("Helper size with direction"), "helper_size", &wr, this, 0),
+      cache(_("Cache size:"),_("Cache size"), "cache_size", &wr, this, 3),
       pointwise(NULL)
 {
     registerParameter(&satellites_param);
@@ -68,6 +69,7 @@ LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject)
     registerParameter(&ignore_radius_0);
     registerParameter(&only_selected);
     registerParameter(&hide_knots);
+    registerParameter(&cache);
 
     radius.param_set_range(0.0, Geom::infinity());
     radius.param_set_increments(1, 1);
@@ -78,6 +80,9 @@ LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject)
     helper_size.param_set_range(0, 999);
     helper_size.param_set_increments(5, 5);
     helper_size.param_set_digits(0);
+    cache.param_set_range(0, 999);
+    cache.param_set_increments(1, 1);
+    cache.param_set_digits(0);
 }
 
 void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
@@ -380,8 +385,7 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
         Geom::Curve const &first_curve = pathv.curveAt(0);
         size_t number_curves = pathv.curveCount();
         //Activete cache
-        timeAtArcLength(1, first_curve, number_curves * 3);
-        arcLengthAt(1, first_curve, number_curves * 3);
+        timeAtArcLength(1, first_curve, number_curves * cache);
         for (std::vector<Satellite>::iterator it = sats.begin();
                 it != sats.end();) {
             if (it->is_time != flexible) {
