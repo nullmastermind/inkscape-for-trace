@@ -294,6 +294,16 @@ void FilletChamferKnotHolderEntity::knot_set(Geom::Point const &p,
     Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = pointwise->getPwd2();
     Geom::PathVector pathv = path_from_piecewise(Geom::remove_short_cuts(pwd2,0.01),0.01);
     if (_index >= _pparam->_vector.size() ) {
+        //I want to remplace this whith patvectorTime but need a way to know the index of a curve in a pathvector
+        //Geom::Path sat_path = pathv.pathAt(index);
+        //PathTime sat_time = sat_path.nearestTime(pathv.curveAt(index).initialPoint());
+        //boost::optional<size_t> previous_index = boost::none;
+        //if (sat_path.closed() && sat_time.curve_index == 0) {
+        //    previous_index = sat_path.size();
+        //} else if(!sat_path.closed() || sat_time.curve_index != 0) {
+        //    previous_index = sat_time.curve_index - 1;
+        //}
+        //if (previous_index) {
         Geom::Path sat_path = pathv.pathAt(index);
         boost::optional<size_t> curve_prev_index = boost::none;
         size_t sat_curve_time = Geom::nearest_time(pathv.curveAt(index).initialPoint(),pwd2);

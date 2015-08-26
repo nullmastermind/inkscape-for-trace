@@ -278,7 +278,6 @@ void LPEFilletChamfer::updateAmount()
         }
         boost::optional<size_t> previous = boost::none;
         if (sat_path.closed() && sat_curve_time == first) {
-            sat_curve_time = Geom::nearest_time(sat_path.initialPoint(),pwd2);
             previous = sat_curve_time + sat_path.size() - 1;
         } else if(!sat_path.closed() || sat_curve_time != first) {
             previous = sat_curve_time - 1;
