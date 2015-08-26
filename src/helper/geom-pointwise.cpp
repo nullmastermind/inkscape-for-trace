@@ -47,7 +47,7 @@ void Pointwise::setStart()
         }
         int index = 0;
         for (Geom::Path::const_iterator curve_it =  path_it->begin();
-                    curve_it !=  path_it->end(); ++curve_it) {
+                curve_it !=  path_it->end(); ++curve_it) {
             if(index == 0) {
                 if (!path_it->closed()) {
                     _satellites[counter].hidden = true;
