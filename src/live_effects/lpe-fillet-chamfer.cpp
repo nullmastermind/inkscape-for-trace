@@ -51,8 +51,8 @@ LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject)
                         "use_knot_distance", &wr, this, false),
       hide_knots(_("Hide knots"), _("Hide knots"), "hide_knots", &wr, this,
                  false),
-      ignore_radius_0(_("Ignore 0 radius knots"), _("Ignore 0 radius knots"),
-                      "ignore_radius_0", &wr, this, false),
+      apply_no_radius(_("Apply changes if radius = 0"), _("Apply changes if radius = 0"), "apply_no_radius", &wr, this, true),
+      apply_with_radius(_("Apply changes if radius > 0"), _("Apply changes if radius > 0"), "apply_with_radius", &wr, this, true),
       helper_size(_("Helper size with direction:"),
                   _("Helper size with direction"), "helper_size", &wr, this, 0),
       pointwise(NULL)
@@ -65,7 +65,8 @@ LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject)
     registerParameter(&flexible);
     registerParameter(&use_knot_distance);
     registerParameter(&mirror_knots);
-    registerParameter(&ignore_radius_0);
+    registerParameter(&apply_no_radius);
+    registerParameter(&apply_with_radius);
     registerParameter(&only_selected);
     registerParameter(&hide_knots);
 
@@ -273,7 +274,9 @@ void LPEFilletChamfer::updateAmount()
             it->amount = 0;
             continue;
         }
-        if (ignore_radius_0 && it->amount == 0) {
+        if ((!apply_no_radius && it->amount == 0) ||
+            (!apply_with_radius && it->amount != 0)) 
+        {
             continue;
         }
         boost::optional<size_t> previous = boost::none;
@@ -306,7 +309,9 @@ void LPEFilletChamfer::updateChamferSteps()
     Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = pointwise->getPwd2();
     for (std::vector<Satellite>::iterator it = satellites.begin();
             it != satellites.end(); ++it) {
-        if (ignore_radius_0 && it->amount == 0) {
+        if ((!apply_no_radius && it->amount == 0) ||
+            (!apply_with_radius && it->amount != 0)) 
+        {
             continue;
         }
         if (only_selected) {
@@ -328,7 +333,9 @@ void LPEFilletChamfer::updateSatelliteType(SatelliteType satellitetype)
     Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = pointwise->getPwd2();
     for (std::vector<Satellite>::iterator it = satellites.begin();
             it != satellites.end(); ++it) {
-        if (ignore_radius_0 && it->amount == 0) {
+        if ((!apply_no_radius && it->amount == 0) ||
+            (!apply_with_radius && it->amount != 0)) 
+        {
             continue;
         }
         if (only_selected) {

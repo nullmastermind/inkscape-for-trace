@@ -56,7 +56,8 @@ private:
     BoolParam only_selected;
     BoolParam use_knot_distance;
     BoolParam hide_knots;
-    BoolParam ignore_radius_0;
+    BoolParam apply_no_radius;
+    BoolParam apply_with_radius;
     ScalarParam helper_size;
 
     Pointwise *pointwise;
