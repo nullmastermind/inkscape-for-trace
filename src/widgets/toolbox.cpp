@@ -341,6 +341,9 @@ static gchar const * ui_descr =
         "    <separator />"
         "    <toolitem action='measure_units_label' />"
         "    <toolitem action='MeasureUnitsAction' />"
+        "    <toolitem action='MeasureIgnore1stAndLast' />"
+        "    <toolitem action='MeasureInBettween' />"
+        "    <toolitem action='MeasureAllLayers' />"
         "  </toolbar>"
 
         "  <toolbar name='StarToolbar'>"

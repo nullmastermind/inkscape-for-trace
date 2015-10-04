@@ -38,6 +38,8 @@
 #include "widgets/ege-output-action.h"
 #include "preferences.h"
 #include "toolbox.h"
+#include "widgets/ink-action.h"
+#include "ui/icon-names.h"
 #include "ui/widget/unit-tracker.h"
 
 using Inkscape::UI::Widget::UnitTracker;
@@ -79,6 +81,7 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
     g_object_set_data( holder, "tracker", tracker );
 
     EgeAdjustmentAction *eact = 0;
+    Inkscape::IconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
 
     /* Font Size */
     {
@@ -107,6 +110,39 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
         GtkAction* act = tracker->createAction( "MeasureUnitsAction", _("Units:"), _("The units to be used for the measurements") );
         g_signal_connect_after( G_OBJECT(act), "changed", G_CALLBACK(measure_unit_changed), holder );
         gtk_action_group_add_action( mainActions, act );
+    }
+    // ignore_1st_and_last
+    {
+        InkToggleAction* act = ink_toggle_action_new( "MeasureIgnore1stAndLast",
+                                                      _("Ignore first and last"),
+                                                      _("Ignore first and last"),
+                                                      INKSCAPE_ICON("draw-geometry-line-segment"),
+                                                      secondarySize );
+        gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
+        PrefPusher *pusher = new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/measure/ignore_1st_and_last");
+        g_signal_connect( holder, "destroy", G_CALLBACK(delete_prefspusher), pusher);
+    }
+    // measure imbetweens
+    {
+        InkToggleAction* act = ink_toggle_action_new( "MeasureInBettween",
+                                                      _("Show meassures between items"),
+                                                      _("Show meassures between items"),
+                                                      INKSCAPE_ICON("distribute-randomize"),
+                                                      secondarySize );
+        gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
+        PrefPusher *pusher = new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/measure/show_in_between");
+        g_signal_connect( holder, "destroy", G_CALLBACK(delete_prefspusher), pusher);
+    }
+    // measure only current layer
+    {
+        InkToggleAction* act = ink_toggle_action_new( "MeasureAllLayers",
+                                                      _("Measure all layers"),
+                                                      _("Measure all layers"),
+                                                      INKSCAPE_ICON("dialog-layers"),
+                                                      secondarySize );
+        gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
+        PrefPusher *pusher = new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/measure/all_layers");
+        g_signal_connect( holder, "destroy", G_CALLBACK(delete_prefspusher), pusher);
     }
 } // end of sp_measure_toolbox_prep()
 

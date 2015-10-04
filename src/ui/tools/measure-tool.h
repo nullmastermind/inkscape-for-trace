@@ -32,15 +32,15 @@ public:
 
 	virtual void finish();
 	virtual bool root_handler(GdkEvent* event);
+	virtual void showCanvasItems(GdkEventMotion const &event);
 
 	virtual const std::string& getPrefsPath();
 
 private:
 	SPCanvasItem* grabbed;
-
     Geom::Point start_point;
     boost::optional<Geom::Point> explicitBase;
-    boost::optional<Geom::Point> lastEnd;
+    boost::optional<Geom::Point> last_end;
 };
 
 }

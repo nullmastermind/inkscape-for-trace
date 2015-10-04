@@ -15,6 +15,7 @@
 #include <boost/none_t.hpp>
 #include "util/units.h"
 #include "macros.h"
+#include "rubberband.h"
 #include "display/curve.h"
 #include "sp-shape.h"
 #include "sp-text.h"
@@ -296,22 +297,18 @@ static void calculate_intersections(SPDesktop * /*desktop*/, SPItem* item, Geom:
 }
 
 bool MeasureTool::root_handler(GdkEvent* event) {
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
-
     gint ret = FALSE;
 
     switch (event->type) {
         case GDK_BUTTON_PRESS: {
             Geom::Point const button_w(event->button.x, event->button.y);
             explicitBase = boost::none;
-            lastEnd = boost::none;
+            last_end = boost::none;
             start_point = desktop->w2d(button_w);
 
             if (event->button.button == 1 && !this->space_panning) {
                 // save drag origin
-                xp = static_cast<gint>(event->button.x);
-                yp = static_cast<gint>(event->button.y);
+                start_point = desktop->w2d(Geom::Point(event->button.x, event->button.y));
                 within_tolerance = true;
 
                 ret = TRUE;
@@ -330,381 +327,43 @@ bool MeasureTool::root_handler(GdkEvent* event) {
         }
         case GDK_KEY_PRESS: {
             if ((event->key.keyval == GDK_KEY_Shift_L) || (event->key.keyval == GDK_KEY_Shift_R)) {
-                if (lastEnd) {
-                    explicitBase = lastEnd;
+                if (last_end) {
+                    explicitBase = last_end;
                 }
             }
             break;
         }
         case GDK_MOTION_NOTIFY: {
-            if (!((event->motion.state & GDK_BUTTON1_MASK) && !this->space_panning)) {
-                if (!(event->motion.state & GDK_SHIFT_MASK)) {
-                    Geom::Point const motion_w(event->motion.x, event->motion.y);
-                    Geom::Point const motion_dt(desktop->w2d(motion_w));
+            if (!(event->motion.state & GDK_BUTTON1_MASK) && !(event->motion.state & GDK_SHIFT_MASK)) {
+                Geom::Point const motion_w(event->motion.x, event->motion.y);
+                Geom::Point const motion_dt(desktop->w2d(motion_w));
 
-                    SnapManager &m = desktop->namedview->snap_manager;
-                    m.setup(desktop);
+                SnapManager &m = desktop->namedview->snap_manager;
+                m.setup(desktop);
 
-                    Inkscape::SnapCandidatePoint scp(motion_dt, Inkscape::SNAPSOURCE_OTHER_HANDLE);
-                    scp.addOrigin(start_point);
+                Inkscape::SnapCandidatePoint scp(motion_dt, Inkscape::SNAPSOURCE_OTHER_HANDLE);
+                scp.addOrigin(start_point);
 
-                    m.preSnap(scp);
-                    m.unSetup();
-                }
+                m.preSnap(scp);
+                m.unSetup();
             } else {
                 ret = TRUE;
-
-                if ( within_tolerance
-                     && ( abs( static_cast<gint>(event->motion.x) - xp ) < tolerance )
-                     && ( abs( static_cast<gint>(event->motion.y) - yp ) < tolerance ) ) {
-                    break; // do not drag if we're within tolerance from origin
+                Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+                tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
+                Geom::Point const motion_w(event->motion.x, event->motion.y);
+                if ( within_tolerance){
+                    if ( Geom::LInfty( motion_w - start_point ) < tolerance) {
+                        return false;   // Do not drag if we're within tolerance from origin.
+                    }
                 }
                 // Once the user has moved farther than tolerance from the original location
                 // (indicating they intend to move the object, not click), then always process the
                 // motion notify coordinates as given (no snapping back to origin)
                 within_tolerance = false;
-
-                //clear previous temporary canvas items, we'll draw new ones
-                for (size_t idx = 0; idx < measure_tmp_items.size(); ++idx) {
-                    desktop->remove_temporary_canvasitem(measure_tmp_items[idx]);
+                if(event->motion.time == 0 || !last_end  || Geom::LInfty( motion_w - *last_end ) > (tolerance/2)){
+                    showCanvasItems(event->motion);
+                    last_end = motion_w ;
                 }
-
-                measure_tmp_items.clear();
-
-                Geom::Point const motion_w(event->motion.x, event->motion.y);
-                Geom::Point const motion_dt(desktop->w2d(motion_w));
-                Geom::Point end_point = motion_dt;
-
-                if (event->motion.state & GDK_CONTROL_MASK) {
-                    spdc_endpoint_snap_rotation(this, end_point, start_point, event->motion.state);
-                } else {
-                    if (!(event->motion.state & GDK_SHIFT_MASK)) {
-                        SnapManager &m = desktop->namedview->snap_manager;
-                        m.setup(desktop);
-                        Inkscape::SnapCandidatePoint scp(end_point, Inkscape::SNAPSOURCE_OTHER_HANDLE);
-                        scp.addOrigin(start_point);
-                        Inkscape::SnappedPoint sp = m.freeSnap(scp);
-                        end_point = sp.getPoint();
-                        m.unSetup();
-                    }
-                }
-
-                Geom::PathVector lineseg;
-                Geom::Path p;
-                p.start(desktop->dt2doc(start_point));
-                p.appendNew<Geom::LineSegment>(desktop->dt2doc(end_point));
-                lineseg.push_back(p);
-
-                double deltax = end_point[Geom::X] - start_point[Geom::X];
-                double deltay = end_point[Geom::Y] - start_point[Geom::Y];
-                double angle = atan2(deltay, deltax);
-                double baseAngle = 0;
-
-                if (explicitBase) {
-                    double deltax2 = explicitBase.get()[Geom::X] - start_point[Geom::X];
-                    double deltay2 = explicitBase.get()[Geom::Y] - start_point[Geom::Y];
-
-                    baseAngle = atan2(deltay2, deltax2);
-                    angle -= baseAngle;
-
-                    if (angle < -M_PI) {
-                        angle += 2 * M_PI;
-                    } else if (angle > M_PI) {
-                        angle -= 2 * M_PI;
-                    }
-                }
-
-//TODO: calculate NPOINTS
-//800 seems to be a good value for 800x600 resolution
-#define NPOINTS 800
-
-                std::vector<Geom::Point> points;
-
-                for (double i = 0; i < NPOINTS; i++) {
-                    points.push_back(desktop->d2w(start_point + (i / NPOINTS) * (end_point - start_point)));
-                }
-
-                // TODO: Felipe, why don't you simply iterate over all items, and test whether their bounding boxes intersect
-                // with the measurement line, instead of interpolating over 800 points? E.g. bbox_of_measurement_line.intersects(*bbox_of_item).
-                // That's also how the object-snapper works, see _findCandidates() in object-snapper.cpp.
-
-                // TODO switch to a different variable name. The single letter 'l' is easy to misread.
-
-                //select elements crossed by line segment:
-                std::vector<SPItem*> items = desktop->getDocument()->getItemsAtPoints(desktop->dkey, points);
-                std::vector<double> intersection_times;
-                for (std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++) {
-                    SPItem *item = *i;
-
-                    if (SP_IS_SHAPE(item)) {
-                       calculate_intersections(desktop, item, lineseg, SP_SHAPE(item)->getCurve(), intersection_times);
-                    } else {
-                        if (SP_IS_TEXT(item) || SP_IS_FLOWTEXT(item)) {
-                            Inkscape::Text::Layout::iterator iter = te_get_layout(item)->begin();
-                            do {
-                                Inkscape::Text::Layout::iterator iter_next = iter;
-                                iter_next.nextGlyph(); // iter_next is one glyph ahead from iter
-                                if (iter == iter_next) {
-                                    break;
-                                }
-
-                                // get path from iter to iter_next:
-                                SPCurve *curve = te_get_layout(item)->convertToCurves(iter, iter_next);
-                                iter = iter_next; // shift to next glyph
-                                if (!curve) {
-                                    continue; // error converting this glyph
-                                }
-                                if (curve->is_empty()) { // whitespace glyph?
-                                    curve->unref();
-                                    continue;
-                                }
-
-                                curve->transform(item->i2doc_affine());
-
-                                calculate_intersections(desktop, item, lineseg, curve, intersection_times);
-
-                                if (iter == te_get_layout(item)->end()) {
-                                    break;
-                                }
-                            } while (true);
-                        }
-                    }
-                }
-
-                Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-                if (!prefs->getBool("/tools/measure/ignore_1st_and_last", true)) {
-                    intersection_times.push_back(0);
-                    intersection_times.push_back(1);
-                }
-
-                Glib::ustring unit_name = prefs->getString("/tools/measure/unit");
-                if (!unit_name.compare("")) {
-                    unit_name = "px";
-                }
-
-                double fontsize = prefs->getInt("/tools/measure/fontsize");
-
-                // Normal will be used for lines and text
-                Geom::Point windowNormal = Geom::unit_vector(Geom::rot90(desktop->d2w(end_point - start_point)));
-                Geom::Point normal = desktop->w2d(windowNormal);
-
-                std::vector<Geom::Point> intersections;
-                std::sort(intersection_times.begin(), intersection_times.end());
-                for (std::vector<double>::iterator iter_t = intersection_times.begin(); iter_t != intersection_times.end(); iter_t++) {
-                    intersections.push_back(lineseg[0].pointAt(*iter_t));
-                }
-
-                std::vector<LabelPlacement> placements;
-                for (size_t idx = 1; idx < intersections.size(); ++idx) {
-                    LabelPlacement placement;
-                    placement.lengthVal = (intersections[idx] - intersections[idx - 1]).length();
-                    placement.lengthVal = Inkscape::Util::Quantity::convert(placement.lengthVal, "px", unit_name);
-                    placement.offset = DIMENSION_OFFSET;
-                    placement.start = desktop->doc2dt( (intersections[idx - 1] + intersections[idx]) / 2 );
-                    placement.end = placement.start - (normal * placement.offset);
-
-                    placements.push_back(placement);
-                }
-
-                // Adjust positions
-                repositionOverlappingLabels(placements, desktop, windowNormal, fontsize);
-
-                for (std::vector<LabelPlacement>::iterator it = placements.begin(); it != placements.end(); ++it)
-                {
-                    LabelPlacement &place = *it;
-
-                    // TODO cleanup memory, Glib::ustring, etc.:
-                    gchar *measure_str = g_strdup_printf("%.2f %s", place.lengthVal, unit_name.c_str());
-                    SPCanvasText *canvas_tooltip = sp_canvastext_new(desktop->getTempGroup(),
-                                                                     desktop,
-                                                                     place.end,
-                                                                     measure_str);
-                    sp_canvastext_set_fontsize(canvas_tooltip, fontsize);
-                    canvas_tooltip->rgba = 0xffffffff;
-                    canvas_tooltip->rgba_background = 0x0000007f;
-                    canvas_tooltip->outline = false;
-                    canvas_tooltip->background = true;
-                    canvas_tooltip->anchor_position = TEXT_ANCHOR_CENTER;
-
-                    measure_tmp_items.push_back(desktop->add_temporary_canvasitem(canvas_tooltip, 0));
-                    g_free(measure_str);
-                }
-
-                Geom::Point angleDisplayPt = calcAngleDisplayAnchor(desktop, angle, baseAngle,
-                                                                    start_point, end_point,
-                                                                    fontsize);
-
-                {
-                    // TODO cleanup memory, Glib::ustring, etc.:
-                    gchar *angle_str = g_strdup_printf("%.2f °", angle * 180/M_PI);
-
-                    SPCanvasText *canvas_tooltip = sp_canvastext_new(desktop->getTempGroup(),
-                                                                     desktop,
-                                                                     angleDisplayPt,
-                                                                     angle_str);
-                    sp_canvastext_set_fontsize(canvas_tooltip, fontsize);
-                    canvas_tooltip->rgba = 0xffffffff;
-                    canvas_tooltip->rgba_background = 0x337f337f;
-                    canvas_tooltip->outline = false;
-                    canvas_tooltip->background = true;
-                    canvas_tooltip->anchor_position = TEXT_ANCHOR_CENTER;
-
-                    measure_tmp_items.push_back(desktop->add_temporary_canvasitem(canvas_tooltip, 0));
-                    g_free(angle_str);
-                }
-
-                {
-                    double totallengthval = (end_point - start_point).length();
-                    totallengthval = Inkscape::Util::Quantity::convert(totallengthval, "px", unit_name);
-
-                    // TODO cleanup memory, Glib::ustring, etc.:
-                    gchar *totallength_str = g_strdup_printf("%.2f %s", totallengthval, unit_name.c_str());
-                    SPCanvasText *canvas_tooltip = sp_canvastext_new(desktop->getTempGroup(),
-                                                                     desktop,
-                                                                     end_point + desktop->w2d(Geom::Point(3*fontsize, -fontsize)),
-                                                                     totallength_str);
-                    sp_canvastext_set_fontsize(canvas_tooltip, fontsize);
-                    canvas_tooltip->rgba = 0xffffffff;
-                    canvas_tooltip->rgba_background = 0x3333337f;
-                    canvas_tooltip->outline = false;
-                    canvas_tooltip->background = true;
-                    canvas_tooltip->anchor_position = TEXT_ANCHOR_LEFT;
-
-                    measure_tmp_items.push_back(desktop->add_temporary_canvasitem(canvas_tooltip, 0));
-                    g_free(totallength_str);
-                }
-
-                if (intersections.size() > 2) {
-                    double totallengthval = (intersections[intersections.size()-1] - intersections[0]).length();
-                    totallengthval = Inkscape::Util::Quantity::convert(totallengthval, "px", unit_name);
-
-                    // TODO cleanup memory, Glib::ustring, etc.:
-                    gchar *total_str = g_strdup_printf("%.2f %s", totallengthval, unit_name.c_str());
-                    SPCanvasText *canvas_tooltip = sp_canvastext_new(desktop->getTempGroup(),
-                                                                     desktop,
-                                                                     desktop->doc2dt((intersections[0] + intersections[intersections.size()-1])/2) + normal * 60,
-                                                                     total_str);
-                    sp_canvastext_set_fontsize(canvas_tooltip, fontsize);
-                    canvas_tooltip->rgba = 0xffffffff;
-                    canvas_tooltip->rgba_background = 0x33337f7f;
-                    canvas_tooltip->outline = false;
-                    canvas_tooltip->background = true;
-                    canvas_tooltip->anchor_position = TEXT_ANCHOR_CENTER;
-
-                    measure_tmp_items.push_back(desktop->add_temporary_canvasitem(canvas_tooltip, 0));
-                    g_free(total_str);
-                }
-
-                // Now that text has been added, we can add lines and controls so that they go underneath
-
-                for (size_t idx = 0; idx < intersections.size(); ++idx) {
-                    // Display the intersection indicator (i.e. the cross)
-                    SPCanvasItem * canvasitem = sp_canvas_item_new(desktop->getTempGroup(),
-                                                                   SP_TYPE_CTRL,
-                                                                   "anchor", SP_ANCHOR_CENTER,
-                                                                   "size", 8.0,
-                                                                   "stroked", TRUE,
-                                                                   "stroke_color", 0xff0000ff,
-                                                                   "mode", SP_KNOT_MODE_XOR,
-                                                                   "shape", SP_KNOT_SHAPE_CROSS,
-                                                                   NULL );
-
-                    SP_CTRL(canvasitem)->moveto(desktop->doc2dt(intersections[idx]));
-                    measure_tmp_items.push_back(desktop->add_temporary_canvasitem(canvasitem, 0));
-                }
-
-                // Since adding goes to the bottom, do all lines last.
-
-                // draw main control line
-                {
-                    SPCtrlLine *control_line = ControlManager::getManager().createControlLine(desktop->getTempGroup(),
-                                                                                              start_point,
-                                                                                              end_point);
-                    measure_tmp_items.push_back(desktop->add_temporary_canvasitem(control_line, 0));
-
-                    if ((end_point[Geom::X] != start_point[Geom::X]) && (end_point[Geom::Y] != start_point[Geom::Y])) {
-                        double length = std::abs((end_point - start_point).length());
-                        Geom::Point anchorEnd = start_point;
-                        anchorEnd[Geom::X] += length;
-                        if (explicitBase) {
-                            anchorEnd *= (Geom::Affine(Geom::Translate(-start_point))
-                                          * Geom::Affine(Geom::Rotate(baseAngle))
-                                          * Geom::Affine(Geom::Translate(start_point)));
-                        }
-
-                        SPCtrlLine *control_line = ControlManager::getManager().createControlLine(desktop->getTempGroup(),
-                                                                                                  start_point,
-                                                                                                  anchorEnd,
-                                                                                                  CTLINE_SECONDARY);
-                        measure_tmp_items.push_back(desktop->add_temporary_canvasitem(control_line, 0));
-
-                        createAngleDisplayCurve(desktop, start_point, end_point, angleDisplayPt, angle);
-                    }
-                }
-
-                if (intersections.size() > 2) {
-                    ControlManager &mgr = ControlManager::getManager();
-                    SPCtrlLine *control_line = 0;
-                    control_line = mgr.createControlLine(desktop->getTempGroup(),
-                                                         desktop->doc2dt(intersections[0]) + normal * 60,
-                                                         desktop->doc2dt(intersections[intersections.size() - 1]) + normal * 60);
-                    measure_tmp_items.push_back(desktop->add_temporary_canvasitem(control_line, 0));
-
-                    control_line = mgr.createControlLine(desktop->getTempGroup(),
-                                                         desktop->doc2dt(intersections[0]),
-                                                         desktop->doc2dt(intersections[0]) + normal * 65);
-                    measure_tmp_items.push_back(desktop->add_temporary_canvasitem(control_line, 0));
-
-                    control_line = mgr.createControlLine(desktop->getTempGroup(),
-                                                         desktop->doc2dt(intersections[intersections.size() - 1]),
-                                                         desktop->doc2dt(intersections[intersections.size() - 1]) + normal * 65);
-                    measure_tmp_items.push_back(desktop->add_temporary_canvasitem(control_line, 0));
-                }
-
-                // call-out lines
-                for (std::vector<LabelPlacement>::iterator it = placements.begin(); it != placements.end(); ++it)
-                {
-                    LabelPlacement &place = *it;
-
-                    ControlManager &mgr = ControlManager::getManager();
-                    SPCtrlLine *control_line = mgr.createControlLine(desktop->getTempGroup(),
-                                                                     place.start,
-                                                                     place.end,
-                                                                     CTLINE_SECONDARY);
-                    measure_tmp_items.push_back(desktop->add_temporary_canvasitem(control_line, 0));
-                }
-
-                {
-                    for (size_t idx = 1; idx < intersections.size(); ++idx) {
-                        Geom::Point measure_text_pos = (intersections[idx - 1] + intersections[idx]) / 2;
-
-                        ControlManager &mgr = ControlManager::getManager();
-                        SPCtrlLine *control_line = mgr.createControlLine(desktop->getTempGroup(),
-                                                                         desktop->doc2dt(measure_text_pos),
-                                                                         desktop->doc2dt(measure_text_pos) - (normal * DIMENSION_OFFSET),
-                                                                         CTLINE_SECONDARY);
-                        measure_tmp_items.push_back(desktop->add_temporary_canvasitem(control_line, 0));
-                    }
-                }
-
-                // Initial point
-                {
-                    SPCanvasItem * canvasitem = sp_canvas_item_new(desktop->getTempGroup(),
-                                                                   SP_TYPE_CTRL,
-                                                                   "anchor", SP_ANCHOR_CENTER,
-                                                                   "size", 8.0,
-                                                                   "stroked", TRUE,
-                                                                   "stroke_color", 0xff0000ff,
-                                                                   "mode", SP_KNOT_MODE_XOR,
-                                                                   "shape", SP_KNOT_SHAPE_CROSS,
-                                                                   NULL );
-
-                    SP_CTRL(canvasitem)->moveto(start_point);
-                    measure_tmp_items.push_back(desktop->add_temporary_canvasitem(canvasitem, 0));
-                }
-
-                lastEnd = end_point; // track in case we get a anchoring key-press later
-
                 gobble_motion_events(GDK_BUTTON1_MASK);
             }
             break;
@@ -712,7 +371,7 @@ bool MeasureTool::root_handler(GdkEvent* event) {
         case GDK_BUTTON_RELEASE: {
             sp_event_context_discard_delayed_snap_event(this);
             explicitBase = boost::none;
-            lastEnd = boost::none;
+            last_end = boost::none;
 
             //clear all temporary canvas items related to the measurement tool.
             for (size_t idx = 0; idx < measure_tmp_items.size(); ++idx) {
@@ -726,21 +385,365 @@ bool MeasureTool::root_handler(GdkEvent* event) {
                 this->grabbed = NULL;
             }
 
-            xp = 0;
-            yp = 0;
+            start_point = Geom::Point();
             break;
         }
         default:
             break;
     }
-
     if (!ret) {
     	ret = ToolBase::root_handler(event);
     }
-
+    
     return ret;
 }
 
+void MeasureTool::showCanvasItems(GdkEventMotion const &mevent){
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    Geom::Point const motion_w(mevent.x, mevent.y);
+    bool show_in_between = prefs->getBool("/tools/measure/show_in_between");
+    bool all_layers = prefs->getBool("/tools/measure/all_layers");
+    //clear previous temporary canvas items, we'll draw new ones
+    for (size_t idx = 0; idx < measure_tmp_items.size(); ++idx) {
+        desktop->remove_temporary_canvasitem(measure_tmp_items[idx]);
+    }
+
+    measure_tmp_items.clear();
+    Geom::Point const motion_dt(desktop->w2d(motion_w));
+    Geom::Point end_point = motion_dt;
+
+    if (mevent.state & GDK_CONTROL_MASK) {
+        spdc_endpoint_snap_rotation(this, end_point, start_point, mevent.state);
+    } else {
+        if (!(mevent.state & GDK_SHIFT_MASK)) {
+            SnapManager &m = desktop->namedview->snap_manager;
+            m.setup(desktop);
+            Inkscape::SnapCandidatePoint scp(end_point, Inkscape::SNAPSOURCE_OTHER_HANDLE);
+            scp.addOrigin(start_point);
+            Inkscape::SnappedPoint sp = m.freeSnap(scp);
+            end_point = sp.getPoint();
+            m.unSetup();
+        }
+    }
+
+    Geom::PathVector lineseg;
+    Geom::Path p;
+    p.start(desktop->dt2doc(start_point));
+    p.appendNew<Geom::LineSegment>(desktop->dt2doc(end_point));
+    lineseg.push_back(p);
+
+    double deltax = end_point[Geom::X] - start_point[Geom::X];
+    double deltay = end_point[Geom::Y] - start_point[Geom::Y];
+    double angle = atan2(deltay, deltax);
+    double baseAngle = 0;
+
+    if (explicitBase) {
+        double deltax2 = explicitBase.get()[Geom::X] - start_point[Geom::X];
+        double deltay2 = explicitBase.get()[Geom::Y] - start_point[Geom::Y];
+
+        baseAngle = atan2(deltay2, deltax2);
+        angle -= baseAngle;
+
+        if (angle < -M_PI) {
+            angle += 2 * M_PI;
+        } else if (angle > M_PI) {
+            angle -= 2 * M_PI;
+        }
+    }
+    std::vector<SPItem*> items;
+    Inkscape::Rubberband *r = Inkscape::Rubberband::get(desktop);
+    r->setMode(RUBBERBAND_MODE_TOUCHPATH);
+    if(!show_in_between){
+        r->start(desktop,start_point);
+        r->move(end_point);
+        items = desktop->getDocument()->getItemsAtPoints(desktop->dkey, r->getPoints(), all_layers, 2);
+        r->stop();
+        r->setMode(RUBBERBAND_MODE_TOUCHPATH);
+        r->start(desktop,end_point);
+        r->move(start_point);
+        std::vector<SPItem*> items_reverse = desktop->getDocument()->getItemsAtPoints(desktop->dkey, r->getPoints(), all_layers, 2);
+        r->stop();
+        if(items_reverse.size() == 2){
+            items.push_back(items_reverse[1]);
+        }
+        if(items_reverse.size() >= 1){
+            items.push_back(items_reverse[0]);
+        }
+    } else {
+        r->start(desktop,start_point);
+        r->move(end_point);
+        items = desktop->getDocument()->getItemsAtPoints(desktop->dkey, r->getPoints(), all_layers);
+        r->stop();
+    }
+    std::vector<double> intersection_times;
+    for (std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++) {
+        SPItem *item = *i;
+        if (SP_IS_SHAPE(item)) {
+           calculate_intersections(desktop, item, lineseg, SP_SHAPE(item)->getCurve(), intersection_times);
+        } else {
+            if (SP_IS_TEXT(item) || SP_IS_FLOWTEXT(item)) {
+                Inkscape::Text::Layout::iterator iter = te_get_layout(item)->begin();
+                do {
+                    Inkscape::Text::Layout::iterator iter_next = iter;
+                    iter_next.nextGlyph(); // iter_next is one glyph ahead from iter
+                    if (iter == iter_next) {
+                        break;
+                    }
+
+                    // get path from iter to iter_next:
+                    SPCurve *curve = te_get_layout(item)->convertToCurves(iter, iter_next);
+                    iter = iter_next; // shift to next glyph
+                    if (!curve) {
+                        continue; // error converting this glyph
+                    }
+                    if (curve->is_empty()) { // whitespace glyph?
+                        curve->unref();
+                        continue;
+                    }
+
+                    curve->transform(item->i2doc_affine());
+
+                    calculate_intersections(desktop, item, lineseg, curve, intersection_times);
+                    if (iter == te_get_layout(item)->end()) {
+                        break;
+                    }
+                } while (true);
+            }
+        }
+    }
+    Glib::ustring unit_name = prefs->getString("/tools/measure/unit");
+    if (!unit_name.compare("")) {
+        unit_name = "px";
+    }
+
+    double fontsize = prefs->getInt("/tools/measure/fontsize");
+
+    // Normal will be used for lines and text
+    Geom::Point windowNormal = Geom::unit_vector(Geom::rot90(desktop->d2w(end_point - start_point)));
+    Geom::Point normal = desktop->w2d(windowNormal);
+
+    std::vector<Geom::Point> intersections;
+    std::sort(intersection_times.begin(), intersection_times.end());
+    for (std::vector<double>::iterator iter_t = intersection_times.begin(); iter_t != intersection_times.end(); iter_t++) {
+        if(show_in_between){
+            intersections.push_back(lineseg[0].pointAt(*iter_t));
+        }
+    }
+    if(!show_in_between && intersection_times.size() > 1){
+        intersections.push_back(lineseg[0].pointAt(intersection_times[0]));
+        intersections.push_back(lineseg[0].pointAt(intersection_times[intersection_times.size()-1]));
+    }
+    if (!prefs->getBool("/tools/measure/ignore_1st_and_last", true)) {
+        intersections.insert(intersections.begin(),lineseg[0].pointAt(0));
+        intersections.push_back(lineseg[0].pointAt(1));
+    }
+    std::vector<LabelPlacement> placements;
+    for (size_t idx = 1; idx < intersections.size(); ++idx) {
+        LabelPlacement placement;
+        placement.lengthVal = (intersections[idx] - intersections[idx - 1]).length();
+        placement.lengthVal = Inkscape::Util::Quantity::convert(placement.lengthVal, "px", unit_name);
+        placement.offset = DIMENSION_OFFSET;
+        placement.start = desktop->doc2dt( (intersections[idx - 1] + intersections[idx]) / 2 );
+        placement.end = placement.start - (normal * placement.offset);
+
+        placements.push_back(placement);
+    }
+
+    // Adjust positions
+    repositionOverlappingLabels(placements, desktop, windowNormal, fontsize);
+    for (std::vector<LabelPlacement>::iterator it = placements.begin(); it != placements.end(); ++it)
+    {
+        LabelPlacement &place = *it;
+
+        // TODO cleanup memory, Glib::ustring, etc.:
+        gchar *measure_str = g_strdup_printf("%.2f %s", place.lengthVal, unit_name.c_str());
+        SPCanvasText *canvas_tooltip = sp_canvastext_new(desktop->getTempGroup(),
+                                                         desktop,
+                                                         place.end,
+                                                         measure_str);
+        sp_canvastext_set_fontsize(canvas_tooltip, fontsize);
+        canvas_tooltip->rgba = 0xffffffff;
+        canvas_tooltip->rgba_background = 0x0000007f;
+        canvas_tooltip->outline = false;
+        canvas_tooltip->background = true;
+        canvas_tooltip->anchor_position = TEXT_ANCHOR_CENTER;
+
+        measure_tmp_items.push_back(desktop->add_temporary_canvasitem(canvas_tooltip, 0));
+        g_free(measure_str);
+    }
+
+    Geom::Point angleDisplayPt = calcAngleDisplayAnchor(desktop, angle, baseAngle,
+                                                        start_point, end_point,
+                                                        fontsize);
+
+    {
+        // TODO cleanup memory, Glib::ustring, etc.:
+        gchar *angle_str = g_strdup_printf("%.2f °", angle * 180/M_PI);
+
+        SPCanvasText *canvas_tooltip = sp_canvastext_new(desktop->getTempGroup(),
+                                                         desktop,
+                                                         angleDisplayPt,
+                                                         angle_str);
+        sp_canvastext_set_fontsize(canvas_tooltip, fontsize);
+        canvas_tooltip->rgba = 0xffffffff;
+        canvas_tooltip->rgba_background = 0x337f337f;
+        canvas_tooltip->outline = false;
+        canvas_tooltip->background = true;
+        canvas_tooltip->anchor_position = TEXT_ANCHOR_CENTER;
+
+        measure_tmp_items.push_back(desktop->add_temporary_canvasitem(canvas_tooltip, 0));
+        g_free(angle_str);
+    }
+
+    {
+        double totallengthval = (end_point - start_point).length();
+        totallengthval = Inkscape::Util::Quantity::convert(totallengthval, "px", unit_name);
+
+        // TODO cleanup memory, Glib::ustring, etc.:
+        gchar *totallength_str = g_strdup_printf("%.2f %s", totallengthval, unit_name.c_str());
+        SPCanvasText *canvas_tooltip = sp_canvastext_new(desktop->getTempGroup(),
+                                                         desktop,
+                                                         end_point + desktop->w2d(Geom::Point(3*fontsize, -fontsize)),
+                                                         totallength_str);
+        sp_canvastext_set_fontsize(canvas_tooltip, fontsize);
+        canvas_tooltip->rgba = 0xffffffff;
+        canvas_tooltip->rgba_background = 0x3333337f;
+        canvas_tooltip->outline = false;
+        canvas_tooltip->background = true;
+        canvas_tooltip->anchor_position = TEXT_ANCHOR_LEFT;
+
+        measure_tmp_items.push_back(desktop->add_temporary_canvasitem(canvas_tooltip, 0));
+        g_free(totallength_str);
+    }
+
+    if (intersections.size() > 2) {
+        double totallengthval = (intersections[intersections.size()-1] - intersections[0]).length();
+        totallengthval = Inkscape::Util::Quantity::convert(totallengthval, "px", unit_name);
+
+        // TODO cleanup memory, Glib::ustring, etc.:
+        gchar *total_str = g_strdup_printf("%.2f %s", totallengthval, unit_name.c_str());
+        SPCanvasText *canvas_tooltip = sp_canvastext_new(desktop->getTempGroup(),
+                                                         desktop,
+                                                         desktop->doc2dt((intersections[0] + intersections[intersections.size()-1])/2) + normal * 60,
+                                                         total_str);
+        sp_canvastext_set_fontsize(canvas_tooltip, fontsize);
+        canvas_tooltip->rgba = 0xffffffff;
+        canvas_tooltip->rgba_background = 0x33337f7f;
+        canvas_tooltip->outline = false;
+        canvas_tooltip->background = true;
+        canvas_tooltip->anchor_position = TEXT_ANCHOR_CENTER;
+
+        measure_tmp_items.push_back(desktop->add_temporary_canvasitem(canvas_tooltip, 0));
+        g_free(total_str);
+    }
+
+    // Now that text has been added, we can add lines and controls so that they go underneath
+    for (size_t idx = 0; idx < intersections.size(); ++idx) {
+        // Display the intersection indicator (i.e. the cross)
+        SPCanvasItem * canvasitem = sp_canvas_item_new(desktop->getTempGroup(),
+                                                       SP_TYPE_CTRL,
+                                                       "anchor", SP_ANCHOR_CENTER,
+                                                       "size", 8.0,
+                                                       "stroked", TRUE,
+                                                       "stroke_color", 0xff0000ff,
+                                                       "mode", SP_KNOT_MODE_XOR,
+                                                       "shape", SP_KNOT_SHAPE_CROSS,
+                                                       NULL );
+
+        SP_CTRL(canvasitem)->moveto(desktop->doc2dt(intersections[idx]));
+        measure_tmp_items.push_back(desktop->add_temporary_canvasitem(canvasitem, 0));
+    }
+
+    // Since adding goes to the bottom, do all lines last.
+
+    // draw main control line
+    {
+        SPCtrlLine *control_line = ControlManager::getManager().createControlLine(desktop->getTempGroup(),
+                                                                                  start_point,
+                                                                                  end_point);
+        measure_tmp_items.push_back(desktop->add_temporary_canvasitem(control_line, 0));
+
+        if ((end_point[Geom::X] != start_point[Geom::X]) && (end_point[Geom::Y] != start_point[Geom::Y])) {
+            double length = std::abs((end_point - start_point).length());
+            Geom::Point anchorEnd = start_point;
+            anchorEnd[Geom::X] += length;
+            if (explicitBase) {
+                anchorEnd *= (Geom::Affine(Geom::Translate(-start_point))
+                              * Geom::Affine(Geom::Rotate(baseAngle))
+                              * Geom::Affine(Geom::Translate(start_point)));
+            }
+
+            SPCtrlLine *control_line = ControlManager::getManager().createControlLine(desktop->getTempGroup(),
+                                                                                      start_point,
+                                                                                      anchorEnd,
+                                                                                      CTLINE_SECONDARY);
+            measure_tmp_items.push_back(desktop->add_temporary_canvasitem(control_line, 0));
+
+            createAngleDisplayCurve(desktop, start_point, end_point, angleDisplayPt, angle);
+        }
+    }
+
+    if (intersections.size() > 2) {
+        ControlManager &mgr = ControlManager::getManager();
+        SPCtrlLine *control_line = 0;
+        control_line = mgr.createControlLine(desktop->getTempGroup(),
+                                             desktop->doc2dt(intersections[0]) + normal * 60,
+                                             desktop->doc2dt(intersections[intersections.size() - 1]) + normal * 60);
+        measure_tmp_items.push_back(desktop->add_temporary_canvasitem(control_line, 0));
+
+        control_line = mgr.createControlLine(desktop->getTempGroup(),
+                                             desktop->doc2dt(intersections[0]),
+                                             desktop->doc2dt(intersections[0]) + normal * 65);
+        measure_tmp_items.push_back(desktop->add_temporary_canvasitem(control_line, 0));
+
+        control_line = mgr.createControlLine(desktop->getTempGroup(),
+                                             desktop->doc2dt(intersections[intersections.size() - 1]),
+                                             desktop->doc2dt(intersections[intersections.size() - 1]) + normal * 65);
+        measure_tmp_items.push_back(desktop->add_temporary_canvasitem(control_line, 0));
+    }
+
+    // call-out lines
+    for (std::vector<LabelPlacement>::iterator it = placements.begin(); it != placements.end(); ++it)
+    {
+        LabelPlacement &place = *it;
+
+        ControlManager &mgr = ControlManager::getManager();
+        SPCtrlLine *control_line = mgr.createControlLine(desktop->getTempGroup(),
+                                                         place.start,
+                                                         place.end,
+                                                         CTLINE_SECONDARY);
+        measure_tmp_items.push_back(desktop->add_temporary_canvasitem(control_line, 0));
+    }
+
+    {
+        for (size_t idx = 1; idx < intersections.size(); ++idx) {
+            Geom::Point measure_text_pos = (intersections[idx - 1] + intersections[idx]) / 2;
+
+            ControlManager &mgr = ControlManager::getManager();
+            SPCtrlLine *control_line = mgr.createControlLine(desktop->getTempGroup(),
+                                                             desktop->doc2dt(measure_text_pos),
+                                                             desktop->doc2dt(measure_text_pos) - (normal * DIMENSION_OFFSET),
+                                                             CTLINE_SECONDARY);
+            measure_tmp_items.push_back(desktop->add_temporary_canvasitem(control_line, 0));
+        }
+    }
+
+    // Initial point
+    {
+        SPCanvasItem * canvasitem = sp_canvas_item_new(desktop->getTempGroup(),
+                                                       SP_TYPE_CTRL,
+                                                       "anchor", SP_ANCHOR_CENTER,
+                                                       "size", 8.0,
+                                                       "stroked", TRUE,
+                                                       "stroke_color", 0xff0000ff,
+                                                       "mode", SP_KNOT_MODE_XOR,
+                                                       "shape", SP_KNOT_SHAPE_CROSS,
+                                                       NULL );
+
+        SP_CTRL(canvasitem)->moveto(start_point);
+        measure_tmp_items.push_back(desktop->add_temporary_canvasitem(canvasitem, 0));
+    }
+}
 }
 }
 }
