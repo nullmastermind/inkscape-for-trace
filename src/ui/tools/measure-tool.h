@@ -11,7 +11,8 @@
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
-
+#include <stddef.h>
+#include <sigc++/sigc++.h>
 #include "ui/tools/tool-base.h"
 #include <2geom/point.h>
 #include <boost/optional.hpp>
@@ -19,28 +20,37 @@
 #define SP_MEASURE_CONTEXT(obj) (dynamic_cast<Inkscape::UI::Tools::MeasureTool*>((Inkscape::UI::Tools::ToolBase*)obj))
 #define SP_IS_MEASURE_CONTEXT(obj) (dynamic_cast<const Inkscape::UI::Tools::MeasureTool*>((const Inkscape::UI::Tools::ToolBase*)obj) != NULL)
 
+class SPKnot;
+
 namespace Inkscape {
 namespace UI {
 namespace Tools {
 
 class MeasureTool : public ToolBase {
 public:
-	MeasureTool();
-	virtual ~MeasureTool();
+    MeasureTool();
+    virtual ~MeasureTool();
 
-	static const std::string prefsPath;
+    static const std::string prefsPath;
 
-	virtual void finish();
-	virtual bool root_handler(GdkEvent* event);
-	virtual void showCanvasItems(GdkEventMotion const &event);
-
-	virtual const std::string& getPrefsPath();
+    virtual void finish();
+    virtual bool root_handler(GdkEvent* event);
+    virtual void showCanvasItems(Geom::Point start_point, Geom::Point end_point);
+    virtual const std::string& getPrefsPath();
+    void knotMovedHandler(SPKnot */*knot*/, Geom::Point const /*&ppointer*/, guint /*state*/);
+    void knotUngrabbedHandler(SPKnot */*knot*/,  unsigned int /*state*/);
 
 private:
-	SPCanvasItem* grabbed;
+    SPCanvasItem* grabbed;
     Geom::Point start_point;
     boost::optional<Geom::Point> explicitBase;
     boost::optional<Geom::Point> last_end;
+    SPKnot *knot_start;
+    SPKnot *knot_end;
+    sigc::connection _knot_start_moved_connection;
+    sigc::connection _knot_start_ungrabbed_connection;
+    sigc::connection _knot_end_moved_connection;
+    sigc::connection _knot_end_ungrabbed_connection;
 };
 
 }

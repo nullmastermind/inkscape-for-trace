@@ -30,7 +30,7 @@
 #include "pixmaps/cursor-measure.xpm"
 #include "preferences.h"
 #include "inkscape.h"
-
+#include "knot.h"
 #include "ui/tools/measure-tool.h"
 #include "ui/tools/freehand-base.h"
 #include "display/canvas-text.h"
@@ -45,10 +45,14 @@
 #include "enums.h"
 #include "ui/control-manager.h"
 #include "knot-enums.h"
+#include <glibmm/i18n.h>
 
 using Inkscape::ControlManager;
 using Inkscape::CTLINE_SECONDARY;
 using Inkscape::Util::unit_table;
+
+#define MT_KNOT_COLOR_NORMAL 0xffffff00
+#define MT_KNOT_COLOR_MOUSEOVER 0xff000000
 
 namespace Inkscape {
 namespace UI {
@@ -57,7 +61,7 @@ namespace Tools {
 std::vector<Inkscape::Display::TemporaryItem*> measure_tmp_items;
 
 const std::string& MeasureTool::getPrefsPath() {
-	return MeasureTool::prefsPath;
+    return MeasureTool::prefsPath;
 }
 
 const std::string MeasureTool::prefsPath = "/tools/measure";
@@ -227,14 +231,61 @@ void createAngleDisplayCurve(SPDesktop *desktop, Geom::Point const &center, Geom
 
 } // namespace
 
-
+static Geom::Point start_p = Geom::Point();
+static Geom::Point end_p = Geom::Point();
 MeasureTool::MeasureTool()
     : ToolBase(cursor_measure_xpm, 4, 4)
     , grabbed(NULL)
 {
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    // create the knot
+    this->knot_start = new SPKnot(desktop, N_("Measure start"));
+    this->knot_start->setMode(SP_KNOT_MODE_XOR);
+    this->knot_start->setFill(MT_KNOT_COLOR_NORMAL, MT_KNOT_COLOR_MOUSEOVER, MT_KNOT_COLOR_MOUSEOVER);
+    this->knot_start->setStroke(0x0000007f, 0x0000007f, 0x0000007f);
+    this->knot_start->setShape(SP_KNOT_SHAPE_CIRCLE);
+    this->knot_start->updateCtrl();
+    this->knot_end = new SPKnot(desktop, N_("Measure end"));
+    this->knot_end->setMode(SP_KNOT_MODE_XOR);
+    this->knot_end->setFill(MT_KNOT_COLOR_NORMAL, MT_KNOT_COLOR_MOUSEOVER, MT_KNOT_COLOR_MOUSEOVER);
+    this->knot_end->setStroke(0x0000007f, 0x0000007f, 0x0000007f);
+    this->knot_end->setShape(SP_KNOT_SHAPE_CIRCLE);
+    this->knot_end->updateCtrl();
+    if(end_p != Geom::Point()){
+        this->knot_start->setPosition(start_p, SP_KNOT_STATE_NORMAL);
+        this->knot_start->show();
+        this->knot_end->setPosition(end_p, SP_KNOT_STATE_NORMAL);
+        this->knot_end->show();
+        this->showCanvasItems(this->knot_start->position(), this->knot_end->position());
+    }
+    this->_knot_start_moved_connection = this->knot_start->moved_signal.connect(sigc::mem_fun(*this, &MeasureTool::knotMovedHandler));
+    this->_knot_start_ungrabbed_connection = this->knot_start->ungrabbed_signal.connect(sigc::mem_fun(*this, &MeasureTool::knotUngrabbedHandler));
+    this->_knot_end_moved_connection = this->knot_end->moved_signal.connect(sigc::mem_fun(*this, &MeasureTool::knotMovedHandler));
+    this->_knot_end_ungrabbed_connection = this->knot_end->ungrabbed_signal.connect(sigc::mem_fun(*this, &MeasureTool::knotUngrabbedHandler));
+
 }
 
 MeasureTool::~MeasureTool() {
+    this->_knot_start_moved_connection.disconnect();
+    this->_knot_start_ungrabbed_connection.disconnect();
+    this->_knot_end_moved_connection.disconnect();
+    this->_knot_end_ungrabbed_connection.disconnect();
+
+    /* unref should call destroy */
+    knot_unref(this->knot_start);
+    knot_unref(this->knot_end);
+    for (size_t idx = 0; idx < measure_tmp_items.size(); ++idx) {
+        desktop->remove_temporary_canvasitem(measure_tmp_items[idx]);
+    }
+    measure_tmp_items.clear();
+}
+
+void MeasureTool::knotMovedHandler(SPKnot */*knot*/, Geom::Point const /*&ppointer*/, guint /*state*/){
+    showCanvasItems(this->knot_start->position(), this->knot_end->position());
+}
+
+void MeasureTool::knotUngrabbedHandler(SPKnot */*knot*/,  unsigned int /*state*/){
+    showCanvasItems(this->knot_start->position(), this->knot_end->position());
 }
 
 void MeasureTool::finish() {
@@ -249,12 +300,12 @@ void MeasureTool::finish() {
 }
 
 //void MeasureTool::setup() {
-//	ToolBase* ec = this;
+//    ToolBase* ec = this;
 //
 ////    if (SP_EVENT_CONTEXT_CLASS(sp_measure_context_parent_class)->setup) {
 ////        SP_EVENT_CONTEXT_CLASS(sp_measure_context_parent_class)->setup(ec);
 ////    }
-//	ToolBase::setup();
+//    ToolBase::setup();
 //}
 
 //gint MeasureTool::item_handler(SPItem* item, GdkEvent* event) {
@@ -301,6 +352,8 @@ bool MeasureTool::root_handler(GdkEvent* event) {
 
     switch (event->type) {
         case GDK_BUTTON_PRESS: {
+            this->knot_start->hide();
+            this->knot_end->hide();
             Geom::Point const button_w(event->button.x, event->button.y);
             explicitBase = boost::none;
             last_end = boost::none;
@@ -353,7 +406,7 @@ bool MeasureTool::root_handler(GdkEvent* event) {
                 Geom::Point const motion_w(event->motion.x, event->motion.y);
                 if ( within_tolerance){
                     if ( Geom::LInfty( motion_w - start_point ) < tolerance) {
-                        return false;   // Do not drag if we're within tolerance from origin.
+                        return FALSE;   // Do not drag if we're within tolerance from origin.
                     }
                 }
                 // Once the user has moved farther than tolerance from the original location
@@ -361,7 +414,24 @@ bool MeasureTool::root_handler(GdkEvent* event) {
                 // motion notify coordinates as given (no snapping back to origin)
                 within_tolerance = false;
                 if(event->motion.time == 0 || !last_end  || Geom::LInfty( motion_w - *last_end ) > (tolerance/2)){
-                    showCanvasItems(event->motion);
+                    Geom::Point const motion_w(event->motion.x, event->motion.y);
+                    Geom::Point const motion_dt(desktop->w2d(motion_w));
+                    Geom::Point end_point = motion_dt;
+
+                    if (event->motion.state & GDK_CONTROL_MASK) {
+                        spdc_endpoint_snap_rotation(this, end_point, start_point, event->motion.state);
+                    } else {
+                        if (!(event->motion.state & GDK_SHIFT_MASK)) {
+                            SnapManager &m = desktop->namedview->snap_manager;
+                            m.setup(desktop);
+                            Inkscape::SnapCandidatePoint scp(end_point, Inkscape::SNAPSOURCE_OTHER_HANDLE);
+                            scp.addOrigin(start_point);
+                            Inkscape::SnappedPoint sp = m.freeSnap(scp);
+                            end_point = sp.getPoint();
+                            m.unSetup();
+                        }
+                    }
+                    showCanvasItems(start_point, end_point);
                     last_end = motion_w ;
                 }
                 gobble_motion_events(GDK_BUTTON1_MASK);
@@ -369,63 +439,42 @@ bool MeasureTool::root_handler(GdkEvent* event) {
             break;
         }
         case GDK_BUTTON_RELEASE: {
-            sp_event_context_discard_delayed_snap_event(this);
-            explicitBase = boost::none;
-            last_end = boost::none;
-
-            //clear all temporary canvas items related to the measurement tool.
-            for (size_t idx = 0; idx < measure_tmp_items.size(); ++idx) {
-                desktop->remove_temporary_canvasitem(measure_tmp_items[idx]);
+            this->knot_start->setPosition(start_point, SP_KNOT_STATE_NORMAL);
+            this->knot_start->show();
+            if(last_end){
+                Geom::Point end_point = desktop->w2d(*last_end);
+                this->knot_end->setPosition(end_point, SP_KNOT_STATE_NORMAL);
+                this->knot_end->show();
             }
-
-            measure_tmp_items.clear();
-
             if (this->grabbed) {
                 sp_canvas_item_ungrab(this->grabbed, event->button.time);
                 this->grabbed = NULL;
             }
-
-            start_point = Geom::Point();
+            sp_event_context_discard_delayed_snap_event(this);
             break;
         }
         default:
             break;
     }
     if (!ret) {
-    	ret = ToolBase::root_handler(event);
+        ret = ToolBase::root_handler(event);
     }
     
     return ret;
 }
 
-void MeasureTool::showCanvasItems(GdkEventMotion const &mevent){
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    Geom::Point const motion_w(mevent.x, mevent.y);
-    bool show_in_between = prefs->getBool("/tools/measure/show_in_between");
-    bool all_layers = prefs->getBool("/tools/measure/all_layers");
+void MeasureTool::showCanvasItems(Geom::Point start_point, Geom::Point end_point){
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    start_p = start_point;
+    end_p = end_point;
     //clear previous temporary canvas items, we'll draw new ones
     for (size_t idx = 0; idx < measure_tmp_items.size(); ++idx) {
         desktop->remove_temporary_canvasitem(measure_tmp_items[idx]);
     }
-
     measure_tmp_items.clear();
-    Geom::Point const motion_dt(desktop->w2d(motion_w));
-    Geom::Point end_point = motion_dt;
-
-    if (mevent.state & GDK_CONTROL_MASK) {
-        spdc_endpoint_snap_rotation(this, end_point, start_point, mevent.state);
-    } else {
-        if (!(mevent.state & GDK_SHIFT_MASK)) {
-            SnapManager &m = desktop->namedview->snap_manager;
-            m.setup(desktop);
-            Inkscape::SnapCandidatePoint scp(end_point, Inkscape::SNAPSOURCE_OTHER_HANDLE);
-            scp.addOrigin(start_point);
-            Inkscape::SnappedPoint sp = m.freeSnap(scp);
-            end_point = sp.getPoint();
-            m.unSetup();
-        }
-    }
-
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool show_in_between = prefs->getBool("/tools/measure/show_in_between");
+    bool all_layers = prefs->getBool("/tools/measure/all_layers");
     Geom::PathVector lineseg;
     Geom::Path p;
     p.start(desktop->dt2doc(start_point));
@@ -463,10 +512,10 @@ void MeasureTool::showCanvasItems(GdkEventMotion const &mevent){
         r->move(start_point);
         std::vector<SPItem*> items_reverse = desktop->getDocument()->getItemsAtPoints(desktop->dkey, r->getPoints(), all_layers, 2);
         r->stop();
-        if(items_reverse.size() == 2){
+        if(items_reverse.size() == 2 && items_reverse[1] != items[0] && items_reverse[1] != items[1]){
             items.push_back(items_reverse[1]);
         }
-        if(items_reverse.size() >= 1){
+        if(items_reverse.size() >= 1 && items_reverse[0] != items[1]){
             items.push_back(items_reverse[0]);
         }
     } else {
