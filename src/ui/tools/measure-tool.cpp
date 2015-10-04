@@ -420,16 +420,14 @@ bool MeasureTool::root_handler(GdkEvent* event) {
 
                     if (event->motion.state & GDK_CONTROL_MASK) {
                         spdc_endpoint_snap_rotation(this, end_point, start_point, event->motion.state);
-                    } else {
-                        if (!(event->motion.state & GDK_SHIFT_MASK)) {
-                            SnapManager &m = desktop->namedview->snap_manager;
-                            m.setup(desktop);
-                            Inkscape::SnapCandidatePoint scp(end_point, Inkscape::SNAPSOURCE_OTHER_HANDLE);
-                            scp.addOrigin(start_point);
-                            Inkscape::SnappedPoint sp = m.freeSnap(scp);
-                            end_point = sp.getPoint();
-                            m.unSetup();
-                        }
+                    } else if (!(event->motion.state & GDK_SHIFT_MASK)) {
+                        SnapManager &m = desktop->namedview->snap_manager;
+                        m.setup(desktop);
+                        Inkscape::SnapCandidatePoint scp(end_point, Inkscape::SNAPSOURCE_OTHER_HANDLE);
+                        scp.addOrigin(start_point);
+                        Inkscape::SnappedPoint sp = m.freeSnap(scp);
+                        end_point = sp.getPoint();
+                        m.unSetup();
                     }
                     showCanvasItems(start_point, end_point);
                     last_end = motion_w ;
@@ -443,6 +441,17 @@ bool MeasureTool::root_handler(GdkEvent* event) {
             this->knot_start->show();
             if(last_end){
                 Geom::Point end_point = desktop->w2d(*last_end);
+                if (event->button.state & GDK_CONTROL_MASK) {
+                        spdc_endpoint_snap_rotation(this, end_point, start_point, event->motion.state);
+                } else if (!(event->button.state & GDK_SHIFT_MASK)) {
+                    SnapManager &m = desktop->namedview->snap_manager;
+                    m.setup(desktop);
+                    Inkscape::SnapCandidatePoint scp(end_point, Inkscape::SNAPSOURCE_OTHER_HANDLE);
+                    scp.addOrigin(start_point);
+                    Inkscape::SnappedPoint sp = m.freeSnap(scp);
+                    end_point = sp.getPoint();
+                    m.unSetup();
+                }
                 this->knot_end->setPosition(end_point, SP_KNOT_STATE_NORMAL);
                 this->knot_end->show();
             }
