@@ -37,6 +37,7 @@ public:
     virtual bool root_handler(GdkEvent* event);
     virtual void showCanvasItems();
     virtual void showCanvasItems(Geom::Point start_point, Geom::Point end_point);
+    virtual void reverseKnots();
     virtual const std::string& getPrefsPath();
     void knotMovedHandler(SPKnot */*knot*/, Geom::Point const /*&ppointer*/, guint /*state*/);
     void knotUngrabbedHandler(SPKnot */*knot*/,  unsigned int /*state*/);

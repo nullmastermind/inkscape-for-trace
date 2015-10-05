@@ -280,6 +280,16 @@ MeasureTool::~MeasureTool() {
     measure_tmp_items.clear();
 }
 
+void MeasureTool::reverseKnots(){
+    Geom::Point start = start_p;
+    Geom::Point end = end_p;
+    this->knot_start->setPosition(end, SP_KNOT_STATE_NORMAL);
+    this->knot_start->show();
+    this->knot_end->setPosition(start, SP_KNOT_STATE_NORMAL);
+    this->knot_end->show();
+    this->showCanvasItems(end, start);
+}
+
 void MeasureTool::knotMovedHandler(SPKnot */*knot*/, Geom::Point const /*&ppointer*/, guint /*state*/){
     showCanvasItems(this->knot_start->position(), this->knot_end->position());
 }

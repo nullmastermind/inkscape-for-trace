@@ -148,7 +148,12 @@ static void toggle_show_in_between( GtkToggleAction* act, gpointer data )
         mt->showCanvasItems();
     }
 }
-
+static void sp_reverse_knots(void){
+    MeasureTool *mt = get_measure_tool();
+    if (mt) {
+        mt->reverseKnots();
+    }
+}
 void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, GObject* holder)
 {
     UnitTracker* tracker = new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR);
@@ -219,6 +224,16 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
                                                       secondarySize );
         gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/measure/all_layers", true) );
         g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(toggle_all_layers), desktop) ;
+        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
+    }
+    //toogle start end
+    {
+        InkAction* act = ink_action_new( "MeasureReverse",
+                                          _("Reverse measure"),
+                                          _("Reverse measure"),
+                                          INKSCAPE_ICON("draw-geometry-mirror"),
+                                          secondarySize );
+        g_signal_connect_after( G_OBJECT(act), "activate", G_CALLBACK(sp_reverse_knots), 0 );
         gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
     }
 } // end of sp_measure_toolbox_prep()
