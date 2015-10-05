@@ -33,6 +33,8 @@
 #include "measure-toolbar.h"
 
 #include "desktop.h"
+#include "inkscape.h"
+#include "message-stack.h"
 #include "document-undo.h"
 #include "widgets/ege-adjustment-action.h"
 #include "widgets/ege-output-action.h"
@@ -40,6 +42,7 @@
 #include "toolbox.h"
 #include "widgets/ink-action.h"
 #include "ui/icon-names.h"
+#include "ui/tools/measure-tool.h"
 #include "ui/widget/unit-tracker.h"
 
 using Inkscape::UI::Widget::UnitTracker;
@@ -47,10 +50,25 @@ using Inkscape::Util::Unit;
 using Inkscape::DocumentUndo;
 using Inkscape::UI::ToolboxFactory;
 using Inkscape::UI::PrefPusher;
+using Inkscape::UI::Tools::MeasureTool;
 
 //########################
 //##  Measure Toolbox   ##
 //########################
+
+/** Temporary hack: Returns the node tool in the active desktop.
+ * Will go away during tool refactoring. */
+static MeasureTool *get_measure_tool()
+{
+    MeasureTool *tool = 0;
+    if (SP_ACTIVE_DESKTOP ) {
+        Inkscape::UI::Tools::ToolBase *ec = SP_ACTIVE_DESKTOP->event_context;
+        if (SP_IS_MEASURE_CONTEXT(ec)) {
+            tool = static_cast<MeasureTool*>(ec);
+        }
+    }
+    return tool;
+}
 
 static void
 sp_measure_fontsize_value_changed(GtkAdjustment *adj, GObject *tbl)
@@ -61,6 +79,10 @@ sp_measure_fontsize_value_changed(GtkAdjustment *adj, GObject *tbl)
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         prefs->setInt(Glib::ustring("/tools/measure/fontsize"),
             gtk_adjustment_get_value(adj));
+        MeasureTool *mt = get_measure_tool();
+        if (mt) {
+            mt->showCanvasItems();
+        }
     }
 }
 
@@ -70,6 +92,61 @@ static void measure_unit_changed(GtkAction* /*act*/, GObject* tbl)
     Glib::ustring const unit = tracker->getActiveUnit()->abbr;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setString("/tools/measure/unit", unit);
+    MeasureTool *mt = get_measure_tool();
+    if (mt) {
+        mt->showCanvasItems();
+    }
+}
+
+static void toggle_ignore_1st_and_last( GtkToggleAction* act, gpointer data )
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    gboolean active = gtk_toggle_action_get_active(act);
+    prefs->setInt("/tools/measure/ignore_1st_and_last", active);
+    SPDesktop *desktop = static_cast<SPDesktop *>(data);
+    if ( active ) {
+        desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Start and end measures inactive."));
+    } else {
+        desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Start and end measures active."));
+    }
+    MeasureTool *mt = get_measure_tool();
+    if (mt) {
+        mt->showCanvasItems();
+    }
+}
+
+static void toggle_all_layers( GtkToggleAction* act, gpointer data )
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    gboolean active = gtk_toggle_action_get_active(act);
+    prefs->setInt("/tools/measure/all_layers", active);
+    SPDesktop *desktop = static_cast<SPDesktop *>(data);
+    if ( active ) {
+        desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Use all layers in the measure."));
+    } else {
+        desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Use current layer in the measure."));
+    }
+    MeasureTool *mt = get_measure_tool();
+    if (mt) {
+        mt->showCanvasItems();
+    }
+}
+
+static void toggle_show_in_between( GtkToggleAction* act, gpointer data )
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    gboolean active = gtk_toggle_action_get_active(act);
+    prefs->setInt("/tools/measure/show_in_between", active);
+    SPDesktop *desktop = static_cast<SPDesktop *>(data);
+    if ( active ) {
+        desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Compute all elements."));
+    } else {
+        desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Compute max lenght."));
+    }
+    MeasureTool *mt = get_measure_tool();
+    if (mt) {
+        mt->showCanvasItems();
+    }
 }
 
 void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, GObject* holder)
@@ -118,20 +195,20 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
                                                       _("Ignore first and last"),
                                                       INKSCAPE_ICON("draw-geometry-line-segment"),
                                                       secondarySize );
-        gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
-        PrefPusher *pusher = new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/measure/ignore_1st_and_last");
-        g_signal_connect( holder, "destroy", G_CALLBACK(delete_prefspusher), pusher);
+        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/measure/ignore_1st_and_last", true) );
+        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(toggle_ignore_1st_and_last), desktop) ;
+        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
     }
     // measure imbetweens
     {
         InkToggleAction* act = ink_toggle_action_new( "MeasureInBettween",
-                                                      _("Show meassures between items"),
-                                                      _("Show meassures between items"),
+                                                      _("Show measures between items"),
+                                                      _("Show measures between items"),
                                                       INKSCAPE_ICON("distribute-randomize"),
                                                       secondarySize );
-        gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
-        PrefPusher *pusher = new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/measure/show_in_between");
-        g_signal_connect( holder, "destroy", G_CALLBACK(delete_prefspusher), pusher);
+        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/measure/show_in_between", true) );
+        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(toggle_show_in_between), desktop) ;
+        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
     }
     // measure only current layer
     {
@@ -140,9 +217,9 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
                                                       _("Measure all layers"),
                                                       INKSCAPE_ICON("dialog-layers"),
                                                       secondarySize );
-        gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
-        PrefPusher *pusher = new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/measure/all_layers");
-        g_signal_connect( holder, "destroy", G_CALLBACK(delete_prefspusher), pusher);
+        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/measure/all_layers", true) );
+        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(toggle_all_layers), desktop) ;
+        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
     }
 } // end of sp_measure_toolbox_prep()
 

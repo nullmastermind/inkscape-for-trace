@@ -256,7 +256,7 @@ MeasureTool::MeasureTool()
         this->knot_start->show();
         this->knot_end->setPosition(end_p, SP_KNOT_STATE_NORMAL);
         this->knot_end->show();
-        this->showCanvasItems(this->knot_start->position(), this->knot_end->position());
+        this->showCanvasItems();
     }
     this->_knot_start_moved_connection = this->knot_start->moved_signal.connect(sigc::mem_fun(*this, &MeasureTool::knotMovedHandler));
     this->_knot_start_ungrabbed_connection = this->knot_start->ungrabbed_signal.connect(sigc::mem_fun(*this, &MeasureTool::knotUngrabbedHandler));
@@ -470,6 +470,10 @@ bool MeasureTool::root_handler(GdkEvent* event) {
     }
     
     return ret;
+}
+
+void MeasureTool::showCanvasItems(){
+    showCanvasItems(start_p, end_p);
 }
 
 void MeasureTool::showCanvasItems(Geom::Point start_point, Geom::Point end_point){
