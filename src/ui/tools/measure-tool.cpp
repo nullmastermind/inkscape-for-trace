@@ -296,24 +296,24 @@ void MeasureTool::knotStartMovedHandler(SPKnot */*knot*/, Geom::Point const &ppo
     if (!(state & GDK_SHIFT_MASK)) {
         SnapManager &m = desktop->namedview->snap_manager;
         m.setup(desktop);
-        Inkscape::SnapCandidatePoint scp(ppointer, Inkscape::SNAPSOURCE_OTHER_HANDLE);
-        scp.addOrigin(end_p);
+        Inkscape::SnapCandidatePoint scp(this->knot_start->position(), Inkscape::SNAPSOURCE_OTHER_HANDLE);
+        scp.addOrigin(this->knot_end->position());
         Inkscape::SnappedPoint sp = m.freeSnap(scp);
         if(start_p != sp.getPoint()){
             start_p = sp.getPoint();
-            this->knot_end->setPosition(start_p, SP_KNOT_STATE_MOUSEOVER);
+            this->knot_start->setPosition(start_p, SP_KNOT_STATE_MOUSEOVER);
         }
         m.unSetup();
     }
-    showCanvasItems(start_point, this->knot_end->position());
+    showCanvasItems(start_p, this->knot_end->position());
 }
 
 void MeasureTool::knotEndMovedHandler(SPKnot */*knot*/, Geom::Point const &ppointer, guint state){
     if (!(state & GDK_SHIFT_MASK)) {
         SnapManager &m = desktop->namedview->snap_manager;
         m.setup(desktop);
-        Inkscape::SnapCandidatePoint scp(ppointer, Inkscape::SNAPSOURCE_OTHER_HANDLE);
-        scp.addOrigin(start_p);
+        Inkscape::SnapCandidatePoint scp(this->knot_end->position(), Inkscape::SNAPSOURCE_OTHER_HANDLE);
+        scp.addOrigin(this->knot_start->position());
         Inkscape::SnappedPoint sp = m.freeSnap(scp);
         if(end_p != sp.getPoint()){
             end_p = sp.getPoint();
