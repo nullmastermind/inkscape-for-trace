@@ -190,14 +190,12 @@ Geom::Point calcAngleDisplayAnchor(SPDesktop *desktop, double angle, double base
  * @param anchor the anchor point for displaying the text label.
  * @param angle the angle of the arc segment to draw.
  */
-void createAngleDisplayCurve(SPDesktop *desktop, Geom::Point const &center, Geom::Point const &end, Geom::Point const &anchor, double angle, Glib::ustring unit_name)
+void createAngleDisplayCurve(SPDesktop *desktop, Geom::Point const &center, Geom::Point const &end, Geom::Point const &anchor, double angle)
 {
     // Given that we have a point on the arc's edge and the angle of the arc, we need to get the two endpoints.
 
     double textLen = std::abs((anchor - center).length());
-    textLen = Inkscape::Util::Quantity::convert(textLen, "px", unit_name);
     double sideLen = std::abs((end - center).length());
-    sideLen = Inkscape::Util::Quantity::convert(sideLen, "px", unit_name);
     if (sideLen > 0.0) {
         double factor = std::min(1.0, textLen / sideLen);
     
@@ -879,7 +877,7 @@ void MeasureTool::showCanvasItems(Geom::Point start_point, Geom::Point end_point
                                                                                       CTLINE_SECONDARY);
             measure_tmp_items.push_back(desktop->add_temporary_canvasitem(control_line, 0));
 
-            createAngleDisplayCurve(desktop, start_point, end_point, angleDisplayPt, angle, unit_name);
+            createAngleDisplayCurve(desktop, start_point, end_point, angleDisplayPt, angle);
         }
     }
 
