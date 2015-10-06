@@ -17,15 +17,13 @@
 #include "macros.h"
 #include "rubberband.h"
 #include "display/curve.h"
-#include "sp-shape.h"
-#include "sp-text.h"
-#include "sp-flowtext.h"
 #include "text-editing.h"
 #include "display/sp-ctrlline.h"
 #include "display/sodipodi-ctrl.h"
 #include "display/sp-canvas-item.h"
 #include "display/sp-canvas-util.h"
 #include "desktop.h"
+#include "svg/svg.h"
 #include "document.h"
 #include "pixmaps/cursor-measure.xpm"
 #include "preferences.h"
@@ -42,6 +40,10 @@
 #include <2geom/angle.h>
 #include "snap.h"
 #include "sp-namedview.h"
+#include "sp-shape.h"
+#include "sp-text.h"
+#include "sp-flowtext.h"
+#include "sp-defs.h"
 #include "enums.h"
 #include "ui/control-manager.h"
 #include "knot-enums.h"
@@ -258,9 +260,9 @@ MeasureTool::MeasureTool()
         this->knot_end->show();
         this->showCanvasItems();
     }
-    this->_knot_start_moved_connection = this->knot_start->moved_signal.connect(sigc::mem_fun(*this, &MeasureTool::knotMovedHandler));
+    this->_knot_start_moved_connection = this->knot_start->moved_signal.connect(sigc::mem_fun(*this, &MeasureTool::knotStartMovedHandler));
     this->_knot_start_ungrabbed_connection = this->knot_start->ungrabbed_signal.connect(sigc::mem_fun(*this, &MeasureTool::knotUngrabbedHandler));
-    this->_knot_end_moved_connection = this->knot_end->moved_signal.connect(sigc::mem_fun(*this, &MeasureTool::knotMovedHandler));
+    this->_knot_end_moved_connection = this->knot_end->moved_signal.connect(sigc::mem_fun(*this, &MeasureTool::knotEndMovedHandler));
     this->_knot_end_ungrabbed_connection = this->knot_end->ungrabbed_signal.connect(sigc::mem_fun(*this, &MeasureTool::knotUngrabbedHandler));
 
 }
@@ -290,13 +292,43 @@ void MeasureTool::reverseKnots(){
     this->showCanvasItems(end, start);
 }
 
-void MeasureTool::knotMovedHandler(SPKnot */*knot*/, Geom::Point const /*&ppointer*/, guint /*state*/){
-    showCanvasItems(this->knot_start->position(), this->knot_end->position());
+void MeasureTool::knotStartMovedHandler(SPKnot */*knot*/, Geom::Point const &ppointer, guint state){
+    if (!(state & GDK_SHIFT_MASK)) {
+        SnapManager &m = desktop->namedview->snap_manager;
+        m.setup(desktop);
+        Inkscape::SnapCandidatePoint scp(ppointer, Inkscape::SNAPSOURCE_OTHER_HANDLE);
+        scp.addOrigin(end_p);
+        Inkscape::SnappedPoint sp = m.freeSnap(scp);
+        if(start_p != sp.getPoint()){
+            start_p = sp.getPoint();
+            this->knot_end->setPosition(start_p, SP_KNOT_STATE_MOUSEOVER);
+        }
+        m.unSetup();
+    }
+    showCanvasItems(start_point, this->knot_end->position());
 }
 
-void MeasureTool::knotUngrabbedHandler(SPKnot */*knot*/,  unsigned int /*state*/){
-    showCanvasItems(this->knot_start->position(), this->knot_end->position());
+void MeasureTool::knotEndMovedHandler(SPKnot */*knot*/, Geom::Point const &ppointer, guint state){
+    if (!(state & GDK_SHIFT_MASK)) {
+        SnapManager &m = desktop->namedview->snap_manager;
+        m.setup(desktop);
+        Inkscape::SnapCandidatePoint scp(ppointer, Inkscape::SNAPSOURCE_OTHER_HANDLE);
+        scp.addOrigin(start_p);
+        Inkscape::SnappedPoint sp = m.freeSnap(scp);
+        if(end_p != sp.getPoint()){
+            end_p = sp.getPoint();
+            this->knot_end->setPosition(end_p, SP_KNOT_STATE_MOUSEOVER);
+        }
+        m.unSetup();
+    }
+    showCanvasItems(this->knot_start->position(), end_p);
 }
+
+void MeasureTool::knotUngrabbedHandler(SPKnot */*knot*/,  unsigned int state){
+    showCanvasItems(this->knot_start->position(), end_p);
+}
+
+
 
 void MeasureTool::finish() {
     this->enableGrDrag(false);
@@ -480,6 +512,100 @@ bool MeasureTool::root_handler(GdkEvent* event) {
     }
     
     return ret;
+}
+
+void MeasureTool::setMarkers(){
+    SPDesktop *desktop = this->desktop;
+    SPDocument *doc = desktop->getDocument();
+    SPObject *arrowStart = doc->getObjectById("Arrow2Sstart");
+    SPObject *arrowEnd = doc->getObjectById("Arrow2Send");
+    if (!arrowStart) {
+        setMarker(true);
+    }
+    if(!arrowEnd){
+        setMarker(false);
+    }
+}
+void MeasureTool::setMarker(bool isStart){
+    SPDesktop *desktop = this->desktop;
+    SPDocument *doc = desktop->getDocument();
+    SPDefs *defs = doc->getDefs();
+    Inkscape::XML::Node *repr;
+    Inkscape::XML::Document *xml_doc = doc->getReprDoc();
+    repr = xml_doc->createElement("svg:marker");
+    if(isStart){
+        repr->setAttribute("id", "Arrow2Sstart");
+    } else {
+        repr->setAttribute("id", "Arrow2Send");
+    }
+    repr->setAttribute("inkscape:isstock", "true");
+    if(isStart){
+        repr->setAttribute("inkscape:stockid", "Arrow2Sstart");
+    } else {
+        repr->setAttribute("inkscape:stockid", "Arrow2Send");
+    }
+    repr->setAttribute("orient", "auto");
+    repr->setAttribute("refX", "0.0");
+    repr->setAttribute("refY", "0.0");
+    repr->setAttribute("style", "overflow:visible;");
+    SPItem *item = SP_ITEM(defs->appendChildRepr(repr));
+    Inkscape::GC::release(repr);
+    item->updateRepr();
+    Inkscape::XML::Node *repr2;
+    repr2 = xml_doc->createElement("svg:path");
+    repr2->setAttribute("d", "M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.9730900,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z");
+    if(isStart){
+        repr2->setAttribute("id", "Arrow2SstartPath");
+    } else {
+        repr2->setAttribute("id", "Arrow2SendPath");
+    }
+    repr2->setAttribute("style", "fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round;stroke:#000000;stroke-opacity:1;fill:#000000;fill-opacity:1");
+    if(isStart){
+        repr2->setAttribute("transform", "scale(0.3) translate(-2.3,0)");
+    } else {
+        repr2->setAttribute("transform", "scale(0.3) rotate(180) translate(-2.3,0)");
+    }
+    SPItem *item2 = SP_ITEM(item->appendChildRepr(repr2));
+    Inkscape::GC::release(repr2);
+    item2->updateRepr();
+}
+
+void MeasureTool::toMarkDimension(){
+    setMarkers();
+    Geom::PathVector c;
+    Geom::Path p;
+    p.start(start_p);
+    p.appendNew<Geom::LineSegment>(end_p);
+    c.push_back(p);
+    SPDesktop *desktop = this->desktop;
+    SPDocument *doc = desktop->getDocument();
+    Inkscape::XML::Document *xml_doc = doc->getReprDoc();
+    if (c.size() == 1) {
+        Inkscape::XML::Node *repr;
+        repr = xml_doc->createElement("svg:path");
+        gchar const *str = sp_svg_write_path(c);
+        gchar const *style_str = "fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#Arrow2Sstart);marker-end:url(#Arrow2Send)";
+        g_assert( str != NULL );
+        repr->setAttribute("d", str);
+        repr->setAttribute("style", style_str);
+        // Attach repr
+        SPItem *item = SP_ITEM(desktop->currentLayer()->appendChildRepr(repr));
+        Inkscape::GC::release(repr);
+        item->updateRepr();
+    }
+
+    // Flush pending updates
+    doc->ensureUpToDate();
+    reset();
+}
+
+void MeasureTool::reset(){
+    this->knot_start->hide();
+    this->knot_end->hide();
+    for (size_t idx = 0; idx < measure_tmp_items.size(); ++idx) {
+        desktop->remove_temporary_canvasitem(measure_tmp_items[idx]);
+    }
+    measure_tmp_items.clear();
 }
 
 void MeasureTool::showCanvasItems(){
@@ -765,12 +891,12 @@ void MeasureTool::showCanvasItems(Geom::Point start_point, Geom::Point end_point
 
         control_line = mgr.createControlLine(desktop->getTempGroup(),
                                              desktop->doc2dt(intersections[0]),
-                                             desktop->doc2dt(intersections[0]) + normal * 65);
+                                             desktop->doc2dt(intersections[0]) + normal * 60);
         measure_tmp_items.push_back(desktop->add_temporary_canvasitem(control_line, 0));
 
         control_line = mgr.createControlLine(desktop->getTempGroup(),
                                              desktop->doc2dt(intersections[intersections.size() - 1]),
-                                             desktop->doc2dt(intersections[intersections.size() - 1]) + normal * 65);
+                                             desktop->doc2dt(intersections[intersections.size() - 1]) + normal * 60);
         measure_tmp_items.push_back(desktop->add_temporary_canvasitem(control_line, 0));
     }
 

@@ -154,6 +154,14 @@ static void sp_reverse_knots(void){
         mt->reverseKnots();
     }
 }
+
+static void sp_to_mark_dimension(void){
+    MeasureTool *mt = get_measure_tool();
+    if (mt) {
+        mt->toMarkDimension();
+    }
+}
+
 void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, GObject* holder)
 {
     UnitTracker* tracker = new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR);
@@ -234,6 +242,16 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
                                           INKSCAPE_ICON("draw-geometry-mirror"),
                                           secondarySize );
         g_signal_connect_after( G_OBJECT(act), "activate", G_CALLBACK(sp_reverse_knots), 0 );
+        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
+    }
+    //to mark dimensions
+    {
+        InkAction* act = ink_action_new( "MeasureMarkDimension",
+                                          _("Mark Dimension"),
+                                          _("Mark Dimension"),
+                                          INKSCAPE_ICON("draw-geometry-mirror"),
+                                          secondarySize );
+        g_signal_connect_after( G_OBJECT(act), "activate", G_CALLBACK(sp_to_mark_dimension), 0 );
         gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
     }
 } // end of sp_measure_toolbox_prep()

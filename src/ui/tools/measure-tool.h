@@ -38,8 +38,13 @@ public:
     virtual void showCanvasItems();
     virtual void showCanvasItems(Geom::Point start_point, Geom::Point end_point);
     virtual void reverseKnots();
+    virtual void toMarkDimension();
+    virtual void reset();
+    virtual void setMarkers();
+    virtual void setMarker(bool isStart);
     virtual const std::string& getPrefsPath();
-    void knotMovedHandler(SPKnot */*knot*/, Geom::Point const /*&ppointer*/, guint /*state*/);
+    void knotStartMovedHandler(SPKnot */*knot*/, Geom::Point const &ppointer, guint state);
+    void knotEndMovedHandler(SPKnot */*knot*/, Geom::Point const &ppointer, guint state);
     void knotUngrabbedHandler(SPKnot */*knot*/,  unsigned int /*state*/);
 
 private:
