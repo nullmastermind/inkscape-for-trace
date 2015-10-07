@@ -25,6 +25,7 @@
 #include "desktop.h"
 #include "svg/svg.h"
 #include "document.h"
+#include <viewbox.h>
 #include "pixmaps/cursor-measure.xpm"
 #include "preferences.h"
 #include "inkscape.h"
@@ -38,12 +39,14 @@
 #include <2geom/pathvector.h>
 #include <2geom/crossing.h>
 #include <2geom/angle.h>
+#include <2geom/transforms.h>
 #include "snap.h"
 #include "sp-namedview.h"
 #include "sp-shape.h"
 #include "sp-text.h"
 #include "sp-flowtext.h"
 #include "sp-defs.h"
+#include "sp-item.h"
 #include "enums.h"
 #include "ui/control-manager.h"
 #include "knot-enums.h"
@@ -571,12 +574,17 @@ void MeasureTool::setMarker(bool isStart){
 }
 
 void MeasureTool::toMarkDimension(){
+    Geom::Point windowNormal = Geom::unit_vector(Geom::rot90(desktop->d2w(end_p - start_p)));
+    Geom::Point normal = desktop->w2d(windowNormal);
     setMarkers();
     Geom::PathVector c;
     Geom::Path p;
-    p.start(start_p);
-    p.appendNew<Geom::LineSegment>(end_p);
+    p.start(desktop->doc2dt(start_p) + normal * 60);
+    p.appendNew<Geom::LineSegment>(desktop->doc2dt(end_p) + normal * 60);
     c.push_back(p);
+    c *= desktop->doc2dt();
+    c *= SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
+    c *= Geom::Scale(95.0);
     SPDesktop *desktop = this->desktop;
     SPDocument *doc = desktop->getDocument();
     Inkscape::XML::Document *xml_doc = doc->getReprDoc();
@@ -596,7 +604,7 @@ void MeasureTool::toMarkDimension(){
 
     // Flush pending updates
     doc->ensureUpToDate();
-    reset();
+    //reset();
 }
 
 void MeasureTool::reset(){
