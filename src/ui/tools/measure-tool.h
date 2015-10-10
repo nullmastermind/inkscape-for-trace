@@ -43,6 +43,7 @@ public:
     virtual void setMarkers();
     virtual void setMarker(bool isStart);
     virtual const std::string& getPrefsPath();
+    void setLabelText(const char *value, Geom::Point pos, double fontsize, Geom::Coord angle);
     void knotStartMovedHandler(SPKnot */*knot*/, Geom::Point const &ppointer, guint state);
     void knotEndMovedHandler(SPKnot */*knot*/, Geom::Point const &ppointer, guint state);
     void knotUngrabbedHandler(SPKnot */*knot*/,  unsigned int /*state*/);

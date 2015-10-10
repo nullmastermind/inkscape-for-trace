@@ -339,6 +339,8 @@ static gchar const * ui_descr =
         "  <toolbar name='MeasureToolbar'>"
         "    <toolitem action='MeasureFontSizeAction' />"
         "    <separator />"
+        "    <toolitem action='MeasureOffsetAction' />"
+        "    <separator />"
         "    <toolitem action='measure_units_label' />"
         "    <toolitem action='MeasureUnitsAction' />"
         "    <toolitem action='MeasureIgnore1stAndLast' />"
