@@ -733,7 +733,7 @@ void MeasureTool::setLine(Geom::Point start_point,Geom::Point end_point, bool ma
         } else {
             sp_repr_css_set_property (css, "stroke", "#000000");
         }
-        sp_repr_css_set_property (css, "stroke-linecap", "butt");
+        sp_repr_css_set_property (css, "stroke-linecap", "square");
         sp_repr_css_set_property (css, "stroke-linejoin", "miter");
         sp_repr_css_set_property (css, "stroke-miterlimit", "4");
         sp_repr_css_set_property (css, "stroke-dasharray", "none");
@@ -770,12 +770,12 @@ void MeasureTool::setPoint(Geom::Point origin, Inkscape::XML::Node *measure_repr
         return;
     }
     char const * svgd;
-    svgd = "m -3.55,-3.55 7.11,7.11 m 0,-7.11 -7.11,7.11";
+    svgd = "m 0.707,0.707 6.586,6.586 m 0,-6.586 -6.586,6.586";
     Geom::PathVector c = sp_svg_read_pathv(svgd);
     Geom::Scale scale = Geom::Scale(desktop->current_zoom()).inverse();
+    c *= Geom::Translate(Geom::Point(-3.5,-3.5));
     c *= scale;
-    Geom::Point strokewidth = (Geom::Point(1,1) * SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse())/ desktop->current_zoom();
-    c *= Geom::Translate(Geom::Point(strokewidth/2.0) - (scale.vector() * 0.5));
+    c *= Geom::Translate(Geom::Point() - (scale.vector() * 0.5));
     c *= Geom::Translate(desktop->doc2dt(origin));
     c *= SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
     SPDocument *doc = desktop->getDocument();
@@ -785,6 +785,7 @@ void MeasureTool::setPoint(Geom::Point origin, Inkscape::XML::Node *measure_repr
         repr = xml_doc->createElement("svg:path");
         gchar const *str = sp_svg_write_path(c);
         SPCSSAttr *css = sp_repr_css_attr_new();
+        Geom::Point strokewidth = (Geom::Point(1,1) * SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse())/ desktop->current_zoom();
         std::stringstream stroke_width;
         stroke_width.imbue(std::locale::classic());
         stroke_width <<  strokewidth[Geom::X];
@@ -794,7 +795,7 @@ void MeasureTool::setPoint(Geom::Point origin, Inkscape::XML::Node *measure_repr
         gchar c[64];
         sp_svg_write_color (c, sizeof(c), line_color_secondary);
         sp_repr_css_set_property (css, "stroke", c);
-        sp_repr_css_set_property (css, "stroke-linecap", "butt");
+        sp_repr_css_set_property (css, "stroke-linecap", "square");
         sp_repr_css_set_property (css, "stroke-linejoin", "miter");
         sp_repr_css_set_property (css, "stroke-miterlimit", "4");
         sp_repr_css_set_property (css, "stroke-dasharray", "none");
