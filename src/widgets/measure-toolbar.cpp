@@ -178,6 +178,13 @@ static void sp_to_mark_dimension(void){
     }
 }
 
+static void sp_to_item(void){
+    MeasureTool *mt = get_measure_tool();
+    if (mt) {
+        mt->toItem();
+    }
+}
+
 void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, GObject* holder)
 {
     UnitTracker* tracker = new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR);
@@ -281,6 +288,16 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
                                           INKSCAPE_ICON("tool-pointer"),
                                           secondarySize );
         g_signal_connect_after( G_OBJECT(act), "activate", G_CALLBACK(sp_to_mark_dimension), 0 );
+        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
+    }
+    //to item
+    {
+        InkAction* act = ink_action_new( "MeasureToItem",
+                                          _("Convert to item"),
+                                          _("Convert to item"),
+                                          INKSCAPE_ICON("path-reverse"),
+                                          secondarySize );
+        g_signal_connect_after( G_OBJECT(act), "activate", G_CALLBACK(sp_to_item), 0 );
         gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
     }
 } // end of sp_measure_toolbox_prep()
