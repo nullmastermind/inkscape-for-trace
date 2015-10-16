@@ -386,7 +386,6 @@ void MeasureTool::knotEndMovedHandler(SPKnot */*knot*/, Geom::Point const &ppoin
         end_p = point;
         this->knot_end->moveto(end_p);
     }
-    last_end = desktop->d2w(end_p);
     showCanvasItems();
 }
 
