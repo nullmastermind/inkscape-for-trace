@@ -86,6 +86,22 @@ sp_measure_fontsize_value_changed(GtkAdjustment *adj, GObject *tbl)
     }
 }
 
+static void
+sp_measure_offset_value_changed(GtkAdjustment *adj, GObject *tbl)
+{
+    SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data( tbl, "desktop" ));
+
+    if (DocumentUndo::getUndoSensitive(desktop->getDocument())) {
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        prefs->setInt(Glib::ustring("/tools/measure/offset"),
+            gtk_adjustment_get_value(adj));
+        MeasureTool *mt = get_measure_tool();
+        if (mt) {
+            mt->showCanvasItems();
+        }
+    }
+}
+
 static void measure_unit_changed(GtkAction* /*act*/, GObject* tbl)
 {
     UnitTracker* tracker = reinterpret_cast<UnitTracker*>(g_object_get_data(tbl, "tracker"));
@@ -162,6 +178,13 @@ static void sp_to_mark_dimension(void){
     }
 }
 
+static void sp_to_item(void){
+    MeasureTool *mt = get_measure_tool();
+    if (mt) {
+        mt->toItem();
+    }
+}
+
 void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, GObject* holder)
 {
     UnitTracker* tracker = new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR);
@@ -180,12 +203,11 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
                                          _("The font size to be used in the measurement labels"),
                                          "/tools/measure/fontsize", 0.0,
                                          GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
-                                         10, 36, 1.0, 4.0,
+                                         1, 36, 1.0, 4.0,
                                          0, 0, 0,
                                          sp_measure_fontsize_value_changed);
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
     }
-
 
     // units label
     {
@@ -201,6 +223,20 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
         g_signal_connect_after( G_OBJECT(act), "changed", G_CALLBACK(measure_unit_changed), holder );
         gtk_action_group_add_action( mainActions, act );
     }
+
+    /* Offset */
+    {
+        eact = create_adjustment_action( "MeasureOffsetAction",
+                                         _("Offset"), _("Offset:"),
+                                         _("The offset size"),
+                                         "/tools/measure/offset", 30.0,
+                                         GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
+                                         0.0, 90000.0, 1.0, 4.0,
+                                         0, 0, 0,
+                                         sp_measure_offset_value_changed);
+        gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
+    }
+
     // ignore_1st_and_last
     {
         InkToggleAction* act = ink_toggle_action_new( "MeasureIgnore1stAndLast",
@@ -249,9 +285,19 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
         InkAction* act = ink_action_new( "MeasureMarkDimension",
                                           _("Mark Dimension"),
                                           _("Mark Dimension"),
-                                          INKSCAPE_ICON("draw-geometry-mirror"),
+                                          INKSCAPE_ICON("tool-pointer"),
                                           secondarySize );
         g_signal_connect_after( G_OBJECT(act), "activate", G_CALLBACK(sp_to_mark_dimension), 0 );
+        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
+    }
+    //to item
+    {
+        InkAction* act = ink_action_new( "MeasureToItem",
+                                          _("Convert to item"),
+                                          _("Convert to item"),
+                                          INKSCAPE_ICON("path-reverse"),
+                                          secondarySize );
+        g_signal_connect_after( G_OBJECT(act), "activate", G_CALLBACK(sp_to_item), 0 );
         gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
     }
 } // end of sp_measure_toolbox_prep()
