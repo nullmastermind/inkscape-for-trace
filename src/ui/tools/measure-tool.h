@@ -38,6 +38,7 @@ public:
     virtual bool root_handler(GdkEvent* event);
     virtual void showCanvasItems(bool to_item = false, Inkscape::XML::Node *measure_repr = NULL);
     virtual void reverseKnots();
+    virtual void toGuides();
     virtual void toMarkDimension();
     virtual void toItem();
     virtual void reset();

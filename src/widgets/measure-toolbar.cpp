@@ -178,6 +178,13 @@ static void sp_to_mark_dimension(void){
     }
 }
 
+static void sp_to_guides(void){
+    MeasureTool *mt = get_measure_tool();
+    if (mt) {
+        mt->toGuides();
+    }
+}
+
 static void sp_to_item(void){
     MeasureTool *mt = get_measure_tool();
     if (mt) {
@@ -278,6 +285,16 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
                                           INKSCAPE_ICON("draw-geometry-mirror"),
                                           secondarySize );
         g_signal_connect_after( G_OBJECT(act), "activate", G_CALLBACK(sp_reverse_knots), 0 );
+        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
+    }
+    //to guides
+    {
+        InkAction* act = ink_action_new( "MeasureToGuides",
+                                          _("To guides"),
+                                          _("Mark Dimension"),
+                                          INKSCAPE_ICON("guides"),
+                                          secondarySize );
+        g_signal_connect_after( G_OBJECT(act), "activate", G_CALLBACK(sp_to_guides), 0 );
         gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
     }
     //to mark dimensions

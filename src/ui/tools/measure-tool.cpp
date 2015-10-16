@@ -650,6 +650,97 @@ void MeasureTool::setMarker(bool isStart)
     path->updateRepr();
 }
 
+void MeasureTool::toGuides()
+{
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    SPDocument *doc = desktop->getDocument();
+    Inkscape::XML::Document *xml_doc = doc->getReprDoc();
+    Geom::Point start = start_p * SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
+    Geom::Point end = end_p * SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
+    Geom::Ray ray(start,end);
+    SPNamedView *namedview = desktop->namedview;
+    if(!namedview){
+        return;
+    }
+    //meassure angle
+    Inkscape::XML::Node *measure_line;
+    measure_line = xml_doc->createElement("sodipodi:guide");
+    std::stringstream position;
+    position.imbue(std::locale::classic());
+    position <<  start[Geom::X] << "," << start[Geom::Y];
+    measure_line->setAttribute("position", position.str().c_str() );
+    Geom::Point unit_vector = Geom::rot90(start.polar(ray.angle()));
+    std::stringstream angle;
+    angle.imbue(std::locale::classic());
+    angle << unit_vector[Geom::X] << "," << unit_vector[Geom::Y];
+    measure_line->setAttribute("orientation", angle.str().c_str());
+    namedview->appendChild(measure_line);
+    Inkscape::GC::release(measure_line);
+    //base angle
+    if(explicitBase){
+        explicitBase = *explicitBase * SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
+        ray.setPoints(start, *explicitBase);
+        if(ray.angle() != 0){
+            Inkscape::XML::Node *base_line;
+            base_line = xml_doc->createElement("sodipodi:guide");
+            position.str("");
+            position.imbue(std::locale::classic());
+            position <<  start[Geom::X] << "," << start[Geom::Y];
+            base_line->setAttribute("position", position.str().c_str() );
+            Geom::Point unit_vector = Geom::rot90(start.polar(ray.angle()));
+            std::stringstream angle;
+            angle.imbue(std::locale::classic());
+            angle << unit_vector[Geom::X] << "," << unit_vector[Geom::Y];
+            base_line->setAttribute("orientation", angle.str().c_str());
+            namedview->appendChild(base_line);
+            Inkscape::GC::release(base_line);
+        }
+    }
+    //start horizontal
+    Inkscape::XML::Node *start_horizontal;
+    start_horizontal = xml_doc->createElement("sodipodi:guide");
+    position.str("");
+    position.imbue(std::locale::classic());
+    position <<  start[Geom::X] << "," << start[Geom::Y];
+    start_horizontal->setAttribute("position", position.str().c_str() );
+    start_horizontal->setAttribute("orientation", "0,1");
+    namedview->appendChild(start_horizontal);
+    Inkscape::GC::release(start_horizontal);
+    //start vertical
+    Inkscape::XML::Node *start_vertical;
+    start_vertical = xml_doc->createElement("sodipodi:guide");
+    position.str("");
+    position.imbue(std::locale::classic());
+    position <<  start[Geom::X] << "," << start[Geom::Y];
+    start_vertical->setAttribute("position", position.str().c_str() );
+    start_vertical->setAttribute("orientation", "1,0");
+    namedview->appendChild(start_vertical);
+    Inkscape::GC::release(start_vertical);
+    //end horizontal
+    Inkscape::XML::Node *end_horizontal;
+    end_horizontal = xml_doc->createElement("sodipodi:guide");
+    position.str("");
+    position.imbue(std::locale::classic());
+    position <<  end[Geom::X] << "," << end[Geom::Y];
+    end_horizontal->setAttribute("position", position.str().c_str() );
+    end_horizontal->setAttribute("orientation", "0,1");
+    namedview->appendChild(end_horizontal);
+    Inkscape::GC::release(end_horizontal);
+    //start vertical
+    Inkscape::XML::Node *end_vertical;
+    end_vertical = xml_doc->createElement("sodipodi:guide");
+    position.str("");
+    position.imbue(std::locale::classic());
+    position <<  end[Geom::X] << "," << end[Geom::Y];
+    end_vertical->setAttribute("position", position.str().c_str() );
+    end_vertical->setAttribute("orientation", "1,0");
+    namedview->appendChild(end_vertical);
+    Inkscape::GC::release(end_vertical);
+
+    doc->ensureUpToDate();
+    DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_MEASURE,_("Add guides from measure tool"));
+}
+
 void MeasureTool::toItem()
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
