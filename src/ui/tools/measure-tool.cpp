@@ -657,8 +657,10 @@ void MeasureTool::toGuides()
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     SPDocument *doc = desktop->getDocument();
     Inkscape::XML::Document *xml_doc = doc->getReprDoc();
-    Geom::Point start = start_p * SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
-    Geom::Point end = end_p * SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
+    Geom::Point start = desktop->doc2dt(start_p);
+    Geom::Point end = desktop->doc2dt(end_p);
+    start *= SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
+    end *= SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
     Geom::Ray ray(start,end);
     SPNamedView *namedview = desktop->namedview;
     if(!namedview){
