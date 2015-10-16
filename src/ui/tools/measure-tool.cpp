@@ -344,6 +344,8 @@ void MeasureTool::reverseKnots()
     this->knot_start->show();
     this->knot_end->moveto(start);
     this->knot_end->show();
+    start_p = end;
+    end_p = start;
     this->showCanvasItems();
 }
 
