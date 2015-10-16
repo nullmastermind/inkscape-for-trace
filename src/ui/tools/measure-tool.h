@@ -36,9 +36,9 @@ public:
 
     virtual void finish();
     virtual bool root_handler(GdkEvent* event);
-    virtual void showCanvasItems();
-    virtual void showCanvasItems(Geom::Point start_point, Geom::Point end_point, bool to_item = false, Inkscape::XML::Node *measure_repr = NULL);
+    virtual void showCanvasItems(bool to_item = false, Inkscape::XML::Node *measure_repr = NULL);
     virtual void reverseKnots();
+    virtual void toGuides();
     virtual void toMarkDimension();
     virtual void toItem();
     virtual void reset();
@@ -54,7 +54,6 @@ public:
 
 private:
     SPCanvasItem* grabbed;
-    Geom::Point start_point;
     boost::optional<Geom::Point> explicitBase;
     boost::optional<Geom::Point> last_end;
     SPKnot *knot_start;
