@@ -291,7 +291,7 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
     {
         InkAction* act = ink_action_new( "MeasureToGuides",
                                           _("To guides"),
-                                          _("Mark Dimension"),
+                                          _("To guides"),
                                           INKSCAPE_ICON("guides"),
                                           secondarySize );
         g_signal_connect_after( G_OBJECT(act), "activate", G_CALLBACK(sp_to_guides), 0 );
