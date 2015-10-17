@@ -664,7 +664,7 @@ void MeasureTool::toGuides()
     if(!namedview){
         return;
     }
-    setGuide(start,ray.angle(), _("Meassure"));
+    setGuide(start,ray.angle(), _("Measure"));
     if(explicitBase){
         explicitBase = *explicitBase * SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
         ray.setPoints(start, *explicitBase);
@@ -723,7 +723,7 @@ void MeasureTool::toMarkDimension()
     gchar *totallength_str = g_strdup_printf("%.2f %s", totallengthval, unit_name.c_str());
     setLabelText(totallength_str, middle, fontsize, Geom::deg_to_rad(180) - ray.angle());
     doc->ensureUpToDate();
-    DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_MEASURE,_("Add global meassure line"));
+    DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_MEASURE,_("Add global measure line"));
 }
 
 void MeasureTool::setGuide(Geom::Point origin,double angle, const char *label)
@@ -741,7 +741,7 @@ void MeasureTool::setGuide(Geom::Point origin,double angle, const char *label)
         return;
     }
     origin *= affine; 
-    //meassure angle
+    //measure angle
     Inkscape::XML::Node *guide;
     guide = xml_doc->createElement("sodipodi:guide");
     std::stringstream position;
