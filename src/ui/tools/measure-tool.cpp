@@ -672,10 +672,10 @@ void MeasureTool::toGuides()
             setGuide(start,ray.angle(), _("Base"));
         }
     }
-    setGuide(start,0,_("Start"));
+    setGuide(start,0,"");
     setGuide(start,Geom::deg_to_rad(90),_("Start"));
     setGuide(end,0,_("End"));
-    setGuide(end,Geom::deg_to_rad(90),_("End"));
+    setGuide(end,Geom::deg_to_rad(90),"");
     showCanvasItems(true);
     doc->ensureUpToDate();
     DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_MEASURE,_("Add guides from measure tool"));
@@ -1270,8 +1270,16 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, Inkscape::XML::N
         if(to_guides) {
             std::stringstream cross_number;
             cross_number.imbue(std::locale::classic());
-            cross_number <<  _("Crossing ") << idx;
-            setGuide(desktop->doc2dt(intersections[idx]), angle + Geom::deg_to_rad(90), cross_number.str().c_str());
+            if (!prefs->getBool("/tools/measure/ignore_1st_and_last", true)){
+                cross_number <<  _("Crossing ") << idx;
+            } else {
+                cross_number <<  _("Crossing ") << idx + 1;
+            }
+            if (!prefs->getBool("/tools/measure/ignore_1st_and_last", true) && idx == 0) {
+                setGuide(desktop->doc2dt(intersections[idx]), angle + Geom::deg_to_rad(90), "");
+            } else {
+                setGuide(desktop->doc2dt(intersections[idx]), angle + Geom::deg_to_rad(90), cross_number.str().c_str());
+            }
         }
     }
     // Since adding goes to the bottom, do all lines last.
