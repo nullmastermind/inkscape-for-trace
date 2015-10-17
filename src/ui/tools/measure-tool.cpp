@@ -39,6 +39,7 @@
 #include "sp-flowtext.h"
 #include "sp-defs.h"
 #include "sp-item.h"
+#include "sp-root.h"
 #include "macros.h"
 #include "rubberband.h"
 #include "path-chemistry.h"
@@ -656,91 +657,26 @@ void MeasureTool::toGuides()
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     SPDocument *doc = desktop->getDocument();
-    Inkscape::XML::Document *xml_doc = doc->getReprDoc();
-    Geom::Point start = desktop->doc2dt(start_p);
-    Geom::Point end = desktop->doc2dt(end_p);
-    start *= SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
-    end *= SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
+    Geom::Point start = desktop->doc2dt(start_p) * desktop->doc2dt();
+    Geom::Point end = desktop->doc2dt(end_p) * desktop->doc2dt();
     Geom::Ray ray(start,end);
     SPNamedView *namedview = desktop->namedview;
     if(!namedview){
         return;
     }
-    //meassure angle
-    Inkscape::XML::Node *measure_line;
-    measure_line = xml_doc->createElement("sodipodi:guide");
-    std::stringstream position;
-    position.imbue(std::locale::classic());
-    position <<  start[Geom::X] << "," << start[Geom::Y];
-    measure_line->setAttribute("position", position.str().c_str() );
-    Geom::Point unit_vector = Geom::rot90(start.polar(ray.angle()));
-    std::stringstream angle;
-    angle.imbue(std::locale::classic());
-    angle << unit_vector[Geom::X] << "," << unit_vector[Geom::Y];
-    measure_line->setAttribute("orientation", angle.str().c_str());
-    namedview->appendChild(measure_line);
-    Inkscape::GC::release(measure_line);
-    //base angle
+    setGuide(start,ray.angle(), _("Meassure"));
     if(explicitBase){
         explicitBase = *explicitBase * SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
         ray.setPoints(start, *explicitBase);
         if(ray.angle() != 0){
-            Inkscape::XML::Node *base_line;
-            base_line = xml_doc->createElement("sodipodi:guide");
-            position.str("");
-            position.imbue(std::locale::classic());
-            position <<  start[Geom::X] << "," << start[Geom::Y];
-            base_line->setAttribute("position", position.str().c_str() );
-            Geom::Point unit_vector = Geom::rot90(start.polar(ray.angle()));
-            std::stringstream angle;
-            angle.imbue(std::locale::classic());
-            angle << unit_vector[Geom::X] << "," << unit_vector[Geom::Y];
-            base_line->setAttribute("orientation", angle.str().c_str());
-            namedview->appendChild(base_line);
-            Inkscape::GC::release(base_line);
+            setGuide(start,ray.angle(), _("Base"));
         }
     }
-    //start horizontal
-    Inkscape::XML::Node *start_horizontal;
-    start_horizontal = xml_doc->createElement("sodipodi:guide");
-    position.str("");
-    position.imbue(std::locale::classic());
-    position <<  start[Geom::X] << "," << start[Geom::Y];
-    start_horizontal->setAttribute("position", position.str().c_str() );
-    start_horizontal->setAttribute("orientation", "0,1");
-    namedview->appendChild(start_horizontal);
-    Inkscape::GC::release(start_horizontal);
-    //start vertical
-    Inkscape::XML::Node *start_vertical;
-    start_vertical = xml_doc->createElement("sodipodi:guide");
-    position.str("");
-    position.imbue(std::locale::classic());
-    position <<  start[Geom::X] << "," << start[Geom::Y];
-    start_vertical->setAttribute("position", position.str().c_str() );
-    start_vertical->setAttribute("orientation", "1,0");
-    namedview->appendChild(start_vertical);
-    Inkscape::GC::release(start_vertical);
-    //end horizontal
-    Inkscape::XML::Node *end_horizontal;
-    end_horizontal = xml_doc->createElement("sodipodi:guide");
-    position.str("");
-    position.imbue(std::locale::classic());
-    position <<  end[Geom::X] << "," << end[Geom::Y];
-    end_horizontal->setAttribute("position", position.str().c_str() );
-    end_horizontal->setAttribute("orientation", "0,1");
-    namedview->appendChild(end_horizontal);
-    Inkscape::GC::release(end_horizontal);
-    //start vertical
-    Inkscape::XML::Node *end_vertical;
-    end_vertical = xml_doc->createElement("sodipodi:guide");
-    position.str("");
-    position.imbue(std::locale::classic());
-    position <<  end[Geom::X] << "," << end[Geom::Y];
-    end_vertical->setAttribute("position", position.str().c_str() );
-    end_vertical->setAttribute("orientation", "1,0");
-    namedview->appendChild(end_vertical);
-    Inkscape::GC::release(end_vertical);
-
+    setGuide(start,0,_("Start"));
+    setGuide(start,Geom::deg_to_rad(90),_("Start"));
+    setGuide(end,0,_("End"));
+    setGuide(end,Geom::deg_to_rad(90),_("End"));
+    showCanvasItems(true);
     doc->ensureUpToDate();
     DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_MEASURE,_("Add guides from measure tool"));
 }
@@ -753,7 +689,7 @@ void MeasureTool::toItem()
     guint32 line_color_primary = 0x0000ff7f;
     Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
     Inkscape::XML::Node *rgroup = xml_doc->createElement("svg:g");
-    showCanvasItems(true, rgroup);
+    showCanvasItems(false, true,rgroup);
     setLine(start_p,end_p, false, &line_color_primary, rgroup);
     SPItem *measure_item = SP_ITEM(desktop->currentLayer()->appendChildRepr(rgroup));
     Inkscape::GC::release(rgroup);
@@ -788,6 +724,39 @@ void MeasureTool::toMarkDimension()
     setLabelText(totallength_str, middle, fontsize, Geom::deg_to_rad(180) - ray.angle());
     doc->ensureUpToDate();
     DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_MEASURE,_("Add global meassure line"));
+}
+
+void MeasureTool::setGuide(Geom::Point origin,double angle, const char *label)
+{
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    SPDocument *doc = desktop->getDocument();
+    Inkscape::XML::Document *xml_doc = doc->getReprDoc();
+    SPRoot const *root = doc->getRoot();
+    Geom::Affine affine(Geom::identity());
+    if(root) {
+        affine *= root->c2p.inverse();
+    }
+    SPNamedView *namedview = desktop->namedview;
+    if(!namedview){
+        return;
+    }
+    origin *= affine; 
+    //meassure angle
+    Inkscape::XML::Node *guide;
+    guide = xml_doc->createElement("sodipodi:guide");
+    std::stringstream position;
+    position.imbue(std::locale::classic());
+    position <<  origin[Geom::X] << "," << origin[Geom::Y];
+    guide->setAttribute("position", position.str().c_str() );
+    guide->setAttribute("inkscape:color", "rgb(167,0,255)");
+    guide->setAttribute("inkscape:label", label);
+    Geom::Point unit_vector = Geom::rot90(origin.polar(angle));
+    std::stringstream angle_str;
+    angle_str.imbue(std::locale::classic());
+    angle_str << unit_vector[Geom::X] << "," << unit_vector[Geom::Y];
+    guide->setAttribute("orientation", angle_str.str().c_str());
+    namedview->appendChild(guide);
+    Inkscape::GC::release(guide);
 }
 
 void MeasureTool::setLine(Geom::Point start_point,Geom::Point end_point, bool markers, guint32 *color, Inkscape::XML::Node *measure_repr)
@@ -1023,7 +992,7 @@ void MeasureTool::reset()
     measure_tmp_items.clear();
 }
 
-void MeasureTool::showCanvasItems(bool to_item, Inkscape::XML::Node *measure_repr)
+void MeasureTool::showCanvasItems(bool to_guides, bool to_item, Inkscape::XML::Node *measure_repr)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if(!desktop || !start_p.isFinite() || !end_p.isFinite() || end_p == MAGIC_POINT) {
@@ -1193,7 +1162,7 @@ void MeasureTool::showCanvasItems(bool to_item, Inkscape::XML::Node *measure_rep
 
     {
         // TODO cleanup memory, Glib::ustring, etc.:
-        gchar *angle_str = g_strdup_printf("%.2f °", angle * 180/M_PI);
+        gchar *angle_str = g_strdup_printf("%.2f °", Geom::rad_to_deg(angle));
 
         SPCanvasText *canvas_tooltip = sp_canvastext_new(desktop->getTempGroup(),
                                        desktop,
@@ -1297,6 +1266,12 @@ void MeasureTool::showCanvasItems(bool to_item, Inkscape::XML::Node *measure_rep
         measure_tmp_items.push_back(desktop->add_temporary_canvasitem(canvasitem, 0));
         if(to_item) {
             setPoint(desktop->doc2dt(intersections[idx]), measure_repr);
+        }
+        if(to_guides) {
+            std::stringstream cross_number;
+            cross_number.imbue(std::locale::classic());
+            cross_number <<  _("Crossing ") << idx;
+            setGuide(desktop->doc2dt(intersections[idx]), angle + Geom::deg_to_rad(90), cross_number.str().c_str());
         }
     }
     // Since adding goes to the bottom, do all lines last.

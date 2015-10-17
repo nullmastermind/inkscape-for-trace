@@ -36,7 +36,7 @@ public:
 
     virtual void finish();
     virtual bool root_handler(GdkEvent* event);
-    virtual void showCanvasItems(bool to_item = false, Inkscape::XML::Node *measure_repr = NULL);
+    virtual void showCanvasItems(bool to_guides = false, bool to_item = false, Inkscape::XML::Node *measure_repr = NULL);
     virtual void reverseKnots();
     virtual void toGuides();
     virtual void toMarkDimension();
@@ -45,6 +45,7 @@ public:
     virtual void setMarkers();
     virtual void setMarker(bool isStart);
     virtual const std::string& getPrefsPath();
+    void setGuide(Geom::Point origin, double angle, const char *label);
     void setPoint(Geom::Point origin, Inkscape::XML::Node *measure_repr);
     void setLine(Geom::Point start_point,Geom::Point end_point, bool markers = false, guint32 *color = NULL, Inkscape::XML::Node *measure_repr = NULL);
     void setLabelText(const char *value, Geom::Point pos, double fontsize, Geom::Coord angle, guint32 *background = NULL, Inkscape::XML::Node *measure_repr = NULL, CanvasTextAnchorPositionEnum text_anchor = TEXT_ANCHOR_CENTER );
