@@ -716,11 +716,15 @@ void MeasureTool::toMarkDimension()
     if (!unit_name.compare("")) {
         unit_name = "px";
     }
-    double fontsize = prefs->getInt("/tools/measure/fontsize")  * (96/72);
+    double fontsize = prefs->getInt("/tools/measure/fontsize")  * (96.0/72.0);
+    int precision = prefs->getInt("/tools/measure/precision");
+    std::stringstream precision_str;
+    precision_str.imbue(std::locale::classic());
+    precision_str <<  "%." << precision << "f %s";
     Geom::Point middle = Geom::middle_point(start, end);
     double totallengthval = (end_p - start_p).length();
     totallengthval = Inkscape::Util::Quantity::convert(totallengthval, "px", unit_name);
-    gchar *totallength_str = g_strdup_printf("%.2f %s", totallengthval, unit_name.c_str());
+    gchar *totallength_str = g_strdup_printf(precision_str.str().c_str(), totallengthval, unit_name.c_str());
     setLabelText(totallength_str, middle, fontsize, Geom::deg_to_rad(180) - ray.angle());
     doc->ensureUpToDate();
     DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_MEASURE,_("Add global measure line"));
@@ -1137,7 +1141,11 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, Inkscape::XML::N
         LabelPlacement &place = *it;
 
         // TODO cleanup memory, Glib::ustring, etc.:
-        gchar *measure_str = g_strdup_printf("%.2f %s", place.lengthVal, unit_name.c_str());
+        int precision = prefs->getInt("/tools/measure/precision");
+        std::stringstream precision_str;
+        precision_str.imbue(std::locale::classic());
+        precision_str <<  "%." << precision << "f %s";
+        gchar *measure_str = g_strdup_printf(precision_str.str().c_str(), place.lengthVal, unit_name.c_str());
         SPCanvasText *canvas_tooltip = sp_canvastext_new(desktop->getTempGroup(),
                                        desktop,
                                        place.end,
@@ -1162,7 +1170,11 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, Inkscape::XML::N
 
     {
         // TODO cleanup memory, Glib::ustring, etc.:
-        gchar *angle_str = g_strdup_printf("%.2f °", Geom::rad_to_deg(angle));
+        int precision = prefs->getInt("/tools/measure/precision");
+        std::stringstream precision_str;
+        precision_str.imbue(std::locale::classic());
+        precision_str <<  "%." << precision << "f °";
+        gchar *angle_str = g_strdup_printf(precision_str.str().c_str(), Geom::rad_to_deg(angle));
 
         SPCanvasText *canvas_tooltip = sp_canvastext_new(desktop->getTempGroup(),
                                        desktop,
@@ -1187,7 +1199,11 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, Inkscape::XML::N
         totallengthval = Inkscape::Util::Quantity::convert(totallengthval, "px", unit_name);
 
         // TODO cleanup memory, Glib::ustring, etc.:
-        gchar *totallength_str = g_strdup_printf("%.2f %s", totallengthval, unit_name.c_str());
+        int precision = prefs->getInt("/tools/measure/precision");
+        std::stringstream precision_str;
+        precision_str.imbue(std::locale::classic());
+        precision_str <<  "%." << precision << "f %s";
+        gchar *totallength_str = g_strdup_printf(precision_str.str().c_str(), totallengthval, unit_name.c_str());
         SPCanvasText *canvas_tooltip = sp_canvastext_new(desktop->getTempGroup(),
                                        desktop,
                                        end_p + desktop->w2d(Geom::Point(3*fontsize, -fontsize)),
@@ -1211,7 +1227,11 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, Inkscape::XML::N
         totallengthval = Inkscape::Util::Quantity::convert(totallengthval, "px", unit_name);
 
         // TODO cleanup memory, Glib::ustring, etc.:
-        gchar *total_str = g_strdup_printf("%.2f %s", totallengthval, unit_name.c_str());
+        int precision = prefs->getInt("/tools/measure/precision");
+        std::stringstream precision_str;
+        precision_str.imbue(std::locale::classic());
+        precision_str <<  "%." << precision << "f %s";
+        gchar *total_str = g_strdup_printf(precision_str.str().c_str(), totallengthval, unit_name.c_str());
         SPCanvasText *canvas_tooltip = sp_canvastext_new(desktop->getTempGroup(),
                                        desktop,
                                        desktop->doc2dt((intersections[0] + intersections[intersections.size()-1])/2) + normal * (dimension_offset * 2),

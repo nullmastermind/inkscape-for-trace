@@ -102,6 +102,23 @@ sp_measure_offset_value_changed(GtkAdjustment *adj, GObject *tbl)
     }
 }
 
+
+static void
+sp_measure_precision_value_changed(GtkAdjustment *adj, GObject *tbl)
+{
+    SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data( tbl, "desktop" ));
+
+    if (DocumentUndo::getUndoSensitive(desktop->getDocument())) {
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        prefs->setInt(Glib::ustring("/tools/measure/precision"),
+            gtk_adjustment_get_value(adj));
+        MeasureTool *mt = get_measure_tool();
+        if (mt) {
+            mt->showCanvasItems();
+        }
+    }
+}
+
 static void measure_unit_changed(GtkAction* /*act*/, GObject* tbl)
 {
     UnitTracker* tracker = reinterpret_cast<UnitTracker*>(g_object_get_data(tbl, "tracker"));
@@ -212,8 +229,8 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
                                          GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
                                          1, 36, 1.0, 4.0,
                                          0, 0, 0,
-                                         sp_measure_fontsize_value_changed);
-        gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
+                                         sp_measure_fontsize_value_changed, NULL, 0 , 2);
+        gtk_action_group_add_action( mainActions, GTK_ACTION(eact));
     }
 
     // units label
@@ -231,6 +248,20 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
         gtk_action_group_add_action( mainActions, act );
     }
 
+    /* Precission */
+    {
+        eact = create_adjustment_action( "MeasurePrecisionAction",
+                                         _("Precision"), _("Precision:"),
+                                         _("Decimal precision of measure"),
+                                         "/tools/measure/precision", 2,
+                                         GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
+                                         0, 10, 1, 0,
+                                         0, 0, 0,
+                                         sp_measure_precision_value_changed, NULL, 0 ,0);
+        gtk_action_group_add_action( mainActions, GTK_ACTION(eact));
+    }
+
+
     /* Offset */
     {
         eact = create_adjustment_action( "MeasureOffsetAction",
@@ -240,7 +271,7 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
                                          GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
                                          0.0, 90000.0, 1.0, 4.0,
                                          0, 0, 0,
-                                         sp_measure_offset_value_changed);
+                                         sp_measure_offset_value_changed, NULL, 0 , 2);
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
     }
 
