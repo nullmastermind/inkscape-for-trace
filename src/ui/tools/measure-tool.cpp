@@ -106,14 +106,14 @@ bool SortLabelPlacement(LabelPlacement const &first, LabelPlacement const &secon
     }
 }
 
-void repositionOverlappingLabels(std::vector<LabelPlacement> &placements, SPDesktop *desktop, Geom::Point const &normal, double fontsize)
+void repositionOverlappingLabels(std::vector<LabelPlacement> &placements, SPDesktop *desktop, Geom::Point const &normal, double fontsize, int precision)
 {
     std::sort(placements.begin(), placements.end(), SortLabelPlacement);
 
     double border = 3;
     Geom::Rect box;
     {
-        Geom::Point tmp(fontsize * 8 + (border * 2), fontsize + (border * 2));
+        Geom::Point tmp(fontsize * (6 + precision) + (border * 2), fontsize + (border * 2));
         tmp = desktop->w2d(tmp);
         box = Geom::Rect(-tmp[Geom::X] / 2, -tmp[Geom::Y] / 2, tmp[Geom::X] / 2, tmp[Geom::Y] / 2);
     }
@@ -706,12 +706,13 @@ void MeasureTool::toMarkDimension()
     setMarkers();
     Geom::Ray ray(start_p,end_p);
     Geom::Point start = start_p + Geom::Point::polar(ray.angle(), 5);
-    start = start + Geom::Point::polar(ray.angle() + Geom::deg_to_rad(90), -(dimension_offset / 4.0));
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    dimension_offset = prefs->getDouble("/tools/measure/offset");
+    start = start + Geom::Point::polar(ray.angle() + Geom::deg_to_rad(90), -dimension_offset);
     Geom::Point end = end_p + Geom::Point::polar(ray.angle(), -5);
-    end = end+ Geom::Point::polar(ray.angle() + Geom::deg_to_rad(90), -(dimension_offset / 4.0));
+    end = end+ Geom::Point::polar(ray.angle() + Geom::deg_to_rad(90), -dimension_offset);
     guint32 color = 0x000000ff;
     setLine(start, end, true, &color);
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     Glib::ustring unit_name = prefs->getString("/tools/measure/unit");
     if (!unit_name.compare("")) {
         unit_name = "px";
@@ -724,7 +725,8 @@ void MeasureTool::toMarkDimension()
     Geom::Point middle = Geom::middle_point(start, end);
     double totallengthval = (end_p - start_p).length();
     totallengthval = Inkscape::Util::Quantity::convert(totallengthval, "px", unit_name);
-    gchar *totallength_str = g_strdup_printf(precision_str.str().c_str(), totallengthval, unit_name.c_str());
+    double scale = prefs->getDouble("/tools/measure/scale") / 100.0;
+    gchar *totallength_str = g_strdup_printf(precision_str.str().c_str(), totallengthval * scale, unit_name.c_str());
     setLabelText(totallength_str, middle, fontsize, Geom::deg_to_rad(180) - ray.angle());
     doc->ensureUpToDate();
     DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_MEASURE,_("Add global measure line"));
@@ -825,6 +827,8 @@ void MeasureTool::setLine(Geom::Point start_point,Geom::Point end_point, bool ma
             SPItem *item = SP_ITEM(desktop->currentLayer()->appendChildRepr(repr));
             Inkscape::GC::release(repr);
             item->updateRepr();
+            desktop->getSelection()->clear();
+            desktop->getSelection()->add(item);
         }
     }
 }
@@ -903,13 +907,15 @@ void MeasureTool::setLabelText(const char *value, Geom::Point pos, double fontsi
     SPCSSAttr *css = sp_repr_css_attr_new();
     std::stringstream font_size;
     font_size.imbue(std::locale::classic());
-    font_size <<  fontsize ;
+    font_size <<  fontsize << "px";
     sp_repr_css_set_property (css, "font-size", font_size.str().c_str());
     sp_repr_css_set_property (css, "font-style", "normal");
     sp_repr_css_set_property (css, "font-weight", "normal");
     sp_repr_css_set_property (css, "line-height", "125%");
     sp_repr_css_set_property (css, "letter-spacing", "0px");
     sp_repr_css_set_property (css, "word-spacing", "0px");
+    sp_repr_css_set_property (css, "text-align", "center");
+    sp_repr_css_set_property (css, "text-anchor", "middle");
     if(measure_repr) {
         sp_repr_css_set_property (css, "fill", "#FFFFFF");
     } else {
@@ -953,10 +959,10 @@ void MeasureTool::setLabelText(const char *value, Geom::Point pos, double fontsi
         sp_repr_css_attr_unref (css);
         sp_repr_set_svg_double(rgroup, "x", 0);
         sp_repr_set_svg_double(rgroup, "y", 0);
-        sp_repr_set_svg_double(rrect, "x", 0);
+        sp_repr_set_svg_double(rrect, "x", -bbox->width()/2.0);
         sp_repr_set_svg_double(rrect, "y", -bbox->height());
-        sp_repr_set_svg_double(rrect, "width", (bbox->width()) + 6);
-        sp_repr_set_svg_double(rrect, "height", (bbox->height()) + 6);
+        sp_repr_set_svg_double(rrect, "width", bbox->width() + 6);
+        sp_repr_set_svg_double(rrect, "height", bbox->height() + 6);
         Inkscape::XML::Node *rtextitem = text_item->getRepr();
         text_item->deleteObject();
         rgroup->addChild(rtextitem, NULL);
@@ -1012,7 +1018,7 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, Inkscape::XML::N
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool show_in_between = prefs->getBool("/tools/measure/show_in_between");
     bool all_layers = prefs->getBool("/tools/measure/all_layers");
-    dimension_offset = prefs->getDouble("/tools/measure/offset");
+    dimension_offset = 70;
     Geom::PathVector lineseg;
     Geom::Path p;
     p.start(desktop->dt2doc(start_p));
@@ -1102,8 +1108,8 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, Inkscape::XML::N
     if (!unit_name.compare("")) {
         unit_name = "px";
     }
-
-    double fontsize = prefs->getInt("/tools/measure/fontsize") * (96/72);
+    double scale = prefs->getDouble("/tools/measure/scale") / 100.0;
+    double fontsize = prefs->getDouble("/tools/measure/fontsize") * (96/72);
     // Normal will be used for lines and text
     Geom::Point windowNormal = Geom::unit_vector(Geom::rot90(desktop->d2w(end_p - start_p)));
     Geom::Point normal = desktop->w2d(windowNormal);
@@ -1128,24 +1134,24 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, Inkscape::XML::N
         LabelPlacement placement;
         placement.lengthVal = (intersections[idx] - intersections[idx - 1]).length();
         placement.lengthVal = Inkscape::Util::Quantity::convert(placement.lengthVal, "px", unit_name);
-        placement.offset = dimension_offset;
+        placement.offset = dimension_offset / 2;
         placement.start = desktop->doc2dt( (intersections[idx - 1] + intersections[idx]) / 2 );
         placement.end = placement.start - (normal * placement.offset);
 
         placements.push_back(placement);
     }
-
+    int precision = prefs->getInt("/tools/measure/precision");
     // Adjust positions
-    repositionOverlappingLabels(placements, desktop, windowNormal, fontsize);
+    repositionOverlappingLabels(placements, desktop, windowNormal, fontsize, precision);
     for (std::vector<LabelPlacement>::iterator it = placements.begin(); it != placements.end(); ++it) {
         LabelPlacement &place = *it;
 
         // TODO cleanup memory, Glib::ustring, etc.:
-        int precision = prefs->getInt("/tools/measure/precision");
+
         std::stringstream precision_str;
         precision_str.imbue(std::locale::classic());
         precision_str <<  "%." << precision << "f %s";
-        gchar *measure_str = g_strdup_printf(precision_str.str().c_str(), place.lengthVal, unit_name.c_str());
+        gchar *measure_str = g_strdup_printf(precision_str.str().c_str(), place.lengthVal * scale, unit_name.c_str());
         SPCanvasText *canvas_tooltip = sp_canvastext_new(desktop->getTempGroup(),
                                        desktop,
                                        place.end,
@@ -1203,7 +1209,7 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, Inkscape::XML::N
         std::stringstream precision_str;
         precision_str.imbue(std::locale::classic());
         precision_str <<  "%." << precision << "f %s";
-        gchar *totallength_str = g_strdup_printf(precision_str.str().c_str(), totallengthval, unit_name.c_str());
+        gchar *totallength_str = g_strdup_printf(precision_str.str().c_str(), totallengthval * scale, unit_name.c_str());
         SPCanvasText *canvas_tooltip = sp_canvastext_new(desktop->getTempGroup(),
                                        desktop,
                                        end_p + desktop->w2d(Geom::Point(3*fontsize, -fontsize)),
@@ -1231,10 +1237,10 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, Inkscape::XML::N
         std::stringstream precision_str;
         precision_str.imbue(std::locale::classic());
         precision_str <<  "%." << precision << "f %s";
-        gchar *total_str = g_strdup_printf(precision_str.str().c_str(), totallengthval, unit_name.c_str());
+        gchar *total_str = g_strdup_printf(precision_str.str().c_str(), totallengthval * scale, unit_name.c_str());
         SPCanvasText *canvas_tooltip = sp_canvastext_new(desktop->getTempGroup(),
                                        desktop,
-                                       desktop->doc2dt((intersections[0] + intersections[intersections.size()-1])/2) + normal * (dimension_offset * 2),
+                                       desktop->doc2dt((intersections[0] + intersections[intersections.size()-1])/2) + normal * dimension_offset,
                                        total_str);
         sp_canvastext_set_fontsize(canvas_tooltip, fontsize);
         canvas_tooltip->rgba = 0xffffffff;
@@ -1245,7 +1251,7 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, Inkscape::XML::N
         measure_tmp_items.push_back(desktop->add_temporary_canvasitem(canvas_tooltip, 0));
         if(to_item) {
             guint32 background = canvas_tooltip->rgba_background;
-            setLabelText(total_str, desktop->doc2dt((intersections[0] + intersections[intersections.size()-1])/2) + normal * (dimension_offset * 2), fontsize, 0, &background, measure_repr);
+            setLabelText(total_str, desktop->doc2dt((intersections[0] + intersections[intersections.size()-1])/2) + normal * dimension_offset, fontsize, 0, &background, measure_repr);
         }
         g_free(total_str);
     }
@@ -1341,34 +1347,34 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, Inkscape::XML::N
         ControlManager &mgr = ControlManager::getManager();
         SPCtrlLine *control_line = 0;
         control_line = mgr.createControlLine(desktop->getTempGroup(),
-                                             desktop->doc2dt(intersections[0]) + normal * (dimension_offset * 2),
-                                             desktop->doc2dt(intersections[intersections.size() - 1]) + normal * (dimension_offset * 2));
+                                             desktop->doc2dt(intersections[0]) + normal * dimension_offset,
+                                             desktop->doc2dt(intersections[intersections.size() - 1]) + normal * dimension_offset);
         measure_tmp_items.push_back(desktop->add_temporary_canvasitem(control_line, 0));
         if(to_item) {
-            setLine(desktop->doc2dt(intersections[0]) + normal * (dimension_offset * 2),
-                    desktop->doc2dt(intersections[intersections.size() - 1]) + normal * (dimension_offset * 2),
+            setLine(desktop->doc2dt(intersections[0]) + normal * dimension_offset,
+                    desktop->doc2dt(intersections[intersections.size() - 1]) + normal * dimension_offset,
                     false,
                     &line_color_primary,
                     measure_repr);
         }
         control_line = mgr.createControlLine(desktop->getTempGroup(),
                                              desktop->doc2dt(intersections[0]),
-                                             desktop->doc2dt(intersections[0]) + normal * (dimension_offset * 2));
+                                             desktop->doc2dt(intersections[0]) + normal * dimension_offset);
         measure_tmp_items.push_back(desktop->add_temporary_canvasitem(control_line, 0));
         if(to_item) {
             setLine(desktop->doc2dt(intersections[0]),
-                    desktop->doc2dt(intersections[0]) + normal * (dimension_offset * 2),
+                    desktop->doc2dt(intersections[0]) + normal * dimension_offset,
                     false,
                     &line_color_primary,
                     measure_repr);
         }
         control_line = mgr.createControlLine(desktop->getTempGroup(),
                                              desktop->doc2dt(intersections[intersections.size() - 1]),
-                                             desktop->doc2dt(intersections[intersections.size() - 1]) + normal * (dimension_offset * 2));
+                                             desktop->doc2dt(intersections[intersections.size() - 1]) + normal * dimension_offset);
         measure_tmp_items.push_back(desktop->add_temporary_canvasitem(control_line, 0));
         if(to_item) {
             setLine(desktop->doc2dt(intersections[intersections.size() - 1]),
-                    desktop->doc2dt(intersections[intersections.size() - 1]) + normal * (dimension_offset * 2),
+                    desktop->doc2dt(intersections[intersections.size() - 1]) + normal * dimension_offset,
                     false,
                     &line_color_primary,
                     measure_repr);
@@ -1397,12 +1403,12 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, Inkscape::XML::N
             ControlManager &mgr = ControlManager::getManager();
             SPCtrlLine *control_line = mgr.createControlLine(desktop->getTempGroup(),
                                        desktop->doc2dt(measure_text_pos),
-                                       desktop->doc2dt(measure_text_pos) - (normal * dimension_offset),
+                                       desktop->doc2dt(measure_text_pos) - (normal * dimension_offset / 2),
                                        CTLINE_SECONDARY);
             measure_tmp_items.push_back(desktop->add_temporary_canvasitem(control_line, 0));
             if(to_item) {
                 setLine(desktop->doc2dt(measure_text_pos),
-                        desktop->doc2dt(measure_text_pos) - (normal * dimension_offset),
+                        desktop->doc2dt(measure_text_pos) - (normal * dimension_offset / 2),
                         false,
                         &line_color_secondary,
                         measure_repr);

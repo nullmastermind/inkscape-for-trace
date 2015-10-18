@@ -341,6 +341,8 @@ static gchar const * ui_descr =
         "    <separator />"
         "    <toolitem action='MeasurePrecisionAction' />"
         "    <separator />"
+        "    <toolitem action='MeasureScaleAction' />"
+        "    <separator />"
         "    <toolitem action='MeasureOffsetAction' />"
         "    <separator />"
         "    <toolitem action='measure_units_label' />"
