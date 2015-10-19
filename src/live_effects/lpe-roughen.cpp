@@ -183,24 +183,33 @@ double LPERoughen::sign(double random_number)
     return random_number;
 }
 
-Geom::Point LPERoughen::randomize(double max_lenght, double direction)
+Geom::Point LPERoughen::randomize(double max_lenght, bool is_node)
 {
-    double displace_x_parsed = displace_x * global_randomize;
-    double displace_y_parsed = displace_y * global_randomize;
-    Geom::Point output = Geom::Point(sign(displace_x_parsed), sign(displace_y_parsed));
-    if( direction != 0){
-        int angle = (int)max_smooth_angle;
-        if (angle == 0){
-            angle = 1;
-        }
-        double dist = Geom::distance(Geom::Point(0,0),output);
-        output  = Geom::Point::polar(direction + sign(Geom::deg_to_rad(rand() % angle)), dist);
+    double factor = 1.0/3.0;
+    if(is_node){
+        factor = 1.0;
     }
+    double displace_x_parsed = displace_x * global_randomize * factor;
+    double displace_y_parsed = displace_y * global_randomize * factor;
+    Geom::Point output = Geom::Point(sign(displace_x_parsed), sign(displace_y_parsed));
     if( fixed_displacement ){
         Geom::Ray ray(Geom::Point(0,0),output);
         output  = Geom::Point::polar(ray.angle(), max_lenght);
     }
     return output;
+}
+
+Geom::Point LPERoughen::randomize(double lenght, Geom::Point start, Geom::Point end)
+{
+    int angle = (int)max_smooth_angle;
+    if (angle == 0){
+        angle = 1;
+    }
+    Geom::Ray ray(start, end);
+    if(!fixed_displacement ){
+        lenght = Geom::distance(start, end);
+    }
+    return Geom::Point::polar(ray.angle() + sign(Geom::deg_to_rad(rand() % angle)), lenght) + start;
 }
 
 void LPERoughen::doEffect(SPCurve *curve)
@@ -317,9 +326,9 @@ SPCurve const * LPERoughen::addNodesAndJitter(Geom::Curve const * A, Geom::Point
     Geom::Point point_b2(0, 0);
     Geom::Point point_b3(0, 0);
     if (shift_nodes) {
-        point_a3 = randomize(max_lenght);
+        point_a3 = randomize(max_lenght, true);
         if(last){
-            point_b3 = randomize(max_lenght);
+            point_b3 = randomize(max_lenght, true);
         }
     }
     if (handles == HM_RAND || handles == HM_SMOOTH) {
@@ -350,42 +359,38 @@ SPCurve const * LPERoughen::addNodesAndJitter(Geom::Curve const * A, Geom::Point
         std::pair<Geom::CubicBezier, Geom::CubicBezier> div = cubic->subdivide(t);
         std::vector<Geom::Point> seg1 = div.first.controlPoints(),
                                  seg2 = div.second.controlPoints();
+        point_b3  = seg2[3] + point_b3;
+        point_a3 = seg1[3] + point_a3;
+        point_b1  = randomize(max_lenght, point_a3, seg2[1]);
+        point_b2  = seg1[2] + point_b2;
         Geom::Ray ray(prev,A->initialPoint());
-        point_a1  = Geom::Point::polar(ray.angle(), max_lenght);
+        point_a1  = A->initialPoint() + Geom::Point::polar(ray.angle(), max_lenght);
         if(prev == Geom::Point(0,0)){
             point_a1 = randomize(max_lenght);
         }
-        ray.setPoints(seg1[3] + point_a3, seg2[1] + point_a3);
-        point_b1  = randomize(max_lenght, ray.angle());
         if(last){
-            ray.setPoints(seg2[3] + point_b3, A->pointAt(1 - (t / 3)) + point_b3);
-            point_b2  = randomize(max_lenght, ray.angle());
+            ray.setPoints(point_b3, point_a3);
+            point_b2  = randomize(max_lenght, point_b3, ray.pointAt(100.0/3.0));
         }
-        ray.setPoints(seg2[1] + point_a3 + point_b1, seg2[0] + point_a3);
-        point_a2  = Geom::Point::polar(ray.angle(), max_lenght);
+        ray.setPoints(point_b1, point_a3);
+        point_a2  = point_a3 + Geom::Point::polar(ray.angle(), max_lenght);
         if(last){
-            prev = A->pointAt(1 - (t / 3)) + point_b2 + point_b3;
+            prev = point_b2;
         } else {
-            prev = seg1[3] + point_a2 + point_a3;
+            prev = point_a2;
         }
         out->moveto(seg1[0]);
-        out->curveto(seg1[0] + point_a1, seg1[3] + point_a2 + point_a3, seg1[3] + point_a3);
-        if(last){
-            out->curveto(seg2[1] + point_a3 + point_b1, A->pointAt(1 - (t / 3)) + point_b2 + point_b3, seg2[3] + point_b3);
-        } else {
-            out->curveto(seg2[1] + point_a3 + point_b1, seg2[2] + point_b2 + point_b3, seg2[3] + point_b3);
-        }
+        out->curveto(point_a1,point_a2,point_a3);
+        out->curveto(point_b1, point_b2, point_b3);
     } else if(handles == HM_SMOOTH && !cubic) {
         Geom::Ray ray(prev,A->initialPoint());
         point_a1 = Geom::Point::polar(ray.angle(), max_lenght);
         if(prev==Geom::Point(0,0)){
             point_a1 = randomize(max_lenght);
         }
-        ray.setPoints(A->pointAt(t) + point_a3, A->pointAt(t + (t / 3)) + point_a3);
-        point_b1  = randomize(max_lenght, ray.angle());
+        point_b1  = randomize(max_lenght, A->pointAt(t) + point_a3, A->pointAt(t + (t / 3)) + point_a3);
         if(last){
-            ray.setPoints(A->finalPoint() + point_b3, A->pointAt(t +((t / 3) * 2)) + point_b3);
-            point_b2  = randomize(max_lenght, ray.angle());
+            point_b2  = randomize(max_lenght, A->finalPoint() + point_b3, A->pointAt(t +((t / 3) * 2)) + point_b3);
         }
         ray.setPoints(A->pointAt(t + (t / 3)) + point_a3 + point_b1, A->pointAt(t) + point_a3);
         point_a2  = Geom::Point::polar(ray.angle(), max_lenght);
