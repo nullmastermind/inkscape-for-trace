@@ -252,4 +252,10 @@ def computeBBox(aList,mat=[[1,0,0],[0,1,0]]):
     return bbox
 
 
+def computePointInNode(pt, node, mat=[[1.0, 0.0, 0.0], [0.0, 1.0, 0.0]]):
+    if node.getparent() is not None:
+        applyTransformToPoint(invertTransform(composeParents(node, mat)), pt)
+    return pt
+
+
 # vim: expandtab shiftwidth=4 tabstop=8 softtabstop=4 fileencoding=utf-8 textwidth=99
