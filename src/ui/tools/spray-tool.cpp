@@ -57,6 +57,9 @@
 #include "livarot/Shape.h"
 #include <2geom/circle.h>
 #include <2geom/transforms.h>
+#include <2geom/path-intersection.h>
+#include <2geom/pathvector.h>
+#include <2geom/crossing.h>
 #include "preferences.h"
 #include "style.h"
 #include "box3d.h"
@@ -331,6 +334,65 @@ static void random_position(double &radius, double &angle, double &a, double &s,
     radius = pow(radius_temp, 0.5);
 
 }
+static bool fit_item(SPDesktop *desktop,
+                     SPItem * item_copied,
+                     SPItem * item,
+                     gchar const * spray_origin,
+                     Geom::Point center,
+                     double scale,
+                     double scale_variation,
+                     size_t limit){
+    Geom::OptRect bbox = item_copied->desktopVisualBounds();
+    std::vector<SPItem*> items = desktop->getDocument()->getItemsPartiallyInBox(desktop->dkey, *bbox);
+    for (std::vector<SPItem*>::const_iterator i=items.begin(); i!=items.end(); i++) {
+        SPItem *item_down = *i;
+        Geom::OptRect bbox = item_down->desktopVisualBounds();
+        if(item_down->getId() == item->getId() || (item_down->getAttribute("inkscape:spray-origin") && item_down != item_copied && strcmp(item_down->getAttribute("inkscape:spray-origin"),spray_origin) == 0)){
+//            if(!SP_IS_GROUP(item) && 1>2){
+//                SPShape *down_item_shape = dynamic_cast<SPShape *>(item_down);
+//                if (down_item_shape) {
+//                    Geom::PathVector pathv;
+//                    SPPath *down_item_path = dynamic_cast<SPPath *>(down_item_shape);
+//                    if (down_item_path) {
+//                        pathv = down_item_path->get_curve()->get_pathvector();
+//                    } else {
+//                        pathv = down_item_shape->getCurve()->get_pathvector();
+//                    }
+//                    if (!pathv.empty()) {
+//                        SPShape *copied_item_shape = dynamic_cast<SPShape *>(item_copied);
+//                        if (copied_item_shape) {
+//                            Geom::PathVector pathv_other;
+//                            SPPath *copied_item_path = dynamic_cast<SPPath *>(copied_item_shape);
+//                            if (copied_item_path) {
+//                                pathv_other = copied_item_path->get_curve()->get_pathvector();
+//                            } else {
+//                                pathv_other = copied_item_shape->getCurve()->get_pathvector();
+//                            }
+//                            if (!pathv_other.empty()) {
+//                                Geom::CrossingSet cs = Geom::crossings(pathv, pathv_other);
+//                                if(cs[0].size() == 0){
+//                                    continue;
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+            if(limit > 10){
+                item_copied->deleteObject();
+                return false;
+            } else {
+                sp_spray_scale_rel(center,desktop, item_copied, Geom::Scale(-scale, -scale));
+                scale = (1.0 - scale_variation / 100.0) + ((1.0 + scale_variation / 100.0)/limit); 
+                sp_spray_scale_rel(center,desktop, item_copied, Geom::Scale(scale, scale));
+                sp_item_move_rel(item_copied, Geom::Translate(rand() % 20 -10, rand() % 20 -10));
+                limit += 1;
+                return fit_item(desktop, item_copied, item, spray_origin, center, scale, scale_variation, limit);
+            }
+        }
+    }
+    return true;
+}
 
 static bool sp_spray_recursive(SPDesktop *desktop,
                                Inkscape::Selection *selection,
@@ -380,7 +442,10 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                 Inkscape::XML::Node *old_repr = item->getRepr();
                 Inkscape::XML::Node *parent = old_repr->parent();
                 Inkscape::XML::Node *copy = old_repr->duplicate(xml_doc);
-                copy->setAttribute("inkscape:spray-origin", item->getId());
+                std::stringstream original_id;
+                original_id <<  "#" << item->getId();
+                gchar const * spray_origin = original_id.str().c_str();
+                copy->setAttribute("inkscape:spray-origin", spray_origin);
                 parent->appendChild(copy);
 
                 SPObject *new_obj = doc->getObjectByRepr(copy);
@@ -393,47 +458,7 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                 // Move the cursor p
                 Geom::Point move = (Geom::Point(cos(tilt)*cos(dp)*dr/(1-ratio)+sin(tilt)*sin(dp)*dr/(1+ratio), -sin(tilt)*cos(dp)*dr/(1-ratio)+cos(tilt)*sin(dp)*dr/(1+ratio)))+(p-a->midpoint());
                 sp_item_move_rel(item_copied, Geom::Translate(move[Geom::X], -move[Geom::Y]));
-                did = true;
-                Geom::OptRect bbox = item_copied->desktopGeometricBounds();
-                std::vector<SPItem*> items = desktop->getDocument()->getItemsInBox(desktop->dkey, *bbox);
-                for (std::vector<SPItem*>::const_iterator i=items.begin(); i!=items.end(); i++) {
-                    SPItem *item_down = *i;
-                    std::cout << item_down->getAttribute("inkscape:spray-origin") << "asdgfasdasas\n";
-                    if(item_down->getAttribute("inkscape:spray-origin") &&( strcmp(item_down->getAttribute("inkscape:spray-origin"),item->getId()) == 0 || strcmp(item_down->getId(),item->getId()) == 0)){
-                        if(!SP_IS_GROUP(item)){
-                            SPShape *down_item_shape = dynamic_cast<SPShape *>(item_down);
-                            if (down_item_shape) {
-                                Geom::PathVector c;
-                                SPPath *down_item_path = dynamic_cast<SPPath *>(down_item_shape);
-                                if (down_item_path) {
-                                    c = down_item_path->get_curve()->get_pathvector();
-                                } else {
-                                    c = down_item_shape->getCurve()->get_pathvector();
-                                }
-                                if (c) {
-                                    SPShape *copied_item_shape = dynamic_cast<SPShape *>(item_copied);
-                                    if (copied_item_shape) {
-                                        Geom::PathVector d;
-                                        SPPath *copied_item_path = dynamic_cast<SPPath *>(copied_item_shape);
-                                        if (copied_item_path) {
-                                            d = copied_item_path->get_curve()->get_pathvector();
-                                        } else {
-                                            d = copied_item_shape->getCurve()->get_pathvector();
-                                        }
-                                        if (d) {
-                                            Geom::CrossingSet cs = Geom::crossings(c,d);
-                                            if(cs[0].size() == 0){
-                                                continue;
-                                            }
-                                        }
-                                }
-                            }
-                        }
-                        item_copied->deleteObject();
-                        std::cout << item_down->getAttribute("inkscape:spray-origin") << "hasssss\n";
-                        did = false;
-                    }
-                }
+                did = fit_item(desktop, item_copied, item, spray_origin, center, scale_variation, _scale,  0);
             }
         }
 #ifdef ENABLE_SPRAY_MODE_SINGLE_PATH
