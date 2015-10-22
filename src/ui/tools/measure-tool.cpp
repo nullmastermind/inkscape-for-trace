@@ -15,7 +15,6 @@
 #include <gdk/gdkkeysyms.h>
 #include <boost/none_t.hpp>
 #include "util/units.h"
-#include "display/canvas-text.h"
 #include "display/curve.h"
 #include "display/sodipodi-ctrl.h"
 #include "display/sp-ctrlline.h"
@@ -26,7 +25,6 @@
 #include "svg/svg-color.h"
 #include "ui/tools/measure-tool.h"
 #include "ui/tools/freehand-base.h"
-#include "ui/control-manager.h"
 #include <2geom/line.h>
 #include <2geom/path-intersection.h>
 #include <2geom/pathvector.h>
@@ -41,6 +39,7 @@
 #include "sp-item.h"
 #include "sp-root.h"
 #include "macros.h"
+#include "svg/stringstream.h"
 #include "rubberband.h"
 #include "path-chemistry.h"
 #include "desktop.h"
@@ -83,8 +82,6 @@ const std::string MeasureTool::prefsPath = "/tools/measure";
 
 namespace {
 
-gint dimension_offset = 35;
-
 /**
  * Simple class to use for removing label overlap.
  */
@@ -106,6 +103,8 @@ bool SortLabelPlacement(LabelPlacement const &first, LabelPlacement const &secon
     }
 }
 
+//precision is for give the number of decimal positions 
+//of the label to calculate label width
 void repositionOverlappingLabels(std::vector<LabelPlacement> &placements, SPDesktop *desktop, Geom::Point const &normal, double fontsize, int precision)
 {
     std::sort(placements.begin(), placements.end(), SortLabelPlacement);
@@ -194,6 +193,75 @@ Geom::Point calcAngleDisplayAnchor(SPDesktop *desktop, double angle, double base
 }
 
 /**
+ * Create a measure iten in current document.
+ *
+ * @param pathv the path to create.
+ * @param markers, if the path resuts get markers.
+ * @param color of the stroke.
+ * @param measure_repr container element.
+ */
+void setMeasureItem(Geom::PathVector pathv, bool is_curve, bool markers, guint32 color, Inkscape::XML::Node *measure_repr)
+{
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    if(!desktop) {
+        return;
+    }
+    SPDocument *doc = desktop->getDocument();
+    Inkscape::XML::Document *xml_doc = doc->getReprDoc();
+    Inkscape::XML::Node *repr;
+    repr = xml_doc->createElement("svg:path");
+    gchar const *str = sp_svg_write_path(pathv);
+    SPCSSAttr *css = sp_repr_css_attr_new();
+    Geom::Coord strokewidth = SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse().expansionX();
+    std::stringstream stroke_width;
+    stroke_width.imbue(std::locale::classic());
+    if(measure_repr) {
+        stroke_width <<  strokewidth / desktop->current_zoom();
+    } else {
+        stroke_width <<  strokewidth;
+    }
+    sp_repr_css_set_property (css, "stroke-width", stroke_width.str().c_str());
+    sp_repr_css_set_property (css, "fill", "none");
+    if(color) {
+        gchar color_line[64];
+        sp_svg_write_color (color_line, sizeof(color_line), color);
+        sp_repr_css_set_property (css, "stroke", color_line);
+    } else {
+        sp_repr_css_set_property (css, "stroke", "#ff0000");
+    }
+    char const * stroke_linecap = is_curve ? "butt" : "square";
+    sp_repr_css_set_property (css, "stroke-linecap", stroke_linecap);
+    sp_repr_css_set_property (css, "stroke-linejoin", "miter");
+    sp_repr_css_set_property (css, "stroke-miterlimit", "4");
+    sp_repr_css_set_property (css, "stroke-dasharray", "none");
+    if(measure_repr) {
+        sp_repr_css_set_property (css, "stroke-opacity", "0.5");
+    } else {
+        sp_repr_css_set_property (css, "stroke-opacity", "1");
+    }
+    if(markers) {
+        sp_repr_css_set_property (css, "marker-start", "url(#Arrow2Sstart)");
+        sp_repr_css_set_property (css, "marker-end", "url(#Arrow2Send)");
+    }
+    Glib::ustring css_str;
+    sp_repr_css_write_string(css,css_str);
+    repr->setAttribute("style", css_str.c_str());
+    sp_repr_css_attr_unref (css);
+    g_assert( str != NULL );
+    repr->setAttribute("d", str);
+    if(measure_repr) {
+        measure_repr->addChild(repr, NULL);
+        Inkscape::GC::release(repr);
+    } else {
+        SPItem *item = SP_ITEM(desktop->currentLayer()->appendChildRepr(repr));
+        Inkscape::GC::release(repr);
+        item->updateRepr();
+        desktop->getSelection()->clear();
+        desktop->getSelection()->add(item);
+    }
+}
+
+/**
  * Given an angle, the arc center and edge point, draw an arc segment centered around that edge point.
  *
  * @param desktop the desktop that is being used.
@@ -242,57 +310,29 @@ void createAngleDisplayCurve(SPDesktop *desktop, Geom::Point const &center, Geom
 
         measure_tmp_items.push_back(desktop->add_temporary_canvasitem(SP_CANVAS_ITEM(curve), 0, true));
         if(measure_repr) {
-            Geom::PathVector c;
-            Geom::Path p;
-            p.start(desktop->doc2dt(p1));
-            p.appendNew<Geom::CubicBezier>(desktop->doc2dt(p2),desktop->doc2dt(p3),desktop->doc2dt(p4));
-            c.push_back(p);
-            c *= SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
-            SPDocument *doc = desktop->getDocument();
-            Inkscape::XML::Document *xml_doc = doc->getReprDoc();
-            if (c.size() == 1) {
-                Inkscape::XML::Node *repr;
-                repr = xml_doc->createElement("svg:path");
-                gchar const *str = sp_svg_write_path(c);
-                Geom::Point strokewidth = Geom::Point(1,1) * SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
-                SPCSSAttr *css = sp_repr_css_attr_new();
-                std::stringstream stroke_width;
-                stroke_width.imbue(std::locale::classic());
-                stroke_width <<  strokewidth[Geom::X] / desktop->current_zoom();
-                sp_repr_css_set_property (css, "stroke-width", stroke_width.str().c_str());
-                sp_repr_css_set_property (css, "fill", "none");
-                guint32 line_color_secondary = 0xff00007f;
-                gchar c[64];
-                sp_svg_write_color (c, sizeof(c), line_color_secondary);
-                sp_repr_css_set_property (css, "stroke", c);
-                sp_repr_css_set_property (css, "stroke-linecap", "butt");
-                sp_repr_css_set_property (css, "stroke-linejoin", "miter");
-                sp_repr_css_set_property (css, "stroke-miterlimit", "4");
-                sp_repr_css_set_property (css, "stroke-dasharray", "none");
-                sp_repr_css_set_property (css, "stroke-opacity", "0.5");
-                Glib::ustring css_str;
-                sp_repr_css_write_string(css,css_str);
-                repr->setAttribute("style", css_str.c_str());
-                sp_repr_css_attr_unref (css);
-                g_assert( str != NULL );
-                repr->setAttribute("d", str);
-                measure_repr->addChild(repr, NULL);
-                Inkscape::GC::release(repr);
+            Geom::PathVector pathv;
+            Geom::Path path;
+            path.start(desktop->doc2dt(p1));
+            path.appendNew<Geom::CubicBezier>(desktop->doc2dt(p2),desktop->doc2dt(p3),desktop->doc2dt(p4));
+            pathv.push_back(path);
+            pathv *= SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
+            if(!pathv.empty()) {
+                setMeasureItem(pathv, true, false, 0xff00007f, measure_repr);
             }
         }
     }
 }
-} // namespace
 
-Geom::Point const MAGIC_POINT = Geom::Point(-0.0003432532004303,-0.006745034004304);
-static Geom::Point start_p = MAGIC_POINT;
-static Geom::Point end_p = MAGIC_POINT;
+} // namespace
 
 MeasureTool::MeasureTool()
     : ToolBase(cursor_measure_xpm, 4, 4)
     , grabbed(NULL)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    start_p = readMeasurePoint(true);
+    end_p = readMeasurePoint(false);
+    dimension_offset = 35;
     // create the knots
     this->knot_start = new SPKnot(desktop, N_("Measure start"));
     this->knot_start->setMode(SP_KNOT_MODE_XOR);
@@ -307,7 +347,7 @@ MeasureTool::MeasureTool()
     this->knot_end->setShape(SP_KNOT_SHAPE_CIRCLE);
     this->knot_end->updateCtrl();
     Geom::Rect display_area = desktop->get_display_area () ;
-    if(display_area.interiorContains(start_p) && display_area.interiorContains(end_p) && end_p != MAGIC_POINT) {
+    if(display_area.interiorContains(start_p) && display_area.interiorContains(end_p) && end_p != Geom::Point()) {
         this->knot_start->moveto(start_p);
         this->knot_start->show();
         this->knot_end->moveto(end_p);
@@ -337,6 +377,46 @@ MeasureTool::~MeasureTool()
     measure_tmp_items.clear();
 }
 
+Geom::Point MeasureTool::readMeasurePoint(bool is_start) {
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    SPNamedView *namedview = desktop->namedview;
+    if(!namedview) {
+        return Geom::Point(Geom::infinity(),Geom::infinity());
+    }
+    char const * measure_point = is_start ? "inkscape:measure-start" : "inkscape:measure-end";
+    char const * measure_point_data = namedview->getAttribute (measure_point);
+    if(!measure_point_data) {
+        measure_point_data = "0,0";
+        namedview->setAttribute (measure_point, measure_point_data);
+    }
+    gchar ** strarray = g_strsplit(measure_point_data, ",", 2);
+    double newx, newy;
+    unsigned int success = sp_svg_number_read_d(strarray[0], &newx);
+    success += sp_svg_number_read_d(strarray[1], &newy);
+    g_strfreev (strarray);
+    if (success == 2) {
+        Geom::Point point_data(newx, newy);
+        return point_data;
+    }
+    return Geom::Point(Geom::infinity(),Geom::infinity());
+
+}
+
+void MeasureTool::writeMeasurePoint(Geom::Point point, bool is_start) {
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    SPNamedView *namedview = desktop->namedview;
+    if(!namedview) {
+        return;
+    }
+    Inkscape::SVGOStringStream os;
+    os << point;
+    gchar * str = g_strdup(os.str().c_str());
+    char const * measure_point = is_start ? "inkscape:measure-start" : "inkscape:measure-end";
+    namedview->setAttribute (measure_point, str);
+}
+
+//This function is used to reverse the Measure, I do it in two steps because when move the knot the 
+//start_ or the end_p are overwrite so I need the original values.
 void MeasureTool::reverseKnots()
 {
     Geom::Point start = start_p;
@@ -356,13 +436,13 @@ void MeasureTool::knotStartMovedHandler(SPKnot */*knot*/, Geom::Point const &ppo
     if (state & GDK_CONTROL_MASK) {
         spdc_endpoint_snap_rotation(this, point, end_p, state);
     } else if (!(state & GDK_SHIFT_MASK)) {
-        SnapManager &m = desktop->namedview->snap_manager;
-        m.setup(desktop);
+        SnapManager &snap_manager = desktop->namedview->snap_manager;
+        snap_manager.setup(desktop);
         Inkscape::SnapCandidatePoint scp(point, Inkscape::SNAPSOURCE_OTHER_HANDLE);
         scp.addOrigin(this->knot_end->position());
-        Inkscape::SnappedPoint sp = m.freeSnap(scp);
+        Inkscape::SnappedPoint sp = snap_manager.freeSnap(scp);
         point = sp.getPoint();
-        m.unSetup();
+        snap_manager.unSetup();
     }
     if(start_p != point) {
         start_p = point;
@@ -377,13 +457,13 @@ void MeasureTool::knotEndMovedHandler(SPKnot */*knot*/, Geom::Point const &ppoin
     if (state & GDK_CONTROL_MASK) {
         spdc_endpoint_snap_rotation(this, point, start_p, state);
     } else if (!(state & GDK_SHIFT_MASK)) {
-        SnapManager &m = desktop->namedview->snap_manager;
-        m.setup(desktop);
+        SnapManager &snap_manager = desktop->namedview->snap_manager;
+        snap_manager.setup(desktop);
         Inkscape::SnapCandidatePoint scp(point, Inkscape::SNAPSOURCE_OTHER_HANDLE);
         scp.addOrigin(this->knot_start->position());
-        Inkscape::SnappedPoint sp = m.freeSnap(scp);
+        Inkscape::SnappedPoint sp = snap_manager.freeSnap(scp);
         point = sp.getPoint();
-        m.unSetup();
+        snap_manager.unSetup();
     }
     if(end_p != point) {
         end_p = point;
@@ -413,51 +493,29 @@ void MeasureTool::finish()
     ToolBase::finish();
 }
 
-//void MeasureTool::setup() {
-//    ToolBase* ec = this;
-//
-////    if (SP_EVENT_CONTEXT_CLASS(sp_measure_context_parent_class)->setup) {
-////        SP_EVENT_CONTEXT_CLASS(sp_measure_context_parent_class)->setup(ec);
-////    }
-//    ToolBase::setup();
-//}
-
-//gint MeasureTool::item_handler(SPItem* item, GdkEvent* event) {
-//    gint ret = FALSE;
-//
-////    if (SP_EVENT_CONTEXT_CLASS(sp_measure_context_parent_class)->item_handler) {
-////        ret = SP_EVENT_CONTEXT_CLASS(sp_measure_context_parent_class)->item_handler(event_context, item, event);
-////    }
-//    ret = ToolBase::item_handler(item, event);
-//
-//    return ret;
-//}
-
 static void calculate_intersections(SPDesktop * /*desktop*/, SPItem* item, Geom::PathVector const &lineseg, SPCurve *curve, std::vector<double> &intersections)
 {
-
     curve->transform(item->i2doc_affine());
     // Find all intersections of the control-line with this shape
     Geom::CrossingSet cs = Geom::crossings(lineseg, curve->get_pathvector());
     Geom::delete_duplicates(cs[0]);
 
     // Reconstruct and store the points of intersection
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool only_visible = prefs->getBool("/tools/measure/only_visible", false);
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     for (Geom::Crossings::const_iterator m = cs[0].begin(); m != cs[0].end(); ++m) {
-#if 0
-//TODO: consider only visible intersections
-        Geom::Point intersection = lineseg[0].pointAt((*m).ta);
-        double eps = 0.0001;
-        SPDocument* doc = desktop->getDocument();
-        if (((*m).ta > eps &&
-                item == doc->getItemAtPoint(desktop->dkey, lineseg[0].pointAt((*m).ta - eps), false, NULL)) ||
-                ((*m).ta + eps < 1 &&
-                 item == doc->getItemAtPoint(desktop->dkey, lineseg[0].pointAt((*m).ta + eps), false, NULL)) ) {
+        if(only_visible) {
+            double eps = 0.0001;
+            if (((*m).ta > eps &&
+             item == desktop->getItemAtPoint(desktop->d2w(desktop->dt2doc(lineseg[0].pointAt((*m).ta - eps))), true, NULL)) ||
+            ((*m).ta + eps < 1 &&
+             item == desktop->getItemAtPoint(desktop->d2w(desktop->dt2doc(lineseg[0].pointAt((*m).ta + eps))), true, NULL))) {
+                intersections.push_back((*m).ta);
+            }
+        } else {
             intersections.push_back((*m).ta);
         }
-#else
-        intersections.push_back((*m).ta);
-
-#endif
     }
 }
 
@@ -482,10 +540,10 @@ bool MeasureTool::root_handler(GdkEvent* event)
             ret = TRUE;
         }
 
-        SnapManager &m = desktop->namedview->snap_manager;
-        m.setup(desktop);
-        m.freeSnapReturnByRef(start_p, Inkscape::SNAPSOURCE_OTHER_HANDLE);
-        m.unSetup();
+        SnapManager &snap_manager = desktop->namedview->snap_manager;
+        snap_manager.setup(desktop);
+        snap_manager.freeSnapReturnByRef(start_p, Inkscape::SNAPSOURCE_OTHER_HANDLE);
+        snap_manager.unSetup();
 
         sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
                             GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK,
@@ -505,14 +563,14 @@ bool MeasureTool::root_handler(GdkEvent* event)
                 Geom::Point const motion_w(event->motion.x, event->motion.y);
                 Geom::Point const motion_dt(desktop->w2d(motion_w));
 
-                SnapManager &m = desktop->namedview->snap_manager;
-                m.setup(desktop);
+                SnapManager &snap_manager = desktop->namedview->snap_manager;
+                snap_manager.setup(desktop);
 
                 Inkscape::SnapCandidatePoint scp(motion_dt, Inkscape::SNAPSOURCE_OTHER_HANDLE);
                 scp.addOrigin(start_p);
 
-                m.preSnap(scp);
-                m.unSetup();
+                snap_manager.preSnap(scp);
+                snap_manager.unSetup();
             }
         } else {
             ret = TRUE;
@@ -536,13 +594,13 @@ bool MeasureTool::root_handler(GdkEvent* event)
                 if (event->motion.state & GDK_CONTROL_MASK) {
                     spdc_endpoint_snap_rotation(this, end_p, start_p, event->motion.state);
                 } else if (!(event->motion.state & GDK_SHIFT_MASK)) {
-                    SnapManager &m = desktop->namedview->snap_manager;
-                    m.setup(desktop);
+                    SnapManager &snap_manager = desktop->namedview->snap_manager;
+                    snap_manager.setup(desktop);
                     Inkscape::SnapCandidatePoint scp(end_p, Inkscape::SNAPSOURCE_OTHER_HANDLE);
                     scp.addOrigin(start_p);
-                    Inkscape::SnappedPoint sp = m.freeSnap(scp);
+                    Inkscape::SnappedPoint sp = snap_manager.freeSnap(scp);
                     end_p = sp.getPoint();
-                    m.unSetup();
+                    snap_manager.unSetup();
                 }
                 showCanvasItems();
                 last_end = motion_w ;
@@ -560,13 +618,13 @@ bool MeasureTool::root_handler(GdkEvent* event)
             if (event->button.state & GDK_CONTROL_MASK) {
                 spdc_endpoint_snap_rotation(this, end_p, start_p, event->motion.state);
             } else if (!(event->button.state & GDK_SHIFT_MASK)) {
-                SnapManager &m = desktop->namedview->snap_manager;
-                m.setup(desktop);
+                SnapManager &snap_manager = desktop->namedview->snap_manager;
+                snap_manager.setup(desktop);
                 Inkscape::SnapCandidatePoint scp(end_p, Inkscape::SNAPSOURCE_OTHER_HANDLE);
                 scp.addOrigin(start_p);
-                Inkscape::SnappedPoint sp = m.freeSnap(scp);
+                Inkscape::SnappedPoint sp = snap_manager.freeSnap(scp);
                 end_p = sp.getPoint();
-                m.unSetup();
+                snap_manager.unSetup();
             }
         }
         this->knot_end->moveto(end_p);
@@ -609,17 +667,9 @@ void MeasureTool::setMarker(bool isStart)
     Inkscape::XML::Node *rmarker;
     Inkscape::XML::Document *xml_doc = doc->getReprDoc();
     rmarker = xml_doc->createElement("svg:marker");
-    if(isStart) {
-        rmarker->setAttribute("id", "Arrow2Sstart");
-    } else {
-        rmarker->setAttribute("id", "Arrow2Send");
-    }
+    rmarker->setAttribute("id", isStart ? "Arrow2Sstart" : "Arrow2Send");
     rmarker->setAttribute("inkscape:isstock", "true");
-    if(isStart) {
-        rmarker->setAttribute("inkscape:stockid", "Arrow2Sstart");
-    } else {
-        rmarker->setAttribute("inkscape:stockid", "Arrow2Send");
-    }
+    rmarker->setAttribute("inkscape:stockid", isStart ? "Arrow2Sstart" : "Arrow2Send");
     rmarker->setAttribute("orient", "auto");
     rmarker->setAttribute("refX", "0.0");
     rmarker->setAttribute("refY", "0.0");
@@ -630,11 +680,7 @@ void MeasureTool::setMarker(bool isStart)
     Inkscape::XML::Node *rpath;
     rpath = xml_doc->createElement("svg:path");
     rpath->setAttribute("d", "M 8.72,4.03 L -2.21,0.02 L 8.72,-4.00 C 6.97,-1.63 6.98,1.62 8.72,4.03 z");
-    if(isStart) {
-        rpath->setAttribute("id", "Arrow2SstartPath");
-    } else {
-        rpath->setAttribute("id", "Arrow2SendPath");
-    }
+    rpath->setAttribute("id", isStart ? "Arrow2SstartPath" : "Arrow2SendPath");
     SPCSSAttr *css = sp_repr_css_attr_new();
     sp_repr_css_set_property (css, "stroke", "none");
     sp_repr_css_set_property (css, "fill", "#000000");
@@ -643,11 +689,7 @@ void MeasureTool::setMarker(bool isStart)
     sp_repr_css_write_string(css,css_str);
     rpath->setAttribute("style", css_str.c_str());
     sp_repr_css_attr_unref (css);
-    if(isStart) {
-        rpath->setAttribute("transform", "scale(0.3) translate(-2.3,0)");
-    } else {
-        rpath->setAttribute("transform", "scale(0.3) rotate(180) translate(-2.3,0)");
-    }
+    rpath->setAttribute("transform", isStart ? "scale(0.3) translate(-2.3,0)" : "scale(0.3) rotate(180) translate(-2.3,0)");
     SPItem *path = SP_ITEM(marker->appendChildRepr(rpath));
     Inkscape::GC::release(rpath);
     path->updateRepr();
@@ -661,14 +703,14 @@ void MeasureTool::toGuides()
     Geom::Point end = desktop->doc2dt(end_p) * desktop->doc2dt();
     Geom::Ray ray(start,end);
     SPNamedView *namedview = desktop->namedview;
-    if(!namedview){
+    if(!namedview) {
         return;
     }
     setGuide(start,ray.angle(), _("Measure"));
-    if(explicitBase){
+    if(explicitBase) {
         explicitBase = *explicitBase * SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
         ray.setPoints(start, *explicitBase);
-        if(ray.angle() != 0){
+        if(ray.angle() != 0) {
             setGuide(start,ray.angle(), _("Base"));
         }
     }
@@ -690,7 +732,7 @@ void MeasureTool::toItem()
     Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
     Inkscape::XML::Node *rgroup = xml_doc->createElement("svg:g");
     showCanvasItems(false, true,rgroup);
-    setLine(start_p,end_p, false, &line_color_primary, rgroup);
+    setLine(start_p,end_p, false, line_color_primary, rgroup);
     SPItem *measure_item = SP_ITEM(desktop->currentLayer()->appendChildRepr(rgroup));
     Inkscape::GC::release(rgroup);
     measure_item->updateRepr();
@@ -707,27 +749,27 @@ void MeasureTool::toMarkDimension()
     Geom::Ray ray(start_p,end_p);
     Geom::Point start = start_p + Geom::Point::polar(ray.angle(), 5);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    dimension_offset = prefs->getDouble("/tools/measure/offset");
+    dimension_offset = prefs->getDouble("/tools/measure/offset", 5.0);
     start = start + Geom::Point::polar(ray.angle() + Geom::deg_to_rad(90), -dimension_offset);
     Geom::Point end = end_p + Geom::Point::polar(ray.angle(), -5);
     end = end+ Geom::Point::polar(ray.angle() + Geom::deg_to_rad(90), -dimension_offset);
     guint32 color = 0x000000ff;
-    setLine(start, end, true, &color);
+    setLine(start, end, true, color);
     Glib::ustring unit_name = prefs->getString("/tools/measure/unit");
     if (!unit_name.compare("")) {
         unit_name = "px";
     }
-    double fontsize = prefs->getInt("/tools/measure/fontsize")  * (96.0/72.0);
-    int precision = prefs->getInt("/tools/measure/precision");
+    double fontsize = prefs->getInt("/tools/measure/fontsize", 10.0);
+    int precision = prefs->getInt("/tools/measure/precision", 2);
     std::stringstream precision_str;
     precision_str.imbue(std::locale::classic());
     precision_str <<  "%." << precision << "f %s";
     Geom::Point middle = Geom::middle_point(start, end);
     double totallengthval = (end_p - start_p).length();
     totallengthval = Inkscape::Util::Quantity::convert(totallengthval, "px", unit_name);
-    double scale = prefs->getDouble("/tools/measure/scale") / 100.0;
+    double scale = prefs->getDouble("/tools/measure/scale", 100.0) / 100.0;
     gchar *totallength_str = g_strdup_printf(precision_str.str().c_str(), totallengthval * scale, unit_name.c_str());
-    setLabelText(totallength_str, middle, fontsize, Geom::deg_to_rad(180) - ray.angle());
+    setLabelText(totallength_str, middle, fontsize, Geom::deg_to_rad(180) - ray.angle(), color);
     doc->ensureUpToDate();
     DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_MEASURE,_("Add global measure line"));
 }
@@ -743,7 +785,7 @@ void MeasureTool::setGuide(Geom::Point origin,double angle, const char *label)
         affine *= root->c2p.inverse();
     }
     SPNamedView *namedview = desktop->namedview;
-    if(!namedview){
+    if(!namedview) {
         return;
     }
     origin *= affine; 
@@ -765,71 +807,20 @@ void MeasureTool::setGuide(Geom::Point origin,double angle, const char *label)
     Inkscape::GC::release(guide);
 }
 
-void MeasureTool::setLine(Geom::Point start_point,Geom::Point end_point, bool markers, guint32 *color, Inkscape::XML::Node *measure_repr)
+void MeasureTool::setLine(Geom::Point start_point,Geom::Point end_point, bool markers, guint32 color, Inkscape::XML::Node *measure_repr)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if(!desktop || !start_p.isFinite() || !end_p.isFinite()) {
         return;
     }
-    Geom::PathVector c;
-    Geom::Path p;
-    p.start(desktop->doc2dt(start_point));
-    p.appendNew<Geom::LineSegment>(desktop->doc2dt(end_point));
-    c.push_back(p);
-    c *= SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
-    SPDocument *doc = desktop->getDocument();
-    Inkscape::XML::Document *xml_doc = doc->getReprDoc();
-    if (c.size() == 1) {
-        Inkscape::XML::Node *repr;
-        repr = xml_doc->createElement("svg:path");
-        gchar const *str = sp_svg_write_path(c);
-        Geom::Point strokewidth = Geom::Point(1,1) * SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
-        SPCSSAttr *css = sp_repr_css_attr_new();
-        std::stringstream stroke_width;
-        stroke_width.imbue(std::locale::classic());
-        if(measure_repr) {
-            stroke_width <<  strokewidth[Geom::X] / desktop->current_zoom();
-        } else {
-            stroke_width <<  strokewidth[Geom::X];
-        }
-        sp_repr_css_set_property (css, "stroke-width", stroke_width.str().c_str());
-        sp_repr_css_set_property (css, "fill", "none");
-        if(color) {
-            gchar c[64];
-            sp_svg_write_color (c, sizeof(c), *color);
-            sp_repr_css_set_property (css, "stroke", c);
-        } else {
-            sp_repr_css_set_property (css, "stroke", "#000000");
-        }
-        sp_repr_css_set_property (css, "stroke-linecap", "square");
-        sp_repr_css_set_property (css, "stroke-linejoin", "miter");
-        sp_repr_css_set_property (css, "stroke-miterlimit", "4");
-        sp_repr_css_set_property (css, "stroke-dasharray", "none");
-        if(measure_repr) {
-            sp_repr_css_set_property (css, "stroke-opacity", "0.5");
-        } else {
-            sp_repr_css_set_property (css, "stroke-opacity", "1");
-        }
-        if(markers) {
-            sp_repr_css_set_property (css, "marker-start", "url(#Arrow2Sstart)");
-            sp_repr_css_set_property (css, "marker-end", "url(#Arrow2Send)");
-        }
-        Glib::ustring css_str;
-        sp_repr_css_write_string(css,css_str);
-        repr->setAttribute("style", css_str.c_str());
-        sp_repr_css_attr_unref (css);
-        g_assert( str != NULL );
-        repr->setAttribute("d", str);
-        if(measure_repr) {
-            measure_repr->addChild(repr, NULL);
-            Inkscape::GC::release(repr);
-        } else {
-            SPItem *item = SP_ITEM(desktop->currentLayer()->appendChildRepr(repr));
-            Inkscape::GC::release(repr);
-            item->updateRepr();
-            desktop->getSelection()->clear();
-            desktop->getSelection()->add(item);
-        }
+    Geom::PathVector pathv;
+    Geom::Path path;
+    path.start(desktop->doc2dt(start_point));
+    path.appendNew<Geom::LineSegment>(desktop->doc2dt(end_point));
+    pathv.push_back(path);
+    pathv *= SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
+    if(!pathv.empty()) {
+        setMeasureItem(pathv, false, markers, color, measure_repr);
     }
 }
 
@@ -841,47 +832,20 @@ void MeasureTool::setPoint(Geom::Point origin, Inkscape::XML::Node *measure_repr
     }
     char const * svgd;
     svgd = "m 0.707,0.707 6.586,6.586 m 0,-6.586 -6.586,6.586";
-    Geom::PathVector c = sp_svg_read_pathv(svgd);
+    Geom::PathVector pathv = sp_svg_read_pathv(svgd);
     Geom::Scale scale = Geom::Scale(desktop->current_zoom()).inverse();
-    c *= Geom::Translate(Geom::Point(-3.5,-3.5));
-    c *= scale;
-    c *= Geom::Translate(Geom::Point() - (scale.vector() * 0.5));
-    c *= Geom::Translate(desktop->doc2dt(origin));
-    c *= SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
-    SPDocument *doc = desktop->getDocument();
-    Inkscape::XML::Document *xml_doc = doc->getReprDoc();
-    if (c.size() == 2) {
-        Inkscape::XML::Node *repr;
-        repr = xml_doc->createElement("svg:path");
-        gchar const *str = sp_svg_write_path(c);
-        SPCSSAttr *css = sp_repr_css_attr_new();
-        Geom::Point strokewidth = (Geom::Point(1,1) * SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse())/ desktop->current_zoom();
-        std::stringstream stroke_width;
-        stroke_width.imbue(std::locale::classic());
-        stroke_width <<  strokewidth[Geom::X];
-        sp_repr_css_set_property (css, "stroke-width", stroke_width.str().c_str());
-        sp_repr_css_set_property (css, "fill", "none");
+    pathv *= Geom::Translate(Geom::Point(-3.5,-3.5));
+    pathv *= scale;
+    pathv *= Geom::Translate(Geom::Point() - (scale.vector() * 0.5));
+    pathv *= Geom::Translate(desktop->doc2dt(origin));
+    pathv *= SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
+    if (!pathv.empty()) {
         guint32 line_color_secondary = 0xff0000ff;
-        gchar c[64];
-        sp_svg_write_color (c, sizeof(c), line_color_secondary);
-        sp_repr_css_set_property (css, "stroke", c);
-        sp_repr_css_set_property (css, "stroke-linecap", "square");
-        sp_repr_css_set_property (css, "stroke-linejoin", "miter");
-        sp_repr_css_set_property (css, "stroke-miterlimit", "4");
-        sp_repr_css_set_property (css, "stroke-dasharray", "none");
-        sp_repr_css_set_property (css, "stroke-opacity", "0.5");
-        Glib::ustring css_str;
-        sp_repr_css_write_string(css,css_str);
-        repr->setAttribute("style", css_str.c_str());
-        sp_repr_css_attr_unref (css);
-        g_assert( str != NULL );
-        repr->setAttribute("d", str);
-        measure_repr->addChild(repr, NULL);
-        Inkscape::GC::release(repr);
+        setMeasureItem(pathv, false, false, line_color_secondary, measure_repr);
     }
 }
 
-void MeasureTool::setLabelText(const char *value, Geom::Point pos, double fontsize, Geom::Coord angle, guint32 *background, Inkscape::XML::Node *measure_repr, CanvasTextAnchorPositionEnum text_anchor)
+void MeasureTool::setLabelText(const char *value, Geom::Point pos, double fontsize, Geom::Coord angle, guint32 background, Inkscape::XML::Node *measure_repr, CanvasTextAnchorPositionEnum text_anchor)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
@@ -907,13 +871,17 @@ void MeasureTool::setLabelText(const char *value, Geom::Point pos, double fontsi
     SPCSSAttr *css = sp_repr_css_attr_new();
     std::stringstream font_size;
     font_size.imbue(std::locale::classic());
-    font_size <<  fontsize << "px";
+    if(measure_repr) {
+        font_size <<  fontsize;
+    } else {
+        font_size <<  fontsize << "pt";
+    }
     sp_repr_css_set_property (css, "font-size", font_size.str().c_str());
     sp_repr_css_set_property (css, "font-style", "normal");
     sp_repr_css_set_property (css, "font-weight", "normal");
     sp_repr_css_set_property (css, "line-height", "125%");
-    sp_repr_css_set_property (css, "letter-spacing", "0px");
-    sp_repr_css_set_property (css, "word-spacing", "0px");
+    sp_repr_css_set_property (css, "letter-spacing", "0");
+    sp_repr_css_set_property (css, "word-spacing", "0");
     sp_repr_css_set_property (css, "text-align", "center");
     sp_repr_css_set_property (css, "text-anchor", "middle");
     if(measure_repr) {
@@ -940,7 +908,7 @@ void MeasureTool::setLabelText(const char *value, Geom::Point pos, double fontsi
     if (!measure_repr && bbox) {
         Geom::Point center = bbox->midpoint();
         text_item->transform *= Geom::Translate(center).inverse();
-        pos = pos + Geom::Point::polar(angle+ Geom::deg_to_rad(90), -bbox->height());
+        pos += Geom::Point::polar(angle+ Geom::deg_to_rad(90), -bbox->height());
     }
     if(measure_repr) {
         /* Create <group> */
@@ -948,9 +916,9 @@ void MeasureTool::setLabelText(const char *value, Geom::Point pos, double fontsi
         /* Create <rect> */
         Inkscape::XML::Node *rrect = xml_doc->createElement("svg:rect");
         SPCSSAttr *css = sp_repr_css_attr_new ();
-        gchar c[64];
-        sp_svg_write_color (c, sizeof(c), *background);
-        sp_repr_css_set_property (css, "fill", c);
+        gchar color_line[64];
+        sp_svg_write_color (color_line, sizeof(color_line), background);
+        sp_repr_css_set_property (css, "fill", color_line);
         sp_repr_css_set_property (css, "fill-opacity", "0.5");
         sp_repr_css_set_property (css, "stroke-width", "0");
         Glib::ustring css_str;
@@ -1002,22 +970,86 @@ void MeasureTool::reset()
     measure_tmp_items.clear();
 }
 
+void MeasureTool::setMeasureCanvasText(bool is_angle, double precision, double amount, double fontsize, Glib::ustring unit_name, Geom::Point position, guint32 background, CanvasTextAnchorPositionEnum text_anchor, bool to_item, Inkscape::XML::Node *measure_repr)
+{
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    std::stringstream precision_str;
+    precision_str.imbue(std::locale::classic());
+    if(is_angle){
+        precision_str << "%." << precision << "f °";
+    } else {
+        precision_str << "%." << precision << "f %s";
+    }
+    gchar *measure_str = g_strdup_printf(precision_str.str().c_str(), amount, unit_name.c_str());
+    SPCanvasText *canvas_tooltip = sp_canvastext_new(desktop->getTempGroup(),
+                                   desktop,
+                                   position,
+                                   measure_str);
+    sp_canvastext_set_fontsize(canvas_tooltip, fontsize);
+    canvas_tooltip->rgba = 0xffffffff;
+    canvas_tooltip->rgba_background = background;
+    canvas_tooltip->outline = false;
+    canvas_tooltip->background = true;
+    canvas_tooltip->anchor_position = text_anchor;
+    measure_tmp_items.push_back(desktop->add_temporary_canvasitem(canvas_tooltip, 0));
+    if(to_item) {
+        setLabelText(measure_str, position, fontsize, 0, background, measure_repr);
+    }
+    g_free(measure_str);
+}
+
+void MeasureTool::setMeasureCanvasItem(Geom::Point position, bool to_item, Inkscape::XML::Node *measure_repr){
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    SPCanvasItem * canvasitem = sp_canvas_item_new(desktop->getTempGroup(),
+        SP_TYPE_CTRL,
+        "anchor", SP_ANCHOR_CENTER,
+        "size", 8.0,
+        "stroked", TRUE,
+        "stroke_color", 0xff0000ff,
+        "mode", SP_KNOT_MODE_XOR,
+        "shape", SP_KNOT_SHAPE_CROSS,
+        NULL );
+
+    SP_CTRL(canvasitem)->moveto(position);
+    measure_tmp_items.push_back(desktop->add_temporary_canvasitem(canvasitem, 0));
+    if(to_item) {
+        setPoint(position, measure_repr);
+    }
+}
+
+void MeasureTool::setMeasureCanvasControlLine(Geom::Point start, Geom::Point end, bool to_item, Inkscape::CtrlLineType ctrl_line_type, Inkscape::XML::Node *measure_repr){
+        SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+        SPCtrlLine *control_line = ControlManager::getManager().createControlLine(desktop->getTempGroup(),
+                                   start,
+                                   end,
+                                   ctrl_line_type);
+        measure_tmp_items.push_back(desktop->add_temporary_canvasitem(control_line, 0));
+        gint32 color = ctrl_line_type == CTLINE_PRIMARY ? 0x0000ff7f : 0xff00007f;
+        if(to_item) {
+            setLine(start,
+                    end,
+                    false,
+                    color,
+                    measure_repr);
+        }
+}
+
 void MeasureTool::showCanvasItems(bool to_guides, bool to_item, Inkscape::XML::Node *measure_repr)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    if(!desktop || !start_p.isFinite() || !end_p.isFinite() || end_p == MAGIC_POINT) {
+    if(!desktop || !start_p.isFinite() || !end_p.isFinite() || start_p == end_p) {
         return;
     }
-    guint32 line_color_primary = 0x0000ff7f;
-    guint32 line_color_secondary = 0xff00007f;
+    writeMeasurePoint(start_p, true);
+    writeMeasurePoint(end_p, false);
     //clear previous temporary canvas items, we'll draw new ones
     for (size_t idx = 0; idx < measure_tmp_items.size(); ++idx) {
         desktop->remove_temporary_canvasitem(measure_tmp_items[idx]);
     }
     measure_tmp_items.clear();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    bool show_in_between = prefs->getBool("/tools/measure/show_in_between");
-    bool all_layers = prefs->getBool("/tools/measure/all_layers");
+    bool show_in_between = prefs->getBool("/tools/measure/show_in_between", true);
+    bool all_layers = prefs->getBool("/tools/measure/all_layers", true);
     dimension_offset = 70;
     Geom::PathVector lineseg;
     Geom::Path p;
@@ -1025,24 +1057,14 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, Inkscape::XML::N
     p.appendNew<Geom::LineSegment>(desktop->dt2doc(end_p));
     lineseg.push_back(p);
 
-    double deltax = end_p[Geom::X] - start_p[Geom::X];
-    double deltay = end_p[Geom::Y] - start_p[Geom::Y];
-    double angle = atan2(deltay, deltax);
+    double angle = atan2(end_p - start_p);
     double baseAngle = 0;
 
     if (explicitBase) {
-        double deltax2 = explicitBase.get()[Geom::X] - start_p[Geom::X];
-        double deltay2 = explicitBase.get()[Geom::Y] - start_p[Geom::Y];
-
-        baseAngle = atan2(deltay2, deltax2);
+        baseAngle = atan2(explicitBase.get() - start_p);
         angle -= baseAngle;
-
-        if (angle < -M_PI) {
-            angle += 2 * M_PI;
-        } else if (angle > M_PI) {
-            angle -= 2 * M_PI;
-        }
     }
+
     std::vector<SPItem*> items;
     Inkscape::Rubberband *r = Inkscape::Rubberband::get(desktop);
     r->setMode(RUBBERBAND_MODE_TOUCHPATH);
@@ -1108,8 +1130,8 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, Inkscape::XML::N
     if (!unit_name.compare("")) {
         unit_name = "px";
     }
-    double scale = prefs->getDouble("/tools/measure/scale") / 100.0;
-    double fontsize = prefs->getDouble("/tools/measure/fontsize") * (96/72);
+    double scale = prefs->getDouble("/tools/measure/scale", 100.0) / 100.0;
+    double fontsize = prefs->getDouble("/tools/measure/fontsize", 10.0);
     // Normal will be used for lines and text
     Geom::Point windowNormal = Geom::unit_vector(Geom::rot90(desktop->d2w(end_p - start_p)));
     Geom::Point normal = desktop->w2d(windowNormal);
@@ -1140,163 +1162,46 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, Inkscape::XML::N
 
         placements.push_back(placement);
     }
-    int precision = prefs->getInt("/tools/measure/precision");
+    int precision = prefs->getInt("/tools/measure/precision", 2);
     // Adjust positions
     repositionOverlappingLabels(placements, desktop, windowNormal, fontsize, precision);
     for (std::vector<LabelPlacement>::iterator it = placements.begin(); it != placements.end(); ++it) {
         LabelPlacement &place = *it;
-
-        // TODO cleanup memory, Glib::ustring, etc.:
-
-        std::stringstream precision_str;
-        precision_str.imbue(std::locale::classic());
-        precision_str <<  "%." << precision << "f %s";
-        gchar *measure_str = g_strdup_printf(precision_str.str().c_str(), place.lengthVal * scale, unit_name.c_str());
-        SPCanvasText *canvas_tooltip = sp_canvastext_new(desktop->getTempGroup(),
-                                       desktop,
-                                       place.end,
-                                       measure_str);
-        sp_canvastext_set_fontsize(canvas_tooltip, fontsize);
-        canvas_tooltip->rgba = 0xffffffff;
-        canvas_tooltip->rgba_background = 0x0000007f;
-        canvas_tooltip->outline = false;
-        canvas_tooltip->background = true;
-        canvas_tooltip->anchor_position = TEXT_ANCHOR_CENTER;
-        measure_tmp_items.push_back(desktop->add_temporary_canvasitem(canvas_tooltip, 0));
-        if(to_item) {
-            guint32 background = canvas_tooltip->rgba_background;
-            setLabelText(measure_str, place.end, fontsize, 0, &background, measure_repr);
-        }
-        g_free(measure_str);
+        setMeasureCanvasText(false, precision, place.lengthVal * scale, fontsize, unit_name, place.end, 0x0000007f, TEXT_ANCHOR_CENTER, to_item, measure_repr);
     }
-
     Geom::Point angleDisplayPt = calcAngleDisplayAnchor(desktop, angle, baseAngle,
                                  start_p, end_p,
                                  fontsize);
-
     {
-        // TODO cleanup memory, Glib::ustring, etc.:
-        int precision = prefs->getInt("/tools/measure/precision");
-        std::stringstream precision_str;
-        precision_str.imbue(std::locale::classic());
-        precision_str <<  "%." << precision << "f °";
-        gchar *angle_str = g_strdup_printf(precision_str.str().c_str(), Geom::rad_to_deg(angle));
-
-        SPCanvasText *canvas_tooltip = sp_canvastext_new(desktop->getTempGroup(),
-                                       desktop,
-                                       angleDisplayPt,
-                                       angle_str);
-        sp_canvastext_set_fontsize(canvas_tooltip, fontsize);
-        canvas_tooltip->rgba = 0xffffffff;
-        canvas_tooltip->rgba_background = 0x337f337f;
-        canvas_tooltip->outline = false;
-        canvas_tooltip->background = true;
-        canvas_tooltip->anchor_position = TEXT_ANCHOR_CENTER;
-        measure_tmp_items.push_back(desktop->add_temporary_canvasitem(canvas_tooltip, 0));
-        if(to_item) {
-            guint32 background = canvas_tooltip->rgba_background;
-            setLabelText(angle_str, angleDisplayPt, fontsize, 0, &background, measure_repr);
-        }
-        g_free(angle_str);
+        setMeasureCanvasText(true, precision, Geom::rad_to_deg(angle), fontsize, unit_name, angleDisplayPt, 0x337f337f, TEXT_ANCHOR_CENTER, to_item, measure_repr);
     }
 
     {
         double totallengthval = (end_p - start_p).length();
         totallengthval = Inkscape::Util::Quantity::convert(totallengthval, "px", unit_name);
-
-        // TODO cleanup memory, Glib::ustring, etc.:
-        int precision = prefs->getInt("/tools/measure/precision");
-        std::stringstream precision_str;
-        precision_str.imbue(std::locale::classic());
-        precision_str <<  "%." << precision << "f %s";
-        gchar *totallength_str = g_strdup_printf(precision_str.str().c_str(), totallengthval * scale, unit_name.c_str());
-        SPCanvasText *canvas_tooltip = sp_canvastext_new(desktop->getTempGroup(),
-                                       desktop,
-                                       end_p + desktop->w2d(Geom::Point(3*fontsize, -fontsize)),
-                                       totallength_str);
-        sp_canvastext_set_fontsize(canvas_tooltip, fontsize);
-        canvas_tooltip->rgba = 0xffffffff;
-        canvas_tooltip->rgba_background = 0x3333337f;
-        canvas_tooltip->outline = false;
-        canvas_tooltip->background = true;
-        canvas_tooltip->anchor_position = TEXT_ANCHOR_LEFT;
-        measure_tmp_items.push_back(desktop->add_temporary_canvasitem(canvas_tooltip, 0));
-        if(to_item) {
-            guint32 background = canvas_tooltip->rgba_background;
-            setLabelText(totallength_str, end_p + desktop->w2d(Geom::Point(3*fontsize, -fontsize)), fontsize, 0, &background, measure_repr, TEXT_ANCHOR_LEFT);
-        }
-        g_free(totallength_str);
+        Geom::Point origin = end_p + desktop->w2d(Geom::Point(3*fontsize, -fontsize));
+        setMeasureCanvasText(false, precision, totallengthval * scale, fontsize, unit_name, origin, 0x3333337f, TEXT_ANCHOR_LEFT, to_item, measure_repr);
     }
 
     if (intersections.size() > 2) {
         double totallengthval = (intersections[intersections.size()-1] - intersections[0]).length();
         totallengthval = Inkscape::Util::Quantity::convert(totallengthval, "px", unit_name);
-
-        // TODO cleanup memory, Glib::ustring, etc.:
-        int precision = prefs->getInt("/tools/measure/precision");
-        std::stringstream precision_str;
-        precision_str.imbue(std::locale::classic());
-        precision_str <<  "%." << precision << "f %s";
-        gchar *total_str = g_strdup_printf(precision_str.str().c_str(), totallengthval * scale, unit_name.c_str());
-        SPCanvasText *canvas_tooltip = sp_canvastext_new(desktop->getTempGroup(),
-                                       desktop,
-                                       desktop->doc2dt((intersections[0] + intersections[intersections.size()-1])/2) + normal * dimension_offset,
-                                       total_str);
-        sp_canvastext_set_fontsize(canvas_tooltip, fontsize);
-        canvas_tooltip->rgba = 0xffffffff;
-        canvas_tooltip->rgba_background = 0x33337f7f;
-        canvas_tooltip->outline = false;
-        canvas_tooltip->background = true;
-        canvas_tooltip->anchor_position = TEXT_ANCHOR_CENTER;
-        measure_tmp_items.push_back(desktop->add_temporary_canvasitem(canvas_tooltip, 0));
-        if(to_item) {
-            guint32 background = canvas_tooltip->rgba_background;
-            setLabelText(total_str, desktop->doc2dt((intersections[0] + intersections[intersections.size()-1])/2) + normal * dimension_offset, fontsize, 0, &background, measure_repr);
-        }
-        g_free(total_str);
+        Geom::Point origin = desktop->doc2dt((intersections[0] + intersections[intersections.size()-1])/2) + normal * dimension_offset;
+        setMeasureCanvasText(false, precision, totallengthval * scale, fontsize, unit_name, origin, 0x33337f7f, TEXT_ANCHOR_CENTER, to_item, measure_repr);
     }
 
     // Initial point
     {
-        SPCanvasItem * canvasitem = sp_canvas_item_new(desktop->getTempGroup(),
-                                    SP_TYPE_CTRL,
-                                    "anchor", SP_ANCHOR_CENTER,
-                                    "size", 8.0,
-                                    "stroked", TRUE,
-                                    "stroke_color", 0xff0000ff,
-                                    "mode", SP_KNOT_MODE_XOR,
-                                    "shape", SP_KNOT_SHAPE_CROSS,
-                                    NULL );
-
-        SP_CTRL(canvasitem)->moveto(start_p);
-        measure_tmp_items.push_back(desktop->add_temporary_canvasitem(canvasitem, 0));
-        if(to_item) {
-            setPoint(start_p, measure_repr);
-        }
+        setMeasureCanvasItem(start_p, false, measure_repr);
     }
 
     // Now that text has been added, we can add lines and controls so that they go underneath
     for (size_t idx = 0; idx < intersections.size(); ++idx) {
-        // Display the intersection indicator (i.e. the cross)
-        SPCanvasItem * canvasitem = sp_canvas_item_new(desktop->getTempGroup(),
-                                    SP_TYPE_CTRL,
-                                    "anchor", SP_ANCHOR_CENTER,
-                                    "size", 8.0,
-                                    "stroked", TRUE,
-                                    "stroke_color", 0xff0000ff,
-                                    "mode", SP_KNOT_MODE_XOR,
-                                    "shape", SP_KNOT_SHAPE_CROSS,
-                                    NULL );
-
-        SP_CTRL(canvasitem)->moveto(desktop->doc2dt(intersections[idx]));
-        measure_tmp_items.push_back(desktop->add_temporary_canvasitem(canvasitem, 0));
-        if(to_item) {
-            setPoint(desktop->doc2dt(intersections[idx]), measure_repr);
-        }
+        setMeasureCanvasItem(desktop->doc2dt(intersections[idx]), to_item, measure_repr);
         if(to_guides) {
             std::stringstream cross_number;
             cross_number.imbue(std::locale::classic());
-            if (!prefs->getBool("/tools/measure/ignore_1st_and_last", true)){
+            if (!prefs->getBool("/tools/measure/ignore_1st_and_last", true)) {
                 cross_number <<  _("Crossing ") << idx;
             } else {
                 cross_number <<  _("Crossing ") << idx + 1;
@@ -1312,110 +1217,41 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, Inkscape::XML::N
 
     // draw main control line
     {
-        SPCtrlLine *control_line = ControlManager::getManager().createControlLine(desktop->getTempGroup(),
-                                   start_p,
-                                   end_p);
-        measure_tmp_items.push_back(desktop->add_temporary_canvasitem(control_line, 0));
-
-        if ((end_p[Geom::X] != start_p[Geom::X]) && (end_p[Geom::Y] != start_p[Geom::Y])) {
-            double length = std::abs((end_p - start_p).length());
-            Geom::Point anchorEnd = start_p;
-            anchorEnd[Geom::X] += length;
-            if (explicitBase) {
-                anchorEnd *= (Geom::Affine(Geom::Translate(-start_p))
-                              * Geom::Affine(Geom::Rotate(baseAngle))
-                              * Geom::Affine(Geom::Translate(start_p)));
-            }
-
-            SPCtrlLine *control_line = ControlManager::getManager().createControlLine(desktop->getTempGroup(),
-                                       start_p,
-                                       anchorEnd,
-                                       CTLINE_SECONDARY);
-            measure_tmp_items.push_back(desktop->add_temporary_canvasitem(control_line, 0));
-            if(to_item) {
-                setLine(start_p,
-                        anchorEnd,
-                        false,
-                        &line_color_secondary,
-                        measure_repr);
-            }
-            createAngleDisplayCurve(desktop, start_p, end_p, angleDisplayPt, angle, measure_repr);
+        setMeasureCanvasControlLine(start_p, end_p, false, CTLINE_SECONDARY, measure_repr);
+        double length = std::abs((end_p - start_p).length());
+        Geom::Point anchorEnd = start_p;
+        anchorEnd[Geom::X] += length;
+        if (explicitBase) {
+            anchorEnd *= (Geom::Affine(Geom::Translate(-start_p))
+                          * Geom::Affine(Geom::Rotate(baseAngle))
+                          * Geom::Affine(Geom::Translate(start_p)));
         }
+        setMeasureCanvasControlLine(start_p, anchorEnd, to_item, CTLINE_SECONDARY, measure_repr);
+        createAngleDisplayCurve(desktop, start_p, end_p, angleDisplayPt, angle, measure_repr);
     }
 
     if (intersections.size() > 2) {
-        ControlManager &mgr = ControlManager::getManager();
-        SPCtrlLine *control_line = 0;
-        control_line = mgr.createControlLine(desktop->getTempGroup(),
-                                             desktop->doc2dt(intersections[0]) + normal * dimension_offset,
-                                             desktop->doc2dt(intersections[intersections.size() - 1]) + normal * dimension_offset);
-        measure_tmp_items.push_back(desktop->add_temporary_canvasitem(control_line, 0));
-        if(to_item) {
-            setLine(desktop->doc2dt(intersections[0]) + normal * dimension_offset,
-                    desktop->doc2dt(intersections[intersections.size() - 1]) + normal * dimension_offset,
-                    false,
-                    &line_color_primary,
-                    measure_repr);
-        }
-        control_line = mgr.createControlLine(desktop->getTempGroup(),
-                                             desktop->doc2dt(intersections[0]),
-                                             desktop->doc2dt(intersections[0]) + normal * dimension_offset);
-        measure_tmp_items.push_back(desktop->add_temporary_canvasitem(control_line, 0));
-        if(to_item) {
-            setLine(desktop->doc2dt(intersections[0]),
-                    desktop->doc2dt(intersections[0]) + normal * dimension_offset,
-                    false,
-                    &line_color_primary,
-                    measure_repr);
-        }
-        control_line = mgr.createControlLine(desktop->getTempGroup(),
-                                             desktop->doc2dt(intersections[intersections.size() - 1]),
-                                             desktop->doc2dt(intersections[intersections.size() - 1]) + normal * dimension_offset);
-        measure_tmp_items.push_back(desktop->add_temporary_canvasitem(control_line, 0));
-        if(to_item) {
-            setLine(desktop->doc2dt(intersections[intersections.size() - 1]),
-                    desktop->doc2dt(intersections[intersections.size() - 1]) + normal * dimension_offset,
-                    false,
-                    &line_color_primary,
-                    measure_repr);
-        }
+        setMeasureCanvasControlLine(desktop->doc2dt(intersections[0]) + normal * dimension_offset, desktop->doc2dt(intersections[intersections.size() - 1]) + normal * dimension_offset, to_item, CTLINE_PRIMARY , measure_repr);
+        
+        setMeasureCanvasControlLine(desktop->doc2dt(intersections[0]), desktop->doc2dt(intersections[0]) + normal * dimension_offset, to_item, CTLINE_PRIMARY , measure_repr);
+
+        setMeasureCanvasControlLine(desktop->doc2dt(intersections[intersections.size() - 1]), desktop->doc2dt(intersections[intersections.size() - 1]) + normal * dimension_offset, to_item, CTLINE_PRIMARY , measure_repr);
     }
 
     // call-out lines
     for (std::vector<LabelPlacement>::iterator it = placements.begin(); it != placements.end(); ++it) {
         LabelPlacement &place = *it;
-
-        ControlManager &mgr = ControlManager::getManager();
-        SPCtrlLine *control_line = mgr.createControlLine(desktop->getTempGroup(),
-                                   place.start,
-                                   place.end,
-                                   CTLINE_SECONDARY);
-        measure_tmp_items.push_back(desktop->add_temporary_canvasitem(control_line, 0));
-        if(to_item) {
-            setLine(place.start,place.end, false, &line_color_secondary, measure_repr);
-        }
+        setMeasureCanvasControlLine(place.start, place.end, to_item, CTLINE_SECONDARY, measure_repr);
     }
 
     {
         for (size_t idx = 1; idx < intersections.size(); ++idx) {
             Geom::Point measure_text_pos = (intersections[idx - 1] + intersections[idx]) / 2;
-
-            ControlManager &mgr = ControlManager::getManager();
-            SPCtrlLine *control_line = mgr.createControlLine(desktop->getTempGroup(),
-                                       desktop->doc2dt(measure_text_pos),
-                                       desktop->doc2dt(measure_text_pos) - (normal * dimension_offset / 2),
-                                       CTLINE_SECONDARY);
-            measure_tmp_items.push_back(desktop->add_temporary_canvasitem(control_line, 0));
-            if(to_item) {
-                setLine(desktop->doc2dt(measure_text_pos),
-                        desktop->doc2dt(measure_text_pos) - (normal * dimension_offset / 2),
-                        false,
-                        &line_color_secondary,
-                        measure_repr);
-            }
+            setMeasureCanvasControlLine(desktop->doc2dt(measure_text_pos), desktop->doc2dt(measure_text_pos) - (normal * dimension_offset / 2), to_item, CTLINE_SECONDARY, measure_repr);
         }
     }
 }
+
 }
 }
 }

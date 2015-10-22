@@ -162,6 +162,23 @@ static void toggle_ignore_1st_and_last( GtkToggleAction* act, gpointer data )
     }
 }
 
+static void toggle_only_visible( GtkToggleAction* act, gpointer data )
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    gboolean active = gtk_toggle_action_get_active(act);
+    prefs->setInt("/tools/measure/only_visible", active);
+    SPDesktop *desktop = static_cast<SPDesktop *>(data);
+    if ( active ) {
+        desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Show only visible crossings."));
+    } else {
+        desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Show all crossings."));
+    }
+    MeasureTool *mt = get_measure_tool();
+    if (mt) {
+        mt->showCanvasItems();
+    }
+}
+
 static void toggle_all_layers( GtkToggleAction* act, gpointer data )
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -239,9 +256,9 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
         eact = create_adjustment_action( "MeasureFontSizeAction",
                                          _("Font Size"), _("Font Size:"),
                                          _("The font size to be used in the measurement labels"),
-                                         "/tools/measure/fontsize", 0.0,
+                                         "/tools/measure/fontsize", 10.0,
                                          GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
-                                         1, 36, 1.0, 4.0,
+                                         1.0, 36.0, 1.0, 4.0,
                                          0, 0, 0,
                                          sp_measure_fontsize_value_changed, NULL, 0 , 2);
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact));
@@ -312,7 +329,18 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
         g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(toggle_ignore_1st_and_last), desktop) ;
         gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
     }
-    /* measure imbetweens */
+    /* only visible */
+    {
+        InkToggleAction* act = ink_toggle_action_new( "MeasureOnlyVisible",
+                                                      _("Only visible intersections"),
+                                                      _("Only visible intersections"),
+                                                      INKSCAPE_ICON("zoom"),
+                                                      secondarySize );
+        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/measure/only_visible", true) );
+        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(toggle_only_visible), desktop) ;
+        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
+    }
+        /* measure imbetweens */
     {
         InkToggleAction* act = ink_toggle_action_new( "MeasureInBettween",
                                                       _("Show measures between items"),

@@ -1470,15 +1470,15 @@ std::vector<SPItem*> SPDocument::getItemsAtPoints(unsigned const key, std::vecto
     if(desktop){
         layer_model = desktop->layers;
     }
-    size_t h = 0;
+    size_t item_counter = 0;
     for(int i = points.size()-1;i>=0; i--) {
         SPItem *item = find_item_at_point(&nodes, key, points[i]);
         if (item && items.end()==find(items.begin(),items.end(), item))
             if(all_layers || (layer_model && layer_model->layerForObject(item) == current_layer)){
                 items.push_back(item);
-                h++;
+                item_counter++;
                 //limit 0 = no limit
-                if(h == limit){
+                if(item_counter == limit){
                     prefs->setDouble("/options/cursortolerance/value", saved_delta);
                     return items;
                 }
