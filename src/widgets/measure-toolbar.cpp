@@ -102,6 +102,20 @@ sp_measure_offset_value_changed(GtkAdjustment *adj, GObject *tbl)
     }
 }
 
+static void sp_measure_scale_value_changed(GtkAdjustment *adj, GObject *tbl)
+{
+    SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data( tbl, "desktop" ));
+
+    if (DocumentUndo::getUndoSensitive(desktop->getDocument())) {
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        prefs->setInt(Glib::ustring("/tools/measure/scale"),
+            gtk_adjustment_get_value(adj));
+        MeasureTool *mt = get_measure_tool();
+        if (mt) {
+            mt->showCanvasItems();
+        }
+    }
+}
 
 static void
 sp_measure_precision_value_changed(GtkAdjustment *adj, GObject *tbl)
@@ -141,6 +155,23 @@ static void toggle_ignore_1st_and_last( GtkToggleAction* act, gpointer data )
         desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Start and end measures inactive."));
     } else {
         desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Start and end measures active."));
+    }
+    MeasureTool *mt = get_measure_tool();
+    if (mt) {
+        mt->showCanvasItems();
+    }
+}
+
+static void toggle_only_visible( GtkToggleAction* act, gpointer data )
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    gboolean active = gtk_toggle_action_get_active(act);
+    prefs->setInt("/tools/measure/only_visible", active);
+    SPDesktop *desktop = static_cast<SPDesktop *>(data);
+    if ( active ) {
+        desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Show only visible crossings."));
+    } else {
+        desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Show all crossings."));
     }
     MeasureTool *mt = get_measure_tool();
     if (mt) {
@@ -225,15 +256,15 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
         eact = create_adjustment_action( "MeasureFontSizeAction",
                                          _("Font Size"), _("Font Size:"),
                                          _("The font size to be used in the measurement labels"),
-                                         "/tools/measure/fontsize", 0.0,
+                                         "/tools/measure/fontsize", 10.0,
                                          GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
-                                         1, 36, 1.0, 4.0,
+                                         1.0, 36.0, 1.0, 4.0,
                                          0, 0, 0,
                                          sp_measure_fontsize_value_changed, NULL, 0 , 2);
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact));
     }
 
-    // units label
+    /* units label */
     {
         EgeOutputAction* act = ege_output_action_new( "measure_units_label", _("Units:"), _("The units to be used for the measurements"), 0 );
         ege_output_action_set_use_markup( act, TRUE );
@@ -241,7 +272,7 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
         gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
     }
 
-    // units menu
+    /* units menu */
     {
         GtkAction* act = tracker->createAction( "MeasureUnitsAction", _("Units:"), _("The units to be used for the measurements") );
         g_signal_connect_after( G_OBJECT(act), "changed", G_CALLBACK(measure_unit_changed), holder );
@@ -261,13 +292,25 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact));
     }
 
+    /* Scale */
+    {
+        eact = create_adjustment_action( "MeasureScaleAction",
+                                         _("Scale %"), _("Scale %:"),
+                                         _("Scale the results"),
+                                         "/tools/measure/scale", 100.0,
+                                         GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
+                                         0.0, 90000.0, 1.0, 4.0,
+                                         0, 0, 0,
+                                         sp_measure_scale_value_changed, NULL, 0 , 3);
+        gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
+    }
 
     /* Offset */
     {
         eact = create_adjustment_action( "MeasureOffsetAction",
                                          _("Offset"), _("Offset:"),
                                          _("The offset size"),
-                                         "/tools/measure/offset", 30.0,
+                                         "/tools/measure/offset", 5.0,
                                          GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
                                          0.0, 90000.0, 1.0, 4.0,
                                          0, 0, 0,
@@ -275,7 +318,7 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
     }
 
-    // ignore_1st_and_last
+    /* ignore_1st_and_last */
     {
         InkToggleAction* act = ink_toggle_action_new( "MeasureIgnore1stAndLast",
                                                       _("Ignore first and last"),
@@ -286,7 +329,18 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
         g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(toggle_ignore_1st_and_last), desktop) ;
         gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
     }
-    // measure imbetweens
+    /* only visible */
+    {
+        InkToggleAction* act = ink_toggle_action_new( "MeasureOnlyVisible",
+                                                      _("Only visible intersections"),
+                                                      _("Only visible intersections"),
+                                                      INKSCAPE_ICON("zoom"),
+                                                      secondarySize );
+        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/measure/only_visible", true) );
+        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(toggle_only_visible), desktop) ;
+        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
+    }
+        /* measure imbetweens */
     {
         InkToggleAction* act = ink_toggle_action_new( "MeasureInBettween",
                                                       _("Show measures between items"),
@@ -297,7 +351,7 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
         g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(toggle_show_in_between), desktop) ;
         gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
     }
-    // measure only current layer
+    /* measure only current layer */
     {
         InkToggleAction* act = ink_toggle_action_new( "MeasureAllLayers",
                                                       _("Measure all layers"),
@@ -308,7 +362,7 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
         g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(toggle_all_layers), desktop) ;
         gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
     }
-    //toogle start end
+    /* toogle start end */
     {
         InkAction* act = ink_action_new( "MeasureReverse",
                                           _("Reverse measure"),
@@ -318,7 +372,7 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
         g_signal_connect_after( G_OBJECT(act), "activate", G_CALLBACK(sp_reverse_knots), 0 );
         gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
     }
-    //to guides
+    /* to guides */
     {
         InkAction* act = ink_action_new( "MeasureToGuides",
                                           _("To guides"),
@@ -328,7 +382,7 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
         g_signal_connect_after( G_OBJECT(act), "activate", G_CALLBACK(sp_to_guides), 0 );
         gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
     }
-    //to mark dimensions
+    /* to mark dimensions */
     {
         InkAction* act = ink_action_new( "MeasureMarkDimension",
                                           _("Mark Dimension"),
@@ -338,7 +392,7 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
         g_signal_connect_after( G_OBJECT(act), "activate", G_CALLBACK(sp_to_mark_dimension), 0 );
         gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
     }
-    //to item
+    /* to item */
     {
         InkAction* act = ink_action_new( "MeasureToItem",
                                           _("Convert to item"),

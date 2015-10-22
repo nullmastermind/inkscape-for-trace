@@ -16,6 +16,7 @@
 #include "ui/tools/tool-base.h"
 #include <2geom/point.h>
 #include "display/canvas-text.h"
+#include "ui/control-manager.h"
 #include <boost/optional.hpp>
 
 #define SP_MEASURE_CONTEXT(obj) (dynamic_cast<Inkscape::UI::Tools::MeasureTool*>((Inkscape::UI::Tools::ToolBase*)obj))
@@ -45,10 +46,15 @@ public:
     virtual void setMarkers();
     virtual void setMarker(bool isStart);
     virtual const std::string& getPrefsPath();
+    Geom::Point readMeasurePoint(bool is_start);
+    void writeMeasurePoint(Geom::Point point, bool is_start);
     void setGuide(Geom::Point origin, double angle, const char *label);
     void setPoint(Geom::Point origin, Inkscape::XML::Node *measure_repr);
-    void setLine(Geom::Point start_point,Geom::Point end_point, bool markers = false, guint32 *color = NULL, Inkscape::XML::Node *measure_repr = NULL);
-    void setLabelText(const char *value, Geom::Point pos, double fontsize, Geom::Coord angle, guint32 *background = NULL, Inkscape::XML::Node *measure_repr = NULL, CanvasTextAnchorPositionEnum text_anchor = TEXT_ANCHOR_CENTER );
+    void setLine(Geom::Point start_point,Geom::Point end_point, bool markers, guint32 color, Inkscape::XML::Node *measure_repr = NULL);
+    void setMeasureCanvasText(bool is_angle, double precision, double amount, double fontsize, Glib::ustring unit_name, Geom::Point position, guint32 background, CanvasTextAnchorPositionEnum text_anchor, bool to_item, Inkscape::XML::Node *measure_repr);
+    void setMeasureCanvasItem(Geom::Point position, bool to_item, Inkscape::XML::Node *measure_repr);
+    void setMeasureCanvasControlLine(Geom::Point start, Geom::Point end, bool to_item, Inkscape::CtrlLineType ctrl_line_type, Inkscape::XML::Node *measure_repr);
+    void setLabelText(const char *value, Geom::Point pos, double fontsize, Geom::Coord angle, guint32 background , Inkscape::XML::Node *measure_repr = NULL, CanvasTextAnchorPositionEnum text_anchor = TEXT_ANCHOR_CENTER );
     void knotStartMovedHandler(SPKnot */*knot*/, Geom::Point const &ppointer, guint state);
     void knotEndMovedHandler(SPKnot */*knot*/, Geom::Point const &ppointer, guint state);
     void knotUngrabbedHandler(SPKnot */*knot*/,  unsigned int /*state*/);
@@ -59,6 +65,9 @@ private:
     boost::optional<Geom::Point> last_end;
     SPKnot *knot_start;
     SPKnot *knot_end;
+    gint dimension_offset;
+    Geom::Point start_p;
+    Geom::Point end_p;
     sigc::connection _knot_start_moved_connection;
     sigc::connection _knot_start_ungrabbed_connection;
     sigc::connection _knot_end_moved_connection;
