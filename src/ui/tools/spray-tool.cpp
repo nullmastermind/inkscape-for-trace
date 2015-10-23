@@ -341,6 +341,8 @@ static bool fit_item(SPDesktop *desktop,
                      Geom::Point center,
                      double scale,
                      double scale_variation,
+                     Geom::Point p,
+                     Geom::Point move,
                      size_t limit){
     Geom::OptRect bbox = item_copied->desktopVisualBounds();
     std::vector<SPItem*> items = desktop->getDocument()->getItemsPartiallyInBox(desktop->dkey, *bbox);
@@ -378,16 +380,20 @@ static bool fit_item(SPDesktop *desktop,
 //                    }
 //                }
 //            }
-            if(limit > 10){
+            if(limit > 3){
                 item_copied->deleteObject();
                 return false;
             } else {
                 sp_spray_scale_rel(center,desktop, item_copied, Geom::Scale(-scale, -scale));
-                scale = (1.0 - scale_variation / 100.0) + ((1.0 + scale_variation / 100.0)/limit); 
+                sp_item_move_rel(item_copied, Geom::Translate(Geom::Point(-move[Geom::X], move[Geom::Y])));
+                Geom::Path path;
+                path.start(Geom::Point(move[Geom::X],-move[Geom::Y]));
+                path.appendNew<Geom::LineSegment>(p);
+                scale = (1.0 - scale_variation / 100.0) + (scale/(limit+2)); 
                 sp_spray_scale_rel(center,desktop, item_copied, Geom::Scale(scale, scale));
-                sp_item_move_rel(item_copied, Geom::Translate(rand() % 20 -10, rand() % 20 -10));
+                sp_item_move_rel(item_copied, Geom::Translate(path.pointAt(1/(limit+2))));
                 limit += 1;
-                return fit_item(desktop, item_copied, item, spray_origin, center, scale, scale_variation, limit);
+                return fit_item(desktop, item_copied, item, spray_origin, center, scale, scale_variation, p, move, limit);
             }
         }
     }
@@ -442,10 +448,13 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                 Inkscape::XML::Node *old_repr = item->getRepr();
                 Inkscape::XML::Node *parent = old_repr->parent();
                 Inkscape::XML::Node *copy = old_repr->duplicate(xml_doc);
-                std::stringstream original_id;
-                original_id <<  "#" << item->getId();
-                gchar const * spray_origin = original_id.str().c_str();
-                copy->setAttribute("inkscape:spray-origin", spray_origin);
+                gchar const * spray_origin;
+                if(!copy->attribute("inkscape:spray-origin")){
+                    spray_origin = g_strdup_printf("#%s", old_repr->attribute("id"));
+                    copy->setAttribute("inkscape:spray-origin", spray_origin);
+                } else {
+                    spray_origin = copy->attribute("inkscape:spray-origin");
+                }
                 parent->appendChild(copy);
 
                 SPObject *new_obj = doc->getObjectByRepr(copy);
@@ -458,7 +467,8 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                 // Move the cursor p
                 Geom::Point move = (Geom::Point(cos(tilt)*cos(dp)*dr/(1-ratio)+sin(tilt)*sin(dp)*dr/(1+ratio), -sin(tilt)*cos(dp)*dr/(1-ratio)+cos(tilt)*sin(dp)*dr/(1+ratio)))+(p-a->midpoint());
                 sp_item_move_rel(item_copied, Geom::Translate(move[Geom::X], -move[Geom::Y]));
-                did = fit_item(desktop, item_copied, item, spray_origin, center, scale_variation, _scale,  0);
+                Inkscape::GC::release(copy);
+                did = fit_item(desktop, item_copied, item, spray_origin, center, scale_variation, _scale, p , move , 9);
             }
         }
 #ifdef ENABLE_SPRAY_MODE_SINGLE_PATH
@@ -491,6 +501,13 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                 if (_fid <= population) { // Rules the population of objects sprayed
                     // Duplicates the parent item
                     Inkscape::XML::Node *copy = old_repr->duplicate(xml_doc);
+                    gchar const * spray_origin;
+                    if(!copy->attribute("inkscape:spray-origin")){
+                        spray_origin = g_strdup_printf("#%s", old_repr->attribute("id"));
+                        copy->setAttribute("inkscape:spray-origin", spray_origin);
+                    } else {
+                        spray_origin = copy->attribute("inkscape:spray-origin");
+                    }
                     parent->appendChild(copy);
                     SPObject *new_obj = doc->getObjectByRepr(copy);
                     item_copied = dynamic_cast<SPItem *>(new_obj);
@@ -513,7 +530,7 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                     sp_selected_path_union_skip_undo(selection, selection->desktop());
                     selection->add(parent_item);
                     Inkscape::GC::release(copy);
-                    did = true;
+                    did = fit_item(desktop, item_copied, parent_item, spray_origin, center, scale_variation, _scale, p , move , 9);
                 }
             }
         }
@@ -533,6 +550,13 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                 // Ad the clone to the list of the parent's children
                 parent->appendChild(clone);
                 // Generates the link between parent and child attributes
+                gchar const * spray_origin;
+                if(!clone->attribute("inkscape:spray-origin")){
+                    spray_origin = g_strdup_printf("#%s", old_repr->attribute("id"));
+                    clone->setAttribute("inkscape:spray-origin", spray_origin);
+                } else {
+                    spray_origin = clone->attribute("inkscape:spray-origin");
+                }
                 gchar *href_str = g_strdup_printf("#%s", old_repr->attribute("id"));
                 clone->setAttribute("xlink:href", href_str, false); 
                 g_free(href_str);
@@ -549,7 +573,7 @@ static bool sp_spray_recursive(SPDesktop *desktop,
 
                 Inkscape::GC::release(clone);
 
-                did = true;
+                did = fit_item(desktop, item_copied, item, spray_origin, center, scale_variation, _scale, p , move , 9);
             }
         }
     }
