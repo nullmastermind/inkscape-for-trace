@@ -339,16 +339,17 @@ static bool fit_item(SPDesktop *desktop,
                      SPItem * item,
                      gchar const * spray_origin,
                      Geom::Point center,
-                     double scale,
+                     double _scale,
                      double scale_variation,
+                     double &scale,
+                     double angle,
                      Geom::Point p,
-                     Geom::Point move,
-                     size_t limit){
+                     Geom::Point move){
     Geom::OptRect bbox = item_copied->desktopVisualBounds();
     std::vector<SPItem*> items = desktop->getDocument()->getItemsPartiallyInBox(desktop->dkey, *bbox);
     for (std::vector<SPItem*>::const_iterator i=items.begin(); i!=items.end(); i++) {
         SPItem *item_down = *i;
-        Geom::OptRect bbox = item_down->desktopVisualBounds();
+        bbox = item_down->desktopVisualBounds();
         if(item_down->getId() == item->getId() || (item_down->getAttribute("inkscape:spray-origin") && item_down != item_copied && strcmp(item_down->getAttribute("inkscape:spray-origin"),spray_origin) == 0)){
 //            if(!SP_IS_GROUP(item) && 1>2){
 //                SPShape *down_item_shape = dynamic_cast<SPShape *>(item_down);
@@ -380,20 +381,26 @@ static bool fit_item(SPDesktop *desktop,
 //                    }
 //                }
 //            }
-            if(limit > 3){
+            sp_item_move_rel(item_copied, Geom::Translate(-move[Geom::X], move[Geom::Y]));
+            sp_spray_rotate_rel(center,desktop,item_copied, Geom::Rotate(angle).inverse());
+            sp_spray_scale_rel(center,desktop, item_copied, Geom::Scale(scale,scale).inverse());
+            sp_spray_scale_rel(center,desktop, item_copied, Geom::Scale(_scale, _scale).inverse());
+            
+            double min_scale = (1.0 - scale_variation / 100.0);
+            _scale = min_scale + ((_scale - min_scale)/2); 
+            sp_spray_scale_rel(center,desktop, item_copied, Geom::Scale(_scale, _scale));
+            sp_spray_scale_rel(center,desktop, item_copied, Geom::Scale(scale,scale));
+            sp_spray_rotate_rel(center,desktop,item_copied, Geom::Rotate(angle));
+            sp_item_move_rel(item_copied, Geom::Translate(move[Geom::X], -move[Geom::Y]));
+            bbox = item_copied->desktopVisualBounds();
+            if(bbox->intersects(item_down->desktopVisualBounds())){
+                std::cout << "deleted\n";
                 item_copied->deleteObject();
                 return false;
             } else {
-                sp_spray_scale_rel(center,desktop, item_copied, Geom::Scale(-scale, -scale));
-                sp_item_move_rel(item_copied, Geom::Translate(Geom::Point(-move[Geom::X], move[Geom::Y])));
-                Geom::Path path;
-                path.start(Geom::Point(move[Geom::X],-move[Geom::Y]));
-                path.appendNew<Geom::LineSegment>(p);
-                scale = (1.0 - scale_variation / 100.0) + (scale/(limit+2)); 
-                sp_spray_scale_rel(center,desktop, item_copied, Geom::Scale(scale, scale));
-                sp_item_move_rel(item_copied, Geom::Translate(path.pointAt(1/(limit+2))));
-                limit += 1;
-                return fit_item(desktop, item_copied, item, spray_origin, center, scale, scale_variation, p, move, limit);
+                std::cout << "applied\n";
+                //if the element fit no other can be down so saefly return
+                return true;
             }
         }
     }
@@ -468,7 +475,7 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                 Geom::Point move = (Geom::Point(cos(tilt)*cos(dp)*dr/(1-ratio)+sin(tilt)*sin(dp)*dr/(1+ratio), -sin(tilt)*cos(dp)*dr/(1-ratio)+cos(tilt)*sin(dp)*dr/(1+ratio)))+(p-a->midpoint());
                 sp_item_move_rel(item_copied, Geom::Translate(move[Geom::X], -move[Geom::Y]));
                 Inkscape::GC::release(copy);
-                did = fit_item(desktop, item_copied, item, spray_origin, center, scale_variation, _scale, p , move , 9);
+                did = fit_item(desktop, item_copied, item, spray_origin, center, scale_variation, _scale, scale, angle, p , move);
             }
         }
 #ifdef ENABLE_SPRAY_MODE_SINGLE_PATH
@@ -530,7 +537,7 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                     sp_selected_path_union_skip_undo(selection, selection->desktop());
                     selection->add(parent_item);
                     Inkscape::GC::release(copy);
-                    did = fit_item(desktop, item_copied, parent_item, spray_origin, center, scale_variation, _scale, p , move , 9);
+                    did = fit_item(desktop, item_copied, parent_item, spray_origin, center, scale_variation, _scale, scale, angle, p , move);
                 }
             }
         }
@@ -573,7 +580,7 @@ static bool sp_spray_recursive(SPDesktop *desktop,
 
                 Inkscape::GC::release(clone);
 
-                did = fit_item(desktop, item_copied, item, spray_origin, center, scale_variation, _scale, p , move , 9);
+                did = fit_item(desktop, item_copied, item, spray_origin, center, scale_variation, _scale, scale, angle, p , move);
             }
         }
     }
