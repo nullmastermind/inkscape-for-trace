@@ -210,7 +210,7 @@ void setMeasureItem(Geom::PathVector pathv, bool is_curve, bool markers, guint32
     Inkscape::XML::Document *xml_doc = doc->getReprDoc();
     Inkscape::XML::Node *repr;
     repr = xml_doc->createElement("svg:path");
-    gchar const *str = sp_svg_write_path(pathv);
+    gchar *str = sp_svg_write_path(pathv);
     SPCSSAttr *css = sp_repr_css_attr_new();
     Geom::Coord strokewidth = SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse().expansionX();
     std::stringstream stroke_width;
@@ -249,6 +249,7 @@ void setMeasureItem(Geom::PathVector pathv, bool is_curve, bool markers, guint32
     sp_repr_css_attr_unref (css);
     g_assert( str != NULL );
     repr->setAttribute("d", str);
+    g_free(str);
     if(measure_repr) {
         measure_repr->addChild(repr, NULL);
         Inkscape::GC::release(repr);
@@ -408,11 +409,10 @@ void MeasureTool::writeMeasurePoint(Geom::Point point, bool is_start) {
     if(!namedview) {
         return;
     }
-    Inkscape::SVGOStringStream os;
-    os << point;
-    gchar * str = g_strdup(os.str().c_str());
-    char const * measure_point = is_start ? "inkscape:measure-start" : "inkscape:measure-end";
+    gchar *str =  g_strdup_printf("%f,%f", point[Geom::X], point[Geom::Y]);
+    gchar const *measure_point = is_start ? "inkscape:measure-start" : "inkscape:measure-end";
     namedview->setAttribute (measure_point, str);
+    g_free(str);
 }
 
 //This function is used to reverse the Measure, I do it in two steps because when move the knot the 
@@ -759,7 +759,7 @@ void MeasureTool::toMarkDimension()
     if (!unit_name.compare("")) {
         unit_name = "px";
     }
-    double fontsize = prefs->getInt("/tools/measure/fontsize", 10.0);
+    double fontsize = prefs->getDouble("/tools/measure/fontsize", 10.0);
     int precision = prefs->getInt("/tools/measure/precision", 2);
     std::stringstream precision_str;
     precision_str.imbue(std::locale::classic());
@@ -770,6 +770,7 @@ void MeasureTool::toMarkDimension()
     double scale = prefs->getDouble("/tools/measure/scale", 100.0) / 100.0;
     gchar *totallength_str = g_strdup_printf(precision_str.str().c_str(), totallengthval * scale, unit_name.c_str());
     setLabelText(totallength_str, middle, fontsize, Geom::deg_to_rad(180) - ray.angle(), color);
+    g_free(totallength_str);
     doc->ensureUpToDate();
     DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_MEASURE,_("Add global measure line"));
 }
@@ -867,7 +868,7 @@ void MeasureTool::setLabelText(const char *value, Geom::Point pos, double fontsi
 
     /* Create <tspan> */
     Inkscape::XML::Node *rtspan = xml_doc->createElement("svg:tspan");
-    rtspan->setAttribute("sodipodi:role", "line"); // otherwise, why bother creating the tspan?
+    rtspan->setAttribute("sodipodi:role", "line");
     SPCSSAttr *css = sp_repr_css_attr_new();
     std::stringstream font_size;
     font_size.imbue(std::locale::classic());
@@ -1199,18 +1200,18 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, Inkscape::XML::N
     for (size_t idx = 0; idx < intersections.size(); ++idx) {
         setMeasureCanvasItem(desktop->doc2dt(intersections[idx]), to_item, measure_repr);
         if(to_guides) {
-            std::stringstream cross_number;
-            cross_number.imbue(std::locale::classic());
+            gchar *cross_number;
             if (!prefs->getBool("/tools/measure/ignore_1st_and_last", true)) {
-                cross_number <<  _("Crossing ") << idx;
+                cross_number= g_strdup_printf(_("Crossing %d"), idx);
             } else {
-                cross_number <<  _("Crossing ") << idx + 1;
+                cross_number= g_strdup_printf(_("Crossing %d"), idx + 1);
             }
             if (!prefs->getBool("/tools/measure/ignore_1st_and_last", true) && idx == 0) {
                 setGuide(desktop->doc2dt(intersections[idx]), angle + Geom::deg_to_rad(90), "");
             } else {
-                setGuide(desktop->doc2dt(intersections[idx]), angle + Geom::deg_to_rad(90), cross_number.str().c_str());
+                setGuide(desktop->doc2dt(intersections[idx]), angle + Geom::deg_to_rad(90), cross_number);
             }
+            g_free(cross_number);
         }
     }
     // Since adding goes to the bottom, do all lines last.
