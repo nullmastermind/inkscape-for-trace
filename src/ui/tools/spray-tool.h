@@ -88,7 +88,6 @@ public:
     SPCanvasItem *dilate_area;
     bool overlap;
     double offset;
-    std::vector<SPItem*> hidding_items;
     sigc::connection style_set_connection;
 
     static const std::string prefsPath;

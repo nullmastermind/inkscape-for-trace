@@ -49,6 +49,7 @@
 #include "path-chemistry.h"
 
 #include "sp-text.h"
+#include "sp-root.h"
 #include "sp-flowtext.h"
 #include "display/sp-canvas.h"
 #include "display/canvas-bpath.h"
@@ -131,6 +132,29 @@ static void sp_spray_scale_rel(Geom::Point c, SPDesktop */*desktop*/, SPItem *it
     item->set_i2d_affine(item->i2dt_affine() * s.inverse() * scale * s);
     item->doWriteTransform(item->getRepr(), item->transform);
 }
+///* Method to scale items */
+//static Geom::Affine sp_spray_scale_rel(Geom::Point c, SPDesktop *desktop, SPItem *item, Geom::Scale const &scale, bool write)
+//{
+//    //Maybe isbetter create a metod inverse to set_i2d_affine to calculate transforms
+//    // whith objects not in tree
+//    Geom::Translate const s(c);
+//    Geom::Affine scale_computed = item->i2dt_affine() * s.inverse() * scale * s;
+//    Geom::Affine dt2p; /* desktop to item parent transform */
+//    if (item->parent) {
+//        dt2p = static_cast<SPItem *>(item->parent)->i2dt_affine().inverse();
+//    } else {
+//        dt2p = desktop->dt2doc();
+//    }
+//    Geom::Affine i2p( scale_computed * dt2p );
+//    if(!write){
+//        i2p = scale_computed * dt2p * desktop->dt2doc().inverse();
+//    }
+//    if(write) {
+//        item->set_item_transform(i2p);
+//        item->doWriteTransform(item->getRepr(), item->transform);
+//    }
+//    return i2p;
+//}
 
 SprayTool::SprayTool()
     : ToolBase(cursor_spray_xpm, 4, 4, false)
@@ -156,7 +180,6 @@ SprayTool::SprayTool()
     , dilate_area(NULL)
     , overlap(false)
     , offset(0)
-    , hidding_items()
 {
 }
 
@@ -355,21 +378,21 @@ static void random_position(double &radius, double &angle, double &a, double &s,
 }
 static bool fit_item(SPDesktop *desktop,
                      Geom::OptRect bbox,
-                     SPItem * item,
-                     gchar const * spray_origin,
-                     double scale,
-                     double scale_variation,
-                     std::vector<SPItem*> hidding_items)
+                     gchar const * spray_origin)
 {
     std::vector<SPItem*> items_down = desktop->getDocument()->getItemsPartiallyInBox(desktop->dkey, *bbox);
+    //std::cout << bbox->top() << "top" << bbox->left() << "left" << bbox->bottom() << "bottom" << bbox->right() << "rightINSIDE\n";
+    std::cout << "eeeeeenter\n";
     for (std::vector<SPItem*>::const_iterator i=items_down.begin(); i!=items_down.end(); i++) {
         SPItem *item_down = *i;
         gchar const * item_down_sharp = g_strdup_printf("#%s", item_down->getId());
-        if(item_down_sharp == spray_origin ||
+        std::cout << "BUUUCCCLLLLEEEE\n";
+        if(strcmp(item_down_sharp, spray_origin) == 0 ||
           (item_down->getAttribute("inkscape:spray-origin") && 
            strcmp(item_down->getAttribute("inkscape:spray-origin"),spray_origin) == 0 
            )
         ){
+        
 //            if(!SP_IS_GROUP(item) && 1>2){
 //                SPShape *down_item_shape = dynamic_cast<SPShape *>(item_down);
 //                if (down_item_shape) {
@@ -429,11 +452,12 @@ static bool fit_item(SPDesktop *desktop,
 //            } else {
 //                std::cout << "applied\n";
 //            }
-        return false;
+std::cout << "coincide\n";
+        return true;
         }
         std::cout << "not\n";
     }
-    return true;
+    return false;
 }
 
 static bool sp_spray_recursive(SPDesktop *desktop,
@@ -452,8 +476,7 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                                double ratio,
                                double tilt,
                                double rotation_variation,
-                               gint _distrib,
-                               std::vector<SPItem*> hidding_items)
+                               gint _distrib)
 {
     bool did = false;
 
@@ -478,6 +501,7 @@ static bool sp_spray_recursive(SPDesktop *desktop,
         if (a) {
             if(_fid <= population)
             {
+                SPDocument *doc = item->document;
                 gchar const * spray_origin;
                 if(!item->getAttribute("inkscape:spray-origin")){
                     spray_origin = g_strdup_printf("#%s", item->getId());
@@ -485,43 +509,63 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                     spray_origin = item->getAttribute("inkscape:spray-origin");
                 }
                 Geom::Point center=item->getCenter();
-                Geom::Rect rect(Geom::Point(a->top(), a->left()),Geom::Point(a->bottom(), a->right()));
+                Geom::Path path;
+                path.start(Geom::Point(a->left(), a->top()));
+                path.appendNew<Geom::LineSegment>(Geom::Point(a->right(), a->top()));
+                path.appendNew<Geom::LineSegment>(Geom::Point(a->right(), a->bottom()));
+                path.appendNew<Geom::LineSegment>(Geom::Point(a->left(), a->bottom()));
+                path.close(true);
                 Geom::Translate const s(center);
-                rect *= item->i2dt_affine() * s.inverse() * Geom::Scale(_scale) * s;
-                rect *= item->i2dt_affine() * s.inverse() * Geom::Scale(scale) * s;
-                rect *= item->i2dt_affine() * s.inverse() * Geom::Rotate(angle) * s;
+                path *= item->transform.inverse() * doc->getRoot()->c2p.inverse() * item->i2dt_affine() * s.inverse() * Geom::Scale(_scale) * s * item->i2dt_affine().inverse() * doc->getRoot()->c2p * item->transform;
+                path *= item->transform.inverse() * doc->getRoot()->c2p.inverse() * item->i2dt_affine() * s.inverse() * Geom::Scale(scale) * s * item->i2dt_affine().inverse() * doc->getRoot()->c2p * item->transform;
+                path *= item->transform.inverse() * doc->getRoot()->c2p.inverse() * item->i2dt_affine() * s.inverse() * Geom::Rotate(angle) * s * item->i2dt_affine().inverse() * doc->getRoot()->c2p * item->transform;
                 Geom::Point move = (Geom::Point(cos(tilt)*cos(dp)*dr/(1-ratio)+sin(tilt)*sin(dp)*dr/(1+ratio), -sin(tilt)*cos(dp)*dr/(1-ratio)+cos(tilt)*sin(dp)*dr/(1+ratio)))+(p-a->midpoint());
-                rect *= item->i2dt_affine() * s.inverse() * Geom::Translate(move[Geom::X], -move[Geom::Y]) * s;
-                Geom::OptRect bbox_transformed(Geom::Point(rect.top(), rect.left()),Geom::Point(rect.bottom(), rect.right()));
-                if(!fit_item(desktop, bbox_transformed, item, spray_origin, _scale, scale_variation, hidding_items)){
-                    double min_scale = (1.0 - scale_variation / 100.0);
-                    _scale = g_random_double_range(min_scale, 0.8); 
-                    center=item->getCenter();
-                    Geom::Translate const moved_center(center);
-                    rect *= item->i2dt_affine() * moved_center.inverse() * Geom::Scale(_scale) * moved_center;
-                    Geom::OptRect bbox_transformed2(Geom::Point(rect.top(), rect.left()),Geom::Point(rect.bottom(), rect.right()));
-                    if(!fit_item(desktop, bbox_transformed2, item, spray_origin, _scale, scale_variation, hidding_items)){
-                        return false;
-                    }
-                }
+                path *= Geom::Translate(move[Geom::X], move[Geom::Y]);
+                path *= desktop->doc2dt();
+                //std::cout << rect.top() << "top" << rect.left() << "left" << rect.bottom() << "bottom" << rect.right() << "transformed\n";
+                Geom::OptRect bbox = path.boundsFast();
+                std::cout << bbox->top() << "top" << bbox->left() << "left" << bbox->bottom() << "bottom" << bbox->right() << "PREV\n";
+                //std::cout << "ppp\n";
+                if(!fit_item(desktop, bbox, spray_origin)){
+                    //std::cout << "aaa\n";
+
+                        //return true;
+
+//                    double min_scale = (1.0 - scale_variation / 100.0);
+//                    _scale = g_random_double_range(min_scale, 0.8); 
+//                    center=item->getCenter();
+//                    Geom::Translate const moved_center(center);
+//                    rect *= item->i2dt_affine() * moved_center.inverse() * Geom::Scale(_scale) * moved_center;
+//                    Geom::OptRect bbox_transformed2(Geom::Point(rect.left(), rect.top()),Geom::Point(rect.right(), rect.bottom()));
+//                    if(!fit_item(desktop, bbox_transformed2, spray_origin)){
+//                        return true;
+//                    }
+                
+                //std::cout << "ccc";
                 SPItem *item_copied;
                 // Duplicate
-                SPDocument *doc = item->document;
                 Inkscape::XML::Document* xml_doc = doc->getReprDoc();
                 Inkscape::XML::Node *old_repr = item->getRepr();
                 Inkscape::XML::Node *parent = old_repr->parent();
                 Inkscape::XML::Node *copy = old_repr->duplicate(xml_doc);
+                if(!copy->attribute("inkscape:spray-origin")){
+                    copy->setAttribute("inkscape:spray-origin", spray_origin);
+                }
                 parent->appendChild(copy);
-                copy->setAttribute("inkscape:spray-origin", spray_origin);
                 SPObject *new_obj = doc->getObjectByRepr(copy);
                 item_copied = dynamic_cast<SPItem *>(new_obj);   // Conversion object->item
-                sp_spray_scale_rel(center,desktop, item_copied, Geom::Scale(_scale,_scale));
-                sp_spray_scale_rel(center,desktop, item_copied, Geom::Scale(scale,scale));
+                sp_spray_scale_rel(center,desktop, item_copied, Geom::Scale(_scale));
+                sp_spray_scale_rel(center,desktop, item_copied, Geom::Scale(scale));
                 sp_spray_rotate_rel(center,desktop,item_copied, Geom::Rotate(angle));
                 // Move the cursor p
                 sp_item_move_rel(item_copied, Geom::Translate(move[Geom::X], -move[Geom::Y]));
+                bbox = item_copied->documentVisualBounds();
+                std::cout << bbox->top() << "top" << bbox->left() << "left" << bbox->bottom() << "bottom" << bbox->right() << "POST\n";
                 Inkscape::GC::release(copy);
                 did = true;
+                } else {
+                    did = false;
+                }
             }
         }
 #ifdef ENABLE_SPRAY_MODE_SINGLE_PATH
@@ -633,7 +677,7 @@ static bool sp_spray_recursive(SPDesktop *desktop,
     return did;
 }
 
-static bool sp_spray_dilate(SprayTool *tc, Geom::Point /*event_p*/, Geom::Point p, Geom::Point vector, bool reverse, std::vector<SPItem*> hidding_items)
+static bool sp_spray_dilate(SprayTool *tc, Geom::Point /*event_p*/, Geom::Point p, Geom::Point vector, bool reverse)
 {
     SPDesktop *desktop = tc->desktop;
     Inkscape::Selection *selection = desktop->getSelection();
@@ -672,7 +716,7 @@ static bool sp_spray_dilate(SprayTool *tc, Geom::Point /*event_p*/, Geom::Point 
             SPItem *item = *i;
             g_assert(item != NULL);
 
-            if (sp_spray_recursive(desktop, selection, item, p, vector, tc->mode, radius, population, tc->scale, tc->scale_variation, reverse, move_mean, move_standard_deviation, tc->ratio, tc->tilt, tc->rotation_variation, tc->distrib, hidding_items)) {
+            if (sp_spray_recursive(desktop, selection, item, p, vector, tc->mode, radius, population, tc->scale, tc->scale_variation, reverse, move_mean, move_standard_deviation, tc->ratio, tc->tilt, tc->rotation_variation, tc->distrib)) {
                 did = true;
             }
         }
@@ -732,7 +776,7 @@ bool SprayTool::root_handler(GdkEvent* event) {
                 this->has_dilated = false;
 
                 if(this->is_dilating && event->button.button == 1 && !this->space_panning) {
-                    sp_spray_dilate(this, motion_w, desktop->dt2doc(motion_dt), Geom::Point(0,0), MOD__SHIFT(event), this->hidding_items);
+                    sp_spray_dilate(this, motion_w, desktop->dt2doc(motion_dt), Geom::Point(0,0), MOD__SHIFT(event));
                 }
 
                 this->has_dilated = true;
@@ -762,7 +806,7 @@ bool SprayTool::root_handler(GdkEvent* event) {
 
             // Dilating:
             if (this->is_drawing && ( event->motion.state & GDK_BUTTON1_MASK )) {
-                sp_spray_dilate(this, motion_w, motion_doc, motion_doc - this->last_push, event->button.state & GDK_SHIFT_MASK? true : false, this->hidding_items);
+                sp_spray_dilate(this, motion_w, motion_doc, motion_doc - this->last_push, event->button.state & GDK_SHIFT_MASK? true : false);
                 //this->last_push = motion_doc;
                 this->has_dilated = true;
 
@@ -795,7 +839,7 @@ bool SprayTool::root_handler(GdkEvent* event) {
                         this->is_dilating = true;
                         this->has_dilated = false;
                         if(this->is_dilating && !this->space_panning) {
-                            sp_spray_dilate(this, scroll_w, desktop->dt2doc(scroll_dt), Geom::Point(0,0), false, this->hidding_items);
+                            sp_spray_dilate(this, scroll_w, desktop->dt2doc(scroll_dt), Geom::Point(0,0), false);
                         }
                         this->has_dilated = true;
                         
@@ -825,7 +869,7 @@ bool SprayTool::root_handler(GdkEvent* event) {
                 if (!this->has_dilated) {
                     // If we did not rub, do a light tap
                     this->pressure = 0.03;
-                    sp_spray_dilate(this, motion_w, desktop->dt2doc(motion_dt), Geom::Point(0,0), MOD__SHIFT(event), this->hidding_items);
+                    sp_spray_dilate(this, motion_w, desktop->dt2doc(motion_dt), Geom::Point(0,0), MOD__SHIFT(event));
                 }
                 this->is_dilating = false;
                 this->has_dilated = false;
@@ -842,11 +886,6 @@ bool SprayTool::root_handler(GdkEvent* event) {
                         DocumentUndo::done(this->desktop->getDocument(),
                                            SP_VERB_CONTEXT_SPRAY, _("Spray in single path"));
                         break;
-                }
-                for (std::vector<SPItem*>::const_iterator i=this->hidding_items.begin(); i!=this->hidding_items.end(); i++) {
-                    SPItem *item = *i;
-                    this->hidding_items.erase(i);
-                    item->deleteObject();
                 }
             }
             break;
