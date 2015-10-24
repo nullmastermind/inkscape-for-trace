@@ -102,6 +102,19 @@ static void sp_spray_scale_value_changed( GtkAdjustment *adj, GObject * /*tbl*/ 
             gtk_adjustment_get_value(adj));
 }
 
+static void sp_spray_offset_value_changed( GtkAdjustment *adj, GObject * /*tbl*/ )
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    prefs->setDouble( "/tools/spray/offset",
+            gtk_adjustment_get_value(adj));
+}
+
+static void sp_not_overlap( GtkAdjustment *adj, GObject * /*tbl*/ )
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    prefs->setDouble( "/tools/spray/overlap",
+            gtk_adjustment_get_value(adj));
+}
 
 void sp_spray_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder)
 {
@@ -266,6 +279,31 @@ void sp_spray_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
         gtk_action_set_sensitive( GTK_ACTION(eact), TRUE );
         g_object_set_data( holder, "spray_scale", eact );
     }
+    
+    /* dont_overlap */
+    {
+        InkAction* act = ink_action_new( "SprayNotOverlapAction",
+                                          _("Not overlap"),
+                                          _("Not overlap"),
+                                          INKSCAPE_ICON("distribute-randomize"),
+                                          secondarySize );
+        g_signal_connect_after( G_OBJECT(act), "activate", G_CALLBACK(sp_not_overlap), 0 );
+        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
+    }
+    
+    /* Offset */
+    {
+        EgeAdjustmentAction *eact = create_adjustment_action( "SprayToolOffsetAction",
+                                         _("Min offset"), _("Min offset:"),
+                                         _("The min offset size"),
+                                         "/tools/spray/offset", 0.0,
+                                         GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
+                                         -9000.0, 9000.0, 1.0, 4.0,
+                                         0, 0, 0,
+                                         sp_spray_offset_value_changed, NULL, 0 , 2);
+        gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
+    }
+
 
 
 

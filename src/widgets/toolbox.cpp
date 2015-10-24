@@ -317,6 +317,10 @@ static gchar const * ui_descr =
         "    <separator />"
         "    <toolitem action='SprayStandard_deviationAction' />"
         "    <toolitem action='SprayMeanAction' />"
+        "    <separator />"
+        "    <toolitem action='SprayNotOverlapAction' />"
+        "    <toolitem action='SprayToolOffsetAction' />"
+        
         "  </toolbar>"
 
         "  <toolbar name='ZoomToolbar'>"
