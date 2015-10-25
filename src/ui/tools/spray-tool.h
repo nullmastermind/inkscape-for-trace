@@ -12,7 +12,6 @@
  *   Benoît LAVORATA
  *   Vincent MONTAGNE
  *   Pierre BARBRY-BLOT
- *   Jabiertxo Arraiza JABIERTXOF
  *
  * Copyright (C) 2009 authors
  *
@@ -87,8 +86,7 @@ public:
     bool has_dilated;
     Geom::Point last_push;
     SPCanvasItem *dilate_area;
-    bool overlap;
-    double offset;
+
     sigc::connection style_set_connection;
 
     static const std::string prefsPath;

@@ -15,11 +15,10 @@
  *   Tavmjong Bah <tavmjong@free.fr>
  *   Abhishek Sharma
  *   Kris De Gussem <Kris.DeGussem@gmail.com>
- *   Jabiertxo Arraiza <jabier.arraiza@marker.es>
  *
  * Copyright (C) 2004 David Turner
  * Copyright (C) 2003 MenTaLguY
- * Copyright (C) 1999-2015 authors
+ * Copyright (C) 1999-2011 authors
  * Copyright (C) 2001-2002 Ximian, Inc.
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
@@ -103,19 +102,6 @@ static void sp_spray_scale_value_changed( GtkAdjustment *adj, GObject * /*tbl*/ 
             gtk_adjustment_get_value(adj));
 }
 
-static void sp_spray_offset_value_changed( GtkAdjustment *adj, GObject * /*tbl*/ )
-{
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setDouble( "/tools/spray/offset",
-            gtk_adjustment_get_value(adj));
-}
-
-static void sp_toggle_not_overlap( GtkToggleAction* act, gpointer data )
-{
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    gboolean active = gtk_toggle_action_get_active(act);
-    prefs->setBool("/tools/spray/overlap", active);
-}
 
 void sp_spray_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder)
 {
@@ -280,31 +266,6 @@ void sp_spray_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
         gtk_action_set_sensitive( GTK_ACTION(eact), TRUE );
         g_object_set_data( holder, "spray_scale", eact );
     }
-
-    {
-        InkToggleAction* act = ink_toggle_action_new( "SprayNotOverlapAction",
-                                                      _("Not overlap"),
-                                                      _("Not overlap"),
-                                                      INKSCAPE_ICON("distribute-randomize"),
-                                                      secondarySize );
-        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/spray/overlap", true) );
-        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(sp_toggle_not_overlap), desktop) ;
-        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
-    }
-    
-    /* Offset */
-    {
-        EgeAdjustmentAction *eact = create_adjustment_action( "SprayToolOffsetAction",
-                                         _("Offset"), _("Offset:"),
-                                         _("Base offset size"),
-                                         "/tools/spray/offset", 0.0,
-                                         GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
-                                         -1000.0, 1000.0, 1.0, 4.0,
-                                         0, 0, 0,
-                                         sp_spray_offset_value_changed, NULL, 0 , 2);
-        gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
-    }
-
 
 
 
