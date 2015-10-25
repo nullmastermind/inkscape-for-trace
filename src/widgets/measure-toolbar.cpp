@@ -77,7 +77,7 @@ sp_measure_fontsize_value_changed(GtkAdjustment *adj, GObject *tbl)
 
     if (DocumentUndo::getUndoSensitive(desktop->getDocument())) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        prefs->setInt(Glib::ustring("/tools/measure/fontsize"),
+        prefs->setDouble(Glib::ustring("/tools/measure/fontsize"),
             gtk_adjustment_get_value(adj));
         MeasureTool *mt = get_measure_tool();
         if (mt) {
@@ -93,7 +93,7 @@ sp_measure_offset_value_changed(GtkAdjustment *adj, GObject *tbl)
 
     if (DocumentUndo::getUndoSensitive(desktop->getDocument())) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        prefs->setInt(Glib::ustring("/tools/measure/offset"),
+        prefs->setDouble(Glib::ustring("/tools/measure/offset"),
             gtk_adjustment_get_value(adj));
         MeasureTool *mt = get_measure_tool();
         if (mt) {
@@ -108,7 +108,7 @@ static void sp_measure_scale_value_changed(GtkAdjustment *adj, GObject *tbl)
 
     if (DocumentUndo::getUndoSensitive(desktop->getDocument())) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        prefs->setInt(Glib::ustring("/tools/measure/scale"),
+        prefs->setDouble(Glib::ustring("/tools/measure/scale"),
             gtk_adjustment_get_value(adj));
         MeasureTool *mt = get_measure_tool();
         if (mt) {
@@ -133,7 +133,8 @@ sp_measure_precision_value_changed(GtkAdjustment *adj, GObject *tbl)
     }
 }
 
-static void measure_unit_changed(GtkAction* /*act*/, GObject* tbl)
+static void 
+sp_measure_unit_changed(GtkAction* /*act*/, GObject* tbl)
 {
     UnitTracker* tracker = reinterpret_cast<UnitTracker*>(g_object_get_data(tbl, "tracker"));
     Glib::ustring const unit = tracker->getActiveUnit()->abbr;
@@ -145,11 +146,12 @@ static void measure_unit_changed(GtkAction* /*act*/, GObject* tbl)
     }
 }
 
-static void toggle_ignore_1st_and_last( GtkToggleAction* act, gpointer data )
+static void 
+sp_toggle_ignore_1st_and_last( GtkToggleAction* act, gpointer data )
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     gboolean active = gtk_toggle_action_get_active(act);
-    prefs->setInt("/tools/measure/ignore_1st_and_last", active);
+    prefs->setBool("/tools/measure/ignore_1st_and_last", active);
     SPDesktop *desktop = static_cast<SPDesktop *>(data);
     if ( active ) {
         desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Start and end measures inactive."));
@@ -162,11 +164,12 @@ static void toggle_ignore_1st_and_last( GtkToggleAction* act, gpointer data )
     }
 }
 
-static void toggle_only_visible( GtkToggleAction* act, gpointer data )
+static void 
+sp_toggle_only_visible( GtkToggleAction* act, gpointer data )
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     gboolean active = gtk_toggle_action_get_active(act);
-    prefs->setInt("/tools/measure/only_visible", active);
+    prefs->setBool("/tools/measure/only_visible", active);
     SPDesktop *desktop = static_cast<SPDesktop *>(data);
     if ( active ) {
         desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Show only visible crossings."));
@@ -179,11 +182,12 @@ static void toggle_only_visible( GtkToggleAction* act, gpointer data )
     }
 }
 
-static void toggle_all_layers( GtkToggleAction* act, gpointer data )
+static void 
+sp_toggle_all_layers( GtkToggleAction* act, gpointer data )
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     gboolean active = gtk_toggle_action_get_active(act);
-    prefs->setInt("/tools/measure/all_layers", active);
+    prefs->setBool("/tools/measure/all_layers", active);
     SPDesktop *desktop = static_cast<SPDesktop *>(data);
     if ( active ) {
         desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Use all layers in the measure."));
@@ -196,11 +200,12 @@ static void toggle_all_layers( GtkToggleAction* act, gpointer data )
     }
 }
 
-static void toggle_show_in_between( GtkToggleAction* act, gpointer data )
+static void 
+sp_toggle_show_in_between( GtkToggleAction* act, gpointer data )
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     gboolean active = gtk_toggle_action_get_active(act);
-    prefs->setInt("/tools/measure/show_in_between", active);
+    prefs->setBool("/tools/measure/show_in_between", active);
     SPDesktop *desktop = static_cast<SPDesktop *>(data);
     if ( active ) {
         desktop->messageStack()->flash(Inkscape::INFORMATION_MESSAGE, _("Compute all elements."));
@@ -212,28 +217,32 @@ static void toggle_show_in_between( GtkToggleAction* act, gpointer data )
         mt->showCanvasItems();
     }
 }
-static void sp_reverse_knots(void){
+static void 
+sp_reverse_knots(void){
     MeasureTool *mt = get_measure_tool();
     if (mt) {
         mt->reverseKnots();
     }
 }
 
-static void sp_to_mark_dimension(void){
+static void 
+sp_to_mark_dimension(void){
     MeasureTool *mt = get_measure_tool();
     if (mt) {
         mt->toMarkDimension();
     }
 }
 
-static void sp_to_guides(void){
+static void 
+sp_to_guides(void){
     MeasureTool *mt = get_measure_tool();
     if (mt) {
         mt->toGuides();
     }
 }
 
-static void sp_to_item(void){
+static void 
+sp_to_item(void){
     MeasureTool *mt = get_measure_tool();
     if (mt) {
         mt->toItem();
@@ -275,7 +284,7 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
     /* units menu */
     {
         GtkAction* act = tracker->createAction( "MeasureUnitsAction", _("Units:"), _("The units to be used for the measurements") );
-        g_signal_connect_after( G_OBJECT(act), "changed", G_CALLBACK(measure_unit_changed), holder );
+        g_signal_connect_after( G_OBJECT(act), "changed", G_CALLBACK(sp_measure_unit_changed), holder );
         gtk_action_group_add_action( mainActions, act );
     }
 
@@ -326,7 +335,7 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
                                                       INKSCAPE_ICON("draw-geometry-line-segment"),
                                                       secondarySize );
         gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/measure/ignore_1st_and_last", true) );
-        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(toggle_ignore_1st_and_last), desktop) ;
+        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(sp_toggle_ignore_1st_and_last), desktop) ;
         gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
     }
     /* only visible */
@@ -337,7 +346,7 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
                                                       INKSCAPE_ICON("zoom"),
                                                       secondarySize );
         gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/measure/only_visible", true) );
-        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(toggle_only_visible), desktop) ;
+        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(sp_toggle_only_visible), desktop) ;
         gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
     }
         /* measure imbetweens */
@@ -348,7 +357,7 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
                                                       INKSCAPE_ICON("distribute-randomize"),
                                                       secondarySize );
         gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/measure/show_in_between", true) );
-        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(toggle_show_in_between), desktop) ;
+        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(sp_toggle_show_in_between), desktop) ;
         gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
     }
     /* measure only current layer */
@@ -359,7 +368,7 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
                                                       INKSCAPE_ICON("dialog-layers"),
                                                       secondarySize );
         gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/measure/all_layers", true) );
-        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(toggle_all_layers), desktop) ;
+        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(sp_toggle_all_layers), desktop) ;
         gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
     }
     /* toogle start end */

@@ -347,14 +347,20 @@ MeasureTool::MeasureTool()
     this->knot_end->setStroke(0x0000007f, 0x0000007f, 0x0000007f);
     this->knot_end->setShape(SP_KNOT_SHAPE_CIRCLE);
     this->knot_end->updateCtrl();
-    Geom::Rect display_area = desktop->get_display_area () ;
+    Geom::Rect display_area = desktop->get_display_area();
     if(display_area.interiorContains(start_p) && display_area.interiorContains(end_p) && end_p != Geom::Point()) {
         this->knot_start->moveto(start_p);
         this->knot_start->show();
         this->knot_end->moveto(end_p);
         this->knot_end->show();
         showCanvasItems();
+    } else {
+        start_p = Geom::Point(0,0);
+        end_p = Geom::Point(0,0);
+        writeMeasurePoint(start_p, true);
+        writeMeasurePoint(end_p, false);
     }
+
     this->_knot_start_moved_connection = this->knot_start->moved_signal.connect(sigc::mem_fun(*this, &MeasureTool::knotStartMovedHandler));
     this->_knot_start_ungrabbed_connection = this->knot_start->ungrabbed_signal.connect(sigc::mem_fun(*this, &MeasureTool::knotUngrabbedHandler));
     this->_knot_end_moved_connection = this->knot_end->moved_signal.connect(sigc::mem_fun(*this, &MeasureTool::knotEndMovedHandler));
@@ -612,7 +618,6 @@ bool MeasureTool::root_handler(GdkEvent* event)
     case GDK_BUTTON_RELEASE: {
         this->knot_start->moveto(start_p);
         this->knot_start->show();
-        end_p = end_p;
         if(last_end) {
             end_p = desktop->w2d(*last_end);
             if (event->button.state & GDK_CONTROL_MASK) {
@@ -630,6 +635,7 @@ bool MeasureTool::root_handler(GdkEvent* event)
         this->knot_end->moveto(end_p);
         this->knot_end->show();
         showCanvasItems();
+
         if (this->grabbed) {
             sp_canvas_item_ungrab(this->grabbed, event->button.time);
             this->grabbed = NULL;
@@ -698,6 +704,9 @@ void MeasureTool::setMarker(bool isStart)
 void MeasureTool::toGuides()
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    if(!desktop || !start_p.isFinite() || !end_p.isFinite() || start_p == end_p) {
+        return;
+    }
     SPDocument *doc = desktop->getDocument();
     Geom::Point start = desktop->doc2dt(start_p) * desktop->doc2dt();
     Geom::Point end = desktop->doc2dt(end_p) * desktop->doc2dt();
@@ -726,12 +735,15 @@ void MeasureTool::toGuides()
 void MeasureTool::toItem()
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    if(!desktop || !start_p.isFinite() || !end_p.isFinite() || start_p == end_p) {
+        return;
+    }
     SPDocument *doc = desktop->getDocument();
     Geom::Ray ray(start_p,end_p);
     guint32 line_color_primary = 0x0000ff7f;
     Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
     Inkscape::XML::Node *rgroup = xml_doc->createElement("svg:g");
-    showCanvasItems(false, true,rgroup);
+    showCanvasItems(false, true, rgroup);
     setLine(start_p,end_p, false, line_color_primary, rgroup);
     SPItem *measure_item = SP_ITEM(desktop->currentLayer()->appendChildRepr(rgroup));
     Inkscape::GC::release(rgroup);
@@ -744,6 +756,9 @@ void MeasureTool::toItem()
 void MeasureTool::toMarkDimension()
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    if(!desktop || !start_p.isFinite() || !end_p.isFinite() || start_p == end_p) {
+        return;
+    }
     SPDocument *doc = desktop->getDocument();
     setMarkers();
     Geom::Ray ray(start_p,end_p);
@@ -1218,7 +1233,7 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, Inkscape::XML::N
 
     // draw main control line
     {
-        setMeasureCanvasControlLine(start_p, end_p, false, CTLINE_SECONDARY, measure_repr);
+        setMeasureCanvasControlLine(start_p, end_p, false, CTLINE_PRIMARY, measure_repr);
         double length = std::abs((end_p - start_p).length());
         Geom::Point anchorEnd = start_p;
         anchorEnd[Geom::X] += length;
