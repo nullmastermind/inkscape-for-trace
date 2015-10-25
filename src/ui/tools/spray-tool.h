@@ -12,6 +12,7 @@
  *   Benoît LAVORATA
  *   Vincent MONTAGNE
  *   Pierre BARBRY-BLOT
+ *   Jabiertxo Arraiza JABIERTXOF
  *
  * Copyright (C) 2009 authors
  *

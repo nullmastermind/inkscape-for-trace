@@ -12,6 +12,7 @@
  *   Steren GIANNINI (steren.giannini@gmail.com)
  *   Jon A. Cruz <jon@joncruz.org>
  *   Abhishek Sharma
+ *   Jabiertxo Arraiza <jabier.arraiza@marker.es>
  *
  * Copyright (C) 2009 authors
  *
@@ -132,29 +133,6 @@ static void sp_spray_scale_rel(Geom::Point c, SPDesktop */*desktop*/, SPItem *it
     item->set_i2d_affine(item->i2dt_affine() * s.inverse() * scale * s);
     item->doWriteTransform(item->getRepr(), item->transform);
 }
-///* Method to scale items */
-//static Geom::Affine sp_spray_scale_rel(Geom::Point c, SPDesktop *desktop, SPItem *item, Geom::Scale const &scale, bool write)
-//{
-//    //Maybe isbetter create a metod inverse to set_i2d_affine to calculate transforms
-//    // whith objects not in tree
-//    Geom::Translate const s(c);
-//    Geom::Affine scale_computed = item->i2dt_affine() * s.inverse() * scale * s;
-//    Geom::Affine dt2p; /* desktop to item parent transform */
-//    if (item->parent) {
-//        dt2p = static_cast<SPItem *>(item->parent)->i2dt_affine().inverse();
-//    } else {
-//        dt2p = desktop->dt2doc();
-//    }
-//    Geom::Affine i2p( scale_computed * dt2p );
-//    if(!write){
-//        i2p = scale_computed * dt2p * desktop->dt2doc().inverse();
-//    }
-//    if(write) {
-//        item->set_item_transform(i2p);
-//        item->doWriteTransform(item->getRepr(), item->transform);
-//    }
-//    return i2p;
-//}
 
 SprayTool::SprayTool()
     : ToolBase(cursor_spray_xpm, 4, 4, false)
@@ -339,16 +317,6 @@ static double get_move_standard_deviation(SprayTool *tc)
     return tc->standard_deviation;
 }
 
-static double get_offset(SprayTool *tc)
-{
-    return tc->offset;
-}
-
-static double get_overlap(SprayTool *tc)
-{
-    return tc->overlap;
-}
-
 /**
  * Method to handle the distribution of the items
  * @param[out]  radius : radius of the position of the sprayed object
@@ -376,88 +344,63 @@ static void random_position(double &radius, double &angle, double &a, double &s,
     radius = pow(radius_temp, 0.5);
 
 }
+
+static void sp_spray_transform_path(SPItem * item, Geom::Path &path, Geom::Affine affine, Geom::Point center){
+    SPDocument *doc = item->document;
+    path *= doc->getRoot()->c2p.inverse();
+    path *= item->transform.inverse();
+    Geom::Affine dt2p;
+    if (item->parent) {
+        dt2p = static_cast<SPItem *>(item->parent)->i2dt_affine().inverse();
+    } else {
+        SPDesktop *dt = SP_ACTIVE_DESKTOP;
+        dt2p = dt->dt2doc();
+    }
+    Geom::Affine i2dt = item->i2dt_affine() * Geom::Translate(center).inverse() * affine * Geom::Translate(center);
+    path *= i2dt * dt2p;
+    path *= doc->getRoot()->c2p;
+}
+
 static bool fit_item(SPDesktop *desktop,
+                     SPItem *item,
                      Geom::OptRect bbox,
-                     gchar const * spray_origin)
+                     gchar const * spray_origin,
+                     Geom::Point move,
+                     Geom::Point center,
+                     double angle,
+                     double _scale,
+                     double scale,
+                     double offset)
 {
+    if(offset < 0){
+        offset = std::min(std::min(std::abs(offset), bbox->width()/2.0),std::min(std::abs(offset), bbox->height()/2.0)) * -1;
+    }
+    bbox = Geom::Rect(Geom::Point(bbox->left() - offset, bbox->top() - offset),Geom::Point(bbox->right() + offset, bbox->bottom() + offset));
+    Geom::Path path;
+    path.start(Geom::Point(bbox->left(), bbox->top()));
+    path.appendNew<Geom::LineSegment>(Geom::Point(bbox->right(), bbox->top()));
+    path.appendNew<Geom::LineSegment>(Geom::Point(bbox->right(), bbox->bottom()));
+    path.appendNew<Geom::LineSegment>(Geom::Point(bbox->left(), bbox->bottom()));
+    path.close(true);
+    Geom::Translate const s(center);
+    sp_spray_transform_path(item, path, Geom::Scale(_scale), center);
+    sp_spray_transform_path(item, path, Geom::Scale(scale), center);
+    sp_spray_transform_path(item, path, Geom::Rotate(angle), center);
+    path *= Geom::Translate(move[Geom::X], move[Geom::Y]);
+    path *= desktop->doc2dt();
+    bbox = path.boundsFast();
     std::vector<SPItem*> items_down = desktop->getDocument()->getItemsPartiallyInBox(desktop->dkey, *bbox);
-    //std::cout << bbox->top() << "top" << bbox->left() << "left" << bbox->bottom() << "bottom" << bbox->right() << "rightINSIDE\n";
-    std::cout << "eeeeeenter\n";
     for (std::vector<SPItem*>::const_iterator i=items_down.begin(); i!=items_down.end(); i++) {
         SPItem *item_down = *i;
         gchar const * item_down_sharp = g_strdup_printf("#%s", item_down->getId());
-        std::cout << "BUUUCCCLLLLEEEE\n";
         if(strcmp(item_down_sharp, spray_origin) == 0 ||
           (item_down->getAttribute("inkscape:spray-origin") && 
-           strcmp(item_down->getAttribute("inkscape:spray-origin"),spray_origin) == 0 
-           )
-        ){
-        
-//            if(!SP_IS_GROUP(item) && 1>2){
-//                SPShape *down_item_shape = dynamic_cast<SPShape *>(item_down);
-//                if (down_item_shape) {
-//                    Geom::PathVector pathv;
-//                    SPPath *down_item_path = dynamic_cast<SPPath *>(down_item_shape);
-//                    if (down_item_path) {
-//                        pathv = down_item_path->get_curve()->get_pathvector();
-//                    } else {
-//                        pathv = down_item_shape->getCurve()->get_pathvector();
-//                    }
-//                    if (!pathv.empty()) {
-//                        SPShape *copied_item_shape = dynamic_cast<SPShape *>(item_copied);
-//                        if (copied_item_shape) {
-//                            Geom::PathVector pathv_other;
-//                            SPPath *copied_item_path = dynamic_cast<SPPath *>(copied_item_shape);
-//                            if (copied_item_path) {
-//                                pathv_other = copied_item_path->get_curve()->get_pathvector();
-//                            } else {
-//                                pathv_other = copied_item_shape->getCurve()->get_pathvector();
-//                            }
-//                            if (!pathv_other.empty()) {
-//                                Geom::CrossingSet cs = Geom::crossings(pathv, pathv_other);
-//                                if(cs[0].size() == 0){
-//                                    continue;
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//            sp_item_move_rel(item_copied, Geom::Translate(-move[Geom::X], move[Geom::Y]));
-//            sp_spray_rotate_rel(center,desktop,item_copied, Geom::Rotate(angle).inverse());
-//            sp_spray_scale_rel(center,desktop, item_copied, Geom::Scale(scale,scale).inverse());
-//            sp_spray_scale_rel(center,desktop, item_copied, Geom::Scale(_scale, _scale).inverse());
-//            
-//            double min_scale = (1.0 - scale_variation / 100.0);
-//            _scale = min_scale + ((_scale - min_scale)/2); 
-//            sp_spray_scale_rel(center,desktop, item_copied, Geom::Scale(_scale, _scale));
-//            sp_spray_scale_rel(center,desktop, item_copied, Geom::Scale(scale,scale));
-//            sp_spray_rotate_rel(center,desktop,item_copied, Geom::Rotate(angle));
-//            sp_item_move_rel(item_copied, Geom::Translate(move[Geom::X], -move[Geom::Y]));
-//            Geom::Point center = item_copied->getCenter();
-//            sp_spray_scale_rel(center,desktop, item_copied, Geom::Scale(scale).inverse());
-//            double min_scale = (1.0 - scale_variation / 100.0);
-//            scale = g_random_double_range(min_scale, 0.8); 
-//            sp_spray_scale_rel(center, desktop, item_copied, Geom::Scale(scale));
-//            bbox = item_copied->desktopVisualBounds();
-//            if(bbox->intersects(item_down->desktopVisualBounds()) ||
-//               bbox->contains(item_down->desktopVisualBounds())
-//               )
-//            {
-//                //this hack is for speed draw, moved and on release delete all at this point
-//                //item_copied->deleteObject();
-//                item_copied->setHidden(true);
-//                hidding_items.push_back(item_copied);
-//                return true;
-//            } else {
-//                std::cout << "applied\n";
-//            }
-std::cout << "coincide\n";
-        return true;
+           strcmp(item_down->getAttribute("inkscape:spray-origin"),spray_origin) == 0 ))
+        {
+            return false;
         }
-        std::cout << "not\n";
     }
-    return false;
+    return true;
 }
 
 static bool sp_spray_recursive(SPDesktop *desktop,
@@ -476,7 +419,10 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                                double ratio,
                                double tilt,
                                double rotation_variation,
-                               gint _distrib)
+                               gint _distrib,
+                               bool overlap,
+                               double offset,
+                               size_t &limit)
 {
     bool did = false;
 
@@ -508,40 +454,39 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                 } else {
                     spray_origin = item->getAttribute("inkscape:spray-origin");
                 }
-                Geom::Point center=item->getCenter();
-                Geom::Path path;
-                path.start(Geom::Point(a->left(), a->top()));
-                path.appendNew<Geom::LineSegment>(Geom::Point(a->right(), a->top()));
-                path.appendNew<Geom::LineSegment>(Geom::Point(a->right(), a->bottom()));
-                path.appendNew<Geom::LineSegment>(Geom::Point(a->left(), a->bottom()));
-                path.close(true);
-                Geom::Translate const s(center);
-                path *= item->transform.inverse() * doc->getRoot()->c2p.inverse() * item->i2dt_affine() * s.inverse() * Geom::Scale(_scale) * s * item->i2dt_affine().inverse() * doc->getRoot()->c2p * item->transform;
-                path *= item->transform.inverse() * doc->getRoot()->c2p.inverse() * item->i2dt_affine() * s.inverse() * Geom::Scale(scale) * s * item->i2dt_affine().inverse() * doc->getRoot()->c2p * item->transform;
-                path *= item->transform.inverse() * doc->getRoot()->c2p.inverse() * item->i2dt_affine() * s.inverse() * Geom::Rotate(angle) * s * item->i2dt_affine().inverse() * doc->getRoot()->c2p * item->transform;
+                Geom::Point center = item->getCenter();
                 Geom::Point move = (Geom::Point(cos(tilt)*cos(dp)*dr/(1-ratio)+sin(tilt)*sin(dp)*dr/(1+ratio), -sin(tilt)*cos(dp)*dr/(1-ratio)+cos(tilt)*sin(dp)*dr/(1+ratio)))+(p-a->midpoint());
-                path *= Geom::Translate(move[Geom::X], move[Geom::Y]);
-                path *= desktop->doc2dt();
-                //std::cout << rect.top() << "top" << rect.left() << "left" << rect.bottom() << "bottom" << rect.right() << "transformed\n";
-                Geom::OptRect bbox = path.boundsFast();
-                std::cout << bbox->top() << "top" << bbox->left() << "left" << bbox->bottom() << "bottom" << bbox->right() << "PREV\n";
-                //std::cout << "ppp\n";
-                if(!fit_item(desktop, bbox, spray_origin)){
-                    //std::cout << "aaa\n";
-
-                        //return true;
-
-//                    double min_scale = (1.0 - scale_variation / 100.0);
-//                    _scale = g_random_double_range(min_scale, 0.8); 
-//                    center=item->getCenter();
-//                    Geom::Translate const moved_center(center);
-//                    rect *= item->i2dt_affine() * moved_center.inverse() * Geom::Scale(_scale) * moved_center;
-//                    Geom::OptRect bbox_transformed2(Geom::Point(rect.left(), rect.top()),Geom::Point(rect.right(), rect.bottom()));
-//                    if(!fit_item(desktop, bbox_transformed2, spray_origin)){
-//                        return true;
-//                    }
-                
-                //std::cout << "ccc";
+                if(overlap){
+                    if(!fit_item(desktop, item, a, spray_origin, move, center, angle, _scale, scale, offset)){
+                         limit += 1;
+                         //Limit recursion to 10 levels
+                         //Seems enoght to chech if thete is place to put new copie
+                         if(limit < 11){
+                             return sp_spray_recursive(desktop,
+                                   selection,
+                                   item,
+                                   p,
+                                   Geom::Point(),
+                                   mode,
+                                   radius,
+                                   population,
+                                   scale,
+                                   scale_variation,
+                                   false,
+                                   mean,
+                                   standard_deviation,
+                                   ratio,
+                                   tilt,
+                                   rotation_variation,
+                                   _distrib,
+                                   overlap,
+                                   offset,
+                                   limit);
+                         } else {
+                            return false;
+                         }
+                    }
+                }
                 SPItem *item_copied;
                 // Duplicate
                 Inkscape::XML::Document* xml_doc = doc->getReprDoc();
@@ -559,13 +504,8 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                 sp_spray_rotate_rel(center,desktop,item_copied, Geom::Rotate(angle));
                 // Move the cursor p
                 sp_item_move_rel(item_copied, Geom::Translate(move[Geom::X], -move[Geom::Y]));
-                bbox = item_copied->documentVisualBounds();
-                std::cout << bbox->top() << "top" << bbox->left() << "left" << bbox->bottom() << "bottom" << bbox->right() << "POST\n";
                 Inkscape::GC::release(copy);
                 did = true;
-                } else {
-                    did = false;
-                }
             }
         }
 #ifdef ENABLE_SPRAY_MODE_SINGLE_PATH
@@ -636,8 +576,45 @@ static bool sp_spray_recursive(SPDesktop *desktop,
         Geom::OptRect a = item->documentVisualBounds();
         if (a) {
             if(_fid <= population) {
-                SPItem *item_copied;
                 SPDocument *doc = item->document;
+                gchar const * spray_origin;
+                if(!item->getAttribute("inkscape:spray-origin")){
+                    spray_origin = g_strdup_printf("#%s", item->getId());
+                } else {
+                    spray_origin = item->getAttribute("inkscape:spray-origin");
+                }
+                Geom::Point center=item->getCenter();
+                Geom::Point move = (Geom::Point(cos(tilt)*cos(dp)*dr/(1-ratio)+sin(tilt)*sin(dp)*dr/(1+ratio), -sin(tilt)*cos(dp)*dr/(1-ratio)+cos(tilt)*sin(dp)*dr/(1+ratio)))+(p-a->midpoint());
+                if(overlap){
+                    if(!fit_item(desktop, item, a, spray_origin, move, center, angle, _scale, scale, offset)){
+                         limit += 1;
+                         if(limit < 11){
+                             return sp_spray_recursive(desktop,
+                                   selection,
+                                   item,
+                                   p,
+                                   Geom::Point(),
+                                   mode,
+                                   radius,
+                                   population,
+                                   scale,
+                                   scale_variation,
+                                   false,
+                                   mean,
+                                   standard_deviation,
+                                   ratio,
+                                   tilt,
+                                   rotation_variation,
+                                   _distrib,
+                                   overlap,
+                                   offset,
+                                   limit);
+                         } else {
+                            return false;
+                         }
+                    }
+                }
+                SPItem *item_copied;
                 Inkscape::XML::Document* xml_doc = doc->getReprDoc();
                 Inkscape::XML::Node *old_repr = item->getRepr();
                 Inkscape::XML::Node *parent = old_repr->parent();
@@ -647,12 +624,8 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                 // Ad the clone to the list of the parent's children
                 parent->appendChild(clone);
                 // Generates the link between parent and child attributes
-                gchar const * spray_origin;
                 if(!clone->attribute("inkscape:spray-origin")){
-                    spray_origin = g_strdup_printf("#%s", old_repr->attribute("id"));
                     clone->setAttribute("inkscape:spray-origin", spray_origin);
-                } else {
-                    spray_origin = clone->attribute("inkscape:spray-origin");
                 }
                 gchar *href_str = g_strdup_printf("#%s", old_repr->attribute("id"));
                 clone->setAttribute("xlink:href", href_str, false); 
@@ -661,11 +634,9 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                 SPObject *clone_object = doc->getObjectByRepr(clone);
                 // Conversion object->item
                 item_copied = dynamic_cast<SPItem *>(clone_object);
-                Geom::Point center = item->getCenter();
                 sp_spray_scale_rel(center, desktop, item_copied, Geom::Scale(_scale, _scale));
                 sp_spray_scale_rel(center, desktop, item_copied, Geom::Scale(scale, scale));
                 sp_spray_rotate_rel(center, desktop, item_copied, Geom::Rotate(angle));
-                Geom::Point move = (Geom::Point(cos(tilt)*cos(dp)*dr/(1-ratio)+sin(tilt)*sin(dp)*dr/(1+ratio), -sin(tilt)*cos(dp)*dr/(1-ratio)+cos(tilt)*sin(dp)*dr/(1+ratio)))+(p-a->midpoint());
                 sp_item_move_rel(item_copied, Geom::Translate(move[Geom::X], -move[Geom::Y]));
 
                 Inkscape::GC::release(clone);
@@ -715,8 +686,8 @@ static bool sp_spray_dilate(SprayTool *tc, Geom::Point /*event_p*/, Geom::Point 
         for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
             SPItem *item = *i;
             g_assert(item != NULL);
-
-            if (sp_spray_recursive(desktop, selection, item, p, vector, tc->mode, radius, population, tc->scale, tc->scale_variation, reverse, move_mean, move_standard_deviation, tc->ratio, tc->tilt, tc->rotation_variation, tc->distrib)) {
+            size_t limit = 0;
+            if (sp_spray_recursive(desktop, selection, item, p, vector, tc->mode, radius, population, tc->scale, tc->scale_variation, reverse, move_mean, move_standard_deviation, tc->ratio, tc->tilt, tc->rotation_variation, tc->distrib, tc->overlap, tc->offset, limit)) {
                 did = true;
             }
         }

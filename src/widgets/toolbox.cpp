@@ -16,10 +16,11 @@
  *   Tavmjong Bah <tavmjong@free.fr>
  *   Abhishek Sharma
  *   Kris De Gussem <Kris.DeGussem@gmail.com>
+ *   Jabiertxo Arraiza <jabier.arraiza@marker.es>
  *
  * Copyright (C) 2004 David Turner
  * Copyright (C) 2003 MenTaLguY
- * Copyright (C) 1999-2011 authors
+ * Copyright (C) 1999-2015 authors
  * Copyright (C) 2001-2002 Ximian, Inc.
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
