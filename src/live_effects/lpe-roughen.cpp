@@ -201,15 +201,15 @@ Geom::Point LPERoughen::randomize(double max_lenght, bool is_node)
 
 Geom::Point LPERoughen::randomize(double lenght, Geom::Point start, Geom::Point end)
 {
-    int angle = (int)max_smooth_angle;
-    if (angle == 0){
-        angle = 1;
+    int angle = 0;
+    if((int)max_smooth_angle != 0){
+        angle = sign(Geom::deg_to_rad(rand() % (int)max_smooth_angle));
     }
     Geom::Ray ray(start, end);
     if(!fixed_displacement ){
         lenght = Geom::distance(start, end);
     }
-    return Geom::Point::polar(ray.angle() + sign(Geom::deg_to_rad(rand() % angle)), lenght) + start;
+    return Geom::Point::polar(ray.angle() + angle , lenght) + start;
 }
 
 void LPERoughen::doEffect(SPCurve *curve)
@@ -360,7 +360,7 @@ SPCurve const * LPERoughen::addNodesAndJitter(Geom::Curve const * A, Geom::Point
         std::vector<Geom::Point> seg1 = div.first.controlPoints(),
                                  seg2 = div.second.controlPoints();
         point_b1  = randomize(max_lenght, seg1[3] + point_a3, seg2[1]  + point_a3);
-        point_b2  = seg1[2];
+        point_b2  = seg2[2];
         point_b3  = seg2[3] + point_b3;
         point_a3 = seg1[3] + point_a3;
         Geom::Ray ray(prev,A->initialPoint());
@@ -371,7 +371,10 @@ SPCurve const * LPERoughen::addNodesAndJitter(Geom::Curve const * A, Geom::Point
         if(last){
             Geom::Path b2(point_b3);
             b2.appendNew<Geom::LineSegment>(point_a3);
-            point_b2  = randomize(max_lenght, point_b3, b2.pointAt(1.0/3.0));
+            double dist = Geom::distance(b2.pointAt(1.0/3.0), point_b3);
+            ray.setPoints(point_b3, b2.pointAt(1.0/3.0));
+            point_b2  = point_b3 + Geom::Point::polar(ray.angle(), dist);
+            point_b2  = randomize(max_lenght, point_b3, point_b2);
         }
         ray.setPoints(point_b1, point_a3);
         point_a2  = point_a3 + Geom::Point::polar(ray.angle(), max_lenght);
@@ -396,7 +399,10 @@ SPCurve const * LPERoughen::addNodesAndJitter(Geom::Curve const * A, Geom::Point
         if(last){
             Geom::Path b2(point_b3);
             b2.appendNew<Geom::LineSegment>(point_a3);
-            point_b2  = randomize(max_lenght, point_b3, b2.pointAt(1.0/3.0));
+            double dist = Geom::distance(b2.pointAt(1.0/3.0), point_b3);
+            ray.setPoints(point_b3, b2.pointAt(1.0/3.0));
+            point_b2  = point_b3 + Geom::Point::polar(ray.angle(), dist);
+            point_b2  = randomize(max_lenght, point_b3, point_b2);
         }
         ray.setPoints(point_b1, point_a3);
         point_a2  = point_a3 + Geom::Point::polar(ray.angle(), max_lenght);
