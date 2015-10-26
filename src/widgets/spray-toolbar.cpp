@@ -128,6 +128,8 @@ void sp_spray_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
 {
     Inkscape::IconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool overlap = prefs->getBool("/tools/spray/overlap", false);
 
     {
         /* Width */
@@ -291,8 +293,8 @@ void sp_spray_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
     /* Overlap */
     {
         InkToggleAction* act = ink_toggle_action_new( "SprayNotOverlapAction",
-                                                      _("Not overlap"),
-                                                      _("Not overlap"),
+                                                      _("Prevent overlapping objects"),
+                                                      _("Prevent overlapping objects"),
                                                       INKSCAPE_ICON("distribute-randomize"),
                                                       secondarySize );
         gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/spray/overlap", false) );
@@ -303,30 +305,39 @@ void sp_spray_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
     /* Picker */
     {
         InkToggleAction* act = ink_toggle_action_new( "SprayPickColorAction",
-                                                      _("Pick down color"),
-                                                      _("Pick down color"),
+                                                      _("Pick down color. Fill must be unset on original when spraying clones"),
+                                                      _("Pick down color. Fill must be unset on original when spraying clones"),
                                                       INKSCAPE_ICON("color-picker"),
                                                       secondarySize );
         gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/spray/picker", false) );
         g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(sp_toggle_picker), desktop) ;
         gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
+
+        //if ( offset ) {
+       //     gtk_action_set_sensitive( GTK_ACTION(eact), TRUE );
+        //} else {
+        //    gtk_action_set_sensitive( GTK_ACTION(eact), FALSE );
+        //}
     }
     
     /* Offset */
     {
         EgeAdjustmentAction *eact = create_adjustment_action( "SprayToolOffsetAction",
                                          _("Offset"), _("Offset:"),
-                                         _("Base offset size"),
+                                         _("Increase to segregate objects more (value in px)"),
                                          "/tools/spray/offset", 0.0,
                                          GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
                                          -1000.0, 1000.0, 1.0, 4.0,
                                          0, 0, 0,
                                          sp_spray_offset_value_changed, NULL, 0 , 2);
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
+
+        //if ( offset ) {
+        //    gtk_action_set_sensitive( GTK_ACTION(eact), TRUE );
+        //} else {
+        //    gtk_action_set_sensitive( GTK_ACTION(eact), FALSE );
+        //}
     }
-
-
-
 
 }
 
