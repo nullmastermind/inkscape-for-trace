@@ -361,7 +361,6 @@ static void sp_spray_transform_path(SPItem * item, Geom::Path &path, Geom::Affin
 static bool fit_item(SPDesktop *desktop,
                      SPItem *item,
                      Geom::OptRect bbox,
-                     gchar const * spray_origin,
                      Geom::Point move,
                      Geom::Point center,
                      double angle,
@@ -387,14 +386,28 @@ static bool fit_item(SPDesktop *desktop,
     path *= desktop->doc2dt();
     bbox = path.boundsFast();
     std::vector<SPItem*> items_down = desktop->getDocument()->getItemsPartiallyInBox(desktop->dkey, *bbox);
+    Inkscape::Selection *selection = desktop->getSelection();
+    if (selection->isEmpty()) {
+        return false;
+    }
+    std::vector<SPItem*> const items_selected(selection->itemList());
     for (std::vector<SPItem*>::const_iterator i=items_down.begin(); i!=items_down.end(); i++) {
         SPItem *item_down = *i;
         gchar const * item_down_sharp = g_strdup_printf("#%s", item_down->getId());
-        if(strcmp(item_down_sharp, spray_origin) == 0 ||
-          (item_down->getAttribute("inkscape:spray-origin") && 
-           strcmp(item_down->getAttribute("inkscape:spray-origin"),spray_origin) == 0 ))
-        {
-            return false;
+        for (std::vector<SPItem*>::const_iterator j=items_selected.begin(); j!=items_selected.end(); j++) {
+            SPItem *item_selected = *j;
+            gchar const * spray_origin;
+            if(!item->getAttribute("inkscape:spray-origin")){
+                spray_origin = g_strdup_printf("#%s", item_selected->getId());
+            } else {
+                spray_origin = item_selected->getAttribute("inkscape:spray-origin");
+            }
+            if(strcmp(item_down_sharp, spray_origin) == 0 ||
+              (item_down->getAttribute("inkscape:spray-origin") && 
+               strcmp(item_down->getAttribute("inkscape:spray-origin"),spray_origin) == 0 ))
+            {
+                return false;
+            }
         }
     }
     return true;
@@ -454,7 +467,7 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                 Geom::Point center = item->getCenter();
                 Geom::Point move = (Geom::Point(cos(tilt)*cos(dp)*dr/(1-ratio)+sin(tilt)*sin(dp)*dr/(1+ratio), -sin(tilt)*cos(dp)*dr/(1-ratio)+cos(tilt)*sin(dp)*dr/(1+ratio)))+(p-a->midpoint());
                 if(overlap){
-                    if(!fit_item(desktop, item, a, spray_origin, move, center, angle, _scale, scale, offset)){
+                    if(!fit_item(desktop, item, a, move, center, angle, _scale, scale, offset)){
                          limit += 1;
                          //Limit recursion to 10 levels
                          //Seems enough to chech if there is place to put new copie
@@ -583,7 +596,7 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                 Geom::Point center=item->getCenter();
                 Geom::Point move = (Geom::Point(cos(tilt)*cos(dp)*dr/(1-ratio)+sin(tilt)*sin(dp)*dr/(1+ratio), -sin(tilt)*cos(dp)*dr/(1-ratio)+cos(tilt)*sin(dp)*dr/(1+ratio)))+(p-a->midpoint());
                 if(overlap){
-                    if(!fit_item(desktop, item, a, spray_origin, move, center, angle, _scale, scale, offset)){
+                    if(!fit_item(desktop, item, a, move, center, angle, _scale, scale, offset)){
                          limit += 1;
                          if(limit < 11){
                              return sp_spray_recursive(desktop,
