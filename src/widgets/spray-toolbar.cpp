@@ -287,7 +287,7 @@ void sp_spray_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
                                                       _("Not overlap"),
                                                       INKSCAPE_ICON("distribute-randomize"),
                                                       secondarySize );
-        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/spray/overlap", true) );
+        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/spray/overlap", false) );
         g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(sp_toggle_not_overlap), desktop) ;
         gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
     }

@@ -59,9 +59,6 @@
 #include "livarot/Shape.h"
 #include <2geom/circle.h>
 #include <2geom/transforms.h>
-#include <2geom/path-intersection.h>
-#include <2geom/pathvector.h>
-#include <2geom/crossing.h>
 #include "preferences.h"
 #include "style.h"
 #include "box3d.h"
@@ -460,7 +457,7 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                     if(!fit_item(desktop, item, a, spray_origin, move, center, angle, _scale, scale, offset)){
                          limit += 1;
                          //Limit recursion to 10 levels
-                         //Seems enoght to chech if thete is place to put new copie
+                         //Seems enough to chech if there is place to put new copie
                          if(limit < 11){
                              return sp_spray_recursive(desktop,
                                    selection,
