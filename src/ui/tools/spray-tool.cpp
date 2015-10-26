@@ -49,6 +49,13 @@
 #include "sp-path.h"
 #include "path-chemistry.h"
 
+// For color picking
+#include "display/drawing.h"
+#include "display/drawing-context.h"
+#include "display/cairo-utils.h"
+#include "desktop-style.h"
+#include "svg/svg-color.h"
+
 #include "sp-text.h"
 #include "sp-root.h"
 #include "sp-flowtext.h"
@@ -154,6 +161,7 @@ SprayTool::SprayTool()
     , has_dilated(false)
     , dilate_area(NULL)
     , overlap(false)
+    , picker(false)
     , offset(0)
 {
 }
@@ -228,6 +236,7 @@ void SprayTool::setup() {
     sp_event_context_read(this, "usepressure");
     sp_event_context_read(this, "Scale");
     sp_event_context_read(this, "offset");
+    sp_event_context_read(this, "picker");
     sp_event_context_read(this, "overlap");
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -268,6 +277,8 @@ void SprayTool::set(const Inkscape::Preferences::Entry& val) {
         this->ratio = CLAMP(val.getDouble(), 0.0, 0.9);
     } else if (path == "offset") {
         this->offset = CLAMP(val.getDouble(), -1000.0, 1000.0);
+    } else if (path == "picker") {
+        this->picker =  val.getBool();
     } else if (path == "overlap") {
         this->overlap = val.getBool();
     }
@@ -366,7 +377,9 @@ static bool fit_item(SPDesktop *desktop,
                      double angle,
                      double _scale,
                      double scale,
-                     double offset)
+                     bool picker,
+                     double offset,
+                     SPCSSAttr *css)
 {
     if(offset < 0){
         offset = std::min(std::min(std::abs(offset), bbox->width()/2.0),std::min(std::abs(offset), bbox->height()/2.0)) * -1;
@@ -378,7 +391,6 @@ static bool fit_item(SPDesktop *desktop,
     path.appendNew<Geom::LineSegment>(Geom::Point(bbox->right(), bbox->bottom()));
     path.appendNew<Geom::LineSegment>(Geom::Point(bbox->left(), bbox->bottom()));
     path.close(true);
-    Geom::Translate const s(center);
     sp_spray_transform_path(item, path, Geom::Scale(_scale), center);
     sp_spray_transform_path(item, path, Geom::Scale(scale), center);
     sp_spray_transform_path(item, path, Geom::Rotate(angle), center);
@@ -410,6 +422,42 @@ static bool fit_item(SPDesktop *desktop,
             }
         }
     }
+    if(picker){
+        Geom::IntRect area = Geom::IntRect::from_xywh(floor(desktop->d2w(bbox->midpoint())[Geom::X]), floor(desktop->d2w(bbox->midpoint())[Geom::Y]), 1, 1);
+        double R = 0, G = 0, B = 0, A = 0;
+        cairo_surface_t *s = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1, 1);
+        sp_canvas_arena_render_surface(SP_CANVAS_ARENA(desktop->getDrawing()), s, area);
+        ink_cairo_surface_average_color_premul(s, R, G, B, A);
+        cairo_surface_destroy(s);
+        
+    //    Inkscape::Drawing *pick_drawing = new Inkscape::Drawing();
+    //    pick_drawing->update();
+    //    Geom::Rect box( center_bbox[Geom::X]-1, center_bbox[Geom::Y]-1,
+    //                    center_bbox[Geom::X]+1, center_bbox[Geom::Y]+1 );
+
+    //    /* Item integer bbox in points */
+    //    Geom::IntRect ibox = box.roundOutwards();
+
+    //    /* Find visible area */
+    //    cairo_surface_t *s = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, ibox.width(), ibox.height());
+    //    Inkscape::DrawingContext dc(s, ibox.min());
+
+    //    /* Render copy and pick color */
+    //    pick_drawing->render(dc, ibox);
+    //    double R = 0, G = 0, B = 0, A = 0;
+    //    ink_cairo_surface_average_color(s, R, G, B, A);
+    //    cairo_surface_destroy(s);
+        // status message
+        guint32 c32 = SP_RGBA32_F_COMPOSE(R, G, B, A);
+        gchar c[64];
+        sp_svg_write_color(c, sizeof(c), c32);
+        sp_repr_css_set_property(css, "fill", c);
+        gchar const * fill_opacity = g_strdup_printf("%f", A);
+        sp_repr_css_set_property(css, "fill-opacity", fill_opacity);
+        if(R == 1 && G == 1 && B == 1 && A == 0){
+            return false;
+        }
+    }
     return true;
 }
 
@@ -431,6 +479,7 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                                double rotation_variation,
                                gint _distrib,
                                bool overlap,
+                               bool picker,
                                double offset,
                                size_t &limit)
 {
@@ -466,8 +515,9 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                 }
                 Geom::Point center = item->getCenter();
                 Geom::Point move = (Geom::Point(cos(tilt)*cos(dp)*dr/(1-ratio)+sin(tilt)*sin(dp)*dr/(1+ratio), -sin(tilt)*cos(dp)*dr/(1-ratio)+cos(tilt)*sin(dp)*dr/(1+ratio)))+(p-a->midpoint());
+                SPCSSAttr *css = sp_repr_css_attr_new();
                 if(overlap){
-                    if(!fit_item(desktop, item, a, move, center, angle, _scale, scale, offset)){
+                    if(!fit_item(desktop, item, a, move, center, angle, _scale, scale, picker, offset, css)){
                          limit += 1;
                          //Limit recursion to 10 levels
                          //Seems enough to chech if there is place to put new copie
@@ -490,6 +540,7 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                                    rotation_variation,
                                    _distrib,
                                    overlap,
+                                   picker,
                                    offset,
                                    limit);
                          } else {
@@ -515,6 +566,9 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                 // Move the cursor p
                 sp_item_move_rel(item_copied, Geom::Translate(move[Geom::X], -move[Geom::Y]));
                 Inkscape::GC::release(copy);
+                if(picker){
+                    sp_desktop_apply_css_recursive(item_copied, css, true);
+                }
                 did = true;
             }
         }
@@ -595,8 +649,9 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                 }
                 Geom::Point center=item->getCenter();
                 Geom::Point move = (Geom::Point(cos(tilt)*cos(dp)*dr/(1-ratio)+sin(tilt)*sin(dp)*dr/(1+ratio), -sin(tilt)*cos(dp)*dr/(1-ratio)+cos(tilt)*sin(dp)*dr/(1+ratio)))+(p-a->midpoint());
+                SPCSSAttr *css = sp_repr_css_attr_new();
                 if(overlap){
-                    if(!fit_item(desktop, item, a, move, center, angle, _scale, scale, offset)){
+                    if(!fit_item(desktop, item, a, move, center, angle, _scale, scale, picker, offset, css)){
                          limit += 1;
                          if(limit < 11){
                              return sp_spray_recursive(desktop,
@@ -617,6 +672,7 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                                    rotation_variation,
                                    _distrib,
                                    overlap,
+                                   picker,
                                    offset,
                                    limit);
                          } else {
@@ -648,7 +704,9 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                 sp_spray_scale_rel(center, desktop, item_copied, Geom::Scale(scale, scale));
                 sp_spray_rotate_rel(center, desktop, item_copied, Geom::Rotate(angle));
                 sp_item_move_rel(item_copied, Geom::Translate(move[Geom::X], -move[Geom::Y]));
-
+                if(picker){
+                    sp_desktop_apply_css_recursive(item_copied, css, true);
+                }
                 Inkscape::GC::release(clone);
                 did = true;
             }
@@ -697,7 +755,7 @@ static bool sp_spray_dilate(SprayTool *tc, Geom::Point /*event_p*/, Geom::Point 
             SPItem *item = *i;
             g_assert(item != NULL);
             size_t limit = 0;
-            if (sp_spray_recursive(desktop, selection, item, p, vector, tc->mode, radius, population, tc->scale, tc->scale_variation, reverse, move_mean, move_standard_deviation, tc->ratio, tc->tilt, tc->rotation_variation, tc->distrib, tc->overlap, tc->offset, limit)) {
+            if (sp_spray_recursive(desktop, selection, item, p, vector, tc->mode, radius, population, tc->scale, tc->scale_variation, reverse, move_mean, move_standard_deviation, tc->ratio, tc->tilt, tc->rotation_variation, tc->distrib, tc->overlap,tc->picker, tc->offset, limit)) {
                 did = true;
             }
         }

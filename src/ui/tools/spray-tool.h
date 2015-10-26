@@ -88,6 +88,7 @@ public:
     Geom::Point last_push;
     SPCanvasItem *dilate_area;
     bool overlap;
+    bool picker;
     double offset;
     sigc::connection style_set_connection;
 

@@ -117,6 +117,13 @@ static void sp_toggle_not_overlap( GtkToggleAction* act, gpointer data )
     prefs->setBool("/tools/spray/overlap", active);
 }
 
+static void sp_toggle_picker( GtkToggleAction* act, gpointer data )
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    gboolean active = gtk_toggle_action_get_active(act);
+    prefs->setBool("/tools/spray/picker", active);
+}
+
 void sp_spray_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder)
 {
     Inkscape::IconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
@@ -281,6 +288,7 @@ void sp_spray_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
         g_object_set_data( holder, "spray_scale", eact );
     }
 
+    /* Overlap */
     {
         InkToggleAction* act = ink_toggle_action_new( "SprayNotOverlapAction",
                                                       _("Not overlap"),
@@ -289,6 +297,18 @@ void sp_spray_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
                                                       secondarySize );
         gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/spray/overlap", false) );
         g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(sp_toggle_not_overlap), desktop) ;
+        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
+    }
+
+    /* Picker */
+    {
+        InkToggleAction* act = ink_toggle_action_new( "SprayPickColorAction",
+                                                      _("Pick down color"),
+                                                      _("Pick down color"),
+                                                      INKSCAPE_ICON("color-picker"),
+                                                      secondarySize );
+        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/spray/picker", false) );
+        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(sp_toggle_picker), desktop) ;
         gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
     }
     

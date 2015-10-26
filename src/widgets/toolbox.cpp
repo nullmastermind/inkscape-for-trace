@@ -320,6 +320,7 @@ static gchar const * ui_descr =
         "    <toolitem action='SprayMeanAction' />"
         "    <separator />"
         "    <toolitem action='SprayNotOverlapAction' />"
+        "    <toolitem action='SprayPickColorAction' />"
         "    <toolitem action='SprayToolOffsetAction' />"
         
         "  </toolbar>"
