@@ -429,25 +429,6 @@ static bool fit_item(SPDesktop *desktop,
         sp_canvas_arena_render_surface(SP_CANVAS_ARENA(desktop->getDrawing()), s, area);
         ink_cairo_surface_average_color_premul(s, R, G, B, A);
         cairo_surface_destroy(s);
-        
-    //    Inkscape::Drawing *pick_drawing = new Inkscape::Drawing();
-    //    pick_drawing->update();
-    //    Geom::Rect box( center_bbox[Geom::X]-1, center_bbox[Geom::Y]-1,
-    //                    center_bbox[Geom::X]+1, center_bbox[Geom::Y]+1 );
-
-    //    /* Item integer bbox in points */
-    //    Geom::IntRect ibox = box.roundOutwards();
-
-    //    /* Find visible area */
-    //    cairo_surface_t *s = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, ibox.width(), ibox.height());
-    //    Inkscape::DrawingContext dc(s, ibox.min());
-
-    //    /* Render copy and pick color */
-    //    pick_drawing->render(dc, ibox);
-    //    double R = 0, G = 0, B = 0, A = 0;
-    //    ink_cairo_surface_average_color(s, R, G, B, A);
-    //    cairo_surface_destroy(s);
-        // status message
         guint32 c32 = SP_RGBA32_F_COMPOSE(R, G, B, A);
         gchar c[64];
         sp_svg_write_color(c, sizeof(c), c32);
