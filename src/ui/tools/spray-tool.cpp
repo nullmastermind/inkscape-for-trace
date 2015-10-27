@@ -455,8 +455,8 @@ static bool fit_item(SPDesktop *desktop,
         if(!overlap){
             doc->ensureUpToDate();
         }
-        Geom::Point mid_point = bbox->midpoint();
-        Geom::IntRect area = Geom::IntRect::from_xywh(floor(desktop->d2w(mid_point)[Geom::X]), floor(desktop->d2w(mid_point)[Geom::Y]), 1, 1);
+        Geom::Point mid_point = desktop->d2w(bbox->midpoint());
+        Geom::IntRect area = Geom::IntRect::from_xywh(floor(mid_point[Geom::X]), floor(mid_point[Geom::Y]), 1, 1);
         double R = 0, G = 0, B = 0, A = 0;
         cairo_surface_t *s = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1, 1);
         sp_canvas_arena_render_surface(SP_CANVAS_ARENA(desktop->getDrawing()), s, area);
