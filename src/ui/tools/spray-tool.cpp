@@ -378,13 +378,19 @@ static bool fit_item(SPDesktop *desktop,
                      double _scale,
                      double scale,
                      bool picker,
+                     bool overlap,
                      double offset,
                      SPCSSAttr *css)
 {
-    if(offset < 0){
-        offset = std::min(std::min(std::abs(offset), bbox->width()/2.0),std::min(std::abs(offset), bbox->height()/2.0)) * -1;
+    SPDocument *doc = item->document;
+    double width = bbox->width();
+    double height = bbox->height();
+    double size = std::min(width,height);
+    double offset_min = (offset * size)/100.0 - (size);
+    if(offset_min < 0 ){
+        offset_min = 0;
     }
-    bbox = Geom::Rect(Geom::Point(bbox->left() - offset, bbox->top() - offset),Geom::Point(bbox->right() + offset, bbox->bottom() + offset));
+    bbox = Geom::Rect(Geom::Point(bbox->left() - offset_min, bbox->top() - offset_min),Geom::Point(bbox->right() + offset_min, bbox->bottom() + offset_min));
     Geom::Path path;
     path.start(Geom::Point(bbox->left(), bbox->top()));
     path.appendNew<Geom::LineSegment>(Geom::Point(bbox->right(), bbox->top()));
@@ -397,6 +403,16 @@ static bool fit_item(SPDesktop *desktop,
     path *= Geom::Translate(move[Geom::X], move[Geom::Y]);
     path *= desktop->doc2dt();
     bbox = path.boundsFast();
+    double bbox_left_main = bbox->left();
+    double bbox_top_main = bbox->top();
+    double width_transformed = bbox->width();
+    double height_transformed = bbox->height();
+    size = std::min(width_transformed,height_transformed);
+    if(offset < 100 ){
+        offset_min = ((99.0 - offset) * size)/100.0 - size;
+    } else {
+        offset_min = 0;
+    }
     std::vector<SPItem*> items_down = desktop->getDocument()->getItemsPartiallyInBox(desktop->dkey, *bbox);
     Inkscape::Selection *selection = desktop->getSelection();
     if (selection->isEmpty()) {
@@ -405,6 +421,11 @@ static bool fit_item(SPDesktop *desktop,
     std::vector<SPItem*> const items_selected(selection->itemList());
     for (std::vector<SPItem*>::const_iterator i=items_down.begin(); i!=items_down.end(); i++) {
         SPItem *item_down = *i;
+        Geom::OptRect bbox_down = item_down->documentVisualBounds();
+        width = bbox_down->width();
+        height = bbox_down->height();
+        double bbox_left = bbox_down->left();
+        double bbox_top = bbox_down->top();
         gchar const * item_down_sharp = g_strdup_printf("#%s", item_down->getId());
         for (std::vector<SPItem*>::const_iterator j=items_selected.begin(); j!=items_selected.end(); j++) {
             SPItem *item_selected = *j;
@@ -415,27 +436,56 @@ static bool fit_item(SPDesktop *desktop,
                 spray_origin = item_selected->getAttribute("inkscape:spray-origin");
             }
             if(strcmp(item_down_sharp, spray_origin) == 0 ||
-              (item_down->getAttribute("inkscape:spray-origin") && 
-               strcmp(item_down->getAttribute("inkscape:spray-origin"),spray_origin) == 0 ))
+                (item_down->getAttribute("inkscape:spray-origin") && 
+                strcmp(item_down->getAttribute("inkscape:spray-origin"),spray_origin) == 0 ))
             {
-                return false;
+                if(overlap){
+                    if(!(offset_min < 0 && std::abs(bbox_left - bbox_left_main) > std::abs(offset_min) && 
+                std::abs(bbox_top - bbox_top_main) > std::abs(offset_min))){
+                        return false;
+                    }
+                } else if(picker){
+                    item_down->setHidden(true);
+                    item_down->updateRepr();
+                }
             }
         }
     }
     if(picker){
-        Geom::IntRect area = Geom::IntRect::from_xywh(floor(desktop->d2w(bbox->midpoint())[Geom::X]), floor(desktop->d2w(bbox->midpoint())[Geom::Y]), 1, 1);
+        if(!overlap){
+            doc->ensureUpToDate();
+        }
+        Geom::Point mid_point = bbox->midpoint();
+        Geom::IntRect area = Geom::IntRect::from_xywh(floor(desktop->d2w(mid_point)[Geom::X]), floor(desktop->d2w(mid_point)[Geom::Y]), 1, 1);
         double R = 0, G = 0, B = 0, A = 0;
         cairo_surface_t *s = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1, 1);
         sp_canvas_arena_render_surface(SP_CANVAS_ARENA(desktop->getDrawing()), s, area);
         ink_cairo_surface_average_color_premul(s, R, G, B, A);
         cairo_surface_destroy(s);
+        if (fabs(A) < 1e-4) {
+            A = 0; // suppress exponentials, CSS does not allow that
+        }
+        if (A > 0) {
+            R /= A;
+            G /= A;
+            B /= A;
+        }
         guint32 c32 = SP_RGBA32_F_COMPOSE(R, G, B, A);
         gchar c[64];
         sp_svg_write_color(c, sizeof(c), c32);
         sp_repr_css_set_property(css, "fill", c);
-        gchar const * fill_opacity = g_strdup_printf("%f", A);
-        sp_repr_css_set_property(css, "fill-opacity", fill_opacity);
-        if(R == 1 && G == 1 && B == 1 && A == 0){
+        std::stringstream fill_opacity;
+        fill_opacity.imbue(std::locale::classic());
+        fill_opacity << float(A);
+        sp_repr_css_set_property(css, "fill-opacity", fill_opacity.str().c_str());
+        if(!overlap){
+            for (std::vector<SPItem *>::const_iterator k=items_down.begin(); k!=items_down.end(); k++) {
+                SPItem *item_hidden = *k;
+                item_hidden->setHidden(false);
+                item_hidden->updateRepr();
+            }
+        }
+        if(A == 0){
             return false;
         }
     }
@@ -497,8 +547,8 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                 Geom::Point center = item->getCenter();
                 Geom::Point move = (Geom::Point(cos(tilt)*cos(dp)*dr/(1-ratio)+sin(tilt)*sin(dp)*dr/(1+ratio), -sin(tilt)*cos(dp)*dr/(1-ratio)+cos(tilt)*sin(dp)*dr/(1+ratio)))+(p-a->midpoint());
                 SPCSSAttr *css = sp_repr_css_attr_new();
-                if(overlap){
-                    if(!fit_item(desktop, item, a, move, center, angle, _scale, scale, picker, offset, css)){
+                if(overlap || picker){
+                    if(!fit_item(desktop, item, a, move, center, angle, _scale, scale, picker, overlap, offset, css)){
                          limit += 1;
                          //Limit recursion to 10 levels
                          //Seems enough to chech if there is place to put new copie
@@ -631,8 +681,8 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                 Geom::Point center=item->getCenter();
                 Geom::Point move = (Geom::Point(cos(tilt)*cos(dp)*dr/(1-ratio)+sin(tilt)*sin(dp)*dr/(1+ratio), -sin(tilt)*cos(dp)*dr/(1-ratio)+cos(tilt)*sin(dp)*dr/(1+ratio)))+(p-a->midpoint());
                 SPCSSAttr *css = sp_repr_css_attr_new();
-                if(overlap){
-                    if(!fit_item(desktop, item, a, move, center, angle, _scale, scale, picker, offset, css)){
+                if(overlap || picker){
+                    if(!fit_item(desktop, item, a, move, center, angle, _scale, scale, picker, overlap, offset, css)){
                          limit += 1;
                          if(limit < 11){
                              return sp_spray_recursive(desktop,
