@@ -355,7 +355,7 @@ static void random_position(double &radius, double &angle, double &a, double &s,
 
 static void sp_spray_transform_path(SPItem * item, Geom::Path &path, Geom::Affine affine, Geom::Point center){
     SPDocument *doc = item->document;
-    path *= doc->getRoot()->c2p.inverse();
+    path *= i2anc_affine(static_cast<SPItem *>(item->parent), NULL).inverse();
     path *= item->transform.inverse();
     Geom::Affine dt2p;
     if (item->parent) {
@@ -366,7 +366,7 @@ static void sp_spray_transform_path(SPItem * item, Geom::Path &path, Geom::Affin
     }
     Geom::Affine i2dt = item->i2dt_affine() * Geom::Translate(center).inverse() * affine * Geom::Translate(center);
     path *= i2dt * dt2p;
-    path *= doc->getRoot()->c2p;
+    path *= i2anc_affine(static_cast<SPItem *>(item->parent), NULL);
 }
 
 static bool fit_item(SPDesktop *desktop,
