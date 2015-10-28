@@ -559,7 +559,7 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                          limit += 1;
                          //Limit recursion to 10 levels
                          //Seems enough to chech if there is place to put new copie
-                         if(limit < 11){
+                         if(limit < 21){
                              return sp_spray_recursive(desktop,
                                    selection,
                                    item,
@@ -692,7 +692,7 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                 if(overlap || picker || visible){
                     if(!fit_item(desktop, item, a, move, center, angle, _scale, scale, picker, visible, overlap, offset, css)){
                          limit += 1;
-                         if(limit < 11){
+                         if(limit < 21){
                              return sp_spray_recursive(desktop,
                                    selection,
                                    item,
