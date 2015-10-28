@@ -89,6 +89,7 @@ public:
     SPCanvasItem *dilate_area;
     bool overlap;
     bool picker;
+    bool visible;
     double offset;
     sigc::connection style_set_connection;
 

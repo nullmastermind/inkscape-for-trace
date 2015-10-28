@@ -162,6 +162,7 @@ SprayTool::SprayTool()
     , dilate_area(NULL)
     , overlap(false)
     , picker(false)
+    , visible(false)
     , offset(0)
 {
 }
@@ -237,6 +238,7 @@ void SprayTool::setup() {
     sp_event_context_read(this, "Scale");
     sp_event_context_read(this, "offset");
     sp_event_context_read(this, "picker");
+    sp_event_context_read(this, "visible");
     sp_event_context_read(this, "overlap");
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -279,6 +281,8 @@ void SprayTool::set(const Inkscape::Preferences::Entry& val) {
         this->offset = CLAMP(val.getDouble(), -1000.0, 1000.0);
     } else if (path == "picker") {
         this->picker =  val.getBool();
+    } else if (path == "visible") {
+        this->visible =  val.getBool();
     } else if (path == "overlap") {
         this->overlap = val.getBool();
     }
@@ -354,7 +358,6 @@ static void random_position(double &radius, double &angle, double &a, double &s,
 }
 
 static void sp_spray_transform_path(SPItem * item, Geom::Path &path, Geom::Affine affine, Geom::Point center){
-    SPDocument *doc = item->document;
     path *= i2anc_affine(static_cast<SPItem *>(item->parent), NULL).inverse();
     path *= item->transform.inverse();
     Geom::Affine dt2p;
@@ -378,6 +381,7 @@ static bool fit_item(SPDesktop *desktop,
                      double _scale,
                      double scale,
                      bool picker,
+                     bool visible,
                      bool overlap,
                      double offset,
                      SPCSSAttr *css)
@@ -444,14 +448,14 @@ static bool fit_item(SPDesktop *desktop,
                 std::abs(bbox_top - bbox_top_main) > std::abs(offset_min))){
                         return false;
                     }
-                } else if(picker){
+                } else if(picker || visible){
                     item_down->setHidden(true);
                     item_down->updateRepr();
                 }
             }
         }
     }
-    if(picker){
+    if(picker || visible){
         if(!overlap){
             doc->ensureUpToDate();
         }
@@ -465,19 +469,21 @@ static bool fit_item(SPDesktop *desktop,
         if (fabs(A) < 1e-4) {
             A = 0; // suppress exponentials, CSS does not allow that
         }
-        if (A > 0) {
-            R /= A;
-            G /= A;
-            B /= A;
+        if(picker){
+            if (A > 0) {
+                R /= A;
+                G /= A;
+                B /= A;
+            }
+            guint32 c32 = SP_RGBA32_F_COMPOSE(R, G, B, A);
+            gchar c[64];
+            sp_svg_write_color(c, sizeof(c), c32);
+            sp_repr_css_set_property(css, "fill", c);
+            std::stringstream fill_opacity;
+            fill_opacity.imbue(std::locale::classic());
+            fill_opacity << float(A);
+            sp_repr_css_set_property(css, "fill-opacity", fill_opacity.str().c_str());
         }
-        guint32 c32 = SP_RGBA32_F_COMPOSE(R, G, B, A);
-        gchar c[64];
-        sp_svg_write_color(c, sizeof(c), c32);
-        sp_repr_css_set_property(css, "fill", c);
-        std::stringstream fill_opacity;
-        fill_opacity.imbue(std::locale::classic());
-        fill_opacity << float(A);
-        sp_repr_css_set_property(css, "fill-opacity", fill_opacity.str().c_str());
         if(!overlap){
             for (std::vector<SPItem *>::const_iterator k=items_down.begin(); k!=items_down.end(); k++) {
                 SPItem *item_hidden = *k;
@@ -511,6 +517,7 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                                gint _distrib,
                                bool overlap,
                                bool picker,
+                               bool visible,
                                double offset,
                                size_t &limit)
 {
@@ -547,8 +554,8 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                 Geom::Point center = item->getCenter();
                 Geom::Point move = (Geom::Point(cos(tilt)*cos(dp)*dr/(1-ratio)+sin(tilt)*sin(dp)*dr/(1+ratio), -sin(tilt)*cos(dp)*dr/(1-ratio)+cos(tilt)*sin(dp)*dr/(1+ratio)))+(p-a->midpoint());
                 SPCSSAttr *css = sp_repr_css_attr_new();
-                if(overlap || picker){
-                    if(!fit_item(desktop, item, a, move, center, angle, _scale, scale, picker, overlap, offset, css)){
+                if(overlap || picker || visible){
+                    if(!fit_item(desktop, item, a, move, center, angle, _scale, scale, picker, visible, overlap, offset, css)){
                          limit += 1;
                          //Limit recursion to 10 levels
                          //Seems enough to chech if there is place to put new copie
@@ -572,6 +579,7 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                                    _distrib,
                                    overlap,
                                    picker,
+                                   visible,
                                    offset,
                                    limit);
                          } else {
@@ -681,8 +689,8 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                 Geom::Point center=item->getCenter();
                 Geom::Point move = (Geom::Point(cos(tilt)*cos(dp)*dr/(1-ratio)+sin(tilt)*sin(dp)*dr/(1+ratio), -sin(tilt)*cos(dp)*dr/(1-ratio)+cos(tilt)*sin(dp)*dr/(1+ratio)))+(p-a->midpoint());
                 SPCSSAttr *css = sp_repr_css_attr_new();
-                if(overlap || picker){
-                    if(!fit_item(desktop, item, a, move, center, angle, _scale, scale, picker, overlap, offset, css)){
+                if(overlap || picker || visible){
+                    if(!fit_item(desktop, item, a, move, center, angle, _scale, scale, picker, visible, overlap, offset, css)){
                          limit += 1;
                          if(limit < 11){
                              return sp_spray_recursive(desktop,
@@ -704,6 +712,7 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                                    _distrib,
                                    overlap,
                                    picker,
+                                   visible,
                                    offset,
                                    limit);
                          } else {
@@ -786,7 +795,7 @@ static bool sp_spray_dilate(SprayTool *tc, Geom::Point /*event_p*/, Geom::Point 
             SPItem *item = *i;
             g_assert(item != NULL);
             size_t limit = 0;
-            if (sp_spray_recursive(desktop, selection, item, p, vector, tc->mode, radius, population, tc->scale, tc->scale_variation, reverse, move_mean, move_standard_deviation, tc->ratio, tc->tilt, tc->rotation_variation, tc->distrib, tc->overlap,tc->picker, tc->offset, limit)) {
+            if (sp_spray_recursive(desktop, selection, item, p, vector, tc->mode, radius, population, tc->scale, tc->scale_variation, reverse, move_mean, move_standard_deviation, tc->ratio, tc->tilt, tc->rotation_variation, tc->distrib, tc->overlap, tc->picker, tc->visible, tc->offset, limit)) {
                 did = true;
             }
         }
