@@ -174,10 +174,7 @@ enum SPCSSWritingMode {
 enum SPCSSTextOrientation {
     SP_CSS_TEXT_ORIENTATION_MIXED,
     SP_CSS_TEXT_ORIENTATION_UPRIGHT,
-    SP_CSS_TEXT_ORIENTATION_SIDEWAYS_RIGHT,
-    SP_CSS_TEXT_ORIENTATION_SIDEWAYS_LEFT,
-    SP_CSS_TEXT_ORIENTATION_SIDEWAYS,
-    SP_CSS_TEXT_ORIENTATION_USE_GLYPH_ORIENTATION
+    SP_CSS_TEXT_ORIENTATION_SIDEWAYS
 };
 
 enum SPTextAnchor {
@@ -519,10 +516,7 @@ static SPStyleEnum const enum_writing_mode[] = {
 static SPStyleEnum const enum_text_orientation[] = {
     {"mixed",                 SP_CSS_TEXT_ORIENTATION_MIXED}, // Default
     {"upright",               SP_CSS_TEXT_ORIENTATION_UPRIGHT},
-    {"sideways-right",        SP_CSS_TEXT_ORIENTATION_SIDEWAYS_RIGHT},
-    {"sideways-left",         SP_CSS_TEXT_ORIENTATION_SIDEWAYS_LEFT},
     {"sideways",              SP_CSS_TEXT_ORIENTATION_SIDEWAYS},
-    {"use-glyph-orientation", SP_CSS_TEXT_ORIENTATION_USE_GLYPH_ORIENTATION},
     {NULL, -1}
 };
 

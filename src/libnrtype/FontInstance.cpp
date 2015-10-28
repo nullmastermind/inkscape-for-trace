@@ -374,10 +374,10 @@ void font_instance::LoadGlyph(int glyph_id)
         GLYPHMETRICS metrics;
         DWORD bufferSize=GetGlyphOutline (parent->hScreenDC, glyph_id, GGO_GLYPH_INDEX | GGO_NATIVE | GGO_UNHINTED, &metrics, 0, NULL, &identity);
         double scale=1.0/parent->fontSize;
-        n_g.h_advance=metrics.gmCellIncX*scale;
-        n_g.v_advance=otm.otmTextMetrics.tmHeight*scale;
-        n_g.h_width=metrics.gmBlackBoxX*scale;
-        n_g.v_width=metrics.gmBlackBoxY*scale;
+        n_g.h_advance = metrics.gmCellIncX          * scale;
+        n_g.v_advance = otm.otmTextMetrics.tmHeight * scale;
+        n_g.h_width   = metrics.gmBlackBoxX         * scale;
+        n_g.v_width   = metrics.gmBlackBoxY         * scale;
         if ( bufferSize == GDI_ERROR) {
             // shit happened
         } else if ( bufferSize == 0) {
@@ -459,7 +459,13 @@ void font_instance::LoadGlyph(int glyph_id)
                 n_g.v_advance=((double)theFace->glyph->metrics.vertAdvance)/((double)theFace->units_per_EM);
                 n_g.v_width=((double)theFace->glyph->metrics.height)/((double)theFace->units_per_EM);
             } else {
-                n_g.v_width=n_g.v_advance=((double)theFace->height)/((double)theFace->units_per_EM);
+                // CSS3 Writing modes dictates that if vertical font metrics are missing we must
+                // synthisize them. No method is specified. The SVG 1.1 spec suggests using the em
+                // height (which is not theFace->height as that includes leading). The em height
+                // is ascender + descender (descender positive).  Note: The "Requirements for
+                // Japanese Text Layout" W3C document says that Japanese kanji should be "set
+                // solid" which implies that vertical (and horizontal) advance should be 1em.
+                n_g.v_width=n_g.v_advance= 1.0;
             }
             if ( theFace->glyph->format == ft_glyph_format_outline ) {
                 FT_Outline_Funcs ft2_outline_funcs = {
@@ -529,6 +535,15 @@ bool font_instance::FontMetrics(double &ascent,double &descent,double &leading)
     leading=fabs(((double)theFace->height)/((double)theFace->units_per_EM));
     leading-=ascent+descent;
 #endif
+
+    // CSS dictates em size is ascent + descent
+    double em = ascent + descent;
+    if( em <= 0 ) {
+        return false; // Pathological
+    }
+    ascent /= em;
+    descent /= em;
+    leading /= em;
     return true;
 }
 

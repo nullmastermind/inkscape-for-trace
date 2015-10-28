@@ -22,6 +22,7 @@
 #include <vector>
 #include <boost/optional.hpp>
 #include <svg/svg-length.h>
+#include "style-enums.h"
 
 #ifdef HAVE_CAIRO_PDF
 namespace Inkscape {
@@ -156,6 +157,9 @@ public:
     /** Used to specify any particular text direction required. Used for
     both the 'direction' and 'block-progression' CSS attributes. */
     enum Direction {LEFT_TO_RIGHT, RIGHT_TO_LEFT, TOP_TO_BOTTOM, BOTTOM_TO_TOP};
+
+    /** Used to specify orientation of glyphs in vertical text. */
+    enum Orientation {ORIENTATION_UPRIGHT, ORIENTATION_SIDEWAYS};
 
     /** Display alignment for shapes. See appendWrapShape(). */
     enum DisplayAlign {DISPLAY_ALIGN_BEFORE, DISPLAY_ALIGN_CENTER, DISPLAY_ALIGN_AFTER};
@@ -603,18 +607,45 @@ public:
 
     //@}
 
-    /// it's useful for this to be public so that ScanlineMaker can use it
-    struct LineHeight {
+
+    /**
+     * Keep track of font metrics. Two use cases:
+     * 1. Keep track of ascent and descent of an individual font.
+     * 2. Keep track of effective ascent and descent that includes half-leading.
+     *
+     * Note: Leading refers to the "external" leading which is added (subtracted) due to
+     * a computed value of 'line-height' that differs from 'font-size'. "Internal" leading
+     * which is specified inside a font is not used in CSS. The 'font-size' is based on
+     * the font's em size which is 'ascent' + 'descent'.
+     *
+     * This structure was renamed (and modified) from "LineHeight".
+     *
+     * It's useful for this to be public so that ScanlineMaker can use it.
+     */
+    struct FontMetrics {
+
         double ascent;
         double descent;
-        double leading;
-        inline double total() const {return ascent + descent + leading;}
-        inline void setZero() {ascent = descent = leading = 0.0;}
-        inline LineHeight& operator*=(double x) {ascent *= x; descent *= x; leading *= x; return *this;}
-        void max(LineHeight const &other);   /// makes this object contain the largest of all three members between this object and other
+        double leading; // Not used... to be removed (requires change to font->FontMetrics()
+
+        // CSS 2.1 dictates that font-size is based on em-size which is defined as ascent + descent
+        inline double emSize() const {return ascent + descent;}
+        // Alternatively name function for use 2.
+        inline double lineSize() const { return ascent + descent; }
+        inline void setZero() {ascent = descent = 0.0;}
+
+        // For scaling for 'font-size'.
+        inline FontMetrics& operator*=(double x) {ascent *= x; descent *= x; return *this;}
+
+        /// Save the larger values of ascent and descent between this and other. Needed for laying
+        /// out a line with mixed font-sizes, fonts, or line spacings.
+        void max(FontMetrics const &other);
+
+        /// Calculate the effective ascent and descent including half "leading".
+        void computeEffective( const double &line_height );
+
         inline double getAscent() const {return ascent; }
         inline double getDescent() const {return descent; }
-        inline double getLeading() const {return leading; }
     };
 
     /// see _enum_converter()
@@ -748,6 +779,7 @@ private:
         float x;         /// relative to the start of the chunk
         float y;         /// relative to the current line's baseline
         float rotation;  /// absolute, modulo any object transforms, which we don't know about
+        Orientation orientation; /// Orientation of glyph in vertical text
         float width;
         float vertical_scale; /// to implement lengthAdjust="spacingAndGlyphs" that must scale glyphs only horizontally; instead we change font size and then undo that change vertically only
         inline Span const & span(Layout const *l) const {return l->_spans[l->_characters[in_character].in_span];}
@@ -772,8 +804,9 @@ private:
         float x_start;   /// relative to the start of the chunk
         float x_end;     /// relative to the start of the chunk
         inline float width() const {return std::abs(x_start - x_end);}
-        LineHeight line_height;
+        FontMetrics line_height;
         double baseline_shift;  /// relative to the line's baseline
+        SPCSSTextOrientation text_orientation;
         Direction direction;     /// See CSS3 section 3.2. Either rtl or ltr
         Direction block_progression;  /// See CSS3 section 3.2. The direction in which lines go.
         unsigned in_input_stream_item;
