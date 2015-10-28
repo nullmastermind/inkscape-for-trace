@@ -553,7 +553,7 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                 }
                 Geom::Point center = item->getCenter();
                 Geom::Point move = (Geom::Point(cos(tilt)*cos(dp)*dr/(1-ratio)+sin(tilt)*sin(dp)*dr/(1+ratio), -sin(tilt)*cos(dp)*dr/(1-ratio)+cos(tilt)*sin(dp)*dr/(1+ratio)))+(p-a->midpoint());
-                SPCSSAttr *css = sp_repr_css_attr(item->getRepr(), "style");
+                SPCSSAttr *css = sp_repr_css_attr_new();
                 if(overlap || picker || visible){
                     if(!fit_item(desktop, item, a, move, center, angle, _scale, scale, picker, visible, overlap, offset, css)){
                          limit += 1;
@@ -688,7 +688,7 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                 }
                 Geom::Point center=item->getCenter();
                 Geom::Point move = (Geom::Point(cos(tilt)*cos(dp)*dr/(1-ratio)+sin(tilt)*sin(dp)*dr/(1+ratio), -sin(tilt)*cos(dp)*dr/(1-ratio)+cos(tilt)*sin(dp)*dr/(1+ratio)))+(p-a->midpoint());
-                SPCSSAttr *css = sp_repr_css_attr(item->getRepr(), "style");
+                SPCSSAttr *css = sp_repr_css_attr_new();
                 if(overlap || picker || visible){
                     if(!fit_item(desktop, item, a, move, center, angle, _scale, scale, picker, visible, overlap, offset, css)){
                          limit += 1;
