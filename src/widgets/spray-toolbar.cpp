@@ -57,7 +57,9 @@ using Inkscape::UI::PrefPusher;
 static void sp_stb_sensitivize( GObject *tbl )
 {
     GtkAction* offset = GTK_ACTION( g_object_get_data(tbl, "offset") );
+    GtkAdjustment *adj_offset = ege_adjustment_action_get_adjustment( EGE_ADJUSTMENT_ACTION(offset) );
     GtkToggleAction *overlap = GTK_TOGGLE_ACTION( g_object_get_data(tbl, "overlap") );
+    gtk_adjustment_set_value( adj_offset, 100.0 );
     if (gtk_toggle_action_get_active(overlap)) {
         gtk_action_set_sensitive( offset, TRUE );
     } else {

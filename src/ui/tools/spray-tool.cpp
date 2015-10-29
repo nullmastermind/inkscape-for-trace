@@ -434,7 +434,7 @@ static bool fit_item(SPDesktop *desktop,
         for (std::vector<SPItem*>::const_iterator j=items_selected.begin(); j!=items_selected.end(); j++) {
             SPItem *item_selected = *j;
             gchar const * spray_origin;
-            if(!item->getAttribute("inkscape:spray-origin")){
+            if(!item_selected->getAttribute("inkscape:spray-origin")){
                 spray_origin = g_strdup_printf("#%s", item_selected->getId());
             } else {
                 spray_origin = item_selected->getAttribute("inkscape:spray-origin");
@@ -518,8 +518,7 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                                bool overlap,
                                bool picker,
                                bool visible,
-                               double offset,
-                               size_t &limit)
+                               double offset)
 {
     bool did = false;
 
@@ -556,35 +555,7 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                 SPCSSAttr *css = sp_repr_css_attr_new();
                 if(overlap || picker || visible){
                     if(!fit_item(desktop, item, a, move, center, angle, _scale, scale, picker, visible, overlap, offset, css)){
-                         limit += 1;
-                         //Limit recursion to 10 levels
-                         //Seems enough to chech if there is place to put new copie
-                         if(limit < 21){
-                             return sp_spray_recursive(desktop,
-                                   selection,
-                                   item,
-                                   p,
-                                   Geom::Point(),
-                                   mode,
-                                   radius,
-                                   population,
-                                   scale,
-                                   scale_variation,
-                                   false,
-                                   mean,
-                                   standard_deviation,
-                                   ratio,
-                                   tilt,
-                                   rotation_variation,
-                                   _distrib,
-                                   overlap,
-                                   picker,
-                                   visible,
-                                   offset,
-                                   limit);
-                         } else {
-                            return false;
-                         }
+                        return false;
                     }
                 }
                 SPItem *item_copied;
@@ -691,33 +662,7 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                 SPCSSAttr *css = sp_repr_css_attr_new();
                 if(overlap || picker || visible){
                     if(!fit_item(desktop, item, a, move, center, angle, _scale, scale, picker, visible, overlap, offset, css)){
-                         limit += 1;
-                         if(limit < 21){
-                             return sp_spray_recursive(desktop,
-                                   selection,
-                                   item,
-                                   p,
-                                   Geom::Point(),
-                                   mode,
-                                   radius,
-                                   population,
-                                   scale,
-                                   scale_variation,
-                                   false,
-                                   mean,
-                                   standard_deviation,
-                                   ratio,
-                                   tilt,
-                                   rotation_variation,
-                                   _distrib,
-                                   overlap,
-                                   picker,
-                                   visible,
-                                   offset,
-                                   limit);
-                         } else {
-                            return false;
-                         }
+                        return false;
                     }
                 }
                 SPItem *item_copied;
@@ -794,8 +739,7 @@ static bool sp_spray_dilate(SprayTool *tc, Geom::Point /*event_p*/, Geom::Point 
         for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
             SPItem *item = *i;
             g_assert(item != NULL);
-            size_t limit = 0;
-            if (sp_spray_recursive(desktop, selection, item, p, vector, tc->mode, radius, population, tc->scale, tc->scale_variation, reverse, move_mean, move_standard_deviation, tc->ratio, tc->tilt, tc->rotation_variation, tc->distrib, tc->overlap, tc->picker, tc->visible, tc->offset, limit)) {
+            if (sp_spray_recursive(desktop, selection, item, p, vector, tc->mode, radius, population, tc->scale, tc->scale_variation, reverse, move_mean, move_standard_deviation, tc->ratio, tc->tilt, tc->rotation_variation, tc->distrib, tc->overlap, tc->picker, tc->visible, tc->offset)) {
                 did = true;
             }
         }
