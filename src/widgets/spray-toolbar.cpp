@@ -42,6 +42,7 @@
 #include "toolbox.h"
 #include "ui/dialog/clonetiler.h"
 #include "ui/dialog/dialog-manager.h"
+#include "ui/dialog/panel-dialog.h"
 #include "ui/icon-names.h"
 
 #include <glibmm/i18n.h>
@@ -79,6 +80,20 @@ static void sp_stb_sensitivize( GObject *tbl )
     } else {
         gtk_action_set_sensitive( spray_scale, TRUE );
     }
+}
+
+Inkscape::UI::Dialog::CloneTiler *get_clone_tiler_panel(SPDesktop *desktop)
+{
+    if (Inkscape::UI::Dialog::PanelDialogBase *panel_dialog =
+        dynamic_cast<Inkscape::UI::Dialog::PanelDialogBase *>(desktop->_dlg_mgr->getDialog("CloneTiler"))) {
+        try {
+            Inkscape::UI::Dialog::CloneTiler &clone_tiler =
+                dynamic_cast<Inkscape::UI::Dialog::CloneTiler &>(panel_dialog->getPanel());
+            return &clone_tiler;
+        } catch (std::exception &e) { }
+    }
+
+    return 0;
 }
 
 static void sp_spray_width_value_changed( GtkAdjustment *adj, GObject * /*tbl*/ )
@@ -182,10 +197,11 @@ static void sp_toggle_picker( GtkToggleAction* act, gpointer data )
         GtkToggleAction *visible = GTK_TOGGLE_ACTION( g_object_get_data(tbl, "visible") );
         gtk_toggle_action_set_active(visible, false);
         prefs->setBool("/dialogs/clonetiler/dotrace", true);
-        prefs->setBool("/dialogs/clonetiler/opentrace", true);
         SPDesktop *dt = SP_ACTIVE_DESKTOP;
-        dt->_dlg_mgr->showDialog("CloneTiler");
-        prefs->setBool("/dialogs/clonetiler/opentrace", false);
+        if (Inkscape::UI::Dialog::CloneTiler *ct = get_clone_tiler_panel(dt)){
+            dt->_dlg_mgr->showDialog("CloneTiler");
+            ct->show_page_trace();
+        }
     }
 }
 
