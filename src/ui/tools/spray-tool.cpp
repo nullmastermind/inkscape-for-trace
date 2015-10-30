@@ -588,9 +588,9 @@ static bool fit_item(SPDesktop *desktop,
                     power = 1 + fabs(gamma_picked);
 
                 val = pow (val, power);
-                r = pow (r, power);
-                g = pow (g, power);
-                b = pow (b, power);
+                r = pow ((double)r, (double)power);
+                g = pow ((double)g, (double)power);
+                b = pow ((double)b, (double)power);
             }
 
             if (invert_picked) {
