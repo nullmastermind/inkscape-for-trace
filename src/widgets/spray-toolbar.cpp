@@ -371,7 +371,7 @@ void sp_spray_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
                                                       _("Pressure"),
                                                       _("Use the pressure of the input device to alter the scale of new items"),
                                                       INKSCAPE_ICON("draw-use-pressure"),
-                                                      secondarySize );
+                                                      Inkscape::ICON_SIZE_DECORATION);
         gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/spray/usepressurescale", false) );
         g_object_set_data( holder, "usepressurescale", act );
         g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(sp_toggle_pressure_scale), holder) ;

@@ -336,7 +336,7 @@ static double get_population(SprayTool *tc)
 
 static double get_pressure(SprayTool *tc)
 {
-    double pressure = (tc->usepressurepopulation? tc->pressure / TC_DEFAULT_PRESSURE : 1);
+    double pressure = tc->pressure / TC_DEFAULT_PRESSURE;
     //g_warning("Pressure, population: %f, %f", pressure, pressure * tc->population);
     return pressure;
 }
@@ -559,7 +559,7 @@ static bool sp_spray_recursive(SPDesktop *desktop,
     double angle = g_random_double_range( - rotation_variation / 100.0 * M_PI , rotation_variation / 100.0 * M_PI );
     double _scale = g_random_double_range( 1.0 - scale_variation / 100.0, 1.0 + scale_variation / 100.0 );
     if(usepressurescale){
-        _scale = pressure * 2.0;
+        _scale = pressure;
     }
     double dr; double dp;
     random_position( dr, dp, mean, standard_deviation, _distrib );
