@@ -173,19 +173,6 @@ static void sp_toggle_pressure_scale( GtkToggleAction* act, gpointer data)
     sp_stb_sensitivize( tbl );
 }
 
-static void sp_toggle_visible( GtkToggleAction* act, gpointer data)
-{
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    gboolean active = gtk_toggle_action_get_active(act);
-    prefs->setBool("/tools/spray/visible", active);
-    if(active == true){
-        prefs->setBool("/tools/spray/picker", false);
-        GObject *tbl = G_OBJECT(data);
-        GtkToggleAction *picker = GTK_TOGGLE_ACTION( g_object_get_data(tbl, "picker") );
-        gtk_toggle_action_set_active(picker, false);
-    }
-}
-
 static void sp_toggle_picker( GtkToggleAction* act, gpointer data )
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -405,19 +392,6 @@ void sp_spray_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
         gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/spray/picker", false) );
         g_object_set_data( holder, "picker", act );
         g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(sp_toggle_picker), holder) ;
-        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
-    }
-
-    /* Visible */
-    {
-        InkToggleAction* act = ink_toggle_action_new( "SprayOverVisibleAction",
-                                                      _("Apply on non transparent areas"),
-                                                      _("Apply on non transparent areas"),
-                                                      INKSCAPE_ICON("object-visible"),
-                                                      secondarySize );
-        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/spray/visible", false) );
-        g_object_set_data( holder, "visible", act );
-        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(sp_toggle_visible), holder) ;
         gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
     }
 
