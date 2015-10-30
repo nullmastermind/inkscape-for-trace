@@ -63,7 +63,9 @@ public:
 
     /* attributes */
     bool dragging;           /* mouse state: mouse is dragging */
-    bool usepressure;
+    bool usepressurewidth;
+    bool usepressurepopulation;
+    bool usepressurescale;
     bool usetilt;
     bool usetext;
 

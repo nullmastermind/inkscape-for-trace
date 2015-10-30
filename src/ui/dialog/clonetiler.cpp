@@ -85,7 +85,7 @@ CloneTiler::CloneTiler () :
 {
     Gtk::Box *contents = _getContents();
     contents->set_spacing(0);
-
+    
     {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
@@ -777,7 +777,6 @@ CloneTiler::CloneTiler () :
         {
             GtkWidget *vb = clonetiler_new_tab (nb, _("_Trace"));
 
-
         {
 #if GTK_CHECK_VERSION(3,0,0)
             GtkWidget *hb = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, VB_MARGIN);
@@ -787,7 +786,12 @@ CloneTiler::CloneTiler () :
 #endif
             gtk_box_pack_start (GTK_BOX (vb), hb, FALSE, FALSE, 0);
 
-            GtkWidget *b  = gtk_check_button_new_with_label (_("Trace the drawing under the tiles"));
+            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+            if(prefs->getBool("/dialogs/clonetiler/opentrace", false)){
+                gtk_notebook_set_current_page (GTK_NOTEBOOK(nb),5);
+            }
+
+            GtkWidget *b  = gtk_check_button_new_with_label (_("Trace the drawing under the tiles/spray tool"));
             g_object_set_data (G_OBJECT(b), "uncheckable", GINT_TO_POINTER(TRUE));
             bool old = prefs->getBool(prefs_path + "dotrace");
             gtk_toggle_button_set_active ((GtkToggleButton *) b, old);
@@ -1289,7 +1293,6 @@ CloneTiler::CloneTiler () :
         }
 
         gtk_widget_show_all (mainbox);
-
     }
 
     show_all();

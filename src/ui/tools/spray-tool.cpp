@@ -142,7 +142,9 @@ SprayTool::SprayTool()
     : ToolBase(cursor_spray_xpm, 4, 4, false)
     , pressure(TC_DEFAULT_PRESSURE)
     , dragging(false)
-    , usepressure(false)
+    , usepressurewidth(false)
+    , usepressurepopulation(false)
+    , usepressurescale(false)
     , usetilt(false)
     , usetext(false)
     , width(0.2)
@@ -234,7 +236,9 @@ void SprayTool::setup() {
     sp_event_context_read(this, "population");
     sp_event_context_read(this, "mean");
     sp_event_context_read(this, "standard_deviation");
-    sp_event_context_read(this, "usepressure");
+    sp_event_context_read(this, "usepressurewidth");
+    sp_event_context_read(this, "usepressurepopulation");
+    sp_event_context_read(this, "usepressurescale");
     sp_event_context_read(this, "Scale");
     sp_event_context_read(this, "offset");
     sp_event_context_read(this, "picker");
@@ -258,8 +262,12 @@ void SprayTool::set(const Inkscape::Preferences::Entry& val) {
         this->update_cursor(false);
     } else if (path == "width") {
         this->width = 0.01 * CLAMP(val.getInt(10), 1, 100);
-    } else if (path == "usepressure") {
-        this->usepressure = val.getBool();
+    } else if (path == "usepressurewidth") {
+        this->usepressurewidth = val.getBool();
+    } else if (path == "usepressurepopulation") {
+        this->usepressurepopulation = val.getBool();
+    } else if (path == "usepressurescale") {
+        this->usepressurescale = val.getBool();
     } else if (path == "population") {
         this->population = 0.01 * CLAMP(val.getInt(10), 1, 100);
     } else if (path == "rotation_variation") {
@@ -297,9 +305,16 @@ static void sp_spray_extinput(SprayTool *tc, GdkEvent *event)
     }
 }
 
+static double get_width(SprayTool *tc)
+{
+    double pressure = (tc->usepressurewidth? tc->pressure / TC_DEFAULT_PRESSURE : 1);
+    //g_warning("Pressure, population: %f, %f", pressure, pressure * tc->population);
+    return pressure * tc->width;
+}
+
 static double get_dilate_radius(SprayTool *tc)
 {
-    return 250 * tc->width/SP_EVENT_CONTEXT(tc)->desktop->current_zoom();
+    return 250 * get_width(tc)/SP_EVENT_CONTEXT(tc)->desktop->current_zoom();
 }
 
 static double get_path_mean(SprayTool *tc)
@@ -314,9 +329,16 @@ static double get_path_standard_deviation(SprayTool *tc)
 
 static double get_population(SprayTool *tc)
 {
-    double pressure = (tc->usepressure? tc->pressure / TC_DEFAULT_PRESSURE : 1);
+    double pressure = (tc->usepressurepopulation? tc->pressure / TC_DEFAULT_PRESSURE : 1);
     //g_warning("Pressure, population: %f, %f", pressure, pressure * tc->population);
     return pressure * tc->population;
+}
+
+static double get_pressure(SprayTool *tc)
+{
+    double pressure = (tc->usepressurepopulation? tc->pressure / TC_DEFAULT_PRESSURE : 1);
+    //g_warning("Pressure, population: %f, %f", pressure, pressure * tc->population);
+    return pressure;
 }
 
 static double get_move_mean(SprayTool *tc)
@@ -518,7 +540,9 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                                bool overlap,
                                bool picker,
                                bool visible,
-                               double offset)
+                               double offset,
+                               bool usepressurescale,
+                               double pressure)
 {
     bool did = false;
 
@@ -534,6 +558,9 @@ static bool sp_spray_recursive(SPDesktop *desktop,
     double _fid = g_random_double_range(0, 1);
     double angle = g_random_double_range( - rotation_variation / 100.0 * M_PI , rotation_variation / 100.0 * M_PI );
     double _scale = g_random_double_range( 1.0 - scale_variation / 100.0, 1.0 + scale_variation / 100.0 );
+    if(usepressurescale){
+        _scale = pressure * 2.0;
+    }
     double dr; double dp;
     random_position( dr, dp, mean, standard_deviation, _distrib );
     dr=dr*radius;
@@ -739,7 +766,7 @@ static bool sp_spray_dilate(SprayTool *tc, Geom::Point /*event_p*/, Geom::Point 
         for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
             SPItem *item = *i;
             g_assert(item != NULL);
-            if (sp_spray_recursive(desktop, selection, item, p, vector, tc->mode, radius, population, tc->scale, tc->scale_variation, reverse, move_mean, move_standard_deviation, tc->ratio, tc->tilt, tc->rotation_variation, tc->distrib, tc->overlap, tc->picker, tc->visible, tc->offset)) {
+            if (sp_spray_recursive(desktop, selection, item, p, vector, tc->mode, radius, population, tc->scale, tc->scale_variation, reverse, move_mean, move_standard_deviation, tc->ratio, tc->tilt, tc->rotation_variation, tc->distrib, tc->overlap, tc->picker, tc->visible, tc->offset, tc->usepressurescale, get_pressure(tc))) {
                 did = true;
             }
         }
