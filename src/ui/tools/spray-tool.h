@@ -89,9 +89,9 @@ public:
     bool has_dilated;
     Geom::Point last_push;
     SPCanvasItem *dilate_area;
-    bool overlap;
+    bool nooverlap;
     bool picker;
-    bool pickinversescale;
+    bool pickinversesize;
     bool pickfill;
     bool pickstroke;
     bool visible;

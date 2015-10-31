@@ -173,9 +173,9 @@ SprayTool::SprayTool()
     , is_dilating(false)
     , has_dilated(false)
     , dilate_area(NULL)
-    , overlap(false)
+    , nooverlap(false)
     , picker(false)
-    , pickinversescale(false)
+    , pickinversesize(false)
     , pickfill(false)
     , pickstroke(false)
     , visible(false)
@@ -256,11 +256,11 @@ void SprayTool::setup() {
     sp_event_context_read(this, "Scale");
     sp_event_context_read(this, "offset");
     sp_event_context_read(this, "picker");
-    sp_event_context_read(this, "pickinversescale");
+    sp_event_context_read(this, "pickinversesize");
     sp_event_context_read(this, "pickfill");
     sp_event_context_read(this, "pickstroke");
     sp_event_context_read(this, "visible");
-    sp_event_context_read(this, "overlap");
+    sp_event_context_read(this, "nooverlap");
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (prefs->getBool("/tools/spray/selcue")) {
@@ -306,16 +306,16 @@ void SprayTool::set(const Inkscape::Preferences::Entry& val) {
         this->offset = CLAMP(val.getDouble(), -1000.0, 1000.0);
     } else if (path == "picker") {
         this->picker =  val.getBool();
-    } else if (path == "pickinversescale") {
-        this->pickinversescale =  val.getBool();
+    } else if (path == "pickinversesize") {
+        this->pickinversesize =  val.getBool();
     } else if (path == "pickfill") {
         this->pickfill =  val.getBool();
     } else if (path == "pickstroke") {
         this->pickstroke =  val.getBool();
     } else if (path == "visible") {
         this->visible =  val.getBool();
-    } else if (path == "overlap") {
-        this->overlap = val.getBool();
+    } else if (path == "nooverlap") {
+        this->nooverlap = val.getBool();
     }
 }
 
@@ -440,11 +440,11 @@ static bool fit_item(SPDesktop *desktop,
                      double &_scale,
                      double scale,
                      bool picker,
-                     bool pickinversescale,
+                     bool pickinversesize,
                      bool pickfill,
                      bool pickstroke,
                      bool visible,
-                     bool overlap,
+                     bool nooverlap,
                      double offset,
                      SPCSSAttr *css,
                      bool trace_scale)
@@ -506,7 +506,7 @@ static bool fit_item(SPDesktop *desktop,
                 (item_down->getAttribute("inkscape:spray-origin") && 
                 strcmp(item_down->getAttribute("inkscape:spray-origin"),spray_origin) == 0 ))
             {
-                if(overlap){
+                if(nooverlap){
                     if(!(offset_min < 0 && std::abs(bbox_left - bbox_left_main) > std::abs(offset_min) && 
                 std::abs(bbox_top - bbox_top_main) > std::abs(offset_min))){
                         return false;
@@ -520,7 +520,7 @@ static bool fit_item(SPDesktop *desktop,
     }
     if(picker || visible){
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        if(!overlap){
+        if(!nooverlap){
             doc->ensureUpToDate();
         }
         int    pick = prefs->getInt("/dialogs/clonetiler/pick");
@@ -625,12 +625,12 @@ static bool fit_item(SPDesktop *desktop,
             rgba = SP_RGBA32_F_COMPOSE(r, g, b, a);
             if (pick_to_size) {
                 if(!trace_scale){
-                    if(pickinversescale){
+                    if(pickinversesize) {
                         _scale = 1.0 - val;
                     } else {
                         _scale = val;
                     }
-                    if _scale == 0.0){
+                    if(_scale == 0.0) {
                         return false;
                     }
                     if(!fit_item(desktop,
@@ -642,11 +642,11 @@ static bool fit_item(SPDesktop *desktop,
                          _scale,
                          scale,
                          picker,
-                         pickinversescale,
+                         pickinversesize,
                          pickfill,
                          pickstroke,
                          visible,
-                         overlap,
+                         nooverlap,
                          offset,
                          css,
                          true)){
@@ -682,7 +682,7 @@ static bool fit_item(SPDesktop *desktop,
                 return false;
             }
         }
-        if(!overlap && (picker || visible)){
+        if(!nooverlap && (picker || visible)){
             for (std::vector<SPItem *>::const_iterator k=items_down.begin(); k!=items_down.end(); k++) {
                 SPItem *item_hidden = *k;
                 item_hidden->setHidden(false);
@@ -710,9 +710,9 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                                double tilt,
                                double rotation_variation,
                                gint _distrib,
-                               bool overlap,
+                               bool nooverlap,
                                bool picker,
-                               bool pickinversescale,
+                               bool pickinversesize,
                                bool pickfill,
                                bool pickstroke,
                                bool visible,
@@ -756,8 +756,8 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                 Geom::Point center = item->getCenter();
                 Geom::Point move = (Geom::Point(cos(tilt)*cos(dp)*dr/(1-ratio)+sin(tilt)*sin(dp)*dr/(1+ratio), -sin(tilt)*cos(dp)*dr/(1-ratio)+cos(tilt)*sin(dp)*dr/(1+ratio)))+(p-a->midpoint());
                 SPCSSAttr *css = sp_repr_css_attr_new();
-                if(overlap || picker || visible){
-                    if(!fit_item(desktop, item, a, move, center, angle, _scale, scale, picker, pickinversescale, pickfill, pickstroke, visible, overlap, offset, css, false)){
+                if(nooverlap || picker || visible){
+                    if(!fit_item(desktop, item, a, move, center, angle, _scale, scale, picker, pickinversesize, pickfill, pickstroke, visible, nooverlap, offset, css, false)){
                         return false;
                     }
                 }
@@ -863,8 +863,8 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                 Geom::Point center=item->getCenter();
                 Geom::Point move = (Geom::Point(cos(tilt)*cos(dp)*dr/(1-ratio)+sin(tilt)*sin(dp)*dr/(1+ratio), -sin(tilt)*cos(dp)*dr/(1-ratio)+cos(tilt)*sin(dp)*dr/(1+ratio)))+(p-a->midpoint());
                 SPCSSAttr *css = sp_repr_css_attr_new();
-                if(overlap || picker || visible){
-                    if(!fit_item(desktop, item, a, move, center, angle, _scale, scale, picker, pickinversescale, pickfill, pickstroke, visible, overlap, offset, css, false)){
+                if(nooverlap || picker || visible){
+                    if(!fit_item(desktop, item, a, move, center, angle, _scale, scale, picker, pickinversesize, pickfill, pickstroke, visible, nooverlap, offset, css, false)){
                         return false;
                     }
                 }
@@ -942,7 +942,7 @@ static bool sp_spray_dilate(SprayTool *tc, Geom::Point /*event_p*/, Geom::Point 
         for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
             SPItem *item = *i;
             g_assert(item != NULL);
-            if (sp_spray_recursive(desktop, selection, item, p, vector, tc->mode, radius, population, tc->scale, tc->scale_variation, reverse, move_mean, move_standard_deviation, tc->ratio, tc->tilt, tc->rotation_variation, tc->distrib, tc->overlap, tc->picker, tc->pickinversescale, tc->pickfill, tc->pickstroke, tc->visible, tc->offset, tc->usepressurescale, get_pressure(tc))) {
+            if (sp_spray_recursive(desktop, selection, item, p, vector, tc->mode, radius, population, tc->scale, tc->scale_variation, reverse, move_mean, move_standard_deviation, tc->ratio, tc->tilt, tc->rotation_variation, tc->distrib, tc->nooverlap, tc->picker, tc->pickinversesize, tc->pickfill, tc->pickstroke, tc->visible, tc->offset, tc->usepressurescale, get_pressure(tc))) {
                 did = true;
             }
         }

@@ -785,11 +785,6 @@ CloneTiler::CloneTiler () :
 #endif
             gtk_box_pack_start (GTK_BOX (vb), hb, FALSE, FALSE, 0);
 
-            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-            if(prefs->getBool("/dialogs/clonetiler/opentrace", false)){
-                gtk_notebook_set_current_page (GTK_NOTEBOOK(nb),5);
-            }
-
             b  = gtk_check_button_new_with_label (_("Trace the drawing under the tiles/spray tool"));
             g_object_set_data (G_OBJECT(b), "uncheckable", GINT_TO_POINTER(TRUE));
             bool old = prefs->getBool(prefs_path + "dotrace");
