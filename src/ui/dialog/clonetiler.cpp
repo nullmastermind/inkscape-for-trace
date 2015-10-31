@@ -662,7 +662,7 @@ CloneTiler::CloneTiler () :
             gtk_box_pack_start (GTK_BOX (hb), l, FALSE, FALSE, 0);
 
             guint32 rgba = 0x000000ff | sp_svg_read_color (prefs->getString(prefs_path + "initial_color").data(), 0x000000ff);
-            color_picker = new Inkscape::UI::Widget::ColorPicker (*new Glib::ustring(_("Initial color of tiled clones")), *new Glib::ustring(_("Initial color for clones (works only if the original has unset fill or stroke)")), rgba, false);
+            color_picker = new Inkscape::UI::Widget::ColorPicker (*new Glib::ustring(_("Initial color of tiled clones")), *new Glib::ustring(_("Initial color for clones (works only if the original has unset fill or stroke or on spray tool in copy mode)")), rgba, false);
             color_changed_connection = color_picker->connectChanged (sigc::ptr_fun(on_picker_color_changed));
 
             gtk_box_pack_start (GTK_BOX (hb), reinterpret_cast<GtkWidget*>(color_picker->gobj()), FALSE, FALSE, 0);
@@ -1003,7 +1003,19 @@ CloneTiler::CloneTiler () :
            gtk_widget_set_sensitive (vvb, prefs->getBool(prefs_path + "dotrace"));
         }
         }
-
+        // Info 
+        {
+#if GTK_CHECK_VERSION(3,0,0)
+            GtkWidget *hb = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, VB_MARGIN);
+            gtk_box_set_homogeneous(GTK_BOX(hb), FALSE);
+#else
+            GtkWidget *hb = gtk_hbox_new(FALSE, VB_MARGIN);
+#endif
+            gtk_box_pack_start (GTK_BOX (mainbox), hb, FALSE, FALSE, 0);
+            GtkWidget *l = gtk_label_new(_(""));
+            gtk_label_set_markup (GTK_LABEL(l), _("Apply to tiled clones:"));
+            gtk_box_pack_start (GTK_BOX (hb), l, FALSE, FALSE, 0);
+        }
         // Rows/columns, width/height
         {
 #if GTK_CHECK_VERSION(3,0,0)

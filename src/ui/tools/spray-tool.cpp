@@ -175,6 +175,10 @@ SprayTool::SprayTool()
     , dilate_area(NULL)
     , overlap(false)
     , picker(false)
+    , pickinversescale(false)
+    , pickfill(false)
+    , pickstroke(false)
+    , visible(false)
     , offset(0)
 {
 }
@@ -252,6 +256,10 @@ void SprayTool::setup() {
     sp_event_context_read(this, "Scale");
     sp_event_context_read(this, "offset");
     sp_event_context_read(this, "picker");
+    sp_event_context_read(this, "pickinversescale");
+    sp_event_context_read(this, "pickfill");
+    sp_event_context_read(this, "pickstroke");
+    sp_event_context_read(this, "visible");
     sp_event_context_read(this, "overlap");
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -298,6 +306,14 @@ void SprayTool::set(const Inkscape::Preferences::Entry& val) {
         this->offset = CLAMP(val.getDouble(), -1000.0, 1000.0);
     } else if (path == "picker") {
         this->picker =  val.getBool();
+    } else if (path == "pickinversescale") {
+        this->pickinversescale =  val.getBool();
+    } else if (path == "pickfill") {
+        this->pickfill =  val.getBool();
+    } else if (path == "pickstroke") {
+        this->pickstroke =  val.getBool();
+    } else if (path == "visible") {
+        this->visible =  val.getBool();
     } else if (path == "overlap") {
         this->overlap = val.getBool();
     }
@@ -424,6 +440,10 @@ static bool fit_item(SPDesktop *desktop,
                      double &_scale,
                      double scale,
                      bool picker,
+                     bool pickinversescale,
+                     bool pickfill,
+                     bool pickstroke,
+                     bool visible,
                      bool overlap,
                      double offset,
                      SPCSSAttr *css,
@@ -491,21 +511,21 @@ static bool fit_item(SPDesktop *desktop,
                 std::abs(bbox_top - bbox_top_main) > std::abs(offset_min))){
                         return false;
                     }
-                } else if(picker){
+                } else if(picker || visible){
                     item_down->setHidden(true);
                     item_down->updateRepr();
                 }
             }
         }
     }
-    if(picker){
+    if(picker || visible){
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         if(!overlap){
             doc->ensureUpToDate();
         }
         int    pick = prefs->getInt("/dialogs/clonetiler/pick");
-        bool   pick_to_presence = prefs->getBool("/dialogs/clonetiler/pick_to_presence");
         bool   pick_to_size = prefs->getBool("/dialogs/clonetiler/pick_to_size");
+        bool   pick_to_presence = prefs->getBool("/dialogs/clonetiler/pick_to_presence", false);
         bool   pick_to_color = prefs->getBool("/dialogs/clonetiler/pick_to_color");
         bool   pick_to_opacity = prefs->getBool("/dialogs/clonetiler/pick_to_opacity");
         double rand_picked = 0.01 * prefs->getDoubleLimited("/dialogs/clonetiler/rand_picked", 0, 0, 100);
@@ -518,28 +538,24 @@ static bool fit_item(SPDesktop *desktop,
         double R = 0, G = 0, B = 0, A = 0;
         cairo_surface_t *s = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1, 1);
         sp_canvas_arena_render_surface(SP_CANVAS_ARENA(desktop->getDrawing()), s, area);
-        ink_cairo_surface_average_color_premul(s, R, G, B, A);
+        ink_cairo_surface_average_color(s, R, G, B, A);
         cairo_surface_destroy(s);
-        if (fabs(A) < 1e-4) {
-            A = 0; // suppress exponentials, CSS does not allow that
+        guint32 rgba = SP_RGBA32_F_COMPOSE(R, G, B, A);
+        float r = SP_RGBA32_R_F(rgba);
+        float g = SP_RGBA32_G_F(rgba);
+        float b = SP_RGBA32_B_F(rgba);
+        float a = SP_RGBA32_A_F(rgba);
+        //this can fix the bug #1511998 if confirmed 
+        if( a == 0 && r == 0 && g == 0 && b == 0){
+            r = 1;
+            g = 1;
+            b = 1;
         }
-        if(A == 0 && R == 0 && G == 0 && B == 0){
-            R = 1;
-            G = 1;
-            B = 1;
+        if(visible && (a == 0 || a < 1e-6)){
+            return false;
         }
-        if(picker){
-//            if (A > 0) {
-//                R /= A;
-//                G /= A;
-//                B /= A;
-//            }
-            guint32 rgba = SP_RGBA32_F_COMPOSE(R, G, B, A);
-            float r = SP_RGBA32_R_F(rgba);
-            float g = SP_RGBA32_G_F(rgba);
-            float b = SP_RGBA32_B_F(rgba);
-            float a = SP_RGBA32_A_F(rgba);
 
+        if(picker){
             float hsl[3];
             sp_color_rgb_to_hsl_floatv (hsl, r, g, b);
 
@@ -607,17 +623,17 @@ static bool fit_item(SPDesktop *desktop,
 
             // recompose tweaked color
             rgba = SP_RGBA32_F_COMPOSE(r, g, b, a);
-            if (pick_to_presence) {
-                //this line I think is wrong in original code clonetiler
-                //if (g_random_double_range (0, 1) > val) {
-                if(a == 0){
-                    return false;
-                }
-            }
             if (pick_to_size) {
                 if(!trace_scale){
-                    _scale = 2 - (val * 1.7);
-                    return fit_item(desktop,
+                    if(pickinversescale){
+                        _scale = 1.0 - val;
+                    } else {
+                        _scale = val;
+                    }
+                    if _scale == 0.0){
+                        return false;
+                    }
+                    if(!fit_item(desktop,
                          item,
                          bbox,
                          move,
@@ -626,25 +642,47 @@ static bool fit_item(SPDesktop *desktop,
                          _scale,
                          scale,
                          picker,
+                         pickinversescale,
+                         pickfill,
+                         pickstroke,
+                         visible,
                          overlap,
                          offset,
                          css,
-                         true);
+                         true)){
+                            return false;
+                         }
                 }
             }
+
             if (pick_to_opacity) {
-                opacity *= a;
-                std::stringstream fill_opacity;
-                fill_opacity.imbue(std::locale::classic());
-                fill_opacity << float(opacity);
-                sp_repr_css_set_property(css, "fill-opacity", fill_opacity.str().c_str());
+                opacity *= val;
+                std::stringstream opacity_str;
+                opacity_str.imbue(std::locale::classic());
+                opacity_str << opacity;
+                sp_repr_css_set_property(css, "opacity", opacity_str.str().c_str());
+            }
+            if (pick_to_presence) {
+                if (g_random_double_range (0, 1) > val) {
+                    //Hidding the element is a way to retain original
+                    //beabiohur of tiled clones for presence option.
+                    sp_repr_css_set_property(css, "opacity", "0");
+                }
             }
             if (pick_to_color) {
                 sp_svg_write_color(color_string, sizeof(color_string), rgba);
-                sp_repr_css_set_property(css, "fill", color_string);
+                if(pickfill){
+                    sp_repr_css_set_property(css, "fill", color_string);
+                }
+                if(pickstroke){
+                    sp_repr_css_set_property(css, "stroke", color_string);
+                }
+            }
+            if (opacity < 1e-6) { // invisibly transparent, skip
+                return false;
             }
         }
-        if(!overlap){
+        if(!overlap && (picker || visible)){
             for (std::vector<SPItem *>::const_iterator k=items_down.begin(); k!=items_down.end(); k++) {
                 SPItem *item_hidden = *k;
                 item_hidden->setHidden(false);
@@ -674,6 +712,10 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                                gint _distrib,
                                bool overlap,
                                bool picker,
+                               bool pickinversescale,
+                               bool pickfill,
+                               bool pickstroke,
+                               bool visible,
                                double offset,
                                bool usepressurescale,
                                double pressure)
@@ -714,8 +756,8 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                 Geom::Point center = item->getCenter();
                 Geom::Point move = (Geom::Point(cos(tilt)*cos(dp)*dr/(1-ratio)+sin(tilt)*sin(dp)*dr/(1+ratio), -sin(tilt)*cos(dp)*dr/(1-ratio)+cos(tilt)*sin(dp)*dr/(1+ratio)))+(p-a->midpoint());
                 SPCSSAttr *css = sp_repr_css_attr_new();
-                if(overlap || picker){
-                    if(!fit_item(desktop, item, a, move, center, angle, _scale, scale, picker, overlap, offset, css, false)){
+                if(overlap || picker || visible){
+                    if(!fit_item(desktop, item, a, move, center, angle, _scale, scale, picker, pickinversescale, pickfill, pickstroke, visible, overlap, offset, css, false)){
                         return false;
                     }
                 }
@@ -821,8 +863,8 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                 Geom::Point center=item->getCenter();
                 Geom::Point move = (Geom::Point(cos(tilt)*cos(dp)*dr/(1-ratio)+sin(tilt)*sin(dp)*dr/(1+ratio), -sin(tilt)*cos(dp)*dr/(1-ratio)+cos(tilt)*sin(dp)*dr/(1+ratio)))+(p-a->midpoint());
                 SPCSSAttr *css = sp_repr_css_attr_new();
-                if(overlap || picker){
-                    if(!fit_item(desktop, item, a, move, center, angle, _scale, scale, picker, overlap, offset, css, false)){
+                if(overlap || picker || visible){
+                    if(!fit_item(desktop, item, a, move, center, angle, _scale, scale, picker, pickinversescale, pickfill, pickstroke, visible, overlap, offset, css, false)){
                         return false;
                     }
                 }
@@ -900,7 +942,7 @@ static bool sp_spray_dilate(SprayTool *tc, Geom::Point /*event_p*/, Geom::Point 
         for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
             SPItem *item = *i;
             g_assert(item != NULL);
-            if (sp_spray_recursive(desktop, selection, item, p, vector, tc->mode, radius, population, tc->scale, tc->scale_variation, reverse, move_mean, move_standard_deviation, tc->ratio, tc->tilt, tc->rotation_variation, tc->distrib, tc->overlap, tc->picker, tc->offset, tc->usepressurescale, get_pressure(tc))) {
+            if (sp_spray_recursive(desktop, selection, item, p, vector, tc->mode, radius, population, tc->scale, tc->scale_variation, reverse, move_mean, move_standard_deviation, tc->ratio, tc->tilt, tc->rotation_variation, tc->distrib, tc->overlap, tc->picker, tc->pickinversescale, tc->pickfill, tc->pickstroke, tc->visible, tc->offset, tc->usepressurescale, get_pressure(tc))) {
                 did = true;
             }
         }

@@ -67,7 +67,11 @@ static void sp_stb_sensitivize( GObject *tbl )
     GtkAdjustment *adj_offset = ege_adjustment_action_get_adjustment( EGE_ADJUSTMENT_ACTION(offset) );
     GtkAdjustment *adj_scale = ege_adjustment_action_get_adjustment( EGE_ADJUSTMENT_ACTION(spray_scale) );
     GtkToggleAction *overlap = GTK_TOGGLE_ACTION( g_object_get_data(tbl, "overlap") );
+    GtkToggleAction *picker = GTK_TOGGLE_ACTION( g_object_get_data(tbl, "picker") );
     GtkToggleAction *usepressurescale = GTK_TOGGLE_ACTION( g_object_get_data(tbl, "usepressurescale") );
+    GtkAction *pickfill = GTK_ACTION( g_object_get_data(tbl, "pickfill") );
+    GtkAction *pickstroke = GTK_ACTION( g_object_get_data(tbl, "pickstroke") );
+    GtkAction *pickinversescale = GTK_ACTION( g_object_get_data(tbl, "pickinversescale") );
     gtk_adjustment_set_value( adj_offset, 100.0 );
     if (gtk_toggle_action_get_active(overlap)) {
         gtk_action_set_sensitive( offset, TRUE );
@@ -79,6 +83,15 @@ static void sp_stb_sensitivize( GObject *tbl )
         gtk_action_set_sensitive( spray_scale, FALSE );
     } else {
         gtk_action_set_sensitive( spray_scale, TRUE );
+    }
+    if(gtk_toggle_action_get_active(picker)){
+        gtk_action_set_sensitive( pickfill, TRUE );
+        gtk_action_set_sensitive( pickstroke, TRUE );
+        gtk_action_set_sensitive( pickinversescale, TRUE );
+    } else {
+        gtk_action_set_sensitive( pickfill, FALSE );
+        gtk_action_set_sensitive( pickstroke, FALSE );
+        gtk_action_set_sensitive( pickinversescale, FALSE );
     }
 }
 
@@ -173,16 +186,19 @@ static void sp_toggle_pressure_scale( GtkToggleAction* act, gpointer data)
     sp_stb_sensitivize( tbl );
 }
 
+static void sp_toggle_visible( GtkToggleAction* act, gpointer data)
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    gboolean active = gtk_toggle_action_get_active(act);
+    prefs->setBool("/tools/spray/visible", active);
+}
+
 static void sp_toggle_picker( GtkToggleAction* act, gpointer data )
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     gboolean active = gtk_toggle_action_get_active(act);
     prefs->setBool("/tools/spray/picker", active);
     if(active == true){
-        prefs->setBool("/tools/spray/visible", false);
-        GObject *tbl = G_OBJECT(data);
-        GtkToggleAction *visible = GTK_TOGGLE_ACTION( g_object_get_data(tbl, "visible") );
-        gtk_toggle_action_set_active(visible, false);
         prefs->setBool("/dialogs/clonetiler/dotrace", true);
         SPDesktop *dt = SP_ACTIVE_DESKTOP;
         if (Inkscape::UI::Dialog::CloneTiler *ct = get_clone_tiler_panel(dt)){
@@ -190,6 +206,29 @@ static void sp_toggle_picker( GtkToggleAction* act, gpointer data )
             ct->show_page_trace();
         }
     }
+    GObject *tbl = G_OBJECT(data);
+    sp_stb_sensitivize(tbl);
+}
+
+static void sp_toggle_pickfill( GtkToggleAction* act, gpointer data )
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    gboolean active = gtk_toggle_action_get_active(act);
+    prefs->setBool("/tools/spray/pickfill", active);
+}
+
+static void sp_toggle_pickinversescale( GtkToggleAction* act, gpointer data )
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    gboolean active = gtk_toggle_action_get_active(act);
+    prefs->setBool("/tools/spray/pickinversescale", active);
+}
+
+static void sp_toggle_pickstroke( GtkToggleAction* act, gpointer data )
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    gboolean active = gtk_toggle_action_get_active(act);
+    prefs->setBool("/tools/spray/pickstroke", active);
 }
 
 void sp_spray_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder)
@@ -385,13 +424,65 @@ void sp_spray_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
     /* Picker */
     {
         InkToggleAction* act = ink_toggle_action_new( "SprayPickColorAction",
-                                                      _("Pick down color. Fill must be unset on original when spraying clones"),
-                                                      _("Pick down color. Fill must be unset on original when spraying clones"),
+                                                      _("Pick down. Fill or Stroke must be unset on original when spraying color to clones"),
+                                                      _("Pick down. Fill or Stroke must be unset on original when spraying color to clones"),
                                                       INKSCAPE_ICON("color-picker"),
                                                       secondarySize );
         gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/spray/picker", false) );
         g_object_set_data( holder, "picker", act );
         g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(sp_toggle_picker), holder) ;
+        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
+    }
+
+    /* Inverse Scale */
+    {
+        InkToggleAction* act = ink_toggle_action_new( "SprayOverPickInverseScaleAction",
+                                                      _("Apply inversed scale to pick"),
+                                                      _("Apply inversed scale to pick"),
+                                                      INKSCAPE_ICON("object-tweak-shrink"),
+                                                      secondarySize );
+        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/spray/pickinversescale", false) );
+        g_object_set_data( holder, "pickinversescale", act );
+        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(sp_toggle_pickinversescale), holder) ;
+        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
+    }
+
+    /* Pick Fill */
+    {
+        InkToggleAction* act = ink_toggle_action_new( "SprayOverPickFillAction",
+                                                      _("Apply picked color to fill"),
+                                                      _("Apply picked color to fill"),
+                                                      INKSCAPE_ICON("paint-solid"),
+                                                      secondarySize );
+        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/spray/pickfill", false) );
+        g_object_set_data( holder, "pickfill", act );
+        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(sp_toggle_pickfill), holder) ;
+        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
+    }
+
+    /* Pick Stroke */
+    {
+        InkToggleAction* act = ink_toggle_action_new( "SprayOverPickStrokeAction",
+                                                      _("Apply picked color to stroke"),
+                                                      _("Apply picked color to stroke"),
+                                                      INKSCAPE_ICON("no-marker"),
+                                                      secondarySize );
+        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/spray/pickstroke", false) );
+        g_object_set_data( holder, "pickstroke", act );
+        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(sp_toggle_pickstroke), holder) ;
+        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
+    }
+    
+    /* Visible */
+    {
+        InkToggleAction* act = ink_toggle_action_new( "SprayOverVisibleAction",
+                                                      _("Apply only over non transparent areas"),
+                                                      _("Apply only over non transparent areas"),
+                                                      INKSCAPE_ICON("object-visible"),
+                                                      secondarySize );
+        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/spray/visible", false) );
+        g_object_set_data( holder, "visible", act );
+        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(sp_toggle_visible), holder) ;
         gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
     }
 

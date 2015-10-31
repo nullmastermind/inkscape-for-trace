@@ -91,6 +91,9 @@ public:
     SPCanvasItem *dilate_area;
     bool overlap;
     bool picker;
+    bool pickinversescale;
+    bool pickfill;
+    bool pickstroke;
     bool visible;
     double offset;
     sigc::connection style_set_connection;
