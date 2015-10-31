@@ -71,7 +71,7 @@ static void sp_stb_sensitivize( GObject *tbl )
     GtkToggleAction *usepressurescale = GTK_TOGGLE_ACTION( g_object_get_data(tbl, "usepressurescale") );
     GtkAction *pickfill = GTK_ACTION( g_object_get_data(tbl, "pickfill") );
     GtkAction *pickstroke = GTK_ACTION( g_object_get_data(tbl, "pickstroke") );
-    GtkAction *pickinversesize = GTK_ACTION( g_object_get_data(tbl, "pickinversesize") );
+    GtkAction *pickinversevalue = GTK_ACTION( g_object_get_data(tbl, "pickinversevalue") );
     gtk_adjustment_set_value( adj_offset, 100.0 );
     if (gtk_toggle_action_get_active(nooverlap)) {
         gtk_action_set_sensitive( offset, TRUE );
@@ -87,11 +87,11 @@ static void sp_stb_sensitivize( GObject *tbl )
     if(gtk_toggle_action_get_active(picker)){
         gtk_action_set_sensitive( pickfill, TRUE );
         gtk_action_set_sensitive( pickstroke, TRUE );
-        gtk_action_set_sensitive( pickinversesize, TRUE );
+        gtk_action_set_sensitive( pickinversevalue, TRUE );
     } else {
         gtk_action_set_sensitive( pickfill, FALSE );
         gtk_action_set_sensitive( pickstroke, FALSE );
-        gtk_action_set_sensitive( pickinversesize, FALSE );
+        gtk_action_set_sensitive( pickinversevalue, FALSE );
     }
 }
 
@@ -217,11 +217,11 @@ static void sp_toggle_pick_fill( GtkToggleAction* act, gpointer data )
     prefs->setBool("/tools/spray/pickfill", active);
 }
 
-static void sp_toggle_pick_inverse_size( GtkToggleAction* act, gpointer data )
+static void sp_toggle_pick_inverse_value( GtkToggleAction* act, gpointer data )
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     gboolean active = gtk_toggle_action_get_active(act);
-    prefs->setBool("/tools/spray/pickinversesize", active);
+    prefs->setBool("/tools/spray/pickinversevalue", active);
 }
 
 static void sp_toggle_pick_stroke( GtkToggleAction* act, gpointer data )
@@ -436,14 +436,14 @@ void sp_spray_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
 
     /* Inverse Value Size */
     {
-        InkToggleAction* act = ink_toggle_action_new( "SprayOverPickInverseSizeAction",
-                                                      _("Apply inversed to pick value size"),
-                                                      _("Apply inversed to pick value size"),
+        InkToggleAction* act = ink_toggle_action_new( "SprayOverPickInverseValueAction",
+                                                      _("Inversed pick value retaining color"),
+                                                      _("Inversed pick value retaining color"),
                                                       INKSCAPE_ICON("object-tweak-shrink"),
                                                       secondarySize );
-        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/spray/pickinversesize", false) );
-        g_object_set_data( holder, "pickinversesize", act );
-        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(sp_toggle_pick_inverse_size), holder) ;
+        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/spray/pickinversevalue", false) );
+        g_object_set_data( holder, "pickinversevalue", act );
+        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(sp_toggle_pick_inverse_value), holder) ;
         gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
     }
 

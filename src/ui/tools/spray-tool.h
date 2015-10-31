@@ -91,7 +91,7 @@ public:
     SPCanvasItem *dilate_area;
     bool nooverlap;
     bool picker;
-    bool pickinversesize;
+    bool pickinversevalue;
     bool pickfill;
     bool pickstroke;
     bool visible;
