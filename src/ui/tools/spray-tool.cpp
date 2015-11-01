@@ -434,7 +434,7 @@ double randomize01(double val, double rand)
 static bool fit_item(SPDesktop *desktop,
                      SPItem *item,
                      Geom::OptRect bbox,
-                     Geom::Point move,
+                     Geom::Point &move,
                      Geom::Point center,
                      double angle,
                      double &_scale,
@@ -457,6 +457,11 @@ static bool fit_item(SPDesktop *desktop,
     if(offset_min < 0 ){
         offset_min = 0;
     }
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool pick_to_size = prefs->getBool("/dialogs/clonetiler/pick_to_size");
+    if(picker && pick_to_size && !trace_scale){
+        _scale = 0.1;
+    }
     Geom::OptRect bbox_procesed = Geom::Rect(Geom::Point(bbox->left() - offset_min, bbox->top() - offset_min),Geom::Point(bbox->right() + offset_min, bbox->bottom() + offset_min));
     Geom::Path path;
     path.start(Geom::Point(bbox_procesed->left(), bbox_procesed->top()));
@@ -467,13 +472,24 @@ static bool fit_item(SPDesktop *desktop,
     sp_spray_transform_path(item, path, Geom::Scale(_scale), center);
     sp_spray_transform_path(item, path, Geom::Scale(scale), center);
     sp_spray_transform_path(item, path, Geom::Rotate(angle), center);
-    path *= Geom::Translate(move[Geom::X], move[Geom::Y]);
+    path *= Geom::Translate(move);
     path *= desktop->doc2dt();
     bbox_procesed = path.boundsFast();
     double bbox_left_main = bbox_procesed->left();
     double bbox_top_main = bbox_procesed->top();
     double width_transformed = bbox_procesed->width();
     double height_transformed = bbox_procesed->height();
+    Geom::Point mid_point = desktop->d2w(bbox_procesed->midpoint());
+    Geom::IntRect area = Geom::IntRect::from_xywh(floor(mid_point[Geom::X]), floor(mid_point[Geom::Y]), 1, 1);
+    double R = 0, G = 0, B = 0, A = 0;
+    cairo_surface_t *s = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1, 1);
+    sp_canvas_arena_render_surface(SP_CANVAS_ARENA(desktop->getDrawing()), s, area);
+    ink_cairo_surface_average_color(s, R, G, B, A);
+    cairo_surface_destroy(s);
+    guint32 rgba = SP_RGBA32_F_COMPOSE(R, G, B, A);
+    if(nooverlap && visible && (A==0 || A < 1e-6)){
+        return false;
+    }
     size = std::min(width_transformed,height_transformed);
     if(offset < 100 ){
         offset_min = ((99.0 - offset) * size)/100.0 - size;
@@ -519,12 +535,10 @@ static bool fit_item(SPDesktop *desktop,
         }
     }
     if(picker || visible){
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         if(!nooverlap){
             doc->ensureUpToDate();
         }
         int    pick = prefs->getInt("/dialogs/clonetiler/pick");
-        bool   pick_to_size = prefs->getBool("/dialogs/clonetiler/pick_to_size");
         bool   pick_to_presence = prefs->getBool("/dialogs/clonetiler/pick_to_presence", false);
         bool   pick_to_color = prefs->getBool("/dialogs/clonetiler/pick_to_color");
         bool   pick_to_opacity = prefs->getBool("/dialogs/clonetiler/pick_to_opacity");
@@ -533,20 +547,12 @@ static bool fit_item(SPDesktop *desktop,
         double gamma_picked = prefs->getDoubleLimited("/dialogs/clonetiler/gamma_picked", 0, -10, 10);
         double opacity = 1.0;
         gchar color_string[32]; *color_string = 0;
-        Geom::Point mid_point = desktop->d2w(bbox_procesed->midpoint());
-        Geom::IntRect area = Geom::IntRect::from_xywh(floor(mid_point[Geom::X]), floor(mid_point[Geom::Y]), 1, 1);
-        double R = 0, G = 0, B = 0, A = 0;
-        cairo_surface_t *s = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, 1, 1);
-        sp_canvas_arena_render_surface(SP_CANVAS_ARENA(desktop->getDrawing()), s, area);
-        ink_cairo_surface_average_color(s, R, G, B, A);
-        cairo_surface_destroy(s);
-        guint32 rgba = SP_RGBA32_F_COMPOSE(R, G, B, A);
         float r = SP_RGBA32_R_F(rgba);
         float g = SP_RGBA32_G_F(rgba);
         float b = SP_RGBA32_B_F(rgba);
         float a = SP_RGBA32_A_F(rgba);
         //this can fix the bug #1511998 if confirmed 
-        if( a == 0 && r == 0 && g == 0 && b == 0){
+        if( a == 0 || a < 1e-6){
             r = 1;
             g = 1;
             b = 1;
