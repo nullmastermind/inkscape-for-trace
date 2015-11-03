@@ -420,7 +420,6 @@ void MeasureTool::writeMeasurePoint(Geom::Point point, bool is_start) {
     meassure_point_str << point[Geom::X] << "," << point[Geom::Y];
     gchar const *measure_point = is_start ? "inkscape:measure-start" : "inkscape:measure-end";
     namedview->setAttribute (measure_point, meassure_point_str.str().c_str());
-    g_free(str);
 }
 
 //This function is used to reverse the Measure, I do it in two steps because when move the knot the 
