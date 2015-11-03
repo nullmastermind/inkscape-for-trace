@@ -687,8 +687,17 @@ static void dumpUnbrokenSpans(ParagraphInfo *para){
                         else
                             new_glyph.vertical_scale = 1.0;
 
+                        // Position glyph --------------------
+                        new_glyph.x = current_x + unbroken_span_glyph_info->geometry.x_offset * font_size_multiplier;
+                        new_glyph.y =_y_offset;
+
+                        // y-coordinate is flipped between vertical and horizontal text... delta_y is common offset but applied with opposite sign
+                        double delta_y = unbroken_span_glyph_info->geometry.y_offset * font_size_multiplier + unbroken_span.baseline_shift;
+
                         if (_block_progression == LEFT_TO_RIGHT || _block_progression == RIGHT_TO_LEFT) {
                             // Vertical text
+
+                            new_glyph.y += delta_y;
 
                             // TODO: Should also check 'glyph_orientation_vertical' if 'text-orientation' is unset...
                             if( new_span.text_orientation == SP_CSS_TEXT_ORIENTATION_SIDEWAYS ||
@@ -698,45 +707,26 @@ static void dumpUnbrokenSpans(ParagraphInfo *para){
                                 // Sideways orientation (Latin characters, CJK punctuation), 90deg rotation done at output stage.
                                 new_glyph.orientation = ORIENTATION_SIDEWAYS;
 
-                                new_glyph.x = current_x + unbroken_span_glyph_info->geometry.x_offset * font_size_multiplier;
-
                                 // Baseline is determined by overall block (i.e. <text>) 'text-orientation' value.
-                                // (It's actually a bit more complicated but this should handle most cases.)
-                                if( _flow._blockTextOrientation() == SP_CSS_TEXT_ORIENTATION_SIDEWAYS ) {
-                                    // Baseline is alphabetic
-                                    new_glyph.y =_y_offset +
-                                        unbroken_span.baseline_shift +
-                                        (unbroken_span_glyph_info->geometry.y_offset * font_size_multiplier);
-                                } else {
-                                    // Baseline is center
-                                    new_glyph.y =_y_offset +
-                                        unbroken_span.baseline_shift +
-                                        (unbroken_span_glyph_info->geometry.y_offset * font_size_multiplier) +
-                                        0.5 * (new_span.line_height.descent - new_span.line_height.ascent);
+                                if( _flow._blockTextOrientation() != SP_CSS_TEXT_ORIENTATION_SIDEWAYS ) {
+                                    // Baseline is center  (shift: alphabetic to center)
+                                    new_glyph.y += 0.5 * (new_span.line_height.descent - new_span.line_height.ascent);
                                 }
 
                                 new_glyph.width = new_span.font_size * para.pango_items[unbroken_span.pango_item_index].font->Advance(unbroken_span_glyph_info->glyph, false);
 
                             } else {
-
                                 // Upright orientation
-                                new_glyph.x = current_x + unbroken_span_glyph_info->geometry.x_offset * font_size_multiplier +
-                                    new_span.line_height.ascent;
+
+                                new_glyph.x +=  new_span.line_height.ascent;
 
                                 // Baseline is determined by overall block (i.e. <text>) 'text-orientation' value.
-                                // (It's actually a bit more complicated but this should handle most cases.)
                                 if( _flow._blockTextOrientation() == SP_CSS_TEXT_ORIENTATION_SIDEWAYS ) {
-                                    // Baseline is alphabetic .. sideways
-                                    new_glyph.y =_y_offset +
-                                        unbroken_span.baseline_shift +
-                                        (unbroken_span_glyph_info->geometry.y_offset * font_size_multiplier) -
-                                         new_span.line_height.descent;
+                                    // Baseline is alphabetic .. sideways  (shift: left edge to alphabetic)
+                                    new_glyph.y -= new_span.line_height.descent;
                                 } else {
-                                    // Baseline is center
-                                    new_glyph.y = _y_offset +  // Does baseline shift have any meaning here?
-                                        unbroken_span.baseline_shift +
-                                        (unbroken_span_glyph_info->geometry.y_offset -
-                                         unbroken_span_glyph_info->geometry.width * 0.5) * font_size_multiplier;
+                                    // Baseline is center  (shift: left edge to center)
+                                    new_glyph.y -= unbroken_span_glyph_info->geometry.width * 0.5 * font_size_multiplier;
                                 }
 
                                 new_glyph.width = new_span.font_size * para.pango_items[unbroken_span.pango_item_index].font->Advance(unbroken_span_glyph_info->glyph, true);
@@ -747,15 +737,15 @@ static void dumpUnbrokenSpans(ParagraphInfo *para){
                             }
                         } else {
                             // Horizontal text
-                            new_glyph.x = current_x + unbroken_span_glyph_info->geometry.x_offset * font_size_multiplier;
-                            new_glyph.y = _y_offset -
-                                unbroken_span.baseline_shift +
-                                unbroken_span_glyph_info->geometry.y_offset * font_size_multiplier;
+                            new_glyph.y -= delta_y;
+
                             new_glyph.width = unbroken_span_glyph_info->geometry.width * font_size_multiplier;
                             if ((new_glyph.width == 0) && (para.pango_items[unbroken_span.pango_item_index].font))
                                 new_glyph.width = new_span.font_size * para.pango_items[unbroken_span.pango_item_index].font->Advance(unbroken_span_glyph_info->glyph, false);
                                 // for some reason pango returns zero width for invalid glyph characters (those empty boxes), so go to freetype for the info
                         }
+
+
                         if (new_span.direction == RIGHT_TO_LEFT) {
                             // pango wanted to give us glyphs in visual order but we refused, so we need to work
                             // out where the cluster start is ourselves
@@ -772,7 +762,7 @@ static void dumpUnbrokenSpans(ParagraphInfo *para){
                             }
                             new_glyph.x -= cluster_width;
                         }
-                       _flow._glyphs.push_back(new_glyph);
+                        _flow._glyphs.push_back(new_glyph);
 
                         // create the Layout::Character(s)
                         double advance_width = new_glyph.width;
