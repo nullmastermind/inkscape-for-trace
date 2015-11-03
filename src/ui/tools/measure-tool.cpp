@@ -415,9 +415,11 @@ void MeasureTool::writeMeasurePoint(Geom::Point point, bool is_start) {
     if(!namedview) {
         return;
     }
-    gchar *str =  g_strdup_printf("%f,%f", point[Geom::X], point[Geom::Y]);
+    std::stringstream meassure_point_str;
+    meassure_point_str.imbue(std::locale::classic());
+    meassure_point_str << point[Geom::X] << "," << point[Geom::Y];
     gchar const *measure_point = is_start ? "inkscape:measure-start" : "inkscape:measure-end";
-    namedview->setAttribute (measure_point, str);
+    namedview->setAttribute (measure_point, meassure_point_str.str().c_str());
     g_free(str);
 }
 
