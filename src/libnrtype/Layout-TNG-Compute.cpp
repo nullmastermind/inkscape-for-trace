@@ -700,10 +700,20 @@ static void dumpUnbrokenSpans(ParagraphInfo *para){
 
                                 new_glyph.x = current_x + unbroken_span_glyph_info->geometry.x_offset * font_size_multiplier;
 
-                                new_glyph.y =_y_offset +
-                                    unbroken_span.baseline_shift +
-                                    (unbroken_span_glyph_info->geometry.y_offset * font_size_multiplier)
-                                    + 0.5 * (new_span.line_height.descent - new_span.line_height.ascent);
+                                // Baseline is determined by overall block (i.e. <text>) 'text-orientation' value.
+                                // (It's actually a bit more complicated but this should handle most cases.)
+                                if( _flow._blockTextOrientation() == SP_CSS_TEXT_ORIENTATION_SIDEWAYS ) {
+                                    // Baseline is alphabetic
+                                    new_glyph.y =_y_offset +
+                                        unbroken_span.baseline_shift +
+                                        (unbroken_span_glyph_info->geometry.y_offset * font_size_multiplier);
+                                } else {
+                                    // Baseline is center
+                                    new_glyph.y =_y_offset +
+                                        unbroken_span.baseline_shift +
+                                        (unbroken_span_glyph_info->geometry.y_offset * font_size_multiplier) +
+                                        0.5 * (new_span.line_height.descent - new_span.line_height.ascent);
+                                }
 
                                 new_glyph.width = new_span.font_size * para.pango_items[unbroken_span.pango_item_index].font->Advance(unbroken_span_glyph_info->glyph, false);
 
@@ -713,10 +723,21 @@ static void dumpUnbrokenSpans(ParagraphInfo *para){
                                 new_glyph.x = current_x + unbroken_span_glyph_info->geometry.x_offset * font_size_multiplier +
                                     new_span.line_height.ascent;
 
-                                new_glyph.y = _y_offset +  // Does baseline shift have any meaning here?
-                                    unbroken_span.baseline_shift +
-                                    (unbroken_span_glyph_info->geometry.y_offset -
-                                     unbroken_span_glyph_info->geometry.width * 0.5) * font_size_multiplier;
+                                // Baseline is determined by overall block (i.e. <text>) 'text-orientation' value.
+                                // (It's actually a bit more complicated but this should handle most cases.)
+                                if( _flow._blockTextOrientation() == SP_CSS_TEXT_ORIENTATION_SIDEWAYS ) {
+                                    // Baseline is alphabetic .. sideways
+                                    new_glyph.y =_y_offset +
+                                        unbroken_span.baseline_shift +
+                                        (unbroken_span_glyph_info->geometry.y_offset * font_size_multiplier) -
+                                         new_span.line_height.descent;
+                                } else {
+                                    // Baseline is center
+                                    new_glyph.y = _y_offset +  // Does baseline shift have any meaning here?
+                                        unbroken_span.baseline_shift +
+                                        (unbroken_span_glyph_info->geometry.y_offset -
+                                         unbroken_span_glyph_info->geometry.width * 0.5) * font_size_multiplier;
+                                }
 
                                 new_glyph.width = new_span.font_size * para.pango_items[unbroken_span.pango_item_index].font->Advance(unbroken_span_glyph_info->glyph, true);
                                 if( new_glyph.width == 0 ) {

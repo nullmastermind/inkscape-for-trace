@@ -192,6 +192,11 @@ Layout::Direction Layout::InputStreamTextSource::styleGetBlockProgression() cons
   return TOP_TO_BOTTOM;
 }
 
+SPCSSTextOrientation Layout::InputStreamTextSource::styleGetTextOrientation() const
+{
+  return ((SPCSSTextOrientation)style->text_orientation.computed);
+}
+
 static Layout::Alignment text_anchor_to_alignment(unsigned anchor, Layout::Direction para_direction)
 {
     switch (anchor) {
