@@ -424,8 +424,8 @@ void sp_spray_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
     /* Picker */
     {
         InkToggleAction* act = ink_toggle_action_new( "SprayPickColorAction",
-                                                      _("Pick down. Fill or Stroke must be unset on original when spraying color to clones"),
-                                                      _("Pick down. Fill or Stroke must be unset on original when spraying color to clones"),
+                                                      _("Pick down. You can use trace clones dialog for avanced effects. In clone mode original fill or stroke colors must be unset"),
+                                                      _("Pick down. You can use trace clones dialog for avanced effects. In clone mode original fill or stroke colors must be unset"),
                                                       INKSCAPE_ICON("color-picker"),
                                                       secondarySize );
         gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/spray/picker", false) );
@@ -504,7 +504,7 @@ void sp_spray_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
     /* Offset */
     {
         EgeAdjustmentAction *eact = create_adjustment_action( "SprayToolOffsetAction",
-                                         _("Offset precent"), _("Offset percent:"),
+                                         _("Offset %"), _("Offset %:"),
                                          _("Increase to segregate objects more (value in percent)"),
                                          "/tools/spray/offset", 100,
                                          GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,

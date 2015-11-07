@@ -3017,7 +3017,7 @@ void CloneTiler::clonetiler_do_pick_toggled(GtkToggleButton *tb, GtkWidget *dlg)
 void CloneTiler::show_page_trace()
 {
     gtk_notebook_set_current_page(GTK_NOTEBOOK(nb),6);
-    gtk_toggle_button_set_active ((GtkToggleButton *) b, true);
+    gtk_toggle_button_set_active ((GtkToggleButton *) b, false);
 }
 
 

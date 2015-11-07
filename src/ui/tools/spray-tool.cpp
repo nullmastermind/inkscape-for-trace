@@ -538,6 +538,7 @@ static bool fit_item(SPDesktop *desktop,
         if(!nooverlap){
             doc->ensureUpToDate();
         }
+        bool   trace = prefs->getBool("/dialogs/clonetiler/dotrace");
         int    pick = prefs->getInt("/dialogs/clonetiler/pick");
         bool   pick_to_presence = prefs->getBool("/dialogs/clonetiler/pick_to_presence", false);
         bool   pick_to_color = prefs->getBool("/dialogs/clonetiler/pick_to_color");
@@ -561,7 +562,7 @@ static bool fit_item(SPDesktop *desktop,
             return false;
         }
 
-        if(picker){
+        if(picker && trace){
             float hsl[3];
             sp_color_rgb_to_hsl_floatv (hsl, r, g, b);
 
@@ -675,7 +676,7 @@ static bool fit_item(SPDesktop *desktop,
             if (pick_to_presence) {
                 if (g_random_double_range (0, 1) > val) {
                     //Hidding the element is a way to retain original
-                    //beabiohur of tiled clones for presence option.
+                    //behabiohur of tiled clones for presence option.
                     sp_repr_css_set_property(css, "opacity", "0");
                 }
             }
@@ -690,6 +691,15 @@ static bool fit_item(SPDesktop *desktop,
             }
             if (opacity < 1e-6) { // invisibly transparent, skip
                 return false;
+            }
+        }
+        if(!trace){
+            sp_svg_write_color(color_string, sizeof(color_string), rgba);
+            if(pickfill){
+                sp_repr_css_set_property(css, "fill", color_string);
+            }
+            if(pickstroke){
+                sp_repr_css_set_property(css, "stroke", color_string);
             }
         }
         if(!nooverlap && (picker || visible)){
