@@ -424,8 +424,8 @@ void sp_spray_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
     /* Picker */
     {
         InkToggleAction* act = ink_toggle_action_new( "SprayPickColorAction",
-                                                      _("Pick down. You can use trace clones dialog for avanced effects. In clone mode original fill or stroke colors must be unset"),
-                                                      _("Pick down. You can use trace clones dialog for avanced effects. In clone mode original fill or stroke colors must be unset"),
+                                                      _("Pick color from the drawing. You can use clonetiler trace dialog for avanced effects. In clone mode original fill or stroke colors must be unset."),
+                                                      _("Pick color from the drawing. You can use clonetiler trace dialog for avanced effects. In clone mode original fill or stroke colors must be unset."),
                                                       INKSCAPE_ICON("color-picker"),
                                                       secondarySize );
         gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/spray/picker", false) );
@@ -495,8 +495,6 @@ void sp_spray_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
                                                       secondarySize );
         gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/spray/nooverlap", false) );
         g_object_set_data( holder, "nooverlap", act );
-        //g_object_set_data (context_object, "holder", holder);
-        //g_object_set_data (context_object, "desktop", desktop);
         g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(sp_toggle_nooverlap), holder) ;
         gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
     }

@@ -331,7 +331,6 @@ static void sp_spray_extinput(SprayTool *tc, GdkEvent *event)
 static double get_width(SprayTool *tc)
 {
     double pressure = (tc->usepressurewidth? tc->pressure / TC_DEFAULT_PRESSURE : 1);
-    //g_warning("Pressure, population: %f, %f", pressure, pressure * tc->population);
     return pressure * tc->width;
 }
 
@@ -353,14 +352,12 @@ static double get_path_standard_deviation(SprayTool *tc)
 static double get_population(SprayTool *tc)
 {
     double pressure = (tc->usepressurepopulation? tc->pressure / TC_DEFAULT_PRESSURE : 1);
-    //g_warning("Pressure, population: %f, %f", pressure, pressure * tc->population);
     return pressure * tc->population;
 }
 
 static double get_pressure(SprayTool *tc)
 {
     double pressure = tc->pressure / TC_DEFAULT_PRESSURE;
-    //g_warning("Pressure, population: %f, %f", pressure, pressure * tc->population);
     return pressure;
 }
 
@@ -676,7 +673,7 @@ static bool fit_item(SPDesktop *desktop,
             if (pick_to_presence) {
                 if (g_random_double_range (0, 1) > val) {
                     //Hidding the element is a way to retain original
-                    //behabiohur of tiled clones for presence option.
+                    //behaviour of tiled clones for presence option.
                     sp_repr_css_set_property(css, "opacity", "0");
                 }
             }

@@ -785,11 +785,11 @@ CloneTiler::CloneTiler () :
 #endif
             gtk_box_pack_start (GTK_BOX (vb), hb, FALSE, FALSE, 0);
 
-            b  = gtk_check_button_new_with_label (_("Trace the drawing under the tiles/spray tool"));
+            b  = gtk_check_button_new_with_label (_("Trace the drawing under the clones/sprayed items"));
             g_object_set_data (G_OBJECT(b), "uncheckable", GINT_TO_POINTER(TRUE));
             bool old = prefs->getBool(prefs_path + "dotrace");
             gtk_toggle_button_set_active ((GtkToggleButton *) b, old);
-            gtk_widget_set_tooltip_text (b, _("For each clone/ Sprayed item, pick a value from the drawing in that clone's or item spayed location and apply it"));
+            gtk_widget_set_tooltip_text (b, _("For each clone/sparayed item, pick a value from the drawing in its location and apply it"));
             gtk_box_pack_start (GTK_BOX (hb), b, FALSE, FALSE, 0);
 
             g_signal_connect(G_OBJECT(b), "toggled",
@@ -998,7 +998,7 @@ CloneTiler::CloneTiler () :
            gtk_widget_set_sensitive (vvb, prefs->getBool(prefs_path + "dotrace"));
         }
         }
-        // Info 
+
         {
 #if GTK_CHECK_VERSION(3,0,0)
             GtkWidget *hb = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, VB_MARGIN);
