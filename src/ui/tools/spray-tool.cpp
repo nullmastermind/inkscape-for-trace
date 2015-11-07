@@ -459,7 +459,8 @@ static bool fit_item(SPDesktop *desktop,
     }
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool pick_to_size = prefs->getBool("/dialogs/clonetiler/pick_to_size");
-    if(picker && pick_to_size && !trace_scale){
+    bool trace = prefs->getBool("/dialogs/clonetiler/dotrace");
+    if(picker && pick_to_size && !trace_scale && trace){
         _scale = 0.1;
     }
     Geom::OptRect bbox_procesed = Geom::Rect(Geom::Point(bbox->left() - offset_min, bbox->top() - offset_min),Geom::Point(bbox->right() + offset_min, bbox->bottom() + offset_min));
@@ -538,7 +539,6 @@ static bool fit_item(SPDesktop *desktop,
         if(!nooverlap){
             doc->ensureUpToDate();
         }
-        bool   trace = prefs->getBool("/dialogs/clonetiler/dotrace");
         int    pick = prefs->getInt("/dialogs/clonetiler/pick");
         bool   pick_to_presence = prefs->getBool("/dialogs/clonetiler/pick_to_presence", false);
         bool   pick_to_color = prefs->getBool("/dialogs/clonetiler/pick_to_color");
