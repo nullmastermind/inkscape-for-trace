@@ -789,7 +789,7 @@ CloneTiler::CloneTiler () :
             g_object_set_data (G_OBJECT(b), "uncheckable", GINT_TO_POINTER(TRUE));
             bool old = prefs->getBool(prefs_path + "dotrace");
             gtk_toggle_button_set_active ((GtkToggleButton *) b, old);
-            gtk_widget_set_tooltip_text (b, _("For each clone/sparayed item, pick a value from the drawing in its location and apply it"));
+            gtk_widget_set_tooltip_text (b, _("For each clone/sprayed item, pick a value from the drawing in its location and apply it"));
             gtk_box_pack_start (GTK_BOX (hb), b, FALSE, FALSE, 0);
 
             g_signal_connect(G_OBJECT(b), "toggled",
