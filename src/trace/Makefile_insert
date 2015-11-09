@@ -1,5 +1,7 @@
 ## Makefile.am fragment sourced by src/Makefile.am.
 
+if HAVE_POTRACE
+
 ink_common_sources +=	            \
 	trace/pool.h                        \
 	trace/trace.h                       \
@@ -17,3 +19,5 @@ ink_common_sources +=	            \
 	trace/potrace/bitmap.h              \
 	trace/potrace/inkscape-potrace.cpp  \
 	trace/potrace/inkscape-potrace.h
+
+endif

@@ -249,6 +249,8 @@ if test "x$potrace_ok" = "xyes"; then
    AC_DEFINE(HAVE_POTRACE, 1, [Use Potrace])
 fi
 
+AM_CONDITIONAL(HAVE_POTRACE, test "x$potrace_ok" = "xyes")
+
 dnl ******************************
 dnl Check for libexif
 dnl ******************************
@@ -1201,6 +1203,7 @@ Configuration:
         Enable LittleCms:         ${enable_lcms}
         Enable DBUS:              ${with_dbus} 
         Enable Poppler-Cairo:     ${enable_poppler_cairo}
+	Enable Potrace:           ${potrace_ok}
         ImageMagick Magick++:     ${magick_ok}
         Libwpg:                   ${with_libwpg}
         Libvisio:                 ${with_libvisio}
