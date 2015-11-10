@@ -1072,11 +1072,10 @@ void  Layout::Calculator::_buildPangoItemizationForPara(ParagraphInfo *para) con
     para->direction = LEFT_TO_RIGHT; // CSS default
     if (_flow._input_stream[para->first_input_index]->Type() == TEXT_SOURCE) {
         Layout::InputStreamTextSource const *text_source = static_cast<Layout::InputStreamTextSource *>(_flow._input_stream[para->first_input_index]);
-        if (text_source->style->direction.set) {
-            para->direction =                (text_source->style->direction.computed == SP_CSS_DIRECTION_LTR) ? LEFT_TO_RIGHT : RIGHT_TO_LEFT;
-            PangoDirection pango_direction = (text_source->style->direction.computed == SP_CSS_DIRECTION_LTR) ? PANGO_DIRECTION_LTR : PANGO_DIRECTION_RTL;
-            pango_items_glist = pango_itemize_with_base_dir(_pango_context, pango_direction, para_text.data(), 0, para_text.bytes(), attributes_list, NULL);
-        }
+
+        para->direction =                (text_source->style->direction.computed == SP_CSS_DIRECTION_LTR) ? LEFT_TO_RIGHT : RIGHT_TO_LEFT;
+        PangoDirection pango_direction = (text_source->style->direction.computed == SP_CSS_DIRECTION_LTR) ? PANGO_DIRECTION_LTR : PANGO_DIRECTION_RTL;
+        pango_items_glist = pango_itemize_with_base_dir(_pango_context, pango_direction, para_text.data(), 0, para_text.bytes(), attributes_list, NULL);
     }
 
     if( pango_items_glist == NULL ) {
