@@ -98,56 +98,10 @@ LPERoughen::~LPERoughen() {}
 
 void LPERoughen::doOnApply(SPLPEItem const* lpeitem)
 {
-    SPLPEItem* item = const_cast<SPLPEItem*>(lpeitem);
     //calculamos el tamaño mas optimo para el roughen en función del número de nodos y la distancia del trazado
 }
 
-static void
-sp_group_perform_patheffect(SPGroup *group, SPGroup *topgroup, bool write)
-{
-    std::vector<SPItem*> const item_list = sp_item_group_item_list(group);
 
-    for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();iter++) {
-        SPObject *subitem = *iter;
-
-        SPGroup *subGroup = dynamic_cast<SPGroup *>(subitem);
-        if (subGroup) {
-            sp_group_perform_patheffect(subGroup, topgroup, write);
-        } else {
-            SPShape *subShape = dynamic_cast<SPShape *>(subitem);
-            if (subShape) {
-                SPCurve * c = NULL;
-
-                SPPath *subPath = dynamic_cast<SPPath *>(subShape);
-                if (subPath) {
-                    c = subPath->get_original_curve();
-                } else {
-                    c = subShape->getCurve();
-                }
-
-                // only run LPEs when the shape has a curve defined
-                if (c) {
-                    c->transform(i2anc_affine(subitem, topgroup));
-                    topgroup->performPathEffect(c);
-                    c->transform(i2anc_affine(subitem, topgroup).inverse());
-                    subShape->setCurve(c, TRUE);
-
-                    if (write) {
-                        Inkscape::XML::Node *repr = subitem->getRepr();
-                        gchar *str = sp_svg_write_path(c->get_pathvector());
-                        repr->setAttribute("d", str);
-#ifdef GROUP_VERBOSE
-                        g_message("sp_group_perform_patheffect writes 'd' attribute");
-#endif
-                        g_free(str);
-                    }
-
-                    c->unref();
-                }
-            }
-        }
-    }
-}
 
 void LPERoughen::doBeforeEffect(SPLPEItem const *lpeitem)
 {
