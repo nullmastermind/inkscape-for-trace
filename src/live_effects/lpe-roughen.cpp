@@ -98,7 +98,7 @@ LPERoughen::~LPERoughen() {}
 
 void LPERoughen::doBeforeEffect(SPLPEItem const *lpeitem)
 {
-    if(spray_tool_friendly && seed == 0){
+    if(spray_tool_friendly && seed == 0 && SP_OBJECT(lpeitem)->getId()){
         std::string id_item(SP_OBJECT(lpeitem)->getId());
         long seed = static_cast<long>(boost::hash_value(id_item));
         global_randomize.param_set_value(global_randomize.get_value(), seed);
