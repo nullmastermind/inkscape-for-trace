@@ -45,6 +45,7 @@ public:
 
     virtual void doEffect(SPCurve *curve);
     virtual double sign(double randNumber);
+    virtual void doOnApply(SPLPEItem const* lpeitem);
     virtual Geom::Point randomize(double max_lenght, bool is_node = false);
     virtual Geom::Point randomize(double lenght, Geom::Point start, Geom::Point end);
     virtual void doBeforeEffect(SPLPEItem const * lpeitem);
