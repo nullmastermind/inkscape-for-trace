@@ -21,6 +21,7 @@
 #include FT_BBOX_H
 #include FT_TRUETYPE_TAGS_H
 #include FT_TRUETYPE_TABLES_H
+#include FT_GLYPH_H
 #include <pango/pangoft2.h>
 #include <2geom/pathvector.h>
 #include <2geom/path-sink.h>
@@ -507,7 +508,7 @@ void font_instance::LoadGlyph(int glyph_id)
     }
 }
 
-bool font_instance::FontMetrics(double &ascent,double &descent,double &leading)
+bool font_instance::FontMetrics(double &ascent,double &descent,double &xheight)
 {
     if ( pFont == NULL ) {
         return false;
@@ -516,34 +517,77 @@ bool font_instance::FontMetrics(double &ascent,double &descent,double &leading)
     if ( theFace == NULL ) {
         return false;
     }
+
+    // CSS2 recommends using the OS/2 values sTypoAscender and sTypoDescender
+    // for the ascender and descender values:
+    //   http://www.w3.org/TR/CSS2/visudet.html#sTypoAscender
+    // The typographic ascender and descender are taken from the
+    // otmMacAscent and otmMacDescent values:
+    //   http://microsoft.public.win32.programmer.gdi.narkive.com/LV6k4BDh/msdn-documentation-outlinetextmetrics-clarification
+    // The otmAscent and otmDescent values are the maxiumum ascent and maxiumum
+    // descent of all the glyphs in a font.
+
 #ifdef USE_PANGO_WIN32
     OUTLINETEXTMETRIC otm;
     if ( !GetOutlineTextMetrics(parent->hScreenDC,sizeof(otm),&otm) ) {
         return false;
     }
+
     double scale=1.0/parent->fontSize;
-    ascent=fabs(otm.otmAscent*scale);
-    descent=fabs(otm.otmDescent*scale);
-    leading=fabs(otm.otmLineGap*scale);
+    ascent=fabs(otm.otmMacAscent*scale);
+    descent=fabs(otm.otmMacDescent*scale);
+    xheight=fabs(otm.otmXHeight*scale);
+    // May not be necessary... but if OS/2 table is missing or not version 2 or higher,
+    // xheight might be set to 0.
+    if( xheight = 0.0 ) xheight = ascent/2.0;
     //otmSubscriptSize, otmSubscriptOffset, otmSuperscriptSize, otmSuperscriptOffset, 
 #else
     if ( theFace->units_per_EM == 0 ) {
         return false; // bitmap font
     }
-    ascent=fabs(((double)theFace->ascender)/((double)theFace->units_per_EM));
-    descent=fabs(((double)theFace->descender)/((double)theFace->units_per_EM));
-    leading=fabs(((double)theFace->height)/((double)theFace->units_per_EM));
-    leading-=ascent+descent;
+    
+    TT_OS2*  os2 = (TT_OS2*)FT_Get_Sfnt_Table( theFace, FT_SFNT_OS2 );       
+    if( os2 ) {
+        ascent =fabs(((double)os2->sTypoAscender)/((double)theFace->units_per_EM));
+        descent=fabs(((double)os2->sTypoDescender)/((double)theFace->units_per_EM));
+    } else {
+        ascent =fabs(((double)theFace->ascender)/((double)theFace->units_per_EM));
+        descent=fabs(((double)theFace->descender)/((double)theFace->units_per_EM));
+    }
+
+    // We must find x-height ourselves! First try OS/2 table.
+    if( os2 && os2->version >= 0x0002 && os2->version != 0xffffu ) {
+        // Only os/2 version 2 and above have sxHeight, 0xffff marks "old Mac fonts" without table
+        xheight=fabs(((double)os2->sxHeight)/((double)theFace->units_per_EM));
+    } else {
+        // Measure 'x' height in font. Recommended option by XSL standard if no sxHeight.
+        FT_UInt index = FT_Get_Char_Index( theFace, 'x' );
+        if( index != 0 ) {
+            FT_Load_Glyph( theFace, index, FT_LOAD_NO_SCALE );
+            xheight = (fabs)(((double)theFace->glyph->metrics.height/(double)theFace->units_per_EM));
+        } else {
+            // No 'x' in font!
+            xheight = ascent/2.0;
+        }
+    }
 #endif
 
-    // CSS dictates em size is ascent + descent
+    // CSS dictates em size is ascent + descent.... but this doesn't seem to be used in practice.
+    // The em size is what the font reports...
     double em = ascent + descent;
     if( em <= 0 ) {
-        return false; // Pathological
+       return false; // Pathological
     }
     ascent /= em;
     descent /= em;
-    leading /= em;
+    xheight /= em;
+
+    // gchar* font_name = pango_font_description_to_string( descr );
+    // std::cout <<  "Font: " << (font_name ? font_name : ("Null")) << std::endl;
+    // g_free( font_name );
+    // std::cout << "  ascent: " << ascent << "  descent: " << descent
+    //           << "  x-height: " << xheight << "\n" << std::endl;
+
     return true;
 }
 

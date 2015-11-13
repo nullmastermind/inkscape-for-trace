@@ -610,7 +610,7 @@ public:
 
     /**
      * Keep track of font metrics. Two use cases:
-     * 1. Keep track of ascent and descent of an individual font.
+     * 1. Keep track of ascent, descent, and x-height of an individual font.
      * 2. Keep track of effective ascent and descent that includes half-leading.
      *
      * Note: Leading refers to the "external" leading which is added (subtracted) due to
@@ -626,16 +626,16 @@ public:
 
         double ascent;
         double descent;
-        double leading; // Not used... to be removed (requires change to font->FontMetrics()
+        double xheight;
 
         // CSS 2.1 dictates that font-size is based on em-size which is defined as ascent + descent
         inline double emSize() const {return ascent + descent;}
         // Alternatively name function for use 2.
         inline double lineSize() const { return ascent + descent; }
-        inline void setZero() {ascent = descent = 0.0;}
+        inline void setZero() {ascent = descent = xheight = 0.0;}
 
         // For scaling for 'font-size'.
-        inline FontMetrics& operator*=(double x) {ascent *= x; descent *= x; return *this;}
+        inline FontMetrics& operator*=(double x) {ascent *= x; descent *= x; xheight *= x; return *this;}
 
         /// Save the larger values of ascent and descent between this and other. Needed for laying
         /// out a line with mixed font-sizes, fonts, or line spacings.
@@ -646,6 +646,7 @@ public:
 
         inline double getAscent() const {return ascent; }
         inline double getDescent() const {return descent; }
+        inline double getXheight() const {return xheight; }
     };
 
     /// see _enum_converter()

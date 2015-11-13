@@ -1121,7 +1121,7 @@ void Layout::Calculator::_computeFontLineHeight(font_instance *font, double font
         *line_height_multiplier = 1.0;
     }
     else {
-	font->FontMetrics(font_metrics->ascent, font_metrics->descent, font_metrics->leading);
+	font->FontMetrics(font_metrics->ascent, font_metrics->descent, font_metrics->xheight);
     }
     *font_metrics *= font_size;
 
@@ -1819,13 +1819,13 @@ void Layout::_calculateCursorShapeForEmpty()
     FontMetrics line_height;
     if (font) {
         const_cast<font_instance*>(font)->FontSlope(caret_slope_run, caret_slope_rise);
-        font->FontMetrics(line_height.ascent, line_height.descent, line_height.leading);
+        font->FontMetrics(line_height.ascent, line_height.descent, line_height.xheight);
         line_height *= font_size;
         font->Unref();
     } else {
         line_height.ascent = font_size * 0.85;      // random guesses
         line_height.descent = font_size * 0.15;
-        line_height.leading = 0.0;
+        line_height.xheight = 0.0;
     }
     double caret_slope = atan2(caret_slope_run, caret_slope_rise);
     _empty_cursor_shape.height = font_size / cos(caret_slope);
