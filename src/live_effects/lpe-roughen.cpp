@@ -20,6 +20,7 @@
 #include "live_effects/parameter/parameter.h"
 #include <boost/functional/hash.hpp>
 #include "helper/geom.h"
+#include "sp-item-group.h"
 #include <glibmm/i18n.h>
 #include <cmath>
 
@@ -41,6 +42,35 @@ static const Util::EnumData<HandlesMethod> HandlesMethodData[HM_END] = {
 };
 static const Util::EnumDataConverter<HandlesMethod>
 HMConverter(HandlesMethodData, HM_END);
+
+static void
+sp_get_better_default_size(SPItem *item, double &value)
+{
+    if (SP_IS_GROUP(item)) {
+        std::vector<SPItem*> const item_list = sp_item_group_item_list(SP_GROUP(item));
+        for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();iter++) {
+            SPItem *subitem = *iter;
+            value += sp_get_better_default_size(subitem, value);
+        }
+        if(item_list.size() > 0){
+            value /= item_list.size();
+        }
+    } else {
+        SPShape *shape = dynamic_cast<SPShape *>(item);
+        if (shape) {
+            SPCurve * c = NULL;
+            SPPath *path = dynamic_cast<SPPath *>(shape);
+            if (path) {
+                c = path->get_original_curve();
+            } else {
+                c = shape->getCurve();
+            }
+            if (c) {
+                value = Geom::length(paths_to_pw(c->get_pathvector()))/(c->get_segment_count () * 3);
+            }
+        }
+    }
+}
 
 LPERoughen::LPERoughen(LivePathEffectObject *lpeobject)
     : Effect(lpeobject),
@@ -98,10 +128,12 @@ LPERoughen::~LPERoughen() {}
 
 void LPERoughen::doOnApply(SPLPEItem const* lpeitem)
 {
-    //calculamos el tamaño mas optimo para el roughen en función del número de nodos y la distancia del trazado
+    SPLPEItem * splpeitem = const_cast<SPLPEItem *>(lpeitem);
+    double initial = 0;
+    sp_get_better_default_size(SP_ITEM(splpeitem), initial);
+    displace_x.param_set_value(initial, displace_x.defseed);
+    displace_y.param_set_value(initial, displace_y.defseed);
 }
-
-
 
 void LPERoughen::doBeforeEffect(SPLPEItem const *lpeitem)
 {
