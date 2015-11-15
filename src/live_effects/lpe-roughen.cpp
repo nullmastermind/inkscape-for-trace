@@ -120,7 +120,7 @@ sp_get_better_default_size(SPItem *item, double &value)
                 c = shape->getCurve();
             }
             if (c) {
-                value += Geom::length(paths_to_pw(c->get_pathvector()))/(c->get_segment_count () * 3);
+                value += Geom::length(paths_to_pw(c->get_pathvector()))/(c->get_segment_count () * 6);
             }
         }
     }
@@ -240,10 +240,11 @@ Geom::Point LPERoughen::randomize(double max_lenght, bool is_node)
 
 Geom::Point LPERoughen::randomize(double lenght, Geom::Point start, Geom::Point end)
 {
-    int angle = 0;
+    double angle = 0;
     if((int)max_smooth_angle != 0){
         angle = sign(Geom::deg_to_rad(rand() % (int)max_smooth_angle));
     }
+    std::cout << angle << "anggggle\n";
     Geom::Ray ray(start, end);
     if(!fixed_displacement ){
         lenght = Geom::distance(start, end);
@@ -283,10 +284,11 @@ void LPERoughen::doEffect(SPCurve *curve)
             Geom::CubicBezier const *cubic = NULL;
             cubic = dynamic_cast<Geom::CubicBezier const *>(&*curve_it1);
             if (cubic) {
-                nCurve->curveto((*cubic)[1], (*cubic)[2], curve_it1->finalPoint());
+                nCurve->curveto((*cubic)[1] + last_move, (*cubic)[2], curve_it1->finalPoint());
             } else {
                 nCurve->lineto(curve_it1->finalPoint());
             }
+            last_move = Geom::Point(0, 0);
             double length = curve_it1->length(0.001);
             std::size_t splits = 0;
             if (method == DM_SEGMENTS) {
@@ -396,7 +398,68 @@ SPCurve const * LPERoughen::addNodesAndJitter(Geom::Curve const * A, Geom::Point
             point_b2 = point_b3;
         }
     }
-    if(handles == HM_RETRACT){
+    if(handles == HM_SMOOTH){
+        if(cubic) {
+            std::pair<Geom::CubicBezier, Geom::CubicBezier> div = cubic->subdivide(t);
+            std::vector<Geom::Point> seg1 = div.first.controlPoints(),
+                                     seg2 = div.second.controlPoints();
+            point_b1  = randomize(max_lenght, seg1[3] + point_a3, seg2[1] + point_a3);
+            point_b2  = seg2[2];
+            point_b3  = seg2[3] + point_b3;
+            point_a3 = seg1[3] + point_a3;
+            Geom::Ray ray(prev,A->initialPoint());
+            point_a1  = A->initialPoint() + Geom::Point::polar(ray.angle(), max_lenght);
+            if(prev == Geom::Point(0,0)){
+                point_a1 = randomize(max_lenght);
+            }
+            if(last){
+                Geom::Path b2(point_b3);
+                b2.appendNew<Geom::LineSegment>(point_a3);
+                double dist = Geom::distance(b2.pointAt(1.0/3.0), point_b3);
+                ray.setPoints(point_b3, b2.pointAt(1.0/3.0));
+                point_b2  = point_b3 + Geom::Point::polar(ray.angle(), dist);
+                point_b2  = randomize(max_lenght, point_b3, point_b2);
+            }
+            ray.setPoints(point_b1, point_a3);
+            point_a2  = point_a3 + Geom::Point::polar(ray.angle(), max_lenght);
+            if(last){
+                prev = point_b2;
+            } else {
+                prev = point_a2;
+            }
+            out->moveto(seg1[0]);
+            out->curveto(point_a1,point_a2,point_a3);
+            out->curveto(point_b1, point_b2, point_b3);
+        } else {
+            point_b1  = randomize(max_lenght,  A->pointAt(t) + point_a3,  A->pointAt(t + (t / 3)));
+            point_b2  = A->pointAt(t +((t / 3) * 2));
+            point_b3  = A->finalPoint() + point_b3;
+            point_a3 = A->pointAt(t) + point_a3;
+            Geom::Ray ray(prev,A->initialPoint());
+            point_a1  = A->initialPoint() + Geom::Point::polar(ray.angle(), max_lenght);
+            if(prev == Geom::Point(0,0)){
+                point_a1 = randomize(max_lenght);
+            }
+            if(last){
+                Geom::Path b2(point_b3);
+                b2.appendNew<Geom::LineSegment>(point_a3);
+                double dist = Geom::distance(b2.pointAt(1.0/3.0), point_b3);
+                ray.setPoints(point_b3, b2.pointAt(1.0/3.0));
+                point_b2  = point_b3 + Geom::Point::polar(ray.angle(), dist);
+                point_b2  = randomize(max_lenght, point_b3, point_b2);
+            }
+            ray.setPoints(point_b1, point_a3);
+            point_a2  = point_a3 + Geom::Point::polar(ray.angle(), max_lenght);
+            if(last){
+                prev = point_b2;
+            } else {
+                prev = point_a2;
+            }
+            out->moveto(A->initialPoint());
+            out->curveto(point_a1,point_a2,point_a3);
+            out->curveto(point_b1, point_b2, point_b3);
+        }
+    } else if(handles == HM_RETRACT){
         out->moveto(A->initialPoint());
         out->lineto(A->pointAt(t) + point_a3);
         if(cubic && !last){
@@ -406,71 +469,12 @@ SPCurve const * LPERoughen::addNodesAndJitter(Geom::Curve const * A, Geom::Point
         } else {
             out->lineto(A->finalPoint() + point_b3);
         }
-    } else if(handles == HM_SMOOTH && cubic) {
-        std::pair<Geom::CubicBezier, Geom::CubicBezier> div = cubic->subdivide(t);
-        std::vector<Geom::Point> seg1 = div.first.controlPoints(),
-                                 seg2 = div.second.controlPoints();
-        point_b1  = randomize(max_lenght, seg1[3] + point_a3, seg2[1]  + point_a3);
-        point_b2  = seg2[2];
-        point_b3  = seg2[3] + point_b3;
-        point_a3 = seg1[3] + point_a3;
-        Geom::Ray ray(prev,A->initialPoint());
-        point_a1  = A->initialPoint() + Geom::Point::polar(ray.angle(), max_lenght);
-        if(prev == Geom::Point(0,0)){
-            point_a1 = randomize(max_lenght);
-        }
-        if(last){
-            Geom::Path b2(point_b3);
-            b2.appendNew<Geom::LineSegment>(point_a3);
-            double dist = Geom::distance(b2.pointAt(1.0/3.0), point_b3);
-            ray.setPoints(point_b3, b2.pointAt(1.0/3.0));
-            point_b2  = point_b3 + Geom::Point::polar(ray.angle(), dist);
-            point_b2  = randomize(max_lenght, point_b3, point_b2);
-        }
-        ray.setPoints(point_b1, point_a3);
-        point_a2  = point_a3 + Geom::Point::polar(ray.angle(), max_lenght);
-        if(last){
-            prev = point_b2;
-        } else {
-            prev = point_a2;
-        }
-        out->moveto(seg1[0]);
-        out->curveto(point_a1,point_a2,point_a3);
-        out->curveto(point_b1, point_b2, point_b3);
-    } else if(handles == HM_SMOOTH && !cubic) {
-        point_b1  = randomize(max_lenght,  A->pointAt(t) + point_a3,  A->pointAt(t + (t / 3)));
-        point_b2  = A->pointAt(t +((t / 3) * 2));
-        point_b3  = A->finalPoint() + point_b3;
-        point_a3 = A->pointAt(t) + point_a3;
-        Geom::Ray ray(prev,A->initialPoint());
-        point_a1  = A->initialPoint() + Geom::Point::polar(ray.angle(), max_lenght);
-        if(prev == Geom::Point(0,0)){
-            point_a1 = randomize(max_lenght);
-        }
-        if(last){
-            Geom::Path b2(point_b3);
-            b2.appendNew<Geom::LineSegment>(point_a3);
-            double dist = Geom::distance(b2.pointAt(1.0/3.0), point_b3);
-            ray.setPoints(point_b3, b2.pointAt(1.0/3.0));
-            point_b2  = point_b3 + Geom::Point::polar(ray.angle(), dist);
-            point_b2  = randomize(max_lenght, point_b3, point_b2);
-        }
-        ray.setPoints(point_b1, point_a3);
-        point_a2  = point_a3 + Geom::Point::polar(ray.angle(), max_lenght);
-        if(last){
-            prev = point_b2;
-        } else {
-            prev = point_a2;
-        }
-        out->moveto(A->initialPoint());
-        out->curveto(point_a1,point_a2,point_a3);
-        out->curveto(point_b1, point_b2, point_b3);
-    } else if (cubic) {
-        std::pair<Geom::CubicBezier, Geom::CubicBezier> div = cubic->subdivide(t);
-        std::vector<Geom::Point> seg1 = div.first.controlPoints(),
-                                 seg2 = div.second.controlPoints();
-        out->moveto(seg1[0]);
-        if(handles == HM_ALONG_NODES){
+    } else if(handles == HM_ALONG_NODES){
+        if (cubic) {
+            std::pair<Geom::CubicBezier, Geom::CubicBezier> div = cubic->subdivide(t);
+            std::vector<Geom::Point> seg1 = div.first.controlPoints(),
+                                     seg2 = div.second.controlPoints();
+            out->moveto(seg1[0]);
             out->curveto(seg1[1] + last_move, seg1[2] + point_a3, seg1[3] + point_a3);
             last_move = point_a3;
             if(last){
@@ -478,17 +482,23 @@ SPCurve const * LPERoughen::addNodesAndJitter(Geom::Curve const * A, Geom::Point
             }
             out->curveto(seg2[1] + point_a3, seg2[2]  + point_b3, seg2[3] + point_b3);
         } else {
+            out->moveto(A->initialPoint());
+            out->lineto(A->pointAt(t) + point_a3);
+            out->lineto(A->finalPoint() + point_b3);
+        }
+    } else if(handles == HM_RAND) {
+        if (cubic) {
+            std::pair<Geom::CubicBezier, Geom::CubicBezier> div = cubic->subdivide(t);
+            std::vector<Geom::Point> seg1 = div.first.controlPoints(),
+                                     seg2 = div.second.controlPoints();
+            out->moveto(seg1[0]);
             out->curveto(seg1[1] + point_a1, seg1[2] + point_a2 + point_a3, seg1[3] + point_a3);
             out->curveto(seg2[1] + point_a3 + point_b1, seg2[2]  + point_b2 + point_b3, seg2[3] + point_b3);
+        } else {
+            out->moveto(A->initialPoint());
+            out->lineto(A->pointAt(t) + point_a3);
+            out->lineto(A->finalPoint() + point_b3);
         }
-    } else if (handles == HM_RAND) {
-        out->moveto(A->initialPoint());
-        out->curveto(A->pointAt(t / 3) + point_a1, A->pointAt((t / 3) * 2) + point_a2  + point_a3, A->pointAt(t) + point_a3);
-        out->curveto(A->pointAt(t + (t / 3)) + point_a3 + point_b1, A->pointAt(t +((t / 3) * 2)) + point_b2 + point_b3, A->finalPoint() + point_b3);
-    } else {
-        out->moveto(A->initialPoint());
-        out->lineto(A->pointAt(t) + point_a3);
-        out->lineto(A->finalPoint() + point_b3);
     }
     return out;
 }
@@ -508,46 +518,46 @@ SPCurve *LPERoughen::jitter(Geom::Curve const * A, Geom::Point &prev, Geom::Poin
         point_a1 = randomize(max_lenght);
         point_a2 = randomize(max_lenght);
     }
-    if(handles == HM_RETRACT){
+    if(handles == HM_SMOOTH) {
+        if (cubic) {
+            Geom::Ray ray(prev,A->initialPoint());
+            point_a1  = Geom::Point::polar(ray.angle(), max_lenght);
+            if(prev == Geom::Point(0,0)){
+                point_a1 = A->pointAt(1.0/3.0) + randomize(max_lenght);
+            }
+            ray.setPoints((*cubic)[3] + point_a3, (*cubic)[2] + point_a3);
+            point_a2  = randomize(max_lenght, ray.angle());
+            prev = (*cubic)[2] + point_a2;
+            out->moveto((*cubic)[0]);
+            out->curveto((*cubic)[0] + point_a1, (*cubic)[2] + point_a2 + point_a3, (*cubic)[3] + point_a3);
+        } else {
+            Geom::Ray ray(prev,A->initialPoint());
+            point_a1 = Geom::Point::polar(ray.angle(), max_lenght);
+            if(prev==Geom::Point(0,0)){
+                point_a1 = A->pointAt(1.0/3.0) + randomize(max_lenght);
+            }
+            ray.setPoints(A->finalPoint() + point_a3, A->pointAt((1.0/3.0) * 2) + point_a3);
+            point_a2  = randomize(max_lenght, ray.angle());
+            prev = A->pointAt((1.0/3.0) * 2) +  point_a2 + point_a3;
+            out->moveto(A->initialPoint());
+            out->curveto(A->initialPoint() + point_a1, A->pointAt((1.0/3.0) * 2) + point_a2 + point_a3, A->finalPoint() + point_a3);
+        }
+    } else if(handles == HM_RETRACT){
         out->moveto(A->initialPoint());
         out->lineto(A->finalPoint() + point_a3);
-    } else if(handles == HM_SMOOTH && cubic) {
-        Geom::Ray ray(prev,A->initialPoint());
-        point_a1  = Geom::Point::polar(ray.angle(), max_lenght);
-        if(prev == Geom::Point(0,0)){
-            point_a1 = A->pointAt(1.0/3.0) + randomize(max_lenght);
-        }
-        ray.setPoints((*cubic)[3] + point_a3, (*cubic)[2] + point_a3);
-        point_a2  = randomize(max_lenght, ray.angle());
-        prev = (*cubic)[2] + point_a2;
-        out->moveto((*cubic)[0]);
-        out->curveto((*cubic)[0] + point_a1, (*cubic)[2] + point_a2 + point_a3, (*cubic)[3] + point_a3);
-    } else if(handles == HM_SMOOTH && !cubic) {
-        Geom::Ray ray(prev,A->initialPoint());
-        point_a1 = Geom::Point::polar(ray.angle(), max_lenght);
-        if(prev==Geom::Point(0,0)){
-            point_a1 = A->pointAt(1.0/3.0) + randomize(max_lenght);
-        }
-        ray.setPoints(A->finalPoint() + point_a3, A->pointAt((1.0/3.0) * 2) + point_a3);
-        point_a2  = randomize(max_lenght, ray.angle());
-        prev = A->pointAt((1.0/3.0) * 2) +  point_a2 + point_a3;
-        out->moveto(A->initialPoint());
-        out->curveto(A->initialPoint() + point_a1, A->pointAt((1.0/3.0) * 2) + point_a2 + point_a3, A->finalPoint() + point_a3);
-    } else if (cubic) {
-        out->moveto((*cubic)[0]);
-        if(handles == HM_ALONG_NODES){
+    } else if (handles == HM_ALONG_NODES) {
+        if(cubic){
+            out->moveto((*cubic)[0]);
             out->curveto((*cubic)[1] + last_move, (*cubic)[2] + point_a3, (*cubic)[3] + point_a3);
             last_move = point_a3;
         } else {
-            out->curveto((*cubic)[1] + point_a1, (*cubic)[2] + point_a2 + point_a3, (*cubic)[3] + point_a3);
+            out->moveto(A->initialPoint());
+            out->lineto(A->finalPoint() + point_a3);
         }
     } else if (handles == HM_RAND) {
         out->moveto(A->initialPoint());
         out->curveto(A->pointAt(0.3333) + point_a1, A->pointAt(0.6666) + point_a2 + point_a3,
                      A->finalPoint() + point_a3);
-    } else {
-        out->moveto(A->initialPoint());
-        out->lineto(A->finalPoint() + point_a3);
     }
     return out;
 }
