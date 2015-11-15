@@ -60,8 +60,6 @@ LPERoughen::LPERoughen(LivePathEffectObject *lpeobject)
                       "global_randomize", &wr, this, 1.),
       handles(_("Handles"), _("Handles options"), "handles", HMConverter, &wr,
              this, HM_ALONG_NODES),
-      max_smooth_angle(_("Max. smooth handle angle"), _("Max. smooth handle angle"),
-                     "max_smooth_angle", &wr, this, 20),
       shift_nodes(_("Shift nodes"), _("Shift nodes"), "shift_nodes", &wr, this,
                  true),
       fixed_displacement(_("Fixed displacement"), _("Fixed displacement, 1/3 of segment length"),
@@ -76,7 +74,6 @@ LPERoughen::LPERoughen(LivePathEffectObject *lpeobject)
     registerParameter(&displace_y);
     registerParameter(&global_randomize);
     registerParameter(&handles);
-    registerParameter(&max_smooth_angle);
     registerParameter(&shift_nodes);
     registerParameter(&fixed_displacement);
     registerParameter(&spray_tool_friendly);
@@ -89,9 +86,6 @@ LPERoughen::LPERoughen(LivePathEffectObject *lpeobject)
     segments.param_set_range(1, Geom::infinity());
     segments.param_set_increments(1, 1);
     segments.param_set_digits(0);
-    max_smooth_angle.param_set_range(0, 359);
-    max_smooth_angle.param_set_increments(1, 1);
-    max_smooth_angle.param_set_digits(0);
     seed = 0;
 }
 
@@ -131,8 +125,8 @@ void LPERoughen::doOnApply(SPLPEItem const* lpeitem)
     SPLPEItem * splpeitem = const_cast<SPLPEItem *>(lpeitem);
     double initial = 0;
     sp_get_better_default_size(SP_ITEM(splpeitem), initial);
-    displace_x.param_set_value(initial, displace_x.defseed);
-    displace_y.param_set_value(initial, displace_y.defseed);
+    displace_x.param_set_value(initial, 0);
+    displace_y.param_set_value(initial, 0);
 }
 
 void LPERoughen::doBeforeEffect(SPLPEItem const *lpeitem)
@@ -236,20 +230,6 @@ Geom::Point LPERoughen::randomize(double max_lenght, bool is_node)
         output  = Geom::Point::polar(ray.angle(), max_lenght);
     }
     return output;
-}
-
-Geom::Point LPERoughen::randomize(double lenght, Geom::Point start, Geom::Point end)
-{
-    double angle = 0;
-    if((int)max_smooth_angle != 0){
-        angle = sign(Geom::deg_to_rad(rand() % (int)max_smooth_angle));
-    }
-    std::cout << angle << "anggggle\n";
-    Geom::Ray ray(start, end);
-    if(!fixed_displacement ){
-        lenght = Geom::distance(start, end);
-    }
-    return Geom::Point::polar(ray.angle() + angle , lenght) + start;
 }
 
 void LPERoughen::doEffect(SPCurve *curve)
@@ -403,11 +383,16 @@ SPCurve const * LPERoughen::addNodesAndJitter(Geom::Curve const * A, Geom::Point
             std::pair<Geom::CubicBezier, Geom::CubicBezier> div = cubic->subdivide(t);
             std::vector<Geom::Point> seg1 = div.first.controlPoints(),
                                      seg2 = div.second.controlPoints();
-            point_b1  = randomize(max_lenght, seg1[3] + point_a3, seg2[1] + point_a3);
+            Geom::Ray ray(seg1[3] + point_a3, seg2[1] + point_a3);
+            double lenght = max_lenght;
+            if(!fixed_displacement ){
+                lenght = Geom::distance(seg1[3] + point_a3, seg2[1] + point_a3);
+            }
+            point_b1  = seg1[3] + point_a3 + Geom::Point::polar(ray.angle() , lenght);
             point_b2  = seg2[2];
             point_b3  = seg2[3] + point_b3;
             point_a3 = seg1[3] + point_a3;
-            Geom::Ray ray(prev,A->initialPoint());
+            ray.setPoints(prev,A->initialPoint());
             point_a1  = A->initialPoint() + Geom::Point::polar(ray.angle(), max_lenght);
             if(prev == Geom::Point(0,0)){
                 point_a1 = randomize(max_lenght);
@@ -415,10 +400,12 @@ SPCurve const * LPERoughen::addNodesAndJitter(Geom::Curve const * A, Geom::Point
             if(last){
                 Geom::Path b2(point_b3);
                 b2.appendNew<Geom::LineSegment>(point_a3);
-                double dist = Geom::distance(b2.pointAt(1.0/3.0), point_b3);
-                ray.setPoints(point_b3, b2.pointAt(1.0/3.0));
-                point_b2  = point_b3 + Geom::Point::polar(ray.angle(), dist);
-                point_b2  = randomize(max_lenght, point_b3, point_b2);
+                lenght = max_lenght;
+                ray.setPoints(point_b3, point_b2);
+                if(!fixed_displacement ){
+                    lenght = Geom::distance(b2.pointAt(1.0/3.0), point_b3);
+                }
+                point_b2  = point_b3 + Geom::Point::polar(ray.angle() , lenght);
             }
             ray.setPoints(point_b1, point_a3);
             point_a2  = point_a3 + Geom::Point::polar(ray.angle(), max_lenght);
@@ -431,11 +418,16 @@ SPCurve const * LPERoughen::addNodesAndJitter(Geom::Curve const * A, Geom::Point
             out->curveto(point_a1,point_a2,point_a3);
             out->curveto(point_b1, point_b2, point_b3);
         } else {
-            point_b1  = randomize(max_lenght,  A->pointAt(t) + point_a3,  A->pointAt(t + (t / 3)));
+            Geom::Ray ray(A->pointAt(t) + point_a3,  A->pointAt(t + (t / 3)));
+            double lenght = max_lenght;
+            if(!fixed_displacement ){
+                lenght = Geom::distance(A->pointAt(t) + point_a3,  A->pointAt(t + (t / 3)));
+            }
+            point_b1  = A->pointAt(t) + point_a3 + Geom::Point::polar(ray.angle() , lenght);
             point_b2  = A->pointAt(t +((t / 3) * 2));
             point_b3  = A->finalPoint() + point_b3;
             point_a3 = A->pointAt(t) + point_a3;
-            Geom::Ray ray(prev,A->initialPoint());
+            ray.setPoints(prev,A->initialPoint());
             point_a1  = A->initialPoint() + Geom::Point::polar(ray.angle(), max_lenght);
             if(prev == Geom::Point(0,0)){
                 point_a1 = randomize(max_lenght);
@@ -443,10 +435,12 @@ SPCurve const * LPERoughen::addNodesAndJitter(Geom::Curve const * A, Geom::Point
             if(last){
                 Geom::Path b2(point_b3);
                 b2.appendNew<Geom::LineSegment>(point_a3);
-                double dist = Geom::distance(b2.pointAt(1.0/3.0), point_b3);
-                ray.setPoints(point_b3, b2.pointAt(1.0/3.0));
-                point_b2  = point_b3 + Geom::Point::polar(ray.angle(), dist);
-                point_b2  = randomize(max_lenght, point_b3, point_b2);
+                lenght = max_lenght;
+                ray.setPoints(point_b3, point_b2);
+                if(!fixed_displacement ){
+                    lenght = Geom::distance(b2.pointAt(1.0/3.0), point_b3);
+                }
+                point_b2  = point_b3 + Geom::Point::polar(ray.angle() , lenght);
             }
             ray.setPoints(point_b1, point_a3);
             point_a2  = point_a3 + Geom::Point::polar(ray.angle(), max_lenght);
@@ -512,7 +506,7 @@ SPCurve *LPERoughen::jitter(Geom::Curve const * A, Geom::Point &prev, Geom::Poin
     Geom::Point point_a2(0, 0);
     Geom::Point point_a3(0, 0);
     if (shift_nodes) {
-        point_a3 = randomize(max_lenght);
+        point_a3 = randomize(max_lenght, true);
     }
     if (handles == HM_RAND || handles == HM_SMOOTH) {
         point_a1 = randomize(max_lenght);

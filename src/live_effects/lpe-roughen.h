@@ -47,7 +47,6 @@ public:
     virtual double sign(double randNumber);
     virtual void doOnApply(SPLPEItem const* lpeitem);
     virtual Geom::Point randomize(double max_lenght, bool is_node = false);
-    virtual Geom::Point randomize(double lenght, Geom::Point start, Geom::Point end);
     virtual void doBeforeEffect(SPLPEItem const * lpeitem);
     virtual SPCurve const * addNodesAndJitter(Geom::Curve const * A, Geom::Point &prev, Geom::Point &last_move, double t, bool last);
     virtual SPCurve *jitter(Geom::Curve const * A,  Geom::Point &prev, Geom::Point &last_move);
@@ -62,7 +61,6 @@ private:
     RandomParam displace_y;
     RandomParam global_randomize;
     EnumParam<HandlesMethod> handles;
-    ScalarParam max_smooth_angle;
     BoolParam shift_nodes;
     BoolParam fixed_displacement;
     BoolParam spray_tool_friendly;

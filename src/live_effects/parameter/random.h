@@ -43,11 +43,11 @@ public:
 
     operator gdouble();
     inline gdouble get_value() { return value; } ;
-    long defseed;
 
 protected:
     long startseed;
     long seed;
+    long defseed;
 
     gdouble value;
     gdouble min;
