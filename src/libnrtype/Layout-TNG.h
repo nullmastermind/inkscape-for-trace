@@ -635,7 +635,7 @@ public:
             descent_max =  0.2;
         }            
 
-        inline void set( font_instance *font );
+        void set( font_instance *font );
         
         // CSS 2.1 dictates that font-size is based on em-size which is defined as ascent + descent
         inline double emSize() const {return ascent + descent;}
@@ -718,7 +718,6 @@ private:
         LengthAdjust lengthAdjust;
         
         // a few functions for some of the more complicated style accesses
-        float styleComputeFontSize() const;
         /// The return value must be freed with pango_font_description_free()
         PangoFontDescription *styleGetFontDescription() const;
         font_instance *styleGetFontInstance() const;

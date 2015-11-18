@@ -113,7 +113,7 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     font_weight(      "font-weight",     enum_font_weight,     SP_CSS_FONT_WEIGHT_NORMAL, SP_CSS_FONT_WEIGHT_400  ),
     font_stretch(     "font-stretch",    enum_font_stretch,    SP_CSS_FONT_STRETCH_NORMAL ), 
     font_size(),
-    line_height(      "line-height",                     1.0 ),  // SPILengthOrNormal
+    line_height(      "line-height",                    1.25 ),  // SPILengthOrNormal
     font_family(      "font-family",     "sans-serif"        ),  // SPIString w/default
     font(),                                                      // SPIFont
     font_specification( "-inkscape-font-specification"       ),  // SPIString

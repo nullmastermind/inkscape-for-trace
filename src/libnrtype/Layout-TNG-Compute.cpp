@@ -194,9 +194,8 @@ class Layout::Calculator
 
     void _buildPangoItemizationForPara(ParagraphInfo *para) const;
 
-    static void _computeFontLineHeight(font_instance *font, double font_size,
-                                       SPStyle const *style, FontMetrics *line_height,
-                                       double *line_height_multiplier);
+    // Returns line_height_multiplier
+    static double _computeFontLineHeight( SPStyle const *style );
 
     unsigned _buildSpansForPara(ParagraphInfo *para) const;
 
@@ -1106,46 +1105,32 @@ void  Layout::Calculator::_buildPangoItemizationForPara(ParagraphInfo *para) con
 }
 
 /**
- * Gets the ascent and descent for a font given the 'font-size' propert and finds the value of
- * line_height_multiplier given the 'line-height' property. The result of multiplying
- * \a l by \a line_height_multiplier is the inline box height as specified in css2
+ * Finds the value of line_height_multiplier given the 'line-height' property. The result of
+ * multiplying \a l by \a line_height_multiplier is the inline box height as specified in css2
  * section 10.8.  http://www.w3.org/TR/CSS2/visudet.html#line-height
+ *
+ * The 'computed' value of 'line-height' does not have a consistent meaning. We need to find the
+ * 'used' value and divide that by the font size.
  */
-// THIS FUNCTION SHOULD NOT BE NECESSARY
-void Layout::Calculator::_computeFontLineHeight(font_instance *font, double font_size,
-                                                SPStyle const *style, FontMetrics *font_metrics,
-                                                double *line_height_multiplier)
+double Layout::Calculator::_computeFontLineHeight( SPStyle const *style )
 {
-    if (font == NULL) {
-        font_metrics->setZero();
-        *line_height_multiplier = 1.0;
-    }
-    else {
-	font->FontMetrics(font_metrics->ascent, font_metrics->descent, font_metrics->xheight);
-    }
-    *font_metrics *= font_size;
-
     // yet another borked SPStyle member that we're going to have to fix ourselves
-    // To do: check if it really is still borked.
+    // We shouldn't need to climb the element tree...
     for ( ; ; ) {
         if (style->line_height.set && !style->line_height.inherit) {
             if (style->line_height.normal)
                 break;
             switch (style->line_height.unit) {
                 case SP_CSS_UNIT_NONE:
-                    *line_height_multiplier = style->line_height.computed;
-                    return;
+                    return style->line_height.computed;
                 case SP_CSS_UNIT_EX:
-                    *line_height_multiplier = style->line_height.value * 0.5;
+                    return style->line_height.value * 0.5;
                     // 0.5 is an approximation of the x-height. Fixme.
-                    return;
                 case SP_CSS_UNIT_EM:
                 case SP_CSS_UNIT_PERCENT:
-                    *line_height_multiplier = style->line_height.value;
-                    return;
+                    return style->line_height.value;
                 default:  // absolute values
-                    *line_height_multiplier = style->line_height.computed / font_metrics->emSize();
-                    return;
+                    return style->line_height.computed / style->font_size.computed;
             }
             break;
         }
@@ -1153,7 +1138,7 @@ void Layout::Calculator::_computeFontLineHeight(font_instance *font, double font
         style = style->object->parent->style;
         if (style == NULL) break;
     }
-    *line_height_multiplier = LINE_HEIGHT_NORMAL;
+    return (LINE_HEIGHT_NORMAL);
 }
 
 bool compareGlyphWidth(const PangoGlyphInfo &a, const PangoGlyphInfo &b)
@@ -1270,7 +1255,7 @@ unsigned Layout::Calculator::_buildSpansForPara(ParagraphInfo *para) const
                 }
 
                 // now we know the length, do some final calculations and add the UnbrokenSpan to the list
-                new_span.font_size = text_source->styleComputeFontSize() * _flow.getTextLengthMultiplierDue();
+                new_span.font_size = text_source->style->font_size.computed * _flow.getTextLengthMultiplierDue();
                 if (new_span.text_bytes) {
                     new_span.glyph_string = pango_glyph_string_new();
                     /* Some assertions intended to help diagnose bug #1277746. */
@@ -1366,7 +1351,9 @@ unsigned Layout::Calculator::_buildSpansForPara(ParagraphInfo *para) const
                         /* glyphs[].x_offset values may be out of order within any log_clusters, apparently harmless */
                     }
                     new_span.pango_item_index = pango_item_index;
-                    _computeFontLineHeight(para->pango_items[pango_item_index].font, new_span.font_size, text_source->style, &new_span.line_height, &new_span.line_height_multiplier);
+                    new_span.line_height_multiplier = _computeFontLineHeight( text_source->style );
+                    new_span.line_height.set( para->pango_items[pango_item_index].font );
+                    new_span.line_height *= new_span.font_size;
 
                     // At some point we may want to calculate baseline_shift here (to take advantage
                     // of otm features like superscript baseline), but for now we use style baseline_shift.
@@ -1381,11 +1368,13 @@ unsigned Layout::Calculator::_buildSpansForPara(ParagraphInfo *para) const
                     new_span.pango_item_index = -1;
                     font_instance *font = text_source->styleGetFontInstance();
                     if (font) {
-                        _computeFontLineHeight(font, new_span.font_size, text_source->style, &new_span.line_height, &new_span.line_height_multiplier);
+                        new_span.line_height_multiplier = _computeFontLineHeight( text_source->style );
+                        new_span.line_height.set( font );
+                        new_span.line_height *= new_span.font_size;
                         font->Unref();
                     } else {
-                        new_span.line_height.setZero();
-                        new_span.line_height_multiplier = 1.0;
+                        new_span.line_height *= 0.0;  // Set all to zero
+                        new_span.line_height_multiplier = LINE_HEIGHT_NORMAL;
                     }
                     TRACE(("add style init span %lu\n", para->unbroken_spans.size()));
                 }
@@ -1451,9 +1440,9 @@ bool Layout::Calculator::_findChunksForLine(ParagraphInfo const &para,
             InputStreamTextSource const *text_source = static_cast<InputStreamTextSource const *>(_flow._input_stream.front());
             font_instance *font = text_source->styleGetFontInstance();
             if (font) {
-                double font_size = text_source->styleComputeFontSize();
-                double multiplier;
-                _computeFontLineHeight(font, font_size, text_source->style, line_height, &multiplier);
+                double multiplier = _computeFontLineHeight(text_source->style);
+                line_height->set( font );
+                *line_height *= text_source->style->font_size.computed;
                 font->Unref();
                 *line_height *= multiplier;
                 _scanline_maker->setNewYCoordinate(_scanline_maker->yCoordinate() - line_height->ascent);
@@ -1814,7 +1803,7 @@ void Layout::_calculateCursorShapeForEmpty()
     InputStreamTextSource const *text_source = static_cast<InputStreamTextSource const *>(_input_stream.front());
 
     font_instance *font = text_source->styleGetFontInstance();
-    double font_size = text_source->styleComputeFontSize();
+    double font_size = text_source->style->font_size.computed;
     double caret_slope_run = 0.0, caret_slope_rise = 1.0;
     FontMetrics line_height;
     if (font) {
@@ -1822,11 +1811,8 @@ void Layout::_calculateCursorShapeForEmpty()
         font->FontMetrics(line_height.ascent, line_height.descent, line_height.xheight);
         line_height *= font_size;
         font->Unref();
-    } else {
-        line_height.ascent = font_size * 0.85;      // random guesses
-        line_height.descent = font_size * 0.15;
-        line_height.xheight = 0.0;
     }
+
     double caret_slope = atan2(caret_slope_run, caret_slope_rise);
     _empty_cursor_shape.height = font_size / cos(caret_slope);
     _empty_cursor_shape.rotation = caret_slope;
