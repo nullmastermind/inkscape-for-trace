@@ -194,7 +194,7 @@ font_instance::font_instance(void) :
     _baselines[ SP_CSS_BASELINE_IDEOGRAPHIC      ] = -_descent;
     _baselines[ SP_CSS_BASELINE_HANGING          ] =  0.8 * _ascent;
     _baselines[ SP_CSS_BASELINE_MATHEMATICAL     ] =  0.8 * _xheight;
-    _baselines[ SP_CSS_BASELINE_CENTRAL          ] =  0.5;
+    _baselines[ SP_CSS_BASELINE_CENTRAL          ] =  0.5 - _descent;
     _baselines[ SP_CSS_BASELINE_MIDDLE           ] =  0.5 * _xheight;
     _baselines[ SP_CSS_BASELINE_TEXT_BEFORE_EDGE ] = -_descent;
     _baselines[ SP_CSS_BASELINE_TEXT_AFTER_EDGE  ] = _ascent;
@@ -710,7 +710,7 @@ void font_instance::FindFontMetrics() {
             _baselines[ SP_CSS_BASELINE_IDEOGRAPHIC      ] = -_descent;      // Recommendation
             _baselines[ SP_CSS_BASELINE_HANGING          ] = 0.8 * _ascent;  // Guess
             _baselines[ SP_CSS_BASELINE_MATHEMATICAL     ] = 0.8 * _xheight; // Guess
-            _baselines[ SP_CSS_BASELINE_CENTRAL          ] = 0.5;            // Definition
+            _baselines[ SP_CSS_BASELINE_CENTRAL          ] = 0.5 - _descent; // Definition
             _baselines[ SP_CSS_BASELINE_MIDDLE           ] = 0.5 * _xheight; // Definition
             _baselines[ SP_CSS_BASELINE_TEXT_BEFORE_EDGE ] = -_descent;      // Definition
             _baselines[ SP_CSS_BASELINE_TEXT_AFTER_EDGE  ] = _ascent;        // Definition
@@ -783,7 +783,7 @@ void font_instance::FindFontMetrics() {
             _baselines[ SP_CSS_BASELINE_IDEOGRAPHIC      ] = -_descent;      // Recommendation
             _baselines[ SP_CSS_BASELINE_HANGING          ] = 0.8 * _ascent;  // Guess
             _baselines[ SP_CSS_BASELINE_MATHEMATICAL     ] = 0.8 * _xheight; // Guess
-            _baselines[ SP_CSS_BASELINE_CENTRAL          ] = 0.5;            // Definition
+            _baselines[ SP_CSS_BASELINE_CENTRAL          ] = 0.5 - _descent; // Definition
             _baselines[ SP_CSS_BASELINE_MIDDLE           ] = 0.5 * _xheight; // Definition
             _baselines[ SP_CSS_BASELINE_TEXT_BEFORE_EDGE ] = -_descent;      // Definition
             _baselines[ SP_CSS_BASELINE_TEXT_AFTER_EDGE  ] = _ascent;        // Definition
@@ -803,9 +803,9 @@ void font_instance::FindFontMetrics() {
                 FT_Glyph_Get_CBox( aglyph, FT_GLYPH_BBOX_UNSCALED, &acbox );
                 double math = (acbox.yMin + acbox.yMax)/2.0/(double)theFace->units_per_EM;
                 _baselines[ SP_CSS_BASELINE_MATHEMATICAL ] = math;
-                std::cout << "Math baseline: - bbox: y_min: " << acbox.yMin
-                          << "  y_max: " << acbox.yMax
-                          << "  math: " << math << std::endl;
+                // std::cout << "Math baseline: - bbox: y_min: " << acbox.yMin
+                //           << "  y_max: " << acbox.yMax
+                //           << "  math: " << math << std::endl;
             }
 
             // Find hanging baseline... assume it is at top of 'म'.
@@ -818,26 +818,26 @@ void font_instance::FindFontMetrics() {
                 FT_Glyph_Get_CBox( aglyph, FT_GLYPH_BBOX_UNSCALED, &acbox );
                 double hanging = (double)acbox.yMax/(double)theFace->units_per_EM;
                 _baselines[ SP_CSS_BASELINE_HANGING ] = hanging;
-                std::cout << "Hanging baseline:  प: " << hanging << std::endl;
+                // std::cout << "Hanging baseline:  प: " << hanging << std::endl;
             }
         }
 #endif
-        const gchar *family = pango_font_description_get_family(descr);
-        std::cout << "Font: " << (family?family:"null") << std::endl;
-        std::cout << "  ascent:      " << _ascent      << std::endl;
-        std::cout << "  descent:     " << _descent     << std::endl;
-        std::cout << "  x-height:    " << _xheight     << std::endl;
-        std::cout << "  max ascent:  " << _ascent_max  << std::endl;
-        std::cout << "  max descent: " << _descent_max << std::endl;
-        std::cout << " Baselines:" << std::endl;
-        std::cout << "  alphabetic:  " << _baselines[ SP_CSS_BASELINE_ALPHABETIC       ] << std::endl;
-        std::cout << "  ideographic: " << _baselines[ SP_CSS_BASELINE_IDEOGRAPHIC      ] << std::endl;
-        std::cout << "  hanging:     " << _baselines[ SP_CSS_BASELINE_HANGING          ] << std::endl;
-        std::cout << "  math:        " << _baselines[ SP_CSS_BASELINE_MATHEMATICAL     ] << std::endl;
-        std::cout << "  central:     " << _baselines[ SP_CSS_BASELINE_CENTRAL          ] << std::endl;
-        std::cout << "  middle:      " << _baselines[ SP_CSS_BASELINE_MIDDLE           ] << std::endl;
-        std::cout << "  text_before: " << _baselines[ SP_CSS_BASELINE_TEXT_BEFORE_EDGE ] << std::endl;
-        std::cout << "  text_after:  " << _baselines[ SP_CSS_BASELINE_TEXT_AFTER_EDGE  ] << std::endl;
+        // const gchar *family = pango_font_description_get_family(descr);
+        // std::cout << "Font: " << (family?family:"null") << std::endl;
+        // std::cout << "  ascent:      " << _ascent      << std::endl;
+        // std::cout << "  descent:     " << _descent     << std::endl;
+        // std::cout << "  x-height:    " << _xheight     << std::endl;
+        // std::cout << "  max ascent:  " << _ascent_max  << std::endl;
+        // std::cout << "  max descent: " << _descent_max << std::endl;
+        // std::cout << " Baselines:" << std::endl;
+        // std::cout << "  alphabetic:  " << _baselines[ SP_CSS_BASELINE_ALPHABETIC       ] << std::endl;
+        // std::cout << "  ideographic: " << _baselines[ SP_CSS_BASELINE_IDEOGRAPHIC      ] << std::endl;
+        // std::cout << "  hanging:     " << _baselines[ SP_CSS_BASELINE_HANGING          ] << std::endl;
+        // std::cout << "  math:        " << _baselines[ SP_CSS_BASELINE_MATHEMATICAL     ] << std::endl;
+        // std::cout << "  central:     " << _baselines[ SP_CSS_BASELINE_CENTRAL          ] << std::endl;
+        // std::cout << "  middle:      " << _baselines[ SP_CSS_BASELINE_MIDDLE           ] << std::endl;
+        // std::cout << "  text_before: " << _baselines[ SP_CSS_BASELINE_TEXT_BEFORE_EDGE ] << std::endl;
+        // std::cout << "  text_after:  " << _baselines[ SP_CSS_BASELINE_TEXT_AFTER_EDGE  ] << std::endl;
     }
 }
 

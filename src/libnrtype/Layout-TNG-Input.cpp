@@ -151,6 +151,11 @@ SPCSSTextOrientation Layout::InputStreamTextSource::styleGetTextOrientation() co
   return ((SPCSSTextOrientation)style->text_orientation.computed);
 }
 
+SPCSSBaseline Layout::InputStreamTextSource::styleGetDominantBaseline() const
+{
+  return ((SPCSSBaseline)style->dominant_baseline.computed);
+}
+
 static Layout::Alignment text_anchor_to_alignment(unsigned anchor, Layout::Direction para_direction)
 {
     switch (anchor) {

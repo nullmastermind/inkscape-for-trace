@@ -692,9 +692,17 @@ static void dumpUnbrokenSpans(ParagraphInfo *para){
 
                         // y-coordinate is flipped between vertical and horizontal text... delta_y is common offset but applied with opposite sign
                         double delta_y = unbroken_span_glyph_info->geometry.y_offset * font_size_multiplier + unbroken_span.baseline_shift;
+                        SPCSSBaseline dominant_baseline = _flow._blockBaseline();
 
                         if (_block_progression == LEFT_TO_RIGHT || _block_progression == RIGHT_TO_LEFT) {
                             // Vertical text
+
+                            // Default dominant baseline is determined by overall block (i.e. <text>) 'text-orientation' value.
+                            if( _flow._blockTextOrientation() != SP_CSS_TEXT_ORIENTATION_SIDEWAYS ) {
+                                if( dominant_baseline == SP_CSS_BASELINE_AUTO ) dominant_baseline = SP_CSS_BASELINE_CENTRAL;
+                            } else {
+                                if( dominant_baseline == SP_CSS_BASELINE_AUTO ) dominant_baseline = SP_CSS_BASELINE_ALPHABETIC;
+                            }
 
                             new_glyph.y += delta_y;
 
@@ -703,15 +711,10 @@ static void dumpUnbrokenSpans(ParagraphInfo *para){
                                 (new_span.text_orientation == SP_CSS_TEXT_ORIENTATION_MIXED &&
                                  para.pango_items[unbroken_span.pango_item_index].item->analysis.gravity == 0) ) {
 
-                                // Sideways orientation (Latin characters, CJK punctuation), 90deg rotation done at output stage.
+                                // Sideways orientation (Latin characters, CJK punctuation), 90deg rotation done at output stage. zzzzzzz
                                 new_glyph.orientation = ORIENTATION_SIDEWAYS;
 
-                                // Baseline is determined by overall block (i.e. <text>) 'text-orientation' value.
-                                if( _flow._blockTextOrientation() != SP_CSS_TEXT_ORIENTATION_SIDEWAYS ) {
-                                    // Baseline is center  (shift: alphabetic to center)
-                                    new_glyph.y += 0.5 * (new_span.line_height.descent - new_span.line_height.ascent);
-                                }
-
+                                new_glyph.y -= new_span.font_size * para.pango_items[unbroken_span.pango_item_index].font->GetBaselines()[ dominant_baseline ];
                                 new_glyph.width = new_span.font_size * para.pango_items[unbroken_span.pango_item_index].font->Advance(unbroken_span_glyph_info->glyph, false);
 
                             } else {
@@ -719,14 +722,10 @@ static void dumpUnbrokenSpans(ParagraphInfo *para){
 
                                 new_glyph.x +=  new_span.line_height.ascent;
 
-                                // Baseline is determined by overall block (i.e. <text>) 'text-orientation' value.
-                                if( _flow._blockTextOrientation() == SP_CSS_TEXT_ORIENTATION_SIDEWAYS ) {
-                                    // Baseline is alphabetic .. sideways  (shift: left edge to alphabetic)
-                                    new_glyph.y -= new_span.line_height.descent;
-                                } else {
-                                    // Baseline is center  (shift: left edge to center)
-                                    new_glyph.y -= unbroken_span_glyph_info->geometry.width * 0.5 * font_size_multiplier;
-                                }
+                                // Glyph reference point is center  (shift: left edge to center glyph)
+                                new_glyph.y -= unbroken_span_glyph_info->geometry.width * 0.5 * font_size_multiplier;
+                                new_glyph.y -= new_span.font_size * (para.pango_items[unbroken_span.pango_item_index].font->GetBaselines()[ dominant_baseline ] -
+                                                                     para.pango_items[unbroken_span.pango_item_index].font->GetBaselines()[ SP_CSS_BASELINE_CENTRAL ] );
 
                                 new_glyph.width = new_span.font_size * para.pango_items[unbroken_span.pango_item_index].font->Advance(unbroken_span_glyph_info->glyph, true);
                                 if( new_glyph.width == 0 ) {
@@ -736,8 +735,12 @@ static void dumpUnbrokenSpans(ParagraphInfo *para){
                             }
                         } else {
                             // Horizontal text
-                            new_glyph.y -= delta_y;
 
+                            if( dominant_baseline == SP_CSS_BASELINE_AUTO ) dominant_baseline = SP_CSS_BASELINE_ALPHABETIC;
+
+                            new_glyph.y -= delta_y;
+                            new_glyph.y += new_span.font_size * para.pango_items[unbroken_span.pango_item_index].font->GetBaselines()[ dominant_baseline ];
+                            
                             new_glyph.width = unbroken_span_glyph_info->geometry.width * font_size_multiplier;
                             if ((new_glyph.width == 0) && (para.pango_items[unbroken_span.pango_item_index].font))
                                 new_glyph.width = new_span.font_size * para.pango_items[unbroken_span.pango_item_index].font->Advance(unbroken_span_glyph_info->glyph, false);

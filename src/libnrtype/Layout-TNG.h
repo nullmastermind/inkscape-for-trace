@@ -723,6 +723,7 @@ private:
         font_instance *styleGetFontInstance() const;
         Direction styleGetBlockProgression() const;
         SPCSSTextOrientation styleGetTextOrientation() const;
+        SPCSSBaseline styleGetDominantBaseline() const;
         Alignment styleGetAlignment(Direction para_direction, bool try_text_align) const;
     };
 
@@ -767,6 +768,14 @@ private:
             if(!_input_stream.empty())
                 return static_cast<InputStreamTextSource*>(_input_stream.front())->styleGetTextOrientation();
             return SP_CSS_TEXT_ORIENTATION_MIXED;
+        }
+
+    /** The overall text-orientation of the whole flow. */
+    inline  SPCSSBaseline _blockBaseline() const
+        {
+            if(!_input_stream.empty())
+                return static_cast<InputStreamTextSource*>(_input_stream.front())->styleGetDominantBaseline();
+            return SP_CSS_BASELINE_AUTO;
         }
 
     /** so that LEFT_TO_RIGHT == RIGHT_TO_LEFT but != TOP_TO_BOTTOM */
