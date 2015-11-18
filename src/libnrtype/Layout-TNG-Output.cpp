@@ -199,11 +199,14 @@ void Layout::show(DrawingGroup *in_arena, Geom::OptRect const &paintbox) const
                     first_line_glyph = false;
                     phase0 =  glyph_matrix.translation()[Geom::X];
                 }
-                // save the starting coordinates for the line - these are needed for figuring out dot/dash/wave phase
+                // Save the starting coordinates for the line - these are needed for figuring out
+                // dot/dash/wave phase.
+                // Use maximum ascent and descent to ensure glpyhs that extend outside the embox
+                // are fully drawn.
                 (void) nr_text->addComponent(_spans[span_index].font, _glyphs[glyph_index].glyph, glyph_matrix,
                     _glyphs[glyph_index].width,
-                    _spans[span_index].line_height.getTypoAscent(),
-                    _spans[span_index].line_height.getTypoDescent(),
+                    _spans[span_index].line_height.getMaxAscent(),
+                    _spans[span_index].line_height.getMaxDescent(),
                     glyph_matrix.translation()[Geom::X] - phase0
                 );
             }
