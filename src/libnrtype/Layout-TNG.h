@@ -622,20 +622,32 @@ public:
      *
      * It's useful for this to be public so that ScanlineMaker can use it.
      */
-    struct FontMetrics {
+    class FontMetrics {
 
-        double ascent;
-        double descent;
-        double xheight;
+    public:
+        FontMetrics() { reset(); }
+        
+        void reset() {
+            ascent      =  0.8;
+            descent     = -0.2;
+            xheight     =  0.5;
+            ascent_max  =  0.8;
+            descent_max =  0.2;
+        }            
 
+        inline void set( font_instance *font );
+        
         // CSS 2.1 dictates that font-size is based on em-size which is defined as ascent + descent
         inline double emSize() const {return ascent + descent;}
         // Alternatively name function for use 2.
         inline double lineSize() const { return ascent + descent; }
-        inline void setZero() {ascent = descent = xheight = 0.0;}
+        inline void setZero() {ascent = descent = xheight = ascent_max = descent_max = 0.0;}
 
         // For scaling for 'font-size'.
-        inline FontMetrics& operator*=(double x) {ascent *= x; descent *= x; xheight *= x; return *this;}
+        inline FontMetrics& operator*=(double x) {
+            ascent *= x; descent *= x; xheight *= x; ascent_max *= x; descent_max *= x;
+            return *this;
+        }
 
         /// Save the larger values of ascent and descent between this and other. Needed for laying
         /// out a line with mixed font-sizes, fonts, or line spacings.
@@ -644,10 +656,20 @@ public:
         /// Calculate the effective ascent and descent including half "leading".
         void computeEffective( const double &line_height );
 
-        inline double getAscent() const {return ascent; }
-        inline double getDescent() const {return descent; }
-        inline double getXheight() const {return xheight; }
-    };
+        inline double getTypoAscent()  const {return ascent; }
+        inline double getTypoDescent() const {return descent; }
+        inline double getXHeight()     const {return xheight; }
+        inline double getMaxAscent()   const {return ascent_max; }
+        inline double getMaxDescent()  const {return descent_max; }
+
+        // private:
+        double ascent;      // Typographic ascent.
+        double descent;     // Typographic descent.
+        double xheight;     // Height of 'x' measured from alphabetic baseline.
+        double ascent_max;  // Maximum ascent of all glyphs in font.
+        double descent_max; // Maximum descent of all glyphs in font.
+
+    }; // End FontMetrics
 
     /// see _enum_converter()
     struct EnumConversionItem {

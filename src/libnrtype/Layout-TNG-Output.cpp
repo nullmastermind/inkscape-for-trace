@@ -93,10 +93,24 @@ void Layout::_clearOutputObjects()
     _path_fitted = NULL;
 }
 
+void Layout::FontMetrics::set(font_instance *font)
+{
+    if( font != NULL ) {
+        ascent      = font->GetTypoAscent();  
+        descent     = font->GetTypoDescent();
+        xheight     = font->GetXHeight();
+        ascent_max  = font->GetMaxAscent();
+        descent_max = font->GetMaxDescent();
+    }
+}
+
 void Layout::FontMetrics::max(FontMetrics const &other)
 {
-    if (other.ascent > ascent)  ascent  = other.ascent;
-    if (other.descent > descent) descent = other.descent;
+    if (other.ascent      > ascent      ) ascent      = other.ascent;
+    if (other.descent     > descent     ) descent     = other.descent;
+    if( other.xheight     > xheight     ) xheight     = other.xheight;
+    if( other.ascent_max  > ascent_max  ) ascent_max  = other.ascent_max;
+    if( other.descent_max > descent_max ) descent_max = other.descent_max;
 }
 
 void Layout::FontMetrics::computeEffective( const double &line_height_multiplier ) {
@@ -142,8 +156,8 @@ void Layout::show(DrawingGroup *in_arena, Geom::OptRect const &paintbox) const
         InputStreamTextSource const *text_source = static_cast<InputStreamTextSource const *>(_input_stream[_spans[span_index].in_input_stream_item]);
 
         text_source->style->text_decoration_data.tspan_width             =  _spans[span_index].width();
-        text_source->style->text_decoration_data.ascender                =  _spans[span_index].line_height.getAscent();
-        text_source->style->text_decoration_data.descender               =  _spans[span_index].line_height.getDescent();
+        text_source->style->text_decoration_data.ascender                =  _spans[span_index].line_height.getTypoAscent();
+        text_source->style->text_decoration_data.descender               =  _spans[span_index].line_height.getTypoDescent();
 
         if(!span_index ||
            (_chunks[_spans[span_index].in_chunk].in_line != _chunks[_spans[span_index-1].in_chunk].in_line)){
@@ -188,8 +202,8 @@ void Layout::show(DrawingGroup *in_arena, Geom::OptRect const &paintbox) const
                 // save the starting coordinates for the line - these are needed for figuring out dot/dash/wave phase
                 (void) nr_text->addComponent(_spans[span_index].font, _glyphs[glyph_index].glyph, glyph_matrix,
                     _glyphs[glyph_index].width,
-                    _spans[span_index].line_height.getAscent(),
-                    _spans[span_index].line_height.getDescent(),
+                    _spans[span_index].line_height.getTypoAscent(),
+                    _spans[span_index].line_height.getTypoDescent(),
                     glyph_matrix.translation()[Geom::X] - phase0
                 );
             }

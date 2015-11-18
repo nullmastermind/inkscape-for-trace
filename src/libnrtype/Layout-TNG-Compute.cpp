@@ -482,7 +482,7 @@ static void dumpUnbrokenSpans(ParagraphInfo *para){
                 // Vertical text, use em box center as baseline
                 new_line.baseline_y += 0.5 * line_height.emSize();
             } else {
-                new_line.baseline_y += line_height.getAscent();
+                new_line.baseline_y += line_height.getTypoAscent();
             }
         }
 

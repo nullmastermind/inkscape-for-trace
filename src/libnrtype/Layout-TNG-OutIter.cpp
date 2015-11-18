@@ -120,7 +120,8 @@ Layout::iterator Layout::getNearestCursorPositionTo(double x, double y) const
     double best_y_range = DBL_MAX;
     double best_x_range = DBL_MAX;
     for (chunk_index = 0 ; chunk_index < _chunks.size() ; chunk_index++) {
-        FontMetrics line_height = {0.0, 0.0, 0.0};
+        FontMetrics line_height;
+        line_height *= 0.0; // Set all metrics to zero.
         double chunk_width = 0.0;
         for ( ; span_index < _spans.size() && _spans[span_index].in_chunk == chunk_index ; span_index++) {
             line_height.max(_spans[span_index].line_height);
