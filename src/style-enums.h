@@ -191,10 +191,24 @@ enum SPWhiteSpace {
     SP_CSS_WHITE_SPACE_PRELINE
 };
 
+// Not complete list
+enum SPCSSBaseline {
+    SP_CSS_BASELINE_AUTO,
+    SP_CSS_BASELINE_ALPHABETIC,
+    SP_CSS_BASELINE_IDEOGRAPHIC,
+    SP_CSS_BASELINE_HANGING,
+    SP_CSS_BASELINE_MATHEMATICAL,
+    SP_CSS_BASELINE_CENTRAL,
+    SP_CSS_BASELINE_MIDDLE,
+    SP_CSS_BASELINE_TEXT_BEFORE_EDGE,
+    SP_CSS_BASELINE_TEXT_AFTER_EDGE,
+    SP_CSS_BASELINE_SIZE  // Size of enum, keep last.
+};
+    
 enum SPCSSBaselineShift {
-  SP_CSS_BASELINE_SHIFT_BASELINE,
-  SP_CSS_BASELINE_SHIFT_SUB,
-  SP_CSS_BASELINE_SHIFT_SUPER
+    SP_CSS_BASELINE_SHIFT_BASELINE,
+    SP_CSS_BASELINE_SHIFT_SUB,
+    SP_CSS_BASELINE_SHIFT_SUPER
 };
 
 enum SPVisibility {
@@ -517,6 +531,19 @@ static SPStyleEnum const enum_text_orientation[] = {
     {"mixed",                 SP_CSS_TEXT_ORIENTATION_MIXED}, // Default
     {"upright",               SP_CSS_TEXT_ORIENTATION_UPRIGHT},
     {"sideways",              SP_CSS_TEXT_ORIENTATION_SIDEWAYS},
+    {NULL, -1}
+};
+
+static SPStyleEnum const enum_baseline[] = {
+    {"auto",                  SP_CSS_BASELINE_AUTO}, // Default
+    {"alphabetic",            SP_CSS_BASELINE_ALPHABETIC},
+    {"ideographic",           SP_CSS_BASELINE_IDEOGRAPHIC},
+    {"hanging",               SP_CSS_BASELINE_HANGING},
+    {"mathematical",          SP_CSS_BASELINE_MATHEMATICAL},
+    {"central",               SP_CSS_BASELINE_CENTRAL},
+    {"middle",                SP_CSS_BASELINE_MIDDLE},
+    {"text-before-edge",      SP_CSS_BASELINE_TEXT_BEFORE_EDGE},
+    {"text-after-edge",       SP_CSS_BASELINE_TEXT_AFTER_EDGE},
     {NULL, -1}
 };
 
