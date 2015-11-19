@@ -196,8 +196,8 @@ font_instance::font_instance(void) :
     _baselines[ SP_CSS_BASELINE_MATHEMATICAL     ] =  0.8 * _xheight;
     _baselines[ SP_CSS_BASELINE_CENTRAL          ] =  0.5 - _descent;
     _baselines[ SP_CSS_BASELINE_MIDDLE           ] =  0.5 * _xheight;
-    _baselines[ SP_CSS_BASELINE_TEXT_BEFORE_EDGE ] = -_descent;
-    _baselines[ SP_CSS_BASELINE_TEXT_AFTER_EDGE  ] = _ascent;
+    _baselines[ SP_CSS_BASELINE_TEXT_BEFORE_EDGE ] = _ascent;
+    _baselines[ SP_CSS_BASELINE_TEXT_AFTER_EDGE  ] = -_descent;
 }
 
 font_instance::~font_instance(void)
@@ -712,8 +712,8 @@ void font_instance::FindFontMetrics() {
             _baselines[ SP_CSS_BASELINE_MATHEMATICAL     ] = 0.8 * _xheight; // Guess
             _baselines[ SP_CSS_BASELINE_CENTRAL          ] = 0.5 - _descent; // Definition
             _baselines[ SP_CSS_BASELINE_MIDDLE           ] = 0.5 * _xheight; // Definition
-            _baselines[ SP_CSS_BASELINE_TEXT_BEFORE_EDGE ] = -_descent;      // Definition
-            _baselines[ SP_CSS_BASELINE_TEXT_AFTER_EDGE  ] = _ascent;        // Definition
+            _baselines[ SP_CSS_BASELINE_TEXT_BEFORE_EDGE ] = _ascent;        // Definition
+            _baselines[ SP_CSS_BASELINE_TEXT_AFTER_EDGE  ] = -_descent;      // Definition
 
 
             MAT2 identity = {{0,1},{0,0},{0,0},{0,1}};
@@ -785,8 +785,8 @@ void font_instance::FindFontMetrics() {
             _baselines[ SP_CSS_BASELINE_MATHEMATICAL     ] = 0.8 * _xheight; // Guess
             _baselines[ SP_CSS_BASELINE_CENTRAL          ] = 0.5 - _descent; // Definition
             _baselines[ SP_CSS_BASELINE_MIDDLE           ] = 0.5 * _xheight; // Definition
-            _baselines[ SP_CSS_BASELINE_TEXT_BEFORE_EDGE ] = -_descent;      // Definition
-            _baselines[ SP_CSS_BASELINE_TEXT_AFTER_EDGE  ] = _ascent;        // Definition
+            _baselines[ SP_CSS_BASELINE_TEXT_BEFORE_EDGE ] = _ascent;        // Definition
+            _baselines[ SP_CSS_BASELINE_TEXT_AFTER_EDGE  ] = -_descent;      // Definition
 
             // Better math baseline:
             // Try center of minus sign
