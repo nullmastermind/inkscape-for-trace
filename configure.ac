@@ -80,9 +80,6 @@ if test "$GCC" = "yes"; then
   # Enable all default warnings
   CPPFLAGS="-Wall $CPPFLAGS"
 
-  # C++11
-  CPPFLAGS="-std=c++11 $CPPFLAGS"
-
   # Permit only top-level Glib headers to be used.
   # 
   # TODO: This is already used in Glib >= 2.32 so this flag can be 
