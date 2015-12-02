@@ -53,6 +53,7 @@ static void sp_guideline_init(SPGuideLine *gl)
 {
     gl->rgba = 0x0000ff7f;
 
+    gl->locked = false;
     gl->normal_to_line = Geom::Point(0,1);
     gl->angle = 3.14159265358979323846/2;
     gl->point_on_line = Geom::Point(0,0);
@@ -219,6 +220,7 @@ SPCanvasItem *sp_guideline_new(SPCanvasGroup *parent, char* label, Geom::Point p
 
     normal.normalize();
     gl->label = label;
+    gl->locked = false;
     gl->normal_to_line = normal;
     gl->angle = tan( -gl->normal_to_line[Geom::X] / gl->normal_to_line[Geom::Y]);
     sp_guideline_set_position(gl, point_on_line);
@@ -235,6 +237,12 @@ void sp_guideline_set_label(SPGuideLine *gl, const char* label)
     }
     gl->label = g_strdup(label);
 
+    sp_canvas_item_request_update(SP_CANVAS_ITEM (gl));
+}
+
+void sp_guideline_set_locked(SPGuideLine *gl, const bool locked)
+{
+    gl->locked = locked;
     sp_canvas_item_request_update(SP_CANVAS_ITEM (gl));
 }
 
