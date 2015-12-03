@@ -107,6 +107,7 @@ static void sp_desktop_widget_realize (GtkWidget *widget);
 static gint sp_desktop_widget_event (GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw);
 
 static void sp_dtw_color_profile_event(EgeColorProfTracker *widget, SPDesktopWidget *dtw);
+static void update_guides_lock( GtkWidget *button, gpointer data );
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 static void cms_adjust_toggled( GtkWidget *button, gpointer data );
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
@@ -390,6 +391,27 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     dtw->tool_toolbox = ToolboxFactory::createToolToolbox();
     ToolboxFactory::setOrientation( dtw->tool_toolbox, GTK_ORIENTATION_VERTICAL );
     gtk_box_pack_start( GTK_BOX(dtw->hbox), dtw->tool_toolbox, FALSE, TRUE, 0 );
+    /* Lock all guides */
+    gchar const* tip = "";
+    Inkscape::Verb* verb = Inkscape::Verb::get( SP_VERB_VIEW_GUIDES_LOCK_TOGGLE );
+    if ( verb ) {
+        SPAction *act = verb->get_action( Inkscape::ActionContext( dtw->viewwidget.view ) );
+        if ( act && act->tip ) {
+            tip = act->tip;
+        }
+    }
+    dtw->guides_lock = sp_button_new_from_data( Inkscape::ICON_SIZE_DECORATION,
+                                               SP_BUTTON_TYPE_TOGGLE,
+                                               NULL,
+                                               INKSCAPE_ICON("object-locked"),
+                                               tip );
+    {
+        bool locked = prefs->getBool("/options/guides/locked");
+        if ( locked ) {
+            sp_button_toggle_set_down( SP_BUTTON(dtw->guides_lock), TRUE );
+        }
+    }
+    g_signal_connect_after( G_OBJECT(dtw->guides_lock), "clicked", G_CALLBACK(update_guides_lock), dtw );
 
     /* Horizontal ruler */
     GtkWidget *eventbox = gtk_event_box_new ();
@@ -398,7 +420,11 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     Inkscape::Util::Unit const *pt = unit_table.getUnit("pt");
     sp_ruler_set_unit(SP_RULER(dtw->hruler), pt);
     gtk_widget_set_tooltip_text (dtw->hruler_box, gettext(pt->name_plural.c_str()));
-    gtk_container_add (GTK_CONTAINER (eventbox), dtw->hruler);
+    /* Lock all guides */
+    dtw->hruler_box = gtk_hbox_new (FALSE, 0);
+    gtk_box_pack_start( GTK_BOX(dtw->hruler_box), dtw->guides_lock, FALSE, FALSE, 0 );
+    gtk_box_pack_start( GTK_BOX(dtw->hruler_box), dtw->hruler, true, true, 1 );
+    gtk_container_add (GTK_CONTAINER (eventbox), dtw->hruler_box);
     g_signal_connect (G_OBJECT (eventbox), "button_press_event", G_CALLBACK (sp_dt_hruler_event), dtw);
     g_signal_connect (G_OBJECT (eventbox), "button_release_event", G_CALLBACK (sp_dt_hruler_event), dtw);
     g_signal_connect (G_OBJECT (eventbox), "motion_notify_event", G_CALLBACK (sp_dt_hruler_event), dtw);
@@ -407,23 +433,25 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     GtkWidget *tbl = gtk_grid_new();
     dtw->canvas_tbl = gtk_grid_new();
     
-    gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), eventbox, 1, 0, 1, 1);
+    gtk_grid_attach(GTK_GRID(dtw->canvas_tbl), eventbox, 0, 0, 1, 1);
 #else
     GtkWidget *tbl = gtk_table_new(2, 3, FALSE);
     dtw->canvas_tbl = gtk_table_new(3, 3, FALSE);
    
     gtk_table_attach(GTK_TABLE(dtw->canvas_tbl),
                      eventbox,
-                     1, 2,     0, 1, 
+                     0, 2,     0, 1, 
 		     GTK_FILL, GTK_FILL, 
 		     0,        0);
 #endif
-
+    
     gtk_box_pack_start( GTK_BOX(dtw->hbox), tbl, TRUE, TRUE, 1 );
 
     /* Vertical ruler */
     eventbox = gtk_event_box_new ();
     dtw->vruler = sp_ruler_new(GTK_ORIENTATION_VERTICAL);
+
+    /* Vertical ruler */
     dtw->vruler_box = eventbox;
     sp_ruler_set_unit (SP_RULER (dtw->vruler), pt);
     gtk_widget_set_tooltip_text (dtw->vruler_box, gettext(pt->name_plural.c_str()));
@@ -445,6 +473,9 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
 
     // Horizontal scrollbar
     dtw->hadj = GTK_ADJUSTMENT(gtk_adjustment_new(0.0, -4000.0, 4000.0, 10.0, 100.0, 4.0));
+
+
+
 
 #if GTK_CHECK_VERSION(3,0,0)
     dtw->hscrollbar = gtk_scrollbar_new(GTK_ORIENTATION_HORIZONTAL, GTK_ADJUSTMENT (dtw->hadj));
@@ -487,8 +518,8 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
             0, 0);
 #endif
 
-    gchar const* tip = "";
-    Inkscape::Verb* verb = Inkscape::Verb::get( SP_VERB_VIEW_CMS_TOGGLE );
+    tip = "";
+    verb = Inkscape::Verb::get( SP_VERB_VIEW_CMS_TOGGLE );
     if ( verb ) {
         SPAction *act = verb->get_action( Inkscape::ActionContext( dtw->viewwidget.view ) );
         if ( act && act->tip ) {
@@ -1015,6 +1046,7 @@ sp_desktop_widget_event (GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dt
     return FALSE;
 }
 
+
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 void sp_dtw_color_profile_event(EgeColorProfTracker */*tracker*/, SPDesktopWidget *dtw)
 {
@@ -1035,6 +1067,20 @@ void sp_dtw_color_profile_event(EgeColorProfTracker */*tracker*/, SPDesktopWidge
 {
 }
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+
+void update_guides_lock( GtkWidget */*button*/, gpointer data )
+{
+    SPDesktopWidget *dtw = SP_DESKTOP_WIDGET(data);
+
+    bool down = SP_BUTTON_IS_DOWN(dtw->guides_lock);
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    prefs->setBool("/options/guides/guides_lock", down);
+    if (down) {
+        dtw->setMessage (Inkscape::NORMAL_MESSAGE, _("Guides are locked"));
+    } else {
+        dtw->setMessage (Inkscape::NORMAL_MESSAGE, _("Guides are unlocked"));
+    }
+}
 
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 void cms_adjust_toggled( GtkWidget */*button*/, gpointer data )

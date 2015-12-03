@@ -349,7 +349,9 @@ double SPGuide::getDistanceFrom(Geom::Point const &pt) const
  */
 void SPGuide::moveto(Geom::Point const point_on_line, bool const commit)
 {
-    if(this->locked) {
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool global_lock = prefs->getBool("/options/guides/guides_lock", false);
+    if(this->locked || global_lock) {
         return;
     }
     for (GSList *l = views; l != NULL; l = l->next) {

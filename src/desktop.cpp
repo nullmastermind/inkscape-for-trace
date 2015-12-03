@@ -1467,6 +1467,13 @@ void SPDesktop::toggleColorProfAdjust()
     _widget->toggleColorProfAdjust();
 }
 
+void SPDesktop::toggleGuidesLock()
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool guides_lock = prefs->getBool("/options/guides/guides_lock", false);
+    prefs->setBool("/options/guides/guides_lock", !guides_lock);
+}
+
 bool SPDesktop::colorProfAdjustEnabled()
 {
     return _widget->colorProfAdjustEnabled();

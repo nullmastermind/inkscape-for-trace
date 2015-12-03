@@ -531,7 +531,9 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
             } else {
                 GdkCursor *guide_cursor;
                 guide_cursor = gdk_cursor_new (GDK_HAND1);
-                if(guide->getLocked()){
+                Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+                bool global_lock = prefs->getBool("/options/guides/guides_lock", false);
+                if(guide->getLocked() || global_lock){
                     guide_cursor = gdk_cursor_new (GDK_X_CURSOR);
                 }
                 gdk_window_set_cursor(gtk_widget_get_window (GTK_WIDGET(desktop->getCanvas())), guide_cursor);

@@ -300,7 +300,11 @@ void GuidelinePropertiesDialog::_setup() {
     _relative_toggle.signal_toggled().connect(sigc::mem_fun(*this, &GuidelinePropertiesDialog::_modeChanged));
     _relative_toggle.set_active(_relative_toggle_status);
 
-    std::cout << _guide->getLocked() << "_guide->getLocked()\n";
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool global_guides_lock = prefs->getBool("/options/guides/guides_lock", false);
+    if(global_guides_lock){
+        _locked_toggle.set_sensitive(false);
+    }
     _locked_toggle.set_active(_guide->getLocked());
 
     // don't know what this exactly does, but it results in that the dialog closes when entering a value and pressing enter (see LP bug 484187)
