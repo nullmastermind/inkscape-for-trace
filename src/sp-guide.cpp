@@ -118,6 +118,7 @@ void SPGuide::set(unsigned int key, const gchar *value) {
         break;
     case SP_ATTR_INKSCAPE_LOCKED:
         this->locked = helperfns_read_bool(value, false);
+        this->hicolor = this->color;
         if (value) {
             this->set_locked(this->locked, false);
         }

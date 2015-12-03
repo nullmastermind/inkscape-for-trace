@@ -18,6 +18,7 @@
 #include <2geom/transforms.h>
 #include "sp-canvas-util.h"
 #include "sp-ctrlpoint.h"
+#include "sp-ctrlquadr.h"
 #include "guideline.h"
 #include "display/cairo-utils.h"
 
@@ -180,7 +181,7 @@ static void sp_guideline_update(SPCanvasItem *item, Geom::Affine const &affine, 
 
     sp_ctrlpoint_set_coords(gl->origin, gl->point_on_line);
     sp_canvas_item_request_update(SP_CANVAS_ITEM (gl->origin));
-
+    
     Geom::Point pol_transformed = gl->point_on_line*affine;
     if (gl->is_horizontal()) {
         sp_canvas_update_bbox (item, -1000000, round(pol_transformed[Geom::Y] - 16), 1000000, round(pol_transformed[Geom::Y] + 1));
