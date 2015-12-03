@@ -1077,8 +1077,6 @@ void update_guides_lock( GtkWidget */*button*/, gpointer data )
     prefs->setBool("/options/guides/guides_lock", down);
     if (down) {
         dtw->setMessage (Inkscape::NORMAL_MESSAGE, _("Guides are locked"));
-    } else {
-        dtw->setMessage (Inkscape::NORMAL_MESSAGE, _("Guides are unlocked"));
     }
 }
 
