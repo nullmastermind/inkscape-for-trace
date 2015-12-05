@@ -1474,7 +1474,7 @@ bool SPDesktop::colorProfAdjustEnabled()
 
 void SPDesktop::toggleGrids()
 {
-    if (namedview->grids) {
+    if (! namedview->grids.empty()) {
         if(gridgroup) {
             showGrids(!grids_visible);
         }

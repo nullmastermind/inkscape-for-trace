@@ -1364,12 +1364,11 @@ void DocumentProperties::update_gridspage()
 
     //add tabs
     bool grids_present = false;
-    for (GSList const * l = nv->grids; l != NULL; l = l->next) {
-        Inkscape::CanvasGrid * grid = (Inkscape::CanvasGrid*) l->data;
-        if (!grid->repr->attribute("id")) continue; // update_gridspage is called again when "id" is added
-        Glib::ustring name(grid->repr->attribute("id"));
+    for(std::vector<Inkscape::CanvasGrid *>::const_iterator it = nv->grids.begin(); it != nv->grids.end(); ++it) {
+        if (!(*it)->repr->attribute("id")) continue; // update_gridspage is called again when "id" is added
+        Glib::ustring name((*it)->repr->attribute("id"));
         const char *icon = NULL;
-        switch (grid->getGridType()) {
+        switch ((*it)->getGridType()) {
             case GRID_RECTANGULAR:
                 icon = "grid-rectangular";
                 break;
@@ -1379,7 +1378,7 @@ void DocumentProperties::update_gridspage()
             default:
                 break;
         }
-        _grids_notebook.append_page(*grid->newWidget(), _createPageTabLabel(name, icon));
+        _grids_notebook.append_page(*(*it)->newWidget(), _createPageTabLabel(name, icon));
         grids_present = true;
     }
     _grids_notebook.show_all();
@@ -1639,14 +1638,9 @@ void DocumentProperties::onRemoveGrid()
     SPDesktop *dt = getDesktop();
     SPNamedView *nv = dt->getNamedView();
     Inkscape::CanvasGrid * found_grid = NULL;
-    int i = 0;
-    for (GSList const * l = nv->grids; l != NULL; l = l->next, i++) {  // not a very nice fix, but works.
-        Inkscape::CanvasGrid * grid = (Inkscape::CanvasGrid*) l->data;
-        if (pagenum == i) {
-            found_grid = grid;
-            break; // break out of for-loop
-        }
-    }
+    if( pagenum < nv->grids.size())
+        found_grid = nv->grids[pagenum];
+
     if (found_grid) {
         // delete the grid that corresponds with the selected tab
         // when the grid is deleted from SVG, the SPNamedview handler automatically deletes the object, so found_grid becomes an invalid pointer!
