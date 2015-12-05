@@ -18,7 +18,6 @@
 #include <2geom/transforms.h>
 #include "sp-canvas-util.h"
 #include "sp-ctrlpoint.h"
-#include "sp-ctrlquadr.h"
 #include "guideline.h"
 #include "display/cairo-utils.h"
 

@@ -118,7 +118,6 @@ void SPGuide::set(unsigned int key, const gchar *value) {
         break;
     case SP_ATTR_INKSCAPE_LOCKED:
         this->locked = helperfns_read_bool(value, false);
-        this->hicolor = this->color;
         if (value) {
             this->set_locked(this->locked, false);
         }
@@ -349,9 +348,7 @@ double SPGuide::getDistanceFrom(Geom::Point const &pt) const
  */
 void SPGuide::moveto(Geom::Point const point_on_line, bool const commit)
 {
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    bool global_lock = prefs->getBool("/options/guides/guides_lock", false);
-    if(this->locked || global_lock) {
+    if(this->locked) {
         return;
     }
     for (GSList *l = views; l != NULL; l = l->next) {

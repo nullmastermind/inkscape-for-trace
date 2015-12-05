@@ -1938,6 +1938,9 @@ void ZoomVerb::perform(SPAction *action, void *data)
         case SP_VERB_TOGGLE_GUIDES:
             sp_namedview_toggle_guides(doc, repr);
             break;
+        case SP_VERB_TOGGLE_GUIDES_LOCK:
+            sp_namedview_toggle_guides_lock(doc, repr);
+            break;
         case SP_VERB_TOGGLE_SNAPPING:
             dt->toggleSnapGlobal();
             break;
@@ -1988,9 +1991,6 @@ void ZoomVerb::perform(SPAction *action, void *data)
             break;
         case SP_VERB_VIEW_CMS_TOGGLE:
             dt->toggleColorProfAdjust();
-            break;
-        case SP_VERB_VIEW_GUIDES_LOCK_TOGGLE:
-            dt->toggleGuidesLock();
             break;
         case SP_VERB_VIEW_ICON_PREVIEW:
             INKSCAPE.dialogs_unhide();
@@ -2831,6 +2831,7 @@ Verb *Verb::_base_verbs[] = {
     new ZoomVerb(SP_VERB_TOGGLE_SCROLLBARS, "ToggleScrollbars", N_("Scroll_bars"), N_("Show or hide the canvas scrollbars"), NULL),
     new ZoomVerb(SP_VERB_TOGGLE_GRID, "ToggleGrid", N_("Page _Grid"), N_("Show or hide the page grid"), INKSCAPE_ICON("show-grid")),
     new ZoomVerb(SP_VERB_TOGGLE_GUIDES, "ToggleGuides", N_("G_uides"), N_("Show or hide guides (drag from a ruler to create a guide)"), INKSCAPE_ICON("show-guides")),
+    new ZoomVerb(SP_VERB_TOGGLE_GUIDES_LOCK, "ToggleGuidesLook", N_("Gui_des Lock"), N_("Lock or unlock all guides"), INKSCAPE_ICON("object-locked")),
     new ZoomVerb(SP_VERB_TOGGLE_SNAPPING, "ToggleSnapGlobal", N_("Snap"), N_("Enable snapping"), INKSCAPE_ICON("snap")),
     new ZoomVerb(SP_VERB_TOGGLE_COMMANDS_TOOLBAR, "ToggleCommandsToolbar", N_("_Commands Bar"), N_("Show or hide the Commands bar (under the menu)"), NULL),
     new ZoomVerb(SP_VERB_TOGGLE_SNAP_TOOLBAR, "ToggleSnapToolbar", N_("Sn_ap Controls Bar"), N_("Show or hide the snapping controls"), NULL),
@@ -2880,8 +2881,6 @@ Verb *Verb::_base_verbs[] = {
 
     new ZoomVerb(SP_VERB_VIEW_CMS_TOGGLE, "ViewCmsToggle", N_("Color-managed view"),
                  N_("Toggle color-managed display for this document window"), INKSCAPE_ICON("color-management")),
-    new ZoomVerb(SP_VERB_VIEW_GUIDES_LOCK_TOGGLE, "GuidesLockToggle", N_("Lock all guides"),
-                 N_("Lock all guides"), INKSCAPE_ICON("object-locked")),
 
     new ZoomVerb(SP_VERB_VIEW_ICON_PREVIEW, "ViewIconPreview", N_("Ico_n Preview..."),
                  N_("Open a window to preview objects at different icon resolutions"), INKSCAPE_ICON("dialog-icon-preview")),

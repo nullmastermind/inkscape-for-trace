@@ -393,7 +393,7 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     gtk_box_pack_start( GTK_BOX(dtw->hbox), dtw->tool_toolbox, FALSE, TRUE, 0 );
     /* Lock all guides */
     gchar const* tip = "";
-    Inkscape::Verb* verb = Inkscape::Verb::get( SP_VERB_VIEW_GUIDES_LOCK_TOGGLE );
+    Inkscape::Verb* verb = Inkscape::Verb::get( SP_VERB_TOGGLE_GUIDES_LOCK );
     if ( verb ) {
         SPAction *act = verb->get_action( Inkscape::ActionContext( dtw->viewwidget.view ) );
         if ( act && act->tip ) {
@@ -405,12 +405,6 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
                                                NULL,
                                                INKSCAPE_ICON("object-locked"),
                                                tip );
-    {
-        bool locked = prefs->getBool("/options/guides/locked");
-        if ( locked ) {
-            sp_button_toggle_set_down( SP_BUTTON(dtw->guides_lock), TRUE );
-        }
-    }
     g_signal_connect_after( G_OBJECT(dtw->guides_lock), "clicked", G_CALLBACK(update_guides_lock), dtw );
 
     /* Horizontal ruler */
@@ -1006,7 +1000,15 @@ void SPDesktopWidget::updateNamedview()
 
     modified_connection = desktop->namedview->connectModified(sigc::mem_fun(*this, &SPDesktopWidget::namedviewModified));
     namedviewModified(desktop->namedview, SP_OBJECT_MODIFIED_FLAG);
-
+    SPDocument *doc = desktop->getDocument();
+    SPNamedView *nv = desktop->getNamedView();
+    Inkscape::XML::Node *repr = nv->getRepr();
+    bool locked = desktop->namedview->lockguides;
+    if ( locked ) {
+        sp_button_toggle_set_down( SP_BUTTON(guides_lock), TRUE );
+        //to reverse the callback
+        sp_namedview_toggle_guides_lock(doc, repr);
+    }
     updateTitle( desktop->doc()->getName() );
 }
 
@@ -1073,11 +1075,12 @@ void update_guides_lock( GtkWidget */*button*/, gpointer data )
     SPDesktopWidget *dtw = SP_DESKTOP_WIDGET(data);
 
     bool down = SP_BUTTON_IS_DOWN(dtw->guides_lock);
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setBool("/options/guides/guides_lock", down);
-    if (down) {
-        dtw->setMessage (Inkscape::NORMAL_MESSAGE, _("Guides are locked"));
-    }
+
+    SPDocument *doc = dtw->desktop->getDocument();
+    SPNamedView *nv = dtw->desktop->getNamedView();
+    Inkscape::XML::Node *repr = nv->getRepr();
+    nv->lockguides = down;
+    sp_namedview_toggle_guides_lock(doc, repr);
 }
 
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)

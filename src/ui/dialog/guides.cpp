@@ -300,8 +300,7 @@ void GuidelinePropertiesDialog::_setup() {
     _relative_toggle.signal_toggled().connect(sigc::mem_fun(*this, &GuidelinePropertiesDialog::_modeChanged));
     _relative_toggle.set_active(_relative_toggle_status);
 
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    bool global_guides_lock = prefs->getBool("/options/guides/guides_lock", false);
+    bool global_guides_lock = _desktop->namedview->lockguides;
     if(global_guides_lock){
         _locked_toggle.set_sensitive(false);
     }

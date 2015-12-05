@@ -50,6 +50,8 @@
 #include "ui/tools-switch.h"
 #include "verbs.h"
 #include "widgets/desktop-widget.h"
+#include "sp-cursor.h"
+#include "pixmaps/cursor-select.xpm"
 #include "xml/repr.h"
 
 using Inkscape::DocumentUndo;
@@ -514,8 +516,9 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
             break;
     case GDK_ENTER_NOTIFY:
     {
-            sp_guideline_set_color(SP_GUIDELINE(item), guide->getHiColor());
-
+            if (!guide->getLocked()) {
+                sp_guideline_set_color(SP_GUIDELINE(item), guide->getHiColor());
+            }
             // set move or rotate cursor
             Geom::Point const event_w(event->crossing.x, event->crossing.y);
 
@@ -531,10 +534,8 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
             } else {
                 GdkCursor *guide_cursor;
                 guide_cursor = gdk_cursor_new (GDK_HAND1);
-                Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-                bool global_lock = prefs->getBool("/options/guides/guides_lock", false);
-                if(guide->getLocked() || global_lock){
-                    guide_cursor = gdk_cursor_new (GDK_X_CURSOR);
+                if(guide->getLocked()){
+                    guide_cursor = sp_cursor_new_from_xpm(cursor_select_xpm , 1, 1);
                 }
                 gdk_window_set_cursor(gtk_widget_get_window (GTK_WIDGET(desktop->getCanvas())), guide_cursor);
 #if GTK_CHECK_VERSION(3,0,0)

@@ -386,7 +386,6 @@ public:
     void toggleColorProfAdjust();
     bool colorProfAdjustEnabled();
 
-    void toggleGuidesLock();
     void toggleGrids();
     void toggleSnapGlobal();
     bool gridsEnabled() const { return grids_visible; };
