@@ -525,6 +525,9 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
             if ((event->crossing.state & GDK_SHIFT_MASK) && (drag_type != SP_DRAG_MOVE_ORIGIN)) {
                 GdkCursor *guide_cursor;
                 guide_cursor = gdk_cursor_new (GDK_EXCHANGE);
+                if(guide->getLocked()){
+                    guide_cursor = sp_cursor_new_from_xpm(cursor_select_xpm , 1, 1);
+                }
                 gdk_window_set_cursor(gtk_widget_get_window (GTK_WIDGET(desktop->getCanvas())), guide_cursor);
 #if GTK_CHECK_VERSION(3,0,0)
                 g_object_unref(guide_cursor);

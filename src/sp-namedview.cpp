@@ -1002,7 +1002,7 @@ void sp_namedview_toggle_guides(SPDocument *doc, Inkscape::XML::Node *repr)
     doc->setModifiedSinceSave();
 }
 
-void sp_namedview_toggle_guides_lock(SPDocument *doc, Inkscape::XML::Node *repr)
+void sp_namedview_guides_toggle_lock(SPDocument *doc, Inkscape::XML::Node *repr)
 {
     unsigned int v;
     unsigned int set = sp_repr_get_boolean(repr, "inkscape:lockguides", &v);
@@ -1016,7 +1016,6 @@ void sp_namedview_toggle_guides_lock(SPDocument *doc, Inkscape::XML::Node *repr)
     DocumentUndo::setUndoSensitive(doc, false);
     sp_repr_set_boolean(repr, "inkscape:lockguides", v);
     DocumentUndo::setUndoSensitive(doc, saved);
-
     doc->setModifiedSinceSave();
 }
 
