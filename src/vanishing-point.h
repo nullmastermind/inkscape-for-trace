@@ -23,8 +23,6 @@
 #include "ui/control-manager.h" // TODO break enums out separately
 
 class SPBox3D;
-typedef struct _GList GList;
-typedef struct _GSList GSList;
 
 namespace Box3D {
 
@@ -173,8 +171,8 @@ public:
     bool dragging;
 
     SPDocument *document;
-    GList *draggers;
-    GSList *lines;
+    std::vector<VPDragger *> draggers;
+    std::vector<SPCtrlLine *> lines;
 
     void printDraggers(); // convenience for debugging
     /* 
