@@ -1592,7 +1592,7 @@ void sp_gradient_reverse_selected_gradients(SPDesktop *desktop)
     GrDrag *drag = ev->get_drag();
 
     // First try selected dragger
-    if (drag && drag->selected) {
+    if (drag && !drag->selected.empty()) {
         drag->selected_reverse_vector();
     } else { // If no drag or no dragger selected, act on selection (both fill and stroke gradients)
         const std::vector<SPItem*> list=selection->itemList();

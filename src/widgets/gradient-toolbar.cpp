@@ -106,10 +106,10 @@ void gr_apply_gradient(Inkscape::Selection *selection, GrDrag *drag, SPGradient 
     // GRADIENTFIXME: make this work for multiple selected draggers.
 
     // First try selected dragger
-    if (drag && drag->selected) {
-        GrDragger *dragger = static_cast<GrDragger*>(drag->selected->data);
-        for (GSList const* i = dragger->draggables; i != NULL; i = i->next) { // for all draggables of dragger
-            GrDraggable *draggable = static_cast<GrDraggable*>(i->data);
+    if (drag && !drag->selected.empty()) {
+        GrDragger *dragger = *(drag->selected.begin());
+        for(std::vector<GrDraggable *>::const_iterator i = dragger->draggables.begin(); i != dragger->draggables.end(); ++i) { //for all draggables of dragger
+            GrDraggable *draggable =  *i;
             gr_apply_gradient_to_item(draggable->item, gr, initialType, initialMode, draggable->fill_or_stroke);
         }
         return;
@@ -255,11 +255,11 @@ void gr_read_selection( Inkscape::Selection *selection,
                         SPGradientSpread &spr_selected,
                         bool &spr_multi )
 {
-    if (drag && drag->selected) {
+    if (drag && !drag->selected.empty()) {
         // GRADIENTFIXME: make this work for more than one selected dragger?
-        GrDragger *dragger = static_cast<GrDragger*>(drag->selected->data);
-        for (GSList const* i = dragger->draggables; i; i = i->next) { // for all draggables of dragger
-            GrDraggable *draggable = static_cast<GrDraggable *>(i->data);
+        GrDragger *dragger = *(drag->selected.begin());
+        for(std::vector<GrDraggable *>::const_iterator i = dragger->draggables.begin(); i != dragger->draggables.end(); ++i) { //for all draggables of dragger
+            GrDraggable *draggable = *i;
             SPGradient *gradient = sp_item_gradient_get_vector(draggable->item, draggable->fill_or_stroke);
             SPGradientSpread spread = sp_item_gradient_get_spread(draggable->item, draggable->fill_or_stroke);
 
@@ -394,10 +394,10 @@ static void gr_tb_selection_changed(Inkscape::Selection * /*selection*/, gpointe
         }
 
         InkAction *add = (InkAction *) g_object_get_data(G_OBJECT(widget), "gradient_stops_add_action");
-        gtk_action_set_sensitive(GTK_ACTION(add), (gr_selected && !gr_multi && drag && drag->selected));
+        gtk_action_set_sensitive(GTK_ACTION(add), (gr_selected && !gr_multi && drag && !drag->selected.empty()));
 
         InkAction *del = (InkAction *) g_object_get_data(G_OBJECT(widget), "gradient_stops_delete_action");
-        gtk_action_set_sensitive(GTK_ACTION(del), (gr_selected && !gr_multi && drag && drag->selected));
+        gtk_action_set_sensitive(GTK_ACTION(del), (gr_selected && !gr_multi && drag && !drag->selected.empty()));
 
         InkAction *reverse = (InkAction *) g_object_get_data(G_OBJECT(widget), "gradient_stops_reverse_action");
         gtk_action_set_sensitive(GTK_ACTION(reverse), (gr_selected!= NULL));
@@ -649,7 +649,7 @@ static void select_stop_by_drag(GtkWidget *combo_box, SPGradient *gradient, Tool
 
     GrDrag *drag = ev->get_drag();
 
-    if (!drag || !drag->selected) {
+    if (!drag || drag->selected.empty()) {
         blocked = TRUE;
         gtk_combo_box_set_active(GTK_COMBO_BOX(combo_box) , 0);
         gr_stop_set_offset(GTK_COMBO_BOX(combo_box), data);
@@ -660,11 +660,10 @@ static void select_stop_by_drag(GtkWidget *combo_box, SPGradient *gradient, Tool
     gint n = 0;
 
     // for all selected draggers
-    for (GList *i = drag->selected; i != NULL; i = i->next) {
-        GrDragger *dragger = static_cast<GrDragger*>(i->data);
-        // for all draggables of dragger
-        for (GSList const* j = dragger->draggables; j != NULL; j = j->next) {
-            GrDraggable *draggable = static_cast<GrDraggable*>(j->data);
+    for(std::set<GrDragger *>::const_iterator i = drag->selected.begin(); i != drag->selected.end(); ++i) { //for all draggables of dragger
+        GrDragger *dragger = *i;
+        for(std::vector<GrDraggable *>::const_iterator j = dragger->draggables.begin(); j != dragger->draggables.end(); ++j) { //for all draggables of dragger
+            GrDraggable *draggable = *j; 
 
             if (draggable->point_type != POINT_RG_FOCUS) {
                 n++;
