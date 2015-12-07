@@ -179,9 +179,11 @@ static void sp_guideline_update(SPCanvasItem *item, Geom::Affine const &affine, 
     gl->affine = affine;
 
     if (gl->locked) {
-      gl->origin->radius = 1;
+      sp_ctrlpoint_set_circle(gl->origin, false);
+      sp_ctrlpoint_set_lenght(gl->origin, 6);
     } else {
-      gl->origin->radius = 3;
+      sp_ctrlpoint_set_circle(gl->origin, true);
+      sp_ctrlpoint_set_lenght(gl->origin, 4);
     }
     sp_ctrlpoint_set_coords(gl->origin, gl->point_on_line);
     sp_canvas_item_request_update(SP_CANVAS_ITEM (gl->origin));

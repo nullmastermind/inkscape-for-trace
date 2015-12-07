@@ -298,7 +298,7 @@ void ControlManagerImpl::updateItem(SPCanvasItem *item)
         double target = _sizeTable[item->ctrlType][_size - 1];
 
         if ((item->ctrlType == CTRL_TYPE_ORIGIN) && SP_IS_CTRLPOINT(item)) {
-            sp_ctrlpoint_set_radius(SP_CTRLPOINT(item), target / 2.0);
+            sp_ctrlpoint_set_lenght(SP_CTRLPOINT(item), target );
         } else {
             if (_sizeChangers.count(item->ctrlType) && _manager.isSelected(item)) {
                 target += 2;
