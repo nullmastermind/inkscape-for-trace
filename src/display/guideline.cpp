@@ -178,6 +178,11 @@ static void sp_guideline_update(SPCanvasItem *item, Geom::Affine const &affine, 
 
     gl->affine = affine;
 
+    if (gl->locked) {
+      gl->origin->radius = 1;
+    } else {
+      gl->origin->radius = 3;
+    }
     sp_ctrlpoint_set_coords(gl->origin, gl->point_on_line);
     sp_canvas_item_request_update(SP_CANVAS_ITEM (gl->origin));
     
@@ -190,6 +195,7 @@ static void sp_guideline_update(SPCanvasItem *item, Geom::Affine const &affine, 
         //TODO: labels in angled guidelines are not showing up for some reason.
         sp_canvas_update_bbox (item, -1000000, -1000000, 1000000, 1000000);
     }
+
 }
 
 // Returns 0.0 if point is on the guideline
