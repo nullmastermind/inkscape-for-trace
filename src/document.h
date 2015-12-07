@@ -27,6 +27,7 @@
 #include <glibmm/ustring.h>
 #include <boost/ptr_container/ptr_list.hpp>
 #include <vector>
+#include <set>
 
 namespace Avoid {
 class Router;
@@ -258,7 +259,7 @@ public:
     int ensureUpToDate();
     bool addResource(char const *key, SPObject *object);
     bool removeResource(char const *key, SPObject *object);
-    const GSList *getResourceList(char const *key) const;
+    const std::set<SPObject *> getResourceList(char const *key) const;
     std::vector<SPItem*> getItemsInBox(unsigned int dkey, Geom::Rect const &box) const;
     std::vector<SPItem*> getItemsPartiallyInBox(unsigned int dkey, Geom::Rect const &box) const;
     SPItem *getItemAtPoint(unsigned int key, Geom::Point const &p, bool into_groups, SPItem *upto = NULL) const;

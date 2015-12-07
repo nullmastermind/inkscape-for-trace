@@ -15,6 +15,8 @@
  */
 
 #include <map>
+#include <set>
+#include <string>
 #include <stddef.h>
 #include <sigc++/sigc++.h>
 #include "xml/event-fns.h"
@@ -40,8 +42,10 @@ struct SPDocumentPrivate {
 	typedef std::map<GQuark, SPDocument::IDChangedSignal> IDChangedSignalMap;
 	typedef std::map<GQuark, SPDocument::ResourcesChangedSignal> ResourcesChangedSignalMap;
 
-	GHashTable *iddef;	/**< Dictionary of id -> SPObject mappings */
-	GHashTable *reprdef;   /**< Dictionary of Inkscape::XML::Node -> SPObject mappings */
+        std::map<std::string, SPObject *> iddef;
+        std::map<Inkscape::XML::Node *, SPObject *> reprdef;
+	//GHashTable *iddef;	/**< Dictionary of id -> SPObject mappings */
+	//GHashTable *reprdef;   /**< Dictionary of Inkscape::XML::Node -> SPObject mappings */
 
 	unsigned long serial;
 
@@ -50,7 +54,8 @@ struct SPDocumentPrivate {
 
 	/* Resources */
 	/* It is GHashTable of GSLists */
-	GHashTable *resources;
+        std::map<std::string, std::set<SPObject *> > resources;
+	//GHashTable *resources;
 	ResourcesChangedSignalMap resources_changed_signals;
 
         sigc::signal<void> destroySignal;

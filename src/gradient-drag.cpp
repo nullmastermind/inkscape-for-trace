@@ -208,9 +208,9 @@ Glib::ustring GrDrag::makeStopSafeColor( gchar const *str, bool &isNull )
         Glib::ustring::size_type pos = colorStr.find("url(#");
         if ( pos != Glib::ustring::npos ) {
             Glib::ustring targetName = colorStr.substr(pos + 5, colorStr.length() - 6);
-            const GSList *gradients = desktop->doc()->getResourceList("gradient");
-            for (const GSList *item = gradients; item; item = item->next) {
-                SPGradient* grad = SP_GRADIENT(item->data);
+            std::set<SPObject *> gradients = desktop->doc()->getResourceList("gradient");
+            for (std::set<SPObject *>::const_iterator it = gradients.begin(); it != gradients.end(); ++it) {
+                SPGradient* grad = SP_GRADIENT(*it);
                 if ( targetName == grad->getId() ) {
                     SPGradient *vect = grad->getVector();
                     SPStop *firstStop = (vect) ? vect->getFirstStop() : grad->getFirstStop();

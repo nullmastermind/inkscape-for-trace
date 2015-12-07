@@ -139,19 +139,18 @@ gboolean gr_vector_list(GtkWidget *combo_box, SPDesktop *desktop, bool selection
     /* Clear old list, if there is any */
     gtk_list_store_clear(store);
 
-    GSList *gl = NULL;
-    const GSList *gradients = document->getResourceList("gradient");
-    for (const GSList *i = gradients; i != NULL; i = i->next) {
-        SPGradient *grad = SP_GRADIENT(i->data);
+    std::vector<SPObject *> gl;
+    std::set<SPObject *> gradients = document->getResourceList( "gradient" );
+    for (std::set<SPObject *>::const_iterator it = gradients.begin(); it != gradients.end(); ++it) {
+        SPGradient *grad = SP_GRADIENT(*it);
         if ( grad->hasStops() && !grad->isSolid() ) {
-            gl = g_slist_prepend(gl, i->data);
+            gl.push_back(*it);
         }
     }
-    gl = g_slist_reverse(gl);
 
     guint pos = 0;
 
-    if (!gl) {
+    if (gl.empty()) {
         // The document has no gradients
         gtk_list_store_append(store, &iter);
         gtk_list_store_set(store, &iter, 0, _("No gradient"), 1, NULL, 2, NULL, -1);
@@ -180,9 +179,8 @@ gboolean gr_vector_list(GtkWidget *combo_box, SPDesktop *desktop, bool selection
         }
 
         guint idx = 0;
-        while (gl) {
-            SPGradient *gradient = SP_GRADIENT(gl->data);
-            gl = g_slist_remove(gl, gradient);
+        for (std::vector<SPObject *>::const_iterator it = gl.begin(); it != gl.end(); ++it) {
+            SPGradient *gradient = SP_GRADIENT(*it);
 
             Glib::ustring label = gr_prepare_label(gradient);
             GdkPixbuf *pixb = sp_gradient_to_pixbuf(gradient, 64, 16);
@@ -765,25 +763,25 @@ static gboolean update_stop_list( GtkWidget *stop_combo, SPGradient *gradient, S
     }
 
     /* Populate the combobox store */
-    GSList *sl = NULL;
+    std::vector<SPObject *> sl;
     if ( gradient->hasStops() ) {
         for ( SPObject *ochild = gradient->firstChild() ; ochild ; ochild = ochild->getNext() ) {
             if (SP_IS_STOP(ochild)) {
-                sl = g_slist_append(sl, ochild);
+                sl.push_back(ochild);
             }
         }
     }
-    if (!sl) {
+    if (sl.empty()) {
         gtk_list_store_append(store, &iter);
         gtk_list_store_set(store, &iter, 0, _("No stops in gradient"), 1, NULL, 2, NULL, -1);
         sensitive = FALSE;
 
     } else {
 
-        for (; sl != NULL; sl = sl->next){
-            if (SP_IS_STOP(sl->data)){
-                SPStop *stop = SP_STOP(sl->data);
-                Inkscape::XML::Node *repr = reinterpret_cast<SPItem *>(sl->data)->getRepr();
+        for (std::vector<SPObject *>::const_iterator it = sl.begin(); it != sl.end(); ++it) {
+            if (SP_IS_STOP(*it)){
+                SPStop *stop = SP_STOP(*it);
+                Inkscape::XML::Node *repr = reinterpret_cast<SPItem *>(*it)->getRepr();
                 Inkscape::UI::Widget::ColorPreview *cpv = Gtk::manage(new Inkscape::UI::Widget::ColorPreview(stop->get_rgba32()));
                 GdkPixbuf *pb = cpv->toPixbuf(32, 16);
                 Glib::ustring label = gr_ellipsize_text(repr->attribute("id"), 25);

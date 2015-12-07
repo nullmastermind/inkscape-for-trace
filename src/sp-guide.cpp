@@ -255,10 +255,11 @@ void sp_guide_create_guides_around_page(SPDesktop *dt)
 void sp_guide_delete_all_guides(SPDesktop *dt)
 {
     SPDocument *doc=dt->getDocument();
-    const GSList *current;
-    while ( (current = doc->getResourceList("guide")) ) {
-        SPGuide* guide = SP_GUIDE(current->data);
+    std::set<SPObject *> current = doc->getResourceList("guide");
+    while (!current.empty()){
+        SPGuide* guide = SP_GUIDE(*(current.begin()));
         sp_guide_remove(guide);
+        current = doc->getResourceList("guide");
     }
 
     DocumentUndo::done(doc, SP_VERB_NONE, _("Delete All Guides"));
