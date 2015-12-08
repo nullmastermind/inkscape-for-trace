@@ -1527,7 +1527,7 @@ bool SPDocument::addResource(gchar const *key, SPObject *object)
     if ( !object->cloned ) {
         std::set<SPObject *> rlist = priv->resources[key];
         g_return_val_if_fail(rlist.find(object) == rlist.end(), false);
-        rlist.insert(object);
+        priv->resources[key].insert(object);
 
         GQuark q = g_quark_from_string(key);
 
@@ -1559,7 +1559,7 @@ bool SPDocument::removeResource(gchar const *key, SPObject *object)
         std::set<SPObject *> rlist = priv->resources[key];
         g_return_val_if_fail(!rlist.empty(), false);
         g_return_val_if_fail(rlist.find(object) != rlist.end(), false);
-        rlist.erase(object);
+        priv->resources[key].erase(object);
 
         GQuark q = g_quark_from_string(key);
         priv->resources_changed_signals[q].emit();
