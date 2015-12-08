@@ -124,7 +124,7 @@ private:
     sigc::connection _ungrabbed_connection;
 };
 
-class SPCtrlLine;
+struct SPCtrlLine;
 /**
 This is the root class of the gradient dragging machinery. It holds lists of GrDraggers
 and of lines (simple canvas items). It also remembers one of the draggers as selected.
