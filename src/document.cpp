@@ -81,7 +81,7 @@ using Inkscape::Util::unit_table;
 static gint sp_document_idle_handler(gpointer data);
 static gint sp_document_rerouting_handler(gpointer data);
 
-gboolean sp_document_resource_list_free(gpointer key, gpointer value, gpointer data);
+//gboolean sp_document_resource_list_free(gpointer key, gpointer value, gpointer data);
 
 static gint doc_count = 0;
 static gint doc_mem_count = 0;
@@ -105,7 +105,6 @@ SPDocument::SPDocument() :
     rerouting_handler_id(0),
     profileManager(NULL), // deferred until after other initialization
     router(new Avoid::Router(Avoid::PolyLineRouting|Avoid::OrthogonalRouting)),
-    _collection_queue(NULL),
     oldSignalsConnected(false),
     current_persp3d(NULL),
     current_persp3d_impl(NULL),
@@ -122,8 +121,6 @@ SPDocument::SPDocument() :
     p->sensitive = false;
     p->partial = NULL;
     p->history_size = 0;
-    p->undo = NULL;
-    p->redo = NULL;
     p->seeking = false;
 
     priv = p;
@@ -283,19 +280,18 @@ void SPDocument::queueForOrphanCollection(SPObject *object) {
     g_return_if_fail(object->document == this);
 
     sp_object_ref(object, NULL);
-    _collection_queue = g_slist_prepend(_collection_queue, object);
+    _collection_queue.push_back(object);
 }
 
 void SPDocument::collectOrphans() {
-    while (_collection_queue) {
-        GSList *objects=_collection_queue;
-        _collection_queue = NULL;
-        for ( GSList *iter=objects ; iter ; iter = iter->next ) {
-            SPObject *object=reinterpret_cast<SPObject *>(iter->data);
+    while (!_collection_queue.empty()) {
+        std::vector<SPObject *> objects(_collection_queue);
+        _collection_queue.clear();
+        for (std::vector<SPObject *>::const_iterator iter = objects.begin(); iter != objects.end(); ++iter) {
+            SPObject *object = *iter;
             object->collectOrphan();
             sp_object_unref(object, NULL);
         }
-        g_slist_free(objects);
     }
 }
 
@@ -1587,13 +1583,6 @@ sigc::connection SPDocument::connectResourcesChanged(gchar const *key,
 }
 
 /* Helpers */
-
-gboolean
-sp_document_resource_list_free(gpointer /*key*/, gpointer value, gpointer /*data*/)
-{
-    g_slist_free((GSList *) value);
-    return TRUE;
-}
 
 static unsigned int count_objects_recursive(SPObject *obj, unsigned int count)
 {

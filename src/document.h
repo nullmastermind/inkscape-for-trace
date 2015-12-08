@@ -122,7 +122,7 @@ public:
     // Instance of the connector router
     Avoid::Router *router;
 
-    GSList *_collection_queue;
+    std::vector<SPObject *> _collection_queue;
 
     bool oldSignalsConnected;
 

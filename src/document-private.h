@@ -53,9 +53,7 @@ struct SPDocumentPrivate {
 	IDChangedSignalMap id_changed_signals;
 
 	/* Resources */
-	/* It is GHashTable of GSLists */
         std::map<std::string, std::set<SPObject *> > resources;
-	//GHashTable *resources;
 	ResourcesChangedSignalMap resources_changed_signals;
 
         sigc::signal<void> destroySignal;
@@ -70,8 +68,8 @@ struct SPDocumentPrivate {
 	bool sensitive; /* If we save actions to undo stack */
 	Inkscape::XML::Event * partial; /* partial undo log when interrupted */
 	int history_size;
-	GSList * undo; /* Undo stack of reprs */
-	GSList * redo; /* Redo stack of reprs */
+        std::vector<Inkscape::Event *> undo; /* Undo stack of reprs */
+        std::vector<Inkscape::Event *> redo; /* Redo stack of reprs */
 
 	/* Undo listener */
 	Inkscape::CompositeUndoStackObserver undoStackObservers;
