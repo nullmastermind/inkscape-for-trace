@@ -16,10 +16,11 @@
  *   Tavmjong Bah <tavmjong@free.fr>
  *   Abhishek Sharma
  *   Kris De Gussem <Kris.DeGussem@gmail.com>
+ *   Jabiertxo Arraiza <jabier.arraiza@marker.es>
  *
  * Copyright (C) 2004 David Turner
  * Copyright (C) 2003 MenTaLguY
- * Copyright (C) 1999-2011 authors
+ * Copyright (C) 1999-2015 authors
  * Copyright (C) 2001-2002 Ximian, Inc.
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
@@ -78,7 +79,11 @@
 #include "measure-toolbar.h"
 #include "node-toolbar.h"
 #include "rect-toolbar.h"
-#include "paintbucket-toolbar.h"
+
+#if HAVE_POTRACE
+# include "paintbucket-toolbar.h"
+#endif
+
 #include "pencil-toolbar.h"
 #include "select-toolbar.h"
 #include "spray-toolbar.h"
@@ -150,7 +155,9 @@ static struct {
 	{ "/tools/calligraphic", "dyna_draw_tool", SP_VERB_CONTEXT_CALLIGRAPHIC, SP_VERB_CONTEXT_CALLIGRAPHIC_PREFS },
 	{ "/tools/lpetool",  "lpetool_tool",   SP_VERB_CONTEXT_LPETOOL, SP_VERB_CONTEXT_LPETOOL_PREFS },
 	{ "/tools/eraser",   "eraser_tool",    SP_VERB_CONTEXT_ERASER, SP_VERB_CONTEXT_ERASER_PREFS },
+#if HAVE_POTRACE
 	{ "/tools/paintbucket",    "paintbucket_tool",     SP_VERB_CONTEXT_PAINTBUCKET, SP_VERB_CONTEXT_PAINTBUCKET_PREFS },
+#endif
 	{ "/tools/text",     "text_tool",      SP_VERB_CONTEXT_TEXT, SP_VERB_CONTEXT_TEXT_PREFS },
 	{ "/tools/connector","connector_tool", SP_VERB_CONTEXT_CONNECTOR, SP_VERB_CONTEXT_CONNECTOR_PREFS },
 	{ "/tools/gradient", "gradient_tool",  SP_VERB_CONTEXT_GRADIENT, SP_VERB_CONTEXT_GRADIENT_PREFS },
@@ -211,8 +218,10 @@ static struct {
       SP_VERB_INVALID, 0, 0},
     { "/tools/mesh", "mesh_toolbox", 0, sp_mesh_toolbox_prep, "MeshToolbar",
       SP_VERB_INVALID, 0, 0},
+#if HAVE_POTRACE
     { "/tools/paintbucket",  "paintbucket_toolbox",  0, sp_paintbucket_toolbox_prep, "PaintbucketToolbar",
       SP_VERB_CONTEXT_PAINTBUCKET_PREFS, "/tools/paintbucket", N_("Style of Paint Bucket fill objects")},
+#endif
     { NULL, NULL, NULL, NULL, NULL, SP_VERB_INVALID, NULL, NULL }
 };
 
@@ -309,14 +318,28 @@ static gchar const * ui_descr =
         "    <toolitem action='SprayModeAction' />"
         "    <separator />"
         "    <toolitem action='SprayWidthAction' />"
+        "    <toolitem action='SprayPressureWidthAction' />"
         "    <toolitem action='SprayPopulationAction' />"
-        "    <toolitem action='SprayPressureAction' />"
+        "    <toolitem action='SprayPressurePopulationAction' />"
         "    <separator />"
         "    <toolitem action='SprayRotationAction' />"
         "    <toolitem action='SprayScaleAction' />"
+        "    <toolitem action='SprayPressureScaleAction' />"
         "    <separator />"
         "    <toolitem action='SprayStandard_deviationAction' />"
         "    <toolitem action='SprayMeanAction' />"
+        "    <separator />"
+        "    <toolitem action='SprayOverNoTransparentAction' />"
+        "    <toolitem action='SprayOverTransparentAction' />"
+        "    <toolitem action='SprayPickNoOverlapAction' />"
+        "    <toolitem action='SprayNoOverlapAction' />"
+        "    <toolitem action='SprayToolOffsetAction' />"
+        "    <separator />"
+        "    <toolitem action='SprayPickColorAction' />"
+        "    <toolitem action='SprayPickFillAction' />"
+        "    <toolitem action='SprayPickStrokeAction' />"
+        "    <toolitem action='SprayPickInverseValueAction' />"
+        "    <toolitem action='SprayPickCenterAction' />"
         "  </toolbar>"
 
         "  <toolbar name='ZoomToolbar'>"
@@ -339,9 +362,23 @@ static gchar const * ui_descr =
         "  <toolbar name='MeasureToolbar'>"
         "    <toolitem action='MeasureFontSizeAction' />"
         "    <separator />"
+        "    <toolitem action='MeasurePrecisionAction' />"
+        "    <separator />"
+        "    <toolitem action='MeasureScaleAction' />"
+        "    <separator />"
+        "    <toolitem action='MeasureOffsetAction' />"
+        "    <separator />"
         "    <toolitem action='measure_units_label' />"
         "    <toolitem action='MeasureUnitsAction' />"
-        "  </toolbar>"
+        "    <toolitem action='MeasureIgnore1stAndLast' />"
+        "    <toolitem action='MeasureInBettween' />"
+        "    <toolitem action='MeasureOnlyVisible' />"
+        "    <toolitem action='MeasureAllLayers' />"
+        "    <toolitem action='MeasureReverse' />"
+        "    <toolitem action='MeasureToGuides' />"
+        "    <toolitem action='MeasureMarkDimension' />"
+        "    <toolitem action='MeasureToItem' />"
+        "  </toolbar>" 
 
         "  <toolbar name='StarToolbar'>"
         "    <separator />"
@@ -440,6 +477,7 @@ static gchar const * ui_descr =
         "    <separator />"
         "  </toolbar>"
 
+#if HAVE_POTRACE
         "  <toolbar name='PaintbucketToolbar'>"
         "    <toolitem action='ChannelsAction' />"
         "    <separator />"
@@ -452,6 +490,7 @@ static gchar const * ui_descr =
         "    <separator />"
         "    <toolitem action='PaintbucketResetAction' />"
         "  </toolbar>"
+#endif
 
         "  <toolbar name='EraserToolbar'>"
         "    <toolitem action='EraserModeAction' />"
@@ -477,6 +516,8 @@ static gchar const * ui_descr =
         "    <toolitem action='TextDxAction' />"
         "    <toolitem action='TextDyAction' />"
         "    <toolitem action='TextRotationAction' />"
+        "    <separator />"
+        "    <toolitem action='TextWritingModeAction' />"
         "    <separator />"
         "    <toolitem action='TextOrientationAction' />"
         "  </toolbar>"
@@ -519,9 +560,12 @@ static gchar const * ui_descr =
 //        "    <toolitem action='MeshEditFillAction' />"
 //        "    <toolitem action='MeshEditStrokeAction' />"
 //        "    <toolitem action='MeshShowHandlesAction' />"
+        "    <toolitem action='MeshToggleSidesAction' />"
+        "    <toolitem action='MeshMakeEllipticalAction' />"
+        "    <toolitem action='MeshPickColorsAction' />"
+        "    <separator />"
         "    <toolitem action='MeshWarningAction' />"
         "    <toolitem action='MeshSmoothAction' />"
-        "    <separator />"
         "  </toolbar>"
 
         "  <toolbar name='DropperToolbar'>"
@@ -899,8 +943,12 @@ static Glib::RefPtr<Gtk::ActionGroup> create_or_fetch_actions( SPDesktop* deskto
     };
 
     Inkscape::IconSize toolboxSize = ToolboxFactory::prefToSize("/toolbox/small");
-
     Glib::RefPtr<Gtk::ActionGroup> mainActions;
+    if (desktop == NULL)
+    {
+        return mainActions;
+    }
+
     if ( groups.find(desktop) != groups.end() ) {
         mainActions = groups[desktop];
     }
@@ -908,10 +956,7 @@ static Glib::RefPtr<Gtk::ActionGroup> create_or_fetch_actions( SPDesktop* deskto
     if ( !mainActions ) {
         mainActions = Gtk::ActionGroup::create("main");
         groups[desktop] = mainActions;
-        if (desktop)
-        {
-            desktop->connectDestroy(&desktopDestructHandler);
-        }
+        desktop->connectDestroy(&desktopDestructHandler);
     }
 
     for ( guint i = 0; i < G_N_ELEMENTS(verbsToUse); i++ ) {
@@ -1291,8 +1336,11 @@ void setup_tool_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
         "    <toolitem action='ToolSpray' />"
         "    <toolitem action='ToolEraser' />"
 
+#if HAVE_POTRACE
         "   <!-- Fill -->"
         "    <toolitem action='ToolPaintBucket' />"
+#endif
+
         "    <toolitem action='ToolGradient' />"
 #ifdef WITH_MESH
         "    <toolitem action='ToolMesh' />"
@@ -1511,13 +1559,12 @@ static void toggle_snap_callback(GtkToggleAction *act, gpointer data) //data poi
 
     SPDesktop *dt = reinterpret_cast<SPDesktop*>(ptr);
     SPNamedView *nv = dt->getNamedView();
-    SPDocument *doc = nv->document;
-
-    if (dt == NULL || nv == NULL) {
-        g_warning("No desktop or namedview specified (in toggle_snap_callback)!");
+    if (nv == NULL) {
+        g_warning("No namedview specified (in toggle_snap_callback)!");
         return;
     }
 
+    SPDocument *doc = nv->document;
     Inkscape::XML::Node *repr = nv->getRepr();
 
     if (repr == NULL) {

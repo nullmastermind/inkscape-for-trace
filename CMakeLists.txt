@@ -89,17 +89,17 @@ option(WITH_IMAGE_MAGICK "Compile with support of ImageMagick for raster extensi
 option(WITH_LIBCDR "Compile with support of libcdr for CorelDRAW Diagrams" ON)
 option(WITH_LIBVISIO "Compile with support of libvisio for Microsoft Visio Diagrams" ON)
 option(WITH_LIBWPG "Compile with support of libwpg for WordPerfect Graphics" ON)
+option(WITH_NLS "Compile with Native Language Support (using gettext)" ON)
+option(WITH_GTK3_EXPERIMENTAL "Enable compilation with GTK+3 (EXPERIMENTAL!)" OFF)
 
 include(CMakeScripts/ConfigPaths.cmake) # Installation Paths
 include(CMakeScripts/DefineDependsandFlags.cmake) # Includes, Compiler Flags, and Link Libraries
 include(CMakeScripts/HelperMacros.cmake) # Misc Utility Macros
 
 
-
 # -----------------------------------------------------------------------------
 # BAD HACKS, NEED TO INVESTIGATE MAKING THESE LESS BAD
 add_definitions(-D_FORTIFY_SOURCE=2)
-add_definitions(-DPOTRACE="potrace")
 add_definitions(-DORBIT2=1)
 add_definitions(-DHAVE_CONFIG_H)
 add_definitions(-DHAVE_CAIRO_PDF=1)  # needed for src/libnrtype/Layout-TNG.h
@@ -139,6 +139,9 @@ add_custom_target(uninstall
 # -----------------------------------------------------------------------------
 
 add_subdirectory(src)
+if(ENABLE_NLS)
+  add_subdirectory(po)
+endif(ENABLE_NLS)
 
 
 # -----------------------------------------------------------------------------
@@ -149,7 +152,7 @@ if(UNIX)
 	# TODO: man, locale
 
 	install(
-		PROGRAMS ${EXECUTABLE_OUTPUT_PATH}/inkscape
+                PROGRAMS ${EXECUTABLE_OUTPUT_PATH}/inkscape ${EXECUTABLE_OUTPUT_PATH}/inkview
 		DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
 	)
 

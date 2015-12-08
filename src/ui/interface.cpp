@@ -239,7 +239,7 @@ sp_create_window(SPViewWidget *vw, bool editable)
         }
         int pos = nui_drop_target_entries;
 
-        for (std::vector<gchar*>::iterator it = types.begin() ; it != types.end() ; it++) {
+        for (std::vector<gchar*>::iterator it = types.begin() ; it != types.end() ; ++it) {
             completeDropTargets[pos].target = *it;
             completeDropTargets[pos].flags = 0;
             completeDropTargets[pos].info = IMAGE_DATA;
@@ -577,6 +577,9 @@ static gboolean checkitem_update(GtkWidget *widget, GdkEventExpose * /*event*/, 
         if (!strcmp(action->id, "ToggleGrid")) {
             ison = dt->gridsEnabled();
         }
+        else if (!strcmp(action->id, "EditGuidesToggleLock")) {
+            ison = dt->namedview->lockguides;
+        }
         else if (!strcmp(action->id, "ToggleGuides")) {
             ison = dt->namedview->getGuides();
         }
@@ -846,13 +849,11 @@ static void sp_ui_build_dyn_menus(Inkscape::XML::Node *menus, GtkWidget *menu, I
 #endif
                     }
                 } else if (menu_pntr->attribute("check") != NULL) {
-                    SPAction *action = NULL;
                     if (verb->get_code() != SP_VERB_NONE) {
-                        action = verb->get_action(Inkscape::ActionContext(view));
-                    }
-                    sp_ui_menu_append_check_item_from_verb(GTK_MENU(menu), view, action->name, action->tip, NULL,
+                        SPAction *action = verb->get_action(Inkscape::ActionContext(view));
+                        sp_ui_menu_append_check_item_from_verb(GTK_MENU(menu), view, action->name, action->tip, NULL,
                             checkitem_toggled, checkitem_update, verb);
-
+                    }
                 } else {
                     sp_ui_menu_append_item_from_verb(GTK_MENU(menu), verb, view);
                     group = NULL;
@@ -868,11 +869,7 @@ static void sp_ui_build_dyn_menus(Inkscape::XML::Node *menus, GtkWidget *menu, I
             }
             continue;
         }
-        if (!strcmp(menu_pntr->name(), "separator")
-                // This was spelt wrong in the original version
-                // and so this is for backward compatibility.  It can
-                // probably be dropped after the 0.44 release.
-             || !strcmp(menu_pntr->name(), "seperator")) {
+        if (!strcmp(menu_pntr->name(), "separator")) {
             GtkWidget *item = gtk_separator_menu_item_new();
             gtk_widget_show(item);
             gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
@@ -2076,7 +2073,7 @@ void ContextMenu::ImageEdit(void)
 #endif
 
     std::vector<SPItem*> itemlist=_desktop->selection->itemList();
-    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
+    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();++i){
         Inkscape::XML::Node *ir = (*i)->getRepr();
         const gchar *href = ir->attribute("xlink:href");
         

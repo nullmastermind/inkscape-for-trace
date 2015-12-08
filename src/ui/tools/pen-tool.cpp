@@ -84,7 +84,7 @@ namespace Tools {
 static Geom::Point pen_drag_origin_w(0, 0);
 static bool pen_within_tolerance = false;
 static int pen_last_paraxial_dir = 0; // last used direction in horizontal/vertical mode; 0 = horizontal, 1 = vertical
-const double HANDLE_CUBIC_GAP = 0.01;
+const double HANDLE_CUBIC_GAP = 0.001;
 
 const std::string& PenTool::getPrefsPath() {
     return PenTool::prefsPath;
@@ -382,11 +382,12 @@ bool PenTool::_handleButtonPress(GdkEventButton const &bevent) {
         if( anchor && anchor == this->sa && this->green_curve->is_empty()){
             //remove the following line to avoid having one node on top of another
             _finishSegment(event_dt, bevent.state);
-            _finish( false);
+            _finish(true);
             return true;
         }
         return false;
     } 
+    
     bool ret = false;
     if (bevent.button == 1 && !this->space_panning
         // make sure this is not the last click for a waiting LPE (otherwise we want to finish the path)
@@ -860,7 +861,7 @@ bool PenTool::_handleButtonRelease(GdkEventButton const &revent) {
 bool PenTool::_handle2ButtonPress(GdkEventButton const &bevent) {
     bool ret = false;
     // only end on LMB double click. Otherwise horizontal scrolling causes ending of the path
-    if (this->npoints != 0 && bevent.button == 1) {
+    if (this->npoints != 0 && bevent.button == 1 && this->state != PenTool::CLOSE) {
         this->_finish(false);
         ret = true;
     }

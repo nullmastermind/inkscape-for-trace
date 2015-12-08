@@ -1474,7 +1474,7 @@ void FilterEffectsDialog::FilterModifier::update_selection(Selection *sel)
 
     std::set<SPObject*> used;
     std::vector<SPItem*> itemlist=sel->itemList();
-    for(std::vector<SPItem*>::const_iterator i=itemlist.begin(); itemlist.end() != i; i++) {
+    for(std::vector<SPItem*>::const_iterator i=itemlist.begin(); itemlist.end() != i; ++i) {
         SPObject *obj = *i;
         SPStyle *style = obj->style;
         if (!style || !SP_IS_ITEM(obj)) {
@@ -1555,7 +1555,7 @@ void FilterEffectsDialog::FilterModifier::on_selection_toggled(const Glib::ustri
             filter = 0;
 
         std::vector<SPItem*> itemlist=sel->itemList();
-        for(std::vector<SPItem*>::const_iterator i=itemlist.begin(); itemlist.end() != i; i++) {
+        for(std::vector<SPItem*>::const_iterator i=itemlist.begin(); itemlist.end() != i; ++i) {
             SPItem * item = *i;
             SPStyle *style = item->style;
             g_assert(style != NULL);
@@ -1669,7 +1669,7 @@ void FilterEffectsDialog::FilterModifier::remove_filter()
         // Delete all references to this filter
         std::vector<SPItem*> x,y;
         std::vector<SPItem*> all = get_all_items(x, _desktop->currentRoot(), _desktop, false, false, true, y);
-        for(std::vector<SPItem*>::const_iterator i=all.begin(); all.end() != i; i++) {
+        for(std::vector<SPItem*>::const_iterator i=all.begin(); all.end() != i; ++i) {
             if (!SP_IS_ITEM(*i)) {
                 continue;
             }
@@ -2756,8 +2756,6 @@ FilterEffectsDialog::FilterEffectsDialog()
     _sizegroup = Gtk::SizeGroup::create(Gtk::SIZE_GROUP_HORIZONTAL);
     _sizegroup->set_ignore_hidden();
 
-    _add_primitive_type.remove_row(NR_FILTER_TILE);
-
     // Initialize widget hierarchy
 #if WITH_GTKMM_3_0
     Gtk::Paned* hpaned = Gtk::manage(new Gtk::Paned);
@@ -2925,7 +2923,7 @@ void FilterEffectsDialog::init_settings_widgets()
     _settings->add_lightsource();
 
     _settings->type(NR_FILTER_TILE);
-    _settings->add_notimplemented();
+    _settings->add_no_params();
 
     _settings->type(NR_FILTER_TURBULENCE);
 //    _settings->add_checkbutton(false, SP_ATTR_STITCHTILES, _("Stitch Tiles"), "stitch", "noStitch");
@@ -3017,7 +3015,7 @@ void FilterEffectsDialog::update_primitive_infobox()
             break;
         case(NR_FILTER_TILE):
             _infobox_icon.set_from_icon_name("feTile-icon", Gtk::ICON_SIZE_DIALOG);
-            _infobox_desc.set_markup(_("The <b>feTile</b> filter primitive tiles a region with its input graphic"));
+            _infobox_desc.set_markup(_("The <b>feTile</b> filter primitive tiles a region with an input graphic. The source tile is defined by the filter primitive subregion of the input."));
             break;
         case(NR_FILTER_TURBULENCE):
             _infobox_icon.set_from_icon_name("feTurbulence-icon", Gtk::ICON_SIZE_DIALOG);

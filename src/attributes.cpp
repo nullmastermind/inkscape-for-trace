@@ -41,6 +41,7 @@ static SPStyleProp const props[] = {
     {SP_ATTR_TRANSFORM_CENTER_Y, "inkscape:transform-center-y"},
     {SP_ATTR_INKSCAPE_PATH_EFFECT, "inkscape:path-effect"},
     {SP_ATTR_INKSCAPE_HIGHLIGHT_COLOR, "inkscape:highlight-color"},
+    {SP_ATTR_INKSCAPE_SPRAY_ORIGIN, "inkscape:spray-origin"},
     /* SPAnchor */
     {SP_ATTR_XLINK_HREF, "xlink:href"},
     {SP_ATTR_XLINK_TYPE, "xlink:type"},
@@ -116,6 +117,7 @@ static SPStyleProp const props[] = {
     {SP_ATTR_INKSCAPE_SNAP_PAGE_BORDER, "inkscape:snap-page"},
     {SP_ATTR_INKSCAPE_CURRENT_LAYER, "inkscape:current-layer"},
     {SP_ATTR_INKSCAPE_DOCUMENT_UNITS, "inkscape:document-units"},  // This setting sets the Display units, *not* the units used in SVG
+    {SP_ATTR_INKSCAPE_LOCKGUIDES, "inkscape:lockguides"},
     {SP_ATTR_UNITS, "units"},
     {SP_ATTR_INKSCAPE_CONNECTOR_SPACING, "inkscape:connector-spacing"},
     /* SPColorProfile */
@@ -125,6 +127,8 @@ static SPStyleProp const props[] = {
     /* SPGuide */
     {SP_ATTR_ORIENTATION, "orientation"},
     {SP_ATTR_POSITION, "position"},
+    {SP_ATTR_INKSCAPE_COLOR, "inkscape:color"},
+    {SP_ATTR_INKSCAPE_LOCKED, "inkscape:locked"},
     /* SPImage */
     {SP_ATTR_X, "x"},
     {SP_ATTR_Y, "y"},
@@ -439,8 +443,8 @@ static SPStyleProp const props[] = {
 
     /* Text (css3) */
     {SP_PROP_DIRECTION, "direction"},
-    {SP_PROP_BLOCK_PROGRESSION, "block-progression"},
     {SP_PROP_WRITING_MODE, "writing-mode"},
+    {SP_PROP_TEXT_ORIENTATION, "text-orientation"},
     {SP_PROP_UNICODE_BIDI, "unicode-bidi"},
     {SP_PROP_ALIGNMENT_BASELINE, "alignment-baseline"},
     {SP_PROP_BASELINE_SHIFT, "baseline-shift"},

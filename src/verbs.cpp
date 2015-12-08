@@ -832,7 +832,14 @@ Verb *Verb::getbyid(gchar const *id)
         verb = verb_found->second;
     }
 
-    if (verb == NULL)
+    if (verb == NULL
+#if !HAVE_POTRACE
+                // Squash warning about disabled features
+                && strcmp(id, "ToolPaintBucket")  != 0
+                && strcmp(id, "SelectionTrace")   != 0
+                && strcmp(id, "PaintBucketPrefs") != 0
+#endif
+            )
         printf("Unable to find: %s\n", id);
 
     return verb;
@@ -944,6 +951,10 @@ void EditVerb::perform(SPAction *action, void *data)
     
     g_return_if_fail(ensure_desktop_valid(action));
     SPDesktop *dt = sp_action_get_desktop(action);
+
+    SPDocument *doc = dt->getDocument();
+
+    Inkscape::XML::Node *repr = dt->namedview->getRepr();
 
     switch (reinterpret_cast<std::size_t>(data)) {
         case SP_VERB_EDIT_UNDO:
@@ -1072,10 +1083,12 @@ void EditVerb::perform(SPAction *action, void *data)
         case SP_VERB_EDIT_DELETE_ALL_GUIDES:
             sp_guide_delete_all_guides(dt);
             break;
+        case SP_VERB_EDIT_GUIDES_TOGGLE_LOCK:
+            dt->toggleGuidesLock();
+            break;
         case SP_VERB_EDIT_GUIDES_AROUND_PAGE:
             sp_guide_create_guides_around_page(dt);
             break;
-
         case SP_VERB_EDIT_NEXT_PATHEFFECT_PARAMETER:
             sp_selection_next_patheffect_param(dt);
             break;
@@ -1201,10 +1214,14 @@ void SelectionVerb::perform(SPAction *action, void *data)
         case SP_VERB_SELECTION_REVERSE:
             SelectionHelper::reverse(dt);
             break;
+
+#if HAVE_POTRACE
         case SP_VERB_SELECTION_TRACE:
             INKSCAPE.dialogs_unhide();
             dt->_dlg_mgr->showDialog("Trace");
             break;
+#endif
+
         case SP_VERB_SELECTION_PIXEL_ART:
             INKSCAPE.dialogs_unhide();
             dt->_dlg_mgr->showDialog("PixelArt");
@@ -1606,7 +1623,7 @@ void ContextVerb::perform(SPAction *action, void *data)
     /** \todo !!! hopefully this can go away soon and actions can look after
      * themselves
      */
-    for (vidx = SP_VERB_CONTEXT_SELECT; vidx <= SP_VERB_CONTEXT_PAINTBUCKET_PREFS; vidx++)
+    for (vidx = SP_VERB_CONTEXT_SELECT; vidx <= SP_VERB_CONTEXT_LPETOOL_PREFS; vidx++)
     {
         SPAction *tool_action= get((sp_verb_t)vidx)->get_action(action->context);
         if (tool_action) {
@@ -1673,9 +1690,13 @@ void ContextVerb::perform(SPAction *action, void *data)
         case SP_VERB_CONTEXT_CONNECTOR:
             tools_switch(dt,  TOOLS_CONNECTOR);
             break;
+
+#if HAVE_POTRACE
         case SP_VERB_CONTEXT_PAINTBUCKET:
             tools_switch(dt, TOOLS_PAINTBUCKET);
             break;
+#endif
+
         case SP_VERB_CONTEXT_ERASER:
             tools_switch(dt, TOOLS_ERASER);
             break;
@@ -1759,10 +1780,14 @@ void ContextVerb::perform(SPAction *action, void *data)
             prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_CONNECTOR);
             dt->_dlg_mgr->showDialog("InkscapePreferences");
             break;
+
+#if HAVE_POTRACE
         case SP_VERB_CONTEXT_PAINTBUCKET_PREFS:
             prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_PAINTBUCKET);
             dt->_dlg_mgr->showDialog("InkscapePreferences");
             break;
+#endif
+
         case SP_VERB_CONTEXT_ERASER_PREFS:
             prefs->setInt("/dialogs/preferences/page", PREFS_PAGE_TOOLS_ERASER);
             dt->_dlg_mgr->showDialog("InkscapePreferences");
@@ -2160,10 +2185,14 @@ void TutorialVerb::perform(SPAction *action, void *data)
             // TRANSLATORS: See "tutorial-basic.svg" comment.
             sp_help_open_tutorial(NULL, (gpointer)_("tutorial-advanced.svg"));
             break;
+
+#if HAVE_POTRACE
         case SP_VERB_TUTORIAL_TRACING:
             // TRANSLATORS: See "tutorial-basic.svg" comment.
             sp_help_open_tutorial(NULL, (gpointer)_("tutorial-tracing.svg"));
             break;
+#endif
+
         case SP_VERB_TUTORIAL_TRACING_PIXELART:
             sp_help_open_tutorial(NULL, (gpointer)_("tutorial-tracing-pixelart.svg"));
             break;
@@ -2517,6 +2546,7 @@ Verb *Verb::_base_verbs[] = {
                  N_("Deselect any selected objects or nodes"), INKSCAPE_ICON("edit-select-none")),
     new EditVerb(SP_VERB_EDIT_DELETE_ALL_GUIDES, "EditRemoveAllGuides", N_("Delete All Guides"),
                  N_("Delete all the guides in the document"), NULL),
+    new EditVerb(SP_VERB_EDIT_GUIDES_TOGGLE_LOCK, "EditGuidesToggleLock", N_("Lock All Guides"), N_("Toggle lock of all guides in the document"), NULL),
     new EditVerb(SP_VERB_EDIT_GUIDES_AROUND_PAGE, "EditGuidesAroundPage", N_("Create _Guides Around the Page"),
                  N_("Create four guides aligned with the page borders"), NULL),
     new EditVerb(SP_VERB_EDIT_NEXT_PATHEFFECT_PARAMETER, "EditNextPathEffectParameter", N_("Next path effect parameter"),
@@ -2593,9 +2623,13 @@ Verb *Verb::_base_verbs[] = {
                       N_("Simplify selected paths (remove extra nodes)"), INKSCAPE_ICON("path-simplify")),
     new SelectionVerb(SP_VERB_SELECTION_REVERSE, "SelectionReverse", N_("_Reverse"),
                       N_("Reverse the direction of selected paths (useful for flipping markers)"), INKSCAPE_ICON("path-reverse")),
+
+#if HAVE_POTRACE
     // TRANSLATORS: "to trace" means "to convert a bitmap to vector graphics" (to vectorize)
     new SelectionVerb(SP_VERB_SELECTION_TRACE, "SelectionTrace", N_("_Trace Bitmap..."),
                       N_("Create one or more paths from a bitmap by tracing it"), INKSCAPE_ICON("bitmap-trace")),
+#endif
+
     new SelectionVerb(SP_VERB_SELECTION_PIXEL_ART, "SelectionPixelArt", N_("Trace Pixel Art..."),
                       N_("Create paths using Kopf-Lischinski algorithm to vectorize pixel art"), INKSCAPE_ICON("pixelart-trace")),
     new SelectionVerb(SP_VERB_SELECTION_CREATE_BITMAP, "SelectionCreateBitmap", N_("Make a _Bitmap Copy"),
@@ -2733,8 +2767,12 @@ Verb *Verb::_base_verbs[] = {
                     N_("Pick colors from image"), INKSCAPE_ICON("color-picker")),
     new ContextVerb(SP_VERB_CONTEXT_CONNECTOR, "ToolConnector", NC_("ContextVerb", "Connector"),
                     N_("Create diagram connectors"), INKSCAPE_ICON("draw-connector")),
+
+#if HAVE_POTRACE
     new ContextVerb(SP_VERB_CONTEXT_PAINTBUCKET, "ToolPaintBucket", NC_("ContextVerb", "Paint Bucket"),
                     N_("Fill bounded areas"), INKSCAPE_ICON("color-fill")),
+#endif
+
     new ContextVerb(SP_VERB_CONTEXT_LPE, "ToolLPE", NC_("ContextVerb", "LPE Edit"),
                     N_("Edit Path Effect parameters"), NULL),
     new ContextVerb(SP_VERB_CONTEXT_ERASER, "ToolEraser", NC_("ContextVerb", "Eraser"),
@@ -2780,8 +2818,12 @@ Verb *Verb::_base_verbs[] = {
                     N_("Open Preferences for the Dropper tool"), NULL),
     new ContextVerb(SP_VERB_CONTEXT_CONNECTOR_PREFS, "ConnectorPrefs", N_("Connector Preferences"),
                     N_("Open Preferences for the Connector tool"), NULL),
+
+#if HAVE_POTRACE
     new ContextVerb(SP_VERB_CONTEXT_PAINTBUCKET_PREFS, "PaintBucketPrefs", N_("Paint Bucket Preferences"),
                     N_("Open Preferences for the Paint Bucket tool"), NULL),
+#endif
+
     new ContextVerb(SP_VERB_CONTEXT_ERASER_PREFS, "EraserPrefs", N_("Eraser Preferences"),
                     N_("Open Preferences for the Eraser tool"), NULL),
     new ContextVerb(SP_VERB_CONTEXT_LPETOOL_PREFS, "LPEToolPrefs", N_("LPE Tool Preferences"),
@@ -2937,9 +2979,13 @@ Verb *Verb::_base_verbs[] = {
                      N_("Using shape tools to create and edit shapes"), NULL),
     new TutorialVerb(SP_VERB_TUTORIAL_ADVANCED, "TutorialsAdvanced", N_("Inkscape: _Advanced"),
                      N_("Advanced Inkscape topics"), NULL/*"tutorial_advanced"*/),
+
+#if HAVE_POTRACE
     // TRANSLATORS: "to trace" means "to convert a bitmap to vector graphics" (to vectorize)
     new TutorialVerb(SP_VERB_TUTORIAL_TRACING, "TutorialsTracing", N_("Inkscape: T_racing"),
                      N_("Using bitmap tracing"), NULL/*"tutorial_tracing"*/),
+#endif
+
     new TutorialVerb(SP_VERB_TUTORIAL_TRACING_PIXELART, "TutorialsTracingPixelArt", N_("Inkscape: Tracing Pixel Art"),
                      N_("Using Trace Pixel Art dialog"), NULL),
     new TutorialVerb(SP_VERB_TUTORIAL_CALLIGRAPHY, "TutorialsCalligraphy", N_("Inkscape: _Calligraphy"),

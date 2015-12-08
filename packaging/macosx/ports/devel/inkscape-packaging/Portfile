@@ -51,7 +51,8 @@ depends_build-append        port:popt \
                             port:ImageMagick \
                             port:gtkspell2 \
                             port:aspell-dict-en \
-                            port:poppler
+                            port:poppler \
+                            port:potrace
 
 # ports for Inkscape.app
 depends_build-append        port:gnome-icon-theme \
@@ -66,6 +67,7 @@ depends_build-append        port:py27-lxml \
                             port:py27-numpy \
                             port:py27-Pillow \
                             port:py27-uniconvertor \
+                            port:py27-serial \
                             port:py27-pygtk
 
 if {${os.major} <= 10} {

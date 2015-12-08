@@ -15,10 +15,11 @@
  *   Tavmjong Bah <tavmjong@free.fr>
  *   Abhishek Sharma
  *   Kris De Gussem <Kris.DeGussem@gmail.com>
+ *   Jabiertxo Arraiza <jabier.arraiza@marker.es>
  *
  * Copyright (C) 2004 David Turner
  * Copyright (C) 2003 MenTaLguY
- * Copyright (C) 1999-2011 authors
+ * Copyright (C) 1999-2015 authors
  * Copyright (C) 2001-2002 Ximian, Inc.
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
@@ -28,19 +29,23 @@
 # include "config.h"
 #endif
 
-#include <glibmm/i18n.h>
+#include <gtkmm.h>
 
 #include "spray-toolbar.h"
 #include "desktop.h"
-#include "document-undo.h"
+#include "inkscape.h"
 #include "widgets/ege-adjustment-action.h"
 #include "widgets/ege-select-one-action.h"
 #include "widgets/ink-action.h"
 #include "preferences.h"
 #include "toolbox.h"
+#include "ui/dialog/clonetiler.h"
+#include "ui/dialog/dialog-manager.h"
+#include "ui/dialog/panel-dialog.h"
 #include "ui/icon-names.h"
 
-using Inkscape::DocumentUndo;
+#include <glibmm/i18n.h>
+
 using Inkscape::UI::ToolboxFactory;
 using Inkscape::UI::PrefPusher;
 
@@ -52,6 +57,74 @@ using Inkscape::UI::PrefPusher;
 //########################
 //##       Spray        ##
 //########################
+
+static void sp_stb_sensitivize( GObject *tbl )
+{
+    GtkAction* offset = GTK_ACTION( g_object_get_data(tbl, "offset") );
+    GtkAction* spray_scale = GTK_ACTION( g_object_get_data(tbl, "spray_scale") );
+    GtkAdjustment *adj_offset = ege_adjustment_action_get_adjustment( EGE_ADJUSTMENT_ACTION(offset) );
+    GtkAdjustment *adj_scale = ege_adjustment_action_get_adjustment( EGE_ADJUSTMENT_ACTION(spray_scale) );
+    GtkToggleAction *no_overlap = GTK_TOGGLE_ACTION( g_object_get_data(tbl, "no_overlap") );
+    GtkToggleAction *picker = GTK_TOGGLE_ACTION( g_object_get_data(tbl, "picker") );
+    GtkAction* picker_action = GTK_ACTION( g_object_get_data(tbl, "picker") );
+    GtkToggleAction *usepressurescale = GTK_TOGGLE_ACTION( g_object_get_data(tbl, "usepressurescale") );
+    GtkAction *pick_fill = GTK_ACTION( g_object_get_data(tbl, "pick_fill") );
+    GtkAction *pick_stroke = GTK_ACTION( g_object_get_data(tbl, "pick_stroke") );
+    GtkAction *pick_inverse_value = GTK_ACTION( g_object_get_data(tbl, "pick_inverse_value") );
+    GtkAction *pick_center = GTK_ACTION( g_object_get_data(tbl, "pick_center") );
+    gtk_adjustment_set_value( adj_offset, 100.0 );
+    if (gtk_toggle_action_get_active(no_overlap) && gtk_action_get_sensitive(picker_action)) {
+        gtk_action_set_sensitive( offset, TRUE );
+    } else {
+        gtk_action_set_sensitive( offset, FALSE );
+    }
+    if (gtk_toggle_action_get_active(usepressurescale)) {
+        gtk_adjustment_set_value( adj_scale, 0.0 );
+        gtk_action_set_sensitive( spray_scale, FALSE );
+    } else {
+        gtk_action_set_sensitive( spray_scale, TRUE );
+    }
+    if(gtk_toggle_action_get_active(picker) && gtk_action_get_sensitive(picker_action)){
+        gtk_action_set_sensitive( pick_fill, TRUE );
+        gtk_action_set_sensitive( pick_stroke, TRUE );
+        gtk_action_set_sensitive( pick_inverse_value, TRUE );
+        gtk_action_set_sensitive( pick_center, TRUE );
+    } else {
+        gtk_action_set_sensitive( pick_fill, FALSE );
+        gtk_action_set_sensitive( pick_stroke, FALSE );
+        gtk_action_set_sensitive( pick_inverse_value, FALSE );
+        gtk_action_set_sensitive( pick_center, FALSE );
+    }
+}
+
+static void sp_spray_erase_sensitivize( GObject *tbl, bool sensitive){
+    gtk_action_set_sensitive( GTK_ACTION( g_object_get_data(tbl, "no_overlap") ), sensitive );
+    gtk_action_set_sensitive( GTK_ACTION( g_object_get_data(tbl, "over_no_transparent") ), sensitive );
+    gtk_action_set_sensitive( GTK_ACTION( g_object_get_data(tbl, "over_transparent") ), sensitive );
+    gtk_action_set_sensitive( GTK_ACTION( g_object_get_data(tbl, "pick_no_overlap") ), sensitive );
+    gtk_action_set_sensitive( GTK_ACTION( g_object_get_data(tbl, "pick_stroke") ), sensitive );
+    gtk_action_set_sensitive( GTK_ACTION( g_object_get_data(tbl, "pick_fill") ), sensitive );
+    gtk_action_set_sensitive( GTK_ACTION( g_object_get_data(tbl, "pick_inverse_value") ), sensitive );
+    gtk_action_set_sensitive( GTK_ACTION( g_object_get_data(tbl, "pick_center") ), sensitive );
+    gtk_action_set_sensitive( GTK_ACTION( g_object_get_data(tbl, "picker") ), sensitive );
+    gtk_action_set_sensitive( GTK_ACTION( g_object_get_data(tbl, "offset") ), sensitive );
+    gtk_action_set_sensitive( GTK_ACTION( g_object_get_data(tbl, "spray_rotation") ), sensitive );
+    sp_stb_sensitivize( tbl );
+}
+
+Inkscape::UI::Dialog::CloneTiler *get_clone_tiler_panel(SPDesktop *desktop)
+{
+    if (Inkscape::UI::Dialog::PanelDialogBase *panel_dialog =
+        dynamic_cast<Inkscape::UI::Dialog::PanelDialogBase *>(desktop->_dlg_mgr->getDialog("CloneTiler"))) {
+        try {
+            Inkscape::UI::Dialog::CloneTiler &clone_tiler =
+                dynamic_cast<Inkscape::UI::Dialog::CloneTiler &>(panel_dialog->getPanel());
+            return &clone_tiler;
+        } catch (std::exception &e) { }
+    }
+
+    return 0;
+}
 
 static void sp_spray_width_value_changed( GtkAdjustment *adj, GObject * /*tbl*/ )
 {
@@ -74,11 +147,16 @@ static void sp_spray_standard_deviation_value_changed( GtkAdjustment *adj, GObje
             gtk_adjustment_get_value(adj));
 }
 
-static void sp_spray_mode_changed( EgeSelectOneAction *act, GObject * /*tbl*/ )
+static void sp_spray_mode_changed( EgeSelectOneAction *act, GObject * tbl )
 {
     int mode = ege_select_one_action_get_active( act );
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setInt("/tools/spray/mode", mode);
+    if(mode != 3){
+        sp_spray_erase_sensitivize(tbl, true);
+    } else {
+        sp_spray_erase_sensitivize(tbl, false);
+    }
 }
 
 static void sp_spray_population_value_changed( GtkAdjustment *adj, GObject * /*tbl*/ )
@@ -102,12 +180,105 @@ static void sp_spray_scale_value_changed( GtkAdjustment *adj, GObject * /*tbl*/ 
             gtk_adjustment_get_value(adj));
 }
 
+static void sp_spray_offset_value_changed( GtkAdjustment *adj, GObject * /*tbl*/ )
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    prefs->setDouble( "/tools/spray/offset",
+            gtk_adjustment_get_value(adj));
+}
+
+static void sp_toggle_no_overlap( GtkToggleAction* act, gpointer data)
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    gboolean active = gtk_toggle_action_get_active(act);
+    prefs->setBool("/tools/spray/no_overlap", active);
+    GObject *tbl = G_OBJECT(data);
+    sp_stb_sensitivize(tbl);
+}
+
+static void sp_toggle_pressure_scale( GtkToggleAction* act, gpointer data)
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    gboolean active = gtk_toggle_action_get_active(act);
+    prefs->setBool("/tools/spray/usepressurescale", active);
+    if(active == true){
+        prefs->setDouble("/tools/spray/scale_variation", 0);
+    }
+    GObject *tbl = G_OBJECT(data);
+    sp_stb_sensitivize( tbl );
+}
+
+static void sp_toggle_over_no_transparent( GtkToggleAction* act, gpointer data)
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    gboolean active = gtk_toggle_action_get_active(act);
+    prefs->setBool("/tools/spray/over_no_transparent", active);
+}
+
+static void sp_toggle_over_transparent( GtkToggleAction* act, gpointer data)
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    gboolean active = gtk_toggle_action_get_active(act);
+    prefs->setBool("/tools/spray/over_transparent", active);
+}
+
+
+static void sp_toggle_picker( GtkToggleAction* act, gpointer data )
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    gboolean active = gtk_toggle_action_get_active(act);
+    prefs->setBool("/tools/spray/picker", active);
+    if(active == true){
+        prefs->setBool("/dialogs/clonetiler/dotrace", false);
+        SPDesktop *dt = SP_ACTIVE_DESKTOP;
+        if (Inkscape::UI::Dialog::CloneTiler *ct = get_clone_tiler_panel(dt)){
+            dt->_dlg_mgr->showDialog("CloneTiler");
+            ct->show_page_trace();
+        }
+    }
+    GObject *tbl = G_OBJECT(data);
+    sp_stb_sensitivize(tbl);
+}
+
+static void sp_toggle_pick_center( GtkToggleAction* act, gpointer data )
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    gboolean active = gtk_toggle_action_get_active(act);
+    prefs->setBool("/tools/spray/pick_center", active);
+}
+
+static void sp_toggle_pick_fill( GtkToggleAction* act, gpointer data )
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    gboolean active = gtk_toggle_action_get_active(act);
+    prefs->setBool("/tools/spray/pick_fill", active);
+}
+
+static void sp_toggle_pick_stroke( GtkToggleAction* act, gpointer data )
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    gboolean active = gtk_toggle_action_get_active(act);
+    prefs->setBool("/tools/spray/pick_stroke", active);
+}
+
+static void sp_toggle_pick_no_overlap( GtkToggleAction* act, gpointer data )
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    gboolean active = gtk_toggle_action_get_active(act);
+    prefs->setBool("/tools/spray/pick_no_overlap", active);
+}
+
+static void sp_toggle_pick_inverse_value( GtkToggleAction* act, gpointer data )
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    gboolean active = gtk_toggle_action_get_active(act);
+    prefs->setBool("/tools/spray/pick_inverse_value", active);
+}
 
 void sp_spray_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder)
 {
     Inkscape::IconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-
     {
         /* Width */
         gchar const* labels[] = {_("(narrow spray)"), 0, 0, 0, _("(default)"), 0, 0, 0, 0, _("(broad spray)")};
@@ -123,7 +294,20 @@ void sp_spray_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
         gtk_action_set_sensitive( GTK_ACTION(eact), TRUE );
     }
+    
+    /* Use Pressure Width button */
+    {
+        InkToggleAction* act = ink_toggle_action_new( "SprayPressureWidthAction",
+                                                      _("Pressure"),
+                                                      _("Use the pressure of the input device to alter the width of spray area"),
+                                                      INKSCAPE_ICON("draw-use-pressure"),
+                                                      Inkscape::ICON_SIZE_DECORATION );
+        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
+        PrefPusher *pusher = new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/spray/usepressurewidth");
+        g_signal_connect(holder, "destroy", G_CALLBACK(delete_prefspusher), pusher);
 
+    }
+    
     {
         /* Mean */
         gchar const* labels[] = {_("(default)"), 0, 0, 0, 0, 0, 0, _("(maximum mean)")};
@@ -158,7 +342,7 @@ void sp_spray_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
 
     /* Mode */
     {
-        GtkListStore* model = gtk_list_store_new( 3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING );
+        GtkListStore* model = gtk_list_store_new( 4, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING );
 
         GtkTreeIter iter;
         gtk_list_store_append( model, &iter );
@@ -174,6 +358,7 @@ void sp_spray_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
                             1, _("Spray clones of the initial selection"),
                             2, INKSCAPE_ICON("spray-mode-clone"),
                             -1 );
+        
 #ifdef ENABLE_SPRAY_MODE_SINGLE_PATH
         gtk_list_store_append( model, &iter );
         gtk_list_store_set( model, &iter,
@@ -182,6 +367,14 @@ void sp_spray_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
                             2, INKSCAPE_ICON("spray-mode-union"),
                             -1 );
 #endif
+        
+        gtk_list_store_append( model, &iter );
+        gtk_list_store_set( model, &iter,
+                            0, _("Delete sprayed items"),
+                            1, _("Delete sprayed items from selection"),
+                            2, INKSCAPE_ICON("draw-eraser"),
+                            -1 );
+        
         EgeSelectOneAction* act = ege_select_one_action_new( "SprayModeAction", _("Mode"), (""), NULL, GTK_TREE_MODEL(model) );
         g_object_set( act, "short_label", _("Mode:"), NULL );
         gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
@@ -218,15 +411,15 @@ void sp_spray_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
         g_object_set_data( holder, "spray_population", eact );
     }
 
-    /* Use Pressure button */
+    /* Use Pressure Population button */
     {
-        InkToggleAction* act = ink_toggle_action_new( "SprayPressureAction",
+        InkToggleAction* act = ink_toggle_action_new( "SprayPressurePopulationAction",
                                                       _("Pressure"),
                                                       _("Use the pressure of the input device to alter the amount of sprayed objects"),
                                                       INKSCAPE_ICON("draw-use-pressure"),
                                                       Inkscape::ICON_SIZE_DECORATION );
         gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
-        PrefPusher *pusher = new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/spray/usepressure");
+        PrefPusher *pusher = new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/spray/usepressurepopulation");
         g_signal_connect(holder, "destroy", G_CALLBACK(delete_prefspusher), pusher);
 
     }
@@ -267,8 +460,152 @@ void sp_spray_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObj
         g_object_set_data( holder, "spray_scale", eact );
     }
 
+    /* Use Pressure Scale button */
+    {
+        InkToggleAction* act = ink_toggle_action_new( "SprayPressureScaleAction",
+                                                      _("Pressure"),
+                                                      _("Use the pressure of the input device to alter the scale of new items"),
+                                                      INKSCAPE_ICON("draw-use-pressure"),
+                                                      Inkscape::ICON_SIZE_DECORATION);
+        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/spray/usepressurescale", false) );
+        g_object_set_data( holder, "usepressurescale", act );
+        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(sp_toggle_pressure_scale), holder) ;
+        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
+    }
 
+    /* Picker */
+    {
+        InkToggleAction* act = ink_toggle_action_new( "SprayPickColorAction",
+                                                      _("Pick color from the drawing. You can use clonetiler trace dialog for avanced effects. In clone mode original fill or stroke colors must be unset."),
+                                                      _("Pick color from the drawing. You can use clonetiler trace dialog for avanced effects. In clone mode original fill or stroke colors must be unset."),
+                                                      INKSCAPE_ICON("color-picker"),
+                                                      secondarySize );
+        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/spray/picker", false) );
+        g_object_set_data( holder, "picker", act );
+        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(sp_toggle_picker), holder) ;
+        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
+    }
+    
+    /* Pick from center */
+    {
+        InkToggleAction* act = ink_toggle_action_new( "SprayPickCenterAction",
+                                                      _("Pick from center instead average area."),
+                                                      _("Pick from center instead average area."),
+                                                      INKSCAPE_ICON("snap-bounding-box-center"),
+                                                      secondarySize );
+        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/spray/pick_center", true) );
+        g_object_set_data( holder, "pick_center", act );
+        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(sp_toggle_pick_center), holder) ;
+        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
+    }
 
+    /* Inverse Value Size */
+    {
+        InkToggleAction* act = ink_toggle_action_new( "SprayPickInverseValueAction",
+                                                      _("Inversed pick value, retaining color in advanced trace mode"),
+                                                      _("Inversed pick value, retaining color in advanced trace mode"),
+                                                      INKSCAPE_ICON("object-tweak-shrink"),
+                                                      secondarySize );
+        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/spray/pick_inverse_value", false) );
+        g_object_set_data( holder, "pick_inverse_value", act );
+        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(sp_toggle_pick_inverse_value), holder) ;
+        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
+    }
+
+    /* Pick Fill */
+    {
+        InkToggleAction* act = ink_toggle_action_new( "SprayPickFillAction",
+                                                      _("Apply picked color to fill"),
+                                                      _("Apply picked color to fill"),
+                                                      INKSCAPE_ICON("paint-solid"),
+                                                      secondarySize );
+        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/spray/pick_fill", false) );
+        g_object_set_data( holder, "pick_fill", act );
+        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(sp_toggle_pick_fill), holder) ;
+        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
+    }
+
+    /* Pick Stroke */
+    {
+        InkToggleAction* act = ink_toggle_action_new( "SprayPickStrokeAction",
+                                                      _("Apply picked color to stroke"),
+                                                      _("Apply picked color to stroke"),
+                                                      INKSCAPE_ICON("no-marker"),
+                                                      secondarySize );
+        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/spray/pick_stroke", false) );
+        g_object_set_data( holder, "pick_stroke", act );
+        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(sp_toggle_pick_stroke), holder) ;
+        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
+    }
+
+    /* Pick No Overlap */
+    {
+        InkToggleAction* act = ink_toggle_action_new( "SprayPickNoOverlapAction",
+                                                      _("No overlap between colors"),
+                                                      _("No overlap between colors"),
+                                                      INKSCAPE_ICON("symbol-bigger"),
+                                                      secondarySize );
+        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/spray/pick_no_overlap", false) );
+        g_object_set_data( holder, "pick_no_overlap", act );
+        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(sp_toggle_pick_no_overlap), holder) ;
+        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
+    }
+
+    /* Over Transparent */
+    {
+        InkToggleAction* act = ink_toggle_action_new( "SprayOverTransparentAction",
+                                                      _("Apply over transparent areas"),
+                                                      _("Apply over transparent areas"),
+                                                      INKSCAPE_ICON("object-hidden"),
+                                                      secondarySize );
+        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/spray/over_transparent", true) );
+        g_object_set_data( holder, "over_transparent", act );
+        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(sp_toggle_over_transparent), holder) ;
+        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
+    }
+
+    /* Over No Transparent */
+    {
+        InkToggleAction* act = ink_toggle_action_new( "SprayOverNoTransparentAction",
+                                                      _("Apply over no transparent areas"),
+                                                      _("Apply over no transparent areas"),
+                                                      INKSCAPE_ICON("object-visible"),
+                                                      secondarySize );
+        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/spray/over_no_transparent", true) );
+        g_object_set_data( holder, "over_no_transparent", act );
+        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(sp_toggle_over_no_transparent), holder) ;
+        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
+    }
+
+    /* Overlap */
+    {
+        InkToggleAction* act = ink_toggle_action_new( "SprayNoOverlapAction",
+                                                      _("Prevent overlapping objects"),
+                                                      _("Prevent overlapping objects"),
+                                                      INKSCAPE_ICON("distribute-randomize"),
+                                                      secondarySize );
+        gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(act), prefs->getBool("/tools/spray/no_overlap", false) );
+        g_object_set_data( holder, "no_overlap", act );
+        g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(sp_toggle_no_overlap), holder) ;
+        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
+    }
+    
+    /* Offset */
+    {
+        gchar const* labels[] = {_("(minimum offset)"), 0, 0, 0, _("(default)"), 0, 0, _("(maximum offset)")};
+        gdouble values[] = {0, 25, 50, 75, 100, 150, 200, 1000};
+        EgeAdjustmentAction *eact = create_adjustment_action( "SprayToolOffsetAction",
+                                         _("Offset %"), _("Offset %:"),
+                                         _("Increase to segregate objects more (value in percent)"),
+                                         "/tools/spray/offset", 100,
+                                         GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
+                                         0, 1000, 1, 4,
+                                         labels, values, G_N_ELEMENTS(labels),
+                                         sp_spray_offset_value_changed, NULL, 0 , 0);
+        g_object_set_data( holder, "offset", eact );
+        gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
+    }
+    sp_spray_erase_sensitivize(holder, prefs->getInt("/tools/spray/mode") != 3);
 }
 
 

@@ -80,6 +80,18 @@
    function. */
 #cmakedefine HAVE_GTK_WINDOW_SET_DEFAULT_ICON_FROM_FILE 1
 
+/* Build with Gtkmm 3.0.x or higher */
+#cmakedefine WITH_GTKMM_3_0 1
+
+/* Build with Gtkmm 3.10.x or higher */
+#cmakedefine WITH_GTKMM_3_10 1
+
+/* Build with external GDL */
+#cmakedefine WITH_EXT_GDL 1
+
+/* Build with GDL 3.6 or higher */
+#cmakedefine WITH_GDL_3_6 1
+
 /* Define to 1 if you have the <ieeefp.h> header file. */
 #cmakedefine HAVE_IEEEFP_H 1
 
@@ -288,6 +300,9 @@
 
 /* Image Magick++ support for bitmap effects */
 #cmakedefine WITH_IMAGE_MAGICK 1
+
+/* Use libjpeg */
+#cmakedefine HAVE_JPEG 1
 
 /* Build in Inkboard support */
 #cmakedefine WITH_INKBOARD 1

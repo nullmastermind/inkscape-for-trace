@@ -46,7 +46,6 @@ all_libs =			\
 	$(FREETYPE_LIBS)	\
 	$(kdeldadd)		\
 	$(win32ldflags)		\
-	$(CARBON_LDFLAGS)	\
 	$(LIBWPG_LIBS)		\
 	$(LIBVISIO_LIBS)		\
 	$(LIBCDR_LIBS)		\
@@ -260,9 +259,7 @@ check-local:
 #        the XFAIL_TESTS build target should be removed.
 #        See the following Launchpad bugs:
 #
-#          LP #1202271 <cxxtest: preferences-test.h fails>
 #          LP #1208013 <cxxtest: curve-test.h fails>
-#          LP #1208002 <cxxtest: svg-length-test.h fails>
 #          LP #1208005 <cxxtest: svg-path-geom-test.h fails>
 #          LP #1207502 <cxxtest: svg-affine-test.h fails>
 
