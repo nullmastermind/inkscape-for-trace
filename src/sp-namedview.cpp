@@ -690,7 +690,6 @@ void SPNamedView::remove_child(Inkscape::XML::Node *child) {
     } else {
         for(std::vector<SPGuide *>::iterator it=this->guides.begin();it!=this->guides.end();++it ) {
             if ( (*it)->getRepr() == child ) {
-                delete (*it);
                 this->guides.erase(it); 
                 break;
             }   
