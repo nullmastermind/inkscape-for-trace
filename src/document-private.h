@@ -36,16 +36,12 @@ class Event;
 }
 }
 
-typedef struct _GHashTable GHashTable;
-
 struct SPDocumentPrivate {
 	typedef std::map<GQuark, SPDocument::IDChangedSignal> IDChangedSignalMap;
 	typedef std::map<GQuark, SPDocument::ResourcesChangedSignal> ResourcesChangedSignalMap;
 
         std::map<std::string, SPObject *> iddef;
         std::map<Inkscape::XML::Node *, SPObject *> reprdef;
-	//GHashTable *iddef;	/**< Dictionary of id -> SPObject mappings */
-	//GHashTable *reprdef;   /**< Dictionary of Inkscape::XML::Node -> SPObject mappings */
 
 	unsigned long serial;
 
