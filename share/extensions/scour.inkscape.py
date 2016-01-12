@@ -1,7 +1,21 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import sys, inkex
-from scour.scour import scourString
+import sys, platform, inkex
+
+try:
+    import scour
+    from scour.scour import scourString
+except Exception as e:
+    inkex.errormsg("Failed to import Python module 'scour'.\nPlease make sure it is installed (e.g. using 'pip install scour' or 'sudo apt-get install python-scour') and try again.")
+    inkex.errormsg("\nDetails:\n" + str(e))
+    sys.exit()
+
+try:
+    import six
+except Exception as e:
+    inkex.errormsg("Failed to import Python module 'six'.\nPlease make sure it is installed (e.g. using 'pip install six' or 'sudo apt-get install python-six') and try again.")
+    inkex.errormsg("\nDetails:\n" + str(e))
+    sys.exit()
 
 class ScourInkscape (inkex.Effect):
 
@@ -33,11 +47,19 @@ class ScourInkscape (inkex.Effect):
         self.OptionParser.add_option("--renderer-workaround",      type="inkbool", action="store", dest="renderer_workaround")
 
     def effect(self):
-        input = file(self.args[0], "r")
-        self.options.infilename = self.args[0]
-        sys.stdout.write(scourString(input.read(), self.options).encode("UTF-8"))
-        input.close()
-        sys.stdout.close()
+        try:
+            input = file(self.args[0], "r")
+            self.options.infilename = self.args[0]
+            sys.stdout.write(scourString(input.read(), self.options).encode("UTF-8"))
+            input.close()
+            sys.stdout.close()
+        except Exception as e:
+            inkex.errormsg("Error during optimization.")
+            inkex.errormsg("\nDetails:\n" + str(e))
+            inkex.errormsg("\nOS version: " + platform.platform())
+            inkex.errormsg("Python version: " + sys.version)
+            inkex.errormsg("Scour version: " + scour.__version__)
+            sys.exit()
 
 if __name__ == '__main__':
     e = ScourInkscape()
