@@ -32,7 +32,6 @@ static void sp_guideline_render(SPCanvasItem *item, SPCanvasBuf *buf);
 
 static double sp_guideline_point(SPCanvasItem *item, Geom::Point p, SPCanvasItem **actual_item);
 
-//static gboolean sp_guideline_origin_move(SPKnot *knot, Geom::Point *position, guint state, SPGuideLine *data);
 static void sp_guideline_drawline (SPCanvasBuf *buf, gint x0, gint y0, gint x1, gint y1, guint32 rgba);
 
 G_DEFINE_TYPE(SPGuideLine, sp_guideline, SP_TYPE_CANVAS_ITEM);
@@ -231,15 +230,6 @@ SPCanvasItem *sp_guideline_new(SPCanvasGroup *parent, char* label, Geom::Point p
 
     return item;
 }
-
-/*static gboolean sp_guideline_origin_move(SPKnot *knot, Geom::Point *position, guint state, SPGuideLine *gl)
-{
-    if(gl->locked) {
-        return true;
-    }
-    sp_guideline_set_position(gl, *position);
-    return false;
-}*/
 
 void sp_guideline_set_label(SPGuideLine *gl, const char* label)
 {
