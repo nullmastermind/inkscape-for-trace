@@ -25,7 +25,6 @@
 
 #include "display/sp-canvas.h"
 #include "display/guideline.h"
-#include "display/sodipodi-ctrl.h"
 #include "svg/svg.h"
 #include "svg/svg-color.h"
 #include "svg/stringstream.h"

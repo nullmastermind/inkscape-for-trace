@@ -21,9 +21,6 @@
 #include "display/cairo-utils.h"
 #include "display/sp-canvas.h"
 #include "display/sodipodi-ctrl.h"
-#include "ui/control-manager.h"
-
-using Inkscape::ControlManager;
 
 static void sp_guideline_destroy(SPCanvasItem *object);
 
