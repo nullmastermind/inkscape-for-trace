@@ -95,11 +95,11 @@ these WMF enumerations is by referencing the following table:
 
 /*
 File:      uemf.h
-Version:   0.0.32
-Date:      28-APR-2015
+Version:   0.0.33
+Date:      27-JAN-2016
 Author:    David Mathog, Biology Division, Caltech
 email:     mathog@caltech.edu
-Copyright: 2015 David Mathog and California Institute of Technology (Caltech)
+Copyright: 2016 David Mathog and California Institute of Technology (Caltech)
 */
 
 #ifndef _UEMF_
@@ -2017,6 +2017,7 @@ typedef struct {
     U_STYLEENTRY        elpStyleEntry[1];   //!< Array of StyleEntry (For user specified dot/dash patterns)
 } U_EXTLOGPEN,
   *PU_EXTLOGPEN;                            //!< EMF manual 2.2.20
+#define U_SIZE_EXTLOGPEN   (sizeof(U_EXTLOGPEN) - sizeof(U_STYLEENTRY)) // there may not be any style entries
 
 /**
   \brief For U_EMR_* OffBmi* fields
@@ -3029,7 +3030,9 @@ typedef struct {
                                             //!< Record may include optional DIB bitmap
 } U_EMREXTCREATEPEN,
   *PU_EMREXTCREATEPEN;                      //!< EMF manual 2.3.7.9
-#define U_SIZE_EMREXTCREATEPEN   (sizeof(U_EMREXTCREATEPEN))
+/* extlogpen has a field on the end which may or may not be present in a record, so use the predefined size instead
+of the struct size */
+#define U_SIZE_EMREXTCREATEPEN   (sizeof(U_EMREXTCREATEPEN) - sizeof(U_EXTLOGPEN) + U_SIZE_EXTLOGPEN)
 
 /* Index  96.97  */
 /** EMF manual 2.3.5.32          
