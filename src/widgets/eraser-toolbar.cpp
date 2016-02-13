@@ -122,14 +122,14 @@ void sp_eraser_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
 
     {
         /* Width */
-        gchar const* labels[] = {_("(hairline)"), 0, 0, 0, _("(default)"), 0, 0, 0, 0, _("(broad stroke)")};
-        gdouble values[] = {1, 3, 5, 10, 15, 20, 30, 50, 75, 100};
+        gchar const* labels[] = {_("(no width)"),_("(hairline)"), 0, 0, 0, _("(default)"), 0, 0, 0, 0, _("(broad stroke)")};
+        gdouble values[] = {0, 1, 3, 5, 10, 15, 20, 30, 50, 75, 100};
         EgeAdjustmentAction *eact = create_adjustment_action( "EraserWidthAction",
                                                               _("Pen Width"), _("Width:"),
                                                               _("The width of the eraser pen (relative to the visible canvas area)"),
                                                               "/tools/eraser/width", 15,
                                                               GTK_WIDGET(desktop->canvas), holder, TRUE, "altx-eraser",
-                                                              1, 100, 1.0, 10.0,
+                                                              0, 100, 1.0, 10.0,
                                                               labels, values, G_N_ELEMENTS(labels),
                                                               sp_erc_width_value_changed, NULL /*unit tracker*/, 1, 0);
         ege_adjustment_action_set_appearance( eact, TOOLBAR_SLIDER_HINT );
