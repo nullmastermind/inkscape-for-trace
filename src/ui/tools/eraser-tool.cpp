@@ -699,7 +699,9 @@ void EraserTool::set_to_accumulated() {
                             this->repr->parent()->appendChild(dup);
                             Inkscape::GC::release(dup); // parent takes over
                             selection->set(dup);
-                            sp_selected_path_union(selection, desktop);
+                            if (!this->nowidth) {
+                                sp_selected_path_union(selection, desktop);
+                            }
                             selection->add(item);
                             if(item->style->fill_rule.value == SP_WIND_RULE_EVENODD){
                                 SPCSSAttr *css = sp_repr_css_attr_new();
