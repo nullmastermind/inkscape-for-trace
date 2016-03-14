@@ -93,7 +93,7 @@ void
 LPECopyRotate::transform_multiply(Geom::Affine const& postmul, bool set)
 {
     if(fusion_paths) {
-        Geom::Coord angle  = Geom::rad_to_deg(atan(-postmul[1]/postmul[0]));
+        Geom::Coord angle  = Geom::deg_from_rad(atan(-postmul[1]/postmul[0]));
         angle += starting_angle;
         starting_angle.param_set_value(angle);
     }
@@ -235,11 +235,11 @@ LPECopyRotate::setFusion(Geom::PathVector &path_on, Geom::Path divider, double s
         Geom::PathVector tmp_path_helper;
         Geom::Path append_path = original;
         for (int i = 0; i < num_copies; ++i) {
-            Geom::Rotate rot(-Geom::deg_to_rad(rotation_angle * (i)));
+            Geom::Rotate rot(-Geom::rad_from_deg(rotation_angle * (i)));
             Geom::Affine m = pre * rot * Geom::Translate(origin);
             if(i%2 != 0) {
                 Geom::Point A = (Geom::Point)origin;
-                Geom::Point B = origin + dir * Geom::Rotate(-Geom::deg_to_rad((rotation_angle*i)+starting_angle)) * size_divider;
+                Geom::Point B = origin + dir * Geom::Rotate(-Geom::rad_from_deg((rotation_angle*i)+starting_angle)) * size_divider;
                 Geom::Affine m1(1.0, 0.0, 0.0, 1.0, A[0], A[1]);
                 double hyp = Geom::distance(A, B);
                 double c = (B[0] - A[0]) / hyp; // cos(alpha)
@@ -299,7 +299,7 @@ LPECopyRotate::setFusion(Geom::PathVector &path_on, Geom::Path divider, double s
             double diagonal = Geom::distance(Geom::Point(boundingbox_X.min(),boundingbox_Y.min()),Geom::Point(boundingbox_X.max(),boundingbox_Y.max()));
             Geom::Rect bbox(Geom::Point(boundingbox_X.min(),boundingbox_Y.min()),Geom::Point(boundingbox_X.max(),boundingbox_Y.max()));
             double size_divider = Geom::distance(origin,bbox) + (diagonal * 2);
-            Geom::Point base_point = origin + dir * Geom::Rotate(-Geom::deg_to_rad((rotation_angle * num_copies) + starting_angle)) * size_divider;
+            Geom::Point base_point = origin + dir * Geom::Rotate(-Geom::rad_from_deg((rotation_angle * num_copies) + starting_angle)) * size_divider;
             Geom::Ray base_b(divider.pointAt(1), base_point);
             if(Geom::are_near(tmp_path_helper[0].initialPoint(),base_a) && Geom::are_near(tmp_path_helper[0].finalPoint(),base_a)){
                 tmp_path_helper[0].close();
@@ -343,8 +343,8 @@ LPECopyRotate::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & p
     double diagonal = Geom::distance(Geom::Point(boundingbox_X.min(),boundingbox_Y.min()),Geom::Point(boundingbox_X.max(),boundingbox_Y.max()));
     Geom::Rect bbox(Geom::Point(boundingbox_X.min(),boundingbox_Y.min()),Geom::Point(boundingbox_X.max(),boundingbox_Y.max()));
     double size_divider = Geom::distance(origin,bbox) + (diagonal * 2);
-    Geom::Point line_start  = origin + dir * Rotate(-deg_to_rad(starting_angle)) * size_divider;
-    Geom::Point line_end = origin + dir * Rotate(-deg_to_rad(rotation_angle + starting_angle)) * size_divider;
+    Geom::Point line_start  = origin + dir * Rotate(-rad_from_deg(starting_angle)) * size_divider;
+    Geom::Point line_end = origin + dir * Rotate(-rad_from_deg(rotation_angle + starting_angle)) * size_divider;
     //Note:: beter way to do this
     //Whith AppendNew have problems whith the crossing order
     Geom::Path divider = Geom::Path(line_start);
@@ -383,7 +383,7 @@ LPECopyRotate::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & p
         }
     } else {
         for (int i = 0; i < num_copies; ++i) {
-            Rotate rot(-deg_to_rad(rotation_angle * i));
+            Rotate rot(-rad_from_deg(rotation_angle * i));
             Affine t = pre * rot * Translate(origin);
             output.concat(pwd2_in * t);
         }
