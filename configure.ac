@@ -154,40 +154,6 @@ if test "$GCC" = "yes"; then
   # C++-specific flags are defined further below.  Look for CXXFLAGS...
 fi
 
-# Detect a working version of unordered containers.
-# First try looking for native support (C++11 feature)
-AC_MSG_CHECKING([native support for unordered_set])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <unordered_set>]],
-[[
-  std::unordered_set<int> i, j;
-  i = j;
-]])],
-[native_unordered_set_works=yes], [native_unordered_set_works=no])
-
-if test "x$native_unordered_set_works" = "xyes"; then
-	AC_MSG_RESULT([ok])
-	AC_DEFINE(HAVE_NATIVE_UNORDERED_SET, 1, [Has working native unordered_set])
-else
-	AC_MSG_RESULT([not working])
-fi
-
-AC_MSG_CHECKING([TR1 unordered_set usability])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <tr1/unordered_set>]],
-[[
-  std::tr1::unordered_set<int> i, j;
-  i = j;
-]])],
-[tr1_unordered_set_works=yes], [tr1_unordered_set_works=no])
-
-if test "x$tr1_unordered_set_works" = "xyes"; then
-	AC_MSG_RESULT([ok])
-	AC_DEFINE(HAVE_TR1_UNORDERED_SET, 1, [Has working standard TR1 unordered_set])
-else
-	AC_MSG_RESULT([not working])
-fi
-
-AC_CHECK_HEADER([boost/unordered_set.hpp], [AC_DEFINE(HAVE_BOOST_UNORDERED_SET, 1, [Boost unordered_set (Boost >= 1.36)])], [])
-
 # Test whether GCC emits a spurious warning when using boost::optional
 # If yes, turn off strict aliasing warnings to reduce noise
 # and allow the legitimate warnings to stand out
@@ -239,6 +205,17 @@ if test "x$ac_cv_prog_cxx_openmp" != "xunsupported"; then
 	CXXFLAGS="$CXXFLAGS $OPENMP_CXXFLAGS"
 	AC_DEFINE(HAVE_OPENMP, 1, [Use OpenMP])
 fi
+
+dnl ********************
+dnl Check for libpotrace
+dnl ********************
+AC_CHECK_LIB(potrace, potrace_trace, [AC_CHECK_HEADER(potracelib.h, potrace_ok=yes, potrace_ok=no)], potrace_ok=no)
+if test "x$potrace_ok" = "xyes"; then
+   LIBS="-lpotrace $LIBS"
+   AC_DEFINE(HAVE_POTRACE, 1, [Use Potrace])
+fi
+
+AM_CONDITIONAL(HAVE_POTRACE, test "x$potrace_ok" = "xyes")
 
 dnl ******************************
 dnl Check for libexif
@@ -421,12 +398,12 @@ AC_ARG_ENABLE(poppler-cairo,
 	[enable_poppler_cairo=$enableval], [enable_poppler_cairo=yes])
 
 POPPLER_CFLAGS=""
-PKG_CHECK_MODULES(POPPLER, poppler >= 0.8.3, poppler=yes, poppler=no)
+PKG_CHECK_MODULES(POPPLER, poppler >= 0.20.0, poppler=yes, poppler=no)
 
 if test "x$poppler" = "xyes"; then
 	dnl Working libpoppler
 	dnl Have to test libpoppler-glib presence
-	PKG_CHECK_MODULES(POPPLER_GLIB, poppler-glib >= 0.8.3, poppler_glib=yes, poppler_glib=no)
+	PKG_CHECK_MODULES(POPPLER_GLIB, poppler-glib >= 0.20.0, poppler_glib=yes, poppler_glib=no)
 	if test "x$poppler_glib" = "xyes"; then
 		dnl Working libpoppler-glib found
 		dnl Check whether the Cairo SVG backend is available
@@ -438,7 +415,7 @@ if test "x$poppler" = "xyes"; then
 	if test "x$enable_poppler_cairo" = "xyes"; then
 		dnl Have to test libpoppler-cairo presence for PDF preview
 		dnl AC_CHECK_HEADER(Magick++.h, magick_ok=yes, magick_ok=no)
-		PKG_CHECK_MODULES(POPPLER_CAIRO, poppler-cairo >= 0.8.3, poppler_cairo=yes, poppler_cairo=no)
+		PKG_CHECK_MODULES(POPPLER_CAIRO, poppler-cairo >= 0.20.0, poppler_cairo=yes, poppler_cairo=no)
 		if test "x$poppler_glib" = "xyes" -a "x$poppler_cairo" = "xyes" -a \
 			"x$cairo_svg" = "xno"
 		then
@@ -460,32 +437,10 @@ fi
 AC_SUBST(POPPLER_CFLAGS)
 AC_SUBST(POPPLER_LIBS)
 
-PKG_CHECK_MODULES(POPPLER_NEWERRORAPI, poppler >= 0.20.0, popplernewerror=yes, popplernewerror=no)
-if test "x$popplernewerror" = "xyes"; then
-	AC_DEFINE(POPPLER_NEW_ERRORAPI, 1, [Use new error API from Poppler >= 0.20.0])
-fi
-
-
 ink_svd_CPPFLAGS=$CPPFLAGS
 ink_svd_LIBS=$LIBS
 CPPFLAGS="$CPPFLAGS $POPPLER_CFLAGS"
 LIBS="$LIBS $POPPLER_LIBS"
-
-AC_MSG_CHECKING(for new color space API in Poppler)
-popplercolor="no"
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <GfxState.h>]],
-[[
-  typedef GfxColorSpace *(*parse_p)(Object *, Gfx *);
-  parse_p p = &GfxColorSpace::parse;
-]])],
-[popplercolor=yes])
-
-if test "x$popplercolor" = "xyes"; then
-	AC_DEFINE(POPPLER_NEW_COLOR_SPACE_API, 1, [Use color space API from Poppler >= 0.12.2])
-	AC_MSG_RESULT(yes)
-else
-	AC_MSG_RESULT(no)
-fi
 
 PKG_CHECK_MODULES(POPPLER_EVEN_NEWER_COLOR_SPACE_API, poppler >= 0.26.0, popplernewercolorspaceapi=yes, popplernewercolorspaceapi=no)
 if test "x$popplernewercolorspaceapi" = "xyes"; then
@@ -495,24 +450,6 @@ fi
 PKG_CHECK_MODULES(POPPLER_EVEN_NEWER_NEW_COLOR_SPACE_API, poppler >= 0.29.0, popplernewernewcolorspaceapi=yes, popplernewernewcolorspaceapi=no)
 if test "x$popplernewernewcolorspaceapi" = "xyes"; then
 	AC_DEFINE(POPPLER_EVEN_NEWER_NEW_COLOR_SPACE_API, 1, [Use even newer new color space API from Poppler >= 0.29.0])
-fi
-
-# Poppler's b604a008 commit changes this
-AC_MSG_CHECKING([whether GfxPatch in Poppler no longer uses GfxColor])
-popplergfxcolor="no"
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
-		  [[#include <GfxState.h>]],
-[[
-  GfxPatch::ColorValue color = {c: {0}};
-  GfxPatch patch;
-  patch.color[0][0] = color;
-]])
-], [popplergfxcolor=yes])
-if test "x$popplergfxcolor" = "xyes"; then
-	AC_DEFINE(POPPLER_NEW_GFXPATCH, 1, [GfxPatch no longer uses GfxColor in >= 0.15.1])
-	AC_MSG_RESULT(yes)
-else
-	AC_MSG_RESULT(no)
 fi
 
 CPPFLAGS=$ink_svd_CPPFLAGS
@@ -687,13 +624,20 @@ AC_SUBST(IMAGEMAGICK_CFLAGS)
 dnl ******************************
 dnl   Unconditional dependencies
 dnl ******************************
-PKG_CHECK_MODULES(INKSCAPE,
-		  bdw-gc      >= 7.1
-		  cairo       >= 1.10
+
+dnl Separate out dependencies that are known to introduce
+dnl C++-specific compiler flags
+PKG_CHECK_MODULES(INKSCAPE_CXX_DEPS,
 		  cairomm-1.0 >= 1.9.8
-		  glib-2.0    >= 2.28
 		  glibmm-2.4  >= 2.28
 		  giomm-2.4
+		  sigc++-2.0  >= 2.0.12
+		  )
+
+PKG_CHECK_MODULES(INKSCAPE,
+		  bdw-gc      >= 7.2
+		  cairo       >= 1.10
+		  glib-2.0    >= 2.28
 		  gsl
 		  gthread-2.0 >= 2.0
 		  libpng      >= 1.2
@@ -701,16 +645,69 @@ PKG_CHECK_MODULES(INKSCAPE,
 		  libxslt     >= 1.0.15
 		  pango       >= 1.24
 		  pangoft2    >= 1.24
-		  sigc++-2.0  >= 2.0.12
 		  )
 
-dnl Check whether we need to use new Glib::Thread::Mutex API.
-dnl TODO: Drop this test once we bump the required version of glibmm to 2.32
-PKG_CHECK_MODULES(GLIBMM_2_32, glibmm-2.4 >= 2.32, with_glibmm_2_32=yes, with_glibmm_2_32=no)
-
-if test "x$with_glibmm_2_32" = "xyes"; then
-	AC_DEFINE(WITH_GLIBMM_2_32,1,[Build with Glibmm 2.32 or higher])
+# test whether depenencies require C++11
+AC_MSG_CHECKING([whether C++11 mode is required])
+CXXFLAGS_SAVE="$CXXFLAGS"
+CXXFLAGS="$INKSCAPE_CXX_DEPS_CFLAGS $CXXFLAGS"
+cxx11_required=unknown
+AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+#include <glibmm.h>
+int main() {}
+])], [cxx11_required=no], [cxx11_required=unknown])
+if test "x$cxx11_required" = "xunknown"; then
+  CXXFLAGS="-std=c++11 $CXXFLAGS"
+  AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+  #include <glibmm.h>
+  int main() {}
+  ])], [cxx11_required=yes], [cxx11_required=unknown])
 fi
+CXXFLAGS="$CXXFLAGS_SAVE"
+if test "x$cxx11_required" = "xunknown"; then
+  AC_MSG_RESULT([unknown])
+  AC_MSG_ERROR([cannot detect whether C++11 is required])
+fi
+if test "x$cxx11_required" = "xyes"; then
+  AC_MSG_RESULT([yes])
+  CXXFLAGS="-std=c++11 $CXXFLAGS"
+else
+  AC_MSG_RESULT([no])
+fi
+
+# Detect a working version of unordered containers.
+# First try looking for native support (C++11 feature)
+AC_MSG_CHECKING([native support for unordered_set])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <unordered_set>]],
+[[
+  std::unordered_set<int> i, j;
+  i = j;
+]])],
+[native_unordered_set_works=yes], [native_unordered_set_works=no])
+
+if test "x$native_unordered_set_works" = "xyes"; then
+	AC_MSG_RESULT([ok])
+	AC_DEFINE(HAVE_NATIVE_UNORDERED_SET, 1, [Has working native unordered_set])
+else
+	AC_MSG_RESULT([not working])
+fi
+
+AC_MSG_CHECKING([TR1 unordered_set usability])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <tr1/unordered_set>]],
+[[
+  std::tr1::unordered_set<int> i, j;
+  i = j;
+]])],
+[tr1_unordered_set_works=yes], [tr1_unordered_set_works=no])
+
+if test "x$tr1_unordered_set_works" = "xyes"; then
+	AC_MSG_RESULT([ok])
+	AC_DEFINE(HAVE_TR1_UNORDERED_SET, 1, [Has working standard TR1 unordered_set])
+else
+	AC_MSG_RESULT([not working])
+fi
+
+AC_CHECK_HEADER([boost/unordered_set.hpp], [AC_DEFINE(HAVE_BOOST_UNORDERED_SET, 1, [Boost unordered_set (Boost >= 1.36)])], [])
 
 dnl *********************************
 dnl   Allow experimental GTK+3 build
@@ -729,12 +726,16 @@ if test "x$enable_gtk3" = "xyes"; then
 	fi
 
 	PKG_CHECK_MODULES(GTK,
-			  gtkmm-3.0 >= 3.2
-			  gdkmm-3.0 >= 3.2
 			  gtk+-3.0  >= 3.2
 			  gdk-3.0   >= 3.2
 			  gdl-3.0   > 3.3.4
-			  $ink_spell_pkg,
+			  $ink_spell_pkg)
+
+	dnl Separate out dependencies that are known to introduce
+	dnl C++-specific compiler flags
+	PKG_CHECK_MODULES(GTKMM,
+			  gtkmm-3.0 >= 3.2
+			  gdkmm-3.0 >= 3.2,
 			  with_gtkmm_3_0=yes,
 			  with_gtkmm_3_0=no)
 
@@ -807,7 +808,11 @@ else
 
 	PKG_CHECK_MODULES(GTK,
 			  gtk+-2.0  >= 2.24
-			  $ink_spell_pkg
+			  $ink_spell_pkg)
+	
+	dnl Separate out dependencies that are known to introduce C++-specific
+	dnl compiler flags
+	PKG_CHECK_MODULES(GTKMM,
 			  gdkmm-2.4 >= 2.24
 			  gtkmm-2.4 >= 2.24)
 
@@ -848,7 +853,9 @@ else
 fi
 
 INKSCAPE_CFLAGS="$GTK_CFLAGS $INKSCAPE_CFLAGS"
+INKSCAPE_CXX_DEPS_CFLAGS="$GTKMM_CFLAGS $INKSCAPE_CXX_DEPS_CFLAGS"
 INKSCAPE_LIBS="$GTK_LIBS $INKSCAPE_LIBS"
+INKSCAPE_CXX_DEPS_LIBS="$GTKMM_LIBS $INKSCAPE_CXX_DEPS_LIBS"
 
 dnl Configure x11 library if Gtk+ uses it as a backend.
 dnl Note that this is only here because we directly use X11 functionality.  We
@@ -899,21 +906,6 @@ if test "x$enable_strict_build" = "xhigh"; then
         CPPFLAGS="-Werror=deprecated-declarations $CPPFLAGS"
 fi
 
-# Check for Apple Mac OS X Carbon framework
-carbon_ok=no
-AC_MSG_CHECKING([for Mac OS X Carbon support])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
-#include <Carbon/Carbon.h>
-#include <CoreServices/CoreServices.h>]], [])
-], [carbon_ok=yes])
-AC_MSG_RESULT($carbon_ok)
-if test "x$carbon_ok" = "xyes"; then
-  AC_DEFINE(HAVE_CARBON, 1, [define to 1 if Carbon is available])
-  CARBON_LDFLAGS="-framework Carbon"
-  AC_SUBST(CARBON_LDFLAGS)
-fi
-AM_CONDITIONAL(HAVE_CARBON, test "x$carbon_ok" = "xyes")
-
 # Check for some boost header files
 AC_CHECK_HEADERS([boost/concept_check.hpp], [], AC_MSG_ERROR([You need the boost package (e.g. libboost-dev)]))
 
@@ -947,9 +939,6 @@ dnl Check for bind_textdomain_codeset, including -lintl if GLib brings it in.
 sp_save_LIBS=$LIBS
 LIBS="$LIBS $INKSCAPE_LIBS"
 AC_CHECK_FUNCS(bind_textdomain_codeset)
-dnl Check for gtk_window_fullscreen in gtk (>= 2.2)
-AC_CHECK_FUNCS(gtk_window_set_default_icon_from_file)
-AC_CHECK_FUNCS(gtk_window_fullscreen)
 LIBS=$sp_save_LIBS
 
 
@@ -1098,14 +1087,8 @@ dnl
 
 AC_SUBST(INKSCAPE_CFLAGS)
 AC_SUBST(INKSCAPE_LIBS)
-
-
-dnl Check to see if we have a newer (2.32.0+) glibmm
-TMP_CPPFLAGS="$CPPFLAGS"
-CPPFLAGS="$GTK_CFLAGS $CPPFLAGS"
-AC_CHECK_HEADERS([glibmm/threads.h])
-CPPFLAGS="$TMP_CPPFLAGS"
-
+AC_SUBST(INKSCAPE_CXX_DEPS_CFLAGS)
+AC_SUBST(INKSCAPE_CXX_DEPS_LIBS)
 
 dnl Define our data paths for config.h
 AC_DEFINE_DIR([INKSCAPE_DATADIR], [datadir], [Base data directory])
@@ -1153,7 +1136,6 @@ share/extensions/Makefile
 share/extensions/alphabet_soup/Makefile
 share/extensions/Barcode/Makefile
 share/extensions/Poly3DObjects/Makefile
-share/extensions/scour/Makefile
 share/extensions/test/Makefile
 share/extensions/xaml2svg/Makefile
 share/extensions/ink2canvas/Makefile
@@ -1207,6 +1189,7 @@ Configuration:
         Enable LittleCms:         ${enable_lcms}
         Enable DBUS:              ${with_dbus} 
         Enable Poppler-Cairo:     ${enable_poppler_cairo}
+	Enable Potrace:           ${potrace_ok}
         ImageMagick Magick++:     ${magick_ok}
         Libwpg:                   ${with_libwpg}
         Libvisio:                 ${with_libvisio}

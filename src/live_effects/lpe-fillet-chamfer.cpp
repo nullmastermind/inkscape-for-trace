@@ -76,12 +76,15 @@ LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject) :
     radius.param_set_range(0., infinity());
     radius.param_set_increments(1, 1);
     radius.param_set_digits(4);
+    radius.param_overwrite_widget(true);
     chamfer_steps.param_set_range(1, 999);
     chamfer_steps.param_set_increments(1, 1);
     chamfer_steps.param_set_digits(0);
+    chamfer_steps.param_overwrite_widget(true);
     helper_size.param_set_range(0, infinity());
     helper_size.param_set_increments(5, 5);
     helper_size.param_set_digits(0);
+    helper_size.param_overwrite_widget(true);
     fillet_chamfer_values.set_chamfer_steps(3);
 }
 
@@ -96,6 +99,14 @@ Gtk::Widget *LPEFilletChamfer::newWidget()
     vbox->set_border_width(5);
     vbox->set_homogeneous(false);
     vbox->set_spacing(2);
+    Gtk::HBox *advertaising = Gtk::manage(new Gtk::HBox(true, 0));
+    Gtk::Button *advert = Gtk::manage(new Gtk::Button(Glib::ustring(_("IMPORTANT! New version soon..."))));
+    advertaising->pack_start(*advert, true, true, 2);
+    vbox->pack_start(*advertaising, true, true, 2);
+    Gtk::HBox *advertaising2 = Gtk::manage(new Gtk::HBox(true, 0));
+    Gtk::Button *advert2 = Gtk::manage(new Gtk::Button(Glib::ustring(_("Not compatible. Convert to path after."))));
+    advertaising2->pack_start(*advert2, true, true, 2);
+    vbox->pack_start(*advertaising2, true, true, 2);
     std::vector<Parameter *>::iterator it = param_vector.begin();
     while (it != param_vector.end()) {
         if ((*it)->widget_is_visible) {
@@ -226,18 +237,21 @@ void LPEFilletChamfer::updateFillet()
     }
     Piecewise<D2<SBasis> > const &pwd2 = fillet_chamfer_values.get_pwd2();
     doUpdateFillet(path_from_piecewise(pwd2, tolerance), power);
+    DocumentUndo::done(getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change scalar parameter"));
 }
 
 void LPEFilletChamfer::fillet()
 {
     Piecewise<D2<SBasis> > const &pwd2 = fillet_chamfer_values.get_pwd2();
     doChangeType(path_from_piecewise(pwd2, tolerance), 1);
+    DocumentUndo::done(getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Convert to fillet"));
 }
 
 void LPEFilletChamfer::inverseFillet()
 {
     Piecewise<D2<SBasis> > const &pwd2 = fillet_chamfer_values.get_pwd2();
     doChangeType(path_from_piecewise(pwd2, tolerance), 2);
+    DocumentUndo::done(getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Convert to inverse fillet"));
 }
 
 void LPEFilletChamfer::chamferSubdivisions()
@@ -245,6 +259,7 @@ void LPEFilletChamfer::chamferSubdivisions()
     fillet_chamfer_values.set_chamfer_steps(chamfer_steps);
     Piecewise<D2<SBasis> > const &pwd2 = fillet_chamfer_values.get_pwd2();
     doChangeType(path_from_piecewise(pwd2, tolerance), chamfer_steps + 5000);
+    DocumentUndo::done(getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change scalar parameter"));
 }
 
 void LPEFilletChamfer::chamfer()
@@ -252,6 +267,7 @@ void LPEFilletChamfer::chamfer()
     fillet_chamfer_values.set_chamfer_steps(chamfer_steps);
     Piecewise<D2<SBasis> > const &pwd2 = fillet_chamfer_values.get_pwd2();
     doChangeType(path_from_piecewise(pwd2, tolerance), chamfer_steps + 3000);
+    DocumentUndo::done(getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Convert to chamfer"));
 }
 
 void LPEFilletChamfer::inverseChamfer()
@@ -259,6 +275,7 @@ void LPEFilletChamfer::inverseChamfer()
     fillet_chamfer_values.set_chamfer_steps(chamfer_steps);
     Piecewise<D2<SBasis> > const &pwd2 = fillet_chamfer_values.get_pwd2();
     doChangeType(path_from_piecewise(pwd2, tolerance), chamfer_steps + 4000);
+    DocumentUndo::done(getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Convert to inverse fillet"));
 }
 
 void LPEFilletChamfer::refreshKnots()
@@ -270,6 +287,7 @@ void LPEFilletChamfer::refreshKnots()
         tools_switch(desktop, TOOLS_SELECT);
         tools_switch(desktop, TOOLS_NODES);
     }
+    DocumentUndo::done(getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Knots and helper paths refreshed"));
 }
 
 void LPEFilletChamfer::doUpdateFillet(Geom::PathVector const &original_pathv, double power)

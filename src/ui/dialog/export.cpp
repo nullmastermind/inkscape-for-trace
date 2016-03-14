@@ -474,7 +474,14 @@ void Export::set_default_filename () {
 
         doc_export_name = filename_entry.get_text();
     }
+    else if ( SP_ACTIVE_DOCUMENT )
+    {
+        Glib::ustring filename = create_filepath_from_id (_("bitmap"), filename_entry.get_text());
+        filename_entry.set_text(filename);
+        filename_entry.set_position(filename.length());
 
+        doc_export_name = filename_entry.get_text();
+    }
 }
 
 #if WITH_GTKMM_3_0
@@ -814,7 +821,7 @@ void Export::onAreaToggled ()
                 if (filename.empty()) {
                     const gchar * id = "object";
                     const std::vector<XML::Node*> reprlst = SP_ACTIVE_DESKTOP->getSelection()->reprList();
-                    for(std::vector<XML::Node*>::const_iterator i=reprlst.begin(); reprlst.end() != i; i++) {
+                    for(std::vector<XML::Node*>::const_iterator i=reprlst.begin(); reprlst.end() != i; ++i) {
                         Inkscape::XML::Node * repr = *i;
                         if (repr->attribute("id")) {
                             id = repr->attribute("id");
@@ -1023,7 +1030,7 @@ void Export::onExport ()
         gint export_count = 0;
 
         std::vector<SPItem*> itemlist=desktop->getSelection()->itemList();
-        for(std::vector<SPItem*>::const_iterator i = itemlist.begin();i!=itemlist.end() && !interrupted ;i++){
+        for(std::vector<SPItem*>::const_iterator i = itemlist.begin();i!=itemlist.end() && !interrupted ;++i){
             SPItem *item = *i;
 
             prog_dlg->set_data("current", GINT_TO_POINTER(n));
@@ -1232,7 +1239,7 @@ void Export::onExport ()
             DocumentUndo::setUndoSensitive(doc, false);
             reprlst = desktop->getSelection()->reprList();
 
-            for(std::vector<Inkscape::XML::Node*>::const_iterator i=reprlst.begin(); reprlst.end() != i; i++) {
+            for(std::vector<Inkscape::XML::Node*>::const_iterator i=reprlst.begin(); reprlst.end() != i; ++i) {
                 Inkscape::XML::Node * repr = *i;
                 const gchar * temp_string;
                 Glib::ustring dir = Glib::path_get_dirname(filename.c_str());

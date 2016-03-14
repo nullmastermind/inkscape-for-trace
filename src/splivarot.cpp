@@ -105,6 +105,13 @@ sp_selected_path_cut(Inkscape::Selection *selection, SPDesktop *desktop)
 {
     sp_selected_path_boolop(selection, desktop, bool_op_cut, SP_VERB_SELECTION_CUT, _("Division"));
 }
+
+void
+sp_selected_path_cut_skip_undo(Inkscape::Selection *selection, SPDesktop *desktop)
+{
+    sp_selected_path_boolop(selection, desktop, bool_op_cut, SP_VERB_NONE, _("Division"));
+}
+
 void
 sp_selected_path_slice(Inkscape::Selection *selection, SPDesktop *desktop)
 {
@@ -341,13 +348,6 @@ sp_selected_path_boolop(Inkscape::Selection *selection, SPDesktop *desktop, bool
     }
 
     g_assert(!il.empty());
-
-    if (il.size() > 2) {
-        if (bop == bool_op_diff || bop == bool_op_cut || bop == bool_op_slice ) {
-            boolop_display_error_message(desktop, _("Select <b>exactly 2 paths</b> to perform difference, division, or path cut."));
-            return;
-        }
-    }
 
     // reverseOrderForOp marks whether the order of the list is the top->down order
     // it's only used when there are 2 objects, and for operations who need to know the

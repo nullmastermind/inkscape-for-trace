@@ -13,10 +13,6 @@
 # include <config.h>
 #endif
 
-#if WITH_GLIBMM_2_32
-# include <glibmm/threads.h>
-#endif
-
 #include "tags.h"
 #include <gtkmm/widget.h>
 #include <gtkmm/icontheme.h>
@@ -353,7 +349,7 @@ void TagsPanel::_objectsSelected( Selection *sel ) {
     _selectedConnection.block();
     _tree.get_selection()->unselect_all();
     std::vector<SPObject*> tmp=sel->list();
-	for(std::vector<SPObject*>::const_iterator i=tmp.begin();i!=tmp.end();i++)
+	for(std::vector<SPObject*>::const_iterator i=tmp.begin();i!=tmp.end();++i)
     {
         SPObject *obj = *i;
         _store->foreach(sigc::bind<SPObject *>( sigc::mem_fun(*this, &TagsPanel::_checkForSelected), obj));
@@ -651,7 +647,7 @@ bool TagsPanel::_handleButtonEvent(GdkEventButton* event)
                         if (SP_IS_TAG(obj)) {
                             bool wasadded = false;
                             std::vector<SPItem*> items=_desktop->selection->itemList();
-                        	for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
+                        	for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();++i){
                                 SPObject *newobj = *i;
                                 bool addchild = true;
                                 for ( SPObject *child = obj->children; child != NULL; child = child->next) {

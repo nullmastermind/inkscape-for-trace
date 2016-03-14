@@ -159,9 +159,8 @@ void FilletChamferPointArrayParam::recalculate_controlpoints_for_new_pwd2(
                     //todo: if the path remove some nodes whith the result of a straight
                     //line but with handles, the node inserted into dont fire the knot
                     // because is not handle as cusp node by  get_nodetype function
-                    bool this_is_line = true;
                     bool next_is_line = is_straight_curve(*curve_it1);
-                    this_is_line = is_straight_curve((*path_it)[counterCurves - 1]);
+                    bool this_is_line = is_straight_curve((*path_it)[counterCurves - 1]);
                     nodetype = get_nodetype((*path_it)[counterCurves - 1], *curve_it1);
                     if (this_is_line || next_is_line) {
                         nodetype = NODE_CUSP;
@@ -307,9 +306,8 @@ void FilletChamferPointArrayParam::recalculate_knots(
                         nodetype = NODE_NONE;
                     }
                 } else {
-                    bool this_is_line = true;
                     bool next_is_line = is_straight_curve(*curve_it1);
-                    this_is_line = is_straight_curve((*path_it)[counterCurves - 1]);
+                    bool this_is_line = is_straight_curve((*path_it)[counterCurves - 1]);
                     nodetype = get_nodetype((*path_it)[counterCurves - 1], *curve_it1);
                     if (this_is_line || next_is_line) {
                         nodetype = NODE_CUSP;
@@ -394,7 +392,7 @@ void FilletChamferPointArrayParam::updateCanvasIndicators()
         Geom::PathVector pathv = sp_svg_read_pathv(svgd);
         Geom::Affine aff = Geom::Affine();
         aff *= Geom::Scale(helper_size);
-        aff *= Geom::Rotate(ray1.angle() - deg_to_rad(270));
+        aff *= Geom::Rotate(ray1.angle() - rad_from_deg(270));
         aff *= Geom::Translate(last_pwd2[i].valueAt(Xvalue));
         pathv *= aff;
         hp.push_back(pathv[0]);
@@ -467,12 +465,12 @@ double FilletChamferPointArrayParam::len_to_rad(int index, double len)
     Geom::Point endArcPoint = B->toSBasis().valueAt(times[2]);
     Curve *knotCurve1 = A->portion(times[0], times[1]);
     Curve *knotCurve2 = B->portion(times[2], 1);
-    Geom::CubicBezier const *cubic1 = dynamic_cast<Geom::CubicBezier const *>(&*knotCurve1);
+    Geom::CubicBezier const *cubic1 = dynamic_cast<Geom::CubicBezier const *>(knotCurve1);
     Ray ray1(startArcPoint, A->finalPoint());
     if (cubic1) {
         ray1.setPoints((*cubic1)[2], startArcPoint);
     }
-    Geom::CubicBezier const *cubic2 = dynamic_cast<Geom::CubicBezier const *>(&*knotCurve2);
+    Geom::CubicBezier const *cubic2 = dynamic_cast<Geom::CubicBezier const *>(knotCurve2);
     Ray ray2(B->initialPoint(), endArcPoint);
     if (cubic2) {
         ray2.setPoints(endArcPoint, (*cubic2)[1]);

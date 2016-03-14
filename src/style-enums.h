@@ -163,17 +163,18 @@ enum SPCSSDirection {
     SP_CSS_DIRECTION_RTL
 };
 
-enum SPCSSBlockProgression {
-    SP_CSS_BLOCK_PROGRESSION_TB,
-    SP_CSS_BLOCK_PROGRESSION_RL,
-    SP_CSS_BLOCK_PROGRESSION_LR
-};
-
 enum SPCSSWritingMode {
     SP_CSS_WRITING_MODE_LR_TB,
     SP_CSS_WRITING_MODE_RL_TB,
     SP_CSS_WRITING_MODE_TB_RL,
     SP_CSS_WRITING_MODE_TB_LR
+};
+
+// CSS WRITING MODES 3
+enum SPCSSTextOrientation {
+    SP_CSS_TEXT_ORIENTATION_MIXED,
+    SP_CSS_TEXT_ORIENTATION_UPRIGHT,
+    SP_CSS_TEXT_ORIENTATION_SIDEWAYS
 };
 
 enum SPTextAnchor {
@@ -190,10 +191,24 @@ enum SPWhiteSpace {
     SP_CSS_WHITE_SPACE_PRELINE
 };
 
+// Not complete list
+enum SPCSSBaseline {
+    SP_CSS_BASELINE_AUTO,
+    SP_CSS_BASELINE_ALPHABETIC,
+    SP_CSS_BASELINE_IDEOGRAPHIC,
+    SP_CSS_BASELINE_HANGING,
+    SP_CSS_BASELINE_MATHEMATICAL,
+    SP_CSS_BASELINE_CENTRAL,
+    SP_CSS_BASELINE_MIDDLE,
+    SP_CSS_BASELINE_TEXT_BEFORE_EDGE,
+    SP_CSS_BASELINE_TEXT_AFTER_EDGE,
+    SP_CSS_BASELINE_SIZE  // Size of enum, keep last.
+};
+    
 enum SPCSSBaselineShift {
-  SP_CSS_BASELINE_SHIFT_BASELINE,
-  SP_CSS_BASELINE_SHIFT_SUB,
-  SP_CSS_BASELINE_SHIFT_SUPER
+    SP_CSS_BASELINE_SHIFT_BASELINE,
+    SP_CSS_BASELINE_SHIFT_SUB,
+    SP_CSS_BASELINE_SHIFT_SUPER
 };
 
 enum SPVisibility {
@@ -489,13 +504,6 @@ static SPStyleEnum const enum_direction[] = {
     {NULL, -1}
 };
 
-static SPStyleEnum const enum_block_progression[] = {
-    {"tb", SP_CSS_BLOCK_PROGRESSION_TB},
-    {"rl", SP_CSS_BLOCK_PROGRESSION_RL},
-    {"lr", SP_CSS_BLOCK_PROGRESSION_LR},
-    {NULL, -1}
-};
-
 static SPStyleEnum const enum_writing_mode[] = {
     /* Note that using the same enumerator for lr as lr-tb means we write as lr-tb even if the
      * input file said lr.  We prefer writing lr-tb on the grounds that the spec says the initial
@@ -504,12 +512,38 @@ static SPStyleEnum const enum_writing_mode[] = {
      * ECMA scripts may be surprised to find tb-rl in DOM if they set the attribute to rl, so
      * sharing enumerators for different strings may be a bug (once we support ecma script).
      */
+    // SVG 1.1  Deprecated but still must be supported in SVG 2.
     {"lr-tb", SP_CSS_WRITING_MODE_LR_TB},
     {"rl-tb", SP_CSS_WRITING_MODE_RL_TB},
     {"tb-rl", SP_CSS_WRITING_MODE_TB_RL},
     {"lr", SP_CSS_WRITING_MODE_LR_TB},
     {"rl", SP_CSS_WRITING_MODE_RL_TB},
     {"tb", SP_CSS_WRITING_MODE_TB_RL},
+    // SVG 2 & CSS 3 Writing Modes
+    {"horizontal-tb", SP_CSS_WRITING_MODE_LR_TB}, // This is correct, 'direction' distinguishes between 'lr' and 'rl'.
+    {"vertical-rl", SP_CSS_WRITING_MODE_TB_RL},
+    {"vertical-lr", SP_CSS_WRITING_MODE_TB_LR},
+    {NULL, -1}
+};
+
+// CSS WRITING MODES 3
+static SPStyleEnum const enum_text_orientation[] = {
+    {"mixed",                 SP_CSS_TEXT_ORIENTATION_MIXED}, // Default
+    {"upright",               SP_CSS_TEXT_ORIENTATION_UPRIGHT},
+    {"sideways",              SP_CSS_TEXT_ORIENTATION_SIDEWAYS},
+    {NULL, -1}
+};
+
+static SPStyleEnum const enum_baseline[] = {
+    {"auto",                  SP_CSS_BASELINE_AUTO}, // Default
+    {"alphabetic",            SP_CSS_BASELINE_ALPHABETIC},
+    {"ideographic",           SP_CSS_BASELINE_IDEOGRAPHIC},
+    {"hanging",               SP_CSS_BASELINE_HANGING},
+    {"mathematical",          SP_CSS_BASELINE_MATHEMATICAL},
+    {"central",               SP_CSS_BASELINE_CENTRAL},
+    {"middle",                SP_CSS_BASELINE_MIDDLE},
+    {"text-before-edge",      SP_CSS_BASELINE_TEXT_BEFORE_EDGE},
+    {"text-after-edge",       SP_CSS_BASELINE_TEXT_AFTER_EDGE},
     {NULL, -1}
 };
 

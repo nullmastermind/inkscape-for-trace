@@ -240,6 +240,7 @@ set(inkscape_SRC
 	print.cpp
 	profile-manager.cpp
 	proj_pt.cpp
+	pure-transform.cpp
 	rdf.cpp
 	removeoverlap.cpp
 	resource-manager.cpp
@@ -367,6 +368,7 @@ set(inkscape_SRC
 	print.h
 	profile-manager.h
 	proj_pt.h
+	pure-transform.h
 	rdf.h
 	remove-last.h
 	removeoverlap.h
@@ -509,8 +511,14 @@ set(inkscape_SRC
 #add_inkscape_lib(sp_LIB "${sp_SRC}")
 #add_inkscape_lib(inkscape_LIB "${inkscape_SRC}")
 
-# make executable for INKSCAPE
-add_executable(inkscape ${main_SRC} ${inkscape_SRC} ${sp_SRC})
+# Build everything except main and inkview.c in a CMake "object" library.
+# An object library is just a bunch of .o files. Linking them with main.c or inkview.c
+# we get the inkscape and inkview executables respectively.
+add_library(inkscape_base OBJECT ${inkscape_SRC} ${sp_SRC})
+
+# make executables for inkscape and inkview
+add_executable(inkscape ${main_SRC} $<TARGET_OBJECTS:inkscape_base>)
+add_executable(inkview inkview.cpp $<TARGET_OBJECTS:inkscape_base>)
 
 if(UNIX)
 # message after building.
@@ -523,31 +531,31 @@ endif()
 
 add_dependencies(inkscape inkscape_version)
 
-target_link_libraries(inkscape
-	# order from automake
-	#sp_LIB
-	#nrtype_LIB
+if (NOT "${WITH_EXT_GDL}")
+    list (APPEND INKSCAPE_LIBS "gdl_LIB")
+endif()
 
-	#inkscape_LIB
-	#sp_LIB # annoying, we need both!
-	nrtype_LIB # annoying, we need both!
+set(INKSCAPE_TARGET_LIBS
+        # order from automake
+        #sp_LIB
+        #nrtype_LIB
 
-	croco_LIB
-	avoid_LIB
-	gdl_LIB
-	cola_LIB
-	vpsc_LIB
-	livarot_LIB
-	uemf_LIB
-	2geom_LIB
-	depixelize_LIB
-	util_LIB
-	gc_LIB
+        #inkscape_LIB
+        #sp_LIB # annoying, we need both!
+        nrtype_LIB # annoying, we need both!
 
-	${INKSCAPE_LIBS}
+        croco_LIB
+        avoid_LIB
+        cola_LIB
+        vpsc_LIB
+        livarot_LIB
+        uemf_LIB
+        2geom_LIB
+        depixelize_LIB
+        util_LIB
+        gc_LIB
+        ${INKSCAPE_LIBS}
 )
 
-# TODO
-# make executable for INKVIEW
-#add_executable(inkview inkview.cpp)
-# ...
+target_link_libraries(inkscape ${INKSCAPE_TARGET_LIBS})
+target_link_libraries(inkview ${INKSCAPE_TARGET_LIBS})

@@ -41,6 +41,7 @@ static SPStyleProp const props[] = {
     {SP_ATTR_TRANSFORM_CENTER_Y, "inkscape:transform-center-y"},
     {SP_ATTR_INKSCAPE_PATH_EFFECT, "inkscape:path-effect"},
     {SP_ATTR_INKSCAPE_HIGHLIGHT_COLOR, "inkscape:highlight-color"},
+    {SP_ATTR_INKSCAPE_SPRAY_ORIGIN, "inkscape:spray-origin"},
     /* SPAnchor */
     {SP_ATTR_XLINK_HREF, "xlink:href"},
     {SP_ATTR_XLINK_TYPE, "xlink:type"},
@@ -81,6 +82,7 @@ static SPStyleProp const props[] = {
     {SP_ATTR_FIT_MARGIN_LEFT, "fit-margin-left"},
     {SP_ATTR_FIT_MARGIN_RIGHT, "fit-margin-right"},
     {SP_ATTR_FIT_MARGIN_BOTTOM, "fit-margin-bottom"},
+    {SP_ATTR_INKSCAPE_PAGECHECKERBOARD, "inkscape:pagecheckerboard"},
     {SP_ATTR_INKSCAPE_PAGEOPACITY, "inkscape:pageopacity"},
     {SP_ATTR_INKSCAPE_PAGESHADOW, "inkscape:pageshadow"},
     {SP_ATTR_INKSCAPE_ZOOM, "inkscape:zoom"},
@@ -116,6 +118,7 @@ static SPStyleProp const props[] = {
     {SP_ATTR_INKSCAPE_SNAP_PAGE_BORDER, "inkscape:snap-page"},
     {SP_ATTR_INKSCAPE_CURRENT_LAYER, "inkscape:current-layer"},
     {SP_ATTR_INKSCAPE_DOCUMENT_UNITS, "inkscape:document-units"},  // This setting sets the Display units, *not* the units used in SVG
+    {SP_ATTR_INKSCAPE_LOCKGUIDES, "inkscape:lockguides"},
     {SP_ATTR_UNITS, "units"},
     {SP_ATTR_INKSCAPE_CONNECTOR_SPACING, "inkscape:connector-spacing"},
     /* SPColorProfile */
@@ -125,6 +128,8 @@ static SPStyleProp const props[] = {
     /* SPGuide */
     {SP_ATTR_ORIENTATION, "orientation"},
     {SP_ATTR_POSITION, "position"},
+    {SP_ATTR_INKSCAPE_COLOR, "inkscape:color"},
+    {SP_ATTR_INKSCAPE_LOCKED, "inkscape:locked"},
     /* SPImage */
     {SP_ATTR_X, "x"},
     {SP_ATTR_Y, "y"},
@@ -289,6 +294,7 @@ static SPStyleProp const props[] = {
     /* SPRadialGradient */
     {SP_ATTR_FX, "fx"},
     {SP_ATTR_FY, "fy"},
+    {SP_ATTR_FR, "fr"},
     /* SPMeshPatch */
     {SP_ATTR_TENSOR, "tensor"},
     //{SP_ATTR_TYPE, "type"},
@@ -439,8 +445,8 @@ static SPStyleProp const props[] = {
 
     /* Text (css3) */
     {SP_PROP_DIRECTION, "direction"},
-    {SP_PROP_BLOCK_PROGRESSION, "block-progression"},
     {SP_PROP_WRITING_MODE, "writing-mode"},
+    {SP_PROP_TEXT_ORIENTATION, "text-orientation"},
     {SP_PROP_UNICODE_BIDI, "unicode-bidi"},
     {SP_PROP_ALIGNMENT_BASELINE, "alignment-baseline"},
     {SP_PROP_BASELINE_SHIFT, "baseline-shift"},
@@ -532,21 +538,13 @@ static SPStyleProp const props[] = {
 unsigned
 sp_attribute_lookup(gchar const *key)
 {
-    static GHashTable *propdict = NULL;
-
-    if (!propdict) {
-        unsigned int i;
-        propdict = g_hash_table_new(g_str_hash, g_str_equal);
-        for (i = 1; i < n_attrs; i++) {
-            g_assert(props[i].code == static_cast< gint >(i) );
-            // If this g_assert fails, then the sort order of SPAttributeEnum does not match the order in props[]!
-            g_hash_table_insert(propdict,
-                                const_cast<void *>(static_cast<void const *>(props[i].name)),
-                                GINT_TO_POINTER(props[i].code));
-        }
+    for (unsigned int i = 1; i < n_attrs; i++) {
+        g_assert(props[i].code == static_cast< gint >(i) );
+        // If this g_assert fails, then the sort order of SPAttributeEnum does not match the order in props[]!
+        if(g_str_equal(const_cast<void *>(static_cast<void const *>(props[i].name)), key))
+            return GPOINTER_TO_UINT(GINT_TO_POINTER(props[i].code));
     }
-
-    return GPOINTER_TO_UINT(g_hash_table_lookup(propdict, key));
+    return SP_ATTR_INVALID;
 }
 
 unsigned char const *

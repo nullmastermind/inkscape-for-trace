@@ -15,6 +15,10 @@
 #ifndef INKSCAPE_UI_DIALOG_INKSCAPE_PREFERENCES_H
 #define INKSCAPE_UI_DIALOG_INKSCAPE_PREFERENCES_H
 
+#if HAVE_CONFIG_H
+# include "config.h"
+#endif
+
 #include <iostream>
 #include <vector>
 #include "ui/widget/preferences-widget.h"
@@ -56,7 +60,11 @@ enum {
     PREFS_PAGE_TOOLS_TEXT,
     PREFS_PAGE_TOOLS_SPRAY,
     PREFS_PAGE_TOOLS_ERASER,
+
+#if HAVE_POTRACE
     PREFS_PAGE_TOOLS_PAINTBUCKET,
+#endif
+
     PREFS_PAGE_TOOLS_GRADIENT,
     PREFS_PAGE_TOOLS_DROPPER,
     PREFS_PAGE_TOOLS_CONNECTOR,
@@ -322,6 +330,7 @@ protected:
     UI::Widget::PrefCheckButton _importexport_import_res_override;
     UI::Widget::PrefSlider      _snap_delay;
     UI::Widget::PrefSlider      _snap_weight;
+    UI::Widget::PrefSlider      _snap_persistence;
     UI::Widget::PrefCheckButton _font_dialog;
     UI::Widget::PrefCombo       _font_unit_type;
     UI::Widget::PrefCheckButton _font_output_px;
@@ -493,6 +502,7 @@ protected:
     static void AddConvertGuidesCheckbox(UI::Widget::DialogPage& p, Glib::ustring const &prefs_path, bool def_value);
     static void AddFirstAndLastCheckbox(UI::Widget::DialogPage& p, Glib::ustring const &prefs_path, bool def_value);
     static void AddDotSizeSpinbutton(UI::Widget::DialogPage& p, Glib::ustring const &prefs_path, double def_value);
+    static void AddBaseSimplifySpinbutton(UI::Widget::DialogPage& p, Glib::ustring const &prefs_path, double def_value);
     static void AddNewObjectsStyle(UI::Widget::DialogPage& p, Glib::ustring const &prefs_path, const gchar* banner = NULL);
 
     void on_pagelist_selection_changed();

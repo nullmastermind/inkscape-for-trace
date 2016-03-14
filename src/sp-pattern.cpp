@@ -244,7 +244,7 @@ void SPPattern::update(SPCtx *ctx, unsigned int flags)
     std::list<SPObject *> l;
     _getChildren(l);
 
-    for (SPObjectIterator it = l.begin(); it != l.end(); it++) {
+    for (SPObjectIterator it = l.begin(); it != l.end(); ++it) {
         SPObject *child = *it;
 
         sp_object_ref(child, NULL);
@@ -270,7 +270,7 @@ void SPPattern::modified(unsigned int flags)
     std::list<SPObject *> l;
     _getChildren(l);
 
-    for (SPObjectIterator it = l.begin(); it != l.end(); it++) {
+    for (SPObjectIterator it = l.begin(); it != l.end(); ++it) {
         SPObject *child = *it;
 
         sp_object_ref(child, NULL);
@@ -390,15 +390,16 @@ const gchar *SPPattern::produce(const std::vector<Inkscape::XML::Node *> &reprs,
     repr->setAttribute("patternUnits", "userSpaceOnUse");
     sp_repr_set_svg_double(repr, "width", bounds.dimensions()[Geom::X]);
     sp_repr_set_svg_double(repr, "height", bounds.dimensions()[Geom::Y]);
-
-    Glib::ustring t = sp_svg_transform_write(transform);
-    repr->setAttribute("patternTransform", t);
-
+    //TODO: Maybe is better handle it in sp_svg_transform_write
+    if(transform != Geom::Affine()){ 
+        Glib::ustring t = sp_svg_transform_write(transform);
+        repr->setAttribute("patternTransform", t);
+    }
     defsrepr->appendChild(repr);
     const gchar *pat_id = repr->attribute("id");
     SPObject *pat_object = document->getObjectById(pat_id);
 
-    for (NodePtrIterator i = reprs.begin(); i != reprs.end(); i++) {
+    for (NodePtrIterator i = reprs.begin(); i != reprs.end(); ++i) {
         Inkscape::XML::Node *node = *i;
         SPItem *copy = SP_ITEM(pat_object->appendChildRepr(node));
 

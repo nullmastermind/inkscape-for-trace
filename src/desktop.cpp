@@ -210,9 +210,11 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *aCanvas, Inkscape::UI::View::EditWid
     main = (SPCanvasGroup *) sp_canvas_item_new (root, SP_TYPE_CANVAS_GROUP, NULL);
     g_signal_connect (G_OBJECT (main), "event", G_CALLBACK (sp_desktop_root_handler), this);
 
+    /* This is the background the page sits on. */
     table = sp_canvas_item_new (main, SP_TYPE_CTRLRECT, NULL);
     SP_CTRLRECT(table)->setRectangle(Geom::Rect(Geom::Point(-80000, -80000), Geom::Point(80000, 80000)));
     SP_CTRLRECT(table)->setColor(0x00000000, true, 0x00000000);
+    SP_CTRLRECT(table)->setCheckerboard( false );
     sp_canvas_item_move_to_z (table, 0);
 
     page = sp_canvas_item_new (main, SP_TYPE_CTRLRECT, NULL);
@@ -1467,6 +1469,11 @@ void SPDesktop::toggleColorProfAdjust()
     _widget->toggleColorProfAdjust();
 }
 
+void SPDesktop::toggleGuidesLock()
+{
+    _widget->toggleGuidesLock();
+}
+
 bool SPDesktop::colorProfAdjustEnabled()
 {
     return _widget->colorProfAdjustEnabled();
@@ -1474,7 +1481,7 @@ bool SPDesktop::colorProfAdjustEnabled()
 
 void SPDesktop::toggleGrids()
 {
-    if (namedview->grids) {
+    if (! namedview->grids.empty()) {
         if(gridgroup) {
             showGrids(!grids_visible);
         }
@@ -1699,12 +1706,6 @@ static void _reconstruction_start(SPDesktop * desktop)
     desktop->_reconstruction_old_layer_id = desktop->currentLayer()->getId() ? desktop->currentLayer()->getId() : "";
     desktop->layers->reset();
 
-    /*
-    GSList const * selection_objs = desktop->selection->list();
-    for (; selection_objs != NULL; selection_objs = selection_objs->next) {
-
-    }
-    */
     desktop->selection->clear();
 }
 
@@ -1732,14 +1733,16 @@ static void _namedview_modified (SPObject *obj, guint flags, SPDesktop *desktop)
 
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
 
-        /* Show/hide page background */
-        if (nv->pagecolor | (0xff != 0xffffffff)) {
-            sp_canvas_item_show (desktop->table);
-            ((CtrlRect *) desktop->table)->setColor(0x00000000, true, nv->pagecolor | 0xff);
-            sp_canvas_item_move_to_z (desktop->table, 0);
+        /* Set page background */
+        sp_canvas_item_show (desktop->table);
+        if (nv->pagecheckerboard) {
+            ((CtrlRect *) desktop->table)->setCheckerboard( true );
+            ((CtrlRect *) desktop->table)->setColor(0x00000000, true, nv->pagecolor ); // | 0xff);
         } else {
-            sp_canvas_item_hide (desktop->table);
+            ((CtrlRect *) desktop->table)->setCheckerboard( false );
+            ((CtrlRect *) desktop->table)->setColor(0x00000000, true, nv->pagecolor | 0xff);
         }
+        sp_canvas_item_move_to_z (desktop->table, 0);
 
         /* Show/hide page border */
         if (nv->showborder) {
@@ -1876,6 +1879,8 @@ SPDesktop::show_dialogs()
     mapVerbPreference.insert(std::make_pair ("ObjectProperties", "/dialogs/object") );
     mapVerbPreference.insert(std::make_pair ("SpellCheck", "/dialogs/spellcheck") );
     mapVerbPreference.insert(std::make_pair ("Symbols", "/dialogs/symbols") );
+    mapVerbPreference.insert(std::make_pair ("ObjectsPanel", "/dialogs/objects") );
+    mapVerbPreference.insert(std::make_pair ("TagsPanel", "/dialogs/tags") );
 
     for (std::map<Glib::ustring, Glib::ustring>::const_iterator iter = mapVerbPreference.begin(); iter != mapVerbPreference.end(); ++iter) {
         Glib::ustring pref = iter->second;

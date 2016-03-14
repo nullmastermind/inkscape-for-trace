@@ -1,7 +1,41 @@
+/**
+ * \file
+ * \brief Some two-dimensional SBasis operations
+ *//*
+ * Authors:
+ *   MenTaLguy <mental@rydia.net>
+ *   Jean-François Barraud <jf.barraud@gmail.com>
+ *   Johan Engelen <j.b.c.engelen@alumnus.utwente.nl>
+ *   
+ * Copyright 2007-2012 Authors
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it either under the terms of the GNU Lesser General Public
+ * License version 2.1 as published by the Free Software Foundation
+ * (the "LGPL") or, at your option, under the terms of the Mozilla
+ * Public License Version 1.1 (the "MPL"). If you do not alter this
+ * notice, a recipient may use your version of this file under either
+ * the MPL or the LGPL.
+ *
+ * You should have received a copy of the LGPL along with this library
+ * in the file COPYING-LGPL-2.1; if not, output to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * You should have received a copy of the MPL along with this library
+ * in the file COPYING-MPL-1.1
+ *
+ * The contents of this file are subject to the Mozilla Public License
+ * Version 1.1 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * This software is distributed on an "AS IS" basis, WITHOUT WARRANTY
+ * OF ANY KIND, either express or implied. See the LGPL or the MPL for
+ * the specific language governing rights and limitations.
+ *
+ */
+
 #include <2geom/d2.h>
-/* One would think that we would include d2-sbasis.h, however,
- * you cannot actually include it in anything - only d2 may import it.
- * This is due to the trickinesses of template submatching. */
+#include <2geom/piecewise.h>
 
 namespace Geom {
 
@@ -147,12 +181,12 @@ Piecewise<D2<SBasis> > force_continuity(Piecewise<D2<SBasis> > const &f, double 
                 SBasis &prev_sb=result.segs[prev][dim];
                 SBasis &cur_sb =result.segs[cur][dim];
                 Coord const c=pt0[dim];
-                if (prev_sb.empty()) {
+                if (prev_sb.isZero(0)) {
                   prev_sb = SBasis(Linear(0.0, c));
                 } else {
                   prev_sb[0][1] = c;
                 }
-                if (cur_sb.empty()) {
+                if (cur_sb.isZero(0)) {
                   cur_sb = SBasis(Linear(c, 0.0));
                 } else {
                   cur_sb[0][0] = c;
@@ -198,30 +232,22 @@ Point unitTangentAt(D2<SBasis> const & a, Coord t, unsigned n)
     return Point (0,0);
 }
 
-static void set_first_point(Piecewise<D2<SBasis> > &f, Point a){
+static void set_first_point(Piecewise<D2<SBasis> > &f, Point const &a){
     if ( f.empty() ){
         f.concat(Piecewise<D2<SBasis> >(D2<SBasis>(SBasis(Linear(a[X])), SBasis(Linear(a[Y])))));
         return;
     }
     for (unsigned dim=0; dim<2; dim++){
-        if (f.segs.front()[dim].size() == 0){
-            f.segs.front()[dim] = SBasis(Linear(a[dim],0));
-        }else{
-            f.segs.front()[dim][0][0] = a[dim];
-        }
+        f.segs.front()[dim][0][0] = a[dim];
     }
 }
-static void set_last_point(Piecewise<D2<SBasis> > &f, Point a){
+static void set_last_point(Piecewise<D2<SBasis> > &f, Point const &a){
     if ( f.empty() ){
         f.concat(Piecewise<D2<SBasis> >(D2<SBasis>(SBasis(Linear(a[X])), SBasis(Linear(a[Y])))));
         return;
     }
     for (unsigned dim=0; dim<2; dim++){
-        if (f.segs.back()[dim].size() == 0){
-            f.segs.back()[dim] = SBasis(Linear(0,a[dim]));
-        }else{
-            f.segs.back()[dim][0][1] = a[dim];
-        }
+        f.segs.back()[dim][0][1] = a[dim];
     }
 }
 

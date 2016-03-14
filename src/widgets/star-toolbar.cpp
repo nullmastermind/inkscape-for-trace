@@ -84,7 +84,7 @@ static void sp_stb_magnitude_value_changed( GtkAdjustment *adj, GObject *dataKlu
 
     Inkscape::Selection *selection = desktop->getSelection();
     std::vector<SPItem*> itemlist=selection->itemList();
-    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
+    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();++i){
         SPItem *item = *i;
         if (SP_IS_STAR(item)) {
             Inkscape::XML::Node *repr = item->getRepr();
@@ -129,7 +129,7 @@ static void sp_stb_proportion_value_changed( GtkAdjustment *adj, GObject *dataKl
     bool modmade = false;
     Inkscape::Selection *selection = desktop->getSelection();
     std::vector<SPItem*> itemlist=selection->itemList();
-    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
+    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();++i){
         SPItem *item = *i;
         if (SP_IS_STAR(item)) {
             Inkscape::XML::Node *repr = item->getRepr();
@@ -182,11 +182,11 @@ static void sp_stb_sides_flat_state_changed( EgeSelectOneAction *act, GObject *d
     bool modmade = false;
 
     if ( prop_action ) {
-        gtk_action_set_sensitive( prop_action, !flat );
+        gtk_action_set_visible( prop_action, !flat );
     }
 
     std::vector<SPItem*> itemlist=selection->itemList();
-    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
+    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();++i){
         SPItem *item = *i;
         if (SP_IS_STAR(item)) {
             Inkscape::XML::Node *repr = item->getRepr();
@@ -225,7 +225,7 @@ static void sp_stb_rounded_value_changed( GtkAdjustment *adj, GObject *dataKludg
 
     Inkscape::Selection *selection = desktop->getSelection();
     std::vector<SPItem*> itemlist=selection->itemList();
-    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
+    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();++i){
         SPItem *item = *i;
         if (SP_IS_STAR(item)) {
             Inkscape::XML::Node *repr = item->getRepr();
@@ -265,7 +265,7 @@ static void sp_stb_randomized_value_changed( GtkAdjustment *adj, GObject *dataKl
 
     Inkscape::Selection *selection = desktop->getSelection();
     std::vector<SPItem*> itemlist=selection->itemList();
-    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
+    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();++i){
         SPItem *item = *i;
         if (SP_IS_STAR(item)) {
             Inkscape::XML::Node *repr = item->getRepr();
@@ -319,10 +319,10 @@ static void star_tb_event_attr_changed(Inkscape::XML::Node *repr, gchar const *n
         EgeSelectOneAction* flat_action = EGE_SELECT_ONE_ACTION( g_object_get_data( G_OBJECT(tbl), "flat_action" ) );
         if ( flatsides && !strcmp(flatsides,"false") ) {
             ege_select_one_action_set_active( flat_action, 1 );
-            gtk_action_set_sensitive( prop_action, TRUE );
+            gtk_action_set_visible( prop_action, TRUE );
         } else {
             ege_select_one_action_set_active( flat_action, 0 );
-            gtk_action_set_sensitive( prop_action, FALSE );
+            gtk_action_set_visible( prop_action, FALSE );
         }
     } else if ((!strcmp(name, "sodipodi:r1") || !strcmp(name, "sodipodi:r2")) && (!isFlatSided) ) {
         adj = GTK_ADJUSTMENT(g_object_get_data(G_OBJECT(tbl), "proportion"));
@@ -368,7 +368,7 @@ sp_star_toolbox_selection_changed(Inkscape::Selection *selection, GObject *tbl)
     purge_repr_listener( tbl, tbl );
 
     std::vector<SPItem*> itemlist=selection->itemList();
-    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
+    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();++i){
         SPItem *item = *i;
         if (SP_IS_STAR(item)) {
             n_selected++;
@@ -415,7 +415,7 @@ static void sp_stb_defaults( GtkWidget * /*widget*/, GObject *dataKludge )
     ege_select_one_action_set_active( flat_action, flat ? 0 : 1 );
 
     GtkAction* sb2 = GTK_ACTION( g_object_get_data( dataKludge, "prop_action" ) );
-    gtk_action_set_sensitive( sb2, !flat );
+    gtk_action_set_visible( sb2, !flat );
 
     adj = GTK_ADJUSTMENT( g_object_get_data( dataKludge, "magnitude" ) );
     gtk_adjustment_set_value(adj, mag);
@@ -521,9 +521,9 @@ void sp_star_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
         }
 
         if ( !isFlatSided ) {
-            gtk_action_set_sensitive( GTK_ACTION(eact), TRUE );
+            gtk_action_set_visible( GTK_ACTION(eact), TRUE );
         } else {
-            gtk_action_set_sensitive( GTK_ACTION(eact), FALSE );
+            gtk_action_set_visible( GTK_ACTION(eact), FALSE );
         }
 
         /* Roundedness */
