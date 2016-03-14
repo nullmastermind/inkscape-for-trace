@@ -144,13 +144,13 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {BSPLINE,               N_("BSpline"),                 "bspline"},
     {JOIN_TYPE,             N_("Join type"),               "join_type"},
     {TAPER_STROKE,          N_("Taper stroke"),            "taper_stroke"},
+    {COPY_ROTATE,           N_("Rotate copies"),           "copy_rotate"},
 /* Ponyscape -> Inkscape 0.92*/
     {ATTACH_PATH,           N_("Attach path"),             "attach_path"},
     {FILL_BETWEEN_STROKES,  N_("Fill between strokes"),    "fill_between_strokes"},
     {FILL_BETWEEN_MANY,     N_("Fill between many"),       "fill_between_many"},
     {ELLIPSE_5PTS,          N_("Ellipse by 5 points"),     "ellipse_5pts"},
     {BOUNDING_BOX,          N_("Bounding Box"),            "bounding_box"},
-    {COPY_ROTATE,           N_("Rotate copies"),           "copy_rotate"},
 };
 const Util::EnumDataConverter<EffectType> LPETypeConverter(LPETypeData, sizeof(LPETypeData)/sizeof(*LPETypeData));
 
