@@ -60,14 +60,13 @@ LPEMirrorSymmetry::LPEMirrorSymmetry(LivePathEffectObject *lpeobject) :
     center(_("Center of mirroring (X or Y)"), _("Center of the mirror"), "center", &wr, this, "Adjust the center of mirroring")
 {
     show_orig_path = true;
-
     registerParameter(&mode);
     registerParameter( &discard_orig_path);
     registerParameter( &fusion_paths);
     registerParameter( &reverse_fusion);
     registerParameter( &reflection_line);
     registerParameter( &center);
-
+    apply_to_clippath_and_mask = true;
 }
 
 LPEMirrorSymmetry::~LPEMirrorSymmetry()
@@ -75,6 +74,7 @@ LPEMirrorSymmetry::~LPEMirrorSymmetry()
 }
 
 void
+
 LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
 {
     using namespace Geom;

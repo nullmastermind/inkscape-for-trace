@@ -210,6 +210,28 @@ push @{$properties{ "solid-opacity" }->{elements}}, @graphics_elements;
 $properties{ "solid-opacity" }->{default} = "1.0";
 $properties{ "solid-opacity" }->{inherit} = "no";
 
+push @{$properties{ "white-space" }->{elements}}, @container_elements;
+push @{$properties{ "white-space" }->{elements}}, @text_content_elements;
+$properties{ "white-space" }->{default} = "normal";
+$properties{ "white-space" }->{inherit} = "yes";
+
+push @{$properties{ "shape-inside" }->{elements}}, @text_content_elements;
+$properties{ "shape-inside" }->{default} = "auto";
+$properties{ "shape-inside" }->{inherit} = "no";
+
+push @{$properties{ "shape-outside" }->{elements}}, @text_content_elements;
+$properties{ "shape-outside" }->{default} = "auto";
+$properties{ "shape-outside" }->{inherit} = "no";
+
+push @{$properties{ "shape-padding" }->{elements}}, @text_content_elements;
+$properties{ "shape-padding" }->{default} = "none";
+$properties{ "shape-padding" }->{inherit} = "no";
+
+push @{$properties{ "shape-margin" }->{elements}}, @text_content_elements;
+$properties{ "shape-margin" }->{default} = "0";
+$properties{ "shape-margin" }->{inherit} = "no";
+
+
 # CSS Text Decoration
 push @{$properties{ "text-decoration-line" }->{elements}}, @container_elements;
 push @{$properties{ "text-decoration-line" }->{elements}}, @text_content_elements;
@@ -223,8 +245,8 @@ $properties{ "text-decoration-color" }->{inherit} = "no";
 
 push @{$properties{ "text-decoration-style" }->{elements}}, @container_elements;
 push @{$properties{ "text-decoration-style" }->{elements}}, @text_content_elements;
-$properties{ "text-decoration-color" }->{default} = "solid";
-$properties{ "text-decoration-color" }->{inherit} = "no";
+$properties{ "text-decoration-style" }->{default} = "solid";
+$properties{ "text-decoration-style" }->{inherit} = "no";
 
 push @{$properties{ "text-decoration-fill" }->{elements}}, @container_elements;
 push @{$properties{ "text-decoration-fill" }->{elements}}, @text_content_elements;
@@ -236,6 +258,47 @@ push @{$properties{ "text-decoration-stroke" }->{elements}}, @text_content_eleme
 $properties{ "text-decoration-stroke" }->{default} = "NO_DEFAULT";
 $properties{ "text-decoration-stroke" }->{inherit} = "no";
 
+# CSS Writing Modes
+push @{$properties{ "text-orientation" }->{elements}}, @container_elements;
+push @{$properties{ "text-orientation" }->{elements}}, @text_content_elements;
+$properties{ "text-orientation" }->{default} = "mixed";
+$properties{ "text-orientation" }->{inherit} = "yes";
+
+# CSS Transformations
+push @{$properties{ "transform" }->{elements}}, @container_elements;
+push @{$properties{ "transform" }->{elements}}, @graphics_elements;
+$properties{ "transform" }->{default} = "none";
+$properties{ "transform" }->{inherit} = "no";
+
+push @{$properties{ "transform-box" }->{elements}}, @container_elements;
+push @{$properties{ "transform-box" }->{elements}}, @graphics_elements;
+$properties{ "transform-box" }->{default} = "NO_DEFAULT";  # Default no 100% fixed.
+$properties{ "transform-box" }->{inherit} = "no";
+
+push @{$properties{ "transform-origin" }->{elements}}, @container_elements;
+push @{$properties{ "transform-origin" }->{elements}}, @graphics_elements;
+$properties{ "transform-origin" }->{default} = "NO_DEFAULT";  # Default is complicated
+$properties{ "transform-origin" }->{inherit} = "no";
+
+push @{$properties{ "transform-style" }->{elements}}, @container_elements;
+push @{$properties{ "transform-style" }->{elements}}, @graphics_elements;
+$properties{ "transform-style" }->{default} = "flat";
+$properties{ "transform-style" }->{inherit} = "no";
+
+push @{$properties{ "perspective" }->{elements}}, @container_elements;
+push @{$properties{ "perspective" }->{elements}}, @graphics_elements;
+$properties{ "perspective" }->{default} = "none";
+$properties{ "perspective" }->{inherit} = "no";
+
+push @{$properties{ "perspective-origin" }->{elements}}, @container_elements;
+push @{$properties{ "perspective-origin" }->{elements}}, @graphics_elements;
+$properties{ "perspective-origin" }->{default} = "NO_DEFAULT"; # Default is complicated
+$properties{ "perspective-origin" }->{inherit} = "no";
+
+push @{$properties{ "backface-visibility" }->{elements}}, @container_elements;
+push @{$properties{ "backface-visibility" }->{elements}}, @graphics_elements;
+$properties{ "backface-visibility" }->{default} = "visible";
+$properties{ "backface-visibility" }->{inherit} = "no";
 
 # Output
 

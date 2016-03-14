@@ -19,7 +19,6 @@ class SPDesktop;
 class SPObject;
 class SPItem;
 class SPStyle;
-typedef struct _GSList GSList;
 namespace Inkscape {
 namespace XML {
 class Node;
@@ -44,6 +43,7 @@ enum { // which property was queried (add when you need more)
     QUERY_STYLE_PROPERTY_STROKEJOIN,  // stroke join
     QUERY_STYLE_PROPERTY_STROKECAP,  // stroke cap
     QUERY_STYLE_PROPERTY_STROKESTYLE, // markers, dasharray, miterlimit, stroke-width, stroke-cap, stroke-join
+    QUERY_STYLE_PROPERTY_PAINTORDER, // paint-order
     QUERY_STYLE_PROPERTY_FONT_SPECIFICATION, //-inkscape-font-specification
     QUERY_STYLE_PROPERTY_FONTFAMILY, // font-family
     QUERY_STYLE_PROPERTY_FONTSTYLE, // font style 
@@ -51,6 +51,7 @@ enum { // which property was queried (add when you need more)
     QUERY_STYLE_PROPERTY_FONTFEATURESETTINGS, // font feature settings (OpenType features)
     QUERY_STYLE_PROPERTY_FONTNUMBERS, // size, spacings
     QUERY_STYLE_PROPERTY_BASELINES, // baseline-shift
+    QUERY_STYLE_PROPERTY_WRITINGMODES, // writing-mode, text-orientation
     QUERY_STYLE_PROPERTY_MASTEROPACITY, // opacity
     QUERY_STYLE_PROPERTY_BLEND, // blend
     QUERY_STYLE_PROPERTY_BLUR // blur

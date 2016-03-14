@@ -212,7 +212,7 @@ static gboolean sp_export_id_only = FALSE;
 static gchar *sp_export_svg = NULL;
 static gchar *sp_export_ps = NULL;
 static gchar *sp_export_eps = NULL;
-static gint sp_export_ps_level = 2;
+static gint sp_export_ps_level = 3;
 static gchar *sp_export_pdf = NULL;
 static gchar *sp_export_pdf_version = NULL;
 static gchar *sp_export_emf = NULL;
@@ -260,7 +260,7 @@ static void resetCommandlineGlobals() {
         sp_export_svg = NULL;
         sp_export_ps = NULL;
         sp_export_eps = NULL;
-        sp_export_ps_level = 2;
+        sp_export_ps_level = 3;
         sp_export_pdf = NULL;
         sp_export_pdf_version = NULL;
         sp_export_emf = NULL;
@@ -405,7 +405,7 @@ struct poptOption options[] = {
     {"export-ps-level", 0,
      POPT_ARG_INT, &sp_export_ps_level, SP_ARG_EXPORT_PS_LEVEL,
      N_("Choose the PostScript Level used to export. Possible choices are"
-        " 2 (the default) and 3"),
+        " 2 and 3 (the default)"),
      N_("PS Level")},
 
     {"export-pdf", 'A',
@@ -1045,6 +1045,10 @@ sp_main_gui(int argc, char const **argv)
     gchar *usericondir = Inkscape::Application::profile_path("icons");
     gtk_icon_theme_append_search_path(gtk_icon_theme_get_default(), usericondir);
     gtk_icon_theme_append_search_path(gtk_icon_theme_get_default(), INKSCAPE_PIXMAPDIR);
+#ifdef INKSCAPE_THEMEDIR
+    gtk_icon_theme_append_search_path(gtk_icon_theme_get_default(), INKSCAPE_THEMEDIR);
+    gtk_icon_theme_rescan_if_needed (gtk_icon_theme_get_default());
+#endif
     g_free(usericondir);
 
     gdk_event_handler_set((GdkEventFunc)snooper, NULL, NULL);

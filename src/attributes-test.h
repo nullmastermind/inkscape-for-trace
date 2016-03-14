@@ -42,7 +42,8 @@ public:
    SVG 2: white-space, shape-inside, shape-outside, shape-padding, shape-margin
    SVG 2: text-decoration-fill, text-decoration-stroke
    SVG 2: solid-color, solid-opacity
-   SVG 2: Hatches and Meshes
+   SVG 2: Hatches and Meshes, radial gradient 'fr'
+   CSS 3: text-orientation
    CSS 3: font-variant-xxx, font-feature-settings
 */
 struct {char const *attr; bool supported;} const all_attrs[] = {
@@ -69,7 +70,6 @@ struct {char const *attr; bool supported;} const all_attrs[] = {
     {"baseProfile", false},
     {"bbox", true},
     {"bias", true},
-    {"block-progression", true},
     {"by", true},
     {"calcMode", true},
     {"cap-height", true},
@@ -145,6 +145,7 @@ struct {char const *attr; bool supported;} const all_attrs[] = {
     {"from", true},
     {"fx", true},
     {"fy", true},
+    {"fr", true},
     {"g1", true},
     {"g2", true},
     {"glyph-name", true},
@@ -334,6 +335,7 @@ struct {char const *attr; bool supported;} const all_attrs[] = {
     {"widths", true},
     {"word-spacing", true},
     {"writing-mode", true},
+    {"text-orientation", true},
     {"x", true},
     {"x-height", true},
     {"x1", true},
@@ -489,6 +491,7 @@ struct {char const *attr; bool supported;} const all_attrs[] = {
     {"showgrid", true},
 //    {"gridtype", true},
     {"showguides", true},
+//    {"inkscape:lockguides", false}, //not sure about uncomment
     {"gridtolerance", true},
     {"guidetolerance", true},
     {"objecttolerance", true},

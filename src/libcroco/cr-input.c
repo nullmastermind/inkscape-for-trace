@@ -722,6 +722,8 @@ cr_input_consume_white_spaces (CRInput * a_this, gulong * a_nb_chars)
 
         }
 
+	*a_nb_chars = (gulong) nb_consumed;
+
         if (nb_consumed && status == CR_END_OF_INPUT_ERROR) {
                 status = CR_OK;
         }
@@ -746,7 +748,7 @@ enum CRStatus
 cr_input_peek_char (CRInput const * a_this, guint32 * a_char)
 {
         enum CRStatus status = CR_OK;
-        glong consumed = 0,
+        gulong consumed = 0,
                 nb_bytes_left = 0;
 
         g_return_val_if_fail (a_this && PRIVATE (a_this)

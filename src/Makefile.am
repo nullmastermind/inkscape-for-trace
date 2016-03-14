@@ -40,13 +40,13 @@ noinst_LIBRARIES =	\
 all_libs =			\
 	$(noinst_LIBRARIES)	\
 	$(INKSCAPE_LIBS)	\
+	$(INKSCAPE_CXX_DEPS_LIBS) \
 	$(EXIF_LIBS)            \
 	$(GNOME_VFS_LIBS)	\
 	$(XFT_LIBS)		\
 	$(FREETYPE_LIBS)	\
 	$(kdeldadd)		\
 	$(win32ldflags)		\
-	$(CARBON_LDFLAGS)	\
 	$(LIBWPG_LIBS)		\
 	$(LIBVISIO_LIBS)		\
 	$(LIBCDR_LIBS)		\
@@ -65,6 +65,10 @@ inkview_SOURCES =
 BUILT_SOURCES =
 # Extra files to distribute
 EXTRA_DIST =
+
+# C++-specific flags defined here
+AM_CXXFLAGS = \
+	$(INKSCAPE_CXX_DEPS_CFLAGS)
 
 AM_CPPFLAGS =	\
 	-I$(top_srcdir)/cxxtest \
@@ -260,9 +264,7 @@ check-local:
 #        the XFAIL_TESTS build target should be removed.
 #        See the following Launchpad bugs:
 #
-#          LP #1202271 <cxxtest: preferences-test.h fails>
 #          LP #1208013 <cxxtest: curve-test.h fails>
-#          LP #1208002 <cxxtest: svg-length-test.h fails>
 #          LP #1208005 <cxxtest: svg-path-geom-test.h fails>
 #          LP #1207502 <cxxtest: svg-affine-test.h fails>
 

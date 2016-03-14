@@ -16,11 +16,11 @@
 
 /*
 File:      uemf.c
-Version:   0.0.30
-Date:      20-MAR-2015
+Version:   0.0.31
+Date:      26-JAN-2016
 Author:    David Mathog, Biology Division, Caltech
 email:     mathog@caltech.edu
-Copyright: 2015 David Mathog and California Institute of Technology (Caltech)
+Copyright: 2016 David Mathog and California Institute of Technology (Caltech)
 */
 
 #ifdef __cplusplus
@@ -1858,8 +1858,8 @@ U_LOGCOLORSPACEA logcolorspacea_set(
    lcsa.lcsIntent     =    lcsIntent;   
    lcsa.lcsEndpoints  =    lcsEndpoints;
    lcsa.lcsGammaRGB   =    lcsGammaRGB; 
-   memset(lcsa.lcsFilename,0,U_MAX_PATH);  // zero out the Filename field
    strncpy(lcsa.lcsFilename,lcsFilename,U_MAX_PATH);
+   lcsa.lcsFilename[U_MAX_PATH-1] = '\0';
    return(lcsa);
 }
 
@@ -1889,6 +1889,7 @@ U_LOGCOLORSPACEW logcolorspacew_set(
     lcsa.lcsEndpoints  =    lcsEndpoints;
     lcsa.lcsGammaRGB   =    lcsGammaRGB; 
     wchar16strncpypad(lcsa.lcsFilename,lcsFilename,U_MAX_PATH);
+    lcsa.lcsFilename[U_MAX_PATH-1] = '\0';
     return(lcsa);
 }
 
@@ -1983,6 +1984,7 @@ U_LOGFONT logfont_set(
     lf.lfQuality                 = lfQuality;         
     lf.lfPitchAndFamily          = lfPitchAndFamily;  
     wchar16strncpypad(lf.lfFaceName, lfFaceName, U_LF_FACESIZE); // pad this one as the intial structure was not set to zero
+    lf.lfFaceName[U_LF_FACESIZE-1] = '\0';
     return(lf);
 }
 
@@ -2006,7 +2008,9 @@ U_LOGFONT_PANOSE logfont_panose_set(
    U_LOGFONT_PANOSE lfp;
    memset(&lfp,0,sizeof(U_LOGFONT_PANOSE)); // all fields zero unless needed.  Many should be ignored or must be 0.
    wchar16strncpy(lfp.elfFullName, elfFullName, U_LF_FULLFACESIZE);
+   lfp.elfFullName[U_LF_FULLFACESIZE-1] = '\0';
    wchar16strncpy(lfp.elfStyle,    elfStyle,    U_LF_FACESIZE);
+   lfp.elfStyle[U_LF_FACESIZE-1] = '\0';
    lfp.elfLogFont    =   elfLogFont;
    lfp.elfStyleSize  =   elfStyleSize;
    lfp.elfPanose     =   elfPanose;

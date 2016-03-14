@@ -479,7 +479,7 @@ void ObjectsPanel::_objectsSelected( Selection *sel ) {
     _tree.get_selection()->unselect_all();
     SPItem *item = NULL;
     std::vector<SPItem*> const items = sel->itemList();
-    for(std::vector<SPItem*>::const_iterator i=items.begin(); i!=items.end();i++){
+    for(std::vector<SPItem*>::const_iterator i=items.begin(); i!=items.end(); ++i){
         item = *i;
         if (setOpacity)
         {
@@ -1583,6 +1583,10 @@ void ObjectsPanel::_blurChangedIter(const Gtk::TreeIter& iter, double blur)
             }
 
             if (radius != 0) {
+                // The modify function expects radius to be in display pixels.
+                Geom::Affine i2d (item->i2dt_affine());
+                double expansion = i2d.descrim();
+                radius *= expansion;
                 SPFilter *filter = modify_filter_gaussian_blur_from_item(_document, item, radius);
                 sp_style_set_property_url(item, "filter", filter, false);
             } else if (item->style->filter.set && item->style->getFilter()) {
@@ -1614,11 +1618,11 @@ ObjectsPanel::ObjectsPanel() :
     _pending(0),
     _toggleEvent(0),
     _defer_target(),
-    _visibleHeader(_("V")),
-    _lockHeader(_("L")),
-    _typeHeader(_("T")),
-    _clipmaskHeader(_("CM")),
-    _highlightHeader(_("HL")),
+    _visibleHeader(C_("Visibility", "V")),
+    _lockHeader(C_("Lock", "L")),
+    _typeHeader(C_("Type", "T")),
+    _clipmaskHeader(C_("Clip and mask", "CM")),
+    _highlightHeader(C_("Highlight", "HL")),
     _nameHeader(_("Label")),
     _composite_vbox(false, 0),
     _opacity_vbox(false, 0),

@@ -54,12 +54,17 @@
 #include "ui/icon-names.h"
 #include "ui/tools/text-tool.h"
 #include "ui/tools/tool-base.h"
+#include "ui/widget/unit-tracker.h"
+#include "util/units.h"
 #include "verbs.h"
 #include "xml/repr.h"
 
 using Inkscape::DocumentUndo;
 using Inkscape::UI::ToolboxFactory;
 using Inkscape::UI::PrefPusher;
+using Inkscape::UI::Widget::UnitTracker;
+using Inkscape::Util::Unit;
+using Inkscape::Util::unit_table;
 
 //#define DEBUG_TEXT
 
@@ -155,7 +160,7 @@ static void sp_text_fontfamily_value_changed( Ink_ComboBoxEntry_Action *act, GOb
             act->active = 0; // New family is always at top of list.
         }
 
-        std::pair<Glib::ustring,Glib::ustring> ui = fontlister->set_font_family( act->active );
+        fontlister->set_font_family( act->active );
         // active text set in sp_text_toolbox_selection_changed()
 
         SPCSSAttr *css = sp_repr_css_attr_new ();
@@ -373,7 +378,7 @@ static void sp_text_align_mode_changed( EgeSelectOneAction *act, GObject *tbl )
     // move the x of all texts to preserve the same bbox
     Inkscape::Selection *selection = desktop->getSelection();
     std::vector<SPItem*> itemlist=selection->itemList();
-    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
+    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end(); ++i){
         if (SP_IS_TEXT(*i)) {
             SPItem *item = *i;
 
@@ -504,8 +509,14 @@ static void sp_text_align_mode_changed( EgeSelectOneAction *act, GObject *tbl )
 
 static void sp_text_lineheight_value_changed( GtkAdjustment *adj, GObject *tbl )
 {
-    // quit if run by the _changed callbacks
-    if (g_object_get_data(G_OBJECT(tbl), "freeze")) {
+    UnitTracker *tracker = reinterpret_cast<UnitTracker*>(g_object_get_data(tbl, "tracker"));
+
+    if ( !tracker || tracker->isUpdating() || g_object_get_data(tbl, "freeze")) {
+        /*
+         * When only units are being changed, don't treat changes
+         * to adjuster values as object changes.
+         * or quit if run by the _changed callbacks
+         */
         return;
     }
     g_object_set_data( tbl, "freeze", GINT_TO_POINTER(TRUE) );
@@ -514,7 +525,18 @@ static void sp_text_lineheight_value_changed( GtkAdjustment *adj, GObject *tbl )
     // Set css line height.
     SPCSSAttr *css = sp_repr_css_attr_new ();
     Inkscape::CSSOStringStream osfs;
-    osfs << gtk_adjustment_get_value(adj)*100 << "%";
+
+    gdouble value = gtk_adjustment_get_value(adj);
+
+    Unit const *unit = tracker->getActiveUnit();
+
+    // Value can only be in px or percent or naked pc (e.g. 0.7 for 70%)
+    if (unit->abbr != "%") {
+        value = unit->convert(value, "px");
+        unit = unit_table.getUnit("px");
+    }
+
+    osfs << value << unit->abbr;
     sp_repr_css_set_property (css, "line-height", osfs.str().c_str());
 
     // Apply line-height to selected objects.
@@ -526,7 +548,7 @@ static void sp_text_lineheight_value_changed( GtkAdjustment *adj, GObject *tbl )
     Inkscape::Selection *selection = desktop->getSelection();
     bool modmade = false;
     std::vector<SPItem*> itemlist=selection->itemList();
-    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
+    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end(); ++i){
         if (SP_IS_TEXT (*i)) {
             (*i)->getRepr()->setAttribute("sodipodi:linespacing", sp_repr_css_property (css, "line-height", NULL));
             modmade = true;
@@ -737,7 +759,7 @@ static void sp_text_rotation_value_changed( GtkAdjustment *adj, GObject *tbl )
     g_object_set_data( tbl, "freeze", GINT_TO_POINTER(FALSE) );
 }
 
-static void sp_text_orientation_mode_changed( EgeSelectOneAction *act, GObject *tbl )
+static void sp_writing_mode_changed( EgeSelectOneAction *act, GObject *tbl )
 {
     // quit if run by the _changed callbacks
     if (g_object_get_data(G_OBJECT(tbl), "freeze")) {
@@ -752,13 +774,73 @@ static void sp_text_orientation_mode_changed( EgeSelectOneAction *act, GObject *
     {
         case 0:
         {
-            sp_repr_css_set_property (css, "writing-mode", "lr");
+            sp_repr_css_set_property (css, "writing-mode", "lr-tb");
             break;
         }
 
         case 1:
         {
-            sp_repr_css_set_property (css, "writing-mode", "tb");
+            sp_repr_css_set_property (css, "writing-mode", "tb-rl");
+            break;
+        }
+
+            case 2:
+        {
+            sp_repr_css_set_property (css, "writing-mode", "vertical-lr");
+            break;
+        }
+}
+
+    SPStyle query(SP_ACTIVE_DOCUMENT);
+    int result_numbers =
+        sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_FONTNUMBERS);
+
+    // If querying returned nothing, update default style.
+    if (result_numbers == QUERY_STYLE_NOTHING)
+    {
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        prefs->mergeStyle("/tools/text/style", css);
+    }
+
+    sp_desktop_set_style (SP_ACTIVE_DESKTOP, css, true, true);
+    if(result_numbers != QUERY_STYLE_NOTHING)
+    {
+        DocumentUndo::done(SP_ACTIVE_DESKTOP->getDocument(), SP_VERB_CONTEXT_TEXT,
+                       _("Text: Change writing mode"));
+    }
+    sp_repr_css_attr_unref (css);
+
+    g_object_set_data( tbl, "freeze", GINT_TO_POINTER(FALSE) );
+}
+
+static void sp_text_orientation_changed( EgeSelectOneAction *act, GObject *tbl )
+{
+    // quit if run by the _changed callbacks
+    if (g_object_get_data(G_OBJECT(tbl), "freeze")) {
+        return;
+    }
+    g_object_set_data( tbl, "freeze", GINT_TO_POINTER(TRUE) );
+
+    int mode = ege_select_one_action_get_active( act );
+
+    SPCSSAttr   *css        = sp_repr_css_attr_new ();
+    switch (mode)
+    {
+        case 0:
+        {
+            sp_repr_css_set_property (css, "text-orientation", "auto");
+            break;
+        }
+
+        case 1:
+        {
+            sp_repr_css_set_property (css, "text-orientation", "upright");
+            break;
+        }
+
+        case 2:
+        {
+            sp_repr_css_set_property (css, "text-orientation", "sideways");
             break;
         }
     }
@@ -871,7 +953,7 @@ static void sp_text_toolbox_selection_changed(Inkscape::Selection */*selection*/
     // Find out if we have flowed text now so we can use it several places
     gboolean isFlow = false;
     std::vector<SPItem*> itemlist=SP_ACTIVE_DESKTOP->getSelection()->itemList();
-    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();i++){
+    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end(); ++i){
         // const gchar* id = reinterpret_cast<SPItem *>(items->data)->getId();
         // std::cout << "    " << id << std::endl;
         if( SP_IS_FLOWTEXT(*i)) {
@@ -893,13 +975,17 @@ static void sp_text_toolbox_selection_changed(Inkscape::Selection */*selection*/
     int result_style    = sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_FONTSTYLE);
     int result_numbers  = sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_FONTNUMBERS);
     int result_baseline = sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_BASELINES);
+    int result_wmode    = sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_WRITINGMODES);
 
     /*
      * If no text in selection (querying returned nothing), read the style from
      * the /tools/text preferencess (default style for new texts). Return if
      * tool bar already set to these preferences.
      */
-    if (result_family == QUERY_STYLE_NOTHING || result_style == QUERY_STYLE_NOTHING || result_numbers == QUERY_STYLE_NOTHING) {
+    if (result_family  == QUERY_STYLE_NOTHING ||
+        result_style   == QUERY_STYLE_NOTHING ||
+        result_numbers == QUERY_STYLE_NOTHING ||
+        result_wmode   == QUERY_STYLE_NOTHING ) {
         // There are no texts in selection, read from preferences.
         query.readFromPrefs("/tools/text");
 #ifdef DEBUG_TEXT
@@ -1009,21 +1095,31 @@ static void sp_text_toolbox_selection_changed(Inkscape::Selection */*selection*/
 
         // Line height (spacing)
         double height;
+
+        Unit const *lh_unit;
+        UnitTracker* tracker = reinterpret_cast<UnitTracker*>( g_object_get_data( tbl, "tracker" ) );
+
         if (query.line_height.normal) {
-            height = Inkscape::Text::Layout::LINE_HEIGHT_NORMAL;
+            lh_unit = unit_table.getUnit("%");
+            height = Inkscape::Text::Layout::LINE_HEIGHT_NORMAL * 100;
+        } else if (query.line_height.unit == SP_CSS_UNIT_PERCENT) {
+            lh_unit = unit_table.getUnit("%");
+            height = query.line_height.value * 100;
         } else {
-            if (query.line_height.unit == SP_CSS_UNIT_PERCENT) {
-                height = query.line_height.value;
-            } else {
-                height = query.line_height.computed;
-            }
+            lh_unit = tracker->getActiveUnit();
+            // Can get unit like this: unit_table.getUnit(query.line_height.unit);
+            height = Inkscape::Util::Quantity::convert(query.line_height.computed, "px", lh_unit);
         }
+
+        // Set before value is set
+        tracker->setActiveUnit(lh_unit);
 
         GtkAction* lineHeightAction = GTK_ACTION( g_object_get_data( tbl, "TextLineHeightAction" ) );
         GtkAdjustment *lineHeightAdjustment =
             ege_adjustment_action_get_adjustment(EGE_ADJUSTMENT_ACTION( lineHeightAction ));
         gtk_adjustment_set_value( lineHeightAdjustment, height );
 
+        height = gtk_adjustment_get_value( lineHeightAdjustment );
 
         // Word spacing
         double wordSpacing;
@@ -1047,13 +1143,42 @@ static void sp_text_toolbox_selection_changed(Inkscape::Selection */*selection*/
         gtk_adjustment_set_value( letterSpacingAdjustment, letterSpacing );
 
 
+        // Writing mode
+        int activeButton2 = 0;
+        if (query.writing_mode.computed == SP_CSS_WRITING_MODE_LR_TB) activeButton2 = 0;
+        if (query.writing_mode.computed == SP_CSS_WRITING_MODE_TB_RL) activeButton2 = 1;
+        if (query.writing_mode.computed == SP_CSS_WRITING_MODE_TB_LR) activeButton2 = 2;
+
+        EgeSelectOneAction* writingModeAction =
+            EGE_SELECT_ONE_ACTION( g_object_get_data( tbl, "TextWritingModeAction" ) );
+        ege_select_one_action_set_active( writingModeAction, activeButton2 );
+
         // Orientation
-        int activeButton2 = (query.writing_mode.computed == SP_CSS_WRITING_MODE_LR_TB ? 0 : 1);
+        int activeButton3 = 0;
+        if (query.text_orientation.computed == SP_CSS_TEXT_ORIENTATION_MIXED   ) activeButton3 = 0;
+        if (query.text_orientation.computed == SP_CSS_TEXT_ORIENTATION_UPRIGHT ) activeButton3 = 1;
+        if (query.text_orientation.computed == SP_CSS_TEXT_ORIENTATION_SIDEWAYS) activeButton3 = 2;
 
         EgeSelectOneAction* textOrientationAction =
             EGE_SELECT_ONE_ACTION( g_object_get_data( tbl, "TextOrientationAction" ) );
-        ege_select_one_action_set_active( textOrientationAction, activeButton2 );
+        ege_select_one_action_set_active( textOrientationAction, activeButton3 );
 
+        // Disable text orientation for horizontal text..  See above for why this nonsense
+        model = GTK_LIST_STORE( ege_select_one_action_get_model( textOrientationAction ) );
+
+        path = gtk_tree_path_new_from_string("0");
+        gtk_tree_model_get_iter( GTK_TREE_MODEL (model), &iter, path );
+        gtk_list_store_set( model, &iter, /* column */ 3, activeButton2 != 0, -1 );
+
+        path = gtk_tree_path_new_from_string("1");
+        gtk_tree_model_get_iter( GTK_TREE_MODEL (model), &iter, path );
+        gtk_list_store_set( model, &iter, /* column */ 3, activeButton2 != 0, -1 );
+
+        path = gtk_tree_path_new_from_string("2");
+        gtk_tree_model_get_iter( GTK_TREE_MODEL (model), &iter, path );
+        gtk_list_store_set( model, &iter, /* column */ 3, activeButton2 != 0, -1 );
+
+        ege_select_one_action_update_sensitive( textOrientationAction );
 
     }
 
@@ -1165,7 +1290,7 @@ static void sp_text_toolbox_select_cb( GtkEntry* entry, GtkEntryIconPosition /*p
   SPDocument *document = desktop->getDocument();
   std::vector<SPItem*> x,y;
   std::vector<SPItem*> allList = get_all_items(x, document->getRoot(), desktop, false, false, true, y);
-  for(std::vector<SPItem*>::const_reverse_iterator i=allList.rbegin();i!=allList.rend();i++){
+  for(std::vector<SPItem*>::const_reverse_iterator i=allList.rbegin();i!=allList.rend(); ++i){
       SPItem *item = *i;
     SPStyle *style = item->style;
 
@@ -1196,6 +1321,15 @@ static void sp_text_toolbox_select_cb( GtkEntry* entry, GtkEntryIconPosition /*p
 }
 
 static void text_toolbox_watch_ec(SPDesktop* dt, Inkscape::UI::Tools::ToolBase* ec, GObject* holder);
+
+static void destroy_tracker( GObject* obj, gpointer /*user_data*/ )
+{
+    UnitTracker *tracker = reinterpret_cast<UnitTracker*>(g_object_get_data(obj, "tracker"));
+    if ( tracker ) {
+        delete tracker;
+        g_object_set_data( obj, "tracker", 0 );
+    }
+}
 
 // Define all the "widgets" in the toolbar.
 void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder)
@@ -1387,7 +1521,7 @@ void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
         g_signal_connect_after( G_OBJECT(act), "changed", G_CALLBACK(sp_text_align_mode_changed), holder );
     }
 
-    /* Orientation (Left to Right, Top to Bottom */
+    /* Writing mode (Horizontal, Vertical-LR, Vertical-RL) */
     {
         GtkListStore* model = gtk_list_store_new( 3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING );
 
@@ -1402,14 +1536,73 @@ void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
 
         gtk_list_store_append( model, &iter );
         gtk_list_store_set( model, &iter,
-                            0, _("Vertical"),
-                            1, _("Vertical text"),
+                            0, _("Vertical — RL"),
+                            1, _("Vertical text — lines: right to left"),
                             2, INKSCAPE_ICON("format-text-direction-vertical"),
                             -1 );
 
+        gtk_list_store_append( model, &iter );
+        gtk_list_store_set( model, &iter,
+                            0, _("Vertical — LR"),
+                            1, _("Vertical text — lines: left to right"), // Mongolian!
+                            2, INKSCAPE_ICON("format-text-direction-vertical-lr"),
+                            -1 );
+
+        EgeSelectOneAction* act = ege_select_one_action_new( "TextWritingModeAction", // Name
+                                                             _("Writing mode"),        // Label
+                                                             _("Block progression"),   // Tooltip
+                                                             NULL,                    // Icon name
+                                                             GTK_TREE_MODEL(model) ); // Model
+
+        g_object_set( act, "short_label", "NotUsed", NULL );
+        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
+        g_object_set_data( holder, "TextWritingModeAction", act );
+
+        ege_select_one_action_set_appearance( act, "full" );
+        ege_select_one_action_set_radio_action_type( act, INK_RADIO_ACTION_TYPE );
+        g_object_set( G_OBJECT(act), "icon-property", "iconId", NULL );
+        ege_select_one_action_set_icon_column( act, 2 );
+        ege_select_one_action_set_icon_size( act, secondarySize );
+        ege_select_one_action_set_tooltip_column( act, 1  );
+
+        gint mode = prefs->getInt("/tools/text/writing_mode", 0);
+        ege_select_one_action_set_active( act, mode );
+        g_signal_connect_after( G_OBJECT(act), "changed", G_CALLBACK(sp_writing_mode_changed), holder );
+    }
+
+    /* Text (glyph) orientation (Auto (mixed), Upright, Sideways) */
+    {
+        GtkListStore* model = gtk_list_store_new( 4, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN );
+
+        GtkTreeIter iter;
+
+        gtk_list_store_append( model, &iter );
+        gtk_list_store_set( model, &iter,
+                            0, _("Auto"),
+                            1, _("Auto glyph orientation"),
+                            2, INKSCAPE_ICON("text-orientation-auto"),
+                            3, true,
+                            -1 );
+
+        gtk_list_store_append( model, &iter );
+        gtk_list_store_set( model, &iter,
+                            0, _("Upright"),
+                            1, _("Upright glyph orientation"),
+                            2, INKSCAPE_ICON("text-orientation-upright"),
+                            3, true,
+                            -1 );
+
+        gtk_list_store_append( model, &iter );
+        gtk_list_store_set( model, &iter,
+                            0, _("Sideways"),
+                            1, _("Sideways glyph orientation"),
+                            2, INKSCAPE_ICON("text-orientation-sideways"),
+                            3, true,
+                            -1 );
+
         EgeSelectOneAction* act = ege_select_one_action_new( "TextOrientationAction", // Name
-                                                             _("Orientation"),        // Label
-                                                             _("Text orientation"),   // Tooltip
+                                                             _("Text orientation"),        // Label
+                                                             _("Text (glyph) orientation in vertical text."),   // Tooltip
                                                              NULL,                    // Icon name
                                                              GTK_TREE_MODEL(model) ); // Model
 
@@ -1423,10 +1616,11 @@ void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
         ege_select_one_action_set_icon_column( act, 2 );
         ege_select_one_action_set_icon_size( act, secondarySize );
         ege_select_one_action_set_tooltip_column( act, 1  );
+        ege_select_one_action_set_sensitive_column( act, 3 );
 
-        gint mode = prefs->getInt("/tools/text/orientation", 0);
+        gint mode = prefs->getInt("/tools/text/text_orientation", 0);
         ege_select_one_action_set_active( act, mode );
-        g_signal_connect_after( G_OBJECT(act), "changed", G_CALLBACK(sp_text_orientation_mode_changed), holder );
+        g_signal_connect_after( G_OBJECT(act), "changed", G_CALLBACK(sp_text_orientation_changed), holder );
     }
 
     /* Line height */
@@ -1435,22 +1629,29 @@ void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
         gchar const* labels[] = {_("Smaller spacing"), 0, 0, 0, 0, C_("Text tool", "Normal"), 0, 0, 0, 0, 0, _("Larger spacing")};
         gdouble values[] = { 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1,2, 1.3, 1.4, 1.5, 2.0};
 
+        // Add the units menu.
+        UnitTracker* tracker = new UnitTracker(Inkscape::Util::UNIT_TYPE_LINEAR);
+        tracker->prependUnit(unit_table.getUnit("%"));
+
+        g_object_set_data( holder, "tracker", tracker );
+        g_signal_connect( holder, "destroy", G_CALLBACK(destroy_tracker), holder );
+
         EgeAdjustmentAction *eact = create_adjustment_action(
             "TextLineHeightAction",               /* name */
             _("Line Height"),                     /* label */
             _("Line:"),                           /* short label */
-            _("Spacing between lines (times font size)"),      /* tooltip */
+            _("Spacing between baselines"),       /* tooltip */
             "/tools/text/lineheight",             /* preferences path */
-            0.0,                                  /* default */
+            125,                                  /* default */
             GTK_WIDGET(desktop->canvas),          /* focusTarget */
             holder,                               /* dataKludge */
             FALSE,                                /* set alt-x keyboard shortcut? */
             NULL,                                 /* altx_mark */
-            0.0, 10.0, 0.01, 0.10,                /* lower, upper, step (arrow up/down), page up/down */
+            0.0, 1e6, 1.0, 10.0,                /* lower, upper, step (arrow up/down), page up/down */
             labels, values, G_N_ELEMENTS(labels), /* drop down menu */
             sp_text_lineheight_value_changed,     /* callback */
-            NULL,                                 /* unit tracker */
-            0.1,                                  /* step (used?) */
+            tracker,                              /* unit tracker */
+            1.0,                                  /* step (used?) */
             2,                                    /* digits to show */
             1.0                                   /* factor (multiplies default) */
             );
@@ -1458,6 +1659,11 @@ void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
         gtk_action_set_sensitive( GTK_ACTION(eact), TRUE );
         g_object_set_data( holder, "TextLineHeightAction", eact );
         g_object_set( G_OBJECT(eact), "iconId", "text_line_spacing", NULL );
+
+        GtkAction* act = tracker->createAction( "TextLineHeightUnitAction", _("Units"), ("") );
+        gtk_action_group_add_action( mainActions, act );
+        g_object_set_data( holder, "TextLineHeightUnitAction", act );
+
     }
 
     /* Word spacing */

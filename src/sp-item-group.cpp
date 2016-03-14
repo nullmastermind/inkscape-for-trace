@@ -58,8 +58,11 @@ using Inkscape::DocumentUndo;
 
 static void sp_group_perform_patheffect(SPGroup *group, SPGroup *topgroup, bool write);
 
-SPGroup::SPGroup() : SPLPEItem() {
-    this->_layer_mode = SPGroup::GROUP;
+SPGroup::SPGroup() : SPLPEItem(),
+    _expanded(false),
+    _insertBottom(false),
+    _layer_mode(SPGroup::GROUP)
+{
 }
 
 SPGroup::~SPGroup() {
@@ -90,10 +93,9 @@ void SPGroup::child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) 
         if ( item ) {
             /* TODO: this should be moved into SPItem somehow */
             SPItemView *v;
-            Inkscape::DrawingItem *ac;
 
             for (v = this->display; v != NULL; v = v->next) {
-                ac = item->invoke_show (v->arenaitem->drawing(), v->key, v->flags);
+                Inkscape::DrawingItem *ac = item->invoke_show (v->arenaitem->drawing(), v->key, v->flags);
 
                 if (ac) {
                     v->arenaitem->appendChild(ac);
@@ -105,12 +107,10 @@ void SPGroup::child_added(Inkscape::XML::Node* child, Inkscape::XML::Node* ref) 
         if ( item ) {
             /* TODO: this should be moved into SPItem somehow */
             SPItemView *v;
-            Inkscape::DrawingItem *ac;
-
             unsigned position = item->pos_in_parent();
 
             for (v = this->display; v != NULL; v = v->next) {
-                ac = item->invoke_show (v->arenaitem->drawing(), v->key, v->flags);
+                Inkscape::DrawingItem *ac = item->invoke_show (v->arenaitem->drawing(), v->key, v->flags);
 
                 if (ac) {
                     v->arenaitem->prependChild(ac);
@@ -162,7 +162,7 @@ void SPGroup::update(SPCtx *ctx, unsigned int flags) {
     }
     childflags &= SP_OBJECT_MODIFIED_CASCADE;
     std::vector<SPObject*> l=this->childList(true, SPObject::ActionUpdate);
-    for(std::vector<SPObject*> ::const_iterator i=l.begin();i!=l.end();i++){
+    for(std::vector<SPObject*> ::const_iterator i=l.begin();i!=l.end();++i){
         SPObject *child = *i;
 
         if (childflags || (child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
@@ -206,7 +206,7 @@ void SPGroup::modified(guint flags) {
     flags &= SP_OBJECT_MODIFIED_CASCADE;
 
     std::vector<SPObject*> l=this->childList(true);
-    for(std::vector<SPObject*>::const_iterator i=l.begin();i!=l.end();i++){
+    for(std::vector<SPObject*>::const_iterator i=l.begin();i!=l.end();++i){
         SPObject *child = *i;
 
         if (flags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
@@ -280,7 +280,7 @@ Geom::OptRect SPGroup::bbox(Geom::Affine const &transform, SPItem::BBoxType bbox
 
     // TODO CPPIFY: replace this const_cast later
     std::vector<SPObject*> l = const_cast<SPGroup*>(this)->childList(false, SPObject::ActionBBox);
-    for(std::vector<SPObject*>::const_iterator i=l.begin();i!=l.end();i++){
+    for(std::vector<SPObject*>::const_iterator i=l.begin();i!=l.end();++i){
         SPObject *o = *i;
         SPItem *item = dynamic_cast<SPItem *>(o);
         if (item && !item->isHidden()) {
@@ -294,7 +294,7 @@ Geom::OptRect SPGroup::bbox(Geom::Affine const &transform, SPItem::BBoxType bbox
 
 void SPGroup::print(SPPrintContext *ctx) {
 	std::vector<SPObject*> l=this->childList(false);
-    for(std::vector<SPObject*>::const_iterator i=l.begin();i!=l.end();i++){
+    for(std::vector<SPObject*>::const_iterator i=l.begin();i!=l.end();++i){
         SPObject *o = *i;
         SPItem *item = dynamic_cast<SPItem *>(o);
         if (item) {
@@ -348,7 +348,7 @@ Inkscape::DrawingItem *SPGroup::show (Inkscape::Drawing &drawing, unsigned int k
 
 void SPGroup::hide (unsigned int key) {
 	std::vector<SPObject*> l=this->childList(false, SPObject::ActionShow);
-    for(std::vector<SPObject*>::const_iterator i=l.begin();i!=l.end();i++){
+    for(std::vector<SPObject*>::const_iterator i=l.begin();i!=l.end();++i){
         SPObject *o = *i;
 
         SPItem *item = dynamic_cast<SPItem *>(o);
@@ -373,7 +373,7 @@ void SPGroup::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape:
 
 void sp_item_group_ungroup_handle_clones(SPItem *parent, Geom::Affine const g)
 {
-    for(std::list<SPObject*>::const_iterator refd=parent->hrefList.begin();refd!=parent->hrefList.end();refd++){
+    for(std::list<SPObject*>::const_iterator refd=parent->hrefList.begin();refd!=parent->hrefList.end();++refd){
         SPItem *citem = dynamic_cast<SPItem *>(*refd);
         if (citem && !citem->cloned) {
             SPUse *useitem = dynamic_cast<SPUse *>(citem);
@@ -465,7 +465,7 @@ sp_item_group_ungroup (SPGroup *group, std::vector<SPItem*> &children, bool do_d
             Inkscape::XML::Node *nrepr = child->getRepr()->duplicate(prepr->document());
 
             // Merging transform
-            Geom::Affine ctrans;
+            Geom::Affine ctrans = citem->transform * g;
                 // We should not apply the group's transformation to both a linked offset AND to its source
                 if (dynamic_cast<SPOffset *>(citem)) { // Do we have an offset at hand (whether it's dynamic or linked)?
                     SPItem *source = sp_offset_get_source(dynamic_cast<SPOffset *>(citem));
@@ -476,13 +476,9 @@ sp_item_group_ungroup (SPGroup *group, std::vector<SPItem*> &children, bool do_d
                         source = sp_offset_get_source(dynamic_cast<SPOffset *>(source));
                     }
                     if (source != NULL && // If true then we must be dealing with a linked offset ...
-                        group->isAncestorOf(source) == false) { // ... of which the source is not in the same group
-                        ctrans = citem->transform * g; // then we should apply the transformation of the group to the offset
-                    } else {
-                        ctrans = citem->transform;
+                        group->isAncestorOf(source) ) { // ... of which the source is in the same group
+                        ctrans = citem->transform; // then we should apply the transformation of the group to the offset
                     }
-                } else {
-                    ctrans = citem->transform * g;
                 }
 
             // FIXME: constructing a transform that would fully preserve the appearance of a
@@ -785,7 +781,7 @@ gint SPGroup::getItemCount() const {
 void SPGroup::_showChildren (Inkscape::Drawing &drawing, Inkscape::DrawingItem *ai, unsigned int key, unsigned int flags) {
     Inkscape::DrawingItem *ac = NULL;
     std::vector<SPObject*> l=this->childList(false, SPObject::ActionShow);
-    for(std::vector<SPObject*>::const_iterator i=l.begin();i!=l.end();i++){
+    for(std::vector<SPObject*>::const_iterator i=l.begin();i!=l.end();++i){
         SPObject *o = *i;
         SPItem * child = dynamic_cast<SPItem *>(o);
         if (child) {
@@ -804,7 +800,7 @@ void SPGroup::update_patheffect(bool write) {
 
     std::vector<SPItem*> const item_list = sp_item_group_item_list(this);
 
-    for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();iter++) {
+    for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
         SPObject *subitem = *iter;
 
         SPLPEItem *lpeItem = dynamic_cast<SPLPEItem *>(subitem);
@@ -814,7 +810,7 @@ void SPGroup::update_patheffect(bool write) {
     }
 
     if (hasPathEffect() && pathEffectsEnabled()) {
-        for (PathEffectList::iterator it = this->path_effect_list->begin(); it != this->path_effect_list->end(); it++)
+        for (PathEffectList::iterator it = this->path_effect_list->begin(); it != this->path_effect_list->end(); ++it)
         {
             LivePathEffectObject *lpeobj = (*it)->lpeobject;
 
@@ -832,7 +828,7 @@ sp_group_perform_patheffect(SPGroup *group, SPGroup *topgroup, bool write)
 {
     std::vector<SPItem*> const item_list = sp_item_group_item_list(group);
 
-    for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();iter++) {
+    for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
         SPObject *subitem = *iter;
 
         SPGroup *subGroup = dynamic_cast<SPGroup *>(subitem);

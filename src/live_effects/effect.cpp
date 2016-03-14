@@ -57,6 +57,7 @@
 #include "live_effects/lpe-sketch.h"
 #include "live_effects/lpe-spiro.h"
 #include "live_effects/lpe-tangent_to_curve.h"
+#include "live_effects/lpe-transform_2pts.h"
 #include "live_effects/lpe-taperstroke.h"
 #include "live_effects/lpe-test-doEffect-stack.h"
 #include "live_effects/lpe-text_label.h"
@@ -150,6 +151,7 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {FILLET_CHAMFER,        N_("Fillet/Chamfer"),          "fillet-chamfer"},
     {INTERPOLATE_POINTS,    N_("Interpolate points"),      "interpolate_points"},
     {MIRROR_SYMMETRY,       N_("Mirror symmetry"),         "mirror_symmetry"},
+    {TRANSFORM_2PTS,           N_("Transform by 2 points"),      "transform_2pts"},
 };
 const Util::EnumDataConverter<EffectType> LPETypeConverter(LPETypeData, sizeof(LPETypeData)/sizeof(*LPETypeData));
 
@@ -315,6 +317,9 @@ Effect::New(EffectType lpenr, LivePathEffectObject *lpeobj)
         case SHOW_HANDLES:
             neweffect = static_cast<Effect*> ( new LPEShowHandles(lpeobj) );
             break;
+        case TRANSFORM_2PTS:
+            neweffect = static_cast<Effect*> ( new LPETransform2Pts(lpeobj) );
+            break;
         default:
             g_warning("LivePathEffect::Effect::New called with invalid patheffect type (%d)", lpenr);
             neweffect = NULL;
@@ -351,7 +356,8 @@ Effect::createAndApply(EffectType type, SPDocument *doc, SPItem *item)
 }
 
 Effect::Effect(LivePathEffectObject *lpeobject)
-    : _provides_knotholder_entities(false),
+    : apply_to_clippath_and_mask(false),
+      _provides_knotholder_entities(false),
       oncanvasedit_it(0),
       is_visible(_("Is visible?"), _("If unchecked, the effect remains applied to the object but is temporarily disabled on canvas"), "is_visible", &wr, this, true),
       show_orig_path(false),
