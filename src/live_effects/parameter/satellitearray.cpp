@@ -137,9 +137,9 @@ void SatelliteArrayParam::updateCanvasIndicators(bool mirror)
         Geom::Affine aff = Geom::Affine();
         aff *= Geom::Scale(_helper_size);
         if (mirror == true) {
-            aff *= Geom::Rotate(ray_1.angle() - Geom::deg_to_rad(90));
+            aff *= Geom::Rotate(ray_1.angle() - Geom::rad_from_deg(90));
         } else {
-            aff *= Geom::Rotate(ray_1.angle() - Geom::deg_to_rad(270));
+            aff *= Geom::Rotate(ray_1.angle() - Geom::rad_from_deg(270));
         }
         aff *= Geom::Translate(curve_in->pointAt(pos));
         pathv *= aff;
@@ -167,9 +167,9 @@ void SatelliteArrayParam::updateCanvasIndicators(bool mirror)
                 aff = Geom::Affine();
                 aff *= Geom::Scale(_helper_size / 2.0);
                 if (mirror == true) {
-                    aff *= Geom::Rotate(ray_1.angle() - Geom::deg_to_rad(90));
+                    aff *= Geom::Rotate(ray_1.angle() - Geom::rad_from_deg(90));
                 } else {
-                    aff *= Geom::Rotate(ray_1.angle() - Geom::deg_to_rad(270));
+                    aff *= Geom::Rotate(ray_1.angle() - Geom::rad_from_deg(270));
                 }
                 aff *= Geom::Translate(curve_in->pointAt(pos));
                 pathv *= aff;
