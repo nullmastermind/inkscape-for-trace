@@ -342,7 +342,7 @@ public:
           computed(0)
     {}
 
-    SPILength( Glib::ustring const &name, unsigned value = 0 )
+    SPILength( Glib::ustring const &name, float value = 0 )
         : SPIBase( name ),
           unit(SP_CSS_UNIT_NONE),
           value(value),
@@ -401,7 +401,7 @@ public:
           normal(true)
     {}
 
-    SPILengthOrNormal( Glib::ustring const &name, unsigned value = 0 )
+    SPILengthOrNormal( Glib::ustring const &name, float value = 0 )
         : SPILength( name, value ),
           normal(true)
     {}
@@ -1260,7 +1260,6 @@ struct SPITextDecorationData {
     float   tspan_width;           // from libnrtype, when it calculates spans
     float   ascender;              // the rest from tspan's font
     float   descender;
-    float   line_gap;
     float   underline_thickness;
     float   underline_position; 
     float   line_through_thickness;

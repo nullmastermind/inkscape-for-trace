@@ -298,11 +298,11 @@ static void sp_gvs_rebuild_gui_full(SPGradientVectorSelector *gvs)
     /* Pick up all gradients with vectors */
     GSList *gl = NULL;
     if (gvs->gr) {
-        const GSList *gradients = gvs->gr->document->getResourceList("gradient");
-        for (const GSList *curr = gradients; curr; curr = curr->next) {
-            SPGradient* grad = SP_GRADIENT(curr->data);
+        std::set<SPObject *> gradients = gvs->gr->document->getResourceList("gradient");
+        for (std::set<SPObject *>::const_iterator it = gradients.begin(); it != gradients.end(); ++it) {
+            SPGradient* grad = SP_GRADIENT(*it);
             if ( grad->hasStops() && (grad->isSwatch() == gvs->swatched) ) {
-                gl = g_slist_prepend(gl, curr->data);
+                gl = g_slist_prepend(gl, *it);
             }
         }
     }
@@ -842,7 +842,8 @@ static GtkWidget * sp_gradient_vector_widget_new(SPGradient *gradient, SPStop *s
 
     GtkWidget *vb, *w, *f;
 
-    g_return_val_if_fail(!gradient || SP_IS_GRADIENT(gradient), NULL);
+    g_return_val_if_fail(gradient != NULL, NULL);
+    g_return_val_if_fail(SP_IS_GRADIENT(gradient), NULL);
 
 #if GTK_CHECK_VERSION(3,0,0)
     vb = gtk_box_new(GTK_ORIENTATION_VERTICAL, PAD);

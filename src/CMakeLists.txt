@@ -240,6 +240,7 @@ set(inkscape_SRC
 	print.cpp
 	profile-manager.cpp
 	proj_pt.cpp
+	pure-transform.cpp
 	rdf.cpp
 	removeoverlap.cpp
 	resource-manager.cpp
@@ -367,6 +368,7 @@ set(inkscape_SRC
 	print.h
 	profile-manager.h
 	proj_pt.h
+	pure-transform.h
 	rdf.h
 	remove-last.h
 	removeoverlap.h
@@ -529,6 +531,10 @@ endif()
 
 add_dependencies(inkscape inkscape_version)
 
+if (NOT "${WITH_EXT_GDL}")
+    list (APPEND INKSCAPE_LIBS "gdl_LIB")
+endif()
+
 set(INKSCAPE_TARGET_LIBS
         # order from automake
         #sp_LIB
@@ -540,7 +546,6 @@ set(INKSCAPE_TARGET_LIBS
 
         croco_LIB
         avoid_LIB
-        gdl_LIB
         cola_LIB
         vpsc_LIB
         livarot_LIB

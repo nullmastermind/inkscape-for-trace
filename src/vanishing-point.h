@@ -23,8 +23,6 @@
 #include "ui/control-manager.h" // TODO break enums out separately
 
 class SPBox3D;
-typedef struct _GList GList;
-typedef struct _GSList GSList;
 
 namespace Box3D {
 
@@ -48,6 +46,7 @@ public:
     inline VanishingPoint &operator=(VanishingPoint const &rhs) {
         _persp = rhs._persp;
         _axis = rhs._axis;
+        my_counter = rhs.my_counter;
         return *this;
     }
     inline bool operator==(VanishingPoint const &rhs) const {
@@ -173,8 +172,8 @@ public:
     bool dragging;
 
     SPDocument *document;
-    GList *draggers;
-    GSList *lines;
+    std::vector<VPDragger *> draggers;
+    std::vector<SPCtrlLine *> lines;
 
     void printDraggers(); // convenience for debugging
     /* 
@@ -195,7 +194,6 @@ public:
 
     inline bool hasEmptySelection() { return this->selection->isEmpty(); }
     bool allBoxesAreSelected (VPDragger *dragger);
-    GSList * selectedBoxesWithVPinDragger (VPDragger *dragger);
 
     // FIXME: Should this be private? (It's the case with the corresponding function in gradient-drag.h)
     //        But vp_knot_grabbed_handler

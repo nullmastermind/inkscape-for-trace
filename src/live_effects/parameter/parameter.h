@@ -102,7 +102,8 @@ public:
                 const Glib::ustring& key,
                 Inkscape::UI::Widget::Registry* wr,
                 Effect* effect,
-                gdouble default_value = 1.0);
+                gdouble default_value = 1.0,
+                bool no_widget = false);
     virtual ~ScalarParam();
 
     virtual bool param_readSVGValue(const gchar * strvalue);
@@ -117,6 +118,7 @@ public:
 
     void addSlider(bool add_slider_widget) { add_slider = add_slider_widget; };
 
+    void param_overwrite_widget(bool overwrite_widget);
     virtual Gtk::Widget * param_newWidget();
 
     inline operator gdouble() const { return value; };
@@ -131,6 +133,8 @@ protected:
     double inc_step;
     double inc_page;
     bool add_slider;
+    bool overwrite_widget;
+    bool hide_widget;
 
 private:
     ScalarParam(const ScalarParam&);

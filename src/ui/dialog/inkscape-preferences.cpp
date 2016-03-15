@@ -206,6 +206,15 @@ void InkscapePreferences::AddDotSizeSpinbutton(DialogPage &p, Glib::ustring cons
                        false );
 }
 
+void InkscapePreferences::AddBaseSimplifySpinbutton(DialogPage &p, Glib::ustring const &prefs_path, double def_value)
+{
+    PrefSpinButton* sb = Gtk::manage( new PrefSpinButton);
+    sb->init ( prefs_path + "/base-simplify", 0.0, 100.0, 1.0, 10.0, def_value, false, false);
+    p.add_line( false, _("Base simplify:"), *sb, _("on dinamic LPE simplify"),
+                       _("Base simplify of dinamic LPE based simplify"),
+                       false );
+}
+
 
 static void StyleFromSelectionToTool(Glib::ustring const &prefs_path, StyleSwatch *swatch)
 {
@@ -425,6 +434,7 @@ void InkscapePreferences::initPageTools()
     this->AddSelcueCheckbox(_page_pencil, "/tools/freehand/pencil", true);
     this->AddNewObjectsStyle(_page_pencil, "/tools/freehand/pencil");
     this->AddDotSizeSpinbutton(_page_pencil, "/tools/freehand/pencil", 3.0);
+    this->AddBaseSimplifySpinbutton(_page_pencil, "/tools/freehand/pencil", 25.0);
     _page_pencil.add_group_header( _("Sketch mode"));
     _page_pencil.add_line( true, "", _pencil_average_all_sketches, "",
                             _("If on, the sketch result will be the normal average of all sketches made, instead of averaging the old result with the new sketch"));
@@ -478,10 +488,12 @@ void InkscapePreferences::initPageTools()
     this->AddPage(_page_eraser, _("Eraser"), iter_tools, PREFS_PAGE_TOOLS_ERASER);
     this->AddNewObjectsStyle(_page_eraser, "/tools/eraser");
 
+#if HAVE_POTRACE
     //Paint Bucket
     this->AddPage(_page_paintbucket, _("Paint Bucket"), iter_tools, PREFS_PAGE_TOOLS_PAINTBUCKET);
     this->AddSelcueCheckbox(_page_paintbucket, "/tools/paintbucket", false);
     this->AddNewObjectsStyle(_page_paintbucket, "/tools/paintbucket");
+#endif
 
     //Gradient
     this->AddPage(_page_gradient, _("Gradient"), iter_tools, PREFS_PAGE_TOOLS_GRADIENT);
@@ -601,7 +613,7 @@ void InkscapePreferences::initPageUI()
                               _("Set the language for menus and number formats"), false);
 
     {
-        Glib::ustring sizeLabels[] = {_("Large"), _("Small"), _("Smaller")};
+        Glib::ustring sizeLabels[] = {C_("Icon size", "Large"), C_("Icon size", "Small"), C_("Icon size", "Smaller")};
         int sizeValues[] = {0, 1, 2};
 
         _misc_small_tools.init( "/toolbox/tools/small", sizeLabels, sizeValues, G_N_ELEMENTS(sizeLabels), 0 );
@@ -686,7 +698,7 @@ void InkscapePreferences::initPageUI()
     _win_ontop_agressive.init ( _("Aggressive"), "/options/transientpolicy/value", 2, false, &_win_ontop_none);
 
     {
-        Glib::ustring defaultSizeLabels[] = {_("Small"), _("Large"), _("Maximized")};
+        Glib::ustring defaultSizeLabels[] = {C_("Window size", "Small"), C_("Window size", "Large"), C_("Window size", "Maximized")};
         int defaultSizeValues[] = {0, 1, 2};
 
         _win_default_size.init( "/options/defaultwindowsize/value", defaultSizeLabels, defaultSizeValues, G_N_ELEMENTS(defaultSizeLabels), 1 );
@@ -1250,11 +1262,9 @@ void InkscapePreferences::initPageBehavior()
     _scroll_auto_thres.init ( "/options/autoscrolldistance/value", -600.0, 600.0, 1.0, 1.0, -10.0, true, false);
     _page_scrolling.add_line( true, _("_Threshold:"), _scroll_auto_thres, _("pixels"),
                            _("How far (in screen pixels) you need to be from the canvas edge to trigger autoscroll; positive is outside the canvas, negative is within the canvas"), false);
-/*
-    _scroll_space.init ( _("Left mouse button pans when Space is pressed"), "/options/spacepans/value", false);
-    _page_scrolling.add_line( false, "", _scroll_space, "",
-                            _("When on, pressing and holding Space and dragging with left mouse button pans canvas (as in Adobe Illustrator); when off, Space temporarily switches to Selector tool (default)"));
-*/
+    _scroll_space.init ( _("Mouse move pans when Space is pressed"), "/options/spacebarpans/value", true);
+    _page_scrolling.add_line( true, "", _scroll_space, "",
+                            _("When on, pressing and holding Space and dragging pans canvas"));
     _wheel_zoom.init ( _("Mouse wheel zooms by default"), "/options/wheelzooms/value", false);
     _page_scrolling.add_line( false, "", _wheel_zoom, "",
                             _("When on, mouse wheel zooms without Ctrl and scrolls canvas with Ctrl; when off, it zooms with Ctrl and scrolls without Ctrl"));

@@ -379,7 +379,7 @@ SPGradient *sp_gradient_reset_to_userspace(SPGradient *gr, SPItem *item)
 
         if (angle != 0.0) {
 
-            Geom::Line grl(center, Geom::deg_to_rad(angle));
+            Geom::Line grl(center, Geom::rad_from_deg(angle));
             Geom::LineSegment bbl1(bbox->corner(0), bbox->corner(1));
             Geom::LineSegment bbl2(bbox->corner(1), bbox->corner(2));
             Geom::LineSegment bbl3(bbox->corner(2), bbox->corner(3));
@@ -1571,7 +1571,7 @@ void sp_gradient_invert_selected_gradients(SPDesktop *desktop, Inkscape::PaintTa
     Inkscape::Selection *selection = desktop->getSelection();
 
     const std::vector<SPItem*> list=selection->itemList();
-    for (std::vector<SPItem*>::const_iterator i = list.begin(); i != list.end(); i++) {
+    for (std::vector<SPItem*>::const_iterator i = list.begin(); i != list.end(); ++i) {
         sp_item_gradient_invert_vector_color(*i, fill_or_stroke);
     }
 
@@ -1592,11 +1592,11 @@ void sp_gradient_reverse_selected_gradients(SPDesktop *desktop)
     GrDrag *drag = ev->get_drag();
 
     // First try selected dragger
-    if (drag && drag->selected) {
+    if (drag && !drag->selected.empty()) {
         drag->selected_reverse_vector();
     } else { // If no drag or no dragger selected, act on selection (both fill and stroke gradients)
         const std::vector<SPItem*> list=selection->itemList();
-        for (std::vector<SPItem*>::const_iterator i = list.begin(); i != list.end(); i++) {
+        for (std::vector<SPItem*>::const_iterator i = list.begin(); i != list.end(); ++i) {
             sp_item_gradient_reverse_vector(*i, Inkscape::FOR_FILL);
             sp_item_gradient_reverse_vector(*i, Inkscape::FOR_STROKE);
         }
@@ -1612,9 +1612,9 @@ void sp_gradient_unset_swatch(SPDesktop *desktop, std::string id)
     SPDocument *doc = desktop ? desktop->doc() : 0;
 
     if (doc) {
-        const GSList *gradients = doc->getResourceList("gradient");
-        for (const GSList *item = gradients; item; item = item->next) {
-            SPGradient* grad = SP_GRADIENT(item->data);
+        const std::set<SPObject *> gradients = doc->getResourceList("gradient");
+        for (std::set<SPObject *>::const_iterator i = gradients.begin(); i != gradients.end(); ++i) {
+            SPGradient* grad = SP_GRADIENT(*i);
             if ( id == grad->getId() ) {
                 grad->setSwatch(false);
                 DocumentUndo::done(doc, SP_VERB_CONTEXT_GRADIENT,

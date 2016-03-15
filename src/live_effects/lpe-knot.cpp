@@ -27,7 +27,6 @@
 #include <2geom/sbasis-to-bezier.h>
 #include <2geom/sbasis.h>
 #include <2geom/d2.h>
-#include <2geom/d2-sbasis.h>
 #include <2geom/path.h>
 #include <2geom/bezier-to-sbasis.h>
 #include <2geom/basic-intersection.h>
@@ -507,7 +506,7 @@ static void
 collectPathsAndWidths (SPLPEItem const *lpeitem, Geom::PathVector &paths, std::vector<double> &stroke_widths){
     if (SP_IS_GROUP(lpeitem)) {
     	std::vector<SPItem*> item_list = sp_item_group_item_list(SP_GROUP(lpeitem));
-        for ( std::vector<SPItem*>::const_iterator iter = item_list.begin(); iter != item_list.end(); iter++) {
+        for ( std::vector<SPItem*>::const_iterator iter = item_list.begin(); iter != item_list.end(); ++iter) {
             SPObject *subitem = *iter;
             if (SP_IS_LPE_ITEM(subitem)) {
                 collectPathsAndWidths(SP_LPE_ITEM(subitem), paths, stroke_widths);

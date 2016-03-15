@@ -126,89 +126,43 @@ int Layout::_enum_converter(int input, EnumConversionItem const *conversion_tabl
     return conversion_table[0].output;
 }
 
-// ***** the style format interface
-// this doesn't include all accesses to SPStyle, only the ones that are non-trivial
-
-static const float medium_font_size = 12.0;     // more of a default if all else fails than anything else
-float Layout::InputStreamTextSource::styleComputeFontSize() const
-{
-    return style->font_size.computed;
-
-    // in case the computed value's not good enough, here's some manual code held in reserve:
-    SPStyle const *this_style = style;
-    float inherit_multiplier = 1.0;
-
-    for ( ; ; ) {
-        if (this_style->font_size.set && !this_style->font_size.inherit) {
-            switch (this_style->font_size.type) {
-                case SP_FONT_SIZE_LITERAL: {
-                    switch(this_style->font_size.literal) {   // these multipliers are straight out of the CSS spec
-	                    case SP_CSS_FONT_SIZE_XX_SMALL: return medium_font_size * inherit_multiplier * (3.0/5.0);
-	                    case SP_CSS_FONT_SIZE_X_SMALL:  return medium_font_size * inherit_multiplier * (3.0/4.0);
-	                    case SP_CSS_FONT_SIZE_SMALL:    return medium_font_size * inherit_multiplier * (8.0/9.0);
-                        default:
-	                    case SP_CSS_FONT_SIZE_MEDIUM:   return medium_font_size * inherit_multiplier;
-	                    case SP_CSS_FONT_SIZE_LARGE:    return medium_font_size * inherit_multiplier * (6.0/5.0);
-	                    case SP_CSS_FONT_SIZE_X_LARGE:  return medium_font_size * inherit_multiplier * (3.0/2.0);
-	                    case SP_CSS_FONT_SIZE_XX_LARGE: return medium_font_size * inherit_multiplier * 2.0;
-	                    case SP_CSS_FONT_SIZE_SMALLER: inherit_multiplier *= 0.84; break;   //not exactly according to spec
-	                    case SP_CSS_FONT_SIZE_LARGER:  inherit_multiplier *= 1.26; break;   //not exactly according to spec
-                    }
-                    break;
-                }
-                case SP_FONT_SIZE_PERCENTAGE: {    // 'em' units should be in here, but aren't. Fix in style.cpp.
-                    inherit_multiplier *= this_style->font_size.value;
-                    break;
-                }
-                case SP_FONT_SIZE_LENGTH: {
-                    return this_style->font_size.value * inherit_multiplier;
-                }
-            }
-        }
-        if (this_style->object == NULL || this_style->object->parent == NULL) break;
-        this_style = this_style->object->parent->style;
-        if (this_style == NULL) break;
-    }
-    return medium_font_size * inherit_multiplier;
-}
-
-static const Layout::EnumConversionItem enum_convert_spstyle_block_progression_to_direction[] = {
-    {SP_CSS_BLOCK_PROGRESSION_TB, Layout::TOP_TO_BOTTOM},
-    {SP_CSS_BLOCK_PROGRESSION_LR, Layout::LEFT_TO_RIGHT},
-    {SP_CSS_BLOCK_PROGRESSION_RL, Layout::RIGHT_TO_LEFT}};
-
-static const Layout::EnumConversionItem enum_convert_spstyle_writing_mode_to_direction[] = {
-    {SP_CSS_WRITING_MODE_LR_TB, Layout::TOP_TO_BOTTOM},
-    {SP_CSS_WRITING_MODE_RL_TB, Layout::TOP_TO_BOTTOM},
-    {SP_CSS_WRITING_MODE_TB_RL, Layout::RIGHT_TO_LEFT},
-    {SP_CSS_WRITING_MODE_TB_LR, Layout::LEFT_TO_RIGHT}};
-
 Layout::Direction Layout::InputStreamTextSource::styleGetBlockProgression() const
 {
-    // this function shouldn't be necessary, but since style.cpp doesn't support
-    // shorthand properties yet, it is.
-    SPStyle const *this_style = style;
+  switch( style->writing_mode.computed ) {
 
-    for ( ; ; ) {
-        if (this_style->block_progression.set)
-            return (Layout::Direction)_enum_converter(this_style->block_progression.computed, enum_convert_spstyle_block_progression_to_direction, sizeof(enum_convert_spstyle_block_progression_to_direction)/sizeof(enum_convert_spstyle_block_progression_to_direction[0]));
-        if (this_style->writing_mode.set)
-            return (Layout::Direction)_enum_converter(this_style->writing_mode.computed, enum_convert_spstyle_writing_mode_to_direction, sizeof(enum_convert_spstyle_writing_mode_to_direction)/sizeof(enum_convert_spstyle_writing_mode_to_direction[0]));
-        if (this_style->object == NULL || this_style->object->parent == NULL) break;
-        this_style = this_style->object->parent->style;
-        if (this_style == NULL) break;
-    }
+  case SP_CSS_WRITING_MODE_LR_TB:
+  case SP_CSS_WRITING_MODE_RL_TB:
     return TOP_TO_BOTTOM;
+      
+  case SP_CSS_WRITING_MODE_TB_RL:
+    return RIGHT_TO_LEFT;
 
+  case SP_CSS_WRITING_MODE_TB_LR:
+    return LEFT_TO_RIGHT;
+
+  default:
+    std::cerr << "Layout::InputTextStream::styleGetBlockProgression: invalid writing mode." << std::endl;
+  }
+  return TOP_TO_BOTTOM;
 }
 
-static Layout::Alignment text_anchor_to_alignment(unsigned anchor, Layout::Direction /*para_direction*/)
+SPCSSTextOrientation Layout::InputStreamTextSource::styleGetTextOrientation() const
+{
+  return ((SPCSSTextOrientation)style->text_orientation.computed);
+}
+
+SPCSSBaseline Layout::InputStreamTextSource::styleGetDominantBaseline() const
+{
+  return ((SPCSSBaseline)style->dominant_baseline.computed);
+}
+
+static Layout::Alignment text_anchor_to_alignment(unsigned anchor, Layout::Direction para_direction)
 {
     switch (anchor) {
         default:
-        case SP_CSS_TEXT_ANCHOR_START:  return Layout::LEFT;
+        case SP_CSS_TEXT_ANCHOR_START:  return para_direction == Layout::LEFT_TO_RIGHT ? Layout::LEFT : Layout::RIGHT;
         case SP_CSS_TEXT_ANCHOR_MIDDLE: return Layout::CENTER;
-        case SP_CSS_TEXT_ANCHOR_END:    return Layout::RIGHT;
+        case SP_CSS_TEXT_ANCHOR_END:    return para_direction == Layout::LEFT_TO_RIGHT ? Layout::RIGHT : Layout::LEFT;
     }
 }
 

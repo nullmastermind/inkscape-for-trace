@@ -73,12 +73,16 @@ LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject)
     radius.param_set_range(0.0, Geom::infinity());
     radius.param_set_increments(1, 1);
     radius.param_set_digits(4);
+    radius.param_overwrite_widget(true);
     chamfer_steps.param_set_range(1, 999);
     chamfer_steps.param_set_increments(1, 1);
     chamfer_steps.param_set_digits(0);
+    //chamfer_steps.param_overwrite_widget(true);
     helper_size.param_set_range(0, 999);
     helper_size.param_set_increments(5, 5);
     helper_size.param_set_digits(0);
+    //helper_size.param_overwrite_widget(true);
+
 }
 
 void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
@@ -142,6 +146,14 @@ Gtk::Widget *LPEFilletChamfer::newWidget()
     vbox->set_border_width(5);
     vbox->set_homogeneous(false);
     vbox->set_spacing(2);
+    Gtk::HBox *advertaising = Gtk::manage(new Gtk::HBox(true, 0));
+    Gtk::Button *advert = Gtk::manage(new Gtk::Button(Glib::ustring(_("IMPORTANT! New version soon..."))));
+    advertaising->pack_start(*advert, true, true, 2);
+    vbox->pack_start(*advertaising, true, true, 2);
+    Gtk::HBox *advertaising2 = Gtk::manage(new Gtk::HBox(true, 0));
+    Gtk::Button *advert2 = Gtk::manage(new Gtk::Button(Glib::ustring(_("Not compatible. Convert to path after."))));
+    advertaising2->pack_start(*advert2, true, true, 2);
+    vbox->pack_start(*advertaising2, true, true, 2);
     std::vector<Parameter *>::iterator it = param_vector.begin();
     while (it != param_vector.end()) {
         if ((*it)->widget_is_visible) {

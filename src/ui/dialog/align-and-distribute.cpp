@@ -42,7 +42,7 @@
 #include "ui/icon-names.h"
 #include "ui/tools/node-tool.h"
 #include "ui/tool/multi-path-manipulator.h"
-#include "util/glib-list-iterators.h"
+#include "ui/tool/control-point-selection.h"
 #include "verbs.h"
 #include "widgets/icon.h"
 #include "sp-root.h"
@@ -88,6 +88,42 @@ Action::Action(const Glib::ustring &id,
 #endif
 }
 
+
+void ActionAlign::do_node_action(Inkscape::UI::Tools::NodeTool *nt, int verb)
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    int prev_pref = prefs->getInt("/dialogs/align/align-nodes-to");
+    switch(verb){
+        case SP_VERB_ALIGN_HORIZONTAL_LEFT:
+            prefs->setInt("/dialogs/align/align-nodes-to", MIN_NODE );
+            nt->_multipath->alignNodes(Geom::Y);
+            break;
+        case SP_VERB_ALIGN_HORIZONTAL_CENTER:
+            nt->_multipath->alignNodes(Geom::Y);
+            break;
+        case SP_VERB_ALIGN_HORIZONTAL_RIGHT:
+            prefs->setInt("/dialogs/align/align-nodes-to", MAX_NODE );
+            nt->_multipath->alignNodes(Geom::Y);
+            break;
+        case SP_VERB_ALIGN_VERTICAL_TOP:
+            prefs->setInt("/dialogs/align/align-nodes-to", MAX_NODE );
+            nt->_multipath->alignNodes(Geom::X);
+            break;
+        case SP_VERB_ALIGN_VERTICAL_CENTER:
+            nt->_multipath->alignNodes(Geom::X);
+            break;
+        case SP_VERB_ALIGN_VERTICAL_BOTTOM:
+            prefs->setInt("/dialogs/align/align-nodes-to", MIN_NODE );
+            nt->_multipath->alignNodes(Geom::X);
+            break;
+        case SP_VERB_ALIGN_VERTICAL_HORIZONTAL_CENTER:
+            nt->_multipath->alignNodes(Geom::X);
+            nt->_multipath->alignNodes(Geom::Y);
+            break;
+        default:return;
+    }
+    prefs->setInt("/dialogs/align/align-nodes-to", prev_pref );
+}
 
 void ActionAlign::do_action(SPDesktop *desktop, int index)
 {
@@ -188,6 +224,14 @@ ActionAlign::Coeffs const ActionAlign::_allCoeffs[11] = {
 
 void ActionAlign::do_verb_action(SPDesktop *desktop, int verb)
 {
+    Inkscape::UI::Tools::ToolBase *event_context = desktop->getEventContext();
+    if (INK_IS_NODE_TOOL(event_context)) {
+        Inkscape::UI::Tools::NodeTool *nt = INK_NODE_TOOL(event_context);
+        if(!nt->_selected_nodes->empty()){
+            do_node_action(nt, verb);
+            return;
+        }
+    }
     do_action(desktop, verb_to_coeff(verb));
 }
 
@@ -535,7 +579,7 @@ private :
             if (length_a != length_b) return (length_a > length_b);
         }
         // Last criteria: Sort according to the z-coordinate
-        return (a->isSiblingOf(b));
+        return sp_item_repr_compare_position(a,b)<0;
     }
 
     virtual void on_button_click()
@@ -742,7 +786,6 @@ private :
         if (!selection) return;
 
         std::vector<SPItem*> selected(selection->itemList());
-        if (selected.empty()) return;
 
         //Check 2 or more selected objects
         if (selected.size() < 2) return;
@@ -795,7 +838,51 @@ private :
                                     _("Distribute text baselines"));
             }
 
-        } else {
+        } else { //align
+            Geom::Point ref_point;
+            SPItem *focus = NULL;
+            Geom::OptRect b = Geom::OptRect();
+
+            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+
+            switch (AlignTarget(prefs->getInt("/dialogs/align/align-to", 6)))
+            {
+                case LAST:
+                    focus = SP_ITEM(*selected.begin());
+                    break;
+                case FIRST:
+                    focus = SP_ITEM(*--(selected.end()));
+                    break;
+                case BIGGEST:
+                    focus = selection->largestItem(Selection::AREA);
+                    break;
+                case SMALLEST:
+                    focus = selection->smallestItem(Selection::AREA);
+                    break;
+                case PAGE:
+                    b = desktop->getDocument()->preferredBounds();
+                    break;
+                case DRAWING:
+                    b = desktop->getDocument()->getRoot()->desktopPreferredBounds();
+                    break;
+                case SELECTION:
+                    b = selection->preferredBounds();
+                    break;
+                default:
+                    g_assert_not_reached ();
+                    break;
+            };  
+
+            if(focus) {
+                if (SP_IS_TEXT (focus) || SP_IS_FLOWTEXT (focus)) {
+                    ref_point = *(te_get_layout(focus)->baselineAnchorPoint())*(focus->i2dt_affine());
+                } else {
+                    ref_point = focus->desktopPreferredBounds()->min();
+                }
+            } else {
+                ref_point = b->min();
+            }
+
             for (std::vector<SPItem*>::iterator it(selected.begin());
                  it != selected.end();
                  ++it)
@@ -807,7 +894,7 @@ private :
                     if (pt) {
                         Geom::Point base = *pt * (item)->i2dt_affine();
                         Geom::Point t(0.0, 0.0);
-                        t[_orientation] = b_min[_orientation] - base[_orientation];
+                        t[_orientation] = ref_point[_orientation] - base[_orientation];
                         sp_item_move_rel(item, Geom::Translate(t));
                         changed = true;
                     }
@@ -829,6 +916,9 @@ static void on_tool_changed(AlignAndDistribute *daad)
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (desktop && desktop->getEventContext())
         daad->setMode(tools_active(desktop) == TOOLS_NODES);
+    else
+        daad->setMode(false);
+
 }
 
 static void on_selection_changed(AlignAndDistribute *daad)
@@ -863,6 +953,7 @@ AlignAndDistribute::AlignAndDistribute()
       _nodesTable(1, 4, true),
 #endif
       _anchorLabel(_("Relative to: ")),
+      _anchorLabelNode(_("Relative to: ")),
       _selgrpLabel(_("_Treat selection as group: "), 1)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -1001,8 +1092,19 @@ AlignAndDistribute::AlignAndDistribute()
     _combo.set_active(prefs->getInt("/dialogs/align/align-to", 6));
     _combo.signal_changed().connect(sigc::mem_fun(*this, &AlignAndDistribute::on_ref_change));
 
+    _comboNode.append(_("Last selected"));
+    _comboNode.append(_("First selected"));
+    _comboNode.append(_("Middle of selection"));
+    _comboNode.append(_("Min value"));
+    _comboNode.append(_("Max value"));
+    _comboNode.set_active(prefs->getInt("/dialogs/align/align-nodes-to", 2));
+    _comboNode.signal_changed().connect(sigc::mem_fun(*this, &AlignAndDistribute::on_node_ref_change));
+
     _anchorBox.pack_end(_combo, false, false);
     _anchorBox.pack_end(_anchorLabel, false, false);
+
+    _anchorBoxNode.pack_end(_comboNode, false, false);
+    _anchorBoxNode.pack_end(_anchorLabelNode, false, false);
 
     _selgrpLabel.set_mnemonic_widget(_selgrp);
     _selgrpBox.pack_end(_selgrp, false, false);
@@ -1021,11 +1123,15 @@ AlignAndDistribute::AlignAndDistribute()
     _alignBox.pack_start(_selgrpBox);
     _alignBox.pack_start(_alignTableBox);
 
+    _alignBoxNode.pack_start(_anchorBoxNode, false, false);
+    _alignBoxNode.pack_start(_nodesTableBox);
+
+
     _alignFrame.add(_alignBox);
     _distributeFrame.add(_distributeTableBox);
     _rearrangeFrame.add(_rearrangeTableBox);
     _removeOverlapFrame.add(_removeOverlapTableBox);
-    _nodesFrame.add(_nodesTableBox);
+    _nodesFrame.add(_alignBoxNode);
 
     Gtk::Box *contents = _getContents();
     contents->set_spacing(4);
@@ -1036,7 +1142,7 @@ AlignAndDistribute::AlignAndDistribute()
     contents->pack_start(_distributeFrame, true, true);
     contents->pack_start(_rearrangeFrame, true, true);
     contents->pack_start(_removeOverlapFrame, true, true);
-    contents->pack_start(_nodesFrame, true, true);
+    contents->pack_start(_nodesFrame, true, false);
 
     //Connect to the global tool change signal
     _toolChangeConn = INKSCAPE.signal_eventcontext_set.connect(sigc::hide<0>(sigc::bind(sigc::ptr_fun(&on_tool_changed), this)));
@@ -1082,6 +1188,13 @@ void AlignAndDistribute::on_ref_change(){
     //Make blink the master
 }
 
+void AlignAndDistribute::on_node_ref_change(){
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    prefs->setInt("/dialogs/align/align-nodes-to", _comboNode.get_active_row_number());
+
+    //Make blink the master
+}
+
 void AlignAndDistribute::on_selgrp_toggled(){
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setInt("/dialogs/align/sel-as-groups", _selgrp.get_active());
@@ -1107,6 +1220,7 @@ void AlignAndDistribute::setMode(bool nodeEdit)
     ((_rearrangeFrame).*(mSel))();
     ((_removeOverlapFrame).*(mSel))();
     ((_nodesFrame).*(mNode))();
+    _getContents()->queue_resize();
 
 }
 void AlignAndDistribute::addAlignButton(const Glib::ustring &id, const Glib::ustring tiptext,

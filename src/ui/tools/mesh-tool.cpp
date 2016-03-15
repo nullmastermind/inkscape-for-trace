@@ -57,7 +57,7 @@ namespace Inkscape {
 namespace UI {
 namespace Tools {
 
-static void sp_mesh_drag(MeshTool &rc, Geom::Point const pt, guint state, guint32 etime);
+static void sp_mesh_end_drag(MeshTool &rc);
 
 const std::string& MeshTool::getPrefsPath() {
 	return MeshTool::prefsPath;
@@ -316,7 +316,7 @@ static void sp_mesh_context_split_near_point(MeshTool *rc, SPItem *item,  Geom::
 /**
 Wrapper for various mesh operations that require a list of selected corner nodes.
  */
-static void
+void
 sp_mesh_context_corner_operation (MeshTool *rc, MeshCornerOperation operation )
 {
 
@@ -332,11 +332,11 @@ sp_mesh_context_corner_operation (MeshTool *rc, MeshCornerOperation operation )
  
     // Get list of selected draggers for each mesh.
     // For all selected draggers
-    for (GList *i = drag->selected; i != NULL; i = i->next) {
-        GrDragger *dragger = (GrDragger *) i->data;
+    for (std::set<GrDragger *>::const_iterator i = drag->selected.begin(); i != drag->selected.end(); ++i) {
+        GrDragger *dragger = *i;
         // For all draggables of dragger
-        for (GSList const* j = dragger->draggables; j != NULL; j = j->next) {
-            GrDraggable *d = (GrDraggable *) j->data;
+        for (std::vector<GrDraggable *>::const_iterator j = dragger->draggables.begin(); j != dragger->draggables.end() ; ++j) { 
+            GrDraggable *d = *j;
 
             // Only mesh corners
             if( d->point_type != POINT_MG_CORNER ) continue;
@@ -457,9 +457,9 @@ bool MeshTool::root_handler(GdkEvent* event) {
             bool over_line = false;
             SPCtrlCurve *line = NULL;
 
-            if (drag->lines) {
-                for (GSList *l = drag->lines; (l != NULL) && (!over_line); l = l->next) {
-                    line = (SPCtrlCurve*) l->data;
+            if (! drag->lines.empty()) {
+                for (std::vector<SPCtrlLine *>::const_iterator l = drag->lines.begin(); l != drag->lines.end() && (!over_line); ++l) {
+                    line = (SPCtrlCurve*) (*l);
                     over_line |= sp_mesh_context_is_over_line (this, (SPItem*) line, Geom::Point(event->motion.x, event->motion.y));
                 }
             }
@@ -471,7 +471,7 @@ bool MeshTool::root_handler(GdkEvent* event) {
             } else {
                 // Create a new gradient with default coordinates.
             	std::vector<SPItem*> items=selection->itemList();
-                for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
+                for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();++i){
                     SPItem *item = *i;
                     SPGradientType new_type = SP_GRADIENT_TYPE_MESH;
                     Inkscape::PaintTarget fsmode = (prefs->getInt("/tools/gradient/newfillorstroke", 1) != 0) ? Inkscape::FOR_FILL : Inkscape::FOR_STROKE;
@@ -560,8 +560,9 @@ bool MeshTool::root_handler(GdkEvent* event) {
                 Inkscape::Rubberband::get(desktop)->move(motion_dt);
                 this->defaultMessageContext()->set(Inkscape::NORMAL_MESSAGE, _("<b>Draw around</b> handles to select them"));
             } else {
-                // Create new gradient with coordinates determined by drag.
-                sp_mesh_drag(*this, motion_dt, event->motion.state, event->motion.time);
+                // Do nothing. For a linear/radial gradient we follow the drag, updating the
+                // gradient as the end node is dragged. For a mesh gradient, the gradient is always
+                // created to fill the object when the drag ends.
             }
 
             gobble_motion_events(GDK_BUTTON1_MASK);
@@ -592,9 +593,9 @@ bool MeshTool::root_handler(GdkEvent* event) {
             // Change cursor shape if over line
             bool over_line = false;
 
-            if (drag->lines) {
-                for (GSList *l = drag->lines; l != NULL; l = l->next) {
-                    over_line |= sp_mesh_context_is_over_line (this, (SPItem*) l->data, Geom::Point(event->motion.x, event->motion.y));
+            if (!drag->lines.empty()) {
+                for (std::vector<SPCtrlLine *>::const_iterator l = drag->lines.begin(); l != drag->lines.end() ; ++l) {
+                    over_line |= sp_mesh_context_is_over_line (this, (SPItem*)(*l), Geom::Point(event->motion.x, event->motion.y));
                 }
             }
 
@@ -623,9 +624,9 @@ bool MeshTool::root_handler(GdkEvent* event) {
             bool over_line = false;
             SPCtrlLine *line = NULL;
 
-            if (drag->lines) {
-                for (GSList *l = drag->lines; (l != NULL) && (!over_line); l = l->next) {
-                    line = (SPCtrlLine*) l->data;
+            if (!drag->lines.empty()) {
+                for (std::vector<SPCtrlLine *>::const_iterator l = drag->lines.begin(); l != drag->lines.end() && (!over_line); ++l) {
+                    line = (SPCtrlLine*)(*l);
                     over_line = sp_mesh_context_is_over_line (this, (SPItem*) line, Geom::Point(event->motion.x, event->motion.y));
 
                     if (over_line) {
@@ -649,7 +650,7 @@ bool MeshTool::root_handler(GdkEvent* event) {
                 }
 
                 if (!this->within_tolerance) {
-                    // we've been dragging, either do nothing (grdrag handles that),
+                    // we've been dragging, either create a new gradient
                     // or rubberband-select if we have rubberband
                     Inkscape::Rubberband *r = Inkscape::Rubberband::get(desktop);
 
@@ -659,6 +660,9 @@ bool MeshTool::root_handler(GdkEvent* event) {
                             Geom::OptRect const b = r->getRectangle();
                             drag->selectRect(*b);
                         }
+                    } else {
+                        // Create a new mesh gradient
+                        sp_mesh_end_drag(*this);
                     }
                 } else if (this->item_to_select) {
                     if (over_line && line) {
@@ -674,7 +678,7 @@ bool MeshTool::root_handler(GdkEvent* event) {
                     }
                 } else {
                     // click in an empty space; do the same as Esc
-                    if (drag->selected) {
+                    if (!drag->selected.empty()) {
                         drag->deselectAll();
                     } else {
                         selection->clear();
@@ -720,7 +724,7 @@ bool MeshTool::root_handler(GdkEvent* event) {
             break;
 
         case GDK_KEY_Escape:
-            if (drag->selected) {
+            if (!drag->selected.empty()) {
                 drag->deselectAll();
             } else {
                 selection->clear();
@@ -837,7 +841,7 @@ bool MeshTool::root_handler(GdkEvent* event) {
         case GDK_KEY_Delete:
         case GDK_KEY_KP_Delete:
         case GDK_KEY_BackSpace:
-            if ( drag->selected ) {
+            if ( !drag->selected.empty() ) {
                 std::cout << "Deleting mesh stops not implemented yet" << std::endl;
                 ret = TRUE;
             }
@@ -922,7 +926,7 @@ bool MeshTool::root_handler(GdkEvent* event) {
     return ret;
 }
 
-static void sp_mesh_drag(MeshTool &rc, Geom::Point const /*pt*/, guint /*state*/, guint32 /*etime*/) {
+static void sp_mesh_end_drag(MeshTool &rc) {
     SPDesktop *desktop = SP_EVENT_CONTEXT(&rc)->desktop;
     Inkscape::Selection *selection = desktop->getSelection();
     SPDocument *document = desktop->getDocument();
@@ -952,7 +956,7 @@ static void sp_mesh_drag(MeshTool &rc, Geom::Point const /*pt*/, guint /*state*/
         sp_repr_css_set_property(css, "fill-opacity", "1.0");
 
         std::vector<SPItem*> items=selection->itemList();
-        for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();i++){
+        for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();++i){
 
             //FIXME: see above
             sp_repr_css_change_recursive((*i)->getRepr(), css, "style");
@@ -963,19 +967,8 @@ static void sp_mesh_drag(MeshTool &rc, Geom::Point const /*pt*/, guint /*state*/
  
             (*i)->requestModified(SP_OBJECT_MODIFIED_FLAG);
         }
-        // if (ec->_grdrag) {
-        //     ec->_grdrag->updateDraggers();
-        //     // prevent regenerating draggers by selection modified signal, which sometimes
-        //     // comes too late and thus destroys the knot which we will now grab:
-        //     ec->_grdrag->local_change = true;
-        //     // give the grab out-of-bounds values of xp/yp because we're already dragging
-        //     // and therefore are already out of tolerance
-        //     ec->_grdrag->grabKnot (SP_ITEM(selection->itemList()->data),
-        //                            type == SP_GRADIENT_TYPE_LINEAR? POINT_LG_END : POINT_RG_R1,
-        //                            -1, // ignore number (though it is always 1)
-        //                            fill_or_stroke, 99999, 99999, etime);
-        // }
-        // We did an undoable action, but SPDocumentUndo::done will be called by the knot when released
+
+        DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_MESH, _("Create mesh"));
 
         // status text; we do not track coords because this branch is run once, not all the time
         // during drag

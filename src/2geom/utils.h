@@ -68,8 +68,32 @@ struct NullIterator
     NullIterator() {}
 
     template <typename T>
-    void operator=(T const &v) {}
+    void operator=(T const &) {}
 };
+
+/** @brief Get the next iterator in the container with wrap-around.
+ * If the iterator would become the end iterator after incrementing,
+ * return the begin iterator instead. */
+template <typename Iter, typename Container>
+Iter cyclic_next(Iter i, Container &c) {
+    ++i;
+    if (i == c.end()) {
+        i = c.begin();
+    }
+    return i;
+}
+
+/** @brief Get the previous iterator in the container with wrap-around.
+ * If the passed iterator is the begin iterator, return the iterator
+ * just before the end iterator instead. */
+template <typename Iter, typename Container>
+Iter cyclic_prior(Iter i, Container &c) {
+    if (i == c.begin()) {
+        i = c.end();
+    }
+    --i;
+    return i;
+}
 
 } // end namespace Geom
 
