@@ -1049,7 +1049,6 @@ objects_query_fontnumbers (const std::vector<SPItem*> &objects, SPStyle *style_r
     double letterspacing_prev = 0;
     double wordspacing_prev = 0;
     double linespacing_prev = 0;
-    int linespacing_unit = 0;
 
     int texts = 0;
     int no_size = 0;
@@ -1106,11 +1105,6 @@ objects_query_fontnumbers (const std::vector<SPItem*> &objects, SPStyle *style_r
             linespacing_current = style->line_height.computed;
             linespacing_normal = false;
         }
-        if (linespacing_unit == 0) {
-            linespacing_unit = style->line_height.unit;
-        } else if (linespacing_unit != style->line_height.unit) {
-            linespacing_unit = SP_CSS_UNIT_PERCENT;
-        }
         linespacing += linespacing_current;
 
         if ((size_prev != 0 && style->font_size.computed != size_prev) ||
@@ -1154,7 +1148,7 @@ objects_query_fontnumbers (const std::vector<SPItem*> &objects, SPStyle *style_r
     style_res->line_height.normal = linespacing_normal;
     style_res->line_height.computed = linespacing;
     style_res->line_height.value = linespacing;
-    style_res->line_height.unit = linespacing_unit;
+    style_res->line_height.unit = SP_CSS_UNIT_PERCENT;
 
     if (texts > 1) {
         if (different) {
