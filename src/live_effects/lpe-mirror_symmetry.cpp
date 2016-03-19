@@ -52,18 +52,18 @@ public:
 
 LPEMirrorSymmetry::LPEMirrorSymmetry(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
-    mode(_("Mode"), _("Symetry move mode"), "mode", MTConverter, &wr, this, MT_FREE),
+    mode(_("Mode"), _("Symmetry move mode"), "mode", MTConverter, &wr, this, MT_FREE),
     discard_orig_path(_("Discard original path?"), _("Check this to only keep the mirrored part of the path"), "discard_orig_path", &wr, this, false),
-    fusion_paths(_("Fusioned symetry"), _("Fusion right side whith symm"), "fusion_paths", &wr, this, true),
-    reverse_fusion(_("Reverse fusion"), _("Reverse fusion"), "reverse_fusion", &wr, this, false),
-    reflection_line(_("Reflection line:"), _("Line which serves as 'mirror' for the reflection"), "reflection_line", &wr, this, "M0,0 L1,0"),
-    center(_("Center of mirroring (X or Y)"), _("Center of the mirror"), "center", &wr, this, "Adjust the center of mirroring")
+    fuse_paths(_("Fuse paths"), _("Fuse original and the reflection into a single path"), "fuse_paths", &wr, this, true),
+    oposite_fuse(_("Oposite fuse"), _("Picks the other side of the mirror as the original"), "oposite_fuse", &wr, this, false),
+    reflection_line(_("Axis of reflection:"), _("Line which serves as 'mirror' for the reflection"), "reflection_line", &wr, this, "M0,0 L1,0"),
+    center(_("Center of mirroring"), _("Center of the mirror"), "center", &wr, this, "Adjust the center of mirroring")
 {
     show_orig_path = true;
     registerParameter(&mode);
     registerParameter( &discard_orig_path);
-    registerParameter( &fusion_paths);
-    registerParameter( &reverse_fusion);
+    registerParameter( &fuse_paths);
+    registerParameter( &oposite_fuse);
     registerParameter( &reflection_line);
     registerParameter( &center);
     apply_to_clippath_and_mask = true;
@@ -161,7 +161,7 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
     line_m_expanded.start( line_start);
     line_m_expanded.appendNew<Geom::LineSegment>( line_end);
 
-    if (!discard_orig_path && !fusion_paths) {
+    if (!discard_orig_path && !fuse_paths) {
         path_out = path_in;
     }
 
@@ -181,7 +181,7 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
     m = m * m2.inverse();
     m = m * m1;
 
-    if(fusion_paths && !discard_orig_path) {
+    if(fuse_paths && !discard_orig_path) {
         for (Geom::PathVector::const_iterator path_it = original_pathv.begin();
                 path_it != original_pathv.end(); ++path_it) {
             if (path_it->empty()) {
@@ -209,7 +209,7 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
                 Geom::Path portion = original.portion(time_start, timeEnd);
                 Geom::Point middle = portion.pointAt((double)portion.size()/2.0);
                 position = pointSideOfLine(line_start, line_end, middle);
-                if(reverse_fusion) {
+                if(oposite_fuse) {
                     position *= -1;
                 }
                 if(position == 1) {
@@ -226,7 +226,7 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
                 time_start = timeEnd;
             }
             position = pointSideOfLine(line_start, line_end, original.finalPoint());
-            if(reverse_fusion) {
+            if(oposite_fuse) {
                 position *= -1;
             }
             if(cs.size()!=0 && position == 1) {
@@ -259,7 +259,7 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
         }
     }
 
-    if (!fusion_paths || discard_orig_path) {
+    if (!fuse_paths || discard_orig_path) {
         for (int i = 0; i < static_cast<int>(path_in.size()); ++i) {
             path_out.push_back(path_in[i] * m);
         }
