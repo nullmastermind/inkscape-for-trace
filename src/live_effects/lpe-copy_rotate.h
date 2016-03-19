@@ -35,7 +35,7 @@ public:
     virtual Geom::Piecewise<Geom::D2<Geom::SBasis> > doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in);
     virtual void doBeforeEffect (SPLPEItem const* lpeitem);
     virtual void setFusion(Geom::PathVector &path_in, Geom::Path divider, double sizeDivider);
-    virtual void split(Geom::PathVector &path_in,Geom::Path divider);
+    virtual void split(Geom::PathVector &path_in, Geom::Path const &divider);
     virtual void resetDefaults(SPItem const* item);
     virtual void transform_multiply(Geom::Affine const& postmul, bool set);
     /* the knotholder entity classes must be declared friends */
@@ -52,7 +52,7 @@ private:
     ScalarParam rotation_angle;
     ScalarParam num_copies;
     BoolParam copies_to_360;
-    BoolParam fusion_paths ;
+    BoolParam fuse_paths;
     Geom::Point A;
     Geom::Point B;
     Geom::Point dir;
