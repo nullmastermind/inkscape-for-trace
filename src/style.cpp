@@ -1510,7 +1510,8 @@ gchar const *
 sp_style_get_css_unit_string(int unit)
 {
     // specify px by default, see inkscape bug 1221626, mozilla bug 234789
-
+    // This is a problematic fix as some properties (e.g. 'line-height') have
+    // different behaviour if there is no unit.
     switch (unit) {
 
         case SP_CSS_UNIT_NONE: return "px";
