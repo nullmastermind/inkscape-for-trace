@@ -83,23 +83,28 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
     Point point_a(boundingbox_X.max(), boundingbox_Y.min());
     Point point_b(boundingbox_X.max(), boundingbox_Y.max());
     Point point_c(boundingbox_X.max(), boundingbox_Y.middle());
-    if(mode == MT_Y) {
+    if (mode == MT_Y) {
         point_a = Geom::Point(boundingbox_X.min(),center[Y]);
         point_b = Geom::Point(boundingbox_X.max(),center[Y]);
     }
-    if(mode == MT_X) {
+    if (mode == MT_X) {
         point_a = Geom::Point(center[X],boundingbox_Y.min());
         point_b = Geom::Point(center[X],boundingbox_Y.max());
     }
-    if( mode == MT_X || mode == MT_Y ) {
+    if ( mode == MT_X || mode == MT_Y ) {
         Geom::Path path;
         path.start( point_a );
         path.appendNew<Geom::LineSegment>( point_b );
         reflection_line.set_new_value(path.toPwSb(), true);
         line_separation.setPoints(point_a, point_b);
         center.param_setValue(path.pointAt(0.5), true);
-    } else if( mode == MT_FREE) {
+    } else if ( mode == MT_FREE) {
         Geom::PathVector line_m(reflection_line.get_pathvector());
+        Geom::Line line_symm;
+        line_symm->setPoints(line_m->initialPoint(), line_m->finalPoint());
+        Geom::GenericRect bbox(boundingbox_X.min(), boundingbox_Y.min(), boundingbox_X.max(), boundingbox_Y.max());
+        line_m[0].initialPoint = bbox->nearestEdgePoint(line_m->initialPoint());
+        line_m[0].finalPoint = bbox->nearestEdgePoint(line_m->finalPoint())
         if(!are_near(previous_center,center, 0.01)) {
             Geom::Point trans = center - line_m[0].pointAt(0.5);
             line_m[0] *= Geom::Affine(1,0,0,1,trans[X],trans[Y]);
@@ -111,6 +116,7 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
             center.param_setValue(line_m[0].pointAt(0.5), true);
             point_a = line_m[0].initialPoint();
             point_b = line_m[0].finalPoint();
+            reflection_line.set_new_value(line_m[0].toPwSb(), true);
             line_separation.setPoints(point_a, point_b);
         }
         previous_center = center;
@@ -138,52 +144,42 @@ LPEMirrorSymmetry::doOnApply (SPLPEItem const* lpeitem)
     previous_center = center;
 }
 
-int
-LPEMirrorSymmetry::pointSideOfLine(Geom::Point point_a, Geom::Point point_b, Geom::Point point_x)
-{
-    //http://stackoverflow.com/questions/1560492/how-to-tell-whether-a-point-is-to-the-right-or-left-side-of-a-line
-    double pos =  (point_b[Geom::X]-point_a[Geom::X])*(point_x[Geom::Y]-point_a[Geom::Y]) - (point_b[Geom::Y]-point_a[Geom::Y])*(point_x[Geom::X]-point_a[Geom::X]);
-    return (pos < 0) ? -1 : (pos > 0);
-}
 
 Geom::PathVector
 LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
 {
     // Don't allow empty path parameter:
-    if ( reflection_line.get_pathvector().empty() ) {
+    Geom::PathVector line_m(reflection_line.get_pathvector());
+    if ( line_m.empty() ) {
         return path_in;
     }
     Geom::PathVector const original_pathv = pathv_to_linear_and_cubic_beziers(path_in);
     Geom::PathVector path_out;
-    Geom::Path line_m_expanded;
-    Geom::Point line_start = line_separation.pointAt(-100000.0);
-    Geom::Point line_end = line_separation.pointAt(100000.0);
-    line_m_expanded.start( line_start);
-    line_m_expanded.appendNew<Geom::LineSegment>( line_end);
-
+    
     if (!discard_orig_path && !fuse_paths) {
         path_out = path_in;
     }
 
-    Geom::Point point_a(line_start);
-    Geom::Point point_b(line_end);
+    Geom::Point point_a(line_separation.initialPoint());
+    Geom::Point point_b(line_separation.finalPoint());
 
-    Geom::Affine m1(1.0, 0.0, 0.0, 1.0, point_a[0], point_a[1]);
+    Geom::Translate m1(point_a[0], point_a[1]);
     double hyp = Geom::distance(point_a, point_b);
     double c = (point_b[0] - point_a[0]) / hyp; // cos(alpha)
     double s = (point_b[1] - point_a[1]) / hyp; // sin(alpha)
 
     Geom::Affine m2(c, -s, s, c, 0.0, 0.0);
-    Geom::Affine sca(1.0, 0.0, 0.0, -1.0, 0.0, 0.0);
+    Geom::Scale sca(1.0, -1.0);
 
     Geom::Affine m = m1.inverse() * m2;
     m = m * sca;
     m = m * m2.inverse();
     m = m * m1;
 
-    if(fuse_paths && !discard_orig_path) {
+    if (fuse_paths && !discard_orig_path) {
         for (Geom::PathVector::const_iterator path_it = original_pathv.begin();
-                path_it != original_pathv.end(); ++path_it) {
+             path_it != original_pathv.end(); ++path_it) 
+        {
             if (path_it->empty()) {
                 continue;
             }
@@ -197,22 +193,22 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
                     end_open = true;
                 }
             }
-            Geom::Path original = (Geom::Path)(*path_it);
-            if(end_open && path_it->closed()) {
+            Geom::Path original = path_it;
+            if (end_open && path_it->closed()) {
                 original.close(false);
                 original.appendNew<Geom::LineSegment>( original.initialPoint() );
                 original.close(true);
             }
-            Geom::Crossings cs = crossings(original, line_m_expanded);
-            for(unsigned int i = 0; i < cs.size(); i++) {
+            Geom::Crossings cs = crossings(original, line_m);
+            for (unsigned int i = 0; i < cs.size(); i++) {
                 double timeEnd = cs[i].ta;
                 Geom::Path portion = original.portion(time_start, timeEnd);
                 Geom::Point middle = portion.pointAt((double)portion.size()/2.0);
-                position = pointSideOfLine(line_start, line_end, middle);
-                if(oposite_fuse) {
+                position = Geom::sgn(Geom::cross(point_b - point_a, middle - point_a));
+                if (oposite_fuse) {
                     position *= -1;
                 }
-                if(position == 1) {
+                if (position == 1) {
                     Geom::Path mirror = portion.reversed() * m;
                     mirror.setInitial(portion.finalPoint());
                     portion.append(mirror);
@@ -225,11 +221,11 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
                 portion.clear();
                 time_start = timeEnd;
             }
-            position = pointSideOfLine(line_start, line_end, original.finalPoint());
-            if(oposite_fuse) {
+            position = position = Geom::sgn(Geom::cross(point_b - point_a, original.finalPoint() - point_a                                                                                                                                                                              ));
+            if (oposite_fuse) {
                 position *= -1;
             }
-            if(cs.size()!=0 && position == 1) {
+            if (cs.size()!=0 && position == 1) {
                 Geom::Path portion = original.portion(time_start, original.size());
                 portion = portion.reversed();
                 Geom::Path mirror = portion.reversed() * m;
@@ -250,7 +246,7 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
                 }
                 portion.clear();
             }
-            if(cs.size() == 0 && position == 1) {
+            if (cs.size() == 0 && position == 1) {
                 temp_path.push_back(original);
                 temp_path.push_back(original * m);
             }

@@ -44,7 +44,6 @@ public:
     virtual ~LPEMirrorSymmetry();
     virtual void doOnApply (SPLPEItem const* lpeitem);
     virtual void doBeforeEffect (SPLPEItem const* lpeitem);
-    virtual int pointSideOfLine(Geom::Point A, Geom::Point B, Geom::Point X);
     virtual Geom::PathVector doEffect_path (Geom::PathVector const & path_in);
     /* the knotholder entity classes must be declared friends */
     friend class MS::KnotHolderEntityCenterMirrorSymmetry;
