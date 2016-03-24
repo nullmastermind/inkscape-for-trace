@@ -32,6 +32,8 @@ class KnotHolderEntityCenterMirrorSymmetry;
 }
 
 enum ModeType {
+    MT_V,
+    MT_H,
     MT_FREE,
     MT_X,
     MT_Y,
@@ -57,10 +59,11 @@ private:
     BoolParam discard_orig_path;
     BoolParam fuse_paths;
     BoolParam oposite_fuse;
-    PathParam reflection_line;
+    PointParam start_point;
+    PointParam end_point;
     Geom::Line line_separation;
     Geom::Point previous_center;
-    PointParam center;
+    Geom::Point center_point;
 
     LPEMirrorSymmetry(const LPEMirrorSymmetry&);
     LPEMirrorSymmetry& operator=(const LPEMirrorSymmetry&);
