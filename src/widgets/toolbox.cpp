@@ -516,7 +516,7 @@ static gchar const * ui_descr =
         "    <toolitem action='TextSubscriptAction' />"
         "    <separator />"
         "    <toolitem action='TextLineHeightAction' />"
-        "    <toolitem action='TextLineHeightUnitAction' />"
+        "    <toolitem action='TextLineHeightUnitsAction' />"
         "    <toolitem action='TextLetterSpacingAction' />"
         "    <toolitem action='TextWordSpacingAction' />"
         "    <toolitem action='TextDxAction' />"
@@ -1126,7 +1126,7 @@ EgeAdjustmentAction * create_adjustment_action( gchar const *name,
 
     if (unit_tracker) {
         unit_tracker->addAdjustment(adj);
-    }   
+    } 
 
     // Using a cast just to make sure we pass in the right kind of function pointer
     g_object_set( G_OBJECT(act), "tool-post", static_cast<EgeWidgetFixup>(sp_set_font_size_smaller), NULL );

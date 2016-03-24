@@ -152,9 +152,6 @@ public:
     
     /** Retrieve a given unit based on its SVGLength unit */
     Unit const *getUnit(SVGLength::Unit u) const;
-
-    /** Retrieve a given unit based on its SP_CSS_UNIT */
-    Unit const *getUnit(unsigned int u) const;
     
     /** Retrieve a quantity based on its string identifier */
     Quantity parseQuantity(Glib::ustring const &q) const;

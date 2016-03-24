@@ -44,14 +44,6 @@ public:
 
 } // namespace CR
 
-int 
-pointSideOfLine(Geom::Point const &A, Geom::Point const &B, Geom::Point const &X)
-{
-    //http://stackoverflow.com/questions/1560492/how-to-tell-whether-a-point-is-to-the-right-or-left-side-of-a-line
-    double pos =  (B[Geom::X]-A[Geom::X])*(X[Geom::Y]-A[Geom::Y]) - (B[Geom::Y]-A[Geom::Y])*(X[Geom::X]-A[Geom::X]);
-    return (pos < 0) ? -1 : (pos > 0);
-}
-
 bool 
 pointInTriangle(Geom::Point const &p, Geom::Point const &p1, Geom::Point const &p2, Geom::Point const &p3)
 {
@@ -71,10 +63,10 @@ LPECopyRotate::LPECopyRotate(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
     origin(_("Origin"), _("Origin of the rotation"), "origin", &wr, this, "Adjust the origin of the rotation"),
     starting_angle(_("Starting:"), _("Angle of the first copy"), "starting_angle", &wr, this, 0.0),
-    rotation_angle(_("Rotation angle:"), _("Angle between two successive copies"), "rotation_angle", &wr, this, 30.0),
-    num_copies(_("Number of copies:"), _("Number of copies of the original path"), "num_copies", &wr, this, 5),
+    rotation_angle(_("Rotation angle:"), _("Angle between two successive copies"), "rotation_angle", &wr, this, 60.0),
+    num_copies(_("Number of copies:"), _("Number of copies of the original path"), "num_copies", &wr, this, 6),
     copies_to_360(_("360º Copies"), _("No rotation angle, fixed to 360º"), "copies_to_360", &wr, this, true),
-    fuse_paths(_("Fuse paths"), _("Fuse paths by helper line"), "fuse_paths", &wr, this, false),
+    fuse_paths(_("Fuse paths"), _("Fuse paths by helper line, use fill-rule: evenodd for best result"), "fuse_paths", &wr, this, false),
     dist_angle_handle(100.0)
 {
     show_orig_path = true;
@@ -143,6 +135,7 @@ LPECopyRotate::doBeforeEffect (SPLPEItem const* lpeitem)
         num_copies.param_set_increments(2,2);
         if ((int)num_copies%2 !=0) {
             num_copies.param_set_value(num_copies+1);
+            rotation_angle.param_set_value(360.0/(double)num_copies);
         }
     } else {
         num_copies.param_set_increments(1,1);
@@ -181,10 +174,13 @@ LPECopyRotate::split(Geom::PathVector &path_on, Geom::Path const &divider)
     std::sort(crossed.begin(), crossed.end());
     for (unsigned int i = 0; i < crossed.size(); i++) {
         double time_end = crossed[i];
+        if (time_start == time_end || time_end - time_start < Geom::EPSILON) {
+            continue;
+        }
         Geom::Path portion_original = original.portion(time_start,time_end);
         if (!portion_original.empty()) {
-            Geom::Point side_checker = portion_original.pointAt(0.001);
-            position = pointSideOfLine(divider[0].finalPoint(),  divider[1].finalPoint(), side_checker);
+            Geom::Point side_checker = portion_original.pointAt(0.0001);
+            position = Geom::sgn(Geom::cross(divider[1].finalPoint() - divider[0].finalPoint(), side_checker - divider[0].finalPoint()));
             if (rotation_angle != 180) {
                 position = pointInTriangle(side_checker, divider.initialPoint(), divider[0].finalPoint(), divider[1].finalPoint());
             }
@@ -195,7 +191,7 @@ LPECopyRotate::split(Geom::PathVector &path_on, Geom::Path const &divider)
             time_start = time_end;
         }
     }
-    position = pointSideOfLine(divider[0].finalPoint(), divider[1].finalPoint(), original.finalPoint());
+    position = Geom::sgn(Geom::cross(divider[1].finalPoint() - divider[0].finalPoint(), original.finalPoint() - divider[0].finalPoint()));
     if (rotation_angle != 180) {
         position = pointInTriangle(original.finalPoint(), divider.initialPoint(), divider[0].finalPoint(), divider[1].finalPoint());
     }
@@ -242,13 +238,13 @@ LPECopyRotate::setFusion(Geom::PathVector &path_on, Geom::Path divider, double s
             if (i%2 != 0) {
                 Geom::Point A = (Geom::Point)origin;
                 Geom::Point B = origin + dir * Geom::Rotate(-Geom::rad_from_deg((rotation_angle*i)+starting_angle)) * size_divider;
-                Geom::Affine m1(1.0, 0.0, 0.0, 1.0, A[0], A[1]);
+                Geom::Translate m1(A[0], A[1]);
                 double hyp = Geom::distance(A, B);
                 double c = (B[0] - A[0]) / hyp; // cos(alpha)
                 double s = (B[1] - A[1]) / hyp; // sin(alpha)
 
                 Geom::Affine m2(c, -s, s, c, 0.0, 0.0);
-                Geom::Affine sca(1.0, 0.0, 0.0, -1.0, 0.0, 0.0);
+                Geom::Scale sca(1.0, -1.0);
 
                 Geom::Affine tmp_m = m1.inverse() * m2;
                 m = tmp_m;
@@ -269,7 +265,6 @@ LPECopyRotate::setFusion(Geom::PathVector &path_on, Geom::Path divider, double s
                     tmp_path_helper[tmp_path_helper.size()-1] = tmp_path_helper[tmp_path_helper.size()-1].reversed();
                     tmp_append.setInitial(tmp_path_helper[tmp_path_helper.size()-1].finalPoint());
                     tmp_path_helper[tmp_path_helper.size()-1].append(tmp_append);
-                    tmp_path_helper[tmp_path_helper.size()-1] = tmp_path_helper[tmp_path_helper.size()-1].reversed();
                 } else if (Geom::are_near(tmp_path_helper[tmp_path_helper.size()-1].finalPoint(), append_path.initialPoint())) {
                     Geom::Path tmp_append = append_path;
                     tmp_append.setInitial(tmp_path_helper[tmp_path_helper.size()-1].finalPoint());
@@ -279,7 +274,6 @@ LPECopyRotate::setFusion(Geom::PathVector &path_on, Geom::Path divider, double s
                     tmp_path_helper[tmp_path_helper.size()-1] = tmp_path_helper[tmp_path_helper.size()-1].reversed();
                     tmp_append.setInitial(tmp_path_helper[tmp_path_helper.size()-1].finalPoint());
                     tmp_path_helper[tmp_path_helper.size()-1].append(tmp_append);
-                    tmp_path_helper[tmp_path_helper.size()-1] = tmp_path_helper[tmp_path_helper.size()-1].reversed();
                 } else if (Geom::are_near(tmp_path_helper[0].finalPoint(), append_path.finalPoint())) {
                     Geom::Path tmp_append = append_path.reversed();
                     tmp_append.setInitial(tmp_path_helper[0].finalPoint());
@@ -289,7 +283,6 @@ LPECopyRotate::setFusion(Geom::PathVector &path_on, Geom::Path divider, double s
                     tmp_path_helper[0] = tmp_path_helper[0].reversed();
                     tmp_append.setInitial(tmp_path_helper[0].finalPoint());
                     tmp_path_helper[0].append(tmp_append);
-                    tmp_path_helper[0] = tmp_path_helper[0].reversed();
                 } else {
                     tmp_path_helper.push_back(append_path);
                 }

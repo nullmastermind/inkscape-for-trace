@@ -42,8 +42,8 @@ public:
     Inkscape::Util::Unit const * getActiveUnit() const;
 
     void addUnit(Inkscape::Util::Unit const *u);
-    void prependUnit(Inkscape::Util::Unit const *u);
     void addAdjustment(GtkAdjustment *adj);
+    void prependUnit(Inkscape::Util::Unit const *u);
     void setFullVal(GtkAdjustment *adj, gdouble val);
 
     GtkAction *createAction(gchar const *name, gchar const *label, gchar const *tooltip);
