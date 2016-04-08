@@ -302,6 +302,15 @@ Inkscape::XML::Node *SPText::write(Inkscape::XML::Document *xml_doc, Inkscape::X
     this->attributes.writeTo(repr);
     this->rebuildLayout();  // copied from update(), see LP Bug 1339305
 
+    // deprecated attribute, but keep it around for backwards compatibility
+    if (this->style->line_height.set && !this->style->line_height.inherit && !this->style->line_height.normal && this->style->line_height.unit == SP_CSS_UNIT_PERCENT) {
+        Inkscape::SVGOStringStream os;
+        os << (this->style->line_height.value * 100.0) << "%";
+        this->getRepr()->setAttribute("sodipodi:linespacing", os.str().c_str());
+    } else {
+        this->getRepr()->setAttribute("sodipodi:linespacing", NULL);
+    }
+
     // SVG 2 Auto-wrapped text
     if( this->width.computed > 0.0 ) {
         sp_repr_set_svg_double(repr, "width", this->width.computed);
@@ -636,6 +645,13 @@ void SPText::_adjustFontsizeRecursive(SPItem *item, double ex, bool is_root)
         style->font_size.computed *= ex;
         style->letter_spacing.computed *= ex;
         style->word_spacing.computed *= ex;
+        if (style->line_height.unit != SP_CSS_UNIT_NONE &&
+            style->line_height.unit != SP_CSS_UNIT_PERCENT &&
+            style->line_height.unit != SP_CSS_UNIT_EM &&
+            style->line_height.unit != SP_CSS_UNIT_EX) {
+            // No unit on 'line-height' property has special behavior.
+            style->line_height.computed *= ex;
+        }
         item->updateRepr();
     }
 
@@ -819,8 +835,8 @@ void TextTagAttributes::setFirstXY(Geom::Point &point)
         attributes.x.resize(1, zero_length);
     if (attributes.y.empty())
         attributes.y.resize(1, zero_length);
-    attributes.x[0].computed = point[Geom::X];
-    attributes.y[0].computed = point[Geom::Y];
+    attributes.x[0] = point[Geom::X];
+    attributes.y[0] = point[Geom::Y];
 }
 
 void TextTagAttributes::mergeInto(Inkscape::Text::Layout::OptionalTextTagAttrs *output, Inkscape::Text::Layout::OptionalTextTagAttrs const &parent_attrs, unsigned parent_attrs_offset, bool copy_xy, bool copy_dxdyrotate) const

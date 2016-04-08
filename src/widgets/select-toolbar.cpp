@@ -437,58 +437,58 @@ void sp_select_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
     // four spinbuttons
 
     eact = create_adjustment_action(
-            /* name= */ "XAction",
-            /* label= */ C_("Select toolbar", "X position"),
-            /* shortLabel= */ C_("Select toolbar", "X:"),
-            /* tooltip= */ C_("Select toolbar", "Horizontal coordinate of selection"),
-            /* path= */ "/tools/select/X",
-            /* def(default) */ 0.0,
-            /* focusTarget= */ GTK_WIDGET(desktop->canvas),
-            /* dataKludge= */ G_OBJECT(spw),
-            /* altx, altx_mark */ TRUE, "altx",
-            /* lower, uppper, step, page */ -1e6, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
-            /* descrLabels, descrValues, descrCount */ 0, 0, 0,
-            /* callback= */ sp_object_layout_any_value_changed,
-            /* unit_tracker= */ tracker,
-            /* climb, digits, factor */ SPIN_STEP, 3, 1);
+            "XAction",                            /* name */ 
+            C_("Select toolbar", "X position"),   /* label */ 
+            C_("Select toolbar", "X:"),           /* shortLabel */ 
+            C_("Select toolbar", "Horizontal coordinate of selection"), /* tooltip */ 
+            "/tools/select/X",                    /* path */ 
+            0.0,                                  /* def(default) */ 
+            GTK_WIDGET(desktop->canvas),          /* focusTarget */ 
+            G_OBJECT(spw),                        /* dataKludge */ 
+            TRUE, "altx",                         /* altx, altx_mark */ 
+            -1e6, 1e6, SPIN_STEP, SPIN_PAGE_STEP, /* lower, uppper, step, page */ 
+            0, 0, 0,                              /* descrLabels, descrValues, descrCount */ 
+            sp_object_layout_any_value_changed,   /* callback */ 
+            tracker,                              /* unit_tracker */ 
+            SPIN_STEP, 3, 1);                     /* climb, digits, factor */
 
     gtk_action_group_add_action( selectionActions, GTK_ACTION(eact) );
     contextActions->push_back( GTK_ACTION(eact) );
 
     eact = create_adjustment_action(
-            /* name= */ "YAction",
-            /* label= */ C_("Select toolbar", "Y position"),
-            /* shortLabel= */ C_("Select toolbar", "Y:"),
-            /* tooltip= */ C_("Select toolbar", "Vertical coordinate of selection"),
-            /* path= */ "/tools/select/Y",
-            /* def(default) */ 0.0,
-            /* focusTarget= */ GTK_WIDGET(desktop->canvas),
-            /* dataKludge= */ G_OBJECT(spw),
-            /* altx, altx_mark */ TRUE, "altx",
-            /* lower, uppper, step, page */ -1e6, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
-            /* descrLabels, descrValues, descrCount */ 0, 0, 0,
-            /* callback= */ sp_object_layout_any_value_changed,
-            /* unit_tracker= */ tracker,
-            /* climb, digits, factor */ SPIN_STEP, 3, 1);
+            "YAction",                            /* name */
+            C_("Select toolbar", "Y position"),   /* label */
+            C_("Select toolbar", "Y:"),           /* shortLabel */
+            C_("Select toolbar", "Vertical coordinate of selection"), /* tooltip */
+            "/tools/select/Y",                    /* path */
+            0.0,                                  /* def(default) */
+            GTK_WIDGET(desktop->canvas),          /* focusTarget */
+            G_OBJECT(spw),                        /* dataKludge */
+            TRUE, "altx",                         /* altx, altx_mark */
+            -1e6, 1e6, SPIN_STEP, SPIN_PAGE_STEP, /* lower, uppper, step, page */
+            0, 0, 0,                              /* descrLabels, descrValues, descrCount */
+            sp_object_layout_any_value_changed,   /* callback */
+            tracker,                              /* unit_tracker */
+            SPIN_STEP, 3, 1);                     /* climb, digits, factor */              
 
     gtk_action_group_add_action( selectionActions, GTK_ACTION(eact) );
     contextActions->push_back( GTK_ACTION(eact) );
 
     eact = create_adjustment_action(
-            /* name= */ "WidthAction",
-            /* label= */ C_("Select toolbar", "Width"),
-            /* shortLabel= */ C_("Select toolbar", "W:"),
-            /* tooltip= */ C_("Select toolbar", "Width of selection"),
-            /* path= */ "/tools/select/width",
-            /* def(default) */ 0.0,
-            /* focusTarget= */ GTK_WIDGET(desktop->canvas),
-            /* dataKludge= */ G_OBJECT(spw),
-            /* altx, altx_mark */ TRUE, "altx",
-            /* lower, uppper, step, page */ 0.0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
-            /* descrLabels, descrValues, descrCount */ 0, 0, 0,
-            /* callback= */ sp_object_layout_any_value_changed,
-            /* unit_tracker= */ tracker,
-            /* climb, digits, factor */ SPIN_STEP, 3, 1);
+            "WidthAction",                        /* name */
+            C_("Select toolbar", "Width"),        /* label */
+            C_("Select toolbar", "W:"),           /* shortLabel */
+            C_("Select toolbar", "Width of selection"), /* tooltip */
+            "/tools/select/width",                /* path */                      
+            0.0,                                  /* def(default) */
+            GTK_WIDGET(desktop->canvas),          /* focusTarget */
+            G_OBJECT(spw),                        /* dataKludge */
+            TRUE, "altx",                         /* altx, altx_mark */
+            0.0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,  /* lower, uppper, step, page */
+            0, 0, 0,                              /* descrLabels, descrValues, descrCount */
+            sp_object_layout_any_value_changed,   /* callback */
+            tracker,                              /* unit_tracker */
+            SPIN_STEP, 3, 1);                     /* climb, digits, factor */
 
     gtk_action_group_add_action( selectionActions, GTK_ACTION(eact) );
     contextActions->push_back( GTK_ACTION(eact) );
@@ -507,20 +507,21 @@ void sp_select_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
     }
 
     eact = create_adjustment_action(
-            /* name= */ "HeightAction",
-            /* label= */ C_("Select toolbar", "Height"),
-            /* shortLabel= */ C_("Select toolbar", "H:"),
-            /* tooltip= */ C_("Select toolbar", "Height of selection"),
-            /* path= */ "/tools/select/height",
-            /* def(default) */ 0.0,
-            /* focusTarget= */ GTK_WIDGET(desktop->canvas),
-            /* dataKludge= */ G_OBJECT(spw),
-            /* altx, altx_mark */ TRUE, "altx",
-            /* lower, uppper, step, page */ 0.0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,
-            /* descrLabels, descrValues, descrCount */ 0, 0, 0,
-            /* callback= */ sp_object_layout_any_value_changed,
-            /* unit_tracker= */ tracker,
-            /* climb, digits, factor */ SPIN_STEP, 3, 1);
+            "HeightAction",                       /* name */
+            C_("Select toolbar", "Height"),       /* label */
+            C_("Select toolbar", "H:"),           /* shortLabel */
+            C_("Select toolbar", "Height of selection"), /* tooltip */
+            "/tools/select/height",               /* path */                      
+            0.0,                                  /* def(default) */
+            GTK_WIDGET(desktop->canvas),          /* focusTarget */
+            G_OBJECT(spw),                        /* dataKludge */
+            TRUE, "altx",                         /* altx, altx_mark */
+            0.0, 1e6, SPIN_STEP, SPIN_PAGE_STEP,  /* lower, uppper, step, page */
+            0, 0, 0,                              /* descrLabels, descrValues, descrCount */
+            sp_object_layout_any_value_changed,   /* callback */
+            tracker,                              /* unit_tracker */
+            SPIN_STEP, 3, 1);                     /* climb, digits, factor */
+
 
     gtk_action_group_add_action( selectionActions, GTK_ACTION(eact) );
     contextActions->push_back( GTK_ACTION(eact) );

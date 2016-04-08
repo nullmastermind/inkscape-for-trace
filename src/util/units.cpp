@@ -81,21 +81,7 @@ unsigned const svg_length_lookup[] = {
     UNIT_CODE_PERCENT
 };
 
-/* From SP_CSS_UNIT_* to unit  */
-unsigned const sp_css_unit_lookup[] = {
-    0,
-    UNIT_CODE_PX,
-    UNIT_CODE_PT,
-    UNIT_CODE_PC,
-    UNIT_CODE_MM,
-    UNIT_CODE_CM,
-    UNIT_CODE_IN,
-    UNIT_CODE_EM,
-    UNIT_CODE_EX,
-    UNIT_CODE_PERCENT
-    // UNIT_CODE_FT Missing,
-    // UNIT_CODE_MT Missing,
-};
+
 
 // maps unit codes obtained from their abbreviations to their SVGLength unit indexes
 typedef INK_UNORDERED_MAP<unsigned, SVGLength::Unit> UnitCodeLookup;
@@ -227,10 +213,6 @@ bool Unit::compatibleWith(Glib::ustring const &u) const
 {
     return compatibleWith(unit_table.getUnit(u));
 }
-bool Unit::compatibleWith(char const *u) const
-{
-    return compatibleWith(unit_table.getUnit(u));
-}
 
 bool Unit::operator==(Unit const &other) const
 {
@@ -272,6 +254,8 @@ double Unit::convert(double from_dist, char const *to) const
 {
     return convert(from_dist, unit_table.getUnit(to));
 }
+
+
 
 Unit UnitTable::_empty_unit;
 
@@ -318,19 +302,6 @@ Unit const *UnitTable::getUnit(SVGLength::Unit u) const
     }
 
     UnitCodeMap::const_iterator f = _unit_map.find(svg_length_lookup[u]);
-    if (f != _unit_map.end()) {
-        return &(*f->second);
-    }
-    return &_empty_unit;
-}
-/* SP_CSS_UNIT lookup */
-Unit const *UnitTable::getUnit(unsigned int u) const
-{
-    if (u == 0 || u > 9) {
-        return &_empty_unit;
-    }
-
-    UnitCodeMap::const_iterator f = _unit_map.find(sp_css_unit_lookup[u]);
     if (f != _unit_map.end()) {
         return &(*f->second);
     }
