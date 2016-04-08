@@ -609,7 +609,7 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
             Geom::Coord rx = radius;
             Geom::Coord ry = rx;
             if (times[1] != 1) {
-                if (times[1] != times[0] || times[1] == times[0] == 1) {
+                if (times[1] != times[0] || (times[1] == 1 && times[0] == 1)) {
                     if (!knot_curve_1->isDegenerate()) {
                         tmp_path.append(*knot_curve_1);
                     }
