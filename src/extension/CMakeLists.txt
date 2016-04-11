@@ -14,6 +14,7 @@ set(extension_SRC
 	print.cpp
 	system.cpp
 	timer.cpp
+    loader.cpp
 
 	implementation/implementation.cpp
 	implementation/xslt.cpp
@@ -90,6 +91,7 @@ set(extension_SRC
 	print.h
 	system.h
 	timer.h
+    loader.h
 
 	implementation/implementation.h
 	implementation/script.h
