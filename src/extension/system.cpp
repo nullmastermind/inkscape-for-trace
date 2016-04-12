@@ -490,11 +490,8 @@ build_from_reprdoc(Inkscape::XML::Document *doc, Implementation::Implementation 
             }
             case MODULE_PLUGIN: {
                 Inkscape::Extension::Loader loader = Inkscape::Extension::Loader();
-                loader.setBaseDirectory ( Inkscape::Application::profile_path("extensions"));
-                imp = loader.LoadImplementation(doc);
-                if( imp != NULL) {
-                    return new Extension(repr, imp);
-                }
+                loader.set_base_directory ( Inkscape::Application::profile_path("extensions"));
+                imp = loader.load_implementation(doc);
                 break;
             }
             default: {
@@ -529,6 +526,7 @@ build_from_reprdoc(Inkscape::XML::Document *doc, Implementation::Implementation 
             break;
         }
         default: {
+            module = new Extension(repr, imp);
             break;
         }
     }

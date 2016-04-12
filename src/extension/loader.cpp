@@ -20,10 +20,10 @@ namespace Extension {
 
 typedef Implementation::Implementation *(*_getImplementation)(void);
 
-bool Loader::LoadDependency(Dependency *dep)
+bool Loader::load_dependency(Dependency *dep)
 {
     GModule *module = NULL;
-    module = g_module_open(dep->getName(), (GModuleFlags)0);
+    module = g_module_open(dep->get_name(), (GModuleFlags)0);
     if (module == NULL) {
         return false;
     }
@@ -35,7 +35,7 @@ bool Loader::LoadDependency(Dependency *dep)
  * @param doc The xml representation of the INX extension configuration.
  * @return The implementation of the extension loaded from the plugin.
  */
-Implementation::Implementation *Loader::LoadImplementation(Inkscape::XML::Document *doc)
+Implementation::Implementation *Loader::load_implementation(Inkscape::XML::Document *doc)
 {
     try {
         Inkscape::XML::Node *repr = doc->root();
@@ -48,10 +48,10 @@ Implementation::Implementation *Loader::LoadImplementation(Inkscape::XML::Docume
 
             if (!strcmp(chname, "dependency")) {
                 Dependency dep = Dependency(child_repr);
-                bool success = LoadDependency(&dep);
+                bool success = load_dependency(&dep);
                 if( !success ){
                     const char *res = g_module_error();
-                    g_warning("Unable to load dependency %s of plugin %s.\nDetails: %s\n", dep.getName(), res);
+                    g_warning("Unable to load dependency %s of plugin %s.\nDetails: %s\n", dep.get_name(), res);
                     return NULL;
                 }
             } 

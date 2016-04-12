@@ -31,7 +31,7 @@ public:
      * 
      * @param dir is the path where the plugin should be loaded from.
      */
-    void setBaseDirectory(const gchar *dir) {
+    void set_base_directory(const gchar *dir) {
         _baseDirectory = dir;
     }
 
@@ -40,7 +40,7 @@ public:
      * 
      * @param dep
      */
-    bool LoadDependency(Dependency *dep);
+    bool load_dependency(Dependency *dep);
 
     /**
      * Load the actual implementation of a plugin supplied by the plugin.
@@ -48,7 +48,7 @@ public:
      * @param doc The xml representation of the INX extension configuration.
      * @return The implementation of the extension loaded from the plugin.
      */
-    Implementation::Implementation *LoadImplementation(Inkscape::XML::Document *doc);
+    Implementation::Implementation *load_implementation(Inkscape::XML::Document *doc);
 
 private:
     const gchar *_baseDirectory; /**< The base directory to load a plugin from */

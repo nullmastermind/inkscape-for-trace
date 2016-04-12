@@ -241,7 +241,7 @@ bool Dependency::check (void) const
     Returns the name of the dependency as found in the configuration file.
  
 */
-const gchar* Dependency::getName()
+const gchar* Dependency::get_name()
 {
     return _string;
 }
