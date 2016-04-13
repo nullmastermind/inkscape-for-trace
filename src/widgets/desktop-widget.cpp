@@ -572,10 +572,18 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     sp_ruler_add_track_widget (SP_RULER(dtw->vruler), GTK_WIDGET(dtw->canvas));
 
 #if GTK_CHECK_VERSION(3,0,0)
-    GdkRGBA white = {1,1,1,1};
-    gtk_widget_override_background_color(GTK_WIDGET(dtw->canvas),
-                                         GTK_STATE_FLAG_NORMAL,
-					 &white);
+    GtkCssProvider  *css_provider  = gtk_css_provider_new();
+    GtkStyleContext *style_context = gtk_widget_get_style_context(GTK_WIDGET(dtw->canvas));
+
+    gtk_css_provider_load_from_data(css_provider,
+                                    "SPCanvas {\n"
+                                    " background-color: white;\n"
+                                    "}\n",
+                                    -1, NULL);
+
+    gtk_style_context_add_provider(style_context,
+                                   GTK_STYLE_PROVIDER(css_provider),
+                                   GTK_STYLE_PROVIDER_PRIORITY_USER);
 #else
     GtkStyle *style = gtk_style_copy(gtk_widget_get_style(GTK_WIDGET(dtw->canvas)));
     style->bg[GTK_STATE_NORMAL] = style->white;
@@ -692,38 +700,37 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     gtk_container_add (GTK_CONTAINER (eventbox), dtw->coord_status);
     gtk_widget_set_tooltip_text (eventbox, _("Cursor coordinates"));
     GtkWidget *label_x = gtk_label_new(_("X:"));
-    gtk_misc_set_alignment (GTK_MISC(label_x), 0.0, 0.5);
-
-#if GTK_CHECK_VERSION(3,0,0)
-    gtk_grid_attach(GTK_GRID(dtw->coord_status), 
-            label_x, 1, 0, 1, 1);
-#else
-    gtk_table_attach(GTK_TABLE(dtw->coord_status),  label_x, 1,2, 0,1, GTK_FILL, GTK_FILL, 0, 0);
-#endif
-
     GtkWidget *label_y = gtk_label_new(_("Y:"));
-    gtk_misc_set_alignment (GTK_MISC(label_y), 0.0, 0.5);
 
 #if GTK_CHECK_VERSION(3,0,0)
+    gtk_widget_set_halign(label_x, GTK_ALIGN_START);
+    gtk_widget_set_halign(label_y, GTK_ALIGN_START);
+    gtk_grid_attach(GTK_GRID(dtw->coord_status), label_x, 1, 0, 1, 1);
     gtk_grid_attach(GTK_GRID(dtw->coord_status), label_y, 1, 1, 1, 1);
 #else
+    gtk_misc_set_alignment (GTK_MISC(label_x), 0.0, 0.5);
+    gtk_misc_set_alignment (GTK_MISC(label_y), 0.0, 0.5);
+    gtk_table_attach(GTK_TABLE(dtw->coord_status),  label_x, 1,2, 0,1, GTK_FILL, GTK_FILL, 0, 0);
     gtk_table_attach(GTK_TABLE(dtw->coord_status),  label_y, 1,2, 1,2, GTK_FILL, GTK_FILL, 0, 0);
 #endif
 
     dtw->coord_status_x = gtk_label_new(NULL);
-    gtk_label_set_markup( GTK_LABEL(dtw->coord_status_x), "<tt>   0.00 </tt>" );
-    gtk_misc_set_alignment (GTK_MISC(dtw->coord_status_x), 1.0, 0.5);
     dtw->coord_status_y = gtk_label_new(NULL);
+    gtk_label_set_markup( GTK_LABEL(dtw->coord_status_x), "<tt>   0.00 </tt>" );
     gtk_label_set_markup( GTK_LABEL(dtw->coord_status_y), "<tt>   0.00 </tt>" );
-    gtk_misc_set_alignment (GTK_MISC(dtw->coord_status_y), 1.0, 0.5);
+
     GtkWidget* label_z = gtk_label_new(_("Z:"));
 
 #if GTK_CHECK_VERSION(3,0,0)
+    gtk_widget_set_halign(dtw->coord_status_x, GTK_ALIGN_END);
+    gtk_widget_set_halign(dtw->coord_status_y, GTK_ALIGN_END);
     gtk_grid_attach(GTK_GRID(dtw->coord_status), dtw->coord_status_x, 2, 0, 1, 1);
     gtk_grid_attach(GTK_GRID(dtw->coord_status), dtw->coord_status_y, 2, 1, 1, 1);
     gtk_grid_attach(GTK_GRID(dtw->coord_status), label_z, 3, 0, 1, 2);
     gtk_grid_attach(GTK_GRID(dtw->coord_status), dtw->zoom_status, 4, 0, 1, 2);
 #else
+    gtk_misc_set_alignment (GTK_MISC(dtw->coord_status_x), 1.0, 0.5);
+    gtk_misc_set_alignment (GTK_MISC(dtw->coord_status_y), 1.0, 0.5);
     gtk_table_attach(GTK_TABLE(dtw->coord_status), dtw->coord_status_x, 2,3, 0,1, GTK_FILL, GTK_FILL, 0, 0);
     gtk_table_attach(GTK_TABLE(dtw->coord_status), dtw->coord_status_y, 2,3, 1,2, GTK_FILL, GTK_FILL, 0, 0);
     gtk_table_attach(GTK_TABLE(dtw->coord_status),  label_z, 3,4, 0,2, GTK_FILL, GTK_FILL, 0, 0);
@@ -756,7 +763,13 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     dtw->select_status_eventbox = gtk_event_box_new ();
     dtw->select_status = gtk_label_new (NULL);
     gtk_label_set_ellipsize (GTK_LABEL(dtw->select_status), PANGO_ELLIPSIZE_END);
+
+#if GTK_CHECK_VERSION(3,0,0)
+    gtk_widget_set_halign(dtw->select_status, GTK_ALIGN_START);
+#else
     gtk_misc_set_alignment (GTK_MISC (dtw->select_status), 0.0, 0.5);
+#endif
+
     gtk_widget_set_size_request (dtw->select_status, 1, -1);
     // display the initial welcome message in the statusbar
     gtk_label_set_markup (GTK_LABEL (dtw->select_status), _("<b>Welcome to Inkscape!</b> Use shape or freehand tools to create objects; use selector (arrow) to move or transform them."));
@@ -1685,7 +1698,8 @@ void SPDesktopWidget::setToolboxPosition(Glib::ustring const& id, GtkPositionTyp
             case GTK_POS_TOP:
             case GTK_POS_BOTTOM:
                 if ( gtk_widget_is_ancestor(toolbox, hbox) ) {
-                    gtk_widget_reparent( toolbox, vbox );
+                    gtk_container_remove(GTK_CONTAINER(hbox), toolbox);
+                    gtk_container_add(GTK_CONTAINER(vbox), toolbox);
                     gtk_box_set_child_packing(GTK_BOX(vbox), toolbox, FALSE, TRUE, 0, GTK_PACK_START);
                 }
                 ToolboxFactory::setOrientation(toolbox, GTK_ORIENTATION_HORIZONTAL);
@@ -1693,7 +1707,8 @@ void SPDesktopWidget::setToolboxPosition(Glib::ustring const& id, GtkPositionTyp
             case GTK_POS_LEFT:
             case GTK_POS_RIGHT:
                 if ( !gtk_widget_is_ancestor(toolbox, hbox) ) {
-                    gtk_widget_reparent( toolbox, hbox );
+                    gtk_container_remove(GTK_CONTAINER(vbox), toolbox);
+                    gtk_container_add(GTK_CONTAINER(hbox), toolbox);
                     gtk_box_set_child_packing(GTK_BOX(hbox), toolbox, FALSE, TRUE, 0, GTK_PACK_START);
                     if (pos == GTK_POS_LEFT) {
                         gtk_box_reorder_child( GTK_BOX(hbox), toolbox, 0 );

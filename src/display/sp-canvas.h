@@ -11,9 +11,11 @@
  *   Raph Levien <raph@gimp.org>
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *   Jon A. Cruz <jon@joncruz.org>
+ *   Krzysztof Kosiński <tweenk.pl@gmail.com>
  *
  * Copyright (C) 1998 The Free Software Foundation
  * Copyright (C) 2002 Lauris Kaplinski
+ * Copyright (C) 2016 Google Inc.
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
@@ -155,9 +157,8 @@ public:
      */
     static gint handle_scroll(GtkWidget *widget, GdkEventScroll *event);
     static gint handle_motion(GtkWidget *widget, GdkEventMotion *event);
-#if GTK_CHECK_VERSION(3,0,0)
     static gboolean handle_draw(GtkWidget *widget, cairo_t *cr);
-#else
+#if !GTK_CHECK_VERSION(3,0,0)
     static gboolean handle_expose(GtkWidget *widget, GdkEventExpose *event);
 #endif
     static gint handle_key_event(GtkWidget *widget, GdkEventKey *event);
@@ -180,9 +181,8 @@ public:
     int _y0;
 
     /* Area that needs redrawing, stored as a microtile array */
-    int    _tLeft, _tTop, _tRight, _tBottom;
-    int    _tile_w, _tile_h;
-    uint8_t *_tiles;
+    cairo_surface_t *_backing_store;
+    cairo_region_t *_clean_region;
 
     /** Last known modifier state, for deferred repick when a button is down. */
     int _state;
@@ -208,7 +208,6 @@ public:
     int _close_enough;
 
     unsigned int _need_update : 1;
-    unsigned int _need_redraw : 1;
     unsigned int _need_repick : 1;
 
     int _forced_redraw_count;

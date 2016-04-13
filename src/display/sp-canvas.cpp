@@ -8,9 +8,11 @@
  *   fred
  *   bbyak
  *   Jon A. Cruz <jon@joncruz.org>
+ *   Krzysztof Kosiński <tweenk.pl@gmail.com>
  *
  * Copyright (C) 1998 The Free Software Foundation
  * Copyright (C) 2002-2006 authors
+ * Copyright (C) 2016 Google Inc.
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
@@ -122,7 +124,7 @@ struct SPCanvasClass {
 
 namespace {
 
-gint const UPDATE_PRIORITY = G_PRIORITY_HIGH_IDLE;
+gint const UPDATE_PRIORITY = G_PRIORITY_DEFAULT_IDLE;
 
 GdkWindow *getWindow(SPCanvas *canvas)
 {
@@ -935,7 +937,6 @@ void sp_canvas_class_init(SPCanvasClass *klass)
 static void sp_canvas_init(SPCanvas *canvas)
 {
     gtk_widget_set_has_window (GTK_WIDGET (canvas), TRUE);
-    gtk_widget_set_double_buffered (GTK_WIDGET (canvas), FALSE);
     gtk_widget_set_can_focus (GTK_WIDGET (canvas), TRUE);
 
     canvas->_pick_event.type = GDK_LEAVE_NOTIFY;
@@ -956,9 +957,8 @@ static void sp_canvas_init(SPCanvas *canvas)
     
     canvas->_drawing_disabled = false;
 
-    canvas->_tiles=NULL;
-    canvas->_tLeft=canvas->_tTop=canvas->_tRight=canvas->_tBottom=0;
-    canvas->_tile_h=canvas->_tile_h=0;
+    canvas->_backing_store = NULL;
+    canvas->_clean_region = cairo_region_create();
 
     canvas->_forced_redraw_count = 0;
     canvas->_forced_redraw_limit = -1;
@@ -967,22 +967,15 @@ static void sp_canvas_init(SPCanvas *canvas)
     canvas->_enable_cms_display_adj = false;
     new (&canvas->_cms_key) Glib::ustring("");
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-
-    canvas->_is_scrolling = false;
 }
 
 void SPCanvas::shutdownTransients()
 {
-    // We turn off the need_redraw flag, since if the canvas is mapped again
-    // it will request a redraw anyways.  We do not turn off the need_update
-    // flag, though, because updates are not queued when the canvas remaps
-    // itself.
-    //
-    _need_redraw = FALSE;
-    if (_tiles) g_free(_tiles);
-    _tiles = NULL;
-    _tLeft = _tTop = _tRight = _tBottom = 0;
-    _tile_h = _tile_h = 0;
+    // Reset the clean region
+    if (_clean_region && !cairo_region_is_empty(_clean_region)) {
+        cairo_region_destroy(_clean_region);
+        _clean_region = cairo_region_create();
+    }
 
     if (_grabbed_item) {
         _grabbed_item = NULL;
@@ -1004,6 +997,14 @@ void SPCanvas::dispose(GObject *object)
     if (canvas->_root) {
         g_object_unref (canvas->_root);
         canvas->_root = NULL;
+    }
+    if (canvas->_backing_store) {
+        cairo_surface_destroy(canvas->_backing_store);
+        canvas->_backing_store = NULL;
+    }
+    if (canvas->_clean_region) {
+        cairo_region_destroy(canvas->_clean_region);
+        canvas->_clean_region = NULL;
     }
 
     canvas->shutdownTransients();
@@ -1138,41 +1139,41 @@ void SPCanvas::handle_size_request(GtkWidget *widget, GtkRequisition *req)
 void SPCanvas::handle_size_allocate(GtkWidget *widget, GtkAllocation *allocation)
 {
     SPCanvas *canvas = SP_CANVAS (widget);
-    GtkAllocation widg_allocation;
+    GtkAllocation old_allocation;
    
-    gtk_widget_get_allocation (widget, &widg_allocation);
+    gtk_widget_get_allocation(widget, &old_allocation);
 
-//    Geom::IntRect old_area = Geom::IntRect::from_xywh(canvas->x0, canvas->y0,
-//        widg_allocation.width, widg_allocation.height);
+//    Geom::IntRect old_area = Geom::IntRect::from_xywh(canvas->_x0, canvas->_y0,
+//        old_allocation.width, old_allocation.height);
 
     Geom::IntRect new_area = Geom::IntRect::from_xywh(canvas->_x0, canvas->_y0,
         allocation->width, allocation->height);
 
-    // Schedule redraw of new region
-    canvas->resizeTiles(canvas->_x0, canvas->_y0, canvas->_x0 + allocation->width, canvas->_y0 + allocation->height);
-    if (SP_CANVAS_ITEM_GET_CLASS (canvas->_root)->viewbox_changed)
-        SP_CANVAS_ITEM_GET_CLASS (canvas->_root)->viewbox_changed (canvas->_root, new_area);
-
-    if (allocation->width > widg_allocation.width) {
-        canvas->requestRedraw(canvas->_x0 + widg_allocation.width,
-                              0,
-                              canvas->_x0 + allocation->width,
-                              canvas->_y0 + allocation->height);
+    // resize backing store; the clean region does not change
+    cairo_surface_t *new_backing_store = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
+        allocation->width, allocation->height);
+    if (canvas->_backing_store) {
+        cairo_t *cr = cairo_create(new_backing_store);
+        cairo_set_source_surface(cr, canvas->_backing_store, 0, 0);
+        cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
+        cairo_paint(cr);
+        cairo_destroy(cr);
+        cairo_surface_destroy(canvas->_backing_store);
     }
-    if (allocation->height > widg_allocation.height) {
-        canvas->requestRedraw(0,
-                              canvas->_y0 + widg_allocation.height,
-                              canvas->_x0 + allocation->width,
-                              canvas->_y0 + allocation->height);
-    }
+    canvas->_backing_store = new_backing_store;
 
     gtk_widget_set_allocation (widget, allocation);
+
+    // Schedule redraw of new region
+    if (SP_CANVAS_ITEM_GET_CLASS (canvas->_root)->viewbox_changed)
+        SP_CANVAS_ITEM_GET_CLASS (canvas->_root)->viewbox_changed (canvas->_root, new_area);
 
     if (gtk_widget_get_realized (widget)) {
         gdk_window_move_resize (gtk_widget_get_window (widget),
                                 allocation->x, allocation->y,
                                 allocation->width, allocation->height);
     }
+    canvas->addIdle();
 }
 
 int SPCanvas::emitEvent(GdkEvent *event)
@@ -1554,11 +1555,7 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
 
 #if GTK_CHECK_VERSION(3,0,0)
     GtkStyleContext *context = gtk_widget_get_style_context(widget);
-    GdkRGBA color;
-    gtk_style_context_get_background_color(context,
-                                           gtk_widget_get_state_flags(widget),
-                                           &color);
-    gdk_cairo_set_source_rgba(buf.ct, &color);
+    gtk_render_background(context, buf.ct, 0, 0, paint_rect.width(), paint_rect.height());
 #else
     GtkStyle *style = gtk_widget_get_style (widget);
     gdk_cairo_set_source_color(buf.ct, &style->bg[GTK_STATE_NORMAL]);
@@ -1600,7 +1597,8 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
     }
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 
-    cairo_t *xct = gdk_cairo_create(gtk_widget_get_window (widget));
+    //cairo_t *xct = gdk_cairo_create(gtk_widget_get_window (widget));
+    cairo_t *xct = cairo_create(_backing_store);
     cairo_translate(xct, paint_rect.left() - _x0, paint_rect.top() - _y0);
     cairo_rectangle(xct, 0, 0, paint_rect.width(), paint_rect.height());
     cairo_clip(xct);
@@ -1609,6 +1607,12 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
     cairo_paint(xct);
     cairo_destroy(xct);
     cairo_surface_destroy(imgs);
+
+    cairo_rectangle_int_t crect = { paint_rect.left(), paint_rect.right(), paint_rect.width(), paint_rect.height() };
+    cairo_region_union_rectangle(_clean_region, &crect);
+
+    gtk_widget_queue_draw_area(GTK_WIDGET(this), paint_rect.left() -_x0, paint_rect.top() - _y0,
+        paint_rect.width(), paint_rect.height());
 }
 
 struct PaintRectSetup {
@@ -1792,52 +1796,63 @@ void SPCanvas::endForcedFullRedraws()
     _forced_redraw_limit = -1;
 }
 
-#if GTK_CHECK_VERSION(3,0,0)
 gboolean SPCanvas::handle_draw(GtkWidget *widget, cairo_t *cr) {
     SPCanvas *canvas = SP_CANVAS(widget);
 
     cairo_rectangle_list_t *rects = cairo_copy_clip_rectangle_list(cr);
+    cairo_region_t *draw_region = cairo_region_create();
 
     for (int i = 0; i < rects->num_rectangles; i++) {
         cairo_rectangle_t rectangle = rects->rectangles[i];
-
-        Geom::IntRect r = Geom::IntRect::from_xywh(rectangle.x + canvas->_x0, rectangle.y + canvas->_y0,
-                                                   rectangle.width, rectangle.height);
-
-        canvas->requestRedraw(r.left(), r.top(), r.right(), r.bottom());
+        Geom::Rect dr = Geom::Rect::from_xywh(rectangle.x + canvas->_x0, rectangle.y + canvas->_y0,
+                                              rectangle.width, rectangle.height);
+        Geom::IntRect ir = dr.roundOutwards();
+        cairo_rectangle_int_t irect = { ir.left(), ir.top(), ir.width(), ir.height() };
+        cairo_region_union_rectangle(draw_region, &irect);
     }
-
     cairo_rectangle_list_destroy(rects);
 
-	return FALSE;
+    cairo_region_t *draw_dirty = cairo_region_copy(draw_region);
+    cairo_region_subtract(draw_dirty, canvas->_clean_region);
+    cairo_region_intersect(draw_region, canvas->_clean_region);
+
+    // Draw the clean portion
+    if (!cairo_region_is_empty(draw_region)) {
+        cairo_region_translate(draw_region, -canvas->_x0, -canvas->_y0);
+        cairo_save(cr);
+        int n_rects = cairo_region_num_rectangles(draw_region);
+        for (int i = 0; i < n_rects; ++i) {
+            cairo_rectangle_int_t crect;
+            cairo_region_get_rectangle(draw_region, i, &crect);
+            cairo_rectangle(cr, crect.x, crect.y, crect.width, crect.height);
+        }
+        cairo_clip(cr);
+        cairo_set_source_surface(cr, canvas->_backing_store, 0, 0);
+        cairo_paint(cr);
+        cairo_restore(cr);
+    }
+
+    // Render the dirty portion in the background
+    if (!cairo_region_is_empty(draw_dirty)) {
+        canvas->addIdle();
+    }
+    cairo_region_destroy(draw_region);
+    cairo_region_destroy(draw_dirty);
+
+	return TRUE;
 }
-#else
+#if !GTK_CHECK_VERSION(3,0,0)
 gboolean SPCanvas::handle_expose(GtkWidget *widget, GdkEventExpose *event)
 {
-    SPCanvas *canvas = SP_CANVAS(widget);
+    cairo_t *cr = gdk_cairo_create(gtk_widget_get_window(widget));
 
-    if (!gtk_widget_is_drawable (widget) ||
-        (event->window != getWindow(canvas))) {
-        return FALSE;
-    }
+    gdk_cairo_region (cr, event->region);
+    cairo_clip (cr);
+    gboolean result = SPCanvas::handle_draw(widget, cr);
 
-    int n_rects = 0;
-    GdkRectangle *rects = NULL;
-    gdk_region_get_rectangles(event->region, &rects, &n_rects);
+    cairo_destroy (cr);
 
-    if(rects == NULL)
-        return FALSE;
-    
-    for (int i = 0; i < n_rects; i++) {
-        GdkRectangle rectangle = rects[i];
-
-        Geom::IntRect r = Geom::IntRect::from_xywh(rectangle.x + canvas->_x0, rectangle.y + canvas->_y0,
-                                                   rectangle.width, rectangle.height);
-            
-        canvas->requestRedraw(r.left(), r.top(), r.right(), r.bottom());
-    }
-
-    return FALSE;
+    return result;
 }
 #endif
 
@@ -1890,41 +1905,21 @@ int SPCanvas::paint()
         _need_update = FALSE;
     }
 
-    if (!_need_redraw) {
-        return TRUE;
+    GtkAllocation allocation;
+    gtk_widget_get_allocation(GTK_WIDGET(this), &allocation);
+    cairo_rectangle_int_t crect = { _x0, _y0, allocation.width, allocation.height };
+    cairo_region_t *to_draw = cairo_region_create_rectangle(&crect);
+    cairo_region_subtract(to_draw, _clean_region);
+
+    int n_rects = cairo_region_num_rectangles(to_draw);
+    for (int i = 0; i < n_rects; ++i) {
+        cairo_rectangle_int_t crect;
+        cairo_region_get_rectangle(to_draw, i, &crect);
+        if (!paintRect(crect.x, crect.y, crect.x + crect.width, crect.y + crect.height)) {
+            // Aborted
+            return FALSE;
+        };
     }
-
-    Cairo::RefPtr<Cairo::Region> to_paint = Cairo::Region::create();
-
-    for (int j = _tTop; j < _tBottom; ++j) {
-        for (int i = _tLeft; i < _tRight; ++i) {
-            int tile_index = (i - _tLeft) + (j - _tTop) * _tile_h;
-
-            if (_tiles[tile_index]) { // if this tile is dirtied (nonzero)
-                Cairo::RectangleInt rect = {i*TILE_SIZE, j*TILE_SIZE,
-                                   TILE_SIZE, TILE_SIZE};
-                to_paint->do_union(rect);
-            }
-        }
-    }
-
-    int n_rect = to_paint->get_num_rectangles();
-
-    if (n_rect > 0) {
-        for (int i=0; i < n_rect; i++) {
-            Cairo::RectangleInt rect = to_paint->get_rectangle(i);
-            int x0 = rect.x;
-            int y0 = rect.y;
-            int x1 = x0 + rect.width;
-            int y1 = y0 + rect.height;
-            if (!paintRect(x0, y0, x1, y1)) {
-                // Aborted
-                return FALSE;
-            };
-        }
-    }
-
-    _need_redraw = FALSE;
 
     // we've had a full unaborted redraw, reset the full redraw counter
     if (_forced_redraw_limit != -1) {
@@ -2012,7 +2007,27 @@ void SPCanvas::scrollTo(double cx, double cy, unsigned int clear, bool is_scroll
 
     gtk_widget_get_allocation(&_widget, &allocation);
 
-    resizeTiles(_x0, _y0, _x0 + allocation.width, _y0 + allocation.height);
+    assert(_backing_store);
+    cairo_surface_t *new_backing_store = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
+        allocation.width, allocation.height);
+    cairo_t *cr = cairo_create(new_backing_store);
+    cairo_set_source_rgb(cr, 1, 1, 1);
+    cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
+    cairo_paint(cr);
+    cairo_set_source_surface(cr, _backing_store, -dx, -dy);
+    cairo_paint(cr);
+    cairo_destroy(cr);
+    cairo_surface_destroy(_backing_store);
+    _backing_store = new_backing_store;
+
+    if (clear) {
+        cairo_region_destroy(_clean_region);
+        _clean_region = cairo_region_create();
+    } else {
+        cairo_rectangle_int_t crect = { _x0, _y0, allocation.width, allocation.height };
+        cairo_region_intersect_rectangle(_clean_region, &crect);
+    }
+
     if (SP_CANVAS_ITEM_GET_CLASS(_root)->viewbox_changed) {
         SP_CANVAS_ITEM_GET_CLASS(_root)->viewbox_changed(_root, new_area);
     }
@@ -2020,19 +2035,17 @@ void SPCanvas::scrollTo(double cx, double cy, unsigned int clear, bool is_scroll
     if (!clear) {
         // scrolling without zoom; redraw only the newly exposed areas
         if ((dx != 0) || (dy != 0)) {
-            this->_is_scrolling = is_scrolling;
             if (gtk_widget_get_realized(GTK_WIDGET(this))) {
                 gdk_window_scroll(getWindow(this), -dx, -dy);
             }
         }
-    } else {
-        // scrolling as part of zoom; do nothing here - the next do_update will perform full redraw
     }
+    addIdle();
 }
 
 void SPCanvas::updateNow()
 {
-    if (_need_update || _need_redraw) {
+    if (_need_update) {
         doUpdate();
     }
 }
@@ -2045,26 +2058,16 @@ void SPCanvas::requestUpdate()
 
 void SPCanvas::requestRedraw(int x0, int y0, int x1, int y1)
 {
-    GtkAllocation allocation;
-
     if (!gtk_widget_is_drawable( GTK_WIDGET(this) )) {
         return;
     }
-    if ((x0 >= x1) || (y0 >= y1)) {
+    if (x0 >= x1 || y0 >= y1) {
         return;
     }
 
     Geom::IntRect bbox(x0, y0, x1, y1);
-    gtk_widget_get_allocation(GTK_WIDGET(this), &allocation);
-
-    Geom::IntRect canvas_rect = Geom::IntRect::from_xywh(this->_x0, this->_y0,
-                                                         allocation.width, allocation.height);
-    
-    Geom::OptIntRect clip = bbox & canvas_rect;
-    if (clip) {
-        dirtyRect(*clip);
-        addIdle();
-    }
+    dirtyRect(bbox);
+    addIdle();
 }
 
 /**
@@ -2168,63 +2171,17 @@ inline int sp_canvas_tile_ceil(int x)
     return ((x + (TILE_SIZE - 1)) & (~(TILE_SIZE - 1))) / TILE_SIZE;
 }
 
-void SPCanvas::resizeTiles(int nl, int nt, int nr, int nb)
-{
-    if ( nl >= nr || nt >= nb ) {
-        if (_tiles) g_free(_tiles);
-        _tLeft = _tTop = _tRight = _tBottom = 0;
-        _tile_h = _tile_h = 0;
-        _tiles = NULL;
-        return;
-    }
-    int tl = sp_canvas_tile_floor(nl);
-    int tt = sp_canvas_tile_floor(nt);
-    int tr = sp_canvas_tile_ceil(nr);
-    int tb = sp_canvas_tile_ceil(nb);
-
-    int nh = tr-tl, nv = tb-tt;
-    uint8_t *ntiles = (uint8_t*) g_malloc(nh * nv * sizeof(uint8_t));
-    for (int i = tl; i < tr; i++) {
-        for (int j = tt; j < tb; j++) {
-            int ind = (i-tl) + (j-tt)*nh;
-            if ( i >= _tLeft && i < _tRight && j >= _tTop && j < _tBottom ) {
-                ntiles[ind] = _tiles[(i - _tLeft) + (j - _tTop) * _tile_h]; // copy from the old tile
-            } else {
-                ntiles[ind] = 0; // newly exposed areas get 0
-            }
-        }
-    }
-    if (_tiles) g_free(_tiles);
-    _tiles = ntiles;
-    _tLeft = tl;
-    _tTop = tt;
-    _tRight = tr;
-    _tBottom = tb;
-    _tile_h = nh;
-    _tile_h = nv;
-}
-
 void SPCanvas::dirtyRect(Geom::IntRect const &area) {
-    _need_redraw = TRUE;
     markRect(area, 1);
 }
 
 void SPCanvas::markRect(Geom::IntRect const &area, uint8_t val)
 {
-    int tl = sp_canvas_tile_floor(area.left());
-    int tt = sp_canvas_tile_floor(area.top());
-    int tr = sp_canvas_tile_ceil(area.right());
-    int tb = sp_canvas_tile_ceil(area.bottom());
-    if ( tl >= _tRight || tr <= _tLeft || tt >= _tBottom || tb <= _tTop ) return;
-    if ( tl < _tLeft ) tl = _tLeft;
-    if ( tr > _tRight ) tr = _tRight;
-    if ( tt < _tTop ) tt = _tTop;
-    if ( tb > _tBottom ) tb = _tBottom;
-
-    for (int i=tl; i<tr; i++) {
-        for (int j=tt; j<tb; j++) {
-            _tiles[(i - _tLeft) + (j - _tTop) * _tile_h] = val;
-        }
+    cairo_rectangle_int_t crect = { area.left(), area.top(), area.width(), area.height() };
+    if (val) {
+        cairo_region_subtract_rectangle(_clean_region, &crect);
+    } else {
+        cairo_region_union_rectangle(_clean_region, &crect);
     }
 }
 
