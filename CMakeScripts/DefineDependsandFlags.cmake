@@ -100,9 +100,12 @@ if(APPLE)
     pkg_check_modules(x11 REQUIRED x11)
     list(APPEND INKSCAPE_LIBS ${x11_LDFLAGS})
     endif()
+elseif(WIN32)
+# X11 not available on windows
 else()
     pkg_check_modules(x11 REQUIRED x11)
     list(APPEND INKSCAPE_LIBS ${x11_LDFLAGS})
+
 endif()
 
 if(WITH_GNOME_VFS)
