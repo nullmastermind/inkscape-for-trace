@@ -1698,8 +1698,11 @@ void SPDesktopWidget::setToolboxPosition(Glib::ustring const& id, GtkPositionTyp
             case GTK_POS_TOP:
             case GTK_POS_BOTTOM:
                 if ( gtk_widget_is_ancestor(toolbox, hbox) ) {
+                    // Removing a widget can reduce ref count to zero
+                    g_object_ref(G_OBJECT(toolbox));
                     gtk_container_remove(GTK_CONTAINER(hbox), toolbox);
                     gtk_container_add(GTK_CONTAINER(vbox), toolbox);
+                    g_object_unref(G_OBJECT(toolbox));
                     gtk_box_set_child_packing(GTK_BOX(vbox), toolbox, FALSE, TRUE, 0, GTK_PACK_START);
                 }
                 ToolboxFactory::setOrientation(toolbox, GTK_ORIENTATION_HORIZONTAL);
@@ -1707,8 +1710,10 @@ void SPDesktopWidget::setToolboxPosition(Glib::ustring const& id, GtkPositionTyp
             case GTK_POS_LEFT:
             case GTK_POS_RIGHT:
                 if ( !gtk_widget_is_ancestor(toolbox, hbox) ) {
+                    g_object_ref(G_OBJECT(toolbox));
                     gtk_container_remove(GTK_CONTAINER(vbox), toolbox);
                     gtk_container_add(GTK_CONTAINER(hbox), toolbox);
+                    g_object_unref(G_OBJECT(toolbox));
                     gtk_box_set_child_packing(GTK_BOX(hbox), toolbox, FALSE, TRUE, 0, GTK_PACK_START);
                     if (pos == GTK_POS_LEFT) {
                         gtk_box_reorder_child( GTK_BOX(hbox), toolbox, 0 );

@@ -526,6 +526,10 @@ endif()
 
 add_dependencies(inkscape inkscape_version)
 
+if(WITH_DBUS)
+    add_dependencies(inkscape inkscape_dbus)
+endif()
+
 set(INKSCAPE_TARGET_LIBS
         # order from automake
         #sp_LIB

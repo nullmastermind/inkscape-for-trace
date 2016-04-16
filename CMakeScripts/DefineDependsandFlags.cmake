@@ -14,9 +14,8 @@ list(APPEND INKSCAPE_INCS ${PROJECT_SOURCE_DIR}
 # ----------------------------------------------------------------------------
 # Files we include
 # ----------------------------------------------------------------------------
-
 if(WIN32)
- message("---------------- BEGIN: Win32 ----------------")
+message("---------------- BEGIN: Win32 ----------------")
 
  # The name of the target operating system
  set(CMAKE_SYSTEM_NAME Windows)
@@ -33,13 +32,12 @@ if(WIN32)
  set(CMAKE_RC_COMPILE_OBJECT "<CMAKE_RC_COMPILER> -O coff -i <SOURCE> -o <OBJECT>")
 
  # Here is the target environment located
- set(CMAKE_FIND_ROOT_PATH $ENV{MINGW_PATH}/mingw64/)
+ set(CMAKE_FIND_ROOT_PATH $ENV{MINGW_PATH}/)
 
  message("CMAKE_FIND_ROOT_PATH: " ${CMAKE_FIND_ROOT_PATH})
 
  # Tweak CMake into using Unix-style library names.
  set(CMAKE_FIND_LIBRARY_PREFIXES "lib")
- #set(CMAKE_FIND_LIBRARY_SUFFIXES ".so" ".a" ".dll.a")
  set(CMAKE_FIND_LIBRARY_SUFFIXES ".dll.a" ".dll")
 
  message("CMAKE_FIND_LIBRARY_PREFIXES: " ${CMAKE_FIND_LIBRARY_PREFIXES})
@@ -50,14 +48,15 @@ if(WIN32)
  message("SDL_INCLUDE_DIR: " ${SDL_INCLUDE_DIR})
 
  #if (${CMAKE_SYSTEM_PROCESSOR} MATCHES "^amd64")
+ link_directories($ENV{MINGW_PATH}/lib)
  link_directories($ENV{DEVLIBS_PATH}/lib)
- link_directories($ENV{MINGW_PATH}/mingw64/lib)
- link_directories($ENV{MINGW_PATH}/mingw64/x86_64-w64-mingw32/lib)
+ link_directories($ENV{MINGW_PATH}/x86_64-w64-mingw32/lib)
  link_directories($ENV{WINDIR}/system32)
- 
- include_directories($ENV{MINGW_PATH}/mingw64/include)
- include_directories($ENV{MINGW_PATH}/mingw64/x86_64-w64-mingw32/include)
- include_directories($ENV{MINGW_PATH}/mingw64/x86_64-w64-mingw32/include/c++)
+
+ include_directories($ENV{MINGW_PATH}/include)
+
+ include_directories($ENV{MINGW_PATH}/x86_64-w64-mingw32/include)
+ include_directories($ENV{MINGW_PATH}/x86_64-w64-mingw32/include/c++)
  #endif ()
 
  get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
@@ -81,9 +80,7 @@ if(WIN32)
  # Try to compile using C++ 11.
  set(CMAKE_CXX_STANDARD 11)
 
- message("CMAKE_CXX_STANDARD: " ${CMAKE_CXX_STANDARD})
  message("---------------- END: Win32 ----------------")
-
 endif()
 
 pkg_check_modules(INKSCAPE_DEP REQUIRED pangocairo pangoft2 fontconfig gthread-2.0 gsl gmodule-2.0)
@@ -253,11 +250,13 @@ else(POTRACE_FOUND)
 endif()
 
 if(WITH_DBUS)
-    find_package(DBus REQUIRED)
+    pkg_check_modules(DBUS dbus-1 dbus-glib-1)
     if(DBUS_FOUND)
-	list(APPEND INKSCAPE_INCS_SYS ${DBUS_INCLUDE_DIR})
-	list(APPEND INKSCAPE_INCS_SYS ${DBUS_ARCH_INCLUDE_DIR})
-	list(APPEND INKSCAPE_LIBS ${DBUS_LIBRARIES})
+    list(APPEND INKSCAPE_LIBS ${DBUS_LDFLAGS})
+    list(APPEND INKSCAPE_INCS_SYS ${DBUS_INCLUDE_DIRS} ${CMAKE_BINARY_DIR}/src/extension/dbus/)
+    list(APPEND INKSCAPE_LIBS ${DBUS_LIBRARIES})
+    add_definitions(${DBUS_CFLAGS_OTHER})
+    
     else()
 	set(WITH_DBUS OFF)
     endif()
@@ -309,7 +308,7 @@ if("${WITH_GTK3_EXPERIMENTAL}")
     pkg_check_modules(GDL_3_6 gdl-3.0>=3.6)
 
     if("${GDL_3_6_FOUND}")
-        message("Using Gdl 3.6 or higher")
+        message("Using GDL 3.6 or higher")
         set (WITH_GDL_3_6 1)
     endif()
 
@@ -317,9 +316,12 @@ if("${WITH_GTK3_EXPERIMENTAL}")
     pkg_check_modules(GTKSPELL3 gtkspell3-3.0)
 
     if("${GTKSPELL3_FOUND}")
-        message("Using GtkSpell3 3.0")
+        message("Using GtkSpell 3")
         set (WITH_GTKSPELL 1)
+    else()
+        unset(WITH_GTKSPELL)
     endif()
+
     list(APPEND INKSCAPE_INCS_SYS
         ${GTK3_INCLUDE_DIRS}
         ${GTKSPELL3_INCLUDE_DIRS}
@@ -338,19 +340,21 @@ else()
                      )
     list(APPEND INKSCAPE_CXX_FLAGS ${GTK_CFLAGS_OTHER})
     pkg_check_modules(GTKSPELL2 gtkspell-2.0)
-    if("${GTKSPELL3_FOUND}")
-        message("Using GtkSpell3 3.0")
-        add_definitions(${GTK_CFLAGS_OTHER})
+    if("${GTKSPELL2_FOUND}")
+        message("Using GtkSpell 2")
+        add_definitions(${GTKSPELL2_CFLAGS_OTHER})
         set (WITH_GTKSPELL 1)
+    else()
+        unset(WITH_GTKSPELL)
     endif()
     list(APPEND INKSCAPE_INCS_SYS
         ${GTK_INCLUDE_DIRS}
-        ${GTKSPELL_INCLUDE_DIRS}
+        ${GTKSPELL2_INCLUDE_DIRS}
         )
 
     list(APPEND INKSCAPE_LIBS
         ${GTK_LIBRARIES}
-        ${GTKSPELL_LIBRARIES}
+        ${GTKSPELL2_LIBRARIES}
         )
 endif()
 
@@ -368,17 +372,6 @@ if(ASPELL_FOUND)
     list(APPEND INKSCAPE_LIBS     ${ASPELL_LIBRARIES})
     add_definitions(${ASPELL_DEFINITIONS})
     set(HAVE_ASPELL TRUE)
-endif()
-
-if("${TRY_GTKSPELL}" AND "${WITH_GTKSPELL}")
-    find_package(GtkSpell)
-    if(GTKSPELL_FOUND)
-	list(APPEND INKSCAPE_INCS_SYS ${GTKSPELL_INCLUDE_DIR})
-	list(APPEND INKSCAPE_LIBS     ${GTKSPELL_LIBRARIES})
-	add_definitions(${GTKSPELL_DEFINITIONS})
-    else()
-	set(WITH_GTKSPELL OFF)
-    endif()
 endif()
 
 #find_package(OpenSSL)
@@ -443,6 +436,9 @@ if(WITH_NLS)
 	message(STATUS "Cannot find gettext + msgfmt to convert language file. Translation won't be enabled")
     endif(GETTEXT_FOUND)
 endif(WITH_NLS)
+
+#sets c++11 for newer sigc++ if required when pkg-config does not detect it
+find_package(SigC++ REQUIRED)
 
 pkg_check_modules(SIGC++ REQUIRED sigc++-2.0 )
 list(APPEND INKSCAPE_LIBS ${SIGC++_LDFLAGS})
