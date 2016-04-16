@@ -108,7 +108,10 @@ add_definitions(-DORBIT2=1)
 add_definitions(-DHAVE_CONFIG_H)
 add_definitions(-DHAVE_CAIRO_PDF=1)  # needed for src/libnrtype/Layout-TNG.h
 add_definitions(-DHAVE_TR1_UNORDERED_SET) # XXX make an option!
+
+if(!WIN32)
 add_definitions(-fPIC)
+endif()
 #
 # end badness
 # -----------------------------------------------------------------------------
