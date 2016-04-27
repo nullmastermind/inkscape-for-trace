@@ -52,6 +52,9 @@ set(live_effects_SRC
 	lpegroupbbox.cpp
 	lpeobject-reference.cpp
 	lpe-vonkoch.cpp
+	lpe-embrodery-stitch.cpp
+	lpe-embrodery-stitch-ordering.cpp
+	lpe-bool.cpp
 	lpeobject.cpp
 	spiro-converters.cpp
 	spiro.cpp
@@ -129,6 +132,9 @@ set(live_effects_SRC
 	lpe-test-doEffect-stack.h
 	lpe-text_label.h
 	lpe-vonkoch.h
+	lpe-embrodery-stitch.h
+	lpe-embrodery-stitch-ordering.h
+	lpe-bool.h
 	lpegroupbbox.h
 	lpeobject-reference.h
 	lpeobject.h
