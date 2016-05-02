@@ -58,6 +58,8 @@
 #include "sp-item-group.h"
 #include "sp-shape.h"
 #include "sp-path.h"
+#include "sp-clippath.h"
+#include "sp-rect.h"
 #include "sp-text.h"
 #include "display/canvas-bpath.h"
 #include "display/canvas-arena.h"
@@ -69,6 +71,7 @@
 #include <2geom/math-utils.h>
 #include <2geom/pathvector.h>
 #include "path-chemistry.h"
+#include "selection-chemistry.h"
 #include "display/curve.h"
 
 #include "ui/tools/eraser-tool.h"
@@ -380,7 +383,7 @@ void EraserTool::cancel() {
 bool EraserTool::root_handler(GdkEvent* event) {
     gint ret = FALSE;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    gint eraserMode = prefs->getBool("/tools/eraser/mode") ? 1 : 0;
+    gint eraser_mode = prefs->getInt("/tools/eraser/mode", 2);
     switch (event->type) {
         case GDK_BUTTON_PRESS:
             if (event->button.button == 1 && !this->space_panning) {
@@ -400,7 +403,7 @@ bool EraserTool::root_handler(GdkEvent* event) {
                 if (this->repr) {
                     this->repr = NULL;
                 }
-                if ( ! eraserMode ) {
+                if ( eraser_mode == 0 ) {
                     Inkscape::Rubberband::get(desktop)->start(desktop, button_dt);
                     Inkscape::Rubberband::get(desktop)->setMode(RUBBERBAND_MODE_TOUCHPATH);
                 }
@@ -448,7 +451,7 @@ bool EraserTool::root_handler(GdkEvent* event) {
 
                 ret = TRUE;
             }
-            if ( !eraserMode ) {
+            if ( eraser_mode == 0 ) {
                 this->accumulated->reset();
                 Inkscape::Rubberband::get(desktop)->move(motion_dt);
             }
@@ -491,7 +494,7 @@ bool EraserTool::root_handler(GdkEvent* event) {
             ret = TRUE;
         }
 
-        if (!eraserMode && Inkscape::Rubberband::get(desktop)->is_started()) {
+        if (eraser_mode == 0 && Inkscape::Rubberband::get(desktop)->is_started()) {
             Inkscape::Rubberband::get(desktop)->stop();
         }
             
@@ -578,7 +581,7 @@ bool EraserTool::root_handler(GdkEvent* event) {
             break;
 
         case GDK_KEY_Escape:
-            if ( !eraserMode ) {
+            if ( eraser_mode == 0 ) {
                 Inkscape::Rubberband::get(desktop)->stop();
             }
             if (this->is_drawing) {
@@ -640,7 +643,9 @@ void EraserTool::clear_current() {
 
 void EraserTool::set_to_accumulated() {
     bool workDone = false;
-
+    SPDocument *document = this->desktop->doc();
+//    bool has_undo_sensitive = DocumentUndo::getUndoSensitive(document);
+//    DocumentUndo::setUndoSensitive(document, false);
     if (!this->accumulated->is_empty()) {
         if (!this->repr) {
             /* Create object */
@@ -666,7 +671,7 @@ void EraserTool::set_to_accumulated() {
             bool wasSelection = false;
             Inkscape::Selection *selection = desktop->getSelection();
             Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-            gint eraserMode = prefs->getBool("/tools/eraser/mode") ? 1 : 0;
+            gint eraser_mode = prefs->getInt("/tools/eraser/mode", 2);
             Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
 
             SPItem* acid = SP_ITEM(desktop->doc()->getObjectByRepr(this->repr));
@@ -674,7 +679,7 @@ void EraserTool::set_to_accumulated() {
             std::vector<SPItem*> remainingItems;
             std::vector<SPItem*> toWorkOn;
             if (selection->isEmpty()) {
-                if ( eraserMode ) {
+                if ( eraser_mode  == 1 || eraser_mode  == 2) {
                     toWorkOn = desktop->getDocument()->getItemsPartiallyInBox(desktop->dkey, *eraserBbox);
                 } else {
                     Inkscape::Rubberband *r = Inkscape::Rubberband::get(desktop);
@@ -682,7 +687,7 @@ void EraserTool::set_to_accumulated() {
                 }
                 toWorkOn.erase(std::remove(toWorkOn.begin(), toWorkOn.end(), acid), toWorkOn.end());
             } else {
-                if ( !eraserMode ) {
+                if ( eraser_mode == 0 ) {
                     Inkscape::Rubberband *r = Inkscape::Rubberband::get(desktop);
                     std::vector<SPItem*> touched;
                     touched = desktop->getDocument()->getItemsAtPoints(desktop->dkey, r->getPoints());
@@ -698,7 +703,7 @@ void EraserTool::set_to_accumulated() {
             }
 
             if ( !toWorkOn.empty() ) {
-                if ( eraserMode ) {
+                if ( eraser_mode  == 1 ) {
                     for (std::vector<SPItem*>::const_iterator i = toWorkOn.begin(); i != toWorkOn.end(); ++i){
                         SPItem *item = *i;
                         SPUse *use = dynamic_cast<SPUse *>(item);
@@ -707,7 +712,6 @@ void EraserTool::set_to_accumulated() {
                             SPItem *item = *i;
                             item->deleteObject(true);
                             sp_object_unref(item);
-                            workDone = true;
                             workDone = true;
                         } else if (SP_IS_GROUP(item) || use ) {
                             /*Do nothing*/
@@ -755,6 +759,81 @@ void EraserTool::set_to_accumulated() {
                             }
                         }
                     }
+                } else if ( eraser_mode  == 2 ) {
+                    for (std::vector<SPItem*>::const_iterator i = toWorkOn.begin(); i != toWorkOn.end(); ++i){
+                        selection->clear();
+                        SPItem *item = *i;
+                        Geom::OptRect bbox = item->desktopVisualBounds();
+                        Inkscape::XML::Document *xml_doc = this->desktop->doc()->getReprDoc();
+                        Inkscape::XML::Node *rect_repr = xml_doc->createElement("svg:rect");
+                        SPRect * rect = SP_RECT(this->desktop->currentLayer()->appendChildRepr(rect_repr));
+                        rect->updateRepr();
+                        rect->setPosition (bbox.min()[Geom::X], bbox.min()[Geom::Y], bbox.dimensions()[Geom::X], bbox.dimensions()[Geom::Y]);
+                        rect->doWriteTransform(rect_repr, SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse() * this->desktop->dt2doc());
+                        Inkscape::GC::release(rect_repr);
+                        
+                        
+                        Inkscape::XML::Node *rect_repr2 = xml_doc->createElement("svg:rect");
+                        SPRect * rect2 = SP_RECT(this->desktop->currentLayer()->appendChildRepr(rect_repr2));
+                        rect2->updateRepr();
+                        sp_desktop_apply_style_tool (desktop, rect_repr2, "/tools/shapes/rect", false);
+                        rect2->setPosition (bbox->left(), bbox->top(), bbox->width(), bbox->height());
+                        rect->doWriteTransform(rect_repr, SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse() * this->desktop->dt2doc());
+                        Inkscape::GC::release(rect_repr2);
+                        
+                        
+                        Inkscape::XML::Node *rect_repr3 = xml_doc->createElement("svg:rect");
+                        SPRect * rect3 = SP_RECT(this->desktop->currentLayer()->appendChildRepr(rect_repr3));
+                        rect3->updateRepr();
+                        sp_desktop_apply_style_tool (desktop, rect_repr3, "/tools/shapes/rect", false);
+                        rect3->setPosition (bbox->left(), bbox->top(), bbox->width(), bbox->height());
+                        rect->doWriteTransform(rect_repr3, SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse() * this->desktop->doc2dt());
+                        Inkscape::GC::release(rect_repr3);
+                        
+                        
+                        
+                        
+                        
+                        Inkscape::XML::Node* dup = this->repr->duplicate(xml_doc);
+                        this->repr->parent()->appendChild(dup);
+                        Inkscape::GC::release(dup); // parent takes over
+                        selection->set(dup);
+                        sp_selected_path_union_skip_undo(selection, this->desktop);
+                        sp_selection_raise_to_top(selection, this->desktop);
+                        if (bbox && bbox->intersects(*eraserBbox)) {
+                            SPClipPath *clip_path = item->clip_ref->getObject();
+                            if (clip_path) {
+                                SPObject *clip_data = clip_path->firstChild();
+                                Inkscape::XML::Node *dup_clip = clip_data->getRepr()->duplicate(xml_doc);
+                                if (dup_clip) {
+                                    this->repr->parent()->appendChild(dup_clip);
+                                    sp_object_ref(clip_data, 0);
+                                    clip_data->deleteObject(true);
+                                    sp_object_unref(clip_data);
+                                    sp_selection_raise_to_top(selection, this->desktop);
+                                    selection->add(dup_clip);
+                                }
+                            } else {
+                                selection->add(rect);
+                            }
+                            sp_selected_path_diff_skip_undo(selection, this->desktop);
+                            sp_selection_raise_to_top(selection, this->desktop);
+                            selection->add(item);
+                            sp_selection_set_mask(this->desktop, true, false);
+                        } else {
+                            SPItem *erase_clip = selection->singleItem();
+                            if (erase_clip) {
+                                sp_object_ref(erase_clip, 0);
+                                erase_clip->deleteObject(true);
+                                sp_object_unref(erase_clip);
+                            }
+                        }
+                        workDone = true;
+                    }
+                    selection->clear();
+                    if (wasSelection) {
+                        selection->setList(toWorkOn);
+                    }
                 } else {
                     for (std::vector<SPItem*> ::const_iterator i = toWorkOn.begin();i!=toWorkOn.end();++i) {
                         sp_object_ref( *i, 0 );
@@ -768,7 +847,7 @@ void EraserTool::set_to_accumulated() {
                     }
                 }
 
-                if ( !eraserMode ) {
+                if ( eraser_mode == 0 ) {
                     //sp_selection_delete(desktop);
                     remainingItems.clear();
                 }
@@ -792,7 +871,7 @@ void EraserTool::set_to_accumulated() {
         }
     }
 
-
+//    DocumentUndo::setUndoSensitive(document, has_undo_sensitive);
     if ( workDone ) {
         DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_ERASER, _("Draw eraser stroke"));
     } else {
@@ -987,7 +1066,7 @@ void EraserTool::fit_and_split(bool release) {
         g_print("[%d]Yup\n", this->npoints);
 #endif
         if (!release) {
-            gint eraserMode = prefs->getBool("/tools/eraser/mode") ? 1 : 0;
+            gint eraser_mode = prefs->getInt("/tools/eraser/mode",2);
             g_assert(!this->currentcurve->is_empty());
 
             SPCanvasItem *cbp = sp_canvas_item_new(desktop->getSketch(), SP_TYPE_CANVAS_BPATH, NULL);
@@ -1009,7 +1088,7 @@ void EraserTool::fit_and_split(bool release) {
 
             this->segments = g_slist_prepend(this->segments, cbp);
 
-            if ( !eraserMode ) {
+            if ( eraser_mode == 0 ) {
                 sp_canvas_item_hide(cbp);
                 sp_canvas_item_hide(this->currentshape);
             }

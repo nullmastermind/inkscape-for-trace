@@ -67,15 +67,15 @@ static void sp_erc_mass_value_changed( GtkAdjustment *adj, GObject* tbl )
 static void sp_erasertb_mode_changed( EgeSelectOneAction *act, GObject *tbl )
 {
     SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data( tbl, "desktop" ));
-    bool eraserMode = ege_select_one_action_get_active( act ) != 0;
+    guint eraser_mode = ege_select_one_action_get_active( act );
     if (DocumentUndo::getUndoSensitive(desktop->getDocument())) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        prefs->setBool( "/tools/eraser/mode", eraserMode );
+        prefs->setInt( "/tools/eraser/mode", eraser_mode );
     }
     GtkAction *split = GTK_ACTION( g_object_get_data(tbl, "split") );
     GtkAction *mass = GTK_ACTION( g_object_get_data(tbl, "mass") );
     GtkAction *width = GTK_ACTION( g_object_get_data(tbl, "width") );
-    if(eraserMode == TRUE){
+    if(eraser_mode != 0){
         gtk_action_set_visible( split, TRUE );
         gtk_action_set_visible( mass, TRUE );
         gtk_action_set_visible( width, TRUE );
@@ -90,7 +90,7 @@ static void sp_erasertb_mode_changed( EgeSelectOneAction *act, GObject *tbl )
         g_object_set_data( tbl, "freeze", GINT_TO_POINTER(TRUE) );
 
         /*
-        if ( eraserMode != 0 ) {
+        if ( eraser_mode != 0 ) {
         } else {
         }
         */
@@ -111,7 +111,7 @@ void sp_eraser_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
 {
     Inkscape::IconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    gint eraserMode = FALSE;
+    gint eraser_mode = FALSE;
     {
         GtkListStore* model = gtk_list_store_new( 3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING );
         GtkTreeIter iter;
@@ -125,8 +125,15 @@ void sp_eraser_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
         gtk_list_store_append( model, &iter );
         gtk_list_store_set( model, &iter,
                             0, _("Cut"),
-                            1, _("Cut out from objects"),
+                            1, _("Cut out from paths and shapes"),
                             2, INKSCAPE_ICON("path-difference"),
+                            -1 );
+
+        gtk_list_store_append( model, &iter );
+        gtk_list_store_set( model, &iter,
+                            0, _("Clip"),
+                            1, _("Clip from objects"),
+                            2, INKSCAPE_ICON("path-intersection"),
                             -1 );
 
         EgeSelectOneAction* act = ege_select_one_action_new( "EraserModeAction", (""), (""), NULL, GTK_TREE_MODEL(model) );
@@ -137,12 +144,13 @@ void sp_eraser_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
         ege_select_one_action_set_appearance( act, "full" );
         ege_select_one_action_set_radio_action_type( act, INK_RADIO_ACTION_TYPE );
         g_object_set( G_OBJECT(act), "icon-property", "iconId", NULL );
-        ege_select_one_action_set_icon_column( act, 2 );
-        ege_select_one_action_set_tooltip_column( act, 1  );
+        ege_select_one_action_set_icon_column( act, 2);
+        ege_select_one_action_set_icon_size( act, secondarySize );
+        ege_select_one_action_set_tooltip_column( act, 1);
 
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        eraserMode = prefs->getBool("/tools/eraser/mode") ? TRUE : FALSE;
-        ege_select_one_action_set_active( act, eraserMode );
+        eraser_mode = prefs->getInt("/tools/eraser/mode", 2);
+        ege_select_one_action_set_active( act, eraser_mode );
         g_signal_connect_after( G_OBJECT(act), "changed", G_CALLBACK(sp_erasertb_mode_changed), holder );
     }
 
@@ -195,7 +203,7 @@ void sp_eraser_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
     GtkAction *split = GTK_ACTION( g_object_get_data(holder, "split") );
     GtkAction *mass = GTK_ACTION( g_object_get_data(holder, "mass") );
     GtkAction *width = GTK_ACTION( g_object_get_data(holder, "width") );
-    if(eraserMode == TRUE){
+    if (eraser_mode != 0) {
         gtk_action_set_visible( split, TRUE );
         gtk_action_set_visible( mass, TRUE );
         gtk_action_set_visible( width, TRUE );
