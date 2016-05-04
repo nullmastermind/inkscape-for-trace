@@ -235,7 +235,6 @@ void IconImpl::sizeAllocate(GtkWidget *widget, GtkAllocation *allocation)
 // GTK3 Only, Doesn't actually seem to be used.
 gboolean IconImpl::draw(GtkWidget *widget, cairo_t* cr)
 {
-    std::cout << "IconImpl::draw: Entrance" << std::endl;
     SPIcon *icon = SP_ICON(widget);
     if ( !icon->pb ) {
         fetchPixbuf( icon );
@@ -249,7 +248,7 @@ gboolean IconImpl::draw(GtkWidget *widget, cairo_t* cr)
     if (gtk_widget_get_state_flags (GTK_WIDGET(icon)) != GTK_STATE_FLAG_NORMAL && image) {
 #else
     if (gtk_widget_get_state (GTK_WIDGET(icon)) != GTK_STATE_NORMAL && image) {
-        std::cout << "IconImpl::draw: Ooops! It is called in GTK2" << std::endl;
+        std::cerr << "IconImpl::draw: Ooops! It is called in GTK2" << std::endl;
 #endif
         std::cerr << "IconImpl::draw: No image, creating fallback" << std::endl;
 
@@ -805,6 +804,10 @@ GtkWidget *IconImpl::newFull( Inkscape::IconSize lsize, gchar const *name )
 
     GtkWidget *widget = NULL;
     gint trySize = CLAMP( static_cast<gint>(lsize), 0, static_cast<gint>(G_N_ELEMENTS(iconSizeLookup) - 1) );
+    if (trySize != lsize ) {
+        std::cerr << "GtkWidget *IconImple::newFull(): lsize != trySize: lsize: " << lsize
+                  << " try Size: " << trySize << " " << (name?name:"NULL") << std::endl;
+    }
     if ( !sizeMapDone ) {
         injectCustomSize();
     }
@@ -832,6 +835,7 @@ GtkWidget *IconImpl::newFull( Inkscape::IconSize lsize, gchar const *name )
 
             if ( Inkscape::Preferences::get()->getBool("/options/iconrender/named_nodelay") ) {
                 int psize = getPhysSize(lsize);
+                // std::cout << "  name: " << name << " size: " << psize << std::endl;
                 prerenderIcon(name, mappedSize, psize);
             } else {
                 addPreRender( mappedSize, name );
