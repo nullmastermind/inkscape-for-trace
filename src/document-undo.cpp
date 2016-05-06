@@ -328,28 +328,35 @@ gboolean Inkscape::DocumentUndo::redo(SPDocument *doc)
 	return ret;
 }
 
-void Inkscape::DocumentUndo::clearUndo(SPDocument *doc)
+void Inkscape::DocumentUndo::clearUndo(SPDocument *doc, size_t limit)
 {
     if (! doc->priv->undo.empty())
         doc->priv->undoStackObservers.notifyClearUndoEvent();
-    while (! doc->priv->undo.empty()) {
+    if (limit == 0) {
+        limit = doc->priv->undo.size();
+    }
+    while (! doc->priv->undo.empty() && limit > 0) {
         Inkscape::Event *e = doc->priv->undo.back();
         doc->priv->undo.pop_back();
         delete e;
         doc->priv->history_size--;
+        limit--;
     }
 }
 
-void Inkscape::DocumentUndo::clearRedo(SPDocument *doc)
+void Inkscape::DocumentUndo::clearRedo(SPDocument *doc, size_t limit)
 {
-        if (!doc->priv->redo.empty())
-                doc->priv->undoStackObservers.notifyClearRedoEvent();
-
-    while (! doc->priv->redo.empty()) {
+    if (!doc->priv->redo.empty())
+            doc->priv->undoStackObservers.notifyClearRedoEvent();
+    if (limit == 0) {
+        limit = doc->priv->undo.size();
+    }
+    while (! doc->priv->redo.empty() && limit > 0) {
         Inkscape::Event *e = doc->priv->redo.back();
         doc->priv->redo.pop_back();
         delete e;
         doc->priv->history_size--;
+        limit--;
     }
 }
 

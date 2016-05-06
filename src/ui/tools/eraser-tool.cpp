@@ -644,8 +644,6 @@ void EraserTool::clear_current() {
 void EraserTool::set_to_accumulated() {
     bool workDone = false;
     SPDocument *document = this->desktop->doc();
-//    bool has_undo_sensitive = DocumentUndo::getUndoSensitive(document);
-//    DocumentUndo::setUndoSensitive(document, false);
     if (!this->accumulated->is_empty()) {
         if (!this->repr) {
             /* Create object */
@@ -657,11 +655,11 @@ void EraserTool::set_to_accumulated() {
 
             this->repr = repr;
         }
-        SPItem *item = SP_ITEM(desktop->currentLayer()->appendChildRepr(this->repr));
+        SPItem *item_repr = SP_ITEM(desktop->currentLayer()->appendChildRepr(this->repr));
         Inkscape::GC::release(this->repr);
-        item->updateRepr();
+        item_repr->updateRepr();
         Geom::PathVector pathv = this->accumulated->get_pathvector() * desktop->dt2doc();
-        pathv *= item->i2doc_affine().inverse();
+        pathv *= item_repr->i2doc_affine().inverse();
         gchar *str = sp_svg_write_path(pathv);
         g_assert( str != NULL );
         this->repr->setAttribute("d", str);
@@ -760,66 +758,68 @@ void EraserTool::set_to_accumulated() {
                         }
                     }
                 } else if ( eraser_mode  == 2 ) {
+                    remainingItems.clear();
                     for (std::vector<SPItem*>::const_iterator i = toWorkOn.begin(); i != toWorkOn.end(); ++i){
                         selection->clear();
+                        size_t n_undo = 0;
                         SPItem *item = *i;
                         Geom::OptRect bbox = item->desktopVisualBounds();
                         Inkscape::XML::Document *xml_doc = this->desktop->doc()->getReprDoc();
                         Inkscape::XML::Node *rect_repr = xml_doc->createElement("svg:rect");
+                        sp_desktop_apply_style_tool (desktop, rect_repr, "/tools/eraser", false);
                         SPRect * rect = SP_RECT(this->desktop->currentLayer()->appendChildRepr(rect_repr));
-                        rect->updateRepr();
-                        rect->setPosition (bbox.min()[Geom::X], bbox.min()[Geom::Y], bbox.dimensions()[Geom::X], bbox.dimensions()[Geom::Y]);
-                        rect->doWriteTransform(rect_repr, SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse() * this->desktop->dt2doc());
                         Inkscape::GC::release(rect_repr);
                         
-                        
-                        Inkscape::XML::Node *rect_repr2 = xml_doc->createElement("svg:rect");
-                        SPRect * rect2 = SP_RECT(this->desktop->currentLayer()->appendChildRepr(rect_repr2));
-                        rect2->updateRepr();
-                        sp_desktop_apply_style_tool (desktop, rect_repr2, "/tools/shapes/rect", false);
-                        rect2->setPosition (bbox->left(), bbox->top(), bbox->width(), bbox->height());
-                        rect->doWriteTransform(rect_repr, SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse() * this->desktop->dt2doc());
-                        Inkscape::GC::release(rect_repr2);
-                        
-                        
-                        Inkscape::XML::Node *rect_repr3 = xml_doc->createElement("svg:rect");
-                        SPRect * rect3 = SP_RECT(this->desktop->currentLayer()->appendChildRepr(rect_repr3));
-                        rect3->updateRepr();
-                        sp_desktop_apply_style_tool (desktop, rect_repr3, "/tools/shapes/rect", false);
-                        rect3->setPosition (bbox->left(), bbox->top(), bbox->width(), bbox->height());
-                        rect->doWriteTransform(rect_repr3, SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse() * this->desktop->doc2dt());
-                        Inkscape::GC::release(rect_repr3);
-                        
-                        
-                        
-                        
-                        
+                        rect->updateRepr();
+                        rect->setPosition (bbox->left(), bbox->top(), bbox->width(), bbox->height());
+                        rect->transform = SP_ITEM(desktop->currentLayer())->i2dt_affine().inverse();
+
                         Inkscape::XML::Node* dup = this->repr->duplicate(xml_doc);
                         this->repr->parent()->appendChild(dup);
                         Inkscape::GC::release(dup); // parent takes over
                         selection->set(dup);
                         sp_selected_path_union_skip_undo(selection, this->desktop);
                         sp_selection_raise_to_top(selection, this->desktop);
+                        n_undo++;
                         if (bbox && bbox->intersects(*eraserBbox)) {
                             SPClipPath *clip_path = item->clip_ref->getObject();
                             if (clip_path) {
-                                SPObject *clip_data = clip_path->firstChild();
-                                Inkscape::XML::Node *dup_clip = clip_data->getRepr()->duplicate(xml_doc);
-                                if (dup_clip) {
-                                    this->repr->parent()->appendChild(dup_clip);
-                                    sp_object_ref(clip_data, 0);
-                                    clip_data->deleteObject(true);
-                                    sp_object_unref(clip_data);
-                                    sp_selection_raise_to_top(selection, this->desktop);
-                                    selection->add(dup_clip);
+                                SPPath *clip_data = SP_PATH(clip_path->firstChild());
+                                if (clip_data) {
+                                    Inkscape::XML::Node *dup_clip = SP_OBJECT(clip_data)->getRepr()->duplicate(xml_doc);
+                                    if (dup_clip) {
+                                        SPItem * dup_clip_obj = SP_ITEM(item_repr->parent->appendChildRepr(dup_clip));
+                                        if (dup_clip_obj) {
+                                            dup_clip_obj->doWriteTransform(dup_clip, item->transform);
+                                            sp_object_ref(clip_data, 0);
+                                            clip_data->deleteObject(true);
+                                            sp_object_unref(clip_data);
+                                            sp_object_ref(clip_path, 0);
+                                            clip_path->deleteObject(true);
+                                            sp_object_unref(clip_path);
+                                            sp_object_ref(rect, 0);
+                                            rect->deleteObject(true);
+                                            sp_object_unref(rect);
+                                            sp_selection_raise_to_top(selection, this->desktop);
+                                            n_undo++;
+                                            selection->add(dup_clip);
+                                            sp_selected_path_diff_skip_undo(selection, this->desktop);
+                                            n_undo++;
+                                            SPItem * clip = SP_ITEM(selection->itemList()[0]);
+                                        }
+                                    }
                                 }
                             } else {
                                 selection->add(rect);
+                                sp_selected_path_diff_skip_undo(selection, this->desktop);
+                                n_undo++;
                             }
-                            sp_selected_path_diff_skip_undo(selection, this->desktop);
                             sp_selection_raise_to_top(selection, this->desktop);
+                            n_undo++;
                             selection->add(item);
                             sp_selection_set_mask(this->desktop, true, false);
+                            n_undo++;
+                            DocumentUndo::clearUndo(document, n_undo);
                         } else {
                             SPItem *erase_clip = selection->singleItem();
                             if (erase_clip) {
@@ -829,11 +829,12 @@ void EraserTool::set_to_accumulated() {
                             }
                         }
                         workDone = true;
+                        selection->clear();
+                        if (wasSelection) {
+                            remainingItems.push_back(item);
+                        }
                     }
-                    selection->clear();
-                    if (wasSelection) {
-                        selection->setList(toWorkOn);
-                    }
+
                 } else {
                     for (std::vector<SPItem*> ::const_iterator i = toWorkOn.begin();i!=toWorkOn.end();++i) {
                         sp_object_ref( *i, 0 );
@@ -871,7 +872,6 @@ void EraserTool::set_to_accumulated() {
         }
     }
 
-//    DocumentUndo::setUndoSensitive(document, has_undo_sensitive);
     if ( workDone ) {
         DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_ERASER, _("Draw eraser stroke"));
     } else {
