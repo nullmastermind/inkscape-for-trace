@@ -141,7 +141,7 @@ void Inkscape::DocumentUndo::maybeDone(SPDocument *doc, const gchar *key, const 
 {
 	g_assert (doc != NULL);
 	g_assert (doc->priv != NULL);
-        g_assert (doc->priv->sensitive);
+       //g_assert (doc->priv->sensitive);
         if ( key && !*key ) {
             g_warning("Blank undo key specified.");
         }
@@ -328,35 +328,28 @@ gboolean Inkscape::DocumentUndo::redo(SPDocument *doc)
 	return ret;
 }
 
-void Inkscape::DocumentUndo::clearUndo(SPDocument *doc, size_t limit)
+void Inkscape::DocumentUndo::clearUndo(SPDocument *doc)
 {
     if (! doc->priv->undo.empty())
         doc->priv->undoStackObservers.notifyClearUndoEvent();
-    if (limit == 0) {
-        limit = doc->priv->undo.size();
-    }
-    while (! doc->priv->undo.empty() && limit > 0) {
+    while (! doc->priv->undo.empty()) {
         Inkscape::Event *e = doc->priv->undo.back();
         doc->priv->undo.pop_back();
         delete e;
         doc->priv->history_size--;
-        limit--;
     }
 }
 
-void Inkscape::DocumentUndo::clearRedo(SPDocument *doc, size_t limit)
+void Inkscape::DocumentUndo::clearRedo(SPDocument *doc)
 {
-    if (!doc->priv->redo.empty())
-            doc->priv->undoStackObservers.notifyClearRedoEvent();
-    if (limit == 0) {
-        limit = doc->priv->undo.size();
-    }
-    while (! doc->priv->redo.empty() && limit > 0) {
+        if (!doc->priv->redo.empty())
+                doc->priv->undoStackObservers.notifyClearRedoEvent();
+
+    while (! doc->priv->redo.empty()) {
         Inkscape::Event *e = doc->priv->redo.back();
         doc->priv->redo.pop_back();
         delete e;
         doc->priv->history_size--;
-        limit--;
     }
 }
 

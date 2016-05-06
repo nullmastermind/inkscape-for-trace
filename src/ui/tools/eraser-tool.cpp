@@ -721,7 +721,7 @@ void EraserTool::set_to_accumulated() {
                                 Inkscape::GC::release(dup); // parent takes over
                                 selection->set(dup);
                                 if (!this->nowidth) {
-                                    sp_selected_path_union_skip_undo(selection, desktop);
+                                    sp_selected_path_union(selection, desktop);
                                 }
                                 selection->add(item);
                                 if(item->style->fill_rule.value == SP_WIND_RULE_EVENODD){
@@ -732,9 +732,9 @@ void EraserTool::set_to_accumulated() {
                                     css = 0;
                                 }
                                 if (this->nowidth) {
-                                    sp_selected_path_cut_skip_undo(selection, desktop);
+                                    sp_selected_path_cut(selection, desktop);
                                 } else {
-                                    sp_selected_path_diff_skip_undo(selection, desktop);
+                                    sp_selected_path_diff(selection, desktop);
                                 }
                                 workDone = true; // TODO set this only if something was cut.
                                 bool break_apart = prefs->getBool("/tools/eraser/break_apart", false);
@@ -761,7 +761,6 @@ void EraserTool::set_to_accumulated() {
                     remainingItems.clear();
                     for (std::vector<SPItem*>::const_iterator i = toWorkOn.begin(); i != toWorkOn.end(); ++i){
                         selection->clear();
-                        size_t n_undo = 0;
                         SPItem *item = *i;
                         Geom::OptRect bbox = item->desktopVisualBounds();
                         Inkscape::XML::Document *xml_doc = this->desktop->doc()->getReprDoc();
@@ -778,9 +777,8 @@ void EraserTool::set_to_accumulated() {
                         this->repr->parent()->appendChild(dup);
                         Inkscape::GC::release(dup); // parent takes over
                         selection->set(dup);
-                        sp_selected_path_union_skip_undo(selection, this->desktop);
+                        sp_selected_path_union(selection, this->desktop);
                         sp_selection_raise_to_top(selection, this->desktop);
-                        n_undo++;
                         if (bbox && bbox->intersects(*eraserBbox)) {
                             SPClipPath *clip_path = item->clip_ref->getObject();
                             if (clip_path) {
@@ -801,25 +799,19 @@ void EraserTool::set_to_accumulated() {
                                             rect->deleteObject(true);
                                             sp_object_unref(rect);
                                             sp_selection_raise_to_top(selection, this->desktop);
-                                            n_undo++;
                                             selection->add(dup_clip);
-                                            sp_selected_path_diff_skip_undo(selection, this->desktop);
-                                            n_undo++;
+                                            sp_selected_path_diff(selection, this->desktop);
                                             SPItem * clip = SP_ITEM(selection->itemList()[0]);
                                         }
                                     }
                                 }
                             } else {
                                 selection->add(rect);
-                                sp_selected_path_diff_skip_undo(selection, this->desktop);
-                                n_undo++;
+                                sp_selected_path_diff(selection, this->desktop);
                             }
                             sp_selection_raise_to_top(selection, this->desktop);
-                            n_undo++;
                             selection->add(item);
                             sp_selection_set_mask(this->desktop, true, false);
-                            n_undo++;
-                            DocumentUndo::clearUndo(document, n_undo);
                         } else {
                             SPItem *erase_clip = selection->singleItem();
                             if (erase_clip) {
@@ -871,7 +863,6 @@ void EraserTool::set_to_accumulated() {
             this->repr = 0;
         }
     }
-
     if ( workDone ) {
         DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_ERASER, _("Draw eraser stroke"));
     } else {

@@ -33,9 +33,9 @@ public:
 
     static bool getUndoSensitive(SPDocument const *document);
 
-    static void clearUndo(SPDocument *document, size_t limit = 0);
+    static void clearUndo(SPDocument *document);
 
-    static void clearRedo(SPDocument *document, size_t limit = 0);
+    static void clearRedo(SPDocument *document);
 
     static void done(SPDocument *document, unsigned int event_type, Glib::ustring const &event_description);
 
