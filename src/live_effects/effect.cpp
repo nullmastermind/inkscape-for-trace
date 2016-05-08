@@ -62,6 +62,7 @@
 #include "live_effects/lpe-test-doEffect-stack.h"
 #include "live_effects/lpe-text_label.h"
 #include "live_effects/lpe-vonkoch.h"
+#include "live_effects/lpe-bool.h"
 
 #include "xml/node-event-vector.h"
 #include "sp-object.h"
@@ -151,6 +152,8 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {FILL_BETWEEN_MANY,     N_("Fill between many"),       "fill_between_many"},
     {ELLIPSE_5PTS,          N_("Ellipse by 5 points"),     "ellipse_5pts"},
     {BOUNDING_BOX,          N_("Bounding Box"),            "bounding_box"},
+/* MSoegtrop */
+    {BOOL_OP,               N_("Boolean operation"),       "bool_op"},
 };
 const Util::EnumDataConverter<EffectType> LPETypeConverter(LPETypeData, sizeof(LPETypeData)/sizeof(*LPETypeData));
 
@@ -172,6 +175,10 @@ Effect::New(EffectType lpenr, LivePathEffectObject *lpeobj)
 {
     Effect* neweffect = NULL;
     switch (lpenr) {
+        case BOOL_OP:
+            neweffect = static_cast<Effect*> ( new LPEBool(lpeobj) );
+            break;
+
         case PATTERN_ALONG_PATH:
             neweffect = static_cast<Effect*> ( new LPEPatternAlongPath(lpeobj) );
             break;

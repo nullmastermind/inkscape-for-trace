@@ -66,6 +66,7 @@ enum EffectType {
     TAPER_STROKE,
     PERSPECTIVE_ENVELOPE,
     FILLET_CHAMFER,
+    BOOL_OP,
     INVALID_LPE // This must be last (I made it such that it is not needed anymore I think..., Don't trust on it being last. - johan)
 };
 
