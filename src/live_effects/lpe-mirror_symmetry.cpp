@@ -127,10 +127,10 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
             SPDocument * doc = SP_ACTIVE_DESKTOP->getDocument();
             Geom::Rect view_box_rect = doc->getViewBox();
             Geom::Point sp = Geom::Point(view_box_rect.width()/2.0, 0);
-            sp *= lpeitem->transform.inverse();
+            sp *= lpeitem->i2dt_affine().inverse();
             start_point.param_setValue(sp);
             Geom::Point ep = Geom::Point(view_box_rect.width()/2.0, view_box_rect.height());
-            ep *= lpeitem->transform.inverse();
+            ep *= lpeitem->i2dt_affine().inverse();
             end_point.param_setValue(ep);
             center_point = Geom::middle_point((Geom::Point)start_point, (Geom::Point)end_point);
             line_separation.setPoints(start_point, end_point);
@@ -140,10 +140,10 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
             SPDocument * doc = SP_ACTIVE_DESKTOP->getDocument();
             Geom::Rect view_box_rect = doc->getViewBox();
             Geom::Point sp = Geom::Point(0, view_box_rect.height()/2.0);
-            sp *= lpeitem->transform.inverse();
+            sp *= lpeitem->i2dt_affine().inverse();
             start_point.param_setValue(sp);
             Geom::Point ep = Geom::Point(view_box_rect.width(), view_box_rect.height()/2.0);
-            ep *= lpeitem->transform.inverse();
+            ep *= lpeitem->i2dt_affine().inverse();
             end_point.param_setValue(ep);
             center_point = Geom::middle_point((Geom::Point)start_point, (Geom::Point)end_point);
             line_separation.setPoints(start_point, end_point);
