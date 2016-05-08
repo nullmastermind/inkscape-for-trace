@@ -39,6 +39,7 @@
 #include "io/sys.h"
 #include "inkscape.h"
 #include "document-undo.h"
+#include "loader.h"
 
 
 namespace Inkscape {
@@ -46,7 +47,7 @@ namespace Extension {
 
 static void open_internal(Inkscape::Extension::Extension *in_plug, gpointer in_data);
 static void save_internal(Inkscape::Extension::Extension *in_plug, gpointer in_data);
-static Extension *build_from_reprdoc(Inkscape::XML::Document *doc, Implementation::Implementation *in_imp);
+static Extension *build_from_reprdoc(Inkscape::XML::Document *doc, Implementation::Implementation *in_imp, std::string* baseDir);
 
 /**
  * \return   A new document created from the filename passed in
@@ -421,12 +422,12 @@ get_print(gchar const *key)
  * case could apply to modules that are built in (like the SVG load/save functions).
  */
 static Extension *
-build_from_reprdoc(Inkscape::XML::Document *doc, Implementation::Implementation *in_imp)
+build_from_reprdoc(Inkscape::XML::Document *doc, Implementation::Implementation *in_imp, std::string* baseDir)
 {
     enum {
         MODULE_EXTENSION,
         MODULE_XSLT,
-        /* MODULE_PLUGIN, */
+        MODULE_PLUGIN,
         MODULE_UNKNOWN_IMP
     } module_implementation_type = MODULE_UNKNOWN_IMP;
     enum {
@@ -465,10 +466,8 @@ build_from_reprdoc(Inkscape::XML::Document *doc, Implementation::Implementation 
             module_implementation_type = MODULE_EXTENSION;
         } else if (!strcmp(element_name, INKSCAPE_EXTENSION_NS "xslt")) {
             module_implementation_type = MODULE_XSLT;
-#if 0
-        } else if (!strcmp(element_name, "plugin")) {
+        } else if (!strcmp(element_name,  INKSCAPE_EXTENSION_NS "plugin")) {
             module_implementation_type = MODULE_PLUGIN;
-#endif
         }
 
         //Inkscape::XML::Node *old_repr = child_repr;
@@ -489,13 +488,14 @@ build_from_reprdoc(Inkscape::XML::Document *doc, Implementation::Implementation 
                 imp = static_cast<Implementation::Implementation *>(xslt);
                 break;
             }
-#if 0
             case MODULE_PLUGIN: {
-                Implementation::Plugin *plugin = new Implementation::Plugin();
-                imp = static_cast<Implementation::Implementation *>(plugin);
+                Inkscape::Extension::Loader loader = Inkscape::Extension::Loader();
+                if( baseDir != NULL){
+                    loader.set_base_directory ( *baseDir );
+                }
+                imp = loader.load_implementation(doc);
                 break;
             }
-#endif
             default: {
                 imp = NULL;
                 break;
@@ -528,6 +528,7 @@ build_from_reprdoc(Inkscape::XML::Document *doc, Implementation::Implementation 
             break;
         }
         default: {
+            module = new Extension(repr, imp);
             break;
         }
     }
@@ -547,7 +548,8 @@ Extension *
 build_from_file(gchar const *filename)
 {
     Inkscape::XML::Document *doc = sp_repr_read_file(filename, INKSCAPE_EXTENSION_URI);
-    Extension *ext = build_from_reprdoc(doc, NULL);
+    std::string dir = Glib::path_get_dirname(filename);
+    Extension *ext = build_from_reprdoc(doc, NULL, &dir);
     if (ext != NULL)
         Inkscape::GC::release(doc);
     else
@@ -569,7 +571,7 @@ build_from_mem(gchar const *buffer, Implementation::Implementation *in_imp)
 {
     Inkscape::XML::Document *doc = sp_repr_read_mem(buffer, strlen(buffer), INKSCAPE_EXTENSION_URI);
     g_return_val_if_fail(doc != NULL, NULL);
-    Extension *ext = build_from_reprdoc(doc, in_imp);
+    Extension *ext = build_from_reprdoc(doc, in_imp, NULL);
     Inkscape::GC::release(doc);
     return ext;
 }

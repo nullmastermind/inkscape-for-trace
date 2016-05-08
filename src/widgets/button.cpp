@@ -96,7 +96,6 @@ static void sp_button_dispose(GObject *object)
 static void sp_button_get_preferred_width(GtkWidget *widget, gint *minimal_width, gint *natural_width)
 {
     GtkWidget *child = gtk_bin_get_child(GTK_BIN(widget));
-    GtkStyle *style = gtk_widget_get_style(widget);
 
     if (child) {
         gtk_widget_get_preferred_width(GTK_WIDGET(child), minimal_width, natural_width);
@@ -105,14 +104,20 @@ static void sp_button_get_preferred_width(GtkWidget *widget, gint *minimal_width
         *natural_width = 0;
     }
 
-    *minimal_width += 2 + 2 * MAX(2, style->xthickness);
-    *natural_width += 2 + 2 * MAX(2, style->xthickness);
+    GtkStyleContext *context = gtk_widget_get_style_context (widget);
+    GtkBorder padding;
+    GtkBorder border;
+
+    gtk_style_context_get_padding(context, GTK_STATE_FLAG_NORMAL, &padding);
+    gtk_style_context_get_border( context, GTK_STATE_FLAG_NORMAL, &border );
+
+    *minimal_width += MAX(2, padding.left + padding.right + border.left + border.right);
+    *natural_width += MAX(2, padding.left + padding.right + border.left + border.right);
 }
 
 static void sp_button_get_preferred_height(GtkWidget *widget, gint *minimal_height, gint *natural_height)
 {
     GtkWidget *child = gtk_bin_get_child(GTK_BIN(widget));
-    GtkStyle *style = gtk_widget_get_style(widget);
 
     if (child) {
         gtk_widget_get_preferred_height(GTK_WIDGET(child), minimal_height, natural_height);
@@ -121,8 +126,15 @@ static void sp_button_get_preferred_height(GtkWidget *widget, gint *minimal_heig
         *natural_height = 0;
     }
 
-    *minimal_height += 2 + 2 * MAX(2, style->ythickness);
-    *natural_height += 2 + 2 * MAX(2, style->ythickness);
+    GtkStyleContext *context = gtk_widget_get_style_context (widget);
+    GtkBorder padding;
+    GtkBorder border;
+
+    gtk_style_context_get_padding(context, GTK_STATE_FLAG_NORMAL, &padding);
+    gtk_style_context_get_border( context, GTK_STATE_FLAG_NORMAL, &border );
+
+    *minimal_height += MAX(2, padding.top + padding.bottom + border.top + border.bottom);
+    *natural_height += MAX(2, padding.top + padding.bottom + border.top + border.bottom);
 }
 #else
 static void sp_button_size_request(GtkWidget *widget, GtkRequisition *requisition)

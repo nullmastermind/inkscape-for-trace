@@ -35,7 +35,7 @@ import re
 import sys
 from math import *
 
-#a dictionary of all of the xmlns prefixes in a standard inkscape doc
+# a dictionary of all of the xmlns prefixes in a standard inkscape doc
 NSS = {
 u'sodipodi' :u'http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd',
 u'cc'       :u'http://creativecommons.org/ns#',
@@ -100,9 +100,9 @@ def errormsg(msg):
          inkex.errormsg(_("This extension requires two selected paths."))
     """
     if isinstance(msg, unicode):
-        sys.stderr.write(msg.encode("UTF-8") + "\n")
+        sys.stderr.write(msg.encode("utf-8") + "\n")
     else:
-        sys.stderr.write((unicode(msg, "utf-8", errors='replace') + "\n").encode("UTF-8"))
+        sys.stderr.write((unicode(msg, "utf-8", errors='replace') + "\n").encode("utf-8"))
 
 
 def are_near_relative(a, b, eps):
@@ -112,12 +112,12 @@ def are_near_relative(a, b, eps):
 # third party library
 try:
     from lxml import etree
-except Exception, e:
+except ImportError as e:
     localize()
     errormsg(_("The fantastic lxml wrapper for libxml2 is required by inkex.py and therefore this extension."
                "Please download and install the latest version from http://cheeseshop.python.org/pypi/lxml/, "
                "or install it through your package manager by a command like: sudo apt-get install "
-               "python-lxml\n\nTechnical details:\n%s" % (e,)))
+               "python-lxml\n\nTechnical details:\n%s" % (e, )))
     sys.exit()
 
 
@@ -132,7 +132,7 @@ def check_inkbool(option, opt, value):
 
 def addNS(tag, ns=None):
     val = tag
-    if ns is not None and len(ns) > 0 and NSS.has_key(ns) and len(tag) > 0 and tag[0] != '{':
+    if ns is not None and len(ns) > 0 and ns in NSS and len(tag) > 0 and tag[0] != '{':
         val = "{%s}%s" % (NSS[ns], tag)
     return val
 
@@ -165,6 +165,9 @@ class Effect:
         # TODO write a parser for this
 
     def effect(self):
+        """Apply some effects on the document. Extensions subclassing Effect
+        must override this function and define the transformations
+        in it."""
         pass
 
     def getoptions(self,args=sys.argv[1:]):
@@ -178,7 +181,7 @@ class Effect:
         if filename is not None:
             try:
                 stream = open(filename, 'r')
-            except Exception:
+            except IOError:
                 errormsg(_("Unable to open specified file: %s") % filename)
                 sys.exit()
 
@@ -187,7 +190,7 @@ class Effect:
         elif self.svg_file is not None:
             try:
                 stream = open(self.svg_file, 'r')
-            except Exception:
+            except IOError:
                 errormsg(_("Unable to open object member file: %s") % self.svg_file)
                 sys.exit()
 
@@ -205,7 +208,7 @@ class Effect:
     def getposinlayer(self):
         #defaults
         self.current_layer = self.document.getroot()
-        self.view_center = (0.0,0.0)
+        self.view_center = (0.0, 0.0)
 
         layerattr = self.document.xpath('//sodipodi:namedview/@inkscape:current-layer', namespaces=NSS)
         if layerattr:
@@ -278,7 +281,8 @@ class Effect:
         self.getselected()
         self.getdocids()
         self.effect()
-        if output: self.output()
+        if output:
+            self.output()
 
     def uniqueId(self, old_id, make_new_id=True):
         new_id = old_id
@@ -297,8 +301,8 @@ class Effect:
         return retval
 
     # a dictionary of unit to user unit conversion factors
-    __uuconv = {'in':96.0, 'pt':1.33333333333, 'px':1.0, 'mm':3.77952755913, 'cm':37.7952755913,
-                'm':3779.52755913, 'km':3779527.55913, 'pc':16.0, 'yd':3456.0 , 'ft':1152.0}
+    __uuconv = {'in': 96.0, 'pt': 1.33333333333, 'px': 1.0, 'mm': 3.77952755913, 'cm': 37.7952755913,
+                'm': 3779.52755913, 'km': 3779527.55913, 'pc': 16.0, 'yd': 3456.0, 'ft': 1152.0}
 
     # Fault tolerance for lazily defined SVG
     def getDocumentWidth(self):
@@ -314,6 +318,10 @@ class Effect:
 
     # Fault tolerance for lazily defined SVG
     def getDocumentHeight(self):
+        """Returns a string corresponding to the height of the document, as
+        defined in the SVG file. If it is not defined, returns the height
+        as defined by the viewBox attribute. If viewBox is not defined,
+        returns the string '0'."""
         height = self.document.getroot().get('height')
         if height:
             return height
@@ -325,9 +333,10 @@ class Effect:
                 return '0'
 
     def getDocumentUnit(self):
-        """Function returns the unit used for the values in SVG.
-        For lack of an attribute in SVG that explicitly defines what units are used for SVG coordinates,
-        Try to calculate the unit from the SVG width and SVG viewbox.
+        """Returns the unit used for in the SVG document.
+        In the case the SVG document lacks an attribute that explicitly
+        defines what units are used for SVG coordinates, it tries to calculate
+        the unit from the SVG width and viewBox attributes.
         Defaults to 'px' units."""
         svgunit = 'px'  # default to pixels
 
