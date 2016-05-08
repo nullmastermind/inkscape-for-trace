@@ -13,34 +13,42 @@ namespace Inkscape {
 
 namespace LivePathEffect {
 
-//TODO: move maybe to svg-lenght.cpp
+//TODO: move maybe
 unsigned int
-sp_svg_satellite_read_d(gchar const *str, Satellite *sat){
+sp_svg_satellite_vector_read_d(gchar const *str, std::vector<Satellite> *satellites){
     if (!str) {
         return 0;
     }
-    gchar ** strarray = g_strsplit(str, ",", 8);
-    if(strlen(str) > 0 && strarray[7] && !strarray[8]){
-        sat->setSatelliteType(g_strstrip(strarray[0]));
-        sat->is_time = strncmp(strarray[1],"1",1) == 0;
-        sat->active = strncmp(strarray[2],"1",1) == 0;
-        sat->has_mirror = strncmp(strarray[3],"1",1) == 0;
-        sat->hidden = strncmp(strarray[4],"1",1) == 0;
-        double amount,angle;
-        float stepsTmp;
-        sp_svg_number_read_d(strarray[5], &amount);
-        sp_svg_number_read_d(strarray[6], &angle);
-        sp_svg_number_read_f(strarray[7], &stepsTmp);
-        unsigned int steps = (unsigned int)stepsTmp;
-        sat->amount = amount;
-        sat->angle = angle;
-        sat->steps = steps;
-        g_strfreev (strarray);
-        return 1;
+    gchar ** strarray = g_strsplit(str, "@", 0);
+    for (size_t i = 0; i < strarray.size(); ++i) {
+        gchar ** strsubarray = g_strsplit(strarray[i], ",", 7);
+        if(strlen(str) > 0 && strsubarray[6] && !strsubarray[7]){
+            Satellite sat;
+            sat->setSatelliteType(g_strstrip(strsubarray[0]));
+            sat->is_time = strncmp(strsubarray[1],"1",1) == 0;
+            sat->has_mirror = strncmp(strsubarray[2],"1",1) == 0;
+            sat->hidden = strncmp(strsubarray[3],"1",1) == 0;
+            double amount,angle;
+            float stepsTmp;
+            sp_svg_number_read_d(strsubarray[4], &amount);
+            sp_svg_number_read_d(strsubarray[5], &angle);
+            sp_svg_number_read_f(strsubarray[6], &stepsTmp);
+            unsigned int steps = (unsigned int)stepsTmp;
+            sat->amount = amount;
+            sat->angle = angle;
+            sat->steps = steps;
+            g_strfreev (strsubarray);
+            satellites.push_back(sat);
+        }
+        g_strfreev (strsubarray);
     }
     g_strfreev (strarray);
+    if (!sat.empty()){
+        return 1;
+    }
     return 0;
 }
+
 
 template <>
 double
@@ -75,24 +83,19 @@ ArrayParam<Geom::Point>::readsvg(const gchar * str)
     return Geom::Point(Geom::infinity(),Geom::infinity());
 }
 
+
 template <>
-Satellite
-ArrayParam<Satellite >::readsvg(const gchar * str)
+std::vector<Satellite>
+ArrayParam<std::vector<Satellite > >::readsvg(const gchar * str)
 {
-    Satellite sat;
-    if (sp_svg_satellite_read_d(str, &sat)) {
-        return sat;
+    std::vector<Satellite > satellites;
+    if (sp_svg_satellite_vector_read_d(str, &satellites)) {
+        return satellites;
     }
-    Satellite satellite(FILLET);
-    satellite.setIsTime(true);
-    satellite.setActive(false);
-    satellite.setHasMirror(false);
-    satellite.setHidden(true);
-    satellite.setAmount(0.0);
-    satellite.setAngle(0.0);
-    satellite.setSteps(0);
-    return satellite;
+    satellites.push_back(Satellite satellite(FILLET));
+    return satellites;
 }
+
 
 } /* namespace LivePathEffect */
 

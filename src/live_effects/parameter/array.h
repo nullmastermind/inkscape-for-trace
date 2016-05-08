@@ -110,22 +110,25 @@ protected:
         str << nVector;
     }
 
-    void writesvgData(SVGOStringStream &str, Satellite const &nVector) const {
-        str << nVector.getSatelliteTypeGchar();
-        str << ",";
-        str << nVector.is_time;
-        str << ",";
-        str << nVector.active;
-        str << ",";
-        str << nVector.has_mirror;
-        str << ",";
-        str << nVector.hidden;
-        str << ",";
-        str << nVector.amount;
-        str << ",";
-        str << nVector.angle;
-        str << ",";
-        str << nVector.steps;
+    void writesvgData(SVGOStringStream &str, std::vector<Satellite> const &nVector) const {
+        for (size_t i = 0; i < nVector.size(); ++i) {
+            str << nVector[i].getSatelliteTypeGchar();
+            str << ",";
+            str << nVector[i].is_time;
+            str << ",";
+            str << nVector[i].has_mirror;
+            str << ",";
+            str << nVector[i].hidden;
+            str << ",";
+            str << nVector[i].amount;
+            str << ",";
+            str << nVector[i].angle;
+            str << ",";
+            str << nVector[i].steps;
+            if (i != nVector.size()-1) {
+                str << "@";
+            }
+        }
     }
 
     StorageType readsvg(const gchar * str);

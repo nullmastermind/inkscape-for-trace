@@ -32,7 +32,6 @@ Satellite::Satellite() {}
 Satellite::Satellite(SatelliteType satellite_type)
     : satellite_type(satellite_type),
       is_time(false),
-      active(false),
       has_mirror(false),
       hidden(true),
       amount(0.0),
@@ -54,7 +53,6 @@ double timeAtArcLength(double const A, Geom::Curve const &curve_in)
         return 0;
     }
 
-    //using "d2_in" for curve comparation, using directly "curve_in" crash in bezier compare function- dynamic_cast-
     Geom::D2<Geom::SBasis> d2_in = curve_in.toSBasis();
     double t = 0;
     double length_part = curve_in.length();
@@ -63,9 +61,8 @@ double timeAtArcLength(double const A, Geom::Curve const &curve_in)
             t = A / length_part;
         }
     } else if (!curve_in.isLineSegment()) {
-
         std::vector<double> t_roots = roots(Geom::arcLengthSb(d2_in) - A);
-        if (t_roots.size() > 0) {
+        if (!t_roots.empty()) {
             t = t_roots[0];
         }
     }
@@ -82,8 +79,6 @@ double arcLengthAt(double const A, Geom::Curve const &curve_in)
         return 0;
     }
 
-    //using "d2_in" for curve comparation, using directly "curve_in" crash in bezier compare function- dynamic_cast-
-    Geom::D2<Geom::SBasis> d2_in = curve_in.toSBasis();
     double s = 0;
     double length_part = curve_in.length();
     if (A > length_part || curve_in.isLineSegment()) {
@@ -91,6 +86,7 @@ double arcLengthAt(double const A, Geom::Curve const &curve_in)
     } else if (!curve_in.isLineSegment()) {
         Geom::Curve *curve = curve_in.portion(0.0, A);
         s = curve->length();
+        delete curve;
     }
     return s;
 }
@@ -105,7 +101,7 @@ double Satellite::radToLen(
     double len = 0;
     Geom::D2<Geom::SBasis> d2_in = curve_in.toSBasis();
     Geom::D2<Geom::SBasis> d2_out = curve_out.toSBasis();
-    Geom::Piecewise<Geom::D2<Geom::SBasis> > offset_curve0 =
+    Geom::Piecewise<Geom::D2<Geom::SBasis> > offset_curve0 = 
         Geom::Piecewise<Geom::D2<Geom::SBasis> >(d2_in) +
         rot90(unitVector(derivative(d2_in))) * (A);
     Geom::Piecewise<Geom::D2<Geom::SBasis> > offset_curve1 =
@@ -136,30 +132,28 @@ double Satellite::lenToRad(
 {
     double time_in = (previousSatellite).time(A, true, curve_in);
     double time_out = timeAtArcLength(A, curve_out);
-    Geom::Point startArcPoint = curve_in.pointAt(time_in);
-    Geom::Point endArcPoint = curve_out.pointAt(time_out);
-    Geom::Curve *knotCurve1 = curve_in.portion(0, time_in);
-    Geom::Curve *knotCurve2 = curve_out.portion(time_out, 1);
-    Geom::CubicBezier const *cubic1 =
-        dynamic_cast<Geom::CubicBezier const *>(&*knotCurve1);
+    Geom::Point start_arc_point = curve_in.pointAt(time_in);
+    Geom::Point end_arc_point = curve_out.pointAt(time_out);
+    Geom::Curve *knot_curve1 = curve_in.portion(0, time_in);
+    Geom::Curve *knot_curve2 = curve_out.portion(time_out, 1);
+    Geom::cubic_bezier const *cubic1 = dynamic_cast<Geom::cubic_bezier const *>(&*knot_curve1);
     Geom::Ray ray1(startArcPoint, curve_in.pointAt(1));
     if (cubic1) {
         ray1.setPoints((*cubic1)[2], startArcPoint);
     }
-    Geom::CubicBezier const *cubic2 =
-        dynamic_cast<Geom::CubicBezier const *>(&*knotCurve2);
+    Geom::cubic_bezier const *cubic2 = dynamic_cast<Geom::cubic_bezier const *>(&*knot_curve2);
     Geom::Ray ray2(curve_out.pointAt(0), endArcPoint);
     if (cubic2) {
         ray2.setPoints(endArcPoint, (*cubic2)[1]);
     }
-    bool ccwToggle = cross(curve_in.pointAt(1) - startArcPoint,
-                           endArcPoint - startArcPoint) < 0;
-    double distanceArc =
+    bool ccw_toggle = cross(curve_in.pointAt(1) - startArcPoint,
+                           end_arc_point - startArcPoint) < 0;
+    double distance_arc =
         Geom::distance(startArcPoint, middle_point(startArcPoint, endArcPoint));
-    double angleBetween = angle_between(ray1, ray2, ccwToggle);
-    double divisor = std::sin(angleBetween / 2.0);
+    double angle_between = angle_between(ray1, ray2, ccw_toggle);
+    double divisor = std::sin(angle_between / 2.0);
     if (divisor > 0) {
-        return distanceArc / divisor;
+        return distance_arc / divisor;
     }
     return 0;
 }
@@ -167,12 +161,12 @@ double Satellite::lenToRad(
 /**
  * Get the time position of the satellite in curve_in
  */
-double Satellite::time(Geom::Curve const &curve_in, bool const I) const
+double Satellite::time(Geom::Curve const &curve_in, bool inverse) const
 {
     double t = amount;
     if (!is_time) {
-        t = time(t, I, curve_in);
-    } else if (I) {
+        t = time(t, inverse, curve_in);
+    } else if (inverse) {
         t = 1-t;
     }
     if (t > 1) {
@@ -182,18 +176,18 @@ double Satellite::time(Geom::Curve const &curve_in, bool const I) const
 }
 
 /**.
- * Get the time from a length A in other curve, a bolean I gived to reverse time
+ * Get the time from a length A in other curve, a bolean inverse gived to reverse time
  */
-double Satellite::time(double A, bool const I,
+double Satellite::time(double A, bool inverse,
                        Geom::Curve const &curve_in) const
 {
-    if (A == 0 && I) {
+    if (A == 0 && inverse) {
         return 1;
     }
-    if (A == 0 && !I) {
+    if (A == 0 && !inverse) {
         return 0;
     }
-    if (!I) {
+    if (!inverse) {
         return timeAtArcLength(A, curve_in);
     }
     double length_part = curve_in.length();
@@ -216,19 +210,19 @@ double Satellite::arcDistance(Geom::Curve const &curve_in) const
 /**
  * Get the point position of the satellite
  */
-Geom::Point Satellite::getPosition(Geom::Curve const &curve_in, bool const I) const
+Geom::Point Satellite::getPosition(Geom::Curve const &curve_in, bool inverse) const
 {
-    double t = time(curve_in, I);
+    double t = time(curve_in, inverse);
     return curve_in.pointAt(t);
 }
 
 /**
  * Set the position of the satellite from a gived point P
  */
-void Satellite::setPosition(Geom::Point const p, Geom::Curve const &curve_in, bool const I)
+void Satellite::setPosition(Geom::Point const p, Geom::Curve const &curve_in, bool inverse)
 {
     Geom::Curve * curve = const_cast<Geom::Curve *>(&curve_in);
-    if (I) {
+    if (inverse) {
         curve = curve->reverse();
     }
     double A = Geom::nearest_time(p, *curve);

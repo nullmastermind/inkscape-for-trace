@@ -29,11 +29,9 @@ set(2geom_SRC
 	pathvector.cpp
 	piecewise.cpp
 	point.cpp
-	pointwise.cpp
 	polynomial.cpp
 	rect.cpp
 	# recursive-bezier-intersection.cpp
-	satellite.cpp
 	sbasis-2d.cpp
 	sbasis-geometric.cpp
 	sbasis-math.cpp
@@ -95,7 +93,6 @@ set(2geom_SRC
 	pathvector.h
 	piecewise.h
 	point.h
-	pointwise.h
 	polynomial.h
 	ray.h
 	rect.h

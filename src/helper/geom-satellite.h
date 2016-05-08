@@ -39,10 +39,6 @@ public:
     {
         is_time = set_is_time;
     }
-    void setActive(bool set_active)
-    {
-        active = set_active;
-    }
     void setHasMirror(bool set_has_mirror)
     {
         has_mirror = set_has_mirror;
@@ -69,20 +65,22 @@ public:
     double radToLen(double const A, Geom::Curve const &curve_in,
                     Geom::Curve const &curve_out) const;
 
-    double time(Geom::Curve const &curve_in, bool const I = false) const;
-    double time(double A, bool const I, Geom::Curve const &curve_in) const;
+    double time(Geom::Curve const &curve_in, bool inverse = false) const;
+    double time(double A, bool inverse, Geom::Curve const &curve_in) const;
     double arcDistance(Geom::Curve const &curve_in) const;
 
-    void setPosition(Geom::Point const p, Geom::Curve const &curve_in, bool const I = false);
-    Geom::Point getPosition(Geom::Curve const &curve_in, bool const I = false) const;
+    void setPosition(Geom::Point const p, Geom::Curve const &curve_in, bool inverse = false);
+    Geom::Point getPosition(Geom::Curve const &curve_in, bool inverse = false) const;
 
     void setSatelliteType(gchar const *A);
     gchar const *getSatelliteTypeGchar() const;
     SatelliteType satellite_type;
+    //The value stored could be a time value of the satellite in the curve ot a distance on the curve
+    //"is_time" tell is if is a time or lenght value
     bool is_time;
-    bool active;
     bool has_mirror;
     bool hidden;
+    //in "amount" we store the time or distance used in the satellite
     double amount;
     double angle;
     size_t steps;

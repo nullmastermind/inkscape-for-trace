@@ -28,44 +28,27 @@
 /**
  * @brief Pointwise a class to manage a vector of satellites per piecewise curve
  */
-typedef Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2sb;
+typedef Geom::Piecewise<Geom::D2<Geom::SBasis> > PwD2SBasisasis;
+typedef std::vector< Satelites > Satelites;
 class Pointwise {
 public:
-    pwd2sb getPwd2() const;
-    void setPwd2(pwd2sb const &pwd2_in);
-    /**
-     * @parameter curve_based allow the use of a satellite on last node of open paths
-     * if not curve based
-     */
-    std::vector<Satellite> getSatellites();
-    void setSatellites(std::vector<Satellite> const &sats);
-
-    /** Update the start satellite on open/closed paths.
-    */
-    void setStart();
-    /** Fired when a path is modified.
-    */
-    void recalculateForNewPwd2(pwd2sb const &A, Geom::PathVector const &B, Satellite const &S);
-    /** Some nodes/subpaths are removed.
-    */
-    void pwd2Subtract(pwd2sb const &A);
-    /** Append nodes/subpaths to current pointwise
-    */
-    void pwd2Append(pwd2sb const &A, Satellite const &S);
-    /** Send a subpath to end and update satellites
-    */
-    void subpathToBack(size_t subpath);
-    /** Reverse a subpath and update satellites
-    */
-    void subpathReverse(size_t start, size_t end);
-    /** Fired when a path is modified duplicating a node. Piecewise ignore degenerated curves.
-    */
-    void insertDegenerateSatellites(pwd2sb const &A, Geom::PathVector const &B, Satellite const &S);
+    PwD2SBasis getPwd2() const;
+    Geom::Pathvector getPV() const;
+    void setPwd2(PwD2SBasis const &pwd2_in);
+    Satelites getSatellites();
+    size_t getTotalSatellites();
+    void setSatellites(Satelites const &sats);
+    void recalculateForNewPwd2(PwD2SBasis const &A, Geom::PathVector const &B, Satellite const &S);
+    //Fired when a path is modified.
+    void recalculatePwD2(PwD2SBasis const &A, Satellite const &S);
+    //Recalculate satellites
+    void insertDegenerateSatellites(PwD2SBasis const &A, Geom::PathVector const &B, Satellite const &S);
+    //Fired when a path is modified duplicating a node. Piecewise ignore degenerated curves.
 
 private:
-    pwd2sb _pwd2;
+    PwD2SBasis _pwd2;
     Geom::PathVector _pathvector;
-    std::vector<Satellite> _satellites;
+    Satelites _satellites;
 };
 
 #endif //SEEN_POINTWISE_H

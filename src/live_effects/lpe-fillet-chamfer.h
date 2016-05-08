@@ -13,7 +13,7 @@
  */
 
 #include "live_effects/parameter/enum.h"
-#include "live_effects/parameter/satellitearray.h"
+#include "live_effects/parameter/satellitesarray.h"
 #include "live_effects/effect.h"
 #include "helper/geom-pointwise.h"
 
@@ -45,7 +45,7 @@ public:
     void fillet();
     void inverseFillet();
 
-    SatelliteArrayParam satellites_param;
+    SatellitesArrayParam satellites_param;
 
 private:
     EnumParam<FilletMethod> method;

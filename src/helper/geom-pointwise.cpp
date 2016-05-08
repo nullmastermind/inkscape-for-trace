@@ -16,221 +16,116 @@
 
 #include <helper/geom-pointwise.h>
 
-pwd2sb Pointwise::getPwd2() const
+PwD2SBasis Pointwise::getPwd2() const
 {
     return _pwd2;
 }
 
-void Pointwise::setPwd2(pwd2sb const &pwd2_in)
+Geom::Pathvector Pointwise::getPV() const
+{
+    return _pathvector;
+}
+
+void Pointwise::setPwd2(PwD2SBasis const &pwd2_in)
 {
     _pathvector = path_from_piecewise(Geom::remove_short_cuts(_pwd2,0.01),0.01);
     _pwd2 = pwd2_in;
 }
 
-std::vector<Satellite> Pointwise::getSatellites()
+Satelites Pointwise::getSatellites()
 {
     return _satellites;
 }
 
-void Pointwise::setSatellites(std::vector<Satellite> const &sats)
+size_t Pointwise::getTotalSatellites()
+{
+    size_t counter = 0
+    for (size_t i = 0; i < satellites.size(); ++i) {
+        for (size_t j = 0; j < satellites[i].size(); ++j) {
+            counter++;
+        }
+    }
+    return counter;
+}
+
+void Pointwise::setSatellites(Satelites const &sats)
 {
     _satellites = sats;
 }
 
-void Pointwise::setStart()
+void Pointwise::recalculateForNewPwd2(PwD2SBasis const &A, Geom::PathVector const &B, Satellite const &S)
 {
-    int counter = 0;
-    for (Geom::PathVector::const_iterator path_it = _pathvector.begin();
-            path_it != _pathvector.end(); ++path_it) {
-        if (path_it->empty()) {
-            continue;
-        }
-        int index = 0;
-        for (Geom::Path::const_iterator curve_it =  path_it->begin();
-                curve_it !=  path_it->end(); ++curve_it) {
-            if(index == 0) {
-                if (!path_it->closed()) {
-                    _satellites[counter].hidden = true;
-                    _satellites[counter].active = false;
-                } else {
-                    _satellites[counter].active = true;
-                    _satellites[counter].hidden = _satellites[counter+1].hidden;
-                }
-            }
-            ++index;
-            ++counter;
-        }
-    }
-}
-
-void Pointwise::recalculateForNewPwd2(pwd2sb const &A, Geom::PathVector const &B, Satellite const &S)
-{
-    if (_pwd2.size() > A.size()) {
-        pwd2Subtract(A);
-    } else if (_pwd2.size() < A.size()) {
-        pwd2Append(A, S);
+    if (_pwd2.size() > A.size() || _pwd2.size() < A.size()) {
+        recalculatePwD2(A, S);
     } else {
         insertDegenerateSatellites(A, B, S);
     }
 }
 
-void Pointwise::pwd2Subtract(pwd2sb const &A)
+void Pointwise::recalculatePwD2(PwD2SBasis const &A, Satellite const &S)
 {
-    size_t counter = 0;
-    std::vector<Satellite> sats;
-    pwd2sb pwd2 = _pwd2;
-    setPwd2(A);
-    Geom::PathVector pathv = path_from_piecewise(Geom::remove_short_cuts(_pwd2,0.01),0.01);
-    for (size_t i = 0; i < _satellites.size(); i++) {
-        Geom::Path sat_path = pathv.pathAt(i - counter);
-        Geom::PathTime sat_curve_time = sat_path.nearestTime(pathv.curveAt(i - counter).initialPoint());
-        Geom::PathTime sat_curve_time_start = sat_path.nearestTime(sat_path.initialPoint());
-        if (sat_curve_time_start.curve_index < sat_curve_time.curve_index||
-                !are_near(pwd2[i].at0(), A[i - counter].at0())) {
-            counter++;
-        } else {
-            sats.push_back(_satellites[i - counter]);
-        }
-    }
-    setSatellites(sats);
-}
-
-void Pointwise::pwd2Append(pwd2sb const &A, Satellite const &S)
-{
-    size_t counter = 0;
-    std::vector<Satellite> sats;
-    bool reorder = false;
-    for (size_t i = 0; i < A.size(); i++) {
-        Geom::PathVector pathv = path_from_piecewise(Geom::remove_short_cuts(_pwd2,0.01),0.01);
-        Geom::Path sat_path = pathv.pathAt(i - counter);
-        boost::optional< Geom::PathVectorTime > sat_curve_time_optional = pathv.nearestTime(pathv.curveAt(i-counter).initialPoint());
-        Geom::PathVectorTime sat_curve_time;
-        if(sat_curve_time_optional) {
-            sat_curve_time = *sat_curve_time_optional;
-        }
-        sat_curve_time.normalizeForward(sat_path.size());
-        size_t first = Geom::nearest_time(sat_path.initialPoint(),_pwd2);
-        size_t last = first + sat_path.size() - 1;
-        bool is_start = false;
-        if(sat_curve_time.curve_index == 0) {
-            is_start = true;
-        }
-        //Check for subpath closed. If a subpath is closed, is not reversed or moved
-        //to back
-        size_t old_subpath_index = sat_curve_time.path_index;
-        pathv = path_from_piecewise(Geom::remove_short_cuts(A,0.01),0.01);
-        sat_path = pathv.pathAt(i);
-        sat_curve_time_optional = pathv.nearestTime(pathv.curveAt(i).initialPoint());
-        if(sat_curve_time_optional) {
-            sat_curve_time = *sat_curve_time_optional;
-        }
-        sat_curve_time.normalizeForward(sat_path.size());
-        size_t new_subpath_index = sat_curve_time.path_index;
-        bool subpath_is_changed = false;
-        if (_pwd2.size() > i - counter) {
-            subpath_is_changed = old_subpath_index != new_subpath_index;
-        }
-
-        if (!reorder && is_start && !are_near(_pwd2[i - counter].at0(), A[i].at0()) && !subpath_is_changed) {
-            //Send the modified subpath to back
-            subpathToBack(old_subpath_index);
-            reorder = true;
-            i--;
-            continue;
-        }
-
-        if (is_start && !are_near(_pwd2[i - counter].at0(), A[i].at0()) && !subpath_is_changed) {
-            subpathReverse(first, last);
-        }
-
-        if (_pwd2.size() <= i - counter || !are_near(_pwd2[i - counter].at0(), A[i].at0())) {
-            counter++;
-            sats.push_back(S);
-        } else {
-            sats.push_back(_satellites[i - counter]);
-        }
-    }
-    setPwd2(A);
-    setSatellites(sats);
-}
-
-void Pointwise::subpathToBack(size_t subpath)
-{
-    Geom::PathVector path_in =
-        path_from_piecewise(remove_short_cuts(_pwd2, 0.1), 0.001);
-    size_t subpath_counter = 0;
-    size_t counter = 0;
-    Geom::PathVector tmp_path;
-    Geom::Path to_back;
-    for (Geom::PathVector::const_iterator path_it = path_in.begin();
-            path_it != path_in.end(); ++path_it) {
-        if (path_it->empty()) {
-            continue;
-        }
-        Geom::Path::const_iterator curve_it1 = path_it->begin();
-        Geom::Path::const_iterator curve_endit = path_it->end_default();
-        Geom::Curve const &closingline = path_it->back_closed();
-        if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
-            curve_endit = path_it->end_open();
-        }
-        while (curve_it1 != curve_endit) {
-            if (subpath_counter == subpath) {
-                _satellites.push_back(_satellites[counter]);
-                _satellites.erase(_satellites.begin() + counter);
-            } else {
-                counter++;
+    Satelites sats;
+    Geom::PathVector new_pathv = path_from_piecewise(Geom::remove_short_cuts(A,0.01),0.01);
+    Geom::PathVector old_pathv = _pathvector;
+    _pathvector.clear();
+    size_t new_size = new_pathv.size();
+    size_t old_size = old_pathv.size();
+    size_t old_increments = old_size;
+    for (size_t i = 0; i < new_pathv.size(); i++) {
+        bool match = false;
+        for (size_t j = 0; j < old_pathv.size(); j++) {
+            std::vector<satellite> subpath_satellites;
+            if ( new_pathv[i] == old_pathv[j]){
+                _pathvector.push_back(old_pathv[j];
+                sats.push_back(_satellites[j]);
+                _satellites.erase(_satellites.begin() + j);
+                old_pathv.erase(old_pathv.begin() + j);
+                new_pathv.erase(new_pathv.begin() + i);
+                match = true;
+                break;
             }
-            ++curve_it1;
         }
-        if (subpath_counter == subpath) {
-            to_back = *path_it;
-        } else {
-            tmp_path.push_back(*path_it);
+        if (!match && new_size > old_increments){
+            _pathvector.push_back(new_pathv[i]);
+            std::vector<satellite> subpath_satellites;
+            for (size_t k = 0; k < new_pathv[i].size(); k++) {
+                subpath_satellites.push_back(Satellite(_satellites[0][0].satellite_type));
+            }
+            sats.push_back(subpath_satellites);
+            old_increments ++;
         }
-        subpath_counter++;
     }
-    tmp_path.push_back(to_back);
-    setPwd2(remove_short_cuts(paths_to_pw(tmp_path), 0.01));
+    if (new_size == old_size) {
+        //we asume not change the order of subpaths when remove or add nodes to existing subpaths
+        for (size_t l = 0; l < old_pathv.size(); l++) {
+            //we assume we only can delete or add nodes not a mix of both
+            if (old_pathv[l].size() > new_pathv[l].size()){
+                //erase nodes
+                for (size_t m = 0; m < old_pathv[l].size(); m++) {
+                    if (!are_near(old_pathv[l][m].initialPoint(), new_pathv[l][m].initialPoint()) {
+                        _satellites[l].erase(_satellites.begin() + m);
+                    }
+                }
+            } else if (old_pathv[l].size() > new_pathv[l].size()) {
+                //add nodes
+                for (size_t m = 0; m < old_pathv[l].size(); m++) {
+                    if (!are_near(old_pathv[l][m].initialPoint(), new_pathv[l][m].initialPoint()) {
+                        _satellites[l].insert(_satellites.begin() + m, S);
+                    }
+                }
+            } else {
+                //never happends
+            }
+            sats.push_back(_satellites[l]);
+            _pathvector.push_back(new_pathv[l]);
+        
+        }
+    }
+    setPwd2(A);
+    setSatellites(sats);
 }
 
-void Pointwise::subpathReverse(size_t start, size_t end)
-{
-    start++;
-    for (size_t i = end; i >= start; i--) {
-        _satellites.insert(_satellites.begin() + end + 1, _satellites[i]);
-        _satellites.erase(_satellites.begin() + i);
-    }
-    Geom::PathVector path_in =
-        path_from_piecewise(remove_short_cuts(_pwd2, 0.1), 0.001);
-    size_t counter = 0;
-    size_t subpath_counter = 0;
-    Geom::Path sat_path = path_in.pathAt(start);
-    boost::optional< Geom::PathVectorTime > sat_curve_time_optional = path_in.nearestTime(path_in.curveAt(start).initialPoint());
-    Geom::PathVectorTime sat_curve_time;
-    if(sat_curve_time_optional) {
-        sat_curve_time = *sat_curve_time_optional;
-    }
-    sat_curve_time.normalizeForward(sat_path.size());
-    size_t subpath = sat_curve_time.path_index;
-    Geom::PathVector tmp_path;
-    Geom::Path rev;
-    for (Geom::PathVector::const_iterator path_it = path_in.begin();
-            path_it != path_in.end(); ++path_it) {
-        if (path_it->empty()) {
-            continue;
-        }
-        counter++;
-        if (subpath_counter == subpath) {
-            tmp_path.push_back(path_it->reversed());
-        } else {
-            tmp_path.push_back(*path_it);
-        }
-        subpath_counter++;
-    }
-    setPwd2(remove_short_cuts(paths_to_pw(tmp_path), 0.01));
-}
-
-void Pointwise::insertDegenerateSatellites(pwd2sb const &A, Geom::PathVector const &B, Satellite const &S)
+void Pointwise::insertDegenerateSatellites(PwD2SBasis const &A, Geom::PathVector const &B, Satellite const &S)
 {
     size_t size_A = A.size();
     size_t size_B = B.curveCount();
@@ -238,31 +133,21 @@ void Pointwise::insertDegenerateSatellites(pwd2sb const &A, Geom::PathVector con
     if (satellite_gap == 0) {
         return;
     }
-    size_t counter = 0;
     size_t counter_added = 0;
-    for (Geom::PathVector::const_iterator path_it = B.begin();
-            path_it != B.end(); ++path_it) {
-        if (path_it->empty()) {
+    for (size_t i = 0; i < B.size(); i++) {
+        size_t counter = 0;
+        if (B[i]->empty()) {
             continue;
         }
-        Geom::Path::const_iterator curve_it1 = path_it->begin();
-        Geom::Path::const_iterator curve_endit = path_it->end_default();
-        if (path_it->closed()) {
-            Geom::Curve const &closingline = path_it->back_closed();
-            if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
-                curve_endit = path_it->end_open();
-            }
-        }
-        while (curve_it1 != curve_endit) {
-            if ((*curve_it1).isDegenerate() && counter_added < satellite_gap) {
+        for (size_t j = 0; j < B[i].size(); j++) {
+            if ((B[i][j].isDegenerate() && counter_added < satellite_gap) {
                 counter_added++;
-                _satellites.insert(_satellites.begin() + counter + 1 ,S);
+                _satellites[i].insert(_satellites[i].begin() + counter + 1 ,S);
             }
             ++curve_it1;
             counter++;
         }
     }
-
     setPwd2(A);
 }
 

@@ -1,5 +1,5 @@
-#ifndef INKSCAPE_LIVEPATHEFFECT_SATELLITE_PAIR_ARRAY_H
-#define INKSCAPE_LIVEPATHEFFECT_SATELLITE_PAIR_ARRAY_H
+#ifndef INKSCAPE_LIVEPATHEFFECT_SATELLITES_ARRAY_H
+#define INKSCAPE_LIVEPATHEFFECT_SATELLITES_ARRAY_H
 
 /*
  * Inkscape::LivePathEffectParameters
@@ -30,9 +30,9 @@ namespace LivePathEffect {
 
 class FilletChamferKnotHolderEntity;
 
-class SatelliteArrayParam : public ArrayParam<Satellite> {
+class SatellitesArrayParam : public ArrayArrayParam<Satellite> {
 public:
-    SatelliteArrayParam(const Glib::ustring &label, const Glib::ustring &tip,
+    SatellitesArrayParam(const Glib::ustring &label, const Glib::ustring &tip,
                         const Glib::ustring &key,
                         Inkscape::UI::Widget::Registry *wr, Effect *effect);
 
@@ -67,8 +67,8 @@ protected:
     KnotHolder *knoth;
 
 private:
-    SatelliteArrayParam(const SatelliteArrayParam &);
-    SatelliteArrayParam &operator=(const SatelliteArrayParam &);
+    SatellitesArrayParam(const SatellitesArrayParam &);
+    SatellitesArrayParam &operator=(const SatellitesArrayParam &);
 
     SPKnotShapeType _knot_shape;
     SPKnotModeType _knot_mode;
@@ -83,7 +83,7 @@ private:
 
 class FilletChamferKnotHolderEntity : public KnotHolderEntity {
 public:
-    FilletChamferKnotHolderEntity(SatelliteArrayParam *p, size_t index);
+    FilletChamferKnotHolderEntity(SatellitesArrayParam *p, size_t index, size_t subindex);
     virtual ~FilletChamferKnotHolderEntity()
     {
         _pparam->knoth = NULL;
@@ -103,8 +103,9 @@ public:
     ;
 
 private:
-    SatelliteArrayParam *_pparam;
+    SatellitesArrayParam *_pparam;
     size_t _index;
+    size_t _subindex;
 };
 
 } //namespace LivePathEffect
