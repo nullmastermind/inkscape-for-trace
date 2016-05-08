@@ -127,10 +127,10 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
             SPDocument * doc = SP_ACTIVE_DESKTOP->getDocument();
             Geom::Rect view_box_rect = doc->getViewBox();
             Geom::Point sp = Geom::Point(view_box_rect.width()/2.0, 0);
-            sp *= lpeitem->i2dt_affine().inverse();
+            sp *= i2anc_affine(SP_OBJECT(lpeitem), SP_OBJECT(SP_ACTIVE_DESKTOP->currentLayer()->parent)) .inverse();
             start_point.param_setValue(sp);
             Geom::Point ep = Geom::Point(view_box_rect.width()/2.0, view_box_rect.height());
-            ep *= lpeitem->i2dt_affine().inverse();
+            ep *= i2anc_affine(SP_OBJECT(lpeitem), SP_OBJECT(SP_ACTIVE_DESKTOP->currentLayer()->parent)) .inverse();
             end_point.param_setValue(ep);
             center_point = Geom::middle_point((Geom::Point)start_point, (Geom::Point)end_point);
             line_separation.setPoints(start_point, end_point);
@@ -140,10 +140,10 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
             SPDocument * doc = SP_ACTIVE_DESKTOP->getDocument();
             Geom::Rect view_box_rect = doc->getViewBox();
             Geom::Point sp = Geom::Point(0, view_box_rect.height()/2.0);
-            sp *= lpeitem->i2dt_affine().inverse();
+            sp *= i2anc_affine(SP_OBJECT(lpeitem), SP_OBJECT(SP_ACTIVE_DESKTOP->currentLayer()->parent)) .inverse();
             start_point.param_setValue(sp);
             Geom::Point ep = Geom::Point(view_box_rect.width(), view_box_rect.height()/2.0);
-            ep *= lpeitem->i2dt_affine().inverse();
+            ep *= i2anc_affine(SP_OBJECT(lpeitem), SP_OBJECT(SP_ACTIVE_DESKTOP->currentLayer()->parent)) .inverse();
             end_point.param_setValue(ep);
             center_point = Geom::middle_point((Geom::Point)start_point, (Geom::Point)end_point);
             line_separation.setPoints(start_point, end_point);
@@ -178,7 +178,7 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
     Geom::PathVector path_out;
     
     if (!discard_orig_path && !fuse_paths) {
-        path_out = path_in;
+        path_out = pathv_to_linear_and_cubic_beziers(path_in);
     }
 
     Geom::Point point_a(line_separation.initialPoint());
