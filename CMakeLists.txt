@@ -19,6 +19,13 @@ project(inkscape)
 set(INKSCAPE_VERSION 0.91+devel)
 set(PROJECT_NAME inkscape)
 set(CMAKE_INCLUDE_CURRENT_DIR TRUE)
+if(APPLE)
+    SET(CMAKE_MACOSX_RPATH TRUE)
+    SET(CMAKE_INSTALL_RPATH "@loader_path/../lib/inkscape")
+else()
+    SET(CMAKE_INSTALL_RPATH "$ORIGIN/../lib/inkscape")
+endif()
+
 
 cmake_policy(SET CMP0003 NEW) # don't be prolific with library paths
 cmake_policy(SET CMP0005 NEW) # proper define quoting
@@ -59,8 +66,8 @@ endif(APPLE)
 # -----------------------------------------------------------------------------
 # Redirect output files
 # -----------------------------------------------------------------------------
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin CACHE INTERNAL "" FORCE )
-set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib CACHE INTERNAL "" FORCE )
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin CACHE INTERNAL "" )
+set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib CACHE INTERNAL "" )
 
 # -----------------------------------------------------------------------------
 # Test Harness
@@ -70,6 +77,8 @@ set(GMOCK_DIR "${CMAKE_SOURCE_DIR}/gtest/gmock-1.7.0"
 
 if(EXISTS "${GMOCK_DIR}" AND IS_DIRECTORY "${GMOCK_DIR}")
     set(GMOCK_PRESENT ON)
+else()
+    message("No gmock/gtest found! Perhaps you wish to run 'bash download-gtest.sh' to download it.")
 endif()
 
 # -----------------------------------------------------------------------------
@@ -84,7 +93,6 @@ option(WITH_OPENMP "Compile with OpenMP support" ON)
 
 option(WITH_PROFILING "Turn on profiling" OFF) # Set to true if compiler/linker should enable profiling
 
-option(WITH_GTKSPELL "Compile with support for GTK spelling widget" ON)
 option(ENABLE_POPPLER "Compile with support of libpoppler" ON)
 option(ENABLE_POPPLER_CAIRO "Compile with support of libpoppler-cairo for rendering PDF preview (depends on ENABLE_POPPLER)" ON)
 option(WITH_IMAGE_MAGICK "Compile with support of ImageMagick for raster extensions and image import resolution" ON)
@@ -106,6 +114,9 @@ add_definitions(-DORBIT2=1)
 add_definitions(-DHAVE_CONFIG_H)
 add_definitions(-DHAVE_CAIRO_PDF=1)  # needed for src/libnrtype/Layout-TNG.h
 add_definitions(-DHAVE_TR1_UNORDERED_SET) # XXX make an option!
+if(NOT WIN32)
+    add_definitions(-fPIC)
+endif()
 #
 # end badness
 # -----------------------------------------------------------------------------
@@ -125,11 +136,6 @@ add_custom_target(dist
 configure_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in"
     "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
-    IMMEDIATE @ONLY)
-
-configure_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/inkscape.desktop.in"
-    "${CMAKE_BINARY_DIR}/inkscape.desktop"
     IMMEDIATE @ONLY)
 
 add_custom_target(uninstall
@@ -174,10 +180,7 @@ endforeach()
 # Installation
 # -----------------------------------------------------------------------------
 if(UNIX)
-    install(
-        PROGRAMS ${EXECUTABLE_OUTPUT_PATH}/inkscape ${EXECUTABLE_OUTPUT_PATH}/inkview
-	DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
-	)
+    #The install directive for the binaries and libraries are found in src/CMakeList.txt
 
     install(
 	FILES ${CMAKE_BINARY_DIR}/inkscape.desktop
@@ -189,6 +192,7 @@ if(UNIX)
 
 else()
     # TODO, WIN32, APPLE/OSX, MinGW
+
 endif()
 
 # -----------------------------------------------------------------------------
@@ -211,6 +215,14 @@ if(WITH_GTEST)
     enable_testing()
     add_subdirectory(test EXCLUDE_FROM_ALL)
 endif()
+
+# Canonicalize the flags to speed up recompilation using ccache/etc.
+# This should be the last thing we do:
+include(CMakeScripts/CanonicalizeFlagsVar.cmake)
+canonicalize_flags_var("${CMAKE_CXX_FLAGS}" _new_cxx)
+set(CMAKE_CXX_FLAGS "${_new_cxx}" CACHE STRING "" FORCE)
+# message(FATAL_ERROR "CMAKE_CXX_FLAGS = <${CMAKE_CXX_FLAGS}>")
+
 
 # ----------------------------------------------------------------------
 # Information Summary
