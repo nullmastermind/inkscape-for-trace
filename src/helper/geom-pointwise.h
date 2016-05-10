@@ -28,16 +28,16 @@
 /**
  * @brief Pointwise a class to manage a vector of satellites per piecewise curve
  */
-typedef Geom::Piecewise<Geom::D2<Geom::SBasis> > PwD2SBasisasis;
-typedef std::vector< Satelites > Satelites;
+typedef Geom::Piecewise<Geom::D2<Geom::SBasis> > PwD2SBasis;
+typedef std::vector<std::vector<Satellite> > Satellites;
 class Pointwise {
 public:
     PwD2SBasis getPwd2() const;
-    Geom::Pathvector getPV() const;
+    Geom::PathVector getPV() const;
     void setPwd2(PwD2SBasis const &pwd2_in);
-    Satelites getSatellites();
+    Satellites getSatellites();
     size_t getTotalSatellites();
-    void setSatellites(Satelites const &sats);
+    void setSatellites(Satellites const &satellites);
     void recalculateForNewPwd2(PwD2SBasis const &A, Geom::PathVector const &B, Satellite const &S);
     //Fired when a path is modified.
     void recalculatePwD2(PwD2SBasis const &A, Satellite const &S);
@@ -48,7 +48,7 @@ public:
 private:
     PwD2SBasis _pwd2;
     Geom::PathVector _pathvector;
-    Satelites _satellites;
+    Satellites _satellites;
 };
 
 #endif //SEEN_POINTWISE_H

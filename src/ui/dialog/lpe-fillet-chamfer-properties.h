@@ -10,7 +10,7 @@
 
 #include <2geom/point.h>
 #include <gtkmm.h>
-#include "live_effects/parameter/satellitearray.h"
+#include "live_effects/parameter/satellitesarray.h"
 
 class SPDesktop;
 

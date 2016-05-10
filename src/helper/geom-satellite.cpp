@@ -136,22 +136,22 @@ double Satellite::lenToRad(
     Geom::Point end_arc_point = curve_out.pointAt(time_out);
     Geom::Curve *knot_curve1 = curve_in.portion(0, time_in);
     Geom::Curve *knot_curve2 = curve_out.portion(time_out, 1);
-    Geom::cubic_bezier const *cubic1 = dynamic_cast<Geom::cubic_bezier const *>(&*knot_curve1);
-    Geom::Ray ray1(startArcPoint, curve_in.pointAt(1));
+    Geom::CubicBezier const *cubic1 = dynamic_cast<Geom::CubicBezier const *>(&*knot_curve1);
+    Geom::Ray ray1(start_arc_point, curve_in.pointAt(1));
     if (cubic1) {
-        ray1.setPoints((*cubic1)[2], startArcPoint);
+        ray1.setPoints((*cubic1)[2], start_arc_point);
     }
-    Geom::cubic_bezier const *cubic2 = dynamic_cast<Geom::cubic_bezier const *>(&*knot_curve2);
-    Geom::Ray ray2(curve_out.pointAt(0), endArcPoint);
+    Geom::CubicBezier const *cubic2 = dynamic_cast<Geom::CubicBezier const *>(&*knot_curve2);
+    Geom::Ray ray2(curve_out.pointAt(0), end_arc_point);
     if (cubic2) {
-        ray2.setPoints(endArcPoint, (*cubic2)[1]);
+        ray2.setPoints(end_arc_point, (*cubic2)[1]);
     }
-    bool ccw_toggle = cross(curve_in.pointAt(1) - startArcPoint,
-                           end_arc_point - startArcPoint) < 0;
+    bool ccw_toggle = cross(curve_in.pointAt(1) - start_arc_point,
+                           end_arc_point - start_arc_point) < 0;
     double distance_arc =
-        Geom::distance(startArcPoint, middle_point(startArcPoint, endArcPoint));
-    double angle_between = angle_between(ray1, ray2, ccw_toggle);
-    double divisor = std::sin(angle_between / 2.0);
+        Geom::distance(start_arc_point, middle_point(start_arc_point, end_arc_point));
+    double angle = angle_between(ray1, ray2, ccw_toggle);
+    double divisor = std::sin(angle / 2.0);
     if (divisor > 0) {
         return distance_arc / divisor;
     }

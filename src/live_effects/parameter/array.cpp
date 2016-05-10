@@ -15,35 +15,36 @@ namespace LivePathEffect {
 
 //TODO: move maybe
 unsigned int
-sp_svg_satellite_vector_read_d(gchar const *str, std::vector<Satellite> *satellites){
+sp_svg_satellite_vector_read_d(gchar const *str, std::vector<Satellite> *subpath_satellites){
     if (!str) {
         return 0;
     }
-    gchar ** strarray = g_strsplit(str, "@", 0);
-    for (size_t i = 0; i < strarray.size(); ++i) {
-        gchar ** strsubarray = g_strsplit(strarray[i], ",", 7);
+    gchar ** strarray = g_strsplit(str, " @ ", 0);
+    gchar ** iter = strarray;
+    while (*iter != NULL) {
+        gchar ** strsubarray = g_strsplit(*iter, ",", 7);
         if(strlen(str) > 0 && strsubarray[6] && !strsubarray[7]){
-            Satellite sat;
-            sat->setSatelliteType(g_strstrip(strsubarray[0]));
-            sat->is_time = strncmp(strsubarray[1],"1",1) == 0;
-            sat->has_mirror = strncmp(strsubarray[2],"1",1) == 0;
-            sat->hidden = strncmp(strsubarray[3],"1",1) == 0;
+            Satellite satellite;
+            satellite.setSatelliteType(g_strstrip(strsubarray[0]));
+            satellite.is_time = strncmp(strsubarray[1],"1",1) == 0;
+            satellite.has_mirror = strncmp(strsubarray[2],"1",1) == 0;
+            satellite.hidden = strncmp(strsubarray[3],"1",1) == 0;
             double amount,angle;
             float stepsTmp;
             sp_svg_number_read_d(strsubarray[4], &amount);
             sp_svg_number_read_d(strsubarray[5], &angle);
             sp_svg_number_read_f(strsubarray[6], &stepsTmp);
             unsigned int steps = (unsigned int)stepsTmp;
-            sat->amount = amount;
-            sat->angle = angle;
-            sat->steps = steps;
+            satellite.amount = amount;
+            satellite.angle = angle;
+            satellite.steps = steps;
+            subpath_satellites->push_back(satellite);
             g_strfreev (strsubarray);
-            satellites.push_back(sat);
         }
-        g_strfreev (strsubarray);
+        iter++;
     }
     g_strfreev (strarray);
-    if (!sat.empty()){
+    if (!subpath_satellites->empty()){
         return 1;
     }
     return 0;
@@ -88,12 +89,12 @@ template <>
 std::vector<Satellite>
 ArrayParam<std::vector<Satellite > >::readsvg(const gchar * str)
 {
-    std::vector<Satellite > satellites;
-    if (sp_svg_satellite_vector_read_d(str, &satellites)) {
-        return satellites;
+    std::vector<Satellite > subpath_satellites;
+    if (sp_svg_satellite_vector_read_d(str, &subpath_satellites)) {
+        return subpath_satellites;
     }
-    satellites.push_back(Satellite satellite(FILLET));
-    return satellites;
+    subpath_satellites.push_back(Satellite(FILLET));
+    return subpath_satellites;
 }
 
 

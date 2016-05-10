@@ -65,7 +65,7 @@ set(live_effects_SRC
 	parameter/path.cpp
 	parameter/point.cpp
 	parameter/powerstrokepointarray.cpp
-	parameter/satellitearray.cpp
+	parameter/satellitesarray.cpp
 	parameter/random.cpp
 	parameter/text.cpp
 	parameter/togglebutton.cpp
@@ -145,7 +145,7 @@ set(live_effects_SRC
 	parameter/path.h
 	parameter/point.h
 	parameter/powerstrokepointarray.h
-	parameter/satellitearray.h
+	parameter/satellitesarray.h
 	parameter/random.h
 	parameter/text.h
 	parameter/togglebutton.h

@@ -51,7 +51,7 @@ public:
 
     virtual bool param_readSVGValue(const gchar * strvalue) {
         _vector.clear();
-        gchar ** strarray = g_strsplit(strvalue, "|", 0);
+        gchar ** strarray = g_strsplit(strvalue, " | ", 0);
         gchar ** iter = strarray;
         while (*iter != NULL) {
             _vector.push_back( readsvg(*iter) );
@@ -112,6 +112,10 @@ protected:
 
     void writesvgData(SVGOStringStream &str, std::vector<Satellite> const &nVector) const {
         for (size_t i = 0; i < nVector.size(); ++i) {
+            if (i != 0) {
+                // separate items with @ symbol ¿Any other?
+                str << " @ ";
+            }
             str << nVector[i].getSatelliteTypeGchar();
             str << ",";
             str << nVector[i].is_time;
@@ -125,9 +129,6 @@ protected:
             str << nVector[i].angle;
             str << ",";
             str << nVector[i].steps;
-            if (i != nVector.size()-1) {
-                str << "@";
-            }
         }
     }
 

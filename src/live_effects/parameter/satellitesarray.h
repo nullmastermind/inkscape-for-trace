@@ -30,7 +30,7 @@ namespace LivePathEffect {
 
 class FilletChamferKnotHolderEntity;
 
-class SatellitesArrayParam : public ArrayArrayParam<Satellite> {
+class SatellitesArrayParam : public ArrayParam<std::vector<Satellite> > {
 public:
     SatellitesArrayParam(const Glib::ustring &label, const Glib::ustring &tip,
                         const Glib::ustring &key,
