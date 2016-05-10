@@ -135,7 +135,6 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {SIMPLIFY,              N_("Simplify"),                "simplify"},
     {LATTICE2,              N_("Lattice Deformation 2"),   "lattice2"},
     {PERSPECTIVE_ENVELOPE,  N_("Perspective/Envelope"),    "perspective-envelope"},
-    {FILLET_CHAMFER,        N_("Fillet/Chamfer"),          "fillet-chamfer"},
     {INTERPOLATE_POINTS,    N_("Interpolate points"),      "interpolate_points"},
     {TRANSFORM_2PTS,        N_("Transform by 2 points"),   "transform_2pts"},
     {SHOW_HANDLES,          N_("Show handles"),            "show_handles"},
@@ -145,6 +144,7 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {TAPER_STROKE,          N_("Taper stroke"),            "taper_stroke"},
     {MIRROR_SYMMETRY,       N_("Mirror symmetry"),         "mirror_symmetry"},
     {COPY_ROTATE,           N_("Rotate copies"),           "copy_rotate"},
+    {FILLET_CHAMFER,        N_("Fillet/Chamfer"),          "fillet-chamfer"},
 /* Ponyscape -> Inkscape 0.92*/
     {ATTACH_PATH,           N_("Attach path"),             "attach_path"},
     {FILL_BETWEEN_STROKES,  N_("Fill between strokes"),    "fill_between_strokes"},
