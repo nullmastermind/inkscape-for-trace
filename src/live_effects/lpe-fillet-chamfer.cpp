@@ -410,22 +410,21 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
             }
         }
         //if are diferent sizes call to poinwise recalculate
-        //todo: fire a reverse satellites on reverse path. Maybe a new method
-        //like "are_similar" to avoid precission issues on reverse a pointwise
-        //and after convert to Pathvector
+        //TODO: Update the satellite data in paths modified, Goal 0.93
         if (pointwise && number_nodes != pointwise->getTotalSatellites()) {
-            std::cout << "gasdfgffffffffffffffffffffffffffffffffffffffffffffffffff\n";
+            pointwise->setSatellites(satellites);
             Satellite satellite(satellites[0][0].satellite_type);
             satellite.setIsTime(satellites[0][0].is_time);
             satellite.setHasMirror(satellites[0][0].has_mirror);
             pointwise->recalculateForNewPwd2(pwd2, pathv, satellite);
+            satellites_param.setPointwise(pointwise);
         } else {
             pointwise = new Pointwise();
             pointwise->setPwd2(pwd2);
             pointwise->setSatellites(satellites);
+            satellites_param.setPointwise(pointwise);
+            refreshKnots();
         }
-        satellites_param.setPointwise(pointwise);
-        refreshKnots();
     } else {
         g_warning("LPE Fillet can only be applied to shapes (not groups).");
     }
@@ -477,16 +476,15 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
                 }
                 continue;
             }
+            if (curve_next_index && *curve_next_index != pathv[path].size() - 1 && pathv[path][*curve_next_index].isDegenerate()) {
+                curve_next_index = *curve_next_index + 1;
+            }
             Geom::Curve const &curve_it2 = pathv[path][*curve_next_index];
-//            if (curve != pathv[path].size() && (*curve_it2).isDegenerate()) {
-//                ++curve_it2;
-//            }
-//            if ((*curve_it1).isDegenerate()) {
-//                ++curve_it1;
-//                counter_curves++;
-//                time0 = 0.0;
-//                continue;
-//            }
+            if ((*curve_it1).isDegenerate()) {
+                curve++;
+                time0 = 0.0;
+                continue;
+            }
             Satellite satellite = satellites[path][*curve_next_index];
             if (!curve) { //curve == 0 
                 if (!path_it->closed()) {

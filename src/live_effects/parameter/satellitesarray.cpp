@@ -339,6 +339,7 @@ Geom::Point FilletChamferKnotHolderEntity::knot_get() const
         return Geom::Point(Geom::infinity(), Geom::infinity());
     }
     Geom::PathVector pathv = pointwise->getPV();
+
     if (pathv[_index].size() <= subindex){ //We know this path is open and is last satellite. Hide it
         _pparam->_vector[_index][subindex].hidden = true;
         return Geom::Point(Geom::infinity(), Geom::infinity());
