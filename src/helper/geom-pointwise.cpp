@@ -77,18 +77,32 @@ void Pointwise::recalculatePwD2(PwD2SBasis const &A, Satellite const &S)
         for (size_t j = 0; j < old_pathv.size(); j++) {
             if ( new_pathv[i] == old_pathv[j]){
                 satellites.push_back(_satellites[j]);
-                old_pathv.erase(old_pathv.begin() + j);
-                new_pathv.erase(new_pathv.begin() + i);
+//                old_pathv.erase(old_pathv.begin() + j);
+//                new_pathv.erase(new_pathv.begin() + i);
+
+                std::cout << "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmatch\n";
+                _pathvector.push_back(new_pathv[i]);
                 match = true;
                 break;
             }
         }
-        //Removed subpath update for this version of fillet chamfer
-        std::vector<Satellite> subpath_satellites;
-        for (size_t k = 0; k < new_pathv[i].size_closed(); k++) {
-            subpath_satellites.push_back(S);
+        if (!match && new_size > old_size) {
+            //Removed subpath update for this version of fillet chamfer
+            std::vector<Satellite> subpath_satellites;
+            for (size_t k = 0; k < new_pathv[i].size_closed(); k++) {
+                subpath_satellites.push_back(S);
+            }
+            _pathvector.push_back(new_pathv[i]);
+            satellites.push_back(subpath_satellites);
+        } else if(!match) {
+            //Removed subpath update for this version of fillet chamfer
+            std::vector<Satellite> subpath_satellites;
+            for (size_t k = 0; k < new_pathv[i].size_closed(); k++) {
+                subpath_satellites.push_back(S);
+            }
+            _pathvector.push_back(new_pathv[i]);
+            satellites.push_back(subpath_satellites);
         }
-        satellites.push_back(subpath_satellites);
     }
 
 //    if (new_size == old_size) {
@@ -128,8 +142,10 @@ void Pointwise::recalculatePwD2(PwD2SBasis const &A, Satellite const &S)
 //            satellites.push_back(subpath_satellites);
 //        }
 //    }
-    setPwd2(A);
+    Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = remove_short_cuts(paths_to_pw(_pathvector), 0.01);;
+    setPwd2(pwd2);
     setSatellites(satellites);
+    std::cout << _satellites.size() << "ssssssssssssssssssssss\n";
 }
 //Remove subpath update for this version of fillet chamfer
 //void Pointwise::insertDegenerateSatellites(PwD2SBasis const &A, Geom::PathVector const &B, Satellite const &S)
