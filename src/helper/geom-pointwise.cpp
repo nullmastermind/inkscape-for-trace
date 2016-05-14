@@ -15,25 +15,24 @@
     */
 
 #include <helper/geom-pointwise.h>
-PwD2SBasis Pointwise::getPwd2() const
-{
-    return _pwd2;
-}
-
-Geom::PathVector Pointwise::getPV() const
+Geom::PathVector Pointwise::getPathVector() const
 {
     return _pathvector;
 }
 
-void Pointwise::setPwd2(PwD2SBasis const &pwd2_in)
+void Pointwise::setPathVector(Geom::PathVector pathv)
 {
-    _pwd2 = pwd2_in;
-    _pathvector = path_from_piecewise(Geom::remove_short_cuts(_pwd2,0.01),0.01);
+    _pathvector = pathv;
 }
 
 Satellites Pointwise::getSatellites()
 {
     return _satellites;
+}
+
+void Pointwise::setSatellites(Satellites satellites)
+{
+    _satellites = satellites;
 }
 
 size_t Pointwise::getTotalSatellites()
@@ -47,131 +46,19 @@ size_t Pointwise::getTotalSatellites()
     return counter;
 }
 
-void Pointwise::setSatellites(Satellites const &satellites)
-{
-    _satellites = satellites;
-}
-
-void Pointwise::recalculateForNewPwd2(PwD2SBasis const &A, Geom::PathVector const &B, Satellite const &S)
-{
-//Remove subpath update for this version of fillet chamfer
-//    if (_pwd2.size() > A.size() || _pwd2.size() < A.size()) {
-//        recalculatePwD2(A, S);
-//    } else {
-//        //insertDegenerateSatellites(A, B, S);
-//    }
-    recalculatePwD2(A, S);
-}
-
-void Pointwise::recalculatePwD2(PwD2SBasis const &A, Satellite const &S)
+void Pointwise::recalculateForNewPathVector(Geom::PathVector const pathv, Satellite const &S)
 {
     Satellites satellites;
-    Geom::PathVector new_pathv = path_from_piecewise(Geom::remove_short_cuts(A,0.01),0.01);
-    Geom::PathVector old_pathv = _pathvector;
-    _pathvector.clear();
-    size_t new_size = new_pathv.size();
-    size_t old_size = old_pathv.size();
-//    size_t old_increments = old_size;
-    for (size_t i = 0; i < new_pathv.size(); i++) {
-        bool match = false;
-        for (size_t j = 0; j < old_pathv.size(); j++) {
-            if ( new_pathv[i] == old_pathv[j]){
-                satellites.push_back(_satellites[j]);
-//                old_pathv.erase(old_pathv.begin() + j);
-//                new_pathv.erase(new_pathv.begin() + i);
-
-                std::cout << "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmatch\n";
-                _pathvector.push_back(new_pathv[i]);
-                match = true;
-                break;
-            }
+    for (size_t i = 0; i < pathv.size(); i++) {
+        std::vector<Satellite> subpath_satellites;
+        for (size_t k = 0; k < pathv[i].size_closed(); k++) {
+            subpath_satellites.push_back(S);
         }
-        if (!match && new_size > old_size) {
-            //Removed subpath update for this version of fillet chamfer
-            std::vector<Satellite> subpath_satellites;
-            for (size_t k = 0; k < new_pathv[i].size_closed(); k++) {
-                subpath_satellites.push_back(S);
-            }
-            _pathvector.push_back(new_pathv[i]);
-            satellites.push_back(subpath_satellites);
-        } else if(!match) {
-            //Removed subpath update for this version of fillet chamfer
-            std::vector<Satellite> subpath_satellites;
-            for (size_t k = 0; k < new_pathv[i].size_closed(); k++) {
-                subpath_satellites.push_back(S);
-            }
-            _pathvector.push_back(new_pathv[i]);
-            satellites.push_back(subpath_satellites);
-        }
+        satellites.push_back(subpath_satellites);
     }
-
-//    if (new_size == old_size) {
-//        //TODO: ensure select remaining old_path subpath with the updated subpath remaining in new_path
-//        //This cam make bug with reversed paths or reorderer ones.
-//        for (size_t l = 0; l < old_pathv.size(); l++) {
-//            //we assume we only can delete or add nodes not a mix of both
-//            std::vector<Satellite> subpath_satellites;
-//            if (old_pathv[l].size() > new_pathv[l].size()){
-//                //erase nodes
-//                size_t erased = 0;
-//                for (size_t m = 0; m < old_pathv[l].size(); m++) {
-//                    if (are_near(old_pathv[l][m].initialPoint(), new_pathv[l][m - erased].initialPoint())) {
-//                        subpath_satellites.push_back(_satellites[l][m]);
-//                    } else {
-//                        erased++;
-//                    }
-//                }
-//                if (!old_pathv[l].closed() && 
-//                    are_near(old_pathv[l][old_pathv[l].size() - 1].finalPoint(), new_pathv[l][new_pathv[l].size() - 1].finalPoint())) 
-//                {
-//                    subpath_satellites.push_back(_satellites[l][old_pathv[l].size()]);
-//                }
-//            } else if (old_pathv[l].size() < new_pathv[l].size()) {
-//                //add nodes
-//                for (size_t m = 0; m < old_pathv[l].size(); m++) {
-//                    if (!are_near(old_pathv[l][m].initialPoint(), new_pathv[l][m].initialPoint())) {
-//                        _satellites[l].insert(_satellites[l].begin() + m, S);
-//                    }
-//                }
-//                if (!old_pathv[l].closed() && !are_near(old_pathv[l][old_pathv[l].size()-1].finalPoint(), new_pathv[l][old_pathv[l].size()-1].finalPoint())) {
-//                    _satellites[l].insert(_satellites[l].begin() + old_pathv[l].size(), S);
-//                }
-//            } else {
-//                //never happends
-//            }
-//            satellites.push_back(subpath_satellites);
-//        }
-//    }
-    Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2 = remove_short_cuts(paths_to_pw(_pathvector), 0.01);;
-    setPwd2(pwd2);
+    setPathVector(pathv);
     setSatellites(satellites);
-    std::cout << _satellites.size() << "ssssssssssssssssssssss\n";
 }
-//Remove subpath update for this version of fillet chamfer
-//void Pointwise::insertDegenerateSatellites(PwD2SBasis const &A, Geom::PathVector const &B, Satellite const &S)
-//{
-//    size_t size_A = A.size();
-//    size_t size_B = B.curveCount();
-//    size_t satellite_gap = size_B - size_A;
-//    if (satellite_gap == 0) {
-//        return;
-//    }
-//    size_t counter_added = 0;
-//    for (size_t i = 0; i < B.size(); i++) {
-//        size_t counter = 0;
-//        if (B[i].empty()) {
-//            continue;
-//        }
-//        for (size_t j = 0; j < B[i].size_closed(); j++) {
-//            if (B[i][j].isDegenerate() && counter_added < satellite_gap) {
-//                counter_added++;
-//                _satellites[i].insert(_satellites[i].begin() + counter + 1 ,S);
-//            }
-//            counter++;
-//        }
-//    }
-//    setPwd2(A);
-//}
 
 /*
   Local Variables:

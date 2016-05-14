@@ -56,9 +56,9 @@ public:
     void param_transform_multiply(Geom::Affine const &postmul, bool /*set*/);
     void setUseDistance(bool use_knot_distance);
     void setEffectType(EffectType et);
-    void setPointwise(Pointwise *pointwise);
-    void set_oncanvas_looks(SPKnotShapeType shape, SPKnotModeType mode,
-                            guint32 color);
+    void setPointwise(Pointwise pointwise);
+    bool validData();
+    void set_oncanvas_looks(SPKnotShapeType shape, SPKnotModeType mode, guint32 color);
 
     friend class FilletChamferKnotHolderEntity;
     friend class LPEFilletChamfer;
@@ -77,7 +77,7 @@ private:
     int _helper_size;
     bool _use_distance;
     EffectType _effectType;
-    Pointwise *_last_pointwise;
+    Pointwise _last_pointwise;
 
 };
 

@@ -13,44 +13,6 @@ namespace Inkscape {
 
 namespace LivePathEffect {
 
-//TODO: move maybe
-unsigned int
-sp_svg_satellite_vector_read_d(gchar const *str, std::vector<Satellite> *subpath_satellites){
-    if (!str) {
-        return 0;
-    }
-    gchar ** strarray = g_strsplit(str, " @ ", 0);
-    gchar ** iter = strarray;
-    while (*iter != NULL) {
-        gchar ** strsubarray = g_strsplit(*iter, ",", 7);
-        if(strlen(str) > 0 && strsubarray[6] && !strsubarray[7]){
-            Satellite satellite;
-            satellite.setSatelliteType(g_strstrip(strsubarray[0]));
-            satellite.is_time = strncmp(strsubarray[1],"1",1) == 0;
-            satellite.has_mirror = strncmp(strsubarray[2],"1",1) == 0;
-            satellite.hidden = strncmp(strsubarray[3],"1",1) == 0;
-            double amount,angle;
-            float stepsTmp;
-            sp_svg_number_read_d(strsubarray[4], &amount);
-            sp_svg_number_read_d(strsubarray[5], &angle);
-            sp_svg_number_read_f(strsubarray[6], &stepsTmp);
-            unsigned int steps = (unsigned int)stepsTmp;
-            satellite.amount = amount;
-            satellite.angle = angle;
-            satellite.steps = steps;
-            subpath_satellites->push_back(satellite);
-            g_strfreev (strsubarray);
-        }
-        iter++;
-    }
-    g_strfreev (strarray);
-    if (!subpath_satellites->empty()){
-        return 1;
-    }
-    return 0;
-}
-
-
 template <>
 double
 ArrayParam<double>::readsvg(const gchar * str)
@@ -89,11 +51,35 @@ template <>
 std::vector<Satellite>
 ArrayParam<std::vector<Satellite > >::readsvg(const gchar * str)
 {
-    std::vector<Satellite > subpath_satellites;
-    if (sp_svg_satellite_vector_read_d(str, &subpath_satellites)) {
+    std::vector<Satellite> subpath_satellites;
+    if (!str) {
         return subpath_satellites;
     }
-    subpath_satellites.push_back(Satellite(FILLET));
+    gchar ** strarray = g_strsplit(str, "@", 0);
+    gchar ** iter = strarray;
+    while (*iter != NULL) {
+        gchar ** strsubarray = g_strsplit(*iter, ",", 7);
+        if(*strsubarray[6]){
+            Satellite satellite;
+            satellite.setSatelliteType(g_strstrip(strsubarray[0]));
+            satellite.is_time = strncmp(strsubarray[1],"1",1) == 0;
+            satellite.has_mirror = strncmp(strsubarray[2],"1",1) == 0;
+            satellite.hidden = strncmp(strsubarray[3],"1",1) == 0;
+            double amount,angle;
+            float stepsTmp;
+            sp_svg_number_read_d(strsubarray[4], &amount);
+            sp_svg_number_read_d(strsubarray[5], &angle);
+            sp_svg_number_read_f(g_strstrip(strsubarray[6]), &stepsTmp);
+            unsigned int steps = (unsigned int)stepsTmp;
+            satellite.amount = amount;
+            satellite.angle = angle;
+            satellite.steps = steps;
+            subpath_satellites.push_back(satellite);
+        }
+        g_strfreev (strsubarray);
+        iter++;
+    }
+    g_strfreev (strarray);
     return subpath_satellites;
 }
 

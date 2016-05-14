@@ -51,7 +51,7 @@ public:
 
     virtual bool param_readSVGValue(const gchar * strvalue) {
         _vector.clear();
-        gchar ** strarray = g_strsplit(strvalue, " | ", 0);
+        gchar ** strarray = g_strsplit(strvalue, "|", 0);
         gchar ** iter = strarray;
         while (*iter != NULL) {
             _vector.push_back( readsvg(*iter) );

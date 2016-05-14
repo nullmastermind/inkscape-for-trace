@@ -18,35 +18,23 @@
 #define SEEN_POINTWISE_H
 
 #include <helper/geom-satellite.h>
-#include <2geom/sbasis.h>
-#include <2geom/sbasis-2d.h>
-#include <2geom/piecewise.h>
-#include <2geom/sbasis-to-bezier.h>
 #include <2geom/path.h>
+#include <2geom/pathvector.h>
 #include <boost/optional.hpp>
 
 /**
- * @brief Pointwise a class to manage a vector of satellites per piecewise curve
+ * @brief Pointwise a class to manage a vector of satellites per curve
  */
-typedef Geom::Piecewise<Geom::D2<Geom::SBasis> > PwD2SBasis;
 typedef std::vector<std::vector<Satellite> > Satellites;
 class Pointwise {
 public:
-    PwD2SBasis getPwd2() const;
-    Geom::PathVector getPV() const;
-    void setPwd2(PwD2SBasis const &pwd2_in);
+    Geom::PathVector getPathVector() const;
+    void setPathVector(Geom::PathVector pathv);
     Satellites getSatellites();
     size_t getTotalSatellites();
-    void setSatellites(Satellites const &satellites);
-    void recalculateForNewPwd2(PwD2SBasis const &A, Geom::PathVector const &B, Satellite const &S);
-    //Fired when a path is modified.
-    void recalculatePwD2(PwD2SBasis const &A, Satellite const &S);
-    //Recalculate satellites
-    void insertDegenerateSatellites(PwD2SBasis const &A, Geom::PathVector const &B, Satellite const &S);
-    //Fired when a path is modified duplicating a node. Piecewise ignore degenerated curves.
-
+    void setSatellites(Satellites satellites);
+    void recalculateForNewPathVector(Geom::PathVector const pathv, Satellite const &S);
 private:
-    PwD2SBasis _pwd2;
     Geom::PathVector _pathvector;
     Satellites _satellites;
 };

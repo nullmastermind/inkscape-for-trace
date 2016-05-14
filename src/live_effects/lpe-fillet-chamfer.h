@@ -60,7 +60,7 @@ private:
     BoolParam apply_with_radius;
     ScalarParam helper_size;
 
-    Pointwise *pointwise;
+    Pointwise pointwise;
     Geom::PathVector _hp;
 
     LPEFilletChamfer(const LPEFilletChamfer &);
