@@ -89,7 +89,7 @@ protected:
     size_t _default_size;
 
     void writesvg(SVGOStringStream &str, std::vector<StorageType> const &vector) const {
-        for (size_t i = 0; i < vector.size(); ++i) {
+        for (unsigned int i = 0; i < vector.size(); ++i) {
             if (i != 0) {
                 // separate items with pipe symbol
                 str << " | ";
@@ -98,37 +98,37 @@ protected:
         }
     }
     
-    void writesvgData(SVGOStringStream &str, float const &nVector) const {
-        str << nVector;
+    void writesvgData(SVGOStringStream &str, float const &vector_data) const {
+        str << vector_data;
     }
 
-    void writesvgData(SVGOStringStream &str, double const &nVector) const {
-        str << nVector;
+    void writesvgData(SVGOStringStream &str, double const &vector_data) const {
+        str << vector_data;
     }
 
-    void writesvgData(SVGOStringStream &str, Geom::Point const &nVector) const {
-        str << nVector;
+    void writesvgData(SVGOStringStream &str, Geom::Point const &vector_data) const {
+        str << vector_data;
     }
 
-    void writesvgData(SVGOStringStream &str, std::vector<Satellite> const &nVector) const {
-        for (size_t i = 0; i < nVector.size(); ++i) {
+    void writesvgData(SVGOStringStream &str, std::vector<Satellite> const &vector_data) const {
+        for (size_t i = 0; i < vector_data.size(); ++i) {
             if (i != 0) {
                 // separate items with @ symbol ¿Any other?
                 str << " @ ";
             }
-            str << nVector[i].getSatelliteTypeGchar();
+            str << vector_data[i].getSatelliteTypeGchar();
             str << ",";
-            str << nVector[i].is_time;
+            str << vector_data[i].is_time;
             str << ",";
-            str << nVector[i].has_mirror;
+            str << vector_data[i].has_mirror;
             str << ",";
-            str << nVector[i].hidden;
+            str << vector_data[i].hidden;
             str << ",";
-            str << nVector[i].amount;
+            str << vector_data[i].amount;
             str << ",";
-            str << nVector[i].angle;
+            str << vector_data[i].angle;
             str << ",";
-            str << nVector[i].steps;
+            str << vector_data[i].steps;
         }
     }
 

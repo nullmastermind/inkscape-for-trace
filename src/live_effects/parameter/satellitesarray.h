@@ -55,6 +55,7 @@ public:
     }
     void param_transform_multiply(Geom::Affine const &postmul, bool /*set*/);
     void setUseDistance(bool use_knot_distance);
+    void setPathUpdate(bool path_update);
     void setEffectType(EffectType et);
     void setPointwise(Pointwise pointwise);
     bool validData();
@@ -76,6 +77,7 @@ private:
     Geom::PathVector _hp;
     int _helper_size;
     bool _use_distance;
+    bool _path_update;
     EffectType _effectType;
     Pointwise _last_pointwise;
 
@@ -99,8 +101,7 @@ public:
     bool valid_index(size_t index) const
     {
         return (_pparam->_vector.size() > index);
-    }
-    ;
+    };
 
 private:
     SatellitesArrayParam *_pparam;

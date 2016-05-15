@@ -48,6 +48,7 @@ void SatellitesArrayParam::setPointwise(Pointwise pointwise)
 {
     _last_pointwise = pointwise;
     param_set_and_write_new_value(_last_pointwise.getSatellites());
+
 }
 
 void SatellitesArrayParam::setUseDistance(bool use_knot_distance)
@@ -60,6 +61,11 @@ void SatellitesArrayParam::setEffectType(EffectType et)
     _effectType = et;
 }
 
+void SatellitesArrayParam::setPathUpdate(bool path_update)
+{
+    _path_update = path_update;
+}
+
 void SatellitesArrayParam::setHelperSize(int hs)
 {
     _helper_size = hs;
@@ -67,6 +73,7 @@ void SatellitesArrayParam::setHelperSize(int hs)
 }
 bool SatellitesArrayParam::validData()
 {
+    if (_path_update) { return false;}
     return _last_pointwise.getPathVector().nodes().size() == _last_pointwise.getTotalSatellites();
 }
 void SatellitesArrayParam::updateCanvasIndicators(bool mirror)
@@ -323,6 +330,7 @@ void FilletChamferKnotHolderEntity::knot_set(Geom::Point const &p,
 Geom::Point FilletChamferKnotHolderEntity::knot_get() const
 {
     if (! _pparam->validData() || !valid_index(_index)) {
+        this->knot->hide();
         return Geom::Point(Geom::infinity(), Geom::infinity());
     }
     Geom::Point tmp_point;
@@ -336,10 +344,12 @@ Geom::Point FilletChamferKnotHolderEntity::knot_get() const
         !pathv[_index].closed() && subindex == 0 ||//ignore first satellites on open paths
         pathv[_index].size() == subindex) //ignore last satellite in open paths with fillet chamfer effect
     {
+        this->knot->hide();
         _pparam->_vector[_index][subindex].hidden = true;
         return Geom::Point(Geom::infinity(), Geom::infinity());
     }
     this->knot->show();
+    std::cout <<  subindex << pathv[_index].size() << "----" << _pparam->_vector[_index].size() << "fgdgsdgsdgsdsdsgd\n";
     if (subindex != _subindex) {
         tmp_point = satellite.getPosition(pathv[_index][subindex]);
         size_t previous_index = subindex - 1;

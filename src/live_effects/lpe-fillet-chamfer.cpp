@@ -363,6 +363,7 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
         satellites_param.setUseDistance(use_knot_distance);
         //mandatory call
         satellites_param.setEffectType(effectType());
+        satellites_param.setPathUpdate(false);
 
         Geom::PathVector const pathv = pathv_to_linear_and_cubic_beziers(c->get_pathvector());
         Satellites satellites = satellites_param.data();
@@ -402,8 +403,11 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
         //if are diferent sizes call to poinwise recalculate
         //TODO: Update the satellite data in paths modified, Goal 0.93
         size_t satellites_counter = pointwise.getTotalSatellites();
+        if (satellites_counter != 0 ){
+            std::cout << number_nodes << "aaaaa" << pointwise.getTotalSatellites() << "\n";
+        }
         if (satellites_counter != 0 && number_nodes != satellites_counter) {
-            pointwise.setSatellites(satellites);
+            satellites_param.setPathUpdate(true);
             Satellite satellite(satellites[0][0].satellite_type);
             satellite.setIsTime(satellites[0][0].is_time);
             satellite.setHasMirror(mirror_knots);
