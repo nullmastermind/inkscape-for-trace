@@ -35,7 +35,7 @@ def get_picker_data(value):
     value -- The value returned from the color picker.
     Returns an object with color and opacity properties.
     """
-    v = hex(value & 0xFFFFFFFF)[2:-1].rjust(8, '0').upper()
+    v = '%08X' % (value & 0xFFFFFFFF)
     color = '#' + v[0:-2].rjust(6, '0')
     opacity = '%1.2f' % (float(int(v[6:].rjust(2, '0'), 16))/255)
     return type('', (object,), {'color':color, 'opacity':opacity})()
@@ -156,9 +156,9 @@ class Frame(inkex.Effect):
         for id, node in self.selected.iteritems():
             box = computeBBox([node])
             if 'outside' == position:
-                box = size_box(box, (3.5 + (width/2)))
+                box = size_box(box, (width/2))
             else:
-                box = size_box(box, (3.5 - (width/2)))
+                box = size_box(box, (width/2))
             name = 'Frame'
             frame = self.add_frame(parent, name, box, style, corner_radius)
             if self.options.clip:

@@ -58,7 +58,18 @@ class Frame_Test(unittest.TestCase):
         new_frame = self.get_frame(uut.document)
         self.assertIsNotNone(new_frame)
         self.assertEqual('{http://www.w3.org/2000/svg}path', new_frame.tag)
-    
+        new_frame_style = new_frame.attrib['style'].lower()
+        self.assertTrue('fill-opacity:0.36' in new_frame_style
+            , 'Invalid fill-opacity in "' + new_frame_style + '".')
+        self.assertTrue('stroke:#000000' in new_frame_style
+            , 'Invalid stroke in "' + new_frame_style + '".')
+        self.assertTrue('stroke-width:10.0' in new_frame_style
+            , 'Invalid stroke-width in "' + new_frame_style + '".')
+        self.assertTrue('stroke-opacity:1.00' in new_frame_style
+            , 'Invalid stroke-opacity in "' + new_frame_style + '".')
+        self.assertTrue('fill:#ff0000' in new_frame_style
+            , 'Invalid fill in "' + new_frame_style + '".')
+
     
     def test_single_frame_grouped(self):
         args = [
