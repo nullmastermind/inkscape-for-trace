@@ -268,7 +268,7 @@
     <cxxtestpart command="${python} ${cxxtest}/cxxtestgen.py --have-eh"
                  out="${src}/svg/test-svg.cpp">
         <fileset dir="${src}/svg">
-            <include name="css-ostringstream-test.h"/>
+            <!--<include name="css-ostringstream-test.h"/>-->
             <include name="stringstream-test.h"/>
             <include name="svg-affine-test.h"/>
             <include name="svg-color-test.h"/>
@@ -328,7 +328,7 @@
             <exclude name="extension/dbus/.*"/>
             <exclude name="extension/dxf2svg/.*"/>
             <exclude name="extension/implementation/plugin.cpp"/>
-            <exclude name="extension/plugin/.*"/>
+            <exclude name="extension/plugins/.*"/>
             <exclude name="extract-uri-test.cpp"/>
             <exclude name="helper/units-test.cpp"/>
             <!-- exclude name="inkview.cpp"/-->
@@ -343,6 +343,7 @@
             <exclude name="svg/test-svg-main.cpp"/>
             <exclude name="util/list-container-test.cpp"/>
             <exclude name="widgets/test-widgets.cpp"/>
+            <exclude name="widgets/image-menu-item.c"/>
             <exclude name="xml/quote-test.cpp"/>
             <exclude name="xml/repr-action-test.cpp"/>
             <exclude name="xml/test-xml.cpp"/>
@@ -400,6 +401,7 @@
             -I${devlibs}/include
             <!-- GTK / GTKMM -->
             ${pcc.gtkmm-2.4}
+            ${pcc.gmodule-2.0}
             <!-- OTHER -->
 			${pcc.Magick++}
 			${pcc.libxml-2.0}
@@ -480,6 +482,7 @@
        <libs>
            -L${devlibs}/lib
            ${pcl.poppler-cairo} ${pcl.poppler-glib} ${pcl.poppler} 
+           ${pcl.gmodule-2.0}
            ${pcl.gtkmm-2.4}  ${pcl.pangoft2} ${pcl.gthread-2.0}
            ${devlibs}/bin/libxml2.dll
            ${devlibs}/bin/libxslt.dll
@@ -564,6 +567,7 @@
            -L${devlibs}/lib
            ${pcl.poppler-cairo} ${pcl.poppler-glib} ${pcl.poppler} 
            ${pcl.gtkmm-2.4}  ${pcl.pangoft2} ${pcl.gthread-2.0}
+		   ${pcl.gmodule-2.0}
            ${devlibs}/bin/libxml2.dll
            ${devlibs}/bin/libxslt.dll
            ${devlibs}/bin/libexslt.dll
@@ -615,6 +619,7 @@
            -L${devlibs}/lib
            ${pcl.poppler-cairo} ${pcl.poppler-glib} ${pcl.poppler} 
            ${pcl.gtkmm-2.4}  ${pcl.pangoft2} ${pcl.gthread-2.0}
+           ${pcl.gmodule-2.0}
            ${devlibs}/bin/libxml2.dll
            ${devlibs}/bin/libxslt.dll
            ${devlibs}/bin/libexslt.dll
@@ -647,7 +652,9 @@
     <!-- Create the distribution directory -->
     <copy todir="${dist}" file="AUTHORS"/>
     <copy todir="${dist}" file="COPYING"/>
-    <copy todir="${dist}" file="COPYING.LIB"/>
+    <copy todir="${dist}" file="GPL2.txt"/>
+    <copy todir="${dist}" file="GPL3.txt"/>
+    <copy todir="${dist}" file="LGPL2.1.txt"/>
     <copy todir="${dist}" file="NEWS"/>
     <copy todir="${dist}" file="README"/>
     <copy todir="${dist}" file="TRANSLATORS"/>
@@ -720,7 +727,7 @@
     <!-- MSGFMT files -->
     <copy todir="${dist}">
         <fileset dir="${build}/locale">
-          <exclude name=".*\.am"/>
+          <exclude name="\.am$"/>
         </fileset>
     </copy>
 
@@ -735,9 +742,9 @@
     <copy todir="${dist}/lib"> <fileset dir="${devlibs}/lib/glib-2.0"/> </copy>
     <copy todir="${dist}">
         <fileset dir="share">
-          <exclude name=".*\.am"/>
-          <exclude name=".*\.in"/>
-          <exclude name=".*\.sh"/>
+          <exclude name="\.am$"/>
+          <exclude name="\.in$"/>
+          <exclude name="\.sh$"/>
         </fileset>
     </copy>
     <copy todir="${dist}/share"> <fileset dir="${devlibs}/share/locale"/> </copy>
@@ -756,12 +763,12 @@
     <copy todir="${dist}" file="${devlibs}/perl/bin/perl58.dll"/>
 
     <!-- PYTHON -->
-    <copy todir="${dist}" file="${devlibs}/python/python26.dll"/>
+    <copy todir="${dist}" file="${devlibs}/python/python27.dll"/>
     <copy todir="${dist}/python" file="${devlibs}/python/python.exe" />
     <copy todir="${dist}/python" file="${devlibs}/python/pythonw.exe"/>
     <copy todir="${dist}/python"> <fileset dir="${devlibs}/python/Lib"/> </copy>
     <copy todir="${dist}/python"> <fileset dir="${devlibs}/python/DLLs"/> </copy>
-    <!-- <copy todir="${dist}/python"> <fileset dir="${devlibs}/python/Scripts"/> </copy> -->
+    <copy todir="${dist}/python"> <fileset dir="${devlibs}/python/Scripts"/> </copy>
 
     <!--<copy file="${devlibs}/share/themes/MS-Windows/gtk-2.0/gtkrc" todir="${dist}/etc/gtk-2.0"/>-->
     <makefile file="${dist}/etc/gtk-2.0/gtkrc">

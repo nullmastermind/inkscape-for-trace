@@ -13,7 +13,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
 """
 Python barcode renderer for RM4CC barcodes. Designed for use with Inkscape.
@@ -66,10 +66,11 @@ check = ['ZUVWXY','501234','B6789A','HCDEFG','NIJKLM','TOPQRS']
 (BAR_TRACK, BAR_DOWN, BAR_UP, BAR_FULL, BAR_NONE, WHITE_SPACE) = range(6)
 
 class Rm4scc(Barcode):
+    default_height = 18
+
     def encode(self, text):
         result = ''
 
-        self.height = 18
         text = text.upper()
         text.replace('(', '')
         text.replace(')', '')
@@ -80,10 +81,8 @@ class Rm4scc(Barcode):
         for char in text:
             if map.has_key(char):
                 result = result + map[char]
-            
                 i = i + 1
 
-        self.inclabel = text
         return result;
 
     # given a string of data, return the check character
@@ -117,7 +116,7 @@ class Rm4scc(Barcode):
         checkchar = check[total_upper][total_lower]
         return checkchar
 
-    def getStyle(self, index):
+    def get_style(self, index):
         """Royal Mail Barcodes use a completely different style"""
         result = { 'width' : 2, 'write' : True, 'top' : 0 }
         if index == BAR_TRACK: # Track Bar

@@ -104,16 +104,15 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {EXTRUDE,               N_("Extrude"),                 "extrude"},
     {LATTICE,               N_("Lattice Deformation"),     "lattice"},
     {LINE_SEGMENT,          N_("Line Segment"),            "line_segment"},
-    {MIRROR_SYMMETRY,       N_("Mirror symmetry"),         "mirror_symmetry"},
     {OFFSET,                N_("Offset"),                  "offset"},
     {PARALLEL,              N_("Parallel"),                "parallel"},
     {PATH_LENGTH,           N_("Path length"),             "path_length"},
     {PERP_BISECTOR,         N_("Perpendicular bisector"),  "perp_bisector"},
     {PERSPECTIVE_PATH,      N_("Perspective path"),        "perspective_path"},
-    {COPY_ROTATE,           N_("Rotate copies"),           "copy_rotate"},
     {RECURSIVE_SKELETON,    N_("Recursive skeleton"),      "recursive_skeleton"},
     {TANGENT_TO_CURVE,      N_("Tangent to curve"),        "tangent_to_curve"},
     {TEXT_LABEL,            N_("Text label"),              "text_label"},
+    {FILLET_CHAMFER,        N_("Fillet/Chamfer"),          "fillet-chamfer"},
 #endif
 /* 0.46 */
     {BEND_PATH,             N_("Bend"),                    "bend_path"},
@@ -133,25 +132,25 @@ const Util::EnumData<EffectType> LPETypeData[] = {
 /* 0.91 */
     {POWERSTROKE,           N_("Power stroke"),            "powerstroke"},
     {CLONE_ORIGINAL,        N_("Clone original path"),     "clone_original"},
-/* EXPERIMENTAL */    
+/* 0.92 */
+    {SIMPLIFY,              N_("Simplify"),                "simplify"},
+    {LATTICE2,              N_("Lattice Deformation 2"),   "lattice2"},
+    {PERSPECTIVE_ENVELOPE,  N_("Perspective/Envelope"),    "perspective-envelope"},
+    {INTERPOLATE_POINTS,    N_("Interpolate points"),      "interpolate_points"},
+    {TRANSFORM_2PTS,        N_("Transform by 2 points"),   "transform_2pts"},
     {SHOW_HANDLES,          N_("Show handles"),            "show_handles"},
     {ROUGHEN,               N_("Roughen"),                 "roughen"},
     {BSPLINE,               N_("BSpline"),                 "bspline"},
     {JOIN_TYPE,             N_("Join type"),               "join_type"},
     {TAPER_STROKE,          N_("Taper stroke"),            "taper_stroke"},
-/* Ponyscape */
+    {MIRROR_SYMMETRY,       N_("Mirror symmetry"),         "mirror_symmetry"},
+    {COPY_ROTATE,           N_("Rotate copies"),           "copy_rotate"},
+/* Ponyscape -> Inkscape 0.92*/
     {ATTACH_PATH,           N_("Attach path"),             "attach_path"},
     {FILL_BETWEEN_STROKES,  N_("Fill between strokes"),    "fill_between_strokes"},
     {FILL_BETWEEN_MANY,     N_("Fill between many"),       "fill_between_many"},
     {ELLIPSE_5PTS,          N_("Ellipse by 5 points"),     "ellipse_5pts"},
     {BOUNDING_BOX,          N_("Bounding Box"),            "bounding_box"},
-/* 0.91 */
-    {SIMPLIFY,               N_("Simplify"),     "simplify"},
-    {LATTICE2,               N_("Lattice Deformation 2"),     "lattice2"},
-    {PERSPECTIVE_ENVELOPE,  N_("Perspective/Envelope"),        "perspective-envelope"},
-    {FILLET_CHAMFER,        N_("Fillet/Chamfer"),          "fillet-chamfer"},
-    {INTERPOLATE_POINTS,    N_("Interpolate points"),      "interpolate_points"},
-    {TRANSFORM_2PTS,           N_("Transform by 2 points"),      "transform_2pts"},
 };
 const Util::EnumDataConverter<EffectType> LPETypeConverter(LPETypeData, sizeof(LPETypeData)/sizeof(*LPETypeData));
 
@@ -356,7 +355,8 @@ Effect::createAndApply(EffectType type, SPDocument *doc, SPItem *item)
 }
 
 Effect::Effect(LivePathEffectObject *lpeobject)
-    : _provides_knotholder_entities(false),
+    : apply_to_clippath_and_mask(false),
+      _provides_knotholder_entities(false),
       oncanvasedit_it(0),
       is_visible(_("Is visible?"), _("If unchecked, the effect remains applied to the object but is temporarily disabled on canvas"), "is_visible", &wr, this, true),
       show_orig_path(false),
@@ -467,6 +467,10 @@ void Effect::doBeforeEffect_impl(SPLPEItem const* lpeitem)
         pathvector_before_effect = sp_curve->get_pathvector();
     }
     doBeforeEffect(lpeitem);
+    if (apply_to_clippath_and_mask && SP_IS_GROUP(sp_lpe_item)) {
+        sp_lpe_item->apply_to_clippath(sp_lpe_item);
+        sp_lpe_item->apply_to_mask(sp_lpe_item);
+    }
 }
 
 /**

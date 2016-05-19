@@ -105,6 +105,13 @@ sp_selected_path_cut(Inkscape::Selection *selection, SPDesktop *desktop)
 {
     sp_selected_path_boolop(selection, desktop, bool_op_cut, SP_VERB_SELECTION_CUT, _("Division"));
 }
+
+void
+sp_selected_path_cut_skip_undo(Inkscape::Selection *selection, SPDesktop *desktop)
+{
+    sp_selected_path_boolop(selection, desktop, bool_op_cut, SP_VERB_NONE, _("Division"));
+}
+
 void
 sp_selected_path_slice(Inkscape::Selection *selection, SPDesktop *desktop)
 {
@@ -855,7 +862,7 @@ void sp_selected_path_outline_add_marker( SPObject *marker_object, Geom::Affine 
     if (marker->markerUnits == SP_MARKER_UNITS_STROKEWIDTH) {
         tr = stroke_scale * tr;
     }
-
+    
     // total marker transform
     tr = marker_item->transform * marker->c2p * tr * transform;
 
@@ -1146,7 +1153,9 @@ sp_selected_path_outline(SPDesktop *desktop)
         desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>stroked path(s)</b> to convert stroke to path."));
         return;
     }
-
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool scale_stroke = prefs->getBool("/options/transform/stroke", true);
+    prefs->setBool("/options/transform/stroke", true);
     bool did = false;
     std::vector<SPItem*> il(selection->itemList());
     for (std::vector<SPItem*>::const_iterator l = il.begin(); l != il.end(); l++){
@@ -1496,7 +1505,7 @@ sp_selected_path_outline(SPDesktop *desktop)
         delete res;
         delete orig;
     }
-
+    prefs->setBool("/options/transform/stroke", scale_stroke);
     if (did) {
         DocumentUndo::done(desktop->getDocument(), SP_VERB_SELECTION_OUTLINE, 
                            _("Convert stroke to path"));
@@ -1767,10 +1776,13 @@ sp_selected_path_do_offset(SPDesktop *desktop, bool expand, double prefOffset)
         SPItem *item = *l;
         SPCurve *curve = NULL;
 
-        if (!SP_IS_SHAPE(item) && !SP_IS_TEXT(item))
+        if (!SP_IS_SHAPE(item) && !SP_IS_TEXT(item) && !SP_IS_FLOWTEXT(item))
             continue;
         else if (SP_IS_SHAPE(item)) {
             curve = SP_SHAPE(item)->getCurve();
+        }
+        else if (SP_IS_FLOWTEXT(item)) {
+            curve = SP_FLOWTEXT(item)->getNormalizedBpath();
         }
         else { // Item must be SP_TEXT
             curve = SP_TEXT(item)->getNormalizedBpath();

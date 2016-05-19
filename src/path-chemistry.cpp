@@ -1,4 +1,4 @@
-/*
+    /*
  * Here are handlers for modifying selections, specific to paths
  *
  * Authors:
@@ -52,7 +52,7 @@ inline bool less_than_items(SPItem const *first, SPItem const *second)
 }
 
 void
-sp_selected_path_combine(SPDesktop *desktop)
+sp_selected_path_combine(SPDesktop *desktop, bool skip_undo)
 {
     Inkscape::Selection *selection = desktop->getSelection();
     SPDocument *doc = desktop->getDocument();
@@ -172,10 +172,10 @@ sp_selected_path_combine(SPDesktop *desktop)
 
         // move to the position of the topmost, reduced by the number of deleted items
         repr->setPosition(position > 0 ? position : 0);
-
-        DocumentUndo::done(desktop->getDocument(), SP_VERB_SELECTION_COMBINE, 
-                           _("Combine"));
-
+        if ( !skip_undo ) {
+            DocumentUndo::done(desktop->getDocument(), SP_VERB_SELECTION_COMBINE, 
+                               _("Combine"));
+        }
         selection->set(repr);
 
         Inkscape::GC::release(repr);
@@ -188,7 +188,7 @@ sp_selected_path_combine(SPDesktop *desktop)
 }
 
 void
-sp_selected_path_break_apart(SPDesktop *desktop)
+sp_selected_path_break_apart(SPDesktop *desktop, bool skip_undo)
 {
     Inkscape::Selection *selection = desktop->getSelection();
 
@@ -217,7 +217,6 @@ sp_selected_path_break_apart(SPDesktop *desktop)
         if (curve == NULL) {
             continue;
         }
-
         did = true;
 
         Inkscape::XML::Node *parent = item->getRepr()->parent();
@@ -228,16 +227,10 @@ sp_selected_path_break_apart(SPDesktop *desktop)
         gchar *style = g_strdup(item->getRepr()->attribute("style"));
         // XML Tree being used directly here while it shouldn't be...
         gchar *path_effect = g_strdup(item->getRepr()->attribute("inkscape:path-effect"));
-
-        Geom::PathVector apv = curve->get_pathvector() * path->transform;
-
-        curve->unref();
-
+        Geom::Affine transform = path->transform;
         // it's going to resurrect as one of the pieces, so we delete without advertisement
         item->deleteObject(false);
 
-        curve = new SPCurve(apv);
-        g_assert(curve != NULL);
 
         GSList *list = curve->split();
 
@@ -258,7 +251,8 @@ sp_selected_path_break_apart(SPDesktop *desktop)
             else
                 repr->setAttribute("d", str);
             g_free(str);
-
+            repr->setAttribute("transform", sp_svg_transform_write(transform));
+            
             // add the new repr to the parent
             parent->appendChild(repr);
 
@@ -283,8 +277,10 @@ sp_selected_path_break_apart(SPDesktop *desktop)
     desktop->clearWaitingCursor();
 
     if (did) {
-        DocumentUndo::done(desktop->getDocument(), SP_VERB_SELECTION_BREAK_APART, 
-                           _("Break apart"));
+        if ( !skip_undo ) {
+            DocumentUndo::done(desktop->getDocument(), SP_VERB_SELECTION_BREAK_APART, 
+                               _("Break apart"));
+        }
     } else {
         desktop->getMessageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No path(s)</b> to break apart in the selection."));
     }

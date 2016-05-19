@@ -28,6 +28,9 @@
 #include <gtkmm/notebook.h>
 #include <gtkmm/sizegroup.h>
 
+#include <gtkmm/paned.h>
+#include <gtkmm/scrolledwindow.h>
+
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
@@ -277,9 +280,15 @@ private:
     // Primitives Info Box  
     Gtk::Label _infobox_desc;
     Gtk::Image _infobox_icon;
+    Gtk::ScrolledWindow* _sw_infobox;
 
     // View/add primitives
-    Gtk::VBox _primitive_box;
+#if WITH_GTKMM_3_0
+    Gtk::Paned* _primitive_box;
+#else
+    Gtk::VPaned* _primitive_box;
+#endif
+    
     UI::Widget::ComboBoxEnum<Inkscape::Filters::FilterPrimitiveType> _add_primitive_type;
     Gtk::Button _add_primitive;
 

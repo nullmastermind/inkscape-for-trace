@@ -3,6 +3,7 @@
 # Set all HAVE_XXX variables, to correctly set all defines in config.h
 #SET(CMAKE_REQUIRED_INCLUDES ${INK_INCLUDES})
 include(CheckIncludeFiles)
+include(CheckIncludeFileCXX)
 include(CheckFunctionExists)
 include(CheckStructHasMember)
 # usage: CHECK_INCLUDE_FILES (<header> <RESULT_VARIABLE> )
@@ -12,7 +13,7 @@ include(CheckStructHasMember)
 set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} ${INKSCAPE_LIBS})
 set(CMAKE_REQUIRED_INCLUDES ${CMAKE_REQUIRED_INCLUDES} ${INKSCAPE_INCS_SYS})
 
-CHECK_INCLUDE_FILES(boost/concept_check.hpp HAVE_BOOST_CONCEPT_CHECK_HPP)
+CHECK_INCLUDE_FILE_CXX(boost/concept_check.hpp HAVE_BOOST_CONCEPT_CHECK_HPP)
 CHECK_INCLUDE_FILES(cairo-pdf.h HAVE_CAIRO_PDF)
 CHECK_FUNCTION_EXISTS(floor HAVE_FLOOR)
 CHECK_FUNCTION_EXISTS(fpsetmask HAVE_FPSETMASK)
@@ -58,6 +59,8 @@ CHECK_INCLUDE_FILES(sys/types.h HAVE_SYS_TYPES_H)
 CHECK_INCLUDE_FILES(unistd.h HAVE_UNISTD_H)
 CHECK_INCLUDE_FILES(zlib.h HAVE_ZLIB_H)
 
+CHECK_INCLUDE_FILE_CXX(unordered_set HAVE_NATIVE_UNORDERED_SET)
+
 # Enable pango defines, necessary for compilation on Win32, how about Linux?
 # yes but needs to be done a better way
 if(HAVE_CAIRO_PDF)
@@ -65,7 +68,6 @@ if(HAVE_CAIRO_PDF)
     set(RENDER_WITH_PANGO_CAIRO TRUE)
 endif()
 
-# Create the two configuration files: config.h and inkscape_version.h
-# Create them in the binary root dir
+# Create the configuration files config.h in the binary root dir
 configure_file(${CMAKE_SOURCE_DIR}/config.h.cmake ${CMAKE_BINARY_DIR}/include/config.h)
 add_definitions(-DHAVE_CONFIG_H)

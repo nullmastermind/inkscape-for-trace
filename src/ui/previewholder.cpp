@@ -49,16 +49,20 @@ PreviewHolder::PreviewHolder() :
     _wrap(false),
     _border(BORDER_NONE)
 {
+    set_name( "PreviewHolder" );
     _scroller = Gtk::manage(new Gtk::ScrolledWindow());
+    _scroller->set_name( "PreviewHolderScroller" );
     ((Gtk::ScrolledWindow *)_scroller)->set_policy(Gtk::POLICY_AUTOMATIC,
                                                    Gtk::POLICY_AUTOMATIC);
 
 #if WITH_GTKMM_3_0
     _insides = Gtk::manage(new Gtk::Grid());
+    _insides->set_name( "PreviewHolderGrid" );
     _insides->set_column_spacing(8);
     
     // Add a container with the scroller and a spacer
     Gtk::Grid* spaceHolder = Gtk::manage(new Gtk::Grid());
+    spaceHolder->set_name( "PreviewHolderSpaceHolder" );
 
     _scroller->set_hexpand();
     _scroller->set_vexpand();
@@ -339,6 +343,12 @@ void PreviewHolder::calcGridSize( const Gtk::Widget* thing, int itemCount, int& 
     // Initially set all items in a horizontal row
     width = itemCount;
     height = 1;
+
+#if GTK_CHECK_VERSION(3,16,0)
+    // Disable overlay scrolling as the scrollbar covers up swatches.
+    // For some reason this also makes the height 55px.
+    ((Gtk::ScrolledWindow *)_scroller)->set_overlay_scrolling(false);
+#endif
 
     if ( _anchor == SP_ANCHOR_SOUTH || _anchor == SP_ANCHOR_NORTH ) {
         Gtk::Requisition req;

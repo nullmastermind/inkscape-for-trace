@@ -13,7 +13,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
 """
 Renderer for barcodes, SVG extention for Inkscape.
@@ -39,19 +39,23 @@ For supported barcodes see Barcode module directory.
 
 import sys
 
-def getBarcode(code, **kwargs):
+class NoBarcode(object):
+    """Simple class for no barcode"""
+    def generate(self):
+        return None
+
+def getBarcode(code, **kw):
     """Gets a barcode from a list of available barcode formats"""
     if not code:
         return sys.stderr.write("No barcode format given!\n")
 
-
     code = str(code).replace('-', '').strip()
+    mod = 'Barcode'
     try:
-        barcode = getattr(__import__('Barcode.'+code, fromlist=['Barcode']), code)
-        return barcode(kwargs)
+        return getattr(__import__(mod+'.'+code, fromlist=[mod]), code)(kw)
     except ImportError:
         sys.stderr.write("Invalid type of barcode: %s\n" % code)
     except AttributeError:
-        raise
-        sys.stderr.write("Barcode module is missing the barcode class: %s\n" % code)
+        sys.stderr.write("Barcode module is missing barcode class: %s\n" % code)
+    return NoBarcode()
 

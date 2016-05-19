@@ -32,7 +32,6 @@
 #include "util/reverse-list.h"
 #include "verbs.h"
 #include "widgets/icon.h"
-#include "widgets/shrink-wrap-button.h"
 #include "xml/node-event-vector.h"
 #include "widgets/gradient-vector.h"
 
@@ -46,6 +45,7 @@ public:
     AlternateIcons(Inkscape::IconSize size, gchar const *a, gchar const *b)
     : _a(NULL), _b(NULL)
     {
+        set_name("AlternateIcons");
         if (a) {
             _a = Gtk::manage(sp_icon_get_icon(a, size));
             _a->set_no_show_all(true);
@@ -95,6 +95,7 @@ private:
 LayerSelector::LayerSelector(SPDesktop *desktop)
 : _desktop(NULL), _layer(NULL)
 {
+    set_name("LayerSelector");
     AlternateIcons *label;
 
     label = Gtk::manage(new AlternateIcons(Inkscape::ICON_SIZE_DECORATION,
@@ -114,7 +115,6 @@ LayerSelector::LayerSelector(SPDesktop *desktop)
     );
 
     _visibility_toggle.set_relief(Gtk::RELIEF_NONE);
-    shrink_wrap_button(_visibility_toggle);
     _visibility_toggle.set_tooltip_text(_("Toggle current layer visibility"));
     pack_start(_visibility_toggle, Gtk::PACK_EXPAND_PADDING);
 
@@ -135,7 +135,6 @@ LayerSelector::LayerSelector(SPDesktop *desktop)
     );
 
     _lock_toggle.set_relief(Gtk::RELIEF_NONE);
-    shrink_wrap_button(_lock_toggle);
     _lock_toggle.set_tooltip_text(_("Lock or unlock current layer"));
     pack_start(_lock_toggle, Gtk::PACK_EXPAND_PADDING);
 

@@ -13,25 +13,23 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110, USA.
 #
 """
 Python barcode renderer for UPCA barcodes. Designed for use with Inkscape.
 """
 
-from BaseEan import EanBarcode
+from .BaseEan import EanBarcode
 
 class Upca(EanBarcode):
     """Provides a renderer for EAN12 aka UPC-A Barcodes"""
-    name    = 'upca'
-    lengths = [ 11 ]
-    checks  = [ 12 ]
+    name = 'upca'
+    font_size = 10
+    lengths = [11]
+    checks = [12]
 
     def _encode(self, n):
         """Encode for a UPC-A Barcode"""
-        self.label = self.space(n[0:1], 3, n[1:6], 4, n[6:11], 3, n[11:])
+        self.text = self.space(n[0:1], 3, n[1:6], 4, n[6:11], 3, n[11:])
         return self.enclose(self.encode_left(n[0:6]), self.encode_right(n[6:12]))
 
-    def fontSize(self):
-        """We need a bigger barcode"""
-        return 10

@@ -952,10 +952,6 @@ void EditVerb::perform(SPAction *action, void *data)
     g_return_if_fail(ensure_desktop_valid(action));
     SPDesktop *dt = sp_action_get_desktop(action);
 
-    SPDocument *doc = dt->getDocument();
-
-    Inkscape::XML::Node *repr = dt->namedview->getRepr();
-
     switch (reinterpret_cast<std::size_t>(data)) {
         case SP_VERB_EDIT_UNDO:
             sp_undo(dt, dt->getDocument());
@@ -1153,6 +1149,9 @@ void SelectionVerb::perform(SPAction *action, void *data)
             break;
         case SP_VERB_SELECTION_UNGROUP:
             sp_selection_ungroup(selection, dt);
+            break;
+        case SP_VERB_SELECTION_UNGROUP_POP_SELECTION:
+            sp_selection_ungroup_pop_selection(selection, dt);
             break;
         default:
             handled = false;
@@ -2563,6 +2562,8 @@ Verb *Verb::_base_verbs[] = {
                       N_("Group selected objects"), INKSCAPE_ICON("object-group")),
     new SelectionVerb(SP_VERB_SELECTION_UNGROUP, "SelectionUnGroup", N_("_Ungroup"),
                       N_("Ungroup selected groups"), INKSCAPE_ICON("object-ungroup")),
+    new SelectionVerb(SP_VERB_SELECTION_UNGROUP_POP_SELECTION, "SelectionUnGroupPopSelection", N_("_Pop selected objects out of group"),
+                      N_("Pop selected objects out of group"), INKSCAPE_ICON("object-ungroup-pop-selection")),
 
     new SelectionVerb(SP_VERB_SELECTION_TEXTTOPATH, "SelectionTextToPath", N_("_Put on Path"),
                       N_("Put text on path"), INKSCAPE_ICON("text-put-on-path")),
@@ -2949,7 +2950,7 @@ Verb *Verb::_base_verbs[] = {
     new DialogVerb(SP_VERB_DIALOG_TAGS, "DialogTags", N_("Selection se_ts..."),
                    N_("View Tags"), INKSCAPE_ICON("edit-select-all-layers")),
     new DialogVerb(SP_VERB_DIALOG_LIVE_PATH_EFFECT, "DialogLivePathEffect", N_("Path E_ffects ..."),
-                   N_("Manage, edit, and apply path effects"), NULL),
+                   N_("Manage, edit, and apply path effects"), INKSCAPE_ICON("dialog-path-effects")),
     new DialogVerb(SP_VERB_DIALOG_FILTER_EFFECTS, "DialogFilterEffects", N_("Filter _Editor..."),
                    N_("Manage, edit, and apply SVG filters"), INKSCAPE_ICON("dialog-filters")),
     new DialogVerb(SP_VERB_DIALOG_SVG_FONTS, "DialogSVGFonts", N_("SVG Font Editor..."),
@@ -3004,7 +3005,7 @@ Verb *Verb::_base_verbs[] = {
                        N_("Fit the page to the current selection"), NULL),
     new FitCanvasVerb(SP_VERB_FIT_CANVAS_TO_DRAWING, "FitCanvasToDrawing", N_("Fit Page to Drawing"),
                        N_("Fit the page to the drawing"), NULL),
-    new FitCanvasVerb(SP_VERB_FIT_CANVAS_TO_SELECTION_OR_DRAWING, "FitCanvasToSelectionOrDrawing", N_("Fit Page to Selection or Drawing"),
+    new FitCanvasVerb(SP_VERB_FIT_CANVAS_TO_SELECTION_OR_DRAWING, "FitCanvasToSelectionOrDrawing", N_("_Resize Page to Selection"),
                        N_("Fit the page to the current selection or the drawing if there is no selection"), NULL),
     // LockAndHide
     new LockAndHideVerb(SP_VERB_UNLOCK_ALL, "UnlockAll", N_("Unlock All"),
