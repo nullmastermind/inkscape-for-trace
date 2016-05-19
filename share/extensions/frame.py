@@ -158,7 +158,7 @@ class Frame(inkex.Effect):
             if 'outside' == position:
                 box = size_box(box, (width/2))
             else:
-                box = size_box(box, (width/2))
+                box = size_box(box, -(width/2))
             name = 'Frame'
             frame = self.add_frame(parent, name, box, style, corner_radius)
             if self.options.clip:
