@@ -46,7 +46,7 @@ size_t Pointwise::getTotalSatellites()
     return counter;
 }
 
-void Pointwise::recalculateForNewPathVector(Geom::PathVector const pathv, Satellite const &S)
+void Pointwise::recalculateForNewPathVector(Geom::PathVector const pathv, Satellite const S)
 {
     Satellites satellites;
     for (size_t i = 0; i < pathv.size(); i++) {

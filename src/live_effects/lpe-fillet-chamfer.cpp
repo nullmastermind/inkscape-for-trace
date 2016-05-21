@@ -239,8 +239,11 @@ void LPEFilletChamfer::inverseChamfer()
 
 void LPEFilletChamfer::refreshKnots()
 {
-    if (satellites_param.knoth) {
-        satellites_param.knoth->update_knots();
+    //Find another way to update knots satellites_param.knoth->update_knots(); do the thing
+    //but not updat the knot index on node delete
+    if (tools_isactive(desktop, TOOLS_NODES)) {
+        tools_switch(desktop, TOOLS_SELECT);
+        tools_switch(desktop, TOOLS_NODES);
     }
 }
 
@@ -413,13 +416,12 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
             satellite.setHasMirror(mirror_knots);
             satellite.setHidden(hide_knots);
             pointwise.recalculateForNewPathVector(pathv, satellite);
-            satellites_param.setPointwise(pointwise);
         } else {
             pointwise.setPathVector(pathv);
             pointwise.setSatellites(satellites);
-            satellites_param.setPointwise(pointwise);
-            refreshKnots();
         }
+        satellites_param.setPointwise(pointwise);
+        refreshKnots();
     } else {
         g_warning("LPE Fillet can only be applied to shapes (not groups).");
     }

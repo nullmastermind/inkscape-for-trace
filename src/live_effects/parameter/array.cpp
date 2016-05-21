@@ -60,21 +60,21 @@ ArrayParam<std::vector<Satellite > >::readsvg(const gchar * str)
     while (*iter != NULL) {
         gchar ** strsubarray = g_strsplit(*iter, ",", 7);
         if(*strsubarray[6]){
-            Satellite satellite;
-            satellite.setSatelliteType(g_strstrip(strsubarray[0]));
-            satellite.is_time = strncmp(strsubarray[1],"1",1) == 0;
-            satellite.has_mirror = strncmp(strsubarray[2],"1",1) == 0;
-            satellite.hidden = strncmp(strsubarray[3],"1",1) == 0;
+            Satellite *satellite = new Satellite();
+            satellite->setSatelliteType(g_strstrip(strsubarray[0]));
+            satellite->is_time = strncmp(strsubarray[1],"1",1) == 0;
+            satellite->has_mirror = strncmp(strsubarray[2],"1",1) == 0;
+            satellite->hidden = strncmp(strsubarray[3],"1",1) == 0;
             double amount,angle;
             float stepsTmp;
             sp_svg_number_read_d(strsubarray[4], &amount);
             sp_svg_number_read_d(strsubarray[5], &angle);
             sp_svg_number_read_f(g_strstrip(strsubarray[6]), &stepsTmp);
             unsigned int steps = (unsigned int)stepsTmp;
-            satellite.amount = amount;
-            satellite.angle = angle;
-            satellite.steps = steps;
-            subpath_satellites.push_back(satellite);
+            satellite->amount = amount;
+            satellite->angle = angle;
+            satellite->steps = steps;
+            subpath_satellites.push_back(*satellite);
         }
         g_strfreev (strsubarray);
         iter++;

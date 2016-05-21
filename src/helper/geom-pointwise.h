@@ -33,7 +33,7 @@ public:
     Satellites getSatellites();
     size_t getTotalSatellites();
     void setSatellites(Satellites satellites);
-    void recalculateForNewPathVector(Geom::PathVector const pathv, Satellite const &S);
+    void recalculateForNewPathVector(Geom::PathVector const pathv, Satellite const S);
 private:
     Geom::PathVector _pathvector;
     Satellites _satellites;
