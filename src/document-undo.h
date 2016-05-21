@@ -33,10 +33,6 @@ public:
 
     static bool getUndoSensitive(SPDocument const *document);
 
-    static void setUndoJoined(SPDocument *doc, bool join_undo);
-
-    static bool getUndoJoined(SPDocument *doc);
-
     static void clearUndo(SPDocument *document);
 
     static void clearRedo(SPDocument *document);

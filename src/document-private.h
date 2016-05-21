@@ -37,44 +37,43 @@ class Event;
 }
 
 struct SPDocumentPrivate {
-    typedef std::map<GQuark, SPDocument::IDChangedSignal> IDChangedSignalMap;
-    typedef std::map<GQuark, SPDocument::ResourcesChangedSignal> ResourcesChangedSignalMap;
+	typedef std::map<GQuark, SPDocument::IDChangedSignal> IDChangedSignalMap;
+	typedef std::map<GQuark, SPDocument::ResourcesChangedSignal> ResourcesChangedSignalMap;
 
-    std::map<std::string, SPObject *> iddef;
-    std::map<Inkscape::XML::Node *, SPObject *> reprdef;
+        std::map<std::string, SPObject *> iddef;
+        std::map<Inkscape::XML::Node *, SPObject *> reprdef;
 
-    unsigned long serial;
+	unsigned long serial;
 
-    /** Dictionary of signals for id changes */
-    IDChangedSignalMap id_changed_signals;
+	/** Dictionary of signals for id changes */
+	IDChangedSignalMap id_changed_signals;
 
-    /* Resources */
-    std::map<std::string, std::set<SPObject *> > resources;
-    ResourcesChangedSignalMap resources_changed_signals;
+	/* Resources */
+        std::map<std::string, std::vector<SPObject *> > resources;
+	ResourcesChangedSignalMap resources_changed_signals;
 
-    sigc::signal<void> destroySignal;
-    SPDocument::ModifiedSignal modified_signal;
-    SPDocument::URISetSignal uri_set_signal;
-    SPDocument::ResizedSignal resized_signal;
-    SPDocument::ReconstructionStart _reconstruction_start_signal;
-    SPDocument::ReconstructionFinish  _reconstruction_finish_signal;
-    SPDocument::CommitSignal commit_signal;
+        sigc::signal<void> destroySignal;
+	SPDocument::ModifiedSignal modified_signal;
+	SPDocument::URISetSignal uri_set_signal;
+	SPDocument::ResizedSignal resized_signal;
+	SPDocument::ReconstructionStart _reconstruction_start_signal;
+	SPDocument::ReconstructionFinish  _reconstruction_finish_signal;
+  SPDocument::CommitSignal commit_signal;
 
-    /* Undo/Redo state */
-    bool sensitive; /* If we save actions to undo stack */
-    bool join_undo; /* If we group actions to one undo stack */
-    Inkscape::XML::Event * partial; /* partial undo log when interrupted */
-    int history_size;
-    std::vector<Inkscape::Event *> undo; /* Undo stack of reprs */
-    std::vector<Inkscape::Event *> redo; /* Redo stack of reprs */
+	/* Undo/Redo state */
+	bool sensitive; /* If we save actions to undo stack */
+	Inkscape::XML::Event * partial; /* partial undo log when interrupted */
+	int history_size;
+        std::vector<Inkscape::Event *> undo; /* Undo stack of reprs */
+        std::vector<Inkscape::Event *> redo; /* Redo stack of reprs */
 
-    /* Undo listener */
-    Inkscape::CompositeUndoStackObserver undoStackObservers;
+	/* Undo listener */
+	Inkscape::CompositeUndoStackObserver undoStackObservers;
 
-    // XXX only for testing!
-    Inkscape::ConsoleOutputUndoObserver console_output_undo_observer;
+	// XXX only for testing!
+	Inkscape::ConsoleOutputUndoObserver console_output_undo_observer;
 
-    bool seeking;
+	bool seeking;
     sigc::connection selChangeConnection;
     sigc::connection desktopActivatedConnection;
 };
