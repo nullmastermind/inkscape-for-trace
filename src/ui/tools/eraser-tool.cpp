@@ -644,8 +644,6 @@ void EraserTool::clear_current() {
 void EraserTool::set_to_accumulated() {
     bool workDone = false;
     SPDocument *document = this->desktop->doc();
-    bool saved = DocumentUndo::getUndoSensitive(document);
-    DocumentUndo::setUndoSensitive(document, false);
     if (!this->accumulated->is_empty()) {
         if (!this->repr) {
             /* Create object */
@@ -680,17 +678,17 @@ void EraserTool::set_to_accumulated() {
             std::vector<SPItem*> toWorkOn;
             if (selection->isEmpty()) {
                 if ( eraser_mode  == 1 || eraser_mode  == 2) {
-                    toWorkOn = desktop->getDocument()->getItemsPartiallyInBox(desktop->dkey, *eraserBbox);
+                    toWorkOn = document->getItemsPartiallyInBox(desktop->dkey, *eraserBbox);
                 } else {
                     Inkscape::Rubberband *r = Inkscape::Rubberband::get(desktop);
-                    toWorkOn = desktop->getDocument()->getItemsAtPoints(desktop->dkey, r->getPoints());
+                    toWorkOn = document->getItemsAtPoints(desktop->dkey, r->getPoints());
                 }
                 toWorkOn.erase(std::remove(toWorkOn.begin(), toWorkOn.end(), acid), toWorkOn.end());
             } else {
                 if ( eraser_mode == 0 ) {
                     Inkscape::Rubberband *r = Inkscape::Rubberband::get(desktop);
                     std::vector<SPItem*> touched;
-                    touched = desktop->getDocument()->getItemsAtPoints(desktop->dkey, r->getPoints());
+                    touched = document->getItemsAtPoints(desktop->dkey, r->getPoints());
                     for (std::vector<SPItem*>::const_iterator i = touched.begin();i!=touched.end();++i) {
                         if(selection->includes(*i)){
                             toWorkOn.push_back((*i));
@@ -779,8 +777,8 @@ void EraserTool::set_to_accumulated() {
                         this->repr->parent()->appendChild(dup);
                         Inkscape::GC::release(dup); // parent takes over
                         selection->set(dup);
-                        sp_selected_path_union_skip_undo(selection, this->desktop);
-                        sp_selection_raise_to_top(selection, this->desktop, true);
+                        sp_selected_path_union_skip_undo(selection, desktop);
+                        sp_selection_raise_to_top(selection, desktop, true);
                         if (bbox && bbox->intersects(*eraserBbox)) {
                             SPClipPath *clip_path = item->clip_ref->getObject();
                             if (clip_path) {
@@ -800,20 +798,21 @@ void EraserTool::set_to_accumulated() {
                                             sp_object_ref(rect, 0);
                                             rect->deleteObject(true);
                                             sp_object_unref(rect);
-                                            sp_selection_raise_to_top(selection, this->desktop, true);
+                                            sp_selection_raise_to_top(selection, desktop, true);
                                             selection->add(dup_clip);
-                                            sp_selected_path_diff_skip_undo(selection, this->desktop);
+                                            sp_selected_path_diff_skip_undo(selection, desktop);
                                             SPItem * clip = SP_ITEM(selection->itemList()[0]);
                                         }
                                     }
                                 }
                             } else {
                                 selection->add(rect);
-                                sp_selected_path_diff_skip_undo(selection, this->desktop);
+                                std::cout << "asasgfasfasfasfasfasf\n";
+                                sp_selected_path_diff_skip_undo(selection, desktop);
                             }
-                            sp_selection_raise_to_top(selection, this->desktop, true);
+                            sp_selection_raise_to_top(selection, desktop, true);
                             selection->add(item);
-                            sp_selection_set_mask(this->desktop, true, false);
+                            sp_selection_set_mask(desktop, true, false, true);
                         } else {
                             SPItem *erase_clip = selection->singleItem();
                             if (erase_clip) {
@@ -843,7 +842,7 @@ void EraserTool::set_to_accumulated() {
                 }
 
                 if ( eraser_mode == 0 ) {
-                    //sp_selection_delete(desktop);
+                    sp_selection_delete(desktop);
                     remainingItems.clear();
                 }
 
@@ -865,12 +864,10 @@ void EraserTool::set_to_accumulated() {
             this->repr = 0;
         }
     }
-    document->setModifiedSinceSave();
-    DocumentUndo::setUndoSensitive(document, saved);
     if ( workDone ) {
-        DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_ERASER, _("Draw eraser stroke"));
+        DocumentUndo::done(document, SP_VERB_CONTEXT_ERASER, _("Draw eraser stroke"));
     } else {
-        DocumentUndo::cancel(desktop->getDocument());
+        DocumentUndo::cancel(document);
     }
 }
 
