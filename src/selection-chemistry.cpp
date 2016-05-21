@@ -1031,7 +1031,7 @@ sp_selection_raise(Inkscape::Selection *selection, SPDesktop *desktop)
                        C_("Undo action", "Raise"));
 }
 
-void sp_selection_raise_to_top(Inkscape::Selection *selection, SPDesktop *desktop)
+void sp_selection_raise_to_top(Inkscape::Selection *selection, SPDesktop *desktop, bool skip_undo)
 {
     SPDocument *document = selection->layers()->getDocument();
 
@@ -1055,9 +1055,10 @@ void sp_selection_raise_to_top(Inkscape::Selection *selection, SPDesktop *deskto
         Inkscape::XML::Node *repr =(*l);
         repr->setPosition(-1);
     }
-
-    DocumentUndo::done(document, SP_VERB_SELECTION_TO_FRONT,
-                       _("Raise to top"));
+    if (!skip_undo) {
+        DocumentUndo::done(document, SP_VERB_SELECTION_TO_FRONT,
+                         _("Raise to top"));
+    }
 }
 
 void sp_selection_lower(Inkscape::Selection *selection, SPDesktop *desktop)
@@ -1115,7 +1116,7 @@ void sp_selection_lower(Inkscape::Selection *selection, SPDesktop *desktop)
                        C_("Undo action", "Lower"));
 }
 
-void sp_selection_lower_to_bottom(Inkscape::Selection *selection, SPDesktop *desktop)
+void sp_selection_lower_to_bottom(Inkscape::Selection *selection, SPDesktop *desktop, bool skip_undo)
 {
     SPDocument *document = selection->layers()->getDocument();
 
@@ -1149,9 +1150,10 @@ void sp_selection_lower_to_bottom(Inkscape::Selection *selection, SPDesktop *des
         }
         repr->setPosition(minpos);
     }
-
-    DocumentUndo::done(document, SP_VERB_SELECTION_TO_BACK,
-                       _("Lower to bottom"));
+    if (!skip_undo) {
+        DocumentUndo::done(document, SP_VERB_SELECTION_TO_BACK,
+                           _("Lower to bottom"));
+    }
 }
 
 void
@@ -3859,7 +3861,7 @@ void sp_selection_set_clipgroup(SPDesktop *desktop)
  * If \a apply_clip_path parameter is true, clipPath is created, otherwise mask
  *
  */
-void sp_selection_set_mask(SPDesktop *desktop, bool apply_clip_path, bool apply_to_layer)
+void sp_selection_set_mask(SPDesktop *desktop, bool apply_clip_path, bool apply_to_layer, bool skip_undo)
 {
     if (desktop == NULL) {
         return;
@@ -4021,11 +4023,12 @@ void sp_selection_set_mask(SPDesktop *desktop, bool apply_clip_path, bool apply_
     }
 
     selection->addList(items_to_select);
-
-    if (apply_clip_path) {
-        DocumentUndo::done(doc, SP_VERB_OBJECT_SET_CLIPPATH, _("Set clipping path"));
-    } else {
-        DocumentUndo::done(doc, SP_VERB_OBJECT_SET_MASK, _("Set mask"));
+    if (!skip_undo) {
+        if (apply_clip_path) {
+            DocumentUndo::done(doc, SP_VERB_OBJECT_SET_CLIPPATH, _("Set clipping path"));
+        } else {
+            DocumentUndo::done(doc, SP_VERB_OBJECT_SET_MASK, _("Set mask"));
+        }
     }
 }
 

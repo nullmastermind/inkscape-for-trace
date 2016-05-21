@@ -121,6 +121,7 @@ SPDocument::SPDocument() :
     p->serial = next_serial++;
 
     p->sensitive = false;
+    p->join_undo = false;
     p->partial = NULL;
     p->history_size = 0;
     p->seeking = false;
