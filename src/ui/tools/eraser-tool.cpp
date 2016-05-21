@@ -723,10 +723,8 @@ void EraserTool::set_to_accumulated() {
                                 Inkscape::GC::release(dup); // parent takes over
                                 selection->set(dup);
                                 if (!this->nowidth) {
-                                    DocumentUndo::setUndoSensitive(document, saved);
                                     sp_selected_path_union_skip_undo(selection, desktop);
-                                    DocumentUndo::setUndoSensitive(document, false);
-                                }
+                                 }
                                 selection->add(item);
                                 if(item->style->fill_rule.value == SP_WIND_RULE_EVENODD){
                                     SPCSSAttr *css = sp_repr_css_attr_new();
@@ -735,16 +733,13 @@ void EraserTool::set_to_accumulated() {
                                     sp_repr_css_attr_unref(css);
                                     css = 0;
                                 }
-                                DocumentUndo::setUndoSensitive(document, saved);
                                 if (this->nowidth) {
                                     sp_selected_path_cut_skip_undo(selection, desktop);
                                 } else {
                                     sp_selected_path_diff_skip_undo(selection, desktop);
                                 }
-                                DocumentUndo::setUndoSensitive(document, saved);
                                 workDone = true; // TODO set this only if something was cut.
                                 bool break_apart = prefs->getBool("/tools/eraser/break_apart", false);
-                                DocumentUndo::setUndoSensitive(document, saved);
                                 if(!break_apart){
                                     sp_selected_path_combine(desktop, true);
                                 } else {
@@ -752,7 +747,6 @@ void EraserTool::set_to_accumulated() {
                                         sp_selected_path_break_apart(desktop, true);
                                     }
                                 }
-                                DocumentUndo::setUndoSensitive(document, saved);
                                 if ( !selection->isEmpty() ) {
                                     // If the item was not completely erased, track the new remainder.
                                     std::vector<SPItem*> nowSel(selection->itemList());
@@ -785,10 +779,8 @@ void EraserTool::set_to_accumulated() {
                         this->repr->parent()->appendChild(dup);
                         Inkscape::GC::release(dup); // parent takes over
                         selection->set(dup);
-                        DocumentUndo::setUndoSensitive(document, saved);
                         sp_selected_path_union_skip_undo(selection, this->desktop);
-                        DocumentUndo::setUndoSensitive(document, false);
-                        sp_selection_raise_to_top(selection, this->desktop);
+                        sp_selection_raise_to_top(selection, this->desktop, true);
                         if (bbox && bbox->intersects(*eraserBbox)) {
                             SPClipPath *clip_path = item->clip_ref->getObject();
                             if (clip_path) {
@@ -808,23 +800,18 @@ void EraserTool::set_to_accumulated() {
                                             sp_object_ref(rect, 0);
                                             rect->deleteObject(true);
                                             sp_object_unref(rect);
-                                            sp_selection_raise_to_top(selection, this->desktop);
+                                            sp_selection_raise_to_top(selection, this->desktop, true);
                                             selection->add(dup_clip);
-                                            DocumentUndo::setUndoSensitive(document, saved);
                                             sp_selected_path_diff_skip_undo(selection, this->desktop);
-                                            DocumentUndo::setUndoSensitive(document, saved);
                                             SPItem * clip = SP_ITEM(selection->itemList()[0]);
-                                            DocumentUndo::setUndoSensitive(document, false);
                                         }
                                     }
                                 }
                             } else {
                                 selection->add(rect);
-                                DocumentUndo::setUndoSensitive(document, saved);
                                 sp_selected_path_diff_skip_undo(selection, this->desktop);
-                                DocumentUndo::setUndoSensitive(document, false);
                             }
-                            sp_selection_raise_to_top(selection, this->desktop);
+                            sp_selection_raise_to_top(selection, this->desktop, true);
                             selection->add(item);
                             sp_selection_set_mask(this->desktop, true, false);
                         } else {
