@@ -647,48 +647,48 @@ void EraserTool::set_to_accumulated() {
     if (!this->accumulated->is_empty()) {
         if (!this->repr) {
             /* Create object */
-            Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
+            Inkscape::XML::Document *xml_doc = this->desktop->doc()->getReprDoc();
             Inkscape::XML::Node *repr = xml_doc->createElement("svg:path");
 
             /* Set style */
-            sp_desktop_apply_style_tool (desktop, repr, "/tools/eraser", false);
+            sp_desktop_apply_style_tool (this->desktop, repr, "/tools/eraser", false);
 
             this->repr = repr;
         }
-        SPItem *item_repr = SP_ITEM(desktop->currentLayer()->appendChildRepr(this->repr));
+        SPItem *item_repr = SP_ITEM(this->desktop->currentLayer()->appendChildRepr(this->repr));
         Inkscape::GC::release(this->repr);
         item_repr->updateRepr();
-        Geom::PathVector pathv = this->accumulated->get_pathvector() * desktop->dt2doc();
+        Geom::PathVector pathv = this->accumulated->get_pathvector() * this->desktop->dt2doc();
         pathv *= item_repr->i2doc_affine().inverse();
         gchar *str = sp_svg_write_path(pathv);
         g_assert( str != NULL );
         this->repr->setAttribute("d", str);
         g_free(str);
-
+        Geom::OptRect eraserBbox;
         if ( this->repr ) {
             bool wasSelection = false;
-            Inkscape::Selection *selection = desktop->getSelection();
+            Inkscape::Selection *selection = this->desktop->getSelection();
             Inkscape::Preferences *prefs = Inkscape::Preferences::get();
             gint eraser_mode = prefs->getInt("/tools/eraser/mode", 2);
-            Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
+            Inkscape::XML::Document *xml_doc = this->desktop->doc()->getReprDoc();
 
-            SPItem* acid = SP_ITEM(desktop->doc()->getObjectByRepr(this->repr));
-            Geom::OptRect eraserBbox = acid->desktopVisualBounds();
+            SPItem* acid = SP_ITEM(this->desktop->doc()->getObjectByRepr(this->repr));
+            eraserBbox = acid->desktopVisualBounds();
             std::vector<SPItem*> remainingItems;
             std::vector<SPItem*> toWorkOn;
             if (selection->isEmpty()) {
                 if ( eraser_mode  == 1 || eraser_mode  == 2) {
-                    toWorkOn = document->getItemsPartiallyInBox(desktop->dkey, *eraserBbox);
+                    toWorkOn = document->getItemsPartiallyInBox(this->desktop->dkey, *eraserBbox);
                 } else {
-                    Inkscape::Rubberband *r = Inkscape::Rubberband::get(desktop);
-                    toWorkOn = document->getItemsAtPoints(desktop->dkey, r->getPoints());
+                    Inkscape::Rubberband *r = Inkscape::Rubberband::get(this->desktop);
+                    toWorkOn = document->getItemsAtPoints(this->desktop->dkey, r->getPoints());
                 }
                 toWorkOn.erase(std::remove(toWorkOn.begin(), toWorkOn.end(), acid), toWorkOn.end());
             } else {
                 if ( eraser_mode == 0 ) {
-                    Inkscape::Rubberband *r = Inkscape::Rubberband::get(desktop);
+                    Inkscape::Rubberband *r = Inkscape::Rubberband::get(this->desktop);
                     std::vector<SPItem*> touched;
-                    touched = document->getItemsAtPoints(desktop->dkey, r->getPoints());
+                    touched = document->getItemsAtPoints(this->desktop->dkey, r->getPoints());
                     for (std::vector<SPItem*>::const_iterator i = touched.begin();i!=touched.end();++i) {
                         if(selection->includes(*i)){
                             toWorkOn.push_back((*i));
@@ -721,28 +721,28 @@ void EraserTool::set_to_accumulated() {
                                 Inkscape::GC::release(dup); // parent takes over
                                 selection->set(dup);
                                 if (!this->nowidth) {
-                                    sp_selected_path_union_skip_undo(selection, desktop);
+                                    sp_selected_path_union_skip_undo(selection, this->desktop);
                                  }
                                 selection->add(item);
                                 if(item->style->fill_rule.value == SP_WIND_RULE_EVENODD){
                                     SPCSSAttr *css = sp_repr_css_attr_new();
                                     sp_repr_css_set_property(css, "fill-rule", "evenodd");
-                                    sp_desktop_set_style(desktop, css);
+                                    sp_desktop_set_style(this->desktop, css);
                                     sp_repr_css_attr_unref(css);
                                     css = 0;
                                 }
                                 if (this->nowidth) {
-                                    sp_selected_path_cut_skip_undo(selection, desktop);
+                                    sp_selected_path_cut_skip_undo(selection, this->desktop);
                                 } else {
-                                    sp_selected_path_diff_skip_undo(selection, desktop);
+                                    sp_selected_path_diff_skip_undo(selection, this->desktop);
                                 }
                                 workDone = true; // TODO set this only if something was cut.
                                 bool break_apart = prefs->getBool("/tools/eraser/break_apart", false);
                                 if(!break_apart){
-                                    sp_selected_path_combine(desktop, true);
+                                    sp_selected_path_combine(this->desktop, true);
                                 } else {
                                     if(!this->nowidth){
-                                        sp_selected_path_break_apart(desktop, true);
+                                        sp_selected_path_break_apart(this->desktop, true);
                                     }
                                 }
                                 if ( !selection->isEmpty() ) {
@@ -758,76 +758,75 @@ void EraserTool::set_to_accumulated() {
                         }
                     }
                 } else if ( eraser_mode  == 2 ) {
-                    remainingItems.clear();
-                    for (std::vector<SPItem*>::const_iterator i = toWorkOn.begin(); i != toWorkOn.end(); ++i){
-                        selection->clear();
-                        SPItem *item = *i;
-                        Geom::OptRect bbox = item->desktopVisualBounds();
-                        Inkscape::XML::Document *xml_doc = this->desktop->doc()->getReprDoc();
-                        Inkscape::XML::Node *rect_repr = xml_doc->createElement("svg:rect");
-                        sp_desktop_apply_style_tool (desktop, rect_repr, "/tools/eraser", false);
-                        SPRect * rect = SP_RECT(this->desktop->currentLayer()->appendChildRepr(rect_repr));
-                        Inkscape::GC::release(rect_repr);
-                        
-                        rect->updateRepr();
-                        rect->setPosition (bbox->left(), bbox->top(), bbox->width(), bbox->height());
-                        rect->transform = SP_ITEM(desktop->currentLayer())->i2dt_affine().inverse();
-
-                        Inkscape::XML::Node* dup = this->repr->duplicate(xml_doc);
-                        this->repr->parent()->appendChild(dup);
-                        Inkscape::GC::release(dup); // parent takes over
-                        selection->set(dup);
-                        sp_selected_path_union_skip_undo(selection, desktop);
-                        sp_selection_raise_to_top(selection, desktop, true);
-                        if (bbox && bbox->intersects(*eraserBbox)) {
-                            SPClipPath *clip_path = item->clip_ref->getObject();
-                            if (clip_path) {
-                                SPPath *clip_data = SP_PATH(clip_path->firstChild());
-                                if (clip_data) {
-                                    Inkscape::XML::Node *dup_clip = SP_OBJECT(clip_data)->getRepr()->duplicate(xml_doc);
-                                    if (dup_clip) {
-                                        SPItem * dup_clip_obj = SP_ITEM(item_repr->parent->appendChildRepr(dup_clip));
-                                        if (dup_clip_obj) {
-                                            dup_clip_obj->doWriteTransform(dup_clip, item->transform);
-                                            sp_object_ref(clip_data, 0);
-                                            clip_data->deleteObject(true);
-                                            sp_object_unref(clip_data);
-                                            sp_object_ref(clip_path, 0);
-                                            clip_path->deleteObject(true);
-                                            sp_object_unref(clip_path);
-                                            sp_object_ref(rect, 0);
-                                            rect->deleteObject(true);
-                                            sp_object_unref(rect);
-                                            sp_selection_raise_to_top(selection, desktop, true);
-                                            selection->add(dup_clip);
-                                            sp_selected_path_diff_skip_undo(selection, desktop);
-                                            SPItem * clip = SP_ITEM(selection->itemList()[0]);
+                    if (!this->nowidth) {
+                        remainingItems.clear();
+                        for (std::vector<SPItem*>::const_iterator i = toWorkOn.begin(); i != toWorkOn.end(); ++i){
+                            selection->clear();
+                            SPItem *item = *i;
+                            Geom::OptRect bbox = item->desktopVisualBounds();
+                            Inkscape::XML::Document *xml_doc = this->desktop->doc()->getReprDoc();
+                            Inkscape::XML::Node *rect_repr = xml_doc->createElement("svg:rect");
+                            sp_desktop_apply_style_tool (this->desktop, rect_repr, "/tools/eraser", false);
+                            SPRect * rect = SP_RECT(this->desktop->currentLayer()->appendChildRepr(rect_repr));
+                            Inkscape::GC::release(rect_repr);
+                            rect->setPosition (bbox->left(), bbox->top(), bbox->width(), bbox->height());
+                            rect->transform = SP_ITEM(this->desktop->currentLayer())->i2dt_affine().inverse();
+                            rect->updateRepr();
+                            this->desktop->canvas->endForcedFullRedraws();
+                            Inkscape::XML::Node* dup = this->repr->duplicate(xml_doc);
+                            this->repr->parent()->appendChild(dup);
+                            Inkscape::GC::release(dup); // parent takes over
+                            selection->set(dup);
+                            sp_selected_path_union_skip_undo(selection, this->desktop);
+                            sp_selection_raise_to_top(selection, this->desktop, true);
+                            if (bbox && bbox->intersects(*eraserBbox)) {
+                                SPClipPath *clip_path = item->clip_ref->getObject();
+                                if (clip_path) {
+                                    SPPath *clip_data = SP_PATH(clip_path->firstChild());
+                                    if (clip_data) {
+                                        Inkscape::XML::Node *dup_clip = SP_OBJECT(clip_data)->getRepr()->duplicate(xml_doc);
+                                        if (dup_clip) {
+                                            SPItem * dup_clip_obj = SP_ITEM(item_repr->parent->appendChildRepr(dup_clip));
+                                            if (dup_clip_obj) {
+                                                dup_clip_obj->doWriteTransform(dup_clip, item->transform);
+                                                sp_object_ref(clip_data, 0);
+                                                clip_data->deleteObject(true);
+                                                sp_object_unref(clip_data);
+                                                sp_object_ref(clip_path, 0);
+                                                clip_path->deleteObject(true);
+                                                sp_object_unref(clip_path);
+                                                sp_object_ref(rect, 0);
+                                                rect->deleteObject(true);
+                                                sp_object_unref(rect);
+                                                sp_selection_raise_to_top(selection, this->desktop, true);
+                                                selection->add(dup_clip);
+                                                sp_selected_path_diff_skip_undo(selection, this->desktop);
+                                                SPItem * clip = SP_ITEM(selection->itemList()[0]);
+                                            }
                                         }
                                     }
+                                } else {
+                                    selection->add(rect);
+                                    sp_selected_path_diff_skip_undo(selection, this->desktop);
                                 }
+                                sp_selection_raise_to_top(selection, this->desktop, true);
+                                selection->add(item);
+                                sp_selection_set_mask(this->desktop, true, false, true);
                             } else {
-                                selection->add(rect);
-                                std::cout << "asasgfasfasfasfasfasf\n";
-                                sp_selected_path_diff_skip_undo(selection, desktop);
+                                SPItem *erase_clip = selection->singleItem();
+                                if (erase_clip) {
+                                    sp_object_ref(erase_clip, 0);
+                                    erase_clip->deleteObject(true);
+                                    sp_object_unref(erase_clip);
+                                }
                             }
-                            sp_selection_raise_to_top(selection, desktop, true);
-                            selection->add(item);
-                            sp_selection_set_mask(desktop, true, false, true);
-                        } else {
-                            SPItem *erase_clip = selection->singleItem();
-                            if (erase_clip) {
-                                sp_object_ref(erase_clip, 0);
-                                erase_clip->deleteObject(true);
-                                sp_object_unref(erase_clip);
+                            workDone = true;
+                            selection->clear();
+                            if (wasSelection) {
+                                remainingItems.push_back(item);
                             }
-                        }
-                        workDone = true;
-                        selection->clear();
-                        if (wasSelection) {
-                            remainingItems.push_back(item);
                         }
                     }
-
                 } else {
                     for (std::vector<SPItem*> ::const_iterator i = toWorkOn.begin();i!=toWorkOn.end();++i) {
                         sp_object_ref( *i, 0 );
@@ -842,7 +841,7 @@ void EraserTool::set_to_accumulated() {
                 }
 
                 if ( eraser_mode == 0 ) {
-                    sp_selection_delete(desktop);
+                    sp_selection_delete(this->desktop);
                     remainingItems.clear();
                 }
 

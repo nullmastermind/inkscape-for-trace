@@ -76,7 +76,11 @@ static void sp_erasertb_mode_changed( EgeSelectOneAction *act, GObject *tbl )
     GtkAction *mass = GTK_ACTION( g_object_get_data(tbl, "mass") );
     GtkAction *width = GTK_ACTION( g_object_get_data(tbl, "width") );
     if(eraser_mode != 0){
-        gtk_action_set_visible( split, TRUE );
+        if(eraser_mode == 1) {
+            gtk_action_set_visible( split, TRUE );
+        } else {
+            gtk_action_set_visible( split, FALSE );
+        }
         gtk_action_set_visible( mass, TRUE );
         gtk_action_set_visible( width, TRUE );
     } else {
@@ -204,7 +208,11 @@ void sp_eraser_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
     GtkAction *mass = GTK_ACTION( g_object_get_data(holder, "mass") );
     GtkAction *width = GTK_ACTION( g_object_get_data(holder, "width") );
     if (eraser_mode != 0) {
-        gtk_action_set_visible( split, TRUE );
+        if(eraser_mode == 1) {
+            gtk_action_set_visible( split, TRUE );
+        } else {
+            gtk_action_set_visible( split, FALSE );
+        }
         gtk_action_set_visible( mass, TRUE );
         gtk_action_set_visible( width, TRUE );
     } else {
