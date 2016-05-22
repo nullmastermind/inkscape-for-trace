@@ -766,20 +766,11 @@ void EraserTool::set_to_accumulated() {
                             SPItem *item = *i;
                             Geom::OptRect bbox = item->desktopVisualBounds();
                             Inkscape::XML::Document *xml_doc = this->desktop->doc()->getReprDoc();
-                            Inkscape::XML::Node *rect_repr = xml_doc->createElement("svg:rect");
-                            sp_desktop_apply_style_tool (this->desktop, rect_repr, "/tools/eraser", false);
-                            SPRect * rect = SP_RECT(item_repr->parent->appendChildRepr(rect_repr));
-                            Inkscape::GC::release(rect_repr);
-                            rect->setPosition (bbox->left(), bbox->top(), bbox->width(), bbox->height());
-                            rect->transform = SP_ITEM(rect->parent)->i2dt_affine().inverse();
-                            rect->updateRepr();
-                            this->desktop->canvas->endForcedFullRedraws();
                             Inkscape::XML::Node* dup = this->repr->duplicate(xml_doc);
                             this->repr->parent()->appendChild(dup);
                             Inkscape::GC::release(dup); // parent takes over
                             selection->set(dup);
                             sp_selected_path_union_skip_undo(selection, this->desktop);
-                            sp_selection_raise_to_top(selection, this->desktop, true);
                             if (bbox && bbox->intersects(*eraserBbox)) {
                                 SPClipPath *clip_path = item->clip_ref->getObject();
                                 if (clip_path) {
@@ -790,15 +781,9 @@ void EraserTool::set_to_accumulated() {
                                             SPItem * dup_clip_obj = SP_ITEM(item_repr->parent->appendChildRepr(dup_clip));
                                             if (dup_clip_obj) {
                                                 dup_clip_obj->doWriteTransform(dup_clip, item->transform);
-                                                sp_object_ref(clip_data, 0);
-                                                clip_data->deleteObject(true);
-                                                sp_object_unref(clip_data);
                                                 sp_object_ref(clip_path, 0);
                                                 clip_path->deleteObject(true);
                                                 sp_object_unref(clip_path);
-                                                sp_object_ref(rect, 0);
-                                                rect->deleteObject(true);
-                                                sp_object_unref(rect);
                                                 sp_selection_raise_to_top(selection, this->desktop, true);
                                                 selection->add(dup_clip);
                                                 sp_selected_path_diff_skip_undo(selection, this->desktop);
@@ -807,6 +792,15 @@ void EraserTool::set_to_accumulated() {
                                         }
                                     }
                                 } else {
+                                    Inkscape::XML::Node *rect_repr = xml_doc->createElement("svg:rect");
+                                    sp_desktop_apply_style_tool (this->desktop, rect_repr, "/tools/eraser", false);
+                                    SPRect * rect = SP_RECT(item_repr->parent->appendChildRepr(rect_repr));
+                                    Inkscape::GC::release(rect_repr);
+                                    rect->setPosition (bbox->left(), bbox->top(), bbox->width(), bbox->height());
+                                    rect->transform = SP_ITEM(rect->parent)->i2dt_affine().inverse();
+                                    rect->updateRepr();
+                                    rect->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+                                    sp_selection_raise_to_top(selection, this->desktop, true);
                                     selection->add(rect);
                                     sp_selected_path_diff_skip_undo(selection, this->desktop);
                                 }
