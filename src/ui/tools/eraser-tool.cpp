@@ -61,6 +61,7 @@
 #include "sp-clippath.h"
 #include "sp-rect.h"
 #include "sp-text.h"
+#include "sp-root.h"
 #include "display/canvas-bpath.h"
 #include "display/canvas-arena.h"
 #include "livarot/Shape.h"
@@ -655,7 +656,7 @@ void EraserTool::set_to_accumulated() {
 
             this->repr = repr;
         }
-        SPItem *item_repr = SP_ITEM(this->desktop->currentLayer()->appendChildRepr(this->repr));
+        SPItem *item_repr = SP_ITEM(SP_OBJECT(document->getRoot())->appendChildRepr(this->repr));
         Inkscape::GC::release(this->repr);
         item_repr->updateRepr();
         Geom::PathVector pathv = this->accumulated->get_pathvector() * this->desktop->dt2doc();
@@ -722,7 +723,7 @@ void EraserTool::set_to_accumulated() {
                                 selection->set(dup);
                                 if (!this->nowidth) {
                                     sp_selected_path_union_skip_undo(selection, this->desktop);
-                                 }
+                                }
                                 selection->add(item);
                                 if(item->style->fill_rule.value == SP_WIND_RULE_EVENODD){
                                     SPCSSAttr *css = sp_repr_css_attr_new();
@@ -767,10 +768,10 @@ void EraserTool::set_to_accumulated() {
                             Inkscape::XML::Document *xml_doc = this->desktop->doc()->getReprDoc();
                             Inkscape::XML::Node *rect_repr = xml_doc->createElement("svg:rect");
                             sp_desktop_apply_style_tool (this->desktop, rect_repr, "/tools/eraser", false);
-                            SPRect * rect = SP_RECT(this->desktop->currentLayer()->appendChildRepr(rect_repr));
+                            SPRect * rect = SP_RECT(item_repr->parent->appendChildRepr(rect_repr));
                             Inkscape::GC::release(rect_repr);
                             rect->setPosition (bbox->left(), bbox->top(), bbox->width(), bbox->height());
-                            rect->transform = SP_ITEM(this->desktop->currentLayer())->i2dt_affine().inverse();
+                            rect->transform = SP_ITEM(rect->parent)->i2dt_affine().inverse();
                             rect->updateRepr();
                             this->desktop->canvas->endForcedFullRedraws();
                             Inkscape::XML::Node* dup = this->repr->duplicate(xml_doc);
