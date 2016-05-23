@@ -24,40 +24,37 @@ public:
     LPEBool(LivePathEffectObject *lpeobject);
     virtual ~LPEBool();
 
-    void doEffect (SPCurve * curve);
-    virtual void resetDefaults(SPItem const * item);
+    void doEffect(SPCurve *curve);
+    virtual void resetDefaults(SPItem const *item);
 
-    enum bool_op_ex
-    {
-      bool_op_ex_union     = bool_op_union,
-      bool_op_ex_inters    = bool_op_inters,
-      bool_op_ex_diff      = bool_op_diff,
-      bool_op_ex_symdiff   = bool_op_symdiff,
-      bool_op_ex_cut       = bool_op_cut,
-      bool_op_ex_slice     = bool_op_slice,
-      bool_op_ex_slice_inside,            // like bool_op_slice, but leaves only the contour pieces inside of the cut path
-      bool_op_ex_slice_outside,           // like bool_op_slice, but leaves only the contour pieces outside of the cut path
-      bool_op_ex_slice_rmv_inner,         // like bool_op_ex_slice, but remove inner contours
-      bool_op_ex_slice_inside_rmv_inner,  // like bool_op_ex_slice_inside, but remove inner contours
-      bool_op_ex_slice_outside_rmv_inner, // like bool_op_ex_slice_outside, but remove inner contours
-	  bool_op_ex_count
+    enum bool_op_ex {
+        bool_op_ex_union     = bool_op_union,
+        bool_op_ex_inters    = bool_op_inters,
+        bool_op_ex_diff      = bool_op_diff,
+        bool_op_ex_symdiff   = bool_op_symdiff,
+        bool_op_ex_cut       = bool_op_cut,
+        bool_op_ex_slice     = bool_op_slice,
+        bool_op_ex_slice_inside,            // like bool_op_slice, but leaves only the contour pieces inside of the cut path
+        bool_op_ex_slice_outside,           // like bool_op_slice, but leaves only the contour pieces outside of the cut path
+        bool_op_ex_count
     };
 
-    inline friend bool_op to_bool_op( bool_op_ex val )
+    inline friend bool_op to_bool_op(bool_op_ex val)
     {
-    	assert( val<=bool_op_ex_slice );
-    	(bool_op) val;
+        assert(val <= bool_op_ex_slice);
+        (bool_op) val;
     }
 
 private:
-    LPEBool(const LPEBool&);
-    LPEBool& operator=(const LPEBool&);
+    LPEBool(const LPEBool &);
+    LPEBool &operator=(const LPEBool &);
 
     OriginalPathParam operand_path;
     EnumParam<bool_op_ex> bool_operation;
     EnumParam<fill_typ> fill_type_this;
     EnumParam<fill_typ> fill_type_operand;
     BoolParam swap_operands;
+    BoolParam rmv_inner;
 };
 
 }; //namespace LivePathEffect

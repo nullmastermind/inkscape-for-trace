@@ -4,14 +4,32 @@
 /*
  * Keep in order of:
  *   General -> Specific
- *   Order of default appearance
- *     Top -> Bottom (e.g. Selector Tool, Node Tool, ...)
- *     Left -> Right
+ *   Order of appearance in widget tree.
+ *   See GtkInspector
+ *     GTK_DEBUG=interactive ~/path_to_gtk3/bin/inkscape
  *
  * We need a standardized naming scheme.
+ *
+ * As of Gtk 3.20, you cannot use widget names.
  */
 
-/* Lightest to darkest based on linear rgb */
+/* Standard theme based colors. Prefer these.
+ *
+ * @theme_bg_color
+ * @theme_fg_color
+ * @theme_base_color
+ * @theme_text_color
+ * @theme_selected_bg_color
+ * @theme_selected_fg_color
+ * @theme_tooltip_bg_color
+ * @theme_tooltip_fg_color
+ *
+ */
+
+
+/* Our own custom shades... better not to use.
+ * Lightest to darkest based on linear rgb.
+ */
 @define-color bg_color0  #ffffff; /* White */
 @define-color bg_color05 #f8f8f8; /* Slightly off white */
 @define-color bg_color1  #f0f0f0;
@@ -23,16 +41,41 @@
 @define-color bg_color7  #636363;
 @define-color bg_color8  #000000; /* Black */
 
-GtkWidget {
+/* 'GtkWidget' for Gtk  <= 3.18   */
+/* 'widget'    for Gtk  <= 3.19.2 */   
+GtkWidget, widget {
 /*    font-size: 12pt; */
 }
 
-SPRuler {
-    background-color: @bg_color05;
+GtkSpinButton {
+    padding: 0;
 }
 
+spinbutton {
+    padding: 0;
+}
+
+GtkSpinButton.entry {
+    padding-left: 2px;
+}
+
+spinbutton.entry {
+    padding-left: 2px;
+}
+
+SPRuler {
+    background-color: @theme_bg_color;
+    color:            @theme_fg_color;
+}
+
+ruler-widget {
+    background-color: @theme_bg_color;
+    color:            @theme_fg_color;
+}
+
+/* The actual canvas (Inkscape's drawing area). */
 SPCanvas {
-    background-color: @bg_color0;
+    background-color: white;
 }
 
 combobox window.popup scrolledwindow treeview separator {
@@ -49,7 +92,7 @@ combobox window.popup scrolledwindow treeview separator {
     -GtkComboBox-appears-as-list: true;
 }
 
-#guides_lock {
+#LockGuides {
     padding: 0;
 }
 
