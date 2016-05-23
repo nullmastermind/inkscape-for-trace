@@ -16,9 +16,9 @@
 #include <2geom/elliptical-arc.h>
 #include "knotholder.h"
 #include <boost/optional.hpp>
+#include "ui/tools-switch.h"
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
-
 namespace Inkscape {
 namespace LivePathEffect {
 
@@ -241,6 +241,7 @@ void LPEFilletChamfer::refreshKnots()
 {
     //Find another way to update knots satellites_param.knoth->update_knots(); do the thing
     //but not updat the knot index on node delete
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (tools_isactive(desktop, TOOLS_NODES)) {
         tools_switch(desktop, TOOLS_SELECT);
         tools_switch(desktop, TOOLS_NODES);
@@ -420,8 +421,8 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
             pointwise.setPathVector(pathv);
             pointwise.setSatellites(satellites);
         }
-        satellites_param.setPointwise(pointwise);
         refreshKnots();
+        satellites_param.setPointwise(pointwise);
     } else {
         g_warning("LPE Fillet can only be applied to shapes (not groups).");
     }
