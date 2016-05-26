@@ -61,26 +61,25 @@ void SatellitesArrayParam::setEffectType(EffectType et)
     _effectType = et;
 }
 
-void SatellitesArrayParam::setPathUpdate(bool path_update)
-{
-    _path_update = path_update;
-}
-
 void SatellitesArrayParam::setHelperSize(int hs)
 {
     _helper_size = hs;
     updateCanvasIndicators();
 }
-bool SatellitesArrayParam::validData()
+bool SatellitesArrayParam::validData(size_t index,size_t subindex)
 {
-    if (_path_update) { return false;}
-    return _last_pointwise.getPathVector().nodes().size() == _last_pointwise.getTotalSatellites();
+    if(!_last_pointwise.getPathVector().size() > index){
+        return false;
+    }
+    if(!_last_pointwise.getPathVector()[index].size_closed() > subindex){
+        return false;
+    }
+    return true; //_last_pointwise.getPathVector().nodes().size() == _last_pointwise.getTotalSatellites();
 }
+
 void SatellitesArrayParam::updateCanvasIndicators(bool mirror)
 {
-    if (!validData()) {
-        return;
-    }
+
     if(!_hp.empty()) {
         _hp.clear();
     }
@@ -94,6 +93,9 @@ void SatellitesArrayParam::updateCanvasIndicators(bool mirror)
     if (_effectType == FILLET_CHAMFER) {
         for (size_t i = 0; i < _vector.size(); ++i) {
             for (size_t j = 0; j < _vector[i].size(); ++j) {
+                if (!validData(i, j)) {
+                    return;
+                }
                 if (_vector[i][j].hidden || //Ignore if hidden
                     (!_vector[i][j].has_mirror && mirror == true) || //Ignore if not have mirror and we are in mirror loop
                     _vector[i][j].amount == 0 || //no helper in 0 value
@@ -216,12 +218,12 @@ void SatellitesArrayParam::addKnotHolderEntities(KnotHolder *knotholder,
                                                  SPDesktop *desktop,
                                                  SPItem *item, bool mirror)
 {
-    if (!validData()) {
-        return;
-    }
     Geom::PathVector pathv = _last_pointwise.getPathVector();
     for (size_t i = 0; i < _vector.size(); ++i) {
         for (size_t j = 0; j < _vector[i].size(); ++j) {
+            if (!validData(i, j)) {
+                return;
+            }
             if (!_vector[i][j].has_mirror && mirror) {
                 continue;
             }
@@ -282,13 +284,13 @@ void FilletChamferKnotHolderEntity::knot_set(Geom::Point const &p,
         Geom::Point const &/*origin*/,
         guint state)
 {
-    if (! _pparam->validData() || !valid_index(_index)) {
-        return;
-    }
     Geom::Point s = snap_knot_position(p, state);
     size_t subindex = _subindex;
     if (_subindex >= _pparam->_vector[_index].size()) {
         subindex = _subindex - _pparam->_vector[_index].size();
+    }
+    if (!_pparam->validData(_index, subindex)) {
+        return;
     }
     Satellite satellite = _pparam->_vector[_index][subindex];
     Geom::PathVector pathv = _pparam->_last_pointwise.getPathVector();
@@ -329,14 +331,14 @@ void FilletChamferKnotHolderEntity::knot_set(Geom::Point const &p,
 
 Geom::Point FilletChamferKnotHolderEntity::knot_get() const
 {
-    if (! _pparam->validData() || !valid_index(_index)) {
-        this->knot->hide();
-        return Geom::Point(Geom::infinity(), Geom::infinity());
-    }
     Geom::Point tmp_point;
     size_t subindex = _subindex;
     if (_subindex >= _pparam->_vector[_index].size()) {
         subindex = _subindex - _pparam->_vector[_index].size();
+    }
+    if (!_pparam->validData(_index, subindex)) {
+        this->knot->hide();
+        return Geom::Point(Geom::infinity(), Geom::infinity());
     }
     Satellite satellite = _pparam->_vector[_index][subindex];
     Geom::PathVector pathv = _pparam->_last_pointwise.getPathVector();
@@ -380,12 +382,12 @@ Geom::Point FilletChamferKnotHolderEntity::knot_get() const
 
 void FilletChamferKnotHolderEntity::knot_click(guint state)
 {
-    if (! _pparam->validData() || !valid_index(_index)) {
-        return;
-    }
     size_t subindex = _subindex;
     if (_subindex >= _pparam->_vector[_index].size()) {
         subindex = _subindex - _pparam->_vector[_index].size();
+    }
+    if (!_pparam->validData(_index, subindex)) {
+        return;
     }
     Geom::PathVector pathv = _pparam->_last_pointwise.getPathVector();
     if (!pathv[_index].closed() && subindex == 0 ||//ignore first satellites on open paths
@@ -471,12 +473,12 @@ void FilletChamferKnotHolderEntity::knot_click(guint state)
 
 void FilletChamferKnotHolderEntity::knot_set_offset(Satellite satellite)
 {
-    if (! _pparam->validData() || !valid_index(_index)) {
-        return;
-    }
     size_t subindex = _subindex;
     if (_subindex >= _pparam->_vector[_index].size()) {
         subindex = _subindex - _pparam->_vector[_index].size();
+    }
+    if (!_pparam->validData(_index, subindex)) {
+        return;
     }
     Geom::PathVector pathv = _pparam->_last_pointwise.getPathVector();
     if (satellite.hidden ||

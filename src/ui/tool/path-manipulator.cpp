@@ -12,7 +12,6 @@
 
 #include "live_effects/lpe-powerstroke.h"
 #include "live_effects/lpe-bspline.h"
-#include "live_effects/lpe-fillet-chamfer.h"
 #include <string>
 #include <sstream>
 #include <deque>
