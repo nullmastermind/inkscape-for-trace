@@ -15,7 +15,7 @@
 #include "live_effects/parameter/enum.h"
 #include "live_effects/parameter/satellitesarray.h"
 #include "live_effects/effect.h"
-#include "helper/geom-pointwise.h"
+#include "helper/geom-pathvectorsatellites.h"
 
 namespace Inkscape {
 namespace LivePathEffect {
@@ -60,7 +60,7 @@ private:
     BoolParam apply_with_radius;
     ScalarParam helper_size;
 
-    Pointwise pointwise;
+    PathVectorSatellites pathVectorSatellites;
     Geom::PathVector _hp;
 
     LPEFilletChamfer(const LPEFilletChamfer &);

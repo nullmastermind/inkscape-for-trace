@@ -12,7 +12,7 @@
  * hours
  *
  *
- * This parameter act as bridge from pointwise class to serialize it as a LPE
+ * This parameter act as bridge from pathVectorSatellites class to serialize it as a LPE
  * parameter
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
@@ -20,7 +20,7 @@
 
 #include "live_effects/parameter/array.h"
 #include "live_effects/effect-enum.h"
-#include "helper/geom-pointwise.h"
+#include "helper/geom-pathvectorsatellites.h"
 #include "knot-holder-entity.h"
 #include <glib.h>
 
@@ -56,7 +56,7 @@ public:
     void param_transform_multiply(Geom::Affine const &postmul, bool /*set*/);
     void setUseDistance(bool use_knot_distance);
     void setEffectType(EffectType et);
-    void setPointwise(Pointwise pointwise);
+    void setPathVectorSatellites(PathVectorSatellites pathVectorSatellites);
     bool validData(size_t index, size_t subindex);
     void set_oncanvas_looks(SPKnotShapeType shape, SPKnotModeType mode, guint32 color);
 
@@ -77,7 +77,7 @@ private:
     int _helper_size;
     bool _use_distance;
     EffectType _effectType;
-    Pointwise _last_pointwise;
+    PathVectorSatellites _last_pathVectorSatellites;
 
 };
 

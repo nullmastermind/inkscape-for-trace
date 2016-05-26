@@ -1,6 +1,6 @@
 /**
  * \file
- * \brief Pointwise a class to manage a vector of satellites per piecewise node
+ * \brief PathVectorSatellites a class to manage a vector of satellites per piecewise node
  */ /*
     * Authors:
     * Jabiertxof
@@ -14,32 +14,31 @@
     * This code is in public domain
     */
 
-#ifndef SEEN_POINTWISE_H
-#define SEEN_POINTWISE_H
+#ifndef SEEN_PATHVECTORSATELLITES_H
+#define SEEN_PATHVECTORSATELLITES_H
 
 #include <helper/geom-satellite.h>
 #include <2geom/path.h>
 #include <2geom/pathvector.h>
-#include <boost/optional.hpp>
 
 /**
- * @brief Pointwise a class to manage a vector of satellites per curve
+ * @brief PathVectorSatellites a class to manage a vector of satellites per curve
  */
 typedef std::vector<std::vector<Satellite> > Satellites;
-class Pointwise {
+class PathVectorSatellites {
 public:
     Geom::PathVector getPathVector() const;
     void setPathVector(Geom::PathVector pathv);
     Satellites getSatellites();
-    size_t getTotalSatellites();
     void setSatellites(Satellites satellites);
+    size_t getTotalSatellites();
     void recalculateForNewPathVector(Geom::PathVector const pathv, Satellite const S);
 private:
     Geom::PathVector _pathvector;
     Satellites _satellites;
 };
 
-#endif //SEEN_POINTWISE_H
+#endif //SEEN_PATHVECTORSATELLITES_H
 /*
   Local Variables:
   mode:c++

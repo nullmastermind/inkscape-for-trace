@@ -14,8 +14,8 @@ ink_common_sources +=	\
 	helper/geom-nodetype.h	\
 	helper/geom-pathstroke.cpp      \
 	helper/geom-pathstroke.h        \
-	helper/geom-pointwise.cpp	\
-	helper/geom-pointwise.h	\
+	helper/geom-pathvectorsatellites.cpp	\
+	helper/geom-pathvectorsatellites.h	\
 	helper/geom-satellite.cpp	\
 	helper/geom-satellite.h	\
 	helper/gnome-utils.cpp	\

@@ -1,6 +1,6 @@
 /**
  * \file
- * \brief Pointwise a class to manage a vector of satellites per piecewise node
+ * \brief PathVectorSatellites a class to manage a vector of satellites per piecewise node
  */ /*
     * Authors:
     * Jabiertxof
@@ -14,28 +14,28 @@
     * This code is in public domain
     */
 
-#include <helper/geom-pointwise.h>
-Geom::PathVector Pointwise::getPathVector() const
+#include <helper/geom-pathvectorsatellites.h>
+Geom::PathVector PathVectorSatellites::getPathVector() const
 {
     return _pathvector;
 }
 
-void Pointwise::setPathVector(Geom::PathVector pathv)
+void PathVectorSatellites::setPathVector(Geom::PathVector pathv)
 {
     _pathvector = pathv;
 }
 
-Satellites Pointwise::getSatellites()
+Satellites PathVectorSatellites::getSatellites()
 {
     return _satellites;
 }
 
-void Pointwise::setSatellites(Satellites satellites)
+void PathVectorSatellites::setSatellites(Satellites satellites)
 {
     _satellites = satellites;
 }
 
-size_t Pointwise::getTotalSatellites()
+size_t PathVectorSatellites::getTotalSatellites()
 {
     size_t counter = 0;
     for (size_t i = 0; i < _satellites.size(); ++i) {
@@ -46,7 +46,7 @@ size_t Pointwise::getTotalSatellites()
     return counter;
 }
 
-void Pointwise::recalculateForNewPathVector(Geom::PathVector const pathv, Satellite const S)
+void PathVectorSatellites::recalculateForNewPathVector(Geom::PathVector const pathv, Satellite const S)
 {
     Satellites satellites;
     for (size_t i = 0; i < pathv.size(); i++) {

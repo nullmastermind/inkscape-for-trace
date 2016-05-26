@@ -14,7 +14,7 @@ set(helper_SRC
 	geom.cpp
 	geom-nodetype.cpp
 	geom-pathstroke.cpp
-	geom-pointwise.cpp
+	geom-pathvectorsatellites.cpp
 	geom-satellite.cpp
 	gnome-utils.cpp
 	pixbuf-ops.cpp
@@ -34,7 +34,7 @@ set(helper_SRC
 	geom-curves.h
 	geom-nodetype.h
 	geom-pathstroke.h
-	geom-pointwise.h
+	geom-pathvectorsatellites.h
 	geom-satellite.h
 	geom.h
 	gnome-utils.h
