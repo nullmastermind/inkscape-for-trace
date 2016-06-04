@@ -99,6 +99,7 @@ set(ui_SRC
 	dialog/print-colors-preview-dialog.cpp
 	dialog/print.cpp
 	dialog/spellcheck.cpp
+        dialog/styledialog.cpp
 	dialog/svg-fonts-dialog.cpp
 	dialog/swatches.cpp
 	dialog/symbols.cpp
@@ -240,6 +241,7 @@ set(ui_SRC
 	dialog/print-colors-preview-dialog.h
 	dialog/print.h
 	dialog/spellcheck.h
+        dialog/styledialog.h
 	dialog/svg-fonts-dialog.h
 	dialog/swatches.h
 	dialog/symbols.h
