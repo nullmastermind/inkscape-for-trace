@@ -19,6 +19,7 @@ parts:
   inkscape:
     plugin: cmake
     source: .
+    configflags: ['-DENABLE_BINRELOC=ON']
   snapcraft-wrapper:
     plugin: copy
     files:
