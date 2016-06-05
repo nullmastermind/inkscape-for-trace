@@ -10,6 +10,8 @@ list(APPEND INKSCAPE_INCS ${PROJECT_SOURCE_DIR}
     # generated includes
     ${CMAKE_BINARY_DIR}/include
 )
+# TODO temporary flag
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 # ----------------------------------------------------------------------------
 # Files we include

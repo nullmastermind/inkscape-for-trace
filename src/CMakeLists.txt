@@ -229,7 +229,9 @@ set(inkscape_SRC
 	message-context.cpp
 	message-stack.cpp
 	mod360.cpp
+	object.cpp
 	object-hierarchy.cpp
+	object-set.cpp
 	object-snapper.cpp
 	path-chemistry.cpp
 	persp3d-reference.cpp
@@ -353,7 +355,9 @@ set(inkscape_SRC
 	mod360-test.h
 	mod360.h
 	number-opt-number.h
+	object.h
 	object-hierarchy.h
+	object-set.h
 	object-snapper.h
 	object-test.h
 	path-chemistry.h

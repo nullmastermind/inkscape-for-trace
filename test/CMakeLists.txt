@@ -14,7 +14,6 @@ set_source_files_properties(
 		${CMAKE_BINARY_DIR}/src/inkscape-version.cpp
 		PROPERTIES GENERATED TRUE)
 
-# include_directories(${CMAKE_CURRENT_BINARY_DIR}/__/src)
 include_directories(${CMAKE_BINARY_DIR}/src)
 
 add_executable(unittest
@@ -23,9 +22,9 @@ add_executable(unittest
 	src/attributes-test.cpp
 	src/color-profile-test.cpp
 	src/dir-util-test.cpp
+		src/object-test.cpp
+	src/object-set-test.cpp
 )
-
-target_link_libraries(unittest inkscape_base)
 
 add_dependencies(unittest inkscape_version)
 
@@ -37,9 +36,7 @@ endif()
 
 target_link_libraries(unittest
 	gmock_main
-
-	# order from automake
-	#sp_LIB
+	inkscape_base
 
 	#inkscape_LIB
 	#sp_LIB # annoying, we need both!
@@ -63,5 +60,3 @@ target_link_libraries(unittest
 add_test(BaseTest ${EXECUTABLE_OUTPUT_PATH}/unittest)
 
 add_dependencies(check unittest)
-
-#
