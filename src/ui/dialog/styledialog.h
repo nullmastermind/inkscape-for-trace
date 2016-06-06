@@ -40,6 +40,7 @@ public:
 
 private:
     void _styleButton( Gtk::Button& btn, char const* iconName, char const* tooltip);
+    std::string _setClassAttribute(std::vector<SPObject*>);
 
     class ModelColumns : public Gtk::TreeModel::ColumnRecord
     {

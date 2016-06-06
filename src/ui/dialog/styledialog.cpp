@@ -1,3 +1,14 @@
+/** @file
+ * @brief A dialog for CSS selectors
+ */
+/* Authors:
+ *   Kamalpreet Kaur Grewal
+ *
+ * Copyright (C) Kamalpreet Kaur Grewal 2016 <grewalkamal005@gmail.com>
+ *
+ * Released under GNU GPL, read the file 'COPYING' for more information
+ */
+
 #include "styledialog.h"
 #include "widgets/icon.h"
 #include "verbs.h"
@@ -8,6 +19,13 @@ namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
+/**
+ * @brief StyleDialog::_styleButton
+ * @param btn
+ * @param iconName
+ * @param tooltip
+ * This function sets the style of '+' and '-' buttons at the bottom of dialog.
+ */
 void StyleDialog::_styleButton(Gtk::Button& btn, char const* iconName,
                                char const* tooltip)
 {
@@ -68,6 +86,11 @@ void StyleDialog::setDesktop( SPDesktop* desktop )
     _desktop = Panel::getDesktop();
 }
 
+/**
+ * @brief StyleDialog::_addSelector
+ * This function is the slot to the signal emitted when '+' at the bottom of
+ * the dialog is clicked.
+ */
 void StyleDialog::_addSelector()
 {
     Gtk::TreeModel::Row row = *(_store->append());
@@ -81,7 +104,18 @@ void StyleDialog::_addSelector()
     Gtk::Entry *textEditPtr = manage ( new Gtk::Entry() );
     textDialogPtr->add_button("Add", Gtk::RESPONSE_OK);
     textDialogPtr->get_vbox()->pack_start(*textEditPtr, Gtk::PACK_SHRINK);
-    textEditPtr->set_text("Class1");
+
+    /**
+     * By default, the entrybox contains 'Class1' as text. However, if object(s)
+     * is(are) selected and user clicks '+' at the bottom of dialog, the
+     * entrybox will have the id(s) of the selected objects as text.
+     */
+    if (_desktop->selection->isEmpty())
+        textEditPtr->set_text("Class1");
+    else {
+        std::vector<SPObject*> selected = _desktop->getSelection()->list();
+        textEditPtr->set_text(_setClassAttribute(selected));
+    }
 
     textDialogPtr->set_size_request(200, 100);
     textDialogPtr->show_all();
@@ -99,13 +133,46 @@ void StyleDialog::_addSelector()
         break;
     }
 
+    /**
+     * The 'class' attribute of the selected objects is set to the text that
+     * the user sets in the entrybox. If the attribute does not exist, it is
+     * created. In case the attribute already has a value, the new value entered
+     * is appended to the values.
+     */
     if (_desktop->selection) {
         std::vector<SPObject*> selected = _desktop->getSelection()->list();
         for (int i = 0; i < selected.size(); ++i ) {
             SPObject *obj = selected.at(i);
-            obj->setAttribute("class", textEditPtr->get_text());
+            const char *classExists = obj->getAttribute("class");
+
+            if (classExists) {
+                if (strlen(classExists) == 0)
+                    obj->setAttribute("class", textEditPtr->get_text());
+                else
+                    obj->setAttribute("class", std::string(classExists) + " " +
+                                      textEditPtr->get_text());
+            }
+            else {
+                obj->setAttribute("class", textEditPtr->get_text());
+            }
         }
     }
+}
+
+/**
+ * @brief StyleDialog::_setClassAttribute
+ * @param sel
+ * @return This function returns the ids of objects selected which are passed
+ * to entrybox.
+ */
+std::string StyleDialog::_setClassAttribute(std::vector<SPObject*> sel)
+{
+    std::string str = "";
+    for (int i = 0; i < sel.size(); ++i ) {
+        SPObject *obj = sel.at(i);
+        str = str + " " + std::string(obj->getId());
+    }
+    return str;
 }
 
 } // namespace Dialog
