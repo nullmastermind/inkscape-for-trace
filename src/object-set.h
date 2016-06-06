@@ -12,7 +12,6 @@
 #ifndef INKSCAPE_PROTOTYPE_OBJECTSET_H
 #define INKSCAPE_PROTOTYPE_OBJECTSET_H
 
-#include "object.h"
 #include <string>
 #include <unordered_map>
 #include <boost/multi_index_container.hpp>
@@ -20,38 +19,39 @@
 #include <boost/multi_index/sequenced_index.hpp>
 #include <boost/multi_index/hashed_index.hpp>
 #include <sigc++/connection.h>
+#include "sp-object.h"
 
 struct hashed{};
 
 typedef boost::multi_index_container<
-        Object*,
+        SPObject*,
         boost::multi_index::indexed_by<
                 boost::multi_index::sequenced<>,
                 boost::multi_index::hashed_unique<
                         boost::multi_index::tag<hashed>,
-                        boost::multi_index::identity<Object*>>
+                        boost::multi_index::identity<SPObject*>>
         >> multi_index_container;
 
 class ObjectSet {
 public:
     ObjectSet() {};
     ~ObjectSet();
-    bool add(Object* object);
-    bool remove(Object* object);
-    bool contains(Object* object);
+    bool add(SPObject* object);
+    void remove(SPObject* object);
+    bool contains(SPObject* object);
     void clear();
     int size();
 
 private:
-    void _add(Object* object);
-    void _remove(Object* object);
-    bool _anyAncestorIsInSet(Object *object);
-    void _removeDescendantsFromSet(Object *object);
-    void _removeAncestorsFromSet(Object *object);
-    Object *_getMutualAncestor(Object *object);
+    void _add(SPObject* object);
+    void _remove(SPObject* object);
+    bool _anyAncestorIsInSet(SPObject *object);
+    void _removeDescendantsFromSet(SPObject *object);
+    void _removeAncestorsFromSet(SPObject *object);
+    SPObject *_getMutualAncestor(SPObject *object);
 
     multi_index_container container;
-    std::unordered_map<Object*, sigc::connection> releaseConnections;
+    std::unordered_map<SPObject*, sigc::connection> releaseConnections;
 };
 
 
