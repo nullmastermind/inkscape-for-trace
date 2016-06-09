@@ -211,11 +211,11 @@ add_custom_target(clean-all
 
 #-----------------------------------------------------------------------------
 
-add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND})
+#add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND})
 
 if(WITH_GTEST)
     enable_testing()
-    add_subdirectory(test EXCLUDE_FROM_ALL)
+    add_subdirectory(testfiles EXCLUDE_FROM_ALL)
 endif()
 
 # Canonicalize the flags to speed up recompilation using ccache/etc.
