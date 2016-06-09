@@ -9,11 +9,10 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 #include <gtest/gtest.h>
+#include <doc-per-case-test.h>
 #include "object-set.h"
-#include "document.h"
-#include "xml/simple-document.h"
 
-class ObjectSetTest: public testing::Test {
+class ObjectSetTest: public DocPerCaseTest {
 public:
     ObjectSetTest() {
         A = new SPObject();
@@ -71,10 +70,7 @@ TEST_F(ObjectSetTest, Basics) {
 
 TEST_F(ObjectSetTest, Autoremoving) {
     SPObject* Q = new SPObject();
-    // TODO temporary
-    SPDocument *document = new SPDocument();
-    Inkscape::XML::Node *rroot = new Inkscape::XML::SimpleDocument();
-    Q->invoke_build(document, rroot, 0);
+    Q->invoke_build(_doc, _doc->rroot, 1);
     set.add(Q);
     EXPECT_TRUE(set.contains(Q));
     EXPECT_EQ(1, set.size());
@@ -172,10 +168,7 @@ TEST_F(ObjectSetTest, Removing) {
 
 TEST_F(ObjectSetTest, TwoSets) {
     SPObject* Q = new SPObject();
-    // TODO temporary
-    SPDocument *document = new SPDocument();
-    Inkscape::XML::Node *rroot = new Inkscape::XML::SimpleDocument();
-    Q->invoke_build(document, rroot, 0);
+    Q->invoke_build(_doc, _doc->rroot, 1);
     A->attach(B, nullptr);
     A->attach(Q, nullptr);
     set.add(A);

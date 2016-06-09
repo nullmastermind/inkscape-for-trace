@@ -229,7 +229,6 @@ set(inkscape_SRC
 	message-context.cpp
 	message-stack.cpp
 	mod360.cpp
-	object.cpp
 	object-hierarchy.cpp
 	object-set.cpp
 	object-snapper.cpp
@@ -355,7 +354,6 @@ set(inkscape_SRC
 	mod360-test.h
 	mod360.h
 	number-opt-number.h
-	object.h
 	object-hierarchy.h
 	object-set.h
 	object-snapper.h
