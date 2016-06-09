@@ -1,3 +1,13 @@
+/*
+ * Multiindex container for selection
+ *
+ * Authors:
+ *   Adrian Boguszewski
+ *
+ * Copyright (C) 2016 Adrian Boguszewski
+ *
+ * Released under GNU GPL, read the file 'COPYING' for more information
+ */
 #include <gtest/gtest.h>
 #include "object-set.h"
 #include "document.h"

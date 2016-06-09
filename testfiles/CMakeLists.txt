@@ -1,9 +1,6 @@
 # -----------------------------------------------------------------------------
 #
 # -----------------------------------------------------------------------------
-
-set(CMAKE_CTEST_COMMAND ctest -V)
-
 add_subdirectory(${GMOCK_DIR} ${CMAKE_BINARY_DIR}/gmock)
 
 include_directories(SYSTEM ${GMOCK_DIR}/gtest/include
@@ -16,17 +13,12 @@ set_source_files_properties(
 
 include_directories(${CMAKE_BINARY_DIR}/src)
 
-add_executable(unittest
-	unittest.cpp
-	doc-per-case-test.cpp
-	src/attributes-test.cpp
-	src/color-profile-test.cpp
-	src/dir-util-test.cpp
-		src/object-test.cpp
-	src/object-set-test.cpp
-)
-
-add_dependencies(unittest inkscape_version)
+set(TEST_SOURCES
+	attributes-test
+	color-profile-test
+	dir-util-test
+	object-test
+	object-set-test)
 
 set (_optional_unittest_libs )
 
@@ -34,14 +26,12 @@ if (NOT "${WITH_EXT_GDL}")
 	list (APPEND _optional_unittest_libs "gdl_LIB")
 endif()
 
-target_link_libraries(unittest
+set(TEST_LIBS
 	gmock_main
 	inkscape_base
-
 	#inkscape_LIB
 	#sp_LIB # annoying, we need both!
 	nrtype_LIB # annoying, we need both!
-
 	croco_LIB
 	avoid_LIB
 	${_optional_unittest_libs}
@@ -53,10 +43,13 @@ target_link_libraries(unittest
 	depixelize_LIB
 	util_LIB
 	gc_LIB
-
 	${INKSCAPE_LIBS}
 )
 
-add_test(BaseTest ${EXECUTABLE_OUTPUT_PATH}/unittest)
-
-add_dependencies(check unittest)
+foreach(source ${TEST_SOURCES})
+	add_executable(${source} src/${source}.cpp unittest.cpp doc-per-case-test.cpp)
+	target_link_libraries(${source} ${TEST_LIBS})
+	add_test(NAME ${source} COMMAND ${EXECUTABLE_OUTPUT_PATH}/${source})
+	add_dependencies(${source} inkscape_version)
+	add_dependencies(check ${source})
+endforeach()
