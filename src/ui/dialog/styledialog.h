@@ -41,6 +41,8 @@ public:
 private:
     void _styleButton( Gtk::Button& btn, char const* iconName, char const* tooltip);
     std::string _setClassAttribute(std::vector<SPObject*>);
+    std::map<std::string, std::string>_selectorMap;
+    void _populateTree(std::map<std::string, std::string>);
 
     class ModelColumns : public Gtk::TreeModel::ColumnRecord
     {

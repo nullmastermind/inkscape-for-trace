@@ -14,6 +14,10 @@
 #include "verbs.h"
 #include "sp-object.h"
 #include "selection.h"
+#include "xml/attribute-record.h"
+
+using Inkscape::Util::List;
+using Inkscape::XML::AttributeRecord;
 
 namespace Inkscape {
 namespace UI {
@@ -97,8 +101,8 @@ void StyleDialog::_addSelector()
 
     /**
      * On clicking '+' button, an entrybox with default text opens up. If an
-     * object is already selected, 'class' attribute with value in the entry
-     * is added to the selected object.
+     * object is already selected, a selector with value in the entry
+     * is added to a new style element.
      */
     Gtk::Dialog *textDialogPtr =  new Gtk::Dialog();
     Gtk::Entry *textEditPtr = manage ( new Gtk::Entry() );
@@ -110,7 +114,7 @@ void StyleDialog::_addSelector()
      * is(are) selected and user clicks '+' at the bottom of dialog, the
      * entrybox will have the id(s) of the selected objects as text.
      */
-    if (_desktop->selection->isEmpty())
+    if ( _desktop->selection->isEmpty() )
         textEditPtr->set_text("Class1");
     else {
         std::vector<SPObject*> selected = _desktop->getSelection()->list();
@@ -120,13 +124,28 @@ void StyleDialog::_addSelector()
     textDialogPtr->set_size_request(200, 100);
     textDialogPtr->show_all();
     int result = textDialogPtr->run();
+
+    /**
+     * @brief selectorName
+     * This string stores selector name. If '#' or a '.' is present in the
+     * beginning of string, text from entrybox is saved directly as name for
+     * selector. If text like 'red' is written in entrybox, it is prefixed
+     * with a dot.
+     */
+    std::string selectorName = "";
+    if ( textEditPtr->get_text().at(0) == '#' ||
+            textEditPtr->get_text().at(0) == '.' )
+        selectorName = textEditPtr->get_text();
+    else
+        selectorName = "." + textEditPtr->get_text();
+
     static int number = 1;
 
     switch (result) {
     case Gtk::RESPONSE_OK:
         textDialogPtr->hide();
         row[_mColumns._selectorNumber] = number;
-        row[_mColumns._selectorLabel] = textEditPtr->get_text();
+        row[_mColumns._selectorLabel] = selectorName;
         number++;
         break;
     default:
@@ -134,27 +153,49 @@ void StyleDialog::_addSelector()
     }
 
     /**
-     * The 'class' attribute of the selected objects is set to the text that
-     * the user sets in the entrybox. If the attribute does not exist, it is
+     * The selector name objects is set to the text that the user sets in the
+     * entrybox. If the attribute does not exist, it is
      * created. In case the attribute already has a value, the new value entered
      * is appended to the values.
      */
-    if (_desktop->selection) {
+    if ( _desktop->selection ) {
         std::vector<SPObject*> selected = _desktop->getSelection()->list();
-        for (int i = 0; i < selected.size(); ++i ) {
+        std::string selectorValue;
+        for ( unsigned i = 0; i < selected.size(); ++i ) {
             SPObject *obj = selected.at(i);
-            const char *classExists = obj->getAttribute("class");
 
-            if (classExists) {
-                if (strlen(classExists) == 0)
-                    obj->setAttribute("class", textEditPtr->get_text());
-                else
-                    obj->setAttribute("class", std::string(classExists) + " " +
-                                      textEditPtr->get_text());
+            std::string style = std::string(obj->getRepr()->attribute("style"));
+            style = row[_mColumns._selectorLabel] + ";" + style;
+
+            for ( List<AttributeRecord const> iter = obj->getRepr()->attributeList() ;
+                  iter ; ++iter ) {
+                gchar const * property = g_quark_to_string(iter->key);
+                gchar const * value = iter->value;
+
+                if ( std::string(property) == "style" )
+                {
+                    selectorValue = row[_mColumns._selectorLabel] + "{" +
+                            "\n" + std::string(value) + "\n" + "}";
+                }
             }
-            else {
-                obj->setAttribute("class", textEditPtr->get_text());
-            }
+
+            /**
+             * @brief root
+             * A new style element is added to the document with value obtained
+             * from selectorValue above.
+             */
+            Inkscape::XML::Node *root = obj->getRepr()->document()->root();
+            Inkscape::XML::Node *newChild = obj->getRepr()->document()
+                    ->createElement("svg:style");
+
+            Inkscape::XML::Node *smallChildren = obj->getRepr()->document()
+                    ->createTextNode(selectorValue.c_str());
+
+            newChild->appendChild(smallChildren);
+            Inkscape::GC::release(smallChildren);
+
+            root->addChild(newChild, NULL);
+            Inkscape::GC::release(newChild);
         }
     }
 }
@@ -168,11 +209,28 @@ void StyleDialog::_addSelector()
 std::string StyleDialog::_setClassAttribute(std::vector<SPObject*> sel)
 {
     std::string str = "";
-    for (int i = 0; i < sel.size(); ++i ) {
+    for (unsigned i = 0; i < sel.size(); ++i) {
         SPObject *obj = sel.at(i);
-        str = str + " " + std::string(obj->getId());
+        str = str + "#" + std::string(obj->getId()) + " ";
     }
     return str;
+}
+
+/**
+ * @brief StyleDialog::_populateTree
+ * @param _selMap
+ * This function will populate the treeview with selectors available in the
+ * stylesheet. Not used yet.
+ */
+void StyleDialog::_populateTree(std::map<std::string, std::string> _selMap)
+{
+    std::map<std::string, std::string> _selectMap = _selMap;
+
+    for(std::map<std::string, std::string>::iterator it = _selectMap.begin();
+        it != _selectMap.end(); ++it) {
+        Gtk::TreeModel::Row row = *(_store->append());
+        row[_mColumns._selectorLabel] = it->first;
+    }
 }
 
 } // namespace Dialog
