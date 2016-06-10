@@ -19,6 +19,7 @@
 #include <gtkmm/dialog.h>
 
 #include "desktop.h"
+#include "document.h"
 
 namespace Inkscape {
 namespace UI {
@@ -48,8 +49,7 @@ private:
     {
     public:
         ModelColumns()
-        { add(_selectorNumber); add(_selectorLabel); }
-        Gtk::TreeModelColumn<int> _selectorNumber;
+        { add(_selectorLabel); }
         Gtk::TreeModelColumn<Glib::ustring> _selectorLabel;
     };
 

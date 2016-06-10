@@ -59,7 +59,6 @@ StyleDialog::StyleDialog() :
 
     _store = Gtk::ListStore::create(_mColumns);
     _treeView.set_model(_store);
-    _treeView.append_column("Selector Number", _mColumns._selectorNumber);
     _treeView.append_column("Selector Name", _mColumns._selectorLabel);
 
     Gtk::Button* create = manage( new Gtk::Button() );
@@ -77,6 +76,32 @@ StyleDialog::StyleDialog() :
 
     SPDesktop* targetDesktop = getDesktop();
     setDesktop(targetDesktop);
+
+    /**
+     * @brief document
+     * If an existing document is opened, its XML representation is obtained
+     * and if it contains any style element with a style selector, the selector
+     * name and its value is extracted and saved to a map. This map is then used
+     * to populate the treeview with the already existing selectors.
+     */
+    SPDocument * document = targetDesktop->doc();
+    unsigned num = document->getReprRoot()->childCount();
+
+    std::string key, value;
+    std::map<std::string, std::string> selMap;
+
+    for ( unsigned i = 0; i < num; ++i )
+    {
+        if ( std::string(document->getReprRoot()->nthChild(i)->name()) == "svg:style" )
+        {
+            char *str = strdup(document->getReprRoot()->nthChild(i)->firstChild()
+                               ->content());
+            key = strtok(str, " ");
+            value = strtok(NULL, "");
+            selMap[key] = value;
+        }
+    }
+    _populateTree(selMap);
 }
 
 StyleDialog::~StyleDialog()
@@ -134,19 +159,15 @@ void StyleDialog::_addSelector()
      */
     std::string selectorName = "";
     if ( textEditPtr->get_text().at(0) == '#' ||
-            textEditPtr->get_text().at(0) == '.' )
+         textEditPtr->get_text().at(0) == '.' )
         selectorName = textEditPtr->get_text();
     else
         selectorName = "." + textEditPtr->get_text();
 
-    static int number = 1;
-
     switch (result) {
     case Gtk::RESPONSE_OK:
         textDialogPtr->hide();
-        row[_mColumns._selectorNumber] = number;
         row[_mColumns._selectorLabel] = selectorName;
-        number++;
         break;
     default:
         break;
@@ -167,8 +188,8 @@ void StyleDialog::_addSelector()
             std::string style = std::string(obj->getRepr()->attribute("style"));
             style = row[_mColumns._selectorLabel] + ";" + style;
 
-            for ( List<AttributeRecord const> iter = obj->getRepr()->attributeList() ;
-                  iter ; ++iter ) {
+            for ( List<AttributeRecord const> iter = obj->getRepr()->attributeList();
+                  iter; ++iter ) {
                 gchar const * property = g_quark_to_string(iter->key);
                 gchar const * value = iter->value;
 
@@ -196,6 +217,8 @@ void StyleDialog::_addSelector()
 
             root->addChild(newChild, NULL);
             Inkscape::GC::release(newChild);
+
+            _selectorMap[selectorName] = selectorValue;
         }
     }
 }
@@ -209,7 +232,7 @@ void StyleDialog::_addSelector()
 std::string StyleDialog::_setClassAttribute(std::vector<SPObject*> sel)
 {
     std::string str = "";
-    for (unsigned i = 0; i < sel.size(); ++i) {
+    for ( unsigned i = 0; i < sel.size(); ++i ) {
         SPObject *obj = sel.at(i);
         str = str + "#" + std::string(obj->getId()) + " ";
     }
@@ -219,15 +242,15 @@ std::string StyleDialog::_setClassAttribute(std::vector<SPObject*> sel)
 /**
  * @brief StyleDialog::_populateTree
  * @param _selMap
- * This function will populate the treeview with selectors available in the
- * stylesheet. Not used yet.
+ * This function populates the treeview with selectors available in the
+ * stylesheet.
  */
 void StyleDialog::_populateTree(std::map<std::string, std::string> _selMap)
 {
     std::map<std::string, std::string> _selectMap = _selMap;
 
-    for(std::map<std::string, std::string>::iterator it = _selectMap.begin();
-        it != _selectMap.end(); ++it) {
+    for( std::map<std::string, std::string>::iterator it = _selectMap.begin();
+         it != _selectMap.end(); ++it ) {
         Gtk::TreeModel::Row row = *(_store->append());
         row[_mColumns._selectorLabel] = it->first;
     }
