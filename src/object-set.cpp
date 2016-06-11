@@ -9,6 +9,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <sigc++/sigc++.h>
 #include "object-set.h"
 
 bool ObjectSet::add(SPObject* object) {
@@ -27,24 +28,21 @@ bool ObjectSet::add(SPObject* object) {
     return true;
 }
 
-void ObjectSet::remove(SPObject* object) {
+bool ObjectSet::remove(SPObject* object) {
     // object is the top of subtree
     if (contains(object)) {
         _remove(object);
-        // TODO
-//        return true;
+        return true;
     }
 
     // any ancestor of object is in the set
     if (_anyAncestorIsInSet(object)) {
         _removeAncestorsFromSet(object);
-        // TODO
-//        return true;
+        return true;
     }
 
     // no object nor any parent in the set
-    // TODO
-//    return false;
+    return false;
 }
 
 bool ObjectSet::contains(SPObject* object) {
@@ -92,7 +90,7 @@ void ObjectSet::_remove(SPObject *object) {
 }
 
 void ObjectSet::_add(SPObject *object) {
-    releaseConnections[object] = object->connectRelease(sigc::mem_fun(*this, &ObjectSet::remove));
+    releaseConnections[object] = object->connectRelease(sigc::hide_return(sigc::mem_fun(*this, &ObjectSet::remove)));
     container.push_back(object);
 }
 

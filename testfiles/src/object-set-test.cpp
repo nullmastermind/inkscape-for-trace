@@ -108,10 +108,8 @@ TEST_F(ObjectSetTest, AdvancedDescendants) {
     C->attach(G, nullptr);
     C->attach(H, nullptr);
     set.add(A);
-//    bool resultF = set.remove(F);
-//    EXPECT_TRUE(resultF);
-    // TODO temporary
-    set.remove(F);
+    bool resultF = set.remove(F);
+    EXPECT_TRUE(resultF);
     EXPECT_EQ(4, set.size());
     EXPECT_FALSE(set.contains(F));
     EXPECT_TRUE(set.contains(B));
@@ -133,34 +131,24 @@ TEST_F(ObjectSetTest, Removing) {
     C->attach(F, nullptr);
     C->attach(G, nullptr);
     C->attach(H, nullptr);
-//    bool removeH = set.remove(H);
-//    EXPECT_FALSE(removeH);
-    // TODO temporary
-    set.remove(H);
+    bool removeH = set.remove(H);
+    EXPECT_FALSE(removeH);
     set.add(A);
-//    bool removeX = set.remove(X);
-//    EXPECT_TRUE(removeX);
-    // TODO temporary
-    set.remove(X);
+    bool removeX = set.remove(X);
+    EXPECT_TRUE(removeX);
     EXPECT_EQ(2, set.size());
     EXPECT_TRUE(set.contains(B));
     EXPECT_TRUE(set.contains(C));
     EXPECT_FALSE(set.contains(X));
     EXPECT_FALSE(set.contains(A));
-//    bool removeX2 = set.remove(X);
-//    EXPECT_FALSE(removeX2);
-    // TODO temporary
-    set.remove(X);
+    bool removeX2 = set.remove(X);
+    EXPECT_FALSE(removeX2);
     EXPECT_EQ(2, set.size());
-//    bool removeA = set.remove(A);
-//    EXPECT_FALSE(removeA);
-    // TODO temporary
-    set.remove(A);
+    bool removeA = set.remove(A);
+    EXPECT_FALSE(removeA);
     EXPECT_EQ(2, set.size());
-//    bool removeC = set.remove(C);
-//    EXPECT_TRUE(removeC);
-    // TODO temporary
-    set.remove(C);
+    bool removeC = set.remove(C);
+    EXPECT_TRUE(removeC);
     EXPECT_EQ(1, set.size());
     EXPECT_TRUE(set.contains(B));
     EXPECT_FALSE(set.contains(C));

@@ -37,7 +37,7 @@ public:
     ObjectSet() {};
     ~ObjectSet();
     bool add(SPObject* object);
-    void remove(SPObject* object);
+    bool remove(SPObject* object);
     bool contains(SPObject* object);
     void clear();
     int size();
