@@ -3,17 +3,17 @@
 # This file is distributed under the same license as the Inkscape package.
 # Copyright (C) 2001, 2007, 2008, 2009 Free Software Foundation, Inc.
 #
-#: ../src/ui/dialog/clonetiler.cpp:1010
 # Yuri Syrota <rasta@renome.rovno.ua>, 2000.
 # Maxim Dziumanenko <dziumanenko@gmail.com>, 2004-2007.
 # Alex <pilipchukap@rambler.ru>, 2005.
 # Yuri Chornoivan <yurchor@ukr.net>, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016.
+#: ../src/ui/dialog/clonetiler.cpp:1010
 msgid ""
 msgstr ""
 "Project-Id-Version: uk\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2016-05-14 17:02+0300\n"
-"PO-Revision-Date: 2016-05-14 22:34+0300\n"
+"POT-Creation-Date: 2016-06-02 12:12+0200\n"
+"PO-Revision-Date: 2016-05-29 11:47+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <translation@linux.org.ua>\n"
 "Language: uk\n"
@@ -51,14 +51,14 @@ msgid ""
 "trace bitmaps and much more. We also aim to maintain a thriving user and "
 "developer community by using open, community-oriented development."
 msgstr ""
-"У Inkscape передбачено підтримку багатьох складних можливостей SVG (маркерів, "
-"клонів, накладань із прозорістю тощо) та приділено значну увагу створенню "
-"якомога простішого інтерфейсу. За допомогою цієї програми дуже просто "
-"редагувати розташування вузлів контуру, виконувати складні дії з контуром, "
-"перетворювати растрові зображення на векторні (трасувати зображення) тощо. "
-"Супровід програми здійснюється зацікавленою у цьому спільнотою користувачів "
-"та розробників на основі принципів відкритої розробки із орієнтацією на "
-"потреби спільноти."
+"У Inkscape передбачено підтримку багатьох складних можливостей SVG "
+"(маркерів, клонів, накладань із прозорістю тощо) та приділено значну увагу "
+"створенню якомога простішого інтерфейсу. За допомогою цієї програми дуже "
+"просто редагувати розташування вузлів контуру, виконувати складні дії з "
+"контуром, перетворювати растрові зображення на векторні (трасувати "
+"зображення) тощо. Супровід програми здійснюється зацікавленою у цьому "
+"спільнотою користувачів та розробників на основі принципів відкритої "
+"розробки із орієнтацією на потреби спільноти."
 
 #: ../inkscape.appdata.xml.in.h:5
 msgid "Main application window"
@@ -706,8 +706,7 @@ msgstr "Чорна діра"
 #: ../share/filters/filters.svg.h:279 ../share/filters/filters.svg.h:835
 #: ../share/filters/filters.svg.h:839 ../share/filters/filters.svg.h:843
 #: ../src/extension/internal/filter/morphology.h:76
-#: ../src/extension/internal/filter/morphology.h:203
-#: ../src/filter-enums.cpp:32
+#: ../src/extension/internal/filter/morphology.h:203 ../src/filter-enums.cpp:32
 msgid "Morphology"
 msgstr "Морфологія"
 
@@ -3419,1033 +3418,1033 @@ msgstr "Сукно (растр)"
 msgid "Old paint (bitmap)"
 msgstr "Стара картина (растр)"
 
-#. Symbols: ./MapSymbolsNPS.svg
+#. Symbols: ./AigaSymbols.svg
 #: ../share/symbols/symbols.h:2
-msgctxt "Symbol"
-msgid "United States National Park Service Map Symbols"
-msgstr "Символи карт служб національних парків США"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:3 ../share/symbols/symbols.h:4
-msgctxt "Symbol"
-msgid "Airport"
-msgstr "Аеропорт"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:5 ../share/symbols/symbols.h:6
-msgctxt "Symbol"
-msgid "Amphitheatre"
-msgstr "Амфітеатр"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:7 ../share/symbols/symbols.h:8
-msgctxt "Symbol"
-msgid "Bicycle Trail"
-msgstr "Велосипедна траса"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:9 ../share/symbols/symbols.h:10
-msgctxt "Symbol"
-msgid "Boat Launch"
-msgstr "Місце спуску човнів"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:11 ../share/symbols/symbols.h:12
-msgctxt "Symbol"
-msgid "Boat Tour"
-msgstr "Човновий маршрут"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:13 ../share/symbols/symbols.h:14
-msgctxt "Symbol"
-msgid "Bus Stop"
-msgstr "Автобусна зупинка"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:15 ../share/symbols/symbols.h:16
-msgctxt "Symbol"
-msgid "Campfire"
-msgstr "Місце для багаття"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:17 ../share/symbols/symbols.h:18
-msgctxt "Symbol"
-msgid "Campground"
-msgstr "Майданчик для табору"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:19 ../share/symbols/symbols.h:20
-msgctxt "Symbol"
-msgid "CanoeAccess"
-msgstr "Доступ до каное"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:21 ../share/symbols/symbols.h:22
-msgctxt "Symbol"
-msgid "Crosscountry Ski Trail"
-msgstr "Траса для лижного кросу"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:23 ../share/symbols/symbols.h:24
-msgctxt "Symbol"
-msgid "Downhill Skiing"
-msgstr "Лижний спуск"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:25 ../share/symbols/symbols.h:26
-msgctxt "Symbol"
-msgid "Drinking Water"
-msgstr "Питна вода"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:27 ../share/symbols/symbols.h:28
-#: ../share/symbols/symbols.h:172 ../share/symbols/symbols.h:173
-msgctxt "Symbol"
-msgid "First Aid"
-msgstr "Перша допомога"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:29 ../share/symbols/symbols.h:30
-msgctxt "Symbol"
-msgid "Fishing"
-msgstr "Риболовля"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:31 ../share/symbols/symbols.h:32
-msgctxt "Symbol"
-msgid "Food Service"
-msgstr "Служба харчування"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:33 ../share/symbols/symbols.h:34
-msgctxt "Symbol"
-msgid "Four Wheel Drive Road"
-msgstr "Дорога для чотириколісних машин"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:35 ../share/symbols/symbols.h:36
-msgctxt "Symbol"
-msgid "Gas Station"
-msgstr "Автозаправка"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:37 ../share/symbols/symbols.h:38
-msgctxt "Symbol"
-msgid "Golfing"
-msgstr "Гольф"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:39 ../share/symbols/symbols.h:40
-msgctxt "Symbol"
-msgid "Horseback Riding"
-msgstr "Траса для кінської їзди"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:41 ../share/symbols/symbols.h:42
-msgctxt "Symbol"
-msgid "Hospital"
-msgstr "Лікарня"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:43 ../share/symbols/symbols.h:44
-msgctxt "Symbol"
-msgid "Ice Skating"
-msgstr "Катання на ковзанах"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:45 ../share/symbols/symbols.h:46
-#: ../share/symbols/symbols.h:206 ../share/symbols/symbols.h:207
-msgctxt "Symbol"
-msgid "Information"
-msgstr "Довідкова служба"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:47 ../share/symbols/symbols.h:48
-msgctxt "Symbol"
-msgid "Litter Receptacle"
-msgstr "Сховище нош"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:49 ../share/symbols/symbols.h:50
-msgctxt "Symbol"
-msgid "Lodging"
-msgstr "Кімнати"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:51 ../share/symbols/symbols.h:52
-msgctxt "Symbol"
-msgid "Marina"
-msgstr "Пристань"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:53 ../share/symbols/symbols.h:54
-msgctxt "Symbol"
-msgid "Motorbike Trail"
-msgstr "Траса для мотоциклів"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:55 ../share/symbols/symbols.h:56
-msgctxt "Symbol"
-msgid "Radiator Water"
-msgstr "Вода для опалювання"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:57 ../share/symbols/symbols.h:58
-msgctxt "Symbol"
-msgid "Recycling"
-msgstr "Пункт переробки"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:59 ../share/symbols/symbols.h:60
-#: ../share/symbols/symbols.h:258 ../share/symbols/symbols.h:259
-msgctxt "Symbol"
-msgid "Parking"
-msgstr "Паркувальний майданчик"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:61 ../share/symbols/symbols.h:62
-msgctxt "Symbol"
-msgid "Pets On Leash"
-msgstr "Домашні тварини на повідді"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:63 ../share/symbols/symbols.h:64
-msgctxt "Symbol"
-msgid "Picnic Area"
-msgstr "Місце для пікніків"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:65 ../share/symbols/symbols.h:66
-msgctxt "Symbol"
-msgid "Post Office"
-msgstr "Поштове відділення"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:67 ../share/symbols/symbols.h:68
-msgctxt "Symbol"
-msgid "Ranger Station"
-msgstr "Станція рейнджерів"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:69 ../share/symbols/symbols.h:70
-msgctxt "Symbol"
-msgid "RV Campground"
-msgstr "Майданчик для трейлерів"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:71 ../share/symbols/symbols.h:72
-msgctxt "Symbol"
-msgid "Restrooms"
-msgstr "Туалети"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:73 ../share/symbols/symbols.h:74
-msgctxt "Symbol"
-msgid "Sailing"
-msgstr "Парусний спорт"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:75 ../share/symbols/symbols.h:76
-msgctxt "Symbol"
-msgid "Sanitary Disposal Station"
-msgstr "Станція утилізації відходів"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:77 ../share/symbols/symbols.h:78
-msgctxt "Symbol"
-msgid "Scuba Diving"
-msgstr "Пірнання з аквалангом"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:79 ../share/symbols/symbols.h:80
-msgctxt "Symbol"
-msgid "Self Guided Trail"
-msgstr "Стежка для самостійного огляду"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:81 ../share/symbols/symbols.h:82
-msgctxt "Symbol"
-msgid "Shelter"
-msgstr "Притулок"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:83 ../share/symbols/symbols.h:84
-msgctxt "Symbol"
-msgid "Showers"
-msgstr "Душові"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:85 ../share/symbols/symbols.h:86
-msgctxt "Symbol"
-msgid "Sledding"
-msgstr "Катання на санях"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:87 ../share/symbols/symbols.h:88
-msgctxt "Symbol"
-msgid "SnowmobileTrail"
-msgstr "Траса для снігоходів"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:89 ../share/symbols/symbols.h:90
-msgctxt "Symbol"
-msgid "Stable"
-msgstr "Стайня"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:91 ../share/symbols/symbols.h:92
-msgctxt "Symbol"
-msgid "Store"
-msgstr "Склад"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:93 ../share/symbols/symbols.h:94
-msgctxt "Symbol"
-msgid "Swimming"
-msgstr "Плавання"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:95 ../share/symbols/symbols.h:96
-#: ../share/symbols/symbols.h:162 ../share/symbols/symbols.h:163
-msgctxt "Symbol"
-msgid "Telephone"
-msgstr "Телефон"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:97 ../share/symbols/symbols.h:98
-msgctxt "Symbol"
-msgid "Emergency Telephone"
-msgstr "Телефон виклику служб надзвичайних ситуацій"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:99 ../share/symbols/symbols.h:100
-msgctxt "Symbol"
-msgid "Trailhead"
-msgstr "Початок маршруту"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:101 ../share/symbols/symbols.h:102
-msgctxt "Symbol"
-msgid "Wheelchair Accessible"
-msgstr "Візок"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:103 ../share/symbols/symbols.h:104
-msgctxt "Symbol"
-msgid "Wind Surfing"
-msgstr "Віндсерфінг"
-
-#. Symbols: ./MapSymbolsNPS.svg
-#: ../share/symbols/symbols.h:105
-msgctxt "Symbol"
-msgid "Blank"
-msgstr "Порожньо"
-
-#. Symbols: ./FlowSymbols.svg
-#: ../share/symbols/symbols.h:106
-msgctxt "Symbol"
-msgid "Flow Chart Shapes"
-msgstr "Форми блок-схем"
-
-#. Symbols: ./FlowSymbols.svg
-#: ../share/symbols/symbols.h:107
-msgctxt "Symbol"
-msgid "Process"
-msgstr "Обробляти"
-
-#. Symbols: ./FlowSymbols.svg
-#: ../share/symbols/symbols.h:108
-msgctxt "Symbol"
-msgid "Input/Output"
-msgstr "Вхід/Вихід"
-
-#. Symbols: ./FlowSymbols.svg
-#: ../share/symbols/symbols.h:109
-msgctxt "Symbol"
-msgid "Document"
-msgstr "Документ"
-
-#. Symbols: ./FlowSymbols.svg
-#: ../share/symbols/symbols.h:110
-msgctxt "Symbol"
-msgid "Manual Operation"
-msgstr "Ручна дія"
-
-#. Symbols: ./FlowSymbols.svg
-#: ../share/symbols/symbols.h:111
-msgctxt "Symbol"
-msgid "Preparation"
-msgstr "Підготовка"
-
-#. Symbols: ./FlowSymbols.svg
-#: ../share/symbols/symbols.h:112
-msgctxt "Symbol"
-msgid "Merge"
-msgstr "Об’єднання"
-
-#. Symbols: ./FlowSymbols.svg
-#: ../share/symbols/symbols.h:113
-msgctxt "Symbol"
-msgid "Decision"
-msgstr "Рішення"
-
-#. Symbols: ./FlowSymbols.svg
-#: ../share/symbols/symbols.h:114
-msgctxt "Symbol"
-msgid "Magnetic Tape"
-msgstr "Магнітна стрічка"
-
-#. Symbols: ./FlowSymbols.svg
-#: ../share/symbols/symbols.h:115
-msgctxt "Symbol"
-msgid "Display"
-msgstr "Показ"
-
-#. Symbols: ./FlowSymbols.svg
-#: ../share/symbols/symbols.h:116
-msgctxt "Symbol"
-msgid "Auxiliary Operation"
-msgstr "Допоміжна операція"
-
-#. Symbols: ./FlowSymbols.svg
-#: ../share/symbols/symbols.h:117
-msgctxt "Symbol"
-msgid "Manual Input"
-msgstr "Ручний ввід"
-
-#. Symbols: ./FlowSymbols.svg
-#: ../share/symbols/symbols.h:118
-msgctxt "Symbol"
-msgid "Extract"
-msgstr "Видобування"
-
-#. Symbols: ./FlowSymbols.svg
-#: ../share/symbols/symbols.h:119
-msgctxt "Symbol"
-msgid "Terminal/Interrupt"
-msgstr "Завершення/Переривання"
-
-#. Symbols: ./FlowSymbols.svg
-#: ../share/symbols/symbols.h:120
-msgctxt "Symbol"
-msgid "Punched Card"
-msgstr "Перфокартка"
-
-#. Symbols: ./FlowSymbols.svg
-#: ../share/symbols/symbols.h:121
-msgctxt "Symbol"
-msgid "Punch Tape"
-msgstr "Перфострічка"
-
-#. Symbols: ./FlowSymbols.svg
-#: ../share/symbols/symbols.h:122
-msgctxt "Symbol"
-msgid "Online Storage"
-msgstr "Сховище даних у мережі"
-
-#. Symbols: ./FlowSymbols.svg
-#: ../share/symbols/symbols.h:123
-msgctxt "Symbol"
-msgid "Keying"
-msgstr "Набір"
-
-#. Symbols: ./FlowSymbols.svg
-#: ../share/symbols/symbols.h:124
-msgctxt "Symbol"
-msgid "Sort"
-msgstr "Упорядкування"
-
-#. Symbols: ./FlowSymbols.svg
-#: ../share/symbols/symbols.h:125
-msgctxt "Symbol"
-msgid "Connector"
-msgstr "З’єднання"
-
-#. Symbols: ./FlowSymbols.svg
-#: ../share/symbols/symbols.h:126
-msgctxt "Symbol"
-msgid "Off-Page Connector"
-msgstr "З'єднання поза сторінкою"
-
-#. Symbols: ./FlowSymbols.svg
-#: ../share/symbols/symbols.h:127
-msgctxt "Symbol"
-msgid "Transmittal Tape"
-msgstr "Передавальна стрічка"
-
-#. Symbols: ./FlowSymbols.svg
-#: ../share/symbols/symbols.h:128
-msgctxt "Symbol"
-msgid "Communication Link"
-msgstr "З’єднання для обміну даними"
-
-#. Symbols: ./FlowSymbols.svg
-#: ../share/symbols/symbols.h:129
-msgctxt "Symbol"
-msgid "Collate"
-msgstr "Об’єднання"
-
-#. Symbols: ./FlowSymbols.svg
-#: ../share/symbols/symbols.h:130
-msgctxt "Symbol"
-msgid "Comment/Annotation"
-msgstr "Коментар/Анотація"
-
-#. Symbols: ./FlowSymbols.svg
-#: ../share/symbols/symbols.h:131
-msgctxt "Symbol"
-msgid "Core"
-msgstr "Ядро"
-
-#. Symbols: ./FlowSymbols.svg
-#: ../share/symbols/symbols.h:132
-msgctxt "Symbol"
-msgid "Predefined Process"
-msgstr "Наперед визначений процес"
-
-#. Symbols: ./FlowSymbols.svg
-#: ../share/symbols/symbols.h:133
-msgctxt "Symbol"
-msgid "Magnetic Disk (Database)"
-msgstr "Магнітний диск (база даних)"
-
-#. Symbols: ./FlowSymbols.svg
-#: ../share/symbols/symbols.h:134
-msgctxt "Symbol"
-msgid "Magnetic Drum (Direct Access)"
-msgstr "Магнітний барабан (безпосередній доступ)"
-
-#. Symbols: ./FlowSymbols.svg
-#: ../share/symbols/symbols.h:135
-msgctxt "Symbol"
-msgid "Offline Storage"
-msgstr "Автономне сховище даних"
-
-#. Symbols: ./FlowSymbols.svg
-#: ../share/symbols/symbols.h:136
-msgctxt "Symbol"
-msgid "Logical Or"
-msgstr "Логічне «АБО»"
-
-#. Symbols: ./FlowSymbols.svg
-#: ../share/symbols/symbols.h:137
-msgctxt "Symbol"
-msgid "Logical And"
-msgstr "Логічне «ТА»"
-
-#. Symbols: ./FlowSymbols.svg
-#: ../share/symbols/symbols.h:138
-msgctxt "Symbol"
-msgid "Delay"
-msgstr "Затримка"
-
-#. Symbols: ./FlowSymbols.svg
-#: ../share/symbols/symbols.h:139
-msgctxt "Symbol"
-msgid "Loop Limit Begin"
-msgstr "Початок циклу"
-
-#. Symbols: ./FlowSymbols.svg
-#: ../share/symbols/symbols.h:140
-msgctxt "Symbol"
-msgid "Loop Limit End"
-msgstr "Кінець циклу"
-
-#. Symbols: ./BalloonSymbols.svg
-#: ../share/symbols/symbols.h:141
-msgctxt "Symbol"
-msgid "Word Balloons"
-msgstr "Мовні бульки"
-
-#. Symbols: ./BalloonSymbols.svg
-#: ../share/symbols/symbols.h:142
-msgctxt "Symbol"
-msgid "Thought Balloon"
-msgstr "Булька думок"
-
-#. Symbols: ./BalloonSymbols.svg
-#: ../share/symbols/symbols.h:143
-msgctxt "Symbol"
-msgid "Dream Speaking"
-msgstr "Висловлення мрій"
-
-#. Symbols: ./BalloonSymbols.svg
-#: ../share/symbols/symbols.h:144
-msgctxt "Symbol"
-msgid "Rounded Balloon"
-msgstr "Заокруглена булька"
-
-#. Symbols: ./BalloonSymbols.svg
-#: ../share/symbols/symbols.h:145
-msgctxt "Symbol"
-msgid "Squared Balloon"
-msgstr "Квадрата булька"
-
-#. Symbols: ./BalloonSymbols.svg
-#: ../share/symbols/symbols.h:146
-msgctxt "Symbol"
-msgid "Over the Phone"
-msgstr "Телефоном"
-
-#. Symbols: ./BalloonSymbols.svg
-#: ../share/symbols/symbols.h:147
-msgctxt "Symbol"
-msgid "Hip Balloon"
-msgstr "Булька смутку"
-
-#. Symbols: ./BalloonSymbols.svg
-#: ../share/symbols/symbols.h:148
-msgctxt "Symbol"
-msgid "Circle Balloon"
-msgstr "Кругова булька"
-
-#. Symbols: ./BalloonSymbols.svg
-#: ../share/symbols/symbols.h:149
-msgctxt "Symbol"
-msgid "Exclaim Balloon"
-msgstr "Булька вигуку"
-
-#. Symbols: ./LogicSymbols.svg
-#: ../share/symbols/symbols.h:150
-msgctxt "Symbol"
-msgid "Logic Symbols"
-msgstr "Символи логіки"
-
-#. Symbols: ./LogicSymbols.svg
-#: ../share/symbols/symbols.h:151
-msgctxt "Symbol"
-msgid "Xnor Gate"
-msgstr "Ключ виключне заперечувальне АБО»"
-
-#. Symbols: ./LogicSymbols.svg
-#: ../share/symbols/symbols.h:152
-msgctxt "Symbol"
-msgid "Xor Gate"
-msgstr "Ключ виключне І"
-
-#. Symbols: ./LogicSymbols.svg
-#: ../share/symbols/symbols.h:153
-msgctxt "Symbol"
-msgid "Nor Gate"
-msgstr "Ключ АБО-НІ"
-
-#. Symbols: ./LogicSymbols.svg
-#: ../share/symbols/symbols.h:154
-msgctxt "Symbol"
-msgid "Or Gate"
-msgstr "Ключ АБО"
-
-#. Symbols: ./LogicSymbols.svg
-#: ../share/symbols/symbols.h:155
-msgctxt "Symbol"
-msgid "Nand Gate"
-msgstr "Ключ І-НІ"
-
-#. Symbols: ./LogicSymbols.svg
-#: ../share/symbols/symbols.h:156
-msgctxt "Symbol"
-msgid "And Gate"
-msgstr "Ключ І"
-
-#. Symbols: ./LogicSymbols.svg
-#: ../share/symbols/symbols.h:157
-msgctxt "Symbol"
-msgid "Buffer"
-msgstr "Буфер"
-
-#. Symbols: ./LogicSymbols.svg
-#: ../share/symbols/symbols.h:158
-msgctxt "Symbol"
-msgid "Not Gate"
-msgstr "Ключ НІ"
-
-#. Symbols: ./LogicSymbols.svg
-#: ../share/symbols/symbols.h:159
-msgctxt "Symbol"
-msgid "Buffer Small"
-msgstr "Малий буфер"
-
-#. Symbols: ./LogicSymbols.svg
-#: ../share/symbols/symbols.h:160
-msgctxt "Symbol"
-msgid "Not Gate Small"
-msgstr "Малий ключ НІ"
-
-#. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:161
 msgctxt "Symbol"
 msgid "AIGA Symbol Signs"
 msgstr "Знаки-символи AIGA"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:164 ../share/symbols/symbols.h:165
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:3 ../share/symbols/symbols.h:4
+#: ../share/symbols/symbols.h:281 ../share/symbols/symbols.h:282
+msgctxt "Symbol"
+msgid "Telephone"
+msgstr "Телефон"
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:5 ../share/symbols/symbols.h:6
 msgctxt "Symbol"
 msgid "Mail"
 msgstr "Пошта"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:166 ../share/symbols/symbols.h:167
+#: ../share/symbols/symbols.h:7 ../share/symbols/symbols.h:8
 msgctxt "Symbol"
 msgid "Currency Exchange"
 msgstr "Обмін валют"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:168 ../share/symbols/symbols.h:169
+#: ../share/symbols/symbols.h:9 ../share/symbols/symbols.h:10
 msgctxt "Symbol"
 msgid "Currency Exchange - Euro"
 msgstr "Обмін валют — євро"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:170 ../share/symbols/symbols.h:171
+#: ../share/symbols/symbols.h:11 ../share/symbols/symbols.h:12
 msgctxt "Symbol"
 msgid "Cashier"
 msgstr "Каса"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:174 ../share/symbols/symbols.h:175
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:13 ../share/symbols/symbols.h:14
+#: ../share/symbols/symbols.h:213 ../share/symbols/symbols.h:214
+msgctxt "Symbol"
+msgid "First Aid"
+msgstr "Перша допомога"
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:15 ../share/symbols/symbols.h:16
 msgctxt "Symbol"
 msgid "Lost and Found"
 msgstr "Втрачено і знайдено"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:176 ../share/symbols/symbols.h:177
+#: ../share/symbols/symbols.h:17 ../share/symbols/symbols.h:18
 msgctxt "Symbol"
 msgid "Coat Check"
 msgstr "Гардероб"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:178 ../share/symbols/symbols.h:179
+#: ../share/symbols/symbols.h:19 ../share/symbols/symbols.h:20
 msgctxt "Symbol"
 msgid "Baggage Lockers"
 msgstr "Шафи для зберігання речей"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:180 ../share/symbols/symbols.h:181
+#: ../share/symbols/symbols.h:21 ../share/symbols/symbols.h:22
 msgctxt "Symbol"
 msgid "Escalator"
 msgstr "Ескалатор"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:182 ../share/symbols/symbols.h:183
+#: ../share/symbols/symbols.h:23 ../share/symbols/symbols.h:24
 msgctxt "Symbol"
 msgid "Escalator Down"
 msgstr "Ескалатор вниз"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:184 ../share/symbols/symbols.h:185
+#: ../share/symbols/symbols.h:25 ../share/symbols/symbols.h:26
 msgctxt "Symbol"
 msgid "Escalator Up"
 msgstr "Ескалатор вгору"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:186 ../share/symbols/symbols.h:187
+#: ../share/symbols/symbols.h:27 ../share/symbols/symbols.h:28
 msgctxt "Symbol"
 msgid "Stairs"
 msgstr "Сходи"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:188 ../share/symbols/symbols.h:189
+#: ../share/symbols/symbols.h:29 ../share/symbols/symbols.h:30
 msgctxt "Symbol"
 msgid "Stairs Down"
 msgstr "Сходи вниз"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:190 ../share/symbols/symbols.h:191
+#: ../share/symbols/symbols.h:31 ../share/symbols/symbols.h:32
 msgctxt "Symbol"
 msgid "Stairs Up"
 msgstr "Сходи вгору"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:192 ../share/symbols/symbols.h:193
+#: ../share/symbols/symbols.h:33 ../share/symbols/symbols.h:34
 msgctxt "Symbol"
 msgid "Elevator"
 msgstr "Ліфт"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:194 ../share/symbols/symbols.h:195
+#: ../share/symbols/symbols.h:35 ../share/symbols/symbols.h:36
 msgctxt "Symbol"
 msgid "Toilets - Men"
 msgstr "Чоловічий туалет"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:196 ../share/symbols/symbols.h:197
+#: ../share/symbols/symbols.h:37 ../share/symbols/symbols.h:38
 msgctxt "Symbol"
 msgid "Toilets - Women"
 msgstr "Жіночий туалет"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:198 ../share/symbols/symbols.h:199
+#: ../share/symbols/symbols.h:39 ../share/symbols/symbols.h:40
 msgctxt "Symbol"
 msgid "Toilets"
 msgstr "Туалети"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:200 ../share/symbols/symbols.h:201
+#: ../share/symbols/symbols.h:41 ../share/symbols/symbols.h:42
 msgctxt "Symbol"
 msgid "Nursery"
 msgstr "Ясла"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:202 ../share/symbols/symbols.h:203
+#: ../share/symbols/symbols.h:43 ../share/symbols/symbols.h:44
 msgctxt "Symbol"
 msgid "Drinking Fountain"
 msgstr "Питний фонтанчик"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:204 ../share/symbols/symbols.h:205
+#: ../share/symbols/symbols.h:45 ../share/symbols/symbols.h:46
 msgctxt "Symbol"
 msgid "Waiting Room"
 msgstr "Зала очікування"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:208 ../share/symbols/symbols.h:209
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:47 ../share/symbols/symbols.h:48
+#: ../share/symbols/symbols.h:231 ../share/symbols/symbols.h:232
+msgctxt "Symbol"
+msgid "Information"
+msgstr "Довідкова служба"
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:49 ../share/symbols/symbols.h:50
 msgctxt "Symbol"
 msgid "Hotel Information"
 msgstr "Інформація щодо готелів"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:210 ../share/symbols/symbols.h:211
+#: ../share/symbols/symbols.h:51 ../share/symbols/symbols.h:52
 msgctxt "Symbol"
 msgid "Air Transportation"
 msgstr "Повітряний транспорт"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:212 ../share/symbols/symbols.h:213
+#: ../share/symbols/symbols.h:53 ../share/symbols/symbols.h:54
 msgctxt "Symbol"
 msgid "Heliport"
 msgstr "Вертодром"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:214 ../share/symbols/symbols.h:215
+#: ../share/symbols/symbols.h:55 ../share/symbols/symbols.h:56
 msgctxt "Symbol"
 msgid "Taxi"
 msgstr "Таксі"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:216 ../share/symbols/symbols.h:217
+#: ../share/symbols/symbols.h:57 ../share/symbols/symbols.h:58
 msgctxt "Symbol"
 msgid "Bus"
 msgstr "Автобус"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:218 ../share/symbols/symbols.h:219
+#: ../share/symbols/symbols.h:59 ../share/symbols/symbols.h:60
 msgctxt "Symbol"
 msgid "Ground Transportation"
 msgstr "Наземний транспорт"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:220 ../share/symbols/symbols.h:221
+#: ../share/symbols/symbols.h:61 ../share/symbols/symbols.h:62
 msgctxt "Symbol"
 msgid "Rail Transportation"
 msgstr "Залізничний транспорт"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:222 ../share/symbols/symbols.h:223
+#: ../share/symbols/symbols.h:63 ../share/symbols/symbols.h:64
 msgctxt "Symbol"
 msgid "Water Transportation"
 msgstr "Водний транспорт"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:224 ../share/symbols/symbols.h:225
+#: ../share/symbols/symbols.h:65 ../share/symbols/symbols.h:66
 msgctxt "Symbol"
 msgid "Car Rental"
 msgstr "Оренда автомобілів"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:226 ../share/symbols/symbols.h:227
+#: ../share/symbols/symbols.h:67 ../share/symbols/symbols.h:68
 msgctxt "Symbol"
 msgid "Restaurant"
 msgstr "Ресторан"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:228 ../share/symbols/symbols.h:229
+#: ../share/symbols/symbols.h:69 ../share/symbols/symbols.h:70
 msgctxt "Symbol"
 msgid "Coffeeshop"
 msgstr "Кав’ярня"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:230 ../share/symbols/symbols.h:231
+#: ../share/symbols/symbols.h:71 ../share/symbols/symbols.h:72
 msgctxt "Symbol"
 msgid "Bar"
 msgstr "Бар"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:232 ../share/symbols/symbols.h:233
+#: ../share/symbols/symbols.h:73 ../share/symbols/symbols.h:74
 msgctxt "Symbol"
 msgid "Shops"
 msgstr "Крамниці"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:234 ../share/symbols/symbols.h:235
+#: ../share/symbols/symbols.h:75 ../share/symbols/symbols.h:76
 msgctxt "Symbol"
 msgid "Barber Shop - Beauty Salon"
 msgstr "Перукарня і салон краси"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:236 ../share/symbols/symbols.h:237
+#: ../share/symbols/symbols.h:77 ../share/symbols/symbols.h:78
 msgctxt "Symbol"
 msgid "Barber Shop"
 msgstr "Перукарня"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:238 ../share/symbols/symbols.h:239
+#: ../share/symbols/symbols.h:79 ../share/symbols/symbols.h:80
 msgctxt "Symbol"
 msgid "Beauty Salon"
 msgstr "Салон краси"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:240 ../share/symbols/symbols.h:241
+#: ../share/symbols/symbols.h:81 ../share/symbols/symbols.h:82
 msgctxt "Symbol"
 msgid "Ticket Purchase"
 msgstr "Придбання квитків"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:242 ../share/symbols/symbols.h:243
+#: ../share/symbols/symbols.h:83 ../share/symbols/symbols.h:84
 msgctxt "Symbol"
 msgid "Baggage Check In"
 msgstr "Приймання багажу"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:244 ../share/symbols/symbols.h:245
+#: ../share/symbols/symbols.h:85 ../share/symbols/symbols.h:86
 msgctxt "Symbol"
 msgid "Baggage Claim"
 msgstr "Видача багажу"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:246 ../share/symbols/symbols.h:247
+#: ../share/symbols/symbols.h:87 ../share/symbols/symbols.h:88
 msgctxt "Symbol"
 msgid "Customs"
 msgstr "Митні послуги"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:248 ../share/symbols/symbols.h:249
+#: ../share/symbols/symbols.h:89 ../share/symbols/symbols.h:90
 msgctxt "Symbol"
 msgid "Immigration"
 msgstr "Міграційна служба"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:250 ../share/symbols/symbols.h:251
+#: ../share/symbols/symbols.h:91 ../share/symbols/symbols.h:92
 msgctxt "Symbol"
 msgid "Departing Flights"
 msgstr "Відправлення"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:252 ../share/symbols/symbols.h:253
+#: ../share/symbols/symbols.h:93 ../share/symbols/symbols.h:94
 msgctxt "Symbol"
 msgid "Arriving Flights"
 msgstr "Прибуття"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:254 ../share/symbols/symbols.h:255
+#: ../share/symbols/symbols.h:95 ../share/symbols/symbols.h:96
 msgctxt "Symbol"
 msgid "Smoking"
 msgstr "Місце для куріння"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:256 ../share/symbols/symbols.h:257
+#: ../share/symbols/symbols.h:97 ../share/symbols/symbols.h:98
 msgctxt "Symbol"
 msgid "No Smoking"
 msgstr "Куріння заборонено"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:260 ../share/symbols/symbols.h:261
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:99 ../share/symbols/symbols.h:100
+#: ../share/symbols/symbols.h:245 ../share/symbols/symbols.h:246
+msgctxt "Symbol"
+msgid "Parking"
+msgstr "Паркувальний майданчик"
+
+#. Symbols: ./AigaSymbols.svg
+#: ../share/symbols/symbols.h:101 ../share/symbols/symbols.h:102
 msgctxt "Symbol"
 msgid "No Parking"
 msgstr "Паркування заборонено"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:262 ../share/symbols/symbols.h:263
+#: ../share/symbols/symbols.h:103 ../share/symbols/symbols.h:104
 msgctxt "Symbol"
 msgid "No Dogs"
 msgstr "Вигулювання собак заборонено"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:264 ../share/symbols/symbols.h:265
+#: ../share/symbols/symbols.h:105 ../share/symbols/symbols.h:106
 msgctxt "Symbol"
 msgid "No Entry"
 msgstr "Вхід заборонено"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:266 ../share/symbols/symbols.h:267
+#: ../share/symbols/symbols.h:107 ../share/symbols/symbols.h:108
 msgctxt "Symbol"
 msgid "Exit"
 msgstr "Вихід"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:268 ../share/symbols/symbols.h:269
+#: ../share/symbols/symbols.h:109 ../share/symbols/symbols.h:110
 msgctxt "Symbol"
 msgid "Fire Extinguisher"
 msgstr "Вогнегасник"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:270 ../share/symbols/symbols.h:271
+#: ../share/symbols/symbols.h:111 ../share/symbols/symbols.h:112
 msgctxt "Symbol"
 msgid "Right Arrow"
 msgstr "Стрілка праворуч"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:272 ../share/symbols/symbols.h:273
+#: ../share/symbols/symbols.h:113 ../share/symbols/symbols.h:114
 msgctxt "Symbol"
 msgid "Forward and Right Arrow"
 msgstr "Стрілка вперед і праворуч"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:274 ../share/symbols/symbols.h:275
+#: ../share/symbols/symbols.h:115 ../share/symbols/symbols.h:116
 msgctxt "Symbol"
 msgid "Up Arrow"
 msgstr "Стрілка вгору"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:276 ../share/symbols/symbols.h:277
+#: ../share/symbols/symbols.h:117 ../share/symbols/symbols.h:118
 msgctxt "Symbol"
 msgid "Forward and Left Arrow"
 msgstr "Стрілка вперед і ліворуч"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:278 ../share/symbols/symbols.h:279
+#: ../share/symbols/symbols.h:119 ../share/symbols/symbols.h:120
 msgctxt "Symbol"
 msgid "Left Arrow"
 msgstr "Стрілка ліворуч"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:280 ../share/symbols/symbols.h:281
+#: ../share/symbols/symbols.h:121 ../share/symbols/symbols.h:122
 msgctxt "Symbol"
 msgid "Left and Down Arrow"
 msgstr "Стрілка ліворуч і вниз"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:282 ../share/symbols/symbols.h:283
+#: ../share/symbols/symbols.h:123 ../share/symbols/symbols.h:124
 msgctxt "Symbol"
 msgid "Down Arrow"
 msgstr "Стрілка вниз"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:284 ../share/symbols/symbols.h:285
+#: ../share/symbols/symbols.h:125 ../share/symbols/symbols.h:126
 msgctxt "Symbol"
 msgid "Right and Down Arrow"
 msgstr "Стрілка праворуч і вниз"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:286 ../share/symbols/symbols.h:287
+#: ../share/symbols/symbols.h:127 ../share/symbols/symbols.h:128
 msgctxt "Symbol"
 msgid "NPS Wheelchair Accessible - 1996"
 msgstr "Візок NPS — 1996"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:288 ../share/symbols/symbols.h:289
+#: ../share/symbols/symbols.h:129 ../share/symbols/symbols.h:130
 msgctxt "Symbol"
 msgid "NPS Wheelchair Accessible"
 msgstr "Візок NPS"
 
 #. Symbols: ./AigaSymbols.svg
-#: ../share/symbols/symbols.h:290 ../share/symbols/symbols.h:291
+#: ../share/symbols/symbols.h:131 ../share/symbols/symbols.h:132
 msgctxt "Symbol"
 msgid "New Wheelchair Accessible"
 msgstr "Новий візок"
+
+#. Symbols: ./BalloonSymbols.svg
+#: ../share/symbols/symbols.h:133
+msgctxt "Symbol"
+msgid "Word Balloons"
+msgstr "Мовні бульки"
+
+#. Symbols: ./BalloonSymbols.svg
+#: ../share/symbols/symbols.h:134
+msgctxt "Symbol"
+msgid "Thought Balloon"
+msgstr "Булька думок"
+
+#. Symbols: ./BalloonSymbols.svg
+#: ../share/symbols/symbols.h:135
+msgctxt "Symbol"
+msgid "Dream Speaking"
+msgstr "Висловлення мрій"
+
+#. Symbols: ./BalloonSymbols.svg
+#: ../share/symbols/symbols.h:136
+msgctxt "Symbol"
+msgid "Rounded Balloon"
+msgstr "Заокруглена булька"
+
+#. Symbols: ./BalloonSymbols.svg
+#: ../share/symbols/symbols.h:137
+msgctxt "Symbol"
+msgid "Squared Balloon"
+msgstr "Квадрата булька"
+
+#. Symbols: ./BalloonSymbols.svg
+#: ../share/symbols/symbols.h:138
+msgctxt "Symbol"
+msgid "Over the Phone"
+msgstr "Телефоном"
+
+#. Symbols: ./BalloonSymbols.svg
+#: ../share/symbols/symbols.h:139
+msgctxt "Symbol"
+msgid "Hip Balloon"
+msgstr "Булька смутку"
+
+#. Symbols: ./BalloonSymbols.svg
+#: ../share/symbols/symbols.h:140
+msgctxt "Symbol"
+msgid "Circle Balloon"
+msgstr "Кругова булька"
+
+#. Symbols: ./BalloonSymbols.svg
+#: ../share/symbols/symbols.h:141
+msgctxt "Symbol"
+msgid "Exclaim Balloon"
+msgstr "Булька вигуку"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:142
+msgctxt "Symbol"
+msgid "Flow Chart Shapes"
+msgstr "Форми блок-схем"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:143
+msgctxt "Symbol"
+msgid "Process"
+msgstr "Обробляти"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:144
+msgctxt "Symbol"
+msgid "Input/Output"
+msgstr "Вхід/Вихід"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:145
+msgctxt "Symbol"
+msgid "Document"
+msgstr "Документ"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:146
+msgctxt "Symbol"
+msgid "Manual Operation"
+msgstr "Ручна дія"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:147
+msgctxt "Symbol"
+msgid "Preparation"
+msgstr "Підготовка"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:148
+msgctxt "Symbol"
+msgid "Merge"
+msgstr "Об’єднання"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:149
+msgctxt "Symbol"
+msgid "Decision"
+msgstr "Рішення"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:150
+msgctxt "Symbol"
+msgid "Magnetic Tape"
+msgstr "Магнітна стрічка"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:151
+msgctxt "Symbol"
+msgid "Display"
+msgstr "Показ"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:152
+msgctxt "Symbol"
+msgid "Auxiliary Operation"
+msgstr "Допоміжна операція"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:153
+msgctxt "Symbol"
+msgid "Manual Input"
+msgstr "Ручний ввід"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:154
+msgctxt "Symbol"
+msgid "Extract"
+msgstr "Видобування"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:155
+msgctxt "Symbol"
+msgid "Terminal/Interrupt"
+msgstr "Завершення/Переривання"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:156
+msgctxt "Symbol"
+msgid "Punched Card"
+msgstr "Перфокартка"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:157
+msgctxt "Symbol"
+msgid "Punch Tape"
+msgstr "Перфострічка"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:158
+msgctxt "Symbol"
+msgid "Online Storage"
+msgstr "Сховище даних у мережі"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:159
+msgctxt "Symbol"
+msgid "Keying"
+msgstr "Набір"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:160
+msgctxt "Symbol"
+msgid "Sort"
+msgstr "Упорядкування"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:161
+msgctxt "Symbol"
+msgid "Connector"
+msgstr "З’єднання"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:162
+msgctxt "Symbol"
+msgid "Off-Page Connector"
+msgstr "З'єднання поза сторінкою"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:163
+msgctxt "Symbol"
+msgid "Transmittal Tape"
+msgstr "Передавальна стрічка"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:164
+msgctxt "Symbol"
+msgid "Communication Link"
+msgstr "З’єднання для обміну даними"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:165
+msgctxt "Symbol"
+msgid "Collate"
+msgstr "Об’єднання"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:166
+msgctxt "Symbol"
+msgid "Comment/Annotation"
+msgstr "Коментар/Анотація"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:167
+msgctxt "Symbol"
+msgid "Core"
+msgstr "Ядро"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:168
+msgctxt "Symbol"
+msgid "Predefined Process"
+msgstr "Наперед визначений процес"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:169
+msgctxt "Symbol"
+msgid "Magnetic Disk (Database)"
+msgstr "Магнітний диск (база даних)"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:170
+msgctxt "Symbol"
+msgid "Magnetic Drum (Direct Access)"
+msgstr "Магнітний барабан (безпосередній доступ)"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:171
+msgctxt "Symbol"
+msgid "Offline Storage"
+msgstr "Автономне сховище даних"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:172
+msgctxt "Symbol"
+msgid "Logical Or"
+msgstr "Логічне «АБО»"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:173
+msgctxt "Symbol"
+msgid "Logical And"
+msgstr "Логічне «ТА»"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:174
+msgctxt "Symbol"
+msgid "Delay"
+msgstr "Затримка"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:175
+msgctxt "Symbol"
+msgid "Loop Limit Begin"
+msgstr "Початок циклу"
+
+#. Symbols: ./FlowSymbols.svg
+#: ../share/symbols/symbols.h:176
+msgctxt "Symbol"
+msgid "Loop Limit End"
+msgstr "Кінець циклу"
+
+#. Symbols: ./LogicSymbols.svg
+#: ../share/symbols/symbols.h:177
+msgctxt "Symbol"
+msgid "Logic Symbols"
+msgstr "Символи логіки"
+
+#. Symbols: ./LogicSymbols.svg
+#: ../share/symbols/symbols.h:178
+msgctxt "Symbol"
+msgid "Xnor Gate"
+msgstr "Ключ виключне заперечувальне АБО»"
+
+#. Symbols: ./LogicSymbols.svg
+#: ../share/symbols/symbols.h:179
+msgctxt "Symbol"
+msgid "Xor Gate"
+msgstr "Ключ виключне І"
+
+#. Symbols: ./LogicSymbols.svg
+#: ../share/symbols/symbols.h:180
+msgctxt "Symbol"
+msgid "Nor Gate"
+msgstr "Ключ АБО-НІ"
+
+#. Symbols: ./LogicSymbols.svg
+#: ../share/symbols/symbols.h:181
+msgctxt "Symbol"
+msgid "Or Gate"
+msgstr "Ключ АБО"
+
+#. Symbols: ./LogicSymbols.svg
+#: ../share/symbols/symbols.h:182
+msgctxt "Symbol"
+msgid "Nand Gate"
+msgstr "Ключ І-НІ"
+
+#. Symbols: ./LogicSymbols.svg
+#: ../share/symbols/symbols.h:183
+msgctxt "Symbol"
+msgid "And Gate"
+msgstr "Ключ І"
+
+#. Symbols: ./LogicSymbols.svg
+#: ../share/symbols/symbols.h:184
+msgctxt "Symbol"
+msgid "Buffer"
+msgstr "Буфер"
+
+#. Symbols: ./LogicSymbols.svg
+#: ../share/symbols/symbols.h:185
+msgctxt "Symbol"
+msgid "Not Gate"
+msgstr "Ключ НІ"
+
+#. Symbols: ./LogicSymbols.svg
+#: ../share/symbols/symbols.h:186
+msgctxt "Symbol"
+msgid "Buffer Small"
+msgstr "Малий буфер"
+
+#. Symbols: ./LogicSymbols.svg
+#: ../share/symbols/symbols.h:187
+msgctxt "Symbol"
+msgid "Not Gate Small"
+msgstr "Малий ключ НІ"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:188
+msgctxt "Symbol"
+msgid "United States National Park Service Map Symbols"
+msgstr "Символи карт служб національних парків США"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:189 ../share/symbols/symbols.h:190
+msgctxt "Symbol"
+msgid "Airport"
+msgstr "Аеропорт"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:191 ../share/symbols/symbols.h:192
+msgctxt "Symbol"
+msgid "Amphitheatre"
+msgstr "Амфітеатр"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:193 ../share/symbols/symbols.h:194
+msgctxt "Symbol"
+msgid "Bicycle Trail"
+msgstr "Велосипедна траса"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:195 ../share/symbols/symbols.h:196
+msgctxt "Symbol"
+msgid "Boat Launch"
+msgstr "Місце спуску човнів"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:197 ../share/symbols/symbols.h:198
+msgctxt "Symbol"
+msgid "Boat Tour"
+msgstr "Човновий маршрут"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:199 ../share/symbols/symbols.h:200
+msgctxt "Symbol"
+msgid "Bus Stop"
+msgstr "Автобусна зупинка"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:201 ../share/symbols/symbols.h:202
+msgctxt "Symbol"
+msgid "Campfire"
+msgstr "Місце для багаття"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:203 ../share/symbols/symbols.h:204
+msgctxt "Symbol"
+msgid "Campground"
+msgstr "Майданчик для табору"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:205 ../share/symbols/symbols.h:206
+msgctxt "Symbol"
+msgid "CanoeAccess"
+msgstr "Доступ до каное"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:207 ../share/symbols/symbols.h:208
+msgctxt "Symbol"
+msgid "Crosscountry Ski Trail"
+msgstr "Траса для лижного кросу"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:209 ../share/symbols/symbols.h:210
+msgctxt "Symbol"
+msgid "Downhill Skiing"
+msgstr "Лижний спуск"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:211 ../share/symbols/symbols.h:212
+msgctxt "Symbol"
+msgid "Drinking Water"
+msgstr "Питна вода"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:215 ../share/symbols/symbols.h:216
+msgctxt "Symbol"
+msgid "Fishing"
+msgstr "Риболовля"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:217 ../share/symbols/symbols.h:218
+msgctxt "Symbol"
+msgid "Food Service"
+msgstr "Служба харчування"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:219 ../share/symbols/symbols.h:220
+msgctxt "Symbol"
+msgid "Four Wheel Drive Road"
+msgstr "Дорога для чотириколісних машин"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:221 ../share/symbols/symbols.h:222
+msgctxt "Symbol"
+msgid "Gas Station"
+msgstr "Автозаправка"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:223 ../share/symbols/symbols.h:224
+msgctxt "Symbol"
+msgid "Golfing"
+msgstr "Гольф"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:225 ../share/symbols/symbols.h:226
+msgctxt "Symbol"
+msgid "Horseback Riding"
+msgstr "Траса для кінської їзди"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:227 ../share/symbols/symbols.h:228
+msgctxt "Symbol"
+msgid "Hospital"
+msgstr "Лікарня"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:229 ../share/symbols/symbols.h:230
+msgctxt "Symbol"
+msgid "Ice Skating"
+msgstr "Катання на ковзанах"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:233 ../share/symbols/symbols.h:234
+msgctxt "Symbol"
+msgid "Litter Receptacle"
+msgstr "Сховище нош"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:235 ../share/symbols/symbols.h:236
+msgctxt "Symbol"
+msgid "Lodging"
+msgstr "Кімнати"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:237 ../share/symbols/symbols.h:238
+msgctxt "Symbol"
+msgid "Marina"
+msgstr "Пристань"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:239 ../share/symbols/symbols.h:240
+msgctxt "Symbol"
+msgid "Motorbike Trail"
+msgstr "Траса для мотоциклів"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:241 ../share/symbols/symbols.h:242
+msgctxt "Symbol"
+msgid "Radiator Water"
+msgstr "Вода для опалювання"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:243 ../share/symbols/symbols.h:244
+msgctxt "Symbol"
+msgid "Recycling"
+msgstr "Пункт переробки"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:247 ../share/symbols/symbols.h:248
+msgctxt "Symbol"
+msgid "Pets On Leash"
+msgstr "Домашні тварини на повідді"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:249 ../share/symbols/symbols.h:250
+msgctxt "Symbol"
+msgid "Picnic Area"
+msgstr "Місце для пікніків"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:251 ../share/symbols/symbols.h:252
+msgctxt "Symbol"
+msgid "Post Office"
+msgstr "Поштове відділення"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:253 ../share/symbols/symbols.h:254
+msgctxt "Symbol"
+msgid "Ranger Station"
+msgstr "Станція рейнджерів"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:255 ../share/symbols/symbols.h:256
+msgctxt "Symbol"
+msgid "RV Campground"
+msgstr "Майданчик для трейлерів"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:257 ../share/symbols/symbols.h:258
+msgctxt "Symbol"
+msgid "Restrooms"
+msgstr "Туалети"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:259 ../share/symbols/symbols.h:260
+msgctxt "Symbol"
+msgid "Sailing"
+msgstr "Парусний спорт"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:261 ../share/symbols/symbols.h:262
+msgctxt "Symbol"
+msgid "Sanitary Disposal Station"
+msgstr "Станція утилізації відходів"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:263 ../share/symbols/symbols.h:264
+msgctxt "Symbol"
+msgid "Scuba Diving"
+msgstr "Пірнання з аквалангом"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:265 ../share/symbols/symbols.h:266
+msgctxt "Symbol"
+msgid "Self Guided Trail"
+msgstr "Стежка для самостійного огляду"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:267 ../share/symbols/symbols.h:268
+msgctxt "Symbol"
+msgid "Shelter"
+msgstr "Притулок"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:269 ../share/symbols/symbols.h:270
+msgctxt "Symbol"
+msgid "Showers"
+msgstr "Душові"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:271 ../share/symbols/symbols.h:272
+msgctxt "Symbol"
+msgid "Sledding"
+msgstr "Катання на санях"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:273 ../share/symbols/symbols.h:274
+msgctxt "Symbol"
+msgid "SnowmobileTrail"
+msgstr "Траса для снігоходів"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:275 ../share/symbols/symbols.h:276
+msgctxt "Symbol"
+msgid "Stable"
+msgstr "Стайня"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:277 ../share/symbols/symbols.h:278
+msgctxt "Symbol"
+msgid "Store"
+msgstr "Склад"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:279 ../share/symbols/symbols.h:280
+msgctxt "Symbol"
+msgid "Swimming"
+msgstr "Плавання"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:283 ../share/symbols/symbols.h:284
+msgctxt "Symbol"
+msgid "Emergency Telephone"
+msgstr "Телефон виклику служб надзвичайних ситуацій"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:285 ../share/symbols/symbols.h:286
+msgctxt "Symbol"
+msgid "Trailhead"
+msgstr "Початок маршруту"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:287 ../share/symbols/symbols.h:288
+msgctxt "Symbol"
+msgid "Wheelchair Accessible"
+msgstr "Візок"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:289 ../share/symbols/symbols.h:290
+msgctxt "Symbol"
+msgid "Wind Surfing"
+msgstr "Віндсерфінг"
+
+#. Symbols: ./MapSymbolsNPS.svg
+#: ../share/symbols/symbols.h:291
+msgctxt "Symbol"
+msgid "Blank"
+msgstr "Порожньо"
 
 #: ../share/templates/templates.h:1
 msgid "CD Label 120mmx120mm "
@@ -4932,7 +4931,7 @@ msgstr "Документ у пам'яті %d"
 msgid "Memory document %1"
 msgstr "Документ у пам'яті %1"
 
-#: ../src/document.cpp:873
+#: ../src/document.cpp:864
 #, c-format
 msgid "Unnamed document %d"
 msgstr "Документ без назви %d"
@@ -5128,8 +5127,7 @@ msgstr "Адаптивна постеризація"
 #: ../src/ui/widget/page-sizer.cpp:249
 #: ../src/widgets/calligraphy-toolbar.cpp:430
 #: ../src/widgets/eraser-toolbar.cpp:154 ../src/widgets/spray-toolbar.cpp:297
-#: ../src/widgets/tweak-toolbar.cpp:128
-#: ../share/extensions/foldablebox.inx.h:2
+#: ../src/widgets/tweak-toolbar.cpp:128 ../share/extensions/foldablebox.inx.h:2
 msgid "Width:"
 msgstr "Ширина:"
 
@@ -6592,15 +6590,13 @@ msgid "Transparency type:"
 msgstr "Тип прозорості:"
 
 #: ../src/extension/internal/filter/bumps.h:353
-#: ../src/extension/internal/filter/morphology.h:176
-#: ../src/filter-enums.cpp:91
+#: ../src/extension/internal/filter/morphology.h:176 ../src/filter-enums.cpp:91
 msgid "Atop"
 msgstr "Згори (Atop)"
 
 #: ../src/extension/internal/filter/bumps.h:354
 #: ../src/extension/internal/filter/distort.h:70
-#: ../src/extension/internal/filter/morphology.h:174
-#: ../src/filter-enums.cpp:89
+#: ../src/extension/internal/filter/morphology.h:174 ../src/filter-enums.cpp:89
 msgid "In"
 msgstr "Вхід"
 
@@ -6861,12 +6857,12 @@ msgstr "Перетворення на:"
 #: ../src/extension/internal/filter/color.h:819
 #: ../src/ui/widget/color-icc-selector.cpp:193
 #: ../src/ui/widget/color-scales.cpp:448 ../src/ui/widget/color-scales.cpp:449
-#: ../src/ui/widget/selected-style.cpp:274
+#: ../src/ui/widget/selected-style.cpp:275
 msgid "Black"
 msgstr "Чорний"
 
 #: ../src/extension/internal/filter/color.h:820
-#: ../src/ui/widget/selected-style.cpp:270
+#: ../src/ui/widget/selected-style.cpp:271
 msgid "White"
 msgstr "Білий"
 
@@ -6889,7 +6885,7 @@ msgid "Customize greyscale components"
 msgstr "Налаштувати компоненти відтінків сірого"
 
 #: ../src/extension/internal/filter/color.h:980
-#: ../src/ui/widget/selected-style.cpp:266
+#: ../src/ui/widget/selected-style.cpp:267
 msgid "Invert"
 msgstr "Інвертувати"
 
@@ -7114,15 +7110,14 @@ msgid "Felt Feather"
 msgstr "Фетрове розтушування"
 
 #: ../src/extension/internal/filter/distort.h:71
-#: ../src/extension/internal/filter/morphology.h:175
-#: ../src/filter-enums.cpp:90
+#: ../src/extension/internal/filter/morphology.h:175 ../src/filter-enums.cpp:90
 msgid "Out"
 msgstr "Вихід"
 
 #: ../src/extension/internal/filter/distort.h:77
 #: ../src/extension/internal/filter/textures.h:75
 #: ../src/ui/widget/selected-style.cpp:132
-#: ../src/ui/widget/style-swatch.cpp:128
+#: ../src/ui/widget/style-swatch.cpp:130
 msgid "Stroke:"
 msgstr "Штрих:"
 
@@ -7311,13 +7306,11 @@ msgstr "Приховати зображення"
 msgid "Composite type:"
 msgstr "Тип суміщення:"
 
-#: ../src/extension/internal/filter/morphology.h:173
-#: ../src/filter-enums.cpp:88
+#: ../src/extension/internal/filter/morphology.h:173 ../src/filter-enums.cpp:88
 msgid "Over"
 msgstr "Накладання"
 
-#: ../src/extension/internal/filter/morphology.h:177
-#: ../src/filter-enums.cpp:92
+#: ../src/extension/internal/filter/morphology.h:177 ../src/filter-enums.cpp:92
 msgid "XOR"
 msgstr "Виключне АБО (XOR)"
 
@@ -7391,8 +7384,8 @@ msgstr "Заливання шумом"
 #: ../src/ui/dialog/tracedialog.cpp:747
 #: ../share/extensions/color_HSL_adjust.inx.h:2
 #: ../share/extensions/color_custom.inx.h:2
-#: ../share/extensions/color_randomize.inx.h:2
-#: ../share/extensions/dots.inx.h:2 ../share/extensions/dxf_input.inx.h:2
+#: ../share/extensions/color_randomize.inx.h:2 ../share/extensions/dots.inx.h:2
+#: ../share/extensions/dxf_input.inx.h:2
 #: ../share/extensions/dxf_outlines.inx.h:2
 #: ../share/extensions/gcodetools_area.inx.h:29
 #: ../share/extensions/gcodetools_engraving.inx.h:7
@@ -7403,10 +7396,10 @@ msgstr "Заливання шумом"
 #: ../share/extensions/gimp_xcf.inx.h:2
 #: ../share/extensions/interp_att_g.inx.h:2
 #: ../share/extensions/jessyInk_uninstall.inx.h:2
+#: ../share/extensions/jitternodes.inx.h:2
 #: ../share/extensions/lorem_ipsum.inx.h:2
 #: ../share/extensions/pathalongpath.inx.h:2
-#: ../share/extensions/pathscatter.inx.h:2
-#: ../share/extensions/radiusrand.inx.h:2 ../share/extensions/scour.inx.h:2
+#: ../share/extensions/pathscatter.inx.h:2 ../share/extensions/scour.inx.h:2
 #: ../share/extensions/split.inx.h:2 ../share/extensions/voronoi2svg.inx.h:2
 #: ../share/extensions/web-set-att.inx.h:2
 #: ../share/extensions/web-transmit-att.inx.h:2
@@ -7516,7 +7509,7 @@ msgstr ""
 
 #: ../src/extension/internal/filter/paint.h:331
 #: ../src/ui/dialog/align-and-distribute.cpp:1090
-#: ../src/widgets/desktop-widget.cpp:2070
+#: ../src/widgets/desktop-widget.cpp:2087
 msgid "Drawing"
 msgstr "Малюнок"
 
@@ -7525,7 +7518,7 @@ msgstr "Малюнок"
 #: ../src/extension/internal/filter/paint.h:496
 #: ../src/extension/internal/filter/paint.h:590
 #: ../src/extension/internal/filter/paint.h:976
-#: ../src/live_effects/effect.cpp:136 ../src/splivarot.cpp:2206
+#: ../src/live_effects/effect.cpp:136 ../src/splivarot.cpp:2209
 msgid "Simplify"
 msgstr "Спростити"
 
@@ -7968,42 +7961,40 @@ msgstr "Градієнт GIMP (*.ggr)"
 msgid "Gradients used in GIMP"
 msgstr "Градієнти, що використовуються у GIMP"
 
-#: ../src/extension/internal/grid.cpp:204 ../src/ui/widget/panel.cpp:116
+#: ../src/extension/internal/grid.cpp:199 ../src/ui/widget/panel.cpp:117
 msgid "Grid"
 msgstr "Сітка"
 
-#: ../src/extension/internal/grid.cpp:206
+#: ../src/extension/internal/grid.cpp:201
 msgid "Line Width:"
 msgstr "Товщина ліній:"
 
-#: ../src/extension/internal/grid.cpp:207
+#: ../src/extension/internal/grid.cpp:202
 msgid "Horizontal Spacing:"
 msgstr "Горизонтальний інтервал:"
 
-#: ../src/extension/internal/grid.cpp:208
+#: ../src/extension/internal/grid.cpp:203
 msgid "Vertical Spacing:"
 msgstr "Вертикальний інтервал:"
 
-#: ../src/extension/internal/grid.cpp:209
+#: ../src/extension/internal/grid.cpp:204
 msgid "Horizontal Offset:"
 msgstr "Горизонтальний зсув:"
 
-#: ../src/extension/internal/grid.cpp:210
+#: ../src/extension/internal/grid.cpp:205
 msgid "Vertical Offset:"
 msgstr "Вертикальний зсув:"
 
-#: ../src/extension/internal/grid.cpp:214
+#: ../src/extension/internal/grid.cpp:209
 #: ../src/ui/dialog/inkscape-preferences.cpp:1532
 #: ../share/extensions/draw_from_triangle.inx.h:58
-#: ../share/extensions/eqtexsvg.inx.h:4
-#: ../share/extensions/foldablebox.inx.h:9
+#: ../share/extensions/eqtexsvg.inx.h:4 ../share/extensions/foldablebox.inx.h:9
 #: ../share/extensions/funcplot.inx.h:38
 #: ../share/extensions/grid_cartesian.inx.h:23
 #: ../share/extensions/grid_isometric.inx.h:11
 #: ../share/extensions/grid_polar.inx.h:22
 #: ../share/extensions/guides_creator.inx.h:25
-#: ../share/extensions/hershey.inx.h:52
-#: ../share/extensions/layout_nup.inx.h:35
+#: ../share/extensions/hershey.inx.h:52 ../share/extensions/layout_nup.inx.h:35
 #: ../share/extensions/lindenmayer.inx.h:34
 #: ../share/extensions/nicechart.inx.h:45
 #: ../share/extensions/param_curves.inx.h:30
@@ -8024,14 +8015,14 @@ msgstr "Вертикальний зсув:"
 msgid "Render"
 msgstr "Відтворення"
 
-#: ../src/extension/internal/grid.cpp:215
+#: ../src/extension/internal/grid.cpp:210
 #: ../src/ui/dialog/document-properties.cpp:163
 #: ../src/ui/dialog/inkscape-preferences.cpp:832
-#: ../src/widgets/toolbox.cpp:1886
+#: ../src/widgets/toolbox.cpp:1894
 msgid "Grids"
 msgstr "Сітки"
 
-#: ../src/extension/internal/grid.cpp:218
+#: ../src/extension/internal/grid.cpp:213
 msgid "Draw a path which is a grid"
 msgstr "Намалювати контур у формі сітки"
 
@@ -8363,8 +8354,7 @@ msgid "Map all fill patterns to standard WMF hatches"
 msgstr "Пов’язати усі заповнення візерунками зі стандартними шаблонами WMF"
 
 #: ../src/extension/internal/wmf-inout.cpp:3208
-#: ../share/extensions/wmf_input.inx.h:2
-#: ../share/extensions/wmf_output.inx.h:2
+#: ../share/extensions/wmf_input.inx.h:2 ../share/extensions/wmf_output.inx.h:2
 msgid "Windows Metafile (*.wmf)"
 msgstr "Метафайл Windows (*.wmf)"
 
@@ -8637,8 +8627,7 @@ msgstr "Обертання відтінку"
 msgid "Luminance to Alpha"
 msgstr "Освітленість до прозорості"
 
-#: ../src/filter-enums.cpp:87
-#: ../share/extensions/jessyInk_mouseHandler.inx.h:3
+#: ../src/filter-enums.cpp:87 ../share/extensions/jessyInk_mouseHandler.inx.h:3
 #: ../share/extensions/jessyInk_transitions.inx.h:7
 #: ../share/extensions/measure.inx.h:20 ../share/extensions/nicechart.inx.h:33
 msgid "Default"
@@ -8955,8 +8944,7 @@ msgstr "Згорнути цю панель"
 msgid "Close this dock"
 msgstr "Закрити цю панель"
 
-#: ../src/libgdl/gdl-dock-item-grip.c:723
-#: ../src/libgdl/gdl-dock-tablabel.c:125
+#: ../src/libgdl/gdl-dock-item-grip.c:723 ../src/libgdl/gdl-dock-tablabel.c:125
 msgid "Controlling dock item"
 msgstr "Контролюючий елемент панелі"
 
@@ -9113,7 +9101,7 @@ msgstr ""
 #: ../src/ui/dialog/align-and-distribute.cpp:1089
 #: ../src/ui/dialog/document-properties.cpp:161
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1549
-#: ../src/widgets/desktop-widget.cpp:2066
+#: ../src/widgets/desktop-widget.cpp:2083
 #: ../share/extensions/empty_page.inx.h:1
 #: ../share/extensions/voronoi2svg.inx.h:10
 msgid "Page"
@@ -9126,8 +9114,7 @@ msgstr "Індекс поточної сторінки"
 #: ../src/libgdl/gdl-dock-object.c:125
 #: ../src/live_effects/parameter/originalpatharray.cpp:82
 #: ../src/ui/dialog/inkscape-preferences.cpp:1566
-#: ../src/ui/widget/page-sizer.cpp:285
-#: ../src/widgets/gradient-selector.cpp:150
+#: ../src/ui/widget/page-sizer.cpp:285 ../src/widgets/gradient-selector.cpp:150
 #: ../src/widgets/sp-xmlview-attr-list.cpp:49
 msgid "Name"
 msgstr "Назва"
@@ -10576,72 +10563,6 @@ msgstr "Показати точки"
 msgid "Hide Points"
 msgstr "Приховати точки"
 
-#: ../src/live_effects/lpe-mirror_symmetry.cpp:36
-msgid "Vertical Page Center"
-msgstr "Центр сторінки за вертикаллю"
-
-#: ../src/live_effects/lpe-mirror_symmetry.cpp:37
-msgid "Horizontal Page Center"
-msgstr "Центр сторінки за горизонталлю"
-
-#: ../src/live_effects/lpe-mirror_symmetry.cpp:38
-msgid "Free from reflection line"
-msgstr "Довільно від лінії відбиття"
-
-#: ../src/live_effects/lpe-mirror_symmetry.cpp:39
-msgid "X from middle knot"
-msgstr "За X від середнього вузла"
-
-#: ../src/live_effects/lpe-mirror_symmetry.cpp:40
-msgid "Y from middle knot"
-msgstr "За Y від середнього вузла"
-
-#: ../src/live_effects/lpe-mirror_symmetry.cpp:72
-#: ../src/widgets/spray-toolbar.cpp:388 ../src/widgets/tweak-toolbar.cpp:253
-msgid "Mode"
-msgstr "Режим"
-
-#: ../src/live_effects/lpe-mirror_symmetry.cpp:72
-msgid "Symmetry move mode"
-msgstr "Режим симетричного пересування"
-
-#: ../src/live_effects/lpe-mirror_symmetry.cpp:73
-msgid "Discard original path?"
-msgstr "Відкинути початковий контур?"
-
-#: ../src/live_effects/lpe-mirror_symmetry.cpp:73
-msgid "Check this to only keep the mirrored part of the path"
-msgstr ""
-"Позначте цей пункт, щоб програма зберегла лише віддзеркалену частину контуру"
-
-#: ../src/live_effects/lpe-mirror_symmetry.cpp:74
-msgid "Fuse paths"
-msgstr "Об’єднати контури"
-
-#: ../src/live_effects/lpe-mirror_symmetry.cpp:74
-msgid "Fuse original and the reflection into a single path"
-msgstr "Об’єднати оригінал і відбиток у єдиний контур"
-
-#: ../src/live_effects/lpe-mirror_symmetry.cpp:75
-msgid "Oposite fuse"
-msgstr ""
-
-#: ../src/live_effects/lpe-mirror_symmetry.cpp:75
-msgid "Picks the other side of the mirror as the original"
-msgstr "Визначає зображення по той бік дзеркала як оригінал"
-
-#: ../src/live_effects/lpe-mirror_symmetry.cpp:76
-msgid "Start mirror line"
-msgstr "Початок лінії віддзеркалення"
-
-#: ../src/live_effects/lpe-mirror_symmetry.cpp:77
-msgid "End mirror line"
-msgstr "Кінець лінії віддзеркалення"
-
-#: ../src/live_effects/lpe-mirror_symmetry.cpp:335
-msgid "Adjust the center"
-msgstr "Скоригувати центр"
-
 #: ../src/live_effects/lpe-patternalongpath.cpp:63
 #: ../share/extensions/pathalongpath.inx.h:10
 msgid "Single"
@@ -10750,54 +10671,58 @@ msgid "Envelope deformation"
 msgstr "Викривлення обгортки"
 
 #: ../src/live_effects/lpe-perspective-envelope.cpp:45
+msgid "Overflow perspective"
+msgstr "Зовнішня перспектива"
+
+#: ../src/live_effects/lpe-perspective-envelope.cpp:46
 msgid "Type"
 msgstr "Тип"
 
-#: ../src/live_effects/lpe-perspective-envelope.cpp:45
+#: ../src/live_effects/lpe-perspective-envelope.cpp:46
 msgid "Select the type of deformation"
 msgstr "Виберіть тип деформування"
 
-#: ../src/live_effects/lpe-perspective-envelope.cpp:46
+#: ../src/live_effects/lpe-perspective-envelope.cpp:47
 msgid "Top Left"
 msgstr "Верхній лівий"
 
-#: ../src/live_effects/lpe-perspective-envelope.cpp:46
+#: ../src/live_effects/lpe-perspective-envelope.cpp:47
 msgid "Top Left - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
 "Верхній лівий — <b>Ctrl+Alt+клацання</b>, щоб скинути, <b>Ctrl</b>, щоб "
 "рухатися вздовж осей"
 
-#: ../src/live_effects/lpe-perspective-envelope.cpp:47
+#: ../src/live_effects/lpe-perspective-envelope.cpp:48
 msgid "Top Right"
 msgstr "Верхній правий"
 
-#: ../src/live_effects/lpe-perspective-envelope.cpp:47
+#: ../src/live_effects/lpe-perspective-envelope.cpp:48
 msgid "Top Right - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
 "Верхній правий — <b>Ctrl+Alt+клацання</b>, щоб скинути, <b>Ctrl</b>, щоб "
 "рухатися вздовж осей"
 
-#: ../src/live_effects/lpe-perspective-envelope.cpp:48
+#: ../src/live_effects/lpe-perspective-envelope.cpp:49
 msgid "Down Left"
 msgstr "Нижній лівий"
 
-#: ../src/live_effects/lpe-perspective-envelope.cpp:48
+#: ../src/live_effects/lpe-perspective-envelope.cpp:49
 msgid "Down Left - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
 "Нижній лівий — <b>Ctrl+Alt+клацання</b>, щоб скинути, <b>Ctrl</b>, щоб "
 "рухатися вздовж осей"
 
-#: ../src/live_effects/lpe-perspective-envelope.cpp:49
+#: ../src/live_effects/lpe-perspective-envelope.cpp:50
 msgid "Down Right"
 msgstr "Нижній правий"
 
-#: ../src/live_effects/lpe-perspective-envelope.cpp:49
+#: ../src/live_effects/lpe-perspective-envelope.cpp:50
 msgid "Down Right - <b>Ctrl+Alt+Click</b>: reset, <b>Ctrl</b>: move along axes"
 msgstr ""
 "Нижній правий — <b>Ctrl+Alt+клацання</b>, щоб скинути, <b>Ctrl</b>, щоб "
 "рухатися вздовж осей"
 
-#: ../src/live_effects/lpe-perspective-envelope.cpp:269
+#: ../src/live_effects/lpe-perspective-envelope.cpp:367
 msgid "Handles:"
 msgstr "Елементи керування:"
 
@@ -11112,7 +11037,7 @@ msgid "Handles options"
 msgstr "Параметри елементів керування"
 
 #: ../src/live_effects/lpe-roughen.cpp:63
-#: ../share/extensions/radiusrand.inx.h:5
+#: ../share/extensions/jitternodes.inx.h:5
 msgid "Shift nodes"
 msgstr "Зміщення вузлів"
 
@@ -11192,8 +11117,7 @@ msgstr "Ві_дстань між позначками:"
 msgid "Distance between successive ruler marks"
 msgstr "Відстань між послідовними позначками на лінійці"
 
-#: ../src/live_effects/lpe-ruler.cpp:42
-#: ../share/extensions/foldablebox.inx.h:7
+#: ../src/live_effects/lpe-ruler.cpp:42 ../share/extensions/foldablebox.inx.h:7
 #: ../share/extensions/interp_att_g.inx.h:9
 #: ../share/extensions/layout_nup.inx.h:3
 #: ../share/extensions/printing_marks.inx.h:11
@@ -12117,7 +12041,7 @@ msgstr "ІД-ОБ'ЄКТА"
 msgid "Start Inkscape in interactive shell mode."
 msgstr "Запустити Inkscape у режимі інтерактивної оболонки."
 
-#: ../src/main.cpp:876 ../src/main.cpp:1318
+#: ../src/main.cpp:876 ../src/main.cpp:1349
 msgid ""
 "[OPTIONS...] [FILE...]\n"
 "\n"
@@ -12569,8 +12493,7 @@ msgstr "<b>Нічого</b> не було вилучено."
 #: ../src/widgets/eraser-toolbar.cpp:120
 #: ../src/widgets/gradient-toolbar.cpp:1181
 #: ../src/widgets/gradient-toolbar.cpp:1195
-#: ../src/widgets/gradient-toolbar.cpp:1209
-#: ../src/widgets/node-toolbar.cpp:401
+#: ../src/widgets/gradient-toolbar.cpp:1209 ../src/widgets/node-toolbar.cpp:401
 msgid "Delete"
 msgstr "Вилучити"
 
@@ -13236,20 +13159,20 @@ msgstr "Область верстання"
 msgid "Flow Excluded Region"
 msgstr "Виключена область верстання"
 
-#: ../src/sp-flowtext.cpp:282
+#: ../src/sp-flowtext.cpp:284
 msgid "Flowed Text"
 msgstr "Контурний текст"
 
-#: ../src/sp-flowtext.cpp:284
+#: ../src/sp-flowtext.cpp:286
 msgid "Linked Flowed Text"
 msgstr "Пов’язаний контурний текст"
 
-#: ../src/sp-flowtext.cpp:290 ../src/sp-text.cpp:380
+#: ../src/sp-flowtext.cpp:292 ../src/sp-text.cpp:380
 #: ../src/ui/tools/text-tool.cpp:1556
 msgid " [truncated]"
 msgstr " (обрізано)"
 
-#: ../src/sp-flowtext.cpp:292
+#: ../src/sp-flowtext.cpp:294
 #, c-format
 msgid "(%d character%s)"
 msgid_plural "(%d characters%s)"
@@ -13449,8 +13372,8 @@ msgstr "Умовна група"
 
 #: ../src/sp-text.cpp:361 ../src/verbs.cpp:347
 #: ../share/extensions/lorem_ipsum.inx.h:8
-#: ../share/extensions/replace_font.inx.h:11
-#: ../share/extensions/split.inx.h:10 ../share/extensions/text_braille.inx.h:2
+#: ../share/extensions/replace_font.inx.h:11 ../share/extensions/split.inx.h:10
+#: ../share/extensions/text_braille.inx.h:2
 #: ../share/extensions/text_extract.inx.h:14
 #: ../share/extensions/text_flipcase.inx.h:2
 #: ../share/extensions/text_lowercase.inx.h:2
@@ -13584,41 +13507,41 @@ msgstr "Створити динамічний відступ"
 msgid "Select <b>path(s)</b> to inset/outset."
 msgstr "Позначте <b>контур(и)</b> для втягування/розтягування."
 
-#: ../src/splivarot.cpp:1962
+#: ../src/splivarot.cpp:1965
 msgid "Outset path"
 msgstr "Розтягнений контур"
 
-#: ../src/splivarot.cpp:1962
+#: ../src/splivarot.cpp:1965
 msgid "Inset path"
 msgstr "Втягнутий контур"
 
-#: ../src/splivarot.cpp:1964
+#: ../src/splivarot.cpp:1967
 msgid "<b>No paths</b> to inset/outset in the selection."
 msgstr "У позначеному <b>немає контурів</b> для втягування/розтягування."
 
-#: ../src/splivarot.cpp:2126
+#: ../src/splivarot.cpp:2129
 msgid "Simplifying paths (separately):"
 msgstr "Спрощення контурів (окремо):"
 
-#: ../src/splivarot.cpp:2128
+#: ../src/splivarot.cpp:2131
 msgid "Simplifying paths:"
 msgstr "Спрощення контурів:"
 
-#: ../src/splivarot.cpp:2165
+#: ../src/splivarot.cpp:2168
 #, c-format
 msgid "%s <b>%d</b> of <b>%d</b> paths simplified..."
 msgstr "%s <b>%d</b> з <b>%d</b> контурів спрощено…"
 
-#: ../src/splivarot.cpp:2178
+#: ../src/splivarot.cpp:2181
 #, c-format
 msgid "<b>%d</b> paths simplified."
 msgstr "<b>%d</b> контурів спрощено."
 
-#: ../src/splivarot.cpp:2192
+#: ../src/splivarot.cpp:2195
 msgid "Select <b>path(s)</b> to simplify."
 msgstr "Позначте <b>контур(и)</b> для спрощення."
 
-#: ../src/splivarot.cpp:2208
+#: ../src/splivarot.cpp:2211
 msgid "<b>No paths</b> to simplify in the selection."
 msgstr "У позначеному <b>немає контурів</b> для спрощення."
 
@@ -13916,7 +13839,7 @@ msgid "Rearrange"
 msgstr "Перевпорядкувати"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:941
-#: ../src/widgets/toolbox.cpp:1788
+#: ../src/widgets/toolbox.cpp:1796
 msgid "Nodes"
 msgstr "Вузли"
 
@@ -14839,19 +14762,19 @@ msgstr ""
 msgid "<small>Creating tiled clones...</small>"
 msgstr "<small>Створення мозаїчних клонів…</small>"
 
-#: ../src/ui/dialog/clonetiler.cpp:2669
+#: ../src/ui/dialog/clonetiler.cpp:2670
 msgid "Create tiled clones"
 msgstr "Створити мозаїку з клонів"
 
-#: ../src/ui/dialog/clonetiler.cpp:2906
+#: ../src/ui/dialog/clonetiler.cpp:2907
 msgid "<small>Per row:</small>"
 msgstr "<small>На рядок:</small>"
 
-#: ../src/ui/dialog/clonetiler.cpp:2924
+#: ../src/ui/dialog/clonetiler.cpp:2925
 msgid "<small>Per column:</small>"
 msgstr "<small>На стовпчик:</small>"
 
-#: ../src/ui/dialog/clonetiler.cpp:2932
+#: ../src/ui/dialog/clonetiler.cpp:2933
 msgid "<small>Randomize:</small>"
 msgstr "<small>Випадковість:</small>"
 
@@ -14867,27 +14790,27 @@ msgstr ""
 msgid "Change color definition"
 msgstr "Зміна визначення кольору"
 
-#: ../src/ui/dialog/color-item.cpp:675
+#: ../src/ui/dialog/color-item.cpp:677
 msgid "Remove stroke color"
 msgstr "Вилучити колір штриха"
 
-#: ../src/ui/dialog/color-item.cpp:675
+#: ../src/ui/dialog/color-item.cpp:677
 msgid "Remove fill color"
 msgstr "Вилучити колір заповнення"
 
-#: ../src/ui/dialog/color-item.cpp:680
+#: ../src/ui/dialog/color-item.cpp:682
 msgid "Set stroke color to none"
 msgstr "Зняти колір з штриха"
 
-#: ../src/ui/dialog/color-item.cpp:680
+#: ../src/ui/dialog/color-item.cpp:682
 msgid "Set fill color to none"
 msgstr "Зняти колір заповнення"
 
-#: ../src/ui/dialog/color-item.cpp:698
+#: ../src/ui/dialog/color-item.cpp:700
 msgid "Set stroke color from swatch"
 msgstr "Встановити колір штриха зі зразків"
 
-#: ../src/ui/dialog/color-item.cpp:698
+#: ../src/ui/dialog/color-item.cpp:700
 msgid "Set fill color from swatch"
 msgstr "Встановити колір заповнення зі зразків"
 
@@ -14988,8 +14911,7 @@ msgid ""
 msgstr ""
 "Колір тла сторінки. Зауваження: параметр прозорості буде проігноровано під "
 "час редагування, якщо не позначено пункт «Тло-шахівниця» (але враховано під "
-"час "
-"експортування до растра)."
+"час експортування до растра)."
 
 #: ../src/ui/dialog/document-properties.cpp:124
 msgid "Border _color:"
@@ -15177,8 +15099,7 @@ msgstr "Ви_лучити"
 msgid "Remove selected grid."
 msgstr "Вилучити вибрану сітку."
 
-#: ../src/ui/dialog/document-properties.cpp:162
-#: ../src/widgets/toolbox.cpp:1895
+#: ../src/ui/dialog/document-properties.cpp:162 ../src/widgets/toolbox.cpp:1903
 msgid "Guides"
 msgstr "Напрямні"
 
@@ -15280,7 +15201,7 @@ msgstr "Додайте назву поточного файла або вкаж�
 
 #: ../src/ui/dialog/document-properties.cpp:768
 #: ../src/ui/dialog/document-properties.cpp:845
-#: ../src/ui/widget/selected-style.cpp:356
+#: ../src/ui/widget/selected-style.cpp:357
 msgid "Remove"
 msgstr "Вилучити"
 
@@ -15567,13 +15488,13 @@ msgid "Export aborted."
 msgstr "Експорт перервано."
 
 #: ../src/ui/dialog/export.cpp:1308 ../src/ui/interface.cpp:1401
-#: ../src/widgets/desktop-widget.cpp:1186
-#: ../src/widgets/desktop-widget.cpp:1248
+#: ../src/widgets/desktop-widget.cpp:1201
+#: ../src/widgets/desktop-widget.cpp:1263
 msgid "_Cancel"
 msgstr "_Скасувати"
 
 #: ../src/ui/dialog/export.cpp:1309 ../src/ui/dialog/input.cpp:1082
-#: ../src/verbs.cpp:2432 ../src/widgets/desktop-widget.cpp:1187
+#: ../src/verbs.cpp:2432 ../src/widgets/desktop-widget.cpp:1202
 msgid "_Save"
 msgstr "З_берегти"
 
@@ -15615,14 +15536,14 @@ msgstr "Інформація"
 #: ../share/extensions/jessyInk_uninstall.inx.h:10
 #: ../share/extensions/jessyInk_video.inx.h:2
 #: ../share/extensions/jessyInk_view.inx.h:7
+#: ../share/extensions/jitternodes.inx.h:12
 #: ../share/extensions/layout_nup.inx.h:24
 #: ../share/extensions/lindenmayer.inx.h:13
-#: ../share/extensions/lorem_ipsum.inx.h:6
-#: ../share/extensions/measure.inx.h:33
+#: ../share/extensions/lorem_ipsum.inx.h:6 ../share/extensions/measure.inx.h:33
 #: ../share/extensions/pathalongpath.inx.h:16
 #: ../share/extensions/pathscatter.inx.h:18
-#: ../share/extensions/radiusrand.inx.h:8 ../share/extensions/restack.inx.h:25
-#: ../share/extensions/split.inx.h:8 ../share/extensions/voronoi2svg.inx.h:16
+#: ../share/extensions/restack.inx.h:25 ../share/extensions/split.inx.h:8
+#: ../share/extensions/voronoi2svg.inx.h:16
 #: ../share/extensions/web-set-att.inx.h:25
 #: ../share/extensions/web-transmit-att.inx.h:23
 #: ../share/extensions/webslicer_create_group.inx.h:11
@@ -15744,7 +15665,7 @@ msgid "Document"
 msgstr "Документ"
 
 #: ../src/ui/dialog/filedialogimpl-gtkmm.cpp:1553 ../src/verbs.cpp:175
-#: ../src/widgets/desktop-widget.cpp:2074
+#: ../src/widgets/desktop-widget.cpp:2091
 #: ../share/extensions/printing_marks.inx.h:18
 msgid "Selection"
 msgstr "позначене"
@@ -16703,7 +16624,7 @@ msgstr "Спіралі"
 msgid "Search spirals"
 msgstr "Шукати спіралі"
 
-#: ../src/ui/dialog/find.cpp:103 ../src/widgets/toolbox.cpp:1796
+#: ../src/ui/dialog/find.cpp:103 ../src/widgets/toolbox.cpp:1804
 msgid "Paths"
 msgstr "Контури"
 
@@ -17588,7 +17509,7 @@ msgstr "Розташування на сітці"
 #: ../src/ui/dialog/grid-arrange-tab.cpp:571
 #: ../src/ui/dialog/object-attributes.cpp:66
 #: ../src/ui/dialog/object-attributes.cpp:75
-#: ../src/ui/widget/page-sizer.cpp:247 ../src/widgets/desktop-widget.cpp:703
+#: ../src/ui/widget/page-sizer.cpp:247 ../src/widgets/desktop-widget.cpp:744
 #: ../src/widgets/node-toolbar.cpp:581
 msgid "X:"
 msgstr "X:"
@@ -17600,7 +17521,7 @@ msgstr "Горизонтальний інтервал між стовпчика�
 #: ../src/ui/dialog/grid-arrange-tab.cpp:572
 #: ../src/ui/dialog/object-attributes.cpp:67
 #: ../src/ui/dialog/object-attributes.cpp:76
-#: ../src/ui/widget/page-sizer.cpp:248 ../src/widgets/desktop-widget.cpp:704
+#: ../src/ui/widget/page-sizer.cpp:248 ../src/widgets/desktop-widget.cpp:745
 #: ../src/widgets/node-toolbar.cpp:599
 msgid "Y:"
 msgstr "Y:"
@@ -17786,12 +17707,12 @@ msgid "Base simplify:"
 msgstr "Базове спрощення:"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:213
-msgid "on dinamic LPE simplify"
-msgstr ""
+msgid "on dynamic LPE simplify"
+msgstr "спрощення на динамічних LPE"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:214
-msgid "Base simplify of dinamic LPE based simplify"
-msgstr ""
+msgid "Base simplify of dynamic LPE based simplify"
+msgstr "Базове спрощення динамічного спрощення на основі LPE"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:229
 msgid "<b>No objects selected</b> to take the style from."
@@ -18096,7 +18017,7 @@ msgstr "Стиль малювання об'єктів"
 
 #. Zoom
 #: ../src/ui/dialog/inkscape-preferences.cpp:394
-#: ../src/widgets/desktop-widget.cpp:668
+#: ../src/widgets/desktop-widget.cpp:709
 msgid "Zoom"
 msgstr "Масштаб"
 
@@ -20857,8 +20778,7 @@ msgstr "Нахил за X"
 msgid "Y tilt"
 msgstr "Нахил за Y"
 
-#: ../src/ui/dialog/input.cpp:1616
-#: ../src/ui/widget/color-wheel-selector.cpp:29
+#: ../src/ui/dialog/input.cpp:1616 ../src/ui/widget/color-wheel-selector.cpp:29
 msgid "Wheel"
 msgstr "Колесо"
 
@@ -20956,19 +20876,19 @@ msgstr "Новий шар створено."
 msgid "Move to Layer"
 msgstr "Пересунути до шару"
 
-#: ../src/ui/dialog/layers.cpp:525 ../src/ui/widget/layer-selector.cpp:610
+#: ../src/ui/dialog/layers.cpp:525 ../src/ui/widget/layer-selector.cpp:612
 msgid "Unhide layer"
 msgstr "Показати шар"
 
-#: ../src/ui/dialog/layers.cpp:525 ../src/ui/widget/layer-selector.cpp:610
+#: ../src/ui/dialog/layers.cpp:525 ../src/ui/widget/layer-selector.cpp:612
 msgid "Hide layer"
 msgstr "Сховати шар"
 
-#: ../src/ui/dialog/layers.cpp:536 ../src/ui/widget/layer-selector.cpp:602
+#: ../src/ui/dialog/layers.cpp:536 ../src/ui/widget/layer-selector.cpp:604
 msgid "Lock layer"
 msgstr "Заблокувати шар"
 
-#: ../src/ui/dialog/layers.cpp:536 ../src/ui/widget/layer-selector.cpp:602
+#: ../src/ui/dialog/layers.cpp:536 ../src/ui/widget/layer-selector.cpp:604
 msgid "Unlock layer"
 msgstr "Розблокувати шар"
 
@@ -21665,18 +21585,15 @@ msgstr "Алгоритм Копфа-Ліщинського"
 msgid "Output"
 msgstr "Вивід"
 
-#: ../src/ui/dialog/pixelartdialog.cpp:297
-#: ../src/ui/dialog/tracedialog.cpp:814
+#: ../src/ui/dialog/pixelartdialog.cpp:297 ../src/ui/dialog/tracedialog.cpp:814
 msgid "Reset all settings to defaults"
 msgstr "Скинути значення всіх параметрів до типових"
 
-#: ../src/ui/dialog/pixelartdialog.cpp:302
-#: ../src/ui/dialog/tracedialog.cpp:819
+#: ../src/ui/dialog/pixelartdialog.cpp:302 ../src/ui/dialog/tracedialog.cpp:819
 msgid "Abort a trace in progress"
 msgstr "Перервати векторизацію"
 
-#: ../src/ui/dialog/pixelartdialog.cpp:306
-#: ../src/ui/dialog/tracedialog.cpp:823
+#: ../src/ui/dialog/pixelartdialog.cpp:306 ../src/ui/dialog/tracedialog.cpp:823
 msgid "Execute the trace"
 msgstr "Провести векторизацію"
 
@@ -22047,8 +21964,7 @@ msgid "Preview Text:"
 msgstr "Перегляд тексту:"
 
 #: ../src/ui/dialog/swatches.cpp:202 ../src/ui/tools/gradient-tool.cpp:360
-#: ../src/ui/tools/gradient-tool.cpp:458
-#: ../src/widgets/gradient-vector.cpp:801
+#: ../src/ui/tools/gradient-tool.cpp:458 ../src/widgets/gradient-vector.cpp:801
 msgid "Add gradient stop"
 msgstr "Додавання опорної точки градієнта"
 
@@ -22801,7 +22717,7 @@ msgid "Open _Recent"
 msgstr "Відкрити не_давній"
 
 #: ../src/ui/interface.cpp:1018 ../src/ui/interface.cpp:1104
-#: ../src/ui/interface.cpp:1207 ../src/ui/widget/selected-style.cpp:542
+#: ../src/ui/interface.cpp:1207 ../src/ui/widget/selected-style.cpp:543
 msgid "Drop color"
 msgstr "Скинути колір"
 
@@ -23329,8 +23245,9 @@ msgstr ""
 "елементи керування"
 
 #: ../src/ui/tool/node.cpp:529
+#, fuzzy
 msgctxt "Path handle tip"
-msgid "<b>Ctrl</b>: Move handle by his actual steps in BSpline Live Effect"
+msgid "<b>Ctrl</b>: Snap handle to steps defined in BSpline Live Path Effect"
 msgstr ""
 "<b>Ctrl</b>: пересунути вус за його справжніми кроками у інтерактивному "
 "ефекті B-сплайнів"
@@ -23481,8 +23398,7 @@ msgid "Rotate handle"
 msgstr "Обертати вус"
 
 #. We need to call MPM's method because it could have been our last node
-#: ../src/ui/tool/path-manipulator.cpp:1555
-#: ../src/widgets/node-toolbar.cpp:397
+#: ../src/ui/tool/path-manipulator.cpp:1555 ../src/widgets/node-toolbar.cpp:397
 msgid "Delete node"
 msgstr "Вилучити вузол"
 
@@ -24240,7 +24156,7 @@ msgstr "<b>Shift</b>: намалювати навколо початкової �
 msgid "Create mesh"
 msgstr "Створити сітку"
 
-#: ../src/ui/tools/node-tool.cpp:653
+#: ../src/ui/tools/node-tool.cpp:648
 msgctxt "Node tool tip"
 msgid ""
 "<b>Shift</b>: drag to add nodes to the selection, click to toggle object "
@@ -24249,12 +24165,12 @@ msgstr ""
 "<b>Shift</b>: перетягніть, щоб додати вузли до позначеного, клацніть, щоб "
 "перемкнути режим позначення об'єктів"
 
-#: ../src/ui/tools/node-tool.cpp:657
+#: ../src/ui/tools/node-tool.cpp:652
 msgctxt "Node tool tip"
 msgid "<b>Shift</b>: drag to add nodes to the selection"
 msgstr "<b>Shift</b>: перетягування додає вузли до позначеного фрагмента"
 
-#: ../src/ui/tools/node-tool.cpp:686
+#: ../src/ui/tools/node-tool.cpp:681
 #, c-format
 msgid "<b>%u of %u</b> node selected."
 msgid_plural "<b>%u of %u</b> nodes selected."
@@ -24262,7 +24178,7 @@ msgstr[0] "Позначено <b>%u з %u</b> вузла."
 msgstr[1] "Позначено <b>%u з %u</b> вузлів."
 msgstr[2] "Позначено <b>%u з %u</b> вузлів."
 
-#: ../src/ui/tools/node-tool.cpp:693
+#: ../src/ui/tools/node-tool.cpp:688
 #, c-format
 msgctxt "Node tool tip"
 msgid "%s Drag to select nodes, click to edit only this object (more: Shift)"
@@ -24270,33 +24186,33 @@ msgstr ""
 "%s Перетягніть, щоб позначити вузли, клацніть, щоб редагувати лише цей "
 "об'єкт (інше: Shift)"
 
-#: ../src/ui/tools/node-tool.cpp:699
+#: ../src/ui/tools/node-tool.cpp:694
 #, c-format
 msgctxt "Node tool tip"
 msgid "%s Drag to select nodes, click clear the selection"
 msgstr ""
 "%s Перетягніть вказівник, щоб позначити вузли, клацніть, щоб зняти позначення"
 
-#: ../src/ui/tools/node-tool.cpp:708
+#: ../src/ui/tools/node-tool.cpp:703
 msgctxt "Node tool tip"
 msgid "Drag to select nodes, click to edit only this object"
 msgstr ""
 "Перетягніть, щоб позначити вузли, клацніть, щоб редагувати лише цей об'єкт"
 
-#: ../src/ui/tools/node-tool.cpp:711
+#: ../src/ui/tools/node-tool.cpp:706
 msgctxt "Node tool tip"
 msgid "Drag to select nodes, click to clear the selection"
 msgstr ""
 "Перетягніть вказівник, щоб позначити вузли, клацніть, щоб зняти позначення"
 
-#: ../src/ui/tools/node-tool.cpp:716
+#: ../src/ui/tools/node-tool.cpp:711
 msgctxt "Node tool tip"
 msgid "Drag to select objects to edit, click to edit this object (more: Shift)"
 msgstr ""
 "Перетягніть, щоб позначити об'єкти редагування, клацніть для редагування "
 "поточного об'єкта (більше: Shift)"
 
-#: ../src/ui/tools/node-tool.cpp:719
+#: ../src/ui/tools/node-tool.cpp:714
 msgctxt "Node tool tip"
 msgid "Drag to select objects to edit"
 msgstr "Перетягніть вказівник для позначення об'єктів редагування"
@@ -25365,19 +25281,19 @@ msgid "Feature settings in CSS form. No sanity checking is performed."
 msgstr ""
 "Параметри модифікацій у формі CSS. Перевірки щодо коректності не виконується."
 
-#: ../src/ui/widget/layer-selector.cpp:116
+#: ../src/ui/widget/layer-selector.cpp:118
 msgid "Toggle current layer visibility"
 msgstr "Сховати чи відкрити поточний шар"
 
-#: ../src/ui/widget/layer-selector.cpp:136
+#: ../src/ui/widget/layer-selector.cpp:138
 msgid "Lock or unlock current layer"
 msgstr "Заблокувати чи розблокувати поточний шар"
 
-#: ../src/ui/widget/layer-selector.cpp:139
+#: ../src/ui/widget/layer-selector.cpp:141
 msgid "Current layer"
 msgstr "Поточний шар"
 
-#: ../src/ui/widget/layer-selector.cpp:580
+#: ../src/ui/widget/layer-selector.cpp:582
 msgid "(root)"
 msgstr "(основа)"
 
@@ -25394,8 +25310,8 @@ msgid "Document license updated"
 msgstr "Оновлено умови ліцензування документа"
 
 #: ../src/ui/widget/object-composite-settings.cpp:47
-#: ../src/ui/widget/selected-style.cpp:1117
 #: ../src/ui/widget/selected-style.cpp:1118
+#: ../src/ui/widget/selected-style.cpp:1119
 msgid "Opacity (%)"
 msgstr "Непрозорість (у %)"
 
@@ -25404,8 +25320,8 @@ msgid "Change blur"
 msgstr "Зміна розмивання"
 
 #: ../src/ui/widget/object-composite-settings.cpp:200
-#: ../src/ui/widget/selected-style.cpp:941
-#: ../src/ui/widget/selected-style.cpp:1243
+#: ../src/ui/widget/selected-style.cpp:942
+#: ../src/ui/widget/selected-style.cpp:1244
 msgid "Change opacity"
 msgstr "Зміна непрозорості"
 
@@ -25532,92 +25448,92 @@ msgstr "Встановити масштаб сторінки"
 msgid "Set 'viewBox'"
 msgstr "Встановити «viewBox»"
 
-#: ../src/ui/widget/panel.cpp:115
+#: ../src/ui/widget/panel.cpp:116
 msgid "List"
 msgstr "Список"
 
-#: ../src/ui/widget/panel.cpp:138
+#: ../src/ui/widget/panel.cpp:139
 msgctxt "Swatches"
 msgid "Size"
 msgstr "Розмір"
 
-#: ../src/ui/widget/panel.cpp:142
+#: ../src/ui/widget/panel.cpp:143
 msgctxt "Swatches height"
 msgid "Tiny"
 msgstr "Крихітна"
 
-#: ../src/ui/widget/panel.cpp:143
+#: ../src/ui/widget/panel.cpp:144
 msgctxt "Swatches height"
 msgid "Small"
 msgstr "Мала"
 
-#: ../src/ui/widget/panel.cpp:144
+#: ../src/ui/widget/panel.cpp:145
 msgctxt "Swatches height"
 msgid "Medium"
 msgstr "Середня"
 
-#: ../src/ui/widget/panel.cpp:145
+#: ../src/ui/widget/panel.cpp:146
 msgctxt "Swatches height"
 msgid "Large"
 msgstr "Велика"
 
-#: ../src/ui/widget/panel.cpp:146
+#: ../src/ui/widget/panel.cpp:147
 msgctxt "Swatches height"
 msgid "Huge"
 msgstr "Величезна"
 
-#: ../src/ui/widget/panel.cpp:168
+#: ../src/ui/widget/panel.cpp:169
 msgctxt "Swatches"
 msgid "Width"
 msgstr "Ширина"
 
-#: ../src/ui/widget/panel.cpp:172
+#: ../src/ui/widget/panel.cpp:173
 msgctxt "Swatches width"
 msgid "Narrower"
 msgstr "Вужча"
 
-#: ../src/ui/widget/panel.cpp:173
+#: ../src/ui/widget/panel.cpp:174
 msgctxt "Swatches width"
 msgid "Narrow"
 msgstr "Вузька"
 
-#: ../src/ui/widget/panel.cpp:174
+#: ../src/ui/widget/panel.cpp:175
 msgctxt "Swatches width"
 msgid "Medium"
 msgstr "Середня"
 
-#: ../src/ui/widget/panel.cpp:175
+#: ../src/ui/widget/panel.cpp:176
 msgctxt "Swatches width"
 msgid "Wide"
 msgstr "Широка"
 
-#: ../src/ui/widget/panel.cpp:176
+#: ../src/ui/widget/panel.cpp:177
 msgctxt "Swatches width"
 msgid "Wider"
 msgstr "Ширша"
 
-#: ../src/ui/widget/panel.cpp:206
+#: ../src/ui/widget/panel.cpp:207
 msgctxt "Swatches"
 msgid "Border"
 msgstr "Рамка"
 
-#: ../src/ui/widget/panel.cpp:210
+#: ../src/ui/widget/panel.cpp:211
 msgctxt "Swatches border"
 msgid "None"
 msgstr "Немає"
 
-#: ../src/ui/widget/panel.cpp:211
+#: ../src/ui/widget/panel.cpp:212
 msgctxt "Swatches border"
 msgid "Solid"
 msgstr "Суцільна"
 
-#: ../src/ui/widget/panel.cpp:212
+#: ../src/ui/widget/panel.cpp:213
 msgctxt "Swatches border"
 msgid "Wide"
 msgstr "Широка"
 
 #. TRANSLATORS: "Wrap" indicates how colour swatches are displayed
-#: ../src/ui/widget/panel.cpp:243
+#: ../src/ui/widget/panel.cpp:244
 msgctxt "Swatches"
 msgid "Wrap"
 msgstr "З перенесенням"
@@ -25679,7 +25595,7 @@ msgstr ""
 "елементи буде надруковано так, як вони виглядають на екрані."
 
 #: ../src/ui/widget/selected-style.cpp:131
-#: ../src/ui/widget/style-swatch.cpp:127
+#: ../src/ui/widget/style-swatch.cpp:129
 msgid "Fill:"
 msgstr "Заповнення:"
 
@@ -25687,287 +25603,287 @@ msgstr "Заповнення:"
 msgid "O:"
 msgstr "Н:"
 
-#: ../src/ui/widget/selected-style.cpp:178
+#: ../src/ui/widget/selected-style.cpp:179
 msgid "N/A"
 msgstr "Н/Д"
 
-#: ../src/ui/widget/selected-style.cpp:181
-#: ../src/ui/widget/selected-style.cpp:1110
+#: ../src/ui/widget/selected-style.cpp:182
 #: ../src/ui/widget/selected-style.cpp:1111
+#: ../src/ui/widget/selected-style.cpp:1112
 #: ../src/widgets/gradient-toolbar.cpp:162
 msgid "Nothing selected"
 msgstr "Нічого не позначено"
 
-#: ../src/ui/widget/selected-style.cpp:184
+#: ../src/ui/widget/selected-style.cpp:185
 msgctxt "Fill"
 msgid "<i>None</i>"
 msgstr "<i>Немає</i>"
 
-#: ../src/ui/widget/selected-style.cpp:186
+#: ../src/ui/widget/selected-style.cpp:187
 msgctxt "Stroke"
 msgid "<i>None</i>"
 msgstr "<i>Немає</i>"
 
-#: ../src/ui/widget/selected-style.cpp:190
-#: ../src/ui/widget/style-swatch.cpp:321
+#: ../src/ui/widget/selected-style.cpp:191
+#: ../src/ui/widget/style-swatch.cpp:323
 msgctxt "Fill and stroke"
 msgid "No fill"
 msgstr "Без заповнення"
 
-#: ../src/ui/widget/selected-style.cpp:190
-#: ../src/ui/widget/style-swatch.cpp:321
+#: ../src/ui/widget/selected-style.cpp:191
+#: ../src/ui/widget/style-swatch.cpp:323
 msgctxt "Fill and stroke"
 msgid "No stroke"
 msgstr "Без штриха"
 
-#: ../src/ui/widget/selected-style.cpp:192
-#: ../src/ui/widget/style-swatch.cpp:300 ../src/widgets/paint-selector.cpp:231
+#: ../src/ui/widget/selected-style.cpp:193
+#: ../src/ui/widget/style-swatch.cpp:302 ../src/widgets/paint-selector.cpp:231
 msgid "Pattern"
 msgstr "Заповнення візерунком"
 
-#: ../src/ui/widget/selected-style.cpp:195
-#: ../src/ui/widget/style-swatch.cpp:302
+#: ../src/ui/widget/selected-style.cpp:196
+#: ../src/ui/widget/style-swatch.cpp:304
 msgid "Pattern fill"
 msgstr "Заповнення візерунком"
 
-#: ../src/ui/widget/selected-style.cpp:195
-#: ../src/ui/widget/style-swatch.cpp:302
+#: ../src/ui/widget/selected-style.cpp:196
+#: ../src/ui/widget/style-swatch.cpp:304
 msgid "Pattern stroke"
 msgstr "Штрих-візерунок"
 
-#: ../src/ui/widget/selected-style.cpp:197
+#: ../src/ui/widget/selected-style.cpp:198
 msgid "<b>L</b>"
 msgstr "<b>Л</b>"
 
-#: ../src/ui/widget/selected-style.cpp:200
-#: ../src/ui/widget/style-swatch.cpp:294
+#: ../src/ui/widget/selected-style.cpp:201
+#: ../src/ui/widget/style-swatch.cpp:296
 msgid "Linear gradient fill"
 msgstr "Заповнення з лінійним градієнтом"
 
-#: ../src/ui/widget/selected-style.cpp:200
-#: ../src/ui/widget/style-swatch.cpp:294
+#: ../src/ui/widget/selected-style.cpp:201
+#: ../src/ui/widget/style-swatch.cpp:296
 msgid "Linear gradient stroke"
 msgstr "Штрих з лінійним градієнтом"
 
-#: ../src/ui/widget/selected-style.cpp:207
+#: ../src/ui/widget/selected-style.cpp:208
 msgid "<b>R</b>"
 msgstr "<b>П</b>"
 
-#: ../src/ui/widget/selected-style.cpp:210
-#: ../src/ui/widget/style-swatch.cpp:298
+#: ../src/ui/widget/selected-style.cpp:211
+#: ../src/ui/widget/style-swatch.cpp:300
 msgid "Radial gradient fill"
 msgstr "Заповнення з радіальним градієнтом"
 
-#: ../src/ui/widget/selected-style.cpp:210
-#: ../src/ui/widget/style-swatch.cpp:298
+#: ../src/ui/widget/selected-style.cpp:211
+#: ../src/ui/widget/style-swatch.cpp:300
 msgid "Radial gradient stroke"
 msgstr "Штрих з радіальним градієнтом"
 
-#: ../src/ui/widget/selected-style.cpp:218
+#: ../src/ui/widget/selected-style.cpp:219
 msgid "<b>M</b>"
 msgstr "<b>С</b>"
 
-#: ../src/ui/widget/selected-style.cpp:221
+#: ../src/ui/widget/selected-style.cpp:222
 msgid "Mesh gradient fill"
 msgstr "Заповнення із сітковим градієнтом"
 
-#: ../src/ui/widget/selected-style.cpp:221
+#: ../src/ui/widget/selected-style.cpp:222
 msgid "Mesh gradient stroke"
 msgstr "Штрих із сітковим градієнтом"
 
-#: ../src/ui/widget/selected-style.cpp:229
+#: ../src/ui/widget/selected-style.cpp:230
 msgid "Different"
 msgstr "Інші"
 
-#: ../src/ui/widget/selected-style.cpp:232
+#: ../src/ui/widget/selected-style.cpp:233
 msgid "Different fills"
 msgstr "Інші заповнення"
 
-#: ../src/ui/widget/selected-style.cpp:232
+#: ../src/ui/widget/selected-style.cpp:233
 msgid "Different strokes"
 msgstr "Інші штрихи"
 
-#: ../src/ui/widget/selected-style.cpp:234
-#: ../src/ui/widget/style-swatch.cpp:324
+#: ../src/ui/widget/selected-style.cpp:235
+#: ../src/ui/widget/style-swatch.cpp:326
 msgid "<b>Unset</b>"
 msgstr "<b>Не встановлено</b>"
 
 #. TRANSLATORS COMMENT: unset is a verb here
-#: ../src/ui/widget/selected-style.cpp:237
-#: ../src/ui/widget/selected-style.cpp:295
-#: ../src/ui/widget/selected-style.cpp:573
-#: ../src/ui/widget/style-swatch.cpp:326 ../src/widgets/fill-style.cpp:703
+#: ../src/ui/widget/selected-style.cpp:238
+#: ../src/ui/widget/selected-style.cpp:296
+#: ../src/ui/widget/selected-style.cpp:574
+#: ../src/ui/widget/style-swatch.cpp:328 ../src/widgets/fill-style.cpp:703
 msgid "Unset fill"
 msgstr "Не заливати"
 
-#: ../src/ui/widget/selected-style.cpp:237
-#: ../src/ui/widget/selected-style.cpp:295
-#: ../src/ui/widget/selected-style.cpp:589
-#: ../src/ui/widget/style-swatch.cpp:326 ../src/widgets/fill-style.cpp:703
+#: ../src/ui/widget/selected-style.cpp:238
+#: ../src/ui/widget/selected-style.cpp:296
+#: ../src/ui/widget/selected-style.cpp:590
+#: ../src/ui/widget/style-swatch.cpp:328 ../src/widgets/fill-style.cpp:703
 msgid "Unset stroke"
 msgstr "Зняття штриха"
 
-#: ../src/ui/widget/selected-style.cpp:240
+#: ../src/ui/widget/selected-style.cpp:241
 msgid "Flat color fill"
 msgstr "Однорідне заповнення"
 
-#: ../src/ui/widget/selected-style.cpp:240
+#: ../src/ui/widget/selected-style.cpp:241
 msgid "Flat color stroke"
 msgstr "Однорідний штрих"
 
 #. TRANSLATOR COMMENT: A means "Averaged"
-#: ../src/ui/widget/selected-style.cpp:243
+#: ../src/ui/widget/selected-style.cpp:244
 msgid "<b>a</b>"
 msgstr "<b>a</b>"
 
-#: ../src/ui/widget/selected-style.cpp:246
+#: ../src/ui/widget/selected-style.cpp:247
 msgid "Fill is averaged over selected objects"
 msgstr "Заповнення усереднюється у позначених об'єктах"
 
-#: ../src/ui/widget/selected-style.cpp:246
+#: ../src/ui/widget/selected-style.cpp:247
 msgid "Stroke is averaged over selected objects"
 msgstr "Штрих усереднено для позначених об'єктів"
 
 #. TRANSLATOR COMMENT: M means "Multiple"
-#: ../src/ui/widget/selected-style.cpp:249
+#: ../src/ui/widget/selected-style.cpp:250
 msgid "<b>m</b>"
 msgstr "<b>m</b>"
 
-#: ../src/ui/widget/selected-style.cpp:252
+#: ../src/ui/widget/selected-style.cpp:253
 msgid "Multiple selected objects have the same fill"
 msgstr "Множина позначених об'єктів має однакове заповнення"
 
-#: ../src/ui/widget/selected-style.cpp:252
+#: ../src/ui/widget/selected-style.cpp:253
 msgid "Multiple selected objects have the same stroke"
 msgstr "Множина позначених об'єктів має однакові штрихи"
 
-#: ../src/ui/widget/selected-style.cpp:254
+#: ../src/ui/widget/selected-style.cpp:255
 msgid "Edit fill..."
 msgstr "Редагувати заповнення…"
 
-#: ../src/ui/widget/selected-style.cpp:254
+#: ../src/ui/widget/selected-style.cpp:255
 msgid "Edit stroke..."
 msgstr "Редагування штриха…"
 
-#: ../src/ui/widget/selected-style.cpp:258
+#: ../src/ui/widget/selected-style.cpp:259
 msgid "Last set color"
 msgstr "Останній використаний колір"
 
-#: ../src/ui/widget/selected-style.cpp:262
+#: ../src/ui/widget/selected-style.cpp:263
 msgid "Last selected color"
 msgstr "Останній вибраний колір"
 
-#: ../src/ui/widget/selected-style.cpp:278
+#: ../src/ui/widget/selected-style.cpp:279
 msgid "Copy color"
 msgstr "Копіювати колір"
 
-#: ../src/ui/widget/selected-style.cpp:282
+#: ../src/ui/widget/selected-style.cpp:283
 msgid "Paste color"
 msgstr "Вставити колір"
 
-#: ../src/ui/widget/selected-style.cpp:286
-#: ../src/ui/widget/selected-style.cpp:866
+#: ../src/ui/widget/selected-style.cpp:287
+#: ../src/ui/widget/selected-style.cpp:867
 msgid "Swap fill and stroke"
 msgstr "Поміняти місцями кольори заповнення та штриха"
 
-#: ../src/ui/widget/selected-style.cpp:290
-#: ../src/ui/widget/selected-style.cpp:598
-#: ../src/ui/widget/selected-style.cpp:607
+#: ../src/ui/widget/selected-style.cpp:291
+#: ../src/ui/widget/selected-style.cpp:599
+#: ../src/ui/widget/selected-style.cpp:608
 msgid "Make fill opaque"
 msgstr "Зробити заповнення непрозорим"
 
-#: ../src/ui/widget/selected-style.cpp:290
+#: ../src/ui/widget/selected-style.cpp:291
 msgid "Make stroke opaque"
 msgstr "Зробити штрихи непрозорими"
 
-#: ../src/ui/widget/selected-style.cpp:299
-#: ../src/ui/widget/selected-style.cpp:555 ../src/widgets/fill-style.cpp:503
+#: ../src/ui/widget/selected-style.cpp:300
+#: ../src/ui/widget/selected-style.cpp:556 ../src/widgets/fill-style.cpp:503
 msgid "Remove fill"
 msgstr "Вилучити заповнення"
 
-#: ../src/ui/widget/selected-style.cpp:299
-#: ../src/ui/widget/selected-style.cpp:564 ../src/widgets/fill-style.cpp:503
+#: ../src/ui/widget/selected-style.cpp:300
+#: ../src/ui/widget/selected-style.cpp:565 ../src/widgets/fill-style.cpp:503
 msgid "Remove stroke"
 msgstr "Вилучити штрих"
 
-#: ../src/ui/widget/selected-style.cpp:619
+#: ../src/ui/widget/selected-style.cpp:620
 msgid "Apply last set color to fill"
 msgstr "Застосувати останній використаний колір для заповнення"
 
-#: ../src/ui/widget/selected-style.cpp:631
+#: ../src/ui/widget/selected-style.cpp:632
 msgid "Apply last set color to stroke"
 msgstr "Застосувати останній використаний колір для штриха"
 
-#: ../src/ui/widget/selected-style.cpp:642
+#: ../src/ui/widget/selected-style.cpp:643
 msgid "Apply last selected color to fill"
 msgstr "Застосувати останній вибраний колір для заповнення"
 
-#: ../src/ui/widget/selected-style.cpp:653
+#: ../src/ui/widget/selected-style.cpp:654
 msgid "Apply last selected color to stroke"
 msgstr "Застосувати останній вибраний колір для штриха"
 
-#: ../src/ui/widget/selected-style.cpp:679
+#: ../src/ui/widget/selected-style.cpp:680
 msgid "Invert fill"
 msgstr "Інвертувати заповнення"
 
-#: ../src/ui/widget/selected-style.cpp:703
+#: ../src/ui/widget/selected-style.cpp:704
 msgid "Invert stroke"
 msgstr "Інвертувати штрих"
 
-#: ../src/ui/widget/selected-style.cpp:715
+#: ../src/ui/widget/selected-style.cpp:716
 msgid "White fill"
 msgstr "Заповнення білим"
 
-#: ../src/ui/widget/selected-style.cpp:727
+#: ../src/ui/widget/selected-style.cpp:728
 msgid "White stroke"
 msgstr "Білий штрих"
 
-#: ../src/ui/widget/selected-style.cpp:739
+#: ../src/ui/widget/selected-style.cpp:740
 msgid "Black fill"
 msgstr "Заповнення чорним"
 
-#: ../src/ui/widget/selected-style.cpp:751
+#: ../src/ui/widget/selected-style.cpp:752
 msgid "Black stroke"
 msgstr "Чорний штрих"
 
-#: ../src/ui/widget/selected-style.cpp:794
+#: ../src/ui/widget/selected-style.cpp:795
 msgid "Paste fill"
 msgstr "Вставити заповнення"
 
-#: ../src/ui/widget/selected-style.cpp:812
+#: ../src/ui/widget/selected-style.cpp:813
 msgid "Paste stroke"
 msgstr "Вставити штрих"
 
-#: ../src/ui/widget/selected-style.cpp:968
+#: ../src/ui/widget/selected-style.cpp:969
 msgid "Change stroke width"
 msgstr "Змінити товщину штриха"
 
-#: ../src/ui/widget/selected-style.cpp:1071
+#: ../src/ui/widget/selected-style.cpp:1072
 msgid ", drag to adjust"
 msgstr ", налаштуйте шляхом перетягування"
 
-#: ../src/ui/widget/selected-style.cpp:1156
+#: ../src/ui/widget/selected-style.cpp:1157
 #, c-format
 msgid "Stroke width: %.5g%s%s"
 msgstr "Товщина штриха: %.5g%s%s"
 
-#: ../src/ui/widget/selected-style.cpp:1160
+#: ../src/ui/widget/selected-style.cpp:1161
 msgid " (averaged)"
 msgstr " (осереднений)"
 
-#: ../src/ui/widget/selected-style.cpp:1186
+#: ../src/ui/widget/selected-style.cpp:1187
 msgid "0 (transparent)"
 msgstr "0 (прозорий)"
 
-#: ../src/ui/widget/selected-style.cpp:1210
+#: ../src/ui/widget/selected-style.cpp:1211
 msgid "100% (opaque)"
 msgstr "100% (непрозорий)"
 
-#: ../src/ui/widget/selected-style.cpp:1384
+#: ../src/ui/widget/selected-style.cpp:1385
 msgid "Adjust alpha"
 msgstr "Скоригувати канал прозорості"
 
-#: ../src/ui/widget/selected-style.cpp:1386
+#: ../src/ui/widget/selected-style.cpp:1387
 #, c-format
 msgid ""
 "Adjusting <b>alpha</b>: was %.3g, now <b>%.3g</b> (diff %.3g); with <b>Ctrl</"
@@ -25978,11 +25894,11 @@ msgstr ""
 "%.3g); скористайтеся <b>Ctrl</b> для зміни освітленості;<b>Shift</b> — для "
 "зміни насиченості, без модифікаторів — виправлення відтінку"
 
-#: ../src/ui/widget/selected-style.cpp:1390
+#: ../src/ui/widget/selected-style.cpp:1391
 msgid "Adjust saturation"
 msgstr "Корекція насиченості"
 
-#: ../src/ui/widget/selected-style.cpp:1392
+#: ../src/ui/widget/selected-style.cpp:1393
 #, c-format
 msgid ""
 "Adjusting <b>saturation</b>: was %.3g, now <b>%.3g</b> (diff %.3g); with "
@@ -25993,11 +25909,11 @@ msgstr ""
 "скористайтеся <b>Ctrl</b> для корекції освітленості, <b>Alt</b> — для зміни "
 "прозорості, без модифікаторів – корекція відтінку"
 
-#: ../src/ui/widget/selected-style.cpp:1396
+#: ../src/ui/widget/selected-style.cpp:1397
 msgid "Adjust lightness"
 msgstr "Корекція освітленості"
 
-#: ../src/ui/widget/selected-style.cpp:1398
+#: ../src/ui/widget/selected-style.cpp:1399
 #, c-format
 msgid ""
 "Adjusting <b>lightness</b>: was %.3g, now <b>%.3g</b> (diff %.3g); with "
@@ -26008,11 +25924,11 @@ msgstr ""
 "скористайтеся <b>Shift</b> для зміни насиченості, <b>Alt</b> — для зміни "
 "прозорості, без модифікаторів — виправлення відтінку"
 
-#: ../src/ui/widget/selected-style.cpp:1402
+#: ../src/ui/widget/selected-style.cpp:1403
 msgid "Adjust hue"
 msgstr "Корекція відтінку"
 
-#: ../src/ui/widget/selected-style.cpp:1404
+#: ../src/ui/widget/selected-style.cpp:1405
 #, c-format
 msgid ""
 "Adjusting <b>hue</b>: was %.3g, now <b>%.3g</b> (diff %.3g); with <b>Shift</"
@@ -26023,12 +25939,12 @@ msgstr ""
 "скористайтеся <b>Shift</b> для зміни насиченості, <b>Alt</b> — для зміни "
 "прозорості, а <b>Ctrl</b> для зміни освітленості"
 
-#: ../src/ui/widget/selected-style.cpp:1522
-#: ../src/ui/widget/selected-style.cpp:1536
+#: ../src/ui/widget/selected-style.cpp:1523
+#: ../src/ui/widget/selected-style.cpp:1537
 msgid "Adjust stroke width"
 msgstr "Скоригувати товщину штриха"
 
-#: ../src/ui/widget/selected-style.cpp:1523
+#: ../src/ui/widget/selected-style.cpp:1524
 #, c-format
 msgid "Adjusting <b>stroke width</b>: was %.3g, now <b>%.3g</b> (diff %.3g)"
 msgstr ""
@@ -26040,40 +25956,40 @@ msgctxt "Sliders"
 msgid "Link"
 msgstr "З'єднати"
 
-#: ../src/ui/widget/style-swatch.cpp:292
+#: ../src/ui/widget/style-swatch.cpp:294
 msgid "L Gradient"
 msgstr "Лінійний градієнт"
 
-#: ../src/ui/widget/style-swatch.cpp:296
+#: ../src/ui/widget/style-swatch.cpp:298
 msgid "R Gradient"
 msgstr "Рад. градієнт"
 
-#: ../src/ui/widget/style-swatch.cpp:312
+#: ../src/ui/widget/style-swatch.cpp:314
 #, c-format
 msgid "Fill: %06x/%.3g"
 msgstr "Заповнення: %06x/%.3g"
 
-#: ../src/ui/widget/style-swatch.cpp:314
+#: ../src/ui/widget/style-swatch.cpp:316
 #, c-format
 msgid "Stroke: %06x/%.3g"
 msgstr "Штрих: %06x/%.3g"
 
-#: ../src/ui/widget/style-swatch.cpp:319
+#: ../src/ui/widget/style-swatch.cpp:321
 msgctxt "Fill and stroke"
 msgid "<i>None</i>"
 msgstr "<i>Немає</i>"
 
-#: ../src/ui/widget/style-swatch.cpp:346
+#: ../src/ui/widget/style-swatch.cpp:348
 #, c-format
 msgid "Stroke width: %.5g%s"
 msgstr "Товщина штриха: %.5g%s"
 
-#: ../src/ui/widget/style-swatch.cpp:362
+#: ../src/ui/widget/style-swatch.cpp:364
 #, c-format
 msgid "O: %2.0f"
 msgstr "Н: %2.0f"
 
-#: ../src/ui/widget/style-swatch.cpp:367
+#: ../src/ui/widget/style-swatch.cpp:369
 #, c-format
 msgid "Opacity: %2.1f %%"
 msgstr "Непрозорість: %2.1f %%"
@@ -26829,7 +26745,7 @@ msgstr "Вилучити усі напрямні у документі"
 msgid "Lock All Guides"
 msgstr "Заблокувати усі напрямні"
 
-#: ../src/verbs.cpp:2546 ../src/widgets/desktop-widget.cpp:402
+#: ../src/verbs.cpp:2546 ../src/widgets/desktop-widget.cpp:404
 msgid "Toggle lock of all guides in the document"
 msgstr "Увімкнути або вимкнути блокування усіх напрямних у документі"
 
@@ -29029,20 +28945,12 @@ msgstr "Пунктир"
 msgid "Pattern offset"
 msgstr "Зміщення пунктиру"
 
-#: ../src/widgets/desktop-widget.cpp:495
+#: ../src/widgets/desktop-widget.cpp:499
 msgid "Zoom drawing if window size changes"
 msgstr "Змінювати масштаб при зміні розмірів вікна"
 
-#: ../src/widgets/desktop-widget.cpp:702
-msgid "Cursor coordinates"
-msgstr "Координати курсора"
-
-#: ../src/widgets/desktop-widget.cpp:723
-msgid "Z:"
-msgstr "Z:"
-
-#. display the initial welcome message in the statusbar
-#: ../src/widgets/desktop-widget.cpp:776
+#. Display the initial welcome message in the statusbar
+#: ../src/widgets/desktop-widget.cpp:701
 msgid ""
 "<b>Welcome to Inkscape!</b> Use shape or freehand tools to create objects; "
 "use selector (arrow) to move or transform them."
@@ -29051,77 +28959,85 @@ msgstr ""
 "малювання для створення об'єктів; для їх переміщення чи трансформації "
 "використовуйте селектор (стрілку)."
 
-#: ../src/widgets/desktop-widget.cpp:870
+#: ../src/widgets/desktop-widget.cpp:743
+msgid "Cursor coordinates"
+msgstr "Координати курсора"
+
+#: ../src/widgets/desktop-widget.cpp:764
+msgid "Z:"
+msgstr "Z:"
+
+#: ../src/widgets/desktop-widget.cpp:885
 msgid "grayscale"
 msgstr "сірі півтони"
 
-#: ../src/widgets/desktop-widget.cpp:871
+#: ../src/widgets/desktop-widget.cpp:886
 msgid ", grayscale"
 msgstr ", сірі півтони"
 
-#: ../src/widgets/desktop-widget.cpp:872
+#: ../src/widgets/desktop-widget.cpp:887
 msgid "print colors preview"
 msgstr "друк попереднього перегляду кольорів"
 
-#: ../src/widgets/desktop-widget.cpp:873
+#: ../src/widgets/desktop-widget.cpp:888
 msgid ", print colors preview"
 msgstr ", друк попереднього перегляду кольорів"
 
-#: ../src/widgets/desktop-widget.cpp:874
+#: ../src/widgets/desktop-widget.cpp:889
 msgid "outline"
 msgstr "обрис"
 
-#: ../src/widgets/desktop-widget.cpp:875
+#: ../src/widgets/desktop-widget.cpp:890
 msgid "no filters"
 msgstr "без фільтрування"
 
-#: ../src/widgets/desktop-widget.cpp:902
+#: ../src/widgets/desktop-widget.cpp:917
 #, c-format
 msgid "%s%s: %d (%s%s) - Inkscape"
 msgstr "%s%s: %d (%s%s) – Inkscape"
 
-#: ../src/widgets/desktop-widget.cpp:904 ../src/widgets/desktop-widget.cpp:908
+#: ../src/widgets/desktop-widget.cpp:919 ../src/widgets/desktop-widget.cpp:923
 #, c-format
 msgid "%s%s: %d (%s) - Inkscape"
 msgstr "%s%s: %d (%s) — Inkscape"
 
-#: ../src/widgets/desktop-widget.cpp:910
+#: ../src/widgets/desktop-widget.cpp:925
 #, c-format
 msgid "%s%s: %d - Inkscape"
 msgstr "%s%s: %d — Inkscape"
 
-#: ../src/widgets/desktop-widget.cpp:916
+#: ../src/widgets/desktop-widget.cpp:931
 #, c-format
 msgid "%s%s (%s%s) - Inkscape"
 msgstr "%s%s (%s%s) — Inkscape"
 
-#: ../src/widgets/desktop-widget.cpp:918 ../src/widgets/desktop-widget.cpp:922
+#: ../src/widgets/desktop-widget.cpp:933 ../src/widgets/desktop-widget.cpp:937
 #, c-format
 msgid "%s%s (%s) - Inkscape"
 msgstr "%s%s (%s) — Inkscape"
 
-#: ../src/widgets/desktop-widget.cpp:924
+#: ../src/widgets/desktop-widget.cpp:939
 #, c-format
 msgid "%s%s - Inkscape"
 msgstr "%s%s — Inkscape"
 
-#: ../src/widgets/desktop-widget.cpp:1096
+#: ../src/widgets/desktop-widget.cpp:1111
 msgid "Locked all guides"
 msgstr "Заблоковано усі напрямні"
 
-#: ../src/widgets/desktop-widget.cpp:1098
+#: ../src/widgets/desktop-widget.cpp:1113
 msgid "Unlocked all guides"
 msgstr "Розблоковано усі напрямні"
 
-#: ../src/widgets/desktop-widget.cpp:1115
+#: ../src/widgets/desktop-widget.cpp:1130
 msgid "Color-managed display is <b>enabled</b> in this window"
 msgstr "Показ з керуванням кольорами у цьому вікні <b>увімкнено</b>"
 
-#: ../src/widgets/desktop-widget.cpp:1117
+#: ../src/widgets/desktop-widget.cpp:1132
 msgid "Color-managed display is <b>disabled</b> in this window"
 msgstr "Показ з керуванням кольорами у цьому вікні <b>вимкнено</b>"
 
-#: ../src/widgets/desktop-widget.cpp:1172
+#: ../src/widgets/desktop-widget.cpp:1187
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">Save changes to document \"%s\" before "
@@ -29134,12 +29050,12 @@ msgstr ""
 "\n"
 "Якщо ви закриєте документ без збереження, усі зміни будуть втрачені."
 
-#: ../src/widgets/desktop-widget.cpp:1182
-#: ../src/widgets/desktop-widget.cpp:1241
+#: ../src/widgets/desktop-widget.cpp:1197
+#: ../src/widgets/desktop-widget.cpp:1256
 msgid "Close _without saving"
 msgstr "_Не зберігати"
 
-#: ../src/widgets/desktop-widget.cpp:1231
+#: ../src/widgets/desktop-widget.cpp:1246
 #, c-format
 msgid ""
 "<span weight=\"bold\" size=\"larger\">The file \"%s\" was saved with a "
@@ -29152,11 +29068,11 @@ msgstr ""
 "\n"
 "Зберегти документ у форматі SVG Inkscape?"
 
-#: ../src/widgets/desktop-widget.cpp:1243
+#: ../src/widgets/desktop-widget.cpp:1258
 msgid "_Save as Inkscape SVG"
 msgstr "_Зберегти як SVG Inkscape"
 
-#: ../src/widgets/desktop-widget.cpp:1456
+#: ../src/widgets/desktop-widget.cpp:1472
 msgid "Note:"
 msgstr "Примітка:"
 
@@ -29223,15 +29139,9 @@ msgstr "Маса гумки"
 msgid "Increase to make the eraser drag behind, as if slowed by inertia"
 msgstr "Збільшення веде до відставання гумки так, неначе її сповільнює інерція"
 
-#: ../src/widgets/eraser-toolbar.cpp:186
-#, fuzzy
-msgid "Break appart cutted items"
-msgstr "Розірвати контур у позначеному вузлі"
-
-#: ../src/widgets/eraser-toolbar.cpp:187
-#, fuzzy
-msgid "Break appart cutted itemss"
-msgstr "Розірвати контур у позначеному вузлі"
+#: ../src/widgets/eraser-toolbar.cpp:186 ../src/widgets/eraser-toolbar.cpp:187
+msgid "Break apart cut items"
+msgstr "Розділити обрізані елементи"
 
 #: ../src/widgets/fill-style.cpp:356
 msgid "Change fill rule"
@@ -29352,33 +29262,27 @@ msgstr "радіальний"
 msgid "Create radial (elliptic or circular) gradient"
 msgstr "Створити радіальний (еліптичний чи круговий) градієнт"
 
-#: ../src/widgets/gradient-toolbar.cpp:1044
-#: ../src/widgets/mesh-toolbar.cpp:387
+#: ../src/widgets/gradient-toolbar.cpp:1044 ../src/widgets/mesh-toolbar.cpp:387
 msgid "New:"
 msgstr "Створити:"
 
-#: ../src/widgets/gradient-toolbar.cpp:1067
-#: ../src/widgets/mesh-toolbar.cpp:410
+#: ../src/widgets/gradient-toolbar.cpp:1067 ../src/widgets/mesh-toolbar.cpp:410
 msgid "fill"
 msgstr "заповнення"
 
-#: ../src/widgets/gradient-toolbar.cpp:1067
-#: ../src/widgets/mesh-toolbar.cpp:410
+#: ../src/widgets/gradient-toolbar.cpp:1067 ../src/widgets/mesh-toolbar.cpp:410
 msgid "Create gradient in the fill"
 msgstr "Створити градієнт у заповненні"
 
-#: ../src/widgets/gradient-toolbar.cpp:1071
-#: ../src/widgets/mesh-toolbar.cpp:414
+#: ../src/widgets/gradient-toolbar.cpp:1071 ../src/widgets/mesh-toolbar.cpp:414
 msgid "stroke"
 msgstr "штрих"
 
-#: ../src/widgets/gradient-toolbar.cpp:1071
-#: ../src/widgets/mesh-toolbar.cpp:414
+#: ../src/widgets/gradient-toolbar.cpp:1071 ../src/widgets/mesh-toolbar.cpp:414
 msgid "Create gradient in the stroke"
 msgstr "Створити градієнт у штриху"
 
-#: ../src/widgets/gradient-toolbar.cpp:1074
-#: ../src/widgets/mesh-toolbar.cpp:417
+#: ../src/widgets/gradient-toolbar.cpp:1074 ../src/widgets/mesh-toolbar.cpp:417
 msgid "on:"
 msgstr "на:"
 
@@ -29477,8 +29381,7 @@ msgstr "Зв'язати градієнти"
 msgid "Link gradients to change all related gradients"
 msgstr "Зв'язати градієнти, щоб вони змінювалися у всіх пов'язаних градієнтів"
 
-#: ../src/widgets/gradient-vector.cpp:317
-#: ../src/widgets/paint-selector.cpp:965
+#: ../src/widgets/gradient-vector.cpp:317 ../src/widgets/paint-selector.cpp:965
 #: ../src/widgets/stroke-marker-selector.cpp:154
 msgid "No document selected"
 msgstr "Документ не вибрано"
@@ -30767,6 +30670,10 @@ msgstr "Вилучити розкидані об’єкти"
 msgid "Delete sprayed items from selection"
 msgstr "Вилучити розкидані об’єкти з позначеного"
 
+#: ../src/widgets/spray-toolbar.cpp:388 ../src/widgets/tweak-toolbar.cpp:253
+msgid "Mode"
+msgstr "Режим"
+
 #. Population
 #: ../src/widgets/spray-toolbar.cpp:408
 msgid "(low population)"
@@ -31538,133 +31445,133 @@ msgstr "Ще не визначено"
 msgid "Style of Paint Bucket fill objects"
 msgstr "Стиль нових об'єктів, що створені інструментом заповнення"
 
-#: ../src/widgets/toolbox.cpp:1742
+#: ../src/widgets/toolbox.cpp:1750
 msgid "Bounding box"
 msgstr "Рамка-обгортка"
 
-#: ../src/widgets/toolbox.cpp:1742
+#: ../src/widgets/toolbox.cpp:1750
 msgid "Snap bounding boxes"
 msgstr "Прилипання до рамок-обгорток"
 
-#: ../src/widgets/toolbox.cpp:1751
+#: ../src/widgets/toolbox.cpp:1759
 msgid "Bounding box edges"
 msgstr "Краї рамок-обгорток"
 
-#: ../src/widgets/toolbox.cpp:1751
+#: ../src/widgets/toolbox.cpp:1759
 msgid "Snap to edges of a bounding box"
 msgstr "Прилипання до країв рамок-обгорток"
 
-#: ../src/widgets/toolbox.cpp:1760
+#: ../src/widgets/toolbox.cpp:1768
 msgid "Bounding box corners"
 msgstr "Кути рамок-обгорток"
 
-#: ../src/widgets/toolbox.cpp:1760
+#: ../src/widgets/toolbox.cpp:1768
 msgid "Snap bounding box corners"
 msgstr "Прилипання до кутів рамок-обгорток"
 
-#: ../src/widgets/toolbox.cpp:1769
+#: ../src/widgets/toolbox.cpp:1777
 msgid "BBox Edge Midpoints"
 msgstr "Середні точки країв рамки-обгортки"
 
-#: ../src/widgets/toolbox.cpp:1769
+#: ../src/widgets/toolbox.cpp:1777
 msgid "Snap midpoints of bounding box edges"
 msgstr "Прилипання до середніх точок країв рамок-обгорток"
 
-#: ../src/widgets/toolbox.cpp:1779
+#: ../src/widgets/toolbox.cpp:1787
 msgid "BBox Centers"
 msgstr "Центри рамок-обгорток"
 
-#: ../src/widgets/toolbox.cpp:1779
+#: ../src/widgets/toolbox.cpp:1787
 msgid "Snapping centers of bounding boxes"
 msgstr "Прилипання до центрів рамок-обгорток"
 
-#: ../src/widgets/toolbox.cpp:1788
+#: ../src/widgets/toolbox.cpp:1796
 msgid "Snap nodes, paths, and handles"
 msgstr "Прилипання до вузлів, контурів та вусів"
 
-#: ../src/widgets/toolbox.cpp:1796
+#: ../src/widgets/toolbox.cpp:1804
 msgid "Snap to paths"
 msgstr "Прилипання до контурів"
 
-#: ../src/widgets/toolbox.cpp:1805
+#: ../src/widgets/toolbox.cpp:1813
 msgid "Path intersections"
 msgstr "Перетин контурів"
 
-#: ../src/widgets/toolbox.cpp:1805
+#: ../src/widgets/toolbox.cpp:1813
 msgid "Snap to path intersections"
 msgstr "Прилипання до перетинів контурів"
 
-#: ../src/widgets/toolbox.cpp:1814
+#: ../src/widgets/toolbox.cpp:1822
 msgid "To nodes"
 msgstr "До вузлів"
 
-#: ../src/widgets/toolbox.cpp:1814
+#: ../src/widgets/toolbox.cpp:1822
 msgid "Snap cusp nodes, incl. rectangle corners"
 msgstr "Прилипання до вузлів-вершин, зокрема кутів прямокутників"
 
-#: ../src/widgets/toolbox.cpp:1823
+#: ../src/widgets/toolbox.cpp:1831
 msgid "Smooth nodes"
 msgstr "Гладкі вузли"
 
-#: ../src/widgets/toolbox.cpp:1823
+#: ../src/widgets/toolbox.cpp:1831
 msgid "Snap smooth nodes, incl. quadrant points of ellipses"
 msgstr "Прилипання до гладких вузлів, зокрема вершин еліпсів"
 
-#: ../src/widgets/toolbox.cpp:1832
+#: ../src/widgets/toolbox.cpp:1840
 msgid "Line Midpoints"
 msgstr "Середні точки лінії"
 
-#: ../src/widgets/toolbox.cpp:1832
+#: ../src/widgets/toolbox.cpp:1840
 msgid "Snap midpoints of line segments"
 msgstr "Прилипання до середніх точок сегментів лінії"
 
-#: ../src/widgets/toolbox.cpp:1841
+#: ../src/widgets/toolbox.cpp:1849
 msgid "Others"
 msgstr "Інші"
 
-#: ../src/widgets/toolbox.cpp:1841
+#: ../src/widgets/toolbox.cpp:1849
 msgid "Snap other points (centers, guide origins, gradient handles, etc.)"
 msgstr ""
 "Прилипання до інших точок (центрів, початків напрямних, опорних точок "
 "градієнтів тощо)"
 
-#: ../src/widgets/toolbox.cpp:1849
+#: ../src/widgets/toolbox.cpp:1857
 msgid "Object Centers"
 msgstr "Центри об'єктів"
 
-#: ../src/widgets/toolbox.cpp:1849
+#: ../src/widgets/toolbox.cpp:1857
 msgid "Snap centers of objects"
 msgstr "Прилипання до центрів об'єктів"
 
-#: ../src/widgets/toolbox.cpp:1858
+#: ../src/widgets/toolbox.cpp:1866
 msgid "Rotation Centers"
 msgstr "Центри обертання"
 
-#: ../src/widgets/toolbox.cpp:1858
+#: ../src/widgets/toolbox.cpp:1866
 msgid "Snap an item's rotation center"
 msgstr "Прилипання до центру обертання елемента"
 
-#: ../src/widgets/toolbox.cpp:1867
+#: ../src/widgets/toolbox.cpp:1875
 msgid "Text baseline"
 msgstr "Базова лінія тексту"
 
-#: ../src/widgets/toolbox.cpp:1867
+#: ../src/widgets/toolbox.cpp:1875
 msgid "Snap text anchors and baselines"
 msgstr "Прилипання до прив'язок тексту та центрів об'єктів"
 
-#: ../src/widgets/toolbox.cpp:1877
+#: ../src/widgets/toolbox.cpp:1885
 msgid "Page border"
 msgstr "Межа сторінки"
 
-#: ../src/widgets/toolbox.cpp:1877
+#: ../src/widgets/toolbox.cpp:1885
 msgid "Snap to the page border"
 msgstr "Прилипання до межі сторінки"
 
-#: ../src/widgets/toolbox.cpp:1886
+#: ../src/widgets/toolbox.cpp:1894
 msgid "Snap to grids"
 msgstr "Прилипання до сітки"
 
-#: ../src/widgets/toolbox.cpp:1895
+#: ../src/widgets/toolbox.cpp:1903
 msgid "Snap guides"
 msgstr "Прилипання до напрямних"
 
@@ -31881,57 +31788,53 @@ msgid "Use the pressure of the input device to alter the force of tweak action"
 msgstr ""
 "Використовувати силу натиску пристрою введення для зміни сили дії корекції"
 
-#: ../share/extensions/convert2dashes.py:100
-msgid ""
-"The selected object is not a path.\n"
-"Try using the procedure Path->Object to Path."
+#: ../share/extensions/convert2dashes.py:56
+msgid "Total number of objects not converted: {}\n"
 msgstr ""
-"Позначений об'єкт не є контуром.\n"
-"Спробуйте скористатися пунктом меню Контур -> Об'єкт у контур."
 
-#: ../share/extensions/dimension.py:109
+#: ../share/extensions/dimension.py:108
 msgid "Please select an object."
 msgstr "Будь ласка, позначте об'єкт."
 
-#: ../share/extensions/dimension.py:134
+#: ../share/extensions/dimension.py:133
 msgid "Unable to process this object.  Try changing it into a path first."
 msgstr ""
 "Неможливо обробити цей об'єкт. Спробуйте спочатку перетворити його на контур."
 
 #. report to the Inkscape console using errormsg
-#: ../share/extensions/draw_from_triangle.py:180
+#: ../share/extensions/draw_from_triangle.py:179
 msgid "Side Length 'a' (px): "
 msgstr "Довжина кроку «a» (у пк): "
 
-#: ../share/extensions/draw_from_triangle.py:181
+#: ../share/extensions/draw_from_triangle.py:180
 msgid "Side Length 'b' (px): "
 msgstr "Довжина кроку «b» (у пк): "
 
-#: ../share/extensions/draw_from_triangle.py:182
+#: ../share/extensions/draw_from_triangle.py:181
 msgid "Side Length 'c' (px): "
 msgstr "Довжина кроку «c» (у пк): "
 
-#: ../share/extensions/draw_from_triangle.py:183
+#: ../share/extensions/draw_from_triangle.py:182
 msgid "Angle 'A' (radians): "
 msgstr "Кут «A» (у радіанах): "
 
-#: ../share/extensions/draw_from_triangle.py:184
+#: ../share/extensions/draw_from_triangle.py:183
 msgid "Angle 'B' (radians): "
 msgstr "Кут «B» (у радіанах): "
 
-#: ../share/extensions/draw_from_triangle.py:185
+#: ../share/extensions/draw_from_triangle.py:184
 msgid "Angle 'C' (radians): "
 msgstr "Кут «C» (у радіанах): "
 
-#: ../share/extensions/draw_from_triangle.py:186
+#: ../share/extensions/draw_from_triangle.py:185
 msgid "Semiperimeter (px): "
 msgstr "Напівпериметр (у пк): "
 
-#: ../share/extensions/draw_from_triangle.py:187
+#: ../share/extensions/draw_from_triangle.py:186
 msgid "Area (px^2): "
 msgstr "Площа (у пк²): "
 
-#: ../share/extensions/dxf_input.py:528
+#: ../share/extensions/dxf_input.py:530
 #, python-format
 msgid ""
 "%d ENTITIES of type POLYLINE encountered and ignored. Please try to convert "
@@ -31940,7 +31843,7 @@ msgstr ""
 "Виявлено і проігноровано %d записів типу POLYLINE. Спробуйте виконати "
 "перетворення у формат версії 13 за допомогою QCad."
 
-#: ../share/extensions/dxf_outlines.py:49
+#: ../share/extensions/dxf_outlines.py:47
 msgid ""
 "Failed to import the numpy or numpy.linalg modules. These modules are "
 "required by this extension. Please install them and try again."
@@ -31948,7 +31851,7 @@ msgstr ""
 "Не вдалося імпортувати модулі numpy або numpy.linalg. Ці модулі потрібні для "
 "цього додатку. Будь ласка, встановіть модулі і повторіть спробу."
 
-#: ../share/extensions/dxf_outlines.py:315
+#: ../share/extensions/dxf_outlines.py:313
 msgid ""
 "Error: Field 'Layer match name' must be filled when using 'By name match' "
 "option"
@@ -31956,12 +31859,12 @@ msgstr ""
 "Помилка: якщо використовується варіант «Відповідність за назвою», слід "
 "заповнити поле «Назва відповідного шару»"
 
-#: ../share/extensions/dxf_outlines.py:356
+#: ../share/extensions/dxf_outlines.py:354
 #, python-format
 msgid "Warning: Layer '%s' not found!"
 msgstr "Попередження: шару «%s» не знайдено."
 
-#: ../share/extensions/embedimage.py:84
+#: ../share/extensions/embedimage.py:83
 msgid ""
 "No xlink:href or sodipodi:absref attributes found, or they do not point to "
 "an existing file! Unable to embed image."
@@ -31969,12 +31872,12 @@ msgstr ""
 "Не знайдено атрибутів xlink:href або sodipodi:absref або вони не вказують на "
 "існуючий файл! Не вдалося вбудувати зображення."
 
-#: ../share/extensions/embedimage.py:86
+#: ../share/extensions/embedimage.py:85
 #, python-format
 msgid "Sorry we could not locate %s"
 msgstr "Вибачте, нам не вдалося знайти %s"
 
-#: ../share/extensions/embedimage.py:111
+#: ../share/extensions/embedimage.py:110
 #, python-format
 msgid ""
 "%s is not of type image/png, image/jpeg, image/bmp, image/gif, image/tiff, "
@@ -31991,27 +31894,27 @@ msgstr ""
 "Для роботи export_gpl.py потрібен PyXML. Будь ласка, отримайте останню "
 "версію з сайта http://pyxml.sourceforge.net/."
 
-#: ../share/extensions/extractimage.py:68
+#: ../share/extensions/extractimage.py:66
 #, python-format
 msgid "Image extracted to: %s"
 msgstr "Зображення видобуто до: %s"
 
-#: ../share/extensions/extractimage.py:75
+#: ../share/extensions/extractimage.py:73
 msgid "Unable to find image data."
 msgstr "Не вдалося знайти дані зображення."
 
-#: ../share/extensions/extrude.py:43
+#: ../share/extensions/extrude.py:41
 msgid "Need at least 2 paths selected"
 msgstr "Слід позначити принаймні 2 контури"
 
-#: ../share/extensions/funcplot.py:48
+#: ../share/extensions/funcplot.py:46
 msgid ""
 "x-interval cannot be zero. Please modify 'Start X value' or 'End X value'"
 msgstr ""
 "Інтервал за x не може бути нульовим. Будь ласка, змініть значення «Початкове "
 "значення за X» або «Кінцеве значення за X»"
 
-#: ../share/extensions/funcplot.py:60
+#: ../share/extensions/funcplot.py:58
 msgid ""
 "y-interval cannot be zero. Please modify 'Y value of rectangle's top' or 'Y "
 "value of rectangle's bottom'"
@@ -32019,25 +31922,25 @@ msgstr ""
 "Інтервал за y не може бути нульовим. Будь ласка, змініть значення «Y-"
 "координата верху прямокутника» або «Y-координата основи прямокутника»"
 
-#: ../share/extensions/funcplot.py:315
+#: ../share/extensions/funcplot.py:313
 msgid "Please select a rectangle"
 msgstr "Будь ласка, позначте прямокутник"
 
-#: ../share/extensions/gcodetools.py:3321
-#: ../share/extensions/gcodetools.py:4526
-#: ../share/extensions/gcodetools.py:4699
-#: ../share/extensions/gcodetools.py:6232
-#: ../share/extensions/gcodetools.py:6427
+#: ../share/extensions/gcodetools.py:3319
+#: ../share/extensions/gcodetools.py:4524
+#: ../share/extensions/gcodetools.py:4697
+#: ../share/extensions/gcodetools.py:6230
+#: ../share/extensions/gcodetools.py:6425
 msgid "No paths are selected! Trying to work on all available paths."
 msgstr ""
 "Не позначено жодного контуру. Буде виконано спробу обробки всіх доступних "
 "контурів."
 
-#: ../share/extensions/gcodetools.py:3324
+#: ../share/extensions/gcodetools.py:3322
 msgid "Nothing is selected. Please select something."
 msgstr "Нічого не позначено. Будь ласка, позначте щось."
 
-#: ../share/extensions/gcodetools.py:3864
+#: ../share/extensions/gcodetools.py:3862
 msgid ""
 "Directory does not exist! Please specify existing directory at Preferences "
 "tab!"
@@ -32045,7 +31948,7 @@ msgstr ""
 "Каталогу не існує. Будь ласка, вкажіть назву каталогу, який вже створено, на "
 "вкладці «Налаштування»."
 
-#: ../share/extensions/gcodetools.py:3894
+#: ../share/extensions/gcodetools.py:3892
 #, python-format
 msgid ""
 "Can not write to specified file!\n"
@@ -32054,7 +31957,7 @@ msgstr ""
 "Не вдалося виконати запис до вказаного файла!\n"
 "%s"
 
-#: ../share/extensions/gcodetools.py:4040
+#: ../share/extensions/gcodetools.py:4038
 #, python-format
 msgid ""
 "Orientation points for '%s' layer have not been found! Please add "
@@ -32063,13 +31966,13 @@ msgstr ""
 "Не виявлено точок орієнтації для шару «%s». Будь ласка, додайте точки "
 "орієнтації за допомогою вкладки «Орієнтація»!"
 
-#: ../share/extensions/gcodetools.py:4047
+#: ../share/extensions/gcodetools.py:4045
 #, python-format
 msgid "There are more than one orientation point groups in '%s' layer"
 msgstr "У шарі «%s» виявлено більше за одну групу точок орієнтації"
 
+#: ../share/extensions/gcodetools.py:4076
 #: ../share/extensions/gcodetools.py:4078
-#: ../share/extensions/gcodetools.py:4080
 msgid ""
 "Orientation points are wrong! (if there are two orientation points they "
 "should not be the same. If there are three orientation points they should "
@@ -32079,7 +31982,7 @@ msgstr ""
 "збігатися. Якщо використовуються три точки, ці точки не повинні лежати на "
 "одній прямій."
 
-#: ../share/extensions/gcodetools.py:4250
+#: ../share/extensions/gcodetools.py:4248
 #, python-format
 msgid ""
 "Warning! Found bad orientation points in '%s' layer. Resulting Gcode could "
@@ -32088,7 +31991,7 @@ msgstr ""
 "Увага. Виявлено помилкові точки орієнтації у шарі «%s». Отримані дані Gcode "
 "може бути пошкоджено!"
 
-#: ../share/extensions/gcodetools.py:4263
+#: ../share/extensions/gcodetools.py:4261
 #, python-format
 msgid ""
 "Warning! Found bad graffiti reference point in '%s' layer. Resulting Gcode "
@@ -32098,7 +32001,7 @@ msgstr ""
 "Gcode може бути пошкоджено!"
 
 #. xgettext:no-pango-format
-#: ../share/extensions/gcodetools.py:4284
+#: ../share/extensions/gcodetools.py:4282
 msgid ""
 "This extension works with Paths and Dynamic Offsets and groups of them only! "
 "All other objects will be ignored!\n"
@@ -32116,7 +32019,7 @@ msgstr ""
 "як->.ps), а потім скористайтеся пунктом меню «Файл->Імпортувати» для "
 "імпортування створеного файла."
 
-#: ../share/extensions/gcodetools.py:4290
+#: ../share/extensions/gcodetools.py:4288
 msgid ""
 "Document has no layers! Add at least one layer using layers panel (Ctrl+Shift"
 "+L)"
@@ -32124,7 +32027,7 @@ msgstr ""
 "У документі немає шарів! Додайте принаймні один шар за допомогою панелі "
 "шарів (Ctrl+Shift+L)"
 
-#: ../share/extensions/gcodetools.py:4294
+#: ../share/extensions/gcodetools.py:4292
 msgid ""
 "Warning! There are some paths in the root of the document, but not in any "
 "layer! Using bottom-most layer for them."
@@ -32132,7 +32035,7 @@ msgstr ""
 "Увага! У корені документа вказано декілька контурів, але цих контурів немає "
 "у жодному шарі! Для цих контурів буде використано найнижчий шар."
 
-#: ../share/extensions/gcodetools.py:4371
+#: ../share/extensions/gcodetools.py:4369
 #, python-format
 msgid ""
 "Warning! Tool's and default tool's parameter's (%s) types are not the same "
@@ -32141,19 +32044,19 @@ msgstr ""
 "Увага. Тип параметра інструмента та типовий тип параметра інструмента (%s) "
 "не збігаються ( type('%s') != type('%s') )."
 
-#: ../share/extensions/gcodetools.py:4374
+#: ../share/extensions/gcodetools.py:4372
 #, python-format
 msgid "Warning! Tool has parameter that default tool has not ( '%s': '%s' )."
 msgstr ""
 "Увага. Для інструмента вказано параметр, який не передбачено типовим "
 "інструментом ( '%s': '%s' )."
 
-#: ../share/extensions/gcodetools.py:4388
+#: ../share/extensions/gcodetools.py:4386
 #, python-format
 msgid "Layer '%s' contains more than one tool!"
 msgstr "У шарі «%s» міститься більше за один інструмент."
 
-#: ../share/extensions/gcodetools.py:4391
+#: ../share/extensions/gcodetools.py:4389
 #, python-format
 msgid ""
 "Can not find tool for '%s' layer! Please add one with Tools library tab!"
@@ -32161,8 +32064,8 @@ msgstr ""
 "Не вдалося знайти інструмент для шару «%s». Будь ласка, додайте інструмент "
 "за допомогою вкладки «Бібліотека інструментів»."
 
-#: ../share/extensions/gcodetools.py:4553
-#: ../share/extensions/gcodetools.py:4708
+#: ../share/extensions/gcodetools.py:4551
+#: ../share/extensions/gcodetools.py:4706
 msgid ""
 "Warning: One or more paths do not have 'd' parameter, try to Ungroup (Ctrl"
 "+Shift+G) and Object to Path (Ctrl+Shift+C)!"
@@ -32171,7 +32074,7 @@ msgstr ""
 "Скористайтеся пунктом меню «Розгрупувати» (Ctrl+Shift+G) або «Об'єкт у "
 "контур» (Ctrl+Shift+C)."
 
-#: ../share/extensions/gcodetools.py:4667
+#: ../share/extensions/gcodetools.py:4665
 msgid ""
 "Nothing is selected. Please select something to convert to drill point "
 "(dxfpoint) or clear point sign."
@@ -32179,64 +32082,64 @@ msgstr ""
 "Нічого не позначено. Будь ласка, позначте щось для перетворення на точку "
 "отвору (точку dxf) або вилучіть знак точки."
 
-#: ../share/extensions/gcodetools.py:4750
-#: ../share/extensions/gcodetools.py:4996
+#: ../share/extensions/gcodetools.py:4748
+#: ../share/extensions/gcodetools.py:4994
 msgid "This extension requires at least one selected path."
 msgstr "Для роботи цього додатка потрібно позначити принаймні один контур."
 
-#: ../share/extensions/gcodetools.py:4756
-#: ../share/extensions/gcodetools.py:5002
+#: ../share/extensions/gcodetools.py:4754
+#: ../share/extensions/gcodetools.py:5000
 #, python-format
 msgid "Tool diameter must be > 0 but tool's diameter on '%s' layer is not!"
 msgstr ""
 "Діаметр інструмента має бути > 0, але діаметр інструмент на шарі «%s» має "
 "недодатне значення."
 
-#: ../share/extensions/gcodetools.py:4767
-#: ../share/extensions/gcodetools.py:4956
-#: ../share/extensions/gcodetools.py:5011
+#: ../share/extensions/gcodetools.py:4765
+#: ../share/extensions/gcodetools.py:4954
+#: ../share/extensions/gcodetools.py:5009
 msgid "Warning: omitting non-path"
 msgstr "Попередження: пропущено об'єкт, який не є контуром"
 
-#: ../share/extensions/gcodetools.py:5511
+#: ../share/extensions/gcodetools.py:5509
 msgid "Please select at least one path to engrave and run again."
 msgstr "Виберіть хоча б один контур для гравірування і повторіть запуск."
 
-#: ../share/extensions/gcodetools.py:5519
+#: ../share/extensions/gcodetools.py:5517
 msgid "Unknown unit selected. mm assumed"
 msgstr "Вибрано невідому одиницю виміру, буде використано мм."
 
-#: ../share/extensions/gcodetools.py:5540
+#: ../share/extensions/gcodetools.py:5538
 #, python-format
 msgid "Tool '%s' has no shape. 45 degree cone assumed!"
 msgstr "У інструмента «%s» немає форми. Буде використано 45° конічний."
 
-#: ../share/extensions/gcodetools.py:5611
-#: ../share/extensions/gcodetools.py:5616
+#: ../share/extensions/gcodetools.py:5609
+#: ../share/extensions/gcodetools.py:5614
 msgid "csp_normalised_normal error. See log."
 msgstr "Помилка csp_normalised_normal. Ознайомтеся з повідомленням журналу."
 
-#: ../share/extensions/gcodetools.py:5804
+#: ../share/extensions/gcodetools.py:5802
 msgid "No need to engrave sharp angles."
 msgstr "Немає потреби у гравіруванні гострих кутів."
 
-#: ../share/extensions/gcodetools.py:5848
+#: ../share/extensions/gcodetools.py:5846
 msgid ""
 "Active layer already has orientation points! Remove them or select another "
 "layer!"
 msgstr ""
 "У активному шарі вже є точки орієнтації. Вилучіть їх або виберіть інший шар."
 
-#: ../share/extensions/gcodetools.py:5893
+#: ../share/extensions/gcodetools.py:5891
 msgid "Active layer already has a tool! Remove it or select another layer!"
 msgstr ""
 "У активному шарі вже є інструмент. Вилучіть його або виберіть інший шар."
 
-#: ../share/extensions/gcodetools.py:6008
+#: ../share/extensions/gcodetools.py:6006
 msgid "Selection is empty! Will compute whole drawing."
 msgstr "Нічого не позначено. Обчислення буде виконано для всього малюнка."
 
-#: ../share/extensions/gcodetools.py:6062
+#: ../share/extensions/gcodetools.py:6060
 msgid ""
 "Tutorials, manuals and support can be found at\n"
 "English support forum:\n"
@@ -32250,18 +32153,18 @@ msgstr ""
 "або форумі підтримки російською:\n"
 "\thttp://www.cnc-club.ru/gcodetoolsru"
 
-#: ../share/extensions/gcodetools.py:6107
+#: ../share/extensions/gcodetools.py:6105
 msgid "Lathe X and Z axis remap should be 'X', 'Y' or 'Z'. Exiting..."
 msgstr ""
 "Значеннями перепризначених осей X і Z мають бути «X», «Y» або «Z». "
 "Завершення роботи…"
 
-#: ../share/extensions/gcodetools.py:6110
+#: ../share/extensions/gcodetools.py:6108
 msgid "Lathe X and Z axis remap should be the same. Exiting..."
 msgstr ""
 "Значення перепризначених осей X і Z мають бути однаковими. Завершення роботи…"
 
-#: ../share/extensions/gcodetools.py:6662
+#: ../share/extensions/gcodetools.py:6660
 #, python-format
 msgid ""
 "Select one of the action tabs - Path to Gcode, Area, Engraving, DXF points, "
@@ -32272,7 +32175,7 @@ msgstr ""
 "Точки DXF, Відступ, Верстат або Бібліотека інструментів.\n"
 "Ідентифікатор поточної активної вкладки — %s"
 
-#: ../share/extensions/gcodetools.py:6668
+#: ../share/extensions/gcodetools.py:6666
 msgid ""
 "Orientation points have not been defined! A default set of orientation "
 "points has been automatically added."
@@ -32280,7 +32183,7 @@ msgstr ""
 "Не визначено точки орієнтації. Було автоматично додано типовий набір точок "
 "орієнтації."
 
-#: ../share/extensions/gcodetools.py:6672
+#: ../share/extensions/gcodetools.py:6670
 msgid ""
 "Cutting tool has not been defined! A default tool has been automatically "
 "added."
@@ -32288,7 +32191,7 @@ msgstr ""
 "Не вказано інструмент гравірування. Буде автоматично додано типовий "
 "інструмент."
 
-#: ../share/extensions/generate_voronoi.py:35
+#: ../share/extensions/generate_voronoi.py:33
 msgid ""
 "Failed to import the subprocess module. Please report this as a bug at: "
 "https://bugs.launchpad.net/inkscape."
@@ -32296,33 +32199,33 @@ msgstr ""
 "Не вдалося імпортувати модуль підпроцесу. Будь ласка, повідомте про цю ваду "
 "за адресою: https://bugs.launchpad.net/inkscape."
 
-#: ../share/extensions/generate_voronoi.py:36
+#: ../share/extensions/generate_voronoi.py:34
 msgid "Python version is: "
 msgstr "Версія Python: "
 
-#: ../share/extensions/generate_voronoi.py:94
+#: ../share/extensions/generate_voronoi.py:92
 msgid "Please select an object"
 msgstr "Будь ласка, позначте об'єкт"
 
-#: ../share/extensions/gimp_xcf.py:39
+#: ../share/extensions/gimp_xcf.py:37
 msgid "Inkscape must be installed and set in your path variable."
 msgstr ""
 "Inkscape має бути встановлено до одного з каталогів, описаних змінною PATH."
 
-#: ../share/extensions/gimp_xcf.py:43
+#: ../share/extensions/gimp_xcf.py:41
 msgid "Gimp must be installed and set in your path variable."
 msgstr ""
 "Gimp має бути встановлено до одного з каталогів, описаних змінною PATH."
 
-#: ../share/extensions/gimp_xcf.py:47
+#: ../share/extensions/gimp_xcf.py:45
 msgid "An error occurred while processing the XCF file."
 msgstr "Під час спроби обробки файла XCF сталася помилка."
 
-#: ../share/extensions/gimp_xcf.py:185
+#: ../share/extensions/gimp_xcf.py:183
 msgid "This extension requires at least one non empty layer."
 msgstr "Для роботи цього додатка потрібен хоча б один непорожній шар."
 
-#: ../share/extensions/guillotine.py:250
+#: ../share/extensions/guillotine.py:248
 msgid "The sliced bitmaps have been saved as:"
 msgstr "Зрізані растрові зображення було збережено як:"
 
@@ -32335,11 +32238,11 @@ msgid "Pen "
 msgstr "Різець "
 
 #. issue error if no hpgl data found
-#: ../share/extensions/hpgl_input.py:58
+#: ../share/extensions/hpgl_input.py:56
 msgid "No HPGL data found."
 msgstr "Не знайдено даних HPGL."
 
-#: ../share/extensions/hpgl_input.py:66
+#: ../share/extensions/hpgl_input.py:64
 msgid ""
 "The HPGL data contained unknown (unsupported) commands, there is a "
 "possibility that the drawing is missing some content."
@@ -32348,14 +32251,14 @@ msgstr ""
 "кресленні не буде деяких елементів."
 
 #. issue error if no paths found
-#: ../share/extensions/hpgl_output.py:58
+#: ../share/extensions/hpgl_output.py:57
 msgid ""
 "No paths where found. Please convert all objects you want to save into paths."
 msgstr ""
 "Контурів не знайдено. Будь ласка, перетворіть усі потрібні вам об’єкти для "
 "збереження на контури."
 
-#: ../share/extensions/inkex.py:117
+#: ../share/extensions/inkex.py:116
 #, python-format
 msgid ""
 "The fantastic lxml wrapper for libxml2 is required by inkex.py and therefore "
@@ -32374,12 +32277,12 @@ msgstr ""
 "Технічна інформація:\n"
 "%s"
 
-#: ../share/extensions/inkex.py:185
+#: ../share/extensions/inkex.py:184
 #, python-format
 msgid "Unable to open specified file: %s"
 msgstr "Не вдалося відкрити вказаний файл: %s"
 
-#: ../share/extensions/inkex.py:194
+#: ../share/extensions/inkex.py:193
 #, python-format
 msgid "Unable to open object member file: %s"
 msgstr "Не вдалося відкрити файл-частину об’єкта: %s"
@@ -32393,20 +32296,20 @@ msgstr "Не знайдено відповідного вузла для вир�
 msgid "SVG Width not set correctly! Assuming width = 100"
 msgstr "Ширину SVG вказано некоректно! Припускаємо ширину, що дорівнює 100"
 
-#: ../share/extensions/interp_att_g.py:176
+#: ../share/extensions/interp_att_g.py:175
 msgid "There is no selection to interpolate"
 msgstr "Нічого не позначено для інтерполяції"
 
-#: ../share/extensions/jessyInk_autoTexts.py:45
-#: ../share/extensions/jessyInk_effects.py:50
-#: ../share/extensions/jessyInk_export.py:96
-#: ../share/extensions/jessyInk_keyBindings.py:188
-#: ../share/extensions/jessyInk_masterSlide.py:46
-#: ../share/extensions/jessyInk_mouseHandler.py:48
-#: ../share/extensions/jessyInk_summary.py:64
-#: ../share/extensions/jessyInk_transitions.py:50
-#: ../share/extensions/jessyInk_video.py:49
-#: ../share/extensions/jessyInk_view.py:67
+#: ../share/extensions/jessyInk_autoTexts.py:44
+#: ../share/extensions/jessyInk_effects.py:49
+#: ../share/extensions/jessyInk_export.py:94
+#: ../share/extensions/jessyInk_keyBindings.py:187
+#: ../share/extensions/jessyInk_masterSlide.py:44
+#: ../share/extensions/jessyInk_mouseHandler.py:47
+#: ../share/extensions/jessyInk_summary.py:63
+#: ../share/extensions/jessyInk_transitions.py:49
+#: ../share/extensions/jessyInk_video.py:47
+#: ../share/extensions/jessyInk_view.py:66
 msgid ""
 "The JessyInk script is not installed in this SVG file or has a different "
 "version than the JessyInk extensions. Please select \"install/update...\" "
@@ -32420,7 +32323,7 @@ msgstr ""
 "або оновити скрипт JessyInk.\n"
 "\n"
 
-#: ../share/extensions/jessyInk_autoTexts.py:48
+#: ../share/extensions/jessyInk_autoTexts.py:47
 msgid ""
 "To assign an effect, please select an object.\n"
 "\n"
@@ -32428,7 +32331,7 @@ msgstr ""
 "Щоб призначити ефект, будь ласка, позначте об'єкт.\n"
 "\n"
 
-#: ../share/extensions/jessyInk_autoTexts.py:54
+#: ../share/extensions/jessyInk_autoTexts.py:53
 #, python-brace-format
 msgid ""
 "Node with id '{0}' is not a suitable text node and was therefore ignored.\n"
@@ -32438,7 +32341,7 @@ msgstr ""
 "проігноровано.\n"
 "\n"
 
-#: ../share/extensions/jessyInk_effects.py:53
+#: ../share/extensions/jessyInk_effects.py:52
 msgid ""
 "No object selected. Please select the object you want to assign an effect to "
 "and then press apply.\n"
@@ -32446,15 +32349,15 @@ msgstr ""
 "Не позначено жодного об'єкта. Будь ласка, позначте об'єкт, до якого ви "
 "бажаєте призначити ефект, а потім натисніть кнопку «Застосувати».\n"
 
-#: ../share/extensions/jessyInk_export.py:82
+#: ../share/extensions/jessyInk_export.py:80
 msgid "Could not find Inkscape command.\n"
 msgstr "Не вдалося знайти команду Inkscape.\n"
 
-#: ../share/extensions/jessyInk_masterSlide.py:56
+#: ../share/extensions/jessyInk_masterSlide.py:54
 msgid "Layer not found. Removed current master slide selection.\n"
 msgstr "Шар не знайдено. Вилучено позначення поточного основного слайда.\n"
 
-#: ../share/extensions/jessyInk_masterSlide.py:58
+#: ../share/extensions/jessyInk_masterSlide.py:56
 msgid ""
 "More than one layer with this name found. Removed current master slide "
 "selection.\n"
@@ -32462,16 +32365,16 @@ msgstr ""
 "Знайдено декілька шарів з такою назвою. Вилучено позначення поточного "
 "основного слайда.\n"
 
-#: ../share/extensions/jessyInk_summary.py:69
+#: ../share/extensions/jessyInk_summary.py:68
 #, python-brace-format
 msgid "JessyInk script version {0} installed."
 msgstr "Встановлено версію {0} скрипту JessyInk."
 
-#: ../share/extensions/jessyInk_summary.py:71
+#: ../share/extensions/jessyInk_summary.py:70
 msgid "JessyInk script installed."
 msgstr "Встановлено скрипт JessyInk."
 
-#: ../share/extensions/jessyInk_summary.py:83
+#: ../share/extensions/jessyInk_summary.py:82
 msgid ""
 "\n"
 "Master slide:"
@@ -32479,7 +32382,7 @@ msgstr ""
 "\n"
 "Основний слайд:"
 
-#: ../share/extensions/jessyInk_summary.py:89
+#: ../share/extensions/jessyInk_summary.py:88
 msgid ""
 "\n"
 "Slide {0!s}:"
@@ -32487,30 +32390,30 @@ msgstr ""
 "\n"
 "Слайд {0!s}:"
 
-#: ../share/extensions/jessyInk_summary.py:94
+#: ../share/extensions/jessyInk_summary.py:93
 #, python-brace-format
 msgid "{0}Layer name: {1}"
 msgstr "{0}Назва шару: {1}"
 
-#: ../share/extensions/jessyInk_summary.py:102
+#: ../share/extensions/jessyInk_summary.py:101
 msgid "{0}Transition in: {1} ({2!s} s)"
 msgstr "{0}Перехід у {1} ({2!s} с)"
 
-#: ../share/extensions/jessyInk_summary.py:104
+#: ../share/extensions/jessyInk_summary.py:103
 #, python-brace-format
 msgid "{0}Transition in: {1}"
 msgstr "{0}Перехід у {1}"
 
-#: ../share/extensions/jessyInk_summary.py:111
+#: ../share/extensions/jessyInk_summary.py:110
 msgid "{0}Transition out: {1} ({2!s} s)"
 msgstr "{0}Перехід з {1} ({2!s} с)"
 
-#: ../share/extensions/jessyInk_summary.py:113
+#: ../share/extensions/jessyInk_summary.py:112
 #, python-brace-format
 msgid "{0}Transition out: {1}"
 msgstr "{0}Вихідна позиція переходу: {1}"
 
-#: ../share/extensions/jessyInk_summary.py:120
+#: ../share/extensions/jessyInk_summary.py:119
 #, python-brace-format
 msgid ""
 "\n"
@@ -32519,12 +32422,12 @@ msgstr ""
 "\n"
 "{0}Автотексти:"
 
-#: ../share/extensions/jessyInk_summary.py:123
+#: ../share/extensions/jessyInk_summary.py:122
 #, python-brace-format
 msgid "{0}\t\"{1}\" (object id \"{2}\") will be replaced by \"{3}\"."
 msgstr "{0}\t\"{1}\" (ідентифікатор об'єкта «{2}») буде замінено на «{3}»."
 
-#: ../share/extensions/jessyInk_summary.py:168
+#: ../share/extensions/jessyInk_summary.py:167
 #, python-brace-format
 msgid ""
 "\n"
@@ -32533,7 +32436,7 @@ msgstr ""
 "\n"
 "{0}Початковий ефект (порядковий номер {1}):"
 
-#: ../share/extensions/jessyInk_summary.py:170
+#: ../share/extensions/jessyInk_summary.py:169
 msgid ""
 "\n"
 "{0}Effect {1!s} (order number {2}):"
@@ -32541,47 +32444,47 @@ msgstr ""
 "\n"
 "{0}Ефект {1!s} (порядковий номер {2}):"
 
-#: ../share/extensions/jessyInk_summary.py:174
+#: ../share/extensions/jessyInk_summary.py:173
 #, python-brace-format
 msgid "{0}\tView will be set according to object \"{1}\""
 msgstr "{0}\tОбласть перегляду буде встановлено відповідно до об'єкта «{1}»"
 
-#: ../share/extensions/jessyInk_summary.py:176
+#: ../share/extensions/jessyInk_summary.py:175
 #, python-brace-format
 msgid "{0}\tObject \"{1}\""
 msgstr "{0}\tОб'єкт «{1}»"
 
-#: ../share/extensions/jessyInk_summary.py:179
+#: ../share/extensions/jessyInk_summary.py:178
 msgid " will appear"
 msgstr " з'явиться"
 
-#: ../share/extensions/jessyInk_summary.py:181
+#: ../share/extensions/jessyInk_summary.py:180
 msgid " will disappear"
 msgstr " зникне"
 
-#: ../share/extensions/jessyInk_summary.py:184
+#: ../share/extensions/jessyInk_summary.py:183
 #, python-brace-format
 msgid " using effect \"{0}\""
 msgstr " з використанням ефекту «{0}»"
 
-#: ../share/extensions/jessyInk_summary.py:187
+#: ../share/extensions/jessyInk_summary.py:186
 msgid " in {0!s} s"
 msgstr " у {0!s} s"
 
-#: ../share/extensions/jessyInk_transitions.py:55
+#: ../share/extensions/jessyInk_transitions.py:54
 msgid "Layer not found.\n"
 msgstr "Шару не знайдено.\n"
 
-#: ../share/extensions/jessyInk_transitions.py:57
+#: ../share/extensions/jessyInk_transitions.py:56
 msgid "More than one layer with this name found.\n"
 msgstr "Знайдено більше за один шар з такою назвою.\n"
 
-#: ../share/extensions/jessyInk_transitions.py:70
+#: ../share/extensions/jessyInk_transitions.py:69
 msgid "Please enter a layer name.\n"
 msgstr "Будь ласка, вкажіть назву шару.\n"
 
-#: ../share/extensions/jessyInk_video.py:54
-#: ../share/extensions/jessyInk_video.py:59
+#: ../share/extensions/jessyInk_video.py:52
+#: ../share/extensions/jessyInk_video.py:57
 msgid ""
 "Could not obtain the selected layer for inclusion of the video element.\n"
 "\n"
@@ -32589,11 +32492,11 @@ msgstr ""
 "Не вдалося отримати позначений шар для включення до елемента «video».\n"
 "\n"
 
-#: ../share/extensions/jessyInk_view.py:75
+#: ../share/extensions/jessyInk_view.py:74
 msgid "More than one object selected. Please select only one object.\n"
 msgstr "Позначено декілька об'єктів. Вам слід позначити лише один об'єкт.\n"
 
-#: ../share/extensions/jessyInk_view.py:79
+#: ../share/extensions/jessyInk_view.py:78
 msgid ""
 "No object selected. Please select the object you want to assign a view to "
 "and then press apply.\n"
@@ -32602,17 +32505,17 @@ msgstr ""
 "бажаєте призначити область перегляду, а потім натисніть кнопку "
 "«Застосувати».\n"
 
-#: ../share/extensions/markers_strokepaint.py:83
+#: ../share/extensions/markers_strokepaint.py:82
 #, python-format
 msgid "No style attribute found for id: %s"
 msgstr "Не знайдено атрибута стилю для ідентифікатора: %s"
 
-#: ../share/extensions/markers_strokepaint.py:137
+#: ../share/extensions/markers_strokepaint.py:136
 #, python-format
 msgid "unable to locate marker: %s"
 msgstr "Не вдалося знайти маркер: %s"
 
-#: ../share/extensions/measure.py:58
+#: ../share/extensions/measure.py:57
 msgid ""
 "Failed to import the numpy modules. These modules are required by this "
 "extension. Please install them and try again.  On a Debian-like system this "
@@ -32623,17 +32526,16 @@ msgstr ""
 "заснованих на Debian, цю операцію можна виконати командою sudo apt-get "
 "install python-numpy."
 
-#: ../share/extensions/measure.py:120
+#: ../share/extensions/measure.py:119
 msgid "Area is zero, cannot calculate Center of Mass"
 msgstr "Площа дорівнює нулю. Визначення центра мас позбавлене сенсу."
 
-#: ../share/extensions/pathalongpath.py:208
-#: ../share/extensions/pathscatter.py:228
-#: ../share/extensions/perspective.py:52
+#: ../share/extensions/pathalongpath.py:207
+#: ../share/extensions/pathscatter.py:226 ../share/extensions/perspective.py:50
 msgid "This extension requires two selected paths."
 msgstr "Для роботи цього додатка потрібно вибрати два контури."
 
-#: ../share/extensions/pathalongpath.py:234
+#: ../share/extensions/pathalongpath.py:233
 msgid ""
 "The total length of the pattern is too small :\n"
 "Please choose a larger object or set 'Space between copies' > 0"
@@ -32642,7 +32544,7 @@ msgstr ""
 "Будь ласка, виберіть більший об'єкт або встановіть значення параметра "
 "«Відстань між копіями» > 0"
 
-#: ../share/extensions/pathalongpath.py:277
+#: ../share/extensions/pathalongpath.py:276
 msgid ""
 "The 'stretch' option requires that the pattern must have non-zero width :\n"
 "Please edit the pattern width."
@@ -32650,12 +32552,12 @@ msgstr ""
 "Для розтягнення візерунок повинен мати ненульову ширину.\n"
 "Будь ласка, змініть ширину візерунка."
 
-#: ../share/extensions/pathmodifier.py:237
+#: ../share/extensions/pathmodifier.py:235
 #, python-format
 msgid "Please first convert objects to paths!  (Got [%s].)"
 msgstr "Будь ласка, спочатку перетворіть об'єкти на контури! (Отримано [%s].)"
 
-#: ../share/extensions/perspective.py:44
+#: ../share/extensions/perspective.py:42
 msgid ""
 "Failed to import the numpy or numpy.linalg modules. These modules are "
 "required by this extension. Please install them and try again.  On a Debian-"
@@ -32667,8 +32569,7 @@ msgstr ""
 "системах, заснованих на Debian, цю операцію можна виконати командою sudo apt-"
 "get install python-numpy."
 
-#: ../share/extensions/perspective.py:60
-#: ../share/extensions/summersnight.py:51
+#: ../share/extensions/perspective.py:58 ../share/extensions/summersnight.py:49
 #, python-format
 msgid ""
 "The first selected object is of type '%s'.\n"
@@ -32677,16 +32578,14 @@ msgstr ""
 "Перший вибраний об'єкт належить до типу «%s».\n"
 "Спробуйте скористатися пунктом меню Контур -> Об'єкт у контур."
 
-#: ../share/extensions/perspective.py:67
-#: ../share/extensions/summersnight.py:59
+#: ../share/extensions/perspective.py:65 ../share/extensions/summersnight.py:57
 msgid ""
 "This extension requires that the second selected path be four nodes long."
 msgstr ""
 "Для роботи цього додатка потрібно, щоб другий вибраний контур складався "
 "принаймні з чотирьох вузлів."
 
-#: ../share/extensions/perspective.py:93
-#: ../share/extensions/summersnight.py:92
+#: ../share/extensions/perspective.py:91 ../share/extensions/summersnight.py:90
 msgid ""
 "The second selected object is a group, not a path.\n"
 "Try using the procedure Object->Ungroup."
@@ -32694,8 +32593,7 @@ msgstr ""
 "Другий з вибраних об'єктів є групою, а не контуром.\n"
 "Спробуйте скористатися пунктом меню Контур -> Розділити."
 
-#: ../share/extensions/perspective.py:95
-#: ../share/extensions/summersnight.py:94
+#: ../share/extensions/perspective.py:93 ../share/extensions/summersnight.py:92
 msgid ""
 "The second selected object is not a path.\n"
 "Try using the procedure Path->Object to Path."
@@ -32703,8 +32601,7 @@ msgstr ""
 "Другий з вибраних об'єктів не є контуром.\n"
 "Спробуйте скористатися пунктом меню Контур -> Об'єкт у контур."
 
-#: ../share/extensions/perspective.py:98
-#: ../share/extensions/summersnight.py:97
+#: ../share/extensions/perspective.py:96 ../share/extensions/summersnight.py:95
 msgid ""
 "The first selected object is not a path.\n"
 "Try using the procedure Path->Object to Path."
@@ -32713,32 +32610,40 @@ msgstr ""
 "Спробуйте скористатися пунктом меню Контур -> Об'єкт у контур."
 
 #. issue error if no paths found
-#: ../share/extensions/plotter.py:69
+#: ../share/extensions/plotter.py:68
 msgid ""
 "No paths where found. Please convert all objects you want to plot into paths."
 msgstr ""
 "Контурів не знайдено. Будь ласка, перетворіть усі потрібні вам об’єкти для "
 "вирізання на контури."
 
-#: ../share/extensions/plotter.py:147
-msgid ""
-"pySerial is not installed.\n"
-"\n"
-"1. Download pySerial here (not the \".exe\"!): http://pypi.python.org/pypi/"
-"pyserial\n"
-"2. Extract the \"serial\" subfolder from the zip to the following folder: C:"
-"\\[Program files]\\inkscape\\python\\Lib\\\n"
-"3. Restart Inkscape."
-msgstr ""
-"pySerial не встановлено.\n"
-"\n"
-"1. Отримайте пакунок pySerial (не файл «.exe»!) тут: http://pypi.python.org/"
-"pypi/pyserial\n"
-"2. Виконайте видобування підтеки «serial» з архіву zip до цієї теки: C:"
-"\\[Program files]\\inkscape\\python\\Lib\\\n"
-"3. Перезапустіть Inkscape."
+#: ../share/extensions/plotter.py:146
+msgid "pySerial is not installed. Please follow these steps:"
+msgstr "Не встановлено pySerial. Будь ласка, виконайте такі кроки:"
 
-#: ../share/extensions/plotter.py:199
+#: ../share/extensions/plotter.py:147
+msgid "1. Download and extract (unzip) this file to your local harddisk:"
+msgstr "1. Отримайте і розпакуйте цей файл на ваш локальний диск:"
+
+#: ../share/extensions/plotter.py:149
+msgid ""
+"2. Copy the \"serial\" folder (Can be found inside the just extracted folder)"
+msgstr ""
+"2. Скопіюйте теку «serial» (цю теку розташовано у теці із розпакованими "
+"даними)"
+
+#: ../share/extensions/plotter.py:150
+msgid ""
+"   into the following Inkscape folder: C:\\[Program files]\\inkscape\\python"
+"\\Lib\\"
+msgstr ""
+"   до такої теки Inkscape: C:\\[Program files]\\inkscape\\python\\Lib\\"
+
+#: ../share/extensions/plotter.py:151
+msgid "3. Close and restart Inkscape."
+msgstr "3. Завершіть роботу Inkscape і знову запустіть програму."
+
+#: ../share/extensions/plotter.py:200
 msgid ""
 "Could not open port. Please check that your plotter is running, connected "
 "and the settings are correct."
@@ -32746,7 +32651,7 @@ msgstr ""
 "Не вдалося відкрити порт. Будь ласка, переконайтеся, що плотер увімкнено, "
 "з’єднано з комп’ютером і належним чином налаштовано."
 
-#: ../share/extensions/polyhedron_3d.py:66
+#: ../share/extensions/polyhedron_3d.py:64
 msgid ""
 "Failed to import the numpy module. This module is required by this "
 "extension. Please install it and try again.  On a Debian-like system this "
@@ -32757,26 +32662,26 @@ msgstr ""
 "Debian, виконати встановлення можна командою «sudo apt-get install python-"
 "numpy»."
 
-#: ../share/extensions/polyhedron_3d.py:337
+#: ../share/extensions/polyhedron_3d.py:335
 msgid "No face data found in specified file."
 msgstr "У вказаному файлі не знайдено даних про грані."
 
-#: ../share/extensions/polyhedron_3d.py:338
+#: ../share/extensions/polyhedron_3d.py:336
 msgid "Try selecting \"Edge Specified\" in the Model File tab.\n"
 msgstr ""
 "Спробуйте позначити пункт «Визначення країв» на вкладці моделі файла.\n"
 
-#: ../share/extensions/polyhedron_3d.py:344
+#: ../share/extensions/polyhedron_3d.py:342
 msgid "No edge data found in specified file."
 msgstr "У вказаному файлі не знайдено даних про краї."
 
-#: ../share/extensions/polyhedron_3d.py:345
+#: ../share/extensions/polyhedron_3d.py:343
 msgid "Try selecting \"Face Specified\" in the Model File tab.\n"
 msgstr ""
 "Спробуйте позначити пункт «Визначення граней» на вкладці моделі файла.\n"
 
 #. we cannot generate a list of faces from the edges without a lot of computation
-#: ../share/extensions/polyhedron_3d.py:524
+#: ../share/extensions/polyhedron_3d.py:522
 msgid ""
 "Face Data Not Found. Ensure file contains face data, and check the file is "
 "imported as \"Face-Specified\" under the \"Model File\" tab.\n"
@@ -32784,38 +32689,38 @@ msgstr ""
 "Не знайдено даних про грані. Переконайтеся, що файл містить дані про грані і "
 "що файл було імпортовано як «вказані грані» на вкладці «файл моделі».\n"
 
-#: ../share/extensions/polyhedron_3d.py:526
+#: ../share/extensions/polyhedron_3d.py:524
 msgid "Internal Error. No view type selected\n"
 msgstr "Внутрішня помилка. Не вибрано типу перегляду\n"
 
-#: ../share/extensions/print_win32_vector.py:41
+#: ../share/extensions/print_win32_vector.py:39
 msgid "sorry, this will run only on Windows, exiting..."
 msgstr "вибачте, це працює лише у Windows, завершуємо роботу…"
 
-#: ../share/extensions/print_win32_vector.py:179
+#: ../share/extensions/print_win32_vector.py:177
 msgid "Failed to open default printer"
 msgstr "Не вдалося відкрити канал типового принтера"
 
-#: ../share/extensions/render_barcode_datamatrix.py:203
+#: ../share/extensions/render_barcode_datamatrix.py:201
 msgid "Unrecognised DataMatrix size"
 msgstr "Невідома розмірність DataMatrix"
 
 #. we have an invalid bit value
-#: ../share/extensions/render_barcode_datamatrix.py:644
+#: ../share/extensions/render_barcode_datamatrix.py:642
 msgid "Invalid bit value, this is a bug!"
 msgstr "Некоректне бітове значення, це вада!"
 
 #. abort if converting blank text
-#: ../share/extensions/render_barcode_datamatrix.py:679
+#: ../share/extensions/render_barcode_datamatrix.py:677
 msgid "Please enter an input string"
 msgstr "Будь ласка, введіть вхідний рядок"
 
 #. abort if converting blank text
-#: ../share/extensions/render_barcode_qrcode.py:1055
+#: ../share/extensions/render_barcode_qrcode.py:1053
 msgid "Please enter an input text"
 msgstr "Будь ласка, введіть вхідний текст"
 
-#: ../share/extensions/replace_font.py:133
+#: ../share/extensions/replace_font.py:131
 msgid ""
 "Couldn't find anything using that font, please ensure the spelling and "
 "spacing is correct."
@@ -32823,18 +32728,18 @@ msgstr ""
 "Не вдалося знайти жодних елементів, у яких використано цей шрифт. Будь "
 "ласка, переконайтеся, що назву написано і розділено пробілами належним чином."
 
-#: ../share/extensions/replace_font.py:140
+#: ../share/extensions/replace_font.py:138
 #: ../share/extensions/svg_and_media_zip_output.py:193
 msgid "Didn't find any fonts in this document/selection."
 msgstr "У цьому документі (позначеному фрагменті) не знайдено жодних шрифтів."
 
-#: ../share/extensions/replace_font.py:143
+#: ../share/extensions/replace_font.py:141
 #: ../share/extensions/svg_and_media_zip_output.py:196
 #, python-format
 msgid "Found the following font only: %s"
 msgstr "Виявлено лише такий шрифт: %s"
 
-#: ../share/extensions/replace_font.py:145
+#: ../share/extensions/replace_font.py:143
 #: ../share/extensions/svg_and_media_zip_output.py:198
 #, python-format
 msgid ""
@@ -32844,27 +32749,27 @@ msgstr ""
 "Виявлено такі шрифти:\n"
 "%s"
 
-#: ../share/extensions/replace_font.py:196
+#: ../share/extensions/replace_font.py:194
 msgid "There was nothing selected"
 msgstr "Нічого не позначено"
 
-#: ../share/extensions/replace_font.py:244
+#: ../share/extensions/replace_font.py:242
 msgid "Please enter a search string in the find box."
 msgstr "Будь ласка, вкажіть потрібний рядок у полі пошуку."
 
-#: ../share/extensions/replace_font.py:248
+#: ../share/extensions/replace_font.py:246
 msgid "Please enter a replacement font in the replace with box."
 msgstr "Будь ласка, вкажіть шрифт-замінник у полі замінника."
 
-#: ../share/extensions/replace_font.py:253
+#: ../share/extensions/replace_font.py:251
 msgid "Please enter a replacement font in the replace all box."
 msgstr "Будь ласка, вкажіть шрифт-замінник у полі заміни всіх елементів."
 
-#: ../share/extensions/restack.py:76
+#: ../share/extensions/restack.py:75
 msgid "There is no selection to restack."
 msgstr "Нічого не позначено для зміни позицій у стосі."
 
-#: ../share/extensions/summersnight.py:43
+#: ../share/extensions/summersnight.py:41
 msgid ""
 "This extension requires two selected paths. \n"
 "The second path must be exactly four nodes long."
@@ -32877,13 +32782,13 @@ msgstr ""
 msgid "Could not locate file: %s"
 msgstr "Не вдалося знайти файл: %s"
 
-#: ../share/extensions/svgcalendar.py:266
-#: ../share/extensions/svgcalendar.py:288
+#: ../share/extensions/svgcalendar.py:265
+#: ../share/extensions/svgcalendar.py:287
 msgid "You must select a correct system encoding."
 msgstr "Вам слід вибрати відповідне кодування символів системи."
 
-#: ../share/extensions/uniconv-ext.py:56
-#: ../share/extensions/uniconv_output.py:122
+#: ../share/extensions/uniconv-ext.py:54
+#: ../share/extensions/uniconv_output.py:121
 msgid ""
 "You need to install the UniConvertor software.\n"
 "For GNU/Linux: install the package python-uniconvertor.\n"
@@ -32897,69 +32802,69 @@ msgstr ""
 "http://sk1project.org/modules.php?name=Products&product=uniconvertor\n"
 "і встановіть його до теки Python Inkscape.\n"
 
-#: ../share/extensions/voronoi2svg.py:206
+#: ../share/extensions/voronoi2svg.py:205
 msgid "Please select objects!"
 msgstr "Будь ласка, позначте об'єкт."
 
-#: ../share/extensions/web-set-att.py:58
-#: ../share/extensions/web-transmit-att.py:54
+#: ../share/extensions/web-set-att.py:56
+#: ../share/extensions/web-transmit-att.py:53
 msgid "You must select at least two elements."
 msgstr "Вам слід вибрати принаймні два елементи."
 
-#: ../share/extensions/webslicer_create_group.py:57
+#: ../share/extensions/webslicer_create_group.py:55
 msgid ""
 "You must create and select some \"Slicer rectangles\" before trying to group."
 msgstr ""
 "Вам слід створити і позначити декілька «Прямокутників зрізів», перш ніж "
 "намагатися групувати ці об'єкти."
 
-#: ../share/extensions/webslicer_create_group.py:72
+#: ../share/extensions/webslicer_create_group.py:70
 msgid ""
 "You must to select some \"Slicer rectangles\" or other \"Layout groups\"."
 msgstr ""
 "Вам слід позначити декілька «Прямокутників зрізів» або інших «Груп "
 "компонування»."
 
-#: ../share/extensions/webslicer_create_group.py:76
+#: ../share/extensions/webslicer_create_group.py:74
 #, python-format
 msgid "Oops... The element \"%s\" is not in the Web Slicer layer"
 msgstr "Ой… Елемент «%s» не перебуває у шарі зрізу"
 
-#: ../share/extensions/webslicer_export.py:57
+#: ../share/extensions/webslicer_export.py:55
 msgid "You must give a directory to export the slices."
 msgstr "Вам слід вказати каталог для експортування зрізів."
 
-#: ../share/extensions/webslicer_export.py:69
+#: ../share/extensions/webslicer_export.py:67
 #, python-format
 msgid "Can't create \"%s\"."
 msgstr "Не вдалося створити «%s»."
 
-#: ../share/extensions/webslicer_export.py:70
+#: ../share/extensions/webslicer_export.py:68
 #, python-format
 msgid "Error: %s"
 msgstr "Помилка: %s"
 
-#: ../share/extensions/webslicer_export.py:73
+#: ../share/extensions/webslicer_export.py:71
 #, python-format
 msgid "The directory \"%s\" does not exists."
 msgstr "Каталогу «%s» не існує."
 
-#: ../share/extensions/webslicer_export.py:78
+#: ../share/extensions/webslicer_export.py:76
 msgid "No slicer layer found."
 msgstr "Не знайдено шару перерізу."
 
-#: ../share/extensions/webslicer_export.py:108
+#: ../share/extensions/webslicer_export.py:106
 #, python-format
 msgid "You have more than one element with \"%s\" html-id."
 msgstr "У вас є більше одного елемента з html-ідентифікатором «%s»."
 
-#: ../share/extensions/webslicer_export.py:338
+#: ../share/extensions/webslicer_export.py:336
 msgid "You must install the ImageMagick to get JPG and GIF."
 msgstr "Вам слід встановити ImageMagick для завантаження JPG і GIF."
 
 #. PARAMETER PROCESSING
 #. lines of longitude are odd : abort
-#: ../share/extensions/wireframe_sphere.py:117
+#: ../share/extensions/wireframe_sphere.py:116
 msgid "Please enter an even number of lines of longitude."
 msgstr "Будь ласка, вкажіть парну кількість рядків довготи."
 
@@ -32989,10 +32894,10 @@ msgstr "Кількість сегментів:"
 #: ../share/extensions/edge3d.inx.h:9 ../share/extensions/flatten.inx.h:3
 #: ../share/extensions/fractalize.inx.h:4
 #: ../share/extensions/interp_att_g.inx.h:31
+#: ../share/extensions/jitternodes.inx.h:14
 #: ../share/extensions/markers_strokepaint.inx.h:13
 #: ../share/extensions/perspective.inx.h:2
 #: ../share/extensions/pixelsnap.inx.h:3
-#: ../share/extensions/radiusrand.inx.h:10
 #: ../share/extensions/rubberstretch.inx.h:6
 #: ../share/extensions/straightseg.inx.h:4
 #: ../share/extensions/summersnight.inx.h:2 ../share/extensions/whirl.inx.h:4
@@ -35543,14 +35448,12 @@ msgstr ""
 "спробу відкриття."
 
 #: ../share/extensions/hpgl_input.inx.h:3
-#: ../share/extensions/hpgl_output.inx.h:4
-#: ../share/extensions/plotter.inx.h:32
+#: ../share/extensions/hpgl_output.inx.h:4 ../share/extensions/plotter.inx.h:32
 msgid "Resolution X (dpi):"
 msgstr "Роздільна здатність за X (у т/дюйм):"
 
 #: ../share/extensions/hpgl_input.inx.h:4
-#: ../share/extensions/hpgl_output.inx.h:5
-#: ../share/extensions/plotter.inx.h:33
+#: ../share/extensions/hpgl_output.inx.h:5 ../share/extensions/plotter.inx.h:33
 msgid ""
 "The amount of steps the plotter moves if it moves for 1 inch on the X axis "
 "(Default: 1016.0)"
@@ -35558,14 +35461,12 @@ msgstr ""
 "Кількість кроків різця у одному дюймі за віссю X (типове значення — 1016.0)"
 
 #: ../share/extensions/hpgl_input.inx.h:5
-#: ../share/extensions/hpgl_output.inx.h:6
-#: ../share/extensions/plotter.inx.h:34
+#: ../share/extensions/hpgl_output.inx.h:6 ../share/extensions/plotter.inx.h:34
 msgid "Resolution Y (dpi):"
 msgstr "Роздільна здатність за Y (у т/дюйм):"
 
 #: ../share/extensions/hpgl_input.inx.h:6
-#: ../share/extensions/hpgl_output.inx.h:7
-#: ../share/extensions/plotter.inx.h:35
+#: ../share/extensions/hpgl_output.inx.h:7 ../share/extensions/plotter.inx.h:35
 msgid ""
 "The amount of steps the plotter moves if it moves for 1 inch on the Y axis "
 "(Default: 1016.0)"
@@ -35605,18 +35506,15 @@ msgstr ""
 "контури. Скористайтеся додатком плотера (меню «Додатки»), щоб виконати "
 "вирізання безпосередньо за допомогою послідовного з’єднання."
 
-#: ../share/extensions/hpgl_output.inx.h:3
-#: ../share/extensions/plotter.inx.h:31
+#: ../share/extensions/hpgl_output.inx.h:3 ../share/extensions/plotter.inx.h:31
 msgid "Plotter Settings "
 msgstr "Параметри вирізання "
 
-#: ../share/extensions/hpgl_output.inx.h:8
-#: ../share/extensions/plotter.inx.h:36
+#: ../share/extensions/hpgl_output.inx.h:8 ../share/extensions/plotter.inx.h:36
 msgid "Pen number:"
 msgstr "Номер різця:"
 
-#: ../share/extensions/hpgl_output.inx.h:9
-#: ../share/extensions/plotter.inx.h:37
+#: ../share/extensions/hpgl_output.inx.h:9 ../share/extensions/plotter.inx.h:37
 msgid "The number of the pen (tool) to use (Standard: '1')"
 msgstr ""
 "Номер різця (інструмента), яким слід скористатися. (Типове значення: 1)"
@@ -35924,7 +35822,8 @@ msgstr "Довідка з використання клавіатури та м�
 
 #. i18n. Please don't translate it unless a page exists in your language
 #: ../share/extensions/inkscape_help_keys.inx.h:3
-msgid "http://inkscape.org/doc/keys091.html"
+#, fuzzy
+msgid "http://inkscape.org/doc/keys092.html"
 msgstr "http://inkscape.org/doc/keys091.html"
 
 #: ../share/extensions/inkscape_help_manual.inx.h:1
@@ -35942,7 +35841,8 @@ msgstr "Нове у поточній версії"
 
 #. i18n. Please don't translate it unless a page exists in your language
 #: ../share/extensions/inkscape_help_relnotes.inx.h:3
-msgid "http://wiki.inkscape.org/wiki/index.php/Release_notes/0.91"
+#, fuzzy
+msgid "http://wiki.inkscape.org/wiki/index.php/Release_notes/0.92"
 msgstr "http://wiki.inkscape.org/wiki/index.php/Release_notes/0.91"
 
 #: ../share/extensions/inkscape_help_reportabug.inx.h:1
@@ -35973,13 +35873,11 @@ msgstr "Дублювати кінцеві контури"
 msgid "Interpolate style"
 msgstr "Інтерполяція стилю"
 
-#: ../share/extensions/interp.inx.h:7
-#: ../share/extensions/interp_att_g.inx.h:10
+#: ../share/extensions/interp.inx.h:7 ../share/extensions/interp_att_g.inx.h:10
 msgid "Use Z-order"
 msgstr "Використати порядок за Z"
 
-#: ../share/extensions/interp.inx.h:8
-#: ../share/extensions/interp_att_g.inx.h:11
+#: ../share/extensions/interp.inx.h:8 ../share/extensions/interp_att_g.inx.h:11
 msgid "Workaround for reversed selection order in Live Preview cycles"
 msgstr ""
 "Обхідний захід для зворотного порядку позначення у циклах інтерактивного "
@@ -36564,6 +36462,50 @@ msgstr ""
 "За допомогою цього додатка ви зможете налаштувати, оновити або вилучити "
 "області перегляду презентацій JessyInk. Докладніші відомості можна знайти за "
 "адресою code.google.com/p/jessyink."
+
+#: ../share/extensions/jitternodes.inx.h:1
+msgid "Jitter nodes"
+msgstr "Тремтіння вузлів"
+
+#: ../share/extensions/jitternodes.inx.h:3
+msgid "Maximum displacement in X (px):"
+msgstr "Максимальне зміщення за X (у пк):"
+
+#: ../share/extensions/jitternodes.inx.h:4
+msgid "Maximum displacement in Y (px):"
+msgstr "Максимальне зміщення за Y (у пк):"
+
+#: ../share/extensions/jitternodes.inx.h:6
+msgid "Shift node handles"
+msgstr "Зміщення вусів вузла"
+
+#: ../share/extensions/jitternodes.inx.h:7
+msgid "Distribution of the displacements:"
+msgstr "Розподіл зміщень:"
+
+#: ../share/extensions/jitternodes.inx.h:8
+msgid "Uniform"
+msgstr "Однорідний"
+
+#: ../share/extensions/jitternodes.inx.h:9
+msgid "Pareto"
+msgstr "Парето"
+
+#: ../share/extensions/jitternodes.inx.h:10
+msgid "Gaussian"
+msgstr "Гауса"
+
+#: ../share/extensions/jitternodes.inx.h:11
+msgid "Log-normal"
+msgstr "Логнормальний"
+
+#: ../share/extensions/jitternodes.inx.h:13
+msgid ""
+"This effect randomly shifts the nodes (and optionally node handles) of the "
+"selected path."
+msgstr ""
+"Цей ефект випадково зсуває вузли (та за бажанням вуса вузлів) для вибраного "
+"контуру."
 
 #: ../share/extensions/layers2svgfont.inx.h:1
 msgid "3 - Convert Glyph Layers to SVG Font"
@@ -37592,8 +37534,7 @@ msgstr ""
 msgid "AutoCAD Plot Input"
 msgstr "Імпорт з креслення AutoCAD"
 
-#: ../share/extensions/plt_input.inx.h:2
-#: ../share/extensions/plt_output.inx.h:2
+#: ../share/extensions/plt_input.inx.h:2 ../share/extensions/plt_output.inx.h:2
 msgid "HP Graphics Language Plot file [AutoCAD] (*.plt)"
 msgstr "Файл креслення графічною мовою HP [AutoCAD] (*.plt)"
 
@@ -37869,34 +37810,6 @@ msgstr "Випуск під обрізання"
 msgid "PostScript Input"
 msgstr "Імпорт з Postscript"
 
-#: ../share/extensions/radiusrand.inx.h:1
-msgid "Jitter nodes"
-msgstr "Тремтіння вузлів"
-
-#: ../share/extensions/radiusrand.inx.h:3
-msgid "Maximum displacement in X (px):"
-msgstr "Максимальне зміщення за X (у пк):"
-
-#: ../share/extensions/radiusrand.inx.h:4
-msgid "Maximum displacement in Y (px):"
-msgstr "Максимальне зміщення за Y (у пк):"
-
-#: ../share/extensions/radiusrand.inx.h:6
-msgid "Shift node handles"
-msgstr "Зміщення вусів вузла"
-
-#: ../share/extensions/radiusrand.inx.h:7
-msgid "Use normal distribution"
-msgstr "Використовувати нормальний розподіл"
-
-#: ../share/extensions/radiusrand.inx.h:9
-msgid ""
-"This effect randomly shifts the nodes (and optionally node handles) of the "
-"selected path."
-msgstr ""
-"Цей ефект випадково зсуває вузли (та за бажанням вуса вузлів) для вибраного "
-"контуру."
-
 #: ../share/extensions/render_alphabetsoup.inx.h:1
 msgid "Alphabet Soup"
 msgstr "Абетковий суп"
@@ -38163,6 +38076,7 @@ msgstr ""
 "позначених об’єктів на поточному рівні малювання (шарі або групі)."
 
 #: ../share/extensions/restack.inx.h:27
+#: ../share/extensions/ungroup_deep.inx.h:6
 msgid "Arrange"
 msgstr "Компонування"
 
@@ -38280,8 +38194,8 @@ msgid ""
 "Inkscape, Sodipodi and Adobe Illustrator."
 msgstr ""
 "Не вилучати специфічні для засобу редагування елементи та атрибути. У "
-"поточній версії передбачено підтримку таких редакторів: Inkscape, Sodipodi та "
-"Adobe Illustrator."
+"поточній версії передбачено підтримку таких редакторів: Inkscape, Sodipodi "
+"та Adobe Illustrator."
 
 #: ../share/extensions/scour.inx.h:15
 msgid "Keep unreferenced definitions"
@@ -38349,8 +38263,8 @@ msgid ""
 "Resolve external references to raster images and embed them as Base64-"
 "encoded data URLs."
 msgstr ""
-"Визначити джерела посилань на растрові зображення і вбудувати ці зображення у "
-"кодуванні даних Base64."
+"Визначити джерела посилань на растрові зображення і вбудувати ці зображення "
+"у кодуванні даних Base64."
 
 #: ../share/extensions/scour.inx.h:28
 msgid "Enable viewboxing"
@@ -38375,10 +38289,10 @@ msgid ""
 "to hand-edit the SVG file you can disable this option to bring down the file "
 "size even more at the cost of clarity."
 msgstr ""
-"Створити код із красивим форматуванням і розбиттям на рядки. Якщо у вас немає "
-"намірів редагувати файл SVG вручну, ви можете зняти позначення з цього пункту "
-"і зменшити розмір файла незначно погіршивши придатність коду до читання "
-"людиною."
+"Створити код із красивим форматуванням і розбиттям на рядки. Якщо у вас "
+"немає намірів редагувати файл SVG вручну, ви можете зняти позначення з цього "
+"пункту і зменшити розмір файла незначно погіршивши придатність коду до "
+"читання людиною."
 
 #: ../share/extensions/scour.inx.h:33
 msgid "Indentation characters:"
@@ -38391,9 +38305,9 @@ msgid ""
 "\"Format output with line-breaks and indentation\" is disabled."
 msgstr ""
 "Тип відступів, який використовуватиметься на кожному рівні вкладеності "
-"оброблених даних. Виберіть пункт «Немає», щоб вимкнути відступи. Цей пункт ні "
-"на що не вплине, якщо не позначено пункт «Форматувати виведені дані розбиттям "
-"на рядки і відступами»."
+"оброблених даних. Виберіть пункт «Немає», щоб вимкнути відступи. Цей пункт "
+"ні на що не вплине, якщо не позначено пункт «Форматувати виведені дані "
+"розбиттям на рядки і відступами»."
 
 #: ../share/extensions/scour.inx.h:35
 msgid "Depth of indentation:"
@@ -38418,8 +38332,8 @@ msgid ""
 "root SVG element which instructs the SVG editor not to change whitespace in "
 "the document at all (and therefore overrides the options above)."
 msgstr ""
-"Цей пункт буде корисним, якщо у вхідному файлі визначено "
-"«xml:space='preserve'» у кореневому елементі SVG. Таке визначення наказує "
+"Цей пункт буде корисним, якщо у вхідному файлі визначено «xml:"
+"space='preserve'» у кореневому елементі SVG. Таке визначення наказує "
 "редактору SVG не змінювати розташування пробілів у коді (тобто скасувати дію "
 "пунктів, розташованих вище)."
 
@@ -38470,10 +38384,10 @@ msgid ""
 "shortest values to the most-referenced elements. For instance, "
 "\"linearGradient5621\" will become \"a\" if it is the most used element."
 msgstr ""
-"Мінімізувати довжину ідентифікаторів, використовуючи літери нижнього регістру "
-"і призначаючи найкоротші значення елементам, на які найбільше посилань. "
-"Наприклад, «linearGradient5621» буде перетворено «a», якщо цей елемент є "
-"найвживанішим."
+"Мінімізувати довжину ідентифікаторів, використовуючи літери нижнього "
+"регістру і призначаючи найкоротші значення елементам, на які найбільше "
+"посилань. Наприклад, «linearGradient5621» буде перетворено «a», якщо цей "
+"елемент є найвживанішим."
 
 #: ../share/extensions/scour.inx.h:49
 msgid "Prefix shortened IDs with:"
@@ -38496,11 +38410,11 @@ msgid ""
 "preserved while numbered IDs (as they are generated by most SVG editors "
 "including Inkscape) will be removed/shortened."
 msgstr ""
-"Описові ідентифікатори, які було створено вручну для посилання або позначення "
-"певних елементів або груп (наприклад, #pochatokStrilky, #kinecStrilky або "
-"#tekstoviMitky) буде збережено, а нумеровані ідентифікатори (які створюються "
-"більшістю програм для редагування SVG, зокрема Inkscape) буде вилучено або "
-"скорочено."
+"Описові ідентифікатори, які було створено вручну для посилання або "
+"позначення певних елементів або груп (наприклад, #pochatokStrilky, "
+"#kinecStrilky або #tekstoviMitky) буде збережено, а нумеровані "
+"ідентифікатори (які створюються більшістю програм для редагування SVG, "
+"зокрема Inkscape) буде вилучено або скорочено."
 
 #: ../share/extensions/scour.inx.h:53
 msgid "Preserve the following IDs:"
@@ -38546,7 +38460,8 @@ msgid "Custom Height (px):"
 msgstr "Нетипова висота (у пк):"
 
 #: ../share/extensions/seamless_pattern.inx.h:4
-msgid "This extension overwrite current document"
+#, fuzzy
+msgid "This extension overwrites the current document"
 msgstr "Це розширення перезапише поточний документ"
 
 #: ../share/extensions/seamless_pattern_procedural.inx.h:1
@@ -38581,8 +38496,7 @@ msgstr "Нижній елемент:"
 msgid "sK1 vector graphics files input"
 msgstr "Імпорт файлів векторної графіки sK1"
 
-#: ../share/extensions/sk1_input.inx.h:2
-#: ../share/extensions/sk1_output.inx.h:2
+#: ../share/extensions/sk1_input.inx.h:2 ../share/extensions/sk1_output.inx.h:2
 msgid "sK1 vector graphics files (*.sk1)"
 msgstr "Файли векторної графіки sK1 (*.sk1)"
 
@@ -39053,6 +38967,30 @@ msgstr "За стороною a і кутами a, b"
 #: ../share/extensions/triangle.inx.h:13
 msgid "From Side c and Angles a, b"
 msgstr "За стороною c і кутами a, b"
+
+#: ../share/extensions/ungroup_deep.inx.h:1
+#, fuzzy
+msgid "Deep Ungroup"
+msgstr "Розгрупувати"
+
+#: ../share/extensions/ungroup_deep.inx.h:2
+#, fuzzy
+msgid "Ungroup all groups in the selected object."
+msgstr "Створити групу-обгортку на основі позначених об’єктів"
+
+#: ../share/extensions/ungroup_deep.inx.h:3
+#, fuzzy
+msgid "Starting Depth"
+msgstr "Початковий контур:"
+
+#: ../share/extensions/ungroup_deep.inx.h:4
+#, fuzzy
+msgid "Stopping Depth (from top)"
+msgstr "Вилучити контур-обгортку з позначених об'єктів'"
+
+#: ../share/extensions/ungroup_deep.inx.h:5
+msgid "Depth to Keep (from bottom)"
+msgstr ""
 
 #: ../share/extensions/voronoi2svg.inx.h:1
 msgid "Voronoi Diagram"
@@ -39534,19 +39472,92 @@ msgstr "Нахил (у градусах):"
 msgid "Hide lines behind the sphere"
 msgstr "Ховати лінії за сферою"
 
-#: ../share/extensions/wmf_input.inx.h:1
-#: ../share/extensions/wmf_output.inx.h:1
+#: ../share/extensions/wmf_input.inx.h:1 ../share/extensions/wmf_output.inx.h:1
 msgid "Windows Metafile Input"
 msgstr "Імпорт метафайла Windows"
 
-#: ../share/extensions/wmf_input.inx.h:3
-#: ../share/extensions/wmf_output.inx.h:3
+#: ../share/extensions/wmf_input.inx.h:3 ../share/extensions/wmf_output.inx.h:3
 msgid "A popular graphics file format for clipart"
 msgstr "Популярний графічний формат для кліпарту"
 
 #: ../share/extensions/xaml2svg.inx.h:1
 msgid "XAML Input"
 msgstr "Імпорт з XAML"
+
+#~ msgid "Vertical Page Center"
+#~ msgstr "Центр сторінки за вертикаллю"
+
+#~ msgid "Horizontal Page Center"
+#~ msgstr "Центр сторінки за горизонталлю"
+
+#~ msgid "Free from reflection line"
+#~ msgstr "Довільно від лінії відбиття"
+
+#~ msgid "X from middle knot"
+#~ msgstr "За X від середнього вузла"
+
+#~ msgid "Y from middle knot"
+#~ msgstr "За Y від середнього вузла"
+
+#~ msgid "Symmetry move mode"
+#~ msgstr "Режим симетричного пересування"
+
+#~ msgid "Discard original path?"
+#~ msgstr "Відкинути початковий контур?"
+
+#~ msgid "Check this to only keep the mirrored part of the path"
+#~ msgstr ""
+#~ "Позначте цей пункт, щоб програма зберегла лише віддзеркалену частину "
+#~ "контуру"
+
+#~ msgid "Fuse paths"
+#~ msgstr "Об’єднати контури"
+
+#~ msgid "Fuse original and the reflection into a single path"
+#~ msgstr "Об’єднати оригінал і відбиток у єдиний контур"
+
+#~ msgid "Picks the other side of the mirror as the original"
+#~ msgstr "Визначає зображення по той бік дзеркала як оригінал"
+
+#~ msgid "Start mirror line"
+#~ msgstr "Початок лінії віддзеркалення"
+
+#~ msgid "End mirror line"
+#~ msgstr "Кінець лінії віддзеркалення"
+
+#~ msgid "Adjust the center"
+#~ msgstr "Скоригувати центр"
+
+#, fuzzy
+#~ msgid "Break appart cutted itemss"
+#~ msgstr "Розірвати контур у позначеному вузлі"
+
+#~ msgid ""
+#~ "The selected object is not a path.\n"
+#~ "Try using the procedure Path->Object to Path."
+#~ msgstr ""
+#~ "Позначений об'єкт не є контуром.\n"
+#~ "Спробуйте скористатися пунктом меню Контур -> Об'єкт у контур."
+
+#~ msgid ""
+#~ "pySerial is not installed.\n"
+#~ "\n"
+#~ "1. Download pySerial here (not the \".exe\"!): http://pypi.python.org/"
+#~ "pypi/pyserial\n"
+#~ "2. Extract the \"serial\" subfolder from the zip to the following folder: "
+#~ "C:\\[Program files]\\inkscape\\python\\Lib\\\n"
+#~ "3. Restart Inkscape."
+#~ msgstr ""
+#~ "pySerial не встановлено.\n"
+#~ "\n"
+#~ "1. Отримайте пакунок pySerial (не файл «.exe»!) тут: http://pypi.python."
+#~ "org/pypi/pyserial\n"
+#~ "2. Виконайте видобування підтеки «serial» з архіву zip до цієї теки: C:"
+#~ "\\[Program files]\\inkscape\\python\\Lib\\\n"
+#~ "3. Перезапустіть Inkscape."
+
+#~ msgid "Use normal distribution"
+#~ msgstr "Використовувати нормальний розподіл"
 
 #~ msgid ""
 #~ "Select <b>exactly 2 paths</b> to perform difference, division, or path "
@@ -40550,9 +40561,6 @@ msgstr "Імпорт з XAML"
 #~ "Варто зберегти ваш документ, перш ніж продовжувати.\n"
 #~ "\n"
 #~ "Продовжити обробку (без збереження)?"
-
-#~ msgid "pySerial is not installed."
-#~ msgstr "Не встановлено pySerial."
 
 #~ msgid "You need to install the UniConvertor software.\n"
 #~ msgstr "Вам слід встановити UniConvertor.\n"

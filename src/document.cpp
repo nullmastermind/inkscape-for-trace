@@ -369,11 +369,6 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
     // Recursively build object tree
     document->root->invoke_build(document, rroot, false);
 
-    /* fixme: Not sure about this, but lets assume ::build updates */
-    rroot->setAttribute("inkscape:version", Inkscape::version_string);
-    /* fixme: Again, I moved these here to allow version determining in ::build (Lauris) */
-
-
     /* Eliminate obsolete sodipodi:docbase, for privacy reasons */
     rroot->setAttribute("sodipodi:docbase", NULL);
 
@@ -587,15 +582,6 @@ Inkscape::Util::Unit const* SPDocument::getDisplayUnit() const
 {
     SPNamedView const* nv = sp_document_namedview(this, NULL);
     return nv ? nv->getDisplayUnit() : unit_table.getUnit("px");
-}
-
-/// guaranteed not to return nullptr
-// returns 'px' units as default, like legacy Inkscape
-// THIS SHOULD NOT BE USED... INSTEAD USE DOCUMENT SCALE
-Inkscape::Util::Unit const& SPDocument::getSVGUnit() const
-{
-    SPNamedView const* nv = sp_document_namedview(this, NULL);
-    return nv ? nv->getSVGUnit() : *unit_table.getUnit("px");
 }
 
 /// Sets document scale (by changing viewBox)
