@@ -92,6 +92,8 @@ ink_common_sources +=		\
 	ui/dialog/print-colors-preview-dialog.h		\
 	ui/dialog/spellcheck.cpp		\
 	ui/dialog/spellcheck.h		\
+	ui/dialog/styledialog.cpp		\
+	ui/dialog/styledialog.h			\
 	ui/dialog/svg-fonts-dialog.cpp		\
 	ui/dialog/svg-fonts-dialog.h		\
 	ui/dialog/swatches.cpp			\
