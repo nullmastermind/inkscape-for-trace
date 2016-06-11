@@ -60,7 +60,7 @@ private:
     BoolParam apply_with_radius;
     ScalarParam helper_size;
 
-    PathVectorSatellites pathVectorSatellites;
+    PathVectorSatellites *pathvector_satellites;
     Geom::PathVector _hp;
 
     LPEFilletChamfer(const LPEFilletChamfer &);

@@ -46,6 +46,19 @@ size_t PathVectorSatellites::getTotalSatellites()
     return counter;
 }
 
+std::pair<size_t, size_t> PathVectorSatellites::getIndexData(size_t index)
+{
+    size_t counter = 0;
+    for (size_t i = 0; i < _satellites.size(); ++i) {
+        for (size_t j = 0; j < _satellites[i].size(); ++j) {
+            if (index == counter) {
+                return std::make_pair(i,j);
+            }
+            counter++;
+        }
+    }
+    return std::make_pair(0,0);
+}
 void PathVectorSatellites::recalculateForNewPathVector(Geom::PathVector const pathv, Satellite const S)
 {
     Satellites satellites;

@@ -45,7 +45,6 @@ public:
                                        SPItem *item);
     virtual void addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop,
                                        SPItem *item, bool mirror);
-    virtual void clearKnotHolder(KnotHolder *knotholder);
     virtual void addCanvasIndicators(SPLPEItem const *lpeitem,
                                      std::vector<Geom::PathVector> &hp_vec);
     virtual void updateCanvasIndicators();
@@ -57,8 +56,7 @@ public:
     void param_transform_multiply(Geom::Affine const &postmul, bool /*set*/);
     void setUseDistance(bool use_knot_distance);
     void setEffectType(EffectType et);
-    void setPathVectorSatellites(PathVectorSatellites pathVectorSatellites, bool refresh_knots = false);
-    bool validData(size_t index, size_t subindex);
+    void setPathVectorSatellites(PathVectorSatellites *pathVectorSatellites);
     void set_oncanvas_looks(SPKnotShapeType shape, SPKnotModeType mode, guint32 color);
 
     friend class FilletChamferKnotHolderEntity;
@@ -78,13 +76,13 @@ private:
     int _helper_size;
     bool _use_distance;
     EffectType _effectType;
-    PathVectorSatellites _last_pathVectorSatellites;
+    PathVectorSatellites *_last_pathvector_satellites;
 
 };
 
 class FilletChamferKnotHolderEntity : public KnotHolderEntity {
 public:
-    FilletChamferKnotHolderEntity(SatellitesArrayParam *p, size_t index, size_t subindex);
+    FilletChamferKnotHolderEntity(SatellitesArrayParam *p, size_t index);
     virtual ~FilletChamferKnotHolderEntity()
     {
         _pparam->knoth = NULL;
@@ -97,15 +95,14 @@ public:
     void knot_set_offset(Satellite);
     /** Checks whether the index falls within the size of the parameter's vector
      */
-    bool valid_index(size_t index) const
+    bool valid_index(size_t index,size_t subindex) const
     {
-        return (_pparam->_vector.size() > index);
+        return (_pparam->_vector.size() > index && _pparam->_vector[index].size() > subindex);
     };
 
 private:
     SatellitesArrayParam *_pparam;
     size_t _index;
-    size_t _subindex;
 };
 
 } //namespace LivePathEffect
