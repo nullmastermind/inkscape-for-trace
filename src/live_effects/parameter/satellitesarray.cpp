@@ -44,11 +44,16 @@ void SatellitesArrayParam::set_oncanvas_looks(SPKnotShapeType shape,
     _knot_color = color;
 }
 
-void SatellitesArrayParam::setPathVectorSatellites(PathVectorSatellites pathVectorSatellites)
+void SatellitesArrayParam::setPathVectorSatellites(PathVectorSatellites pathVectorSatellites, bool refresh_knots)
 {
+    if (refresh_knots) {
+        clearKnotHolder(knoth);
+    }
     _last_pathVectorSatellites = pathVectorSatellites;
     param_set_and_write_new_value(_last_pathVectorSatellites.getSatellites());
-
+    if (refresh_knots) {
+        addKnotHolderEntities(knoth, SP_ACTIVE_DESKTOP, knoth.getItem());
+    }
 }
 
 void SatellitesArrayParam::setUseDistance(bool use_knot_distance)
@@ -212,6 +217,16 @@ void SatellitesArrayParam::param_transform_multiply(Geom::Affine const &postmul,
         }
         param_set_and_write_new_value(_vector);
     }
+}
+
+void SatellitesArrayParam::clearKnotHolder(KnotHolder *knotholder)
+{
+    for (std::list<KnotHolderEntity *>::iterator i = knotholder.entity.begin(); i != knotholder.entity.end(); ++i)
+    {
+        delete (*i);
+        (*i) = NULL;
+    }
+    entity.clear(); // is this necessary?
 }
 
 void SatellitesArrayParam::addKnotHolderEntities(KnotHolder *knotholder,

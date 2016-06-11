@@ -378,8 +378,7 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
             satellite.setHasMirror(mirror_knots);
             satellite.setHidden(hide_knots);
             pathVectorSatellites.recalculateForNewPathVector(pathv, satellite);
-            satellites_param.setPathVectorSatellites(pathVectorSatellites);
-            refreshKnots();
+            satellites_param.setPathVectorSatellites(pathVectorSatellites, true);
             return;
         }
         Satellites satellites = satellites_param.data();

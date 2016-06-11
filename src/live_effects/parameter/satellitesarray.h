@@ -45,6 +45,7 @@ public:
                                        SPItem *item);
     virtual void addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop,
                                        SPItem *item, bool mirror);
+    virtual void clearKnotHolder(KnotHolder *knotholder);
     virtual void addCanvasIndicators(SPLPEItem const *lpeitem,
                                      std::vector<Geom::PathVector> &hp_vec);
     virtual void updateCanvasIndicators();
@@ -56,7 +57,7 @@ public:
     void param_transform_multiply(Geom::Affine const &postmul, bool /*set*/);
     void setUseDistance(bool use_knot_distance);
     void setEffectType(EffectType et);
-    void setPathVectorSatellites(PathVectorSatellites pathVectorSatellites);
+    void setPathVectorSatellites(PathVectorSatellites pathVectorSatellites, bool refresh_knots = false);
     bool validData(size_t index, size_t subindex);
     void set_oncanvas_looks(SPKnotShapeType shape, SPKnotModeType mode, guint32 color);
 
