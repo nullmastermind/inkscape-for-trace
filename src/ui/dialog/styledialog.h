@@ -17,6 +17,7 @@
 #include <gtkmm/liststore.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/dialog.h>
+#include <gtkmm/treeselection.h>
 
 #include "desktop.h"
 #include "document.h"
@@ -43,6 +44,7 @@ private:
     void _styleButton( Gtk::Button& btn, char const* iconName, char const* tooltip);
     std::string _setClassAttribute(std::vector<SPObject*>);
     std::map<std::string, std::string>_selectorMap;
+    std::map<std::string, std::string> _getSelectorMap();
     void _populateTree(std::map<std::string, std::string>);
 
     class ModelColumns : public Gtk::TreeModel::ColumnRecord
@@ -54,15 +56,20 @@ private:
     };
 
     SPDesktop* _desktop;
+    SPDesktop* _targetDesktop;
     ModelColumns _mColumns;
     Gtk::VBox _mainBox;
     Gtk::HBox _buttonBox;
     Gtk::TreeView _treeView;
     Glib::RefPtr<Gtk::ListStore> _store;
     Gtk::ScrolledWindow _scrolledWindow;
+    Gtk::Button* del;
+    Gtk::Button* create;
+    SPDocument* _document;
 
     // Signal handlers
     void _addSelector();
+    void _delSelector();
 };
 
 } // namespace Dialog

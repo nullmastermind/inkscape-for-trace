@@ -61,47 +61,31 @@ StyleDialog::StyleDialog() :
     _treeView.set_model(_store);
     _treeView.append_column("Selector Name", _mColumns._selectorLabel);
 
-    Gtk::Button* create = manage( new Gtk::Button() );
+    create = manage( new Gtk::Button() );
     _styleButton(*create, "list-add", "Add a new CSS Selector");
     create->signal_clicked().connect(sigc::mem_fun(*this,
                                                    &StyleDialog::_addSelector));
 
-    Gtk::Button* del = manage( new Gtk::Button() );
+    del = manage( new Gtk::Button() );
     _styleButton(*del, "list-remove", "Remove a CSS Selector");
+    del->signal_clicked().connect(sigc::mem_fun(*this,
+                                                   &StyleDialog::_delSelector));
     del->set_sensitive(false);
 
     _mainBox.pack_start(_buttonBox, Gtk::PACK_SHRINK);
     _buttonBox.pack_start(*create, Gtk::PACK_SHRINK);
     _buttonBox.pack_start(*del, Gtk::PACK_SHRINK);
 
-    SPDesktop* targetDesktop = getDesktop();
-    setDesktop(targetDesktop);
+    _targetDesktop = getDesktop();
+    setDesktop(_targetDesktop);
 
     /**
      * @brief document
      * If an existing document is opened, its XML representation is obtained
-     * and if it contains any style element with a style selector, the selector
-     * name and its value is extracted and saved to a map. This map is then used
-     * to populate the treeview with the already existing selectors.
+     * and is then used to populate the treeview with the already existing
+     * selectors in the style element.
      */
-    SPDocument * document = targetDesktop->doc();
-    unsigned num = document->getReprRoot()->childCount();
-
-    std::string key, value;
-    std::map<std::string, std::string> selMap;
-
-    for ( unsigned i = 0; i < num; ++i )
-    {
-        if ( std::string(document->getReprRoot()->nthChild(i)->name()) == "svg:style" )
-        {
-            char *str = strdup(document->getReprRoot()->nthChild(i)->firstChild()
-                               ->content());
-            key = strtok(str, " ");
-            value = strtok(NULL, "");
-            selMap[key] = value;
-        }
-    }
-    _populateTree(selMap);
+    _populateTree(_getSelectorMap());
 }
 
 StyleDialog::~StyleDialog()
@@ -173,6 +157,8 @@ void StyleDialog::_addSelector()
         break;
     }
 
+    del->set_sensitive(true);
+
     /**
      * The selector name objects is set to the text that the user sets in the
      * entrybox. If the attribute does not exist, it is
@@ -224,6 +210,52 @@ void StyleDialog::_addSelector()
 }
 
 /**
+ * @brief StyleDialog::_delSelector
+ * This function deletes selector when '-' at the bottom is clicked. Currently
+ * selectors are deleted from StyleDialog and not from repr of the document.
+ */
+void StyleDialog::_delSelector()
+{
+    Glib::RefPtr<Gtk::TreeSelection> refTreeSelection = _treeView.get_selection();
+    Gtk::TreeModel::iterator iter = refTreeSelection->get_selected();
+    std::map<std::string, std::string>selMap = _getSelectorMap();
+
+    if (iter)
+    {
+        Gtk::TreeModel::Row row = *iter;
+        for( unsigned it = 0; it < selMap.size(); ++it ) {
+            std::string key = strtok(strdup(_document->getReprRoot()
+                                            ->nthChild(it)
+                                            ->firstChild()->content()), " ");
+
+            /**
+             * @brief toDeleteNode
+             * The node to be deleted is obtained using nthChild and the selector
+             * name and corresponding style node from the repr of document are
+             * saved to a map. Keys of this map and labels of selected rows of
+             * dialog are compared and deleted.
+             */
+            Inkscape::XML::Node *toDeleteNode = _document->getReprRoot()->nthChild(it);
+            std::map<std::string, Inkscape::XML::Node*>toDeleteMap;
+            toDeleteMap[key] = toDeleteNode;
+
+            for( std::map<std::string, Inkscape::XML::Node*>::iterator i =
+                 toDeleteMap.begin(); i != toDeleteMap.end(); ++i ) {
+                if( row[_mColumns._selectorLabel] == i->first)
+                {
+                    std::cout << i->second->name() << std::endl;
+                /**
+                  This should work but uncommenting it causes a crash currently.
+                  */
+                    //_document->getReprRoot()->removeChild(toDeleteNode);
+                }
+            }
+        }
+        _store->erase(row);
+    }
+}
+
+/**
  * @brief StyleDialog::_setClassAttribute
  * @param sel
  * @return This function returns the ids of objects selected which are passed
@@ -237,6 +269,36 @@ std::string StyleDialog::_setClassAttribute(std::vector<SPObject*> sel)
         str = str + "#" + std::string(obj->getId()) + " ";
     }
     return str;
+}
+
+/**
+ * @brief StyleDialog::_getSelectorMap
+ * @return selMap
+ * This function returns a map whose key is the style selector name and value is
+ * the style properties. All style selectors are extracted from svg:style
+ * element.
+ */
+std::map<std::string, std::string>StyleDialog::_getSelectorMap()
+{
+    _document = _targetDesktop->doc();
+    unsigned num = _document->getReprRoot()->childCount();
+
+    std::string key, value;
+    std::map<std::string, std::string> selMap;
+
+    for ( unsigned i = 0; i < num; ++i )
+    {
+        if ( std::string(_document->getReprRoot()->nthChild(i)->name()) == "svg:style" )
+        {
+            char *str = strdup(_document->getReprRoot()->nthChild(i)->firstChild()
+                               ->content());
+            key = strtok(str, " ");
+            value = strtok(NULL, "");
+            selMap[key] = value;
+        }
+    }
+
+    return selMap;
 }
 
 /**
@@ -254,6 +316,9 @@ void StyleDialog::_populateTree(std::map<std::string, std::string> _selMap)
         Gtk::TreeModel::Row row = *(_store->append());
         row[_mColumns._selectorLabel] = it->first;
     }
+
+    if (_selectMap.size() > 0)
+        del->set_sensitive(true);
 }
 
 } // namespace Dialog
