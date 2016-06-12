@@ -305,13 +305,18 @@ void FilletChamferKnotHolderEntity::knot_set(Geom::Point const &p,
     {
         return;
     }
-    if (is_mirror) {
-        size_t previous_index = curve_index - 1;
-        if(curve_index == 0 && pathv[path_index].closed()){
-            previous_index = pathv[path_index].size() - 1;
-        }
-        Geom::Curve const &curve_in = pathv[path_index][previous_index];
-        double mirror_time = Geom::nearest_time(s, curve_in);
+    size_t previous_index = curve_index - 1;
+    if(curve_index == 0 && pathv[path_index].closed()){
+        previous_index = pathv[path_index].size() - 1;
+    }
+    Geom::Curve const &curve_in = pathv[path_index][previous_index];
+    double mirror_time = Geom::nearest_time(s, curve_in);
+    Geom::Point mirror = curve_in.pointAt(mirror_time);
+    double normal_time = Geom::nearest_time(s, pathv[path_index][curve_index]);
+    Geom::Point normal = pathv[path_index][curve_index].pointAt(normal_time);
+    double distance_mirror = Geom::distance(mirror,s);
+    double distance_normal = Geom::distance(normal,s);
+    if (distance_mirror <= distance_normal) {
         double time_start = 0;
         Satellites satellites = _pparam->_last_pathvector_satellites->getSatellites();
         time_start = satellites[path_index][previous_index].time(curve_in);
