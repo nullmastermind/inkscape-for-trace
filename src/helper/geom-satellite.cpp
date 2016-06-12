@@ -1,6 +1,6 @@
 /**
  * \file
- * \brief Satellite a per ?node/curve holder of data.
+ * \brief Satellite a per node holder of data.
  */ /*
     * Authors:
     * 2015 Jabier Arraiza Cenoz<jabier.arraiza@marker.es>
@@ -23,15 +23,14 @@
 #include <ctime>
 #endif
 
-/**
- * @brief Satellite a per ?node/curve holder of data.
- */
+///@brief Satellite a per node holder of data.
 Satellite::Satellite() {}
 
 
 Satellite::Satellite(SatelliteType satellite_type)
     : satellite_type(satellite_type),
       is_time(false),
+      selected(false),
       has_mirror(false),
       hidden(true),
       amount(0.0),
@@ -41,12 +40,8 @@ Satellite::Satellite(SatelliteType satellite_type)
 
 Satellite::~Satellite() {}
 
-/**
- * Calculate the time in curve_in with a size of A
- * TODO: find a better place to it
- */
-
-
+///Calculate the time in curve_in with a size of A
+//TODO: find a better place to it
 double timeAtArcLength(double const A, Geom::Curve const &curve_in)
 {
     if ( A == 0 || curve_in.isDegenerate()) {
@@ -69,10 +64,8 @@ double timeAtArcLength(double const A, Geom::Curve const &curve_in)
     return t;
 }
 
-/**
- * Calculate the size in curve_in with a point at A
- * TODO: find a better place to it
- */
+///Calculate the size in curve_in with a point at A
+//TODO: find a better place to it
 double arcLengthAt(double const A, Geom::Curve const &curve_in)
 {
     if ( A == 0 || curve_in.isDegenerate()) {
@@ -91,9 +84,7 @@ double arcLengthAt(double const A, Geom::Curve const &curve_in)
     return s;
 }
 
-/**
- * Convert a arc radius of a fillet/chamfer to his satellite length -point position where fillet/chamfer knot be on original curve
- */
+///Convert a arc radius of a fillet/chamfer to his satellite length -point position where fillet/chamfer knot be on original curve
 double Satellite::radToLen(
     double const A, Geom::Curve const &curve_in,
     Geom::Curve const &curve_out) const
@@ -122,9 +113,7 @@ double Satellite::radToLen(
     return len;
 }
 
-/**
-* Convert a satelite length -point position where fillet/chamfer knot be on original curve- to a arc radius of fillet/chamfer
-*/
+///Convert a satelite length -point position where fillet/chamfer knot be on original curve- to a arc radius of fillet/chamfer
 double Satellite::lenToRad(
     double const A, Geom::Curve const &curve_in,
     Geom::Curve const &curve_out,
@@ -158,9 +147,7 @@ double Satellite::lenToRad(
     return 0;
 }
 
-/**
- * Get the time position of the satellite in curve_in
- */
+///Get the time position of the satellite in curve_in
 double Satellite::time(Geom::Curve const &curve_in, bool inverse) const
 {
     double t = amount;
@@ -175,9 +162,7 @@ double Satellite::time(Geom::Curve const &curve_in, bool inverse) const
     return t;
 }
 
-/**.
- * Get the time from a length A in other curve, a bolean inverse gived to reverse time
- */
+///Get the time from a length A in other curve, a bolean inverse gived to reverse time
 double Satellite::time(double A, bool inverse,
                        Geom::Curve const &curve_in) const
 {
@@ -195,9 +180,7 @@ double Satellite::time(double A, bool inverse,
     return timeAtArcLength(A, curve_in);
 }
 
-/**
- * Get the length of the satellite in curve_in
- */
+///Get the length of the satellite in curve_in
 double Satellite::arcDistance(Geom::Curve const &curve_in) const
 {
     double s = amount;
@@ -207,18 +190,14 @@ double Satellite::arcDistance(Geom::Curve const &curve_in) const
     return s;
 }
 
-/**
- * Get the point position of the satellite
- */
+///Get the point position of the satellite
 Geom::Point Satellite::getPosition(Geom::Curve const &curve_in, bool inverse) const
 {
     double t = time(curve_in, inverse);
     return curve_in.pointAt(t);
 }
 
-/**
- * Set the position of the satellite from a gived point P
- */
+///Set the position of the satellite from a gived point P
 void Satellite::setPosition(Geom::Point const p, Geom::Curve const &curve_in, bool inverse)
 {
     Geom::Curve * curve = const_cast<Geom::Curve *>(&curve_in);
@@ -232,9 +211,8 @@ void Satellite::setPosition(Geom::Point const p, Geom::Curve const &curve_in, bo
     amount = A;
 }
 
-/**
- * Map a satellite type with gchar
- */
+
+///Map a satellite type with gchar
 void Satellite::setSatelliteType(gchar const *A)
 {
     std::map<std::string, SatelliteType> gchar_map_to_satellite_type =
@@ -245,9 +223,7 @@ void Satellite::setSatelliteType(gchar const *A)
     }
 }
 
-/**
- * Map a gchar with satelliteType
- */
+///Map a gchar with satelliteType
 gchar const *Satellite::getSatelliteTypeGchar() const
 {
     std::map<SatelliteType, gchar const *> satellite_type_to_gchar_map =

@@ -1,6 +1,6 @@
 /**
  * \file
- * \brief Satellite a per ?node/curve holder of data.
+ * \brief Satellite a per node holder of data.
  */ /*
     * Authors:
     * 2015 Jabier Arraiza Cenoz<jabier.arraiza@marker.es>
@@ -25,7 +25,7 @@ enum SatelliteType {
     INVALID_SATELLITE     // Invalid Satellite
 };
 /**
- * @brief Satellite a per ?node/curve holder of data.
+ * @brief Satellite a per node holder of data.
  */
 
 class Satellite {
@@ -38,6 +38,10 @@ public:
     void setIsTime(bool set_is_time)
     {
         is_time = set_is_time;
+    }
+    void setSelected(bool set_selected)
+    {
+        selected = set_selected;
     }
     void setHasMirror(bool set_has_mirror)
     {
@@ -75,9 +79,10 @@ public:
     void setSatelliteType(gchar const *A);
     gchar const *getSatelliteTypeGchar() const;
     SatelliteType satellite_type;
-    //The value stored could be a time value of the satellite in the curve ot a distance on the curve
+    //The value stored could be a time value of the satellite in the curve or a lenght of distance to the node from the satellite
     //"is_time" tell is if is a time or lenght value
     bool is_time;
+    bool selected;
     bool has_mirror;
     bool hidden;
     //in "amount" we store the time or distance used in the satellite
@@ -85,7 +90,7 @@ public:
     double angle;
     size_t steps;
 };
-//cache_limit never called as 1
+
 double timeAtArcLength(double const A, Geom::Curve const &curve_in);
 double arcLengthAt(double const A, Geom::Curve const &curve_in);
 

@@ -120,6 +120,8 @@ protected:
             str << ",";
             str << vector_data[i].is_time;
             str << ",";
+            str << vector_data[i].selected;
+            str << ",";
             str << vector_data[i].has_mirror;
             str << ",";
             str << vector_data[i].hidden;

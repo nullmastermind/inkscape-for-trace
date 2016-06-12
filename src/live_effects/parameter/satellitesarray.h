@@ -64,7 +64,7 @@ public:
     friend class LPEFilletChamfer;
 
 protected:
-    KnotHolder *knoth;
+    KnotHolder *_knoth;
 
 private:
     SatellitesArrayParam(const SatellitesArrayParam &);
@@ -74,6 +74,7 @@ private:
     SPKnotModeType _knot_mode;
     guint32 _knot_color;
     Geom::PathVector _hp;
+    Geom::PathVector _knot_reset_helper;
     int _helper_size;
     bool _use_distance;
     bool _global_knot_hide;
@@ -87,7 +88,7 @@ public:
     FilletChamferKnotHolderEntity(SatellitesArrayParam *p, size_t index);
     virtual ~FilletChamferKnotHolderEntity()
     {
-        _pparam->knoth = NULL;
+        _pparam->_knoth = NULL;
     }
 
     virtual void knot_set(Geom::Point const &p, Geom::Point const &origin,

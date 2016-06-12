@@ -59,8 +59,9 @@ public:
     void doOnApply_impl(SPLPEItem const* lpeitem);
     void doBeforeEffect_impl(SPLPEItem const* lpeitem);
     void setCurrentZoom(double cZ);
-    void setSelectedNodePoints(std::vector<Geom::Point> sNP);
-    bool isNodePointSelected(Geom::Point const &nodePoint) const;
+    void setSelectedNodePoints(std::vector<Geom::Point> selected_node_points);
+    std::vector<size_t> getSelectedNodes();
+    bool isNodePointSelected(Geom::Point const &node_point) const;
     virtual void doOnApply (SPLPEItem const* lpeitem);
     virtual void doBeforeEffect (SPLPEItem const* lpeitem);
     

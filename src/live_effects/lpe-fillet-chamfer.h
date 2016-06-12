@@ -20,7 +20,7 @@
 namespace Inkscape {
 namespace LivePathEffect {
 
-enum FilletMethod {
+enum Fillet_method {
     FM_AUTO,
     FM_ARC,
     FM_BEZIER,
@@ -40,28 +40,24 @@ public:
     void updateChamferSteps();
     void updateAmount();
     void refreshKnots();
-    void chamfer();
-    void inverseChamfer();
-    void fillet();
-    void inverseFillet();
 
-    SatellitesArrayParam satellites_param;
+    SatellitesArrayParam _satellites_param;
 
 private:
-    EnumParam<FilletMethod> method;
-    ScalarParam radius;
-    ScalarParam chamfer_steps;
-    BoolParam flexible;
-    BoolParam mirror_knots;
-    BoolParam only_selected;
-    BoolParam use_knot_distance;
-    BoolParam hide_knots;
-    BoolParam apply_no_radius;
-    BoolParam apply_with_radius;
-    ScalarParam helper_size;
+    EnumParam<Fillet_method> _method;
+    ScalarParam _radius;
+    ScalarParam _chamfer_steps;
+    BoolParam _flexible;
+    BoolParam _mirror_knots;
+    BoolParam _only_selected;
+    BoolParam _use_knot_distance;
+    BoolParam _hide_knots;
+    BoolParam _apply_no_radius;
+    BoolParam _apply_with_radius;
+    ScalarParam _helper_size;
 
-    bool degenerate_hide;
-    PathVectorSatellites *pathvector_satellites;
+    bool _degenerate_hide;
+    PathVectorSatellites *_pathvector_satellites;
     Geom::PathVector _hp;
 
     LPEFilletChamfer(const LPEFilletChamfer &);

@@ -22,67 +22,65 @@
 namespace Inkscape {
 namespace LivePathEffect {
 
-static const Util::EnumData<FilletMethod> FilletMethodData[FM_END] = {
-    { FM_AUTO, N_("Auto"), "auto" }, { FM_ARC, N_("Force arc"), "arc" },
+static const Util::EnumData<Fillet_method> Fillet_methodData[] = {
+    { FM_AUTO, N_("Auto"), "auto" }, 
+    { FM_ARC, N_("Force arc"), "arc" },
     { FM_BEZIER, N_("Force bezier"), "bezier" }
 };
-static const Util::EnumDataConverter<FilletMethod> FMConverter(FilletMethodData,
-        FM_END);
+static const Util::EnumDataConverter<Fillet_method> FMConverter(Fillet_methodData, FM_END);
 
 LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject)
     : Effect(lpeobject),
-      satellites_param(_("pair_array_param"), _("pair_array_param"),
-                       "satellites_param", &wr, this),
-      method(_("Method:"), _("Methods to calculate the fillet or chamfer"),
-             "method", FMConverter, &wr, this, FM_AUTO),
-      radius(_("Radius (unit or %):"), _("Radius, in unit or %"), "radius", &wr,
+      _satellites_param("satellites_param", "satellites_param",
+                       "_satellites_param", &wr, this),
+      _method(_("_method:"), _("_methods to calculate the fillet or chamfer"),
+             "_method", FMConverter, &wr, this, FM_AUTO),
+      _radius(_("_radius (unit or %):"), _("_radius, in unit or %"), "_radius", &wr,
              this, 0.0),
-      chamfer_steps(_("Chamfer steps:"), _("Chamfer steps"), "chamfer_steps",
+      _chamfer_steps(_("Chamfer steps:"), _("Chamfer steps"), "_chamfer_steps",
                     &wr, this, 1),
-      flexible(_("Flexible radius size (%)"), _("Flexible radius size (%)"),
-               "flexible", &wr, this, false),
-      mirror_knots(_("Mirror Knots"), _("Mirror Knots"), "mirror_knots", &wr,
+      _flexible(_("_flexible _radius size (%)"), _("_flexible _radius size (%)"),
+               "_flexible", &wr, this, false),
+      _mirror_knots(_("Mirror Knots"), _("Mirror Knots"), "_mirror_knots", &wr,
                    this, true),
-      only_selected(_("Change only selected nodes"),
-                    _("Change only selected nodes"), "only_selected", &wr, this,
+      _only_selected(_("Change only selected nodes"),
+                    _("Change only selected nodes"), "_only_selected", &wr, this,
                     false),
-      use_knot_distance(_("Use knots distance instead radius"),
-                        _("Use knots distance instead radius"),
-                        "use_knot_distance", &wr, this, false),
-      hide_knots(_("Hide knots"), _("Hide knots"), "hide_knots", &wr, this,
+      _use_knot_distance(_("Use knots distance instead _radius"),
+                        _("Use knots distance instead _radius"),
+                        "_use_knot_distance", &wr, this, false),
+      _hide_knots(_("Hide knots"), _("Hide knots"), "_hide_knots", &wr, this,
                  false),
-      apply_no_radius(_("Apply changes if radius = 0"), _("Apply changes if radius = 0"), "apply_no_radius", &wr, this, true),
-      apply_with_radius(_("Apply changes if radius > 0"), _("Apply changes if radius > 0"), "apply_with_radius", &wr, this, true),
-      helper_size(_("Helper size with direction:"),
-                  _("Helper size with direction"), "helper_size", &wr, this, 0),
-      pathvector_satellites(NULL),
-      degenerate_hide(false)
+      _apply_no_radius(_("Apply changes if _radius = 0"), _("Apply changes if _radius = 0"), "_apply_no_radius", &wr, this, true),
+      _apply_with_radius(_("Apply changes if _radius > 0"), _("Apply changes if _radius > 0"), "_apply_with_radius", &wr, this, true),
+      _helper_size(_("Helper path size with direction to node:"),
+                  _("Helper path size with direction to node"), "_helper_size", &wr, this, 0),
+      _pathvector_satellites(NULL),
+      _degenerate_hide(false)
 {
-    registerParameter(&satellites_param);
-    registerParameter(&method);
-    registerParameter(&radius);
-    registerParameter(&chamfer_steps);
-    registerParameter(&helper_size);
-    registerParameter(&flexible);
-    registerParameter(&use_knot_distance);
-    registerParameter(&mirror_knots);
-    registerParameter(&apply_no_radius);
-    registerParameter(&apply_with_radius);
-    registerParameter(&only_selected);
-    registerParameter(&hide_knots);
+    registerParameter(&_satellites_param);
+    registerParameter(&_method);
+    registerParameter(&_radius);
+    registerParameter(&_chamfer_steps);
+    registerParameter(&_helper_size);
+    registerParameter(&_flexible);
+    registerParameter(&_use_knot_distance);
+    registerParameter(&_mirror_knots);
+    registerParameter(&_apply_no_radius);
+    registerParameter(&_apply_with_radius);
+    registerParameter(&_only_selected);
+    registerParameter(&_hide_knots);
 
-    radius.param_set_range(0.0, Geom::infinity());
-    radius.param_set_increments(1, 1);
-    radius.param_set_digits(4);
-    radius.param_overwrite_widget(true);
-    chamfer_steps.param_set_range(1, 999);
-    chamfer_steps.param_set_increments(1, 1);
-    chamfer_steps.param_set_digits(0);
-    //chamfer_steps.param_overwrite_widget(true);
-    helper_size.param_set_range(0, 999);
-    helper_size.param_set_increments(5, 5);
-    helper_size.param_set_digits(0);
-    //helper_size.param_overwrite_widget(true);
+    _radius.param_set_range(0.0, Geom::infinity());
+    _radius.param_set_increments(1, 1);
+    _radius.param_set_digits(4);
+    _radius.param_overwrite_widget(true);
+    _chamfer_steps.param_set_range(1, 999);
+    _chamfer_steps.param_set_increments(1, 1);
+    _chamfer_steps.param_set_digits(0);
+    _helper_size.param_set_range(0, 999);
+    _helper_size.param_set_increments(5, 5);
+    _helper_size.param_set_digits(0);
 }
 
 void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
@@ -103,24 +101,24 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
                 //  continue 
                 //}
                 Satellite satellite(FILLET);
-                satellite.setSteps(chamfer_steps);
+                satellite.setSteps(_chamfer_steps);
                 subpath_satellites.push_back(satellite);
             }
-            //we add the last satellite on open path because pathvector_satellites is related to nodes, not curves
+            //we add the last satellite on open path because _pathvector_satellites is related to nodes, not curves
             //so maybe in the future we can need this last satellite in other effects
-            //dont remove for this effect because pathvector_satellites class has methods when the path is modiffied
-            //and we want one method for all uses
+            //dont remove for this effect because _pathvector_satellites class has _methods when the path is modiffied
+            //and we want one _method for all uses
             if (!path_it->closed()) {
                 Satellite satellite(FILLET);
-                satellite.setSteps(chamfer_steps);
+                satellite.setSteps(_chamfer_steps);
                 subpath_satellites.push_back(satellite);
             }
             satellites.push_back(subpath_satellites);
         }
-        pathvector_satellites = new PathVectorSatellites();
-        pathvector_satellites->setPathVector(pathv);
-        pathvector_satellites->setSatellites(satellites);
-        satellites_param.setPathVectorSatellites(pathvector_satellites);
+        _pathvector_satellites = new PathVectorSatellites();
+        _pathvector_satellites->setPathVector(pathv);
+        _pathvector_satellites->setSatellites(satellites);
+        _satellites_param.setPathVectorSatellites(_pathvector_satellites);
     } else {
         g_warning("LPE Fillet/Chamfer can only be applied to shapes (not groups).");
         SPLPEItem *item = const_cast<SPLPEItem *>(lpeItem);
@@ -142,7 +140,7 @@ Gtk::Widget *LPEFilletChamfer::newWidget()
         if ((*it)->widget_is_visible) {
             Parameter *param = *it;
             Gtk::Widget *widg = param->param_newWidget();
-            if (param->param_key == "radius") {
+            if (param->param_key == "_radius") {
                 Inkscape::UI::Widget::Scalar *widg_registered =
                     Gtk::manage(dynamic_cast<Inkscape::UI::Widget::Scalar *>(widg));
                 widg_registered->signal_value_changed().connect(
@@ -154,7 +152,7 @@ Gtk::Widget *LPEFilletChamfer::newWidget()
                     Gtk::Entry *entry_widget = dynamic_cast<Gtk::Entry *>(childList[1]);
                     entry_widget->set_width_chars(6);
                 }
-            } else if (param->param_key == "chamfer_steps") {
+            } else if (param->param_key == "_chamfer_steps") {
                 Inkscape::UI::Widget::Scalar *widg_registered =
                     Gtk::manage(dynamic_cast<Inkscape::UI::Widget::Scalar *>(widg));
                 widg_registered->signal_value_changed().connect(
@@ -166,12 +164,12 @@ Gtk::Widget *LPEFilletChamfer::newWidget()
                     Gtk::Entry *entry_widget = dynamic_cast<Gtk::Entry *>(childList[1]);
                     entry_widget->set_width_chars(3);
                 }
-            } else if (param->param_key == "helper_size") {
+            } else if (param->param_key == "_helper_size") {
                 Inkscape::UI::Widget::Scalar *widg_registered =
                     Gtk::manage(dynamic_cast<Inkscape::UI::Widget::Scalar *>(widg));
                 widg_registered->signal_value_changed().connect(
                     sigc::mem_fun(*this, &LPEFilletChamfer::refreshKnots));
-            } else if (param->param_key == "only_selected") {
+            } else if (param->param_key == "_only_selected") {
                 Gtk::manage(widg);
             }
             Glib::ustring *tip = param->param_getTooltip();
@@ -189,29 +187,25 @@ Gtk::Widget *LPEFilletChamfer::newWidget()
     }
 
     Gtk::HBox *fillet_container = Gtk::manage(new Gtk::HBox(true, 0));
-    Gtk::Button *fillet =
-        Gtk::manage(new Gtk::Button(Glib::ustring(_("Fillet"))));
+    Gtk::Button *fillet =  Gtk::manage(new Gtk::Button(Glib::ustring(_("Fillet"))));
     fillet->signal_clicked()
-    .connect(sigc::mem_fun(*this, &LPEFilletChamfer::fillet));
+    .connect(sigc::bind<SatelliteType>(sigc::mem_fun(*this, &LPEFilletChamfer::updateSatelliteType),FILLET));
 
     fillet_container->pack_start(*fillet, true, true, 2);
-    Gtk::Button *inverse_fillet =
-        Gtk::manage(new Gtk::Button(Glib::ustring(_("Inverse fillet"))));
+    Gtk::Button *inverse_fillet = Gtk::manage(new Gtk::Button(Glib::ustring(_("Inverse fillet"))));
     inverse_fillet->signal_clicked()
-    .connect(sigc::mem_fun(*this, &LPEFilletChamfer::inverseFillet));
+    .connect(sigc::bind<SatelliteType>(sigc::mem_fun(*this, &LPEFilletChamfer::updateSatelliteType),INVERSE_FILLET));
     fillet_container->pack_start(*inverse_fillet, true, true, 2);
 
     Gtk::HBox *chamfer_container = Gtk::manage(new Gtk::HBox(true, 0));
-    Gtk::Button *chamfer =
-        Gtk::manage(new Gtk::Button(Glib::ustring(_("Chamfer"))));
+    Gtk::Button *chamfer = Gtk::manage(new Gtk::Button(Glib::ustring(_("Chamfer"))));
     chamfer->signal_clicked()
-    .connect(sigc::mem_fun(*this, &LPEFilletChamfer::chamfer));
+    .connect(sigc::bind<SatelliteType>(sigc::mem_fun(*this, &LPEFilletChamfer::updateSatelliteType),CHAMFER));
 
     chamfer_container->pack_start(*chamfer, true, true, 2);
-    Gtk::Button *inverse_chamfer =
-        Gtk::manage(new Gtk::Button(Glib::ustring(_("Inverse chamfer"))));
+    Gtk::Button *inverse_chamfer = Gtk::manage(new Gtk::Button(Glib::ustring(_("Inverse chamfer"))));
     inverse_chamfer->signal_clicked()
-    .connect(sigc::mem_fun(*this, &LPEFilletChamfer::inverseChamfer));
+    .connect(sigc::bind<SatelliteType>(sigc::mem_fun(*this, &LPEFilletChamfer::updateSatelliteType),INVERSE_CHAMFER));
     chamfer_container->pack_start(*inverse_chamfer, true, true, 2);
 
     vbox->pack_start(*fillet_container, true, true, 2);
@@ -220,136 +214,30 @@ Gtk::Widget *LPEFilletChamfer::newWidget()
     return vbox;
 }
 
-void LPEFilletChamfer::fillet()
-{
-    updateSatelliteType(FILLET);
-}
-
-void LPEFilletChamfer::inverseFillet()
-{
-    updateSatelliteType(INVERSE_FILLET);
-}
-
-void LPEFilletChamfer::chamfer()
-{
-    updateSatelliteType(CHAMFER);
-}
-
-void LPEFilletChamfer::inverseChamfer()
-{
-    updateSatelliteType(INVERSE_CHAMFER);
-}
-
 void LPEFilletChamfer::refreshKnots()
 {
-    if (satellites_param.knoth) {
-        satellites_param.knoth->update_knots();
+    if (_satellites_param._knoth) {
+        _satellites_param._knoth->update_knots();
     }
 }
 
 void LPEFilletChamfer::updateAmount()
 {
-    double power = 0;
-    if (!flexible) {
-        power = radius;
-    } else {
-        power = radius / 100;
-    }
-    Satellites satellites = pathvector_satellites->getSatellites();
-    Geom::PathVector pathv = pathvector_satellites->getPathVector();
-    for (size_t i = 0; i < satellites.size(); ++i) {
-        for (size_t j = 0; j < satellites[i].size(); ++j) {
-            boost::optional<size_t> previous_index = boost::none;
-            if(j == 0 && pathv[i].closed()){
-                previous_index = pathv[i].size() - 1;
-            } else if(!pathv[i].closed() || j != 0) {
-                previous_index = j - 1;
-            }
-            if (!pathv[i].closed() && j == 0) {
-                satellites[i][j].amount = 0;
-                continue;
-            }
-            if (pathv[i].size() == j) {
-                continue;
-            }
-            if ((!apply_no_radius && satellites[i][j].amount == 0) ||
-                (!apply_with_radius && satellites[i][j].amount != 0)) 
-            {
-                continue;
-            }
-            
-            Geom::Point satellite_point = pathv[i].pointAt(j);
-            if (isNodePointSelected(satellite_point) || !only_selected) {
-                if (!use_knot_distance && !flexible) {
-                    if(previous_index) {
-                        satellites[i][j].amount = satellites[i][j].radToLen(power, pathv[i][*previous_index], pathv[i][j]);
-                    } else {
-                        satellites[i][j].amount = 0.0;
-                    }
-                } else {
-                    satellites[i][j].amount = power;
-                }
-            }
-        }
-    }
-    pathvector_satellites->setSatellites(satellites);
-    satellites_param.setPathVectorSatellites(pathvector_satellites);
+    _pathvector_satellites->updateAmount(_radius, _apply_no_radius, _apply_with_radius, _only_selected, 
+                                         _use_knot_distance, _flexible);
+    _satellites_param.setPathVectorSatellites(_pathvector_satellites);
 }
 
 void LPEFilletChamfer::updateChamferSteps()
 {
-    Satellites satellites = pathvector_satellites->getSatellites();
-    Geom::PathVector pathv = pathvector_satellites->getPathVector();
-    for (size_t i = 0; i < satellites.size(); ++i) {
-        for (size_t j = 0; j < satellites[i].size(); ++j) {
-            if ((!apply_no_radius && satellites[i][j].amount == 0) ||
-                (!apply_with_radius && satellites[i][j].amount != 0)) 
-            {
-                continue;
-            }
-            if (only_selected) {
-                Geom::Point satellite_point = pathv[i].pointAt(j);
-                if (isNodePointSelected(satellite_point)) {
-                    satellites[i][j].steps = chamfer_steps;
-                }
-            } else {
-                satellites[i][j].steps = chamfer_steps;
-            }
-        }
-    }
-    pathvector_satellites->setSatellites(satellites);
-    satellites_param.setPathVectorSatellites(pathvector_satellites);
+    _pathvector_satellites->updateSteps(_chamfer_steps, _apply_no_radius, _apply_with_radius, _only_selected);
+    _satellites_param.setPathVectorSatellites(_pathvector_satellites);
 }
 
 void LPEFilletChamfer::updateSatelliteType(SatelliteType satellitetype)
 {
-    Satellites satellites = pathvector_satellites->getSatellites();
-    Geom::PathVector pathv = pathvector_satellites->getPathVector();
-    for (size_t i = 0; i < satellites.size(); ++i) {
-        for (size_t j = 0; j < satellites[i].size(); ++j) {
-            if ((!apply_no_radius && satellites[i][j].amount == 0) ||
-                (!apply_with_radius && satellites[i][j].amount != 0)) 
-            {
-                continue;
-            }
-            if (pathv[i].size() == j) {
-                if (!only_selected) {
-                    satellites[i][j].satellite_type = satellitetype;
-                }
-                continue;
-            }
-            if (only_selected) {
-                Geom::Point satellite_point = pathv[i].pointAt(j);
-                if (isNodePointSelected(satellite_point)) {
-                    satellites[i][j].satellite_type = satellitetype;
-                }
-            } else {
-                satellites[i][j].satellite_type = satellitetype;
-            }
-        }
-    }
-    pathvector_satellites->setSatellites(satellites);
-    satellites_param.setPathVectorSatellites(pathvector_satellites);
+    _pathvector_satellites->updateSatelliteType(satellitetype, _apply_no_radius, _apply_with_radius, _only_selected);
+    _satellites_param.setPathVectorSatellites(_pathvector_satellites);
 }
 
 void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
@@ -363,45 +251,46 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
             c = path->get_original_curve();
         }
         //fillet chamfer specific calls
-        satellites_param.setUseDistance(use_knot_distance);
+        _satellites_param.setUseDistance(_use_knot_distance);
         //mandatory call
-        satellites_param.setEffectType(effectType());
+        _satellites_param.setEffectType(effectType());
         Geom::PathVector const pathv = pathv_to_linear_and_cubic_beziers(c->get_pathvector());
         //if are diferent sizes call to poinwise recalculate
         //TODO: Update the satellite data in paths modified, Goal 0.93
-        if (pathvector_satellites) {
+        if (_pathvector_satellites) {
             size_t number_nodes = pathv.nodes().size();
-            size_t satellites_counter = pathvector_satellites->getTotalSatellites();
+            size_t satellites_counter = _pathvector_satellites->getTotalSatellites();
             if (number_nodes != satellites_counter) {
                 Satellite satellite(FILLET);
-                satellite.setIsTime(flexible);
-                satellite.setHasMirror(mirror_knots);
-                satellite.setHidden(hide_knots);
-                pathvector_satellites->recalculateForNewPathVector(pathv, satellite);
-                satellites_param.setPathVectorSatellites(pathvector_satellites);
+                satellite.setIsTime(_flexible);
+                satellite.setHasMirror(_mirror_knots);
+                satellite.setHidden(_hide_knots);
+                _pathvector_satellites->recalculateForNewPathVector(pathv, satellite);
+                _pathvector_satellites->setSelected(getSelectedNodes());
+                _satellites_param.setPathVectorSatellites(_pathvector_satellites);
                 refreshKnots();
                 return;
             }
         }
-        Satellites satellites = satellites_param.data();
+        Satellites satellites = _satellites_param.data();
         if(satellites.empty()) {
             doOnApply(lpeItem);
-            satellites = satellites_param.data();
+            satellites = _satellites_param.data();
         }
-        if (degenerate_hide) {
-            satellites_param.setGlobalKnotHide(true);
+        if (_degenerate_hide) {
+            _satellites_param.setGlobalKnotHide(true);
         } else {
-            satellites_param.setGlobalKnotHide(false);
+            _satellites_param.setGlobalKnotHide(false);
         }
-        if (hide_knots) {
-            satellites_param.setHelperSize(0);
+        if (_hide_knots) {
+            _satellites_param.setHelperSize(0);
         } else {
-            satellites_param.setHelperSize(helper_size);
+            _satellites_param.setHelperSize(_helper_size);
         }
         for (size_t i = 0; i < satellites.size(); ++i) {
             for (size_t j = 0; j < satellites[i].size(); ++j) {
-                if (satellites[i][j].is_time != flexible) {
-                    satellites[i][j].is_time = flexible;
+                if (satellites[i][j].is_time != _flexible) {
+                    satellites[i][j].is_time = _flexible;
                     double amount = satellites[i][j].amount;
                     if (pathv[i].size() == j){
                         continue;
@@ -415,16 +304,17 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
                         satellites[i][j].amount = size;
                     }
                 }
-                if (satellites[i][j].has_mirror != mirror_knots) {
-                    satellites[i][j].has_mirror = mirror_knots;
+                if (satellites[i][j].has_mirror != _mirror_knots) {
+                    satellites[i][j].has_mirror = _mirror_knots;
                 }
-                satellites[i][j].hidden = hide_knots;
+                satellites[i][j].hidden = _hide_knots;
             }
         }
-        pathvector_satellites = new PathVectorSatellites();
-        pathvector_satellites->setPathVector(pathv);
-        pathvector_satellites->setSatellites(satellites);
-        satellites_param.setPathVectorSatellites(pathvector_satellites);
+        _pathvector_satellites = new PathVectorSatellites();
+        _pathvector_satellites->setPathVector(pathv);
+        _pathvector_satellites->setSatellites(satellites);
+        _pathvector_satellites->setSelected(getSelectedNodes());
+        _satellites_param.setPathVectorSatellites(_pathvector_satellites);
         refreshKnots();
     } else {
         g_warning("LPE Fillet can only be applied to shapes (not groups).");
@@ -444,7 +334,7 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
     Geom::PathVector path_out;
     size_t path = 0;
     const double K = (4.0 / 3.0) * (sqrt(2.0) - 1.0);
-    degenerate_hide = false;
+    _degenerate_hide = false;
     Geom::PathVector pathv = pathv_to_linear_and_cubic_beziers(path_in);
     for (Geom::PathVector::const_iterator path_it = pathv.begin(); path_it != pathv.end(); ++path_it) {
         if (path_it->empty()) {
@@ -460,7 +350,7 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
         }
         double time0 = 0;
         size_t curve = 0;
-        Satellites satellites = pathvector_satellites->getSatellites();
+        Satellites satellites = _pathvector_satellites->getSatellites();
         for (Geom::Path::const_iterator curve_it1 = path_it->begin(); curve_it1 !=  path_it->end(); ++curve_it1) {
             size_t next_index = curve + 1;
             if (curve == pathv[path].size() - 1 && pathv[path].closed()) {
@@ -476,7 +366,7 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
             }
             Satellite satellite = satellites[path][next_index];
             if (Geom::are_near((*curve_it1).initialPoint(),(*curve_it1).finalPoint())) {
-                degenerate_hide = true;
+                _degenerate_hide = true;
                 g_warning("Knots hidded if consecutive nodes has the same position.");
                 return path_in;
             }
@@ -563,10 +453,10 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
             Geom::Line const x_line(Geom::Point(0, 0), Geom::Point(1, 0));
             Geom::Line const angled_line(start_arc_point, end_arc_point);
             double arc_angle = Geom::angle_between(x_line, angled_line);
-            double radius = Geom::distance(start_arc_point,
+            double _radius = Geom::distance(start_arc_point,
                                            middle_point(start_arc_point, end_arc_point)) /
                             sin(angle / 2.0);
-            Geom::Coord rx = radius;
+            Geom::Coord rx = _radius;
             Geom::Coord ry = rx;
             if (times[1] != 1) {
                 if (times[1] != times[0] || (times[1] == 1 && times[0] == 1)) {
@@ -583,8 +473,8 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
                     Geom::Path path_chamfer;
                     path_chamfer.start(tmp_path.finalPoint());
                     if ((is_straight_curve(*curve_it1) &&
-                            is_straight_curve(curve_it2) && method != FM_BEZIER) ||
-                            method == FM_ARC) {
+                            is_straight_curve(curve_it2) && _method != FM_BEZIER) ||
+                            _method == FM_ARC) {
                         ccw_toggle = ccw_toggle ? 0 : 1;
                         path_chamfer.appendNew<Geom::EllipticalArc>(rx, ry, arc_angle, 0,
                                 ccw_toggle, end_arc_point);
@@ -592,9 +482,9 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
                         path_chamfer.appendNew<Geom::CubicBezier>(handle_1, handle_2,
                                 end_arc_point);
                     }
-                    double chamfer_stepsTime = 1.0 / steps;
+                    double _chamfer_stepsTime = 1.0 / steps;
                     for (size_t i = 1; i < steps; i++) {
-                        Geom::Point chamfer_step = path_chamfer.pointAt(chamfer_stepsTime * i);
+                        Geom::Point chamfer_step = path_chamfer.pointAt(_chamfer_stepsTime * i);
                         tmp_path.appendNew<Geom::LineSegment>(chamfer_step);
                     }
                     tmp_path.appendNew<Geom::LineSegment>(end_arc_point);
@@ -602,25 +492,25 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
                     Geom::Path path_chamfer;
                     path_chamfer.start(tmp_path.finalPoint());
                     if ((is_straight_curve(*curve_it1) &&
-                            is_straight_curve(curve_it2) && method != FM_BEZIER) ||
-                            method == FM_ARC) {
+                            is_straight_curve(curve_it2) && _method != FM_BEZIER) ||
+                            _method == FM_ARC) {
                         path_chamfer.appendNew<Geom::EllipticalArc>(rx, ry, arc_angle, 0,
                                 ccw_toggle, end_arc_point);
                     } else {
                         path_chamfer.appendNew<Geom::CubicBezier>(
                             inverse_handle_1, inverse_handle_2, end_arc_point);
                     }
-                    double chamfer_stepsTime = 1.0 / steps;
+                    double _chamfer_stepsTime = 1.0 / steps;
                     for (size_t i = 1; i < steps; i++) {
                         Geom::Point chamfer_step =
-                            path_chamfer.pointAt(chamfer_stepsTime * i);
+                            path_chamfer.pointAt(_chamfer_stepsTime * i);
                         tmp_path.appendNew<Geom::LineSegment>(chamfer_step);
                     }
                     tmp_path.appendNew<Geom::LineSegment>(end_arc_point);
                 } else if (type == INVERSE_FILLET) {
                     if ((is_straight_curve(*curve_it1) &&
-                            is_straight_curve(curve_it2) && method != FM_BEZIER) ||
-                            method == FM_ARC) {
+                            is_straight_curve(curve_it2) && _method != FM_BEZIER) ||
+                            _method == FM_ARC) {
                         tmp_path.appendNew<Geom::EllipticalArc>(rx, ry, arc_angle, 0, ccw_toggle,
                                                                 end_arc_point);
                     } else {
@@ -629,8 +519,8 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
                     }
                 } else if (type == FILLET) {
                     if ((is_straight_curve(*curve_it1) &&
-                            is_straight_curve(curve_it2) && method != FM_BEZIER) ||
-                            method == FM_ARC) {
+                            is_straight_curve(curve_it2) && _method != FM_BEZIER) ||
+                            _method == FM_ARC) {
                         ccw_toggle = ccw_toggle ? 0 : 1;
                         tmp_path.appendNew<Geom::EllipticalArc>(rx, ry, arc_angle, 0, ccw_toggle,
                                                                 end_arc_point);

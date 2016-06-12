@@ -26,7 +26,7 @@ SatellitesArrayParam::SatellitesArrayParam(const Glib::ustring &label,
         const Glib::ustring &key,
         Inkscape::UI::Widget::Registry *wr,
         Effect *effect)
-    : ArrayParam<std::vector<Satellite> >(label, tip, key, wr, effect, 0), knoth(NULL)
+    : ArrayParam<std::vector<Satellite> >(label, tip, key, wr, effect, 0), _knoth(NULL)
 {
     _knot_shape = SP_KNOT_SHAPE_DIAMOND;
     _knot_mode = SP_KNOT_MODE_XOR;
@@ -180,6 +180,9 @@ void SatellitesArrayParam::updateCanvasIndicators(bool mirror)
             }
         }
     }
+    if(!_knot_reset_helper.empty()){
+        _hp.insert(_hp.end(), _knot_reset_helper.begin(), _knot_reset_helper.end() );
+    }
     if (mirror) {
         updateCanvasIndicators(false);
     }
@@ -230,24 +233,21 @@ void SatellitesArrayParam::addKnotHolderEntities(KnotHolder *knotholder,
             using namespace Geom;
             //If is for filletChamfer effect...
             if (_effectType == FILLET_CHAMFER) {
-//                if(!pathv[i].closed() && (j == 0 || j == _vector[i].size() -1)) {
-//                    continue;
-//                }
                 const gchar *tip;
                 if (type == CHAMFER) {
-                    tip = _("<b>Chamfer</b>: <b>Ctrl+Click</b> toggle type, "
+                    tip = _("<b>Chamfer</b>: <b>Ctrl+Click</b> toggles type, "
                             "<b>Shift+Click</b> open dialog, "
                             "<b>Ctrl+Alt+Click</b> reset");
                 } else if (type == INVERSE_CHAMFER) {
-                    tip = _("<b>Inverse Chamfer</b>: <b>Ctrl+Click</b> toggle type, "
+                    tip = _("<b>Inverse Chamfer</b>: <b>Ctrl+Click</b> toggles type, "
                             "<b>Shift+Click</b> open dialog, "
                             "<b>Ctrl+Alt+Click</b> reset");
                 } else if (type == INVERSE_FILLET) {
-                    tip = _("<b>Inverse Fillet</b>: <b>Ctrl+Click</b> toggle type, "
+                    tip = _("<b>Inverse Fillet</b>: <b>Ctrl+Click</b> toggles type, "
                             "<b>Shift+Click</b> open dialog, "
                             "<b>Ctrl+Alt+Click</b> reset");
                 } else {
-                    tip = _("<b>Fillet</b>: <b>Ctrl+Click</b> toggle type, "
+                    tip = _("<b>Fillet</b>: <b>Ctrl+Click</b> toggles type, "
                             "<b>Shift+Click</b> open dialog, "
                             "<b>Ctrl+Alt+Click</b> reset");
                 }
@@ -267,7 +267,7 @@ void SatellitesArrayParam::addKnotHolderEntities(KnotHolder *knotholder,
         SPDesktop *desktop,
         SPItem *item)
 {
-    knoth = knotholder;
+    _knoth = knotholder;
     addKnotHolderEntities(knotholder, desktop, item, true);
 }
 
@@ -316,6 +316,14 @@ void FilletChamferKnotHolderEntity::knot_set(Geom::Point const &p,
     Geom::Point normal = pathv[path_index][curve_index].pointAt(normal_time);
     double distance_mirror = Geom::distance(mirror,s);
     double distance_normal = Geom::distance(normal,s);
+    //this avoid toggle when fillet are near node
+//    if (is_mirror && Geom::are_near(mirror, pathv[path_index][curve_index].initialPoint())) {
+//        distance_mirror = 0.0;
+//        distance_normal = 1.0;
+//    } else if (!is_mirror && Geom::are_near(normal, pathv[path_index][curve_index].initialPoint())){
+//        distance_mirror = 1.0;
+//        distance_normal = 0.0;
+//    }
     if (distance_mirror <= distance_normal) {
         double time_start = 0;
         Satellites satellites = _pparam->_last_pathvector_satellites->getSatellites();
@@ -331,6 +339,15 @@ void FilletChamferKnotHolderEntity::knot_set(Geom::Point const &p,
         satellite.amount = amount;
     } else {
         satellite.setPosition(s, pathv[path_index][curve_index]);
+    }
+    _pparam->_knot_reset_helper.clear();
+    if (satellite.amount == 0){
+        char const *svgd;
+        svgd = "M -5.39,8.78 -9.13,5.29 -10.38,10.28 Z M -7.22,7.07 -3.43,3.37 m -1.95,-12.16 -3.74,3.5 -1.26,-5 z "
+               "m -1.83,1.71 3.78,3.7 M 5.24,8.78 8.98,5.29 10.24,10.28 Z "
+               "M 7.07,7.07 3.29,3.37 M 5.24,-8.78 l 3.74,3.5 1.26,-5 z M 7.07,-7.07 3.29,-3.37";
+        _pparam->_knot_reset_helper = sp_svg_read_pathv(svgd);
+        _pparam->_knot_reset_helper *= Geom::Affine(_pparam->_helper_size * 0.1,0,0,_pparam->_helper_size * 0.1,0,0) * Geom::Translate(Geom::Point(normal));
     }
     _pparam->_vector[path_index][curve_index] = satellite;
     SPLPEItem *splpeitem = dynamic_cast<SPLPEItem *>(item);
@@ -446,21 +463,21 @@ void FilletChamferKnotHolderEntity::knot_click(guint state)
             sp_lpe_item_update_patheffect(SP_LPE_ITEM(item), false, false);
             const gchar *tip;
             if (type == CHAMFER) {
-                tip = _("<b>Chamfer</b>: <b>Ctrl+Click</b> toggle type, "
+                tip = _("<b>Chamfer</b>: <b>Ctrl+Click</b> toggles type, "
                         "<b>Shift+Click</b> open dialog, "
-                        "<b>Ctrl+Alt+Click</b> reset");
+                        "<b>Ctrl+Alt+Click</b> resets");
             } else if (type == INVERSE_CHAMFER) {
-                tip = _("<b>Inverse Chamfer</b>: <b>Ctrl+Click</b> toggle type, "
+                tip = _("<b>Inverse Chamfer</b>: <b>Ctrl+Click</b> toggles type, "
                         "<b>Shift+Click</b> open dialog, "
-                        "<b>Ctrl+Alt+Click</b> reset");
+                        "<b>Ctrl+Alt+Click</b> resets");
             } else if (type == INVERSE_FILLET) {
-                tip = _("<b>Inverse Fillet</b>: <b>Ctrl+Click</b> toggle type, "
+                tip = _("<b>Inverse Fillet</b>: <b>Ctrl+Click</b> toggles type, "
                         "<b>Shift+Click</b> open dialog, "
-                        "<b>Ctrl+Alt+Click</b> reset");
+                        "<b>Ctrl+Alt+Click</b> resets");
             } else {
-                tip = _("<b>Fillet</b>: <b>Ctrl+Click</b> toggle type, "
+                tip = _("<b>Fillet</b>: <b>Ctrl+Click</b> toggles type, "
                         "<b>Shift+Click</b> open dialog, "
-                        "<b>Ctrl+Alt+Click</b> reset");
+                        "<b>Ctrl+Alt+Click</b> resets");
             }
             this->knot->tip = g_strdup(tip);
             this->knot->show();

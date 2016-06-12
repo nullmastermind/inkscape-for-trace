@@ -1,6 +1,6 @@
 /**
  * \file
- * \brief PathVectorSatellites a class to manage a vector of satellites per piecewise node
+ * \brief PathVectorSatellites a class to manage satellites -per node extra data- in a pathvector
  */ /*
     * Authors:
     * Jabiertxof
@@ -21,10 +21,8 @@
 #include <2geom/path.h>
 #include <2geom/pathvector.h>
 
-/**
- * @brief PathVectorSatellites a class to manage a vector of satellites per curve
- */
 typedef std::vector<std::vector<Satellite> > Satellites;
+///@brief PathVectorSatellites a class to manage satellites in a pathvector
 class PathVectorSatellites {
 public:
     Geom::PathVector getPathVector() const;
@@ -32,6 +30,11 @@ public:
     Satellites getSatellites();
     void setSatellites(Satellites satellites);
     size_t getTotalSatellites();
+    void setSelected(std::vector<size_t> selected);
+    void updateSteps(size_t steps, bool apply_no_radius, bool apply_with_radius, bool only_selected);
+    void updateAmount(double radius, bool apply_no_radius, bool apply_with_radius, bool only_selected, 
+                      bool use_knot_distance, bool flexible);
+    void updateSatelliteType(SatelliteType satellitetype, bool apply_no_radius, bool apply_with_radius, bool only_selected);
     std::pair<size_t, size_t> getIndexData(size_t index);
     void recalculateForNewPathVector(Geom::PathVector const pathv, Satellite const S);
 private:
