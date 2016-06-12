@@ -25,7 +25,7 @@
 #include "gc-anchored.h"
 #include "inkgc/gc-soft-ptr.h"
 #include "sp-item.h"
-
+#include "object-set.h"
 
 
 class SPDesktop;
@@ -110,7 +110,9 @@ public:
      *
      * @param the xml node of the item to add
      */
-    void add(XML::Node *repr) { add(_objectForXMLNode(repr)); }
+    void add(XML::Node *repr) {
+        add(_objectForXMLNode(repr));
+    }
 
     /**
      * Set the selection to a single specific object.
@@ -124,7 +126,9 @@ public:
      *
      * @param repr the xml node of the item to select
      */
-    void set(XML::Node *repr) { set(_objectForXMLNode(repr)); }
+    void set(XML::Node *repr) {
+        set(_objectForXMLNode(repr));
+    }
 
     /**
      * Removes an item from the set of selected objects.
@@ -174,12 +178,11 @@ public:
 
     /**  Add items from an STL iterator range to the selection.
      *  \param  from the begin iterator
-     *  \param  to   the end iterator
+     *  \param  to the end iterator
      */
     template <typename InputIterator>
     void add(InputIterator from, InputIterator to) {
-        _invalidateCachedLists();
-        while ( from != to ) {
+        while (from != to) {
             _add(*from);
             ++from;
         }
@@ -194,17 +197,17 @@ public:
     /**
      * Returns true if no items are selected.
      */
-    bool isEmpty() const { return _objs.empty(); }
+    bool isEmpty();
 
     /**
      * Returns true if the given object is selected.
      */
-    bool includes(SPObject *obj) const;
+    bool includes(SPObject *obj);
 
     /**
      * Returns true if the given item is selected.
      */
-    bool includes(XML::Node *repr) const {
+    bool includes(XML::Node *repr) {
         return includes(_objectForXMLNode(repr));
     }
 
@@ -240,13 +243,13 @@ public:
     XML::Node *singleRepr();
 
     /** Returns the list of selected objects. */
-    std::vector<SPObject*> const &list();
+    std::vector<SPObject*> list();
     /** Returns the list of selected SPItems. */
-    std::vector<SPItem*> const &itemList();
+    std::vector<SPItem*> itemList();
     /** Returns a list of the xml nodes of all selected objects. */
     /// \todo only returns reprs of SPItems currently; need a separate
     ///      method for that
-    std::vector<XML::Node*> const &reprList();
+    std::vector<XML::Node*> reprList();
 
     /** Returns a list of all perspectives which have a 3D box in the current selection.
        (these may also be nested in groups) */
@@ -344,13 +347,6 @@ private:
     void _emitModified(unsigned int flags);
     /** Issues changed selection signal. */
     void _emitChanged(bool persist_selection_context = false);
-
-    void _invalidateCachedLists();
-
-    /** unselect all descendants of the given item. */
-    void _removeObjectDescendants(SPObject *obj);
-    /** unselect all ancestors of the given item. */
-    void _removeObjectAncestors(SPObject *obj);
     /** clears the selection (without issuing a notification). */
     void _clear();
     /** adds an object (without issuing a notification). */
@@ -362,15 +358,9 @@ private:
     /** Releases an active layer object that is being removed. */
     void _releaseContext(SPObject *obj);
 
-    mutable std::list<SPObject*> _objs; //to more efficiently remove arbitrary elements
-    mutable std::vector<SPObject*> _objs_vector; // to be returned by list();
-    mutable std::set<SPObject*> _objs_set; //to efficiently test if object is selected
-    mutable std::vector<XML::Node*> _reprs;
-    mutable std::vector<SPItem*> _items;
+    ObjectSet _selectionSet;
 
-    void add_box_perspective(SPBox3D *box);
     void add_3D_boxes_recursively(SPObject *obj);
-    void remove_box_perspective(SPBox3D *box);
     void remove_3D_boxes_recursively(SPObject *obj);
     SPItem *_sizeistItem(bool sml, CompareSize compare);
 
@@ -383,7 +373,6 @@ private:
     unsigned int _idle;
 
     std::map<SPObject *, sigc::connection> _modified_connections;
-    std::map<SPObject *, sigc::connection> _release_connections;
     sigc::connection _context_release_connection;
 
     sigc::signal<void, Selection *> _changed_signal;

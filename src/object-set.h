@@ -41,6 +41,8 @@ public:
     bool contains(SPObject* object);
     void clear();
     int size();
+    multi_index_container::iterator begin();
+    multi_index_container::iterator end();
 
 private:
     void _add(SPObject* object);

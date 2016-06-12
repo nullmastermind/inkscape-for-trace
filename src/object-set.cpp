@@ -18,13 +18,14 @@ bool ObjectSet::add(SPObject* object) {
         return false;
     }
 
+    // very nice function, but needs refinement
     // check if there is mutual ancestor for some elements, which can replace all of them in the set
-    SPObject* o = _getMutualAncestor(object);
+//    object = _getMutualAncestor(object);
 
     // remove all descendants from the set
-    _removeDescendantsFromSet(o);
+    _removeDescendantsFromSet(object);
 
-    _add(o);
+    _add(object);
     return true;
 }
 
@@ -131,4 +132,12 @@ void ObjectSet::_removeAncestorsFromSet(SPObject *object) {
 
 ObjectSet::~ObjectSet() {
     clear();
+}
+
+multi_index_container::iterator ObjectSet::begin() {
+    return container.begin();
+}
+
+multi_index_container::iterator ObjectSet::end() {
+    return container.end();
 }

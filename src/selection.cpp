@@ -17,14 +17,10 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include <config.h>
 #endif
-#include "macros.h"
+
 #include "inkscape.h"
 #include "document.h"
-#include "layer-model.h"
-#include "selection.h"
-#include <2geom/rect.h>
 #include "xml/repr.h"
 #include "preferences.h"
 
@@ -32,21 +28,15 @@
 #include "sp-path.h"
 #include "sp-item-group.h"
 #include "box3d.h"
-#include "box3d.h"
 #include "persp3d.h"
-
-#include <sigc++/functors/mem_fun.h>
+#include <boost/lambda/lambda.hpp>
+#include <boost/lambda/casts.hpp>
 
 #define SP_SELECTION_UPDATE_PRIORITY (G_PRIORITY_HIGH_IDLE + 1)
 
 namespace Inkscape {
 
 Selection::Selection(LayerModel *layers, SPDesktop *desktop) :
-    _objs(std::list<SPObject*>()),
-    _objs_vector(std::vector<SPObject*>()),
-    _objs_set(std::set<SPObject*>()),
-    _reprs(std::vector<XML::Node*>()),
-    _items(std::vector<SPItem*>()),
     _layers(layers),
     _desktop(desktop),
     _selection_context(NULL),
@@ -122,18 +112,8 @@ Selection::_releaseContext(SPObject *obj)
     _selection_context = NULL;
 }
 
-void Selection::_invalidateCachedLists() {
-    _items.clear();
-    _reprs.clear();
-    _objs_vector.clear();
-}
-
 void Selection::_clear() {
-    _invalidateCachedLists();
-    while (!_objs.empty()) {
-        SPObject *obj=_objs.front();
-        _remove(obj);
-    }
+    _selectionSet.clear();
 }
 
 SPObject *Selection::activeContext() {
@@ -142,13 +122,11 @@ SPObject *Selection::activeContext() {
     return _layers->currentLayer();
     }
 
-bool Selection::includes(SPObject *obj) const {
-    if (obj == NULL)
-        return FALSE;
+bool Selection::includes(SPObject *obj)  {
+    g_return_val_if_fail(obj != NULL, false);
+    g_return_val_if_fail(SP_IS_OBJECT(obj), false);
 
-    g_return_val_if_fail(SP_IS_OBJECT(obj), FALSE);
-
-    return ( _objs_set.find(obj)!=_objs_set.end() );
+    return _selectionSet.contains(obj);
 }
 
 void Selection::add(SPObject *obj, bool persist_selection_context/* = false */) {
@@ -156,11 +134,6 @@ void Selection::add(SPObject *obj, bool persist_selection_context/* = false */) 
     g_return_if_fail(SP_IS_OBJECT(obj));
     g_return_if_fail(obj->document != NULL);
 
-    if (includes(obj)) {
-        return;
-    }
-
-    _invalidateCachedLists();
     _add(obj);
     _emitChanged(persist_selection_context);
 }
@@ -175,18 +148,8 @@ void Selection::add_3D_boxes_recursively(SPObject *obj) {
 }
 
 void Selection::_add(SPObject *obj) {
-    // unselect any of the item's ancestors and descendants which may be selected
-    // (to prevent double-selection)
-    _removeObjectDescendants(obj);
-    _removeObjectAncestors(obj);
-    g_return_if_fail(SP_IS_OBJECT(obj));
-
-    _objs.push_front(obj);
-    _objs_set.insert(obj);
-
+    _selectionSet.add(obj);
     add_3D_boxes_recursively(obj);
-
-    _release_connections[obj] = obj->connectRelease(sigc::mem_fun(*this, (void (Selection::*)(SPObject *))&Selection::remove));
     _modified_connections[obj] = obj->connectModified(sigc::mem_fun(*this, &Selection::_schedule_modified));
 }
 
@@ -196,8 +159,8 @@ void Selection::set(SPObject *object, bool persist_selection_context) {
 }
 
 void Selection::toggle(SPObject *obj) {
-    if (includes (obj)) {
-        remove (obj);
+    if (includes(obj)) {
+        remove(obj);
     } else {
         add(obj);
     }
@@ -206,9 +169,7 @@ void Selection::toggle(SPObject *obj) {
 void Selection::remove(SPObject *obj) {
     g_return_if_fail(obj != NULL);
     g_return_if_fail(SP_IS_OBJECT(obj));
-    g_return_if_fail(includes(obj));
 
-    _invalidateCachedLists();
     _remove(obj);
     _emitChanged();
 }
@@ -231,13 +192,8 @@ void Selection::_remove(SPObject *obj) {
     _modified_connections[obj].disconnect();
     _modified_connections.erase(obj);
 
-    _release_connections[obj].disconnect();
-    _release_connections.erase(obj);
-
+    _selectionSet.remove(obj);
     remove_3D_boxes_recursively(obj);
-
-    _objs.remove(obj);
-    _objs_set.erase(obj);
 }
 
 void Selection::setList(std::vector<SPItem*> const &list) {
@@ -245,20 +201,20 @@ void Selection::setList(std::vector<SPItem*> const &list) {
     if (!list.empty()) {
         _clear();
         addList(list);
-    } else clear();
+    } else {
+        clear();
+    }
 }
 
 void Selection::addList(std::vector<SPItem*> const &list) {
-
     if (list.empty())
         return;
 
-    _invalidateCachedLists();
-
-    for ( std::vector<SPItem*>::const_iterator iter=list.begin();iter!=list.end(); ++iter) {
+    for (std::vector<SPItem*>::const_iterator iter = list.begin(); iter != list.end(); ++iter) {
         SPObject *obj = *iter;
-        if (includes(obj)) continue;
-        _add (obj);
+        if (!includes(obj)) {
+            _add(obj);
+        }
     }
 
     _emitChanged();
@@ -267,8 +223,8 @@ void Selection::addList(std::vector<SPItem*> const &list) {
 void Selection::setReprList(std::vector<XML::Node*> const &list) {
     _clear();
 
-    for ( std::vector<XML::Node*>::const_reverse_iterator iter=list.rbegin();iter!=list.rend(); ++iter) {
-        SPObject *obj=_objectForXMLNode(*iter);
+    for (std::vector<XML::Node*>::const_reverse_iterator iter = list.rbegin(); iter != list.rend(); ++iter) {
+        SPObject *obj = _objectForXMLNode(*iter);
         if (obj) {
             _add(obj);
         }
@@ -282,39 +238,27 @@ void Selection::clear() {
     _emitChanged();
 }
 
-std::vector<SPObject*> const &Selection::list() {
-    if(!_objs_vector.empty())
-    return _objs_vector;
-
-    for ( std::list<SPObject*>::const_iterator iter=_objs.begin();iter!=_objs.end(); ++iter) {
-            _objs_vector.push_back(*iter);
-    }
-    return _objs_vector;
-
+bool Selection::isEmpty() {
+    return _selectionSet.size() == 0;
 }
 
-std::vector<SPItem*> const &Selection::itemList() {
-    if (!_items.empty()) {
-        return _items;
-    }
-
-    for ( std::list<SPObject*>::const_iterator iter=_objs.begin();iter!=_objs.end(); ++iter) {
-        SPObject *obj=*iter;
-        if (SP_IS_ITEM(obj)) {
-            _items.push_back(SP_ITEM(obj));
-        }
-    }
-    return _items;
+std::vector<SPObject*> Selection::list() {
+    return std::vector<SPObject*>(_selectionSet.begin(), _selectionSet.end());
 }
 
-std::vector<XML::Node*> const &Selection::reprList() {
-    if (!_reprs.empty()) { return _reprs; }
+std::vector<SPItem*> Selection::itemList() {
+    std::vector<SPObject *> tmp = list();
+    std::vector<SPItem*> result;
+    std::remove_if(tmp.begin(), tmp.end(), [](SPObject* o){return !SP_IS_ITEM(o);});
+    std::transform(tmp.begin(), tmp.end(), std::back_inserter(result), [](SPObject* o){return SP_ITEM(o);});
+    return result;
+}
+
+std::vector<XML::Node*> Selection::reprList() {
     std::vector<SPItem*> list = itemList();
-    for ( std::vector<SPItem*>::const_iterator iter=list.begin();iter!=list.end(); ++iter) {
-        SPObject *obj = *iter;
-        _reprs.push_back(obj->getRepr());
-    }
-    return _reprs;
+    std::vector<XML::Node*> result;
+    std::transform(list.begin(), list.end(), std::back_inserter(result), [](SPItem* item) { return item->getRepr(); });
+    return result;
 }
 
 std::list<Persp3D *> const Selection::perspList() {
@@ -343,20 +287,22 @@ std::list<SPBox3D *> const Selection::box3DList(Persp3D *persp) {
 }
 
 SPObject *Selection::single() {
-    if ( _objs.size() == 1 ) {
-        return _objs.front();
-    } else {
-        return NULL;
+    if (_selectionSet.size() == 1) {
+        return *_selectionSet.begin();
     }
+
+    return nullptr;
 }
 
 SPItem *Selection::singleItem() {
-    std::vector<SPItem*> const items=itemList();
-    if ( items.size()==1) {
-        return items[0];
-    } else {
-        return NULL;
+    if (_selectionSet.size() == 1) {
+        SPObject* obj = *_selectionSet.begin();
+        if (SP_IS_ITEM(obj)) {
+            return SP_ITEM(obj);
+        }
     }
+
+    return nullptr;
 }
 
 SPItem *Selection::smallestItem(Selection::CompareSize compare) {
@@ -378,19 +324,20 @@ SPItem *Selection::_sizeistItem(bool sml, Selection::CompareSize compare) {
         Geom::Rect bbox = *obox;
 
         gdouble size = compare == 2 ? bbox.area() :
-            (compare == 1 ? bbox.width() : bbox.height());
+                       (compare == 1 ? bbox.width() : bbox.height());
         size = sml ? size : size * -1;
         if (size < max) {
             max = size;
             ist = SP_ITEM(*i);
         }
     }
+
     return ist;
 }
 
 Inkscape::XML::Node *Selection::singleRepr() {
-    SPObject *obj=single();
-    return obj ? obj->getRepr() : NULL;
+    SPObject *obj = single();
+    return obj ? obj->getRepr() : nullptr;
 }
 
 Geom::OptRect Selection::bounds(SPItem::BBoxType type) const
@@ -484,34 +431,6 @@ std::vector<Inkscape::SnapCandidatePoint> Selection::getSnapPoints(SnapPreferenc
     return p;
 }
 
-void Selection::_removeObjectDescendants(SPObject *obj) {
-    std::vector<SPObject*> toremove;
-    for ( std::list<SPObject*>::const_iterator iter=_objs.begin();iter!=_objs.end(); ++iter) {
-        SPObject *sel_obj= dynamic_cast<SPObject*>(*iter);
-        SPObject *parent = sel_obj->parent;
-        while (parent) {
-            if ( parent == obj ) {
-                toremove.push_back(sel_obj);
-                break;
-            }
-            parent = parent->parent;
-        }
-    }
-    for ( std::vector<SPObject*>::const_iterator iter=toremove.begin();iter!=toremove.end(); ++iter) {
-        _remove(*iter);
-    }
-}
-
-void Selection::_removeObjectAncestors(SPObject *obj) {
-        SPObject *parent = obj->parent;
-        while (parent) {
-            if (includes(parent)) {
-                _remove(parent);
-            }
-            parent = parent->parent;
-        }
-}
-
 SPObject *Selection::_objectForXMLNode(Inkscape::XML::Node *repr) const {
     g_return_val_if_fail(repr != NULL, NULL);
     gchar const *id = repr->attribute("id");
@@ -528,6 +447,7 @@ size_t Selection::numberOfLayers() {
         SPObject *layer = _layers->layerForObject(*iter);
         layers.insert(layer);
     }
+
     return layers.size();
 }
 

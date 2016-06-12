@@ -118,8 +118,8 @@ TEST_F(ObjectSetTest, AdvancedDescendants) {
     EXPECT_TRUE(set.contains(X));
     bool resultF2 = set.add(F);
     EXPECT_TRUE(resultF2);
-    EXPECT_EQ(1, set.size());
-    EXPECT_TRUE(set.contains(A));
+    EXPECT_EQ(5, set.size());
+    EXPECT_TRUE(set.contains(F));
 }
 
 TEST_F(ObjectSetTest, Removing) {
@@ -183,4 +183,21 @@ TEST_F(ObjectSetTest, SetRemoving) {
     delete objectSet;
     EXPECT_STREQ(nullptr, A->getId());
     EXPECT_STREQ(nullptr, C->getId());
+}
+
+TEST_F(ObjectSetTest, SetOrder) {
+    set.add(A);
+    set.add(D);
+    set.add(B);
+    set.add(E);
+    set.add(C);
+    EXPECT_EQ(5, set.size());
+    auto it = set.begin();
+    EXPECT_EQ(A, *it++);
+    EXPECT_EQ(D, *it++);
+    EXPECT_EQ(B, *it++);
+    EXPECT_EQ(E, *it++);
+    EXPECT_EQ(C, *it++);
+    EXPECT_EQ(set.end(), it);
+
 }
