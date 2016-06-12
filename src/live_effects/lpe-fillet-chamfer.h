@@ -60,6 +60,7 @@ private:
     BoolParam apply_with_radius;
     ScalarParam helper_size;
 
+    bool degenerate_hide;
     PathVectorSatellites *pathvector_satellites;
     Geom::PathVector _hp;
 

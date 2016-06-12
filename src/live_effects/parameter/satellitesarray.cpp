@@ -33,6 +33,7 @@ SatellitesArrayParam::SatellitesArrayParam(const Glib::ustring &label,
     _knot_color = 0xAAFF8800;
     _helper_size = 0;
     _use_distance = false;
+    _global_knot_hide = false;
     _effectType = FILLET_CHAMFER;
     _last_pathvector_satellites = NULL;
 }
@@ -57,6 +58,10 @@ void SatellitesArrayParam::setUseDistance(bool use_knot_distance)
     _use_distance = use_knot_distance;
 }
 
+void SatellitesArrayParam::setGlobalKnotHide(bool global_knot_hide)
+{
+    _global_knot_hide = global_knot_hide;
+}
 void SatellitesArrayParam::setEffectType(EffectType et)
 {
     _effectType = et;
@@ -331,7 +336,7 @@ void FilletChamferKnotHolderEntity::knot_set(Geom::Point const &p,
 
 Geom::Point FilletChamferKnotHolderEntity::knot_get() const
 {
-    if (!_pparam->_last_pathvector_satellites) {
+    if (!_pparam->_last_pathvector_satellites || _pparam->_global_knot_hide) {
         return Geom::Point(Geom::infinity(), Geom::infinity());
     }
     Geom::Point tmp_point;

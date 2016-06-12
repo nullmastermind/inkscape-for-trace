@@ -55,7 +55,8 @@ LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject)
       apply_with_radius(_("Apply changes if radius > 0"), _("Apply changes if radius > 0"), "apply_with_radius", &wr, this, true),
       helper_size(_("Helper size with direction:"),
                   _("Helper size with direction"), "helper_size", &wr, this, 0),
-      pathvector_satellites(NULL)
+      pathvector_satellites(NULL),
+      degenerate_hide(false)
 {
     registerParameter(&satellites_param);
     registerParameter(&method);
@@ -387,6 +388,11 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
             doOnApply(lpeItem);
             satellites = satellites_param.data();
         }
+        if (degenerate_hide) {
+            satellites_param.setGlobalKnotHide(true);
+        } else {
+            satellites_param.setGlobalKnotHide(false);
+        }
         if (hide_knots) {
             satellites_param.setHelperSize(0);
         } else {
@@ -438,6 +444,7 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
     Geom::PathVector path_out;
     size_t path = 0;
     const double K = (4.0 / 3.0) * (sqrt(2.0) - 1.0);
+    degenerate_hide = false;
     Geom::PathVector pathv = pathv_to_linear_and_cubic_beziers(path_in);
     for (Geom::PathVector::const_iterator path_it = pathv.begin(); path_it != pathv.end(); ++path_it) {
         if (path_it->empty()) {
@@ -468,6 +475,11 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
                 continue;
             }
             Satellite satellite = satellites[path][next_index];
+            if (Geom::are_near((*curve_it1).initialPoint(),(*curve_it1).finalPoint())) {
+                degenerate_hide = true;
+                g_warning("Knots hidded if consecutive nodes has the same position.");
+                return path_in;
+            }
             if (!curve) { //curve == 0 
                 if (!path_it->closed()) {
                     time0 = 0;

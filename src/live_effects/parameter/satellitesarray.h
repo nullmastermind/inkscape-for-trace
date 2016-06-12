@@ -55,6 +55,7 @@ public:
     }
     void param_transform_multiply(Geom::Affine const &postmul, bool /*set*/);
     void setUseDistance(bool use_knot_distance);
+    void setGlobalKnotHide(bool global_knot_hide);
     void setEffectType(EffectType et);
     void setPathVectorSatellites(PathVectorSatellites *pathVectorSatellites);
     void set_oncanvas_looks(SPKnotShapeType shape, SPKnotModeType mode, guint32 color);
@@ -75,6 +76,7 @@ private:
     Geom::PathVector _hp;
     int _helper_size;
     bool _use_distance;
+    bool _global_knot_hide;
     EffectType _effectType;
     PathVectorSatellites *_last_pathvector_satellites;
 
