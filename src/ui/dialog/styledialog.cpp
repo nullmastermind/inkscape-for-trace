@@ -19,6 +19,8 @@
 using Inkscape::Util::List;
 using Inkscape::XML::AttributeRecord;
 
+#define REMOVE_SPACES(x) x.erase(std::remove(x.begin(), x.end(), ' '), x.end());
+
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
@@ -181,8 +183,8 @@ void StyleDialog::_addSelector()
 
                 if ( std::string(property) == "style" )
                 {
-                    selectorValue = row[_mColumns._selectorLabel] + "{" +
-                            "\n" + std::string(value) + "\n" + "}";
+                    selectorValue = "\n" + row[_mColumns._selectorLabel] + "{"
+                            + std::string(value) + "}";
                 }
             }
 
@@ -223,10 +225,10 @@ void StyleDialog::_delSelector()
     if (iter)
     {
         Gtk::TreeModel::Row row = *iter;
-        for( unsigned it = 0; it < selMap.size(); ++it ) {
-            std::string key = strtok(strdup(_document->getReprRoot()
-                                            ->nthChild(it)
-                                            ->firstChild()->content()), " ");
+//        for( unsigned it = 0; it < selMap.size(); ++it ) {
+//            std::string key = strtok(strdup(_document->getReprRoot()
+//                                            ->nthChild(it)
+//                                            ->firstChild()->content()), "{");
 
             /**
              * @brief toDeleteNode
@@ -235,22 +237,22 @@ void StyleDialog::_delSelector()
              * saved to a map. Keys of this map and labels of selected rows of
              * dialog are compared and deleted.
              */
-            Inkscape::XML::Node *toDeleteNode = _document->getReprRoot()->nthChild(it);
-            std::map<std::string, Inkscape::XML::Node*>toDeleteMap;
-            toDeleteMap[key] = toDeleteNode;
+//            Inkscape::XML::Node *toDeleteNode = _document->getReprRoot()->nthChild(it);
+//            std::map<std::string, Inkscape::XML::Node*>toDeleteMap;
+//            toDeleteMap[key] = toDeleteNode;
 
-            for( std::map<std::string, Inkscape::XML::Node*>::iterator i =
-                 toDeleteMap.begin(); i != toDeleteMap.end(); ++i ) {
-                if( row[_mColumns._selectorLabel] == i->first)
-                {
-                    std::cout << i->second->name() << std::endl;
-                /**
-                  This should work but uncommenting it causes a crash currently.
-                  */
-                    //_document->getReprRoot()->removeChild(toDeleteNode);
-                }
-            }
-        }
+//            for( std::map<std::string, Inkscape::XML::Node*>::iterator i =
+//                 toDeleteMap.begin(); i != toDeleteMap.end(); ++i ) {
+//                if( row[_mColumns._selectorLabel] == i->first)
+//                {
+//                    std::cout << i->second->name() << std::endl;
+//                /**
+//                  This should work but uncommenting it causes a crash currently.
+//                  */
+//                    //_document->getReprRoot()->removeChild(toDeleteNode);
+//                }
+//            }
+//        }
         _store->erase(row);
     }
 }
@@ -290,11 +292,22 @@ std::map<std::string, std::string>StyleDialog::_getSelectorMap()
     {
         if ( std::string(_document->getReprRoot()->nthChild(i)->name()) == "svg:style" )
         {
-            char *str = strdup(_document->getReprRoot()->nthChild(i)->firstChild()
-                               ->content());
-            key = strtok(str, " ");
-            value = strtok(NULL, "");
-            selMap[key] = value;
+            std::stringstream str;
+            str << _document->getReprRoot()->nthChild(i)->firstChild()->content();
+            std::string sel;
+
+            while (str != NULL)
+            {
+                while(std::getline(str, sel, '\n')){
+                    REMOVE_SPACES(sel);
+                    if (!sel.empty())
+                    {
+                        key = strtok(strdup(sel.c_str()), "{");
+                        value = strtok(NULL, "}");
+                        selMap[key] = value;
+                    }
+                }
+            }
         }
     }
 
