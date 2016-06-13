@@ -173,20 +173,27 @@ void StyleDialog::_addSelector()
         for ( unsigned i = 0; i < selected.size(); ++i ) {
             SPObject *obj = selected.at(i);
 
-            std::string style = std::string(obj->getRepr()->attribute("style"));
-            style = row[_mColumns._selectorLabel] + ";" + style;
+            if (obj->getRepr()->attribute("style"))
+            {
+                std::string style = std::string(obj->getRepr()->attribute("style"));
+                style = row[_mColumns._selectorLabel] + ";" + style;
 
-            for ( List<AttributeRecord const> iter = obj->getRepr()->attributeList();
-                  iter; ++iter ) {
-                gchar const * property = g_quark_to_string(iter->key);
-                gchar const * value = iter->value;
+                for ( List<AttributeRecord const> iter = obj->getRepr()->attributeList();
+                      iter; ++iter ) {
+                    gchar const * property = g_quark_to_string(iter->key);
+                    gchar const * value = iter->value;
 
-                if ( std::string(property) == "style" )
-                {
-                    selectorValue = "\n" + row[_mColumns._selectorLabel] + "{"
-                            + std::string(value) + "}";
+                    if ( std::string(property) == "style" )
+                    {
+                        selectorValue = "\n" + row[_mColumns._selectorLabel] + "{"
+                                + std::string(value) + "}";
+                    }
                 }
             }
+
+            else
+                std::cout << "This object does not have a style attribute. Add "
+                             "one first.";
 
             /**
              * @brief root
