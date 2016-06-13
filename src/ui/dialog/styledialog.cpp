@@ -165,17 +165,20 @@ void StyleDialog::_addSelector()
      * The selector name objects is set to the text that the user sets in the
      * entrybox. If the attribute does not exist, it is
      * created. In case the attribute already has a value, the new value entered
-     * is appended to the values.
+     * is appended to the values. If a style attribute does not exist, it is
+     * created with an empty value. Also if a class selector is added, then
+     * class attribute for the selected object is set too.
      */
     if ( _desktop->selection ) {
         std::vector<SPObject*> selected = _desktop->getSelection()->list();
         std::string selectorValue;
         for ( unsigned i = 0; i < selected.size(); ++i ) {
             SPObject *obj = selected.at(i);
+            std::string style;
 
             if (obj->getRepr()->attribute("style"))
             {
-                std::string style = std::string(obj->getRepr()->attribute("style"));
+                style = std::string(obj->getRepr()->attribute("style"));
                 style = row[_mColumns._selectorLabel] + ";" + style;
 
                 for ( List<AttributeRecord const> iter = obj->getRepr()->attributeList();
@@ -192,8 +195,23 @@ void StyleDialog::_addSelector()
             }
 
             else
-                std::cout << "This object does not have a style attribute. Add "
-                             "one first.";
+            {
+                style = " ";
+                std::cout << "style" << style;
+                obj->getRepr()->setAttribute("style", style);
+            }
+
+            if ( strcmp(selectorName.substr(0,1).c_str(), ".") == 0 ){
+                if (!obj->getRepr()->attribute("class"))
+                    obj->getRepr()->setAttribute("class", textEditPtr->get_text()
+                                                 .erase(0,1));
+                else
+                    obj->getRepr()->setAttribute("class", std::string(obj->
+                                                                      getRepr()->
+                                                                      attribute("class"))
+                                                 + " " + textEditPtr->get_text()
+                                                 .erase(0,0));
+            }
 
             /**
              * @brief root
@@ -303,16 +321,13 @@ std::map<std::string, std::string>StyleDialog::_getSelectorMap()
             str << _document->getReprRoot()->nthChild(i)->firstChild()->content();
             std::string sel;
 
-            while (str != NULL)
-            {
-                while(std::getline(str, sel, '\n')){
-                    REMOVE_SPACES(sel);
-                    if (!sel.empty())
-                    {
-                        key = strtok(strdup(sel.c_str()), "{");
-                        value = strtok(NULL, "}");
-                        selMap[key] = value;
-                    }
+            while(std::getline(str, sel, '\n')){
+                REMOVE_SPACES(sel);
+                if (!sel.empty())
+                {
+                    key = strtok(strdup(sel.c_str()), "{");
+                    value = strtok(NULL, "}");
+                    selMap[key] = value;
                 }
             }
         }
