@@ -252,6 +252,7 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
         }
         //fillet chamfer specific calls
         _satellites_param.setUseDistance(_use_knot_distance);
+        _satellites_param.setCurrentZoom(current_zoom);
         //mandatory call
         _satellites_param.setEffectType(effectType());
         Geom::PathVector const pathv = pathv_to_linear_and_cubic_beziers(c->get_pathvector());

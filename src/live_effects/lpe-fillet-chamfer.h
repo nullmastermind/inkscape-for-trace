@@ -31,10 +31,10 @@ class LPEFilletChamfer : public Effect {
 public:
     LPEFilletChamfer(LivePathEffectObject *lpeobject);
     virtual void doBeforeEffect(SPLPEItem const *lpeItem);
-    virtual Geom::PathVector
-    doEffect_path(Geom::PathVector const &path_in);
+    virtual Geom::PathVector doEffect_path(Geom::PathVector const &path_in);
     virtual void doOnApply(SPLPEItem const *lpeItem);
     virtual Gtk::Widget *newWidget();
+    Geom::Ray getRay(Geom::Point start, Geom::Point end, Geom::Curve *curve, bool reverse);
     void addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec);
     void updateSatelliteType(SatelliteType satellitetype);
     void updateChamferSteps();

@@ -34,6 +34,7 @@ SatellitesArrayParam::SatellitesArrayParam(const Glib::ustring &label,
     _helper_size = 0;
     _use_distance = false;
     _global_knot_hide = false;
+    _current_zoom = 0;
     _effectType = FILLET_CHAMFER;
     _last_pathvector_satellites = NULL;
 }
@@ -56,6 +57,11 @@ void SatellitesArrayParam::setPathVectorSatellites(PathVectorSatellites *pathVec
 void SatellitesArrayParam::setUseDistance(bool use_knot_distance)
 {
     _use_distance = use_knot_distance;
+}
+
+void SatellitesArrayParam::setCurrentZoom(double current_zoom)
+{
+    _current_zoom = current_zoom;
 }
 
 void SatellitesArrayParam::setGlobalKnotHide(bool global_knot_hide)
@@ -316,15 +322,9 @@ void FilletChamferKnotHolderEntity::knot_set(Geom::Point const &p,
     Geom::Point normal = pathv[path_index][curve_index].pointAt(normal_time);
     double distance_mirror = Geom::distance(mirror,s);
     double distance_normal = Geom::distance(normal,s);
-    //this avoid toggle when fillet are near node
-//    if (is_mirror && Geom::are_near(mirror, pathv[path_index][curve_index].initialPoint())) {
-//        distance_mirror = 0.0;
-//        distance_normal = 1.0;
-//    } else if (!is_mirror && Geom::are_near(normal, pathv[path_index][curve_index].initialPoint())){
-//        distance_mirror = 1.0;
-//        distance_normal = 0.0;
-//    }
-    if (distance_mirror <= distance_normal) {
+    if (Geom::are_near(s, pathv[path_index][curve_index].initialPoint(), 1.5 / _pparam->_current_zoom)) {
+        satellite.amount = 0;
+    } else if (distance_mirror < distance_normal) {
         double time_start = 0;
         Satellites satellites = _pparam->_last_pathvector_satellites->getSatellites();
         time_start = satellites[path_index][previous_index].time(curve_in);
@@ -347,7 +347,7 @@ void FilletChamferKnotHolderEntity::knot_set(Geom::Point const &p,
                "m -1.83,1.71 3.78,3.7 M 5.24,8.78 8.98,5.29 10.24,10.28 Z "
                "M 7.07,7.07 3.29,3.37 M 5.24,-8.78 l 3.74,3.5 1.26,-5 z M 7.07,-7.07 3.29,-3.37";
         _pparam->_knot_reset_helper = sp_svg_read_pathv(svgd);
-        _pparam->_knot_reset_helper *= Geom::Affine(_pparam->_helper_size * 0.1,0,0,_pparam->_helper_size * 0.1,0,0) * Geom::Translate(Geom::Point(normal));
+        _pparam->_knot_reset_helper *= Geom::Affine(_pparam->_helper_size * 0.1,0,0,_pparam->_helper_size * 0.1,0,0) * Geom::Translate(pathv[path_index][curve_index].initialPoint());
     }
     _pparam->_vector[path_index][curve_index] = satellite;
     SPLPEItem *splpeitem = dynamic_cast<SPLPEItem *>(item);
