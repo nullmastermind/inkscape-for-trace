@@ -43,9 +43,9 @@ public:
 private:
     void _styleButton( Gtk::Button& btn, char const* iconName, char const* tooltip);
     std::string _setClassAttribute(std::vector<SPObject*>);
-    std::map<std::string, std::string>_selectorMap;
-    std::map<std::string, std::string> _getSelectorMap();
-    void _populateTree(std::map<std::string, std::string>);
+    std::vector<std::pair<std::string, std::string> >_selectorVec;
+    std::vector<std::pair<std::string, std::string> > _getSelectorVec();
+    std::string _populateTree(std::vector<std::pair<std::string, std::string> >);
 
     class ModelColumns : public Gtk::TreeModel::ColumnRecord
     {
@@ -66,6 +66,8 @@ private:
     Gtk::Button* del;
     Gtk::Button* create;
     SPDocument* _document;
+    bool _styleExists;
+    std::string _sValue ;
 
     // Signal handlers
     void _addSelector();

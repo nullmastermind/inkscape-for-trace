@@ -10,6 +10,7 @@
  */
 
 #include "styledialog.h"
+#include "ui/widget/addtoicon.h"
 #include "widgets/icon.h"
 #include "verbs.h"
 #include "sp-object.h"
@@ -61,6 +62,11 @@ StyleDialog::StyleDialog() :
 
     _store = Gtk::ListStore::create(_mColumns);
     _treeView.set_model(_store);
+
+    Inkscape::UI::Widget::AddToIcon * addRenderer = manage(
+                new Inkscape::UI::Widget::AddToIcon() );
+    addRenderer->property_active() = true;
+    _treeView.append_column("type", *addRenderer);
     _treeView.append_column("Selector Name", _mColumns._selectorLabel);
 
     create = manage( new Gtk::Button() );
@@ -87,7 +93,8 @@ StyleDialog::StyleDialog() :
      * and is then used to populate the treeview with the already existing
      * selectors in the style element.
      */
-    _populateTree(_getSelectorMap());
+    _styleExists = false;
+    _sValue = _populateTree(_getSelectorVec());
 }
 
 StyleDialog::~StyleDialog()
@@ -178,9 +185,6 @@ void StyleDialog::_addSelector()
 
             if (obj->getRepr()->attribute("style"))
             {
-                style = std::string(obj->getRepr()->attribute("style"));
-                style = row[_mColumns._selectorLabel] + ";" + style;
-
                 for ( List<AttributeRecord const> iter = obj->getRepr()->attributeList();
                       iter; ++iter ) {
                     gchar const * property = g_quark_to_string(iter->key);
@@ -188,8 +192,8 @@ void StyleDialog::_addSelector()
 
                     if ( std::string(property) == "style" )
                     {
-                        selectorValue = "\n" + row[_mColumns._selectorLabel] + "{"
-                                + std::string(value) + "}";
+                        selectorValue = row[_mColumns._selectorLabel] + "{"
+                                + std::string(value) + "}" + "\n";
                     }
                 }
             }
@@ -197,7 +201,6 @@ void StyleDialog::_addSelector()
             else
             {
                 style = " ";
-                std::cout << "style" << style;
                 obj->getRepr()->setAttribute("style", style);
             }
 
@@ -216,22 +219,45 @@ void StyleDialog::_addSelector()
             /**
              * @brief root
              * A new style element is added to the document with value obtained
-             * from selectorValue above.
+             * from selectorValue above. If style element already exists, then
+             * the new selector's content is appended to its previous content.
              */
-            Inkscape::XML::Node *root = obj->getRepr()->document()->root();
-            Inkscape::XML::Node *newChild = obj->getRepr()->document()
-                    ->createElement("svg:style");
+            unsigned num = _document->getReprRoot()->childCount();
+            Inkscape::XML::Node *styleChild;
+            for ( unsigned i = 0; i < num; ++i )
+            {
+                if ( std::string(_document->getReprRoot()->nthChild(i)->name())
+                     == "svg:style" )
+                {
+                    _styleExists = true;
+                    styleChild = _document->getReprRoot()->nthChild(i);
+                    break;
+                }
+                else
+                    _styleExists = false;
+            }
 
-            Inkscape::XML::Node *smallChildren = obj->getRepr()->document()
-                    ->createTextNode(selectorValue.c_str());
+            if ( _styleExists )
+            {
+                _sValue = _sValue + selectorValue;
+                styleChild->firstChild()->setContent(_sValue.c_str());
+            }
+            else
+            {
+                _sValue = selectorValue;
+                Inkscape::XML::Node *root = obj->getRepr()->document()->root();
+                Inkscape::XML::Node *newChild = obj->getRepr()->document()
+                        ->createElement("svg:style");
+                Inkscape::XML::Node *smallChildren = obj->getRepr()->document()
+                        ->createTextNode(selectorValue.c_str());
 
-            newChild->appendChild(smallChildren);
-            Inkscape::GC::release(smallChildren);
+                newChild->appendChild(smallChildren);
+                Inkscape::GC::release(smallChildren);
 
-            root->addChild(newChild, NULL);
-            Inkscape::GC::release(newChild);
-
-            _selectorMap[selectorName] = selectorValue;
+                root->addChild(newChild, NULL);
+                Inkscape::GC::release(newChild);
+            }
+            _selectorVec.push_back(std::make_pair(selectorName, selectorValue));
         }
     }
 }
@@ -245,7 +271,7 @@ void StyleDialog::_delSelector()
 {
     Glib::RefPtr<Gtk::TreeSelection> refTreeSelection = _treeView.get_selection();
     Gtk::TreeModel::iterator iter = refTreeSelection->get_selected();
-    std::map<std::string, std::string>selMap = _getSelectorMap();
+    std::vector<std::pair<std::string, std::string> >selVec = _getSelectorVec();
 
     if (iter)
     {
@@ -299,19 +325,19 @@ std::string StyleDialog::_setClassAttribute(std::vector<SPObject*> sel)
 }
 
 /**
- * @brief StyleDialog::_getSelectorMap
- * @return selMap
- * This function returns a map whose key is the style selector name and value is
- * the style properties. All style selectors are extracted from svg:style
+ * @brief StyleDialog::_getSelectorVec
+ * @return selVec
+ * This function returns a vector whose key is the style selector name and value
+ * is the style properties. All style selectors are extracted from svg:style
  * element.
  */
-std::map<std::string, std::string>StyleDialog::_getSelectorMap()
+std::vector<std::pair<std::string, std::string> >StyleDialog::_getSelectorVec()
 {
     _document = _targetDesktop->doc();
     unsigned num = _document->getReprRoot()->childCount();
 
     std::string key, value;
-    std::map<std::string, std::string> selMap;
+    std::vector<std::pair<std::string, std::string> > selVec;
 
     for ( unsigned i = 0; i < num; ++i )
     {
@@ -327,33 +353,39 @@ std::map<std::string, std::string>StyleDialog::_getSelectorMap()
                 {
                     key = strtok(strdup(sel.c_str()), "{");
                     value = strtok(NULL, "}");
-                    selMap[key] = value;
+                    selVec.push_back(std::make_pair(key, value));
                 }
             }
         }
     }
 
-    return selMap;
+    return selVec;
 }
 
 /**
  * @brief StyleDialog::_populateTree
- * @param _selMap
+ * @param _selVec
  * This function populates the treeview with selectors available in the
  * stylesheet.
  */
-void StyleDialog::_populateTree(std::map<std::string, std::string> _selMap)
+std::string StyleDialog::_populateTree(std::vector<std::pair<std::string,
+                                       std::string> > _selVec)
 {
-    std::map<std::string, std::string> _selectMap = _selMap;
+    std::vector<std::pair<std::string, std::string> > _selectVec = _selVec;
+    std::string selectorValue;
 
-    for( std::map<std::string, std::string>::iterator it = _selectMap.begin();
-         it != _selectMap.end(); ++it ) {
+    for( unsigned it = 0; it < _selectVec.size(); ++it ) {
         Gtk::TreeModel::Row row = *(_store->append());
-        row[_mColumns._selectorLabel] = it->first;
+        row[_mColumns._selectorLabel] = _selectVec[it].first;
+        std::string selValue = _selectVec[it].first + " { "
+                + _selectVec[it].second + " }" + "\n";
+        selectorValue.append(selValue.c_str());
     }
 
-    if (_selectMap.size() > 0)
+    if (_selectVec.size() > 0)
         del->set_sensitive(true);
+
+    return selectorValue;
 }
 
 } // namespace Dialog
