@@ -94,6 +94,8 @@ StyleDialog::StyleDialog() :
      * selectors in the style element.
      */
     _styleExists = false;
+    _document = _targetDesktop->doc();
+    _num = _document->getReprRoot()->childCount();
     _sValue = _populateTree(_getSelectorVec());
 }
 
@@ -222,15 +224,13 @@ void StyleDialog::_addSelector()
              * from selectorValue above. If style element already exists, then
              * the new selector's content is appended to its previous content.
              */
-            unsigned num = _document->getReprRoot()->childCount();
-            Inkscape::XML::Node *styleChild;
-            for ( unsigned i = 0; i < num; ++i )
+            for ( unsigned i = 0; i < _num; ++i )
             {
                 if ( std::string(_document->getReprRoot()->nthChild(i)->name())
                      == "svg:style" )
                 {
                     _styleExists = true;
-                    styleChild = _document->getReprRoot()->nthChild(i);
+                    _styleChild = _document->getReprRoot()->nthChild(i);
                     break;
                 }
                 else
@@ -240,7 +240,7 @@ void StyleDialog::_addSelector()
             if ( _styleExists )
             {
                 _sValue = _sValue + selectorValue;
-                styleChild->firstChild()->setContent(_sValue.c_str());
+                _styleChild->firstChild()->setContent(_sValue.c_str());
             }
             else
             {
@@ -264,46 +264,34 @@ void StyleDialog::_addSelector()
 
 /**
  * @brief StyleDialog::_delSelector
- * This function deletes selector when '-' at the bottom is clicked. Currently
- * selectors are deleted from StyleDialog and not from repr of the document.
+ * This function deletes selector when '-' at the bottom is clicked. The index
+ * of selected row is obtained and the corresponding selector and its values are
+ * deleted from the selector vector. Then _sValue's content is reset and contains
+ * only selectors remaining in the selVec (or treeview).
  */
 void StyleDialog::_delSelector()
 {
     Glib::RefPtr<Gtk::TreeSelection> refTreeSelection = _treeView.get_selection();
     Gtk::TreeModel::iterator iter = refTreeSelection->get_selected();
     std::vector<std::pair<std::string, std::string> >selVec = _getSelectorVec();
+    Gtk::TreeModel::Path path;
 
     if (iter)
     {
         Gtk::TreeModel::Row row = *iter;
-//        for( unsigned it = 0; it < selMap.size(); ++it ) {
-//            std::string key = strtok(strdup(_document->getReprRoot()
-//                                            ->nthChild(it)
-//                                            ->firstChild()->content()), "{");
+        path = _treeView.get_model()->get_path(iter);
+        int i = atoi(path.to_string().c_str());
+        selVec.erase(selVec.begin()+i);
+        _sValue.clear();
 
-            /**
-             * @brief toDeleteNode
-             * The node to be deleted is obtained using nthChild and the selector
-             * name and corresponding style node from the repr of document are
-             * saved to a map. Keys of this map and labels of selected rows of
-             * dialog are compared and deleted.
-             */
-//            Inkscape::XML::Node *toDeleteNode = _document->getReprRoot()->nthChild(it);
-//            std::map<std::string, Inkscape::XML::Node*>toDeleteMap;
-//            toDeleteMap[key] = toDeleteNode;
+        for (unsigned i = 0; i < selVec.size(); ++i)
+        {
+            std::string selValue = (selVec[i].first + "{"
+                                     + selVec[i].second + " }\n");
+            _sValue.append(selValue.c_str());
+        }
 
-//            for( std::map<std::string, Inkscape::XML::Node*>::iterator i =
-//                 toDeleteMap.begin(); i != toDeleteMap.end(); ++i ) {
-//                if( row[_mColumns._selectorLabel] == i->first)
-//                {
-//                    std::cout << i->second->name() << std::endl;
-//                /**
-//                  This should work but uncommenting it causes a crash currently.
-//                  */
-//                    //_document->getReprRoot()->removeChild(toDeleteNode);
-//                }
-//            }
-//        }
+        _styleChild->firstChild()->setContent(_sValue.c_str());
         _store->erase(row);
     }
 }
@@ -333,13 +321,10 @@ std::string StyleDialog::_setClassAttribute(std::vector<SPObject*> sel)
  */
 std::vector<std::pair<std::string, std::string> >StyleDialog::_getSelectorVec()
 {
-    _document = _targetDesktop->doc();
-    unsigned num = _document->getReprRoot()->childCount();
-
     std::string key, value;
     std::vector<std::pair<std::string, std::string> > selVec;
 
-    for ( unsigned i = 0; i < num; ++i )
+    for ( unsigned i = 0; i < _num; ++i )
     {
         if ( std::string(_document->getReprRoot()->nthChild(i)->name()) == "svg:style" )
         {
@@ -384,6 +369,15 @@ std::string StyleDialog::_populateTree(std::vector<std::pair<std::string,
 
     if (_selectVec.size() > 0)
         del->set_sensitive(true);
+
+    for ( unsigned i = 0; i < _num; ++i )
+    {
+        if ( std::string(_document->getReprRoot()->nthChild(i)->name())
+             == "svg:style" )
+        {
+            _styleChild = _document->getReprRoot()->nthChild(i);
+        }
+    }
 
     return selectorValue;
 }

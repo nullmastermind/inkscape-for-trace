@@ -68,6 +68,8 @@ private:
     SPDocument* _document;
     bool _styleExists;
     std::string _sValue ;
+    Inkscape::XML::Node *_styleChild;
+    unsigned _num;
 
     // Signal handlers
     void _addSelector();
