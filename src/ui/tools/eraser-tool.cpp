@@ -708,7 +708,6 @@ void EraserTool::set_to_accumulated() {
                             item->deleteObject(true);
                             sp_object_unref(item);
                             workDone = true;
-                            workDone = true;
                         } else if (SP_IS_GROUP(item) || use ) {
                             /*Do nothing*/
                         } else {

@@ -55,7 +55,7 @@ Inkscape::Selection *StyleSubject::Selection::_getSelection() const {
     }
 }
 
-std::vector<SPObject*> StyleSubject::Selection::list(){
+std::vector<SPObject*> StyleSubject::Selection::list() {
     Inkscape::Selection *selection = _getSelection();
     if(selection)
         return selection->list();
