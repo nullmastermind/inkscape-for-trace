@@ -283,17 +283,44 @@ void StyleDialog::_delSelector()
         Gtk::TreeModel::Row row = *iter;
         path = _treeView.get_model()->get_path(iter);
         int i = atoi(path.to_string().c_str());
-        selVec.erase(selVec.begin()+i);
-        _sValue.clear();
 
-        for (unsigned i = 0; i < selVec.size(); ++i)
+        if (selVec.size() != 0)
         {
-            std::string selValue = (selVec[i].first + "{"
-                                     + selVec[i].second + " }\n");
-            _sValue.append(selValue.c_str());
-        }
+            selVec.erase(selVec.begin()+i);
+            _sValue.clear();
 
-        _styleChild->firstChild()->setContent(_sValue.c_str());
+            if (selVec.size() != 0)
+            {
+                for (unsigned i = 0; i < selVec.size(); ++i)
+                {
+                    std::string selValue = (selVec[i].first + "{"
+                                            + selVec[i].second + " }\n");
+                    _sValue.append(selValue.c_str());
+                }
+
+            }
+
+            /**
+              * Only if a value exists in _sValue and there is a _styleChild
+              * which contains the style element, then the content in style
+              * element is updated else the _styleChild is set and its content
+              * is set to an empty string.
+              */
+            if (!_sValue.empty() && _styleChild)
+                _styleChild->firstChild()->setContent(_sValue.c_str());
+            else
+            {
+                for ( unsigned i = 0; i < _num; ++i )
+                {
+                    if ( std::string(_document->getReprRoot()->nthChild(i)->name())
+                         == "svg:style" )
+                    {
+                        _styleChild = _document->getReprRoot()->nthChild(i);
+                    }
+                }
+                _styleChild->firstChild()->setContent("");
+            }
+        }
         _store->erase(row);
     }
 }
