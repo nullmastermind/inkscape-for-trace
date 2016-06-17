@@ -53,7 +53,6 @@ StyleDialog::StyleDialog() :
     _desktop(0)
 {
     set_size_request(200, 200);
-    add(_mainBox);
 
     _mainBox.pack_start(_scrolledWindow, Gtk::PACK_EXPAND_WIDGET);
     _treeView.set_headers_visible(false);
@@ -80,9 +79,12 @@ StyleDialog::StyleDialog() :
                                                    &StyleDialog::_delSelector));
     del->set_sensitive(false);
 
-    _mainBox.pack_start(_buttonBox, Gtk::PACK_SHRINK);
+    _mainBox.pack_end(_buttonBox, Gtk::PACK_SHRINK);
+
     _buttonBox.pack_start(*create, Gtk::PACK_SHRINK);
     _buttonBox.pack_start(*del, Gtk::PACK_SHRINK);
+
+    _getContents()->pack_start(_mainBox, Gtk::PACK_EXPAND_WIDGET);
 
     _targetDesktop = getDesktop();
     setDesktop(_targetDesktop);
