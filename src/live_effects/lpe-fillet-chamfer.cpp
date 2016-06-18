@@ -258,25 +258,22 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
         Geom::PathVector const pathv = pathv_to_linear_and_cubic_beziers(c->get_pathvector());
         //if are diferent sizes call to poinwise recalculate
         //TODO: Update the satellite data in paths modified, Goal 0.93
+        Satellites satellites = _satellites_param.data();
+        if(satellites.empty()) {
+            doOnApply(lpeItem);
+            satellites = _satellites_param.data();
+        }
         if (_pathvector_satellites) {
             size_t number_nodes = pathv.nodes().size();
-            size_t previous_number_nodes = _pathvector_satellites->getPathVector().nodes().size();
+            size_t previous_number_nodes = _pathvector_satellites->getTotalSatellites();
             if (number_nodes != previous_number_nodes) {
                 Satellite satellite(FILLET);
                 satellite.setIsTime(_flexible);
                 satellite.setHasMirror(_mirror_knots);
                 satellite.setHidden(_hide_knots);
                 _pathvector_satellites->recalculateForNewPathVector(pathv, satellite);
-                _pathvector_satellites->setSelected(getSelectedNodes());
-                _satellites_param.setPathVectorSatellites(_pathvector_satellites);
-                refreshKnots();
-                return;
+                satellites = _pathvector_satellites->getSatellites();
             }
-        }
-        Satellites satellites = _satellites_param.data();
-        if(satellites.empty()) {
-            doOnApply(lpeItem);
-            satellites = _satellites_param.data();
         }
         if (_degenerate_hide) {
             _satellites_param.setGlobalKnotHide(true);
@@ -311,7 +308,9 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
                 satellites[i][j].hidden = _hide_knots;
             }
         }
-        _pathvector_satellites = new PathVectorSatellites();
+        if (!_pathvector_satellites) {
+            _pathvector_satellites = new PathVectorSatellites();
+        }
         _pathvector_satellites->setPathVector(pathv);
         _pathvector_satellites->setSatellites(satellites);
         _pathvector_satellites->setSelected(getSelectedNodes());
@@ -378,8 +377,7 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
             }
             Geom::Curve const &curve_it2 = pathv[path][next_index];
             Satellite satellite = satellites[path][next_index];
-            if (Geom::are_near((*curve_it1).initialPoint(), (*curve_it1).finalPoint()) ||
-                Geom::are_near(curve_it2.initialPoint(), curve_it2.finalPoint())) {
+            if (Geom::are_near((*curve_it1).initialPoint(), (*curve_it1).finalPoint())) {
                 _degenerate_hide = true;
                 g_warning("Knots hidded if consecutive nodes has the same position.");
                 return path_in;

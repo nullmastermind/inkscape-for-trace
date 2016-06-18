@@ -421,6 +421,9 @@ Effect::getSelectedNodes()
 {
     size_t counter = 0;
     std::vector<size_t> result;
+    if (pathvector_before_effect.empty()){
+        return result;
+    }
     for (size_t i = 0; i < pathvector_before_effect.size(); i++) {
         for (size_t j = 0; j < pathvector_before_effect[i].size_closed(); j++) {
             if ((!pathvector_before_effect[i].closed() && 
@@ -440,15 +443,11 @@ Effect::getSelectedNodes()
 bool
 Effect::isNodeSelected(Geom::Point const &node_point) const
 {
-    if (_selected_nodes_pos.size() > 0) {
-        using Geom::X;
-        using Geom::Y; 
-        Geom::Affine transformCoordinate = sp_lpe_item->i2dt_affine();
+    if (!_selected_nodes_pos.empty()) {
         for (std::vector<Geom::Point>::const_iterator i = _selected_nodes_pos.begin();
                 i != _selected_nodes_pos.end(); ++i) {
-            Geom::Point p = *i;
-            Geom::Point p2(node_point[X],node_point[Y]);
-            p2 *= transformCoordinate;
+            Geom::Point p = (*i);
+            Geom::Point p2(node_point[Geom::X],node_point[Geom::Y]);
             if (Geom::are_near(p, p2, 0.01)) {
                 return true;
             }

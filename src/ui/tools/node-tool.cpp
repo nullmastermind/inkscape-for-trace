@@ -292,15 +292,16 @@ void  NodeTool::update_helperpath () {
     if (SP_IS_LPE_ITEM(selection->singleItem())) {
         Inkscape::LivePathEffect::Effect *lpe = SP_LPE_ITEM(selection->singleItem())->getCurrentLPE();
         if (lpe && lpe->isVisible()/* && lpe->showOrigPath()*/) {
-            Inkscape::UI::ControlPointSelection::Set &selection_nodes = _selected_nodes->allPoints();
-            std::vector<Geom::Point> selected_nodes_pos;
+            Inkscape::UI::ControlPointSelection::Set &selection_nodes = this->_selected_nodes->allPoints();
+            std::vector<Geom::Point> positions;
+            Geom::Affine affine =  SP_ITEM(selection->singleItem())->i2dt_affine();
             for (Inkscape::UI::ControlPointSelection::Set::iterator i = selection_nodes.begin(); i != selection_nodes.end(); ++i) {
                 if ((*i)->selected()) {
                     Inkscape::UI::Node *n = dynamic_cast<Inkscape::UI::Node *>(*i);
-                    selected_nodes_pos.push_back(n->position());
+                    positions.push_back(n->position() * affine);
                 }
             }
-            lpe->setSelectedNodes(selected_nodes_pos);
+            lpe->setSelectedNodes(positions);
             lpe->setCurrentZoom(this->desktop->current_zoom());
             SPCurve *c = new SPCurve();
             SPCurve *cc = new SPCurve();

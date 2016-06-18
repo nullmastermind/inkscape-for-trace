@@ -63,16 +63,11 @@ std::pair<size_t, size_t> PathVectorSatellites::getIndexData(size_t index)
 void PathVectorSatellites::setSelected(std::vector<size_t> selected)
 {
     size_t counter = 0;
-    for (size_t h = 0; h < selected.size(); ++h) {
-        std::cout << selected[h] << "vec\n";
-    }
     for (size_t i = 0; i < _satellites.size(); ++i) {
         for (size_t j = 0; j < _satellites[i].size(); ++j) {
             if(find (selected.begin(), selected.end(), counter) != selected.end()){
-                std::cout << counter << "true\n";
                 _satellites[i][j].setSelected(true);
             } else {
-                std::cout << "false\n";
                 _satellites[i][j].setSelected(false);
             }
             counter++;
@@ -182,23 +177,14 @@ void PathVectorSatellites::recalculateForNewPathVector(Geom::PathVector const pa
     size_t number_nodes = pathv.nodes().size();
     size_t previous_number_nodes = _pathvector.nodes().size();
     for (size_t i = 0; i < pathv.size(); i++) {
-        satellites.reserve(pathv.size());
-        std::vector<Satellite> pathsatellites;
+        std::vector<Satellite> path_satellites;
         for (size_t j = 0; j < pathv[i].size_closed(); j++) {
-            satellites[i].reserve(pathv[i].size_closed());
             found = false;
             for (size_t k = 0; k < _pathvector.size(); k++) {
                 for (size_t l = 0; l < _pathvector[k].size_closed(); l++) {
-                    if ((l == _pathvector[k].size_closed() -1 &&
-                         j == pathv[i].size_closed() -1 &&
-                         Geom::are_near(_pathvector[k][l-1].finalPoint(),  pathv[i][j-1].finalPoint())) ||
-                        (l == _pathvector[k].size_closed() -1 &&
-                         Geom::are_near(_pathvector[k][l-1].finalPoint(),  pathv[i][j].finalPoint())) ||
-                        (j == pathv[i].size_closed() -1 &&
-                         Geom::are_near(_pathvector[k][l].finalPoint(),  pathv[i][j-1].finalPoint())) ||
-                        (Geom::are_near(_pathvector[k][l].initialPoint(),  pathv[i][j].initialPoint())))
+                    if (Geom::are_near(_pathvector[k][l].initialPoint(),  pathv[i][j].initialPoint()))
                     {
-                        pathsatellites.push_back(_satellites[k][l]);
+                        path_satellites.push_back(_satellites[k][l]);
                         found = true;
                         break;
                     }
@@ -208,11 +194,11 @@ void PathVectorSatellites::recalculateForNewPathVector(Geom::PathVector const pa
                 }
             }
             
-            if (found == false && previous_number_nodes < number_nodes) {
-                pathsatellites.push_back(S);
+            if (!found && previous_number_nodes < number_nodes) {
+                path_satellites.push_back(S);
             }
         }
-        satellites.push_back(pathsatellites);
+        satellites.push_back(path_satellites);
     }
     setPathVector(pathv);
     setSatellites(satellites);

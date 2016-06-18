@@ -81,7 +81,6 @@ void SatellitesArrayParam::setHelperSize(int hs)
 
 void SatellitesArrayParam::updateCanvasIndicators(bool mirror)
 {
-
     if (!_last_pathvector_satellites) {
         return;
     }

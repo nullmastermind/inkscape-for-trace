@@ -16,6 +16,7 @@
 #include "live_effects/parameter/satellitesarray.h"
 #include "live_effects/effect.h"
 #include "helper/geom-pathvectorsatellites.h"
+#include "helper/geom-satellite.h"
 
 namespace Inkscape {
 namespace LivePathEffect {
