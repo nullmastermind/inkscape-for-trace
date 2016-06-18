@@ -35,6 +35,7 @@ public:
     virtual void doOnApply(SPLPEItem const *lpeItem);
     virtual Gtk::Widget *newWidget();
     Geom::Ray getRay(Geom::Point start, Geom::Point end, Geom::Curve *curve, bool reverse);
+    void addChamferSteps(Geom::Path &tmp_path, Geom::Path path_chamfer, Geom::Point end_arc_point);
     void addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec);
     void updateSatelliteType(SatelliteType satellitetype);
     void updateChamferSteps();

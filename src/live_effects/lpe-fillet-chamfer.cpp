@@ -328,6 +328,17 @@ LPEFilletChamfer::addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<
     hp_vec.push_back(_hp);
 }
 
+void
+LPEFilletChamfer::addChamferSteps(Geom::Path &tmp_path, Geom::Path path_chamfer, Geom::Point end_arc_point)
+{
+    double path_subdivision = 1.0 / steps;
+    for (size_t i = 1; i < steps; i++) {
+        Geom::Point chamfer_step = path_chamfer.pointAt(path_subdivision * i);
+        tmp_path.appendNew<Geom::LineSegment>(chamfer_step);
+    }
+    tmp_path.appendNew<Geom::LineSegment>(end_arc_point);
+}
+
 Geom::PathVector
 LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
 {
@@ -470,65 +481,45 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
                 if (steps < 1) {
                     steps = 1;
                 }
-                if (type == CHAMFER) {
-                    Geom::Path path_chamfer;
-                    path_chamfer.start(tmp_path.finalPoint());
-                    if ((is_straight_curve(*curve_it1) &&
-                            is_straight_curve(curve_it2) && _method != FM_BEZIER) ||
-                            _method == FM_ARC) {
-                        ccw_toggle = ccw_toggle ? 0 : 1;
-                        path_chamfer.appendNew<Geom::EllipticalArc>(rx, ry, arc_angle, 0,
-                                ccw_toggle, end_arc_point);
-                    } else {
-                        path_chamfer.appendNew<Geom::CubicBezier>(handle_1, handle_2,
-                                end_arc_point);
-                    }
-                    double _chamfer_stepsTime = 1.0 / steps;
-                    for (size_t i = 1; i < steps; i++) {
-                        Geom::Point chamfer_step = path_chamfer.pointAt(_chamfer_stepsTime * i);
-                        tmp_path.appendNew<Geom::LineSegment>(chamfer_step);
-                    }
-                    tmp_path.appendNew<Geom::LineSegment>(end_arc_point);
-                } else if (type == INVERSE_CHAMFER) {
-                    Geom::Path path_chamfer;
-                    path_chamfer.start(tmp_path.finalPoint());
-                    if ((is_straight_curve(*curve_it1) &&
-                            is_straight_curve(curve_it2) && _method != FM_BEZIER) ||
-                            _method == FM_ARC) {
-                        path_chamfer.appendNew<Geom::EllipticalArc>(rx, ry, arc_angle, 0,
-                                ccw_toggle, end_arc_point);
-                    } else {
-                        path_chamfer.appendNew<Geom::CubicBezier>(
-                            inverse_handle_1, inverse_handle_2, end_arc_point);
-                    }
-                    double _chamfer_stepsTime = 1.0 / steps;
-                    for (size_t i = 1; i < steps; i++) {
-                        Geom::Point chamfer_step =
-                            path_chamfer.pointAt(_chamfer_stepsTime * i);
-                        tmp_path.appendNew<Geom::LineSegment>(chamfer_step);
-                    }
-                    tmp_path.appendNew<Geom::LineSegment>(end_arc_point);
-                } else if (type == INVERSE_FILLET) {
-                    if ((is_straight_curve(*curve_it1) &&
-                            is_straight_curve(curve_it2) && _method != FM_BEZIER) ||
-                            _method == FM_ARC) {
-                        tmp_path.appendNew<Geom::EllipticalArc>(rx, ry, arc_angle, 0, ccw_toggle,
-                                                                end_arc_point);
-                    } else {
-                        tmp_path.appendNew<Geom::CubicBezier>(inverse_handle_1,
-                                                              inverse_handle_2, end_arc_point);
-                    }
-                } else if (type == FILLET) {
-                    if ((is_straight_curve(*curve_it1) &&
-                            is_straight_curve(curve_it2) && _method != FM_BEZIER) ||
-                            _method == FM_ARC) {
-                        ccw_toggle = ccw_toggle ? 0 : 1;
-                        tmp_path.appendNew<Geom::EllipticalArc>(rx, ry, arc_angle, 0, ccw_toggle,
-                                                                end_arc_point);
-                    } else {
-                        tmp_path.appendNew<Geom::CubicBezier>(handle_1, handle_2,
-                                                              end_arc_point);
-                    }
+                bool eliptical = (is_straight_curve(*curve_it1) &&
+                                  is_straight_curve(curve_it2) && _method != FM_BEZIER) ||
+                                  _method == FM_ARC;
+                switch (type) {
+                    case CHAMFER:
+                        Geom::Path path_chamfer;
+                        path_chamfer.start(tmp_path.finalPoint());
+                        if (eliptical) {
+                            ccw_toggle = ccw_toggle ? 0 : 1;
+                            path_chamfer.appendNew<Geom::EllipticalArc>(rx, ry, arc_angle, 0, ccw_toggle, end_arc_point);
+                        } else {
+                            path_chamfer.appendNew<Geom::CubicBezier>(handle_1, handle_2, end_arc_point);
+                        }
+                        addChamferSteps(tmp_path, path_chamfer, end_arc_point);
+                        break;
+                    case INVERSE_CHAMFER:
+                        Geom::Path path_chamfer;
+                        path_chamfer.start(tmp_path.finalPoint());
+                        if (eliptical) {
+                            path_chamfer.appendNew<Geom::EllipticalArc>(rx, ry, arc_angle, 0, ccw_toggle, end_arc_point);
+                        } else {
+                            path_chamfer.appendNew<Geom::CubicBezier>(inverse_handle_1, inverse_handle_2, end_arc_point);
+                        }
+                        addChamferSteps(tmp_path, path_chamfer, end_arc_point);
+                        break;
+                    case INVERSE_FILLET:
+                        if (eliptical) {
+                            tmp_path.appendNew<Geom::EllipticalArc>(rx, ry, arc_angle, 0, ccw_toggle, end_arc_point);
+                        } else {
+                            tmp_path.appendNew<Geom::CubicBezier>(inverse_handle_1, inverse_handle_2, end_arc_point);
+                        }
+                        break;
+                    default: //fillet
+                        if (eliptical) {
+                            ccw_toggle = ccw_toggle ? 0 : 1;
+                            tmp_path.appendNew<Geom::EllipticalArc>(rx, ry, arc_angle, 0, ccw_toggle, end_arc_point);
+                        } else {
+                            tmp_path.appendNew<Geom::CubicBezier>(handle_1, handle_2, end_arc_point);
+                        }
                 }
             } else {
                 if (!knot_curve_1->isDegenerate()) {
