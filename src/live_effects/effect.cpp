@@ -363,14 +363,13 @@ Effect::Effect(LivePathEffectObject *lpeobject)
       lpeobj(lpeobject),
       concatenate_before_pwd2(false),
       sp_lpe_item(NULL),
-      current_zoom(1),
       sp_curve(NULL),
       provides_own_flash_paths(true), // is automatically set to false if providesOwnFlashPaths() is not overridden
-      is_ready(false) // is automatically set to false if providesOwnFlashPaths() is not overridden
+      is_ready(false), // is automatically set to false if providesOwnFlashPaths() is not overridden
+      _current_zoom(1.0)
 {
     registerParameter( dynamic_cast<Parameter *>(&is_visible) );
     is_visible.widget_is_visible = false;
-    current_zoom = 0.0;
 }
 
 Effect::~Effect()
@@ -400,13 +399,19 @@ Effect::doOnApply (SPLPEItem const*/*lpeitem*/)
 }
 
 void
-Effect::setCurrentZoom(double cZ)
+Effect::setCurrentZoom(double zoom)
 {
-    current_zoom = cZ;
+    _current_zoom = zoom;
+}
+
+double
+Effect::getCurrentZoom()
+{
+    return _current_zoom;
 }
 
 void
-Effect::setSelectedNodePoints(std::vector<size_t> selected_nodes_pos)
+Effect::setSelectedNodes(std::vector<Geom::Point> selected_nodes_pos)
 {
     _selected_nodes_pos = selected_nodes_pos;
 }
@@ -419,9 +424,9 @@ Effect::getSelectedNodes()
     for (size_t i = 0; i < pathvector_before_effect.size(); i++) {
         for (size_t j = 0; j < pathvector_before_effect[i].size_closed(); j++) {
             if ((!pathvector_before_effect[i].closed() && 
-                 pathvector_before_effect[i].size_closed() == j-1 && 
-                 isNodePointSelected( pathvector_before_effect[i][j].finalPoint())) ||
-                 isNodePointSelected( pathvector_before_effect[i][j].initialPoint()))
+                 pathvector_before_effect[i].size_closed() == j+1 && 
+                 isNodeSelected( pathvector_before_effect[i][j].finalPoint())) ||
+                 isNodeSelected( pathvector_before_effect[i][j].initialPoint()))
             {
                 result.push_back(counter);
             }
@@ -433,15 +438,15 @@ Effect::getSelectedNodes()
 
 
 bool
-Effect::isNodePointSelected(Geom::Point const &node_point) const
+Effect::isNodeSelected(Geom::Point const &node_point) const
 {
     if (_selected_nodes_pos.size() > 0) {
         using Geom::X;
         using Geom::Y; 
+        Geom::Affine transformCoordinate = sp_lpe_item->i2dt_affine();
         for (std::vector<Geom::Point>::const_iterator i = _selected_nodes_pos.begin();
                 i != _selected_nodes_pos.end(); ++i) {
             Geom::Point p = *i;
-            Geom::Affine transformCoordinate = sp_lpe_item->i2dt_affine();
             Geom::Point p2(node_point[X],node_point[Y]);
             p2 *= transformCoordinate;
             if (Geom::are_near(p, p2, 0.01)) {

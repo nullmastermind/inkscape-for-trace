@@ -252,7 +252,7 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
         }
         //fillet chamfer specific calls
         _satellites_param.setUseDistance(_use_knot_distance);
-        _satellites_param.setCurrentZoom(current_zoom);
+        _satellites_param.setCurrentZoom(getCurrentZoom());
         //mandatory call
         _satellites_param.setEffectType(effectType());
         Geom::PathVector const pathv = pathv_to_linear_and_cubic_beziers(c->get_pathvector());
@@ -262,7 +262,6 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
             size_t number_nodes = pathv.nodes().size();
             size_t previous_number_nodes = _pathvector_satellites->getPathVector().nodes().size();
             if (number_nodes != previous_number_nodes) {
-                std::cout << "sfsfaasfasfasfasffasdf\n";
                 Satellite satellite(FILLET);
                 satellite.setIsTime(_flexible);
                 satellite.setHasMirror(_mirror_knots);
@@ -348,7 +347,8 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
     size_t path = 0;
     const double K = (4.0 / 3.0) * (sqrt(2.0) - 1.0);
     _degenerate_hide = false;
-    Geom::PathVector pathv = pathv_to_linear_and_cubic_beziers(path_in);
+    Geom::PathVector const pathv = pathv_to_linear_and_cubic_beziers(path_in);
+    Satellites satellites = _pathvector_satellites->getSatellites();
     for (Geom::PathVector::const_iterator path_it = pathv.begin(); path_it != pathv.end(); ++path_it) {
         if (path_it->empty()) {
             continue;
@@ -363,7 +363,6 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
         }
         double time0 = 0;
         size_t curve = 0;
-        Satellites satellites = _pathvector_satellites->getSatellites();
         for (Geom::Path::const_iterator curve_it1 = path_it->begin(); curve_it1 !=  path_it->end(); ++curve_it1) {
             size_t next_index = curve + 1;
             if (curve == pathv[path].size() - 1 && pathv[path].closed()) {
@@ -377,8 +376,10 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
                 }
                 continue;
             }
+            Geom::Curve const &curve_it2 = pathv[path][next_index];
             Satellite satellite = satellites[path][next_index];
-            if (Geom::are_near((*curve_it1).initialPoint(),(*curve_it1).finalPoint())) {
+            if (Geom::are_near((*curve_it1).initialPoint(), (*curve_it1).finalPoint()) ||
+                Geom::are_near(curve_it2.initialPoint(), curve_it2.finalPoint())) {
                 _degenerate_hide = true;
                 g_warning("Knots hidded if consecutive nodes has the same position.");
                 return path_in;
@@ -391,7 +392,6 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
                 }
             }
             bool last = pathv[path].size() - 1 == curve;
-            Geom::Curve const &curve_it2 = pathv[path][next_index];
             double s = satellite.arcDistance(curve_it2);
             double time1 = satellite.time(s, true, (*curve_it1));
             double time2 = satellite.time(curve_it2);
@@ -406,6 +406,7 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
             times.push_back(time1);
             times.push_back(time2);
             Geom::Curve *knot_curve_1 = curve_it1->portion(times[0], times[1]);
+            Geom::Curve *knot_curve_2 = curve_it2.portion(times[2], 1);
             if (curve > 0) {
                 knot_curve_1->setInitial(tmp_path.finalPoint());
             } else {
@@ -432,7 +433,6 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
             if (time0 == 1) {
                 handle_1 = start_arc_point;
             }
-            Geom::Curve *knot_curve_2 = curve_it2.portion(times[2], 1);
             Geom::CubicBezier const *cubic_2 =
                 dynamic_cast<Geom::CubicBezier const *>(&*knot_curve_2);
             Geom::Ray ray_2(curve_it2.initialPoint(), end_arc_point);

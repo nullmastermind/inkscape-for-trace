@@ -176,7 +176,6 @@ void PathVectorSatellites::updateSatelliteType(SatelliteType satellitetype, bool
 
 void PathVectorSatellites::recalculateForNewPathVector(Geom::PathVector const pathv, Satellite const S)
 {
-    return;
     Satellites satellites;
     bool found = false;
     //TODO evaluate fix on nodes at same position

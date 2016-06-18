@@ -58,10 +58,11 @@ public:
     //of indirection is needed. We first call these methods, then the below.
     void doOnApply_impl(SPLPEItem const* lpeitem);
     void doBeforeEffect_impl(SPLPEItem const* lpeitem);
-    void setCurrentZoom(double cZ);
-    void setSelectedNodePoints(std::vector<Geom::Point> selected_nodes_pos);
+    void setCurrentZoom(double zoom);
+    double getCurrentZoom();
+    void setSelectedNodes(std::vector<Geom::Point> selected_nodes_pos);
     std::vector<size_t> getSelectedNodes();
-    bool isNodePointSelected(Geom::Point const &node_point) const;
+    bool isNodeSelected(Geom::Point const &node_point) const;
     virtual void doOnApply (SPLPEItem const* lpeitem);
     virtual void doBeforeEffect (SPLPEItem const* lpeitem);
     
@@ -162,7 +163,6 @@ protected:
     bool concatenate_before_pwd2;
 
     SPLPEItem * sp_lpe_item; // these get stored in doBeforeEffect_impl, and derived classes may do as they please with them.
-    double current_zoom;
     std::vector<Geom::Point> _selected_nodes_pos;
     SPCurve * sp_curve;
     Geom::PathVector pathvector_before_effect;
@@ -170,7 +170,7 @@ private:
     bool provides_own_flash_paths; // if true, the standard flash path is suppressed
 
     bool is_ready;
-
+    double _current_zoom;
     Effect(const Effect&);
     Effect& operator=(const Effect&);
 };

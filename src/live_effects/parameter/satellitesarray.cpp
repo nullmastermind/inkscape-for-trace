@@ -356,10 +356,7 @@ void FilletChamferKnotHolderEntity::knot_set(Geom::Point const &p,
         _pparam->_knot_reset_helper *= Geom::Affine(_pparam->_helper_size * 0.1,0,0,_pparam->_helper_size * 0.1,0,0) * Geom::Translate(pathv[path_index][curve_index].initialPoint());
     }
     _pparam->_vector[path_index][curve_index] = satellite;
-    SPLPEItem *splpeitem = dynamic_cast<SPLPEItem *>(item);
-    if (splpeitem) {
-        sp_lpe_item_update_patheffect(splpeitem, false, false);
-    }
+    sp_lpe_item_update_patheffect(SP_LPE_ITEM(item), false, false);
 }
 
 Geom::Point FilletChamferKnotHolderEntity::knot_get() const
@@ -391,7 +388,6 @@ Geom::Point FilletChamferKnotHolderEntity::knot_get() const
     }
     this->knot->show();
     if (is_mirror) {
-        tmp_point = satellite.getPosition(pathv[path_index][curve_index]);
         gint previous_index = curve_index - 1;
         if(curve_index == 0 && pathv[path_index].closed()){
             previous_index = pathv[path_index].size() - 1;
@@ -418,6 +414,7 @@ Geom::Point FilletChamferKnotHolderEntity::knot_get() const
         tmp_point = satellite.getPosition(pathv[path_index][curve_index]);
     }
     Geom::Point const canvas_point = tmp_point;
+    _pparam->updateCanvasIndicators();
     return canvas_point;
 }
 

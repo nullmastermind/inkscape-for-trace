@@ -398,7 +398,7 @@ void LPEBSpline::doBSplineFromWidget(SPCurve *curve, double weight_ammount)
                     (apply_no_weight && Geom::are_near((*cubic)[1], point_at0)) ||
                     (apply_with_weight && !Geom::are_near((*cubic)[1], point_at0)))
                 {
-                    if (isNodePointSelected(point_at0) || !only_selected) {
+                    if (isNodeSelected(point_at0) || !only_selected) {
                         point_at1 = sbasis_in.valueAt(weight_ammount);
                         if (weight_ammount != NO_POWER) {
                             point_at1 =
@@ -414,7 +414,7 @@ void LPEBSpline::doBSplineFromWidget(SPCurve *curve, double weight_ammount)
                     (apply_no_weight && Geom::are_near((*cubic)[2], point_at3)) ||
                     (apply_with_weight && !Geom::are_near((*cubic)[2], point_at3)))
                 {
-                    if (isNodePointSelected(point_at3) || !only_selected) {
+                    if (isNodeSelected(point_at3) || !only_selected) {
                         point_at2 = sbasis_in.valueAt(1 - weight_ammount);
                         if (weight_ammount != NO_POWER) {
                             point_at2 =
@@ -431,14 +431,14 @@ void LPEBSpline::doBSplineFromWidget(SPCurve *curve, double weight_ammount)
                     (apply_no_weight && weight_ammount == NO_POWER) ||
                     (apply_with_weight && weight_ammount != NO_POWER))
                 {
-                    if (isNodePointSelected(point_at0) || !only_selected) {
+                    if (isNodeSelected(point_at0) || !only_selected) {
                         point_at1 = sbasis_in.valueAt(weight_ammount);
                         point_at1 =
                             Geom::Point(point_at1[X] + HANDLE_CUBIC_GAP, point_at1[Y] + HANDLE_CUBIC_GAP);
                     } else {
                         point_at1 = in->first_segment()->initialPoint();
                     }
-                    if (isNodePointSelected(point_at3) || !only_selected) {
+                    if (isNodeSelected(point_at3) || !only_selected) {
                         point_at2 = sbasis_in.valueAt(1 - weight_ammount);
                         point_at2 =
                             Geom::Point(point_at2[X] + HANDLE_CUBIC_GAP, point_at2[Y] + HANDLE_CUBIC_GAP);

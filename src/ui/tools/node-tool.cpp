@@ -300,7 +300,7 @@ void  NodeTool::update_helperpath () {
                     selected_nodes_pos.push_back(n->position());
                 }
             }
-            lpe->setSelectedNodePoints(selected_nodes_pos);
+            lpe->setSelectedNodes(selected_nodes_pos);
             lpe->setCurrentZoom(this->desktop->current_zoom());
             SPCurve *c = new SPCurve();
             SPCurve *cc = new SPCurve();
