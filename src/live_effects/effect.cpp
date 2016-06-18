@@ -406,9 +406,9 @@ Effect::setCurrentZoom(double cZ)
 }
 
 void
-Effect::setSelectedNodePoints(std::vector<Geom::Point> selected_node_points)
+Effect::setSelectedNodePoints(std::vector<size_t> selected_nodes_pos)
 {
-    selectedNodesPoints = selected_node_points;
+    _selected_nodes_pos = selected_nodes_pos;
 }
 
 std::vector<size_t>
@@ -418,7 +418,8 @@ Effect::getSelectedNodes()
     std::vector<size_t> result;
     for (size_t i = 0; i < pathvector_before_effect.size(); i++) {
         for (size_t j = 0; j < pathvector_before_effect[i].size_closed(); j++) {
-            if ((pathvector_before_effect[i].size_closed() == j-1 && 
+            if ((!pathvector_before_effect[i].closed() && 
+                 pathvector_before_effect[i].size_closed() == j-1 && 
                  isNodePointSelected( pathvector_before_effect[i][j].finalPoint())) ||
                  isNodePointSelected( pathvector_before_effect[i][j].initialPoint()))
             {
@@ -434,11 +435,11 @@ Effect::getSelectedNodes()
 bool
 Effect::isNodePointSelected(Geom::Point const &node_point) const
 {
-    if (selectedNodesPoints.size() > 0) {
+    if (_selected_nodes_pos.size() > 0) {
         using Geom::X;
         using Geom::Y; 
-        for (std::vector<Geom::Point>::const_iterator i = selectedNodesPoints.begin();
-                i != selectedNodesPoints.end(); ++i) {
+        for (std::vector<Geom::Point>::const_iterator i = _selected_nodes_pos.begin();
+                i != _selected_nodes_pos.end(); ++i) {
             Geom::Point p = *i;
             Geom::Affine transformCoordinate = sp_lpe_item->i2dt_affine();
             Geom::Point p2(node_point[X],node_point[Y]);

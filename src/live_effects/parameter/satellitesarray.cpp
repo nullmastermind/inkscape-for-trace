@@ -112,9 +112,12 @@ void SatellitesArrayParam::updateCanvasIndicators(bool mirror)
                 bool overflow = false;
                 double size_out = _vector[i][j].arcDistance(*curve_in);
                 double lenght_out = curve_in->length();
-                size_t previous_index = j - 1; //Always are previous index because we skip first satellite on open paths
+                gint previous_index = j - 1; //Always are previous index because we skip first satellite on open paths
                 if(j == 0 && pathv[i].closed()){
                     previous_index = pathv[i].size() - 1;
+                }
+                if( previous_index < 0 ) {
+                    return;
                 }
                 double lenght_in = pathv.curveAt(previous_index).length();
                 if (mirror) {
@@ -311,9 +314,12 @@ void FilletChamferKnotHolderEntity::knot_set(Geom::Point const &p,
     {
         return;
     }
-    size_t previous_index = curve_index - 1;
+    gint previous_index = curve_index - 1;
     if(curve_index == 0 && pathv[path_index].closed()){
         previous_index = pathv[path_index].size() - 1;
+    }
+    if( previous_index < 0 ) {
+        return;
     }
     Geom::Curve const &curve_in = pathv[path_index][previous_index];
     double mirror_time = Geom::nearest_time(s, curve_in);
@@ -386,9 +392,12 @@ Geom::Point FilletChamferKnotHolderEntity::knot_get() const
     this->knot->show();
     if (is_mirror) {
         tmp_point = satellite.getPosition(pathv[path_index][curve_index]);
-        size_t previous_index = curve_index - 1;
+        gint previous_index = curve_index - 1;
         if(curve_index == 0 && pathv[path_index].closed()){
             previous_index = pathv[path_index].size() - 1;
+        }
+        if( previous_index < 0 ) {
+            return Geom::Point(Geom::infinity(), Geom::infinity());
         }
         Geom::Curve const &curve_in = pathv[path_index][previous_index];
         double s = satellite.arcDistance(pathv[path_index][curve_index]);
@@ -484,27 +493,24 @@ void FilletChamferKnotHolderEntity::knot_click(guint state)
         }
     } else if (state & GDK_SHIFT_MASK) {
         double amount = _pparam->_vector[path_index][curve_index].amount;
-        size_t previous_index =  curve_index - 1;
+        gint previous_index =  curve_index - 1;
         if(curve_index == 0 && pathv[path_index].closed()){
             previous_index = pathv[path_index].size() - 1;
         }
+        if( previous_index < 0 ) {
+            return;
+        }
         if (!_pparam->_use_distance && !_pparam->_vector[path_index][curve_index].is_time) {
-            if (previous_index) {
-                amount = _pparam->_vector[path_index][curve_index].lenToRad(amount, pathv[path_index][previous_index], pathv[path_index][curve_index], _pparam->_vector[path_index][previous_index]);
-            } else {
-                amount = 0.0;
-            }
+            amount = _pparam->_vector[path_index][curve_index].lenToRad(amount, pathv[path_index][previous_index], pathv[path_index][curve_index], _pparam->_vector[path_index][previous_index]);
         }
         bool aprox = false;
         Geom::D2<Geom::SBasis> d2_out = pathv[path_index][curve_index].toSBasis();
-        if (previous_index) {
-            Geom::D2<Geom::SBasis> d2_in = pathv[path_index][previous_index].toSBasis();
-            aprox = ((d2_in)[0].degreesOfFreedom() != 2 ||
-                     d2_out[0].degreesOfFreedom() != 2) &&
-                    !_pparam->_use_distance
-                    ? true
-                    : false;
-        }
+        Geom::D2<Geom::SBasis> d2_in = pathv[path_index][previous_index].toSBasis();
+        aprox = ((d2_in)[0].degreesOfFreedom() != 2 ||
+                 d2_out[0].degreesOfFreedom() != 2) &&
+                !_pparam->_use_distance
+                ? true
+                : false;
         Inkscape::UI::Dialogs::FilletChamferPropertiesDialog::showDialog(
             this->desktop, amount, this, _pparam->_use_distance,
             aprox, _pparam->_vector[path_index][curve_index]);
@@ -540,9 +546,12 @@ void FilletChamferKnotHolderEntity::knot_set_offset(Satellite satellite)
     double amount = satellite.amount;
     double max_amount = amount;
     if (!_pparam->_use_distance && !satellite.is_time) {
-        size_t previous_index = curve_index - 1;
+        gint previous_index = curve_index - 1;
         if(curve_index == 0 && pathv[path_index].closed()){
             previous_index = pathv[path_index].size() - 1;
+        }
+        if( previous_index < 0 ) {
+            return;
         }
         amount = _pparam->_vector[path_index][curve_index].radToLen(amount, pathv[path_index][previous_index], pathv[path_index][curve_index]);
         if (max_amount > 0 && amount == 0) {

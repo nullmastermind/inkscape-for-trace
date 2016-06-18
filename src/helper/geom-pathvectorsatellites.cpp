@@ -63,11 +63,16 @@ std::pair<size_t, size_t> PathVectorSatellites::getIndexData(size_t index)
 void PathVectorSatellites::setSelected(std::vector<size_t> selected)
 {
     size_t counter = 0;
+    for (size_t h = 0; h < selected.size(); ++h) {
+        std::cout << selected[h] << "vec\n";
+    }
     for (size_t i = 0; i < _satellites.size(); ++i) {
         for (size_t j = 0; j < _satellites[i].size(); ++j) {
             if(find (selected.begin(), selected.end(), counter) != selected.end()){
+                std::cout << counter << "true\n";
                 _satellites[i][j].setSelected(true);
             } else {
+                std::cout << "false\n";
                 _satellites[i][j].setSelected(false);
             }
             counter++;
@@ -171,6 +176,7 @@ void PathVectorSatellites::updateSatelliteType(SatelliteType satellitetype, bool
 
 void PathVectorSatellites::recalculateForNewPathVector(Geom::PathVector const pathv, Satellite const S)
 {
+    return;
     Satellites satellites;
     bool found = false;
     //TODO evaluate fix on nodes at same position
@@ -194,7 +200,6 @@ void PathVectorSatellites::recalculateForNewPathVector(Geom::PathVector const pa
                         (Geom::are_near(_pathvector[k][l].initialPoint(),  pathv[i][j].initialPoint())))
                     {
                         pathsatellites.push_back(_satellites[k][l]);
-                        std::cout << "dgsgdsgsdgsdgsdgsdgsdgsdgsdgsdgsd\n";
                         found = true;
                         break;
                     }

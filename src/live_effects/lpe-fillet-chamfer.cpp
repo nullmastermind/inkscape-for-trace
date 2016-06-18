@@ -260,8 +260,9 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
         //TODO: Update the satellite data in paths modified, Goal 0.93
         if (_pathvector_satellites) {
             size_t number_nodes = pathv.nodes().size();
-            size_t satellites_counter = _pathvector_satellites->getTotalSatellites();
-            if (number_nodes != satellites_counter) {
+            size_t previous_number_nodes = _pathvector_satellites->getPathVector().nodes().size();
+            if (number_nodes != previous_number_nodes) {
+                std::cout << "sfsfaasfasfasfasffasdf\n";
                 Satellite satellite(FILLET);
                 satellite.setIsTime(_flexible);
                 satellite.setHasMirror(_mirror_knots);
@@ -329,7 +330,7 @@ LPEFilletChamfer::addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<
 }
 
 void
-LPEFilletChamfer::addChamferSteps(Geom::Path &tmp_path, Geom::Path path_chamfer, Geom::Point end_arc_point)
+LPEFilletChamfer::addChamferSteps(Geom::Path &tmp_path, Geom::Path path_chamfer, Geom::Point end_arc_point, size_t steps)
 {
     double path_subdivision = 1.0 / steps;
     for (size_t i = 1; i < steps; i++) {
@@ -462,14 +463,6 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
             if (times[1] == times[0]) {
                 start_arc_point = curve_it1->pointAt(times[0]);
             }
-            Geom::Line const x_line(Geom::Point(0, 0), Geom::Point(1, 0));
-            Geom::Line const angled_line(start_arc_point, end_arc_point);
-            double arc_angle = Geom::angle_between(x_line, angled_line);
-            double _radius = Geom::distance(start_arc_point,
-                                           middle_point(start_arc_point, end_arc_point)) /
-                            sin(angle / 2.0);
-            Geom::Coord rx = _radius;
-            Geom::Coord ry = rx;
             if (times[1] != 1) {
                 if (times[1] != times[0] || (times[1] == 1 && times[0] == 1)) {
                     if (!knot_curve_1->isDegenerate()) {
@@ -478,14 +471,20 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
                 }
                 SatelliteType type = satellite.satellite_type;
                 size_t steps = satellite.steps;
-                if (steps < 1) {
-                    steps = 1;
-                }
+                if (!steps) steps = 1;
+                Geom::Line const x_line(Geom::Point(0, 0), Geom::Point(1, 0));
+                Geom::Line const angled_line(start_arc_point, end_arc_point);
+                double arc_angle = Geom::angle_between(x_line, angled_line);
+                double radius = Geom::distance(start_arc_point, middle_point(start_arc_point, end_arc_point)) /
+                                                sin(angle / 2.0);
+                Geom::Coord rx = radius;
+                Geom::Coord ry = rx;
                 bool eliptical = (is_straight_curve(*curve_it1) &&
                                   is_straight_curve(curve_it2) && _method != FM_BEZIER) ||
                                   _method == FM_ARC;
                 switch (type) {
-                    case CHAMFER:
+                case CHAMFER:
+                    {
                         Geom::Path path_chamfer;
                         path_chamfer.start(tmp_path.finalPoint());
                         if (eliptical) {
@@ -494,9 +493,11 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
                         } else {
                             path_chamfer.appendNew<Geom::CubicBezier>(handle_1, handle_2, end_arc_point);
                         }
-                        addChamferSteps(tmp_path, path_chamfer, end_arc_point);
-                        break;
-                    case INVERSE_CHAMFER:
+                        addChamferSteps(tmp_path, path_chamfer, end_arc_point, steps);
+                    }
+                    break;
+                case INVERSE_CHAMFER:
+                    {
                         Geom::Path path_chamfer;
                         path_chamfer.start(tmp_path.finalPoint());
                         if (eliptical) {
@@ -504,22 +505,28 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
                         } else {
                             path_chamfer.appendNew<Geom::CubicBezier>(inverse_handle_1, inverse_handle_2, end_arc_point);
                         }
-                        addChamferSteps(tmp_path, path_chamfer, end_arc_point);
-                        break;
-                    case INVERSE_FILLET:
+                        addChamferSteps(tmp_path, path_chamfer, end_arc_point, steps);
+                    }
+                    break;
+                case INVERSE_FILLET:
+                    {
                         if (eliptical) {
                             tmp_path.appendNew<Geom::EllipticalArc>(rx, ry, arc_angle, 0, ccw_toggle, end_arc_point);
                         } else {
                             tmp_path.appendNew<Geom::CubicBezier>(inverse_handle_1, inverse_handle_2, end_arc_point);
                         }
-                        break;
-                    default: //fillet
+                    }
+                    break;
+                default: //fillet
+                    {
                         if (eliptical) {
                             ccw_toggle = ccw_toggle ? 0 : 1;
                             tmp_path.appendNew<Geom::EllipticalArc>(rx, ry, arc_angle, 0, ccw_toggle, end_arc_point);
                         } else {
                             tmp_path.appendNew<Geom::CubicBezier>(handle_1, handle_2, end_arc_point);
                         }
+                    }
+                    break;
                 }
             } else {
                 if (!knot_curve_1->isDegenerate()) {

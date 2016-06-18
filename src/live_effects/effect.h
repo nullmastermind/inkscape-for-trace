@@ -59,7 +59,7 @@ public:
     void doOnApply_impl(SPLPEItem const* lpeitem);
     void doBeforeEffect_impl(SPLPEItem const* lpeitem);
     void setCurrentZoom(double cZ);
-    void setSelectedNodePoints(std::vector<Geom::Point> selected_node_points);
+    void setSelectedNodePoints(std::vector<Geom::Point> selected_nodes_pos);
     std::vector<size_t> getSelectedNodes();
     bool isNodePointSelected(Geom::Point const &node_point) const;
     virtual void doOnApply (SPLPEItem const* lpeitem);
@@ -163,7 +163,7 @@ protected:
 
     SPLPEItem * sp_lpe_item; // these get stored in doBeforeEffect_impl, and derived classes may do as they please with them.
     double current_zoom;
-    std::vector<Geom::Point> selectedNodesPoints;
+    std::vector<Geom::Point> _selected_nodes_pos;
     SPCurve * sp_curve;
     Geom::PathVector pathvector_before_effect;
 private:

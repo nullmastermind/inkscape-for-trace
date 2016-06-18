@@ -117,7 +117,8 @@ FilletChamferPropertiesDialog::~FilletChamferPropertiesDialog()
 }
 
 void FilletChamferPropertiesDialog::showDialog(
-    SPDesktop *desktop, double _amount,
+    SPDesktop *desktop, 
+    double _amount,
     const Inkscape::LivePathEffect::
     FilletChamferKnotHolderEntity *pt,
     bool _use_distance,
@@ -243,9 +244,9 @@ void FilletChamferPropertiesDialog::_setPt(
 }
 
 
-void FilletChamferPropertiesDialog::_setAmount(double amm)
+void FilletChamferPropertiesDialog::_setAmount(double amount)
 {
-    _amount = amm;
+    _amount = amount;
 }
 
 
