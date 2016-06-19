@@ -155,11 +155,16 @@ void StyleDialog::_addSelector()
      * with a dot.
      */
     std::string selectorName = "";
-    if ( textEditPtr->get_text().at(0) == '#' ||
-         textEditPtr->get_text().at(0) == '.' )
-        selectorName = textEditPtr->get_text();
-    else
-        selectorName = "." + textEditPtr->get_text();
+    if ( !textEditPtr->get_text().empty() ) {
+        if ( textEditPtr->get_text().at(0) == '#' ||
+             textEditPtr->get_text().at(0) == '.' )
+            selectorName = textEditPtr->get_text();
+        else
+            selectorName = "." + textEditPtr->get_text();
+    }
+    else {
+        selectorName = ".Class1";
+    }
 
     switch (result) {
     case Gtk::RESPONSE_OK:
