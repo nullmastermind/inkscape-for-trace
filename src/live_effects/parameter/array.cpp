@@ -59,7 +59,7 @@ ArrayParam<std::vector<Satellite > >::readsvg(const gchar * str)
     gchar ** iter = strarray;
     while (*iter != NULL) {
         gchar ** strsubarray = g_strsplit(*iter, ",", 8);
-        if(*strsubarray[7]){//steps always > 0
+        if (*strsubarray[7]) {//steps always > 0
             Satellite *satellite = new Satellite();
             satellite->setSatelliteType(g_strstrip(strsubarray[0]));
             satellite->is_time = strncmp(strsubarray[1],"1",1) == 0;

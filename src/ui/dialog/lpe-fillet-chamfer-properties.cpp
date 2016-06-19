@@ -167,7 +167,7 @@ void FilletChamferPropertiesDialog::_apply()
         }
         _satellite.amount = d_pos;
         size_t steps = (size_t)_fillet_chamfer_chamfer_subdivisions.get_value();
-        if(steps < 1) {
+        if (steps < 1) {
             steps = 1;
         }
         _satellite.steps = steps;
@@ -204,10 +204,10 @@ void FilletChamferPropertiesDialog::_setSatellite(Satellite satellite)
 {
     double position;
     std::string distance_or_radius = std::string(_("Radius"));
-    if(_aprox) {
+    if (_aprox) {
         distance_or_radius = std::string(_("Radius approximated"));
     }
-    if(_use_distance) {
+    if (_use_distance) {
         distance_or_radius = std::string(_("Knot distance"));
     }
     if (satellite.is_time) {

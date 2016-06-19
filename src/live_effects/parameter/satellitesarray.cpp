@@ -85,7 +85,7 @@ void SatellitesArrayParam::updateCanvasIndicators(bool mirror)
         return;
     }
 
-    if(!_hp.empty()) {
+    if (!_hp.empty()) {
         _hp.clear();
     }
     Geom::PathVector pathv = _last_pathvector_satellites->getPathVector();
@@ -112,10 +112,10 @@ void SatellitesArrayParam::updateCanvasIndicators(bool mirror)
                 double size_out = _vector[i][j].arcDistance(*curve_in);
                 double lenght_out = curve_in->length();
                 gint previous_index = j - 1; //Always are previous index because we skip first satellite on open paths
-                if(j == 0 && pathv[i].closed()){
+                if (j == 0 && pathv[i].closed()) {
                     previous_index = pathv[i].size() - 1;
                 }
-                if( previous_index < 0 ) {
+                if ( previous_index < 0 ) {
                     return;
                 }
                 double lenght_in = pathv.curveAt(previous_index).length();
@@ -188,7 +188,7 @@ void SatellitesArrayParam::updateCanvasIndicators(bool mirror)
             }
         }
     }
-    if(!_knot_reset_helper.empty()){
+    if (!_knot_reset_helper.empty()) {
         _hp.insert(_hp.end(), _knot_reset_helper.begin(), _knot_reset_helper.end() );
     }
     if (mirror) {
@@ -314,10 +314,10 @@ void FilletChamferKnotHolderEntity::knot_set(Geom::Point const &p,
         return;
     }
     gint previous_index = curve_index - 1;
-    if(curve_index == 0 && pathv[path_index].closed()){
+    if (curve_index == 0 && pathv[path_index].closed()) {
         previous_index = pathv[path_index].size() - 1;
     }
-    if( previous_index < 0 ) {
+    if ( previous_index < 0 ) {
         return;
     }
     Geom::Curve const &curve_in = pathv[path_index][previous_index];
@@ -346,7 +346,7 @@ void FilletChamferKnotHolderEntity::knot_set(Geom::Point const &p,
         satellite.setPosition(s, pathv[path_index][curve_index]);
     }
     _pparam->_knot_reset_helper.clear();
-    if (satellite.amount == 0){
+    if (satellite.amount == 0) {
         char const *svgd;
         svgd = "M -5.39,8.78 -9.13,5.29 -10.38,10.28 Z M -7.22,7.07 -3.43,3.37 m -1.95,-12.16 -3.74,3.5 -1.26,-5 z "
                "m -1.83,1.71 3.78,3.7 M 5.24,8.78 8.98,5.29 10.24,10.28 Z "
@@ -388,10 +388,10 @@ Geom::Point FilletChamferKnotHolderEntity::knot_get() const
     this->knot->show();
     if (is_mirror) {
         gint previous_index = curve_index - 1;
-        if(curve_index == 0 && pathv[path_index].closed()){
+        if (curve_index == 0 && pathv[path_index].closed()) {
             previous_index = pathv[path_index].size() - 1;
         }
-        if( previous_index < 0 ) {
+        if ( previous_index < 0 ) {
             return Geom::Point(Geom::infinity(), Geom::infinity());
         }
         Geom::Curve const &curve_in = pathv[path_index][previous_index];
@@ -490,10 +490,10 @@ void FilletChamferKnotHolderEntity::knot_click(guint state)
     } else if (state & GDK_SHIFT_MASK) {
         double amount = _pparam->_vector[path_index][curve_index].amount;
         gint previous_index =  curve_index - 1;
-        if(curve_index == 0 && pathv[path_index].closed()){
+        if (curve_index == 0 && pathv[path_index].closed()) {
             previous_index = pathv[path_index].size() - 1;
         }
-        if( previous_index < 0 ) {
+        if ( previous_index < 0 ) {
             return;
         }
         if (!_pparam->_use_distance && !_pparam->_vector[path_index][curve_index].is_time) {
@@ -543,10 +543,10 @@ void FilletChamferKnotHolderEntity::knot_set_offset(Satellite satellite)
     double max_amount = amount;
     if (!_pparam->_use_distance && !satellite.is_time) {
         gint previous_index = curve_index - 1;
-        if(curve_index == 0 && pathv[path_index].closed()){
+        if (curve_index == 0 && pathv[path_index].closed()) {
             previous_index = pathv[path_index].size() - 1;
         }
-        if( previous_index < 0 ) {
+        if ( previous_index < 0 ) {
             return;
         }
         amount = _pparam->_vector[path_index][curve_index].radToLen(amount, pathv[path_index][previous_index], pathv[path_index][curve_index]);

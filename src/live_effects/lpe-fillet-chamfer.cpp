@@ -259,7 +259,7 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
         //if are diferent sizes call to poinwise recalculate
         //TODO: Update the satellite data in paths modified, Goal 0.93
         Satellites satellites = _satellites_param.data();
-        if(satellites.empty()) {
+        if (satellites.empty()) {
             doOnApply(lpeItem);
             satellites = _satellites_param.data();
         }
@@ -290,7 +290,7 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
                 if (satellites[i][j].is_time != _flexible) {
                     satellites[i][j].is_time = _flexible;
                     double amount = satellites[i][j].amount;
-                    if (pathv[i].size() == j){
+                    if (pathv[i].size() == j) {
                         continue;
                     }
                     Geom::Curve const &curve_in = pathv[i][j];
@@ -367,6 +367,7 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
             if (curve == pathv[path].size() - 1 && pathv[path].closed()) {
                 next_index = 0;
             }
+            //append last extreme of paths on open paths
             if (curve == pathv[path].size() -1 && !pathv[path].closed()) { //the path is open and we are at end of path
                 if (time0 != 1) { //Previous satellite not at 100% amount
                     Geom::Curve *last_curve = curve_it1->portion(time0, 1);
@@ -389,7 +390,6 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
                     time0 = satellites[path][0].time(*curve_it1);
                 }
             }
-            bool last = pathv[path].size() - 1 == curve;
             double s = satellite.arcDistance(curve_it2);
             double time1 = satellite.time(s, true, (*curve_it1));
             double time2 = satellite.time(curve_it2);
@@ -399,70 +399,61 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
             if (time2 > 1) {
                 time2 = 1;
             }
-            std::vector<double> times;
-            times.push_back(time0);
-            times.push_back(time1);
-            times.push_back(time2);
-            Geom::Curve *knot_curve_1 = curve_it1->portion(times[0], times[1]);
-            Geom::Curve *knot_curve_2 = curve_it2.portion(times[2], 1);
+            Geom::Curve *knot_curve_1 = curve_it1->portion(time0, time1);
+            Geom::Curve *knot_curve_2 = curve_it2.portion(time2, 1);
             if (curve > 0) {
                 knot_curve_1->setInitial(tmp_path.finalPoint());
             } else {
-                tmp_path.start((*curve_it1).pointAt(times[0]));
+                tmp_path.start((*curve_it1).pointAt(time0));
             }
 
             Geom::Point start_arc_point = knot_curve_1->finalPoint();
-            Geom::Point end_arc_point = curve_it2.pointAt(times[2]);
-            if (times[2] == 1) {
-                end_arc_point = curve_it2.pointAt(times[2] - GAP_HELPER);
+            Geom::Point end_arc_point = curve_it2.pointAt(time2);
+            //add a gap helper
+            if (time2 == 1) {
+                end_arc_point = curve_it2.pointAt(time2 - GAP_HELPER);
             }
-            if (times[1] == times[0]) {
-                start_arc_point = curve_it1->pointAt(times[0] + GAP_HELPER);
+            if (time1 == time0) {
+                start_arc_point = curve_it1->pointAt(time1 + GAP_HELPER);
             }
+
             double k1 = distance(start_arc_point, curve_it1->finalPoint()) * K;
-            double k2 = distance(end_arc_point, curve_it2.initialPoint()) * K;
-            Geom::CubicBezier const *cubic_1 =
-                dynamic_cast<Geom::CubicBezier const *>(&*knot_curve_1);
+            double k2 = distance(curve_it2.initialPoint(), end_arc_point) * K;
+            Geom::CubicBezier const *cubic_1 = dynamic_cast<Geom::CubicBezier const *>(&*knot_curve_1);
+            Geom::CubicBezier const *cubic_2 = dynamic_cast<Geom::CubicBezier const *>(&*knot_curve_2);
             Geom::Ray ray_1(start_arc_point, curve_it1->finalPoint());
+            Geom::Ray ray_2(curve_it2.initialPoint(), end_arc_point);
             if (cubic_1) {
                 ray_1.setPoints((*cubic_1)[2], start_arc_point);
             }
-            Geom::Point handle_1 = Geom::Point::polar(ray_1.angle(), k1) + start_arc_point;
-            if (time0 == 1) {
-                handle_1 = start_arc_point;
-            }
-            Geom::CubicBezier const *cubic_2 =
-                dynamic_cast<Geom::CubicBezier const *>(&*knot_curve_2);
-            Geom::Ray ray_2(curve_it2.initialPoint(), end_arc_point);
             if (cubic_2) {
                 ray_2.setPoints(end_arc_point, (*cubic_2)[1]);
             }
-            Geom::Point handle_2 = end_arc_point - Geom::Point::polar(ray_2.angle(), k2);
-
-            bool ccw_toggle = cross(curve_it1->finalPoint() - start_arc_point,
-                                    end_arc_point - start_arc_point) < 0;
+            bool ccw_toggle = cross(curve_it1->finalPoint() - start_arc_point, end_arc_point - start_arc_point) < 0;
             double angle = angle_between(ray_1, ray_2, ccw_toggle);
-            double handleAngle = ray_1.angle() - angle;
+            double handle_angle_1 = ray_1.angle() - angle;
+            double handle_angle_2 = ray_2.angle() + angle;
             if (ccw_toggle) {
-                handleAngle = ray_1.angle() + angle;
+                handle_angle_1 = ray_1.angle() + angle;
+                handle_angle_2 = ray_2.angle() - angle;
             }
-            Geom::Point inverse_handle_1 = Geom::Point::polar(handleAngle, k1) + start_arc_point;
+            Geom::Point handle_1 = Geom::Point::polar(ray_1.angle(), k1) + start_arc_point;
+            Geom::Point handle_2 = end_arc_point - Geom::Point::polar(ray_2.angle(), k2);
+            Geom::Point inverse_handle_1 = Geom::Point::polar(handle_angle_1, k1) + start_arc_point;
+            Geom::Point inverse_handle_2 = end_arc_point - Geom::Point::polar(handle_angle_2, k2);
             if (time0 == 1) {
+                handle_1 = start_arc_point;
                 inverse_handle_1 = start_arc_point;
             }
-            handleAngle = ray_2.angle() + angle;
-            if (ccw_toggle) {
-                handleAngle = ray_2.angle() - angle;
+            //remove gap helper
+            if (time2 == 1) {
+                end_arc_point = curve_it2.pointAt(time2);
             }
-            Geom::Point inverse_handle_2 = end_arc_point - Geom::Point::polar(handleAngle, k2);
-            if (times[2] == 1) {
-                end_arc_point = curve_it2.pointAt(times[2]);
+            if (time1 == time0) {
+                start_arc_point = curve_it1->pointAt(time0);
             }
-            if (times[1] == times[0]) {
-                start_arc_point = curve_it1->pointAt(times[0]);
-            }
-            if (times[1] != 1) {
-                if (times[1] != times[0] || (times[1] == 1 && times[0] == 1)) {
+            if (time1 != 1) {
+                if (time1 != time0 || (time1 == 1 && time0 == 1)) {
                     if (!knot_curve_1->isDegenerate()) {
                         tmp_path.append(*knot_curve_1);
                     }
@@ -474,7 +465,7 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
                 Geom::Line const angled_line(start_arc_point, end_arc_point);
                 double arc_angle = Geom::angle_between(x_line, angled_line);
                 double radius = Geom::distance(start_arc_point, middle_point(start_arc_point, end_arc_point)) /
-                                                sin(angle / 2.0);
+                                               sin(angle / 2.0);
                 Geom::Coord rx = radius;
                 Geom::Coord ry = rx;
                 bool eliptical = (is_straight_curve(*curve_it1) &&
@@ -531,11 +522,11 @@ LPEFilletChamfer::doEffect_path(Geom::PathVector const &path_in)
                     tmp_path.append(*knot_curve_1);
                 }
             }
-            if (path_it->closed() && last) {
-                tmp_path.close();
-            }
             curve++;
-            time0 = times[2];
+            time0 = time2;
+        }
+        if (path_it->closed()) {
+            tmp_path.close();
         }
         path++;
         path_out.push_back(tmp_path);
