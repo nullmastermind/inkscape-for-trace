@@ -18,6 +18,9 @@
 #include <boost/multi_index/identity.hpp>
 #include <boost/multi_index/sequenced_index.hpp>
 #include <boost/multi_index/hashed_index.hpp>
+#include <boost/multi_index/random_access_index.hpp>
+#include <boost/range/sub_range.hpp>
+#include <boost/range/any_range.hpp>
 #include <sigc++/connection.h>
 #include "sp-object.h"
 #include "sp-item.h"
@@ -26,15 +29,30 @@ class SPBox3D;
 class Persp3D;
 
 struct hashed{};
+struct random_access{};
 
 typedef boost::multi_index_container<
         SPObject*,
         boost::multi_index::indexed_by<
                 boost::multi_index::sequenced<>,
+                boost::multi_index::random_access<
+                        boost::multi_index::tag<random_access>>,
                 boost::multi_index::hashed_unique<
                         boost::multi_index::tag<hashed>,
                         boost::multi_index::identity<SPObject*>>
         >> multi_index_container;
+
+typedef boost::any_range<
+        SPObject*,
+        boost::random_access_traversal_tag,
+        SPObject* const&,
+        std::ptrdiff_t> SPObjectRange;
+
+typedef boost::any_range<
+        SPItem*,
+        boost::random_access_traversal_tag,
+        SPItem* const&,
+        std::ptrdiff_t> SPItemRange;
 
 class ObjectSet {
 public:
@@ -126,7 +144,7 @@ public:
     SPItem *largestItem(CompareSize compare);
 
     /** Returns the list of selected objects. */
-    std::vector<SPObject*> list();
+    SPObjectRange range();
 
     /** Returns the list of selected SPItems. */
     std::vector<SPItem*> itemList();
@@ -174,15 +192,12 @@ public:
      */
     std::list<SPBox3D *> const box3DList(Persp3D *persp = NULL);
 
-
-    multi_index_container::iterator begin();
-    multi_index_container::iterator end();
-
 protected:
     virtual void _connectSignals(SPObject* object) {};
     virtual void _releaseSignals(SPObject* object) {};
     virtual void _emitSignals() {};
     void _add(SPObject* object);
+    void _clear();
     void _remove(SPObject* object);
     bool _anyAncestorIsInSet(SPObject *object);
     void _removeDescendantsFromSet(SPObject *object);

@@ -3090,7 +3090,7 @@ void sp_selection_symbol(SPDesktop *desktop, bool /*apply*/ )
 
     doc->ensureUpToDate();
 
-    std::vector<SPObject*> items(selection->list());
+    std::vector<SPObject*> items(selection->range().begin(), selection->range().end());
     sort(items.begin(),items.end(),sp_object_compare_position_bool);
 
     // Keep track of parent, this is where <use> will be inserted.

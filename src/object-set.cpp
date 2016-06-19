@@ -16,6 +16,7 @@
 #include "persp3d.h"
 #include "preferences.h"
 
+
 bool ObjectSet::add(SPObject* object) {
     g_return_val_if_fail(object != NULL, false);
     g_return_val_if_fail(SP_IS_OBJECT(object), false);
@@ -68,9 +69,7 @@ bool ObjectSet::includes(SPObject *object) {
 }
 
 void ObjectSet::clear() {
-    for (auto object: container) {
-        _remove(object);
-    }
+    _clear();
     _emitSignals();
 }
 
@@ -117,6 +116,12 @@ void ObjectSet::_add(SPObject *object) {
     _connectSignals(object);
 }
 
+void ObjectSet::_clear() {
+    for (auto object: container) {
+        _remove(object);
+    }
+}
+
 SPObject *ObjectSet::_getMutualAncestor(SPObject *object) {
     SPObject *o = object;
 
@@ -153,15 +158,7 @@ void ObjectSet::_removeAncestorsFromSet(SPObject *object) {
 }
 
 ObjectSet::~ObjectSet() {
-    clear();
-}
-
-multi_index_container::iterator ObjectSet::begin() {
-    return container.begin();
-}
-
-multi_index_container::iterator ObjectSet::end() {
-    return container.end();
+    _clear();
 }
 
 void ObjectSet::toggle(SPObject *obj) {
@@ -229,12 +226,11 @@ SPItem *ObjectSet::_sizeistItem(bool sml, CompareSize compare) {
     return ist;
 }
 
-std::vector<SPObject*> ObjectSet::list() {
-    return std::vector<SPObject*>(container.begin(), container.end());
+SPObjectRange ObjectSet::range() {
+    return SPObjectRange(container.get<random_access>().begin(), container.get<random_access>().end());
 }
-
 std::vector<SPItem*> ObjectSet::itemList() {
-    std::vector<SPObject *> tmp = list();
+    std::vector<SPObject *> tmp = std::vector<SPObject *>(container.begin(), container.end());
     std::vector<SPItem*> result;
     std::remove_if(tmp.begin(), tmp.end(), [](SPObject* o){return !SP_IS_ITEM(o);});
     std::transform(tmp.begin(), tmp.end(), std::back_inserter(result), [](SPObject* o){return SP_ITEM(o);});
@@ -242,14 +238,14 @@ std::vector<SPItem*> ObjectSet::itemList() {
 }
 
 void ObjectSet::set(SPObject *object) {
-    clear();
+    _clear();
     _add(object);
     // can't emit signal here due to boolean argument in Selection
 //    _emitSignals();
 }
 
 void ObjectSet::setList(const std::vector<SPItem *> &objs) {
-    clear();
+    _clear();
     addList(objs);
 }
 

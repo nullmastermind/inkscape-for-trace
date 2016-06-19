@@ -37,8 +37,13 @@ class Node;
 }
 }
 
-
 namespace Inkscape {
+
+typedef boost::any_range<
+        XML::Node*,
+        boost::random_access_traversal_tag,
+        XML::Node* const&,
+        std::ptrdiff_t> XMLNodeRange;
 
 /**
  * The set of selected SPObjects for a given document and layer model.

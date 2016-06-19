@@ -57,9 +57,11 @@ Inkscape::Selection *StyleSubject::Selection::_getSelection() const {
 
 std::vector<SPObject*> StyleSubject::Selection::list() {
     Inkscape::Selection *selection = _getSelection();
-    if(selection)
-        return selection->list();
-    else return std::vector<SPObject*>();
+    if(selection) {
+        return std::vector<SPObject *>(selection->range().begin(), selection->range().end());
+    }
+
+    return std::vector<SPObject*>();
 }
 
 Geom::OptRect StyleSubject::Selection::getBounds(SPItem::BBoxType type) {

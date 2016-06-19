@@ -196,11 +196,11 @@ TEST_F(ObjectSetTest, SetOrder) {
     set->add(E);
     set->add(C);
     EXPECT_EQ(5, set->size());
-    auto it = set->begin();
+    auto it = set->range().begin();
     EXPECT_EQ(A, *it++);
     EXPECT_EQ(D, *it++);
     EXPECT_EQ(B, *it++);
     EXPECT_EQ(E, *it++);
     EXPECT_EQ(C, *it++);
-    EXPECT_EQ(set->end(), it);
+    EXPECT_EQ(set->range().end(), it);
 }
