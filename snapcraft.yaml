@@ -24,9 +24,12 @@ parts:
     plugin: copy
     files:
       snapcraft.sh: snapcraft.sh
+  gtklaunch:
+    plugin: make
+    source: https://github.com/dplanella/gtkconf.git
 
 apps:
   inkscape:
-    command: snapcraft.sh inkscape
+    command: snapcraft.sh gtk-launch inkscape
   viewer:
-    command: snapcraft.sh inkview
+    command: snapcraft.sh gtk-launch inkview
