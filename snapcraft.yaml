@@ -49,5 +49,7 @@ parts:
 apps:
   inkscape:
     command: snapcraft.sh gtk-launch inkscape
+    plugs: [home, unity7]
   viewer:
     command: snapcraft.sh gtk-launch inkview
+    plugs: [home, unity7]
