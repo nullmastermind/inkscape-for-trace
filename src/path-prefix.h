@@ -21,6 +21,10 @@
 //#endif /* __cplusplus */
 
 #ifdef ENABLE_BINRELOC
+/* The way that we're building now is with a shared library between Inkscape
+   and Inkview, and the code will find the path to the library then. But we
+   don't really want that. This prefix then pulls things out of the lib directory
+   and back into the root install dir. */
 #  define INKSCAPE_LIBPREFIX      "/../.."
 #  define INKSCAPE_APPICONDIR     BR_DATADIR( INKSCAPE_LIBPREFIX "/share/pixmaps" )
 #  define INKSCAPE_ATTRRELDIR     BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/attributes" )
