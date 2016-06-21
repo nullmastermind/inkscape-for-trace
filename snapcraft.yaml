@@ -25,6 +25,7 @@ parts:
       - libatkmm-1.6-1v5
       - libcairomm-1.0-1v5
       - libcdr-0.1-1
+      - libgdk-pixbuf2.0-0
       - libglibmm-2.4-1v5
       - libgnomevfs2-0
       - libgtkmm-2.4-1v5
@@ -38,6 +39,8 @@ parts:
       - libwpg-0.3-3
       - libglib2.0-bin
       - light-themes
+    stage:
+      - -lib/inkscape
   snapcraft-wrapper:
     plugin: copy
     files:
