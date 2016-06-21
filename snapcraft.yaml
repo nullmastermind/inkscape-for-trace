@@ -39,12 +39,13 @@ parts:
       - libwpg-0.3-3
       - libglib2.0-bin
       - light-themes
-    stage:
-      - -lib/inkscape
+    snap:
+      - -lib/inkscape/*.a
   snapcraft-wrapper:
     plugin: copy
     files:
       snapcraft.sh: snapcraft.sh
+      README: lib/share/README
   gtklaunch:
     plugin: make
     source: https://github.com/dplanella/gtkconf.git
