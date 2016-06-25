@@ -194,7 +194,7 @@ sp_desktop_set_style(SPDesktop *desktop, SPCSSAttr *css, bool change, bool write
         sp_repr_css_merge(css_write, css);
         sp_css_attr_unset_uris(css_write);
         prefs->mergeStyle("/desktop/style", css_write);
-        std::vector<SPItem*> const itemlist = desktop->selection->itemList();
+        std::vector<SPItem*> const itemlist = desktop->selection->items();
         for (std::vector<SPItem*>::const_iterator i = itemlist.begin(); i!= itemlist.end(); ++i) {
             /* last used styles for 3D box faces are stored separately */
             SPObject *obj = *i;
@@ -234,7 +234,7 @@ sp_desktop_set_style(SPDesktop *desktop, SPCSSAttr *css, bool change, bool write
         sp_repr_css_merge(css_no_text, css);
         css_no_text = sp_css_attr_unset_text(css_no_text);
 
-        std::vector<SPItem*> const itemlist = desktop->selection->itemList();
+        std::vector<SPItem*> const itemlist = desktop->selection->items();
         for (std::vector<SPItem*>::const_iterator i = itemlist.begin(); i!= itemlist.end(); ++i) {
             SPItem *item = *i;
 
@@ -1917,7 +1917,7 @@ sp_desktop_query_style(SPDesktop *desktop, SPStyle *style, int property)
 
     // otherwise, do querying and averaging over selection
     if (desktop->selection != NULL) {
-        return sp_desktop_query_style_from_list (desktop->selection->itemList(), style, property);
+        return sp_desktop_query_style_from_list (desktop->selection->items(), style, property);
     }
 
     return QUERY_STYLE_NOTHING;

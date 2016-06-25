@@ -362,7 +362,7 @@ void IconPreviewPanel::refreshPreview()
                 if ( sel ) {
                     //g_message("found a selection to play with");
 
-                	std::vector<SPItem*> const items = sel->itemList();
+                	std::vector<SPItem*> const items = sel->items();
                     for(std::vector<SPItem*>::const_iterator i=items.begin();!target && i!=items.end();++i){
                         SPItem* item = *i;
                         gchar const *id = item->getId();

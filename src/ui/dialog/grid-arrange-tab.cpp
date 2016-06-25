@@ -163,7 +163,7 @@ void GridArrangeTab::arrange()
     desktop->getDocument()->ensureUpToDate();
 
     Inkscape::Selection *selection = desktop->getSelection();
-    const std::vector<SPItem*> items = selection ? selection->itemList() : std::vector<SPItem*>();
+    const std::vector<SPItem*> items = selection ? selection->items() : std::vector<SPItem*>();
     for(std::vector<SPItem*>::const_iterator i = items.begin();i!=items.end(); ++i){
         SPItem *item = *i;
         Geom::OptRect b = item->documentVisualBounds();
@@ -192,7 +192,7 @@ void GridArrangeTab::arrange()
     // require the sorting done before we can calculate row heights etc.
 
     g_return_if_fail(selection);
-    std::vector<SPItem*> sorted(selection->itemList());
+    std::vector<SPItem*> sorted(selection->items());
     sort(sorted.begin(),sorted.end(),sp_compare_y_position);
     sort(sorted.begin(),sorted.end(),sp_compare_x_position);
 
@@ -368,7 +368,7 @@ void GridArrangeTab::on_row_spinbutton_changed()
     Inkscape::Selection *selection = desktop ? desktop->selection : 0;
     g_return_if_fail( selection );
 
-    std::vector<SPItem*> const items = selection->itemList();
+    std::vector<SPItem*> const items = selection->items();
     int selcount = items.size();
 
     double PerCol = ceil(selcount / NoOfColsSpinner.get_value());
@@ -394,7 +394,7 @@ void GridArrangeTab::on_col_spinbutton_changed()
     Inkscape::Selection *selection = desktop ? desktop->selection : 0;
     g_return_if_fail(selection);
 
-    int selcount = selection->itemList().size();
+    int selcount = selection->items().size();
 
     double PerRow = ceil(selcount / NoOfRowsSpinner.get_value());
     NoOfColsSpinner.set_value(PerRow);
@@ -531,7 +531,7 @@ void GridArrangeTab::updateSelection()
     updating = true;
     SPDesktop *desktop = Parent->getDesktop();
     Inkscape::Selection *selection = desktop ? desktop->selection : 0;
-    std::vector<SPItem*> const items = selection ? selection->itemList() : std::vector<SPItem*>();
+    std::vector<SPItem*> const items = selection ? selection->items() : std::vector<SPItem*>();
 
     if (!items.empty()) {
         int selcount = items.size();
@@ -602,7 +602,7 @@ GridArrangeTab::GridArrangeTab(ArrangeDialog *parent)
     g_return_if_fail( selection );
     int selcount = 1;
     if (!selection->isEmpty()) {
-        selcount = selection->itemList().size();
+        selcount = selection->items().size();
     }
 
 

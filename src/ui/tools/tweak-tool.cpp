@@ -153,7 +153,7 @@ void TweakTool::update_cursor (bool with_shift) {
     gchar *sel_message = NULL;
 
     if (!desktop->selection->isEmpty()) {
-        num = desktop->selection->itemList().size();
+        num = desktop->selection->items().size();
         sel_message = g_strdup_printf(ngettext("<b>%i</b> object selected","<b>%i</b> objects selected",num), num);
     } else {
         sel_message = g_strdup_printf("%s", _("<b>Nothing</b> selected"));
@@ -1076,7 +1076,7 @@ sp_tweak_dilate (TweakTool *tc, Geom::Point event_p, Geom::Point p, Geom::Point 
     double move_force = get_move_force(tc);
     double color_force = MIN(sqrt(path_force)/20.0, 1);
 
-    std::vector<SPItem*> items=selection->itemList();
+    std::vector<SPItem*> items= selection->items();
     for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end(); ++i){
         SPItem *item = *i;
 
@@ -1185,7 +1185,7 @@ bool TweakTool::root_handler(GdkEvent* event) {
 
                 guint num = 0;
                 if (!desktop->selection->isEmpty()) {
-                    num = desktop->selection->itemList().size();
+                    num = desktop->selection->items().size();
                 }
                 if (num == 0) {
                     this->message_context->flash(Inkscape::ERROR_MESSAGE, _("<b>Nothing selected!</b> Select objects to tweak."));

@@ -57,7 +57,7 @@ sp_selected_path_combine(SPDesktop *desktop, bool skip_undo)
     Inkscape::Selection *selection = desktop->getSelection();
     SPDocument *doc = desktop->getDocument();
 
-    std::vector<SPItem*> items(selection->itemList());
+    std::vector<SPItem*> items(selection->items());
     
     if (items.size() < 1) {
         desktop->getMessageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to combine."));
@@ -203,7 +203,7 @@ sp_selected_path_break_apart(SPDesktop *desktop, bool skip_undo)
 
     bool did = false;
 
-    std::vector<SPItem*> itemlist(selection->itemList());
+    std::vector<SPItem*> itemlist(selection->items());
     for (std::vector<SPItem*>::const_iterator i = itemlist.begin(); i != itemlist.end(); ++i){
 
         SPItem *item = *i;
@@ -303,7 +303,7 @@ sp_selected_path_to_curves(Inkscape::Selection *selection, SPDesktop *desktop, b
         desktop->setWaitingCursor();
     }
 
-    std::vector<SPItem*> selected(selection->itemList());
+    std::vector<SPItem*> selected(selection->items());
     std::vector<Inkscape::XML::Node*> to_select;
     selection->clear();
     std::vector<SPItem*> items(selected);
@@ -334,7 +334,7 @@ void sp_selected_to_lpeitems(SPDesktop *desktop)
         return;
     }
 
-    std::vector<SPItem*> selected(selection->itemList());
+    std::vector<SPItem*> selected(selection->items());
     std::vector<Inkscape::XML::Node*> to_select;
     selection->clear();
     std::vector<SPItem*> items(selected);
@@ -603,7 +603,7 @@ void
 sp_selected_path_reverse(SPDesktop *desktop)
 {
     Inkscape::Selection *selection = desktop->getSelection();
-    std::vector<SPItem*> items = selection->itemList();
+    std::vector<SPItem*> items = selection->items();
 
     if (items.empty()) {
         desktop->getMessageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>path(s)</b> to reverse."));

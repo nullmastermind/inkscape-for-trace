@@ -83,7 +83,7 @@ static void sp_stb_magnitude_value_changed( GtkAdjustment *adj, GObject *dataKlu
     bool modmade = false;
 
     Inkscape::Selection *selection = desktop->getSelection();
-    std::vector<SPItem*> itemlist=selection->itemList();
+    std::vector<SPItem*> itemlist= selection->items();
     for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();++i){
         SPItem *item = *i;
         if (SP_IS_STAR(item)) {
@@ -128,7 +128,7 @@ static void sp_stb_proportion_value_changed( GtkAdjustment *adj, GObject *dataKl
 
     bool modmade = false;
     Inkscape::Selection *selection = desktop->getSelection();
-    std::vector<SPItem*> itemlist=selection->itemList();
+    std::vector<SPItem*> itemlist= selection->items();
     for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();++i){
         SPItem *item = *i;
         if (SP_IS_STAR(item)) {
@@ -185,7 +185,7 @@ static void sp_stb_sides_flat_state_changed( EgeSelectOneAction *act, GObject *d
         gtk_action_set_visible( prop_action, !flat );
     }
 
-    std::vector<SPItem*> itemlist=selection->itemList();
+    std::vector<SPItem*> itemlist= selection->items();
     for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();++i){
         SPItem *item = *i;
         if (SP_IS_STAR(item)) {
@@ -224,7 +224,7 @@ static void sp_stb_rounded_value_changed( GtkAdjustment *adj, GObject *dataKludg
     bool modmade = false;
 
     Inkscape::Selection *selection = desktop->getSelection();
-    std::vector<SPItem*> itemlist=selection->itemList();
+    std::vector<SPItem*> itemlist= selection->items();
     for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();++i){
         SPItem *item = *i;
         if (SP_IS_STAR(item)) {
@@ -264,7 +264,7 @@ static void sp_stb_randomized_value_changed( GtkAdjustment *adj, GObject *dataKl
     bool modmade = false;
 
     Inkscape::Selection *selection = desktop->getSelection();
-    std::vector<SPItem*> itemlist=selection->itemList();
+    std::vector<SPItem*> itemlist= selection->items();
     for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();++i){
         SPItem *item = *i;
         if (SP_IS_STAR(item)) {
@@ -367,7 +367,7 @@ sp_star_toolbox_selection_changed(Inkscape::Selection *selection, GObject *tbl)
 
     purge_repr_listener( tbl, tbl );
 
-    std::vector<SPItem*> itemlist=selection->itemList();
+    std::vector<SPItem*> itemlist= selection->items();
     for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();++i){
         SPItem *item = *i;
         if (SP_IS_STAR(item)) {

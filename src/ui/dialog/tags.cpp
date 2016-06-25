@@ -348,7 +348,7 @@ void TagsPanel::_objectsSelected( Selection *sel ) {
     
     _selectedConnection.block();
     _tree.get_selection()->unselect_all();
-    auto tmp = sel->range();
+    auto tmp = sel->objects();
 	for(auto i = tmp.begin(); i != tmp.end(); ++i)
     {
         SPObject *obj = *i;
@@ -646,7 +646,7 @@ bool TagsPanel::_handleButtonEvent(GdkEventButton* event)
                     if (col == _tree.get_column(COL_ADD - 1) && down_at_add) {
                         if (SP_IS_TAG(obj)) {
                             bool wasadded = false;
-                            std::vector<SPItem*> items=_desktop->selection->itemList();
+                            std::vector<SPItem*> items= _desktop->selection->items();
                         	for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();++i){
                                 SPObject *newobj = *i;
                                 bool addchild = true;

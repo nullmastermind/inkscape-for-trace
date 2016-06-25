@@ -650,7 +650,7 @@ void Transformation::updatePageTransform(Inkscape::Selection *selection)
 {
     if (selection && !selection->isEmpty()) {
         if (_check_replace_matrix.get_active()) {
-            Geom::Affine current (selection->itemList()[0]->transform); // take from the first item in selection
+            Geom::Affine current (selection->items()[0]->transform); // take from the first item in selection
 
             Geom::Affine new_displayed = current;
 
@@ -735,7 +735,7 @@ void Transformation::applyPageMove(Inkscape::Selection *selection)
 
         if (_check_move_relative.get_active()) {
             // shift each object relatively to the previous one
-            std::vector<SPItem*> selected(selection->itemList());
+            std::vector<SPItem*> selected(selection->items());
             if (selected.empty()) return;
 
             if (fabs(x) > 1e-6) {
@@ -810,7 +810,7 @@ void Transformation::applyPageScale(Inkscape::Selection *selection)
     bool transform_stroke = prefs->getBool("/options/transform/stroke", true);
     bool preserve = prefs->getBool("/options/preservetransform/value", false);
     if (prefs->getBool("/dialogs/transformation/applyseparately")) {
-    	std::vector<SPItem*> tmp=selection->itemList();
+    	std::vector<SPItem*> tmp= selection->items();
     	for(std::vector<SPItem*>::const_iterator i=tmp.begin();i!=tmp.end();++i){
             SPItem *item = *i;
             Geom::OptRect bbox_pref = item->desktopPreferredBounds();
@@ -874,7 +874,7 @@ void Transformation::applyPageRotate(Inkscape::Selection *selection)
     }
 
     if (prefs->getBool("/dialogs/transformation/applyseparately")) {
-    	std::vector<SPItem*> tmp=selection->itemList();
+    	std::vector<SPItem*> tmp= selection->items();
     	for(std::vector<SPItem*>::const_iterator i=tmp.begin();i!=tmp.end();++i){
             SPItem *item = *i;
             sp_item_rotate_rel(item, Geom::Rotate (angle*M_PI/180.0));
@@ -894,7 +894,7 @@ void Transformation::applyPageSkew(Inkscape::Selection *selection)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (prefs->getBool("/dialogs/transformation/applyseparately")) {
-    	std::vector<SPItem*> items=selection->itemList();
+    	std::vector<SPItem*> items= selection->items();
     	for(std::vector<SPItem*>::const_iterator i = items.begin();i!=items.end();++i){
             SPItem *item = *i;
 
@@ -996,7 +996,7 @@ void Transformation::applyPageTransform(Inkscape::Selection *selection)
     }
 
     if (_check_replace_matrix.get_active()) {
-    	std::vector<SPItem*> tmp=selection->itemList();
+    	std::vector<SPItem*> tmp= selection->items();
     	for(std::vector<SPItem*>::const_iterator i=tmp.begin();i!=tmp.end();++i){
             SPItem *item = *i;
             item->set_item_transform(displayed);
@@ -1149,7 +1149,7 @@ void Transformation::onReplaceMatrixToggled()
     double f = _scalar_transform_f.getValue();
 
     Geom::Affine displayed (a, b, c, d, e, f);
-    Geom::Affine current = selection->itemList()[0]->transform; // take from the first item in selection
+    Geom::Affine current = selection->items()[0]->transform; // take from the first item in selection
 
     Geom::Affine new_displayed;
     if (_check_replace_matrix.get_active()) {

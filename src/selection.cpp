@@ -130,25 +130,13 @@ void Selection::setReprList(std::vector<XML::Node*> const &list) {
     _emitChanged();
 }
 
-std::vector<XML::Node*> Selection::reprList() {
-    std::vector<SPItem*> list = itemList();
-    std::vector<XML::Node*> result;
-    std::transform(list.begin(), list.end(), std::back_inserter(result), [](SPItem* item) { return item->getRepr(); });
-    return result;
-}
-
-Inkscape::XML::Node *Selection::singleRepr() {
-    SPObject *obj = single();
-    return obj ? obj->getRepr() : nullptr;
-}
-
 std::vector<Inkscape::SnapCandidatePoint> Selection::getSnapPoints(SnapPreferences const *snapprefs) const {
     std::vector<Inkscape::SnapCandidatePoint> p;
 
     if (snapprefs != NULL){
         SnapPreferences snapprefs_dummy = *snapprefs; // create a local copy of the snapping prefs
         snapprefs_dummy.setTargetSnappable(Inkscape::SNAPTARGET_ROTATION_CENTER, false); // locally disable snapping to the item center
-        std::vector<SPItem*> const items = const_cast<Selection *>(this)->itemList();
+        std::vector<SPItem*> const items = const_cast<Selection *>(this)->items();
         for ( std::vector<SPItem*>::const_iterator iter=items.begin();iter!=items.end(); ++iter) {
             SPItem *this_item = *iter;
             this_item->getSnappoints(p, &snapprefs_dummy);
@@ -174,7 +162,7 @@ SPObject *Selection::_objectForXMLNode(Inkscape::XML::Node *repr) const {
 }
 
 size_t Selection::numberOfLayers() {
-    std::vector<SPItem*> const items = const_cast<Selection *>(this)->itemList();
+    std::vector<SPItem*> const items = const_cast<Selection *>(this)->items();
     std::set<SPObject*> layers;
     for ( std::vector<SPItem*>::const_iterator iter=items.begin();iter!=items.end(); ++iter) {
         SPObject *layer = _layers->layerForObject(*iter);
@@ -185,7 +173,7 @@ size_t Selection::numberOfLayers() {
 }
 
 size_t Selection::numberOfParents() {
-    std::vector<SPItem*> const items = const_cast<Selection *>(this)->itemList();
+    std::vector<SPItem*> const items = const_cast<Selection *>(this)->items();
     std::set<SPObject*> parents;
     for ( std::vector<SPItem*>::const_iterator iter=items.begin();iter!=items.end(); ++iter) {
         SPObject *parent = (*iter)->parent;

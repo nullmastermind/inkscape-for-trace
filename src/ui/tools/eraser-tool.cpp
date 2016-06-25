@@ -692,7 +692,7 @@ void EraserTool::set_to_accumulated() {
                         }
                     }
                 } else {
-                    toWorkOn = selection->itemList();
+                    toWorkOn = selection->items();
                 }
                 wasSelection = true;
             }
@@ -744,7 +744,7 @@ void EraserTool::set_to_accumulated() {
                                 }
                                 if ( !selection->isEmpty() ) {
                                     // If the item was not completely erased, track the new remainder.
-                                    std::vector<SPItem*> nowSel(selection->itemList());
+                                    std::vector<SPItem*> nowSel(selection->items());
                                     for (std::vector<SPItem*>::const_iterator i2 = nowSel.begin();i2!=nowSel.end();++i2) {
                                         remainingItems.push_back(*i2);
                                     }

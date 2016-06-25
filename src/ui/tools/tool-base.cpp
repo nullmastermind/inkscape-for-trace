@@ -1158,7 +1158,7 @@ SPItem *sp_event_context_find_item(SPDesktop *desktop, Geom::Point const &p,
 
     if (select_under) {
         SPItem *selected_at_point = desktop->getItemFromListAtPointBottom(
-                desktop->selection->itemList(), p);
+                desktop->selection->items(), p);
         item = desktop->getItemAtPoint(p, into_groups, selected_at_point);
         if (item == NULL) { // we may have reached bottom, flip over to the top
             item = desktop->getItemAtPoint(p, into_groups, NULL);

@@ -443,7 +443,7 @@ SPItem *TextEdit::getSelectedTextItem (void)
     if (!SP_ACTIVE_DESKTOP)
         return NULL;
 
-    std::vector<SPItem*> tmp=SP_ACTIVE_DESKTOP->getSelection()->itemList();
+    std::vector<SPItem*> tmp= SP_ACTIVE_DESKTOP->getSelection()->items();
 	for(std::vector<SPItem*>::const_iterator i=tmp.begin();i!=tmp.end();++i)
     {
         if (SP_IS_TEXT(*i) || SP_IS_FLOWTEXT(*i))
@@ -461,7 +461,7 @@ unsigned TextEdit::getSelectedTextCount (void)
 
     unsigned int items = 0;
 
-    std::vector<SPItem*> tmp=SP_ACTIVE_DESKTOP->getSelection()->itemList();
+    std::vector<SPItem*> tmp= SP_ACTIVE_DESKTOP->getSelection()->items();
 	for(std::vector<SPItem*>::const_iterator i=tmp.begin();i!=tmp.end();++i)
     {
         if (SP_IS_TEXT(*i) || SP_IS_FLOWTEXT(*i))
@@ -568,7 +568,7 @@ void TextEdit::onApply()
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 
     unsigned items = 0;
-    const std::vector<SPItem*> item_list = desktop->getSelection()->itemList();
+    const std::vector<SPItem*> item_list = desktop->getSelection()->items();
     SPCSSAttr *css = fillTextStyle ();
     sp_desktop_set_style(desktop, css, true);
 

@@ -12,6 +12,8 @@
 #include <doc-per-case-test.h>
 #include "object-set.h"
 
+using namespace Inkscape;
+
 class ObjectSetTest: public DocPerCaseTest {
 public:
     ObjectSetTest() {
@@ -196,11 +198,11 @@ TEST_F(ObjectSetTest, SetOrder) {
     set->add(E);
     set->add(C);
     EXPECT_EQ(5, set->size());
-    auto it = set->range().begin();
+    auto it = set->objects().begin();
     EXPECT_EQ(A, *it++);
     EXPECT_EQ(D, *it++);
     EXPECT_EQ(B, *it++);
     EXPECT_EQ(E, *it++);
     EXPECT_EQ(C, *it++);
-    EXPECT_EQ(set->range().end(), it);
+    EXPECT_EQ(set->objects().end(), it);
 }

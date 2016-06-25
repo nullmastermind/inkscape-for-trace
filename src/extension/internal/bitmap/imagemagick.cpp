@@ -65,7 +65,7 @@ ImageMagickDocCache::ImageMagickDocCache(Inkscape::UI::View::View * view) :
     _imageItems(NULL)
 {
     SPDesktop *desktop = (SPDesktop*)view;
-    const std::vector<SPItem*> selectedItemList = desktop->selection->itemList();
+    const std::vector<SPItem*> selectedItemList = desktop->selection->items();
     int selectCount = selectedItemList.size();
     
     // Init the data-holders
@@ -235,7 +235,7 @@ ImageMagick::prefs_effect(Inkscape::Extension::Effect *module, Inkscape::UI::Vie
 {
     SPDocument * current_document = view->doc();
 
-    std::vector<SPItem*> selected = ((SPDesktop *)view)->getSelection()->itemList();
+    std::vector<SPItem*> selected = ((SPDesktop *) view)->getSelection()->items();
     Inkscape::XML::Node * first_select = NULL;
     if (!selected.empty()) {
         first_select = (selected.front())->getRepr();

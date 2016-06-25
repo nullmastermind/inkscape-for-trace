@@ -39,12 +39,6 @@ class Node;
 
 namespace Inkscape {
 
-typedef boost::any_range<
-        XML::Node*,
-        boost::random_access_traversal_tag,
-        XML::Node* const&,
-        std::ptrdiff_t> XMLNodeRange;
-
 /**
  * The set of selected SPObjects for a given document and layer model.
  *
@@ -155,16 +149,6 @@ public:
     bool includes(XML::Node *repr) {
         return includes(_objectForXMLNode(repr));
     }
-
-    /**
-     * Returns a single selected object's xml node.
-     *
-     * @return NULL unless exactly one object is selected
-     */
-    XML::Node *singleRepr();
-
-    /** Returns a list of the xml nodes of all selected objects. */
-    std::vector<XML::Node*> reprList();
 
     /** Returns the number of layers in which there are selected objects. */
     size_t numberOfLayers();

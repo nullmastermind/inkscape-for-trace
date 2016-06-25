@@ -65,7 +65,7 @@ SPImage *Tracer::getSelectedSPImage()
     if (sioxEnabled)
         {
         SPImage *img = NULL;
-        std::vector<SPItem*> const list = sel->itemList();
+        std::vector<SPItem*> const list = sel->items();
         std::vector<SPItem *> items;
         sioxShapes.clear();
 

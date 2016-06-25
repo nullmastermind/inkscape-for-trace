@@ -28,6 +28,12 @@
 class SPBox3D;
 class Persp3D;
 
+namespace Inkscape {
+
+namespace XML {
+class Node;
+}
+
 struct hashed{};
 struct random_access{};
 
@@ -53,6 +59,12 @@ typedef boost::any_range<
         boost::random_access_traversal_tag,
         SPItem* const&,
         std::ptrdiff_t> SPItemRange;
+
+typedef boost::any_range<
+        XML::Node*,
+        boost::random_access_traversal_tag,
+        XML::Node* const&,
+        std::ptrdiff_t> XMLNodeRange;
 
 class ObjectSet {
 public:
@@ -144,10 +156,20 @@ public:
     SPItem *largestItem(CompareSize compare);
 
     /** Returns the list of selected objects. */
-    SPObjectRange range();
+    SPObjectRange objects();
 
     /** Returns the list of selected SPItems. */
-    std::vector<SPItem*> itemList();
+    std::vector<SPItem*> items();
+
+    /** Returns a list of the xml nodes of all selected objects. */
+    std::vector<XML::Node*> xmlNodes();
+
+    /**
+     * Returns a single selected object's xml node.
+     *
+     * @return NULL unless exactly one object is selected
+     */
+    XML::Node *singleRepr();
 
     /**
      * Selects exactly the specified objects.
@@ -213,5 +235,6 @@ protected:
 
 };
 
+} // namespace Inkscape
 
 #endif //INKSCAPE_PROTOTYPE_OBJECTSET_H

@@ -515,7 +515,7 @@ void StrokeStyle::markerSelectCB(MarkerComboBox *marker_combo, StrokeStyle *spw,
     //spw->updateMarkerHist(which);
 
     Inkscape::Selection *selection = spw->desktop->getSelection();
-    std::vector<SPItem*> itemlist=selection->itemList();
+    std::vector<SPItem*> itemlist= selection->items();
     for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();++i){
         SPItem *item = *i;
         if (!SP_IS_SHAPE(item) || SP_IS_RECT(item)) { // can't set marker to rect, until it's converted to using <path>
@@ -988,7 +988,7 @@ StrokeStyle::updateLine()
     if (!sel || sel->isEmpty())
         return;
 
-    std::vector<SPItem*> const objects = sel->itemList();
+    std::vector<SPItem*> const objects = sel->items();
     SPObject * const object = objects[0];
     SPStyle * const style = object->style;
 
@@ -1044,7 +1044,7 @@ StrokeStyle::scaleLine()
     
     SPDocument *document = desktop->getDocument();
     Inkscape::Selection *selection = desktop->getSelection();
-    std::vector<SPItem*> items=selection->itemList();
+    std::vector<SPItem*> items= selection->items();
 
     /* TODO: Create some standardized method */
     SPCSSAttr *css = sp_repr_css_attr_new();

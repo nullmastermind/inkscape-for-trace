@@ -133,7 +133,7 @@ void ActionAlign::do_action(SPDesktop *desktop, int index)
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool sel_as_group = prefs->getBool("/dialogs/align/sel-as-groups");
 
-    std::vector<SPItem*> selected(selection->itemList());
+    std::vector<SPItem*> selected(selection->items());
     if (selected.empty()) return;
 
     const Coeffs &a = _allCoeffs[index];
@@ -293,7 +293,7 @@ private :
         Inkscape::Selection *selection = desktop->getSelection();
         if (!selection) return;
 
-        std::vector<SPItem*> selected(selection->itemList());
+        std::vector<SPItem*> selected(selection->items());
         if (selected.empty()) return;
 
         //Check 2 or more selected objects
@@ -499,7 +499,7 @@ private :
         // xGap and yGap are the minimum space required between bounding rectangles.
         double const xGap = removeOverlapXGap.get_value();
         double const yGap = removeOverlapYGap.get_value();
-        removeoverlap(_dialog.getDesktop()->getSelection()->itemList(), xGap, yGap);
+        removeoverlap(_dialog.getDesktop()->getSelection()->items(), xGap, yGap);
 
         // restore compensation setting
         prefs->setInt("/options/clonecompensation/value", saved_compensation);
@@ -530,7 +530,7 @@ private :
         int saved_compensation = prefs->getInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
         prefs->setInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
 
-        graphlayout(_dialog.getDesktop()->getSelection()->itemList());
+        graphlayout(_dialog.getDesktop()->getSelection()->items());
 
         // restore compensation setting
         prefs->setInt("/options/clonecompensation/value", saved_compensation);
@@ -590,7 +590,7 @@ private :
         Inkscape::Selection *selection = desktop->getSelection();
         if (!selection) return;
 
-        std::vector<SPItem*> selected(selection->itemList());
+        std::vector<SPItem*> selected(selection->items());
         if (selected.empty()) return;
 
         //Check 2 or more selected objects
@@ -656,7 +656,7 @@ private :
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         int saved_compensation = prefs->getInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
         prefs->setInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
-        std::vector<SPItem*> x(_dialog.getDesktop()->getSelection()->itemList());
+        std::vector<SPItem*> x(_dialog.getDesktop()->getSelection()->items());
         unclump (x);
 
         // restore compensation setting
@@ -687,7 +687,7 @@ private :
         Inkscape::Selection *selection = desktop->getSelection();
         if (!selection) return;
 
-        std::vector<SPItem*> selected(selection->itemList());
+        std::vector<SPItem*> selected(selection->items());
         if (selected.empty()) return;
 
         //Check 2 or more selected objects
@@ -785,7 +785,7 @@ private :
         Inkscape::Selection *selection = desktop->getSelection();
         if (!selection) return;
 
-        std::vector<SPItem*> selected(selection->itemList());
+        std::vector<SPItem*> selected(selection->items());
 
         //Check 2 or more selected objects
         if (selected.size() < 2) return;

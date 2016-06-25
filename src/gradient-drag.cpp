@@ -2070,7 +2070,7 @@ void GrDrag::updateDraggers()
     this->draggers.clear();
 
     g_return_if_fail(this->selection != NULL);
-    std::vector<SPItem*> list = this->selection->itemList();
+    std::vector<SPItem*> list = this->selection->items();
     for (std::vector<SPItem*>::const_iterator i = list.begin(); i != list.end(); ++i) {
         SPItem *item = *i;
         SPStyle *style = item->style;
@@ -2138,7 +2138,7 @@ void GrDrag::updateLines()
 
     g_return_if_fail(this->selection != NULL);
 
-    std::vector<SPItem*> list = this->selection->itemList();
+    std::vector<SPItem*> list = this->selection->items();
     for (std::vector<SPItem*>::const_iterator i = list.begin(); i != list.end(); ++i) {
         SPItem *item = *i;
 
@@ -2282,7 +2282,7 @@ void GrDrag::updateLevels()
 
     g_return_if_fail (this->selection != NULL);
 
-    std::vector<SPItem*> list = this->selection->itemList();
+    std::vector<SPItem*> list = this->selection->items();
     for (std::vector<SPItem*>::const_iterator i = list.begin(); i != list.end(); ++i) {
         SPItem *item = *i;
         Geom::OptRect rect = item->desktopVisualBounds();

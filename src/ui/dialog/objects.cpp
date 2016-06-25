@@ -478,7 +478,7 @@ void ObjectsPanel::_objectsSelected( Selection *sel ) {
     _selectedConnection.block();
     _tree.get_selection()->unselect_all();
     SPItem *item = NULL;
-    std::vector<SPItem*> const items = sel->itemList();
+    std::vector<SPItem*> const items = sel->items();
     for(std::vector<SPItem*>::const_iterator i=items.begin(); i!=items.end(); ++i){
         item = *i;
         if (setOpacity)

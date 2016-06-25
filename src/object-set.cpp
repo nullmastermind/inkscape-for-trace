@@ -16,6 +16,7 @@
 #include "persp3d.h"
 #include "preferences.h"
 
+namespace Inkscape {
 
 bool ObjectSet::add(SPObject* object) {
     g_return_val_if_fail(object != NULL, false);
@@ -202,7 +203,7 @@ SPItem *ObjectSet::largestItem(CompareSize compare) {
 }
 
 SPItem *ObjectSet::_sizeistItem(bool sml, CompareSize compare) {
-    std::vector<SPItem*> const items = itemList();
+    std::vector<SPItem*> const items = const_cast<ObjectSet *>(this)->items();
     gdouble max = sml ? 1e18 : 0;
     SPItem *ist = NULL;
 
@@ -226,15 +227,27 @@ SPItem *ObjectSet::_sizeistItem(bool sml, CompareSize compare) {
     return ist;
 }
 
-SPObjectRange ObjectSet::range() {
+SPObjectRange ObjectSet::objects() {
     return SPObjectRange(container.get<random_access>().begin(), container.get<random_access>().end());
 }
-std::vector<SPItem*> ObjectSet::itemList() {
+std::vector<SPItem*> ObjectSet::items() {
     std::vector<SPObject *> tmp = std::vector<SPObject *>(container.begin(), container.end());
     std::vector<SPItem*> result;
     std::remove_if(tmp.begin(), tmp.end(), [](SPObject* o){return !SP_IS_ITEM(o);});
     std::transform(tmp.begin(), tmp.end(), std::back_inserter(result), [](SPObject* o){return SP_ITEM(o);});
     return result;
+}
+
+std::vector<XML::Node*> ObjectSet::xmlNodes() {
+    std::vector<SPItem*> list = items();
+    std::vector<XML::Node*> result;
+    std::transform(list.begin(), list.end(), std::back_inserter(result), [](SPItem* item) { return item->getRepr(); });
+    return result;
+}
+
+Inkscape::XML::Node *ObjectSet::singleRepr() {
+    SPObject *obj = single();
+    return obj ? obj->getRepr() : nullptr;
 }
 
 void ObjectSet::set(SPObject *object) {
@@ -273,7 +286,7 @@ Geom::OptRect ObjectSet::bounds(SPItem::BBoxType type) const
 
 Geom::OptRect ObjectSet::geometricBounds() const
 {
-    std::vector<SPItem*> const items = const_cast<ObjectSet *>(this)->itemList();
+    std::vector<SPItem*> const items = const_cast<ObjectSet *>(this)->items();
 
     Geom::OptRect bbox;
     for ( std::vector<SPItem*>::const_iterator iter=items.begin();iter!=items.end(); ++iter) {
@@ -284,7 +297,7 @@ Geom::OptRect ObjectSet::geometricBounds() const
 
 Geom::OptRect ObjectSet::visualBounds() const
 {
-    std::vector<SPItem*> const items = const_cast<ObjectSet *>(this)->itemList();
+    std::vector<SPItem*> const items = const_cast<ObjectSet *>(this)->items();
 
     Geom::OptRect bbox;
     for ( std::vector<SPItem*>::const_iterator iter=items.begin();iter!=items.end(); ++iter) {
@@ -305,7 +318,7 @@ Geom::OptRect ObjectSet::preferredBounds() const
 Geom::OptRect ObjectSet::documentBounds(SPItem::BBoxType type) const
 {
     Geom::OptRect bbox;
-    std::vector<SPItem*> const items = const_cast<ObjectSet *>(this)->itemList();
+    std::vector<SPItem*> const items = const_cast<ObjectSet *>(this)->items();
     if (items.empty()) return bbox;
 
     for ( std::vector<SPItem*>::const_iterator iter=items.begin();iter!=items.end(); ++iter) {
@@ -319,7 +332,7 @@ Geom::OptRect ObjectSet::documentBounds(SPItem::BBoxType type) const
 // If we have a selection of multiple items, then the center of the first item
 // will be returned; this is also the case in SelTrans::centerRequest()
 boost::optional<Geom::Point> ObjectSet::center() const {
-    std::vector<SPItem*> const items = const_cast<ObjectSet *>(this)->itemList();
+    std::vector<SPItem*> const items = const_cast<ObjectSet *>(this)->items();
     if (!items.empty()) {
         SPItem *first = items.back(); // from the first item in selection
         if (first->isCenterSet()) { // only if set explicitly
@@ -382,3 +395,5 @@ void ObjectSet::_remove_3D_boxes_recursively(SPObject *obj) {
         _3dboxes.erase(b);
     }
 }
+
+} // namespace Inkscape
