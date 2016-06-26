@@ -14,7 +14,7 @@
 
 #include <ui/widget/panel.h>
 #include <gtkmm/treeview.h>
-#include <gtkmm/liststore.h>
+#include <gtkmm/treestore.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/dialog.h>
 #include <gtkmm/treeselection.h>
@@ -46,13 +46,15 @@ private:
     std::vector<std::pair<std::string, std::string> >_selectorVec;
     std::vector<std::pair<std::string, std::string> > _getSelectorVec();
     std::string _populateTree(std::vector<std::pair<std::string, std::string> >);
+    bool _handleButtonEvent(GdkEventButton *event);
 
     class ModelColumns : public Gtk::TreeModel::ColumnRecord
     {
     public:
         ModelColumns()
-        { add(_selectorLabel); }
+        { add(_selectorLabel); add(_colAddRemove); }
         Gtk::TreeModelColumn<Glib::ustring> _selectorLabel;
+        Gtk::TreeModelColumn<bool> _colAddRemove;
     };
 
     SPDesktop* _desktop;
@@ -61,7 +63,7 @@ private:
     Gtk::VBox _mainBox;
     Gtk::HBox _buttonBox;
     Gtk::TreeView _treeView;
-    Glib::RefPtr<Gtk::ListStore> _store;
+    Glib::RefPtr<Gtk::TreeStore> _store;
     Gtk::ScrolledWindow _scrolledWindow;
     Gtk::Button* del;
     Gtk::Button* create;
@@ -70,6 +72,9 @@ private:
     std::string _sValue ;
     Inkscape::XML::Node *_styleChild;
     unsigned _num;
+    std::string _selectorName = "";
+    std::string _selectorValue;
+    Gtk::TreeModel::Row _row;
 
     // Signal handlers
     void _addSelector();
