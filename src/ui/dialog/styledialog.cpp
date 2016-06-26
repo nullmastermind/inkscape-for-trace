@@ -111,6 +111,10 @@ StyleDialog::StyleDialog() :
                                                                 &StyleDialog::
                                                                 _handleButtonEvent),
                                                   false);
+
+    _treeView.signal_row_activated().connect(sigc::mem_fun(*this,
+                                                           &StyleDialog::
+                                                           _selectedRowCallback));
 }
 
 StyleDialog::~StyleDialog()
@@ -180,16 +184,6 @@ void StyleDialog::_addSelector()
         _selectorName = ".Class1";
     }
 
-    switch (result) {
-    case Gtk::RESPONSE_OK:
-        textDialogPtr->hide();
-        _row[_mColumns._selectorLabel] = _selectorName;
-        _row[_mColumns._colAddRemove] = true;
-        break;
-    default:
-        break;
-    }
-
     del->set_sensitive(true);
 
     /**
@@ -201,10 +195,12 @@ void StyleDialog::_addSelector()
      * class attribute for the selected object is set too.
      */
     SPObject *obj;
+    bool objExists = false;
     if (!_desktop->getSelection()->list().empty()) {
         std::vector<SPObject*> selected = _desktop->getSelection()->list();
         for (unsigned i = 0; i < selected.size(); ++i) {
             obj = selected.at(i);
+            objExists = true;
             std::string style;
 
             if (obj->getRepr()->attribute("style")) {
@@ -214,7 +210,7 @@ void StyleDialog::_addSelector()
                     gchar const * value = iter->value;
 
                     if (std::string(property) == "style") {
-                        _selectorValue = _row[_mColumns._selectorLabel] + "{"
+                        _selectorValue = _selectorName + "{"
                                 + std::string(value) + "}" + "\n";
                     }
                 }
@@ -241,9 +237,22 @@ void StyleDialog::_addSelector()
     }
     else {
         _selectorValue = _selectorName + "{" + "}" + "\n";
+        objExists = false;
     }
 
-    /**
+    switch (result) {
+    case Gtk::RESPONSE_OK:
+        textDialogPtr->hide();
+        _row[_mColumns._selectorLabel] = _selectorName;
+        _row[_mColumns._colAddRemove] = true;
+        if (objExists) {
+            _row[_mColumns._colObj] = obj;
+        }
+        break;
+    default:
+        break;
+    }
+        /**
      * @brief root
      * A new style element is added to the document with value obtained
      * from selectorValue above. If style element already exists, then
@@ -462,6 +471,7 @@ bool StyleDialog::_handleButtonEvent(GdkEventButton *event)
                                 childrow = *(_store->append(row->children()));
                                 childrow[_mColumns._selectorLabel] = obj->getId();
                                 childrow[_mColumns._colAddRemove] = false;
+                                childrow[_mColumns._colObj] = obj;
                             }
                             else {
                                 for(type_children::iterator it = children.begin();
@@ -474,6 +484,7 @@ bool StyleDialog::_handleButtonEvent(GdkEventButton *event)
                                         childrow = *(_store->append(row.children()));
                                         childrow[_mColumns._selectorLabel] = obj->getId();
                                         childrow[_mColumns._colAddRemove] = false;
+                                        childrow[_mColumns._colObj] = obj;
                                     }
                                     else {
                                         std::cout << "Do nothing" << std::endl;
@@ -484,6 +495,50 @@ bool StyleDialog::_handleButtonEvent(GdkEventButton *event)
                     }
                 }
             }
+        }
+    }
+}
+
+/**
+ * @brief StyleDialog::_selected_row_callback
+ * @param path
+ * This function selects objects in the drawing corresponding to the selector
+ * selected in the treeview.
+ */
+void StyleDialog::_selectedRowCallback(const Gtk::TreeModel::Path& path,
+                                         Gtk::TreeViewColumn* /* column */)
+{
+    _desktop->selection->clear();
+    Gtk::TreeModel::iterator iter = _store->get_iter(path);
+    if (iter) {
+        Gtk::TreeModel::Row row = *iter;
+        Gtk::TreeModel::Children children = row.children();
+
+        if (row[_mColumns._colObj]) {
+            SPObject *obj = row[_mColumns._colObj];
+            _desktop->selection->add(obj);
+        }
+
+        if (children) {
+            _checkAllChildren(children);
+        }
+    }
+}
+
+/**
+ * @brief StyleDialog::_checkAllChildren
+ * @param children
+ * This function iterates children of the row selected in treeview and selects
+ * the objects corresponding to any selector in child rows.
+ */
+void StyleDialog::_checkAllChildren(Gtk::TreeModel::Children& children)
+{
+    for (Gtk::TreeModel::Children::iterator iter = children.begin();
+         iter!= children.end(); ++iter) {
+        Gtk::TreeModel::Row childrow = *iter;
+        if (childrow[_mColumns._colObj]) {
+            SPObject *obj = childrow[_mColumns._colObj];
+            _desktop->selection->add(obj);
         }
     }
 }

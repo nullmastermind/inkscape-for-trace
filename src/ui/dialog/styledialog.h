@@ -47,14 +47,18 @@ private:
     std::vector<std::pair<std::string, std::string> > _getSelectorVec();
     std::string _populateTree(std::vector<std::pair<std::string, std::string> >);
     bool _handleButtonEvent(GdkEventButton *event);
+    void _selectedRowCallback(const Gtk::TreeModel::Path& path,
+                                Gtk::TreeViewColumn* /* column */);
+    void _checkAllChildren(Gtk::TreeModel::Children& children);
 
     class ModelColumns : public Gtk::TreeModel::ColumnRecord
     {
     public:
         ModelColumns()
-        { add(_selectorLabel); add(_colAddRemove); }
+        { add(_selectorLabel); add(_colAddRemove); add(_colObj); }
         Gtk::TreeModelColumn<Glib::ustring> _selectorLabel;
         Gtk::TreeModelColumn<bool> _colAddRemove;
+        Gtk::TreeModelColumn<SPObject *> _colObj;
     };
 
     SPDesktop* _desktop;
