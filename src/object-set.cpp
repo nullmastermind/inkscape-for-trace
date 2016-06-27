@@ -174,13 +174,8 @@ bool ObjectSet::isEmpty() {
     return container.size() == 0;
 }
 
-
 SPObject *ObjectSet::single() {
-    if (container.size() == 1) {
-        return *container.begin();
-    }
-
-    return nullptr;
+    return container.size() == 1 ? *container.begin() : nullptr;
 }
 
 SPItem *ObjectSet::singleItem() {
@@ -256,27 +251,6 @@ void ObjectSet::set(SPObject *object) {
     // can't emit signal here due to boolean argument in Selection
 //    _emitSignals();
 }
-
-void ObjectSet::setList(const std::vector<SPItem *> &objs) {
-    _clear();
-    addList(objs);
-}
-
-void ObjectSet::addList(const std::vector<SPItem *> &objs) {
-    for (std::vector<SPItem*>::const_iterator iter = objs.begin(); iter != objs.end(); ++iter) {
-        SPObject *obj = *iter;
-        if (!includes(obj)) {
-            add(obj);
-        }
-    }
-}
-
-void ObjectSet::add(const std::vector<SPItem*>::iterator& from, const std::vector<SPItem*>::iterator& to) {
-    for(auto it = from; it != to; ++it) {
-        _add(*it);
-    }
-}
-
 
 Geom::OptRect ObjectSet::bounds(SPItem::BBoxType type) const
 {

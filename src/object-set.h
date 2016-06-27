@@ -21,6 +21,8 @@
 #include <boost/multi_index/random_access_index.hpp>
 #include <boost/range/sub_range.hpp>
 #include <boost/range/any_range.hpp>
+#include <boost/type_traits.hpp>
+#include <boost/utility/enable_if.hpp>
 #include <sigc++/connection.h>
 #include "sp-object.h"
 #include "sp-item.h"
@@ -84,7 +86,12 @@ public:
      *  \param from the begin iterator
      *  \param to the end iterator
      */
-    void add(const std::vector<SPItem*>::iterator& from, const std::vector<SPItem*>::iterator& to);
+    template <typename InputIterator>
+    void add(InputIterator from, InputIterator to) {
+        for(auto it = from; it != to; ++it) {
+            _add(*it);
+        }
+    }
 
     /**
      * Removes an item from the set of selected objects.
@@ -176,14 +183,27 @@ public:
      *
      * @param objs the objects to select
      */
-    void setList(const std::vector<SPItem *> &objs);
+    template <class T>
+    typename boost::enable_if<boost::is_base_of<SPObject, T>, void>::type
+    setList(const std::vector<T*> &objs) {
+        _clear();
+        addList(objs);
+    }
 
     /**
      * Adds the specified objects to selection, without deselecting first.
      *
      * @param objs the objects to select
      */
-    void addList(std::vector<SPItem*> const &objs);
+    template <class T>
+    typename boost::enable_if<boost::is_base_of<SPObject, T>, void>::type
+    addList(const std::vector<T*> &objs) {
+        for (auto obj: objs) {
+            if (!includes(obj)) {
+                add(obj);
+            }
+        }
+    }
 
     /** Returns the bounding rectangle of the selection. */
     Geom::OptRect bounds(SPItem::BBoxType type) const;

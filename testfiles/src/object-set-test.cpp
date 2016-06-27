@@ -10,6 +10,8 @@
  */
 #include <gtest/gtest.h>
 #include <doc-per-case-test.h>
+#include <src/sp-factory.h>
+#include <src/sp-rect.h>
 #include "object-set.h"
 
 using namespace Inkscape;
@@ -67,11 +69,98 @@ TEST_F(ObjectSetTest, Basics) {
     EXPECT_TRUE(set->includes(C));
     EXPECT_FALSE(set->includes(D));
     EXPECT_FALSE(set->includes(X));
+    EXPECT_FALSE(set->includes(nullptr));
     set->remove(A);
     EXPECT_EQ(2, set->size());
     EXPECT_FALSE(set->includes(A));
     set->clear();
     EXPECT_EQ(0, set->size());
+    bool resultNull = set->add(nullptr);
+    EXPECT_FALSE(resultNull);
+    EXPECT_EQ(0, set->size());
+    bool resultNull2 = set->remove(nullptr);
+    EXPECT_FALSE(resultNull2);
+}
+
+TEST_F(ObjectSetTest, Advanced) {
+    set->add(A);
+    set->add(B);
+    set->add(C);
+    EXPECT_TRUE(set->includes(C));
+    set->toggle(C);
+    EXPECT_EQ(2, set->size());
+    EXPECT_FALSE(set->includes(C));
+    set->toggle(D);
+    EXPECT_EQ(3, set->size());
+    EXPECT_TRUE(set->includes(D));
+    set->toggle(D);
+    EXPECT_EQ(2, set->size());
+    EXPECT_FALSE(set->includes(D));
+    EXPECT_EQ(nullptr, set->single());
+    set->set(X);
+    EXPECT_EQ(1, set->size());
+    EXPECT_TRUE(set->includes(X));
+    EXPECT_EQ(X, set->single());
+    EXPECT_FALSE(set->isEmpty());
+    set->clear();
+    EXPECT_TRUE(set->isEmpty());
+    std::vector<SPObject*> list1 {A, B, C, D};
+    std::vector<SPObject*> list2 {E, F};
+    set->addList(list1);
+    EXPECT_EQ(4, set->size());
+    set->addList(list2);
+    EXPECT_EQ(6, set->size());
+    EXPECT_TRUE(set->includes(A));
+    EXPECT_TRUE(set->includes(B));
+    EXPECT_TRUE(set->includes(C));
+    EXPECT_TRUE(set->includes(D));
+    EXPECT_TRUE(set->includes(E));
+    EXPECT_TRUE(set->includes(F));
+    set->setList(list2);
+    EXPECT_EQ(2, set->size());
+    EXPECT_TRUE(set->includes(E));
+    EXPECT_TRUE(set->includes(F));
+}
+
+TEST_F(ObjectSetTest, Items) {
+    SPRect* rect10x100 = (SPRect *) SPFactory::createObject("svg:rect");
+//    rect10x100->invoke_build(_doc, _doc->rroot, 1);
+    SPRect* rect20x40 = (SPRect *) SPFactory::createObject("svg:rect");
+//    rect20x40->invoke_build(_doc, _doc->rroot, 1);
+//    SPRect* rect30x30 = (SPRect *) SPFactory::createObject("svg:rect");
+//    rect30x30->invoke_build(_doc, _doc->rroot, 1);
+//    rect10x100->width = 10;
+//    rect10x100->height = 100;
+//    rect20x40->width = 20;
+//    rect20x40->height = 40;
+//    rect30x30->width = 30;
+//    rect30x30->height = 30;
+    set->add(rect10x100);
+    EXPECT_EQ(rect10x100, set->singleItem());
+    EXPECT_EQ(rect10x100->getRepr(), set->singleRepr());
+    set->add(rect20x40);
+    EXPECT_EQ(nullptr, set->singleItem());
+    EXPECT_EQ(nullptr, set->singleRepr());
+//    set->add(rect30x30);
+//    EXPECT_EQ(3, set->size());
+//    EXPECT_EQ(rect10x100, set->smallestItem(ObjectSet::CompareSize::HORIZONTAL));
+//    EXPECT_EQ(rect30x30, set->smallestItem(ObjectSet::CompareSize::VERTICAL));
+//    EXPECT_EQ(rect20x40, set->smallestItem(ObjectSet::CompareSize::AREA));
+//    EXPECT_EQ(rect30x30, set->largestItem(ObjectSet::CompareSize::HORIZONTAL));
+//    EXPECT_EQ(rect10x100, set->largestItem(ObjectSet::CompareSize::VERTICAL));
+//    EXPECT_EQ(rect10x100, set->largestItem(ObjectSet::CompareSize::AREA));
+}
+
+TEST_F(ObjectSetTest, Ranges) {
+    std::vector<SPObject*> objs {A, D, B, E, C, F};
+    set->add(objs.begin() + 1, objs.end() - 1);
+    EXPECT_EQ(4, set->size());
+    auto it = set->objects().begin();
+    EXPECT_EQ(D, *it++);
+    EXPECT_EQ(B, *it++);
+    EXPECT_EQ(E, *it++);
+    EXPECT_EQ(C, *it++);
+    EXPECT_EQ(set->objects().end(), it);
 }
 
 TEST_F(ObjectSetTest, Autoremoving) {
@@ -189,20 +278,4 @@ TEST_F(ObjectSetTest, SetRemoving) {
     delete objectSet;
     EXPECT_STREQ(nullptr, A->getId());
     EXPECT_STREQ(nullptr, C->getId());
-}
-
-TEST_F(ObjectSetTest, SetOrder) {
-    set->add(A);
-    set->add(D);
-    set->add(B);
-    set->add(E);
-    set->add(C);
-    EXPECT_EQ(5, set->size());
-    auto it = set->objects().begin();
-    EXPECT_EQ(A, *it++);
-    EXPECT_EQ(D, *it++);
-    EXPECT_EQ(B, *it++);
-    EXPECT_EQ(E, *it++);
-    EXPECT_EQ(C, *it++);
-    EXPECT_EQ(set->objects().end(), it);
 }

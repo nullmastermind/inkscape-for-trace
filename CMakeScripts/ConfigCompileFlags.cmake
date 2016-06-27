@@ -1,6 +1,8 @@
 set(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS}")
 add_definitions(-Wall -Wformat-security -W -Wpointer-arith -Wcast-align -Wsign-compare -Woverloaded-virtual -Wswitch)
-add_definitions(-O2)
+# TODO temporary flag
+add_definitions(-O0)
+add_definitions(-std=c++11)
 
 # Define the flags for profiling if desired:
 if(WITH_PROFILING)
