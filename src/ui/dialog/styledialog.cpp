@@ -172,13 +172,7 @@ void StyleDialog::_addSelector()
      * with a dot.
      */
     if (!textEditPtr->get_text().empty()) {
-        if (textEditPtr->get_text().at(0) == '#' ||
-             textEditPtr->get_text().at(0) == '.') {
             _selectorName = textEditPtr->get_text();
-        }
-        else {
-            _selectorName = "." + textEditPtr->get_text();
-        }
     }
     else {
         _selectorName = ".Class1";
@@ -252,27 +246,24 @@ void StyleDialog::_addSelector()
     default:
         break;
     }
-        /**
-     * @brief root
+
+    /**
      * A new style element is added to the document with value obtained
      * from selectorValue above. If style element already exists, then
      * the new selector's content is appended to its previous content.
      */
-    for (unsigned i = 0; i < _num; ++i) {
-        if (std::string(_document->getReprRoot()->nthChild(i)->name())
-             == "svg:style") {
-            _styleExists = true;
-            _styleChild = _document->getReprRoot()->nthChild(i);
-            break;
-        }
-        else {
-            _styleExists = false;
-        }
+    _selectorVec.push_back(std::make_pair(_selectorName, _selectorValue));
+
+    if (_styleElementNode()) {
+        _styleChild = _styleElementNode();
+        _styleExists = true;
+    }
+    else {
+        _styleExists = false;
     }
 
     if (_styleExists) {
-        _sValue = _sValue + _selectorValue;
-        _styleChild->firstChild()->setContent(_sValue.c_str());
+        _updateStyleContent();
     }
     else {
         _sValue = _selectorValue;
@@ -288,7 +279,20 @@ void StyleDialog::_addSelector()
         root->addChild(newChild, NULL);
         Inkscape::GC::release(newChild);
     }
-    _selectorVec.push_back(std::make_pair(_selectorName, _selectorValue));
+}
+
+/**
+ * @brief StyleDialog::_updateStyleContent
+ * This function updates the content in style element as new selectors (or
+ * objects) are added/removed.
+ */
+void StyleDialog::_updateStyleContent()
+{
+    std::string styleContent = "";
+    for (unsigned i = 0; i < _selectorVec.size(); ++i) {
+        styleContent = styleContent + _selectorVec[i].second;
+    }
+    _styleElementNode()->firstChild()->setContent(styleContent.c_str());
 }
 
 /**
@@ -297,12 +301,13 @@ void StyleDialog::_addSelector()
  * of selected row is obtained and the corresponding selector and its values are
  * deleted from the selector vector. Then _sValue's content is reset and contains
  * only selectors remaining in the selVec (or treeview).
+ * TODO: get index of children of rows for correct deletion of rows having
+ * children.
  */
 void StyleDialog::_delSelector()
 {
     Glib::RefPtr<Gtk::TreeSelection> refTreeSelection = _treeView.get_selection();
     Gtk::TreeModel::iterator iter = refTreeSelection->get_selected();
-    std::vector<std::pair<std::string, std::string> >selVec = _getSelectorVec();
     Gtk::TreeModel::Path path;
 
     if (iter) {
@@ -310,36 +315,43 @@ void StyleDialog::_delSelector()
         path = _treeView.get_model()->get_path(iter);
         int i = atoi(path.to_string().c_str());
 
-        if (selVec.size() != 0) {
-            selVec.erase(selVec.begin()+i);
-            _sValue.clear();
-
-            for (unsigned i = 0; i < selVec.size(); ++i) {
-                std::string selValue = (selVec[i].first + "{"
-                                        + selVec[i].second + " }\n");
-                _sValue.append(selValue.c_str());
-            }
+        if (_selectorVec.size() != 0) {
+            _selectorVec.erase(_selectorVec.begin()+i);
 
             /**
-              * Only if a value exists in _sValue and there is a _styleChild
-              * which contains the style element, then the content in style
-              * element is updated else the _styleChild is set and its content
-              * is set to an empty string.
+              * If there is a _styleChild which contains the style element, then
+              * the content in style element is updated else the _styleChild is
+              * obtained and its content is set.
               */
-            if (!_sValue.empty() && _styleChild) {
-                _styleChild->firstChild()->setContent(_sValue.c_str());
+            if (_styleChild) {
+                _updateStyleContent();
             }
             else {
-                for (unsigned i = 0; i < _num; ++i) {
-                    if (std::string(_document->getReprRoot()->nthChild(i)->name())
-                         == "svg:style") {
-                        _styleChild = _document->getReprRoot()->nthChild(i);
-                    }
-                }
-                _styleChild->firstChild()->setContent("");
+                _styleChild = _styleElementNode();
+                _updateStyleContent();
             }
         }
         _store->erase(row);
+    }
+}
+
+/**
+ * @brief StyleDialog::_styleElementNode
+ * @return
+ * This function returns the node containing style element. The document's
+ * children are iterated and the repr of the style element that occurs is
+ * obtained.
+ */
+Inkscape::XML::Node* StyleDialog::_styleElementNode()
+{
+    for (unsigned i = 0; i < _num; ++i) {
+        if (std::string(_document->getReprRoot()->nthChild(i)->name())
+             == "svg:style") {
+            return _document->getReprRoot()->nthChild(i);
+        }
+        else {
+            return NULL;
+        }
     }
 }
 
@@ -412,8 +424,8 @@ std::string StyleDialog::_populateTree(std::vector<std::pair<std::string,
     for(unsigned it = 0; it < _selectVec.size(); ++it) {
         Gtk::TreeModel::Row row = *(_store->append());
         row[_mColumns._selectorLabel] = _selectVec[it].first;
-        std::string selValue = _selectVec[it].first + " { "
-                + _selectVec[it].second + " }" + "\n";
+        std::string selValue = _selectVec[it].first + "{"
+                + _selectVec[it].second + "}" + "\n";
         selectorValue.append(selValue.c_str());
     }
 
@@ -421,12 +433,7 @@ std::string StyleDialog::_populateTree(std::vector<std::pair<std::string,
         del->set_sensitive(true);
     }
 
-    for (unsigned i = 0; i < _num; ++i) {
-        if (std::string(_document->getReprRoot()->nthChild(i)->name())
-             == "svg:style") {
-            _styleChild = _document->getReprRoot()->nthChild(i);
-        }
-    }
+    _styleChild = _styleElementNode();
 
     return selectorValue;
 }
@@ -438,9 +445,7 @@ std::string StyleDialog::_populateTree(std::vector<std::pair<std::string,
  * This function handles the event when '+' button in front of a selector name
  * is clicked. The selected objects (if any) is added to the selector as a child
  * in the treeview.
- * TODO: Appending children in XML repr.
  */
-
 bool StyleDialog::_handleButtonEvent(GdkEventButton *event)
 {
     if (event->type == GDK_BUTTON_PRESS && event->button == 1) {
@@ -461,37 +466,30 @@ bool StyleDialog::_handleButtonEvent(GdkEventButton *event)
                         Gtk::TreeModel::iterator iter = refTreeSelection->
                                 get_selected();
 
-                        if (iter) {
+                        if (iter)
+                        {
                             Gtk::TreeModel::Row row = *iter;
                             typedef Gtk::TreeModel::Children type_children;
-                            type_children children = row->children();
                             Gtk::TreeModel::Row childrow;
-
-                            if (children.size() == 0 && row->parent() == 0) {
-                                childrow = *(_store->append(row->children()));
-                                childrow[_mColumns._selectorLabel] = obj->getId();
-                                childrow[_mColumns._colAddRemove] = false;
-                                childrow[_mColumns._colObj] = obj;
-                            }
-                            else {
-                                for(type_children::iterator it = children.begin();
+                            path = _treeView.get_model()->get_path(iter);
+                            childrow = *(_store->append(row->children()));
+                            childrow[_mColumns._selectorLabel] = obj->getId();
+                            childrow[_mColumns._colAddRemove] = false;
+                            childrow[_mColumns._colObj] = obj;
+                            Gtk::TreeModel::Children children = row.children();
+                            std::string childStyle;
+                            if (children) {
+                                for(Gtk::TreeModel::Children::iterator it = children.begin();
                                     it != children.end(); ++it) {
-                                    Gtk::TreeModel::iterator i = it;
-                                    path = _treeView.get_model()->get_path(i);
-
-                                    if((*it)->get_value(_mColumns._selectorLabel)
-                                            != obj->getId()) {
-                                        childrow = *(_store->append(row.children()));
-                                        childrow[_mColumns._selectorLabel] = obj->getId();
-                                        childrow[_mColumns._colAddRemove] = false;
-                                        childrow[_mColumns._colObj] = obj;
-                                    }
-                                    else {
-                                        std::cout << "Do nothing" << std::endl;
-                                    }
+                                    Gtk::TreeModel::Row row = *it;
+                                    SPObject *obj = row[_mColumns._colObj];
+                                    childStyle = "#" + std::string(obj->getId()) + "{" +
+                                            std::string(obj->getAttribute("style")) + "}\n";
                                 }
                             }
+                            _selectorVec.push_back(std::make_pair(obj->getId(), childStyle));
                         }
+                        _updateStyleContent();
                     }
                 }
             }
@@ -506,21 +504,21 @@ bool StyleDialog::_handleButtonEvent(GdkEventButton *event)
  * selected in the treeview.
  */
 void StyleDialog::_selectedRowCallback(const Gtk::TreeModel::Path& path,
-                                         Gtk::TreeViewColumn* /* column */)
+                                         Gtk::TreeViewColumn*  column )
 {
     _desktop->selection->clear();
-    Gtk::TreeModel::iterator iter = _store->get_iter(path);
-    if (iter) {
-        Gtk::TreeModel::Row row = *iter;
-        Gtk::TreeModel::Children children = row.children();
-
-        if (row[_mColumns._colObj]) {
-            SPObject *obj = row[_mColumns._colObj];
-            _desktop->selection->add(obj);
-        }
-
-        if (children) {
-            _checkAllChildren(children);
+    if (column == _treeView.get_column(1)) {
+        Gtk::TreeModel::iterator iter = _store->get_iter(path);
+        if (iter) {
+            Gtk::TreeModel::Row row = *iter;
+            Gtk::TreeModel::Children children = row.children();
+            if (row[_mColumns._colObj]) {
+                SPObject *obj = row[_mColumns._colObj];
+                _desktop->selection->add(obj);
+            }
+            if (children) {
+                _checkAllChildren(children);
+            }
         }
     }
 }

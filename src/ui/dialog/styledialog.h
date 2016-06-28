@@ -50,6 +50,8 @@ private:
     void _selectedRowCallback(const Gtk::TreeModel::Path& path,
                                 Gtk::TreeViewColumn* /* column */);
     void _checkAllChildren(Gtk::TreeModel::Children& children);
+    Inkscape::XML::Node *_styleElementNode();
+    void _updateStyleContent();
 
     class ModelColumns : public Gtk::TreeModel::ColumnRecord
     {
