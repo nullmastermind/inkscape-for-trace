@@ -83,7 +83,7 @@ StyleDialog::StyleDialog() :
     del = manage( new Gtk::Button() );
     _styleButton(*del, "list-remove", "Remove a CSS Selector");
     del->signal_clicked().connect(sigc::mem_fun(*this,
-                                                   &StyleDialog::_delSelector));
+                                                &StyleDialog::_delSelector));
     del->set_sensitive(false);
 
     _mainBox.pack_end(_buttonBox, Gtk::PACK_SHRINK);
@@ -105,7 +105,7 @@ StyleDialog::StyleDialog() :
     _styleExists = false;
     _document = _targetDesktop->doc();
     _num = _document->getReprRoot()->childCount();
-    _sValue = _populateTree(_getSelectorVec());
+    _selectorValue = _populateTree(_getSelectorVec());
 
     _treeView.signal_button_press_event().connect(sigc::mem_fun(*this,
                                                                 &StyleDialog::
@@ -172,7 +172,7 @@ void StyleDialog::_addSelector()
      * with a dot.
      */
     if (!textEditPtr->get_text().empty()) {
-            _selectorName = textEditPtr->get_text();
+        _selectorName = textEditPtr->get_text();
     }
     else {
         _selectorName = ".Class1";
@@ -199,7 +199,7 @@ void StyleDialog::_addSelector()
 
             if (obj->getRepr()->attribute("style")) {
                 for (List<AttributeRecord const> iter = obj->getRepr()->attributeList();
-                      iter; ++iter) {
+                     iter; ++iter) {
                     gchar const * property = g_quark_to_string(iter->key);
                     gchar const * value = iter->value;
 
@@ -256,17 +256,12 @@ void StyleDialog::_addSelector()
 
     if (_styleElementNode()) {
         _styleChild = _styleElementNode();
-        _styleExists = true;
-    }
-    else {
-        _styleExists = false;
-    }
-
-    if (_styleExists) {
         _updateStyleContent();
     }
-    else {
-        _sValue = _selectorValue;
+    else if (_styleExists && !_newDrawing) {
+        _updateStyleContent();
+    }
+    else if (!_styleExists) {
         Inkscape::XML::Node *root = _document->getReprDoc()->root();
         Inkscape::XML::Node *newChild = _document->getReprDoc()
                 ->createElement("svg:style");
@@ -292,17 +287,16 @@ void StyleDialog::_updateStyleContent()
     for (unsigned i = 0; i < _selectorVec.size(); ++i) {
         styleContent = styleContent + _selectorVec[i].second;
     }
-    _styleElementNode()->firstChild()->setContent(styleContent.c_str());
+    _styleChild->firstChild()->setContent(styleContent.c_str());
 }
 
 /**
  * @brief StyleDialog::_delSelector
  * This function deletes selector when '-' at the bottom is clicked. The index
  * of selected row is obtained and the corresponding selector and its values are
- * deleted from the selector vector. Then _sValue's content is reset and contains
- * only selectors remaining in the selVec (or treeview).
- * TODO: get index of children of rows for correct deletion of rows having
- * children.
+ * deleted from the selector vector. If a row has no parent, it is directly
+ * erased from the vector else the string containing selector row's selector value
+ * is updated after parsing.
  */
 void StyleDialog::_delSelector()
 {
@@ -316,7 +310,37 @@ void StyleDialog::_delSelector()
         int i = atoi(path.to_string().c_str());
 
         if (_selectorVec.size() != 0) {
-            _selectorVec.erase(_selectorVec.begin()+i);
+            if (!row.parent()) {
+                _selectorVec.erase(_selectorVec.begin()+i);
+            }
+            else {
+                std::stringstream str;
+                std::string sel, key, value;
+                int i;
+
+                for (unsigned it = 0; it < _selectorVec.size(); ++it) {
+                    str << _selectorVec[it].second;
+                    i = it;
+                }
+
+                while (std::getline(str, sel, '\n')) {
+                    REMOVE_SPACES(sel);
+                    if (!sel.empty()) {
+                        key = strtok(strdup(sel.c_str()), "{");
+                        char *temp = strtok(NULL, "}");
+                        if (strtok(temp, "}") != NULL) {
+                            value = strtok(temp, "}");
+                        }
+                        if (key == "#" + row[_mColumns._selectorLabel]) {
+                            sel = "";
+                        }
+                        else {
+                            sel = sel;
+                        }
+                        _selectorVec[i].second = sel;
+                    }
+                }
+            }
 
             /**
               * If there is a _styleChild which contains the style element, then
@@ -347,6 +371,8 @@ Inkscape::XML::Node* StyleDialog::_styleElementNode()
     for (unsigned i = 0; i < _num; ++i) {
         if (std::string(_document->getReprRoot()->nthChild(i)->name())
              == "svg:style") {
+            _styleExists = true;
+            _newDrawing = true;
             return _document->getReprRoot()->nthChild(i);
         }
         else {
@@ -376,15 +402,17 @@ std::string StyleDialog::_setClassAttribute(std::vector<SPObject*> sel)
  * @return selVec
  * This function returns a vector whose key is the style selector name and value
  * is the style properties. All style selectors are extracted from svg:style
- * element.
+ * element. _newDrawing is flag is set to false check if an existing drawing is
+ * opened.
  */
 std::vector<std::pair<std::string, std::string> >StyleDialog::_getSelectorVec()
 {
     std::string key, value;
-    std::vector<std::pair<std::string, std::string> > selVec;
-
     for (unsigned i = 0; i < _num; ++i) {
         if (std::string(_document->getReprRoot()->nthChild(i)->name()) == "svg:style") {
+            _styleExists = true;
+            _newDrawing = false;
+            _styleChild = _document->getReprRoot()->nthChild(i);
             std::stringstream str;
             str << _document->getReprRoot()->nthChild(i)->firstChild()->content();
             std::string sel;
@@ -401,12 +429,12 @@ std::vector<std::pair<std::string, std::string> >StyleDialog::_getSelectorVec()
                     if (strtok(temp, "}") != NULL) {
                         value = strtok(temp, "}");
                     }
-                    selVec.push_back(std::make_pair(key, value));
+                    _selectorVec.push_back(std::make_pair(key, sel));
                 }
             }
         }
     }
-    return selVec;
+    return _selectorVec;
 }
 
 /**
@@ -418,22 +446,20 @@ std::vector<std::pair<std::string, std::string> >StyleDialog::_getSelectorVec()
 std::string StyleDialog::_populateTree(std::vector<std::pair<std::string,
                                        std::string> > _selVec)
 {
-    std::vector<std::pair<std::string, std::string> > _selectVec = _selVec;
+    _selectorVec = _selVec;
     std::string selectorValue;
 
-    for(unsigned it = 0; it < _selectVec.size(); ++it) {
+    for(unsigned it = 0; it < _selectorVec.size(); ++it) {
         Gtk::TreeModel::Row row = *(_store->append());
-        row[_mColumns._selectorLabel] = _selectVec[it].first;
-        std::string selValue = _selectVec[it].first + "{"
-                + _selectVec[it].second + "}" + "\n";
+        row[_mColumns._selectorLabel] = _selectorVec[it].first;
+        _selectorVec[it].second = _selectorVec[it].second + "\n";
+        std::string selValue = _selectorVec[it].second;
         selectorValue.append(selValue.c_str());
     }
 
-    if (_selectVec.size() > 0) {
+    if (_selectorVec.size() > 0) {
         del->set_sensitive(true);
     }
-
-    _styleChild = _styleElementNode();
 
     return selectorValue;
 }
@@ -489,7 +515,13 @@ bool StyleDialog::_handleButtonEvent(GdkEventButton *event)
                             }
                             _selectorVec.push_back(std::make_pair(obj->getId(), childStyle));
                         }
-                        _updateStyleContent();
+                        if (_styleElementNode()) {
+                            _styleChild = _styleElementNode();
+                            _updateStyleContent();
+                        }
+                        else if (_styleExists && !_newDrawing) {
+                            _updateStyleContent();
+                        }
                     }
                 }
             }

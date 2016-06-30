@@ -75,12 +75,12 @@ private:
     Gtk::Button* create;
     SPDocument* _document;
     bool _styleExists;
-    std::string _sValue ;
     Inkscape::XML::Node *_styleChild;
     unsigned _num;
     std::string _selectorName = "";
     std::string _selectorValue;
     Gtk::TreeModel::Row _row;
+    bool _newDrawing;
 
     // Signal handlers
     void _addSelector();
