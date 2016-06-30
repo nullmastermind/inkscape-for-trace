@@ -77,7 +77,7 @@ private:
     bool _styleExists;
     Inkscape::XML::Node *_styleChild;
     unsigned _num;
-    std::string _selectorName = "";
+    std::string _selectorName;
     std::string _selectorValue;
     Gtk::TreeModel::Row _row;
     bool _newDrawing;

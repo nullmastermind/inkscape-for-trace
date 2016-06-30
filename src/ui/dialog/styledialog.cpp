@@ -316,11 +316,11 @@ void StyleDialog::_delSelector()
             else {
                 std::stringstream str;
                 std::string sel, key, value;
-                int i;
+                int index;
 
                 for (unsigned it = 0; it < _selectorVec.size(); ++it) {
                     str << _selectorVec[it].second;
-                    i = it;
+                    index = it;
                 }
 
                 while (std::getline(str, sel, '\n')) {
@@ -337,7 +337,7 @@ void StyleDialog::_delSelector()
                         else {
                             sel = sel;
                         }
-                        _selectorVec[i].second = sel;
+                        _selectorVec[index].second = sel;
                     }
                 }
             }
@@ -375,10 +375,8 @@ Inkscape::XML::Node* StyleDialog::_styleElementNode()
             _newDrawing = true;
             return _document->getReprRoot()->nthChild(i);
         }
-        else {
-            return NULL;
-        }
     }
+    return NULL;
 }
 
 /**
@@ -495,7 +493,6 @@ bool StyleDialog::_handleButtonEvent(GdkEventButton *event)
                         if (iter)
                         {
                             Gtk::TreeModel::Row row = *iter;
-                            typedef Gtk::TreeModel::Children type_children;
                             Gtk::TreeModel::Row childrow;
                             path = _treeView.get_model()->get_path(iter);
                             childrow = *(_store->append(row->children()));
@@ -527,6 +524,7 @@ bool StyleDialog::_handleButtonEvent(GdkEventButton *event)
             }
         }
     }
+    return false;
 }
 
 /**
