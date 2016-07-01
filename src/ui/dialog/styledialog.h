@@ -43,15 +43,17 @@ public:
 private:
     void _styleButton( Gtk::Button& btn, char const* iconName, char const* tooltip);
     std::string _setClassAttribute(std::vector<SPObject*>);
-    std::vector<std::pair<std::string, std::string> >_selectorVec;
-    std::vector<std::pair<std::string, std::string> > _getSelectorVec();
-    std::string _populateTree(std::vector<std::pair<std::string, std::string> >);
+    std::vector<std::pair<std::pair<std::string, SPObject *>, std::string> >_selectorVec;
+    std::vector<std::pair<std::pair<std::string, SPObject *>, std::string> > _getSelectorVec();
+    std::string _populateTree(std::vector<std::pair<std::pair<std::string, SPObject *>,
+                              std::string> >);
     bool _handleButtonEvent(GdkEventButton *event);
     void _selectedRowCallback(const Gtk::TreeModel::Path& path,
                                 Gtk::TreeViewColumn* /* column */);
     void _checkAllChildren(Gtk::TreeModel::Children& children);
     Inkscape::XML::Node *_styleElementNode();
     void _updateStyleContent();
+    void _selectRow(Selection *);
 
     class ModelColumns : public Gtk::TreeModel::ColumnRecord
     {

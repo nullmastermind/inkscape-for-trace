@@ -20,7 +20,8 @@
 using Inkscape::Util::List;
 using Inkscape::XML::AttributeRecord;
 
-#define REMOVE_SPACES(x) x.erase(0, x.find_first_not_of(' '));
+#define REMOVE_SPACES(x) x.erase(0, x.find_first_not_of(' ')); \
+    x.erase(x.find_last_not_of(' ') + 1);
 
 namespace Inkscape {
 namespace UI {
@@ -126,6 +127,8 @@ void StyleDialog::setDesktop( SPDesktop* desktop )
 {
     Panel::setDesktop(desktop);
     _desktop = Panel::getDesktop();
+    _desktop->selection->connectChanged(sigc::mem_fun(*this, &StyleDialog::
+                                                      _selectRow));
 }
 
 /**
@@ -189,6 +192,7 @@ void StyleDialog::_addSelector()
      * class attribute for the selected object is set too.
      */
     SPObject *obj;
+    SPObject *selectorObj;
     bool objExists = false;
     if (!_desktop->getSelection()->list().empty()) {
         std::vector<SPObject*> selected = _desktop->getSelection()->list();
@@ -241,6 +245,7 @@ void StyleDialog::_addSelector()
         _row[_mColumns._colAddRemove] = true;
         if (objExists) {
             _row[_mColumns._colObj] = obj;
+            selectorObj = obj;
         }
         break;
     default:
@@ -252,7 +257,8 @@ void StyleDialog::_addSelector()
      * from selectorValue above. If style element already exists, then
      * the new selector's content is appended to its previous content.
      */
-    _selectorVec.push_back(std::make_pair(_selectorName, _selectorValue));
+    _selectorVec.push_back(std::make_pair(std::make_pair(_selectorName, selectorObj),
+                                          _selectorValue));
 
     if (_styleElementNode()) {
         _styleChild = _styleElementNode();
@@ -403,7 +409,7 @@ std::string StyleDialog::_setClassAttribute(std::vector<SPObject*> sel)
  * element. _newDrawing is flag is set to false check if an existing drawing is
  * opened.
  */
-std::vector<std::pair<std::string, std::string> >StyleDialog::_getSelectorVec()
+std::vector<std::pair<std::pair<std::string, SPObject *>, std::string> > StyleDialog::_getSelectorVec()
 {
     std::string key, value;
     for (unsigned i = 0; i < _num; ++i) {
@@ -427,7 +433,12 @@ std::vector<std::pair<std::string, std::string> >StyleDialog::_getSelectorVec()
                     if (strtok(temp, "}") != NULL) {
                         value = strtok(temp, "}");
                     }
-                    _selectorVec.push_back(std::make_pair(key, sel));
+                    std::string selId = key.erase(0, key.find_first_not_of('#'));
+                    REMOVE_SPACES(selId);
+                    REMOVE_SPACES(key);
+                    SPObject *obj = _document->getObjectById(selId);
+                    _selectorVec.push_back(std::make_pair(std::make_pair(key, obj),
+                                                          sel));
                 }
             }
         }
@@ -441,16 +452,17 @@ std::vector<std::pair<std::string, std::string> >StyleDialog::_getSelectorVec()
  * This function populates the treeview with selectors available in the
  * stylesheet.
  */
-std::string StyleDialog::_populateTree(std::vector<std::pair<std::string,
-                                       std::string> > _selVec)
+std::string StyleDialog::_populateTree(std::vector<std::pair<std::pair<std::string,
+                                       SPObject *>, std::string> > _selVec)
 {
     _selectorVec = _selVec;
     std::string selectorValue;
 
     for(unsigned it = 0; it < _selectorVec.size(); ++it) {
         Gtk::TreeModel::Row row = *(_store->append());
-        row[_mColumns._selectorLabel] = _selectorVec[it].first;
+        row[_mColumns._selectorLabel] = _selectorVec[it].first.first;
         row[_mColumns._colAddRemove] = true;
+        row[_mColumns._colObj] = _selectorVec[it].first.second;
         _selectorVec[it].second = _selectorVec[it].second + "\n";
         std::string selValue = _selectorVec[it].second;
         selectorValue.append(selValue.c_str());
@@ -511,7 +523,9 @@ bool StyleDialog::_handleButtonEvent(GdkEventButton *event)
                                             std::string(obj->getAttribute("style")) + "}\n";
                                 }
                             }
-                            _selectorVec.push_back(std::make_pair(obj->getId(), childStyle));
+                            _selectorVec.push_back(std::make_pair(std::make_pair
+                                                                  (obj->getId(), obj),
+                                                                  childStyle));
                         }
                         if (_styleElementNode()) {
                             _styleChild = _styleElementNode();
@@ -568,6 +582,31 @@ void StyleDialog::_checkAllChildren(Gtk::TreeModel::Children& children)
         if (childrow[_mColumns._colObj]) {
             SPObject *obj = childrow[_mColumns._colObj];
             _desktop->selection->add(obj);
+        }
+    }
+}
+
+/**
+ * @brief StyleDialog::_selectRow
+ * This function selects the rows in treeview corresponding to an object selected
+ * in the drawing.
+ */
+void StyleDialog::_selectRow(Selection */*sel*/)
+{
+    if (!_desktop->selection->list().empty()) {
+        SPObject *obj;
+        std::vector<SPObject*> selected = _desktop->getSelection()->list();
+        for (unsigned i = 0; i < selected.size(); ++i) {
+            obj = selected.at(i);
+        }
+
+        Gtk::TreeModel::Children children = _store->children();
+        for(Gtk::TreeModel::Children::iterator iter = children.begin();
+            iter != children.end(); ++iter) {
+            Gtk::TreeModel::Row row = *iter;
+            if (obj == row[_mColumns._colObj]) {
+                _treeView.get_selection()->select(row);
+            }
         }
     }
 }
