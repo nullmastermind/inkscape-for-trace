@@ -820,8 +820,8 @@ void Export::onAreaToggled ()
                    one that's nice */
                 if (filename.empty()) {
                     const gchar * id = "object";
-                    const std::vector<XML::Node*> reprlst = SP_ACTIVE_DESKTOP->getSelection()->xmlNodes();
-                    for(std::vector<XML::Node*>::const_iterator i=reprlst.begin(); reprlst.end() != i; ++i) {
+                    auto reprlst = SP_ACTIVE_DESKTOP->getSelection()->xmlNodes();
+                    for(auto i=reprlst.begin(); reprlst.end() != i; ++i) {
                         Inkscape::XML::Node * repr = *i;
                         if (repr->attribute("id")) {
                             id = repr->attribute("id");
@@ -1231,15 +1231,14 @@ void Export::onExport ()
             break;
         }
         case SELECTION_SELECTION: {
-        	std::vector<XML::Node*> reprlst;
             SPDocument * doc = SP_ACTIVE_DOCUMENT;
             bool modified = false;
 
             bool saved = DocumentUndo::getUndoSensitive(doc);
             DocumentUndo::setUndoSensitive(doc, false);
-            reprlst = desktop->getSelection()->xmlNodes();
+            auto reprlst = desktop->getSelection()->xmlNodes();
 
-            for(std::vector<Inkscape::XML::Node*>::const_iterator i=reprlst.begin(); reprlst.end() != i; ++i) {
+            for(auto i=reprlst.begin(); reprlst.end() != i; ++i) {
                 Inkscape::XML::Node * repr = *i;
                 const gchar * temp_string;
                 Glib::ustring dir = Glib::path_get_dirname(filename.c_str());

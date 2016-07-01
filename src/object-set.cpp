@@ -15,6 +15,8 @@
 #include "box3d.h"
 #include "persp3d.h"
 #include "preferences.h"
+#include <boost/range/adaptor/filtered.hpp>
+#include <boost/range/adaptor/transformed.hpp>
 
 namespace Inkscape {
 
@@ -230,13 +232,6 @@ std::vector<SPItem*> ObjectSet::items() {
     std::vector<SPItem*> result;
     std::remove_if(tmp.begin(), tmp.end(), [](SPObject* o){return !SP_IS_ITEM(o);});
     std::transform(tmp.begin(), tmp.end(), std::back_inserter(result), [](SPObject* o){return SP_ITEM(o);});
-    return result;
-}
-
-std::vector<XML::Node*> ObjectSet::xmlNodes() {
-    std::vector<SPItem*> list = items();
-    std::vector<XML::Node*> result;
-    std::transform(list.begin(), list.end(), std::back_inserter(result), [](SPItem* item) { return item->getRepr(); });
     return result;
 }
 

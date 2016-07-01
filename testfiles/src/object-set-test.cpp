@@ -13,6 +13,7 @@
 #include <src/sp-factory.h>
 #include <src/sp-rect.h>
 #include "object-set.h"
+#include <xml/node.h>
 
 using namespace Inkscape;
 
@@ -123,6 +124,8 @@ TEST_F(ObjectSetTest, Advanced) {
 }
 
 TEST_F(ObjectSetTest, Items) {
+    // cannot test smallestItem and largestItem functions due to too many dependencies
+    // uncomment if the problem is fixed
     SPRect* rect10x100 = (SPRect *) SPFactory::createObject("svg:rect");
 //    rect10x100->invoke_build(_doc, _doc->rroot, 1);
     SPRect* rect20x40 = (SPRect *) SPFactory::createObject("svg:rect");
@@ -161,6 +164,18 @@ TEST_F(ObjectSetTest, Ranges) {
     EXPECT_EQ(E, *it++);
     EXPECT_EQ(C, *it++);
     EXPECT_EQ(set->objects().end(), it);
+    SPObject* rect1 = SPFactory::createObject("svg:rect");
+    SPObject* rect2 = SPFactory::createObject("svg:rect");
+    SPObject* rect3 = SPFactory::createObject("svg:rect");
+    set->add(rect1);
+    set->add(rect2);
+    set->add(rect3);
+    EXPECT_EQ(7, set->size());
+    auto xmlNode = set->xmlNodes().begin();
+    EXPECT_EQ(rect1->getRepr(), *xmlNode++);
+    EXPECT_EQ(rect2->getRepr(), *xmlNode++);
+    EXPECT_EQ(rect3->getRepr(), *xmlNode++);
+    EXPECT_EQ(set->xmlNodes().end(), xmlNode);
 }
 
 TEST_F(ObjectSetTest, Autoremoving) {

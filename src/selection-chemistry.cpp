@@ -454,7 +454,7 @@ void sp_selection_duplicate(SPDesktop *desktop, bool suppressDone, bool duplicat
         desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to duplicate."));
         return;
     }
-    std::vector<Inkscape::XML::Node*> reprs(selection->xmlNodes());
+    std::vector<Inkscape::XML::Node*> reprs(selection->xmlNodes().begin(), selection->xmlNodes().end());
 
     if(duplicateLayer){
         reprs.clear();
@@ -763,7 +763,7 @@ void sp_selection_group(Inkscape::Selection *selection, SPDesktop *desktop)
         return;
     }
 
-    std::vector<Inkscape::XML::Node*> p (selection->xmlNodes());
+    std::vector<Inkscape::XML::Node*> p (selection->xmlNodes().begin(), selection->xmlNodes().end());
 
     selection->clear();
 
@@ -1048,7 +1048,7 @@ void sp_selection_raise_to_top(Inkscape::Selection *selection, SPDesktop *deskto
         return;
     }
 
-    std::vector<Inkscape::XML::Node*> rl(selection->xmlNodes());
+    std::vector<Inkscape::XML::Node*> rl(selection->xmlNodes().begin(), selection->xmlNodes().end());
     sort(rl.begin(),rl.end(),sp_repr_compare_position_bool);
 
     for (std::vector<Inkscape::XML::Node*>::const_iterator l=rl.begin(); l!=rl.end();++l) {
@@ -1132,7 +1132,7 @@ void sp_selection_lower_to_bottom(Inkscape::Selection *selection, SPDesktop *des
         return;
     }
 
-    std::vector<Inkscape::XML::Node*> rl(selection->xmlNodes());
+    std::vector<Inkscape::XML::Node*> rl(selection->xmlNodes().begin(), selection->xmlNodes().end());
     sort(rl.begin(),rl.end(),sp_repr_compare_position_bool);
 
     for (std::vector<Inkscape::XML::Node*>::const_reverse_iterator l=rl.rbegin();l!=rl.rend();++l) {
@@ -1722,8 +1722,8 @@ void sp_selection_remove_transform(SPDesktop *desktop)
 
     Inkscape::Selection *selection = desktop->getSelection();
 
-    std::vector<Inkscape::XML::Node*> items = selection->xmlNodes();
-    for (std::vector<Inkscape::XML::Node*>::const_iterator l=items.begin();l!=items.end() ;++l) {
+    auto items = selection->xmlNodes();
+    for (auto l=items.begin();l!=items.end() ;++l) {
         (*l)->setAttribute("transform", NULL, false);
     }
 
@@ -2603,7 +2603,7 @@ void sp_selection_clone(SPDesktop *desktop)
         return;
     }
 
-    std::vector<Inkscape::XML::Node*> reprs (selection->xmlNodes());
+    std::vector<Inkscape::XML::Node*> reprs(selection->xmlNodes().begin(), selection->xmlNodes().end());
 
     selection->clear();
 
@@ -3472,12 +3472,12 @@ void sp_selection_get_export_hints(Inkscape::Selection *selection, Glib::ustring
         return;
     }
 
-    std::vector<Inkscape::XML::Node*> const reprlst = selection->xmlNodes();
+    auto reprlst = selection->xmlNodes();
     bool filename_search = TRUE;
     bool xdpi_search = TRUE;
     bool ydpi_search = TRUE;
 
-    for (std::vector<Inkscape::XML::Node*>::const_iterator i=reprlst.begin();filename_search&&xdpi_search&&ydpi_search&&i!=reprlst.end();++i){
+    for (auto i=reprlst.begin();filename_search&&xdpi_search&&ydpi_search&&i!=reprlst.end();++i){
         gchar const *dpi_string;
         Inkscape::XML::Node *repr = *i;
 
@@ -3765,7 +3765,7 @@ void sp_selection_set_clipgroup(SPDesktop *desktop)
         return;
     }
         
-    std::vector<Inkscape::XML::Node*> p(selection->xmlNodes());
+    std::vector<Inkscape::XML::Node*> p(selection->xmlNodes().begin(), selection->xmlNodes().end());
     
     sort(p.begin(),p.end(),sp_repr_compare_position_bool);
 

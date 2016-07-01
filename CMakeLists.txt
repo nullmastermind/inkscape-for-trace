@@ -104,6 +104,7 @@ else()
     message("No gmock/gtest found! Perhaps you wish to run 'bash download-gtest.sh' to download it.")
 endif()
 
+include(CMakeScripts/ConfigCompileFlags.cmake)
 include(CMakeScripts/ConfigPaths.cmake) # Installation Paths
 include(CMakeScripts/DefineDependsandFlags.cmake) # Includes, Compiler Flags, and Link Libraries
 include(CMakeScripts/HelperMacros.cmake) # Misc Utility Macros

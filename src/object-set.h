@@ -19,6 +19,8 @@
 #include <boost/multi_index/sequenced_index.hpp>
 #include <boost/multi_index/hashed_index.hpp>
 #include <boost/multi_index/random_access_index.hpp>
+#include <boost/range/adaptor/filtered.hpp>
+#include <boost/range/adaptor/transformed.hpp>
 #include <boost/range/sub_range.hpp>
 #include <boost/range/any_range.hpp>
 #include <boost/type_traits.hpp>
@@ -39,6 +41,26 @@ class Node;
 struct hashed{};
 struct random_access{};
 
+struct is_item {
+    bool operator()(SPObject* obj) {
+        return SP_IS_ITEM(obj);
+    }
+};
+
+struct object_to_item {
+    typedef SPItem* result_type;
+    SPItem* operator()(SPObject* obj) const {
+        return SP_ITEM(obj);
+    }
+};
+
+struct object_to_node {
+    typedef XML::Node* result_type;
+    XML::Node* operator()(SPObject* obj) const {
+        return obj->getRepr();
+    }
+};
+
 typedef boost::multi_index_container<
         SPObject*,
         boost::multi_index::indexed_by<
@@ -56,21 +78,11 @@ typedef boost::any_range<
         SPObject* const&,
         std::ptrdiff_t> SPObjectRange;
 
-typedef boost::any_range<
-        SPItem*,
-        boost::random_access_traversal_tag,
-        SPItem* const&,
-        std::ptrdiff_t> SPItemRange;
-
-typedef boost::any_range<
-        XML::Node*,
-        boost::random_access_traversal_tag,
-        XML::Node* const&,
-        std::ptrdiff_t> XMLNodeRange;
-
 class ObjectSet {
 public:
     enum CompareSize {HORIZONTAL, VERTICAL, AREA};
+    typedef decltype(multi_index_container().get<random_access>() | boost::adaptors::filtered(is_item()) | boost::adaptors::transformed(object_to_item())) SPItemRange;
+    typedef decltype(multi_index_container().get<random_access>() | boost::adaptors::filtered(is_item()) | boost::adaptors::transformed(object_to_node())) XMLNodeRange;
 
     ObjectSet() {};
     virtual ~ObjectSet();
@@ -169,7 +181,11 @@ public:
     std::vector<SPItem*> items();
 
     /** Returns a list of the xml nodes of all selected objects. */
-    std::vector<XML::Node*> xmlNodes();
+    XMLNodeRange xmlNodes() {
+        return XMLNodeRange(container.get<random_access>()
+            | boost::adaptors::filtered(is_item())
+            | boost::adaptors::transformed(object_to_node()));
+    }
 
     /**
      * Returns a single selected object's xml node.
@@ -254,6 +270,9 @@ protected:
     std::unordered_map<SPObject*, sigc::connection> releaseConnections;
 
 };
+
+typedef ObjectSet::SPItemRange SPItemRange;
+typedef ObjectSet::XMLNodeRange XMLNodeRange;
 
 } // namespace Inkscape
 

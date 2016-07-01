@@ -689,7 +689,7 @@ sp_selected_path_boolop(Inkscape::Selection *selection, SPDesktop *desktop, bool
         }
     } else {
         // find out the bottom object
-    	std::vector<Inkscape::XML::Node*> sorted(selection->xmlNodes());
+    	std::vector<Inkscape::XML::Node*> sorted(selection->xmlNodes().begin(), selection->xmlNodes().end());
 
         sort(sorted.begin(),sorted.end(),sp_repr_compare_position_bool);
 
