@@ -20,7 +20,7 @@
 using Inkscape::Util::List;
 using Inkscape::XML::AttributeRecord;
 
-#define REMOVE_SPACES(x) x.erase(std::remove(x.begin(), x.end(), ' '), x.end());
+#define REMOVE_SPACES(x) x.erase(0, x.find_first_not_of(' '));
 
 namespace Inkscape {
 namespace UI {
@@ -450,6 +450,7 @@ std::string StyleDialog::_populateTree(std::vector<std::pair<std::string,
     for(unsigned it = 0; it < _selectorVec.size(); ++it) {
         Gtk::TreeModel::Row row = *(_store->append());
         row[_mColumns._selectorLabel] = _selectorVec[it].first;
+        row[_mColumns._colAddRemove] = true;
         _selectorVec[it].second = _selectorVec[it].second + "\n";
         std::string selValue = _selectorVec[it].second;
         selectorValue.append(selValue.c_str());
