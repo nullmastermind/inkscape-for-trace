@@ -2,10 +2,6 @@
 # Define the main source
 # -----------------------------------------------------------------------------
 
-set(main_SRC
-	main.cpp
-)
-
 set(sp_SRC
 	attribute-rel-css.cpp
 	attribute-rel-svg.cpp
@@ -423,21 +419,6 @@ set(inkscape_SRC
 	version.h
 )
 
-if(WIN32)
-	list(APPEND inkscape_SRC
-		inkscape.rc
-		registrytool.cpp
-		#deptool.cpp
-		winconsole.cpp
-		winmain.cpp
-
-		# -------
-		# Headers
-		registrytool.h
-	)
-endif()
-
-
 # -----------------------------------------------------------------------------
 # Generate version file
 # -----------------------------------------------------------------------------
@@ -481,7 +462,6 @@ add_subdirectory(widgets)
 add_subdirectory(xml)
 add_subdirectory(2geom)
 
-
 # Directories containing lists files that describe building internal libraries
 add_subdirectory(libavoid)
 add_subdirectory(libcola)
@@ -493,7 +473,6 @@ add_subdirectory(libvpsc)
 add_subdirectory(livarot)
 add_subdirectory(libnrtype)
 add_subdirectory(libdepixelize)
-
 
 get_property(inkscape_global_SRC GLOBAL PROPERTY inkscape_global_SRC)
 
@@ -508,12 +487,32 @@ set(inkscape_SRC
 #add_inkscape_lib(sp_LIB "${sp_SRC}")
 #add_inkscape_lib(inkscape_LIB "${inkscape_SRC}")
 
+if(WIN32)
+	# Sources for the inkscape executable on Windows.
+	set(main_SRC
+		registrytool.h
+		registrytool.cpp
+		main.cpp
+		winmain.cpp
+		#winconsole.cpp
+	)
+	
+	# Add the platform specific resource files (enabling the app icon).
+	if(${HAVE_MINGW64})
+		list(APPEND main_SRC inkscape-x64.rc)
+	else()
+		list(APPEND main_SRC inkscape.rc)
+	endif()
+else()
+	set(main_SRC main.cpp)
+endif()
+
 # Build everything except main and inkview.c in a shared library.
 add_library(inkscape_base SHARED ${inkscape_SRC} ${sp_SRC})
 
 # make executables for inkscape and inkview
-add_executable(inkscape ${main_SRC} )
-add_executable(inkview inkview.cpp )
+add_executable(inkscape ${main_SRC})
+add_executable(inkview inkview.cpp)
 
 add_dependencies(inkscape inkscape_version)
 
@@ -525,11 +524,9 @@ set(INKSCAPE_TARGET_LIBS
         # order from automake
         #sp_LIB
         #nrtype_LIB
-
         #inkscape_LIB
         #sp_LIB # annoying, we need both!
         nrtype_LIB # annoying, we need both!
-
         croco_LIB
         avoid_LIB
         cola_LIB
@@ -548,22 +545,9 @@ if (NOT "${WITH_EXT_GDL}")
     list (INSERT INKSCAPE_TARGET_LIBS 0 "gdl_LIB")
 endif()
 
-
-
-
 # Link the inkscape_base library against all external dependencies
 target_link_libraries(inkscape_base ${INKSCAPE_TARGET_LIBS})
 
 # Link inkscape and inkview against inkscape_base
-target_link_libraries(inkscape inkscape_base )
+target_link_libraries(inkscape inkscape_base)
 target_link_libraries(inkview inkscape_base)
-
-#Define the installation
-install(
-    TARGETS inkscape_base inkscape inkview 
-  RUNTIME DESTINATION bin
-  LIBRARY DESTINATION lib/inkscape
-  ARCHIVE DESTINATION lib/inkscape
-  )
-
-  
