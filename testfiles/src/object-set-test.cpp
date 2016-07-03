@@ -172,10 +172,17 @@ TEST_F(ObjectSetTest, Ranges) {
     set->add(rect3);
     EXPECT_EQ(7, set->size());
     auto xmlNode = set->xmlNodes().begin();
+    EXPECT_EQ(3, boost::distance(set->xmlNodes()));
     EXPECT_EQ(rect1->getRepr(), *xmlNode++);
     EXPECT_EQ(rect2->getRepr(), *xmlNode++);
     EXPECT_EQ(rect3->getRepr(), *xmlNode++);
     EXPECT_EQ(set->xmlNodes().end(), xmlNode);
+    auto item = set->items().begin();
+    EXPECT_EQ(3, boost::distance(set->items()));
+    EXPECT_EQ(rect1, *item++);
+    EXPECT_EQ(rect2, *item++);
+    EXPECT_EQ(rect3, *item++);
+    EXPECT_EQ(set->items().end(), item);
 }
 
 TEST_F(ObjectSetTest, Autoremoving) {
