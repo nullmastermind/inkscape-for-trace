@@ -407,8 +407,8 @@ void NodeTool::selection_changed(Inkscape::Selection *sel) {
 
     std::set<ShapeRecord> shapes;
 
-    std::vector<SPItem*> items= sel->items();
-    for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();++i){
+    auto items= sel->items();
+    for(auto i=items.begin();i!=items.end();++i){
         SPObject *obj = *i;
 
         if (SP_IS_ITEM(obj)) {
@@ -443,8 +443,9 @@ void NodeTool::selection_changed(Inkscape::Selection *sel) {
         }
     }
 
+    std::vector<SPItem *> vec(sel->items().begin(), sel->items().end());
     _previous_selection = _current_selection;
-    _current_selection = sel->items();
+    _current_selection = vec;
 
     this->_multipath->setItems(shapes);
     this->update_tip(NULL);

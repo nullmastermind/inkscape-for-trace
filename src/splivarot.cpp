@@ -335,7 +335,7 @@ void
 sp_selected_path_boolop(Inkscape::Selection *selection, SPDesktop *desktop, bool_op bop, const unsigned int verb, const Glib::ustring description)
 {
     SPDocument *doc = selection->layers()->getDocument();
-    std::vector<SPItem*> il= selection->items();
+    std::vector<SPItem*> il(selection->items().begin(), selection->items().end());
     
     // allow union on a single object for the purpose of removing self overlapse (svn log, revision 13334)
     if ( (il.size() < 2) && (bop != bool_op_union)) {
@@ -1157,7 +1157,7 @@ sp_selected_path_outline(SPDesktop *desktop)
     bool scale_stroke = prefs->getBool("/options/transform/stroke", true);
     prefs->setBool("/options/transform/stroke", true);
     bool did = false;
-    std::vector<SPItem*> il(selection->items());
+    std::vector<SPItem*> il(selection->items().begin(), selection->items().end());
     for (std::vector<SPItem*>::const_iterator l = il.begin(); l != il.end(); l++){
         SPItem *item = *l;
 
@@ -1771,7 +1771,7 @@ sp_selected_path_do_offset(SPDesktop *desktop, bool expand, double prefOffset)
     }
 
     bool did = false;
-    std::vector<SPItem*> il(selection->items());
+    std::vector<SPItem*> il(selection->items().begin(), selection->items().end());
     for (std::vector<SPItem*>::const_iterator l = il.begin(); l != il.end(); l++){
         SPItem *item = *l;
         SPCurve *curve = NULL;
@@ -2196,7 +2196,7 @@ sp_selected_path_simplify_selection(SPDesktop *desktop, float threshold, bool ju
         return;
     }
 
-    std::vector<SPItem*> items(selection->items());
+    std::vector<SPItem*> items(selection->items().begin(), selection->items().end());
 
     bool didSomething = sp_selected_path_simplify_items(desktop, selection,
                                                         items, threshold,

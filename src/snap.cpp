@@ -708,8 +708,8 @@ void SnapManager::setupIgnoreSelection(SPDesktop const *desktop,
     _items_to_ignore.clear();
 
     Inkscape::Selection *sel = _desktop->selection;
-    std::vector<SPItem*> const items = sel->items();
-    for (std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();++i) {
+    auto items = sel->items();
+    for (auto i=items.begin();i!=items.end();++i) {
         _items_to_ignore.push_back(*i);
     }
 }

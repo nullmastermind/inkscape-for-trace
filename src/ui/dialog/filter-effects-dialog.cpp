@@ -1474,8 +1474,8 @@ void FilterEffectsDialog::FilterModifier::update_selection(Selection *sel)
     }
 
     std::set<SPObject*> used;
-    std::vector<SPItem*> itemlist= sel->items();
-    for(std::vector<SPItem*>::const_iterator i=itemlist.begin(); itemlist.end() != i; ++i) {
+    auto itemlist= sel->items();
+    for(auto i=itemlist.begin(); itemlist.end() != i; ++i) {
         SPObject *obj = *i;
         SPStyle *style = obj->style;
         if (!style || !SP_IS_ITEM(obj)) {
@@ -1555,8 +1555,8 @@ void FilterEffectsDialog::FilterModifier::on_selection_toggled(const Glib::ustri
         if((*iter)[_columns.sel] == 1)
             filter = 0;
 
-        std::vector<SPItem*> itemlist= sel->items();
-        for(std::vector<SPItem*>::const_iterator i=itemlist.begin(); itemlist.end() != i; ++i) {
+        auto itemlist= sel->items();
+        for(auto i=itemlist.begin(); itemlist.end() != i; ++i) {
             SPItem * item = *i;
             SPStyle *style = item->style;
             g_assert(style != NULL);

@@ -178,7 +178,11 @@ public:
     SPObjectRange objects();
 
     /** Returns the list of selected SPItems. */
-    std::vector<SPItem*> items();
+    SPItemRange items() {
+        return SPItemRange(container.get<random_access>()
+           | boost::adaptors::filtered(is_item())
+           | boost::adaptors::transformed(object_to_item()));
+    };
 
     /** Returns a list of the xml nodes of all selected objects. */
     XMLNodeRange xmlNodes() {

@@ -122,7 +122,7 @@ void SelectionDescriber::_selectionModified(Inkscape::Selection *selection, guin
 }
 
 void SelectionDescriber::_updateMessageFromSelection(Inkscape::Selection *selection) {
-	std::vector<SPItem*> const items = selection->items();
+	std::vector<SPItem*> items(selection->items().begin(), selection->items().end());
 
     if (items.empty()) { // no items
         _context.set(Inkscape::NORMAL_MESSAGE, _when_nothing);

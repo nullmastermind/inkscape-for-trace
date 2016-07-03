@@ -522,8 +522,8 @@ bool ClipboardManagerImpl::pasteSize(SPDesktop *desktop, bool separately, bool a
 
         // resize each object in the selection
         if (separately) {
-            std::vector<SPItem*> itemlist= selection->items();
-            for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();++i){
+            auto itemlist= selection->items();
+            for(auto i=itemlist.begin();i!=itemlist.end();++i){
                 SPItem *item = *i;
                 if (item) {
                     Geom::OptRect obj_size = item->desktopVisualBounds();
@@ -578,8 +578,8 @@ bool ClipboardManagerImpl::pastePathEffect(SPDesktop *desktop)
                 desktop->doc()->importDefs(tempdoc);
                 // make sure all selected items are converted to paths first (i.e. rectangles)
                 sp_selected_to_lpeitems(desktop);
-                std::vector<SPItem*> itemlist= selection->items();
-                for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();++i){
+                auto itemlist= selection->items();
+                for(auto i=itemlist.begin();i!=itemlist.end();++i){
                     SPItem *item = *i;
                     _applyPathEffect(item, effectstack);
                 }
@@ -661,9 +661,9 @@ Glib::ustring ClipboardManagerImpl::getShapeOrTextObjectId(SPDesktop *desktop)
 void ClipboardManagerImpl::_copySelection(Inkscape::Selection *selection)
 {
     // copy the defs used by all items
-    std::vector<SPItem*> itemlist= selection->items();
+    auto itemlist= selection->items();
     cloned_elements.clear();
-    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();++i){
+    for(auto i=itemlist.begin();i!=itemlist.end();++i){
         SPItem *item = *i;
         if (item) {
             _copyUsedDefs(item);
@@ -674,7 +674,7 @@ void ClipboardManagerImpl::_copySelection(Inkscape::Selection *selection)
 
     // copy the representation of the items
     std::vector<SPObject*> sorted_items;
-    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();++i)
+    for(auto i=itemlist.begin();i!=itemlist.end();++i)
         sorted_items.push_back(*i);
     sort(sorted_items.begin(),sorted_items.end(),sp_object_compare_position_bool);
 

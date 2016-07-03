@@ -210,7 +210,7 @@ void SprayTool::update_cursor(bool /*with_shift*/) {
     gchar *sel_message = NULL;
 
     if (!desktop->selection->isEmpty()) {
-        num = desktop->selection->items().size();
+        num = (guint) boost::distance(desktop->selection->items());
         sel_message = g_strdup_printf(ngettext("<b>%i</b> object selected","<b>%i</b> objects selected",num), num);
     } else {
         sel_message = g_strdup_printf("%s", _("<b>Nothing</b> selected"));
@@ -591,7 +591,7 @@ static bool fit_item(SPDesktop *desktop,
     if (selection->isEmpty()) {
         return false;
     }
-    std::vector<SPItem*> const items_selected(selection->items());
+    std::vector<SPItem*> const items_selected(selection->items().begin(), selection->items().end());
     std::vector<SPItem*> items_down_erased;
     for (std::vector<SPItem*>::const_iterator i=items_down.begin(); i!=items_down.end(); ++i) {
         SPItem *item_down = *i;
@@ -1002,8 +1002,8 @@ static bool sp_spray_recursive(SPDesktop *desktop,
         SPItem *unionResult = NULL;    // Previous union
 
         int i=1;
-        std::vector<SPItem*> items= selection->items();
-        for(std::vector<SPItem*>::const_iterator it=items.begin();it!=items.end(); ++it){
+        auto items= selection->items();
+        for(auto it=items.begin();it!=items.end(); ++it){
             SPItem *item1 = *it;
             if (i == 1) {
                 parent_item = item1;
@@ -1170,7 +1170,7 @@ static bool sp_spray_dilate(SprayTool *tc, Geom::Point /*event_p*/, Geom::Point 
     double move_standard_deviation = get_move_standard_deviation(tc);
 
     {
-        std::vector<SPItem*> const items(selection->items());
+        std::vector<SPItem*> const items(selection->items().begin(), selection->items().end());
 
         for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end(); ++i){
             SPItem *item = *i;
@@ -1299,7 +1299,7 @@ bool SprayTool::root_handler(GdkEvent* event) {
 
             guint num = 0;
             if (!desktop->selection->isEmpty()) {
-                num = desktop->selection->items().size();
+                num = boost::distance(desktop->selection->items()   );
             }
             if (num == 0) {
                 this->message_context->flash(Inkscape::ERROR_MESSAGE, _("<b>Nothing selected!</b> Select objects to spray."));

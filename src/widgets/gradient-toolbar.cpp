@@ -116,8 +116,8 @@ void gr_apply_gradient(Inkscape::Selection *selection, GrDrag *drag, SPGradient 
     }
 
    // If no drag or no dragger selected, act on selection
-    std::vector<SPItem*> itemlist= selection->items();
-    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();++i){
+    auto itemlist= selection->items();
+    for(auto i=itemlist.begin();i!=itemlist.end();++i){
        gr_apply_gradient_to_item(*i, gr, initialType, initialMode, initialMode);
    }
 }
@@ -216,8 +216,8 @@ void gr_get_dt_selected_gradient(Inkscape::Selection *selection, SPGradient *&gr
 {
     SPGradient *gradient = 0;
 
-    std::vector<SPItem*> itemlist= selection->items();
-    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();++i){
+    auto itemlist= selection->items();
+    for(auto i=itemlist.begin();i!=itemlist.end();++i){
         SPItem *item = *i;// get the items gradient, not the getVector() version
          SPStyle *style = item->style;
          SPPaintServer *server = 0;
@@ -284,8 +284,8 @@ void gr_read_selection( Inkscape::Selection *selection,
     }
 
    // If no selected dragger, read desktop selection
-    std::vector<SPItem*> itemlist= selection->items();
-    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();++i){
+    auto itemlist= selection->items();
+    for(auto i=itemlist.begin();i!=itemlist.end();++i){
         SPItem *item = *i;
         SPStyle *style = item->style;
 

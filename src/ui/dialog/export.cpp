@@ -608,7 +608,7 @@ void Export::onBatchClicked ()
 
 void Export::updateCheckbuttons ()
 {
-    gint num = SP_ACTIVE_DESKTOP->getSelection()->items().size();
+    gint num = (gint) boost::distance(SP_ACTIVE_DESKTOP->getSelection()->items());
     if (num >= 2) {
         batch_export.set_sensitive(true);
         batch_export.set_label(g_strdup_printf (ngettext("B_atch export %d selected object","B_atch export %d selected objects",num), num));
@@ -1015,7 +1015,7 @@ void Export::onExport ()
     if (batch_export.get_active ()) {
         // Batch export of selected objects
 
-        gint num = (desktop->getSelection()->items()).size();
+        gint num = (gint) boost::distance(desktop->getSelection()->items());
         gint n = 0;
 
         if (num < 1) {
@@ -1029,8 +1029,8 @@ void Export::onExport ()
 
         gint export_count = 0;
 
-        std::vector<SPItem*> itemlist= desktop->getSelection()->items();
-        for(std::vector<SPItem*>::const_iterator i = itemlist.begin();i!=itemlist.end() && !interrupted ;++i){
+        auto itemlist= desktop->getSelection()->items();
+        for(auto i = itemlist.begin();i!=itemlist.end() && !interrupted ;++i){
             SPItem *item = *i;
 
             prog_dlg->set_data("current", GINT_TO_POINTER(n));
@@ -1070,12 +1070,13 @@ void Export::onExport ()
                     MessageCleaner msgFlashCleanup(desktop->messageStack()->flashF(Inkscape::IMMEDIATE_MESSAGE,
                                                    _("Exporting file <b>%s</b>..."), safeFile), desktop);
                     std::vector<SPItem*> x;
+                    std::vector<SPItem*> selected(desktop->getSelection()->items().begin(), desktop->getSelection()->items().end());
                     if (!sp_export_png_file (doc, path.c_str(),
                                              *area, width, height, dpi, dpi,
                                              nv->pagecolor,
                                              onProgressCallback, (void*)prog_dlg,
                                              TRUE,  // overwrite without asking
-                                             hide ? (desktop->getSelection()->items()) : x
+                                             hide ? selected : x
                                             )) {
                         gchar * error = g_strdup_printf(_("Could not export to filename %s.\n"), safeFile);
 
@@ -1160,12 +1161,13 @@ void Export::onExport ()
 
         /* Do export */
         std::vector<SPItem*> x;
+        std::vector<SPItem*> selected(desktop->getSelection()->items().begin(), desktop->getSelection()->items().end());
         ExportResult status = sp_export_png_file(desktop->getDocument(), path.c_str(),
                               Geom::Rect(Geom::Point(x0, y0), Geom::Point(x1, y1)), width, height, xdpi, ydpi,
                               nv->pagecolor,
                               onProgressCallback, (void*)prog_dlg,
                               FALSE,
-                              hide ? (desktop->getSelection()->items()) : x
+                              hide ? selected : x
                                                 );
         if (status == EXPORT_ERROR) {
             gchar * safeFile = Inkscape::IO::sanitizeString(path.c_str());

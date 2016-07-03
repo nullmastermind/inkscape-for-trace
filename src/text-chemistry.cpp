@@ -43,8 +43,8 @@ using Inkscape::DocumentUndo;
 static SPItem *
 flowtext_in_selection(Inkscape::Selection *selection)
 {
-	std::vector<SPItem*> items = selection->items();
-    for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();++i){
+	auto items = selection->items();
+    for(auto i=items.begin();i!=items.end();++i){
         if (SP_IS_FLOWTEXT(*i))
             return *i;
     }
@@ -54,8 +54,8 @@ flowtext_in_selection(Inkscape::Selection *selection)
 static SPItem *
 text_or_flowtext_in_selection(Inkscape::Selection *selection)
 {
-	std::vector<SPItem*> items = selection->items();
-    for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();++i){
+    auto items = selection->items();
+    for(auto i=items.begin();i!=items.end();++i){
         if (SP_IS_TEXT(*i) || SP_IS_FLOWTEXT(*i))
             return *i;
     }
@@ -65,8 +65,8 @@ text_or_flowtext_in_selection(Inkscape::Selection *selection)
 static SPItem *
 shape_in_selection(Inkscape::Selection *selection)
 {
-	std::vector<SPItem*> items = selection->items();
-    for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();++i){
+    auto items = selection->items();
+    for(auto i=items.begin();i!=items.end();++i){
         if (SP_IS_SHAPE(*i))
             return *i;
     }
@@ -87,7 +87,7 @@ text_put_on_path()
 
     Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
 
-    if (!text || !shape || selection->items().size() != 2) {
+    if (!text || !shape || boost::distance(selection->items()) != 2) {
         desktop->getMessageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>a text and a path</b> to put text on path."));
         return;
     }
@@ -196,8 +196,8 @@ text_remove_from_path()
     }
 
     bool did = false;
-    std::vector<SPItem*> items(selection->items());
-    for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();++i){
+    auto items = selection->items();
+    for(auto i=items.begin();i!=items.end();++i){
         SPObject *obj = *i;
 
         if (SP_IS_TEXT_TEXTPATH(obj)) {
@@ -214,7 +214,8 @@ text_remove_from_path()
     } else {
         DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_TEXT, 
                            _("Remove text from path"));
-        selection->setList(selection->items()); // reselect to update statusbar description
+        std::vector<SPItem *> vec(selection->items().begin(), selection->items().end());
+        selection->setList(vec); // reselect to update statusbar description
     }
 }
 
@@ -260,8 +261,8 @@ text_remove_all_kerns()
 
     bool did = false;
 
-    std::vector<SPItem*> items = selection->items();
-    for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();++i){
+    auto items = selection->items();
+    for(auto i=items.begin();i!=items.end();++i){
         SPObject *obj = *i;
 
         if (!SP_IS_TEXT(obj) && !SP_IS_TSPAN(obj) && !SP_IS_FLOWTEXT(obj)) {
@@ -296,7 +297,7 @@ text_flow_into_shape()
     SPItem *text = text_or_flowtext_in_selection(selection);
     SPItem *shape = shape_in_selection(selection);
 
-    if (!text || !shape || selection->items().size() < 2) {
+    if (!text || !shape || boost::distance(selection->items()) < 2) {
         desktop->getMessageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>a text</b> and one or more <b>paths or shapes</b> to flow text into frame."));
         return;
     }
@@ -320,8 +321,8 @@ text_flow_into_shape()
     g_return_if_fail(SP_IS_FLOWREGION(object));
 
     /* Add clones */
-    std::vector<SPItem*> items = selection->items();
-    for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();++i){
+    auto items = selection->items();
+    for(auto i=items.begin();i!=items.end();++i){
         SPItem *item = *i;
         if (SP_IS_SHAPE(item)){
             Inkscape::XML::Node *clone = xml_doc->createElement("svg:use");
@@ -387,7 +388,7 @@ text_unflow ()
     Inkscape::Selection *selection = desktop->getSelection();
 
 
-    if (!flowtext_in_selection(selection) || selection->items().size() < 1) {
+    if (!flowtext_in_selection(selection) || boost::distance(selection->items()) < 1) {
         desktop->getMessageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>a flowed text</b> to unflow it."));
         return;
     }
@@ -395,8 +396,8 @@ text_unflow ()
     std::vector<SPItem*> new_objs;
     GSList *old_objs = NULL;
 
-    std::vector<SPItem*> items = selection->items();
-    for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();++i){
+    auto items = selection->items();
+    for(auto i=items.begin();i!=items.end();++i){
 
         if (!SP_IS_FLOWTEXT(*i)) {
             continue;
@@ -480,7 +481,7 @@ flowtext_to_text()
     bool did = false;
 
     std::vector<Inkscape::XML::Node*> reprs;
-    std::vector<SPItem*> items(selection->items());
+    std::vector<SPItem*> items(selection->items().begin(), selection->items().end());
     for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();++i){
         
         SPItem *item = *i;

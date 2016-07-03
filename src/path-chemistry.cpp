@@ -57,7 +57,7 @@ sp_selected_path_combine(SPDesktop *desktop, bool skip_undo)
     Inkscape::Selection *selection = desktop->getSelection();
     SPDocument *doc = desktop->getDocument();
 
-    std::vector<SPItem*> items(selection->items());
+    std::vector<SPItem*> items(selection->items().begin(), selection->items().end());
     
     if (items.size() < 1) {
         desktop->getMessageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to combine."));
@@ -203,7 +203,7 @@ sp_selected_path_break_apart(SPDesktop *desktop, bool skip_undo)
 
     bool did = false;
 
-    std::vector<SPItem*> itemlist(selection->items());
+    std::vector<SPItem*> itemlist(selection->items().begin(), selection->items().end());
     for (std::vector<SPItem*>::const_iterator i = itemlist.begin(); i != itemlist.end(); ++i){
 
         SPItem *item = *i;
@@ -303,7 +303,7 @@ sp_selected_path_to_curves(Inkscape::Selection *selection, SPDesktop *desktop, b
         desktop->setWaitingCursor();
     }
 
-    std::vector<SPItem*> selected(selection->items());
+    std::vector<SPItem*> selected(selection->items().begin(), selection->items().end());
     std::vector<Inkscape::XML::Node*> to_select;
     selection->clear();
     std::vector<SPItem*> items(selected);
@@ -334,7 +334,7 @@ void sp_selected_to_lpeitems(SPDesktop *desktop)
         return;
     }
 
-    std::vector<SPItem*> selected(selection->items());
+    std::vector<SPItem*> selected(selection->items().begin(), selection->items().end());
     std::vector<Inkscape::XML::Node*> to_select;
     selection->clear();
     std::vector<SPItem*> items(selected);
@@ -603,7 +603,7 @@ void
 sp_selected_path_reverse(SPDesktop *desktop)
 {
     Inkscape::Selection *selection = desktop->getSelection();
-    std::vector<SPItem*> items = selection->items();
+    auto items = selection->items();
 
     if (items.empty()) {
         desktop->getMessageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>path(s)</b> to reverse."));
@@ -617,7 +617,7 @@ sp_selected_path_reverse(SPDesktop *desktop)
     bool did = false;
     desktop->messageStack()->flash(Inkscape::IMMEDIATE_MESSAGE, _("Reversing paths..."));
 
-    for (std::vector<SPItem*>::const_iterator i = items.begin(); i != items.end(); ++i){
+    for (auto i = items.begin(); i != items.end(); ++i){
 
         SPPath *path = dynamic_cast<SPPath *>(*i);
         if (!path) {

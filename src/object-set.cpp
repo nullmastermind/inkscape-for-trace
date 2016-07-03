@@ -200,11 +200,11 @@ SPItem *ObjectSet::largestItem(CompareSize compare) {
 }
 
 SPItem *ObjectSet::_sizeistItem(bool sml, CompareSize compare) {
-    std::vector<SPItem*> const items = const_cast<ObjectSet *>(this)->items();
+    auto items = this->items();
     gdouble max = sml ? 1e18 : 0;
     SPItem *ist = NULL;
 
-    for ( std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end(); ++i) {
+    for (auto i = items.begin(); i != items.end(); ++i) {
         Geom::OptRect obox = SP_ITEM(*i)->desktopPreferredBounds();
         if (!obox || obox.empty()) {
             continue;
@@ -227,13 +227,6 @@ SPItem *ObjectSet::_sizeistItem(bool sml, CompareSize compare) {
 SPObjectRange ObjectSet::objects() {
     return SPObjectRange(container.get<random_access>().begin(), container.get<random_access>().end());
 }
-std::vector<SPItem*> ObjectSet::items() {
-    std::vector<SPObject *> tmp = std::vector<SPObject *>(container.begin(), container.end());
-    std::vector<SPItem*> result;
-    std::remove_if(tmp.begin(), tmp.end(), [](SPObject* o){return !SP_IS_ITEM(o);});
-    std::transform(tmp.begin(), tmp.end(), std::back_inserter(result), [](SPObject* o){return SP_ITEM(o);});
-    return result;
-}
 
 Inkscape::XML::Node *ObjectSet::singleRepr() {
     SPObject *obj = single();
@@ -255,10 +248,10 @@ Geom::OptRect ObjectSet::bounds(SPItem::BBoxType type) const
 
 Geom::OptRect ObjectSet::geometricBounds() const
 {
-    std::vector<SPItem*> const items = const_cast<ObjectSet *>(this)->items();
+    auto items = const_cast<ObjectSet *>(this)->items();
 
     Geom::OptRect bbox;
-    for ( std::vector<SPItem*>::const_iterator iter=items.begin();iter!=items.end(); ++iter) {
+    for (auto iter = items.begin(); iter != items.end(); ++iter) {
         bbox.unionWith(SP_ITEM(*iter)->desktopGeometricBounds());
     }
     return bbox;
@@ -266,10 +259,10 @@ Geom::OptRect ObjectSet::geometricBounds() const
 
 Geom::OptRect ObjectSet::visualBounds() const
 {
-    std::vector<SPItem*> const items = const_cast<ObjectSet *>(this)->items();
+    auto items = const_cast<ObjectSet *>(this)->items();
 
     Geom::OptRect bbox;
-    for ( std::vector<SPItem*>::const_iterator iter=items.begin();iter!=items.end(); ++iter) {
+    for (auto iter = items.begin(); iter != items.end(); ++iter) {
         bbox.unionWith(SP_ITEM(*iter)->desktopVisualBounds());
     }
     return bbox;
@@ -287,10 +280,10 @@ Geom::OptRect ObjectSet::preferredBounds() const
 Geom::OptRect ObjectSet::documentBounds(SPItem::BBoxType type) const
 {
     Geom::OptRect bbox;
-    std::vector<SPItem*> const items = const_cast<ObjectSet *>(this)->items();
+    auto items = const_cast<ObjectSet *>(this)->items();
     if (items.empty()) return bbox;
 
-    for ( std::vector<SPItem*>::const_iterator iter=items.begin();iter!=items.end(); ++iter) {
+    for (auto iter = items.begin(); iter != items.end(); ++iter) {
         SPItem *item = SP_ITEM(*iter);
         bbox |= item->documentBounds(type);
     }
@@ -301,7 +294,7 @@ Geom::OptRect ObjectSet::documentBounds(SPItem::BBoxType type) const
 // If we have a selection of multiple items, then the center of the first item
 // will be returned; this is also the case in SelTrans::centerRequest()
 boost::optional<Geom::Point> ObjectSet::center() const {
-    std::vector<SPItem*> const items = const_cast<ObjectSet *>(this)->items();
+    auto items = const_cast<ObjectSet *>(this)->items();
     if (!items.empty()) {
         SPItem *first = items.back(); // from the first item in selection
         if (first->isCenterSet()) { // only if set explicitly

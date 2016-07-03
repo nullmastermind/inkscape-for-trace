@@ -136,8 +136,8 @@ std::vector<Inkscape::SnapCandidatePoint> Selection::getSnapPoints(SnapPreferenc
     if (snapprefs != NULL){
         SnapPreferences snapprefs_dummy = *snapprefs; // create a local copy of the snapping prefs
         snapprefs_dummy.setTargetSnappable(Inkscape::SNAPTARGET_ROTATION_CENTER, false); // locally disable snapping to the item center
-        std::vector<SPItem*> const items = const_cast<Selection *>(this)->items();
-        for ( std::vector<SPItem*>::const_iterator iter=items.begin();iter!=items.end(); ++iter) {
+        auto items = const_cast<Selection *>(this)->items();
+        for (auto iter = items.begin(); iter != items.end(); ++iter) {
             SPItem *this_item = *iter;
             this_item->getSnappoints(p, &snapprefs_dummy);
             
@@ -162,9 +162,9 @@ SPObject *Selection::_objectForXMLNode(Inkscape::XML::Node *repr) const {
 }
 
 size_t Selection::numberOfLayers() {
-    std::vector<SPItem*> const items = const_cast<Selection *>(this)->items();
+    auto items = this->items();
     std::set<SPObject*> layers;
-    for ( std::vector<SPItem*>::const_iterator iter=items.begin();iter!=items.end(); ++iter) {
+    for (auto iter = items.begin(); iter != items.end(); ++iter) {
         SPObject *layer = _layers->layerForObject(*iter);
         layers.insert(layer);
     }
@@ -173,9 +173,9 @@ size_t Selection::numberOfLayers() {
 }
 
 size_t Selection::numberOfParents() {
-    std::vector<SPItem*> const items = const_cast<Selection *>(this)->items();
+    auto items = this->items();
     std::set<SPObject*> parents;
-    for ( std::vector<SPItem*>::const_iterator iter=items.begin();iter!=items.end(); ++iter) {
+    for (auto iter = items.begin(); iter != items.end(); ++iter) {
         SPObject *parent = (*iter)->parent;
         parents.insert(parent);
     }
