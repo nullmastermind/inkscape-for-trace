@@ -12,7 +12,7 @@
 #include <doc-per-case-test.h>
 #include <src/sp-factory.h>
 #include <src/sp-rect.h>
-#include "object-set.h"
+#include <src/object-set.h>
 #include <xml/node.h>
 
 using namespace Inkscape;

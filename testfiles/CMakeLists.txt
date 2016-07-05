@@ -17,6 +17,7 @@ set(TEST_SOURCES
 	attributes-test
 	color-profile-test
 	dir-util-test
+	sp-object-test
 	object-set-test)
 
 set (_optional_unittest_libs )
