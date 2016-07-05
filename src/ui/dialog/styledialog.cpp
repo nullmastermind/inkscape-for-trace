@@ -192,7 +192,8 @@ void StyleDialog::_addSelector()
      * class attribute for the selected object is set too.
      */
     SPObject *obj;
-    SPObject *selectorObj;
+    std::vector<SPObject *> objVec;
+
     bool objExists = false;
     if (!_desktop->getSelection()->list().empty()) {
         std::vector<SPObject*> selected = _desktop->getSelection()->list();
@@ -244,8 +245,8 @@ void StyleDialog::_addSelector()
         _row[_mColumns._selectorLabel] = _selectorName;
         _row[_mColumns._colAddRemove] = true;
         if (objExists) {
-            _row[_mColumns._colObj] = obj;
-            selectorObj = obj;
+            _row[_mColumns._colObj] = _desktop->selection->list();
+            objVec = _row[_mColumns._colObj];
         }
         break;
     default:
@@ -257,7 +258,7 @@ void StyleDialog::_addSelector()
      * from selectorValue above. If style element already exists, then
      * the new selector's content is appended to its previous content.
      */
-    _selectorVec.push_back(std::make_pair(std::make_pair(_selectorName, selectorObj),
+    _selectorVec.push_back(std::make_pair(std::make_pair(_selectorName, objVec),
                                           _selectorValue));
 
     if (_styleElementNode()) {
@@ -320,19 +321,14 @@ void StyleDialog::_delSelector()
                 _selectorVec.erase(_selectorVec.begin()+i);
             }
             else {
-                std::stringstream str;
                 std::string sel, key, value;
-                int index;
-
                 for (unsigned it = 0; it < _selectorVec.size(); ++it) {
-                    str << _selectorVec[it].second;
-                    index = it;
-                }
-
-                while (std::getline(str, sel, '\n')) {
+                    sel = _selectorVec[it].second;
                     REMOVE_SPACES(sel);
+                    std::cout << "sel" << sel << std::endl;
                     if (!sel.empty()) {
                         key = strtok(strdup(sel.c_str()), "{");
+                        REMOVE_SPACES(key);
                         char *temp = strtok(NULL, "}");
                         if (strtok(temp, "}") != NULL) {
                             value = strtok(temp, "}");
@@ -343,7 +339,7 @@ void StyleDialog::_delSelector()
                         else {
                             sel = sel;
                         }
-                        _selectorVec[index].second = sel;
+                        _selectorVec[it].second = sel;
                     }
                 }
             }
@@ -376,7 +372,7 @@ Inkscape::XML::Node* StyleDialog::_styleElementNode()
 {
     for (unsigned i = 0; i < _num; ++i) {
         if (std::string(_document->getReprRoot()->nthChild(i)->name())
-             == "svg:style") {
+                == "svg:style") {
             _styleExists = true;
             _newDrawing = true;
             return _document->getReprRoot()->nthChild(i);
@@ -409,9 +405,9 @@ std::string StyleDialog::_setClassAttribute(std::vector<SPObject*> sel)
  * element. _newDrawing is flag is set to false check if an existing drawing is
  * opened.
  */
-std::vector<std::pair<std::pair<std::string, SPObject *>, std::string> > StyleDialog::_getSelectorVec()
+std::vector<_selectorVecType> StyleDialog::_getSelectorVec()
 {
-    std::string key, value;
+    std::string key, value, selId;
     for (unsigned i = 0; i < _num; ++i) {
         if (std::string(_document->getReprRoot()->nthChild(i)->name()) == "svg:style") {
             _styleExists = true;
@@ -426,19 +422,74 @@ std::vector<std::pair<std::pair<std::string, SPObject *>, std::string> > StyleDi
               * value is set to empty so that its corresponding XML repr is added.
               */
             while(std::getline(str, sel, '\n')) {
+                std::vector<SPObject *>objVec;
                 REMOVE_SPACES(sel);
                 if (!sel.empty()) {
                     key = strtok(strdup(sel.c_str()), "{");
+                    _selectorName = key;
                     char *temp = strtok(NULL, "}");
                     if (strtok(temp, "}") != NULL) {
                         value = strtok(temp, "}");
                     }
-                    std::string selId = key.erase(0, key.find_first_not_of('#'));
-                    REMOVE_SPACES(selId);
-                    REMOVE_SPACES(key);
-                    SPObject *obj = _document->getObjectById(selId);
-                    _selectorVec.push_back(std::make_pair(std::make_pair(key, obj),
-                                                          sel));
+
+                    std::stringstream ss(key);
+                    std::string token;
+                    std::size_t found = key.find(",");
+                    if (found!=std::string::npos) {
+                        while(std::getline(ss, token, ',')) {
+                            REMOVE_SPACES(token);
+
+                            if (strcmp(token.substr(0,1).c_str(), ".") == 0) {
+                                token.erase(0, token.find_first_not_of('.'));
+                                for (unsigned i = 0; i < _num; ++i) {
+                                    if (_document->getReprRoot()->
+                                            nthChild(i)->attribute("class") &&
+                                            _document->getReprRoot()->nthChild(i)
+                                            ->attribute("class") == token) {
+                                        selId = _document->getReprRoot()->nthChild(i)
+                                                ->attribute("id");
+                                        objVec.push_back( _document->getObjectById(selId));
+                                    }
+                                }
+                            }
+                            else if (strcmp(token.substr(0,1).c_str(), "#") == 0) {
+                                token.erase(0, token.find_first_not_of('#'));
+                                selId = token;
+                                objVec.push_back(_document->getObjectById(selId));
+                            }
+                            else {
+                                std::cout << "simple text" << std::endl;
+                            }
+                        }
+                    }
+                    else {
+                        REMOVE_SPACES(key);
+                        std::string tkn = key;
+                        if (strcmp(tkn.substr(0,1).c_str(), ".") == 0) {
+                            tkn.erase(0, tkn.find_first_not_of('.'));
+                            for (unsigned i = 0; i < _num; ++i) {
+                                if (_document->getReprRoot()->
+                                        nthChild(i)->attribute("class") &&
+                                        _document->getReprRoot()->nthChild(i)
+                                        ->attribute("class") == tkn) {
+                                    selId = _document->getReprRoot()->nthChild(i)
+                                            ->attribute("id");
+                                    objVec.push_back(_document->getObjectById(selId));
+                                }
+                            }
+                        }
+                        else if (strcmp(tkn.substr(0,1).c_str(), "#") == 0) {
+                            tkn.erase(0, key.find_first_not_of('#'));
+                            selId = tkn;
+                            objVec.push_back(_document->getObjectById(selId));
+                        }
+                        else {
+                            std::cout << "simple text" << std::endl;
+                        }
+                    }
+                    _selectorValue = _selectorName + "{" + value + "}\n";
+                    _selectorVec.push_back(std::make_pair(std::make_pair(key, objVec),
+                                                          _selectorValue));
                 }
             }
         }
@@ -452,8 +503,7 @@ std::vector<std::pair<std::pair<std::string, SPObject *>, std::string> > StyleDi
  * This function populates the treeview with selectors available in the
  * stylesheet.
  */
-std::string StyleDialog::_populateTree(std::vector<std::pair<std::pair<std::string,
-                                       SPObject *>, std::string> > _selVec)
+std::string StyleDialog::_populateTree(std::vector<_selectorVecType> _selVec)
 {
     _selectorVec = _selVec;
     std::string selectorValue;
@@ -463,7 +513,6 @@ std::string StyleDialog::_populateTree(std::vector<std::pair<std::pair<std::stri
         row[_mColumns._selectorLabel] = _selectorVec[it].first.first;
         row[_mColumns._colAddRemove] = true;
         row[_mColumns._colObj] = _selectorVec[it].first.second;
-        _selectorVec[it].second = _selectorVec[it].second + "\n";
         std::string selValue = _selectorVec[it].second;
         selectorValue.append(selValue.c_str());
     }
@@ -505,26 +554,29 @@ bool StyleDialog::_handleButtonEvent(GdkEventButton *event)
 
                         if (iter)
                         {
-                            Gtk::TreeModel::Row row = *iter;
-                            Gtk::TreeModel::Row childrow;
                             path = _treeView.get_model()->get_path(iter);
-                            childrow = *(_store->append(row->children()));
-                            childrow[_mColumns._selectorLabel] = obj->getId();
-                            childrow[_mColumns._colAddRemove] = false;
-                            childrow[_mColumns._colObj] = obj;
-                            Gtk::TreeModel::Children children = row.children();
+                            int i = atoi(path.to_string().c_str());
+                            Gtk::TreeModel::Row row = *iter;
                             std::string childStyle;
-                            if (children) {
-                                for(Gtk::TreeModel::Children::iterator it = children.begin();
-                                    it != children.end(); ++it) {
-                                    Gtk::TreeModel::Row row = *it;
-                                    SPObject *obj = row[_mColumns._colObj];
+
+                            if (_selectorVec.size() != 0) {
+                                if (!row.parent()) {
+                                    Gtk::TreeModel::Row childrow;
+                                    childrow = *(_store->append(row->children()));
+                                    std::cout << "_store->children()  " << _store->children()
+                                                 ->children().size() << std::endl;
+
+                                    childrow[_mColumns._selectorLabel] = obj->getId();
+                                    childrow[_mColumns._colAddRemove] = false;
+                                    childrow[_mColumns._colObj] = _desktop->selection->list();
                                     childStyle = "#" + std::string(obj->getId()) + "{" +
                                             std::string(obj->getAttribute("style")) + "}\n";
                                 }
                             }
+
                             _selectorVec.push_back(std::make_pair(std::make_pair
-                                                                  (obj->getId(), obj),
+                                                                  (obj->getId(),
+                                                                   sel),
                                                                   childStyle));
                         }
                         if (_styleElementNode()) {
@@ -557,8 +609,9 @@ void StyleDialog::_selectedRowCallback(const Gtk::TreeModel::Path& path,
         if (iter) {
             Gtk::TreeModel::Row row = *iter;
             Gtk::TreeModel::Children children = row.children();
-            if (row[_mColumns._colObj]) {
-                SPObject *obj = row[_mColumns._colObj];
+            std::vector<SPObject *> objVec = row[_mColumns._colObj];
+            for (unsigned i = 0; i < objVec.size(); ++i) {
+                SPObject *obj = objVec[i];
                 _desktop->selection->add(obj);
             }
             if (children) {
@@ -579,8 +632,9 @@ void StyleDialog::_checkAllChildren(Gtk::TreeModel::Children& children)
     for (Gtk::TreeModel::Children::iterator iter = children.begin();
          iter!= children.end(); ++iter) {
         Gtk::TreeModel::Row childrow = *iter;
-        if (childrow[_mColumns._colObj]) {
-            SPObject *obj = childrow[_mColumns._colObj];
+        std::vector<SPObject *> objVec = childrow[_mColumns._colObj];
+        for (unsigned i = 0; i < objVec.size(); ++i) {
+            SPObject *obj = objVec[i];
             _desktop->selection->add(obj);
         }
     }
@@ -604,8 +658,25 @@ void StyleDialog::_selectRow(Selection */*sel*/)
         for(Gtk::TreeModel::Children::iterator iter = children.begin();
             iter != children.end(); ++iter) {
             Gtk::TreeModel::Row row = *iter;
-            if (obj == row[_mColumns._colObj]) {
-                _treeView.get_selection()->select(row);
+            std::vector<SPObject *> objVec = row[_mColumns._colObj];
+            std::vector<SPObject *> childObjVec;
+            Gtk::TreeModel::Row childRow;
+            if (row.children()) {
+                for(Gtk::TreeModel::Children::iterator it = row.children().begin();
+                    it != row.children().end(); ++it) {
+                    childRow = *it;
+                    childObjVec = childRow[_mColumns._colObj];
+                }
+            }
+            for (unsigned i = 0; i < objVec.size(); ++i) {
+                if (obj->getId() == objVec[i]->getId()) {
+                    _treeView.get_selection()->select(row);
+                }
+            }
+            for (unsigned j = 0; j < childObjVec.size(); ++j) {
+                if (obj->getId() == childObjVec[j]->getId()) {
+                    _treeView.get_selection()->select(childRow);
+                }
             }
         }
     }

@@ -30,6 +30,8 @@ namespace Dialog {
  * @brief The StyleDialog class
  * A list of CSS selectors will show up in this dialog.
  */
+typedef std::pair<std::pair<std::string, std::vector<SPObject *> >, std::string>
+_selectorVecType;
 
 class StyleDialog : public UI::Widget::Panel
 {
@@ -43,10 +45,10 @@ public:
 private:
     void _styleButton( Gtk::Button& btn, char const* iconName, char const* tooltip);
     std::string _setClassAttribute(std::vector<SPObject*>);
-    std::vector<std::pair<std::pair<std::string, SPObject *>, std::string> >_selectorVec;
-    std::vector<std::pair<std::pair<std::string, SPObject *>, std::string> > _getSelectorVec();
-    std::string _populateTree(std::vector<std::pair<std::pair<std::string, SPObject *>,
-                              std::string> >);
+
+    std::vector<_selectorVecType>_selectorVec;
+    std::vector<_selectorVecType> _getSelectorVec();
+    std::string _populateTree(std::vector<_selectorVecType>);
     bool _handleButtonEvent(GdkEventButton *event);
     void _selectedRowCallback(const Gtk::TreeModel::Path& path,
                                 Gtk::TreeViewColumn* /* column */);
@@ -62,7 +64,7 @@ private:
         { add(_selectorLabel); add(_colAddRemove); add(_colObj); }
         Gtk::TreeModelColumn<Glib::ustring> _selectorLabel;
         Gtk::TreeModelColumn<bool> _colAddRemove;
-        Gtk::TreeModelColumn<SPObject *> _colObj;
+        Gtk::TreeModelColumn<std::vector<SPObject *> > _colObj;
     };
 
     SPDesktop* _desktop;
