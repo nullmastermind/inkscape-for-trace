@@ -6,58 +6,7 @@ message("------------------------------")
 message("Source Dir: ${CMAKE_CURRENT_SOURCE_DIR}")
 message("Binary Dir: ${CMAKE_CURRENT_BINARY_DIR}")
 
-# -----------------------------------------------------------------------------
-# Set platform defaults (originally copied from darktable)
-# -----------------------------------------------------------------------------
-include(CMakeScripts/ConfigPaths.cmake)
-
-if(WIN32)
-    message("-- Windows build detected, setting default features")
-
-	list(INSERT CMAKE_SYSTEM_INCLUDE_PATH 0 ${DEVLIBS_PATH})
-	list(INSERT CMAKE_SYSTEM_LIBRARY_PATH 0 ${DEVLIBS_PATH})
-	
-	set(CMAKE_C_COMPILER "${MINGW_BIN}/gcc.exe")
-	set(CMAKE_C_LINK_EXECUTABLE "${MINGW_BIN}/gcc.exe")
-	set(CMAKE_CXX_COMPILER "${MINGW_BIN}/g++.exe")
-	set(CMAKE_CXX_LINK_EXECUTABLE "${MINGW_BIN}/g++.exe")
-	set(CMAKE_CXX_STANDARD 11)
-	
-	# Setup Windows resource files compiler.
-	set(CMAKE_RC_COMPILER "${MINGW_BIN}/windres.exe")
-	set(CMAKE_RC_COMPILER_INIT windres)
-	enable_language(RC)
-	set(CMAKE_RC_COMPILE_OBJECT "<CMAKE_RC_COMPILER> -O coff -i <SOURCE> -o <OBJECT>")
-	
-	# These options are required for having i18n support on Windows.
-	option(ENABLE_NLS "Compile with Native Language Support (using gettext)" ON)
-	option(HAVE_BIND_TEXTDOMAIN_CODESET "Compile with 'bind_textdomain_codeset' function" ON)
-	
-	# Does not compile on Windows with these options.
-	option(BR_PTHREADS "Use binreloc thread support" OFF)
-	option(ENABLE_BINRELOC "Use AutoPackage" OFF)
-endif(WIN32)
-
-if(APPLE)
-    message("-- Mac OS X build detected, setting default features")
-	
-    # prefer macports and/or user-installed libraries over system ones
-    #LIST(APPEND CMAKE_PREFIX_PATH /opt/local /usr/local)
-    set(CMAKE_FIND_FRAMEWORK "LAST")
-
-    # test and display relevant env variables
-    if(DEFINED ENV{CMAKE_PREFIX_PATH})
-	message("CMAKE_PREFIX_PATH: $ENV{CMAKE_PREFIX_PATH}")
-    endif()
-	
-    if(DEFINED ENV{GTKMM_BASEPATH})
-	message("GTKMM_BASEPATH: $ENV{GTKMM_BASEPATH}")
-    endif()
-
-    # detect current GTK+ backend
-    pkg_check_variable(gtk+-2.0 target)
-    message("GTK2 backend: ${GTK+_2.0_TARGET}")
-endif(APPLE)
+include(CMakeScripts/ConfigEnv.cmake)
 
 # -----------------------------------------------------------------------------
 # CMake Configuration
@@ -79,7 +28,6 @@ if(APPLE)
 else()
     SET(CMAKE_INSTALL_RPATH "$ORIGIN/../lib/inkscape")
 endif()
-
 
 cmake_policy(SET CMP0003 NEW) # don't be prolific with library paths
 cmake_policy(SET CMP0005 NEW) # proper define quoting
@@ -178,230 +126,46 @@ add_custom_target(uninstall
 # Subdirs (on only 1 atm), but a lot happens here
 # -----------------------------------------------------------------------------
 add_subdirectory(src)
+
 if(ENABLE_NLS)
     add_subdirectory(po)
 endif(ENABLE_NLS)
 
-
 # -----------------------------------------------------------------------------
 # Man pages
 # -----------------------------------------------------------------------------
-include("CMakeScripts/Pod2man.cmake")
+if(NOT WIN32)
+	include("CMakeScripts/Pod2man.cmake")
 
-# Load AUTHORS file contents into $INKSCAPE_AUTHORS
-file(READ ${CMAKE_CURRENT_SOURCE_DIR}/AUTHORS content)
-string(REGEX REPLACE "^([^\n#]+)\n" "\\1;\n" content_list "${content}")
-join(INKSCAPE_AUTHORS "," "${content_list}")
+	# Load AUTHORS file contents into $INKSCAPE_AUTHORS
+	file(READ ${CMAKE_CURRENT_SOURCE_DIR}/AUTHORS content)
+	string(REGEX REPLACE "^([^\n#]+)\n" "\\1;\n" content_list "${content}")
+	
+	join(INKSCAPE_AUTHORS "," "${content_list}")
 
-foreach(podfile
-        man/inkscape.pod
-        man/inkscape.de.pod
-        man/inkscape.el.pod
-        man/inkscape.fr.pod
-        man/inkscape.ja.pod
-        man/inkscape.sk.pod
-        man/inkscape.zh_TW.pod
-	man/inkview.pod)
-    set(POD_IN ${CMAKE_CURRENT_SOURCE_DIR}/${podfile}.in)
-    set(POD_OUT ${CMAKE_CURRENT_BINARY_DIR}/${podfile})
-    configure_file(${POD_IN} ${POD_OUT})
-    pod2man(${POD_OUT} ${INKSCAPE_VERSION} 1 "Inkscape Commands Manual")
-endforeach()
+	foreach(podfile
+			man/inkscape.pod
+			man/inkscape.de.pod
+			man/inkscape.el.pod
+			man/inkscape.fr.pod
+			man/inkscape.ja.pod
+			man/inkscape.sk.pod
+			man/inkscape.zh_TW.pod
+			man/inkview.pod)
+			
+		set(POD_IN ${CMAKE_CURRENT_SOURCE_DIR}/${podfile}.in)
+		set(POD_OUT ${CMAKE_CURRENT_BINARY_DIR}/${podfile})
+		
+		configure_file(${POD_IN} ${POD_OUT})
+		
+		pod2man(${POD_OUT} ${INKSCAPE_VERSION} 1 "Inkscape Commands Manual")
+	endforeach()
+endif()
 
 # -----------------------------------------------------------------------------
 # Installation
 # -----------------------------------------------------------------------------
-if(UNIX)
-	#Define the installation
-	install(
-	  TARGETS inkscape_base inkscape inkview 
-	  RUNTIME DESTINATION bin
-	  LIBRARY DESTINATION lib/inkscape
-	  ARCHIVE DESTINATION lib/inkscape
-	)
-	
-    #The install directive for the binaries and libraries are found in src/CMakeList.txt
-    install(
-	FILES ${CMAKE_BINARY_DIR}/inkscape.desktop
-	DESTINATION ${CMAKE_INSTALL_PREFIX}/${SHARE_INSTALL}/applications
-	)
-
-    # this should probably be done no matter what the platform is, just set SHARE_INSTALL first
-    add_subdirectory(share) 
-elseif(WIN32)
-	set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/inkscape)
-	
-    install(PROGRAMS
-		${EXECUTABLE_OUTPUT_PATH}/inkscape.exe
-		${EXECUTABLE_OUTPUT_PATH}/inkview.exe
-        DESTINATION ${CMAKE_INSTALL_PREFIX}
-	)
-	
-    install(FILES
-		${LIBRARY_OUTPUT_PATH}/libinkscape_base.dll
-		${LIBRARY_OUTPUT_PATH}/libgrid2.dll
-        DESTINATION ${CMAKE_INSTALL_PREFIX}
-	)
-		
-    # devlibs and mingw dlls
-    install(FILES
-		AUTHORS
-		COPYING
-		NEWS
-		README
-		TRANSLATORS
-		${DEVLIBS_BIN}/libatkmm-1.6-1.dll
-		${DEVLIBS_BIN}/libglibmm-2.4-1.dll
-		${DEVLIBS_BIN}/libgiomm-2.4-1.dll
-		${DEVLIBS_BIN}/libgtkmm-2.4-1.dll
-		${DEVLIBS_BIN}/libgdkmm-2.4-1.dll
-		${DEVLIBS_BIN}/libpangomm-1.4-1.dll
-		${DEVLIBS_BIN}/libcairomm-1.0-1.dll
-		${DEVLIBS_BIN}/libsigc-2.0-0.dll
-		${DEVLIBS_BIN}/libfreetype-6.dll
-		${DEVLIBS_BIN}/libffi-6.dll
-		${DEVLIBS_BIN}/libgc-1.dll
-		${DEVLIBS_BIN}/libgsl-19.dll
-		${DEVLIBS_BIN}/libgslcblas-0.dll
-		${DEVLIBS_BIN}/libharfbuzz-0.dll
-		${DEVLIBS_BIN}/liblzma-5.dll
-		${DEVLIBS_BIN}/libaspell-15.dll
-		${DEVLIBS_BIN}/libatk-1.0-0.dll
-		${DEVLIBS_BIN}/libgdk-win32-2.0-0.dll
-		${DEVLIBS_BIN}/libgdk_pixbuf-2.0-0.dll
-		${DEVLIBS_BIN}/libglib-2.0-0.dll
-		${DEVLIBS_BIN}/libgmodule-2.0-0.dll
-		${DEVLIBS_BIN}/libgobject-2.0-0.dll
-		${DEVLIBS_BIN}/libgtk-win32-2.0-0.dll
-		${DEVLIBS_BIN}/libgthread-2.0-0.dll
-		${DEVLIBS_BIN}/libgio-2.0-0.dll
-		${DEVLIBS_BIN}/libcairo-2.dll
-		${DEVLIBS_BIN}/libpixman-1-0.dll
-		${DEVLIBS_BIN}/libpoppler-58.dll
-		${DEVLIBS_BIN}/libpoppler-glib-8.dll
-		${DEVLIBS_BIN}/libpangocairo-1.0-0.dll
-		${DEVLIBS_BIN}/libpango-1.0-0.dll
-		${DEVLIBS_BIN}/libpangoft2-1.0-0.dll
-		${DEVLIBS_BIN}/libpangowin32-1.0-0.dll
-		${DEVLIBS_BIN}/libfontconfig-1.dll
-		${DEVLIBS_BIN}/libxml2-2.dll
-		${DEVLIBS_BIN}/libxslt-1.dll
-		${DEVLIBS_BIN}/libexslt-0.dll
-		${DEVLIBS_BIN}/libexpat-1.dll
-		${DEVLIBS_BIN}/librevenge-0.0.dll
-		${DEVLIBS_BIN}/librevenge-stream-0.0.dll
-		${DEVLIBS_BIN}/libwpg-0.3.dll
-		${DEVLIBS_BIN}/libwpd-0.10.dll
-		${DEVLIBS_BIN}/libvisio-0.1.dll
-		${DEVLIBS_BIN}/libcdr-0.1.dll
-		${DEVLIBS_BIN}/icuin56.dll
-		${DEVLIBS_BIN}/icudt56.dll
-		${DEVLIBS_BIN}/icuuc56.dll
-		${DEVLIBS_BIN}/libjpeg-9.dll
-		${DEVLIBS_BIN}/libpng16-16.dll
-		${DEVLIBS_BIN}/libtiff-5.dll
-		${DEVLIBS_BIN}/libexif-12.dll
-		${DEVLIBS_BIN}/libcurl-4.dll
-		${DEVLIBS_BIN}/zlib1.dll
-		${DEVLIBS_BIN}/bz2-1.dll
-		${DEVLIBS_BIN}/libiconv-2.dll
-		${DEVLIBS_BIN}/libpopt-0.dll
-		${DEVLIBS_BIN}/liblcms2-2.dll
-		${DEVLIBS_BIN}/libMagick++-6.Q16-6.dll
-		${DEVLIBS_BIN}/libMagickCore-6.Q16-2.dll
-		${DEVLIBS_BIN}/libMagickWand-6.Q16-2.dll
-		${DEVLIBS_BIN}/libintl-8.dll
-		${DEVLIBS_BIN}/libpotrace-0.dll
-		${MINGW_BIN}/libstdc++-6.dll
-        ${MINGW_BIN}/libwinpthread-1.dll
-        ${MINGW_BIN}/libgcc_s_seh-1.dll
-        ${MINGW_BIN}/libgomp-1.dll 
-        DESTINATION ${CMAKE_INSTALL_PREFIX})
-		
-	# Setup application data directories, poppler files, locales, icons and themes
-	file(MAKE_DIRECTORY
-		data
-		doc
-		modules
-		plugins)
-	
-	install(DIRECTORY
-		data
-		doc
-		modules
-		plugins
-		share
-		DESTINATION ${CMAKE_INSTALL_PREFIX}
-		PATTERN Adwaita EXCLUDE					# NOTE: The theme is not used on Windows.
-		PATTERN hicolor/index.theme EXCLUDE 	# NOTE: Empty index.theme in hicolor icon theme causes SIGSEGV.
-		PATTERN CMakeLists.txt EXCLUDE
-		PATTERN *.am EXCLUDE)
-		
-	install(DIRECTORY ${DEVLIBS_PATH}/share/themes
-		DESTINATION ${CMAKE_INSTALL_PREFIX}/share)
-		
-	install(DIRECTORY ${DEVLIBS_PATH}/share/poppler
-		DESTINATION ${CMAKE_INSTALL_PREFIX}/share)
-		
-	install(DIRECTORY ${DEVLIBS_PATH}/etc/fonts
-		DESTINATION ${CMAKE_INSTALL_PREFIX}/etc)
-
-	install(DIRECTORY ${DEVLIBS_PATH}/share/locale
-		DESTINATION ${CMAKE_INSTALL_PREFIX}/share)
-		
-	install(DIRECTORY ${DEVLIBS_PATH}/etc/gtk-2.0
-		DESTINATION ${CMAKE_INSTALL_PREFIX}/etc)
-		
-	# GTK 2.0
-	install(DIRECTORY ${DEVLIBS_LIB}/gtk-2.0
-		DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
-		FILES_MATCHING
-		PATTERN "*.dll"
-		PATTERN "*.cache")
-	
-	install(DIRECTORY ${DEVLIBS_LIB}/gdk-pixbuf-2.0
-		DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
-		FILES_MATCHING
-		PATTERN "*.dll"
-		PATTERN "*.cache")
-		
-	# Aspell dictionaries
-	install(DIRECTORY ${DEVLIBS_LIB}/aspell-0.60
-		DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
-		
-	# Necessary to run extensions on windows if it is not in the path
-	if (CMAKE_SYSTEM_PROCESSOR MATCHES "AMD64")
-		install(FILES
-			${DEVLIBS_BIN}/gspawn-win64-helper.exe
-			${DEVLIBS_BIN}/gspawn-win64-helper-console.exe
-			DESTINATION ${CMAKE_INSTALL_PREFIX})
-	else()
-		install(FILES
-			${DEVLIBS_BIN}/gspawn-win32-helper.exe
-			${DEVLIBS_BIN}/gspawn-win32-helper-console.exe
-			DESTINATION ${CMAKE_INSTALL_PREFIX})
-	endif()
-		
-	# Perl
-	install(FILES
-		${DEVLIBS_PATH}/perl/bin/perl58.dll
-        DESTINATION ${CMAKE_INSTALL_PREFIX})
-	
-	# Python
-	install(FILES
-		${DEVLIBS_PATH}/python/python.exe
-		${DEVLIBS_PATH}/python/pythonw.exe
-		${DEVLIBS_PATH}/python/python27.dll
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/python)
-		
-	install(DIRECTORY ${DEVLIBS_PATH}/python/lib
-		DESTINATION ${CMAKE_INSTALL_PREFIX}/python)
-		
-	install(DIRECTORY ${DEVLIBS_PATH}/python/dlls
-		DESTINATION ${CMAKE_INSTALL_PREFIX}/python)
-elseif(APPLE)
-    # TODO
-endif()
+include(CMakeScripts/Install.cmake)
 
 # -----------------------------------------------------------------------------
 # Clean
