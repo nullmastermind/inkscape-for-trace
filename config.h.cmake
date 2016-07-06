@@ -232,18 +232,10 @@
 #cmakedefine HAVE_ZLIB_H 1
 
 /* Base data directory -- only path-prefix.h should use it! */
-#ifdef WIN32
-#define INKSCAPE_DATADIR ""
-#else
-#define INKSCAPE_DATADIR "${CMAKE_INSTALL_PREFIX}/share"
-#endif
+#define INKSCAPE_DATADIR "${INKSCAPE_DATADIR}"
 
 /* Base library directory -- only path-prefix.h should use it! */
-#ifdef WIN32
-#define INKSCAPE_LIBDIR "\\lib"
-#else
-#define INKSCAPE_LIBDIR "${CMAKE_INSTALL_PREFIX}/lib"
-#endif
+#define INKSCAPE_LIBDIR "${INKSCAPE_LIBDIR}"
 
 /* Define to 1 if `lstat' dereferences a symlink specified with a trailing
    slash. */

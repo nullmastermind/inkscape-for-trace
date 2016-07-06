@@ -16,8 +16,6 @@ if(UNIX)
     # this should probably be done no matter what the platform is, just set SHARE_INSTALL first
     add_subdirectory(share)
 elseif(WIN32)
-	set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/inkscape)
-
 	install(PROGRAMS
 		${EXECUTABLE_OUTPUT_PATH}/inkscape.exe
 		${EXECUTABLE_OUTPUT_PATH}/inkview.exe

@@ -5,10 +5,10 @@
 # -----------------------------------------------------------------------------
 
 # Directory containing the precompiled Inkscape libraries. Usually c:\devlibs or c:\devlibs64
-set(ENV_DEVLIBS_PATH C:/devlibs)
+set(ENV_DEVLIBS_PATH C:/devlibs64)
 
 # Directory containing the MinGW instance used for compilation. Usually c:\mingw or c:\mingw64
-set(ENV_MINGW_PATH C:/mingw)
+set(ENV_MINGW_PATH C:/mingw64)
 
 # Directory containing the (optional) Ghostscript installation.
 set(ENV_GS_PATH C:/latex/gs/gs8.61)
@@ -18,27 +18,27 @@ set(ENV_GS_PATH C:/latex/gs/gs8.61)
 # -----------------------------------------------------------------------------
 message(STATUS "Configuring MinGW environment:")
 	
-if($ENV{DEVLIBS_PATH} STREQUAL "")
-	message(STATUS "Setting path to development libraries from mingwenv.cmake: ${ENV_DEVLIBS_PATH}")
+if("$ENV{DEVLIBS_PATH}" STREQUAL "")
+	message(STATUS "  Setting path to development libraries from mingwenv.cmake: ${ENV_DEVLIBS_PATH}")
 	set(DEVLIBS_PATH ${ENV_DEVLIBS_PATH})
 else()
-	message(STATUS "Setting path to development libraries from environment: $ENV{DEVLIBS_PATH}")
+	message(STATUS "  Setting path to development libraries from environment: $ENV{DEVLIBS_PATH}")
 	set(DEVLIBS_PATH $ENV{DEVLIBS_PATH})
 endif()
 
-if($ENV{MINGW_PATH} STREQUAL "")
-	message(STATUS "Setting path to MinGW from mingwenv.cmake: ${ENV_MINGW_PATH}")
+if("$ENV{MINGW_PATH}" STREQUAL "")
+	message(STATUS "  Setting path to MinGW from mingwenv.cmake: ${ENV_MINGW_PATH}")
 	set(MINGW_PATH ${ENV_MINGW_PATH})
 else()
-	message(STATUS "Setting path to MinGW from environment: $ENV{MINGW_PATH}")
+	message(STATUS "  Setting path to MinGW from environment: $ENV{MINGW_PATH}")
 	set(MINGW_PATH $ENV{MINGW_PATH})
 endif()
 
-if($ENV{GS_PATH} STREQUAL "")
-	message(STATUS "Setting path to Ghostscript from mingwenv.cmake: ${ENV_GS_PATH}")
+if("$ENV{GS_PATH}" STREQUAL "")
+	message(STATUS "  Setting path to Ghostscript from mingwenv.cmake: ${ENV_GS_PATH}")
 	set(GS_PATH ${ENV_GS_PATH})
 else()
-	message(STATUS "Setting path to Ghostscript from environment: $ENV{GS_PATH}")
+	message(STATUS "  Setting path to Ghostscript from environment: $ENV{GS_PATH}")
 	set(GS_PATH $ENV{GS_PATH})
 endif()
 	
@@ -98,10 +98,10 @@ list(APPEND CMAKE_PROGRAM_PATH  ${DEVLIBS_BIN})
 set(HAVE_MINGW ON)
 	
 # Try to determine the MinGW processor architecture.
-if(EXISTS ${MINGW_PATH}/mingw32)
+if(EXISTS "${MINGW_PATH}/mingw32")
 	set(HAVE_MINGW64 OFF)
 	set(MINGW_ARCH mingw32)
-elseif(EXISTS ${MINGW_PATH}/x86_64-w64-mingw32)
+elseif(EXISTS "${MINGW_PATH}/x86_64-w64-mingw32")
 	set(HAVE_MINGW64 ON)
 	set(MINGW_ARCH x86_64-w64-mingw32)
 else()
@@ -109,9 +109,9 @@ else()
 endif()
 
 # Path to processor architecture specific binaries and libs.
-set(MINGW_ARCH_PATH ${MINGW_PATH}/${MINGW_ARCH})
+set(MINGW_ARCH_PATH "${MINGW_PATH}/${MINGW_ARCH}")
 
-set(MINGW_BIN ${MINGW_PATH}/bin)
+set(MINGW_BIN "${MINGW_PATH}/bin")
 
 if(NOT EXISTS ${MINGW_BIN})
 	message(FATAL_ERROR "MinGW binary directory does not exist: ${MINGW_BIN}")
@@ -120,7 +120,7 @@ endif()
 # Eliminate error messages when not having mingw in the environment path variable.
 list(APPEND CMAKE_PROGRAM_PATH  ${MINGW_BIN})
 
-set(MINGW_LIB ${MINGW_PATH}/lib)
+set(MINGW_LIB "${MINGW_PATH}/lib")
 
 if(NOT EXISTS ${MINGW_LIB})
 	message(FATAL_ERROR "MinGW library directory does not exist: ${MINGW_LIB}")
@@ -129,7 +129,7 @@ endif()
 # Add MinGW libraries to linker path.
 link_directories(${MINGW_LIB})
 
-set(MINGW_INCLUDE ${MINGW_PATH}/include)
+set(MINGW_INCLUDE "${MINGW_PATH}/include")
 
 if(NOT EXISTS ${MINGW_INCLUDE})
 	message(FATAL_ERROR "MinGW include directory does not exist: ${MINGW_INCLUDE}")
@@ -139,7 +139,7 @@ endif()
 include_directories(SYSTEM ${MINGW_INCLUDE})
 
 if(HAVE_MINGW64)
-	set(MINGW64_LIB ${MINGW_ARCH_PATH}/lib)
+	set(MINGW64_LIB "${MINGW_ARCH_PATH}/lib")
 	
 	if(NOT EXISTS ${MINGW64_LIB})
 		message(FATAL_ERROR "MinGW 64-Bit libraries directory does not exist: ${MINGW64_LIB}")
@@ -148,7 +148,7 @@ if(HAVE_MINGW64)
 	# Add 64-Bit libraries to linker path.
 	link_directories(${MINGW64_LIB})
 	
-	set(MINGW64_INCLUDE ${MINGW_ARCH_PATH}/include)
+	set(MINGW64_INCLUDE "${MINGW_ARCH_PATH}/include")
 	
 	if(NOT EXISTS ${MINGW64_INCLUDE})
 		message(FATAL_ERROR "MinGW 64-Bit include directory does not exist: ${MINGW64_INCLUDE}")
