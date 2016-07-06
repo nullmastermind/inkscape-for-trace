@@ -5,10 +5,7 @@ if(UNIX)
       DESTINATION ${CMAKE_INSTALL_PREFIX}/${SHARE_INSTALL}/applications)
 endif()
 
-if(NOT WIN32)
-    # this should probably be done no matter what the platform is, just set SHARE_INSTALL first
-    add_subdirectory(../share)
-else()
+if(WIN32)
   install(PROGRAMS
     ${EXECUTABLE_OUTPUT_PATH}/inkscape.exe
     ${EXECUTABLE_OUTPUT_PATH}/inkview.exe
