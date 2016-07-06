@@ -200,23 +200,16 @@ void StyleDialog::_addSelector()
         for (unsigned i = 0; i < selected.size(); ++i) {
             obj = selected.at(i);
             objExists = true;
-            std::string style;
+            if (!obj->getRepr()->attribute("style")) {
+                obj->getRepr()->setAttribute("style", NULL);
+            }
 
-            if (obj->getRepr()->attribute("style")) {
-                for (List<AttributeRecord const> iter = obj->getRepr()->attributeList();
-                     iter; ++iter) {
-                    gchar const * property = g_quark_to_string(iter->key);
-                    gchar const * value = iter->value;
-
-                    if (std::string(property) == "style") {
-                        _selectorValue = _selectorName + "{"
-                                + std::string(value) + "}" + "\n";
-                    }
-                }
+            if (obj->getAttribute("style") == NULL) {
+                _selectorValue = _selectorName + "{" + "}" + "\n";
             }
             else {
-                style = " ";
-                obj->getRepr()->setAttribute("style", style);
+                _selectorValue = _selectorName + "{"
+                        + obj->getAttribute("style") + "}" + "\n";
             }
 
             if (strcmp(_selectorName.substr(0,1).c_str(), ".") == 0) {
@@ -647,13 +640,20 @@ void StyleDialog::_checkAllChildren(Gtk::TreeModel::Children& children)
  */
 void StyleDialog::_selectRow(Selection */*sel*/)
 {
+    SPObject *obj = NULL;
+    bool objExists = false;
     if (!_desktop->selection->list().empty()) {
-        SPObject *obj;
         std::vector<SPObject*> selected = _desktop->getSelection()->list();
-        for (unsigned i = 0; i < selected.size(); ++i) {
-            obj = selected.at(i);
-        }
+        obj = selected.back();
+    }
 
+    /**
+      * If obj has some SPObject, then it is added to desktop's selection. If a
+      * row in treeview has children, those rows are checked too against selected
+      * object's id. If an object which is not present in any selector is selected,
+      * the treeview's selections are unselected.
+      */
+    if (obj != NULL) {
         Gtk::TreeModel::Children children = _store->children();
         for(Gtk::TreeModel::Children::iterator iter = children.begin();
             iter != children.end(); ++iter) {
@@ -661,23 +661,31 @@ void StyleDialog::_selectRow(Selection */*sel*/)
             std::vector<SPObject *> objVec = row[_mColumns._colObj];
             std::vector<SPObject *> childObjVec;
             Gtk::TreeModel::Row childRow;
+
+            for (unsigned i = 0; i < objVec.size(); ++i) {
+                if (obj->getId() == objVec[i]->getId()) {
+                    _treeView.get_selection()->select(row);
+                    objExists = true;
+                }
+            }
+
             if (row.children()) {
                 for(Gtk::TreeModel::Children::iterator it = row.children().begin();
                     it != row.children().end(); ++it) {
                     childRow = *it;
                     childObjVec = childRow[_mColumns._colObj];
                 }
-            }
-            for (unsigned i = 0; i < objVec.size(); ++i) {
-                if (obj->getId() == objVec[i]->getId()) {
-                    _treeView.get_selection()->select(row);
+                for (unsigned j = 0; j < childObjVec.size(); ++j) {
+                    if (obj->getId() == childObjVec[j]->getId()) {
+                        _treeView.get_selection()->select(childRow);
+                        objExists = true;
+                    }
                 }
             }
-            for (unsigned j = 0; j < childObjVec.size(); ++j) {
-                if (obj->getId() == childObjVec[j]->getId()) {
-                    _treeView.get_selection()->select(childRow);
-                }
-            }
+        }
+
+        if (!objExists) {
+            _treeView.get_selection()->unselect_all();
         }
     }
 }
