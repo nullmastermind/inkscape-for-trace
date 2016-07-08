@@ -113,9 +113,10 @@ StyleDialog::StyleDialog() :
                                                                 _handleButtonEvent),
                                                   false);
 
-    _treeView.signal_row_activated().connect(sigc::mem_fun(*this,
-                                                           &StyleDialog::
-                                                           _selectedRowCallback));
+    _treeView.signal_button_press_event().connect_notify(sigc::mem_fun
+                                                         (*this, &StyleDialog::
+                                                          _buttonEventsSelectObjs),
+                                                         false);
 }
 
 StyleDialog::~StyleDialog()
@@ -548,18 +549,14 @@ bool StyleDialog::_handleButtonEvent(GdkEventButton *event)
                         if (iter)
                         {
                             path = _treeView.get_model()->get_path(iter);
-                            int i = atoi(path.to_string().c_str());
                             Gtk::TreeModel::Row row = *iter;
                             std::string childStyle;
-
                             if (_selectorVec.size() != 0) {
                                 if (!row.parent()) {
                                     Gtk::TreeModel::Row childrow;
                                     childrow = *(_store->append(row->children()));
-                                    std::cout << "_store->children()  " << _store->children()
-                                                 ->children().size() << std::endl;
-
-                                    childrow[_mColumns._selectorLabel] = obj->getId();
+                                    childrow[_mColumns._selectorLabel] = "#" +
+                                            std::string(obj->getId());
                                     childrow[_mColumns._colAddRemove] = false;
                                     childrow[_mColumns._colObj] = _desktop->selection->list();
                                     childStyle = "#" + std::string(obj->getId()) + "{" +
@@ -588,27 +585,59 @@ bool StyleDialog::_handleButtonEvent(GdkEventButton *event)
 }
 
 /**
- * @brief StyleDialog::_selected_row_callback
- * @param path
+ * @brief StyleDialog::_selectObjects
+ * @param event
+ * This function detects single or double click on a selector in any row. Single
+ * click on a selector selects the matching objects. A double click on any
+ * selector selects the matching objects as well as will open CSS dialog. It
+ * calls _selectObjects to add objects to selection.
+ * TODO: Open CSS dialog on double click.
+ */
+void StyleDialog::_buttonEventsSelectObjs(GdkEventButton* event )
+{
+    if (event->type == GDK_BUTTON_PRESS && event->button == 1) {
+        int x = static_cast<int>(event->x);
+        int y = static_cast<int>(event->y);
+        _selectObjects(x, y);
+    }
+    else if (event->type == GDK_2BUTTON_PRESS && event->button == 1) {
+        int x = static_cast<int>(event->x);
+        int y = static_cast<int>(event->y);
+        _selectObjects(x, y);
+        //Open CSS dialog here.
+    }
+}
+
+/**
+ * @brief StyleDialog::_selectObjects
+ * @param eventX
+ * @param eventY
  * This function selects objects in the drawing corresponding to the selector
  * selected in the treeview.
  */
-void StyleDialog::_selectedRowCallback(const Gtk::TreeModel::Path& path,
-                                         Gtk::TreeViewColumn*  column )
+void StyleDialog::_selectObjects(int eventX, int eventY)
 {
     _desktop->selection->clear();
-    if (column == _treeView.get_column(1)) {
-        Gtk::TreeModel::iterator iter = _store->get_iter(path);
-        if (iter) {
-            Gtk::TreeModel::Row row = *iter;
-            Gtk::TreeModel::Children children = row.children();
-            std::vector<SPObject *> objVec = row[_mColumns._colObj];
-            for (unsigned i = 0; i < objVec.size(); ++i) {
-                SPObject *obj = objVec[i];
-                _desktop->selection->add(obj);
-            }
-            if (children) {
-                _checkAllChildren(children);
+    Gtk::TreeViewColumn *col = _treeView.get_column(1);
+    Gtk::TreeModel::Path path;
+    int x = eventX;
+    int y = eventY;
+    int x2 = 0;
+    int y2 = 0;
+    if (_treeView.get_path_at_pos(x, y, path, col, x2, y2)) {
+        if (col == _treeView.get_column(1)) {
+            Gtk::TreeModel::iterator iter = _store->get_iter(path);
+            if (iter) {
+                Gtk::TreeModel::Row row = *iter;
+                Gtk::TreeModel::Children children = row.children();
+                std::vector<SPObject *> objVec = row[_mColumns._colObj];
+                for (unsigned i = 0; i < objVec.size(); ++i) {
+                    SPObject *obj = objVec[i];
+                    _desktop->selection->add(obj);
+                }
+                if (children) {
+                    _checkAllChildren(children);
+                }
             }
         }
     }
@@ -641,7 +670,6 @@ void StyleDialog::_checkAllChildren(Gtk::TreeModel::Children& children)
 void StyleDialog::_selectRow(Selection */*sel*/)
 {
     SPObject *obj = NULL;
-    bool objExists = false;
     if (!_desktop->selection->list().empty()) {
         std::vector<SPObject*> selected = _desktop->getSelection()->list();
         obj = selected.back();
@@ -665,7 +693,6 @@ void StyleDialog::_selectRow(Selection */*sel*/)
             for (unsigned i = 0; i < objVec.size(); ++i) {
                 if (obj->getId() == objVec[i]->getId()) {
                     _treeView.get_selection()->select(row);
-                    objExists = true;
                 }
             }
 
@@ -678,15 +705,13 @@ void StyleDialog::_selectRow(Selection */*sel*/)
                 for (unsigned j = 0; j < childObjVec.size(); ++j) {
                     if (obj->getId() == childObjVec[j]->getId()) {
                         _treeView.get_selection()->select(childRow);
-                        objExists = true;
                     }
                 }
             }
         }
-
-        if (!objExists) {
-            _treeView.get_selection()->unselect_all();
-        }
+    }
+    else {
+        _treeView.get_selection()->unselect_all();
     }
 }
 

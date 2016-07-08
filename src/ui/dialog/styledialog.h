@@ -50,8 +50,8 @@ private:
     std::vector<_selectorVecType> _getSelectorVec();
     std::string _populateTree(std::vector<_selectorVecType>);
     bool _handleButtonEvent(GdkEventButton *event);
-    void _selectedRowCallback(const Gtk::TreeModel::Path& path,
-                                Gtk::TreeViewColumn* /* column */);
+    void _buttonEventsSelectObjs(GdkEventButton *event);
+    void _selectObjects(int, int);
     void _checkAllChildren(Gtk::TreeModel::Children& children);
     Inkscape::XML::Node *_styleElementNode();
     void _updateStyleContent();
