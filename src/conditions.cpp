@@ -218,7 +218,7 @@ static bool evaluateSVG11Feature(gchar const *feature) {
     };
     
     for ( unsigned int i = 0 ; i < sizeof(_supported_features)/sizeof(_supported_features[0]); i++ ) {
-        if ( 0 == strcasecmp(feature, _supported_features[0]) )
+        if ( 0 == strcasecmp(feature, _supported_features[i]) )
             return true;
     }
     return false;
@@ -236,7 +236,7 @@ static bool evaluateSVG10Feature(gchar const *feature) {
         // "dom.svg.all"
     };
     for ( unsigned int i = 0 ; i < sizeof(_supported_features)/sizeof(_supported_features[0]); i++ ) {
-        if ( 0 == strcasecmp(feature, _supported_features[0]) )
+        if ( 0 == strcasecmp(feature, _supported_features[i]) )
             return true;
     }
     return false;
