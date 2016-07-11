@@ -308,50 +308,35 @@ bool is_item(SPObject const &object) {
 void SPItem::raiseToTop() {
     using Inkscape::Algorithms::find_last_if;
 
-    SPObject *topmost=find_last_if<SPObject::SiblingIterator>(
-        next, NULL, &is_item
-    );
-    if (topmost) {
+    auto topmost = find_last_if(++parent->_children.iterator_to(*this), parent->_children.end(), &is_item);
+    if (topmost != parent->_children.end()) {
         getRepr()->parent()->changeOrder( getRepr(), topmost->getRepr() );
     }
 }
 
 void SPItem::raiseOne() {
-    SPObject *next_higher=std::find_if<SPObject::SiblingIterator>(
-        next, NULL, &is_item
-    );
-    if (next_higher) {
+    auto next_higher = std::find_if(++parent->_children.iterator_to(*this), parent->_children.end(), &is_item);
+    if (next_higher != parent->_children.end()) {
         Inkscape::XML::Node *ref = next_higher->getRepr();
         getRepr()->parent()->changeOrder(getRepr(), ref);
     }
 }
 
 void SPItem::lowerOne() {
-    using Inkscape::Util::MutableList;
-    using Inkscape::Util::reverse_list;
+    using Inkscape::Algorithms::find_last_if;
 
-    MutableList<SPObject &> next_lower=std::find_if(
-        reverse_list<SPObject::SiblingIterator>(
-            parent->firstChild(), this
-        ),
-        MutableList<SPObject &>(),
-        &is_item
-    );
-    if (next_lower) {
-        ++next_lower;
-        Inkscape::XML::Node *ref = ( next_lower ? next_lower->getRepr() : NULL );
+    auto next_lower = find_last_if(parent->_children.begin(), parent->_children.iterator_to(*this), &is_item);
+    if (next_lower != parent->_children.iterator_to(*this)) {
+        next_lower--;
+        Inkscape::XML::Node *ref = next_lower->getRepr();
         getRepr()->parent()->changeOrder(getRepr(), ref);
     }
 }
 
 void SPItem::lowerToBottom() {
-    using Inkscape::Algorithms::find_last_if;
-    using Inkscape::Util::MutableList;
-    using Inkscape::Util::reverse_list;
-
-    SPObject * bottom=parent->firstChild();
-    while(dynamic_cast<SPObject*>(bottom) && dynamic_cast<SPObject*>(bottom->next) && bottom!=this && !is_item(*(bottom->next))) bottom=bottom->next;
-    if (bottom && bottom != this) {
+    auto bottom = std::find_if(parent->_children.begin(), parent->_children.iterator_to(*this), &is_item);
+    if (bottom != parent->_children.iterator_to(*this)) {
+        bottom--;
         Inkscape::XML::Node *ref = bottom->getRepr() ;
         parent->getRepr()->changeOrder(getRepr(), ref);
     }

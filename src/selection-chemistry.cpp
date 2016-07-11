@@ -4261,11 +4261,11 @@ static void itemtree_map(void (*f)(SPItem *, SPDesktop *), SPObject *root, SPDes
             f(item, desktop);
         }
     }
-    for ( SPObject::SiblingIterator iter = root->firstChild() ; iter ; ++iter ) {
+    for (auto& child: root->_children) {
         //don't recurse into locked layers
-        SPItem *item = dynamic_cast<SPItem *>(&*iter);
+        SPItem *item = dynamic_cast<SPItem *>(&child);
         if (!(item && desktop->isLayer(item) && item->isLocked())) {
-            itemtree_map(f, iter, desktop);
+            itemtree_map(f, &child, desktop);
         }
     }
 }

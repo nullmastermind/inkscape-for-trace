@@ -297,9 +297,8 @@ Geom::OptRect SPGroup::bbox(Geom::Affine const &transform, SPItem::BBoxType bbox
 }
 
 void SPGroup::print(SPPrintContext *ctx) {
-	std::vector<SPObject*> l=this->childList(false);
-    for(std::vector<SPObject*>::const_iterator i=l.begin();i!=l.end();++i){
-        SPObject *o = *i;
+    for(auto& child: _children){
+        SPObject *o = &child;
         SPItem *item = dynamic_cast<SPItem *>(o);
         if (item) {
             item->invoke_print(ctx);

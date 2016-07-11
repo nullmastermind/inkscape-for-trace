@@ -7,8 +7,9 @@
  *   Stephen Silver <sasilver@users.sourceforge.net>
  *   Jon A. Cruz <jon@joncruz.org>
  *   Abhishek Sharma
+ *   Adrian Boguszewski
  *
- * Copyright (C) 1999-2008 authors
+ * Copyright (C) 1999-2016 authors
  * Copyright (C) 2001-2002 Ximian, Inc.
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
@@ -16,6 +17,7 @@
 
 #include <cstring>
 #include <string>
+#include <boost/range/adaptor/transformed.hpp>
 
 #include "helper/sp-marshal.h"
 #include "xml/node-event-vector.h"
@@ -398,13 +400,12 @@ void SPObject::changeCSS(SPCSSAttr *css, gchar const *attr)
 }
 
 std::vector<SPObject*> SPObject::childList(bool add_ref, Action) {
-	 std::vector<SPObject*> l;
-    for ( SPObject *child = firstChild() ; child; child = child->getNext() ) {
+    std::vector<SPObject*> l;
+    for (auto& child: _children) {
         if (add_ref) {
-            sp_object_ref (child);
+            sp_object_ref(&child);
         }
-
-        l.push_back(child);
+        l.push_back(&child);
     }
     return l;
 
@@ -467,9 +468,9 @@ void SPObject::requestOrphanCollection() {
 }
 
 void SPObject::_sendDeleteSignalRecursive() {
-    for (SPObject *child = firstChild(); child; child = child->getNext()) {
-        child->_delete_signal.emit(child);
-        child->_sendDeleteSignalRecursive();
+    for (auto& child: _children) {
+        child._delete_signal.emit(&child);
+        child._sendDeleteSignalRecursive();
     }
 }
 
@@ -497,12 +498,12 @@ void SPObject::deleteObject(bool propagate, bool propagate_descendants)
 void SPObject::cropToObject(SPObject *except)
 {
     std::vector<SPObject*> toDelete;
-    for ( SPObject *child = this->firstChild(); child; child = child->getNext() ) {
-        if (SP_IS_ITEM(child)) {
-            if (child->isAncestorOf(except)) {
-                child->cropToObject(except);
-            } else if(child != except) {
-                toDelete.push_back(child);
+    for (auto& child: _children) {
+        if (SP_IS_ITEM(&child)) {
+            if (child.isAncestorOf(except)) {
+                child.cropToObject(except);
+            } else if(&child != except) {
+                toDelete.push_back(&child);
             }
         }
     }
@@ -525,6 +526,12 @@ void SPObject::attach(SPObject *object, SPObject *prev)
     object->parent = this;
     this->_updateTotalHRefCount(object->_total_hrefcount);
 
+    auto it = _children.begin();
+    if (prev != nullptr) {
+        it = ++_children.iterator_to(*prev);
+    }
+    _children.insert(it, *object);
+
     SPObject *next;
     if (prev) {
         next = prev->next;
@@ -541,43 +548,47 @@ void SPObject::attach(SPObject *object, SPObject *prev)
         object->xml_space.value = this->xml_space.value;
 }
 
-void SPObject::reorder(SPObject *prev)
-{
-    //g_return_if_fail(object != NULL);
-    //g_return_if_fail(SP_IS_OBJECT(object));
-    g_return_if_fail(this->parent != NULL);
-    g_return_if_fail(this != prev);
-    g_return_if_fail(!prev || SP_IS_OBJECT(prev));
-    g_return_if_fail(!prev || prev->parent == this->parent);
+void SPObject::reorder(SPObject* obj, SPObject* prev) {
+    g_return_if_fail(obj != nullptr);
+    g_return_if_fail(obj->parent);
+    g_return_if_fail(obj->parent == this);
+    g_return_if_fail(obj != prev);
+    g_return_if_fail(!prev || prev->parent == obj->parent);
 
-    SPObject *const parent=this->parent;
+    auto it = _children.begin();
+    if (prev != nullptr) {
+        it = ++_children.iterator_to(*prev);
+    }
+
+    _children.splice(it, _children, _children.iterator_to(*obj));
+
 
     SPObject *old_prev=NULL;
-    for ( SPObject *child = parent->children ; child && child != this ;
+    for ( SPObject *child = children ; child && child != obj ;
           child = child->next )
     {
         old_prev = child;
     }
 
-    SPObject *next=this->next;
+    SPObject *next=obj->next;
     if (old_prev) {
         old_prev->next = next;
     } else {
-        parent->children = next;
+        children = next;
     }
     if (!next) {
-        parent->_last_child = old_prev;
+        _last_child = old_prev;
     }
     if (prev) {
         next = prev->next;
-        prev->next = this;
+        prev->next = obj;
     } else {
-        next = parent->children;
-        parent->children = this;
+        next = children;
+        children = obj;
     }
-    this->next = next;
+    obj->next = next;
     if (!next) {
-        parent->_last_child = this;
+        _last_child = obj;
     }
 }
 
@@ -589,6 +600,7 @@ void SPObject::detach(SPObject *object)
     g_return_if_fail(SP_IS_OBJECT(object));
     g_return_if_fail(object->parent == this);
 
+    _children.erase(_children.iterator_to(*object));
     object->releaseReferences();
 
     SPObject *prev=NULL;
@@ -618,14 +630,14 @@ void SPObject::detach(SPObject *object)
 SPObject *SPObject::get_child_by_repr(Inkscape::XML::Node *repr)
 {
     g_return_val_if_fail(repr != NULL, NULL);
-    SPObject *result = 0;
+    SPObject *result = nullptr;
 
-    if ( _last_child && (_last_child->getRepr() == repr) ) {
-        result = _last_child;   // optimization for common scenario
+    if (_children.size() > 0 && _children.back().getRepr() == repr) {
+        result = &_children.back();   // optimization for common scenario
     } else {
-        for ( SPObject *child = children ; child ; child = child->next ) {
-            if ( child->getRepr() == repr ) {
-                result = child;
+        for (auto& child: _children) {
+            if (child.getRepr() == repr) {
+                result = &child;
                 break;
             }
         }
@@ -656,10 +668,12 @@ void SPObject::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
 
 void SPObject::release() {
     SPObject* object = this;
-
     debug("id=%p, typename=%s", object, g_type_name_from_instance((GTypeInstance*)object));
-    while (object->children) {
-        object->detach(object->children);
+    auto tmp = _children | boost::adaptors::transformed([](SPObject& obj){return &obj;});
+    std::vector<SPObject *> toRelease(tmp.begin(), tmp.end());
+
+    for (auto& p: toRelease) {
+        object->detach(p);
     }
 }
 
@@ -680,7 +694,7 @@ void SPObject::order_changed(Inkscape::XML::Node *child, Inkscape::XML::Node * /
     SPObject *ochild = object->get_child_by_repr(child);
     g_return_if_fail(ochild != NULL);
     SPObject *prev = new_ref ? object->get_child_by_repr(new_ref) : NULL;
-    ochild->reorder(prev);
+    object->reorder(ochild, prev);
     ochild->_position_changed_signal.emit(ochild);
 }
 
@@ -1523,33 +1537,33 @@ bool SPObject::setTitleOrDesc(gchar const *value, gchar const *svg_tagname, bool
     return true;
 }
 
-SPObject * SPObject::findFirstChild(gchar const *tagname) const
+SPObject* SPObject::findFirstChild(gchar const *tagname) const
 {
-    for (SPObject *child = children; child; child = child->next)
+    for (auto& child: const_cast<SPObject*>(this)->_children)
     {
-        if (child->repr->type() == Inkscape::XML::ELEMENT_NODE &&
-            !strcmp(child->repr->name(), tagname)) {
-            return child;
+        if (child.repr->type() == Inkscape::XML::ELEMENT_NODE &&
+            !strcmp(child.repr->name(), tagname)) {
+            return &child;
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 char* SPObject::textualContent() const
 {
     GString* text = g_string_new("");
 
-    for (const SPObject *child = firstChild(); child; child = child->next)
+    for (auto& child: _children)
     {
-        Inkscape::XML::NodeType child_type = child->repr->type();
+        Inkscape::XML::NodeType child_type = child.repr->type();
 
         if (child_type == Inkscape::XML::ELEMENT_NODE) {
-            char* new_string = child->textualContent();
+            char* new_string = child.textualContent();
             g_string_append(text, new_string);
             g_free(new_string);
         }
         else if (child_type == Inkscape::XML::TEXT_NODE) {
-            g_string_append(text, child->repr->content());
+            g_string_append(text, child.repr->content());
         }
     }
     return g_string_free(text, FALSE);
@@ -1566,8 +1580,8 @@ void SPObject::recursivePrintTree( unsigned level )
         std::cout << "  ";
     }
     std::cout << (getId()?getId():"No object id") << std::endl;
-    for (SPObject *child = children; child; child = child->next) {
-        child->recursivePrintTree( level+1 );
+    for (auto& child: _children) {
+        child.recursivePrintTree(level + 1);
     }
 }
 

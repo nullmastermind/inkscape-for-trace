@@ -92,7 +92,7 @@ bool URIReference::_acceptObject(SPObject *obj) const
             g_warning("cloned object with no known type\n");
             return false;
         }
-        for (int i = positions.size() - 2; i >= 0; i--)
+        for (int i = (int) (positions.size() - 2); i >= 0; i--)
             owner = owner->childList(false)[positions[i]];
     }
     // once we have the "original" object (hopefully) we look at who is referencing it
