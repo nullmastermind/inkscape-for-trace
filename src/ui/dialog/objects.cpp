@@ -1292,9 +1292,9 @@ bool ObjectsPanel::_executeAction()
             break;
             case BUTTON_COLLAPSE_ALL:
             {
-                for (SPObject* obj = _document->getRoot()->firstChild(); obj != NULL; obj = obj->next) {
-                    if (SP_IS_GROUP(obj)) {
-                        _setCollapsed(SP_GROUP(obj));
+                for (auto& obj: _document->getRoot()->_children) {
+                    if (SP_IS_GROUP(&obj)) {
+                        _setCollapsed(SP_GROUP(&obj));
                     }
                 }
                 _objectsChanged(_document->getRoot());

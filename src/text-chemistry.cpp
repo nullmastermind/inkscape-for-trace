@@ -240,9 +240,9 @@ text_remove_all_kerns_recursively(SPObject *o)
         g_strfreev(xa_comma);
     }
 
-    for (SPObject *i = o->firstChild(); i != NULL; i = i->getNext()) {
-        text_remove_all_kerns_recursively(i);
-        i->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
+    for (auto& i: o->_children) {
+        text_remove_all_kerns_recursively(&i);
+        i.requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
     }
 }
 

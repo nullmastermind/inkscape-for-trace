@@ -118,7 +118,7 @@ static gchar *sp_object_get_unique_id(SPObject    *object,
  */
 SPObject::SPObject()
     : cloned(0), uflags(0), mflags(0), hrefcount(0), _total_hrefcount(0),
-      document(NULL), parent(NULL), children(NULL), _last_child(NULL),
+      document(NULL), parent(NULL), children(NULL),
       next(NULL), id(NULL), repr(NULL), refCount(1),hrefList(std::list<SPObject*>()),
       _successor(NULL), _collection_policy(SPObject::COLLECT_WITH_PARENT),
       _label(NULL), _default_label(NULL)
@@ -541,9 +541,6 @@ void SPObject::attach(SPObject *object, SPObject *prev)
         this->children = object;
     }
     object->next = next;
-    if (!next) {
-        this->_last_child = object;
-    }
     if (!object->xml_space.set)
         object->xml_space.value = this->xml_space.value;
 }
@@ -576,9 +573,6 @@ void SPObject::reorder(SPObject* obj, SPObject* prev) {
     } else {
         children = next;
     }
-    if (!next) {
-        _last_child = old_prev;
-    }
     if (prev) {
         next = prev->next;
         prev->next = obj;
@@ -587,9 +581,6 @@ void SPObject::reorder(SPObject* obj, SPObject* prev) {
         children = obj;
     }
     obj->next = next;
-    if (!next) {
-        _last_child = obj;
-    }
 }
 
 void SPObject::detach(SPObject *object)
@@ -615,9 +606,6 @@ void SPObject::detach(SPObject *object)
         prev->next = next;
     } else {
         this->children = next;
-    }
-    if (!next) {
-        this->_last_child = prev;
     }
 
     object->next = NULL;
@@ -856,11 +844,9 @@ void SPObject::releaseReferences() {
 
 SPObject *SPObject::getPrev()
 {
-    SPObject *prev = 0;
-    for ( SPObject *obj = parent->firstChild(); obj && !prev; obj = obj->getNext() ) {
-        if (obj->getNext() == this) {
-            prev = obj;
-        }
+    SPObject *prev = nullptr;
+    if (parent && !parent->_children.empty() && &parent->_children.front() != this) {
+        prev = &*(--parent->_children.iterator_to(*this));
     }
     return prev;
 }

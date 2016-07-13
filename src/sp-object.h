@@ -209,7 +209,6 @@ public:
     SPDocument *document; /* Document we are part of */
     SPObject *parent; /* Our parent (only one allowed) */
     SPObject *children; /* Our children */
-    SPObject *_last_child; /* Remembered last child */
     SPObject *next; /* Next object in linked list */
 
 private:
@@ -314,11 +313,11 @@ public:
 
     bool hasChildren() const { return ( _children.size() > 0 ); }
 
-    SPObject *firstChild() { return children; }
-    SPObject const *firstChild() const { return children; }
+    SPObject *firstChild() { return _children.empty() ? nullptr : &_children.front(); }
+    SPObject const *firstChild() const { return _children.empty() ? nullptr : &_children.front(); }
 
-    SPObject *lastChild() { return _last_child; }
-    SPObject const *lastChild() const { return _last_child; }
+    SPObject *lastChild() { return _children.empty() ? nullptr : &_children.back(); }
+    SPObject const *lastChild() const { return _children.empty() ? nullptr : &_children.back(); }
 
     enum Action { ActionGeneral, ActionBBox, ActionUpdate, ActionShow };
 

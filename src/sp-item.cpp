@@ -705,9 +705,9 @@ Inkscape::XML::Node* SPItem::write(Inkscape::XML::Document *xml_doc, Inkscape::X
     // so we need to add any children from the underlying object to the new repr
     if (flags & SP_OBJECT_WRITE_BUILD) {
         GSList *l = NULL;
-        for (SPObject *child = object->firstChild(); child != NULL; child = child->next ) {
-            if (dynamic_cast<SPTitle *>(child) || dynamic_cast<SPDesc *>(child)) {
-                Inkscape::XML::Node *crepr = child->updateRepr(xml_doc, NULL, flags);
+        for (auto& child: object->_children) {
+            if (dynamic_cast<SPTitle *>(&child) || dynamic_cast<SPDesc *>(&child)) {
+                Inkscape::XML::Node *crepr = child.updateRepr(xml_doc, NULL, flags);
                 if (crepr) {
                     l = g_slist_prepend (l, crepr);
                 }
@@ -719,9 +719,9 @@ Inkscape::XML::Node* SPItem::write(Inkscape::XML::Document *xml_doc, Inkscape::X
             l = g_slist_remove (l, l->data);
         }
     } else {
-        for (SPObject *child = object->firstChild() ; child != NULL; child = child->next ) {
-            if (dynamic_cast<SPTitle *>(child) || dynamic_cast<SPDesc *>(child)) {
-                child->updateRepr(flags);
+        for (auto& child: object->_children) {
+            if (dynamic_cast<SPTitle *>(&child) || dynamic_cast<SPDesc *>(&child)) {
+                child.updateRepr(flags);
             }
         }
     }
@@ -928,12 +928,12 @@ unsigned int SPItem::pos_in_parent() const {
 
     unsigned int pos = 0;
 
-    for ( SPObject *iter = parent->firstChild() ; iter ; iter = iter->next) {
-        if (iter == this) {
+    for (auto& iter: parent->_children) {
+        if (&iter == this) {
             return pos;
         }
 
-        if (dynamic_cast<SPItem *>(iter)) {
+        if (dynamic_cast<SPItem *>(&iter)) {
             pos++;
         }
     }
@@ -1666,8 +1666,8 @@ SPItem const *sp_item_first_item_child(SPObject const *obj)
 SPItem *sp_item_first_item_child(SPObject *obj)
 {
     SPItem *child = 0;
-    for ( SPObject *iter = obj->firstChild() ; iter ; iter = iter->next ) {
-        SPItem *tmp = dynamic_cast<SPItem *>(iter);
+    for (auto& iter: obj->_children) {
+        SPItem *tmp = dynamic_cast<SPItem *>(&iter);
         if ( tmp ) {
             child = tmp;
             break;

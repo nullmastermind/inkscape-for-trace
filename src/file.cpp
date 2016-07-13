@@ -1204,8 +1204,8 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
 
         // Count the number of top-level items in the imported document.
         guint items_count = 0;
-        for ( SPObject *child = doc->getRoot()->firstChild(); child; child = child->getNext()) {
-            if (SP_IS_ITEM(child)) {
+        for (auto& child: doc->getRoot()->_children) {
+            if (SP_IS_ITEM(&child)) {
                 items_count++;
             }
         }
@@ -1234,9 +1234,9 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
         // Construct a new object representing the imported image,
         // and insert it into the current document.
         SPObject *new_obj = NULL;
-        for ( SPObject *child = doc->getRoot()->firstChild(); child; child = child->getNext() ) {
-            if (SP_IS_ITEM(child)) {
-                Inkscape::XML::Node *newitem = child->getRepr()->duplicate(xml_in_doc);
+        for (auto& child: doc->getRoot()->_children) {
+            if (SP_IS_ITEM(&child)) {
+                Inkscape::XML::Node *newitem = child.getRepr()->duplicate(xml_in_doc);
 
                 // convert layers to groups, and make sure they are unlocked
                 // FIXME: add "preserve layers" mode where each layer from
@@ -1249,10 +1249,10 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
             }
 
             // don't lose top-level defs or style elements
-            else if (child->getRepr()->type() == Inkscape::XML::ELEMENT_NODE) {
-                const gchar *tag = child->getRepr()->name();
+            else if (child.getRepr()->type() == Inkscape::XML::ELEMENT_NODE) {
+                const gchar *tag = child.getRepr()->name();
                 if (!strcmp(tag, "svg:style")) {
-                    in_doc->getRoot()->appendChildRepr(child->getRepr()->duplicate(xml_in_doc));
+                    in_doc->getRoot()->appendChildRepr(child.getRepr()->duplicate(xml_in_doc));
                 }
             }
         }

@@ -128,9 +128,9 @@ void SPClipPath::update(SPCtx* ctx, unsigned int flags) {
     flags &= SP_OBJECT_MODIFIED_CASCADE;
 
     GSList *l = NULL;
-    for ( SPObject *child = this->firstChild(); child; child = child->getNext()) {
-        sp_object_ref(child);
-        l = g_slist_prepend(l, child);
+    for (auto& child: _children) {
+        sp_object_ref(&child);
+        l = g_slist_prepend(l, &child);
     }
 
     l = g_slist_reverse(l);
@@ -167,9 +167,9 @@ void SPClipPath::modified(unsigned int flags) {
     flags &= SP_OBJECT_MODIFIED_CASCADE;
 
     GSList *l = NULL;
-    for (SPObject *child = this->firstChild(); child; child = child->getNext()) {
-        sp_object_ref(child);
-        l = g_slist_prepend(l, child);
+    for (auto& child: _children) {
+        sp_object_ref(&child);
+        l = g_slist_prepend(l, &child);
     }
 
     l = g_slist_reverse(l);
@@ -200,9 +200,9 @@ Inkscape::DrawingItem *SPClipPath::show(Inkscape::Drawing &drawing, unsigned int
     Inkscape::DrawingGroup *ai = new Inkscape::DrawingGroup(drawing);
     display = sp_clippath_view_new_prepend(display, key, ai);
 
-    for ( SPObject *child = firstChild() ; child ; child = child->getNext() ) {
-        if (SP_IS_ITEM(child)) {
-            Inkscape::DrawingItem *ac = SP_ITEM(child)->invoke_show(drawing, key, SP_ITEM_REFERENCE_FLAGS);
+    for (auto& child: _children) {
+        if (SP_IS_ITEM(&child)) {
+            Inkscape::DrawingItem *ac = SP_ITEM(&child)->invoke_show(drawing, key, SP_ITEM_REFERENCE_FLAGS);
 
             if (ac) {
                 /* The order is not important in clippath */
@@ -223,9 +223,9 @@ Inkscape::DrawingItem *SPClipPath::show(Inkscape::Drawing &drawing, unsigned int
 }
 
 void SPClipPath::hide(unsigned int key) {
-    for ( SPObject *child = firstChild() ; child; child = child->getNext() ) {
-        if (SP_IS_ITEM(child)) {
-            SP_ITEM(child)->invoke_hide(key);
+    for (auto& child: _children) {
+        if (SP_IS_ITEM(&child)) {
+            SP_ITEM(&child)->invoke_hide(key);
         }
     }
 
@@ -252,9 +252,9 @@ void SPClipPath::setBBox(unsigned int key, Geom::OptRect const &bbox) {
 Geom::OptRect SPClipPath::geometricBounds(Geom::Affine const &transform) {
     Geom::OptRect bbox;
 
-    for (SPObject *i = firstChild(); i; i = i->getNext()) {
-        if (SP_IS_ITEM(i)) {
-        	Geom::OptRect tmp = SP_ITEM(i)->geometricBounds(Geom::Affine(SP_ITEM(i)->transform) * transform);
+    for (auto& i: _children) {
+        if (SP_IS_ITEM(&i)) {
+        	Geom::OptRect tmp = SP_ITEM(&i)->geometricBounds(Geom::Affine(SP_ITEM(&i)->transform) * transform);
 			bbox.unionWith(tmp);
         }
     }

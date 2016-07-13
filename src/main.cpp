@@ -1228,8 +1228,8 @@ static int sp_process_file_list(GSList *fl)
                 	std::vector<SPItem*> items;
                     SPRoot *root = doc->getRoot();
                     doc->ensureUpToDate();
-                    for ( SPObject *iter = root->firstChild(); iter ; iter = iter->getNext()) {
-                        SPItem* item = (SPItem*) iter;
+                    for (auto& iter: root->_children) {
+                        SPItem* item = (SPItem*) &iter;
                         if (! (SP_IS_TEXT(item) || SP_IS_FLOWTEXT(item) || SP_IS_GROUP(item))) {
                             continue;
                         }

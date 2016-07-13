@@ -59,6 +59,7 @@ TEST_F(SPObjectTest, Basics) {
     a->attach(b, nullptr);
     a->attach(d, c);
     EXPECT_TRUE(a->hasChildren());
+    EXPECT_EQ(b, a->firstChild());
     EXPECT_EQ(d, a->lastChild());
     auto children = a->childList(false);
     EXPECT_EQ(3, children.size());
@@ -93,6 +94,8 @@ TEST_F(SPObjectTest, Basics) {
     EXPECT_EQ(2, a->childList(false).size());
     a->releaseReferences();
     EXPECT_FALSE(a->hasChildren());
+    EXPECT_EQ(nullptr, a->firstChild());
+    EXPECT_EQ(nullptr, a->lastChild());
 }
 
 TEST_F(SPObjectTest, Advanced) {
@@ -102,6 +105,15 @@ TEST_F(SPObjectTest, Advanced) {
     a->attach(e, a->lastChild());
     EXPECT_EQ(e, a->get_child_by_repr(e->getRepr()));
     EXPECT_EQ(c, a->get_child_by_repr(c->getRepr()));
+    EXPECT_EQ(d, e->getPrev());
+    EXPECT_EQ(c, d->getPrev());
+    EXPECT_EQ(b, c->getPrev());
+    EXPECT_EQ(nullptr, b->getPrev());
+    std::vector<SPObject*> tmp = {b, c, d, e};
+    int index = 0;
+    for(auto& child: a->_children) {
+        EXPECT_EQ(tmp[index++], &child);
+    }
 }
 
 TEST_F(SPObjectTest, Tmp) {
@@ -109,7 +121,12 @@ TEST_F(SPObjectTest, Tmp) {
     a->attach(c, a->lastChild());
     a->attach(d, a->lastChild());
     a->attach(e, a->lastChild());
-    EXPECT_TRUE(a->hasChildren());
-    a->releaseReferences();
-    EXPECT_FALSE(a->hasChildren());
+    std::vector<SPObject*> tmp;
+    for (SPObject *q = a->firstChild(); q; q = q->getNext()) {
+        tmp.push_back(q);
+    }
+    int index = 0;
+    for(auto& child: a->_children) {
+        EXPECT_EQ(tmp[index++], &child);
+    }
 }

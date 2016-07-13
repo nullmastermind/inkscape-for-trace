@@ -199,8 +199,8 @@ static guint count_gradient_hrefs(SPObject *o, SPGradient *gr)
         i ++;
     }
 
-    for ( SPObject *child = o->firstChild(); child; child = child->getNext() ) {
-        i += count_gradient_hrefs(child, gr);
+    for (auto& child: o->_children) {
+        i += count_gradient_hrefs(&child, gr);
     }
 
     return i;
@@ -926,11 +926,11 @@ void sp_item_gradient_reverse_vector(SPItem *item, Inkscape::PaintTarget fill_or
     GSList *child_objects = NULL;
     std::vector<double> offsets;
     double offset;
-    for ( SPObject *child = vector->firstChild(); child; child = child->getNext()) {
-        child_reprs = g_slist_prepend (child_reprs, child->getRepr());
-        child_objects = g_slist_prepend (child_objects, child);
+    for (auto& child: vector->_children) {
+        child_reprs = g_slist_prepend (child_reprs, child.getRepr());
+        child_objects = g_slist_prepend (child_objects, &child);
         offset=0;
-        sp_repr_get_double(child->getRepr(), "offset", &offset);
+        sp_repr_get_double(child.getRepr(), "offset", &offset);
         offsets.push_back(offset);
     }
 
@@ -979,9 +979,9 @@ void sp_item_gradient_invert_vector_color(SPItem *item, Inkscape::PaintTarget fi
         sp_gradient_repr_set_link(gradient->getRepr(), vector);
     }
 
-    for ( SPObject *child = vector->firstChild(); child; child = child->getNext()) {
-        if (SP_IS_STOP(child)) {
-            guint32 color =  SP_STOP(child)->get_rgba32();
+    for (auto& child: vector->_children) {
+        if (SP_IS_STOP(&child)) {
+            guint32 color =  SP_STOP(&child)->get_rgba32();
             //g_message("Stop color %d", color);
             gchar c[64];
             sp_svg_write_color (c, sizeof(c),
@@ -994,7 +994,7 @@ void sp_item_gradient_invert_vector_color(SPItem *item, Inkscape::PaintTarget fi
             );
             SPCSSAttr *css = sp_repr_css_attr_new ();
             sp_repr_css_set_property (css, "stop-color", c);
-            sp_repr_css_change(child->getRepr(), css, "style");
+            sp_repr_css_change(child.getRepr(), css, "style");
             sp_repr_css_attr_unref (css);
         }
     }

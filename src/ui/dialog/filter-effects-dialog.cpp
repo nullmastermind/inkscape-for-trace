@@ -103,9 +103,7 @@ static int input_count(const SPFilterPrimitive* prim)
         return 2;
     else if(SP_IS_FEMERGE(prim)) {
         // Return the number of feMergeNode connections plus an extra
-        int count = 1;
-        for(const SPObject* o = prim->firstChild(); o; o = o->next, ++count){};
-        return count;
+        return (int) (prim->_children.size() + 1);
     }
     else
         return 1;
@@ -2343,11 +2341,12 @@ const Gtk::TreeIter FilterEffectsDialog::PrimitiveList::find_result(const Gtk::T
     if(SP_IS_FEMERGE(prim)) {
         int c = 0;
         bool found = false;
-        for(const SPObject* o = prim->firstChild(); o; o = o->next, ++c) {
-            if(c == attr && SP_IS_FEMERGENODE(o)) {
-                image = SP_FEMERGENODE(o)->input;
+        for (auto& o: prim->_children) {
+            if(c == attr && SP_IS_FEMERGENODE(&o)) {
+                image = SP_FEMERGENODE(&o)->input;
                 found = true;
             }
+            ++c;
         }
         if(!found)
             return target;
@@ -2534,21 +2533,23 @@ bool FilterEffectsDialog::PrimitiveList::on_button_release_event(GdkEventButton*
             if(SP_IS_FEMERGE(prim)) {
                 int c = 1;
                 bool handled = false;
-                for(SPObject* o = prim->firstChild(); o && !handled; o = o->next, ++c) {
-                    if(c == _in_drag && SP_IS_FEMERGENODE(o)) {
+                for (auto& o: prim->_children) {
+                    if(c == _in_drag && SP_IS_FEMERGENODE(&o)) {
                         // If input is null, delete it
                         if(!in_val) {
 
                             //XML Tree being used directly here while it shouldn't be.
-                            sp_repr_unparent(o->getRepr());
+                            sp_repr_unparent(o.getRepr());
                             DocumentUndo::done(prim->document, SP_VERB_DIALOG_FILTER_EFFECTS,
                                                _("Remove merge node"));
                             (*get_selection()->get_selected())[_columns.primitive] = prim;
+                        } else {
+                            _dialog.set_attr(&o, SP_ATTR_IN, in_val);
                         }
-                        else
-                            _dialog.set_attr(o, SP_ATTR_IN, in_val);
                         handled = true;
+                        break;
                     }
+                    ++c;
                 }
                 // Add new input?
                 if(!handled && c == _in_drag && in_val) {

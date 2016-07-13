@@ -894,8 +894,8 @@ void ClipboardManagerImpl::_copyPattern(SPPattern *pattern)
         _copyNode(pattern->getRepr(), _doc, _defs);
 
         // items in the pattern may also use gradients and other patterns, so recurse
-        for ( SPObject *child = pattern->firstChild() ; child ; child = child->getNext() ) {
-            SPItem *childItem = dynamic_cast<SPItem *>(child);
+        for (auto& child: pattern->_children) {
+            SPItem *childItem = dynamic_cast<SPItem *>(&child);
             if (childItem) {
                 _copyUsedDefs(childItem);
             }

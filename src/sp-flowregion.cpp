@@ -63,9 +63,9 @@ void SPFlowregion::update(SPCtx *ctx, unsigned int flags) {
 
     GSList *l = NULL;
 
-    for ( SPObject *child = this->firstChild() ; child ; child = child->getNext() ) {
-        sp_object_ref(child);
-        l = g_slist_prepend(l, child);
+    for (auto& child: _children) {
+        sp_object_ref(&child);
+        l = g_slist_prepend(l, &child);
     }
 
     l = g_slist_reverse(l);
@@ -102,9 +102,9 @@ void SPFlowregion::UpdateComputed(void)
     }
     computed.clear();
 
-    for (SPObject* child = firstChild() ; child ; child = child->getNext() ) {
+    for (auto& child: _children) {
         Shape *shape = 0;
-        GetDest(child, &shape);
+        GetDest(&child, &shape);
         computed.push_back(shape);
     }
 }
@@ -118,9 +118,9 @@ void SPFlowregion::modified(guint flags) {
 
     GSList *l = NULL;
 
-    for ( SPObject *child = this->firstChild() ; child ; child = child->getNext() ) {
-        sp_object_ref(child);
-        l = g_slist_prepend(l, child);
+    for (auto& child: _children) {
+        sp_object_ref(&child);
+        l = g_slist_prepend(l, &child);
     }
 
     l = g_slist_reverse(l);
@@ -145,9 +145,9 @@ Inkscape::XML::Node *SPFlowregion::write(Inkscape::XML::Document *xml_doc, Inksc
         }
 
         GSList *l = NULL;
-        for ( SPObject *child = this->firstChild() ; child; child = child->getNext() ) {
-            if ( !dynamic_cast<SPTitle *>(child) && !dynamic_cast<SPDesc *>(child) ) {
-                Inkscape::XML::Node *crepr = child->updateRepr(xml_doc, NULL, flags);
+        for (auto& child: _children) {
+            if ( !dynamic_cast<SPTitle *>(&child) && !dynamic_cast<SPDesc *>(&child) ) {
+                Inkscape::XML::Node *crepr = child.updateRepr(xml_doc, NULL, flags);
 
                 if (crepr) {
                     l = g_slist_prepend(l, crepr);
@@ -161,10 +161,9 @@ Inkscape::XML::Node *SPFlowregion::write(Inkscape::XML::Document *xml_doc, Inksc
             l = g_slist_remove(l, l->data);
         }
 
-    } else {
-        for ( SPObject *child = this->firstChild() ; child; child = child->getNext() ) {
-            if ( !dynamic_cast<SPTitle *>(child) && !dynamic_cast<SPDesc *>(child) ) {
-                child->updateRepr(flags);
+        for (auto& child: _children) {
+            if ( !dynamic_cast<SPTitle *>(&child) && !dynamic_cast<SPDesc *>(&child) ) {
+                child.updateRepr(flags);
             }
         }
     }
@@ -221,9 +220,9 @@ void SPFlowregionExclude::update(SPCtx *ctx, unsigned int flags) {
 
     GSList *l = NULL;
 
-    for ( SPObject *child = this->firstChild() ; child ; child = child->getNext() ) {
-        sp_object_ref(child);
-        l = g_slist_prepend(l, child);
+    for (auto& child: _children) {
+        sp_object_ref(&child);
+        l = g_slist_prepend(l, &child);
     }
 
     l = g_slist_reverse (l);
@@ -259,8 +258,8 @@ void SPFlowregionExclude::UpdateComputed(void)
         computed = NULL;
     }
 
-    for ( SPObject* child = firstChild() ; child ; child = child->getNext() ) {
-        GetDest(child, &computed);
+    for (auto& child: _children) {
+        GetDest(&child, &computed);
     }
 }
 
@@ -273,9 +272,9 @@ void SPFlowregionExclude::modified(guint flags) {
 
     GSList *l = NULL;
 
-    for ( SPObject *child = this->firstChild() ; child ; child = child->getNext() ) {
-        sp_object_ref(child);
-        l = g_slist_prepend(l, child);
+    for (auto& child: _children) {
+        sp_object_ref(&child);
+        l = g_slist_prepend(l, &child);
     }
 
     l = g_slist_reverse (l);
@@ -301,8 +300,8 @@ Inkscape::XML::Node *SPFlowregionExclude::write(Inkscape::XML::Document *xml_doc
 
         GSList *l = NULL;
 
-        for ( SPObject *child = this->firstChild() ; child; child = child->getNext() ) {
-            Inkscape::XML::Node *crepr = child->updateRepr(xml_doc, NULL, flags);
+        for (auto& child: _children) {
+            Inkscape::XML::Node *crepr = child.updateRepr(xml_doc, NULL, flags);
 
             if (crepr) {
                 l = g_slist_prepend(l, crepr);
@@ -316,8 +315,8 @@ Inkscape::XML::Node *SPFlowregionExclude::write(Inkscape::XML::Document *xml_doc
         }
 
     } else {
-        for ( SPObject *child = this->firstChild() ; child; child = child->getNext() ) {
-            child->updateRepr(flags);
+        for (auto& child: _children) {
+            child.updateRepr(flags);
         }
     }
 

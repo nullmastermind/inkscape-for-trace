@@ -268,8 +268,8 @@ Inkscape::XML::Node* SPFilter::write(Inkscape::XML::Document *doc, Inkscape::XML
         }
 
         GSList *l = NULL;
-        for ( SPObject *child = this->firstChild(); child; child = child->getNext() ) {
-            Inkscape::XML::Node *crepr = child->updateRepr(doc, NULL, flags);
+        for (auto& child: _children) {
+            Inkscape::XML::Node *crepr = child.updateRepr(doc, NULL, flags);
 
             if (crepr) {
                 l = g_slist_prepend (l, crepr);
@@ -282,8 +282,8 @@ Inkscape::XML::Node* SPFilter::write(Inkscape::XML::Document *doc, Inkscape::XML
             l = g_slist_remove (l, l->data);
         }
     } else {
-        for ( SPObject *child = this->firstChild() ; child; child = child->getNext() ) {
-            child->updateRepr(flags);
+        for (auto& child: _children) {
+            child.updateRepr(flags);
         }
     }
 

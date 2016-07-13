@@ -883,9 +883,9 @@ void item_outline_add_marker_child( SPItem const *item, Geom::Affine marker_tran
     // note: a marker child item can be an item group!
     if (SP_IS_GROUP(item)) {
         // recurse through all childs:
-        for (SPObject const *o = item->firstChild() ; o ; o = o->getNext() ) {
-            if ( SP_IS_ITEM(o) ) {
-                item_outline_add_marker_child(SP_ITEM(o), tr, pathv_in);
+        for (auto& o: item->_children) {
+            if ( SP_IS_ITEM(&o) ) {
+                item_outline_add_marker_child(SP_ITEM(&o), tr, pathv_in);
             }
         }
     } else {

@@ -88,6 +88,7 @@ SPCycleType SP_CYCLING = SP_CYCLE_FOCUS;
 #include <map>
 #include <cstring>
 #include <string>
+#include <boost/range/adaptor/reversed.hpp>
 #include "sp-item.h"
 #include "box3d.h"
 #include "persp3d.h"
@@ -432,8 +433,8 @@ static void add_ids_recursive(std::vector<const gchar *> &ids, SPObject *obj)
         ids.push_back(obj->getId());
 
         if (dynamic_cast<SPGroup *>(obj)) {
-            for (SPObject *child = obj->firstChild() ; child; child = child->getNext() ) {
-                add_ids_recursive(ids, child);
+            for (auto& child: obj->_children) {
+                add_ids_recursive(ids, &child);
             }
         }
     }
@@ -586,20 +587,20 @@ void sp_edit_clear_all(Inkscape::Selection *selection)
  */
 std::vector<SPItem*> &get_all_items(std::vector<SPItem*> &list, SPObject *from, SPDesktop *desktop, bool onlyvisible, bool onlysensitive, bool ingroups, std::vector<SPItem*> const &exclude)
 {
-    for ( SPObject *child = from->firstChild() ; child; child = child->getNext() ) {
-        SPItem *item = dynamic_cast<SPItem *>(child);
+    for (auto& child: from->_children) {
+        SPItem *item = dynamic_cast<SPItem *>(&child);
         if (item &&
             !desktop->isLayer(item) &&
             (!onlysensitive || !item->isLocked()) &&
             (!onlyvisible || !desktop->itemIsHidden(item)) &&
-            (exclude.empty() || exclude.end() == std::find(exclude.begin(),exclude.end(),child))
+            (exclude.empty() || exclude.end() == std::find(exclude.begin(), exclude.end(), &child))
             )
         {
             list.insert(list.begin(),item);
         }
 
         if (ingroups || (item && desktop->isLayer(item))) {
-            list = get_all_items(list, child, desktop, onlyvisible, onlysensitive, ingroups, exclude);
+            list = get_all_items(list, &child, desktop, onlyvisible, onlysensitive, ingroups, exclude);
         }
     }
 
@@ -1200,9 +1201,10 @@ take_style_from_item(SPObject *object)
         (dynamic_cast<SPText *>(object) && object->children && object->children->next == NULL)) {
         // if this is a text with exactly one tspan child, merge the style of that tspan as well
         // If this is a group, merge the style of its topmost (last) child with style
-        for (SPObject *last_element = object->lastChild(); last_element != NULL; last_element = last_element->getPrev()) {
-            if ( last_element->style ) {
-                SPCSSAttr *temp = sp_css_attr_from_object(last_element, SP_STYLE_FLAG_IFSET);
+        auto list = object->_children | boost::adaptors::reversed;
+        for (auto& element: list) {
+            if (element.style ) {
+                SPCSSAttr *temp = sp_css_attr_from_object(&element, SP_STYLE_FLAG_IFSET);
                 if (temp) {
                     sp_repr_css_merge(css, temp);
                     sp_repr_css_attr_unref(temp);
@@ -1621,10 +1623,10 @@ void sp_selection_apply_affine(Inkscape::Selection *selection, Geom::Affine cons
         } else if (transform_flowtext_with_frame) {
             // apply the inverse of the region's transform to the <use> so that the flow remains
             // the same (even though the output itself gets transformed)
-            for ( SPObject *region = item->firstChild() ; region ; region = region->getNext() ) {
-                if (dynamic_cast<SPFlowregion *>(region) || dynamic_cast<SPFlowregionExclude *>(region)) {
-                    for ( SPObject *item = region->firstChild() ; item ; item = item->getNext() ) {
-                        SPUse *use = dynamic_cast<SPUse *>(item);
+            for (auto& region: item->_children) {
+                if (dynamic_cast<SPFlowregion *>(&region) || dynamic_cast<SPFlowregionExclude *>(&region)) {
+                    for (auto& itm: region._children) {
+                        SPUse *use = dynamic_cast<SPUse *>(&itm);
                         if ( use ) {
                             use->doWriteTransform(use->getRepr(), use->transform.inverse(), NULL, compensate);
                         }
@@ -2702,8 +2704,9 @@ sp_selection_unlink(SPDesktop *desktop)
     // Get a copy of current selection.
     std::vector<SPItem*> new_select;
     bool unlinked = false;
-    auto items= selection->items();
-    for (auto i=boost::rbegin(items);i!=boost::rend(items);++i){
+    std::vector<SPItem *> items(selection->items().begin(), selection->items().end());
+
+    for (auto i=items.rbegin();i!=items.rend();++i){
         SPItem *item = *i;
 
         if (dynamic_cast<SPText *>(item)) {
@@ -3432,9 +3435,9 @@ void sp_selection_untile(SPDesktop *desktop)
         Geom::Affine pat_transform = basePat->getTransform();
         pat_transform *= item->transform;
 
-        for (SPObject *child = pattern->firstChild() ; child != NULL; child = child->next ) {
-            if (dynamic_cast<SPItem *>(child)) {
-                Inkscape::XML::Node *copy = child->getRepr()->duplicate(xml_doc);
+        for (auto& child: pattern->_children) {
+            if (dynamic_cast<SPItem *>(&child)) {
+                Inkscape::XML::Node *copy = child.getRepr()->duplicate(xml_doc);
                 SPItem *i = dynamic_cast<SPItem *>(desktop->currentLayer()->appendChildRepr(copy));
 
                // FIXME: relink clones to the new canvas objects
@@ -4100,9 +4103,9 @@ void sp_selection_unset_mask(SPDesktop *desktop, bool apply_clip_path) {
     for ( std::map<SPObject*,SPItem*>::iterator it = referenced_objects.begin() ; it != referenced_objects.end() ; ++it) {
         SPObject *obj = (*it).first; // Group containing the clipped paths or masks
         GSList *items_to_move = NULL;
-        for ( SPObject *child = obj->firstChild() ; child; child = child->getNext() ) {
+        for (auto& child: obj->_children) {
             // Collect all clipped paths and masks within a single group
-            Inkscape::XML::Node *copy = child->getRepr()->duplicate(xml_doc);
+            Inkscape::XML::Node *copy = child.getRepr()->duplicate(xml_doc);
             if(copy->attribute("inkscape:original-d") && copy->attribute("inkscape:path-effect"))
             {
                 copy->setAttribute("d", copy->attribute("inkscape:original-d"));

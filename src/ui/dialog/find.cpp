@@ -747,14 +747,14 @@ std::vector<SPItem*> &Find::all_items (SPObject *r, std::vector<SPItem*> &l, boo
         return l; // we're not interested in metadata
     }
 
-    for (SPObject *child = r->firstChild(); child; child = child->getNext()) {
-        SPItem *item = dynamic_cast<SPItem *>(child);
-        if (item && !child->cloned && !desktop->isLayer(item)) {
+    for (auto& child: r->_children) {
+        SPItem *item = dynamic_cast<SPItem *>(&child);
+        if (item && !child.cloned && !desktop->isLayer(item)) {
             if ((hidden || !desktop->itemIsHidden(item)) && (locked || !item->isLocked())) {
-                l.insert(l.begin(),(SPItem*)child);
+                l.insert(l.begin(),(SPItem*)&child);
             }
         }
-        l = all_items (child, l, hidden, locked);
+        l = all_items (&child, l, hidden, locked);
     }
     return l;
 }
