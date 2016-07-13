@@ -327,8 +327,25 @@ void StyleDialog::_delSelector()
                     for (Gtk::TreeModel::Children::iterator child = row.children().begin();
                          child != row.children().end(); ++child) {
                         Gtk::TreeModel::Row childrow = *child;
-                        if (key == childrow[_mColumns._selectorLabel]) {
-                            _selectorVec.erase(it);
+                        std::string childSel, childKey;
+                        std::vector<_selectorVecType>::iterator i;
+                        for (i = _selectorVec.begin(); i != _selectorVec.end();) {
+                            childSel = (*i).second;
+                            REMOVE_SPACES(childSel);
+                            if (!childSel.empty()) {
+                                childKey = strtok(strdup(childSel.c_str()), "{");
+                                REMOVE_SPACES(childKey);
+                            }
+                            Glib::ustring selectedChildRowLabel =
+                                    childrow[_mColumns._selectorLabel];
+                            std::string matchChildSelector = selectedChildRowLabel;
+                            REMOVE_SPACES(matchChildSelector);
+                            if (childKey == matchChildSelector) {
+                                i = _selectorVec.erase(i);
+                            }
+                            else {
+                                ++i;
+                            }
                         }
                     }
                 }
@@ -568,8 +585,14 @@ bool StyleDialog::_handleButtonEvent(GdkEventButton *event)
                                             std::string(obj->getId());
                                     childrow[_mColumns._colAddRemove] = false;
                                     childrow[_mColumns._colObj] = _desktop->selection->list();
-                                    childStyle = "#" + std::string(obj->getId()) + "{" +
-                                            std::string(obj->getAttribute("style")) + "}\n";
+                                    if (obj->getAttribute("style") != NULL) {
+                                        childStyle = "#" + std::string(obj->getId()) + "{" +
+                                                std::string(obj->getAttribute("style")) + "}\n";
+                                    }
+                                    else {
+                                        childStyle = "#" + std::string(obj->getId())
+                                                + "{" + "}\n";
+                                    }
                                     Glib::ustring key = row[_mColumns._selectorLabel];
                                     if (strcmp(key.substr(0,1).c_str(), ".") == 0) {
                                         if (!obj->getRepr()->attribute("class")) {
