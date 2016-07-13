@@ -321,7 +321,7 @@ void StyleDialog::_delSelector()
 
             Glib::ustring selectedRowLabel = row[_mColumns._selectorLabel];
             std::string matchSelector = selectedRowLabel;
-            REMOVE_SPACES(s1);
+            REMOVE_SPACES(matchSelector);
             if (key == matchSelector) {
                 if (!row.children().empty()) {
                     for (Gtk::TreeModel::Children::iterator child = row.children().begin();
@@ -341,10 +341,11 @@ void StyleDialog::_delSelector()
 
             /**
               * The _stylechild is obtained which contains the style element and
-              * the content in style element is updated.
+              * the content in style element is updated. If _selectorVec is
+              * empty, the style element is removed from the XML repr else
+              * the content is updated simply using _updateStyleContent().
               */
             _styleChild = _styleElementNode();
-
             if (_selectorVec.size() == 0) {
                 _document->getReprRoot()->removeChild(_styleChild);
                 _styleExists = false;
