@@ -75,6 +75,8 @@ StyleDialog::StyleDialog() :
     }
 
     _treeView.append_column("Selector Name", _mColumns._selectorLabel);
+    _treeView.set_expander_column(*(_treeView.get_column(1)));
+    _treeView.set_level_indentation(-12);
 
     create = manage( new Gtk::Button() );
     _styleButton(*create, "list-add", "Add a new CSS Selector");
