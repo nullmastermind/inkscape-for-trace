@@ -307,7 +307,7 @@ void StyleDialog::_delSelector()
         Gtk::TreeModel::Row row = *iter;
         std::string sel, key, value;
         std::vector<_selectorVecType>::iterator it;
-        for (it = _selectorVec.begin(); it != _selectorVec.end(); ++it ) {
+        for (it = _selectorVec.begin(); it != _selectorVec.end();) {
             sel = (*it).second;
             REMOVE_SPACES(sel);
             if (!sel.empty()) {
@@ -318,10 +318,11 @@ void StyleDialog::_delSelector()
                     value = strtok(temp, "}");
                 }
             }
-        }
 
-        if (_selectorVec.size() != 0) {
-            if (!row.parent()) {
+            Glib::ustring selectedRowLabel = row[_mColumns._selectorLabel];
+            std::string matchSelector = selectedRowLabel;
+            REMOVE_SPACES(s1);
+            if (key == matchSelector) {
                 if (!row.children().empty()) {
                     for (Gtk::TreeModel::Children::iterator child = row.children().begin();
                          child != row.children().end(); ++child) {
@@ -331,20 +332,24 @@ void StyleDialog::_delSelector()
                         }
                     }
                 }
-                _selectorVec.erase(it);
+                it = _selectorVec.erase(it);
                 _store->erase(row);
+            }
+            else {
+                ++it;
             }
 
             /**
-              * If there is a _styleChild which contains the style element, then
-              * the content in style element is updated else the _styleChild is
-              * obtained and its content is set.
+              * The _stylechild is obtained which contains the style element and
+              * the content in style element is updated.
               */
-            if (_styleChild) {
-                _updateStyleContent();
+            _styleChild = _styleElementNode();
+
+            if (_selectorVec.size() == 0) {
+                _document->getReprRoot()->removeChild(_styleChild);
+                _styleExists = false;
             }
             else {
-                _styleChild = _styleElementNode();
                 _updateStyleContent();
             }
         }
