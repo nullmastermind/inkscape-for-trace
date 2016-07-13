@@ -50,8 +50,9 @@ public:
     void read(SPObject *object, Inkscape::XML::Node *repr);
     void readFromObject(SPObject *object);
     void readFromPrefs(Glib::ustring const &path);
-    void readIfUnset( int id, char const *val );
+    void readIfUnset( int id, char const *val, SPStyleSrc const &source = SP_STYLE_SRC_STYLE_PROP );
     Glib::ustring write( unsigned int const flags = SP_STYLE_FLAG_IFSET,
+                         SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
                          SPStyle const *const base = NULL ) const;
     void cascade( SPStyle const *const parent );
     void merge(   SPStyle const *const parent );
@@ -64,8 +65,8 @@ public:
 
 private:
     void _mergeString( char const *const p );
-    void _mergeDeclList( CRDeclaration const *const decl_list );
-    void _mergeDecl(      CRDeclaration const *const decl );
+    void _mergeDeclList( CRDeclaration const *const decl_list, SPStyleSrc const &source );
+    void _mergeDecl(     CRDeclaration const *const decl,      SPStyleSrc const &source );
     void _mergeProps( CRPropList *const props );
     void _mergeObjectStylesheet( SPObject const *const object );
 

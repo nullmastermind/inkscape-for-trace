@@ -3,6 +3,7 @@
 #include "xml/repr.h"
 #include "document.h"
 #include "sp-style-elem.h"
+#include "sp-root.h"
 #include "attributes.h"
 #include "style.h"
 using Inkscape::XML::TEXT_NODE;
@@ -64,6 +65,7 @@ content_changed_cb(Inkscape::XML::Node *, gchar const *, gchar const *,
     SPObject *obj = reinterpret_cast<SPObject *>(data);
     g_assert(data != NULL);
     obj->read_content();
+    obj->document->getRoot()->emitModified( SP_OBJECT_MODIFIED_CASCADE );
 }
 
 static void
@@ -249,6 +251,19 @@ property_cb(CRDocHandler *const a_handler,
     g_return_if_fail(append_status == CR_OK);
 }
 
+void update_style_recursively( SPObject *object ) {
+    if (object) {
+        // std::cout << "update_style_recursively: "
+        //           << (object->getId()?object->getId():"null") << std::endl;
+        if (object->style) {
+            object->style->readFromObject( object );
+        }
+        for (SPObject *child = object->children; child; child = child->next) {
+            update_style_recursively( child );
+        }
+    }
+}
+
 void SPStyleElem::read_content() {
     /* fixme: If there's more than one <style> element in a document, then the document stylesheet
      * will be set to a random one of them, even switching between them.
@@ -315,9 +330,13 @@ void SPStyleElem::read_content() {
     // the <style> is a child of the object that uses a style from it. It just forces the parent of
     // <style> to reread its style as soon as the stylesheet is fully loaded. Naturally, this won't
     // work if the user of the stylesheet is its grandparent or precedent.
-    if ( parent ) {
-        parent->style->readFromObject( parent );
-    }
+    //    if ( parent ) {
+    //        parent->style->readFromObject( parent );
+    //    }
+
+    // If style sheet has changed, we need to cascade the entire object tree, top down
+    // Get root, read style, loop through children
+    update_style_recursively( (SPObject *)document->getRoot() );
 }
 
 /**

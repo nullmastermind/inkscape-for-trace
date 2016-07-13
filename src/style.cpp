@@ -685,22 +685,22 @@ SPStyle::readFromPrefs(Glib::ustring const &path) {
 
 // Matches sp_style_merge_property(SPStyle *style, gint id, gchar const *val)
 void
-SPStyle::readIfUnset( gint id, gchar const *val ) {
+SPStyle::readIfUnset( gint id, gchar const *val, SPStyleSrc const &source ) {
 
-    // std::cout << "SPStyle::readIfUnset: Entrance: " << (val?val:"null") << std::endl;
+    // std::cout << "SPStyle::readIfUnset: Entrance: " << id << ": " << (val?val:"null") << std::endl;
     // To Do: If it is not too slow, use std::map instead of std::vector inorder to remove switch()
     // (looking up SP_PROP_xxxx already uses a hash).
     g_return_if_fail(val != NULL);
 
     switch (id) {
         case SP_PROP_INKSCAPE_FONT_SPEC:
-            font_specification.readIfUnset( val );
+            font_specification.readIfUnset( val, source );
             break;
         case SP_PROP_FONT_FAMILY:
-            font_family.readIfUnset( val );
+            font_family.readIfUnset( val, source );
             break;
         case SP_PROP_FONT_SIZE:
-            font_size.readIfUnset( val );
+            font_size.readIfUnset( val, source );
             break;
         case SP_PROP_FONT_SIZE_ADJUST:
             if (strcmp(val, "none") != 0) {
@@ -708,105 +708,105 @@ SPStyle::readIfUnset( gint id, gchar const *val ) {
             }
             break;
         case SP_PROP_FONT_STYLE:
-            font_style.readIfUnset( val );
+            font_style.readIfUnset( val, source );
             break;
         case SP_PROP_FONT_VARIANT:
-            font_variant.readIfUnset( val );
+            font_variant.readIfUnset( val, source );
             break;
         case SP_PROP_FONT_WEIGHT:
-            font_weight.readIfUnset( val );
+            font_weight.readIfUnset( val, source );
             break;
         case SP_PROP_FONT_STRETCH:
-            font_stretch.readIfUnset( val );
+            font_stretch.readIfUnset( val, source );
             break;
         case SP_PROP_FONT:
-            font.readIfUnset( val );
+            font.readIfUnset( val, source );
             break;
 
             /* Font Variants CSS 3 */
         case SP_PROP_FONT_VARIANT_LIGATURES:
-            font_variant_ligatures.readIfUnset( val );
+            font_variant_ligatures.readIfUnset( val, source );
             break;
         case SP_PROP_FONT_VARIANT_POSITION:
-            font_variant_position.readIfUnset( val );
+            font_variant_position.readIfUnset( val, source );
             break;
         case SP_PROP_FONT_VARIANT_CAPS:
-            font_variant_caps.readIfUnset( val );
+            font_variant_caps.readIfUnset( val, source );
             break;
         case SP_PROP_FONT_VARIANT_NUMERIC:
-            font_variant_numeric.readIfUnset( val );
+            font_variant_numeric.readIfUnset( val, source );
             break;
         case SP_PROP_FONT_VARIANT_ALTERNATES:
-            font_variant_alternates.readIfUnset( val );
+            font_variant_alternates.readIfUnset( val, source );
             break;
         case SP_PROP_FONT_VARIANT_EAST_ASIAN:
-            font_variant_east_asian.readIfUnset( val );
+            font_variant_east_asian.readIfUnset( val, source );
             break;
         case SP_PROP_FONT_FEATURE_SETTINGS:
-            font_feature_settings.readIfUnset( val );
+            font_feature_settings.readIfUnset( val, source );
             break;
 
             /* Text */
         case SP_PROP_TEXT_INDENT:
-            text_indent.readIfUnset( val );
+            text_indent.readIfUnset( val, source );
             break;
         case SP_PROP_TEXT_ALIGN:
-            text_align.readIfUnset( val );
+            text_align.readIfUnset( val, source );
             break;
         case SP_PROP_TEXT_DECORATION:
-            text_decoration.readIfUnset( val );
+            text_decoration.readIfUnset( val, source );
             break;
         case SP_PROP_TEXT_DECORATION_LINE:
-            text_decoration_line.readIfUnset( val );
+            text_decoration_line.readIfUnset( val, source );
             break;
         case SP_PROP_TEXT_DECORATION_STYLE:
-            text_decoration_style.readIfUnset( val );
+            text_decoration_style.readIfUnset( val, source );
             break;
         case SP_PROP_TEXT_DECORATION_COLOR:
-            text_decoration_color.readIfUnset( val );
+            text_decoration_color.readIfUnset( val, source );
             break;
         case SP_PROP_LINE_HEIGHT:
-            line_height.readIfUnset( val );
+            line_height.readIfUnset( val, source );
             break;
         case SP_PROP_LETTER_SPACING:
-            letter_spacing.readIfUnset( val );
+            letter_spacing.readIfUnset( val, source );
             break;
         case SP_PROP_WORD_SPACING:
-            word_spacing.readIfUnset( val );
+            word_spacing.readIfUnset( val, source );
             break;
         case SP_PROP_TEXT_TRANSFORM:
-            text_transform.readIfUnset( val );
+            text_transform.readIfUnset( val, source );
             break;
             /* Text (css3) */
         case SP_PROP_DIRECTION:
-            direction.readIfUnset( val );
+            direction.readIfUnset( val, source );
             break;
         case SP_PROP_WRITING_MODE:
-            writing_mode.readIfUnset( val );
+            writing_mode.readIfUnset( val, source );
             break;
         case SP_PROP_TEXT_ORIENTATION:
-            text_orientation.readIfUnset( val );
+            text_orientation.readIfUnset( val, source );
             break;
         case SP_PROP_TEXT_ANCHOR:
-            text_anchor.readIfUnset( val );
+            text_anchor.readIfUnset( val, source );
             break;
         case SP_PROP_WHITE_SPACE:
-            white_space.readIfUnset( val );
+            white_space.readIfUnset( val, source );
             break;
         case SP_PROP_SHAPE_INSIDE:
-            shape_inside.readIfUnset( val );
+            shape_inside.readIfUnset( val, source );
             break;
         case SP_PROP_SHAPE_PADDING:
-            shape_padding.readIfUnset( val );
+            shape_padding.readIfUnset( val, source );
             break;
         case SP_PROP_DOMINANT_BASELINE:
-            dominant_baseline.readIfUnset( val );
+            dominant_baseline.readIfUnset( val, source );
             break;
         case SP_PROP_BASELINE_SHIFT:
-            baseline_shift.readIfUnset( val );
+            baseline_shift.readIfUnset( val, source );
             break;
         case SP_PROP_TEXT_RENDERING:
-            text_rendering.readIfUnset( val );
+            text_rendering.readIfUnset( val, source );
             break;
         case SP_PROP_ALIGNMENT_BASELINE:
             g_warning("Unimplemented style property SP_PROP_ALIGNMENT_BASELINE: value: %s", val);
@@ -825,25 +825,25 @@ SPStyle::readIfUnset( gint id, gchar const *val ) {
             g_warning("Unimplemented style property SP_PROP_CLIP: value: %s", val);
             break;
         case SP_PROP_COLOR:
-            color.readIfUnset( val );
+            color.readIfUnset( val, source );
             break;
         case SP_PROP_CURSOR:
             g_warning("Unimplemented style property SP_PROP_CURSOR: value: %s", val);
             break;
         case SP_PROP_DISPLAY:
-            display.readIfUnset( val );
+            display.readIfUnset( val, source );
             break;
         case SP_PROP_OVERFLOW:
-            overflow.readIfUnset( val );
+            overflow.readIfUnset( val, source );
             break;
         case SP_PROP_VISIBILITY:
-            visibility.readIfUnset( val );
+            visibility.readIfUnset( val, source );
             break;
         case SP_PROP_ISOLATION:
-            isolation.readIfUnset( val );
+            isolation.readIfUnset( val, source );
             break;
         case SP_PROP_MIX_BLEND_MODE:
-            mix_blend_mode.readIfUnset( val );
+            mix_blend_mode.readIfUnset( val, source );
             break;
 
             /* SVG */
@@ -861,7 +861,7 @@ SPStyle::readIfUnset( gint id, gchar const *val ) {
             this->object->getRepr()->setAttribute("clip-path", val);
             break;
         case SP_PROP_CLIP_RULE:
-            clip_rule.readIfUnset( val );
+            clip_rule.readIfUnset( val, source );
             break;
         case SP_PROP_MASK:
             /** \todo
@@ -873,14 +873,14 @@ SPStyle::readIfUnset( gint id, gchar const *val ) {
             this->object->getRepr()->setAttribute("mask", val);
             break;
         case SP_PROP_OPACITY:
-            opacity.readIfUnset( val );
+            opacity.readIfUnset( val, source );
             break;
         case SP_PROP_ENABLE_BACKGROUND:
-            enable_background.readIfUnset( val );
+            enable_background.readIfUnset( val, source );
             break;
             /* Filter */
         case SP_PROP_FILTER:
-            if( !filter.inherit ) filter.readIfUnset( val );
+            if( !filter.inherit ) filter.readIfUnset( val, source );
             break;
         case SP_PROP_FLOOD_COLOR:
             g_warning("Unimplemented style property SP_PROP_FLOOD_COLOR: value: %s", val);
@@ -905,83 +905,83 @@ SPStyle::readIfUnset( gint id, gchar const *val ) {
             /* Paint */
         case SP_PROP_COLOR_INTERPOLATION:
             // We read it but issue warning
-            color_interpolation.readIfUnset( val );
+            color_interpolation.readIfUnset( val, source );
             if( color_interpolation.value != SP_CSS_COLOR_INTERPOLATION_SRGB ) {
                 g_warning("Inkscape currently only supports color-interpolation = sRGB");
             }
             break;
         case SP_PROP_COLOR_INTERPOLATION_FILTERS:
-            color_interpolation_filters.readIfUnset( val );
+            color_interpolation_filters.readIfUnset( val, source );
             break;
         case SP_PROP_COLOR_PROFILE:
             g_warning("Unimplemented style property SP_PROP_COLOR_PROFILE: value: %s", val);
             break;
         case SP_PROP_COLOR_RENDERING:
-            color_rendering.readIfUnset( val );
+            color_rendering.readIfUnset( val, source );
             break;
         case SP_PROP_SOLID_COLOR:
-            solid_color.readIfUnset( val );
+            solid_color.readIfUnset( val, source );
             break;
         case SP_PROP_SOLID_OPACITY:
-            solid_opacity.readIfUnset( val );
+            solid_opacity.readIfUnset( val, source );
             break;
         case SP_PROP_FILL:
-            fill.readIfUnset( val );
+            fill.readIfUnset( val, source );
             break;
         case SP_PROP_FILL_OPACITY:
-            fill_opacity.readIfUnset( val );
+            fill_opacity.readIfUnset( val, source );
             break;
         case SP_PROP_FILL_RULE:
-            fill_rule.readIfUnset( val );
+            fill_rule.readIfUnset( val, source );
             break;
         case SP_PROP_IMAGE_RENDERING:
-            image_rendering.readIfUnset( val );
+            image_rendering.readIfUnset( val, source );
             break;
         case SP_PROP_MARKER:
             /* TODO:  Call sp_uri_reference_resolve(SPDocument *document, guchar const *uri) */ 
-            marker.readIfUnset( val );
+            marker.readIfUnset( val, source );
             break;
         case SP_PROP_MARKER_START:
             /* TODO:  Call sp_uri_reference_resolve(SPDocument *document, guchar const *uri) */
-            marker_start.readIfUnset( val );
+            marker_start.readIfUnset( val, source );
             break;
         case SP_PROP_MARKER_MID:
             /* TODO:  Call sp_uri_reference_resolve(SPDocument *document, guchar const *uri) */
-            marker_mid.readIfUnset( val );
+            marker_mid.readIfUnset( val, source );
             break;
         case SP_PROP_MARKER_END:
             /* TODO:  Call sp_uri_reference_resolve(SPDocument *document, guchar const *uri) */
-            marker_end.readIfUnset( val );
+            marker_end.readIfUnset( val, source );
             break;
         case SP_PROP_SHAPE_RENDERING:
-            shape_rendering.readIfUnset( val );
+            shape_rendering.readIfUnset( val, source );
             break;
         case SP_PROP_STROKE:
-            stroke.readIfUnset( val );
+            stroke.readIfUnset( val, source );
             break;
         case SP_PROP_STROKE_WIDTH:
-            stroke_width.readIfUnset( val );
+            stroke_width.readIfUnset( val, source );
             break;
         case SP_PROP_STROKE_DASHARRAY:
-            stroke_dasharray.readIfUnset( val );
+            stroke_dasharray.readIfUnset( val, source );
             break;
         case SP_PROP_STROKE_DASHOFFSET:
-            stroke_dashoffset.readIfUnset( val );
+            stroke_dashoffset.readIfUnset( val, source );
             break;
         case SP_PROP_STROKE_LINECAP:
-            stroke_linecap.readIfUnset( val );
+            stroke_linecap.readIfUnset( val, source );
             break;
         case SP_PROP_STROKE_LINEJOIN:
-            stroke_linejoin.readIfUnset( val );
+            stroke_linejoin.readIfUnset( val, source );
             break;
         case SP_PROP_STROKE_MITERLIMIT:
-            stroke_miterlimit.readIfUnset( val );
+            stroke_miterlimit.readIfUnset( val, source );
             break;
         case SP_PROP_STROKE_OPACITY:
-            stroke_opacity.readIfUnset( val );
+            stroke_opacity.readIfUnset( val, source );
             break;
         case SP_PROP_PAINT_ORDER:
-            paint_order.readIfUnset( val );
+            paint_order.readIfUnset( val, source );
             break;
         default:
             g_warning("SPIStyle::readIfUnset(): Invalid style property id: %d value: %s", id, val);
@@ -1003,16 +1003,16 @@ SPStyle::readIfUnset( gint id, gchar const *val ) {
  * \post ret != NULL.
  */
 Glib::ustring
-SPStyle::write( guint const flags, SPStyle const *const base ) const {
+SPStyle::write( guint const flags, SPStyleSrc const &style_src_req, SPStyle const *const base ) const {
 
     // std::cout << "SPStyle::write" << std::endl;
 
     Glib::ustring style_string;
     for(std::vector<SPIBase*>::size_type i = 0; i != _properties.size(); ++i) {
         if( base != NULL ) {
-            style_string += _properties[i]->write( flags, base->_properties[i] );
+            style_string += _properties[i]->write( flags, style_src_req, base->_properties[i] );
         } else {
-            style_string += _properties[i]->write( flags, NULL );
+            style_string += _properties[i]->write( flags, style_src_req, NULL );
         }
     }
     // for(SPPropMap::iterator i = _propmap.begin(); i != _propmap.end(); ++i ) {
@@ -1116,13 +1116,13 @@ SPStyle::_mergeString( gchar const *const p ) {
     CRDeclaration *const decl_list
         = cr_declaration_parse_list_from_buf(reinterpret_cast<guchar const *>(p), CR_UTF_8);
     if (decl_list) {
-        _mergeDeclList( decl_list );
+        _mergeDeclList( decl_list, SP_STYLE_SRC_ATTRIBUTE );
         cr_declaration_destroy(decl_list);
     }
 }
 
 void
-SPStyle::_mergeDeclList( CRDeclaration const *const decl_list ) {
+SPStyle::_mergeDeclList( CRDeclaration const *const decl_list, SPStyleSrc const &source ) {
 
     // std::cout << "SPStyle::_mergeDeclList" << std::endl;
 
@@ -1130,13 +1130,13 @@ SPStyle::_mergeDeclList( CRDeclaration const *const decl_list ) {
     // (Properties are only set if not previously set. See:
     // Ref: http://www.w3.org/TR/REC-CSS2/cascade.html#cascading-order point 4.)
     if (decl_list->next) {
-        _mergeDeclList( decl_list->next );
+        _mergeDeclList( decl_list->next, source );
     }
-    _mergeDecl( decl_list );
+    _mergeDecl( decl_list, source );
 }
 
 void
-SPStyle::_mergeDecl(  CRDeclaration const *const decl ) {
+SPStyle::_mergeDecl(  CRDeclaration const *const decl, SPStyleSrc const &source ) {
 
     // std::cout << "SPStyle::_mergeDecl" << std::endl;
 
@@ -1149,7 +1149,7 @@ SPStyle::_mergeDecl(  CRDeclaration const *const decl ) {
          */
         guchar *const str_value_unsigned = cr_term_to_string(decl->value);
         gchar *const str_value = reinterpret_cast<gchar *>(str_value_unsigned);
-        readIfUnset( prop_idx, str_value );
+        readIfUnset( prop_idx, str_value, source );
         g_free(str_value);
     }
 }
@@ -1164,7 +1164,7 @@ SPStyle::_mergeProps( CRPropList *const props ) {
         _mergeProps( cr_prop_list_get_next( props ) );
         CRDeclaration *decl = NULL;
         cr_prop_list_get_decl(props, &decl);
-        _mergeDecl( decl );
+        _mergeDecl( decl, SP_STYLE_SRC_STYLE_SHEET );
     }
 }
 

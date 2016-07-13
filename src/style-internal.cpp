@@ -58,6 +58,20 @@ using Inkscape::CSSOStringStream;
 
 // SPIBase --------------------------------------------------------------
 
+// Standard criteria for writing a property
+// dfp == different from parent
+inline bool should_write( guint const flags, bool set, bool dfp, bool src) {
+
+    bool should_write = false;
+    if ( ((flags & SP_STYLE_FLAG_ALWAYS))                  ||
+         ((flags & SP_STYLE_FLAG_IFSET)  && set && src)    ||
+         ((flags & SP_STYLE_FLAG_IFDIFF) && set && src && dfp)) {
+        should_write = true;
+    }
+    return should_write;
+}
+
+
 
 // SPIFloat -------------------------------------------------------------
 
@@ -80,14 +94,12 @@ SPIFloat::read( gchar const *str ) {
 }
 
 const Glib::ustring
-SPIFloat::write( guint const flags, SPIBase const *const base) const {
+SPIFloat::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase const *const base) const {
 
     SPIFloat const *const my_base = dynamic_cast<const SPIFloat*>(base);
-    if ( (flags & SP_STYLE_FLAG_ALWAYS) ||
-         ((flags & SP_STYLE_FLAG_IFSET) && this->set) ||
-         ((flags & SP_STYLE_FLAG_IFDIFF) && this->set
-          && (!my_base->set || this != my_base )))
-    {
+    bool dfp = (!inherits || !my_base || (my_base != this)); // Different from parent
+    bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
+    if (should_write(flags, set, dfp, src)) {
         if (this->inherit) {
             return (name + ":inherit;");
         } else {
@@ -156,14 +168,12 @@ SPIScale24::read( gchar const *str ) {
 }
 
 const Glib::ustring
-SPIScale24::write( guint const flags, SPIBase const *const base) const {
+SPIScale24::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase const *const base) const {
 
     SPIScale24 const *const my_base = dynamic_cast<const SPIScale24*>(base);
-    if ( (flags & SP_STYLE_FLAG_ALWAYS) ||
-         ((flags & SP_STYLE_FLAG_IFSET) && this->set) ||
-         ((flags & SP_STYLE_FLAG_IFDIFF) && this->set
-          && (!my_base->set || this != my_base )))
-    {
+    bool dfp = (!inherits || !my_base || (my_base != this)); // Different from parent
+    bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
+    if (should_write(flags, set, dfp, src)) {
         if (this->inherit) {
             return (name + ":inherit;");
         } else {
@@ -308,14 +318,12 @@ SPILength::read( gchar const *str ) {
 }
 
 const Glib::ustring
-SPILength::write( guint const flags, SPIBase const *const base) const {
+SPILength::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase const *const base) const {
 
     SPILength const *const my_base = dynamic_cast<const SPILength*>(base);
-    if ( (flags & SP_STYLE_FLAG_ALWAYS) ||
-         ((flags & SP_STYLE_FLAG_IFSET) && this->set) ||
-         ((flags & SP_STYLE_FLAG_IFDIFF) && this->set
-          && (!my_base->set || this != my_base )))
-    {
+    bool dfp = (!inherits || !my_base || (my_base != this)); // Different from parent
+    bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
+    if (should_write(flags, set, dfp, src)) {
         if (this->inherit) {
             return (name + ":inherit;");
         } else {
@@ -465,18 +473,16 @@ SPILengthOrNormal::read( gchar const *str ) {
 };
 
 const Glib::ustring
-SPILengthOrNormal::write( guint const flags, SPIBase const *const base) const {
+SPILengthOrNormal::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase const *const base) const {
 
     SPILength const *const my_base = dynamic_cast<const SPILength*>(base);
-    if ( (flags & SP_STYLE_FLAG_ALWAYS) ||
-         ((flags & SP_STYLE_FLAG_IFSET) && this->set) ||
-         ((flags & SP_STYLE_FLAG_IFDIFF) && this->set
-          && (!my_base->set || this != my_base )))
-    {
+    bool dfp = (!inherits || !my_base || (my_base != this)); // Different from parent
+    bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
+    if (should_write(flags, set, dfp, src)) {
         if (this->normal) {
             return (name + ":normal;");
         } else {
-            return SPILength::write(flags, base);
+            return SPILength::write(flags, style_src_req, base);
         }
     }
     return Glib::ustring("");
@@ -552,14 +558,12 @@ SPIEnum::read( gchar const *str ) {
 }
 
 const Glib::ustring
-SPIEnum::write( guint const flags, SPIBase const *const base) const {
+SPIEnum::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase const *const base) const {
 
     SPIEnum const *const my_base = dynamic_cast<const SPIEnum*>(base);
-    if ( (flags & SP_STYLE_FLAG_ALWAYS) ||
-         ((flags & SP_STYLE_FLAG_IFSET) && this->set) ||
-         ((flags & SP_STYLE_FLAG_IFDIFF) && this->set
-          && (!my_base->set || this != my_base )))
-    {
+    bool dfp = (!inherits || !my_base || (my_base != this)); // Different from parent
+    bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
+    if (should_write(flags, set, dfp, src)) {
         if (this->inherit) {
             return (name + ":inherit;");
         }
@@ -691,14 +695,12 @@ SPIEnumBits::read( gchar const *str ) {
 }
 
 const Glib::ustring
-SPIEnumBits::write( guint const flags, SPIBase const *const base) const {
+SPIEnumBits::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase const *const base) const {
 
     SPIEnum const *const my_base = dynamic_cast<const SPIEnum*>(base);
-    if ( (flags & SP_STYLE_FLAG_ALWAYS) ||
-         ((flags & SP_STYLE_FLAG_IFSET) && this->set) ||
-         ((flags & SP_STYLE_FLAG_IFDIFF) && this->set
-          && (!my_base->set || this != my_base )))
-    {
+    bool dfp = (!inherits || !my_base || (my_base != this)); // Different from parent
+    bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
+    if (should_write(flags, set, dfp, src)) {
         if (this->inherit) {
             return (name + ":inherit;");
         }
@@ -762,14 +764,12 @@ SPILigatures::read( gchar const *str ) {
 }
 
 const Glib::ustring
-SPILigatures::write( guint const flags, SPIBase const *const base) const {
+SPILigatures::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase const *const base) const {
 
     SPIEnum const *const my_base = dynamic_cast<const SPIEnum*>(base);
-    if ( (flags & SP_STYLE_FLAG_ALWAYS) ||
-         ((flags & SP_STYLE_FLAG_IFSET) && this->set) ||
-         ((flags & SP_STYLE_FLAG_IFDIFF) && this->set
-          && (!my_base->set || this != my_base )))
-    {
+    bool dfp = (!inherits || !my_base || (my_base != this)); // Different from parent
+    bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
+    if (should_write(flags, set, dfp, src)) {
         if (this->inherit) {
             return (name + ":inherit;");
         }
@@ -863,14 +863,12 @@ SPINumeric::read( gchar const *str ) {
 }
 
 const Glib::ustring
-SPINumeric::write( guint const flags, SPIBase const *const base) const {
+SPINumeric::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase const *const base) const {
 
     SPIEnum const *const my_base = dynamic_cast<const SPIEnum*>(base);
-    if ( (flags & SP_STYLE_FLAG_ALWAYS) ||
-         ((flags & SP_STYLE_FLAG_IFSET) && this->set) ||
-         ((flags & SP_STYLE_FLAG_IFDIFF) && this->set
-          && (!my_base->set || this != my_base )))
-    {
+    bool dfp = (!inherits || !my_base || (my_base != this)); // Different from parent
+    bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
+    if (should_write(flags, set, dfp, src)) {
         if (this->inherit) {
             return (name + ":inherit;");
         }
@@ -934,14 +932,12 @@ SPIString::read( gchar const *str ) {
 // This routine is actually rarely used. Writing is done usually
 // in sp_repr_css_write_string...
 const Glib::ustring
-SPIString::write( guint const flags, SPIBase const *const base) const {
+SPIString::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase const *const base) const {
 
     SPIString const *const my_base = dynamic_cast<const SPIString*>(base);
-    if ( (flags & SP_STYLE_FLAG_ALWAYS) ||
-         ((flags & SP_STYLE_FLAG_IFSET) && this->set) ||
-         ((flags & SP_STYLE_FLAG_IFDIFF) && this->set
-          && (!my_base->set || this != my_base )))
-    {
+    bool dfp = (!inherits || !my_base || (my_base != this) ); // Different from parent
+    bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
+    if (should_write(flags, set, dfp, src)) {
         if (this->inherit) {
             return (name + ":inherit;");
         } else {
@@ -1045,14 +1041,12 @@ void SPIColor::read( gchar const *str ) {
 }
 
 const Glib::ustring
-SPIColor::write( guint const flags, SPIBase const *const base) const {
+SPIColor::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase const *const base) const {
 
     SPIColor const *const my_base = dynamic_cast<const SPIColor*>(base);
-    if ( (flags & SP_STYLE_FLAG_ALWAYS) ||
-         ((flags & SP_STYLE_FLAG_IFSET) && this->set) ||
-         ((flags & SP_STYLE_FLAG_IFDIFF) && this->set
-          && (!my_base->set || this != my_base )))
-    {
+    bool dfp = (!inherits || !my_base || (my_base != this)); // Different from parent
+    bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
+    if (should_write(flags, set, dfp, src)) {
         CSSOStringStream css;
 
         if (this->currentcolor) {
@@ -1274,14 +1268,12 @@ SPIPaint::read( gchar const *str, SPStyle &style_in, SPDocument *document_in ) {
 }
 
 const Glib::ustring
-SPIPaint::write( guint const flags, SPIBase const *const base) const {
+SPIPaint::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase const *const base) const {
 
     SPIPaint const *const my_base = dynamic_cast<const SPIPaint*>(base);
-    if ( (flags & SP_STYLE_FLAG_ALWAYS) ||
-         ((flags & SP_STYLE_FLAG_IFSET) && this->set) ||
-         ((flags & SP_STYLE_FLAG_IFDIFF) && this->set
-          && (!my_base->set || this != my_base )))
-    {
+    bool dfp = (!inherits || !my_base || (my_base != this)); // Different from parent
+    bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
+    if (should_write(flags, set, dfp, src)) {
         CSSOStringStream css;
 
         if (this->inherit) {
@@ -1546,14 +1538,12 @@ SPIPaintOrder::read( gchar const *str ) {
 }
 
 const Glib::ustring
-SPIPaintOrder::write( guint const flags, SPIBase const *const base) const {
+SPIPaintOrder::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase const *const base) const {
 
     SPIPaintOrder const *const my_base = dynamic_cast<const SPIPaintOrder*>(base);
-    if ( (flags & SP_STYLE_FLAG_ALWAYS) ||
-         ((flags & SP_STYLE_FLAG_IFSET) && this->set) ||
-         ((flags & SP_STYLE_FLAG_IFDIFF) && this->set
-          && (!my_base->set || this != my_base )))
-    {
+    bool dfp = (!inherits || !my_base || (my_base != this)); // Different from parent
+    bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
+    if (should_write(flags, set, dfp, src)) {
         CSSOStringStream css;
 
         if (this->inherit) {
@@ -1694,14 +1684,14 @@ SPIFilter::read( gchar const *str ) {
     }
 }
 
-const Glib::ustring SPIFilter::write( guint const flags, SPIBase const *const /*base*/) const
+const Glib::ustring SPIFilter::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase const *const /*base*/) const
 {
     // TODO: fix base
     //SPILength const *const my_base = dynamic_cast<const SPILength*>(base);
-    if ( (flags & SP_STYLE_FLAG_ALWAYS) ||
-         ((flags & SP_STYLE_FLAG_IFSET) && this->set) ||
-         ((flags & SP_STYLE_FLAG_IFDIFF) && this->set))
-    {
+    // bool dfp = (!inherits || !my_base || (my_base != this)); // Different from parent
+    bool dfp = true;
+    bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
+    if (should_write(flags, set, dfp, src)) {
         if (this->inherit) {
             return (name + ":inherit;");
         } else if(this->href && this->href->getURI()) {
@@ -1833,14 +1823,12 @@ SPIDashArray::read( gchar const *str ) {
 }
 
 const Glib::ustring
-SPIDashArray::write( guint const flags, SPIBase const *const base) const {
+SPIDashArray::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase const *const base) const {
 
     SPIDashArray const *const my_base = dynamic_cast<const SPIDashArray*>(base);
-    if ( (flags & SP_STYLE_FLAG_ALWAYS) ||
-         ((flags & SP_STYLE_FLAG_IFSET) && this->set) ||
-         ((flags & SP_STYLE_FLAG_IFDIFF) && this->set
-          && (!my_base->set || this != my_base )))
-    {
+    bool dfp = (!inherits || !my_base || (my_base != this)); // Different from parent
+    bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
+    if (should_write(flags, set, dfp, src)) {
         if (this->inherit) {
             return (name + ":inherit;");
         } else if (this->values.empty() ) {
@@ -1950,14 +1938,12 @@ SPIFontSize::read( gchar const *str ) {
 }
 
 const Glib::ustring
-SPIFontSize::write( guint const flags, SPIBase const *const base) const {
+SPIFontSize::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase const *const base) const {
 
     SPIFontSize const *const my_base = dynamic_cast<const SPIFontSize*>(base);
-    if ( (flags & SP_STYLE_FLAG_ALWAYS) ||
-         ((flags & SP_STYLE_FLAG_IFSET) && this->set) ||
-         ((flags & SP_STYLE_FLAG_IFDIFF) && this->set
-          && (!my_base->set || this != my_base )))
-    {
+    bool dfp = (!inherits || !my_base || (my_base != this)); // Different from parent
+    bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
+    if (should_write(flags, set, dfp, src)) {
         CSSOStringStream css;
 
         if (this->inherit) {
@@ -2244,7 +2230,7 @@ SPIFont::read( gchar const *str ) {
     }
 }
 
-const Glib::ustring SPIFont::write( guint const /*flags*/, SPIBase const *const /*base*/) const
+const Glib::ustring SPIFont::write( guint const /*flags*/, SPStyleSrc const & /*style_src_req*/, SPIBase const *const /*base*/) const
 {
     // At the moment, do nothing. We could add a preference to write out
     // 'font' shorthand rather than longhand properties.
@@ -2321,14 +2307,12 @@ SPIBaselineShift::read( gchar const *str ) {
 }
 
 const Glib::ustring
-SPIBaselineShift::write( guint const flags, SPIBase const *const base) const {
+SPIBaselineShift::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase const *const base) const {
 
     SPIBaselineShift const *const my_base = dynamic_cast<const SPIBaselineShift*>(base);
-    if ( (flags & SP_STYLE_FLAG_ALWAYS) ||
-         ((flags & SP_STYLE_FLAG_IFSET) && this->set) ||
-         ((flags & SP_STYLE_FLAG_IFDIFF) && this->set
-          && (!my_base->set || !this->isZero() )))
-    {
+    bool dfp = (!inherits || !my_base || (my_base != this)); // Different from parent
+    bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
+    if (should_write(flags, set, dfp, src)) {
         CSSOStringStream css;
 
         if (this->inherit) {
@@ -2512,13 +2496,11 @@ SPITextDecorationLine::read( gchar const *str ) {
 }
 
 const Glib::ustring
-SPITextDecorationLine::write( guint const flags, SPIBase const *const base) const {
+SPITextDecorationLine::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase const *const base) const {
     SPITextDecorationLine const *const my_base = dynamic_cast<const SPITextDecorationLine*>(base);
-    if ( (flags & SP_STYLE_FLAG_ALWAYS) ||
-         ((flags & SP_STYLE_FLAG_IFSET) && this->set) ||
-         ((flags & SP_STYLE_FLAG_IFDIFF) && this->set
-          && (!my_base->set || this != my_base )))
-    {
+    bool dfp = (!inherits || !my_base || (my_base != this)); // Different from parent
+    bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
+    if (should_write(flags, set, dfp, src)) {
         Inkscape::CSSOStringStream os;
         os << name << ":";
         if( inherit ) {
@@ -2644,13 +2626,11 @@ SPITextDecorationStyle::read( gchar const *str ) {
 }
 
 const Glib::ustring
-SPITextDecorationStyle::write( guint const flags, SPIBase const *const base) const {
+SPITextDecorationStyle::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase const *const base) const {
     SPITextDecorationStyle const *const my_base = dynamic_cast<const SPITextDecorationStyle*>(base);
-    if ( (flags & SP_STYLE_FLAG_ALWAYS) ||
-         ((flags & SP_STYLE_FLAG_IFSET) && this->set) ||
-         ((flags & SP_STYLE_FLAG_IFDIFF) && this->set
-          && (!my_base->set || this != my_base )))
-    {
+    bool dfp = (!inherits || !my_base || (my_base != this)); // Different from parent
+    bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
+    if (should_write(flags, set, dfp, src)) {
         Inkscape::CSSOStringStream os;
         os << name << ":";
         if( inherit ) {
@@ -2800,7 +2780,7 @@ SPITextDecoration::read( gchar const *str ) {
 // Returns CSS2 'text-decoration' (using settings in SPTextDecorationLine)
 // This is required until all SVG renderers support CSS3 'text-decoration'
 const Glib::ustring
-SPITextDecoration::write( guint const flags, SPIBase const *const base) const {
+SPITextDecoration::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase const *const base) const {
     SPITextDecoration const *const my_base = dynamic_cast<const SPITextDecoration*>(base);
     if ( (flags & SP_STYLE_FLAG_ALWAYS) ||
          ((flags & SP_STYLE_FLAG_IFSET) && style->text_decoration_line.set) ||
