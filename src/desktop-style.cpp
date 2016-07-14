@@ -163,7 +163,7 @@ sp_desktop_apply_css_recursive(SPObject *o, SPCSSAttr *css, bool skip_lines)
         return;
     }
 
-    for (auto& child: o->_children) {
+    for (auto& child: o->children) {
         if (sp_repr_css_property(css, "opacity", NULL) != NULL) {
             // Unset properties which are accumulating and thus should not be set recursively.
             // For example, setting opacity 0.5 on a group recursively would result in the visible opacity of 0.25 for an item in the group.
@@ -1714,7 +1714,7 @@ objects_query_blend (const std::vector<SPItem*> &objects, SPStyle *style_res)
             int blendcount = 0;
 
             // determine whether filter is simple (blend and/or blur) or complex
-            for(auto& primitive_obj: style->getFilter()->_children) {
+            for(auto& primitive_obj: style->getFilter()->children) {
                 SPFilterPrimitive *primitive = dynamic_cast<SPFilterPrimitive *>(&primitive_obj);
                 if (!primitive) {
                     break;
@@ -1731,7 +1731,7 @@ objects_query_blend (const std::vector<SPItem*> &objects, SPStyle *style_res)
 
             // simple filter
             if(blurcount == 1 || blendcount == 1) {
-                for(auto& primitive_obj: style->getFilter()->_children) {
+                for(auto& primitive_obj: style->getFilter()->children) {
                     SPFilterPrimitive *primitive = dynamic_cast<SPFilterPrimitive *>(&primitive_obj);
                     if (!primitive) {
                         break;
@@ -1810,7 +1810,7 @@ objects_query_blur (const std::vector<SPItem*> &objects, SPStyle *style_res)
         //if object has a filter
         if (style->filter.set && style->getFilter()) {
             //cycle through filter primitives
-            for(auto& primitive_obj: style->getFilter()->_children) {
+            for(auto& primitive_obj: style->getFilter()->children) {
                 SPFilterPrimitive *primitive = dynamic_cast<SPFilterPrimitive *>(&primitive_obj);
                 if (primitive) {
 

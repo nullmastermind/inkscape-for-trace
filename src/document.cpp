@@ -257,7 +257,7 @@ void SPDocument::setCurrentPersp3D(Persp3D * const persp) {
 
 void SPDocument::getPerspectivesInDefs(std::vector<Persp3D*> &list) const
 {
-    for (auto& i: root->defs->_children) {
+    for (auto& i: root->defs->children) {
         if (SP_IS_PERSP3D(&i)) {
             list.push_back(SP_PERSP3D(&i));
         }
@@ -1256,7 +1256,7 @@ static std::vector<SPItem*> &find_items_in_area(std::vector<SPItem*> &s, SPGroup
 {
     g_return_val_if_fail(SP_IS_GROUP(group), s);
 
-    for (auto& o: group->_children) {
+    for (auto& o: group->children) {
         if ( SP_IS_ITEM(&o) ) {
             if (SP_IS_GROUP(&o) && (SP_GROUP(&o)->effectiveLayerMode(dkey) == SPGroup::LAYER || into_groups)) {
                 s = find_items_in_area(s, SP_GROUP(&o), dkey, area, test, take_insensitive, into_groups);
@@ -1278,7 +1278,7 @@ Returns true if an item is among the descendants of group (recursively).
  */
 static bool item_is_in_group(SPItem *item, SPGroup *group)
 {
-    for (auto& o: group->_children) {
+    for (auto& o: group->children) {
         if ( SP_IS_ITEM(&o) ) {
             if (SP_ITEM(&o) == item) {
                 return true;
@@ -1298,7 +1298,7 @@ SPItem *SPDocument::getItemFromListAtPointBottom(unsigned int dkey, SPGroup *gro
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     gdouble delta = prefs->getDouble("/options/cursortolerance/value", 1.0);
 
-    for (auto& o: group->_children) {
+    for (auto& o: group->children) {
         if (bottomMost) {
             break;
         }
@@ -1328,7 +1328,7 @@ The list can be persisted, which improves "find at multiple points" speed.
 */
 void SPDocument::build_flat_item_list(unsigned int dkey, SPGroup *group, gboolean into_groups) const
 {
-    for (auto& o: group->_children) {
+    for (auto& o: group->children) {
         if (!SP_IS_ITEM(&o)) {
             continue;
         }
@@ -1392,7 +1392,7 @@ static SPItem *find_group_at_point(unsigned int dkey, SPGroup *group, Geom::Poin
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     gdouble delta = prefs->getDouble("/options/cursortolerance/value", 1.0);
 
-    for (auto& o: group->_children) {
+    for (auto& o: group->children) {
         if (!SP_IS_ITEM(&o)) {
             continue;
         }
@@ -1597,7 +1597,7 @@ static unsigned int count_objects_recursive(SPObject *obj, unsigned int count)
 {
     count++; // obj itself
 
-    for (auto& i: obj->_children) {
+    for (auto& i: obj->children) {
         count = count_objects_recursive(&i, count);
     }
 
@@ -1623,12 +1623,12 @@ static unsigned int objects_in_document(SPDocument *document)
 static void vacuum_document_recursive(SPObject *obj)
 {
     if (SP_IS_DEFS(obj)) {
-        for (auto& def: obj->_children) {
+        for (auto& def: obj->children) {
             // fixme: some inkscape-internal nodes in the future might not be collectable
             def.requestOrphanCollection();
         }
     } else {
-        for (auto& i: obj->_children) {
+        for (auto& i: obj->children) {
             vacuum_document_recursive(&i);
         }
     }
@@ -1757,7 +1757,7 @@ void SPDocument::importDefsNode(SPDocument *source, Inkscape::XML::Node *defs, I
         // Prevent duplicates of solid swatches by checking if equivalent swatch already exists
         if (src && SP_IS_GRADIENT(src)) {
             SPGradient *s_gr = SP_GRADIENT(src);
-            for (auto& trg: getDefs()->_children) {
+            for (auto& trg: getDefs()->children) {
                 if (&trg && (src != &trg) && SP_IS_GRADIENT(&trg)) {
                     SPGradient *t_gr = SP_GRADIENT(&trg);
                     if (t_gr && s_gr->isEquivalent(t_gr)) {
@@ -1828,7 +1828,7 @@ void SPDocument::importDefsNode(SPDocument *source, Inkscape::XML::Node *defs, I
                 id.erase( pos ); 
 
                 // Check that it really is a duplicate
-                for (auto& trg: getDefs()->_children) {
+                for (auto& trg: getDefs()->children) {
                     if(&trg && SP_IS_SYMBOL(&trg) && src != &trg ) {
                         std::string id2 = trg.getRepr()->attribute("id");
 

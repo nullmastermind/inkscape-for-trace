@@ -90,7 +90,7 @@ void Inkscape::ObjectSnapper::_findCandidates(SPObject* parent,
     Geom::Rect bbox_to_snap_incl = bbox_to_snap; // _incl means: will include the snapper tolerance
     bbox_to_snap_incl.expandBy(getSnapperTolerance()); // see?
 
-    for (auto& o: parent->_children) {
+    for (auto& o: parent->children) {
         g_assert(dt != NULL);
         SPItem *item = dynamic_cast<SPItem *>(&o);
         if (item && !(dt->itemIsHidden(item) && !clip_or_mask)) {

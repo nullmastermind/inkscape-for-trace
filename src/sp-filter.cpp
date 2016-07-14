@@ -268,7 +268,7 @@ Inkscape::XML::Node* SPFilter::write(Inkscape::XML::Document *doc, Inkscape::XML
         }
 
         GSList *l = NULL;
-        for (auto& child: _children) {
+        for (auto& child: children) {
             Inkscape::XML::Node *crepr = child.updateRepr(doc, NULL, flags);
 
             if (crepr) {
@@ -282,7 +282,7 @@ Inkscape::XML::Node* SPFilter::write(Inkscape::XML::Document *doc, Inkscape::XML
             l = g_slist_remove (l, l->data);
         }
     } else {
-        for (auto& child: _children) {
+        for (auto& child: children) {
             child.updateRepr(flags);
         }
     }
@@ -420,7 +420,7 @@ void sp_filter_build_renderer(SPFilter *sp_filter, Inkscape::Filters::Filter *nr
     }
 
     nr_filter->clear_primitives();
-    for(auto& primitive_obj: sp_filter->_children) {
+    for(auto& primitive_obj: sp_filter->children) {
         if (SP_IS_FILTER_PRIMITIVE(&primitive_obj)) {
             SPFilterPrimitive *primitive = SP_FILTER_PRIMITIVE(&primitive_obj);
             g_assert(primitive != NULL);
@@ -439,7 +439,7 @@ int sp_filter_primitive_count(SPFilter *filter) {
     g_assert(filter != NULL);
     int count = 0;
 
-    for(auto& primitive_obj: filter->_children) {
+    for(auto& primitive_obj: filter->children) {
         if (SP_IS_FILTER_PRIMITIVE(&primitive_obj)) {
             count++;
         }
@@ -512,7 +512,7 @@ Glib::ustring sp_filter_get_new_result_name(SPFilter *filter) {
     g_assert(filter != NULL);
     int largest = 0;
 
-    for(auto& primitive_obj: filter->_children) {
+    for(auto& primitive_obj: filter->children) {
         if (SP_IS_FILTER_PRIMITIVE(&primitive_obj)) {
             Inkscape::XML::Node *repr = primitive_obj.getRepr();
             char const *result = repr->attribute("result");

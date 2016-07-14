@@ -115,7 +115,7 @@ void SvgFontsDialog::AttrEntry::set_text(char* t){
 void SvgFontsDialog::AttrEntry::on_attr_changed(){
 
     SPObject* o = NULL;
-    for (auto& node: dialog->get_selected_spfont()->_children) {
+    for (auto& node: dialog->get_selected_spfont()->children) {
         switch(this->attr){
             case SP_PROP_FONT_FAMILY:
                 if (SP_IS_FONTFACE(&node)){
@@ -170,7 +170,7 @@ void GlyphComboBox::update(SPFont* spfont){
     this->append(""); //Gtk is refusing to clear the combobox when I comment out this line
     this->remove_all();
 
-    for (auto& node: spfont->_children) {
+    for (auto& node: spfont->children) {
         if (SP_IS_GLYPH(&node)){
             this->append((static_cast<SPGlyph*>(&node))->unicode);
         }
@@ -308,7 +308,7 @@ void SvgFontsDialog::update_global_settings_tab(){
     SPFont* font = get_selected_spfont();
     if (!font) return;
 
-    for (auto& obj: font->_children) {
+    for (auto& obj: font->children) {
         if (SP_IS_FONTFACE(&obj)){
             _familyname_entry->set_text((SP_FONTFACE(&obj))->font_family);
         }
@@ -413,7 +413,7 @@ SvgFontsDialog::populate_glyphs_box()
     SPFont* spfont = this->get_selected_spfont();
     _glyphs_observer.set(spfont);
 
-    for (auto& node: spfont->_children) {
+    for (auto& node: spfont->children) {
         if (SP_IS_GLYPH(&node)){
             Gtk::TreeModel::Row row = *(_GlyphsListStore->append());
             row[_GlyphsListColumns.glyph_node] = static_cast<SPGlyph*>(&node);
@@ -431,7 +431,7 @@ SvgFontsDialog::populate_kerning_pairs_box()
 
     SPFont* spfont = this->get_selected_spfont();
 
-    for (auto& node: spfont->_children) {
+    for (auto& node: spfont->children) {
         if (SP_IS_HKERN(&node)){
             Gtk::TreeModel::Row row = *(_KerningPairsListStore->append());
             row[_KerningPairsListColumns.first_glyph] = (static_cast<SPGlyphKerning*>(&node))->u1->attribute_string().c_str();
@@ -492,7 +492,7 @@ void SvgFontsDialog::add_glyph(){
 Geom::PathVector
 SvgFontsDialog::flip_coordinate_system(Geom::PathVector pathv){
     double units_per_em = 1000;
-    for (auto& obj: get_selected_spfont()->_children) {
+    for (auto& obj: get_selected_spfont()->children) {
         if (SP_IS_FONTFACE(&obj)){
             //XML Tree being directly used here while it shouldn't be.
             sp_repr_get_double(obj.getRepr(), "units-per-em", &units_per_em);
@@ -574,7 +574,7 @@ void SvgFontsDialog::missing_glyph_description_from_selected_path(){
 
     Geom::PathVector pathv = sp_svg_read_pathv(node->attribute("d"));
 
-    for (auto& obj: get_selected_spfont()->_children) {
+    for (auto& obj: get_selected_spfont()->children) {
         if (SP_IS_MISSING_GLYPH(&obj)){
 
             //XML Tree being directly used here while it shouldn't be.
@@ -596,7 +596,7 @@ void SvgFontsDialog::reset_missing_glyph_description(){
     }
 
     SPDocument* doc = desktop->getDocument();
-    for (auto& obj: get_selected_spfont()->_children) {
+    for (auto& obj: get_selected_spfont()->children) {
         if (SP_IS_MISSING_GLYPH(&obj)){
             //XML Tree being directly used here while it shouldn't be.
             obj.getRepr()->setAttribute("d", (char*) "M0,0h1000v1024h-1000z");
@@ -734,7 +734,7 @@ void SvgFontsDialog::add_kerning_pair(){
 
     //look for this kerning pair on the currently selected font
     this->kerning_pair = NULL;
-    for (auto& node: get_selected_spfont()->_children) {
+    for (auto& node: get_selected_spfont()->children) {
         //TODO: It is not really correct to get only the first byte of each string.
         //TODO: We should also support vertical kerning
         if (SP_IS_HKERN(&node) && (static_cast<SPGlyphKerning*>(&node))->u1->contains((gchar) first_glyph.get_active_text().c_str()[0])
@@ -848,7 +848,7 @@ SPFont *new_font(SPDocument *document)
 
 void set_font_family(SPFont* font, char* str){
     if (!font) return;
-    for (auto& obj: font->_children) {
+    for (auto& obj: font->children) {
         if (SP_IS_FONTFACE(&obj)){
             //XML Tree being directly used here while it shouldn't be.
             obj.getRepr()->setAttribute("font-family", str);
@@ -868,7 +868,7 @@ void SvgFontsDialog::add_font(){
     font->setLabel(os.str().c_str());
 
     os2 << "SVGFont " << count;
-    for (auto& obj: font->_children) {
+    for (auto& obj: font->children) {
         if (SP_IS_FONTFACE(&obj)){
             //XML Tree being directly used here while it shouldn't be.
             obj.getRepr()->setAttribute("font-family", os2.str().c_str());

@@ -68,23 +68,23 @@ TEST_F(SPObjectTest, Basics) {
     EXPECT_EQ(c, children[1]);
     EXPECT_EQ(d, children[2]);
     a->attach(b, a->lastChild());
-    EXPECT_EQ(3, a->_children.size());
+    EXPECT_EQ(3, a->children.size());
     a->reorder(b, b);
-    EXPECT_EQ(3, a->_children.size());
-    EXPECT_EQ(b, &a->_children.front());
-    EXPECT_EQ(d, &a->_children.back());
+    EXPECT_EQ(3, a->children.size());
+    EXPECT_EQ(b, &a->children.front());
+    EXPECT_EQ(d, &a->children.back());
     a->reorder(b, d);
-    EXPECT_EQ(3, a->_children.size());
-    EXPECT_EQ(c, &a->_children.front());
-    EXPECT_EQ(b, &a->_children.back());
+    EXPECT_EQ(3, a->children.size());
+    EXPECT_EQ(c, &a->children.front());
+    EXPECT_EQ(b, &a->children.back());
     a->reorder(d, nullptr);
-    EXPECT_EQ(3, a->_children.size());
-    EXPECT_EQ(d, &a->_children.front());
-    EXPECT_EQ(b, &a->_children.back());
+    EXPECT_EQ(3, a->children.size());
+    EXPECT_EQ(d, &a->children.front());
+    EXPECT_EQ(b, &a->children.back());
     a->reorder(c, b);
-    EXPECT_EQ(3, a->_children.size());
-    EXPECT_EQ(d, &a->_children.front());
-    EXPECT_EQ(c, &a->_children.back());
+    EXPECT_EQ(3, a->children.size());
+    EXPECT_EQ(d, &a->children.front());
+    EXPECT_EQ(c, &a->children.back());
     a->detach(b);
     EXPECT_EQ(c, a->lastChild());
     children = a->childList(false);
@@ -116,7 +116,7 @@ TEST_F(SPObjectTest, Advanced) {
     EXPECT_EQ(c, b->getNext());
     std::vector<SPObject*> tmp = {b, c, d, e};
     int index = 0;
-    for(auto& child: a->_children) {
+    for(auto& child: a->children) {
         EXPECT_EQ(tmp[index++], &child);
     }
 }

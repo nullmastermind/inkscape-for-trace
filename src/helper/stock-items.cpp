@@ -204,7 +204,7 @@ SPObject *get_stock_item(gchar const *urn, gboolean stock)
         }
         SPObject *object = NULL;
         if (!strcmp(base, "marker") && !stock) {
-            for (auto& child: defs->_children)
+            for (auto& child: defs->children)
             {
                 if (child.getRepr()->attribute("inkscape:stockid") &&
                     !strcmp(name_p, child.getRepr()->attribute("inkscape:stockid")) &&
@@ -216,7 +216,7 @@ SPObject *get_stock_item(gchar const *urn, gboolean stock)
             
         }
         else if (!strcmp(base,"pattern") && !stock)  {
-            for (auto& child: defs->_children)
+            for (auto& child: defs->children)
             {
                 if (child.getRepr()->attribute("inkscape:stockid") &&
                     !strcmp(name_p, child.getRepr()->attribute("inkscape:stockid")) &&
@@ -228,7 +228,7 @@ SPObject *get_stock_item(gchar const *urn, gboolean stock)
             
         }
         else if (!strcmp(base,"gradient") && !stock)  {
-            for (auto& child: defs->_children)
+            for (auto& child: defs->children)
             {
                 if (child.getRepr()->attribute("inkscape:stockid") &&
                     !strcmp(name_p, child.getRepr()->attribute("inkscape:stockid")) &&

@@ -335,7 +335,7 @@ GSList *MarkerComboBox::get_marker_list (SPDocument *source)
         return NULL;
     }
 
-    for (auto& child: defs->_children)
+    for (auto& child: defs->children)
     {
         if (SP_IS_MARKER(&child)) {
             ml = g_slist_prepend (ml, &child);

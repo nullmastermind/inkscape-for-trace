@@ -96,7 +96,7 @@ void SPTSpan::update(SPCtx *ctx, guint flags) {
     }
     childflags &= SP_OBJECT_MODIFIED_CASCADE;
 
-    for (auto& ochild: _children) {
+    for (auto& ochild: children) {
         if ( flags || ( ochild.uflags & SP_OBJECT_MODIFIED_FLAG )) {
         	ochild.updateDisplay(ctx, childflags);
         }
@@ -128,7 +128,7 @@ void SPTSpan::modified(unsigned int flags) {
     
     flags &= SP_OBJECT_MODIFIED_CASCADE;
 
-    for (auto& ochild: _children) {
+    for (auto& ochild: children) {
         if (flags || (ochild.mflags & SP_OBJECT_MODIFIED_FLAG)) {
             ochild.emitModified(flags);
         }
@@ -175,7 +175,7 @@ Inkscape::XML::Node* SPTSpan::write(Inkscape::XML::Document *xml_doc, Inkscape::
     if ( flags&SP_OBJECT_WRITE_BUILD ) {
         GSList *l = NULL;
 
-        for (auto& child: _children) {
+        for (auto& child: children) {
             Inkscape::XML::Node* c_repr=NULL;
 
             if ( SP_IS_TSPAN(&child) || SP_IS_TREF(&child) ) {
@@ -197,7 +197,7 @@ Inkscape::XML::Node* SPTSpan::write(Inkscape::XML::Document *xml_doc, Inkscape::
             l = g_slist_remove(l, l->data);
         }
     } else {
-        for (auto& child: _children) {
+        for (auto& child: children) {
             if ( SP_IS_TSPAN(&child) || SP_IS_TREF(&child) ) {
                 child.updateRepr(flags);
             } else if ( SP_IS_TEXTPATH(&child) ) {
@@ -313,7 +313,7 @@ void SPTextPath::update(SPCtx *ctx, guint flags) {
 
     flags &= SP_OBJECT_MODIFIED_CASCADE;
 
-    for (auto& ochild: _children) {
+    for (auto& ochild: children) {
         if ( flags || ( ochild.uflags & SP_OBJECT_MODIFIED_FLAG )) {
             ochild.updateDisplay(ctx, flags);
         }
@@ -367,7 +367,7 @@ void SPTextPath::modified(unsigned int flags) {
 
     flags &= SP_OBJECT_MODIFIED_CASCADE;
 
-    for (auto& ochild: _children) {
+    for (auto& ochild: children) {
         if (flags || (ochild.mflags & SP_OBJECT_MODIFIED_FLAG)) {
             ochild.emitModified(flags);
         }
@@ -399,7 +399,7 @@ Inkscape::XML::Node* SPTextPath::write(Inkscape::XML::Document *xml_doc, Inkscap
     if ( flags & SP_OBJECT_WRITE_BUILD ) {
         GSList *l = NULL;
 
-        for (auto& child: _children) {
+        for (auto& child: children) {
             Inkscape::XML::Node* c_repr=NULL;
 
             if ( SP_IS_TSPAN(&child) || SP_IS_TREF(&child) ) {
@@ -421,7 +421,7 @@ Inkscape::XML::Node* SPTextPath::write(Inkscape::XML::Document *xml_doc, Inkscap
             l = g_slist_remove(l, l->data);
         }
     } else {
-        for (auto& child: _children) {
+        for (auto& child: children) {
             if ( SP_IS_TSPAN(&child) || SP_IS_TREF(&child) ) {
                 child.updateRepr(flags);
             } else if ( SP_IS_TEXTPATH(&child) ) {
@@ -466,7 +466,7 @@ void sp_textpath_to_text(SPObject *tp)
     // make a list of textpath children
     GSList *tp_reprs = NULL;
 
-    for (auto& o: tp->_children) {
+    for (auto& o: tp->children) {
         tp_reprs = g_slist_prepend(tp_reprs, o.getRepr());
     }
 

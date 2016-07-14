@@ -36,7 +36,7 @@ bool is_layer(SPObject &object) {
  *  @returns NULL if there are no further layers under a parent
  */
 SPObject *next_sibling_layer(SPObject *layer) {
-    SPObject::ChildrenList &list = layer->parent->_children;
+    SPObject::ChildrenList &list = layer->parent->children;
     auto l = std::find_if(++list.iterator_to(*layer), list.end(), &is_layer);
     return l != list.end() ? &*l : nullptr;
 }
@@ -48,7 +48,7 @@ SPObject *next_sibling_layer(SPObject *layer) {
 SPObject *previous_sibling_layer(SPObject *layer) {
     using Inkscape::Algorithms::find_last_if;
 
-    SPObject::ChildrenList &list = layer->parent->_children;
+    SPObject::ChildrenList &list = layer->parent->children;
     auto l = find_last_if(list.begin(), list.iterator_to(*layer), &is_layer);
     return l != list.iterator_to(*layer) ? &*(l) : nullptr;
 }
@@ -60,8 +60,8 @@ SPObject *previous_sibling_layer(SPObject *layer) {
 SPObject *first_descendant_layer(SPObject *layer) {
     SPObject *first_descendant = nullptr;
     while (true) {
-        auto tmp = std::find_if(layer->_children.begin(), layer->_children.end(), &is_layer);
-        if (tmp != layer->_children.end()) {
+        auto tmp = std::find_if(layer->children.begin(), layer->children.end(), &is_layer);
+        if (tmp != layer->children.end()) {
             first_descendant = layer;
         } else {
             break;
@@ -79,8 +79,8 @@ SPObject *first_descendant_layer(SPObject *layer) {
 SPObject *last_child_layer(SPObject *layer) {
     using Inkscape::Algorithms::find_last_if;
 
-    auto l = find_last_if(layer->_children.begin(), layer->_children.end(), &is_layer);
-    return l != layer->_children.end() ? &*l : nullptr;
+    auto l = find_last_if(layer->children.begin(), layer->children.end(), &is_layer);
+    return l != layer->children.end() ? &*l : nullptr;
 }
 
 SPObject *last_elder_layer(SPObject *root, SPObject *layer) {

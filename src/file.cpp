@@ -1204,7 +1204,7 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
 
         // Count the number of top-level items in the imported document.
         guint items_count = 0;
-        for (auto& child: doc->getRoot()->_children) {
+        for (auto& child: doc->getRoot()->children) {
             if (SP_IS_ITEM(&child)) {
                 items_count++;
             }
@@ -1234,7 +1234,7 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
         // Construct a new object representing the imported image,
         // and insert it into the current document.
         SPObject *new_obj = NULL;
-        for (auto& child: doc->getRoot()->_children) {
+        for (auto& child: doc->getRoot()->children) {
             if (SP_IS_ITEM(&child)) {
                 Inkscape::XML::Node *newitem = child.getRepr()->duplicate(xml_in_doc);
 

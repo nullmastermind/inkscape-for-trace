@@ -2042,7 +2042,7 @@ void CloneTiler::clonetiler_trace_hide_tiled_clones_recursively(SPObject *from)
     if (!trace_drawing)
         return;
 
-    for (auto& o: from->_children) {
+    for (auto& o: from->children) {
         SPItem *item = dynamic_cast<SPItem *>(&o);
         if (item && clonetiler_is_a_clone_of(&o, NULL)) {
             item->invoke_hide(trace_visionkey); // FIXME: hide each tiled clone's original too!
@@ -2123,7 +2123,7 @@ void CloneTiler::clonetiler_unclump(GtkWidget */*widget*/, void *)
 
     std::vector<SPItem*> to_unclump; // not including the original
 
-    for (auto& child: parent->_children) {
+    for (auto& child: parent->children) {
         if (clonetiler_is_a_clone_of (&child, obj)) {
             to_unclump.push_back((SPItem*)&child);
         }
@@ -2143,7 +2143,7 @@ guint CloneTiler::clonetiler_number_of_clones(SPObject *obj)
 
     guint n = 0;
 
-    for (auto& child: parent->_children) {
+    for (auto& child: parent->children) {
         if (clonetiler_is_a_clone_of (&child, obj)) {
             n ++;
         }
@@ -2172,7 +2172,7 @@ void CloneTiler::clonetiler_remove(GtkWidget */*widget*/, GtkWidget *dlg, bool d
 
 // remove old tiling
     GSList *to_delete = NULL;
-    for (auto& child: parent->_children) {
+    for (auto& child: parent->children) {
         if (clonetiler_is_a_clone_of (&child, obj)) {
             to_delete = g_slist_prepend (to_delete, &child);
         }

@@ -400,7 +400,7 @@ void SPObject::changeCSS(SPCSSAttr *css, gchar const *attr)
 
 std::vector<SPObject*> SPObject::childList(bool add_ref, Action) {
     std::vector<SPObject*> l;
-    for (auto& child: _children) {
+    for (auto& child: children) {
         if (add_ref) {
             sp_object_ref(&child);
         }
@@ -467,7 +467,7 @@ void SPObject::requestOrphanCollection() {
 }
 
 void SPObject::_sendDeleteSignalRecursive() {
-    for (auto& child: _children) {
+    for (auto& child: children) {
         child._delete_signal.emit(&child);
         child._sendDeleteSignalRecursive();
     }
@@ -497,7 +497,7 @@ void SPObject::deleteObject(bool propagate, bool propagate_descendants)
 void SPObject::cropToObject(SPObject *except)
 {
     std::vector<SPObject*> toDelete;
-    for (auto& child: _children) {
+    for (auto& child: children) {
         if (SP_IS_ITEM(&child)) {
             if (child.isAncestorOf(except)) {
                 child.cropToObject(except);
@@ -525,11 +525,11 @@ void SPObject::attach(SPObject *object, SPObject *prev)
     object->parent = this;
     this->_updateTotalHRefCount(object->_total_hrefcount);
 
-    auto it = _children.begin();
+    auto it = children.begin();
     if (prev != nullptr) {
-        it = ++_children.iterator_to(*prev);
+        it = ++children.iterator_to(*prev);
     }
-    _children.insert(it, *object);
+    children.insert(it, *object);
 
     if (!object->xml_space.set)
         object->xml_space.value = this->xml_space.value;
@@ -542,12 +542,12 @@ void SPObject::reorder(SPObject* obj, SPObject* prev) {
     g_return_if_fail(obj != prev);
     g_return_if_fail(!prev || prev->parent == obj->parent);
 
-    auto it = _children.begin();
+    auto it = children.begin();
     if (prev != nullptr) {
-        it = ++_children.iterator_to(*prev);
+        it = ++children.iterator_to(*prev);
     }
 
-    _children.splice(it, _children, _children.iterator_to(*obj));
+    children.splice(it, children, children.iterator_to(*obj));
 }
 
 void SPObject::detach(SPObject *object)
@@ -558,7 +558,7 @@ void SPObject::detach(SPObject *object)
     g_return_if_fail(SP_IS_OBJECT(object));
     g_return_if_fail(object->parent == this);
 
-    _children.erase(_children.iterator_to(*object));
+    children.erase(children.iterator_to(*object));
     object->releaseReferences();
 
     object->parent = NULL;
@@ -572,10 +572,10 @@ SPObject *SPObject::get_child_by_repr(Inkscape::XML::Node *repr)
     g_return_val_if_fail(repr != NULL, NULL);
     SPObject *result = nullptr;
 
-    if (_children.size() > 0 && _children.back().getRepr() == repr) {
-        result = &_children.back();   // optimization for common scenario
+    if (children.size() > 0 && children.back().getRepr() == repr) {
+        result = &children.back();   // optimization for common scenario
     } else {
-        for (auto& child: _children) {
+        for (auto& child: children) {
             if (child.getRepr() == repr) {
                 result = &child;
                 break;
@@ -609,7 +609,7 @@ void SPObject::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *ref)
 void SPObject::release() {
     SPObject* object = this;
     debug("id=%p, typename=%s", object, g_type_name_from_instance((GTypeInstance*)object));
-    auto tmp = _children | boost::adaptors::transformed([](SPObject& obj){return &obj;});
+    auto tmp = children | boost::adaptors::transformed([](SPObject& obj){return &obj;});
     std::vector<SPObject *> toRelease(tmp.begin(), tmp.end());
 
     for (auto& p: toRelease) {
@@ -797,8 +797,8 @@ void SPObject::releaseReferences() {
 SPObject *SPObject::getPrev()
 {
     SPObject *prev = nullptr;
-    if (parent && !parent->_children.empty() && &parent->_children.front() != this) {
-        prev = &*(--parent->_children.iterator_to(*this));
+    if (parent && !parent->children.empty() && &parent->children.front() != this) {
+        prev = &*(--parent->children.iterator_to(*this));
     }
     return prev;
 }
@@ -806,8 +806,8 @@ SPObject *SPObject::getPrev()
 SPObject* SPObject::getNext()
 {
     SPObject *next = nullptr;
-    if (parent && !parent->_children.empty() && &parent->_children.back() != this) {
-        next = &*(++parent->_children.iterator_to(*this));
+    if (parent && !parent->children.empty() && &parent->children.back() != this) {
+        next = &*(++parent->children.iterator_to(*this));
     }
     return next;
 }
@@ -1475,7 +1475,7 @@ bool SPObject::setTitleOrDesc(gchar const *value, gchar const *svg_tagname, bool
     }
     else {
         // remove the current content of the 'text' or 'desc' element
-        auto tmp = elem->_children | boost::adaptors::transformed([](SPObject& obj) { return &obj; });
+        auto tmp = elem->children | boost::adaptors::transformed([](SPObject& obj) { return &obj; });
         std::vector<SPObject*> vec(tmp.begin(), tmp.end());
         for (auto &child: vec) {
             child->deleteObject();
@@ -1489,7 +1489,7 @@ bool SPObject::setTitleOrDesc(gchar const *value, gchar const *svg_tagname, bool
 
 SPObject* SPObject::findFirstChild(gchar const *tagname) const
 {
-    for (auto& child: const_cast<SPObject*>(this)->_children)
+    for (auto& child: const_cast<SPObject*>(this)->children)
     {
         if (child.repr->type() == Inkscape::XML::ELEMENT_NODE &&
             !strcmp(child.repr->name(), tagname)) {
@@ -1503,7 +1503,7 @@ char* SPObject::textualContent() const
 {
     GString* text = g_string_new("");
 
-    for (auto& child: _children)
+    for (auto& child: children)
     {
         Inkscape::XML::NodeType child_type = child.repr->type();
 
@@ -1530,7 +1530,7 @@ void SPObject::recursivePrintTree( unsigned level )
         std::cout << "  ";
     }
     std::cout << (getId()?getId():"No object id") << std::endl;
-    for (auto& child: _children) {
+    for (auto& child: children) {
         child.recursivePrintTree(level + 1);
     }
 }

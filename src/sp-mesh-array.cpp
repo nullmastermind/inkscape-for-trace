@@ -632,12 +632,12 @@ void SPMeshNodeArray::read( SPMesh *mg_in ) {
 
     guint max_column = 0;
     guint irow = 0; // Corresponds to top of patch being read in.
-    for (auto& ro: mg->_children) {
+    for (auto& ro: mg->children) {
 
         if (SP_IS_MESHROW(&ro)) {
 
             guint icolumn = 0; // Corresponds to left of patch being read in.
-            for (auto& po: ro._children) {
+            for (auto& po: ro.children) {
 
                 if (SP_IS_MESHPATCH(&po)) {
 
@@ -652,7 +652,7 @@ void SPMeshNodeArray::read( SPMesh *mg_in ) {
                     // Only 'top' side defined for first row.
                     if( irow != 0 ) ++istop;
 
-                    for (auto& so: po._children) {
+                    for (auto& so: po.children) {
                         if (SP_IS_STOP(&so)) {
 
                             if( istop > 3 ) {
@@ -848,13 +848,13 @@ void SPMeshNodeArray::write( SPMesh *mg ) {
     // First we must delete reprs for old mesh rows and patches.
     GSList *descendant_reprs = NULL;
     GSList *descendant_objects = NULL;
-    for (auto& row: mg->_children) {
+    for (auto& row: mg->children) {
         descendant_reprs = g_slist_prepend (descendant_reprs, row.getRepr());
         descendant_objects = g_slist_prepend (descendant_objects, &row);
-        for (auto& patch: row._children) {
+        for (auto& patch: row.children) {
             descendant_reprs = g_slist_prepend (descendant_reprs, patch.getRepr());
             descendant_objects = g_slist_prepend (descendant_objects, &patch);
-            for (auto& stop: patch._children) {
+            for (auto& stop: patch.children) {
                 descendant_reprs = g_slist_prepend (descendant_reprs, stop.getRepr());
                 descendant_objects = g_slist_prepend (descendant_objects, &stop);
             }

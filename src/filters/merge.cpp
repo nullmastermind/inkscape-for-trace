@@ -94,7 +94,7 @@ void SPFeMerge::build_renderer(Inkscape::Filters::Filter* filter) {
 
     int in_nr = 0;
 
-    for(auto& input: _children) {
+    for(auto& input: children) {
         if (SP_IS_FEMERGENODE(&input)) {
             SPFeMergeNode *node = SP_FEMERGENODE(&input);
             nr_merge->set_input(in_nr, node->input);

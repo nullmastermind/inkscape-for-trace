@@ -223,7 +223,7 @@ void SPPattern::_getChildren(std::list<SPObject *> &l)
 {
     for (SPPattern *pat_i = this; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
         if (pat_i->firstChild()) { // find the first one with children
-            for (auto& child: pat_i->_children) {
+            for (auto& child: pat_i->children) {
                 l.push_back(&child);
             }
             break; // do not go further up the chain if children are found
@@ -319,7 +319,7 @@ guint SPPattern::_countHrefs(SPObject *o) const
         i++;
     }
 
-    for (auto& child: o->_children) {
+    for (auto& child: o->children) {
         i += _countHrefs(&child);
     }
 
@@ -508,7 +508,7 @@ Geom::OptRect SPPattern::viewbox() const
 
 bool SPPattern::_hasItemChildren() const
 {
-    for (auto& child: _children) {
+    for (auto& child: children) {
         if (SP_IS_ITEM(&child)) {
             return true;
         }
@@ -558,7 +558,7 @@ cairo_pattern_t *SPPattern::pattern_new(cairo_t *base_ct, Geom::OptRect const &b
     Inkscape::DrawingGroup *root = new Inkscape::DrawingGroup(drawing);
     drawing.setRoot(root);
 
-    for (auto& child: shown->_children) {
+    for (auto& child: shown->children) {
         if (SP_IS_ITEM(&child)) {
             // for each item in pattern, show it on our drawing, add to the group,
             // and connect to the release signal in case the item gets deleted
@@ -654,7 +654,7 @@ cairo_pattern_t *SPPattern::pattern_new(cairo_t *base_ct, Geom::OptRect const &b
     // Render drawing to pattern_surface via drawing context, this calls root->render
     // which is really DrawingItem->render().
     drawing.render(dc, one_tile);
-    for (auto& child: shown->_children) {
+    for (auto& child: shown->children) {
         if (SP_IS_ITEM(&child)) {
             SP_ITEM(&child)->invoke_hide(dkey);
         }

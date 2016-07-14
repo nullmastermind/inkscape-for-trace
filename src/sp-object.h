@@ -306,13 +306,13 @@ public:
      */
     SPObject *getPrev();
 
-    bool hasChildren() const { return ( _children.size() > 0 ); }
+    bool hasChildren() const { return ( children.size() > 0 ); }
 
-    SPObject *firstChild() { return _children.empty() ? nullptr : &_children.front(); }
-    SPObject const *firstChild() const { return _children.empty() ? nullptr : &_children.front(); }
+    SPObject *firstChild() { return children.empty() ? nullptr : &children.front(); }
+    SPObject const *firstChild() const { return children.empty() ? nullptr : &children.front(); }
 
-    SPObject *lastChild() { return _children.empty() ? nullptr : &_children.back(); }
-    SPObject const *lastChild() const { return _children.empty() ? nullptr : &_children.back(); }
+    SPObject *lastChild() { return children.empty() ? nullptr : &children.back(); }
+    SPObject const *lastChild() const { return children.empty() ? nullptr : &children.back(); }
 
     enum Action { ActionGeneral, ActionBBox, ActionUpdate, ActionShow };
 
@@ -857,7 +857,7 @@ public:
                     ListHook,
                     &SPObject::_child_hook
             >> ChildrenList;
-    ChildrenList _children;
+    ChildrenList children;
 	virtual void read_content();
 
     void recursivePrintTree(unsigned level = 0);  // For debugging

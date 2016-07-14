@@ -53,7 +53,7 @@ static void hide_other_items_recursively(SPObject *o, GSList *list, unsigned dke
 
     // recurse
     if (!g_slist_find(list, o)) {
-        for (auto& child: o->_children) {
+        for (auto& child: o->children) {
             hide_other_items_recursively(&child, list, dkey);
         }
     }

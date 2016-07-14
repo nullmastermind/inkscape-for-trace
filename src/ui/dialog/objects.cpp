@@ -340,7 +340,7 @@ void ObjectsPanel::_objectsChanged(SPObject */*obj*/)
 void ObjectsPanel::_addObject(SPObject* obj, Gtk::TreeModel::Row* parentRow)
 {
     if ( _desktop && obj ) {
-        for(auto& child: obj->_children) {
+        for(auto& child: obj->children) {
             if (SP_IS_ITEM(&child))
             {
                 SPItem * item = SP_ITEM(&child);
@@ -398,7 +398,7 @@ void ObjectsPanel::_updateObject( SPObject *obj, bool recurse ) {
     //end mark
     if (recurse)
     {
-        for (auto& iter: obj->_children) {
+        for (auto& iter: obj->children) {
             _updateObject(&iter, recurse);
         }
     }
@@ -518,7 +518,7 @@ void ObjectsPanel::_setCompositingValues(SPItem *item)
     SPGaussianBlur *spblur = NULL;
     if (item->style->getFilter())
     {
-        for (auto& primitive_obj: item->style->getFilter()->_children) {
+        for (auto& primitive_obj: item->style->getFilter()->children) {
             if (!SP_IS_FILTER_PRIMITIVE(&primitive_obj)) {
                 break;
             }
@@ -1293,7 +1293,7 @@ bool ObjectsPanel::_executeAction()
             break;
             case BUTTON_COLLAPSE_ALL:
             {
-                for (auto& obj: _document->getRoot()->_children) {
+                for (auto& obj: _document->getRoot()->children) {
                     if (SP_IS_GROUP(&obj)) {
                         _setCollapsed(SP_GROUP(&obj));
                     }
@@ -1405,7 +1405,7 @@ void ObjectsPanel::_setCollapsed(SPGroup * group)
 {
     group->setExpanded(false);
     group->updateRepr(SP_OBJECT_WRITE_NO_CHILDREN | SP_OBJECT_WRITE_EXT);
-    for (auto& iter: group->_children) {
+    for (auto& iter: group->children) {
         if (SP_IS_GROUP(&iter)) {
             _setCollapsed(SP_GROUP(&iter));
         }
@@ -1523,7 +1523,7 @@ void ObjectsPanel::_blendChangedIter(const Gtk::TreeIter& iter, Glib::ustring bl
         if (blendmode != "normal") {
             gdouble radius = 0;
             if (item->style->getFilter()) {
-                for (auto& primitive: item->style->getFilter()->_children) {
+                for (auto& primitive: item->style->getFilter()->children) {
                     if (!SP_IS_FILTER_PRIMITIVE(&primitive)) {
                         break;
                     }
@@ -1538,7 +1538,7 @@ void ObjectsPanel::_blendChangedIter(const Gtk::TreeIter& iter, Glib::ustring bl
             SPFilter *filter = new_filter_simple_from_item(_document, item, blendmode.c_str(), radius);
             sp_style_set_property_url(item, "filter", filter, false);
         } else {
-            for (auto& primitive: item->style->getFilter()->_children) {
+            for (auto& primitive: item->style->getFilter()->children) {
                 if (!SP_IS_FILTER_PRIMITIVE(&primitive)) {
                     break;
                 }
@@ -1598,7 +1598,7 @@ void ObjectsPanel::_blurChangedIter(const Gtk::TreeIter& iter, double blur)
                 SPFilter *filter = modify_filter_gaussian_blur_from_item(_document, item, radius);
                 sp_style_set_property_url(item, "filter", filter, false);
             } else if (item->style->filter.set && item->style->getFilter()) {
-                for (auto& primitive: item->style->getFilter()->_children) {
+                for (auto& primitive: item->style->getFilter()->children) {
                     if (!SP_IS_FILTER_PRIMITIVE(&primitive)) {
                         break;
                     }

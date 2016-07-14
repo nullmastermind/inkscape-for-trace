@@ -1042,7 +1042,7 @@ void  PrintEmf::do_clip_if_present(SPStyle const *style){
                 /* find the clipping path */
                 Geom::PathVector combined_pathvector;
                 Geom::Affine tfc;   // clipping transform, generally not the same as item transform
-                for (auto& child: scp->_children) {
+                for (auto& child: scp->children) {
                     item = SP_ITEM(&child);
                     if (!item) {
                         break;
@@ -1085,7 +1085,7 @@ Geom::PathVector PrintEmf::merge_PathVector_with_group(Geom::PathVector const &c
     new_combined_pathvector = combined_pathvector;
     SPGroup *group = SP_GROUP(item);
     Geom::Affine tfc = item->transform * transform;
-    for (auto& child: group->_children) {
+    for (auto& child: group->children) {
         item = SP_ITEM(&child);
         if (!item) {
             break;

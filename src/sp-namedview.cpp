@@ -248,7 +248,7 @@ void SPNamedView::build(SPDocument *document, Inkscape::XML::Node *repr) {
     this->readAttr( "inkscape:lockguides" );
 
     /* Construct guideline list */
-    for (auto& o: _children) {
+    for (auto& o: children) {
         if (SP_IS_GUIDE(&o)) {
             SPGuide * g = SP_GUIDE(&o);
             this->guides.push_back(g);
@@ -858,7 +858,7 @@ void sp_namedview_update_layers_from_document (SPDesktop *desktop)
     }
     // if that didn't work out, look for the topmost layer
     if (!layer) {
-        for (auto& iter: document->getRoot()->_children) {
+        for (auto& iter: document->getRoot()->children) {
             if (desktop->isLayer(&iter)) {
                 layer = &iter;
             }

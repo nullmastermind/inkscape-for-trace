@@ -399,7 +399,7 @@ void TagsPanel::_objectsChanged(SPObject* root)
 void TagsPanel::_addObject( SPDocument* doc, SPObject* obj, Gtk::TreeModel::Row* parentRow )
 {
     if ( _desktop && obj ) {
-        for (auto& child: obj->_children) {
+        for (auto& child: obj->children) {
             if (SP_IS_TAG(&child))
             {
                 Gtk::TreeModel::iterator iter = parentRow ? _store->prepend(parentRow->children()) : _store->prepend();
@@ -430,7 +430,7 @@ void TagsPanel::_addObject( SPDocument* doc, SPObject* obj, Gtk::TreeModel::Row*
             
             _tree.expand_to_path( _store->get_path(iteritems) );
 
-            for (auto& child: obj->_children) {
+            for (auto& child: obj->children) {
                 if (SP_IS_TAG_USE(&child))
                 {
                     SPItem *item = SP_TAG_USE(&child)->ref->getObject();
@@ -459,7 +459,7 @@ void TagsPanel::_addObject( SPDocument* doc, SPObject* obj, Gtk::TreeModel::Row*
 
 void TagsPanel::_select_tag( SPTag * tag )
 {
-    for (auto& child: tag->_children) {
+    for (auto& child: tag->children) {
         if (SP_IS_TAG(&child)) {
             _select_tag(SP_TAG(&child));
         } else if (SP_IS_TAG_USE(&child)) {
@@ -649,7 +649,7 @@ bool TagsPanel::_handleButtonEvent(GdkEventButton* event)
                         	for(auto i=items.begin();i!=items.end();++i){
                                 SPObject *newobj = *i;
                                 bool addchild = true;
-                                for (auto& child: obj->_children) {
+                                for (auto& child: obj->children) {
                                     if (SP_IS_TAG_USE(&child) && SP_TAG_USE(&child)->ref->getObject() == newobj) {
                                         addchild = false;
                                     }

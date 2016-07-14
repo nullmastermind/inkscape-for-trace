@@ -293,7 +293,7 @@ void PrintMetafile::brush_classify(SPObject *parent, int depth, Inkscape::Pixbuf
             }
 
             // still looking?  Look at this pattern's children, if there are any
-            for (auto& child: pat_i->_children) {
+            for (auto& child: pat_i->children) {
                 if (*epixbuf || *hatchType != -1) {
                     break;
                 }
@@ -304,7 +304,7 @@ void PrintMetafile::brush_classify(SPObject *parent, int depth, Inkscape::Pixbuf
         *epixbuf = ((SPImage *)parent)->pixbuf;
         return;
     } else { // some inkscape rearrangements pass through nodes between pattern and image which are not classified as either.
-        for (auto& child: parent->_children) {
+        for (auto& child: parent->children) {
             if (*epixbuf || *hatchType != -1) {
                 break;
             }

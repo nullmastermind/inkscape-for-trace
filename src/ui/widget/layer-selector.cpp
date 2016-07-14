@@ -352,7 +352,7 @@ void LayerSelector::_buildSiblingEntries(
 ) {
     using Inkscape::Util::rest;
 
-    auto siblings = parent._children | boost::adaptors::filtered(is_layer(_desktop)) | boost::adaptors::reversed;
+    auto siblings = parent.children | boost::adaptors::filtered(is_layer(_desktop)) | boost::adaptors::reversed;
 
     SPObject *layer( hierarchy ? &*hierarchy : NULL );
 

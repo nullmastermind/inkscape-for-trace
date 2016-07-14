@@ -51,7 +51,7 @@ static guint count_filter_hrefs(SPObject *o, SPFilter *filter)
         i ++;
     }
 
-    for (auto& child: o->_children) {
+    for (auto& child: o->children) {
         i += count_filter_hrefs(&child, filter);
     }
 
@@ -491,14 +491,14 @@ void remove_filter_gaussian_blur (SPObject *item)
 
 bool filter_is_single_gaussian_blur(SPFilter *filter)
 {
-    return (filter->_children.size() == 1 &&
-            SP_IS_GAUSSIANBLUR(&filter->_children.front()));
+    return (filter->children.size() == 1 &&
+            SP_IS_GAUSSIANBLUR(&filter->children.front()));
 }
 
 double get_single_gaussian_blur_radius(SPFilter *filter)
 {
-    if (filter->_children.size() == 1 &&
-        SP_IS_GAUSSIANBLUR(&filter->_children.front())) {
+    if (filter->children.size() == 1 &&
+        SP_IS_GAUSSIANBLUR(&filter->children.front())) {
 
         SPGaussianBlur *gb = SP_GAUSSIANBLUR(filter->firstChild());
         double x = gb->stdDeviation.getNumber();

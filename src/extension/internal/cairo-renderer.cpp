@@ -741,7 +741,7 @@ CairoRenderer::applyClipPath(CairoRenderContext *ctx, SPClipPath const *cp)
 
     TRACE(("BEGIN clip\n"));
     SPObject const *co = cp;
-    for (auto& child: co->_children) {
+    for (auto& child: co->children) {
         SPItem const *item = dynamic_cast<SPItem const *>(&child);
         if (item) {
 
@@ -800,7 +800,7 @@ CairoRenderer::applyMask(CairoRenderContext *ctx, SPMask const *mask)
 
     TRACE(("BEGIN mask\n"));
     SPObject const *co = mask;
-    for (auto& child: co->_children) {
+    for (auto& child: co->children) {
         SPItem const *item = dynamic_cast<SPItem const *>(&child);
         if (item) {
             // TODO fix const correctness:

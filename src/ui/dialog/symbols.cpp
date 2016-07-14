@@ -658,7 +658,7 @@ GSList* SymbolsDialog::symbols_in_doc_recursive (SPObject *r, GSList *l)
     l = g_slist_prepend (l, r);
   }
 
-  for (auto& child: r->_children) {
+  for (auto& child: r->children) {
     l = symbols_in_doc_recursive( &child, l );
   }
 
@@ -680,7 +680,7 @@ GSList* SymbolsDialog::use_in_doc_recursive (SPObject *r, GSList *l)
     l = g_slist_prepend (l, r);
   }
 
-  for (auto& child: r->_children) {
+  for (auto& child: r->children) {
     l = use_in_doc_recursive( &child, l );
   }
 

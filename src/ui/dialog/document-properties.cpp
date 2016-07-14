@@ -1315,7 +1315,7 @@ void DocumentProperties::changeEmbeddedScript(){
     for (std::vector<SPObject *>::const_iterator it = current.begin(); it != current.end(); ++it) {
         SPObject* obj = *it;
         if (id == obj->getId()){
-            int count = (int) obj->_children.size();
+            int count = (int) obj->children.size();
 
             if (count>1)
                 g_warning("TODO: Found a script element with multiple (%d) child nodes! We must implement support for that!", count);
@@ -1359,7 +1359,7 @@ void DocumentProperties::editEmbeddedScript(){
             //XML Tree being used directly here while it shouldn't be.
             Inkscape::XML::Node *repr = obj->getRepr();
             if (repr){
-                auto tmp = obj->_children | boost::adaptors::transformed([](SPObject& o) { return &o; });
+                auto tmp = obj->children | boost::adaptors::transformed([](SPObject& o) { return &o; });
                 std::vector<SPObject*> vec(tmp.begin(), tmp.end());
                 for (auto &child: vec) {
                     child->deleteObject();

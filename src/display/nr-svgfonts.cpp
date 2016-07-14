@@ -203,7 +203,7 @@ SvgFont::scaled_font_text_to_glyphs (cairo_scaled_font_t  */*scaled_font*/,
             //check whether is there a glyph declared on the SVG document
             // that matches with the text string in its current position
             if ( (len = size_of_substring(this->glyphs[i]->unicode.c_str(), _utf8)) ){
-                for(auto& node: font->_children) {
+                for(auto& node: font->children) {
                     if (!previous_unicode) {
                         break;
                     }
@@ -276,7 +276,7 @@ SvgFont::glyph_modified(SPObject* /* blah */, unsigned int /* bleh */){
 Geom::PathVector
 SvgFont::flip_coordinate_system(SPFont* spfont, Geom::PathVector pathv){
     double units_per_em = 1000;
-    for(auto& obj: spfont->_children) {
+    for(auto& obj: spfont->children) {
         if (dynamic_cast<SPFontFace *>(&obj)) {
             //XML Tree being directly used here while it shouldn't be.
             sp_repr_get_double(obj.getRepr(), "units_per_em", &units_per_em);
@@ -344,7 +344,7 @@ SvgFont::scaled_font_render_glyph (cairo_scaled_font_t  */*scaled_font*/,
 
     if (node->hasChildren()){
         //render the SVG described on this glyph's child nodes.
-        for(auto& child: node->_children) {
+        for(auto& child: node->children) {
             {
                 SPPath *path = dynamic_cast<SPPath *>(&child);
                 if (path) {
@@ -379,7 +379,7 @@ SvgFont::scaled_font_render_glyph (cairo_scaled_font_t  */*scaled_font*/,
 cairo_font_face_t*
 SvgFont::get_font_face(){
     if (!this->userfont) {
-        for(auto& node: font->_children) {
+        for(auto& node: font->children) {
             SPGlyph *glyph = dynamic_cast<SPGlyph *>(&node);
             if (glyph) {
                 glyphs.push_back(glyph);

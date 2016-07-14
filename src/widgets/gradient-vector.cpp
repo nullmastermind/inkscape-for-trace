@@ -363,7 +363,7 @@ unsigned long sp_gradient_to_hhssll(SPGradient *gr)
 
 static GSList *get_all_doc_items(GSList *list, SPObject *from, bool onlyvisible, bool onlysensitive, bool ingroups, GSList const *exclude)
 {
-    for (auto& child: from->_children) {
+    for (auto& child: from->children) {
         if (SP_IS_ITEM(&child)) {
             list = g_slist_prepend(list, SP_ITEM(&child));
         }
@@ -525,7 +525,7 @@ static void verify_grad(SPGradient *gradient)
     int i = 0;
     SPStop *stop = NULL;
     /* count stops */
-    for (auto& ochild: gradient->_children) {
+    for (auto& ochild: gradient->children) {
         if (SP_IS_STOP(&ochild)) {
             i++;
             stop = SP_STOP(&ochild);
@@ -568,7 +568,7 @@ static void select_stop_in_list( GtkWidget *vb, SPGradient *gradient, SPStop *ne
     GtkWidget *combo_box = static_cast<GtkWidget *>(g_object_get_data(G_OBJECT(vb), "combo_box"));
 
     int i = 0;
-    for (auto& ochild: gradient->_children) {
+    for (auto& ochild: gradient->children) {
         if (SP_IS_STOP(&ochild)) {
             if (&ochild == new_stop) {
                 gtk_combo_box_set_active (GTK_COMBO_BOX(combo_box) , i);
@@ -603,7 +603,7 @@ static void update_stop_list( GtkWidget *vb, SPGradient *gradient, SPStop *new_s
     /* Populate the combobox store */
     GSList *sl = NULL;
     if ( gradient->hasStops() ) {
-        for (auto& ochild: gradient->_children) {
+        for (auto& ochild: gradient->children) {
             if (SP_IS_STOP(&ochild)) {
                 sl = g_slist_append(sl, &ochild);
             }

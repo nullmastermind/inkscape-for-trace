@@ -276,7 +276,7 @@ void SPGradient::build(SPDocument *document, Inkscape::XML::Node *repr)
 
     SPPaintServer::build(document, repr);
 
-    for (auto& ochild: _children) {
+    for (auto& ochild: children) {
         if (SP_IS_STOP(&ochild)) {
             this->has_stops = TRUE;
             break;
@@ -481,7 +481,7 @@ void SPGradient::remove_child(Inkscape::XML::Node *child)
     SPPaintServer::remove_child(child);
 
     this->has_stops = FALSE;
-    for (auto& ochild: _children) {
+    for (auto& ochild: children) {
         if (SP_IS_STOP(&ochild)) {
             this->has_stops = TRUE;
             break;
@@ -536,7 +536,7 @@ void SPGradient::modified(guint flags)
     // FIXME: climb up the ladder of hrefs
     GSList *l = NULL;
 
-    for (auto& child: _children) {
+    for (auto& child: children) {
         sp_object_ref(&child);
         l = g_slist_prepend(l, &child);
     }
@@ -558,7 +558,7 @@ void SPGradient::modified(guint flags)
 SPStop* SPGradient::getFirstStop()
 {
     SPStop* first = nullptr;
-    for (auto& ochild: _children) {
+    for (auto& ochild: children) {
         if (SP_IS_STOP(&ochild)) {
             first = SP_STOP(&ochild);
             break;
@@ -588,7 +588,7 @@ Inkscape::XML::Node *SPGradient::write(Inkscape::XML::Document *xml_doc, Inkscap
     if (flags & SP_OBJECT_WRITE_BUILD) {
         GSList *l = NULL;
 
-        for (auto& child: _children) {
+        for (auto& child: children) {
             Inkscape::XML::Node *crepr = child.updateRepr(xml_doc, NULL, flags);
 
             if (crepr) {
@@ -916,7 +916,7 @@ bool SPGradient::invalidateArray()
 void SPGradient::rebuildVector()
 {
     gint len = 0;
-    for (auto& child: _children) {
+    for (auto& child: children) {
         if (SP_IS_STOP(&child)) {
             len ++;
         }
@@ -938,7 +938,7 @@ void SPGradient::rebuildVector()
         }
     }
 
-    for (auto& child: _children) {
+    for (auto& child: children) {
         if (SP_IS_STOP(&child)) {
             SPStop *stop = SP_STOP(&child);
 
@@ -1023,7 +1023,7 @@ void SPGradient::rebuildArray()
     array.read( SP_MESH( this ) );
 
     has_patches = false;
-    for (auto& ro: _children) {
+    for (auto& ro: children) {
         if (SP_IS_MESHROW(&ro)) {
             has_patches = true;
             // std::cout << "  Has Patches" << std::endl;

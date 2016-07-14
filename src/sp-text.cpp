@@ -155,7 +155,7 @@ void SPText::update(SPCtx *ctx, guint flags) {
     // Create temporary list of children
     GSList *l = NULL;
 
-    for (auto& child: _children) {
+    for (auto& child: children) {
         sp_object_ref(&child, this);
         l = g_slist_prepend (l, &child);
     }
@@ -235,7 +235,7 @@ void SPText::modified(guint flags) {
     // Create temporary list of children
     GSList *l = NULL;
 
-    for (auto& child: _children) {
+    for (auto& child: children) {
         sp_object_ref(&child, this);
         l = g_slist_prepend (l, &child);
     }
@@ -262,7 +262,7 @@ Inkscape::XML::Node *SPText::write(Inkscape::XML::Document *xml_doc, Inkscape::X
 
         GSList *l = NULL;
 
-        for (auto& child: _children) {
+        for (auto& child: children) {
             if (SP_IS_TITLE(&child) || SP_IS_DESC(&child)) {
                 continue;
             }
@@ -286,7 +286,7 @@ Inkscape::XML::Node *SPText::write(Inkscape::XML::Document *xml_doc, Inkscape::X
             l = g_slist_remove (l, l->data);
         }
     } else {
-        for (auto& child: _children) {
+        for (auto& child: children) {
             if (SP_IS_TITLE(&child) || SP_IS_DESC(&child)) {
                 continue;
             }
@@ -606,7 +606,7 @@ unsigned SPText::_buildLayoutInput(SPObject *root, Inkscape::Text::Layout::Optio
         }
     }
 
-    for (auto& child: root->_children) {
+    for (auto& child: root->children) {
         SPString *str = dynamic_cast<SPString *>(&child);
         if (str) {
             Glib::ustring const &string = str->string;
@@ -628,7 +628,7 @@ void SPText::rebuildLayout()
     Inkscape::Text::Layout::OptionalTextTagAttrs optional_attrs;
     _buildLayoutInput(this, optional_attrs, 0, false);
     layout.calculateFlow();
-    for (auto& child: _children) {
+    for (auto& child: children) {
         if (SP_IS_TEXTPATH(&child)) {
             SPTextPath const *textpath = SP_TEXTPATH(&child);
             if (textpath->originalPath != NULL) {
@@ -640,7 +640,7 @@ void SPText::rebuildLayout()
     //g_print("%s", layout.dumpAsText().c_str());
 
     // set the x,y attributes on role:line spans
-    for (auto& child: _children) {
+    for (auto& child: children) {
         if (SP_IS_TSPAN(&child)) {
             SPTSpan *tspan = SP_TSPAN(&child);
             if ( (tspan->role != SP_TSPAN_ROLE_UNSPECIFIED)
@@ -676,7 +676,7 @@ void SPText::_adjustFontsizeRecursive(SPItem *item, double ex, bool is_root)
         item->updateRepr();
     }
 
-    for(auto& o: item->_children) {
+    for(auto& o: item->children) {
         if (SP_IS_ITEM(&o))
             _adjustFontsizeRecursive(SP_ITEM(&o), ex, false);
     }
@@ -695,7 +695,7 @@ void SPText::_adjustCoordsRecursive(SPItem *item, Geom::Affine const &m, double 
         SP_TREF(item)->attributes.transform(m, ex, ex, is_root);
     }
 
-    for(auto& o: item->_children) {
+    for(auto& o: item->children) {
         if (SP_IS_ITEM(&o))
             _adjustCoordsRecursive(SP_ITEM(&o), m, ex, false);
     }

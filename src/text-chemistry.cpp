@@ -142,7 +142,7 @@ text_put_on_path()
 
     // make a list of text children
     GSList *text_reprs = NULL;
-    for(auto& o: text->_children) {
+    for(auto& o: text->children) {
         text_reprs = g_slist_prepend(text_reprs, o.getRepr());
     }
 
@@ -240,7 +240,7 @@ text_remove_all_kerns_recursively(SPObject *o)
         g_strfreev(xa_comma);
     }
 
-    for (auto& i: o->_children) {
+    for (auto& i: o->children) {
         text_remove_all_kerns_recursively(&i);
         i.requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
     }
@@ -353,7 +353,7 @@ text_flow_into_shape()
         Inkscape::GC::release(text_repr);
 
     } else { // reflow an already flowed text, preserving paras
-        for(auto& o: text->_children) {
+        for(auto& o: text->children) {
             if (SP_IS_FLOWPARA(&o)) {
                 Inkscape::XML::Node *para_repr = o.getRepr()->duplicate(xml_doc);
                 root_repr->appendChild(para_repr);

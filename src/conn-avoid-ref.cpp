@@ -334,7 +334,7 @@ static Avoid::Polygon avoid_item_poly(SPItem const *item)
 std::vector<SPItem *> get_avoided_items(std::vector<SPItem *> &list, SPObject *from, SPDesktop *desktop,
         bool initialised)
 {
-    for (auto& child: from->_children) {
+    for (auto& child: from->children) {
         if (SP_IS_ITEM(&child) &&
             !desktop->isLayer(SP_ITEM(&child)) &&
             !SP_ITEM(&child)->isLocked() &&

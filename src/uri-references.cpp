@@ -76,7 +76,7 @@ bool URIReference::_acceptObject(SPObject *obj) const
         std::vector<int> positions;
         while (owner->cloned) {
             int position = 0;
-            for (auto &child: owner->parent->_children) {
+            for (auto &child: owner->parent->children) {
                 if(&child == owner) {
                     break;
                 }

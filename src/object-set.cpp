@@ -93,7 +93,7 @@ bool ObjectSet::_anyAncestorIsInSet(SPObject *object) {
 }
 
 void ObjectSet::_removeDescendantsFromSet(SPObject *object) {
-    for (auto& child: object->_children) {
+    for (auto& child: object->children) {
         if (includes(&child)) {
             _remove(&child);
             // there is certainly no children of this child in the set
@@ -130,7 +130,7 @@ SPObject *ObjectSet::_getMutualAncestor(SPObject *object) {
 
     bool flag = true;
     while (o->parent != nullptr) {
-        for (auto &child: o->parent->_children) {
+        for (auto &child: o->parent->children) {
             if(&child != o && !includes(&child)) {
                 flag = false;
                 break;
@@ -147,7 +147,7 @@ SPObject *ObjectSet::_getMutualAncestor(SPObject *object) {
 void ObjectSet::_removeAncestorsFromSet(SPObject *object) {
     SPObject* o = object;
     while (o->parent != nullptr) {
-        for (auto &child: o->parent->_children) {
+        for (auto &child: o->parent->children) {
             if (&child != o) {
                 _add(&child);
             }

@@ -506,7 +506,7 @@ sp_tref_convert_to_tspan(SPObject *obj)
     ////////////////////
     else {
         GSList *l = NULL;
-        for (auto& child: obj->_children) {
+        for (auto& child: obj->children) {
             sp_object_ref(&child, obj);
             l = g_slist_prepend (l, &child);
         }

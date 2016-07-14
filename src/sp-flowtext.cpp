@@ -72,7 +72,7 @@ void SPFlowtext::update(SPCtx* ctx, unsigned int flags) {
 
     GSList *l = NULL;
 
-    for (auto& child: _children) {
+    for (auto& child: children) {
         sp_object_ref(&child);
         l = g_slist_prepend(l, &child);
     }
@@ -135,7 +135,7 @@ void SPFlowtext::modified(unsigned int flags) {
         }
     }
 
-    for (auto& o: _children) {
+    for (auto& o: children) {
         if (dynamic_cast<SPFlowregion *>(&o)) {
             region = &o;
             break;
@@ -223,7 +223,7 @@ Inkscape::XML::Node* SPFlowtext::write(Inkscape::XML::Document* doc, Inkscape::X
 
         GSList *l = NULL;
 
-        for (auto& child: _children) {
+        for (auto& child: children) {
             Inkscape::XML::Node *c_repr = NULL;
 
             if ( dynamic_cast<SPFlowdiv *>(&child) || dynamic_cast<SPFlowpara *>(&child) || dynamic_cast<SPFlowregion *>(&child) || dynamic_cast<SPFlowregionExclude *>(&child)) {
@@ -241,7 +241,7 @@ Inkscape::XML::Node* SPFlowtext::write(Inkscape::XML::Document* doc, Inkscape::X
             l = g_slist_remove(l, l->data);
         }
     } else {
-        for (auto& child: _children) {
+        for (auto& child: children) {
             if ( dynamic_cast<SPFlowdiv *>(&child) || dynamic_cast<SPFlowpara *>(&child) || dynamic_cast<SPFlowregion *>(&child) || dynamic_cast<SPFlowregionExclude *>(&child)) {
                 child.updateRepr(flags);
             }
@@ -390,7 +390,7 @@ void SPFlowtext::_buildLayoutInput(SPObject *root, Shape const *exclusion_shape,
         *pending_line_break_object = NULL;
     }
 
-    for (auto& child: root->_children) {
+    for (auto& child: root->children) {
         SPString *str = dynamic_cast<SPString *>(&child);
         if (str) {
             if (*pending_line_break_object) {
@@ -440,7 +440,7 @@ Shape* SPFlowtext::_buildExclusionShape() const
     Shape *shape = new Shape();
     Shape *shape_temp = new Shape();
 
-    for (auto& child: _children) {
+    for (auto& child: children) {
         // RH: is it right that this shouldn't be recursive?
         SPFlowregionExclude *c_child = dynamic_cast<SPFlowregionExclude *>(const_cast<SPObject*>(&child));
         if ( c_child && c_child->computed && c_child->computed->hasEdges() ) {
@@ -593,7 +593,7 @@ SPItem *SPFlowtext::get_frame(SPItem const *after)
     SPItem *frame = 0;
 
     SPObject *region = 0;
-    for (auto& o: _children) {
+    for (auto& o: children) {
         if (dynamic_cast<SPFlowregion *>(&o)) {
             region = &o;
             break;
@@ -603,7 +603,7 @@ SPItem *SPFlowtext::get_frame(SPItem const *after)
     if (region) {
         bool past = false;
 
-        for (auto& o: region->_children) {
+        for (auto& o: region->children) {
             SPItem *item = dynamic_cast<SPItem *>(&o);
             if (item) {
                 if ( (after == NULL) || past ) {
@@ -707,7 +707,7 @@ Geom::Affine SPFlowtext::set_transform (Geom::Affine const &xform)
     }
 
     SPObject *region = NULL;
-    for (auto& o: _children) {
+    for (auto& o: children) {
         if (dynamic_cast<SPFlowregion *>(&o)) {
             region = &o;
             break;

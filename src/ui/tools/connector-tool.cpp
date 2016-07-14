@@ -1114,7 +1114,7 @@ void ConnectorTool::_setActiveShape(SPItem *item) {
 
         // The idea here is to try and add a group's children to solidify
         // connection handling. We react to path objects with only one node.
-        for (auto& child: item->_children) {
+        for (auto& child: item->children) {
           if (SP_IS_PATH(&child) && SP_PATH(&child)->nodesInPath() == 1) {
               this->_activeShapeAddKnot((SPItem *) &child);
           }

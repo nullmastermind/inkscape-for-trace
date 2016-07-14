@@ -2539,7 +2539,7 @@ void GrDrag::deleteSelected(bool just_one)
         // cannot use vector->vector.stops.size() because the vector might be invalidated by deletion of a midstop
         // manually count the children, don't know if there already exists a function for this...
         int len = 0;
-        for (auto& child: stopinfo->vector->_children)
+        for (auto& child: stopinfo->vector->children)
         {
             if ( SP_IS_STOP(&child) ) {
                 len ++;

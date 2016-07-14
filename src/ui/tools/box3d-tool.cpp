@@ -118,7 +118,7 @@ static void sp_box3d_context_ensure_persp_in_defs(SPDocument *document) {
     SPDefs *defs = document->getDefs();
 
     bool has_persp = false;
-    for (auto& child: defs->_children) {
+    for (auto& child: defs->children) {
         if (SP_IS_PERSP3D(&child)) {
             has_persp = true;
             break;

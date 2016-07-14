@@ -433,7 +433,7 @@ static void add_ids_recursive(std::vector<const gchar *> &ids, SPObject *obj)
         ids.push_back(obj->getId());
 
         if (dynamic_cast<SPGroup *>(obj)) {
-            for (auto& child: obj->_children) {
+            for (auto& child: obj->children) {
                 add_ids_recursive(ids, &child);
             }
         }
@@ -587,7 +587,7 @@ void sp_edit_clear_all(Inkscape::Selection *selection)
  */
 std::vector<SPItem*> &get_all_items(std::vector<SPItem*> &list, SPObject *from, SPDesktop *desktop, bool onlyvisible, bool onlysensitive, bool ingroups, std::vector<SPItem*> const &exclude)
 {
-    for (auto& child: from->_children) {
+    for (auto& child: from->children) {
         SPItem *item = dynamic_cast<SPItem *>(&child);
         if (item &&
             !desktop->isLayer(item) &&
@@ -1143,7 +1143,7 @@ void sp_selection_lower_to_bottom(Inkscape::Selection *selection, SPDesktop *des
         pp = document->getObjectByRepr(repr->parent());
         minpos = 0;
         g_assert(dynamic_cast<SPGroup *>(pp));
-        for (auto& pc: pp->_children) {
+        for (auto& pc: pp->children) {
             if(dynamic_cast<SPItem *>(&pc)) {
                 break;
             }
@@ -1202,7 +1202,7 @@ take_style_from_item(SPObject *object)
         (dynamic_cast<SPText *>(object) && object->firstChild() && object->firstChild()->getNext() == NULL)) {
         // if this is a text with exactly one tspan child, merge the style of that tspan as well
         // If this is a group, merge the style of its topmost (last) child with style
-        auto list = object->_children | boost::adaptors::reversed;
+        auto list = object->children | boost::adaptors::reversed;
         for (auto& element: list) {
             if (element.style ) {
                 SPCSSAttr *temp = sp_css_attr_from_object(&element, SP_STYLE_FLAG_IFSET);
@@ -1624,9 +1624,9 @@ void sp_selection_apply_affine(Inkscape::Selection *selection, Geom::Affine cons
         } else if (transform_flowtext_with_frame) {
             // apply the inverse of the region's transform to the <use> so that the flow remains
             // the same (even though the output itself gets transformed)
-            for (auto& region: item->_children) {
+            for (auto& region: item->children) {
                 if (dynamic_cast<SPFlowregion *>(&region) || dynamic_cast<SPFlowregionExclude *>(&region)) {
-                    for (auto& itm: region._children) {
+                    for (auto& itm: region.children) {
                         SPUse *use = dynamic_cast<SPUse *>(&itm);
                         if ( use ) {
                             use->doWriteTransform(use->getRepr(), use->transform.inverse(), NULL, compensate);
@@ -2348,7 +2348,7 @@ typedef struct ListReverse {
 private:
     static GSList *make_list(SPObject *object, SPObject *limit) {
         GSList *list = NULL;
-        for (auto &child: object->_children) {
+        for (auto &child: object->children) {
             if (&child == limit) {
                 break;
             }
@@ -3435,7 +3435,7 @@ void sp_selection_untile(SPDesktop *desktop)
         Geom::Affine pat_transform = basePat->getTransform();
         pat_transform *= item->transform;
 
-        for (auto& child: pattern->_children) {
+        for (auto& child: pattern->children) {
             if (dynamic_cast<SPItem *>(&child)) {
                 Inkscape::XML::Node *copy = child.getRepr()->duplicate(xml_doc);
                 SPItem *i = dynamic_cast<SPItem *>(desktop->currentLayer()->appendChildRepr(copy));
@@ -4103,7 +4103,7 @@ void sp_selection_unset_mask(SPDesktop *desktop, bool apply_clip_path) {
     for ( std::map<SPObject*,SPItem*>::iterator it = referenced_objects.begin() ; it != referenced_objects.end() ; ++it) {
         SPObject *obj = (*it).first; // Group containing the clipped paths or masks
         GSList *items_to_move = NULL;
-        for (auto& child: obj->_children) {
+        for (auto& child: obj->children) {
             // Collect all clipped paths and masks within a single group
             Inkscape::XML::Node *copy = child.getRepr()->duplicate(xml_doc);
             if(copy->attribute("inkscape:original-d") && copy->attribute("inkscape:path-effect"))
@@ -4264,7 +4264,7 @@ static void itemtree_map(void (*f)(SPItem *, SPDesktop *), SPObject *root, SPDes
             f(item, desktop);
         }
     }
-    for (auto& child: root->_children) {
+    for (auto& child: root->children) {
         //don't recurse into locked layers
         SPItem *item = dynamic_cast<SPItem *>(&child);
         if (!(item && desktop->isLayer(item) && item->isLocked())) {

@@ -747,7 +747,7 @@ std::vector<SPItem*> &Find::all_items (SPObject *r, std::vector<SPItem*> &l, boo
         return l; // we're not interested in metadata
     }
 
-    for (auto& child: r->_children) {
+    for (auto& child: r->children) {
         SPItem *item = dynamic_cast<SPItem *>(&child);
         if (item && !child.cloned && !desktop->isLayer(item)) {
             if ((hidden || !desktop->itemIsHidden(item)) && (locked || !item->isLocked())) {

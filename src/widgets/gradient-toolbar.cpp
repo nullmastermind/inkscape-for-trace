@@ -720,7 +720,7 @@ static void select_stop_by_drag(GtkWidget *combo_box, SPGradient *gradient, Tool
 static void select_stop_in_list( GtkWidget *combo_box, SPGradient *gradient, SPStop *new_stop, GtkWidget *data, gboolean block)
 {
     int i = 0;
-    for (auto& ochild: gradient->_children) {
+    for (auto& ochild: gradient->children) {
         if (SP_IS_STOP(&ochild)) {
             if (&ochild == new_stop) {
                 blocked = block;
@@ -765,7 +765,7 @@ static gboolean update_stop_list( GtkWidget *stop_combo, SPGradient *gradient, S
     /* Populate the combobox store */
     std::vector<SPObject *> sl;
     if ( gradient->hasStops() ) {
-        for (auto& ochild: gradient->_children) {
+        for (auto& ochild: gradient->children) {
             if (SP_IS_STOP(&ochild)) {
                 sl.push_back(&ochild);
             }

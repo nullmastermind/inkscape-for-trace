@@ -199,7 +199,7 @@ static guint count_gradient_hrefs(SPObject *o, SPGradient *gr)
         i ++;
     }
 
-    for (auto& child: o->_children) {
+    for (auto& child: o->children) {
         i += count_gradient_hrefs(&child, gr);
     }
 
@@ -926,7 +926,7 @@ void sp_item_gradient_reverse_vector(SPItem *item, Inkscape::PaintTarget fill_or
     GSList *child_objects = NULL;
     std::vector<double> offsets;
     double offset;
-    for (auto& child: vector->_children) {
+    for (auto& child: vector->children) {
         child_reprs = g_slist_prepend (child_reprs, child.getRepr());
         child_objects = g_slist_prepend (child_objects, &child);
         offset=0;
@@ -979,7 +979,7 @@ void sp_item_gradient_invert_vector_color(SPItem *item, Inkscape::PaintTarget fi
         sp_gradient_repr_set_link(gradient->getRepr(), vector);
     }
 
-    for (auto& child: vector->_children) {
+    for (auto& child: vector->children) {
         if (SP_IS_STOP(&child)) {
             guint32 color =  SP_STOP(&child)->get_rgba32();
             //g_message("Stop color %d", color);

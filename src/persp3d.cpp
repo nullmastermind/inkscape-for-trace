@@ -215,7 +215,7 @@ Persp3D *persp3d_create_xml_element(SPDocument *document, Persp3DImpl *dup) {// 
 Persp3D *persp3d_document_first_persp(SPDocument *document)
 {
     Persp3D *first = 0;
-    for (auto& child: document->getDefs()->_children) {
+    for (auto& child: document->getDefs()->children) {
         if (SP_IS_PERSP3D(&child)) {
             first = SP_PERSP3D(&child);
             break;
@@ -534,7 +534,7 @@ persp3d_print_debugging_info (Persp3D *persp) {
 
 void persp3d_print_debugging_info_all(SPDocument *document)
 {
-    for (auto& child: document->getDefs()->_children) {
+    for (auto& child: document->getDefs()->children) {
         if (SP_IS_PERSP3D(&child)) {
             persp3d_print_debugging_info(SP_PERSP3D(&child));
         }

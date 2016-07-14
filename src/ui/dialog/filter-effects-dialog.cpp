@@ -103,7 +103,7 @@ static int input_count(const SPFilterPrimitive* prim)
         return 2;
     else if(SP_IS_FEMERGE(prim)) {
         // Return the number of feMergeNode connections plus an extra
-        return (int) (prim->_children.size() + 1);
+        return (int) (prim->children.size() + 1);
     }
     else
         return 1;
@@ -1060,7 +1060,7 @@ public:
     {
         SPFeFuncNode* funcNode = NULL;
         bool found = false;
-        for(auto& node: ct->_children) {
+        for(auto& node: ct->children) {
             funcNode = SP_FEFUNCNODE(&node);
             if( funcNode->channel == _channel ) {
                 found = true;
@@ -1868,7 +1868,7 @@ void FilterEffectsDialog::PrimitiveList::update()
         bool active_found = false;
         _dialog._primitive_box->set_sensitive(true);
         _dialog.update_filter_general_settings_view();
-        for(auto& prim_obj: f->_children) {
+        for(auto& prim_obj: f->children) {
             SPFilterPrimitive *prim = SP_FILTER_PRIMITIVE(&prim_obj);
             if(!prim) {
                 break;
@@ -2339,7 +2339,7 @@ const Gtk::TreeIter FilterEffectsDialog::PrimitiveList::find_result(const Gtk::T
     if(SP_IS_FEMERGE(prim)) {
         int c = 0;
         bool found = false;
-        for (auto& o: prim->_children) {
+        for (auto& o: prim->children) {
             if(c == attr && SP_IS_FEMERGENODE(&o)) {
                 image = SP_FEMERGENODE(&o)->input;
                 found = true;
@@ -2531,7 +2531,7 @@ bool FilterEffectsDialog::PrimitiveList::on_button_release_event(GdkEventButton*
             if(SP_IS_FEMERGE(prim)) {
                 int c = 1;
                 bool handled = false;
-                for (auto& o: prim->_children) {
+                for (auto& o: prim->children) {
                     if(c == _in_drag && SP_IS_FEMERGENODE(&o)) {
                         // If input is null, delete it
                         if(!in_val) {

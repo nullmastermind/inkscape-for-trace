@@ -27,7 +27,7 @@ void SPFlowdiv::update(SPCtx *ctx, unsigned int flags) {
     childflags &= SP_OBJECT_MODIFIED_CASCADE;
 
     GSList* l = NULL;
-    for (auto& child: _children) {
+    for (auto& child: children) {
         sp_object_ref(&child);
         l = g_slist_prepend(l, &child);
     }
@@ -65,7 +65,7 @@ void SPFlowdiv::modified(unsigned int flags) {
     flags &= SP_OBJECT_MODIFIED_CASCADE;
 
     GSList *l = NULL;
-    for (auto& child: _children) {
+    for (auto& child: children) {
         sp_object_ref(&child);
         l = g_slist_prepend(l, &child);
     }
@@ -104,7 +104,7 @@ Inkscape::XML::Node* SPFlowdiv::write(Inkscape::XML::Document *xml_doc, Inkscape
 
         GSList *l = NULL;
 
-        for (auto& child: _children) {
+        for (auto& child: children) {
             Inkscape::XML::Node* c_repr = NULL;
 
             if ( SP_IS_FLOWTSPAN (&child) ) {
@@ -126,7 +126,7 @@ Inkscape::XML::Node* SPFlowdiv::write(Inkscape::XML::Document *xml_doc, Inkscape
             l = g_slist_remove(l, l->data);
         }
     } else {
-        for (auto& child: _children) {
+        for (auto& child: children) {
             if ( SP_IS_FLOWTSPAN (&child) ) {
                 child.updateRepr(flags);
             } else if ( SP_IS_FLOWPARA(&child) ) {
@@ -168,7 +168,7 @@ void SPFlowtspan::update(SPCtx *ctx, unsigned int flags) {
     childflags &= SP_OBJECT_MODIFIED_CASCADE;
 
     GSList* l = NULL;
-    for (auto& child: _children) {
+    for (auto& child: children) {
         sp_object_ref(&child);
         l = g_slist_prepend(l, &child);
     }
@@ -206,7 +206,7 @@ void SPFlowtspan::modified(unsigned int flags) {
     flags &= SP_OBJECT_MODIFIED_CASCADE;
 
     GSList *l = NULL;
-    for (auto& child: _children) {
+    for (auto& child: children) {
         sp_object_ref(&child);
         l = g_slist_prepend(l, &child);
     }
@@ -242,7 +242,7 @@ Inkscape::XML::Node *SPFlowtspan::write(Inkscape::XML::Document *xml_doc, Inksca
 
         GSList *l = NULL;
 
-        for (auto& child: _children) {
+        for (auto& child: children) {
             Inkscape::XML::Node* c_repr = NULL;
 
             if ( SP_IS_FLOWTSPAN(&child) ) {
@@ -264,7 +264,7 @@ Inkscape::XML::Node *SPFlowtspan::write(Inkscape::XML::Document *xml_doc, Inksca
             l = g_slist_remove(l, l->data);
         }
     } else {
-        for (auto& child: _children) {
+        for (auto& child: children) {
             if ( SP_IS_FLOWTSPAN(&child) ) {
                 child.updateRepr(flags);
             } else if ( SP_IS_FLOWPARA(&child) ) {
@@ -307,7 +307,7 @@ void SPFlowpara::update(SPCtx *ctx, unsigned int flags) {
     flags &= SP_OBJECT_MODIFIED_CASCADE;
 
     GSList* l = NULL;
-    for (auto& child: _children) {
+    for (auto& child: children) {
         sp_object_ref(&child);
         l = g_slist_prepend(l, &child);
     }
@@ -343,7 +343,7 @@ void SPFlowpara::modified(unsigned int flags) {
     flags &= SP_OBJECT_MODIFIED_CASCADE;
 
     GSList *l = NULL;
-    for (auto& child: _children) {
+    for (auto& child: children) {
         sp_object_ref(&child);
         l = g_slist_prepend(l, &child);
     }
@@ -379,7 +379,7 @@ Inkscape::XML::Node *SPFlowpara::write(Inkscape::XML::Document *xml_doc, Inkscap
 
         GSList *l = NULL;
 
-        for (auto& child: _children) {
+        for (auto& child: children) {
             Inkscape::XML::Node* c_repr = NULL;
 
             if ( SP_IS_FLOWTSPAN(&child) ) {
@@ -401,7 +401,7 @@ Inkscape::XML::Node *SPFlowpara::write(Inkscape::XML::Document *xml_doc, Inkscap
             l = g_slist_remove(l, l->data);
         }
     } else {
-        for (auto& child: _children) {
+        for (auto& child: children) {
             if ( SP_IS_FLOWTSPAN(&child) ) {
                 child.updateRepr(flags);
             } else if ( SP_IS_FLOWPARA(&child) ) {

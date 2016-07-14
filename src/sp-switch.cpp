@@ -32,7 +32,7 @@ SPSwitch::~SPSwitch() {
 SPObject *SPSwitch::_evaluateFirst() {
     SPObject *first = 0;
 
-    for (auto& child: _children) {
+    for (auto& child: children) {
         if (SP_IS_ITEM(&child) && sp_item_evaluate(SP_ITEM(&child))) {
         	first = &child;
             break;

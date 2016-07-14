@@ -986,7 +986,7 @@ void CairoRenderContext::popState(void)
 
 static bool pattern_hasItemChildren(SPPattern *pat)
 {
-    for (auto& child: pat->_children) {
+    for (auto& child: pat->children) {
         if (SP_IS_ITEM (&child)) {
             return true;
         }
@@ -1086,7 +1086,7 @@ CairoRenderContext::_createPatternPainter(SPPaintServer const *const paintserver
     // show items and render them
     for (SPPattern *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
         if (pat_i && SP_IS_OBJECT(pat_i) && pattern_hasItemChildren(pat_i)) { // find the first one with item children
-            for (auto& child: pat_i->_children) {
+            for (auto& child: pat_i->children) {
                 if (SP_IS_ITEM(&child)) {
                     SP_ITEM(&child)->invoke_show(drawing, dkey, SP_ITEM_REFERENCE_FLAGS);
                     _renderer->renderItem(pattern_ctx, SP_ITEM(&child));
@@ -1115,7 +1115,7 @@ CairoRenderContext::_createPatternPainter(SPPaintServer const *const paintserver
     // hide all items
     for (SPPattern *pat_i = pat; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
         if (pat_i && SP_IS_OBJECT(pat_i) && pattern_hasItemChildren(pat_i)) { // find the first one with item children
-            for (auto& child: pat_i->_children) {
+            for (auto& child: pat_i->children) {
                 if (SP_IS_ITEM(&child)) {
                     SP_ITEM(&child)->invoke_hide(dkey);
                 }

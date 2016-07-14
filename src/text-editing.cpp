@@ -91,7 +91,7 @@ bool sp_te_input_is_empty(SPObject const *item)
     if (SP_IS_STRING(item)) {
         empty = SP_STRING(item)->string.empty();
     } else {
-        for (auto& child: item->_children) {
+        for (auto& child: item->children) {
             if (!sp_te_input_is_empty(&child)) {
                 empty = false;
                 break;
@@ -237,7 +237,7 @@ unsigned sp_text_get_length(SPObject const *item)
             length++;
         }
     
-        for (auto& child: item->_children) {
+        for (auto& child: item->children) {
             if (SP_IS_STRING(&child)) {
                 length += SP_STRING(&child)->string.length();
             } else {
@@ -267,7 +267,7 @@ unsigned sp_text_get_length_upto(SPObject const *item, SPObject const *upto)
     }
     
     // Count the length of the children
-    for (auto& child: item->_children) {
+    for (auto& child: item->children) {
         if (upto && &child == upto) {
             // hit upto, return immediately
             return length;
@@ -323,7 +323,7 @@ to \a item at the same level. */
 static unsigned sum_sibling_text_lengths_before(SPObject const *item)
 {
     unsigned char_index = 0;
-    for (auto& sibling: item->parent->_children) {
+    for (auto& sibling: item->parent->children) {
         if (&sibling == item) {
             break;
         }
@@ -860,7 +860,7 @@ static void sp_te_get_ustring_multiline(SPObject const *root, Glib::ustring *str
     if (*pending_line_break) {
         *string += '\n';
     }
-    for (auto& child: root->_children) {
+    for (auto& child: root->children) {
         if (SP_IS_STRING(&child)) {
             *string += SP_STRING(&child)->string;
         } else {
@@ -944,7 +944,7 @@ sp_te_set_repr_text_multiline(SPItem *text, gchar const *str)
     gchar *content = g_strdup (str);
 
     repr->setContent("");
-    for (auto& child: object->_children) {
+    for (auto& child: object->children) {
         if (!SP_IS_FLOWREGION(&child) && !SP_IS_FLOWREGIONEXCLUDE(&child)) {
             repr->removeChild(child.getRepr());
         }
@@ -1405,7 +1405,7 @@ static void apply_css_recursive(SPObject *o, SPCSSAttr const *css)
 {
     sp_repr_css_change(o->getRepr(), const_cast<SPCSSAttr*>(css), "style");
 
-    for (auto& child: o->_children) {
+    for (auto& child: o->children) {
         if (sp_repr_css_property(const_cast<SPCSSAttr*>(css), "opacity", NULL) != NULL) {
             // Unset properties which are accumulating and thus should not be set recursively.
             // For example, setting opacity 0.5 on a group recursively would result in the visible opacity of 0.25 for an item in the group.
@@ -2073,7 +2073,7 @@ bool has_visible_text(SPObject *obj)
     if (SP_IS_STRING(obj) && !SP_STRING(obj)->string.empty()) {
         hasVisible = true; // maybe we should also check that it's not all whitespace?
     } else {
-        for (auto& child: obj->_children) {
+        for (auto& child: obj->children) {
             if (has_visible_text(const_cast<SPObject *>(&child))) {
                 hasVisible = true;
                 break;

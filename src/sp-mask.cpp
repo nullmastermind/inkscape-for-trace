@@ -227,7 +227,7 @@ Inkscape::DrawingItem *SPMask::sp_mask_show(Inkscape::Drawing &drawing, unsigned
 	Inkscape::DrawingGroup *ai = new Inkscape::DrawingGroup(drawing);
 	this->display = sp_mask_view_new_prepend (this->display, key, ai);
 
-	for (auto& child: _children) {
+	for (auto& child: children) {
 		if (SP_IS_ITEM (&child)) {
 			Inkscape::DrawingItem *ac = SP_ITEM (&child)->invoke_show (drawing, key, SP_ITEM_REFERENCE_FLAGS);
 
@@ -250,7 +250,7 @@ void SPMask::sp_mask_hide(unsigned int key) {
 	g_return_if_fail (this != NULL);
 	g_return_if_fail (SP_IS_MASK (this));
 
-	for (auto& child: _children) {
+	for (auto& child: children) {
 		if (SP_IS_ITEM (&child)) {
 			SP_ITEM(&child)->invoke_hide (key);
 		}

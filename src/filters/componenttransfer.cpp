@@ -49,7 +49,7 @@ static void sp_feComponentTransfer_children_modified(SPFeComponentTransfer *sp_c
 {
     if (sp_componenttransfer->renderer) {
         bool set[4] = {false, false, false, false};
-        for(auto& node: sp_componenttransfer->_children) {
+        for(auto& node: sp_componenttransfer->children) {
             int i = 4;
 
             SPFeFuncNode *funcNode = SP_FEFUNCNODE(&node);

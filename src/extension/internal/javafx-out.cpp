@@ -732,7 +732,7 @@ bool JavaFXOutput::doTreeRecursive(SPDocument *doc, SPObject *obj)
     /**
      * Descend into children
      */
-    for (auto &child: obj->_children)
+    for (auto &child: obj->children)
         {
             if (!doTreeRecursive(doc, &child)) {
                 return false;
@@ -804,7 +804,7 @@ bool JavaFXOutput::doBody(SPDocument *doc, SPObject *obj)
     /**
      * Descend into children
      */
-    for (auto &child: obj->_children)
+    for (auto &child: obj->children)
         {
             if (!doBody(doc, &child)) {
                 return false;

@@ -233,7 +233,7 @@ void SPHatch::set(unsigned int key, const gchar* value)
 
 bool SPHatch::_hasHatchPatchChildren(SPHatch const *hatch)
 {
-    for (auto& child: hatch->_children) {
+    for (auto& child: hatch->children) {
         SPHatchPath const *hatchPath = dynamic_cast<SPHatchPath const *>(&child);
         if (hatchPath) {
             return true;
@@ -248,7 +248,7 @@ std::vector<SPHatchPath*> SPHatch::hatchPaths()
     SPHatch *src = chase_hrefs<SPHatch>(this, sigc::ptr_fun(&_hasHatchPatchChildren));
 
     if (src) {
-        for (auto& child: src->_children) {
+        for (auto& child: src->children) {
             SPHatchPath *hatchPath = dynamic_cast<SPHatchPath *>(&child);
             if (hatchPath) {
                 list.push_back(hatchPath);
@@ -264,7 +264,7 @@ std::vector<SPHatchPath const*> SPHatch::hatchPaths() const
     SPHatch const *src = chase_hrefs<SPHatch const>(this, sigc::ptr_fun(&_hasHatchPatchChildren));
 
     if (src) {
-        for (auto& child: src->_children) {
+        for (auto& child: src->children) {
             SPHatchPath const *hatchPath = dynamic_cast<SPHatchPath const*>(&child);
             if (hatchPath) {
                 list.push_back(hatchPath);

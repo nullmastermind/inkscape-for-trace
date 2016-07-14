@@ -234,7 +234,7 @@ GSList *SpellCheck::allTextItems (SPObject *r, GSList *l, bool hidden, bool lock
         return l; // we're not interested in metadata
     }
 
-    for (auto& child: r->_children) {
+    for (auto& child: r->children) {
         if (SP_IS_ITEM (&child) && !child.cloned && !desktop->isLayer(SP_ITEM(&child))) {
                 if ((hidden || !desktop->itemIsHidden(SP_ITEM(&child))) && (locked || !SP_ITEM(&child)->isLocked())) {
                     if (SP_IS_TEXT(&child) || SP_IS_FLOWTEXT(&child))

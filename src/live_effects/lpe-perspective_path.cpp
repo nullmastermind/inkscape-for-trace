@@ -107,7 +107,7 @@ void LPEPerspectivePath::refresh(Gtk::Entry* perspective) {
     perspectiveID = perspective->get_text();
     Persp3D *first = 0;
     Persp3D *persp = 0;
-    for (auto& child: lpeobj->document->getDefs()->_children) {
+    for (auto& child: lpeobj->document->getDefs()->children) {
         if (SP_IS_PERSP3D(&child) && first == 0) {
             first = SP_PERSP3D(&child);
         }

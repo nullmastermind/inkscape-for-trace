@@ -385,7 +385,7 @@ sp_tweak_dilate_recursive (Inkscape::Selection *selection, SPItem *item, Geom::P
 
     if (dynamic_cast<SPGroup *>(item) && !dynamic_cast<SPBox3D *>(item)) {
         GSList *children = NULL;
-        for (auto& child: item->_children) {
+        for (auto& child: item->children) {
             if (dynamic_cast<SPItem *>(static_cast<SPObject *>(&child))) {
                 children = g_slist_prepend(children, &child);
             }
@@ -832,7 +832,7 @@ static void tweak_colors_in_gradient(SPItem *item, Inkscape::PaintTarget fill_or
     double offset_l = 0;
     double offset_h = 0;
     SPObject *child_prev = NULL;
-    for (auto& child: vector->_children) {
+    for (auto& child: vector->children) {
         SPStop *stop = dynamic_cast<SPStop *>(&child);
         if (!stop) {
             continue;
@@ -894,7 +894,7 @@ sp_tweak_color_recursive (guint mode, SPItem *item, SPItem *item_at_point,
     bool did = false;
 
     if (dynamic_cast<SPGroup *>(item)) {
-        for (auto& child: item->_children) {
+        for (auto& child: item->children) {
             SPItem *childItem = dynamic_cast<SPItem *>(&child);
             if (childItem) {
                 if (sp_tweak_color_recursive (mode, childItem, item_at_point,
@@ -951,7 +951,7 @@ sp_tweak_color_recursive (guint mode, SPItem *item, SPItem *item_at_point,
                 Geom::Affine i2dt = item->i2dt_affine ();
                 if (style->filter.set && style->getFilter()) {
                     //cycle through filter primitives
-                    for (auto& primitive_obj: style->getFilter()->_children) {
+                    for (auto& primitive_obj: style->getFilter()->children) {
                         SPFilterPrimitive *primitive = dynamic_cast<SPFilterPrimitive *>(&primitive_obj);
                         if (primitive) {
                             //if primitive is gaussianblur
