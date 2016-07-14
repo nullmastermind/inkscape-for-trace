@@ -1010,7 +1010,7 @@ sp_selection_raise(Inkscape::Selection *selection, SPDesktop *desktop)
         for (std::vector<SPItem*>::const_iterator item=rev.begin();item!=rev.end();++item) {
             SPObject *child = *item;
             // for each selected object, find the next sibling
-            for (SPObject *newref = child->next; newref; newref = newref->next) {
+            for (SPObject *newref = child->getNext(); newref; newref = newref->getNext()) {
                 // if the sibling is an item AND overlaps our selection,
                 SPItem *newItem = dynamic_cast<SPItem *>(newref);
                 if (newItem) {
@@ -1138,15 +1138,16 @@ void sp_selection_lower_to_bottom(Inkscape::Selection *selection, SPDesktop *des
 
     for (std::vector<Inkscape::XML::Node*>::const_reverse_iterator l=rl.rbegin();l!=rl.rend();++l) {
         gint minpos;
-        SPObject *pp, *pc;
+        SPObject *pp;
         Inkscape::XML::Node *repr = (*l);
         pp = document->getObjectByRepr(repr->parent());
         minpos = 0;
         g_assert(dynamic_cast<SPGroup *>(pp));
-        pc = pp->firstChild();
-        while (!dynamic_cast<SPItem *>(pc)) {
+        for (auto& pc: pp->_children) {
+            if(dynamic_cast<SPItem *>(&pc)) {
+                break;
+            }
             minpos += 1;
-            pc = pc->next;
         }
         repr->setPosition(minpos);
     }
@@ -1197,8 +1198,8 @@ take_style_from_item(SPObject *object)
     if (css == NULL)
         return NULL;
 
-    if ((dynamic_cast<SPGroup *>(object) && object->children) ||
-        (dynamic_cast<SPText *>(object) && object->children && object->children->next == NULL)) {
+    if ((dynamic_cast<SPGroup *>(object) && object->firstChild()) ||
+        (dynamic_cast<SPText *>(object) && object->firstChild() && object->firstChild()->getNext() == NULL)) {
         // if this is a text with exactly one tspan child, merge the style of that tspan as well
         // If this is a group, merge the style of its topmost (last) child with style
         auto list = object->_children | boost::adaptors::reversed;
@@ -2330,10 +2331,10 @@ typedef struct ListReverse {
     typedef GSList *Iterator;
 
     static Iterator children(SPObject *o) {
-        return make_list(o->firstChild(), NULL);
+        return make_list(o, NULL);
     }
     static Iterator siblings_after(SPObject *o) {
-        return make_list(o->parent->firstChild(), o);
+        return make_list(o->parent, o);
     }
     static void dispose(Iterator i) {
         g_slist_free(i);
@@ -2347,13 +2348,12 @@ typedef struct ListReverse {
 private:
     static GSList *make_list(SPObject *object, SPObject *limit) {
         GSList *list = NULL;
-        while ( object != limit ) {
-            if (!object) { // TODO check if this happens in practice
-                g_warning("Unexpected list overrun");
+        for (auto &child: object->_children) {
+            if (&child == limit) {
                 break;
             }
-            list = g_slist_prepend(list, object);
-            object = object->getNext();
+            list = g_slist_prepend(list, &child);
+
         }
         return list;
     }

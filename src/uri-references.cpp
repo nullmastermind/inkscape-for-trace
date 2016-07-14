@@ -76,10 +76,11 @@ bool URIReference::_acceptObject(SPObject *obj) const
         std::vector<int> positions;
         while (owner->cloned) {
             int position = 0;
-            SPObject *c = owner->parent->firstChild();
-            while (c != owner && dynamic_cast<SPObject *>(c)) {
+            for (auto &child: owner->parent->_children) {
+                if(&child == owner) {
+                    break;
+                }
                 position++;
-                c = c->next;
             }
             positions.push_back(position);
             owner = owner->parent;

@@ -351,8 +351,8 @@ void SPItem::moveTo(SPItem *target, bool intoafter) {
         // Assume move to the "first" in the top node, find the top node
         intoafter = false;
         SPObject* bottom = this->document->getObjectByRepr(our_ref->root())->firstChild();
-        while(!dynamic_cast<SPItem*>(bottom->next)){
-        	bottom=bottom->next;
+        while(!dynamic_cast<SPItem*>(bottom->getNext())){
+        	bottom = bottom->getNext();
         }
         target_ref = bottom->getRepr();
     }
@@ -974,8 +974,8 @@ void SPItem::getSnappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscap
     for (std::list<SPObject const *>::const_iterator o = clips_and_masks.begin(); o != clips_and_masks.end(); ++o) {
         if (*o) {
             // obj is a group object, the children are the actual clippers
-            for (SPObject *child = (*o)->children ; child ; child = child->next) {
-                SPItem *item = dynamic_cast<SPItem *>(child);
+            for(auto& child: (*o)->_children) {
+                SPItem *item = dynamic_cast<SPItem *>(const_cast<SPObject*>(&child));
                 if (item) {
                     std::vector<Inkscape::SnapCandidatePoint> p_clip_or_mask;
                     // Please note the recursive call here!
@@ -1302,8 +1302,8 @@ void SPItem::adjust_stroke_width_recursive(double expansion)
 
 // A clone's child is the ghost of its original - we must not touch it, skip recursion
     if ( !dynamic_cast<SPUse *>(this) ) {
-        for ( SPObject *o = children; o; o = o->getNext() ) {
-            SPItem *item = dynamic_cast<SPItem *>(o);
+        for (auto& o: _children) {
+            SPItem *item = dynamic_cast<SPItem *>(&o);
             if (item) {
                 item->adjust_stroke_width_recursive(expansion);
             }
@@ -1317,8 +1317,8 @@ void SPItem::freeze_stroke_width_recursive(bool freeze)
 
 // A clone's child is the ghost of its original - we must not touch it, skip recursion
     if ( !dynamic_cast<SPUse *>(this) ) {
-        for ( SPObject *o = children; o; o = o->getNext() ) {
-            SPItem *item = dynamic_cast<SPItem *>(o);
+        for (auto& o: _children) {
+            SPItem *item = dynamic_cast<SPItem *>(&o);
             if (item) {
                 item->freeze_stroke_width_recursive(freeze);
             }
@@ -1337,10 +1337,10 @@ sp_item_adjust_rects_recursive(SPItem *item, Geom::Affine advertized_transform)
     	rect->compensateRxRy(advertized_transform);
     }
 
-    for (SPObject *o = item->children; o != NULL; o = o->next) {
-        SPItem *item = dynamic_cast<SPItem *>(o);
-        if (item) {
-            sp_item_adjust_rects_recursive(item, advertized_transform);
+    for(auto& o: item->_children) {
+        SPItem *itm = dynamic_cast<SPItem *>(&o);
+        if (itm) {
+            sp_item_adjust_rects_recursive(itm, advertized_transform);
         }
     }
 }
@@ -1357,8 +1357,8 @@ void SPItem::adjust_paint_recursive (Geom::Affine advertized_transform, Geom::Af
 // also we do not recurse into clones, because a clone's child is the ghost of its original -
 // we must not touch it
     if (!(this && (dynamic_cast<SPText *>(this) || dynamic_cast<SPUse *>(this)))) {
-        for (SPObject *o = children; o != NULL; o = o->next) {
-            SPItem *item = dynamic_cast<SPItem *>(o);
+        for (auto& o: _children) {
+            SPItem *item = dynamic_cast<SPItem *>(&o);
             if (item) {
 // At the level of the transformed item, t_ancestors is identity;
 // below it, it is the accmmulated chain of transforms from this level to the top level

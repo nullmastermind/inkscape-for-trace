@@ -1058,11 +1058,10 @@ public:
     // FuncNode can be in any order so we must search to find correct one.
     SPFeFuncNode* find_node(SPFeComponentTransfer* ct)
     {
-        SPObject* node = ct->children;
         SPFeFuncNode* funcNode = NULL;
         bool found = false;
-        for(;node;node=node->next){
-            funcNode = SP_FEFUNCNODE(node);
+        for(auto& node: ct->_children) {
+            funcNode = SP_FEFUNCNODE(&node);
             if( funcNode->channel == _channel ) {
                 found = true;
                 break;
@@ -1226,7 +1225,7 @@ protected:
 
         _locked = true;
 
-        SPObject* child = o->children;
+        SPObject* child = o->firstChild();
 
         if(SP_IS_FEDISTANTLIGHT(child))
             _light_source.set_active(0);
@@ -1251,7 +1250,7 @@ private:
         if(prim) {
             _locked = true;
 
-            SPObject* child = prim->children;
+            SPObject* child = prim->firstChild();
             const int ls = _light_source.get_active_row_number();
             // Check if the light source type has changed
             if(!(ls == -1 && !child) &&
@@ -1285,8 +1284,8 @@ private:
         _light_box.show_all();
 
         SPFilterPrimitive* prim = _dialog._primitive_list.get_selected();
-        if(prim && prim->children)
-            _settings.show_and_update(_light_source.get_active_data()->id, prim->children);
+        if(prim && prim->firstChild())
+            _settings.show_and_update(_light_source.get_active_data()->id, prim->firstChild());
     }
 
     FilterEffectsDialog& _dialog;
@@ -1869,26 +1868,25 @@ void FilterEffectsDialog::PrimitiveList::update()
         bool active_found = false;
         _dialog._primitive_box->set_sensitive(true);
         _dialog.update_filter_general_settings_view();
-        for(SPObject *prim_obj = f->children;
-                prim_obj && SP_IS_FILTER_PRIMITIVE(prim_obj);
-                prim_obj = prim_obj->next) {
-            SPFilterPrimitive *prim = SP_FILTER_PRIMITIVE(prim_obj);
-            if(prim) {
-                Gtk::TreeModel::Row row = *_model->append();
-                row[_columns.primitive] = prim;
+        for(auto& prim_obj: f->_children) {
+            SPFilterPrimitive *prim = SP_FILTER_PRIMITIVE(&prim_obj);
+            if(!prim) {
+                break;
+            }
+            Gtk::TreeModel::Row row = *_model->append();
+            row[_columns.primitive] = prim;
 
-                //XML Tree being used directly here while it shouldn't be.
-                row[_columns.type_id] = FPConverter.get_id_from_key(prim->getRepr()->name());
-                row[_columns.type] = _(FPConverter.get_label(row[_columns.type_id]).c_str());
-                
-                if (prim->getId()) {
-                    row[_columns.id] =  Glib::ustring(prim->getId());
-                }
-                
-                if(prim == active_prim) {
-                    get_selection()->select(row);
-                    active_found = true;
-                }
+            //XML Tree being used directly here while it shouldn't be.
+            row[_columns.type_id] = FPConverter.get_id_from_key(prim->getRepr()->name());
+            row[_columns.type] = _(FPConverter.get_label(row[_columns.type_id]).c_str());
+
+            if (prim->getId()) {
+                row[_columns.id] =  Glib::ustring(prim->getId());
+            }
+
+            if(prim == active_prim) {
+                get_selection()->select(row);
+                active_found = true;
             }
         }
 
@@ -3098,7 +3096,7 @@ void FilterEffectsDialog::set_filternode_attr(const AttrWidget* input)
 
 void FilterEffectsDialog::set_child_attr_direct(const AttrWidget* input)
 {
-    set_attr(_primitive_list.get_selected()->children, input->get_attribute(), input->get_as_attribute().c_str());
+    set_attr(_primitive_list.get_selected()->firstChild(), input->get_attribute(), input->get_as_attribute().c_str());
 }
 
 void FilterEffectsDialog::set_attr(SPObject* o, const SPAttributeEnum attr, const gchar* val)

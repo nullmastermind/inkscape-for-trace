@@ -839,8 +839,8 @@ void ClipboardManagerImpl::_copyUsedDefs(SPItem *item)
             SPObject *mask = item->mask_ref->getObject();
             _copyNode(mask->getRepr(), _doc, _defs);
             // recurse into the mask for its gradients etc.
-            for (SPObject *o = mask->children ; o != NULL ; o = o->next) {
-                SPItem *childItem = dynamic_cast<SPItem *>(o);
+            for(auto& o: mask->_children) {
+                SPItem *childItem = dynamic_cast<SPItem *>(&o);
                 if (childItem) {
                     _copyUsedDefs(childItem);
                 }
@@ -857,8 +857,8 @@ void ClipboardManagerImpl::_copyUsedDefs(SPItem *item)
     }
 
     // recurse
-    for (SPObject *o = item->children ; o != NULL ; o = o->next) {
-        SPItem *childItem = dynamic_cast<SPItem *>(o);
+    for(auto& o: item->_children) {
+        SPItem *childItem = dynamic_cast<SPItem *>(&o);
         if (childItem) {
             _copyUsedDefs(childItem);
         }

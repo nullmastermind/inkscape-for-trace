@@ -142,8 +142,8 @@ text_put_on_path()
 
     // make a list of text children
     GSList *text_reprs = NULL;
-    for (SPObject *o = text->children; o != NULL; o = o->next) {
-        text_reprs = g_slist_prepend(text_reprs, o->getRepr());
+    for(auto& o: text->_children) {
+        text_reprs = g_slist_prepend(text_reprs, o.getRepr());
     }
 
     // create textPath and put it into the text
@@ -353,9 +353,9 @@ text_flow_into_shape()
         Inkscape::GC::release(text_repr);
 
     } else { // reflow an already flowed text, preserving paras
-        for (SPObject *o = text->children; o != NULL; o = o->next) {
-            if (SP_IS_FLOWPARA(o)) {
-                Inkscape::XML::Node *para_repr = o->getRepr()->duplicate(xml_doc);
+        for(auto& o: text->_children) {
+            if (SP_IS_FLOWPARA(&o)) {
+                Inkscape::XML::Node *para_repr = o.getRepr()->duplicate(xml_doc);
                 root_repr->appendChild(para_repr);
                 object = doc->getObjectByRepr(para_repr);
                 g_return_if_fail(SP_IS_FLOWPARA(object));

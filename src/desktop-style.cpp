@@ -1810,9 +1810,8 @@ objects_query_blur (const std::vector<SPItem*> &objects, SPStyle *style_res)
         //if object has a filter
         if (style->filter.set && style->getFilter()) {
             //cycle through filter primitives
-            SPObject *primitive_obj = style->getFilter()->children;
-            while (primitive_obj) {
-                SPFilterPrimitive *primitive = dynamic_cast<SPFilterPrimitive *>(primitive_obj);
+            for(auto& primitive_obj: style->getFilter()->_children) {
+                SPFilterPrimitive *primitive = dynamic_cast<SPFilterPrimitive *>(&primitive_obj);
                 if (primitive) {
 
                     //if primitive is gaussianblur
@@ -1830,7 +1829,6 @@ objects_query_blur (const std::vector<SPItem*> &objects, SPStyle *style_res)
                         }
                     }
                 }
-                primitive_obj = primitive_obj->next;
             }
         }
     }

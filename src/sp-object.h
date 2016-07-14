@@ -208,8 +208,6 @@ public:
     unsigned int _total_hrefcount; /* our hrefcount + total descendants */
     SPDocument *document; /* Document we are part of */
     SPObject *parent; /* Our parent (only one allowed) */
-    SPObject *children; /* Our children */
-    SPObject *next; /* Next object in linked list */
 
 private:
     SPObject(const SPObject&);
@@ -300,11 +298,8 @@ public:
      */
     SPObject const *nearestCommonAncestor(SPObject const *object) const;
 
-    /* A non-const version can be similarly constructed if you want one.
-     * (Don't just cast away the constness, which would be ill-formed.) */
-    SPObject *getNext() {return next;}
-
-    SPObject const *getNext() const {return next;}
+    /* Returns next object in sibling list or NULL. */
+    SPObject *getNext();
 
     /**
      * Returns previous object in sibling list or NULL.

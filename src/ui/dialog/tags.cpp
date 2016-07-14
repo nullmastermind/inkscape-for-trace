@@ -399,26 +399,26 @@ void TagsPanel::_objectsChanged(SPObject* root)
 void TagsPanel::_addObject( SPDocument* doc, SPObject* obj, Gtk::TreeModel::Row* parentRow )
 {
     if ( _desktop && obj ) {
-        for ( SPObject *child = obj->children; child != NULL; child = child->next) {
-            if (SP_IS_TAG(child))
+        for (auto& child: obj->_children) {
+            if (SP_IS_TAG(&child))
             {
                 Gtk::TreeModel::iterator iter = parentRow ? _store->prepend(parentRow->children()) : _store->prepend();
                 Gtk::TreeModel::Row row = *iter;
-                row[_model->_colObject] = child;
+                row[_model->_colObject] = &child;
                 row[_model->_colParentObject] = NULL;
-                row[_model->_colLabel] = child->label() ? child->label() : child->getId();
+                row[_model->_colLabel] = child.label() ? child.label() : child.getId();
                 row[_model->_colAddRemove] = true;
                 row[_model->_colAllowAddRemove] = true;
                 
                 _tree.expand_to_path( _store->get_path(iter) );
 
-                TagsPanel::ObjectWatcher *w = new TagsPanel::ObjectWatcher(this, child);
-                child->getRepr()->addObserver(*w);
+                TagsPanel::ObjectWatcher *w = new TagsPanel::ObjectWatcher(this, &child);
+                child.getRepr()->addObserver(*w);
                 _objectWatchers.push_back(w);
-                _addObject( doc, child, &row );
+                _addObject( doc, &child, &row );
             }
         }
-        if (SP_IS_TAG(obj) && obj->children)
+        if (SP_IS_TAG(obj) && obj->firstChild())
         {
             Gtk::TreeModel::iterator iteritems = parentRow ? _store->append(parentRow->children()) : _store->prepend();
             Gtk::TreeModel::Row rowitems = *iteritems;
@@ -429,16 +429,16 @@ void TagsPanel::_addObject( SPDocument* doc, SPObject* obj, Gtk::TreeModel::Row*
             rowitems[_model->_colAllowAddRemove] = false;
             
             _tree.expand_to_path( _store->get_path(iteritems) );
-            
-            for ( SPObject *child = obj->children; child != NULL; child = child->next) {
-                if (SP_IS_TAG_USE(child))
+
+            for (auto& child: obj->_children) {
+                if (SP_IS_TAG_USE(&child))
                 {
-                    SPItem *item = SP_TAG_USE(child)->ref->getObject();
+                    SPItem *item = SP_TAG_USE(&child)->ref->getObject();
                     Gtk::TreeModel::iterator iter = _store->prepend(rowitems->children());
                     Gtk::TreeModel::Row row = *iter;
-                    row[_model->_colObject] = child;
+                    row[_model->_colObject] = &child;
                     row[_model->_colParentObject] = NULL;
-                    row[_model->_colLabel] = item ? (item->label() ? item->label() : item->getId()) : SP_TAG_USE(child)->href;
+                    row[_model->_colLabel] = item ? (item->label() ? item->label() : item->getId()) : SP_TAG_USE(&child)->href;
                     row[_model->_colAddRemove] = false;
                     row[_model->_colAllowAddRemove] = true;
 
@@ -447,7 +447,7 @@ void TagsPanel::_addObject( SPDocument* doc, SPObject* obj, Gtk::TreeModel::Row*
                     }
 
                     if (item) {
-                        TagsPanel::ObjectWatcher *w = new TagsPanel::ObjectWatcher(this, child, item->getRepr());
+                        TagsPanel::ObjectWatcher *w = new TagsPanel::ObjectWatcher(this, &child, item->getRepr());
                         item->getRepr()->addObserver(*w);
                         _objectWatchers.push_back(w);
                     }
@@ -459,12 +459,11 @@ void TagsPanel::_addObject( SPDocument* doc, SPObject* obj, Gtk::TreeModel::Row*
 
 void TagsPanel::_select_tag( SPTag * tag )
 {
-    for (SPObject * child = tag->children; child != NULL; child = child->next)
-    {
-        if (SP_IS_TAG(child)) {
-            _select_tag(SP_TAG(child));
-        } else if (SP_IS_TAG_USE(child)) {
-            SPObject * obj = SP_TAG_USE(child)->ref->getObject();
+    for (auto& child: tag->_children) {
+        if (SP_IS_TAG(&child)) {
+            _select_tag(SP_TAG(&child));
+        } else if (SP_IS_TAG_USE(&child)) {
+            SPObject * obj = SP_TAG_USE(&child)->ref->getObject();
             if (obj) {
                 if (_desktop->selection->isEmpty()) _desktop->setCurrentLayer(obj->parent);
                 _desktop->selection->add(obj);
@@ -650,8 +649,8 @@ bool TagsPanel::_handleButtonEvent(GdkEventButton* event)
                         	for(auto i=items.begin();i!=items.end();++i){
                                 SPObject *newobj = *i;
                                 bool addchild = true;
-                                for ( SPObject *child = obj->children; child != NULL; child = child->next) {
-                                    if (SP_IS_TAG_USE(child) && SP_TAG_USE(child)->ref->getObject() == newobj) {
+                                for (auto& child: obj->_children) {
+                                    if (SP_IS_TAG_USE(&child) && SP_TAG_USE(&child)->ref->getObject() == newobj) {
                                         addchild = false;
                                     }
                                 }

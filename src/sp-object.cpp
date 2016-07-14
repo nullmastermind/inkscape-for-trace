@@ -118,8 +118,7 @@ static gchar *sp_object_get_unique_id(SPObject    *object,
  */
 SPObject::SPObject()
     : cloned(0), uflags(0), mflags(0), hrefcount(0), _total_hrefcount(0),
-      document(NULL), parent(NULL), children(NULL),
-      next(NULL), id(NULL), repr(NULL), refCount(1),hrefList(std::list<SPObject*>()),
+      document(NULL), parent(NULL), id(NULL), repr(NULL), refCount(1), hrefList(std::list<SPObject*>()),
       _successor(NULL), _collection_policy(SPObject::COLLECT_WITH_PARENT),
       _label(NULL), _default_label(NULL)
 {
@@ -532,15 +531,6 @@ void SPObject::attach(SPObject *object, SPObject *prev)
     }
     _children.insert(it, *object);
 
-    SPObject *next;
-    if (prev) {
-        next = prev->next;
-        prev->next = object;
-    } else {
-        next = this->children;
-        this->children = object;
-    }
-    object->next = next;
     if (!object->xml_space.set)
         object->xml_space.value = this->xml_space.value;
 }
@@ -558,29 +548,6 @@ void SPObject::reorder(SPObject* obj, SPObject* prev) {
     }
 
     _children.splice(it, _children, _children.iterator_to(*obj));
-
-
-    SPObject *old_prev=NULL;
-    for ( SPObject *child = children ; child && child != obj ;
-          child = child->next )
-    {
-        old_prev = child;
-    }
-
-    SPObject *next=obj->next;
-    if (old_prev) {
-        old_prev->next = next;
-    } else {
-        children = next;
-    }
-    if (prev) {
-        next = prev->next;
-        prev->next = obj;
-    } else {
-        next = children;
-        children = obj;
-    }
-    obj->next = next;
 }
 
 void SPObject::detach(SPObject *object)
@@ -594,21 +561,6 @@ void SPObject::detach(SPObject *object)
     _children.erase(_children.iterator_to(*object));
     object->releaseReferences();
 
-    SPObject *prev=NULL;
-    for ( SPObject *child = this->children ; child && child != object ;
-          child = child->next )
-    {
-        prev = child;
-    }
-
-    SPObject *next=object->next;
-    if (prev) {
-        prev->next = next;
-    } else {
-        this->children = next;
-    }
-
-    object->next = NULL;
     object->parent = NULL;
 
     this->_updateTotalHRefCount(-object->_total_hrefcount);
@@ -849,6 +801,15 @@ SPObject *SPObject::getPrev()
         prev = &*(--parent->_children.iterator_to(*this));
     }
     return prev;
+}
+
+SPObject* SPObject::getNext()
+{
+    SPObject *next = nullptr;
+    if (parent && !parent->_children.empty() && &parent->_children.back() != this) {
+        next = &*(++parent->_children.iterator_to(*this));
+    }
+    return next;
 }
 
 void SPObject::repr_child_added(Inkscape::XML::Node * /*repr*/, Inkscape::XML::Node *child, Inkscape::XML::Node *ref, gpointer data)
@@ -1514,8 +1475,11 @@ bool SPObject::setTitleOrDesc(gchar const *value, gchar const *svg_tagname, bool
     }
     else {
         // remove the current content of the 'text' or 'desc' element
-        SPObject *child;
-        while (NULL != (child = elem->firstChild())) child->deleteObject();
+        auto tmp = elem->_children | boost::adaptors::transformed([](SPObject& obj) { return &obj; });
+        std::vector<SPObject*> vec(tmp.begin(), tmp.end());
+        for (auto &child: vec) {
+            child->deleteObject();
+        }
     }
 
     // add the new content

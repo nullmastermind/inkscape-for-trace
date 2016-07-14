@@ -583,7 +583,7 @@ sp_item_group_ungroup (SPGroup *group, std::vector<SPItem*> &children, bool do_d
             if (text) {
                 //this causes a change in text-on-path appearance when there is a non-conformal transform, see bug #1594565
                 double scale = (ctrans.expansionX() + ctrans.expansionY()) / 2.0;
-                SPTextPath * text_path = dynamic_cast<SPTextPath *>(text->children);
+                SPTextPath * text_path = dynamic_cast<SPTextPath *>(text->firstChild());
                 if (!text_path) {
                     nrepr->setAttribute("transform", affinestr);
                 } else {

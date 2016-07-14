@@ -951,9 +951,8 @@ sp_tweak_color_recursive (guint mode, SPItem *item, SPItem *item_at_point,
                 Geom::Affine i2dt = item->i2dt_affine ();
                 if (style->filter.set && style->getFilter()) {
                     //cycle through filter primitives
-                    SPObject *primitive_obj = style->getFilter()->children;
-                    while (primitive_obj) {
-                        SPFilterPrimitive *primitive = dynamic_cast<SPFilterPrimitive *>(primitive_obj);
+                    for (auto& primitive_obj: style->getFilter()->_children) {
+                        SPFilterPrimitive *primitive = dynamic_cast<SPFilterPrimitive *>(&primitive_obj);
                         if (primitive) {
                             //if primitive is gaussianblur
                             SPGaussianBlur * spblur = dynamic_cast<SPGaussianBlur *>(primitive);
@@ -962,7 +961,6 @@ sp_tweak_color_recursive (guint mode, SPItem *item, SPItem *item_at_point,
                                 blur_now += num * i2dt.descrim(); // sum all blurs in the filter
                             }
                         }
-                        primitive_obj = primitive_obj->next;
                     }
                 }
                 double perimeter = bbox->dimensions()[Geom::X] + bbox->dimensions()[Geom::Y];

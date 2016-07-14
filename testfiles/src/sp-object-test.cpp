@@ -16,6 +16,7 @@
 #include <doc-per-case-test.h>
 #include <src/util/share.h>
 #include <src/xml/simple-document.h>
+#include <boost/range/adaptor/transformed.hpp>
 
 using namespace Inkscape;
 using namespace Inkscape::XML;
@@ -109,22 +110,11 @@ TEST_F(SPObjectTest, Advanced) {
     EXPECT_EQ(c, d->getPrev());
     EXPECT_EQ(b, c->getPrev());
     EXPECT_EQ(nullptr, b->getPrev());
+    EXPECT_EQ(nullptr, e->getNext());
+    EXPECT_EQ(e, d->getNext());
+    EXPECT_EQ(d, c->getNext());
+    EXPECT_EQ(c, b->getNext());
     std::vector<SPObject*> tmp = {b, c, d, e};
-    int index = 0;
-    for(auto& child: a->_children) {
-        EXPECT_EQ(tmp[index++], &child);
-    }
-}
-
-TEST_F(SPObjectTest, Tmp) {
-    a->attach(b, a->lastChild());
-    a->attach(c, a->lastChild());
-    a->attach(d, a->lastChild());
-    a->attach(e, a->lastChild());
-    std::vector<SPObject*> tmp;
-    for (SPObject *q = a->firstChild(); q; q = q->getNext()) {
-        tmp.push_back(q);
-    }
     int index = 0;
     for(auto& child: a->_children) {
         EXPECT_EQ(tmp[index++], &child);

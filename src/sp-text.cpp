@@ -676,9 +676,9 @@ void SPText::_adjustFontsizeRecursive(SPItem *item, double ex, bool is_root)
         item->updateRepr();
     }
 
-    for (SPObject *o = item->children; o != NULL; o = o->next) {
-        if (SP_IS_ITEM(o))
-            _adjustFontsizeRecursive(SP_ITEM(o), ex, false);
+    for(auto& o: item->_children) {
+        if (SP_IS_ITEM(&o))
+            _adjustFontsizeRecursive(SP_ITEM(&o), ex, false);
     }
 }
 
@@ -695,9 +695,9 @@ void SPText::_adjustCoordsRecursive(SPItem *item, Geom::Affine const &m, double 
         SP_TREF(item)->attributes.transform(m, ex, ex, is_root);
     }
 
-    for (SPObject *o = item->children; o != NULL; o = o->next) {
-        if (SP_IS_ITEM(o))
-            _adjustCoordsRecursive(SP_ITEM(o), m, ex, false);
+    for(auto& o: item->_children) {
+        if (SP_IS_ITEM(&o))
+            _adjustCoordsRecursive(SP_ITEM(&o), m, ex, false);
     }
 }
 

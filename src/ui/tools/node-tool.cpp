@@ -378,8 +378,8 @@ void gather_items(NodeTool *nt, SPItem *base, SPObject *obj, Inkscape::UI::Shape
         r.role = role;
         s.insert(r);
     } else if (role != SHAPE_ROLE_NORMAL && (SP_IS_GROUP(obj) || SP_IS_OBJECTGROUP(obj))) {
-        for (SPObject *c = obj->children; c; c = c->next) {
-            gather_items(nt, base, c, role, s);
+        for (auto& c: obj->_children) {
+            gather_items(nt, base, &c, role, s);
         }
     } else if (SP_IS_ITEM(obj)) {
         SPItem *item = static_cast<SPItem*>(obj);

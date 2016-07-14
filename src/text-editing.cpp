@@ -944,13 +944,10 @@ sp_te_set_repr_text_multiline(SPItem *text, gchar const *str)
     gchar *content = g_strdup (str);
 
     repr->setContent("");
-    SPObject *child = object->firstChild();
-    while (child) {
-        SPObject *next = child->getNext();
-        if (!SP_IS_FLOWREGION(child) && !SP_IS_FLOWREGIONEXCLUDE(child)) {
-            repr->removeChild(child->getRepr());
+    for (auto& child: object->_children) {
+        if (!SP_IS_FLOWREGION(&child) && !SP_IS_FLOWREGIONEXCLUDE(&child)) {
+            repr->removeChild(child.getRepr());
         }
-        child = next;
     }
 
     gchar *p = content;

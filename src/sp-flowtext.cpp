@@ -440,9 +440,9 @@ Shape* SPFlowtext::_buildExclusionShape() const
     Shape *shape = new Shape();
     Shape *shape_temp = new Shape();
 
-    for (SPObject *child = children ; child ; child = child->getNext() ) {
+    for (auto& child: _children) {
         // RH: is it right that this shouldn't be recursive?
-        SPFlowregionExclude *c_child = dynamic_cast<SPFlowregionExclude *>(child);
+        SPFlowregionExclude *c_child = dynamic_cast<SPFlowregionExclude *>(const_cast<SPObject*>(&child));
         if ( c_child && c_child->computed && c_child->computed->hasEdges() ) {
             if (shape->hasEdges()) {
                 shape_temp->Booleen(shape, c_child->computed, bool_op_union);

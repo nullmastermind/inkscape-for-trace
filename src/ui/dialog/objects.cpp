@@ -340,12 +340,11 @@ void ObjectsPanel::_objectsChanged(SPObject */*obj*/)
 void ObjectsPanel::_addObject(SPObject* obj, Gtk::TreeModel::Row* parentRow)
 {
     if ( _desktop && obj ) {
-        for ( SPObject *child = obj->children; child != NULL; child = child->next) {
-
-            if (SP_IS_ITEM(child))
+        for(auto& child: obj->_children) {
+            if (SP_IS_ITEM(&child))
             {
-                SPItem * item = SP_ITEM(child);
-                SPGroup * group = SP_IS_GROUP(child) ? SP_GROUP(child) : 0;
+                SPItem * item = SP_ITEM(&child);
+                SPGroup * group = SP_IS_GROUP(&child) ? SP_GROUP(&child) : 0;
                 
                 //Add the item to the tree and set the column information
                 Gtk::TreeModel::iterator iter = parentRow ? _store->prepend(parentRow->children()) : _store->prepend();
@@ -372,14 +371,14 @@ void ObjectsPanel::_addObject(SPObject* obj, Gtk::TreeModel::Row* parentRow)
                 }
 
                 //Add an object watcher to the item
-                ObjectsPanel::ObjectWatcher *w = new ObjectsPanel::ObjectWatcher(this, child);
-                child->getRepr()->addObserver(*w);
+                ObjectsPanel::ObjectWatcher *w = new ObjectsPanel::ObjectWatcher(this, &child);
+                child.getRepr()->addObserver(*w);
                 _objectWatchers.push_back(w);
                 
                 //If the item is a group, recursively add its children
                 if (group)
                 {
-                    _addObject( child, &row );
+                    _addObject( &child, &row );
                 }
             }
         }
@@ -399,9 +398,8 @@ void ObjectsPanel::_updateObject( SPObject *obj, bool recurse ) {
     //end mark
     if (recurse)
     {
-        for (SPObject * iter = obj->children; iter != NULL; iter = iter->next)
-        {
-            _updateObject(iter, recurse);
+        for (auto& iter: obj->_children) {
+            _updateObject(&iter, recurse);
         }
     }
 }
@@ -520,19 +518,22 @@ void ObjectsPanel::_setCompositingValues(SPItem *item)
     SPGaussianBlur *spblur = NULL;
     if (item->style->getFilter())
     {
-        for(SPObject *primitive_obj = item->style->getFilter()->children; primitive_obj && SP_IS_FILTER_PRIMITIVE(primitive_obj); primitive_obj = primitive_obj->next) {
-                if(SP_IS_FEBLEND(primitive_obj) && !spblend) {
-                    //Get the blend mode
-                    spblend = SP_FEBLEND(primitive_obj);
-                }
-                
-                if(SP_IS_GAUSSIANBLUR(primitive_obj) && !spblur) {
-                    //Get the blur value
-                    spblur = SP_GAUSSIANBLUR(primitive_obj);
-                }
+        for (auto& primitive_obj: item->style->getFilter()->_children) {
+            if (!SP_IS_FILTER_PRIMITIVE(&primitive_obj)) {
+                break;
             }
+            if(SP_IS_FEBLEND(&primitive_obj) && !spblend) {
+                //Get the blend mode
+                spblend = SP_FEBLEND(&primitive_obj);
+            }
+
+            if(SP_IS_GAUSSIANBLUR(&primitive_obj) && !spblur) {
+                //Get the blur value
+                spblur = SP_GAUSSIANBLUR(&primitive_obj);
+            }
+        }
     }
-    
+
     //Set the blend mode
     _fe_cb.set_blend_mode(spblend ? spblend->blend_mode : Inkscape::Filters::BLEND_NORMAL);
     
@@ -1404,9 +1405,10 @@ void ObjectsPanel::_setCollapsed(SPGroup * group)
 {
     group->setExpanded(false);
     group->updateRepr(SP_OBJECT_WRITE_NO_CHILDREN | SP_OBJECT_WRITE_EXT);
-    for (SPObject *iter = group->children; iter != NULL; iter = iter->next)
-    {
-        if (SP_IS_GROUP(iter)) _setCollapsed(SP_GROUP(iter));
+    for (auto& iter: group->_children) {
+        if (SP_IS_GROUP(&iter)) {
+            _setCollapsed(SP_GROUP(&iter));
+        }
     }
 }
 
@@ -1521,11 +1523,14 @@ void ObjectsPanel::_blendChangedIter(const Gtk::TreeIter& iter, Glib::ustring bl
         if (blendmode != "normal") {
             gdouble radius = 0;
             if (item->style->getFilter()) {
-                for (SPObject *primitive = item->style->getFilter()->children; primitive && SP_IS_FILTER_PRIMITIVE(primitive); primitive = primitive->next) {
-                    if (SP_IS_GAUSSIANBLUR(primitive)) {
+                for (auto& primitive: item->style->getFilter()->_children) {
+                    if (!SP_IS_FILTER_PRIMITIVE(&primitive)) {
+                        break;
+                    }
+                    if (SP_IS_GAUSSIANBLUR(&primitive)) {
                         Geom::OptRect bbox = item->bounds(SPItem::GEOMETRIC_BBOX);
                         if (bbox) {
-                            radius = SP_GAUSSIANBLUR(primitive)->stdDeviation.getNumber();
+                            radius = SP_GAUSSIANBLUR(&primitive)->stdDeviation.getNumber();
                         }
                     }
                 }
@@ -1533,13 +1538,16 @@ void ObjectsPanel::_blendChangedIter(const Gtk::TreeIter& iter, Glib::ustring bl
             SPFilter *filter = new_filter_simple_from_item(_document, item, blendmode.c_str(), radius);
             sp_style_set_property_url(item, "filter", filter, false);
         } else {
-            for (SPObject *primitive = item->style->getFilter()->children; primitive && SP_IS_FILTER_PRIMITIVE(primitive); primitive = primitive->next) {
-                if (SP_IS_FEBLEND(primitive)) {
-                    primitive->deleteObject();
+            for (auto& primitive: item->style->getFilter()->_children) {
+                if (!SP_IS_FILTER_PRIMITIVE(&primitive)) {
+                    break;
+                }
+                if (SP_IS_FEBLEND(&primitive)) {
+                    primitive.deleteObject();
                     break;
                 }
             }
-            if (!item->style->getFilter()->children) {
+            if (!item->style->getFilter()->firstChild()) {
                 remove_filter(item, false);
             }
         }
@@ -1590,13 +1598,16 @@ void ObjectsPanel::_blurChangedIter(const Gtk::TreeIter& iter, double blur)
                 SPFilter *filter = modify_filter_gaussian_blur_from_item(_document, item, radius);
                 sp_style_set_property_url(item, "filter", filter, false);
             } else if (item->style->filter.set && item->style->getFilter()) {
-                for (SPObject *primitive = item->style->getFilter()->children; primitive && SP_IS_FILTER_PRIMITIVE(primitive); primitive = primitive->next) {
-                    if (SP_IS_GAUSSIANBLUR(primitive)) {
-                        primitive->deleteObject();
+                for (auto& primitive: item->style->getFilter()->_children) {
+                    if (!SP_IS_FILTER_PRIMITIVE(&primitive)) {
+                        break;
+                    }
+                    if (SP_IS_GAUSSIANBLUR(&primitive)) {
+                        primitive.deleteObject();
                         break;
                     }
                 }
-                if (!item->style->getFilter()->children) {
+                if (!item->style->getFilter()->firstChild()) {
                     remove_filter(item, false);
                 }
             }

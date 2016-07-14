@@ -1483,10 +1483,8 @@ do_query_all_recurse (SPObject *o)
         }
     }
 
-    SPObject *child = o->children;
-    while (child) {
-        do_query_all_recurse (child);
-        child = child->next;
+    for(auto& child: o->_children) {
+        do_query_all_recurse (&child);
     }
 }
 
