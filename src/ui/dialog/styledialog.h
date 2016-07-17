@@ -21,6 +21,7 @@
 
 #include "desktop.h"
 #include "document.h"
+#include "ui/dialog/cssdialog.h"
 
 namespace Inkscape {
 namespace UI {
@@ -85,6 +86,7 @@ private:
     std::string _selectorValue;
     Gtk::TreeModel::Row _row;
     bool _newDrawing;
+    CssDialog *_cssPane;
 
     // Signal handlers
     void _addSelector();

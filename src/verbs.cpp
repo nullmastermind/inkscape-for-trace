@@ -2122,6 +2122,9 @@ void DialogVerb::perform(SPAction *action, void *data)
         case SP_VERB_DIALOG_STYLE:
             dt->_dlg_mgr->showDialog("StyleDialog");
            break;
+        case SP_VERB_DIALOG_CSS:
+            dt->_dlg_mgr->showDialog("CssDialog");
+            break;
 
         default:
             break;
@@ -2954,6 +2957,8 @@ Verb *Verb::_base_verbs[] = {
                    N_("View Tags"), INKSCAPE_ICON("edit-select-all-layers")),
     new DialogVerb(SP_VERB_DIALOG_STYLE, "DialogStyle", N_("Style Dialog..."),
                    N_("View Style Dialog"), NULL),
+    new DialogVerb(SP_VERB_DIALOG_CSS, "DialogCss", N_("Css Dialog..."),
+                   N_("View Css Dialog"), NULL),
     new DialogVerb(SP_VERB_DIALOG_LIVE_PATH_EFFECT, "DialogLivePathEffect", N_("Path E_ffects ..."),
                    N_("Manage, edit, and apply path effects"), INKSCAPE_ICON("dialog-path-effects")),
     new DialogVerb(SP_VERB_DIALOG_FILTER_EFFECTS, "DialogFilterEffects", N_("Filter _Editor..."),

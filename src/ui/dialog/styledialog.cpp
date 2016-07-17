@@ -119,6 +119,8 @@ StyleDialog::StyleDialog() :
                                                          (*this, &StyleDialog::
                                                           _buttonEventsSelectObjs),
                                                          false);
+
+    _cssPane = new CssDialog;
 }
 
 StyleDialog::~StyleDialog()
@@ -695,7 +697,60 @@ void StyleDialog::_buttonEventsSelectObjs(GdkEventButton* event )
         int x = static_cast<int>(event->x);
         int y = static_cast<int>(event->y);
         _selectObjects(x, y);
+
         //Open CSS dialog here.
+        if (!_cssPane->get_visible()) {
+            _mainBox.pack_end(*_cssPane, Gtk::PACK_SHRINK);
+            _cssPane->show_all();
+        }
+        Glib::RefPtr<Gtk::TreeSelection> refTreeSelection = _treeView.get_selection();
+        Gtk::TreeModel::iterator iter = refTreeSelection->get_selected();
+        if (iter) {
+            Gtk::TreeModel::Row row = *iter;
+            std::string sel, key, value;
+            std::vector<_selectorVecType>::iterator it;
+            for (it = _selectorVec.begin(); it != _selectorVec.end(); ++it) {
+                sel = (*it).second;
+                REMOVE_SPACES(sel);
+                if (!sel.empty()) {
+                    key = strtok(strdup(sel.c_str()), "{");
+                    REMOVE_SPACES(key);
+                    char *temp = strtok(NULL, "}");
+                    if (strtok(temp, "}") != NULL) {
+                        value = strtok(temp, "}");
+                    }
+                }
+
+                Glib::ustring selectedRowLabel = row[_mColumns._selectorLabel];
+                std::string matchSelector = selectedRowLabel;
+                REMOVE_SPACES(matchSelector);
+
+                if (key == matchSelector) {
+                    _cssPane->_store->clear();
+                    std::stringstream ss(value);
+                    std::string token;
+                    std::size_t found = value.find(";");
+                    if (found!=std::string::npos) {
+                        while(std::getline(ss, token, ';')) {
+                            REMOVE_SPACES(token);
+                            if (!token.empty()) {
+                                _cssPane->propRow = *(_cssPane->_store->append());
+                                _cssPane->propRow[_cssPane->_cssColumns._colUnsetProp] = false;
+                                _cssPane->propRow[_cssPane->_cssColumns._propertyLabel] = token;
+                                _cssPane->_propCol->add_attribute(_cssPane->_textRenderer
+                                                                  ->property_text(),
+                                                                  _cssPane->_cssColumns
+                                                                  ._propertyLabel);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else {
+            _cssPane->_store->clear();
+            _cssPane->hide();
+        }
     }
 }
 

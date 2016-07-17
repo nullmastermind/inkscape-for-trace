@@ -57,6 +57,7 @@ set(ui_SRC
 	dialog/calligraphic-profile-rename.cpp
 	dialog/clonetiler.cpp
 	dialog/color-item.cpp
+       dialog/cssdialog.cpp
 	dialog/debug.cpp
 	dialog/desktop-tracker.cpp
 	dialog/dialog-manager.cpp
@@ -197,6 +198,7 @@ set(ui_SRC
 	dialog/calligraphic-profile-rename.h
 	dialog/clonetiler.h
 	dialog/color-item.h
+       dialog/cssdialog.h
 	dialog/debug.h
 	dialog/desktop-tracker.h
 	dialog/dialog-manager.h
