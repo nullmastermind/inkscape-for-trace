@@ -91,6 +91,9 @@ private:
     // Signal handlers
     void _addSelector();
     void _delSelector();
+
+    // Signal handler for CssDialog
+    void _handleEdited(const Glib::ustring& path, const Glib::ustring& new_text);
 };
 
 } // namespace Dialog

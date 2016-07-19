@@ -21,6 +21,11 @@ namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
+/**
+ * Constructor
+ * A treeview whose each row corresponds to a CSS property of selector selected.
+ * TODO: Further, buttons to add and delete properties will be added.
+ */
 CssDialog::CssDialog():
     UI::Widget::Panel("", "/dialogs/css", SP_VERB_DIALOG_CSS),
     _desktop(0)
@@ -53,9 +58,6 @@ CssDialog::CssDialog():
 
     _targetDesktop = getDesktop();
     setDesktop(_targetDesktop);
-
-    _textRenderer->signal_edited().connect(sigc::mem_fun(*this, &CssDialog::
-                                                         _handleEdited));
 }
 
 CssDialog::~CssDialog()
@@ -66,16 +68,6 @@ CssDialog::~CssDialog()
 void CssDialog::setDesktop( SPDesktop* desktop )
 {
     _desktop = desktop;
-}
-
-void CssDialog::_handleEdited(const Glib::ustring& path, const Glib::ustring& new_text)
-{
-    Gtk::TreeModel::iterator iter = _treeView.get_model()->get_iter(path);
-    if (iter) {
-        Gtk::TreeModel::Row row = *iter;
-        row[_cssColumns._propertyLabel] = new_text;
-        editedProp = new_text;
-    }
 }
 
 } // namespace Dialog

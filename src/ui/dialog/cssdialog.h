@@ -24,6 +24,10 @@ namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
+/**
+ * @brief The CssDialog class
+ * A list of CSS properties will show up in this dialog.
+ */
 class CssDialog : public UI::Widget::Panel
 {
 public:
@@ -49,13 +53,12 @@ public:
     Gtk::TreeView _treeView;
     Glib::RefPtr<Gtk::ListStore> _store;
     Gtk::ScrolledWindow _scrolledWindow;
-    Gtk::TreeModel::Row propRow;
+    Gtk::TreeModel::Row _propRow;
     Gtk::CellRendererText *_textRenderer;
     Gtk::TreeViewColumn *_propCol;
-    Glib::ustring editedProp;
+    Glib::ustring _editedProp;
 
-    void _handleButtonEvent(const Gtk::TreeModel::Path &path, Gtk::TreeViewColumn*col);
-    void _handleEdited(const Glib::ustring& path, const Glib::ustring& new_text);
+    void _handleButtonEvent(const Gtk::TreeModel::Path &path, Gtk::TreeViewColumn *col);
 };
 
 

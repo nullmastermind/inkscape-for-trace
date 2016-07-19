@@ -684,7 +684,6 @@ bool StyleDialog::_handleButtonEvent(GdkEventButton *event)
  * click on a selector selects the matching objects. A double click on any
  * selector selects the matching objects as well as will open CSS dialog. It
  * calls _selectObjects to add objects to selection.
- * TODO: Open CSS dialog on double click.
  */
 void StyleDialog::_buttonEventsSelectObjs(GdkEventButton* event )
 {
@@ -703,6 +702,7 @@ void StyleDialog::_buttonEventsSelectObjs(GdkEventButton* event )
             _mainBox.pack_end(*_cssPane, Gtk::PACK_SHRINK);
             _cssPane->show_all();
         }
+
         Glib::RefPtr<Gtk::TreeSelection> refTreeSelection = _treeView.get_selection();
         Gtk::TreeModel::iterator iter = refTreeSelection->get_selected();
         if (iter) {
@@ -734,9 +734,9 @@ void StyleDialog::_buttonEventsSelectObjs(GdkEventButton* event )
                         while(std::getline(ss, token, ';')) {
                             REMOVE_SPACES(token);
                             if (!token.empty()) {
-                                _cssPane->propRow = *(_cssPane->_store->append());
-                                _cssPane->propRow[_cssPane->_cssColumns._colUnsetProp] = false;
-                                _cssPane->propRow[_cssPane->_cssColumns._propertyLabel] = token;
+                                _cssPane->_propRow = *(_cssPane->_store->append());
+                                _cssPane->_propRow[_cssPane->_cssColumns._colUnsetProp] = false;
+                                _cssPane->_propRow[_cssPane->_cssColumns._propertyLabel] = token;
                                 _cssPane->_propCol->add_attribute(_cssPane->_textRenderer
                                                                   ->property_text(),
                                                                   _cssPane->_cssColumns
@@ -746,10 +746,79 @@ void StyleDialog::_buttonEventsSelectObjs(GdkEventButton* event )
                     }
                 }
             }
+            _cssPane->_textRenderer->signal_edited().connect(sigc::mem_fun(*this,
+                                                                           &StyleDialog::
+                                                                           _handleEdited));
         }
         else {
             _cssPane->_store->clear();
             _cssPane->hide();
+        }
+    }
+}
+
+/**
+ * @brief StyleDialog::_handleEdited
+ * @param path
+ * @param new_text
+ * This function edits CSS properties of the selector chosen. new_text is used
+ * to update the property in XML repr. The value from selected selector is
+ * obtained and modified as per value of new_text. Later _updateStyleContent() is
+ * called to update XML repr and hence changes are reflected in the drawing too.
+ */
+void StyleDialog::_handleEdited(const Glib::ustring& path, const Glib::ustring& new_text)
+{
+    Gtk::TreeModel::iterator iterCss = _cssPane->_treeView.get_model()->get_iter(path);
+    if (iterCss) {
+        Gtk::TreeModel::Row row = *iterCss;
+        row[_cssPane->_cssColumns._propertyLabel] = new_text;
+        _cssPane->_editedProp = new_text;
+    }
+
+    Glib::RefPtr<Gtk::TreeSelection> refTreeSelection = _treeView.get_selection();
+    Gtk::TreeModel::iterator iter = refTreeSelection->get_selected();
+    if (iter) {
+        Gtk::TreeModel::Row row = *iter;
+        std::string sel, key, value;
+        std::vector<_selectorVecType>::iterator it;
+        for (it = _selectorVec.begin(); it != _selectorVec.end(); ++it) {
+            sel = (*it).second;
+            REMOVE_SPACES(sel);
+            if (!sel.empty()) {
+                key = strtok(strdup(sel.c_str()), "{");
+                REMOVE_SPACES(key);
+                char *temp = strtok(NULL, "}");
+                if (strtok(temp, "}") != NULL) {
+                    value = strtok(temp, "}");
+                }
+            }
+
+            Glib::ustring selectedRowLabel = row[_mColumns._selectorLabel];
+            std::string matchSelector = selectedRowLabel;
+            REMOVE_SPACES(matchSelector);
+
+            if (key == matchSelector) {
+                std::stringstream ss(value);
+                std::string token;
+                std::size_t found = value.find(";");
+                if (found!=std::string::npos) {
+                    while(std::getline(ss, token, ';')) {
+                        REMOVE_SPACES(token);
+                        if (!token.empty()) {
+                            if (token.substr(0, token.find(":")) == _cssPane
+                                    ->_editedProp.substr(0, _cssPane->_editedProp
+                                                         .find(":")))
+                            {
+                                token = _cssPane->_editedProp;
+                                value.clear();
+                                value += token + ";";
+                                (*it).second = key + " { " + value + " }\n";
+                                _updateStyleContent();
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
