@@ -799,7 +799,7 @@ void StyleDialog::_handleEdited(const Glib::ustring& path, const Glib::ustring& 
 
             if (key == matchSelector) {
                 std::stringstream ss(value);
-                std::string token;
+                std::string token, editedToken;
                 std::size_t found = value.find(";");
                 if (found!=std::string::npos) {
                     while(std::getline(ss, token, ';')) {
@@ -807,12 +807,11 @@ void StyleDialog::_handleEdited(const Glib::ustring& path, const Glib::ustring& 
                         if (!token.empty()) {
                             if (token.substr(0, token.find(":")) == _cssPane
                                     ->_editedProp.substr(0, _cssPane->_editedProp
-                                                         .find(":")))
-                            {
-                                token = _cssPane->_editedProp;
-                                value.clear();
-                                value += token + ";";
-                                (*it).second = key + " { " + value + " }\n";
+                                                         .find(":"))) {
+                                editedToken = _cssPane->_editedProp;
+                                size_t startPos = value.find(token);
+                                value.replace(startPos, token.length(), editedToken);
+                                (*it).second = key + "{" + value + "}\n";
                                 _updateStyleContent();
                             }
                         }
