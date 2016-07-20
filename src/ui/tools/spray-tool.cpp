@@ -1050,7 +1050,7 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                     if (unionResult) { // No need to add the very first item (initialized with NULL).
                         selection->add(unionResult);
                     }
-                    sp_selected_path_union_skip_undo(selection, selection->desktop());
+                    sp_selected_path_union_skip_undo(selection);
                     selection->add(parent_item);
                     Inkscape::GC::release(copy);
                     did = true;

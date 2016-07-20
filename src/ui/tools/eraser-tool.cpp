@@ -718,7 +718,7 @@ void EraserTool::set_to_accumulated() {
                                 Inkscape::GC::release(dup); // parent takes over
                                 selection->set(dup);
                                 if (!this->nowidth) {
-                                    sp_selected_path_union_skip_undo(selection, desktop);
+                                    sp_selected_path_union_skip_undo(selection);
                                 }
                                 selection->add(item);
                                 if(item->style->fill_rule.value == SP_WIND_RULE_EVENODD){
@@ -729,9 +729,9 @@ void EraserTool::set_to_accumulated() {
                                     css = 0;
                                 }
                                 if (this->nowidth) {
-                                    sp_selected_path_cut_skip_undo(selection, desktop);
+                                    sp_selected_path_cut_skip_undo(selection);
                                 } else {
-                                    sp_selected_path_diff_skip_undo(selection, desktop);
+                                    sp_selected_path_diff_skip_undo(selection);
                                 }
                                 workDone = true; // TODO set this only if something was cut.
                                 bool break_apart = prefs->getBool("/tools/eraser/break_apart", false);

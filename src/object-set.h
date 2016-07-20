@@ -102,6 +102,7 @@ public:
     typedef decltype(multi_index_container().get<random_access>() | boost::adaptors::filtered(is_item()) | boost::adaptors::transformed(object_to_node())) XMLNodeRange;
 
     ObjectSet(SPDesktop* desktop): _desktop(desktop) {};
+    ObjectSet(): _desktop(nullptr) {};
     virtual ~ObjectSet();
 
     /**
