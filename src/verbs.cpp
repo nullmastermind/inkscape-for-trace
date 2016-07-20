@@ -1133,22 +1133,22 @@ void SelectionVerb::perform(SPAction *action, void *data)
             sp_selected_path_slice(selection, dt);
             break;
         case SP_VERB_SELECTION_TO_FRONT:
-            sp_selection_raise_to_top(selection, dt);
+            sp_selection_raise_to_top_ui(selection, dt);
             break;
         case SP_VERB_SELECTION_TO_BACK:
-            sp_selection_lower_to_bottom(selection, dt);
+            sp_selection_lower_to_bottom_ui(selection, dt);
             break;
         case SP_VERB_SELECTION_RAISE:
-            sp_selection_raise(selection, dt);
+            sp_selection_raise_ui(selection, dt);
             break;
         case SP_VERB_SELECTION_LOWER:
-            sp_selection_lower(selection, dt);
+            sp_selection_lower_ui(selection, dt);
             break;
         case SP_VERB_SELECTION_GROUP:
-            sp_selection_group(selection, dt);
+            sp_selection_group_ui(selection, dt);
             break;
         case SP_VERB_SELECTION_UNGROUP:
-            sp_selection_ungroup(selection, dt);
+            sp_selection_ungroup_ui(selection, dt);
             break;
         case SP_VERB_SELECTION_UNGROUP_POP_SELECTION:
             sp_selection_ungroup_pop_selection(selection, dt);

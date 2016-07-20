@@ -23,11 +23,9 @@
 #include "inkgc/gc-managed.h"
 #include "gc-finalized.h"
 #include "gc-anchored.h"
-#include "inkgc/gc-soft-ptr.h"
 #include "sp-item.h"
 #include "object-set.h"
 
-class SPDesktop;
 class SPItem;
 
 namespace Inkscape {
@@ -80,12 +78,7 @@ public:
      */
     LayerModel *layers() { return _layers; }
 
-    /**
-     * Returns the desktop the selection is bound to
-     *
-     * @return the desktop the selection is bound to, or NULL if in console mode
-     */
-    SPDesktop *desktop() { return _desktop; }
+
 
     /**
      * Returns active layer for selection (currentLayer or its parent).
@@ -228,7 +221,6 @@ private:
     void _releaseContext(SPObject *obj);
 
     LayerModel *_layers;
-    GC::soft_ptr<SPDesktop> _desktop;
     SPObject* _selection_context;
     unsigned int _flags;
     unsigned int _idle;

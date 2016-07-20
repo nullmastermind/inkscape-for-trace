@@ -1916,7 +1916,7 @@ void ContextMenu::MakeGroupMenu(void)
 
 void ContextMenu::ActivateGroup(void)
 {
-    sp_selection_group(_desktop->selection, _desktop);
+    sp_selection_group_ui(_desktop->selection, _desktop);
 }
 
 void ContextMenu::ActivateUngroup(void)

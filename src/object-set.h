@@ -26,11 +26,14 @@
 #include <boost/type_traits.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <sigc++/connection.h>
+#include <inkgc/gc-soft-ptr.h>
 #include "sp-object.h"
 #include "sp-item.h"
+#include "sp-item-group.h"
 
 class SPBox3D;
 class Persp3D;
+class SPDesktop;
 
 namespace Inkscape {
 
@@ -47,6 +50,12 @@ struct is_item {
     }
 };
 
+struct is_group {
+    bool operator()(SPObject* obj) {
+        return SP_IS_GROUP(obj);
+    }
+};
+
 struct object_to_item {
     typedef SPItem* result_type;
     SPItem* operator()(SPObject* obj) const {
@@ -58,6 +67,13 @@ struct object_to_node {
     typedef XML::Node* result_type;
     XML::Node* operator()(SPObject* obj) const {
         return obj->getRepr();
+    }
+};
+
+struct object_to_group {
+    typedef SPGroup* result_type;
+    SPGroup* operator()(SPObject* obj) const {
+        return SP_GROUP(obj);
     }
 };
 
@@ -82,9 +98,10 @@ class ObjectSet {
 public:
     enum CompareSize {HORIZONTAL, VERTICAL, AREA};
     typedef decltype(multi_index_container().get<random_access>() | boost::adaptors::filtered(is_item()) | boost::adaptors::transformed(object_to_item())) SPItemRange;
+    typedef decltype(multi_index_container().get<random_access>() | boost::adaptors::filtered(is_group()) | boost::adaptors::transformed(object_to_group())) SPGroupRange;
     typedef decltype(multi_index_container().get<random_access>() | boost::adaptors::filtered(is_item()) | boost::adaptors::transformed(object_to_node())) XMLNodeRange;
 
-    ObjectSet() {};
+    ObjectSet(SPDesktop* desktop): _desktop(desktop) {};
     virtual ~ObjectSet();
 
     /**
@@ -177,18 +194,25 @@ public:
     /** Returns the list of selected objects. */
     SPObjectRange objects();
 
-    /** Returns the list of selected SPItems. */
+    /** Returns a range of selected SPItems. */
     SPItemRange items() {
         return SPItemRange(container.get<random_access>()
            | boost::adaptors::filtered(is_item())
            | boost::adaptors::transformed(object_to_item()));
     };
 
-    /** Returns a list of the xml nodes of all selected objects. */
+    /** Returns a range of selected groups. */
+    SPGroupRange groups() {
+        return SPGroupRange (container.get<random_access>()
+            | boost::adaptors::filtered(is_group())
+            | boost::adaptors::transformed(object_to_group()));
+    }
+
+    /** Returns a range of the xml nodes of all selected objects. */
     XMLNodeRange xmlNodes() {
         return XMLNodeRange(container.get<random_access>()
-            | boost::adaptors::filtered(is_item())
-            | boost::adaptors::transformed(object_to_node()));
+                            | boost::adaptors::filtered(is_item())
+                            | boost::adaptors::transformed(object_to_node()));
     }
 
     /**
@@ -254,6 +278,13 @@ public:
      */
     std::list<SPBox3D *> const box3DList(Persp3D *persp = NULL);
 
+    /**
+     * Returns the desktop the selection is bound to
+     *
+     * @return the desktop the selection is bound to, or NULL if in console mode
+     */
+    SPDesktop *desktop() { return _desktop; }
+
 protected:
     virtual void _connectSignals(SPObject* object) {};
     virtual void _releaseSignals(SPObject* object) {};
@@ -270,12 +301,14 @@ protected:
     virtual void _remove_3D_boxes_recursively(SPObject *obj);
 
     multi_index_container container;
+    GC::soft_ptr<SPDesktop> _desktop;
     std::list<SPBox3D *> _3dboxes;
     std::unordered_map<SPObject*, sigc::connection> releaseConnections;
 
 };
 
 typedef ObjectSet::SPItemRange SPItemRange;
+typedef ObjectSet::SPGroupRange SPGroupRange;
 typedef ObjectSet::XMLNodeRange XMLNodeRange;
 
 } // namespace Inkscape

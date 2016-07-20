@@ -27,15 +27,16 @@
 
 #include "sp-shape.h"
 #include "sp-path.h"
+#include "desktop.h"
 #include "document.h"
 
 #define SP_SELECTION_UPDATE_PRIORITY (G_PRIORITY_HIGH_IDLE + 1)
 
 namespace Inkscape {
 
-Selection::Selection(LayerModel *layers, SPDesktop *desktop) :
+Selection::Selection(LayerModel *layers, SPDesktop *desktop):
+    ObjectSet(desktop),
     _layers(layers),
-    _desktop(desktop),
     _selection_context(NULL),
     _flags(0),
     _idle(0)
