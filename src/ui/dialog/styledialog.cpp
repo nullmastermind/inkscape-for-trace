@@ -55,6 +55,7 @@ StyleDialog::StyleDialog() :
 {
     set_size_request(200, 200);
 
+    _paned.pack1(_mainBox, Gtk::SHRINK);
     _mainBox.pack_start(_scrolledWindow, Gtk::PACK_EXPAND_WIDGET);
     _treeView.set_headers_visible(false);
     _scrolledWindow.add(_treeView);
@@ -76,7 +77,6 @@ StyleDialog::StyleDialog() :
 
     _treeView.append_column("Selector Name", _mColumns._selectorLabel);
     _treeView.set_expander_column(*(_treeView.get_column(1)));
-    _treeView.set_level_indentation(-12);
 
     create = manage( new Gtk::Button() );
     _styleButton(*create, "list-add", "Add a new CSS Selector");
@@ -94,7 +94,7 @@ StyleDialog::StyleDialog() :
     _buttonBox.pack_start(*create, Gtk::PACK_SHRINK);
     _buttonBox.pack_start(*del, Gtk::PACK_SHRINK);
 
-    _getContents()->pack_start(_mainBox, Gtk::PACK_EXPAND_WIDGET);
+    _getContents()->pack_start(_paned, Gtk::PACK_EXPAND_WIDGET);
 
     _targetDesktop = getDesktop();
     setDesktop(_targetDesktop);
@@ -699,7 +699,7 @@ void StyleDialog::_buttonEventsSelectObjs(GdkEventButton* event )
 
         //Open CSS dialog here.
         if (!_cssPane->get_visible()) {
-            _mainBox.pack_end(*_cssPane, Gtk::PACK_SHRINK);
+            _paned.pack2(*_cssPane, Gtk::SHRINK);
             _cssPane->show_all();
         }
 

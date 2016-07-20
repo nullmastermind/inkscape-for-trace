@@ -18,6 +18,7 @@
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/dialog.h>
 #include <gtkmm/treeselection.h>
+#include <gtkmm/paned.h>
 
 #include "desktop.h"
 #include "document.h"
@@ -71,6 +72,7 @@ private:
     SPDesktop* _desktop;
     SPDesktop* _targetDesktop;
     ModelColumns _mColumns;
+    Gtk::VPaned _paned;
     Gtk::VBox _mainBox;
     Gtk::HBox _buttonBox;
     Gtk::TreeView _treeView;

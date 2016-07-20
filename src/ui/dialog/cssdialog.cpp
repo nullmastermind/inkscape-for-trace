@@ -30,7 +30,7 @@ CssDialog::CssDialog():
     UI::Widget::Panel("", "/dialogs/css", SP_VERB_DIALOG_CSS),
     _desktop(0)
 {
-    set_size_request(50, 50);
+    set_size_request(20, 15);
     _mainBox.pack_start(_scrolledWindow, Gtk::PACK_EXPAND_WIDGET);
     _treeView.set_headers_visible(false);
     _scrolledWindow.add(_treeView);
