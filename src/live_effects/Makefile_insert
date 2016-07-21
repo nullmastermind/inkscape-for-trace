@@ -70,6 +70,8 @@ ink_common_sources += \
 	live_effects/lpe-perspective_path.h		\
 	live_effects/lpe-perspective-envelope.cpp	\
 	live_effects/lpe-perspective-envelope.h		\
+	live_effects/lpe-measure-line.cpp	\
+	live_effects/lpe-measure-line.h	\
 	live_effects/lpe-mirror_symmetry.cpp	\
 	live_effects/lpe-mirror_symmetry.h	\
 	live_effects/lpe-circle_3pts.cpp	\
