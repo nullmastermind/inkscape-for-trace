@@ -1081,9 +1081,8 @@ void sp_event_root_menu_popup(SPDesktop *desktop, SPItem *item, GdkEvent *event)
     item = sp_event_context_find_item (desktop,
                               Geom::Point(event->button.x, event->button.y), FALSE, FALSE);
 
-    /* fixme: This is not what I want but works for now (Lauris) */
-    if (event->type == GDK_KEY_PRESS) {
-        item = desktop->getSelection()->singleItem();
+    if (event->type == GDK_KEY_PRESS && !desktop->getSelection()->isEmpty()) {
+        item = desktop->getSelection()->items().front();
     }
 
     ContextMenu* CM = new ContextMenu(desktop, item);
