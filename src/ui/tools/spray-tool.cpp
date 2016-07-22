@@ -13,6 +13,7 @@
  *   Jon A. Cruz <jon@joncruz.org>
  *   Abhishek Sharma
  *   Jabiertxo Arraiza <jabier.arraiza@marker.es>
+ *   Adrian Boguszewski
  *
  * Copyright (C) 2009 authors
  *
@@ -196,6 +197,7 @@ SprayTool::SprayTool()
 }
 
 SprayTool::~SprayTool() {
+    object_set.clear();
     this->enableGrDrag(false);
     this->style_set_connection.disconnect();
 
@@ -862,7 +864,7 @@ static bool fit_item(SPDesktop *desktop,
 }
 
 static bool sp_spray_recursive(SPDesktop *desktop,
-                               Inkscape::Selection *selection,
+                               Inkscape::ObjectSet *set,
                                SPItem *item,
                                Geom::Point p,
                                Geom::Point /*vector*/,
@@ -907,7 +909,7 @@ static bool sp_spray_recursive(SPDesktop *desktop,
         if (box) {
             // convert 3D boxes to ordinary groups before spraying their shapes
             item = box3d_convert_to_group(box);
-            selection->add(item);
+            set->add(item);
         }
     }
 
@@ -996,23 +998,11 @@ static bool sp_spray_recursive(SPDesktop *desktop,
         }
 #ifdef ENABLE_SPRAY_MODE_SINGLE_PATH
     } else if (mode == SPRAY_MODE_SINGLE_PATH) {
+        long setSize = boost::distance(set->items());
+        SPItem *parent_item = setSize > 0 ? set->items().front() : nullptr;    // Initial object
+        SPItem *unionResult = setSize > 1 ? *(++set->items().begin()) : nullptr;    // Previous union
+        SPItem *item_copied = nullptr;    // Projected object
 
-        SPItem *parent_item = NULL;    // Initial object
-        SPItem *item_copied = NULL;    // Projected object
-        SPItem *unionResult = NULL;    // Previous union
-
-        int i=1;
-        auto items= selection->items();
-        for(auto it=items.begin();it!=items.end(); ++it){
-            SPItem *item1 = *it;
-            if (i == 1) {
-                parent_item = item1;
-            }
-            if (i == 2) {
-                unionResult = item1;
-            }
-            i++;
-        }
         if (parent_item) {
             SPDocument *doc = parent_item->document;
             Inkscape::XML::Document* xml_doc = doc->getReprDoc();
@@ -1045,13 +1035,13 @@ static bool sp_spray_recursive(SPDesktop *desktop,
                     sp_item_move_rel(item_copied, Geom::Translate(move[Geom::X], -move[Geom::Y]));
 
                     // Union and duplication
-                    selection->clear();
-                    selection->add(item_copied);
+                    set->clear();
+                    set->add(item_copied);
                     if (unionResult) { // No need to add the very first item (initialized with NULL).
-                        selection->add(unionResult);
+                        set->add(unionResult);
                     }
-                    sp_selected_path_union_skip_undo(selection);
-                    selection->add(parent_item);
+                    sp_selected_path_union_skip_undo(set);
+                    set->add(parent_item);
                     Inkscape::GC::release(copy);
                     did = true;
                 }
@@ -1146,9 +1136,8 @@ static bool sp_spray_recursive(SPDesktop *desktop,
 static bool sp_spray_dilate(SprayTool *tc, Geom::Point /*event_p*/, Geom::Point p, Geom::Point vector, bool reverse)
 {
     SPDesktop *desktop = tc->desktop;
-    Inkscape::Selection *selection = desktop->getSelection();
-
-    if (selection->isEmpty()) {
+    Inkscape::ObjectSet *set = tc->objectSet();
+    if (set->isEmpty()) {
         return false;
     }
 
@@ -1170,7 +1159,7 @@ static bool sp_spray_dilate(SprayTool *tc, Geom::Point /*event_p*/, Geom::Point 
     double move_standard_deviation = get_move_standard_deviation(tc);
 
     {
-        std::vector<SPItem*> const items(selection->items().begin(), selection->items().end());
+        std::vector<SPItem*> const items(set->items().begin(), set->items().end());
 
         for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end(); ++i){
             SPItem *item = *i;
@@ -1182,7 +1171,7 @@ static bool sp_spray_dilate(SprayTool *tc, Geom::Point /*event_p*/, Geom::Point 
             SPItem *item = *i;
             g_assert(item != NULL);
             if (sp_spray_recursive(desktop
-                                , selection
+                                , set
                                 , item
                                 , p, vector
                                 , tc->mode
@@ -1276,6 +1265,11 @@ bool SprayTool::root_handler(GdkEvent* event) {
                 this->is_dilating = true;
                 this->has_dilated = false;
 
+                object_set = *desktop->getSelection();
+                if (mode == SPRAY_MODE_SINGLE_PATH) {
+                    desktop->getSelection()->clear();
+                }
+
                 if(this->is_dilating && event->button.button == 1 && !this->space_panning) {
                     sp_spray_dilate(this, motion_w, desktop->dt2doc(motion_dt), Geom::Point(0,0), MOD__SHIFT(event));
                 }
@@ -1299,7 +1293,7 @@ bool SprayTool::root_handler(GdkEvent* event) {
 
             guint num = 0;
             if (!desktop->selection->isEmpty()) {
-                num = boost::distance(desktop->selection->items()   );
+                num = (guint) boost::distance(desktop->selection->items());
             }
             if (num == 0) {
                 this->message_context->flash(Inkscape::ERROR_MESSAGE, _("<b>Nothing selected!</b> Select objects to spray."));
@@ -1384,6 +1378,8 @@ bool SprayTool::root_handler(GdkEvent* event) {
                                            SP_VERB_CONTEXT_SPRAY, _("Spray with clones"));
                         break;
                     case SPRAY_MODE_SINGLE_PATH:
+                        sp_selected_path_union_skip_undo(objectSet());
+                        desktop->getSelection()->add(object_set.objects().begin(), object_set.objects().end());
                         DocumentUndo::done(this->desktop->getDocument(),
                                            SP_VERB_CONTEXT_SPRAY, _("Spray in single path"));
                         break;

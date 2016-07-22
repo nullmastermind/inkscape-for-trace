@@ -121,6 +121,7 @@ public:
         for(auto it = from; it != to; ++it) {
             _add(*it);
         }
+        _emitSignals();
     }
 
     /**
