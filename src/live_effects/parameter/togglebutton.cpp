@@ -110,7 +110,7 @@ ToggleButtonParam::param_newWidget()
         gtk_box_pack_start (GTK_BOX(box_button), label_button, false, false, 1);
     }
 
-    checkwdg->add(*Gtk::manage(Glib::wrap(boxButton)));
+    checkwdg->add(*Gtk::manage(Glib::wrap(box_button)));
     checkwdg->setActive(value);
     checkwdg->setProgrammatically = false;
     checkwdg->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change togglebutton parameter"));
