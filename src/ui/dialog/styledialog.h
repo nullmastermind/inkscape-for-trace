@@ -48,9 +48,17 @@ private:
     void _styleButton( Gtk::Button& btn, char const* iconName, char const* tooltip);
     std::string _setClassAttribute(std::vector<SPObject*>);
 
-    std::vector<_selectorVecType>_selectorVec;
-    std::vector<_selectorVecType> _getSelectorVec();
-    std::string _populateTree(std::vector<_selectorVecType>);
+    class InkSelector {
+    public:
+        std::string _selector;
+        std::vector<SPObject *> _matchingObjs;
+        std::string _xmlContent;
+    };
+
+    InkSelector inkSelector;
+    std::vector<InkSelector> _selectorVec;
+    std::vector<InkSelector> _getSelectorVec();
+    std::string _populateTree(std::vector<InkSelector>);
     bool _handleButtonEvent(GdkEventButton *event);
     void _buttonEventsSelectObjs(GdkEventButton *event);
     void _selectObjects(int, int);
@@ -83,7 +91,6 @@ private:
     SPDocument* _document;
     bool _styleExists;
     Inkscape::XML::Node *_styleChild;
-    unsigned _num;
     std::string _selectorName;
     std::string _selectorValue;
     Gtk::TreeModel::Row _row;

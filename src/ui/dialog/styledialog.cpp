@@ -107,7 +107,6 @@ StyleDialog::StyleDialog() :
      */
     _styleExists = false;
     _document = _targetDesktop->doc();
-    _num = _document->getReprRoot()->childCount();
     _selectorValue = _populateTree(_getSelectorVec());
 
     _treeView.signal_button_press_event().connect(sigc::mem_fun(*this,
@@ -217,7 +216,7 @@ void StyleDialog::_addSelector()
                         + obj->getAttribute("style") + "}" + "\n";
             }
 
-            if (strcmp(_selectorName.substr(0,1).c_str(), ".") == 0) {
+            if (_selectorName[0] == '.') {
                 if (!obj->getRepr()->attribute("class")) {
                     obj->getRepr()->setAttribute("class", textEditPtr->get_text()
                                                  .erase(0,1));
@@ -256,8 +255,10 @@ void StyleDialog::_addSelector()
      * from selectorValue above. If style element already exists, then
      * the new selector's content is appended to its previous content.
      */
-    _selectorVec.push_back(std::make_pair(std::make_pair(_selectorName, objVec),
-                                          _selectorValue));
+    inkSelector._selector = _selectorName;
+    inkSelector._matchingObjs = objVec;
+    inkSelector._xmlContent = _selectorValue;
+    _selectorVec.push_back(inkSelector);
 
     if (_styleElementNode()) {
         _styleChild = _styleElementNode();
@@ -290,7 +291,7 @@ void StyleDialog::_updateStyleContent()
 {
     std::string styleContent = "";
     for (unsigned i = 0; i < _selectorVec.size(); ++i) {
-        styleContent = styleContent + _selectorVec[i].second;
+        styleContent = styleContent + _selectorVec[i]._xmlContent;
     }
     _styleChild->firstChild()->setContent(styleContent.c_str());
 }
@@ -310,12 +311,12 @@ void StyleDialog::_delSelector()
     if (iter) {
         Gtk::TreeModel::Row row = *iter;
         std::string sel, key, value;
-        std::vector<_selectorVecType>::iterator it;
+        std::vector<InkSelector>::iterator it;
         for (it = _selectorVec.begin(); it != _selectorVec.end();) {
-            sel = (*it).second;
+            sel = (*it)._xmlContent;
             REMOVE_SPACES(sel);
             if (!sel.empty()) {
-                key = strtok(strdup(sel.c_str()), "{");
+                key = strtok((char*)sel.c_str(), "{");
                 REMOVE_SPACES(key);
                 char *temp = strtok(NULL, "}");
                 if (strtok(temp, "}") != NULL) {
@@ -332,12 +333,12 @@ void StyleDialog::_delSelector()
                          child != row.children().end(); ++child) {
                         Gtk::TreeModel::Row childrow = *child;
                         std::string childSel, childKey;
-                        std::vector<_selectorVecType>::iterator i;
+                        std::vector<InkSelector>::iterator i;
                         for (i = _selectorVec.begin(); i != _selectorVec.end();) {
-                            childSel = (*i).second;
+                            childSel = (*i)._xmlContent;
                             REMOVE_SPACES(childSel);
                             if (!childSel.empty()) {
-                                childKey = strtok(strdup(childSel.c_str()), "{");
+                                childKey = strtok((char*)childSel.c_str(), "{");
                                 REMOVE_SPACES(childKey);
                             }
                             Glib::ustring selectedChildRowLabel =
@@ -387,7 +388,7 @@ void StyleDialog::_delSelector()
  */
 Inkscape::XML::Node* StyleDialog::_styleElementNode()
 {
-    for (unsigned i = 0; i < _num; ++i) {
+    for (unsigned i = 0; i < _document->getReprRoot()->childCount(); ++i) {
         if (std::string(_document->getReprRoot()->nthChild(i)->name())
                 == "svg:style") {
             _styleExists = true;
@@ -422,10 +423,10 @@ std::string StyleDialog::_setClassAttribute(std::vector<SPObject*> sel)
  * element. _newDrawing is flag is set to false check if an existing drawing is
  * opened.
  */
-std::vector<_selectorVecType> StyleDialog::_getSelectorVec()
+std::vector<StyleDialog::InkSelector> StyleDialog::_getSelectorVec()
 {
     std::string key, value, selId;
-    for (unsigned i = 0; i < _num; ++i) {
+    for (unsigned i = 0; i < _document->getReprRoot()->childCount(); ++i) {
         if (std::string(_document->getReprRoot()->nthChild(i)->name()) == "svg:style") {
             _styleExists = true;
             _newDrawing = false;
@@ -442,7 +443,7 @@ std::vector<_selectorVecType> StyleDialog::_getSelectorVec()
                 std::vector<SPObject *>objVec;
                 REMOVE_SPACES(sel);
                 if (!sel.empty()) {
-                    key = strtok(strdup(sel.c_str()), "{");
+                    key = strtok((char*)sel.c_str(), "{");
                     _selectorName = key;
                     char *temp = strtok(NULL, "}");
                     if (strtok(temp, "}") != NULL) {
@@ -456,9 +457,10 @@ std::vector<_selectorVecType> StyleDialog::_getSelectorVec()
                         while(std::getline(ss, token, ',')) {
                             REMOVE_SPACES(token);
 
-                            if (strcmp(token.substr(0,1).c_str(), ".") == 0) {
+                            if (token[0] == '.') {
                                 token.erase(0, token.find_first_not_of('.'));
-                                for (unsigned i = 0; i < _num; ++i) {
+                                for (unsigned i = 0; i < _document->getReprRoot()
+                                     ->childCount(); ++i) {
                                     if (_document->getReprRoot()->
                                             nthChild(i)->attribute("class") &&
                                             _document->getReprRoot()->nthChild(i)
@@ -469,7 +471,7 @@ std::vector<_selectorVecType> StyleDialog::_getSelectorVec()
                                     }
                                 }
                             }
-                            else if (strcmp(token.substr(0,1).c_str(), "#") == 0) {
+                            else if (token[0] == '#') {
                                 token.erase(0, token.find_first_not_of('#'));
                                 selId = token;
                                 objVec.push_back(_document->getObjectById(selId));
@@ -482,9 +484,10 @@ std::vector<_selectorVecType> StyleDialog::_getSelectorVec()
                     else {
                         REMOVE_SPACES(key);
                         std::string tkn = key;
-                        if (strcmp(tkn.substr(0,1).c_str(), ".") == 0) {
+                        if (tkn[0] == '.') {
                             tkn.erase(0, tkn.find_first_not_of('.'));
-                            for (unsigned i = 0; i < _num; ++i) {
+                            for (unsigned i = 0; i < _document->getReprRoot()
+                                 ->childCount(); ++i) {
                                 if (_document->getReprRoot()->
                                         nthChild(i)->attribute("class") &&
                                         _document->getReprRoot()->nthChild(i)
@@ -495,7 +498,7 @@ std::vector<_selectorVecType> StyleDialog::_getSelectorVec()
                                 }
                             }
                         }
-                        else if (strcmp(tkn.substr(0,1).c_str(), "#") == 0) {
+                        else if (tkn[0] == '#') {
                             tkn.erase(0, key.find_first_not_of('#'));
                             selId = tkn;
                             objVec.push_back(_document->getObjectById(selId));
@@ -505,8 +508,11 @@ std::vector<_selectorVecType> StyleDialog::_getSelectorVec()
                         }
                     }
                     _selectorValue = _selectorName + "{" + value + "}\n";
-                    _selectorVec.push_back(std::make_pair(std::make_pair(key, objVec),
-                                                          _selectorValue));
+
+                    inkSelector._selector = key;
+                    inkSelector._matchingObjs = objVec;
+                    inkSelector._xmlContent = _selectorValue;
+                    _selectorVec.push_back(inkSelector);
                 }
             }
         }
@@ -520,17 +526,17 @@ std::vector<_selectorVecType> StyleDialog::_getSelectorVec()
  * This function populates the treeview with selectors available in the
  * stylesheet.
  */
-std::string StyleDialog::_populateTree(std::vector<_selectorVecType> _selVec)
+std::string StyleDialog::_populateTree(std::vector<InkSelector> _selVec)
 {
     _selectorVec = _selVec;
     std::string selectorValue;
 
     for(unsigned it = 0; it < _selectorVec.size(); ++it) {
         Gtk::TreeModel::Row row = *(_store->append());
-        row[_mColumns._selectorLabel] = _selectorVec[it].first.first;
+        row[_mColumns._selectorLabel] = _selectorVec[it]._selector;
         row[_mColumns._colAddRemove] = true;
-        row[_mColumns._colObj] = _selectorVec[it].first.second;
-        std::string selValue = _selectorVec[it].second;
+        row[_mColumns._colObj] = _selectorVec[it]._matchingObjs;
+        std::string selValue = _selectorVec[it]._xmlContent;
         selectorValue.append(selValue.c_str());
     }
 
@@ -598,7 +604,7 @@ bool StyleDialog::_handleButtonEvent(GdkEventButton *event)
                                                 + "{" + "}\n";
                                     }
                                     Glib::ustring key = row[_mColumns._selectorLabel];
-                                    if (strcmp(key.substr(0,1).c_str(), ".") == 0) {
+                                    if (key[0] == '.') {
                                         if (!obj->getRepr()->attribute("class")) {
                                             obj->setAttribute("class", key.erase(0,1));
                                         }
@@ -613,10 +619,10 @@ bool StyleDialog::_handleButtonEvent(GdkEventButton *event)
                                 }
                             }
 
-                            _selectorVec.push_back(std::make_pair(std::make_pair
-                                                                  (obj->getId(),
-                                                                   sel),
-                                                                  childStyle));
+                            inkSelector._selector = obj->getId();
+                            inkSelector._matchingObjs = sel;
+                            inkSelector._xmlContent = childStyle;
+                            _selectorVec.push_back(inkSelector);
                         }
                         if (_styleElementNode()) {
                             _styleChild = _styleElementNode();
@@ -630,12 +636,12 @@ bool StyleDialog::_handleButtonEvent(GdkEventButton *event)
 
                 else {
                     std::string sel, key, value;
-                    std::vector<_selectorVecType>::iterator it;
+                    std::vector<InkSelector>::iterator it;
                     for (it = _selectorVec.begin(); it != _selectorVec.end(); ++it ) {
-                        sel = (*it).second;
+                        sel = (*it)._xmlContent;
                         REMOVE_SPACES(sel);
                         if (!sel.empty()) {
-                            key = strtok(strdup(sel.c_str()), "{");
+                            key = strtok((char*)sel.c_str(), "{");
                             REMOVE_SPACES(key);
                             char *temp = strtok(NULL, "}");
                             if (strtok(temp, "}") != NULL) {
@@ -646,7 +652,7 @@ bool StyleDialog::_handleButtonEvent(GdkEventButton *event)
                     if (key == row[_mColumns._selectorLabel]) {
                         Gtk::TreeModel::Row parentRow = *(row.parent());
                         Glib::ustring parentKey = parentRow[_mColumns._selectorLabel];
-                        if (strcmp(parentKey.substr(0,1).c_str(), ".") == 0) {
+                        if (parentKey[0] == '.') {
                             std::vector<SPObject *> objVec = row[_mColumns._colObj];
                             for (unsigned i = 0; i < objVec.size(); ++i) {
                                 SPObject *obj = objVec[i];
@@ -708,12 +714,12 @@ void StyleDialog::_buttonEventsSelectObjs(GdkEventButton* event )
         if (iter) {
             Gtk::TreeModel::Row row = *iter;
             std::string sel, key, value;
-            std::vector<_selectorVecType>::iterator it;
+            std::vector<InkSelector>::iterator it;
             for (it = _selectorVec.begin(); it != _selectorVec.end(); ++it) {
-                sel = (*it).second;
+                sel = (*it)._xmlContent;
                 REMOVE_SPACES(sel);
                 if (!sel.empty()) {
-                    key = strtok(strdup(sel.c_str()), "{");
+                    key = strtok((char*)sel.c_str(), "{");
                     REMOVE_SPACES(key);
                     char *temp = strtok(NULL, "}");
                     if (strtok(temp, "}") != NULL) {
@@ -780,12 +786,12 @@ void StyleDialog::_handleEdited(const Glib::ustring& path, const Glib::ustring& 
     if (iter) {
         Gtk::TreeModel::Row row = *iter;
         std::string sel, key, value;
-        std::vector<_selectorVecType>::iterator it;
+        std::vector<InkSelector>::iterator it;
         for (it = _selectorVec.begin(); it != _selectorVec.end(); ++it) {
-            sel = (*it).second;
+            sel = (*it)._xmlContent;
             REMOVE_SPACES(sel);
             if (!sel.empty()) {
-                key = strtok(strdup(sel.c_str()), "{");
+                key = strtok((char*)sel.c_str(), "{");
                 REMOVE_SPACES(key);
                 char *temp = strtok(NULL, "}");
                 if (strtok(temp, "}") != NULL) {
@@ -811,7 +817,7 @@ void StyleDialog::_handleEdited(const Glib::ustring& path, const Glib::ustring& 
                                 editedToken = _cssPane->_editedProp;
                                 size_t startPos = value.find(token);
                                 value.replace(startPos, token.length(), editedToken);
-                                (*it).second = key + "{" + value + "}\n";
+                                (*it)._xmlContent = key + "{" + value + "}\n";
                                 _updateStyleContent();
                             }
                         }
