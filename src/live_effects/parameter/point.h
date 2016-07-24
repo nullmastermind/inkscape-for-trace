@@ -11,7 +11,6 @@
 
 #include <glib.h>
 #include <2geom/point.h>
-
 #include "live_effects/parameter/parameter.h"
 
 #include "knot-holder-entity.h"

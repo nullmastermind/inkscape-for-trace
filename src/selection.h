@@ -192,6 +192,11 @@ public:
     void clear();
 
     /**
+     * Emmit modified signal
+     */
+    void emitModified();
+
+    /**
      * Returns true if no items are selected.
      */
     bool isEmpty() const { return _objs.empty(); }

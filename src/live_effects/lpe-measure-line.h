@@ -9,8 +9,11 @@
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
-#include "live_effects/parameter/texttopath.h"
+#include "live_effects/parameter/font.h"
 #include "live_effects/effect.h"
+#include <libnrtype/font-lister.h>
+#include "xml/node.h"
+
 
 namespace Inkscape {
 namespace LivePathEffect {
@@ -19,13 +22,13 @@ class LPEMeasureLine : public Effect {
 public:
     LPEMeasureLine(LivePathEffectObject *lpeobject);
     virtual ~LPEMeasureLine();
-
+    virtual void doBeforeEffect (SPLPEItem const* lpeitem);
     virtual Geom::PathVector doEffect_path(Geom::PathVector const &path_in);
-
 private:
-
-    TextToPathParam text;
-
+    double lenght;
+    FontParam fontselector;
+    Inkscape::FontLister *fontlister;
+    Inkscape::XML::Node *rtext;
     LPEMeasureLine(const LPEMeasureLine &);
     LPEMeasureLine &operator=(const LPEMeasureLine &);
 

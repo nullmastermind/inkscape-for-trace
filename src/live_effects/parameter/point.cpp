@@ -134,7 +134,7 @@ PointParam::param_newWidget()
     Gtk::HBox * hbox = Gtk::manage( new Gtk::HBox() );
     static_cast<Gtk::HBox*>(hbox)->pack_start(*pointwdg, true, true);
     static_cast<Gtk::HBox*>(hbox)->show_all_children();
-
+    param_effect->upd_params = false;
     return dynamic_cast<Gtk::Widget *> (hbox);
 }
 

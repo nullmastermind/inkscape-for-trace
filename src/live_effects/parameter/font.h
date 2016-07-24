@@ -1,5 +1,5 @@
-#ifndef INKSCAPE_LIVEPATHEFFECT_PARAMETER_TEXT_TO_PATH_H
-#define INKSCAPE_LIVEPATHEFFECT_PARAMETER_TEXT_TO_PATH_H
+#ifndef INKSCAPE_LIVEPATHEFFECT_PARAMETER_FONT_H
+#define INKSCAPE_LIVEPATHEFFECT_PARAMETER_FONT_H
 
 /*
  * Inkscape::LivePathEffectParameters
@@ -7,52 +7,42 @@
  * Authors:
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
-
 #include <glib.h>
-
-#include "display/canvas-bpath.h"
+#include <gtkmm.h>
 #include "live_effects/parameter/parameter.h"
-
-struct SPCanvasText;
 
 namespace Inkscape {
 
 namespace LivePathEffect {
 
-class TextToPathParam : public Parameter {
+class FontParam : public Parameter {
 public:
-    TextToPathParam( const Glib::ustring& label,
+    FontParam( const Glib::ustring& label,
                const Glib::ustring& tip,
                const Glib::ustring& key,
                Inkscape::UI::Widget::Registry* wr,
                Effect* effect,
                const Glib::ustring default_value = "");
-    virtual ~TextToPathParam() {}
+    virtual ~FontParam() {}
 
     virtual Gtk::Widget * param_newWidget();
-
     virtual bool param_readSVGValue(const gchar * strvalue);
+    double param_readFontSize(const gchar * strvalue);
+    Glib::ustring param_readFontSpec(const gchar * strvalue);
     virtual gchar * param_getSVGValue() const;
 
     void param_setValue(const Glib::ustring newvalue);
+    
     virtual void param_set_default();
-    void setPos(Geom::Point pos);
-    void setPosAndAnchor(const Geom::Piecewise<Geom::D2<Geom::SBasis> > &pwd2,
-			 const double t, const double length, bool use_curvature = false);
-    void setAnchor(double x_value, double y_value);
 
     const Glib::ustring get_value() const { return defvalue; };
 
 private:
-    TextToPathParam(const TextToPathParam&);
-    TextToPathParam& operator=(const TextToPathParam&);
-    double anchor_x;
-    double anchor_y;
-
+    FontParam(const FontParam&);
+    FontParam& operator=(const FontParam&);
     Glib::ustring value;
     Glib::ustring defvalue;
 
-    SPCanvasText *canvas_text;
 };
 
 /*
@@ -61,10 +51,10 @@ private:
  * parameter must be initialized differently than usual (only with a pointer to the parent effect;
  * no label, no tooltip, etc.).
  */
-class TextToPathParamInternal : public TextToPathParam {
+class FontParamInternal : public FontParam {
 public:
-    TextToPathParamInternal(Effect* effect) :
-        TextToPathParam("", "", "", NULL, effect) {}
+    FontParamInternal(Effect* effect) :
+        FontParam("", "", "", NULL, effect) {}
 
     virtual Gtk::Widget * param_newWidget() { return NULL; }
 };

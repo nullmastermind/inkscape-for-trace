@@ -370,6 +370,7 @@ Effect::Effect(LivePathEffectObject *lpeobject)
       concatenate_before_pwd2(false),
       sp_lpe_item(NULL),
       current_zoom(1),
+      upd_params(true),
       sp_curve(NULL),
       provides_own_flash_paths(true), // is automatically set to false if providesOwnFlashPaths() is not overridden
       is_ready(false) // is automatically set to false if providesOwnFlashPaths() is not overridden
@@ -697,7 +698,7 @@ Effect::newWidget()
 
         ++it;
     }
-
+    upd_params = false;
     return dynamic_cast<Gtk::Widget *>(vbox);
 }
 

@@ -33,6 +33,8 @@ ink_common_sources +=	\
 	ui/widget/entry.h        \
 	ui/widget/filter-effect-chooser.h \
 	ui/widget/filter-effect-chooser.cpp \
+	ui/widget/font-selector.h      	\
+	ui/widget/font-selector.cpp      	\
 	ui/widget/font-variants.h      	\
 	ui/widget/font-variants.cpp     \
 	ui/widget/gimpspinscale.c	\

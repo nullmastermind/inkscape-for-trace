@@ -282,6 +282,11 @@ void Selection::clear() {
     _emitChanged();
 }
 
+void Selection::emitModified()
+{
+    _emitChanged();
+}
+
 std::vector<SPObject*> const &Selection::list() {
     if(!_objs_vector.empty())
     return _objs_vector;

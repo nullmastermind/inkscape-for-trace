@@ -22,6 +22,7 @@
 #include "ui/widget/text.h"
 #include "ui/widget/random.h"
 #include "ui/widget/unit-menu.h"
+#include "ui/widget/font-selector.h"
 #include "ui/widget/color-picker.h"
 #include "inkscape.h"
 
@@ -416,6 +417,23 @@ public:
 protected:
     sigc::connection  _value_changed_connection;
     sigc::connection  _reseeded_connection;
+    void on_value_changed();
+};
+
+class RegisteredFontSelector : public RegisteredWidget<FontSelector> {
+public:
+    virtual ~RegisteredFontSelector();
+    RegisteredFontSelector ( const Glib::ustring& label,
+                             const Glib::ustring& tip,
+                             const Glib::ustring& key,
+                             Registry& wr,
+                             Inkscape::XML::Node* repr_in = NULL,
+                             SPDocument *doc_in = NULL);
+
+    void setValue (Glib::ustring fontspec, double fontsize);
+
+protected:
+    sigc::connection  _value_changed_connection;
     void on_value_changed();
 };
 

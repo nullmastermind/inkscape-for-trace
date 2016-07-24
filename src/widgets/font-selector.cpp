@@ -19,9 +19,6 @@
 # include "config.h"
 #endif
 
-#include <libnrtype/font-lister.h>
-#include <libnrtype/font-instance.h>
-
 #include <2geom/transforms.h>
 
 #include <gtk/gtk.h>
@@ -34,29 +31,7 @@
 
 /* SPFontSelector */
 
-struct SPFontSelector
-{
-#if GTK_CHECK_VERSION(3,0,0)
-    GtkBox hbox;
-#else
-    GtkHBox hbox;
-#endif
 
-    unsigned int block_emit : 1;
-
-    GtkWidget *family;
-    GtkWidget *style;
-    GtkWidget *size;
-
-    GtkWidget *family_treeview;
-    GtkWidget *style_treeview;
-
-    NRNameList families;
-    NRStyleList styles;
-    gfloat fontsize;
-    bool fontsize_dirty;
-    Glib::ustring *fontspec;
-};
 
 
 struct SPFontSelectorClass
@@ -274,6 +249,7 @@ static void sp_font_selector_dispose(GObject *object)
 
     if (fsel->fontspec) {
         delete fsel->fontspec;
+        fsel->fontspec = 0;
     }
 
     if (fsel->families.length > 0) {

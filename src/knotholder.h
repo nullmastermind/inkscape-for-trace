@@ -51,7 +51,7 @@ public:
 
     void knot_moved_handler(SPKnot *knot, Geom::Point const &p, unsigned int state);
     void knot_clicked_handler(SPKnot *knot, unsigned int state);
-    void knot_ungrabbed_handler(SPKnot *knot, unsigned int);
+    void knot_ungrabbed_handler(SPKnot *knot, unsigned int state);
 
     void add(KnotHolderEntity *e);
 

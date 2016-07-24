@@ -12,6 +12,7 @@
 #include "live_effects/effect.h"
 #include "svg/svg.h"
 #include "svg/stringstream.h"
+#include "selection.h"
 #include "widgets/icon.h"
 #include "inkscape.h"
 #include "verbs.h"
@@ -106,6 +107,7 @@ ToggleButtonParam::param_newWidget()
     }else{
         gtk_box_pack_start (GTK_BOX(boxButton), labelButton, false, false, 1);
     }
+    param_effect->upd_params = false;
     checkwdg->add(*Gtk::manage(Glib::wrap(boxButton)));
     checkwdg->setActive(value);
     checkwdg->setProgrammatically = false;
@@ -157,6 +159,12 @@ ToggleButtonParam::param_setValue(bool newvalue)
 
 void
 ToggleButtonParam::toggled() {
+    //Force redraw for update widgets
+    param_effect->upd_params = true;
+    if (SP_ACTIVE_DESKTOP) {
+        Inkscape::Selection *selection = SP_ACTIVE_DESKTOP->getSelection();
+        selection ->emitModified();
+    }
     _signal_toggled.emit();
 }
 

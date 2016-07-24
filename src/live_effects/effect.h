@@ -122,6 +122,7 @@ public:
 
     void editNextParamOncanvas(SPItem * item, SPDesktop * desktop);
     bool apply_to_clippath_and_mask;
+    bool upd_params;
 
 protected:
     Effect(LivePathEffectObject *lpeobject);

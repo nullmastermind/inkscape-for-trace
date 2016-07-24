@@ -17,6 +17,7 @@
 
 #include "document.h"
 #include "document-undo.h"
+#include "selection.h"
 #include "sp-shape.h"
 #include "knot.h"
 #include "knotholder.h"
@@ -202,7 +203,7 @@ KnotHolder::knot_moved_handler(SPKnot *knot, Geom::Point const &p, guint state)
 }
 
 void
-KnotHolder::knot_ungrabbed_handler(SPKnot */*knot*/, guint)
+KnotHolder::knot_ungrabbed_handler(SPKnot */*knot*/, guint /*state*/)
 {
 	this->dragging = false;
 
@@ -226,8 +227,12 @@ KnotHolder::knot_ungrabbed_handler(SPKnot */*knot*/, guint)
             // write the ones that were changed?
             Inkscape::LivePathEffect::Effect *lpe = lpeItem->getCurrentLPE();
             if (lpe) {
+                lpe->upd_params = true;
                 LivePathEffectObject *lpeobj = lpe->getLPEObj();
                 lpeobj->updateRepr();
+                //Force redraw for update widgets
+                Inkscape::Selection *selection = desktop->getSelection();
+                selection ->emitModified();
             }
         }
 
