@@ -62,9 +62,9 @@ PointParam::param_get_default() const{
 }
 
 void
-PointParam::param_update_default(Geom::Point newpoint)
+PointParam::param_update_default(const Geom::Point default_point)
 {
-    defvalue = newpoint;
+    defvalue = default_point;
 }
 
 void

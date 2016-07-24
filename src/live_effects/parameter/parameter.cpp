@@ -101,6 +101,12 @@ ScalarParam::param_set_default()
     param_set_value(defvalue);
 }
 
+void 
+ScalarParam::param_update_default(gdouble default_value)
+{
+    defvalue = default_value;
+}
+
 void
 ScalarParam::param_set_value(gdouble val)
 {
@@ -169,6 +175,7 @@ ScalarParam::param_newWidget()
         if(!overwrite_widget){
             rsu->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change scalar parameter"));
         }
+        param_effect->upd_params = false;
         return dynamic_cast<Gtk::Widget *> (rsu);
     } else {
         return NULL;

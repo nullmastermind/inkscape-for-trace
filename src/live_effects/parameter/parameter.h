@@ -110,6 +110,7 @@ public:
     virtual gchar * param_getSVGValue() const;
 
     virtual void param_set_default();
+    void param_update_default(gdouble default_value);
     void param_set_value(gdouble val);
     void param_make_integer(bool yes = true);
     void param_set_range(gdouble min, gdouble max);

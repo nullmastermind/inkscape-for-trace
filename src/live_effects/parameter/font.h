@@ -28,6 +28,7 @@ public:
     virtual Gtk::Widget * param_newWidget();
     virtual bool param_readSVGValue(const gchar * strvalue);
     double param_readFontSize(const gchar * strvalue);
+    void param_update_default(const Glib::ustring defvalue);
     Glib::ustring param_readFontSpec(const gchar * strvalue);
     virtual gchar * param_getSVGValue() const;
 

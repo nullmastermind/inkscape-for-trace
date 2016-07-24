@@ -11,7 +11,13 @@
  */
 #include "live_effects/parameter/font.h"
 #include "live_effects/effect.h"
+#include "live_effects/parameter/text.h"
+#include "live_effects/parameter/unit.h"
+#include "live_effects/parameter/bool.h"
 #include <libnrtype/font-lister.h>
+#include <2geom/angle.h>
+#include <2geom/ray.h>
+#include <2geom/point.h>
 #include "xml/node.h"
 
 
@@ -23,12 +29,22 @@ public:
     LPEMeasureLine(LivePathEffectObject *lpeobject);
     virtual ~LPEMeasureLine();
     virtual void doBeforeEffect (SPLPEItem const* lpeitem);
+    virtual void doOnApply(SPLPEItem const* lpeitem);
     virtual Geom::PathVector doEffect_path(Geom::PathVector const &path_in);
+    void saveDefault();
+    virtual Gtk::Widget *newWidget();
 private:
-    double lenght;
+    double length;
     FontParam fontselector;
     Inkscape::FontLister *fontlister;
     Inkscape::XML::Node *rtext;
+    Geom::Point pos;
+    Geom::Coord angle;
+    ScalarParam scale;
+    ScalarParam precision;
+    UnitParam unit;
+    BoolParam reverse;
+    Glib::ustring doc_unit;
     LPEMeasureLine(const LPEMeasureLine &);
     LPEMeasureLine &operator=(const LPEMeasureLine &);
 

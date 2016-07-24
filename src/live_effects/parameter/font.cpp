@@ -33,7 +33,10 @@ FontParam::param_set_default()
 {
     param_setValue(defvalue);
 }
-
+void 
+FontParam::param_update_default(const Glib::ustring default_value){
+    defvalue = default_value;
+}
 
 Glib::ustring
 FontParam::param_readFontSpec(const gchar * strvalue)
@@ -100,7 +103,7 @@ FontParam::param_newWidget()
     Glib::ustring fontspec = param_readFontSpec(param_getSVGValue());
     fontselectorwdg->setValue( fontspec, fontsize );
     fontselectorwdg->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change font selector parameter"));
-
+    param_effect->upd_params = false;
     return dynamic_cast<Gtk::Widget *> (fontselectorwdg);
 }
 
