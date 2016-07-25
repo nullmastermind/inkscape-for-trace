@@ -13,8 +13,12 @@
 #include "preferences.h"
 #include "util/units.h"
 #include "svg/svg-length.h"
+#include "svg/svg-color.h"
 #include "display/curve.h"
+#include <2geom/affine.h>
+#include "style.h"
 #include "sp-root.h"
+#include "sp-item.h"
 #include "sp-shape.h"
 #include "sp-path.h"
 #include "desktop.h"
@@ -32,27 +36,57 @@ LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
     fontselector(_("Font Selector:"), _("Font Selector"), "fontselector", &wr, this, " "),
     scale(_("Scale:"), _("Scaling factor"), "scale", &wr, this, 1.0),
     precision(_("Number precision"), _("Number precision"), "precision", &wr, this, 2),
+    offset_right_left(_("Offset right left"), _("Offset right left"), "offset_right_left", &wr, this, 0),
+    offset_top_bottom(_("Offset top bottom"), _("Offset top bottom"), "offset_top_bottom", &wr, this, 10),
+    gap_start(_("Gap to line from origin"), _("Gap to line from origin, without affecting measure"), "gap_start", &wr, this, 0),
+    gap_end(_("Gap to line from end"), _("Gap to line from end, without affecting measure"), "gap_end", &wr, this, 0),
     unit(_("Unit:"), _("Unit"), "unit", &wr, this),
     reverse(_("To other side"), _("To other side"), "reverse", &wr, this, false),
+    color_as_line(_("Measure color as line"), _("Measure color as line"), "color_as_line", &wr, this, false),
+    scale_insensitive(_("Scale insensitive"), _("Scale insensitive to transforms in element, parents..."), "scale_insensitive", &wr, this, true),
     pos(0,0),
     angle(0)
 {
     registerParameter(&fontselector);
     registerParameter(&scale);
     registerParameter(&precision);
+    registerParameter(&offset_right_left);
+    registerParameter(&offset_top_bottom);
+    registerParameter(&gap_start);
+    registerParameter(&gap_end);
     registerParameter(&unit);
     registerParameter(&reverse);
+    registerParameter(&color_as_line);
+    registerParameter(&scale_insensitive);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     fontselector.param_update_default(prefs->getString("/live_effects/measure-line/fontselector"));
     scale.param_update_default(prefs->getDouble("/live_effects/measure-line/scale", 1.0));
     precision.param_update_default(prefs->getInt("/live_effects/measure-line/precision", 2));
+    offset_right_left.param_update_default(prefs->getDouble("/live_effects/measure-line/offset_right_left", 0.0));
+    offset_top_bottom.param_update_default(prefs->getDouble("/live_effects/measure-line/offset_top_bottom", 10.0));
+    gap_start.param_update_default(prefs->getDouble("/live_effects/measure-line/gap_start", 0.0));
+    gap_end.param_update_default(prefs->getDouble("/live_effects/measure-line/gap_end", 0.0));
     unit.param_update_default(prefs->getString("/live_effects/measure-line/unit"));
     reverse.param_update_default(prefs->getBool("/live_effects/measure-line/reverse"));
+    color_as_line.param_update_default(prefs->getBool("/live_effects/measure-line/color_as_line"));
+    scale_insensitive.param_update_default(prefs->getBool("/live_effects/measure-line/scale_insensitive"));
     rtext = NULL;
     precision.param_set_range(0, 100);
     precision.param_set_increments(1, 1);
     precision.param_set_digits(0);
     precision.param_make_integer(true);
+    offset_right_left.param_set_range(-999999.0, 999999.0);
+    offset_right_left.param_set_increments(1, 1);
+    offset_right_left.param_set_digits(2);
+    offset_top_bottom.param_set_range(-999999.0, 999999.0);
+    offset_top_bottom.param_set_increments(1, 1);
+    offset_top_bottom.param_set_digits(2);
+    gap_start.param_set_range(-999999.0, 999999.0);
+    gap_start.param_set_increments(1, 1);
+    gap_start.param_set_digits(2);
+    gap_end.param_set_range(-999999.0, 999999.0);
+    gap_end.param_set_increments(1, 1);
+    gap_end.param_set_digits(2);
     fontlister = Inkscape::FontLister::get_instance();
 }
 
@@ -75,21 +109,22 @@ LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
     SPPath *sp_path = dynamic_cast<SPPath *>(splpeitem);
     if (sp_path) {
         Geom::PathVector pathvector = sp_path->get_original_curve()->get_pathvector();
-        if (SP_ACTIVE_DESKTOP) {
+        if (SPDesktop *desktop = SP_ACTIVE_DESKTOP) {
             Geom::Point s = pathvector.initialPoint();
             Geom::Point e =  pathvector.finalPoint();
+            length = Geom::distance(path_in.initialPoint(), path_in.finalPoint())  * scale;
             pos = Geom::middle_point(s,e);
             Geom::Ray ray(s,e);
             angle = ray.angle();
-            SPDesktop *desktop = SP_ACTIVE_DESKTOP;
             doc_unit = Inkscape::Util::unit_table.getUnit(desktop->doc()->getRoot()->height.unit)->abbr;
             if (reverse) {
                 angle = std::fmod(angle + rad_from_deg(180), 2*M_PI);
                 if (angle < 0) angle += 2*M_PI;
             }
+            Geom::Point newpos = pos - Point::polar(angle, offset_right_left);
             Geom::Coord angle_cross = std::fmod(angle + rad_from_deg(90), 2*M_PI);
             if (angle_cross < 0) angle_cross += 2*M_PI;
-            Geom::Point newpos = pos - Point::polar(angle_cross, 10);
+            newpos = newpos - Point::polar(angle_cross, offset_top_bottom);
             Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
             Inkscape::URI SVGElem_uri(((Glib::ustring)"#" + (Glib::ustring)SP_OBJECT(lpeitem)->getId() + (Glib::ustring)"_mlsize").c_str());
             Inkscape::URIReference* SVGElemRef = new Inkscape::URIReference(desktop->doc());
@@ -103,6 +138,7 @@ LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
             } else {
                 rtext = xml_doc->createElement("svg:text");
                 rtext->setAttribute("xml:space", "preserve");
+                rtext->setAttribute("sodipodi:insensitive", "true");
                 rtext->setAttribute("id", ((Glib::ustring)SP_OBJECT(lpeitem)->getId() + (Glib::ustring)"_mlsize").c_str());
                 /* Set style */
                 sp_repr_set_svg_double(rtext, "x", newpos[Geom::X]);
@@ -126,7 +162,30 @@ LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
             sp_repr_css_set_property (css, "word-spacing", "0");
             sp_repr_css_set_property (css, "text-align", "center");
             sp_repr_css_set_property (css, "text-anchor", "middle");
-            sp_repr_css_set_property (css, "fill", "#000000");
+            if (color_as_line) {
+                if (lpeitem->style) {
+                    if (lpeitem->style->stroke.isPaintserver()) {
+                        SPPaintServer * server = lpeitem->style->getStrokePaintServer();
+                        if (server) {
+                            Glib::ustring str;
+                            str += "url(#";
+                            str += server->getId();
+                            str += ")";
+                            sp_repr_css_set_property (css, "fill", str.c_str());
+                        }
+                    } else if (lpeitem->style->stroke.isColor()) {
+                        gchar c[64];
+                        sp_svg_write_color (c, sizeof(c), lpeitem->style->stroke.value.color.toRGBA32(SP_SCALE24_TO_FLOAT(lpeitem->style->stroke_opacity.value)));
+                        sp_repr_css_set_property (css, "fill", c);
+                    } else {
+                        sp_repr_css_set_property (css, "fill", "#000000");
+                    }
+                } else {
+                    sp_repr_css_unset_property (css, "#000000");
+                }
+            } else {
+                sp_repr_css_set_property (css, "fill", "#000000");
+            }
             sp_repr_css_set_property (css, "fill-opacity", "1");
             sp_repr_css_set_property (css, "stroke", "none");
             Glib::ustring css_str;
@@ -141,6 +200,10 @@ LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
                 Inkscape::GC::release(rtspan);
             }
             /* Create TEXT */
+            if (!scale_insensitive) {
+                Geom::Affine affinetransform = i2anc_affine(SP_OBJECT(lpeitem), SP_OBJECT(desktop->doc()->getRoot()));
+                length *= (affinetransform.expansionX() + affinetransform.expansionY()) / 2.0;
+            }
             length = Inkscape::Util::Quantity::convert(length, doc_unit.c_str(), unit.get_abbreviation());
             std::stringstream length_str;
             length_str.imbue(std::locale::classic());
@@ -165,8 +228,20 @@ LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
             Geom::Affine affine = Geom::Affine(Geom::Translate(newpos).inverse());
             affine *= Geom::Rotate(angle);
             affine *= Geom::Translate(newpos);
-            SP_ITEM(text_obj)->transform = affine;
+            SP_ITEM(text_obj)->transform = affine * i2anc_affine(SP_OBJECT(lpeitem), SP_OBJECT(desktop->doc()->getRoot()));
             text_obj->updateRepr();
+        }
+    }
+}
+
+void LPEMeasureLine::doOnRemove (SPLPEItem const* /*lpeitem*/)
+{
+    if (SPDesktop *desktop = SP_ACTIVE_DESKTOP) {
+        rtext->setAttribute("sodipodi:insensitive", NULL);
+        SPObject * text_obj = desktop->currentLayer()->get_child_by_repr(rtext);
+        if (text_obj) {
+            text_obj->updateRepr();
+            text_obj->deleteObject();
         }
     }
 }
@@ -211,11 +286,17 @@ Gtk::Widget *LPEMeasureLine::newWidget()
 Geom::PathVector
 LPEMeasureLine::doEffect_path(Geom::PathVector const &path_in)
 {
-
-    length = Geom::distance(path_in.initialPoint(), path_in.finalPoint())  * scale;
     Geom::Path path;
     Geom::Point s = path_in.initialPoint();
     Geom::Point e =  path_in.finalPoint();
+    if (reverse) {
+        angle = std::fmod(angle + rad_from_deg(180), 2*M_PI);
+        if (angle < 0) angle += 2*M_PI;
+    }
+    s = s - Point::polar(angle, gap_start);
+    angle = std::fmod(angle + rad_from_deg(180), 2*M_PI);
+    if (angle < 0) angle += 2*M_PI;
+    e = e - Point::polar(angle, gap_end);
     path.start( s );
     path.appendNew<Geom::LineSegment>( e );
     Geom::PathVector output;
@@ -230,8 +311,14 @@ LPEMeasureLine::saveDefault()
     prefs->setString("/live_effects/measure-line/fontselector", (Glib::ustring)fontselector.param_getSVGValue());
     prefs->setDouble("/live_effects/measure-line/scale", scale);
     prefs->setInt("/live_effects/measure-line/precision", precision);
+    prefs->setDouble("/live_effects/measure-line/offset_right_left", offset_right_left);
+    prefs->setDouble("/live_effects/measure-line/offset_top_bottom", offset_top_bottom);
+    prefs->setDouble("/live_effects/measure-line/gap_start", gap_start);
+    prefs->setDouble("/live_effects/measure-line/gap_end", gap_end);
     prefs->setString("/live_effects/measure-line/unit", (Glib::ustring)unit.get_abbreviation());
     prefs->setInt("/live_effects/measure-line/reverse", reverse);
+    prefs->setInt("/live_effects/measure-line/color_as_line", color_as_line);
+    prefs->setInt("/live_effects/measure-line/scale_insensitive", scale_insensitive);
 }
 
 }; //namespace LivePathEffect

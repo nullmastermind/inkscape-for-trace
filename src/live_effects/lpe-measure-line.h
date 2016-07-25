@@ -30,6 +30,7 @@ public:
     virtual ~LPEMeasureLine();
     virtual void doBeforeEffect (SPLPEItem const* lpeitem);
     virtual void doOnApply(SPLPEItem const* lpeitem);
+    virtual void doOnRemove (SPLPEItem const* /*lpeitem*/);
     virtual Geom::PathVector doEffect_path(Geom::PathVector const &path_in);
     void saveDefault();
     virtual Gtk::Widget *newWidget();
@@ -42,9 +43,16 @@ private:
     Geom::Coord angle;
     ScalarParam scale;
     ScalarParam precision;
+    ScalarParam offset_right_left;
+    ScalarParam offset_top_bottom;
+    ScalarParam gap_start;
+    ScalarParam gap_end;
     UnitParam unit;
     BoolParam reverse;
+    BoolParam color_as_line;
+    BoolParam scale_insensitive;
     Glib::ustring doc_unit;
+/*    Geom::Affine affine_over;*/
     LPEMeasureLine(const LPEMeasureLine &);
     LPEMeasureLine &operator=(const LPEMeasureLine &);
 

@@ -19,7 +19,7 @@ FontSelector::FontSelector(Glib::ustring const &label, Glib::ustring const &tool
               Glib::ustring const &suffix,
               Glib::ustring const &icon,
               bool mnemonic)
-             :_widget(new Gtk::HBox()), expanded(true)
+             :_widget(new Gtk::HBox()), expanded(false)
 {
     Gtk::VBox * vbox_expander = Gtk::manage( new Gtk::VBox() );
     GtkWidget *fontsel = sp_font_selector_new();
