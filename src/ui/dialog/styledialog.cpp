@@ -425,95 +425,88 @@ std::string StyleDialog::_setClassAttribute(std::vector<SPObject*> sel)
  */
 std::vector<StyleDialog::InkSelector> StyleDialog::_getSelectorVec()
 {
-    std::string key, value, selId;
     for (unsigned i = 0; i < _document->getReprRoot()->childCount(); ++i) {
         if (std::string(_document->getReprRoot()->nthChild(i)->name()) == "svg:style") {
             _styleExists = true;
             _newDrawing = false;
             _styleChild = _document->getReprRoot()->nthChild(i);
-            std::stringstream str;
-            str << _document->getReprRoot()->nthChild(i)->firstChild()->content();
-            std::string sel;
 
-            /**
-              * If a selector without any style attribute content is added, the
-              * value is set to empty so that its corresponding XML repr is added.
-              */
-            while(std::getline(str, sel, '\n')) {
+            // Get content from first style element.
+            std::string content = _styleChild->firstChild()->content();
+
+            // Remove end-of-lines (check it works on Windoze).
+            content.erase(std::remove(content.begin(), content.end(), '\n'), content.end());
+
+            // First split into selector/value chunks.
+            // An attempt to use Glib::Regex failed. A C++11 version worked but
+            // reportedly has problems on Windows. Using split_simple() is simpler
+            // and probably faster.
+            //
+            // Glib::RefPtr<Glib::Regex> regex1 =
+            //   Glib::Regex::create("([^\\{]+)\\{([^\\{]+)\\}");
+            //
+            // Glib::MatchInfo minfo;
+            // regex1->match(content, minfo);
+
+            // Split on curly brackets. Even tokens are selectors, odd are values.
+            std::vector<std::string> tokens = Glib::Regex::split_simple("[}{]", content);
+
+            for (unsigned i = 0; i < tokens.size()-1; i += 2) {
+                std::string selectors = tokens[i];
+                REMOVE_SPACES(selectors); // Remove leading/trailing spaces
+
+                /** Make a list of all objects that selector matches. This is
+                 * currently limited to simple id, class, and element selectors.
+                 * Expanding this would take integrating a true CSS parser.
+                 */
                 std::vector<SPObject *>objVec;
-                REMOVE_SPACES(sel);
-                if (!sel.empty()) {
-                    key = strtok((char*)sel.c_str(), "{");
-                    _selectorName = key;
-                    char *temp = strtok(NULL, "}");
-                    if (strtok(temp, "}") != NULL) {
-                        value = strtok(temp, "}");
+
+                // Split selector string into individual selectors (which are comma separated).
+                std::vector<std::string> tokens2 = Glib::Regex::split_simple
+                        ("\\s*,\\s*", selectors );
+
+                for(unsigned i = 0; i < tokens2.size(); ++i) {
+                    std::string token2 = tokens2[i];
+
+                    // Find objects that match class selector
+                    if (token2[0] == '.') {
+                        token2.erase(0,1);
+                        std::vector<SPObject *> objects = _document
+                                ->getObjectsByClass(token2);
+                        objVec.insert(objVec.end(), objects.begin(), objects.end());
                     }
 
-                    std::stringstream ss(key);
-                    std::string token;
-                    std::size_t found = key.find(",");
-                    if (found!=std::string::npos) {
-                        while(std::getline(ss, token, ',')) {
-                            REMOVE_SPACES(token);
-
-                            if (token[0] == '.') {
-                                token.erase(0, token.find_first_not_of('.'));
-                                for (unsigned i = 0; i < _document->getReprRoot()
-                                     ->childCount(); ++i) {
-                                    if (_document->getReprRoot()->
-                                            nthChild(i)->attribute("class") &&
-                                            _document->getReprRoot()->nthChild(i)
-                                            ->attribute("class") == token) {
-                                        selId = _document->getReprRoot()->nthChild(i)
-                                                ->attribute("id");
-                                        objVec.push_back( _document->getObjectById(selId));
-                                    }
-                                }
-                            }
-                            else if (token[0] == '#') {
-                                token.erase(0, token.find_first_not_of('#'));
-                                selId = token;
-                                objVec.push_back(_document->getObjectById(selId));
-                            }
-                            else {
-                                std::cout << "simple text" << std::endl;
-                            }
+                    // Find objects that match id selector
+                    else if (token2[0] == '#') {
+                        token2.erase(0,1);
+                        SPObject * object = _document->getObjectById(token2);
+                        if (object) {
+                            objVec.push_back(object);
                         }
                     }
+
+                    // Find objects that match element selector
                     else {
-                        REMOVE_SPACES(key);
-                        std::string tkn = key;
-                        if (tkn[0] == '.') {
-                            tkn.erase(0, tkn.find_first_not_of('.'));
-                            for (unsigned i = 0; i < _document->getReprRoot()
-                                 ->childCount(); ++i) {
-                                if (_document->getReprRoot()->
-                                        nthChild(i)->attribute("class") &&
-                                        _document->getReprRoot()->nthChild(i)
-                                        ->attribute("class") == tkn) {
-                                    selId = _document->getReprRoot()->nthChild(i)
-                                            ->attribute("id");
-                                    objVec.push_back(_document->getObjectById(selId));
-                                }
-                            }
-                        }
-                        else if (tkn[0] == '#') {
-                            tkn.erase(0, key.find_first_not_of('#'));
-                            selId = tkn;
-                            objVec.push_back(_document->getObjectById(selId));
-                        }
-                        else {
-                            std::cout << "simple text" << std::endl;
-                        }
+                        std::vector<SPObject *> objects = _document->
+                                getObjectsByElement(token2);
+                        objVec.insert(objVec.end(), objects.begin(), objects.end());
                     }
-                    _selectorValue = _selectorName + "{" + value + "}\n";
-
-                    inkSelector._selector = key;
-                    inkSelector._matchingObjs = objVec;
-                    inkSelector._xmlContent = _selectorValue;
-                    _selectorVec.push_back(inkSelector);
                 }
+
+                std::string values;
+                // Check to make sure we do have a value to match selector.
+                if ((i+1) < tokens.size()) {
+                    values = tokens[i+1];
+                } else {
+                    std::cerr << "StyleDialog::_getSelectorVec: Missing values "
+                                 "for last selector!" << std::endl;
+                }
+
+                _selectorValue = selectors + "{" + values + "}\n";
+                inkSelector._selector = selectors;
+                inkSelector._matchingObjs = objVec;
+                inkSelector._xmlContent = _selectorValue;
+                _selectorVec.push_back(inkSelector);
             }
         }
     }

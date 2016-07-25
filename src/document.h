@@ -179,6 +179,9 @@ public:
     SPObject *getObjectById(char const *id) const;
     sigc::connection connectIdChanged(const char *id, IDChangedSignal::slot_type slot);
 
+    std::vector<SPObject *> getObjectsByClass(Glib::ustring const &klass) const;
+    std::vector<SPObject *> getObjectsByElement(Glib::ustring const &element) const;
+
     void bindObjectToRepr(Inkscape::XML::Node *repr, SPObject *object);
     SPObject *getObjectByRepr(Inkscape::XML::Node *repr) const;
 

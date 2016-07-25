@@ -1053,6 +1053,60 @@ sigc::connection SPDocument::connectIdChanged(gchar const *id,
     return priv->id_changed_signals[g_quark_from_string(id)].connect(slot);
 }
 
+void _getObjectsByClassRecursive(Glib::ustring const &klass, SPObject *parent, std::vector<SPObject *> &objects)
+{
+    if (parent) {
+        Glib::ustring class_attribute;
+        char const *temp = parent->getAttribute("class");
+        if (temp) {
+            class_attribute = temp;
+        }
+
+        if (class_attribute.find( klass ) != std::string::npos) {
+            objects.push_back( parent );
+        }
+
+        // Check children
+        for (SPObject *child = parent->children; child; child = child->next) {
+            _getObjectsByClassRecursive( klass, child, objects );
+        }
+    }
+}
+
+std::vector<SPObject *> SPDocument::getObjectsByClass(Glib::ustring const &klass) const
+{
+    std::vector<SPObject *> objects;
+    g_return_val_if_fail(!klass.empty(), objects);
+
+    _getObjectsByClassRecursive(klass, root, objects);
+    return objects;
+}
+
+void _getObjectsByElementRecursive(Glib::ustring const &element, SPObject *parent,
+                                   std::vector<SPObject *> &objects)
+{
+    if (parent) {
+        Glib::ustring prefixed = "svg:" + element;
+        if (parent->getRepr()->name() == prefixed) {
+            objects.push_back(parent);
+        }
+
+        // Check children
+        for (SPObject *child = parent->children; child; child = child->next) {
+            _getObjectsByElementRecursive(element, child, objects);
+        }
+    }
+}
+
+std::vector<SPObject *> SPDocument::getObjectsByElement(Glib::ustring const &element) const
+{
+    std::vector<SPObject *> objects;
+    g_return_val_if_fail(!element.empty(), objects);
+
+    _getObjectsByElementRecursive(element, root, objects);
+    return objects;
+}
+
 void SPDocument::bindObjectToRepr(Inkscape::XML::Node *repr, SPObject *object)
 {
     if (object) {
