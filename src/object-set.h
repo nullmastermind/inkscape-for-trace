@@ -198,21 +198,21 @@ public:
 
     /** Returns a range of selected SPItems. */
     SPItemRange items() {
-        return SPItemRange(container.get<random_access>()
+        return SPItemRange(_container.get<random_access>()
            | boost::adaptors::filtered(is_item())
            | boost::adaptors::transformed(object_to_item()));
     };
 
     /** Returns a range of selected groups. */
     SPGroupRange groups() {
-        return SPGroupRange (container.get<random_access>()
+        return SPGroupRange (_container.get<random_access>()
             | boost::adaptors::filtered(is_group())
             | boost::adaptors::transformed(object_to_group()));
     }
 
     /** Returns a range of the xml nodes of all selected objects. */
     XMLNodeRange xmlNodes() {
-        return XMLNodeRange(container.get<random_access>()
+        return XMLNodeRange(_container.get<random_access>()
                             | boost::adaptors::filtered(is_item())
                             | boost::adaptors::transformed(object_to_node()));
     }
@@ -299,13 +299,13 @@ protected:
     void _removeAncestorsFromSet(SPObject *object);
     SPItem *_sizeistItem(bool sml, CompareSize compare);
     SPObject *_getMutualAncestor(SPObject *object);
-    virtual void _add_3D_boxes_recursively(SPObject *obj);
-    virtual void _remove_3D_boxes_recursively(SPObject *obj);
+    virtual void _add3DBoxesRecursively(SPObject *obj);
+    virtual void _remove3DBoxesRecursively(SPObject *obj);
 
-    multi_index_container container;
+    multi_index_container _container;
     GC::soft_ptr<SPDesktop> _desktop;
     std::list<SPBox3D *> _3dboxes;
-    std::unordered_map<SPObject*, sigc::connection> releaseConnections;
+    std::unordered_map<SPObject*, sigc::connection> _releaseConnections;
 
 };
 
@@ -316,3 +316,14 @@ typedef ObjectSet::XMLNodeRange XMLNodeRange;
 } // namespace Inkscape
 
 #endif //INKSCAPE_PROTOTYPE_OBJECTSET_H
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :

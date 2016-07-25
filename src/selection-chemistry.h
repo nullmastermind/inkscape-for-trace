@@ -109,7 +109,7 @@ void sp_selection_to_next_layer( SPDesktop *desktop, bool suppressDone = false )
 void sp_selection_to_prev_layer( SPDesktop *desktop, bool suppressDone = false );
 void sp_selection_to_layer( SPDesktop *desktop, SPObject *layer, bool suppressDone = false );
 
-void sp_selection_apply_affine(Inkscape::ObjectSet *selection, Geom::Affine const &affine, bool set_i2d = true, bool compensate = true, bool adjust_transf_center = true);
+void sp_selection_apply_affine(Inkscape::ObjectSet *set, Geom::Affine const &affine, bool set_i2d = true, bool compensate = true, bool adjust_transf_center = true);
 void sp_selection_remove_transform (SPDesktop *desktop);
 void sp_selection_scale_absolute (Inkscape::ObjectSet *set, double x0, double x1, double y0, double y1);
 void sp_selection_scale_relative(Inkscape::ObjectSet *set, Geom::Point const &align, Geom::Scale const &scale);

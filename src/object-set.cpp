@@ -24,7 +24,6 @@ bool ObjectSet::add(SPObject* object) {
     g_return_val_if_fail(object != NULL, false);
     g_return_val_if_fail(SP_IS_OBJECT(object), false);
 
-
     // any ancestor is in the set - do nothing
     if (_anyAncestorIsInSet(object)) {
         return false;
@@ -68,7 +67,7 @@ bool ObjectSet::includes(SPObject *object) {
     g_return_val_if_fail(object != NULL, false);
     g_return_val_if_fail(SP_IS_OBJECT(object), false);
 
-    return container.get<hashed>().find(object) != container.get<hashed>().end();
+    return _container.get<hashed>().find(object) != _container.get<hashed>().end();
 }
 
 void ObjectSet::clear() {
@@ -77,7 +76,7 @@ void ObjectSet::clear() {
 }
 
 int ObjectSet::size() {
-    return container.size();
+    return _container.size();
 }
 
 bool ObjectSet::_anyAncestorIsInSet(SPObject *object) {
@@ -105,22 +104,22 @@ void ObjectSet::_removeDescendantsFromSet(SPObject *object) {
 }
 
 void ObjectSet::_remove(SPObject *object) {
-    releaseConnections[object].disconnect();
-    releaseConnections.erase(object);
-    container.get<hashed>().erase(object);
-    _remove_3D_boxes_recursively(object);
+    _releaseConnections[object].disconnect();
+    _releaseConnections.erase(object);
+    _container.get<hashed>().erase(object);
+    _remove3DBoxesRecursively(object);
     _releaseSignals(object);
 }
 
 void ObjectSet::_add(SPObject *object) {
-    releaseConnections[object] = object->connectRelease(sigc::hide_return(sigc::mem_fun(*this, &ObjectSet::remove)));
-    container.push_back(object);
-    _add_3D_boxes_recursively(object);
+    _releaseConnections[object] = object->connectRelease(sigc::hide_return(sigc::mem_fun(*this, &ObjectSet::remove)));
+    _container.push_back(object);
+    _add3DBoxesRecursively(object);
     _connectSignals(object);
 }
 
 void ObjectSet::_clear() {
-    for (auto object: container) {
+    for (auto object: _container) {
         _remove(object);
     }
 }
@@ -173,16 +172,16 @@ void ObjectSet::toggle(SPObject *obj) {
 }
 
 bool ObjectSet::isEmpty() {
-    return container.size() == 0;
+    return _container.size() == 0;
 }
 
 SPObject *ObjectSet::single() {
-    return container.size() == 1 ? *container.begin() : nullptr;
+    return _container.size() == 1 ? *_container.begin() : nullptr;
 }
 
 SPItem *ObjectSet::singleItem() {
-    if (container.size() == 1) {
-        SPObject* obj = *container.begin();
+    if (_container.size() == 1) {
+        SPObject* obj = *_container.begin();
         if (SP_IS_ITEM(obj)) {
             return SP_ITEM(obj);
         }
@@ -225,7 +224,7 @@ SPItem *ObjectSet::_sizeistItem(bool sml, CompareSize compare) {
 }
 
 SPObjectRange ObjectSet::objects() {
-    return SPObjectRange(container.get<random_access>().begin(), container.get<random_access>().end());
+    return SPObjectRange(_container.get<random_access>().begin(), _container.get<random_access>().end());
 }
 
 Inkscape::XML::Node *ObjectSet::singleRepr() {
@@ -309,7 +308,6 @@ boost::optional<Geom::Point> ObjectSet::center() const {
     }
 }
 
-
 std::list<Persp3D *> const ObjectSet::perspList() {
     std::list<Persp3D *> pl;
     for (std::list<SPBox3D *>::iterator i = _3dboxes.begin(); i != _3dboxes.end(); ++i) {
@@ -335,7 +333,7 @@ std::list<SPBox3D *> const ObjectSet::box3DList(Persp3D *persp) {
     return boxes;
 }
 
-void ObjectSet::_add_3D_boxes_recursively(SPObject *obj) {
+void ObjectSet::_add3DBoxesRecursively(SPObject *obj) {
     std::list<SPBox3D *> boxes = box3d_extract_boxes(obj);
 
     for (std::list<SPBox3D *>::iterator i = boxes.begin(); i != boxes.end(); ++i) {
@@ -344,7 +342,7 @@ void ObjectSet::_add_3D_boxes_recursively(SPObject *obj) {
     }
 }
 
-void ObjectSet::_remove_3D_boxes_recursively(SPObject *obj) {
+void ObjectSet::_remove3DBoxesRecursively(SPObject *obj) {
     std::list<SPBox3D *> boxes = box3d_extract_boxes(obj);
 
     for (std::list<SPBox3D *>::iterator i = boxes.begin(); i != boxes.end(); ++i) {
@@ -359,3 +357,14 @@ void ObjectSet::_remove_3D_boxes_recursively(SPObject *obj) {
 }
 
 } // namespace Inkscape
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :
