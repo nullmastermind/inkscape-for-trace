@@ -50,6 +50,7 @@ public:
     SPDesktop* _targetDesktop;
     CssColumns _cssColumns;
     Gtk::VBox _mainBox;
+    Gtk::HBox _buttonBox;
     Gtk::TreeView _treeView;
     Glib::RefPtr<Gtk::ListStore> _store;
     Gtk::ScrolledWindow _scrolledWindow;
@@ -57,8 +58,11 @@ public:
     Gtk::CellRendererText *_textRenderer;
     Gtk::TreeViewColumn *_propCol;
     Glib::ustring _editedProp;
+    Gtk::Button* create;
+    bool _newProperty;
 
-    void _handleButtonEvent(const Gtk::TreeModel::Path &path, Gtk::TreeViewColumn *col);
+    void _styleButton( Gtk::Button& btn, char const* iconName, char const* tooltip);
+    void _addProperty();
 };
 
 

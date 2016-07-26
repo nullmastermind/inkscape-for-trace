@@ -120,6 +120,10 @@ StyleDialog::StyleDialog() :
                                                          false);
 
     _cssPane = new CssDialog;
+
+    _treeView.get_selection()->signal_changed().connect(sigc::mem_fun(*this,
+                                                                      &StyleDialog::
+                                                                      _selChanged));
 }
 
 StyleDialog::~StyleDialog()
@@ -279,6 +283,7 @@ void StyleDialog::_addSelector()
 
         root->addChild(newChild, NULL);
         Inkscape::GC::release(newChild);
+        _styleChild = newChild;
     }
 }
 
@@ -745,14 +750,29 @@ void StyleDialog::_buttonEventsSelectObjs(GdkEventButton* event )
                     }
                 }
             }
-            _cssPane->_textRenderer->signal_edited().connect(sigc::mem_fun(*this,
-                                                                           &StyleDialog::
-                                                                           _handleEdited));
         }
         else {
             _cssPane->_store->clear();
             _cssPane->hide();
         }
+
+        _cssPane->_textRenderer->signal_edited().connect(sigc::mem_fun(*this,
+                                                                       &StyleDialog::
+                                                                       _handleEdited));
+        _cssPane->_treeView.signal_button_press_event().connect(sigc::mem_fun
+                                                                (*this, &StyleDialog::
+                                                                 _delProperty),
+                                                                false);
+    }
+}
+
+/**
+ * @brief StyleDialog::_selChanged
+ * When no row in _treeView of Style Dialog is selected, the _cssPane is hidden.
+ */
+void StyleDialog::_selChanged() {
+    if (_treeView.get_selection()->count_selected_rows() == 0) {
+        _cssPane->hide();
     }
 }
 
@@ -762,8 +782,9 @@ void StyleDialog::_buttonEventsSelectObjs(GdkEventButton* event )
  * @param new_text
  * This function edits CSS properties of the selector chosen. new_text is used
  * to update the property in XML repr. The value from selected selector is
- * obtained and modified as per value of new_text. Later _updateStyleContent() is
- * called to update XML repr and hence changes are reflected in the drawing too.
+ * obtained and modified as per value of new_text. If a new property is added,
+ * value is appended with new_text. Later _updateStyleContent() is called to
+ * update XML repr and hence changes are reflected in the drawing too.
  */
 void StyleDialog::_handleEdited(const Glib::ustring& path, const Glib::ustring& new_text)
 {
@@ -774,6 +795,7 @@ void StyleDialog::_handleEdited(const Glib::ustring& path, const Glib::ustring& 
         _cssPane->_editedProp = new_text;
     }
 
+    // Selected selector row is obtained here to get corresponding key and value.
     Glib::RefPtr<Gtk::TreeSelection> refTreeSelection = _treeView.get_selection();
     Gtk::TreeModel::iterator iter = refTreeSelection->get_selected();
     if (iter) {
@@ -797,28 +819,112 @@ void StyleDialog::_handleEdited(const Glib::ustring& path, const Glib::ustring& 
             REMOVE_SPACES(matchSelector);
 
             if (key == matchSelector) {
-                std::stringstream ss(value);
-                std::string token, editedToken;
-                std::size_t found = value.find(";");
-                if (found!=std::string::npos) {
-                    while(std::getline(ss, token, ';')) {
-                        REMOVE_SPACES(token);
-                        if (!token.empty()) {
-                            if (token.substr(0, token.find(":")) == _cssPane
-                                    ->_editedProp.substr(0, _cssPane->_editedProp
-                                                         .find(":"))) {
-                                editedToken = _cssPane->_editedProp;
-                                size_t startPos = value.find(token);
-                                value.replace(startPos, token.length(), editedToken);
-                                (*it)._xmlContent = key + "{" + value + "}\n";
-                                _updateStyleContent();
+                /** If a new property is added, existing value is appended with new
+                 * property, else replacements in value are done in the 'else' block.
+                 */
+                if (_cssPane->_newProperty) {
+                    value.append((new_text + ";").c_str());
+                    _cssPane->_propCol->add_attribute(_cssPane->_textRenderer
+                                                      ->property_text(),
+                                                      _cssPane->_cssColumns
+                                                      ._propertyLabel);
+                    _cssPane->_newProperty = false;
+                }
+                else {
+                    std::stringstream ss(value);
+                    std::string token, editedToken;
+                    std::size_t found = value.find(";");
+                    if (found!=std::string::npos) {
+                        while(std::getline(ss, token, ';')) {
+                            REMOVE_SPACES(token);
+                            if (!token.empty()) {
+                                if (token.substr(0, token.find(":")) == _cssPane
+                                        ->_editedProp.substr(0, _cssPane->_editedProp
+                                                             .find(":"))) {
+                                    editedToken = _cssPane->_editedProp;
+                                    size_t startPos = value.find(token);
+                                    value.replace(startPos, token.length(), editedToken);
+                                }
                             }
                         }
                     }
                 }
+                value.erase(std::remove(value.begin(), value.end(), '\n'), value.end());
+                (*it)._xmlContent = key + "{" + value + "}\n";
+                _updateStyleContent();
             }
         }
     }
+}
+
+
+/**
+ * @brief StyleDialog::_delProperty
+ * @param event
+ * @return
+ * This function deletes property when '-' in front of property in CSS panel is
+ * clicked. The property row is deleted from CSS panel and XML repr is updated.
+ * toDelProperty is the property to be deleted which is looked in 'value' and is
+ * erased from 'value'.
+ */
+bool StyleDialog::_delProperty(GdkEventButton *event)
+{
+    if (event->type == GDK_BUTTON_PRESS && event->button == 1) {
+        Gtk::TreeViewColumn *col = 0;
+        Gtk::TreeModel::Path path;
+        int x = static_cast<int>(event->x);
+        int y = static_cast<int>(event->y);
+        int x2 = 0;
+        int y2 = 0;
+        Gtk::TreeModel::Row cssRow;
+        Glib::ustring toDelProperty;
+        if (_cssPane->_treeView.get_path_at_pos(x, y, path, col, x2, y2)) {
+            if (col == _cssPane->_treeView.get_column(0)) {
+                Gtk::TreeModel::iterator cssIter = _cssPane->_treeView.get_selection()
+                        ->get_selected();
+                if (cssIter) {
+                    cssRow = *cssIter;
+                    toDelProperty = cssRow[_cssPane->_cssColumns._propertyLabel];
+                }
+
+                Gtk::TreeModel::iterator iter = _treeView.get_selection()->get_selected();
+                if (iter) {
+                    Gtk::TreeModel::Row row = *iter;
+                    std::string sel, key, value;
+                    std::vector<InkSelector>::iterator it;
+                    for (it = _selectorVec.begin(); it != _selectorVec.end(); ++it) {
+                        sel = (*it)._xmlContent;
+                        REMOVE_SPACES(sel);
+                        if (!sel.empty()) {
+                            key = strtok((char*)sel.c_str(), "{");
+                            REMOVE_SPACES(key);
+                            char *temp = strtok(NULL, "}");
+                            if (strtok(temp, "}") != NULL) {
+                                value = strtok(temp, "}");
+                            }
+                        }
+
+                        Glib::ustring selectedRowLabel = row[_mColumns._selectorLabel];
+                        std::string matchSelector = selectedRowLabel;
+                        REMOVE_SPACES(matchSelector);
+
+                        if (key == matchSelector) {
+                            std::size_t found = value.find(toDelProperty);
+                            if (found!=std::string::npos) {
+                                if (!toDelProperty.empty()) {
+                                    value.erase(found, toDelProperty.length()+1);
+                                    (*it)._xmlContent = key + "{" + value + "}\n";
+                                    _updateStyleContent();
+                                }
+                            }
+                        }
+                    }
+                }
+                _cssPane->_store->erase(cssRow);
+            }
+        }
+    }
+    return false;
 }
 
 /**

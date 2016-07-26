@@ -100,9 +100,11 @@ private:
     // Signal handlers
     void _addSelector();
     void _delSelector();
+    void _selChanged();
 
     // Signal handler for CssDialog
     void _handleEdited(const Glib::ustring& path, const Glib::ustring& new_text);
+    bool _delProperty(GdkEventButton *event);
 };
 
 } // namespace Dialog
