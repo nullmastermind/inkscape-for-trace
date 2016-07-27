@@ -266,7 +266,7 @@ void SvgFontsDialog::update_fonts()
 {
     SPDesktop* desktop = this->getDesktop();
     SPDocument* document = desktop->getDocument();
-    std::vector<SPObject *> fonts = document->getResourceList( "fonts" );
+    std::vector<SPObject *> fonts = document->getResourceList( "font" );
 
     _model->clear();
     for (std::vector<SPObject *>::const_iterator it = fonts.begin(); it != fonts.end(); ++it) {
@@ -340,7 +340,7 @@ void SvgFontsDialog::on_font_selection_changed(){
     update_sensitiveness();
 }
 
-void SvgFontsDialog::on_setwidth_changed(){
+void SvgFontsDialog::on_setfontdata_changed(){
     SPFont* spfont = this->get_selected_spfont();
     if (spfont){
         spfont->horiz_adv_x = setwidth_spin.get_value();
@@ -397,7 +397,7 @@ Gtk::VBox* SvgFontsDialog::global_settings_tab(){
     setwidth_hbox->add(*Gtk::manage(new Gtk::Label(_("Set width:"))));
     setwidth_hbox->add(setwidth_spin);
 
-    setwidth_spin.signal_changed().connect(sigc::mem_fun(*this, &SvgFontsDialog::on_setwidth_changed));
+    setwidth_spin.signal_changed().connect(sigc::mem_fun(*this, &SvgFontsDialog::on_setfontdata_changed));
     setwidth_spin.set_range(0, 4096);
     setwidth_spin.set_increments(10, 0);
     global_vbox.pack_start(*setwidth_hbox, false, false);
@@ -497,7 +497,7 @@ SvgFontsDialog::flip_coordinate_system(Geom::PathVector pathv){
     for (obj = get_selected_spfont()->children; obj; obj=obj->next){
         if (SP_IS_FONTFACE(obj)){
             //XML Tree being directly used here while it shouldn't be.
-            sp_repr_get_double(obj->getRepr(), "units_per_em", &units_per_em);
+            sp_repr_get_double(obj->getRepr(), "units-per-em", &units_per_em);
         }
     }
 

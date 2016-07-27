@@ -683,6 +683,11 @@ bool ToolBase::root_handler(GdkEvent* event) {
             }
             break;
 
+        case GDK_KEY_Menu:
+            sp_event_root_menu_popup(desktop, NULL, event);
+            ret = TRUE;
+            break;
+
         case GDK_KEY_F10:
             if (MOD__SHIFT_ONLY(event)) {
                 sp_event_root_menu_popup(desktop, NULL, event);
@@ -1078,7 +1083,7 @@ void sp_event_root_menu_popup(SPDesktop *desktop, SPItem *item, GdkEvent *event)
 
     /* fixme: This is not what I want but works for now (Lauris) */
     if (event->type == GDK_KEY_PRESS) {
-        item = desktop->getSelection()->singleItem();
+        item = desktop->getSelection()->itemList().front();
     }
 
     ContextMenu* CM = new ContextMenu(desktop, item);

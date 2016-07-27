@@ -11,11 +11,9 @@
  *   Raph Levien <raph@gimp.org>
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *   Jon A. Cruz <jon@joncruz.org>
- *   Krzysztof Kosiński <tweenk.pl@gmail.com>
  *
  * Copyright (C) 1998 The Free Software Foundation
  * Copyright (C) 2002 Lauris Kaplinski
- * Copyright (C) 2016 Google Inc.
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
@@ -87,9 +85,6 @@ struct SPCanvas {
     Geom::IntRect getViewboxIntegers() const;
     SPCanvasGroup *getRoot();
 
-    void setBackgroundColor(guint32 rgba);
-    void setBackgroundCheckerboard();
-
     /// Returns new canvas as widget.
     static GtkWidget *createAA();
 
@@ -108,8 +103,7 @@ private:
 
     /// Marks the specified area as dirty (requiring redraw)
     void dirtyRect(Geom::IntRect const &area);
-    /// Marks the whole widget for redraw
-    void dirtyAll();
+    /// Marks specific canvas rectangle as clean (val == 0) or dirty (otherwise)
     void markRect(Geom::IntRect const &area, uint8_t val);
 
     /// Invokes update, paint, and repick on canvas.
@@ -161,8 +155,9 @@ public:
      */
     static gint handle_scroll(GtkWidget *widget, GdkEventScroll *event);
     static gint handle_motion(GtkWidget *widget, GdkEventMotion *event);
+#if GTK_CHECK_VERSION(3,0,0)
     static gboolean handle_draw(GtkWidget *widget, cairo_t *cr);
-#if !GTK_CHECK_VERSION(3,0,0)
+#else
     static gboolean handle_expose(GtkWidget *widget, GdkEventExpose *event);
 #endif
     static gint handle_key_event(GtkWidget *widget, GdkEventKey *event);
@@ -181,18 +176,15 @@ public:
     bool _is_dragging;
     double _dx0;
     double _dy0;
-    int _x0; ///< World coordinate of the leftmost pixels
-    int _y0; ///< World coordinate of the topmost pixels
+    int _x0;
+    int _y0;
 
-    /// Image surface storing the contents of the widget
-    cairo_surface_t *_backing_store;
-    /// Area of the widget that has up-to-date content
-    cairo_region_t *_clean_region;
-    /// Widget background, defaults to white
-    cairo_pattern_t *_background;
-    bool _background_is_checkerboard;
+    /* Area that needs redrawing, stored as a microtile array */
+    int    _tLeft, _tTop, _tRight, _tBottom;
+    int    _tile_w, _tile_h;
+    uint8_t *_tiles;
 
-    /// Last known modifier state, for deferred repick when a button is down.
+    /** Last known modifier state, for deferred repick when a button is down. */
     int _state;
 
     /** The item containing the mouse pointer, or NULL if none. */
@@ -216,6 +208,7 @@ public:
     int _close_enough;
 
     unsigned int _need_update : 1;
+    unsigned int _need_redraw : 1;
     unsigned int _need_repick : 1;
 
     int _forced_redraw_count;
