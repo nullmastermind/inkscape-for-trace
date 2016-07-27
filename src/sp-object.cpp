@@ -151,6 +151,9 @@ SPObject::~SPObject() {
         sp_object_unref(this->_successor, NULL);
         this->_successor = NULL;
     }
+    if (parent) {
+        parent->children.erase(parent->children.iterator_to(*this));
+    }
 
     if( style == NULL ) {
         // style pointer could be NULL if unreffed too many times.

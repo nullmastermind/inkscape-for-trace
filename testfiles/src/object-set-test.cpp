@@ -14,8 +14,11 @@
 #include <src/sp-rect.h>
 #include <src/object-set.h>
 #include <xml/node.h>
+#include <src/xml/text-node.h>
+#include <src/xml/simple-document.h>
 
 using namespace Inkscape;
+using namespace Inkscape::XML;
 
 class ObjectSetTest: public DocPerCaseTest {
 public:
@@ -31,6 +34,25 @@ public:
         X = new SPObject();
         set = new ObjectSet();
         set2 = new ObjectSet();
+        auto sd = new SimpleDocument();
+        auto xt = new TextNode(Util::share_string("x"), sd);
+        auto ht = new TextNode(Util::share_string("h"), sd);
+        auto gt = new TextNode(Util::share_string("g"), sd);
+        auto ft = new TextNode(Util::share_string("f"), sd);
+        auto et = new TextNode(Util::share_string("e"), sd);
+        auto dt = new TextNode(Util::share_string("d"), sd);
+        auto ct = new TextNode(Util::share_string("c"), sd);
+        auto bt = new TextNode(Util::share_string("b"), sd);
+        auto at = new TextNode(Util::share_string("a"), sd);
+        X->invoke_build(_doc, xt, 0);
+        H->invoke_build(_doc, ht, 0);
+        G->invoke_build(_doc, gt, 0);
+        F->invoke_build(_doc, ft, 0);
+        E->invoke_build(_doc, et, 0);
+        D->invoke_build(_doc, dt, 0);
+        C->invoke_build(_doc, ct, 0);
+        B->invoke_build(_doc, bt, 0);
+        A->invoke_build(_doc, at, 0);
     }
     ~ObjectSetTest() {
         delete set;
@@ -186,12 +208,10 @@ TEST_F(ObjectSetTest, Ranges) {
 }
 
 TEST_F(ObjectSetTest, Autoremoving) {
-    SPObject* Q = new SPObject();
-    Q->invoke_build(_doc, _doc->rroot, 1);
-    set->add(Q);
-    EXPECT_TRUE(set->includes(Q));
+    set->add(A);
+    EXPECT_TRUE(set->includes(A));
     EXPECT_EQ(1, set->size());
-    Q->releaseReferences();
+    A->releaseReferences();
     EXPECT_EQ(0, set->size());
 }
 
@@ -272,20 +292,18 @@ TEST_F(ObjectSetTest, Removing) {
 }
 
 TEST_F(ObjectSetTest, TwoSets) {
-    SPObject* Q = new SPObject();
-    Q->invoke_build(_doc, _doc->rroot, 1);
     A->attach(B, nullptr);
-    A->attach(Q, nullptr);
+    A->attach(C, nullptr);
     set->add(A);
     set2->add(A);
     EXPECT_EQ(1, set->size());
     EXPECT_EQ(1, set2->size());
     set->remove(B);
     EXPECT_EQ(1, set->size());
-    EXPECT_TRUE(set->includes(Q));
+    EXPECT_TRUE(set->includes(C));
     EXPECT_EQ(1, set2->size());
     EXPECT_TRUE(set2->includes(A));
-    Q->releaseReferences();
+    C->releaseReferences();
     EXPECT_EQ(0, set->size());
     EXPECT_EQ(1, set2->size());
     EXPECT_TRUE(set2->includes(A));

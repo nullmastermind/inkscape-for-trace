@@ -14,9 +14,7 @@
 #include <src/xml/node.h>
 #include <src/xml/text-node.h>
 #include <doc-per-case-test.h>
-#include <src/util/share.h>
 #include <src/xml/simple-document.h>
-#include <boost/range/adaptor/transformed.hpp>
 
 using namespace Inkscape;
 using namespace Inkscape::XML;
@@ -42,11 +40,11 @@ public:
         a->invoke_build(_doc, at, 0);
     }
     ~SPObjectTest() {
-        delete a;
-        delete b;
-        delete c;
-        delete d;
         delete e;
+        delete d;
+        delete c;
+        delete b;
+        delete a;
     }
     SPObject* a;
     SPObject* b;

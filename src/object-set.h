@@ -86,7 +86,7 @@ typedef boost::multi_index_container<
                 boost::multi_index::hashed_unique<
                         boost::multi_index::tag<hashed>,
                         boost::multi_index::identity<SPObject*>>
-        >> multi_index_container;
+        >> MultiIndexContainer;
 
 typedef boost::any_range<
         SPObject*,
@@ -97,9 +97,9 @@ typedef boost::any_range<
 class ObjectSet {
 public:
     enum CompareSize {HORIZONTAL, VERTICAL, AREA};
-    typedef decltype(multi_index_container().get<random_access>() | boost::adaptors::filtered(is_item()) | boost::adaptors::transformed(object_to_item())) SPItemRange;
-    typedef decltype(multi_index_container().get<random_access>() | boost::adaptors::filtered(is_group()) | boost::adaptors::transformed(object_to_group())) SPGroupRange;
-    typedef decltype(multi_index_container().get<random_access>() | boost::adaptors::filtered(is_item()) | boost::adaptors::transformed(object_to_node())) XMLNodeRange;
+    typedef decltype(MultiIndexContainer().get<random_access>() | boost::adaptors::filtered(is_item()) | boost::adaptors::transformed(object_to_item())) SPItemRange;
+    typedef decltype(MultiIndexContainer().get<random_access>() | boost::adaptors::filtered(is_group()) | boost::adaptors::transformed(object_to_group())) SPGroupRange;
+    typedef decltype(MultiIndexContainer().get<random_access>() | boost::adaptors::filtered(is_item()) | boost::adaptors::transformed(object_to_node())) XMLNodeRange;
 
     ObjectSet(SPDesktop* desktop): _desktop(desktop) {};
     ObjectSet(): _desktop(nullptr) {};
@@ -302,7 +302,7 @@ protected:
     virtual void _add3DBoxesRecursively(SPObject *obj);
     virtual void _remove3DBoxesRecursively(SPObject *obj);
 
-    multi_index_container _container;
+    MultiIndexContainer _container;
     GC::soft_ptr<SPDesktop> _desktop;
     std::list<SPBox3D *> _3dboxes;
     std::unordered_map<SPObject*, sigc::connection> _releaseConnections;

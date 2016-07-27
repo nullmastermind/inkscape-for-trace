@@ -1133,22 +1133,22 @@ void SelectionVerb::perform(SPAction *action, void *data)
             sp_selected_path_slice(selection, dt);
             break;
         case SP_VERB_SELECTION_TO_FRONT:
-            sp_selection_raise_to_top_ui(selection, dt);
+            sp_selection_raise_to_top(selection, dt);
             break;
         case SP_VERB_SELECTION_TO_BACK:
-            sp_selection_lower_to_bottom_ui(selection, dt);
+            sp_selection_lower_to_bottom(selection, dt);
             break;
         case SP_VERB_SELECTION_RAISE:
-            sp_selection_raise_ui(selection, dt);
+            sp_selection_raise(selection, dt);
             break;
         case SP_VERB_SELECTION_LOWER:
-            sp_selection_lower_ui(selection, dt);
+            sp_selection_lower(selection, dt);
             break;
         case SP_VERB_SELECTION_GROUP:
-            sp_selection_group_ui(selection, dt);
+            sp_selection_group(selection, dt);
             break;
         case SP_VERB_SELECTION_UNGROUP:
-            sp_selection_ungroup_ui(selection, dt);
+            sp_selection_ungroup(selection, dt);
             break;
         case SP_VERB_SELECTION_UNGROUP_POP_SELECTION:
             sp_selection_ungroup_pop_selection(selection, dt);
@@ -1520,7 +1520,7 @@ void ObjectVerb::perform( SPAction *action, void *data)
             sp_selection_rotate_90(dt, true);
             break;
         case SP_VERB_OBJECT_FLATTEN:
-            sp_selection_remove_transform(dt);
+            sp_object_set_remove_transform(dt);
             break;
         case SP_VERB_OBJECT_FLOW_TEXT:
             text_flow_into_shape();
@@ -1532,12 +1532,12 @@ void ObjectVerb::perform( SPAction *action, void *data)
             flowtext_to_text();
             break;
         case SP_VERB_OBJECT_FLIP_HORIZONTAL:
-            sp_selection_scale_relative(sel, center, Geom::Scale(-1.0, 1.0));
+            sp_object_set_scale_relative(sel, center, Geom::Scale(-1.0, 1.0));
             DocumentUndo::done(dt->getDocument(), SP_VERB_OBJECT_FLIP_HORIZONTAL,
                                _("Flip horizontally"));
             break;
         case SP_VERB_OBJECT_FLIP_VERTICAL:
-            sp_selection_scale_relative(sel, center, Geom::Scale(1.0, -1.0));
+            sp_object_set_scale_relative(sel, center, Geom::Scale(1.0, -1.0));
             DocumentUndo::done(dt->getDocument(), SP_VERB_OBJECT_FLIP_VERTICAL,
                                _("Flip vertically"));
             break;

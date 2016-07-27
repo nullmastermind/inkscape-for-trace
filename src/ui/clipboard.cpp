@@ -539,8 +539,8 @@ bool ClipboardManagerImpl::pasteSize(SPDesktop *desktop, bool separately, bool a
         else {
             Geom::OptRect sel_size = selection->visualBounds();
             if ( sel_size ) {
-                sp_selection_scale_relative(selection, sel_size->midpoint(),
-                                            _getScale(desktop, min, max, *sel_size, apply_x, apply_y));
+                sp_object_set_scale_relative(selection, sel_size->midpoint(),
+                                             _getScale(desktop, min, max, *sel_size, apply_x, apply_y));
             }
         }
         pasted = true;

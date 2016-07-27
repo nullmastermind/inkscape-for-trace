@@ -1250,7 +1250,7 @@ sp_ui_drag_data_received(GtkWidget *widget,
                 Geom::OptRect sel_bbox = selection->visualBounds();
                 if (sel_bbox) {
                     Geom::Point m( desktop->point() - sel_bbox->midpoint() );
-                    sp_selection_move_relative(selection, m, false);
+                    sp_object_set_move_relative(selection, m, false);
                 }
             }
 
@@ -1916,7 +1916,7 @@ void ContextMenu::MakeGroupMenu(void)
 
 void ContextMenu::ActivateGroup(void)
 {
-    sp_selection_group_ui(_desktop->selection, _desktop);
+    sp_selection_group(_desktop->selection, _desktop);
 }
 
 void ContextMenu::ActivateUngroup(void)

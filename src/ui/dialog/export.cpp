@@ -814,7 +814,7 @@ void Export::onAreaToggled ()
         case SELECTION_SELECTION:
             if ((SP_ACTIVE_DESKTOP->getSelection())->isEmpty() == false) {
 
-                sp_selection_get_export_hints (SP_ACTIVE_DESKTOP->getSelection(), filename, &xdpi, &ydpi);
+                sp_object_set_get_export_hints(SP_ACTIVE_DESKTOP->getSelection(), filename, &xdpi, &ydpi);
 
                 /* If we still don't have a filename -- let's build
                    one that's nice */
