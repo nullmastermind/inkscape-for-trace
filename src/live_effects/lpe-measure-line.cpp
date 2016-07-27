@@ -14,6 +14,7 @@
 #include "util/units.h"
 #include "svg/svg-length.h"
 #include "svg/svg-color.h"
+#include "svg/svg.h"
 #include "display/curve.h"
 #include <2geom/affine.h>
 #include "style.h"
@@ -34,10 +35,13 @@ namespace LivePathEffect {
 LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
     fontselector(_("Font Selector:"), _("Font Selector"), "fontselector", &wr, this, " "),
+    origin(_("Optional Origin:"), _("Optional origin"), "origin", &wr, this),
+    curve_linked(_("Curve on optional origin:"), _("Curve on optional origin, set 0 to start/end"), "curve_linked", &wr, this, 1),
+    line_offset(_("Optional origin offset"), _("Optional origin offset"), "line_offset", &wr, this, 5),
     scale(_("Scale:"), _("Scaling factor"), "scale", &wr, this, 1.0),
     precision(_("Number precision"), _("Number precision"), "precision", &wr, this, 2),
     offset_right_left(_("Offset right left"), _("Offset right left"), "offset_right_left", &wr, this, 0),
-    offset_top_bottom(_("Offset top bottom"), _("Offset top bottom"), "offset_top_bottom", &wr, this, 10),
+    offset_top_bottom(_("Offset top bottom"), _("Offset top bottom"), "offset_top_bottom", &wr, this, 5),
     gap_start(_("Gap to line from origin"), _("Gap to line from origin, without affecting measure"), "gap_start", &wr, this, 0),
     gap_end(_("Gap to line from end"), _("Gap to line from end, without affecting measure"), "gap_end", &wr, this, 0),
     unit(_("Unit:"), _("Unit"), "unit", &wr, this),
@@ -48,6 +52,9 @@ LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
     angle(0)
 {
     registerParameter(&fontselector);
+    registerParameter(&origin);
+    registerParameter(&curve_linked);
+    registerParameter(&line_offset);
     registerParameter(&scale);
     registerParameter(&precision);
     registerParameter(&offset_right_left);
@@ -63,9 +70,8 @@ LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
     scale.param_update_default(prefs->getDouble("/live_effects/measure-line/scale", 1.0));
     precision.param_update_default(prefs->getInt("/live_effects/measure-line/precision", 2));
     offset_right_left.param_update_default(prefs->getDouble("/live_effects/measure-line/offset_right_left", 0.0));
-    offset_top_bottom.param_update_default(prefs->getDouble("/live_effects/measure-line/offset_top_bottom", 10.0));
-    gap_start.param_update_default(prefs->getDouble("/live_effects/measure-line/gap_start", 0.0));
-    gap_end.param_update_default(prefs->getDouble("/live_effects/measure-line/gap_end", 0.0));
+    offset_top_bottom.param_update_default(prefs->getDouble("/live_effects/measure-line/offset_top_bottom", 5.0));
+    line_offset.param_update_default(prefs->getDouble("/live_effects/measure-line/line_offset", 5.0));
     unit.param_update_default(prefs->getString("/live_effects/measure-line/unit"));
     reverse.param_update_default(prefs->getBool("/live_effects/measure-line/reverse"));
     color_as_line.param_update_default(prefs->getBool("/live_effects/measure-line/color_as_line"));
@@ -75,12 +81,20 @@ LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
     precision.param_set_increments(1, 1);
     precision.param_set_digits(0);
     precision.param_make_integer(true);
+    curve_linked.param_set_range(1, 999);
+    curve_linked.param_set_increments(1, 1);
+    curve_linked.param_set_digits(0);
+    curve_linked.param_make_integer(true);
+    precision.param_make_integer(true);
     offset_right_left.param_set_range(-999999.0, 999999.0);
     offset_right_left.param_set_increments(1, 1);
     offset_right_left.param_set_digits(2);
     offset_top_bottom.param_set_range(-999999.0, 999999.0);
     offset_top_bottom.param_set_increments(1, 1);
     offset_top_bottom.param_set_digits(2);
+    line_offset.param_set_range(-999999.0, 999999.0);
+    line_offset.param_set_increments(1, 1);
+    line_offset.param_set_digits(2);
     gap_start.param_set_range(-999999.0, 999999.0);
     gap_start.param_set_increments(1, 1);
     gap_start.param_set_digits(2);
@@ -110,9 +124,39 @@ LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
     if (sp_path) {
         Geom::PathVector pathvector = sp_path->get_original_curve()->get_pathvector();
         if (SPDesktop *desktop = SP_ACTIVE_DESKTOP) {
+            Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
             Geom::Point s = pathvector.initialPoint();
             Geom::Point e =  pathvector.finalPoint();
-            length = Geom::distance(path_in.initialPoint(), path_in.finalPoint())  * scale;
+            if (origin.linksToPath() && origin.getObject() && !origin.get_pathvector().empty()) {
+                pathvector = origin.get_pathvector();
+                size_t ncurves = pathvector.curveCount();
+                curve_linked.param_set_range(1, ncurves);
+                if(previous_ncurves != ncurves) {
+                    this->upd_params = true;
+                    previous_ncurves = ncurves;
+                }
+                s = pathvector.pointAt(curve_linked -1);
+                e = pathvector.pointAt(curve_linked);
+                Geom::Ray ray(s,e);
+                angle = ray.angle();
+                if (reverse) {
+                    angle = std::fmod(angle + rad_from_deg(180), 2*M_PI);
+                    if (angle < 0) angle += 2*M_PI;
+                }
+                Geom::Coord angle_cross = std::fmod(angle + rad_from_deg(90), 2*M_PI);
+                if (angle_cross < 0) angle_cross += 2*M_PI;
+                s = s - Point::polar(angle_cross, line_offset);
+                e = e - Point::polar(angle_cross, line_offset);
+                Geom::Path path;
+                path.start( s );
+                path.appendNew<Geom::LineSegment>( e );
+                Geom::PathVector line_upd;
+                line_upd.push_back(path);
+                Inkscape::XML::Node *line = SP_OBJECT(sp_path)->getRepr();
+                gchar *str = sp_svg_write_path(line_upd);
+                line->setAttribute("inkscape:original-d", str);
+            }
+            length = Geom::distance(s, e)  * scale;
             pos = Geom::middle_point(s,e);
             Geom::Ray ray(s,e);
             angle = ray.angle();
@@ -125,7 +169,6 @@ LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
             Geom::Coord angle_cross = std::fmod(angle + rad_from_deg(90), 2*M_PI);
             if (angle_cross < 0) angle_cross += 2*M_PI;
             newpos = newpos - Point::polar(angle_cross, offset_top_bottom);
-            Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
             Inkscape::URI SVGElem_uri(((Glib::ustring)"#" + (Glib::ustring)SP_OBJECT(lpeitem)->getId() + (Glib::ustring)"_mlsize").c_str());
             Inkscape::URIReference* SVGElemRef = new Inkscape::URIReference(desktop->doc());
             SVGElemRef->attach(SVGElem_uri);
@@ -313,8 +356,7 @@ LPEMeasureLine::saveDefault()
     prefs->setInt("/live_effects/measure-line/precision", precision);
     prefs->setDouble("/live_effects/measure-line/offset_right_left", offset_right_left);
     prefs->setDouble("/live_effects/measure-line/offset_top_bottom", offset_top_bottom);
-    prefs->setDouble("/live_effects/measure-line/gap_start", gap_start);
-    prefs->setDouble("/live_effects/measure-line/gap_end", gap_end);
+    prefs->setDouble("/live_effects/measure-line/line_offset", line_offset);
     prefs->setString("/live_effects/measure-line/unit", (Glib::ustring)unit.get_abbreviation());
     prefs->setInt("/live_effects/measure-line/reverse", reverse);
     prefs->setInt("/live_effects/measure-line/color_as_line", color_as_line);
