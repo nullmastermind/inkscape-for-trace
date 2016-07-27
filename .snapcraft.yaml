@@ -80,13 +80,13 @@ parts:
   snapcraft-wrapper:
     plugin: copy
     files:
-      snapcraft.sh: snapcraft.sh
+      packaging/snappy/snapcraft.sh: snapcraft.sh
       README: lib/share/README
 
 apps:
   inkscape:
     command: snapcraft.sh desktop-launch inkscape
-    plugs: [home, unity7]
+    plugs: [home, unity7, gsettings]
   viewer:
     command: snapcraft.sh desktop-launch inkview
-    plugs: [home, unity7]
+    plugs: [home, unity7, gsettings]
