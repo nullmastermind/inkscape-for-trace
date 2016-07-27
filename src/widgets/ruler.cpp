@@ -120,7 +120,6 @@ static void          sp_ruler_unmap                (GtkWidget      *widget);
 static void          sp_ruler_size_allocate        (GtkWidget      *widget,
                                                     GtkAllocation  *allocation);
 
-#if GTK_CHECK_VERSION(3,0,0)
 static void          sp_ruler_get_preferred_width  (GtkWidget      *widget, 
                                                     gint           *minimum_width,
                                                     gint           *natural_width);
@@ -129,21 +128,11 @@ static void          sp_ruler_get_preferred_height (GtkWidget      *widget,
                                                     gint           *minimum_height,
                                                     gint           *natural_height);
 static void          sp_ruler_style_updated        (GtkWidget      *widget);
-#else
-static void          sp_ruler_size_request         (GtkWidget      *widget,
-                                                    GtkRequisition *requisition);
-static void          sp_ruler_style_set            (GtkWidget      *widget,
-                                                    GtkStyle       *prev_style);
-#endif
 
 static gboolean      sp_ruler_motion_notify        (GtkWidget      *widget,
                                                     GdkEventMotion *event);
 static gboolean      sp_ruler_draw                 (GtkWidget      *widget,
                                                     cairo_t        *cr);
-#if !GTK_CHECK_VERSION(3,0,0)
-static gboolean      sp_ruler_expose               (GtkWidget      *widget,
-                                                    GdkEventExpose *event);
-#endif
 static void          sp_ruler_draw_ticks           (SPRuler        *ruler);
 static GdkRectangle  sp_ruler_get_pos_rect         (SPRuler        *ruler,
                                                     gdouble         position);
@@ -181,16 +170,10 @@ sp_ruler_class_init (SPRulerClass *klass)
   widget_class->map                  = sp_ruler_map;
   widget_class->unmap                = sp_ruler_unmap;
   widget_class->size_allocate        = sp_ruler_size_allocate;
-#if GTK_CHECK_VERSION(3,0,0)
   widget_class->get_preferred_width  = sp_ruler_get_preferred_width;
   widget_class->get_preferred_height = sp_ruler_get_preferred_height;
   widget_class->style_updated        = sp_ruler_style_updated;
   widget_class->draw                 = sp_ruler_draw;
-#else
-  widget_class->size_request         = sp_ruler_size_request;
-  widget_class->style_set            = sp_ruler_style_set;
-  widget_class->expose_event         = sp_ruler_expose;
-#endif
   widget_class->motion_notify_event = sp_ruler_motion_notify;
 
   g_type_class_add_private (object_class, sizeof (SPRulerPrivate));
@@ -487,16 +470,10 @@ sp_ruler_realize (GtkWidget *widget)
   attributes.width       = allocation.width;
   attributes.height      = allocation.height;
   attributes.wclass      = GDK_INPUT_ONLY;
-#if GTK_CHECK_VERSION(3,0,0)
   attributes.event_mask  = (gtk_widget_get_events (widget) |
                            GDK_EXPOSURE_MASK               |
 			   GDK_POINTER_MOTION_MASK         |
 			   GDK_POINTER_MOTION_HINT_MASK);
-#else
-  attributes.event_mask  = (gtk_widget_get_events (widget) |
-                           GDK_EXPOSURE_MASK               |
-			   GDK_POINTER_MOTION_MASK);
-#endif
 
   attributes_mask = GDK_WA_X | GDK_WA_Y;
 
@@ -599,7 +576,6 @@ sp_ruler_size_request (GtkWidget      *widget,
 
   size = 2 + ink_rect.height * 1.7;
 
-#if GTK_CHECK_VERSION(3,0,0)
   GtkStyleContext *context = gtk_widget_get_style_context (widget);
   GtkBorder        border;
 
@@ -607,47 +583,25 @@ sp_ruler_size_request (GtkWidget      *widget,
   
   requisition->width  = border.left + border.right;
   requisition->height = border.top  + border.bottom;
-#else
-  GtkStyle        *style   = gtk_widget_get_style(widget);
-#endif
 
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-#if GTK_CHECK_VERSION(3,0,0)
       requisition->width  += 1;
       requisition->height += size;
-#else
-      requisition->width  = style->xthickness * 2 + 1;
-      requisition->height = style->ythickness * 2 + size;
-#endif
     }
   else
     {
-#if GTK_CHECK_VERSION(3,0,0)
       requisition->width  += size;
       requisition->height += 1;
-#else
-      requisition->width  = style->xthickness * 2 + size;
-      requisition->height = style->ythickness * 2 + 1;
-#endif
     }
 }
 
 static void
-#if GTK_CHECK_VERSION(3,0,0)
 sp_ruler_style_updated (GtkWidget *widget)
-#else
-sp_ruler_style_set (GtkWidget *widget,
-                    GtkStyle  *prev_style)
-#endif
 {
   SPRulerPrivate *priv = SP_RULER_GET_PRIVATE (widget);
 
-#if GTK_CHECK_VERSION(3,0,0)
   GTK_WIDGET_CLASS (sp_ruler_parent_class)->style_updated (widget);
-#else
-  GTK_WIDGET_CLASS (sp_ruler_parent_class)->style_set (widget, prev_style);
-#endif
 
   gtk_widget_style_get (widget,
 		        "font-scale", &priv->font_scale,
@@ -660,7 +614,6 @@ sp_ruler_style_set (GtkWidget *widget,
     }
 }
 
-#if GTK_CHECK_VERSION(3,0,0)
 static void
 sp_ruler_get_preferred_width (GtkWidget *widget,
                               gint      *minimum_width,
@@ -684,26 +637,6 @@ sp_ruler_get_preferred_height (GtkWidget *widget,
   
   *minimum_height = *natural_height = requisition.height;
 }
-#else
-static gboolean
-sp_ruler_expose (GtkWidget *widget,
-                 GdkEventExpose *event)
-{
-    cairo_t        *cr    = gdk_cairo_create(gtk_widget_get_window(widget));
-    GtkAllocation   allocation;
-  
-    gdk_cairo_region (cr, event->region);
-    cairo_clip (cr);
-
-    gtk_widget_get_allocation (widget, &allocation);
-
-    gboolean result = sp_ruler_draw (widget, cr);
-
-    cairo_destroy (cr);
-
-    return result;
-}
-#endif
 
 static gboolean
 sp_ruler_draw (GtkWidget *widget,
@@ -749,13 +682,8 @@ sp_ruler_draw_pos (SPRuler *ruler,
 {
   GtkWidget       *widget  = GTK_WIDGET (ruler);
 
-#if GTK_CHECK_VERSION(3,0,0)
   GtkStyleContext *context = gtk_widget_get_style_context (widget);
   GdkRGBA          color;
-#else
-  GtkStyle        *style   = gtk_widget_get_style (widget);
-  GtkStateType     state   = gtk_widget_get_state (widget);
-#endif
   
   SPRulerPrivate  *priv    = SP_RULER_GET_PRIVATE (ruler);
   GdkRectangle      pos_rect;
@@ -767,13 +695,9 @@ sp_ruler_draw_pos (SPRuler *ruler,
 
   if ((pos_rect.width > 0) && (pos_rect.height > 0))
     {
-#if GTK_CHECK_VERSION(3,0,0)
       gtk_style_context_get_color (context, gtk_widget_get_state_flags (widget),
                                    &color);
       gdk_cairo_set_source_rgba (cr, &color);
-#else
-      gdk_cairo_set_source_color (cr, &style->fg[state]);
-#endif
 
       cairo_move_to (cr, pos_rect.x, pos_rect.y);
 
@@ -1112,16 +1036,9 @@ sp_ruler_draw_ticks (SPRuler *ruler)
 {
     GtkWidget       *widget  = GTK_WIDGET (ruler);
 
-#if GTK_CHECK_VERSION(3,0,0)
     GtkStyleContext *context = gtk_widget_get_style_context (widget);
     GtkBorder        border;
     GdkRGBA          color;
-#else
-    GtkStyle        *style   = gtk_widget_get_style (widget);
-    GtkStateType     state   = gtk_widget_get_state (widget);
-    gint             xthickness;
-    gint             ythickness;
-#endif
 
     SPRulerPrivate  *priv    = SP_RULER_GET_PRIVATE (ruler);
     GtkAllocation    allocation;
@@ -1150,12 +1067,7 @@ sp_ruler_draw_ticks (SPRuler *ruler)
 
     gtk_widget_get_allocation (widget, &allocation);
 
-#if GTK_CHECK_VERSION(3,0,0)
     gtk_style_context_get_border (context, static_cast<GtkStateFlags>(0), &border);
-#else
-    xthickness = style->xthickness;
-    ythickness = style->ythickness;
-#endif
 
     layout = sp_ruler_get_layout (widget, "0123456789");
     pango_layout_get_extents (layout, &ink_rect, &logical_rect);
@@ -1166,25 +1078,16 @@ sp_ruler_draw_ticks (SPRuler *ruler)
     if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
      {
         width = allocation.width;
-#if GTK_CHECK_VERSION(3,0,0)
         height = allocation.height - (border.top + border.bottom);
-#else
-        height = allocation.height - ythickness * 2;
-#endif
      }
     else
      {
         width = allocation.height;
-#if GTK_CHECK_VERSION(3,0,0)
         height = allocation.width - (border.top + border.bottom);
-#else
-        height = allocation.width - ythickness * 2;
-#endif
      }
 
     cr = cairo_create (priv->backing_store);
     
-#if GTK_CHECK_VERSION(3,0,0)
     gtk_render_background (context, cr, 0, 0, allocation.width, allocation.height);
     gtk_render_frame (context, cr, 0, 0, allocation.width, allocation.height);
     
@@ -1208,30 +1111,6 @@ sp_ruler_draw_ticks (SPRuler *ruler)
                          1,
                          allocation.height - (border.top + border.bottom));
       }
-#else
-    gdk_cairo_set_source_color (cr, &style->bg[state]);
-    
-    cairo_paint (cr);
-    
-    gdk_cairo_set_source_color(cr, &style->fg[state]);
-
-    if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-      {
-        cairo_rectangle (cr,
-                         xthickness,
-                         height + ythickness,
-                         allocation.width - 2 * xthickness,
-                         1);      
-      }
-    else
-      {
-        cairo_rectangle (cr,
-                         height + xthickness,
-                         ythickness,
-                         1,
-                         allocation.height - 2 * ythickness);
-      }
-#endif
 
     sp_ruler_get_range (ruler, &lower, &upper, &max_size);
 
@@ -1312,7 +1191,6 @@ sp_ruler_draw_ticks (SPRuler *ruler)
             // by a pixel, and jump back on the next redraw). This is suppressed by adding 1e-9 (that's only one nanopixel ;-))
             pos = gint(Inkscape::round((cur - lower) * increment + 1e-12));
 
-#if GTK_CHECK_VERSION(3,0,0)
             if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
              {
                cairo_rectangle (cr,
@@ -1325,20 +1203,6 @@ sp_ruler_draw_ticks (SPRuler *ruler)
                                 height + border.left - length, pos,
                                 length,                        1);
              }
-#else
-            if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-             {
-               cairo_rectangle (cr,
-                                pos, height + ythickness - length,
-                                1,   length);
-             }
-            else 
-             {
-               cairo_rectangle (cr,
-                                height + xthickness - length, pos,
-                                length,                       1);
-             }
-#endif
 
             /* draw label */
             double label_spacing_px = fabs(increment*(double)ruler_metric.ruler_scale[scale]/ruler_metric.subdivide[i]);
@@ -1356,15 +1220,9 @@ sp_ruler_draw_ticks (SPRuler *ruler)
                     pango_layout_set_text (layout, unit_str, -1);
                     pango_layout_get_extents (layout, &logical_rect, NULL);
 
-#if GTK_CHECK_VERSION(3,0,0)
                     cairo_move_to (cr,
                                    pos + 2,
                                    border.top + PANGO_PIXELS (logical_rect.y - digit_offset));
-#else
-                    cairo_move_to (cr,
-                                   pos + 2,
-                                   ythickness + PANGO_PIXELS (logical_rect.y - digit_offset));
-#endif
 
                     pango_cairo_show_layout(cr, layout);
                   }
@@ -1378,15 +1236,9 @@ sp_ruler_draw_ticks (SPRuler *ruler)
                         pango_layout_set_text (layout, digit_str, 1);
                         pango_layout_get_extents (layout, NULL, &logical_rect);
 
-#if GTK_CHECK_VERSION(3,0,0)
                         cairo_move_to (cr,
                                        border.left + 1,
                                        pos + digit_height * j + 2 + PANGO_PIXELS (logical_rect.y - digit_offset));
-#else
-                        cairo_move_to (cr,
-                                       xthickness + 1,
-                                       pos + digit_height * j + 2 + PANGO_PIXELS (logical_rect.y - digit_offset));
-#endif
                         pango_cairo_show_layout (cr, layout);
                       }
                   }
@@ -1423,7 +1275,6 @@ sp_ruler_get_pos_rect (SPRuler *ruler,
 
   gtk_widget_get_allocation (widget, &allocation);
 
-#if GTK_CHECK_VERSION(3,0,0)
   GtkStyleContext *context = gtk_widget_get_style_context (widget);
   GtkBorder padding;
 
@@ -1431,11 +1282,6 @@ sp_ruler_get_pos_rect (SPRuler *ruler,
 
   xthickness = padding.left + padding.right;
   ythickness = padding.top + padding.bottom;
-#else
-  GtkStyle *style  = gtk_widget_get_style (widget);
-  xthickness = style->xthickness;
-  ythickness = style->ythickness;
-#endif
 
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
