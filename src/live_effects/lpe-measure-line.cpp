@@ -37,7 +37,7 @@ LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
     fontselector(_("Font Selector*"), _("Font Selector"), "fontselector", &wr, this, " "),
     origin(_("Optional Origin"), _("Optional origin"), "origin", &wr, this),
-    curve_linked(_("Curve on optional origin*"), _("Curve on optional origin, set 0 to start/end"), "curve_linked", &wr, this, 1),
+    curve_linked(_("Curve on optional origin"), _("Curve on optional origin, set 0 to start/end"), "curve_linked", &wr, this, 1),
     origin_offset(_("Optional origin offset*"), _("Optional origin offset"), "origin_offset", &wr, this, 5),
     scale(_("Scale*"), _("Scaling factor"), "scale", &wr, this, 1.0),
     precision(_("Number precision*"), _("Number precision"), "precision", &wr, this, 2),
