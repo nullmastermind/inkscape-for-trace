@@ -731,8 +731,7 @@ AC_CHECK_HEADER([boost/unordered_set.hpp], [AC_DEFINE(HAVE_BOOST_UNORDERED_SET, 
 			  gdkmm-3.0 >= 3.8)
 
 
-dnl Drop these hacks as soon as we've got rid of all GTK+ 2/3 conditional blocks
-AC_DEFINE([WITH_GTKMM_3_0], [1], [Use GTKmm 3.0 or higher])
+dnl Drop this hack as soon as we've got rid of all GTK+ 2/3 conditional blocks
 AC_DEFINE([WITH_EXT_GDL],   [1], [Use external GDL])
 
 	# Check whether we can use new features in Gtkmm 3.10

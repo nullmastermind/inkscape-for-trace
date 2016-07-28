@@ -247,7 +247,6 @@ set(TRY_GTKSPELL 1)
         gdl-3.0>=3.4
         )
     list(APPEND INKSCAPE_CXX_FLAGS ${GTK3_CFLAGS_OTHER})
-    set(WITH_GTKMM_3_0 1)
     set(WITH_EXT_GDL 1)
 
     # Check whether we can use new features in Gtkmm 3.10

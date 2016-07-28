@@ -149,16 +149,10 @@ void ToolBase::sp_event_context_set_cursor(GdkCursorType cursor_type) {
     GdkDisplay *display = gdk_display_get_default();
     GdkCursor *cursor = gdk_cursor_new_for_display(display, cursor_type);
 
-#if WITH_GTKMM_3_0
     if (cursor) {
           gdk_window_set_cursor (gtk_widget_get_window (w), cursor);
           g_object_unref (cursor);
     }
-#else
-    gdk_window_set_cursor (gtk_widget_get_window (w), cursor);
-    gdk_cursor_unref (cursor);
-#endif
-
 }
 
 /**
