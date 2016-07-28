@@ -45,7 +45,7 @@ private:
     Geom::Coord angle;
     OriginalPathParam origin;
     ScalarParam curve_linked;
-    ScalarParam line_offset;
+    ScalarParam origin_offset;
     ScalarParam scale;
     ScalarParam precision;
     ScalarParam offset_right_left;
@@ -57,7 +57,9 @@ private:
     BoolParam reverse;
     BoolParam color_as_line;
     BoolParam scale_insensitive;
+    BoolParam local_locale;
     Glib::ustring doc_unit;
+    static bool alerts_off;
 /*    Geom::Affine affine_over;*/
     LPEMeasureLine(const LPEMeasureLine &);
     LPEMeasureLine &operator=(const LPEMeasureLine &);

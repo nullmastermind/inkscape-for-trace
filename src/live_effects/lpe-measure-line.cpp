@@ -24,6 +24,7 @@
 #include "sp-path.h"
 #include "desktop.h"
 #include "document.h"
+#include <iomanip>
 
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
@@ -34,27 +35,28 @@ namespace LivePathEffect {
 
 LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
-    fontselector(_("Font Selector:"), _("Font Selector"), "fontselector", &wr, this, " "),
-    origin(_("Optional Origin:"), _("Optional origin"), "origin", &wr, this),
-    curve_linked(_("Curve on optional origin:"), _("Curve on optional origin, set 0 to start/end"), "curve_linked", &wr, this, 1),
-    line_offset(_("Optional origin offset"), _("Optional origin offset"), "line_offset", &wr, this, 5),
-    scale(_("Scale:"), _("Scaling factor"), "scale", &wr, this, 1.0),
-    precision(_("Number precision"), _("Number precision"), "precision", &wr, this, 2),
-    offset_right_left(_("Offset right left"), _("Offset right left"), "offset_right_left", &wr, this, 0),
-    offset_top_bottom(_("Offset top bottom"), _("Offset top bottom"), "offset_top_bottom", &wr, this, 5),
+    fontselector(_("Font Selector*"), _("Font Selector"), "fontselector", &wr, this, " "),
+    origin(_("Optional Origin"), _("Optional origin"), "origin", &wr, this),
+    curve_linked(_("Curve on optional origin*"), _("Curve on optional origin, set 0 to start/end"), "curve_linked", &wr, this, 1),
+    origin_offset(_("Optional origin offset*"), _("Optional origin offset"), "origin_offset", &wr, this, 5),
+    scale(_("Scale*"), _("Scaling factor"), "scale", &wr, this, 1.0),
+    precision(_("Number precision*"), _("Number precision"), "precision", &wr, this, 2),
+    offset_right_left(_("Offset right left*"), _("Offset right left"), "offset_right_left", &wr, this, 0),
+    offset_top_bottom(_("Offset top bottom*"), _("Offset top bottom"), "offset_top_bottom", &wr, this, 5),
     gap_start(_("Gap to line from origin"), _("Gap to line from origin, without affecting measure"), "gap_start", &wr, this, 0),
     gap_end(_("Gap to line from end"), _("Gap to line from end, without affecting measure"), "gap_end", &wr, this, 0),
-    unit(_("Unit:"), _("Unit"), "unit", &wr, this),
-    reverse(_("To other side"), _("To other side"), "reverse", &wr, this, false),
-    color_as_line(_("Measure color as line"), _("Measure color as line"), "color_as_line", &wr, this, false),
-    scale_insensitive(_("Scale insensitive"), _("Scale insensitive to transforms in element, parents..."), "scale_insensitive", &wr, this, true),
+    unit(_("Unit*"), _("Unit"), "unit", &wr, this),
+    reverse(_("To other side*"), _("To other side"), "reverse", &wr, this, false),
+    color_as_line(_("Measure color as line*"), _("Measure color as line"), "color_as_line", &wr, this, false),
+    scale_insensitive(_("Scale insensitive*"), _("Scale insensitive to transforms in element, parents..."), "scale_insensitive", &wr, this, true),
+    local_locale(_("Local Number Format*"), _("Local number format"), "local_locale", &wr, this, true),
     pos(0,0),
     angle(0)
 {
     registerParameter(&fontselector);
     registerParameter(&origin);
     registerParameter(&curve_linked);
-    registerParameter(&line_offset);
+    registerParameter(&origin_offset);
     registerParameter(&scale);
     registerParameter(&precision);
     registerParameter(&offset_right_left);
@@ -65,17 +67,19 @@ LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
     registerParameter(&reverse);
     registerParameter(&color_as_line);
     registerParameter(&scale_insensitive);
+    registerParameter(&local_locale);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     fontselector.param_update_default(prefs->getString("/live_effects/measure-line/fontselector"));
     scale.param_update_default(prefs->getDouble("/live_effects/measure-line/scale", 1.0));
     precision.param_update_default(prefs->getInt("/live_effects/measure-line/precision", 2));
     offset_right_left.param_update_default(prefs->getDouble("/live_effects/measure-line/offset_right_left", 0.0));
     offset_top_bottom.param_update_default(prefs->getDouble("/live_effects/measure-line/offset_top_bottom", 5.0));
-    line_offset.param_update_default(prefs->getDouble("/live_effects/measure-line/line_offset", 5.0));
+    origin_offset.param_update_default(prefs->getDouble("/live_effects/measure-line/origin_offset", 5.0));
     unit.param_update_default(prefs->getString("/live_effects/measure-line/unit"));
     reverse.param_update_default(prefs->getBool("/live_effects/measure-line/reverse"));
     color_as_line.param_update_default(prefs->getBool("/live_effects/measure-line/color_as_line"));
     scale_insensitive.param_update_default(prefs->getBool("/live_effects/measure-line/scale_insensitive"));
+    local_locale.param_update_default(prefs->getBool("/live_effects/measure-line/local_locale"));
     rtext = NULL;
     precision.param_set_range(0, 100);
     precision.param_set_increments(1, 1);
@@ -92,9 +96,9 @@ LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
     offset_top_bottom.param_set_range(-999999.0, 999999.0);
     offset_top_bottom.param_set_increments(1, 1);
     offset_top_bottom.param_set_digits(2);
-    line_offset.param_set_range(-999999.0, 999999.0);
-    line_offset.param_set_increments(1, 1);
-    line_offset.param_set_digits(2);
+    origin_offset.param_set_range(-999999.0, 999999.0);
+    origin_offset.param_set_increments(1, 1);
+    origin_offset.param_set_digits(2);
     gap_start.param_set_range(-999999.0, 999999.0);
     gap_start.param_set_increments(1, 1);
     gap_start.param_set_digits(2);
@@ -103,6 +107,8 @@ LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
     gap_end.param_set_digits(2);
     fontlister = Inkscape::FontLister::get_instance();
 }
+
+bool LPEMeasureLine::alerts_off = false;
 
 LPEMeasureLine::~LPEMeasureLine() {}
 
@@ -113,6 +119,18 @@ LPEMeasureLine::doOnApply(SPLPEItem const* lpeitem)
         g_warning("LPE measure line can only be applied to shapes (not groups).");
         SPLPEItem * item = const_cast<SPLPEItem*>(lpeitem);
         item->removeCurrentPathEffect(false);
+    } else {
+        if(!alerts_off) {
+            char *msg = _("The \"measure line\" path effect could update original path on the object you are applying it to if link it to other path. If this is not what you want, click Cancel.");
+            Gtk::MessageDialog dialog(msg, false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_OK_CANCEL, true);
+            gint response = dialog.run();
+            alerts_off = true;
+            if(response == GTK_RESPONSE_CANCEL) {
+                SPLPEItem* item = const_cast<SPLPEItem*>(lpeitem);
+                item->removeCurrentPathEffect(false);
+                return;
+            }
+        }
     }
 }
 
@@ -145,8 +163,8 @@ LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
                 }
                 Geom::Coord angle_cross = std::fmod(angle + rad_from_deg(90), 2*M_PI);
                 if (angle_cross < 0) angle_cross += 2*M_PI;
-                s = s - Point::polar(angle_cross, line_offset);
-                e = e - Point::polar(angle_cross, line_offset);
+                s = s - Point::polar(angle_cross, origin_offset);
+                e = e - Point::polar(angle_cross, origin_offset);
                 Geom::Path path;
                 path.start( s );
                 path.appendNew<Geom::LineSegment>( e );
@@ -249,17 +267,22 @@ LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
             }
             length = Inkscape::Util::Quantity::convert(length, doc_unit.c_str(), unit.get_abbreviation());
             std::stringstream length_str;
-            length_str.imbue(std::locale::classic());
-            length_str << "%." << precision << "f %s";
-            gchar *lengthchar = g_strdup_printf(length_str.str().c_str(), length, unit.get_abbreviation());
+            length_str.setf(std::ios::fixed, std::ios::floatfield);
+            length_str.precision(precision);
+            if (local_locale) {
+                length_str.imbue(std::locale(""));
+            } else {
+                length_str.imbue(std::locale::classic());
+            }
+            length_str << length << unit.get_abbreviation();
             Inkscape::XML::Node *rstring = NULL;
             if (!elemref) {
-                rstring = xml_doc->createTextNode(lengthchar);
+                rstring = xml_doc->createTextNode(length_str.str().c_str());
                 rtspan->addChild(rstring, NULL);
                 Inkscape::GC::release(rstring);
             } else {
                 rstring = rtspan->firstChild();
-                rstring->setContent(lengthchar);
+                rstring->setContent(length_str.str().c_str());
             }
             SPObject * text_obj = NULL;
             if (!elemref) {
@@ -280,11 +303,13 @@ LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
 void LPEMeasureLine::doOnRemove (SPLPEItem const* /*lpeitem*/)
 {
     if (SPDesktop *desktop = SP_ACTIVE_DESKTOP) {
-        rtext->setAttribute("sodipodi:insensitive", NULL);
-        SPObject * text_obj = desktop->currentLayer()->get_child_by_repr(rtext);
-        if (text_obj) {
-            text_obj->updateRepr();
-            text_obj->deleteObject();
+        if (rtext) {
+            rtext->setAttribute("sodipodi:insensitive", NULL);
+            SPObject * text_obj = desktop->currentLayer()->get_child_by_repr(rtext);
+            if (text_obj) {
+                text_obj->updateRepr();
+                text_obj->deleteObject();
+            }
         }
     }
 }
@@ -297,7 +322,7 @@ Gtk::Widget *LPEMeasureLine::newWidget()
 
     vbox->set_border_width(5);
     vbox->set_homogeneous(false);
-    vbox->set_spacing(6);
+    vbox->set_spacing(2);
 
     std::vector<Parameter *>::iterator it = param_vector.begin();
     Gtk::HBox * button1 = Gtk::manage(new Gtk::HBox(true,0));
@@ -319,7 +344,7 @@ Gtk::Widget *LPEMeasureLine::newWidget()
 
         ++it;
     }
-    Gtk::Button *save_default = Gtk::manage(new Gtk::Button(Glib::ustring(_("Save as default"))));
+    Gtk::Button *save_default = Gtk::manage(new Gtk::Button(Glib::ustring(_("Save '*' as default"))));
     save_default->signal_clicked().connect(sigc::mem_fun(*this, &LPEMeasureLine::saveDefault));
     button1->pack_start(*save_default, true, true, 2);
     vbox->pack_start(*button1, true, true, 2);
@@ -356,11 +381,12 @@ LPEMeasureLine::saveDefault()
     prefs->setInt("/live_effects/measure-line/precision", precision);
     prefs->setDouble("/live_effects/measure-line/offset_right_left", offset_right_left);
     prefs->setDouble("/live_effects/measure-line/offset_top_bottom", offset_top_bottom);
-    prefs->setDouble("/live_effects/measure-line/line_offset", line_offset);
+    prefs->setDouble("/live_effects/measure-line/origin_offset", origin_offset);
     prefs->setString("/live_effects/measure-line/unit", (Glib::ustring)unit.get_abbreviation());
-    prefs->setInt("/live_effects/measure-line/reverse", reverse);
-    prefs->setInt("/live_effects/measure-line/color_as_line", color_as_line);
-    prefs->setInt("/live_effects/measure-line/scale_insensitive", scale_insensitive);
+    prefs->setBool("/live_effects/measure-line/reverse", reverse);
+    prefs->setBool("/live_effects/measure-line/color_as_line", color_as_line);
+    prefs->setBool("/live_effects/measure-line/scale_insensitive", scale_insensitive);
+    prefs->setBool("/live_effects/measure-line/local_locale", local_locale);
 }
 
 }; //namespace LivePathEffect

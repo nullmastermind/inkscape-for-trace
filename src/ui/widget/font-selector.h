@@ -54,6 +54,7 @@ public:
 protected:
     Gtk::Widget  *_widget;
     bool expanded;
+    Glib::ustring _label;
     Gtk::Expander * expander;
     SPFontSelector *fsel;
     Glib::ustring _fontspec;

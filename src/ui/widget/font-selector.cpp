@@ -19,7 +19,7 @@ FontSelector::FontSelector(Glib::ustring const &label, Glib::ustring const &tool
               Glib::ustring const &suffix,
               Glib::ustring const &icon,
               bool mnemonic)
-             :_widget(new Gtk::HBox()), expanded(false)
+             :_widget(new Gtk::HBox()), expanded(false), _label(label)
 {
     Gtk::VBox * vbox_expander = Gtk::manage( new Gtk::VBox() );
     GtkWidget *fontsel = sp_font_selector_new();
@@ -35,7 +35,7 @@ FontSelector::FontSelector(Glib::ustring const &label, Glib::ustring const &tool
     pButton->set_tooltip_text(_("Save the changes to font selector"));
     vbox_expander->pack_start(*Gtk::manage(Glib::wrap(fontsel)), true, true);
     vbox_expander->pack_start(*pButton, true, true);
-    expander = Gtk::manage(new Gtk::Expander(Glib::ustring(_("Font Selector:"))));
+    expander = Gtk::manage(new Gtk::Expander(label));
     expander->add(*vbox_expander);
     expander->set_expanded(expanded);
     expander->set_spacing(5);
@@ -52,9 +52,9 @@ FontSelector::onExpanderChanged()
 {
     expanded = expander->get_expanded();
     if(expanded) {
-        expander->set_label (Glib::ustring(_("Font Selector:")));
+        expander->set_label (Glib::ustring(_label));
     } else {
-        expander->set_label (Glib::ustring(_("Font Selector: <b>hided</b>")));
+        expander->set_label (Glib::ustring(_label + _(" <b>hided</b>")));
     }
 }
 
