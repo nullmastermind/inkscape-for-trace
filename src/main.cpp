@@ -52,10 +52,8 @@
 #include <glib-object.h>
 #include <gtk/gtk.h>
 
-#if GTK_CHECK_VERSION(3,0,0)
 #include <gtkmm/cssprovider.h>
 #include <gdkmm/screen.h>
-#endif
 
 #include "inkgc/gc-core.h"
 
@@ -1056,8 +1054,6 @@ sp_main_gui(int argc, char const **argv)
 #endif
     g_free(usericondir);
 
-
-#if GTK_CHECK_VERSION(3,0,0)
     // Add style sheet (GTK3)
     Glib::RefPtr<Gdk::Screen> screen = Gdk::Screen::get_default();
 
@@ -1114,7 +1110,6 @@ sp_main_gui(int argc, char const **argv)
 
       Gtk::StyleContext::add_provider_for_screen (screen, provider2, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
-#endif
 
     gdk_event_handler_set((GdkEventFunc)snooper, NULL, NULL);
     Inkscape::Debug::log_display_config();

@@ -1320,11 +1320,7 @@ RotateableSwatch::do_motion(double by, guint modifier) {
 
             g_object_unref(pixbuf);	    
             gdk_window_set_cursor(gtk_widget_get_window(w), cr);
-#if GTK_CHECK_VERSION(3,0,0)
 	    g_object_unref(cr);
-#else
-            gdk_cursor_unref(cr);
-#endif
 	    cr = NULL;
             cr_set = true;
         }
@@ -1388,11 +1384,7 @@ RotateableSwatch::do_release(double by, guint modifier) {
         GtkWidget *w = GTK_WIDGET(gobj());
         gdk_window_set_cursor(gtk_widget_get_window(w), NULL);
         if (cr) {
-#if GTK_CHECK_VERSION(3,0,0)
            g_object_unref(cr);
-#else
-           gdk_cursor_unref (cr);
-#endif
            cr = NULL;
         }
         cr_set = false;

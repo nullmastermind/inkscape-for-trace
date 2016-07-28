@@ -67,12 +67,7 @@
 
 #include "helper/png-write.h"
 
-#if WITH_EXT_GDL
 #include <gdl/gdl-dock-item.h>
-#else
-#include "libgdl/gdl-dock-item.h"
-#endif
-
 
 // required to set status message after export
 #include "desktop.h"
