@@ -2211,7 +2211,6 @@ set_adjustment (GtkAdjustment *adj, double l, double u, double ps, double si, do
 	    gtk_adjustment_set_page_size(adj, ps);
 	    gtk_adjustment_set_step_increment(adj, si);
 	    gtk_adjustment_set_page_increment(adj, pi);
-	    gtk_adjustment_changed (adj);
     }
 }
 
