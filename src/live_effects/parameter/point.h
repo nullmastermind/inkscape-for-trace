@@ -11,6 +11,7 @@
 
 #include <glib.h>
 #include <2geom/point.h>
+#include "ui/widget/registered-widget.h"
 #include "live_effects/parameter/parameter.h"
 
 #include "knot-holder-entity.h"
@@ -61,6 +62,7 @@ private:
     SPKnotModeType knot_mode;
     guint32 knot_color;
     gchar *handle_tip;
+    Inkscape::UI::Widget::RegisteredTransformedPoint * _pointwdg;
 };
 
 

@@ -4,8 +4,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "ui/widget/registered-widget.h"
-#include <glibmm/i18n.h>
 
 #include "live_effects/parameter/parameter.h"
 #include "live_effects/effect.h"
@@ -15,6 +13,8 @@
 #include "svg/stringstream.h"
 
 #include "verbs.h"
+
+#include <glibmm/i18n.h>
 
 #define noLPEREALPARAM_DEBUG
 
@@ -66,7 +66,8 @@ ScalarParam::ScalarParam( const Glib::ustring& label, const Glib::ustring& tip,
       inc_page(1),
       add_slider(false),
       overwrite_widget(false),
-      hide_widget(no_widget)
+      hide_widget(no_widget),
+      _rsu(NULL)
 {
 }
 
@@ -117,6 +118,9 @@ ScalarParam::param_set_value(gdouble val)
         value = max;
     if (value < min)
         value = min;
+    if (_rsu) {
+        _rsu->setValue(val);
+    }
 }
 
 void
@@ -138,7 +142,9 @@ ScalarParam::param_set_range(gdouble min, gdouble max)
     } else {
 	this->max = SCALARPARAM_G_MAXDOUBLE;
     }
-
+    if (_rsu) {
+        _rsu->setRange(this->min, this->max);
+    }
     param_set_value(value); // reset value to see whether it is in ranges
 }
 
@@ -161,22 +167,22 @@ Gtk::Widget *
 ScalarParam::param_newWidget()
 {
     if(!hide_widget){
-        Inkscape::UI::Widget::RegisteredScalar *rsu = Gtk::manage( new Inkscape::UI::Widget::RegisteredScalar(
+        _rsu = Gtk::manage( new Inkscape::UI::Widget::RegisteredScalar(
             param_label, param_tooltip, param_key, *param_wr, param_effect->getRepr(), param_effect->getSPDoc() ) );
 
-        rsu->setValue(value);
-        rsu->setDigits(digits);
-        rsu->setIncrements(inc_step, inc_page);
-        rsu->setRange(min, max);
-        rsu->setProgrammatically = false;
+        _rsu->setValue(value);
+        _rsu->setDigits(digits);
+        _rsu->setIncrements(inc_step, inc_page);
+        _rsu->setRange(min, max);
+        _rsu->setProgrammatically = false;
         if (add_slider) {
-            rsu->addSlider();
+            _rsu->addSlider();
         }
         if(!overwrite_widget){
-            rsu->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change scalar parameter"));
+            _rsu->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change scalar parameter"));
         }
         param_effect->upd_params = false;
-        return dynamic_cast<Gtk::Widget *> (rsu);
+        return dynamic_cast<Gtk::Widget *> (_rsu);
     } else {
         return NULL;
     }
@@ -186,6 +192,9 @@ void
 ScalarParam::param_set_digits(unsigned digits)
 {
     this->digits = digits;
+    if (_rsu) {
+        _rsu->setDigits(this->digits);
+    }
 }
 
 void
@@ -193,6 +202,9 @@ ScalarParam::param_set_increments(double step, double page)
 {
     inc_step = step;
     inc_page = page;
+    if (_rsu) {
+       _rsu->setIncrements(inc_step, inc_page);
+    }
 }
 
 

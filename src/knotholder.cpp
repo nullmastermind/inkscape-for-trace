@@ -227,12 +227,8 @@ KnotHolder::knot_ungrabbed_handler(SPKnot */*knot*/, guint /*state*/)
             // write the ones that were changed?
             Inkscape::LivePathEffect::Effect *lpe = lpeItem->getCurrentLPE();
             if (lpe) {
-                lpe->upd_params = true;
                 LivePathEffectObject *lpeobj = lpe->getLPEObj();
                 lpeobj->updateRepr();
-                //Force redraw for update widgets
-                Inkscape::Selection *selection = desktop->getSelection();
-                selection ->emitModified();
             }
         }
 

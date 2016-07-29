@@ -12,6 +12,7 @@
 #include <glibmm/ustring.h>
 #include <2geom/forward.h>
 #include <2geom/pathvector.h>
+#include "ui/widget/registered-widget.h"
 
 // In gtk2, this wasn't an issue; we could toss around
 // G_MAXDOUBLE and not worry about size allocations. But
@@ -140,6 +141,7 @@ protected:
 private:
     ScalarParam(const ScalarParam&);
     ScalarParam& operator=(const ScalarParam&);
+    Inkscape::UI::Widget::RegisteredScalar *_rsu;
 };
 
 } //namespace LivePathEffect
