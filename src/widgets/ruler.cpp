@@ -642,8 +642,14 @@ static gboolean
 sp_ruler_draw (GtkWidget *widget,
 	       cairo_t *cr)
 {
-  SPRuler        *ruler = SP_RULER (widget);
-  SPRulerPrivate *priv  = SP_RULER_GET_PRIVATE (ruler);
+  SPRuler         *ruler   = SP_RULER (widget);
+  SPRulerPrivate  *priv    = SP_RULER_GET_PRIVATE (ruler);
+  GtkStyleContext *context = gtk_widget_get_style_context (widget);
+  GtkAllocation    allocation;
+
+  gtk_widget_get_allocation (widget, &allocation);
+  gtk_render_background (context, cr, 0, 0, allocation.width, allocation.height);
+  gtk_render_frame (context, cr, 0, 0, allocation.width, allocation.height);
 
   sp_ruler_draw_ticks (ruler);
 
@@ -669,7 +675,7 @@ sp_ruler_make_pixmap (SPRuler *ruler)
 
   priv->backing_store = 
     gdk_window_create_similar_surface (gtk_widget_get_window (widget),
-                                       CAIRO_CONTENT_COLOR,
+                                       CAIRO_CONTENT_COLOR_ALPHA,
                                        allocation.width,
                                        allocation.height);
 
@@ -1088,9 +1094,10 @@ sp_ruler_draw_ticks (SPRuler *ruler)
 
     cr = cairo_create (priv->backing_store);
     
-    gtk_render_background (context, cr, 0, 0, allocation.width, allocation.height);
-    gtk_render_frame (context, cr, 0, 0, allocation.width, allocation.height);
-    
+    cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
+    cairo_paint (cr);
+    cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
+
     gtk_style_context_get_color (context, gtk_widget_get_state_flags (widget),
                                  &color);
     gdk_cairo_set_source_rgba (cr, &color);
@@ -1319,9 +1326,6 @@ sp_ruler_get_pos_rect (SPRuler *ruler,
       rect.y = ROUND ((position - lower) * increment) + (ythickness - rect.height) / 2 - 1;
     }
 
-  rect.x += allocation.x;
-  rect.y += allocation.y;
-
   return rect;
 }
 
@@ -1344,18 +1348,21 @@ sp_ruler_queue_pos_redraw (SPRuler *ruler)
 {
   SPRulerPrivate    *priv = SP_RULER_GET_PRIVATE (ruler);
   const GdkRectangle rect = sp_ruler_get_pos_rect (ruler, priv->position);
+  GtkAllocation      allocation;
+
+  gtk_widget_get_allocation (GTK_WIDGET(ruler), &allocation);
 
   gtk_widget_queue_draw_area (GTK_WIDGET(ruler),
-                              rect.x,
-                              rect.y,
+                              rect.x + allocation.x,
+                              rect.y + allocation.y,
                               rect.width,
                               rect.height);
 
   if (priv->last_pos_rect.width != 0 || priv->last_pos_rect.height != 0)
     {
       gtk_widget_queue_draw_area (GTK_WIDGET(ruler),
-                                  priv->last_pos_rect.x,
-                                  priv->last_pos_rect.y,
+                                  priv->last_pos_rect.x + allocation.x,
+                                  priv->last_pos_rect.y + allocation.y,
                                   priv->last_pos_rect.width,
                                   priv->last_pos_rect.height);
 
