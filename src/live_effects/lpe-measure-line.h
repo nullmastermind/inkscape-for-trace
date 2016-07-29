@@ -11,6 +11,7 @@
  */
 
 #include "live_effects/effect.h"
+#include "live_effects/parameter/enum.h"
 #include "live_effects/parameter/font.h"
 #include "live_effects/parameter/text.h"
 #include "live_effects/parameter/unit.h"
@@ -20,11 +21,20 @@
 #include <2geom/angle.h>
 #include <2geom/ray.h>
 #include <2geom/point.h>
-#include "xml/node.h"
-
 
 namespace Inkscape {
 namespace LivePathEffect {
+
+enum OrientationMethod {
+    OM_HORIZONTAL,
+    OM_VERTICAL,
+    OM_PARALLEL,
+    OM_PARALLEL_VERTICAL,
+    OM_PARALLEL_HORIZONTAL,
+    OM_VERTICAL_HORIZONTAL,
+    OM_PARALLEL_VERTICAL_HORIZONTAL,
+    OM_END
+};
 
 class LPEMeasureLine : public Effect {
 public:
@@ -37,12 +47,9 @@ public:
     void saveDefault();
     virtual Gtk::Widget *newWidget();
 private:
-    double length;
     FontParam fontselector;
     Inkscape::FontLister *fontlister;
-    Inkscape::XML::Node *rtext;
-    Geom::Point pos;
-    Geom::Coord angle;
+    EnumParam<OrientationMethod> orientation;
     OriginalPathParam origin;
     ScalarParam curve_linked;
     ScalarParam origin_offset;

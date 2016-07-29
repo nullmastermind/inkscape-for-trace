@@ -8,6 +8,7 @@
  */
 #include "live_effects/lpe-measure-line.h"
 #include "inkscape.h"
+#include "xml/node.h"
 #include "uri.h"
 #include "uri-references.h"
 #include "preferences.h"
@@ -33,9 +34,21 @@ using namespace Geom;
 namespace Inkscape {
 namespace LivePathEffect {
 
+static const Util::EnumData<OrientationMethod> OrientationMethodData[] = {
+    { OM_HORIZONTAL, N_("Horizontal"), "horizontal" }, 
+    { OM_VERTICAL, N_("Vertical"), "vertical" },
+    { OM_PARALLEL, N_("Parallel"), "parallel" },
+    { OM_PARALLEL_VERTICAL, N_("Parallel and vertical,"), "parallel_vertical" },
+    { OM_PARALLEL_HORIZONTAL, N_("Parallel and horizontal"), "parallel_horizontal" },
+    { OM_VERTICAL_HORIZONTAL, N_("Vertical and horizontal"), "vertical_horizontal" },
+    { OM_PARALLEL_VERTICAL_HORIZONTAL, N_("Parallel, vertical and horizontal"), "parallel_vertical_horizontal" }
+};
+static const Util::EnumDataConverter<OrientationMethod> OMConverter(OrientationMethodData, OM_END);
+
 LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
     fontselector(_("Font Selector*"), _("Font Selector"), "fontselector", &wr, this, " "),
+    orientation(_("Orientation"), _("Orientation method"), "orientation", OMConverter, &wr, this, OM_PARALLEL, false),
     origin(_("Optional Origin"), _("Optional origin"), "origin", &wr, this),
     curve_linked(_("Curve on optional origin"), _("Curve on optional origin, set 0 to start/end"), "curve_linked", &wr, this, 1),
     origin_offset(_("Optional origin offset*"), _("Optional origin offset"), "origin_offset", &wr, this, 5),
@@ -49,11 +62,10 @@ LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
     reverse(_("To other side*"), _("To other side"), "reverse", &wr, this, false),
     color_as_line(_("Measure color as line*"), _("Measure color as line"), "color_as_line", &wr, this, false),
     scale_insensitive(_("Scale insensitive*"), _("Scale insensitive to transforms in element, parents..."), "scale_insensitive", &wr, this, true),
-    local_locale(_("Local Number Format*"), _("Local number format"), "local_locale", &wr, this, true),
-    pos(0,0),
-    angle(0)
+    local_locale(_("Local Number Format*"), _("Local number format"), "local_locale", &wr, this, true)
 {
     registerParameter(&fontselector);
+    registerParameter(&orientation);
     registerParameter(&origin);
     registerParameter(&curve_linked);
     registerParameter(&origin_offset);
@@ -80,7 +92,6 @@ LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
     color_as_line.param_update_default(prefs->getBool("/live_effects/measure-line/color_as_line"));
     scale_insensitive.param_update_default(prefs->getBool("/live_effects/measure-line/scale_insensitive"));
     local_locale.param_update_default(prefs->getBool("/live_effects/measure-line/local_locale"));
-    rtext = NULL;
     precision.param_set_range(0, 100);
     precision.param_set_increments(1, 1);
     precision.param_set_digits(0);
@@ -143,175 +154,279 @@ LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
         Geom::PathVector pathvector = sp_path->get_original_curve()->get_pathvector();
         if (SPDesktop *desktop = SP_ACTIVE_DESKTOP) {
             Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
-            Geom::Point s = pathvector.initialPoint();
-            Geom::Point e =  pathvector.finalPoint();
-            if (origin.linksToPath() && origin.getObject() && !origin.get_pathvector().empty()) {
-                pathvector = origin.get_pathvector();
-                size_t ncurves = pathvector.curveCount();
-                curve_linked.param_set_range(1, ncurves);
-                if(previous_ncurves != ncurves) {
-                    this->upd_params = true;
-                    previous_ncurves = ncurves;
+            std::vector<OrientationMethod> orientations;
+            std::vector<OrientationMethod> orientations_remove;
+            if ( orientation == OM_HORIZONTAL ||
+                 orientation == OM_PARALLEL_VERTICAL_HORIZONTAL ||
+                 orientation == OM_PARALLEL_HORIZONTAL ||
+                 orientation == OM_VERTICAL_HORIZONTAL)
+            {                
+                orientations.push_back(OM_HORIZONTAL);
+            } else {
+                orientations_remove.push_back(OM_HORIZONTAL);
+            }
+            if ( orientation == OM_VERTICAL ||
+                 orientation == OM_PARALLEL_VERTICAL_HORIZONTAL ||
+                 orientation == OM_PARALLEL_VERTICAL ||
+                 orientation == OM_VERTICAL_HORIZONTAL)
+            { 
+                orientations.push_back(OM_VERTICAL);
+            } else {
+                orientations_remove.push_back(OM_VERTICAL);
+            }
+            if ( orientation == OM_PARALLEL ||
+                 orientation == OM_PARALLEL_VERTICAL_HORIZONTAL ||
+                 orientation == OM_PARALLEL_VERTICAL ||
+                 orientation == OM_PARALLEL_HORIZONTAL)
+            { 
+                orientations.push_back(OM_PARALLEL);
+            } else {
+                orientations_remove.push_back(OM_PARALLEL);
+            }
+            for (std::vector<OrientationMethod>::const_iterator om_it = orientations.begin(); om_it != orientations.end(); ++om_it) {
+                Geom::Point s = pathvector.initialPoint();
+                Geom::Point e =  pathvector.finalPoint();
+                Glib::ustring orientation_str;
+                Inkscape::XML::Node *rtext = NULL;
+                if (*om_it == OM_VERTICAL) {
+                    orientation_str = "vertical";
                 }
-                s = pathvector.pointAt(curve_linked -1);
-                e = pathvector.pointAt(curve_linked);
+                if (*om_it == OM_HORIZONTAL) {
+                    orientation_str = "horizontal";
+                }
+                if (*om_it == OM_PARALLEL) {
+                    orientation_str = "parallel";
+                }
+                if (origin.linksToPath() && origin.getObject() && !origin.get_pathvector().empty()) {
+                    pathvector = origin.get_pathvector();
+                    size_t ncurves = pathvector.curveCount();
+                    curve_linked.param_set_range(1, ncurves);
+                    if(previous_ncurves != ncurves) {
+                        this->upd_params = true;
+                        previous_ncurves = ncurves;
+                    }
+                    s = pathvector.pointAt(curve_linked -1);
+                    e = pathvector.pointAt(curve_linked);
+                    if(*om_it == OM_VERTICAL) {
+                        Coord xpos = std::max(s[Geom::X],e[Geom::X]);
+                        if (reverse) {
+                            xpos = std::min(s[Geom::X],e[Geom::X]);
+                        }
+                        s[Geom::X] = xpos;
+                        e[Geom::X] = xpos;
+                    }
+                    if(*om_it == OM_HORIZONTAL) {
+                        Coord ypos = std::max(s[Geom::Y],e[Geom::Y]);
+                        if (reverse) {
+                            ypos = std::min(s[Geom::Y],e[Geom::Y]);
+                        }
+                        s[Geom::Y] = ypos;
+                        e[Geom::Y] = ypos;
+                    }
+                    Geom::Ray ray(s,e);
+                    Geom::Coord angle = ray.angle();
+                    if (reverse) {
+                        angle = std::fmod(angle + rad_from_deg(180), 2*M_PI);
+                        if (angle < 0) angle += 2*M_PI;
+                    }
+                    Geom::Coord angle_cross = std::fmod(angle + rad_from_deg(90), 2*M_PI);
+                    if (angle_cross < 0) angle_cross += 2*M_PI;
+                    s = s - Point::polar(angle_cross, origin_offset);
+                    e = e - Point::polar(angle_cross, origin_offset);
+                    Geom::Path path;
+                    path.start( s );
+                    path.appendNew<Geom::LineSegment>( e );
+                    Geom::PathVector line_upd;
+                    line_upd.push_back(path);
+                    Inkscape::XML::Node *line = SP_OBJECT(sp_path)->getRepr();
+                    gchar *str = sp_svg_write_path(line_upd);
+                    line->setAttribute("inkscape:original-d", str);
+                } else {
+                    if(*om_it == OM_VERTICAL) {
+                        Coord xpos = std::max(s[Geom::X],e[Geom::X]);
+                        if (reverse) {
+                            xpos = std::min(s[Geom::X],e[Geom::X]);
+                        }
+                        s[Geom::X] = xpos;
+                        e[Geom::X] = xpos;
+                    }
+                    if(*om_it == OM_HORIZONTAL) {
+                        Coord ypos = std::max(s[Geom::Y],e[Geom::Y]);
+                        if (reverse) {
+                            ypos = std::min(s[Geom::Y],e[Geom::Y]);
+                        }
+                        s[Geom::Y] = ypos;
+                        e[Geom::Y] = ypos;
+                    }
+                }
+                double length = Geom::distance(s, e)  * scale;
+                Geom::Point pos = Geom::middle_point(s,e);
                 Geom::Ray ray(s,e);
-                angle = ray.angle();
+                Geom::Coord angle = ray.angle();
+                doc_unit = Inkscape::Util::unit_table.getUnit(desktop->doc()->getRoot()->height.unit)->abbr;
                 if (reverse) {
                     angle = std::fmod(angle + rad_from_deg(180), 2*M_PI);
                     if (angle < 0) angle += 2*M_PI;
                 }
+                Geom::Point newpos = pos - Point::polar(angle, offset_right_left);
                 Geom::Coord angle_cross = std::fmod(angle + rad_from_deg(90), 2*M_PI);
                 if (angle_cross < 0) angle_cross += 2*M_PI;
-                s = s - Point::polar(angle_cross, origin_offset);
-                e = e - Point::polar(angle_cross, origin_offset);
-                Geom::Path path;
-                path.start( s );
-                path.appendNew<Geom::LineSegment>( e );
-                Geom::PathVector line_upd;
-                line_upd.push_back(path);
-                Inkscape::XML::Node *line = SP_OBJECT(sp_path)->getRepr();
-                gchar *str = sp_svg_write_path(line_upd);
-                line->setAttribute("inkscape:original-d", str);
-            }
-            length = Geom::distance(s, e)  * scale;
-            pos = Geom::middle_point(s,e);
-            Geom::Ray ray(s,e);
-            angle = ray.angle();
-            doc_unit = Inkscape::Util::unit_table.getUnit(desktop->doc()->getRoot()->height.unit)->abbr;
-            if (reverse) {
-                angle = std::fmod(angle + rad_from_deg(180), 2*M_PI);
-                if (angle < 0) angle += 2*M_PI;
-            }
-            Geom::Point newpos = pos - Point::polar(angle, offset_right_left);
-            Geom::Coord angle_cross = std::fmod(angle + rad_from_deg(90), 2*M_PI);
-            if (angle_cross < 0) angle_cross += 2*M_PI;
-            newpos = newpos - Point::polar(angle_cross, offset_top_bottom);
-            Inkscape::URI SVGElem_uri(((Glib::ustring)"#" + (Glib::ustring)SP_OBJECT(lpeitem)->getId() + (Glib::ustring)"_mlsize").c_str());
-            Inkscape::URIReference* SVGElemRef = new Inkscape::URIReference(desktop->doc());
-            SVGElemRef->attach(SVGElem_uri);
-            SPObject *elemref = NULL;
-            Inkscape::XML::Node *rtspan = NULL;
-            if (elemref = SVGElemRef->getObject()) {
-                rtext = elemref->getRepr();
-                sp_repr_set_svg_double(rtext, "x", newpos[Geom::X]);
-                sp_repr_set_svg_double(rtext, "y", newpos[Geom::Y]);
-            } else {
-                rtext = xml_doc->createElement("svg:text");
-                rtext->setAttribute("xml:space", "preserve");
-                rtext->setAttribute("sodipodi:insensitive", "true");
-                rtext->setAttribute("id", ((Glib::ustring)SP_OBJECT(lpeitem)->getId() + (Glib::ustring)"_mlsize").c_str());
-                /* Set style */
-                sp_repr_set_svg_double(rtext, "x", newpos[Geom::X]);
-                sp_repr_set_svg_double(rtext, "y", newpos[Geom::Y]);
-                /* Create <tspan> */
-                rtspan = xml_doc->createElement("svg:tspan");
-                rtspan->setAttribute("sodipodi:role", "line");
-            }
-            SPCSSAttr *css = sp_repr_css_attr_new();
-            Glib::ustring fontspec = fontselector.param_readFontSpec(fontselector.param_getSVGValue());
-            double fontsize = fontselector.param_readFontSize(fontselector.param_getSVGValue());
-            fontlister->fill_css( css, fontspec );
-            std::stringstream font_size;
-            font_size.imbue(std::locale::classic());
-            font_size <<  fontsize << "pt";
-            sp_repr_css_set_property (css, "font-size", font_size.str().c_str());
-            sp_repr_css_set_property (css, "font-style", "normal");
-            sp_repr_css_set_property (css, "font-weight", "normal");
-            sp_repr_css_set_property (css, "line-height", "125%");
-            sp_repr_css_set_property (css, "letter-spacing", "0");
-            sp_repr_css_set_property (css, "word-spacing", "0");
-            sp_repr_css_set_property (css, "text-align", "center");
-            sp_repr_css_set_property (css, "text-anchor", "middle");
-            if (color_as_line) {
-                if (lpeitem->style) {
-                    if (lpeitem->style->stroke.isPaintserver()) {
-                        SPPaintServer * server = lpeitem->style->getStrokePaintServer();
-                        if (server) {
-                            Glib::ustring str;
-                            str += "url(#";
-                            str += server->getId();
-                            str += ")";
-                            sp_repr_css_set_property (css, "fill", str.c_str());
+                newpos = newpos - Point::polar(angle_cross, offset_top_bottom);
+                Inkscape::URI SVGElem_uri(((Glib::ustring)"#" + (Glib::ustring)SP_OBJECT(lpeitem)->getId() + (Glib::ustring)"_DINnumber_" + orientation_str).c_str());
+                Inkscape::URIReference* SVGElemRef = new Inkscape::URIReference(desktop->doc());
+                SVGElemRef->attach(SVGElem_uri);
+                SPObject *elemref = NULL;
+                Inkscape::XML::Node *rtspan = NULL;
+                if (elemref = SVGElemRef->getObject()) {
+                    rtext = elemref->getRepr();
+                    sp_repr_set_svg_double(rtext, "x", newpos[Geom::X]);
+                    sp_repr_set_svg_double(rtext, "y", newpos[Geom::Y]);
+                } else {
+                    rtext = xml_doc->createElement("svg:text");
+                    rtext->setAttribute("xml:space", "preserve");
+                    rtext->setAttribute("sodipodi:insensitive", "true");
+                    rtext->setAttribute("id", ((Glib::ustring)SP_OBJECT(lpeitem)->getId() + (Glib::ustring)"_DINnumber_" + orientation_str).c_str());
+                    /* Set style */
+                    sp_repr_set_svg_double(rtext, "x", newpos[Geom::X]);
+                    sp_repr_set_svg_double(rtext, "y", newpos[Geom::Y]);
+                    /* Create <tspan> */
+                    rtspan = xml_doc->createElement("svg:tspan");
+                    rtspan->setAttribute("sodipodi:role", "line");
+                }
+                SPCSSAttr *css = sp_repr_css_attr_new();
+                Glib::ustring fontspec = fontselector.param_readFontSpec(fontselector.param_getSVGValue());
+                double fontsize = fontselector.param_readFontSize(fontselector.param_getSVGValue());
+                fontlister->fill_css( css, fontspec );
+                std::stringstream font_size;
+                font_size.imbue(std::locale::classic());
+                font_size <<  fontsize << "pt";
+                sp_repr_css_set_property (css, "font-size", font_size.str().c_str());
+                sp_repr_css_set_property (css, "font-style", "normal");
+                sp_repr_css_set_property (css, "font-weight", "normal");
+                sp_repr_css_set_property (css, "line-height", "125%");
+                sp_repr_css_set_property (css, "letter-spacing", "0");
+                sp_repr_css_set_property (css, "word-spacing", "0");
+                sp_repr_css_set_property (css, "text-align", "center");
+                sp_repr_css_set_property (css, "text-anchor", "middle");
+                if (color_as_line) {
+                    if (lpeitem->style) {
+                        if (lpeitem->style->stroke.isPaintserver()) {
+                            SPPaintServer * server = lpeitem->style->getStrokePaintServer();
+                            if (server) {
+                                Glib::ustring str;
+                                str += "url(#";
+                                str += server->getId();
+                                str += ")";
+                                sp_repr_css_set_property (css, "fill", str.c_str());
+                            }
+                        } else if (lpeitem->style->stroke.isColor()) {
+                            gchar c[64];
+                            sp_svg_write_color (c, sizeof(c), lpeitem->style->stroke.value.color.toRGBA32(SP_SCALE24_TO_FLOAT(lpeitem->style->stroke_opacity.value)));
+                            sp_repr_css_set_property (css, "fill", c);
+                        } else {
+                            sp_repr_css_set_property (css, "fill", "#000000");
                         }
-                    } else if (lpeitem->style->stroke.isColor()) {
-                        gchar c[64];
-                        sp_svg_write_color (c, sizeof(c), lpeitem->style->stroke.value.color.toRGBA32(SP_SCALE24_TO_FLOAT(lpeitem->style->stroke_opacity.value)));
-                        sp_repr_css_set_property (css, "fill", c);
                     } else {
-                        sp_repr_css_set_property (css, "fill", "#000000");
+                        sp_repr_css_unset_property (css, "#000000");
                     }
                 } else {
-                    sp_repr_css_unset_property (css, "#000000");
+                    sp_repr_css_set_property (css, "fill", "#000000");
                 }
-            } else {
-                sp_repr_css_set_property (css, "fill", "#000000");
+                sp_repr_css_set_property (css, "fill-opacity", "1");
+                sp_repr_css_set_property (css, "stroke", "none");
+                Glib::ustring css_str;
+                sp_repr_css_write_string(css,css_str);
+                if (!rtspan) {
+                    rtspan = rtext->firstChild();
+                }
+                rtspan->setAttribute("style", css_str.c_str());
+                sp_repr_css_attr_unref (css);
+                if (!elemref) {
+                    rtext->addChild(rtspan, NULL);
+                    Inkscape::GC::release(rtspan);
+                }
+                /* Create TEXT */
+                if (!scale_insensitive) {
+                    Geom::Affine affinetransform = i2anc_affine(SP_OBJECT(lpeitem), SP_OBJECT(desktop->doc()->getRoot()));
+                    length *= (affinetransform.expansionX() + affinetransform.expansionY()) / 2.0;
+                }
+                length = Inkscape::Util::Quantity::convert(length, doc_unit.c_str(), unit.get_abbreviation());
+                std::stringstream length_str;
+                length_str.setf(std::ios::fixed, std::ios::floatfield);
+                length_str.precision(precision);
+                if (local_locale) {
+                    length_str.imbue(std::locale(""));
+                } else {
+                    length_str.imbue(std::locale::classic());
+                }
+                length_str << length << unit.get_abbreviation();
+                Inkscape::XML::Node *rstring = NULL;
+                if (!elemref) {
+                    rstring = xml_doc->createTextNode(length_str.str().c_str());
+                    rtspan->addChild(rstring, NULL);
+                    Inkscape::GC::release(rstring);
+                } else {
+                    rstring = rtspan->firstChild();
+                    rstring->setContent(length_str.str().c_str());
+                }
+                SPObject * text_obj = NULL;
+                if (!elemref) {
+                    text_obj = SP_OBJECT(desktop->currentLayer()->appendChildRepr(rtext));
+                    Inkscape::GC::release(rtext);
+                } else {
+                    text_obj = desktop->currentLayer()->get_child_by_repr(rtext);
+                }
+                Geom::Affine affine = Geom::Affine(Geom::Translate(newpos).inverse());
+                affine *= Geom::Rotate(angle);
+                affine *= Geom::Translate(newpos);
+                SP_ITEM(text_obj)->transform = affine * i2anc_affine(SP_OBJECT(lpeitem), SP_OBJECT(desktop->doc()->getRoot()));
+                text_obj->updateRepr();
             }
-            sp_repr_css_set_property (css, "fill-opacity", "1");
-            sp_repr_css_set_property (css, "stroke", "none");
-            Glib::ustring css_str;
-            sp_repr_css_write_string(css,css_str);
-            if (!rtspan) {
-                rtspan = rtext->firstChild();
+            for (std::vector<OrientationMethod>::const_iterator omdel_it = orientations_remove.begin(); omdel_it != orientations_remove.end(); ++omdel_it) {
+                Glib::ustring orientation_str;
+                if (*omdel_it == OM_VERTICAL) {
+                    orientation_str = "vertical";
+                }
+                if (*omdel_it == OM_HORIZONTAL) {
+                    orientation_str = "horizontal";
+                }
+                if (*omdel_it == OM_PARALLEL) {
+                    orientation_str = "parallel";
+                }
+                Inkscape::URI SVGElem_uri(((Glib::ustring)"#" + (Glib::ustring)SP_OBJECT(lpeitem)->getId() + (Glib::ustring)"_DINnumber_" + orientation_str).c_str());
+                Inkscape::URIReference* SVGElemRef = new Inkscape::URIReference(desktop->doc());
+                SVGElemRef->attach(SVGElem_uri);
+                SPObject *elemref = NULL;
+                if (elemref = SVGElemRef->getObject()) {
+                    elemref->deleteObject();
+                }
             }
-            rtspan->setAttribute("style", css_str.c_str());
-            sp_repr_css_attr_unref (css);
-            if (!elemref) {
-                rtext->addChild(rtspan, NULL);
-                Inkscape::GC::release(rtspan);
-            }
-            /* Create TEXT */
-            if (!scale_insensitive) {
-                Geom::Affine affinetransform = i2anc_affine(SP_OBJECT(lpeitem), SP_OBJECT(desktop->doc()->getRoot()));
-                length *= (affinetransform.expansionX() + affinetransform.expansionY()) / 2.0;
-            }
-            length = Inkscape::Util::Quantity::convert(length, doc_unit.c_str(), unit.get_abbreviation());
-            std::stringstream length_str;
-            length_str.setf(std::ios::fixed, std::ios::floatfield);
-            length_str.precision(precision);
-            if (local_locale) {
-                length_str.imbue(std::locale(""));
-            } else {
-                length_str.imbue(std::locale::classic());
-            }
-            length_str << length << unit.get_abbreviation();
-            Inkscape::XML::Node *rstring = NULL;
-            if (!elemref) {
-                rstring = xml_doc->createTextNode(length_str.str().c_str());
-                rtspan->addChild(rstring, NULL);
-                Inkscape::GC::release(rstring);
-            } else {
-                rstring = rtspan->firstChild();
-                rstring->setContent(length_str.str().c_str());
-            }
-            SPObject * text_obj = NULL;
-            if (!elemref) {
-                text_obj = SP_OBJECT(desktop->currentLayer()->appendChildRepr(rtext));
-                Inkscape::GC::release(rtext);
-            } else {
-                text_obj = desktop->currentLayer()->get_child_by_repr(rtext);
-            }
-            Geom::Affine affine = Geom::Affine(Geom::Translate(newpos).inverse());
-            affine *= Geom::Rotate(angle);
-            affine *= Geom::Translate(newpos);
-            SP_ITEM(text_obj)->transform = affine * i2anc_affine(SP_OBJECT(lpeitem), SP_OBJECT(desktop->doc()->getRoot()));
-            text_obj->updateRepr();
         }
     }
 }
 
 void LPEMeasureLine::doOnRemove (SPLPEItem const* /*lpeitem*/)
 {
-    if (SPDesktop *desktop = SP_ACTIVE_DESKTOP) {
-        if (rtext) {
-            rtext->setAttribute("sodipodi:insensitive", NULL);
-            SPObject * text_obj = desktop->currentLayer()->get_child_by_repr(rtext);
-            if (text_obj) {
-                text_obj->updateRepr();
-                text_obj->deleteObject();
-            }
-        }
-    }
+//    if (SPDesktop *desktop = SP_ACTIVE_DESKTOP) {
+//        if (horizontal_text) {
+//            SPObject * text_obj = desktop->currentLayer()->get_child_by_repr(horizontal_text);
+//            if (text_obj) {
+//                text_obj->deleteObject();
+//            }
+//        }
+//        if (vertical_text) {
+//            SPObject * text_obj = desktop->currentLayer()->get_child_by_repr(vertical_text);
+//            if (text_obj) {
+//                text_obj->deleteObject();
+//            }
+//        }
+//        if (parallel_text) {
+//            SPObject * text_obj = desktop->currentLayer()->get_child_by_repr(parallel_text);
+//            if (text_obj) {
+//                text_obj->deleteObject();
+//            }
+//        }
+//    }
 }
 
 Gtk::Widget *LPEMeasureLine::newWidget()
@@ -357,6 +472,8 @@ LPEMeasureLine::doEffect_path(Geom::PathVector const &path_in)
     Geom::Path path;
     Geom::Point s = path_in.initialPoint();
     Geom::Point e =  path_in.finalPoint();
+    Geom::Ray ray(s,e);
+    Geom::Coord angle = ray.angle();
     if (reverse) {
         angle = std::fmod(angle + rad_from_deg(180), 2*M_PI);
         if (angle < 0) angle += 2*M_PI;
@@ -365,6 +482,22 @@ LPEMeasureLine::doEffect_path(Geom::PathVector const &path_in)
     angle = std::fmod(angle + rad_from_deg(180), 2*M_PI);
     if (angle < 0) angle += 2*M_PI;
     e = e - Point::polar(angle, gap_end);
+    if(orientation == OM_VERTICAL) {
+        Coord xpos = std::max(s[Geom::X],e[Geom::X]);
+        if (reverse) {
+            xpos = std::min(s[Geom::X],e[Geom::X]);
+        }
+        s[Geom::X] = xpos;
+        e[Geom::X] = xpos;
+    }
+    if(orientation == OM_HORIZONTAL) {
+        Coord ypos = std::max(s[Geom::Y],e[Geom::Y]);
+        if (reverse) {
+            ypos = std::min(s[Geom::Y],e[Geom::Y]);
+        }
+        s[Geom::Y] = ypos;
+        e[Geom::Y] = ypos;
+    }
     path.start( s );
     path.appendNew<Geom::LineSegment>( e );
     Geom::PathVector output;

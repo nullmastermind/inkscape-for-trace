@@ -78,6 +78,8 @@ protected:
     RegisteredWidget( A& a, B& b, C c, D d ): W( a, b, c, d ) { construct(); }
     template< typename A, typename B, typename C, typename D, typename E , typename F>
     RegisteredWidget( A& a, B& b, C c, D& d, E& e, F* f): W( a, b, c, d, e, f) { construct(); }
+    template< typename A, typename B, typename C, typename D, typename E , typename F, typename G>
+    RegisteredWidget( A& a, B& b, C& c, D& d, E& e, F f, G& g): W( a, b, c, d, e, f, g) { construct(); }
 
     virtual ~RegisteredWidget() {};
 
