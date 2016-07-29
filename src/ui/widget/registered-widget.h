@@ -22,7 +22,7 @@
 #include "ui/widget/text.h"
 #include "ui/widget/random.h"
 #include "ui/widget/unit-menu.h"
-#include "ui/widget/font-selector.h"
+#include "ui/widget/font-button.h"
 #include "ui/widget/color-picker.h"
 #include "inkscape.h"
 
@@ -421,20 +421,20 @@ protected:
     void on_value_changed();
 };
 
-class RegisteredFontSelector : public RegisteredWidget<FontSelector> {
+class RegisteredFontButton : public RegisteredWidget<FontButton> {
 public:
-    virtual ~RegisteredFontSelector();
-    RegisteredFontSelector ( const Glib::ustring& label,
+    virtual ~RegisteredFontButton();
+    RegisteredFontButton ( const Glib::ustring& label,
                              const Glib::ustring& tip,
                              const Glib::ustring& key,
                              Registry& wr,
                              Inkscape::XML::Node* repr_in = NULL,
                              SPDocument *doc_in = NULL);
 
-    void setValue (Glib::ustring fontspec, double fontsize);
+    void setValue (Glib::ustring fontspec);
 
 protected:
-    sigc::connection  _value_changed_connection;
+    sigc::connection  _signal_font_set;
     void on_value_changed();
 };
 

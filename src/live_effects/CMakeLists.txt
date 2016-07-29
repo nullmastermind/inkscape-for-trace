@@ -69,7 +69,7 @@ set(live_effects_SRC
 	parameter/powerstrokepointarray.cpp
 	parameter/random.cpp
 	parameter/text.cpp
-	parameter/font.cpp
+	parameter/fontbutton.cpp
 	parameter/togglebutton.cpp
 	parameter/transformedpoint.cpp
 	parameter/unit.cpp
@@ -151,7 +151,7 @@ set(live_effects_SRC
 	parameter/powerstrokepointarray.h
 	parameter/random.h
 	parameter/text.h
-	parameter/font.h
+	parameter/fontbutton.h
 	parameter/togglebutton.h
 	parameter/transformedpoint.h
 	parameter/unit.h

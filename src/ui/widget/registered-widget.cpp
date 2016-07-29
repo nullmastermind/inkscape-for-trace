@@ -25,7 +25,7 @@
 #include "ui/widget/scalar-unit.h"
 #include "ui/widget/point.h"
 #include "ui/widget/random.h"
-#include "ui/widget/font-selector.h"
+#include "ui/widget/font-button.h"
 #include "widgets/spinbutton-events.h"
 
 #include "xml/repr.h"
@@ -805,33 +805,31 @@ RegisteredRandom::on_value_changed()
 }
 
 /*#########################################
- * Registered FONT-SELECTOR
+ * Registered FONT-BUTTON
  */
 
-RegisteredFontSelector::~RegisteredFontSelector()
+RegisteredFontButton::~RegisteredFontButton()
 {
-    _value_changed_connection.disconnect();
+    _signal_font_set.disconnect();
 }
 
-RegisteredFontSelector::RegisteredFontSelector ( const Glib::ustring& label, const Glib::ustring& tip,
+RegisteredFontButton::RegisteredFontButton ( const Glib::ustring& label, const Glib::ustring& tip,
                         const Glib::ustring& key, Registry& wr, Inkscape::XML::Node* repr_in,
                         SPDocument* doc_in )
-    : RegisteredWidget<FontSelector> (label, tip)
+    : RegisteredWidget<FontButton>(label, tip)
 {
     init_parent(key, wr, repr_in, doc_in);
-    _value_changed_connection = signal_fontselupd.connect (sigc::mem_fun (*this, &RegisteredFontSelector::on_value_changed));
+    _signal_font_set =  signal_font_value_changed().connect (sigc::mem_fun (*this, &RegisteredFontButton::on_value_changed));
 }
 
 void
-RegisteredFontSelector::setValue (Glib::ustring fontspec, double fontsize)
+RegisteredFontButton::setValue (Glib::ustring fontspec)
 {
-    if (fontsize != 0) { //have value in the effect
-        FontSelector::setValue (fontspec, fontsize);
-    }
+    FontButton::setValue(fontspec);
 }
 
 void
-RegisteredFontSelector::on_value_changed()
+RegisteredFontButton::on_value_changed()
 {
 
     if (_wr->isUpdating())
@@ -840,7 +838,7 @@ RegisteredFontSelector::on_value_changed()
     _wr->setUpdating (true);
 
     Inkscape::SVGOStringStream os;
-    os << getFontSpec() << " @ " << getFontSize();
+    os << getValue();
 
     write_to_xml(os.str().c_str());
 

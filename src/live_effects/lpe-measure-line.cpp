@@ -7,6 +7,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 #include "live_effects/lpe-measure-line.h"
+#include <pangomm/fontdescription.h>
+#include <libnrtype/font-lister.h>
 #include "inkscape.h"
 #include "xml/node.h"
 #include "uri.h"
@@ -47,13 +49,13 @@ static const Util::EnumDataConverter<OrientationMethod> OMConverter(OrientationM
 
 LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
-    fontselector(_("Font Selector*"), _("Font Selector"), "fontselector", &wr, this, " "),
+    fontbutton(_("Font*"), _("Font Selector"), "fontbutton", &wr, this),
     orientation(_("Orientation"), _("Orientation method"), "orientation", OMConverter, &wr, this, OM_PARALLEL, false),
     origin(_("Optional Origin"), _("Optional origin"), "origin", &wr, this),
     curve_linked(_("Curve on optional origin"), _("Curve on optional origin, set 0 to start/end"), "curve_linked", &wr, this, 1),
     origin_offset(_("Optional origin offset*"), _("Optional origin offset"), "origin_offset", &wr, this, 5),
     scale(_("Scale*"), _("Scaling factor"), "scale", &wr, this, 1.0),
-    precision(_("Number precision*"), _("Number precision"), "precision", &wr, this, 2),
+    precision(_("Precision*"), _("Precision"), "precision", &wr, this, 2),
     offset_right_left(_("Offset right left*"), _("Offset right left"), "offset_right_left", &wr, this, 0),
     offset_top_bottom(_("Offset top bottom*"), _("Offset top bottom"), "offset_top_bottom", &wr, this, 5),
     gap_start(_("Gap to line from origin"), _("Gap to line from origin, without affecting measure"), "gap_start", &wr, this, 0),
@@ -64,7 +66,7 @@ LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
     scale_insensitive(_("Scale insensitive*"), _("Scale insensitive to transforms in element, parents..."), "scale_insensitive", &wr, this, true),
     local_locale(_("Local Number Format*"), _("Local number format"), "local_locale", &wr, this, true)
 {
-    registerParameter(&fontselector);
+    registerParameter(&fontbutton);
     registerParameter(&orientation);
     registerParameter(&origin);
     registerParameter(&curve_linked);
@@ -81,7 +83,7 @@ LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
     registerParameter(&scale_insensitive);
     registerParameter(&local_locale);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    fontselector.param_update_default(prefs->getString("/live_effects/measure-line/fontselector"));
+    fontbutton.param_update_default(prefs->getString("/live_effects/measure-line/fontbutton"));
     scale.param_update_default(prefs->getDouble("/live_effects/measure-line/scale", 1.0));
     precision.param_update_default(prefs->getInt("/live_effects/measure-line/precision", 2));
     offset_right_left.param_update_default(prefs->getDouble("/live_effects/measure-line/offset_right_left", 0.0));
@@ -116,7 +118,6 @@ LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
     gap_end.param_set_range(-999999.0, 999999.0);
     gap_end.param_set_increments(1, 1);
     gap_end.param_set_digits(2);
-    fontlister = Inkscape::FontLister::get_instance();
 }
 
 bool LPEMeasureLine::alerts_off = false;
@@ -294,15 +295,14 @@ LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
                     rtspan->setAttribute("sodipodi:role", "line");
                 }
                 SPCSSAttr *css = sp_repr_css_attr_new();
-                Glib::ustring fontspec = fontselector.param_readFontSpec(fontselector.param_getSVGValue());
-                double fontsize = fontselector.param_readFontSize(fontselector.param_getSVGValue());
-                fontlister->fill_css( css, fontspec );
+                Pango::FontDescription fontdesc((Glib::ustring)fontbutton.param_getSVGValue());
+                double fontsize = fontdesc.get_size()/Pango::SCALE;
+                Inkscape::FontLister *fontlister = Inkscape::FontLister::get_instance();
+                fontlister->fill_css( css, (Glib::ustring)fontbutton.param_getSVGValue() );
                 std::stringstream font_size;
                 font_size.imbue(std::locale::classic());
                 font_size <<  fontsize << "pt";
                 sp_repr_css_set_property (css, "font-size", font_size.str().c_str());
-                sp_repr_css_set_property (css, "font-style", "normal");
-                sp_repr_css_set_property (css, "font-weight", "normal");
                 sp_repr_css_set_property (css, "line-height", "125%");
                 sp_repr_css_set_property (css, "letter-spacing", "0");
                 sp_repr_css_set_property (css, "word-spacing", "0");
@@ -352,14 +352,15 @@ LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
                 }
                 length = Inkscape::Util::Quantity::convert(length, doc_unit.c_str(), unit.get_abbreviation());
                 std::stringstream length_str;
-                length_str.setf(std::ios::fixed, std::ios::floatfield);
                 length_str.precision(precision);
+                length_str.setf(std::ios::fixed, std::ios::floatfield);
                 if (local_locale) {
                     length_str.imbue(std::locale(""));
                 } else {
                     length_str.imbue(std::locale::classic());
                 }
-                length_str << length << unit.get_abbreviation();
+                length_str << std::fixed << length;
+                length_str << unit.get_abbreviation();
                 Inkscape::XML::Node *rstring = NULL;
                 if (!elemref) {
                     rstring = xml_doc->createTextNode(length_str.str().c_str());
@@ -509,7 +510,7 @@ void
 LPEMeasureLine::saveDefault()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setString("/live_effects/measure-line/fontselector", (Glib::ustring)fontselector.param_getSVGValue());
+    prefs->setString("/live_effects/measure-line/fontbutton", (Glib::ustring)fontbutton.param_getSVGValue());
     prefs->setDouble("/live_effects/measure-line/scale", scale);
     prefs->setInt("/live_effects/measure-line/precision", precision);
     prefs->setDouble("/live_effects/measure-line/offset_right_left", offset_right_left);

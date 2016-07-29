@@ -12,7 +12,7 @@
 
 #include "live_effects/effect.h"
 #include "live_effects/parameter/enum.h"
-#include "live_effects/parameter/font.h"
+#include "live_effects/parameter/fontbutton.h"
 #include "live_effects/parameter/text.h"
 #include "live_effects/parameter/unit.h"
 #include "live_effects/parameter/bool.h"
@@ -47,8 +47,7 @@ public:
     void saveDefault();
     virtual Gtk::Widget *newWidget();
 private:
-    FontParam fontselector;
-    Inkscape::FontLister *fontlister;
+    FontButtonParam fontbutton;
     EnumParam<OrientationMethod> orientation;
     OriginalPathParam origin;
     ScalarParam curve_linked;
