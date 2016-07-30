@@ -71,9 +71,20 @@ parts:
       - libvisio-0.1-1
       - libwpg-0.3-3
       - libglib2.0-bin
+      - aspell
+      - imagemagick
+      - libimage-magick-perl
+      - libwmf-bin
+      - python-lxml
+      - python-numpy
+      - transfig
+      - pstoedit
+      - libsvg-perl
+      - libxml-xql-perl
+      - python-uniconvertor
+      - ruby
     stage:
       - -usr/sbin/update-icon-caches
-      - -usr/share/pkgconfig
     snap:
       - -lib/inkscape/*.a
     after: [desktop/gtk2]
