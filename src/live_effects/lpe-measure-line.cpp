@@ -215,6 +215,9 @@ LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
                         }
                         s[Geom::X] = xpos;
                         e[Geom::X] = xpos;
+                        if (s[Geom::Y] > e[Geom::Y]) {
+                            swap(s,e);
+                        }
                     }
                     if(*om_it == OM_HORIZONTAL) {
                         Coord ypos = std::max(s[Geom::Y],e[Geom::Y]);
@@ -223,6 +226,9 @@ LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
                         }
                         s[Geom::Y] = ypos;
                         e[Geom::Y] = ypos;
+                        if (s[Geom::X] < e[Geom::X]) {
+                            swap(s,e);
+                        }
                     }
                     Geom::Ray ray(s,e);
                     Geom::Coord angle = ray.angle();
@@ -250,6 +256,9 @@ LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
                         }
                         s[Geom::X] = xpos;
                         e[Geom::X] = xpos;
+                        if (s[Geom::Y] > e[Geom::Y]) {
+                            swap(s,e);
+                        }
                     }
                     if(*om_it == OM_HORIZONTAL) {
                         Coord ypos = std::max(s[Geom::Y],e[Geom::Y]);
@@ -258,6 +267,9 @@ LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
                         }
                         s[Geom::Y] = ypos;
                         e[Geom::Y] = ypos;
+                        if (s[Geom::X] < e[Geom::X]) {
+                            swap(s,e);
+                        }
                     }
                 }
                 double length = Geom::distance(s, e)  * scale;
@@ -406,28 +418,55 @@ LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
     }
 }
 
-void LPEMeasureLine::doOnRemove (SPLPEItem const* /*lpeitem*/)
+void LPEMeasureLine::doOnRemove (SPLPEItem const* lpeitem)
 {
-//    if (SPDesktop *desktop = SP_ACTIVE_DESKTOP) {
-//        if (horizontal_text) {
-//            SPObject * text_obj = desktop->currentLayer()->get_child_by_repr(horizontal_text);
-//            if (text_obj) {
-//                text_obj->deleteObject();
-//            }
-//        }
-//        if (vertical_text) {
-//            SPObject * text_obj = desktop->currentLayer()->get_child_by_repr(vertical_text);
-//            if (text_obj) {
-//                text_obj->deleteObject();
-//            }
-//        }
-//        if (parallel_text) {
-//            SPObject * text_obj = desktop->currentLayer()->get_child_by_repr(parallel_text);
-//            if (text_obj) {
-//                text_obj->deleteObject();
-//            }
-//        }
-//    }
+    if (SPDesktop *desktop = SP_ACTIVE_DESKTOP) {
+        SPLPEItem * splpeitem = const_cast<SPLPEItem *>(lpeitem);
+        std::vector<OrientationMethod> orientations;
+        std::vector<OrientationMethod> orientations_remove;
+        if ( orientation == OM_HORIZONTAL ||
+             orientation == OM_PARALLEL_VERTICAL_HORIZONTAL ||
+             orientation == OM_PARALLEL_HORIZONTAL ||
+             orientation == OM_VERTICAL_HORIZONTAL)
+        {                
+            orientations.push_back(OM_HORIZONTAL);
+        }
+        if ( orientation == OM_VERTICAL ||
+             orientation == OM_PARALLEL_VERTICAL_HORIZONTAL ||
+             orientation == OM_PARALLEL_VERTICAL ||
+             orientation == OM_VERTICAL_HORIZONTAL)
+        { 
+            orientations.push_back(OM_VERTICAL);
+        }
+        if ( orientation == OM_PARALLEL ||
+             orientation == OM_PARALLEL_VERTICAL_HORIZONTAL ||
+             orientation == OM_PARALLEL_VERTICAL ||
+             orientation == OM_PARALLEL_HORIZONTAL)
+        { 
+            orientations.push_back(OM_PARALLEL);
+        }
+        for (std::vector<OrientationMethod>::const_iterator om_it = orientations.begin(); om_it != orientations.end(); ++om_it) {
+            Glib::ustring orientation_str;
+            Inkscape::XML::Node *rtext = NULL;
+            if (*om_it == OM_VERTICAL) {
+                orientation_str = "vertical";
+            }
+            if (*om_it == OM_HORIZONTAL) {
+                orientation_str = "horizontal";
+            }
+            if (*om_it == OM_PARALLEL) {
+                orientation_str = "parallel";
+            }
+            Inkscape::URI SVGElem_uri(((Glib::ustring)"#" + (Glib::ustring)SP_OBJECT(lpeitem)->getId() + (Glib::ustring)"_DINnumber_" + orientation_str).c_str());
+            Inkscape::URIReference* SVGElemRef = new Inkscape::URIReference(desktop->doc());
+            SVGElemRef->attach(SVGElem_uri);
+            SPObject *elemref = NULL;
+            Inkscape::XML::Node *rtspan = NULL;
+            if (elemref = SVGElemRef->getObject()) {
+                elemref->deleteObject();
+            }
+        }
+    }
 }
 
 Gtk::Widget *LPEMeasureLine::newWidget()
@@ -483,22 +522,22 @@ LPEMeasureLine::doEffect_path(Geom::PathVector const &path_in)
     angle = std::fmod(angle + rad_from_deg(180), 2*M_PI);
     if (angle < 0) angle += 2*M_PI;
     e = e - Point::polar(angle, gap_end);
-    if(orientation == OM_VERTICAL) {
-        Coord xpos = std::max(s[Geom::X],e[Geom::X]);
-        if (reverse) {
-            xpos = std::min(s[Geom::X],e[Geom::X]);
-        }
-        s[Geom::X] = xpos;
-        e[Geom::X] = xpos;
-    }
-    if(orientation == OM_HORIZONTAL) {
-        Coord ypos = std::max(s[Geom::Y],e[Geom::Y]);
-        if (reverse) {
-            ypos = std::min(s[Geom::Y],e[Geom::Y]);
-        }
-        s[Geom::Y] = ypos;
-        e[Geom::Y] = ypos;
-    }
+//    if(orientation == OM_VERTICAL) {
+//        Coord xpos = std::max(s[Geom::X],e[Geom::X]);
+//        if (reverse) {
+//            xpos = std::min(s[Geom::X],e[Geom::X]);
+//        }
+//        s[Geom::X] = xpos;
+//        e[Geom::X] = xpos;
+//    }
+//    if(orientation == OM_HORIZONTAL) {
+//        Coord ypos = std::max(s[Geom::Y],e[Geom::Y]);
+//        if (reverse) {
+//            ypos = std::min(s[Geom::Y],e[Geom::Y]);
+//        }
+//        s[Geom::Y] = ypos;
+//        e[Geom::Y] = ypos;
+//    }
     path.start( s );
     path.appendNew<Geom::LineSegment>( e );
     Geom::PathVector output;

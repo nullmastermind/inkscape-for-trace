@@ -42,7 +42,7 @@ public:
     virtual ~LPEMeasureLine();
     virtual void doBeforeEffect (SPLPEItem const* lpeitem);
     virtual void doOnApply(SPLPEItem const* lpeitem);
-    virtual void doOnRemove (SPLPEItem const* /*lpeitem*/);
+    virtual void doOnRemove (SPLPEItem const* lpeitem);
     virtual Geom::PathVector doEffect_path(Geom::PathVector const &path_in);
     void saveDefault();
     virtual Gtk::Widget *newWidget();

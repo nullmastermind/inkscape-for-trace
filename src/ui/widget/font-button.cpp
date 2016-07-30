@@ -18,7 +18,7 @@ FontButton::FontButton(Glib::ustring const &label, Glib::ustring const &tooltip,
               Glib::ustring const &suffix,
               Glib::ustring const &icon,
               bool mnemonic)
-           : Labelled(label, tooltip, new Gtk::FontButton("sans"), suffix, icon, mnemonic)
+           : Labelled(label, tooltip, new Gtk::FontButton("Sans 10"), suffix, icon, mnemonic)
 {
 }
 
