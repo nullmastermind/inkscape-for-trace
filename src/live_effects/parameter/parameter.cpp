@@ -5,8 +5,8 @@
  */
 
 
-#include "live_effects/parameter/parameter.h"
 #include "live_effects/effect.h"
+#include "live_effects/parameter/parameter.h"
 #include "svg/svg.h"
 #include "xml/repr.h"
 
@@ -66,8 +66,7 @@ ScalarParam::ScalarParam( const Glib::ustring& label, const Glib::ustring& tip,
       inc_page(1),
       add_slider(false),
       overwrite_widget(false),
-      hide_widget(no_widget),
-      _rsu(NULL)
+      hide_widget(no_widget)
 {
 }
 
@@ -111,6 +110,7 @@ ScalarParam::param_update_default(gdouble default_value)
 void
 ScalarParam::param_set_value(gdouble val)
 {
+    param_effect->upd_params = true;
     value = val;
     if (integer)
         value = round(value);
@@ -118,9 +118,6 @@ ScalarParam::param_set_value(gdouble val)
         value = max;
     if (value < min)
         value = min;
-    if (_rsu) {
-        _rsu->setValue(val);
-    }
 }
 
 void
@@ -131,7 +128,7 @@ ScalarParam::param_set_range(gdouble min, gdouble max)
     // Once again, in gtk2, this is not a problem. But in gtk3,
     // widgets get allocated the amount of size they ask for,
     // leading to excessively long widgets.
-
+    param_effect->upd_params = true;
     if (min >= -SCALARPARAM_G_MAXDOUBLE) {
         this->min = min;
     } else {
@@ -140,10 +137,7 @@ ScalarParam::param_set_range(gdouble min, gdouble max)
     if (max <= SCALARPARAM_G_MAXDOUBLE) {
         this->max = max;
     } else {
-	this->max = SCALARPARAM_G_MAXDOUBLE;
-    }
-    if (_rsu) {
-        _rsu->setRange(this->min, this->max);
+        this->max = SCALARPARAM_G_MAXDOUBLE;
     }
     param_set_value(value); // reset value to see whether it is in ranges
 }
@@ -151,6 +145,7 @@ ScalarParam::param_set_range(gdouble min, gdouble max)
 void
 ScalarParam::param_make_integer(bool yes)
 {
+    param_effect->upd_params = true;
     integer = yes;
     digits = 0;
     inc_step = 1;
@@ -167,22 +162,22 @@ Gtk::Widget *
 ScalarParam::param_newWidget()
 {
     if(!hide_widget){
-        _rsu = Gtk::manage( new Inkscape::UI::Widget::RegisteredScalar(
+        Inkscape::UI::Widget::RegisteredScalar *rsu = Gtk::manage( new Inkscape::UI::Widget::RegisteredScalar(
             param_label, param_tooltip, param_key, *param_wr, param_effect->getRepr(), param_effect->getSPDoc() ) );
 
-        _rsu->setValue(value);
-        _rsu->setDigits(digits);
-        _rsu->setIncrements(inc_step, inc_page);
-        _rsu->setRange(min, max);
-        _rsu->setProgrammatically = false;
+        rsu->setValue(value);
+        rsu->setDigits(digits);
+        rsu->setIncrements(inc_step, inc_page);
+        rsu->setRange(min, max);
+        rsu->setProgrammatically = false;
         if (add_slider) {
-            _rsu->addSlider();
+            rsu->addSlider();
         }
         if(!overwrite_widget){
-            _rsu->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change scalar parameter"));
+            rsu->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change scalar parameter"));
         }
         param_effect->upd_params = false;
-        return dynamic_cast<Gtk::Widget *> (_rsu);
+        return dynamic_cast<Gtk::Widget *> (rsu);
     } else {
         return NULL;
     }
@@ -191,20 +186,16 @@ ScalarParam::param_newWidget()
 void
 ScalarParam::param_set_digits(unsigned digits)
 {
+    param_effect->upd_params = true;
     this->digits = digits;
-    if (_rsu) {
-        _rsu->setDigits(this->digits);
-    }
 }
 
 void
 ScalarParam::param_set_increments(double step, double page)
 {
+    param_effect->upd_params = true;
     inc_step = step;
     inc_page = page;
-    if (_rsu) {
-       _rsu->setIncrements(inc_step, inc_page);
-    }
 }
 
 

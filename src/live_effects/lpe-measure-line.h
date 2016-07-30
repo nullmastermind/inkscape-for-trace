@@ -29,10 +29,6 @@ enum OrientationMethod {
     OM_HORIZONTAL,
     OM_VERTICAL,
     OM_PARALLEL,
-    OM_PARALLEL_VERTICAL,
-    OM_PARALLEL_HORIZONTAL,
-    OM_VERTICAL_HORIZONTAL,
-    OM_PARALLEL_VERTICAL_HORIZONTAL,
     OM_END
 };
 
@@ -43,29 +39,26 @@ public:
     virtual void doBeforeEffect (SPLPEItem const* lpeitem);
     virtual void doOnApply(SPLPEItem const* lpeitem);
     virtual void doOnRemove (SPLPEItem const* lpeitem);
+    virtual void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/);
     virtual Geom::PathVector doEffect_path(Geom::PathVector const &path_in);
     void saveDefault();
     virtual Gtk::Widget *newWidget();
 private:
     FontButtonParam fontbutton;
     EnumParam<OrientationMethod> orientation;
-    OriginalPathParam origin;
     ScalarParam curve_linked;
-    ScalarParam origin_offset;
     ScalarParam scale;
     ScalarParam precision;
     ScalarParam offset_right_left;
     ScalarParam offset_top_bottom;
     ScalarParam gap_start;
     ScalarParam gap_end;
-    size_t previous_ncurves;
     UnitParam unit;
     BoolParam reverse;
     BoolParam color_as_line;
     BoolParam scale_insensitive;
     BoolParam local_locale;
     Glib::ustring doc_unit;
-    static bool alerts_off;
 /*    Geom::Affine affine_over;*/
     LPEMeasureLine(const LPEMeasureLine &);
     LPEMeasureLine &operator=(const LPEMeasureLine &);

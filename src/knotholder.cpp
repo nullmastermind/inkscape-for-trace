@@ -17,7 +17,6 @@
 
 #include "document.h"
 #include "document-undo.h"
-#include "selection.h"
 #include "sp-shape.h"
 #include "knot.h"
 #include "knotholder.h"
@@ -203,7 +202,7 @@ KnotHolder::knot_moved_handler(SPKnot *knot, Geom::Point const &p, guint state)
 }
 
 void
-KnotHolder::knot_ungrabbed_handler(SPKnot */*knot*/, guint /*state*/)
+KnotHolder::knot_ungrabbed_handler(SPKnot */*knot*/, guint)
 {
 	this->dragging = false;
 

@@ -454,7 +454,9 @@ void Effect::doAfterEffect (SPLPEItem const* /*lpeitem*/)
 void Effect::doOnRemove (SPLPEItem const* /*lpeitem*/)
 {
 }
-
+void Effect::doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/)
+{
+}
 //secret impl methods (shhhh!)
 void Effect::doOnApply_impl(SPLPEItem const* lpeitem)
 {

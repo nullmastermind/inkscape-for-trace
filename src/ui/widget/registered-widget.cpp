@@ -298,7 +298,6 @@ RegisteredScalar::on_value_changed()
         setProgrammatically = false;
         return;
     }
-
     if (_wr->isUpdating()) {
         return;
     }

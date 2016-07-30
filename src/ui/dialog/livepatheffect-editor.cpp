@@ -589,6 +589,14 @@ void LivePathEffectEditor::on_visibility_toggled( Glib::ustring const& str )
         /* FIXME: this explicit writing to SVG is wrong. The lpe_item should have a method to disable/enable an effect within its stack.
          * So one can call:  lpe_item->setActive(lpeobjref->lpeobject); */
         lpeobjref->lpeobject->get_lpe()->getRepr()->setAttribute("is_visible", newValue ? "true" : "false");
+        Inkscape::Selection *sel = _getSelection();
+        if ( sel && !sel->isEmpty() ) {
+            SPItem *item = sel->singleItem();
+            SPLPEItem *lpeitem  = dynamic_cast<SPLPEItem *>(item);
+            if ( lpeitem ) {
+                lpeobjref->lpeobject->get_lpe()->doOnVisibilityToggled(lpeitem);
+            }
+        }
         DocumentUndo::done( current_desktop->getDocument(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
                             newValue ? _("Activate path effect") : _("Deactivate path effect"));
     }

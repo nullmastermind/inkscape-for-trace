@@ -117,7 +117,6 @@ public:
     void param_set_range(gdouble min, gdouble max);
     void param_set_digits(unsigned digits);
     void param_set_increments(double step, double page);
-
     void addSlider(bool add_slider_widget) { add_slider = add_slider_widget; };
 
     void param_overwrite_widget(bool overwrite_widget);
@@ -141,7 +140,6 @@ protected:
 private:
     ScalarParam(const ScalarParam&);
     ScalarParam& operator=(const ScalarParam&);
-    Inkscape::UI::Widget::RegisteredScalar *_rsu;
 };
 
 } //namespace LivePathEffect
