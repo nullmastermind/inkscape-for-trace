@@ -34,10 +34,13 @@ TextParam::TextParam( const Glib::ustring& label, const Glib::ustring& tip,
       defvalue(default_value),
       _hide_canvas_text(false)
 {
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP; // FIXME: we shouldn't use this!
-    canvas_text = (SPCanvasText *) sp_canvastext_new(desktop->getTempGroup(), desktop, Geom::Point(0,0), "");
-    sp_canvastext_set_text (canvas_text, default_value.c_str());
-    sp_canvastext_set_coords (canvas_text, 0, 0);
+    if (SPDesktop *desktop = SP_ACTIVE_DESKTOP) { // FIXME: we shouldn't use this!
+        canvas_text = (SPCanvasText *) sp_canvastext_new(desktop->getTempGroup(), desktop, Geom::Point(0,0), "");
+        sp_canvastext_set_text (canvas_text, default_value.c_str());
+        sp_canvastext_set_coords (canvas_text, 0, 0);
+    } else {
+        _hide_canvas_text = true;
+    }
 }
 
 void
@@ -55,8 +58,10 @@ TextParam::param_update_default(Glib::ustring default_value)
 void
 TextParam::param_hide_canvas_text()
 {
-    _hide_canvas_text = true;
-    sp_canvastext_set_text (canvas_text,"");
+    if (!_hide_canvas_text) {
+        sp_canvastext_set_text(canvas_text, " ");
+        _hide_canvas_text = true;
+    }
 }
 
 void
@@ -113,8 +118,7 @@ TextParam::param_newWidget()
 {
     Inkscape::UI::Widget::RegisteredText *rsu = Gtk::manage(new Inkscape::UI::Widget::RegisteredText(
         param_label, param_tooltip, param_key, *param_wr, param_effect->getRepr(), param_effect->getSPDoc()));
-
-    rsu->setText(value.c_str());
+    rsu->setText(value);
     rsu->setProgrammatically = false;
 
     rsu->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change text parameter"));

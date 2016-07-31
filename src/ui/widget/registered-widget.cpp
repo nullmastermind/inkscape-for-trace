@@ -331,8 +331,6 @@ RegisteredText::RegisteredText ( const Glib::ustring& label, const Glib::ustring
     init_parent(key, wr, repr_in, doc_in);
 
     setProgrammatically = false;
-
-    setText("");
     _activate_connection = signal_activate().connect (sigc::mem_fun (*this, &RegisteredText::on_activate));
 }
 
@@ -348,16 +346,13 @@ RegisteredText::on_activate()
         return;
     }
     _wr->setUpdating (true);
-
-    Inkscape::SVGOStringStream os;
-    os << getText();
-
+    Glib::ustring str(getText());
     set_sensitive(false);
+    Inkscape::SVGOStringStream os;
+    os << str;
     write_to_xml(os.str().c_str());
-    set_sensitive(true);
-
     setText(os.str().c_str());
-
+    set_sensitive(true);
     _wr->setUpdating (false);
 }
 

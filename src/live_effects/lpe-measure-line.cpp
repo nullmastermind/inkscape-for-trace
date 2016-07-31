@@ -57,7 +57,7 @@ LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
     helpline_distance(_("Helpline distance*"), _("Helpline distance"), "helpline_distance", &wr, this, 0.0),
     helpline_overlap(_("Helpline overlap*"), _("Helpline overlap"), "helpline_overlap", &wr, this, 2.0),
     unit(_("Unit*"), _("Unit"), "unit", &wr, this, "px"),
-    format(_("Format*"), _("Format the number ex:measure+ +unit"), "format", &wr, this, "measure+unit"),
+    format(_("Format*"), _("Format the number ex:{measure} {unit}, return to save"), "format", &wr, this,"measure unit"),
     arrows_outside(_("Arrows outside"), _("Arrows outside"), "arrows_outside", &wr, this, false),
     flip_side(_("Flip side*"), _("Flip side"), "flip_side", &wr, this, false),
     scale_insensitive(_("Scale insensitive*"), _("Scale insensitive to transforms in element, parents..."), "scale_insensitive", &wr, this, true),
@@ -83,15 +83,27 @@ LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
     registerParameter(&line_group_05);
     registerParameter(&rotate_anotation);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    fontbutton.param_update_default(prefs->getString("/live_effects/measure-line/fontbutton"));
+    Glib::ustring fontbutton_value = prefs->getString("/live_effects/measure-line/fontbutton");
+    if(fontbutton_value.empty()){
+        fontbutton_value = "Sans 10";
+    }
+    fontbutton.param_update_default(fontbutton_value);
     scale.param_update_default(prefs->getDouble("/live_effects/measure-line/scale", 1.0));
     precision.param_update_default(prefs->getInt("/live_effects/measure-line/precision", 2));
     position.param_update_default(prefs->getDouble("/live_effects/measure-line/position", 10.0));
     text_distance.param_update_default(prefs->getDouble("/live_effects/measure-line/text_distance", 5.0));
     helpline_distance.param_update_default(prefs->getDouble("/live_effects/measure-line/helpline_distance", 0.0));
     helpline_overlap.param_update_default(prefs->getDouble("/live_effects/measure-line/helpline_overlap", 0.0));
-    unit.param_update_default(prefs->getString("/live_effects/measure-line/unit"));
-    format.param_update_default(prefs->getString("/live_effects/measure-line/format"));
+    Glib::ustring unit_value = prefs->getString("/live_effects/measure-line/unit");
+    if(unit_value.empty()){
+        unit_value = "px";
+    }
+    unit.param_update_default(unit_value);
+    Glib::ustring format_value = prefs->getString("/live_effects/measure-line/format");
+    if(format_value.empty()){
+        format_value = "{measure}{unit}";
+    }
+    format.param_update_default(format_value);
     flip_side.param_update_default(prefs->getBool("/live_effects/measure-line/flip_side"));
     scale_insensitive.param_update_default(prefs->getBool("/live_effects/measure-line/scale_insensitive"));
     local_locale.param_update_default(prefs->getBool("/live_effects/measure-line/local_locale"));
@@ -391,6 +403,10 @@ LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
             createArrowMarker((Glib::ustring)"ArrowDIN-end");
         }
         if (SPDesktop *desktop = SP_ACTIVE_DESKTOP) {
+            if (((Glib::ustring)format.param_getSVGValue()).empty()) {
+                format.param_setValue((Glib::ustring)"{measure}{unit}");
+                this->upd_params = true;
+            }
             size_t ncurves = pathvector.curveCount();
             curve_linked.param_set_range(0, ncurves);
             Geom::Point start = pathvector.initialPoint();
@@ -491,26 +507,26 @@ void LPEMeasureLine::doOnRemove (SPLPEItem const* lpeitem)
 {
     if (SPDesktop *desktop = SP_ACTIVE_DESKTOP) {
         SPLPEItem * splpeitem = const_cast<SPLPEItem *>(lpeitem);
-        Inkscape::URI SVGElem_uri(( (Glib::ustring)"text-on-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
+        Inkscape::URI SVGElem_uri(((Glib::ustring)"#" + (Glib::ustring)"text-on-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
         Inkscape::URIReference* SVGElemRef = new Inkscape::URIReference(desktop->doc());
         SVGElemRef->attach(SVGElem_uri);
         SPObject *elemref = NULL;
         if (elemref = SVGElemRef->getObject()) {
             elemref->deleteObject();
         }
-        Inkscape::URI SVGElem_uri2(( (Glib::ustring)"infoline-on-end-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
+        Inkscape::URI SVGElem_uri2(((Glib::ustring)"#" + (Glib::ustring)"infoline-on-end-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
         SVGElemRef->attach(SVGElem_uri2);
         elemref = NULL;
         if (elemref = SVGElemRef->getObject()) {
             elemref->deleteObject();
         }
-        Inkscape::URI SVGElem_uri3(( (Glib::ustring)"infoline-on-start-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
+        Inkscape::URI SVGElem_uri3(((Glib::ustring)"#" + (Glib::ustring)"infoline-on-start-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
         SVGElemRef->attach(SVGElem_uri3);
         elemref = NULL;
         if (elemref = SVGElemRef->getObject()) {
             elemref->deleteObject();
         }
-        Inkscape::URI SVGElem_uri4(( (Glib::ustring)"infoline-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
+        Inkscape::URI SVGElem_uri4(((Glib::ustring)"#" + (Glib::ustring)"infoline-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
         SVGElemRef->attach(SVGElem_uri4);
         elemref = NULL;
         if (elemref = SVGElemRef->getObject()) {
