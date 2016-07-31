@@ -41,6 +41,9 @@ public:
     virtual void doOnRemove (SPLPEItem const* lpeitem);
     virtual void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/);
     virtual Geom::PathVector doEffect_path(Geom::PathVector const &path_in);
+    void createLine(Geom::Point start,Geom::Point end,Glib::ustring id, bool main, bool remove);
+    void createTextLabel(Geom::Point pos, double length, Geom::Coord angle, double fontsize, bool remove);
+    void createArrowMarker(Glib::ustring mode);
     void saveDefault();
     virtual Gtk::Widget *newWidget();
 private:
@@ -49,15 +52,18 @@ private:
     ScalarParam curve_linked;
     ScalarParam scale;
     ScalarParam precision;
-    ScalarParam offset_right_left;
-    ScalarParam offset_top_bottom;
-    ScalarParam gap_start;
-    ScalarParam gap_end;
+    ScalarParam position;
+    ScalarParam text_distance;
+    ScalarParam helpline_distance;
+    ScalarParam helpline_overlap;
     UnitParam unit;
-    BoolParam reverse;
-    BoolParam color_as_line;
+    TextParam format;
+    BoolParam arrows_outside;
+    BoolParam flip_side;
     BoolParam scale_insensitive;
     BoolParam local_locale;
+    BoolParam line_group_05;
+    BoolParam rotate_anotation;
     Glib::ustring doc_unit;
 /*    Geom::Affine affine_over;*/
     LPEMeasureLine(const LPEMeasureLine &);
