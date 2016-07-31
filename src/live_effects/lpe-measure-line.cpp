@@ -199,17 +199,6 @@ LPEMeasureLine::createTextLabel(Geom::Point pos, double length, Geom::Coord angl
         Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
         Inkscape::XML::Node *rtext = NULL;
         double doc_w = desktop->getDocument()->getRoot()->width.value;
-//        Glib::ustring doc_unit = unit_table.getUnit(desktop->getDocument()->getRoot()->width.unit)->abbr;
-//        if (doc_unit == "") {
-//            doc_unit = "px";
-//        } else if (doc_unit == "%" && desktop->getDocument()->getRoot()->viewBox_set) {
-//            doc_w_unit = "px";
-//            doc_w = desktop->getDocument()->getRoot()->viewBox.width();
-//        }
-//        doc_unit = Inkscape::Util::unit_table.getUnit(desktop->doc()->getRoot()->height.unit)->abbr;
-//        if (doc_unit.empty()) {
-//            doc_unit = "px";
-//        }
         Geom::Scale scale = desktop->getDocument()->getDocumentScale();
         SPNamedView *nv = desktop->getNamedView();
         Glib::ustring display_unit = nv->display_units->abbr;
@@ -251,11 +240,13 @@ LPEMeasureLine::createTextLabel(Geom::Point pos, double length, Geom::Coord angl
         gchar * transform;
         if (rotate_anotation) {
             Geom::Affine affine = Geom::Affine(Geom::Translate(pos).inverse());
-            if (std::abs(angle) > rad_from_deg(90) && std::abs(angle) < rad_from_deg(270)) {
+            angle = std::fmod(angle, 2*M_PI);
+            if (angle < 0) angle += 2*M_PI;
+            if (angle >= rad_from_deg(90) && angle < rad_from_deg(270)) {
                 angle = std::fmod(angle + rad_from_deg(180), 2*M_PI);
                 if (angle < 0) angle += 2*M_PI;
             }
-            affine *= Geom::Rotate(std::abs(angle));
+            affine *= Geom::Rotate(angle);
             affine *= Geom::Translate(pos);
             transform = sp_svg_transform_write(affine);
         } else {
@@ -458,7 +449,9 @@ LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
             fontsize *= desktop->doc()->getRoot()->c2p.inverse().expansionX();
             Geom::Coord angle_cross = std::fmod(angle + rad_from_deg(90), 2*M_PI);
             if (angle_cross < 0) angle_cross += 2*M_PI;
-            if (std::abs(angle) > rad_from_deg(90) && std::abs(angle) < rad_from_deg(270)) {
+            angle = std::fmod(angle, 2*M_PI);
+            if (angle < 0) angle += 2*M_PI;
+            if (angle >= rad_from_deg(90) && angle < rad_from_deg(270)) {
                 pos = pos - Point::polar(angle_cross, (position - text_distance) + fontsize/2.0);
             } else {
                 pos = pos - Point::polar(angle_cross, (position + text_distance) - fontsize/2.0);
