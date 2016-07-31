@@ -64,7 +64,8 @@ private:
     BoolParam local_locale;
     BoolParam line_group_05;
     BoolParam rotate_anotation;
-    Glib::ustring doc_unit;
+    Glib::ustring display_unit;
+    double doc_scale;
 /*    Geom::Affine affine_over;*/
     LPEMeasureLine(const LPEMeasureLine &);
     LPEMeasureLine &operator=(const LPEMeasureLine &);

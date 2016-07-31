@@ -198,9 +198,30 @@ LPEMeasureLine::createTextLabel(Geom::Point pos, double length, Geom::Coord angl
     if (SPDesktop *desktop = SP_ACTIVE_DESKTOP) {
         Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
         Inkscape::XML::Node *rtext = NULL;
-        doc_unit = Inkscape::Util::unit_table.getUnit(desktop->doc()->getRoot()->height.unit)->abbr;
-        if (doc_unit.empty()) {
-            doc_unit = "px";
+        double doc_w = desktop->getDocument()->getRoot()->width.value;
+//        Glib::ustring doc_unit = unit_table.getUnit(desktop->getDocument()->getRoot()->width.unit)->abbr;
+//        if (doc_unit == "") {
+//            doc_unit = "px";
+//        } else if (doc_unit == "%" && desktop->getDocument()->getRoot()->viewBox_set) {
+//            doc_w_unit = "px";
+//            doc_w = desktop->getDocument()->getRoot()->viewBox.width();
+//        }
+//        doc_unit = Inkscape::Util::unit_table.getUnit(desktop->doc()->getRoot()->height.unit)->abbr;
+//        if (doc_unit.empty()) {
+//            doc_unit = "px";
+//        }
+        Geom::Scale scale = desktop->getDocument()->getDocumentScale();
+        SPNamedView *nv = desktop->getNamedView();
+        Glib::ustring display_unit = nv->display_units->abbr;
+        if (display_unit.empty()) {
+            display_unit = "px";
+        }
+        //only check constrain viewbox on X
+        doc_scale = Inkscape::Util::Quantity::convert( scale[Geom::X], "px", nv->display_units );
+        if( doc_scale > 0 ) {
+            doc_scale= 1.0/doc_scale;
+        } else {
+            doc_scale = 1.0;
         }
         Inkscape::URI SVGElem_uri(((Glib::ustring)"#" +  (Glib::ustring)"text-on-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
         Inkscape::URIReference* SVGElemRef = new Inkscape::URIReference(desktop->doc());
@@ -263,7 +284,7 @@ LPEMeasureLine::createTextLabel(Geom::Point pos, double length, Geom::Coord angl
             rtext->addChild(rtspan, NULL);
             Inkscape::GC::release(rtspan);
         }
-        length = Inkscape::Util::Quantity::convert(length, doc_unit.c_str(), unit.get_abbreviation());
+        length = Inkscape::Util::Quantity::convert(length / doc_scale, display_unit.c_str(), unit.get_abbreviation());
         std::stringstream length_str;
         length_str.precision(precision);
         length_str.setf(std::ios::fixed, std::ios::floatfield);
@@ -343,11 +364,11 @@ LPEMeasureLine::createLine(Geom::Point start,Geom::Point end, Glib::ustring id, 
         std::stringstream stroke_w;
         stroke_w.imbue(std::locale::classic());
         if (line_group_05) {
-            double stroke_width = Inkscape::Util::Quantity::convert(0.25, "mm", doc_unit.c_str());
+            double stroke_width = Inkscape::Util::Quantity::convert(0.25 / doc_scale, "mm", display_unit.c_str());
             stroke_w <<  stroke_width;
             style = style + (Glib::ustring)"stroke-width:" + (Glib::ustring)stroke_w.str();
         } else {
-            double stroke_width = Inkscape::Util::Quantity::convert(0.35, "mm", doc_unit.c_str());
+            double stroke_width = Inkscape::Util::Quantity::convert(0.35 / doc_scale, "mm", display_unit.c_str());
             stroke_w <<  stroke_width;
             style = style + (Glib::ustring)"stroke-width:" + (Glib::ustring)stroke_w.str();
         }
@@ -419,7 +440,7 @@ LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
                     remove = true;
                 }
             }
-            double length = Geom::distance(start,end)  * scale;
+            double length = Geom::distance(hstart,hend)  * scale;
             Geom::Point pos = Geom::middle_point(hstart,hend);
             Geom::Ray ray(hstart,hend);
             Geom::Coord angle = ray.angle();
@@ -432,6 +453,7 @@ LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
             //We get the font size to offset the text to the middle
             Pango::FontDescription fontdesc((Glib::ustring)fontbutton.param_getSVGValue());
             double fontsize = fontdesc.get_size()/Pango::SCALE;
+            fontsize *= desktop->doc()->getRoot()->c2p.inverse().expansionX();
             pos = pos - Point::polar(angle_cross, (position + text_distance) - fontsize/2.0);
             if (!scale_insensitive) {
                 Geom::Affine affinetransform = i2anc_affine(SP_OBJECT(lpeitem), SP_OBJECT(desktop->doc()->getRoot()));
@@ -439,9 +461,9 @@ LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
             }
             createTextLabel(pos, length, angle, fontsize, remove);
             //LINE
-            double arrow_gap = 8 * Inkscape::Util::Quantity::convert(0.35, "mm", doc_unit.c_str());
+            double arrow_gap = 8 * Inkscape::Util::Quantity::convert(0.35 / doc_scale, "mm", display_unit.c_str());
             if (line_group_05) {
-                arrow_gap = 8 * Inkscape::Util::Quantity::convert(0.25, "mm", doc_unit.c_str());
+                arrow_gap = 8 * Inkscape::Util::Quantity::convert(0.25 / doc_scale, "mm", display_unit.c_str());
             }
             if (flip_side) {
                 arrow_gap *= -1;
