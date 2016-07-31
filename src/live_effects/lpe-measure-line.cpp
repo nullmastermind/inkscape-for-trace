@@ -56,7 +56,7 @@ LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
     text_distance(_("Text distance*"), _("Text distance"), "text_distance", &wr, this, 12),
     helpline_distance(_("Helpline distance*"), _("Helpline distance"), "helpline_distance", &wr, this, 0.0),
     helpline_overlap(_("Helpline overlap*"), _("Helpline overlap"), "helpline_overlap", &wr, this, 2.0),
-    unit(_("Unit*"), _("Unit"), "unit", &wr, this),
+    unit(_("Unit*"), _("Unit"), "unit", &wr, this, "px"),
     format(_("Format*"), _("Format the number ex:measure+ +unit"), "format", &wr, this, "measure+unit"),
     arrows_outside(_("Arrows outside"), _("Arrows outside"), "arrows_outside", &wr, this, false),
     flip_side(_("Flip side*"), _("Flip side"), "flip_side", &wr, this, false),
@@ -251,7 +251,11 @@ LPEMeasureLine::createTextLabel(Geom::Point pos, double length, Geom::Coord angl
         gchar * transform;
         if (rotate_anotation) {
             Geom::Affine affine = Geom::Affine(Geom::Translate(pos).inverse());
-            affine *= Geom::Rotate(angle);
+            if (std::abs(angle) > rad_from_deg(90) && std::abs(angle) < rad_from_deg(270)) {
+                angle = std::fmod(angle + rad_from_deg(180), 2*M_PI);
+                if (angle < 0) angle += 2*M_PI;
+            }
+            affine *= Geom::Rotate(std::abs(angle));
             affine *= Geom::Translate(pos);
             transform = sp_svg_transform_write(affine);
         } else {
@@ -448,13 +452,17 @@ LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
                 angle = std::fmod(angle + rad_from_deg(180), 2*M_PI);
                 if (angle < 0) angle += 2*M_PI;
             }
-            Geom::Coord angle_cross = std::fmod(angle + rad_from_deg(90), 2*M_PI);
-            if (angle_cross < 0) angle_cross += 2*M_PI;
             //We get the font size to offset the text to the middle
             Pango::FontDescription fontdesc((Glib::ustring)fontbutton.param_getSVGValue());
             double fontsize = fontdesc.get_size()/Pango::SCALE;
             fontsize *= desktop->doc()->getRoot()->c2p.inverse().expansionX();
-            pos = pos - Point::polar(angle_cross, (position + text_distance) - fontsize/2.0);
+            Geom::Coord angle_cross = std::fmod(angle + rad_from_deg(90), 2*M_PI);
+            if (angle_cross < 0) angle_cross += 2*M_PI;
+            if (std::abs(angle) > rad_from_deg(90) && std::abs(angle) < rad_from_deg(270)) {
+                pos = pos - Point::polar(angle_cross, (position - text_distance) + fontsize/2.0);
+            } else {
+                pos = pos - Point::polar(angle_cross, (position + text_distance) - fontsize/2.0);
+            }
             if (!scale_insensitive) {
                 Geom::Affine affinetransform = i2anc_affine(SP_OBJECT(lpeitem), SP_OBJECT(desktop->doc()->getRoot()));
                 length *= (affinetransform.expansionX() + affinetransform.expansionY()) / 2.0;
