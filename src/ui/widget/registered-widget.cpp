@@ -351,7 +351,6 @@ RegisteredText::on_activate()
     Inkscape::SVGOStringStream os;
     os << str;
     write_to_xml(os.str().c_str());
-    setText(os.str().c_str());
     set_sensitive(true);
     _wr->setUpdating (false);
 }

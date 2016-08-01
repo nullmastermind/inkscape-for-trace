@@ -518,7 +518,7 @@ LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
             }
             //We get the font size to offset the text to the middle
             Pango::FontDescription fontdesc((Glib::ustring)fontbutton.param_getSVGValue());
-            double fontsize = fontdesc.get_size()/Pango::SCALE;
+            double fontsize = fontdesc.get_size()/(double)Pango::SCALE;
             fontsize *= desktop->doc()->getRoot()->c2p.inverse().expansionX();
             Geom::Coord angle_cross = std::fmod(angle + rad_from_deg(90), 2*M_PI);
             if (angle_cross < 0) angle_cross += 2*M_PI;
@@ -541,13 +541,16 @@ LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
             }
             SPCSSAttr *css = sp_repr_css_attr_new();
             sp_repr_css_attr_add_from_string(css, dimline_format.param_getSVGValue());
-            gchar const * width_line =  sp_repr_css_property(css,"stroke-width","-1");
-            if (width_line != "-1") {
-                arrow_gap = 8 * atof(width_line);
+            std::setlocale(LC_NUMERIC, std::locale::classic().name().c_str());
+            double width_line =  atof(sp_repr_css_property(css,"stroke-width","-1"));
+            std::setlocale(LC_NUMERIC, std::locale("").name().c_str());
+            if (width_line > -0.0001) {
+                 arrow_gap = 8 * Inkscape::Util::Quantity::convert(width_line/ doc_scale, "mm", display_unit.c_str());
             }
             if (flip_side) {
                 arrow_gap *= -1;
             }
+            std::cout << arrow_gap << "arrow_gap\n";
             angle_cross = std::fmod(angle + rad_from_deg(90), 2*M_PI);
             if (angle_cross < 0) angle_cross += 2*M_PI;
             hstart = hstart - Point::polar(angle_cross, position);
