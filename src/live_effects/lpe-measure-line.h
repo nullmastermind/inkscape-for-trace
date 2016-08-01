@@ -43,20 +43,21 @@ public:
     virtual Geom::PathVector doEffect_path(Geom::PathVector const &path_in);
     void createLine(Geom::Point start,Geom::Point end,Glib::ustring id, bool main, bool remove);
     void createTextLabel(Geom::Point pos, double length, Geom::Coord angle, double fontsize, bool remove);
+    void onExpanderChanged();
     void createArrowMarker(Glib::ustring mode);
     void saveDefault();
     virtual Gtk::Widget *newWidget();
 private:
+    UnitParam unit;
     FontButtonParam fontbutton;
     EnumParam<OrientationMethod> orientation;
     ScalarParam curve_linked;
-    ScalarParam scale;
     ScalarParam precision;
     ScalarParam position;
     ScalarParam text_distance;
     ScalarParam helpline_distance;
     ScalarParam helpline_overlap;
-    UnitParam unit;
+    ScalarParam scale;
     TextParam format;
     BoolParam arrows_outside;
     BoolParam flip_side;
@@ -64,7 +65,13 @@ private:
     BoolParam local_locale;
     BoolParam line_group_05;
     BoolParam rotate_anotation;
+    TextParam dimline_format;
+    TextParam helperlines_format;
+    TextParam anotation_format;
+    TextParam arrows_format;
     Glib::ustring display_unit;
+    bool expanded;
+    Gtk::Expander * expander;
     double doc_scale;
 /*    Geom::Affine affine_over;*/
     LPEMeasureLine(const LPEMeasureLine &);

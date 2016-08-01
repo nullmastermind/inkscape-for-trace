@@ -47,34 +47,39 @@ static const Util::EnumDataConverter<OrientationMethod> OMConverter(OrientationM
 
 LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
+    unit(_("Unit*"), _("Unit"), "unit", &wr, this, "px"),
     fontbutton(_("Font*"), _("Font Selector"), "fontbutton", &wr, this),
     orientation(_("Orientation"), _("Orientation method"), "orientation", OMConverter, &wr, this, OM_PARALLEL, false),
     curve_linked(_("Curve on origin"), _("Curve on origin, set 0 to start/end"), "curve_linked", &wr, this, 1),
-    scale(_("Scale*"), _("Scaling factor"), "scale", &wr, this, 1.0),
     precision(_("Precision*"), _("Precision"), "precision", &wr, this, 2),
     position(_("Positon*"), _("Positon"), "position", &wr, this, 5),
     text_distance(_("Text distance*"), _("Text distance"), "text_distance", &wr, this, 12),
     helpline_distance(_("Helpline distance*"), _("Helpline distance"), "helpline_distance", &wr, this, 0.0),
     helpline_overlap(_("Helpline overlap*"), _("Helpline overlap"), "helpline_overlap", &wr, this, 2.0),
-    unit(_("Unit*"), _("Unit"), "unit", &wr, this, "px"),
+    scale(_("Scale*"), _("Scaling factor"), "scale", &wr, this, 1.0),
     format(_("Format*"), _("Format the number ex:{measure} {unit}, return to save"), "format", &wr, this,"measure unit"),
     arrows_outside(_("Arrows outside"), _("Arrows outside"), "arrows_outside", &wr, this, false),
     flip_side(_("Flip side*"), _("Flip side"), "flip_side", &wr, this, false),
     scale_insensitive(_("Scale insensitive*"), _("Scale insensitive to transforms in element, parents..."), "scale_insensitive", &wr, this, true),
     local_locale(_("Local Number Format*"), _("Local number format"), "local_locale", &wr, this, true),
     line_group_05(_("Line Group 0.5*"), _("Line Group 0.5, from 0.7"), "line_group_05", &wr, this, true),
-    rotate_anotation(_("Rotate Anotation*"), _("Rotate Anotation"), "rotate_anotation", &wr, this, true)
+    rotate_anotation(_("Rotate Anotation*"), _("Rotate Anotation"), "rotate_anotation", &wr, this, true),
+    dimline_format(_("CSS DIN line*"), _("Override CSS to DIN line, return to save, empty to reset to DIM"), "dimline_format", &wr, this,""),
+    helperlines_format(_("CSS helpers*"), _("Override CSS to helper lines, return to save, empty to reset to DIM"), "helperlines_format", &wr, this,""),
+    anotation_format(_("CSS anotation*"), _("Override CSS to anotation text, return to save, empty to reset to DIM"), "anotation_format", &wr, this,""),
+    arrows_format(_("CSS arrows*"), _("Override CSS to arrows, return to save, empty to reset DIM"), "arrows_format", &wr, this,""),
+    expanded(false)
 {
+    registerParameter(&unit);
     registerParameter(&fontbutton);
     registerParameter(&orientation);
     registerParameter(&curve_linked);
-    registerParameter(&scale);
     registerParameter(&precision);
     registerParameter(&position);
     registerParameter(&text_distance);
     registerParameter(&helpline_distance);
     registerParameter(&helpline_overlap);
-    registerParameter(&unit);
+    registerParameter(&scale);
     registerParameter(&format);
     registerParameter(&arrows_outside);
     registerParameter(&flip_side);
@@ -82,6 +87,10 @@ LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
     registerParameter(&local_locale);
     registerParameter(&line_group_05);
     registerParameter(&rotate_anotation);
+    registerParameter(&dimline_format);
+    registerParameter(&helperlines_format);
+    registerParameter(&anotation_format);
+    registerParameter(&arrows_format);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     Glib::ustring fontbutton_value = prefs->getString("/live_effects/measure-line/fontbutton");
     if(fontbutton_value.empty()){
@@ -104,6 +113,10 @@ LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
         format_value = "{measure}{unit}";
     }
     format.param_update_default(format_value);
+    dimline_format.param_update_default(prefs->getString("/live_effects/measure-line/dimline_format"));
+    helperlines_format.param_update_default(prefs->getString("/live_effects/measure-line/helperlines_format"));
+    anotation_format.param_update_default(prefs->getString("/live_effects/measure-line/anotation_format"));
+    arrows_format.param_update_default(prefs->getString("/live_effects/measure-line/arrows_format"));
     flip_side.param_update_default(prefs->getBool("/live_effects/measure-line/flip_side"));
     scale_insensitive.param_update_default(prefs->getBool("/live_effects/measure-line/scale_insensitive"));
     local_locale.param_update_default(prefs->getBool("/live_effects/measure-line/local_locale"));
@@ -195,11 +208,31 @@ LPEMeasureLine::createArrowMarker(Glib::ustring mode)
                 arrow_path->setAttribute("d", "M 0,0 16,2.11 16,0.5 26,0.5 26,-0.5 16,-0.5 16,-2.11 z");
             }
             arrow_path->setAttribute("id", (mode + (Glib::ustring)"_path").c_str());
-            arrow_path->setAttribute("style", "fill:#000000;stroke:none");
+            SPCSSAttr *css = sp_repr_css_attr_new();
+            sp_repr_css_set_property (css, "fill","#000000");
+            sp_repr_css_set_property (css, "stroke","none" );
+            sp_repr_css_attr_add_from_string(css, arrows_format.param_getSVGValue());
+            Glib::ustring css_str;
+            sp_repr_css_write_string(css,css_str);
+            arrow_path->setAttribute("style", css_str.c_str());
             arrow->addChild(arrow_path, NULL);
             Inkscape::GC::release(arrow_path);
             SPObject * arrow_obj = SP_OBJECT(desktop->getDocument()->getDefs()->appendChildRepr(arrow));
             Inkscape::GC::release(arrow);
+        } else {
+            Inkscape::XML::Node *arrow= elemref->getRepr();
+            if (arrow) {
+                Inkscape::XML::Node *arrow_data = arrow->firstChild();
+                if (arrow_data) {
+                    SPCSSAttr *css = sp_repr_css_attr_new();
+                    sp_repr_css_set_property (css, "fill","#000000");
+                    sp_repr_css_set_property (css, "stroke","none" );
+                    sp_repr_css_attr_add_from_string(css, arrows_format.param_getSVGValue());
+                    Glib::ustring css_str;
+                    sp_repr_css_write_string(css,css_str);
+                    arrow_data->setAttribute("style", css_str.c_str());
+                }
+            }
         }
     }
 }
@@ -266,26 +299,29 @@ LPEMeasureLine::createTextLabel(Geom::Point pos, double length, Geom::Coord angl
         }
         rtext->setAttribute("transform", transform);
         SPCSSAttr *css = sp_repr_css_attr_new();
+        sp_repr_css_attr_add_from_string(css, anotation_format.param_getSVGValue());
         Inkscape::FontLister *fontlister = Inkscape::FontLister::get_instance();
         fontlister->fill_css( css, (Glib::ustring)fontbutton.param_getSVGValue() );
         std::stringstream font_size;
         font_size.imbue(std::locale::classic());
         font_size <<  fontsize << "pt";
-        sp_repr_css_set_property (css, "font-size", font_size.str().c_str());
-        sp_repr_css_set_property (css, "line-height", "125%");
-        sp_repr_css_set_property (css, "letter-spacing", "0");
+
+        sp_repr_css_set_property (css, "font-size",font_size.str().c_str());
+        sp_repr_css_set_property (css, "line-height","125%");
+        sp_repr_css_set_property (css, "letter-spacing","0");
         sp_repr_css_set_property (css, "word-spacing", "0");
         sp_repr_css_set_property (css, "text-align", "center");
         sp_repr_css_set_property (css, "text-anchor", "middle");
         sp_repr_css_set_property (css, "fill", "#000000");
         sp_repr_css_set_property (css, "fill-opacity", "1");
         sp_repr_css_set_property (css, "stroke", "none");
+        sp_repr_css_attr_add_from_string(css, anotation_format.param_getSVGValue());
         Glib::ustring css_str;
         sp_repr_css_write_string(css,css_str);
         if (!rtspan) {
             rtspan = rtext->firstChild();
         }
-        rtspan->setAttribute("style", css_str.c_str());
+        rtext->setAttribute("style", css_str.c_str());
         sp_repr_css_attr_unref (css);
         if (!elemref) {
             rtext->addChild(rtspan, NULL);
@@ -387,7 +423,16 @@ LPEMeasureLine::createLine(Geom::Point start,Geom::Point end, Glib::ustring id, 
             stroke_w <<  stroke_width;
             style = style + (Glib::ustring)"stroke-width:" + (Glib::ustring)stroke_w.str();
         }
-        line->setAttribute("style", style.c_str());
+        SPCSSAttr *css = sp_repr_css_attr_new();
+        sp_repr_css_attr_add_from_string(css, style.c_str());
+        if (main) {
+            sp_repr_css_attr_add_from_string(css, dimline_format.param_getSVGValue());
+        } else {
+            sp_repr_css_attr_add_from_string(css, helperlines_format.param_getSVGValue());
+        }
+        Glib::ustring css_str;
+        sp_repr_css_write_string(css,css_str);
+        line->setAttribute("style", css_str.c_str());
         SPObject * line_obj = NULL;
         if (!elemref) {
             line_obj = SP_OBJECT(desktop->currentLayer()->appendChildRepr(line));
@@ -490,6 +535,12 @@ LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
             if (line_group_05) {
                 arrow_gap = 8 * Inkscape::Util::Quantity::convert(0.25 / doc_scale, "mm", display_unit.c_str());
             }
+            SPCSSAttr *css = sp_repr_css_attr_new();
+            sp_repr_css_attr_add_from_string(css, dimline_format.param_getSVGValue());
+            gchar const * width_line =  sp_repr_css_property(css,"stroke-width","-1");
+            if (width_line != "-1") {
+                arrow_gap = 8 * atof(width_line);
+            }
             if (flip_side) {
                 arrow_gap *= -1;
             }
@@ -555,13 +606,23 @@ Gtk::Widget *LPEMeasureLine::newWidget()
 
     std::vector<Parameter *>::iterator it = param_vector.begin();
     Gtk::HBox * button1 = Gtk::manage(new Gtk::HBox(true,0));
+    Gtk::VBox * vbox_expander = Gtk::manage( new Gtk::VBox(Effect::newWidget()) );
+    vbox_expander->set_border_width(0);
+    vbox_expander->set_spacing(2);
     while (it != param_vector.end()) {
         if ((*it)->widget_is_visible) {
             Parameter *param = *it;
             Gtk::Widget *widg = dynamic_cast<Gtk::Widget *>(param->param_newWidget());
             Glib::ustring *tip = param->param_getTooltip();
             if (widg) {
-                vbox->pack_start(*widg, true, true, 2);
+                if (param->param_key != "dimline_format" &&
+                    param->param_key != "helperlines_format" &&
+                    param->param_key != "arrows_format" &&
+                    param->param_key != "anotation_format") {
+                    vbox->pack_start(*widg, true, true, 2);
+                } else {
+                    vbox_expander->pack_start(*widg, true, true, 2);
+                }
                 if (tip) {
                     widg->set_tooltip_text(*tip);
                 } else {
@@ -576,8 +637,24 @@ Gtk::Widget *LPEMeasureLine::newWidget()
     Gtk::Button *save_default = Gtk::manage(new Gtk::Button(Glib::ustring(_("Save '*' as default"))));
     save_default->signal_clicked().connect(sigc::mem_fun(*this, &LPEMeasureLine::saveDefault));
     button1->pack_start(*save_default, true, true, 2);
+    expander = Gtk::manage(new Gtk::Expander(Glib::ustring(_("Show DIM CSS style override"))));
+    expander->add(*vbox_expander);
+    expander->set_expanded(expanded);
+    expander->property_expanded().signal_changed().connect(sigc::mem_fun(*this, &LPEMeasureLine::onExpanderChanged) );
+    vbox->pack_start(*expander, true, true, 2);
     vbox->pack_start(*button1, true, true, 2);
     return dynamic_cast<Gtk::Widget *>(vbox);
+}
+
+void
+LPEMeasureLine::onExpanderChanged()
+{
+    expanded = expander->get_expanded();
+    if(expanded) {
+        expander->set_label (Glib::ustring(_("Hide DIM CSS style override")));
+    } else {
+        expander->set_label (Glib::ustring(_("Show DIM CSS style override")));
+    }
 }
 
 Geom::PathVector
@@ -599,6 +676,10 @@ LPEMeasureLine::saveDefault()
     prefs->setDouble("/live_effects/measure-line/helpline_overlap", helpline_overlap);
     prefs->setString("/live_effects/measure-line/unit", (Glib::ustring)unit.get_abbreviation());
     prefs->setString("/live_effects/measure-line/format", (Glib::ustring)format.param_getSVGValue());
+    prefs->setString("/live_effects/measure-line/dimline_format", (Glib::ustring)dimline_format.param_getSVGValue());
+    prefs->setString("/live_effects/measure-line/helperlines_format", (Glib::ustring)helperlines_format.param_getSVGValue());
+    prefs->setString("/live_effects/measure-line/anotation_format", (Glib::ustring)anotation_format.param_getSVGValue());
+    prefs->setString("/live_effects/measure-line/arrows_format", (Glib::ustring)arrows_format.param_getSVGValue());
     prefs->setBool("/live_effects/measure-line/flip_side", flip_side);
     prefs->setBool("/live_effects/measure-line/scale_insensitive", scale_insensitive);
     prefs->setBool("/live_effects/measure-line/local_locale", local_locale);
