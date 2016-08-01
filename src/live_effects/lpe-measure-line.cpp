@@ -301,15 +301,23 @@ LPEMeasureLine::createTextLabel(Geom::Point pos, double length, Geom::Coord angl
             length_str.imbue(std::locale::classic());
         }
         length_str << std::fixed << length;
-        length_str << unit.get_abbreviation();
+        Glib::ustring label_value = Glib::ustring(format.param_getSVGValue());
+        size_t s = label_value.find((Glib::ustring)"{measure}",0);
+        if(s < label_value.length()) {
+            label_value.replace(s,s+9,length_str.str());
+        }
+        s = label_value.find((Glib::ustring)"{unit}",0);
+        if(s < label_value.length()) {
+            label_value.replace(s,s+6,unit.get_abbreviation());
+        }
         Inkscape::XML::Node *rstring = NULL;
         if (!elemref) {
-            rstring = xml_doc->createTextNode(length_str.str().c_str());
+            rstring = xml_doc->createTextNode(label_value.c_str());
             rtspan->addChild(rstring, NULL);
             Inkscape::GC::release(rstring);
         } else {
             rstring = rtspan->firstChild();
-            rstring->setContent(length_str.str().c_str());
+            rstring->setContent(label_value.c_str());
         }
         SPObject * text_obj = NULL;
         if (!elemref) {
