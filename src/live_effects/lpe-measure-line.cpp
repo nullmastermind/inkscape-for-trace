@@ -29,7 +29,6 @@
 #include "sp-path.h"
 #include "desktop.h"
 #include "document.h"
-#include <locale>
 #include <iomanip>
 
 // TODO due to internal breakage in glibmm headers, this must be last:
@@ -578,9 +577,9 @@ LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
             }
             SPCSSAttr *css = sp_repr_css_attr_new();
             sp_repr_css_attr_add_from_string(css, dimline_format.param_getSVGValue());
-            std::setlocale(LC_NUMERIC, std::locale::classic().name().c_str());
+            setlocale(LC_NUMERIC, std::locale::classic().name().c_str());
             double width_line =  atof(sp_repr_css_property(css,"stroke-width","-1"));
-            std::setlocale(LC_NUMERIC, std::locale("").name().c_str());
+            setlocale(LC_NUMERIC, std::locale("").name().c_str());
             if (width_line > -0.0001) {
                  arrow_gap = 8 * Inkscape::Util::Quantity::convert(width_line/ doc_scale, "mm", display_unit.c_str());
             }
