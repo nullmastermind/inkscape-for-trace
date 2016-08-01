@@ -123,6 +123,10 @@ LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
     line_group_05.param_update_default(prefs->getBool("/live_effects/measure-line/line_group_05"));
     rotate_anotation.param_update_default(prefs->getBool("/live_effects/measure-line/rotate_anotation"));
     format.param_hide_canvas_text();
+    dimline_format.param_hide_canvas_text();
+    helperlines_format.param_hide_canvas_text();
+    anotation_format.param_hide_canvas_text();
+    arrows_format.param_hide_canvas_text();
     precision.param_set_range(0, 100);
     precision.param_set_increments(1, 1);
     precision.param_set_digits(0);
