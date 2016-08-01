@@ -3,6 +3,7 @@
  *   Jabiertxo Arraiza Cenoz <jabier.arraiza@marker.es>
  * Some code and ideas migrated from dimensioning.py by
  * Johannes B. Rutzmoser, johannes.rutzmoser (at) googlemail (dot) com
+ * https://github.com/Rutzmoser/inkscape_dimensioning
  * Copyright (C) 2014 Author(s)
 
  * Released under GNU GPL, read the file 'COPYING' for more information
