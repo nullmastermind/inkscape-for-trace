@@ -170,52 +170,49 @@ LPEMeasureLine::doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/)
         Inkscape::URIReference* SVGElemRef = new Inkscape::URIReference(desktop->doc());
         SVGElemRef->attach(SVGElem_uri);
         SPObject *elemref = NULL;
-        Inkscape::XML::Node *rtext = NULL;
+        Inkscape::XML::Node *node = NULL;
         if (elemref = SVGElemRef->getObject()) {
-            rtext = elemref->getRepr();
+            node = elemref->getRepr();
             if (!this->isVisible()) {
-                rtext->setAttribute("style", "display:none");
+                node->setAttribute("style", "display:none");
             } else {
-                rtext->setAttribute("style", NULL);
+                node->setAttribute("style", NULL);
             }
         }
-        Inkscape::URI SVGElem_uri(((Glib::ustring)"#" +  (Glib::ustring)"infoline-on-start-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
-        Inkscape::URIReference* SVGElemRef = new Inkscape::URIReference(desktop->doc());
-        SVGElemRef->attach(SVGElem_uri);
-        SPObject *elemref = NULL;
-        Inkscape::XML::Node *rtext = NULL;
+        Inkscape::URI SVGElem_uri2(((Glib::ustring)"#" +  (Glib::ustring)"infoline-on-start-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
+        SVGElemRef->attach(SVGElem_uri2);
+        elemref = NULL;
+        node = NULL;
         if (elemref = SVGElemRef->getObject()) {
-            rtext = elemref->getRepr();
+            node = elemref->getRepr();
             if (!this->isVisible()) {
-                rtext->setAttribute("style", "display:none");
+                node->setAttribute("style", "display:none");
             } else {
-                rtext->setAttribute("style", NULL);
+                node->setAttribute("style", NULL);
             }
         }
-        Inkscape::URI SVGElem_uri(((Glib::ustring)"#" +  (Glib::ustring)"infoline-on-end-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
-        Inkscape::URIReference* SVGElemRef = new Inkscape::URIReference(desktop->doc());
-        SVGElemRef->attach(SVGElem_uri);
-        SPObject *elemref = NULL;
-        Inkscape::XML::Node *rtext = NULL;
+        Inkscape::URI SVGElem_uri3(((Glib::ustring)"#" +  (Glib::ustring)"infoline-on-end-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
+        SVGElemRef->attach(SVGElem_uri3);
+        elemref = NULL;
+        node = NULL;
         if (elemref = SVGElemRef->getObject()) {
-            rtext = elemref->getRepr();
+            node = elemref->getRepr();
             if (!this->isVisible()) {
-                rtext->setAttribute("style", "display:none");
+                node->setAttribute("style", "display:none");
             } else {
-                rtext->setAttribute("style", NULL);
+                node->setAttribute("style", NULL);
             }
         }
-        Inkscape::URI SVGElem_uri(((Glib::ustring)"#" +  (Glib::ustring)"infoline-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
-        Inkscape::URIReference* SVGElemRef = new Inkscape::URIReference(desktop->doc());
-        SVGElemRef->attach(SVGElem_uri);
-        SPObject *elemref = NULL;
-        Inkscape::XML::Node *rtext = NULL;
+        Inkscape::URI SVGElem_uri4(((Glib::ustring)"#" +  (Glib::ustring)"infoline-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
+        SVGElemRef->attach(SVGElem_uri4);
+        elemref = NULL;
+        node = NULL;
         if (elemref = SVGElemRef->getObject()) {
-            rtext = elemref->getRepr();
+            node = elemref->getRepr();
             if (!this->isVisible()) {
-                rtext->setAttribute("style", "display:none");
+                node->setAttribute("style", "display:none");
             } else {
-                rtext->setAttribute("style", NULL);
+                node->setAttribute("style", NULL);
             }
         }
     }
