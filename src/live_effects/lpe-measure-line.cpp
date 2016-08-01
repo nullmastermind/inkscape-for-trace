@@ -29,6 +29,7 @@
 #include "sp-path.h"
 #include "desktop.h"
 #include "document.h"
+#include <locale>
 #include <iomanip>
 
 // TODO due to internal breakage in glibmm headers, this must be last:
