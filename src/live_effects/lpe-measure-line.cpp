@@ -550,7 +550,6 @@ LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
             if (flip_side) {
                 arrow_gap *= -1;
             }
-            std::cout << arrow_gap << "arrow_gap\n";
             angle_cross = std::fmod(angle + rad_from_deg(90), 2*M_PI);
             if (angle_cross < 0) angle_cross += 2*M_PI;
             hstart = hstart - Point::polar(angle_cross, position);
