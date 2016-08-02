@@ -41,7 +41,7 @@ public:
     virtual void doOnRemove (SPLPEItem const* lpeitem);
     virtual void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/);
     virtual Geom::PathVector doEffect_path(Geom::PathVector const &path_in);
-    void createLine(Geom::Point start,Geom::Point end,Glib::ustring id, bool main, bool remove);
+    void createLine(Geom::Point start,Geom::Point end,Glib::ustring id, bool main, bool overflow, bool remove, bool arrows = false);
     void createTextLabel(Geom::Point pos, double length, Geom::Coord angle, bool remove);
     void onExpanderChanged();
     void createArrowMarker(Glib::ustring mode);

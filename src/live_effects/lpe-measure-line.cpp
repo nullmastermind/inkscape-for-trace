@@ -218,6 +218,16 @@ LPEMeasureLine::doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/)
                 node->setAttribute("style", NULL);
             }
         }
+        Inkscape::URI SVGElem_uri5(((Glib::ustring)"#" +  (Glib::ustring)"downline-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
+        SVGElemRef->attach(SVGElem_uri5);
+        if (elemref = SVGElemRef->getObject()) {
+            node = elemref->getRepr();
+            if (!this->isVisible()) {
+                node->setAttribute("style", "display:none");
+            } else {
+                node->setAttribute("style", NULL);
+            }
+        }
     }
 }
 
@@ -305,6 +315,7 @@ LPEMeasureLine::createTextLabel(Geom::Point pos, double length, Geom::Coord angl
         SVGElemRef->attach(SVGElem_uri);
         SPObject *elemref = NULL;
         Inkscape::XML::Node *rtspan = NULL;
+        pos = pos - Point::polar(angle, text_right_left);
         if (elemref = SVGElemRef->getObject()) {
             if (remove) {
                 elemref->deleteObject();
@@ -404,7 +415,7 @@ LPEMeasureLine::createTextLabel(Geom::Point pos, double length, Geom::Coord angl
             Inkscape::GC::release(rtext);
         }
         Inkscape::XML::Node *tmp_node = rtext->duplicate(xml_doc);
-        affine = Geom::Affine(Geom::Scale(1.1));
+        affine = Geom::Affine(Geom::Scale(1.4));
         tmp_node->setAttribute("transform", sp_svg_transform_write(affine));
         SPObject * tmp_obj = SP_OBJECT(desktop->currentLayer()->appendChildRepr(tmp_node));
         Inkscape::GC::release(tmp_node);
@@ -418,7 +429,7 @@ LPEMeasureLine::createTextLabel(Geom::Point pos, double length, Geom::Coord angl
 }
 
 void
-LPEMeasureLine::createLine(Geom::Point start,Geom::Point end, Glib::ustring id, bool main, bool remove)
+LPEMeasureLine::createLine(Geom::Point start,Geom::Point end, Glib::ustring id, bool main, bool overflow, bool remove, bool arrows)
 {
     if (SPDesktop *desktop = SP_ACTIVE_DESKTOP) {
         Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
@@ -434,7 +445,7 @@ LPEMeasureLine::createLine(Geom::Point start,Geom::Point end, Glib::ustring id, 
             end = end + Point::polar(angle, helpline_overlap );
         }
         Geom::PathVector line_pathv;
-        if (main && std::abs(text_top_bottom) < fontsize/1.5 && hide_back){
+        if (main && std::abs(text_top_bottom) < fontsize/1.5 && hide_back && !overflow){
             Geom::Path line_path;
             double k = 0;
             if (flip_side) {
@@ -478,7 +489,9 @@ LPEMeasureLine::createLine(Geom::Point start,Geom::Point end, Glib::ustring id, 
             line->setAttribute("d" , line_str);
         }
         Glib::ustring style = (Glib::ustring)"stroke:#000000;fill:none;";
-        if (main) {
+        if (overflow && !arrows) {
+            line->setAttribute("inkscape:label", "downline");
+        } else if (main) {
             line->setAttribute("inkscape:label", "dinline");
             if (arrows_outside) {
                 style = style + (Glib::ustring)"marker-start:url(#ArrowDINout-start);marker-end:url(#ArrowDINout-end);";
@@ -605,6 +618,34 @@ LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
                 length *= (affinetransform.expansionX() + affinetransform.expansionY()) / 2.0;
             }
             createTextLabel(pos, length, angle, remove);
+            bool overflow = false;
+            if ((anotation_width/2) + std::abs(text_right_left) > Geom::distance(start,end)/2.0) {
+                Geom::Point sstart = end - Point::polar(angle_cross, position);
+                Geom::Point send = end - Point::polar(angle_cross, position);
+                if (text_right_left < 0 && flip_side || text_right_left > 0 && !flip_side) {
+                    sstart = start - Point::polar(angle_cross, position);
+                    send = start - Point::polar(angle_cross, position);
+                }
+                Geom::Point prog_end = Geom::Point();
+                if (std::abs(text_top_bottom) < fontsize/1.5 && hide_back) { 
+                    if (text_right_left > 0 ) {
+                        prog_end = sstart - Point::polar(angle, std::abs(text_right_left) - (anotation_width/1.9) - (Geom::distance(start,end)/2.0));
+                    } else {
+                        prog_end = sstart + Point::polar(angle, std::abs(text_right_left) - (anotation_width/1.9) - (Geom::distance(start,end)/2.0));
+                    }
+                } else {
+                    if (text_right_left > 0 ) {
+                        prog_end = sstart - Point::polar(angle,(anotation_width/2) + std::abs(text_right_left) - (Geom::distance(start,end)/2.0));
+                    } else {
+                        prog_end = sstart + Point::polar(angle,(anotation_width/2) + std::abs(text_right_left) - (Geom::distance(start,end)/2.0));
+                    }
+                }
+                overflow = true;
+                createLine(sstart, prog_end, (Glib::ustring)"downline-" + (Glib::ustring)this->getRepr()->attribute("id"), true, overflow, false, false);
+            } else {
+                //erase it
+                createLine(Geom::Point(),Geom::Point(), (Glib::ustring)"downline-" + (Glib::ustring)this->getRepr()->attribute("id"), true, overflow, true, false);
+            }
             //LINE
             arrow_gap = 8 * Inkscape::Util::Quantity::convert(0.35 / doc_scale, "mm", display_unit.c_str());
             if (line_group_05) {
@@ -621,20 +662,18 @@ LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
             if (flip_side) {
                 arrow_gap *= -1;
             }
-            angle_cross = std::fmod(angle + rad_from_deg(90), 2*M_PI);
-            if (angle_cross < 0) angle_cross += 2*M_PI;
             hstart = hstart - Point::polar(angle_cross, position);
             Glib::ustring id = (Glib::ustring)"infoline-on-start-" + (Glib::ustring)this->getRepr()->attribute("id");
-            createLine(start, hstart, id, false, remove);
+            createLine(start, hstart, id, false, false, remove);
             hend = hend - Point::polar(angle_cross, position);
             id = (Glib::ustring)"infoline-on-end-" + (Glib::ustring)this->getRepr()->attribute("id");
-            createLine(end, hend, id, false, remove);
+            createLine(end, hend, id, false, false, remove);
             if (!arrows_outside) {
                 hstart = hstart + Point::polar(angle, arrow_gap);
                 hend = hend - Point::polar(angle, arrow_gap );
             }
             id = (Glib::ustring)"infoline-" + (Glib::ustring)this->getRepr()->attribute("id");
-            createLine(hstart, hend, id, true, remove);
+            createLine(hstart, hend, id, true, overflow, remove, true);
         }
     }
 }
@@ -662,6 +701,11 @@ void LPEMeasureLine::doOnRemove (SPLPEItem const* lpeitem)
         }
         Inkscape::URI SVGElem_uri4(((Glib::ustring)"#" + (Glib::ustring)"infoline-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
         SVGElemRef->attach(SVGElem_uri4);
+        if (elemref = SVGElemRef->getObject()) {
+            elemref->deleteObject();
+        }
+        Inkscape::URI SVGElem_uri5(((Glib::ustring)"#" + (Glib::ustring)"downline-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
+        SVGElemRef->attach(SVGElem_uri5);
         if (elemref = SVGElemRef->getObject()) {
             elemref->deleteObject();
         }
