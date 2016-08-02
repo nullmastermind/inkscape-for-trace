@@ -42,7 +42,7 @@ public:
     virtual void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/);
     virtual Geom::PathVector doEffect_path(Geom::PathVector const &path_in);
     void createLine(Geom::Point start,Geom::Point end,Glib::ustring id, bool main, bool remove);
-    void createTextLabel(Geom::Point pos, double length, Geom::Coord angle, double fontsize, bool remove);
+    void createTextLabel(Geom::Point pos, double length, Geom::Coord angle, bool remove);
     void onExpanderChanged();
     void createArrowMarker(Glib::ustring mode);
     void saveDefault();
@@ -54,7 +54,8 @@ private:
     ScalarParam curve_linked;
     ScalarParam precision;
     ScalarParam position;
-    ScalarParam text_distance;
+    ScalarParam text_top_bottom;
+    ScalarParam text_right_left;
     ScalarParam helpline_distance;
     ScalarParam helpline_overlap;
     ScalarParam scale;
@@ -65,6 +66,7 @@ private:
     BoolParam local_locale;
     BoolParam line_group_05;
     BoolParam rotate_anotation;
+    BoolParam hide_back;
     TextParam dimline_format;
     TextParam helperlines_format;
     TextParam anotation_format;
@@ -73,6 +75,9 @@ private:
     bool expanded;
     Gtk::Expander * expander;
     double doc_scale;
+    double fontsize;
+    double anotation_width;
+    double arrow_gap;
 /*    Geom::Affine affine_over;*/
     LPEMeasureLine(const LPEMeasureLine &);
     LPEMeasureLine &operator=(const LPEMeasureLine &);

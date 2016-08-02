@@ -54,7 +54,8 @@ LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
     curve_linked(_("Curve on origin"), _("Curve on origin, set 0 to start/end"), "curve_linked", &wr, this, 1),
     precision(_("Precision*"), _("Precision"), "precision", &wr, this, 2),
     position(_("Positon*"), _("Positon"), "position", &wr, this, 5),
-    text_distance(_("Text distance*"), _("Text distance"), "text_distance", &wr, this, 12),
+    text_top_bottom(_("Text top/bottom*"), _("Text top/bottom"), "text_top_bottom", &wr, this, 0),
+    text_right_left(_("Text right/left*"), _("Text right/left"), "text_right_left", &wr, this, 0),
     helpline_distance(_("Helpline distance*"), _("Helpline distance"), "helpline_distance", &wr, this, 0.0),
     helpline_overlap(_("Helpline overlap*"), _("Helpline overlap"), "helpline_overlap", &wr, this, 2.0),
     scale(_("Scale*"), _("Scaling factor"), "scale", &wr, this, 1.0),
@@ -65,6 +66,7 @@ LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
     local_locale(_("Local Number Format*"), _("Local number format"), "local_locale", &wr, this, true),
     line_group_05(_("Line Group 0.5*"), _("Line Group 0.5, from 0.7"), "line_group_05", &wr, this, true),
     rotate_anotation(_("Rotate Anotation*"), _("Rotate Anotation"), "rotate_anotation", &wr, this, true),
+    hide_back(_("Hide if label over*"), _("Hide DIN line if label over"), "hide_back", &wr, this, true),
     dimline_format(_("CSS DIN line*"), _("Override CSS to DIN line, return to save, empty to reset to DIM"), "dimline_format", &wr, this,""),
     helperlines_format(_("CSS helpers*"), _("Override CSS to helper lines, return to save, empty to reset to DIM"), "helperlines_format", &wr, this,""),
     anotation_format(_("CSS anotation*"), _("Override CSS to anotation text, return to save, empty to reset to DIM"), "anotation_format", &wr, this,""),
@@ -77,7 +79,8 @@ LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
     registerParameter(&curve_linked);
     registerParameter(&precision);
     registerParameter(&position);
-    registerParameter(&text_distance);
+    registerParameter(&text_top_bottom);
+    registerParameter(&text_right_left);
     registerParameter(&helpline_distance);
     registerParameter(&helpline_overlap);
     registerParameter(&scale);
@@ -88,6 +91,7 @@ LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
     registerParameter(&local_locale);
     registerParameter(&line_group_05);
     registerParameter(&rotate_anotation);
+    registerParameter(&hide_back);
     registerParameter(&dimline_format);
     registerParameter(&helperlines_format);
     registerParameter(&anotation_format);
@@ -101,7 +105,7 @@ LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
     scale.param_update_default(prefs->getDouble("/live_effects/measure-line/scale", 1.0));
     precision.param_update_default(prefs->getInt("/live_effects/measure-line/precision", 2));
     position.param_update_default(prefs->getDouble("/live_effects/measure-line/position", 10.0));
-    text_distance.param_update_default(prefs->getDouble("/live_effects/measure-line/text_distance", 5.0));
+    text_top_bottom.param_update_default(prefs->getDouble("/live_effects/measure-line/text_top_bottom", 5.0));
     helpline_distance.param_update_default(prefs->getDouble("/live_effects/measure-line/helpline_distance", 0.0));
     helpline_overlap.param_update_default(prefs->getDouble("/live_effects/measure-line/helpline_overlap", 0.0));
     Glib::ustring unit_value = prefs->getString("/live_effects/measure-line/unit");
@@ -123,6 +127,7 @@ LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
     local_locale.param_update_default(prefs->getBool("/live_effects/measure-line/local_locale"));
     line_group_05.param_update_default(prefs->getBool("/live_effects/measure-line/line_group_05"));
     rotate_anotation.param_update_default(prefs->getBool("/live_effects/measure-line/rotate_anotation"));
+    hide_back.param_update_default(prefs->getBool("/live_effects/measure-line/hide_back"));
     format.param_hide_canvas_text();
     dimline_format.param_hide_canvas_text();
     helperlines_format.param_hide_canvas_text();
@@ -140,9 +145,12 @@ LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
     position.param_set_range(-999999.0, 999999.0);
     position.param_set_increments(1, 1);
     position.param_set_digits(2);
-    text_distance.param_set_range(-999999.0, 999999.0);
-    text_distance.param_set_increments(1, 1);
-    text_distance.param_set_digits(2);
+    text_top_bottom.param_set_range(-999999.0, 999999.0);
+    text_top_bottom.param_set_increments(1, 1);
+    text_top_bottom.param_set_digits(2);
+    text_right_left.param_set_range(-999999.0, 999999.0);
+    text_right_left.param_set_increments(1, 1);
+    text_right_left.param_set_digits(2);
     helpline_distance.param_set_range(-999999.0, 999999.0);
     helpline_distance.param_set_increments(1, 1);
     helpline_distance.param_set_digits(2);
@@ -182,8 +190,6 @@ LPEMeasureLine::doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/)
         }
         Inkscape::URI SVGElem_uri2(((Glib::ustring)"#" +  (Glib::ustring)"infoline-on-start-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
         SVGElemRef->attach(SVGElem_uri2);
-        elemref = NULL;
-        node = NULL;
         if (elemref = SVGElemRef->getObject()) {
             node = elemref->getRepr();
             if (!this->isVisible()) {
@@ -194,8 +200,6 @@ LPEMeasureLine::doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/)
         }
         Inkscape::URI SVGElem_uri3(((Glib::ustring)"#" +  (Glib::ustring)"infoline-on-end-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
         SVGElemRef->attach(SVGElem_uri3);
-        elemref = NULL;
-        node = NULL;
         if (elemref = SVGElemRef->getObject()) {
             node = elemref->getRepr();
             if (!this->isVisible()) {
@@ -206,8 +210,6 @@ LPEMeasureLine::doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/)
         }
         Inkscape::URI SVGElem_uri4(((Glib::ustring)"#" +  (Glib::ustring)"infoline-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
         SVGElemRef->attach(SVGElem_uri4);
-        elemref = NULL;
-        node = NULL;
         if (elemref = SVGElemRef->getObject()) {
             node = elemref->getRepr();
             if (!this->isVisible()) {
@@ -258,7 +260,7 @@ LPEMeasureLine::createArrowMarker(Glib::ustring mode)
             arrow_path->setAttribute("style", css_str.c_str());
             arrow->addChild(arrow_path, NULL);
             Inkscape::GC::release(arrow_path);
-            SPObject * arrow_obj = SP_OBJECT(desktop->getDocument()->getDefs()->appendChildRepr(arrow));
+            elemref = SP_OBJECT(desktop->getDocument()->getDefs()->appendChildRepr(arrow));
             Inkscape::GC::release(arrow);
         } else {
             Inkscape::XML::Node *arrow= elemref->getRepr();
@@ -279,7 +281,7 @@ LPEMeasureLine::createArrowMarker(Glib::ustring mode)
 }
 
 void
-LPEMeasureLine::createTextLabel(Geom::Point pos, double length, Geom::Coord angle, double fontsize, bool remove)
+LPEMeasureLine::createTextLabel(Geom::Point pos, double length, Geom::Coord angle, bool remove)
 {
     if (SPDesktop *desktop = SP_ACTIVE_DESKTOP) {
         Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
@@ -324,16 +326,16 @@ LPEMeasureLine::createTextLabel(Geom::Point pos, double length, Geom::Coord angl
             rtspan->setAttribute("sodipodi:role", "line");
         }
         gchar * transform;
-        if (rotate_anotation) {
-            Geom::Affine affine = Geom::Affine(Geom::Translate(pos).inverse());
-            angle = std::fmod(angle, 2*M_PI);
+        Geom::Affine affine = Geom::Affine(Geom::Translate(pos).inverse());
+        angle = std::fmod(angle, 2*M_PI);
+        if (angle < 0) angle += 2*M_PI;
+        if (angle >= rad_from_deg(90) && angle < rad_from_deg(270)) {
+            angle = std::fmod(angle + rad_from_deg(180), 2*M_PI);
             if (angle < 0) angle += 2*M_PI;
-            if (angle >= rad_from_deg(90) && angle < rad_from_deg(270)) {
-                angle = std::fmod(angle + rad_from_deg(180), 2*M_PI);
-                if (angle < 0) angle += 2*M_PI;
-            }
-            affine *= Geom::Rotate(angle);
-            affine *= Geom::Translate(pos);
+        }
+        affine *= Geom::Rotate(angle);
+        affine *= Geom::Translate(pos);
+        if (rotate_anotation) {
             transform = sp_svg_transform_write(affine);
         } else {
             transform = NULL;
@@ -363,6 +365,7 @@ LPEMeasureLine::createTextLabel(Geom::Point pos, double length, Geom::Coord angl
             rtspan = rtext->firstChild();
         }
         rtext->setAttribute("style", css_str.c_str());
+        rtspan->setAttribute("style", NULL);
         sp_repr_css_attr_unref (css);
         if (!elemref) {
             rtext->addChild(rtspan, NULL);
@@ -396,11 +399,21 @@ LPEMeasureLine::createTextLabel(Geom::Point pos, double length, Geom::Coord angl
             rstring = rtspan->firstChild();
             rstring->setContent(label_value.c_str());
         }
-        SPObject * text_obj = NULL;
         if (!elemref) {
-            text_obj = SP_OBJECT(desktop->currentLayer()->appendChildRepr(rtext));
+            elemref = SP_OBJECT(desktop->currentLayer()->appendChildRepr(rtext));
             Inkscape::GC::release(rtext);
         }
+        Inkscape::XML::Node *tmp_node = rtext->duplicate(xml_doc);
+        affine = Geom::Affine(Geom::Scale(1.1));
+        tmp_node->setAttribute("transform", sp_svg_transform_write(affine));
+        SPObject * tmp_obj = SP_OBJECT(desktop->currentLayer()->appendChildRepr(tmp_node));
+        Inkscape::GC::release(tmp_node);
+        tmp_obj->updateRepr();
+        Geom::OptRect bounds = SP_ITEM(tmp_obj)->bounds(SPItem::GEOMETRIC_BBOX);
+        if (bounds) {
+            anotation_width = bounds->width();
+        }
+        tmp_obj->deleteObject();
     }
 }
 
@@ -420,11 +433,33 @@ LPEMeasureLine::createLine(Geom::Point start,Geom::Point end, Glib::ustring id, 
             start = start + Point::polar(angle, helpline_distance );
             end = end + Point::polar(angle, helpline_overlap );
         }
-        Geom::Path line_path;
-        line_path.start(start);
-        line_path.appendNew<Geom::LineSegment>(end);
         Geom::PathVector line_pathv;
-        line_pathv.push_back(line_path);
+        if (main && std::abs(text_top_bottom) < fontsize/1.5 && hide_back){
+            Geom::Path line_path;
+            double k = 0;
+            if (flip_side) {
+                k = (Geom::distance(start,end)/2.0) + arrow_gap - (anotation_width/2.0);
+            } else {
+                k = (Geom::distance(start,end)/2.0) - arrow_gap - (anotation_width/2.0);
+            }
+            if (Geom::distance(start,end) < anotation_width){
+                return;
+            }
+            Geom::Ray ray(end, start);
+            Geom::Coord angle = ray.angle();
+            line_path.start(start);
+            line_path.appendNew<Geom::LineSegment>(start - Point::polar(angle, k));
+            line_pathv.push_back(line_path);
+            line_path.clear();
+            line_path.start(end + Point::polar(angle, k));
+            line_path.appendNew<Geom::LineSegment>(end);
+            line_pathv.push_back(line_path);
+        } else {
+            Geom::Path line_path;
+            line_path.start(start);
+            line_path.appendNew<Geom::LineSegment>(end);
+            line_pathv.push_back(line_path);
+        }
         gchar * line_str = sp_svg_write_path( line_pathv );
         line_pathv.clear();
         if (elemref = SVGElemRef->getObject()) {
@@ -474,9 +509,8 @@ LPEMeasureLine::createLine(Geom::Point start,Geom::Point end, Glib::ustring id, 
         Glib::ustring css_str;
         sp_repr_css_write_string(css,css_str);
         line->setAttribute("style", css_str.c_str());
-        SPObject * line_obj = NULL;
         if (!elemref) {
-            line_obj = SP_OBJECT(desktop->currentLayer()->appendChildRepr(line));
+            elemref = SP_OBJECT(desktop->currentLayer()->appendChildRepr(line));
             Inkscape::GC::release(line);
         }
     }
@@ -555,24 +589,24 @@ LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
             }
             //We get the font size to offset the text to the middle
             Pango::FontDescription fontdesc((Glib::ustring)fontbutton.param_getSVGValue());
-            double fontsize = fontdesc.get_size()/(double)Pango::SCALE;
+            fontsize = fontdesc.get_size()/(double)Pango::SCALE;
             fontsize *= desktop->doc()->getRoot()->c2p.inverse().expansionX();
             Geom::Coord angle_cross = std::fmod(angle + rad_from_deg(90), 2*M_PI);
             if (angle_cross < 0) angle_cross += 2*M_PI;
             angle = std::fmod(angle, 2*M_PI);
             if (angle < 0) angle += 2*M_PI;
             if (angle >= rad_from_deg(90) && angle < rad_from_deg(270)) {
-                pos = pos - Point::polar(angle_cross, (position - text_distance) + fontsize/2.0);
+                pos = pos - Point::polar(angle_cross, (position - text_top_bottom) + fontsize/2.5);
             } else {
-                pos = pos - Point::polar(angle_cross, (position + text_distance) - fontsize/2.0);
+                pos = pos - Point::polar(angle_cross, (position + text_top_bottom) - fontsize/2.5);
             }
             if (!scale_insensitive) {
                 Geom::Affine affinetransform = i2anc_affine(SP_OBJECT(lpeitem), SP_OBJECT(desktop->doc()->getRoot()));
                 length *= (affinetransform.expansionX() + affinetransform.expansionY()) / 2.0;
             }
-            createTextLabel(pos, length, angle, fontsize, remove);
+            createTextLabel(pos, length, angle, remove);
             //LINE
-            double arrow_gap = 8 * Inkscape::Util::Quantity::convert(0.35 / doc_scale, "mm", display_unit.c_str());
+            arrow_gap = 8 * Inkscape::Util::Quantity::convert(0.35 / doc_scale, "mm", display_unit.c_str());
             if (line_group_05) {
                 arrow_gap = 8 * Inkscape::Util::Quantity::convert(0.25 / doc_scale, "mm", display_unit.c_str());
             }
@@ -618,19 +652,16 @@ void LPEMeasureLine::doOnRemove (SPLPEItem const* lpeitem)
         }
         Inkscape::URI SVGElem_uri2(((Glib::ustring)"#" + (Glib::ustring)"infoline-on-end-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
         SVGElemRef->attach(SVGElem_uri2);
-        elemref = NULL;
         if (elemref = SVGElemRef->getObject()) {
             elemref->deleteObject();
         }
         Inkscape::URI SVGElem_uri3(((Glib::ustring)"#" + (Glib::ustring)"infoline-on-start-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
         SVGElemRef->attach(SVGElem_uri3);
-        elemref = NULL;
         if (elemref = SVGElemRef->getObject()) {
             elemref->deleteObject();
         }
         Inkscape::URI SVGElem_uri4(((Glib::ustring)"#" + (Glib::ustring)"infoline-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
         SVGElemRef->attach(SVGElem_uri4);
-        elemref = NULL;
         if (elemref = SVGElemRef->getObject()) {
             elemref->deleteObject();
         }
@@ -714,7 +745,7 @@ LPEMeasureLine::saveDefault()
     prefs->setDouble("/live_effects/measure-line/scale", scale);
     prefs->setInt("/live_effects/measure-line/precision", precision);
     prefs->setDouble("/live_effects/measure-line/position", position);
-    prefs->setDouble("/live_effects/measure-line/text_distance", text_distance);
+    prefs->setDouble("/live_effects/measure-line/text_top_bottom", text_top_bottom);
     prefs->setDouble("/live_effects/measure-line/helpline_distance", helpline_distance);
     prefs->setDouble("/live_effects/measure-line/helpline_overlap", helpline_overlap);
     prefs->setString("/live_effects/measure-line/unit", (Glib::ustring)unit.get_abbreviation());
@@ -728,6 +759,7 @@ LPEMeasureLine::saveDefault()
     prefs->setBool("/live_effects/measure-line/local_locale", local_locale);
     prefs->setBool("/live_effects/measure-line/line_group_05", line_group_05);
     prefs->setBool("/live_effects/measure-line/rotate_anotation", rotate_anotation);
+    prefs->setBool("/live_effects/measure-line/hide_back", hide_back);
 }
 
 }; //namespace LivePathEffect
