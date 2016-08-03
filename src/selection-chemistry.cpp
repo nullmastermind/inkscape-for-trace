@@ -21,7 +21,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+#include <config.h>
 #endif
 
 #include <gtkmm/clipboard.h>
@@ -35,7 +35,6 @@ SPCycleType SP_CYCLING = SP_CYCLE_FOCUS;
 #include "svg/svg.h"
 #include "desktop.h"
 #include "desktop-style.h"
-#include "dir-util.h"
 #include "layer-model.h"
 #include "selection.h"
 #include "ui/tools-switch.h"
@@ -43,7 +42,6 @@ SPCycleType SP_CYCLING = SP_CYCLE_FOCUS;
 #include "message-stack.h"
 #include "sp-item-transform.h"
 #include "sp-marker.h"
-#include "sp-use.h"
 #include "sp-textpath.h"
 #include "sp-tspan.h"
 #include "sp-tref.h"
@@ -54,7 +52,6 @@ SPCycleType SP_CYCLING = SP_CYCLE_FOCUS;
 #include "sp-ellipse.h"
 #include "sp-star.h"
 #include "sp-spiral.h"
-#include "sp-switch.h"
 #include "sp-polyline.h"
 #include "sp-line.h"
 #include "text-editing.h"
@@ -65,13 +62,10 @@ SPCycleType SP_CYCLING = SP_CYCLE_FOCUS;
 #include "sp-conn-end.h"
 #include "ui/tools/dropper-tool.h"
 #include <glibmm/i18n.h>
-#include <2geom/transforms.h>
-#include "xml/repr.h"
 #include "xml/rebase-hrefs.h"
 #include "style.h"
 #include "document-private.h"
 #include "document-undo.h"
-#include "sp-gradient.h"
 #include "sp-gradient-reference.h"
 #include "sp-linear-gradient.h"
 #include "sp-pattern.h"
@@ -79,7 +73,6 @@ SPCycleType SP_CYCLING = SP_CYCLE_FOCUS;
 #include "sp-radial-gradient.h"
 #include "ui/tools/gradient-tool.h"
 #include "sp-namedview.h"
-#include "preferences.h"
 #include "sp-offset.h"
 #include "sp-clippath.h"
 #include "sp-mask.h"
@@ -93,30 +86,18 @@ SPCycleType SP_CYCLING = SP_CYCLE_FOCUS;
 #include "sp-item.h"
 #include "box3d.h"
 #include "persp3d.h"
-#include "util/units.h"
 #include "xml/simple-document.h"
-#include "sp-filter-reference.h"
 #include "gradient-drag.h"
-#include "uri-references.h"
-#include "display/curve.h"
-#include "display/canvas-bpath.h"
 #include "display/cairo-utils.h"
-#include "inkscape.h"
 #include "path-chemistry.h"
 #include "ui/tool/control-point-selection.h"
 #include "ui/tool/multi-path-manipulator.h"
-#include "sp-lpe-item.h"
 #include "live_effects/effect.h"
-#include "live_effects/effect-enum.h"
 #include "live_effects/parameter/originalpath.h"
 #include "layer-manager.h"
 #include "object-set.h"
 
-#include "enums.h"
-#include "sp-item-group.h"
-
 // For clippath editing
-#include "ui/tools-switch.h"
 #include "ui/tools/node-tool.h"
 
 #include "ui/clipboard.h"

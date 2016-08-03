@@ -20,15 +20,12 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "config.h"
-
 #include <numeric>
 
 #include "ui/dialog/dialog-manager.h"
 
 #include "svg/svg.h"
 
-#include <glib.h>
 #include "macros.h"
 #include "document.h"
 #include "document-undo.h"
@@ -38,10 +35,7 @@
 
 #include "message-context.h"
 #include "pixmaps/cursor-spray.xpm"
-#include <boost/optional.hpp>
-#include "xml/repr.h"
 #include "context-fns.h"
-#include "sp-item.h"
 #include "inkscape.h"
 
 #include "splivarot.h"
@@ -58,17 +52,12 @@
 #include "svg/svg-color.h"
 
 #include "sp-text.h"
-#include "sp-root.h"
 #include "sp-flowtext.h"
 #include "display/sp-canvas.h"
-#include "display/canvas-bpath.h"
 #include "display/canvas-arena.h"
 #include "display/curve.h"
 #include "livarot/Shape.h"
 #include <2geom/circle.h>
-#include <2geom/transforms.h>
-#include "preferences.h"
-#include "style.h"
 #include "box3d.h"
 #include "sp-item-transform.h"
 #include "filter-chemistry.h"
@@ -77,9 +66,6 @@
 #include "helper/action.h"
 #include "verbs.h"
 
-#include <iostream>
-
-#include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 #include <glibmm/i18n.h>
 
