@@ -14,8 +14,6 @@
 #define INKSCAPE_EXTENSION_LOADER_H_
 
 #include "extension.h"
-#include "implementation/implementation.h"
-#include <gmodule.h>
 
 
 namespace Inkscape {
