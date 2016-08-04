@@ -915,12 +915,12 @@ bool StyleDialog::_delProperty(GdkEventButton *event)
                                     value.erase(found, toDelProperty.length()+1);
                                     (*it)._xmlContent = key + "{" + value + "}\n";
                                     _updateStyleContent();
+                                    _cssPane->_store->erase(cssRow);
                                 }
                             }
                         }
                     }
                 }
-                _cssPane->_store->erase(cssRow);
             }
         }
     }
