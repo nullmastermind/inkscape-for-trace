@@ -20,21 +20,12 @@ set(TEST_SOURCES
 	sp-object-test
 	object-set-test)
 
-set (_optional_unittest_libs )
-
-if (NOT "${WITH_EXT_GDL}")
-	list (APPEND _optional_unittest_libs "gdl_LIB")
-endif()
-
 set(TEST_LIBS
 	gmock_main
 	inkscape_base
-	#inkscape_LIB
-	#sp_LIB # annoying, we need both!
-	nrtype_LIB # annoying, we need both!
+	nrtype_LIB
 	croco_LIB
 	avoid_LIB
-	${_optional_unittest_libs}
 	cola_LIB
 	vpsc_LIB
 	livarot_LIB
