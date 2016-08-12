@@ -75,7 +75,6 @@
 #include "ui/tools/connector-tool.h"
 #include "pixmaps/cursor-connector.xpm"
 #include "xml/node-event-vector.h"
-#include "xml/repr.h"
 #include "svg/svg.h"
 #include "desktop.h"
 #include "desktop-style.h"
@@ -86,19 +85,13 @@
 #include "message-stack.h"
 #include "selection.h"
 #include "inkscape.h"
-#include "preferences.h"
 #include "sp-path.h"
 #include "display/sp-canvas.h"
 #include "display/canvas-bpath.h"
-#include "display/sodipodi-ctrl.h"
 #include <glibmm/i18n.h>
 #include <glibmm/stringutils.h>
 #include "snap.h"
-#include "knot.h"
 #include "sp-conn-end.h"
-#include "sp-conn-end-pair.h"
-#include "conn-avoid-ref.h"
-#include "libavoid/vertices.h"
 #include "libavoid/router.h"
 #include "context-fns.h"
 #include "sp-namedview.h"
@@ -1114,9 +1107,9 @@ void ConnectorTool::_setActiveShape(SPItem *item) {
 
         // The idea here is to try and add a group's children to solidify
         // connection handling. We react to path objects with only one node.
-        for (SPObject *child = item->firstChild() ; child ; child = child->getNext() ) {
-          if (SP_IS_PATH(child) && SP_PATH(child)->nodesInPath() == 1) {
-              this->_activeShapeAddKnot((SPItem *) child);
+        for (auto& child: item->children) {
+          if (SP_IS_PATH(&child) && SP_PATH(&child)->nodesInPath() == 1) {
+              this->_activeShapeAddKnot((SPItem *) &child);
           }
         }
         this->_activeShapeAddKnot(item);
@@ -1306,8 +1299,8 @@ void cc_selection_set_avoid(bool const set_avoid)
 
     int changes = 0;
 
-    std::vector<SPItem*> l = selection->itemList();
-    for(std::vector<SPItem*>::const_iterator i=l.begin();i!=l.end(); ++i) {
+    auto l = selection->items();
+    for(auto i=l.begin();i!=l.end(); ++i) {
         SPItem *item = *i;
 
         char const *value = (set_avoid) ? "true" : NULL;

@@ -22,7 +22,6 @@
 
 #include "text-edit.h"
 #include <libnrtype/font-instance.h>
-#include <gtk/gtk.h>
 
 #ifdef WITH_GTKSPELL
 extern "C" {
@@ -31,11 +30,8 @@ extern "C" {
 #endif
 
 #include <gtkmm/stock.h>
-#include <libnrtype/font-instance.h>
 #include <libnrtype/font-lister.h>
-#include <xml/repr.h>
 
-#include "macros.h"
 #include "helper/window.h"
 #include "inkscape.h"
 #include "document.h"
@@ -43,13 +39,10 @@ extern "C" {
 #include "desktop-style.h"
 
 #include "document-undo.h"
-#include "selection.h"
-#include "style.h"
 #include "sp-text.h"
 #include "sp-flowtext.h"
 #include "text-editing.h"
 #include "ui/icon-names.h"
-#include "preferences.h"
 #include "verbs.h"
 #include "ui/interface.h"
 #include "svg/css-ostringstream.h"
@@ -99,9 +92,7 @@ TextEdit::TextEdit()
     styleButton(&align_right,   _("Align right"),                INKSCAPE_ICON("format-justify-right"),  &align_left);
     styleButton(&align_justify, _("Justify (only flowed text)"), INKSCAPE_ICON("format-justify-fill"),   &align_left);
 
-#if WITH_GTKMM_3_0
     align_sep.set_orientation(Gtk::ORIENTATION_VERTICAL);
-#endif
 
     layout_hbox.pack_start(align_sep, false, false, 10);
 
@@ -109,9 +100,7 @@ TextEdit::TextEdit()
     styleButton(&text_horizontal, _("Horizontal text"), INKSCAPE_ICON("format-text-direction-horizontal"), NULL);
     styleButton(&text_vertical, _("Vertical text"), INKSCAPE_ICON("format-text-direction-vertical"), &text_horizontal);
 
-#if WITH_GTKMM_3_0
     text_sep.set_orientation(Gtk::ORIENTATION_VERTICAL);
-#endif
 
     layout_hbox.pack_start(text_sep, false, false, 10);
 
@@ -146,12 +135,8 @@ TextEdit::TextEdit()
 
         gtk_widget_set_tooltip_text(startOffset, _("Text path offset"));
 
-#if WITH_GTKMM_3_0
-        Gtk::Separator *sep = Gtk::manage(new Gtk::Separator());
+        auto sep = Gtk::manage(new Gtk::Separator());
         sep->set_orientation(Gtk::ORIENTATION_VERTICAL);
-#else
-        Gtk::VSeparator *sep = Gtk::manage(new Gtk::VSeparator);
-#endif
         layout_hbox.pack_start(*sep, false, false, 10);
 
         layout_hbox.pack_start(*Gtk::manage(Glib::wrap(startOffset)), false, false);
@@ -175,7 +160,6 @@ TextEdit::TextEdit()
     gtk_text_view_set_wrap_mode ((GtkTextView *) text_view, GTK_WRAP_WORD);
 
 #ifdef WITH_GTKSPELL
-#ifdef WITH_GTKMM_3_0
 /*
        TODO: Use computed xml:lang attribute of relevant element, if present, to specify the
        language (either as 2nd arg of gtkspell_new_attach, or with explicit
@@ -187,20 +171,6 @@ TextEdit::TextEdit()
     if (! gtk_spell_checker_attach(speller, GTK_TEXT_VIEW(text_view))) {
         g_print("gtkspell error:\n");
     }
-#else
-    GError *error = NULL;
-
-/*
-       TODO: Use computed xml:lang attribute of relevant element, if present, to specify the
-       language (either as 2nd arg of gtkspell_new_attach, or with explicit
-       gtkspell_set_language call in; see advanced.c example in gtkspell docs).
-       onReadSelection looks like a suitable place.
-*/
-    if (gtkspell_new_attach(GTK_TEXT_VIEW(text_view), NULL, &error) == NULL) {
-        g_print("gtkspell error: %s\n", error->message);
-        g_error_free(error);
-    }
-#endif
 #endif
 
     gtk_widget_set_size_request (text_view, -1, 64);
@@ -443,8 +413,8 @@ SPItem *TextEdit::getSelectedTextItem (void)
     if (!SP_ACTIVE_DESKTOP)
         return NULL;
 
-    std::vector<SPItem*> tmp=SP_ACTIVE_DESKTOP->getSelection()->itemList();
-	for(std::vector<SPItem*>::const_iterator i=tmp.begin();i!=tmp.end();++i)
+    auto tmp= SP_ACTIVE_DESKTOP->getSelection()->items();
+	for(auto i=tmp.begin();i!=tmp.end();++i)
     {
         if (SP_IS_TEXT(*i) || SP_IS_FLOWTEXT(*i))
             return *i;
@@ -461,8 +431,8 @@ unsigned TextEdit::getSelectedTextCount (void)
 
     unsigned int items = 0;
 
-    std::vector<SPItem*> tmp=SP_ACTIVE_DESKTOP->getSelection()->itemList();
-	for(std::vector<SPItem*>::const_iterator i=tmp.begin();i!=tmp.end();++i)
+    auto tmp= SP_ACTIVE_DESKTOP->getSelection()->items();
+	for(auto i=tmp.begin();i!=tmp.end();++i)
     {
         if (SP_IS_TEXT(*i) || SP_IS_FLOWTEXT(*i))
             ++items;
@@ -568,11 +538,11 @@ void TextEdit::onApply()
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 
     unsigned items = 0;
-    const std::vector<SPItem*> item_list = desktop->getSelection()->itemList();
+    auto item_list = desktop->getSelection()->items();
     SPCSSAttr *css = fillTextStyle ();
     sp_desktop_set_style(desktop, css, true);
 
-	for(std::vector<SPItem*>::const_iterator i=item_list.begin();i!=item_list.end();++i){
+	for(auto i=item_list.begin();i!=item_list.end();++i){
         // apply style to the reprs of all text objects in the selection
         if (SP_IS_TEXT (*i)) {
 

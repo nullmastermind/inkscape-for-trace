@@ -24,25 +24,19 @@
 #include "message-context.h"
 #include "selection.h"
 #include "ui/shape-editor.h" // temporary!
-#include "live_effects/effect.h"
-#include "display/curve.h"
 #include "snap.h"
 #include "sp-namedview.h"
 #include "sp-clippath.h"
 #include "sp-item-group.h"
 #include "sp-mask.h"
-#include "sp-object-group.h"
-#include "sp-path.h"
 #include "sp-text.h"
 #include "ui/control-manager.h"
 #include "ui/tools/node-tool.h"
 #include "ui/tool/control-point-selection.h"
 #include "ui/tool/event-utils.h"
-#include "ui/tool/manipulator.h"
 #include "ui/tool/multi-path-manipulator.h"
 #include "ui/tool/path-manipulator.h"
 #include "ui/tool/selector.h"
-#include "ui/tool/shape-record.h"
 
 #include "pixmaps/cursor-node.xpm"
 #include "pixmaps/cursor-node-d.xpm"
@@ -378,8 +372,8 @@ void gather_items(NodeTool *nt, SPItem *base, SPObject *obj, Inkscape::UI::Shape
         r.role = role;
         s.insert(r);
     } else if (role != SHAPE_ROLE_NORMAL && (SP_IS_GROUP(obj) || SP_IS_OBJECTGROUP(obj))) {
-        for (SPObject *c = obj->children; c; c = c->next) {
-            gather_items(nt, base, c, role, s);
+        for (auto& c: obj->children) {
+            gather_items(nt, base, &c, role, s);
         }
     } else if (SP_IS_ITEM(obj)) {
         SPItem *item = static_cast<SPItem*>(obj);
@@ -407,8 +401,8 @@ void NodeTool::selection_changed(Inkscape::Selection *sel) {
 
     std::set<ShapeRecord> shapes;
 
-    std::vector<SPItem*> items=sel->itemList();
-    for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();++i){
+    auto items= sel->items();
+    for(auto i=items.begin();i!=items.end();++i){
         SPObject *obj = *i;
 
         if (SP_IS_ITEM(obj)) {
@@ -443,8 +437,9 @@ void NodeTool::selection_changed(Inkscape::Selection *sel) {
         }
     }
 
+    std::vector<SPItem *> vec(sel->items().begin(), sel->items().end());
     _previous_selection = _current_selection;
-    _current_selection = sel->itemList();
+    _current_selection = vec;
 
     this->_multipath->setItems(shapes);
     this->update_tip(NULL);

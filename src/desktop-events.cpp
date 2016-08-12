@@ -21,7 +21,10 @@
 #include "ui/dialog/guides.h"
 #include "desktop-events.h"
 
-#if WITH_GTKMM_3_0
+#include <gdkmm/display.h>
+#if GTK_CHECK_VERSION(3, 20, 0)
+# include <gdkmm/seat.h>
+#else
 # include <gdkmm/devicemanager.h>
 #endif
 
@@ -97,14 +100,9 @@ static gint sp_dt_ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidge
 
     gint width, height;
 
-#if GTK_CHECK_VERSION(3,0,0)
-    GdkDevice *device = gdk_event_get_device(event);
+    auto device = gdk_event_get_device(event);
     gdk_window_get_device_position(window, device, &wx, &wy, NULL);
     gdk_window_get_geometry(window, NULL /*x*/, NULL /*y*/, &width, &height);
-#else
-    gdk_window_get_pointer(window, &wx, &wy, NULL);
-    gdk_window_get_geometry(window, NULL /*x*/, NULL /*y*/, &width, &height, NULL/*depth*/);
-#endif
     
     Geom::Point const event_win(wx, wy);
 
@@ -160,7 +158,6 @@ static gint sp_dt_ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidge
                 guide = sp_guideline_new(desktop->guides, NULL, event_dt, normal);
                 sp_guideline_set_color(SP_GUIDELINE(guide), desktop->namedview->guidehicolor);
 
-#if GTK_CHECK_VERSION(3,0,0)
                 gdk_device_grab(device,
                                 gtk_widget_get_window(widget), 
                                 GDK_OWNERSHIP_NONE,
@@ -168,12 +165,6 @@ static gint sp_dt_ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidge
                                 (GdkEventMask)(GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK ),
                                 NULL,
                                 event->button.time);
-#else
-                gdk_pointer_grab(gtk_widget_get_window (widget), FALSE,
-                                 (GdkEventMask)(GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK ),
-                                 NULL, NULL,
-                                 event->button.time);
-#endif
             }
             break;
     case GDK_MOTION_NOTIFY:
@@ -208,11 +199,7 @@ static gint sp_dt_ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidge
             if (clicked && event->button.button == 1) {
                 sp_event_context_discard_delayed_snap_event(desktop->event_context);
 
-#if GTK_CHECK_VERSION(3,0,0)
                 gdk_device_ungrab(device, event->button.time);
-#else
-                gdk_pointer_ungrab(event->button.time);
-#endif
 
                 Geom::Point const event_w(sp_canvas_window_to_world(dtw->canvas, event_win));
                 Geom::Point event_dt(desktop->w2d(event_w));
@@ -537,11 +524,7 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
                 guide_cursor = sp_cursor_new_from_xpm(cursor_select_xpm , 1, 1);
             }
             gdk_window_set_cursor(gtk_widget_get_window (GTK_WIDGET(desktop->getCanvas())), guide_cursor);
-#if GTK_CHECK_VERSION(3,0,0)
             g_object_unref(guide_cursor);
-#else
-            gdk_cursor_unref(guide_cursor);
-#endif
 
             char *guide_description = guide->description();
             desktop->guidesMessageContext()->setF(Inkscape::NORMAL_MESSAGE, _("<b>Guideline</b>: %s"), guide_description);
@@ -575,11 +558,7 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
                         GdkDisplay *display      = gdk_display_get_default();
                         GdkCursor  *guide_cursor = gdk_cursor_new_for_display(display, GDK_EXCHANGE);
                         gdk_window_set_cursor(gtk_widget_get_window (GTK_WIDGET(desktop->getCanvas())), guide_cursor);
-#if GTK_CHECK_VERSION(3,0,0)
                         g_object_unref(guide_cursor);
-#else
-                        gdk_cursor_unref(guide_cursor);
-#endif
                         ret = TRUE;
                         break;
                     }
@@ -597,11 +576,7 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
                     GdkDisplay *display      = gdk_display_get_default();
                     GdkCursor  *guide_cursor = gdk_cursor_new_for_display(display, GDK_EXCHANGE);
                     gdk_window_set_cursor(gtk_widget_get_window (GTK_WIDGET(desktop->getCanvas())), guide_cursor);
-#if GTK_CHECK_VERSION(3,0,0)
                     g_object_unref(guide_cursor);
-#else
-                    gdk_cursor_unref(guide_cursor);
-#endif
                     break;
                 }
                 default:
@@ -624,19 +599,20 @@ static GdkInputSource lastType = GDK_SOURCE_MOUSE;
 static void init_extended()
 {
     Glib::ustring avoidName("pad");
-    Glib::RefPtr<Gdk::Display> display = Gdk::Display::get_default();
+    auto display = Gdk::Display::get_default();
 
-#if GTK_CHECK_VERSION(3,0,0)
-    Glib::RefPtr<const Gdk::DeviceManager> dm = display->get_device_manager();
-    std::vector< Glib::RefPtr<const Gdk::Device> > devices = dm->list_devices(Gdk::DEVICE_TYPE_SLAVE);	
+#if GTK_CHECK_VERSION(3, 20, 0)
+    auto seat = display->get_default_seat();
+    auto const devices = seat->get_slaves(Gdk::SEAT_CAPABILITY_ALL);
 #else
-    std::vector< Glib::RefPtr<const Gdk::Device> > devices = display->list_devices();
+    auto dm = display->get_device_manager();
+    auto const devices = dm->list_devices(Gdk::DEVICE_TYPE_SLAVE);	
 #endif
     
     if ( !devices.empty() ) {
-        for ( std::vector< Glib::RefPtr<const Gdk::Device> >::const_iterator dev = devices.begin(); dev != devices.end(); ++dev ) {
-            Glib::ustring const devName = (*dev)->get_name();
-            Gdk::InputSource devSrc = (*dev)->get_source();
+        for (auto const dev : devices) {
+            auto const devName = dev->get_name();
+            auto devSrc = dev->get_source();
             
             if ( !devName.empty()
                  && (avoidName != devName)

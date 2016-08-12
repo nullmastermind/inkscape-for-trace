@@ -35,7 +35,6 @@
 
 #include "display/cairo-utils.h"
 #include "svg/svg.h"
-#include "svg/svg-color.h"
 #include "svg/css-ostringstream.h"
 #include "attributes.h"
 #include "document-private.h"
@@ -46,13 +45,7 @@
 #include "sp-radial-gradient.h"
 #include "sp-mesh.h"
 #include "sp-mesh-row.h"
-#include "sp-mesh-patch.h"
 #include "sp-stop.h"
-#include "streq.h"
-#include "uri.h"
-#include "xml/repr.h"
-#include "style.h"
-#include "display/grayscale.h"
 
 /// Has to be power of 2   Seems to be unused.
 //#define NCOLORS NR_GRADIENT_VECTOR_LENGTH
@@ -276,8 +269,8 @@ void SPGradient::build(SPDocument *document, Inkscape::XML::Node *repr)
 
     SPPaintServer::build(document, repr);
 
-    for ( SPObject *ochild = this->firstChild() ; ochild ; ochild = ochild->getNext() ) {
-        if (SP_IS_STOP(ochild)) {
+    for (auto& ochild: children) {
+        if (SP_IS_STOP(&ochild)) {
             this->has_stops = TRUE;
             break;
         }
@@ -481,8 +474,8 @@ void SPGradient::remove_child(Inkscape::XML::Node *child)
     SPPaintServer::remove_child(child);
 
     this->has_stops = FALSE;
-    for ( SPObject *ochild = this->firstChild() ; ochild ; ochild = ochild->getNext() ) {
-        if (SP_IS_STOP(ochild)) {
+    for (auto& ochild: children) {
+        if (SP_IS_STOP(&ochild)) {
             this->has_stops = TRUE;
             break;
         }
@@ -536,9 +529,9 @@ void SPGradient::modified(guint flags)
     // FIXME: climb up the ladder of hrefs
     GSList *l = NULL;
 
-    for (SPObject *child = this->firstChild() ; child; child = child->getNext() ) {
-        sp_object_ref(child);
-        l = g_slist_prepend(l, child);
+    for (auto& child: children) {
+        sp_object_ref(&child);
+        l = g_slist_prepend(l, &child);
     }
 
     l = g_slist_reverse(l);
@@ -557,10 +550,11 @@ void SPGradient::modified(guint flags)
 
 SPStop* SPGradient::getFirstStop()
 {
-    SPStop* first = 0;
-    for (SPObject *ochild = firstChild(); ochild && !first; ochild = ochild->getNext()) {
-        if (SP_IS_STOP(ochild)) {
-            first = SP_STOP(ochild);
+    SPStop* first = nullptr;
+    for (auto& ochild: children) {
+        if (SP_IS_STOP(&ochild)) {
+            first = SP_STOP(&ochild);
+            break;
         }
     }
     return first;
@@ -587,8 +581,8 @@ Inkscape::XML::Node *SPGradient::write(Inkscape::XML::Document *xml_doc, Inkscap
     if (flags & SP_OBJECT_WRITE_BUILD) {
         GSList *l = NULL;
 
-        for (SPObject *child = this->firstChild(); child; child = child->getNext()) {
-            Inkscape::XML::Node *crepr = child->updateRepr(xml_doc, NULL, flags);
+        for (auto& child: children) {
+            Inkscape::XML::Node *crepr = child.updateRepr(xml_doc, NULL, flags);
 
             if (crepr) {
                 l = g_slist_prepend(l, crepr);
@@ -915,8 +909,8 @@ bool SPGradient::invalidateArray()
 void SPGradient::rebuildVector()
 {
     gint len = 0;
-    for ( SPObject *child = firstChild() ; child ; child = child->getNext() ) {
-        if (SP_IS_STOP(child)) {
+    for (auto& child: children) {
+        if (SP_IS_STOP(&child)) {
             len ++;
         }
     }
@@ -937,9 +931,9 @@ void SPGradient::rebuildVector()
         }
     }
 
-    for ( SPObject *child = firstChild(); child; child = child->getNext() ) {
-        if (SP_IS_STOP(child)) {
-            SPStop *stop = SP_STOP(child);
+    for (auto& child: children) {
+        if (SP_IS_STOP(&child)) {
+            SPStop *stop = SP_STOP(&child);
 
             SPGradientStop gstop;
             if (!vector.stops.empty()) {
@@ -1022,8 +1016,8 @@ void SPGradient::rebuildArray()
     array.read( SP_MESH( this ) );
 
     has_patches = false;
-    for ( SPObject *ro = firstChild() ; ro ; ro = ro->getNext() ) {
-        if (SP_IS_MESHROW(ro)) {
+    for (auto& ro: children) {
+        if (SP_IS_MESHROW(&ro)) {
             has_patches = true;
             // std::cout << "  Has Patches" << std::endl;
             break;

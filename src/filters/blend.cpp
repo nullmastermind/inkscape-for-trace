@@ -18,13 +18,9 @@
 #include "sp-filter.h"
 #include "filters/blend.h"
 #include "attributes.h"
-#include "svg/svg.h"
 #include "xml/repr.h"
 
 #include "display/nr-filter.h"
-#include "display/nr-filter-primitive.h"
-#include "display/nr-filter-blend.h"
-#include "display/nr-filter-types.h"
 
 SPFeBlend::SPFeBlend()
     : SPFilterPrimitive(), blend_mode(Inkscape::Filters::BLEND_NORMAL),
@@ -199,11 +195,11 @@ Inkscape::XML::Node* SPFeBlend::write(Inkscape::XML::Document *doc, Inkscape::XM
     if( !in2_name ) {
 
         // This code is very similar to sp_filter_primtive_name_previous_out()
-        SPObject *i = parent->children;
+        SPObject *i = parent->firstChild();
 
         // Find previous filter primitive
-        while (i && i->next != this) {
-        	i = i->next;
+        while (i && i->getNext() != this) {
+        	i = i->getNext();
         }
 
         if( i ) {

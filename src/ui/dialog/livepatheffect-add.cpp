@@ -9,7 +9,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+#include "config.h"
 #endif
 
 #include "livepatheffect-add.h"
@@ -17,7 +17,6 @@
 #include <gtkmm/stock.h>
 
 #include "desktop.h"
-#include "live_effects/effect-enum.h"
 
 namespace Inkscape {
 namespace UI {
@@ -74,11 +73,7 @@ LivePathEffectAdd::LivePathEffectAdd() :
     add_button.set_use_underline(true);
     add_button.set_can_default();
 
-#if WITH_GTKMM_3_0
-    Gtk::Box *mainVBox = get_content_area();
-#else
-    Gtk::Box *mainVBox = get_vbox();
-#endif
+    auto mainVBox = get_content_area();
 
     mainVBox->pack_start(scrolled_window, true, true);
     add_action_widget(close_button, Gtk::RESPONSE_CLOSE);

@@ -12,14 +12,11 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+#include <config.h>
 #endif
 
 
 #include "ui/widget/point.h"
-#include "ui/widget/labelled.h"
-#include "ui/widget/scalar.h"
-#include <gtkmm/box.h>
 
 namespace Inkscape {
 namespace UI {
@@ -53,11 +50,7 @@ Point::Point(Glib::ustring const &label, Glib::ustring const &tooltip,
 }
 
 Point::Point(Glib::ustring const &label, Glib::ustring const &tooltip,
-#if WITH_GTKMM_3_0
                Glib::RefPtr<Gtk::Adjustment> &adjust,
-#else
-               Gtk::Adjustment &adjust,
-#endif
                unsigned digits,
                Glib::ustring const &suffix,
                Glib::ustring const &icon,

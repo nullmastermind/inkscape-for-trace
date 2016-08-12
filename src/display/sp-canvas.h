@@ -11,9 +11,11 @@
  *   Raph Levien <raph@gimp.org>
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *   Jon A. Cruz <jon@joncruz.org>
+ *   Krzysztof Kosiński <tweenk.pl@gmail.com>
  *
  * Copyright (C) 1998 The Free Software Foundation
  * Copyright (C) 2002 Lauris Kaplinski
+ * Copyright (C) 2016 Google Inc.
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
@@ -85,6 +87,9 @@ struct SPCanvas {
     Geom::IntRect getViewboxIntegers() const;
     SPCanvasGroup *getRoot();
 
+    void setBackgroundColor(guint32 rgba);
+    void setBackgroundCheckerboard();
+
     /// Returns new canvas as widget.
     static GtkWidget *createAA();
 
@@ -103,7 +108,8 @@ private:
 
     /// Marks the specified area as dirty (requiring redraw)
     void dirtyRect(Geom::IntRect const &area);
-    /// Marks specific canvas rectangle as clean (val == 0) or dirty (otherwise)
+    /// Marks the whole widget for redraw
+    void dirtyAll();
     void markRect(Geom::IntRect const &area, uint8_t val);
 
     /// Invokes update, paint, and repick on canvas.
@@ -139,12 +145,8 @@ public:
     static void dispose(GObject *object);
     static void handle_realize(GtkWidget *widget);
     static void handle_unrealize(GtkWidget *widget);
-#if GTK_CHECK_VERSION(3,0,0)
     static void handle_get_preferred_width(GtkWidget *widget, gint *min_w, gint *nat_w);
     static void handle_get_preferred_height(GtkWidget *widget, gint *min_h, gint *nat_h);
-#else
-    static void handle_size_request(GtkWidget *widget, GtkRequisition *req);
-#endif
     static void handle_size_allocate(GtkWidget *widget, GtkAllocation *allocation);
     static gint handle_button(GtkWidget *widget, GdkEventButton *event);
 
@@ -155,11 +157,7 @@ public:
      */
     static gint handle_scroll(GtkWidget *widget, GdkEventScroll *event);
     static gint handle_motion(GtkWidget *widget, GdkEventMotion *event);
-#if GTK_CHECK_VERSION(3,0,0)
     static gboolean handle_draw(GtkWidget *widget, cairo_t *cr);
-#else
-    static gboolean handle_expose(GtkWidget *widget, GdkEventExpose *event);
-#endif
     static gint handle_key_event(GtkWidget *widget, GdkEventKey *event);
     static gint handle_crossing(GtkWidget *widget, GdkEventCrossing *event);
     static gint handle_focus_in(GtkWidget *widget, GdkEventFocus *event);
@@ -176,15 +174,18 @@ public:
     bool _is_dragging;
     double _dx0;
     double _dy0;
-    int _x0;
-    int _y0;
+    int _x0; ///< World coordinate of the leftmost pixels
+    int _y0; ///< World coordinate of the topmost pixels
 
-    /* Area that needs redrawing, stored as a microtile array */
-    int    _tLeft, _tTop, _tRight, _tBottom;
-    int    _tile_w, _tile_h;
-    uint8_t *_tiles;
+    /// Image surface storing the contents of the widget
+    cairo_surface_t *_backing_store;
+    /// Area of the widget that has up-to-date content
+    cairo_region_t *_clean_region;
+    /// Widget background, defaults to white
+    cairo_pattern_t *_background;
+    bool _background_is_checkerboard;
 
-    /** Last known modifier state, for deferred repick when a button is down. */
+    /// Last known modifier state, for deferred repick when a button is down.
     int _state;
 
     /** The item containing the mouse pointer, or NULL if none. */
@@ -208,7 +209,6 @@ public:
     int _close_enough;
 
     unsigned int _need_update : 1;
-    unsigned int _need_redraw : 1;
     unsigned int _need_repick : 1;
 
     int _forced_redraw_count;

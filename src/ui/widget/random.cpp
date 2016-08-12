@@ -10,7 +10,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+#include <config.h>
 #endif
 
 
@@ -47,11 +47,7 @@ Random::Random(Glib::ustring const &label, Glib::ustring const &tooltip,
 }
 
 Random::Random(Glib::ustring const &label, Glib::ustring const &tooltip,
-#if WITH_GTKMM_3_0
                Glib::RefPtr<Gtk::Adjustment> &adjust,
-#else
-               Gtk::Adjustment &adjust,
-#endif
                unsigned digits,
                Glib::ustring const &suffix,
                Glib::ustring const &icon,

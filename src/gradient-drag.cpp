@@ -15,7 +15,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include <config.h>
 #endif
 
 #include <glibmm/i18n.h>
@@ -32,20 +32,15 @@
 #include "display/sp-ctrlline.h"
 #include "display/sp-ctrlcurve.h"
 #include "display/sp-canvas-util.h"
-#include "xml/repr.h"
 #include "xml/sp-css-attr.h"
 #include "svg/css-ostringstream.h"
 #include "svg/svg.h"
-#include "preferences.h"
 #include "inkscape.h"
-#include "sp-item.h"
 #include "style.h"
 #include "knot.h"
 #include "sp-linear-gradient.h"
 #include "sp-radial-gradient.h"
 #include "sp-mesh.h"
-#include "sp-mesh-row.h"
-#include "sp-mesh-patch.h"
 #include "gradient-chemistry.h"
 #include "gradient-drag.h"
 #include "sp-stop.h"
@@ -2070,8 +2065,8 @@ void GrDrag::updateDraggers()
     this->draggers.clear();
 
     g_return_if_fail(this->selection != NULL);
-    std::vector<SPItem*> list = this->selection->itemList();
-    for (std::vector<SPItem*>::const_iterator i = list.begin(); i != list.end(); ++i) {
+    auto list = this->selection->items();
+    for (auto i = list.begin(); i != list.end(); ++i) {
         SPItem *item = *i;
         SPStyle *style = item->style;
 
@@ -2138,8 +2133,8 @@ void GrDrag::updateLines()
 
     g_return_if_fail(this->selection != NULL);
 
-    std::vector<SPItem*> list = this->selection->itemList();
-    for (std::vector<SPItem*>::const_iterator i = list.begin(); i != list.end(); ++i) {
+    auto list = this->selection->items();
+    for (auto i = list.begin(); i != list.end(); ++i) {
         SPItem *item = *i;
 
         SPStyle *style = item->style;
@@ -2282,8 +2277,8 @@ void GrDrag::updateLevels()
 
     g_return_if_fail (this->selection != NULL);
 
-    std::vector<SPItem*> list = this->selection->itemList();
-    for (std::vector<SPItem*>::const_iterator i = list.begin(); i != list.end(); ++i) {
+    auto list = this->selection->items();
+    for (auto i = list.begin(); i != list.end(); ++i) {
         SPItem *item = *i;
         Geom::OptRect rect = item->desktopVisualBounds();
         if (rect) {
@@ -2539,9 +2534,9 @@ void GrDrag::deleteSelected(bool just_one)
         // cannot use vector->vector.stops.size() because the vector might be invalidated by deletion of a midstop
         // manually count the children, don't know if there already exists a function for this...
         int len = 0;
-        for ( SPObject *child = (stopinfo->vector)->firstChild() ; child ; child = child->getNext() )
+        for (auto& child: stopinfo->vector->children)
         {
-            if ( SP_IS_STOP(child) ) {
+            if ( SP_IS_STOP(&child) ) {
                 len ++;
             }
         }

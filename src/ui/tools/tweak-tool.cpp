@@ -11,8 +11,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "config.h"
-
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 #include <glibmm/i18n.h>
@@ -21,7 +19,6 @@
 
 #include "svg/svg.h"
 
-#include <glib.h>
 #include "macros.h"
 #include "document.h"
 #include "document-undo.h"
@@ -48,19 +45,13 @@
 #include "pixmaps/cursor-push.xpm"
 #include "pixmaps/cursor-roughen.xpm"
 #include "pixmaps/cursor-color.xpm"
-#include <boost/optional.hpp>
-#include "xml/repr.h"
 #include "context-fns.h"
-#include "sp-item.h"
 #include "inkscape.h"
-#include "color.h"
-#include "svg/svg-color.h"
 #include "splivarot.h"
 #include "sp-item-group.h"
 #include "sp-shape.h"
 #include "sp-path.h"
 #include "path-chemistry.h"
-#include "sp-gradient.h"
 #include "sp-stop.h"
 #include "sp-gradient-reference.h"
 #include "sp-linear-gradient.h"
@@ -69,13 +60,10 @@
 #include "sp-text.h"
 #include "sp-flowtext.h"
 #include "display/sp-canvas.h"
-#include "display/canvas-bpath.h"
 #include "display/canvas-arena.h"
 #include "display/curve.h"
 #include "livarot/Shape.h"
-#include <2geom/transforms.h>
 #include <2geom/circle.h>
-#include "preferences.h"
 #include "style.h"
 #include "box3d.h"
 #include "sp-item-transform.h"
@@ -153,7 +141,7 @@ void TweakTool::update_cursor (bool with_shift) {
     gchar *sel_message = NULL;
 
     if (!desktop->selection->isEmpty()) {
-        num = desktop->selection->itemList().size();
+        num = (guint) boost::distance(desktop->selection->items());
         sel_message = g_strdup_printf(ngettext("<b>%i</b> object selected","<b>%i</b> objects selected",num), num);
     } else {
         sel_message = g_strdup_printf("%s", _("<b>Nothing</b> selected"));
@@ -385,9 +373,9 @@ sp_tweak_dilate_recursive (Inkscape::Selection *selection, SPItem *item, Geom::P
 
     if (dynamic_cast<SPGroup *>(item) && !dynamic_cast<SPBox3D *>(item)) {
         GSList *children = NULL;
-        for (SPObject *child = item->firstChild() ; child; child = child->getNext() ) {
-            if (dynamic_cast<SPItem *>(static_cast<SPObject *>(child))) {
-                children = g_slist_prepend(children, child);
+        for (auto& child: item->children) {
+            if (dynamic_cast<SPItem *>(static_cast<SPObject *>(&child))) {
+                children = g_slist_prepend(children, &child);
             }
         }
 
@@ -832,8 +820,8 @@ static void tweak_colors_in_gradient(SPItem *item, Inkscape::PaintTarget fill_or
     double offset_l = 0;
     double offset_h = 0;
     SPObject *child_prev = NULL;
-    for (SPObject *child = vector->firstChild(); child; child = child->getNext()) {
-        SPStop *stop = dynamic_cast<SPStop *>(child);
+    for (auto& child: vector->children) {
+        SPStop *stop = dynamic_cast<SPStop *>(&child);
         if (!stop) {
             continue;
         }
@@ -878,7 +866,7 @@ static void tweak_colors_in_gradient(SPItem *item, Inkscape::PaintTarget fill_or
         }
 
         offset_l = offset_h;
-        child_prev = child;
+        child_prev = &child;
     }
 }
 
@@ -894,8 +882,8 @@ sp_tweak_color_recursive (guint mode, SPItem *item, SPItem *item_at_point,
     bool did = false;
 
     if (dynamic_cast<SPGroup *>(item)) {
-        for (SPObject *child = item->firstChild() ; child; child = child->getNext() ) {
-            SPItem *childItem = dynamic_cast<SPItem *>(child);
+        for (auto& child: item->children) {
+            SPItem *childItem = dynamic_cast<SPItem *>(&child);
             if (childItem) {
                 if (sp_tweak_color_recursive (mode, childItem, item_at_point,
                                           fill_goal, do_fill,
@@ -951,9 +939,8 @@ sp_tweak_color_recursive (guint mode, SPItem *item, SPItem *item_at_point,
                 Geom::Affine i2dt = item->i2dt_affine ();
                 if (style->filter.set && style->getFilter()) {
                     //cycle through filter primitives
-                    SPObject *primitive_obj = style->getFilter()->children;
-                    while (primitive_obj) {
-                        SPFilterPrimitive *primitive = dynamic_cast<SPFilterPrimitive *>(primitive_obj);
+                    for (auto& primitive_obj: style->getFilter()->children) {
+                        SPFilterPrimitive *primitive = dynamic_cast<SPFilterPrimitive *>(&primitive_obj);
                         if (primitive) {
                             //if primitive is gaussianblur
                             SPGaussianBlur * spblur = dynamic_cast<SPGaussianBlur *>(primitive);
@@ -962,7 +949,6 @@ sp_tweak_color_recursive (guint mode, SPItem *item, SPItem *item_at_point,
                                 blur_now += num * i2dt.descrim(); // sum all blurs in the filter
                             }
                         }
-                        primitive_obj = primitive_obj->next;
                     }
                 }
                 double perimeter = bbox->dimensions()[Geom::X] + bbox->dimensions()[Geom::Y];
@@ -1076,8 +1062,8 @@ sp_tweak_dilate (TweakTool *tc, Geom::Point event_p, Geom::Point p, Geom::Point 
     double move_force = get_move_force(tc);
     double color_force = MIN(sqrt(path_force)/20.0, 1);
 
-    std::vector<SPItem*> items=selection->itemList();
-    for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end(); ++i){
+    auto items= selection->items();
+    for(auto i=items.begin();i!=items.end(); ++i){
         SPItem *item = *i;
 
         if (is_color_mode (tc->mode)) {
@@ -1185,7 +1171,7 @@ bool TweakTool::root_handler(GdkEvent* event) {
 
                 guint num = 0;
                 if (!desktop->selection->isEmpty()) {
-                    num = desktop->selection->itemList().size();
+                    num = (guint) boost::distance(desktop->selection->items());
                 }
                 if (num == 0) {
                     this->message_context->flash(Inkscape::ERROR_MESSAGE, _("<b>Nothing selected!</b> Select objects to tweak."));

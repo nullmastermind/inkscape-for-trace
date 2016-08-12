@@ -24,7 +24,6 @@
 #include <glibmm/i18n.h>
 #include <glibmm/main.h>
 #include <glibmm/timer.h>
-#include <gdkmm/pixbuf.h>
 
 #include "color-item.h"
 #include "desktop.h"
@@ -35,28 +34,20 @@
 #include "document-undo.h"
 #include "extension/db.h"
 #include "inkscape.h"
-#include "inkscape.h"
 #include "io/sys.h"
 #include "io/resource.h"
 #include "message-context.h"
 #include "path-prefix.h"
-#include "preferences.h"
-#include "sp-item.h"
-#include "sp-gradient.h"
-#include "sp-gradient-vector.h"
 #include "style.h"
 #include "ui/previewholder.h"
 #include "widgets/desktop-widget.h"
 #include "widgets/gradient-vector.h"
-#include "widgets/eek-preview.h"
 #include "display/cairo-utils.h"
 #include "sp-gradient-reference.h"
 #include "dialog-manager.h"
-#include "selection.h"
 #include "verbs.h"
 #include "gradient-chemistry.h"
 #include "helper/action.h"
-#include "helper/action-context.h"
 
 namespace Inkscape {
 namespace UI {
@@ -123,7 +114,7 @@ static void editGradientImpl( SPDesktop* desktop, SPGradient* gr )
         bool shown = false;
         if ( desktop && desktop->doc() ) {
             Inkscape::Selection *selection = desktop->getSelection();
-            std::vector<SPItem*> const items = selection->itemList();
+            std::vector<SPItem*> const items(selection->items().begin(), selection->items().end());
             if (!items.empty()) {
                 SPStyle query( desktop->doc() );
                 int result = objects_query_fillstroke((items), &query, true);
@@ -658,12 +649,8 @@ SwatchesPanel::SwatchesPanel(gchar const* prefsPath) :
 
     if (Glib::ustring(prefsPath) == "/dialogs/swatches") {
         Gtk::Requisition sreq;
-#if WITH_GTKMM_3_0
         Gtk::Requisition sreq_natural;
         get_preferred_size(sreq_natural, sreq);
-#else
-        sreq = size_request();
-#endif
         int minHeight = 60;
         if (sreq.height < minHeight) {
             set_size_request(70, minHeight);

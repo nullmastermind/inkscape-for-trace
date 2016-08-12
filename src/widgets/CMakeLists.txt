@@ -1,24 +1,25 @@
+add_subdirectory(gimp)
 
 set(widgets_SRC
 	button.cpp
-	  arc-toolbar.cpp
-	  box3d-toolbar.cpp
-	  calligraphy-toolbar.cpp
-	  connector-toolbar.cpp
-	  dropper-toolbar.cpp
-	  eraser-toolbar.cpp
-	  lpe-toolbar.cpp
-	  measure-toolbar.cpp
-	  mesh-toolbar.cpp
-	  node-toolbar.cpp
-	  pencil-toolbar.cpp
-	  rect-toolbar.cpp
-	  spiral-toolbar.cpp
-	  spray-toolbar.cpp
-	  star-toolbar.cpp
-	  text-toolbar.cpp
-	  tweak-toolbar.cpp
-	  zoom-toolbar.cpp		
+	arc-toolbar.cpp
+	box3d-toolbar.cpp
+	calligraphy-toolbar.cpp
+	connector-toolbar.cpp
+	dropper-toolbar.cpp
+	eraser-toolbar.cpp
+	lpe-toolbar.cpp
+	measure-toolbar.cpp
+	mesh-toolbar.cpp
+	node-toolbar.cpp
+	pencil-toolbar.cpp
+	rect-toolbar.cpp
+	spiral-toolbar.cpp
+	spray-toolbar.cpp
+	star-toolbar.cpp
+	text-toolbar.cpp
+	tweak-toolbar.cpp
+	zoom-toolbar.cpp		
 	dash-selector.cpp
 	desktop-widget.cpp
 	eek-preview.cpp
@@ -33,10 +34,13 @@ set(widgets_SRC
 	gradient-toolbar.cpp
 	gradient-vector.cpp
 	icon.cpp
+	image-menu-item.c
 	ink-action.cpp
 	ink-comboboxentry-action.cpp
+	ink-radio-action.cpp
+	ink-toggle-action.cpp
+	ink-tool-menu-action.cpp
 	paint-selector.cpp
-	ruler.cpp
 	select-toolbar.cpp
 	sp-attribute-widget.cpp
 	sp-color-selector.cpp
@@ -55,24 +59,24 @@ set(widgets_SRC
 	# -------
 	# Headers
 	button.h
-	  arc-toolbar.h
-	  box3d-toolbar.h
-	  calligraphy-toolbar.h
-	  connector-toolbar.h
-	  dropper-toolbar.h
-	  eraser-toolbar.h
-	  lpe-toolbar.h
-	  measure-toolbar.h
-	  mesh-toolbar.h
-	  node-toolbar.h
-	  pencil-toolbar.h
-	  rect-toolbar.h
-	  spiral-toolbar.h
-	  spray-toolbar.h
-	  star-toolbar.h
-	  text-toolbar.h
-	  tweak-toolbar.h
-	  zoom-toolbar.h	
+	arc-toolbar.h
+	box3d-toolbar.h
+	calligraphy-toolbar.h
+	connector-toolbar.h
+	dropper-toolbar.h
+	eraser-toolbar.h
+	lpe-toolbar.h
+	measure-toolbar.h
+	mesh-toolbar.h
+	node-toolbar.h
+	pencil-toolbar.h
+	rect-toolbar.h
+	spiral-toolbar.h
+	spray-toolbar.h
+	star-toolbar.h
+	text-toolbar.h
+	tweak-toolbar.h
+	zoom-toolbar.h	
 	dash-selector.h
 	desktop-widget.h
 	eek-preview.h
@@ -88,10 +92,13 @@ set(widgets_SRC
 	gradient-toolbar.h
 	gradient-vector.h
 	icon.h
+	image-menu-item.h
         ink-action.h
         ink-comboboxentry-action.h
+	ink-radio-action.h
+        ink-toggle-action.h
+        ink-tool-menu-action.h
 	paint-selector.h
-	ruler.h
 	select-toolbar.h
 	sp-attribute-widget.h
 	sp-color-selector.h
@@ -107,11 +114,6 @@ set(widgets_SRC
 	toolbox.h
 	widget-sizes.h
 )
-
-if(${WITH_GTK3_EXPERIMENTAL})
-    set(image_menu_item_SRC image-menu-item.h image-menu-item.c)
-    add_inkscape_source("${image_menu_item_SRC}")
-endif()
 
 # add_inkscape_lib(widgets_LIB "${widgets_SRC}")
 add_inkscape_source("${widgets_SRC}")

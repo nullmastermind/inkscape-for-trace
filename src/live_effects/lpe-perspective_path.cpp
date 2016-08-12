@@ -15,18 +15,13 @@
 
 #include "persp3d.h"
 //#include "transf_mat_3x4.h"
-#include "document.h"
 #include "document-private.h"
 #include "live_effects/lpe-perspective_path.h"
 #include "live_effects/lpeobject.h"
-#include "sp-item-group.h"
 #include "knot-holder-entity.h"
 #include "knotholder.h"
 #include "desktop.h"
 #include <util/units.h>
-#include "inkscape.h"
-
-#include <2geom/path.h>
 
 namespace Inkscape {
 namespace LivePathEffect {
@@ -107,12 +102,12 @@ void LPEPerspectivePath::refresh(Gtk::Entry* perspective) {
     perspectiveID = perspective->get_text();
     Persp3D *first = 0;
     Persp3D *persp = 0;
-    for ( SPObject *child = this->lpeobj->document->getDefs()->firstChild(); child && !persp; child = child->getNext() ) {
-        if (SP_IS_PERSP3D(child) && first == 0) {
-            first = SP_PERSP3D(child);
+    for (auto& child: lpeobj->document->getDefs()->children) {
+        if (SP_IS_PERSP3D(&child) && first == 0) {
+            first = SP_PERSP3D(&child);
         }
-        if (SP_IS_PERSP3D(child) && strcmp(child->getId(), const_cast<const gchar *>(perspectiveID.c_str())) == 0) {
-            persp = SP_PERSP3D(child);
+        if (SP_IS_PERSP3D(&child) && strcmp(child.getId(), const_cast<const gchar *>(perspectiveID.c_str())) == 0) {
+            persp = SP_PERSP3D(&child);
             break;
         }
     }

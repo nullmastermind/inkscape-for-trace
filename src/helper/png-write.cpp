@@ -14,19 +14,17 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+#include <config.h>
 #endif
 
 #include <png.h>
 #include "ui/interface.h"
 #include <2geom/rect.h>
 #include <2geom/transforms.h>
-#include <glib.h>
 #include "png-write.h"
 #include "io/sys.h"
 #include "display/drawing.h"
 #include "display/drawing-context.h"
-#include "display/drawing-item.h"
 #include "document.h"
 #include "sp-item.h"
 #include "sp-root.h"
@@ -374,8 +372,8 @@ static void hide_other_items_recursively(SPObject *o, const std::vector<SPItem*>
 
     // recurse
     if (list.end()==find(list.begin(),list.end(),o)) {
-        for ( SPObject *child = o->firstChild() ; child; child = child->getNext() ) {
-            hide_other_items_recursively(child, list, dkey);
+        for (auto& child: o->children) {
+            hide_other_items_recursively(&child, list, dkey);
         }
     }
 }

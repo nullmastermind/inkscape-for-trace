@@ -26,7 +26,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+#include <config.h>
 #endif
 
 #include <gtkmm.h>
@@ -36,8 +36,8 @@
 #include "inkscape.h"
 #include "widgets/ege-adjustment-action.h"
 #include "widgets/ege-select-one-action.h"
-#include "widgets/ink-action.h"
-#include "preferences.h"
+#include "ink-radio-action.h"
+#include "ink-toggle-action.h"
 #include "toolbox.h"
 #include "ui/dialog/clonetiler.h"
 #include "ui/dialog/dialog-manager.h"

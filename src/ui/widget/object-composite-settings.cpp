@@ -14,8 +14,6 @@
 
 #include "ui/widget/object-composite-settings.h"
 
-#include <glibmm/i18n.h>
-
 #include "desktop.h"
 
 #include "desktop-style.h"
@@ -23,17 +21,12 @@
 #include "document-undo.h"
 #include "filter-chemistry.h"
 #include "inkscape.h"
-#include "selection.h"
 #include "style.h"
-#include "sp-item.h"
 #include "svg/css-ostringstream.h"
 #include "verbs.h"
-#include "xml/repr.h"
 #include "widgets/icon.h"
-#include "ui/icon-names.h"
 #include "display/sp-canvas.h"
 #include "ui/widget/style-subject.h"
-#include "ui/widget/gimpspinscale.h"
 
 namespace Inkscape {
 namespace UI {
@@ -125,7 +118,7 @@ ObjectCompositeSettings::_blendBlurValueChanged()
     const Glib::ustring blendmode = _fe_cb.get_blend_mode();
 
     //apply created filter to every selected item
-    std::vector<SPObject*> sel=_subject->list();
+    std::vector<SPObject*> sel = _subject->list();
     for (std::vector<SPObject*>::const_iterator i = sel.begin() ; i != sel.end() ; ++i ) {
         if (!SP_IS_ITEM(*i)) {
             continue;
