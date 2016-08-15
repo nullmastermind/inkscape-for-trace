@@ -34,6 +34,9 @@
 #include <sys/stat.h>
 #include <locale.h>
 
+#include <gtkmm/applicationwindow.h>
+#include <gtkmm/button.h>
+#include <gtkmm/image.h>
 #include <gtkmm/main.h>
 
 // #include <stropts.h>
@@ -66,28 +69,42 @@
 extern char *optarg;
 extern int  optind, opterr;
 
-struct SPSlideShow {
-    char **slides;
-    int size;
-    int length;
-    int current;
-    SPDocument *doc;
-    GtkWidget *view;
-    GtkWidget *window;
-    bool fullscreen;
-    int timer;
+/**
+ * The main application window for the slideshow
+ */
+class SPSlideShow : public Gtk::ApplicationWindow {
+public:
+    std::vector<std::string>  slides;  ///< List of filenames for each slide
+    int                       current; ///< Index of the currently displayed slide
+    SPDocument               *doc;     ///< The currently displayed slide
+    GtkWidget                *view;
+    int                       timer;
+    
+    /// Current state of application (full-screen or windowed)
+    bool is_fullscreen;
+
+    SPSlideShow()
+        :
+            slides(),
+            current(0),
+            doc(NULL),
+            view(NULL),
+            is_fullscreen(false)
+    {}
+
+    void control_show();
+    void show_next();
+    void show_prev();
+    void goto_first();
+    void goto_last();
+
+protected:
+    void waiting_cursor();
+    void normal_cursor();
+    void set_document(SPDocument *doc,
+                      int         current);
 };
 
-static GtkWidget *sp_svgview_control_show (struct SPSlideShow *ss);
-static void sp_svgview_show_next (struct SPSlideShow *ss);
-static void sp_svgview_show_prev (struct SPSlideShow *ss);
-static void sp_svgview_goto_first (struct SPSlideShow *ss);
-static void sp_svgview_goto_last (struct SPSlideShow *ss);
-
-static int sp_svgview_show_next_cb (GtkWidget *widget, void *data);
-static int sp_svgview_show_prev_cb (GtkWidget *widget, void *data);
-static int sp_svgview_goto_first_cb (GtkWidget *widget, void *data);
-static int sp_svgview_goto_last_cb (GtkWidget *widget, void *data);
 #ifdef WITH_INKJAR
 static bool is_jar(char const *filename);
 #endif
@@ -114,35 +131,35 @@ static int sp_svgview_main_key_press (GtkWidget */*widget*/,
     switch (event->keyval) {
         case GDK_KEY_Up:
         case GDK_KEY_Home:
-            sp_svgview_goto_first(ss);
+            ss->goto_first();
             break;
         case GDK_KEY_Down:
         case GDK_KEY_End:
-            sp_svgview_goto_last(ss);
+            ss->goto_last();
             break;
         case GDK_KEY_F11:
-            if (ss->fullscreen) {
-                gtk_window_unfullscreen (GTK_WINDOW(ss->window));
-                ss->fullscreen = false;
+            if (ss->is_fullscreen) {
+                ss->unfullscreen();
+                ss->is_fullscreen = false;
             } else {
-                gtk_window_fullscreen (GTK_WINDOW(ss->window));
-                ss->fullscreen = true;
+                ss->fullscreen();
+                ss->is_fullscreen = true;
             }
             break;
         case GDK_KEY_Return:
-            sp_svgview_control_show (ss);
+            ss->control_show();
         break;
         case GDK_KEY_KP_Page_Down:
         case GDK_KEY_Page_Down:
         case GDK_KEY_Right:
         case GDK_KEY_space:
-            sp_svgview_show_next (ss);
+            ss->show_next();
         break;
         case GDK_KEY_KP_Page_Up:
         case GDK_KEY_Page_Up:
         case GDK_KEY_Left:
         case GDK_KEY_BackSpace:
-            sp_svgview_show_prev (ss);
+            ss->show_prev();
             break;
         case GDK_KEY_Escape:
         case GDK_KEY_q:
@@ -152,7 +169,8 @@ static int sp_svgview_main_key_press (GtkWidget */*widget*/,
         default:
             break;
     }
-    gtk_window_set_title(GTK_WINDOW(ss->window), ss->doc->getName());
+
+    ss->set_title(ss->doc->getName());
     return TRUE;
 }
 
@@ -167,9 +185,8 @@ int main (int argc, const char **argv)
 
     Gtk::Main main_instance (&argc, const_cast<char ***>(&argv));
 
-    struct SPSlideShow ss;
-
     int num_parsed_options = 0;
+    SPSlideShow ss;
 
     // the list of arguments is in the net line
     for (int i = 1; i < argc; i++) {
@@ -191,7 +208,6 @@ int main (int argc, const char **argv)
         }
     }
 
-    GtkWidget *w;
     int i;
 
     bindtextdomain (GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
@@ -203,8 +219,6 @@ int main (int argc, const char **argv)
     Inkscape::GC::init();
     Inkscape::Preferences::get(); // ensure preferences are initialized
 
-    gtk_init (&argc, (char ***) &argv);
-
 #ifdef lalaWITH_MODULES
     g_warning ("Have to autoinit modules (lauris)");
     sp_modulesys_init();
@@ -214,15 +228,6 @@ int main (int argc, const char **argv)
     /* we'll end with localised SVG files :-( */
 
     setlocale (LC_NUMERIC, "C");
-
-    ss.size = 32;
-    ss.length = 0;
-    ss.current = 0;
-    ss.slides = g_new (char *, ss.size);
-    ss.current = 0;
-    ss.doc = NULL;
-    ss.view = NULL;
-    ss.fullscreen = false;
 
     Inkscape::Application::create(argv[0], true);
     //Inkscape::Application &inkscape = Inkscape::Application::instance();
@@ -254,21 +259,13 @@ int main (int argc, const char **argv)
                             }
                         }
                     } else if (gba->len > 0) {
-                        //::write(1, gba->data, gba->len);
-                        /* Append to list */
-                        if (ss.length >= ss.size) {
-                            /* Expand */
-                            ss.size <<= 1;
-                            ss.slides = g_renew (char *, ss.slides, ss.size);
-                        }
-
                         ss.doc = SPDocument::createNewDocFromMem ((const gchar *)gba->data,
                                            gba->len,
                                            TRUE);
                         gchar *last_filename = jar_file_reader.get_last_filename();
                         if (ss.doc) {
-                            ss.slides[ss.length++] = strdup (last_filename);
-                            (ss.doc)->setUri (last_filename);
+                            ss.slides.push_back(strdup(last_filename));
+                            (ss.doc)->setUri(last_filename);
                         }
                         g_byte_array_free(gba, TRUE);
                         g_free(last_filename);
@@ -279,16 +276,10 @@ int main (int argc, const char **argv)
             } else {
     #endif /* WITH_INKJAR */
             /* Append to list */
-            if (ss.length >= ss.size) {
-                /* Expand */
-                ss.size <<= 1;
-                ss.slides = g_renew (char *, ss.slides, ss.size);
-            }
-
-            ss.slides[ss.length++] = strdup (argv[i]);
+            ss.slides.push_back(strdup (argv[i]));
 
             if (!ss.doc) {
-                ss.doc = SPDocument::createNewDoc (ss.slides[ss.current], TRUE, false);
+                ss.doc = SPDocument::createNewDoc((ss.slides[ss.current]).c_str(), TRUE, false);
                 if (!ss.doc) {
                     ++ss.current;
                 }
@@ -303,24 +294,21 @@ int main (int argc, const char **argv)
        return 1; /* none of the slides loadable */
     }
     
-    w = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    gtk_window_set_title( GTK_WINDOW(w), ss.doc->getName() );
-    gtk_window_set_default_size (GTK_WINDOW (w),
-                MIN ((int)(ss.doc)->getWidth().value("px"), (int)gdk_screen_width() - 64),
-                MIN ((int)(ss.doc)->getHeight().value("px"), (int)gdk_screen_height() - 64));
-    ss.window = w;
+    ss.set_title(ss.doc->getName() );
+    ss.set_default_size(MIN ((int)(ss.doc)->getWidth().value("px"), (int)gdk_screen_width() - 64),
+                        MIN ((int)(ss.doc)->getHeight().value("px"), (int)gdk_screen_height() - 64));
 
-    g_signal_connect (G_OBJECT (w), "delete_event", (GCallback) sp_svgview_main_delete, &ss);
-    g_signal_connect (G_OBJECT (w), "key_press_event", (GCallback) sp_svgview_main_key_press, &ss);
+    g_signal_connect (G_OBJECT (ss.gobj()), "delete_event", (GCallback) sp_svgview_main_delete, &ss);
+    g_signal_connect (G_OBJECT (ss.gobj()), "key_press_event", (GCallback) sp_svgview_main_key_press, &ss);
 
     (ss.doc)->ensureUpToDate();
     ss.view = sp_svg_view_widget_new (ss.doc);
     (ss.doc)->doUnref ();
     SP_SVG_VIEW_WIDGET(ss.view)->setResize( false, ss.doc->getWidth().value("px"), ss.doc->getHeight().value("px") );
     gtk_widget_show (ss.view);
-    gtk_container_add (GTK_CONTAINER (w), ss.view);
+    ss.add(*Glib::wrap(ss.view));
 
-    gtk_widget_show (w);
+    ss.show();
 
     gtk_main ();
 
@@ -335,202 +323,153 @@ static int sp_svgview_ctrlwin_delete (GtkWidget */*widget*/,
     return FALSE;
 }
 
-static GtkWidget* sp_svgview_control_show(struct SPSlideShow *ss)
+/**
+ * @brief Show the control buttons (next, previous etc) for the application
+ */
+void SPSlideShow::control_show()
 {
     if (!ctrlwin) {
         ctrlwin = gtk_window_new(GTK_WINDOW_TOPLEVEL);
         gtk_window_set_resizable(GTK_WINDOW(ctrlwin), FALSE);
-        gtk_window_set_transient_for(GTK_WINDOW(ctrlwin), GTK_WINDOW(ss->window));
-        g_signal_connect(G_OBJECT (ctrlwin), "key_press_event", (GCallback) sp_svgview_main_key_press, ss);
+        gtk_window_set_transient_for(GTK_WINDOW(ctrlwin), GTK_WINDOW(this->gobj()));
+        g_signal_connect(G_OBJECT (ctrlwin), "key_press_event", (GCallback) sp_svgview_main_key_press, this);
         g_signal_connect(G_OBJECT (ctrlwin), "delete_event", (GCallback) sp_svgview_ctrlwin_delete, NULL);
-
-#if GTK_CHECK_VERSION(3,0,0)
-        GtkWidget *t = gtk_button_box_new(GTK_ORIENTATION_HORIZONTAL);
-#else
-        GtkWidget *t = gtk_hbutton_box_new();
-#endif
-
+        auto t = gtk_button_box_new(GTK_ORIENTATION_HORIZONTAL);
         gtk_container_add(GTK_CONTAINER(ctrlwin), t);
 
-#if GTK_CHECK_VERSION(3,10,0)
-        GtkWidget *b = gtk_button_new_from_icon_name(INKSCAPE_ICON("go-first"), GTK_ICON_SIZE_BUTTON);
-#else
-        GtkWidget *b   = gtk_button_new();
-        GtkWidget *img = gtk_image_new_from_icon_name(INKSCAPE_ICON("go-first"), GTK_ICON_SIZE_BUTTON);
-        gtk_button_set_image(GTK_BUTTON(b), img);
-#endif
-        gtk_container_add(GTK_CONTAINER(t), b);
+        auto btn_go_first = Gtk::manage(new Gtk::Button());
+        auto img_go_first = Gtk::manage(new Gtk::Image());
+        img_go_first->set_from_icon_name(INKSCAPE_ICON("go-first"), Gtk::ICON_SIZE_BUTTON);
+        btn_go_first->set_image(*img_go_first);
+        gtk_container_add(GTK_CONTAINER(t), GTK_WIDGET(btn_go_first->gobj()));
+        btn_go_first->signal_clicked().connect(sigc::mem_fun(*this, &SPSlideShow::goto_first));
+        
+        auto btn_go_prev = Gtk::manage(new Gtk::Button());
+        auto img_go_prev = Gtk::manage(new Gtk::Image());
+        img_go_prev->set_from_icon_name(INKSCAPE_ICON("go-previous"), Gtk::ICON_SIZE_BUTTON);
+        btn_go_prev->set_image(*img_go_prev);
+        gtk_container_add(GTK_CONTAINER(t), GTK_WIDGET(btn_go_prev->gobj()));
+        btn_go_prev->signal_clicked().connect(sigc::mem_fun(*this, &SPSlideShow::show_prev));
+        
+        auto btn_go_next = Gtk::manage(new Gtk::Button());
+        auto img_go_next = Gtk::manage(new Gtk::Image());
+        img_go_next->set_from_icon_name(INKSCAPE_ICON("go-next"), Gtk::ICON_SIZE_BUTTON);
+        btn_go_next->set_image(*img_go_next);
+        gtk_container_add(GTK_CONTAINER(t), GTK_WIDGET(btn_go_next->gobj()));
+        btn_go_next->signal_clicked().connect(sigc::mem_fun(*this, &SPSlideShow::show_next));
+        
+        auto btn_go_last = Gtk::manage(new Gtk::Button());
+        auto img_go_last = Gtk::manage(new Gtk::Image());
+        img_go_last->set_from_icon_name(INKSCAPE_ICON("go-last"), Gtk::ICON_SIZE_BUTTON);
+        btn_go_last->set_image(*img_go_last);
+        gtk_container_add(GTK_CONTAINER(t), GTK_WIDGET(btn_go_last->gobj()));
+        btn_go_last->signal_clicked().connect(sigc::mem_fun(*this, &SPSlideShow::goto_last));
 
-        g_signal_connect(G_OBJECT(b), "clicked", (GCallback) sp_svgview_goto_first_cb, ss);
-#if GTK_CHECK_VERSION(3,10,0)
-        b = gtk_button_new_from_icon_name(INKSCAPE_ICON("go-previous"), GTK_ICON_SIZE_BUTTON);
-#else
-        b = gtk_button_new();
-        img = gtk_image_new_from_icon_name(INKSCAPE_ICON("go-previous"), GTK_ICON_SIZE_BUTTON);
-        gtk_button_set_image(GTK_BUTTON(b), img);
-#endif
-        gtk_container_add(GTK_CONTAINER(t), b);
-
-        g_signal_connect(G_OBJECT(b), "clicked", (GCallback) sp_svgview_show_prev_cb, ss);
-#if GTK_CHECK_VERSION(3,10,0)
-        b = gtk_button_new_from_icon_name(INKSCAPE_ICON("go-next"), GTK_ICON_SIZE_BUTTON);
-#else
-        b = gtk_button_new();
-        img = gtk_image_new_from_icon_name(INKSCAPE_ICON("go-next"), GTK_ICON_SIZE_BUTTON);
-        gtk_button_set_image(GTK_BUTTON(b), img);
-#endif
-        gtk_container_add(GTK_CONTAINER(t), b);
-
-        g_signal_connect(G_OBJECT(b), "clicked", (GCallback) sp_svgview_show_next_cb, ss);
-#if GTK_CHECK_VERSION(3,10,0)
-        b = gtk_button_new_from_icon_name(INKSCAPE_ICON("go-last"), GTK_ICON_SIZE_BUTTON);
-#else
-        b = gtk_button_new();
-        img = gtk_image_new_from_icon_name(INKSCAPE_ICON("go-last"), GTK_ICON_SIZE_BUTTON);
-        gtk_button_set_image(GTK_BUTTON(b), img);
-#endif
-        gtk_container_add(GTK_CONTAINER(t), b);
-        g_signal_connect(G_OBJECT(b), "clicked", (GCallback) sp_svgview_goto_last_cb, ss);
         gtk_widget_show_all(ctrlwin);
     } else {
         gtk_window_present(GTK_WINDOW(ctrlwin));
     }
-
-    return NULL;
 }
 
-static int sp_svgview_show_next_cb (GtkWidget */*widget*/, void *data)
+void SPSlideShow::waiting_cursor()
 {
-    sp_svgview_show_next(static_cast<struct SPSlideShow *>(data));
-    return FALSE;
-}
-
-static int sp_svgview_show_prev_cb (GtkWidget */*widget*/, void *data)
-{
-    sp_svgview_show_prev(static_cast<struct SPSlideShow *>(data));
-    return FALSE;
-}
-
-static int sp_svgview_goto_first_cb (GtkWidget */*widget*/, void *data)
-{
-    sp_svgview_goto_first(static_cast<struct SPSlideShow *>(data));
-    return FALSE;
-}
-
-static int sp_svgview_goto_last_cb (GtkWidget */*widget*/, void *data)
-{
-    sp_svgview_goto_last(static_cast<struct SPSlideShow *>(data));
-    return FALSE;
-}
-
-static void sp_svgview_waiting_cursor(struct SPSlideShow *ss)
-{
-    GdkDisplay *display = gdk_display_get_default();
-    GdkCursor  *waiting = gdk_cursor_new_for_display(display, GDK_WATCH);
-    gdk_window_set_cursor(gtk_widget_get_window(GTK_WIDGET(ss->window)), waiting);
-#if GTK_CHECK_VERSION(3,0,0)
-    g_object_unref(waiting);
-#else
-    gdk_cursor_unref(waiting);
-#endif
+    auto display = Gdk::Display::get_default();
+    auto waiting = Gdk::Cursor::create(display, Gdk::WATCH);
+    get_window()->set_cursor(waiting);
+    
     if (ctrlwin) {
-        GdkCursor *waiting = gdk_cursor_new_for_display(display, GDK_WATCH);
-        gdk_window_set_cursor(gtk_widget_get_window(GTK_WIDGET(ctrlwin)), waiting);
-#if GTK_CHECK_VERSION(3,0,0)
-        g_object_unref(waiting);
-#else
-        gdk_cursor_unref(waiting);
-#endif
+        gdk_window_set_cursor(gtk_widget_get_window(GTK_WIDGET(ctrlwin)), waiting->gobj());
     }
     while(gtk_events_pending()) {
        gtk_main_iteration();
     }
 }
 
-static void sp_svgview_normal_cursor(struct SPSlideShow *ss)
+void SPSlideShow::normal_cursor()
 {
-   gdk_window_set_cursor(gtk_widget_get_window(GTK_WIDGET(ss->window)), NULL);
+    get_window()->set_cursor();
     if (ctrlwin) {
         gdk_window_set_cursor(gtk_widget_get_window(GTK_WIDGET(ctrlwin)), NULL);
     }
 }
 
-static void sp_svgview_set_document(struct SPSlideShow *ss,
-                                    SPDocument *doc,
-                                    int current)
+void SPSlideShow::set_document(SPDocument *doc,
+                               int         current)
 {
-    if (doc && doc != ss->doc) {
+    if (doc && doc != this->doc) {
         doc->ensureUpToDate();
-        reinterpret_cast<SPSVGView*>(SP_VIEW_WIDGET_VIEW (ss->view))->setDocument (doc);
-        ss->doc = doc;
-        ss->current = current;
+        reinterpret_cast<SPSVGView*>(SP_VIEW_WIDGET_VIEW (view))->setDocument (doc);
+        this->doc = doc;
+        this->current = current;
     }
 }
 
-static void sp_svgview_show_next (struct SPSlideShow *ss)
+/**
+ * @brief Show the next file in the slideshow
+ */
+void SPSlideShow::show_next()
 {
-    sp_svgview_waiting_cursor(ss);
+    waiting_cursor();
 
     SPDocument *doc = NULL;
-    int current = ss->current;
-    while (!doc && (current < ss->length - 1)) {
-        doc = SPDocument::createNewDoc (ss->slides[++current], TRUE, false);
+    while (!doc && (current < slides.size() - 1)) {
+        doc = SPDocument::createNewDoc ((slides[++current]).c_str(), TRUE, false);
     }
 
-    sp_svgview_set_document(ss, doc, current);
-
-    sp_svgview_normal_cursor(ss);
+    set_document(doc, current);
+    normal_cursor();
 }
 
-static void sp_svgview_show_prev (struct SPSlideShow *ss)
+/**
+ * @brief Show the previous file in the slideshow
+ */
+void SPSlideShow::show_prev()
 {
-    sp_svgview_waiting_cursor(ss);
+    waiting_cursor();
 
     SPDocument *doc = NULL;
-    int current = ss->current;
     while (!doc && (current > 0)) {
-        doc = SPDocument::createNewDoc (ss->slides[--current], TRUE, false);
+        doc = SPDocument::createNewDoc ((slides[--current]).c_str(), TRUE, false);
     }
 
-    sp_svgview_set_document(ss, doc, current);
-
-    sp_svgview_normal_cursor(ss);
+    set_document(doc, current);
+    normal_cursor();
 }
 
-static void sp_svgview_goto_first (struct SPSlideShow *ss)
+/**
+ * @brief Switch to first slide in slideshow
+ */
+void SPSlideShow::goto_first()
 {
-    sp_svgview_waiting_cursor(ss);
+    waiting_cursor();
 
     SPDocument *doc = NULL;
     int current = 0;
-    while ( !doc && (current < ss->length - 1)) {
-        if (current == ss->current) {
-            break;
-        }
-        doc = SPDocument::createNewDoc (ss->slides[current++], TRUE, false);
+    while ( !doc && (current < slides.size() - 1)) {
+        doc = SPDocument::createNewDoc((slides[current++]).c_str(), TRUE, false);
     }
 
-    sp_svgview_set_document(ss, doc, current - 1);
+    set_document(doc, current - 1);
 
-    sp_svgview_normal_cursor(ss);
+    normal_cursor();
 }
 
-static void sp_svgview_goto_last (struct SPSlideShow *ss)
+/**
+ * @brief Switch to last slide in slideshow
+ */
+void SPSlideShow::goto_last()
 {
-    sp_svgview_waiting_cursor(ss);
+    waiting_cursor();
 
     SPDocument *doc = NULL;
-    int current = ss->length - 1;
+    int current = slides.size() - 1;
     while (!doc && (current >= 0)) {
-        if (current == ss->current) {
-            break;
-        }
-        doc = SPDocument::createNewDoc (ss->slides[current--], TRUE, false);
+        doc = SPDocument::createNewDoc((slides[current--]).c_str(), TRUE, false);
     }
 
-    sp_svgview_set_document(ss, doc, current + 1);
+    set_document(doc, current + 1);
 
-    sp_svgview_normal_cursor(ss);
+    normal_cursor();
 }
 
 #ifdef WITH_INKJAR

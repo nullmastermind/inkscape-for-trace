@@ -114,7 +114,7 @@ static void editGradientImpl( SPDesktop* desktop, SPGradient* gr )
         bool shown = false;
         if ( desktop && desktop->doc() ) {
             Inkscape::Selection *selection = desktop->getSelection();
-            std::vector<SPItem*> const items = selection->itemList();
+            std::vector<SPItem*> const items(selection->items().begin(), selection->items().end());
             if (!items.empty()) {
                 SPStyle query( desktop->doc() );
                 int result = objects_query_fillstroke((items), &query, true);
@@ -649,12 +649,8 @@ SwatchesPanel::SwatchesPanel(gchar const* prefsPath) :
 
     if (Glib::ustring(prefsPath) == "/dialogs/swatches") {
         Gtk::Requisition sreq;
-#if WITH_GTKMM_3_0
         Gtk::Requisition sreq_natural;
         get_preferred_size(sreq_natural, sreq);
-#else
-        sreq = size_request();
-#endif
         int minHeight = 60;
         if (sreq.height < minHeight) {
             set_size_request(70, minHeight);

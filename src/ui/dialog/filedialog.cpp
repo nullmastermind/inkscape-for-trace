@@ -15,11 +15,17 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "filedialogimpl-win32.h"
+#ifdef WIN32
+# include "filedialogimpl-win32.h"
+# include "preferences.h"
+#endif
+
 #include "filedialogimpl-gtkmm.h"
 
 #include "ui/dialog-events.h"
 #include "extension/output.h"
+
+#include <glibmm/convert.h>
 
 namespace Inkscape
 {

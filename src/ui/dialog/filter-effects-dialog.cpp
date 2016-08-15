@@ -22,7 +22,10 @@
 #include "dialog-manager.h"
 #include <gtkmm/imagemenuitem.h>
 
-#if GTK_CHECK_VERSION(3,0,0)
+#include <gdkmm/display.h>
+#if GTK_CHECK_VERSION(3, 20, 0)
+# include <gdkmm/seat.h>
+#else
 # include <gdkmm/devicemanager.h>
 #endif
 
@@ -86,9 +89,7 @@ static int input_count(const SPFilterPrimitive* prim)
         return 2;
     else if(SP_IS_FEMERGE(prim)) {
         // Return the number of feMergeNode connections plus an extra
-        int count = 1;
-        for(const SPObject* o = prim->firstChild(); o; o = o->next, ++count){};
-        return count;
+        return (int) (prim->children.size() + 1);
     }
     else
         return 1;
@@ -302,15 +303,9 @@ public:
             set_tooltip_text(tip_text);
         }
 
-#if WITH_GTKMM_3_0
         Gdk::RGBA col;
         col.set_rgba_u(65535, 65535, 65535);
         set_rgba(col);
-#else
-        Gdk::Color col;
-        col.set_rgb(65535, 65535, 65535);
-        set_color(col);
-#endif
     }
 
     // Returns the color in 'rgb(r,g,b)' form.
@@ -319,13 +314,8 @@ public:
         // no doubles here, so we can use the standard string stream.
         std::ostringstream os;
 
-#if WITH_GTKMM_3_0
-        const Gdk::RGBA c = get_rgba();
-        const int r = c.get_red_u() / 257, g = c.get_green_u() / 257, b = c.get_blue_u() / 257;//TO-DO: verify this. This sounds a lot strange! shouldn't it be 256?
-#else
-        const Gdk::Color c = get_color();
-        const int r = c.get_red() / 257, g = c.get_green() / 257, b = c.get_blue() / 257;//TO-DO: verify this. This sounds a lot strange! shouldn't it be 256?
-#endif
+        const auto c = get_rgba();
+        const int  r = c.get_red_u() / 257, g = c.get_green_u() / 257, b = c.get_blue_u() / 257;//TO-DO: verify this. This sounds a lot strange! shouldn't it be 256?
         os << "rgb(" << r << "," << g << "," << b << ")";
         return os.str();
     }
@@ -342,15 +332,9 @@ public:
         }
         const int r = SP_RGBA32_R_U(i), g = SP_RGBA32_G_U(i), b = SP_RGBA32_B_U(i);
 
-#if WITH_GTKMM_3_0
         Gdk::RGBA col;
         col.set_rgba_u(r * 256, g * 256, b * 256);
         set_rgba(col);
-#else
-        Gdk::Color col;
-        col.set_rgb(r * 256, g * 256, b * 256);
-        set_color(col);
-#endif
     }
 };
 
@@ -674,7 +658,7 @@ private:
     void select_svg_element(){
         Inkscape::Selection* sel = _desktop->getSelection();
         if (sel->isEmpty()) return;
-        Inkscape::XML::Node* node = sel->reprList()[0];
+        Inkscape::XML::Node* node = sel->xmlNodes().front();
         if (!node || !node->matchAttributeName("id")) return;
 
         std::ostringstream xlikhref;
@@ -1043,11 +1027,10 @@ public:
     // FuncNode can be in any order so we must search to find correct one.
     SPFeFuncNode* find_node(SPFeComponentTransfer* ct)
     {
-        SPObject* node = ct->children;
         SPFeFuncNode* funcNode = NULL;
         bool found = false;
-        for(;node;node=node->next){
-            funcNode = SP_FEFUNCNODE(node);
+        for(auto& node: ct->children) {
+            funcNode = SP_FEFUNCNODE(&node);
             if( funcNode->channel == _channel ) {
                 found = true;
                 break;
@@ -1211,7 +1194,7 @@ protected:
 
         _locked = true;
 
-        SPObject* child = o->children;
+        SPObject* child = o->firstChild();
 
         if(SP_IS_FEDISTANTLIGHT(child))
             _light_source.set_active(0);
@@ -1236,7 +1219,7 @@ private:
         if(prim) {
             _locked = true;
 
-            SPObject* child = prim->children;
+            SPObject* child = prim->firstChild();
             const int ls = _light_source.get_active_row_number();
             // Check if the light source type has changed
             if(!(ls == -1 && !child) &&
@@ -1270,8 +1253,8 @@ private:
         _light_box.show_all();
 
         SPFilterPrimitive* prim = _dialog._primitive_list.get_selected();
-        if(prim && prim->children)
-            _settings.show_and_update(_light_source.get_active_data()->id, prim->children);
+        if(prim && prim->firstChild())
+            _settings.show_and_update(_light_source.get_active_data()->id, prim->firstChild());
     }
 
     FilterEffectsDialog& _dialog;
@@ -1457,8 +1440,8 @@ void FilterEffectsDialog::FilterModifier::update_selection(Selection *sel)
     }
 
     std::set<SPObject*> used;
-    std::vector<SPItem*> itemlist=sel->itemList();
-    for(std::vector<SPItem*>::const_iterator i=itemlist.begin(); itemlist.end() != i; ++i) {
+    auto itemlist= sel->items();
+    for(auto i=itemlist.begin(); itemlist.end() != i; ++i) {
         SPObject *obj = *i;
         SPStyle *style = obj->style;
         if (!style || !SP_IS_ITEM(obj)) {
@@ -1538,8 +1521,8 @@ void FilterEffectsDialog::FilterModifier::on_selection_toggled(const Glib::ustri
         if((*iter)[_columns.sel] == 1)
             filter = 0;
 
-        std::vector<SPItem*> itemlist=sel->itemList();
-        for(std::vector<SPItem*>::const_iterator i=itemlist.begin(); itemlist.end() != i; ++i) {
+        auto itemlist= sel->items();
+        for(auto i=itemlist.begin(); itemlist.end() != i; ++i) {
             SPItem * item = *i;
             SPStyle *style = item->style;
             g_assert(style != NULL);
@@ -1713,7 +1696,6 @@ Glib::PropertyProxy<void*> FilterEffectsDialog::CellRendererConnection::property
     return _primitive.get_proxy();
 }
 
-#if WITH_GTKMM_3_0
 void FilterEffectsDialog::CellRendererConnection::get_preferred_width_vfunc(Gtk::Widget& widget,
                                                                             int& minimum_width,
                                                                             int& natural_width) const
@@ -1747,27 +1729,6 @@ void FilterEffectsDialog::CellRendererConnection::get_preferred_height_for_width
 {
     get_preferred_height(widget, minimum_height, natural_height);
 }
-#else
-void FilterEffectsDialog::CellRendererConnection::get_size_vfunc(
-    Gtk::Widget& widget, const Gdk::Rectangle* /*cell_area*/,
-    int* x_offset, int* y_offset, int* width, int* height) const
-{
-    PrimitiveList& primlist = dynamic_cast<PrimitiveList&>(widget);
-
-    if(x_offset)
-        (*x_offset) = 0;
-    if(y_offset)
-        (*y_offset) = 0;
-    if(width)
-        (*width) = size * primlist.primitive_count() + (primlist.get_input_type_width()) * 6;
-    if(height) {
-        // Scale the height depending on the number of inputs, unless it's
-        // the first primitive, in which case there are no connections
-        SPFilterPrimitive* prim = SP_FILTER_PRIMITIVE(_primitive.get_value());
-        (*height) = size * input_count(prim);
-    }
-}
-#endif
 
 /*** PrimitiveList ***/
 FilterEffectsDialog::PrimitiveList::PrimitiveList(FilterEffectsDialog& d)
@@ -1775,13 +1736,8 @@ FilterEffectsDialog::PrimitiveList::PrimitiveList(FilterEffectsDialog& d)
       _in_drag(0),
       _observer(new Inkscape::XML::SignalObserver)
 {
-#if WITH_GTKMM_3_0
     d.signal_draw().connect(sigc::mem_fun(*this, &PrimitiveList::on_draw_signal));
     signal_draw().connect(sigc::mem_fun(*this, &PrimitiveList::on_draw_signal));
-#else
-    d.signal_expose_event().connect(sigc::mem_fun(*this, &PrimitiveList::on_expose_signal));
-    signal_expose_event().connect(sigc::mem_fun(*this, &PrimitiveList::on_expose_signal));
-#endif
 
     add_events(Gdk::POINTER_MOTION_MASK | Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK);
 
@@ -1854,26 +1810,25 @@ void FilterEffectsDialog::PrimitiveList::update()
         bool active_found = false;
         _dialog._primitive_box->set_sensitive(true);
         _dialog.update_filter_general_settings_view();
-        for(SPObject *prim_obj = f->children;
-                prim_obj && SP_IS_FILTER_PRIMITIVE(prim_obj);
-                prim_obj = prim_obj->next) {
-            SPFilterPrimitive *prim = SP_FILTER_PRIMITIVE(prim_obj);
-            if(prim) {
-                Gtk::TreeModel::Row row = *_model->append();
-                row[_columns.primitive] = prim;
+        for(auto& prim_obj: f->children) {
+            SPFilterPrimitive *prim = SP_FILTER_PRIMITIVE(&prim_obj);
+            if(!prim) {
+                break;
+            }
+            Gtk::TreeModel::Row row = *_model->append();
+            row[_columns.primitive] = prim;
 
-                //XML Tree being used directly here while it shouldn't be.
-                row[_columns.type_id] = FPConverter.get_id_from_key(prim->getRepr()->name());
-                row[_columns.type] = _(FPConverter.get_label(row[_columns.type_id]).c_str());
-                
-                if (prim->getId()) {
-                    row[_columns.id] =  Glib::ustring(prim->getId());
-                }
-                
-                if(prim == active_prim) {
-                    get_selection()->select(row);
-                    active_found = true;
-                }
+            //XML Tree being used directly here while it shouldn't be.
+            row[_columns.type_id] = FPConverter.get_id_from_key(prim->getRepr()->name());
+            row[_columns.type] = _(FPConverter.get_label(row[_columns.type_id]).c_str());
+
+            if (prim->getId()) {
+                row[_columns.id] =  Glib::ustring(prim->getId());
+            }
+
+            if(prim == active_prim) {
+                get_selection()->select(row);
+                active_found = true;
             }
         }
 
@@ -1944,25 +1899,9 @@ void FilterEffectsDialog::PrimitiveList::remove_selected()
     }
 }
 
-#if !WITH_GTKMM_3_0
-bool FilterEffectsDialog::PrimitiveList::on_expose_signal(GdkEventExpose * /*evt*/)
-{
-    bool result = false;
-
-    if (get_is_drawable())
-    {
-        Cairo::RefPtr<Cairo::Context> cr = get_bin_window()->create_cairo_context();
-        result = on_draw_signal(cr);
-    }
-
-    return result;
-}
-#endif
-
 bool FilterEffectsDialog::PrimitiveList::on_draw_signal(const Cairo::RefPtr<Cairo::Context> & cr)
 {
     cr->set_line_width(1.0);
-#if GTK_CHECK_VERSION(3,0,0)
     // In GTK+ 3, the draw function receives the widget window, not the
     // bin_window (i.e., just the area under the column headers).  We 
     // therefore translate the origin of our coordinate system to account for this
@@ -1970,7 +1909,7 @@ bool FilterEffectsDialog::PrimitiveList::on_draw_signal(const Cairo::RefPtr<Cair
     convert_bin_window_to_widget_coords(0,0,x_origin,y_origin);
     cr->translate(x_origin, y_origin);
     
-    GtkStyleContext *sc = gtk_widget_get_style_context(GTK_WIDGET(gobj()));
+    auto sc = gtk_widget_get_style_context(GTK_WIDGET(gobj()));
     GdkRGBA bg_color, fg_color;
     gtk_style_context_get_background_color(sc, GTK_STATE_FLAG_NORMAL, &bg_color);
     gtk_style_context_get_color(sc, GTK_STATE_FLAG_NORMAL, &fg_color);
@@ -1988,9 +1927,6 @@ bool FilterEffectsDialog::PrimitiveList::on_draw_signal(const Cairo::RefPtr<Cair
                                 (bg_color_active.green + fg_color_active.green)/2.0,
                                 (bg_color_active.blue + fg_color_active.blue)/2.0,
                                 (bg_color_active.alpha + fg_color_active.alpha)/2.0};
-#else
-    GtkStyle *style = gtk_widget_get_style(GTK_WIDGET(gobj()));
-#endif
 
     SPFilterPrimitive* prim = get_selected();
     int row_count = get_model()->children().size();
@@ -2009,25 +1945,15 @@ bool FilterEffectsDialog::PrimitiveList::on_draw_signal(const Cairo::RefPtr<Cair
             const int x = text_start_x + get_input_type_width() * i;
 	    cr->save();
 	    cr->rectangle(x, 0, get_input_type_width(), vis.get_height());
-#if GTK_CHECK_VERSION(3,0,0)
 	    gdk_cairo_set_source_rgba(cr->cobj(), &bg_color);
 	    cr->fill_preserve();
 
 	    gdk_cairo_set_source_rgba(cr->cobj(), &fg_color);
-#else
-	    gdk_cairo_set_source_color(cr->cobj(), &(style->bg[GTK_STATE_NORMAL]));
-	    cr->fill_preserve();
-	    gdk_cairo_set_source_color(cr->cobj(), &(style->text[GTK_STATE_NORMAL]));
-#endif
 	    cr->move_to(x+get_input_type_width(), 0);
 	    cr->rotate_degrees(90);
 	    _vertical_layout->show_in_cairo_context(cr);
             
-#if GTK_CHECK_VERSION(3,0,0)
             gdk_cairo_set_source_rgba(cr->cobj(), &mid_color);
-#else
-	    gdk_cairo_set_source_color(cr->cobj(), &(style->dark[GTK_STATE_NORMAL]));
-#endif
 	    cr->move_to(x, 0);
 	    cr->line_to(x, vis.get_height());
 	    cr->stroke();
@@ -2044,24 +1970,21 @@ bool FilterEffectsDialog::PrimitiveList::on_draw_signal(const Cairo::RefPtr<Cair
         int mx, my;
         Gdk::ModifierType mask;
 
-#if GTK_CHECK_VERSION(3,0,0)
-        Glib::RefPtr<Gdk::Display> display = get_bin_window()->get_display();
-        Glib::RefPtr<Gdk::DeviceManager> dm = display->get_device_manager();
-        Glib::RefPtr<const Gdk::Device> device = dm->get_client_pointer();
-        get_bin_window()->get_device_position(device, mx, my, mask);
+        auto display = get_bin_window()->get_display();
+#if GTK_CHECK_VERSION(3, 20, 0)
+        auto seat = display->get_default_seat();
+        auto device = seat->get_pointer();
 #else
-        get_bin_window()->get_pointer(mx, my, mask);
+        auto dm = display->get_device_manager();
+        auto device = dm->get_client_pointer();
 #endif
+        get_bin_window()->get_device_position(device, mx, my, mask);
 
         // Outline the bottom of the connection area
         const int outline_x = x + fheight * (row_count - row_index);
 	cr->save();
 
-#if GTK_CHECK_VERSION(3,0,0)
         gdk_cairo_set_source_rgba(cr->cobj(), &mid_color);
-#else
-	gdk_cairo_set_source_color(cr->cobj(), &(style->dark[GTK_STATE_NORMAL]));
-#endif
 
 	cr->move_to(x, y + h);
 	cr->line_to(outline_x, y + h);
@@ -2084,17 +2007,10 @@ bool FilterEffectsDialog::PrimitiveList::on_draw_signal(const Cairo::RefPtr<Cair
 
 		cr->save();
 
-#if GTK_CHECK_VERSION(3,0,0)
                 gdk_cairo_set_source_rgba(cr->cobj(),
                                           inside && mask & GDK_BUTTON1_MASK ?
                                           &mid_color : 
                                           &mid_color_active);
-#else
-		gdk_cairo_set_source_color(cr->cobj(),
-                                           inside && mask & GDK_BUTTON1_MASK ?
-                                           &(style->dark[GTK_STATE_NORMAL]) : 
-                                           &(style->dark[GTK_STATE_ACTIVE]));
-#endif
 
 		draw_connection_node(cr, con_poly, inside);
 
@@ -2120,17 +2036,10 @@ bool FilterEffectsDialog::PrimitiveList::on_draw_signal(const Cairo::RefPtr<Cair
             
 	    cr->save();
 		
-#if GTK_CHECK_VERSION(3,0,0)
             gdk_cairo_set_source_rgba(cr->cobj(),
                                       inside && mask & GDK_BUTTON1_MASK ?
                                       &mid_color : 
                                       &mid_color_active);
-#else
-	    gdk_cairo_set_source_color(cr->cobj(),
-                                       inside && mask & GDK_BUTTON1_MASK ?
-                                       &(style->dark[GTK_STATE_NORMAL]) : 
-                                       &(style->dark[GTK_STATE_ACTIVE]));
-#endif
 
             draw_connection_node(cr, con_poly, inside);
 
@@ -2153,17 +2062,10 @@ bool FilterEffectsDialog::PrimitiveList::on_draw_signal(const Cairo::RefPtr<Cair
 		
 		cr->save();
 
-#if GTK_CHECK_VERSION(3,0,0)
                 gdk_cairo_set_source_rgba(cr->cobj(),
                                           inside && mask & GDK_BUTTON1_MASK ?
                                           &mid_color : 
                                           &mid_color_active);
-#else
-	        gdk_cairo_set_source_color(cr->cobj(),
-                                           inside && mask & GDK_BUTTON1_MASK ?
-                                           &(style->dark[GTK_STATE_NORMAL]) : 
-                                           &(style->dark[GTK_STATE_ACTIVE]));
-#endif
 
                 draw_connection_node(cr, con_poly, inside);
   
@@ -2199,8 +2101,7 @@ void FilterEffectsDialog::PrimitiveList::draw_connection(const Cairo::RefPtr<Cai
 {
     cr->save();
 
-#if GTK_CHECK_VERSION(3,0,0)
-    GtkStyleContext *sc = gtk_widget_get_style_context(GTK_WIDGET(gobj()));
+    auto sc = gtk_widget_get_style_context(GTK_WIDGET(gobj()));
     
     GdkRGBA bg_color, fg_color;
     gtk_style_context_get_background_color(sc, GTK_STATE_FLAG_NORMAL, &bg_color);
@@ -2210,9 +2111,6 @@ void FilterEffectsDialog::PrimitiveList::draw_connection(const Cairo::RefPtr<Cai
                          (bg_color.green + fg_color.green)/2.0,
                          (bg_color.blue + fg_color.blue)/2.0,
                          (bg_color.alpha + fg_color.alpha)/2.0};
-#else
-    GtkStyle *style = gtk_widget_get_style(GTK_WIDGET(gobj()));
-#endif
 
     int src_id = 0;
     Gtk::TreeIter res = find_result(input, attr, src_id);
@@ -2228,11 +2126,7 @@ void FilterEffectsDialog::PrimitiveList::draw_connection(const Cairo::RefPtr<Cai
         gint end_x = text_start_x + tw * src_id + (int)(tw * 0.5f) + 1;
 
 	if(use_default && is_first)
-#if GTK_CHECK_VERSION(3,0,0)
             gdk_cairo_set_source_rgba(cr->cobj(), &mid_color);
-#else
-            gdk_cairo_set_source_color(cr->cobj(), &(style->dark[GTK_STATE_NORMAL]));
-#endif
 	else
             cr->set_source_rgb(0.0, 0.0, 0.0);
 	
@@ -2326,11 +2220,12 @@ const Gtk::TreeIter FilterEffectsDialog::PrimitiveList::find_result(const Gtk::T
     if(SP_IS_FEMERGE(prim)) {
         int c = 0;
         bool found = false;
-        for(const SPObject* o = prim->firstChild(); o; o = o->next, ++c) {
-            if(c == attr && SP_IS_FEMERGENODE(o)) {
-                image = SP_FEMERGENODE(o)->input;
+        for (auto& o: prim->children) {
+            if(c == attr && SP_IS_FEMERGENODE(&o)) {
+                image = SP_FEMERGENODE(&o)->input;
                 found = true;
             }
+            ++c;
         }
         if(!found)
             return target;
@@ -2517,21 +2412,23 @@ bool FilterEffectsDialog::PrimitiveList::on_button_release_event(GdkEventButton*
             if(SP_IS_FEMERGE(prim)) {
                 int c = 1;
                 bool handled = false;
-                for(SPObject* o = prim->firstChild(); o && !handled; o = o->next, ++c) {
-                    if(c == _in_drag && SP_IS_FEMERGENODE(o)) {
+                for (auto& o: prim->children) {
+                    if(c == _in_drag && SP_IS_FEMERGENODE(&o)) {
                         // If input is null, delete it
                         if(!in_val) {
 
                             //XML Tree being used directly here while it shouldn't be.
-                            sp_repr_unparent(o->getRepr());
+                            sp_repr_unparent(o.getRepr());
                             DocumentUndo::done(prim->document, SP_VERB_DIALOG_FILTER_EFFECTS,
                                                _("Remove merge node"));
                             (*get_selection()->get_selected())[_columns.primitive] = prim;
+                        } else {
+                            _dialog.set_attr(&o, SP_ATTR_IN, in_val);
                         }
-                        else
-                            _dialog.set_attr(o, SP_ATTR_IN, in_val);
                         handled = true;
+                        break;
                     }
+                    ++c;
                 }
                 // Add new input?
                 if(!handled && c == _in_drag && in_val) {
@@ -2652,8 +2549,7 @@ void FilterEffectsDialog::PrimitiveList::on_drag_end(const Glib::RefPtr<Gdk::Dra
 bool FilterEffectsDialog::PrimitiveList::on_scroll_timeout()
 {
     if(_autoscroll_y) {
-#if WITH_GTKMM_3_0
-        Glib::RefPtr<Gtk::Adjustment> a = dynamic_cast<Gtk::ScrolledWindow*>(get_parent())->get_vadjustment();
+        auto a = dynamic_cast<Gtk::ScrolledWindow*>(get_parent())->get_vadjustment();
         double v = a->get_value() + _autoscroll_y;
         
 	if(v < 0)
@@ -2662,25 +2558,13 @@ bool FilterEffectsDialog::PrimitiveList::on_scroll_timeout()
             v = a->get_upper() - a->get_page_size();
 
         a->set_value(v);
-#else
-        Gtk::Adjustment& a = *dynamic_cast<Gtk::ScrolledWindow*>(get_parent())->get_vadjustment();
-        double v = a.get_value() + _autoscroll_y;
-        
-	if(v < 0)
-            v = 0;
-        if(v > a.get_upper() - a.get_page_size())
-            v = a.get_upper() - a.get_page_size();
-
-        a.set_value(v);
-#endif
 
         queue_draw();
     }
 
 	   
     if(_autoscroll_x) {
-#if WITH_GTKMM_3_0
-        Glib::RefPtr<Gtk::Adjustment> a_h = dynamic_cast<Gtk::ScrolledWindow*>(get_parent())->get_hadjustment();
+        auto a_h = dynamic_cast<Gtk::ScrolledWindow*>(get_parent())->get_hadjustment();
         double h = a_h->get_value() + _autoscroll_x;
         
 	if(h < 0)
@@ -2689,18 +2573,6 @@ bool FilterEffectsDialog::PrimitiveList::on_scroll_timeout()
             h = a_h->get_upper() - a_h->get_page_size();
 
         a_h->set_value(h);
-#else
-        Gtk::Adjustment& a_h = *dynamic_cast<Gtk::ScrolledWindow*>(get_parent())->get_hadjustment();
-        double h = a_h.get_value() + _autoscroll_x;
-        
-	if(h < 0)
-            h = 0;
-        if(h > a_h.get_upper() - a_h.get_page_size())
-            h = a_h.get_upper() - a_h.get_page_size();
-
-        a_h.set_value(h);
-	
-#endif
 
         queue_draw();
     }
@@ -2742,13 +2614,8 @@ FilterEffectsDialog::FilterEffectsDialog()
     _sizegroup->set_ignore_hidden();
 
     // Initialize widget hierarchy
-#if WITH_GTKMM_3_0
-    Gtk::Paned* hpaned = Gtk::manage(new Gtk::Paned);
+    auto hpaned = Gtk::manage(new Gtk::Paned);
     _primitive_box = Gtk::manage(new Gtk::Paned);
-#else
-    Gtk::HPaned* hpaned = Gtk::manage(new Gtk::HPaned);
-    _primitive_box = Gtk::manage(new Gtk::VPaned);
-#endif
 
     _sw_infobox = Gtk::manage(new Gtk::ScrolledWindow);
     Gtk::ScrolledWindow* sw_prims = Gtk::manage(new Gtk::ScrolledWindow);
@@ -3080,7 +2947,7 @@ void FilterEffectsDialog::set_filternode_attr(const AttrWidget* input)
 
 void FilterEffectsDialog::set_child_attr_direct(const AttrWidget* input)
 {
-    set_attr(_primitive_list.get_selected()->children, input->get_attribute(), input->get_as_attribute().c_str());
+    set_attr(_primitive_list.get_selected()->firstChild(), input->get_attribute(), input->get_as_attribute().c_str());
 }
 
 void FilterEffectsDialog::set_attr(SPObject* o, const SPAttributeEnum attr, const gchar* val)

@@ -126,20 +126,12 @@ SelectTool::~SelectTool() {
     this->_describer = NULL;
 
     if (CursorSelectDragging) {
-#if GTK_CHECK_VERSION(3,0,0)
         g_object_unref(CursorSelectDragging);
-#else
-        gdk_cursor_unref (CursorSelectDragging);
-#endif
         CursorSelectDragging = NULL;
     }
     
     if (CursorSelectMouseover) {
-#if GTK_CHECK_VERSION(3,0,0)
         g_object_unref(CursorSelectMouseover);
-#else
-        gdk_cursor_unref (CursorSelectMouseover);
-#endif
         CursorSelectMouseover = NULL;
     }
 }
@@ -475,7 +467,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
         case GDK_2BUTTON_PRESS:
             if (event->button.button == 1) {
                 if (!selection->isEmpty()) {
-                    SPItem *clicked_item = selection->itemList()[0];
+                    SPItem *clicked_item = selection->items().front();
 
                     if (dynamic_cast<SPGroup *>(clicked_item) && !dynamic_cast<SPBox3D *>(clicked_item)) { // enter group if it's not a 3D box
                         desktop->setCurrentLayer(clicked_item);

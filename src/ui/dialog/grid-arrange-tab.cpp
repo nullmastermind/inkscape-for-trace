@@ -17,12 +17,9 @@
 
 #include "ui/dialog/grid-arrange-tab.h"
 #include <glibmm/i18n.h>
-#include <gtkmm/stock.h>
 
-#if WITH_GTKMM_3_0
-# include <gtkmm/grid.h>
-#else
-#endif
+#include <gtkmm/grid.h>
+#include <gtkmm/stock.h>
 
 #include <2geom/transforms.h>
 
@@ -159,7 +156,11 @@ void GridArrangeTab::arrange()
     desktop->getDocument()->ensureUpToDate();
 
     Inkscape::Selection *selection = desktop->getSelection();
-    const std::vector<SPItem*> items = selection ? selection->itemList() : std::vector<SPItem*>();
+    std::vector<SPItem*> items;
+    if (selection) {
+        items.insert(items.end(), selection->items().begin(), selection->items().end());
+    }
+
     for(std::vector<SPItem*>::const_iterator i = items.begin();i!=items.end(); ++i){
         SPItem *item = *i;
         Geom::OptRect b = item->documentVisualBounds();
@@ -188,7 +189,7 @@ void GridArrangeTab::arrange()
     // require the sorting done before we can calculate row heights etc.
 
     g_return_if_fail(selection);
-    std::vector<SPItem*> sorted(selection->itemList());
+    std::vector<SPItem*> sorted(selection->items().begin(), selection->items().end());
     sort(sorted.begin(),sorted.end(),sp_compare_y_position);
     sort(sorted.begin(),sorted.end(),sp_compare_x_position);
 
@@ -364,8 +365,7 @@ void GridArrangeTab::on_row_spinbutton_changed()
     Inkscape::Selection *selection = desktop ? desktop->selection : 0;
     g_return_if_fail( selection );
 
-    std::vector<SPItem*> const items = selection->itemList();
-    int selcount = items.size();
+    int selcount = (int) boost::distance(selection->items());
 
     double PerCol = ceil(selcount / NoOfColsSpinner.get_value());
     NoOfRowsSpinner.set_value(PerCol);
@@ -390,7 +390,7 @@ void GridArrangeTab::on_col_spinbutton_changed()
     Inkscape::Selection *selection = desktop ? desktop->selection : 0;
     g_return_if_fail(selection);
 
-    int selcount = selection->itemList().size();
+    int selcount = (int) boost::distance(selection->items());
 
     double PerRow = ceil(selcount / NoOfRowsSpinner.get_value());
     NoOfColsSpinner.set_value(PerRow);
@@ -527,7 +527,10 @@ void GridArrangeTab::updateSelection()
     updating = true;
     SPDesktop *desktop = Parent->getDesktop();
     Inkscape::Selection *selection = desktop ? desktop->selection : 0;
-    std::vector<SPItem*> const items = selection ? selection->itemList() : std::vector<SPItem*>();
+    std::vector<SPItem*> items;
+    if (selection) {
+        items.insert(items.end(), selection->items().begin(), selection->items().end());
+    }
 
     if (!items.empty()) {
         int selcount = items.size();
@@ -566,11 +569,7 @@ GridArrangeTab::GridArrangeTab(ArrangeDialog *parent)
     : Parent(parent),
       XPadding(_("X:"), _("Horizontal spacing between columns."), UNIT_TYPE_LINEAR, "", "object-columns", &PaddingUnitMenu),
       YPadding(_("Y:"), _("Vertical spacing between rows."), XPadding, "", "object-rows", &PaddingUnitMenu),
-#if WITH_GTKMM_3_0
       PaddingTable(Gtk::manage(new Gtk::Grid()))
-#else
-      PaddingTable(Gtk::manage(new Gtk::Table(2, 2, false)))
-#endif
 {
      // bool used by spin button callbacks to stop loops where they change each other.
     updating = false;
@@ -598,7 +597,7 @@ GridArrangeTab::GridArrangeTab(ArrangeDialog *parent)
     g_return_if_fail( selection );
     int selcount = 1;
     if (!selection->isEmpty()) {
-        selcount = selection->itemList().size();
+        selcount = (int) boost::distance(selection->items());
     }
 
 
@@ -732,20 +731,11 @@ GridArrangeTab::GridArrangeTab(ArrangeDialog *parent)
     }
 
     PaddingTable->set_border_width(MARGIN);
-
-#if WITH_GTKMM_3_0
     PaddingTable->set_row_spacing(MARGIN);
     PaddingTable->set_column_spacing(MARGIN);
     PaddingTable->attach(XPadding,        0, 0, 1, 1);
     PaddingTable->attach(PaddingUnitMenu, 1, 0, 1, 1);
     PaddingTable->attach(YPadding,        0, 1, 1, 1);
-#else
-    PaddingTable->set_row_spacings(MARGIN);
-    PaddingTable->set_col_spacings(MARGIN);
-    PaddingTable->attach(XPadding, 0, 1, 0, 1, Gtk::SHRINK, Gtk::SHRINK);
-    PaddingTable->attach(PaddingUnitMenu, 1, 2, 0, 1, Gtk::SHRINK, Gtk::SHRINK);
-    PaddingTable->attach(YPadding, 0, 1, 1, 2, Gtk::SHRINK, Gtk::SHRINK);
-#endif
 
     TileBox.pack_start(*PaddingTable, false, false, MARGIN);
 
