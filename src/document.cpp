@@ -1060,8 +1060,8 @@ void _getObjectsByClassRecursive(Glib::ustring const &klass, SPObject *parent, s
         }
 
         // Check children
-        for (SPObject *child = parent->children; child; child = child->next) {
-            _getObjectsByClassRecursive( klass, child, objects );
+        for (auto& child : parent->children) {
+            _getObjectsByClassRecursive( klass, &child, objects );
         }
     }
 }
@@ -1085,8 +1085,8 @@ void _getObjectsByElementRecursive(Glib::ustring const &element, SPObject *paren
         }
 
         // Check children
-        for (SPObject *child = parent->children; child; child = child->next) {
-            _getObjectsByElementRecursive(element, child, objects);
+        for (auto& child : parent->children) {
+            _getObjectsByElementRecursive(element, &child, objects);
         }
     }
 }

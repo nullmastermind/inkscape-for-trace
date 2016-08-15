@@ -258,8 +258,8 @@ void update_style_recursively( SPObject *object ) {
         if (object->style) {
             object->style->readFromObject( object );
         }
-        for (SPObject *child = object->children; child; child = child->next) {
-            update_style_recursively( child );
+        for (auto& child : object->children) {
+            update_style_recursively( &child );
         }
     }
 }

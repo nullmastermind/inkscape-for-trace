@@ -16,7 +16,8 @@
 #include "sp-object.h"
 #include "selection.h"
 #include "xml/attribute-record.h"
-
+#include <glibmm/regex.h>
+ 
 using Inkscape::Util::List;
 using Inkscape::XML::AttributeRecord;
 
@@ -135,8 +136,8 @@ void StyleDialog::setDesktop( SPDesktop* desktop )
 {
     Panel::setDesktop(desktop);
     _desktop = Panel::getDesktop();
-    _desktop->selection->connectChanged(sigc::mem_fun(*this, &StyleDialog::
-                                                      _selectRow));
+    _desktop->getSelection()->connectChanged(sigc::mem_fun(*this, &StyleDialog::
+                                                           _selectRow));
 }
 
 /**
@@ -163,11 +164,15 @@ void StyleDialog::_addSelector()
      * is(are) selected and user clicks '+' at the bottom of dialog, the
      * entrybox will have the id(s) of the selected objects as text.
      */
-    if (_desktop->selection->isEmpty()) {
+    if (_desktop->getSelection()->isEmpty()) {
         textEditPtr->set_text("Class1");
     }
     else {
-        std::vector<SPObject*> selected = _desktop->getSelection()->list();
+        Inkscape::Selection* selection = _desktop->getSelection();
+        std::vector<SPObject*> selected = std::vector<SPObject *>(selection
+                                                                  ->objects().begin(),
+                                                                  selection->
+                                                                  objects().end());
         textEditPtr->set_text(_setClassAttribute(selected));
     }
 
@@ -199,14 +204,11 @@ void StyleDialog::_addSelector()
      * created with an empty value. Also if a class selector is added, then
      * class attribute for the selected object is set too.
      */
-    SPObject *obj;
     std::vector<SPObject *> objVec;
 
     bool objExists = false;
-    if (!_desktop->getSelection()->list().empty()) {
-        std::vector<SPObject*> selected = _desktop->getSelection()->list();
-        for (unsigned i = 0; i < selected.size(); ++i) {
-            obj = selected.at(i);
+    if (!_desktop->getSelection()->isEmpty()) {
+        for (auto& obj: _desktop->getSelection()->objects()) {
             objExists = true;
             if (!obj->getRepr()->attribute("style")) {
                 obj->getRepr()->setAttribute("style", NULL);
@@ -246,7 +248,10 @@ void StyleDialog::_addSelector()
         _row[_mColumns._selectorLabel] = _selectorName;
         _row[_mColumns._colAddRemove] = true;
         if (objExists) {
-            _row[_mColumns._colObj] = _desktop->selection->list();
+            Inkscape::Selection* selection = _desktop->getSelection();
+            _row[_mColumns._colObj] = std::vector<SPObject *>(selection->objects()
+                                                              .begin(), selection
+                                                              ->objects().end());
             objVec = _row[_mColumns._colObj];
         }
         break;
@@ -579,56 +584,55 @@ bool StyleDialog::_handleButtonEvent(GdkEventButton *event)
                   * by removing the parent row's class selector name.
                   */
                 if (!row.parent()) {
-                    if (_desktop->selection) {
-                        std::vector<SPObject *>sel = _desktop->selection->list();
-                        for (unsigned i = 0; i < sel.size(); ++i) {
-                            SPObject *obj = sel[i];
-                            std::string childStyle;
-                            if (iter) {
-                                path = _treeView.get_model()->get_path(iter);
-                                if (_selectorVec.size() != 0) {
-                                    Gtk::TreeModel::Row childrow;
-                                    childrow = *(_store->append(row->children()));
-                                    childrow[_mColumns._selectorLabel] = "#" +
-                                            std::string(obj->getId());
-                                    childrow[_mColumns._colAddRemove] = false;
-                                    childrow[_mColumns._colObj] = _desktop->selection->list();
-                                    if (obj->getAttribute("style") != NULL) {
-                                        childStyle = "#" + std::string(obj->getId()) + "{" +
-                                                std::string(obj->getAttribute("style")) + "}\n";
+                    Inkscape::Selection* selection = _desktop->getSelection();
+                    std::vector<SPObject *> sel = std::vector<SPObject *>
+                            (selection->objects().begin(), selection->objects().end());
+                    for (auto& obj: selection->objects()) {
+                        std::string childStyle;
+                        if (iter) {
+                            path = _treeView.get_model()->get_path(iter);
+                            if (_selectorVec.size() != 0) {
+                                Gtk::TreeModel::Row childrow;
+                                childrow = *(_store->append(row->children()));
+                                childrow[_mColumns._selectorLabel] = "#" +
+                                        std::string(obj->getId());
+                                childrow[_mColumns._colAddRemove] = false;
+                                childrow[_mColumns._colObj] = sel;
+                                if (obj->getAttribute("style") != NULL) {
+                                    childStyle = "#" + std::string(obj->getId()) + "{" +
+                                            std::string(obj->getAttribute("style")) + "}\n";
+                                }
+                                else {
+                                    childStyle = "#" + std::string(obj->getId())
+                                            + "{" + "}\n";
+                                }
+                                Glib::ustring key = row[_mColumns._selectorLabel];
+                                if (key[0] == '.') {
+                                    if (!obj->getRepr()->attribute("class")) {
+                                        obj->setAttribute("class", key.erase(0,1));
                                     }
                                     else {
-                                        childStyle = "#" + std::string(obj->getId())
-                                                + "{" + "}\n";
-                                    }
-                                    Glib::ustring key = row[_mColumns._selectorLabel];
-                                    if (key[0] == '.') {
-                                        if (!obj->getRepr()->attribute("class")) {
-                                            obj->setAttribute("class", key.erase(0,1));
-                                        }
-                                        else {
-                                            obj->setAttribute("class", std::string
-                                                              (obj->getRepr()->
-                                                               attribute("class"))
-                                                              + " " + key
-                                                              .erase(0,1));
-                                        }
+                                        obj->setAttribute("class", std::string
+                                                          (obj->getRepr()->
+                                                           attribute("class"))
+                                                          + " " + key
+                                                          .erase(0,1));
                                     }
                                 }
                             }
+                        }
 
-                            inkSelector._selector = obj->getId();
-                            inkSelector._matchingObjs = sel;
-                            inkSelector._xmlContent = childStyle;
-                            _selectorVec.push_back(inkSelector);
-                        }
-                        if (_styleElementNode()) {
-                            _styleChild = _styleElementNode();
-                            _updateStyleContent();
-                        }
-                        else if (_styleExists && !_newDrawing) {
-                            _updateStyleContent();
-                        }
+                        inkSelector._selector = obj->getId();
+                        inkSelector._matchingObjs = sel;
+                        inkSelector._xmlContent = childStyle;
+                        _selectorVec.push_back(inkSelector);
+                    }
+                    if (_styleElementNode()) {
+                        _styleChild = _styleElementNode();
+                        _updateStyleContent();
+                    }
+                    else if (_styleExists && !_newDrawing) {
+                        _updateStyleContent();
                     }
                 }
 
@@ -989,8 +993,10 @@ void StyleDialog::_checkAllChildren(Gtk::TreeModel::Children& children)
 void StyleDialog::_selectRow(Selection */*sel*/)
 {
     SPObject *obj = NULL;
-    if (!_desktop->selection->list().empty()) {
-        std::vector<SPObject*> selected = _desktop->getSelection()->list();
+    if (!_desktop->selection->isEmpty()) {
+        Inkscape::Selection* selection = _desktop->getSelection();
+        std::vector<SPObject*> selected = std::vector<SPObject *>
+                (selection->objects().begin(), selection->objects().end());
         obj = selected.back();
     }
 
