@@ -827,12 +827,14 @@ void StyleDialog::_handleEdited(const Glib::ustring& path, const Glib::ustring& 
                  * property, else replacements in value are done in the 'else' block.
                  */
                 if (_cssPane->_newProperty) {
-                    value.append((new_text + ";").c_str());
-                    _cssPane->_propCol->add_attribute(_cssPane->_textRenderer
-                                                      ->property_text(),
-                                                      _cssPane->_cssColumns
-                                                      ._propertyLabel);
-                    _cssPane->_newProperty = false;
+                    if (!new_text.empty()) {
+                        value.append((new_text + ";").c_str());
+                        _cssPane->_propCol->add_attribute(_cssPane->_textRenderer
+                                                          ->property_text(),
+                                                          _cssPane->_cssColumns
+                                                          ._propertyLabel);
+                        _cssPane->_newProperty = false;
+                    }
                 }
                 else {
                     std::stringstream ss(value);
