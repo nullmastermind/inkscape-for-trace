@@ -574,6 +574,7 @@ bool StyleDialog::_handleButtonEvent(GdkEventButton *event)
                 Gtk::TreeModel::iterator iter = refTreeSelection->
                         get_selected();
                 Gtk::TreeModel::Row row = *iter;
+                Glib::ustring selectorName;
 
                 /**
                   * This adds child rows to selected rows. If the parent row is
@@ -607,6 +608,7 @@ bool StyleDialog::_handleButtonEvent(GdkEventButton *event)
                                             + "{" + "}\n";
                                 }
                                 Glib::ustring key = row[_mColumns._selectorLabel];
+                                selectorName = row[_mColumns._selectorLabel];
                                 if (key[0] == '.') {
                                     if (!obj->getRepr()->attribute("class")) {
                                         obj->setAttribute("class", key.erase(0,1));
@@ -624,7 +626,19 @@ bool StyleDialog::_handleButtonEvent(GdkEventButton *event)
 
                         inkSelector._selector = obj->getId();
                         inkSelector._matchingObjs = sel;
-                        inkSelector._xmlContent = childStyle;
+
+                        /**
+                          * If the object's parent row is a class selector, then
+                          * there are no changes in style element except the class
+                          * attribute is updated. For the id selector cases, XML
+                          * content's style element is updated.
+                          */
+                        if (selectorName[0] == '.') {
+                            inkSelector._xmlContent = "";
+                        }
+                        else {
+                            inkSelector._xmlContent = childStyle;
+                        }
                         _selectorVec.push_back(inkSelector);
                     }
                     if (_styleElementNode()) {
@@ -651,23 +665,26 @@ bool StyleDialog::_handleButtonEvent(GdkEventButton *event)
                             }
                         }
                     }
-                    if (key == row[_mColumns._selectorLabel]) {
-                        Gtk::TreeModel::Row parentRow = *(row.parent());
-                        Glib::ustring parentKey = parentRow[_mColumns._selectorLabel];
-                        if (parentKey[0] == '.') {
-                            std::vector<SPObject *> objVec = row[_mColumns._colObj];
-                            for (unsigned i = 0; i < objVec.size(); ++i) {
-                                SPObject *obj = objVec[i];
-                                std::string classAttr = std::string(obj->getRepr()
-                                                                    ->attribute("class"));
-                                std::size_t found = classAttr.find(parentKey.erase(0,1));
-                                if (found != std::string::npos) {
-                                    classAttr.erase(found, parentKey.length()+1);
-                                    obj->getRepr()->setAttribute("class", classAttr);
-                                }
+
+                    Gtk::TreeModel::Row parentRow = *(row.parent());
+                    Glib::ustring parentKey = parentRow[_mColumns._selectorLabel];
+
+                    if (key == row[_mColumns._selectorLabel]) {                       
+                        _selectorVec.erase(it);
+                    }
+
+                    if (parentKey[0] == '.') {
+                        std::vector<SPObject *> objVec = row[_mColumns._colObj];
+                        for (unsigned i = 0; i < objVec.size(); ++i) {
+                            SPObject *obj = objVec[i];
+                            std::string classAttr = std::string(obj->getRepr()
+                                                                ->attribute("class"));
+                            std::size_t found = classAttr.find(parentKey.erase(0,1));
+                            if (found != std::string::npos) {
+                                classAttr.erase(found, parentKey.length()+1);
+                                obj->getRepr()->setAttribute("class", classAttr);
                             }
                         }
-                        _selectorVec.erase(it);
                     }
 
                     if (_styleChild) {
