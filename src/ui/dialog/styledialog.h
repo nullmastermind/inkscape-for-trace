@@ -93,9 +93,9 @@ private:
     Inkscape::XML::Node *_styleChild;
     std::string _selectorName;
     std::string _selectorValue;
-    Gtk::TreeModel::Row _row;
     bool _newDrawing;
     CssDialog *_cssPane;
+    void _selAdd(Gtk::TreeModel::Row row);
 
     // Signal handlers
     void _addSelector();

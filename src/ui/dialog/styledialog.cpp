@@ -147,7 +147,7 @@ void StyleDialog::setDesktop( SPDesktop* desktop )
  */
 void StyleDialog::_addSelector()
 {
-    _row = *(_store->append());
+    Gtk::TreeModel::Row row = *(_store->append());
 
     /**
      * On clicking '+' button, an entrybox with default text opens up. If an
@@ -245,14 +245,14 @@ void StyleDialog::_addSelector()
     switch (result) {
     case Gtk::RESPONSE_OK:
         textDialogPtr->hide();
-        _row[_mColumns._selectorLabel] = _selectorName;
-        _row[_mColumns._colAddRemove] = true;
+        row[_mColumns._selectorLabel] = _selectorName;
+        row[_mColumns._colAddRemove] = true;
         if (objExists) {
             Inkscape::Selection* selection = _desktop->getSelection();
-            _row[_mColumns._colObj] = std::vector<SPObject *>(selection->objects()
+            row[_mColumns._colObj] = std::vector<SPObject *>(selection->objects()
                                                               .begin(), selection
                                                               ->objects().end());
-            objVec = _row[_mColumns._colObj];
+            objVec = row[_mColumns._colObj];
         }
         break;
     default:
@@ -290,6 +290,8 @@ void StyleDialog::_addSelector()
         Inkscape::GC::release(newChild);
         _styleChild = newChild;
     }
+
+//    _selAdd(row);
 }
 
 /**
@@ -574,7 +576,6 @@ bool StyleDialog::_handleButtonEvent(GdkEventButton *event)
                 Gtk::TreeModel::iterator iter = refTreeSelection->
                         get_selected();
                 Gtk::TreeModel::Row row = *iter;
-                Glib::ustring selectorName;
 
                 /**
                   * This adds child rows to selected rows. If the parent row is
@@ -585,69 +586,7 @@ bool StyleDialog::_handleButtonEvent(GdkEventButton *event)
                   * by removing the parent row's class selector name.
                   */
                 if (!row.parent()) {
-                    Inkscape::Selection* selection = _desktop->getSelection();
-                    std::vector<SPObject *> sel = std::vector<SPObject *>
-                            (selection->objects().begin(), selection->objects().end());
-                    for (auto& obj: selection->objects()) {
-                        std::string childStyle;
-                        if (iter) {
-                            path = _treeView.get_model()->get_path(iter);
-                            if (_selectorVec.size() != 0) {
-                                Gtk::TreeModel::Row childrow;
-                                childrow = *(_store->append(row->children()));
-                                childrow[_mColumns._selectorLabel] = "#" +
-                                        std::string(obj->getId());
-                                childrow[_mColumns._colAddRemove] = false;
-                                childrow[_mColumns._colObj] = sel;
-                                if (obj->getAttribute("style") != NULL) {
-                                    childStyle = "#" + std::string(obj->getId()) + "{" +
-                                            std::string(obj->getAttribute("style")) + "}\n";
-                                }
-                                else {
-                                    childStyle = "#" + std::string(obj->getId())
-                                            + "{" + "}\n";
-                                }
-                                Glib::ustring key = row[_mColumns._selectorLabel];
-                                selectorName = row[_mColumns._selectorLabel];
-                                if (key[0] == '.') {
-                                    if (!obj->getRepr()->attribute("class")) {
-                                        obj->setAttribute("class", key.erase(0,1));
-                                    }
-                                    else {
-                                        obj->setAttribute("class", std::string
-                                                          (obj->getRepr()->
-                                                           attribute("class"))
-                                                          + " " + key
-                                                          .erase(0,1));
-                                    }
-                                }
-                            }
-                        }
-
-                        inkSelector._selector = obj->getId();
-                        inkSelector._matchingObjs = sel;
-
-                        /**
-                          * If the object's parent row is a class selector, then
-                          * there are no changes in style element except the class
-                          * attribute is updated. For the id selector cases, XML
-                          * content's style element is updated.
-                          */
-                        if (selectorName[0] == '.') {
-                            inkSelector._xmlContent = "";
-                        }
-                        else {
-                            inkSelector._xmlContent = childStyle;
-                        }
-                        _selectorVec.push_back(inkSelector);
-                    }
-                    if (_styleElementNode()) {
-                        _styleChild = _styleElementNode();
-                        _updateStyleContent();
-                    }
-                    else if (_styleExists && !_newDrawing) {
-                        _updateStyleContent();
-                    }
+                    _selAdd(row);
                 }
 
                 else {
@@ -664,25 +603,42 @@ bool StyleDialog::_handleButtonEvent(GdkEventButton *event)
                                 value = strtok(temp, "}");
                             }
                         }
-                    }
 
-                    Gtk::TreeModel::Row parentRow = *(row.parent());
-                    Glib::ustring parentKey = parentRow[_mColumns._selectorLabel];
+                        Gtk::TreeModel::Row parentRow = *(row.parent());
+                        Glib::ustring parentKey = parentRow[_mColumns._selectorLabel];
 
-                    if (key == row[_mColumns._selectorLabel]) {                       
-                        _selectorVec.erase(it);
-                    }
+                        if (key[0] == '#') {
+                            std::string s = parentKey;
+                            Glib::ustring toDelRow = row[_mColumns._selectorLabel];
+                            std::string toDelKey = toDelRow;
+                            std::size_t idFound = s.find(toDelKey);
+                            if (idFound != std::string::npos) {
+                                if (idFound == 0) {
+                                    s.erase(idFound, toDelKey.length()+1);
+                                    parentKey = s;
+                                    parentRow[_mColumns._selectorLabel] = parentKey;
+                                    (*it)._xmlContent.erase(idFound, toDelKey.length());
+                                }
+                                else {
+                                    s.erase(idFound-2, toDelKey.length()+2);
+                                    parentKey = s;
+                                    parentRow[_mColumns._selectorLabel] = parentKey;
+                                    (*it)._xmlContent.erase(idFound-2, toDelKey.length()+2);
+                                }
+                            }
+                        }
 
-                    if (parentKey[0] == '.') {
-                        std::vector<SPObject *> objVec = row[_mColumns._colObj];
-                        for (unsigned i = 0; i < objVec.size(); ++i) {
-                            SPObject *obj = objVec[i];
-                            std::string classAttr = std::string(obj->getRepr()
-                                                                ->attribute("class"));
-                            std::size_t found = classAttr.find(parentKey.erase(0,1));
-                            if (found != std::string::npos) {
-                                classAttr.erase(found, parentKey.length()+1);
-                                obj->getRepr()->setAttribute("class", classAttr);
+                        if (parentKey[0] == '.') {
+                            std::vector<SPObject *> objVec = row[_mColumns._colObj];
+                            for (unsigned i = 0; i < objVec.size(); ++i) {
+                                SPObject *obj = objVec[i];
+                                std::string classAttr = std::string(obj->getRepr()
+                                                                    ->attribute("class"));
+                                std::size_t found = classAttr.find(parentKey.erase(0,1));
+                                if (found != std::string::npos) {
+                                    classAttr.erase(found, parentKey.length()+1);
+                                    obj->getRepr()->setAttribute("class", classAttr);
+                                }
                             }
                         }
                     }
@@ -700,6 +656,87 @@ bool StyleDialog::_handleButtonEvent(GdkEventButton *event)
         }
     }
     return false;
+}
+
+void StyleDialog::_selAdd(Gtk::TreeModel::Row row)
+{
+    Glib::ustring selectorName;
+    Gtk::TreeModel::Row childrow;
+    Inkscape::Selection* selection = _desktop->getSelection();
+    std::vector<SPObject *> sel = std::vector<SPObject *>
+            (selection->objects().begin(), selection->objects().end());
+    for (auto& obj: selection->objects()) {
+       if (*row) {
+            if (_selectorVec.size() != 0) {
+                childrow = *(_store->append(row->children()));
+                childrow[_mColumns._selectorLabel] = "#" +
+                        std::string(obj->getId());
+                childrow[_mColumns._colAddRemove] = false;
+                childrow[_mColumns._colObj] = sel;
+                Glib::ustring key = row[_mColumns._selectorLabel];
+                if (key[0] == '.') {
+                    if (!obj->getRepr()->attribute("class")) {
+                        obj->setAttribute("class", key.erase(0,1));
+                    }
+                    else {
+                        obj->setAttribute("class", std::string
+                                          (obj->getRepr()->
+                                           attribute("class"))
+                                          + " " + key
+                                          .erase(0,1));
+                    }
+                }
+            }
+            selectorName = row[_mColumns._selectorLabel];
+        }
+
+        /**
+          * If the object's parent row is a class selector, then
+          * there are no changes in style element except the class
+          * attribute is updated. For the id selector cases, XML
+          * content's style element is updated.
+          */
+        REMOVE_SPACES(selectorName);
+        std::vector<InkSelector>::iterator it;
+        for (it = _selectorVec.begin(); it != _selectorVec.end(); ++it) {
+            std::string sel, key, value;
+            sel = (*it)._xmlContent;
+            REMOVE_SPACES(sel);
+            if (!sel.empty()) {
+                key = strtok((char*)sel.c_str(), "{");
+                REMOVE_SPACES(key);
+                char *temp = strtok(NULL, "}");
+                if (strtok(temp, "}") != NULL) {
+                    value = strtok(temp, "}");
+                }
+            }
+
+            REMOVE_SPACES((*it)._selector);
+            if ("#" + std::string(obj->getId()) != selectorName) {
+                inkSelector._selector = (*it)._selector;
+                inkSelector._selector.append(", #" + std::string(obj->getId()));
+            }
+
+            inkSelector._xmlContent = inkSelector._selector + "{" + value + "}";
+            if (selectorName != childrow[_mColumns._selectorLabel]) {
+                row[_mColumns._selectorLabel] = selectorName +  ", " +
+                        childrow[_mColumns._selectorLabel];
+            }
+            it = _selectorVec.erase(it);
+            it = _selectorVec.insert(it, inkSelector);
+        }
+
+//        if (selectorName[0] == '.') {
+//            inkSelector._xmlContent = "";
+//        }
+    }
+    if (_styleElementNode()) {
+        _styleChild = _styleElementNode();
+        _updateStyleContent();
+    }
+    else if (_styleExists && !_newDrawing) {
+        _updateStyleContent();
+    }
 }
 
 /**
@@ -839,43 +876,43 @@ void StyleDialog::_handleEdited(const Glib::ustring& path, const Glib::ustring& 
             std::string matchSelector = selectedRowLabel;
             REMOVE_SPACES(matchSelector);
 
-            if (key == matchSelector) {
+//            if (key == matchSelector) {
                 /** If a new property is added, existing value is appended with new
                  * property, else replacements in value are done in the 'else' block.
                  */
-                if (_cssPane->_newProperty) {
-                    if (!new_text.empty()) {
-                        value.append((new_text + ";").c_str());
-                        _cssPane->_propCol->add_attribute(_cssPane->_textRenderer
-                                                          ->property_text(),
-                                                          _cssPane->_cssColumns
-                                                          ._propertyLabel);
-                        _cssPane->_newProperty = false;
-                    }
+            if (_cssPane->_newProperty) {
+                if (!new_text.empty()) {
+                    value.append((new_text + ";").c_str());
+                    _cssPane->_propCol->add_attribute(_cssPane->_textRenderer
+                                                      ->property_text(),
+                                                      _cssPane->_cssColumns
+                                                      ._propertyLabel);
+                    _cssPane->_newProperty = false;
                 }
-                else {
-                    std::stringstream ss(value);
-                    std::string token, editedToken;
-                    std::size_t found = value.find(";");
-                    if (found!=std::string::npos) {
-                        while(std::getline(ss, token, ';')) {
-                            REMOVE_SPACES(token);
-                            if (!token.empty()) {
-                                if (token.substr(0, token.find(":")) == _cssPane
-                                        ->_editedProp.substr(0, _cssPane->_editedProp
-                                                             .find(":"))) {
-                                    editedToken = _cssPane->_editedProp;
-                                    size_t startPos = value.find(token);
-                                    value.replace(startPos, token.length(), editedToken);
-                                }
+            }
+            else {
+                std::stringstream ss(value);
+                std::string token, editedToken;
+                std::size_t found = value.find(";");
+                if (found!=std::string::npos) {
+                    while(std::getline(ss, token, ';')) {
+                        REMOVE_SPACES(token);
+                        if (!token.empty()) {
+                            if (token.substr(0, token.find(":")) == _cssPane
+                                    ->_editedProp.substr(0, _cssPane->_editedProp
+                                                         .find(":"))) {
+                                editedToken = _cssPane->_editedProp;
+                                size_t startPos = value.find(token);
+                                value.replace(startPos, token.length(), editedToken);
                             }
                         }
                     }
                 }
-                value.erase(std::remove(value.begin(), value.end(), '\n'), value.end());
-                (*it)._xmlContent = key + "{" + value + "}\n";
-                _updateStyleContent();
             }
+            value.erase(std::remove(value.begin(), value.end(), '\n'), value.end());
+            (*it)._xmlContent = key + "{" + value + "}\n";
+            _updateStyleContent();
+//            }
         }
     }
 }
@@ -1040,18 +1077,18 @@ void StyleDialog::_selectRow(Selection */*sel*/)
                 }
             }
 
-            if (row.children()) {
-                for(Gtk::TreeModel::Children::iterator it = row.children().begin();
-                    it != row.children().end(); ++it) {
-                    childRow = *it;
-                    childObjVec = childRow[_mColumns._colObj];
-                }
-                for (unsigned j = 0; j < childObjVec.size(); ++j) {
-                    if (obj->getId() == childObjVec[j]->getId()) {
-                        _treeView.get_selection()->select(childRow);
-                    }
-                }
-            }
+//            if (row.children()) {
+//                for(Gtk::TreeModel::Children::iterator it = row.children().begin();
+//                    it != row.children().end(); ++it) {
+//                    childRow = *it;
+//                    childObjVec = childRow[_mColumns._colObj];
+//                }
+//                for (unsigned j = 0; j < childObjVec.size(); ++j) {
+//                    if (obj->getId() == childObjVec[j]->getId()) {
+//                        _treeView.get_selection()->select(childRow);
+//                    }
+//                }
+//            }
         }
     }
     else {
