@@ -876,7 +876,7 @@ void StyleDialog::_handleEdited(const Glib::ustring& path, const Glib::ustring& 
             std::string matchSelector = selectedRowLabel;
             REMOVE_SPACES(matchSelector);
 
-//            if (key == matchSelector) {
+            if (key == matchSelector) {
                 /** If a new property is added, existing value is appended with new
                  * property, else replacements in value are done in the 'else' block.
                  */
@@ -912,7 +912,7 @@ void StyleDialog::_handleEdited(const Glib::ustring& path, const Glib::ustring& 
             value.erase(std::remove(value.begin(), value.end(), '\n'), value.end());
             (*it)._xmlContent = key + "{" + value + "}\n";
             _updateStyleContent();
-//            }
+            }
         }
     }
 }
