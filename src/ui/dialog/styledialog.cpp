@@ -291,7 +291,7 @@ void StyleDialog::_addSelector()
         _styleChild = newChild;
     }
 
-//    _selAdd(row);
+    _selAdd(row);
 }
 
 /**
@@ -340,32 +340,6 @@ void StyleDialog::_delSelector()
             std::string matchSelector = selectedRowLabel;
             REMOVE_SPACES(matchSelector);
             if (key == matchSelector) {
-                if (!row.children().empty()) {
-                    for (Gtk::TreeModel::Children::iterator child = row.children().begin();
-                         child != row.children().end(); ++child) {
-                        Gtk::TreeModel::Row childrow = *child;
-                        std::string childSel, childKey;
-                        std::vector<InkSelector>::iterator i;
-                        for (i = _selectorVec.begin(); i != _selectorVec.end();) {
-                            childSel = (*i)._xmlContent;
-                            REMOVE_SPACES(childSel);
-                            if (!childSel.empty()) {
-                                childKey = strtok((char*)childSel.c_str(), "{");
-                                REMOVE_SPACES(childKey);
-                            }
-                            Glib::ustring selectedChildRowLabel =
-                                    childrow[_mColumns._selectorLabel];
-                            std::string matchChildSelector = selectedChildRowLabel;
-                            REMOVE_SPACES(matchChildSelector);
-                            if (childKey == matchChildSelector) {
-                                i = _selectorVec.erase(i);
-                            }
-                            else {
-                                ++i;
-                            }
-                        }
-                    }
-                }
                 it = _selectorVec.erase(it);
                 _store->erase(row);
             }
@@ -380,7 +354,7 @@ void StyleDialog::_delSelector()
               * the content is updated simply using _updateStyleContent().
               */
             _styleChild = _styleElementNode();
-            if (_selectorVec.size() == 0) {
+            if (_store->children().empty()) {
                 _document->getReprRoot()->removeChild(_styleChild);
                 _styleExists = false;
             }
@@ -592,7 +566,10 @@ bool StyleDialog::_handleButtonEvent(GdkEventButton *event)
                 else {
                     std::string sel, key, value;
                     std::vector<InkSelector>::iterator it;
-                    for (it = _selectorVec.begin(); it != _selectorVec.end(); ++it ) {
+                    Gtk::TreeModel::Row parentRow = *(row).parent();
+                    Glib::ustring parentKey = parentRow[_mColumns._selectorLabel];
+
+                    for (it = _selectorVec.begin(); it != _selectorVec.end(); ++it) {
                         sel = (*it)._xmlContent;
                         REMOVE_SPACES(sel);
                         if (!sel.empty()) {
@@ -604,26 +581,28 @@ bool StyleDialog::_handleButtonEvent(GdkEventButton *event)
                             }
                         }
 
-                        Gtk::TreeModel::Row parentRow = *(row.parent());
-                        Glib::ustring parentKey = parentRow[_mColumns._selectorLabel];
-
-                        if (key[0] == '#') {
-                            std::string s = parentKey;
-                            Glib::ustring toDelRow = row[_mColumns._selectorLabel];
-                            std::string toDelKey = toDelRow;
-                            std::size_t idFound = s.find(toDelKey);
-                            if (idFound != std::string::npos) {
-                                if (idFound == 0) {
-                                    s.erase(idFound, toDelKey.length()+1);
-                                    parentKey = s;
-                                    parentRow[_mColumns._selectorLabel] = parentKey;
-                                    (*it)._xmlContent.erase(idFound, toDelKey.length());
-                                }
-                                else {
-                                    s.erase(idFound-2, toDelKey.length()+2);
-                                    parentKey = s;
-                                    parentRow[_mColumns._selectorLabel] = parentKey;
-                                    (*it)._xmlContent.erase(idFound-2, toDelKey.length()+2);
+                        std::string matchSelector = parentKey;
+                        REMOVE_SPACES(matchSelector);
+                        if (key == matchSelector) {
+                            if (key[0] == '#') {
+                                std::string s = parentKey;
+                                Glib::ustring toDelRow = row[_mColumns._selectorLabel];
+                                std::string toDelKey = toDelRow;
+                                std::size_t idFound = s.find(toDelKey);
+                                if (idFound != std::string::npos) {
+                                    if (idFound == 0) {
+                                        s.erase(idFound, toDelKey.length()+1);
+                                        parentKey = s;
+                                        parentRow[_mColumns._selectorLabel] = parentKey;
+                                        (*it)._xmlContent.erase(idFound, toDelKey.length());
+                                    }
+                                    else {
+                                        s.erase(idFound-2, toDelKey.length()+2);
+                                        parentKey = s;
+                                        parentRow[_mColumns._selectorLabel] = parentKey;
+                                        (*it)._xmlContent.erase(idFound-2, toDelKey.
+                                                                length()+2);
+                                    }
                                 }
                             }
                         }
@@ -641,6 +620,10 @@ bool StyleDialog::_handleButtonEvent(GdkEventButton *event)
                                 }
                             }
                         }
+
+                        if (parentKey.empty()) {
+                            (*it)._xmlContent = "";
+                        }
                     }
 
                     if (_styleChild) {
@@ -650,7 +633,16 @@ bool StyleDialog::_handleButtonEvent(GdkEventButton *event)
                         _styleChild = _styleElementNode();
                         _updateStyleContent();
                     }
+
                     _store->erase(row);
+                    if (parentKey.empty()) {
+                        _store->erase(parentRow);
+                    }
+
+                    if (parentKey.empty() && _store->children().empty()) {
+                        _document->getReprRoot()->removeChild(_styleChild);
+                        _styleExists = false;
+                    }
                 }
             }
         }
@@ -711,19 +703,21 @@ void StyleDialog::_selAdd(Gtk::TreeModel::Row row)
                 }
             }
 
-            REMOVE_SPACES((*it)._selector);
-            if ("#" + std::string(obj->getId()) != selectorName) {
-                inkSelector._selector = (*it)._selector;
-                inkSelector._selector.append(", #" + std::string(obj->getId()));
+            Glib::ustring selectedRowLabel = row[_mColumns._selectorLabel];
+            std::string matchSelector = selectedRowLabel;
+            REMOVE_SPACES(matchSelector);
+            if (key == matchSelector) {
+                REMOVE_SPACES((*it)._selector);
+                if ("#" + std::string(obj->getId()) != selectorName) {
+                    inkSelector._selector = (*it)._selector;
+                    inkSelector._selector.append(", #" + std::string(obj->getId()));
+                    inkSelector._xmlContent = inkSelector._selector + "{" + value + "}\n";
+                    row[_mColumns._selectorLabel] = selectorName +  ", " +
+                            childrow[_mColumns._selectorLabel];
+                }
+                it = _selectorVec.erase(it);
+                it = _selectorVec.insert(it, inkSelector);
             }
-
-            inkSelector._xmlContent = inkSelector._selector + "{" + value + "}";
-            if (selectorName != childrow[_mColumns._selectorLabel]) {
-                row[_mColumns._selectorLabel] = selectorName +  ", " +
-                        childrow[_mColumns._selectorLabel];
-            }
-            it = _selectorVec.erase(it);
-            it = _selectorVec.insert(it, inkSelector);
         }
 
 //        if (selectorName[0] == '.') {
