@@ -671,11 +671,14 @@ void StyleDialog::_selAdd(Gtk::TreeModel::Row row)
                         obj->setAttribute("class", key.erase(0,1));
                     }
                     else {
-                        obj->setAttribute("class", std::string
-                                          (obj->getRepr()->
-                                           attribute("class"))
-                                          + " " + key
-                                          .erase(0,1));
+                        if (obj->getRepr()->attribute("class") != key
+                                .erase(0,1)) {
+                            obj->setAttribute("class", std::string
+                                              (obj->getRepr()->
+                                               attribute("class"))
+                                              + " " + key
+                                              .erase(0,1));
+                        }
                     }
                 }
             }
@@ -708,21 +711,23 @@ void StyleDialog::_selAdd(Gtk::TreeModel::Row row)
             REMOVE_SPACES(matchSelector);
             if (key == matchSelector) {
                 REMOVE_SPACES((*it)._selector);
-                if ("#" + std::string(obj->getId()) != selectorName) {
-                    inkSelector._selector = (*it)._selector;
-                    inkSelector._selector.append(", #" + std::string(obj->getId()));
-                    inkSelector._xmlContent = inkSelector._selector + "{" + value + "}\n";
-                    row[_mColumns._selectorLabel] = selectorName +  ", " +
-                            childrow[_mColumns._selectorLabel];
+                if (selectorName[0] == '#') {
+                    if ("#" + std::string(obj->getId()) != selectorName) {
+                        inkSelector._selector = (*it)._selector;
+                        inkSelector._selector.append(", #" + std::string(obj->getId()));
+                        inkSelector._xmlContent = inkSelector._selector + "{" + value + "}\n";
+                        row[_mColumns._selectorLabel] = selectorName +  ", " +
+                                childrow[_mColumns._selectorLabel];
+                    }
                 }
+                else if (selectorName[0] == '.') {
+                    inkSelector._xmlContent = (*it)._selector + "{" + value + "}\n";
+                }
+
                 it = _selectorVec.erase(it);
                 it = _selectorVec.insert(it, inkSelector);
             }
         }
-
-//        if (selectorName[0] == '.') {
-//            inkSelector._xmlContent = "";
-//        }
     }
     if (_styleElementNode()) {
         _styleChild = _styleElementNode();
