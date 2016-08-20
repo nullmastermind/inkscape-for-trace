@@ -35,13 +35,17 @@ void CssDialog::_styleButton(Gtk::Button& btn, char const* iconName,
     gtk_widget_show(child);
     btn.add(*manage(Glib::wrap(child)));
     btn.set_relief(Gtk::RELIEF_NONE);
-    btn.set_tooltip_text (tooltip);
+    btn.set_tooltip_text(tooltip);
 }
 
 /**
  * Constructor
  * A treeview whose each row corresponds to a CSS property of selector selected.
- * TODO: Further, buttons to add and delete properties will be added.
+ * New CSS property can be added by clicking '+' at bottom of the CSS pane. '-'
+ * in front of the CSS property row can be clicked to delete the CSS property.
+ * Besides clicking on an already selected property row makes the property editable
+ * and clicking 'Enter' updates the property with changes reflected in the
+ * drawing.
  */
 CssDialog::CssDialog():
     UI::Widget::Panel("", "/dialogs/css", SP_VERB_DIALOG_CSS),
@@ -56,14 +60,14 @@ CssDialog::CssDialog():
     _store = Gtk::ListStore::create(_cssColumns);
     _treeView.set_model(_store);
 
-    Inkscape::UI::Widget::AddToIcon * addRenderer = manage(
-                new Inkscape::UI::Widget::AddToIcon() );
+    Inkscape::UI::Widget::AddToIcon * addRenderer = manage(new Inkscape::UI::
+                                                           Widget::AddToIcon());
     addRenderer->property_active() = false;
 
     int addCol = _treeView.append_column("Unset Property", *addRenderer) - 1;
     Gtk::TreeViewColumn *col = _treeView.get_column(addCol);
-    if ( col ) {
-        col->add_attribute( addRenderer->property_active(), _cssColumns._colUnsetProp);
+    if (col) {
+        col->add_attribute(addRenderer->property_active(), _cssColumns._colUnsetProp);
     }
     _textRenderer = Gtk::manage(new Gtk::CellRendererText());
     _textRenderer->property_editable() = true;
@@ -71,7 +75,7 @@ CssDialog::CssDialog():
     int nameColNum = _treeView.append_column("Property", *_textRenderer) - 1;
     _propCol = _treeView.get_column(nameColNum);
 
-    create = manage(new Gtk::Button());
+    Gtk::Button* create = manage(new Gtk::Button());
     _styleButton(*create, "list-add", "Add a new property");
 
     _mainBox.pack_end(_buttonBox, Gtk::PACK_SHRINK);
@@ -85,12 +89,21 @@ CssDialog::CssDialog():
     create->signal_clicked().connect(sigc::mem_fun(*this, &CssDialog::_addProperty));
 }
 
+/**
+ * @brief CssDialog::~CssDialog
+ * Class destructor
+ */
 CssDialog::~CssDialog()
 {
     setDesktop(NULL);
 }
 
-void CssDialog::setDesktop( SPDesktop* desktop )
+/**
+ * @brief CssDialog::setDesktop
+ * @param desktop
+ * This function sets the 'desktop' for the CSS pane.
+ */
+void CssDialog::setDesktop(SPDesktop* desktop)
 {
     _desktop = desktop;
 }

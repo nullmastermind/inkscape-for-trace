@@ -21,6 +21,10 @@
 using Inkscape::Util::List;
 using Inkscape::XML::AttributeRecord;
 
+/**
+ * This macro is used to remove spaces around selectors or any strings when
+ * parsing is done to update XML style element or row labels in this dialog.
+ */
 #define REMOVE_SPACES(x) x.erase(0, x.find_first_not_of(' ')); \
     x.erase(x.find_last_not_of(' ') + 1);
 
@@ -48,7 +52,8 @@ void StyleDialog::_styleButton(Gtk::Button& btn, char const* iconName,
 /**
  * Constructor
  * A treeview and a set of two buttons are added to the dialog. _addSelector
- * adds selectors to treeview. Currently, delete button is disabled.
+ * adds selectors to treeview. _delSelector deletes the selector from the dialog.
+ * Any addition/deletion of the selectors updates XML style element accordingly.
  */
 StyleDialog::StyleDialog() :
     UI::Widget::Panel("", "/dialogs/style", SP_VERB_DIALOG_STYLE),
@@ -127,11 +132,20 @@ StyleDialog::StyleDialog() :
                                                                       _selChanged));
 }
 
+/**
+ * @brief StyleDialog::~StyleDialog
+ * Class destructor
+ */
 StyleDialog::~StyleDialog()
 {
     setDesktop(NULL);
 }
 
+/**
+ * @brief StyleDialog::setDesktop
+ * @param desktop
+ * This function sets the 'desktop' for the Style Dialog.
+ */
 void StyleDialog::setDesktop( SPDesktop* desktop )
 {
     Panel::setDesktop(desktop);
@@ -182,10 +196,9 @@ void StyleDialog::_addSelector()
 
     /**
      * @brief selectorName
-     * This string stores selector name. If '#' or a '.' is present in the
-     * beginning of string, text from entrybox is saved directly as name for
-     * selector. If text like 'red' is written in entrybox, it is prefixed
-     * with a dot.
+     * This string stores selector name. The text from entrybox is saved as name
+     * for selector. If the entrybox is empty, the text (thus selectorName) is
+     * set to ".Class1"
      */
     if (!textEditPtr->get_text().empty()) {
         _selectorName = textEditPtr->get_text();
@@ -290,7 +303,6 @@ void StyleDialog::_addSelector()
         Inkscape::GC::release(newChild);
         _styleChild = newChild;
     }
-
     _selAdd(row);
 }
 
@@ -581,6 +593,12 @@ bool StyleDialog::_handleButtonEvent(GdkEventButton *event)
                             }
                         }
 
+                        /**
+                         * @brief matchSelector
+                         * For id selectors, whenever any child row is deleted,
+                         * the row label is updated and so is the entry for the
+                         * selector in style element.
+                         */
                         std::string matchSelector = parentKey;
                         REMOVE_SPACES(matchSelector);
                         if (key == matchSelector) {
@@ -635,6 +653,15 @@ bool StyleDialog::_handleButtonEvent(GdkEventButton *event)
                     }
 
                     _store->erase(row);
+
+                    /**
+                     * On continuous deletion of objects (child rows) from the
+                     * selector (parent row), if the parent row has no child, then
+                     * the row is erased from the _store. Further if there is no
+                     * row left in _store, which implies there is no content in
+                     * XML style element, then the 'svg:style' element is also
+                     * removed.
+                     */
                     if (parentKey.empty()) {
                         _store->erase(parentRow);
                     }
@@ -650,6 +677,12 @@ bool StyleDialog::_handleButtonEvent(GdkEventButton *event)
     return false;
 }
 
+/**
+ * @brief StyleDialog::_selAdd
+ * @param row
+ * This routine is called when an object is added to a selector by clicking on
+ * '+' in front of the row with selector's label.
+ */
 void StyleDialog::_selAdd(Gtk::TreeModel::Row row)
 {
     Glib::ustring selectorName;
@@ -879,43 +912,42 @@ void StyleDialog::_handleEdited(const Glib::ustring& path, const Glib::ustring& 
                 /** If a new property is added, existing value is appended with new
                  * property, else replacements in value are done in the 'else' block.
                  */
-            if (_cssPane->_newProperty) {
-                if (!new_text.empty()) {
-                    value.append((new_text + ";").c_str());
-                    _cssPane->_propCol->add_attribute(_cssPane->_textRenderer
-                                                      ->property_text(),
-                                                      _cssPane->_cssColumns
-                                                      ._propertyLabel);
-                    _cssPane->_newProperty = false;
+                if (_cssPane->_newProperty) {
+                    if (!new_text.empty()) {
+                        value.append((new_text + ";").c_str());
+                        _cssPane->_propCol->add_attribute(_cssPane->_textRenderer
+                                                          ->property_text(),
+                                                          _cssPane->_cssColumns
+                                                          ._propertyLabel);
+                        _cssPane->_newProperty = false;
+                    }
                 }
-            }
-            else {
-                std::stringstream ss(value);
-                std::string token, editedToken;
-                std::size_t found = value.find(";");
-                if (found!=std::string::npos) {
-                    while(std::getline(ss, token, ';')) {
-                        REMOVE_SPACES(token);
-                        if (!token.empty()) {
-                            if (token.substr(0, token.find(":")) == _cssPane
-                                    ->_editedProp.substr(0, _cssPane->_editedProp
-                                                         .find(":"))) {
-                                editedToken = _cssPane->_editedProp;
-                                size_t startPos = value.find(token);
-                                value.replace(startPos, token.length(), editedToken);
+                else {
+                    std::stringstream ss(value);
+                    std::string token, editedToken;
+                    std::size_t found = value.find(";");
+                    if (found!=std::string::npos) {
+                        while(std::getline(ss, token, ';')) {
+                            REMOVE_SPACES(token);
+                            if (!token.empty()) {
+                                if (token.substr(0, token.find(":")) == _cssPane
+                                        ->_editedProp.substr(0, _cssPane->_editedProp
+                                                             .find(":"))) {
+                                    editedToken = _cssPane->_editedProp;
+                                    size_t startPos = value.find(token);
+                                    value.replace(startPos, token.length(), editedToken);
+                                }
                             }
                         }
                     }
                 }
-            }
-            value.erase(std::remove(value.begin(), value.end(), '\n'), value.end());
-            (*it)._xmlContent = key + "{" + value + "}\n";
-            _updateStyleContent();
+                value.erase(std::remove(value.begin(), value.end(), '\n'), value.end());
+                (*it)._xmlContent = key + "{" + value + "}\n";
+                _updateStyleContent();
             }
         }
     }
 }
-
 
 /**
  * @brief StyleDialog::_delProperty
@@ -1067,27 +1099,11 @@ void StyleDialog::_selectRow(Selection */*sel*/)
             iter != children.end(); ++iter) {
             Gtk::TreeModel::Row row = *iter;
             std::vector<SPObject *> objVec = row[_mColumns._colObj];
-            std::vector<SPObject *> childObjVec;
-            Gtk::TreeModel::Row childRow;
-
             for (unsigned i = 0; i < objVec.size(); ++i) {
                 if (obj->getId() == objVec[i]->getId()) {
                     _treeView.get_selection()->select(row);
                 }
             }
-
-//            if (row.children()) {
-//                for(Gtk::TreeModel::Children::iterator it = row.children().begin();
-//                    it != row.children().end(); ++it) {
-//                    childRow = *it;
-//                    childObjVec = childRow[_mColumns._colObj];
-//                }
-//                for (unsigned j = 0; j < childObjVec.size(); ++j) {
-//                    if (obj->getId() == childObjVec[j]->getId()) {
-//                        _treeView.get_selection()->select(childRow);
-//                    }
-//                }
-//            }
         }
     }
     else {

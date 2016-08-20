@@ -26,7 +26,10 @@ namespace Dialog {
 
 /**
  * @brief The CssDialog class
- * A list of CSS properties will show up in this dialog.
+ * This dialog allows to add, delete and modify CSS properties for selectors
+ * created in Style Dialog. Double clicking any selector in Style dialog, a list
+ * of CSS properties will show up in this dialog (if any exist), else new properties
+ * can be added and each new property forms a new row in this pane.
  */
 class CssDialog : public UI::Widget::Panel
 {
@@ -35,7 +38,7 @@ public:
     ~CssDialog();
 
     static CssDialog &getInstance() { return *new CssDialog(); }
-    void setDesktop( SPDesktop* desktop);
+    void setDesktop(SPDesktop* desktop);
 
     class CssColumns : public Gtk::TreeModel::ColumnRecord
     {
@@ -58,10 +61,9 @@ public:
     Gtk::CellRendererText *_textRenderer;
     Gtk::TreeViewColumn *_propCol;
     Glib::ustring _editedProp;
-    Gtk::Button* create;
     bool _newProperty;
 
-    void _styleButton( Gtk::Button& btn, char const* iconName, char const* tooltip);
+    void _styleButton(Gtk::Button& btn, char const* iconName, char const* tooltip);
     void _addProperty();
 };
 

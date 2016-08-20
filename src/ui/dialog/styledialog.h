@@ -30,7 +30,10 @@ namespace Dialog {
 
 /**
  * @brief The StyleDialog class
- * A list of CSS selectors will show up in this dialog.
+ * A list of CSS selectors will show up in this dialog. This dialog allows to
+ * add and delete selectors. Objects can be added to and removed from the selectors
+ * in the dialog. Besides, selection of any selector row selects the matching
+ * objects in the drawing and vice-versa.
  */
 typedef std::pair<std::pair<std::string, std::vector<SPObject *> >, std::string>
 _selectorVecType;
@@ -42,11 +45,11 @@ public:
     ~StyleDialog();
 
     static StyleDialog &getInstance() { return *new StyleDialog(); }
-    void setDesktop( SPDesktop* desktop);
+    void setDesktop(SPDesktop* desktop);
 
 private:
-    void _styleButton( Gtk::Button& btn, char const* iconName, char const* tooltip);
-    std::string _setClassAttribute(std::vector<SPObject*>);
+    void _styleButton(Gtk::Button& btn, char const* iconName, char const* tooltip);
+    std::string _setClassAttribute(std::vector<SPObject *>);
 
     class InkSelector {
     public:
