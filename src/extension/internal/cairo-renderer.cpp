@@ -542,7 +542,7 @@ static void sp_item_invoke_render(SPItem *item, CairoRenderContext *ctx)
     }
 
     SPStyle* style = item->style;
-    if((ctx->getFilterToBitmap() == TRUE) && (style->filter.set != 0)) {
+    if(ctx->getFilterToBitmap() && (style->filter.set != 0)) {
         return sp_asbitmap_render(item, ctx);
     }
 
