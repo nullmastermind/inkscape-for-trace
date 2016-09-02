@@ -65,6 +65,14 @@ static void sp_erc_mass_value_changed( GtkAdjustment *adj, GObject* tbl )
     update_presets_list(tbl);
 }
 
+static inline void toggle_actions_visibility_based_on_eraserMode( GObject *const tbl, const bool eraserMode)
+{
+    const std::array<const gchar *, 3> arr = {"split", "mass", "width"};
+    for(const gchar * str : arr) {
+        gtk_action_set_visible( GTK_ACTION( g_object_get_data(tbl, str) ), eraserMode );
+    }
+}
+
 static void sp_erasertb_mode_changed( EgeSelectOneAction *act, GObject *tbl )
 {
     SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data( tbl, "desktop" ));
@@ -73,18 +81,7 @@ static void sp_erasertb_mode_changed( EgeSelectOneAction *act, GObject *tbl )
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         prefs->setBool( "/tools/eraser/mode", eraserMode );
     }
-    GtkAction *split = GTK_ACTION( g_object_get_data(tbl, "split") );
-    GtkAction *mass = GTK_ACTION( g_object_get_data(tbl, "mass") );
-    GtkAction *width = GTK_ACTION( g_object_get_data(tbl, "width") );
-    if(eraserMode == TRUE){
-        gtk_action_set_visible( split, TRUE );
-        gtk_action_set_visible( mass, TRUE );
-        gtk_action_set_visible( width, TRUE );
-    } else {
-        gtk_action_set_visible( split, FALSE );
-        gtk_action_set_visible( mass, FALSE );
-        gtk_action_set_visible( width, FALSE );
-    }
+    toggle_actions_visibility_based_on_eraserMode(tbl, eraserMode);
     // only take action if run by the attr_changed listener
     if (!g_object_get_data( tbl, "freeze" )) {
         // in turn, prevent listener from responding
@@ -193,19 +190,7 @@ void sp_eraser_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
         g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(sp_toogle_break_apart), holder) ;
         gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
     }
-    GtkAction *split = GTK_ACTION( g_object_get_data(holder, "split") );
-    GtkAction *mass = GTK_ACTION( g_object_get_data(holder, "mass") );
-    GtkAction *width = GTK_ACTION( g_object_get_data(holder, "width") );
-    if(eraserMode == TRUE){
-        gtk_action_set_visible( split, TRUE );
-        gtk_action_set_visible( mass, TRUE );
-        gtk_action_set_visible( width, TRUE );
-    } else {
-        gtk_action_set_visible( split, FALSE );
-        gtk_action_set_visible( mass, FALSE );
-        gtk_action_set_visible( width, FALSE );
-    }
-
+    toggle_actions_visibility_based_on_eraserMode(holder, eraserMode);
 }
 
 /*
