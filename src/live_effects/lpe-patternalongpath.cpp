@@ -11,6 +11,7 @@
 #include <2geom/bezier-to-sbasis.h>
 
 #include "knotholder.h"
+#include <algorithm>
 
 using std::vector;
 
@@ -95,7 +96,7 @@ LPEPatternAlongPath::LPEPatternAlongPath(LivePathEffectObject *lpeobject) :
     prop_scale.param_set_increments(0.01, 0.10);
 
     _provides_knotholder_entities = true;
-    _prop_scale_store = prop_scale;
+
 }
 
 LPEPatternAlongPath::~LPEPatternAlongPath()
@@ -110,9 +111,6 @@ LPEPatternAlongPath::doBeforeEffect (SPLPEItem const* lpeitem)
     Geom::OptRect bbox = pattern.get_pathvector().boundsFast();
     if (bbox) {
         original_height = (*bbox)[Geom::Y].max() - (*bbox)[Geom::Y].min();
-    }
-    if(_prop_scale_store != prop_scale) {
-        prop_scale.param_set_value(_prop_scale_store);
     }
 }
 
@@ -195,12 +193,12 @@ LPEPatternAlongPath::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > con
                 case PAPCT_REPEATED_STRETCHED:
                     // if uskeleton is closed:
                     if(path_i.segs.front().at0() == path_i.segs.back().at1()){
-                        nbCopies = static_cast<int>(std::floor((uskeleton.domain().extent() - toffset)/(pattBndsX->extent()+xspace)));
+                        nbCopies = std::max(1, static_cast<int>(std::floor((uskeleton.domain().extent() - toffset)/(pattBndsX->extent()+xspace))));
                         pattBndsX = Interval(pattBndsX->min(),pattBndsX->max()+xspace);
                         scaling = (uskeleton.domain().extent() - toffset)/(((double)nbCopies)*pattBndsX->extent());
                         // if not closed: no space at the end
                     }else{
-                        nbCopies = static_cast<int>(std::floor((uskeleton.domain().extent() - toffset + xspace)/(pattBndsX->extent()+xspace)));
+                        nbCopies = std::max(1, static_cast<int>(std::floor((uskeleton.domain().extent() - toffset + xspace)/(pattBndsX->extent()+xspace))));
                         pattBndsX = Interval(pattBndsX->min(),pattBndsX->max()+xspace);
                         scaling = (uskeleton.domain().extent() - toffset)/(((double)nbCopies)*pattBndsX->extent() - xspace);
                     }
@@ -216,9 +214,9 @@ LPEPatternAlongPath::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > con
                 x*=scaling;
             }
             if ( scale_y_rel.get_value() ) {
-                y*=(scaling*_prop_scale_store);
+                y*=(scaling*prop_scale);
             } else {
-                if (_prop_scale_store != 1.0) y *= _prop_scale_store;
+                if (prop_scale != 1.0) y *= prop_scale;
             }
             x += toffset;
             
@@ -256,10 +254,12 @@ LPEPatternAlongPath::transform_multiply(Geom::Affine const& postmul, bool set)
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool transform_stroke = prefs ? prefs->getBool("/options/transform/stroke", true) : true;
     if (transform_stroke && !scale_y_rel) {
-        prop_scale.param_set_value(_prop_scale_store * ((postmul.expansionX() + postmul.expansionY()) / 2));
-    } 	
+        prop_scale.param_set_value(prop_scale * ((postmul.expansionX() + postmul.expansionY()) / 2));
+        prop_scale.write_to_SVG();
+    }
     if (postmul.isTranslation()) {
         pattern.param_transform_multiply(postmul, set);
+        pattern.write_to_SVG();
     }
     sp_lpe_item_update_patheffect (sp_lpe_item, false, true);
 }
@@ -302,9 +302,9 @@ KnotHolderEntityWidthPatternAlongPath::knot_set(Geom::Point const &p, Geom::Poin
         Geom::Point knot_pos = this->knot->pos * item->i2dt_affine().inverse();
         Geom::Coord nearest_to_ray = ray.nearestTime(knot_pos);
         if(nearest_to_ray == 0){
-            lpe->_prop_scale_store = -Geom::distance(s , ptA)/(lpe->original_height/2.0);
+            lpe->prop_scale.param_set_value(-Geom::distance(s , ptA)/(lpe->original_height/2.0));
         } else {
-            lpe->_prop_scale_store = Geom::distance(s , ptA)/(lpe->original_height/2.0);
+            lpe->prop_scale.param_set_value(Geom::distance(s , ptA)/(lpe->original_height/2.0));
         }
         
     }
@@ -328,7 +328,7 @@ KnotHolderEntityWidthPatternAlongPath::knot_get() const
             ray.setPoints(ptA, (*cubic)[1]);
         }
         ray.setAngle(ray.angle() + Geom::rad_from_deg(90));
-        Geom::Point result_point = Geom::Point::polar(ray.angle(), (lpe->original_height/2.0) * lpe->_prop_scale_store) + ptA;
+        Geom::Point result_point = Geom::Point::polar(ray.angle(), (lpe->original_height/2.0) * lpe->prop_scale) + ptA;
 
         pap_helper_path.clear();
         Geom::Path hp(result_point);

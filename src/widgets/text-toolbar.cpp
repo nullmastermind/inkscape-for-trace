@@ -565,6 +565,16 @@ static void sp_text_lineheight_value_changed( GtkAdjustment *adj, GObject *tbl )
 
     // Save for undo
     if(modmade) {
+        // Call ensureUpToDate() causes rebuild of text layout (with all proper style
+        // cascading, etc.). For multi-line text with sodipodi::role="line", we must explicitly
+        // save new <tspan> 'x' and 'y' attribute values by calling updateRepr().
+        // Partial fix for bug #1590141.
+        desktop->getDocument()->ensureUpToDate();
+        for(auto i=itemlist.begin();i!=itemlist.end(); ++i){
+            if (SP_IS_TEXT (*i)) {
+                (*i)->updateRepr();
+            }
+        }
         DocumentUndo::maybeDone(SP_ACTIVE_DESKTOP->getDocument(), "ttb:line-height", SP_VERB_NONE,
                              _("Text: Change line-height"));
     }
