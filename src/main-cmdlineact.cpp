@@ -14,6 +14,7 @@
 #include <verbs.h>
 #include <inkscape.h>
 #include <document.h>
+#include <file.h>
 
 #include <glibmm/i18n.h>
 
@@ -22,6 +23,7 @@
 namespace Inkscape {
 
 std::list <CmdLineAction *> CmdLineAction::_list;
+bool CmdLineAction::_requestQuit = false;
 
 CmdLineAction::CmdLineAction (bool isVerb, gchar const * arg) : _isVerb(isVerb), _arg(NULL) {
 	if (arg != NULL) {
@@ -39,10 +41,34 @@ CmdLineAction::~CmdLineAction () {
 	}
 }
 
+bool
+CmdLineAction::isExtended() {
+	return false;
+}
+
+void
+CmdLineAction::doItX (ActionContext const & context)
+{
+	(void)context;
+	printf("CmdLineAction::doItX() %s\n", _arg);
+}
+
 void
 CmdLineAction::doIt (ActionContext const & context) {
 	//printf("Doing: %s\n", _arg);
 	if (_isVerb) {
+		if (isExtended()) {
+			//printf("Is extended\n");
+
+			doItX(context);
+			return;
+		}
+
+		static std::string quit_verb_name = "FileQuit";
+		if (quit_verb_name == _arg) {
+			_requestQuit = true;
+			return;
+		}
 		Inkscape::Verb * verb = Inkscape::Verb::getbyid(_arg);
 		if (verb == NULL) {
 			printf(_("Unable to find verb ID '%s' specified on the command line.\n"), _arg);
@@ -69,10 +95,19 @@ CmdLineAction::doIt (ActionContext const & context) {
 bool
 CmdLineAction::doList (ActionContext const & context) {
   bool hasActions = !_list.empty();
+	if (!hasActions && _requestQuit) {
+		sp_file_exit();
+		return true;
+	}
+
 	for (std::list<CmdLineAction *>::iterator i = _list.begin();
 			i != _list.end(); ++i) {
 		CmdLineAction * entry = *i;
 		entry->doIt(context);
+		if (_requestQuit) {
+			sp_file_exit();
+			return true;
+		}
 	}
   return hasActions;
 }
