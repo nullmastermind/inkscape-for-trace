@@ -23,7 +23,6 @@
 namespace Inkscape {
 
 std::list <CmdLineAction *> CmdLineAction::_list;
-bool CmdLineAction::_requestQuit = false;
 
 CmdLineAction::CmdLineAction (bool isVerb, gchar const * arg) : _isVerb(isVerb), _arg(NULL) {
     if (arg != NULL) {
@@ -64,11 +63,6 @@ CmdLineAction::doIt (ActionContext const & context) {
             return;
         }
 
-        static std::string quit_verb_name = "FileQuit";
-        if (quit_verb_name == _arg) {
-            _requestQuit = true;
-            return;
-        }
         Inkscape::Verb * verb = Inkscape::Verb::getbyid(_arg);
         if (verb == NULL) {
             printf(_("Unable to find verb ID '%s' specified on the command line.\n"), _arg);
@@ -95,19 +89,10 @@ CmdLineAction::doIt (ActionContext const & context) {
 bool
 CmdLineAction::doList (ActionContext const & context) {
   bool hasActions = !_list.empty();
-    if (!hasActions && _requestQuit) {
-        sp_file_exit();
-        return true;
-    }
-
     for (std::list<CmdLineAction *>::iterator i = _list.begin();
             i != _list.end(); ++i) {
         CmdLineAction * entry = *i;
         entry->doIt(context);
-        if (_requestQuit) {
-            sp_file_exit();
-            return true;
-        }
     }
   return hasActions;
 }
