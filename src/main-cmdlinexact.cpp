@@ -437,44 +437,74 @@ CmdLineXAction::createActionsFromYAML( gchar const *yaml_filename ) {
     int undo_counter = 0;
 
     verbs_list_t::iterator iter = verbs_list.begin();
-    for( ; iter != verbs_list.end(); ++iter ) {
+    for (;iter != verbs_list.end(); ++iter) {
         verb_info_t &verb = *iter;
         std::string &verb_word = verb.args[0];
-        if( s_verbose )
+        if (s_verbose)
             printf("handle %s and args count is %d\n", verb_word.c_str(), (int)verb.args.size());
 
-        if( verb.args.size() == 2 ) {
-            xaction_args_values_map_t values_map;
-            if (verb_word == "XFileSaveAs" || verb_word == "XFileOpen") {
-                std::string &filename = verb.args[1];
-                values_map["filename"] = filename;
-                new CmdLineXAction(verb_word.c_str(), values_map);
-            }
-            else if (verb_word == "XUndoLabel")
-                undo_labels_map[verb.args[1]] = undo_counter;
-            else if (verb_word == "UndoToLabel") {
-                undo_labels_map_t::iterator iter = undo_labels_map.find(verb.args[1]);
-                if(iter != undo_labels_map.end()) {
-                    int counter = undo_counter - iter->second;
-                    if( counter > 0 ) {
-                        for(int i = 0; i < counter; ++i)
-                            new CmdLineAction(true, "EditUndo");
-                        undo_counter -= counter;
-                    }
-                }
-            }
-            else if (verb_word == "XSelectElement") {
-                ++undo_counter;
-                values_map["element-id"] = verb.args[1];
-                new CmdLineXAction(verb_word.c_str(), values_map);
-            }
-            else if (verb_word == "XFileExportPNG") {
-                std::string &png_filename = verb.args[1];
-                values_map["png_filename"] = png_filename;
-                if(createDirForFilename( png_filename )) {
-                    new CmdLineXAction(verb_word.c_str(), values_map);
-                }
-            }
+		if (verb_word == "XFileOpen") {
+			if( verb.args.size() < 2 )
+			{
+				printf("bad arguments for XFileOpen\n");
+				continue;
+			}
+
+			xaction_args_values_map_t values_map;
+			values_map["filename"] = verb.args[1];
+			new CmdLineXAction(verb_word.c_str(), values_map);
+		} else if (verb_word == "XFileSaveAs")
+		{
+			if (verb.args.size() < 2) {
+				printf("bad arguments for XFileSaveAs\n");
+				continue;
+			}
+
+			xaction_args_values_map_t values_map;
+			values_map["filename"] = verb.args[1];
+			new CmdLineXAction(verb_word.c_str(), values_map);
+		} else if (verb_word == "XUndoLabel") {
+			if (verb.args.size() < 2) {
+				printf("bad arguments for XUndoLabel\n");
+				continue;
+			}
+			undo_labels_map[verb.args[1]] = undo_counter;
+		} else if (verb_word == "UndoToLabel") {
+			if (verb.args.size() < 2) {
+				printf("bad arguments for UndoToLabel\n");
+				continue;
+			}
+
+			undo_labels_map_t::iterator iter = undo_labels_map.find(verb.args[1]);
+			if(iter != undo_labels_map.end()) {
+				int counter = undo_counter - iter->second;
+				if( counter > 0 ) {
+					for(int i = 0; i < counter; ++i)
+						new CmdLineAction(true, "EditUndo");
+					undo_counter -= counter;
+				}
+			}
+		} else if (verb_word == "XSelectElement") {
+			if (verb.args.size() < 2) {
+				printf("bad arguments for XSelectElement\n");
+				continue;
+			}
+			++undo_counter;
+
+			xaction_args_values_map_t values_map;
+			values_map["element-id"] = verb.args[1];
+			new CmdLineXAction(verb_word.c_str(), values_map);
+		} else if (verb_word == "XFileExportPNG") {
+			if (verb.args.size() < 2) {
+				printf("bad arguments for XFileExportPNG\n");
+				continue;
+			}
+			
+			xaction_args_values_map_t values_map;
+			std::string &png_filename = verb.args[1];
+			values_map["png_filename"] = png_filename;
+			if(createDirForFilename( png_filename ))
+				new CmdLineXAction(verb_word.c_str(), values_map);
         }
         else if(!verb.xverb) {
             ++undo_counter;
