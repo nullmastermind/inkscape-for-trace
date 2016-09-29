@@ -553,7 +553,7 @@ public:
     SPAction * get_action(Inkscape::ActionContext const & context);
 
 private:
-    static Verb * get_search (unsigned int code, bool verbose = true);
+    static Verb * get_search (unsigned int code);
 public:
 
     /**
@@ -575,7 +575,7 @@ public:
             return get_search(code);
         }
     }
-    static Verb * getbyid (gchar const * id);
+    static Verb * getbyid (gchar const * id, bool verbose = true);
     
     /**
      * Print a message to stderr indicating that this verb needs a GUI to run

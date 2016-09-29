@@ -517,8 +517,13 @@ CmdLineXAction::createActionsFromYAML( gchar const *yaml_filename ) {
             ++undo_counter;
             new CmdLineAction(true, verb.args[0].c_str());
         }
+        else if( Verb::getbyid(verb.args[0].c_str()) != NULL )
+        {
+            ++undo_counter;
+            new CmdLineAction(true, verb.args[0].c_str());
+		}
         else {
-            printf("Unhadled verb %s\n", verb.args[0].c_str());
+            printf("Unhadled xverb %s\n", verb.args[0].c_str());
             fflush(stdout);
         }
     }
