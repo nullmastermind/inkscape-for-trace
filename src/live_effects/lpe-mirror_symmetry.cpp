@@ -25,11 +25,11 @@ namespace Inkscape {
 namespace LivePathEffect {
 
 static const Util::EnumData<ModeType> ModeTypeData[MT_END] = {
-    { MT_V, N_("Vertical Page Center"), "Vertical Page Center, use select tool to move item instead line" },
-    { MT_H, N_("Horizontal Page Center"), "Horizontal Page Center, use select tool to move item instead line" },
-    { MT_FREE, N_("Free from reflection line"), "Free from path" },
-    { MT_X, N_("X from middle knot"), "X from middle knot" },
-    { MT_Y, N_("Y from middle knot"), "Y from middle knot" }
+    { MT_V, N_("Vertical Page Center"), "vertical" },
+    { MT_H, N_("Horizontal Page Center"), "horizontal" },
+    { MT_FREE, N_("Free from reflection line"), "free" },
+    { MT_X, N_("X from middle knot"), "X" },
+    { MT_Y, N_("Y from middle knot"), "Y" }
 };
 static const Util::EnumDataConverter<ModeType>
 MTConverter(ModeTypeData, MT_END);
@@ -87,7 +87,7 @@ void
 LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
 {
     using namespace Geom;
-
+    original_bbox(lpeitem);
     Point point_a(boundingbox_X.max(), boundingbox_Y.min());
     Point point_b(boundingbox_X.max(), boundingbox_Y.max());
     Point point_c(boundingbox_X.max(), boundingbox_Y.middle());
@@ -145,6 +145,18 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
 }
 
 void
+LPEMirrorSymmetry::transform_multiply(Geom::Affine const& postmul, bool set)
+{
+    center_point *= postmul;
+    previous_center = center_point;
+    // cycle through all parameters. Most parameters will not need transformation, but path and point params do.
+    for (std::vector<Parameter *>::iterator it = param_vector.begin(); it != param_vector.end(); ++it) {
+        Parameter * param = *it;
+        param->param_transform_multiply(postmul, set);
+    }
+}
+
+void
 LPEMirrorSymmetry::doOnApply (SPLPEItem const* lpeitem)
 {
     using namespace Geom;
@@ -178,10 +190,13 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
 
     Geom::Translate m1(point_a[0], point_a[1]);
     double hyp = Geom::distance(point_a, point_b);
-    double c = (point_b[0] - point_a[0]) / hyp; // cos(alpha)
-    double s = (point_b[1] - point_a[1]) / hyp; // sin(alpha)
-
-    Geom::Affine m2(c, -s, s, c, 0.0, 0.0);
+    double cos = 0;
+    double sin = 0;
+    if (hyp > 0) {
+        cos = (point_b[0] - point_a[0]) / hyp;
+        sin = (point_b[1] - point_a[1]) / hyp;
+    }
+    Geom::Affine m2(cos, -sin, sin, cos, 0.0, 0.0);
     Geom::Scale sca(1.0, -1.0);
 
     Geom::Affine m = m1.inverse() * m2;
@@ -292,8 +307,8 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
     }
 
     if (!fuse_paths || discard_orig_path) {
-        for (int i = 0; i < static_cast<int>(path_in.size()); ++i) {
-            path_out.push_back(path_in[i] * m);
+        for (size_t i = 0; i < original_pathv.size(); ++i) {
+            path_out.push_back(original_pathv[i] * m);
         }
     }
 
