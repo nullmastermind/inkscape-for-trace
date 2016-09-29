@@ -68,6 +68,7 @@
 #include <document-undo.h>
 #include <ui/view/view-widget.h>
 #include <ui/interface.h>
+#include <verbs.h>
 
 #define DPI_BASE Inkscape::Util::Quantity::convert(1, "in", "px")
 
@@ -91,6 +92,35 @@ bool createDirForFilename( const std::string &filename )
     }
 
     return true;
+}
+
+std::vector<std::string> vectorFromString(const std::string &csv)
+{
+    std::vector<std::string> result;
+
+    std::string delimiters = ",";
+
+    // Skip delimiters at beginning.
+    std::string::size_type lastPos = csv.find_first_not_of(delimiters, 0);
+
+    // Find first non-delimiter.
+    std::string::size_type pos = csv.find_first_of(delimiters, lastPos);
+
+    while (std::string::npos != pos || std::string::npos != lastPos) {
+        // Found a token, add it to the vector.
+        std::string token = csv.substr(lastPos, pos - lastPos);
+        token.erase(0, token.find_first_not_of(' '));       //prefixing spaces
+        token.erase(token.find_last_not_of(' ')+1);         //surfixing spaces
+        result.push_back(token);
+
+        // Skip delimiters.
+        lastPos = csv.find_first_not_of(delimiters, pos);
+
+        // Find next non-delimiter.
+        pos = csv.find_first_of(delimiters, lastPos);
+    }
+
+    return result;
 }
 
 void xFileOpen( const Glib::ustring &uri )
@@ -279,25 +309,6 @@ struct verb_info_t
 
 typedef std::list<verb_info_t> verbs_list_t;
 
-static void tokenize(const std::string& str, std::vector<std::string>& tokens, const std::string& delimiters = ",")
-{
-  // Skip delimiters at beginning.
-  std::string::size_type lastPos = str.find_first_not_of(delimiters, 0);
-
-  // Find first non-delimiter.
-  std::string::size_type pos = str.find_first_of(delimiters, lastPos);
-
-  while (std::string::npos != pos || std::string::npos != lastPos) {
-    // Found a token, add it to the vector.
-    tokens.push_back(str.substr(lastPos, pos - lastPos));
-
-    // Skip delimiters.
-    lastPos = str.find_first_not_of(delimiters, pos);
-
-    // Find next non-delimiter.
-    pos = str.find_first_of(delimiters, lastPos);
-  }
-}
 
 void
 CmdLineXAction::createActionsFromYAML( gchar const *yaml_filename ) {
@@ -397,19 +408,15 @@ CmdLineXAction::createActionsFromYAML( gchar const *yaml_filename ) {
                     if(key == "xverb-id") {
                         verb_info_t verb;
                         verb.xverb = true;
-
-                        std::string values = (char *)token.data.scalar.value;
-                        tokenize(values, verb.args);
-                        for( size_t i = 0; i < verb.args.size(); ++i ) {
-                            verb.args[i].erase(0, verb.args[i].find_first_not_of(' '));       //prefixing spaces
-                            verb.args[i].erase(verb.args[i].find_last_not_of(' ')+1);         //surfixing spaces
-                        }
+                        verb.args = vectorFromString((char *)token.data.scalar.value);
+                        if ((verb.args.size() > 1) && Verb::getbyid((char *)token.data.scalar.value))
+                            verb.xverb = false;
                         verbs_list.push_back(verb);
                     }
                     else if(key == "verb-id") {
                         verb_info_t verb;
                         verb.xverb = false;
-                        verb.args.push_back((char *)token.data.scalar.value);
+                        verb.args = vectorFromString((char *)token.data.scalar.value);
                         verbs_list.push_back(verb);
                     }
                     else {
@@ -443,68 +450,68 @@ CmdLineXAction::createActionsFromYAML( gchar const *yaml_filename ) {
         if (s_verbose)
             printf("handle %s and args count is %d\n", verb_word.c_str(), (int)verb.args.size());
 
-		if (verb_word == "XFileOpen") {
-			if( verb.args.size() < 2 )
-			{
-				printf("bad arguments for XFileOpen\n");
-				continue;
-			}
+        if (verb_word == "XFileOpen") {
+            if( verb.args.size() < 2 )
+            {
+                printf("bad arguments for XFileOpen\n");
+                continue;
+            }
 
-			xaction_args_values_map_t values_map;
-			values_map["filename"] = verb.args[1];
-			new CmdLineXAction(verb_word.c_str(), values_map);
-		} else if (verb_word == "XFileSaveAs")
-		{
-			if (verb.args.size() < 2) {
-				printf("bad arguments for XFileSaveAs\n");
-				continue;
-			}
+            xaction_args_values_map_t values_map;
+            values_map["filename"] = verb.args[1];
+            new CmdLineXAction(verb_word.c_str(), values_map);
+        } else if (verb_word == "XFileSaveAs")
+        {
+            if (verb.args.size() < 2) {
+                printf("bad arguments for XFileSaveAs\n");
+                continue;
+            }
 
-			xaction_args_values_map_t values_map;
-			values_map["filename"] = verb.args[1];
-			new CmdLineXAction(verb_word.c_str(), values_map);
-		} else if (verb_word == "XUndoLabel") {
-			if (verb.args.size() < 2) {
-				printf("bad arguments for XUndoLabel\n");
-				continue;
-			}
-			undo_labels_map[verb.args[1]] = undo_counter;
-		} else if (verb_word == "UndoToLabel") {
-			if (verb.args.size() < 2) {
-				printf("bad arguments for UndoToLabel\n");
-				continue;
-			}
+            xaction_args_values_map_t values_map;
+            values_map["filename"] = verb.args[1];
+            new CmdLineXAction(verb_word.c_str(), values_map);
+        } else if (verb_word == "XUndoLabel") {
+            if (verb.args.size() < 2) {
+                printf("bad arguments for XUndoLabel\n");
+                continue;
+            }
+            undo_labels_map[verb.args[1]] = undo_counter;
+        } else if (verb_word == "UndoToLabel") {
+            if (verb.args.size() < 2) {
+                printf("bad arguments for UndoToLabel\n");
+                continue;
+            }
 
-			undo_labels_map_t::iterator iter = undo_labels_map.find(verb.args[1]);
-			if(iter != undo_labels_map.end()) {
-				int counter = undo_counter - iter->second;
-				if( counter > 0 ) {
-					for(int i = 0; i < counter; ++i)
-						new CmdLineAction(true, "EditUndo");
-					undo_counter -= counter;
-				}
-			}
-		} else if (verb_word == "XSelectElement") {
-			if (verb.args.size() < 2) {
-				printf("bad arguments for XSelectElement\n");
-				continue;
-			}
-			++undo_counter;
+            undo_labels_map_t::iterator iter = undo_labels_map.find(verb.args[1]);
+            if(iter != undo_labels_map.end()) {
+                int counter = undo_counter - iter->second;
+                if( counter > 0 ) {
+                    for(int i = 0; i < counter; ++i)
+                        new CmdLineAction(true, "EditUndo");
+                    undo_counter -= counter;
+                }
+            }
+        } else if (verb_word == "XSelectElement") {
+            if (verb.args.size() < 2) {
+                printf("bad arguments for XSelectElement\n");
+                continue;
+            }
+            ++undo_counter;
 
-			xaction_args_values_map_t values_map;
-			values_map["element-id"] = verb.args[1];
-			new CmdLineXAction(verb_word.c_str(), values_map);
-		} else if (verb_word == "XFileExportPNG") {
-			if (verb.args.size() < 2) {
-				printf("bad arguments for XFileExportPNG\n");
-				continue;
-			}
-			
-			xaction_args_values_map_t values_map;
-			std::string &png_filename = verb.args[1];
-			values_map["png_filename"] = png_filename;
-			if(createDirForFilename( png_filename ))
-				new CmdLineXAction(verb_word.c_str(), values_map);
+            xaction_args_values_map_t values_map;
+            values_map["element-id"] = verb.args[1];
+            new CmdLineXAction(verb_word.c_str(), values_map);
+        } else if (verb_word == "XFileExportPNG") {
+            if (verb.args.size() < 2) {
+                printf("bad arguments for XFileExportPNG\n");
+                continue;
+            }
+            
+            xaction_args_values_map_t values_map;
+            std::string &png_filename = verb.args[1];
+            values_map["png_filename"] = png_filename;
+            if(createDirForFilename( png_filename ))
+                new CmdLineXAction(verb_word.c_str(), values_map);
         }
         else if(!verb.xverb) {
             ++undo_counter;

@@ -553,7 +553,7 @@ public:
     SPAction * get_action(Inkscape::ActionContext const & context);
 
 private:
-    static Verb * get_search (unsigned int code);
+    static Verb * get_search (unsigned int code, bool verbose = true);
 public:
 
     /**
