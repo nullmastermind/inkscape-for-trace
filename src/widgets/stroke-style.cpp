@@ -976,6 +976,16 @@ StrokeStyle::setScaledDash(SPCSSAttr *css,
     }
 }
 
+static inline double calcScaleLineWidth(const double width_typed, SPItem *const item, Inkscape::Util::Unit const *const unit)
+{
+    if (unit->type == Inkscape::Util::UNIT_TYPE_LINEAR) {
+        return Inkscape::Util::Quantity::convert(width_typed, unit, "px");
+    } else { // percentage
+        const gdouble old_w = item->style->stroke_width.computed;
+        return old_w * width_typed / 100;
+    }
+}
+
 /**
  * Sets line properties like width, dashes, markers, etc. on all currently selected items.
  */
@@ -1007,13 +1017,7 @@ StrokeStyle::scaleLine()
 
         for(auto i=items.begin();i!=items.end();++i){
             /* Set stroke width */
-            double width;
-            if (unit->type == Inkscape::Util::UNIT_TYPE_LINEAR) {
-                width = Inkscape::Util::Quantity::convert(width_typed, unit, "px");
-            } else { // percentage
-                gdouble old_w = (*i)->style->stroke_width.computed;
-                width = old_w * width_typed / 100;
-            }
+            const double width = calcScaleLineWidth(width_typed, (*i), unit);
 
             {
                 Inkscape::CSSOStringStream os_width;
