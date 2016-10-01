@@ -394,7 +394,7 @@ if(YAML_FOUND)
     list(APPEND INKSCAPE_LIBS ${YAML_LIBRARIES})
     add_definitions(-DWITH_YAML)
 else(YAML_FOUND)
-    unset(WITH_YAML OFF)
+    set(WITH_YAML OFF)
     message(STATUS "Could not locate the yaml library headers: xverb feature will be disabled")
 endif()
 

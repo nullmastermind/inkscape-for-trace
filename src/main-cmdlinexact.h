@@ -2,6 +2,8 @@
 #ifndef __INK_MAIN_CMD_LINE_XACTIONS_H__
 #define __INK_MAIN_CMD_LINE_XACTIONS_H__
 
+#ifdef WITH_YAML
+
 /** \file
  * Extended actions that can be queued at the yaml file
  */
@@ -37,7 +39,7 @@ public:
 } // Inkscape
 
 
-
+#endif // WITH_YAML
 #endif /* __INK_MAIN_CMD_LINE_XACTIONS_H__ */
 
 /*

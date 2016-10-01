@@ -38,7 +38,7 @@
  *  # inkscape have a lot of useful verbs
  *  - verb-id: FileQuit
  */
-
+#ifdef WITH_YAML
 #include <ui/view/view.h>
 #include <desktop.h>
 #include <helper/action.h>
@@ -52,9 +52,8 @@
 #include <glibmm/i18n.h>
 
 #include "main-cmdlinexact.h"
-#ifdef WITH_YAML
+
 #include "yaml.h"
-#endif // WITH_YAML
 
 #include "extension/system.h"
 #include "file.h"
@@ -315,9 +314,6 @@ typedef std::list<verb_info_t> verbs_list_t;
 
 void
 CmdLineXAction::createActionsFromYAML( gchar const *yaml_filename ) {
-#ifndef WITH_YAML
-    return;
-#else // WITH_YAML
     FILE *fh = fopen(yaml_filename, "r");
     if(fh == NULL) {
         printf("Failed to open file!\n");
@@ -535,11 +531,12 @@ CmdLineXAction::createActionsFromYAML( gchar const *yaml_filename ) {
     }
 
     fflush(stdout);
-#endif // WITH_YAML
 }
 
 
 } // Inkscape
+
+#endif // WITH_YAML
 
 /*
   Local Variables:
