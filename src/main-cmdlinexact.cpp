@@ -316,8 +316,8 @@ typedef std::list<verb_info_t> verbs_list_t;
 void
 CmdLineXAction::createActionsFromYAML( gchar const *yaml_filename ) {
 #ifndef WITH_YAML
-	return;
-#else // WITH_YAML	
+    return;
+#else // WITH_YAML
     FILE *fh = fopen(yaml_filename, "r");
     if(fh == NULL) {
         printf("Failed to open file!\n");
@@ -527,7 +527,7 @@ CmdLineXAction::createActionsFromYAML( gchar const *yaml_filename ) {
         {
             ++undo_counter;
             new CmdLineAction(true, verb.args[0].c_str());
-		}
+        }
         else {
             printf("Unhadled xverb %s\n", verb.args[0].c_str());
             fflush(stdout);
