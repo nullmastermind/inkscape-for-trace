@@ -24,7 +24,7 @@ else (YAML_INCLUDE_DIR AND YAML_LIBRARIES)
     ENDIF (PKG_CONFIG_FOUND)
   ENDIF (NOT WIN32)
 
-  FIND_PATH(YAML_INCLUDE_DIR yaml123.h
+  FIND_PATH(YAML_INCLUDE_DIR yaml.h
     /usr/include
     /usr/local/include
   )

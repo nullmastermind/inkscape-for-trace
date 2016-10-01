@@ -52,7 +52,10 @@
 #include <glibmm/i18n.h>
 
 #include "main-cmdlinexact.h"
+#ifdef WITH_YAML
 #include "yaml.h"
+#endif // WITH_YAML
+
 #include "extension/system.h"
 #include "file.h"
 #include <glib.h>
@@ -312,6 +315,9 @@ typedef std::list<verb_info_t> verbs_list_t;
 
 void
 CmdLineXAction::createActionsFromYAML( gchar const *yaml_filename ) {
+#ifndef WITH_YAML
+	return;
+#else // WITH_YAML	
     FILE *fh = fopen(yaml_filename, "r");
     if(fh == NULL) {
         printf("Failed to open file!\n");
@@ -409,7 +415,7 @@ CmdLineXAction::createActionsFromYAML( gchar const *yaml_filename ) {
                         verb_info_t verb;
                         verb.xverb = true;
                         verb.args = vectorFromString((char *)token.data.scalar.value);
-                        if ((verb.args.size() > 1) && Verb::getbyid((char *)token.data.scalar.value))
+                        if ((verb.args.size() > 1) && Verb::getbyid((char *)token.data.scalar.value, false))
                             verb.xverb = false;
                         verbs_list.push_back(verb);
                     }
@@ -529,7 +535,7 @@ CmdLineXAction::createActionsFromYAML( gchar const *yaml_filename ) {
     }
 
     fflush(stdout);
-    return;
+#endif // WITH_YAML
 }
 
 
