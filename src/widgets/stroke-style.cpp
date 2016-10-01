@@ -437,6 +437,12 @@ StrokeStyle::makeRadioButton(Gtk::RadioButtonGroup &grp,
     return tb;
 }
 
+bool StrokeStyle::shouldMarkersBeUpdated()
+{
+    return startMarkerCombo->update() || midMarkerCombo->update() ||
+                          endMarkerCombo->update();
+}
+
 /**
  * Handles when user selects one of the markers from the marker combobox.
  * Gets the marker uri string and applies it to all selected
@@ -444,11 +450,7 @@ StrokeStyle::makeRadioButton(Gtk::RadioButtonGroup &grp,
  */
 void StrokeStyle::markerSelectCB(MarkerComboBox *marker_combo, StrokeStyle *spw, SPMarkerLoc const /*which*/)
 {
-    bool markers_update = spw->startMarkerCombo->update() ||
-                          spw->midMarkerCombo->update() ||
-                          spw->endMarkerCombo->update();
-
-    if (spw->update || markers_update) {
+    if (spw->update || spw->shouldMarkersBeUpdated()) {
         return;
     }
 
