@@ -62,7 +62,7 @@ BlurEdge::effect (Inkscape::Extension::Effect *module, Inkscape::UI::View::View 
     double old_offset = prefs->getDouble("/options/defaultoffsetwidth/value", 1.0, "px");
 
     // TODO need to properly refcount the items, at least
-    std::vector<SPItem*> items(selection->itemList());
+    std::vector<SPItem*> items(selection->items().begin(), selection->items().end());
     selection->clear();
 
     for(std::vector<SPItem*>::iterator item = items.begin();
@@ -131,8 +131,8 @@ BlurEdge::init (void)
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("Inset/Outset Halo") "</name>\n"
             "<id>org.inkscape.effect.bluredge</id>\n"
-            "<param name=\"blur-width\" gui-text=\"" N_("Width:") "\" gui-description=\"" N_("Width in px of the halo") "\" scope=\"document\" type=\"float\" min=\"1.0\" max=\"50.0\">1.0</param>\n"
-            "<param name=\"num-steps\" gui-text=\"" N_("Number of steps:") "\" gui-description=\"" N_("Number of inset/outset copies of the object to make") "\" scope=\"document\" type=\"int\" min=\"5\" max=\"100\">11</param>\n"
+            "<param name=\"blur-width\" _gui-text=\"" N_("Width:") "\" gui-description=\"" N_("Width in px of the halo") "\" scope=\"document\" type=\"float\" min=\"1.0\" max=\"50.0\">1.0</param>\n"
+            "<param name=\"num-steps\" _gui-text=\"" N_("Number of steps:") "\" gui-description=\"" N_("Number of inset/outset copies of the object to make") "\" scope=\"document\" type=\"int\" min=\"5\" max=\"100\">11</param>\n"
             "<effect>\n"
                 "<object-type>all</object-type>\n"
                 "<effects-menu>\n"

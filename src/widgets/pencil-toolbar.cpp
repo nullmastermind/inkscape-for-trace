@@ -25,19 +25,19 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+#include <config.h>
 #endif
 
 #include <gtkmm.h>
 #include <glibmm/i18n.h>
-#include <list>
 
 #include "pencil-toolbar.h"
 #include "desktop.h"
 #include "widgets/ege-adjustment-action.h"
 #include "widgets/ege-select-one-action.h"
-#include "widgets/ink-action.h"
-#include "preferences.h"
+#include "ink-action.h"
+#include "ink-radio-action.h"
+#include "ink-toggle-action.h"
 #include "toolbox.h"
 #include "ui/tools-switch.h"
 #include "ui/icon-names.h"
@@ -46,13 +46,10 @@
 #include "widgets/spinbutton-events.h"
 #include <selection.h>
 #include "display/curve.h"
-#include "live_effects/effect.h"
 #include "live_effects/lpe-simplify.h"
 #include "live_effects/lpe-powerstroke.h"
-#include "live_effects/effect-enum.h"
 #include "live_effects/lpeobject.h"
 #include "live_effects/lpeobject-reference.h"
-#include "sp-lpe-item.h"
 
 using Inkscape::UI::UXManager;
 using Inkscape::UI::ToolboxFactory;
@@ -240,8 +237,8 @@ static void sp_pencil_tb_defaults(GtkWidget * /*widget*/, GObject *obj)
 static void sp_simplify_flatten(GtkWidget * /*widget*/, GObject *obj)
 {
     SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data(obj, "desktop"));
-    std::vector<SPItem *> selected = desktop->getSelection()->itemList();
-    for (std::vector<SPItem *>::iterator it(selected.begin()); it != selected.end(); ++it){
+    auto selected = desktop->getSelection()->items();
+    for (auto it(selected.begin()); it != selected.end(); ++it){
         SPLPEItem* lpeitem = dynamic_cast<SPLPEItem*>(*it);
         if (lpeitem && lpeitem->hasPathEffect()){
             PathEffectList lpelist = lpeitem->getEffectList();
@@ -285,8 +282,8 @@ static void sp_pencil_tb_tolerance_value_changed(GtkAdjustment *adj, GObject *tb
             gtk_adjustment_get_value(adj));
     g_object_set_data( tbl, "freeze", GINT_TO_POINTER(FALSE) );
     SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data(tbl, "desktop"));
-    std::vector<SPItem *> selected = desktop->getSelection()->itemList();
-    for (std::vector<SPItem *>::iterator it(selected.begin()); it != selected.end(); ++it){
+    auto selected = desktop->getSelection()->items();
+    for (auto it(selected.begin()); it != selected.end(); ++it){
         SPLPEItem* lpeitem = dynamic_cast<SPLPEItem*>(*it);
         if (lpeitem && lpeitem->hasPathEffect()){
             Inkscape::LivePathEffect::Effect* simplify = lpeitem->getPathEffectOfType(Inkscape::LivePathEffect::SIMPLIFY);

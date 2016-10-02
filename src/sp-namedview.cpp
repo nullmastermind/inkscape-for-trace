@@ -14,14 +14,12 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "config.h"
 #include <cstring>
 #include <string>
 #include "event-log.h"
 #include <2geom/transforms.h>
 
 #include "display/canvas-grid.h"
-#include "display/guideline.h"
 #include "util/units.h"
 #include "svg/svg-color.h"
 #include "xml/repr.h"
@@ -59,25 +57,25 @@ static gboolean sp_str_to_bool(const gchar *str);
 static gboolean sp_nv_read_opacity(const gchar *str, guint32 *color);
 
 SPNamedView::SPNamedView() : SPObjectGroup(), snap_manager(this) {
-	this->zoom = 0;
-	this->guidecolor = 0;
-	this->guidehicolor = 0;
-	this->views.clear();
-	this->borderlayer = 0;
-	this->page_size_units = NULL;
-	this->window_x = 0;
-	this->cy = 0;
-	this->window_y = 0;
-    this->svg_units = unit_table.getUnit("px"); // legacy behavior: if no viewbox present, default to 'px' units
+
+    this->zoom = 0;
+    this->guidecolor = 0;
+    this->guidehicolor = 0;
+    this->views.clear();
+    this->borderlayer = 0;
+    this->page_size_units = NULL;
+    this->window_x = 0;
+    this->cy = 0;
+    this->window_y = 0;
     this->display_units = NULL;
-	this->page_size_units = NULL;
-	this->pagecolor = 0;
-	this->cx = 0;
-	this->pageshadow = 0;
-	this->window_width = 0;
-	this->window_height = 0;
-	this->window_maximized = 0;
-	this->bordercolor = 0;
+    this->page_size_units = NULL;
+    this->pagecolor = 0;
+    this->cx = 0;
+    this->pageshadow = 0;
+    this->window_width = 0;
+    this->window_height = 0;
+    this->window_maximized = 0;
+    this->bordercolor = 0;
 
     this->editable = TRUE;
     this->showguides = TRUE;
@@ -248,9 +246,9 @@ void SPNamedView::build(SPDocument *document, Inkscape::XML::Node *repr) {
     this->readAttr( "inkscape:lockguides" );
 
     /* Construct guideline list */
-    for (SPObject *o = this->firstChild() ; o; o = o->getNext() ) {
-        if (SP_IS_GUIDE(o)) {
-            SPGuide * g = SP_GUIDE(o);
+    for (auto& o: children) {
+        if (SP_IS_GUIDE(&o)) {
+            SPGuide * g = SP_GUIDE(&o);
             this->guides.push_back(g);
             //g_object_set(G_OBJECT(g), "color", nv->guidecolor, "hicolor", nv->guidehicolor, NULL);
             g->setColor(this->guidecolor);
@@ -261,16 +259,6 @@ void SPNamedView::build(SPDocument *document, Inkscape::XML::Node *repr) {
 
     // backwards compatibility with grid settings (pre 0.46)
     sp_namedview_generate_old_grid(this, document, repr);
-
-    // If viewbox defined: try to calculate the SVG unit from document width and viewbox
-    if (document->getRoot()->viewBox_set) {
-        Inkscape::Util::Quantity svgwidth = document->getWidth();
-        Geom::Rect viewbox = document->getRoot()->viewBox;
-        double factor = svgwidth.value(unit_table.primary(Inkscape::Util::UNIT_TYPE_LINEAR)) / viewbox.width(); 
-        svg_units = unit_table.findUnit(factor, Inkscape::Util::UNIT_TYPE_LINEAR);
-    } else {  // force the document units to be px
-        repr->setAttribute("inkscape:document-units", "px");
-    }
 }
 
 void SPNamedView::release() {
@@ -868,9 +856,9 @@ void sp_namedview_update_layers_from_document (SPDesktop *desktop)
     }
     // if that didn't work out, look for the topmost layer
     if (!layer) {
-        for ( SPObject *iter = document->getRoot()->firstChild(); iter ; iter = iter->getNext() ) {
-            if (desktop->isLayer(iter)) {
-                layer = iter;
+        for (auto& iter: document->getRoot()->children) {
+            if (desktop->isLayer(&iter)) {
+                layer = &iter;
             }
         }
     }
@@ -1098,7 +1086,6 @@ void SPNamedView::setGuides(bool v)
     g_assert(this->getRepr() != NULL);
     sp_repr_set_boolean(this->getRepr(), "showguides", v);
     sp_repr_set_boolean(this->getRepr(), "inkscape:guide-bbox", v);
-    sp_repr_set_boolean(this->getRepr(), "inkscape:locked", false);
 }
 
 bool SPNamedView::getGuides()
@@ -1153,12 +1140,6 @@ double SPNamedView::getMarginLength(gchar const * const key,
 Inkscape::Util::Unit const * SPNamedView::getDisplayUnit() const
 {
     return display_units ? display_units : unit_table.getUnit("px");
-}
-
-Inkscape::Util::Unit const & SPNamedView::getSVGUnit() const
-{
-    assert(svg_units);
-    return *svg_units; 
 }
 
 /**

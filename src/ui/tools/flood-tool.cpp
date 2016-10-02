@@ -18,14 +18,13 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include <config.h>
 #endif
 
 #include "trace/potrace/inkscape-potrace.h"
 #include <2geom/pathvector.h>
 #include <gdk/gdkkeysyms.h>
 #include <queue>
-#include <deque>
 #include <glibmm/i18n.h>
 
 #include "color.h"
@@ -36,7 +35,6 @@
 #include "display/cairo-utils.h"
 #include "display/drawing-context.h"
 #include "display/drawing-image.h"
-#include "display/drawing-item.h"
 #include "display/drawing.h"
 #include "display/sp-canvas.h"
 #include "document.h"
@@ -47,23 +45,15 @@
 #include "macros.h"
 #include "message-context.h"
 #include "message-stack.h"
-#include "preferences.h"
 #include "rubberband.h"
 #include "selection.h"
 #include "ui/shape-editor.h"
-#include "sp-defs.h"
-#include "sp-item.h"
 #include "splivarot.h"
 #include "sp-namedview.h"
-#include "sp-object.h"
-#include "sp-path.h"
-#include "sp-rect.h"
 #include "sp-root.h"
 #include "svg/svg.h"
 #include "trace/imagemap.h"
-#include "trace/trace.h"
 #include "xml/node-event-vector.h"
-#include "xml/repr.h"
 #include "verbs.h"
 
 #include "pixmaps/cursor-paintbucket.xpm"
@@ -456,7 +446,7 @@ static void do_trace(bitmap_coords_info bci, guchar *trace_px, SPDesktop *deskto
                     ngettext("Area filled, path with <b>%d</b> node created and unioned with selection.","Area filled, path with <b>%d</b> nodes created and unioned with selection.",
                     SP_PATH(reprobj)->nodesInPath()), SP_PATH(reprobj)->nodesInPath() );
                 selection->add(reprobj);
-                sp_selected_path_union_skip_undo(desktop->getSelection(), desktop);
+                sp_selected_path_union_skip_undo(desktop->getSelection());
             } else {
                 desktop->messageStack()->flashF( Inkscape::WARNING_MESSAGE,
                     ngettext("Area filled, path with <b>%d</b> node created.","Area filled, path with <b>%d</b> nodes created.",

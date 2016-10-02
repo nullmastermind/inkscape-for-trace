@@ -37,7 +37,7 @@
 #define noSP_DOCUMENT_DEBUG_UNDO
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+#include <config.h>
 #endif
 #include <string>
 #include <cstring>
@@ -47,7 +47,6 @@
 #include "desktop.h"
 #include "dir-util.h"
 #include "display/drawing.h"
-#include "display/drawing-item.h"
 #include "document-private.h"
 #include "document-undo.h"
 #include "id-clash.h"
@@ -55,18 +54,12 @@
 #include "inkscape-version.h"
 #include "libavoid/router.h"
 #include "persp3d.h"
-#include "preferences.h"
 #include "profile-manager.h"
 #include "rdf.h"
 #include "sp-factory.h"
-#include "sp-item-group.h"
 #include "sp-namedview.h"
 #include "sp-symbol.h"
-#include "transf_mat_3x4.h"
-#include "util/units.h"
-#include "xml/repr.h"
 #include "xml/rebase-hrefs.h"
-#include "libcroco/cr-cascade.h"
 
 using Inkscape::DocumentUndo;
 using Inkscape::Util::unit_table;
@@ -257,9 +250,9 @@ void SPDocument::setCurrentPersp3D(Persp3D * const persp) {
 
 void SPDocument::getPerspectivesInDefs(std::vector<Persp3D*> &list) const
 {
-    for (SPObject *i = root->defs->firstChild(); i; i = i->getNext() ) {
-        if (SP_IS_PERSP3D(i)) {
-            list.push_back(SP_PERSP3D(i));
+    for (auto& i: root->defs->children) {
+        if (SP_IS_PERSP3D(&i)) {
+            list.push_back(SP_PERSP3D(&i));
         }
     }
 }
@@ -368,11 +361,6 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
 
     // Recursively build object tree
     document->root->invoke_build(document, rroot, false);
-
-    /* fixme: Not sure about this, but lets assume ::build updates */
-    rroot->setAttribute("inkscape:version", Inkscape::version_string);
-    /* fixme: Again, I moved these here to allow version determining in ::build (Lauris) */
-
 
     /* Eliminate obsolete sodipodi:docbase, for privacy reasons */
     rroot->setAttribute("sodipodi:docbase", NULL);
@@ -587,15 +575,6 @@ Inkscape::Util::Unit const* SPDocument::getDisplayUnit() const
 {
     SPNamedView const* nv = sp_document_namedview(this, NULL);
     return nv ? nv->getDisplayUnit() : unit_table.getUnit("px");
-}
-
-/// guaranteed not to return nullptr
-// returns 'px' units as default, like legacy Inkscape
-// THIS SHOULD NOT BE USED... INSTEAD USE DOCUMENT SCALE
-Inkscape::Util::Unit const& SPDocument::getSVGUnit() const
-{
-    SPNamedView const* nv = sp_document_namedview(this, NULL);
-    return nv ? nv->getSVGUnit() : *unit_table.getUnit("px");
 }
 
 /// Sets document scale (by changing viewBox)
@@ -969,6 +948,9 @@ SPDocument::emitReconstructionFinish(void)
 {
     // printf("Finishing Reconstruction\n");
     priv->_reconstruction_finish_signal.emit();
+    // indicates that gradients are reloaded (to rebuild the Auto palette)
+    priv->resources_changed_signals[g_quark_from_string("gradient")].emit();
+
 
 /**    
     // Reference to the old persp3d object is invalid after reconstruction.
@@ -1270,12 +1252,12 @@ static std::vector<SPItem*> &find_items_in_area(std::vector<SPItem*> &s, SPGroup
 {
     g_return_val_if_fail(SP_IS_GROUP(group), s);
 
-    for ( SPObject *o = group->firstChild() ; o ; o = o->getNext() ) {
-        if ( SP_IS_ITEM(o) ) {
-            if (SP_IS_GROUP(o) && (SP_GROUP(o)->effectiveLayerMode(dkey) == SPGroup::LAYER || into_groups)) {
-                s = find_items_in_area(s, SP_GROUP(o), dkey, area, test, take_insensitive, into_groups);
+    for (auto& o: group->children) {
+        if ( SP_IS_ITEM(&o) ) {
+            if (SP_IS_GROUP(&o) && (SP_GROUP(&o)->effectiveLayerMode(dkey) == SPGroup::LAYER || into_groups)) {
+                s = find_items_in_area(s, SP_GROUP(&o), dkey, area, test, take_insensitive, into_groups);
             } else {
-                SPItem *child = SP_ITEM(o);
+                SPItem *child = SP_ITEM(&o);
                 Geom::OptRect box = child->desktopVisualBounds();
                 if ( box && test(area, *box) && (take_insensitive || child->isVisibleAndUnlocked(dkey))) {
                     s.push_back(child);
@@ -1292,17 +1274,16 @@ Returns true if an item is among the descendants of group (recursively).
  */
 static bool item_is_in_group(SPItem *item, SPGroup *group)
 {
-    bool inGroup = false;
-    for ( SPObject *o = group->firstChild() ; o && !inGroup; o = o->getNext() ) {
-        if ( SP_IS_ITEM(o) ) {
-            if (SP_ITEM(o) == item) {
-                inGroup = true;
-            } else if ( SP_IS_GROUP(o) ) {
-                inGroup = item_is_in_group(item, SP_GROUP(o));
+    for (auto& o: group->children) {
+        if ( SP_IS_ITEM(&o) ) {
+            if (SP_ITEM(&o) == item) {
+                return true;
+            } else if (SP_IS_GROUP(&o) && item_is_in_group(item, SP_GROUP(&o))) {
+                return true;
             }
         }
     }
-    return inGroup;
+    return false;
 }
 
 SPItem *SPDocument::getItemFromListAtPointBottom(unsigned int dkey, SPGroup *group, std::vector<SPItem*> const &list,Geom::Point const &p, bool take_insensitive)
@@ -1313,21 +1294,24 @@ SPItem *SPDocument::getItemFromListAtPointBottom(unsigned int dkey, SPGroup *gro
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     gdouble delta = prefs->getDouble("/options/cursortolerance/value", 1.0);
 
-    for ( SPObject *o = group->firstChild() ; o && !bottomMost; o = o->getNext() ) {
-        if ( SP_IS_ITEM(o) ) {
-            SPItem *item = SP_ITEM(o);
+    for (auto& o: group->children) {
+        if (bottomMost) {
+            break;
+        }
+        if (SP_IS_ITEM(&o)) {
+            SPItem *item = SP_ITEM(&o);
             Inkscape::DrawingItem *arenaitem = item->get_arenaitem(dkey);
             arenaitem->drawing().update();
             if (arenaitem && arenaitem->pick(p, delta, 1) != NULL
                 && (take_insensitive || item->isVisibleAndUnlocked(dkey))) {
-                if (find(list.begin(),list.end(),item)!=list.end() ) {
+                if (find(list.begin(), list.end(), item) != list.end()) {
                     bottomMost = item;
                 }
             }
 
-            if ( !bottomMost && SP_IS_GROUP(o) ) {
+            if (!bottomMost && SP_IS_GROUP(&o)) {
                 // return null if not found:
-                bottomMost = getItemFromListAtPointBottom(dkey, SP_GROUP(o), list, p, take_insensitive);
+                bottomMost = getItemFromListAtPointBottom(dkey, SP_GROUP(&o), list, p, take_insensitive);
             }
         }
     }
@@ -1340,15 +1324,15 @@ The list can be persisted, which improves "find at multiple points" speed.
 */
 void SPDocument::build_flat_item_list(unsigned int dkey, SPGroup *group, gboolean into_groups) const
 {
-    for ( SPObject *o = group->firstChild() ; o ; o = o->getNext() ) {
-        if (!SP_IS_ITEM(o)) {
+    for (auto& o: group->children) {
+        if (!SP_IS_ITEM(&o)) {
             continue;
         }
 
-        if (SP_IS_GROUP(o) && (SP_GROUP(o)->effectiveLayerMode(dkey) == SPGroup::LAYER || into_groups)) {
-            build_flat_item_list(dkey, SP_GROUP(o), into_groups);
+        if (SP_IS_GROUP(&o) && (SP_GROUP(&o)->effectiveLayerMode(dkey) == SPGroup::LAYER || into_groups)) {
+            build_flat_item_list(dkey, SP_GROUP(&o), into_groups);
         } else {
-            SPItem *child = SP_ITEM(o);
+            SPItem *child = SP_ITEM(&o);
 
             if (child->isVisibleAndUnlocked(dkey)) {
                 _node_cache.push_front(child);
@@ -1404,18 +1388,18 @@ static SPItem *find_group_at_point(unsigned int dkey, SPGroup *group, Geom::Poin
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     gdouble delta = prefs->getDouble("/options/cursortolerance/value", 1.0);
 
-    for ( SPObject *o = group->firstChild() ; o ; o = o->getNext() ) {
-        if (!SP_IS_ITEM(o)) {
+    for (auto& o: group->children) {
+        if (!SP_IS_ITEM(&o)) {
             continue;
         }
-        if (SP_IS_GROUP(o) && SP_GROUP(o)->effectiveLayerMode(dkey) == SPGroup::LAYER) {
-            SPItem *newseen = find_group_at_point(dkey, SP_GROUP(o), p);
+        if (SP_IS_GROUP(&o) && SP_GROUP(&o)->effectiveLayerMode(dkey) == SPGroup::LAYER) {
+            SPItem *newseen = find_group_at_point(dkey, SP_GROUP(&o), p);
             if (newseen) {
                 seen = newseen;
             }
         }
-        if (SP_IS_GROUP(o) && SP_GROUP(o)->effectiveLayerMode(dkey) != SPGroup::LAYER ) {
-            SPItem *child = SP_ITEM(o);
+        if (SP_IS_GROUP(&o) && SP_GROUP(&o)->effectiveLayerMode(dkey) != SPGroup::LAYER ) {
+            SPItem *child = SP_ITEM(&o);
             Inkscape::DrawingItem *arenaitem = child->get_arenaitem(dkey);
             arenaitem->drawing().update();
 
@@ -1609,32 +1593,48 @@ static unsigned int count_objects_recursive(SPObject *obj, unsigned int count)
 {
     count++; // obj itself
 
-    for ( SPObject *i = obj->firstChild(); i; i = i->getNext() ) {
-        count = count_objects_recursive(i, count);
+    for (auto& i: obj->children) {
+        count = count_objects_recursive(&i, count);
     }
 
     return count;
 }
 
+/**
+ * Count the number of objects in a given document recursively using the count_objects_recursive helper function
+ * 
+ * @param[in] document Pointer to the document for counting objects
+ * @return Numer of objects in the document
+ */
 static unsigned int objects_in_document(SPDocument *document)
 {
     return count_objects_recursive(document->getRoot(), 0);
 }
 
+/**
+ * Remove unused definitions etc. recursively from an object and its siblings
+ *
+ * @param[inout] obj Object which shall be "cleaned"
+ */
 static void vacuum_document_recursive(SPObject *obj)
 {
     if (SP_IS_DEFS(obj)) {
-        for ( SPObject *def = obj->firstChild(); def; def = def->getNext()) {
+        for (auto& def: obj->children) {
             // fixme: some inkscape-internal nodes in the future might not be collectable
-            def->requestOrphanCollection();
+            def.requestOrphanCollection();
         }
     } else {
-        for ( SPObject *i = obj->firstChild(); i; i = i->getNext() ) {
-            vacuum_document_recursive(i);
+        for (auto& i: obj->children) {
+            vacuum_document_recursive(&i);
         }
     }
 }
 
+/**
+ * Remove unused definitions etc. recursively from an entire document.
+ *
+ * @return Number of removed objects
+ */
 unsigned int SPDocument::vacuumDocument()
 {
     unsigned int start = objects_in_document(this);
@@ -1653,6 +1653,7 @@ unsigned int SPDocument::vacuumDocument()
         newend = objects_in_document(this);
 
     } while (iterations < 100 && newend < end);
+    // We stop if vacuum_document_recursive doesn't remove any more objects or after 100 iterations, whichever occurs first.
 
     return start - newend;
 }
@@ -1661,6 +1662,11 @@ bool SPDocument::isSeeking() const {
     return priv->seeking;
 }
 
+/**
+ * Indicate to the user if the document has been modified since the last save by displaying a "*" in front of the name of the file in the window title.
+ *
+ * @param[in] modified True if the document has been modified.
+ */
 void SPDocument::setModifiedSinceSave(bool modified) {
     this->modified_since_save = modified;
     if (SP_ACTIVE_DESKTOP) {
@@ -1747,14 +1753,14 @@ void SPDocument::importDefsNode(SPDocument *source, Inkscape::XML::Node *defs, I
         // Prevent duplicates of solid swatches by checking if equivalent swatch already exists
         if (src && SP_IS_GRADIENT(src)) {
             SPGradient *s_gr = SP_GRADIENT(src);
-            for (SPObject *trg = this->getDefs()->firstChild() ; trg ; trg = trg->getNext()) {
-                if (trg && (src != trg) && SP_IS_GRADIENT(trg)) {
-                    SPGradient *t_gr = SP_GRADIENT(trg);
+            for (auto& trg: getDefs()->children) {
+                if (&trg && (src != &trg) && SP_IS_GRADIENT(&trg)) {
+                    SPGradient *t_gr = SP_GRADIENT(&trg);
                     if (t_gr && s_gr->isEquivalent(t_gr)) {
                          // Change object references to the existing equivalent gradient
-                         Glib::ustring newid = trg->getId();
+                         Glib::ustring newid = trg.getId();
                          if(newid != defid){  // id could be the same if it is a second paste into the same document
-                             change_def_references(src, trg);
+                             change_def_references(src, &trg);
                          }
                          gchar *longid = g_strdup_printf("%s_%9.9d", DuplicateDefString.c_str(), stagger++);
                          def->setAttribute("id", longid );
@@ -1818,9 +1824,9 @@ void SPDocument::importDefsNode(SPDocument *source, Inkscape::XML::Node *defs, I
                 id.erase( pos ); 
 
                 // Check that it really is a duplicate
-                for (SPObject *trg = this->getDefs()->firstChild() ; trg ; trg = trg->getNext()) {
-                    if( trg && SP_IS_SYMBOL(trg) && src != trg ) { 
-                        std::string id2 = trg->getRepr()->attribute("id");
+                for (auto& trg: getDefs()->children) {
+                    if(&trg && SP_IS_SYMBOL(&trg) && src != &trg ) {
+                        std::string id2 = trg.getRepr()->attribute("id");
 
                         if( !id.compare( id2 ) ) {
                             duplicate = true;

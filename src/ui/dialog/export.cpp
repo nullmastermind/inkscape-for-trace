@@ -24,18 +24,9 @@
 #include <gtkmm/buttonbox.h>
 #include <gtkmm/dialog.h>
 #include <gtkmm/entry.h>
-#include <gtkmm/image.h>
-#include <gtkmm/label.h>
+#include <gtkmm/grid.h>
 #include <gtkmm/spinbutton.h>
 #include <gtkmm/stock.h>
-#include <gtkmm/stockid.h>
-#if WITH_GTKMM_3_0
-# include <gtkmm/grid.h>
-#else
-# include <gtkmm/table.h>
-#endif
-#include <gtkmm/togglebutton.h>
-#include <gtkmm/widget.h>
 
 #ifdef WITH_GNOME_VFS
 # include <libgnomevfs/gnome-vfs-init.h>  // gnome_vfs_initialized
@@ -45,16 +36,12 @@
 #include <glibmm/miscutils.h>
 
 #include "ui/widget/unit-menu.h"
-#include "util/units.h"
 #include "helper/window.h"
 #include "inkscape.h"
 #include "document.h"
 #include "document-undo.h"
 
-#include "sp-item.h"
-#include "selection.h"
 #include "file.h"
-#include "macros.h"
 #include "sp-namedview.h"
 #include "selection-chemistry.h"
 
@@ -71,12 +58,7 @@
 
 #include "helper/png-write.h"
 
-#if WITH_EXT_GDL
 #include <gdl/gdl-dock-item.h>
-#else
-#include "libgdl/gdl-dock-item.h"
-#endif
-
 
 // required to set status message after export
 #include "desktop.h"
@@ -89,17 +71,12 @@
 #include <glibmm/fileutils.h>
 #endif
 
-#include <gtk/gtk.h>
-
 #define SP_EXPORT_MIN_SIZE 1.0
 
 #define DPI_BASE Inkscape::Util::Quantity::convert(1, "in", "px")
 
 #define EXPORT_COORD_PRECISION 3
 
-#include "../../document.h"
-#include "../../document-undo.h"
-#include "verbs.h"
 #include "export.h"
 
 using Inkscape::Util::unit_table;
@@ -168,6 +145,13 @@ Export::Export (void) :
     browse_image(Gtk::StockID(Gtk::Stock::INDEX), Gtk::ICON_SIZE_BUTTON),
     batch_box(false, 5),
     batch_export(_("B_atch export all selected objects"), _("Export each selected object into its own PNG file, using export hints if any (caution, overwrites without asking!)")),
+    interlacing(_("Use interlacing"),_("Enables ADAM7 interlacing for PNG output. This results in slightly heavier images, but big images will look better sooner when loading the file")),
+    bitdepth_label(_("Bit depth")),
+    bitdepth_cb(),
+    zlib_label(_("Compression")),
+    zlib_compression(),
+    pHYs_label(_("pHYs dpi")),
+    pHYs_sb(pHYs_adj, 1.0, 2),
     hide_box(false, 5),
     hide_export(_("Hide a_ll except selected"), _("In the exported image, hide all objects except those that are selected")),
     closeWhenDone(_("Close when complete"), _("Once the export completes, close this dialog")),
@@ -218,15 +202,9 @@ Export::Export (void) :
             selectiontype_buttons[i]->signal_clicked().connect(sigc::mem_fun(*this, &Export::onAreaToggled));
         }
 
-#if WITH_GTKMM_3_0
-        Gtk::Grid* t = new Gtk::Grid();
+        auto t = new Gtk::Grid();
         t->set_row_spacing(4);
         t->set_column_spacing(4);
-#else
-        Gtk::Table* t = new Gtk::Table(3, 4, false);
-        t->set_row_spacings (4);
-        t->set_col_spacings (4);
-#endif
 
         x0_adj = createSpinbutton ( "x0", 0.0, -1000000.0, 1000000.0, 0.1, 1.0,
                                     t, 0, 0, _("_x0:"), "", EXPORT_COORD_PRECISION, 1,
@@ -268,15 +246,9 @@ Export::Export (void) :
         bm_label->set_use_markup(true);
         size_box.pack_start(*bm_label, false, false, 0);
 
-#if WITH_GTKMM_3_0
-        Gtk::Grid *t = new Gtk::Grid();
+        auto t = new Gtk::Grid();
         t->set_row_spacing(4);
         t->set_column_spacing(4);
-#else
-        Gtk::Table *t = new Gtk::Table(2, 5, false);
-        t->set_row_spacings (4);
-        t->set_col_spacings (4);
-#endif
 
         size_box.pack_start(*t);
 
@@ -356,6 +328,34 @@ Export::Export (void) :
     button_box.pack_start(closeWhenDone, true, true, 0 );
     button_box.pack_end(export_button, false, false, 0);
 
+    /*Advanced*/
+    Gtk::Label *label_advanced = Gtk::manage(new Gtk::Label(_("Advanced"),1));
+    expander.set_label_widget(*label_advanced);
+    const char* const modes_list[]={"Gray_1", "Gray_2","Gray_4","Gray_8","Gray_16","RGB_8","RGB_16","GrayAlpha_8","GrayAlpha_16","RGBA_8","RGBA_16"};
+    for(int i=0; i<11; ++i)
+        bitdepth_cb.append(modes_list[i]);
+    bitdepth_cb.set_active_text("RGBA_8");
+    bitdepth_cb.set_hexpand();
+    const char* const zlist[]={"Z_NO_COMPRESSION","Z_BEST_SPEED","2","3","4","5","Z_DEFAULT_COMPRESSION","7","8","Z_BEST_COMPRESSION"};
+    for(int i=0; i<10; ++i)
+        zlib_compression.append(zlist[i]);
+    zlib_compression.set_active_text("Z_DEFAULT_COMPRESSION");
+    pHYs_adj = Gtk::Adjustment::create(0, 0, 100000, 0.1, 1.0, 0);
+    pHYs_sb.set_adjustment(pHYs_adj);
+    pHYs_sb.set_width_chars(7);
+    pHYs_sb.set_tooltip_text( _("Will force-set the physical dpi for the png file. Set this to 72 if you're planning to work on your png with Photoshop") );
+    zlib_compression.set_hexpand();
+    auto table = new Gtk::Grid();
+    gtk_container_add(GTK_CONTAINER(expander.gobj()), (GtkWidget*)(table->gobj()));
+    table->attach(interlacing,0,0,1,1);
+    table->attach(bitdepth_label,0,1,1,1);
+    table->attach(bitdepth_cb,1,1,1,1);
+    table->attach(zlib_label,0,2,1,1);
+    table->attach(zlib_compression,1,2,1,1);
+    table->attach(pHYs_label,0,3,1,1);
+    table->attach(pHYs_sb,1,3,1,1);
+    table->show();
+
     /* Main dialog */
     Gtk::Box *contents = _getContents();
     contents->set_spacing(0);
@@ -364,6 +364,7 @@ Export::Export (void) :
     contents->pack_start(hide_box);
     contents->pack_end(button_box, false, 0);
     contents->pack_end(_prog, Gtk::PACK_EXPAND_WIDGET);
+    contents->pack_end(expander, FALSE, FALSE,0);
 
     /* Signal handlers */
     filename_entry.signal_changed().connect( sigc::mem_fun(*this, &Export::onFilenameModified) );
@@ -484,27 +485,14 @@ void Export::set_default_filename () {
     }
 }
 
-#if WITH_GTKMM_3_0
 Glib::RefPtr<Gtk::Adjustment> Export::createSpinbutton( gchar const * /*key*/, float val, float min, float max,
         float step, float page,
         Gtk::Grid *t, int x, int y,
         const Glib::ustring& ll, const Glib::ustring& lr,
         int digits, unsigned int sensitive,
         void (Export::*cb)() )
-#else
-Gtk::Adjustment * Export::createSpinbutton( gchar const * /*key*/, float val, float min, float max,
-        float step, float page,
-        Gtk::Table *t, int x, int y,
-        const Glib::ustring& ll, const Glib::ustring& lr,
-        int digits, unsigned int sensitive,
-        void (Export::*cb)() )
-#endif
 {
-#if WITH_GTKMM_3_0
-    Glib::RefPtr<Gtk::Adjustment> adj = Gtk::Adjustment::create(val, min, max, step, page, 0);
-#else
-    Gtk::Adjustment *adj = new Gtk::Adjustment  ( val, min, max, step, page, 0 );
-#endif
+    auto adj = Gtk::Adjustment::create(val, min, max, step, page, 0);
 
     int pos = 0;
     Gtk::Label *l = NULL;
@@ -512,28 +500,17 @@ Gtk::Adjustment * Export::createSpinbutton( gchar const * /*key*/, float val, fl
     if (!ll.empty()) {
         l = new Gtk::Label(ll,true);
         l->set_alignment (1.0, 0.5);
-
-#if WITH_GTKMM_3_0
         l->set_hexpand();
         l->set_vexpand();
         t->attach(*l, x + pos, y, 1, 1);
-#else
-        t->attach (*l, x + pos, x + pos + 1, y, y + 1, Gtk::EXPAND, Gtk::EXPAND, 0, 0 );
-#endif
-
         l->set_sensitive(sensitive);
         pos++;
     }
 
-#if WITH_GTKMM_3_0
-    Gtk::SpinButton *sb = new Gtk::SpinButton(adj, 1.0, digits);
+    auto sb = new Gtk::SpinButton(adj, 1.0, digits);
     sb->set_hexpand();
     sb->set_vexpand();
     t->attach(*sb, x + pos, y, 1, 1);
-#else
-    Gtk::SpinButton *sb = new Gtk::SpinButton(*adj, 1.0, digits);
-    t->attach (*sb, x + pos, x + pos + 1, y, y + 1, Gtk::EXPAND, Gtk::EXPAND, 0, 0 );
-#endif
 
     sb->set_width_chars(7);
     sb->set_sensitive (sensitive);
@@ -546,15 +523,9 @@ Gtk::Adjustment * Export::createSpinbutton( gchar const * /*key*/, float val, fl
     if (!lr.empty()) {
         l = new Gtk::Label(lr,true);
         l->set_alignment (0.0, 0.5);
-
-#if WITH_GTKMM_3_0
         l->set_hexpand();
         l->set_vexpand();
         t->attach(*l, x + pos, y, 1, 1);
-#else
-        t->attach (*l, x + pos, x + pos + 1, y, y + 1, Gtk::EXPAND, Gtk::EXPAND, 0, 0 );
-#endif
-
         l->set_sensitive (sensitive);
         pos++;
         l->set_mnemonic_widget (*sb);
@@ -608,7 +579,7 @@ void Export::onBatchClicked ()
 
 void Export::updateCheckbuttons ()
 {
-    gint num = SP_ACTIVE_DESKTOP->getSelection()->itemList().size();
+    gint num = (gint) boost::distance(SP_ACTIVE_DESKTOP->getSelection()->items());
     if (num >= 2) {
         batch_export.set_sensitive(true);
         batch_export.set_label(g_strdup_printf (ngettext("B_atch export %d selected object","B_atch export %d selected objects",num), num));
@@ -814,14 +785,14 @@ void Export::onAreaToggled ()
         case SELECTION_SELECTION:
             if ((SP_ACTIVE_DESKTOP->getSelection())->isEmpty() == false) {
 
-                sp_selection_get_export_hints (SP_ACTIVE_DESKTOP->getSelection(), filename, &xdpi, &ydpi);
+                sp_object_set_get_export_hints(SP_ACTIVE_DESKTOP->getSelection(), filename, &xdpi, &ydpi);
 
                 /* If we still don't have a filename -- let's build
                    one that's nice */
                 if (filename.empty()) {
                     const gchar * id = "object";
-                    const std::vector<XML::Node*> reprlst = SP_ACTIVE_DESKTOP->getSelection()->reprList();
-                    for(std::vector<XML::Node*>::const_iterator i=reprlst.begin(); reprlst.end() != i; ++i) {
+                    auto reprlst = SP_ACTIVE_DESKTOP->getSelection()->xmlNodes();
+                    for(auto i=reprlst.begin(); reprlst.end() != i; ++i) {
                         Inkscape::XML::Node * repr = *i;
                         if (repr->attribute("id")) {
                             id = repr->attribute("id");
@@ -932,11 +903,7 @@ Gtk::Dialog * Export::create_progress_dialog (Glib::ustring progress_text) {
     Gtk::ProgressBar *prg = new Gtk::ProgressBar ();
     prg->set_text(progress_text);
     dlg->set_data ("progress", prg);
-#if GTK_CHECK_VERSION(3,0,0)
-    Gtk::Box* CA = dlg->get_content_area();
-#else
-    Gtk::Box* CA = dlg->get_vbox();
-#endif
+    auto CA = dlg->get_content_area();
     CA->pack_start(*prg, FALSE, FALSE, 4);
 
     Gtk::Button* btn = dlg->add_button (Gtk::Stock::CANCEL,Gtk::RESPONSE_CANCEL );
@@ -1012,10 +979,22 @@ void Export::onExport ()
     bool exportSuccessful = false;
 
     bool hide = hide_export.get_active ();
+
+    // Advanced parameters
+    bool do_interlace = (interlacing.get_active());
+    float pHYs = 0;
+    int zlib = zlib_compression.get_active_row_number() ;
+    const char* const modes_list[]={"Gray_1", "Gray_2","Gray_4","Gray_8","Gray_16","RGB_8","RGB_16","GrayAlpha_8","GrayAlpha_16","RGBA_8","RGBA_16"};
+    int colortypes[] = {0,0,0,0,0,2,2,4,4,6,6}; //keep in sync with modes_list in Export constructor. values are from libpng doc.
+    int bitdepths[] = {1,2,4,8,16,8,16,8,16,8,16};
+    int color_type = colortypes[bitdepth_cb.get_active_row_number()] ;
+    int bit_depth = bitdepths[bitdepth_cb.get_active_row_number()] ;
+
+
     if (batch_export.get_active ()) {
         // Batch export of selected objects
 
-        gint num = (desktop->getSelection()->itemList()).size();
+        gint num = (gint) boost::distance(desktop->getSelection()->items());
         gint n = 0;
 
         if (num < 1) {
@@ -1029,8 +1008,8 @@ void Export::onExport ()
 
         gint export_count = 0;
 
-        std::vector<SPItem*> itemlist=desktop->getSelection()->itemList();
-        for(std::vector<SPItem*>::const_iterator i = itemlist.begin();i!=itemlist.end() && !interrupted ;++i){
+        auto itemlist= desktop->getSelection()->items();
+        for(auto i = itemlist.begin();i!=itemlist.end() && !interrupted ;++i){
             SPItem *item = *i;
 
             prog_dlg->set_data("current", GINT_TO_POINTER(n));
@@ -1056,6 +1035,7 @@ void Export::onExport ()
             if (dpi == 0.0) {
                 dpi = getValue(xdpi_adj);
             }
+            pHYs = (pHYs_adj->get_value() > 0.01) ? pHYs_adj->get_value() : dpi;
 
             Geom::OptRect area = item->desktopVisualBounds();
             if (area) {
@@ -1070,12 +1050,14 @@ void Export::onExport ()
                     MessageCleaner msgFlashCleanup(desktop->messageStack()->flashF(Inkscape::IMMEDIATE_MESSAGE,
                                                    _("Exporting file <b>%s</b>..."), safeFile), desktop);
                     std::vector<SPItem*> x;
+                    std::vector<SPItem*> selected(desktop->getSelection()->items().begin(), desktop->getSelection()->items().end());
                     if (!sp_export_png_file (doc, path.c_str(),
-                                             *area, width, height, dpi, dpi,
+                                             *area, width, height, pHYs, pHYs,
                                              nv->pagecolor,
                                              onProgressCallback, (void*)prog_dlg,
                                              TRUE,  // overwrite without asking
-                                             hide ? (desktop->getSelection()->itemList()) : x
+                                             hide ? selected : x, 
+                                             do_interlace, color_type, bit_depth, zlib
                                             )) {
                         gchar * error = g_strdup_printf(_("Could not export to filename %s.\n"), safeFile);
 
@@ -1117,6 +1099,7 @@ void Export::onExport ()
         float const y1 = getValuePx(y1_adj);
         float const xdpi = getValue(xdpi_adj);
         float const ydpi = getValue(ydpi_adj);
+        pHYs = (pHYs_adj->get_value() > 0.01) ? pHYs_adj->get_value() : xdpi;
         unsigned long int const width = int(getValue(bmwidth_adj) + 0.5);
         unsigned long int const height = int(getValue(bmheight_adj) + 0.5);
 
@@ -1160,13 +1143,15 @@ void Export::onExport ()
 
         /* Do export */
         std::vector<SPItem*> x;
+        std::vector<SPItem*> selected(desktop->getSelection()->items().begin(), desktop->getSelection()->items().end());
         ExportResult status = sp_export_png_file(desktop->getDocument(), path.c_str(),
-                              Geom::Rect(Geom::Point(x0, y0), Geom::Point(x1, y1)), width, height, xdpi, ydpi,
+                              Geom::Rect(Geom::Point(x0, y0), Geom::Point(x1, y1)), width, height, pHYs, pHYs, //previously xdpi, ydpi. 
                               nv->pagecolor,
                               onProgressCallback, (void*)prog_dlg,
                               FALSE,
-                              hide ? (desktop->getSelection()->itemList()) : x
-                                                );
+                              hide ? selected : x, 
+                              do_interlace, color_type, bit_depth, zlib
+                              );
         if (status == EXPORT_ERROR) {
             gchar * safeFile = Inkscape::IO::sanitizeString(path.c_str());
             gchar * error = g_strdup_printf(_("Could not export to filename %s.\n"), safeFile);
@@ -1231,15 +1216,14 @@ void Export::onExport ()
             break;
         }
         case SELECTION_SELECTION: {
-        	std::vector<XML::Node*> reprlst;
             SPDocument * doc = SP_ACTIVE_DOCUMENT;
             bool modified = false;
 
             bool saved = DocumentUndo::getUndoSensitive(doc);
             DocumentUndo::setUndoSensitive(doc, false);
-            reprlst = desktop->getSelection()->reprList();
+            auto reprlst = desktop->getSelection()->xmlNodes();
 
-            for(std::vector<Inkscape::XML::Node*>::const_iterator i=reprlst.begin(); reprlst.end() != i; ++i) {
+            for(auto i=reprlst.begin(); reprlst.end() != i; ++i) {
                 Inkscape::XML::Node * repr = *i;
                 const gchar * temp_string;
                 Glib::ustring dir = Glib::path_get_dirname(filename.c_str());
@@ -1357,11 +1341,7 @@ void Export::onBrowse ()
     Glib::RefPtr<const Gdk::Window> parentWindow = desktop->getToplevel()->get_window();
     g_assert(parentWindow->gobj() != NULL);
 
-#if WITH_GTKMM_3_0
     opf.hwndOwner = (HWND)gdk_win32_window_get_handle((GdkWindow*)parentWindow->gobj());
-#else
-    opf.hwndOwner = (HWND)gdk_win32_drawable_get_handle((GdkDrawable*)parentWindow->gobj());
-#endif
     opf.lpstrFilter = filter_string;
     opf.lpstrCustomFilter = 0;
     opf.nMaxCustFilter = 0L;
@@ -1521,11 +1501,7 @@ void Export::detectSize() {
 } /* sp_export_detect_size */
 
 /// Called when area x0 value is changed
-#if WITH_GTKMM_3_0
 void Export::areaXChange(Glib::RefPtr<Gtk::Adjustment>& adj)
-#else
-void Export::areaXChange (Gtk::Adjustment *adj)
-#endif
 {
     float x0, x1, xdpi, width;
 
@@ -1564,11 +1540,7 @@ void Export::areaXChange (Gtk::Adjustment *adj)
 } // end of sp_export_area_x_value_changed()
 
 /// Called when area y0 value is changed.
-#if WITH_GTKMM_3_0
 void Export::areaYChange(Glib::RefPtr<Gtk::Adjustment>& adj)
-#else
-void Export::areaYChange (Gtk::Adjustment *adj)
-#endif
 {
     float y0, y1, ydpi, height;
 
@@ -1875,11 +1847,7 @@ void Export::setArea( double x0, double y0, double x1, double y1 )
  * @param  adj   The adjustment widget
  * @param  val   What value to set it to.
  */
-#if WITH_GTKMM_3_0
 void Export::setValue(Glib::RefPtr<Gtk::Adjustment>& adj, double val )
-#else
-void Export::setValue(  Gtk::Adjustment *adj, double val )
-#endif
 {
     if (adj) {
         adj->set_value(val);
@@ -1897,11 +1865,7 @@ void Export::setValue(  Gtk::Adjustment *adj, double val )
  * @param  adj   The adjustment widget
  * @param  val   What the value should be in points.
  */
-#if WITH_GTKMM_3_0
 void Export::setValuePx(Glib::RefPtr<Gtk::Adjustment>& adj, double val)
-#else
-void Export::setValuePx( Gtk::Adjustment *adj, double val)
-#endif
 {
     Unit const *unit = unit_selector.getUnit();
 
@@ -1920,11 +1884,7 @@ void Export::setValuePx( Gtk::Adjustment *adj, double val)
  *
  * @return The value in the specified adjustment.
  */
-#if WITH_GTKMM_3_0
 float Export::getValue(Glib::RefPtr<Gtk::Adjustment>& adj)
-#else
-float Export::getValue(  Gtk::Adjustment *adj )
-#endif
 {
     if (!adj) {
         g_message("sp_export_value_get : adj is NULL");
@@ -1946,11 +1906,7 @@ float Export::getValue(  Gtk::Adjustment *adj )
  *
  * @return The value in the adjustment in points.
  */
-#if WITH_GTKMM_3_0
 float Export::getValuePx(Glib::RefPtr<Gtk::Adjustment>& adj)
-#else
-float Export::getValuePx(  Gtk::Adjustment *adj )
-#endif
 {
     float value = getValue( adj);
     Unit const *unit = unit_selector.getUnit();

@@ -13,16 +13,11 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <gtkmm.h>
-#include "desktop.h"
 #include "live_effects/lpe-roughen.h"
 #include "display/curve.h"
-#include "live_effects/parameter/parameter.h"
 #include <boost/functional/hash.hpp>
 #include "helper/geom.h"
-#include "sp-item-group.h"
-#include <glibmm/i18n.h>
-#include <cmath>
+// TODO due to internal breakage in glibmm headers, this must be last:
 
 namespace Inkscape {
 namespace LivePathEffect {
@@ -229,7 +224,7 @@ void LPERoughen::doEffect(SPCurve *curve)
                 nCurve->lineto(curve_it1->finalPoint());
             }
             last_move = Geom::Point(0, 0);
-            double length = curve_it1->length(0.001);
+            double length = curve_it1->length(0.01);
             std::size_t splits = 0;
             if (method == DM_SEGMENTS) {
                 splits = segments;
@@ -354,9 +349,6 @@ SPCurve const * LPERoughen::addNodesAndJitter(Geom::Curve const * A, Geom::Point
             point_a3 = seg1[3] + point_a3;
             ray.setPoints(prev,A->initialPoint());
             point_a1  = A->initialPoint() + Geom::Point::polar(ray.angle(), max_lenght);
-            if(prev == Geom::Point(0,0)){
-                point_a1 = randomize(max_lenght);
-            }
             if(last){
                 Geom::Path b2(point_b3);
                 b2.appendNew<Geom::LineSegment>(point_a3);

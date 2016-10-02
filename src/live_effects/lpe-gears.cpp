@@ -8,14 +8,9 @@
 
 #include "live_effects/lpe-gears.h"
 
-#include <vector>
-
 #include <glibmm/i18n.h>
 
-#include <2geom/d2.h>
-#include <2geom/sbasis.h>
 #include <2geom/bezier-to-sbasis.h>
-#include <2geom/path.h>
 
 using std::vector;
 using namespace Geom;
@@ -212,7 +207,8 @@ namespace LivePathEffect {
 LPEGears::LPEGears(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
     teeth(_("_Teeth:"), _("The number of teeth"), "teeth", &wr, this, 10),
-    phi(_("_Phi:"), _("Tooth pressure angle (typically 20-25 deg).  The ratio of teeth not in contact."), "phi", &wr, this, 5)
+    phi(_("_Phi:"), _("Tooth pressure angle (typically 20-25 deg).  The ratio of teeth not in contact."), "phi", &wr, this, 5),
+    min_radius(_("Min Radius:"), _("Minimun radius, low balues can slow"), "min_radius", &wr, this, 5.0)
 {
     /* Tooth pressure angle: The angle between the tooth profile and a perpendicular to the pitch
      * circle, usually at the point where the pitch circle meets the tooth profile. Standard angles
@@ -223,8 +219,10 @@ LPEGears::LPEGears(LivePathEffectObject *lpeobject) :
 
     teeth.param_make_integer();
     teeth.param_set_range(3, 1e10);
-    registerParameter( dynamic_cast<Parameter *>(&teeth) );
-    registerParameter( dynamic_cast<Parameter *>(&phi) );
+    min_radius.param_set_range(0.01, 9999.0);
+    registerParameter(&teeth);
+    registerParameter(&phi);
+    registerParameter(&min_radius);
 }
 
 LPEGears::~LPEGears()
@@ -247,12 +245,17 @@ LPEGears::doEffect_path (Geom::PathVector const &path_in)
     gear->angle(atan2((*it).initialPoint() - gear_centre));
 
     ++it;
-	if ( it == gearpath.end() ) return path_out;
-    gear->pitch_radius(Geom::distance(gear_centre, (*it).finalPoint()));
+    if ( it == gearpath.end() ) return path_out;
+    double radius = Geom::distance(gear_centre, (*it).finalPoint());
+    radius = radius < min_radius?min_radius:radius;
+    gear->pitch_radius(radius);
 
     path_out.push_back( gear->path());
-
+    
     for (++it; it != gearpath.end() ; ++it) {
+        if (are_near((*it).initialPoint(), (*it).finalPoint())) {
+            continue;
+        }
         // iterate through Geom::Curve in path_in
         Gear* gearnew = new Gear(gear->spawn( (*it).finalPoint() ));
         path_out.push_back( gearnew->path() );

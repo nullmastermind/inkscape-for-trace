@@ -12,25 +12,20 @@
 #include "multi-path-manipulator.h"
 #include <glib/gi18n.h>
 #include <2geom/bezier-utils.h>
-#include <2geom/transforms.h>
 #include "display/sp-ctrlline.h"
 #include "display/sp-canvas.h"
 #include "display/sp-canvas-util.h"
 #include "desktop.h"
 
-#include "preferences.h"
 #include "snap.h"
-#include "snap-preferences.h"
 #include "sp-namedview.h"
 #include "ui/control-manager.h"
 #include "ui/tool/control-point-selection.h"
 #include "ui/tool/event-utils.h"
-#include "ui/tool/node.h"
 #include "ui/tool/path-manipulator.h"
 #include "ui/tools/node-tool.h"
 #include "ui/tools-switch.h"
 #include <gdk/gdkkeysyms.h>
-#include <cmath>
 
 namespace {
 
@@ -526,7 +521,7 @@ Glib::ustring Handle::_getTip(unsigned state) const
                     snap_increment_degrees());
             } else if(isBSpline){
                 return format_tip(C_("Path handle tip",
-                    "<b>Ctrl</b>: Move handle by his actual steps in BSpline Live Effect"));
+                    "<b>Ctrl</b>: Snap handle to steps defined in BSpline Live Path Effect"));
             }else{
                 return format_tip(C_("Path handle tip",
                     "<b>Ctrl</b>: snap rotation angle to %g° increments, click to retract"),

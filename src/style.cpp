@@ -20,7 +20,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+#include <config.h>
 #endif
 
 #include <cstring>
@@ -31,32 +31,18 @@
 #include "xml/croco-node-iface.h"
 
 #include "svg/svg.h"
-#include "svg/svg-color.h"
-#include "svg/svg-icc-color.h"
 
 #include "display/canvas-bpath.h"
 #include "attributes.h"
 #include "document.h"
-#include "extract-uri.h"
 #include "uri-references.h"
 #include "uri.h"
 #include "sp-paint-server.h"
-#include "streq.h"
-#include "strneq.h"
 #include "style.h"
 #include "svg/css-ostringstream.h"
-#include "xml/repr.h"
 #include "xml/simple-document.h"
 #include "util/units.h"
-#include "macros.h"
 #include "preferences.h"
-
-#include "sp-filter-reference.h"
-
-#include <sigc++/functors/ptr_fun.h>
-#include <sigc++/adaptors/bind.h>
-
-#include <2geom/math-utils.h>
 
 #include <glibmm/regex.h>
 
@@ -124,7 +110,7 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     font_variant_caps(      "font-variant-caps",       enum_font_variant_caps,       SP_CSS_FONT_VARIANT_CAPS_NORMAL       ),
     font_variant_numeric(   "font-variant-numeric",    enum_font_variant_numeric ),
     font_variant_alternates("font-variant-alternates", enum_font_variant_alternates, SP_CSS_FONT_VARIANT_ALTERNATES_NORMAL ),
-    font_variant_east_asian("font-variant-east_asian", enum_font_variant_east_asian, SP_CSS_FONT_VARIANT_EAST_ASIAN_NORMAL ),
+    font_variant_east_asian("font-variant-east-asian", enum_font_variant_east_asian, SP_CSS_FONT_VARIANT_EAST_ASIAN_NORMAL ),
     font_feature_settings(  "font-feature-settings",   "normal" ),
 
     // Text related properties

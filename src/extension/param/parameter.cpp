@@ -40,6 +40,8 @@
 #include "radiobutton.h"
 #include "string.h"
 
+#include <glibmm/i18n.h>
+
 namespace Inkscape {
 namespace Extension {
 

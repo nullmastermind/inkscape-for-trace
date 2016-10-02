@@ -12,12 +12,10 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+#include <config.h>
 #endif
 
-
 #include "display/curve.h"
-#include <2geom/rect.h>
 
 #include "inkscape.h"
 #include "document.h"
@@ -25,12 +23,12 @@
 #include "style.h"
 #include "sp-rect.h"
 #include <glibmm/i18n.h>
-#include "xml/repr.h"
 #include "sp-guide.h"
 #include "preferences.h"
 
 #define noRECT_VERBOSE
 
+//#define OBJECT_TRACE
 
 SPRect::SPRect() : SPShape() {
 }
@@ -39,6 +37,10 @@ SPRect::~SPRect() {
 }
 
 void SPRect::build(SPDocument* doc, Inkscape::XML::Node* repr) {
+#ifdef OBJECT_TRACE
+    objectTrace( "SPRect::build" );
+#endif
+
     SPShape::build(doc, repr);
 
     this->readAttr("x");
@@ -47,9 +49,20 @@ void SPRect::build(SPDocument* doc, Inkscape::XML::Node* repr) {
     this->readAttr("height");
     this->readAttr("rx");
     this->readAttr("ry");
+
+#ifdef OBJECT_TRACE
+    objectTrace( "SPRect::build", false );
+#endif
 }
 
 void SPRect::set(unsigned key, gchar const *value) {
+
+#ifdef OBJECT_TRACE
+    std::stringstream temp;
+    temp << "SPRect::set: " << key  << " " << (value?value:"null");
+    objectTrace( temp.str() );
+#endif
+
     /* fixme: We need real error processing some time */
 
     // We must update the SVGLengths immediately or nodes may be misplaced after they are moved.
@@ -107,9 +120,17 @@ void SPRect::set(unsigned key, gchar const *value) {
             SPShape::set(key, value);
             break;
     }
+#ifdef OBJECT_TRACE
+    objectTrace( "SPRect::set", false );
+#endif
 }
 
 void SPRect::update(SPCtx* ctx, unsigned int flags) {
+
+#ifdef OBJECT_TRACE
+    objectTrace( "SPRect::update", true, flags );
+#endif
+
     if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
         SPItemCtx const *ictx = reinterpret_cast<SPItemCtx const *>(ctx);
 
@@ -130,9 +151,17 @@ void SPRect::update(SPCtx* ctx, unsigned int flags) {
     }
 
     SPShape::update(ctx, flags);
+#ifdef OBJECT_TRACE
+    objectTrace( "SPRect::update", false, flags );
+#endif
 }
 
 Inkscape::XML::Node * SPRect::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
+
+#ifdef OBJECT_TRACE
+    objectTrace( "SPRect::write", true, flags );
+#endif
+
     if ((flags & SP_OBJECT_WRITE_BUILD) && !repr) {
         repr = xml_doc->createElement("svg:rect");
     }
@@ -153,6 +182,10 @@ Inkscape::XML::Node * SPRect::write(Inkscape::XML::Document *xml_doc, Inkscape::
 
     this->set_shape(); // evaluate SPCurve
     SPShape::write(xml_doc, repr, flags);
+
+#ifdef OBJECT_TRACE
+    objectTrace( "SPRect::write", false, flags );
+#endif
 
     return repr;
 }

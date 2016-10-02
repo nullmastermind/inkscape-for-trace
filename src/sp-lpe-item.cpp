@@ -13,7 +13,6 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
 #endif
 
 #include "ui/tool/multi-path-manipulator.h"
@@ -27,11 +26,7 @@
 
 #include "sp-path.h"
 #include "sp-item-group.h"
-#include "streq.h"
-#include "macros.h"
 #include "attributes.h"
-#include "sp-lpe-item.h"
-#include "xml/repr.h"
 #include "uri.h"
 #include "message-stack.h"
 #include "inkscape.h"
@@ -40,14 +35,10 @@
 #include "sp-ellipse.h"
 #include "display/curve.h"
 #include "svg/svg.h"
-#include <2geom/pathvector.h>
 #include "sp-clippath.h"
 #include "sp-mask.h"
 #include "ui/tools-switch.h"
 #include "ui/tools/node-tool.h"
-#include "ui/tools/tool-base.h"
-
-#include <algorithm>
 
 /* LPEItem base class */
 static void sp_lpe_item_enable_path_effects(SPLPEItem *lpeitem, bool enable);
@@ -210,9 +201,6 @@ Inkscape::XML::Node* SPLPEItem::write(Inkscape::XML::Document *xml_doc, Inkscape
  * returns true when LPE was successful.
  */
 bool SPLPEItem::performPathEffect(SPCurve *curve, bool is_clip_or_mask) {
-    if (!this) {
-        return false;
-    }
 
     if (!curve) {
         return false;
@@ -472,7 +460,7 @@ void SPLPEItem::addPathEffect(std::string value, bool reset)
         if (SP_ACTIVE_DESKTOP ) {
         Inkscape::UI::Tools::ToolBase *ec = SP_ACTIVE_DESKTOP->event_context;
             if (INK_IS_NODE_TOOL(ec)) {
-                tools_switch(SP_ACTIVE_DESKTOP, TOOLS_LPETOOL); //mhh
+                tools_switch(SP_ACTIVE_DESKTOP, TOOLS_SELECT); //mhh
                 tools_switch(SP_ACTIVE_DESKTOP, TOOLS_NODES);
             }
         }
@@ -721,7 +709,7 @@ SPLPEItem::apply_to_clip_or_mask(SPItem *clip_mask, SPItem *item)
                 // LPE was unsuccesfull. Read the old 'd'-attribute.
                 if (gchar const * value = repr->attribute("d")) {
                     Geom::PathVector pv = sp_svg_read_pathv(value);
-                    SPCurve *oldcurve = new SPCurve(pv);
+                    SPCurve *oldcurve = new (std::nothrow) SPCurve(pv);
                     if (oldcurve) {
                         SP_SHAPE(clip_mask)->setCurve(oldcurve, TRUE);
                         oldcurve->unref();

@@ -12,78 +12,47 @@ list(APPEND INKSCAPE_INCS ${PROJECT_SOURCE_DIR}
 )
 
 # ----------------------------------------------------------------------------
+# Add C++11 standard compliance
+# TODO: Add a proper check for compiler compliance here
+# ----------------------------------------------------------------------------
+list(APPEND INKSCAPE_CXX_FLAGS "-std=c++11")
+
+# ----------------------------------------------------------------------------
 # Files we include
 # ----------------------------------------------------------------------------
 if(WIN32)
-message("---------------- BEGIN: Win32 ----------------")
+	# Set the link and include directories
+	get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
+	
+	# MinGW supplied STL does not define these floating point constants.. :/
+	add_definitions(-DFLT_EPSILON=1e-9)
+	add_definitions(-DFLT_MAX=1e+37)
+	add_definitions(-DFLT_MIN=1e-37)
 
- # The name of the target operating system
- set(CMAKE_SYSTEM_NAME Windows)
+	list(APPEND INKSCAPE_LIBS "-lmscms")
 
- message("CMAKE_SYSTEM_NAME: " ${CMAKE_SYSTEM_NAME})
-
- set(CMAKE_C_COMPILER gcc)
- set(CMAKE_CXX_COMPILER g++)
- set(CMAKE_RC_COMPILER windres)
-
- # Adjust the command line parameters for windres to the verion of MinGW.
- set(CMAKE_RC_COMPILER_INIT windres)
- enable_language(RC)
- set(CMAKE_RC_COMPILE_OBJECT "<CMAKE_RC_COMPILER> -O coff -i <SOURCE> -o <OBJECT>")
-
- # Here is the target environment located
- set(CMAKE_FIND_ROOT_PATH $ENV{MINGW_PATH}/)
-
- message("CMAKE_FIND_ROOT_PATH: " ${CMAKE_FIND_ROOT_PATH})
-
- # Tweak CMake into using Unix-style library names.
- set(CMAKE_FIND_LIBRARY_PREFIXES "lib")
- set(CMAKE_FIND_LIBRARY_SUFFIXES ".dll.a" ".dll")
-
- message("CMAKE_FIND_LIBRARY_PREFIXES: " ${CMAKE_FIND_LIBRARY_PREFIXES})
- message("CMAKE_FIND_LIBRARY_SUFFIXES: " ${CMAKE_FIND_LIBRARY_SUFFIXES})
-
- set(SDL_INCLUDE_DIR ${CMAKE_FIND_ROOT_PATH}x86_64-w64-mingw32/include/c++)
-
- message("SDL_INCLUDE_DIR: " ${SDL_INCLUDE_DIR})
-
- #if (${CMAKE_SYSTEM_PROCESSOR} MATCHES "^amd64")
- link_directories($ENV{MINGW_PATH}/lib)
- link_directories($ENV{DEVLIBS_PATH}/lib)
- link_directories($ENV{MINGW_PATH}/x86_64-w64-mingw32/lib)
- link_directories($ENV{WINDIR}/system32)
-
- include_directories($ENV{MINGW_PATH}/include)
-
- include_directories($ENV{MINGW_PATH}/x86_64-w64-mingw32/include)
- include_directories($ENV{MINGW_PATH}/x86_64-w64-mingw32/include/c++)
- #endif ()
-
- get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
-
- foreach(dir ${dirs})
-   message("CMAKE_INCLUDE_DIR:" ${dir})
- endforeach()
-
- add_definitions(-DFLT_EPSILON=1e-9)
- add_definitions(-DFLT_MAX=1e+37)
- add_definitions(-DFLT_MIN=1e-37)
-
- list(APPEND INKSCAPE_LIBS "-lgomp")
- list(APPEND INKSCAPE_LIBS "-lwinpthread")
- list(APPEND INKSCAPE_LIBS "-lmscms")
-
- list(APPEND INKSCAPE_CXX_FLAGS "-mwindows")
- list(APPEND INKSCAPE_CXX_FLAGS "-mthreads")
- list(APPEND INKSCAPE_CXX_FLAGS "-m64")
-
- # Try to compile using C++ 11.
- set(CMAKE_CXX_STANDARD 11)
-
- message("---------------- END: Win32 ----------------")
+	list(APPEND INKSCAPE_CXX_FLAGS "-mwindows")
+	list(APPEND INKSCAPE_CXX_FLAGS "-mthreads")
+	
+	if(HAVE_MINGW64)
+		list(APPEND INKSCAPE_LIBS "-lgomp")
+		list(APPEND INKSCAPE_LIBS "-lwinpthread")
+	
+		list(APPEND INKSCAPE_CXX_FLAGS "-m64")
+	else()
+		list(APPEND INKSCAPE_CXX_FLAGS "-m32")
+	endif()
 endif()
 
-pkg_check_modules(INKSCAPE_DEP REQUIRED pangocairo pangoft2 fontconfig gthread-2.0 gsl gmodule-2.0)
+pkg_check_modules(INKSCAPE_DEP REQUIRED
+	          harfbuzz
+	          pangocairo
+		  pangoft2
+		  fontconfig
+		  gthread-2.0
+		  gsl
+		  gmodule-2.0)
+
 list(APPEND INKSCAPE_LIBS ${INKSCAPE_DEP_LDFLAGS})
 list(APPEND INKSCAPE_INCS_SYS ${INKSCAPE_DEP_INCLUDE_DIRS})
 list(APPEND INKSCAPE_LIBS ${INKSCAPE_DEP_LIBRARIES})
@@ -262,12 +231,16 @@ if(WITH_DBUS)
     endif()
 endif()
 
-if(WITH_GTEST)
-    if(EXISTS "${GMOCK_DIR}" AND IS_DIRECTORY "${GMOCK_DIR}")
-	
-    else()
-	set(WITH_GTEST off)
-    endif()
+if(WITH_SVG2)
+	add_definitions(-DWITH_MESH -DWITH_CSSBLEND -DWITH_CSSCOMPOSITE -DWITH_SVG2)
+else()
+	add_definitions(-UWITH_MESH -UWITH_CSSBLEND -UWITH_CSSCOMPOSITE -UWITH_SVG2)
+endif()
+
+if(WITH_LPETOOL)
+	add_definitions(-DWITH_LPETOOL -DLPE_ENABLE_TEST_EFFECTS)
+else()
+	add_definitions(-UWITH_LPETOOL -ULPE_ENABLE_TEST_EFFECTS)
 endif()
 
 # ----------------------------------------------------------------------------
@@ -277,7 +250,6 @@ endif()
 set(TRY_GTKSPELL 1)
 # Include dependencies:
 # use patched version until GTK2_CAIROMMCONFIG_INCLUDE_DIR is added
-if("${WITH_GTK3_EXPERIMENTAL}")
     pkg_check_modules(
         GTK3
         REQUIRED
@@ -287,11 +259,7 @@ if("${WITH_GTK3_EXPERIMENTAL}")
         gdk-3.0>=3.8
         gdl-3.0>=3.4
         )
-    message("Using EXPERIMENTAL Gtkmm 3 build")
     list(APPEND INKSCAPE_CXX_FLAGS ${GTK3_CFLAGS_OTHER})
-    set(WITH_GTKMM_3_0 1)
-    message("Using external GDL")
-    set(WITH_EXT_GDL 1)
 
     # Check whether we can use new features in Gtkmm 3.10
     # TODO: Drop this test and bump the version number in the GTK test above
@@ -331,32 +299,6 @@ if("${WITH_GTK3_EXPERIMENTAL}")
         ${GTK3_LIBRARIES}
         ${GTKSPELL3_LIBRARIES}
     )
-else()
-    pkg_check_modules(GTK REQUIRED
-                     gtkmm-2.4>=2.24
-                     gdkmm-2.4
-                     gtk+-2.0
-                     gdk-2.0
-                     )
-    list(APPEND INKSCAPE_CXX_FLAGS ${GTK_CFLAGS_OTHER})
-    pkg_check_modules(GTKSPELL2 gtkspell-2.0)
-    if("${GTKSPELL2_FOUND}")
-        message("Using GtkSpell 2")
-        add_definitions(${GTKSPELL2_CFLAGS_OTHER})
-        set (WITH_GTKSPELL 1)
-    else()
-        unset(WITH_GTKSPELL)
-    endif()
-    list(APPEND INKSCAPE_INCS_SYS
-        ${GTK_INCLUDE_DIRS}
-        ${GTKSPELL2_INCLUDE_DIRS}
-        )
-
-    list(APPEND INKSCAPE_LIBS
-        ${GTK_LIBRARIES}
-        ${GTKSPELL2_LIBRARIES}
-        )
-endif()
 
 find_package(Freetype REQUIRED)
 list(APPEND INKSCAPE_INCS_SYS ${FREETYPE_INCLUDE_DIRS})

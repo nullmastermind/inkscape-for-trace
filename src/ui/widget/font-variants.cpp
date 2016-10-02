@@ -8,26 +8,18 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+#include <config.h>
 #endif
 
 #include <gtkmm.h>
 #include <glibmm/i18n.h>
 #include <libnrtype/font-instance.h>
-#include <iostream>
 
 #include "font-variants.h"
 
 // For updating from selection
 #include "desktop.h"
-#include "selection.h"
-#include "style.h"
 #include "sp-text.h"
-#include "sp-tspan.h"
-#include "sp-tref.h"
-#include "sp-textpath.h"
-#include "sp-item-group.h"
-#include "xml/repr.h"
 
 namespace Inkscape {
 namespace UI {
@@ -637,7 +629,7 @@ namespace Widget {
           } else if( _caps_all_small.get_active() ) {
               css_string = "all-small-caps";
               caps_new = SP_CSS_FONT_VARIANT_CAPS_ALL_SMALL;
-          } else if( _caps_all_petite.get_active() ) {
+          } else if( _caps_petite.get_active() ) {
               css_string = "petite";
               caps_new = SP_CSS_FONT_VARIANT_CAPS_PETITE;
           } else if( _caps_all_petite.get_active() ) {

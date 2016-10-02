@@ -8,12 +8,11 @@
 //#define LPE_ENABLE_TEST_EFFECTS //uncomment for toy effects
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+#include <config.h>
 #endif
 
 // include effects:
 #include "live_effects/lpe-patternalongpath.h"
-#include "live_effects/effect.h"
 #include "live_effects/lpe-angle_bisector.h"
 #include "live_effects/lpe-attach-path.h"
 #include "live_effects/lpe-bendpath.h"
@@ -64,29 +63,14 @@
 #include "live_effects/lpe-vonkoch.h"
 
 #include "xml/node-event-vector.h"
-#include "sp-object.h"
-#include "attributes.h"
 #include "message-stack.h"
-#include "desktop.h"
-#include "inkscape.h"
-#include "document.h"
 #include "document-private.h"
-#include "xml/document.h"
-#include <glibmm/i18n.h>
 #include "ui/tools/pen-tool.h"
+#include "ui/tools/node-tool.h"
 #include "ui/tools-switch.h"
 #include "knotholder.h"
-#include "sp-lpe-item.h"
 #include "live_effects/lpeobject.h"
-#include "live_effects/parameter/parameter.h"
-#include <glibmm/ustring.h>
 #include "display/curve.h"
-
-#include <exception>
-
-#include <2geom/sbasis-to-bezier.h>
-#include <2geom/affine.h>
-#include <2geom/pathvector.h>
 
 
 namespace Inkscape {
@@ -471,6 +455,7 @@ void Effect::doBeforeEffect_impl(SPLPEItem const* lpeitem)
         sp_lpe_item->apply_to_clippath(sp_lpe_item);
         sp_lpe_item->apply_to_mask(sp_lpe_item);
     }
+    update_helperpath();
 }
 
 /**
@@ -660,6 +645,20 @@ Effect::addCanvasIndicators(SPLPEItem const*/*lpeitem*/, std::vector<Geom::PathV
 {
 }
 
+/**
+ * Call to a method on nodetool to update the helper path from the effect
+ */
+void
+Effect::update_helperpath() {
+    using namespace Inkscape::UI;
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    if (desktop) {
+        if (tools_isactive(desktop, TOOLS_NODES)) {
+            Inkscape::UI::Tools::NodeTool *nt = static_cast<Inkscape::UI::Tools::NodeTool*>(desktop->event_context);
+            nt->update_helperpath();
+        }
+    }
+}
 
 /**
  * This *creates* a new widget, management of deletion should be done by the caller
@@ -714,6 +713,7 @@ Effect::getParameter(const char * key)
 {
     Glib::ustring stringkey(key);
 
+    if (param_vector.empty()) return NULL;
     std::vector<Parameter *>::iterator it = param_vector.begin();
     while (it != param_vector.end()) {
         Parameter * param = *it;

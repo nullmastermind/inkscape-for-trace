@@ -27,9 +27,6 @@
 // TODO: reduce header bloat if possible
 
 #include "file.h" // for file_import, used in _pasteImage
-#include <list>
-#include <algorithm>
-#include <glibmm/ustring.h>
 #include <glibmm/i18n.h>
 #include <glib/gstdio.h> // for g_file_set_contents etc., used in _onGet and paste
 #include "inkgc/gc-core.h"
@@ -41,7 +38,6 @@
 #include "desktop-style.h" // for sp_desktop_set_style, used in _pasteStyle
 #include "document.h"
 #include "document-private.h"
-#include "selection.h"
 #include "message-stack.h"
 #include "context-fns.h"
 #include "ui/tools/dropper-tool.h" // used in copy()
@@ -50,17 +46,13 @@
 #include "extension/input.h"
 #include "extension/output.h"
 #include "selection-chemistry.h"
-#include <2geom/rect.h>
 #include <2geom/transforms.h>
 #include "box3d.h"
 #include "gradient-drag.h"
 #include "sp-marker.h"
-#include "sp-item.h"
 #include "sp-item-transform.h" // for sp_item_scale_rel, used in _pasteSize
 #include "sp-path.h"
 #include "sp-pattern.h"
-#include "sp-shape.h"
-#include "sp-gradient.h"
 #include "sp-gradient-reference.h"
 #include "sp-linear-gradient.h"
 #include "sp-radial-gradient.h"
@@ -68,8 +60,6 @@
 #include "sp-mask.h"
 #include "sp-textpath.h"
 #include "sp-rect.h"
-#include "sp-use.h"
-#include "sp-symbol.h"
 #include "live_effects/lpeobject.h"
 #include "live_effects/lpeobject-reference.h"
 #include "live_effects/parameter/path.h"
@@ -83,9 +73,7 @@
 #include "helper/png-write.h"
 #include "svg/svg-color.h"
 #include "sp-namedview.h"
-#include "snap.h"
 #include "persp3d.h"
-#include "preferences.h"
 
 /// Made up mimetype to represent Gdk::Pixbuf clipboard contents.
 #define CLIPBOARD_GDK_PIXBUF_TARGET "image/x-gdk-pixbuf"
@@ -522,8 +510,8 @@ bool ClipboardManagerImpl::pasteSize(SPDesktop *desktop, bool separately, bool a
 
         // resize each object in the selection
         if (separately) {
-            std::vector<SPItem*> itemlist=selection->itemList();
-            for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();++i){
+            auto itemlist= selection->items();
+            for(auto i=itemlist.begin();i!=itemlist.end();++i){
                 SPItem *item = *i;
                 if (item) {
                     Geom::OptRect obj_size = item->desktopVisualBounds();
@@ -539,8 +527,8 @@ bool ClipboardManagerImpl::pasteSize(SPDesktop *desktop, bool separately, bool a
         else {
             Geom::OptRect sel_size = selection->visualBounds();
             if ( sel_size ) {
-                sp_selection_scale_relative(selection, sel_size->midpoint(),
-                                            _getScale(desktop, min, max, *sel_size, apply_x, apply_y));
+                sp_object_set_scale_relative(selection, sel_size->midpoint(),
+                                             _getScale(desktop, min, max, *sel_size, apply_x, apply_y));
             }
         }
         pasted = true;
@@ -578,8 +566,8 @@ bool ClipboardManagerImpl::pastePathEffect(SPDesktop *desktop)
                 desktop->doc()->importDefs(tempdoc);
                 // make sure all selected items are converted to paths first (i.e. rectangles)
                 sp_selected_to_lpeitems(desktop);
-                std::vector<SPItem*> itemlist=selection->itemList();
-                for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();++i){
+                auto itemlist= selection->items();
+                for(auto i=itemlist.begin();i!=itemlist.end();++i){
                     SPItem *item = *i;
                     _applyPathEffect(item, effectstack);
                 }
@@ -661,9 +649,9 @@ Glib::ustring ClipboardManagerImpl::getShapeOrTextObjectId(SPDesktop *desktop)
 void ClipboardManagerImpl::_copySelection(Inkscape::Selection *selection)
 {
     // copy the defs used by all items
-    std::vector<SPItem*> itemlist=selection->itemList();
+    auto itemlist= selection->items();
     cloned_elements.clear();
-    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();++i){
+    for(auto i=itemlist.begin();i!=itemlist.end();++i){
         SPItem *item = *i;
         if (item) {
             _copyUsedDefs(item);
@@ -674,7 +662,7 @@ void ClipboardManagerImpl::_copySelection(Inkscape::Selection *selection)
 
     // copy the representation of the items
     std::vector<SPObject*> sorted_items;
-    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();++i)
+    for(auto i=itemlist.begin();i!=itemlist.end();++i)
         sorted_items.push_back(*i);
     sort(sorted_items.begin(),sorted_items.end(),sp_object_compare_position_bool);
 
@@ -839,8 +827,8 @@ void ClipboardManagerImpl::_copyUsedDefs(SPItem *item)
             SPObject *mask = item->mask_ref->getObject();
             _copyNode(mask->getRepr(), _doc, _defs);
             // recurse into the mask for its gradients etc.
-            for (SPObject *o = mask->children ; o != NULL ; o = o->next) {
-                SPItem *childItem = dynamic_cast<SPItem *>(o);
+            for(auto& o: mask->children) {
+                SPItem *childItem = dynamic_cast<SPItem *>(&o);
                 if (childItem) {
                     _copyUsedDefs(childItem);
                 }
@@ -857,8 +845,8 @@ void ClipboardManagerImpl::_copyUsedDefs(SPItem *item)
     }
 
     // recurse
-    for (SPObject *o = item->children ; o != NULL ; o = o->next) {
-        SPItem *childItem = dynamic_cast<SPItem *>(o);
+    for(auto& o: item->children) {
+        SPItem *childItem = dynamic_cast<SPItem *>(&o);
         if (childItem) {
             _copyUsedDefs(childItem);
         }
@@ -894,8 +882,8 @@ void ClipboardManagerImpl::_copyPattern(SPPattern *pattern)
         _copyNode(pattern->getRepr(), _doc, _defs);
 
         // items in the pattern may also use gradients and other patterns, so recurse
-        for ( SPObject *child = pattern->firstChild() ; child ; child = child->getNext() ) {
-            SPItem *childItem = dynamic_cast<SPItem *>(child);
+        for (auto& child: pattern->children) {
+            SPItem *childItem = dynamic_cast<SPItem *>(&child);
             if (childItem) {
                 _copyUsedDefs(childItem);
             }
@@ -1300,11 +1288,7 @@ Geom::Scale ClipboardManagerImpl::_getScale(SPDesktop *desktop, Geom::Point cons
  */
 Glib::ustring ClipboardManagerImpl::_getBestTarget()
 {
-#if WITH_GTKMM_3_0
-    std::vector<Glib::ustring> targets = _clipboard->wait_for_targets();
-#else
-    std::list<Glib::ustring> targets = _clipboard->wait_for_targets();
-#endif
+    auto targets = _clipboard->wait_for_targets();
 
     // clipboard target debugging snippet
     /*
@@ -1363,12 +1347,7 @@ void ClipboardManagerImpl::_setClipboardTargets()
 {
     Inkscape::Extension::DB::OutputList outlist;
     Inkscape::Extension::db.get_output_list(outlist);
-
-#if WITH_GTKMM_3_0
     std::vector<Gtk::TargetEntry> target_list;
-#else
-    std::list<Gtk::TargetEntry> target_list;
-#endif
 
     bool plaintextSet = false;
     for (Inkscape::Extension::DB::OutputList::const_iterator out = outlist.begin() ; out != outlist.end() ; ++out) {

@@ -10,13 +10,12 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+#include "config.h"
 #endif
 
 #include <gtkmm/box.h>
 #include <gtkmm/dialog.h>
 #include <gtkmm/textview.h>
-#include <gtkmm/button.h>
 #include <gtkmm/menubar.h>
 #include <gtkmm/scrolledwindow.h>
 #include <glibmm/i18n.h>
@@ -68,12 +67,7 @@ DebugDialogImpl::DebugDialogImpl()
 {
     set_title(_("Messages"));
     set_size_request(300, 400);
-
-#if WITH_GTKMM_3_0
-    Gtk::Box *mainVBox = get_content_area();
-#else
-    Gtk::Box *mainVBox = get_vbox();
-#endif
+    auto mainVBox = get_content_area();
 
     //## Add a menu for clear()
     Gtk::MenuItem* item = Gtk::manage(new Gtk::MenuItem(_("_File"), true));

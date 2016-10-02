@@ -33,48 +33,37 @@
 #include "ui/dialog/ocaldialogs.h"
 #include "desktop.h"
 
-#include "dir-util.h"
 #include "document-private.h"
 #include "document-undo.h"
 #include "ui/tools/tool-base.h"
 #include "extension/db.h"
 #include "extension/input.h"
 #include "extension/output.h"
-#include "extension/system.h"
 #include "file.h"
 #include "helper/png-write.h"
 #include "id-clash.h"
 #include "inkscape.h"
-#include "inkscape.h"
+#include "inkscape-version.h"
 #include "ui/interface.h"
 #include "io/sys.h"
-#include "message.h"
 #include "message-stack.h"
 #include "path-prefix.h"
-#include "preferences.h"
 #include "print.h"
 #include "resource-manager.h"
 #include "rdf.h"
 #include "selection-chemistry.h"
-#include "selection.h"
 #include "sp-namedview.h"
 #include "style.h"
 #include "ui/view/view-widget.h"
-#include "uri.h"
 #include "xml/rebase-hrefs.h"
 #include "xml/sp-css-attr.h"
 #include "verbs.h"
 #include "event-log.h"
 #include "ui/dialog/font-substitution.h"
 
-#include <gtk/gtk.h>
 #include <gtkmm/main.h>
-
-#include <glibmm/convert.h>
-#include <glibmm/i18n.h>
 #include <glibmm/miscutils.h>
-
-#include <string>
+#include <glibmm/convert.h>
 
 using Inkscape::DocumentUndo;
 
@@ -317,6 +306,12 @@ bool sp_file_open(const Glib::ustring &uri,
 
         // everyone who cares now has a reference, get rid of our`s
         doc->doUnref();
+
+        SPRoot *root = doc->getRoot();
+
+        // This is the only place original values should be set.
+        root->original.inkscape = root->version.inkscape;
+        root->original.svg      = root->version.svg;
 
         // resize the window to match the document properties
         sp_namedview_window_from_document(desktop);
@@ -669,6 +664,8 @@ file_save(Gtk::Window &parentWindow, SPDocument *doc, const Glib::ustring &uri,
     if (!doc || uri.size()<1) //Safety check
         return false;
 
+    Inkscape::Version save = doc->getRoot()->version.inkscape;
+    doc->getReprRoot()->setAttribute("inkscape:version", Inkscape::version_string);
     try {
         Inkscape::Extension::save(key, doc, uri.c_str(),
                                   false,
@@ -681,6 +678,8 @@ file_save(Gtk::Window &parentWindow, SPDocument *doc, const Glib::ustring &uri,
         sp_ui_error_dialog(text);
         g_free(text);
         g_free(safeUri);
+        // Restore Inkscape version
+        doc->getReprRoot()->setAttribute("inkscape:version", sp_version_to_string( save ));
         return false;
     } catch (Inkscape::Extension::Output::file_read_only &e) {
         gchar *safeUri = Inkscape::IO::sanitizeString(uri.c_str());
@@ -689,6 +688,7 @@ file_save(Gtk::Window &parentWindow, SPDocument *doc, const Glib::ustring &uri,
         sp_ui_error_dialog(text);
         g_free(text);
         g_free(safeUri);
+        doc->getReprRoot()->setAttribute("inkscape:version", sp_version_to_string( save ));
         return false;
     } catch (Inkscape::Extension::Output::save_failed &e) {
         gchar *safeUri = Inkscape::IO::sanitizeString(uri.c_str());
@@ -697,14 +697,17 @@ file_save(Gtk::Window &parentWindow, SPDocument *doc, const Glib::ustring &uri,
         sp_ui_error_dialog(text);
         g_free(text);
         g_free(safeUri);
+        doc->getReprRoot()->setAttribute("inkscape:version", sp_version_to_string( save ));
         return false;
     } catch (Inkscape::Extension::Output::save_cancelled &e) {
         SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Document not saved."));
+        doc->getReprRoot()->setAttribute("inkscape:version", sp_version_to_string( save ));
         return false;
     } catch (Inkscape::Extension::Output::no_overwrite &e) {
         return sp_file_save_dialog(parentWindow, doc, save_method);
     } catch (...) {
         SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("Document not saved."));
+        doc->getReprRoot()->setAttribute("inkscape:version", sp_version_to_string( save ));
         return false;
     }
 
@@ -1115,14 +1118,14 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place)
     Inkscape::Selection *selection = desktop->getSelection();
     selection->setReprList(pasted_objects_not);
     Geom::Affine doc2parent = SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
-    sp_selection_apply_affine(selection, desktop->dt2doc() * doc2parent * desktop->doc2dt(), true, false, false);
+    sp_object_set_apply_affine(selection, desktop->dt2doc() * doc2parent * desktop->doc2dt(), true, false, false);
     sp_selection_delete(desktop);
 
     // Change the selection to the freshly pasted objects
     selection->setReprList(pasted_objects);
 
     // Apply inverse of parent transform
-    sp_selection_apply_affine(selection, desktop->dt2doc() * doc2parent * desktop->doc2dt(), true, false, false);
+    sp_object_set_apply_affine(selection, desktop->dt2doc() * doc2parent * desktop->doc2dt(), true, false, false);
 
     // Update (among other things) all curves in paths, for bounds() to work
     target_document->ensureUpToDate();
@@ -1152,7 +1155,7 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place)
             m.unSetup();
         }
 
-        sp_selection_move_relative(selection, offset);
+        sp_object_set_move_relative(selection, offset);
     }
 }
 
@@ -1190,8 +1193,8 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
 
         // Count the number of top-level items in the imported document.
         guint items_count = 0;
-        for ( SPObject *child = doc->getRoot()->firstChild(); child; child = child->getNext()) {
-            if (SP_IS_ITEM(child)) {
+        for (auto& child: doc->getRoot()->children) {
+            if (SP_IS_ITEM(&child)) {
                 items_count++;
             }
         }
@@ -1220,9 +1223,9 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
         // Construct a new object representing the imported image,
         // and insert it into the current document.
         SPObject *new_obj = NULL;
-        for ( SPObject *child = doc->getRoot()->firstChild(); child; child = child->getNext() ) {
-            if (SP_IS_ITEM(child)) {
-                Inkscape::XML::Node *newitem = child->getRepr()->duplicate(xml_in_doc);
+        for (auto& child: doc->getRoot()->children) {
+            if (SP_IS_ITEM(&child)) {
+                Inkscape::XML::Node *newitem = child.getRepr()->duplicate(xml_in_doc);
 
                 // convert layers to groups, and make sure they are unlocked
                 // FIXME: add "preserve layers" mode where each layer from
@@ -1235,10 +1238,10 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
             }
 
             // don't lose top-level defs or style elements
-            else if (child->getRepr()->type() == Inkscape::XML::ELEMENT_NODE) {
-                const gchar *tag = child->getRepr()->name();
+            else if (child.getRepr()->type() == Inkscape::XML::ELEMENT_NODE) {
+                const gchar *tag = child.getRepr()->name();
                 if (!strcmp(tag, "svg:style")) {
-                    in_doc->getRoot()->appendChildRepr(child->getRepr()->duplicate(xml_in_doc));
+                    in_doc->getRoot()->appendChildRepr(child.getRepr()->duplicate(xml_in_doc));
                 }
             }
         }
@@ -1257,7 +1260,7 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
             // c2p is identity matrix at this point unless ensureUpToDate is called
             doc->ensureUpToDate();
             Geom::Affine affine = doc->getRoot()->c2p * SP_ITEM(place_to_insert)->i2doc_affine().inverse();
-            sp_selection_apply_affine(selection, desktop->dt2doc() * affine * desktop->doc2dt(), true, false, false);
+            sp_object_set_apply_affine(selection, desktop->dt2doc() * affine * desktop->doc2dt(), true, false, false);
 
             // move to mouse pointer
             {
@@ -1265,7 +1268,7 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
                 Geom::OptRect sel_bbox = selection->visualBounds();
                 if (sel_bbox) {
                     Geom::Point m( desktop->point() - sel_bbox->midpoint() );
-                    sp_selection_move_relative(selection, m, false);
+                    sp_object_set_move_relative(selection, m, false);
                 }
             }
         }

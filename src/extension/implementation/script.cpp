@@ -689,9 +689,9 @@ void Script::effect(Inkscape::Extension::Effect *module,
         return;
     }
 
-    std::vector<SPItem*> selected =
-        desktop->getSelection()->itemList(); //desktop should not be NULL since doc was checked and desktop is a casted pointer
-    for(std::vector<SPItem*>::const_iterator x = selected.begin(); x != selected.end(); ++x){
+    auto selected =
+            desktop->getSelection()->items(); //desktop should not be NULL since doc was checked and desktop is a casted pointer
+    for(auto x = selected.begin(); x != selected.end(); ++x){
         Glib::ustring selected_id;
         selected_id += "--id=";
         selected_id += (*x)->getId();
@@ -808,15 +808,17 @@ void Script::effect(Inkscape::Extension::Effect *module,
     \param  oldroot  The root node of the old (destination) document.
     \param  newroot  The root node of the new (source) document.
 
-    This function first deletes all the elements in the old document by
+    This function first deletes all the root attributes in the old document followed
+    by copying all the root attributes from the new document to the old document.
+
+    It then deletes all the elements in the old document by
     making two pass, the first to create a list of the old elements and
     the second to actually delete them. This two pass approach removes issues
     with the list being change while parsing through it... lots of nasty bugs.
 
     Then, it copies all the element in the new document into the old document.
 
-    Finally, it replaces the attributes in the root element of the old document
-    by the attributes in root of the new document.
+    Finally, it copies the attributes in namedview.
 */
 void Script::copy_doc (Inkscape::XML::Node * oldroot, Inkscape::XML::Node * newroot)
 {
@@ -829,6 +831,28 @@ void Script::copy_doc (Inkscape::XML::Node * oldroot, Inkscape::XML::Node * newr
     // For copying attributes in root and in namedview
     using Inkscape::Util::List;
     using Inkscape::XML::AttributeRecord;
+    std::vector<gchar const *> attribs;
+
+    // Must explicitly copy root attributes. This must be done first since
+    // copying grid lines calls "SPGuide::set()" which needs to know the
+    // width, height, and viewBox of the root element.
+
+    // Make a list of all attributes of the old root node.
+    for (List<AttributeRecord const> iter = oldroot->attributeList(); iter; ++iter) {
+        attribs.push_back(g_quark_to_string(iter->key));
+    }
+
+    // Delete the attributes of the old root node.
+    for (std::vector<gchar const *>::const_iterator it = attribs.begin(); it != attribs.end(); ++it) {
+        oldroot->setAttribute(*it, NULL);
+    }
+
+    // Set the new attributes.
+    for (List<AttributeRecord const> iter = newroot->attributeList(); iter; ++iter) {
+        gchar const *name = g_quark_to_string(iter->key);
+        oldroot->setAttribute(name, newroot->attribute(name));
+    }
+
 
     // Question: Why is the "sodipodi:namedview" special? Treating it as a normal
     // elmement results in crashes.
@@ -882,30 +906,9 @@ void Script::copy_doc (Inkscape::XML::Node * oldroot, Inkscape::XML::Node * newr
         }
     }
 
-    std::vector<gchar const *> attribs;
-
-    // Must explicitly copy root attributes.
-
-    // Make a list of all attributes of the old root node.
-    for (List<AttributeRecord const> iter = oldroot->attributeList(); iter; ++iter) {
-        attribs.push_back(g_quark_to_string(iter->key));
-    }
-
-    // Delete the attributes of the old root node.
-    for (std::vector<gchar const *>::const_iterator it = attribs.begin(); it != attribs.end(); ++it) {
-        oldroot->setAttribute(*it, NULL);
-    }
-
-    // Set the new attributes.
-    for (List<AttributeRecord const> iter = newroot->attributeList(); iter; ++iter) {
-        gchar const *name = g_quark_to_string(iter->key);
-        oldroot->setAttribute(name, newroot->attribute(name));
-    }
-
     attribs.clear();
 
     // Must explicitly copy namedview attributes.
-
     // Make a list of all attributes of the old namedview node.
     for (List<AttributeRecord const> iter = oldroot_namedview->attributeList(); iter; ++iter) {
         attribs.push_back(g_quark_to_string(iter->key));
@@ -939,11 +942,7 @@ void Script::checkStderr (const Glib::ustring &data,
     GtkWidget *dlg = GTK_WIDGET(warning.gobj());
     sp_transientize(dlg);
 
-#if WITH_GTKMM_3_0
-    Gtk::Box * vbox = warning.get_content_area();
-#else
-    Gtk::Box * vbox = warning.get_vbox();
-#endif
+    auto vbox = warning.get_content_area();
 
     /* Gtk::TextView * textview = new Gtk::TextView(Gtk::TextBuffer::create()); */
     Gtk::TextView * textview = new Gtk::TextView();

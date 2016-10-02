@@ -13,6 +13,9 @@
 #define SP_EXPORT_H
 
 #include <gtkmm/progressbar.h>
+#include <gtkmm/expander.h>
+#include <gtkmm/grid.h>
+#include <gtkmm/comboboxtext.h>
 
 #include "ui/dialog/desktop-tracker.h"
 #include "ui/widget/panel.h"
@@ -79,17 +82,10 @@ private:
     /*
      * Getter/setter style functions for the spinbuttons
      */
-#if WITH_GTKMM_3_0
     void setValue(Glib::RefPtr<Gtk::Adjustment>& adj, double val);
     void setValuePx(Glib::RefPtr<Gtk::Adjustment>& adj, double val);
     float getValue(Glib::RefPtr<Gtk::Adjustment>& adj);
     float getValuePx(Glib::RefPtr<Gtk::Adjustment>& adj);
-#else
-    void setValue (Gtk::Adjustment *adj, double val);
-    void setValuePx (Gtk::Adjustment *adj, double val);
-    float getValue (Gtk::Adjustment *adj);
-    float getValuePx (Gtk::Adjustment *adj);
-#endif
 
     /**
      * Helper function to create, style and pack spinbuttons for the export dialog.
@@ -112,21 +108,12 @@ private:
      *
      * No unit_selector is stored in the created spinbutton, relies on external unit management
      */
-#if WITH_GTKMM_3_0
     Glib::RefPtr<Gtk::Adjustment> createSpinbutton( gchar const *key, float val, float min, float max,
                                                     float step, float page,
                                                     Gtk::Grid *t, int x, int y,
                                                     const Glib::ustring& ll, const Glib::ustring& lr,
                                                     int digits, unsigned int sensitive,
                                                     void (Export::*cb)() );
-#else
-    Gtk::Adjustment * createSpinbutton( gchar const *key, float val, float min, float max,
-                                        float step, float page,
-                                        Gtk::Table *t, int x, int y,
-                                        const Glib::ustring& ll, const Glib::ustring& lr,
-                                        int digits, unsigned int sensitive,
-                                        void (Export::*cb)() );
-#endif
 
     /**
      * One of the area select radio buttons was pressed
@@ -152,11 +139,7 @@ private:
     void onAreaX1Change() {
         areaXChange(x1_adj);
     } ;
-#if WITH_GTKMM_3_0
     void areaXChange(Glib::RefPtr<Gtk::Adjustment>& adj);
-#else
-    void areaXChange ( Gtk::Adjustment *adj);
-#endif
 
     /**
      * Area Y value changed callback
@@ -167,11 +150,7 @@ private:
     void onAreaY1Change() {
         areaYChange(y1_adj);
     } ;
-#if WITH_GTKMM_3_0
     void areaYChange(Glib::RefPtr<Gtk::Adjustment>& adj);
-#else
-    void areaYChange ( Gtk::Adjustment *adj);
-#endif
 
     /**
      * Unit changed callback
@@ -298,7 +277,6 @@ private:
     Gtk::VBox area_box;
     Gtk::VBox singleexport_box;
 
-#if WITH_GTKMM_3_0
     /* Custom size widgets */
     Glib::RefPtr<Gtk::Adjustment> x0_adj;
     Glib::RefPtr<Gtk::Adjustment> x1_adj;
@@ -312,21 +290,6 @@ private:
     Glib::RefPtr<Gtk::Adjustment> bmheight_adj;
     Glib::RefPtr<Gtk::Adjustment> xdpi_adj;
     Glib::RefPtr<Gtk::Adjustment> ydpi_adj;
-#else
-    /* Custom size widgets */
-    Gtk::Adjustment *x0_adj;
-    Gtk::Adjustment *x1_adj;
-    Gtk::Adjustment *y0_adj;
-    Gtk::Adjustment *y1_adj;
-    Gtk::Adjustment *width_adj;
-    Gtk::Adjustment *height_adj;
-
-    /* Bitmap size widgets */
-    Gtk::Adjustment *bmwidth_adj;
-    Gtk::Adjustment *bmheight_adj;
-    Gtk::Adjustment *xdpi_adj;
-    Gtk::Adjustment *ydpi_adj;
-#endif
 
     Gtk::VBox size_box;
     Gtk::Label* bm_label;
@@ -353,6 +316,17 @@ private:
     Inkscape::UI::Widget::CheckButton    hide_export;
 
     Inkscape::UI::Widget::CheckButton closeWhenDone;
+
+    /* Advanced */
+    Gtk::Expander expander;
+    Inkscape::UI::Widget::CheckButton interlacing;
+    Gtk::Label                        bitdepth_label;
+    Gtk::ComboBoxText                 bitdepth_cb;
+    Gtk::Label                        zlib_label;
+    Gtk::ComboBoxText                 zlib_compression;
+    Gtk::Label                        pHYs_label;
+    Glib::RefPtr<Gtk::Adjustment>     pHYs_adj;
+    Gtk::SpinButton                   pHYs_sb;
 
     /* Export Button widgets */
     Gtk::HBox button_box;

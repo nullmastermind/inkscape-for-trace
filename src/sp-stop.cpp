@@ -22,7 +22,6 @@
 #include "svg/svg.h"
 #include "svg/svg-color.h"
 #include "svg/css-ostringstream.h"
-#include "xml/repr.h"
 
 SPStop::SPStop() : SPObject() {
 	this->path_string = NULL;
@@ -115,6 +114,7 @@ void SPStop::set(unsigned int key, const gchar* value) {
                     // std::cout << "Got Curve" << std::endl;
                     //curve->unref();
                 //}
+                this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             }
             break;
         }

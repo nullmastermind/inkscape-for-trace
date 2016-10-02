@@ -11,7 +11,7 @@
 */
 
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+#include <config.h>
 #endif
 #include "implementation.h"
 
@@ -22,7 +22,6 @@
 #include "selection.h"
 #include "desktop.h"
 
-#include "ui/view/view.h"
 
 namespace Inkscape {
 namespace Extension {
@@ -46,10 +45,10 @@ Gtk::Widget *Implementation::prefs_effect(Inkscape::Extension::Effect *module, I
 
     SPDocument * current_document = view->doc();
 
-    std::vector<SPItem*> selected = ((SPDesktop *)view)->getSelection()->itemList();
+    auto selected = ((SPDesktop *) view)->getSelection()->items();
     Inkscape::XML::Node const* first_select = NULL;
     if (!selected.empty()) {
-        const SPItem * item = selected[0];
+        const SPItem * item = selected.front();
         first_select = item->getRepr();
     }
 

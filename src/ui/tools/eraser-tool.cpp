@@ -24,8 +24,6 @@
 
 #define noERASER_VERBOSE
 
-#include "config.h"
-
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 #include <glibmm/i18n.h>
@@ -38,7 +36,6 @@
 #include "display/canvas-bpath.h"
 #include <2geom/bezier-utils.h>
 
-#include <glib.h>
 #include "macros.h"
 #include "document.h"
 #include "selection.h"
@@ -47,12 +44,8 @@
 
 #include "desktop-style.h"
 #include "message-context.h"
-#include "preferences.h"
 #include "pixmaps/cursor-eraser.xpm"
-#include "xml/repr.h"
 #include "context-fns.h"
-#include "sp-item.h"
-#include "color.h"
 #include "rubberband.h"
 #include "splivarot.h"
 #include "sp-item-group.h"
@@ -64,17 +57,15 @@
 #include "sp-root.h"
 #include "display/canvas-bpath.h"
 #include "display/canvas-arena.h"
-#include "livarot/Shape.h"
 #include "document-undo.h"
 #include "verbs.h"
 #include "style.h"
-#include "style-enums.h"
-#include <2geom/math-utils.h>
 #include <2geom/pathvector.h>
 #include "path-chemistry.h"
 #include "selection-chemistry.h"
 #include "display/curve.h"
-
+#include "layer-model.h"
+#include "layer-manager.h"
 #include "ui/tools/eraser-tool.h"
 
 using Inkscape::DocumentUndo;
@@ -656,7 +647,9 @@ void EraserTool::set_to_accumulated() {
 
             this->repr = repr;
         }
-        SPItem *item_repr = SP_ITEM(SP_OBJECT(document->getRoot())->appendChildRepr(this->repr));
+        SPObject * top_layer = desktop->layer_manager->nthChildOf(desktop->layers->currentRoot(), 0);
+        SPItem *item_repr = SP_ITEM(top_layer->appendChildRepr(this->repr));
+        std::cout << "asffafa\n";
         Inkscape::GC::release(this->repr);
         item_repr->updateRepr();
         Geom::PathVector pathv = this->accumulated->get_pathvector() * this->desktop->dt2doc();
@@ -696,7 +689,7 @@ void EraserTool::set_to_accumulated() {
                         }
                     }
                 } else {
-                    toWorkOn = selection->itemList();
+                    toWorkOn.insert(toWorkOn.end(), selection->items().begin(), selection->items().end());
                 }
                 wasSelection = true;
             }
@@ -722,7 +715,7 @@ void EraserTool::set_to_accumulated() {
                                 Inkscape::GC::release(dup); // parent takes over
                                 selection->set(dup);
                                 if (!this->nowidth) {
-                                    sp_selected_path_union_skip_undo(selection, this->desktop);
+                                    sp_selected_path_union_skip_undo(selection);
                                 }
                                 selection->add(item);
                                 if(item->style->fill_rule.value == SP_WIND_RULE_EVENODD){
@@ -733,9 +726,9 @@ void EraserTool::set_to_accumulated() {
                                     css = 0;
                                 }
                                 if (this->nowidth) {
-                                    sp_selected_path_cut_skip_undo(selection, this->desktop);
+                                    sp_selected_path_cut_skip_undo(selection);
                                 } else {
-                                    sp_selected_path_diff_skip_undo(selection, this->desktop);
+                                    sp_selected_path_diff_skip_undo(selection);
                                 }
                                 workDone = true; // TODO set this only if something was cut.
                                 bool break_apart = prefs->getBool("/tools/eraser/break_apart", false);
@@ -748,7 +741,7 @@ void EraserTool::set_to_accumulated() {
                                 }
                                 if ( !selection->isEmpty() ) {
                                     // If the item was not completely erased, track the new remainder.
-                                    std::vector<SPItem*> nowSel(selection->itemList());
+                                    std::vector<SPItem*> nowSel(selection->items().begin(), selection->items().end());
                                     for (std::vector<SPItem*>::const_iterator i2 = nowSel.begin();i2!=nowSel.end();++i2) {
                                         remainingItems.push_back(*i2);
                                     }
@@ -770,7 +763,7 @@ void EraserTool::set_to_accumulated() {
                             this->repr->parent()->appendChild(dup);
                             Inkscape::GC::release(dup); // parent takes over
                             selection->set(dup);
-                            sp_selected_path_union_skip_undo(selection, this->desktop);
+                            sp_selected_path_union_skip_undo(selection);
                             if (bbox && bbox->intersects(*eraserBbox)) {
                                 SPClipPath *clip_path = item->clip_ref->getObject();
                                 if (clip_path) {
@@ -786,8 +779,8 @@ void EraserTool::set_to_accumulated() {
                                                 sp_object_unref(clip_path);
                                                 sp_selection_raise_to_top(selection, this->desktop, true);
                                                 selection->add(dup_clip);
-                                                sp_selected_path_diff_skip_undo(selection, this->desktop);
-                                                SPItem * clip = SP_ITEM(selection->itemList()[0]);
+                                                sp_selected_path_diff_skip_undo(selection);
+                                                SPItem * clip = SP_ITEM(*(selection->items().begin()));
                                             }
                                         }
                                     }
@@ -802,7 +795,7 @@ void EraserTool::set_to_accumulated() {
                                     rect->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
                                     sp_selection_raise_to_top(selection, this->desktop, true);
                                     selection->add(rect);
-                                    sp_selected_path_diff_skip_undo(selection, this->desktop);
+                                    sp_selected_path_diff_skip_undo(selection);
                                 }
                                 sp_selection_raise_to_top(selection, this->desktop, true);
                                 selection->add(item);
@@ -1020,7 +1013,7 @@ void EraserTool::fit_and_split(bool release) {
                 }
 
                 this->currentcurve->closepath();
-                sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->currentshape), this->currentcurve);
+                sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->currentshape), this->currentcurve, true);
             }
 
             /* Current eraser */
@@ -1057,7 +1050,7 @@ void EraserTool::fit_and_split(bool release) {
 
             SPCanvasItem *cbp = sp_canvas_item_new(desktop->getSketch(), SP_TYPE_CANVAS_BPATH, NULL);
             SPCurve *curve = this->currentcurve->copy();
-            sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH (cbp), curve);
+            sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH (cbp), curve, true);
             curve->unref();
 
             guint32 fillColor = sp_desktop_get_color_tool (desktop, "/tools/eraser", true);
@@ -1106,7 +1099,7 @@ void EraserTool::draw_temporary_box() {
     }
 
     this->currentcurve->closepath();
-    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->currentshape), this->currentcurve);
+    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->currentshape), this->currentcurve, true);
 }
 
 }

@@ -25,7 +25,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+#include <config.h>
 #endif
 
 #include <glibmm/i18n.h>
@@ -38,12 +38,10 @@
 #include "widgets/ege-adjustment-action.h"
 #include "enums.h"
 #include "graphlayout.h"
-#include "widgets/ink-action.h"
+#include "ink-action.h"
+#include "ink-toggle-action.h"
 #include "inkscape.h"
-#include "preferences.h"
-#include "selection.h"
 #include "sp-namedview.h"
-#include "sp-path.h"
 #include "toolbox.h"
 #include "ui/icon-names.h"
 #include "ui/tools/connector-tool.h"
@@ -51,7 +49,6 @@
 #include "verbs.h"
 #include "widgets/spinbutton-events.h"
 #include "xml/node-event-vector.h"
-#include "xml/repr.h"
 
 using Inkscape::UI::UXManager;
 using Inkscape::DocumentUndo;
@@ -97,8 +94,8 @@ static void sp_connector_orthogonal_toggled( GtkToggleAction* act, GObject *tbl 
     gchar *value = is_orthog ? orthog_str : polyline_str ;
 
     bool modmade = false;
-    std::vector<SPItem*> itemlist=desktop->getSelection()->itemList();
-    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();++i){
+    auto itemlist= desktop->getSelection()->items();
+    for(auto i=itemlist.begin();i!=itemlist.end();++i){
         SPItem *item = *i;
 
         if (Inkscape::UI::Tools::cc_item_is_connector(item)) {
@@ -144,8 +141,8 @@ static void connector_curvature_changed(GtkAdjustment *adj, GObject* tbl)
     g_ascii_dtostr(value, G_ASCII_DTOSTR_BUF_SIZE, newValue);
 
     bool modmade = false;
-    std::vector<SPItem*> itemlist=desktop->getSelection()->itemList();
-    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();++i){
+    auto itemlist= desktop->getSelection()->items();
+    for(auto i=itemlist.begin();i!=itemlist.end();++i){
         SPItem *item = *i;
 
         if (Inkscape::UI::Tools::cc_item_is_connector(item)) {
@@ -227,7 +224,9 @@ static void sp_connector_graph_layout(void)
     int saved_compensation = prefs->getInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
     prefs->setInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
 
-    graphlayout(SP_ACTIVE_DESKTOP->getSelection()->itemList());
+    auto tmp = SP_ACTIVE_DESKTOP->getSelection()->items();
+    std::vector<SPItem *> vec(tmp.begin(), tmp.end());
+    graphlayout(vec);
 
     prefs->setInt("/options/clonecompensation/value", saved_compensation);
 

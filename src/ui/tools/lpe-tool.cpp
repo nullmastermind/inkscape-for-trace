@@ -15,19 +15,16 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include <config.h>
 #endif
 
 #include <2geom/sbasis-geometric.h>
-#include <gdk/gdkkeysyms.h>
 
 #include <glibmm/i18n.h>
-#include "macros.h"
 #include "pixmaps/cursor-crosshairs.xpm"
 #include <gtk/gtk.h>
 #include "desktop.h"
 #include "message-context.h"
-#include "preferences.h"
 #include "ui/shape-editor.h"
 #include "selection.h"
 
@@ -396,8 +393,8 @@ lpetool_create_measuring_items(LpeTool *lc, Inkscape::Selection *selection)
     SPCanvasGroup *tmpgrp = lc->desktop->getTempGroup();
     gchar *arc_length;
     double lengthval;
-    std::vector<SPItem*> items=selection->itemList();
-    for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();++i){
+    auto items= selection->items();
+    for(auto i=items.begin();i!=items.end();++i){
         if (SP_IS_PATH(*i)) {
             path = SP_PATH(*i);
             curve = path->getCurve();

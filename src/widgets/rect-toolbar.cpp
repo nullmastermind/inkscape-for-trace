@@ -25,7 +25,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+#include <config.h>
 #endif
 
 #include <glibmm/i18n.h>
@@ -38,8 +38,6 @@
 #include "widgets/ege-output-action.h"
 #include "widgets/ink-action.h"
 #include "inkscape.h"
-#include "preferences.h"
-#include "selection.h"
 #include "sp-namedview.h"
 #include "sp-rect.h"
 #include "toolbox.h"
@@ -47,11 +45,9 @@
 #include "ui/tools/rect-tool.h"
 #include "ui/uxmanager.h"
 #include "ui/widget/unit-tracker.h"
-#include "util/units.h"
 #include "verbs.h"
 #include "widgets/widget-sizes.h"
 #include "xml/node-event-vector.h"
-#include "xml/repr.h"
 
 using Inkscape::UI::Widget::UnitTracker;
 using Inkscape::UI::UXManager;
@@ -106,8 +102,8 @@ static void sp_rtb_value_changed(GtkAdjustment *adj, GObject *tbl, gchar const *
 
     bool modmade = false;
     Inkscape::Selection *selection = desktop->getSelection();
-    std::vector<SPItem*> itemlist=selection->itemList();
-    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();++i){
+    auto itemlist= selection->items();
+    for(auto i=itemlist.begin();i!=itemlist.end();++i){
         if (SP_IS_RECT(*i)) {
             if (gtk_adjustment_get_value(adj) != 0) {
                 (SP_RECT(*i)->*setter)(Quantity::convert(gtk_adjustment_get_value(adj), unit, "px"));
@@ -243,8 +239,8 @@ static void sp_rect_toolbox_selection_changed(Inkscape::Selection *selection, GO
     }
     purge_repr_listener( tbl, tbl );
 
-    std::vector<SPItem*> itemlist=selection->itemList();
-    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();++i){
+    auto itemlist= selection->items();
+    for(auto i=itemlist.begin();i!=itemlist.end();++i){
         if (SP_IS_RECT(*i)) {
             n_selected++;
             item = *i;

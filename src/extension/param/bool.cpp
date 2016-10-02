@@ -14,12 +14,12 @@
 #include <gtkmm/box.h>
 #include <gtkmm/spinbutton.h>
 #include <gtkmm/checkbutton.h>
+#include <glib/gi18n.h>
 
 #include "xml/node.h"
 #include "../extension.h"
 #include "bool.h"
 #include "preferences.h"
-#include <glibmm/i18n.h>
 
 namespace Inkscape {
 namespace Extension {
@@ -130,12 +130,8 @@ Gtk::Widget *ParamBool::get_widget(SPDocument * doc, Inkscape::XML::Node * node,
         return NULL;
     }
 
-#if WITH_GTKMM_3_0
-    Gtk::Box * hbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, 4));
+    auto hbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, 4));
     hbox->set_homogeneous(false);
-#else
-    Gtk::HBox * hbox = Gtk::manage(new Gtk::HBox(false, 4));
-#endif
 
     Gtk::Label * label = Gtk::manage(new Gtk::Label(_(_text), Gtk::ALIGN_START));
     label->show();

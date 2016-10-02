@@ -17,43 +17,29 @@
 #define DRAW_VERBOSE
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+#include <config.h>
 #endif
 
 #include "live_effects/lpe-bendpath.h"
 #include "live_effects/lpe-patternalongpath.h"
 #include "live_effects/lpe-simplify.h"
 #include "display/canvas-bpath.h"
-#include "xml/repr.h"
 #include "svg/svg.h"
-#include <glibmm/i18n.h>
 #include "display/curve.h"
-#include "desktop.h"
 
 #include "desktop-style.h"
-#include "document.h"
 #include "ui/draw-anchor.h"
 #include "macros.h"
 #include "message-stack.h"
 #include "ui/tools/pen-tool.h"
 #include "ui/tools/lpe-tool.h"
-#include "preferences.h"
-#include "selection.h"
 #include "selection-chemistry.h"
-#include "snap.h"
-#include "sp-path.h"
-#include "sp-use.h"
 #include "sp-item-group.h"
-#include "sp-namedview.h"
 #include "live_effects/lpe-powerstroke.h"
 #include "style.h"
 #include "ui/control-manager.h"
-#include "util/units.h"
 // clipboard support
 #include "ui/clipboard.h"
-#include "ui/tools/freehand-base.h"
-
-#include <gdk/gdkkeysyms.h>
 
 using Inkscape::DocumentUndo;
 
@@ -226,6 +212,10 @@ static void spdc_paste_curve_as_freehand_shape(Geom::PathVector const &newpath, 
     Effect::createAndApply(PATTERN_ALONG_PATH, dc->desktop->doc(), item);
     Effect* lpe = SP_LPE_ITEM(item)->getCurrentLPE();
     static_cast<LPEPatternAlongPath*>(lpe)->pattern.set_new_value(newpath,true);
+    double scale_doc = 1 / dc->desktop->doc()->getDocumentScale()[0];
+    Inkscape::SVGOStringStream os;
+    os << scale_doc;
+    lpe->getRepr()->setAttribute("prop_scale", os.str().c_str());
 }
 
 static void spdc_apply_powerstroke_shape(const std::vector<Geom::Point> & points, FreehandBase *dc, SPItem *item)
@@ -236,38 +226,14 @@ static void spdc_apply_powerstroke_shape(const std::vector<Geom::Point> & points
     Effect* lpe = SP_LPE_ITEM(item)->getCurrentLPE();
     static_cast<LPEPowerStroke*>(lpe)->offset_points.param_set_and_write_new_value(points);
 
-    // find out stroke width (TODO: is there an easier way??)
-    SPDesktop *desktop = dc->desktop;
-    Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
-    Inkscape::XML::Node *repr = xml_doc->createElement("svg:path");
-    Inkscape::GC::release(repr);
-
-    char const* tool = SP_IS_PEN_CONTEXT(dc) ? "/tools/freehand/pen" : "/tools/freehand/pencil";
-
-    // apply the tool's current style
-    sp_desktop_apply_style_tool(desktop, repr, tool, false);
-
-    double stroke_width = 1.0;
-    char const *style_str = NULL;
-    style_str = repr->attribute("style");
-    if (style_str) {
-        SPStyle style(SP_ACTIVE_DOCUMENT);
-        style.mergeString(style_str);
-        stroke_width = style.stroke_width.computed;
-    }
-
-    std::ostringstream s;
-    s.imbue(std::locale::classic());
-    s << points[0][Geom::X] << "," << stroke_width / 2.;
-
     // write powerstroke parameters:
     lpe->getRepr()->setAttribute("start_linecap_type", "zerowidth");
     lpe->getRepr()->setAttribute("end_linecap_type", "zerowidth");
-    lpe->getRepr()->setAttribute("cusp_linecap_type", "round");
     lpe->getRepr()->setAttribute("sort_points", "true");
     lpe->getRepr()->setAttribute("interpolator_type", "CubicBezierJohan");
     lpe->getRepr()->setAttribute("interpolator_beta", "0.2");
-    lpe->getRepr()->setAttribute("offset_points", s.str().c_str());
+    lpe->getRepr()->setAttribute("miter_limit", "4");
+    lpe->getRepr()->setAttribute("linejoin_type", "extrp_arc");
 }
 
 static void spdc_apply_bend_shape(gchar const *svgd, FreehandBase *dc, SPItem *item)
@@ -341,11 +307,13 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
         bool shape_applied = false;
         SPCSSAttr *css_item = sp_css_attr_from_object(item, SP_STYLE_FLAG_ALWAYS);
         const char *cstroke = sp_repr_css_property(css_item, "stroke", "none");
+        const char *stroke_width = sp_repr_css_property(css_item, "stroke-width", "0");
+        double swidth;
+        sp_svg_number_read_d(stroke_width, &swidth);
         static SPItem *bend_item;
 
 #define SHAPE_LENGTH 10
 #define SHAPE_HEIGHT 10
-
 
         if(shape == LAST_APPLIED){
 
@@ -363,7 +331,8 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
             {
                 // "triangle in"
                 std::vector<Geom::Point> points(1);
-                points[0] = Geom::Point(0., SHAPE_HEIGHT/2);
+                points[0] = Geom::Point(0., swidth/2);
+                //points[0] *= i2anc_affine(static_cast<SPItem *>(item->parent), NULL).inverse();
                 spdc_apply_powerstroke_shape(points, dc, item);
 
                 shape_applied = true;
@@ -374,7 +343,9 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
                 // "triangle out"
                 guint curve_length = curve->get_segment_count();
                 std::vector<Geom::Point> points(1);
-                points[0] = Geom::Point((double)curve_length, SHAPE_HEIGHT/2);
+                points[0] = Geom::Point(0, swidth/2);
+                //points[0] *= i2anc_affine(static_cast<SPItem *>(item->parent), NULL).inverse();
+                points[0][Geom::X] = (double)curve_length;
                 spdc_apply_powerstroke_shape(points, dc, item);
 
                 shape_applied = true;
@@ -455,7 +426,6 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
                 if(previous_shape_type == CLIPBOARD){
                     if(previous_shape_pathv.size() != 0){
                         spdc_paste_curve_as_freehand_shape(previous_shape_pathv, dc, item);
-
                         shape_applied = true;
                         shape = CLIPBOARD;
                     } else{
@@ -812,16 +782,26 @@ static void spdc_flush_white(FreehandBase *dc, SPCurve *gc)
 
         if (!dc->white_item) {
             // Attach repr
+            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+            shapeType shape_selected = (shapeType)prefs->getInt(tool_name(dc) + "/shape", 0);
             SPItem *item = SP_ITEM(desktop->currentLayer()->appendChildRepr(repr));
-
-            spdc_check_for_and_apply_waiting_LPE(dc, item, c);
-            if(previous_shape_type != BEND_CLIPBOARD){
-                dc->selection->set(repr);
+            //Bend needs the transforms applied after, Other effects best before
+            if((previous_shape_type == BEND_CLIPBOARD && shape_selected == LAST_APPLIED) ||
+                shape_selected == BEND_CLIPBOARD)
+            {
+                spdc_check_for_and_apply_waiting_LPE(dc, item, c);
+                previous_shape_type = BEND_CLIPBOARD;
             }
             Inkscape::GC::release(repr);
             item->transform = SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
             item->updateRepr();
             item->doWriteTransform(item->getRepr(), item->transform, NULL, true);
+            if((previous_shape_type != BEND_CLIPBOARD || shape_selected != LAST_APPLIED) &&
+                shape_selected != BEND_CLIPBOARD)
+            {
+                spdc_check_for_and_apply_waiting_LPE(dc, item, c);
+                dc->selection->set(repr);
+            }
             if(previous_shape_type == BEND_CLIPBOARD){
                 repr->parent()->removeChild(repr);
             }

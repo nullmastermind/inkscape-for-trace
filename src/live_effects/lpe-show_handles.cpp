@@ -6,16 +6,15 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <gtkmm.h>
-#include <glibmm/i18n.h>
 #include "live_effects/lpe-show_handles.h"
-#include "live_effects/parameter/parameter.h"
 #include <2geom/sbasis-to-bezier.h>
 #include <2geom/svg-path-parser.h>
 #include "helper/geom.h"
 #include "desktop-style.h"
 #include "style.h"
 #include "svg/svg.h"
+// TODO due to internal breakage in glibmm headers, this must be last:
+#include <glibmm/i18n.h>
 
 namespace Inkscape {
 namespace LivePathEffect {

@@ -14,32 +14,20 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+#include <config.h>
 #endif
 
 #include "registered-widget.h"
-#include <gtkmm/radiobutton.h>
 
-#include "ui/widget/color-picker.h"
-#include "ui/widget/registry.h"
-#include "ui/widget/scalar-unit.h"
-#include "ui/widget/point.h"
-#include "ui/widget/random.h"
 #include "widgets/spinbutton-events.h"
 
-#include "xml/repr.h"
 #include "svg/svg-color.h"
 #include "svg/stringstream.h"
 
 #include "verbs.h"
-
-// for interruptability bug:
-#include "display/sp-canvas.h"
-
-#include "desktop.h"
-
-
 #include "sp-root.h"
+
+#include <gtkmm/radiobutton.h>
 
 namespace Inkscape {
 namespace UI {
@@ -113,10 +101,8 @@ RegisteredToggleButton::~RegisteredToggleButton()
     _toggled_connection.disconnect();
 }
 
-RegisteredToggleButton::RegisteredToggleButton (const Glib::ustring& /*label*/, const Glib::ustring& tip, const Glib::ustring& key, Registry& wr, bool right, Inkscape::XML::Node* repr_in, SPDocument *doc_in, char const *active_str, char const *inactive_str)
+RegisteredToggleButton::RegisteredToggleButton (const Glib::ustring& /*label*/, const Glib::ustring& tip, const Glib::ustring& key, Registry& wr, bool right, Inkscape::XML::Node* repr_in, SPDocument *doc_in, char const *icon_active, char const *icon_inactive)
     : RegisteredWidget<Gtk::ToggleButton>()
-    , _active_str(active_str)
-    , _inactive_str(inactive_str)
 {
     init_parent(key, wr, repr_in, doc_in);
     setProgrammatically = false;
@@ -149,7 +135,7 @@ RegisteredToggleButton::on_toggled()
         return;
     _wr->setUpdating (true);
 
-    write_to_xml(get_active() ? _active_str : _inactive_str);
+    write_to_xml(get_active() ? "true" : "false");
     //The slave button is greyed out if the master button is untoggled
     for (std::list<Gtk::Widget*>::const_iterator i = _slavewidgets.begin(); i != _slavewidgets.end(); ++i) {
         (*i)->set_sensitive(get_active());

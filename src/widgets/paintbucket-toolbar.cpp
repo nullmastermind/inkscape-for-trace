@@ -25,7 +25,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+#include <config.h>
 #endif
 
 #include <glibmm/i18n.h>
@@ -35,13 +35,12 @@
 #include "document-undo.h"
 #include "widgets/ege-adjustment-action.h"
 #include "widgets/ege-select-one-action.h"
-#include "preferences.h"
 #include "toolbox.h"
 #include "ui/icon-names.h"
 #include "ui/tools/flood-tool.h"
 #include "ui/uxmanager.h"
 #include "ui/widget/unit-tracker.h"
-#include "util/units.h"
+#include "widgets/ink-action.h"
 
 using Inkscape::UI::Widget::UnitTracker;
 using Inkscape::UI::UXManager;
@@ -127,7 +126,7 @@ void sp_paintbucket_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions
              iterator != channel_list.end(); ++iterator ) {
             GtkTreeIter iter;
             gtk_list_store_append( model, &iter );
-            gtk_list_store_set( model, &iter, 0, (*iterator).c_str(), 1, count, -1 );
+            gtk_list_store_set( model, &iter, 0, _((*iterator).c_str()), 1, count, -1 );
             count++;
         }
 
@@ -193,7 +192,7 @@ void sp_paintbucket_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions
              iterator != gap_list.end(); ++iterator ) {
             GtkTreeIter iter;
             gtk_list_store_append( model, &iter );
-            gtk_list_store_set( model, &iter, 0, (*iterator).c_str(), 1, count, -1 );
+            gtk_list_store_set( model, &iter, 0, _((*iterator).c_str()), 1, count, -1 );
             count++;
         }
         EgeSelectOneAction* act2 = ege_select_one_action_new( "AutoGapAction", _("Close gaps"), (""), NULL, GTK_TREE_MODEL(model) );
@@ -207,13 +206,14 @@ void sp_paintbucket_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions
 
     /* Reset */
     {
-        GtkAction* act = gtk_action_new( "PaintbucketResetAction",
+        InkAction* inky = ink_action_new( "PaintbucketResetAction",
                                           _("Defaults"),
                                           _("Reset paint bucket parameters to defaults (use Inkscape Preferences > Tools to change defaults)"),
-                                          INKSCAPE_ICON("edit-clear"));
-        g_signal_connect_after( G_OBJECT(act), "activate", G_CALLBACK(paintbucket_defaults), holder );
-        gtk_action_group_add_action( mainActions, act );
-        gtk_action_set_sensitive( act, TRUE );
+                                          INKSCAPE_ICON("edit-clear"),
+                                          Inkscape::ICON_SIZE_SMALL_TOOLBAR);
+        g_signal_connect_after( G_OBJECT(inky), "activate", G_CALLBACK(paintbucket_defaults), holder );
+        gtk_action_group_add_action( mainActions, GTK_ACTION(inky) );
+        gtk_action_set_sensitive( GTK_ACTION(inky), TRUE );
     }
 
 }

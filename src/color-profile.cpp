@@ -4,13 +4,8 @@
 
 #define noDEBUG_LCMS
 
-#if WITH_GTKMM_3_0
-# include <gdkmm/rgba.h>
-#else
-# include <gdkmm/color.h>
-#endif
+#include <gdkmm/rgba.h>
 
-#include <glibmm/checksum.h>
 #include <glib/gstdio.h>
 #include <fcntl.h>
 #include <glib/gi18n.h>
@@ -21,7 +16,6 @@
 
 #include <unistd.h>
 #include <cstring>
-#include <string>
 #include <io/sys.h>
 
 #ifdef WIN32
@@ -46,14 +40,13 @@
 #include "inkscape.h"
 #include "document.h"
 #include "preferences.h"
-
+#include <glibmm/checksum.h>
+#include <glibmm/convert.h>
 #include "uri.h"
 
 #ifdef WIN32
 #include <icm.h>
 #endif // WIN32
-
-#include <glibmm/convert.h>
 
 using Inkscape::ColorProfile;
 using Inkscape::ColorProfileImpl;
@@ -588,7 +581,11 @@ bool ColorProfile::GamutCheck(SPColor color)
         static_cast<guchar>(SP_RGBA32_G_U(val)),
         static_cast<guchar>(SP_RGBA32_B_U(val)),
         255};
-    cmsDoTransform(ColorProfile::getTransfGamutCheck(), &check_color, &outofgamut, 1);
+
+    cmsHTRANSFORM gamutCheck = ColorProfile::getTransfGamutCheck();
+    if (gamutCheck) {
+        cmsDoTransform(gamutCheck, &check_color, &outofgamut, 1);
+    }
 
 #if HAVE_LIBLCMS1
     cmsSetAlarmCodes(alarm_r, alarm_g, alarm_b);
@@ -615,8 +612,6 @@ private:
     cmsColorSpaceSignature _profileSpace;
     cmsProfileClassSignature _profileClass;
 };
-
-#include <iostream>
 
 ProfileInfo::ProfileInfo( cmsHPROFILE prof, Glib::ustring const & path ) :
     _path( path ),
@@ -705,7 +700,16 @@ gint Inkscape::CMSSystem::getChannelCount(ColorProfile const *profile)
 
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 
-std::vector<Glib::ustring> ColorProfile::getBaseProfileDirs() {
+// sort home dir before the rest, and alphabetically oterhwise
+bool compareProfileBoolPair(const std::pair<Glib::ustring, bool> & a, const std::pair<Glib::ustring, bool> & b)
+{
+    if (a.second != b.second) return a.second; // a comes first iff it's home, i.e., second == true
+    return a.first < b.first;
+}
+
+// the bool return value tells if it's a user's directory or a system location
+// note that this will treat places under $HOME as system directories when they are found via $XDG_DATA_DIRS
+std::vector<std::pair<Glib::ustring, bool> > ColorProfile::getBaseProfileDirs() {
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
     static bool warnSet = false;
     if (!warnSet) {
@@ -715,17 +719,17 @@ std::vector<Glib::ustring> ColorProfile::getBaseProfileDirs() {
         warnSet = true;
     }
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-    std::vector<Glib::ustring> sources;
+    std::vector<std::pair<Glib::ustring, bool> > sources;
 
     // first try user's local dir
     gchar* path = g_build_filename(g_get_user_data_dir(), "color", "icc", NULL);
-    sources.push_back(path);
+    sources.push_back(std::make_pair(path, true));
     g_free(path);
 
     const gchar* const * dataDirs = g_get_system_data_dirs();
     for ( int i = 0; dataDirs[i]; i++ ) {
         gchar* path = g_build_filename(dataDirs[i], "color", "icc", NULL);
-        sources.push_back(path);
+        sources.push_back(std::make_pair(path, false));
         g_free(path);
     }
 
@@ -737,14 +741,14 @@ std::vector<Glib::ustring> ColorProfile::getBaseProfileDirs() {
         possible.push_back("/Library/ColorSync/Profiles");
         for ( std::vector<Glib::ustring>::const_iterator it = possible.begin(); it != possible.end(); ++it ) {
             if ( g_file_test(it->c_str(), G_FILE_TEST_EXISTS)  && g_file_test(it->c_str(), G_FILE_TEST_IS_DIR) ) {
-                sources.push_back(it->c_str());
+                sources.push_back(std::make_pair(it->c_str(), false));
                 onOSX = true;
             }
         }
         if ( onOSX ) {
             gchar* path = g_build_filename(g_get_home_dir(), "Library", "ColorSync", "Profiles", NULL);
             if ( g_file_test(path, G_FILE_TEST_EXISTS)  && g_file_test(path, G_FILE_TEST_IS_DIR) ) {
-                sources.push_back(path);
+                sources.push_back(std::make_pair(path, true));
             }
             g_free(path);
         }
@@ -760,11 +764,16 @@ std::vector<Glib::ustring> ColorProfile::getBaseProfileDirs() {
         if ( !g_utf8_validate(utf8Path, -1, NULL) ) {
             g_warning( "GetColorDirectoryW() resulted in invalid UTF-8" );
         } else {
-            sources.push_back(utf8Path);
+            sources.push_back(std::make_pair(utf8Path, false));
         }
         g_free( utf8Path );
     }
 #endif // WIN32
+
+    std::sort(sources.begin(), sources.end(), compareProfileBoolPair);
+    std::vector<std::pair<Glib::ustring, bool> >::iterator last = std::unique(sources.begin(), sources.end());
+    sources.erase(last, sources.end());
+
 
     return sources;
 }
@@ -808,28 +817,28 @@ static bool isIccFile( gchar const *filepath )
     return isIccFile;
 }
 
-std::vector<Glib::ustring> ColorProfile::getProfileFiles()
+std::vector<std::pair<Glib::ustring, bool> > ColorProfile::getProfileFiles()
 {
-    std::vector<Glib::ustring> files;
+    std::vector<std::pair<Glib::ustring, bool> > files;
 
-    std::list<Glib::ustring> sources;
+    std::list<std::pair<Glib::ustring, bool> > sources;
     {
-        std::vector<Glib::ustring> tmp = ColorProfile::getBaseProfileDirs();
+        std::vector<std::pair<Glib::ustring, bool> > tmp = ColorProfile::getBaseProfileDirs();
         sources.insert(sources.begin(), tmp.begin(), tmp.end());
     }
-    for ( std::list<Glib::ustring>::const_iterator it = sources.begin(); it != sources.end(); ++it ) {
-        if ( g_file_test( it->c_str(), G_FILE_TEST_EXISTS ) && g_file_test( it->c_str(), G_FILE_TEST_IS_DIR ) ) {
+    for ( std::list<std::pair<Glib::ustring, bool> >::const_iterator it = sources.begin(); it != sources.end(); ++it ) {
+        if ( g_file_test( it->first.c_str(), G_FILE_TEST_EXISTS ) && g_file_test( it->first.c_str(), G_FILE_TEST_IS_DIR ) ) {
             GError *err = 0;
-            GDir *dir = g_dir_open(it->c_str(), 0, &err);
+            GDir *dir = g_dir_open(it->first.c_str(), 0, &err);
 
             if (dir) {
                 for (gchar const *file = g_dir_read_name(dir); file != NULL; file = g_dir_read_name(dir)) {
-                    gchar *filepath = g_build_filename(it->c_str(), file, NULL);
+                    gchar *filepath = g_build_filename(it->first.c_str(), file, NULL);
                     if ( g_file_test( filepath, G_FILE_TEST_IS_DIR ) ) {
-                        sources.push_back( filepath );
+                        sources.push_back( std::make_pair(filepath, it->second) );
                     } else {
                         if ( isIccFile( filepath ) ) {
-                            files.push_back( filepath );
+                            files.push_back( std::make_pair(filepath, it->second) );
                         }
                     }
 
@@ -838,31 +847,44 @@ std::vector<Glib::ustring> ColorProfile::getProfileFiles()
                 g_dir_close(dir);
                 dir = 0;
             } else {
-                gchar *safeDir = Inkscape::IO::sanitizeString(it->c_str());
+                gchar *safeDir = Inkscape::IO::sanitizeString(it->first.c_str());
                 g_warning(_("Color profiles directory (%s) is unavailable."), safeDir);
                 g_free(safeDir);
             }
         }
     }
 
+    std::sort(files.begin(), files.end(), compareProfileBoolPair);
+    std::vector<std::pair<Glib::ustring, bool> >::iterator last = std::unique(files.begin(), files.end());
+    files.erase(last, files.end());
+
     return files;
 }
 
-std::vector<std::pair<Glib::ustring, Glib::ustring> > ColorProfile::getProfileFilesWithNames()
+bool compareProfilePairByName(const std::pair<std::pair<Glib::ustring, bool>, Glib::ustring> & a,
+                              const std::pair<std::pair<Glib::ustring, bool>, Glib::ustring> & b)
 {
-    std::vector<std::pair<Glib::ustring, Glib::ustring> > result;
+    if (a.first.second != b.first.second) return a.first.second;
+    return a.second < b.second;
+}
+
+std::vector<std::pair<std::pair<Glib::ustring, bool>, Glib::ustring> > ColorProfile::getProfileFilesWithNames()
+{
+    std::vector<std::pair<std::pair<Glib::ustring, bool>, Glib::ustring> > result;
 
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-    std::vector<Glib::ustring> files = getProfileFiles();
-    for ( std::vector<Glib::ustring>::const_iterator it = files.begin(); it != files.end(); ++it ) {
-        cmsHPROFILE hProfile = cmsOpenProfileFromFile(it->c_str(), "r");
+    std::vector<std::pair<Glib::ustring, bool> > files = getProfileFiles();
+    for ( std::vector<std::pair<Glib::ustring, bool> >::const_iterator it = files.begin(); it != files.end(); ++it ) {
+        cmsHPROFILE hProfile = cmsOpenProfileFromFile(it->first.c_str(), "r");
         if ( hProfile ) {
             Glib::ustring name = getNameFromProfile(hProfile);
             result.push_back( std::make_pair(*it, name) );
             cmsCloseProfile(hProfile);
         }
     }
-    std::sort(result.begin(), result.end());
+
+    std::sort(result.begin(), result.end(), compareProfilePairByName);
+
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 
     return result;
@@ -942,12 +964,12 @@ void loadProfiles()
     static bool profiles_searched = false;
     if ( !profiles_searched ) {
         knownProfiles.clear();
-        std::vector<Glib::ustring> files = ColorProfile::getProfileFiles();
+        std::vector<std::pair<Glib::ustring, bool> > files = ColorProfile::getProfileFiles();
 
-        for ( std::vector<Glib::ustring>::const_iterator it = files.begin(); it != files.end(); ++it ) {
-            cmsHPROFILE prof = cmsOpenProfileFromFile( it->c_str(), "r" );
+        for ( std::vector<std::pair<Glib::ustring, bool> >::const_iterator it = files.begin(); it != files.end(); ++it ) {
+            cmsHPROFILE prof = cmsOpenProfileFromFile( it->first.c_str(), "r" );
             if ( prof ) {
-                ProfileInfo info( prof, Glib::filename_to_utf8( it->c_str() ) );
+                ProfileInfo info( prof, Glib::filename_to_utf8( it->first.c_str() ) );
                 cmsCloseProfile( prof );
                 prof = 0;
 
@@ -971,11 +993,7 @@ void loadProfiles()
 
 static bool gamutWarn = false;
 
-#if WITH_GTKMM_3_0
 static Gdk::RGBA lastGamutColor("#808080");
-#else
-static Gdk::Color lastGamutColor("#808080");
-#endif
 
 static bool lastBPC = false;
 #if defined(cmsFLAGS_PRESERVEBLACK)
@@ -1121,12 +1139,7 @@ cmsHTRANSFORM Inkscape::CMSSystem::getDisplayTransform()
     bool preserveBlack = prefs->getBool( "/options/softproof/preserveblack");
 #endif //defined(cmsFLAGS_PRESERVEBLACK)
     Glib::ustring colorStr = prefs->getString("/options/softproof/gamutcolor");
-
-#if WITH_GTKMM_3_0
     Gdk::RGBA gamutColor( colorStr.empty() ? "#808080" : colorStr );
-#else
-    Gdk::Color gamutColor( colorStr.empty() ? "#808080" : colorStr );
-#endif
 
     if ( (warn != gamutWarn)
          || (lastIntent != intent)
@@ -1158,15 +1171,9 @@ cmsHTRANSFORM Inkscape::CMSSystem::getDisplayTransform()
             if ( gamutWarn ) {
                 dwFlags |= cmsFLAGS_GAMUTCHECK;
 
-#if WITH_GTKMM_3_0
-                gushort gamutColor_r = gamutColor.get_red_u();
-                gushort gamutColor_g = gamutColor.get_green_u();
-                gushort gamutColor_b = gamutColor.get_blue_u();
-#else
-                gushort gamutColor_r = gamutColor.get_red();
-                gushort gamutColor_g = gamutColor.get_green();
-                gushort gamutColor_b = gamutColor.get_blue();
-#endif
+                auto gamutColor_r = gamutColor.get_red_u();
+                auto gamutColor_g = gamutColor.get_green_u();
+                auto gamutColor_b = gamutColor.get_blue_u();
 
 #if HAVE_LIBLCMS1
                 cmsSetAlarmCodes(gamutColor_r >> 8, gamutColor_g >> 8, gamutColor_b >> 8);
@@ -1307,12 +1314,7 @@ cmsHTRANSFORM Inkscape::CMSSystem::getDisplayPer( Glib::ustring const& id )
                 bool preserveBlack = prefs->getBool( "/options/softproof/preserveblack");
 #endif //defined(cmsFLAGS_PRESERVEBLACK)
                 Glib::ustring colorStr = prefs->getString("/options/softproof/gamutcolor");
-
-#if WITH_GTKMM_3_0
                 Gdk::RGBA gamutColor( colorStr.empty() ? "#808080" : colorStr );
-#else
-                Gdk::Color gamutColor( colorStr.empty() ? "#808080" : colorStr );
-#endif
 
                 if ( (warn != gamutWarn)
                      || (lastIntent != intent)
@@ -1342,16 +1344,9 @@ cmsHTRANSFORM Inkscape::CMSSystem::getDisplayPer( Glib::ustring const& id )
                         cmsUInt32Number dwFlags = cmsFLAGS_SOFTPROOFING;
                         if ( gamutWarn ) {
                             dwFlags |= cmsFLAGS_GAMUTCHECK;
-
-#if WITH_GTKMM_3_0
-                            gushort gamutColor_r = gamutColor.get_red_u();
-                            gushort gamutColor_g = gamutColor.get_green_u();
-                            gushort gamutColor_b = gamutColor.get_blue_u();
-#else
-                            gushort gamutColor_r = gamutColor.get_red();
-                            gushort gamutColor_g = gamutColor.get_green();
-                            gushort gamutColor_b = gamutColor.get_blue();
-#endif
+                            auto gamutColor_r = gamutColor.get_red_u();
+                            auto gamutColor_g = gamutColor.get_green_u();
+                            auto gamutColor_b = gamutColor.get_blue_u();
 
 #if HAVE_LIBLCMS1
                             cmsSetAlarmCodes(gamutColor_r >> 8, gamutColor_g >> 8, gamutColor_b >> 8);

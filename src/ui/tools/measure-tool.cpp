@@ -11,11 +11,10 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+#include <config.h>
 #endif
 
 #include <gtkmm.h>
-#include <gdk/gdkkeysyms.h>
 #include <boost/none_t.hpp>
 #include "util/units.h"
 #include "display/curve.h"
@@ -23,7 +22,6 @@
 #include "display/sp-ctrlline.h"
 #include "display/sp-ctrlcurve.h"
 #include "display/sp-canvas.h"
-#include "display/sp-canvas-item.h"
 #include "display/sp-canvas-util.h"
 #include "svg/svg.h"
 #include "svg/svg-color.h"
@@ -31,34 +29,20 @@
 #include "ui/tools/freehand-base.h"
 #include <2geom/line.h>
 #include <2geom/path-intersection.h>
-#include <2geom/pathvector.h>
-#include <2geom/crossing.h>
-#include <2geom/angle.h>
-#include <2geom/transforms.h>
 #include "ui/dialog/knot-properties.h"
 #include "sp-namedview.h"
-#include "sp-shape.h"
 #include "sp-text.h"
 #include "sp-flowtext.h"
 #include "sp-defs.h"
-#include "sp-item.h"
 #include "sp-root.h"
-#include "macros.h"
 #include "svg/stringstream.h"
 #include "rubberband.h"
 #include "path-chemistry.h"
 #include "desktop.h"
-#include "document.h"
 #include "document-undo.h"
-#include "viewbox.h"
-#include "snap.h"
-#include "knot.h"
 #include "text-editing.h"
 #include "pixmaps/cursor-measure.xpm"
-#include "preferences.h"
 #include "inkscape.h"
-#include "enums.h"
-#include "knot-enums.h"
 #include "desktop-style.h"
 #include "verbs.h"
 #include <glibmm/i18n.h>
@@ -346,13 +330,13 @@ MeasureTool::MeasureTool()
     end_p = readMeasurePoint(false);
     dimension_offset = 35;
     // create the knots
-    this->knot_start = new SPKnot(desktop, N_("Measure start, <b>Shift+Click</b> for position dialog"));
+    this->knot_start = new SPKnot(desktop, _("Measure start, <b>Shift+Click</b> for position dialog"));
     this->knot_start->setMode(SP_KNOT_MODE_XOR);
     this->knot_start->setFill(MT_KNOT_COLOR_NORMAL, MT_KNOT_COLOR_MOUSEOVER, MT_KNOT_COLOR_MOUSEOVER);
     this->knot_start->setStroke(0x0000007f, 0x0000007f, 0x0000007f);
     this->knot_start->setShape(SP_KNOT_SHAPE_CIRCLE);
     this->knot_start->updateCtrl();
-    this->knot_end = new SPKnot(desktop, N_("Measure end, <b>Shift+Click</b> for position dialog"));
+    this->knot_end = new SPKnot(desktop, _("Measure end, <b>Shift+Click</b> for position dialog"));
     this->knot_end->setMode(SP_KNOT_MODE_XOR);
     this->knot_end->setFill(MT_KNOT_COLOR_NORMAL, MT_KNOT_COLOR_MOUSEOVER, MT_KNOT_COLOR_MOUSEOVER);
     this->knot_end->setStroke(0x0000007f, 0x0000007f, 0x0000007f);
@@ -565,7 +549,6 @@ bool MeasureTool::root_handler(GdkEvent* event)
         explicit_base = boost::none;
         explicit_base_tmp = boost::none;
         last_end = boost::none;
-        start_p = desktop->w2d(button_w);
 
         if (event->button.button == 1 && !this->space_panning) {
             // save drag origin
@@ -778,7 +761,7 @@ void MeasureTool::toPhantom()
     measure_tmp_items.clear();
     showCanvasItems(false, false, true);
     doc->ensureUpToDate();
-    DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_MEASURE,_("Add Stored to measure tool"));
+    DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_MEASURE,_("Keep last measure on the canvas, for reference"));
 }
 
 void MeasureTool::toItem()

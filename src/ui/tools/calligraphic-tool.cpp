@@ -23,8 +23,6 @@
 
 #define noDYNA_DRAW_VERBOSE
 
-#include "config.h"
-
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 #include <glibmm/i18n.h>
@@ -35,12 +33,10 @@
 #include "svg/svg.h"
 #include "display/canvas-bpath.h"
 #include "display/cairo-utils.h"
-#include <2geom/math-utils.h>
 #include <2geom/pathvector.h>
 #include <2geom/bezier-utils.h>
 #include <2geom/circle.h>
 #include "display/curve.h"
-#include <glib.h>
 #include "macros.h"
 #include "document.h"
 #include "document-undo.h"
@@ -50,20 +46,15 @@
 
 #include "desktop-style.h"
 #include "message-context.h"
-#include "preferences.h"
 #include "pixmaps/cursor-calligraphy.xpm"
-#include "xml/repr.h"
 #include "context-fns.h"
-#include "sp-item.h"
 #include "inkscape.h"
-#include "color.h"
 #include "splivarot.h"
 #include "sp-item-group.h"
 #include "sp-shape.h"
 #include "sp-path.h"
 #include "sp-text.h"
 #include "display/sp-canvas.h"
-#include "display/canvas-bpath.h"
 #include "display/canvas-arena.h"
 #include "livarot/Shape.h"
 #include "verbs.h"
@@ -144,7 +135,7 @@ void CalligraphicTool::setup() {
 
         SPCurve *c = new SPCurve(path);
 
-        this->hatch_area = sp_canvas_bpath_new(this->desktop->getControls(), c);
+        this->hatch_area = sp_canvas_bpath_new(this->desktop->getControls(), c, true);
 
         c->unref();
 
@@ -930,10 +921,10 @@ void CalligraphicTool::set_to_accumulated(bool unionize, bool subtract) {
 
         if (unionize) {
             desktop->getSelection()->add(this->repr);
-            sp_selected_path_union_skip_undo(desktop->getSelection(), desktop);
+            sp_selected_path_union_skip_undo(desktop->getSelection());
         } else if (subtract) {
             desktop->getSelection()->add(this->repr);
-            sp_selected_path_diff_skip_undo(desktop->getSelection(), desktop);
+            sp_selected_path_diff_skip_undo(desktop->getSelection());
         } else {
             if (this->keep_selected) {
                 desktop->getSelection()->set(this->repr);
@@ -1099,7 +1090,7 @@ void CalligraphicTool::fit_and_split(bool release) {
                     add_cap(this->currentcurve, b2[0], b1[0], this->cap_rounding);
                 }
                 this->currentcurve->closepath();
-                sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->currentshape), this->currentcurve);
+                sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->currentshape), this->currentcurve, true);
             }
 
             /* Current calligraphic */
@@ -1135,7 +1126,7 @@ void CalligraphicTool::fit_and_split(bool release) {
                                                    SP_TYPE_CANVAS_BPATH,
                                                    NULL);
             SPCurve *curve = this->currentcurve->copy();
-            sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH (cbp), curve);
+            sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH (cbp), curve, true);
             curve->unref();
 
             guint32 fillColor = sp_desktop_get_color_tool (desktop, "/tools/calligraphic", true);
@@ -1179,7 +1170,7 @@ void CalligraphicTool::draw_temporary_box() {
     }
 
     this->currentcurve->closepath();
-    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->currentshape), this->currentcurve);
+    sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->currentshape), this->currentcurve, true);
 }
 
 }

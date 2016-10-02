@@ -19,30 +19,22 @@
 
 #include "inkscape-preferences.h"
 #include <glibmm/i18n.h>
-#include <glibmm/markup.h>
 #include <glibmm/miscutils.h>
+#include <glibmm/markup.h>
 #include <gtkmm/main.h>
-#include <gtkmm/frame.h>
-#include <gtkmm/scrolledwindow.h>
 #include <gtkmm/alignment.h>
 
 #include "preferences.h"
 #include "verbs.h"
 #include "selcue.h"
-#include "util/units.h"
-#include <iostream>
-#include "enums.h"
 
 #include "extension/internal/gdkpixbuf-input.h"
 #include "message-stack.h"
 #include "style.h"
 #include "selection.h"
 #include "selection-chemistry.h"
-#include "xml/repr.h"
 #include "ui/widget/style-swatch.h"
-#include "ui/widget/spinbutton.h"
 #include "display/nr-filter-gaussian.h"
-#include "display/nr-filter-types.h"
 #include "cms-system.h"
 #include "color-profile.h"
 #include "display/canvas-grid.h"
@@ -86,12 +78,8 @@ InkscapePreferences::InkscapePreferences()
     _getContents()->add(*sb);
     show_all_children();
     Gtk::Requisition sreq;
-#if WITH_GTKMM_3_0
     Gtk::Requisition sreq_natural;
     sb->get_preferred_size(sreq_natural, sreq);
-#else
-    sreq = sb->size_request();
-#endif
     _sb_width = sreq.width;
     _getContents()->remove(*sb);
     delete sb;
@@ -514,7 +502,7 @@ void InkscapePreferences::initPageTools()
     this->AddPage(_page_dropper, _("Dropper"), iter_tools, PREFS_PAGE_TOOLS_DROPPER);
     this->AddSelcueCheckbox(_page_dropper, "/tools/dropper", true);
     this->AddGradientCheckbox(_page_dropper, "/tools/dropper", true);
-    
+
     //Connector
     this->AddPage(_page_connector, _("Connector"), iter_tools, PREFS_PAGE_TOOLS_CONNECTOR);
     this->AddSelcueCheckbox(_page_connector, "/tools/connector", true);
@@ -665,16 +653,16 @@ void InkscapePreferences::initPageUI()
         _dockbar_style.init( "/options/dock/dockbarstyle", dockbarstyleLabels, dockbarstyleValues, G_N_ELEMENTS(dockbarstyleLabels), 0);
         _page_ui.add_line(false, _("Dockbar style (requires restart):"),  _dockbar_style, "",
                         _("Selects whether the vertical bars on the dockbar will show text labels, icons, or both"), false);
-	
+
         Glib::ustring switcherstyleLabels[] = {_("Text only"), _("Icons only"), _("Icons and text")}; /* see bug #1098437   */
         int switcherstyleValues[] = {0, 1, 2};
-	
+
         /* switcher style */
         _switcher_style.init( "/options/dock/switcherstyle", switcherstyleLabels, switcherstyleValues, G_N_ELEMENTS(switcherstyleLabels), 0);
         _page_ui.add_line(false, _("Switcher style (requires restart):"),  _switcher_style, "",
                         _("Selects whether the dockbar switcher will show text labels, icons, or both"), false);
     }
-    
+
     // Windows
     _win_save_geom.init ( _("Save and restore window geometry for each document"), "/options/savewindowgeometry/value", 1, true, 0);
     _win_save_geom_prefs.init ( _("Remember and use last window's geometry"), "/options/savewindowgeometry/value", 2, false, &_win_save_geom);
@@ -689,7 +677,7 @@ void InkscapePreferences::initPageUI()
 
     _win_native.init ( _("Native open/save dialogs"), "/options/desktopintegration/value", 1, true, 0);
     _win_gtk.init ( _("GTK open/save dialogs"), "/options/desktopintegration/value", 0, false, &_win_native);
-    
+
     _win_hide_task.init ( _("Dialogs are hidden in taskbar"), "/options/dialogsskiptaskbar/value", true);
     _win_save_viewport.init ( _("Save and restore documents viewport"), "/options/savedocviewport/value", true);
     _win_zoom_resize.init ( _("Zoom when window is resized"), "/options/stickyzoom/value", false);
@@ -863,17 +851,10 @@ static void proofComboChanged( Gtk::ComboBoxText* combo )
 }
 
 static void gamutColorChanged( Gtk::ColorButton* btn ) {
-#if WITH_GTKMM_3_0
-    Gdk::RGBA rgba = btn->get_rgba();
-    gushort r = rgba.get_red_u();
-    gushort g = rgba.get_green_u();
-    gushort b = rgba.get_blue_u();
-#else
-    Gdk::Color color = btn->get_color();
-    gushort r = color.get_red();
-    gushort g = color.get_green();
-    gushort b = color.get_blue();
-#endif
+    auto rgba = btn->get_rgba();
+    auto r = rgba.get_red_u();
+    auto g = rgba.get_green_u();
+    auto b = rgba.get_blue_u();
 
     gchar* tmp = g_strdup_printf("#%02x%02x%02x", (r >> 8), (g >> 8), (b >> 8) );
 
@@ -1005,9 +986,9 @@ void InkscapePreferences::initPageIO()
     _page_cms.add_group_header( _("Display adjustment"));
 
     Glib::ustring tmpStr;
-    std::vector<Glib::ustring> sources = ColorProfile::getBaseProfileDirs();
-    for ( std::vector<Glib::ustring>::const_iterator it = sources.begin(); it != sources.end(); ++it ) {
-        gchar* part = g_strdup_printf( "\n%s", it->c_str() );
+    std::vector<std::pair<Glib::ustring, bool> > sources = ColorProfile::getBaseProfileDirs();
+    for ( std::vector<std::pair<Glib::ustring, bool> >::const_iterator it = sources.begin(); it != sources.end(); ++it ) {
+        gchar* part = g_strdup_printf( "\n%s", it->first.c_str() );
         tmpStr += part;
         g_free(part);
     }
@@ -1043,13 +1024,8 @@ void InkscapePreferences::initPageIO()
 
     Glib::ustring colorStr = prefs->getString("/options/softproof/gamutcolor");
 
-#if WITH_GTKMM_3_0
     Gdk::RGBA tmpColor( colorStr.empty() ? "#00ff00" : colorStr);
     _cms_gamutcolor.set_rgba( tmpColor );
-#else
-    Gdk::Color tmpColor( colorStr.empty() ? "#00ff00" : colorStr);
-    _cms_gamutcolor.set_color( tmpColor );
-#endif
 
     _page_cms.add_line( true, _("Out of gamut warning color:"), _cms_gamutcolor, "",
                         _("Selects the color used for out of gamut warning"), false);
@@ -1331,7 +1307,7 @@ void InkscapePreferences::initPageBehavior()
     _steps_rot_relative.init ( _("Relative snapping of guideline angles"), "/options/relativeguiderotationsnap/value", false);
     _page_steps.add_line( false, "", _steps_rot_relative, "",
                             _("When on, the snap angles when rotating a guideline will be relative to the original angle"));
-    _steps_zoom.init ( "/options/zoomincrement/value", 101.0, 500.0, 1.0, 1.0, 1.414213562, true, true);
+    _steps_zoom.init ( "/options/zoomincrement/value", 101.0, 500.0, 1.0, 1.0, M_SQRT2, true, true);
     _page_steps.add_line( false, _("_Zoom in/out by:"), _steps_zoom, _("%"),
                           _("Zoom tool click, +/- keys, and middle click zoom in and out by this multiplier"), false);
     this->AddPage(_page_steps, _("Steps"), iter_behavior, PREFS_PAGE_BEHAVIOR_STEPS);
@@ -1377,28 +1353,28 @@ void InkscapePreferences::initPageBehavior()
     _mask_mask_remove.init ( _("Remove clippath/mask object after applying"), "/options/maskobject/remove", true);
     _page_mask.add_line(false, "", _mask_mask_remove, "",
                         _("After applying, remove the object used as the clipping path or mask from the drawing"));
-    
+
     _page_mask.add_group_header( _("Before applying"));
-    
+
     _mask_grouping_none.init( _("Do not group clipped/masked objects"), "/options/maskobject/grouping", PREFS_MASKOBJECT_GROUPING_NONE, true, 0);
     _mask_grouping_separate.init( _("Put every clipped/masked object in its own group"), "/options/maskobject/grouping", PREFS_MASKOBJECT_GROUPING_SEPARATE, false, &_mask_grouping_none);
     _mask_grouping_all.init( _("Put all clipped/masked objects into one group"), "/options/maskobject/grouping", PREFS_MASKOBJECT_GROUPING_ALL, false, &_mask_grouping_none);
-    
+
     _page_mask.add_line(true, "", _mask_grouping_none, "",
                         _("Apply clippath/mask to every object"));
-    
+
     _page_mask.add_line(true, "", _mask_grouping_separate, "",
                         _("Apply clippath/mask to groups containing single object"));
-    
+
     _page_mask.add_line(true, "", _mask_grouping_all, "",
                         _("Apply clippath/mask to group containing all objects"));
-                        
+
     _page_mask.add_group_header( _("After releasing"));
-    
+
     _mask_ungrouping.init ( _("Ungroup automatically created groups"), "/options/maskobject/ungrouping", true);
     _page_mask.add_line(true, "", _mask_ungrouping, "",
                         _("Ungroup groups created when setting clip/mask"));
-    
+
     this->AddPage(_page_mask, _("Clippaths and masks"), iter_behavior, PREFS_PAGE_BEHAVIOR_MASKS);
 
 
@@ -1411,8 +1387,8 @@ void InkscapePreferences::initPageBehavior()
                            _("Update marker color when object color changes"));
 
     this->AddPage(_page_markers, _("Markers"), iter_behavior, PREFS_PAGE_BEHAVIOR_MARKERS);
-    
-    
+
+
     _page_cleanup.add_group_header( _("Document cleanup"));
     _cleanup_swatches.init ( _("Remove unused swatches when doing a document cleanup"), "/options/cleanupswatches/value", false); // text label
     _page_cleanup.add_line( true, "", _cleanup_swatches, "",
@@ -1594,31 +1570,19 @@ void InkscapePreferences::initKeyboardShortcuts(Gtk::TreeModel::iterator iter_ui
 
     int row = 3;
 
-#if WITH_GTKMM_3_0
     scroller->set_hexpand();
     scroller->set_vexpand();
     _page_keyshortcuts.attach(*scroller, 0, row, 2, 1);
-#else
-    _page_keyshortcuts.attach(*scroller, 0, 2, row, row+1, Gtk::EXPAND | Gtk::FILL, Gtk::EXPAND | Gtk::FILL);
-#endif
 
     row++;
 
-#if WITH_GTKMM_3_0
-    Gtk::ButtonBox *box_buttons = Gtk::manage(new Gtk::ButtonBox);
-#else
-    Gtk::HButtonBox *box_buttons = Gtk::manage (new Gtk::HButtonBox);
-#endif
+    auto box_buttons = Gtk::manage(new Gtk::ButtonBox);
 
     box_buttons->set_layout(Gtk::BUTTONBOX_END);
     box_buttons->set_spacing(4);
 
-#if WITH_GTKMM_3_0
     box_buttons->set_hexpand();
     _page_keyshortcuts.attach(*box_buttons, 0, row, 3, 1);
-#else
-    _page_keyshortcuts.attach(*box_buttons, 0, 3, row, row+1, Gtk::EXPAND | Gtk::FILL, Gtk::SHRINK);
-#endif
 
     UI::Widget::Button *kb_reset = Gtk::manage(new UI::Widget::Button(_("Reset"), _("Remove all your customized keyboard shortcuts, and revert to the shortcuts in the shortcut file listed above")));
     box_buttons->pack_start(*kb_reset, true, true, 6);
@@ -1896,15 +1860,15 @@ void InkscapePreferences::initPageSpellcheck()
 
     /* the returned pointer should _not_ need to be deleted */
     AspellDictInfoList *dlist = get_aspell_dict_info_list(config);
-    
+
     /* config is no longer needed */
     delete_aspell_config(config);
-    
+
     AspellDictInfoEnumeration *dels = aspell_dict_info_list_elements(dlist);
-    
+
     languages.push_back(Glib::ustring(C_("Spellchecker language", "None")));
     langValues.push_back(Glib::ustring(""));
-    
+
     const AspellDictInfo *entry;
     int en_index = 0;
     int i = 0;
@@ -2051,12 +2015,8 @@ bool InkscapePreferences::SetMaxDialogSize(const Gtk::TreeModel::iterator& iter)
     _page_frame.add(*page);
     this->show_all_children();
     Gtk::Requisition sreq;
-#if WITH_GTKMM_3_0
     Gtk::Requisition sreq_natural;
     this->get_preferred_size(sreq_natural, sreq);
-#else
-    sreq = this->size_request();
-#endif
     _max_dialog_width=std::max(_max_dialog_width, sreq.width);
     _max_dialog_height=std::max(_max_dialog_height, sreq.height);
     _page_frame.remove();

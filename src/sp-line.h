@@ -1,4 +1,4 @@
-#ifndef SEEN_SP_LINE_H
+#ifndef SEEN_SP_LINE_H 
 #define SEEN_SP_LINE_H
 
 /*

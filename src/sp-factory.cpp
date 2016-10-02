@@ -32,22 +32,18 @@
 #include "sp-hatch.h"
 #include "sp-hatch-path.h"
 #include "sp-image.h"
-#include "sp-item-group.h"
 #include "sp-line.h"
 #include "sp-linear-gradient.h"
 #include "sp-marker.h"
 #include "sp-mask.h"
-#include "sp-mesh.h"
+#include "sp-mesh-gradient.h"
 #include "sp-mesh-patch.h"
 #include "sp-mesh-row.h"
 #include "sp-metadata.h"
 #include "sp-missing-glyph.h"
 #include "sp-namedview.h"
-#include "sp-object.h"
 #include "sp-offset.h"
-#include "sp-path.h"
 #include "sp-pattern.h"
-#include "sp-polygon.h"
 #include "sp-polyline.h"
 #include "sp-radial-gradient.h"
 #include "sp-rect.h"
@@ -68,7 +64,6 @@
 #include "sp-title.h"
 #include "sp-tref.h"
 #include "sp-tspan.h"
-#include "sp-use.h"
 #include "live_effects/lpeobject.h"
 
 // filters
@@ -159,8 +154,12 @@ SPObject *SPFactory::createObject(std::string const& id)
         ret = new SPGuide;
     else if (id == "svg:hatch")
         ret = new SPHatch;
-    else if (id == "svg:hatchPath")
+    else if (id == "svg:hatchpath")
         ret = new SPHatchPath;
+    else if (id == "svg:hatchPath") {
+        std::cerr << "Warning: <hatchPath> has been renamed <hatchpath>" << std::endl;
+        ret = new SPHatchPath;
+    }
     else if (id == "svg:image")
         ret = new SPImage;
     else if (id == "svg:g")
@@ -173,8 +172,17 @@ SPObject *SPFactory::createObject(std::string const& id)
         ret = new SPMarker;
     else if (id == "svg:mask")
         ret = new SPMask;
-    else if (id == "svg:mesh")
-        ret = new SPMesh;
+    else if (id == "svg:mesh") {         // SVG 2 old
+        ret = new SPMeshGradient;
+        std::cerr << "Warning: <mesh> has been renamed <meshgradient>." << std::endl;
+        std::cerr << "Warning: <mesh> has been repurposed as a shape that tightly wraps a <meshgradient>." << std::endl;
+    }
+    else if (id == "svg:meshGradient") { // SVG 2 old
+        ret = new SPMeshGradient;
+        std::cerr << "Warning: <meshGradient> has been renamed <meshgradient>" << std::endl;
+    }
+    else if (id == "svg:meshgradient") // SVG 2
+        ret = new SPMeshGradient;
     else if (id == "svg:meshpatch")
         ret = new SPMeshpatch;
     else if (id == "svg:meshrow")
@@ -203,7 +211,11 @@ SPObject *SPFactory::createObject(std::string const& id)
         ret = new SPRoot;
     else if (id == "svg:script")
         ret = new SPScript;
-    else if (id == "svg:solidColor")
+    else if (id == "svg:solidColor") {
+        ret = new SPSolidColor;
+        std::cerr << "Warning: <solidColor> has been renamed <solidcolor>" << std::endl;
+    }
+    else if (id == "svg:solidcolor")
         ret = new SPSolidColor;
     else if (id == "spiral")
         ret = new SPSpiral;
