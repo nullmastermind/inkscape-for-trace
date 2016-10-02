@@ -311,21 +311,23 @@ struct verb_info_t
 
 typedef std::list<verb_info_t> verbs_list_t;
 
+static verbs_list_t
+parseVerbsYAMLFile(gchar const *yaml_filename)
+{
+	verbs_list_t verbs_list;
 
-void
-CmdLineXAction::createActionsFromYAML( gchar const *yaml_filename ) {
     FILE *fh = fopen(yaml_filename, "r");
     if(fh == NULL) {
         printf("Failed to open file!\n");
         fflush(stdout);
-        return;
+        return verbs_list;
     }
 
     yaml_parser_t parser;
     if(!yaml_parser_initialize(&parser)) {
         printf("Failed to initialize parser!\n");
         fflush(stdout);
-        return;
+        return verbs_list;
     }
 
     /* Set input file */
@@ -333,12 +335,10 @@ CmdLineXAction::createActionsFromYAML( gchar const *yaml_filename ) {
 
     parser_state_t state = HANDLING_ROOT;
 
-
     bool handling_key = false;
     bool handling_value = false;
 
     std::string key;
-    verbs_list_t verbs_list;
 
     // parse
     yaml_token_t token;
@@ -440,6 +440,14 @@ CmdLineXAction::createActionsFromYAML( gchar const *yaml_filename ) {
     yaml_token_delete(&token);
     yaml_parser_delete(&parser);
     fclose(fh);
+
+	return verbs_list;
+}
+
+void
+CmdLineXAction::createActionsFromYAML( gchar const *yaml_filename )
+{
+    verbs_list_t verbs_list = parseVerbsYAMLFile(yaml_filename);
 
     typedef std::map<std::string,int> undo_labels_map_t;
     undo_labels_map_t undo_labels_map;
