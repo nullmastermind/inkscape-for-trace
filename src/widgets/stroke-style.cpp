@@ -22,6 +22,7 @@
 #include "svg/svg-color.h"
 #include "ui/widget/unit-menu.h"
 #include "desktop-widget.h"
+#include "widgets/style-utils.h"
 
 using Inkscape::DocumentUndo;
 using Inkscape::Util::unit_table;
@@ -912,22 +913,20 @@ StrokeStyle::updateLine()
     if (result_ml != QUERY_STYLE_NOTHING)
         (*miterLimitAdj)->set_value(query.stroke_miterlimit.value); // TODO: reflect averagedness?
 
-    if (result_join != QUERY_STYLE_MULTIPLE_DIFFERENT &&
-        result_join != QUERY_STYLE_NOTHING ) {
+    using Inkscape::is_query_style_updateable;
+    if (! is_query_style_updateable(result_join)) {
         setJoinType(query.stroke_linejoin.value);
     } else {
         setJoinButtons(NULL);
     }
 
-    if (result_cap != QUERY_STYLE_MULTIPLE_DIFFERENT &&
-        result_cap != QUERY_STYLE_NOTHING ) {
+    if (! is_query_style_updateable(result_cap)) {
         setCapType (query.stroke_linecap.value);
     } else {
         setCapButtons(NULL);
     }
 
-    if (result_order != QUERY_STYLE_MULTIPLE_DIFFERENT &&
-        result_order != QUERY_STYLE_NOTHING ) {
+    if (! is_query_style_updateable(result_order)) {
         setPaintOrder (query.paint_order.value);
     } else {
         setPaintOrder (NULL);
