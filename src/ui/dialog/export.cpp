@@ -975,7 +975,12 @@ void Export::onExport ()
 
     SPNamedView *nv = desktop->getNamedView();
     SPDocument *doc = desktop->getDocument();
-
+    Geom::Affine rot = doc->getRoot()->c2p;
+    doc->getRoot()->c2p = doc->getRoot()->rotation.inverse() * doc->getRoot()->c2p;
+    //double rotate_angle = doc->getRoot()->get_rotation();
+    //Inkscape::XML::Node *nv_repr = sp_item_group_get_child_by_name(doc->getRoot(), NULL, "sodipodi:namedview")->getRepr();
+    //sp_repr_set_svg_double(nv_repr, "inkscape:document-rotation", 0.);
+    doc->ensureUpToDate();
     bool exportSuccessful = false;
 
     bool hide = hide_export.get_active ();
@@ -999,6 +1004,7 @@ void Export::onExport ()
 
         if (num < 1) {
             desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("No items selected."));
+            doc->getRoot()->c2p *= doc->getRoot()->rotation;
             return;
         }
 
@@ -1090,6 +1096,7 @@ void Export::onExport ()
         if (filename.empty()) {
             desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("You have to enter a filename."));
             sp_ui_error_dialog(_("You have to enter a filename"));
+            doc->getRoot()->c2p *= doc->getRoot()->rotation;
             return;
         }
 
@@ -1106,6 +1113,7 @@ void Export::onExport ()
         if (!((x1 > x0) && (y1 > y0) && (width > 0) && (height > 0))) {
             desktop->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("The chosen area to be exported is invalid."));
             sp_ui_error_dialog(_("The chosen area to be exported is invalid"));
+            doc->getRoot()->c2p *= doc->getRoot()->rotation;
             return;
         }
 
@@ -1128,6 +1136,7 @@ void Export::onExport ()
 
             g_free(safeDir);
             g_free(error);
+            doc->getRoot()->c2p *= doc->getRoot()->rotation;
             return;
         }
 
@@ -1277,6 +1286,7 @@ void Export::onExport ()
             }
         }
     }
+    doc->getRoot()->c2p *= doc->getRoot()->rotation;
 } // end of sp_export_export_clicked()
 
 /// Called when Browse button is clicked

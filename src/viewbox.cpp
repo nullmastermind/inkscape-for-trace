@@ -17,6 +17,12 @@
 #include "viewbox.h"
 #include "enums.h"
 #include "sp-item.h"
+#include "display/sp-canvas-group.h"
+#include "display/canvas-bpath.h"
+#include "display/curve.h"
+#include "inkscape.h"
+#include "desktop.h"
+
 
 SPViewBox::SPViewBox()
     : viewBox_set(false)
@@ -25,6 +31,8 @@ SPViewBox::SPViewBox()
     , aspect_align(SP_ASPECT_XMID_YMID) // Default per spec
     , aspect_clip(SP_ASPECT_MEET)
     , c2p(Geom::identity())
+    , rotation(Geom::identity())
+    , angle(0)
 {
 }
 
@@ -159,6 +167,14 @@ void SPViewBox::set_preserveAspectRatio(const gchar* value) {
   }
 }
 
+double SPViewBox::get_rotation() {
+    return this->angle;
+}
+
+void SPViewBox::set_rotation(double angle_val) {
+    this->angle = angle_val;
+}
+
 // Apply scaling from viewbox
 void SPViewBox::apply_viewbox(const Geom::Rect& in, double scale_none) {
 
@@ -224,18 +240,60 @@ void SPViewBox::apply_viewbox(const Geom::Rect& in, double scale_none) {
     }
 
     /* Viewbox transform from scale and position */
-    Geom::Affine q;
-    q[0] = scale_x;
-    q[1] = 0.0;
-    q[2] = 0.0;
-    q[3] = scale_y;
-    q[4] = x - scale_x * this->viewBox.left();
-    q[5] = y - scale_y * this->viewBox.top();
-
-    // std::cout << "  q\n" << q << std::endl;
-
-    /* Append viewbox transformation */
-    this->c2p = q * this->c2p;
+    Geom::Affine vbt = Geom::identity();
+    vbt[0] = scale_x;
+    vbt[1] = 0.0;
+    vbt[2] = 0.0;
+    vbt[3] = scale_y;
+    vbt[4] = x - scale_x * this->viewBox.left();
+    vbt[5] = y - scale_y * this->viewBox.top();
+    // std::cout << "  q\n" << q << std::endl
+    /* Append viewbox and turn transformation */
+    if (this->angle > 0.0 || this->angle < 0.0 ) { //!0
+        Geom::Point r0 = this->viewBox.min();
+        Geom::Point r1 = this->viewBox.max();
+        Geom::Point p = (r0 + r1) / 2;
+        SPDesktop * desktop = SP_ACTIVE_DESKTOP;
+        SPCanvasItem *vw_rot = NULL;
+        if (desktop) {
+            if (this->page_border_rotated) {
+                desktop->remove_temporary_canvasitem(this->page_border_rotated);
+                this->page_border_rotated = NULL;
+            }
+            SPCurve *c = new SPCurve();
+            c->moveto(this->viewBox.min());
+            c->lineto(Geom::Point(this->viewBox.max()[Geom::X],this->viewBox.min()[Geom::Y]));
+            c->lineto(Geom::Point(this->viewBox.max()[Geom::X],this->viewBox.max()[Geom::Y]));
+            c->lineto(Geom::Point(this->viewBox.min()[Geom::X],this->viewBox.max()[Geom::Y]));
+            c->closepath();
+            vw_rot = sp_canvas_bpath_new(desktop->getTempGroup(), c, true);
+            sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(vw_rot), 0xFF00009A, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
+            sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(vw_rot), 0, SP_WIND_RULE_NONZERO);
+            this->page_border_rotated = desktop->add_temporary_canvasitem(vw_rot, 0);
+            Geom::PathVector const box = c->get_pathvector();
+            Geom::OptRect bbox = box.boundsFast();
+            if (bbox){
+                r0 = (*bbox).min();
+                r1 = (*bbox).max();
+                p = (r0 + r1) / 2;
+            }
+            Geom::Affine rot = Geom::identity();
+            rot *= Geom::Translate(p).inverse() * Geom::Rotate(Geom::rad_from_deg(-angle)) * Geom::Translate(p);
+            sp_canvas_item_affine_absolute(vw_rot, rot * vbt);
+            this->page_border_rotated = desktop->add_temporary_canvasitem(vw_rot, 0);
+        }
+        rotation = Geom::Translate(p).inverse() * Geom::Rotate(Geom::rad_from_deg(angle)) * Geom::Translate(p);
+        this->c2p = rotation * vbt * this->c2p;
+    } else {
+        SPDesktop * desktop = SP_ACTIVE_DESKTOP;
+        if (desktop) {
+            if (this->page_border_rotated) {
+                desktop->remove_temporary_canvasitem(this->page_border_rotated);
+                this->page_border_rotated = NULL;
+            }
+        }
+        this->c2p = vbt * this->c2p;
+    }
 }
 
 SPItemCtx SPViewBox::get_rctx(const SPItemCtx* ictx, double scale_none) {

@@ -54,6 +54,7 @@ public:
     double zoom;
     double cx;
     double cy;
+    double document_rotation;
     int window_width;
     int window_height;
     int window_x;

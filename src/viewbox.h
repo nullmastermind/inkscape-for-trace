@@ -17,6 +17,13 @@
 
 #include <2geom/rect.h>
 #include <glib.h>
+#include "display/sp-canvas.h"
+
+namespace Inkscape {
+    namespace Display {
+        class TemporaryItem;
+    }
+}
 
 class SPItemCtx;
 
@@ -36,6 +43,11 @@ public:
 
   /* Child to parent additional transform */
   Geom::Affine c2p;
+  Geom::Affine rotation;
+  double angle;
+  double get_rotation();
+  void set_rotation(double angle_val);
+  Inkscape::Display::TemporaryItem *page_border_rotated; 
 
   void set_viewBox(const gchar* value);
   void set_preserveAspectRatio(const gchar* value);
