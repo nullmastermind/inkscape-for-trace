@@ -86,13 +86,12 @@ CmdLineAction::doIt (ActionContext const & context) {
 
 bool
 CmdLineAction::doList (ActionContext const & context) {
-  bool hasActions = !_list.empty();
-    for (std::list<CmdLineAction *>::iterator i = _list.begin();
-            i != _list.end(); ++i) {
+    bool hasActions = !_list.empty();
+    for (std::list<CmdLineAction *>::iterator i = _list.begin(); i != _list.end(); ++i) {
         CmdLineAction * entry = *i;
         entry->doIt(context);
     }
-  return hasActions;
+    return hasActions;
 }
 
 bool
