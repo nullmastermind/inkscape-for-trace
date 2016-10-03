@@ -308,7 +308,7 @@ struct poptOption options[] = {
      N_("Open specified document(s) (option string may be excluded)"),
      N_("FILENAME")},
 #ifdef WITH_YAML
-     {"xverbs", 0,
+    {"xverbs", 0,
      POPT_ARG_STRING, &sp_xverbs_yaml, SP_ARG_XVERBS,
      N_("xverbs command"),
      N_("XVERBS_FILENAME")},

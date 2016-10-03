@@ -57,8 +57,6 @@ CmdLineAction::doIt (ActionContext const & context) {
     //printf("Doing: %s\n", _arg);
     if (_isVerb) {
         if (isExtended()) {
-            //printf("Is extended\n");
-
             doItX(context);
             return;
         }
