@@ -8,11 +8,11 @@
  *
  * Format of xverbs.yaml
  * using: $ inkscape -B xverbs.yaml
- * 
+ *
  * verbose: yes # only "verbose: yes" enable logging
  * run:
  *  # open document to process
- *  - xverb-id: XFileOpen, gfx_sources/loading_screen/sandclock_atlas.svg 
+ *  - xverb-id: XFileOpen, gfx_sources/loading_screen/sandclock_atlas.svg
  *  - xverb-id: XUndoLabel, fresh_document # set label for UndoToLabel xverb works
  *  # note: if something wrong with undo labels use verb EditUndo instead of XUndoLabel and UndoToLabel at all
  *
@@ -31,7 +31,7 @@
  *  - xverb-id: XFileExportPNG, output/thegame/linux/data/gfx_preview/loading_screen/top_sand.png
  *
  *  # return to the fresh_state of document
- *  - xverb-id: UndoToLabel, fresh_document 
+ *  - xverb-id: UndoToLabel, fresh_document
  *
  *  # do any other handling
  *
@@ -82,10 +82,10 @@ bool createDirForFilename( const std::string &filename )
 {
     size_t found = filename.find_last_of("/\\");
     std::string output_directory = filename.substr(0,found);
-    
+
     if( output_directory == filename )
         return true;
-    
+
     if (g_mkdir_with_parents(output_directory.c_str(), 0755)) {
         printf("Can't create directory %s\n", output_directory.c_str());
         fflush(stdout);
@@ -138,7 +138,7 @@ void xFileOpen( const Glib::ustring &uri )
         desktop->setWaitingCursor();
         Inkscape::DocumentUndo::clearRedo(old_document);
     }
-    
+
     SPDocument *doc = NULL;
     Inkscape::Extension::Extension *key = NULL;
     try {
@@ -152,8 +152,8 @@ void xFileOpen( const Glib::ustring &uri )
 
     // Set viewBox if it doesn't exist
     if (!doc->getRoot()->viewBox_set
-    && (doc->getRoot()->width.unit != SVGLength::PERCENT)
-    && (doc->getRoot()->height.unit != SVGLength::PERCENT)) {
+            && (doc->getRoot()->width.unit != SVGLength::PERCENT)
+            && (doc->getRoot()->height.unit != SVGLength::PERCENT)) {
         doc->setViewBox(Geom::Rect::from_xywh(0, 0, doc->getWidth().value(doc->getDisplayUnit()), doc->getHeight().value(doc->getDisplayUnit())));
     }
 
@@ -193,7 +193,7 @@ void xFileSaveAs( Inkscape::ActionContext const & context, const Glib::ustring &
 
     if( createDirForFilename( uri )) {
         Inkscape::Extension::save(
-            Inkscape::Extension::db.get("org.inkscape.output.svg.inkscape"), 
+            Inkscape::Extension::db.get("org.inkscape.output.svg.inkscape"),
             doc, uri.c_str(), false, false, true, Inkscape::Extension::FILE_SAVE_METHOD_SAVE_AS);
         if (s_verbose) {
             printf("save done: %s\n", uri.c_str() );
@@ -220,26 +220,28 @@ void xFileExportPNG( Inkscape::ActionContext const & context, const Glib::ustrin
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     dpi = prefs->getDouble("/dialogs/export/defaultxdpi/value", DPI_BASE);
-    
+
     gdouble width = doc->getWidth().value(doc->getDisplayUnit());
     gdouble height = doc->getHeight().value(doc->getDisplayUnit());
-    
+
     gdouble bmwidth = (width) * dpi / DPI_BASE;
     gdouble bmheight = (height) * dpi / DPI_BASE;
-    
+
     int png_width = (int)(0.5 + bmwidth);
     int png_height = (int)(0.5 + bmheight);
-    
+
     SPNamedView *nv = desktop->getNamedView();
 
     ExportResult status = sp_export_png_file(doc, uri.c_str(),
-        Geom::Rect(Geom::Point(0,0), Geom::Point(width, height)), png_width, png_height, dpi, dpi,
-        nv->pagecolor, 0, 0, TRUE);
+                          Geom::Rect(Geom::Point(0,0), Geom::Point(width, height)), png_width, png_height, dpi, dpi,
+                          nv->pagecolor, 0, 0, TRUE);
 }
 
 void xSelectElement( Inkscape::ActionContext const & context, const Glib::ustring &uri )
 {
-    if (context.getDocument() == NULL || context.getSelection() == NULL) { return; }
+    if (context.getDocument() == NULL || context.getSelection() == NULL) {
+        return;
+    }
 
     if (s_verbose) {
         printf("select element: %s\n", uri.c_str());
@@ -281,7 +283,7 @@ CmdLineXAction::isExtended() {
 
 void
 CmdLineXAction::doItX (ActionContext const & context) {
-    (void)(context);    
+    (void)(context);
 
     if( arg == "XFileSaveAs")
         xFileSaveAs( context, _values_map["filename"] );
@@ -299,9 +301,10 @@ CmdLineXAction::doItX (ActionContext const & context) {
     return;
 }
 
-enum parser_state_t{ HANDLING_ROOT,
-    HANDLING_VERBOSE, // options
-    HANDLING_RUN, HANDLING_RUN_LIST, HANDLING_RUN_LIST_ENTRY }; // run entries
+enum parser_state_t { HANDLING_ROOT,
+                      HANDLING_VERBOSE, // options
+                      HANDLING_RUN, HANDLING_RUN_LIST, HANDLING_RUN_LIST_ENTRY
+                    }; // run entries
 
 struct verb_info_t
 {
@@ -314,7 +317,7 @@ typedef std::list<verb_info_t> verbs_list_t;
 static verbs_list_t
 parseVerbsYAMLFile(gchar const *yaml_filename)
 {
-	verbs_list_t verbs_list;
+    verbs_list_t verbs_list;
 
     FILE *fh = fopen(yaml_filename, "r");
     if(fh == NULL) {
@@ -346,24 +349,39 @@ parseVerbsYAMLFile(gchar const *yaml_filename)
         yaml_parser_scan(&parser, &token);
         switch(token.type)
         {
-        // avoid "warning: enumeration value", "-Wswitch"
-        case YAML_NO_TOKEN: break;
-        case YAML_STREAM_START_TOKEN: break;
-        case YAML_STREAM_END_TOKEN: break;
-        case YAML_VERSION_DIRECTIVE_TOKEN: break;
-        case YAML_TAG_DIRECTIVE_TOKEN: break;
-        case YAML_DOCUMENT_START_TOKEN: break;
-        case YAML_DOCUMENT_END_TOKEN: break;
-        case YAML_FLOW_SEQUENCE_START_TOKEN: break;
-        case YAML_FLOW_SEQUENCE_END_TOKEN: break;
-        case YAML_FLOW_MAPPING_START_TOKEN: break;
-        case YAML_FLOW_MAPPING_END_TOKEN: break;
-        case YAML_FLOW_ENTRY_TOKEN: break;
-        case YAML_ALIAS_TOKEN: break;
-        case YAML_ANCHOR_TOKEN: break;
-        case YAML_TAG_TOKEN: break;
+            // avoid "warning: enumeration value", "-Wswitch"
+        case YAML_NO_TOKEN:
+            break;
+        case YAML_STREAM_START_TOKEN:
+            break;
+        case YAML_STREAM_END_TOKEN:
+            break;
+        case YAML_VERSION_DIRECTIVE_TOKEN:
+            break;
+        case YAML_TAG_DIRECTIVE_TOKEN:
+            break;
+        case YAML_DOCUMENT_START_TOKEN:
+            break;
+        case YAML_DOCUMENT_END_TOKEN:
+            break;
+        case YAML_FLOW_SEQUENCE_START_TOKEN:
+            break;
+        case YAML_FLOW_SEQUENCE_END_TOKEN:
+            break;
+        case YAML_FLOW_MAPPING_START_TOKEN:
+            break;
+        case YAML_FLOW_MAPPING_END_TOKEN:
+            break;
+        case YAML_FLOW_ENTRY_TOKEN:
+            break;
+        case YAML_ALIAS_TOKEN:
+            break;
+        case YAML_ANCHOR_TOKEN:
+            break;
+        case YAML_TAG_TOKEN:
+            break;
 
-        /* Token types (read before actual token) */
+            /* Token types (read before actual token) */
         case YAML_KEY_TOKEN:
             handling_key = true;
             handling_value = false;
@@ -373,12 +391,12 @@ parseVerbsYAMLFile(gchar const *yaml_filename)
             handling_value = true;
             break;
 
-        /* Block delimeters */
+            /* Block delimeters */
         case YAML_BLOCK_SEQUENCE_START_TOKEN:
             if( state == HANDLING_ROOT ) {
                 if( key == "run" )
                     state = HANDLING_RUN;
-            }   
+            }
             break;
         case YAML_BLOCK_ENTRY_TOKEN:
             if( state == HANDLING_RUN )
@@ -399,7 +417,7 @@ parseVerbsYAMLFile(gchar const *yaml_filename)
                 state = HANDLING_ROOT;
             break;
 
-        /* Data */
+            /* Data */
         case YAML_BLOCK_MAPPING_START_TOKEN:
             break;
         case YAML_SCALAR_TOKEN:
@@ -441,7 +459,7 @@ parseVerbsYAMLFile(gchar const *yaml_filename)
     yaml_parser_delete(&parser);
     fclose(fh);
 
-	return verbs_list;
+    return verbs_list;
 }
 
 void
@@ -454,7 +472,7 @@ CmdLineXAction::createActionsFromYAML( gchar const *yaml_filename )
     int undo_counter = 0;
 
     verbs_list_t::iterator iter = verbs_list.begin();
-    for (;iter != verbs_list.end(); ++iter) {
+    for (; iter != verbs_list.end(); ++iter) {
         verb_info_t &verb = *iter;
         std::string &verb_word = verb.args[0];
         if (s_verbose)
@@ -516,7 +534,7 @@ CmdLineXAction::createActionsFromYAML( gchar const *yaml_filename )
                 printf("bad arguments for XFileExportPNG\n");
                 continue;
             }
-            
+
             xaction_args_values_map_t values_map;
             std::string &png_filename = verb.args[1];
             values_map["png_filename"] = png_filename;
