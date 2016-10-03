@@ -18,7 +18,6 @@
 #include "live_effects/lpe-perspective-envelope.h"
 #include "helper/geom.h"
 #include "display/curve.h"
-#include "svg/svg.h"
 #include <gsl/gsl_linalg.h>
 
 using namespace Geom;
@@ -32,8 +31,8 @@ enum DeformationType {
 };
 
 static const Util::EnumData<unsigned> DeformationTypeData[] = {
-    {DEFORMATION_PERSPECTIVE          , N_("Perspective"), "Perspective"},
-    {DEFORMATION_ENVELOPE          , N_("Envelope deformation"), "Envelope deformation"}
+    {DEFORMATION_PERSPECTIVE          , N_("Perspective"), "perspective"},
+    {DEFORMATION_ENVELOPE          , N_("Envelope deformation"), "envelope_deformation"}
 };
 
 static const Util::EnumDataConverter<unsigned> DeformationTypeConverter(DeformationTypeData, sizeof(DeformationTypeData)/sizeof(*DeformationTypeData));

@@ -13,7 +13,6 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include <config.h>
 #endif
 
 #include <cstring>
@@ -23,14 +22,11 @@
 #include "xml/repr.h"
 #include "svg/svg.h"
 #include "sp-path.h"
-#include "sp-shape.h"
 #include "sp-image.h"
 #include "sp-marker.h"
-#include "enums.h"
 #include "sp-text.h"
 #include "sp-flowtext.h"
 #include "text-editing.h"
-#include "sp-item-group.h"
 #include "style.h"
 #include "document.h"
 #include "document-undo.h"
@@ -38,15 +34,9 @@
 #include "message-stack.h"
 #include "selection.h"
 
-#include "desktop.h"
-#include "display/canvas-bpath.h"
-#include "display/curve.h"
 #include <glibmm/i18n.h>
-#include "preferences.h"
 
-#include "xml/repr.h"
 #include "xml/repr-sorting.h"
-#include <2geom/pathvector.h>
 #include <2geom/svg-path-writer.h>
 #include "helper/geom.h"
 
@@ -57,65 +47,96 @@
 #include "verbs.h"
 #include "2geom/svg-path-parser.h" // to get from SVG on boolean to Geom::Path
 
+enum BoolOpErrors {
+    DONE,
+    DONE_NO_PATH,
+    DONE_NO_ACTION,
+    ERR_TOO_LESS_PATHS_1,
+    ERR_TOO_LESS_PATHS_2,
+    ERR_NO_PATHS,
+    ERR_Z_ORDER
+};
+
 using Inkscape::DocumentUndo;
 
 bool   Ancetre(Inkscape::XML::Node *a, Inkscape::XML::Node *who);
 
-void sp_selected_path_boolop(Inkscape::Selection *selection, SPDesktop *desktop, bool_op bop, const unsigned int verb=SP_VERB_NONE, const Glib::ustring description="");
+void sp_selected_path_boolop_ui(Inkscape::Selection *selection, SPDesktop *desktop, bool_op bop,
+                                const unsigned int verb = SP_VERB_NONE, const Glib::ustring description = "");
+BoolOpErrors sp_selected_path_boolop(Inkscape::ObjectSet *set, bool_op bop);
 void sp_selected_path_do_offset(SPDesktop *desktop, bool expand, double prefOffset);
 void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool updating);
 
 void
 sp_selected_path_union(Inkscape::Selection *selection, SPDesktop *desktop)
 {
-    sp_selected_path_boolop(selection, desktop, bool_op_union, SP_VERB_SELECTION_UNION, _("Union"));
+    sp_selected_path_boolop_ui(selection, desktop, bool_op_union, SP_VERB_SELECTION_UNION, _("Union"));
 }
 
 void
-sp_selected_path_union_skip_undo(Inkscape::Selection *selection, SPDesktop *desktop)
+sp_selected_path_union_skip_undo(Inkscape::ObjectSet *set)
 {
-    sp_selected_path_boolop(selection, desktop, bool_op_union, SP_VERB_NONE, _("Union"));
+    sp_selected_path_boolop(set, bool_op_union);
 }
 
 void
 sp_selected_path_intersect(Inkscape::Selection *selection, SPDesktop *desktop)
 {
-    sp_selected_path_boolop(selection, desktop, bool_op_inters, SP_VERB_SELECTION_INTERSECT, _("Intersection"));
+    sp_selected_path_boolop_ui(selection, desktop, bool_op_inters, SP_VERB_SELECTION_INTERSECT, _("Intersection"));
+}
+
+void
+sp_selected_path_intersect_skip_undo(Inkscape::ObjectSet *set)
+{
+    sp_selected_path_boolop(set, bool_op_inters);
 }
 
 void
 sp_selected_path_diff(Inkscape::Selection *selection, SPDesktop *desktop)
 {
-    sp_selected_path_boolop(selection, desktop, bool_op_diff, SP_VERB_SELECTION_DIFF, _("Difference"));
+    sp_selected_path_boolop_ui(selection, desktop, bool_op_diff, SP_VERB_SELECTION_DIFF, _("Difference"));
 }
 
 void
-sp_selected_path_diff_skip_undo(Inkscape::Selection *selection, SPDesktop *desktop)
+sp_selected_path_diff_skip_undo(Inkscape::ObjectSet *set)
 {
-    sp_selected_path_boolop(selection, desktop, bool_op_diff, SP_VERB_NONE, _("Difference"));
+    sp_selected_path_boolop(set, bool_op_diff);
 }
 
 void
 sp_selected_path_symdiff(Inkscape::Selection *selection, SPDesktop *desktop)
 {
-    sp_selected_path_boolop(selection, desktop, bool_op_symdiff, SP_VERB_SELECTION_SYMDIFF, _("Exclusion"));
-}
-void
-sp_selected_path_cut(Inkscape::Selection *selection, SPDesktop *desktop)
-{
-    sp_selected_path_boolop(selection, desktop, bool_op_cut, SP_VERB_SELECTION_CUT, _("Division"));
+    sp_selected_path_boolop_ui(selection, desktop, bool_op_symdiff, SP_VERB_SELECTION_SYMDIFF, _("Exclusion"));
 }
 
 void
-sp_selected_path_cut_skip_undo(Inkscape::Selection *selection, SPDesktop *desktop)
+sp_selected_path_symdiff_skip_undo(Inkscape::ObjectSet *set)
 {
-    sp_selected_path_boolop(selection, desktop, bool_op_cut, SP_VERB_NONE, _("Division"));
+    sp_selected_path_boolop(set, bool_op_symdiff);
+}
+
+void
+sp_selected_path_cut(Inkscape::Selection *selection, SPDesktop *desktop)
+{
+    sp_selected_path_boolop_ui(selection, desktop, bool_op_cut, SP_VERB_SELECTION_CUT, _("Division"));
+}
+
+void
+sp_selected_path_cut_skip_undo(Inkscape::ObjectSet *set)
+{
+    sp_selected_path_boolop(set, bool_op_cut);
 }
 
 void
 sp_selected_path_slice(Inkscape::Selection *selection, SPDesktop *desktop)
 {
-    sp_selected_path_boolop(selection, desktop, bool_op_slice, SP_VERB_SELECTION_SLICE,  _("Cut path"));
+    sp_selected_path_boolop_ui(selection, desktop, bool_op_slice, SP_VERB_SELECTION_SLICE, _("Cut path"));
+}
+
+void
+sp_selected_path_slice_skip_undo(Inkscape::ObjectSet *set)
+{
+    sp_selected_path_boolop(set, bool_op_slice);
 }
 
 // helper for printing error messages, regardless of whether we have a GUI or not
@@ -331,20 +352,17 @@ Geom::PathVector pathliv_to_pathvector(Path *pathliv){
 
 // boolean operations on the desktop
 // take the source paths from the file, do the operation, delete the originals and add the results
-void
-sp_selected_path_boolop(Inkscape::Selection *selection, SPDesktop *desktop, bool_op bop, const unsigned int verb, const Glib::ustring description)
+BoolOpErrors sp_selected_path_boolop(Inkscape::ObjectSet * set, bool_op bop)
 {
-    SPDocument *doc = selection->layers()->getDocument();
-    std::vector<SPItem*> il= selection->itemList();
-    
+    SPDocument *doc = set->desktop()->getDocument();
+    std::vector<SPItem*> il(set->items().begin(), set->items().end());
+
     // allow union on a single object for the purpose of removing self overlapse (svn log, revision 13334)
-    if ( (il.size() < 2) && (bop != bool_op_union)) {
-        boolop_display_error_message(desktop, _("Select <b>at least 2 paths</b> to perform a boolean operation."));
-        return;
+    if (il.size() < 2 && bop != bool_op_union) {
+        return ERR_TOO_LESS_PATHS_2;
     }
-    else if ( il.size() < 1 ) {
-        boolop_display_error_message(desktop, _("Select <b>at least 1 path</b> to perform a boolean union."));
-        return;
+    else if (il.size() < 1) {
+        return ERR_TOO_LESS_PATHS_1;
     }
 
     g_assert(!il.empty());
@@ -360,8 +378,7 @@ sp_selected_path_boolop(Inkscape::Selection *selection, SPDesktop *desktop, bool
         Inkscape::XML::Node *b = il.back()->getRepr();
 
         if (a == NULL || b == NULL) {
-            boolop_display_error_message(desktop, _("Unable to determine the <b>z-order</b> of the objects selected for difference, XOR, division, or path cut."));
-            return;
+            return ERR_Z_ORDER;
         }
 
         if (Ancetre(a, b)) {
@@ -375,8 +392,7 @@ sp_selected_path_boolop(Inkscape::Selection *selection, SPDesktop *desktop, bool
             // find their lowest common ancestor
             Inkscape::XML::Node *parent = LCA(a, b);
             if (parent == NULL) {
-                boolop_display_error_message(desktop, _("Unable to determine the <b>z-order</b> of the objects selected for difference, XOR, division, or path cut."));
-                return;
+                return ERR_Z_ORDER;
             }
 
             // find the children of the LCA that lead from it to the a and b
@@ -405,8 +421,7 @@ sp_selected_path_boolop(Inkscape::Selection *selection, SPDesktop *desktop, bool
         SPItem *item = *l;
         if (!SP_IS_SHAPE(item) && !SP_IS_TEXT(item) && !SP_IS_FLOWTEXT(item))
         {
-            boolop_display_error_message(desktop, _("One of the objects is <b>not a path</b>, cannot perform boolean operation."));
-            return;
+            return ERR_NO_PATHS;
         }
     }
 
@@ -439,7 +454,7 @@ sp_selected_path_boolop(Inkscape::Selection *selection, SPDesktop *desktop, bool
             if (originaux[curOrig] == NULL || originaux[curOrig]->descr_cmd.size() <= 1)
             {
                 for (int i = curOrig; i >= 0; i--) delete originaux[i];
-                return;
+                return DONE_NO_ACTION;
             }
             curOrig++;
         }
@@ -500,18 +515,18 @@ sp_selected_path_boolop(Inkscape::Selection *selection, SPDesktop *desktop, bool
             bool zeroA = theShapeA->numberOfEdges() == 0;
             bool zeroB = theShapeB->numberOfEdges() == 0;
             if (zeroA || zeroB) {
-            	// We might need to do a swap. Apply the above rules depending on operation type.
-            	bool resultIsB =   ((bop == bool_op_union || bop == bool_op_symdiff) && zeroA)
-            		        || ((bop == bool_op_inters) && zeroB)
-            			||  (bop == bool_op_diff);
+                // We might need to do a swap. Apply the above rules depending on operation type.
+                bool resultIsB =   ((bop == bool_op_union || bop == bool_op_symdiff) && zeroA)
+                                   || ((bop == bool_op_inters) && zeroB)
+                                   ||  (bop == bool_op_diff);
                 if (resultIsB) {
-                	// Swap A and B to use B as the result
+                    // Swap A and B to use B as the result
                     Shape *swap = theShapeB;
                     theShapeB = theShapeA;
                     theShapeA = swap;
                 }
             } else {
-            	// Just do the Boolean operation as usual
+                // Just do the Boolean operation as usual
                 // les elements arrivent en ordre inverse dans la liste
                 theShape->Booleen(theShapeB, theShapeA, bop);
                 Shape *swap = theShape;
@@ -672,24 +687,23 @@ sp_selected_path_boolop(Inkscape::Selection *selection, SPDesktop *desktop, bool
         for (std::vector<SPItem*>::const_iterator l = il.begin(); l != il.end(); l++){
             (*l)->deleteObject();
         }
-        DocumentUndo::done(doc, SP_VERB_NONE, description);
-        selection->clear();
+        set->clear();
 
         delete res;
-        return;
+        return DONE_NO_PATH;
     }
 
     // get the source path object
     SPObject *source;
     if ( bop == bool_op_diff || bop == bool_op_cut || bop == bool_op_slice ) {
         if (reverseOrderForOp) {
-             source = il[0];
+            source = il[0];
         } else {
-             source = il.back();
+            source = il.back();
         }
     } else {
         // find out the bottom object
-    	std::vector<Inkscape::XML::Node*> sorted(selection->reprList());
+        std::vector<Inkscape::XML::Node*> sorted(set->xmlNodes().begin(), set->xmlNodes().end());
 
         sort(sorted.begin(),sorted.end(),sp_repr_compare_position_bool);
 
@@ -717,7 +731,7 @@ sp_selected_path_boolop(Inkscape::Selection *selection, SPDesktop *desktop, bool
     gchar *title = source->title();
     gchar *desc = source->desc();
     // remove source paths
-    selection->clear();
+    set->clear();
     for (std::vector<SPItem*>::const_iterator l = il.begin(); l != il.end(); l++){
         // if this is the bottommost object,
         if (!strcmp(reinterpret_cast<SPObject *>(*l)->getRepr()->attribute("id"), id)) {
@@ -796,7 +810,7 @@ sp_selected_path_boolop(Inkscape::Selection *selection, SPDesktop *desktop, bool
             // move to the saved position
             repr->setPosition(pos > 0 ? pos : 0);
 
-            selection->add(repr);
+            set->add(doc->getObjectByRepr(repr));
             Inkscape::GC::release(repr);
 
             delete resPath[i];
@@ -824,14 +838,14 @@ sp_selected_path_boolop(Inkscape::Selection *selection, SPDesktop *desktop, bool
         repr->setAttribute("id", id);
         parent->appendChild(repr);
         if (title) {
-        	doc->getObjectByRepr(repr)->setTitle(title);
-        }            
-        if (desc) {
-        	doc->getObjectByRepr(repr)->setDesc(desc);
+            doc->getObjectByRepr(repr)->setTitle(title);
         }
-		repr->setPosition(pos > 0 ? pos : 0);
+        if (desc) {
+            doc->getObjectByRepr(repr)->setDesc(desc);
+        }
+        repr->setPosition(pos > 0 ? pos : 0);
 
-        selection->add(repr);
+        set->add(doc->getObjectByRepr(repr));
         Inkscape::GC::release(repr);
     }
 
@@ -839,18 +853,46 @@ sp_selected_path_boolop(Inkscape::Selection *selection, SPDesktop *desktop, bool
     if (title) g_free(title);
     if (desc) g_free(desc);
 
-    if (verb != SP_VERB_NONE) {
-        DocumentUndo::done(doc, verb, description);
-    }
-
     delete res;
+
+    return DONE;
+}
+
+void sp_selected_path_boolop_ui(Inkscape::Selection *selection, SPDesktop *desktop, bool_op bop, const unsigned int verb,
+                           const Glib::ustring description)
+{
+    SPDocument *doc = selection->desktop()->getDocument();
+    BoolOpErrors returnCode = sp_selected_path_boolop(selection, bop);
+    switch(returnCode) {
+        case ERR_TOO_LESS_PATHS_1:
+            boolop_display_error_message(desktop, _("Select <b>at least 1 path</b> to perform a boolean union."));
+            return;
+        case ERR_TOO_LESS_PATHS_2:
+            boolop_display_error_message(desktop, _("Select <b>at least 2 paths</b> to perform a boolean operation."));
+            return;
+        case ERR_NO_PATHS:
+            boolop_display_error_message(desktop, _("One of the objects is <b>not a path</b>, cannot perform boolean operation."));
+            return;
+        case ERR_Z_ORDER:
+            boolop_display_error_message(desktop, _("Unable to determine the <b>z-order</b> of the objects selected for difference, XOR, division, or path cut."));
+            return;
+        case DONE_NO_PATH:
+            DocumentUndo::done(doc, SP_VERB_NONE, description);
+            return;
+        case DONE:
+            DocumentUndo::done(doc, verb, description);
+            return;
+        case DONE_NO_ACTION:
+        default:
+            return;
+    }
 }
 
 static
 void sp_selected_path_outline_add_marker( SPObject *marker_object, Geom::Affine marker_transform,
                                           Geom::Scale stroke_scale, Geom::Affine transform,
                                           Inkscape::XML::Node *g_repr, Inkscape::XML::Document *xml_doc, SPDocument * doc,
-                                          SPDesktop *desktop )
+                                          SPDesktop *desktop , bool legacy)
 {
     SPMarker* marker = SP_MARKER (marker_object);
     SPItem* marker_item = sp_item_first_item_child(marker_object);
@@ -874,7 +916,9 @@ void sp_selected_path_outline_add_marker( SPObject *marker_object, Geom::Affine 
         m_repr->setPosition(0);
         SPItem *marker_item = (SPItem *) doc->getObjectByRepr(m_repr);
         marker_item->doWriteTransform(m_repr, tr);
-        sp_item_path_outline(marker_item, desktop);
+        if (!legacy) {
+            sp_item_path_outline(marker_item, desktop, legacy);
+        }
     }
 }
 
@@ -887,9 +931,9 @@ void item_outline_add_marker_child( SPItem const *item, Geom::Affine marker_tran
     // note: a marker child item can be an item group!
     if (SP_IS_GROUP(item)) {
         // recurse through all childs:
-        for (SPObject const *o = item->firstChild() ; o ; o = o->getNext() ) {
-            if ( SP_IS_ITEM(o) ) {
-                item_outline_add_marker_child(SP_ITEM(o), tr, pathv_in);
+        for (auto& o: item->children) {
+            if ( SP_IS_ITEM(&o) ) {
+                item_outline_add_marker_child(SP_ITEM(&o), tr, pathv_in);
             }
         }
     } else {
@@ -1149,20 +1193,26 @@ Geom::PathVector* item_outline(SPItem const *item, bool bbox_only)
 }
 
 bool
-sp_item_path_outline(SPItem *item, SPDesktop *desktop)
+sp_item_path_outline(SPItem *item, SPDesktop *desktop, bool legacy)
 {
     bool did = false;
     Inkscape::Selection *selection = desktop->getSelection();
+    SPDocument * doc = desktop->getDocument();
+    Inkscape::XML::Document *xml_doc = doc->getReprDoc();
     SPLPEItem *lpeitem = SP_LPE_ITEM(item);
     if (lpeitem) {
         lpeitem->removeAllPathEffects(true);
     }
+
     SPGroup *group = dynamic_cast<SPGroup *>(item);
     if (group) {
+        if (legacy) {
+            return false;
+        }
         std::vector<SPItem*> const item_list = sp_item_group_item_list(group);
         for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
             SPItem *subitem = *iter;
-            sp_item_path_outline(subitem, desktop);
+            sp_item_path_outline(subitem, desktop, legacy);
         }
     } else {
         if (!SP_IS_SHAPE(item) && !SP_IS_TEXT(item))
@@ -1374,8 +1424,6 @@ sp_item_path_outline(SPItem *item, SPDesktop *desktop)
             }
 
             if (SP_IS_SHAPE(item)) {
-                SPDocument * doc = desktop->getDocument();
-                Inkscape::XML::Document *xml_doc = doc->getReprDoc();
                 Inkscape::XML::Node *g_repr = xml_doc->createElement("svg:g");
 
                 // add the group to the parent
@@ -1384,23 +1432,24 @@ sp_item_path_outline(SPItem *item, SPDesktop *desktop)
                 g_repr->setPosition(pos > 0 ? pos : 0);
 
                 //The fill
-
                 Inkscape::XML::Node *fill = NULL;
-                gchar const *f_val = sp_repr_css_property(ncsf, "fill", NULL);
-                if (f_val) {
-                    fill = xml_doc->createElement("svg:path");
-                    sp_repr_css_change(fill, ncsf, "style");
+                if (!legacy) {
+                    gchar const *f_val = sp_repr_css_property(ncsf, "fill", NULL);
+                    if( !item->style->fill.noneSet ){
+                        fill = xml_doc->createElement("svg:path");
+                        sp_repr_css_change(fill, ncsf, "style");
 
-                    sp_repr_css_attr_unref(ncsf);
+                        sp_repr_css_attr_unref(ncsf);
 
-                    gchar *str = sp_svg_write_path( pathv );
-                    fill->setAttribute("d", str);
-                    g_free(str);
+                        gchar *str = sp_svg_write_path( pathv );
+                        fill->setAttribute("d", str);
+                        g_free(str);
 
-                    if (mask)
-                        fill->setAttribute("mask", mask);
-                    if (clip_path)
-                        fill->setAttribute("clip-path", clip_path);
+                        if (mask)
+                            fill->setAttribute("mask", mask);
+                        if (clip_path)
+                            fill->setAttribute("clip-path", clip_path);
+                    }
                 }
                 // restore title, description, id, transform
                 g_repr->setAttribute("id", id);
@@ -1412,22 +1461,25 @@ sp_item_path_outline(SPItem *item, SPDesktop *desktop)
                 if (desc) {
                 	newitem->setDesc(desc);
                 }
-                
                 SPShape *shape = SP_SHAPE(item);
 
                 Geom::PathVector const & pathv = curve->get_pathvector();
                 Inkscape::XML::Node *markers = NULL;
                 if(SP_SHAPE(item)->hasMarkers ()) {
-                    markers = xml_doc->createElement("svg:g");
-                    g_repr->appendChild(markers);
-                    markers->setPosition(pos > 0 ? pos : 0);
+                    if (!legacy) {
+                        markers = xml_doc->createElement("svg:g");
+                        g_repr->appendChild(markers);
+                        markers->setPosition(pos > 0 ? pos : 0);
+                    } else {
+                        markers = g_repr;
+                    }
                     // START marker
                     for (int i = 0; i < 2; i++) {  // SP_MARKER_LOC and SP_MARKER_LOC_START
                         if ( SPObject *marker_obj = shape->_marker[i] ) {
                             Geom::Affine const m (sp_shape_marker_get_transform_at_start(pathv.front().front()));
                             sp_selected_path_outline_add_marker( marker_obj, m,
                                                                  Geom::Scale(i_style->stroke_width.computed), transform,
-                                                                 markers, xml_doc, doc, desktop );
+                                                                 markers, xml_doc, doc, desktop, legacy);
                         }
                     }
                     // MID marker
@@ -1442,7 +1494,7 @@ sp_item_path_outline(SPItem *item, SPDesktop *desktop)
                                 Geom::Affine const m (sp_shape_marker_get_transform_at_start(path_it->front()));
                                 sp_selected_path_outline_add_marker( midmarker_obj, m,
                                                                      Geom::Scale(i_style->stroke_width.computed), transform,
-                                                                     markers, xml_doc, doc, desktop );
+                                                                     markers, xml_doc, doc, desktop, legacy);
                             }
                             // MID position
                            if (path_it->size_default() > 1) {
@@ -1457,7 +1509,7 @@ sp_item_path_outline(SPItem *item, SPDesktop *desktop)
                                     Geom::Affine const m (sp_shape_marker_get_transform(*curve_it1, *curve_it2));
                                     sp_selected_path_outline_add_marker( midmarker_obj, m,
                                                                          Geom::Scale(i_style->stroke_width.computed), transform,
-                                                                         markers, xml_doc, doc, desktop );
+                                                                         markers, xml_doc, doc, desktop, legacy);
 
                                     ++curve_it1;
                                     ++curve_it2;
@@ -1469,7 +1521,7 @@ sp_item_path_outline(SPItem *item, SPDesktop *desktop)
                                 Geom::Affine const m = sp_shape_marker_get_transform_at_end(lastcurve);
                                 sp_selected_path_outline_add_marker( midmarker_obj, m,
                                                                      Geom::Scale(i_style->stroke_width.computed), transform,
-                                                                     markers, xml_doc, doc, desktop );
+                                                                     markers, xml_doc, doc, desktop, legacy);
                             }
                         }
                     }
@@ -1488,18 +1540,20 @@ sp_item_path_outline(SPItem *item, SPDesktop *desktop)
                             Geom::Affine const m = sp_shape_marker_get_transform_at_end(lastcurve);
                             sp_selected_path_outline_add_marker( marker_obj, m,
                                                                  Geom::Scale(i_style->stroke_width.computed), transform,
-                                                                 markers, xml_doc, doc, desktop );
+                                                                 markers, xml_doc, doc, desktop, legacy);
                         }
                     }
-                    if (mask)
-                        markers->setAttribute("mask", mask);
-                    if (clip_path)
-                        markers->setAttribute("clip-path", clip_path);
+                    if (!legacy) {
+                        if (mask)
+                            markers->setAttribute("mask", mask);
+                        if (clip_path)
+                            markers->setAttribute("clip-path", clip_path);
+                    }
                 }
                 gchar const *paint_order = sp_repr_css_property(ncss, "paint-order", NULL);
                 SPIPaintOrder temp;
                 temp.read( paint_order );
-                if (temp.layer[0] != SP_CSS_PAINT_ORDER_NORMAL) {
+                if (temp.layer[0] != SP_CSS_PAINT_ORDER_NORMAL && !legacy) {
 
                     if (temp.layer[0] == SP_CSS_PAINT_ORDER_FILL) {
                         if (temp.layer[1] == SP_CSS_PAINT_ORDER_STROKE) {
@@ -1583,14 +1637,21 @@ sp_item_path_outline(SPItem *item, SPDesktop *desktop)
                 if( fill || stroke || markers ) {
                     did = true;
                 }
+                Inkscape::XML::Node *out = NULL;
                 if (!fill && !markers) {
-                    g_repr = stroke;
-                }
-                if (!fill && !stroke) {
-                    g_repr = markers;
-                }
-                if (!markers && !stroke) {
-                    g_repr = fill;
+                    out = stroke;
+                    parent->mergeFrom(g_repr, "");
+                    parent->removeChild(g_repr);
+                } else if (!fill && !stroke) {
+                    out = markers;
+                    parent->mergeFrom(g_repr, "");
+                    parent->removeChild(g_repr);
+                } else if (!markers && !stroke) {
+                    out = fill;
+                    parent->mergeFrom(g_repr, "");
+                    parent->removeChild(g_repr);
+                } else {
+                    out = g_repr;
                 }
                 
                 //bug lp:1290573 : completely destroy the old object first
@@ -1599,7 +1660,7 @@ sp_item_path_outline(SPItem *item, SPDesktop *desktop)
                 if( selection->includes(item) ){
                     selection->remove(item);
                     item->deleteObject(false);
-                    selection->add(g_repr);
+                    selection->add(out);
                 } else {
                     item->deleteObject(false);
                 }
@@ -1624,7 +1685,7 @@ sp_item_path_outline(SPItem *item, SPDesktop *desktop)
 }
 
 void
-sp_selected_path_outline(SPDesktop *desktop)
+sp_selected_path_outline(SPDesktop *desktop, bool legacy)
 {
     Inkscape::Selection *selection = desktop->getSelection();
 
@@ -1636,10 +1697,10 @@ sp_selected_path_outline(SPDesktop *desktop)
     bool scale_stroke = prefs->getBool("/options/transform/stroke", true);
     prefs->setBool("/options/transform/stroke", true);
     bool did = false;
-    std::vector<SPItem*> il(selection->itemList());
+    std::vector<SPItem*> il(selection->items().begin(), selection->items().end());
     for (std::vector<SPItem*>::const_iterator l = il.begin(); l != il.end(); l++){
         SPItem *item = *l;
-        did = sp_item_path_outline(item, desktop);
+        did = sp_item_path_outline(item, desktop, legacy);
     }
 
     prefs->setBool("/options/transform/stroke", scale_stroke);
@@ -1908,7 +1969,7 @@ sp_selected_path_do_offset(SPDesktop *desktop, bool expand, double prefOffset)
     }
 
     bool did = false;
-    std::vector<SPItem*> il(selection->itemList());
+    std::vector<SPItem*> il(selection->items().begin(), selection->items().end());
     for (std::vector<SPItem*>::const_iterator l = il.begin(); l != il.end(); l++){
         SPItem *item = *l;
         SPCurve *curve = NULL;
@@ -2333,7 +2394,7 @@ sp_selected_path_simplify_selection(SPDesktop *desktop, float threshold, bool ju
         return;
     }
 
-    std::vector<SPItem*> items(selection->itemList());
+    std::vector<SPItem*> items(selection->items().begin(), selection->items().end());
 
     bool didSomething = sp_selected_path_simplify_items(desktop, selection,
                                                         items, threshold,

@@ -19,7 +19,7 @@ set(CMAKE_BUILD_TYPE_INIT "Release")
 
 project(inkscape)
 
-set(INKSCAPE_VERSION 0.92pre1)
+set(INKSCAPE_VERSION 0.92+devel)
 set(PROJECT_NAME inkscape)
 set(CMAKE_INCLUDE_CURRENT_DIR TRUE)
 
@@ -56,7 +56,6 @@ option(ENABLE_LCMS "Compile with LCMS support" ON)
 option(WITH_GNOME_VFS "Compile with support for Gnome VFS" ON)
 option(WITH_SVG2 "Compile with support for new SVG2 features" ON)
 option(WITH_LPETOOL "Compile with LPE Tool and experimental LPEs enabled" ON)
-#option(WITH_INKJAR "Enable support for openoffice files (SVG jars)" ON)
 option(WITH_OPENMP "Compile with OpenMP support" ON)
 
 option(WITH_PROFILING "Turn on profiling" OFF) # Set to true if compiler/linker should enable profiling
@@ -68,7 +67,10 @@ option(WITH_LIBCDR "Compile with support of libcdr for CorelDRAW Diagrams" ON)
 option(WITH_LIBVISIO "Compile with support of libvisio for Microsoft Visio Diagrams" ON)
 option(WITH_LIBWPG "Compile with support of libwpg for WordPerfect Graphics" ON)
 option(WITH_NLS "Compile with Native Language Support (using gettext)" ON)
-option(WITH_GTK3_EXPERIMENTAL "Enable compilation with GTK+3 (EXPERIMENTAL!)" OFF)
+
+option(ENABLE_BINRELOC "Enable relocatable binaries" OFF)
+
+include(CMakeScripts/ConfigPaths.cmake) # Installation Paths
 
 # -----------------------------------------------------------------------------
 # Test Harness
@@ -86,7 +88,6 @@ endif()
 include(CMakeScripts/DefineDependsandFlags.cmake) # Includes, Compiler Flags, and Link Libraries
 include(CMakeScripts/HelperMacros.cmake) # Misc Utility Macros
 
-
 # -----------------------------------------------------------------------------
 # BAD HACKS, NEED TO INVESTIGATE MAKING THESE LESS BAD
 add_definitions(-D_FORTIFY_SOURCE=2)
@@ -100,6 +101,14 @@ endif()
 #
 # end badness
 # -----------------------------------------------------------------------------
+
+# -----------------------------------------------------------------------------
+# Relocatable Binary
+# -----------------------------------------------------------------------------
+
+if (ENABLE_BINRELOC)
+	add_definitions(-DENABLE_BINRELOC)
+endif()
 
 # -----------------------------------------------------------------------------
 # Dist Target
@@ -238,7 +247,6 @@ message("ENABLE_POPPLER_CAIRO:    ${ENABLE_POPPLER_CAIRO}")
 message("GMOCK_PRESENT:           ${GMOCK_PRESENT}")
 message("WITH_DBUS:               ${WITH_DBUS}")
 message("WITH_GNOME_VFS:          ${WITH_GNOME_VFS}")
-message("WITH_GTK3_EXPERIMENTAL:  ${WITH_GTK3_EXPERIMENTAL}")
 message("WITH_GTKSPELL:           ${WITH_GTKSPELL}")
 message("WITH_IMAGE_MAGICK:       ${WITH_IMAGE_MAGICK}")
 message("WITH_LIBCDR:             ${WITH_LIBCDR}")

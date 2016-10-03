@@ -13,7 +13,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+#include <config.h>
 #endif
 
 #include <2geom/rect.h>
@@ -29,22 +29,19 @@
 #include "widgets/ege-adjustment-action.h"
 #include "helper/action-context.h"
 #include "helper/action.h"
-#include "widgets/ink-action.h"
+#include "ink-action.h"
+#include "ink-toggle-action.h"
 #include "inkscape.h"
 #include "message-stack.h"
-#include "preferences.h"
 #include "selection-chemistry.h"
-#include "selection.h"
 #include "sp-item-transform.h"
 #include "sp-namedview.h"
 #include "toolbox.h"
 #include "ui/icon-names.h"
 #include "ui/widget/unit-tracker.h"
-#include "util/units.h"
 #include "verbs.h"
 #include "widgets/icon.h"
 #include "widgets/sp-widget.h"
-#include "widgets/spw-utilities.h"
 #include "widgets/widget-sizes.h"
 
 using Inkscape::UI::Widget::UnitTracker;
@@ -257,7 +254,7 @@ sp_object_layout_any_value_changed(GtkAdjustment *adj, GObject *tbl)
             scaler = get_scale_transform_for_uniform_stroke (*bbox_geom, 0, 0, false, false, x0, y0, x1, y1);
         }
 
-        sp_selection_apply_affine(selection, scaler);
+        sp_object_set_apply_affine(selection, scaler);
         DocumentUndo::maybeDone(document, actionkey, SP_VERB_CONTEXT_SELECT,
                                 _("Transform by toolbar"));
 
@@ -415,12 +412,8 @@ void sp_select_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
     g_object_set_data(G_OBJECT(spw), "dtw", desktop->getCanvas());
 
     // The vb frame holds all other widgets and is used to set sensitivity depending on selection state.
-#if GTK_CHECK_VERSION(3,0,0)
-    GtkWidget *vb = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+    auto vb = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_box_set_homogeneous(GTK_BOX(vb), FALSE);
-#else
-    GtkWidget *vb = gtk_hbox_new(FALSE, 0);
-#endif
     gtk_widget_show(vb);
     gtk_container_add(GTK_CONTAINER(spw), vb);
 

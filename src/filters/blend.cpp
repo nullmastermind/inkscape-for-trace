@@ -18,13 +18,9 @@
 #include "sp-filter.h"
 #include "filters/blend.h"
 #include "attributes.h"
-#include "svg/svg.h"
 #include "xml/repr.h"
 
 #include "display/nr-filter.h"
-#include "display/nr-filter-primitive.h"
-#include "display/nr-filter-blend.h"
-#include "display/nr-filter-types.h"
 
 SPFeBlend::SPFeBlend()
     : SPFilterPrimitive(), blend_mode(Inkscape::Filters::BLEND_NORMAL),
@@ -82,7 +78,7 @@ static Inkscape::Filters::FilterBlendMode sp_feBlend_readmode(gchar const *value
         case 's':
             if (strncmp(value, "screen", 6) == 0)
                 return Inkscape::Filters::BLEND_SCREEN;
-            if (strncmp(value, "saturation", 6) == 0)
+            if (strncmp(value, "saturation", 10) == 0)
                 return Inkscape::Filters::BLEND_SATURATION;
             break;
         case 'd':
@@ -110,7 +106,7 @@ static Inkscape::Filters::FilterBlendMode sp_feBlend_readmode(gchar const *value
                 return Inkscape::Filters::BLEND_COLOR;
             break;
         case 'h':
-            if (strncmp(value, "hard-light", 7) == 0)
+            if (strncmp(value, "hard-light", 10) == 0)
                 return Inkscape::Filters::BLEND_HARDLIGHT;
             if (strncmp(value, "hue", 3) == 0)
                 return Inkscape::Filters::BLEND_HUE;
@@ -199,11 +195,11 @@ Inkscape::XML::Node* SPFeBlend::write(Inkscape::XML::Document *doc, Inkscape::XM
     if( !in2_name ) {
 
         // This code is very similar to sp_filter_primtive_name_previous_out()
-        SPObject *i = parent->children;
+        SPObject *i = parent->firstChild();
 
         // Find previous filter primitive
-        while (i && i->next != this) {
-        	i = i->next;
+        while (i && i->getNext() != this) {
+        	i = i->getNext();
         }
 
         if( i ) {

@@ -2,14 +2,10 @@
 #include "config.h"
 #endif
 
-#include <math.h>
 #include <gtkmm/adjustment.h>
 #include <glibmm/i18n.h>
 
-#include <gtk/gtk.h>
-#include <map>
 #include <set>
-#include <vector>
 
 #include "ui/dialog-events.h"
 #include "ui/widget/color-icc-selector.h"
@@ -87,7 +83,6 @@ GtkAttachOptions operator|(GtkAttachOptions lhs, GtkAttachOptions rhs)
 void attachToGridOrTable(GtkWidget *parent, GtkWidget *child, guint left, guint top, guint width, guint height,
                          bool hexpand = false, bool centered = false, guint xpadding = XPAD, guint ypadding = YPAD)
 {
-#if GTK_CHECK_VERSION(3, 0, 0)
   #if GTK_CHECK_VERSION(3, 12, 0)
     gtk_widget_set_margin_start(child, xpadding);
     gtk_widget_set_margin_end(child, xpadding);
@@ -106,14 +101,6 @@ void attachToGridOrTable(GtkWidget *parent, GtkWidget *child, guint left, guint 
         gtk_widget_set_valign(child, GTK_ALIGN_CENTER);
     }
     gtk_grid_attach(GTK_GRID(parent), child, left, top, width, height);
-#else
-    GtkAttachOptions xoptions =
-        centered ? static_cast<GtkAttachOptions>(0) : hexpand ? (GTK_EXPAND | GTK_FILL) : GTK_FILL;
-    GtkAttachOptions yoptions = centered ? static_cast<GtkAttachOptions>(0) : GTK_FILL;
-
-    gtk_table_attach(GTK_TABLE(parent), child, left, left + width, top, top + height, xoptions, yoptions, xpadding,
-                     ypadding);
-#endif
 }
 
 } // namespace
@@ -431,12 +418,7 @@ void ColorICCSelector::init()
 
         _impl->_compUI[i]._label = gtk_label_new_with_mnemonic(labelStr.c_str());
 
-#if GTK_CHECK_VERSION(3,0,0)
         gtk_widget_set_halign(_impl->_compUI[i]._label, GTK_ALIGN_END);
-#else
-        gtk_misc_set_alignment(GTK_MISC(_impl->_compUI[i]._label), 1.0, 0.5);
-#endif
-
         gtk_widget_show(_impl->_compUI[i]._label);
         gtk_widget_set_no_show_all(_impl->_compUI[i]._label, TRUE);
 
@@ -495,12 +477,7 @@ void ColorICCSelector::init()
     // Label
     _impl->_label = gtk_label_new_with_mnemonic(_("_A:"));
 
-#if GTK_CHECK_VERSION(3,0,0)
     gtk_widget_set_halign(_impl->_label, GTK_ALIGN_END);
-#else
-    gtk_misc_set_alignment(GTK_MISC(_impl->_label), 1.0, 0.5);
-#endif
-
     gtk_widget_show(_impl->_label);
 
     attachToGridOrTable(t, _impl->_label, 0, row, 1, 1);
@@ -727,11 +704,7 @@ void ColorICCSelectorImpl::_profilesChanged(std::string const & /*name*/) {}
 
 void ColorICCSelector::on_show()
 {
-#if GTK_CHECK_VERSION(3, 0, 0)
     Gtk::Grid::on_show();
-#else
-    Gtk::Table::on_show();
-#endif
     _colorChanged();
 }
 

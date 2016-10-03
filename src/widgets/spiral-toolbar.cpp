@@ -25,7 +25,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+#include <config.h>
 #endif
 
 #include <glibmm/i18n.h>
@@ -37,7 +37,6 @@
 #include "widgets/ege-adjustment-action.h"
 #include "widgets/ege-output-action.h"
 #include "widgets/ink-action.h"
-#include "preferences.h"
 #include "selection.h"
 #include "sp-spiral.h"
 #include "toolbox.h"
@@ -46,8 +45,6 @@
 #include "verbs.h"
 #include "widgets/spinbutton-events.h"
 #include "xml/node-event-vector.h"
-#include "xml/node.h"
-#include "xml/repr.h"
 
 using Inkscape::UI::UXManager;
 using Inkscape::DocumentUndo;
@@ -79,8 +76,8 @@ static void sp_spl_tb_value_changed(GtkAdjustment *adj, GObject *tbl, Glib::ustr
     gchar* namespaced_name = g_strconcat("sodipodi:", value_name.data(), NULL);
 
     bool modmade = false;
-    std::vector<SPItem*> itemlist=desktop->getSelection()->itemList();
-    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end(); ++i){
+    auto itemlist= desktop->getSelection()->items();
+    for(auto i=itemlist.begin();i!=itemlist.end(); ++i){
         SPItem *item = *i;
         if (SP_IS_SPIRAL(item)) {
             Inkscape::XML::Node *repr = item->getRepr();
@@ -195,8 +192,8 @@ static void sp_spiral_toolbox_selection_changed(Inkscape::Selection *selection, 
 
     purge_repr_listener( tbl, tbl );
 
-    std::vector<SPItem*> itemlist=selection->itemList();
-    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end(); ++i){
+    auto itemlist= selection->items();
+    for(auto i=itemlist.begin();i!=itemlist.end(); ++i){
         SPItem *item = *i;
         if (SP_IS_SPIRAL(item)) {
             n_selected++;

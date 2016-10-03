@@ -85,6 +85,7 @@ enum MeshNodeOperation {
   MG_NODE_SCALE_HANDLE
 };
 
+class SPStop;
 
 class SPMeshNode {
 public:
@@ -95,6 +96,7 @@ public:
     draggable = -1;
     path_type = 'u';
     opacity = 0.0;
+    stop = nullptr;
   }
   NodeType node_type;
   unsigned int     node_edge;
@@ -104,6 +106,7 @@ public:
   char path_type;
   SPColor color;
   double opacity;
+  SPStop *stop; // Stop corresponding to node.
 };
 
 
@@ -133,21 +136,23 @@ public:
   void    setColor( unsigned int i, SPColor c );
   double  getOpacity( unsigned int i );
   void    setOpacity( unsigned int i, double o );
+  SPStop* getStopPtr( unsigned int i );
+  void    setStopPtr( unsigned int i, SPStop* );
 };
 
-class SPMesh;
+class SPMeshGradient;
 
 // An array of mesh nodes.
 class SPMeshNodeArray {
 
 // Should be private
 public:
-  SPMesh *mg;
+  SPMeshGradient *mg;
   std::vector< std::vector< SPMeshNode* > > nodes;
 
 public:
   // Draggables to nodes
-  bool drag_valid;
+  bool draggers_valid;
   std::vector< SPMeshNode* > corners;
   std::vector< SPMeshNode* > handles;
   std::vector< SPMeshNode* > tensors;
@@ -156,17 +161,17 @@ public:
 
   friend class SPMeshPatchI;
 
-  SPMeshNodeArray() { built = false; mg = NULL; drag_valid = false; };
-  SPMeshNodeArray( SPMesh *mg );
+  SPMeshNodeArray() { built = false; mg = NULL; draggers_valid = false; };
+  SPMeshNodeArray( SPMeshGradient *mg );
   SPMeshNodeArray( const SPMeshNodeArray& rhs );
   SPMeshNodeArray& operator=(const SPMeshNodeArray& rhs);
 
   ~SPMeshNodeArray() { clear(); };
   bool built;
 
-  void read( SPMesh *mg );
-  void write( SPMesh *mg );
-  void create( SPMesh *mg, SPItem *item, Geom::OptRect bbox );
+  bool read( SPMeshGradient *mg );
+  void write( SPMeshGradient *mg );
+  void create( SPMeshGradient *mg, SPItem *item, Geom::OptRect bbox );
   void clear();
   void print();
 

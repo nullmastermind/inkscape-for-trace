@@ -22,7 +22,6 @@
 
 #include "text-edit.h"
 #include <libnrtype/font-instance.h>
-#include <gtk/gtk.h>
 
 #ifdef WITH_GTKSPELL
 extern "C" {
@@ -31,11 +30,8 @@ extern "C" {
 #endif
 
 #include <gtkmm/stock.h>
-#include <libnrtype/font-instance.h>
 #include <libnrtype/font-lister.h>
-#include <xml/repr.h>
 
-#include "macros.h"
 #include "helper/window.h"
 #include "inkscape.h"
 #include "document.h"
@@ -43,13 +39,10 @@ extern "C" {
 #include "desktop-style.h"
 
 #include "document-undo.h"
-#include "selection.h"
-#include "style.h"
 #include "sp-text.h"
 #include "sp-flowtext.h"
 #include "text-editing.h"
 #include "ui/icon-names.h"
-#include "preferences.h"
 #include "verbs.h"
 #include "ui/interface.h"
 #include "svg/css-ostringstream.h"
@@ -99,9 +92,7 @@ TextEdit::TextEdit()
     styleButton(&align_right,   _("Align right"),                INKSCAPE_ICON("format-justify-right"),  &align_left);
     styleButton(&align_justify, _("Justify (only flowed text)"), INKSCAPE_ICON("format-justify-fill"),   &align_left);
 
-#if WITH_GTKMM_3_0
     align_sep.set_orientation(Gtk::ORIENTATION_VERTICAL);
-#endif
 
     layout_hbox.pack_start(align_sep, false, false, 10);
 
@@ -109,13 +100,12 @@ TextEdit::TextEdit()
     styleButton(&text_horizontal, _("Horizontal text"), INKSCAPE_ICON("format-text-direction-horizontal"), NULL);
     styleButton(&text_vertical, _("Vertical text"), INKSCAPE_ICON("format-text-direction-vertical"), &text_horizontal);
 
-#if WITH_GTKMM_3_0
     text_sep.set_orientation(Gtk::ORIENTATION_VERTICAL);
-#endif
 
     layout_hbox.pack_start(text_sep, false, false, 10);
 
     /* Line Spacing */
+    /* Commented out as this does not handle non-percentage values
     GtkWidget *px = sp_icon_new( Inkscape::ICON_SIZE_SMALL_TOOLBAR, INKSCAPE_ICON("text_line_spacing") );
     layout_hbox.pack_start(*Gtk::manage(Glib::wrap(px)), false, false);
 
@@ -132,6 +122,7 @@ TextEdit::TextEdit()
     layout_hbox.pack_start(*Gtk::manage(Glib::wrap(spacing_combo)), false, false);
     layout_frame.set_padding(4,4,4,4);
     layout_frame.add(layout_hbox);
+    */
 
     // Text start Offset
     {
@@ -146,12 +137,8 @@ TextEdit::TextEdit()
 
         gtk_widget_set_tooltip_text(startOffset, _("Text path offset"));
 
-#if WITH_GTKMM_3_0
-        Gtk::Separator *sep = Gtk::manage(new Gtk::Separator());
+        auto sep = Gtk::manage(new Gtk::Separator());
         sep->set_orientation(Gtk::ORIENTATION_VERTICAL);
-#else
-        Gtk::VSeparator *sep = Gtk::manage(new Gtk::VSeparator);
-#endif
         layout_hbox.pack_start(*sep, false, false, 10);
 
         layout_hbox.pack_start(*Gtk::manage(Glib::wrap(startOffset)), false, false);
@@ -175,7 +162,6 @@ TextEdit::TextEdit()
     gtk_text_view_set_wrap_mode ((GtkTextView *) text_view, GTK_WRAP_WORD);
 
 #ifdef WITH_GTKSPELL
-#ifdef WITH_GTKMM_3_0
 /*
        TODO: Use computed xml:lang attribute of relevant element, if present, to specify the
        language (either as 2nd arg of gtkspell_new_attach, or with explicit
@@ -187,20 +173,6 @@ TextEdit::TextEdit()
     if (! gtk_spell_checker_attach(speller, GTK_TEXT_VIEW(text_view))) {
         g_print("gtkspell error:\n");
     }
-#else
-    GError *error = NULL;
-
-/*
-       TODO: Use computed xml:lang attribute of relevant element, if present, to specify the
-       language (either as 2nd arg of gtkspell_new_attach, or with explicit
-       gtkspell_set_language call in; see advanced.c example in gtkspell docs).
-       onReadSelection looks like a suitable place.
-*/
-    if (gtkspell_new_attach(GTK_TEXT_VIEW(text_view), NULL, &error) == NULL) {
-        g_print("gtkspell error: %s\n", error->message);
-        g_error_free(error);
-    }
-#endif
 #endif
 
     gtk_widget_set_size_request (text_view, -1, 64);
@@ -226,7 +198,7 @@ TextEdit::TextEdit()
 
     /* Signal handlers */
     g_signal_connect ( G_OBJECT (fontsel), "font_set", G_CALLBACK (onFontChange), this );
-    g_signal_connect ( G_OBJECT (spacing_combo), "changed", G_CALLBACK (onLineSpacingChange), this );
+    // g_signal_connect ( G_OBJECT (spacing_combo), "changed", G_CALLBACK (onLineSpacingChange), this );
     g_signal_connect ( G_OBJECT (text_buffer), "changed", G_CALLBACK (onTextChange), this );
     g_signal_connect(startOffset, "changed", G_CALLBACK(onStartOffsetChange), this);
     setasdefault_button.signal_clicked().connect(sigc::mem_fun(*this, &TextEdit::onSetDefault));
@@ -392,6 +364,7 @@ void TextEdit::onReadSelection ( gboolean dostyle, gboolean /*docontent*/ )
             text_vertical.set_active();
         }
 
+        /*
         double height;
         if (query.line_height.normal) height = Inkscape::Text::Layout::LINE_HEIGHT_NORMAL;
         else if (query.line_height.unit == SP_CSS_UNIT_PERCENT)
@@ -401,6 +374,7 @@ void TextEdit::onReadSelection ( gboolean dostyle, gboolean /*docontent*/ )
 
         gtk_entry_set_text ((GtkEntry *) gtk_bin_get_child ((GtkBin *) spacing_combo), sstr);
         g_free(sstr);
+        */
 
         // Update font variant widget
         //int result_variants =
@@ -443,8 +417,8 @@ SPItem *TextEdit::getSelectedTextItem (void)
     if (!SP_ACTIVE_DESKTOP)
         return NULL;
 
-    std::vector<SPItem*> tmp=SP_ACTIVE_DESKTOP->getSelection()->itemList();
-	for(std::vector<SPItem*>::const_iterator i=tmp.begin();i!=tmp.end();++i)
+    auto tmp= SP_ACTIVE_DESKTOP->getSelection()->items();
+	for(auto i=tmp.begin();i!=tmp.end();++i)
     {
         if (SP_IS_TEXT(*i) || SP_IS_FLOWTEXT(*i))
             return *i;
@@ -461,8 +435,8 @@ unsigned TextEdit::getSelectedTextCount (void)
 
     unsigned int items = 0;
 
-    std::vector<SPItem*> tmp=SP_ACTIVE_DESKTOP->getSelection()->itemList();
-	for(std::vector<SPItem*>::const_iterator i=tmp.begin();i!=tmp.end();++i)
+    auto tmp= SP_ACTIVE_DESKTOP->getSelection()->items();
+	for(auto i=tmp.begin();i!=tmp.end();++i)
     {
         if (SP_IS_TEXT(*i) || SP_IS_FLOWTEXT(*i))
             ++items;
@@ -535,11 +509,9 @@ SPCSSAttr *TextEdit::fillTextStyle ()
             sp_repr_css_set_property (css, "writing-mode", "tb");
         }
 
-        // Note that SVG 1.1 does not support line-height; we set it for consistency, but also set
-        // sodipodi:linespacing for backwards compatibility; in 1.2 we use line-height for flowtext
-
-        const gchar *sstr = gtk_combo_box_text_get_active_text ((GtkComboBoxText *) spacing_combo);
-        sp_repr_css_set_property (css, "line-height", sstr);
+        // Note that SVG 1.1 does not support line-height but we use it.
+        // const gchar *sstr = gtk_combo_box_text_get_active_text ((GtkComboBoxText *) spacing_combo);
+        // sp_repr_css_set_property (css, "line-height", sstr);
 
         // Font variants
         vari_vbox.fill_css( css );
@@ -568,22 +540,15 @@ void TextEdit::onApply()
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
 
     unsigned items = 0;
-    const std::vector<SPItem*> item_list = desktop->getSelection()->itemList();
+    auto item_list = desktop->getSelection()->items();
     SPCSSAttr *css = fillTextStyle ();
     sp_desktop_set_style(desktop, css, true);
 
-	for(std::vector<SPItem*>::const_iterator i=item_list.begin();i!=item_list.end();++i){
+    for(auto i=item_list.begin();i!=item_list.end();++i){
         // apply style to the reprs of all text objects in the selection
-        if (SP_IS_TEXT (*i)) {
-
-            // backwards compatibility:
-            (*i)->getRepr()->setAttribute("sodipodi:linespacing", sp_repr_css_property (css, "line-height", NULL));
-
+        if (SP_IS_TEXT (*i) || (SP_IS_FLOWTEXT (*i)) ) {
             ++items;
         }
-        else if (SP_IS_FLOWTEXT (*i))
-            // no need to set sodipodi:linespacing, because Inkscape never supported it on flowtext
-            ++items;
     }
 
     if (items == 0) {

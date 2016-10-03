@@ -15,7 +15,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+#include <config.h>
 #endif
 #include <cstring>
 #include <string>
@@ -40,14 +40,12 @@
 #include "desktop.h"
 
 #include "sp-root.h"
-#include "preferences.h"
 #include "ui/tools-switch.h"
 #include "message-stack.h"
 #include "selection-describer.h"
 #include "seltrans.h"
 #include "box3d.h"
 #include "display/sp-canvas.h"
-#include "display/sp-canvas-item.h"
 #include "display/drawing-item.h"
 
 using Inkscape::DocumentUndo;
@@ -128,20 +126,12 @@ SelectTool::~SelectTool() {
     this->_describer = NULL;
 
     if (CursorSelectDragging) {
-#if GTK_CHECK_VERSION(3,0,0)
         g_object_unref(CursorSelectDragging);
-#else
-        gdk_cursor_unref (CursorSelectDragging);
-#endif
         CursorSelectDragging = NULL;
     }
     
     if (CursorSelectMouseover) {
-#if GTK_CHECK_VERSION(3,0,0)
         g_object_unref(CursorSelectMouseover);
-#else
-        gdk_cursor_unref (CursorSelectMouseover);
-#endif
         CursorSelectMouseover = NULL;
     }
 }
@@ -477,7 +467,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
         case GDK_2BUTTON_PRESS:
             if (event->button.button == 1) {
                 if (!selection->isEmpty()) {
-                    SPItem *clicked_item = selection->itemList()[0];
+                    SPItem *clicked_item = selection->items().front();
 
                     if (dynamic_cast<SPGroup *>(clicked_item) && !dynamic_cast<SPBox3D *>(clicked_item)) { // enter group if it's not a 3D box
                         desktop->setCurrentLayer(clicked_item);

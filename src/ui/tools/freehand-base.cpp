@@ -17,43 +17,29 @@
 #define DRAW_VERBOSE
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+#include <config.h>
 #endif
 
 #include "live_effects/lpe-bendpath.h"
 #include "live_effects/lpe-patternalongpath.h"
 #include "live_effects/lpe-simplify.h"
 #include "display/canvas-bpath.h"
-#include "xml/repr.h"
 #include "svg/svg.h"
-#include <glibmm/i18n.h>
 #include "display/curve.h"
-#include "desktop.h"
 
 #include "desktop-style.h"
-#include "document.h"
 #include "ui/draw-anchor.h"
 #include "macros.h"
 #include "message-stack.h"
 #include "ui/tools/pen-tool.h"
 #include "ui/tools/lpe-tool.h"
-#include "preferences.h"
-#include "selection.h"
 #include "selection-chemistry.h"
-#include "snap.h"
-#include "sp-path.h"
-#include "sp-use.h"
 #include "sp-item-group.h"
-#include "sp-namedview.h"
 #include "live_effects/lpe-powerstroke.h"
 #include "style.h"
 #include "ui/control-manager.h"
-#include "util/units.h"
 // clipboard support
 #include "ui/clipboard.h"
-#include "ui/tools/freehand-base.h"
-
-#include <gdk/gdkkeysyms.h>
 
 using Inkscape::DocumentUndo;
 
@@ -226,6 +212,10 @@ static void spdc_paste_curve_as_freehand_shape(Geom::PathVector const &newpath, 
     Effect::createAndApply(PATTERN_ALONG_PATH, dc->desktop->doc(), item);
     Effect* lpe = SP_LPE_ITEM(item)->getCurrentLPE();
     static_cast<LPEPatternAlongPath*>(lpe)->pattern.set_new_value(newpath,true);
+    double scale_doc = 1 / dc->desktop->doc()->getDocumentScale()[0];
+    Inkscape::SVGOStringStream os;
+    os << scale_doc;
+    lpe->getRepr()->setAttribute("prop_scale", os.str().c_str());
 }
 
 static void spdc_apply_powerstroke_shape(const std::vector<Geom::Point> & points, FreehandBase *dc, SPItem *item)
@@ -342,7 +332,7 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
                 // "triangle in"
                 std::vector<Geom::Point> points(1);
                 points[0] = Geom::Point(0., swidth/2);
-                points[0] *= i2anc_affine(static_cast<SPItem *>(item->parent), NULL).inverse();
+                //points[0] *= i2anc_affine(static_cast<SPItem *>(item->parent), NULL).inverse();
                 spdc_apply_powerstroke_shape(points, dc, item);
 
                 shape_applied = true;
@@ -354,7 +344,7 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
                 guint curve_length = curve->get_segment_count();
                 std::vector<Geom::Point> points(1);
                 points[0] = Geom::Point(0, swidth/2);
-                points[0] *= i2anc_affine(static_cast<SPItem *>(item->parent), NULL).inverse();
+                //points[0] *= i2anc_affine(static_cast<SPItem *>(item->parent), NULL).inverse();
                 points[0][Geom::X] = (double)curve_length;
                 spdc_apply_powerstroke_shape(points, dc, item);
 
@@ -792,16 +782,26 @@ static void spdc_flush_white(FreehandBase *dc, SPCurve *gc)
 
         if (!dc->white_item) {
             // Attach repr
+            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+            shapeType shape_selected = (shapeType)prefs->getInt(tool_name(dc) + "/shape", 0);
             SPItem *item = SP_ITEM(desktop->currentLayer()->appendChildRepr(repr));
-
-            spdc_check_for_and_apply_waiting_LPE(dc, item, c);
-            if(previous_shape_type != BEND_CLIPBOARD){
-                dc->selection->set(repr);
+            //Bend needs the transforms applied after, Other effects best before
+            if((previous_shape_type == BEND_CLIPBOARD && shape_selected == LAST_APPLIED) ||
+                shape_selected == BEND_CLIPBOARD)
+            {
+                spdc_check_for_and_apply_waiting_LPE(dc, item, c);
+                previous_shape_type = BEND_CLIPBOARD;
             }
             Inkscape::GC::release(repr);
             item->transform = SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
             item->updateRepr();
             item->doWriteTransform(item->getRepr(), item->transform, NULL, true);
+            if((previous_shape_type != BEND_CLIPBOARD || shape_selected != LAST_APPLIED) &&
+                shape_selected != BEND_CLIPBOARD)
+            {
+                spdc_check_for_and_apply_waiting_LPE(dc, item, c);
+                dc->selection->set(repr);
+            }
             if(previous_shape_type == BEND_CLIPBOARD){
                 repr->parent()->removeChild(repr);
             }

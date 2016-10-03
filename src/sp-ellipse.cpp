@@ -21,8 +21,6 @@
 #include <2geom/circle.h>
 #include <2geom/ellipse.h>
 #include <2geom/path-sink.h>
-#include <2geom/pathvector.h>
-#include <2geom/transforms.h>
 
 #include "attributes.h"
 #include "display/curve.h"
@@ -33,19 +31,12 @@
 #include "style.h"
 #include "svg/svg.h"
 #include "svg/path-string.h"
-#include "xml/repr.h"
 
-
-#ifndef M_PI
-#define M_PI 3.14159265358979323846
-#endif
-
-#define SP_2PI (2 * M_PI)
 
 SPGenericEllipse::SPGenericEllipse()
     : SPShape()
     , start(0)
-    , end(SP_2PI)
+    , end(M_2_PI)
     , type(SP_GENERIC_ELLIPSE_UNDEFINED)
     , _closed(true)
 {
@@ -536,7 +527,7 @@ void SPGenericEllipse::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, 
     // Snap to the 4 quadrant points of the ellipse, but only if the arc
     // spans far enough to include them
     if (snapprefs->isTargetSnappable(Inkscape::SNAPTARGET_ELLIPSE_QUADRANT_POINT)) {
-        for (double angle = 0; angle < SP_2PI; angle += M_PI_2) {
+        for (double angle = 0; angle < M_2_PI; angle += M_PI_2) {
             if (Geom::AngleInterval(this->start, this->end, true).contains(angle)) {
                 Geom::Point pt = this->getPointAtAngle(angle) * i2dt;
                 p.push_back(Inkscape::SnapCandidatePoint(pt, Inkscape::SNAPSOURCE_ELLIPSE_QUADRANT_POINT, Inkscape::SNAPTARGET_ELLIPSE_QUADRANT_POINT));
@@ -671,7 +662,7 @@ bool SPGenericEllipse::_isSlice() const
 {
     Geom::AngleInterval a(this->start, this->end, true);
 
-    return !(Geom::are_near(a.extent(), 0) || Geom::are_near(a.extent(), SP_2PI));
+    return !(Geom::are_near(a.extent(), 0) || Geom::are_near(a.extent(), M_2_PI));
 }
 
 /*

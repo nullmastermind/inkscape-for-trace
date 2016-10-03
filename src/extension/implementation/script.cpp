@@ -689,9 +689,9 @@ void Script::effect(Inkscape::Extension::Effect *module,
         return;
     }
 
-    std::vector<SPItem*> selected =
-        desktop->getSelection()->itemList(); //desktop should not be NULL since doc was checked and desktop is a casted pointer
-    for(std::vector<SPItem*>::const_iterator x = selected.begin(); x != selected.end(); ++x){
+    auto selected =
+            desktop->getSelection()->items(); //desktop should not be NULL since doc was checked and desktop is a casted pointer
+    for(auto x = selected.begin(); x != selected.end(); ++x){
         Glib::ustring selected_id;
         selected_id += "--id=";
         selected_id += (*x)->getId();
@@ -942,11 +942,7 @@ void Script::checkStderr (const Glib::ustring &data,
     GtkWidget *dlg = GTK_WIDGET(warning.gobj());
     sp_transientize(dlg);
 
-#if WITH_GTKMM_3_0
-    Gtk::Box * vbox = warning.get_content_area();
-#else
-    Gtk::Box * vbox = warning.get_vbox();
-#endif
+    auto vbox = warning.get_content_area();
 
     /* Gtk::TextView * textview = new Gtk::TextView(Gtk::TextBuffer::create()); */
     Gtk::TextView * textview = new Gtk::TextView();

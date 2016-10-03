@@ -19,30 +19,22 @@
 
 #include "inkscape-preferences.h"
 #include <glibmm/i18n.h>
-#include <glibmm/markup.h>
 #include <glibmm/miscutils.h>
+#include <glibmm/markup.h>
 #include <gtkmm/main.h>
-#include <gtkmm/frame.h>
-#include <gtkmm/scrolledwindow.h>
 #include <gtkmm/alignment.h>
 
 #include "preferences.h"
 #include "verbs.h"
 #include "selcue.h"
-#include "util/units.h"
-#include <iostream>
-#include "enums.h"
 
 #include "extension/internal/gdkpixbuf-input.h"
 #include "message-stack.h"
 #include "style.h"
 #include "selection.h"
 #include "selection-chemistry.h"
-#include "xml/repr.h"
 #include "ui/widget/style-swatch.h"
-#include "ui/widget/spinbutton.h"
 #include "display/nr-filter-gaussian.h"
-#include "display/nr-filter-types.h"
 #include "cms-system.h"
 #include "color-profile.h"
 #include "display/canvas-grid.h"
@@ -86,12 +78,8 @@ InkscapePreferences::InkscapePreferences()
     _getContents()->add(*sb);
     show_all_children();
     Gtk::Requisition sreq;
-#if WITH_GTKMM_3_0
     Gtk::Requisition sreq_natural;
     sb->get_preferred_size(sreq_natural, sreq);
-#else
-    sreq = sb->size_request();
-#endif
     _sb_width = sreq.width;
     _getContents()->remove(*sb);
     delete sb;
@@ -863,17 +851,10 @@ static void proofComboChanged( Gtk::ComboBoxText* combo )
 }
 
 static void gamutColorChanged( Gtk::ColorButton* btn ) {
-#if WITH_GTKMM_3_0
-    Gdk::RGBA rgba = btn->get_rgba();
-    gushort r = rgba.get_red_u();
-    gushort g = rgba.get_green_u();
-    gushort b = rgba.get_blue_u();
-#else
-    Gdk::Color color = btn->get_color();
-    gushort r = color.get_red();
-    gushort g = color.get_green();
-    gushort b = color.get_blue();
-#endif
+    auto rgba = btn->get_rgba();
+    auto r = rgba.get_red_u();
+    auto g = rgba.get_green_u();
+    auto b = rgba.get_blue_u();
 
     gchar* tmp = g_strdup_printf("#%02x%02x%02x", (r >> 8), (g >> 8), (b >> 8) );
 
@@ -1043,13 +1024,8 @@ void InkscapePreferences::initPageIO()
 
     Glib::ustring colorStr = prefs->getString("/options/softproof/gamutcolor");
 
-#if WITH_GTKMM_3_0
     Gdk::RGBA tmpColor( colorStr.empty() ? "#00ff00" : colorStr);
     _cms_gamutcolor.set_rgba( tmpColor );
-#else
-    Gdk::Color tmpColor( colorStr.empty() ? "#00ff00" : colorStr);
-    _cms_gamutcolor.set_color( tmpColor );
-#endif
 
     _page_cms.add_line( true, _("Out of gamut warning color:"), _cms_gamutcolor, "",
                         _("Selects the color used for out of gamut warning"), false);
@@ -1331,7 +1307,7 @@ void InkscapePreferences::initPageBehavior()
     _steps_rot_relative.init ( _("Relative snapping of guideline angles"), "/options/relativeguiderotationsnap/value", false);
     _page_steps.add_line( false, "", _steps_rot_relative, "",
                             _("When on, the snap angles when rotating a guideline will be relative to the original angle"));
-    _steps_zoom.init ( "/options/zoomincrement/value", 101.0, 500.0, 1.0, 1.0, 1.414213562, true, true);
+    _steps_zoom.init ( "/options/zoomincrement/value", 101.0, 500.0, 1.0, 1.0, M_SQRT2, true, true);
     _page_steps.add_line( false, _("_Zoom in/out by:"), _steps_zoom, _("%"),
                           _("Zoom tool click, +/- keys, and middle click zoom in and out by this multiplier"), false);
     this->AddPage(_page_steps, _("Steps"), iter_behavior, PREFS_PAGE_BEHAVIOR_STEPS);
@@ -1594,31 +1570,19 @@ void InkscapePreferences::initKeyboardShortcuts(Gtk::TreeModel::iterator iter_ui
 
     int row = 3;
 
-#if WITH_GTKMM_3_0
     scroller->set_hexpand();
     scroller->set_vexpand();
     _page_keyshortcuts.attach(*scroller, 0, row, 2, 1);
-#else
-    _page_keyshortcuts.attach(*scroller, 0, 2, row, row+1, Gtk::EXPAND | Gtk::FILL, Gtk::EXPAND | Gtk::FILL);
-#endif
 
     row++;
 
-#if WITH_GTKMM_3_0
-    Gtk::ButtonBox *box_buttons = Gtk::manage(new Gtk::ButtonBox);
-#else
-    Gtk::HButtonBox *box_buttons = Gtk::manage (new Gtk::HButtonBox);
-#endif
+    auto box_buttons = Gtk::manage(new Gtk::ButtonBox);
 
     box_buttons->set_layout(Gtk::BUTTONBOX_END);
     box_buttons->set_spacing(4);
 
-#if WITH_GTKMM_3_0
     box_buttons->set_hexpand();
     _page_keyshortcuts.attach(*box_buttons, 0, row, 3, 1);
-#else
-    _page_keyshortcuts.attach(*box_buttons, 0, 3, row, row+1, Gtk::EXPAND | Gtk::FILL, Gtk::SHRINK);
-#endif
 
     UI::Widget::Button *kb_reset = Gtk::manage(new UI::Widget::Button(_("Reset"), _("Remove all your customized keyboard shortcuts, and revert to the shortcuts in the shortcut file listed above")));
     box_buttons->pack_start(*kb_reset, true, true, 6);
@@ -2051,12 +2015,8 @@ bool InkscapePreferences::SetMaxDialogSize(const Gtk::TreeModel::iterator& iter)
     _page_frame.add(*page);
     this->show_all_children();
     Gtk::Requisition sreq;
-#if WITH_GTKMM_3_0
     Gtk::Requisition sreq_natural;
     this->get_preferred_size(sreq_natural, sreq);
-#else
-    sreq = this->size_request();
-#endif
     _max_dialog_width=std::max(_max_dialog_width, sreq.width);
     _max_dialog_height=std::max(_max_dialog_height, sreq.height);
     _page_frame.remove();

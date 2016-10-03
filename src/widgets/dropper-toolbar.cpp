@@ -25,7 +25,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+#include <config.h>
 #endif
 
 #include <glibmm/i18n.h>
@@ -33,7 +33,7 @@
 #include "dropper-toolbar.h"
 #include "document-undo.h"
 #include "widgets/ege-output-action.h"
-#include "widgets/ink-action.h"
+#include "ink-toggle-action.h"
 #include "preferences.h"
 #include "widgets/spinbutton-events.h"
 

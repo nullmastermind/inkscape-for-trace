@@ -12,6 +12,12 @@ list(APPEND INKSCAPE_INCS ${PROJECT_SOURCE_DIR}
 )
 
 # ----------------------------------------------------------------------------
+# Add C++11 standard compliance
+# TODO: Add a proper check for compiler compliance here
+# ----------------------------------------------------------------------------
+list(APPEND INKSCAPE_CXX_FLAGS "-std=c++11")
+
+# ----------------------------------------------------------------------------
 # Files we include
 # ----------------------------------------------------------------------------
 if(WIN32)
@@ -38,7 +44,14 @@ if(WIN32)
 	endif()
 endif()
 
-pkg_check_modules(INKSCAPE_DEP REQUIRED pangocairo pangoft2 fontconfig gthread-2.0 gsl gmodule-2.0)
+pkg_check_modules(INKSCAPE_DEP REQUIRED
+	          harfbuzz
+	          pangocairo
+		  pangoft2
+		  fontconfig
+		  gthread-2.0
+		  gsl
+		  gmodule-2.0)
 
 list(APPEND INKSCAPE_LIBS ${INKSCAPE_DEP_LDFLAGS})
 list(APPEND INKSCAPE_INCS_SYS ${INKSCAPE_DEP_INCLUDE_DIRS})
@@ -237,7 +250,6 @@ endif()
 set(TRY_GTKSPELL 1)
 # Include dependencies:
 # use patched version until GTK2_CAIROMMCONFIG_INCLUDE_DIR is added
-if("${WITH_GTK3_EXPERIMENTAL}")
     pkg_check_modules(
         GTK3
         REQUIRED
@@ -247,11 +259,7 @@ if("${WITH_GTK3_EXPERIMENTAL}")
         gdk-3.0>=3.8
         gdl-3.0>=3.4
         )
-    message("Using EXPERIMENTAL Gtkmm 3 build")
     list(APPEND INKSCAPE_CXX_FLAGS ${GTK3_CFLAGS_OTHER})
-    set(WITH_GTKMM_3_0 1)
-    message("Using external GDL")
-    set(WITH_EXT_GDL 1)
 
     # Check whether we can use new features in Gtkmm 3.10
     # TODO: Drop this test and bump the version number in the GTK test above
@@ -291,32 +299,6 @@ if("${WITH_GTK3_EXPERIMENTAL}")
         ${GTK3_LIBRARIES}
         ${GTKSPELL3_LIBRARIES}
     )
-else()
-    pkg_check_modules(GTK REQUIRED
-                     gtkmm-2.4>=2.24
-                     gdkmm-2.4
-                     gtk+-2.0
-                     gdk-2.0
-                     )
-    list(APPEND INKSCAPE_CXX_FLAGS ${GTK_CFLAGS_OTHER})
-    pkg_check_modules(GTKSPELL2 gtkspell-2.0)
-    if("${GTKSPELL2_FOUND}")
-        message("Using GtkSpell 2")
-        add_definitions(${GTKSPELL2_CFLAGS_OTHER})
-        set (WITH_GTKSPELL 1)
-    else()
-        unset(WITH_GTKSPELL)
-    endif()
-    list(APPEND INKSCAPE_INCS_SYS
-        ${GTK_INCLUDE_DIRS}
-        ${GTKSPELL2_INCLUDE_DIRS}
-        )
-
-    list(APPEND INKSCAPE_LIBS
-        ${GTK_LIBRARIES}
-        ${GTKSPELL2_LIBRARIES}
-        )
-endif()
 
 find_package(Freetype REQUIRED)
 list(APPEND INKSCAPE_INCS_SYS ${FREETYPE_INCLUDE_DIRS})

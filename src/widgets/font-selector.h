@@ -15,8 +15,7 @@
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
-#include <libnrtype/font-lister.h>
-#include <libnrtype/font-instance.h>
+
 #include <glib.h>
 
 struct SPFontSelector

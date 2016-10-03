@@ -38,9 +38,6 @@
 #include <ieeefp.h>
 #endif
 #include <cstring>
-#include <string>
-#include <locale.h>
-#include <stdlib.h>
 
 #include <popt.h>
 #ifndef POPT_TABLEEND
@@ -48,14 +45,8 @@
 #endif /* Not def: POPT_TABLEEND */
 
 #include <libxml/tree.h>
-#include <glib/gprintf.h>
-#include <glib-object.h>
-#include <gtk/gtk.h>
 
-#if GTK_CHECK_VERSION(3,0,0)
-#include <gtkmm/cssprovider.h>
 #include <gdkmm/screen.h>
-#endif
 
 #include "inkgc/gc-core.h"
 
@@ -63,16 +54,13 @@
 #undef AND
 #endif
 
-#include "macros.h"
 #include "file.h"
 #include "document.h"
 #include "layer-model.h"
 #include "selection.h"
-#include "sp-object.h"
 #include "ui/interface.h"
 #include "print.h"
 #include "color.h"
-#include "sp-item.h"
 #include "sp-root.h"
 
 #include "svg/svg.h"
@@ -93,10 +81,8 @@
 
 #include "helper/action-context.h"
 #include "helper/png-write.h"
-#include "helper/geom.h"
 
 #include <extension/extension.h>
-#include <extension/system.h>
 #include <extension/db.h>
 #include <extension/output.h>
 #include <extension/input.h>
@@ -114,10 +100,12 @@
 #endif // WITH_DBUS
 
 #include <glibmm/i18n.h>
-#include <glibmm/main.h>
+#include <glibmm/convert.h>
+#include <glibmm/fileutils.h>
 #include <glibmm/miscutils.h>
-
+#include <glibmm/main.h>
 #include <gtkmm/main.h>
+#include <gtkmm/window.h>
 
 #ifndef HAVE_BIND_TEXTDOMAIN_CODESET
 #define bind_textdomain_codeset(p,c)
@@ -128,8 +116,6 @@
 
 #include <errno.h>
 #include "verbs.h"
-
-#include <gdk/gdkkeysyms.h>
 
 #include "path-chemistry.h"
 #include "sp-text.h"
@@ -867,10 +853,10 @@ static int sp_common_main( int argc, char const **argv, GSList **flDest )
 
 
     // temporarily switch gettext encoding to locale, so that help messages can be output properly
-    gchar const *charset;
-    g_get_charset(&charset);
+    std::string charset;
+    Glib::get_charset(charset);
 
-    bind_textdomain_codeset(GETTEXT_PACKAGE, charset);
+    bind_textdomain_codeset(GETTEXT_PACKAGE, charset.c_str());
 
     poptContext ctx = poptGetContext(NULL, argc, argv, options, 0);
     poptSetOtherOptionHelp(ctx, _("[OPTIONS...] [FILE...]\n\nAvailable options:"));
@@ -1014,16 +1000,6 @@ snooper(GdkEvent *event, gpointer /*data*/) {
     gtk_main_do_event (event);
 }
 
-static std::vector<Glib::ustring> getDirectorySet(const gchar* userDir, const gchar* const * systemDirs) {
-    std::vector<Glib::ustring> listing;
-    listing.push_back(userDir);
-    for ( const char* const* cur = systemDirs; *cur; cur++ )
-    {
-        listing.push_back(*cur);
-    }
-    return listing;
-}
-
 int
 sp_main_gui(int argc, char const **argv)
 {
@@ -1033,106 +1009,23 @@ sp_main_gui(int argc, char const **argv)
     int retVal = sp_common_main( argc, argv, &fl );
     g_return_val_if_fail(retVal == 0, 1);
 
-    // Add possible icon entry directories
-    std::vector<Glib::ustring> dataDirs = getDirectorySet( g_get_user_data_dir(),
-                                                           g_get_system_data_dirs() );
-    for (std::vector<Glib::ustring>::iterator it = dataDirs.begin(); it != dataDirs.end(); ++it)
-    {
-        std::vector<Glib::ustring> listing;
-        listing.push_back(*it);
-        listing.push_back("inkscape");
-        listing.push_back("icons");
-        Glib::ustring dir = Glib::build_filename(listing);
-        gtk_icon_theme_append_search_path(gtk_icon_theme_get_default(), dir.c_str());
-    }
-
-    // Add our icon directory to the search path for icon theme lookups.
-    gchar *usericondir = Inkscape::Application::profile_path("icons");
-    gtk_icon_theme_append_search_path(gtk_icon_theme_get_default(), usericondir);
-    gtk_icon_theme_append_search_path(gtk_icon_theme_get_default(), INKSCAPE_PIXMAPDIR);
-#ifdef INKSCAPE_THEMEDIR
-    gtk_icon_theme_append_search_path(gtk_icon_theme_get_default(), INKSCAPE_THEMEDIR);
-    gtk_icon_theme_rescan_if_needed (gtk_icon_theme_get_default());
-#endif
-    g_free(usericondir);
-
-
-#if GTK_CHECK_VERSION(3,0,0)
-    // Add style sheet (GTK3)
-    Glib::RefPtr<Gdk::Screen> screen = Gdk::Screen::get_default();
-
-    Glib::ustring inkscape_style = INKSCAPE_UIDIR;
-    inkscape_style += "/style.css";
-    // std::cout << "CSS Stylesheet Inkscape: " << inkscape_style << std::endl;
-
-    if (g_file_test (inkscape_style.c_str(), G_FILE_TEST_EXISTS)) {
-      Glib::RefPtr<Gtk::CssProvider> provider = Gtk::CssProvider::create();
-
-      // From 3.16, throws an error which we must catch.
-      try {
-          provider->load_from_path (inkscape_style);
-      }
-#if GTK_CHECK_VERSION(3,16,0)
-      // Gtk::CssProviderError not defined until 3.16.
-      catch (const Gtk::CssProviderError& ex)
-      {
-          std::cerr << "CSSProviderError::load_from_path(): failed to load: " << inkscape_style
-                    << "\n  (" << ex.what() << ")" << std::endl;
-      }
-#else
-      catch (...)
-      {}
-#endif
-
-      Gtk::StyleContext::add_provider_for_screen (screen, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-    } else {
-        std::cerr << "sp_main_gui: Cannot find default style file:\n  (" << inkscape_style
-                  << ")" << std::endl;
-    }
-
-    Glib::ustring user_style = Inkscape::Application::profile_path("ui/style.css");
-    // std::cout << "CSS Stylesheet User: " << user_style << std::endl;
-
-    if (g_file_test (user_style.c_str(), G_FILE_TEST_EXISTS)) {
-      Glib::RefPtr<Gtk::CssProvider> provider2 = Gtk::CssProvider::create();
-
-      // From 3.16, throws an error which we must catch.
-      try {
-          provider2->load_from_path (user_style);
-      }
-#if GTK_CHECK_VERSION(3,16,0)
-      // Gtk::CssProviderError not defined until 3.16.
-      catch (const Gtk::CssProviderError& ex)
-      {
-        std::cerr << "CSSProviderError::load_from_path(): failed to load: " << user_style
-                  << "\n  (" << ex.what() << ")" << std::endl;
-      }
-#else
-      catch (...)
-      {}
-#endif
-
-      Gtk::StyleContext::add_provider_for_screen (screen, provider2, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-    }
-#endif
-
     gdk_event_handler_set((GdkEventFunc)snooper, NULL, NULL);
     Inkscape::Debug::log_display_config();
 
     // Set default window icon. Obeys the theme.
-    gtk_window_set_default_icon_name("inkscape");
+    Gtk::Window::set_default_icon_name("inkscape");
     // Do things that were previously in inkscape_gtk_stock_init().
     sp_icon_get_phys_size(GTK_ICON_SIZE_MENU);
     Inkscape::UI::Widget::Panel::prep();
 
-    gboolean create_new = TRUE;
+    bool create_new = true;
 
     /// \todo FIXME BROKEN - non-UTF-8 sneaks in here.
     Inkscape::Application::create(argv[0], true);
 
     while (fl) {
         if (sp_file_open((gchar *)fl->data,NULL)) {
-            create_new=FALSE;
+            create_new=false;
         }
         fl = g_slist_remove(fl, fl->data);
     }
@@ -1228,8 +1121,8 @@ static int sp_process_file_list(GSList *fl)
                 	std::vector<SPItem*> items;
                     SPRoot *root = doc->getRoot();
                     doc->ensureUpToDate();
-                    for ( SPObject *iter = root->firstChild(); iter ; iter = iter->getNext()) {
-                        SPItem* item = (SPItem*) iter;
+                    for (auto& iter: root->children) {
+                        SPItem* item = (SPItem*) &iter;
                         if (! (SP_IS_TEXT(item) || SP_IS_FLOWTEXT(item) || SP_IS_GROUP(item))) {
                             continue;
                         }
@@ -1483,10 +1376,8 @@ do_query_all_recurse (SPObject *o)
         }
     }
 
-    SPObject *child = o->children;
-    while (child) {
-        do_query_all_recurse (child);
-        child = child->next;
+    for(auto& child: o->children) {
+        do_query_all_recurse (&child);
     }
 }
 

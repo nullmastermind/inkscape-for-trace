@@ -14,20 +14,16 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+#include <config.h>
 #endif
 
 #include <string.h>
 
 #include "display/nr-filter-primitive.h"
-#include "display/nr-filter-types.h"
 
 #include "attributes.h"
 #include "style.h"
 #include "sp-filter-primitive.h"
-#include "xml/repr.h"
-#include "sp-filter.h"
-#include "sp-item.h"
 
 
 // CPPIFY: Make pure virtual.
@@ -246,8 +242,10 @@ int sp_filter_primitive_read_result(SPFilterPrimitive *prim, gchar const *name)
  */
 int sp_filter_primitive_name_previous_out(SPFilterPrimitive *prim) {
     SPFilter *parent = SP_FILTER(prim->parent);
-    SPObject *i = parent->children;
-    while (i && i->next != prim) i = i->next;
+    SPObject *i = parent->firstChild();
+    while (i && i->getNext() != prim) {
+        i = i->getNext();
+    }
     if (i) {
         SPFilterPrimitive *i_prim = SP_FILTER_PRIMITIVE(i);
         if (i_prim->image_out < 0) {

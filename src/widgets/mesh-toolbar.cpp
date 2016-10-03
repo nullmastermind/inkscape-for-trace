@@ -15,7 +15,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+#include <config.h>
 #endif
 
 // REVIEW THESE AT END OF REWRITE
@@ -25,17 +25,13 @@
 
 #include "verbs.h"
 
-#include "macros.h"
 #include "widgets/button.h"
-#include "widgets/widget-sizes.h"
-#include "widgets/spw-utilities.h"
 #include "widgets/spinbutton-events.h"
 #include "widgets/gradient-vector.h"
 #include "widgets/gradient-image.h"
 #include "style.h"
 
 #include "inkscape.h"
-#include "preferences.h"
 #include "document-private.h"
 #include "document-undo.h"
 #include "desktop.h"
@@ -45,24 +41,19 @@
 #include "ui/tools/gradient-tool.h"
 #include "ui/tools/mesh-tool.h"
 #include "gradient-drag.h"
-#include "sp-mesh.h"
+#include "sp-mesh-gradient.h"
 #include "gradient-chemistry.h"
-#include "gradient-selector.h"
-#include "selection.h"
 #include "ui/icon-names.h"
 
 #include "widgets/ege-adjustment-action.h"
-#include "widgets/ege-output-action.h"
 #include "widgets/ege-select-one-action.h"
-#include "widgets/ink-action.h"
-#include "widgets/ink-comboboxentry-action.h"
+#include "ink-action.h"
+#include "ink-radio-action.h"
+#include "ink-toggle-action.h"
 
 #include "sp-stop.h"
 #include "svg/css-ostringstream.h"
-#include "svg/svg-color.h"
 #include "desktop-style.h"
-
-#include "toolbox.h"
 
 using Inkscape::DocumentUndo;
 using Inkscape::UI::ToolboxFactory;
@@ -79,7 +70,7 @@ static bool blocked = false;
  * Get the current selection and dragger status from the desktop
  */
 void ms_read_selection( Inkscape::Selection *selection,
-                        SPMesh *&ms_selected,
+                        SPMeshGradient *&ms_selected,
                         bool &ms_selected_multi,
                         SPMeshType &ms_type,
                         bool &ms_type_multi )
@@ -89,16 +80,16 @@ void ms_read_selection( Inkscape::Selection *selection,
     bool first = true;
     ms_type = SP_MESH_TYPE_COONS;
     
-    std::vector<SPItem*> itemlist=selection->itemList();
-    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();++i){
+    auto itemlist= selection->items();
+    for(auto i=itemlist.begin();i!=itemlist.end();++i){
         SPItem *item = *i;
         SPStyle *style = item->style;
 
         if (style && (style->fill.isPaintserver())) {
             SPPaintServer *server = item->style->getFillPaintServer();
-            if ( SP_IS_MESH(server) ) {
+            if ( SP_IS_MESHGRADIENT(server) ) {
 
-                SPMesh *gradient = SP_MESH(server); // ->getVector();
+                SPMeshGradient *gradient = SP_MESHGRADIENT(server); // ->getVector();
                 SPMeshType type = gradient->type;
 
                 if (gradient != ms_selected) {
@@ -121,9 +112,9 @@ void ms_read_selection( Inkscape::Selection *selection,
 
         if (style && (style->stroke.isPaintserver())) {
             SPPaintServer *server = item->style->getStrokePaintServer();
-            if ( SP_IS_MESH(server) ) {
+            if ( SP_IS_MESHGRADIENT(server) ) {
 
-                SPMesh *gradient = SP_MESH(server); // ->getVector();
+                SPMeshGradient *gradient = SP_MESHGRADIENT(server); // ->getVector();
                 SPMeshType type = gradient->type;
 
                 if (gradient != ms_selected) {
@@ -173,7 +164,7 @@ static void ms_tb_selection_changed(Inkscape::Selection * /*selection*/, gpointe
         //     // Hide/show handles?
         // }
 
-        SPMesh *ms_selected = 0;
+        SPMeshGradient *ms_selected = 0;
         SPMeshType ms_type = SP_MESH_TYPE_COONS;
         bool ms_selected_multi = false;
         bool ms_type_multi = false; 
@@ -212,12 +203,12 @@ static void ms_defs_modified(SPObject * /*defs*/, guint /*flags*/, GObject *widg
     ms_tb_selection_changed(NULL, widget);
 }
 
-void ms_get_dt_selected_gradient(Inkscape::Selection *selection, SPMesh *&ms_selected)
+void ms_get_dt_selected_gradient(Inkscape::Selection *selection, SPMeshGradient *&ms_selected)
 {
-    SPMesh *gradient = 0;
+    SPMeshGradient *gradient = 0;
 
-    std::vector<SPItem*> itemlist=selection->itemList();
-    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();++i){
+    auto itemlist= selection->items();
+    for(auto i=itemlist.begin();i!=itemlist.end();++i){
         SPItem *item = *i;// get the items gradient, not the getVector() version
          SPStyle *style = item->style;
          SPPaintServer *server = 0;
@@ -229,8 +220,8 @@ void ms_get_dt_selected_gradient(Inkscape::Selection *selection, SPMesh *&ms_sel
              server = item->style->getStrokePaintServer();
          }
 
-         if ( SP_IS_MESH(server) ) {
-             gradient = SP_MESH(server);
+         if ( SP_IS_MESHGRADIENT(server) ) {
+             gradient = SP_MESHGRADIENT(server);
          }
     }
 
@@ -304,7 +295,7 @@ static void ms_type_changed(EgeSelectOneAction *act, GtkWidget *widget)
 
     SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data(G_OBJECT(widget), "desktop"));
     Inkscape::Selection *selection = desktop->getSelection();
-    SPMesh *gradient = 0;
+    SPMeshGradient *gradient = 0;
     ms_get_dt_selected_gradient(selection, gradient);
 
     if (gradient) {

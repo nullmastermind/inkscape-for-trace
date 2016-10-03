@@ -13,7 +13,6 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
 #endif
 
 #include "ui/tool/multi-path-manipulator.h"
@@ -27,11 +26,7 @@
 
 #include "sp-path.h"
 #include "sp-item-group.h"
-#include "streq.h"
-#include "macros.h"
 #include "attributes.h"
-#include "sp-lpe-item.h"
-#include "xml/repr.h"
 #include "uri.h"
 #include "message-stack.h"
 #include "inkscape.h"
@@ -40,14 +35,10 @@
 #include "sp-ellipse.h"
 #include "display/curve.h"
 #include "svg/svg.h"
-#include <2geom/pathvector.h>
 #include "sp-clippath.h"
 #include "sp-mask.h"
 #include "ui/tools-switch.h"
 #include "ui/tools/node-tool.h"
-#include "ui/tools/tool-base.h"
-
-#include <algorithm>
 
 /* LPEItem base class */
 static void sp_lpe_item_enable_path_effects(SPLPEItem *lpeitem, bool enable);
@@ -210,9 +201,6 @@ Inkscape::XML::Node* SPLPEItem::write(Inkscape::XML::Document *xml_doc, Inkscape
  * returns true when LPE was successful.
  */
 bool SPLPEItem::performPathEffect(SPCurve *curve, bool is_clip_or_mask) {
-    if (!this) {
-        return false;
-    }
 
     if (!curve) {
         return false;
@@ -349,10 +337,10 @@ sp_lpe_item_create_original_path_recursive(SPLPEItem *lpeitem)
     {
         sp_lpe_item_create_original_path_recursive(SP_LPE_ITEM(mask->firstChild()));
     }
-    SPClipPath * clipPath = lpeitem->clip_ref->getObject();
-    if(clipPath)
+    SPClipPath * clip_path = lpeitem->clip_ref->getObject();
+    if(clip_path)
     {
-        sp_lpe_item_create_original_path_recursive(SP_LPE_ITEM(clipPath->firstChild()));
+        sp_lpe_item_create_original_path_recursive(SP_LPE_ITEM(clip_path->firstChild()));
     }
     if (SP_IS_GROUP(lpeitem)) {
     	std::vector<SPItem*> item_list = sp_item_group_item_list(SP_GROUP(lpeitem));
@@ -383,10 +371,10 @@ sp_lpe_item_cleanup_original_path_recursive(SPLPEItem *lpeitem)
             {
                 sp_lpe_item_cleanup_original_path_recursive(SP_LPE_ITEM(mask->firstChild()));
             }
-            SPClipPath * clipPath = lpeitem->clip_ref->getObject();
-            if(clipPath)
+            SPClipPath * clip_path = lpeitem->clip_ref->getObject();
+            if(clip_path)
             {
-                sp_lpe_item_cleanup_original_path_recursive(SP_LPE_ITEM(clipPath->firstChild()));
+                sp_lpe_item_cleanup_original_path_recursive(SP_LPE_ITEM(clip_path->firstChild()));
             }
         }
         std::vector<SPItem*> item_list = sp_item_group_item_list(SP_GROUP(lpeitem));
@@ -405,10 +393,10 @@ sp_lpe_item_cleanup_original_path_recursive(SPLPEItem *lpeitem)
             {
                 sp_lpe_item_cleanup_original_path_recursive(SP_LPE_ITEM(mask->firstChild()));
             }
-            SPClipPath * clipPath = lpeitem->clip_ref->getObject();
-            if(clipPath)
+            SPClipPath * clip_path = lpeitem->clip_ref->getObject();
+            if(clip_path)
             {
-                sp_lpe_item_cleanup_original_path_recursive(SP_LPE_ITEM(clipPath->firstChild()));
+                sp_lpe_item_cleanup_original_path_recursive(SP_LPE_ITEM(clip_path->firstChild()));
             }
             repr->setAttribute("d", repr->attribute("inkscape:original-d"));
             repr->setAttribute("inkscape:original-d", NULL);
@@ -472,7 +460,7 @@ void SPLPEItem::addPathEffect(std::string value, bool reset)
         if (SP_ACTIVE_DESKTOP ) {
         Inkscape::UI::Tools::ToolBase *ec = SP_ACTIVE_DESKTOP->event_context;
             if (INK_IS_NODE_TOOL(ec)) {
-                tools_switch(SP_ACTIVE_DESKTOP, TOOLS_LPETOOL); //mhh
+                tools_switch(SP_ACTIVE_DESKTOP, TOOLS_SELECT); //mhh
                 tools_switch(SP_ACTIVE_DESKTOP, TOOLS_NODES);
             }
         }
@@ -640,10 +628,13 @@ bool SPLPEItem::hasPathEffectRecursive() const
 void
 SPLPEItem::apply_to_clippath(SPItem *item)
 {
-    SPClipPath *clipPath = item->clip_ref->getObject();
-    if(clipPath) {
-        SPObject * clip_data = clipPath->firstChild();
-        apply_to_clip_or_mask(SP_ITEM(clip_data), item);
+    SPClipPath *clip_path = item->clip_ref->getObject();
+    if(clip_path) {
+        std::vector<SPObject*> clip_path_list = clip_path->childList(true);
+        for ( std::vector<SPObject*>::const_iterator iter=clip_path_list.begin();iter!=clip_path_list.end();++iter) {
+            SPObject * clip_data = *iter;
+            apply_to_clip_or_mask(SP_ITEM(clip_data), item);
+        }
     }
     if(SP_IS_GROUP(item)){
     	std::vector<SPItem*> item_list = sp_item_group_item_list(SP_GROUP(item));
@@ -659,8 +650,11 @@ SPLPEItem::apply_to_mask(SPItem *item)
 {
     SPMask *mask = item->mask_ref->getObject();
     if(mask) {
-        SPObject *mask_data = mask->firstChild();
-        apply_to_clip_or_mask(SP_ITEM(mask_data), item);
+        std::vector<SPObject*> mask_list = mask->childList(true);
+        for ( std::vector<SPObject*>::const_iterator iter=mask_list.begin();iter!=mask_list.end();++iter) {
+            SPObject * mask_data = *iter;
+            apply_to_clip_or_mask(SP_ITEM(mask_data), item);
+        }
     }
     if(SP_IS_GROUP(item)){
     	std::vector<SPItem*> item_list = sp_item_group_item_list(SP_GROUP(item));
@@ -715,7 +709,7 @@ SPLPEItem::apply_to_clip_or_mask(SPItem *clip_mask, SPItem *item)
                 // LPE was unsuccesfull. Read the old 'd'-attribute.
                 if (gchar const * value = repr->attribute("d")) {
                     Geom::PathVector pv = sp_svg_read_pathv(value);
-                    SPCurve *oldcurve = new SPCurve(pv);
+                    SPCurve *oldcurve = new (std::nothrow) SPCurve(pv);
                     if (oldcurve) {
                         SP_SHAPE(clip_mask)->setCurve(oldcurve, TRUE);
                         oldcurve->unref();

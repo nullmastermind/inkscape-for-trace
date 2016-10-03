@@ -1,9 +1,9 @@
-#ifndef SP_FEPOINTLIGHT_H_SEEN
-#define SP_FEPOINTLIGHT_H_SEEN
-
 /** \file
  * SVG <filter> implementation, see sp-filter.cpp.
  */
+#ifndef SP_FEPOINTLIGHT_H_SEEN
+#define SP_FEPOINTLIGHT_H_SEEN
+
 /*
  * Authors:
  *   Hugo Rodrigues <haa.rodrigues@gmail.com>

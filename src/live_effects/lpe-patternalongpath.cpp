@@ -6,22 +6,13 @@
 
 #include "live_effects/lpe-patternalongpath.h"
 #include "live_effects/lpeobject.h"
-#include "sp-shape.h"
 #include "display/curve.h"
-#include "svg/svg.h"
-#include "ui/widget/scalar.h"
 
-#include <2geom/sbasis.h>
-#include <2geom/sbasis-geometric.h>
 #include <2geom/bezier-to-sbasis.h>
-#include <2geom/sbasis-to-bezier.h>
-#include <2geom/d2.h>
-#include <2geom/piecewise.h>
 
-#include "knot-holder-entity.h"
 #include "knotholder.h"
-
 #include <algorithm>
+
 using std::vector;
 
 
@@ -202,12 +193,12 @@ LPEPatternAlongPath::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > con
                 case PAPCT_REPEATED_STRETCHED:
                     // if uskeleton is closed:
                     if(path_i.segs.front().at0() == path_i.segs.back().at1()){
-                        nbCopies = static_cast<int>(std::floor((uskeleton.domain().extent() - toffset)/(pattBndsX->extent()+xspace)));
+                        nbCopies = std::max(1, static_cast<int>(std::floor((uskeleton.domain().extent() - toffset)/(pattBndsX->extent()+xspace))));
                         pattBndsX = Interval(pattBndsX->min(),pattBndsX->max()+xspace);
                         scaling = (uskeleton.domain().extent() - toffset)/(((double)nbCopies)*pattBndsX->extent());
                         // if not closed: no space at the end
                     }else{
-                        nbCopies = static_cast<int>(std::floor((uskeleton.domain().extent() - toffset + xspace)/(pattBndsX->extent()+xspace)));
+                        nbCopies = std::max(1, static_cast<int>(std::floor((uskeleton.domain().extent() - toffset + xspace)/(pattBndsX->extent()+xspace))));
                         pattBndsX = Interval(pattBndsX->min(),pattBndsX->max()+xspace);
                         scaling = (uskeleton.domain().extent() - toffset)/(((double)nbCopies)*pattBndsX->extent() - xspace);
                     }
@@ -264,9 +255,11 @@ LPEPatternAlongPath::transform_multiply(Geom::Affine const& postmul, bool set)
     bool transform_stroke = prefs ? prefs->getBool("/options/transform/stroke", true) : true;
     if (transform_stroke && !scale_y_rel) {
         prop_scale.param_set_value(prop_scale * ((postmul.expansionX() + postmul.expansionY()) / 2));
-    } 	
+        prop_scale.write_to_SVG();
+    }
     if (postmul.isTranslation()) {
         pattern.param_transform_multiply(postmul, set);
+        pattern.write_to_SVG();
     }
     sp_lpe_item_update_patheffect (sp_lpe_item, false, true);
 }
