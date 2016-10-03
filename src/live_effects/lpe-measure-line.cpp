@@ -161,6 +161,11 @@ LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
 
 LPEMeasureLine::~LPEMeasureLine() {}
 
+void swap(Geom::Point &A, Geom::Point &B){
+    Geom::Point tmp = A;
+    A = B;
+    B = tmp;
+}
 void
 LPEMeasureLine::doOnApply(SPLPEItem const* lpeitem)
 {

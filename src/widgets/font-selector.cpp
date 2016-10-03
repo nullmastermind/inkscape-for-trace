@@ -19,10 +19,6 @@
 #include <config.h>
 #endif
 
-#include <2geom/transforms.h>
-
-#include <gtk/gtk.h>
-
 #include <libnrtype/font-lister.h>
 #include <libnrtype/font-instance.h>
 
@@ -32,7 +28,6 @@
 #include "widgets/font-selector.h"
 
 /* SPFontSelector */
-
 
 struct SPFontSelector
 {
@@ -53,7 +48,6 @@ struct SPFontSelector
     bool fontsize_dirty;
     Glib::ustring *fontspec;
 };
-
 
 
 struct SPFontSelectorClass
@@ -251,7 +245,6 @@ static void sp_font_selector_dispose(GObject *object)
 
     if (fsel->fontspec) {
         delete fsel->fontspec;
-        fsel->fontspec = 0;
     }
 
     if (fsel->families.length > 0) {

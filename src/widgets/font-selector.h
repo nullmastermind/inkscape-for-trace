@@ -18,29 +18,7 @@
 
 #include <glib.h>
 
-struct SPFontSelector
-{
-#if GTK_CHECK_VERSION(3,0,0)
-    GtkBox hbox;
-#else
-    GtkHBox hbox;
-#endif
-
-    unsigned int block_emit : 1;
-
-    GtkWidget *family;
-    GtkWidget *style;
-    GtkWidget *size;
-
-    GtkWidget *family_treeview;
-    GtkWidget *style_treeview;
-
-    NRNameList families;
-    NRStyleList styles;
-    gfloat fontsize;
-    bool fontsize_dirty;
-    Glib::ustring *fontspec;
-};
+struct SPFontSelector;
 
 #define SP_TYPE_FONT_SELECTOR (sp_font_selector_get_type ())
 #define SP_FONT_SELECTOR(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_FONT_SELECTOR, SPFontSelector))
