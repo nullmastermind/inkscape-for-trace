@@ -67,7 +67,7 @@ private:
     BoolParam line_group_05;
     BoolParam rotate_anotation;
     BoolParam hide_back;
-    BoolParam lock_measure;
+    BoolParam unlock_measure;
     TextParam dimline_format;
     TextParam helperlines_format;
     TextParam anotation_format;
