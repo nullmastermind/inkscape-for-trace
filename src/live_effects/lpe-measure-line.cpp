@@ -541,6 +541,9 @@ LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
     SPPath *sp_path = dynamic_cast<SPPath *>(splpeitem);
     if (sp_path) {
         Geom::PathVector pathvector = sp_path->get_original_curve()->get_pathvector();
+        SPDocument * doc = SP_ACTIVE_DOCUMENT;
+        Geom::Affine affinetransform = i2anc_affine(SP_OBJECT(lpeitem), SP_OBJECT(doc->getRoot()));
+        pathvector *= affinetransform;
         if (arrows_outside) {
             createArrowMarker((Glib::ustring)"ArrowDINout-start");
             createArrowMarker((Glib::ustring)"ArrowDINout-end");
@@ -618,9 +621,8 @@ LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
             } else {
                 pos = pos - Point::polar(angle_cross, (position + text_top_bottom) - fontsize/2.5);
             }
-            if (!scale_insensitive) {
-                Geom::Affine affinetransform = i2anc_affine(SP_OBJECT(lpeitem), SP_OBJECT(desktop->doc()->getRoot()));
-                length *= (affinetransform.expansionX() + affinetransform.expansionY()) / 2.0;
+            if (scale_insensitive) {
+                length *= (affinetransform.inverse().expansionX() + affinetransform.inverse().expansionY()) / 2.0;
             }
             createTextLabel(pos, length, angle, remove);
             bool overflow = false;
