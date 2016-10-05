@@ -10,6 +10,7 @@
  */
 #include "live_effects/lpe-measure-line.h"
 #include <pangomm/fontdescription.h>
+#include "ui/dialog/livepatheffect-editor.h"
 #include <libnrtype/font-lister.h>
 #include "inkscape.h"
 #include "xml/node.h"
@@ -21,7 +22,7 @@
 #include "svg/svg-color.h"
 #include "svg/svg.h"
 #include "display/curve.h"
-#include <2geom/affine.h>
+#include "2geom/affine.h"
 #include "style.h"
 #include "sp-root.h"
 #include "sp-defs.h"
@@ -67,7 +68,6 @@ LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
     line_group_05(_("Line Group 0.5*"), _("Line Group 0.5, from 0.7"), "line_group_05", &wr, this, true),
     rotate_anotation(_("Rotate Anotation*"), _("Rotate Anotation"), "rotate_anotation", &wr, this, true),
     hide_back(_("Hide if label over*"), _("Hide DIN line if label over"), "hide_back", &wr, this, true),
-    unlock_measure(_("Unlock measure data"), _("Unlock measure data maybe give problems on transforms"), "unlock_measure", &wr, this, false),
     dimline_format(_("CSS DIN line*"), _("Override CSS to DIN line, return to save, empty to reset to DIM"), "dimline_format", &wr, this,""),
     helperlines_format(_("CSS helpers*"), _("Override CSS to helper lines, return to save, empty to reset to DIM"), "helperlines_format", &wr, this,""),
     anotation_format(_("CSS anotation*"), _("Override CSS to anotation text, return to save, empty to reset to DIM"), "anotation_format", &wr, this,""),
@@ -93,7 +93,6 @@ LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
     registerParameter(&line_group_05);
     registerParameter(&rotate_anotation);
     registerParameter(&hide_back);
-    registerParameter(&unlock_measure);
     registerParameter(&dimline_format);
     registerParameter(&helperlines_format);
     registerParameter(&anotation_format);
@@ -159,6 +158,7 @@ LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
     helpline_overlap.param_set_range(-999999.0, 999999.0);
     helpline_overlap.param_set_increments(1, 1);
     helpline_overlap.param_set_digits(2);
+    erase = true;
 }
 
 LPEMeasureLine::~LPEMeasureLine() {}
@@ -256,11 +256,7 @@ LPEMeasureLine::createArrowMarker(Glib::ustring mode)
             arrow->setAttribute("refX", "0.0");
             arrow->setAttribute("refY", "0.0");
             arrow->setAttribute("style", "overflow:visible");
-            if (unlock_measure) {
-                arrow->setAttribute("sodipodi:insensitive", NULL);
-            } else {
-                arrow->setAttribute("sodipodi:insensitive", "true");
-            }
+            arrow->setAttribute("sodipodi:insensitive", "true");
             /* Create <path> */
             Inkscape::XML::Node *arrow_path = xml_doc->createElement("svg:path");
             if (mode == (Glib::ustring)"ArrowDIN-start") {
@@ -288,11 +284,7 @@ LPEMeasureLine::createArrowMarker(Glib::ustring mode)
         } else {
             Inkscape::XML::Node *arrow= elemref->getRepr();
             if (arrow) {
-                if (unlock_measure) {
-                    arrow->setAttribute("sodipodi:insensitive", NULL);
-                } else {
-                    arrow->setAttribute("sodipodi:insensitive", "true");
-                }
+                arrow->setAttribute("sodipodi:insensitive", "true");
                 Inkscape::XML::Node *arrow_data = arrow->firstChild();
                 if (arrow_data) {
                     SPCSSAttr *css = sp_repr_css_attr_new();
@@ -343,11 +335,7 @@ LPEMeasureLine::createTextLabel(Geom::Point pos, double length, Geom::Coord angl
             rtext = elemref->getRepr();
             sp_repr_set_svg_double(rtext, "x", pos[Geom::X]);
             sp_repr_set_svg_double(rtext, "y", pos[Geom::Y]);
-            if (unlock_measure) {
-                rtext->setAttribute("sodipodi:insensitive", NULL);
-            } else {
-                rtext->setAttribute("sodipodi:insensitive", "true");
-            }
+            rtext->setAttribute("sodipodi:insensitive", "true");
         } else {
             if (remove) {
                 return;
@@ -355,11 +343,7 @@ LPEMeasureLine::createTextLabel(Geom::Point pos, double length, Geom::Coord angl
             rtext = xml_doc->createElement("svg:text");
             rtext->setAttribute("xml:space", "preserve");
             rtext->setAttribute("id", ( (Glib::ustring)"text-on-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
-            if (unlock_measure) {
-                rtext->setAttribute("sodipodi:insensitive", NULL);
-            } else {
-                rtext->setAttribute("sodipodi:insensitive", "true");
-            }
+            rtext->setAttribute("sodipodi:insensitive", "true");
             pos = pos - Point::polar(angle, text_right_left);
             sp_repr_set_svg_double(rtext, "x", pos[Geom::X]);
             sp_repr_set_svg_double(rtext, "y", pos[Geom::Y]);
@@ -520,11 +504,7 @@ LPEMeasureLine::createLine(Geom::Point start,Geom::Point end, Glib::ustring id, 
             gchar * line_str = sp_svg_write_path( line_pathv );
             line->setAttribute("d" , line_str);
         }
-        if (unlock_measure) {
-            line->setAttribute("sodipodi:insensitive", NULL);
-        } else {
-            line->setAttribute("sodipodi:insensitive", "true");
-        }
+        line->setAttribute("sodipodi:insensitive", "true");
         line_pathv.clear();
         
         Glib::ustring style = (Glib::ustring)"stroke:#000000;fill:none;";
@@ -723,6 +703,8 @@ LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
 
 void LPEMeasureLine::doOnRemove (SPLPEItem const* lpeitem)
 {
+    if (!erase) return;
+    
     if (SPDesktop *desktop = SP_ACTIVE_DESKTOP) {
         Inkscape::URI SVGElem_uri(((Glib::ustring)"#" + (Glib::ustring)"text-on-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
         Inkscape::URIReference* SVGElemRef = new Inkscape::URIReference(desktop->doc());
@@ -754,6 +736,48 @@ void LPEMeasureLine::doOnRemove (SPLPEItem const* lpeitem)
     }
 }
 
+void LPEMeasureLine::toObjects()
+{
+    if (SPDesktop *desktop = SP_ACTIVE_DESKTOP) {
+        
+        Inkscape::URI SVGElem_uri(((Glib::ustring)"#" + (Glib::ustring)"text-on-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
+        Inkscape::URIReference* SVGElemRef = new Inkscape::URIReference(desktop->doc());
+        SVGElemRef->attach(SVGElem_uri);
+        SPObject *elemref = NULL;
+        if (elemref = SVGElemRef->getObject()) {
+            elemref->getRepr()->setAttribute("sodipodi:insensitive", NULL);
+        }
+        Inkscape::URI SVGElem_uri2(((Glib::ustring)"#" + (Glib::ustring)"infoline-on-end-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
+        SVGElemRef->attach(SVGElem_uri2);
+        if (elemref = SVGElemRef->getObject()) {
+            elemref->getRepr()->setAttribute("sodipodi:insensitive", NULL);
+        }
+        Inkscape::URI SVGElem_uri3(((Glib::ustring)"#" + (Glib::ustring)"infoline-on-start-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
+        SVGElemRef->attach(SVGElem_uri3);
+        if (elemref = SVGElemRef->getObject()) {
+            elemref->getRepr()->setAttribute("sodipodi:insensitive", NULL);
+        }
+        Inkscape::URI SVGElem_uri4(((Glib::ustring)"#" + (Glib::ustring)"infoline-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
+        SVGElemRef->attach(SVGElem_uri4);
+        if (elemref = SVGElemRef->getObject()) {
+            elemref->getRepr()->setAttribute("sodipodi:insensitive", NULL);
+        }
+        Inkscape::URI SVGElem_uri5(((Glib::ustring)"#" + (Glib::ustring)"downline-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
+        SVGElemRef->attach(SVGElem_uri5);
+        if (elemref = SVGElemRef->getObject()) {
+            elemref->getRepr()->setAttribute("sodipodi:insensitive", NULL);
+        }
+        erase = false;
+        sp_lpe_item->removeCurrentPathEffect(true);
+        //TODO: find better way to refresh effect list
+        if (SP_IS_OBJECT(sp_lpe_item)){
+            Inkscape::Selection *selection = SP_ACTIVE_DESKTOP->getSelection();
+            selection->remove(SP_OBJECT(sp_lpe_item));
+            selection->add(SP_OBJECT(sp_lpe_item));
+        }
+    }
+}
+
 Gtk::Widget *LPEMeasureLine::newWidget()
 {
     // use manage here, because after deletion of Effect object, others might
@@ -766,6 +790,7 @@ Gtk::Widget *LPEMeasureLine::newWidget()
 
     std::vector<Parameter *>::iterator it = param_vector.begin();
     Gtk::HBox * button1 = Gtk::manage(new Gtk::HBox(true,0));
+    Gtk::HBox * button2 = Gtk::manage(new Gtk::HBox(true,0));
     Gtk::VBox * vbox_expander = Gtk::manage( new Gtk::VBox(Effect::newWidget()) );
     vbox_expander->set_border_width(0);
     vbox_expander->set_spacing(2);
@@ -797,12 +822,16 @@ Gtk::Widget *LPEMeasureLine::newWidget()
     Gtk::Button *save_default = Gtk::manage(new Gtk::Button(Glib::ustring(_("Save '*' as default"))));
     save_default->signal_clicked().connect(sigc::mem_fun(*this, &LPEMeasureLine::saveDefault));
     button1->pack_start(*save_default, true, true, 2);
+    Gtk::Button *remove = Gtk::manage(new Gtk::Button(Glib::ustring(_("Convert to objects"))));
+    remove->signal_clicked().connect(sigc::mem_fun(*this, &LPEMeasureLine::toObjects));
+    button2->pack_start(*remove, true, true, 2);
     expander = Gtk::manage(new Gtk::Expander(Glib::ustring(_("Show DIM CSS style override"))));
     expander->add(*vbox_expander);
     expander->set_expanded(expanded);
     expander->property_expanded().signal_changed().connect(sigc::mem_fun(*this, &LPEMeasureLine::onExpanderChanged) );
     vbox->pack_start(*expander, true, true, 2);
     vbox->pack_start(*button1, true, true, 2);
+    vbox->pack_start(*button2, true, true, 2);
     return dynamic_cast<Gtk::Widget *>(vbox);
 }
 

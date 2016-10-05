@@ -44,6 +44,7 @@ public:
     void createLine(Geom::Point start,Geom::Point end,Glib::ustring id, bool main, bool overflow, bool remove, bool arrows = false);
     void createTextLabel(Geom::Point pos, double length, Geom::Coord angle, bool remove);
     void onExpanderChanged();
+    void toObjects();
     void createArrowMarker(Glib::ustring mode);
     void saveDefault();
     virtual Gtk::Widget *newWidget();
@@ -67,7 +68,6 @@ private:
     BoolParam line_group_05;
     BoolParam rotate_anotation;
     BoolParam hide_back;
-    BoolParam unlock_measure;
     TextParam dimline_format;
     TextParam helperlines_format;
     TextParam anotation_format;
@@ -79,6 +79,7 @@ private:
     double fontsize;
     double anotation_width;
     double arrow_gap;
+    bool erase;
 /*    Geom::Affine affine_over;*/
     LPEMeasureLine(const LPEMeasureLine &);
     LPEMeasureLine &operator=(const LPEMeasureLine &);
