@@ -17,14 +17,12 @@
 #include "viewbox.h"
 #include "enums.h"
 #include "sp-item.h"
+#include "sp-root.h"
 #include "display/sp-canvas-group.h"
 #include "display/canvas-bpath.h"
 #include "display/curve.h"
 #include "inkscape.h"
 #include "desktop.h"
-
-#include "display/sodipodi-ctrl.h"
-#include "ui/dialog/knot-properties.h"
 
 SPViewBox::SPViewBox()
     : viewBox_set(false)
@@ -177,8 +175,8 @@ double SPViewBox::get_rotation() {
 
 void SPViewBox::set_rotation(double angle_val) {
     this->previous_angle = this->angle;
-    this->rotated = true;
     this->angle = angle_val;
+    this->rotated = true;
 }
 
 // Apply scaling from viewbox
@@ -244,7 +242,6 @@ void SPViewBox::apply_viewbox(const Geom::Rect& in, double scale_none) {
           break;
       }
     }
-
     /* Viewbox transform from scale and position */
     Geom::Affine vbt = Geom::identity();
     vbt[0] = scale_x;
@@ -253,7 +250,6 @@ void SPViewBox::apply_viewbox(const Geom::Rect& in, double scale_none) {
     vbt[3] = scale_y;
     vbt[4] = x - scale_x * this->viewBox.left();
     vbt[5] = y - scale_y * this->viewBox.top();
-    // std::cout << "  q\n" << q << std::endl
     /* Append viewbox and turn transformation */
     if (this->angle > 0.0 || this->angle < 0.0 ) { //!0
         Geom::Point r0 = this->viewBox.min();

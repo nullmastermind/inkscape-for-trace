@@ -47,10 +47,10 @@ public:
   double angle;
   double previous_angle;
   bool rotated;
-  double get_rotation();
-  void set_rotation(double angle_val);
   Inkscape::Display::TemporaryItem *page_border_rotated; 
 
+  double get_rotation();
+  void set_rotation(double angle_val);
   void set_viewBox(const gchar* value);
   void set_preserveAspectRatio(const gchar* value);
 
