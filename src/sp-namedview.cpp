@@ -39,6 +39,9 @@
 #include "conn-avoid-ref.h" // for defaultConnSpacing.
 #include <gtkmm/window.h>
 
+#include "display/sodipodi-ctrl.h"
+#include "ui/dialog/knot-properties.h"
+
 using Inkscape::DocumentUndo;
 using Inkscape::Util::unit_table;
 
@@ -416,7 +419,7 @@ void SPNamedView::set(unsigned int key, const gchar* value) {
             break;
     case SP_ATTR_INKSCAPE_DOCUMENT_ROTATION:
             this->document_rotation = value ? g_ascii_strtod(value, NULL) : 0; // zero means not set
-            if (value && document) {
+            if (document) {
                 sp_namedview_set_document_rotation(document, this);
             }
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
@@ -950,18 +953,26 @@ static void sp_namedview_lock_guides(SPNamedView *nv)
         sp_namedview_lock_single_guide(*it, nv->lockguides);
     }
 }
+void hp2(Geom::Point a) {
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    a = desktop->dt2doc(a);
+    guint32 color = 0xff0000ff;
+    SPCanvasItem * canvasitem = sp_canvas_item_new(desktop->getTempGroup(),
+        SP_TYPE_CTRL,
+        "anchor", SP_ANCHOR_CENTER,
+        "size", 8.0,
+        "stroked", TRUE,
+        "stroke_color", color,
+        "mode", SP_KNOT_MODE_XOR,
+        "shape", SP_KNOT_SHAPE_CROSS,
+        NULL );
 
+    SP_CTRL(canvasitem)->moveto(a);
+    sp_canvas_item_show(canvasitem);
+}
 static void sp_namedview_set_document_rotation(SPDocument *doc, SPNamedView *nv)
 {
     SPDesktop * desktop = SP_ACTIVE_DESKTOP;
-    Geom::Rect area;
-    Geom::Point p = Geom::Point();
-    if (desktop) {
-        area = desktop->get_display_area();
-        p = area.midpoint();
-        p *= desktop->doc2dt();
-        p *= doc->getRoot()->rotation.inverse();
-    }
     doc->getRoot()->set_rotation(nv->document_rotation);
     if (nv->document_rotation) {
         nv->showborder = FALSE;
@@ -970,15 +981,6 @@ static void sp_namedview_set_document_rotation(SPDocument *doc, SPNamedView *nv)
         nv->showborder = prefs->getBool("/template/base/showborder", 1.0);
     }
     if (desktop) {
-        p *= doc->getRoot()->rotation;
-        //desktop->scroll_world_in_svg_coords (p[Geom::X], p[Geom::Y], true);
-        // *= doc->getRoot()->c2p * doc->getRoot()->rotation();
-        //desktop->zoom_absolute (p[Geom::X], p[Geom::Y], desktop->current_zoom());
-        std::cout << p << "pppppp\n";
-//        Geom::Point min_pt = Geom::Point(p[Geom::X] - (area.width() / 2.0), p[Geom::Y] - (area.height() / 2.0));
-//        Geom::Point max_pt = Geom::Point(p[Geom::X] + (area.width() / 2.0), p[Geom::Y] + (area.height() / 2.0));
-//        Geom::Rect const new_area(min_pt, max_pt);
-//        desktop->set_display_area (new_area, 0, false);
         Inkscape::Selection * sel = desktop->getSelection();
         sel->clear();
     }

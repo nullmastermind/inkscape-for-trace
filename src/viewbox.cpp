@@ -23,6 +23,8 @@
 #include "inkscape.h"
 #include "desktop.h"
 
+#include "display/sodipodi-ctrl.h"
+#include "ui/dialog/knot-properties.h"
 
 SPViewBox::SPViewBox()
     : viewBox_set(false)
@@ -33,6 +35,8 @@ SPViewBox::SPViewBox()
     , c2p(Geom::identity())
     , rotation(Geom::identity())
     , angle(0)
+    , previous_angle(0)
+    , rotated(false)
 {
 }
 
@@ -172,6 +176,8 @@ double SPViewBox::get_rotation() {
 }
 
 void SPViewBox::set_rotation(double angle_val) {
+    this->previous_angle = this->angle;
+    this->rotated = true;
     this->angle = angle_val;
 }
 
@@ -255,6 +261,7 @@ void SPViewBox::apply_viewbox(const Geom::Rect& in, double scale_none) {
         Geom::Point p = (r0 + r1) / 2;
         SPDesktop * desktop = SP_ACTIVE_DESKTOP;
         SPCanvasItem *vw_rot = NULL;
+        Geom::Point rot_center = Geom::Point();
         if (desktop) {
             if (this->page_border_rotated) {
                 desktop->remove_temporary_canvasitem(this->page_border_rotated);
@@ -273,17 +280,25 @@ void SPViewBox::apply_viewbox(const Geom::Rect& in, double scale_none) {
             Geom::PathVector const box = c->get_pathvector();
             Geom::OptRect bbox = box.boundsFast();
             if (bbox){
-                r0 = (*bbox).min();
-                r1 = (*bbox).max();
-                p = (r0 + r1) / 2;
+                p = (*bbox).midpoint();
             }
+            Geom::Rect view = desktop->get_display_area();
+            rot_center =  desktop->doc2dt(view.midpoint());
             Geom::Affine rot = Geom::identity();
-            rot *= Geom::Translate(p).inverse() * Geom::Rotate(Geom::rad_from_deg(-angle)) * Geom::Translate(p);
+            rot *= Geom::Translate(p).inverse() * Geom::Rotate(Geom::rad_from_deg(-angle)) *  Geom::Translate(p);
             sp_canvas_item_affine_absolute(vw_rot, rot * vbt);
             this->page_border_rotated = desktop->add_temporary_canvasitem(vw_rot, 0);
+            Geom::Affine rotcenter = Geom::identity();
+            rotcenter *= Geom::Translate(p * vbt).inverse() * Geom::Rotate(Geom::rad_from_deg(this->angle - this->previous_angle)) *  Geom::Translate(p * vbt);
+            rot_center = rot_center * rotcenter;
         }
         rotation = Geom::Translate(p).inverse() * Geom::Rotate(Geom::rad_from_deg(angle)) * Geom::Translate(p);
         this->c2p = rotation * vbt * this->c2p;
+        rot_center =  desktop->dt2doc(rot_center);
+        if (desktop && this->rotated) {
+            desktop->zoom_relative(rot_center[Geom::X], rot_center[Geom::Y], 1.0);
+            this->rotated = false;
+        }
     } else {
         SPDesktop * desktop = SP_ACTIVE_DESKTOP;
         if (desktop) {
@@ -295,6 +310,7 @@ void SPViewBox::apply_viewbox(const Geom::Rect& in, double scale_none) {
         this->c2p = vbt * this->c2p;
     }
 }
+
 
 SPItemCtx SPViewBox::get_rctx(const SPItemCtx* ictx, double scale_none) {
 
