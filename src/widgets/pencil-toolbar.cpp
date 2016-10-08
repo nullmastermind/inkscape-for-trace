@@ -238,11 +238,12 @@ static void sp_simplify_flatten(GtkWidget * /*widget*/, GObject *obj)
 {
     SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data(obj, "desktop"));
     auto selected = desktop->getSelection()->items();
+    SPLPEItem* lpeitem = NULL;
     for (auto it(selected.begin()); it != selected.end(); ++it){
-        SPLPEItem* lpeitem = dynamic_cast<SPLPEItem*>(*it);
+        lpeitem = dynamic_cast<SPLPEItem*>(*it);
         if (lpeitem && lpeitem->hasPathEffect()){
             PathEffectList lpelist = lpeitem->getEffectList();
-            std::list<Inkscape::LivePathEffect::LPEObjectReference *>::iterator i;
+            PathEffectList::iterator i;
             for (i = lpelist.begin(); i != lpelist.end(); ++i) {
                 LivePathEffectObject *lpeobj = (*i)->lpeobject;
                 if (lpeobj) {
@@ -266,6 +267,10 @@ static void sp_simplify_flatten(GtkWidget * /*widget*/, GObject *obj)
                 }
             }
         }
+    }
+    if (lpeitem) {
+        desktop->getSelection()->remove(lpeitem->getRepr());
+        desktop->getSelection()->add(lpeitem->getRepr());
     }
 }
 

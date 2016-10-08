@@ -126,6 +126,12 @@ enum {
     SP_VERB_SELECTION_SYMDIFF,
     SP_VERB_SELECTION_CUT,
     SP_VERB_SELECTION_SLICE,
+    SP_VERB_SELECTION_GROW,
+    SP_VERB_SELECTION_GROW_SCREEN,
+    SP_VERB_SELECTION_GROW_DOUBLE,
+    SP_VERB_SELECTION_SHRINK,
+    SP_VERB_SELECTION_SHRINK_SCREEN,
+    SP_VERB_SELECTION_SHRINK_HALVE,
     SP_VERB_SELECTION_OFFSET,
     SP_VERB_SELECTION_OFFSET_SCREEN,
     SP_VERB_SELECTION_OFFSET_SCREEN_10,
@@ -575,7 +581,7 @@ public:
             return get_search(code);
         }
     }
-    static Verb * getbyid (gchar const * id);
+    static Verb * getbyid (gchar const * id, bool verbose = true);
     
     /**
      * Print a message to stderr indicating that this verb needs a GUI to run
