@@ -143,7 +143,7 @@ ShowUninstDetails hide
 !verbose pop
 
 ReserveFile inkscape.nsi.uninstall
-ReserveFile "${NSISDIR}\Plugins\UserInfo.dll"
+ReserveFile /plugin UserInfo.dll
 !insertmacro MUI_RESERVEFILE_INSTALLOPTIONS
 
 ; #######################################
@@ -151,6 +151,13 @@ ReserveFile "${NSISDIR}\Plugins\UserInfo.dll"
 ; #######################################
 
 ; Product details (version, name, registry keys etc.) {{{2
+; Try to find version number in inkscape.rc first (e.g. 0.92pre1) {{{3
+!ifndef INKSCAPE_VERSION
+  !searchparse /noerrors /file ..\..\src\inkscape.rc `VALUE "ProductVersion", "` INKSCAPE_VERSION `"`
+  !ifdef INKSCAPE_VERSION
+    !echo `Got version number from ..\..\src\inkscape.rc: ${INKSCAPE_VERSION}`
+  !endif
+!endif
 ; Find the version number in inkscape-version.cpp (e.g. 0.47+devel) {{{3
 !ifndef INKSCAPE_VERSION
   ; Official release format (no newlines)
@@ -159,12 +166,14 @@ ReserveFile "${NSISDIR}\Plugins\UserInfo.dll"
     ; Other format; sorry, it has to be done in two steps.
     !searchparse /noerrors /file ..\..\src\inkscape-version.cpp `char const *version_string = "` INKSCAPE_VERSION `";`
     !searchparse /noerrors `${INKSCAPE_VERSION}` `` INKSCAPE_VERSION ` r` BZR_REVISION
-    !ifndef INKSCAPE_VERSION
-      !error "INKSCAPE_VERSION not defined and unable to get version number from ..\..\src\inkscape-version.cpp!"
-    !endif
+  !endif
+  !ifdef INKSCAPE_VERSION
+    !echo `Got version number from ..\..\src\inkscape-version.cpp: ${INKSCAPE_VERSION}`
   !endif
 !endif
-!echo `Got version number from ..\..\src\inkscape-version.cpp: ${INKSCAPE_VERSION}`
+!ifndef INKSCAPE_VERSION
+  !error "INKSCAPE_VERSION not defined and unable to get version number from either ..\..\src\inkscape.rc or ..\..\src\inkscape-version.cpp!"
+!endif
 !define FILENAME Inkscape-${INKSCAPE_VERSION}
 !define BrandingText `Inkscape ${INKSCAPE_VERSION}`
 
@@ -214,7 +223,7 @@ ${!ifexist} ..\..\.bzr\branch\last-revision
   !define VERSION_X.X.X.X_REVISION 0
 !endif
 
-${VersionCompleteXXXN} ${INKSCAPE_VERSION_NUMBER} VERSION_X.X.X.X ${VERSION_X.X.X.X_REVISION}
+${VersionCompleteXXXRevision} ${INKSCAPE_VERSION_NUMBER} VERSION_X.X.X.X ${VERSION_X.X.X.X_REVISION}
 
 ; Product definitions {{{3
 !define PRODUCT_NAME "Inkscape" ; TODO: fix up the language files to not use this and kill this line

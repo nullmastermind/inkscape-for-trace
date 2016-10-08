@@ -1,4 +1,4 @@
-!if ${NSIS_VERSION} = v2.45
+!if `${NSIS_VERSION}` == `v2.45`
 	!error "There is a bug in !searchparse which makes this script not compile in NSIS 2.45. Please upgrade to NSIS 2.46 or later and try again."
 !else
 	!echo "(If you get a compile error with !searchparse, please upgrade to NSIS 2.46 or later and try again.)"
