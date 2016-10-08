@@ -7,7 +7,13 @@
  *
  * Copyright (C) 2016 Shlomi Fish
  *
- * Released under the Expat licence.
+ * Dually-Licensed under:
+ *
+ * 1. The Expat license - https://www.gnu.org/licenses/license-list.html#Expat
+ *
+ * 2. The GNU General Public License, either version 2, or at your option,
+ * any later version of it.
+ * ( https://en.wikipedia.org/wiki/GNU_General_Public_License )
  */
 
 #ifndef SEEN_DIALOGS_STYLE_UTILS_H
