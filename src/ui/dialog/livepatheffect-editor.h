@@ -45,7 +45,8 @@ public:
 
     static LivePathEffectEditor &getInstance() { return *new LivePathEffectEditor(); }
 
-    void onSelectionChanged(Inkscape::Selection *sel);
+    void onSelectionChanged(Inkscape::Selection *sel, bool upd_params = false);
+    void onSelectionModified(Inkscape::Selection *sel);
     virtual void on_effect_selection_changed();
     void setDesktop(SPDesktop *desktop);
 
@@ -63,14 +64,14 @@ private:
     sigc::connection selection_changed_connection;
     sigc::connection selection_modified_connection;
 
+    // void add_entry(const char* name );
+    void effect_list_reload(SPLPEItem *lpeitem);
+
     void set_sensitize_all(bool sensitive);
 
     void showParams(LivePathEffect::Effect& effect);
     void showText(Glib::ustring const &str);
     void selectInList(LivePathEffect::Effect* effect);
-
-   // void add_entry(const char* name );
-    void effect_list_reload(SPLPEItem *lpeitem);
 
     // callback methods for buttons on grids page.
     void onAdd();
@@ -121,6 +122,8 @@ private:
     SPDesktop * current_desktop;
     
     SPLPEItem * current_lpeitem;
+
+    LivePathEffect::LPEObjectReference * current_lperef;
 
     friend void lpeeditor_selection_changed (Inkscape::Selection * selection, gpointer data);
 

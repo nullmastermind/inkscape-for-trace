@@ -73,6 +73,7 @@ void SPLPEItem::build(SPDocument *document, Inkscape::XML::Node *repr) {
 
 void SPLPEItem::release() {
     // disconnect all modified listeners:
+    
     for (std::list<sigc::connection>::iterator mod_it = this->lpe_modified_connection_list->begin();
          mod_it != this->lpe_modified_connection_list->end(); ++mod_it)
     {
@@ -83,7 +84,7 @@ void SPLPEItem::release() {
     this->lpe_modified_connection_list = NULL;
 
     PathEffectList::iterator it = this->path_effect_list->begin();
-
+    
     while ( it != this->path_effect_list->end() ) {
         // unlink and delete all references in the list
         (*it)->unlink();
@@ -121,8 +122,10 @@ void SPLPEItem::set(unsigned int key, gchar const* value) {
 
                 while ( it != this->path_effect_list->end() )
                 {
+                    LivePathEffectObject *lpeobj = (*it)->lpeobject;
+                    lpeobj->get_lpe()->doOnRemove(this);
                     (*it)->unlink();
-                    delete *it;
+                    delete (*it);
                     it = this->path_effect_list->erase(it);
                 }
 
@@ -337,10 +340,10 @@ sp_lpe_item_create_original_path_recursive(SPLPEItem *lpeitem)
     {
         sp_lpe_item_create_original_path_recursive(SP_LPE_ITEM(mask->firstChild()));
     }
-    SPClipPath * clipPath = lpeitem->clip_ref->getObject();
-    if(clipPath)
+    SPClipPath * clip_path = lpeitem->clip_ref->getObject();
+    if(clip_path)
     {
-        sp_lpe_item_create_original_path_recursive(SP_LPE_ITEM(clipPath->firstChild()));
+        sp_lpe_item_create_original_path_recursive(SP_LPE_ITEM(clip_path->firstChild()));
     }
     if (SP_IS_GROUP(lpeitem)) {
     	std::vector<SPItem*> item_list = sp_item_group_item_list(SP_GROUP(lpeitem));
@@ -371,10 +374,10 @@ sp_lpe_item_cleanup_original_path_recursive(SPLPEItem *lpeitem)
             {
                 sp_lpe_item_cleanup_original_path_recursive(SP_LPE_ITEM(mask->firstChild()));
             }
-            SPClipPath * clipPath = lpeitem->clip_ref->getObject();
-            if(clipPath)
+            SPClipPath * clip_path = lpeitem->clip_ref->getObject();
+            if(clip_path)
             {
-                sp_lpe_item_cleanup_original_path_recursive(SP_LPE_ITEM(clipPath->firstChild()));
+                sp_lpe_item_cleanup_original_path_recursive(SP_LPE_ITEM(clip_path->firstChild()));
             }
         }
         std::vector<SPItem*> item_list = sp_item_group_item_list(SP_GROUP(lpeitem));
@@ -393,10 +396,10 @@ sp_lpe_item_cleanup_original_path_recursive(SPLPEItem *lpeitem)
             {
                 sp_lpe_item_cleanup_original_path_recursive(SP_LPE_ITEM(mask->firstChild()));
             }
-            SPClipPath * clipPath = lpeitem->clip_ref->getObject();
-            if(clipPath)
+            SPClipPath * clip_path = lpeitem->clip_ref->getObject();
+            if(clip_path)
             {
-                sp_lpe_item_cleanup_original_path_recursive(SP_LPE_ITEM(clipPath->firstChild()));
+                sp_lpe_item_cleanup_original_path_recursive(SP_LPE_ITEM(clip_path->firstChild()));
             }
             repr->setAttribute("d", repr->attribute("inkscape:original-d"));
             repr->setAttribute("inkscape:original-d", NULL);
@@ -628,10 +631,13 @@ bool SPLPEItem::hasPathEffectRecursive() const
 void
 SPLPEItem::apply_to_clippath(SPItem *item)
 {
-    SPClipPath *clipPath = item->clip_ref->getObject();
-    if(clipPath) {
-        SPObject * clip_data = clipPath->firstChild();
-        apply_to_clip_or_mask(SP_ITEM(clip_data), item);
+    SPClipPath *clip_path = item->clip_ref->getObject();
+    if(clip_path) {
+        std::vector<SPObject*> clip_path_list = clip_path->childList(true);
+        for ( std::vector<SPObject*>::const_iterator iter=clip_path_list.begin();iter!=clip_path_list.end();++iter) {
+            SPObject * clip_data = *iter;
+            apply_to_clip_or_mask(SP_ITEM(clip_data), item);
+        }
     }
     if(SP_IS_GROUP(item)){
     	std::vector<SPItem*> item_list = sp_item_group_item_list(SP_GROUP(item));
@@ -647,8 +653,11 @@ SPLPEItem::apply_to_mask(SPItem *item)
 {
     SPMask *mask = item->mask_ref->getObject();
     if(mask) {
-        SPObject *mask_data = mask->firstChild();
-        apply_to_clip_or_mask(SP_ITEM(mask_data), item);
+        std::vector<SPObject*> mask_list = mask->childList(true);
+        for ( std::vector<SPObject*>::const_iterator iter=mask_list.begin();iter!=mask_list.end();++iter) {
+            SPObject * mask_data = *iter;
+            apply_to_clip_or_mask(SP_ITEM(mask_data), item);
+        }
     }
     if(SP_IS_GROUP(item)){
     	std::vector<SPItem*> item_list = sp_item_group_item_list(SP_GROUP(item));
