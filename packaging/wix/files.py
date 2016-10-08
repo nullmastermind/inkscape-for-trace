@@ -1,9 +1,11 @@
 #!/usr/bin/python
 
+from __future__ import print_function
 
-# list files in directory
 import os
 import uuid
+
+from helpers import get_inkscape_dist_dir
 
 directory_ids = {}
 file_ids = {}
@@ -59,6 +61,9 @@ def ComponentGroup(name, condition, level):
 	for key in keys:
 		del file_ids[key]
 
+#get directory containing the inkscape distribution files
+inkscape_dist_dir = get_inkscape_dist_dir()
+
 with open('files.wxs', 'w') as wxs:
 	wxs.write("<!-- do not edit, this file is created by files.py tool any changes will be lost -->\n")
 	wxs.write("<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>\n")
@@ -68,9 +73,9 @@ with open('files.wxs', 'w') as wxs:
 	wxs.write(indent(2) + "<Directory Id='TARGETDIR' Name='SourceDir'>\n")
 	wxs.write(indent(3) + "<Directory Id='$(var.ProgramFilesFolder)' Name='PFiles'>\n")
 	wxs.write(indent(4) + "<Directory Id='INSTALLDIR' Name='Inkscape'>\n")
-	print "start parsing ..\..\inkscape"
-	directory('..\..\inkscape', 'inkscape', 5, ['inkscape.dbg', 'inkview.dbg', 'gdb.exe'])
-	print "found %d files" % len(file_ids.keys())
+	print("start parsing files from " + inkscape_dist_dir)
+	directory(inkscape_dist_dir, 'inkscape', 5, ['inkscape.dbg', 'inkview.dbg', 'gdb.exe'])
+	print("found %d files" % len(file_ids.keys()))
 	wxs.write(indent(4) + "</Directory>\n")
 	wxs.write(indent(3) + "</Directory>\n")
 	# link to ProgrmMenu
