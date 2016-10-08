@@ -90,12 +90,6 @@ static void sp_erc_tremor_value_changed( GtkAdjustment *adj, GObject* tbl )
 static void sp_set_tbl_eraser_mode_visibility(GObject *const tbl, const guint eraser_mode)
 {
     GtkAction *split = GTK_ACTION( g_object_get_data(tbl, "split") );
-    GtkAction *mass = GTK_ACTION( g_object_get_data(tbl, "mass") );
-    GtkAction *width = GTK_ACTION( g_object_get_data(tbl, "width") );
-    GtkAction *usepressure = GTK_ACTION( g_object_get_data(tbl, "usepressure") );
-    GtkAction *cap_rounding = GTK_ACTION( g_object_get_data(tbl, "cap_rounding") );
-    GtkAction *thinning = GTK_ACTION( g_object_get_data(tbl, "thinning") );
-    GtkAction *tremor = GTK_ACTION( g_object_get_data(tbl, "tremor") );
     gboolean visibility;
     if (eraser_mode != ERASER_MODE_DELETE) {
         if(eraser_mode == ERASER_MODE_CUT) {
@@ -108,12 +102,10 @@ static void sp_set_tbl_eraser_mode_visibility(GObject *const tbl, const guint er
         visibility = FALSE;
         gtk_action_set_visible( split, FALSE );
     }
-    gtk_action_set_visible(usepressure, visibility );
-    gtk_action_set_visible(tremor, visibility );
-    gtk_action_set_visible(cap_rounding, visibility );
-    gtk_action_set_visible(thinning, visibility );
-    gtk_action_set_visible( mass, visibility );
-    gtk_action_set_visible( width, visibility );
+    const std::array<const gchar *, 6> arr = {"cap_rounding", "mass", "thinning", "tremor", "usepressure", "width"};
+    for(const gchar * str : arr) {
+        gtk_action_set_visible( GTK_ACTION( g_object_get_data(tbl, str) ), visibility );
+    }
 }
 
 static void sp_erasertb_mode_changed( EgeSelectOneAction *act, GObject *tbl )
