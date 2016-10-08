@@ -27,9 +27,9 @@ SetCompressorDictSize 32
 RequestExecutionLevel admin
 
 ; Include required files {{{2
-!include RequireLatestNSIS.nsh
-!include ifexist.nsh
-!include VersionCompleteXXXX.nsh
+!include macros\RequireLatestNSIS.nsh
+!include macros\ifexist.nsh
+!include macros\VersionCompleteXXXX.nsh
 !include LogicLib.nsh
 !include Sections.nsh
 
@@ -48,12 +48,12 @@ RequestExecutionLevel admin
 ; However, for the moment, this is what we're using.
 !define INSTDIR_REG_ROOT HKLM
 !define INSTDIR_REG_KEY "${UNINST_KEY}"
-!include AdvUninstLog.nsh
+!include macros\AdvUninstLog.nsh
 !insertmacro INTERACTIVE_UNINSTALL
 
 ; Initialise NSIS plug-ins {{{3
 ; The plugins used are md5dll and messagebox
-!addplugindir .
+!addplugindir plugins
 
 ; FileFunc bits and pieces {{{3
 !include FileFunc.nsh
