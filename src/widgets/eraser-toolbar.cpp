@@ -89,15 +89,9 @@ static void sp_erc_tremor_value_changed( GtkAdjustment *adj, GObject* tbl )
 
 static void sp_set_tbl_eraser_mode_visibility(GObject *const tbl, const guint eraser_mode)
 {
-    GtkAction *split = GTK_ACTION( g_object_get_data(tbl, "split") );
-    gboolean visibility;
-    if (eraser_mode != ERASER_MODE_DELETE) {
-        gtk_action_set_visible( split, (eraser_mode == ERASER_MODE_CUT) ? TRUE : FALSE );
-        visibility = TRUE;
-    } else {
-        visibility = FALSE;
-        gtk_action_set_visible( split, FALSE );
-    }
+    gtk_action_set_visible( GTK_ACTION( g_object_get_data(tbl, "split") ), (eraser_mode == ERASER_MODE_CUT) ? TRUE : FALSE );
+
+    const gboolean visibility = (eraser_mode != ERASER_MODE_DELETE) ? TRUE : FALSE;
     const std::array<const gchar *, 6> arr = {"cap_rounding", "mass", "thinning", "tremor", "usepressure", "width"};
     for (const gchar * str : arr) {
         gtk_action_set_visible( GTK_ACTION( g_object_get_data(tbl, str) ), visibility );
