@@ -150,6 +150,23 @@ ReserveFile /plugin UserInfo.dll
 ; SETTINGS
 ; #######################################
 
+; Find inkscape distribution directory (uncomment line below to manually define)
+;!define INKSCAPE_DIST_DIR ..\..\inkscape
+!ifdef INKSCAPE_DIST_DIR
+  ${!ifnexist} ${INKSCAPE_DIST_DIR}\inkscape.exe
+    !error "inkscape.exe not found in INKSCAPE_DIST_DIR ('${INKSCAPE_DIST_DIR}')"
+!endif
+!ifndef INKSCAPE_DIST_DIR
+  ${!defineifexist} ${INKSCAPE_DIST_DIR}\inkscape.exe INKSCAPE_DIST_DIR ..\..\inkscape ; btool default
+!endif
+!ifndef INKSCAPE_DIST_DIR
+  ${!defineifexist} ..\..\build\inkscape\inkscape.exe INKSCAPE_DIST_DIR ..\..\build\inkscape ; cmake default
+!endif
+!ifndef INKSCAPE_DIST_DIR
+  !error "Couldn't find inkscape distribution directory in neither ..\..\inkscape nor ..\..\build\inkscape"
+!endif
+!echo `Bundling compiled Inkscape files from ${INKSCAPE_DIST_DIR}`
+
 ; Product details (version, name, registry keys etc.) {{{2
 ; Try to find version number in inkscape.rc first (e.g. 0.92pre1) {{{3
 !ifndef INKSCAPE_VERSION
@@ -176,6 +193,18 @@ ReserveFile /plugin UserInfo.dll
 !endif
 !define FILENAME Inkscape-${INKSCAPE_VERSION}
 !define BrandingText `Inkscape ${INKSCAPE_VERSION}`
+
+; Detect architecture of the build
+${!ifexist} ${INKSCAPE_DIST_DIR}\gspawn-win32-helper.exe
+  !define BITNESS 32
+!endif
+${!ifexist} ${INKSCAPE_DIST_DIR}\gspawn-win64-helper.exe
+  !define BITNESS 64
+  ${!redef} FILENAME `${FILENAME}-x64` ; add architecture to filename for 64-bit builds
+!endif
+!ifndef BITNESS
+  !error "Could not detect architecture (BITNESS) of the Inkscape build"
+!endif
 
 ; Check for the Bazaar revision number for lp:inkscape {{{3
 ${!ifexist} ..\..\.bzr\branch\last-revision
@@ -309,49 +338,45 @@ Section $(Core) SecCore ; Mandatory Inkscape core files section {{{
   SetOverwrite on
   SetAutoClose false
 
-  File           /a    ..\..\inkscape\ink*.exe
-  File           /a    ..\..\inkscape\inkscape.com
-  File           /a    ..\..\inkscape\AUTHORS
-  File           /a    ..\..\inkscape\COPYING
-  File           /a    ..\..\inkscape\COPYING.LIB
-  File           /a    ..\..\inkscape\NEWS
-  File           /a    ..\..\inkscape\gspawn-win32-helper.exe
-  File           /a    ..\..\inkscape\gspawn-win32-helper-console.exe
-  File /nonfatal /a    ..\..\inkscape\HACKING.txt
-  File           /a    ..\..\inkscape\README
-  File /nonfatal /a    ..\..\inkscape\README.txt
-  File           /a    ..\..\inkscape\TRANSLATORS
-  File /nonfatal /a /r ..\..\inkscape\data
-  File /nonfatal /a /r ..\..\inkscape\doc
-  File /nonfatal /a /r ..\..\inkscape\plugins
-  File /nonfatal /a /r /x *.??*.???* /x examples /x tutorials ..\..\inkscape\share
+  File           /a    ${INKSCAPE_DIST_DIR}\ink*.exe
+  File /nonfatal /a    ${INKSCAPE_DIST_DIR}\inkscape.com ; not created as of Inkscape 0.92pre1
+  File           /a    ${INKSCAPE_DIST_DIR}\AUTHORS
+  File           /a    ${INKSCAPE_DIST_DIR}\COPYING
+  File           /a    ${INKSCAPE_DIST_DIR}\GPL2.txt
+  File           /a    ${INKSCAPE_DIST_DIR}\GPL3.txt
+  File           /a    ${INKSCAPE_DIST_DIR}\LGPL2.1.txt
+  File           /a    ${INKSCAPE_DIST_DIR}\NEWS
+  File           /a    ${INKSCAPE_DIST_DIR}\gspawn-win${BITNESS}-helper.exe
+  File           /a    ${INKSCAPE_DIST_DIR}\gspawn-win${BITNESS}-helper-console.exe
+  File           /a    ${INKSCAPE_DIST_DIR}\README
+  File           /a    ${INKSCAPE_DIST_DIR}\TRANSLATORS
+  File /nonfatal /a /r ${INKSCAPE_DIST_DIR}\data
+  File /nonfatal /a /r ${INKSCAPE_DIST_DIR}\doc
+  File /nonfatal /a /r ${INKSCAPE_DIST_DIR}\plugins
+  File /nonfatal /a /r /x *.??*.???* /x examples /x tutorials ${INKSCAPE_DIST_DIR}\share
   !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
   ; this files are added because it slips through the filter
-  SetOutPath $INSTDIR\share\branding
-  !insertmacro UNINSTALL.LOG_OPEN_INSTALL
-  File /a ..\..\inkscape\share\branding\draw-freely.ru.svg
-  !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
   SetOutPath $INSTDIR\share\icons
   !insertmacro UNINSTALL.LOG_OPEN_INSTALL
-  File /a ..\..\inkscape\share\icons\inkscape.file.png
-  File /a ..\..\inkscape\share\icons\inkscape.file.svg
+  File /a ${INKSCAPE_DIST_DIR}\share\icons\inkscape.file.png
+  File /a ${INKSCAPE_DIST_DIR}\share\icons\inkscape.file.svg
   !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
   SetOutPath $INSTDIR\share\extensions
   !insertmacro UNINSTALL.LOG_OPEN_INSTALL
-  File /a ..\..\inkscape\share\extensions\inkscape.extension.rng
+  File /a ${INKSCAPE_DIST_DIR}\share\extensions\inkscape.extension.rng
   !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
   SetOutPath $INSTDIR\share\extensions\test
   !insertmacro UNINSTALL.LOG_OPEN_INSTALL
-  File /a ..\..\inkscape\share\extensions\test\inkwebjs-move.test.svg
-  File /a ..\..\inkscape\share\extensions\test\test_template.py.txt
+  File /a ${INKSCAPE_DIST_DIR}\share\extensions\test\inkwebjs-move.test.svg
+  File /a ${INKSCAPE_DIST_DIR}\share\extensions\test\test_template.py.txt
   !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
   SetOutPath $INSTDIR\modules
   !insertmacro UNINSTALL.LOG_OPEN_INSTALL
-  File /nonfatal /a /r ..\..\inkscape\modules\*.*
+  File /nonfatal /a /r ${INKSCAPE_DIST_DIR}\modules\*.*
   !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
   SetOutPath $INSTDIR\python
   !insertmacro UNINSTALL.LOG_OPEN_INSTALL
-  File /nonfatal /a /r ..\..\inkscape\python\*.*
+  File /nonfatal /a /r ${INKSCAPE_DIST_DIR}\python\*.*
   !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
 !endif
 SectionEnd ; SecCore }}}
@@ -363,9 +388,9 @@ Section $(GTKFiles) SecGTK ; Mandatory GTK files section {{{
   SetOutPath $INSTDIR
   !insertmacro UNINSTALL.LOG_OPEN_INSTALL
   SetOverwrite on
-  File /a /r ..\..\inkscape\*.dll
-  File /a /r /x locale ..\..\inkscape\lib
-  File /a /r ..\..\inkscape\etc
+  File /a /r ${INKSCAPE_DIST_DIR}\*.dll
+  File /a /r /x locale ${INKSCAPE_DIST_DIR}\lib
+  File /a /r ${INKSCAPE_DIST_DIR}\etc
   !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
 !endif
 SectionEnd ; SecGTK }}}
@@ -456,7 +481,7 @@ Section $(Examples) SecExamples ; Install example SVG files {{{
 !ifndef DUMMYINSTALL
   SetOutPath $INSTDIR\share
   !insertmacro UNINSTALL.LOG_OPEN_INSTALL
-  File /nonfatal /a /r /x *.??*.???* ..\..\inkscape\share\examples
+  File /nonfatal /a /r /x *.??*.???* ${INKSCAPE_DIST_DIR}\share\examples
   !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
 !endif
 SectionEnd ; SecExamples }}}
@@ -466,7 +491,7 @@ Section $(Tutorials) SecTutorials ; Install tutorials {{{
 !ifndef DUMMYINSTALL
   SetOutPath $INSTDIR\share
   !insertmacro UNINSTALL.LOG_OPEN_INSTALL
-  File /nonfatal /a /r /x *.??*.???* ..\..\inkscape\share\tutorials
+  File /nonfatal /a /r /x *.??*.???* ${INKSCAPE_DIST_DIR}\share\tutorials
   !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
 !endif
 SectionEnd ; SecTutorials }}}
@@ -480,40 +505,40 @@ SectionGroup "$(Languages)" SecLanguages ; Languages sections {{{
     !ifndef DUMMYINSTALL
       SetOutPath $INSTDIR
       !insertmacro UNINSTALL.LOG_OPEN_INSTALL
-      File /nonfatal /a ..\..\inkscape\*.${lng}.txt ; FIXME: remove this?  No such files.
+      File /nonfatal /a ${INKSCAPE_DIST_DIR}\*.${lng}.txt ; FIXME: remove this?  No such files.
       !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
       SetOutPath $INSTDIR\locale
       !insertmacro UNINSTALL.LOG_OPEN_INSTALL
-      File /nonfatal /a /r ..\..\inkscape\locale\${lng}
+      File /nonfatal /a /r ${INKSCAPE_DIST_DIR}\locale\${lng}
       !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
       SetOutPath $INSTDIR\lib\locale
       !insertmacro UNINSTALL.LOG_OPEN_INSTALL
-      File /nonfatal /a /r ..\..\inkscape\lib\locale\${lng}
+      File /nonfatal /a /r ${INKSCAPE_DIST_DIR}\lib\locale\${lng}
       !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
       SetOutPath $INSTDIR\share\clipart
       !insertmacro UNINSTALL.LOG_OPEN_INSTALL
-      File /nonfatal /a /r ..\..\inkscape\share\clipart\*.${lng}.svg
+      File /nonfatal /a /r ${INKSCAPE_DIST_DIR}\share\clipart\*.${lng}.svg
       !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
       ; the keyboard tables
       SetOutPath $INSTDIR\share\screens
       !insertmacro UNINSTALL.LOG_OPEN_INSTALL
-      File /nonfatal /a /r ..\..\inkscape\share\screens\*.${lng}.svg
+      File /nonfatal /a /r ${INKSCAPE_DIST_DIR}\share\screens\*.${lng}.svg
       !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
       SetOutPath $INSTDIR\share\templates
       !insertmacro UNINSTALL.LOG_OPEN_INSTALL
-      File /nonfatal /a /r ..\..\inkscape\share\templates\*.${lng}.svg
+      File /nonfatal /a /r ${INKSCAPE_DIST_DIR}\share\templates\*.${lng}.svg
       !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
       SetOutPath $INSTDIR\doc
       !insertmacro UNINSTALL.LOG_OPEN_INSTALL
-      File /nonfatal /a /r ..\..\inkscape\doc\keys.${lng}.xml
-      File /nonfatal /a /r ..\..\inkscape\doc\keys.${lng}.html
+      File /nonfatal /a /r ${INKSCAPE_DIST_DIR}\doc\keys.${lng}.xml
+      File /nonfatal /a /r ${INKSCAPE_DIST_DIR}\doc\keys.${lng}.html
       !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
       SectionGetFlags ${SecTutorials} $R1
       IntOp $R1 $R1 & ${SF_SELECTED}
       ${If} $R1 >= ${SF_SELECTED}
         SetOutPath $INSTDIR\share\tutorials
         !insertmacro UNINSTALL.LOG_OPEN_INSTALL
-        File /nonfatal /a ..\..\inkscape\share\tutorials\*.${lng}.*
+        File /nonfatal /a ${INKSCAPE_DIST_DIR}\share\tutorials\*.${lng}.*
         !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
       ${EndIf}
     !endif
