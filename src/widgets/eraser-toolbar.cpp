@@ -92,18 +92,14 @@ static void sp_set_tbl_eraser_mode_visibility(GObject *const tbl, const guint er
     GtkAction *split = GTK_ACTION( g_object_get_data(tbl, "split") );
     gboolean visibility;
     if (eraser_mode != ERASER_MODE_DELETE) {
-        if(eraser_mode == ERASER_MODE_CUT) {
-            gtk_action_set_visible( split, TRUE );
-        } else {
-            gtk_action_set_visible( split, FALSE );
-        }
+        gtk_action_set_visible( split, (eraser_mode == ERASER_MODE_CUT) ? TRUE : FALSE );
         visibility = TRUE;
     } else {
         visibility = FALSE;
         gtk_action_set_visible( split, FALSE );
     }
     const std::array<const gchar *, 6> arr = {"cap_rounding", "mass", "thinning", "tremor", "usepressure", "width"};
-    for(const gchar * str : arr) {
+    for (const gchar * str : arr) {
         gtk_action_set_visible( GTK_ACTION( g_object_get_data(tbl, str) ), visibility );
     }
 }
