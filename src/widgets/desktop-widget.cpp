@@ -54,7 +54,7 @@
 #include "ui/uxmanager.h"
 #include "util/ege-appear-time-tracker.h"
 #include "sp-root.h"
-
+#include "attributes.h"
 // We're in the "widgets" directory, so no need to explicitly prefix these:
 #include "button.h"
 #include "gimp/ruler.h"
@@ -105,6 +105,7 @@ static void sp_update_guides_lock( GtkWidget *button, gpointer data );
 static void cms_adjust_toggled( GtkWidget *button, gpointer data );
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 static void cms_adjust_set_sensitive( SPDesktopWidget *dtw, bool enabled );
+static void sp_desktop_widget_rotate_document(GtkWidget *widget, GdkEvent *eventdtw, SPDesktopWidget *dtw);
 static void sp_desktop_widget_adjustment_value_changed (GtkAdjustment *adj, SPDesktopWidget *dtw);
 
 static gdouble sp_dtw_zoom_value_to_display (gdouble value);
@@ -1430,6 +1431,12 @@ void SPDesktopWidget::layoutWidgets()
     } else {
         gtk_widget_show_all (dtw->menubar);
     }
+    
+    if (!prefs->getBool(pref_root + "menu/state", true)) {
+        gtk_widget_hide (dtw->rotatebar);
+    } else {
+        gtk_widget_show_all (dtw->rotatebar);
+    }
 
     if (!prefs->getBool(pref_root + "commands/state", true)) {
         gtk_widget_hide (dtw->commands_toolbox);
@@ -1636,8 +1643,25 @@ SPDesktopWidget* SPDesktopWidget::createInstance(SPNamedView *namedview)
     dtw->menubar = sp_ui_main_menubar (dtw->desktop);
     gtk_widget_set_name(dtw->menubar, "MenuBar");
     gtk_widget_show_all (dtw->menubar);
-    gtk_box_pack_start (GTK_BOX (dtw->vbox), dtw->menubar, FALSE, FALSE, 0);
-
+    SPNamedView *nv = dtw->desktop->namedview;
+    dtw->rotatebar = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL,0.0,360.0,45.0);
+    gtk_range_set_value(GTK_RANGE (dtw->rotatebar), nv->document_rotation);
+    gtk_widget_set_name(dtw->rotatebar, "RotateBar");
+    gtk_widget_show_all (dtw->rotatebar);
+    GtkWidget * containermenu = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_widget_show_all (containermenu);
+    GtkWidget * separator =  gtk_separator_new (GTK_ORIENTATION_VERTICAL);
+    gtk_widget_show_all(separator);
+    GtkWidget * label =  gtk_label_new (_("Rotation"));
+    gtk_widget_show_all(label);
+    gtk_box_pack_start (GTK_BOX (containermenu), dtw->menubar, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (containermenu), separator, FALSE, FALSE, 10);
+    gtk_box_pack_start (GTK_BOX (containermenu), dtw->rotatebar, TRUE, TRUE, 0);
+    gtk_box_pack_start (GTK_BOX (containermenu), label, FALSE, FALSE, 10);
+    gtk_box_pack_start (GTK_BOX (dtw->vbox), containermenu, TRUE, TRUE, 0);
+    g_signal_connect (G_OBJECT (dtw->rotatebar), "button-release-event", G_CALLBACK (sp_desktop_widget_rotate_document), dtw);
+    g_signal_connect (G_OBJECT (dtw->rotatebar), "key-release-event", G_CALLBACK (sp_desktop_widget_rotate_document), dtw);
+    
     dtw->layoutWidgets();
 
     std::vector<GtkWidget *> toolboxes;
@@ -1728,6 +1752,22 @@ void SPDesktopWidget::namedviewModified(SPObject *obj, guint flags)
         ToolboxFactory::updateSnapToolbox(this->desktop, 0, this->snap_toolbox);
     }
 }
+
+static void
+sp_desktop_widget_rotate_document(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw)
+{
+    SPNamedView *nv = dtw->desktop->namedview;
+    double value = gtk_range_get_value(GTK_RANGE(widget));
+    if (value != nv->document_rotation) {
+        sp_repr_set_svg_double(nv->getRepr(), "inkscape:document-rotation", value);
+        SPObject *updated = nv->document->getObjectByRepr(nv->getRepr());
+        if (updated) {
+            updated->updateRepr();
+        }
+        reinterpret_cast<SPObject *>(dtw->desktop->currentLayer())->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+    }
+}
+
 
 static void
 sp_desktop_widget_adjustment_value_changed (GtkAdjustment */*adj*/, SPDesktopWidget *dtw)

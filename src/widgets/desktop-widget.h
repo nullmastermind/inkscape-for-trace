@@ -78,7 +78,7 @@ struct SPDesktopWidget {
 
     GtkWidget *hbox;
 
-    GtkWidget *menubar, *statusbar;
+    GtkWidget *menubar, *statusbar, *rotatebar;
 
     Inkscape::UI::Dialogs::SwatchesPanel *panels;
 

@@ -251,13 +251,12 @@ void SPViewBox::apply_viewbox(const Geom::Rect& in, double scale_none) {
     vbt[4] = x - scale_x * this->viewBox.left();
     vbt[5] = y - scale_y * this->viewBox.top();
     /* Append viewbox and turn transformation */
+    Geom::Point rot_center = Geom::Point();
+    Geom::Point p = this->viewBox.midpoint();
+    Geom::Affine rotcenter = Geom::identity();
+    SPDesktop * desktop = SP_ACTIVE_DESKTOP;
     if (this->angle > 0.0 || this->angle < 0.0 ) { //!0
-        Geom::Point r0 = this->viewBox.min();
-        Geom::Point r1 = this->viewBox.max();
-        Geom::Point p = (r0 + r1) / 2;
-        SPDesktop * desktop = SP_ACTIVE_DESKTOP;
         SPCanvasItem *vw_rot = NULL;
-        Geom::Point rot_center = Geom::Point();
         if (desktop) {
             if (this->page_border_rotated) {
                 desktop->remove_temporary_canvasitem(this->page_border_rotated);
@@ -284,26 +283,26 @@ void SPViewBox::apply_viewbox(const Geom::Rect& in, double scale_none) {
             rot *= Geom::Translate(p).inverse() * Geom::Rotate(Geom::rad_from_deg(-angle)) *  Geom::Translate(p);
             sp_canvas_item_affine_absolute(vw_rot, rot * vbt);
             this->page_border_rotated = desktop->add_temporary_canvasitem(vw_rot, 0);
-            Geom::Affine rotcenter = Geom::identity();
             rotcenter *= Geom::Translate(p * vbt).inverse() * Geom::Rotate(Geom::rad_from_deg(this->angle - this->previous_angle)) *  Geom::Translate(p * vbt);
-            rot_center = rot_center * rotcenter;
         }
         rotation = Geom::Translate(p).inverse() * Geom::Rotate(Geom::rad_from_deg(angle)) * Geom::Translate(p);
         this->c2p = rotation * vbt * this->c2p;
-        rot_center =  desktop->dt2doc(rot_center);
-        if (desktop && this->rotated) {
-            desktop->zoom_relative(rot_center[Geom::X], rot_center[Geom::Y], 1.0);
-            this->rotated = false;
-        }
     } else {
-        SPDesktop * desktop = SP_ACTIVE_DESKTOP;
         if (desktop) {
+            Geom::Rect view = desktop->get_display_area();
+            rot_center =  desktop->doc2dt(view.midpoint());
+            rotcenter *= Geom::Translate(p * vbt).inverse() * Geom::Rotate(Geom::rad_from_deg(this->angle - this->previous_angle)) *  Geom::Translate(p * vbt);
             if (this->page_border_rotated) {
                 desktop->remove_temporary_canvasitem(this->page_border_rotated);
                 this->page_border_rotated = NULL;
             }
         }
         this->c2p = vbt * this->c2p;
+    }
+    if (desktop && this->rotated) {
+        rot_center = desktop->dt2doc(rot_center * rotcenter);
+        desktop->zoom_relative(rot_center[Geom::X], rot_center[Geom::Y], 1.0);
+        this->rotated = false;
     }
 }
 

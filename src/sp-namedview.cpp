@@ -416,8 +416,8 @@ void SPNamedView::set(unsigned int key, const gchar* value) {
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     case SP_ATTR_INKSCAPE_DOCUMENT_ROTATION:
-            this->document_rotation = value ? g_ascii_strtod(value, NULL) : 0; // zero means not set
-            sp_namedview_set_document_rotation(document, this);
+            this->document_rotation = value ? g_ascii_strtod(value, NULL) : 0; 
+            sp_namedview_set_document_rotation(this);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     case SP_ATTR_INKSCAPE_WINDOW_WIDTH:
@@ -950,10 +950,9 @@ static void sp_namedview_lock_guides(SPNamedView *nv)
     }
 }
 
-static void sp_namedview_set_document_rotation(SPDocument *doc, SPNamedView *nv)
+void sp_namedview_set_document_rotation(SPNamedView *nv)
 {
-    
-    doc->getRoot()->set_rotation(nv->document_rotation);
+    nv->document->getRoot()->set_rotation(nv->document_rotation);
     if (nv->document_rotation) {
         nv->showborder = FALSE;
     } else {
