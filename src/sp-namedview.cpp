@@ -960,6 +960,7 @@ static void sp_namedview_lock_guides(SPNamedView *nv)
 
 void sp_namedview_set_document_rotation(SPNamedView *nv)
 {
+    if ( nv->document->getRoot()->get_rotation() == nv->document_rotation) return;
     if(!nv->getViewList().empty()) { // >0 Desktops
         SPDesktop *desktop = nv->getViewList()[0]; 
         desktop->remove_temporary_canvasitem(nv->page_border_rotated);
@@ -992,9 +993,10 @@ void sp_namedview_set_document_rotation(SPNamedView *nv)
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         nv->showborder = prefs->getBool("/template/base/showborder", 1.0);
     }
-//    //TODO: fix ti for work: To update knots of selected items
-//    SPDesktop * desktop = SP_ACTIVE_DESKTOP;
-//    if (desktop) {
+   
+    SPDesktop * desktop = SP_ACTIVE_DESKTOP;
+    if (desktop) {
+//TODO: Remove knots of shapes on selected items
 //        Inkscape::Selection * sel = desktop->getSelection();
 //        std::vector<SPItem*> il(sel->items().begin(), sel->items().end());
 //        for (std::vector<SPItem*>::const_iterator l = il.begin(); l != il.end(); l++){
@@ -1002,7 +1004,11 @@ void sp_namedview_set_document_rotation(SPNamedView *nv)
 //            sel->remove(item->getRepr());
 //            sel->add(item->getRepr());
 //        }
-//    }
+        SPObject *updated = desktop->getDocument()->getRoot();
+        if (updated) {
+            updated->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+        }
+    }
 }
 
 static void sp_namedview_show_single_guide(SPGuide* guide, bool show)

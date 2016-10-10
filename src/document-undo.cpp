@@ -240,53 +240,52 @@ static void perform_document_update(SPDocument &doc) {
 
 gboolean Inkscape::DocumentUndo::undo(SPDocument *doc)
 {
-	using Inkscape::Debug::EventTracker;
-	using Inkscape::Debug::SimpleEvent;
+    using Inkscape::Debug::EventTracker;
+    using Inkscape::Debug::SimpleEvent;
 
-	gboolean ret;
+    gboolean ret;
 
-	EventTracker<SimpleEvent<Inkscape::Debug::Event::DOCUMENT> > tracker("undo");
+    EventTracker<SimpleEvent<Inkscape::Debug::Event::DOCUMENT> > tracker("undo");
 
-	g_assert (doc != NULL);
-	g_assert (doc->priv != NULL);
-	g_assert (doc->priv->sensitive);
+    g_assert (doc != NULL);
+    g_assert (doc->priv != NULL);
+    g_assert (doc->priv->sensitive);
 
-	doc->priv->sensitive = FALSE;
+    doc->priv->sensitive = FALSE;
         doc->priv->seeking = true;
 
-	doc->actionkey.clear();
+    doc->actionkey.clear();
 
-	finish_incomplete_transaction(*doc);
+    finish_incomplete_transaction(*doc);
 
-	if (! doc->priv->undo.empty()) {
-		Inkscape::Event *log = doc->priv->undo.back();
-		doc->priv->undo.pop_back();
-		sp_repr_undo_log (log->event);
-		perform_document_update(*doc);
+    if (! doc->priv->undo.empty()) {
+	    Inkscape::Event *log = doc->priv->undo.back();
+	    doc->priv->undo.pop_back();
+	    sp_repr_undo_log (log->event);
+	    perform_document_update(*doc);
 
-		doc->priv->redo.push_back(log);
+	    doc->priv->redo.push_back(log);
 
                 doc->setModifiedSinceSave();
                 doc->priv->undoStackObservers.notifyUndoEvent(log);
 
-		ret = TRUE;
-	} else {
-		ret = FALSE;
-	}
+	    ret = TRUE;
+    } else {
+	    ret = FALSE;
+    }
 
-	sp_repr_begin_transaction (doc->rdoc);
+    sp_repr_begin_transaction (doc->rdoc);
 
-	doc->priv->sensitive = TRUE;
+    doc->priv->sensitive = TRUE;
         doc->priv->seeking = false;
 
-	if (ret)
-		INKSCAPE.external_change();
+    if (ret) INKSCAPE.external_change();
+
     SPObject *updated = doc->getRoot();
     if (updated) {
         updated->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
     }
-
-	return ret;
+    return ret;
 }
 
 gboolean Inkscape::DocumentUndo::redo(SPDocument *doc)
