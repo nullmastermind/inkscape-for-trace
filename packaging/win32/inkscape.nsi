@@ -27,11 +27,12 @@ SetCompressorDictSize 32
 RequestExecutionLevel admin
 
 ; Include required files {{{2
-!include macros\RequireLatestNSIS.nsh
-!include macros\ifexist.nsh
-!include macros\VersionCompleteXXXX.nsh
 !include LogicLib.nsh
 !include Sections.nsh
+!include macros\ifexist.nsh
+!include macros\RequireLatestNSIS.nsh
+!include macros\SHMessageBoxCheck.nsh
+!include macros\VersionCompleteXXXX.nsh
 
 !macro !redef VAR VAL
   !define _!redef_${VAR} `${VAL}`
@@ -49,7 +50,7 @@ RequestExecutionLevel admin
 !define INSTDIR_REG_ROOT HKLM
 !define INSTDIR_REG_KEY "${UNINST_KEY}"
 !include macros\AdvUninstLog.nsh
-!insertmacro INTERACTIVE_UNINSTALL
+;!insertmacro INTERACTIVE_UNINSTALL ; not needed anymore since we have our own uninstall logic; conflicts with other macros
 
 ; Initialise NSIS plug-ins {{{3
 ; The plugins used are md5dll and messagebox
@@ -58,7 +59,9 @@ RequestExecutionLevel admin
 ; FileFunc bits and pieces {{{3
 !include FileFunc.nsh
 !insertmacro GetParameters
+!insertmacro GetSize
 !insertmacro GetOptions
+!insertmacro Locate
 !insertmacro un.GetParent
 
 ; User interface {{{3
@@ -87,7 +90,7 @@ LicenseForceSelection off
 ; InstType "$(Full)"
 ; InstType "$(Optimal)"
 ; InstType "$(Minimal)"
-; Directory page {{{6
+;Directory page {{{6
 !insertmacro MUI_PAGE_DIRECTORY
 ; Instfiles page {{{6
 !insertmacro MUI_PAGE_INSTFILES
@@ -258,7 +261,7 @@ ${VersionCompleteXXXRevision} ${INKSCAPE_VERSION_NUMBER} VERSION_X.X.X.X ${VERSI
 !define PRODUCT_NAME "Inkscape" ; TODO: fix up the language files to not use this and kill this line
 !define INSTDIR_KEY "Software\Microsoft\Windows\CurrentVersion\App Paths\inkscape.exe"
 !define UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\Inkscape"
-;!define DUMMYINSTALL ; Define this to make it build quickly, not including any of the files or code in the sections, for quick testing of features of the installer and development thereof.
+!define DUMMYINSTALL ; Define this to make it build quickly, not including any of the files or code in the sections, for quick testing of features of the installer and development thereof.
 !define _FILENAME ${FILENAME}.exe
 !undef FILENAME
 !define FILENAME ${_FILENAME}
@@ -269,19 +272,22 @@ Name              `Inkscape`
 Caption           `Inkscape - $(CaptionDescription)`
 BrandingText      `${BrandingText}`
 OutFile           `${FILENAME}`
-InstallDir        "$PROGRAMFILES\Inkscape"
+!if ${BITNESS} = 32
+  InstallDir        "$PROGRAMFILES32\Inkscape"
+!else
+  InstallDir        "$PROGRAMFILES64\Inkscape"
+!endif
 InstallDirRegKey  HKLM "${INSTDIR_KEY}" ""
 
 ; Version information {{{3
 VIProductVersion ${VERSION_X.X.X.X}
-VIAddVersionKey ProductName Inkscape
-VIAddVersionKey Comments "Licensed under the GNU GPL"
-VIAddVersionKey CompanyName inkscape.org
-VIAddVersionKey LegalCopyright "Â© 2016 Inkscape"
-VIAddVersionKey FileDescription Inkscape
-VIAddVersionKey FileVersion ${VERSION_X.X.X.X}
-VIAddVersionKey ProductVersion ${VERSION_X.X.X.X}
-VIAddVersionKey InternalName Inkscape
+VIAddVersionKey /LANG=0 ProductName "Inkscape"
+VIAddVersionKey /LANG=0 Comments "Licensed under the GNU GPL"
+VIAddVersionKey /LANG=0 CompanyName "Inkscape Project"
+VIAddVersionKey /LANG=0 LegalCopyright "© 2016 Inkscape Project"
+VIAddVersionKey /LANG=0 FileDescription "Inkscape Vector Graphics Editor"
+VIAddVersionKey /LANG=0 FileVersion ${VERSION_X.X.X.X}
+VIAddVersionKey /LANG=0 ProductVersion ${VERSION_X.X.X.X}
 
 ; Variables {{{2
 Var askMultiUser
@@ -304,8 +310,15 @@ Var CMDARGS
     ReadRegStr $2 HKU "$1\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders" AppData
     ${IfThen} $2 == "" ${|} ${Continue} ${|}
     DetailPrint "Removing $2\Inkscape"
+
     Delete $2\Inkscape\preferences.xml
     Delete $2\Inkscape\extension-errors.log
+
+    RMDir  $2\Inkscape\extensions
+    RMDir  $2\Inkscape\icons
+    RMDir  $2\Inkscape\keys
+    RMDir  $2\Inkscape\palettes
+    RMDir  $2\Inkscape\templates
     RMDir  $2\Inkscape
   ${Loop}
 !macroend
@@ -617,6 +630,7 @@ SectionGroup "$(Languages)" SecLanguages ; Languages sections {{{
 SectionGroupEnd ; SecLanguages }}}
 
 Section -FinalizeInstallation ; Hidden, mandatory section to finalize installation {{{
+
 !ifndef DUMMYINSTALL
   DetailPrint "Finalizing installation"
   ${IfThen} $MultiUser  = 1 ${|} SetShellVarContext all ${|}
@@ -638,8 +652,15 @@ Section -FinalizeInstallation ; Hidden, mandatory section to finalize installati
   WriteRegStr       SHCTX "${UNINST_KEY}" DisplayName     "Inkscape ${INKSCAPE_VERSION}"
   WriteRegStr       SHCTX "${UNINST_KEY}" DisplayIcon     $INSTDIR\Inkscape.exe,0
   WriteRegStr       SHCTX "${UNINST_KEY}" DisplayVersion  ${INKSCAPE_VERSION}
+  WriteRegStr       SHCTX "${UNINST_KEY}" Publisher       "Inkscape Project"
+  WriteRegStr       SHCTX "${UNINST_KEY}" URLInfoAbout    "https://inkscape.org"
+
   WriteRegDWORD     SHCTX "${UNINST_KEY}" NoModify        1
   WriteRegDWORD     SHCTX "${UNINST_KEY}" NoRepair        1
+
+  ${GetSize} "$INSTDIR" "/S=0K" $0 $1 $2
+  IntFmt $0 "0x%08X" $0
+  WriteRegDWORD     SHCTX "${UNINST_KEY}" EstimatedSize   "$0"
 
   ;create/update log always within .onInstSuccess function
   !insertmacro UNINSTALL.LOG_UPDATE_INSTALL
@@ -662,7 +683,7 @@ Section -FinalizeInstallation ; Hidden, mandatory section to finalize installati
   FileClose $0
   FileClose $9
   ; Not needed any more
-  Delete $INSTDIR\Uninstall.dat
+  ; Delete $INSTDIR\Uninstall.dat ; actually this is checked for in UNINSTALL.LOG_PREPARE_INSTALL, so keep it for now...
 !endif
 SectionEnd ; -FinalizeInstallation }}}
 
@@ -774,7 +795,11 @@ Function .onInit ; initialise the installer {{{2
 
   ; Request uninstallation of an old Inkscape installation {{{
   ReadRegStr $R0 HKLM "${UNINST_KEY}" UninstallString
-  ${IfThen} $R0 == "" ${|} ReadRegStr $R0 HKCU "${UNINST_KEY}" UninstallString ${|}
+  ReadRegStr $R1 HKLM "${UNINST_KEY}" DisplayName
+  ${If} $R0 == ""
+    ReadRegStr $R0 HKCU "${UNINST_KEY}" UninstallString
+    ReadRegStr $R1 HKCU "${UNINST_KEY}" DisplayName
+  ${EndIf}
   ${If} $R0 != ""
   ${AndIf} ${Cmd} ${|} MessageBox MB_YESNO|MB_ICONEXCLAMATION "$(WANT_UNINSTALL_BEFORE)" /SD IDNO IDYES ${|}
     ExecWait $R0
@@ -948,6 +973,7 @@ Function un.onInit ; initialise uninstaller {{{
 FunctionEnd ; un.onInit }}}
 
 Function un.CustomPageUninstall ; {{{
+  SetShellVarContext current
   !insertmacro MUI_HEADER_TEXT "$(UInstOpt)" "$(UInstOpt1)"
   !insertmacro MUI_INSTALLOPTIONS_WRITE inkscape.nsi.uninstall "Field 1" Text "$APPDATA\Inkscape\"
   !insertmacro MUI_INSTALLOPTIONS_WRITE inkscape.nsi.uninstall "Field 2" Text "$(PurgePrefs)"
@@ -958,6 +984,7 @@ FunctionEnd ; un.CustomPageUninstall }}}
 Section Uninstall ; do the uninstalling {{{
 !ifndef DUMMYINSTALL
   ; remove personal settings
+  SetShellVarContext current
   Delete $APPDATA\Inkscape\extension-errors.log
   ${If} $MultiUser = 0
     DetailPrint "Purging personal settings in $APPDATA\Inkscape"
@@ -1016,16 +1043,16 @@ Section Uninstall ; do the uninstalling {{{
   RMDir  $SMPROGRAMS\Inkscape
 
   InitPluginsDir
-  SetPluginUnload manual
 
   ClearErrors
-  FileOpen $0 $INSTDIR\uninstall.log r
+  FileOpen $9 $INSTDIR\uninstall.log r
   ${If} ${Errors} ;else uninstallnotfound
     MessageBox MB_OK|MB_ICONEXCLAMATION "$(UninstallLogNotFound)" /SD IDOK
   ${Else}
+    ${SHMessageBoxCheckInit} "inkscape_uninstall_other_files"
     ${Do}
       ClearErrors
-      FileRead $0 $1
+      FileRead $9 $1
       ${IfThen} ${Errors} ${|} ${ExitDo} ${|}
       ; cat the line into md5 and filename
       StrLen $2 $1
@@ -1033,31 +1060,24 @@ Section Uninstall ; do the uninstalling {{{
       StrCpy $3 $1 32
       StrCpy $filename $1 $2-36 34 ;remove trailing CR/LF
       StrCpy $filename $filename -2
-      ; $3 = MD5 when installed, then deletion choice
       ; $filename = file
-      ; $5 = MD5 now
-      ; $6 = always/never remove files touched by user
+      ; $0 = shall file be deleted?
+      ; $3 = MD5 when installed
+      ; $4 = MD5 now
 
       ${If} ${FileExists} $filename
-        ${If} $6 == always
-          StrCpy $3 2
+        md5dll::GetMD5File /NOUNLOAD $filename
+        Pop $4 ;md5 of file
+        ${If} $3 == $4
+          StrCpy $0 ${IDYES}
         ${Else}
-          md5dll::GetMD5File /NOUNLOAD $filename
-          Pop $5 ;md5 of file
-          ${If} $3 == $5
-            StrCpy $3 1 ; yes
-          ${ElseIf} $6 != never
-            ; the md5 sums does not match so we ask
-            messagebox::show MB_DEFBUTTON3|MB_TOPMOST "" 0,103 \
-              "$(FileChanged)" "$(Yes)" "$(AlwaysYes)" "$(No)" "$(AlwaysNo)"
-            Pop $3
-            ${IfThen} $3 = 2 ${|} StrCpy $6 always ${|}
-            ${IfThen} $3 = 4 ${|} StrCpy $6 never ${|}
-          ${EndIf}
+          ; the md5 sums does not match so we ask
+          ${SHMessageBoxCheck} "$(MUI_UNTEXT_CONFIRM_TITLE)" "$(FileChanged)"
+          ${IfThen} $0 = ${IDYES} ${|} StrCpy $3 1 ${|}
+          ${IfThen} $0 = ${IDNO} ${|} StrCpy $3 0 ${|}
         ${EndIf}
 
-        ${If}   $3 = 1 ; yes
-        ${OrIf} $3 = 2 ; always
+        ${If} $0 = ${IDYES}
           ; Remove File
           ClearErrors
           Delete $filename
@@ -1072,22 +1092,39 @@ Section Uninstall ; do the uninstalling {{{
         ${EndIf}
       ${EndIf}
     ${Loop}
+    ${SHMessageBoxCheckCleanup}
   ${EndIf}
-  FileClose $0
+  FileClose $9
+  ; remove Python cache files that may have been created
+  loopFiles:
+      StrCpy $R1 0
+      ${Locate} "$INSTDIR" "/L=F /M=*.pyc" "un.DeleteFile"
+      StrCmp $R1 0 0 loopFiles
+  ; remove empty directories
+  ; TODO: Seems not to always work correctly due to (self-)locked folders
+  loopDirs:
+    StrCpy $R1 0
+    ${Locate} "$INSTDIR" "/L=DE" "un.DeleteDir"
+    StrCmp $R1 0 0 loopDirs
+  ; remove the uninstaller and installation directory itself
+  Delete $INSTDIR\uninstall.dat
   Delete $INSTDIR\uninstall.log
   Delete $INSTDIR\uninstall.exe
-  ; remove empty directories
-  RMDir $INSTDIR\lib\locale
-  RMDir $INSTDIR\lib
-  RMDir $INSTDIR\data
-  RMDir $INSTDIR\doc
-  RMDir $INSTDIR\modules
-  RMDir $INSTDIR\plugins
   RMDir $INSTDIR
   SetAutoClose false
 !endif
 SectionEnd ; Uninstall }}}
 ; }}}
+
+Function un.DeleteFile
+  Delete $R9
+  IntOp $R1 $R1 + 1
+FunctionEnd
+
+Function un.DeleteDir
+  RMDir $R9
+  IntOp $R1 $R1 + 1
+FunctionEnd
 
 ; This file has been optimised for use in Vim with folding.
 ; (If you can't cope, :set nofoldenable) vim:fen:fdm=marker
