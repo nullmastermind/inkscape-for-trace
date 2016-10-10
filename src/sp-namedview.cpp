@@ -19,7 +19,12 @@
 #include "event-log.h"
 #include <2geom/transforms.h>
 
+#include "display/sp-canvas-group.h"
+#include "display/canvas-bpath.h"
+#include "display/canvas-temporary-item.h"
+#include "display/canvas-temporary-item-list.h"
 #include "display/canvas-grid.h"
+#include "display/curve.h"
 #include "util/units.h"
 #include "svg/svg-color.h"
 #include "xml/repr.h"
@@ -52,7 +57,6 @@ using Inkscape::Util::unit_table;
 #define DEFAULTPAGECOLOR 0xffffff00
 
 static void sp_namedview_setup_guides(SPNamedView * nv);
-static void sp_namedview_set_document_rotation(SPDocument * doc, SPNamedView * nv);
 static void sp_namedview_lock_guides(SPNamedView * nv);
 static void sp_namedview_show_single_guide(SPGuide* guide, bool show);
 static void sp_namedview_lock_single_guide(SPGuide* guide, bool show);
@@ -97,9 +101,13 @@ SPNamedView::SPNamedView() : SPObjectGroup(), snap_manager(this) {
     this->default_layer_id = 0;
 
     this->connector_spacing = defaultConnSpacing;
+    this->page_border_rotated = NULL;
 }
 
 SPNamedView::~SPNamedView() {
+    if(!this->getViewList().empty()) { // >0 Desktops
+        this->getViewList()[0]->remove_temporary_canvasitem(this->page_border_rotated);
+    }
 }
 
 static void sp_namedview_generate_old_grid(SPNamedView * /*nv*/, SPDocument *document, Inkscape::XML::Node *repr) {
@@ -952,7 +960,32 @@ static void sp_namedview_lock_guides(SPNamedView *nv)
 
 void sp_namedview_set_document_rotation(SPNamedView *nv)
 {
-    nv->document->getRoot()->set_rotation(nv->document_rotation);
+    if(!nv->getViewList().empty()) { // >0 Desktops
+        SPDesktop *desktop = nv->getViewList()[0]; 
+        desktop->remove_temporary_canvasitem(nv->page_border_rotated);
+        SPRoot * root = nv->document->getRoot();
+        SPCurve *c = new SPCurve();
+        c->moveto(root->viewBox.min());
+        c->lineto(Geom::Point(root->viewBox.max()[Geom::X],root->viewBox.min()[Geom::Y]));
+        c->lineto(Geom::Point(root->viewBox.max()[Geom::X],root->viewBox.max()[Geom::Y]));
+        c->lineto(Geom::Point(root->viewBox.min()[Geom::X],root->viewBox.max()[Geom::Y]));
+        c->closepath();
+        Geom::Point page_center = root->viewBox.midpoint();
+        Geom::PathVector const box = c->get_pathvector();
+        Geom::Affine rot = Geom::identity();
+        rot *= Geom::Translate(page_center).inverse(); 
+        rot *= Geom::Rotate(Geom::rad_from_deg(nv->document_rotation * -1));
+        rot *=  Geom::Translate(page_center);
+        if (nv->document_rotation) {
+            SPCanvasItem *canvas_border = sp_canvas_bpath_new(desktop->getTempGroup(), c, true);
+            sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(canvas_border), 0xFF00009A, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
+            sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(canvas_border), 0, SP_WIND_RULE_NONZERO);
+            sp_canvas_item_affine_absolute(canvas_border, rot * root->vbt);
+            nv->page_border_rotated = desktop->add_temporary_canvasitem(canvas_border, 0); 
+        }
+        nv->document->getRoot()->set_rotation(nv->document_rotation);
+        c->unref();
+    }
     if (nv->document_rotation) {
         nv->showborder = FALSE;
     } else {

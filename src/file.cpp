@@ -259,8 +259,9 @@ bool sp_file_open(const Glib::ustring &uri,
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     if (desktop) {
         desktop->setWaitingCursor();
+        desktop->remove_temporary_canvasitem(sp_document_namedview(desktop->getDocument(), NULL)->page_border_rotated);
     }
-
+    
     SPDocument *doc = NULL;
     bool cancelled = false;
     try {
@@ -287,7 +288,6 @@ bool sp_file_open(const Glib::ustring &uri,
             doc->setViewBox(Geom::Rect::from_xywh(0, 0, doc->getWidth().value(doc->getDisplayUnit()), doc->getHeight().value(doc->getDisplayUnit())));
             DocumentUndo::setUndoSensitive(doc, true);
         }
-
         SPDocument *existing = desktop ? desktop->getDocument() : NULL;
 
         if (existing && existing->virgin && replace_empty) {

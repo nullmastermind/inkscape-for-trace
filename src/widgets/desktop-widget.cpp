@@ -1645,7 +1645,6 @@ SPDesktopWidget* SPDesktopWidget::createInstance(SPNamedView *namedview)
     gtk_widget_show_all (dtw->menubar);
     SPNamedView *nv = dtw->desktop->namedview;
     dtw->rotatebar = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL,0.0,360.0,45.0);
-    gtk_range_set_value(GTK_RANGE (dtw->rotatebar), nv->document_rotation);
     gtk_widget_set_name(dtw->rotatebar, "RotateBar");
     gtk_widget_show_all (dtw->rotatebar);
     GtkWidget * containermenu = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
@@ -1661,7 +1660,11 @@ SPDesktopWidget* SPDesktopWidget::createInstance(SPNamedView *namedview)
     gtk_box_pack_start (GTK_BOX (dtw->vbox), containermenu, TRUE, TRUE, 0);
     g_signal_connect (G_OBJECT (dtw->rotatebar), "button-release-event", G_CALLBACK (sp_desktop_widget_rotate_document), dtw);
     g_signal_connect (G_OBJECT (dtw->rotatebar), "key-release-event", G_CALLBACK (sp_desktop_widget_rotate_document), dtw);
-    
+    gtk_range_set_value(GTK_RANGE (dtw->rotatebar), nv->document_rotation);
+    //TODO: Find a better way to refresh the widget
+    gtk_widget_set_visible (dtw->rotatebar,false);
+    gtk_widget_set_visible (dtw->rotatebar,true);
+    sp_namedview_set_document_rotation(nv);
     dtw->layoutWidgets();
 
     std::vector<GtkWidget *> toolboxes;
@@ -1703,7 +1706,11 @@ sp_desktop_widget_update_rulers (SPDesktopWidget *dtw)
 void SPDesktopWidget::namedviewModified(SPObject *obj, guint flags)
 {
     SPNamedView *nv=SP_NAMEDVIEW(obj);
-
+    gtk_range_set_value(GTK_RANGE(this->rotatebar), desktop->namedview->document_rotation);
+    sp_namedview_set_document_rotation(nv);
+    //TODO: Find a better way to refresh the widget
+    gtk_widget_set_visible (this->rotatebar,false);
+    gtk_widget_set_visible (this->rotatebar,true);
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         this->dt2r = 1. / nv->display_units->factor;
         this->ruler_origin = Geom::Point(0,0); //nv->gridorigin;   Why was the grid origin used here?
@@ -1756,15 +1763,27 @@ void SPDesktopWidget::namedviewModified(SPObject *obj, guint flags)
 static void
 sp_desktop_widget_rotate_document(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw)
 {
-    SPNamedView *nv = dtw->desktop->namedview;
-    double value = gtk_range_get_value(GTK_RANGE(widget));
-    if (value != nv->document_rotation) {
-        sp_repr_set_svg_double(nv->getRepr(), "inkscape:document-rotation", value);
-        SPObject *updated = nv->document->getObjectByRepr(nv->getRepr());
-        if (updated) {
-            updated->updateRepr();
+    if (event->type == GDK_BUTTON_RELEASE ||
+        event->key.keyval == GDK_KEY_Page_Down || 
+        event->key.keyval == GDK_KEY_Page_Up ||
+        event->key.keyval == GDK_KEY_End ||
+        event->key.keyval == GDK_KEY_Begin ||
+        event->key.keyval == GDK_KEY_Up ||
+        event->key.keyval == GDK_KEY_Down ||
+        event->key.keyval == GDK_KEY_Left ||
+        event->key.keyval == GDK_KEY_Right)
+    {
+        SPNamedView *nv = dtw->desktop->namedview;
+        double value = gtk_range_get_value(GTK_RANGE(widget));
+        if (value != nv->document_rotation) {
+            nv->document_rotation = value;
+            sp_repr_set_svg_double(nv->getRepr(), "inkscape:document-rotation", value);
+            SPObject *updated = SP_OBJECT(nv);
+            if (updated) {
+                updated->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+            }
+            gtk_widget_grab_focus(dtw->rotatebar);
         }
-        reinterpret_cast<SPObject *>(dtw->desktop->currentLayer())->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
     }
 }
 

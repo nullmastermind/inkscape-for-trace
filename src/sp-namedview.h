@@ -21,12 +21,16 @@
 #include "snap.h"
 #include "document.h"
 #include "util/units.h"
+#include "display/sp-canvas.h"
 #include <vector>
 
 namespace Inkscape {
     class CanvasGrid;
     namespace Util {
         class Unit;
+    }
+    namespace Display {
+        class TemporaryItem;
     }
 }
 
@@ -67,7 +71,7 @@ public:
 
     Inkscape::Util::Unit const *display_units;   // Units used for the UI (*not* the same as units of SVG coordinates)
     Inkscape::Util::Unit const *page_size_units; // Only used in "Custom size" part of Document Properties dialog 
-    
+    Inkscape::Display::TemporaryItem *page_border_rotated;
     GQuark default_layer_id;
 
     double connector_spacing;
