@@ -7,7 +7,7 @@
 
 		<Package Id='*' Keywords='Installer' Description="Inkscape Installer" Comments='inkscape is registered trademark of inkscape.org' Manufacturer='inkscape.org' InstallerVersion='$(var.InstallerVersion)' Platform='$(var.Platform)' Languages='1033' Compressed='yes' SummaryCodepage='1252' />
         
-		<Media Id='1' Cabinet='Sample.cab' EmbedCab='yes' DiskPrompt="CD-ROM #1" />
+		<Media Id='1' Cabinet='Sample.cab' EmbedCab='yes' DiskPrompt="CD-ROM #1" CompressionLevel="high"/>
 		<Property Id='DiskPrompt' Value="inkscape Installation [1]" />
 
 		<Property Id='ALLUSERS' Value="2" />
