@@ -261,7 +261,7 @@ ${VersionCompleteXXXRevision} ${INKSCAPE_VERSION_NUMBER} VERSION_X.X.X.X ${VERSI
 !define PRODUCT_NAME "Inkscape" ; TODO: fix up the language files to not use this and kill this line
 !define INSTDIR_KEY "Software\Microsoft\Windows\CurrentVersion\App Paths\inkscape.exe"
 !define UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\Inkscape"
-!define DUMMYINSTALL ; Define this to make it build quickly, not including any of the files or code in the sections, for quick testing of features of the installer and development thereof.
+;!define DUMMYINSTALL ; Define this to make it build quickly, not including any of the files or code in the sections, for quick testing of features of the installer and development thereof.
 !define _FILENAME ${FILENAME}.exe
 !undef FILENAME
 !define FILENAME ${_FILENAME}
@@ -1072,9 +1072,8 @@ Section Uninstall ; do the uninstalling {{{
           StrCpy $0 ${IDYES}
         ${Else}
           ; the md5 sums does not match so we ask
-          ${SHMessageBoxCheck} "$(MUI_UNTEXT_CONFIRM_TITLE)" "$(FileChanged)"
-          ${IfThen} $0 = ${IDYES} ${|} StrCpy $3 1 ${|}
-          ${IfThen} $0 = ${IDNO} ${|} StrCpy $3 0 ${|}
+          ${SHMessageBoxCheck} "$(MUI_UNTEXT_CONFIRM_TITLE)" "$(FileChanged)" ${MB_YESNO}|${MB_ICONQUESTION}
+          Pop $0
         ${EndIf}
 
         ${If} $0 = ${IDYES}
@@ -1101,7 +1100,6 @@ Section Uninstall ; do the uninstalling {{{
       ${Locate} "$INSTDIR" "/L=F /M=*.pyc" "un.DeleteFile"
       StrCmp $R1 0 0 loopFiles
   ; remove empty directories
-  ; TODO: Seems not to always work correctly due to (self-)locked folders
   loopDirs:
     StrCpy $R1 0
     ${Locate} "$INSTDIR" "/L=DE" "un.DeleteDir"
@@ -1119,11 +1117,13 @@ SectionEnd ; Uninstall }}}
 Function un.DeleteFile
   Delete $R9
   IntOp $R1 $R1 + 1
+  Push 0 # required by ${Locate}!
 FunctionEnd
 
 Function un.DeleteDir
   RMDir $R9
   IntOp $R1 $R1 + 1
+  Push 0 # required by ${Locate}!
 FunctionEnd
 
 ; This file has been optimised for use in Vim with folding.
