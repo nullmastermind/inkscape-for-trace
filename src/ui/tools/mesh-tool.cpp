@@ -38,6 +38,9 @@
 #include "snap.h"
 #include "sp-namedview.h"
 #include "verbs.h"
+#include "sp-text.h"
+#include "sp-defs.h"
+#include "style.h"
 
 // Gradient specific
 #include "gradient-drag.h"
@@ -56,7 +59,7 @@ namespace Inkscape {
 namespace UI {
 namespace Tools {
 
-static void sp_mesh_end_drag(MeshTool &rc);
+static void sp_mesh_new_default(MeshTool &rc);
 
 const std::string& MeshTool::getPrefsPath() {
 	return MeshTool::prefsPath;
@@ -471,24 +474,25 @@ bool MeshTool::root_handler(GdkEvent* event) {
                 // always resets selection to the single object under cursor
                 sp_mesh_context_split_near_point(this, selection->items().front(), this->mousepoint_doc, event->button.time);
             } else {
+                sp_mesh_new_default(*this);
                 // Create a new gradient with default coordinates.
-            	auto items= selection->items();
-                for(auto i=items.begin();i!=items.end();++i){
-                    SPItem *item = *i;
-                    SPGradientType new_type = SP_GRADIENT_TYPE_MESH;
-                    Inkscape::PaintTarget fsmode = (prefs->getInt("/tools/gradient/newfillorstroke", 1) != 0) ? Inkscape::FOR_FILL : Inkscape::FOR_STROKE;
+//             	auto items= selection->items();
+//                 for(auto i=items.begin();i!=items.end();++i){
+//                     SPItem *item = *i;
+//                     SPGradientType new_type = SP_GRADIENT_TYPE_MESH;
+//                     Inkscape::PaintTarget fsmode = (prefs->getInt("/tools/gradient/newfillorstroke", 1) != 0) ? Inkscape::FOR_FILL : Inkscape::FOR_STROKE;
 
-#ifdef DEBUG_MESH
-                    std::cout << "sp_mesh_context_root_handler: creating new mesh on: " << (fsmode == Inkscape::FOR_FILL ? "Fill" : "Stroke") << std::endl;
-#endif
-                    SPGradient *vector = sp_gradient_vector_for_object(desktop->getDocument(), desktop, item, fsmode);
+// #ifdef DEBUG_MESH
+//                     std::cout << "sp_mesh_context_root_handler: creating new mesh on: " << (fsmode == Inkscape::FOR_FILL ? "Fill" : "Stroke") << std::endl;
+// #endif
+//                     SPGradient *vector = sp_gradient_vector_for_object(desktop->getDocument(), desktop, item, fsmode);
 
-                    SPGradient *priv = sp_item_set_gradient(item, vector, new_type, fsmode);
-                    sp_gradient_reset_to_userspace(priv, item);
-                }
+//                     SPGradient *priv = sp_item_set_gradient(item, vector, new_type, fsmode);
+//                     sp_gradient_reset_to_userspace(priv, item);
+//                 }
 
-                DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_MESH,
-                                   _("Create default mesh"));
+//                 DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_MESH,
+//                                    _("Create default mesh"));
             }
 
             ret = TRUE;
@@ -663,7 +667,7 @@ bool MeshTool::root_handler(GdkEvent* event) {
                         }
                     } else {
                         // Create a new mesh gradient
-                        sp_mesh_end_drag(*this);
+                        sp_mesh_new_default(*this);
                     }
                 } else if (this->item_to_select) {
                     if (over_line && line) {
@@ -928,7 +932,7 @@ bool MeshTool::root_handler(GdkEvent* event) {
 }
 
 // Creates a new mesh gradient.
-static void sp_mesh_end_drag(MeshTool &rc) {
+static void sp_mesh_new_default(MeshTool &rc) {
     SPDesktop *desktop = SP_EVENT_CONTEXT(&rc)->desktop;
     Inkscape::Selection *selection = desktop->getSelection();
     SPDocument *document = desktop->getDocument();
@@ -937,25 +941,16 @@ static void sp_mesh_end_drag(MeshTool &rc) {
     if (!selection->isEmpty()) {
 
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        int type = SP_GRADIENT_TYPE_MESH;
-        Inkscape::PaintTarget fill_or_stroke = (prefs->getInt("/tools/gradient/newfillorstroke", 1) != 0) ? Inkscape::FOR_FILL : Inkscape::FOR_STROKE;
+        Inkscape::PaintTarget fill_or_stroke =
+            (prefs->getInt("/tools/gradient/newfillorstroke", 1) != 0) ?
+            Inkscape::FOR_FILL : Inkscape::FOR_STROKE;
 
-        SPGradient *vector;
-        if (ec->item_to_select) {
-            // pick color from the object where drag started
-            vector = sp_gradient_vector_for_object(document, desktop, ec->item_to_select, fill_or_stroke);
-        } else {
-            // Starting from empty space:
-            // Sort items so that the topmost comes last
-        	std::vector<SPItem*> items(selection->items().begin(), selection->items().end());
-            sort(items.begin(),items.end(),sp_item_repr_compare_position);
-            // take topmost
-            vector = sp_gradient_vector_for_object(document, desktop, SP_ITEM(items.back()), fill_or_stroke);
-        }
-
-        // HACK: reset fill-opacity - that 0.75 is annoying; BUT remove this when we have an opacity slider for all tabs
+// HACK: reset fill-opacity - that 0.75 is annoying; BUT remove this when we have an opacity slider for all tabs
         SPCSSAttr *css = sp_repr_css_attr_new();
         sp_repr_css_set_property(css, "fill-opacity", "1.0");
+
+        Inkscape::XML::Document *xml_doc = document->getReprDoc();
+        SPDefs *defs = document->getDefs();
 
         auto items= selection->items();
         for(auto i=items.begin();i!=items.end();++i){
@@ -963,11 +958,25 @@ static void sp_mesh_end_drag(MeshTool &rc) {
             //FIXME: see above
             sp_repr_css_change_recursive((*i)->getRepr(), css, "style");
 
-            sp_item_set_gradient(*i, vector, (SPGradientType) type, fill_or_stroke);
+            // Create mesh element
+            Inkscape::XML::Node *repr = xml_doc->createElement("svg:meshgradient");
 
-            // We don't need to do anything. Mesh is already sized appropriately.
- 
-            (*i)->requestModified(SP_OBJECT_MODIFIED_FLAG);
+            // privates are garbage-collectable
+            repr->setAttribute("inkscape:collect", "always");
+
+            // Attach to document
+            defs->getRepr()->appendChild(repr);
+            Inkscape::GC::release(repr);
+
+            // Get corresponding object
+            SPMeshGradient *mg = static_cast<SPMeshGradient *>(document->getObjectByRepr(repr));
+            mg->array.create(mg, *i, (*i)->visualBounds());
+
+            bool isText = SP_IS_TEXT(*i);
+            sp_style_set_property_url (*i, ((fill_or_stroke == Inkscape::FOR_FILL) ? "fill":"stroke"),
+                                   mg, isText);
+
+            (*i)->requestModified(SP_OBJECT_MODIFIED_FLAG|SP_OBJECT_STYLE_MODIFIED_FLAG);
         }
 
         DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_MESH, _("Create mesh"));
