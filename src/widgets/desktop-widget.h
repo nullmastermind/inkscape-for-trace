@@ -97,7 +97,9 @@ struct SPDesktopWidget {
     GtkWidget *select_status;
     GtkWidget *select_status_eventbox;
     GtkWidget *zoom_status;
+    GtkWidget *rotation_status;
     gulong zoom_update;
+    gulong rotation_update;
 
     Inkscape::UI::Widget::Dock *dock;
 
