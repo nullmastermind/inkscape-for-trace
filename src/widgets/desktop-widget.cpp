@@ -105,7 +105,7 @@ static void sp_update_guides_lock( GtkWidget *button, gpointer data );
 static void cms_adjust_toggled( GtkWidget *button, gpointer data );
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 static void cms_adjust_set_sensitive( SPDesktopWidget *dtw, bool enabled );
-static void sp_desktop_widget_rotate_document(GtkWidget *widget, GdkEvent *eventdtw, SPDesktopWidget *dtw);
+static void sp_desktop_widget_rotate_document(GtkSpinButton *spin, SPDesktopWidget *dtw);
 static void sp_desktop_widget_adjustment_value_changed (GtkAdjustment *adj, SPDesktopWidget *dtw);
 
 static gdouble sp_dtw_zoom_value_to_display (gdouble value);
@@ -113,16 +113,15 @@ static gdouble sp_dtw_zoom_display_to_value (gdouble value);
 static gint sp_dtw_zoom_input (GtkSpinButton *spin, gdouble *new_val, gpointer data);
 static bool sp_dtw_zoom_output (GtkSpinButton *spin, gpointer data);
 static void sp_dtw_zoom_value_changed (GtkSpinButton *spin, gpointer data);
-static void sp_dtw_rotate_populate_popup (GtkEntry *entry, GtkMenu *menu, gpointer data);
-//static void sp_dtw_rotate_menu_handler (SPDesktop *dt, gdouble factor);
-//static void sp_dtw_rotate_minus_135 (GtkMenuItem *item, gpointer data);
-//static void sp_dtw_rotate_minus_90 (GtkMenuItem *item, gpointer data);
-//static void sp_dtw_rotate_minus_45 (GtkMenuItem *item, gpointer data);
-//static void sp_dtw_rotate_0 (GtkMenuItem *item, gpointer data);
-//static void sp_dtw_rotate_45 (GtkMenuItem *item, gpointer data);
-//static void sp_dtw_rotate_90 (GtkMenuItem *item, gpointer data);
-//static void sp_dtw_rotate_135 (GtkMenuItem *item, gpointer data);
-//static void sp_dtw_rotate_180 (GtkMenuItem *item, gpointer data);
+static void sp_dtw_rotation_populate_popup (GtkEntry *entry, GtkMenu *menu, gpointer data);
+static void sp_dtw_rotate_minus_180 (GtkMenuItem *item, SPDesktopWidget * data);
+static void sp_dtw_rotate_minus_135 (GtkMenuItem *item, SPDesktopWidget * data);
+static void sp_dtw_rotate_minus_90 (GtkMenuItem *item, SPDesktopWidget * data);
+static void sp_dtw_rotate_minus_45 (GtkMenuItem *item, SPDesktopWidget * data);
+static void sp_dtw_rotate_0 (GtkMenuItem *item, SPDesktopWidget * data);
+static void sp_dtw_rotate_45 (GtkMenuItem *item, SPDesktopWidget * data);
+static void sp_dtw_rotate_90 (GtkMenuItem *item, SPDesktopWidget * data);
+static void sp_dtw_rotate_135 (GtkMenuItem *item, SPDesktopWidget * data);
 
 static void sp_dtw_zoom_populate_popup (GtkEntry *entry, GtkMenu *menu, gpointer data);
 static void sp_dtw_zoom_menu_handler (SPDesktop *dt, gdouble factor);
@@ -624,8 +623,8 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     g_object_set_data (G_OBJECT (dtw->rotation_status), "dtw", dtw->canvas);
     g_signal_connect (G_OBJECT (dtw->rotation_status), "focus-in-event", G_CALLBACK (spinbutton_focus_in), dtw->rotation_status);
     g_signal_connect (G_OBJECT (dtw->rotation_status), "key-press-event", G_CALLBACK (spinbutton_keypress), dtw->rotation_status);
-    dtw->zoom_update = g_signal_connect (G_OBJECT (dtw->rotation_status), "value_changed", G_CALLBACK (sp_desktop_widget_rotate_document), dtw);
-    dtw->zoom_update = g_signal_connect (G_OBJECT (dtw->rotation_status), "populate_popup", G_CALLBACK (sp_dtw_rotate_populate_popup), dtw);
+    dtw->rotation_update = g_signal_connect (G_OBJECT (dtw->rotation_status), "value_changed", G_CALLBACK (sp_desktop_widget_rotate_document), dtw);
+    dtw->rotation_update = g_signal_connect (G_OBJECT (dtw->rotation_status), "populate_popup", G_CALLBACK (sp_dtw_rotation_populate_popup), dtw);
 
     // Cursor coordinates
     dtw->coord_status = gtk_grid_new();
@@ -731,7 +730,7 @@ static void sp_desktop_widget_dispose(GObject *object)
         g_signal_handlers_disconnect_by_func (G_OBJECT (dtw->zoom_status), (gpointer) G_CALLBACK (sp_dtw_zoom_populate_popup), dtw);
         g_signal_handlers_disconnect_matched (G_OBJECT (dtw->rotation_status), G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, dtw->rotation_status);
         g_signal_handlers_disconnect_by_func (G_OBJECT (dtw->rotation_status), (gpointer) G_CALLBACK (sp_desktop_widget_rotate_document), dtw);
-        g_signal_handlers_disconnect_by_func (G_OBJECT (dtw->rotation_status), (gpointer) G_CALLBACK (sp_dtw_zoom_populate_popup), dtw);
+        g_signal_handlers_disconnect_by_func (G_OBJECT (dtw->rotation_status), (gpointer) G_CALLBACK (sp_dtw_rotation_populate_popup), dtw);
         g_signal_handlers_disconnect_by_func (G_OBJECT (dtw->canvas), (gpointer) G_CALLBACK (sp_desktop_widget_event), dtw);
         g_signal_handlers_disconnect_by_func (G_OBJECT (dtw->canvas_tbl), (gpointer) G_CALLBACK (canvas_tbl_size_allocate), dtw);
 
@@ -1464,12 +1463,6 @@ void SPDesktopWidget::layoutWidgets()
         gtk_widget_show_all (dtw->menubar);
     }
     
-    if (!prefs->getBool(pref_root + "menu/state", true)) {
-        gtk_widget_hide (dtw->rotatebar);
-    } else {
-        gtk_widget_show_all (dtw->rotatebar);
-    }
-
     if (!prefs->getBool(pref_root + "commands/state", true)) {
         gtk_widget_hide (dtw->commands_toolbox);
     } else {
@@ -1676,29 +1669,10 @@ SPDesktopWidget* SPDesktopWidget::createInstance(SPNamedView *namedview)
     gtk_widget_set_name(dtw->menubar, "MenuBar");
     gtk_widget_show_all (dtw->menubar);
     SPNamedView *nv = dtw->desktop->namedview;
-    dtw->rotatebar = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL,0.0,360.0,45.0);
-    gtk_widget_set_name(dtw->rotatebar, "RotateBar");
-    gtk_widget_show_all (dtw->rotatebar);
-    GtkWidget * containermenu = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
-    gtk_widget_show_all (containermenu);
-    GtkWidget * separator =  gtk_separator_new (GTK_ORIENTATION_VERTICAL);
-    gtk_widget_show_all(separator);
-    GtkWidget * label =  gtk_label_new (_("Rotation"));
-    gtk_widget_show_all(label);
-    gtk_box_pack_start (GTK_BOX (containermenu), dtw->menubar, FALSE, FALSE, 0);
-    gtk_box_pack_start (GTK_BOX (containermenu), separator, FALSE, FALSE, 10);
-    gtk_box_pack_start (GTK_BOX (containermenu), dtw->rotatebar, TRUE, TRUE, 0);
-    gtk_box_pack_start (GTK_BOX (containermenu), label, FALSE, FALSE, 10);
-    gtk_box_pack_start (GTK_BOX (dtw->vbox), containermenu, TRUE, TRUE, 0);
-    g_signal_connect (G_OBJECT (dtw->rotatebar), "button-release-event", G_CALLBACK (sp_desktop_widget_rotate_document), dtw);
-    g_signal_connect (G_OBJECT (dtw->rotatebar), "key-release-event", G_CALLBACK (sp_desktop_widget_rotate_document), dtw);
-    gtk_range_set_value(GTK_RANGE (dtw->rotatebar), nv->document_rotation);
-    //TODO: Find a better way to refresh the widget
-    gtk_widget_set_visible (dtw->rotatebar,false);
-    gtk_widget_set_visible (dtw->rotatebar,true);
-    sp_namedview_set_document_rotation(nv);
+    gtk_box_pack_start (GTK_BOX (dtw->vbox), dtw->menubar, TRUE, TRUE, 0);
     dtw->layoutWidgets();
-
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON (dtw->rotation_status), namedview->document_rotation);
+    sp_namedview_set_document_rotation(namedview);
     std::vector<GtkWidget *> toolboxes;
     toolboxes.push_back(dtw->tool_toolbox);
     toolboxes.push_back(dtw->aux_toolbox);
@@ -1738,11 +1712,9 @@ sp_desktop_widget_update_rulers (SPDesktopWidget *dtw)
 void SPDesktopWidget::namedviewModified(SPObject *obj, guint flags)
 {
     SPNamedView *nv=SP_NAMEDVIEW(obj);
-    gtk_range_set_value(GTK_RANGE(this->rotatebar), desktop->namedview->document_rotation);
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(this->rotation_status), desktop->namedview->document_rotation);
     sp_namedview_set_document_rotation(nv);
-    //TODO: Find a better way to refresh the widget
-    gtk_widget_set_visible (this->rotatebar,false);
-    gtk_widget_set_visible (this->rotatebar,true);
+
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         this->dt2r = 1. / nv->display_units->factor;
         this->ruler_origin = Geom::Point(0,0); //nv->gridorigin;   Why was the grid origin used here?
@@ -1793,30 +1765,19 @@ void SPDesktopWidget::namedviewModified(SPObject *obj, guint flags)
 }
 
 static void
-sp_desktop_widget_rotate_document(GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dtw)
+sp_desktop_widget_rotate_document(GtkSpinButton *spin, SPDesktopWidget *dtw)
 {
-    if (event->type == GDK_BUTTON_RELEASE ||
-        event->key.keyval == GDK_KEY_Page_Down || 
-        event->key.keyval == GDK_KEY_Page_Up ||
-        event->key.keyval == GDK_KEY_End ||
-        event->key.keyval == GDK_KEY_Begin ||
-        event->key.keyval == GDK_KEY_Up ||
-        event->key.keyval == GDK_KEY_Down ||
-        event->key.keyval == GDK_KEY_Left ||
-        event->key.keyval == GDK_KEY_Right)
-    {
-        SPNamedView *nv = dtw->desktop->namedview;
-        double value = gtk_range_get_value(GTK_RANGE(widget));
-        if (value != nv->document_rotation) {
-            nv->document_rotation = value;
-            sp_repr_set_svg_double(nv->getRepr(), "inkscape:document-rotation", value);
-            SPObject *updated = SP_OBJECT(nv);
-            if (updated) {
-                updated->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-            }
-            gtk_widget_grab_focus(dtw->rotatebar);
+    SPNamedView *nv = dtw->desktop->namedview;
+    double value = gtk_spin_button_get_value (spin);
+    if (!dtw->desktop->getDocument()->getRoot()->rotated && value != nv->document_rotation) {
+        nv->document_rotation = value;
+        sp_repr_set_svg_double(nv->getRepr(), "inkscape:document-rotation", value);
+        SPObject *updated = SP_OBJECT(nv);
+        if (updated) {
+            updated->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         }
     }
+    spinbutton_defocus (GTK_WIDGET(spin));
 }
 
 
@@ -2040,12 +2001,11 @@ sp_dtw_zoom_populate_popup (GtkEntry */*entry*/, GtkMenu *menu, gpointer data)
 
 
 static void
-sp_dtw_rotate_populate_popup (GtkEntry */*entry*/, GtkMenu *menu, gpointer data)
+sp_dtw_rotation_populate_popup (GtkEntry */*entry*/, GtkMenu *menu, gpointer data)
 {
     GList *children, *iter;
     GtkWidget *item;
-    SPDesktop *dt = SP_DESKTOP_WIDGET (data)->desktop;
-
+    SPDesktopWidget *dtw = static_cast<SPDesktopWidget*>(data);
     children = gtk_container_get_children (GTK_CONTAINER (menu));
     for ( iter = children ; iter ; iter = g_list_next (iter)) {
         gtk_container_remove (GTK_CONTAINER (menu), GTK_WIDGET (iter->data));
@@ -2053,46 +2013,94 @@ sp_dtw_rotate_populate_popup (GtkEntry */*entry*/, GtkMenu *menu, gpointer data)
     g_list_free (children);
 
     item = gtk_menu_item_new_with_label ("-180º");
-//    g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (sp_dtw_rotate_minus_180), dt);
+    g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (sp_dtw_rotate_minus_180), dtw);
     gtk_widget_show (item);
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
     
     item = gtk_menu_item_new_with_label ("-135º");
-//    g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (sp_dtw_rotate_minus_135), dt);
+    g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (sp_dtw_rotate_minus_135), dtw);
     gtk_widget_show (item);
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
     
     item = gtk_menu_item_new_with_label ("-90º");
-//    g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (sp_dtw_rotate_minus_90), dt);
+    g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (sp_dtw_rotate_minus_90), dtw);
     gtk_widget_show (item);
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
     
     item = gtk_menu_item_new_with_label ("-45º");
-//    g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (sp_dtw_rotate_minus_45), dt);
+    g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (sp_dtw_rotate_minus_45), dtw);
     gtk_widget_show (item);
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
     
     item = gtk_menu_item_new_with_label ("0º");
-//    g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (sp_dtw_rotate_0), dt);
+    g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (sp_dtw_rotate_0), dtw);
     gtk_widget_show (item);
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
     
     item = gtk_menu_item_new_with_label ("45º");
-//    g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (sp_dtw_rotate_45), dt);
+    g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (sp_dtw_rotate_45), dtw);
     gtk_widget_show (item);
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
     
     
     item = gtk_menu_item_new_with_label ("90º");
-//    g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (sp_dtw_rotate_90), dt);
+    g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (sp_dtw_rotate_90), dtw);
     gtk_widget_show (item);
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
     
     
     item = gtk_menu_item_new_with_label ("135º");
-//    g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (sp_dtw_rotate_135), dt);
+    g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (sp_dtw_rotate_135), dtw);
     gtk_widget_show (item);
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+}
+
+static void
+sp_dtw_rotate_minus_180 (GtkMenuItem */*item*/, SPDesktopWidget * data)
+{
+       gtk_spin_button_set_value (GTK_SPIN_BUTTON((data)->rotation_status),-180);
+}
+
+static void
+sp_dtw_rotate_minus_135 (GtkMenuItem */*item*/, SPDesktopWidget * data)
+{
+       gtk_spin_button_set_value (GTK_SPIN_BUTTON((data)->rotation_status), -135);
+}
+
+static void
+sp_dtw_rotate_minus_90 (GtkMenuItem */*item*/, SPDesktopWidget * data)
+{
+       gtk_spin_button_set_value (GTK_SPIN_BUTTON((data)->rotation_status), -90);
+}
+
+static void
+sp_dtw_rotate_minus_45 (GtkMenuItem */*item*/, SPDesktopWidget * data)
+{
+       gtk_spin_button_set_value (GTK_SPIN_BUTTON((data)->rotation_status), -45);
+}
+
+static void
+sp_dtw_rotate_0 (GtkMenuItem */*item*/,SPDesktopWidget * data)
+{
+       gtk_spin_button_set_value (GTK_SPIN_BUTTON((data)->rotation_status), 0);
+}
+
+static void
+sp_dtw_rotate_45 (GtkMenuItem */*item*/, SPDesktopWidget * data)
+{
+       gtk_spin_button_set_value (GTK_SPIN_BUTTON((data)->rotation_status), 45);
+}
+
+static void
+sp_dtw_rotate_90 (GtkMenuItem */*item*/, SPDesktopWidget * data)
+{
+       gtk_spin_button_set_value (GTK_SPIN_BUTTON((data)->rotation_status), 90);
+}
+
+static void
+sp_dtw_rotate_135 (GtkMenuItem */*item*/, SPDesktopWidget * data)
+{
+       gtk_spin_button_set_value (GTK_SPIN_BUTTON((data)->rotation_status), 135);
 }
 
 static void

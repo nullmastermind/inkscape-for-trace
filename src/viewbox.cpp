@@ -249,7 +249,6 @@ void SPViewBox::apply_viewbox(const Geom::Rect& in, double scale_none) {
     vbt[5] = y - scale_y * this->viewBox.top();
     /* Append viewbox and turn transformation */
     Geom::Point page_center = this->viewBox.midpoint();
-    Geom::Affine center_rotation = Geom::identity();
     SPDesktop * desktop = SP_ACTIVE_DESKTOP;
     if (this->angle > 0.0 || this->angle < 0.0 ) { //!0
         if (desktop) {
@@ -264,6 +263,7 @@ void SPViewBox::apply_viewbox(const Geom::Rect& in, double scale_none) {
     if (desktop && this->rotated) {
         Geom::Rect view = desktop->get_display_area();
         Geom::Point view_center = desktop->doc2dt(view.midpoint());
+        Geom::Affine center_rotation = Geom::identity();
         center_rotation *= Geom::Translate(page_center * vbt).inverse();
         center_rotation *= Geom::Rotate(Geom::rad_from_deg(this->angle - this->previous_angle));
         center_rotation *= Geom::Translate(page_center * vbt);
