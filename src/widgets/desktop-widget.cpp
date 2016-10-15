@@ -108,11 +108,8 @@ static void cms_adjust_set_sensitive( SPDesktopWidget *dtw, bool enabled );
 static void sp_desktop_widget_rotate_document(GtkSpinButton *spin, SPDesktopWidget *dtw);
 static void sp_desktop_widget_adjustment_value_changed (GtkAdjustment *adj, SPDesktopWidget *dtw);
 
-static gdouble sp_dtw_zoom_value_to_display (gdouble value);
-static gdouble sp_dtw_zoom_display_to_value (gdouble value);
-static gint sp_dtw_zoom_input (GtkSpinButton *spin, gdouble *new_val, gpointer data);
-static bool sp_dtw_zoom_output (GtkSpinButton *spin, gpointer data);
-static void sp_dtw_zoom_value_changed (GtkSpinButton *spin, gpointer data);
+static gint sp_dtw_rotation_input (GtkSpinButton *spin, gdouble *new_val, gpointer data);
+static bool sp_dtw_rotation_output (GtkSpinButton *spin, gpointer data);
 static void sp_dtw_rotation_populate_popup (GtkEntry *entry, GtkMenu *menu, gpointer data);
 static void sp_dtw_rotate_minus_180 (GtkMenuItem *item, SPDesktopWidget * data);
 static void sp_dtw_rotate_minus_135 (GtkMenuItem *item, SPDesktopWidget * data);
@@ -122,7 +119,11 @@ static void sp_dtw_rotate_0 (GtkMenuItem *item, SPDesktopWidget * data);
 static void sp_dtw_rotate_45 (GtkMenuItem *item, SPDesktopWidget * data);
 static void sp_dtw_rotate_90 (GtkMenuItem *item, SPDesktopWidget * data);
 static void sp_dtw_rotate_135 (GtkMenuItem *item, SPDesktopWidget * data);
-
+static gdouble sp_dtw_zoom_value_to_display (gdouble value);
+static gdouble sp_dtw_zoom_display_to_value (gdouble value);
+static gint sp_dtw_zoom_input (GtkSpinButton *spin, gdouble *new_val, gpointer data);
+static bool sp_dtw_zoom_output (GtkSpinButton *spin, gpointer data);
+static void sp_dtw_zoom_value_changed (GtkSpinButton *spin, gpointer data);
 static void sp_dtw_zoom_populate_popup (GtkEntry *entry, GtkMenu *menu, gpointer data);
 static void sp_dtw_zoom_menu_handler (SPDesktop *dt, gdouble factor);
 static void sp_dtw_zoom_50 (GtkMenuItem *item, gpointer data);
@@ -611,20 +612,33 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     g_signal_connect (G_OBJECT (dtw->zoom_status), "key-press-event", G_CALLBACK (spinbutton_keypress), dtw->zoom_status);
     dtw->zoom_update = g_signal_connect (G_OBJECT (dtw->zoom_status), "value_changed", G_CALLBACK (sp_dtw_zoom_value_changed), dtw);
     dtw->zoom_update = g_signal_connect (G_OBJECT (dtw->zoom_status), "populate_popup", G_CALLBACK (sp_dtw_zoom_populate_popup), dtw);
+    auto css_provider_spinbutton = Gtk::CssProvider::create();
+    css_provider_spinbutton->load_from_data("* { padding-left: 2; padding-right: 2; padding-top: 0; padding-bottom: 0;}");
+    auto zoomstat = Glib::wrap(dtw->zoom_status);
+    zoomstat->set_name("ZoomStatus");
+    auto context_zoom = zoomstat->get_style_context();
+    context_zoom->add_provider(css_provider_spinbutton, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     
     // Rotate status spinbutton
     dtw->rotation_status = gtk_spin_button_new_with_range (-180,180, 1.0);
-    gtk_widget_set_name(dtw->rotation_status, "RotationStatus");
     gtk_widget_set_tooltip_text (dtw->rotation_status, _("Rotation"));
     gtk_widget_set_size_request (dtw->rotation_status, STATUS_ROTATION_WIDTH, -1);
     gtk_entry_set_width_chars (GTK_ENTRY (dtw->rotation_status), 6);
     gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (dtw->rotation_status), FALSE);
     gtk_spin_button_set_update_policy (GTK_SPIN_BUTTON (dtw->rotation_status), GTK_UPDATE_ALWAYS);
+    g_signal_connect (G_OBJECT (dtw->rotation_status), "input", G_CALLBACK (sp_dtw_rotation_input), dtw);
+    g_signal_connect (G_OBJECT (dtw->rotation_status), "output", G_CALLBACK (sp_dtw_rotation_output), dtw);
     g_object_set_data (G_OBJECT (dtw->rotation_status), "dtw", dtw->canvas);
     g_signal_connect (G_OBJECT (dtw->rotation_status), "focus-in-event", G_CALLBACK (spinbutton_focus_in), dtw->rotation_status);
     g_signal_connect (G_OBJECT (dtw->rotation_status), "key-press-event", G_CALLBACK (spinbutton_keypress), dtw->rotation_status);
     dtw->rotation_update = g_signal_connect (G_OBJECT (dtw->rotation_status), "value_changed", G_CALLBACK (sp_desktop_widget_rotate_document), dtw);
     dtw->rotation_update = g_signal_connect (G_OBJECT (dtw->rotation_status), "populate_popup", G_CALLBACK (sp_dtw_rotation_populate_popup), dtw);
+
+    auto rotstat = Glib::wrap(dtw->rotation_status);
+    rotstat->set_name("RotationStatus");
+    auto context_rotation = rotstat->get_style_context();
+    context_rotation->add_provider(css_provider_spinbutton, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+
 
     // Cursor coordinates
     dtw->coord_status = gtk_grid_new();
@@ -657,10 +671,10 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     gtk_widget_set_halign(dtw->coord_status_y, GTK_ALIGN_END);
     gtk_grid_attach(GTK_GRID(dtw->coord_status), dtw->coord_status_x, 2, 0, 1, 1);
     gtk_grid_attach(GTK_GRID(dtw->coord_status), dtw->coord_status_y, 2, 1, 1, 1);
-    gtk_grid_attach(GTK_GRID(dtw->coord_status), label_z, 3, 0, 1, 1);
-    gtk_grid_attach(GTK_GRID(dtw->coord_status), label_r, 3, 1, 1, 1);
-    gtk_grid_attach(GTK_GRID(dtw->coord_status), dtw->zoom_status, 4, 0, 1, 1);
-    gtk_grid_attach(GTK_GRID(dtw->coord_status), dtw->rotation_status, 4, 1, 1, 1);
+    gtk_grid_attach(GTK_GRID(dtw->coord_status), label_z, 3, 0, 1, 2);
+    gtk_grid_attach(GTK_GRID(dtw->coord_status), label_r, 5, 0, 1, 2);
+    gtk_grid_attach(GTK_GRID(dtw->coord_status), dtw->zoom_status, 4, 0, 1, 2);
+    gtk_grid_attach(GTK_GRID(dtw->coord_status), dtw->rotation_status, 6, 0, 1, 2);
 
     sp_set_font_size_smaller (dtw->coord_status);
 
@@ -728,6 +742,8 @@ static void sp_desktop_widget_dispose(GObject *object)
         g_signal_handlers_disconnect_matched (G_OBJECT (dtw->zoom_status), G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, dtw->zoom_status);
         g_signal_handlers_disconnect_by_func (G_OBJECT (dtw->zoom_status), (gpointer) G_CALLBACK (sp_dtw_zoom_value_changed), dtw);
         g_signal_handlers_disconnect_by_func (G_OBJECT (dtw->zoom_status), (gpointer) G_CALLBACK (sp_dtw_zoom_populate_popup), dtw);
+        g_signal_handlers_disconnect_by_func(G_OBJECT (dtw->rotation_status), (gpointer) G_CALLBACK(sp_dtw_rotation_input), dtw);
+        g_signal_handlers_disconnect_by_func(G_OBJECT (dtw->rotation_status), (gpointer) G_CALLBACK(sp_dtw_rotation_output), dtw);
         g_signal_handlers_disconnect_matched (G_OBJECT (dtw->rotation_status), G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, dtw->rotation_status);
         g_signal_handlers_disconnect_by_func (G_OBJECT (dtw->rotation_status), (gpointer) G_CALLBACK (sp_desktop_widget_rotate_document), dtw);
         g_signal_handlers_disconnect_by_func (G_OBJECT (dtw->rotation_status), (gpointer) G_CALLBACK (sp_dtw_rotation_populate_popup), dtw);
@@ -1857,6 +1873,28 @@ sp_dtw_zoom_output (GtkSpinButton *spin, gpointer /*data*/)
     } else {
         g_snprintf (b, 64, "%4.0f%%", val);
     }
+    gtk_entry_set_text (GTK_ENTRY (spin), b);
+    return TRUE;
+}
+
+static gint
+sp_dtw_rotation_input (GtkSpinButton *spin, gdouble *new_val, gpointer /*data*/)
+{
+    gdouble new_scrolled = gtk_spin_button_get_value (spin);
+    const gchar *b = gtk_entry_get_text (GTK_ENTRY (spin));
+    gdouble new_typed = atof (b);
+
+    *new_val = new_typed;
+
+    return TRUE;
+}
+
+static bool
+sp_dtw_rotation_output (GtkSpinButton *spin, gpointer /*data*/)
+{
+    gchar b[64];
+    double val = gtk_spin_button_get_value (spin);
+    g_snprintf (b, 64, "%3.0fº", val);
     gtk_entry_set_text (GTK_ENTRY (spin), b);
     return TRUE;
 }
