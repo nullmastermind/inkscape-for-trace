@@ -2,13 +2,13 @@
 ; ==========================
 ; This file generates the Inkscape installer, which is currently the
 ; preferred deployment method on Windows.
-; 1. Install NSIS 2.46 or later on Windows (2.45 has a !searchparse bug
-;    which breaks it and earlier doesn't support Windows 7 properly, and
-;    cross-compilation probably won't work due to some !system magic)
+; 1. Install NSIS 3.0 or later (http://nsis.sourceforge.net/)
 ; 2. Compile Inkscape (http://wiki.inkscape.org/wiki/index.php/Win32Port)
-; 3. Compile this file with NSIS. There should be no need to set version
-;    numbers in this file as it gets them from the Bazaar branch info and
-;    ..\..\src\inkscape-version.cpp. However, if the version number comes
+; 3. Compile this file with NSIS.
+;    
+;    There should be no need to set version  numbers in this file as it
+;    gets them from the Bazaar branch info and inkscape.rc or
+;    inkscape-version.cpp respectively. However, if the version number comes
 ;    out wrong or this script didn't compile properly then you can define
 ;    INKSCAPE_VERSION by uncommenting the next line and setting the correct
 ;    value:
@@ -18,10 +18,17 @@
        !define RELEASE_REVISION 1
 
 ; There should never be any need for packagers to touch anything below
-; this line.  That's my job - Chris Morgan
+; this line. Otherwise file a bug or write to the mailing list.
+
+
+; Define this to make it build quickly, not including any of the files or code in the sections,
+; for quick testing of features of the installer and development thereof.
+;!define DUMMYINSTALL
+
 
 ; Installer code {{{1
-; Compression and admin requirement {{{2
+; Unicode, compression and admin requirement {{{2
+Unicode true
 SetCompressor /SOLID lzma
 SetCompressorDictSize 32
 RequestExecutionLevel admin
@@ -106,6 +113,7 @@ ShowUninstDetails hide
 !insertmacro MUI_UNPAGE_FINISH
 
 ; Localization {{{3
+!define LANGFILE_LANGDLL_FMT "%ENGNAME% / %NATIVENAME%" ; include English name in language selection dialog
 ; See also the "Languages sections" SectionGroup lower down.
 !insertmacro MUI_RESERVEFILE_LANGDLL
 ;TODO: check if `!insertmacro LANGFILE "English" "English"`-style lines are needed (don't think it should be due to MUI_LANGUAGE)
@@ -128,8 +136,9 @@ ShowUninstDetails hide
 !insertmacro INKLANGFILE Galician
 !insertmacro INKLANGFILE German
 !insertmacro INKLANGFILE Greek
-!insertmacro INKLANGFILE Indonesian
+!insertmacro INKLANGFILE Hebrew
 !insertmacro INKLANGFILE Icelandic
+!insertmacro INKLANGFILE Indonesian
 !insertmacro INKLANGFILE Italian
 !insertmacro INKLANGFILE Japanese
 !insertmacro INKLANGFILE Polish
@@ -140,7 +149,7 @@ ShowUninstDetails hide
 !insertmacro INKLANGFILE Slovak
 !insertmacro INKLANGFILE Slovenian
 !insertmacro INKLANGFILE Spanish
-!insertmacro INKLANGFILE SimpChinese
+;!insertmacro INKLANGFILE SimpChinese ; disable for now - something went wrong with encoding in the past
 !insertmacro INKLANGFILE TradChinese
 !insertmacro INKLANGFILE Ukrainian
 !verbose pop
@@ -261,7 +270,6 @@ ${VersionCompleteXXXRevision} ${INKSCAPE_VERSION_NUMBER} VERSION_X.X.X.X ${VERSI
 !define PRODUCT_NAME "Inkscape" ; TODO: fix up the language files to not use this and kill this line
 !define INSTDIR_KEY "Software\Microsoft\Windows\CurrentVersion\App Paths\inkscape.exe"
 !define UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\Inkscape"
-;!define DUMMYINSTALL ; Define this to make it build quickly, not including any of the files or code in the sections, for quick testing of features of the installer and development thereof.
 !define _FILENAME ${FILENAME}.exe
 !undef FILENAME
 !define FILENAME ${_FILENAME}
@@ -284,7 +292,7 @@ VIProductVersion ${VERSION_X.X.X.X}
 VIAddVersionKey /LANG=0 ProductName "Inkscape"
 VIAddVersionKey /LANG=0 Comments "Licensed under the GNU GPL"
 VIAddVersionKey /LANG=0 CompanyName "Inkscape Project"
-VIAddVersionKey /LANG=0 LegalCopyright "© 2016 Inkscape Project"
+VIAddVersionKey /LANG=0 LegalCopyright "Â© 2016 Inkscape Project"
 VIAddVersionKey /LANG=0 FileDescription "Inkscape Vector Graphics Editor"
 VIAddVersionKey /LANG=0 FileVersion ${VERSION_X.X.X.X}
 VIAddVersionKey /LANG=0 ProductVersion ${VERSION_X.X.X.X}
@@ -366,7 +374,7 @@ Section $(Core) SecCore ; Mandatory Inkscape core files section {{{
   File /nonfatal /a /r ${INKSCAPE_DIST_DIR}\data
   File /nonfatal /a /r ${INKSCAPE_DIST_DIR}\doc
   File /nonfatal /a /r ${INKSCAPE_DIST_DIR}\plugins
-  File /nonfatal /a /r /x *.??*.???* /x examples /x tutorials ${INKSCAPE_DIST_DIR}\share
+  File /nonfatal /a /r /x *.??*.???* /x examples /x tutorials /x locale ${INKSCAPE_DIST_DIR}\share
   !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
   ; this files are added because it slips through the filter
   SetOutPath $INSTDIR\share\icons
@@ -669,12 +677,16 @@ Section -FinalizeInstallation ; Hidden, mandatory section to finalize installati
   ClearErrors
   FileOpen $0 $INSTDIR\Uninstall.dat r
   FileOpen $9 $INSTDIR\Uninstall.log w
+  FileRead $0 $1 ; read first line (which is the header)
   ${IfNot} ${Errors}
     ${Do}
       ClearErrors
       FileRead $0 $1
       ${IfThen} ${Errors} ${|} ${ExitDo} ${|}
-      StrCpy $1 $1 -2
+      StrCpy $1 $1 -2 ; strip \r\n from path
+      ${If} ${FileExists} $1\*.* ; ignore directories
+        ${Continue}
+      ${EndIf}
       md5dll::GetMD5File /NOUNLOAD $1
       Pop $2
       ${IfThen} $2 != "" ${|} FileWrite $9 "$2  $1$\r$\n" ${|}
@@ -720,6 +732,7 @@ Function .onInit ; initialise the installer {{{2
   !macroend
 
   ; No need for English to be detected as it's the default
+  ; see https://msdn.microsoft.com/goglobal/bb964664.aspx for locale IDs
   !insertmacro LanguageAutoSelect Breton        1150
   !insertmacro LanguageAutoSelect Catalan       1027
   !insertmacro LanguageAutoSelect Czech         1029
@@ -730,8 +743,9 @@ Function .onInit ; initialise the installer {{{2
   !insertmacro LanguageAutoSelect Galician      1110
   !insertmacro LanguageAutoSelect German        1031
   !insertmacro LanguageAutoSelect Greek         1032
+  !insertmacro LanguageAutoSelect Hebrew        1037
+  !insertmacro LanguageAutoSelect Icelandic     1039
   !insertmacro LanguageAutoSelect Indonesian    1057
-  !insertmacro LanguageAutoSelect Icelandic     861
   !insertmacro LanguageAutoSelect Italian       1040
   !insertmacro LanguageAutoSelect Japanese      1041
   !insertmacro LanguageAutoSelect Polish        1045

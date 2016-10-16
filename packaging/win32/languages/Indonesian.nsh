@@ -1,4 +1,4 @@
-;Language: English (1033, ANSI)
+;Language: English (1033)
 ;By Adib Taraben <theadib@gmail.com>
 ${LangFileString} CaptionDescription "Open Source Scalable Vector Graphics Editor"
 ${LangFileString} LICENSE_BOTTOM_TEXT "$(^Name) dilepas dibawah GNU General Public License (GPL). Lisensi ditampilkan disini hanya untuk keperluan informasi saja. $_CLICK"
@@ -83,7 +83,7 @@ ${LangFileString} lng_lv "Latvian"
 ${LangFileString} lng_mk "Macedonia"
 ${LangFileString} lng_mn "Mongolia"
 ${LangFileString} lng_ne "Nepal"
-${LangFileString} lng_nb "Bokmål Norwegia"
+${LangFileString} lng_nb "BokmÃ¥l Norwegia"
 ${LangFileString} lng_nl "Belanda"
 ${LangFileString} lng_nn "Nynorsk Norwegia"
 ${LangFileString} lng_pa "Panjabi"

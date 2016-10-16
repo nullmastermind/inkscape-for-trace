@@ -4,7 +4,7 @@
 #
 # See
 #   http://nsis.sourceforge.net/SHMessageBoxCheck   (documentation)
-#   https://msdn.microsoft.com/de-de/library/windows/desktop/bb773836.aspx   (implementation details)
+#   https://msdn.microsoft.com/library/windows/desktop/bb773836.aspx   (implementation details)
 #
 
 # types to indicate the buttons displayed in the message box
