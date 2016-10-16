@@ -149,7 +149,7 @@ ShowUninstDetails hide
 !insertmacro INKLANGFILE Slovak
 !insertmacro INKLANGFILE Slovenian
 !insertmacro INKLANGFILE Spanish
-;!insertmacro INKLANGFILE SimpChinese ; disable for now - something went wrong with encoding in the past
+!insertmacro INKLANGFILE SimpChinese
 !insertmacro INKLANGFILE TradChinese
 !insertmacro INKLANGFILE Ukrainian
 !verbose pop
