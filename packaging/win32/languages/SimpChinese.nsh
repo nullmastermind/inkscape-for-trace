@@ -1,7 +1,7 @@
 ;Language: Simplified Chinese (2052)
 ;By Liang Wang <fabienow@gmail.com>
 ${LangFileString} CaptionDescription "开源向量绘图软件"
-${LangFileString} LICENSE_BOTTOM_TEXT "$(^Name) 以GNU通用公共许可证发行。 在些提供许可证内容以供参考。"
+${LangFileString} LICENSE_BOTTOM_TEXT "$(^Name) 以GNU通用公共许可证发行。 在些提供许可证内容以供参考。 $_CLICK"
 ${LangFileString} DIFFERENT_USER "使用者 $0 已经安装 Inkscape。$\r$\n如果继续你可能无法成功完成！$\r$\n请以 $0 身份登入后再试一次。"
 ${LangFileString} WANT_UNINSTALL_BEFORE "$R1 已经安装。 $\n你要在安装 $(^Name) 之前移除上一个版本？"
 ${LangFileString} OK_CANCEL_DESC "$\n$\n按“确定”继续或者按“取消”中止。"

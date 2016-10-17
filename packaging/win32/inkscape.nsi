@@ -41,16 +41,6 @@ RequestExecutionLevel admin
 !include macros\SHMessageBoxCheck.nsh
 !include macros\VersionCompleteXXXX.nsh
 
-!macro !redef VAR VAL
-  !define _!redef_${VAR} `${VAL}`
-  !ifdef ${VAR}
-    !undef ${VAR}
-  !endif
-  !define ${VAR} `${VAL}`
-  !undef _!redef_${VAR}
-!macroend
-!define !redef `!insertmacro !redef`
-
 ; Advanced Uninstall Log {{{3
 ; We're abusing this script terribly and it's time to fix the broken uninstaller.
 ; However, for the moment, this is what we're using.
@@ -60,7 +50,7 @@ RequestExecutionLevel admin
 ;!insertmacro INTERACTIVE_UNINSTALL ; not needed anymore since we have our own uninstall logic; conflicts with other macros
 
 ; Initialise NSIS plug-ins {{{3
-; The plugins used are md5dll and messagebox
+; The plugin used is md5dll
 !addplugindir plugins
 
 ; FileFunc bits and pieces {{{3
@@ -80,6 +70,7 @@ RequestExecutionLevel admin
 !define MUI_HEADERIMAGE
 !define MUI_HEADERIMAGE_BITMAP header.bmp
 !define MUI_WELCOMEFINISHPAGE_BITMAP welcomefinish.bmp
+!define MUI_UNWELCOMEFINISHPAGE_BITMAP welcomefinish.bmp
 !define MUI_COMPONENTSPAGE_SMALLDESC
 
 ; Pages {{{4
@@ -212,7 +203,7 @@ ${!ifexist} ${INKSCAPE_DIST_DIR}\gspawn-win32-helper.exe
 !endif
 ${!ifexist} ${INKSCAPE_DIST_DIR}\gspawn-win64-helper.exe
   !define BITNESS 64
-  ${!redef} FILENAME `${FILENAME}-x64` ; add architecture to filename for 64-bit builds
+  !define /redef FILENAME `${FILENAME}-x64` ; add architecture to filename for 64-bit builds
 !endif
 !ifndef BITNESS
   !error "Could not detect architecture (BITNESS) of the Inkscape build"
@@ -246,18 +237,18 @@ ${!ifexist} ..\..\.bzr\branch\last-revision
 
 ; Handle display version number and complete X.X version numbers into X.X.X.X {{{3
 !ifdef DEVEL & BZR_REVISION
-  ${!redef} FILENAME `${FILENAME}-r${BZR_REVISION}`
-  ${!redef} BrandingText `${BrandingText} r${BZR_REVISION}`
+  !define /redef FILENAME `${FILENAME}-r${BZR_REVISION}`
+  !define /redef BrandingText `${BrandingText} r${BZR_REVISION}`
   !define VERSION_X.X.X.X_REVISION ${BZR_REVISION}
 ; Handle the installer revision number {{{4
 !else ifdef RELEASE_REVISION
-  ${!redef} FILENAME `${FILENAME}-${RELEASE_REVISION}`
+  !define /redef FILENAME `${FILENAME}-${RELEASE_REVISION}`
   ; If we wanted the branding text to be like "Inkscape 0.48pre1 r9505" this'd do it.
   ;!ifdef BZR_REVISION
-  ;  ${!redef} BrandingText `${BrandingText} r${BZR_REVISION}`
+  ;  !define /redef BrandingText `${BrandingText} r${BZR_REVISION}`
   ;!endif
   !if `${RELEASE_REVISION}` != `1`
-    ${!redef} BrandingText `${BrandingText}, revision ${RELEASE_REVISION}`
+    !define /redef BrandingText `${BrandingText}, revision ${RELEASE_REVISION}`
   !endif
   !define VERSION_X.X.X.X_REVISION ${RELEASE_REVISION}
 !else
@@ -350,15 +341,13 @@ Section -removeInkscape ; Hidden, mandatory section to clean a previous installa
 !endif
 SectionEnd ; -removeInkscape }}}
 
-Section $(Core) SecCore ; Mandatory Inkscape core files section {{{
+Section "$(Core)" SecCore ; Mandatory Inkscape core files section {{{
   SectionIn 1 2 3 RO
 !ifndef DUMMYINSTALL
   DetailPrint "Installing Inkscape core files..."
+
   SetOutPath $INSTDIR
   !insertmacro UNINSTALL.LOG_OPEN_INSTALL
-  SetOverwrite on
-  SetAutoClose false
-
   File           /a    ${INKSCAPE_DIST_DIR}\ink*.exe
   File /nonfatal /a    ${INKSCAPE_DIST_DIR}\inkscape.com ; not created as of Inkscape 0.92pre1
   File           /a    ${INKSCAPE_DIST_DIR}\AUTHORS
@@ -371,10 +360,29 @@ Section $(Core) SecCore ; Mandatory Inkscape core files section {{{
   File           /a    ${INKSCAPE_DIST_DIR}\gspawn-win${BITNESS}-helper-console.exe
   File           /a    ${INKSCAPE_DIST_DIR}\README
   File           /a    ${INKSCAPE_DIST_DIR}\TRANSLATORS
-  File /nonfatal /a /r ${INKSCAPE_DIST_DIR}\data
-  File /nonfatal /a /r ${INKSCAPE_DIST_DIR}\doc
-  File /nonfatal /a /r ${INKSCAPE_DIST_DIR}\plugins
-  File /nonfatal /a /r /x *.??*.???* /x examples /x tutorials /x locale ${INKSCAPE_DIST_DIR}\share
+  !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
+
+  SetOutPath $INSTDIR\data
+  !insertmacro UNINSTALL.LOG_OPEN_INSTALL
+  File /nonfatal /a /r ${INKSCAPE_DIST_DIR}\data\*.*
+  !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
+  SetOutPath $INSTDIR\doc
+  !insertmacro UNINSTALL.LOG_OPEN_INSTALL
+  File /nonfatal /a /r ${INKSCAPE_DIST_DIR}\doc\*.*
+  !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
+  SetOutPath $INSTDIR\plugins
+  !insertmacro UNINSTALL.LOG_OPEN_INSTALL
+  File /nonfatal /a /r ${INKSCAPE_DIST_DIR}\plugins\*.*
+  !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
+  SetOutPath $INSTDIR\modules
+  !insertmacro UNINSTALL.LOG_OPEN_INSTALL
+  File /nonfatal /a /r ${INKSCAPE_DIST_DIR}\modules\*.*
+  !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
+
+  ;exclude everything from /share for which we have separate sections below
+  SetOutPath $INSTDIR\share
+  !insertmacro UNINSTALL.LOG_OPEN_INSTALL
+  File /nonfatal /a /r /x *.??*.???* /x examples /x extensions /x locale /x tutorials ${INKSCAPE_DIST_DIR}\share\*.*
   !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
   ; this files are added because it slips through the filter
   SetOutPath $INSTDIR\share\icons
@@ -382,36 +390,24 @@ Section $(Core) SecCore ; Mandatory Inkscape core files section {{{
   File /a ${INKSCAPE_DIST_DIR}\share\icons\inkscape.file.png
   File /a ${INKSCAPE_DIST_DIR}\share\icons\inkscape.file.svg
   !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
-  SetOutPath $INSTDIR\share\extensions
-  !insertmacro UNINSTALL.LOG_OPEN_INSTALL
-  File /a ${INKSCAPE_DIST_DIR}\share\extensions\inkscape.extension.rng
-  !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
-  SetOutPath $INSTDIR\share\extensions\test
-  !insertmacro UNINSTALL.LOG_OPEN_INSTALL
-  File /a ${INKSCAPE_DIST_DIR}\share\extensions\test\inkwebjs-move.test.svg
-  File /a ${INKSCAPE_DIST_DIR}\share\extensions\test\test_template.py.txt
-  !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
-  SetOutPath $INSTDIR\modules
-  !insertmacro UNINSTALL.LOG_OPEN_INSTALL
-  File /nonfatal /a /r ${INKSCAPE_DIST_DIR}\modules\*.*
-  !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
-  SetOutPath $INSTDIR\python
-  !insertmacro UNINSTALL.LOG_OPEN_INSTALL
-  File /nonfatal /a /r ${INKSCAPE_DIST_DIR}\python\*.*
-  !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
 !endif
 SectionEnd ; SecCore }}}
 
-Section $(GTKFiles) SecGTK ; Mandatory GTK files section {{{
+Section "$(GTKFiles)" SecGTK ; Mandatory GTK files section {{{
   SectionIn 1 2 3 RO
 !ifndef DUMMYINSTALL
   DetailPrint "Installing GTK files..."
   SetOutPath $INSTDIR
   !insertmacro UNINSTALL.LOG_OPEN_INSTALL
-  SetOverwrite on
-  File /a /r ${INKSCAPE_DIST_DIR}\*.dll
-  File /a /r /x locale ${INKSCAPE_DIST_DIR}\lib
-  File /a /r ${INKSCAPE_DIST_DIR}\etc
+  File /a /r /x python ${INKSCAPE_DIST_DIR}\*.dll
+  !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
+  SetOutPath $INSTDIR\lib
+  !insertmacro UNINSTALL.LOG_OPEN_INSTALL
+  File /a /r /x locale /x aspell-0.60 ${INKSCAPE_DIST_DIR}\lib\*.*
+  !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
+  SetOutPath $INSTDIR\etc
+  !insertmacro UNINSTALL.LOG_OPEN_INSTALL
+  File /a /r ${INKSCAPE_DIST_DIR}\etc\*.*
   !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
 !endif
 SectionEnd ; SecGTK }}}
@@ -423,7 +419,7 @@ Section -SetCurrentUserOnly ; Set the installation to "current user" only by def
 !endif
 SectionEnd ; -SetCurrentUserOnly }}}
 
-Section $(Alluser) SecAlluser ; Then offer the user the option to make it global (default) {{{
+Section "$(Alluser)" SecAlluser ; Then offer the user the option to make it global (default) {{{
   SectionIn 1 2 3
 !ifndef DUMMYINSTALL
   ; disable this option in Win95/Win98/WinME
@@ -435,19 +431,19 @@ SectionEnd ; SecAllUser }}}
 
 SectionGroup "$(Shortcuts)" SecShortcuts ; Create shortcuts for the user {{{
 
-Section $(Desktop) SecDesktop ; Desktop shortcut {{{
+Section "$(Desktop)" SecDesktop ; Desktop shortcut {{{
 !ifndef DUMMYINSTALL
   CreateShortCut $DESKTOP\Inkscape.lnk $INSTDIR\inkscape.exe
 !endif
 SectionEnd ; SecDesktop }}}
 
-Section $(Quicklaunch) SecQuickLaunch ; Quick Launch shortcut {{{
+Section "$(Quicklaunch)" SecQuickLaunch ; Quick Launch shortcut {{{
 !ifndef DUMMYINSTALL
   ${IfThen} $QUICKLAUNCH != $TEMP ${|} CreateShortCut $QUICKLAUNCH\Inkscape.lnk $INSTDIR\inkscape.exe ${|}
 !endif
 SectionEnd ; SecQuickLaunch }}}
 
-Section $(SVGWriter) SecSVGWriter ; Register Inkscape as the default application for .svg[z] {{{
+Section "$(SVGWriter)" SecSVGWriter ; Register Inkscape as the default application for .svg[z] {{{
   SectionIn 1 2 3
 !ifndef DUMMYINSTALL
   DetailPrint "Associating SVG files with Inkscape"
@@ -465,7 +461,7 @@ Section $(SVGWriter) SecSVGWriter ; Register Inkscape as the default application
 !endif
 SectionEnd ; SecSVGWriter }}}
 
-Section $(ContextMenu) SecContextMenu ; Put Inkscape in the .svg[z] context menus (but not as default) {{{
+Section "$(ContextMenu)" SecContextMenu ; Put Inkscape in the .svg[z] context menus (but not as default) {{{
   SectionIn 1 2 3
 !ifndef DUMMYINSTALL
   DetailPrint "Adding Inkscape to SVG file context menu"
@@ -495,27 +491,62 @@ Section /o "$(DeletePrefs)" SecPrefs ; Delete user preferences before installati
 !endif
 SectionEnd ; SecPrefs }}}
 
-SectionGroup "$(Addfiles)" SecAddfiles ; Additional files {{{
-
-Section $(Examples) SecExamples ; Install example SVG files {{{
+Section "$(Python)" SecPython ; Python distribution {{{
   SectionIn 1 2
 !ifndef DUMMYINSTALL
-  SetOutPath $INSTDIR\share
+  DetailPrint "Installing Python..."
+  SetOutPath $INSTDIR\python
   !insertmacro UNINSTALL.LOG_OPEN_INSTALL
-  File /nonfatal /a /r /x *.??*.???* ${INKSCAPE_DIST_DIR}\share\examples
+  File /nonfatal /a /r ${INKSCAPE_DIST_DIR}\python\*.*
+  !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
+!endif
+SectionEnd ; SecPython }}}
+
+SectionGroup "$(Addfiles)" SecAddfiles ; Additional files {{{
+
+Section "$(Extensions)" SecExtensions ; Extensions {{{
+  SectionIn 1 2
+!ifndef DUMMYINSTALL
+  DetailPrint "Installing extensions..."
+  SetOutPath $INSTDIR\share\extensions
+  !insertmacro UNINSTALL.LOG_OPEN_INSTALL
+  File /nonfatal /a /r ${INKSCAPE_DIST_DIR}\share\extensions\*.*
+  !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
+!endif
+SectionEnd ; SecExtensions }}}
+
+Section "$(Examples)" SecExamples ; Install example SVG files {{{
+  SectionIn 1 2
+!ifndef DUMMYINSTALL
+  DetailPrint "Installing examples..."
+  SetOutPath $INSTDIR\share\examples
+  !insertmacro UNINSTALL.LOG_OPEN_INSTALL
+  File /nonfatal /a /r /x *.??*.???* ${INKSCAPE_DIST_DIR}\share\examples\*.*
   !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
 !endif
 SectionEnd ; SecExamples }}}
 
-Section $(Tutorials) SecTutorials ; Install tutorials {{{
+Section "$(Tutorials)" SecTutorials ; Install tutorials {{{
   SectionIn 1 2
 !ifndef DUMMYINSTALL
-  SetOutPath $INSTDIR\share
+  DetailPrint "Installing tutorials..."
+  SetOutPath $INSTDIR\share\tutorials
   !insertmacro UNINSTALL.LOG_OPEN_INSTALL
-  File /nonfatal /a /r /x *.??*.???* ${INKSCAPE_DIST_DIR}\share\tutorials
+  File /nonfatal /a /r /x *.??*.???* ${INKSCAPE_DIST_DIR}\share\tutorials\*.*
   !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
 !endif
 SectionEnd ; SecTutorials }}}
+
+Section "$(Dictionaries)" SecDictionaries ; Aspell dictionaries {{{
+  SectionIn 1 2
+!ifndef DUMMYINSTALL
+  DetailPrint "Installing dictionaries..."
+  SetOutPath $INSTDIR\lib\aspell-0.60
+  !insertmacro UNINSTALL.LOG_OPEN_INSTALL
+  File /nonfatal /a /r ${INKSCAPE_DIST_DIR}\lib\aspell-0.60\*.*
+  !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
+!endif
+SectionEnd ; SecDictionaries }}}
 
 SectionGroupEnd ; SecAddfiles }}}
 
@@ -524,35 +555,42 @@ SectionGroup "$(Languages)" SecLanguages ; Languages sections {{{
     Section /o "$(lng_${lng}) (${lng})" Sec${SecName}
       ;SectionIn 1 2 3
     !ifndef DUMMYINSTALL
-      SetOutPath $INSTDIR
+      DetailPrint "Installing translations and translated content for ${SecName} (${lng}) locale..."
+      ; locale folders (/locale, /share/locale /lib/locale)
+      ${!defineifexist} ${INKSCAPE_DIST_DIR}\locale EXISTS 1
+      !ifdef EXISTS
+        !undef EXISTS
+        SetOutPath $INSTDIR\locale\${lng}
+        !insertmacro UNINSTALL.LOG_OPEN_INSTALL
+        File /nonfatal /a /r ${INKSCAPE_DIST_DIR}\locale\${lng}\*.*
+        !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
+      !endif
+      ${!defineifexist} ${INKSCAPE_DIST_DIR}\share\locale EXISTS 1
+      !ifdef EXISTS
+        !undef EXISTS
+        SetOutPath $INSTDIR\share\locale\${lng}
+        !insertmacro UNINSTALL.LOG_OPEN_INSTALL
+        File /nonfatal /a /r ${INKSCAPE_DIST_DIR}\share\locale\${lng}\*.*
+        !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
+      !endif
+      ${!defineifexist} ${INKSCAPE_DIST_DIR}\lib\locale EXISTS 1
+      !ifdef EXISTS
+        !undef EXISTS
+        SetOutPath $INSTDIR\lib\locale\${lng}
+        !insertmacro UNINSTALL.LOG_OPEN_INSTALL
+        File /nonfatal /a /r ${INKSCAPE_DIST_DIR}\lib\locale\${lng}\*.*
+        !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
+      !endif
+      
+      ; localized documentation, templates and tutorials
+      SetOutPath $INSTDIR\doc
       !insertmacro UNINSTALL.LOG_OPEN_INSTALL
-      File /nonfatal /a ${INKSCAPE_DIST_DIR}\*.${lng}.txt ; FIXME: remove this?  No such files.
-      !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
-      SetOutPath $INSTDIR\locale
-      !insertmacro UNINSTALL.LOG_OPEN_INSTALL
-      File /nonfatal /a /r ${INKSCAPE_DIST_DIR}\locale\${lng}
-      !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
-      SetOutPath $INSTDIR\lib\locale
-      !insertmacro UNINSTALL.LOG_OPEN_INSTALL
-      File /nonfatal /a /r ${INKSCAPE_DIST_DIR}\lib\locale\${lng}
-      !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
-      SetOutPath $INSTDIR\share\clipart
-      !insertmacro UNINSTALL.LOG_OPEN_INSTALL
-      File /nonfatal /a /r ${INKSCAPE_DIST_DIR}\share\clipart\*.${lng}.svg
-      !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
-      ; the keyboard tables
-      SetOutPath $INSTDIR\share\screens
-      !insertmacro UNINSTALL.LOG_OPEN_INSTALL
-      File /nonfatal /a /r ${INKSCAPE_DIST_DIR}\share\screens\*.${lng}.svg
+      File /nonfatal /a ${INKSCAPE_DIST_DIR}\doc\*.${lng}.html ; keys.${lng}.html
+      File /nonfatal /a ${INKSCAPE_DIST_DIR}\doc\*.${lng}.txt ; HACKING.${lng}.html
       !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
       SetOutPath $INSTDIR\share\templates
       !insertmacro UNINSTALL.LOG_OPEN_INSTALL
       File /nonfatal /a /r ${INKSCAPE_DIST_DIR}\share\templates\*.${lng}.svg
-      !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
-      SetOutPath $INSTDIR\doc
-      !insertmacro UNINSTALL.LOG_OPEN_INSTALL
-      File /nonfatal /a /r ${INKSCAPE_DIST_DIR}\doc\keys.${lng}.xml
-      File /nonfatal /a /r ${INKSCAPE_DIST_DIR}\doc\keys.${lng}.html
       !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
       SectionGetFlags ${SecTutorials} $R1
       IntOp $R1 $R1 & ${SF_SELECTED}
@@ -638,7 +676,6 @@ SectionGroup "$(Languages)" SecLanguages ; Languages sections {{{
 SectionGroupEnd ; SecLanguages }}}
 
 Section -FinalizeInstallation ; Hidden, mandatory section to finalize installation {{{
-
 !ifndef DUMMYINSTALL
   DetailPrint "Finalizing installation"
   ${IfThen} $MultiUser  = 1 ${|} SetShellVarContext all ${|}
@@ -709,9 +746,12 @@ SectionEnd ; -FinalizeInstallation }}}
   !insertmacro MUI_DESCRIPTION_TEXT ${SecSVGWriter} "$(SVGWriterDesc)"
   !insertmacro MUI_DESCRIPTION_TEXT ${SecContextMenu} "$(ContextMenuDesc)"
   !insertmacro MUI_DESCRIPTION_TEXT ${SecPrefs} "$(DeletePrefsDesc)"
+  !insertmacro MUI_DESCRIPTION_TEXT ${SecPython} "$(PythonDesc)"
   !insertmacro MUI_DESCRIPTION_TEXT ${SecAddfiles} "$(AddfilesDesc)"
+  !insertmacro MUI_DESCRIPTION_TEXT ${SecExtensions} "$(ExtensionsDesc)"
   !insertmacro MUI_DESCRIPTION_TEXT ${SecExamples} "$(ExamplesDesc)"
   !insertmacro MUI_DESCRIPTION_TEXT ${SecTutorials} "$(TutorialsDesc)"
+  !insertmacro MUI_DESCRIPTION_TEXT ${SecDictionaries} "$(DictionariesDesc)"
   !insertmacro MUI_DESCRIPTION_TEXT ${SecLanguages} "$(LanguagesDesc)"
 !insertmacro MUI_FUNCTION_DESCRIPTION_END ; Section descriptions }}}
 
@@ -1123,7 +1163,6 @@ Section Uninstall ; do the uninstalling {{{
   Delete $INSTDIR\uninstall.log
   Delete $INSTDIR\uninstall.exe
   RMDir $INSTDIR
-  SetAutoClose false
 !endif
 SectionEnd ; Uninstall }}}
 ; }}}
