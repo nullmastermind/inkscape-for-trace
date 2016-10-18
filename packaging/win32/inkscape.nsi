@@ -410,7 +410,20 @@ Section "$(Alluser)" SecAlluser ; Then offer the user the option to make it glob
 !endif
 SectionEnd ; SecAllUser }}}
 
+Section /o "$(DeletePrefs)" SecPrefs ; Delete user preferences before installation {{{
+!ifndef DUMMYINSTALL
+  !insertmacro delprefs
+!endif
+SectionEnd ; SecPrefs }}}
+
 SectionGroup "$(Shortcuts)" SecShortcuts ; Create shortcuts for the user {{{
+
+Section "$(Startmenu)" SecStartMenu ; Start menu shortcut {{{
+  SectionIn 1 2 3
+!ifndef DUMMYINSTALL
+  CreateShortcut $SMPROGRAMS\Inkscape.lnk $INSTDIR\inkscape.exe
+!endif
+SectionEnd ; SecStartMenu }}}
 
 Section "$(Desktop)" SecDesktop ; Desktop shortcut {{{
   SectionIn 1 2 3
@@ -467,12 +480,6 @@ Section "$(ContextMenu)" SecContextMenu ; Put Inkscape in the .svg[z] context me
 SectionEnd ; SecContextMenu }}}
 
 SectionGroupEnd ; SecShortcuts }}}
-
-Section /o "$(DeletePrefs)" SecPrefs ; Delete user preferences before installation {{{
-!ifndef DUMMYINSTALL
-  !insertmacro delprefs
-!endif
-SectionEnd ; SecPrefs }}}
 
 Section "$(Python)" SecPython ; Python distribution {{{
   SectionIn 1 2
@@ -603,9 +610,6 @@ Section -FinalizeInstallation ; Hidden, mandatory section to finalize installati
   WriteRegStr SHCTX "${INSTDIR_KEY}" askMultiUser $askMultiUser
   WriteRegStr SHCTX "${INSTDIR_KEY}" User         $User
 
-  ; start menu entries
-  CreateShortcut $SMPROGRAMS\Inkscape.lnk $INSTDIR\inkscape.exe
-
   ; uninstall settings
   ; WriteUninstaller $INSTDIR\uninst.exe
   WriteRegExpandStr SHCTX "${UNINST_KEY}" UninstallString ${UNINST_EXE}
@@ -658,6 +662,7 @@ SectionEnd ; -FinalizeInstallation }}}
   !insertmacro MUI_DESCRIPTION_TEXT ${SecGTK} "$(GTKFilesDesc)"
   !insertmacro MUI_DESCRIPTION_TEXT ${SecShortcuts} "$(ShortcutsDesc)"
   !insertmacro MUI_DESCRIPTION_TEXT ${SecAlluser} "$(AlluserDesc)"
+  !insertmacro MUI_DESCRIPTION_TEXT ${SecStartMenu} "$(StartmenuDesc)"
   !insertmacro MUI_DESCRIPTION_TEXT ${SecDesktop} "$(DesktopDesc)"
   !insertmacro MUI_DESCRIPTION_TEXT ${SecQuickLaunch} "$(QuicklaunchDesc)"
   !insertmacro MUI_DESCRIPTION_TEXT ${SecSVGWriter} "$(SVGWriterDesc)"
