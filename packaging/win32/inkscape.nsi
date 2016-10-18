@@ -5,7 +5,7 @@
 ; 1. Install NSIS 3.0 or later (http://nsis.sourceforge.net/)
 ; 2. Compile Inkscape (http://wiki.inkscape.org/wiki/index.php/Win32Port)
 ; 3. Compile this file with NSIS.
-;    
+;
 ;    There should be no need to set version  numbers in this file as it
 ;    gets them from the Bazaar branch info and inkscape.rc or
 ;    inkscape-version.cpp respectively. However, if the version number comes
@@ -23,7 +23,7 @@
 
 ; Define this to make it build quickly, not including any of the files or code in the sections,
 ; for quick testing of features of the installer and development thereof.
-;!define DUMMYINSTALL
+!define DUMMYINSTALL
 
 
 ; Installer code {{{1
@@ -40,6 +40,7 @@ RequestExecutionLevel admin
 !include macros\RequireLatestNSIS.nsh
 !include macros\SHMessageBoxCheck.nsh
 !include macros\VersionCompleteXXXX.nsh
+!include languages\_language_lists.nsh
 
 ; Advanced Uninstall Log {{{3
 ; We're abusing this script terribly and it's time to fix the broken uninstaller.
@@ -113,36 +114,12 @@ ShowUninstDetails hide
 !verbose 3
 !insertmacro MUI_LANGUAGE "English"
 !insertmacro LANGFILE_INCLUDE "languages\English.nsh"
-!macro INKLANGFILE _LANG
-  !insertmacro MUI_LANGUAGE "${_LANG}"
-  !insertmacro LANGFILE_INCLUDE_WITHDEFAULT "languages\${_LANG}.nsh" "languages\English.nsh"
+!macro INKLANGFILE  LocaleName LocaleID
+  !insertmacro MUI_LANGUAGE "${LocaleName}"
+  !insertmacro LANGFILE_INCLUDE_WITHDEFAULT "languages\${LocaleName}.nsh" "languages\English.nsh"
 !macroend
-!insertmacro INKLANGFILE Breton
-!insertmacro INKLANGFILE Catalan
-!insertmacro INKLANGFILE Czech
-!insertmacro INKLANGFILE Danish
-!insertmacro INKLANGFILE Dutch
-!insertmacro INKLANGFILE Finnish
-!insertmacro INKLANGFILE French
-!insertmacro INKLANGFILE Galician
-!insertmacro INKLANGFILE German
-!insertmacro INKLANGFILE Greek
-!insertmacro INKLANGFILE Hebrew
-!insertmacro INKLANGFILE Icelandic
-!insertmacro INKLANGFILE Indonesian
-!insertmacro INKLANGFILE Italian
-!insertmacro INKLANGFILE Japanese
-!insertmacro INKLANGFILE Polish
-!insertmacro INKLANGFILE Portuguese
-!insertmacro INKLANGFILE PortugueseBR
-!insertmacro INKLANGFILE Romanian
-!insertmacro INKLANGFILE Russian
-!insertmacro INKLANGFILE Slovak
-!insertmacro INKLANGFILE Slovenian
-!insertmacro INKLANGFILE Spanish
-!insertmacro INKLANGFILE SimpChinese
-!insertmacro INKLANGFILE TradChinese
-!insertmacro INKLANGFILE Ukrainian
+; include list of available installer translations from /languages/_language_lists.nsh
+!insertmacro INSTALLER_TRANSLATIONS INKLANGFILE
 !verbose pop
 
 ReserveFile inkscape.nsi.uninstall
@@ -390,6 +367,10 @@ Section "$(Core)" SecCore ; Mandatory Inkscape core files section {{{
   File /a ${INKSCAPE_DIST_DIR}\share\icons\inkscape.file.png
   File /a ${INKSCAPE_DIST_DIR}\share\icons\inkscape.file.svg
   !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
+  SetOutPath $INSTDIR\share\templates
+  !insertmacro UNINSTALL.LOG_OPEN_INSTALL
+  File /a ${INKSCAPE_DIST_DIR}\share\templates\default.en_US.svg
+  !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
 !endif
 SectionEnd ; SecCore }}}
 
@@ -581,7 +562,7 @@ SectionGroup "$(Languages)" SecLanguages ; Languages sections {{{
         File /nonfatal /a /r ${INKSCAPE_DIST_DIR}\lib\locale\${lng}\*.*
         !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
       !endif
-      
+
       ; localized documentation, templates and tutorials
       SetOutPath $INSTDIR\doc
       !insertmacro UNINSTALL.LOG_OPEN_INSTALL
@@ -604,75 +585,9 @@ SectionGroup "$(Languages)" SecLanguages ; Languages sections {{{
     SectionEnd
   !macroend ; Language }}}
 
-  ; Now create each section with the Language macro {{{
-  !insertmacro Language Amharic           am
-  !insertmacro Language Arabic            ar
-  !insertmacro Language Azerbaijani       az
-  !insertmacro Language Byelorussian      be
-  !insertmacro Language Bulgarian         bg
-  !insertmacro Language Bengali           bn
-  !insertmacro Language BengaliBangladesh bn_BD
-  !insertmacro Language Breton            br
-  !insertmacro Language Catalan           ca
-  !insertmacro Language CatalanValencia   ca@valencia
-  !insertmacro Language Czech             cs
-  !insertmacro Language Danish            da
-  !insertmacro Language German            de
-  !insertmacro Language Dzongkha          dz
-  !insertmacro Language Greek             el
-  !insertmacro Language EnglishAustralian en_AU
-  !insertmacro Language EnglishCanadian   en_CA
-  !insertmacro Language EnglishBritain    en_GB
-  !insertmacro Language EnglishPiglatin   en_US@piglatin
-  !insertmacro Language Esperanto         eo
-  !insertmacro Language Spanish           es
-  !insertmacro Language SpanishMexico     es_MX
-  !insertmacro Language Estonian          et
-  !insertmacro Language Basque            eu
-  !insertmacro Language Farsi             fa
-  !insertmacro Language French            fr
-  !insertmacro Language Finnish           fi
-  !insertmacro Language Irish             ga
-  !insertmacro Language Galician          gl
-  !insertmacro Language Hebrew            he
-  !insertmacro Language Croatian          hr
-  !insertmacro Language Hungarian         hu
-  !insertmacro Language Armenian          hy
-  !insertmacro Language Indonesian        id
-  !insertmacro Language Icelandic         is
-  !insertmacro Language Italian           it
-  !insertmacro Language Japanese          ja
-  !insertmacro Language Khmer             km
-  !insertmacro Language Korean            ko
-  !insertmacro Language Lithuanian        lt
-  !insertmacro Language Latvian           lv
-  !insertmacro Language Mongolian         mn
-  !insertmacro Language Macedonian        mk
-  !insertmacro Language NorwegianBokmal   nb
-  !insertmacro Language Nepali            ne
-  !insertmacro Language Dutch             nl
-  !insertmacro Language NorwegianNynorsk  nn
-  !insertmacro Language Panjabi           pa
-  !insertmacro Language Polish            pl
-  !insertmacro Language Portuguese        pt
-  !insertmacro Language PortugueseBrazil  pt_BR
-  !insertmacro Language Romanian          ro
-  !insertmacro Language Russian           ru
-  !insertmacro Language Kinyarwanda       rw
-  !insertmacro Language Slovak            sk
-  !insertmacro Language Slovenian         sl
-  !insertmacro Language Albanian          sq
-  !insertmacro Language Serbian           sr
-  !insertmacro Language SerbianLatin      sr@latin
-  !insertmacro Language Swedish           sv
-  !insertmacro Language Telugu            te
-  !insertmacro Language Thai              th
-  !insertmacro Language Turkish           tr
-  !insertmacro Language Ukrainian         uk
-  !insertmacro Language Vietnamese        vi
-  !insertmacro Language SimpChinese       zh_CN
-  !insertmacro Language TradChinese       zh_TW
-  ; }}}
+  ; Now create each section with the Language macro.
+  ; include list of available inkscape translations from /languages/_language_lists.nsh
+  !insertmacro INKSCAPE_TRANSLATIONS Language
 SectionGroupEnd ; SecLanguages }}}
 
 Section -FinalizeInstallation ; Hidden, mandatory section to finalize installation {{{
@@ -742,7 +657,7 @@ SectionEnd ; -FinalizeInstallation }}}
   !insertmacro MUI_DESCRIPTION_TEXT ${SecShortcuts} "$(ShortcutsDesc)"
   !insertmacro MUI_DESCRIPTION_TEXT ${SecAlluser} "$(AlluserDesc)"
   !insertmacro MUI_DESCRIPTION_TEXT ${SecDesktop} "$(DesktopDesc)"
-  !insertmacro MUI_DESCRIPTION_TEXT ${SecQuicklaunch} "$(QuicklaunchDesc)"
+  !insertmacro MUI_DESCRIPTION_TEXT ${SecQuickLaunch} "$(QuicklaunchDesc)"
   !insertmacro MUI_DESCRIPTION_TEXT ${SecSVGWriter} "$(SVGWriterDesc)"
   !insertmacro MUI_DESCRIPTION_TEXT ${SecContextMenu} "$(ContextMenuDesc)"
   !insertmacro MUI_DESCRIPTION_TEXT ${SecPrefs} "$(DeletePrefsDesc)"
@@ -763,42 +678,17 @@ Function .onInit ; initialise the installer {{{2
   ; Language detection {{{
   !insertmacro MUI_LANGDLL_DISPLAY
 
-  !macro LanguageAutoSelect SecName LocaleID
+  !macro LanguageAutoSelect LocaleName LocaleID
     ${If} $LANGUAGE = ${LocaleID}
-      SectionGetFlags ${Sec${SecName}} $0
+      SectionGetFlags ${Sec${LocaleName}} $0
       IntOp $0 $0 | ${SF_SELECTED}
-      SectionSetFlags ${Sec${SecName}} $0
+      SectionSetFlags ${Sec${LocaleName}} $0
     ${EndIf}
   !macroend
 
+  ; include list for installer autoselection from /languages/_language_lists.nsh
   ; No need for English to be detected as it's the default
-  ; see https://msdn.microsoft.com/goglobal/bb964664.aspx for locale IDs
-  !insertmacro LanguageAutoSelect Breton        1150
-  !insertmacro LanguageAutoSelect Catalan       1027
-  !insertmacro LanguageAutoSelect Czech         1029
-  !insertmacro LanguageAutoSelect Danish        1030
-  !insertmacro LanguageAutoSelect Dutch         1043
-  !insertmacro LanguageAutoSelect Finnish       1035
-  !insertmacro LanguageAutoSelect French        1036
-  !insertmacro LanguageAutoSelect Galician      1110
-  !insertmacro LanguageAutoSelect German        1031
-  !insertmacro LanguageAutoSelect Greek         1032
-  !insertmacro LanguageAutoSelect Hebrew        1037
-  !insertmacro LanguageAutoSelect Icelandic     1039
-  !insertmacro LanguageAutoSelect Indonesian    1057
-  !insertmacro LanguageAutoSelect Italian       1040
-  !insertmacro LanguageAutoSelect Japanese      1041
-  !insertmacro LanguageAutoSelect Polish        1045
-  !insertmacro LanguageAutoSelect Portuguese    2070
-  !insertmacro LanguageAutoSelect PortugueseBrazil  1046
-  !insertmacro LanguageAutoSelect Romanian      1048
-  !insertmacro LanguageAutoSelect Russian       1049
-  !insertmacro LanguageAutoSelect Slovak        1051
-  !insertmacro LanguageAutoSelect Slovenian     1060
-  !insertmacro LanguageAutoSelect Spanish       1034
-  !insertmacro LanguageAutoSelect SimpChinese   2052
-  !insertmacro LanguageAutoSelect TradChinese   1028
-  !insertmacro LanguageAutoSelect Ukrainian     1058
+  !insertmacro INSTALLER_TRANSLATIONS LanguageAutoSelect
   ; End of language detection }}}
 
   !insertmacro UNINSTALL.LOG_PREPARE_INSTALL ; prepare advanced uninstallation log script
@@ -865,100 +755,39 @@ Function .onInit ; initialise the installer {{{2
   !verbose 3
   ${GetParameters} $CMDARGS
 
-  !macro Parameter key Section
+  !macro Parameter Section key
     ${GetOptions} $CMDARGS /${key}= $1
     ${If} $1 == OFF
-      SectionGetFlags ${Section} $0
+      SectionGetFlags ${Sec${Section}} $0
       IntOp $2 ${SF_SELECTED} ~
       IntOp $0 $0 & $2
-      SectionSetFlags ${Section} $0
+      SectionSetFlags ${Sec${Section}} $0
     ${EndIf}
     ${If} $1 == ON
-      SectionGetFlags ${Section} $0
+      SectionGetFlags ${Sec${Section}} $0
       IntOp $0 $0 | ${SF_SELECTED}
-      SectionSetFlags ${Section} $0
+      SectionSetFlags ${Sec${Section}} $0
     ${EndIf}
   !macroend
 
-  !insertmacro Parameter GTK            ${SecGTK}
-  !insertmacro Parameter SHORTCUTS      ${secShortcuts}
-  !insertmacro Parameter ALLUSER        ${SecAlluser}
-  !insertmacro Parameter DESKTOP        ${SecDesktop}
-  !insertmacro Parameter QUICKLAUNCH    ${SecQUICKlaunch}
-  !insertmacro Parameter SVGEDITOR      ${SecSVGWriter}
-  !insertmacro Parameter CONTEXTMENUE   ${SecContextMenu}
-  !insertmacro Parameter PREFERENCES    ${SecPrefs}
-  !insertmacro Parameter ADDFILES       ${SecAddfiles}
-  !insertmacro Parameter EXAMPLES       ${SecExamples}
-  !insertmacro Parameter TUTORIALS      ${SecTutorials}
-  !insertmacro Parameter LANGUAGES      ${SecLanguages}
-  !insertmacro Parameter am             ${SecAmharic}
-  !insertmacro Parameter ar             ${SecArabic}
-  !insertmacro Parameter az             ${SecAzerbaijani}
-  !insertmacro Parameter be             ${SecByelorussian}
-  !insertmacro Parameter bg             ${SecBulgarian}
-  !insertmacro Parameter bn             ${SecBengali}
-  !insertmacro Parameter bn_BD          ${SecBengaliBangladesh}
-  !insertmacro Parameter br             ${SecBreton}
-  !insertmacro Parameter ca             ${SecCatalan}
-  !insertmacro Parameter ca@valencia    ${SecCatalanValencia}
-  !insertmacro Parameter cs             ${SecCzech}
-  !insertmacro Parameter da             ${SecDanish}
-  !insertmacro Parameter de             ${SecGerman}
-  !insertmacro Parameter dz             ${SecDzongkha}
-  !insertmacro Parameter el             ${SecGreek}
-  !insertmacro Parameter en_AU          ${SecEnglishAustralian}
-  !insertmacro Parameter en_CA          ${SecEnglishCanadian}
-  !insertmacro Parameter en_GB          ${SecEnglishBritain}
-  !insertmacro Parameter en_US@piglatin ${SecEnglishPiglatin}
-  !insertmacro Parameter eo             ${SecEsperanto}
-  !insertmacro Parameter es             ${SecSpanish}
-  !insertmacro Parameter es_MX          ${SecSpanishMexico}
-  !insertmacro Parameter et             ${SecEstonian}
-  !insertmacro Parameter eu             ${SecBasque}
-  !insertmacro Parameter fa             ${SecFarsi}
-  !insertmacro Parameter fi             ${SecFinnish}
-  !insertmacro Parameter fr             ${SecFrench}
-  !insertmacro Parameter ga             ${SecIrish}
-  !insertmacro Parameter gl             ${SecGalician}
-  !insertmacro Parameter he             ${SecHebrew}
-  !insertmacro Parameter hr             ${SecCroatian}
-  !insertmacro Parameter hu             ${SecHungarian}
-  !insertmacro Parameter hy             ${SecArmenian}
-  !insertmacro Parameter id             ${SecIndonesian}
-  !insertmacro Parameter is             ${SecIcelandic}
-  !insertmacro Parameter it             ${SecItalian}
-  !insertmacro Parameter ja             ${SecJapanese}
-  !insertmacro Parameter km             ${SecKhmer}
-  !insertmacro Parameter ko             ${SecKorean}
-  !insertmacro Parameter lt             ${SecLithuanian}
-  !insertmacro Parameter lv             ${SecLatvian}
-  !insertmacro Parameter mk             ${SecMacedonian}
-  !insertmacro Parameter mn             ${SecMongolian}
-  !insertmacro Parameter nb             ${SecNorwegianBokmal}
-  !insertmacro Parameter ne             ${SecNepali}
-  !insertmacro Parameter nl             ${SecDutch}
-  !insertmacro Parameter nn             ${SecNorwegianNynorsk}
-  !insertmacro Parameter pa             ${SecPanjabi}
-  !insertmacro Parameter pl             ${SecPolish}
-  !insertmacro Parameter pt             ${SecPortuguese}
-  !insertmacro Parameter pt_BR          ${SecPortugueseBrazil}
-  !insertmacro Parameter ro             ${SecRomanian}
-  !insertmacro Parameter ru             ${SecRussian}
-  !insertmacro Parameter rw             ${SecKinyarwanda}
-  !insertmacro Parameter sk             ${SecSlovak}
-  !insertmacro Parameter sl             ${SecSlovenian}
-  !insertmacro Parameter sq             ${SecAlbanian}
-  !insertmacro Parameter sr             ${SecSerbian}
-  !insertmacro Parameter sr@latin       ${SecSerbianLatin}
-  !insertmacro Parameter sv             ${SecSwedish}
-  !insertmacro Parameter te             ${SecTelugu}
-  !insertmacro Parameter th             ${SecThai}
-  !insertmacro Parameter tr             ${SecTurkish}
-  !insertmacro Parameter uk             ${SecUkrainian}
-  !insertmacro Parameter vi             ${SecVietnamese}
-  !insertmacro Parameter zh_CN          ${SecSimpChinese}
-  !insertmacro Parameter zh_TW          ${SecTradChinese}
+  !insertmacro Parameter GTK          GTK
+  !insertmacro Parameter Shortcuts    SHORTCUTS
+  !insertmacro Parameter Alluser      ALLUSER
+  !insertmacro Parameter Desktop      DESKTOP
+  !insertmacro Parameter QuickLaunch  QUICKLAUNCH
+  !insertmacro Parameter SVGWriter    SVGEDITOR
+  !insertmacro Parameter ContextMenu  CONTEXTMENUE
+  !insertmacro Parameter Prefs        PREFERENCES
+  !insertmacro Parameter Python       PYTHON
+  !insertmacro Parameter Addfiles     ADDFILES
+  !insertmacro Parameter Extensions   EXTENSIONS
+  !insertmacro Parameter Examples     EXAMPLES
+  !insertmacro Parameter Tutorials    TUTORIALS
+  !insertmacro Parameter Dictionaries DICTIONARIES
+  !insertmacro Parameter Languages    LANGUAGES
+
+  ; include list of available inkscape translations for parameter generation from /languages/_language_lists.nsh
+  !insertmacro INKSCAPE_TRANSLATIONS Parameter
 
   ClearErrors
   ${GetOptions} $CMDARGS /? $1
@@ -975,15 +804,21 @@ Function .onInit ; initialise the installer {{{2
       /SVGEDITOR=(OFF/ON): default SVG editor$\r$\n \
       /CONTEXTMENUE=(OFF/ON): context menue integration$\r$\n \
       /PREFERENCES=(OFF/ON): delete users preference files$\r$\n \
+      /PYTHON=(OFF/ON): python distribution$\r$\n \
       /ADDFILES=(OFF/ON): additional files$\r$\n \
+      /EXTENSIONS=(OFF/ON): extensions$\r$\n \
       /EXAMPLES=(OFF/ON): examples$\r$\n \
       /TUTORIALS=(OFF/ON): tutorials$\r$\n \
+      /DICTIONARIES=(OFF/ON): dictionaries$\r$\n \
       /LANGUAGES=(OFF/ON): translated menues, examples, etc.$\r$\n \
       /[locale code]=(OFF/ON): e.g am, es, es_MX as in Inkscape supported"
     Abort
-    !verbose pop
-  ${EndIf} ; }}}
+  ${EndIf}
+  !verbose pop ; }}}
 FunctionEnd ; .onInit }}}
+
+
+
 ; Uninstaller code {{{1
 Function un.onInit ; initialise uninstaller {{{
   ;begin uninstall, could be added on top of uninstall section instead
