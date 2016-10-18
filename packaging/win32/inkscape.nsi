@@ -23,7 +23,7 @@
 
 ; Define this to make it build quickly, not including any of the files or code in the sections,
 ; for quick testing of features of the installer and development thereof.
-!define DUMMYINSTALL
+;!define DUMMYINSTALL
 
 
 ; Installer code {{{1
@@ -86,9 +86,9 @@ LicenseForceSelection off
 !insertmacro MUI_PAGE_LICENSE ..\..\Copying
 ; Components page {{{6
 !insertmacro MUI_PAGE_COMPONENTS
-; InstType "$(Full)"
-; InstType "$(Optimal)"
-; InstType "$(Minimal)"
+InstType "$(Full)"
+InstType "$(Optimal)"
+InstType "$(Minimal)"
 ;Directory page {{{6
 !insertmacro MUI_PAGE_DIRECTORY
 ; Instfiles page {{{6
@@ -413,12 +413,14 @@ SectionEnd ; SecAllUser }}}
 SectionGroup "$(Shortcuts)" SecShortcuts ; Create shortcuts for the user {{{
 
 Section "$(Desktop)" SecDesktop ; Desktop shortcut {{{
+  SectionIn 1 2 3
 !ifndef DUMMYINSTALL
   CreateShortCut $DESKTOP\Inkscape.lnk $INSTDIR\inkscape.exe
 !endif
 SectionEnd ; SecDesktop }}}
 
 Section "$(Quicklaunch)" SecQuickLaunch ; Quick Launch shortcut {{{
+  SectionIn 1 2 3
 !ifndef DUMMYINSTALL
   ${IfThen} $QUICKLAUNCH != $TEMP ${|} CreateShortCut $QUICKLAUNCH\Inkscape.lnk $INSTDIR\inkscape.exe ${|}
 !endif
@@ -534,7 +536,7 @@ SectionGroupEnd ; SecAddfiles }}}
 SectionGroup "$(Languages)" SecLanguages ; Languages sections {{{
   !macro Language SecName lng ; A macro to create each section {{{
     Section /o "$(lng_${lng}) (${lng})" Sec${SecName}
-      ;SectionIn 1 2 3
+      SectionIn 1 ; flags will be adjusted below, see LanguageAutoSelect in .onInit
     !ifndef DUMMYINSTALL
       DetailPrint "Installing translations and translated content for ${SecName} (${lng}) locale..."
       ; locale folders (/locale, /share/locale /lib/locale)
@@ -680,9 +682,8 @@ Function .onInit ; initialise the installer {{{2
 
   !macro LanguageAutoSelect LocaleName LocaleID
     ${If} $LANGUAGE = ${LocaleID}
-      SectionGetFlags ${Sec${LocaleName}} $0
-      IntOp $0 $0 | ${SF_SELECTED}
-      SectionSetFlags ${Sec${LocaleName}} $0
+      SectionSetInstTypes ${Sec${LocaleName}} 3 ; this equals binary "011" (which flags the default for sections 1 and 2 but not 3)
+                                                ; and is equivalent to "SectionIn 1 2"
     ${EndIf}
   !macroend
 
@@ -690,6 +691,9 @@ Function .onInit ; initialise the installer {{{2
   ; No need for English to be detected as it's the default
   !insertmacro INSTALLER_TRANSLATIONS LanguageAutoSelect
   ; End of language detection }}}
+
+  ; ser the second InstType ("Optimal") as default
+  SetCurInstType 1
 
   !insertmacro UNINSTALL.LOG_PREPARE_INSTALL ; prepare advanced uninstallation log script
 
