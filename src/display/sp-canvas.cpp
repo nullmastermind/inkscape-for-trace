@@ -1997,10 +1997,10 @@ void SPCanvas::startRotateTo(double angle)
         if (ang > 180) {
             ang -= 360;
         }
-        double rot = (-180.0 + x - start_angle)*(M_PI/180.);
+        double rot = (-180.0 + x)*(M_PI/180.);
         double dist = half_min-9;
         gint inverse = 1;
-        if((x- start_angle) < 91 || (x- start_angle) > 270) {
+        if((x) < 91 || (x) > 270) {
             inverse = -1;
         }
         if(x%10 == 0) {
@@ -2012,11 +2012,11 @@ void SPCanvas::startRotateTo(double angle)
             cairo_text_extents(cr, s.c_str(), &extents);
             //std::cout << extents.width/2 << "extents.x_bearing\n";
             cairo_translate(cr, (extents.width/2) * inverse * -1, (dist + ((extents.height/2)* inverse)));
-            if((x- start_angle) < 91 || (x- start_angle) > 270) {
+            if((x) < 91 || (x) > 270) {
                 cairo_rotate(cr, 180*(M_PI/180.0));
             }
             cairo_text_path(cr, s.c_str());
-            if((x- start_angle) < 91 || (x- start_angle) > 270) {
+            if((x) < 91 || (x) > 270) {
                 cairo_rotate(cr, -180*(M_PI/180.0));
             }
             cairo_translate(cr, (extents.width/2) * inverse , (dist + ((extents.height/2)* inverse)) * -1);
@@ -2043,6 +2043,21 @@ void SPCanvas::startRotateTo(double angle)
     cairo_arc(cr, half_w, half_h, half_min-30, 0, 2*M_PI);
     cairo_set_source_rgba (cr, 1, 1, 1, 1);
     cairo_fill(cr);
+    cairo_translate(cr, half_w, half_h);
+    cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
+    cairo_rotate(cr, start_angle*(M_PI/180.));
+    cairo_move_to(cr, 0, 0); 
+    cairo_line_to(cr, 0, (half_min-17) * -1);
+    cairo_set_source_rgba (cr, 1, 1, 1, 0.25);
+    cairo_set_line_cap(cr, CAIRO_LINE_CAP_ROUND); 
+    cairo_set_line_width (cr,5);
+    cairo_stroke(cr);
+    cairo_move_to(cr, 0, 0); 
+    cairo_line_to(cr, 0, (half_min-17) * -1);
+    cairo_set_source_rgba (cr, 1, 0, 0, 0.9);
+    cairo_set_line_width (cr,1);
+    cairo_stroke(cr);
+    cairo_rotate(cr, -start_angle*(M_PI/180.));
     cairo_destroy(cr);
     surface_measure = new_backing_store_measure;
 
@@ -2083,6 +2098,9 @@ void SPCanvas::rotateTo(SPCanvasItem * item, double angle)
     }
     GtkAllocation allocation;
     gtk_widget_get_allocation(&_widget, &allocation);
+    int half_w = allocation.width/2;
+    int half_h = allocation.height/2;
+    int half_min = std::min(half_w,half_h);
     cairo_surface_t *new_backing_store = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, allocation.width, allocation.height);
     cairo_t *cr = cairo_create(new_backing_store);
     cairo_set_source_surface(cr, surface_origin, 0, 0);
@@ -2101,6 +2119,33 @@ void SPCanvas::rotateTo(SPCanvasItem * item, double angle)
     cairo_paint(cr);
     cairo_set_source_surface(cr, surface_measure, 0, 0);
     cairo_paint(cr);
+    cairo_translate(cr, half_w, half_h);
+    cairo_rotate(cr, angle*(M_PI/180.));
+    cairo_move_to(cr, 0, 0); 
+    cairo_line_to(cr, 0, (half_min-17) * -1);
+    cairo_set_source_rgba (cr, 1, 1, 1, 0.25);
+    cairo_set_line_cap(cr, CAIRO_LINE_CAP_ROUND); 
+    cairo_set_line_width (cr,5);
+    cairo_stroke(cr);
+    cairo_move_to(cr, 0, 0); 
+    cairo_line_to(cr, 0, (half_min-17) * -1);
+    cairo_set_source_rgba (cr, 1, 1, 1, 0.9);
+    cairo_set_line_width (cr,1);
+    cairo_stroke(cr);
+    cairo_move_to(cr, 0, 0); 
+    cairo_line_to(cr, 0, (half_min-17) * -1);
+    cairo_set_source_rgba (cr, 1, 0, 0, 0.9);
+    const double dashed[] = {6.0, 3.0};
+    int len  = sizeof(dashed) / sizeof(dashed[0]);
+    cairo_set_dash(cr, dashed, len, 1);
+    cairo_stroke(cr);
+    cairo_translate(cr, -half_w, -half_h);
+    cairo_set_source_rgba (cr, 1, 1, 1, 0.25);
+    cairo_arc(cr, half_w, half_h, 7, 0, 2*M_PI);
+    cairo_fill(cr);
+    cairo_set_source_rgba (cr, 1, 0, 0, 0.7);
+    cairo_arc(cr, half_w, half_h, 5, 0, 2*M_PI);
+    cairo_fill(cr);
     cairo_destroy(cr);
     cairo_surface_destroy(_backing_store);
     _backing_store = new_backing_store;
