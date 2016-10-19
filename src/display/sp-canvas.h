@@ -72,7 +72,9 @@ GType sp_canvas_get_type() G_GNUC_CONST;
 struct SPCanvas {
     /// Scrolls canvas to specific position (cx and cy are measured in screen pixels).
     void scrollTo(double cx, double cy, unsigned int clear, bool is_scrolling = false);
-
+    void startRotateTo(double angle);
+    void rotateTo(SPCanvasItem * item, double angle);
+    void endRotateTo();
     /// Synchronously updates the canvas if necessary.
     void updateNow();
 

@@ -62,7 +62,6 @@
 #include "spw-utilities.h"
 #include "toolbox.h"
 #include "widget-sizes.h"
-
 #include "verbs.h"
 #include <gtkmm/cssprovider.h>
 #include <gtkmm/paned.h>
@@ -1785,15 +1784,20 @@ sp_desktop_widget_rotate_document(GtkSpinButton *spin, SPDesktopWidget *dtw)
 {
     SPNamedView *nv = dtw->desktop->namedview;
     double value = gtk_spin_button_get_value (spin);
-    if (!dtw->desktop->getDocument()->getRoot()->rotated && value != nv->document_rotation) {
-        nv->document_rotation = value;
-        sp_repr_set_svg_double(nv->getRepr(), "inkscape:document-rotation", value);
-        SPObject *updated = SP_OBJECT(nv);
-        if (updated) {
-            updated->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-        }
-    }
-    spinbutton_defocus (GTK_WIDGET(spin));
+//    if (!dtw->desktop->getDocument()->getRoot()->rotated && value != nv->document_rotation) {
+//        nv->document_rotation = value;
+//        sp_repr_set_svg_double(nv->getRepr(), "inkscape:document-rotation", value);
+//        SPObject *updated = SP_OBJECT(nv);
+//        if (updated) {
+//            updated->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+//        }
+//        //dtw->desktop->canvas->endRotateTo();
+//    } else if( value != nv->document_rotation ) {
+        dtw->desktop->canvas->startRotateTo(0);
+        dtw->desktop->canvas->rotateTo(dtw->desktop->getDrawing(),value);
+        if (value == 180) { dtw->desktop->canvas->endRotateTo();}
+//   }
+   spinbutton_defocus (GTK_WIDGET(spin));
 }
 
 

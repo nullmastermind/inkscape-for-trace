@@ -345,7 +345,6 @@ bool ToolBase::root_handler(GdkEvent* event) {
             /* sp_desktop_dialog(); */
         }
         break;
-
     case GDK_BUTTON_PRESS:
         // save drag origin
         xp = (gint) event->button.x;
@@ -446,7 +445,6 @@ bool ToolBase::root_handler(GdkEvent* event) {
                     // do not drag if we're within tolerance from origin
                     break;
                 }
-
                 // Once the user has moved farther than tolerance from
                 // the original location (indicating they intend to move
                 // the object, not click), then always process the motion
