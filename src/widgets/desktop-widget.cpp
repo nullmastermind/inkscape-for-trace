@@ -619,11 +619,12 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     context_zoom->add_provider(css_provider_spinbutton, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     
     // Rotate status spinbutton
-    dtw->rotation_status = gtk_spin_button_new_with_range (-180,180, 1.0);
+    dtw->rotation_status = gtk_spin_button_new_with_range (-360.0,360.0, 1.0);
     gtk_widget_set_tooltip_text (dtw->rotation_status, _("Rotation"));
     gtk_widget_set_size_request (dtw->rotation_status, STATUS_ROTATION_WIDTH, -1);
-    gtk_entry_set_width_chars (GTK_ENTRY (dtw->rotation_status), 6);
+    gtk_entry_set_width_chars (GTK_ENTRY (dtw->rotation_status), 7);
     gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (dtw->rotation_status), FALSE);
+    gtk_spin_button_set_digits (GTK_SPIN_BUTTON (dtw->rotation_status), 2);
     gtk_spin_button_set_update_policy (GTK_SPIN_BUTTON (dtw->rotation_status), GTK_UPDATE_ALWAYS);
     g_signal_connect (G_OBJECT (dtw->rotation_status), "input", G_CALLBACK (sp_dtw_rotation_input), dtw);
     g_signal_connect (G_OBJECT (dtw->rotation_status), "output", G_CALLBACK (sp_dtw_rotation_output), dtw);
@@ -1784,20 +1785,19 @@ sp_desktop_widget_rotate_document(GtkSpinButton *spin, SPDesktopWidget *dtw)
 {
     SPNamedView *nv = dtw->desktop->namedview;
     double value = gtk_spin_button_get_value (spin);
-//    if (!dtw->desktop->getDocument()->getRoot()->rotated && value != nv->document_rotation) {
-//        nv->document_rotation = value;
-//        sp_repr_set_svg_double(nv->getRepr(), "inkscape:document-rotation", value);
-//        SPObject *updated = SP_OBJECT(nv);
-//        if (updated) {
-//            updated->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-//        }
-//        //dtw->desktop->canvas->endRotateTo();
-//    } else if( value != nv->document_rotation ) {
-        dtw->desktop->canvas->startRotateTo(0);
-        dtw->desktop->canvas->rotateTo(dtw->desktop->getDrawing(),value);
-        if (value == 180) { dtw->desktop->canvas->endRotateTo();}
-//   }
-   spinbutton_defocus (GTK_WIDGET(spin));
+    if (!dtw->desktop->getDocument()->getRoot()->rotated && value != nv->document_rotation) {
+        nv->document_rotation = value;
+        sp_repr_set_svg_double(nv->getRepr(), "inkscape:document-rotation", value);
+        SPObject *updated = SP_OBJECT(nv);
+        if (updated) {
+            updated->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+        }
+        //dtw->desktop->canvas->endRotateTo();
+    }// else if( value != nv->document_rotation ) {
+        //dtw->desktop->canvas->startRotateTo(value);
+       // dtw->desktop->canvas->rotateTo(dtw->desktop->getDrawing(),value);
+    // }
+    spinbutton_defocus (GTK_WIDGET(spin));
 }
 
 
@@ -1898,7 +1898,7 @@ sp_dtw_rotation_output (GtkSpinButton *spin, gpointer /*data*/)
 {
     gchar b[64];
     double val = gtk_spin_button_get_value (spin);
-    g_snprintf (b, 64, "%3.0fº", val);
+    g_snprintf (b, 64, "%3.2fº", val);
     gtk_entry_set_text (GTK_ENTRY (spin), b);
     return TRUE;
 }

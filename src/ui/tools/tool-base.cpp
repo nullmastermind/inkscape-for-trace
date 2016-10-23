@@ -327,6 +327,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
     static unsigned int panning = 0;
     static unsigned int panning_cursor = 0;
     static unsigned int zoom_rb = 0;
+    static double angle = 0;
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
@@ -345,6 +346,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
             /* sp_desktop_dialog(); */
         }
         break;
+
     case GDK_BUTTON_PRESS:
         // save drag origin
         xp = (gint) event->button.x;
@@ -393,21 +395,25 @@ bool ToolBase::root_handler(GdkEvent* event) {
             break;
 
         case 3:
-            if ((event->button.state & GDK_SHIFT_MASK) || (event->button.state & GDK_CONTROL_MASK)) {
-                // When starting panning, make sure there are no snap events pending because these might disable the panning again
-                if (_uses_snap) {
-                    sp_event_context_discard_delayed_snap_event(this);
-                }
-                panning = 3;
+//            if ((event->button.state & GDK_SHIFT_MASK) || (event->button.state & GDK_CONTROL_MASK)) {
+//                // When starting panning, make sure there are no snap events pending because these might disable the panning again
+//                if (_uses_snap) {
+//                    sp_event_context_discard_delayed_snap_event(this);
+//                }
+//                panning = 3;
 
-                sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
-                        GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK
-                                | GDK_POINTER_MOTION_HINT_MASK, NULL,
-                        event->button.time);
+//                sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
+//                        GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK
+//                                | GDK_POINTER_MOTION_HINT_MASK, NULL,
+//                        event->button.time);
 
-                ret = TRUE;
-            } else {
+//                ret = TRUE;
+//            } else 
+            if( !this->space_panning ) {
                 sp_event_root_menu_popup(desktop, NULL, event);
+            } else {
+                panning = 5;
+                desktop->canvas->startRotateTo(desktop->namedview->document_rotation);
             }
             break;
 
@@ -418,7 +424,27 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
     case GDK_MOTION_NOTIFY:
         if (panning) {
-            if (panning == 4 && !xp && !yp ) {
+            if (panning == 5) {
+                button_w = Geom::Point(event->motion.x, event->motion.y);
+                Geom::Point const motion_dt(desktop->w2d(button_w));
+                Geom::Rect view = desktop->get_display_area();
+                Geom::Point view_center = desktop->doc2dt(view.midpoint());
+                Geom::Ray center_ray(motion_dt,view_center);
+                if (event->motion.state & GDK_BUTTON3_MASK) {
+                    desktop->canvas->startRotateTo(desktop->namedview->document_rotation);
+                    if (event->motion.state & GDK_SHIFT_MASK) {
+                        angle = floor(center_ray.angle()/5) * 5;
+                    } else if (event->motion.state & GDK_CONTROL_MASK) {
+                        angle = center_ray.angle();
+                    } else if (event->motion.state & GDK_KEY_Alt_L ||
+                              event->motion.state & GDK_KEY_Alt_R){
+                        angle = desktop->namedview->document_rotation;
+                    } else {
+                        angle = floor(center_ray.angle());
+                    }
+                    desktop->canvas->rotateTo(desktop->getDrawing(), angle);
+                }
+            } else if (panning == 4 && !xp && !yp ) {
                 // <Space> + mouse panning started, save location and grab canvas
                 xp = event->motion.x;
                 yp = event->motion.y;
@@ -430,41 +456,43 @@ bool ToolBase::root_handler(GdkEvent* event) {
                                 | GDK_POINTER_MOTION_HINT_MASK, NULL,
                         event->motion.time - 1);
             }
+            if (panning != 5) {
+                if ((panning == 2 && !(event->motion.state & GDK_BUTTON2_MASK))
+                        || (panning == 1 && !(event->motion.state & GDK_BUTTON1_MASK))
+                        || (panning == 3 && !(event->motion.state & GDK_BUTTON3_MASK))) {
+                    /* Gdk seems to lose button release for us sometimes :-( */
+                    panning = 0;
+                    sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate), event->button.time);
+                    ret = TRUE;
+                } else {
+                    if (within_tolerance && (abs((gint) event->motion.x - xp)
+                            < tolerance) && (abs((gint) event->motion.y - yp)
+                            < tolerance)) {
+                        // do not drag if we're within tolerance from origin
+                        break;
+                    }
 
-            if ((panning == 2 && !(event->motion.state & GDK_BUTTON2_MASK))
-                    || (panning == 1 && !(event->motion.state & GDK_BUTTON1_MASK))
-                    || (panning == 3 && !(event->motion.state & GDK_BUTTON3_MASK))) {
-                /* Gdk seems to lose button release for us sometimes :-( */
-                panning = 0;
-                sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate), event->button.time);
-                ret = TRUE;
-            } else {
-                if (within_tolerance && (abs((gint) event->motion.x - xp)
-                        < tolerance) && (abs((gint) event->motion.y - yp)
-                        < tolerance)) {
-                    // do not drag if we're within tolerance from origin
-                    break;
+                    // Once the user has moved farther than tolerance from
+                    // the original location (indicating they intend to move
+                    // the object, not click), then always process the motion
+                    // notify coordinates as given (no snapping back to origin)
+                    within_tolerance = false;
+
+                    // gobble subsequent motion events to prevent "sticking"
+                    // when scrolling is slow
+                    gobble_motion_events(panning == 2 ? GDK_BUTTON2_MASK : (panning
+                            == 1 ? GDK_BUTTON1_MASK : GDK_BUTTON3_MASK));
+
+                    if (panning_cursor == 0) {
+                        panning_cursor = 1;
+                        this->sp_event_context_set_cursor(GDK_FLEUR);
+                    }
+
+                    Geom::Point const motion_w(event->motion.x, event->motion.y);
+                    Geom::Point const moved_w(motion_w - button_w);
+                    this->desktop->scroll_world(moved_w, true); // we're still scrolling, do not redraw
+                    ret = TRUE;
                 }
-                // Once the user has moved farther than tolerance from
-                // the original location (indicating they intend to move
-                // the object, not click), then always process the motion
-                // notify coordinates as given (no snapping back to origin)
-                within_tolerance = false;
-
-                // gobble subsequent motion events to prevent "sticking"
-                // when scrolling is slow
-                gobble_motion_events(panning == 2 ? GDK_BUTTON2_MASK : (panning
-                        == 1 ? GDK_BUTTON1_MASK : GDK_BUTTON3_MASK));
-
-                if (panning_cursor == 0) {
-                    panning_cursor = 1;
-                    this->sp_event_context_set_cursor(GDK_FLEUR);
-                }
-
-                Geom::Point const motion_w(event->motion.x, event->motion.y);
-                Geom::Point const moved_w(motion_w - button_w);
-                this->desktop->scroll_world(moved_w, true); // we're still scrolling, do not redraw
-                ret = TRUE;
             }
         } else if (zoom_rb) {
             Geom::Point const motion_w(event->motion.x, event->motion.y);
@@ -494,60 +522,68 @@ bool ToolBase::root_handler(GdkEvent* event) {
         break;
 
     case GDK_BUTTON_RELEASE:
-        xp = yp = 0;
+        if (panning == 5) {
+            desktop->canvas->endRotateTo();
+            sp_repr_set_svg_double(desktop->namedview->getRepr(), "inkscape:document-rotation", angle);
+            SPObject *updated = SP_OBJECT(desktop->namedview);
+            if (updated) {
+                updated->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+            }
+        } else {
+            xp = yp = 0;
+            if (panning_cursor == 1) {
+                panning_cursor = 0;
+                GtkWidget *w = GTK_WIDGET(this->desktop->getCanvas());
+                gdk_window_set_cursor(gtk_widget_get_window (w), this->cursor);
+            }
 
-        if (panning_cursor == 1) {
-            panning_cursor = 0;
-            GtkWidget *w = GTK_WIDGET(this->desktop->getCanvas());
-            gdk_window_set_cursor(gtk_widget_get_window (w), this->cursor);
-        }
+            if (within_tolerance && (panning || zoom_rb)) {
+                zoom_rb = 0;
 
-        if (within_tolerance && (panning || zoom_rb)) {
-            zoom_rb = 0;
+                if (panning) {
+                    panning = 0;
+                    sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate),
+                            event->button.time);
+                }
 
-            if (panning) {
+                Geom::Point const event_w(event->button.x, event->button.y);
+                Geom::Point const event_dt(desktop->w2d(event_w));
+
+                double const zoom_inc = prefs->getDoubleLimited(
+                        "/options/zoomincrement/value", M_SQRT2, 1.01, 10);
+
+                desktop->zoom_relative_keep_point(event_dt, (event->button.state
+                        & GDK_SHIFT_MASK) ? 1 / zoom_inc : zoom_inc);
+
+                desktop->updateNow();
+                ret = TRUE;
+            } else if (panning == event->button.button) {
                 panning = 0;
                 sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate),
                         event->button.time);
+
+                // in slow complex drawings, some of the motion events are lost;
+                // to make up for this, we scroll it once again to the button-up event coordinates
+                // (i.e. canvas will always get scrolled all the way to the mouse release point,
+                // even if few intermediate steps were visible)
+                Geom::Point const motion_w(event->button.x, event->button.y);
+                Geom::Point const moved_w(motion_w - button_w);
+
+                this->desktop->scroll_world(moved_w);
+                desktop->updateNow();
+                ret = TRUE;
+            } else if (zoom_rb == event->button.button) {
+                zoom_rb = 0;
+
+                Geom::OptRect const b = Inkscape::Rubberband::get(desktop)->getRectangle();
+                Inkscape::Rubberband::get(desktop)->stop();
+
+                if (b && !within_tolerance) {
+                    desktop->set_display_area(*b, 10);
+                }
+
+                ret = TRUE;
             }
-
-            Geom::Point const event_w(event->button.x, event->button.y);
-            Geom::Point const event_dt(desktop->w2d(event_w));
-
-            double const zoom_inc = prefs->getDoubleLimited(
-                    "/options/zoomincrement/value", M_SQRT2, 1.01, 10);
-
-            desktop->zoom_relative_keep_point(event_dt, (event->button.state
-                    & GDK_SHIFT_MASK) ? 1 / zoom_inc : zoom_inc);
-
-            desktop->updateNow();
-            ret = TRUE;
-        } else if (panning == event->button.button) {
-            panning = 0;
-            sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate),
-                    event->button.time);
-
-            // in slow complex drawings, some of the motion events are lost;
-            // to make up for this, we scroll it once again to the button-up event coordinates
-            // (i.e. canvas will always get scrolled all the way to the mouse release point,
-            // even if few intermediate steps were visible)
-            Geom::Point const motion_w(event->button.x, event->button.y);
-            Geom::Point const moved_w(motion_w - button_w);
-
-            this->desktop->scroll_world(moved_w);
-            desktop->updateNow();
-            ret = TRUE;
-        } else if (zoom_rb == event->button.button) {
-            zoom_rb = 0;
-
-            Geom::OptRect const b = Inkscape::Rubberband::get(desktop)->getRectangle();
-            Inkscape::Rubberband::get(desktop)->stop();
-
-            if (b && !within_tolerance) {
-                desktop->set_display_area(*b, 10);
-            }
-
-            ret = TRUE;
         }
         break;
 

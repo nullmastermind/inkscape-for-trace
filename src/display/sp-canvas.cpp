@@ -43,6 +43,8 @@
 #include "debug/gdk-event-latency-tracker.h"
 #include "desktop.h"
 #include "color.h"
+#include <iomanip>
+#include <glibmm/i18n.h>
 
 using Inkscape::Debug::GdkEventLatencyTracker;
 
@@ -1992,6 +1994,8 @@ void SPCanvas::startRotateTo(double angle)
     cairo_set_source_rgba (cr, 1, 1, 1, 0.2);
     cairo_fill(cr);
     cairo_translate(cr, half_w, half_h);
+    cairo_select_font_face(cr, "sans-serif", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL);
+    cairo_set_font_size(cr, 10.0);
     for (gint x = 0; x < 360 ; x++){
         gint ang = 360 - x ;//+ 90;
         if (ang > 180) {
@@ -2005,8 +2009,6 @@ void SPCanvas::startRotateTo(double angle)
         }
         if(x%10 == 0) {
             cairo_rotate(cr, -rot);
-            cairo_select_font_face(cr, "sans-serif", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL);
-            cairo_set_font_size(cr, 10.0);
             cairo_text_extents_t extents;
             std::string s = std::to_string(ang) + "º";
             cairo_text_extents(cr, s.c_str(), &extents);
@@ -2075,7 +2077,9 @@ void SPCanvas::startRotateTo(double angle)
     cairo_paint(cr);
     cairo_destroy(cr);
     surface_origin  = new_backing_store_grey;
-
+    gtk_widget_queue_draw(GTK_WIDGET(this));
+    dirtyAll();
+    addIdle();
 }
 
 void SPCanvas::endRotateTo()
@@ -2091,9 +2095,9 @@ void SPCanvas::endRotateTo()
     addIdle();
 }
 
-void SPCanvas::rotateTo(SPCanvasItem * item, double angle)
+void SPCanvas::rotateTo(SPCanvasItem * item, double angle, bool widget)
 {
-    if (!_backing_store) {
+    if (!_backing_store || !started) {
         return; 
     }
     GtkAllocation allocation;
@@ -2146,6 +2150,60 @@ void SPCanvas::rotateTo(SPCanvasItem * item, double angle)
     cairo_set_source_rgba (cr, 1, 0, 0, 0.7);
     cairo_arc(cr, half_w, half_h, 5, 0, 2*M_PI);
     cairo_fill(cr);
+    cairo_translate(cr, half_w, half_h);
+    cairo_rotate(cr, -angle*(M_PI/180.));
+    if (!widget) {
+        cairo_select_font_face(cr, "sans-serif", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL);
+        cairo_set_font_size(cr, 15.0);
+        cairo_text_extents_t extents;
+        std::ostringstream s;
+        s << _("Original angle ") << std::fixed << std::setprecision(2) << start_angle << "º";
+        cairo_text_extents(cr, s.str().c_str(), &extents);
+        cairo_translate(cr, half_w - extents.width -15 ,-half_h + 25);
+        cairo_set_source_rgba (cr, 1, 1, 1, 1);
+        cairo_text_path(cr, s.str().c_str());
+        cairo_fill(cr);
+        cairo_translate(cr, (half_w - extents.width -15) *-1 ,(-half_h + 25) *-1);
+        s.str("");
+        s << _("New angle ") << std::fixed << std::setprecision(2) << angle << "º";
+        cairo_text_extents(cr, s.str().c_str(), &extents);
+        cairo_translate(cr, half_w - extents.width -15 ,-half_h + 45);
+        cairo_text_path(cr, s.str().c_str());
+        cairo_fill(cr);
+        cairo_translate(cr, (half_w - extents.width -15) *-1 ,(-half_h + 45) *-1);
+        s.str("");
+        s << _("Gap ") << std::fixed << std::setprecision(2) << std::abs(start_angle-angle) << "º";
+        cairo_text_extents(cr, s.str().c_str(), &extents);
+        cairo_translate(cr, half_w - extents.width -15 ,-half_h + 65);
+        cairo_text_path(cr, s.str().c_str());
+        cairo_fill(cr);
+        cairo_translate(cr, (half_w - extents.width -15) *-1 ,(-half_h + 65) *-1);
+        cairo_translate(cr, -half_w + 10 ,-half_h + 25);
+        s.str("");
+        cairo_set_font_size(cr, 12.0);
+        s << _("Normal mode, 1º round step");
+        cairo_text_path(cr, s.str().c_str());
+        cairo_fill(cr);
+        cairo_translate(cr, (-half_w +10) * -1 ,(-half_h + 25) * -1);
+        cairo_translate(cr, -half_w + 10 ,-half_h + 40);
+        s.str("");
+        s << _("+CTRL, Fractional degrees");
+        cairo_text_path(cr, s.str().c_str());
+        cairo_fill(cr);
+        cairo_translate(cr, (-half_w + 10) * -1 ,(-half_h + 40) * -1);
+        cairo_translate(cr, -half_w + 10 ,-half_h + 55);
+        s.str("");
+        s << _("+SHIFT, 5º round step");
+        cairo_text_path(cr, s.str().c_str());
+        cairo_fill(cr);
+        cairo_translate(cr, (-half_w + 10) * -1 ,(-half_h + 55) * -1);
+        cairo_translate(cr, -half_w + 10 ,-half_h + 70);
+        s.str("");
+        s << _("+ALT, Reset");
+        cairo_text_path(cr, s.str().c_str());
+        cairo_fill(cr);
+        //cairo_translate(cr, (-half_w + 10) * -1 ,(-half_h + 60) * -1);
+    }
     cairo_destroy(cr);
     cairo_surface_destroy(_backing_store);
     _backing_store = new_backing_store;
