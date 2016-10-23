@@ -66,6 +66,7 @@
 #include <gtkmm/cssprovider.h>
 #include <gtkmm/paned.h>
 #include <gtkmm/messagedialog.h>
+#include <iomanip>
 
 #if defined (SOLARIS) && (SOLARIS == 8)
 #include "round.h"
@@ -1890,7 +1891,11 @@ sp_dtw_rotation_input (GtkSpinButton *spin, gdouble *new_val, gpointer /*data*/)
     const gchar *b = gtk_entry_get_text (GTK_ENTRY (spin));
     gdouble new_typed = atof (b);
 
-    *new_val = new_typed;
+    if (new_scrolled == new_typed) { // the new value is set by scrolling
+        *new_val = new_scrolled;
+    } else { // the new value is typed in
+        *new_val = new_typed;
+    }
 
     return TRUE;
 }
@@ -1900,8 +1905,10 @@ sp_dtw_rotation_output (GtkSpinButton *spin, gpointer /*data*/)
 {
     gchar b[64];
     double val = gtk_spin_button_get_value (spin);
-    g_snprintf (b, 64, "%3.2fº", val);
-    gtk_entry_set_text (GTK_ENTRY (spin), b);
+    std::ostringstream s;
+    s.imbue(std::locale(""));;
+    s << std::fixed << std::setprecision(2) << val << "º";
+    gtk_entry_set_text (GTK_ENTRY (spin), s.str().c_str());
     return TRUE;
 }
 
