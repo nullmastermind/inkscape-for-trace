@@ -1792,11 +1792,13 @@ sp_desktop_widget_rotate_document(GtkSpinButton *spin, SPDesktopWidget *dtw)
         if (updated) {
             updated->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         }
-        //dtw->desktop->canvas->endRotateTo();
-    }// else if( value != nv->document_rotation ) {
-        //dtw->desktop->canvas->startRotateTo(value);
-       // dtw->desktop->canvas->rotateTo(dtw->desktop->getDrawing(),value);
-    // }
+        dtw->desktop->canvas->endRotateTo();
+    }
+//    } else if( value != nv->document_rotation ) {
+//        dtw->desktop->canvas->clearRotateTo();
+//        dtw->desktop->canvas->startRotateTo(value);
+//        dtw->desktop->canvas->rotateTo(dtw->desktop->getDrawing(),value);
+//    }
     spinbutton_defocus (GTK_WIDGET(spin));
 }
 

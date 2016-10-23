@@ -516,7 +516,21 @@ bool ToolBase::root_handler(GdkEvent* event) {
             break;
 
         case GDK_BUTTON_RELEASE:
+            desktop->canvas->clearRotateTo();
             if (this->space_panning && event->button.button == 3) {
+                xp = yp = 0;
+                if (panning_cursor == 1) {
+                    panning_cursor = 0;
+                    GtkWidget *w = GTK_WIDGET(this->desktop->getCanvas());
+                    gdk_window_set_cursor(gtk_widget_get_window (w), this->cursor);
+                }
+                zoom_rb = 0;
+                if (panning) {
+                    panning = 0;
+                    sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate),
+                            event->button.time);
+                }
+                ret = TRUE;
                 if (desktop->canvas->endRotateTo()) {
                     sp_repr_set_svg_double(desktop->namedview->getRepr(), "inkscape:document-rotation", angle);
                     SPObject *updated = SP_OBJECT(desktop->namedview);
@@ -580,7 +594,6 @@ bool ToolBase::root_handler(GdkEvent* event) {
                     ret = TRUE;
                 }
             }
-            desktop->canvas->clearRotateTo();
             break;
 
         case GDK_KEY_PRESS: {
