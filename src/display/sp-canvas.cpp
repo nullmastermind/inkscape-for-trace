@@ -2077,31 +2077,33 @@ void SPCanvas::startRotateTo(double angle)
     cairo_paint(cr);
     cairo_destroy(cr);
     surface_origin  = new_backing_store_grey;
-    clearRotateTo(true);
+    gtk_widget_queue_draw(GTK_WIDGET(this));
+    dirtyAll();
+    addIdle();
 }
 
 bool SPCanvas::endRotateTo()
 {
-    if (!started) {
+    if (!_backing_store || !started) {
         return false; 
     }
     started = false;
     surface_rotated = NULL;
     surface_origin  = NULL;
-    clearRotateTo(true);
+    gtk_widget_queue_draw(GTK_WIDGET(this));
+    dirtyAll();
+    addIdle();
     return true;
 }
 
-void SPCanvas::clearRotateTo(bool clear)
+void SPCanvas::clearRotateTo()
 {
     if (!started) {
         return; 
     }
     gtk_widget_queue_draw(GTK_WIDGET(this));
     dirtyAll();
-    if (clear) {
-        addIdle();
-    }
+    addIdle();
 }
 
 void SPCanvas::rotateTo(SPCanvasItem * item, double angle, bool widget)
@@ -2217,7 +2219,8 @@ void SPCanvas::rotateTo(SPCanvasItem * item, double angle, bool widget)
     cairo_surface_destroy(_backing_store);
     _backing_store = new_backing_store;
     cairo_pattern_destroy (source_pattern);
-    clearRotateTo(false);
+    gtk_widget_queue_draw(GTK_WIDGET(this));
+    addIdle();
 }
 
 void SPCanvas::updateNow()

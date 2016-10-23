@@ -334,7 +334,6 @@ bool ToolBase::root_handler(GdkEvent* event) {
     /// @todo REmove redundant /value in preference keys
     tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
     bool allow_panning = prefs->getBool("/options/spacebarpans/value");
-    bool clear = true;
     gint ret = FALSE;
 
     switch (event->type) {
@@ -346,7 +345,6 @@ bool ToolBase::root_handler(GdkEvent* event) {
             } else {
                 /* sp_desktop_dialog(); */
             }
-            desktop->canvas->clearRotateTo();
             break;
 
         case GDK_BUTTON_PRESS:
@@ -434,14 +432,13 @@ bool ToolBase::root_handler(GdkEvent* event) {
                                     | GDK_POINTER_MOTION_HINT_MASK, NULL,
                             event->motion.time - 1);
                 } else if (this->space_panning && event->motion.state & GDK_BUTTON3_MASK) {
-                    clear = false;
                     sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate), event->button.time);
                     desktop->canvas->startRotateTo(desktop->namedview->document_rotation);
                     button_w = Geom::Point(event->motion.x, event->motion.y);
-                    Geom::Point const motion_dt(desktop->w2d(button_w));
+                    Geom::Point const motion_dt(desktop->doc2dt(desktop->w2d(button_w)));
                     Geom::Rect view = desktop->get_display_area();
                     Geom::Point view_center = desktop->doc2dt(view.midpoint());
-                    Geom::Ray center_ray(view_center, motion_dt);
+                    Geom::Ray center_ray(motion_dt, view_center);
                     desktop->canvas->startRotateTo(desktop->namedview->document_rotation);
                     angle = Geom::deg_from_rad(center_ray.angle()) - 90;
                     if (event->motion.state & GDK_SHIFT_MASK && event->motion.state & GDK_CONTROL_MASK) {
@@ -583,6 +580,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
                     ret = TRUE;
                 }
             }
+            desktop->canvas->clearRotateTo();
             break;
 
         case GDK_KEY_PRESS: {
@@ -752,6 +750,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
             switch (get_group0_keyval(&event->key)) {
             case GDK_KEY_space:
+                desktop->canvas->clearRotateTo();
                 if (within_tolerance) {
                     // Space was pressed, but not panned
                     sp_toggle_selector(desktop);
@@ -773,6 +772,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
             default:
                 break;
             }
+            desktop->canvas->clearRotateTo();
             break;
 
         case GDK_SCROLL: {
@@ -856,7 +856,6 @@ bool ToolBase::root_handler(GdkEvent* event) {
         default:
             break;
     }
-    desktop->canvas->clearRotateTo(clear);
     return ret;
 }
 
