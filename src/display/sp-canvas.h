@@ -74,7 +74,8 @@ struct SPCanvas {
     void scrollTo(double cx, double cy, unsigned int clear, bool is_scrolling = false);
     void startRotateTo(double angle);
     void rotateTo(SPCanvasItem * item, double angle, bool widget = false);
-    void endRotateTo();
+    bool endRotateTo();
+    void clearRotateTo(bool clear);
     /// Synchronously updates the canvas if necessary.
     void updateNow();
 
