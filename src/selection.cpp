@@ -113,24 +113,6 @@ SPObject *Selection::activeContext() {
     return _layers->currentLayer();
 }
 
-void Selection::set(SPObject *object, bool persist_selection_context) {
-    ObjectSet::set(object);
-    _emitChanged(persist_selection_context);
-}
-
-void Selection::setReprList(std::vector<XML::Node*> const &list) {
-    clear();
-
-    for (std::vector<XML::Node*>::const_reverse_iterator iter = list.rbegin(); iter != list.rend(); ++iter) {
-        SPObject *obj = _objectForXMLNode(*iter);
-        if (obj) {
-            add(obj);
-        }
-    }
-
-    _emitChanged();
-}
-
 std::vector<Inkscape::SnapCandidatePoint> Selection::getSnapPoints(SnapPreferences const *snapprefs) const {
     std::vector<Inkscape::SnapCandidatePoint> p;
 
