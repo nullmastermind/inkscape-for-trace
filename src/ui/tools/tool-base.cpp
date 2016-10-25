@@ -533,10 +533,6 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 ret = TRUE;
                 if (desktop->canvas->endRotateTo()) {
                     sp_repr_set_svg_double(desktop->namedview->getRepr(), "inkscape:document-rotation", angle);
-                    SPObject *updated = SP_OBJECT(desktop->namedview);
-                    if (updated) {
-                        updated->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-                    }
                 }
             } else {
                 xp = yp = 0;

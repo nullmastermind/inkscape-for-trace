@@ -2077,9 +2077,6 @@ void SPCanvas::startRotateTo(double angle)
     cairo_paint(cr);
     cairo_destroy(cr);
     surface_origin  = new_backing_store_grey;
-    gtk_widget_queue_draw(GTK_WIDGET(this));
-    dirtyAll();
-    addIdle();
 }
 
 bool SPCanvas::endRotateTo()
@@ -2101,15 +2098,6 @@ void SPCanvas::clearRotateTo()
     if (!started) {
         return; 
     }
-    GtkAllocation allocation;
-    gtk_widget_get_allocation(&_widget, &allocation);
-    cairo_surface_t *new_backing_store = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, allocation.width, allocation.height);
-    cairo_t *cr = cairo_create(new_backing_store);
-    cairo_set_source(cr, _background);
-    cairo_paint(cr);
-    cairo_destroy(cr);
-    cairo_surface_destroy(_backing_store);
-    _backing_store = new_backing_store;
     gtk_widget_queue_draw(GTK_WIDGET(this));
     dirtyAll();
     addIdle();
