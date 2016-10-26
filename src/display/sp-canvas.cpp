@@ -1891,6 +1891,19 @@ SPCanvasGroup *SPCanvas::getRoot()
     return SP_CANVAS_GROUP(_root);
 }
 
+gdouble grayscale_value_matrix[20] = {
+   0.21, 0.72, 0.072, 0, 0,
+   0.21, 0.72, 0.072, 0, 0,
+   0.21, 0.72, 0.072, 0, 0,
+   0   , 0   , 0    , 1, 0
+   };
+cairo_surface_t *surface_rotated;
+cairo_surface_t *surface_origin;
+cairo_surface_t *surface_measure;
+double start_angle = 0;
+bool started = false;
+bool rotated = false;
+
 void SPCanvas::scrollTo(double cx, double cy, unsigned int clear, bool is_scrolling)
 {
     GtkAllocation allocation;
@@ -1913,9 +1926,14 @@ void SPCanvas::scrollTo(double cx, double cy, unsigned int clear, bool is_scroll
     cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
     // Paint the background
     cairo_translate(cr, -ix, -iy);
+    if (rotated) {
+        cairo_translate(cr, dx, dy);    
+        rotated = false;
+    }
     cairo_set_source(cr, _background);
     cairo_paint(cr);
     // Copy the old backing store contents
+    
     cairo_set_source_surface(cr, _backing_store, _x0, _y0);
     cairo_rectangle(cr, _x0, _y0, allocation.width, allocation.height);
     cairo_clip(cr);
@@ -1951,17 +1969,7 @@ void SPCanvas::scrollTo(double cx, double cy, unsigned int clear, bool is_scroll
     }
     addIdle();
 }
-gdouble grayscale_value_matrix[20] = {
-   0.21, 0.72, 0.072, 0, 0,
-   0.21, 0.72, 0.072, 0, 0,
-   0.21, 0.72, 0.072, 0, 0,
-   0   , 0   , 0    , 1, 0
-   };
-cairo_surface_t *surface_rotated;
-cairo_surface_t *surface_origin;
-cairo_surface_t *surface_measure;
-double start_angle = 0;
-bool started = false;
+
 void SPCanvas::startRotateTo(double angle)
 {
     if (!_backing_store || started) {
@@ -2090,6 +2098,7 @@ bool SPCanvas::endRotateTo()
     gtk_widget_queue_draw(GTK_WIDGET(this));
     dirtyAll();
     addIdle();
+    rotated = true;
     return true;
 }
 
