@@ -124,8 +124,8 @@ selection_display_message(SPDesktop *desktop, Inkscape::MessageType msgType, Gli
         desktop->messageStack()->flash(msgType, msg);
     } else {
         if (msgType == Inkscape::IMMEDIATE_MESSAGE ||
-            msgType == Inkscape::WARNING_MESSAGE ||
-            msgType == Inkscape::ERROR_MESSAGE) {
+                msgType == Inkscape::WARNING_MESSAGE ||
+                msgType == Inkscape::ERROR_MESSAGE) {
             g_printerr("%s\n", msg.c_str());
         }
     }
@@ -273,8 +273,8 @@ void SelectionHelper::fixSelection(SPDesktop *dt)
     for(auto i = boost::rbegin(selList); i != boost::rend(selList); ++i) {
         SPItem *item = *i;
         if( item &&
-            !dt->isLayer(item) &&
-            (!item->isLocked()))
+                !dt->isLayer(item) &&
+                (!item->isLocked()))
         {
             items.push_back(item);
         }
@@ -378,19 +378,19 @@ static void sp_selection_delete_impl(std::vector<SPItem*> const &items, bool pro
 void ObjectSet::deleteItems()
 {
     if(desktop() && tools_isactive(desktop(), TOOLS_TEXT)){
-         if (Inkscape::UI::Tools::sp_text_delete_selection(desktop()->event_context)) {
+        if (Inkscape::UI::Tools::sp_text_delete_selection(desktop()->event_context)) {
             DocumentUndo::done(desktop()->getDocument(), SP_VERB_CONTEXT_TEXT,
                                _("Delete text"));
             return;
-         }
+        }
     }
     
-        if (isEmpty()) {
-            selection_display_message(desktop(),Inkscape::WARNING_MESSAGE, _("<b>Nothing</b> was deleted."));
+    if (isEmpty()) {
+        selection_display_message(desktop(),Inkscape::WARNING_MESSAGE, _("<b>Nothing</b> was deleted."));
         return;
     }
     std::vector<SPItem*> selected(items().begin(), items().end());
-    clear(); 
+    clear();
     sp_selection_delete_impl(selected);
     if(SPDesktop *d = desktop()){
         d->currentLayer()->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
@@ -404,7 +404,7 @@ void ObjectSet::deleteItems()
         tools_switch( d, tools_active( d ) );
     }
     if(document())
-            DocumentUndo::done(document(), SP_VERB_EDIT_DELETE,
+        DocumentUndo::done(document(), SP_VERB_EDIT_DELETE,
                            _("Delete"));
 
 }
@@ -430,7 +430,7 @@ void ObjectSet::duplicate(bool suppressDone, bool duplicateLayer)
         //TODO: understand why layer management is tied to desktop and not to document.
         return;
     }
-        
+
     SPDocument *doc = document();
     
     if(!doc)
@@ -586,11 +586,11 @@ std::vector<SPItem*> &get_all_items(std::vector<SPItem*> &list, SPObject *from, 
     for (auto& child: from->children) {
         SPItem *item = dynamic_cast<SPItem *>(&child);
         if (item &&
-            !desktop->isLayer(item) &&
-            (!onlysensitive || !item->isLocked()) &&
-            (!onlyvisible || !desktop->itemIsHidden(item)) &&
-            (exclude.empty() || exclude.end() == std::find(exclude.begin(), exclude.end(), &child))
-            )
+                !desktop->isLayer(item) &&
+                (!onlysensitive || !item->isLocked()) &&
+                (!onlyvisible || !desktop->itemIsHidden(item)) &&
+                (exclude.empty() || exclude.end() == std::find(exclude.begin(), exclude.end(), &child))
+                )
         {
             list.insert(list.begin(),item);
         }
@@ -628,10 +628,10 @@ static void sp_edit_select_all_full(SPDesktop *dt, bool force_all_layers, bool i
         inlayer = PREFS_SELECTION_ALL;
 
     switch (inlayer) {
-        case PREFS_SELECTION_LAYER: {
+    case PREFS_SELECTION_LAYER: {
         if ( (onlysensitive && dynamic_cast<SPItem *>(dt->currentLayer())->isLocked()) ||
              (onlyvisible && dt->itemIsHidden(dynamic_cast<SPItem *>(dt->currentLayer()))) )
-        return;
+            return;
 
         std::vector<SPItem*> all_items = sp_item_group_item_list(dynamic_cast<SPGroup *>(dt->currentLayer()));
 
@@ -649,17 +649,17 @@ static void sp_edit_select_all_full(SPDesktop *dt, bool force_all_layers, bool i
             }
         }
 
-            break;
-        }
-        case PREFS_SELECTION_LAYER_RECURSIVE: {
-            std::vector<SPItem*> x;
-            items = get_all_items(x, dt->currentLayer(), dt, onlyvisible, onlysensitive, FALSE, exclude);
-            break;
-        }
-        default: {
-            std::vector<SPItem*> x;
-            items = get_all_items(x, dt->currentRoot(), dt, onlyvisible, onlysensitive, FALSE, exclude);
-            break;
+        break;
+    }
+    case PREFS_SELECTION_LAYER_RECURSIVE: {
+        std::vector<SPItem*> x;
+        items = get_all_items(x, dt->currentLayer(), dt, onlyvisible, onlysensitive, FALSE, exclude);
+        break;
+    }
+    default: {
+        std::vector<SPItem*> x;
+        items = get_all_items(x, dt->currentRoot(), dt, onlyvisible, onlysensitive, FALSE, exclude);
+        break;
     }
     }
 
@@ -787,7 +787,7 @@ void ObjectSet::popFromGroup(){
     }
 
     auto item = items().begin(); // leaving this because it will be useful for
-                                                                        // future implementation of complex pop ungrouping
+    // future implementation of complex pop ungrouping
     SPItem *obj = *item;
     SPItem *parent_group = static_cast<SPItem*>(obj->parent);
     if (!SP_IS_GROUP(parent_group) || SP_IS_LAYER(parent_group)) {
@@ -806,7 +806,7 @@ void ObjectSet::popFromGroup(){
     
     if(document())
         DocumentUndo::done(document(), SP_VERB_SELECTION_UNGROUP_POP_SELECTION,
-                       _("Pop selection from group"));
+                           _("Pop selection from group"));
     
 }
 
@@ -883,7 +883,7 @@ void ObjectSet::ungroup()
     ungroup_impl(this);
     if(document())
         DocumentUndo::done(document(), SP_VERB_SELECTION_UNGROUP,
-                       _("Ungroup"));
+                           _("Ungroup"));
 }
 
 // TODO replace it with ObjectSet::degroup_list
@@ -964,7 +964,7 @@ static SPObject *prev_sibling(SPObject *child)
 bool sp_item_repr_compare_position_bool(SPObject const *first, SPObject const *second)
 {
     return sp_repr_compare_position(((SPItem*)first)->getRepr(),
-            ((SPItem*)second)->getRepr())<0;
+                                    ((SPItem*)second)->getRepr())<0;
 }
 
 void ObjectSet::raise(bool skip_undo){
@@ -1015,8 +1015,8 @@ void ObjectSet::raise(bool skip_undo){
     }
     if(document() && !skip_undo)
         DocumentUndo::done(document(), SP_VERB_SELECTION_RAISE,
-                       //TRANSLATORS: "Raise" means "to raise an object" in the undo history
-                       C_("Undo action", "Raise"));
+                           //TRANSLATORS: "Raise" means "to raise an object" in the undo history
+                           C_("Undo action", "Raise"));
 }
 
 
@@ -1042,7 +1042,7 @@ void ObjectSet::raiseToTop(bool skip_undo) {
     }
     if (document() && !skip_undo) {
         DocumentUndo::done(document(), SP_VERB_SELECTION_TO_FRONT,
-                         _("Raise to top"));
+                           _("Raise to top"));
     }
 }
 
@@ -1096,8 +1096,8 @@ void ObjectSet::lower(bool skip_undo){
     }
     if(document() && !skip_undo)
         DocumentUndo::done(document(), SP_VERB_SELECTION_LOWER,
-                       //TRANSLATORS: "Lower" means "to lower an object" in the undo history
-                       C_("Undo action", "Lower"));
+                           //TRANSLATORS: "Lower" means "to lower an object" in the undo history
+                           C_("Undo action", "Lower"));
 }
 
 
@@ -1183,7 +1183,7 @@ take_style_from_item(SPObject *object)
         return NULL;
 
     if ((dynamic_cast<SPGroup *>(object) && object->firstChild()) ||
-        (dynamic_cast<SPText *>(object) && object->firstChild() && object->firstChild()->getNext() == NULL)) {
+            (dynamic_cast<SPText *>(object) && object->firstChild() && object->firstChild()->getNext() == NULL)) {
         // if this is a text with exactly one tspan child, merge the style of that tspan as well
         // If this is a group, merge the style of its topmost (last) child with style
         auto list = object->children | boost::adaptors::reversed;
@@ -1268,7 +1268,7 @@ void ObjectSet::removeLPE()
     // check if something is selected
     if (isEmpty()) {
         if(desktop())
-        desktop()->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to remove live path effects from."));
+            desktop()->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to remove live path effects from."));
         return;
     }
     auto list= items();
@@ -1281,7 +1281,7 @@ void ObjectSet::removeLPE()
 
     if(document())
         DocumentUndo::done(document(), SP_VERB_EDIT_REMOVE_LIVEPATHEFFECT,
-                       _("Remove live path effect"));
+                           _("Remove live path effect"));
 }
 
 void ObjectSet::removeFilter()
@@ -1300,7 +1300,7 @@ void ObjectSet::removeFilter()
     sp_repr_css_attr_unref(css);
     if(document())
         DocumentUndo::done(document(), SP_VERB_EDIT_REMOVE_FILTER,
-                       _("Remove filter"));
+                           _("Remove filter"));
 }
 
 
@@ -1334,8 +1334,8 @@ void sp_selection_change_layer_maintain_clones(std::vector<SPItem*> const &items
             SPItem *oldparent = dynamic_cast<SPItem *>(item->parent);
             SPItem *newparent = dynamic_cast<SPItem *>(where);
             sp_item_group_ungroup_handle_clones(item,
-                    (oldparent->i2doc_affine())
-                    *((newparent->i2doc_affine()).inverse()));
+                                                (oldparent->i2doc_affine())
+                                                *((newparent->i2doc_affine()).inverse()));
         }
     }
 }
@@ -1345,7 +1345,7 @@ void ObjectSet::toNextLayer(bool skip_undo)
     if(!desktop())
         return;
     SPDesktop *dt=desktop(); //TODO make it desktop-independent
-        
+
     // check if something is selected
     if (isEmpty()) {
         dt->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to move to the layer above."));
@@ -1515,7 +1515,7 @@ then simply updates the repr from item->transform.
  */
 
 void ObjectSet::applyAffine(Geom::Affine const &affine, bool set_i2d, bool compensate,
-                                bool adjust_transf_center)
+                            bool adjust_transf_center)
 {
     if (isEmpty())
         return;
@@ -1559,7 +1559,7 @@ void ObjectSet::applyAffine(Geom::Affine const &affine, bool set_i2d, bool compe
             old_center = item->getCenter();
 
 #if 0 /* Re-enable this once persistent guides have a graphical indication.
-         At the time of writing, this is the only place to re-enable. */
+    At the time of writing, this is the only place to re-enable. */
         sp_item_update_cns(*item, desktop());
 #endif
 
@@ -1716,7 +1716,7 @@ void ObjectSet::removeTransform()
 
     if(document())
         DocumentUndo::done(document(), SP_VERB_OBJECT_FLATTEN,
-                       _("Remove transform"));
+                           _("Remove transform"));
 }
 
 void ObjectSet::setScaleAbsolute(double x0, double x1,double y0, double y1)
@@ -1955,20 +1955,20 @@ std::vector<SPItem*> sp_get_same_fill_or_stroke_color(SPItem *sel, std::vector<S
             SPIPaint *iter_paint = (type == SP_FILL_COLOR) ? &(iter->style->fill) : &(iter->style->stroke);
             match = false;
             if (sel_paint->isColor() && iter_paint->isColor() // color == color comparision doesnt seem to work here.
-                && (sel_paint->value.color.toRGBA32(1.0) == iter_paint->value.color.toRGBA32(1.0))) {
+                    && (sel_paint->value.color.toRGBA32(1.0) == iter_paint->value.color.toRGBA32(1.0))) {
                 match = true;
             } else if (sel_paint->isPaintserver() && iter_paint->isPaintserver()) {
 
                 SPPaintServer *sel_server =
-                    (type == SP_FILL_COLOR) ? sel->style->getFillPaintServer() : sel->style->getStrokePaintServer();
+                        (type == SP_FILL_COLOR) ? sel->style->getFillPaintServer() : sel->style->getStrokePaintServer();
                 SPPaintServer *iter_server =
-                    (type == SP_FILL_COLOR) ? iter->style->getFillPaintServer() : iter->style->getStrokePaintServer();
+                        (type == SP_FILL_COLOR) ? iter->style->getFillPaintServer() : iter->style->getStrokePaintServer();
 
                 if ((dynamic_cast<SPLinearGradient *>(sel_server) || dynamic_cast<SPRadialGradient *>(sel_server) ||
                      (dynamic_cast<SPGradient *>(sel_server) && dynamic_cast<SPGradient *>(sel_server)->getVector()->isSwatch()))
-                    &&
-                    (dynamic_cast<SPLinearGradient *>(iter_server) || dynamic_cast<SPRadialGradient *>(iter_server) ||
-                     (dynamic_cast<SPGradient *>(iter_server) && dynamic_cast<SPGradient *>(iter_server)->getVector()->isSwatch()))) {
+                        &&
+                        (dynamic_cast<SPLinearGradient *>(iter_server) || dynamic_cast<SPRadialGradient *>(iter_server) ||
+                         (dynamic_cast<SPGradient *>(iter_server) && dynamic_cast<SPGradient *>(iter_server)->getVector()->isSwatch()))) {
                     SPGradient *sel_vector = dynamic_cast<SPGradient *>(sel_server)->getVector();
                     SPGradient *iter_vector = dynamic_cast<SPGradient *>(iter_server)->getVector();
                     if (sel_vector == iter_vector) {
@@ -2119,7 +2119,7 @@ std::vector<SPItem*> sp_get_same_style(SPItem *sel, std::vector<SPItem*> &src, S
                 for (int i = 0; i < len; i++) {
                     match = (sel_style->marker_ptrs[i]->set == iter_style->marker_ptrs[i]->set);
                     if (sel_style->marker_ptrs[i]->set && iter_style->marker_ptrs[i]->set &&
-                        (strcmp(sel_style->marker_ptrs[i]->value, iter_style->marker_ptrs[i]->value))) {
+                            (strcmp(sel_style->marker_ptrs[i]->value, iter_style->marker_ptrs[i]->value))) {
                         match = false;
                         break;
                     }
@@ -2652,13 +2652,88 @@ void ObjectSet::relink()
     }
 }
 
+bool ObjectSet::unlinkRecursive() {
+    bool unlinked = false;
+    // Main part when called from the GUI.
+    ObjectSet tmp_set(document());
+    if (desktop() || size() > 1) {
+        if (isEmpty()) {
+            if (desktop()) {
+            desktop()->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>clones</b> to unlink."));
+            }
+            return false;
+        }
 
-void ObjectSet::unlink()
+        std::vector<SPItem *> items_(items().begin(), items().end());
+        for (auto& it : items_) {
+            tmp_set.set(it);
+            if (tmp_set.unlinkRecursive()) {
+                unlinked = true;
+            }
+            it = tmp_set.singleItem();
+            assert(it);
+        }
+
+        if (!unlinked && desktop()) {
+            desktop()->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No clones to unlink</b> in the selection."));
+        }
+
+        DocumentUndo::done(document(), SP_VERB_EDIT_UNLINK_CLONE,
+                           _("Unlink resursively clone"));
+        return unlinked;
+    }
+    // Part when called recursively
+    assert(NULL == desktop());
+    assert (1 == size());
+    if (unlink(true)) {
+        unlinked = true;
+    }
+    SPItem* item = singleItem();
+    // Check if a clip is set, in that case unset the clip, unlink all clones and set the clip again.
+    Inkscape::URIReference *clip = item->clip_ref;
+    if ((NULL != clip) && (NULL != clip->getObject())) {
+        tmp_set.set(item);
+        tmp_set.unsetMask(true, true);
+        std::vector<SPItem *> items(tmp_set.items().begin(), tmp_set.items().end());
+        std::vector<SPItem *> new_items;
+        for (SPItem * it : items) {
+            tmp_set.set(it);
+            if (tmp_set.unlinkRecursive()) {
+                unlinked = true;
+            }
+            it = tmp_set.singleItem();
+            assert(it);
+            new_items.push_back(it);
+        }
+        tmp_set.setList(new_items);
+        tmp_set.setMask(true, false, true);
+        item = tmp_set.singleItem();
+        g_assert(item);
+    }
+
+    if (SP_IS_GROUP(item)) {
+        for (SPObject *o = item->firstChild(); o != NULL; ) {
+            SPObject* next = o->getNext();
+            SPItem * child_item = dynamic_cast<SPItem *>(o);
+            if (child_item) {
+                tmp_set.set(child_item);
+                if(tmp_set.unlinkRecursive()) {
+                    unlinked = true;
+                }
+            }
+            o = next;
+        }
+    }
+
+    return unlinked;
+}
+
+bool ObjectSet::unlink(bool skip_undo)
 {
     if (isEmpty()) {
         if(desktop())
             desktop()->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>clones</b> to unlink."));
-        return;
+        return false;
     }
 
     // Get a copy of current selection.
@@ -2715,8 +2790,11 @@ void ObjectSet::unlink()
             desktop()->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No clones to unlink</b> in the selection."));
     }
 
-    DocumentUndo::done(document(), SP_VERB_EDIT_UNLINK_CLONE,
-                       _("Unlink clone"));
+    if (!skip_undo) {
+        DocumentUndo::done(document(), SP_VERB_EDIT_UNLINK_CLONE,
+                           _("Unlink clone"));
+    }
+    return unlinked;
 }
 
 void ObjectSet::cloneOriginal()
@@ -2876,8 +2954,8 @@ void ObjectSet::cloneOriginalPathLPE()
 void ObjectSet::toMarker(bool apply)
 {
     // sp_selection_tile has similar code
-    if (desktop() == NULL) { // TODO: We should not need desktop for that. 
-                             //       Someone get rid of the dt2doc() call.
+    if (desktop() == NULL) { // TODO: We should not need desktop for that.
+        //       Someone get rid of the dt2doc() call.
         return;
     }
 
@@ -2901,7 +2979,7 @@ void ObjectSet::toMarker(bool apply)
     Geom::Point doc_height( 0, doc->getHeight().value("px"));
 
     // calculate the transform to be applied to objects to move them to 0,0
-    Geom::Point corner( r->min()[Geom::X], r->max()[Geom::Y] ); // FIXME: Inverted Y coodinate  
+    Geom::Point corner( r->min()[Geom::X], r->max()[Geom::Y] ); // FIXME: Inverted Y coodinate
     Geom::Point move_p = doc_height - corner;
     move_p[Geom::Y] = -move_p[Geom::Y];
     Geom::Affine move = Geom::Affine(Geom::Translate(move_p));
@@ -3007,7 +3085,7 @@ void ObjectSet::toGuides()
 
 /*
  * Convert objects to <symbol>. How that happens depends on what is selected:
- * 
+ *
  * 1) A random selection of objects will be embedded into a single <symbol> element.
  *
  * 2) Except, a single <g> will have its content directly embedded into a <symbol>; the 'id' and
@@ -3033,9 +3111,9 @@ void ObjectSet::toSymbol()
 
     // Check if something is selected.
     if (isEmpty()) {
-      if (desktop())
-          desktop()->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>objects</b> to convert to symbol."));
-      return;
+        if (desktop())
+            desktop()->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>objects</b> to convert to symbol."));
+        return;
     }
 
     doc->ensureUpToDate();
@@ -3108,9 +3186,9 @@ void ObjectSet::toSymbol()
 
     // Move selected items to new <symbol>
     for (std::vector<SPObject*>::const_reverse_iterator i=items_.rbegin();i!=items_.rend();++i){
-      Inkscape::XML::Node *repr = (*i)->getRepr();
-      repr->parent()->removeChild(repr);
-      symbol_repr->addChild(repr,NULL);
+        Inkscape::XML::Node *repr = (*i)->getRepr();
+        repr->parent()->removeChild(repr);
+        symbol_repr->addChild(repr,NULL);
     }
 
     if( single_group && transform.isTranslation() ) {
@@ -3154,7 +3232,7 @@ void ObjectSet::unSymbol()
     }
 
     SPObject* symbol = single();
- 
+
     // Make sure we have only one object in selection.
     // Require that we really have a <symbol>.
     if( symbol == NULL || !dynamic_cast<SPSymbol *>( symbol ))  {
@@ -3179,14 +3257,14 @@ void ObjectSet::unSymbol()
         SPObject *object = children[0];
         if ( dynamic_cast<SPGroup *>( object ) ) {
             if( object->getAttribute("style") == NULL ||
-                object->getAttribute("class") == NULL ) {
+                    object->getAttribute("class") == NULL ) {
 
                 group->setAttribute("transform", object->getAttribute("transform"));
                 children = object->childList(false);
             }
         }
     }
-        
+
     for (std::vector<SPObject*>::const_reverse_iterator i=children.rbegin();i!=children.rend();++i){
         Inkscape::XML::Node *repr = (*i)->getRepr();
         repr->parent()->removeChild(repr);
@@ -3291,10 +3369,10 @@ void ObjectSet::tile(bool apply)
     prefs->setInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
 
     gchar const *pat_id = SPPattern::produce(repr_copies, bbox, doc,
-                                       ( Geom::Affine(Geom::Translate(desktop()->dt2doc(Geom::Point(r->min()[Geom::X],
-                                                                                            r->max()[Geom::Y]))))
-                                         * parent_transform.inverse() ),
-                                       parent_transform * move);
+                                             ( Geom::Affine(Geom::Translate(desktop()->dt2doc(Geom::Point(r->min()[Geom::X],
+                                                                                              r->max()[Geom::Y]))))
+            * parent_transform.inverse() ),
+            parent_transform * move);
 
     // restore compensation setting
     prefs->setInt("/options/clonecompensation/value", saved_compensation);
@@ -3374,8 +3452,8 @@ void ObjectSet::untile()
                 Inkscape::XML::Node *copy = child.getRepr()->duplicate(xml_doc);
                 SPItem *i = dynamic_cast<SPItem *>(item->parent->appendChildRepr(copy));
 
-               // FIXME: relink clones to the new canvas objects
-               // use SPObject::setid when mental finishes it to steal ids of
+                // FIXME: relink clones to the new canvas objects
+                // use SPObject::setid when mental finishes it to steal ids of
 
                 // this is needed to make sure the new item has curve (simply requestDisplayUpdate does not work)
                 doc->ensureUpToDate();
@@ -3517,7 +3595,7 @@ void ObjectSet::createBitmapCopy()
     gchar *const basename = g_strdup_printf("%s-%s-%u.png",
                                             doc->getName(),
                                             items_[0]->getRepr()->attribute("id"),
-                                            current);
+            current);
     // Imagemagick is known not to handle spaces in filenames, so we replace anything but letters,
     // digits, and a few other chars, with "_"
     g_strcanon(basename, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.=+~$#@^&!?", '_');
@@ -3622,12 +3700,12 @@ void ObjectSet::createBitmapCopy()
     // Do the export
     sp_export_png_file(doc, filepath,
                        bbox->min()[Geom::X], bbox->min()[Geom::Y],
-                       bbox->max()[Geom::X], bbox->max()[Geom::Y],
-                       width, height, res, res,
-                       (guint32) 0xffffff00,
-                       NULL, NULL,
-                       true,  /*bool force_overwrite,*/
-                       items_);
+            bbox->max()[Geom::X], bbox->max()[Geom::Y],
+            width, height, res, res,
+            (guint32) 0xffffff00,
+            NULL, NULL,
+            true,  /*bool force_overwrite,*/
+            items_);
 
     // Run filter, if any
     if (run) {
@@ -3699,7 +3777,7 @@ void ObjectSet::setClipGroup()
             desktop()->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to create clippath or mask from."));
         return;
     }
-        
+
     std::vector<Inkscape::XML::Node*> p(xmlNodes().begin(), xmlNodes().end());
     
     sort(p.begin(),p.end(),sp_repr_compare_position_bool);
@@ -3794,7 +3872,7 @@ void ObjectSet::setClipGroup()
  * If \a apply_clip_path parameter is true, clipPath is created, otherwise mask
  *
  */
- void ObjectSet::setMask(bool apply_clip_path, bool apply_to_layer, bool skip_undo)
+void ObjectSet::setMask(bool apply_clip_path, bool apply_to_layer, bool skip_undo)
 {
     if(!desktop() && apply_to_layer)
         return;
@@ -3960,7 +4038,7 @@ void ObjectSet::setClipGroup()
     }
 }
 
-void ObjectSet::unsetMask(bool apply_clip_path) {
+void ObjectSet::unsetMask(const bool apply_clip_path, const bool skip_undo) {
     SPDocument *doc = document();
     Inkscape::XML::Document *xml_doc = doc->getReprDoc();
 
@@ -4010,13 +4088,13 @@ void ObjectSet::unsetMask(bool apply_clip_path) {
 
         SPGroup *group = dynamic_cast<SPGroup *>(*i);
         if (ungroup_masked && group) {
-                // if we had previously enclosed masked object in group,
-                // add it to list so we can ungroup it later
+            // if we had previously enclosed masked object in group,
+            // add it to list so we can ungroup it later
 
-                // ungroup only groups we created when setting clip/mask
-                if (group->layerMode() == SPGroup::MASK_HELPER) {
-                    items_to_ungroup = g_slist_prepend(items_to_ungroup, group);
-                }
+            // ungroup only groups we created when setting clip/mask
+            if (group->layerMode() == SPGroup::MASK_HELPER) {
+                items_to_ungroup = g_slist_prepend(items_to_ungroup, group);
+            }
 
         }
     }
@@ -4082,10 +4160,12 @@ void ObjectSet::unsetMask(bool apply_clip_path) {
     // rebuild selection
     addList(items_to_select);
 
-    if (apply_clip_path) {
-        DocumentUndo::done(doc, SP_VERB_OBJECT_UNSET_CLIPPATH, _("Release clipping path"));
-    } else {
-        DocumentUndo::done(doc, SP_VERB_OBJECT_UNSET_MASK, _("Release mask"));
+    if (!skip_undo) {
+        if (apply_clip_path) {
+            DocumentUndo::done(doc, SP_VERB_OBJECT_UNSET_CLIPPATH, _("Release clipping path"));
+        } else {
+            DocumentUndo::done(doc, SP_VERB_OBJECT_UNSET_MASK, _("Release mask"));
+        }
     }
 }
 
