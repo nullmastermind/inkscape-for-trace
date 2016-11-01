@@ -335,7 +335,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
     /// @todo REmove redundant /value in preference keys
     tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
     bool allow_panning = prefs->getBool("/options/spacebarpans/value");
-    int rotation_snap = prefs->getInt("/options/rotationsnapsperpi/value", 15);
+    int rotation_snap = 180.0/prefs->getInt("/options/rotationsnapsperpi/value", 12);
     gint ret = FALSE;
 
     switch (event->type) {

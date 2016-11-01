@@ -2211,7 +2211,7 @@ void SPCanvas::rotateTo(double angle)
     cairo_translate(cr, -half_w + 10 ,-half_h + 55);
     s.str("");
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    s << _("+CTRL, ") << prefs->getInt("/options/rotationsnapsperpi/value", 15) << _("º round step");
+    s << _("+CTRL, ") << 180.0/prefs->getInt("/options/rotationsnapsperpi/value", 12) << _("º round step");
     cairo_text_path(cr, s.str().c_str());
     cairo_fill(cr);
     cairo_translate(cr, (-half_w + 10) * -1 ,(-half_h + 55) * -1);
