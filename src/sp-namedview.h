@@ -42,7 +42,7 @@ enum {
     SP_BORDER_LAYER_TOP
 };
 
-class SPNamedView : public SPObjectGroup {
+class SPNamedView : public SPObjectGroup{
 public:
 	SPNamedView();
 	virtual ~SPNamedView();

@@ -176,6 +176,7 @@ public:
     ShapeEditor* shape_editor;
 
     bool space_panning;
+    bool rotating_mode;
 
     DelayedSnapEvent *_delayed_snap_event;
     bool _dse_callback_in_process;

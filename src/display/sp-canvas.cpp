@@ -1927,7 +1927,7 @@ void SPCanvas::scrollTo(double cx, double cy, unsigned int clear, bool is_scroll
     // Paint the background
     cairo_translate(cr, -ix, -iy);
     if (rotated) {
-        cairo_translate(cr, dx, dy);    
+        cairo_translate(cr, dx, dy);
         rotated = false;
     }
     cairo_set_source(cr, _background);
@@ -1982,6 +1982,7 @@ void SPCanvas::startRotateTo(double angle)
     int half_w = allocation.width/2;
     int half_h = allocation.height/2;
     int half_min = std::min(half_w,half_h);
+    
     cairo_surface_t *new_backing_store = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, allocation.width, allocation.height);
     cairo_t *cr = cairo_create(new_backing_store);
     cairo_arc(cr, half_w, half_h, half_min-15, 0, 2*M_PI);
@@ -2112,7 +2113,7 @@ void SPCanvas::clearRotateTo()
     addIdle();
 }
 
-void SPCanvas::rotateTo(SPCanvasItem * item, double angle)
+void SPCanvas::rotateTo(double angle)
 {
     if (!_backing_store || !started) {
         return; 
@@ -2203,19 +2204,26 @@ void SPCanvas::rotateTo(SPCanvasItem * item, double angle)
     cairo_translate(cr, (-half_w +10) * -1 ,(-half_h + 25) * -1);
     cairo_translate(cr, -half_w + 10 ,-half_h + 40);
     s.str("");
-    s << _("+CTRL, Fractional degrees");
+    s << _("+ALT, Fractional degrees");
     cairo_text_path(cr, s.str().c_str());
     cairo_fill(cr);
     cairo_translate(cr, (-half_w + 10) * -1 ,(-half_h + 40) * -1);
     cairo_translate(cr, -half_w + 10 ,-half_h + 55);
     s.str("");
-    s << _("+SHIFT, 5º round step");
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    s << _("+CTRL, ") << prefs->getInt("/options/rotationsnapsperpi/value", 15) << _("º round step");
     cairo_text_path(cr, s.str().c_str());
     cairo_fill(cr);
     cairo_translate(cr, (-half_w + 10) * -1 ,(-half_h + 55) * -1);
     cairo_translate(cr, -half_w + 10 ,-half_h + 70);
     s.str("");
-    s << _("+CTRL+SHIFT, Reset");
+    s << _("+SHIFT, Reset");
+    cairo_text_path(cr, s.str().c_str());
+    cairo_fill(cr);
+    cairo_translate(cr, (-half_w + 10) * -1 ,(-half_h + 70) * -1);
+    cairo_translate(cr, -half_w + 10 ,-half_h + 85);
+    s.str("");
+    s << _("+CTRL+SHIFT, 0º");
     cairo_text_path(cr, s.str().c_str());
     cairo_fill(cr);
     //cairo_translate(cr, (-half_w + 10) * -1 ,(-half_h + 60) * -1);

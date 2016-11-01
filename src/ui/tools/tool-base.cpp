@@ -94,6 +94,7 @@ ToolBase::ToolBase(gchar const *const *cursor_shape, gint hot_x, gint hot_y, boo
     , _grdrag(NULL)
     , shape_editor(NULL)
     , space_panning(false)
+    , rotating_mode(false)
     , _delayed_snap_event(NULL)
     , _dse_callback_in_process(false)
     , desktop(NULL)
@@ -334,6 +335,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
     /// @todo REmove redundant /value in preference keys
     tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
     bool allow_panning = prefs->getBool("/options/spacebarpans/value");
+    int rotation_snap = prefs->getInt("/options/rotationsnapsperpi/value", 15);
     gint ret = FALSE;
 
     switch (event->type) {
@@ -374,42 +376,63 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 break;
 
             case 2:
-                if (event->button.state & GDK_SHIFT_MASK) {
-                    zoom_rb = 2;
+                if (event->button.state & GDK_MOD1_MASK) {
+                    sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate), event->button.time);
+                    desktop->canvas->startRotateTo(desktop->namedview->document_rotation);
+                    this->rotating_mode = true;
+                    this->message_context->set(Inkscape::INFORMATION_MESSAGE,
+                            _("<b>Space+ALT+mouse move</b> to rotate canvas"));
                 } else {
-                    // When starting panning, make sure there are no snap events pending because these might disable the panning again
-                    if (_uses_snap) {
-                        sp_event_context_discard_delayed_snap_event(this);
+                    if (event->button.state & GDK_SHIFT_MASK) {
+                        zoom_rb = 2;
+                    } else {
+                        // When starting panning, make sure there are no snap events pending because these might disable the panning again
+                        if (_uses_snap) {
+                            sp_event_context_discard_delayed_snap_event(this);
+                        }
+                        panning = 2;
+
+                        sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
+                                GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK
+                                        | GDK_POINTER_MOTION_HINT_MASK, NULL,
+                                event->button.time - 1);
                     }
-                    panning = 2;
-
-                    sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
-                            GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK
-                                    | GDK_POINTER_MOTION_HINT_MASK, NULL,
-                            event->button.time - 1);
-
+                    desktop->canvas->clearRotateTo();
+                    this->rotating_mode = false;
+                    ret = TRUE;
+                    desktop->canvas->endRotateTo();
                 }
-
                 ret = TRUE;
                 break;
 
             case 3:
-    //            if ((event->button.state & GDK_SHIFT_MASK) || (event->button.state & GDK_CONTROL_MASK)) {
-    //                // When starting panning, make sure there are no snap events pending because these might disable the panning again
-    //                if (_uses_snap) {
-    //                    sp_event_context_discard_delayed_snap_event(this);
-    //                }
-    //                panning = 3;
+                if (event->button.state & GDK_MOD1_MASK) {
+                    sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate), event->button.time);
+                    desktop->canvas->startRotateTo(desktop->namedview->document_rotation);
+                    this->rotating_mode = true;
+                    this->message_context->set(Inkscape::INFORMATION_MESSAGE,
+                            _("<b>Space+ALT+mouse move</b> to rotate canvas"));
+                } else {
+                    if ((event->button.state & GDK_SHIFT_MASK) || (event->button.state & GDK_CONTROL_MASK)) {
+                        // When starting panning, make sure there are no snap events pending because these might disable the panning again
+                        if (_uses_snap) {
+                            sp_event_context_discard_delayed_snap_event(this);
+                        }
+                        panning = 3;
 
-    //                sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
-    //                        GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK
-    //                                | GDK_POINTER_MOTION_HINT_MASK, NULL,
-    //                        event->button.time);
+                        sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
+                                GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK
+                                        | GDK_POINTER_MOTION_HINT_MASK, NULL,
+                                event->button.time);
 
-    //                ret = TRUE;
-    //            } else 
-                if( !this->space_panning ) {
-                    sp_event_root_menu_popup(desktop, NULL, event);
+                        ret = TRUE;
+                    } else if( !this->space_panning) {
+                        sp_event_root_menu_popup(desktop, NULL, event);
+                    }
+                    desktop->canvas->clearRotateTo();
+                    this->rotating_mode = false;
+                    ret = TRUE;
+                    desktop->canvas->endRotateTo();
                 }
                 break;
 
@@ -419,39 +442,38 @@ bool ToolBase::root_handler(GdkEvent* event) {
             break;
 
         case GDK_MOTION_NOTIFY:
-            if (panning) {
-                if (panning == 4 && !xp && !yp ) {
-                    // <Space> + mouse panning started, save location and grab canvas
-                    xp = event->motion.x;
-                    yp = event->motion.y;
-                    button_w = Geom::Point(event->motion.x, event->motion.y);
+            if (this->rotating_mode) {
+                button_w = Geom::Point(event->motion.x, event->motion.y);
+                Geom::Point const motion_dt(desktop->doc2dt(desktop->w2d(button_w)));
+                Geom::Rect view = desktop->get_display_area();
+                Geom::Point view_center = desktop->doc2dt(view.midpoint());
+                Geom::Ray center_ray(motion_dt, view_center);
+                angle = Geom::deg_from_rad(center_ray.angle()) - 90;
+                if (event->motion.state & GDK_SHIFT_MASK && event->motion.state & GDK_CONTROL_MASK) {
+                    angle = 0;
+                } else if(event->motion.state & GDK_CONTROL_MASK) {
+                    angle = floor(angle/rotation_snap) * rotation_snap;
+                } else if (event->motion.state & GDK_SHIFT_MASK) {
+                    angle = desktop->namedview->document_rotation;
+                } else if (event->motion.state & GDK_MOD1_MASK) {
+                    //Decimal raw angle
+                } else {
+                    angle = floor(angle);
+                }
+                desktop->canvas->rotateTo(angle);
+            } else if (panning == 4 && !xp && !yp ) {
+                // <Space> + mouse panning started, save location and grab canvas
+                xp = event->motion.x;
+                yp = event->motion.y;
+                button_w = Geom::Point(event->motion.x, event->motion.y);
 
-                    sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
-                            GDK_KEY_RELEASE_MASK | GDK_BUTTON_RELEASE_MASK
-                                    | GDK_POINTER_MOTION_MASK
-                                    | GDK_POINTER_MOTION_HINT_MASK, NULL,
-                            event->motion.time - 1);
-                } else if (this->space_panning && event->motion.state & GDK_BUTTON3_MASK) {
-                    sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate), event->button.time);
-                    desktop->canvas->startRotateTo(desktop->namedview->document_rotation);
-                    button_w = Geom::Point(event->motion.x, event->motion.y);
-                    Geom::Point const motion_dt(desktop->doc2dt(desktop->w2d(button_w)));
-                    Geom::Rect view = desktop->get_display_area();
-                    Geom::Point view_center = desktop->doc2dt(view.midpoint());
-                    Geom::Ray center_ray(motion_dt, view_center);
-                    desktop->canvas->startRotateTo(desktop->namedview->document_rotation);
-                    angle = Geom::deg_from_rad(center_ray.angle()) - 90;
-                    if (event->motion.state & GDK_SHIFT_MASK && event->motion.state & GDK_CONTROL_MASK) {
-                        angle = desktop->namedview->document_rotation;
-                    } else if (event->motion.state & GDK_SHIFT_MASK) {
-                        angle = floor(angle/5) * 5;
-                    } else if (event->motion.state & GDK_CONTROL_MASK) {
-                        //Decimal raw angle
-                    } else {
-                        angle = floor(angle);
-                    }
-                    desktop->canvas->rotateTo(desktop->getDrawing(), angle);
-                } 
+                sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
+                        GDK_KEY_RELEASE_MASK | GDK_BUTTON_RELEASE_MASK
+                                | GDK_POINTER_MOTION_MASK
+                                | GDK_POINTER_MOTION_HINT_MASK, NULL,
+                        event->motion.time - 1);
+            }
+            if (panning) {
                 if ((panning == 2 && !(event->motion.state & GDK_BUTTON2_MASK))
                         || (panning == 1 && !(event->motion.state & GDK_BUTTON1_MASK))
                         || (panning == 3 && !(event->motion.state & GDK_BUTTON3_MASK))) {
@@ -516,20 +538,9 @@ bool ToolBase::root_handler(GdkEvent* event) {
             break;
 
         case GDK_BUTTON_RELEASE:
-            desktop->canvas->clearRotateTo();
-            if (this->space_panning && event->button.button == 3) {
-                xp = yp = 0;
-                if (panning_cursor == 1) {
-                    panning_cursor = 0;
-                    GtkWidget *w = GTK_WIDGET(this->desktop->getCanvas());
-                    gdk_window_set_cursor(gtk_widget_get_window (w), this->cursor);
-                }
-                zoom_rb = 0;
-                if (panning) {
-                    panning = 0;
-                    sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate),
-                            event->button.time);
-                }
+            if (this->rotating_mode && event->button.button == 2) {
+                desktop->canvas->clearRotateTo();
+                this->rotating_mode = false;
                 ret = TRUE;
                 if (desktop->canvas->endRotateTo()) {
                     sp_repr_set_svg_double(desktop->namedview->getRepr(), "inkscape:document-rotation", angle);
@@ -589,6 +600,12 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
                     ret = TRUE;
                 }
+                if (this->rotating_mode && event->button.button != 3) {
+                    desktop->canvas->clearRotateTo();
+                    this->rotating_mode = false;
+                    ret = TRUE;
+                    desktop->canvas->endRotateTo();
+                }
             }
             break;
 
@@ -597,6 +614,22 @@ bool ToolBase::root_handler(GdkEvent* event) {
                     "/options/scrollingacceleration/value", 0, 0, 6);
             int const key_scroll = prefs->getIntLimited("/options/keyscroll/value",
                     10, 0, 1000);
+
+            if (this->rotating_mode && 
+                get_group0_keyval(&event->key) != GDK_KEY_space &&
+                get_group0_keyval(&event->key) != GDK_KEY_Shift_L &&
+                get_group0_keyval(&event->key) != GDK_KEY_Shift_R &&
+                get_group0_keyval(&event->key) != GDK_KEY_Control_L &&
+                get_group0_keyval(&event->key) != GDK_KEY_Control_R &&
+                get_group0_keyval(&event->key) != GDK_KEY_Alt_L &&
+                get_group0_keyval(&event->key) != GDK_KEY_Alt_R ) 
+            {
+                desktop->canvas->clearRotateTo();
+                this->rotating_mode = false;
+                ret = TRUE;
+                desktop->canvas->endRotateTo();
+                break;
+            }
 
             switch (get_group0_keyval(&event->key)) {
             // GDK insists on stealing these keys (F1 for no idea what, tab for cycling widgets
@@ -709,14 +742,21 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 break;
 
             case GDK_KEY_space:
-                within_tolerance = true;
-                xp = yp = 0;
-                if (!allow_panning) break;
-                panning = 4;
-                this->space_panning = true;
-                this->message_context->set(Inkscape::INFORMATION_MESSAGE,
-                        _("<b>Space+mouse move</b> to pan canvas"));
-
+                if (event->key.state & GDK_MOD1_MASK) {
+                    sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate), event->button.time);
+                    desktop->canvas->startRotateTo(desktop->namedview->document_rotation);
+                    this->rotating_mode = true;
+                    this->message_context->set(Inkscape::INFORMATION_MESSAGE,
+                            _("<b>Space+ALT+mouse move</b> to rotate canvas"));
+                } else {
+                    within_tolerance = true;
+                    xp = yp = 0;
+                    if (!allow_panning) break;
+                    panning = 4;
+                    this->space_panning = true;
+                    this->message_context->set(Inkscape::INFORMATION_MESSAGE,
+                            _("<b>Space+mouse move</b> to pan canvas"));
+                }
                 ret = TRUE;
                 break;
 
@@ -735,6 +775,22 @@ bool ToolBase::root_handler(GdkEvent* event) {
             break;
 
         case GDK_KEY_RELEASE:
+            if (this->rotating_mode && 
+                get_group0_keyval(&event->key) != GDK_KEY_space &&
+                get_group0_keyval(&event->key) != GDK_KEY_Shift_L &&
+                get_group0_keyval(&event->key) != GDK_KEY_Shift_R &&
+                get_group0_keyval(&event->key) != GDK_KEY_Control_L &&
+                get_group0_keyval(&event->key) != GDK_KEY_Control_R &&
+                get_group0_keyval(&event->key) != GDK_KEY_Alt_L &&
+                get_group0_keyval(&event->key) != GDK_KEY_Alt_R ) 
+            {
+                desktop->canvas->clearRotateTo();
+                this->rotating_mode = false;
+                ret = TRUE;
+                desktop->canvas->endRotateTo();
+                break;
+            }
+
             // Stop panning on any key release
             if (this->space_panning) {
                 this->space_panning = false;
@@ -759,7 +815,14 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
             switch (get_group0_keyval(&event->key)) {
             case GDK_KEY_space:
-                desktop->canvas->clearRotateTo();
+                if (this->rotating_mode) {
+                    desktop->canvas->clearRotateTo();
+                    this->rotating_mode = false;
+                    ret = TRUE;
+                    if (desktop->canvas->endRotateTo()) {
+                        sp_repr_set_svg_double(desktop->namedview->getRepr(), "inkscape:document-rotation", angle);
+                    }
+                }
                 if (within_tolerance) {
                     // Space was pressed, but not panned
                     sp_toggle_selector(desktop);
@@ -781,10 +844,16 @@ bool ToolBase::root_handler(GdkEvent* event) {
             default:
                 break;
             }
-            desktop->canvas->clearRotateTo();
             break;
 
         case GDK_SCROLL: {
+            if (this->rotating_mode) {
+                desktop->canvas->clearRotateTo();
+                this->rotating_mode = false;
+                ret = TRUE;
+                desktop->canvas->endRotateTo();
+                break;
+            }
             bool ctrl = (event->scroll.state & GDK_CONTROL_MASK);
             bool wheelzooms = prefs->getBool("/options/wheelzooms/value");
 
