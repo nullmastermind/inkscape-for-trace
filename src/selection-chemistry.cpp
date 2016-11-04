@@ -2653,12 +2653,12 @@ void ObjectSet::relink()
 }
 
 
-void ObjectSet::unlink()
+bool ObjectSet::unlink(const bool skip_undo)
 {
     if (isEmpty()) {
         if(desktop())
             desktop()->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>clones</b> to unlink."));
-        return;
+        return false;
     }
 
     // Get a copy of current selection.
@@ -2715,8 +2715,56 @@ void ObjectSet::unlink()
             desktop()->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No clones to unlink</b> in the selection."));
     }
 
-    DocumentUndo::done(document(), SP_VERB_EDIT_UNLINK_CLONE,
-                       _("Unlink clone"));
+    if (!skip_undo) {
+        DocumentUndo::done(document(), SP_VERB_EDIT_UNLINK_CLONE,
+                           _("Unlink clone"));
+    }
+    return unlinked;
+}
+
+bool ObjectSet::unlinkRecursive(const bool skip_undo) {
+    if (isEmpty()){
+        if (desktop())
+            desktop()->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select <b>clones</b> to unlink."));
+        return false;
+    }
+    bool unlinked = false;
+    ObjectSet tmp_set(document());
+    std::vector<SPItem*> items_(items().begin(), items().end());
+    for (auto& it:items_){
+        if (SP_IS_GROUP(it)) {
+            std::vector<SPObject*> c = it->childList(false);
+            tmp_set.setList(c);
+            unlinked = tmp_set.unlinkRecursive(true) || unlinked;
+        }
+        tmp_set.set(it);
+        bool has_clip  = false;
+        bool has_mask  = false;
+        Inkscape::URIReference *clip = it->clip_ref;
+        Inkscape::URIReference *mask = it->mask_ref;
+        if ((NULL != clip) && (NULL != clip->getObject())) {
+            tmp_set.unsetMask(true,true);
+            has_clip = true;
+        }
+        if ((NULL != mask) && (NULL != mask->getObject())) {
+            tmp_set.unsetMask(false,true);
+            has_mask = true;
+        }
+        unlinked = tmp_set.unlink(true) || unlinked;
+        if (has_mask)
+            tmp_set.setMask(false,false,true);
+        if (has_clip)
+            tmp_set.setMask(true,false,true);
+    }
+    if (!unlinked) {
+        if(desktop())
+            desktop()->messageStack()->flash(Inkscape::ERROR_MESSAGE, _("<b>No clones to unlink</b> in the selection."));
+    }
+    if (!skip_undo) {
+        DocumentUndo::done(document(), SP_VERB_EDIT_UNLINK_CLONE_RECURSIVE,
+                                           _("Unlink clone recursively"));
+    }
+    return unlinked;
 }
 
 void ObjectSet::cloneOriginal()
@@ -3960,7 +4008,7 @@ void ObjectSet::setClipGroup()
     }
 }
 
-void ObjectSet::unsetMask(bool apply_clip_path) {
+void ObjectSet::unsetMask(const bool apply_clip_path, const bool skip_undo) {
     SPDocument *doc = document();
     Inkscape::XML::Document *xml_doc = doc->getReprDoc();
 
@@ -4082,10 +4130,12 @@ void ObjectSet::unsetMask(bool apply_clip_path) {
     // rebuild selection
     addList(items_to_select);
 
-    if (apply_clip_path) {
-        DocumentUndo::done(doc, SP_VERB_OBJECT_UNSET_CLIPPATH, _("Release clipping path"));
-    } else {
-        DocumentUndo::done(doc, SP_VERB_OBJECT_UNSET_MASK, _("Release mask"));
+    if (!skip_undo) {
+        if (apply_clip_path) {
+            DocumentUndo::done(doc, SP_VERB_OBJECT_UNSET_CLIPPATH, _("Release clipping path"));
+        } else {
+            DocumentUndo::done(doc, SP_VERB_OBJECT_UNSET_MASK, _("Release mask"));
+        }
     }
 }
 
