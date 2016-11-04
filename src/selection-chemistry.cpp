@@ -2669,41 +2669,66 @@ bool ObjectSet::unlink(const bool skip_undo)
     for (auto i=items_.rbegin();i!=items_.rend();++i){
         SPItem *item = *i;
 
-        if (dynamic_cast<SPText *>(item)) {
-            SPObject *tspan = sp_tref_convert_to_tspan(item);
+        ObjectSet tmp_set(document());
+        tmp_set.set(item);
+        bool has_clip  = false;
+        bool has_mask  = false;
+        Inkscape::URIReference *clip = item->clip_ref;
+        Inkscape::URIReference *mask = item->mask_ref;
+        if ((NULL != clip) && (NULL != clip->getObject())) {
+            tmp_set.unsetMask(true,true);
+            has_clip = true;
+        }
+        if ((NULL != mask) && (NULL != mask->getObject())) {
+            tmp_set.unsetMask(false,true);
+            has_mask = true;
+        }
 
-            if (tspan) {
-                item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+        if (has_mask || has_clip) {
+            unlinked = tmp_set.unlink(true) || unlinked;
+            if (has_mask)
+                tmp_set.setMask(false,false,true);
+            if (has_clip)
+                tmp_set.setMask(true,false,true);
+            new_select.push_back(tmp_set.singleItem());
+        }
+        else {
+            if (dynamic_cast<SPText *>(item)) {
+                SPObject *tspan = sp_tref_convert_to_tspan(item);
+
+                if (tspan) {
+                    item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+                }
+
+                // Set unlink to true, and fall into the next if which
+                // will include this text item in the new selection
+                unlinked = true;
             }
 
-            // Set unlink to true, and fall into the next if which
-            // will include this text item in the new selection
-            unlinked = true;
-        }
-
-        if (!(dynamic_cast<SPUse *>(item) || dynamic_cast<SPTRef *>(item))) {
-            // keep the non-use item in the new selection
-            new_select.push_back(item);
-            continue;
-        }
-
-        SPItem *unlink = NULL;
-        SPUse *use = dynamic_cast<SPUse *>(item);
-        if (use) {
-            unlink = use->unlink();
-            // Unable to unlink use (external or invalid href?)
-            if (!unlink) {
+            if (!(dynamic_cast<SPUse *>(item) || dynamic_cast<SPTRef *>(item))) {
+                // keep the non-use item in the new selection
                 new_select.push_back(item);
                 continue;
             }
-        } else /*if (SP_IS_TREF(use))*/ {
-            unlink = dynamic_cast<SPItem *>(sp_tref_convert_to_tspan(item));
-            g_assert(unlink != NULL);
-        }
 
-        unlinked = true;
-        // Add ungrouped items to the new selection.
-        new_select.push_back(unlink);
+            SPItem *unlink = NULL;
+            SPUse *use = dynamic_cast<SPUse *>(item);
+            if (use) {
+                unlink = use->unlink();
+                // Unable to unlink use (external or invalid href?)
+                if (!unlink) {
+                    new_select.push_back(item);
+                    continue;
+                }
+            } else /*if (SP_IS_TREF(use))*/ {
+                unlink = dynamic_cast<SPItem *>(sp_tref_convert_to_tspan(item));
+                g_assert(unlink != NULL);
+            }
+
+            unlinked = true;
+            // Add ungrouped items to the new selection.
+            new_select.push_back(unlink);
+        }
     }
 
     if (!new_select.empty()) { // set new selection
