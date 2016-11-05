@@ -376,7 +376,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 break;
 
             case 2:
-                if (event->button.state & GDK_MOD1_MASK) {
+                if (event->button.state & GDK_CONTROL_MASK) {
                     sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate), event->button.time);
                     desktop->canvas->startRotateTo(desktop->namedview->document_rotation);
                     this->rotating_mode = true;
@@ -406,7 +406,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 break;
 
             case 3:
-                if (event->button.state & GDK_MOD1_MASK) {
+                if (event->button.state & GDK_CONTROL_MASK) {
                     sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate), event->button.time);
                     desktop->canvas->startRotateTo(desktop->namedview->document_rotation);
                     this->rotating_mode = true;
@@ -742,7 +742,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 break;
 
             case GDK_KEY_space:
-                if (event->key.state & GDK_MOD1_MASK) {
+                if (event->key.state & GDK_CONTROL_MASK) {
                     sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate), event->button.time);
                     desktop->canvas->startRotateTo(desktop->namedview->document_rotation);
                     this->rotating_mode = true;
