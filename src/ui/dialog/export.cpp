@@ -977,9 +977,6 @@ void Export::onExport ()
     SPDocument *doc = desktop->getDocument();
     Geom::Affine rot = doc->getRoot()->c2p;
     doc->getRoot()->c2p = doc->getRoot()->rotation.inverse() * doc->getRoot()->c2p;
-    //double rotate_angle = doc->getRoot()->get_rotation();
-    //Inkscape::XML::Node *nv_repr = sp_item_group_get_child_by_name(doc->getRoot(), NULL, "sodipodi:namedview")->getRepr();
-    //sp_repr_set_svg_double(nv_repr, "inkscape:document-rotation", 0.);
     doc->ensureUpToDate();
     bool exportSuccessful = false;
 

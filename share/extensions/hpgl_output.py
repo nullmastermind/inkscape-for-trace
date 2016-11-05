@@ -20,6 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 # standard library
 import sys
+from inkex import NSS
 # local libraries
 import hpgl_encoder
 import inkex
@@ -48,6 +49,13 @@ class HpglOutput(inkex.Effect):
     def effect(self):
         self.options.debug = False
         # get hpgl data
+        svg = self.document.getroot()
+        xpathStr = '//sodipodi:namedview'
+        nv = svg.xpath(xpathStr, namespaces=NSS)
+        document_rotate = "0"
+        if nv != []:
+            document_rotate = nv[0].get("{http://www.inkscape.org/namespaces/inkscape}document-rotation")
+            nv[0].set("{http://www.inkscape.org/namespaces/inkscape}document-rotation","0")
         myHpglEncoder = hpgl_encoder.hpglEncoder(self)
         try:
             self.hpgl, debugObject = myHpglEncoder.getHpgl()
@@ -56,9 +64,13 @@ class HpglOutput(inkex.Effect):
                 # issue error if no paths found
                 inkex.errormsg(_("No paths where found. Please convert all objects you want to save into paths."))
                 self.hpgl = ''
+                if nv != [] and document_rotate:
+                    nv[0].set("{http://www.inkscape.org/namespaces/inkscape}document_rotation",document_rotate)
                 return
             else:
                 type, value, traceback = sys.exc_info()
+                if nv != [] and document_rotate:
+                    nv[0].set("{http://www.inkscape.org/namespaces/inkscape}document_rotation",document_rotate)
                 raise ValueError, ("", type, value), traceback
         # convert raw HPGL to HPGL
         hpglInit = 'IN'
@@ -67,6 +79,8 @@ class HpglOutput(inkex.Effect):
         if self.options.speed > 0:
             hpglInit += ';VS%d' % self.options.speed
         self.hpgl = hpglInit + self.hpgl + ';SP0;PU0,0;IN; '
+        if nv != [] and document_rotate:
+            nv[0].set("{http://www.inkscape.org/namespaces/inkscape}document_rotation",document_rotate)
 
     def output(self):
         # print to file
