@@ -2767,6 +2767,7 @@ bool ObjectSet::unlinkRecursive(const bool skip_undo) {
         DocumentUndo::done(document(), SP_VERB_EDIT_UNLINK_CLONE_RECURSIVE,
                                            _("Unlink clone recursively"));
     }
+    setList(items_);
     return unlinked;
 }
 
