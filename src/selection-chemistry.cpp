@@ -2749,30 +2749,15 @@ bool ObjectSet::unlinkRecursive(const bool skip_undo) {
     bool unlinked = false;
     ObjectSet tmp_set(document());
     std::vector<SPItem*> items_(items().begin(), items().end());
-    for (auto& it:items_){
+    for (auto& it:items_) {
+        tmp_set.set(it);
+        unlinked = tmp_set.unlink(true) || unlinked;
+        it = tmp_set.singleItem();
         if (SP_IS_GROUP(it)) {
             std::vector<SPObject*> c = it->childList(false);
             tmp_set.setList(c);
             unlinked = tmp_set.unlinkRecursive(true) || unlinked;
         }
-        tmp_set.set(it);
-        bool has_clip  = false;
-        bool has_mask  = false;
-        Inkscape::URIReference *clip = it->clip_ref;
-        Inkscape::URIReference *mask = it->mask_ref;
-        if ((NULL != clip) && (NULL != clip->getObject())) {
-            tmp_set.unsetMask(true,true);
-            has_clip = true;
-        }
-        if ((NULL != mask) && (NULL != mask->getObject())) {
-            tmp_set.unsetMask(false,true);
-            has_mask = true;
-        }
-        unlinked = tmp_set.unlink(true) || unlinked;
-        if (has_mask)
-            tmp_set.setMask(false,false,true);
-        if (has_clip)
-            tmp_set.setMask(true,false,true);
     }
     if (!unlinked) {
         if(desktop())
