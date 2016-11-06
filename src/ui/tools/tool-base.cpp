@@ -406,34 +406,25 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 break;
 
             case 3:
-                if (event->button.state & GDK_CONTROL_MASK) {
-                    sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate), event->button.time);
-                    desktop->canvas->startRotateTo(desktop->namedview->document_rotation);
-                    this->rotating_mode = true;
-                    this->message_context->set(Inkscape::INFORMATION_MESSAGE,
-                            _("<b>Space+ALT+mouse move</b> to rotate canvas"));
-                } else {
-                    if ((event->button.state & GDK_SHIFT_MASK) || (event->button.state & GDK_CONTROL_MASK)) {
-                        // When starting panning, make sure there are no snap events pending because these might disable the panning again
-                        if (_uses_snap) {
-                            sp_event_context_discard_delayed_snap_event(this);
-                        }
-                        panning = 3;
-
-                        sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
-                                GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK
-                                        | GDK_POINTER_MOTION_HINT_MASK, NULL,
-                                event->button.time);
-
-                        ret = TRUE;
-                    } else if( !this->space_panning) {
-                        sp_event_root_menu_popup(desktop, NULL, event);
+                if ((event->button.state & GDK_SHIFT_MASK) || (event->button.state & GDK_CONTROL_MASK)) {
+                    // When starting panning, make sure there are no snap events pending because these might disable the panning again
+                    if (_uses_snap) {
+                        sp_event_context_discard_delayed_snap_event(this);
                     }
-                    desktop->canvas->clearRotateTo();
-                    this->rotating_mode = false;
+                    panning = 3;
+
+                    sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
+                            GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK
+                                    | GDK_POINTER_MOTION_HINT_MASK, NULL,
+                            event->button.time);
+
                     ret = TRUE;
-                    desktop->canvas->endRotateTo();
+                } else if( !this->space_panning) {
+                    sp_event_root_menu_popup(desktop, NULL, event);
                 }
+                desktop->canvas->clearRotateTo();
+                this->rotating_mode = false;
+                ret = TRUE;
                 break;
 
             default:
