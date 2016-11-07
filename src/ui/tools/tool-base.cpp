@@ -373,6 +373,8 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
                     ret = TRUE;
                 }
+                desktop->canvas->clearRotateTo();
+                this->rotating_mode = false;
                 break;
 
             case 2:
@@ -420,6 +422,8 @@ bool ToolBase::root_handler(GdkEvent* event) {
                     sp_event_root_menu_popup(desktop, NULL, event);
                 }
                 ret = TRUE;
+                desktop->canvas->clearRotateTo();
+                this->rotating_mode = false;
                 break;
 
             default:
@@ -836,9 +840,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
             if (this->rotating_mode) {
                 desktop->canvas->clearRotateTo();
                 this->rotating_mode = false;
-                ret = TRUE;
                 desktop->canvas->endRotateTo();
-                break;
             }
             bool ctrl = (event->scroll.state & GDK_CONTROL_MASK);
             bool wheelzooms = prefs->getBool("/options/wheelzooms/value");
