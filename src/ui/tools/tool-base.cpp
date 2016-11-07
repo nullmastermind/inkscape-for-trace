@@ -381,7 +381,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
                     desktop->canvas->startRotateTo(desktop->namedview->document_rotation);
                     this->rotating_mode = true;
                     this->message_context->set(Inkscape::INFORMATION_MESSAGE,
-                            _("<b>Space+ALT+mouse move</b> to rotate canvas"));
+                            _("<b>MMB + mouse move</b> to rotate canvas, use modifiers on screen to change snaps"));
                 } else {
                     if (event->button.state & GDK_SHIFT_MASK) {
                         zoom_rb = 2;
@@ -397,10 +397,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
                                         | GDK_POINTER_MOTION_HINT_MASK, NULL,
                                 event->button.time - 1);
                     }
-                    desktop->canvas->clearRotateTo();
-                    this->rotating_mode = false;
                     ret = TRUE;
-                    desktop->canvas->endRotateTo();
                 }
                 ret = TRUE;
                 break;
@@ -422,8 +419,6 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 } else if( !this->space_panning) {
                     sp_event_root_menu_popup(desktop, NULL, event);
                 }
-                desktop->canvas->clearRotateTo();
-                this->rotating_mode = false;
                 ret = TRUE;
                 break;
 
@@ -464,7 +459,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
                                 | GDK_POINTER_MOTION_HINT_MASK, NULL,
                         event->motion.time - 1);
             }
-            if (panning) {
+            if (panning && !this->rotating_mode) {
                 if ((panning == 2 && !(event->motion.state & GDK_BUTTON2_MASK))
                         || (panning == 1 && !(event->motion.state & GDK_BUTTON1_MASK))
                         || (panning == 3 && !(event->motion.state & GDK_BUTTON3_MASK))) {
@@ -738,7 +733,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
                     desktop->canvas->startRotateTo(desktop->namedview->document_rotation);
                     this->rotating_mode = true;
                     this->message_context->set(Inkscape::INFORMATION_MESSAGE,
-                            _("<b>Space+ALT+mouse move</b> to rotate canvas"));
+                            _("<b>Space+mouse move</b> to rotate canvas, use modifiers on screen to change snaps"));
                 } else {
                     within_tolerance = true;
                     xp = yp = 0;
