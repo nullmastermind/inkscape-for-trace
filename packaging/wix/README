@@ -16,13 +16,17 @@ build the installer
 
 when completed there should be inkscape.msi in your path
 
+helpful tips
+- set  CompressionLevel="none"  in inkscape.wxs
+  while experimenting with installer creation
+  (results in huge installer but much faster compilation times)
+
 things still todo
 - detailed explanation what to do for new revisions
 - better filenames (nightly builds versus releases)
 - howto remove python .pyc files after deinstallation
 - localisation into the installer
-
-helpful tips
-- set  CompressionLevel="none"  in inkscape.wxs
-  while experimenting with installer creation
-  (results in huge installer but much faster compilation times)
+- make "Typical" and "Complete" installations actually install different files
+  (at least don't lie to the user by suggesting there would be two different choices)
+- conditionally install localized content according to the users previous feature choices
+  (e.g. only install translated versions of tutorials if the "Tutorials" feature is selected)
