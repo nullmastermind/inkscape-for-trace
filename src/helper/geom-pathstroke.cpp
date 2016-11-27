@@ -945,9 +945,8 @@ void offset_quadratic(Geom::Path& p, Geom::QuadraticBezier const& bez, double wi
     offset_cubic(p, cub, width, tol, levels);
 }
 
-void offset_curve(Geom::Path& res, Geom::Curve const* current, double width)
+void offset_curve(Geom::Path& res, Geom::Curve const* current, double width, double tolerance)
 {
-    double const tolerance = 5.0 * (width / 100); // Tolerance is 5% of the given width.
     size_t levels = 8;
 
     if (current->isDegenerate()) return; // don't do anything
@@ -973,14 +972,14 @@ void offset_curve(Geom::Path& res, Geom::Curve const* current, double width)
             default: {
                 Geom::Path sbasis_path = Geom::cubicbezierpath_from_sbasis(current->toSBasis(), tolerance);
                 for (size_t i = 0; i < sbasis_path.size(); ++i)
-                    offset_curve(res, &sbasis_path[i], width);
+                    offset_curve(res, &sbasis_path[i], width, tolerance);
                 break;
             }
         }
     } else {
         Geom::Path sbasis_path = Geom::cubicbezierpath_from_sbasis(current->toSBasis(), 0.1);
         for (size_t i = 0; i < sbasis_path.size(); ++i)
-            offset_curve(res, &sbasis_path[i], width);
+            offset_curve(res, &sbasis_path[i], width, tolerance);
     }
 }
 
@@ -1067,6 +1066,7 @@ Geom::PathVector outline(Geom::Path const& input, double width, double miter, Li
 
 Geom::Path half_outline(Geom::Path const& input, double width, double miter, LineJoinType join)
 {
+    double const tolerance = 5.0 * (width/100); // Tolerance is 5%
     Geom::Path res;
     if (input.size() == 0) return res;
 
@@ -1086,7 +1086,7 @@ Geom::Path half_outline(Geom::Path const& input, double width, double miter, Lin
     for (size_t u = 0; u < k; u += 2) {
         temp.clear();
 
-        offset_curve(temp, &input[u], width);
+        offset_curve(temp, &input[u], width, tolerance);
 
         // on the first run through, there isn't a join
         if (u == 0) {
@@ -1099,7 +1099,7 @@ Geom::Path half_outline(Geom::Path const& input, double width, double miter, Lin
         // odd number of paths
         if (u < k - 1) {
             temp.clear();
-            offset_curve(temp, &input[u+1], width);
+            offset_curve(temp, &input[u+1], width, tolerance);
             tangents(tang, input[u], input[u+1]);
             outline_join(res, temp, tang[0], tang[1], width, miter, join);
         }
