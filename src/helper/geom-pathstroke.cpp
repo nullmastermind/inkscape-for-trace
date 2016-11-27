@@ -792,7 +792,7 @@ double _offset_cubic_stable_sub(
     // check the tolerance for our estimate to be a parallel curve
 
     double worst_residual = 0;
-    for (size_t ii = 1; ii <= 9; ++ii) {
+    for (size_t ii = 3; ii <= 7; ii+=2) {
         const double t = static_cast<double>(ii) / 10;
         const Geom::Point req = bez.pointAt(t);
         const Geom::Point chk = c.pointAt(c.nearestTime(req));
@@ -947,7 +947,7 @@ void offset_quadratic(Geom::Path& p, Geom::QuadraticBezier const& bez, double wi
 
 void offset_curve(Geom::Path& res, Geom::Curve const* current, double width)
 {
-    double const tolerance = 1.0 * (width / 100); // Tolerance is 1% of the given width.
+    double const tolerance = 5.0 * (width / 100); // Tolerance is 5% of the given width.
     size_t levels = 8;
 
     if (current->isDegenerate()) return; // don't do anything
