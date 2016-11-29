@@ -1081,8 +1081,9 @@ Geom::Path half_outline(Geom::Path const& input, double width, double miter, Lin
     res.start(start);
 
     // Do two curves at a time for efficiency, since the join function needs to know the outgoing curve as well
-    const size_t k = (input.back_closed().isDegenerate() && input.closed())
-            ?input.size_default()-1:input.size_default();
+    const Geom::Curve &closingline = input.back_closed();
+    const size_t k = (are_near(closingline.initialPoint(), closingline.finalPoint()) && input.closed() )
+            ?input.size_open():input.size_default();
     for (size_t u = 0; u < k; u += 2) {
         temp.clear();
 
@@ -1104,7 +1105,6 @@ Geom::Path half_outline(Geom::Path const& input, double width, double miter, Lin
             outline_join(res, temp, tang[0], tang[1], width, miter, join);
         }
     }
-
     if (input.closed()) {
         Geom::Curve const &c1 = res.back();
         Geom::Curve const &c2 = res.front();
@@ -1116,7 +1116,6 @@ Geom::Path half_outline(Geom::Path const& input, double width, double miter, Lin
         outline_join(temp, temp2, tang[0], tang[1], width, miter, join);
         res.erase(res.begin());
         res.erase_last();
-        //
         res.append(temp);
         res.close();
     }
@@ -1128,9 +1127,8 @@ void outline_join(Geom::Path &res, Geom::Path const& temp, Geom::Point in_tang, 
 {
     if (res.size() == 0 || temp.size() == 0)
         return;
-
     Geom::Curve const& outgoing = temp.front();
-    if (Geom::are_near(res.finalPoint(), outgoing.initialPoint())) {
+    if (Geom::are_near(res.finalPoint(), outgoing.initialPoint(), 0.01)) {
         // if the points are /that/ close, just ignore this one
         res.setFinal(temp.initialPoint());
         res.append(temp);
