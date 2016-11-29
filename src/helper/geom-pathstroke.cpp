@@ -1078,7 +1078,7 @@ Geom::Path half_outline(
         double tolerance)
 {
     if (tolerance <= 0) {
-        if (width > 0) {
+        if (std::abs(width) > 0) {
             tolerance = 5.0 * (std::abs(width)/100);
         }
         else {
