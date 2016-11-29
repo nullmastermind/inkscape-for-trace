@@ -1019,13 +1019,19 @@ void peak_cap(Geom::PathBuilder& res, Geom::Path const& with_dir, Geom::Path con
 
 namespace Inkscape {
 
-Geom::PathVector outline(Geom::Path const& input, double width, double miter, LineJoinType join, LineCapType butt)
+Geom::PathVector outline(
+        Geom::Path const& input,
+        double width,
+        double miter,
+        LineJoinType join,
+        LineCapType butt,
+        double tolerance)
 {
     if (input.size() == 0) return Geom::PathVector(); // nope, don't even try
 
     Geom::PathBuilder res;
-    Geom::Path with_dir = half_outline(input, width/2., miter, join);
-    Geom::Path against_dir = half_outline(input.reversed(), width/2., miter, join);
+    Geom::Path with_dir = half_outline(input, width/2., miter, join, tolerance);
+    Geom::Path against_dir = half_outline(input.reversed(), width/2., miter, join, tolerance);
 
     res.moveTo(with_dir[0].initialPoint());
     res.append(with_dir);
@@ -1064,9 +1070,21 @@ Geom::PathVector outline(Geom::Path const& input, double width, double miter, Li
     return res.peek();
 }
 
-Geom::Path half_outline(Geom::Path const& input, double width, double miter, LineJoinType join)
+Geom::Path half_outline(
+        Geom::Path const& input,
+        double width,
+        double miter,
+        LineJoinType join,
+        double tolerance)
 {
-    double const tolerance = 5.0 * (width/100); // Tolerance is 5%
+    if (tolerance <= 0) {
+        if (width > 0) {
+            tolerance = 5.0 * (std::abs(width)/100);
+        }
+        else {
+            tolerance = 1e-4;
+        }
+    }
     Geom::Path res;
     if (input.size() == 0) return res;
 
