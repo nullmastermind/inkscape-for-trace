@@ -31,6 +31,12 @@ namespace MS {
 class KnotHolderEntityCenterMirrorSymmetry;
 }
 
+enum LpeAction {
+    LPE_ERASE = 0,
+    LPE_TO_OBJECTS,
+    LPE_VISIBILITY
+};
+
 enum ModeType {
     MT_V,
     MT_H,
@@ -48,8 +54,13 @@ public:
     virtual void doBeforeEffect (SPLPEItem const* lpeitem);
     virtual void transform_multiply(Geom::Affine const& postmul, bool set);
     virtual Geom::PathVector doEffect_path (Geom::PathVector const & path_in);
+    virtual void doOnRemove (SPLPEItem const* /*lpeitem*/);
+    virtual void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/);
+    void processObjects(LpeAction lpe_action);
     /* the knotholder entity classes must be declared friends */
     friend class MS::KnotHolderEntityCenterMirrorSymmetry;
+    void createPhantom(SPLPEItem *origin, Glib::ustring id, bool styling);
+    void createClone(SPLPEItem *origin, Geom::Affine transform, Glib::ustring id);
     void addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item);
 
 protected:
@@ -60,6 +71,9 @@ private:
     BoolParam discard_orig_path;
     BoolParam fuse_paths;
     BoolParam oposite_fuse;
+    BoolParam split;
+    BoolParam split_sensitive;
+    BoolParam split_style;
     PointParam start_point;
     PointParam end_point;
     Geom::Line line_separation;
