@@ -40,9 +40,6 @@ static const Util::EnumData<ModeType> ModeTypeData[MT_END] = {
 static const Util::EnumDataConverter<ModeType>
 MTConverter(ModeTypeData, MT_END);
 
-std::vector<gchar *> ms_elements;
-SPObject * ms_container;
-
 namespace MS {
 
 class KnotHolderEntityCenterMirrorSymmetry : public LPEKnotHolderEntity {
@@ -62,7 +59,6 @@ LPEMirrorSymmetry::LPEMirrorSymmetry(LivePathEffectObject *lpeobject) :
     fuse_paths(_("Fuse paths"), _("Fuse original and the reflection into a single path"), "fuse_paths", &wr, this, false),
     oposite_fuse(_("Opposite fuse"), _("Picks the other side of the mirror as the original"), "oposite_fuse", &wr, this, false),
     split_elements(_("Split elements"), _("Split elements, this allow gradients and other paints"), "split_elements", &wr, this, false),
-    split_sensitive(_("Make split selectable"), _("Allow select splited elements"), "split_sensitive", &wr, this, false),
     start_point(_("Start mirror line"), _("Start mirror line"), "start_point", &wr, this, "Adjust the start of mirroring"),
     end_point(_("End mirror line"), _("End mirror line"), "end_point", &wr, this, "Adjust end of mirroring"),
     id_origin("id_origin", "id_origin", "id_origin", &wr, this,"")
@@ -74,7 +70,6 @@ LPEMirrorSymmetry::LPEMirrorSymmetry(LivePathEffectObject *lpeobject) :
     registerParameter( &fuse_paths);
     registerParameter( &oposite_fuse);
     registerParameter( &split_elements);
-    //registerParameter( &split_sensitive);
     registerParameter( &start_point);
     registerParameter( &end_point);
     registerParameter( &id_origin);
@@ -167,6 +162,9 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
     }
     previous_center = center_point;
     if (split_elements) {
+        ms_elements.clear();
+        ms_elements.push_back(id);
+        ms_elements.push_back(id_origin.param_getSVGValue());
         ms_container = dynamic_cast<SPObject *>(splpeitem->parent);
         SPDocument * doc = SP_ACTIVE_DOCUMENT;
         Inkscape::XML::Node *root = splpeitem->document->getReprRoot();
@@ -174,13 +172,6 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
         if (root_origin != root) {
             return;
         }
-//        if (std::strcmp(splpeitem->getId(), id) == 0) {
-//            Geom::Affine affine = Geom::identity();
-//            affine *= Geom::Translate(center_point).inverse();
-//            affine *= Geom::Rotate(Geom::rad_from_deg(180));
-//            affine *= Geom::Translate(center_point);
-//            line_separation *= affine;
-//        }
         Geom::Point point_a(line_separation.initialPoint());
         Geom::Point point_b(line_separation.finalPoint());
         Geom::Point gap = Geom::Point(split_gap,0);
@@ -204,30 +195,75 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
         m = m * m1;
         m = m * gap;
         m = m * lpeitem->transform;
-        ms_elements.clear();
         createMirror(splpeitem, m, id);
     } else {
+        ms_elements.clear();
         processObjects(LPE_ERASE);
     }
 }
 
+//void
+//LPEMirrorSymmetry::cloneAttrbutes(Inkscape::XML::Node * origin, Inkscape::XML::Node * dest, char const * first_attribute, ...) 
+//{
+//    va_list args;
+//    va_start(args, first_attribute);
+
+//    if ( origin->name() == "svg:g" && origin->childCount() == dest->childCount() ) {
+//        Inkscape::XML::Node * node_it = origin->firstChild();
+//        size_t index = 0;
+//        while (node_it != origin->lastChild()) {
+//            cloneAttrbutes(node_it, dest->nthChild(index), first_attribute, live, args); 
+//            node_it = node_it->next(); 
+//            index++;
+//        }
+//    }
+//    while(char const * att = va_arg(args, char const *)) {
+//        dest->setAttribute(att,origin->attribute(att));
+//    }
+//    va_end(args);
+//}
+
 void
-LPEMirrorSymmetry::cloneAttrbutes(Inkscape::XML::Node * origin, Inkscape::XML::Node * dest, char const * first_attribute, ...) 
+LPEMirrorSymmetry::cloneAttrbutes(SPObject *origin, SPObject *dest, bool live, char const * first_attribute, ...) 
 {
     va_list args;
     va_start(args, first_attribute);
-
-    if ( origin->name() == "svg:g" && origin->childCount() == dest->childCount() ) {
-        Inkscape::XML::Node * node_it = origin->firstChild();
+    
+    if ( SP_IS_GROUP(origin) && SP_IS_GROUP(dest) && SP_GROUP(origin)->getItemCount() == SP_GROUP(dest)->getItemCount() ) {
+        std::vector< SPObject * > childs = origin->childList(true);
         size_t index = 0;
-        while (node_it != origin->lastChild()) {
-            cloneAttrbutes(node_it, dest->nthChild(index), first_attribute, args); 
-            node_it = node_it->next(); 
+        for (std::vector<SPObject * >::iterator obj_it = childs.begin(); 
+             obj_it != childs.end(); ++obj_it) {
+            SPObject *dest_child = dest->nthChild(index); 
+            cloneAttrbutes(*obj_it, dest_child, live, first_attribute, args); 
             index++;
         }
     }
+    unsigned counter = 0;
     while(char const * att = va_arg(args, char const *)) {
-        dest->setAttribute(att,origin->attribute(att));
+        if (counter % 2 != 0){
+            SPShape * shape =  SP_SHAPE(origin);
+            if (shape) {
+                if ( live && (att == "d" || att == "inkscape:original-d")) {
+                    SPCurve *c = NULL;
+                    if (att == "d") {
+                        c = shape->getCurve();
+                    } else {
+                        c = shape->getCurveBeforeLPE();
+                    }
+                    if (c) {
+                        dest->getRepr()->setAttribute(att,sp_svg_write_path(c->get_pathvector()));
+                        c->reset();
+                        g_free(c);                    
+                    } else {
+                        dest->getRepr()->setAttribute(att,NULL);
+                    }
+                } else {
+                    dest->getRepr()->setAttribute(att,origin->getRepr()->attribute(att));
+                }
+            }
+        }
+        counter++;
     }
     va_end(args);
 }
@@ -247,27 +283,21 @@ LPEMirrorSymmetry::createMirror(SPLPEItem *origin, Geom::Affine transform, gchar
         } else {
             phantom = origin->getRepr()->duplicate(xml_doc);
         }
-        cloneAttrbutes(origin->getRepr(), phantom, "inkscape:original-d"); 
+
         phantom->setAttribute("id", id);
-       // if (std::strcmp(id, id_origin.param_getSVGValue()) != 0) {
-            phantom->setAttribute("transform" , sp_svg_transform_write(transform));
-        
-//        if (split_sensitive) {
-//            phantom->setAttribute("sodipodi:insensitive" , NULL);
-//        } else {
-//            phantom->setAttribute("sodipodi:insensitive" , "true");
-//        }
         if (!elemref) {
             elemref = ms_container->appendChildRepr(phantom);
             Inkscape::GC::release(phantom);
-        } else if (elemref->parent != ms_container) {
+        }
+        cloneAttrbutes(SP_OBJECT(origin), elemref, true, "inkscape:original-d");
+        elemref->getRepr()->setAttribute("transform" , sp_svg_transform_write(transform));
+        if (elemref->parent != ms_container) {
             Inkscape::XML::Node *copy = phantom->duplicate(xml_doc);
+            copy->setAttribute("id", id);
             ms_container->appendChildRepr(copy);
             Inkscape::GC::release(copy);
             elemref->deleteObject();
-            copy->setAttribute("id", id);
         }
-        ms_elements.push_back(id);
     }
 }
 
@@ -283,6 +313,7 @@ LPEMirrorSymmetry::doOnRemove (SPLPEItem const* /*lpeitem*/)
 {
     if (!erase_extra_objects) {
         processObjects(LPE_TO_OBJECTS);
+        std::cout << ms_elements.size()  << "ms_elements.size() ms_elements.size() ms_elements.size() ms_elements.size() ms_elements.size() \n";
         ms_elements.clear();
         return;
     }
@@ -294,17 +325,22 @@ LPEMirrorSymmetry::processObjects(LpeAction lpe_action)
 {
     if (SPDesktop *desktop = SP_ACTIVE_DESKTOP) {
         for (std::vector<gchar *>::iterator el_it = ms_elements.begin(); 
-             el_it != ms_elements.end();++el_it) {
+             el_it != ms_elements.end(); ++el_it) {
             gchar * id = *el_it;
+            std::cout << id << "idididididididididi\n";
             Inkscape::URI SVGElem_uri(((Glib::ustring)"#" +  id).c_str());
             Inkscape::URIReference* SVGElemRef = new Inkscape::URIReference(desktop->doc());
             SVGElemRef->attach(SVGElem_uri);
             SPObject *elemref = NULL;
             if (elemref = SVGElemRef->getObject()) {
+                SPLPEItem *lpe_element = dynamic_cast<SPLPEItem *>(elemref);
+                std::cout << elemref->getId() << "elemref->getId()elemref->getId()elemref->getId()elemref->getId()\n";
                 switch (lpe_action){
                 case LPE_TO_OBJECTS:
                     elemref->getRepr()->setAttribute("sodipodi:insensitive", NULL);
-                    SP_LPE_ITEM(elemref)->removeAllPathEffects(true);
+                    if (lpe_element && lpe_element->hasPathEffect()) {
+                        lpe_element->removeAllPathEffects(true);
+                    }
                 break;
                 case LPE_ERASE:
                     elemref->deleteObject();
@@ -357,6 +393,7 @@ LPEMirrorSymmetry::doOnApply (SPLPEItem const* lpeitem)
     center_point = point_c;
     previous_center = center_point;
     id_origin.param_setValue((Glib::ustring)lpeitem->getId());
+    id_origin.write_to_SVG();
 }
 
 

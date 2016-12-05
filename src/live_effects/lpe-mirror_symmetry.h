@@ -56,7 +56,8 @@ public:
     /* the knotholder entity classes must be declared friends */
     friend class MS::KnotHolderEntityCenterMirrorSymmetry;
     void createMirror(SPLPEItem *origin, Geom::Affine transform, gchar * id);
-    void cloneAttrbutes(Inkscape::XML::Node * origin, Inkscape::XML::Node * dest, char const * first_attribute, ...);
+//    void cloneAttrbutes(Inkscape::XML::Node * origin, Inkscape::XML::Node * dest, char const * first_attribute, ...);
+    void cloneAttrbutes(SPObject *origin, SPObject *dest, bool live, char const * first_attribute, ...);
     void addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item);
 
 protected:
@@ -69,7 +70,6 @@ private:
     BoolParam fuse_paths;
     BoolParam oposite_fuse;
     BoolParam split_elements;
-    BoolParam split_sensitive;
     PointParam start_point;
     PointParam end_point;
     TextParam id_origin;
@@ -77,7 +77,8 @@ private:
     Geom::Point previous_center;
     Geom::Point center_point;
     bool actual;
-
+    std::vector<gchar *> ms_elements;
+    SPObject * ms_container;
     LPEMirrorSymmetry(const LPEMirrorSymmetry&);
     LPEMirrorSymmetry& operator=(const LPEMirrorSymmetry&);
 };
