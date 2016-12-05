@@ -17,6 +17,7 @@
  */
 #include <gtkmm.h>
 #include "live_effects/effect.h"
+#include "live_effects/parameter/text.h"
 #include "live_effects/parameter/parameter.h"
 #include "live_effects/parameter/point.h"
 #include "live_effects/parameter/path.h"
@@ -30,12 +31,6 @@ namespace MS {
 // we need a separate namespace to avoid clashes with LPEPerpBisector
 class KnotHolderEntityCenterMirrorSymmetry;
 }
-
-enum LpeAction {
-    LPE_ERASE = 0,
-    LPE_TO_OBJECTS,
-    LPE_VISIBILITY
-};
 
 enum ModeType {
     MT_V,
@@ -56,11 +51,12 @@ public:
     virtual Geom::PathVector doEffect_path (Geom::PathVector const & path_in);
     virtual void doOnRemove (SPLPEItem const* /*lpeitem*/);
     virtual void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/);
+    virtual Gtk::Widget *newWidget();
     void processObjects(LpeAction lpe_action);
     /* the knotholder entity classes must be declared friends */
     friend class MS::KnotHolderEntityCenterMirrorSymmetry;
-    void createPhantom(SPLPEItem *origin, Glib::ustring id, bool styling);
-    void createClone(SPLPEItem *origin, Geom::Affine transform, Glib::ustring id);
+    void createMirror(SPLPEItem *origin, Geom::Affine transform, gchar * id);
+    void cloneAttrbutes(Inkscape::XML::Node * origin, Inkscape::XML::Node * dest, char const * first_attribute, ...);
     void addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item);
 
 protected:
@@ -68,17 +64,19 @@ protected:
 
 private:
     EnumParam<ModeType> mode;
+    ScalarParam split_gap;
     BoolParam discard_orig_path;
     BoolParam fuse_paths;
     BoolParam oposite_fuse;
-    BoolParam split;
+    BoolParam split_elements;
     BoolParam split_sensitive;
-    BoolParam split_style;
     PointParam start_point;
     PointParam end_point;
+    TextParam id_origin;
     Geom::Line line_separation;
     Geom::Point previous_center;
     Geom::Point center_point;
+    bool actual;
 
     LPEMirrorSymmetry(const LPEMirrorSymmetry&);
     LPEMirrorSymmetry& operator=(const LPEMirrorSymmetry&);

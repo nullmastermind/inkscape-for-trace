@@ -40,7 +40,7 @@ static const Util::EnumData<ModeType> ModeTypeData[MT_END] = {
 static const Util::EnumDataConverter<ModeType>
 MTConverter(ModeTypeData, MT_END);
 
-std::vector<Glib::ustring> ms_elements;
+std::vector<gchar *> ms_elements;
 SPObject * ms_container;
 
 namespace MS {
@@ -52,45 +52,38 @@ public:
     virtual Geom::Point knot_get() const;
 };
 
-class KnotHolderEntityStartMirrorSymmetry : public LPEKnotHolderEntity {
-public:
-    KnotHolderEntityStartMirrorSymmetry(LPEMirrorSymmetry *effect) : LPEKnotHolderEntity(effect){};
-    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state);
-    virtual Geom::Point knot_get() const;
-};
-
-class KnotHolderEntityEndMirrorSymmetry : public LPEKnotHolderEntity {
-public:
-    KnotHolderEntityEndMirrorSymmetry(LPEMirrorSymmetry *effect) : LPEKnotHolderEntity(effect){};
-    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state);
-    virtual Geom::Point knot_get() const;
-};
-
 } // namespace MS
 
 LPEMirrorSymmetry::LPEMirrorSymmetry(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
     mode(_("Mode"), _("Symmetry move mode"), "mode", MTConverter, &wr, this, MT_FREE),
+    split_gap(_("Gap on split"), _("Gap on split"), "split_gap", &wr, this, 0),
     discard_orig_path(_("Discard original path?"), _("Check this to only keep the mirrored part of the path"), "discard_orig_path", &wr, this, false),
     fuse_paths(_("Fuse paths"), _("Fuse original and the reflection into a single path"), "fuse_paths", &wr, this, false),
     oposite_fuse(_("Opposite fuse"), _("Picks the other side of the mirror as the original"), "oposite_fuse", &wr, this, false),
-    split(_("Split elements"), _("Split elements, this allow gradients and other paints"), "split", &wr, this, false),
-    split_sensitive(_("Make split selectable"), _("Allow select splited elements"), "split", &wr, this, false),
-    split_style(_("Make splits with style"), _("Allow Change colors to split"), "split", &wr, this, false),
+    split_elements(_("Split elements"), _("Split elements, this allow gradients and other paints"), "split_elements", &wr, this, false),
+    split_sensitive(_("Make split selectable"), _("Allow select splited elements"), "split_sensitive", &wr, this, false),
     start_point(_("Start mirror line"), _("Start mirror line"), "start_point", &wr, this, "Adjust the start of mirroring"),
-    end_point(_("End mirror line"), _("End mirror line"), "end_point", &wr, this, "Adjust end of mirroring")
+    end_point(_("End mirror line"), _("End mirror line"), "end_point", &wr, this, "Adjust end of mirroring"),
+    id_origin("id_origin", "id_origin", "id_origin", &wr, this,"")
 {
     show_orig_path = true;
     registerParameter(&mode);
+    registerParameter( &split_gap);
     registerParameter( &discard_orig_path);
     registerParameter( &fuse_paths);
     registerParameter( &oposite_fuse);
-    registerParameter( &split);
-    registerParameter( &split_sensitive);
-    registerParameter( &split_style);
+    registerParameter( &split_elements);
+    //registerParameter( &split_sensitive);
     registerParameter( &start_point);
     registerParameter( &end_point);
+    registerParameter( &id_origin);
+    id_origin.param_hide_canvas_text();
+    split_gap.param_set_range(-999999.0, 999999.0);
+    split_gap.param_set_increments(0.1, 0.1);
+    split_gap.param_set_digits(2);
     apply_to_clippath_and_mask = true;
+    actual = true;
 }
 
 LPEMirrorSymmetry::~LPEMirrorSymmetry()
@@ -98,14 +91,30 @@ LPEMirrorSymmetry::~LPEMirrorSymmetry()
 }
 
 void
-
 LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
 {
+    SPLPEItem * splpeitem = const_cast<SPLPEItem *>(lpeitem);
+    if (SPDesktop *desktop = SP_ACTIVE_DESKTOP) {
+        Inkscape::Selection *sel = desktop->getSelection();
+        if ( sel && !sel->isEmpty() ) {
+            SPItem *item = sel->singleItem();
+            if (item) {
+                if(std::strcmp(splpeitem->getId(),item->getId()) != 0) {
+                    actual = false;
+                    return;
+                }
+            } else {
+            
+            }
+        }
+    }
+
     using namespace Geom;
     original_bbox(lpeitem);
+    Geom::Affine m = Geom::identity();//lpeitem->transform;
     Point point_a(boundingbox_X.max(), boundingbox_Y.min());
     Point point_b(boundingbox_X.max(), boundingbox_Y.max());
-    Point point_c(boundingbox_X.max(), boundingbox_Y.middle());
+    gchar * id = g_strdup(((Glib::ustring)"mirror-" + (Glib::ustring)id_origin.param_getSVGValue() + (Glib::ustring)"-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
     if (mode == MT_Y) {
         point_a = Geom::Point(boundingbox_X.min(),center_point[Y]);
         point_b = Geom::Point(boundingbox_X.max(),center_point[Y]);
@@ -157,8 +166,7 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
         }
     }
     previous_center = center_point;
-    if (split) {
-        SPLPEItem * splpeitem = const_cast<SPLPEItem *>(lpeitem);
+    if (split_elements) {
         ms_container = dynamic_cast<SPObject *>(splpeitem->parent);
         SPDocument * doc = SP_ACTIVE_DOCUMENT;
         Inkscape::XML::Node *root = splpeitem->document->getReprRoot();
@@ -166,9 +174,16 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
         if (root_origin != root) {
             return;
         }
+//        if (std::strcmp(splpeitem->getId(), id) == 0) {
+//            Geom::Affine affine = Geom::identity();
+//            affine *= Geom::Translate(center_point).inverse();
+//            affine *= Geom::Rotate(Geom::rad_from_deg(180));
+//            affine *= Geom::Translate(center_point);
+//            line_separation *= affine;
+//        }
         Geom::Point point_a(line_separation.initialPoint());
         Geom::Point point_b(line_separation.finalPoint());
-
+        Geom::Point gap = Geom::Point(split_gap,0);
         Geom::Translate m1(point_a[0], point_a[1]);
         double hyp = Geom::distance(point_a, point_b);
         double cos = 0;
@@ -178,76 +193,80 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
             sin = (point_b[1] - point_a[1]) / hyp;
         }
         Geom::Affine m2(cos, -sin, sin, cos, 0.0, 0.0);
+        gap *= m2;
         Geom::Scale sca(1.0, -1.0);
-
-        Geom::Affine m = m1.inverse() * m2;
+        if (std::strcmp(splpeitem->getId(), id) == 0) {
+            id = id_origin.param_getSVGValue();
+        }
+        m = m1.inverse() * m2;
         m = m * sca;
         m = m * m2.inverse();
         m = m * m1;
-        createPhantom(splpeitem , (Glib::ustring) "origin-clon-", split_style);
-        createClone(splpeitem , m, (Glib::ustring) "clon-");
+        m = m * gap;
+        m = m * lpeitem->transform;
+        ms_elements.clear();
+        createMirror(splpeitem, m, id);
+    } else {
+        processObjects(LPE_ERASE);
     }
 }
 
 void
-LPEMirrorSymmetry::createPhantom(SPLPEItem *origin, Glib::ustring id, bool styling)
+LPEMirrorSymmetry::cloneAttrbutes(Inkscape::XML::Node * origin, Inkscape::XML::Node * dest, char const * first_attribute, ...) 
+{
+    va_list args;
+    va_start(args, first_attribute);
+
+    if ( origin->name() == "svg:g" && origin->childCount() == dest->childCount() ) {
+        Inkscape::XML::Node * node_it = origin->firstChild();
+        size_t index = 0;
+        while (node_it != origin->lastChild()) {
+            cloneAttrbutes(node_it, dest->nthChild(index), first_attribute, args); 
+            node_it = node_it->next(); 
+            index++;
+        }
+    }
+    while(char const * att = va_arg(args, char const *)) {
+        dest->setAttribute(att,origin->attribute(att));
+    }
+    va_end(args);
+}
+
+void
+LPEMirrorSymmetry::createMirror(SPLPEItem *origin, Geom::Affine transform, gchar * id)
 {
     if (SPDesktop *desktop = SP_ACTIVE_DESKTOP) {
         Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
-        id = id + (Glib::ustring)this->getRepr()->attribute("id");
         Inkscape::URI SVGElem_uri(((Glib::ustring)"#" + id).c_str());
         Inkscape::URIReference* SVGElemRef = new Inkscape::URIReference(desktop->doc());
         SVGElemRef->attach(SVGElem_uri);
-        SPObject *elemref = NULL;
-        Inkscape::XML::Node *phantom = origin->getRepr()->duplicate(xml_doc);
+        SPObject *elemref= NULL;
+        Inkscape::XML::Node *phantom = NULL;
         if (elemref = SVGElemRef->getObject()) {
-            elemref->deleteObject();
-        }
-        if (styling) {
-            SPCSSAttr *css = sp_repr_css_attr_new();
-            sp_repr_css_set_property (css, "fill", NULL);
-            sp_repr_css_set_property (css, "stroke",NULL);
-            Glib::ustring css_str;
-            sp_repr_css_write_string(css,css_str);
-            sp_repr_css_change_recursive (phantom, css, css_str.c_str());
-        }
-        phantom->setAttribute("id", id);
-        phantom->setAttribute("inkscape:path-effect", NULL);
-        SP_OBJECT(desktop->getDocument()->getDefs()->appendChildRepr(phantom));
-        Inkscape::GC::release(phantom);
-        ms_elements.push_back(id);
-    }
-}
-
-void
-LPEMirrorSymmetry::createClone(SPLPEItem *origin, Geom::Affine transform, Glib::ustring id)
-{
-    if (SPDesktop *desktop = SP_ACTIVE_DESKTOP) {
-        Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
-        id = id + (Glib::ustring)this->getRepr()->attribute("id");
-        Inkscape::URI SVGElem_uri(((Glib::ustring)"#" + id).c_str());
-        Inkscape::URIReference* SVGElemRef = new Inkscape::URIReference(desktop->doc());
-        SVGElemRef->attach(SVGElem_uri);
-        SPObject *elemref = NULL;
-        Inkscape::XML::Node *use = NULL;
-        use = xml_doc->createElement("svg:use");
-        use->setAttribute("transform" , sp_svg_transform_write(transform));
-        use->setAttribute("xlink:href", ((Glib::ustring)"#origin-" + id).c_str());
-        use->setAttribute("width", "100%");
-        use->setAttribute("height", "100%");
-        use->setAttribute("id", id);
-        use->setAttribute("x", "0");
-        use->setAttribute("y", "0");
-        if (split_sensitive) {
-            use->setAttribute("sodipodi:insensitive" , "false");
+            phantom = elemref->getRepr();
         } else {
-            use->setAttribute("sodipodi:insensitive" , "true");
+            phantom = origin->getRepr()->duplicate(xml_doc);
         }
-        if (elemref) {
+        cloneAttrbutes(origin->getRepr(), phantom, "inkscape:original-d"); 
+        phantom->setAttribute("id", id);
+       // if (std::strcmp(id, id_origin.param_getSVGValue()) != 0) {
+            phantom->setAttribute("transform" , sp_svg_transform_write(transform));
+        
+//        if (split_sensitive) {
+//            phantom->setAttribute("sodipodi:insensitive" , NULL);
+//        } else {
+//            phantom->setAttribute("sodipodi:insensitive" , "true");
+//        }
+        if (!elemref) {
+            elemref = ms_container->appendChildRepr(phantom);
+            Inkscape::GC::release(phantom);
+        } else if (elemref->parent != ms_container) {
+            Inkscape::XML::Node *copy = phantom->duplicate(xml_doc);
+            ms_container->appendChildRepr(copy);
+            Inkscape::GC::release(copy);
             elemref->deleteObject();
+            copy->setAttribute("id", id);
         }
-        elemref = ms_container->appendChildRepr(use);
-        Inkscape::GC::release(use);
         ms_elements.push_back(id);
     }
 }
@@ -274,9 +293,9 @@ void
 LPEMirrorSymmetry::processObjects(LpeAction lpe_action)
 {
     if (SPDesktop *desktop = SP_ACTIVE_DESKTOP) {
-        for (std::vector<Glib::ustring>::iterator el_it = ms_elements.begin(); 
+        for (std::vector<gchar *>::iterator el_it = ms_elements.begin(); 
              el_it != ms_elements.end();++el_it) {
-            Glib::ustring id = *el_it;
+            gchar * id = *el_it;
             Inkscape::URI SVGElem_uri(((Glib::ustring)"#" +  id).c_str());
             Inkscape::URIReference* SVGElemRef = new Inkscape::URIReference(desktop->doc());
             SVGElemRef->attach(SVGElem_uri);
@@ -285,6 +304,7 @@ LPEMirrorSymmetry::processObjects(LpeAction lpe_action)
                 switch (lpe_action){
                 case LPE_TO_OBJECTS:
                     elemref->getRepr()->setAttribute("sodipodi:insensitive", NULL);
+                    SP_LPE_ITEM(elemref)->removeAllPathEffects(true);
                 break;
                 case LPE_ERASE:
                     elemref->deleteObject();
@@ -309,12 +329,14 @@ LPEMirrorSymmetry::processObjects(LpeAction lpe_action)
 void
 LPEMirrorSymmetry::transform_multiply(Geom::Affine const& postmul, bool set)
 {
-    center_point *= postmul;
-    previous_center = center_point;
-    // cycle through all parameters. Most parameters will not need transformation, but path and point params do.
-    for (std::vector<Parameter *>::iterator it = param_vector.begin(); it != param_vector.end(); ++it) {
-        Parameter * param = *it;
-        param->param_transform_multiply(postmul, set);
+    if( !split_elements) {
+        center_point *= postmul;
+        previous_center = center_point;
+        // cycle through all parameters. Most parameters will not need transformation, but path and point params do.
+        for (std::vector<Parameter *>::iterator it = param_vector.begin(); it != param_vector.end(); ++it) {
+            Parameter * param = *it;
+            param->param_transform_multiply(postmul, set);
+        }
     }
 }
 
@@ -334,13 +356,14 @@ LPEMirrorSymmetry::doOnApply (SPLPEItem const* lpeitem)
     end_point.param_update_default(point_b);
     center_point = point_c;
     previous_center = center_point;
+    id_origin.param_setValue((Glib::ustring)lpeitem->getId());
 }
 
 
 Geom::PathVector
 LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
 {
-    if (split && !fuse_paths) {
+    if (split_elements && !fuse_paths) {
         return path_in;
     }
     Geom::PathVector const original_pathv = pathv_to_linear_and_cubic_beziers(path_in);
@@ -369,7 +392,7 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
     m = m * m2.inverse();
     m = m * m1;
 
-    if (fuse_paths && (!discard_orig_path || split )) {
+    if (fuse_paths && (!discard_orig_path || split_elements )) {
         for (Geom::PathVector::const_iterator path_it = original_pathv.begin();
              path_it != original_pathv.end(); ++path_it) 
         {
@@ -420,7 +443,7 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
                         }
                         if (position == 1) {
                             Geom::Path mirror = portion.reversed() * m;
-                            if (split) {
+                            if (split_elements) {
                                 portion.close();
                             } else {
                                 mirror.setInitial(portion.finalPoint());
@@ -446,9 +469,7 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
                     Geom::Path portion = original.portion(time_start, original.size());
                     if (!portion.empty()) {
                         portion = portion.reversed();
-                        if (split) {
-                        
-                        } else {
+                        if (!split_elements) {
                             Geom::Path mirror = portion.reversed() * m;
                             mirror.setInitial(portion.finalPoint());
                             portion.append(mirror);
@@ -484,6 +505,41 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
     }
 
     return path_out;
+}
+
+
+Gtk::Widget *LPEMirrorSymmetry::newWidget()
+{
+    // use manage here, because after deletion of Effect object, others might
+    // still be pointing to this widget.
+    Gtk::VBox *vbox = Gtk::manage(new Gtk::VBox(Effect::newWidget()));
+
+    vbox->set_border_width(5);
+    vbox->set_homogeneous(false);
+    vbox->set_spacing(2);
+
+    std::vector<Parameter *>::iterator it = param_vector.begin();
+    while (it != param_vector.end()) {
+        if ((*it)->widget_is_visible) {
+            Parameter *param = *it;
+            Gtk::Widget *widg = dynamic_cast<Gtk::Widget *>(param->param_newWidget());
+            Glib::ustring *tip = param->param_getTooltip();
+            if (widg) {
+                if (param->param_key != "id_origin") {
+                    vbox->pack_start(*widg, true, true, 2);
+                    if (tip) {
+                        widg->set_tooltip_text(*tip);
+                    } else {
+                        widg->set_tooltip_text("");
+                        widg->set_has_tooltip(false);
+                    }
+                }
+            }
+        }
+
+        ++it;
+    }
+    return dynamic_cast<Gtk::Widget *>(vbox);
 }
 
 void

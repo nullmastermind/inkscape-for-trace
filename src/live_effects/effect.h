@@ -44,6 +44,12 @@ enum LPEPathFlashType {
     DEFAULT
 };
 
+enum LpeAction {
+    LPE_ERASE = 0,
+    LPE_TO_OBJECTS,
+    LPE_VISIBILITY
+};
+
 class Effect {
 public:
     static Effect* New(EffectType lpenr, LivePathEffectObject *lpeobj);
@@ -125,6 +131,7 @@ public:
     bool apply_to_clippath_and_mask;
     bool erase_extra_objects; // set this to false allow retain extra generated objects, see measure line LPE
     bool upd_params;
+    BoolParam is_visible;
 
 protected:
     Effect(LivePathEffectObject *lpeobject);
@@ -150,7 +157,6 @@ protected:
     bool _provides_knotholder_entities;
 
     int oncanvasedit_it;
-    BoolParam is_visible;
 
     bool show_orig_path; // set this to true in derived effects to automatically have the original
                          // path displayed as helperpath
