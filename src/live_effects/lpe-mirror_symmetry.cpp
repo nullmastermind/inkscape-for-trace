@@ -109,7 +109,6 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
     Geom::Affine m = Geom::identity();//lpeitem->transform;
     Point point_a(boundingbox_X.max(), boundingbox_Y.min());
     Point point_b(boundingbox_X.max(), boundingbox_Y.max());
-    gchar * id = g_strdup(((Glib::ustring)"mirror-" + (Glib::ustring)id_origin.param_getSVGValue() + (Glib::ustring)"-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
     if (mode == MT_Y) {
         point_a = Geom::Point(boundingbox_X.min(),center_point[Y]);
         point_b = Geom::Point(boundingbox_X.max(),center_point[Y]);
@@ -162,9 +161,6 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
     }
     previous_center = center_point;
     if (split_elements) {
-        ms_elements.clear();
-        ms_elements.push_back(id);
-        ms_elements.push_back(id_origin.param_getSVGValue());
         ms_container = dynamic_cast<SPObject *>(splpeitem->parent);
         SPDocument * doc = SP_ACTIVE_DOCUMENT;
         Inkscape::XML::Node *root = splpeitem->document->getReprRoot();
@@ -186,16 +182,22 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
         Geom::Affine m2(cos, -sin, sin, cos, 0.0, 0.0);
         gap *= m2;
         Geom::Scale sca(1.0, -1.0);
-        if (std::strcmp(splpeitem->getId(), id) == 0) {
-            id = id_origin.param_getSVGValue();
-        }
+        const char * id_original = id_origin.param_getSVGValue();
+        const char * id = g_strdup(Glib::ustring("mirror-").append(id_original).append("-").append(this->getRepr()->attribute("id")).c_str());
         m = m1.inverse() * m2;
         m = m * sca;
         m = m * m2.inverse();
         m = m * m1;
         m = m * gap;
         m = m * lpeitem->transform;
-        createMirror(splpeitem, m, id);
+        if (std::strcmp(splpeitem->getId(), id) == 0) {
+            createMirror(splpeitem, m, id_original);
+        } else {
+            createMirror(splpeitem, m, id);
+        }
+        ms_elements.clear();
+        ms_elements.push_back(id);
+        ms_elements.push_back(id_original);
     } else {
         ms_elements.clear();
         processObjects(LPE_ERASE);
@@ -269,11 +271,11 @@ LPEMirrorSymmetry::cloneAttrbutes(SPObject *origin, SPObject *dest, bool live, c
 }
 
 void
-LPEMirrorSymmetry::createMirror(SPLPEItem *origin, Geom::Affine transform, gchar * id)
+LPEMirrorSymmetry::createMirror(SPLPEItem *origin, Geom::Affine transform, const char * id)
 {
     if (SPDesktop *desktop = SP_ACTIVE_DESKTOP) {
         Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
-        Inkscape::URI SVGElem_uri(((Glib::ustring)"#" + id).c_str());
+        Inkscape::URI SVGElem_uri(Glib::ustring("#").append(id).c_str());
         Inkscape::URIReference* SVGElemRef = new Inkscape::URIReference(desktop->doc());
         SVGElemRef->attach(SVGElem_uri);
         SPObject *elemref= NULL;
@@ -324,17 +326,15 @@ void
 LPEMirrorSymmetry::processObjects(LpeAction lpe_action)
 {
     if (SPDesktop *desktop = SP_ACTIVE_DESKTOP) {
-        for (std::vector<gchar *>::iterator el_it = ms_elements.begin(); 
+        for (std::vector<const char *>::iterator el_it = ms_elements.begin(); 
              el_it != ms_elements.end(); ++el_it) {
-            gchar * id = *el_it;
-            std::cout << id << "idididididididididi\n";
-            Inkscape::URI SVGElem_uri(((Glib::ustring)"#" +  id).c_str());
+            const char * id = *el_it;
+            Inkscape::URI SVGElem_uri(Glib::ustring("#").append(id).c_str());
             Inkscape::URIReference* SVGElemRef = new Inkscape::URIReference(desktop->doc());
             SVGElemRef->attach(SVGElem_uri);
             SPObject *elemref = NULL;
             if (elemref = SVGElemRef->getObject()) {
                 SPLPEItem *lpe_element = dynamic_cast<SPLPEItem *>(elemref);
-                std::cout << elemref->getId() << "elemref->getId()elemref->getId()elemref->getId()elemref->getId()\n";
                 switch (lpe_action){
                 case LPE_TO_OBJECTS:
                     elemref->getRepr()->setAttribute("sodipodi:insensitive", NULL);
@@ -392,7 +392,7 @@ LPEMirrorSymmetry::doOnApply (SPLPEItem const* lpeitem)
     end_point.param_update_default(point_b);
     center_point = point_c;
     previous_center = center_point;
-    id_origin.param_setValue((Glib::ustring)lpeitem->getId());
+    id_origin.param_setValue(Glib::ustring(lpeitem->getId()));
     id_origin.write_to_SVG();
 }
 
