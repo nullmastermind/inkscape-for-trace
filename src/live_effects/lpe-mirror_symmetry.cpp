@@ -24,6 +24,8 @@
 #include "uri.h"
 #include "uri-references.h"
 #include "knotholder.h"
+#include "style.h"
+#include "xml/sp-css-attr.h"
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
 
@@ -98,12 +100,9 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
                     actual = false;
                     return;
                 }
-            } else {
-            
             }
         }
     }
-
     using namespace Geom;
     original_bbox(lpeitem);
     Geom::Affine m = Geom::identity();//lpeitem->transform;
@@ -170,7 +169,7 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
         }
         Geom::Point point_a(line_separation.initialPoint());
         Geom::Point point_b(line_separation.finalPoint());
-        Geom::Point gap = Geom::Point(split_gap,0);
+        Geom::Point gap(split_gap,0);
         Geom::Translate m1(point_a[0], point_a[1]);
         double hyp = Geom::distance(point_a, point_b);
         double cos = 0;
@@ -180,7 +179,9 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
             sin = (point_b[1] - point_a[1]) / hyp;
         }
         Geom::Affine m2(cos, -sin, sin, cos, 0.0, 0.0);
-        gap *= m2;
+        Geom::Point dir = unit_vector(point_b - point_a);
+        Geom::Point offset = (point_a + point_b)/2 + dir.ccw() * split_gap;
+        line_separation *= Geom::Translate(offset);
         Geom::Scale sca(1.0, -1.0);
         const char * id_original = id_origin.param_getSVGValue();
         const char * id = g_strdup(Glib::ustring("mirror-").append(id_original).append("-").append(this->getRepr()->attribute("id")).c_str());
@@ -188,24 +189,23 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
         m = m * sca;
         m = m * m2.inverse();
         m = m * m1;
-        m = m * gap;
         m = m * lpeitem->transform;
         if (std::strcmp(splpeitem->getId(), id) == 0) {
             createMirror(splpeitem, m, id_original);
         } else {
             createMirror(splpeitem, m, id);
         }
-        ms_elements.clear();
-        ms_elements.push_back(id);
-        ms_elements.push_back(id_original);
+        elements.clear();
+        elements.push_back(id);
+        elements.push_back(id_original);
     } else {
-        ms_elements.clear();
+        elements.clear();
         processObjects(LPE_ERASE);
     }
 }
 
 //void
-//LPEMirrorSymmetry::cloneAttrbutes(Inkscape::XML::Node * origin, Inkscape::XML::Node * dest, char const * first_attribute, ...) 
+//LPEMirrorSymmetry::cloneAttrbutes(Inkscape::XML::Node * origin, Inkscape::XML::Node * dest, const char * first_attribute, ...) 
 //{
 //    va_list args;
 //    va_start(args, first_attribute);
@@ -219,14 +219,14 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
 //            index++;
 //        }
 //    }
-//    while(char const * att = va_arg(args, char const *)) {
+//    while(const char * att = va_arg(args, const char *)) {
 //        dest->setAttribute(att,origin->attribute(att));
 //    }
 //    va_end(args);
 //}
 
 void
-LPEMirrorSymmetry::cloneAttrbutes(SPObject *origin, SPObject *dest, bool live, char const * first_attribute, ...) 
+LPEMirrorSymmetry::cloneAttrbutes(SPObject *origin, SPObject *dest, bool live, const char * first_attribute, ...) 
 {
     va_list args;
     va_start(args, first_attribute);
@@ -241,31 +241,27 @@ LPEMirrorSymmetry::cloneAttrbutes(SPObject *origin, SPObject *dest, bool live, c
             index++;
         }
     }
-    unsigned counter = 0;
-    while(char const * att = va_arg(args, char const *)) {
-        if (counter % 2 != 0){
-            SPShape * shape =  SP_SHAPE(origin);
-            if (shape) {
-                if ( live && (att == "d" || att == "inkscape:original-d")) {
-                    SPCurve *c = NULL;
-                    if (att == "d") {
-                        c = shape->getCurve();
-                    } else {
-                        c = shape->getCurveBeforeLPE();
-                    }
-                    if (c) {
-                        dest->getRepr()->setAttribute(att,sp_svg_write_path(c->get_pathvector()));
-                        c->reset();
-                        g_free(c);                    
-                    } else {
-                        dest->getRepr()->setAttribute(att,NULL);
-                    }
+    for (const char* att = first_attribute; att != NULL; att = va_arg(args, const char*)) {
+        SPShape * shape =  SP_SHAPE(origin);
+        if (shape) {
+            if ( live && (att == "d" || att == "inkscape:original-d")) {
+                SPCurve *c = NULL;
+                if (att == "d") {
+                    c = shape->getCurve();
                 } else {
-                    dest->getRepr()->setAttribute(att,origin->getRepr()->attribute(att));
+                    c = shape->getCurveBeforeLPE();
                 }
+                if (c) {
+                    dest->getRepr()->setAttribute(att,sp_svg_write_path(c->get_pathvector()));
+                    c->reset();
+                    g_free(c);                    
+                } else {
+                    dest->getRepr()->setAttribute(att,NULL);
+                }
+            } else {
+                dest->getRepr()->setAttribute(att,origin->getRepr()->attribute(att));
             }
         }
-        counter++;
     }
     va_end(args);
 }
@@ -291,7 +287,7 @@ LPEMirrorSymmetry::createMirror(SPLPEItem *origin, Geom::Affine transform, const
             elemref = ms_container->appendChildRepr(phantom);
             Inkscape::GC::release(phantom);
         }
-        cloneAttrbutes(SP_OBJECT(origin), elemref, true, "inkscape:original-d");
+        cloneAttrbutes(SP_OBJECT(origin), elemref, true, "inkscape:original-d", "inkscape:path-effect", NULL); //NULL required
         elemref->getRepr()->setAttribute("transform" , sp_svg_transform_write(transform));
         if (elemref->parent != ms_container) {
             Inkscape::XML::Node *copy = phantom->duplicate(xml_doc);
@@ -315,8 +311,8 @@ LPEMirrorSymmetry::doOnRemove (SPLPEItem const* /*lpeitem*/)
 {
     if (!erase_extra_objects) {
         processObjects(LPE_TO_OBJECTS);
-        std::cout << ms_elements.size()  << "ms_elements.size() ms_elements.size() ms_elements.size() ms_elements.size() ms_elements.size() \n";
-        ms_elements.clear();
+        std::cout << elements.size()  << "elements.size() elements.size() elements.size() elements.size() elements.size() \n";
+        elements.clear();
         return;
     }
     processObjects(LPE_ERASE);
@@ -326,37 +322,47 @@ void
 LPEMirrorSymmetry::processObjects(LpeAction lpe_action)
 {
     if (SPDesktop *desktop = SP_ACTIVE_DESKTOP) {
-        for (std::vector<const char *>::iterator el_it = ms_elements.begin(); 
-             el_it != ms_elements.end(); ++el_it) {
+        for (std::vector<const char *>::iterator el_it = elements.begin(); 
+             el_it != elements.end(); ++el_it) {
             const char * id = *el_it;
             Inkscape::URI SVGElem_uri(Glib::ustring("#").append(id).c_str());
             Inkscape::URIReference* SVGElemRef = new Inkscape::URIReference(desktop->doc());
             SVGElemRef->attach(SVGElem_uri);
             SPObject *elemref = NULL;
             if (elemref = SVGElemRef->getObject()) {
-                SPLPEItem *lpe_element = dynamic_cast<SPLPEItem *>(elemref);
+                SPCSSAttr *css;
+                Glib::ustring css_str;
                 switch (lpe_action){
                 case LPE_TO_OBJECTS:
+                    elemref->getRepr()->setAttribute("inkscape:path-effect", NULL);
                     elemref->getRepr()->setAttribute("sodipodi:insensitive", NULL);
-                    if (lpe_element && lpe_element->hasPathEffect()) {
-                        lpe_element->removeAllPathEffects(true);
-                    }
-                break;
+                    break;
+
                 case LPE_ERASE:
-                    elemref->deleteObject();
-                break;
-                default: //LPE_VISIBILITY
-                    if (!this->isVisible()) {
-                        elemref->getRepr()->setAttribute("style", "display:none");
-                    } else {
-                        elemref->getRepr()->setAttribute("style", NULL);
+                    if (std::strcmp(elemref->getId(),id_origin.param_getSVGValue()) != 0) {
+                        elemref->deleteObject();
                     }
-                break;
+                    break;
+
+                case LPE_VISIBILITY:
+                    css = sp_repr_css_attr_new();
+                    sp_repr_css_attr_add_from_string(css, elemref->getRepr()->attribute("style"));
+                    if (!this->isVisible() && std::strcmp(elemref->getId(),id_origin.param_getSVGValue()) != 0) {
+                        css->setAttribute("display", "none");
+                    } else {
+                        css->setAttribute("display", NULL);
+                    }
+                    sp_repr_css_write_string(css,css_str);
+                    elemref->getRepr()->setAttribute("style", css_str.c_str());
+                    break;
+
+                default:
+                    break;
                 }
             }
         }
         if (lpe_action == LPE_ERASE) {
-            ms_elements.clear();
+            elements.clear();
         }
     }
 }
