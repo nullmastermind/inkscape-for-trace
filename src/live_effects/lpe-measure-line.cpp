@@ -686,7 +686,7 @@ LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
     }
 }
 
-
+//TODO: Migrate the tree next function to effect.cpp/h to avoid duplication
 void
 LPEMeasureLine::doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/)
 {
@@ -696,9 +696,8 @@ LPEMeasureLine::doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/)
 void 
 LPEMeasureLine::doOnRemove (SPLPEItem const* /*lpeitem*/)
 {
-    std::cout <<  "111111111111111111111111\n";
+    //unset "erase_extra_objects" hook on sp-lpe-item.cpp
     if (!erase_extra_objects) {
-        std::cout <<  "2222222222222222222222222\n";
         processObjects(LPE_TO_OBJECTS);
         elements.clear();
         return;
@@ -713,6 +712,9 @@ LPEMeasureLine::processObjects(LpeAction lpe_action)
         for (std::vector<const char *>::iterator el_it = elements.begin(); 
              el_it != elements.end(); ++el_it) {
             const char * id = *el_it;
+            if (!id || strlen(id) == 0) {
+                return;
+            }
             Inkscape::URI SVGElem_uri(Glib::ustring("#").append(id).c_str());
             Inkscape::URIReference* SVGElemRef = new Inkscape::URIReference(desktop->doc());
             SVGElemRef->attach(SVGElem_uri);
@@ -722,12 +724,7 @@ LPEMeasureLine::processObjects(LpeAction lpe_action)
                 Glib::ustring css_str;
                 switch (lpe_action){
                 case LPE_TO_OBJECTS:
-                    std::cout << sp_lpe_item->getId() << "sp_lpe_item->getId()\n";
-                    std::cout << id << "Id()\n";
-                    if (std::strcmp(sp_lpe_item->getId(), id) != 0) {
-                        std::cout << id << "loborro\n";
-                        elemref->getRepr()->setAttribute("inkscape:path-effect", NULL);
-                    }
+                    elemref->getRepr()->setAttribute("inkscape:path-effect", NULL);
                     elemref->getRepr()->setAttribute("sodipodi:insensitive", NULL);
                     break;
 

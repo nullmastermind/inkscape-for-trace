@@ -299,7 +299,7 @@ LPEMirrorSymmetry::createMirror(SPLPEItem *origin, Geom::Affine transform, const
     }
 }
 
-
+//TODO: Migrate the tree next function to effect.cpp/h to avoid duplication
 void
 LPEMirrorSymmetry::doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/)
 {
@@ -309,9 +309,9 @@ LPEMirrorSymmetry::doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/)
 void 
 LPEMirrorSymmetry::doOnRemove (SPLPEItem const* /*lpeitem*/)
 {
+    //unset "erase_extra_objects" hook on sp-lpe-item.cpp
     if (!erase_extra_objects) {
         processObjects(LPE_TO_OBJECTS);
-        std::cout << elements.size()  << "elements.size() elements.size() elements.size() elements.size() elements.size() \n";
         elements.clear();
         return;
     }
@@ -325,6 +325,9 @@ LPEMirrorSymmetry::processObjects(LpeAction lpe_action)
         for (std::vector<const char *>::iterator el_it = elements.begin(); 
              el_it != elements.end(); ++el_it) {
             const char * id = *el_it;
+            if (!id || strlen(id) == 0) {
+                return;
+            }
             Inkscape::URI SVGElem_uri(Glib::ustring("#").append(id).c_str());
             Inkscape::URIReference* SVGElemRef = new Inkscape::URIReference(desktop->doc());
             SVGElemRef->attach(SVGElem_uri);
@@ -334,9 +337,7 @@ LPEMirrorSymmetry::processObjects(LpeAction lpe_action)
                 Glib::ustring css_str;
                 switch (lpe_action){
                 case LPE_TO_OBJECTS:
-                    if (std::strcmp(sp_lpe_item->getId(), id) != 0) {
-                        elemref->getRepr()->setAttribute("inkscape:path-effect", NULL);
-                    }
+                    elemref->getRepr()->setAttribute("inkscape:path-effect", NULL);
                     elemref->getRepr()->setAttribute("sodipodi:insensitive", NULL);
                     break;
 

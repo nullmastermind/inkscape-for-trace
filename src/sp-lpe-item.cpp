@@ -24,6 +24,7 @@
 #include "live_effects/lpeobject.h"
 #include "live_effects/lpeobject-reference.h"
 #include "live_effects/lpe-measure-line.h"
+#include "live_effects/lpe-mirror_symmetry.h"
 
 #include "sp-path.h"
 #include "sp-item-group.h"
@@ -125,7 +126,10 @@ void SPLPEItem::set(unsigned int key, gchar const* value) {
                 {
                     if (!value) {
                         LivePathEffectObject *lpeobj = (*it)->lpeobject;
-                        if (Inkscape::LivePathEffect::LPEMeasureLine * lpe = dynamic_cast<Inkscape::LivePathEffect::LPEMeasureLine *>(lpeobj->get_lpe())) {
+                        Inkscape::LivePathEffect::Effect * lpe = lpeobj->get_lpe();
+                        if (dynamic_cast<Inkscape::LivePathEffect::LPEMirrorSymmetry *>(lpe) ||
+                            dynamic_cast<Inkscape::LivePathEffect::LPEMeasureLine *>(lpe) )
+                        {
                             lpe->doOnRemove(this);
                         }
                     }
