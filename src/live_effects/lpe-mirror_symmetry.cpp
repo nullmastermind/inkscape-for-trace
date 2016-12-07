@@ -287,7 +287,7 @@ LPEMirrorSymmetry::createMirror(SPLPEItem *origin, Geom::Affine transform, const
             elemref = ms_container->appendChildRepr(phantom);
             Inkscape::GC::release(phantom);
         }
-        cloneAttrbutes(SP_OBJECT(origin), elemref, true, "inkscape:original-d", "inkscape:path-effect", NULL); //NULL required
+        cloneAttrbutes(SP_OBJECT(origin), elemref, true, "inkscape:original-d", NULL); //NULL required
         elemref->getRepr()->setAttribute("transform" , sp_svg_transform_write(transform));
         if (elemref->parent != ms_container) {
             Inkscape::XML::Node *copy = phantom->duplicate(xml_doc);
@@ -334,7 +334,9 @@ LPEMirrorSymmetry::processObjects(LpeAction lpe_action)
                 Glib::ustring css_str;
                 switch (lpe_action){
                 case LPE_TO_OBJECTS:
-                    elemref->getRepr()->setAttribute("inkscape:path-effect", NULL);
+                    if (sp_lpe_item->getId() != id) {
+                        elemref->getRepr()->setAttribute("inkscape:path-effect", NULL);
+                    }
                     elemref->getRepr()->setAttribute("sodipodi:insensitive", NULL);
                     break;
 
