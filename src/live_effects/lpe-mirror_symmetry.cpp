@@ -334,7 +334,7 @@ LPEMirrorSymmetry::processObjects(LpeAction lpe_action)
                 Glib::ustring css_str;
                 switch (lpe_action){
                 case LPE_TO_OBJECTS:
-                    if (sp_lpe_item->getId() != id) {
+                    if (std::strcmp(sp_lpe_item->getId(), id) != 0) {
                         elemref->getRepr()->setAttribute("inkscape:path-effect", NULL);
                     }
                     elemref->getRepr()->setAttribute("sodipodi:insensitive", NULL);

@@ -696,7 +696,9 @@ LPEMeasureLine::doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/)
 void 
 LPEMeasureLine::doOnRemove (SPLPEItem const* /*lpeitem*/)
 {
+    std::cout <<  "111111111111111111111111\n";
     if (!erase_extra_objects) {
+        std::cout <<  "2222222222222222222222222\n";
         processObjects(LPE_TO_OBJECTS);
         elements.clear();
         return;
@@ -720,7 +722,12 @@ LPEMeasureLine::processObjects(LpeAction lpe_action)
                 Glib::ustring css_str;
                 switch (lpe_action){
                 case LPE_TO_OBJECTS:
-                    elemref->getRepr()->setAttribute("inkscape:path-effect", NULL);
+                    std::cout << sp_lpe_item->getId() << "sp_lpe_item->getId()\n";
+                    std::cout << id << "Id()\n";
+                    if (std::strcmp(sp_lpe_item->getId(), id) != 0) {
+                        std::cout << id << "loborro\n";
+                        elemref->getRepr()->setAttribute("inkscape:path-effect", NULL);
+                    }
                     elemref->getRepr()->setAttribute("sodipodi:insensitive", NULL);
                     break;
 
