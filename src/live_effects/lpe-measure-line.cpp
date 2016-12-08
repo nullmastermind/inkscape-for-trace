@@ -24,6 +24,7 @@
 #include "svg/svg.h"
 #include "display/curve.h"
 #include "2geom/affine.h"
+#include "path-chemistry.h"
 #include "style.h"
 #include "sp-root.h"
 #include "sp-defs.h"
@@ -720,12 +721,19 @@ LPEMeasureLine::processObjects(LpeAction lpe_action)
             SVGElemRef->attach(SVGElem_uri);
             SPObject *elemref = NULL;
             if (elemref = SVGElemRef->getObject()) {
+                Inkscape::XML::Node * elemnode = elemref->getRepr();
+                std::vector<SPItem*> item_list;
+                item_list.push_back(SP_ITEM(elemref));
+                std::vector<Inkscape::XML::Node*> item_to_select;
+                std::vector<SPItem*> item_selected;
                 SPCSSAttr *css;
                 Glib::ustring css_str;
                 switch (lpe_action){
                 case LPE_TO_OBJECTS:
-                    elemref->getRepr()->setAttribute("inkscape:path-effect", NULL);
-                    elemref->getRepr()->setAttribute("sodipodi:insensitive", NULL);
+                    if (elemnode->attribute("inkscape:path-effect")) {
+                        sp_item_list_to_curves(item_list, item_selected, item_to_select);
+                    }
+                    elemnode->setAttribute("sodipodi:insensitive", NULL);
                     break;
 
                 case LPE_ERASE:
@@ -743,7 +751,7 @@ LPEMeasureLine::processObjects(LpeAction lpe_action)
                         css->setAttribute("display", NULL);
                     }
                     sp_repr_css_write_string(css,css_str);
-                    elemref->getRepr()->setAttribute("style", css_str.c_str());
+                    elemnode->setAttribute("style", css_str.c_str());
                     break;
 
                 default:
@@ -751,7 +759,7 @@ LPEMeasureLine::processObjects(LpeAction lpe_action)
                 }
             }
         }
-        if (lpe_action == LPE_ERASE) {
+        if (lpe_action == LPE_ERASE || lpe_action == LPE_TO_OBJECTS) {
             elements.clear();
         }
     }
