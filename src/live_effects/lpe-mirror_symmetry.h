@@ -27,11 +27,6 @@
 namespace Inkscape {
 namespace LivePathEffect {
 
-namespace MS {
-// we need a separate namespace to avoid clashes with LPEPerpBisector
-class KnotHolderEntityCenterMirrorSymmetry;
-}
-
 enum ModeType {
     MT_V,
     MT_H,
@@ -51,14 +46,10 @@ public:
     virtual Geom::PathVector doEffect_path (Geom::PathVector const & path_in);
     virtual void doOnRemove (SPLPEItem const* /*lpeitem*/);
     virtual void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/);
-    virtual Gtk::Widget *newWidget();
     void processObjects(LpeAction lpe_action);
-    /* the knotholder entity classes must be declared friends */
-    friend class MS::KnotHolderEntityCenterMirrorSymmetry;
     void createMirror(SPLPEItem *origin, Geom::Affine transform, const char * id);
 //    void cloneAttrbutes(Inkscape::XML::Node * origin, Inkscape::XML::Node * dest, const char * first_attribute, ...);
     void cloneAttrbutes(SPObject *origin, SPObject *dest, bool live, const char * first_attribute, ...);
-    void addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item);
 
 protected:
     virtual void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec);
@@ -72,11 +63,9 @@ private:
     BoolParam split_elements;
     PointParam start_point;
     PointParam end_point;
-    TextParam id_origin;
+    PointParam center_point;
     Geom::Line line_separation;
     Geom::Point previous_center;
-    Geom::Point center_point;
-    bool actual;
     std::vector<const char *> elements;
     SPObject * ms_container;
     LPEMirrorSymmetry(const LPEMirrorSymmetry&);
