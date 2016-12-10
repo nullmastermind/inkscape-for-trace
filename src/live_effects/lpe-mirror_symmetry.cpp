@@ -13,6 +13,8 @@
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
+
+#include <gtkmm.h>
 #include "live_effects/lpe-mirror_symmetry.h"
 #include "display/curve.h"
 #include "svg/path-string.h"
@@ -27,6 +29,7 @@
 #include "knotholder.h"
 #include "style.h"
 #include "xml/sp-css-attr.h"
+
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
 
