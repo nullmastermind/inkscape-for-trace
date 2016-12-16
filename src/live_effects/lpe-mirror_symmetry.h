@@ -17,8 +17,8 @@
  */
 
 #include "live_effects/effect.h"
-#include "live_effects/parameter/text.h"
 #include "live_effects/parameter/parameter.h"
+#include "live_effects/parameter/text.h"
 #include "live_effects/parameter/point.h"
 #include "live_effects/parameter/path.h"
 #include "live_effects/parameter/enum.h"
@@ -46,11 +46,13 @@ public:
     virtual Geom::PathVector doEffect_path (Geom::PathVector const & path_in);
     virtual void doOnRemove (SPLPEItem const* /*lpeitem*/);
     virtual void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/);
+//    virtual Gtk::Widget * newWidget();
     void processObjects(LpeAction lpe_action);
-    void createMirror(SPLPEItem *origin, Geom::Affine transform, const char * id);
+    void createMirror(SPLPEItem *origin, Geom::Affine transform);
 //    void cloneAttrbutes(Inkscape::XML::Node * origin, Inkscape::XML::Node * dest, const char * first_attribute, ...);
-    void syncMirror(SPLPEItem *origin, const char * id);
+//    void syncMirror(SPLPEItem *origin, const char * id);
     void cloneAttrbutes(SPObject *origin, SPObject *dest, bool live, const char * first_attribute, ...);
+    bool allow_split();
 
 protected:
     virtual void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec);
@@ -65,7 +67,6 @@ private:
     PointParam start_point;
     PointParam end_point;
     PointParam center_point;
-    TextParam original;
     Geom::Line line_separation;
     Geom::Point previous_center;
     std::vector<const char *> elements;
