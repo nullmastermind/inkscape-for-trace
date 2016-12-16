@@ -49,6 +49,7 @@ public:
     void processObjects(LpeAction lpe_action);
     void createMirror(SPLPEItem *origin, Geom::Affine transform, const char * id);
 //    void cloneAttrbutes(Inkscape::XML::Node * origin, Inkscape::XML::Node * dest, const char * first_attribute, ...);
+    void syncMirror(SPLPEItem *origin, const char * id);
     void cloneAttrbutes(SPObject *origin, SPObject *dest, bool live, const char * first_attribute, ...);
 
 protected:
@@ -64,10 +65,11 @@ private:
     PointParam start_point;
     PointParam end_point;
     PointParam center_point;
+    TextParam original;
     Geom::Line line_separation;
     Geom::Point previous_center;
     std::vector<const char *> elements;
-    SPObject * ms_container;
+    SPObject * container;
     LPEMirrorSymmetry(const LPEMirrorSymmetry&);
     LPEMirrorSymmetry& operator=(const LPEMirrorSymmetry&);
 };
