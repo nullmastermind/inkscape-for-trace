@@ -607,7 +607,7 @@ bool SPLPEItem::hasPathEffect() const
     return true;
 }
 
-bool SPLPEItem::hasPathEffectOfType(int const type, bool is_ready) const
+bool SPLPEItem::hasPathEffectOfType(int const type) const
 {
     if (path_effect_list->empty()) {
         return false;
@@ -619,9 +619,7 @@ bool SPLPEItem::hasPathEffectOfType(int const type, bool is_ready) const
         if (lpeobj) {
             Inkscape::LivePathEffect::Effect const* lpe = lpeobj->get_lpe();
             if (lpe && (lpe->effectType() == type)) {
-                if (is_ready || lpe->isReady()) {
-                    return true;
-                }
+                return true;
             }
         }
     }

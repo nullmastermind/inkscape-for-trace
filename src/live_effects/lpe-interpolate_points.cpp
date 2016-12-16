@@ -12,9 +12,8 @@
  */
 
 #include "live_effects/lpe-interpolate_points.h"
+
 #include "live_effects/lpe-powerstroke-interpolators.h"
-// TODO due to internal breakage in glibmm headers, this must be last:
-#include <glibmm/i18n.h>
 
 namespace Inkscape {
 namespace LivePathEffect {

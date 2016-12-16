@@ -11,6 +11,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 #include <gtkmm.h>
+#include <glibmm/i18n.h>
+
 #include "persp3d.h"
 //#include "transf_mat_3x4.h"
 #include "document-private.h"
@@ -20,9 +22,6 @@
 #include "knotholder.h"
 #include "desktop.h"
 #include <util/units.h>
-
-// TODO due to internal breakage in glibmm headers, this must be last:
-#include <glibmm/i18n.h>
 
 namespace Inkscape {
 namespace LivePathEffect {

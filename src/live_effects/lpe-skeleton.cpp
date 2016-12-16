@@ -20,7 +20,8 @@
 
 #include "live_effects/lpe-skeleton.h"
 
-// TODO due to internal breakage in glibmm headers, this must be last:
+// You might need to include other 2geom files. You can add them here:
+
 #include <glibmm/i18n.h>
 
 namespace Inkscape {

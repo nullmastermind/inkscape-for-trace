@@ -20,9 +20,6 @@
 #include "display/curve.h"
 #include <gsl/gsl_linalg.h>
 
-// TODO due to internal breakage in glibmm headers, this must be last:
-#include <glibmm/i18n.h>
-
 using namespace Geom;
 
 namespace Inkscape {

@@ -7,9 +7,10 @@
  */
 
 #include "live_effects/lpe-gears.h"
-#include <2geom/bezier-to-sbasis.h>
-// TODO due to internal breakage in glibmm headers, this must be last:
+
 #include <glibmm/i18n.h>
+
+#include <2geom/bezier-to-sbasis.h>
 
 using std::vector;
 using namespace Geom;

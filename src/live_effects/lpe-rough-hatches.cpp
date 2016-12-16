@@ -13,6 +13,7 @@
  */
 
 #include "ui/widget/scalar.h"
+#include <glibmm/i18n.h>
 #include "live_effects/lpe-rough-hatches.h"
 
 #include "sp-item.h"
@@ -22,8 +23,6 @@
 #include <2geom/sbasis-math.h>
 #include <2geom/bezier-to-sbasis.h>
 
-// TODO due to internal breakage in glibmm headers, this must be last:
-#include <glibmm/i18n.h>
 
 namespace Inkscape {
 namespace LivePathEffect {

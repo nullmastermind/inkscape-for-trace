@@ -4,10 +4,9 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "live_effects/lpe-test-doEffect-stack.h"
-
-// TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
+
+#include "live_effects/lpe-test-doEffect-stack.h"
 
 using std::memcpy;
 

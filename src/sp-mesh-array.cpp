@@ -1198,7 +1198,7 @@ void SPMeshNodeArray::create( SPMeshGradient *mg, SPItem *item, Geom::OptRect bb
             ry = arc->ry.computed;
             start = arc->start;
             end   = arc->end;
-            if( end <= start ) {
+            if( end == start ) {
                 end += 2.0 * M_PI;
             }
         }
@@ -2026,7 +2026,7 @@ guint SPMeshNodeArray::side_arc( std::vector<guint> corners ) {
                 {
                     case 'L':
                     case 'l':
-                        std::cerr << "SPMeshNodeArray::side_arc: Can't convert straight lines to arcs." << std::endl;
+                        std::cout << "SPMeshNodeArray::arc_sides: Can't convert straight lines to arcs.";
                         break;
 
                     case 'C':
@@ -2052,15 +2052,15 @@ guint SPMeshNodeArray::side_arc( std::vector<guint> corners ) {
                                 ++arced;
 
                             } else {
-                                std::cerr << "SPMeshNodeArray::side_arc: No crossing, can't turn into arc." << std::endl;
+                                std::cout << "SPMeshNodeArray::arc_sides: No crossing, can't turn into arc." << std::endl;
                             }
                         } else {
-                            std::cerr << "SPMeshNodeArray::side_arc: Handles parallel, can't turn into arc." << std::endl;
+                            std::cout << "SPMeshNodeArray::arc_sides: Handles parallel, can't turn into arc." << std::endl;
                         }
                         break;
                     }
                     default:
-                        std::cerr << "SPMeshNodeArray::side_arc: Invalid path type: " << n[1]->path_type << std::endl;
+                        std::cout << "SPMeshNodeArray::arc_sides: Invalid path type: " << n[1]->path_type << std::endl;
                 }
             }
         }

@@ -1,11 +1,10 @@
 #!/usr/bin/env python 
 '''
-This extension scales a document to fit different SVG DPI -90/96-
+This extension scale or reduce a document to fit diferent SVG DPI -90/96-
 
 Copyright (C) 2012 Jabiertxo Arraiza, jabier.arraiza@marker.es
-Copyright (C) 2016 su_v, <suv-sf@users.sf.net>
 
-Version 0.6 - DPI Switcher
+Version 0.5 - DPI Switcher
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -20,178 +19,10 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-
-Changes since v0.5:
-    - transform all top-level containers and graphics elements
-    - support scientific notation in SVG lengths
-    - fix scaling with existing matrix() (use functions from simpletransform.py)
-    - support different units for document width, height attributes
-    - improve viewBox support (syntax, offset)
-    - support common cases of text-put-on-path in SVG root
-    - support common cases of <use> references in SVG root
-    - examples from http://tavmjong.free.fr/INKSCAPE/UNITS/ tested
-
-TODO:
-    - check grids/guides created with 0.91:
-      http://tavmjong.free.fr/INKSCAPE/UNITS/units_mm_nv_90dpi.svg
-    - check <symbol> instances
-    - check more <use> and text-on-path cases (reverse scaling needed?)
-    - scale perspective of 3dboxes
-
 '''
-# standard libraries
-import sys
-import re
-import string
-import math
+
+import inkex, sys, re, string
 from lxml import etree
-# local libraries
-import inkex
-import simpletransform
-import simplestyle
-
-
-# globals
-SKIP_CONTAINERS = [
-    'defs',
-    'glyph',
-    'marker',
-    'mask',
-    'missing-glyph',
-    'pattern',
-    'symbol',
-]
-CONTAINER_ELEMENTS = [
-    'a',
-    'g',
-    'switch',
-]
-GRAPHICS_ELEMENTS = [
-    'circle',
-    'ellipse',
-    'image',
-    'line',
-    'path',
-    'polygon',
-    'polyline',
-    'rect',
-    'text',
-    'use',
-]
-
-def is_3dbox(element):
-    """Check whether element is an Inkscape 3dbox type."""
-    return element.get(inkex.addNS('type', 'sodipodi')) == 'inkscape:box3d'
-
-
-def is_use(element):
-    """Check whether element is of type <text>."""
-    return element.tag == inkex.addNS('use', 'svg')
-
-
-def is_text(element):
-    """Check whether element is of type <text>."""
-    return element.tag == inkex.addNS('text', 'svg')
-
-
-def is_text_on_path(element):
-    """Check whether text element is put on a path."""
-    if is_text(element):
-        text_path = element.find(inkex.addNS('textPath', 'svg'))
-        if text_path is not None and len(text_path):
-            return True
-    return False
-
-
-def is_sibling(element1, element2):
-    """Check whether element1 and element2 are siblings of same parent."""
-    return element2 in element1.getparent()
-
-
-def is_in_defs(doc, element):
-    """Check whether element is in defs."""
-    if element is not None:
-        defs = doc.find('defs', namespaces=inkex.NSS)
-        if defs is not None:
-            return linked_node in defs.iterdescendants()
-    return False
-
-
-def get_linked(doc, element):
-    """Return linked element or None."""
-    if element is not None:
-        href = element.get(inkex.addNS('href', 'xlink'), None)
-    if href is not None:
-        linked_id = href[href.find('#')+1:]
-        path = '//*[@id="%s"]' % linked_id
-        el_list = doc.xpath(path, namespaces=inkex.NSS)
-        if isinstance(el_list, list) and len(el_list):
-            return el_list[0]
-        else:
-            return None
-
-
-def check_3dbox(svg, element, scale_x, scale_y):
-    """Check transformation for 3dbox element."""
-    skip = False
-    if skip:
-        # 3dbox elements ignore preserved transforms
-        # FIXME: manually update geometry of 3dbox?
-        pass
-    return skip
-
-
-def check_text_on_path(svg, element, scale_x, scale_y):
-    """Check whether to skip scaling a text put on a path."""
-    skip = False
-    path = get_linked(svg, element.find(inkex.addNS('textPath', 'svg')))
-    if not is_in_defs(svg, path):
-        if is_sibling(element, path):
-            # skip common element scaling if both text and path are siblings
-            skip = True
-            # scale offset
-            if 'transform' in element.attrib:
-                mat = simpletransform.parseTransform(element.get('transform'))
-                mat[0][2] *= scale_x
-                mat[1][2] *= scale_y
-                element.set('transform', simpletransform.formatTransform(mat))
-            # scale font size
-            mat = simpletransform.parseTransform(
-                'scale({},{})'.format(scale_x, scale_y))
-            det = abs(mat[0][0]*mat[1][1] - mat[0][1]*mat[1][0])
-            descrim = math.sqrt(abs(det))
-            prop = 'font-size'
-            # outer text
-            sdict = simplestyle.parseStyle(element.get('style'))
-            if prop in sdict:
-                sdict[prop] = float(sdict[prop]) * descrim
-                element.set('style', simplestyle.formatStyle(sdict))
-            # inner tspans
-            for child in element.iterdescendants():
-                if child.tag == inkex.addNS('tspan', 'svg'): 
-                    sdict = simplestyle.parseStyle(child.get('style'))
-                    if prop in sdict:
-                        sdict[prop] = float(sdict[prop]) * descrim
-                        child.set('style', simplestyle.formatStyle(sdict))
-    return skip
-
-
-def check_use(svg, element, scale_x, scale_y):
-    """Check whether to skip scaling an instanciated element (<use>)."""
-    skip = False
-    path = get_linked(svg, element)
-    if not is_in_defs(svg, path):
-        if is_sibling(element, path):
-            skip = True
-            # scale offset
-            if 'transform' in element.attrib:
-                mat = simpletransform.parseTransform(element.get('transform'))
-                mat[0][2] *= scale_x
-                mat[1][2] *= scale_y
-                element.set('transform', simpletransform.formatTransform(mat))
-    return skip
-
 
 class DPISwitcher(inkex.Effect):
 
@@ -208,140 +39,106 @@ class DPISwitcher(inkex.Effect):
         self.units = "px"
         self.unitExponent = 1.0
 
-    # dictionaries of unit to user unit conversion factors
-    __uuconvLegacy = {
-        'in': 90.0,
-        'pt': 1.25,
-        'px': 1.0,
-        'mm': 3.5433070866,
-        'cm': 35.433070866,
-        'm': 3543.3070866,
-        'km': 3543307.0866,
-        'pc': 15.0,
-        'yd': 3240.0,
-        'ft': 1080.0,
-    }
-    __uuconv = {
-        'in': 96.0,
-        'pt': 1.33333333333,
-        'px': 1.0,
-        'mm': 3.77952755913,
-        'cm': 37.7952755913,
-        'm': 3779.52755913,
-        'km': 3779527.55913,
-        'pc': 16.0,
-        'yd': 3456.0,
-        'ft': 1152.0,
-    }
-
-    def parse_length(self, length, percent=False):
-        """Parse SVG length."""
-        if self.options.switcher == "0":  # dpi90to96
-            known_units = self.__uuconvLegacy.keys()
-        else:  # dpi96to90
-            known_units = self.__uuconv.keys()
-        if percent:
-            unitmatch = re.compile('(%s)$' % '|'.join(known_units + ['%']))
-        else:
-            unitmatch = re.compile('(%s)$' % '|'.join(known_units))
-        param = re.compile(r'(([-+]?[0-9]+(\.[0-9]*)?|[-+]?\.[0-9]+)([eE][-+]?[0-9]+)?)')
-        p = param.match(length)
-        u = unitmatch.search(length)
-        val = 100       # fallback: assume default length of 100
-        unit = 'px'     # fallback: assume 'px' unit
-        if p:
-            val = float(p.string[p.start():p.end()])
-        if u:
-            unit = u.string[u.start():u.end()]
-        return (val, unit)
-
-    def convert_length(self, val, unit):
-        """Convert length to self.units if unit differs."""
-        doc_unit = self.units or 'px'
-        if unit != doc_unit:
-            if self.options.switcher == "0":  # dpi90to96
-                val_px = val * self.__uuconvLegacy[unit]
-                val = val_px / (self.__uuconvLegacy[doc_unit] / self.__uuconvLegacy['px'])
-                unit = doc_unit
-            else:  # dpi96to90
-                val_px = val * self.__uuconv[unit]
-                val = val_px / (self.__uuconv[doc_unit] / self.__uuconv['px']) 
-                unit = doc_unit
-        return (val, unit)
-
-    def check_attr_unit(self, element, attr, unit_list):
-        """Check unit of attribute value, match to units in *unit_list*."""
-        if attr in element.attrib:
-            unit = self.parse_length(element.get(attr), percent=True)[1]
-            return unit in unit_list
-
-    def scale_attr_val(self, element, attr, unit_list, factor):
-        """Scale attribute value if unit matches one in *unit_list*."""
-        if attr in element.attrib:
-            val, unit = self.parse_length(element.get(attr), percent=True)
-            if unit in unit_list:
-                element.set(attr, '{}{}'.format(val * factor, unit))
-
     def scaleRoot(self, svg):
-        """Scale all top-level elements in SVG root."""
-
-        # update viewport
-        widthNumber = self.parse_length(svg.get('width'))[0]
-        heightNumber = self.convert_length(*self.parse_length(svg.get('height')))[0]
-        widthDoc = widthNumber * self.factor_a * self.unitExponent
-        heightDoc = heightNumber * self.factor_a * self.unitExponent
-
-        if svg.get('height'):
-            svg.set('height', str(heightDoc))
-        if svg.get('width'):
-            svg.set('width', str(widthDoc))
-
-        # update viewBox
+        widthNumber = re.sub("[a-zA-Z]", "", svg.get('width'))
+        heightNumber = re.sub("[a-zA-Z]", "", svg.get('height'))
+        widthDoc = str(float(widthNumber) * self.factor_a * self.unitExponent)
+        heightDoc = str(float(heightNumber) * self.factor_a * self.unitExponent)
         if svg.get('viewBox'):
-            viewboxstring = re.sub(' +|, +|,',' ', svg.get('viewBox'))
-            viewboxlist = [float(i) for i in viewboxstring.strip().split(' ', 4)]
-            svg.set('viewBox','{} {} {} {}'.format(*[(val * self.factor_a) for val in viewboxlist]))
-
-        # update guides, grids
+            widthNumber = svg.get('viewBox').split(" ")[2]
+            heightNumber = svg.get('viewBox').split(" ")[3]
+        if svg.get('height'):
+            svg.set('height', heightDoc)
+        if svg.get('width'):
+            svg.set('width', widthDoc)
+        if svg.get('viewBox'):
+            svg.set('viewBox',"0 0 " + str(float(widthNumber) * self.factor_a) + " " + str(float(heightNumber) * self.factor_a))
         if self.options.switcher == "1":
-            # FIXME: dpi96to90 only?
             self.scaleGuides(svg)
             self.scaleGrid(svg)
-
-        for element in svg:  # iterate all top-level elements of SVGRoot
-
-            # init variables
-            tag = etree.QName(element).localname
+        for element in svg:
+            box3DSide = element.get(inkex.addNS('box3dsidetype', 'inkscape'))
+            if box3DSide:
+                continue
+            uri, tag = element.tag.split("}")
             width_scale = self.factor_a
             height_scale = self.factor_a
+            if tag == "rect" or tag == "image" or tag == "path" or tag == "circle" or tag == "ellipse" or tag == "text":
+                if element.get('width') is not None and \
+                (re.sub("[0-9]*\.?[0-9]", "", element.get('width')) == "%" or \
+                re.sub("[0-9]*\.?[0-9]", "", element.get('width')) == "px"):
+                   width_scale = 1.0;
+                if element.get('height') is not None and \
+                (re.sub("[0-9]*\.?[0-9]", "", element.get('height')) == "%" or \
+                re.sub("[0-9]*\.?[0-9]", "", element.get('height')) == "px"):
+                   height_scale = 1.0;
+                if element.get('x') is not None and \
+                re.sub("[0-9]*\.?[0-9]", "", element.get('x')) == "%":
+                    xpos = str(float(element.get('x').replace('%','')) * self.factor_b) + '%'
+                    element.set('x', xpos)
+                if element.get('y') is not None and \
+                re.sub("[0-9]*\.?[0-9]", "", element.get('y')) == "%":
+                    ypos = str(float(element.get('y').replace('%','')) * self.factor_b) + '%'
+                    element.set('y', ypos)
+                if element.get('transform'):
+                    if "matrix" in str(element.get('transform')) and width_scale != 1.0:
+                        result = re.sub(r".*?matrix( \(|\()(.*?)\)", self.matrixElement, str(element.get('transform')))
+                        element.set('transform', result)
+                    if "scale" in str(element.get('transform')) and width_scale != 1.0:
+                        result = re.sub(r".*?scale( \(|\()(.*?)\)", self.scaleElement, str(element.get('transform')))
+                        element.set('transform', result)
+                    if "translate" in str(element.get('transform')) and width_scale != 1.0:
+                        result = re.sub(r".*?translate( \(|\()(.*?)\)", self.translateElement, str(element.get('transform')))
+                        element.set('transform', result)
+                    if "skew" in str(element.get('transform')) and width_scale != 1.0:
+                        result = re.sub(r".*?skew( \(|\()(.*?)\)", self.skewElement, str(element.get('transform')))
+                        element.set('transform', result)
+                    if "scale" not in str(element.get('transform')) and "matrix" not in str(element.get('transform')):
+                        element.set('transform', str(element.get('transform')) + "scale(" + str( width_scale) + ", " + str(height_scale) + ")")
+                else:
+                    element.set('transform', "scale(" + str(width_scale) + ", " + str(height_scale) + ")")
 
-            if tag in GRAPHICS_ELEMENTS or tag in CONTAINER_ELEMENTS:
-
-                # test for specific elements to skip from scaling
-                if is_3dbox(element):
-                    if check_3dbox(svg, element, width_scale, height_scale):
-                        continue
-                if is_text_on_path(element):
-                    if check_text_on_path(svg, element, width_scale, height_scale):
-                        continue
-                if is_use(element):
-                    if check_use(svg, element, width_scale, height_scale):
-                        continue
-
-                # relative units ('%') in presentation attributes
-                for attr in ['width', 'height']:
-                    self.scale_attr_val(element, attr, ['%'], 1.0 / self.factor_a)
-                for attr in ['x', 'y']:
-                    self.scale_attr_val(element, attr, ['%'], 1.0 / self.factor_a)
-
-                # set preserved transforms on top-level elements
-                if width_scale != 1.0 and height_scale != 1.0:
-                    mat = simpletransform.parseTransform(
-                        'scale({},{})'.format(width_scale, height_scale))
-                    simpletransform.applyTransformToNode(mat, element)
+    #a dictionary of unit to user unit conversion factors
+    __uuconv = {'in':96.0, 'pt':1.33333333333, 'px':1.0, 'mm':3.77952755913, 'cm':37.7952755913,
+                'm':3779.52755913, 'km':3779527.55913, 'pc':16.0, 'yd':3456.0 , 'ft':1152.0}
+    
+    __uuconvLegazy = {'in':90.0, 'pt':1.25, 'px':1, 'mm':3.5433070866, 'cm':35.433070866, 'm':3543.3070866,
+                      'km':3543307.0866, 'pc':15.0, 'yd':3240 , 'ft':1080}
 
     def scaleElement(self, m):
-        pass  # TODO: optionally scale graphics elements only?
+        scaleVal = m.group(2).replace(" ","")
+        total = scaleVal.count(',')
+        if total == 1:
+            scaleVal = scaleVal.split(",")
+            return "matrix(" + str(float(scaleVal[0]) * self.factor_a) + ",0,0," + str(float(scaleVal[1]) * self.factor_a) + ",0,0)"
+        else:
+            return "matrix(" + str(float(scaleVal) * self.factor_a) + ",0,0," + str(float(scaleVal) * self.factor_a) + ",0,0)"
+
+
+    def translateElement(self, m):
+        translateVal = m.group(2).replace(" ","")
+        total = translateVal.count(',')
+        if total == 1:
+            translateVal = translateVal.split(",")
+            return "matrix(" + str(self.factor_a) + ",0,0," + str(self.factor_a) + "," + str(float(translateVal[0]) * self.factor_a)  + "," + str(float(translateVal[1]) * self.factor_a) + ")"
+        else:
+            return "matrix(" + str(self.factor_a) + ",0,0," + str(self.factor_a) + "," + str(float(translateVal) * self.factor_a)  + "," + str(float(translateVal) * self.factor_a) + ")"
+
+    def skewElement(self, m):
+        skeweVal = m.group(2).replace(" ","")
+        total = skewVal.count(',')
+        if total == 1:
+            skeweVal = skewVal.split(",")
+            return "skew(" + str(float(skewVal[0]) * self.factor_a)  + "," + str(float(skewVal[1]) * self.factor_a) + ") matrix(" + str(self.factor_a) + ",0,0," + str(self.factor_a) + ",0,0)"
+        else:
+            return "skew(" + str(float(skewVal) * self.factor_a)  + ") matrix(" + str(self.factor_a) + ",0,0," + str(self.factor_a) + ",0,0)"
+
+    def matrixElement(self, m):
+        matrixVal = m.group(2).replace(" ","")
+        total = matrixVal.count(',')
+        matrixVal = matrixVal.split(",")
+        if total == 5:
+            return "matrix(" + str(float(matrixVal[0]) * self.factor_a) + "," + matrixVal[1] + "," + matrixVal[2] + "," + str(float(matrixVal[3]) * self.factor_a) + "," + str(float(matrixVal[4]) * self.factor_a) + "," + str(float(matrixVal[5]) * self.factor_a) + ")"
 
     def scaleGuides(self, svg):
         xpathStr = '//sodipodi:guide'
@@ -369,10 +166,11 @@ class DPISwitcher(inkex.Effect):
                 grid.set("originy", str(originy))
 
     def effect(self):
+        action = self.options.action.strip("\"") # TODO Is this a bug? (Extra " characters)
         saveout = sys.stdout
         sys.stdout = sys.stderr
         svg = self.document.getroot()
-        if self.options.action == '"page_info"':
+        if action == "page_info":
             print ":::SVG document related info:::"
             print "version: " + str(svg.get(inkex.addNS('version',u'inkscape')))
             width = svg.get('width')
@@ -408,18 +206,14 @@ class DPISwitcher(inkex.Effect):
                 self.factor_b = 90.0/96.0
             namedview = svg.find(inkex.addNS('namedview', 'sodipodi'))
             namedview.set(inkex.addNS('document-units', 'inkscape'), "px")
-            self.units = self.parse_length(svg.get('width'))[1]
+            self.units = re.sub("[0-9]*\.?[0-9]", "", svg.get('width'))
             if self.units and self.units <> "px" and self.units <> "" and self.units <> "%":
                 if self.options.switcher == "0":
                     self.unitExponent = 1.0/(self.factor_a/self.__uuconv[self.units])
                 else:
-                    self.unitExponent = 1.0/(self.factor_a/self.__uuconvLegacy[self.units])
+                    self.unitExponent = 1.0/(self.factor_a/self.__uuconvLegazy[self.units])
             self.scaleRoot(svg);
         sys.stdout = saveout
 
-
-if __name__ == '__main__':
-    effect = DPISwitcher()
-    effect.affect()
-
-# vim: expandtab shiftwidth=4 tabstop=8 softtabstop=4 fileencoding=utf-8 textwidth=99
+effect = DPISwitcher()
+effect.affect()

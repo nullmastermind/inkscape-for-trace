@@ -1084,8 +1084,7 @@ sp_tweak_dilate (TweakTool *tc, Geom::Point event_p, Geom::Point p, Geom::Point 
     double move_force = get_move_force(tc);
     double color_force = MIN(sqrt(path_force)/20.0, 1);
 
-//    auto items= selection->items();
-    std::vector<SPItem*> items(selection->items().begin(), selection->items().end());
+    auto items= selection->items();
     for(auto i=items.begin();i!=items.end(); ++i){
         SPItem *item = *i;
 
