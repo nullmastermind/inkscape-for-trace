@@ -173,8 +173,8 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
     } else if ( mode == MT_FREE) {
         if(!are_near(previous_center,center_point, 0.01)) {
             Geom::Point trans = center_point - previous_center;
-            start_point.param_setValue(start_point * trans);
-            end_point.param_setValue(end_point * trans);
+            start_point.param_setValue(start_point * trans, true);
+            end_point.param_setValue(end_point * trans, true);
         }
     } else if ( mode == MT_V){
         if(SP_ACTIVE_DESKTOP){
@@ -185,7 +185,7 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
             start_point.param_setValue(sp);
             Geom::Point ep = Geom::Point(view_box_rect.width()/2.0, view_box_rect.height());
             ep *= i2anc_affine(SP_OBJECT(lpeitem), SP_OBJECT(SP_ACTIVE_DESKTOP->currentLayer()->parent)) .inverse();
-            end_point.param_setValue(ep);
+            end_point.param_setValue(ep, true);
         }
     } else { //horizontal page
         if(SP_ACTIVE_DESKTOP){
@@ -196,7 +196,7 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
             start_point.param_setValue(sp);
             Geom::Point ep = Geom::Point(view_box_rect.width(), view_box_rect.height()/2.0);
             ep *= i2anc_affine(SP_OBJECT(lpeitem), SP_OBJECT(SP_ACTIVE_DESKTOP->currentLayer()->parent)) .inverse();
-            end_point.param_setValue(ep);
+            end_point.param_setValue(ep, true);
         }
     }
     
@@ -445,6 +445,7 @@ LPEMirrorSymmetry::transform_multiply(Geom::Affine const& postmul, bool set)
         param->param_transform_multiply(postmul, set);
     }
     previous_center = Geom::middle_point((Geom::Point)start_point, (Geom::Point)end_point);
+
 //    Geom::Affine m = Geom::identity();
 //    m *= sp_lpe_item->transform;
 //    m *= postmul;
@@ -454,6 +455,7 @@ LPEMirrorSymmetry::transform_multiply(Geom::Affine const& postmul, bool set)
 //    if (other) {
 //        sp_lpe_item_update_patheffect(SP_LPE_ITEM(other), false, false);
 //    }
+
 }
 
 void
@@ -493,8 +495,9 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
         path_out = pathv_to_linear_and_cubic_beziers(path_in);
     }
 
-    Geom::Line ls((Geom::Point)start_point, (Geom::Point)end_point);
-    Geom::Affine m = Geom::reflection (ls.vector(), (Geom::Point)start_point);
+
+    Geom::Line line_separation((Geom::Point)start_point, (Geom::Point)end_point);
+    Geom::Affine m = Geom::reflection (line_separation.vector(), (Geom::Point)start_point);
 
     if (fuse_paths && !discard_orig_path) {
         for (Geom::PathVector::const_iterator path_it = original_pathv.begin();
@@ -521,7 +524,7 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
             }
             Geom::Point s = start_point;
             Geom::Point e = end_point;
-            double dir = ls.angle();
+            double dir = line_separation.angle();
             double diagonal = Geom::distance(Geom::Point(boundingbox_X.min(),boundingbox_Y.min()),Geom::Point(boundingbox_X.max(),boundingbox_Y.max()));
             Geom::Rect bbox(Geom::Point(boundingbox_X.min(),boundingbox_Y.min()),Geom::Point(boundingbox_X.max(),boundingbox_Y.max()));
             double size_divider = Geom::distance(center_point, bbox) + diagonal;
