@@ -23,6 +23,7 @@
 #include "svg/svg-color.h"
 #include "svg/svg.h"
 #include "display/curve.h"
+#include "helper/geom.h"
 #include "2geom/affine.h"
 #include "path-chemistry.h"
 #include "style.h"
@@ -168,12 +169,6 @@ LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
 }
 
 LPEMeasureLine::~LPEMeasureLine() {}
-
-void swap(Geom::Point &A, Geom::Point &B){
-    Geom::Point tmp = A;
-    A = B;
-    B = tmp;
-}
 
 void
 LPEMeasureLine::createArrowMarker(const char * mode)
@@ -535,7 +530,7 @@ LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
         if (SPDesktop *desktop = SP_ACTIVE_DESKTOP) {
             if ((Glib::ustring(format.param_getSVGValue()).empty())) {
                 format.param_setValue(Glib::ustring("{measure}{unit}"));
-                this->upd_params = true;
+                format.write_to_SVG();
             }
             size_t ncurves = pathvector.curveCount();
             if (ncurves != (size_t)curve_linked.param_get_max()) {
