@@ -20,7 +20,6 @@
 #include "knot-holder-entity.h"
 #include "knotholder.h"
 
-#include <glibmm/i18n.h>
 #include <gdk/gdk.h>
 
 #include <2geom/sbasis-to-bezier.h>
@@ -616,10 +615,10 @@ LPEKnot::addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::Pat
     hp_vec.push_back(pathv);
 }
 
-void LPEKnot::addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item)
+void LPEKnot::addKnotHolderEntities(KnotHolder *knotholder, SPItem *item)
 {
     KnotHolderEntity *e = new KnotHolderEntityCrossingSwitcher(this);
-    e->create( desktop, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN,
+    e->create( NULL, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN,
                _("Drag to select a crossing, click to flip it") );
     knotholder->add(e);
 };

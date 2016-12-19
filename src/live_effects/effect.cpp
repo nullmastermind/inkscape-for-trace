@@ -612,15 +612,15 @@ Effect::registerParameter(Parameter * param)
  * Add all registered LPE knotholder handles to the knotholder
  */
 void
-Effect::addHandles(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item) {
+Effect::addHandles(KnotHolder *knotholder, SPItem *item) {
     using namespace Inkscape::LivePathEffect;
 
     // add handles provided by the effect itself
-    addKnotHolderEntities(knotholder, desktop, item);
+    addKnotHolderEntities(knotholder, item);
 
     // add handles provided by the effect's parameters (if any)
     for (std::vector<Parameter *>::iterator p = param_vector.begin(); p != param_vector.end(); ++p) {
-        (*p)->addKnotHolderEntities(knotholder, desktop, item);
+        (*p)->addKnotHolderEntities(knotholder, item);
     }
 }
 
@@ -660,14 +660,7 @@ Effect::addCanvasIndicators(SPLPEItem const*/*lpeitem*/, std::vector<Geom::PathV
  */
 void
 Effect::update_helperpath() {
-    using namespace Inkscape::UI;
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    if (desktop) {
-        if (tools_isactive(desktop, TOOLS_NODES)) {
-            Inkscape::UI::Tools::NodeTool *nt = static_cast<Inkscape::UI::Tools::NodeTool*>(desktop->event_context);
-            nt->update_helperpath();
-        }
-    }
+    Inkscape::UI::Tools::sp_update_helperpath();
 }
 
 /**

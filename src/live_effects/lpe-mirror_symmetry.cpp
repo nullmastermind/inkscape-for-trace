@@ -140,8 +140,10 @@ LPEMirrorSymmetry::doAfterEffect (SPLPEItem const* lpeitem)
 void
 LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
 {
+    SPObject * current_layer = NULL;
     if (SPDesktop *desktop = SP_ACTIVE_DESKTOP) {
         Inkscape::Selection *sel = desktop->getSelection();
+        current_layer = sel->layers()->currentLayer();
         if ( sel && !sel->isEmpty()) {
             SPItem *item = sel->singleItem();
             if (item) {
@@ -151,6 +153,7 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
             }
         }
     }
+    SPDocument * document = SP_ACTIVE_DOCUMENT;
     using namespace Geom;
     original_bbox(lpeitem);
     Point point_a(boundingbox_X.max(), boundingbox_Y.min());
@@ -177,25 +180,23 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
             end_point.param_setValue(end_point * trans, true);
         }
     } else if ( mode == MT_V){
-        if(SP_ACTIVE_DESKTOP){
-            SPDocument * doc = SP_ACTIVE_DESKTOP->getDocument();
-            Geom::Rect view_box_rect = doc->getViewBox();
+        if(current_layer){
+            Geom::Rect view_box_rect = document->getViewBox();
             Geom::Point sp = Geom::Point(view_box_rect.width()/2.0, 0);
-            sp *= i2anc_affine(SP_OBJECT(lpeitem), SP_OBJECT(SP_ACTIVE_DESKTOP->currentLayer()->parent)) .inverse();
+            sp *= i2anc_affine(SP_OBJECT(lpeitem), SP_OBJECT(current_layer->parent)) .inverse();
             start_point.param_setValue(sp);
             Geom::Point ep = Geom::Point(view_box_rect.width()/2.0, view_box_rect.height());
-            ep *= i2anc_affine(SP_OBJECT(lpeitem), SP_OBJECT(SP_ACTIVE_DESKTOP->currentLayer()->parent)) .inverse();
+            ep *= i2anc_affine(SP_OBJECT(lpeitem), SP_OBJECT(current_layer->parent)).inverse();
             end_point.param_setValue(ep, true);
         }
     } else { //horizontal page
-        if(SP_ACTIVE_DESKTOP){
-            SPDocument * doc = SP_ACTIVE_DESKTOP->getDocument();
-            Geom::Rect view_box_rect = doc->getViewBox();
+        if(current_layer){
+            Geom::Rect view_box_rect = document->getViewBox();
             Geom::Point sp = Geom::Point(0, view_box_rect.height()/2.0);
-            sp *= i2anc_affine(SP_OBJECT(lpeitem), SP_OBJECT(SP_ACTIVE_DESKTOP->currentLayer()->parent)) .inverse();
+            sp *= i2anc_affine(SP_OBJECT(lpeitem), SP_OBJECT(current_layer->parent)).inverse();
             start_point.param_setValue(sp);
             Geom::Point ep = Geom::Point(view_box_rect.width(), view_box_rect.height()/2.0);
-            ep *= i2anc_affine(SP_OBJECT(lpeitem), SP_OBJECT(SP_ACTIVE_DESKTOP->currentLayer()->parent)) .inverse();
+            ep *= i2anc_affine(SP_OBJECT(lpeitem), SP_OBJECT(current_layer->parent)).inverse();
             end_point.param_setValue(ep, true);
         }
     }
@@ -271,53 +272,48 @@ LPEMirrorSymmetry::cloneAttrbutes(SPObject *origin, SPObject *dest, bool live, c
 void
 LPEMirrorSymmetry::createMirror(Geom::Affine transform)
 {
-    if (SPDesktop *desktop = SP_ACTIVE_DESKTOP) {
-        const char * id_origin_char = id_origin.param_getSVGValue();
-        const char * mirror = g_strdup(Glib::ustring("mirror-").append(id_origin_char).c_str());
-        const char * elemref_id;
-        if (std::strcmp(sp_lpe_item->getId(), mirror) == 0) {
-            elemref_id = id_origin_char;
+    SPDocument * document = SP_ACTIVE_DOCUMENT;
+    const char * id_origin_char = id_origin.param_getSVGValue();
+    const char * mirror = g_strdup(Glib::ustring("mirror-").append(id_origin_char).c_str());
+    const char * elemref_id;
+    if (std::strcmp(sp_lpe_item->getId(), mirror) == 0) {
+        elemref_id = id_origin_char;
+    } else {
+        elemref_id = mirror;
+    }
+    elements.clear();
+    elements.push_back(id_origin_char);
+    elements.push_back(mirror);
+    Inkscape::XML::Document *xml_doc = document->getReprDoc();
+    SPObject *elemref= NULL;
+    Inkscape::XML::Node *phantom = NULL;
+    if (elemref = document->getObjectById(elemref_id)) {
+        phantom = elemref->getRepr();
+    } else {
+        phantom = sp_lpe_item->getRepr()->duplicate(xml_doc);
+    }
+    phantom->setAttribute("id", elemref_id);
+    if (!elemref) {
+        elemref = container->appendChildRepr(phantom);
+        Inkscape::GC::release(phantom);
+    }
+    cloneAttrbutes(SP_OBJECT(sp_lpe_item), elemref, true, "inkscape:original-d", "d", "inkscape:path-effect", NULL); //NULL required
+    //transform *= last_transform;
+    //if (transform != Geom::identity()) {
+        if (elemref_id == mirror) {
+            elemref->getRepr()->setAttribute("transform" , sp_svg_transform_write(transform));
         } else {
-            elemref_id = mirror;
+            sp_lpe_item->getRepr()->setAttribute("transform" , sp_svg_transform_write(transform));
         }
-        elements.clear();
-        elements.push_back(id_origin_char);
-        elements.push_back(mirror);
-        Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
-        Inkscape::URI SVGElem_uri(Glib::ustring("#").append(elemref_id).c_str());
-        Inkscape::URIReference* SVGElemRef = new Inkscape::URIReference(desktop->doc());
-        SVGElemRef->attach(SVGElem_uri);
-        SPObject *elemref= NULL;
-        Inkscape::XML::Node *phantom = NULL;
-        if (elemref = SVGElemRef->getObject()) {
-            phantom = elemref->getRepr();
-        } else {
-            phantom = sp_lpe_item->getRepr()->duplicate(xml_doc);
-        }
-        phantom->setAttribute("id", elemref_id);
-        if (!elemref) {
-            elemref = container->appendChildRepr(phantom);
-            Inkscape::GC::release(phantom);
-        }
-        cloneAttrbutes(SP_OBJECT(sp_lpe_item), elemref, true, "inkscape:original-d", "d", "inkscape:path-effect", NULL); //NULL required
-        //transform *= last_transform;
-        //if (transform != Geom::identity()) {
-            if (elemref_id == mirror) {
-                elemref->getRepr()->setAttribute("transform" , sp_svg_transform_write(transform));
-            } else {
-                sp_lpe_item->getRepr()->setAttribute("transform" , sp_svg_transform_write(transform));
-            }
-        //}
-        if (elemref->parent != container) {
-            Inkscape::XML::Node *copy = phantom->duplicate(xml_doc);
-            copy->setAttribute("id", elemref_id);
-            other = container->appendChildRepr(copy);
-            Inkscape::GC::release(copy);
-            elemref->deleteObject();
-        } else {
-            other = elemref;
-        }
-        
+    //}
+    if (elemref->parent != container) {
+        Inkscape::XML::Node *copy = phantom->duplicate(xml_doc);
+        copy->setAttribute("id", elemref_id);
+        other = container->appendChildRepr(copy);
+        Inkscape::GC::release(copy);
+        elemref->deleteObject();
+    } else {
+        other = elemref;
     }
 }
 
@@ -379,59 +375,54 @@ LPEMirrorSymmetry::doOnRemove (SPLPEItem const* /*lpeitem*/)
 void 
 LPEMirrorSymmetry::processObjects(LpeAction lpe_action)
 {
-    if (SPDesktop *desktop = SP_ACTIVE_DESKTOP) {
-        for (std::vector<const char *>::iterator el_it = elements.begin(); 
-             el_it != elements.end(); ++el_it) {
-            const char * id = *el_it;
-            if (!id || strlen(id) == 0) {
-                return;
-            }
-            Inkscape::URI SVGElem_uri(Glib::ustring("#").append(id).c_str());
-            Inkscape::URIReference* SVGElemRef = new Inkscape::URIReference(desktop->doc());
-            SVGElemRef->attach(SVGElem_uri);
-            SPObject *elemref = NULL;
-            if (elemref = SVGElemRef->getObject()) {
-                Inkscape::XML::Node * elemnode = elemref->getRepr();
-                std::vector<SPItem*> item_list;
-                item_list.push_back(SP_ITEM(elemref));
-                std::vector<Inkscape::XML::Node*> item_to_select;
-                std::vector<SPItem*> item_selected;
-                SPCSSAttr *css;
-                Glib::ustring css_str;
-                switch (lpe_action){
-                case LPE_TO_OBJECTS:
-                    if (elemnode->attribute("inkscape:path-effect")) {
-                        sp_item_list_to_curves(item_list, item_selected, item_to_select);
-                    }
-                    elemnode->setAttribute("sodipodi:insensitive", NULL);
-                    break;
-
-                case LPE_ERASE:
-                    //if (std::strcmp(elemref->getId(),sp_lpe_item->getId()) != 0) {
-                        elemref->deleteObject();
-                    //}
-                    break;
-
-                case LPE_VISIBILITY:
-                    css = sp_repr_css_attr_new();
-                    sp_repr_css_attr_add_from_string(css, elemref->getRepr()->attribute("style"));
-                    if (!this->isVisible()/* && std::strcmp(elemref->getId(),sp_lpe_item->getId()) != 0*/) {
-                        css->setAttribute("display", "none");
-                    } else {
-                        css->setAttribute("display", NULL);
-                    }
-                    sp_repr_css_write_string(css,css_str);
-                    elemnode->setAttribute("style", css_str.c_str());
-                    break;
-
-                default:
-                    break;
+    for (std::vector<const char *>::iterator el_it = elements.begin(); 
+         el_it != elements.end(); ++el_it) {
+        const char * id = *el_it;
+        if (!id || strlen(id) == 0) {
+            return;
+        }
+        SPObject *elemref = NULL;
+        if (elemref = document->getObjectById(id)) {
+            Inkscape::XML::Node * elemnode = elemref->getRepr();
+            std::vector<SPItem*> item_list;
+            item_list.push_back(SP_ITEM(elemref));
+            std::vector<Inkscape::XML::Node*> item_to_select;
+            std::vector<SPItem*> item_selected;
+            SPCSSAttr *css;
+            Glib::ustring css_str;
+            switch (lpe_action){
+            case LPE_TO_OBJECTS:
+                if (elemnode->attribute("inkscape:path-effect")) {
+                    sp_item_list_to_curves(item_list, item_selected, item_to_select);
                 }
+                elemnode->setAttribute("sodipodi:insensitive", NULL);
+                break;
+
+            case LPE_ERASE:
+                //if (std::strcmp(elemref->getId(),sp_lpe_item->getId()) != 0) {
+                    elemref->deleteObject();
+                //}
+                break;
+
+            case LPE_VISIBILITY:
+                css = sp_repr_css_attr_new();
+                sp_repr_css_attr_add_from_string(css, elemref->getRepr()->attribute("style"));
+                if (!this->isVisible()/* && std::strcmp(elemref->getId(),sp_lpe_item->getId()) != 0*/) {
+                    css->setAttribute("display", "none");
+                } else {
+                    css->setAttribute("display", NULL);
+                }
+                sp_repr_css_write_string(css,css_str);
+                elemnode->setAttribute("style", css_str.c_str());
+                break;
+
+            default:
+                break;
             }
         }
-        if (lpe_action == LPE_ERASE || lpe_action == LPE_TO_OBJECTS) {
-            elements.clear();
-        }
+    }
+    if (lpe_action == LPE_ERASE || lpe_action == LPE_TO_OBJECTS) {
+        elements.clear();
     }
 }
 
