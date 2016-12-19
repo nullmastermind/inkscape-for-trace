@@ -375,6 +375,7 @@ LPEMirrorSymmetry::doOnRemove (SPLPEItem const* /*lpeitem*/)
 void 
 LPEMirrorSymmetry::processObjects(LpeAction lpe_action)
 {
+    SPDocument * document = SP_ACTIVE_DOCUMENT;
     for (std::vector<const char *>::iterator el_it = elements.begin(); 
          el_it != elements.end(); ++el_it) {
         const char * id = *el_it;
