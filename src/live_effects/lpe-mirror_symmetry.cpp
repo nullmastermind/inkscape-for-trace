@@ -57,10 +57,10 @@ LPEMirrorSymmetry::LPEMirrorSymmetry(LivePathEffectObject *lpeobject) :
     fuse_paths(_("Fuse paths"), _("Fuse original and the reflection into a single path"), "fuse_paths", &wr, this, false),
     oposite_fuse(_("Opposite fuse"), _("Picks the other side of the mirror as the original"), "oposite_fuse", &wr, this, false),
     split_elements(_("Split elements"), _("Split elements, this allow gradients and other paints. Group result to apply nested"), "split_elements", &wr, this, false),
-    start_point(_("Start mirror line"), _("Start mirror line"), "start_point", &wr, this, _("Adjust the start of mirroring")),
+    start_point(_("Start mirror line"), _("Start mirror line"), "start_point", &wr, this, _("Adjust start of mirroring")),
     end_point(_("End mirror line"), _("End mirror line"), "end_point", &wr, this, _("Adjust end of mirroring")),
     center_point(_("Center mirror line"), _("Center mirror line"), "center_point", &wr, this, _("Adjust center of mirroring")),
-    id_origin("hidden", "hidden store the id of the first LPEItem", "id_origin", &wr, this,"")
+    id_origin("id origin", "store the id of the first LPEItem", "id_origin", &wr, this,"")
 {
     show_orig_path = true;
     registerParameter(&mode);
