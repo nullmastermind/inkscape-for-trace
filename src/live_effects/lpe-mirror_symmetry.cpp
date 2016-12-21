@@ -140,10 +140,8 @@ LPEMirrorSymmetry::doAfterEffect (SPLPEItem const* lpeitem)
 void
 LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
 {
-    SPObject * current_layer = NULL;
     if (SPDesktop *desktop = SP_ACTIVE_DESKTOP) {
         Inkscape::Selection *sel = desktop->getSelection();
-        current_layer = sel->layers()->currentLayer();
         if ( sel && !sel->isEmpty()) {
             SPItem *item = sel->singleItem();
             if (item) {
@@ -153,7 +151,6 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
             }
         }
     }
-    SPDocument * document = SP_ACTIVE_DOCUMENT;
     using namespace Geom;
     original_bbox(lpeitem);
     //center_point->param_set_liveupdate(false);
@@ -174,8 +171,9 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
         center_point.param_setValue(previous_center, true);
     }
     if ( mode == MT_X || mode == MT_Y ) {
-        start_point.param_setValue(point_a);
-        end_point.param_setValue(point_b);
+        start_point.param_setValue(point_a, true);
+        end_point.param_setValue(point_b, true);
+        center_point.param_setValue(Geom::middle_point(point_a, point_b), true);
     } else if ( mode == MT_FREE) {
         if (are_near(previous_center, (Geom::Point)center_point, 0.01)) {
             center_point.param_setValue(Geom::middle_point((Geom::Point)start_point, (Geom::Point)end_point), true);
@@ -185,25 +183,23 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
             end_point.param_setValue(end_point * trans, true);
         }
     } else if ( mode == MT_V){
-        if(current_layer){
-            Geom::Rect view_box_rect = document->getViewBox();
-            Geom::Point sp = Geom::Point(view_box_rect.width()/2.0, 0);
-            sp *= i2anc_affine(SP_OBJECT(lpeitem), SP_OBJECT(current_layer->parent)) .inverse();
-            start_point.param_setValue(sp);
-            Geom::Point ep = Geom::Point(view_box_rect.width()/2.0, view_box_rect.height());
-            ep *= i2anc_affine(SP_OBJECT(lpeitem), SP_OBJECT(current_layer->parent)).inverse();
-            end_point.param_setValue(ep, true);
-        }
+        SPDocument * document = SP_ACTIVE_DOCUMENT;
+        Geom::Affine transform = i2anc_affine(SP_OBJECT(lpeitem), NULL).inverse();
+        Geom::Point sp = Geom::Point(document->getWidth().value("px")/2.0, 0) * transform;
+        start_point.param_setValue(sp, true);
+        Geom::Point ep = Geom::Point(document->getWidth().value("px")/2.0, document->getHeight().value("px")) * transform;
+        end_point.param_setValue(ep, true);
+        center_point.param_setValue(Geom::middle_point((Geom::Point)start_point, (Geom::Point)end_point), true);
+        previous_center = center_point;
     } else { //horizontal page
-        if(current_layer){
-            Geom::Rect view_box_rect = document->getViewBox();
-            Geom::Point sp = Geom::Point(0, view_box_rect.height()/2.0);
-            sp *= i2anc_affine(SP_OBJECT(lpeitem), SP_OBJECT(current_layer->parent)).inverse();
-            start_point.param_setValue(sp);
-            Geom::Point ep = Geom::Point(view_box_rect.width(), view_box_rect.height()/2.0);
-            ep *= i2anc_affine(SP_OBJECT(lpeitem), SP_OBJECT(current_layer->parent)).inverse();
-            end_point.param_setValue(ep, true);
-        }
+        SPDocument * document = SP_ACTIVE_DOCUMENT;
+        Geom::Affine transform = i2anc_affine(SP_OBJECT(lpeitem), NULL).inverse();
+        Geom::Point sp = Geom::Point(0, document->getHeight().value("px")/2.0) * transform;
+        start_point.param_setValue(sp, true);
+        Geom::Point ep = Geom::Point(document->getWidth().value("px"), document->getHeight().value("px")/2.0) * transform;
+        end_point.param_setValue(ep, true);
+        center_point.param_setValue(Geom::middle_point((Geom::Point)start_point, (Geom::Point)end_point), true);
+        previous_center = center_point;
     }
     if (!are_near(previous_center, (Geom::Point)center_point, 0.01)) {
         center_point.param_setValue(Geom::middle_point((Geom::Point)start_point, (Geom::Point)end_point), true);
