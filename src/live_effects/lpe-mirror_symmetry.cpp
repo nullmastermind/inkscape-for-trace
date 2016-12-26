@@ -26,6 +26,7 @@
 #include "2geom/path-intersection.h"
 #include "2geom/affine.h"
 #include "helper/geom.h"
+#include "sp-lpe-item.h"
 #include "uri.h"
 #include "uri-references.h"
 #include "path-chemistry.h"
@@ -87,9 +88,31 @@ LPEMirrorSymmetry::~LPEMirrorSymmetry()
 {
 }
 
+bool
+LPEMirrorSymmetry::isCurrentLPEItem() {
+    if (SPDesktop *desktop = SP_ACTIVE_DESKTOP) {
+        Inkscape::Selection *sel = desktop->getSelection();
+        if ( sel && !sel->isEmpty()) {
+            SPItem *item = sel->singleItem();
+            if (item) {
+                if(sp_lpe_item && std::strcmp(sp_lpe_item->getId(),item->getId()) == 0) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
 void
 LPEMirrorSymmetry::doAfterEffect (SPLPEItem const* lpeitem)
 {
+    std::cout << sp_lpe_item->getId()  << "111111111111111111111111111111\n";
+    std::cout << lpeitem->getId()  << "22222222222222222222222222222222222222222\n";
+    if (!isCurrentLPEItem()) { 
+        return;
+    }
+    std::cout << "dgagsdgsdgsdgsdgsdgsdgsdgsd\n";
     last_transform = Geom::identity();
     if (split_elements) {
         if (discard_orig_path) {
@@ -126,6 +149,7 @@ LPEMirrorSymmetry::doAfterEffect (SPLPEItem const* lpeitem)
 //        m = m * m1;
         m = m * sp_lpe_item->transform;
 //        if (std::strcmp(sp_lpe_item->getId(), origin) != 0) {
+std::cout << m << "m\n";
             createMirror(m);
 //        } else {
 //            createMirror(sp_lpe_item, m, mirror);
@@ -140,19 +164,12 @@ LPEMirrorSymmetry::doAfterEffect (SPLPEItem const* lpeitem)
 void
 LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
 {
-    if (SPDesktop *desktop = SP_ACTIVE_DESKTOP) {
-        Inkscape::Selection *sel = desktop->getSelection();
-        if ( sel && !sel->isEmpty()) {
-            SPItem *item = sel->singleItem();
-            if (item) {
-                if(std::strcmp(sp_lpe_item->getId(),item->getId()) != 0) {
-                    return;
-                }
-            }
-        }
-    }
+
     using namespace Geom;
     original_bbox(lpeitem);
+    if (!isCurrentLPEItem()) { 
+        return;
+    }
     //center_point->param_set_liveupdate(false);
     Point point_a(boundingbox_X.max(), boundingbox_Y.min());
     Point point_b(boundingbox_X.max(), boundingbox_Y.max());
@@ -164,7 +181,7 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
         point_a = Geom::Point(center_point[X],boundingbox_Y.min());
         point_b = Geom::Point(center_point[X],boundingbox_Y.max());
     }
-    if ((Geom::Point)start_point == (Geom::Point)end_point && (Geom::Point)start_point == Geom::Point(0,0)) {
+    if ((Geom::Point)start_point == (Geom::Point)end_point) {
         start_point.param_setValue(point_a, true);
         end_point.param_setValue(point_b, true);
         previous_center = Geom::middle_point((Geom::Point)start_point, (Geom::Point)end_point);
@@ -274,16 +291,9 @@ LPEMirrorSymmetry::createMirror(Geom::Affine transform)
 {
     SPDocument * document = SP_ACTIVE_DOCUMENT;
     const char * id_origin_char = id_origin.param_getSVGValue();
-    const char * mirror = g_strdup(Glib::ustring("mirror-").append(id_origin_char).c_str());
-    const char * elemref_id;
-    if (std::strcmp(sp_lpe_item->getId(), mirror) == 0) {
-        elemref_id = id_origin_char;
-    } else {
-        elemref_id = mirror;
-    }
+    const char * elemref_id = g_strdup(Glib::ustring("mirror-").append(id_origin_char).c_str());
     elements.clear();
-    elements.push_back(id_origin_char);
-    elements.push_back(mirror);
+    elements.push_back(elemref_id);
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
     SPObject *elemref= NULL;
     Inkscape::XML::Node *phantom = NULL;
@@ -297,14 +307,16 @@ LPEMirrorSymmetry::createMirror(Geom::Affine transform)
         elemref = container->appendChildRepr(phantom);
         Inkscape::GC::release(phantom);
     }
-    cloneAttrbutes(SP_OBJECT(sp_lpe_item), elemref, true, "inkscape:original-d", "d", "inkscape:path-effect", NULL); //NULL required
+    cloneAttrbutes(SP_OBJECT(sp_lpe_item), elemref, true, "d", NULL); //NULL required
     //transform *= last_transform;
     //if (transform != Geom::identity()) {
-        if (elemref_id == mirror) {
-            elemref->getRepr()->setAttribute("transform" , sp_svg_transform_write(transform));
-        } else {
-            sp_lpe_item->getRepr()->setAttribute("transform" , sp_svg_transform_write(transform));
-        }
+    elemref->getRepr()->setAttribute("transform" , sp_svg_transform_write(transform));
+    Inkscape::LivePathEffect::LPEObjectReference* lperef = SP_LPE_ITEM(elemref)->getCurrentLPEReference();
+    if (lperef) {
+        PathEffectList * new_list = SP_LPE_ITEM(elemref)->path_effect_list;
+        new_list->remove(lperef); //current lpe ref is always our 'own' pointer from the path_effect_list
+        elemref->getRepr()->setAttribute("inkscape:path-effect", patheffectlist_svg_string(new_list));
+    }
     //}
     if (elemref->parent != container) {
         Inkscape::XML::Node *copy = phantom->duplicate(xml_doc);
@@ -331,7 +343,7 @@ LPEMirrorSymmetry::newWidget()
     while (it != param_vector.end()) {
         if ((*it)->widget_is_visible) {
             Parameter * param = *it;
-            if (param->param_key == "id_origin") {
+            if (param->param_key == "id_origin" || param->param_key == "center_point") {
                 ++it;
                 continue;
             }
@@ -432,21 +444,23 @@ void
 LPEMirrorSymmetry::transform_multiply(Geom::Affine const& postmul, bool set)
 {
     // cycle through all parameters. Most parameters will not need transformation, but path and point params do.
-    for (std::vector<Parameter *>::iterator it = param_vector.begin(); it != param_vector.end(); ++it) {
-        Parameter * param = *it;
-        param->param_transform_multiply(postmul, set);
-    }
-    previous_center = Geom::middle_point((Geom::Point)start_point, (Geom::Point)end_point);
+    if (isCurrentLPEItem()) {
+        for (std::vector<Parameter *>::iterator it = param_vector.begin(); it != param_vector.end(); ++it) {
+            Parameter * param = *it;
+            param->param_transform_multiply(postmul, set);
+        }
+        previous_center = Geom::middle_point((Geom::Point)start_point, (Geom::Point)end_point);
 
-//    Geom::Affine m = Geom::identity();
-//    m *= sp_lpe_item->transform;
-//    m *= postmul;
-//    sp_lpe_item->transform = m;
-    last_transform *= postmul;
-    sp_lpe_item_update_patheffect(sp_lpe_item, false, false);
-//    if (other) {
-//        sp_lpe_item_update_patheffect(SP_LPE_ITEM(other), false, false);
-//    }
+    //    Geom::Affine m = Geom::identity();
+    //    m *= sp_lpe_item->transform;
+    //    m *= postmul;
+    //    sp_lpe_item->transform = m;
+        //last_transform *= postmul;
+        sp_lpe_item_update_patheffect(sp_lpe_item, false, false);
+    //    if (other) {
+    //        sp_lpe_item_update_patheffect(SP_LPE_ITEM(other), false, false);
+    //    }
+    }
 
 }
 
@@ -477,7 +491,7 @@ LPEMirrorSymmetry::doOnApply (SPLPEItem const* lpeitem)
 Geom::PathVector
 LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
 {
-    if (split_elements && !fuse_paths) {
+    if (split_elements && !fuse_paths || !isCurrentLPEItem()) {
         return path_in;
     }
     Geom::PathVector const original_pathv = pathv_to_linear_and_cubic_beziers(path_in);

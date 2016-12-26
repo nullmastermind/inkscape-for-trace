@@ -50,6 +50,7 @@ public:
     virtual Gtk::Widget * newWidget();
     void processObjects(LpeAction lpe_action);
     void createMirror(Geom::Affine transform);
+    bool isCurrentLPEItem();
     //    void cloneAttrbutes(Inkscape::XML::Node * origin, Inkscape::XML::Node * dest, const char * first_attribute, ...);
     void cloneAttrbutes(SPObject *origin, SPObject *dest, bool live, const char * first_attribute, ...);
 
