@@ -667,8 +667,9 @@ void VPDrag::drawLinesForFace(const SPBox3D *box,
             g_assert_not_reached();
     }
 
-    Geom::Point corner1, corner2, corner3, corner4;
-    box3d_corners_for_PLs(box, axis, corner1, corner2, corner3, corner4);
+    const size_t NUM_CORNERS = 4;
+    Geom::Point corners[NUM_CORNERS];
+    box3d_corners_for_PLs(box, axis, corners[0], corners[1], corners[2], corners[3]);
 
     g_return_if_fail(box3d_get_perspective(box));
     Proj::Pt2 vp = persp3d_get_VP(box3d_get_perspective(box), axis);
@@ -677,45 +678,37 @@ void VPDrag::drawLinesForFace(const SPBox3D *box,
         Geom::Point pt = vp.affine();
         if (this->front_or_rear_lines & 0x1) {
             // draw 'front' perspective lines
-            this->addLine(corner1, pt, type);
-            this->addLine(corner2, pt, type);
+            this->addLine(corners[0], pt, type);
+            this->addLine(corners[1], pt, type);
         }
         if (this->front_or_rear_lines & 0x2) {
             // draw 'rear' perspective lines
-            this->addLine(corner3, pt, type);
-            this->addLine(corner4, pt, type);
+            this->addLine(corners[2], pt, type);
+            this->addLine(corners[3], pt, type);
         }
     }
     else {
         // draw perspective lines for infinite VPs
-        boost::optional<Geom::Point> pt1, pt2, pt3, pt4;
+        boost::optional<Geom::Point> pts[NUM_CORNERS];
         Persp3D *persp = box3d_get_perspective(box);
         SPDesktop *desktop = SP_ACTIVE_DESKTOP; // FIXME: Store the desktop in VPDrag
-        Box3D::PerspectiveLine pl(corner1, axis, persp);
-        pt1 = pl.intersection_with_viewbox(desktop);
 
-        pl = Box3D::PerspectiveLine(corner2, axis, persp);
-        pt2 = pl.intersection_with_viewbox(desktop);
-
-        pl = Box3D::PerspectiveLine(corner3, axis, persp);
-        pt3 = pl.intersection_with_viewbox(desktop);
-
-        pl = Box3D::PerspectiveLine(corner4, axis, persp);
-        pt4 = pl.intersection_with_viewbox(desktop);
-
-        if (!pt1 || !pt2 || !pt3 || !pt4) {
-            // some perspective lines s are outside the canvas; currently we don't draw any of them
-            return;
+        for (size_t i = 0; i < NUM_CORNERS; i++) {
+            Box3D::PerspectiveLine pl(corners[i], axis, persp);
+            if (!(pts[i] = pl.intersection_with_viewbox(desktop))) {
+                // some perspective lines are outside the canvas; currently we don't draw any of them
+                return;
+            }
         }
         if (this->front_or_rear_lines & 0x1) {
             // draw 'front' perspective lines
-            this->addLine(corner1, *pt1, type);
-            this->addLine(corner2, *pt2, type);
+            this->addLine(corners[0], *pts[0], type);
+            this->addLine(corners[1], *pts[1], type);
         }
         if (this->front_or_rear_lines & 0x2) {
             // draw 'rear' perspective lines
-            this->addLine(corner3, *pt3, type);
-            this->addLine(corner4, *pt4, type);
+            this->addLine(corners[2], *pts[2], type);
+            this->addLine(corners[3], *pts[3], type);
         }
     }
 }
