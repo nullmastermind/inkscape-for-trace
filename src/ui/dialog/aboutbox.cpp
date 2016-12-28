@@ -27,7 +27,6 @@
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/aspectframe.h>
 #include <gtkmm/textview.h>
-#include <gtkmm/stock.h>
 
 #include "path-prefix.h"
 #include "document.h"
@@ -37,8 +36,6 @@
 #include "util/units.h"
 
 #include "inkscape-version.h"
-
-
 
 
 namespace Inkscape {
@@ -102,7 +99,7 @@ AboutBox::AboutBox() : Gtk::Dialog(_("About Inkscape")) {
 
     tabs->show_all();
 
-    add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE);
+    add_button(_("_Close"), Gtk::RESPONSE_CLOSE);
     set_default_response(Gtk::RESPONSE_CLOSE);
 
     Gtk::Label *label=new Gtk::Label();
