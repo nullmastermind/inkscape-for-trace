@@ -116,7 +116,7 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {RULER,                 N_("Ruler"),                   "ruler"},
 /* 0.91 */
     {POWERSTROKE,           N_("Power stroke"),            "powerstroke"},
-    {CLONE_ORIGINAL,        N_("Clone original path"),     "clone_original"},
+    {CLONE_ORIGINAL,        N_("Clone original"),          "clone_original"},
 /* 0.92 */
     {SIMPLIFY,              N_("Simplify"),                "simplify"},
     {LATTICE2,              N_("Lattice Deformation 2"),   "lattice2"},
@@ -457,8 +457,7 @@ void Effect::doBeforeEffect_impl(SPLPEItem const* lpeitem)
     //printf("(SPLPEITEM*) %p\n", sp_lpe_item);
     SPShape * shape = dynamic_cast<SPShape *>(sp_lpe_item);
     if(shape){
-        sp_curve = shape->getCurve();
-        pathvector_before_effect = sp_curve->get_pathvector();
+        setSPCurve(shape->getCurve());
     }
     doBeforeEffect(lpeitem);
     if (apply_to_clippath_and_mask && SP_IS_GROUP(sp_lpe_item)) {
@@ -468,6 +467,11 @@ void Effect::doBeforeEffect_impl(SPLPEItem const* lpeitem)
     update_helperpath();
 }
 
+void Effect::setSPCurve(SPCurve *curve)
+{ 
+    sp_curve = curve; 
+    pathvector_before_effect = curve->get_pathvector();
+}
 /**
  * Effects can have a parameter path set before they are applied by accepting a nonzero number of
  * mouse clicks. This method activates the pen context, which waits for the specified number of

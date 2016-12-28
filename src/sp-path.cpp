@@ -354,9 +354,9 @@ g_message("sp_path_update_patheffect writes 'd' attribute");
             if (gchar const * value = repr->attribute("d")) {
                 Geom::PathVector pv = sp_svg_read_pathv(value);
                 SPCurve *oldcurve = new SPCurve(pv);
-
                 if (oldcurve) {
-                    this->setCurve(oldcurve, TRUE);
+                    this->setCurveInsync(oldcurve, TRUE);
+                    repr->setAttribute("d", value);
                     oldcurve->unref();
                 }
             }

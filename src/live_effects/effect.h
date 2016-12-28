@@ -73,6 +73,7 @@ public:
     static int acceptsNumClicks(EffectType type);
     int acceptsNumClicks() const { return acceptsNumClicks(effectType()); }
     void doAcceptPathPreparations(SPLPEItem *lpeitem);
+    void setSPCurve(SPCurve *curve);
 
     /*
      * isReady() indicates whether all preparations which are necessary to apply the LPE are done,
