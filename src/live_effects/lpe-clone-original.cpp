@@ -87,7 +87,7 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, bool live, co
                         if (scale != 100.0) {
                             double scale_affine = scale/100.0;
                             Geom::Affine scale = Geom::Affine(Geom::Scale(scale_affine));
-                            c_pv *= Geom::Translate((*orig_bbox).corner(0)) * scale * Geom::Translate((*orig_bbox).corner(0)).inverse();
+                            c_pv *= Geom::Translate((*orig_bbox).corner(0)).inverse() * scale * Geom::Translate((*orig_bbox).corner(0));
                         }
                     }
                     c->set_pathvector(c_pv);
