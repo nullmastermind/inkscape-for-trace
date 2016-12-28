@@ -33,6 +33,7 @@ public:
 
 private:
     OriginalItemParam  linked_item;
+    ScalarParam scale;
     BoolParam preserve_position;
     TextParam attributes;
     TextParam style_attributes;

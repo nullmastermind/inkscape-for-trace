@@ -20,14 +20,19 @@ namespace LivePathEffect {
 LPECloneOriginal::LPECloneOriginal(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
     linked_item(_("Linked Item:"), _("Item from which to take the original data"), "linked_item", &wr, this),
+    scale(_("Scale %"), _("Scale item %"), "scale", &wr, this, 100.0),
     preserve_position(_("Preserve position"), _("Preserve position"), "preserve_position", &wr, this, false),
     attributes("Attributes linked", "Attributes linked", "attributes", &wr, this,""),
     style_attributes("Style attributes linked", "Style attributes linked", "style_attributes", &wr, this,"")
 {
     registerParameter(&linked_item);
+    registerParameter(&scale);
     registerParameter(&attributes);
     registerParameter(&style_attributes);
     registerParameter(&preserve_position);
+    scale.param_set_range(0.01, 999999.0);
+    scale.param_set_increments(1, 1);
+    scale.param_set_digits(2);
     attributes.param_hide_canvas_text();
     style_attributes.param_hide_canvas_text();
     apply_to_clippath_and_mask = true;
@@ -58,13 +63,12 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, bool live, co
             atts != elems.end(); ++atts) {
             const char* attribute = (*atts).c_str();
             if ( std::strcmp(attribute, "transform") == 0 ) {
-                Geom::Affine affine_dest = Geom::identity();
-                sp_svg_transform_read(SP_ITEM(dest)->getAttribute("transform"), &affine_dest);
+                Geom::Affine affine_dest = SP_ITEM(dest)->transform;
                 dest->getRepr()->setAttribute(attribute, origin->getRepr()->attribute(attribute));
+                Geom::Affine affine_origin = Geom::identity();
+                sp_svg_transform_read(SP_ITEM(origin)->getAttribute("transform"), &affine_origin);
                 if (preserve_position) {
-                    Geom::Affine affine_origin = Geom::identity();
-                    sp_svg_transform_read(SP_ITEM(origin)->getAttribute("transform"), &affine_origin);
-                    SP_ITEM(dest)->transform = Geom::Translate(affine_dest.translation()) * Geom::Translate(affine_origin.translation()).inverse() * affine_origin;
+                    SP_ITEM(dest)->transform = Geom::Translate(affine_dest.translation()) * Geom::Translate(affine_origin.translation()).inverse() * affine_origin ;
                 }
             } else if ( shape_dest && shape_origin && live && (std::strcmp(attribute, "d") == 0 || std::strcmp(attribute, "inkscape:original-d") == 0)) {
                 SPCurve *c = NULL;
@@ -75,10 +79,15 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, bool live, co
                 }
                 if (c) {
                     Geom::PathVector c_pv = c->get_pathvector();
-                    if (preserve_position) {
-                        Geom::OptRect orig_bbox = SP_ITEM(origin)->geometricBounds();
-                        if (orig_bbox) {
+                    Geom::OptRect orig_bbox = SP_ITEM(origin)->geometricBounds();
+                    if (orig_bbox) {
+                        if (preserve_position) {
                             c_pv *= Geom::Translate(Geom::Point(boundingbox_X.min(), boundingbox_Y.min()) - (*orig_bbox).corner(0));
+                        }
+                        if (scale != 100.0) {
+                            double scale_affine = scale/100.0;
+                            Geom::Affine scale = Geom::Affine(Geom::Scale(scale_affine));
+                            c_pv *= Geom::Translate((*orig_bbox).corner(0)) * scale * Geom::Translate((*orig_bbox).corner(0)).inverse();
                         }
                     }
                     c->set_pathvector(c_pv);
