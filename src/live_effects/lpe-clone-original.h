@@ -11,6 +11,7 @@
 
 #include "live_effects/effect.h"
 #include "live_effects/parameter/originalitem.h"
+#include "live_effects/parameter/originalpath.h"
 #include "live_effects/parameter/parameter.h"
 #include "live_effects/parameter/point.h"
 #include "live_effects/parameter/text.h"
@@ -26,13 +27,14 @@ public:
 
     virtual void doEffect (SPCurve * curve);
     virtual void doBeforeEffect (SPLPEItem const* lpeitem);
-    virtual void doAfterEffect (SPLPEItem const* lpeitem);
     virtual void doOnApply(SPLPEItem const* lpeitem);
-    void cloneAttrbutes(SPObject *origin, SPObject *dest, bool live, const char * first_attribute, ...);
-    void cloneStyleAttrbutes(SPObject *origin, SPObject *dest, const char * first_attribute, ...);
+    virtual Gtk::Widget * newWidget();
+    void cloneAttrbutes(SPObject *origin, SPObject *dest, bool live, const char * attributes, const char * style_attributes);
 
 private:
+    OriginalPathParam  linked_path;
     OriginalItemParam  linked_item;
+    ScalarParam scale;
     BoolParam preserve_position;
     TextParam attributes;
     TextParam style_attributes;
