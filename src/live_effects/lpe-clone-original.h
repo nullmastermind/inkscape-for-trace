@@ -29,7 +29,7 @@ public:
     virtual void doBeforeEffect (SPLPEItem const* lpeitem);
     virtual void doOnApply(SPLPEItem const* lpeitem);
     virtual Gtk::Widget * newWidget();
-    void cloneAttrbutes(SPObject *origin, SPObject *dest, bool live, const char * attributes, const char * style_attributes);
+    void cloneAttrbutes(SPObject *origin, SPObject *dest, bool live, const char * attributes, const char * style_attributes, bool root);
 
 private:
     OriginalPathParam  linked_path;
@@ -38,6 +38,8 @@ private:
     BoolParam preserve_position;
     TextParam attributes;
     TextParam style_attributes;
+    bool preserve_position_changed;
+    Geom::Affine preserve_affine;
     LPECloneOriginal(const LPECloneOriginal&);
     LPECloneOriginal& operator=(const LPECloneOriginal&);
 };

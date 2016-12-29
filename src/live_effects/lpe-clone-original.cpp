@@ -37,10 +37,12 @@ LPECloneOriginal::LPECloneOriginal(LivePathEffectObject *lpeobject) :
     attributes.param_hide_canvas_text();
     style_attributes.param_hide_canvas_text();
     apply_to_clippath_and_mask = true;
+    preserve_position_changed = !preserve_position;
+    preserve_affine = Geom::identity();
 }
 
 void
-LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, bool live, const char * attributes, const char * style_attributes) 
+LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, bool live, const char * attributes, const char * style_attributes, bool root) 
 {
     SPDocument * document = SP_ACTIVE_DOCUMENT;
     if ( SP_IS_GROUP(origin) && SP_IS_GROUP(dest) && SP_GROUP(origin)->getItemCount() == SP_GROUP(dest)->getItemCount() ) {
@@ -49,7 +51,7 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, bool live, co
         for (std::vector<SPObject * >::iterator obj_it = childs.begin(); 
              obj_it != childs.end(); ++obj_it) {
             SPObject *dest_child = dest->nthChild(index); 
-            cloneAttrbutes(*obj_it, dest_child, live, attributes, style_attributes); 
+            cloneAttrbutes(*obj_it, dest_child, live, attributes, style_attributes, false); 
             index++;
         }
     }
@@ -65,7 +67,15 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, bool live, co
             Geom::Affine affine_origin = SP_ITEM(origin)->transform;
             //dest->getRepr()->setAttribute(attribute, origin->getRepr()->attribute(attribute));
             if (preserve_position) {
-                SP_ITEM(dest)->transform = Geom::Translate(affine_dest.translation()) * Geom::Translate(affine_origin.translation()).inverse() * affine_origin ;
+                Geom::Affine dest_affine = Geom::identity();
+                if (root) {
+                    dest_affine *= Geom::Translate(preserve_affine.translation());
+                    preserve_affine = Geom::identity();
+                } 
+                dest_affine *= Geom::Translate(affine_dest.translation());
+                dest_affine *= Geom::Translate(affine_origin.translation()).inverse();
+                dest_affine *= affine_origin;
+                SP_ITEM(dest)->transform =  dest_affine;
             } else {
                 SP_ITEM(dest)->transform = affine_origin ;
             }
@@ -131,6 +141,12 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, bool live, co
 void
 LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){
     original_bbox(lpeitem);
+    if ( preserve_position_changed != preserve_position ) {
+        if (!preserve_position) {
+            preserve_affine = SP_ITEM(sp_lpe_item)->transform;
+        }
+        preserve_position_changed = preserve_position;
+    }
     if (linked_path.linksToPath()) { //Legacy staff
         Glib::ustring attributes_value("d");
         attributes.param_setValue(attributes_value);
@@ -142,11 +158,7 @@ LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){
         linked_path.param_readSVGValue("");
     }
     if (linked_item.linksToItem()) {
-        cloneAttrbutes(linked_item.getObject(), SP_OBJECT(sp_lpe_item), true, attributes.param_getSVGValue(), style_attributes.param_getSVGValue());
-        SPShape * shape = dynamic_cast<SPShape *>(sp_lpe_item);
-        if(shape){
-            this->setSPCurve(shape->getCurve());
-        }
+        cloneAttrbutes(linked_item.getObject(), SP_OBJECT(sp_lpe_item), true, attributes.param_getSVGValue(), style_attributes.param_getSVGValue(), true);
     }
 }
 
@@ -205,7 +217,10 @@ LPECloneOriginal::~LPECloneOriginal()
 
 void LPECloneOriginal::doEffect (SPCurve * curve)
 {
-    curve->set_pathvector(pathvector_before_effect);
+    SPShape * shape = getCurrentShape();
+    if(shape){
+        curve->set_pathvector(shape->getCurve()->get_pathvector());
+    }
 }
 
 } // namespace LivePathEffect

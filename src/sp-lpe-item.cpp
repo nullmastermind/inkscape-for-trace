@@ -241,11 +241,11 @@ bool SPLPEItem::performPathEffect(SPCurve *curve, SPShape *current, bool is_clip
                 }
                 if (!is_clip_or_mask || (is_clip_or_mask && lpe->apply_to_clippath_and_mask)) {
                     // Groups have their doBeforeEffect called elsewhere
+                    if (SP_IS_GROUP(this) && current) {
+                        lpe->setCurrentShape(current);
+                    }
                     if (!SP_IS_GROUP(this)) {
                         lpe->doBeforeEffect_impl(this);
-                    }
-                    if (SP_IS_GROUP(this) && current) {
-                        lpe->setSPCurve(current->getCurve());
                     }
                     try {
                         lpe->doEffect(curve);
