@@ -241,7 +241,7 @@ bool SPLPEItem::performPathEffect(SPCurve *curve, SPShape *current, bool is_clip
                 }
                 if (!is_clip_or_mask || (is_clip_or_mask && lpe->apply_to_clippath_and_mask)) {
                     // Groups have their doBeforeEffect called elsewhere
-                    if (SP_IS_GROUP(this) && current) {
+                    if (current) {
                         lpe->setCurrentShape(current);
                     }
                     if (!SP_IS_GROUP(this)) {
@@ -700,7 +700,7 @@ SPLPEItem::apply_to_clip_or_mask(SPItem *clip_mask, SPItem *item)
                     success = this->performPathEffect(c, SP_SHAPE(clip_mask), true);
                     c->transform(i2anc_affine(SP_GROUP(item), SP_GROUP(this)).inverse());
                 } else {
-                    success = this->performPathEffect(c, NULL, true);
+                    success = this->performPathEffect(c, SP_SHAPE(clip_mask), true);
                 }
             } catch (std::exception & e) {
                 g_warning("Exception during LPE execution. \n %s", e.what());
