@@ -289,20 +289,6 @@ Geom::Affine SPPath::set_transform(Geom::Affine const &transform) {
     if (!_curve) { // 0 nodes, nothing to transform
         return Geom::identity();
     }
-
-    // Transform the original-d path if this is a valid LPE this, other else the (ordinary) path
-    if (_curve_before_lpe && hasPathEffectRecursive()) {
-        if (this->hasPathEffectOfType(Inkscape::LivePathEffect::CLONE_ORIGINAL) || this->hasPathEffectOfType(Inkscape::LivePathEffect::BEND_PATH)) {
-            // if path has the CLONE_ORIGINAL LPE applied, don't write the transform to the pathdata, but write it 'unoptimized'
-            // also if the effect is type BEND PATH to fix bug #179842
-            return transform;
-        } else {
-            _curve_before_lpe->transform(transform);
-        }
-    } else {
-        _curve->transform(transform);
-    }
-
     // Adjust stroke
     this->adjust_stroke(transform.descrim());
 
@@ -314,6 +300,21 @@ Geom::Affine SPPath::set_transform(Geom::Affine const &transform) {
 
     // Adjust LPE
     this->adjust_livepatheffect(transform);
+
+    // Transform the original-d path if this is a valid LPE this, other else the (ordinary) path
+    if (_curve_before_lpe && hasPathEffectRecursive()) {
+        if (this->hasPathEffectOfType(Inkscape::LivePathEffect::CLONE_ORIGINAL) || 
+            this->hasPathEffectOfType(Inkscape::LivePathEffect::BEND_PATH)) 
+        {
+            // if path has the CLONE_ORIGINAL LPE applied, don't write the transform to the pathdata, but write it 'unoptimized'
+            // also if the effect is type BEND PATH to fix bug #179842
+            return transform;
+        } else {
+            _curve_before_lpe->transform(transform);
+        }
+    } else {
+        _curve->transform(transform);
+    }
 
     this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
 

@@ -24,6 +24,7 @@ LPECloneOriginal::LPECloneOriginal(LivePathEffectObject *lpeobject) :
     linked_item(_("Linked Item:"), _("Item from which to take the original data"), "linked_item", &wr, this),
     scale(_("Scale %"), _("Scale item %"), "scale", &wr, this, 100.0),
     preserve_position(_("Preserve position"), _("Preserve position"), "preserve_position", &wr, this, false),
+    use_center(_("Relative center of element"), _("Relative center of element"), "use_center", &wr, this, true),
     attributes("Attributes linked", "Attributes linked", "attributes", &wr, this,""),
     style_attributes("Style attributes linked", "Style attributes linked", "style_attributes", &wr, this,"")
 {
@@ -33,14 +34,28 @@ LPECloneOriginal::LPECloneOriginal(LivePathEffectObject *lpeobject) :
     registerParameter(&attributes);
     registerParameter(&style_attributes);
     registerParameter(&preserve_position);
+    registerParameter(&use_center);
     scale.param_set_range(0.01, 999999.0);
     scale.param_set_increments(1, 1);
     scale.param_set_digits(2);
     attributes.param_hide_canvas_text();
     style_attributes.param_hide_canvas_text();
-    preserve_position_changed = !preserve_position;
+    preserve_position_changed = preserve_position;
     preserve_affine = Geom::identity();
-    apply_to_clippath_and_mask = true;
+}
+
+bool hasLinkedTransform( const char * attributes) {
+    gchar ** attarray = g_strsplit(attributes, ",", 0);
+    gchar ** iter = attarray;
+    bool has_linked_transform = false;
+    while (*iter != NULL) {
+        const char* attribute = (*iter);
+        if ( std::strcmp(attribute, "transform") == 0 ) {
+            has_linked_transform = true;
+        }
+        iter++;
+    }
+    return has_linked_transform;
 }
 
 void
@@ -53,41 +68,69 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, bool live, co
         for (std::vector<SPObject * >::iterator obj_it = childs.begin(); 
              obj_it != childs.end(); ++obj_it) {
             SPObject *dest_child = dest->nthChild(index); 
-            cloneAttrbutes(*obj_it, dest_child, live, attributes, style_attributes, false); 
+            cloneAttrbutes((*obj_it), dest_child, live, attributes, style_attributes, false); 
             index++;
         }
     }
     //Attributes
     SPShape * shape_origin =  SP_SHAPE(origin);
+    SPPath * path_origin =  SP_PATH(origin);
     SPShape * shape_dest =  SP_SHAPE(dest);
+    SPMask *mask_origin = SP_ITEM(origin)->mask_ref->getObject();
+    SPMask *mask_dest = SP_ITEM(dest)->mask_ref->getObject();
+    if(mask_origin && mask_dest) {
+        std::vector<SPObject*> mask_list = mask_origin->childList(true);
+        std::vector<SPObject*> mask_list_dest = mask_dest->childList(true);
+        if (mask_list.size() == mask_list_dest.size()) {
+            size_t i = 0;
+            for ( std::vector<SPObject*>::const_iterator iter=mask_list.begin();iter!=mask_list.end();++iter) {
+                SPObject * mask_data = *iter;
+                SPObject * mask_dest_data = mask_list_dest[i];
+                cloneAttrbutes(mask_data, mask_dest_data, live, attributes, style_attributes, false);
+                i++;
+            }
+        }
+    }
+    SPClipPath *clippath_origin = SP_ITEM(origin)->clip_ref->getObject();
+    SPClipPath *clippath_dest = SP_ITEM(dest)->clip_ref->getObject();
+    if(clippath_origin && clippath_dest) {
+        std::vector<SPObject*> clippath_list = clippath_origin->childList(true);
+        std::vector<SPObject*> clippath_list_dest = clippath_dest->childList(true);
+        if (clippath_list.size() == clippath_list_dest.size()) {
+            size_t i = 0;
+            for ( std::vector<SPObject*>::const_iterator iter=clippath_list.begin();iter!=clippath_list.end();++iter) {
+                SPObject * clippath_data = *iter;
+                SPObject * clippath_dest_data = clippath_list_dest[i];
+                cloneAttrbutes(clippath_data, clippath_dest_data, live, attributes, style_attributes, false);
+                i++;
+            }
+        }
+    }
     gchar ** attarray = g_strsplit(attributes, ",", 0);
     gchar ** iter = attarray;
-//    if (SP_IS_CLIPPATH(SP_ITEM(origin)->parent) || SP_IS_MASK(SP_ITEM(origin)->parent)) {
-//        Geom::Affine dest_affine = Geom::identity();
-//        if (root && preserve_position) {
-//            dest_affine *= Geom::Translate(preserve_affine.translation());
-//        } 
-//        SP_ITEM(SP_ITEM(dest)->parent)->transform = dest_affine;
-//    }
+    Geom::Affine affine_dest = Geom::identity();
+    Geom::Affine affine_origin = Geom::identity();
+    Geom::Affine affine_previous = Geom::identity();
+    sp_svg_transform_read(SP_ITEM(dest)->getAttribute("transform"), &affine_dest);
+    sp_svg_transform_read(SP_ITEM(origin)->getAttribute("transform"), &affine_origin);
     while (*iter != NULL) {
         const char* attribute = (*iter);
         if ( std::strcmp(attribute, "transform") == 0 ) {
-            Geom::Affine affine_dest = SP_ITEM(dest)->transform;
-            Geom::Affine affine_origin = SP_ITEM(origin)->transform;
-            //dest->getRepr()->setAttribute(attribute, origin->getRepr()->attribute(attribute));
             if (preserve_position) {
                 Geom::Affine dest_affine = Geom::identity();
                 if (root) {
-                    std::cout << "root" <<  preserve_affine.translation() << "\n";
-                    dest_affine *= Geom::Translate(preserve_affine.translation());
-                    //preserve_affine = Geom::identity();
-                    dest_affine *= Geom::Translate(affine_dest.translation());
+                    dest_affine *= affine_origin;
+                    if (preserve_affine == Geom::identity()) {
+                        dest_affine *= Geom::Translate(affine_dest.translation());
+                    }
                     dest_affine *= Geom::Translate(affine_origin.translation()).inverse();
-                } 
-                dest_affine *= affine_origin;
-                SP_ITEM(dest)->transform =  dest_affine;
+                    dest_affine *= Geom::Translate(preserve_affine.translation());
+                    affine_previous = preserve_affine;
+                    preserve_affine = Geom::identity();
+                    SP_ITEM(dest)->getRepr()->setAttribute("transform",sp_svg_transform_write(dest_affine));
+                }
             } else {
-                SP_ITEM(dest)->transform = affine_origin ;
+                SP_ITEM(dest)->getRepr()->setAttribute("transform",sp_svg_transform_write(affine_origin));
             }
         } else if ( shape_dest && shape_origin && live && (std::strcmp(attribute, "d") == 0 || std::strcmp(attribute, "inkscape:original-d") == 0)) {
             SPCurve *c = NULL;
@@ -99,21 +142,33 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, bool live, co
             if (c) {
                 Geom::PathVector c_pv = c->get_pathvector();
                 Geom::OptRect orig_bbox = SP_ITEM(origin)->geometricBounds();
-                if (orig_bbox && root) {
+                Geom::OptRect dest_bbox = SP_ITEM(dest)->geometricBounds();
+                if (dest_bbox && orig_bbox && root) {
+                    Geom::Point orig_point = (*orig_bbox).corner(0);
+                    Geom::Point dest_point = (*dest_bbox).corner(0);
+                    if (use_center) {
+                        orig_point = (*orig_bbox).midpoint();
+                        dest_point = (*dest_bbox).midpoint();
+                    }
                     if (scale != 100.0) {
                         double scale_affine = scale/100.0;
                         Geom::Scale scale = Geom::Scale(scale_affine);
-                        c_pv *= Geom::Translate((*orig_bbox).midpoint()).inverse();
+                        c_pv *= Geom::Translate(orig_point).inverse();
                         c_pv *= scale;
-                        c_pv *= Geom::Translate((*orig_bbox).midpoint());
+                        c_pv *= Geom::Translate(orig_point);
                     }
-                    if (preserve_position) {
-                        c_pv *= Geom::Translate(Geom::Point(boundingbox_X.middle(), boundingbox_Y.middle()) - (*orig_bbox).midpoint());
+                    if (preserve_position && hasLinkedTransform(attributes)) {
+                        c_pv *= Geom::Translate(dest_point - orig_point);
                     }
                 }
+                c_pv *= i2anc_affine(dest, sp_lpe_item);
                 c->set_pathvector(c_pv);
-                shape_dest->setCurveInsync(c, TRUE);
-                dest->getRepr()->setAttribute(attribute, sp_svg_write_path(c_pv));
+                if (!path_origin) {
+                    shape_dest->setCurveInsync(c, TRUE);
+                    dest->getRepr()->setAttribute(attribute, sp_svg_write_path(c_pv));
+                } else {
+                    shape_dest->setCurve(c, TRUE);
+                }
                 c->unref();
             } else {
                 dest->getRepr()->setAttribute(attribute, NULL);
@@ -124,8 +179,6 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, bool live, co
         iter++;
     }
     g_strfreev (attarray);
-
-    //Style Attributes
     SPCSSAttr *css_origin = sp_repr_css_attr_new();
     sp_repr_css_attr_add_from_string(css_origin, origin->getRepr()->attribute("style"));
     SPCSSAttr *css_dest = sp_repr_css_attr_new();
@@ -161,17 +214,14 @@ LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){
         linked_item.param_readSVGValue(linked_path.param_getSVGValue());
         linked_path.param_readSVGValue("");
     }
+
     if (linked_item.linksToItem()) {
-        if (preserve_position) {
-            preserve_affine = SP_ITEM(sp_lpe_item)->transform;
+         if ( preserve_position_changed != preserve_position ) {
+            if (!preserve_position) {
+                sp_svg_transform_read(SP_ITEM(sp_lpe_item)->getAttribute("transform"), &preserve_affine);
+            }
+            preserve_position_changed = preserve_position;
         }
-//         if ( preserve_position_changed != preserve_position ) {
-//            if (!preserve_position) {
-//                preserve_affine = SP_ITEM(sp_lpe_item)->transform;
-//                preserve_affine *= Geom::Translate(SP_ITEM(linked_item.getObject())->transform.translation()).inverse();
-//            }
-//            preserve_position_changed = preserve_position;
-//        }
         cloneAttrbutes(linked_item.getObject(), SP_OBJECT(sp_lpe_item), true, attributes.param_getSVGValue(), style_attributes.param_getSVGValue(), true);
     }
 }
@@ -219,7 +269,7 @@ LPECloneOriginal::doOnApply(SPLPEItem const* lpeitem){
     Glib::ustring attributes_value("d,transform");
     attributes.param_setValue(attributes_value);
     attributes.write_to_SVG();
-    Glib::ustring style_attributes_value("opacity,border-width");
+    Glib::ustring style_attributes_value("opacity,stroke-width");
     style_attributes.param_setValue(style_attributes_value);
     style_attributes.write_to_SVG();
 }
@@ -229,11 +279,23 @@ LPECloneOriginal::~LPECloneOriginal()
 
 }
 
-void LPECloneOriginal::doEffect (SPCurve * curve)
+void
+LPECloneOriginal::transform_multiply(Geom::Affine const& postmul, bool set)
 {
-    SPShape * shape = getCurrentShape();
-    if(shape){
-        curve->set_pathvector(shape->getCurve()->get_pathvector());
+    if (linked_item.linksToItem()) {
+        bool changed = false;
+        linked_item.getObject()->requestModified(SP_OBJECT_MODIFIED_FLAG);
+    }
+}
+
+void 
+LPECloneOriginal::doEffect (SPCurve * curve)
+{
+    if (linked_item.linksToItem()) {
+        SPShape * shape = getCurrentShape();
+        if(shape){
+            curve->set_pathvector(shape->getCurve()->get_pathvector());
+        }
     }
 }
 
