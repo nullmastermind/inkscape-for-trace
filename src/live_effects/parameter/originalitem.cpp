@@ -84,6 +84,21 @@ OriginalItemParam::param_newWidget()
 }
 
 void
+OriginalItemParam::param_start_listening(SPObject * to)
+{
+    if ( to == NULL ) {
+        return;
+    }
+    start_listening(to, false);
+}
+
+void
+OriginalItemParam::param_quit_listening(void)
+{
+    quit_listening();
+}
+
+void
 OriginalItemParam::linked_modified_callback(SPObject *linked_obj, guint /*flags*/)
 {
     emit_changed();

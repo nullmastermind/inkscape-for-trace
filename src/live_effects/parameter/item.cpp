@@ -135,25 +135,31 @@ ItemParam::addCanvasIndicators(SPLPEItem const*/*lpeitem*/, std::vector<Geom::Pa
 
 
 void
-ItemParam::start_listening(SPObject * to)
+ItemParam::start_listening(SPObject * to, bool force)
 {
     if ( to == NULL ) {
         return;
     }
-    linked_delete_connection = to->connectDelete(sigc::mem_fun(*this, &ItemParam::linked_delete));
-    linked_modified_connection = to->connectModified(sigc::mem_fun(*this, &ItemParam::linked_modified));
-    if (SP_IS_ITEM(to)) {
-        linked_transformed_connection = SP_ITEM(to)->connectTransformed(sigc::mem_fun(*this, &ItemParam::linked_transformed));
+    if (!linked_delete_connection.connected() || force) {
+            std::cout << "111111111111111111\n";
+        linked_delete_connection = to->connectDelete(sigc::mem_fun(*this, &ItemParam::linked_delete));
+        linked_modified_connection = to->connectModified(sigc::mem_fun(*this, &ItemParam::linked_modified));
+        if (SP_IS_ITEM(to)) {
+            linked_transformed_connection = SP_ITEM(to)->connectTransformed(sigc::mem_fun(*this, &ItemParam::linked_transformed));
+        }
+        linked_modified(to, SP_OBJECT_MODIFIED_FLAG); // simulate linked_modified signal, so that path data is updated
     }
-    linked_modified(to, SP_OBJECT_MODIFIED_FLAG); // simulate linked_modified signal, so that path data is updated
 }
 
 void
 ItemParam::quit_listening(void)
 {
-    linked_modified_connection.disconnect();
-    linked_delete_connection.disconnect();
-    linked_transformed_connection.disconnect();
+    if (linked_delete_connection.connected()) {
+            std::cout << "2222222222222222222222\n";
+        linked_modified_connection.disconnect();
+        linked_delete_connection.disconnect();
+        linked_transformed_connection.disconnect();
+    }
 }
 
 void
@@ -161,7 +167,7 @@ ItemParam::ref_changed(SPObject */*old_ref*/, SPObject *new_ref)
 {
     quit_listening();
     if ( new_ref ) {
-        start_listening(new_ref);
+        start_listening(new_ref, true);
     }
 }
 

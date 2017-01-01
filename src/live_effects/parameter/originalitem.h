@@ -26,6 +26,8 @@ public:
 
     bool linksToItem() const { return (href != NULL); }
     SPItem * getObject() const { return ref.getObject(); }
+    void param_start_listening(SPObject * to);
+    void param_quit_listening(void);
 
     virtual Gtk::Widget * param_newWidget();
 
