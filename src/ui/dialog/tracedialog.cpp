@@ -21,7 +21,6 @@
 #include <gtkmm/radiobutton.h>
 #include "ui/widget/spinbutton.h"
 #include "ui/widget/frame.h"
-#include <gtkmm/stock.h>
 
 #include <glibmm/i18n.h>
 
@@ -813,12 +812,12 @@ TraceDialogImpl::TraceDialogImpl() :
     mainResetButton ->set_tooltip_text(_("Reset all settings to defaults"));
 
     //## The OK button
-    mainCancelButton = addResponseButton(Gtk::Stock::STOP, GTK_RESPONSE_CANCEL);
+    mainCancelButton = addResponseButton(_("_Stop"), GTK_RESPONSE_CANCEL);
     if (mainCancelButton) {
 	mainCancelButton->set_tooltip_text(_("Abort a trace in progress"));
 	mainCancelButton->set_sensitive(false);
     }
-    mainOkButton = addResponseButton(Gtk::Stock::OK, GTK_RESPONSE_OK);
+    mainOkButton = addResponseButton(_("_OK"), GTK_RESPONSE_OK);
     mainOkButton->set_tooltip_text(_("Execute the trace"));
 
     show_all_children();

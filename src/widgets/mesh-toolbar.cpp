@@ -18,6 +18,8 @@
 #include <config.h>
 #endif
 
+#include <gtkmm.h>
+
 // REVIEW THESE AT END OF REWRITE
 #include "ui/widget/color-preview.h"
 #include "toolbox.h"
@@ -36,7 +38,6 @@
 #include "document-undo.h"
 #include "desktop.h"
 
-#include <gtkmm.h>
 #include <glibmm/i18n.h>
 
 #include "ui/tools/gradient-tool.h"
@@ -538,6 +539,7 @@ void sp_mesh_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, GObj
         gtk_list_store_append( model, &iter );
         gtk_list_store_set( model, &iter, 0, _("Bicubic"), 1, SP_MESH_TYPE_BICUBIC, -1 );
 
+        // TRANSLATORS: Type of Smoothing. See https://en.wikipedia.org/wiki/Coons_patch
         EgeSelectOneAction* act = ege_select_one_action_new( "MeshSmoothAction", _("Coons"),
                _("Coons: no smoothing. Bicubic: smoothing across patch boundaries."),
                 NULL, GTK_TREE_MODEL(model) );
