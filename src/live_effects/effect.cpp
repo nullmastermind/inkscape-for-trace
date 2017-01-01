@@ -116,7 +116,7 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {RULER,                 N_("Ruler"),                   "ruler"},
 /* 0.91 */
     {POWERSTROKE,           N_("Power stroke"),            "powerstroke"},
-    {CLONE_ORIGINAL,        N_("Clone original path"),     "clone_original"},
+    {CLONE_ORIGINAL,        N_("Clone original"),          "clone_original"},
 /* 0.92 */
     {SIMPLIFY,              N_("Simplify"),                "simplify"},
     {LATTICE2,              N_("Lattice Deformation 2"),   "lattice2"},
@@ -356,7 +356,7 @@ Effect::Effect(LivePathEffectObject *lpeobject)
       sp_lpe_item(NULL),
       current_zoom(1),
       upd_params(true),
-      sp_curve(NULL),
+      sp_shape(NULL),
       provides_own_flash_paths(true), // is automatically set to false if providesOwnFlashPaths() is not overridden
       is_ready(false) // is automatically set to false if providesOwnFlashPaths() is not overridden
 {
@@ -392,9 +392,9 @@ Effect::doOnApply (SPLPEItem const*/*lpeitem*/)
 }
 
 void
-Effect::setSelectedNodePoints(std::vector<Geom::Point> sNP)
+Effect::setSelectedNodePoints(std::vector<Geom::Point> selected_np)
 {
-    selectedNodesPoints = sNP;
+    selected_nodes_points = selected_np;
 }
 
 void
@@ -404,16 +404,16 @@ Effect::setCurrentZoom(double cZ)
 }
 
 bool
-Effect::isNodePointSelected(Geom::Point const &nodePoint) const
+Effect::isNodePointSelected(Geom::Point const &node_point) const
 {
-    if (selectedNodesPoints.size() > 0) {
+    if (selected_nodes_points.size() > 0) {
         using Geom::X;
         using Geom::Y; 
-        for (std::vector<Geom::Point>::const_iterator i = selectedNodesPoints.begin();
-                i != selectedNodesPoints.end(); ++i) {
+        for (std::vector<Geom::Point>::const_iterator i = selected_nodes_points.begin();
+                i != selected_nodes_points.end(); ++i) {
             Geom::Point p = *i;
             Geom::Affine transformCoordinate = sp_lpe_item->i2dt_affine();
-            Geom::Point p2(nodePoint[X],nodePoint[Y]);
+            Geom::Point p2(node_point[X], node_point[Y]);
             p2 *= transformCoordinate;
             if (Geom::are_near(p, p2, 0.01)) {
                 return true;
@@ -446,21 +446,24 @@ void Effect::doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/)
 void Effect::doOnApply_impl(SPLPEItem const* lpeitem)
 {
     sp_lpe_item = const_cast<SPLPEItem *>(lpeitem);
-    /*sp_curve = SP_SHAPE(sp_lpe_item)->getCurve();
-    pathvector_before_effect = sp_curve->get_pathvector();*/
+    SPShape * shape = dynamic_cast<SPShape *>(sp_lpe_item);
+    if(shape){
+        setCurrentShape(shape);
+    }
     doOnApply(lpeitem);
 }
 
 void Effect::doBeforeEffect_impl(SPLPEItem const* lpeitem)
 {
     sp_lpe_item = const_cast<SPLPEItem *>(lpeitem);
-    //printf("(SPLPEITEM*) %p\n", sp_lpe_item);
+    //Groups set shape in performPathEffect before each call to doEffect
     SPShape * shape = dynamic_cast<SPShape *>(sp_lpe_item);
     if(shape){
-        sp_curve = shape->getCurve();
-        pathvector_before_effect = sp_curve->get_pathvector();
+        setCurrentShape(shape);
     }
+    //printf("(SPLPEITEM*) %p\n", sp_lpe_item);
     doBeforeEffect(lpeitem);
+
     if (apply_to_clippath_and_mask && SP_IS_GROUP(sp_lpe_item)) {
         sp_lpe_item->apply_to_clippath(sp_lpe_item);
         sp_lpe_item->apply_to_mask(sp_lpe_item);
@@ -468,6 +471,16 @@ void Effect::doBeforeEffect_impl(SPLPEItem const* lpeitem)
     update_helperpath();
 }
 
+void Effect::setCurrentShape(SPShape * shape){ 
+    if(shape){
+        sp_shape = shape;
+        if (!(sp_curve = sp_shape->getCurve())) {
+            // oops
+            return;
+        }
+        pathvector_before_effect = sp_curve->get_pathvector();
+    }
+}
 /**
  * Effects can have a parameter path set before they are applied by accepting a nonzero number of
  * mouse clicks. This method activates the pen context, which waits for the specified number of

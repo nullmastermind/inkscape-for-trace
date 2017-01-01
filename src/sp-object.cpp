@@ -782,6 +782,7 @@ SPObject* SPObject::nthChild(unsigned index) {
             if (counter == index) {
                 return &child;
             }
+            counter++;
         }
     }
     return NULL;
