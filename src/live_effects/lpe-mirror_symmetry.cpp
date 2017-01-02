@@ -220,6 +220,8 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
 void
 LPEMirrorSymmetry::cloneAttrbutes(SPObject *origin, SPObject *dest, bool live, const char * attributes) 
 {
+    SPDocument * document = SP_ACTIVE_DOCUMENT;
+    Inkscape::XML::Document *xml_doc = document->getReprDoc();
     if ( SP_IS_GROUP(origin) && SP_IS_GROUP(dest) && SP_GROUP(origin)->getItemCount() == SP_GROUP(dest)->getItemCount() ) {
         std::vector< SPObject * > childs = origin->childList(true);
         size_t index = 0;
@@ -235,6 +237,11 @@ LPEMirrorSymmetry::cloneAttrbutes(SPObject *origin, SPObject *dest, bool live, c
     while (*iter != NULL) {
         const char* att = (*iter);
         SPShape * shape =  SP_SHAPE(origin);
+        SPPath * path =  SP_PATH(dest);
+        if (!path && !SP_IS_GROUP(dest)) {
+            Inkscape::XML::Node *dest_node = sp_selected_item_to_curved_repr(SP_ITEM(dest), 0);
+            dest->updateRepr(xml_doc, dest_node, SP_OBJECT_WRITE_ALL);	
+        }
         if (shape) {
             if ( live && (att == "d" || att == "inkscape:original-d")) {
                 SPCurve *c = NULL;
@@ -262,11 +269,11 @@ void
 LPEMirrorSymmetry::toMirror(Geom::Affine transform)
 {
     SPDocument * document = SP_ACTIVE_DOCUMENT;
+    Inkscape::XML::Document *xml_doc = document->getReprDoc();
     const char * id_origin_char = id_origin.param_getSVGValue();
     const char * elemref_id = g_strdup(Glib::ustring("mirror-").append(id_origin_char).c_str());
     elements.clear();
     elements.push_back(elemref_id);
-    Inkscape::XML::Document *xml_doc = document->getReprDoc();
     SPObject *elemref= NULL;
     Inkscape::XML::Node *phantom = NULL;
     if (elemref = document->getObjectById(elemref_id)) {
@@ -275,12 +282,44 @@ LPEMirrorSymmetry::toMirror(Geom::Affine transform)
         phantom = sp_lpe_item->getRepr()->duplicate(xml_doc);
     }
     phantom->setAttribute("id", elemref_id);
+    phantom->setAttribute("inkscape:path-effect", NULL);
+    phantom->setAttribute("sodipodi:type", NULL);
+    phantom->setAttribute("sodipodi:rx", NULL);
+    phantom->setAttribute("sodipodi:ry", NULL);
+    phantom->setAttribute("sodipodi:cx", NULL);
+    phantom->setAttribute("sodipodi:cy", NULL);
+    phantom->setAttribute("sodipodi:end", NULL);
+    phantom->setAttribute("sodipodi:start", NULL);
+    phantom->setAttribute("inkscape:flatsided", NULL);
+    phantom->setAttribute("inkscape:randomized", NULL);
+    phantom->setAttribute("inkscape:rounded", NULL);
+    phantom->setAttribute("sodipodi:arg1", NULL);
+    phantom->setAttribute("sodipodi:arg2", NULL);
+    phantom->setAttribute("sodipodi:r1", NULL);
+    phantom->setAttribute("sodipodi:r2", NULL);
+    phantom->setAttribute("sodipodi:sides", NULL);
+    phantom->setAttribute("inkscape:randomized", NULL);
+    phantom->setAttribute("sodipodi:argument", NULL);
+    phantom->setAttribute("sodipodi:expansion", NULL);
+    phantom->setAttribute("sodipodi:radius", NULL);
+    phantom->setAttribute("sodipodi:revolution", NULL);
+    phantom->setAttribute("sodipodi:t0", NULL);
+    phantom->setAttribute("inkscape:randomized", NULL);
+    phantom->setAttribute("inkscape:randomized", NULL);
+    phantom->setAttribute("inkscape:randomized", NULL);
+    phantom->setAttribute("x", NULL);
+    phantom->setAttribute("y", NULL);
+    phantom->setAttribute("rx", NULL);
+    phantom->setAttribute("ry", NULL);
+    phantom->setAttribute("width", NULL);
+    phantom->setAttribute("height", NULL);
     if (!elemref) {
         elemref = container->appendChildRepr(phantom);
         Inkscape::GC::release(phantom);
         mirror_item.param_write(elemref_id);
+    } else {
+        elemref->updateRepr(xml_doc, phantom, SP_OBJECT_WRITE_ALL);	
     }
-    elemref->getRepr()->setAttribute("inkscape:path-effect", "");
     cloneAttrbutes(SP_OBJECT(sp_lpe_item), elemref, true, "d");
     elemref->getRepr()->setAttribute("transform" , sp_svg_transform_write(transform));
     if (elemref->parent != container) {
@@ -513,6 +552,10 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
                 double time_end = crossed[i];
                 if (time_start != time_end && time_end - time_start > Geom::EPSILON) {
                     Geom::Path portion = original.portion(time_start, time_end);
+                    Geom::Path next_portion = portion;
+                    if (crossed.size() > i+1) {
+                        next_portion = original.portion(time_end, crossed[i+1]);
+                    }
                     if (!portion.empty()) {
                         Geom::Point middle = portion.pointAt((double)portion.size()/2.0);
                         position = Geom::sgn(Geom::cross(e - s, middle - s));
@@ -522,8 +565,9 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
                         if (position == 1) {
                             Geom::Path mirror = portion.reversed() * m;
                             if (split_elements) {
-                                if(i!=0 || original.closed()) {
-                                    portion.close();
+                                if (crossed.size() > i+1) {
+                                    portion.appendNew<Geom::LineSegment>( next_portion.finalPoint() );
+                                    i++;
                                 }
                             } else {
                                 mirror.setInitial(portion.finalPoint());
@@ -533,7 +577,9 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
                                     portion.close();
                                 }
                             }
-                            tmp_path.push_back(portion);
+                            if (split_elements) {
+                                tmp_path.push_back(portion);
+                            }
                         }
                         portion.clear();
                     }
