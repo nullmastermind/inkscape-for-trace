@@ -52,18 +52,20 @@ MTConverter(ModeTypeData, MT_END);
 
 LPEMirrorSymmetry::LPEMirrorSymmetry(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
+    mirror_item(_("Mirror item:"), _("Mirror item"), "mirror_item", &wr, this),
     mode(_("Mode"), _("Symmetry move mode"), "mode", MTConverter, &wr, this, MT_FREE),
     split_gap(_("Gap on split"), _("Gap on split"), "split_gap", &wr, this, 0),
     discard_orig_path(_("Discard original path"), _("Check this to only keep the mirrored part of the path"), "discard_orig_path", &wr, this, false),
     fuse_paths(_("Fuse paths"), _("Fuse original and the reflection into a single path"), "fuse_paths", &wr, this, false),
     oposite_fuse(_("Opposite fuse"), _("Picks the other side of the mirror as the original"), "oposite_fuse", &wr, this, false),
-    split_elements(_("Split elements"), _("Split elements, this allow gradients and other paints. Group result to apply nested"), "split_elements", &wr, this, false),
+    split_elements(_("Split elements"), _("Split elements, this allow gradients and other paints. Whith fuse don't work on shapes"), "split_elements", &wr, this, false),
     start_point(_("Start mirror line"), _("Start mirror line"), "start_point", &wr, this, _("Adjust start of mirroring")),
     end_point(_("End mirror line"), _("End mirror line"), "end_point", &wr, this, _("Adjust end of mirroring")),
     center_point(_("Center mirror line"), _("Center mirror line"), "center_point", &wr, this, _("Adjust center of mirroring")),
     id_origin("id origin", "store the id of the first LPEItem", "id_origin", &wr, this,"")
 {
     show_orig_path = true;
+    registerParameter(&mirror_item);
     registerParameter(&mode);
     registerParameter(&split_gap);
     registerParameter(&discard_orig_path);
@@ -107,12 +109,9 @@ LPEMirrorSymmetry::isCurrentLPEItem() {
 void
 LPEMirrorSymmetry::doAfterEffect (SPLPEItem const* lpeitem)
 {
-    std::cout << sp_lpe_item->getId()  << "111111111111111111111111111111\n";
-    std::cout << lpeitem->getId()  << "22222222222222222222222222222222222222222\n";
     if (!isCurrentLPEItem()) { 
         return;
     }
-    std::cout << "dgagsdgsdgsdgsdgsdgsdgsdgsd\n";
     last_transform = Geom::identity();
     if (split_elements) {
         if (discard_orig_path) {
@@ -129,31 +128,11 @@ LPEMirrorSymmetry::doAfterEffect (SPLPEItem const* lpeitem)
         }
         Geom::Line ls((Geom::Point)start_point, (Geom::Point)end_point);
         Geom::Affine m = Geom::reflection (ls.vector(), (Geom::Point)start_point);
-        //        Geom::Point gap(split_gap,0);
-//        Geom::Translate m1(point_a[0], point_a[1]);
-//        double hyp = Geom::distance(point_a, point_b);
-//        double cos = 0;
-//        double sin = 0;
-//        if (hyp > 0) {
-//            cos = (point_b[0] - point_a[0]) / hyp;
-//            sin = (point_b[1] - point_a[1]) / hyp;
-//        }
-//        Geom::Affine m2(cos, -sin, sin, cos, 0.0, 0.0);
-//        Geom::Point dir = unit_vector(point_b - point_a);
-//        Geom::Point offset = (point_a + point_b)/2 + Geom::rot90(dir.ccw()) * split_gap;
-//        line_separation *= Geom::Translate(offset);
-//        Geom::Scale sca(1.0, -1.0);
-//        m = m1.inverse() * m2;
-//        m = m * sca;
-//        m = m * m2.inverse();
-//        m = m * m1;
+        Geom::Point dir = rot90(unit_vector((Geom::Point)start_point - (Geom::Point)end_point));
+        Geom::Point gap = dir * split_gap;
+        m *= Geom::Translate(gap);
         m = m * sp_lpe_item->transform;
-//        if (std::strcmp(sp_lpe_item->getId(), origin) != 0) {
-std::cout << m << "m\n";
-            createMirror(m);
-//        } else {
-//            createMirror(sp_lpe_item, m, mirror);
-//        }
+        toMirror(m);
     } else {
         processObjects(LPE_ERASE);
         elements.clear();
@@ -238,44 +217,23 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
     previous_center = center_point;
 }
 
-//void
-//LPEMirrorSymmetry::cloneAttrbutes(Inkscape::XML::Node * origin, Inkscape::XML::Node * dest, const char * first_attribute, ...) 
-//{
-//    va_list args;
-//    va_start(args, first_attribute);
-
-//    if ( origin->name() == "svg:g" && origin->childCount() == dest->childCount() ) {
-//        Inkscape::XML::Node * node_it = origin->firstChild();
-//        size_t index = 0;
-//        while (node_it != origin->lastChild()) {
-//            cloneAttrbutes(node_it, dest->nthChild(index), first_attribute, live, args); 
-//            node_it = node_it->next(); 
-//            index++;
-//        }
-//    }
-//    while(const char * att = va_arg(args, const char *)) {
-//        dest->setAttribute(att,origin->attribute(att));
-//    }
-//    va_end(args);
-//}
-
 void
-LPEMirrorSymmetry::cloneAttrbutes(SPObject *origin, SPObject *dest, bool live, const char * first_attribute, ...) 
+LPEMirrorSymmetry::cloneAttrbutes(SPObject *origin, SPObject *dest, bool live, const char * attributes) 
 {
-    va_list args;
-    va_start(args, first_attribute);
-    
     if ( SP_IS_GROUP(origin) && SP_IS_GROUP(dest) && SP_GROUP(origin)->getItemCount() == SP_GROUP(dest)->getItemCount() ) {
         std::vector< SPObject * > childs = origin->childList(true);
         size_t index = 0;
         for (std::vector<SPObject * >::iterator obj_it = childs.begin(); 
              obj_it != childs.end(); ++obj_it) {
             SPObject *dest_child = dest->nthChild(index); 
-            cloneAttrbutes(*obj_it, dest_child, live, first_attribute, args); 
+            cloneAttrbutes(*obj_it, dest_child, live, attributes); 
             index++;
         }
     }
-    for (const char* att = first_attribute; att != NULL; att = va_arg(args, const char*)) {
+    gchar ** attarray = g_strsplit(attributes, ",", 0);
+    gchar ** iter = attarray;
+    while (*iter != NULL) {
+        const char* att = (*iter);
         SPShape * shape =  SP_SHAPE(origin);
         if (shape) {
             if ( live && (att == "d" || att == "inkscape:original-d")) {
@@ -296,12 +254,12 @@ LPEMirrorSymmetry::cloneAttrbutes(SPObject *origin, SPObject *dest, bool live, c
                 dest->getRepr()->setAttribute(att,origin->getRepr()->attribute(att));
             }
         }
+        iter++;
     }
-    va_end(args);
 }
 
 void
-LPEMirrorSymmetry::createMirror(Geom::Affine transform)
+LPEMirrorSymmetry::toMirror(Geom::Affine transform)
 {
     SPDocument * document = SP_ACTIVE_DOCUMENT;
     const char * id_origin_char = id_origin.param_getSVGValue();
@@ -320,18 +278,11 @@ LPEMirrorSymmetry::createMirror(Geom::Affine transform)
     if (!elemref) {
         elemref = container->appendChildRepr(phantom);
         Inkscape::GC::release(phantom);
+        mirror_item.param_write(elemref_id);
     }
-    cloneAttrbutes(SP_OBJECT(sp_lpe_item), elemref, true, "d", NULL); //NULL required
-    //transform *= last_transform;
-    //if (transform != Geom::identity()) {
+    elemref->getRepr()->setAttribute("inkscape:path-effect", "");
+    cloneAttrbutes(SP_OBJECT(sp_lpe_item), elemref, true, "d");
     elemref->getRepr()->setAttribute("transform" , sp_svg_transform_write(transform));
-//    Inkscape::LivePathEffect::LPEObjectReference* lperef = SP_LPE_ITEM(elemref)->getCurrentLPEReference();
-//    if (lperef) {
-//        PathEffectList * new_list = SP_LPE_ITEM(elemref)->path_effect_list;
-//        new_list->remove(lperef); //current lpe ref is always our 'own' pointer from the path_effect_list
-//        elemref->getRepr()->setAttribute("inkscape:path-effect", patheffectlist_svg_string(new_list));
-//    }
-    //}
     if (elemref->parent != container) {
         Inkscape::XML::Node *copy = phantom->duplicate(xml_doc);
         copy->setAttribute("id", elemref_id);

@@ -17,6 +17,7 @@
  */
 
 #include "live_effects/effect.h"
+#include "live_effects/parameter/originalitem.h"
 #include "live_effects/parameter/parameter.h"
 #include "live_effects/parameter/text.h"
 #include "live_effects/parameter/point.h"
@@ -49,15 +50,16 @@ public:
     virtual void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/);
     virtual Gtk::Widget * newWidget();
     void processObjects(LpeAction lpe_action);
-    void createMirror(Geom::Affine transform);
+    void toMirror(Geom::Affine transform);
     bool isCurrentLPEItem();
     //    void cloneAttrbutes(Inkscape::XML::Node * origin, Inkscape::XML::Node * dest, const char * first_attribute, ...);
-    void cloneAttrbutes(SPObject *origin, SPObject *dest, bool live, const char * first_attribute, ...);
+    void cloneAttrbutes(SPObject *origin, SPObject *dest, bool live, const char * attributes);
 
 protected:
     virtual void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec);
 
 private:
+    OriginalItemParam  mirror_item;
     EnumParam<ModeType> mode;
     ScalarParam split_gap;
     BoolParam discard_orig_path;

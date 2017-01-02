@@ -84,11 +84,30 @@ OriginalItemParam::param_newWidget()
 }
 
 void
+OriginalItemParam::param_write(const gchar * iid)
+{
+    Glib::ustring itemid(iid);
+
+    if (itemid.empty()) {
+        return;
+    }
+    // add '#' at start to make it an uri.
+    itemid.insert(itemid.begin(), '#');
+    if ( href && strcmp(itemid.c_str(), href) == 0 ) {
+        // no change, do nothing
+        return;
+    } else {
+        param_write_to_repr(itemid.c_str());
+    }
+}
+
+void
 OriginalItemParam::linked_modified_callback(SPObject *linked_obj, guint /*flags*/)
 {
     if (!inverse) {
         emit_changed();
-        SP_OBJECT(param_effect->getLPEObj())->requestModified(SP_OBJECT_MODIFIED_FLAG);
+        LivePathEffectObject* lpeobj = param_effect->getLPEObj();
+        SP_OBJECT(lpeobj)->requestModified(SP_OBJECT_MODIFIED_FLAG);
     }
 }
 

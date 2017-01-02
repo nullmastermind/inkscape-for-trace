@@ -26,7 +26,7 @@ public:
     void setInverse(bool inversed) { inverse = inversed; }
     bool linksToItem() const { return (href != NULL); }
     SPItem * getObject() const { return ref.getObject(); }
-
+    void param_write(const gchar * iid);
     virtual Gtk::Widget * param_newWidget();
 
 protected:
