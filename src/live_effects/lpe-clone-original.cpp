@@ -24,7 +24,7 @@ LPECloneOriginal::LPECloneOriginal(LivePathEffectObject *lpeobject) :
     linked_item(_("Linked Item:"), _("Item from which to take the original data"), "linked_item", &wr, this),
     scale(_("Scale %"), _("Scale item %"), "scale", &wr, this, 100.0),
     preserve_position(_("Preserve position"), _("Preserve position"), "preserve_position", &wr, this, false),
-    inverse(_("Inverse clone"), _("Use LPE item as origin. Destructive"), "inverse", &wr, this, false),
+    inverse(_("Inverse clone"), _("Use LPE item as origin"), "inverse", &wr, this, false),
     use_center(_("Relative center of element"), _("Relative center of element"), "use_center", &wr, this, true),
     attributes("Attributes linked", "Attributes linked", "attributes", &wr, this,""),
     style_attributes("Style attributes linked", "Style attributes linked", "style_attributes", &wr, this,"")
@@ -136,7 +136,11 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, bool live, co
             }
         } else if ( shape_dest && shape_origin && live && (std::strcmp(attribute, "d") == 0)) {
             SPCurve *c = NULL;
-            c = shape_origin->getCurve();
+            if (inverse) {
+                c = shape_origin->getCurveBeforeLPE();
+            } else {
+                c = shape_origin->getCurve();
+            }
             if (c) {
                 Geom::PathVector c_pv = c->get_pathvector();
                 Geom::OptRect orig_bbox = SP_ITEM(origin)->geometricBounds();
@@ -155,13 +159,12 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, bool live, co
                         c_pv *= scale;
                         c_pv *= Geom::Translate(orig_point);
                     }
-                    if (preserve_position && hasLinkedTransform(attributes)) {
+                    if (preserve_position) {
                         c_pv *= Geom::Translate(dest_point - orig_point);
                     }
                 }
                 if (inverse) {
                     c_pv *= i2anc_affine(origin, sp_lpe_item);
-                    origin->getRepr()->setAttribute("inkscape:original-d", sp_svg_write_path(c_pv));
                 } else {
                     c_pv *= i2anc_affine(dest, sp_lpe_item);
                 }
@@ -218,17 +221,16 @@ LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){
     }
 
     if (linked_item.linksToItem()) {
-         if ( preserve_position_changed != preserve_position ) {
+        linked_item.setInverse(inverse);
+        if ( preserve_position_changed != preserve_position ) {
             if (!preserve_position) {
                 sp_svg_transform_read(SP_ITEM(sp_lpe_item)->getAttribute("transform"), &preserve_affine);
             }
             preserve_position_changed = preserve_position;
         }
         if (inverse) {
-            linked_item.param_quit_listening();
             cloneAttrbutes(SP_OBJECT(sp_lpe_item), linked_item.getObject(), true, attributes.param_getSVGValue(), style_attributes.param_getSVGValue(), true);
         } else {
-            linked_item.param_start_listening(linked_item.getObject());
             cloneAttrbutes(linked_item.getObject(), SP_OBJECT(sp_lpe_item), true, attributes.param_getSVGValue(), style_attributes.param_getSVGValue(), true);
         }
     }
@@ -299,7 +301,7 @@ LPECloneOriginal::transform_multiply(Geom::Affine const& postmul, bool set)
 void 
 LPECloneOriginal::doEffect (SPCurve * curve)
 {
-    if (linked_item.linksToItem()) {
+    if (linked_item.linksToItem() && !inverse) {
         SPShape * shape = getCurrentShape();
         if(shape){
             curve->set_pathvector(shape->getCurve()->get_pathvector());

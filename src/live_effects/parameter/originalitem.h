@@ -23,11 +23,9 @@ public:
                 Inkscape::UI::Widget::Registry* wr,
                 Effect* effect);
     virtual ~OriginalItemParam();
-
+    void setInverse(bool inversed) { inverse = inversed; }
     bool linksToItem() const { return (href != NULL); }
     SPItem * getObject() const { return ref.getObject(); }
-    void param_start_listening(SPObject * to);
-    void param_quit_listening(void);
 
     virtual Gtk::Widget * param_newWidget();
 
@@ -38,6 +36,7 @@ protected:
     void on_select_original_button_click();
 
 private:
+    bool inverse;
     OriginalItemParam(const OriginalItemParam&);
     OriginalItemParam& operator=(const OriginalItemParam&);
 };
