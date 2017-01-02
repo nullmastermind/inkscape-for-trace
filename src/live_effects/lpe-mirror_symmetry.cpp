@@ -325,12 +325,12 @@ LPEMirrorSymmetry::createMirror(Geom::Affine transform)
     //transform *= last_transform;
     //if (transform != Geom::identity()) {
     elemref->getRepr()->setAttribute("transform" , sp_svg_transform_write(transform));
-    Inkscape::LivePathEffect::LPEObjectReference* lperef = SP_LPE_ITEM(elemref)->getCurrentLPEReference();
-    if (lperef) {
-        PathEffectList * new_list = SP_LPE_ITEM(elemref)->path_effect_list;
-        new_list->remove(lperef); //current lpe ref is always our 'own' pointer from the path_effect_list
-        elemref->getRepr()->setAttribute("inkscape:path-effect", patheffectlist_svg_string(new_list));
-    }
+//    Inkscape::LivePathEffect::LPEObjectReference* lperef = SP_LPE_ITEM(elemref)->getCurrentLPEReference();
+//    if (lperef) {
+//        PathEffectList * new_list = SP_LPE_ITEM(elemref)->path_effect_list;
+//        new_list->remove(lperef); //current lpe ref is always our 'own' pointer from the path_effect_list
+//        elemref->getRepr()->setAttribute("inkscape:path-effect", patheffectlist_svg_string(new_list));
+//    }
     //}
     if (elemref->parent != container) {
         Inkscape::XML::Node *copy = phantom->duplicate(xml_doc);
