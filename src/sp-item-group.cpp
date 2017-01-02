@@ -950,36 +950,25 @@ sp_group_perform_patheffect(SPGroup *group, SPGroup *topgroup, bool write)
                 } else {
                     c = subShape->getCurve();
                 }
-                bool success = false;
+
                 // only run LPEs when the shape has a curve defined
                 if (c) {
                     c->transform(i2anc_affine(subitem, topgroup));
-                    success = topgroup->performPathEffect(c, subShape);
+                    topgroup->performPathEffect(c);
                     c->transform(i2anc_affine(subitem, topgroup).inverse());
-                    if (c && success) {
-                        subShape->setCurve(c, TRUE);
-                        if (write) {
-                            Inkscape::XML::Node *repr = subitem->getRepr();
-                            gchar *str = sp_svg_write_path(c->get_pathvector());
-                            repr->setAttribute("d", str);
-    #ifdef GROUP_VERBOSE
-                            g_message("sp_group_perform_patheffect writes 'd' attribute");
-    #endif
-                            g_free(str);
-                        }
-                        c->unref();
-                    } else {
-                        // LPE was unsuccesfull or doeffect stack return null. Read the old 'd'-attribute.
+                    subShape->setCurve(c, TRUE);
+
+                    if (write) {
                         Inkscape::XML::Node *repr = subitem->getRepr();
-                        if (gchar const * value = repr->attribute("d")) {
-                            Geom::PathVector pv = sp_svg_read_pathv(value);
-                            SPCurve *oldcurve = new (std::nothrow) SPCurve(pv);
-                            if (oldcurve) {
-                                subShape->setCurve(oldcurve, TRUE);
-                                oldcurve->unref();
-                            }
-                        }
+                        gchar *str = sp_svg_write_path(c->get_pathvector());
+                        repr->setAttribute("d", str);
+#ifdef GROUP_VERBOSE
+                        g_message("sp_group_perform_patheffect writes 'd' attribute");
+#endif
+                        g_free(str);
                     }
+
+                    c->unref();
                 }
             }
         }

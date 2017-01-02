@@ -212,7 +212,7 @@ Inkscape::XML::Node* SPLPEItem::write(Inkscape::XML::Document *xml_doc, Inkscape
 /**
  * returns true when LPE was successful.
  */
-bool SPLPEItem::performPathEffect(SPCurve *curve, SPShape *current, bool is_clip_or_mask) {
+bool SPLPEItem::performPathEffect(SPCurve *curve, bool is_clip_or_mask) {
 
     if (!curve) {
         return false;
@@ -244,14 +244,12 @@ bool SPLPEItem::performPathEffect(SPCurve *curve, SPShape *current, bool is_clip
                 }
                 if (!is_clip_or_mask || (is_clip_or_mask && lpe->apply_to_clippath_and_mask)) {
                     // Groups have their doBeforeEffect called elsewhere
-                    if (current) {
-                        lpe->setCurrentShape(current);
-                    }
                     if (!SP_IS_GROUP(this)) {
                         lpe->doBeforeEffect_impl(this);
                     }
+
                     try {
-                        lpe->doEffect(curve);
+                            lpe->doEffect(curve);
                     }
                     catch (std::exception & e) {
                         g_warning("Exception during LPE %s execution. \n %s", lpe->getName().c_str(), e.what());
@@ -702,10 +700,10 @@ SPLPEItem::apply_to_clip_or_mask(SPItem *clip_mask, SPItem *item)
             try {
                 if(SP_IS_GROUP(this)){
                     c->transform(i2anc_affine(SP_GROUP(item), SP_GROUP(this)));
-                    success = this->performPathEffect(c, SP_SHAPE(clip_mask), true);
+                    success = this->performPathEffect(c, true);
                     c->transform(i2anc_affine(SP_GROUP(item), SP_GROUP(this)).inverse());
                 } else {
-                    success = this->performPathEffect(c, SP_SHAPE(clip_mask), true);
+                    success = this->performPathEffect(c, true);
                 }
             } catch (std::exception & e) {
                 g_warning("Exception during LPE execution. \n %s", e.what());
@@ -716,13 +714,12 @@ SPLPEItem::apply_to_clip_or_mask(SPItem *clip_mask, SPItem *item)
                 success = false;
             }
             Inkscape::XML::Node *repr = clip_mask->getRepr();
-            // This c check allow to not apply LPE if curve is NULL after performPathEffect used in clone.obgets LPE
-            if (success && c) {
+            if (success) {
                 gchar *str = sp_svg_write_path(c->get_pathvector());
                 repr->setAttribute("d", str);
                 g_free(str);
             } else {
-                // LPE was unsuccesfull  or doeffect stack return null.. Read the old 'd'-attribute.
+                // LPE was unsuccesfull. Read the old 'd'-attribute.
                 if (gchar const * value = repr->attribute("d")) {
                     Geom::PathVector pv = sp_svg_read_pathv(value);
                     SPCurve *oldcurve = new (std::nothrow) SPCurve(pv);
@@ -732,9 +729,7 @@ SPLPEItem::apply_to_clip_or_mask(SPItem *clip_mask, SPItem *item)
                     }
                 }
             }
-            if (c) {
-                c->unref();
-            }
+            c->unref();
         }
     }
 }

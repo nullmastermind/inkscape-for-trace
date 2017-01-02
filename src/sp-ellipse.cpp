@@ -445,20 +445,11 @@ void SPGenericEllipse::set_shape()
     if (hasPathEffect() && pathEffectsEnabled()) {
         SPCurve *c_lpe = curve->copy();
         bool success = this->performPathEffect(c_lpe);
-        
+
         if (success) {
             this->setCurveInsync(c_lpe, TRUE);
-        } else {
-            Inkscape::XML::Node *repr = this->getRepr();
-            if (gchar const * value = repr->attribute("d")) {
-                Geom::PathVector pv = sp_svg_read_pathv(value);
-                SPCurve *oldcurve = new (std::nothrow) SPCurve(pv);
-                if (oldcurve) {
-                    this->setCurveInsync(oldcurve, TRUE);
-                    oldcurve->unref();
-                }
-            }
         }
+
         c_lpe->unref();
     }
 

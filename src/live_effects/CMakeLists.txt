@@ -60,9 +60,6 @@ set(live_effects_SRC
 	parameter/array.cpp
 	parameter/bool.cpp
 	parameter/filletchamferpointarray.cpp
-	parameter/item-reference.cpp
-	parameter/item.cpp
-	parameter/originalitem.cpp
 	parameter/originalpath.cpp
 	parameter/originalpatharray.cpp
 	parameter/parameter.cpp
@@ -145,9 +142,6 @@ set(live_effects_SRC
 	parameter/bool.h
 	parameter/enum.h
 	parameter/filletchamferpointarray.h
-	parameter/item.h
-	parameter/item-reference.h
-	parameter/originalitem.h
 	parameter/originalpath.h
 	parameter/originalpatharray.h
 	parameter/parameter.h
