@@ -36,6 +36,7 @@ private:
     OriginalItemParam  linked_item;
     ScalarParam scale;
     BoolParam preserve_position;
+    BoolParam inverse;
     BoolParam use_center;
     TextParam attributes;
     TextParam style_attributes;

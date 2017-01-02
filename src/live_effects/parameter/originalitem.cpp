@@ -86,8 +86,10 @@ OriginalItemParam::param_newWidget()
 void
 OriginalItemParam::linked_modified_callback(SPObject *linked_obj, guint /*flags*/)
 {
-    emit_changed();
-    SP_OBJECT(param_effect->getLPEObj())->requestModified(SP_OBJECT_MODIFIED_FLAG);
+    if (!inverse) {
+        emit_changed();
+        SP_OBJECT(param_effect->getLPEObj())->requestModified(SP_OBJECT_MODIFIED_FLAG);
+    }
 }
 
 void
