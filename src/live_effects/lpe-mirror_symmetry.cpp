@@ -52,7 +52,6 @@ MTConverter(ModeTypeData, MT_END);
 
 LPEMirrorSymmetry::LPEMirrorSymmetry(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
-    mirror_item(_("Mirror item:"), _("Mirror item"), "mirror_item", &wr, this),
     mode(_("Mode"), _("Symmetry move mode"), "mode", MTConverter, &wr, this, MT_FREE),
     split_gap(_("Gap on split"), _("Gap on split"), "split_gap", &wr, this, 0),
     discard_orig_path(_("Discard original path"), _("Check this to only keep the mirrored part of the path"), "discard_orig_path", &wr, this, false),
@@ -65,7 +64,6 @@ LPEMirrorSymmetry::LPEMirrorSymmetry(LivePathEffectObject *lpeobject) :
     id_origin("id origin", "store the id of the first LPEItem", "id_origin", &wr, this,"")
 {
     show_orig_path = true;
-    registerParameter(&mirror_item);
     registerParameter(&mode);
     registerParameter(&split_gap);
     registerParameter(&discard_orig_path);
@@ -82,43 +80,22 @@ LPEMirrorSymmetry::LPEMirrorSymmetry(LivePathEffectObject *lpeobject) :
     split_gap.param_set_digits(2);
     apply_to_clippath_and_mask = true;
     previous_center = Geom::Point(0,0);
-    other = NULL;
-    last_transform = Geom::identity();
 }
 
 LPEMirrorSymmetry::~LPEMirrorSymmetry()
 {
 }
 
-bool
-LPEMirrorSymmetry::isCurrentLPEItem() {
-    if (SPDesktop *desktop = SP_ACTIVE_DESKTOP) {
-        Inkscape::Selection *sel = desktop->getSelection();
-        if ( sel && !sel->isEmpty()) {
-            SPItem *item = sel->singleItem();
-            if (item) {
-                if(sp_lpe_item && std::strcmp(sp_lpe_item->getId(),item->getId()) == 0) {
-                    return true;
-                }
-            }
-        }
-    }
-    return false;
-}
-
 void
 LPEMirrorSymmetry::doAfterEffect (SPLPEItem const* lpeitem)
 {
-    if (!isCurrentLPEItem()) { 
-        return;
-    }
-    last_transform = Geom::identity();
     if (split_elements) {
-        if (discard_orig_path) {
-            discard_orig_path.param_setValue(false);
-            discard_orig_path.write_to_SVG();
-            std::cout << _("You can't discard original paths on split elements");
-        }
+//        if (discard_orig_path) {
+//            discard_orig_path.param_setValue(false);
+//            discard_orig_path.write_to_SVG();
+//            std::cout << _("You can't discard original paths on split elements");
+//            return;
+//        }
         container = dynamic_cast<SPObject *>(sp_lpe_item->parent);
         SPDocument * doc = SP_ACTIVE_DOCUMENT;
         Inkscape::XML::Node *root = sp_lpe_item->document->getReprRoot();
@@ -136,7 +113,6 @@ LPEMirrorSymmetry::doAfterEffect (SPLPEItem const* lpeitem)
     } else {
         processObjects(LPE_ERASE);
         elements.clear();
-        other = NULL;
     }
 }
 
@@ -146,9 +122,6 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
 
     using namespace Geom;
     original_bbox(lpeitem);
-    if (!isCurrentLPEItem()) { 
-        return;
-    }
     //center_point->param_set_liveupdate(false);
     Point point_a(boundingbox_X.max(), boundingbox_Y.min());
     Point point_b(boundingbox_X.max(), boundingbox_Y.max());
@@ -240,20 +213,17 @@ LPEMirrorSymmetry::cloneAttrbutes(SPObject *origin, SPObject *dest, bool live, c
         SPPath * path =  SP_PATH(dest);
         if (!path && !SP_IS_GROUP(dest)) {
             Inkscape::XML::Node *dest_node = sp_selected_item_to_curved_repr(SP_ITEM(dest), 0);
-            dest->updateRepr(xml_doc, dest_node, SP_OBJECT_WRITE_ALL);	
+            dest->updateRepr(xml_doc, dest_node, SP_OBJECT_WRITE_ALL);
         }
-        if (shape) {
-            if ( live && (att == "d" || att == "inkscape:original-d")) {
+        path =  SP_PATH(dest);
+        if (path && shape) {
+            if ( live && att == "d") {
                 SPCurve *c = NULL;
-                if (att == "d") {
-                    c = shape->getCurve();
-                } else {
-                    c = shape->getCurveBeforeLPE();
-                }
+                c = shape->getCurve();
                 if (c) {
+                    path->setCurve(c, TRUE);
                     dest->getRepr()->setAttribute(att,sp_svg_write_path(c->get_pathvector()));
-                    c->reset();
-                    g_free(c);
+                    c->unref();
                 } else {
                     dest->getRepr()->setAttribute(att,NULL);
                 }
@@ -280,56 +250,52 @@ LPEMirrorSymmetry::toMirror(Geom::Affine transform)
         phantom = elemref->getRepr();
     } else {
         phantom = sp_lpe_item->getRepr()->duplicate(xml_doc);
+        phantom->setAttribute("inkscape:path-effect", NULL);
+        phantom->setAttribute("inkscape:original-d", NULL);
+        phantom->setAttribute("sodipodi:type", NULL);
+        phantom->setAttribute("sodipodi:rx", NULL);
+        phantom->setAttribute("sodipodi:ry", NULL);
+        phantom->setAttribute("sodipodi:cx", NULL);
+        phantom->setAttribute("sodipodi:cy", NULL);
+        phantom->setAttribute("sodipodi:end", NULL);
+        phantom->setAttribute("sodipodi:start", NULL);
+        phantom->setAttribute("inkscape:flatsided", NULL);
+        phantom->setAttribute("inkscape:randomized", NULL);
+        phantom->setAttribute("inkscape:rounded", NULL);
+        phantom->setAttribute("sodipodi:arg1", NULL);
+        phantom->setAttribute("sodipodi:arg2", NULL);
+        phantom->setAttribute("sodipodi:r1", NULL);
+        phantom->setAttribute("sodipodi:r2", NULL);
+        phantom->setAttribute("sodipodi:sides", NULL);
+        phantom->setAttribute("inkscape:randomized", NULL);
+        phantom->setAttribute("sodipodi:argument", NULL);
+        phantom->setAttribute("sodipodi:expansion", NULL);
+        phantom->setAttribute("sodipodi:radius", NULL);
+        phantom->setAttribute("sodipodi:revolution", NULL);
+        phantom->setAttribute("sodipodi:t0", NULL);
+        phantom->setAttribute("inkscape:randomized", NULL);
+        phantom->setAttribute("inkscape:randomized", NULL);
+        phantom->setAttribute("inkscape:randomized", NULL);
+        phantom->setAttribute("x", NULL);
+        phantom->setAttribute("y", NULL);
+        phantom->setAttribute("rx", NULL);
+        phantom->setAttribute("ry", NULL);
+        phantom->setAttribute("width", NULL);
+        phantom->setAttribute("height", NULL);
     }
     phantom->setAttribute("id", elemref_id);
-    phantom->setAttribute("inkscape:path-effect", NULL);
-    phantom->setAttribute("sodipodi:type", NULL);
-    phantom->setAttribute("sodipodi:rx", NULL);
-    phantom->setAttribute("sodipodi:ry", NULL);
-    phantom->setAttribute("sodipodi:cx", NULL);
-    phantom->setAttribute("sodipodi:cy", NULL);
-    phantom->setAttribute("sodipodi:end", NULL);
-    phantom->setAttribute("sodipodi:start", NULL);
-    phantom->setAttribute("inkscape:flatsided", NULL);
-    phantom->setAttribute("inkscape:randomized", NULL);
-    phantom->setAttribute("inkscape:rounded", NULL);
-    phantom->setAttribute("sodipodi:arg1", NULL);
-    phantom->setAttribute("sodipodi:arg2", NULL);
-    phantom->setAttribute("sodipodi:r1", NULL);
-    phantom->setAttribute("sodipodi:r2", NULL);
-    phantom->setAttribute("sodipodi:sides", NULL);
-    phantom->setAttribute("inkscape:randomized", NULL);
-    phantom->setAttribute("sodipodi:argument", NULL);
-    phantom->setAttribute("sodipodi:expansion", NULL);
-    phantom->setAttribute("sodipodi:radius", NULL);
-    phantom->setAttribute("sodipodi:revolution", NULL);
-    phantom->setAttribute("sodipodi:t0", NULL);
-    phantom->setAttribute("inkscape:randomized", NULL);
-    phantom->setAttribute("inkscape:randomized", NULL);
-    phantom->setAttribute("inkscape:randomized", NULL);
-    phantom->setAttribute("x", NULL);
-    phantom->setAttribute("y", NULL);
-    phantom->setAttribute("rx", NULL);
-    phantom->setAttribute("ry", NULL);
-    phantom->setAttribute("width", NULL);
-    phantom->setAttribute("height", NULL);
     if (!elemref) {
         elemref = container->appendChildRepr(phantom);
         Inkscape::GC::release(phantom);
-        mirror_item.param_write(elemref_id);
-    } else {
-        elemref->updateRepr(xml_doc, phantom, SP_OBJECT_WRITE_ALL);	
     }
     cloneAttrbutes(SP_OBJECT(sp_lpe_item), elemref, true, "d");
     elemref->getRepr()->setAttribute("transform" , sp_svg_transform_write(transform));
     if (elemref->parent != container) {
         Inkscape::XML::Node *copy = phantom->duplicate(xml_doc);
         copy->setAttribute("id", elemref_id);
-        other = container->appendChildRepr(copy);
+        container->appendChildRepr(copy);
         Inkscape::GC::release(copy);
         elemref->deleteObject();
-    } else {
-        other = elemref;
     }
 }
 
@@ -416,9 +382,7 @@ LPEMirrorSymmetry::processObjects(LpeAction lpe_action)
                 break;
 
             case LPE_ERASE:
-                //if (std::strcmp(elemref->getId(),sp_lpe_item->getId()) != 0) {
-                    elemref->deleteObject();
-                //}
+                elemref->deleteObject();
                 break;
 
             case LPE_VISIBILITY:
@@ -448,24 +412,12 @@ void
 LPEMirrorSymmetry::transform_multiply(Geom::Affine const& postmul, bool set)
 {
     // cycle through all parameters. Most parameters will not need transformation, but path and point params do.
-    if (isCurrentLPEItem()) {
-        for (std::vector<Parameter *>::iterator it = param_vector.begin(); it != param_vector.end(); ++it) {
-            Parameter * param = *it;
-            param->param_transform_multiply(postmul, set);
-        }
-        previous_center = Geom::middle_point((Geom::Point)start_point, (Geom::Point)end_point);
-
-    //    Geom::Affine m = Geom::identity();
-    //    m *= sp_lpe_item->transform;
-    //    m *= postmul;
-    //    sp_lpe_item->transform = m;
-        //last_transform *= postmul;
-        sp_lpe_item_update_patheffect(sp_lpe_item, false, false);
-    //    if (other) {
-    //        sp_lpe_item_update_patheffect(SP_LPE_ITEM(other), false, false);
-    //    }
+    for (std::vector<Parameter *>::iterator it = param_vector.begin(); it != param_vector.end(); ++it) {
+        Parameter * param = *it;
+        param->param_transform_multiply(postmul, set);
     }
-
+    previous_center = Geom::middle_point((Geom::Point)start_point, (Geom::Point)end_point);
+    sp_lpe_item_update_patheffect(sp_lpe_item, false, false);
 }
 
 void
@@ -495,7 +447,17 @@ LPEMirrorSymmetry::doOnApply (SPLPEItem const* lpeitem)
 Geom::PathVector
 LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
 {
-    if (split_elements && !fuse_paths || !isCurrentLPEItem()) {
+    if (split_elements && !fuse_paths) {
+        if (SP_IS_SHAPE(sp_lpe_item)) {
+            SPCurve *c = NULL;
+            if (!path_in.empty()) {
+                c->set_pathvector(path_in);
+                if (c) {
+                    SP_SHAPE(sp_lpe_item)->setCurveInsync(c, TRUE);
+                    c->unref();
+                }
+            }
+        }
         return path_in;
     }
     Geom::PathVector const original_pathv = pathv_to_linear_and_cubic_beziers(path_in);
@@ -516,7 +478,8 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
             if (path_it->empty()) {
                 continue;
             }
-            Geom::PathVector tmp_path;
+            Geom::PathVector tmp_pathvector;
+            Geom::Path tmp_path;
             double time_start = 0.0;
             int position = 0;
             bool end_open = false;
@@ -552,10 +515,6 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
                 double time_end = crossed[i];
                 if (time_start != time_end && time_end - time_start > Geom::EPSILON) {
                     Geom::Path portion = original.portion(time_start, time_end);
-                    Geom::Path next_portion = portion;
-                    if (crossed.size() > i+1) {
-                        next_portion = original.portion(time_end, crossed[i+1]);
-                    }
                     if (!portion.empty()) {
                         Geom::Point middle = portion.pointAt((double)portion.size()/2.0);
                         position = Geom::sgn(Geom::cross(e - s, middle - s));
@@ -565,20 +524,24 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
                         if (position == 1) {
                             Geom::Path mirror = portion.reversed() * m;
                             if (split_elements) {
-                                if (crossed.size() > i+1) {
-                                    portion.appendNew<Geom::LineSegment>( next_portion.finalPoint() );
-                                    i++;
+                                if (!tmp_path.empty()) {
+                                    tmp_path.appendNew<Geom::LineSegment>( portion.initialPoint() );
                                 }
                             } else {
                                 mirror.setInitial(portion.finalPoint());
                                 portion.append(mirror);
-                                if(i!=0) {
+                                if(i != 0) {
                                     portion.setFinal(portion.initialPoint());
                                     portion.close();
                                 }
                             }
-                            if (split_elements) {
-                                tmp_path.push_back(portion);
+                            if (!split_elements) {
+                                tmp_pathvector.push_back(portion);
+                            } else {
+                                if (!tmp_path.empty()) {
+                                    portion.setInitial(tmp_path.finalPoint());
+                                }
+                                tmp_path.append(portion);
                             }
                         }
                         portion.clear();
@@ -602,36 +565,71 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
                             portion = portion.reversed();
                         }
                         if (!original.closed()) {
-                            tmp_path.push_back(portion);
-                        } else {
-                            if (cs.size() > 1 && tmp_path.size() > 0 && tmp_path[0].size() > 0 ) {
-                                portion.setFinal(tmp_path[0].initialPoint());
-                                portion.setInitial(tmp_path[0].finalPoint());
-                                tmp_path[0].append(portion);
+                            if (!split_elements) {
+                                tmp_pathvector.push_back(portion);
                             } else {
-                                tmp_path.push_back(portion);
+                                portion.setInitial(tmp_path.finalPoint());
+                                tmp_path.append(portion);
+                                tmp_pathvector.push_back(tmp_path);
                             }
-                            tmp_path[0].close();
+                        } else {
+                            if (!split_elements) {
+                                if (cs.size() > 1 && tmp_pathvector.size() > 0 && tmp_pathvector[0].size() > 0 ) {
+                                    portion.setFinal(tmp_pathvector[0].initialPoint());
+                                    portion.setInitial(tmp_pathvector[0].finalPoint());
+                                    tmp_pathvector[0].append(portion);
+                                } else {
+                                    tmp_pathvector.push_back(portion);
+                                }
+                                tmp_pathvector[0].close();
+                            } else {
+                                portion.setInitial(tmp_path.finalPoint());
+                                tmp_path.append(portion);
+                                tmp_path.close();
+                            }
                         }
                         portion.clear();
                     }
                 }
             }
+//            if (cs.size()!=0 && position == 0) {
+//                if (split_elements && original.closed()) {
+//                    tmp_path.appendNew<Geom::LineSegment>( tmp_path.initialPoint() );
+//                    tmp_path.close();
+//                }
+//            }
             if (cs.size() == 0 && position == 1) {
-                tmp_path.push_back(original);
+                tmp_pathvector.push_back(original);
                 if ( !split_elements) {
-                    tmp_path.push_back(original * m);
+                    tmp_pathvector.push_back(original * m);
                 }
             }
-            path_out.insert(path_out.end(), tmp_path.begin(), tmp_path.end());
-            tmp_path.clear();
+            if (split_elements) {
+                if (split_elements && original.closed()) {
+                    tmp_path.appendNew<Geom::LineSegment>( tmp_path.initialPoint() );
+                    tmp_path.close();
+                }
+                tmp_pathvector.push_back(tmp_path);
+                tmp_path.clear();
+            }
+            path_out.insert(path_out.end(), tmp_pathvector.begin(), tmp_pathvector.end());
+            tmp_pathvector.clear();
         }
     } else if (!fuse_paths || discard_orig_path) {
         for (size_t i = 0; i < original_pathv.size(); ++i) {
             path_out.push_back(original_pathv[i] * m);
         }
     }
-
+//    if (SP_IS_SHAPE(sp_lpe_item)) {
+//        SPCurve *c = NULL;
+//        if (!path_out.empty()) {
+//            c->set_pathvector(path_out);
+//            if (c) {
+//                SP_SHAPE(sp_lpe_item)->setCurve(c, TRUE);
+//                c->unref();
+//            }
+//        }
+//    }
     return path_out;
 }
 
