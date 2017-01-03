@@ -448,16 +448,6 @@ Geom::PathVector
 LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
 {
     if (split_elements && !fuse_paths) {
-        if (SP_IS_SHAPE(sp_lpe_item)) {
-            SPCurve *c = NULL;
-            if (!path_in.empty()) {
-                c->set_pathvector(path_in);
-                if (c) {
-                    SP_SHAPE(sp_lpe_item)->setCurveInsync(c, TRUE);
-                    c->unref();
-                }
-            }
-        }
         return path_in;
     }
     Geom::PathVector const original_pathv = pathv_to_linear_and_cubic_beziers(path_in);
@@ -592,12 +582,6 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
                     }
                 }
             }
-//            if (cs.size()!=0 && position == 0) {
-//                if (split_elements && original.closed()) {
-//                    tmp_path.appendNew<Geom::LineSegment>( tmp_path.initialPoint() );
-//                    tmp_path.close();
-//                }
-//            }
             if (cs.size() == 0 && position == 1) {
                 tmp_pathvector.push_back(original);
                 if ( !split_elements) {
@@ -620,16 +604,6 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
             path_out.push_back(original_pathv[i] * m);
         }
     }
-//    if (SP_IS_SHAPE(sp_lpe_item)) {
-//        SPCurve *c = NULL;
-//        if (!path_out.empty()) {
-//            c->set_pathvector(path_out);
-//            if (c) {
-//                SP_SHAPE(sp_lpe_item)->setCurve(c, TRUE);
-//                c->unref();
-//            }
-//        }
-//    }
     return path_out;
 }
 
