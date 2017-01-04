@@ -79,14 +79,6 @@ using Inkscape::UI::ToolboxFactory;
 using ege::AppearTimeTracker;
 using Inkscape::Util::unit_table;
 
-enum {
-    ACTIVATE,
-    DEACTIVATE,
-    MODIFIED,
-    EVENT_CONTEXT_CHANGED,
-    LAST_SIGNAL
-};
-
 
 //---------------------------------------------------------------------
 /* SPDesktopWidget */
