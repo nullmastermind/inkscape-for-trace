@@ -89,7 +89,7 @@ LPEMirrorSymmetry::~LPEMirrorSymmetry()
 void
 LPEMirrorSymmetry::doAfterEffect (SPLPEItem const* lpeitem)
 {
-    if (split_elements) {
+    if (split_elements && !discard_orig_path) {
 //        if (discard_orig_path) {
 //            discard_orig_path.param_setValue(false);
 //            discard_orig_path.write_to_SVG();
@@ -191,7 +191,7 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
 }
 
 void
-LPEMirrorSymmetry::cloneAttrbutes(SPObject *origin, SPObject *dest, bool live, const char * attributes) 
+LPEMirrorSymmetry::cloneD(SPObject *origin, SPObject *dest, bool live, bool root) 
 {
     SPDocument * document = SP_ACTIVE_DOCUMENT;
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
@@ -201,37 +201,35 @@ LPEMirrorSymmetry::cloneAttrbutes(SPObject *origin, SPObject *dest, bool live, c
         for (std::vector<SPObject * >::iterator obj_it = childs.begin(); 
              obj_it != childs.end(); ++obj_it) {
             SPObject *dest_child = dest->nthChild(index); 
-            cloneAttrbutes(*obj_it, dest_child, live, attributes); 
+            cloneD(*obj_it, dest_child, live, false); 
             index++;
         }
     }
-    gchar ** attarray = g_strsplit(attributes, ",", 0);
-    gchar ** iter = attarray;
-    while (*iter != NULL) {
-        const char* att = (*iter);
-        SPShape * shape =  SP_SHAPE(origin);
-        SPPath * path =  SP_PATH(dest);
-        if (!path && !SP_IS_GROUP(dest)) {
-            Inkscape::XML::Node *dest_node = sp_selected_item_to_curved_repr(SP_ITEM(dest), 0);
-            dest->updateRepr(xml_doc, dest_node, SP_OBJECT_WRITE_ALL);
-        }
+    SPShape * shape =  SP_SHAPE(origin);
+    SPPath * path =  SP_PATH(dest);
+    if (!path && !SP_IS_GROUP(dest)) {
+        Inkscape::XML::Node *dest_node = sp_selected_item_to_curved_repr(SP_ITEM(dest), 0);
+        dest->updateRepr(xml_doc, dest_node, SP_OBJECT_WRITE_ALL);
         path =  SP_PATH(dest);
-        if (path && shape) {
-            if ( live && att == "d") {
-                SPCurve *c = NULL;
-                c = shape->getCurve();
-                if (c) {
-                    path->setCurve(c, TRUE);
-                    dest->getRepr()->setAttribute(att,sp_svg_write_path(c->get_pathvector()));
-                    c->unref();
-                } else {
-                    dest->getRepr()->setAttribute(att,NULL);
-                }
+    }
+    if (path && shape) {
+        if ( live) {
+            SPCurve *c = NULL;
+            if (root) {
+                c = new SPCurve();
+                c->set_pathvector(pathvector_before_effect);
             } else {
-                dest->getRepr()->setAttribute(att,origin->getRepr()->attribute(att));
+                c = shape->getCurve();
             }
+            if (c) {
+                path->setCurve(c, TRUE);
+                c->unref();
+            } else {
+                dest->getRepr()->setAttribute("d", NULL);
+            }
+        } else {
+            dest->getRepr()->setAttribute("d", origin->getRepr()->attribute("d"));
         }
-        iter++;
     }
 }
 
@@ -288,7 +286,7 @@ LPEMirrorSymmetry::toMirror(Geom::Affine transform)
         elemref = container->appendChildRepr(phantom);
         Inkscape::GC::release(phantom);
     }
-    cloneAttrbutes(SP_OBJECT(sp_lpe_item), elemref, true, "d");
+    cloneD(SP_OBJECT(sp_lpe_item), elemref, true, true);
     elemref->getRepr()->setAttribute("transform" , sp_svg_transform_write(transform));
     if (elemref->parent != container) {
         Inkscape::XML::Node *copy = phantom->duplicate(xml_doc);
@@ -553,6 +551,10 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
                             mirror.setInitial(portion.finalPoint());
                             portion.append(mirror);
                             portion = portion.reversed();
+                        } else {
+                            if (!tmp_path.empty()) {
+                                tmp_path.appendNew<Geom::LineSegment>( portion.initialPoint() );
+                            }
                         }
                         if (!original.closed()) {
                             if (!split_elements) {

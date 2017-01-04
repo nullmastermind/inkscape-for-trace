@@ -260,6 +260,8 @@ bool SPLPEItem::performPathEffect(SPCurve *curve, bool is_clip_or_mask) {
                         return false;
                     }
                     if (!SP_IS_GROUP(this)) {
+                        lpe->pathvector_before_effect = curve->get_pathvector();
+                        lpe->sp_curve->set_pathvector(lpe->pathvector_before_effect);
                         lpe->doAfterEffect(this);
                     }
                 }
