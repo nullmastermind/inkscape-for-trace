@@ -76,6 +76,7 @@
 #include "sp-namedview.h"
 #include "persp3d.h"
 #include "object-set.h"
+#include "extension/find_extension_by_mime.h"
 
 /// Made up mimetype to represent Gdk::Pixbuf clipboard contents.
 #define CLIPBOARD_GDK_PIXBUF_TARGET "image/x-gdk-pixbuf"
@@ -945,15 +946,7 @@ bool ClipboardManagerImpl::_pasteImage(SPDocument *doc)
         return false;
     }
 
-    // TODO unify with interface.cpp's sp_ui_drag_data_received()
-    // AARGH stupid
-    Inkscape::Extension::DB::InputList o;
-    Inkscape::Extension::db.get_input_list(o);
-    Inkscape::Extension::DB::InputList::const_iterator i = o.begin();
-    while (i != o.end() && strcmp( (*i)->get_mimetype(), "image/png" ) != 0) {
-        ++i;
-    }
-    Inkscape::Extension::Extension *png = *i;
+    Inkscape::Extension::Extension *png = Inkscape::Extension::find_by_mime("image/png");
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     Glib::ustring attr_saved = prefs->getString("/dialogs/import/link");
     bool ask_saved = prefs->getBool("/dialogs/import/ask");
