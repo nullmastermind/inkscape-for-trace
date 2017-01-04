@@ -1525,18 +1525,6 @@ double hermite( const double p0, const double p1, const double m0, const double 
 
 class SPMeshSmoothCorner {
 
-    enum {
-        AMP,
-        DX_LEFT,
-        DX_RIGHT,
-        DY_TOP,
-        DY_BOTTOM,
-        DXY_LT,
-        DXY_RT,
-        DXY_LB,
-        DXY_RB
-    };
-        
 public:
     SPMeshSmoothCorner() {
         for( unsigned i = 0; i < 3; ++i ) {
