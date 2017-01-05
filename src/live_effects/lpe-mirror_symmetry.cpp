@@ -54,7 +54,7 @@ MTConverter(ModeTypeData, MT_END);
 LPEMirrorSymmetry::LPEMirrorSymmetry(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
     mode(_("Mode"), _("Symmetry move mode"), "mode", MTConverter, &wr, this, MT_FREE),
-    split_gap(_("Gap on split"), _("Gap on split"), "split_gap", &wr, this, 0),
+    split_gap(_("Gap on split"), _("Gap on split"), "split_gap", &wr, this, -0.001),
     discard_orig_path(_("Discard original path"), _("Check this to only keep the mirrored part of the path"), "discard_orig_path", &wr, this, false),
     fuse_paths(_("Fuse paths"), _("Fuse original and the reflection into a single path"), "fuse_paths", &wr, this, false),
     oposite_fuse(_("Opposite fuse"), _("Picks the other side of the mirror as the original"), "oposite_fuse", &wr, this, false),
@@ -78,7 +78,7 @@ LPEMirrorSymmetry::LPEMirrorSymmetry(LivePathEffectObject *lpeobject) :
     id_origin.param_hide_canvas_text();
     split_gap.param_set_range(-999999.0, 999999.0);
     split_gap.param_set_increments(0.1, 0.1);
-    split_gap.param_set_digits(2);
+    split_gap.param_set_digits(5);
     apply_to_clippath_and_mask = true;
     previous_center = Geom::Point(0,0);
 }
@@ -91,12 +91,6 @@ void
 LPEMirrorSymmetry::doAfterEffect (SPLPEItem const* lpeitem)
 {
     if (split_elements && !discard_orig_path) {
-//        if (discard_orig_path) {
-//            discard_orig_path.param_setValue(false);
-//            discard_orig_path.write_to_SVG();
-//            std::cout << _("You can't discard original paths on split elements");
-//            return;
-//        }
         container = dynamic_cast<SPObject *>(sp_lpe_item->parent);
         SPDocument * doc = SP_ACTIVE_DOCUMENT;
         Inkscape::XML::Node *root = sp_lpe_item->document->getReprRoot();
@@ -488,8 +482,8 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
         p *= Geom::Translate(line_separation.pointAt(line_separation.nearestTime(base)) - base);
         Geom::PathVector pv_bbox;
         pv_bbox.push_back(p);
-        Geom::PathIntersectionGraph *pig = new Geom::PathIntersectionGraph(pv_bbox, path_in);
-        if (pig && !path_in.empty() && !pv_bbox.empty()) {
+        Geom::PathIntersectionGraph *pig = new Geom::PathIntersectionGraph(pv_bbox, original_pathv);
+        if (pig && !original_pathv.empty() && !pv_bbox.empty()) {
             path_out = pig->getBminusA();
         }
     } else if (fuse_paths && !discard_orig_path) {
