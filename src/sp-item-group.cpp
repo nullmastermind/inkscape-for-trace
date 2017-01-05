@@ -925,6 +925,15 @@ void SPGroup::update_patheffect(bool write) {
         }
 
         sp_group_perform_patheffect(this, this, write);
+        
+        for (PathEffectList::iterator it = this->path_effect_list->begin(); it != this->path_effect_list->end(); ++it)
+        {
+            LivePathEffectObject *lpeobj = (*it)->lpeobject;
+
+            if (lpeobj && lpeobj->get_lpe()) {
+                lpeobj->get_lpe()->doAfterEffect(this);
+            }
+        }
     }
 }
 
