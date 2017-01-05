@@ -455,11 +455,40 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
         path_out = pathv_to_linear_and_cubic_beziers(path_in);
     }
 
-
     Geom::Line line_separation((Geom::Point)start_point, (Geom::Point)end_point);
     Geom::Affine m = Geom::reflection (line_separation.vector(), (Geom::Point)start_point);
-
-    if (fuse_paths && !discard_orig_path) {
+    if (split_elements && fuse_paths) {
+        Geom::OptRect bbox = path_in->boundsFast();
+        bbox *= scale(1.2);
+        Geom::Path p(Geom::Point(bbox->left(), bbox->top()));
+        p.appendNew<Geom::LineSegment>(Geom::Point(bbox->right(), bbox->top()));
+        p.appendNew<Geom::LineSegment>(Geom::Point(bbox->right(), bbox->bottom()));
+        p.appendNew<Geom::LineSegment>(Geom::Point(bbox->left(), bbox->bottom()));
+        p.appendNew<Geom::LineSegment>(Geom::Point(bbox->left(), bbox->top()));
+        p.close();
+        p *= Geom::translate(bbox->middle_point()).inverse();
+        p *= Geom::rotate(line_separation.angle());
+        p *= Geom::translate(bbox->middle_point());
+        bbox = p->boundsFast();
+        p.clear();
+        p(Geom::Point(bbox->left(), bbox->top()));
+        p.appendNew<Geom::LineSegment>(Geom::Point(bbox->right(), bbox->top()));
+        p.appendNew<Geom::LineSegment>(Geom::Point(bbox->right(), bbox->bottom()));
+        p.appendNew<Geom::LineSegment>(Geom::Point(bbox->left(), bbox->bottom()));
+        p.appendNew<Geom::LineSegment>(Geom::Point(bbox->left(), bbox->top()));
+        p.close();
+        Geom::Point base(bbox->right(), bbox->top());
+        if (oposite_fuse) {
+            base = Geom::Point(bbox->left(), bbox->top());
+        }
+        p *= Geom::translate(base - line_separation.pointAt(nearest_time(base, line_separation)));
+        Geom::PathVector pv_bbox;
+        pv_bbox.push_back(p);
+        Geom::PathIntersectionGraph *pig = new Geom::PathIntersectionGraph(pv_bbox, path_in);
+        if (pig && !path_in.empty() && !pv_bbox.empty()) {
+            path_out = pig->getBminusA();
+        }
+    } else if (fuse_paths && !discard_orig_path) {
         for (Geom::PathVector::const_iterator path_it = original_pathv.begin();
              path_it != original_pathv.end(); ++path_it) 
         {
@@ -467,7 +496,6 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
                 continue;
             }
             Geom::PathVector tmp_pathvector;
-            Geom::Path tmp_path;
             double time_start = 0.0;
             int position = 0;
             bool end_open = false;
@@ -511,26 +539,13 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
                         }
                         if (position == 1) {
                             Geom::Path mirror = portion.reversed() * m;
-                            if (split_elements) {
-                                if (!tmp_path.empty()) {
-                                    tmp_path.appendNew<Geom::LineSegment>( portion.initialPoint() );
-                                }
-                            } else {
-                                mirror.setInitial(portion.finalPoint());
-                                portion.append(mirror);
-                                if(i != 0) {
-                                    portion.setFinal(portion.initialPoint());
-                                    portion.close();
-                                }
+                            mirror.setInitial(portion.finalPoint());
+                            portion.append(mirror);
+                            if(i != 0) {
+                                portion.setFinal(portion.initialPoint());
+                                portion.close();
                             }
-                            if (!split_elements) {
-                                tmp_pathvector.push_back(portion);
-                            } else {
-                                if (!tmp_path.empty()) {
-                                    portion.setInitial(tmp_path.finalPoint());
-                                }
-                                tmp_path.append(portion);
-                            }
+                            tmp_pathvector.push_back(portion);
                         }
                         portion.clear();
                     }
@@ -546,39 +561,21 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
                     Geom::Path portion = original.portion(time_start, original.size());
                     if (!portion.empty()) {
                         portion = portion.reversed();
-                        if (!split_elements) {
-                            Geom::Path mirror = portion.reversed() * m;
-                            mirror.setInitial(portion.finalPoint());
-                            portion.append(mirror);
-                            portion = portion.reversed();
-                        } else {
-                            if (!tmp_path.empty()) {
-                                tmp_path.appendNew<Geom::LineSegment>( portion.initialPoint() );
-                            }
-                        }
+                        Geom::Path mirror = portion.reversed() * m;
+                        mirror.setInitial(portion.finalPoint());
+                        portion.append(mirror);
+                        portion = portion.reversed();
                         if (!original.closed()) {
-                            if (!split_elements) {
-                                tmp_pathvector.push_back(portion);
-                            } else {
-                                portion.setInitial(tmp_path.finalPoint());
-                                tmp_path.append(portion);
-                                tmp_pathvector.push_back(tmp_path);
-                            }
+                            tmp_pathvector.push_back(portion);
                         } else {
-                            if (!split_elements) {
-                                if (cs.size() > 1 && tmp_pathvector.size() > 0 && tmp_pathvector[0].size() > 0 ) {
-                                    portion.setFinal(tmp_pathvector[0].initialPoint());
-                                    portion.setInitial(tmp_pathvector[0].finalPoint());
-                                    tmp_pathvector[0].append(portion);
-                                } else {
-                                    tmp_pathvector.push_back(portion);
-                                }
-                                tmp_pathvector[0].close();
+                            if (cs.size() > 1 && tmp_pathvector.size() > 0 && tmp_pathvector[0].size() > 0 ) {
+                                portion.setFinal(tmp_pathvector[0].initialPoint());
+                                portion.setInitial(tmp_pathvector[0].finalPoint());
+                                tmp_pathvector[0].append(portion);
                             } else {
-                                portion.setInitial(tmp_path.finalPoint());
-                                tmp_path.append(portion);
-                                tmp_path.close();
+                                tmp_pathvector.push_back(portion);
                             }
+                            tmp_pathvector[0].close();
                         }
                         portion.clear();
                     }
@@ -586,17 +583,7 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
             }
             if (cs.size() == 0 && position == 1) {
                 tmp_pathvector.push_back(original);
-                if ( !split_elements) {
-                    tmp_pathvector.push_back(original * m);
-                }
-            }
-            if (split_elements) {
-                if (split_elements && original.closed()) {
-                    tmp_path.appendNew<Geom::LineSegment>( tmp_path.initialPoint() );
-                    tmp_path.close();
-                }
-                tmp_pathvector.push_back(tmp_path);
-                tmp_path.clear();
+                tmp_pathvector.push_back(original * m);
             }
             path_out.insert(path_out.end(), tmp_pathvector.begin(), tmp_pathvector.end());
             tmp_pathvector.clear();
