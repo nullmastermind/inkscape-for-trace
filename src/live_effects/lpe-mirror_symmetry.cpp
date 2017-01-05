@@ -23,6 +23,7 @@
 #include "svg/svg.h"
 #include "sp-defs.h"
 #include "helper/geom.h"
+#include "2geom/intersection-graph.h"
 #include "2geom/path-intersection.h"
 #include "2geom/affine.h"
 #include "helper/geom.h"
@@ -458,30 +459,33 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
     Geom::Line line_separation((Geom::Point)start_point, (Geom::Point)end_point);
     Geom::Affine m = Geom::reflection (line_separation.vector(), (Geom::Point)start_point);
     if (split_elements && fuse_paths) {
-        Geom::OptRect bbox = path_in->boundsFast();
-        bbox *= scale(1.2);
+        Geom::OptRect bbox = sp_lpe_item->geometricBounds();
         Geom::Path p(Geom::Point(bbox->left(), bbox->top()));
         p.appendNew<Geom::LineSegment>(Geom::Point(bbox->right(), bbox->top()));
         p.appendNew<Geom::LineSegment>(Geom::Point(bbox->right(), bbox->bottom()));
         p.appendNew<Geom::LineSegment>(Geom::Point(bbox->left(), bbox->bottom()));
         p.appendNew<Geom::LineSegment>(Geom::Point(bbox->left(), bbox->top()));
         p.close();
-        p *= Geom::translate(bbox->middle_point()).inverse();
-        p *= Geom::rotate(line_separation.angle());
-        p *= Geom::translate(bbox->middle_point());
-        bbox = p->boundsFast();
+        p *= Geom::Translate(bbox->midpoint()).inverse();
+        p *= Geom::Scale(1.2);
+        p *= Geom::Rotate(line_separation.angle());
+        p *= Geom::Translate(bbox->midpoint());
+        bbox = p.boundsFast();
         p.clear();
-        p(Geom::Point(bbox->left(), bbox->top()));
+        p.start(Geom::Point(bbox->left(), bbox->top()));
         p.appendNew<Geom::LineSegment>(Geom::Point(bbox->right(), bbox->top()));
         p.appendNew<Geom::LineSegment>(Geom::Point(bbox->right(), bbox->bottom()));
         p.appendNew<Geom::LineSegment>(Geom::Point(bbox->left(), bbox->bottom()));
         p.appendNew<Geom::LineSegment>(Geom::Point(bbox->left(), bbox->top()));
         p.close();
-        Geom::Point base(bbox->right(), bbox->top());
+        p *= Geom::Translate(bbox->midpoint()).inverse();
+        p *= Geom::Rotate(line_separation.angle());
+        p *= Geom::Translate(bbox->midpoint());
+        Geom::Point base(p.pointAt(3));
         if (oposite_fuse) {
-            base = Geom::Point(bbox->left(), bbox->top());
+            base = p.pointAt(0);
         }
-        p *= Geom::translate(base - line_separation.pointAt(nearest_time(base, line_separation)));
+        p *= Geom::Translate(line_separation.pointAt(line_separation.nearestTime(base)) - base);
         Geom::PathVector pv_bbox;
         pv_bbox.push_back(p);
         Geom::PathIntersectionGraph *pig = new Geom::PathIntersectionGraph(pv_bbox, path_in);
