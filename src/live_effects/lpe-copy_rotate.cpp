@@ -17,6 +17,12 @@
 #include <2geom/sbasis-to-bezier.h>
 #include <2geom/intersection-graph.h>
 #include "live_effects/lpe-copy_rotate.h"
+#include "display/curve.h"
+#include "svg/path-string.h"
+#include "svg/svg.h"
+#include "path-chemistry.h"
+#include "style.h"
+#include "xml/sp-css-attr.h"
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
 
@@ -45,9 +51,12 @@ LPECopyRotate::LPECopyRotate(LivePathEffectObject *lpeobject) :
     starting_angle(_("Starting angle"), _("Angle of the first copy"), "starting_angle", &wr, this, 0.0),
     rotation_angle(_("Rotation angle"), _("Angle between two successive copies"), "rotation_angle", &wr, this, 60.0),
     num_copies(_("Number of copies"), _("Number of copies of the original path"), "num_copies", &wr, this, 6),
+    split_gap(_("Gap on split"), _("Gap on split"), "split_gap", &wr, this, -0.001),
     copies_to_360(_("360º Copies"), _("No rotation angle, fixed to 360º"), "copies_to_360", &wr, this, true),
     fuse_paths(_("Kaleidoskope"), _("Kaleidoskope by helper line, use fill-rule: evenodd for best result"), "fuse_paths", &wr, this, false),
     join_paths(_("Join paths"), _("Join paths, use fill-rule: evenodd for best result"), "join_paths", &wr, this, false),
+    split_elements(_("Split elements"), _("Split elements, this allow gradients and other paints. Whith fuse don't work on shapes"), "split_elements", &wr, this, false),
+    id_origin("id origin", "store the id of the first LPEItem", "id_origin", &wr, this,""),
     dist_angle_handle(100.0)
 {
     show_orig_path = true;
@@ -60,8 +69,14 @@ LPECopyRotate::LPECopyRotate(LivePathEffectObject *lpeobject) :
     registerParameter(&starting_point);
     registerParameter(&rotation_angle);
     registerParameter(&num_copies);
+    registerParameter(&split_gap);
+    registerParameter(&split_elements);
+    registerParameter(&id_origin);
     registerParameter(&origin);
-
+    id_origin.param_hide_canvas_text();
+    split_gap.param_set_range(-999999.0, 999999.0);
+    split_gap.param_set_increments(0.1, 0.1);
+    split_gap.param_set_digits(5);
     num_copies.param_make_integer(true);
     num_copies.param_set_range(0, 1000);
     apply_to_clippath_and_mask = true;
@@ -70,6 +85,137 @@ LPECopyRotate::LPECopyRotate(LivePathEffectObject *lpeobject) :
 LPECopyRotate::~LPECopyRotate()
 {
 
+}
+
+void
+LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem)
+{
+    if (split_elements) {
+        container = dynamic_cast<SPObject *>(sp_lpe_item->parent);
+        SPDocument * doc = SP_ACTIVE_DOCUMENT;
+        Inkscape::XML::Node *root = sp_lpe_item->document->getReprRoot();
+        Inkscape::XML::Node *root_origin = doc->getReprRoot();
+        if (root_origin != root) {
+            return;
+        }
+//        Geom::Line ls((Geom::Point)start_point, (Geom::Point)end_point);
+//        Geom::Affine m = Geom::reflection (ls.vector(), (Geom::Point)start_point);
+//        Geom::Point dir = rot90(unit_vector((Geom::Point)start_point - (Geom::Point)end_point));
+//        Geom::Point gap = dir * split_gap;
+//        m *= Geom::Translate(gap);
+//        m = m * sp_lpe_item->transform;
+//        toMirror(m);
+    } else {
+        processObjects(LPE_ERASE);
+        elements.clear();
+    }
+}
+
+void
+LPECopyRotate::cloneD(SPObject *origin, SPObject *dest, bool live, bool root) 
+{
+    SPDocument * document = SP_ACTIVE_DOCUMENT;
+    Inkscape::XML::Document *xml_doc = document->getReprDoc();
+    if ( SP_IS_GROUP(origin) && SP_IS_GROUP(dest) && SP_GROUP(origin)->getItemCount() == SP_GROUP(dest)->getItemCount() ) {
+        std::vector< SPObject * > childs = origin->childList(true);
+        size_t index = 0;
+        for (std::vector<SPObject * >::iterator obj_it = childs.begin(); 
+             obj_it != childs.end(); ++obj_it) {
+            SPObject *dest_child = dest->nthChild(index); 
+            cloneD(*obj_it, dest_child, live, false); 
+            index++;
+        }
+    }
+    SPShape * shape =  SP_SHAPE(origin);
+    SPPath * path =  SP_PATH(dest);
+    if (!path && !SP_IS_GROUP(dest)) {
+        Inkscape::XML::Node *dest_node = sp_selected_item_to_curved_repr(SP_ITEM(dest), 0);
+        dest->updateRepr(xml_doc, dest_node, SP_OBJECT_WRITE_ALL);
+        path =  SP_PATH(dest);
+    }
+    if (path && shape) {
+        if ( live) {
+            SPCurve *c = NULL;
+            if (root) {
+                c = new SPCurve();
+                c->set_pathvector(pathvector_before_effect);
+            } else {
+                c = shape->getCurve();
+            }
+            if (c) {
+                path->setCurve(c, TRUE);
+                c->unref();
+            } else {
+                dest->getRepr()->setAttribute("d", NULL);
+            }
+        } else {
+            dest->getRepr()->setAttribute("d", origin->getRepr()->attribute("d"));
+        }
+    }
+}
+
+void
+LPECopyRotate::toMirror(Geom::Affine transform)
+{
+    SPDocument * document = SP_ACTIVE_DOCUMENT;
+    Inkscape::XML::Document *xml_doc = document->getReprDoc();
+    const char * id_origin_char = id_origin.param_getSVGValue();
+    const char * elemref_id = g_strdup(Glib::ustring("mirror-").append(id_origin_char).c_str());
+    elements.clear();
+    elements.push_back(elemref_id);
+    SPObject *elemref= NULL;
+    Inkscape::XML::Node *phantom = NULL;
+    if (elemref = document->getObjectById(elemref_id)) {
+        phantom = elemref->getRepr();
+    } else {
+        phantom = sp_lpe_item->getRepr()->duplicate(xml_doc);
+        phantom->setAttribute("inkscape:path-effect", NULL);
+        phantom->setAttribute("inkscape:original-d", NULL);
+        phantom->setAttribute("sodipodi:type", NULL);
+        phantom->setAttribute("sodipodi:rx", NULL);
+        phantom->setAttribute("sodipodi:ry", NULL);
+        phantom->setAttribute("sodipodi:cx", NULL);
+        phantom->setAttribute("sodipodi:cy", NULL);
+        phantom->setAttribute("sodipodi:end", NULL);
+        phantom->setAttribute("sodipodi:start", NULL);
+        phantom->setAttribute("inkscape:flatsided", NULL);
+        phantom->setAttribute("inkscape:randomized", NULL);
+        phantom->setAttribute("inkscape:rounded", NULL);
+        phantom->setAttribute("sodipodi:arg1", NULL);
+        phantom->setAttribute("sodipodi:arg2", NULL);
+        phantom->setAttribute("sodipodi:r1", NULL);
+        phantom->setAttribute("sodipodi:r2", NULL);
+        phantom->setAttribute("sodipodi:sides", NULL);
+        phantom->setAttribute("inkscape:randomized", NULL);
+        phantom->setAttribute("sodipodi:argument", NULL);
+        phantom->setAttribute("sodipodi:expansion", NULL);
+        phantom->setAttribute("sodipodi:radius", NULL);
+        phantom->setAttribute("sodipodi:revolution", NULL);
+        phantom->setAttribute("sodipodi:t0", NULL);
+        phantom->setAttribute("inkscape:randomized", NULL);
+        phantom->setAttribute("inkscape:randomized", NULL);
+        phantom->setAttribute("inkscape:randomized", NULL);
+        phantom->setAttribute("x", NULL);
+        phantom->setAttribute("y", NULL);
+        phantom->setAttribute("rx", NULL);
+        phantom->setAttribute("ry", NULL);
+        phantom->setAttribute("width", NULL);
+        phantom->setAttribute("height", NULL);
+    }
+    phantom->setAttribute("id", elemref_id);
+    if (!elemref) {
+        elemref = container->appendChildRepr(phantom);
+        Inkscape::GC::release(phantom);
+    }
+    cloneD(SP_OBJECT(sp_lpe_item), elemref, true, true);
+    elemref->getRepr()->setAttribute("transform" , sp_svg_transform_write(transform));
+    if (elemref->parent != container) {
+        Inkscape::XML::Node *copy = phantom->duplicate(xml_doc);
+        copy->setAttribute("id", elemref_id);
+        container->appendChildRepr(copy);
+        Inkscape::GC::release(copy);
+        elemref->deleteObject();
+    }
 }
 
 Gtk::Widget * LPECopyRotate::newWidget()
@@ -89,7 +235,7 @@ Gtk::Widget * LPECopyRotate::newWidget()
             Gtk::Widget *widg = dynamic_cast<Gtk::Widget *>(param->param_newWidget());
             Glib::ustring *tip = param->param_getTooltip();
             if (widg) {
-                if (param->param_key != "starting_point") {
+                if (param->param_key == "id_origin" || param->param_key != "starting_point") {
                     vbox->pack_start(*widg, true, true, 2);
                     if (tip) {
                         widg->set_tooltip_text(*tip);
@@ -119,17 +265,22 @@ LPECopyRotate::doOnApply(SPLPEItem const* lpeitem)
     origin.param_update_default(A);
     dist_angle_handle = L2(B - A);
     dir = unit_vector(B - A);
+    SPLPEItem * splpeitem = const_cast<SPLPEItem *>(lpeitem);
+    if (!lpeitem->hasPathEffectOfType(this->effectType(), false) ){ //first applied not ready yet
+        id_origin.param_setValue(lpeitem->getRepr()->attribute("id"));
+        id_origin.write_to_SVG();
+    }
 }
 
 void
 LPECopyRotate::transform_multiply(Geom::Affine const& postmul, bool set)
 {
     // cycle through all parameters. Most parameters will not need transformation, but path and point params do.
-
     for (std::vector<Parameter *>::iterator it = param_vector.begin(); it != param_vector.end(); ++it) {
         Parameter * param = *it;
         param->param_transform_multiply(postmul, set);
     }
+    sp_lpe_item_update_patheffect(sp_lpe_item, false, false);
 }
 
 void
@@ -447,6 +598,78 @@ LPECopyRotate::resetDefaults(SPItem const* item)
 {
     Effect::resetDefaults(item);
     original_bbox(SP_LPE_ITEM(item));
+}
+
+
+//TODO: Migrate the tree next function to effect.cpp/h to avoid duplication
+void
+LPECopyRotate::doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/)
+{
+    processObjects(LPE_VISIBILITY);
+}
+
+void 
+LPECopyRotate::doOnRemove (SPLPEItem const* /*lpeitem*/)
+{
+    //unset "erase_extra_objects" hook on sp-lpe-item.cpp
+    if (!erase_extra_objects) {
+        processObjects(LPE_TO_OBJECTS);
+        return;
+    }
+    processObjects(LPE_ERASE);
+}
+
+void 
+LPECopyRotate::processObjects(LpeAction lpe_action)
+{
+    SPDocument * document = SP_ACTIVE_DOCUMENT;
+    for (std::vector<const char *>::iterator el_it = elements.begin(); 
+         el_it != elements.end(); ++el_it) {
+        const char * id = *el_it;
+        if (!id || strlen(id) == 0) {
+            return;
+        }
+        SPObject *elemref = NULL;
+        if (elemref = document->getObjectById(id)) {
+            Inkscape::XML::Node * elemnode = elemref->getRepr();
+            std::vector<SPItem*> item_list;
+            item_list.push_back(SP_ITEM(elemref));
+            std::vector<Inkscape::XML::Node*> item_to_select;
+            std::vector<SPItem*> item_selected;
+            SPCSSAttr *css;
+            Glib::ustring css_str;
+            switch (lpe_action){
+            case LPE_TO_OBJECTS:
+                if (elemnode->attribute("inkscape:path-effect")) {
+                    sp_item_list_to_curves(item_list, item_selected, item_to_select);
+                }
+                elemnode->setAttribute("sodipodi:insensitive", NULL);
+                break;
+
+            case LPE_ERASE:
+                elemref->deleteObject();
+                break;
+
+            case LPE_VISIBILITY:
+                css = sp_repr_css_attr_new();
+                sp_repr_css_attr_add_from_string(css, elemref->getRepr()->attribute("style"));
+                if (!this->isVisible()/* && std::strcmp(elemref->getId(),sp_lpe_item->getId()) != 0*/) {
+                    css->setAttribute("display", "none");
+                } else {
+                    css->setAttribute("display", NULL);
+                }
+                sp_repr_css_write_string(css,css_str);
+                elemnode->setAttribute("style", css_str.c_str());
+                break;
+
+            default:
+                break;
+            }
+        }
+    }
+    if (lpe_action == LPE_ERASE || lpe_action == LPE_TO_OBJECTS) {
+        elements.clear();
+    }
 }
 
 } //namespace LivePathEffect
