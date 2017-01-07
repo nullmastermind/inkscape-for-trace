@@ -20,7 +20,6 @@
 #include "live_effects/parameter/parameter.h"
 #include "live_effects/parameter/text.h"
 #include "live_effects/parameter/point.h"
-#include "live_effects/parameter/path.h"
 #include "live_effects/parameter/enum.h"
 #include "live_effects/lpegroupbbox.h"
 
@@ -62,7 +61,7 @@ private:
     BoolParam discard_orig_path;
     BoolParam fuse_paths;
     BoolParam oposite_fuse;
-    BoolParam split_elements;
+    BoolParam split_items;
     PointParam start_point;
     PointParam end_point;
     PointParam center_point;

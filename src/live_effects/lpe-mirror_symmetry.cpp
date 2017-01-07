@@ -28,10 +28,7 @@
 #include "2geom/affine.h"
 #include "helper/geom.h"
 #include "sp-lpe-item.h"
-#include "uri.h"
-#include "uri-references.h"
 #include "path-chemistry.h"
-#include "knotholder.h"
 #include "style.h"
 #include "xml/sp-css-attr.h"
 
@@ -58,7 +55,7 @@ LPEMirrorSymmetry::LPEMirrorSymmetry(LivePathEffectObject *lpeobject) :
     discard_orig_path(_("Discard original path"), _("Check this to only keep the mirrored part of the path"), "discard_orig_path", &wr, this, false),
     fuse_paths(_("Fuse paths"), _("Fuse original and the reflection into a single path"), "fuse_paths", &wr, this, false),
     oposite_fuse(_("Opposite fuse"), _("Picks the other side of the mirror as the original"), "oposite_fuse", &wr, this, false),
-    split_elements(_("Split elements"), _("Split elements, this allow gradients and other paints. Whith fuse don't work on shapes"), "split_elements", &wr, this, false),
+    split_items(_("Split elements"), _("Split elements, this allow gradients and other paints."), "split_items", &wr, this, false),
     start_point(_("Start mirror line"), _("Start mirror line"), "start_point", &wr, this, _("Adjust start of mirroring")),
     end_point(_("End mirror line"), _("End mirror line"), "end_point", &wr, this, _("Adjust end of mirroring")),
     center_point(_("Center mirror line"), _("Center mirror line"), "center_point", &wr, this, _("Adjust center of mirroring")),
@@ -70,7 +67,7 @@ LPEMirrorSymmetry::LPEMirrorSymmetry(LivePathEffectObject *lpeobject) :
     registerParameter(&discard_orig_path);
     registerParameter(&fuse_paths);
     registerParameter(&oposite_fuse);
-    registerParameter(&split_elements);
+    registerParameter(&split_items);
     registerParameter(&start_point);
     registerParameter(&end_point);
     registerParameter(&center_point);
@@ -90,7 +87,7 @@ LPEMirrorSymmetry::~LPEMirrorSymmetry()
 void
 LPEMirrorSymmetry::doAfterEffect (SPLPEItem const* lpeitem)
 {
-    if (split_elements && !discard_orig_path) {
+    if (split_items && !discard_orig_path) {
         container = dynamic_cast<SPObject *>(sp_lpe_item->parent);
         SPDocument * doc = SP_ACTIVE_DOCUMENT;
         Inkscape::XML::Node *root = sp_lpe_item->document->getReprRoot();
@@ -440,7 +437,7 @@ LPEMirrorSymmetry::doOnApply (SPLPEItem const* lpeitem)
 Geom::PathVector
 LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
 {
-    if (split_elements && !fuse_paths) {
+    if (split_items && !fuse_paths) {
         return path_in;
     }
     Geom::PathVector const original_pathv = pathv_to_linear_and_cubic_beziers(path_in);
@@ -452,7 +449,7 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
 
     Geom::Line line_separation((Geom::Point)start_point, (Geom::Point)end_point);
     Geom::Affine m = Geom::reflection (line_separation.vector(), (Geom::Point)start_point);
-    if (split_elements && fuse_paths) {
+    if (split_items && fuse_paths) {
         Geom::OptRect bbox = sp_lpe_item->geometricBounds();
         Geom::Path p(Geom::Point(bbox->left(), bbox->top()));
         p.appendNew<Geom::LineSegment>(Geom::Point(bbox->right(), bbox->top()));
