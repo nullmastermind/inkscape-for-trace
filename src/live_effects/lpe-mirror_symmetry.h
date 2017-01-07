@@ -67,7 +67,7 @@ private:
     PointParam center_point;
     TextParam id_origin;
     Geom::Point previous_center;
-    std::vector<const char *> elements;
+    std::vector<const char *> items;
     SPObject * container;
     LPEMirrorSymmetry(const LPEMirrorSymmetry&);
     LPEMirrorSymmetry& operator=(const LPEMirrorSymmetry&);

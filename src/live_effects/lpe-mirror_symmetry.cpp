@@ -104,7 +104,7 @@ LPEMirrorSymmetry::doAfterEffect (SPLPEItem const* lpeitem)
         toMirror(m);
     } else {
         processObjects(LPE_ERASE);
-        elements.clear();
+        items.clear();
     }
 }
 
@@ -232,8 +232,8 @@ LPEMirrorSymmetry::toMirror(Geom::Affine transform)
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
     const char * id_origin_char = id_origin.param_getSVGValue();
     const char * elemref_id = g_strdup(Glib::ustring("mirror-").append(id_origin_char).c_str());
-    elements.clear();
-    elements.push_back(elemref_id);
+    items.clear();
+    items.push_back(elemref_id);
     SPObject *elemref= NULL;
     Inkscape::XML::Node *phantom = NULL;
     if (elemref = document->getObjectById(elemref_id)) {
@@ -348,8 +348,8 @@ void
 LPEMirrorSymmetry::processObjects(LpeAction lpe_action)
 {
     SPDocument * document = SP_ACTIVE_DOCUMENT;
-    for (std::vector<const char *>::iterator el_it = elements.begin(); 
-         el_it != elements.end(); ++el_it) {
+    for (std::vector<const char *>::iterator el_it = items.begin(); 
+         el_it != items.end(); ++el_it) {
         const char * id = *el_it;
         if (!id || strlen(id) == 0) {
             return;
@@ -393,7 +393,7 @@ LPEMirrorSymmetry::processObjects(LpeAction lpe_action)
         }
     }
     if (lpe_action == LPE_ERASE || lpe_action == LPE_TO_OBJECTS) {
-        elements.clear();
+        items.clear();
     }
 }
 
