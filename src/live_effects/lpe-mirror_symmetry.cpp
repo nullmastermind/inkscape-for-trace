@@ -97,9 +97,6 @@ LPEMirrorSymmetry::doAfterEffect (SPLPEItem const* lpeitem)
         }
         Geom::Line ls((Geom::Point)start_point, (Geom::Point)end_point);
         Geom::Affine m = Geom::reflection (ls.vector(), (Geom::Point)start_point);
-        Geom::Point dir = rot90(unit_vector((Geom::Point)start_point - (Geom::Point)end_point));
-        Geom::Point gap = dir * split_gap;
-        m *= Geom::Translate(gap);
         m = m * sp_lpe_item->transform;
         toMirror(m);
     } else {
@@ -483,6 +480,10 @@ LPEMirrorSymmetry::doEffect_path (Geom::PathVector const & path_in)
         if (pig && !original_pathv.empty() && !pv_bbox.empty()) {
             path_out = pig->getBminusA();
         }
+        Geom::Point dir = rot90(unit_vector((Geom::Point)start_point - (Geom::Point)end_point));
+        Geom::Point gap = dir * split_gap;
+        m *= Geom::Translate(gap);
+        path_out *= m;
     } else if (fuse_paths && !discard_orig_path) {
         for (Geom::PathVector::const_iterator path_it = original_pathv.begin();
              path_it != original_pathv.end(); ++path_it) 
