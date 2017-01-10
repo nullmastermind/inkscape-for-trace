@@ -176,16 +176,17 @@ def cot(x):#cotangent(x)
 def report_properties( params ):#report to the Inkscape console using errormsg
     # TODO: unit identifier needs solution for arbitrary document scale
     unit = Draw_From_Triangle.getDocumentUnit(e)
-    inkex.errormsg(_("Side Length 'a' (" + unit + "): " + str( params[0][0] ) ))
-    inkex.errormsg(_("Side Length 'b' (" + unit + "): " + str( params[0][1] ) ))
-    inkex.errormsg(_("Side Length 'c' (" + unit + "): " + str( params[0][2] ) ))
-    inkex.errormsg(_("Angle 'A' (radians): " + str( params[1][0] ) ))
-    inkex.errormsg(_("Angle 'B' (radians): " + str( params[1][1] ) ))
-    inkex.errormsg(_("Angle 'C' (radians): " + str( params[1][2] ) ))
-    inkex.errormsg(_("Semiperimeter (px): " + str( params[4][1] ) ))
-    inkex.errormsg(_("Area ("+ unit + "^2): " + str( params[4][0] ) ))
+
+    inkex.errormsg(_("Side Length 'a' ({0}): {1}").format(unit, str(params[0][0])) )
+    inkex.errormsg(_("Side Length 'b' ({0}): {1}").format(unit, str(params[0][1])) )
+    inkex.errormsg(_("Side Length 'c' ({0}): {1}").format(unit, str(params[0][2])) )
+    inkex.errormsg(_("Angle 'A' (radians): {}").format(str(params[1][0])) )
+    inkex.errormsg(_("Angle 'B' (radians): {}").format(str(params[1][1])) )
+    inkex.errormsg(_("Angle 'C' (radians): {}").format(params[1][2]) )
+    inkex.errormsg(_("Semiperimeter (px): {}").format(params[4][1]) )
+    inkex.errormsg(_("Area ({0}^2): {1}").format(unit, str(params[4][0])) )
     return
-    
+
 
 class Style(object): #container for style information
     def __init__(self, options):
