@@ -433,6 +433,7 @@ bool sp_file_open(const Glib::ustring &uri,
                     scaleDialog.add_button(_("Ignore"),          3);
                     scaleDialog.add_button("Scale test - group",    4);
                     scaleDialog.add_button("Scale test - children", 5);
+                    scaleDialog.add_button("Scale test - all",      6);
 
                     gint response = scaleDialog.run();
                     backup = backupButton.get_active();
@@ -519,9 +520,34 @@ bool sp_file_open(const Glib::ustring &uri,
                         prefs->setBool("/options/transform/rectcorners", transform_rectcorners);
                         prefs->setBool("/options/transform/pattern",     transform_pattern);
                         prefs->setBool("/options/transform/gradient",    transform_gradient);
+
+                    } else if (response == 6) {
+
+                        std::cout << "Respons 6a" << std::endl;
+
+                        // Save preferences
+                        bool onlysensitive = prefs->getBool("/options/kbselection/onlysensitive",true);
+                        bool onlyvisible   = prefs->getBool("/options/kbselection/onlyvisible",  true);
+
+                        prefs->setBool("/options/kbselection/onlysensitive", false);
+                        prefs->setBool("/options/kbselection/onlyvisible",   false);
+
+                        Inkscape::Selection *selection = desktop->getSelection();
+                        Inkscape::SelectionHelper::selectAllInAll( desktop );
+
+                        double height = root->height.computed;
+                        selection->setScaleRelative( Geom::Point(0,height), Geom::Scale(96.0/90.0,96.0/90.0) );
+                        std::cout << "  scaling: " << 96.0/90.0 << std::endl;
+                        selection->clear();
+
+                        prefs->setBool("/options/kbselection/onlysensitive", onlysensitive);
+                        prefs->setBool("/options/kbselection/onlyvisible",   onlyvisible  );
+
+                        did_scaling = true;
+
                     }
 
-                    need_fix_box3d = true;
+                    need_fix_box3d = false; // setScaleRelative() handles box3d
                     need_fix_guides = true; // Always fix guides
                 }
 
@@ -550,6 +576,7 @@ bool sp_file_open(const Glib::ustring &uri,
                     scaleDialog.add_button(_("Ignore"),         3);
                     scaleDialog.add_button("Scale test - group",    4);
                     scaleDialog.add_button("Scale test - children", 5);
+                    scaleDialog.add_button("Scale test - all",      6);
 
                     gint response = scaleDialog.run();
                     backup = backupButton.get_active();
@@ -671,9 +698,47 @@ bool sp_file_open(const Glib::ustring &uri,
                             prefs->setBool("/options/transform/gradient",    transform_gradient);
 
                             did_scaling = true;
+
                         }
 
-                        need_fix_box3d = true;
+                    } else if (response == 6) {
+
+                        std::cout << "Response 6b" << std::endl;
+                        double old_height = root->height.computed;
+                        Inkscape::Util::Quantity width  =
+                            Inkscape::Util::Quantity(doc->getWidth().value("px")/ratio, "px" );
+                        Inkscape::Util::Quantity height =
+                            Inkscape::Util::Quantity(doc->getHeight().value("px")/ratio,"px" );
+                        doc->setWidthAndHeight( width, height, false );
+
+                        if (!root->viewBox_set) {
+
+                            // Save preferences
+                            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+                            bool onlysensitive = prefs->getBool("/options/kbselection/onlysensitive",true);
+                            bool onlyvisible   = prefs->getBool("/options/kbselection/onlyvisible",  true);
+
+                            prefs->setBool("/options/kbselection/onlysensitive", false);
+                            prefs->setBool("/options/kbselection/onlyvisible",   false);
+
+                            Inkscape::Selection *selection = desktop->getSelection();
+                            Inkscape::SelectionHelper::selectAllInAll( desktop );
+                            std::cout << "  scaling: " << 96.0/90.0 << std::endl;
+                            double height = root->height.computed;
+
+                            // So far we have just enlarged the drawing but due to the
+                            // inverted coordinate system we must scale around the old
+                            // height position.
+                            selection->setScaleRelative( Geom::Point(0,old_height), Geom::Scale(96.0/90.0,96.0/90.0) );
+                            selection->clear();
+
+                            prefs->setBool("/options/kbselection/onlysensitive", onlysensitive);
+                            prefs->setBool("/options/kbselection/onlyvisible",   onlyvisible  );
+
+                            did_scaling = true;
+                        }
+
+                        need_fix_box3d = false; // setScaleRelative() handls box3s
                         need_fix_guides = true; // Only fix guides if drawing scaled
 
                     } else {
