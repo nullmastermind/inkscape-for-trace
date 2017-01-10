@@ -523,8 +523,6 @@ bool sp_file_open(const Glib::ustring &uri,
 
                     } else if (response == 6) {
 
-                        std::cout << "Respons 6a" << std::endl;
-
                         // Save preferences
                         bool onlysensitive = prefs->getBool("/options/kbselection/onlysensitive",true);
                         bool onlyvisible   = prefs->getBool("/options/kbselection/onlyvisible",  true);
@@ -537,7 +535,6 @@ bool sp_file_open(const Glib::ustring &uri,
 
                         double height = root->height.computed;
                         selection->setScaleRelative( Geom::Point(0,height), Geom::Scale(96.0/90.0,96.0/90.0) );
-                        std::cout << "  scaling: " << 96.0/90.0 << std::endl;
                         selection->clear();
 
                         prefs->setBool("/options/kbselection/onlysensitive", onlysensitive);
@@ -703,7 +700,6 @@ bool sp_file_open(const Glib::ustring &uri,
 
                     } else if (response == 6) {
 
-                        std::cout << "Response 6b" << std::endl;
                         double old_height = root->height.computed;
                         Inkscape::Util::Quantity width  =
                             Inkscape::Util::Quantity(doc->getWidth().value("px")/ratio, "px" );
@@ -723,7 +719,6 @@ bool sp_file_open(const Glib::ustring &uri,
 
                             Inkscape::Selection *selection = desktop->getSelection();
                             Inkscape::SelectionHelper::selectAllInAll( desktop );
-                            std::cout << "  scaling: " << 96.0/90.0 << std::endl;
                             double height = root->height.computed;
 
                             // So far we have just enlarged the drawing but due to the
