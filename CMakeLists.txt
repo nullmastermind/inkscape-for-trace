@@ -79,11 +79,12 @@ include(CMakeScripts/ConfigPaths.cmake) # Installation Paths
 if(NOT GMOCK_DIR)
     find_path(GMOCK_DIR
 	      NAMES src/gmock.cc
-	      PATHS "$ENV{GMOCK_DIR}" "/usr/src/gmock" "/usr/src/googletest/googlemock" "${CMAKE_SOURCE_DIR}/gtest/gmock-1.7.0"
+	      PATHS "$ENV{GMOCK_DIR}"
+		    "/usr/src/googletest/googlemock"
+	            "/usr/src/gmock"
+		    "${CMAKE_SOURCE_DIR}/gtest/gmock-1.7.0"
 	     )
 endif(NOT GMOCK_DIR)
-#set(GMOCK_DIR "${CMAKE_SOURCE_DIR}/gtest/gmock-1.7.0"
-#    CACHE PATH "The path to the GoogleMock test framework.")
 
 if(EXISTS "${GMOCK_DIR}" AND IS_DIRECTORY "${GMOCK_DIR}")
     set(GMOCK_PRESENT ON)
