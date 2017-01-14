@@ -22,6 +22,7 @@
 #include "svg/svg.h"
 #include "path-chemistry.h"
 #include "style.h"
+#include "helper/geom.h"
 #include "xml/sp-css-attr.h"
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
@@ -55,7 +56,7 @@ LPECopyRotate::LPECopyRotate(LivePathEffectObject *lpeobject) :
     copies_to_360(_("360º Copies"), _("No rotation angle, fixed to 360º"), "copies_to_360", &wr, this, true),
     fuse_paths(_("Kaleidoskope"), _("Kaleidoskope by helper line, use fill-rule: evenodd for best result"), "fuse_paths", &wr, this, false),
     join_paths(_("Join paths"), _("Join paths, use fill-rule: evenodd for best result"), "join_paths", &wr, this, false),
-    split_elements(_("Split elements"), _("Split elements, this allow gradients and other paints. Whith fuse don't work on shapes"), "split_elements", &wr, this, false),
+    split_items(_("Split elements"), _("Split elements, this allow gradients and other paints."), "split_items", &wr, this, false),
     id_origin("id origin", "store the id of the first LPEItem", "id_origin", &wr, this,""),
     dist_angle_handle(100.0)
 {
@@ -65,21 +66,22 @@ LPECopyRotate::LPECopyRotate(LivePathEffectObject *lpeobject) :
     registerParameter(&copies_to_360);
     registerParameter(&fuse_paths);
     registerParameter(&join_paths);
+    registerParameter(&split_items);
     registerParameter(&starting_angle);
     registerParameter(&starting_point);
     registerParameter(&rotation_angle);
     registerParameter(&num_copies);
     registerParameter(&split_gap);
-    registerParameter(&split_elements);
     registerParameter(&id_origin);
     registerParameter(&origin);
     id_origin.param_hide_canvas_text();
     split_gap.param_set_range(-999999.0, 999999.0);
     split_gap.param_set_increments(0.1, 0.1);
     split_gap.param_set_digits(5);
+    num_copies.param_set_range(0, 999999);
     num_copies.param_make_integer(true);
-    num_copies.param_set_range(0, 1000);
     apply_to_clippath_and_mask = true;
+    previous_num_copies = num_copies;
 }
 
 LPECopyRotate::~LPECopyRotate()
@@ -90,7 +92,9 @@ LPECopyRotate::~LPECopyRotate()
 void
 LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem)
 {
-    if (split_elements) {
+    if (split_items) {
+        SPDocument * document = SP_ACTIVE_DOCUMENT;
+        items.clear();
         container = dynamic_cast<SPObject *>(sp_lpe_item->parent);
         SPDocument * doc = SP_ACTIVE_DOCUMENT;
         Inkscape::XML::Node *root = sp_lpe_item->document->getReprRoot();
@@ -98,21 +102,70 @@ LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem)
         if (root_origin != root) {
             return;
         }
-//        Geom::Line ls((Geom::Point)start_point, (Geom::Point)end_point);
-//        Geom::Affine m = Geom::reflection (ls.vector(), (Geom::Point)start_point);
-//        Geom::Point dir = rot90(unit_vector((Geom::Point)start_point - (Geom::Point)end_point));
-//        Geom::Point gap = dir * split_gap;
-//        m *= Geom::Translate(gap);
-//        m = m * sp_lpe_item->transform;
-//        toMirror(m);
+        if (previous_num_copies != num_copies) {
+            gint numcopies_gap = previous_num_copies - num_copies;
+            if (numcopies_gap > 0 && num_copies != 0) {
+                guint counter = num_copies - 1;
+                while (numcopies_gap > 0) {
+                    const char * id = g_strdup(Glib::ustring("rotated-").append(std::to_string(counter)).append("-").append(id_origin.param_getSVGValue()).c_str());
+                     if (!id || strlen(id) == 0) {
+                        return;
+                    }
+                    SPObject *elemref = NULL;
+                    if (elemref = document->getObjectById(id)) {
+                        SP_ITEM(elemref)->setHidden(true);
+                    }
+                    counter++;
+                    numcopies_gap--;
+                }
+            }
+            previous_num_copies = num_copies;
+        }
+        
+        double diagonal = Geom::distance(Geom::Point(boundingbox_X.min(),boundingbox_Y.min()),Geom::Point(boundingbox_X.max(),boundingbox_Y.max()));
+        Geom::Rect bbox(Geom::Point(boundingbox_X.min(),boundingbox_Y.min()),Geom::Point(boundingbox_X.max(),boundingbox_Y.max()));
+        double size_divider = Geom::distance(origin,bbox) + (diagonal * 2);
+        Geom::Point line_start  = origin + dir * Geom::Rotate(-(Geom::rad_from_deg(starting_angle))) * size_divider;
+        Geom::Point line_end = origin + dir * Geom::Rotate(-(Geom::rad_from_deg(rotation_angle + starting_angle))) * size_divider;
+        Geom::Affine m = Geom::Translate(-origin) * Geom::Rotate(-(Geom::rad_from_deg(starting_angle)));
+        if (fuse_paths) {
+            size_t rest = 0;
+            for (size_t i = 1; i < num_copies; ++i) {
+                Geom::Affine r = Geom::identity();
+                Geom::Point dir = unit_vector((Geom::Point)origin - Geom::middle_point(line_start,line_end));
+                if( rest%2 == 0) {
+                    r *= Geom::Rotate(Geom::Angle(dir)).inverse();
+                    r *= Geom::Scale(1, -1);
+                    r *= Geom::Rotate(Geom::Angle(dir));
+                }
+                Geom::Rotate rot(-(Geom::rad_from_deg(rotation_angle * i)));
+                Geom::Affine t = m * r * rot * Geom::Rotate(Geom::rad_from_deg(starting_angle)) * Geom::Translate(origin);
+                if( rest%2 == 0) {
+                    t = m * r * rot * Geom::Rotate(Geom::rad_from_deg(starting_angle)).inverse() * Geom::Translate(origin);
+                }
+                t *= sp_lpe_item->transform;
+                toItem(t, i-1);
+                rest ++;
+            }
+        } else {
+            for (size_t i = 1; i < num_copies; ++i) {
+                Geom::Rotate rot(-(Geom::rad_from_deg(rotation_angle * i)));
+                Geom::Affine t = m * rot * Geom::Rotate(Geom::rad_from_deg(starting_angle)) * Geom::Translate(origin);
+                t *= sp_lpe_item->transform;
+                toItem(t, i - 1);
+            }
+        }
     } else {
         processObjects(LPE_ERASE);
-        elements.clear();
+        items.clear();
     }
+    
+    std::cout << previous_num_copies << "previous_num_copies\n";
+    std::cout << num_copies << "num_copies\n";
 }
 
 void
-LPECopyRotate::cloneD(SPObject *origin, SPObject *dest, bool live, bool root) 
+LPECopyRotate::cloneD(SPObject *origin, SPObject *dest, bool root) 
 {
     SPDocument * document = SP_ACTIVE_DOCUMENT;
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
@@ -122,7 +175,7 @@ LPECopyRotate::cloneD(SPObject *origin, SPObject *dest, bool live, bool root)
         for (std::vector<SPObject * >::iterator obj_it = childs.begin(); 
              obj_it != childs.end(); ++obj_it) {
             SPObject *dest_child = dest->nthChild(index); 
-            cloneD(*obj_it, dest_child, live, false); 
+            cloneD(*obj_it, dest_child, false); 
             index++;
         }
     }
@@ -134,35 +187,30 @@ LPECopyRotate::cloneD(SPObject *origin, SPObject *dest, bool live, bool root)
         path =  SP_PATH(dest);
     }
     if (path && shape) {
-        if ( live) {
-            SPCurve *c = NULL;
-            if (root) {
-                c = new SPCurve();
-                c->set_pathvector(pathvector_before_effect);
-            } else {
-                c = shape->getCurve();
-            }
-            if (c) {
-                path->setCurve(c, TRUE);
-                c->unref();
-            } else {
-                dest->getRepr()->setAttribute("d", NULL);
-            }
+        SPCurve *c = NULL;
+        if (root) {
+            c = new SPCurve();
+            c->set_pathvector(pathvector_before_effect);
         } else {
-            dest->getRepr()->setAttribute("d", origin->getRepr()->attribute("d"));
+            c = shape->getCurve();
+        }
+        if (c) {
+            path->setCurve(c, TRUE);
+            c->unref();
+        } else {
+            dest->getRepr()->setAttribute("d", NULL);
         }
     }
 }
 
 void
-LPECopyRotate::toMirror(Geom::Affine transform)
+LPECopyRotate::toItem(Geom::Affine transform, size_t i)
 {
     SPDocument * document = SP_ACTIVE_DOCUMENT;
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
     const char * id_origin_char = id_origin.param_getSVGValue();
-    const char * elemref_id = g_strdup(Glib::ustring("mirror-").append(id_origin_char).c_str());
-    elements.clear();
-    elements.push_back(elemref_id);
+    const char * elemref_id = g_strdup(Glib::ustring("rotated-").append(std::to_string(i)).append("-").append(id_origin_char).c_str());
+    items.push_back(elemref_id);
     SPObject *elemref= NULL;
     Inkscape::XML::Node *phantom = NULL;
     if (elemref = document->getObjectById(elemref_id)) {
@@ -201,13 +249,14 @@ LPECopyRotate::toMirror(Geom::Affine transform)
         phantom->setAttribute("ry", NULL);
         phantom->setAttribute("width", NULL);
         phantom->setAttribute("height", NULL);
+        phantom->setAttribute("id", elemref_id);
     }
-    phantom->setAttribute("id", elemref_id);
     if (!elemref) {
         elemref = container->appendChildRepr(phantom);
         Inkscape::GC::release(phantom);
     }
-    cloneD(SP_OBJECT(sp_lpe_item), elemref, true, true);
+    SP_ITEM(elemref)->setHidden(false);
+    cloneD(SP_OBJECT(sp_lpe_item), elemref, true);
     elemref->getRepr()->setAttribute("transform" , sp_svg_transform_write(transform));
     if (elemref->parent != container) {
         Inkscape::XML::Node *copy = phantom->duplicate(xml_doc);
@@ -295,13 +344,13 @@ LPECopyRotate::doBeforeEffect (SPLPEItem const* lpeitem)
         num_copies.param_set_value(floor(360/rotation_angle));
     }
     if (fuse_paths && copies_to_360) {
-        num_copies.param_set_increments(2,2);
+        num_copies.param_set_increments(2.0,10.0);
         if ((int)num_copies%2 !=0) {
             num_copies.param_set_value(num_copies+1);
             rotation_angle.param_set_value(360.0/(double)num_copies);
         }
     } else {
-        num_copies.param_set_increments(1,1);
+        num_copies.param_set_increments(1.0, 10.0);
     }
 
     if (dist_angle_handle < 1.0) {
@@ -503,6 +552,50 @@ LPECopyRotate::setFusion(Geom::PathVector &path_on, Geom::Path divider, double s
     tmp_path.clear();
 }
 
+Geom::PathVector
+LPECopyRotate::doEffect_path (Geom::PathVector const & path_in)
+{
+    Geom::PathVector path_out;
+    if (split_items && (fuse_paths || join_paths)) {
+        if (num_copies == 0) {
+            return path_out;
+        }
+        path_out = pathv_to_linear_and_cubic_beziers(path_in);
+        double diagonal = Geom::distance(Geom::Point(boundingbox_X.min(),boundingbox_Y.min()),Geom::Point(boundingbox_X.max(),boundingbox_Y.max()));
+        Geom::OptRect bbox = sp_lpe_item->geometricBounds();
+        double size_divider = Geom::distance(origin,bbox) + (diagonal * 2);
+        Geom::Point line_start  = origin + dir * Geom::Rotate(-(Geom::rad_from_deg(starting_angle))) * size_divider;
+        Geom::Point line_end = origin + dir * Geom::Rotate(-(Geom::rad_from_deg(rotation_angle + starting_angle))) * size_divider;
+        Geom::Path divider = Geom::Path(line_start);
+        divider.appendNew<Geom::LineSegment>((Geom::Point)origin);
+        divider.appendNew<Geom::LineSegment>(line_end);
+        divider.close();
+        Geom::PathVector triangle;
+        triangle.push_back(divider);
+        Geom::PathIntersectionGraph *pig = new Geom::PathIntersectionGraph(triangle, path_out);
+        if (pig && ! path_out.empty() && !triangle.empty()) {
+            path_out = pig->getIntersection();
+        }
+        Geom::Affine r = Geom::identity();
+        Geom::Point dir = unit_vector(Geom::middle_point(line_start,line_end) - (Geom::Point)origin);
+        Geom::Point gap = dir * split_gap;
+        r *= Geom::Translate(gap);
+        path_out *= r;
+    } else {
+        // default behavior
+        for (unsigned int i=0; i < path_in.size(); i++) {
+            Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2_in = path_in[i].toPwSb();
+            Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2_out = doEffect_pwd2(pwd2_in);
+            Geom::PathVector path = Geom::path_from_piecewise( pwd2_out, LPE_CONVERSION_TOLERANCE);
+            // add the output path vector to the already accumulated vector:
+            for (unsigned int j=0; j < path.size(); j++) {
+                path_out.push_back(path[j]);
+            }
+        }
+    }
+    return pathv_to_linear_and_cubic_beziers(path_out);
+}
+
 Geom::Piecewise<Geom::D2<Geom::SBasis> >
 LPECopyRotate::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in)
 {
@@ -524,10 +617,10 @@ LPECopyRotate::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & p
     divider.appendNew<Geom::LineSegment>(line_end);
     Piecewise<D2<SBasis> > output;
     Affine pre = Translate(-origin) * Rotate(-rad_from_deg(starting_angle));
+    PathVector const original_pathv = pathv_to_linear_and_cubic_beziers(path_from_piecewise(remove_short_cuts(pwd2_in, 0.1), 0.001));
     if (fuse_paths) {
         Geom::PathVector path_out;
         Geom::PathVector tmp_path;
-        PathVector const original_pathv = path_from_piecewise(remove_short_cuts(pwd2_in, 0.1), 0.001);
         for (Geom::PathVector::const_iterator path_it = original_pathv.begin(); path_it != original_pathv.end(); ++path_it) {
             if (path_it->empty()) {
                 continue;
@@ -554,7 +647,7 @@ LPECopyRotate::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & p
             output = paths_to_pw(path_out);
         }
     } else {
-        Geom::PathVector output_pv = path_from_piecewise(output , 0.01);
+        Geom::PathVector output_pv;
         for (int i = 0; i < num_copies; ++i) {
             Rotate rot(-rad_from_deg(rotation_angle * i));
             Affine t = pre * rot * Translate(origin);
@@ -623,8 +716,8 @@ void
 LPECopyRotate::processObjects(LpeAction lpe_action)
 {
     SPDocument * document = SP_ACTIVE_DOCUMENT;
-    for (std::vector<const char *>::iterator el_it = elements.begin(); 
-         el_it != elements.end(); ++el_it) {
+    for (std::vector<const char *>::iterator el_it = items.begin(); 
+         el_it != items.end(); ++el_it) {
         const char * id = *el_it;
         if (!id || strlen(id) == 0) {
             return;
@@ -668,7 +761,7 @@ LPECopyRotate::processObjects(LpeAction lpe_action)
         }
     }
     if (lpe_action == LPE_ERASE || lpe_action == LPE_TO_OBJECTS) {
-        elements.clear();
+        items.clear();
     }
 }
 

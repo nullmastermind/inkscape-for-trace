@@ -15,6 +15,7 @@
  */
 
 #include "live_effects/effect.h"
+#include "live_effects/parameter/parameter.h"
 #include "live_effects/parameter/text.h"
 #include "live_effects/parameter/point.h"
 #include "live_effects/lpegroupbbox.h"
@@ -27,6 +28,7 @@ public:
     LPECopyRotate(LivePathEffectObject *lpeobject);
     virtual ~LPECopyRotate();
     virtual void doOnApply (SPLPEItem const* lpeitem);
+    virtual Geom::PathVector doEffect_path (Geom::PathVector const & path_in);
     virtual Geom::Piecewise<Geom::D2<Geom::SBasis> > doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in);
     virtual void doBeforeEffect (SPLPEItem const* lpeitem);
     virtual void doAfterEffect (SPLPEItem const* lpeitem);
@@ -38,8 +40,8 @@ public:
     virtual void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/);
     virtual Gtk::Widget * newWidget();
     void processObjects(LpeAction lpe_action);
-    void toMirror(Geom::Affine transform);
-    void cloneD(SPObject *origin, SPObject *dest, bool live, bool root);
+    void toItem(Geom::Affine transform, size_t i);
+    void cloneD(SPObject *origin, SPObject *dest, bool root);
 protected:
     virtual void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec);
 
@@ -53,7 +55,7 @@ private:
     BoolParam copies_to_360;
     BoolParam fuse_paths;
     BoolParam join_paths;
-    BoolParam split_elements;
+    BoolParam split_items;
     TextParam id_origin;
     Geom::Point A;
     Geom::Point B;
@@ -62,7 +64,8 @@ private:
     Geom::Point rot_pos;
     Geom::Point previous_start_point;
     double dist_angle_handle;
-    std::vector<const char *> elements;
+    double previous_num_copies;
+    std::vector<const char *> items;
     SPObject * container;
     LPECopyRotate(const LPECopyRotate&);
     LPECopyRotate& operator=(const LPECopyRotate&);
