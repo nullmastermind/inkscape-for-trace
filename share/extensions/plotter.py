@@ -196,7 +196,7 @@ class Plot(inkex.Effect):
         try:
             mySerial.open()
         except Exception as inst:
-            if 'ould not open port' in inst.args[0]:
+            if 'ould not open port' in inst.strerror:
                 inkex.errormsg(_("Could not open port. Please check that your plotter is running, connected and the settings are correct."))
                 return
             else:
