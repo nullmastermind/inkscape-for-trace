@@ -40,8 +40,9 @@ public:
     virtual void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/);
     virtual Gtk::Widget * newWidget();
     void processObjects(LpeAction lpe_action);
-    void toItem(Geom::Affine transform, size_t i);
-    void cloneD(SPObject *origin, SPObject *dest, bool root);
+    void toItem(Geom::Affine transform, size_t i, bool reset);
+    void cloneD(SPObject *origin, SPObject *dest, bool root, bool reset);
+    void resetStyles();
 protected:
     virtual void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec);
 
@@ -66,6 +67,7 @@ private:
     double dist_angle_handle;
     double previous_num_copies;
     std::vector<const char *> items;
+    bool reset;
     SPObject * container;
     LPECopyRotate(const LPECopyRotate&);
     LPECopyRotate& operator=(const LPECopyRotate&);

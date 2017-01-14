@@ -82,6 +82,7 @@ LPECopyRotate::LPECopyRotate(LivePathEffectObject *lpeobject) :
     num_copies.param_make_integer(true);
     apply_to_clippath_and_mask = true;
     previous_num_copies = num_copies;
+    reset = false;
 }
 
 LPECopyRotate::~LPECopyRotate()
@@ -144,7 +145,7 @@ LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem)
                     t = m * r * rot * Geom::Rotate(Geom::rad_from_deg(starting_angle)).inverse() * Geom::Translate(origin);
                 }
                 t *= sp_lpe_item->transform;
-                toItem(t, i-1);
+                toItem(t, i-1, reset);
                 rest ++;
             }
         } else {
@@ -152,9 +153,10 @@ LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem)
                 Geom::Rotate rot(-(Geom::rad_from_deg(rotation_angle * i)));
                 Geom::Affine t = m * rot * Geom::Rotate(Geom::rad_from_deg(starting_angle)) * Geom::Translate(origin);
                 t *= sp_lpe_item->transform;
-                toItem(t, i - 1);
+                toItem(t, i - 1, reset);
             }
         }
+        reset = false;
     } else {
         processObjects(LPE_ERASE);
         items.clear();
@@ -165,7 +167,7 @@ LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem)
 }
 
 void
-LPECopyRotate::cloneD(SPObject *origin, SPObject *dest, bool root) 
+LPECopyRotate::cloneD(SPObject *origin, SPObject *dest, bool root, bool reset) 
 {
     SPDocument * document = SP_ACTIVE_DOCUMENT;
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
@@ -175,7 +177,7 @@ LPECopyRotate::cloneD(SPObject *origin, SPObject *dest, bool root)
         for (std::vector<SPObject * >::iterator obj_it = childs.begin(); 
              obj_it != childs.end(); ++obj_it) {
             SPObject *dest_child = dest->nthChild(index); 
-            cloneD(*obj_it, dest_child, false); 
+            cloneD(*obj_it, dest_child, false, reset); 
             index++;
         }
     }
@@ -200,11 +202,14 @@ LPECopyRotate::cloneD(SPObject *origin, SPObject *dest, bool root)
         } else {
             dest->getRepr()->setAttribute("d", NULL);
         }
+        if (reset) {
+            dest->getRepr()->setAttribute("style", shape->getRepr()->attribute("style"));
+        }
     }
 }
 
 void
-LPECopyRotate::toItem(Geom::Affine transform, size_t i)
+LPECopyRotate::toItem(Geom::Affine transform, size_t i, bool reset)
 {
     SPDocument * document = SP_ACTIVE_DOCUMENT;
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
@@ -255,9 +260,9 @@ LPECopyRotate::toItem(Geom::Affine transform, size_t i)
         elemref = container->appendChildRepr(phantom);
         Inkscape::GC::release(phantom);
     }
-    SP_ITEM(elemref)->setHidden(false);
-    cloneD(SP_OBJECT(sp_lpe_item), elemref, true);
+    cloneD(SP_OBJECT(sp_lpe_item), elemref, true, reset);
     elemref->getRepr()->setAttribute("transform" , sp_svg_transform_write(transform));
+    SP_ITEM(elemref)->setHidden(false);
     if (elemref->parent != container) {
         Inkscape::XML::Node *copy = phantom->duplicate(xml_doc);
         copy->setAttribute("id", elemref_id);
@@ -265,6 +270,12 @@ LPECopyRotate::toItem(Geom::Affine transform, size_t i)
         Inkscape::GC::release(copy);
         elemref->deleteObject();
     }
+}
+
+void
+LPECopyRotate::resetStyles(){
+    reset = true;
+    doAfterEffect(sp_lpe_item);
 }
 
 Gtk::Widget * LPECopyRotate::newWidget()
@@ -276,7 +287,15 @@ Gtk::Widget * LPECopyRotate::newWidget()
     vbox->set_border_width(5);
     vbox->set_homogeneous(false);
     vbox->set_spacing(2);
-
+    Gtk::HBox * hbox = Gtk::manage(new Gtk::HBox(false,0));
+    Gtk::VBox * vbox_expander = Gtk::manage( new Gtk::VBox(Effect::newWidget()) );
+    vbox_expander->set_border_width(0);
+    vbox_expander->set_spacing(2);
+    Gtk::Button * reset_button = Gtk::manage(new Gtk::Button(Glib::ustring(_("Reset styles"))));
+    reset_button->signal_clicked().connect(sigc::mem_fun (*this,&LPECopyRotate::resetStyles));
+    reset_button->set_size_request(140,30);
+    vbox->pack_start(*hbox, true,true,2);
+    hbox->pack_start(*reset_button, false, false,2);
     std::vector<Parameter *>::iterator it = param_vector.begin();
     while (it != param_vector.end()) {
         if ((*it)->widget_is_visible) {
@@ -733,10 +752,14 @@ LPECopyRotate::processObjects(LpeAction lpe_action)
             Glib::ustring css_str;
             switch (lpe_action){
             case LPE_TO_OBJECTS:
-                if (elemnode->attribute("inkscape:path-effect")) {
-                    sp_item_list_to_curves(item_list, item_selected, item_to_select);
+                if (SP_ITEM(elemref)->isHidden()) {
+                    elemref->deleteObject();
+                } else {
+                    if (elemnode->attribute("inkscape:path-effect")) {
+                        sp_item_list_to_curves(item_list, item_selected, item_to_select);
+                    }
+                    elemnode->setAttribute("sodipodi:insensitive", NULL);
                 }
-                elemnode->setAttribute("sodipodi:insensitive", NULL);
                 break;
 
             case LPE_ERASE:
