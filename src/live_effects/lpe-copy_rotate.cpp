@@ -57,7 +57,6 @@ LPECopyRotate::LPECopyRotate(LivePathEffectObject *lpeobject) :
     fuse_paths(_("Kaleidoskope"), _("Kaleidoskope by helper line, use fill-rule: evenodd for best result"), "fuse_paths", &wr, this, false),
     join_paths(_("Join paths"), _("Join paths, use fill-rule: evenodd for best result"), "join_paths", &wr, this, false),
     split_items(_("Split elements"), _("Split elements, this allow gradients and other paints."), "split_items", &wr, this, false),
-    id_origin("id origin", "store the id of the first LPEItem", "id_origin", &wr, this,""),
     dist_angle_handle(100.0)
 {
     show_orig_path = true;
@@ -72,9 +71,7 @@ LPECopyRotate::LPECopyRotate(LivePathEffectObject *lpeobject) :
     registerParameter(&rotation_angle);
     registerParameter(&num_copies);
     registerParameter(&split_gap);
-    registerParameter(&id_origin);
     registerParameter(&origin);
-    id_origin.param_hide_canvas_text();
     split_gap.param_set_range(-999999.0, 999999.0);
     split_gap.param_set_increments(0.1, 0.1);
     split_gap.param_set_digits(5);
@@ -108,7 +105,7 @@ LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem)
             if (numcopies_gap > 0 && num_copies != 0) {
                 guint counter = num_copies - 1;
                 while (numcopies_gap > 0) {
-                    const char * id = g_strdup(Glib::ustring("rotated-").append(std::to_string(counter)).append("-").append(id_origin.param_getSVGValue()).c_str());
+                    const char * id = g_strdup(Glib::ustring("rotated-").append(std::to_string(counter)).append("-").append(sp_lpe_item->getRepr()->attribute("id")).c_str());
                      if (!id || strlen(id) == 0) {
                         return;
                     }
@@ -213,8 +210,7 @@ LPECopyRotate::toItem(Geom::Affine transform, size_t i, bool reset)
 {
     SPDocument * document = SP_ACTIVE_DOCUMENT;
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
-    const char * id_origin_char = id_origin.param_getSVGValue();
-    const char * elemref_id = g_strdup(Glib::ustring("rotated-").append(std::to_string(i)).append("-").append(id_origin_char).c_str());
+    const char * elemref_id = g_strdup(Glib::ustring("rotated-").append(std::to_string(i)).append("-").append(sp_lpe_item->getRepr()->attribute("id")).c_str());
     items.push_back(elemref_id);
     SPObject *elemref= NULL;
     Inkscape::XML::Node *phantom = NULL;
@@ -303,7 +299,7 @@ Gtk::Widget * LPECopyRotate::newWidget()
             Gtk::Widget *widg = dynamic_cast<Gtk::Widget *>(param->param_newWidget());
             Glib::ustring *tip = param->param_getTooltip();
             if (widg) {
-                if (param->param_key == "id_origin" || param->param_key != "starting_point") {
+                if (param->param_key != "starting_point") {
                     vbox->pack_start(*widg, true, true, 2);
                     if (tip) {
                         widg->set_tooltip_text(*tip);
@@ -333,11 +329,6 @@ LPECopyRotate::doOnApply(SPLPEItem const* lpeitem)
     origin.param_update_default(A);
     dist_angle_handle = L2(B - A);
     dir = unit_vector(B - A);
-    SPLPEItem * splpeitem = const_cast<SPLPEItem *>(lpeitem);
-    if (!lpeitem->hasPathEffectOfType(this->effectType(), false) ){ //first applied not ready yet
-        id_origin.param_setValue(lpeitem->getRepr()->attribute("id"));
-        id_origin.write_to_SVG();
-    }
 }
 
 void

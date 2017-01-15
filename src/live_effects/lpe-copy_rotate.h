@@ -57,7 +57,6 @@ private:
     BoolParam fuse_paths;
     BoolParam join_paths;
     BoolParam split_items;
-    TextParam id_origin;
     Geom::Point A;
     Geom::Point B;
     Geom::Point dir;
