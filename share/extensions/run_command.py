@@ -61,8 +61,11 @@ def run(command_format, prog_name):
             except ImportError:
                 # shouldn't happen...
                 msg = "Neither subprocess.Popen nor popen2.Popen3 is available"
-        if rc and msg is None:
-            msg = "%s failed:\n%s\n%s\n" % (prog_name, out, err)
+        if msg is None:
+            if rc:
+                msg = "%s failed:\n%s\n%s\n" % (prog_name, out, err)
+            elif err:
+                sys.stderr.write("%s executed but logged the following error:\n%s\n%s\n" % (prog_name, out, err))
     except Exception, inst:
         msg = "Error attempting to run %s: %s" % (prog_name, str(inst))
 
