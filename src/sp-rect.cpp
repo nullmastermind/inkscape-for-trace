@@ -120,7 +120,6 @@ void SPRect::set(unsigned key, gchar const *value) {
             SPShape::set(key, value);
             break;
     }
-    updateRepr();
 #ifdef OBJECT_TRACE
     objectTrace( "SPRect::set", false );
 #endif
@@ -172,14 +171,10 @@ Inkscape::XML::Node * SPRect::write(Inkscape::XML::Document *xml_doc, Inkscape::
 
     if (this->rx._set) {
     	sp_repr_set_svg_length(repr, "rx", this->rx);
-    } else {
-        repr->setAttribute("rx", NULL);
     }
 
     if (this->ry._set) {
     	sp_repr_set_svg_length(repr, "ry", this->ry);
-    } else {
-        repr->setAttribute("ry", NULL);
     }
 
     sp_repr_set_svg_length(repr, "x", this->x);
