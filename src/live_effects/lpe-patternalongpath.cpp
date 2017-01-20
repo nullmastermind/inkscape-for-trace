@@ -264,7 +264,6 @@ LPEPatternAlongPath::transform_multiply(Geom::Affine const& postmul, bool set)
         pattern.param_transform_multiply(postmul, set);
         pattern.write_to_SVG();
     }
-    sp_lpe_item_update_patheffect (sp_lpe_item, false, true);
 }
 
 void
