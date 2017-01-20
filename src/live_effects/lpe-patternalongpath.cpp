@@ -11,6 +11,7 @@
 #include <2geom/bezier-to-sbasis.h>
 
 #include "knotholder.h"
+#include <cmath>
 #include <algorithm>
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
@@ -161,7 +162,7 @@ LPEPatternAlongPath::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > con
         //        spacing.param_set_range(-pattBndsX.extent()*.9, Geom::infinity());
         //    }
 
-        y0+=noffset;
+        y0 += noffset;
 
         std::vector<Geom::Piecewise<Geom::D2<Geom::SBasis> > > paths_in;
         paths_in = split_at_discontinuities(pwd2_in);
@@ -197,7 +198,7 @@ LPEPatternAlongPath::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > con
                     
                 case PAPCT_REPEATED_STRETCHED:
                     // if uskeleton is closed:
-                    if(path_i.segs.front().at0() == path_i.segs.back().at1()){
+                    if (are_near(path_i.segs.front().at0(), path_i.segs.back().at1())){
                         nbCopies = std::max(1, static_cast<int>(std::floor((uskeleton.domain().extent() - toffset)/(pattBndsX->extent()+xspace))));
                         pattBndsX = Interval(pattBndsX->min(),pattBndsX->max()+xspace);
                         scaling = (uskeleton.domain().extent() - toffset)/(((double)nbCopies)*pattBndsX->extent());
@@ -213,11 +214,13 @@ LPEPatternAlongPath::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > con
                     return pwd2_in;
             };
             
+            //Ceil to 6 decimals
+            scaling = ceil(scaling * 1000000) / 1000000;
             double pattWidth = pattBndsX->extent() * scaling;
             
-            x*=scaling;
+            x *= scaling;
             if ( scale_y_rel.get_value() ) {
-                y*=(scaling * prop_scale);
+                y *= prop_scale * scaling;
             } else {
                 y *= prop_scale;
             }
@@ -235,7 +238,7 @@ LPEPatternAlongPath::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > con
                 offs+=pattWidth;
             }
         }
-        if (fuse_tolerance > 0){        
+        if (fuse_tolerance > 0){
             pre_output = fuse_nearby_ends(pre_output, fuse_tolerance);
             for (unsigned i=0; i<pre_output.size(); i++){
                 output.concat(pre_output[i]);
