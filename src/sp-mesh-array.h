@@ -76,7 +76,8 @@ enum MeshCornerOperation {
   MG_CORNER_SIDE_ARC,
   MG_CORNER_TENSOR_TOGGLE,
   MG_CORNER_COLOR_SMOOTH,
-  MG_CORNER_COLOR_PICK
+  MG_CORNER_COLOR_PICK,
+  MG_CORNER_INSERT
 };
 
 enum MeshNodeOperation {
@@ -85,6 +86,7 @@ enum MeshNodeOperation {
   MG_NODE_SCALE_HANDLE
 };
 
+class SPStop;
 
 class SPMeshNode {
 public:
@@ -95,6 +97,7 @@ public:
     draggable = -1;
     path_type = 'u';
     opacity = 0.0;
+    stop = nullptr;
   }
   NodeType node_type;
   unsigned int     node_edge;
@@ -104,6 +107,7 @@ public:
   char path_type;
   SPColor color;
   double opacity;
+  SPStop *stop; // Stop corresponding to node.
 };
 
 
@@ -133,21 +137,24 @@ public:
   void    setColor( unsigned int i, SPColor c );
   double  getOpacity( unsigned int i );
   void    setOpacity( unsigned int i, double o );
+  SPStop* getStopPtr( unsigned int i );
+  void    setStopPtr( unsigned int i, SPStop* );
 };
 
-class SPMesh;
+class SPMeshGradient;
+class SPCurve;
 
 // An array of mesh nodes.
 class SPMeshNodeArray {
 
 // Should be private
 public:
-  SPMesh *mg;
+  SPMeshGradient *mg;
   std::vector< std::vector< SPMeshNode* > > nodes;
 
 public:
   // Draggables to nodes
-  bool drag_valid;
+  bool draggers_valid;
   std::vector< SPMeshNode* > corners;
   std::vector< SPMeshNode* > handles;
   std::vector< SPMeshNode* > tensors;
@@ -156,17 +163,17 @@ public:
 
   friend class SPMeshPatchI;
 
-  SPMeshNodeArray() { built = false; mg = NULL; drag_valid = false; };
-  SPMeshNodeArray( SPMesh *mg );
+  SPMeshNodeArray() { built = false; mg = NULL; draggers_valid = false; };
+  SPMeshNodeArray( SPMeshGradient *mg );
   SPMeshNodeArray( const SPMeshNodeArray& rhs );
   SPMeshNodeArray& operator=(const SPMeshNodeArray& rhs);
 
   ~SPMeshNodeArray() { clear(); };
   bool built;
 
-  void read( SPMesh *mg );
-  void write( SPMesh *mg );
-  void create( SPMesh *mg, SPItem *item, Geom::OptRect bbox );
+  bool read( SPMeshGradient *mg );
+  void write( SPMeshGradient *mg );
+  void create( SPMeshGradient *mg, SPItem *item, Geom::OptRect bbox );
   void clear();
   void print();
 
@@ -186,9 +193,22 @@ public:
   unsigned int tensor_toggle( std::vector< unsigned int > );
   unsigned int color_smooth( std::vector< unsigned int > );
   unsigned int color_pick( std::vector< unsigned int >, SPItem* );
+  unsigned int insert( std::vector< unsigned int > );
 
   // Update other nodes in response to a node move.
   void update_handles( unsigned int corner, std::vector< unsigned int > selected_corners, Geom::Point old_p, MeshNodeOperation op );
+
+  // Return outline path (don't forget to unref() when done with curve)
+  SPCurve * outline_path();
+
+  // Transform array
+  void transform(Geom::Affine const &m);
+
+  // Transform mesh to fill box. Return true if not identity transform.
+  bool fill_box(Geom::OptRect &box);
+
+  // Find bounding box
+  // Geom::OptRect findBoundingBox();
 
   void split_row( unsigned int i, unsigned int n );
   void split_column( unsigned int j, unsigned int n );

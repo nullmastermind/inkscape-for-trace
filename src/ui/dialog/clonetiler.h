@@ -16,6 +16,12 @@
 #include "ui/widget/color-picker.h"
 #include "sp-root.h"
 
+namespace Gtk {
+    class CheckButton;
+    class ComboBox;
+    class ToggleButton;
+}
+
 namespace Inkscape {
 namespace UI {
 
@@ -33,45 +39,66 @@ public:
     static CloneTiler &getInstance() { return *new CloneTiler(); }
     void show_page_trace();
 protected:
+    enum PickType {
+        PICK_COLOR,
+        PICK_OPACITY,
+        PICK_R,
+        PICK_G,
+        PICK_B,
+        PICK_H,
+        PICK_S,
+        PICK_L
+    };
 
-    GtkWidget * clonetiler_new_tab(GtkWidget *nb, const gchar *label);
-    GtkWidget * clonetiler_table_x_y_rand(int values);
-    GtkWidget * clonetiler_spinbox(const char *tip, const char *attr, double lower, double upper, const gchar *suffix, bool exponent = false);
-    GtkWidget * clonetiler_checkbox(const char *tip, const char *attr);
-    void clonetiler_table_attach(GtkWidget *table, GtkWidget *widget, float align, int row, int col);
+    GtkWidget * new_tab(GtkWidget *nb, const gchar *label);
+    GtkWidget * table_x_y_rand(int values);
+    Gtk::Widget * spinbox(const char          *tip,
+                          const Glib::ustring &attr,
+                          double               lower,
+                          double               upper,
+                          const gchar         *suffix,
+                          bool                 exponent = false);
+    Gtk::Widget * checkbox(const char          *tip,
+                           const Glib::ustring &attr);
+    void table_attach(GtkWidget *table, GtkWidget *widget, float align, int row, int col);
+    void table_attach(GtkWidget *table, Gtk::Widget *widget, float align, int row, int col);
 
-    static void clonetiler_symgroup_changed(GtkComboBox *cb, gpointer /*data*/);
-    static void clonetiler_remove(GtkWidget */*widget*/, GtkWidget *dlg, bool do_undo = true);
-    static void on_picker_color_changed(guint rgba);
-    static void clonetiler_trace_hide_tiled_clones_recursively(SPObject *from);
-    static void clonetiler_checkbox_toggled(GtkToggleButton *tb, gpointer *data);
-    static void clonetiler_pick_switched(GtkToggleButton */*tb*/, gpointer data);
-    static void clonetiler_do_pick_toggled(GtkToggleButton *tb, GtkWidget *dlg);
-    static void clonetiler_pick_to(GtkToggleButton *tb, gpointer data);
-    static void clonetiler_xy_changed(GtkAdjustment *adj, gpointer data);
-    static void clonetiler_fill_width_changed(GtkAdjustment *adj, Inkscape::UI::Widget::UnitMenu *u);
-    static void clonetiler_fill_height_changed(GtkAdjustment *adj, Inkscape::UI::Widget::UnitMenu *u);
-    void clonetiler_unit_changed();
-    static void clonetiler_switch_to_create(GtkToggleButton */*tb*/, GtkWidget *dlg);
-    static void clonetiler_switch_to_fill(GtkToggleButton */*tb*/, GtkWidget *dlg);
-    static void clonetiler_keep_bbox_toggled(GtkToggleButton *tb, gpointer /*data*/);
-    static void clonetiler_apply(GtkWidget */*widget*/, GtkWidget *dlg);
-    static void clonetiler_unclump(GtkWidget */*widget*/, void *);
-    static void clonetiler_change_selection(Inkscape::Selection *selection, GtkWidget *dlg);
-    static void clonetiler_external_change(GtkWidget *dlg);
-    static void clonetiler_disconnect_gsignal(GObject *widget, gpointer source);
-    static void clonetiler_reset(GtkWidget */*widget*/, GtkWidget *dlg);
-    static guint clonetiler_number_of_clones(SPObject *obj);
-    static void clonetiler_trace_setup(SPDocument *doc, gdouble zoom, SPItem *original);
-    static guint32 clonetiler_trace_pick(Geom::Rect box);
-    static void clonetiler_trace_finish();
-    static bool clonetiler_is_a_clone_of(SPObject *tile, SPObject *obj);
-    static Geom::Rect transform_rect(Geom::Rect const &r, Geom::Affine const &m);
-    static double randomize01(double val, double rand);
-    static void clonetiler_value_changed(GtkAdjustment *adj, gpointer data);
-    static void clonetiler_reset_recursive(GtkWidget *w);
+    void       symgroup_changed(Gtk::ComboBox *cb);
+    void       on_picker_color_changed(guint rgba);
+    void       trace_hide_tiled_clones_recursively(SPObject *from);
+    guint      number_of_clones(SPObject *obj);
+    void       trace_setup(SPDocument *doc, gdouble zoom, SPItem *original);
+    guint32    trace_pick(Geom::Rect box);
+    void       trace_finish();
+    bool       is_a_clone_of(SPObject *tile, SPObject *obj);
+    Geom::Rect transform_rect(Geom::Rect const &r, Geom::Affine const &m);
+    double     randomize01(double val, double rand);
 
-    static Geom::Affine clonetiler_get_transform(    // symmetry group
+    void apply();
+    void change_selection(Inkscape::Selection *selection);
+    void checkbox_toggled(Gtk::ToggleButton   *tb,
+                          Glib::ustring const &attr);
+    void do_pick_toggled();
+    void external_change();
+    void fill_width_changed();
+    void fill_height_changed();
+    void keep_bbox_toggled();
+    void on_remove_button_clicked() {remove();}
+    void pick_switched(PickType);
+    void pick_to(Gtk::ToggleButton   *tb,
+                 Glib::ustring const &pref);
+    void remove(bool do_undo = true);
+    void reset();
+    void reset_recursive(GtkWidget *w);
+    void switch_to_create();
+    void switch_to_fill();
+    void unclump();
+    void unit_changed();
+    void value_changed(Glib::RefPtr<Gtk::Adjustment> &adj, Glib::ustring const &pref);
+    void xy_changed(Glib::RefPtr<Gtk::Adjustment> &adj, Glib::ustring const &pref);
+
+    Geom::Affine get_transform(
+            // symmetry group
             int type,
 
             // row, column
@@ -112,22 +139,17 @@ private:
     CloneTiler(CloneTiler const &d);
     CloneTiler& operator=(CloneTiler const &d);
 
-    GtkWidget *dlg;
+    Gtk::CheckButton *_b;
+    Gtk::CheckButton *_cb_keep_bbox;
     GtkWidget *nb;
-    GtkWidget *b;
     SPDesktop *desktop;
     DesktopTracker deskTrack;
     Inkscape::UI::Widget::ColorPicker *color_picker;
     GtkSizeGroup* table_row_labels;
     Inkscape::UI::Widget::UnitMenu *unit_menu;
 
-#if WITH_GTKMM_3_0
     Glib::RefPtr<Gtk::Adjustment> fill_width;
     Glib::RefPtr<Gtk::Adjustment> fill_height;
-#else
-    Gtk::Adjustment *fill_width;
-    Gtk::Adjustment *fill_height;
-#endif
 
     sigc::connection desktopChangeConn;
     sigc::connection selectChangedConn;
@@ -147,19 +169,15 @@ private:
      */
     void setTargetDesktop(SPDesktop *desktop);
 
+    // Variables that used to be set using GObject
+    GtkWidget *_buttons_on_tiles;
+    GtkWidget *_dotrace;
+    GtkWidget *_status;
+    Gtk::Box *_rowscols;
+    Gtk::Box *_widthheight;
+    
 };
 
-
-enum {
-    PICK_COLOR,
-    PICK_OPACITY,
-    PICK_R,
-    PICK_G,
-    PICK_B,
-    PICK_H,
-    PICK_S,
-    PICK_L
-};
 
 enum {
     TILE_P1,

@@ -10,19 +10,17 @@
 #include "live_effects/parameter/enum.h"
 #include "helper/geom-pathstroke.h"
 
-#include "sp-shape.h"
 #include "style.h"
-#include "xml/repr.h"
-#include "sp-paint-server.h"
 #include "svg/svg-color.h"
 #include "desktop-style.h"
 #include "svg/css-ostringstream.h"
 #include "display/curve.h"
 
-#include <2geom/path.h>
 #include <2geom/elliptical-arc.h>
 
 #include "lpe-jointype.h"
+// TODO due to internal breakage in glibmm headers, this must be last:
+#include <glibmm/i18n.h>
 
 namespace Inkscape {
 namespace LivePathEffect {

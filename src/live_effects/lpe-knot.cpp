@@ -16,28 +16,24 @@
 #include "sp-path.h"
 #include "display/curve.h"
 #include "live_effects/lpe-knot.h"
-#include "svg/svg.h"
 #include "style.h"
 #include "knot-holder-entity.h"
 #include "knotholder.h"
 
-#include <glibmm/i18n.h>
 #include <gdk/gdk.h>
 
 #include <2geom/sbasis-to-bezier.h>
-#include <2geom/sbasis.h>
-#include <2geom/d2.h>
-#include <2geom/path.h>
 #include <2geom/bezier-to-sbasis.h>
 #include <2geom/basic-intersection.h>
-#include <2geom/exception.h>
+#include "helper/geom.h"
 
 // for change crossing undo
 #include "verbs.h"
 #include "document.h"
 #include "document-undo.h"
 
-#include <exception>
+// TODO due to internal breakage in glibmm headers, this must be last:
+#include <glibmm/i18n.h>
 
 namespace Inkscape {
 namespace LivePathEffect {
@@ -101,7 +97,7 @@ findShadowedTime(Geom::Path const &patha, std::vector<Geom::Point> const &pt_and
 
     Affine mat = from_basis( T, N, pt_and_dir[0] );
     mat = mat.inverse();
-    Path p = patha * mat;
+    Geom::Path p = patha * mat;
     
     std::vector<double> times;
     
@@ -399,14 +395,14 @@ LPEKnot::doEffect_path (Geom::PathVector const &path_in)
     if (gpaths.size()==0){
         return path_in;
     }
-
-    for (unsigned comp=0; comp<path_in.size(); comp++){
+    Geom::PathVector const original_pathv = pathv_to_linear_and_cubic_beziers(path_in);
+    for (unsigned comp=0; comp<original_pathv.size(); comp++){
 
         //find the relevant path component in gpaths (required to allow groups!)
         //Q: do we always receive the group members in the same order? can we rest on that?
         unsigned i0 = 0;
         for (i0=0; i0<gpaths.size(); i0++){
-            if (path_in[comp]==gpaths[i0]) break;
+            if (original_pathv[comp]==gpaths[i0]) break;
         }
         if (i0 == gpaths.size() ) {THROW_EXCEPTION("lpe-knot error: group member not recognized");}// this should not happen...
 
@@ -484,7 +480,7 @@ LPEKnot::doEffect_path (Geom::PathVector const &path_in)
 //                std::cout<<"fusing first and last component\n";
                 ++beg_comp;
                 --end_comp;
-                Path first = gpaths[i0].portion(dom.back());
+                Geom::Path first = gpaths[i0].portion(dom.back());
                 //FIXME: stitching should not be necessary (?!?)
                 first.setStitching(true);
                 first.append(gpaths[i0].portion(dom.front()));
@@ -521,7 +517,7 @@ collectPathsAndWidths (SPLPEItem const *lpeitem, Geom::PathVector &paths, std::v
             c = SP_SHAPE(lpeitem)->getCurve();
         }
         if (c) {
-            Geom::PathVector subpaths = c->get_pathvector();
+            Geom::PathVector subpaths = pathv_to_linear_and_cubic_beziers(c->get_pathvector());
             for (unsigned i=0; i<subpaths.size(); i++){
                 paths.push_back(subpaths[i]);
                 //FIXME: do we have to be more carefull when trying to access stroke width?
@@ -619,10 +615,10 @@ LPEKnot::addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::Pat
     hp_vec.push_back(pathv);
 }
 
-void LPEKnot::addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item)
+void LPEKnot::addKnotHolderEntities(KnotHolder *knotholder, SPItem *item)
 {
     KnotHolderEntity *e = new KnotHolderEntityCrossingSwitcher(this);
-    e->create( desktop, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN,
+    e->create( NULL, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN,
                _("Drag to select a crossing, click to flip it") );
     knotholder->add(e);
 };

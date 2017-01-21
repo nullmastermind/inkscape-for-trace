@@ -26,11 +26,6 @@
 namespace Inkscape {
 namespace LivePathEffect {
 
-namespace MS {
-// we need a separate namespace to avoid clashes with LPEPerpBisector
-class KnotHolderEntityCenterMirrorSymmetry;
-}
-
 enum ModeType {
     MT_V,
     MT_H,
@@ -46,10 +41,9 @@ public:
     virtual ~LPEMirrorSymmetry();
     virtual void doOnApply (SPLPEItem const* lpeitem);
     virtual void doBeforeEffect (SPLPEItem const* lpeitem);
+    virtual void transform_multiply(Geom::Affine const& postmul, bool set);
     virtual Geom::PathVector doEffect_path (Geom::PathVector const & path_in);
-    /* the knotholder entity classes must be declared friends */
-    friend class MS::KnotHolderEntityCenterMirrorSymmetry;
-    void addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item);
+    virtual Gtk::Widget * newWidget();
 
 protected:
     virtual void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec);
@@ -61,9 +55,8 @@ private:
     BoolParam oposite_fuse;
     PointParam start_point;
     PointParam end_point;
-    Geom::Line line_separation;
+    PointParam center_point;
     Geom::Point previous_center;
-    Geom::Point center_point;
 
     LPEMirrorSymmetry(const LPEMirrorSymmetry&);
     LPEMirrorSymmetry& operator=(const LPEMirrorSymmetry&);

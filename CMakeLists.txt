@@ -6,6 +6,9 @@ message("------------------------------")
 message("Source Dir: ${CMAKE_CURRENT_SOURCE_DIR}")
 message("Binary Dir: ${CMAKE_CURRENT_BINARY_DIR}")
 
+include(CMakeScripts/HelperFunctions.cmake)
+include(CMakeScripts/ConfigEnv.cmake)
+
 # -----------------------------------------------------------------------------
 # CMake Configuration
 # -----------------------------------------------------------------------------
@@ -16,16 +19,16 @@ set(CMAKE_BUILD_TYPE_INIT "Release")
 
 project(inkscape)
 
-set(INKSCAPE_VERSION 0.92pre1)
+set(INKSCAPE_VERSION 0.92+devel)
 set(PROJECT_NAME inkscape)
 set(CMAKE_INCLUDE_CURRENT_DIR TRUE)
+
 if(APPLE)
     SET(CMAKE_MACOSX_RPATH TRUE)
     SET(CMAKE_INSTALL_RPATH "@loader_path/../lib/inkscape")
 else()
     SET(CMAKE_INSTALL_RPATH "$ORIGIN/../lib/inkscape")
 endif()
-
 
 cmake_policy(SET CMP0003 NEW) # don't be prolific with library paths
 cmake_policy(SET CMP0005 NEW) # proper define quoting
@@ -38,30 +41,6 @@ if(CMAKE_COMPILER_IS_GNUCC)
     endif()
 endif()
 
-include(CMakeScripts/HelperFunctions.cmake)
-
-# -----------------------------------------------------------------------------
-# Set platform defaults (originally copied from darktable)
-# -----------------------------------------------------------------------------
-if(APPLE)
-    message("-- Mac OS X build detected, setting default features")
-    # prefer macports and/or user-installed libraries over system ones
-    #LIST(APPEND CMAKE_PREFIX_PATH /opt/local /usr/local)
-    set(CMAKE_FIND_FRAMEWORK "LAST")
-
-    # test and display relevant env variables
-    if(DEFINED ENV{CMAKE_PREFIX_PATH})
-	message("CMAKE_PREFIX_PATH: $ENV{CMAKE_PREFIX_PATH}")
-    endif()
-    if(DEFINED ENV{GTKMM_BASEPATH})
-	message("GTKMM_BASEPATH: $ENV{GTKMM_BASEPATH}")
-    endif()
-
-    # detect current GTK+ backend
-    pkg_check_variable(gtk+-2.0 target)
-    message("GTK2 backend: ${GTK+_2.0_TARGET}")
-
-endif(APPLE)
 
 # -----------------------------------------------------------------------------
 # Redirect output files
@@ -77,7 +56,6 @@ option(ENABLE_LCMS "Compile with LCMS support" ON)
 option(WITH_GNOME_VFS "Compile with support for Gnome VFS" ON)
 option(WITH_SVG2 "Compile with support for new SVG2 features" ON)
 option(WITH_LPETOOL "Compile with LPE Tool and experimental LPEs enabled" ON)
-#option(WITH_INKJAR "Enable support for openoffice files (SVG jars)" ON)
 option(WITH_OPENMP "Compile with OpenMP support" ON)
 
 option(WITH_PROFILING "Turn on profiling" OFF) # Set to true if compiler/linker should enable profiling
@@ -89,13 +67,24 @@ option(WITH_LIBCDR "Compile with support of libcdr for CorelDRAW Diagrams" ON)
 option(WITH_LIBVISIO "Compile with support of libvisio for Microsoft Visio Diagrams" ON)
 option(WITH_LIBWPG "Compile with support of libwpg for WordPerfect Graphics" ON)
 option(WITH_NLS "Compile with Native Language Support (using gettext)" ON)
-option(WITH_GTK3_EXPERIMENTAL "Enable compilation with GTK+3 (EXPERIMENTAL!)" OFF)
+option(WITH_YAML "Compile with YAML support (enables xverbs)" ON)
+
+option(ENABLE_BINRELOC "Enable relocatable binaries" OFF)
+
+include(CMakeScripts/ConfigPaths.cmake) # Installation Paths
 
 # -----------------------------------------------------------------------------
 # Test Harness
 # -----------------------------------------------------------------------------
-set(GMOCK_DIR "${CMAKE_SOURCE_DIR}/gtest/gmock-1.7.0"
-    CACHE PATH "The path to the GoogleMock test framework.")
+if(NOT GMOCK_DIR)
+    find_path(GMOCK_DIR
+	      NAMES src/gmock.cc
+	      PATHS "$ENV{GMOCK_DIR}"
+		    "/usr/src/googletest/googlemock"
+	            "/usr/src/gmock"
+		    "${CMAKE_SOURCE_DIR}/gtest/gmock-1.7.0"
+	     )
+endif(NOT GMOCK_DIR)
 
 if(EXISTS "${GMOCK_DIR}" AND IS_DIRECTORY "${GMOCK_DIR}")
     set(GMOCK_PRESENT ON)
@@ -104,14 +93,14 @@ else()
     message("No gmock/gtest found! Perhaps you wish to run 'bash download-gtest.sh' to download it.")
 endif()
 
-include(CMakeScripts/ConfigPaths.cmake) # Installation Paths
 include(CMakeScripts/DefineDependsandFlags.cmake) # Includes, Compiler Flags, and Link Libraries
 include(CMakeScripts/HelperMacros.cmake) # Misc Utility Macros
 
-
 # -----------------------------------------------------------------------------
 # BAD HACKS, NEED TO INVESTIGATE MAKING THESE LESS BAD
-add_definitions(-D_FORTIFY_SOURCE=2)
+if (NOT CMAKE_BUILD_TYPE MATCHES Debug)
+  add_definitions(-D_FORTIFY_SOURCE=2)
+endif()
 add_definitions(-DORBIT2=1)
 add_definitions(-DHAVE_CONFIG_H)
 add_definitions(-DHAVE_CAIRO_PDF=1)  # needed for src/libnrtype/Layout-TNG.h
@@ -124,12 +113,31 @@ endif()
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
+# Relocatable Binary
+# -----------------------------------------------------------------------------
+
+if (ENABLE_BINRELOC)
+	add_definitions(-DENABLE_BINRELOC)
+endif()
+
+# -----------------------------------------------------------------------------
 # Dist Target
 # -----------------------------------------------------------------------------
+if(EXISTS ${CMAKE_SOURCE_DIR}/.bzr/)
+    execute_process(COMMAND
+        bzr revno --tree ${CMAKE_SOURCE_DIR}
+                OUTPUT_VARIABLE INKSCAPE_REVISION
+                OUTPUT_STRIP_TRAILING_WHITESPACE)
+else()
+    set(INKSCAPE_REVISION "unknown")
+endif()
 set(INKSCAPE_DIST_PREFIX "${PROJECT_NAME}-${INKSCAPE_VERSION}")
 add_custom_target(dist
-    COMMAND bzr export --root=${INKSCAPE_DIST_PREFIX}
-    "${CMAKE_BINARY_DIR}/${INKSCAPE_DIST_PREFIX}.tar.bz2"
+    COMMAND sed -i "s/unknown/r${INKSCAPE_REVISION}/" CMakeScripts/inkscape-version.cmake
+    && sed -i "s/custom//" CMakeScripts/inkscape-version.cmake
+    && bzr export --uncommitted --root=${INKSCAPE_DIST_PREFIX}
+    "${CMAKE_BINARY_DIR}/${INKSCAPE_DIST_PREFIX}.tar.bz2" 
+    && bzr revert ${CMAKE_SOURCE_DIR}/CMakeScripts/inkscape-version.cmake
     WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
 
 # -----------------------------------------------------------------------------
@@ -148,54 +156,48 @@ add_custom_target(uninstall
 # Subdirs (on only 1 atm), but a lot happens here
 # -----------------------------------------------------------------------------
 add_subdirectory(src)
+
 if(ENABLE_NLS)
     add_subdirectory(po)
 endif(ENABLE_NLS)
 
-
 # -----------------------------------------------------------------------------
 # Man pages
 # -----------------------------------------------------------------------------
-include("CMakeScripts/Pod2man.cmake")
+if(NOT WIN32)
+	include("CMakeScripts/Pod2man.cmake")
 
-# Load AUTHORS file contents into $INKSCAPE_AUTHORS
-file(READ ${CMAKE_CURRENT_SOURCE_DIR}/AUTHORS content)
-string(REGEX REPLACE "^([^\n#]+)\n" "\\1;\n" content_list "${content}")
-join(INKSCAPE_AUTHORS "," "${content_list}")
+	# Load AUTHORS file contents into $INKSCAPE_AUTHORS
+	file(READ ${CMAKE_CURRENT_SOURCE_DIR}/AUTHORS content)
+	string(REGEX REPLACE "^([^\n#]+)\n" "\\1;\n" content_list "${content}")
+	
+	join(INKSCAPE_AUTHORS "," "${content_list}")
 
-foreach(podfile
-        man/inkscape.pod
-        man/inkscape.de.pod
-        man/inkscape.el.pod
-        man/inkscape.fr.pod
-        man/inkscape.ja.pod
-        man/inkscape.sk.pod
-        man/inkscape.zh_TW.pod
-	man/inkview.pod)
-    set(POD_IN ${CMAKE_CURRENT_SOURCE_DIR}/${podfile}.in)
-    set(POD_OUT ${CMAKE_CURRENT_BINARY_DIR}/${podfile})
-    configure_file(${POD_IN} ${POD_OUT})
-    pod2man(${POD_OUT} ${INKSCAPE_VERSION} 1 "Inkscape Commands Manual")
-endforeach()
+	foreach(podfile
+			man/inkscape.pod
+			man/inkscape.de.pod
+			man/inkscape.el.pod
+			man/inkscape.fr.pod
+			man/inkscape.ja.pod
+			man/inkscape.sk.pod
+			man/inkscape.zh_TW.pod
+			man/inkview.pod)
+			
+		set(POD_IN ${CMAKE_CURRENT_SOURCE_DIR}/${podfile}.in)
+		set(POD_OUT ${CMAKE_CURRENT_BINARY_DIR}/${podfile})
+		
+		configure_file(${POD_IN} ${POD_OUT})
+		
+		pod2man(${POD_OUT} ${INKSCAPE_VERSION} 1 "Inkscape Commands Manual")
+	endforeach()
+endif()
 
 # -----------------------------------------------------------------------------
 # Installation
 # -----------------------------------------------------------------------------
-if(UNIX)
-    #The install directive for the binaries and libraries are found in src/CMakeList.txt
-
-    install(
-	FILES ${CMAKE_BINARY_DIR}/inkscape.desktop
-	DESTINATION ${CMAKE_INSTALL_PREFIX}/${SHARE_INSTALL}/applications
-	)
-
-    # this should probably be done no matter what the platform is, just set SHARE_INSTALL first
-    add_subdirectory(share) 
-
-else()
-    # TODO, WIN32, APPLE/OSX, MinGW
-
-endif()
+add_subdirectory(share)
+	
+include(CMakeScripts/Install.cmake)
 
 # -----------------------------------------------------------------------------
 # Clean
@@ -239,6 +241,8 @@ message("")
 
 # cmake info
 message("CMAKE_BINARY_DIR:        ${CMAKE_BINARY_DIR}")
+message("CMAKE_INSTALL_PREFIX:    ${CMAKE_INSTALL_PREFIX}")
+message("PACKAGE_LOCALE_DIR       ${PACKAGE_LOCALE_DIR}")
 message("CMAKE_SYSTEM_NAME:       ${CMAKE_SYSTEM_NAME}")
 message("CMAKE_SYSTEM_VERSION:    ${CMAKE_SYSTEM_VERSION}")
 message("CMAKE_SYSTEM_PROCESSOR:  ${CMAKE_SYSTEM_PROCESSOR}")
@@ -247,6 +251,13 @@ message("CMAKE_CXX_COMPILER:      ${CMAKE_CXX_COMPILER}")
 message("CMAKE_BUILD_TYPE:        ${CMAKE_BUILD_TYPE}")
 message("")
 
+if(WIN32)
+message("CMAKE_PREFIX_PATH:           ${CMAKE_PREFIX_PATH}")
+message("CMAKE_FIND_LIBRARY_PREFIXES: ${CMAKE_FIND_LIBRARY_PREFIXES}")
+message("CMAKE_FIND_LIBRARY_SUFFIXES: ${CMAKE_FIND_LIBRARY_SUFFIXES}")
+message("")
+endif()
+
 # dependency info
 message("ENABLE_LCMS:             ${ENABLE_LCMS}")
 message("ENABLE_POPPLER:          ${ENABLE_POPPLER}")
@@ -254,7 +265,6 @@ message("ENABLE_POPPLER_CAIRO:    ${ENABLE_POPPLER_CAIRO}")
 message("GMOCK_PRESENT:           ${GMOCK_PRESENT}")
 message("WITH_DBUS:               ${WITH_DBUS}")
 message("WITH_GNOME_VFS:          ${WITH_GNOME_VFS}")
-message("WITH_GTK3_EXPERIMENTAL:  ${WITH_GTK3_EXPERIMENTAL}")
 message("WITH_GTKSPELL:           ${WITH_GTKSPELL}")
 message("WITH_IMAGE_MAGICK:       ${WITH_IMAGE_MAGICK}")
 message("WITH_LIBCDR:             ${WITH_LIBCDR}")
@@ -263,4 +273,23 @@ message("WITH_LIBWPG:             ${WITH_LIBWPG}")
 message("WITH_NLS:                ${WITH_NLS}")
 message("WITH_OPENMP:             ${WITH_OPENMP}")
 message("WITH_PROFILING:          ${WITH_PROFILING}")
+message("WITH_YAML:               ${WITH_YAML}")
+
+if(WIN32)
+message("")
+message("HAVE_MINGW:              ${HAVE_MINGW}")
+message("HAVE_MINGW64:            ${HAVE_MINGW64}")
+message("MINGW_PATH:              ${MINGW_PATH}")
+message("MINGW_ARCH:              ${MINGW_ARCH}")
+message("MINGW_ARCH_PATH:         ${MINGW_ARCH_PATH}")
+message("MINGW64_INCLUDE:         ${MINGW64_INCLUDE}")
+message("MINGW64_LIB:             ${MINGW64_LIB}")
+message("DEVLIBS_PATH:            ${DEVLIBS_PATH}")
+message("DEVLIBS_LIB:             ${DEVLIBS_LIB}")
+message("DEVLIBS_BIN:             ${DEVLIBS_BIN}")
+message("PKG_CONFIG_PATH:         ${PKG_CONFIG_PATH}")
+message("GS_PATH                  ${GS_PATH}")
+message("GS_BIN                   ${GS_BIN}")
+endif()
+
 message("------------------------------------------------------------------------")

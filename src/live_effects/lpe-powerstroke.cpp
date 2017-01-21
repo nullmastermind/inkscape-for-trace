@@ -13,32 +13,20 @@
 #include "live_effects/lpe-powerstroke.h"
 #include "live_effects/lpe-powerstroke-interpolators.h"
 
-#include "sp-shape.h"
 #include "style.h"
-#include "xml/repr.h"
-#include "sp-paint-server.h"
 #include "svg/svg-color.h"
 #include "desktop-style.h"
 #include "svg/css-ostringstream.h"
 #include "display/curve.h"
 
-#include <2geom/path.h>
-#include <2geom/piecewise.h>
-#include <2geom/sbasis-geometric.h>
-#include <2geom/transforms.h>
-#include <2geom/bezier-utils.h>
 #include <2geom/elliptical-arc.h>
-#include <2geom/sbasis-to-bezier.h>
 #include <2geom/path-sink.h>
 #include <2geom/path-intersection.h>
-#include <2geom/crossing.h>
-#include <2geom/ellipse.h>
 #include <2geom/circle.h>
-#include <2geom/math-utils.h>
 #include "helper/geom.h"
-#include <math.h>
 
-#include "spiro.h"
+// TODO due to internal breakage in glibmm headers, this must be last:
+#include <glibmm/i18n.h>
 
 namespace Geom {
 // should all be moved to 2geom at some point
@@ -624,11 +612,12 @@ LPEPowerStroke::doEffect_path (Geom::PathVector const & path_in)
     // find time values for which x lies outside path domain
     // and only take portion of x and y that lies within those time values
     std::vector< double > rtsmin = roots (x - pwd2_in.domain().min());
-    std::vector< double > rtsmax = roots (x - pwd2_in.domain().max());
+    std::vector< double > rtsmax = roots (x + pwd2_in.domain().max());
     if ( !rtsmin.empty() && !rtsmax.empty() ) {
         x = portion(x, rtsmin.at(0), rtsmax.at(0));
         y = portion(y, rtsmin.at(0), rtsmax.at(0));
     }
+
     LineJoinType jointype = static_cast<LineJoinType>(linejoin_type.get_value());
 
     Piecewise<D2<SBasis> > pwd2_out   = compose(pwd2_in,x) + y*compose(n,x);

@@ -13,26 +13,20 @@
 
 #include "live_effects/lpe-taperstroke.h"
 
-#include <2geom/path.h>
-#include <2geom/path.h>
 #include <2geom/circle.h>
 #include <2geom/sbasis-to-bezier.h>
 
 #include "helper/geom-nodetype.h"
 #include "helper/geom-pathstroke.h"
 #include "display/curve.h"
-#include "sp-shape.h"
 #include "style.h"
-#include "xml/repr.h"
-#include "sp-paint-server.h"
 #include "svg/svg-color.h"
 #include "desktop-style.h"
 #include "svg/css-ostringstream.h"
 #include "svg/svg.h"
 
-#include "knot-holder-entity.h"
 #include "knotholder.h"
-
+// TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
 
 template<typename T>
@@ -441,14 +435,14 @@ Piecewise<D2<SBasis> > stretch_along(Piecewise<D2<SBasis> > pwd2_in, Geom::Path 
     }
 }
 
-void LPETaperStroke::addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item)
+void LPETaperStroke::addKnotHolderEntities(KnotHolder *knotholder, SPItem *item)
 {
     KnotHolderEntity *e = new TpS::KnotHolderEntityAttachBegin(this);
-    e->create(desktop, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN, _("Start point of the taper"), SP_KNOT_SHAPE_CIRCLE);
+    e->create(NULL, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN, _("Start point of the taper"), SP_KNOT_SHAPE_CIRCLE);
     knotholder->add(e);
 
     KnotHolderEntity *f = new TpS::KnotHolderEntityAttachEnd(this);
-    f->create(desktop, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN, _("End point of the taper"), SP_KNOT_SHAPE_CIRCLE);
+    f->create(NULL, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN, _("End point of the taper"), SP_KNOT_SHAPE_CIRCLE);
     knotholder->add(f);
 }
 

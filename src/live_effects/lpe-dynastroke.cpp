@@ -14,14 +14,10 @@
 #include "display/curve.h"
 //# include <libnr/n-art-bpath.h>
 
-#include <2geom/path.h>
-#include <2geom/sbasis.h>
-#include <2geom/sbasis-geometric.h>
 #include <2geom/bezier-to-sbasis.h>
-#include <2geom/sbasis-to-bezier.h>
-#include <2geom/d2.h>
 #include <2geom/sbasis-math.h>
-#include <2geom/piecewise.h>
+// TODO due to internal breakage in glibmm headers, this must be last:
+#include <glibmm/i18n.h>
 
 namespace Inkscape {
 namespace LivePathEffect {

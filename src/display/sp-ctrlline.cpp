@@ -52,6 +52,7 @@ static void sp_ctrlline_init(SPCtrlLine *ctrlline)
     ctrlline->rgba = 0x0000ff7f;
     ctrlline->s[Geom::X] = ctrlline->s[Geom::Y] = ctrlline->e[Geom::X] = ctrlline->e[Geom::Y] = 0.0;
     ctrlline->item=NULL;
+    ctrlline->is_fill = true;
 }
 
 namespace {
@@ -84,7 +85,7 @@ void sp_ctrlline_render(SPCanvasItem *item, SPCanvasBuf *buf)
     Geom::Point s = cl->s * cl->affine;
     Geom::Point e = cl->e * cl->affine;
 
-    ink_cairo_set_source_rgba32(buf->ct, 0xffffffbf);
+    ink_cairo_set_source_rgba32(buf->ct, 0xffffff7f);
     cairo_set_line_width(buf->ct, 2);
     cairo_new_path(buf->ct);
 

@@ -17,25 +17,18 @@
 #include "message-stack.h"
 
 #include "helper/window.h"
-#include "macros.h"
 #include "inkscape.h"
 #include "document.h"
-#include "selection.h"
 #include "desktop.h"
 
 #include "ui/tools-switch.h"
 #include "ui/tools/text-tool.h"
 #include "ui/interface.h"
-#include "preferences.h"
-#include "sp-text.h"
 #include "sp-flowtext.h"
 #include "text-editing.h"
-#include "sp-tspan.h"
 #include "sp-tref.h"
 #include "sp-defs.h"
 #include "selection-chemistry.h"
-#include <xml/repr.h>
-#include "display/canvas-bpath.h"
 #include "display/curve.h"
 #include "document-undo.h"
 #include "sp-root.h"
@@ -47,7 +40,7 @@
 #endif
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+#include "config.h"
 #endif
 
 
@@ -234,14 +227,14 @@ GSList *SpellCheck::allTextItems (SPObject *r, GSList *l, bool hidden, bool lock
         return l; // we're not interested in metadata
     }
 
-    for (SPObject *child = r->firstChild(); child; child = child->next) {
-        if (SP_IS_ITEM (child) && !child->cloned && !desktop->isLayer(SP_ITEM(child))) {
-                if ((hidden || !desktop->itemIsHidden(SP_ITEM(child))) && (locked || !SP_ITEM(child)->isLocked())) {
-                    if (SP_IS_TEXT(child) || SP_IS_FLOWTEXT(child))
-                        l = g_slist_prepend (l, child);
+    for (auto& child: r->children) {
+        if (SP_IS_ITEM (&child) && !child.cloned && !desktop->isLayer(SP_ITEM(&child))) {
+                if ((hidden || !desktop->itemIsHidden(SP_ITEM(&child))) && (locked || !SP_ITEM(&child)->isLocked())) {
+                    if (SP_IS_TEXT(&child) || SP_IS_FLOWTEXT(&child))
+                        l = g_slist_prepend (l, &child);
                 }
         }
-        l = allTextItems (child, l, hidden, locked);
+        l = allTextItems (&child, l, hidden, locked);
     }
     return l;
 }

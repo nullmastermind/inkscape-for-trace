@@ -8,7 +8,6 @@
  */
 
 #include "prefdialog.h"
-#include <gtkmm/stock.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/separator.h>
 #include <glibmm/i18n.h>
@@ -41,11 +40,7 @@ namespace Extension {
     them.  It also places the passed-in widgets into the dialog.
 */
 PrefDialog::PrefDialog (Glib::ustring name, gchar const * help, Gtk::Widget * controls, Effect * effect) :
-#if WITH_GTKMM_3_0
     Gtk::Dialog(_(name.c_str()), true),
-#else
-    Gtk::Dialog(_(name.c_str()), true, true),
-#endif
     _help(help),
     _name(name),
     _button_ok(NULL),
@@ -68,22 +63,15 @@ PrefDialog::PrefDialog (Glib::ustring name, gchar const * help, Gtk::Widget * co
     hbox->pack_start(*controls, true, true, 6);
     hbox->show();
 
-#if WITH_GTKMM_3_0
     this->get_content_area()->pack_start(*hbox, true, true, 6);
-#else
-    this->get_vbox()->pack_start(*hbox, true, true, 6);
-#endif
 
     /*
     Gtk::Button * help_button = add_button(Gtk::Stock::HELP, Gtk::RESPONSE_HELP);
     if (_help == NULL)
         help_button->set_sensitive(false);
     */
-    _button_cancel = add_button(_effect == NULL ? Gtk::Stock::CANCEL : Gtk::Stock::CLOSE, Gtk::RESPONSE_CANCEL);
-    _button_cancel->set_use_stock(true);
-
-    _button_ok = add_button(_effect == NULL ? Gtk::Stock::OK : Gtk::Stock::APPLY, Gtk::RESPONSE_OK);
-    _button_ok->set_use_stock(true);
+    _button_cancel = add_button(_effect == NULL ? _("_Cancel") : _("_Close"), Gtk::RESPONSE_CANCEL);
+    _button_ok     = add_button(_effect == NULL ? _("_OK")     : _("_Apply"), Gtk::RESPONSE_OK);
     set_default_response(Gtk::RESPONSE_OK);
     _button_ok->grab_focus();
 
@@ -97,19 +85,10 @@ PrefDialog::PrefDialog (Glib::ustring name, gchar const * help, Gtk::Widget * co
             _param_preview = Parameter::make(doc->root(), _effect);
         }
 
-#if WITH_GTKMM_3_0
-        Gtk::Separator * sep = Gtk::manage(new Gtk::Separator());
-#else
-        Gtk::HSeparator * sep = Gtk::manage(new Gtk::HSeparator());
-#endif
-
+        auto sep = Gtk::manage(new Gtk::Separator());
         sep->show();
 
-#if WITH_GTKMM_3_0
         this->get_content_area()->pack_start(*sep, true, true, 4);
-#else
-        this->get_vbox()->pack_start(*sep, true, true, 4);
-#endif
 
         hbox = Gtk::manage(new Gtk::HBox());
         _button_preview = _param_preview->get_widget(NULL, NULL, &_signal_preview);
@@ -117,19 +96,11 @@ PrefDialog::PrefDialog (Glib::ustring name, gchar const * help, Gtk::Widget * co
         hbox->pack_start(*_button_preview, true, true,6);
         hbox->show();
 
-#if WITH_GTKMM_3_0
         this->get_content_area()->pack_start(*hbox, true, true, 6);
-#else
-        this->get_vbox()->pack_start(*hbox, true, true, 6);
-#endif
 
         Gtk::Box * hbox = dynamic_cast<Gtk::Box *>(_button_preview);
         if (hbox != NULL) {
-#if WITH_GTKMM_3_0
             _checkbox_preview = dynamic_cast<Gtk::CheckButton *>(hbox->get_children().front());
-#else
-            _checkbox_preview = dynamic_cast<Gtk::CheckButton *>(hbox->children().back().get_widget());
-#endif
         }
 
         preview_toggle();

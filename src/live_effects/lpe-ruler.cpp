@@ -12,11 +12,8 @@
  */
 
 #include "live_effects/lpe-ruler.h"
-#include <2geom/piecewise.h>
-#include <2geom/sbasis-geometric.h>
-#include "inkscape.h"
-#include "desktop.h"
-
+// TODO due to internal breakage in glibmm headers, this must be last:
+#include <glibmm/i18n.h>
 
 namespace Inkscape {
 namespace LivePathEffect {

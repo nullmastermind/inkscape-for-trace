@@ -62,7 +62,7 @@ BlurEdge::effect (Inkscape::Extension::Effect *module, Inkscape::UI::View::View 
     double old_offset = prefs->getDouble("/options/defaultoffsetwidth/value", 1.0, "px");
 
     // TODO need to properly refcount the items, at least
-    std::vector<SPItem*> items(selection->itemList());
+    std::vector<SPItem*> items(selection->items().begin(), selection->items().end());
     selection->clear();
 
     for(std::vector<SPItem*>::iterator item = items.begin();
@@ -90,7 +90,7 @@ BlurEdge::effect (Inkscape::Extension::Effect *module, Inkscape::UI::View::View 
 
             new_group->appendChild(new_items[i]);
             selection->add(new_items[i]);
-            sp_selected_path_to_curves(selection, static_cast<SPDesktop *>(desktop));
+            selection->toCurves();
 
             if (offset < 0.0) {
                 /* Doing an inset here folks */

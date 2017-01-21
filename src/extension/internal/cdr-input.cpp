@@ -111,17 +111,13 @@ CdrImportDialog::CdrImportDialog(const std::vector<RVNGString> &vec)
      _previewArea = Gtk::manage(new class Gtk::VBox());
      vbox1 = Gtk::manage(new class Gtk::VBox());
      vbox1->pack_start(*_previewArea, Gtk::PACK_EXPAND_WIDGET, 0);
-#if WITH_GTKMM_3_0
      this->get_content_area()->pack_start(*vbox1);
-#else
-     this->get_vbox()->pack_start(*vbox1);
-#endif
 
      // CONTROLS
 
      // Buttons
-     cancelbutton = Gtk::manage(new class Gtk::Button(Gtk::StockID("gtk-cancel")));
-     okbutton = Gtk::manage(new class Gtk::Button(Gtk::StockID("gtk-ok")));
+     cancelbutton = Gtk::manage(new Gtk::Button(_("_Cancel"), true));
+     okbutton     = Gtk::manage(new Gtk::Button(_("_OK"),     true));
 
      // Labels
      _labelSelect = Gtk::manage(new class Gtk::Label(_("Select page:")));
@@ -137,13 +133,8 @@ CdrImportDialog::CdrImportDialog(const std::vector<RVNGString> &vec)
      g_free(label_text);
 
      // Adjustment + spinner
-#if WITH_GTKMM_3_0
-     Glib::RefPtr<Gtk::Adjustment> _pageNumberSpin_adj = Gtk::Adjustment::create(1, 1, _vec.size(), 1, 10, 0);
+     auto _pageNumberSpin_adj = Gtk::Adjustment::create(1, 1, _vec.size(), 1, 10, 0);
      _pageNumberSpin = Gtk::manage(new Gtk::SpinButton(_pageNumberSpin_adj, 1, 0));
-#else
-     Gtk::Adjustment *_pageNumberSpin_adj = Gtk::manage(new class Gtk::Adjustment(1, 1, _vec.size(), 1, 10, 0));
-     _pageNumberSpin = Gtk::manage(new Gtk::SpinButton(*_pageNumberSpin_adj, 1, 0));
-#endif
      _pageNumberSpin->set_can_focus();
      _pageNumberSpin->set_update_policy(Gtk::UPDATE_ALWAYS);
      _pageNumberSpin->set_numeric(true);
@@ -223,6 +214,13 @@ void CdrImportDialog::_setPreviewPage()
 
 SPDocument *CdrInput::open(Inkscape::Extension::Input * /*mod*/, const gchar * uri)
 {
+     #ifdef WIN32
+          // RVNGFileStream uses fopen() internally which unfortunately only uses ANSI encoding on Windows
+          // therefore attempt to convert uri to the system codepage
+          // even if this is not possible the alternate short (8.3) file name will be used if available
+          uri = g_win32_locale_filename_from_utf8(uri);
+     #endif
+
      RVNGFileStream input(uri);
 
      if (!libcdr::CDRDocument::isSupported(&input)) {

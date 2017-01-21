@@ -21,8 +21,6 @@
 #include <2geom/circle.h>
 #include <2geom/ellipse.h>
 #include <2geom/path-sink.h>
-#include <2geom/pathvector.h>
-#include <2geom/transforms.h>
 
 #include "attributes.h"
 #include "display/curve.h"
@@ -33,12 +31,6 @@
 #include "style.h"
 #include "svg/svg.h"
 #include "svg/path-string.h"
-#include "xml/repr.h"
-
-
-#ifndef M_PI
-#define M_PI 3.14159265358979323846
-#endif
 
 #define SP_2PI (2 * M_PI)
 

@@ -26,7 +26,7 @@
 
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+#include <config.h>
 #endif
 
 #include <cstring>
@@ -37,7 +37,6 @@
 // If this is not done, then errors will be generate relating to Glib::Threads being undefined
 #include <gtkmm/filechooserdialog.h>
 #include <gtkmm/messagedialog.h>
-#include <gtkmm/stock.h>
 
 #include "desktop.h"
 
@@ -45,11 +44,9 @@
 #include "document.h"
 #include "ui/tools/freehand-base.h"
 #include "extension/effect.h"
-#include "ui/tools/tool-base.h"
 #include "file.h"
 #include "gradient-drag.h"
 #include "helper/action.h"
-#include "helper/action-context.h"
 #include "help.h"
 #include "inkscape.h"
 #include "ui/interface.h"
@@ -57,7 +54,6 @@
 #include "layer-manager.h"
 #include "message-stack.h"
 #include "path-chemistry.h"
-#include "preferences.h"
 #include "ui/tools/select-tool.h"
 #include "selection-chemistry.h"
 #include "seltrans.h"
@@ -87,9 +83,6 @@
 #include "ui/dialog/spellcheck.h"
 #include "ui/icon-names.h"
 #include "ui/tools/node-tool.h"
-#include "selection.h"
-
-#include <gtk/gtk.h>
 
 using Inkscape::DocumentUndo;
 using Inkscape::UI::Dialog::ActionAlign;
@@ -823,7 +816,7 @@ Verb *Verb::get_search(unsigned int code)
  *
  * @param  id  Which id to search for.
  */
-Verb *Verb::getbyid(gchar const *id)
+Verb *Verb::getbyid(gchar const *id, bool verbose)
 {
     Verb *verb = NULL;
     VerbIDTable::iterator verb_found = _verb_ids.find(id);
@@ -839,8 +832,10 @@ Verb *Verb::getbyid(gchar const *id)
                 && strcmp(id, "SelectionTrace")   != 0
                 && strcmp(id, "PaintBucketPrefs") != 0
 #endif
-            )
-        printf("Unable to find: %s\n", id);
+            ) {
+        if (verbose)
+            printf("Unable to find: %s\n", id);
+    }
 
     return verb;
 }
@@ -960,85 +955,88 @@ void EditVerb::perform(SPAction *action, void *data)
             sp_redo(dt, dt->getDocument());
             break;
         case SP_VERB_EDIT_CUT:
-            sp_selection_cut(dt);
+            dt->selection->cut();
             break;
         case SP_VERB_EDIT_COPY:
-            sp_selection_copy(dt);
+            dt->selection->copy();
             break;
         case SP_VERB_EDIT_PASTE:
             sp_selection_paste(dt, false);
             break;
         case SP_VERB_EDIT_PASTE_STYLE:
-            sp_selection_paste_style(dt);
+            dt->selection->pasteStyle();
             break;
         case SP_VERB_EDIT_PASTE_SIZE:
-            sp_selection_paste_size(dt, true, true);
+            dt->selection->pasteSize(true,true);
             break;
         case SP_VERB_EDIT_PASTE_SIZE_X:
-            sp_selection_paste_size(dt, true, false);
+            dt->selection->pasteSize(true, false);
             break;
         case SP_VERB_EDIT_PASTE_SIZE_Y:
-            sp_selection_paste_size(dt, false, true);
+            dt->selection->pasteSize(false, true);
             break;
         case SP_VERB_EDIT_PASTE_SIZE_SEPARATELY:
-            sp_selection_paste_size_separately(dt, true, true);
+            dt->selection->pasteSizeSeparately(true, true);
             break;
         case SP_VERB_EDIT_PASTE_SIZE_SEPARATELY_X:
-            sp_selection_paste_size_separately(dt, true, false);
+            dt->selection->pasteSizeSeparately(true, false);
             break;
         case SP_VERB_EDIT_PASTE_SIZE_SEPARATELY_Y:
-            sp_selection_paste_size_separately(dt, false, true);
+            dt->selection->pasteSizeSeparately(false, true);
             break;
         case SP_VERB_EDIT_PASTE_IN_PLACE:
             sp_selection_paste(dt, true);
             break;
         case SP_VERB_EDIT_PASTE_LIVEPATHEFFECT:
-            sp_selection_paste_livepatheffect(dt);
+            dt->selection->pastePathEffect();
             break;
         case SP_VERB_EDIT_REMOVE_LIVEPATHEFFECT:
-            sp_selection_remove_livepatheffect(dt);
+            dt->selection->removeLPE();
             break;
         case SP_VERB_EDIT_REMOVE_FILTER:
-            sp_selection_remove_filter(dt);
+            dt->selection->removeFilter();
             break;
         case SP_VERB_EDIT_DELETE:
-            sp_selection_delete(dt);
+            dt->selection->deleteItems();
             break;
         case SP_VERB_EDIT_DUPLICATE:
-            sp_selection_duplicate(dt);
+            dt->selection->duplicate();
             break;
         case SP_VERB_EDIT_CLONE:
-            sp_selection_clone(dt);
+            dt->selection->clone();
             break;
         case SP_VERB_EDIT_UNLINK_CLONE:
-            sp_selection_unlink(dt);
+            dt->selection->unlink();
+            break;
+        case SP_VERB_EDIT_UNLINK_CLONE_RECURSIVE:
+            dt->selection->unlinkRecursive();
             break;
         case SP_VERB_EDIT_RELINK_CLONE:
-            sp_selection_relink(dt);
+            dt->selection->relink();
             break;
         case SP_VERB_EDIT_CLONE_SELECT_ORIGINAL:
-            sp_select_clone_original(dt);
+            dt->selection->cloneOriginal();
             break;
         case SP_VERB_EDIT_CLONE_ORIGINAL_PATH_LPE:
-            sp_selection_clone_original_path_lpe(dt);
+            dt->selection->cloneOriginalPathLPE();
             break;
         case SP_VERB_EDIT_SELECTION_2_MARKER:
-            sp_selection_to_marker(dt);
+            dt->selection->toMarker();
             break;
         case SP_VERB_EDIT_SELECTION_2_GUIDES:
-            sp_selection_to_guides(dt);
+            dt->selection->toGuides();
             break;
         case SP_VERB_EDIT_TILE:
-            sp_selection_tile(dt);
+            dt->selection->tile();
             break;
         case SP_VERB_EDIT_UNTILE:
-            sp_selection_untile(dt);
+            dt->selection->untile();
             break;
         case SP_VERB_EDIT_SYMBOL:
-            sp_selection_symbol(dt);
+            dt->selection->toSymbol();
             break;
         case SP_VERB_EDIT_UNSYMBOL:
-            sp_selection_unsymbol(dt);
+            dt->selection->unSymbol();
             break;
         case SP_VERB_EDIT_SELECT_ALL:
             SelectionHelper::selectAll(dt);
@@ -1088,6 +1086,9 @@ void EditVerb::perform(SPAction *action, void *data)
         case SP_VERB_EDIT_NEXT_PATHEFFECT_PARAMETER:
             sp_selection_next_patheffect_param(dt);
             break;
+        case SP_VERB_EDIT_SWAP_FILL_STROKE:
+            dt->selection->swapFillStroke();
+            break;
         case SP_VERB_EDIT_LINK_COLOR_PROFILE:
             break;
         case SP_VERB_EDIT_REMOVE_COLOR_PROFILE:
@@ -1105,6 +1106,7 @@ void SelectionVerb::perform(SPAction *action, void *data)
 {
     Inkscape::Selection *selection = sp_action_get_selection(action);
     SPDesktop *dt = sp_action_get_desktop(action);
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     // Some of these operations have been modified so they work in command-line mode!
     // In this case, all we need is a selection
@@ -1115,43 +1117,75 @@ void SelectionVerb::perform(SPAction *action, void *data)
     bool handled = true;
     switch (reinterpret_cast<std::size_t>(data)) {
         case SP_VERB_SELECTION_UNION:
-            sp_selected_path_union(selection, dt);
+            selection->pathUnion();
             break;
         case SP_VERB_SELECTION_INTERSECT:
-            sp_selected_path_intersect(selection, dt);
+            selection->pathIntersect();
             break;
         case SP_VERB_SELECTION_DIFF:
-            sp_selected_path_diff(selection, dt);
+            selection->pathDiff();
             break;
         case SP_VERB_SELECTION_SYMDIFF:
-            sp_selected_path_symdiff(selection, dt);
+            selection->pathSymDiff();
             break;
         case SP_VERB_SELECTION_CUT:
-            sp_selected_path_cut(selection, dt);
+            selection->pathCut();
             break;
         case SP_VERB_SELECTION_SLICE:
-            sp_selected_path_slice(selection, dt);
+            selection->pathSlice();
             break;
+        case SP_VERB_SELECTION_GROW:
+        {
+            // FIXME these and the other grow/shrink they should use gobble_key_events.
+            // the problem is how to get access to which key, if any, to gobble.
+            selection->scale(prefs->getDoubleLimited("/options/defaultscale/value", 2, 0, 1000));
+            break;
+        }
+        case SP_VERB_SELECTION_GROW_SCREEN:
+        {
+            selection->scaleScreen(2);
+            break;
+        }
+        case SP_VERB_SELECTION_GROW_DOUBLE:
+        {
+            selection->scaleTimes(2);
+            break;
+        }
+        case SP_VERB_SELECTION_SHRINK:
+        {
+            selection->scale(-prefs->getDoubleLimited("/options/defaultscale/value", 2, 0, 1000));
+            break;
+        }
+        case SP_VERB_SELECTION_SHRINK_SCREEN:
+        {
+            selection->scaleScreen(-2);
+            break;
+        }
+        case SP_VERB_SELECTION_SHRINK_HALVE:
+        {
+            selection->scaleTimes(0.5);
+            break;
+        }
         case SP_VERB_SELECTION_TO_FRONT:
-            sp_selection_raise_to_top(selection, dt);
+            selection->raiseToTop();
             break;
         case SP_VERB_SELECTION_TO_BACK:
-            sp_selection_lower_to_bottom(selection, dt);
+            selection->lowerToBottom();
             break;
         case SP_VERB_SELECTION_RAISE:
-            sp_selection_raise(selection, dt);
+            selection->raise();
             break;
         case SP_VERB_SELECTION_LOWER:
-            sp_selection_lower(selection, dt);
+            selection->lower();
             break;
         case SP_VERB_SELECTION_GROUP:
-            sp_selection_group(selection, dt);
+            selection->group();
             break;
         case SP_VERB_SELECTION_UNGROUP:
-            sp_selection_ungroup(selection, dt);
+            selection->ungroup();
             break;
         case SP_VERB_SELECTION_UNGROUP_POP_SELECTION:
-            sp_selection_ungroup_pop_selection(selection, dt);
+        selection->popFromGroup();
             break;
         default:
             handled = false;
@@ -1207,6 +1241,9 @@ void SelectionVerb::perform(SPAction *action, void *data)
         case SP_VERB_SELECTION_OUTLINE:
             sp_selected_path_outline(dt);
             break;
+        case SP_VERB_SELECTION_OUTLINE_LEGACY:
+            sp_selected_path_outline(dt, true);
+            break;
         case SP_VERB_SELECTION_SIMPLIFY:
             sp_selected_path_simplify(dt);
             break;
@@ -1226,14 +1263,14 @@ void SelectionVerb::perform(SPAction *action, void *data)
             dt->_dlg_mgr->showDialog("PixelArt");
             break;
         case SP_VERB_SELECTION_CREATE_BITMAP:
-            sp_selection_create_bitmap_copy(dt);
+            dt->selection->createBitmapCopy();
             break;
 
         case SP_VERB_SELECTION_COMBINE:
-            sp_selected_path_combine(dt);
+            selection->combine();
             break;
         case SP_VERB_SELECTION_BREAK_APART:
-            sp_selected_path_break_apart(dt);
+            selection->breakApart();
             break;
         case SP_VERB_SELECTION_ARRANGE:
             INKSCAPE.dialogs_unhide();
@@ -1292,11 +1329,11 @@ void LayerVerb::perform(SPAction *action, void *data)
             break;
         }
         case SP_VERB_LAYER_MOVE_TO_NEXT: {
-            sp_selection_to_next_layer(dt);
+            dt->selection->toNextLayer();
             break;
         }
         case SP_VERB_LAYER_MOVE_TO_PREV: {
-            sp_selection_to_prev_layer(dt);
+            dt->selection->toPrevLayer();
             break;
         }
         case SP_VERB_LAYER_MOVE_TO: {
@@ -1367,7 +1404,7 @@ void LayerVerb::perform(SPAction *action, void *data)
         case SP_VERB_LAYER_DUPLICATE: {
             if ( dt->currentLayer() != dt->currentRoot() ) {
 
-            	sp_selection_duplicate(dt, true, true);
+                dt->selection->duplicate(true,true);
 
                 DocumentUndo::done(dt->getDocument(), SP_VERB_LAYER_DUPLICATE,
                                    _("Duplicate layer"));
@@ -1483,7 +1520,7 @@ void ObjectVerb::perform( SPAction *action, void *data)
     bool handled = true;
     switch (reinterpret_cast<std::size_t>(data)) {
         case SP_VERB_OBJECT_TO_CURVE:
-            sp_selected_path_to_curves(sel, dt);
+            sel->toCurves();
             break;
         default:
             handled = false;
@@ -1514,13 +1551,13 @@ void ObjectVerb::perform( SPAction *action, void *data)
 
     switch (reinterpret_cast<std::size_t>(data)) {
         case SP_VERB_OBJECT_ROTATE_90_CW:
-            sp_selection_rotate_90(dt, false);
+            sel->rotate90(false);
             break;
         case SP_VERB_OBJECT_ROTATE_90_CCW:
-            sp_selection_rotate_90(dt, true);
+            sel->rotate90(true);
             break;
         case SP_VERB_OBJECT_FLATTEN:
-            sp_selection_remove_transform(dt);
+            sel->removeTransform();
             break;
         case SP_VERB_OBJECT_FLOW_TEXT:
             text_flow_into_shape();
@@ -1532,35 +1569,35 @@ void ObjectVerb::perform( SPAction *action, void *data)
             flowtext_to_text();
             break;
         case SP_VERB_OBJECT_FLIP_HORIZONTAL:
-            sp_selection_scale_relative(sel, center, Geom::Scale(-1.0, 1.0));
+            sel->setScaleRelative(center, Geom::Scale(-1.0, 1.0));
             DocumentUndo::done(dt->getDocument(), SP_VERB_OBJECT_FLIP_HORIZONTAL,
                                _("Flip horizontally"));
             break;
         case SP_VERB_OBJECT_FLIP_VERTICAL:
-            sp_selection_scale_relative(sel, center, Geom::Scale(1.0, -1.0));
+            sel->setScaleRelative(center, Geom::Scale(1.0, -1.0));
             DocumentUndo::done(dt->getDocument(), SP_VERB_OBJECT_FLIP_VERTICAL,
                                _("Flip vertically"));
             break;
         case SP_VERB_OBJECT_SET_MASK:
-            sp_selection_set_mask(dt, false, false);
+            sel->setMask(false, false);
             break;
         case SP_VERB_OBJECT_EDIT_MASK:
-            sp_selection_edit_clip_or_mask(dt, false);
+            sel->editMask(false);
             break;
         case SP_VERB_OBJECT_UNSET_MASK:
-            sp_selection_unset_mask(dt, false);
+            sel->unsetMask(false);
             break;
         case SP_VERB_OBJECT_SET_CLIPPATH:
-            sp_selection_set_mask(dt, true, false);
+            sel->setMask(true, false);
             break;
         case SP_VERB_OBJECT_CREATE_CLIP_GROUP:
-            sp_selection_set_clipgroup(dt);
+            sel->setClipGroup();
             break;
         case SP_VERB_OBJECT_EDIT_CLIPPATH:
-            sp_selection_edit_clip_or_mask(dt, true);
+            sel->editMask(true);
             break;
         case SP_VERB_OBJECT_UNSET_CLIPPATH:
-            sp_selection_unset_mask(dt, true);
+            sel->unsetMask(true);
             break;
         default:
             break;
@@ -1845,7 +1882,7 @@ void ZoomVerb::perform(SPAction *action, void *data)
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     gdouble zoom_inc =
-        prefs->getDoubleLimited( "/options/zoomincrement/value", 1.414213562, 1.01, 10 );
+        prefs->getDoubleLimited( "/options/zoomincrement/value", M_SQRT2, 1.01, 10 );
 
     double zcorr = 1.0;
     Glib::ustring abbr = prefs->getString("/options/zoomcorrection/unit");
@@ -1859,6 +1896,7 @@ void ZoomVerb::perform(SPAction *action, void *data)
         {
             gint mul = 1 + Inkscape::UI::Tools::gobble_key_events(
                  GDK_KEY_KP_Add, 0); // with any mask
+            // FIXME what if zoom out is bound to something other than subtract?
             // While drawing with the pen/pencil tool, zoom towards the end of the unfinished path
             if (tools_isactive(dt, TOOLS_FREEHAND_PENCIL) || tools_isactive(dt, TOOLS_FREEHAND_PEN)) {
                 SPCurve *rc = SP_DRAW_CONTEXT(ec)->red_curve;
@@ -2326,7 +2364,7 @@ void FitCanvasVerb::perform(SPAction *action, void *data)
 
     switch (reinterpret_cast<std::size_t>(data)) {
         case SP_VERB_FIT_CANVAS_TO_SELECTION:
-            verb_fit_canvas_to_selection(dt);
+            dt->selection->fitCanvas(true);
             break;
         case SP_VERB_FIT_CANVAS_TO_DRAWING:
             verb_fit_canvas_to_drawing(dt);
@@ -2497,6 +2535,8 @@ Verb *Verb::_base_verbs[] = {
                  N_("Create a clone (a copy linked to the original) of selected object"), INKSCAPE_ICON("edit-clone")),
     new EditVerb(SP_VERB_EDIT_UNLINK_CLONE, "EditUnlinkClone", N_("Unlin_k Clone"),
                  N_("Cut the selected clones' links to the originals, turning them into standalone objects"), INKSCAPE_ICON("edit-clone-unlink")),
+    new EditVerb(SP_VERB_EDIT_UNLINK_CLONE_RECURSIVE, "EditUnlinkCloneRecursive", N_("Unlink Clones _recursively"),
+                 N_("Unlink all clones in the selection, even if they are in groups."), INKSCAPE_ICON("edit-clone-unlink")),
     new EditVerb(SP_VERB_EDIT_RELINK_CLONE, "EditRelinkClone", N_("Relink to Copied"),
                  N_("Relink the selected clones to the object currently on the clipboard"), NULL),
     new EditVerb(SP_VERB_EDIT_CLONE_SELECT_ORIGINAL, "EditCloneSelectOriginal", N_("Select _Original"),
@@ -2548,6 +2588,8 @@ Verb *Verb::_base_verbs[] = {
                  N_("Create four guides aligned with the page borders"), NULL),
     new EditVerb(SP_VERB_EDIT_NEXT_PATHEFFECT_PARAMETER, "EditNextPathEffectParameter", N_("Next path effect parameter"),
                  N_("Show next editable path effect parameter"), INKSCAPE_ICON("path-effect-parameter-next")),
+    new EditVerb(SP_VERB_EDIT_SWAP_FILL_STROKE, "EditSwapFillStroke", N_("Swap fill and stroke"),
+                 N_("Swap fill and stroke of an object"), NULL),
 
     // Selection
     new SelectionVerb(SP_VERB_SELECTION_TO_FRONT, "SelectionToFront", N_("Raise to _Top"),
@@ -2588,6 +2630,18 @@ Verb *Verb::_base_verbs[] = {
     // Advanced tutorial for more info
     new SelectionVerb(SP_VERB_SELECTION_SLICE, "SelectionCutPath", N_("Cut _Path"),
                       N_("Cut the bottom path's stroke into pieces, removing fill"), INKSCAPE_ICON("path-cut")),
+    new SelectionVerb(SP_VERB_SELECTION_GROW, "SelectionGrow", N_("_Grow"),
+                      N_("Make selected objects bigger"), INKSCAPE_ICON("selection-grow")),
+    new SelectionVerb(SP_VERB_SELECTION_GROW_SCREEN, "SelectionGrowScreen", N_("_Grow on screen"),
+                      N_("Make selected objects bigger relative to screen"), INKSCAPE_ICON("selection-grow-screen")),
+    new SelectionVerb(SP_VERB_SELECTION_GROW_DOUBLE, "SelectionGrowDouble", N_("_Double size"),
+                      N_("Double the size of selected objects"), INKSCAPE_ICON("selection-grow-double")),
+    new SelectionVerb(SP_VERB_SELECTION_SHRINK, "SelectionShrink", N_("_Shrink"),
+                      N_("Make selected objects smaller"), INKSCAPE_ICON("selection-shrink")),
+    new SelectionVerb(SP_VERB_SELECTION_SHRINK_SCREEN, "SelectionShrinkScreen", N_("_Shrink on screen"),
+                      N_("Make selected objects smaller relative to screen"), INKSCAPE_ICON("selection-shrink-screen")),
+    new SelectionVerb(SP_VERB_SELECTION_SHRINK_HALVE, "SelectionShrinkHalve", N_("_Halve size"),
+                      N_("Halve the size of selected objects"), INKSCAPE_ICON("selection-shrink-halve")),
     // TRANSLATORS: "outset": expand a shape by offsetting the object's path,
     // i.e. by displacing it perpendicular to the path in each point.
     // See also the Advanced Tutorial for explanation.
@@ -2618,6 +2672,8 @@ Verb *Verb::_base_verbs[] = {
                       INKSCAPE_ICON("path-offset-linked")),
     new SelectionVerb(SP_VERB_SELECTION_OUTLINE, "StrokeToPath", N_("_Stroke to Path"),
                       N_("Convert selected object's stroke to paths"), INKSCAPE_ICON("stroke-to-path")),
+    new SelectionVerb(SP_VERB_SELECTION_OUTLINE_LEGACY, "StrokeToPathLegacy", N_("_Stroke to Path Legacy"),
+                      N_("Convert selected object's stroke to paths legacy mode"), INKSCAPE_ICON("stroke-to-path")),
     new SelectionVerb(SP_VERB_SELECTION_SIMPLIFY, "SelectionSimplify", N_("Si_mplify"),
                       N_("Simplify selected paths (remove extra nodes)"), INKSCAPE_ICON("path-simplify")),
     new SelectionVerb(SP_VERB_SELECTION_REVERSE, "SelectionReverse", N_("_Reverse"),
@@ -2895,7 +2951,7 @@ Verb *Verb::_base_verbs[] = {
 
     // Dialogs
     new DialogVerb(SP_VERB_DIALOG_DISPLAY, "DialogPreferences", N_("P_references..."),
-                   N_("Edit global Inkscape preferences"), INKSCAPE_ICON("preferences-system")),
+                   N_("Edit global Inkscape preferences"), INKSCAPE_ICON("gtk-preferences")),
     new DialogVerb(SP_VERB_DIALOG_NAMEDVIEW, "DialogDocumentProperties", N_("_Document Properties..."),
                    N_("Edit properties of this document (to be saved with the document)"), INKSCAPE_ICON("document-properties")),
     new DialogVerb(SP_VERB_DIALOG_METADATA, "DialogMetadata", N_("Document _Metadata..."),

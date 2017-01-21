@@ -28,10 +28,8 @@
 
 #include "pixelartdialog.h"
 #include <gtkmm/radiobutton.h>
-#include <gtkmm/stock.h>
 #include <gtkmm/messagedialog.h>
 
-#include <gtk/gtk.h> //for GTK_RESPONSE* types
 #include <glibmm/i18n.h>
 
 #include "ui/widget/spinbutton.h"
@@ -41,18 +39,13 @@
 #include "desktop-tracker.h"
 #include "message-stack.h"
 #include "selection.h"
-#include "preferences.h"
 
 #include "sp-image.h"
 #include "display/cairo-utils.h"
 #include "libdepixelize/kopftracer2011.h"
-#include <algorithm>
 #include "document.h"
-#include "xml/repr.h"
-#include "xml/document.h"
 #include "svg/svg.h"
 #include "svg/svg-color.h"
-#include "color.h"
 #include "svg/css-ostringstream.h"
 #include "document-undo.h"
 
@@ -297,12 +290,12 @@ PixelArtDialogImpl::PixelArtDialogImpl() :
         mainResetButton ->set_tooltip_text(_("Reset all settings to defaults"));
 
         //## The OK button
-        mainCancelButton = addResponseButton(Gtk::Stock::STOP, GTK_RESPONSE_CANCEL);
+        mainCancelButton = addResponseButton(_("_Stop"), GTK_RESPONSE_CANCEL);
         if (mainCancelButton) {
             mainCancelButton->set_tooltip_text(_("Abort a trace in progress"));
             mainCancelButton->set_sensitive(false);
         }
-        mainOkButton = addResponseButton(Gtk::Stock::OK, GTK_RESPONSE_OK);
+        mainOkButton = addResponseButton(_("_OK"), GTK_RESPONSE_OK);
         mainOkButton->set_tooltip_text(_("Execute the trace"));
 
         contents->pack_start(buttonsHBox);
@@ -372,8 +365,8 @@ void PixelArtDialogImpl::vectorize()
         return;
     }
 
-    std::vector<SPItem*> const items = desktop->selection->itemList();
-    for(std::vector<SPItem*>::const_iterator i=items.begin(); i!=items.end();++i){
+    auto items = desktop->selection->items();
+    for(auto i=items.begin(); i!=items.end();++i){
         if ( !SP_IS_IMAGE(*i) )
             continue;
 

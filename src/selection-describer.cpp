@@ -13,7 +13,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+#include <config.h>
 #endif
 
 #include <glibmm/i18n.h>
@@ -27,17 +27,8 @@
 #include "sp-flowtext.h"
 #include "sp-use.h"
 #include "sp-symbol.h"
-#include "sp-rect.h"
-#include "box3d.h"
-#include "sp-ellipse.h"
-#include "sp-star.h"
-#include "sp-anchor.h"
 #include "sp-image.h"
 #include "sp-path.h"
-#include "sp-line.h"
-#include "sp-use.h"
-#include "sp-polyline.h"
-#include "sp-spiral.h"
 
 // Returns a list of terms for the items to be used in the statusbar
 char* collect_terms (const std::vector<SPItem*> &items)
@@ -122,7 +113,7 @@ void SelectionDescriber::_selectionModified(Inkscape::Selection *selection, guin
 }
 
 void SelectionDescriber::_updateMessageFromSelection(Inkscape::Selection *selection) {
-	std::vector<SPItem*> const items = selection->itemList();
+	std::vector<SPItem*> items(selection->items().begin(), selection->items().end());
 
     if (items.empty()) { // no items
         _context.set(Inkscape::NORMAL_MESSAGE, _when_nothing);

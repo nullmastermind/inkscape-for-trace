@@ -23,16 +23,14 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+#include <config.h>
 #endif
 
 #include "style-internal.h"
-#include "style-enums.h"
 #include "style.h"
 
 #include "svg/svg.h"
 #include "svg/svg-color.h"
-#include "svg/svg-icc-color.h"
 
 #include "streq.h"
 #include "strneq.h"
@@ -41,9 +39,6 @@
 #include "preferences.h"
 #include "svg/css-ostringstream.h"
 #include "util/units.h"
-
-#include <sigc++/functors/ptr_fun.h>
-#include <sigc++/adaptors/bind.h>
 
 #include <glibmm/regex.h>
 
@@ -1560,7 +1555,7 @@ SPIPaintOrder::write( guint const flags, SPIBase const *const base) const {
             css << "inherit";
         } else {
             for( unsigned i = 0; i < PAINT_ORDER_LAYERS; ++i ) {
-                if( this->layer_set[i] == true ) {
+                if( layer_set[i] ) {
                     switch (this->layer[i]) {
                         case SP_CSS_PAINT_ORDER_NORMAL:
                             css << "normal";
@@ -2792,7 +2787,7 @@ SPITextDecoration::read( gchar const *str ) {
     }
 
     // If we set text_decoration_line, then update style_td (for CSS2 text-decoration)
-    if( style->text_decoration_line.set == true ) {
+    if( style->text_decoration_line.set ) {
         style_td = style;
     }
 }

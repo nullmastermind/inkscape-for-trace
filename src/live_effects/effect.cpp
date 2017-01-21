@@ -8,12 +8,11 @@
 //#define LPE_ENABLE_TEST_EFFECTS //uncomment for toy effects
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+#include <config.h>
 #endif
 
 // include effects:
 #include "live_effects/lpe-patternalongpath.h"
-#include "live_effects/effect.h"
 #include "live_effects/lpe-angle_bisector.h"
 #include "live_effects/lpe-attach-path.h"
 #include "live_effects/lpe-bendpath.h"
@@ -40,6 +39,7 @@
 #include "live_effects/lpe-lattice2.h"
 #include "live_effects/lpe-lattice.h"
 #include "live_effects/lpe-line_segment.h"
+#include "live_effects/lpe-measure-line.h"
 #include "live_effects/lpe-mirror_symmetry.h"
 #include "live_effects/lpe-offset.h"
 #include "live_effects/lpe-parallel.h"
@@ -64,29 +64,14 @@
 #include "live_effects/lpe-vonkoch.h"
 
 #include "xml/node-event-vector.h"
-#include "sp-object.h"
-#include "attributes.h"
 #include "message-stack.h"
-#include "desktop.h"
-#include "inkscape.h"
-#include "document.h"
 #include "document-private.h"
-#include "xml/document.h"
-#include <glibmm/i18n.h>
 #include "ui/tools/pen-tool.h"
+#include "ui/tools/node-tool.h"
 #include "ui/tools-switch.h"
 #include "knotholder.h"
-#include "sp-lpe-item.h"
 #include "live_effects/lpeobject.h"
-#include "live_effects/parameter/parameter.h"
-#include <glibmm/ustring.h>
 #include "display/curve.h"
-
-#include <exception>
-
-#include <2geom/sbasis-to-bezier.h>
-#include <2geom/affine.h>
-#include <2geom/pathvector.h>
 
 
 namespace Inkscape {
@@ -151,6 +136,8 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {FILL_BETWEEN_MANY,     N_("Fill between many"),       "fill_between_many"},
     {ELLIPSE_5PTS,          N_("Ellipse by 5 points"),     "ellipse_5pts"},
     {BOUNDING_BOX,          N_("Bounding Box"),            "bounding_box"},
+/* 9.93 */
+    {MEASURE_LINE,          N_("Measure Line"),            "measure-line"},
 };
 const Util::EnumDataConverter<EffectType> LPETypeConverter(LPETypeData, sizeof(LPETypeData)/sizeof(*LPETypeData));
 
@@ -319,6 +306,9 @@ Effect::New(EffectType lpenr, LivePathEffectObject *lpeobj)
         case TRANSFORM_2PTS:
             neweffect = static_cast<Effect*> ( new LPETransform2Pts(lpeobj) );
             break;
+        case MEASURE_LINE:
+            neweffect = static_cast<Effect*> ( new LPEMeasureLine(lpeobj) );
+            break;
         default:
             g_warning("LivePathEffect::Effect::New called with invalid patheffect type (%d)", lpenr);
             neweffect = NULL;
@@ -360,9 +350,12 @@ Effect::Effect(LivePathEffectObject *lpeobject)
       oncanvasedit_it(0),
       is_visible(_("Is visible?"), _("If unchecked, the effect remains applied to the object but is temporarily disabled on canvas"), "is_visible", &wr, this, true),
       show_orig_path(false),
+      erase_extra_objects(true),
       lpeobj(lpeobject),
       concatenate_before_pwd2(false),
       sp_lpe_item(NULL),
+      current_zoom(1),
+      upd_params(true),
       sp_curve(NULL),
       provides_own_flash_paths(true), // is automatically set to false if providesOwnFlashPaths() is not overridden
       is_ready(false), // is automatically set to false if providesOwnFlashPaths() is not overridden
@@ -472,7 +465,9 @@ void Effect::doAfterEffect (SPLPEItem const* /*lpeitem*/)
 void Effect::doOnRemove (SPLPEItem const* /*lpeitem*/)
 {
 }
-
+void Effect::doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/)
+{
+}
 //secret impl methods (shhhh!)
 void Effect::doOnApply_impl(SPLPEItem const* lpeitem)
 {
@@ -496,6 +491,7 @@ void Effect::doBeforeEffect_impl(SPLPEItem const* lpeitem)
         sp_lpe_item->apply_to_clippath(sp_lpe_item);
         sp_lpe_item->apply_to_mask(sp_lpe_item);
     }
+    update_helperpath();
 }
 
 /**
@@ -642,15 +638,15 @@ Effect::registerParameter(Parameter * param)
  * Add all registered LPE knotholder handles to the knotholder
  */
 void
-Effect::addHandles(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item) {
+Effect::addHandles(KnotHolder *knotholder, SPItem *item) {
     using namespace Inkscape::LivePathEffect;
 
     // add handles provided by the effect itself
-    addKnotHolderEntities(knotholder, desktop, item);
+    addKnotHolderEntities(knotholder, item);
 
     // add handles provided by the effect's parameters (if any)
     for (std::vector<Parameter *>::iterator p = param_vector.begin(); p != param_vector.end(); ++p) {
-        (*p)->addKnotHolderEntities(knotholder, desktop, item);
+        (*p)->addKnotHolderEntities(knotholder, item);
     }
 }
 
@@ -685,6 +681,13 @@ Effect::addCanvasIndicators(SPLPEItem const*/*lpeitem*/, std::vector<Geom::PathV
 {
 }
 
+/**
+ * Call to a method on nodetool to update the helper path from the effect
+ */
+void
+Effect::update_helperpath() {
+    Inkscape::UI::Tools::sp_update_helperpath();
+}
 
 /**
  * This *creates* a new widget, management of deletion should be done by the caller
@@ -716,7 +719,7 @@ Effect::newWidget()
 
         ++it;
     }
-
+    upd_params = false;
     return dynamic_cast<Gtk::Widget *>(vbox);
 }
 

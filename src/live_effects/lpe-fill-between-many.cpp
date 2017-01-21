@@ -9,12 +9,9 @@
 #include "live_effects/lpe-fill-between-many.h"
 
 #include "display/curve.h"
-#include "sp-item.h"
-#include "2geom/path.h"
 #include "sp-shape.h"
 #include "sp-text.h"
-#include "2geom/bezier-curve.h"
-
+// TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
 
 namespace Inkscape {
@@ -59,6 +56,9 @@ void LPEFillBetweenMany::doEffect (SPCurve * curve)
     }
     if (!res_pathv.empty()) {
         res_pathv.front().close();
+    }
+    if (res_pathv.empty()) {
+        res_pathv = curve->get_pathvector();
     }
     curve->set_pathvector(res_pathv);
 }

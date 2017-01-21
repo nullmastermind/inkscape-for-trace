@@ -14,7 +14,6 @@
 
 #include <glib.h> // g_assert()
 #include "attributes.h"
-#include <iostream>
 
 typedef struct {
     gint code;
@@ -443,6 +442,7 @@ static SPStyleProp const props[] = {
     {SP_PROP_PAINT_ORDER, "paint-order" },
     {SP_PROP_SOLID_COLOR, "solid-color"},
     {SP_PROP_SOLID_OPACITY, "solid-opacity"},
+    {SP_PROP_VECTOR_EFFECT, "vector-effect"},
 
     /* CSS Blending/Compositing */
     {SP_PROP_MIX_BLEND_MODE, "mix-blend-mode"},

@@ -13,20 +13,15 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+#include "config.h"
 #endif
 
 #include "livepatheffect-editor.h"
-#include <glibmm/i18n.h>
-#include <gtkmm/stock.h>
-#include <gtkmm/toolbar.h>
-#include <vector>
 
 #include "desktop.h"
 
 #include "document.h"
 #include "document-undo.h"
-#include "gtkmm/widget.h"
 #include "helper/action.h"
 #include "inkscape.h"
 #include "live_effects/effect.h"
@@ -34,19 +29,14 @@
 #include "live_effects/lpeobject-reference.h"
 #include "path-chemistry.h"
 #include "selection-chemistry.h"
-#include "selection.h"
 #include "sp-item-group.h"
-#include "sp-lpe-item.h"
 #include "sp-path.h"
 #include "sp-rect.h"
-#include "sp-use.h"
 #include "sp-text.h"
-#include "sp-shape.h"
 #include "ui/icon-names.h"
 #include "ui/widget/imagetoggler.h"
 #include "verbs.h"
 #include "widgets/icon.h"
-#include "xml/node.h"
 #include "livepatheffect-add.h"
 
 namespace Inkscape {
@@ -61,7 +51,7 @@ void lpeeditor_selection_changed (Inkscape::Selection * selection, gpointer data
 {
     LivePathEffectEditor *lpeeditor = static_cast<LivePathEffectEditor *>(data);
     lpeeditor->lpe_list_locked = false;
-    lpeeditor->onSelectionChanged(selection);
+    lpeeditor->onSelectionChanged(selection, true);
 }
 
 static void lpeeditor_selection_modified (Inkscape::Selection * selection, guint /*flags*/, gpointer data)
@@ -98,7 +88,8 @@ LivePathEffectEditor::LivePathEffectEditor()
       button_up(),
       button_down(),
       current_desktop(NULL),
-      current_lpeitem(NULL)
+      current_lpeitem(NULL),
+      current_lperef(NULL)
 {
     Gtk::Box *contents = _getContents();
     contents->set_spacing(4);
@@ -134,13 +125,6 @@ LivePathEffectEditor::LivePathEffectEditor()
 
     // Add toolbar items to toolbar
     toolbar_hbox.set_layout (Gtk::BUTTONBOX_END);
-
-#if !WITH_GTKMM_3_0
-    // TODO: This has been removed from Gtkmm 3.0. Check that
-    //       everything still looks OK!
-    toolbar_hbox.set_child_min_width( 16 );
-#endif
-
     toolbar_hbox.add( button_add );
     toolbar_hbox.set_child_secondary( button_add , true);
     toolbar_hbox.add( button_remove );
@@ -206,6 +190,10 @@ LivePathEffectEditor::~LivePathEffectEditor()
 void
 LivePathEffectEditor::showParams(LivePathEffect::Effect& effect)
 {
+    if ( ! effect.upd_params ) {
+        return;
+    }
+
     if (effectwidget) {
         effectcontrol_vbox.remove(*effectwidget);
         delete effectwidget;
@@ -265,9 +253,8 @@ LivePathEffectEditor::set_sensitize_all(bool sensitive)
     button_down.set_sensitive(sensitive);
 }
 
-
 void
-LivePathEffectEditor::onSelectionChanged(Inkscape::Selection *sel)
+LivePathEffectEditor::onSelectionChanged(Inkscape::Selection *sel, bool upd_params)
 {
     if (lpe_list_locked) {
         // this was triggered by selecting a row in the list, so skip reloading
@@ -291,6 +278,9 @@ LivePathEffectEditor::onSelectionChanged(Inkscape::Selection *sel)
                 if ( lpeitem->hasPathEffect() ) {
                     Inkscape::LivePathEffect::Effect *lpe = lpeitem->getCurrentLPE();
                     if (lpe) {
+                        if (upd_params) {
+                            lpe->upd_params = true;
+                        }
                         showParams(*lpe);
                         lpe_list_locked = true;
                         selectInList(lpe);
@@ -428,7 +418,7 @@ LivePathEffectEditor::onAdd()
 
                 // If item is a SPRect, convert it to path first:
                 if ( dynamic_cast<SPRect *>(item) ) {
-                    sp_selected_path_to_curves(sel, current_desktop, false);
+                    sel->toCurves();
                     item = sel->singleItem(); // get new item
                 }
 
@@ -460,7 +450,7 @@ LivePathEffectEditor::onAdd()
                         item = NULL;
 
                         // run sp_selection_clone_original_path_lpe 
-                        sp_selection_clone_original_path_lpe(current_desktop);
+                        sel->cloneOriginalPathLPE();
 
                         SPItem *new_item = sel->singleItem();
                         // Check that the cloning was successful. We don't want to change the ID of the original referenced path!
@@ -494,6 +484,12 @@ LivePathEffectEditor::onRemove()
         SPItem *item = sel->singleItem();
         SPLPEItem *lpeitem  = dynamic_cast<SPLPEItem *>(item);
         if ( lpeitem ) {
+            if (current_lperef && current_lperef->lpeobject) {
+                LivePathEffect::Effect * effect = current_lperef->lpeobject->get_lpe();
+                if (effect) {
+                    effect->upd_params = true;
+                }
+            }
             lpeitem->removeCurrentPathEffect(false);
 
             DocumentUndo::done( current_desktop->getDocument(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
@@ -542,17 +538,25 @@ void LivePathEffectEditor::onDown()
 void LivePathEffectEditor::on_effect_selection_changed()
 {
     Glib::RefPtr<Gtk::TreeSelection> sel = effectlist_view.get_selection();
-    if (sel->count_selected_rows () == 0)
+    if (sel->count_selected_rows () == 0) {
+        button_remove.set_sensitive(false);
         return;
-
+    }
+    button_remove.set_sensitive(true);
     Gtk::TreeModel::iterator it = sel->get_selected();
     LivePathEffect::LPEObjectReference * lperef = (*it)[columns.lperef];
 
-    if (lperef && current_lpeitem) {
-        if (lperef->lpeobject->get_lpe()) {
+    if (lperef && current_lpeitem && current_lperef != lperef) {
+        //The last condition ignore Gtk::TreeModel may occasionally be changed emitted when nothing has happened
+        if (lperef->getObject()) {
             lpe_list_locked = true; // prevent reload of the list which would lose selection
             current_lpeitem->setCurrentPathEffect(lperef);
-            showParams(*lperef->lpeobject->get_lpe());
+            current_lperef = lperef;
+            LivePathEffect::Effect * effect = lperef->lpeobject->get_lpe();
+            if (effect) {
+                effect->upd_params = true;
+                showParams(*effect);
+            }
         }
     }
 }
@@ -570,6 +574,14 @@ void LivePathEffectEditor::on_visibility_toggled( Glib::ustring const& str )
         /* FIXME: this explicit writing to SVG is wrong. The lpe_item should have a method to disable/enable an effect within its stack.
          * So one can call:  lpe_item->setActive(lpeobjref->lpeobject); */
         lpeobjref->lpeobject->get_lpe()->getRepr()->setAttribute("is_visible", newValue ? "true" : "false");
+        Inkscape::Selection *sel = _getSelection();
+        if ( sel && !sel->isEmpty() ) {
+            SPItem *item = sel->singleItem();
+            SPLPEItem *lpeitem  = dynamic_cast<SPLPEItem *>(item);
+            if ( lpeitem ) {
+                lpeobjref->lpeobject->get_lpe()->doOnVisibilityToggled(lpeitem);
+            }
+        }
         DocumentUndo::done( current_desktop->getDocument(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
                             newValue ? _("Activate path effect") : _("Deactivate path effect"));
     }

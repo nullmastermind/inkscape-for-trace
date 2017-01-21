@@ -3,18 +3,14 @@
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
-
-#include <glibmm/i18n.h>
-
 #include "live_effects/lpe-bounding-box.h"
 
 #include "display/curve.h"
-#include "sp-item.h"
-#include "2geom/path.h"
 #include "sp-shape.h"
 #include "sp-text.h"
-#include "2geom/bezier-curve.h"
-#include "lpe-bounding-box.h"
+// TODO due to internal breakage in glibmm headers, this must be last:
+#include <glibmm/i18n.h>
+
 
 namespace Inkscape {
 namespace LivePathEffect {
@@ -45,6 +41,7 @@ void LPEBoundingBox::doEffect (SPCurve * curve)
             p.appendNew<Geom::LineSegment>(Geom::Point(bbox->right(), bbox->bottom()));
             p.appendNew<Geom::LineSegment>(Geom::Point(bbox->left(), bbox->bottom()));
             p.appendNew<Geom::LineSegment>(Geom::Point(bbox->left(), bbox->top()));
+            p.close();
             Geom::PathVector out;
             out.push_back(p);
             curve->set_pathvector(out);

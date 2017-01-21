@@ -12,6 +12,7 @@
 #include <glibmm/ustring.h>
 #include <2geom/forward.h>
 #include <2geom/pathvector.h>
+#include "ui/widget/registered-widget.h"
 
 // In gtk2, this wasn't an issue; we could toss around
 // G_MAXDOUBLE and not worry about size allocations. But
@@ -67,7 +68,7 @@ public:
 
     // overload these for your particular parameter to make it provide knotholder handles or canvas helperpaths
     virtual bool providesKnotHolderEntities() const { return false; }
-    virtual void addKnotHolderEntities(KnotHolder */*knotholder*/, SPDesktop */*desktop*/, SPItem */*item*/) {};
+    virtual void addKnotHolderEntities(KnotHolder */*knotholder*/, SPItem */*item*/) {};
     virtual void addCanvasIndicators(SPLPEItem const*/*lpeitem*/, std::vector<Geom::PathVector> &/*hp_vec*/) {};
 
     virtual void param_editOncanvas(SPItem * /*item*/, SPDesktop * /*dt*/) {};
@@ -110,13 +111,15 @@ public:
     virtual gchar * param_getSVGValue() const;
 
     virtual void param_set_default();
+    void param_update_default(gdouble default_value);
     void param_set_value(gdouble val);
     void param_make_integer(bool yes = true);
     void param_set_range(gdouble min, gdouble max);
     void param_set_digits(unsigned digits);
     void param_set_increments(double step, double page);
-
     void addSlider(bool add_slider_widget) { add_slider = add_slider_widget; };
+    double param_get_max() { return max; };
+    double param_get_min() { return min; };
 
     void param_overwrite_widget(bool overwrite_widget);
     virtual Gtk::Widget * param_newWidget();

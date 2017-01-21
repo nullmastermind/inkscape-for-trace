@@ -13,10 +13,8 @@
 
 #include "live_effects/lpe-line_segment.h"
 #include "ui/tools/lpe-tool.h"
-
-#include <2geom/pathvector.h>
-#include <2geom/geom.h>
-#include <2geom/bezier-curve.h>
+// TODO due to internal breakage in glibmm headers, this must be last:
+#include <glibmm/i18n.h>
 
 namespace Inkscape {
 namespace LivePathEffect {

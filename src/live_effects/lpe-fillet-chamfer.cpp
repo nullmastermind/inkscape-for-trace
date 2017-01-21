@@ -16,6 +16,7 @@
 #include <2geom/elliptical-arc.h>
 #include "knotholder.h"
 #include <boost/optional.hpp>
+
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
 

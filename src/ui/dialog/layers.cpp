@@ -10,16 +10,13 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+#include "config.h"
 #endif
 
 #include "layers.h"
-#include <gtkmm/widget.h>
 #include <gtkmm/icontheme.h>
 #include <gtkmm/imagemenuitem.h>
 #include <gtkmm/separatormenuitem.h>
-
-#include <glibmm/i18n.h>
 #include <glibmm/main.h>
 
 #include "desktop.h"
@@ -27,19 +24,14 @@
 #include "document.h"
 #include "document-undo.h"
 #include "helper/action.h"
-#include "helper/action-context.h"
 #include "inkscape.h"
 #include "layer-fns.h"
 #include "layer-manager.h"
-#include "preferences.h"
-#include "sp-item.h"
-#include "sp-object.h"
 #include "svg/css-ostringstream.h"
 #include "ui/icon-names.h"
 #include "ui/widget/imagetoggler.h"
 #include "verbs.h"
 #include "widgets/icon.h"
-#include "xml/repr.h"
 #include "sp-root.h"
 #include "ui/tools/tool-base.h"
 #include "selection-chemistry.h"
@@ -866,12 +858,8 @@ LayersPanel::LayersPanel() :
     _scroller.set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC );
     _scroller.set_shadow_type(Gtk::SHADOW_IN);
     Gtk::Requisition sreq;
-#if WITH_GTKMM_3_0
     Gtk::Requisition sreq_natural;
     _scroller.get_preferred_size(sreq_natural, sreq);
-#else
-    sreq = _scroller.size_request();
-#endif
     int minHeight = 70;
     if (sreq.height < minHeight) {
         // Set a min height to see the layers when used with Ubuntu liboverlay-scrollbar

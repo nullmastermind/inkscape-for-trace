@@ -20,7 +20,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+#include <config.h>
 #endif
 
 #include <cstring>
@@ -31,32 +31,18 @@
 #include "xml/croco-node-iface.h"
 
 #include "svg/svg.h"
-#include "svg/svg-color.h"
-#include "svg/svg-icc-color.h"
 
 #include "display/canvas-bpath.h"
 #include "attributes.h"
 #include "document.h"
-#include "extract-uri.h"
 #include "uri-references.h"
 #include "uri.h"
 #include "sp-paint-server.h"
-#include "streq.h"
-#include "strneq.h"
 #include "style.h"
 #include "svg/css-ostringstream.h"
-#include "xml/repr.h"
 #include "xml/simple-document.h"
 #include "util/units.h"
-#include "macros.h"
 #include "preferences.h"
-
-#include "sp-filter-reference.h"
-
-#include <sigc++/functors/ptr_fun.h>
-#include <sigc++/adaptors/bind.h>
-
-#include <2geom/math-utils.h>
 
 #include <glibmm/regex.h>
 
@@ -124,7 +110,7 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     font_variant_caps(      "font-variant-caps",       enum_font_variant_caps,       SP_CSS_FONT_VARIANT_CAPS_NORMAL       ),
     font_variant_numeric(   "font-variant-numeric",    enum_font_variant_numeric ),
     font_variant_alternates("font-variant-alternates", enum_font_variant_alternates, SP_CSS_FONT_VARIANT_ALTERNATES_NORMAL ),
-    font_variant_east_asian("font-variant-east_asian", enum_font_variant_east_asian, SP_CSS_FONT_VARIANT_EAST_ASIAN_NORMAL ),
+    font_variant_east_asian("font-variant-east-asian", enum_font_variant_east_asian, SP_CSS_FONT_VARIANT_EAST_ASIAN_NORMAL ),
     font_feature_settings(  "font-feature-settings",   "normal" ),
 
     // Text related properties
@@ -174,6 +160,9 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     // Solid color properties
     solid_color(      "solid-color"                          ), // SPIColor
     solid_opacity(    "solid-opacity",                         SP_SCALE24_MAX             ),
+
+    // Vector effects
+    vector_effect(    "vector-effect",   enum_vector_effect,   SP_VECTOR_EFFECT_NONE,   false ),
 
     // Fill properties
     fill(             "fill"                                 ),  // SPIPaint
@@ -345,6 +334,8 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     _properties.push_back( &solid_color );
     _properties.push_back( &solid_opacity );
 
+    _properties.push_back( &vector_effect );
+
     _properties.push_back( &fill );
     _properties.push_back( &fill_opacity );
     _properties.push_back( &fill_rule );
@@ -440,6 +431,8 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
 
     //     _propmap.insert( std::make_pair( solid_color.name,           reinterpret_cast<SPIBasePtr>(&SPStyle::solid_color           ) ) );
     //     _propmap.insert( std::make_pair( solid_opacity.name,         reinterpret_cast<SPIBasePtr>(&SPStyle::solid_opacity         ) ) );
+
+    //     _propmap.insert( std::make_pair( vector_effect.name,         reinterpret_cast<SPIBasePtr>(&SPStyle::vector_effect         ) ) );
 
     //     _propmap.insert( std::make_pair( fill.name,                  reinterpret_cast<SPIBasePtr>(&SPStyle::fill                  ) ) );
     //     _propmap.insert( std::make_pair( fill_opacity.name,          reinterpret_cast<SPIBasePtr>(&SPStyle::fill_opacity          ) ) );
@@ -924,6 +917,9 @@ SPStyle::readIfUnset( gint id, gchar const *val ) {
             break;
         case SP_PROP_SOLID_OPACITY:
             solid_opacity.readIfUnset( val );
+            break;
+        case SP_PROP_VECTOR_EFFECT:
+            vector_effect.readIfUnset( val );
             break;
         case SP_PROP_FILL:
             fill.readIfUnset( val );
@@ -1637,6 +1633,9 @@ sp_style_unset_property_attrs(SPObject *o)
     }
     if (style->solid_opacity.set) {
         repr->setAttribute("solid-opacity", NULL);
+    }
+    if (style->vector_effect.set) {
+        repr->setAttribute("vector-effect", NULL);
     }
     if (style->fill.set) {
         repr->setAttribute("fill", NULL);

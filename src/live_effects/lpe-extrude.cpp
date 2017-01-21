@@ -12,15 +12,10 @@
  */
 
 #include "live_effects/lpe-extrude.h"
-
+#include "sp-item.h"
+// TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
 
-#include <2geom/path.h>
-#include <2geom/piecewise.h>
-#include <2geom/transforms.h>
-#include <algorithm>
-
-#include "sp-item.h"
 
 namespace Inkscape {
 namespace LivePathEffect {
@@ -66,7 +61,7 @@ LPEExtrude::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2
     using namespace Geom;
 
     // generate connecting lines (the 'sides' of the extrusion)
-    Path path(Point(0.,0.));
+    Geom::Path path(Point(0.,0.));
     path.appendNew<Geom::LineSegment>( extrude_vector.getVector() );
     Piecewise<D2<SBasis> > connector = path.toPwSb();
 

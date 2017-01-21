@@ -12,16 +12,12 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <string.h>
-
 #include "document.h"
 #include "attributes.h"
-#include "svg/svg.h"
 #include "filters/componenttransfer.h"
 #include "filters/componenttransfer-funcnode.h"
 #include "xml/repr.h"
 #include "display/nr-filter.h"
-#include "display/nr-filter-component-transfer.h"
 
 SPFeComponentTransfer::SPFeComponentTransfer()
     : SPFilterPrimitive(), renderer(NULL)
@@ -49,11 +45,10 @@ static void sp_feComponentTransfer_children_modified(SPFeComponentTransfer *sp_c
 {
     if (sp_componenttransfer->renderer) {
         bool set[4] = {false, false, false, false};
-        SPObject* node = sp_componenttransfer->children;
-        for(;node;node=node->next){
+        for(auto& node: sp_componenttransfer->children) {
             int i = 4;
 
-            SPFeFuncNode *funcNode = SP_FEFUNCNODE(node);
+            SPFeFuncNode *funcNode = SP_FEFUNCNODE(&node);
 
             switch (funcNode->channel) {
             case SPFeFuncNode::R:
@@ -74,13 +69,13 @@ static void sp_feComponentTransfer_children_modified(SPFeComponentTransfer *sp_c
                 g_warning("Unrecognized channel for component transfer.");
                 break;
             }
-            sp_componenttransfer->renderer->type[i] = ((SPFeFuncNode *) node)->type;
-            sp_componenttransfer->renderer->tableValues[i] = ((SPFeFuncNode *) node)->tableValues;
-            sp_componenttransfer->renderer->slope[i] = ((SPFeFuncNode *) node)->slope;
-            sp_componenttransfer->renderer->intercept[i] = ((SPFeFuncNode *) node)->intercept;
-            sp_componenttransfer->renderer->amplitude[i] = ((SPFeFuncNode *) node)->amplitude;
-            sp_componenttransfer->renderer->exponent[i] = ((SPFeFuncNode *) node)->exponent;
-            sp_componenttransfer->renderer->offset[i] = ((SPFeFuncNode *) node)->offset;
+            sp_componenttransfer->renderer->type[i] = ((SPFeFuncNode *) &node)->type;
+            sp_componenttransfer->renderer->tableValues[i] = ((SPFeFuncNode *) &node)->tableValues;
+            sp_componenttransfer->renderer->slope[i] = ((SPFeFuncNode *) &node)->slope;
+            sp_componenttransfer->renderer->intercept[i] = ((SPFeFuncNode *) &node)->intercept;
+            sp_componenttransfer->renderer->amplitude[i] = ((SPFeFuncNode *) &node)->amplitude;
+            sp_componenttransfer->renderer->exponent[i] = ((SPFeFuncNode *) &node)->exponent;
+            sp_componenttransfer->renderer->offset[i] = ((SPFeFuncNode *) &node)->offset;
             set[i] = true;
         }
         // Set any types not explicitly set to the identity transform
