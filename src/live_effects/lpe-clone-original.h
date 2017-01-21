@@ -24,7 +24,6 @@ class LPECloneOriginal : public Effect, GroupBBoxEffect {
 public:
     LPECloneOriginal(LivePathEffectObject *lpeobject);
     virtual ~LPECloneOriginal();
-    virtual void doOnApply(SPLPEItem const* lpeitem);
     virtual void doEffect (SPCurve * curve);
     virtual void doBeforeEffect (SPLPEItem const* lpeitem);
     virtual void transform_multiply(Geom::Affine const& postmul, bool set);
@@ -37,10 +36,18 @@ private:
     ScalarParam scale;
     BoolParam preserve_position;
     BoolParam inverse;
-    BoolParam use_center;
+    BoolParam d;
+    BoolParam transform;
+    BoolParam fill;
+    BoolParam stroke;
+    BoolParam paintorder;
+    BoolParam opacity;
+    BoolParam filter;
     TextParam attributes;
     TextParam style_attributes;
     bool preserve_position_changed;
+    bool expanded;
+    Gtk::Expander * expander;
     Geom::Affine preserve_affine;
     LPECloneOriginal(const LPECloneOriginal&);
     LPECloneOriginal& operator=(const LPECloneOriginal&);

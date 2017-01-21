@@ -25,9 +25,16 @@ LPECloneOriginal::LPECloneOriginal(LivePathEffectObject *lpeobject) :
     scale(_("Scale %"), _("Scale item %"), "scale", &wr, this, 100.0),
     preserve_position(_("Preserve position"), _("Preserve position"), "preserve_position", &wr, this, false),
     inverse(_("Inverse clone"), _("Use LPE item as origin"), "inverse", &wr, this, false),
-    use_center(_("Relative center of element"), _("Relative center of element"), "use_center", &wr, this, true),
+    d(_("Clone shape -d-"), _("Clone shape -d-"), "d", &wr, this, true),
+    transform(_("Clone transforms"), _("Clone transforms"), "d", &wr, this, true),
+    fill(_("Clone fill"), _("Clone fill"), "fill", &wr, this, false),
+    stroke(_("Clone stroke"), _("Clone stroke"), "stroke", &wr, this, false),
+    paintorder(_("Clone paint order"), _("Clone paint order"), "paintorder", &wr, this, false),
+    opacity(_("Clone opacity"), _("Clone opacity"), "opacity", &wr, this, false),
+    filter(_("Clone filter"), _("Clone filter"), "filter", &wr, this, false),
     attributes("Attributes linked", "Attributes linked", "attributes", &wr, this,""),
-    style_attributes("Style attributes linked", "Style attributes linked", "style_attributes", &wr, this,"")
+    style_attributes("Style attributes linked", "Style attributes linked", "style_attributes", &wr, this,""),
+    expanded(false)
 {
     registerParameter(&linked_path);
     registerParameter(&linked_item);
@@ -36,7 +43,13 @@ LPECloneOriginal::LPECloneOriginal(LivePathEffectObject *lpeobject) :
     registerParameter(&style_attributes);
     registerParameter(&preserve_position);
     registerParameter(&inverse);
-    registerParameter(&use_center);
+    registerParameter(&d);
+    registerParameter(&transform);
+    registerParameter(&fill);
+    registerParameter(&stroke);
+    registerParameter(&paintorder);
+    registerParameter(&opacity);
+    registerParameter(&filter);
     scale.param_set_range(0.01, 999999.0);
     scale.param_set_increments(1, 1);
     scale.param_set_digits(2);
@@ -148,10 +161,6 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, bool live, co
                 if (dest_bbox && orig_bbox && root) {
                     Geom::Point orig_point = (*orig_bbox).corner(0);
                     Geom::Point dest_point = (*dest_bbox).corner(0);
-                    if (use_center) {
-                        orig_point = (*orig_bbox).midpoint();
-                        dest_point = (*dest_bbox).midpoint();
-                    }
                     if (scale != 100.0) {
                         double scale_affine = scale/100.0;
                         Geom::Scale scale = Geom::Scale(scale_affine);
@@ -228,10 +237,36 @@ LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){
             }
             preserve_position_changed = preserve_position;
         }
+        Glib::ustring attr = Glib::ustring(attributes.param_getSVGValue());
+        if (d) {
+            attr.append("d,");
+        }
+        if (transform) {
+            attr.append("transform,");
+        }
+        Glib::ustring style_attr = Glib::ustring(style_attributes.param_getSVGValue());
+        if (fill) {
+            style_attr.append("fill,").append("fill-rule,");
+        }
+        if (stroke) {
+            style_attr.append("stroke,").append("stroke-width,").append("stroke-linecap,").append("stroke-linejoin,");
+            style_attr.append("stroke-opacity,").append("stroke-miterlimit,").append("stroke-dasharray,");
+            style_attr.append("stroke-opacity,").append("stroke-dashoffset,").append("marker-start,");
+            style_attr.append("marker-mid,").append("marker-end,");
+        }
+        if (paintorder) {
+            style_attr.append("paint-order,");
+        }
+        if (filter) {
+            style_attr.append("filter,");
+        }
+        if (opacity) {
+            style_attr.append("opacity,");
+        }
         if (inverse) {
-            cloneAttrbutes(SP_OBJECT(sp_lpe_item), linked_item.getObject(), true, attributes.param_getSVGValue(), style_attributes.param_getSVGValue(), true);
+            cloneAttrbutes(SP_OBJECT(sp_lpe_item), linked_item.getObject(), true, g_strdup(attr.c_str()), g_strdup(style_attr.c_str()), true);
         } else {
-            cloneAttrbutes(linked_item.getObject(), SP_OBJECT(sp_lpe_item), true, attributes.param_getSVGValue(), style_attributes.param_getSVGValue(), true);
+            cloneAttrbutes(linked_item.getObject(), SP_OBJECT(sp_lpe_item), true, g_strdup(attr.c_str()), g_strdup(style_attr.c_str()), true);
         }
     }
 }
@@ -246,7 +281,9 @@ LPECloneOriginal::newWidget()
     vbox->set_border_width(5);
     vbox->set_homogeneous(false);
     vbox->set_spacing(2);
-
+    Gtk::VBox * vbox_expander = Gtk::manage( new Gtk::VBox(Effect::newWidget()) );
+    vbox_expander->set_border_width(0);
+    vbox_expander->set_spacing(2);
     std::vector<Parameter *>::iterator it = param_vector.begin();
     while (it != param_vector.end()) {
         if ((*it)->widget_is_visible) {
@@ -258,7 +295,12 @@ LPECloneOriginal::newWidget()
             Gtk::Widget * widg = param->param_newWidget();
             Glib::ustring * tip = param->param_getTooltip();
             if (widg) {
-                vbox->pack_start(*widg, true, true, 2);
+                if (param->param_key != "attributes" &&
+                    param->param_key != "style_attributes") {
+                    vbox->pack_start(*widg, true, true, 2);
+                } else {
+                    vbox_expander->pack_start(*widg, true, true, 2);
+                }
                 if (tip) {
                     widg->set_tooltip_text(*tip);
                 } else {
@@ -270,18 +312,13 @@ LPECloneOriginal::newWidget()
 
         ++it;
     }
+    expander = Gtk::manage(new Gtk::Expander(Glib::ustring(_("Show attributes override"))));
+    expander->add(*vbox_expander);
+    expander->set_expanded(expanded);
+    expander->property_expanded().signal_changed().connect(sigc::mem_fun(*this, &LPEMeasureLine::onExpanderChanged) );
+    vbox->pack_start(*expander, true, true, 2);
     this->upd_params = false;
     return dynamic_cast<Gtk::Widget *>(vbox);
-}
-
-void
-LPECloneOriginal::doOnApply(SPLPEItem const* lpeitem){
-    Glib::ustring attributes_value("d,transform");
-    attributes.param_setValue(attributes_value);
-    attributes.write_to_SVG();
-    Glib::ustring style_attributes_value("opacity,stroke-width");
-    style_attributes.param_setValue(style_attributes_value);
-    style_attributes.write_to_SVG();
 }
 
 LPECloneOriginal::~LPECloneOriginal()
