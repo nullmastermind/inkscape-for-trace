@@ -274,7 +274,7 @@ int Application::autosave()
         if (doc->isModifiedSinceSave()) {
             gchar *oldest_autosave = 0;
             const gchar  *filename = 0;
-            struct stat sb;
+            GStatBuf sb;
             time_t min_time = 0;
             gint count = 0;
 

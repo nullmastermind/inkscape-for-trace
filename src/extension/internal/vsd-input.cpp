@@ -216,6 +216,13 @@ void VsdImportDialog::_setPreviewPage()
 
 SPDocument *VsdInput::open(Inkscape::Extension::Input * /*mod*/, const gchar * uri)
 {
+     #ifdef WIN32
+          // RVNGFileStream uses fopen() internally which unfortunately only uses ANSI encoding on Windows
+          // therefore attempt to convert uri to the system codepage
+          // even if this is not possible the alternate short (8.3) file name will be used if available
+          uri = g_win32_locale_filename_from_utf8(uri);
+     #endif
+
      RVNGFileStream input(uri);
 
      if (!libvisio::VisioDocument::isSupported(&input)) {

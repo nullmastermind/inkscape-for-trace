@@ -287,7 +287,7 @@ SnapIndicator::set_new_snaptarget(Inkscape::SnappedPoint const &p, bool pre_snap
         } else if (p.getSource() != SNAPSOURCE_UNDEFINED) {
             tooltip_str = g_strdup(source_name);
         }
-        double fontsize = prefs->getInt("/tools/measure/fontsize");
+        double fontsize = prefs->getDouble("/tools/measure/fontsize", 10.0);
 
         if (tooltip_str) {
             Geom::Point tooltip_pos = p.getPoint();
@@ -327,7 +327,7 @@ SnapIndicator::set_new_snaptarget(Inkscape::SnappedPoint const &p, bool pre_snap
             SP_CTRLRECT(box)->setDashed(true);
             SP_CTRLRECT(box)->pickable = false;  // See the extensive comment above
             sp_canvas_item_move_to_z(box, 0);
-            _snaptarget_bbox = _desktop->add_temporary_canvasitem(box, timeout_val);
+            _snaptarget_bbox = _desktop->add_temporary_canvasitem(box, timeout_val*1000.0);
         }
     }
 }

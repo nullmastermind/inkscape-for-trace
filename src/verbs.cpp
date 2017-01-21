@@ -1086,6 +1086,9 @@ void EditVerb::perform(SPAction *action, void *data)
         case SP_VERB_EDIT_NEXT_PATHEFFECT_PARAMETER:
             sp_selection_next_patheffect_param(dt);
             break;
+        case SP_VERB_EDIT_SWAP_FILL_STROKE:
+            dt->selection->swapFillStroke();
+            break;
         case SP_VERB_EDIT_LINK_COLOR_PROFILE:
             break;
         case SP_VERB_EDIT_REMOVE_COLOR_PROFILE:
@@ -2585,6 +2588,8 @@ Verb *Verb::_base_verbs[] = {
                  N_("Create four guides aligned with the page borders"), NULL),
     new EditVerb(SP_VERB_EDIT_NEXT_PATHEFFECT_PARAMETER, "EditNextPathEffectParameter", N_("Next path effect parameter"),
                  N_("Show next editable path effect parameter"), INKSCAPE_ICON("path-effect-parameter-next")),
+    new EditVerb(SP_VERB_EDIT_SWAP_FILL_STROKE, "EditSwapFillStroke", N_("Swap fill and stroke"),
+                 N_("Swap fill and stroke of an object"), NULL),
 
     // Selection
     new SelectionVerb(SP_VERB_SELECTION_TO_FRONT, "SelectionToFront", N_("Raise to _Top"),

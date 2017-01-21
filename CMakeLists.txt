@@ -76,8 +76,15 @@ include(CMakeScripts/ConfigPaths.cmake) # Installation Paths
 # -----------------------------------------------------------------------------
 # Test Harness
 # -----------------------------------------------------------------------------
-set(GMOCK_DIR "${CMAKE_SOURCE_DIR}/gtest/gmock-1.7.0"
-    CACHE PATH "The path to the GoogleMock test framework.")
+if(NOT GMOCK_DIR)
+    find_path(GMOCK_DIR
+	      NAMES src/gmock.cc
+	      PATHS "$ENV{GMOCK_DIR}"
+		    "/usr/src/googletest/googlemock"
+	            "/usr/src/gmock"
+		    "${CMAKE_SOURCE_DIR}/gtest/gmock-1.7.0"
+	     )
+endif(NOT GMOCK_DIR)
 
 if(EXISTS "${GMOCK_DIR}" AND IS_DIRECTORY "${GMOCK_DIR}")
     set(GMOCK_PRESENT ON)
