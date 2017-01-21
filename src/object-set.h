@@ -447,7 +447,7 @@ public:
     // various
     void getExportHints(Glib::ustring &filename, float *xdpi, float *ydpi);
     bool fitCanvas(bool with_margins, bool skip_undo = false);
-    
+    void swapFillStroke();
 
 protected:
     virtual void _connectSignals(SPObject* object) {};
