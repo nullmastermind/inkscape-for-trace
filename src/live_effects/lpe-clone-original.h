@@ -8,7 +8,7 @@
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
-
+#include <gtkmm/expander.h>
 #include "live_effects/effect.h"
 #include "live_effects/parameter/originalitem.h"
 #include "live_effects/parameter/originalpath.h"
@@ -28,6 +28,7 @@ public:
     virtual void doBeforeEffect (SPLPEItem const* lpeitem);
     virtual void transform_multiply(Geom::Affine const& postmul, bool set);
     virtual Gtk::Widget * newWidget();
+    void onExpanderChanged();
     void cloneAttrbutes(SPObject *origin, SPObject *dest, bool live, const char * attributes, const char * style_attributes, bool root);
 
 private:

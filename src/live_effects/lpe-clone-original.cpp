@@ -32,8 +32,8 @@ LPECloneOriginal::LPECloneOriginal(LivePathEffectObject *lpeobject) :
     paintorder(_("Clone paint order"), _("Clone paint order"), "paintorder", &wr, this, false),
     opacity(_("Clone opacity"), _("Clone opacity"), "opacity", &wr, this, false),
     filter(_("Clone filter"), _("Clone filter"), "filter", &wr, this, false),
-    attributes("Attributes linked", "Attributes linked", "attributes", &wr, this,""),
-    style_attributes("Style attributes linked", "Style attributes linked", "style_attributes", &wr, this,""),
+    attributes("Attributes linked", "Attributes linked, comma separated atributes", "attributes", &wr, this,""),
+    style_attributes("Style attributes linked", "Style attributes linked, comma separated atributes", "style_attributes", &wr, this,""),
     expanded(false)
 {
     registerParameter(&linked_path);
@@ -237,14 +237,14 @@ LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){
             }
             preserve_position_changed = preserve_position;
         }
-        Glib::ustring attr = Glib::ustring(attributes.param_getSVGValue());
+        Glib::ustring attr = Glib::ustring(attributes.param_getSVGValue()).append(",");
         if (d) {
             attr.append("d,");
         }
         if (transform) {
             attr.append("transform,");
         }
-        Glib::ustring style_attr = Glib::ustring(style_attributes.param_getSVGValue());
+        Glib::ustring style_attr = Glib::ustring(style_attributes.param_getSVGValue()).append(",");
         if (fill) {
             style_attr.append("fill,").append("fill-rule,");
         }
@@ -315,10 +315,21 @@ LPECloneOriginal::newWidget()
     expander = Gtk::manage(new Gtk::Expander(Glib::ustring(_("Show attributes override"))));
     expander->add(*vbox_expander);
     expander->set_expanded(expanded);
-    expander->property_expanded().signal_changed().connect(sigc::mem_fun(*this, &LPEMeasureLine::onExpanderChanged) );
+    expander->property_expanded().signal_changed().connect(sigc::mem_fun(*this, &LPECloneOriginal::onExpanderChanged) );
     vbox->pack_start(*expander, true, true, 2);
     this->upd_params = false;
     return dynamic_cast<Gtk::Widget *>(vbox);
+}
+
+void
+LPECloneOriginal::onExpanderChanged()
+{
+    expanded = expander->get_expanded();
+    if(expanded) {
+        expander->set_label (Glib::ustring(_("Hide attributes override")));
+    } else {
+        expander->set_label (Glib::ustring(_("Show attributes override")));
+    }
 }
 
 LPECloneOriginal::~LPECloneOriginal()
