@@ -119,7 +119,7 @@ const Util::EnumData<EffectType> LPETypeData[] = {
 /* 0.92 */
     {SIMPLIFY,              N_("Simplify"),                "simplify"},
     {LATTICE2,              N_("Lattice Deformation 2"),   "lattice2"},
-    {PERSPECTIVE_ENVELOPE,  N_("Perspective/Envelope"),    "perspective-envelope"},
+    {PERSPECTIVE_ENVELOPE,  N_("Perspective/Envelope"),    "perspective_envelope"},
     {INTERPOLATE_POINTS,    N_("Interpolate points"),      "interpolate_points"},
     {TRANSFORM_2PTS,        N_("Transform by 2 points"),   "transform_2pts"},
     {SHOW_HANDLES,          N_("Show handles"),            "show_handles"},
@@ -129,7 +129,6 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {TAPER_STROKE,          N_("Taper stroke"),            "taper_stroke"},
     {MIRROR_SYMMETRY,       N_("Mirror symmetry"),         "mirror_symmetry"},
     {COPY_ROTATE,           N_("Rotate copies"),           "copy_rotate"},
-    {FILLET_CHAMFER,        N_("Fillet/Chamfer"),          "fillet-chamfer"},
 /* Ponyscape -> Inkscape 0.92*/
     {ATTACH_PATH,           N_("Attach path"),             "attach_path"},
     {FILL_BETWEEN_STROKES,  N_("Fill between strokes"),    "fill_between_strokes"},
@@ -137,7 +136,8 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {ELLIPSE_5PTS,          N_("Ellipse by 5 points"),     "ellipse_5pts"},
     {BOUNDING_BOX,          N_("Bounding Box"),            "bounding_box"},
 /* 9.93 */
-    {MEASURE_LINE,          N_("Measure Line"),            "measure-line"},
+    {MEASURE_LINE,          N_("Measure Line"),            "measure_line"},
+    {FILLET_CHAMFER,        N_("Fillet/Chamfer"),          "fillet_chamfer"},
 };
 const Util::EnumDataConverter<EffectType> LPETypeConverter(LPETypeData, sizeof(LPETypeData)/sizeof(*LPETypeData));
 
@@ -358,11 +358,11 @@ Effect::Effect(LivePathEffectObject *lpeobject)
       upd_params(true),
       sp_curve(NULL),
       provides_own_flash_paths(true), // is automatically set to false if providesOwnFlashPaths() is not overridden
-      is_ready(false), // is automatically set to false if providesOwnFlashPaths() is not overridden
-      _current_zoom(1.0)
+      is_ready(false) // is automatically set to false if providesOwnFlashPaths() is not overridden
 {
     registerParameter( dynamic_cast<Parameter *>(&is_visible) );
     is_visible.widget_is_visible = false;
+    current_zoom = 0.0;
 }
 
 Effect::~Effect()
@@ -392,55 +392,67 @@ Effect::doOnApply (SPLPEItem const*/*lpeitem*/)
 }
 
 void
-Effect::setCurrentZoom(double zoom)
+Effect::setSelectedNodePos(std::vector<Geom::Point> selected_nodes_pos_data)
 {
-    _current_zoom = zoom;
-}
-
-double
-Effect::getCurrentZoom()
-{
-    return _current_zoom;
+    selected_nodes_pos = selected_nodes_pos_data;
 }
 
 void
-Effect::setSelectedNodes(std::vector<Geom::Point> selected_nodes_pos)
+Effect::setSelectedNodeIndex(Geom::PathVector pv)
 {
-    _selected_nodes_pos = selected_nodes_pos;
-}
+    selected_nodes_index.clear();
+    for (Geom::PathVector::const_iterator path_it = pv.begin();
+            path_it != pv.end(); ++path_it) {
 
-std::vector<size_t>
-Effect::getSelectedNodes()
-{
-    size_t counter = 0;
-    std::vector<size_t> result;
-    if (pathvector_before_effect.empty()){
-        return result;
-    }
-    for (size_t i = 0; i < pathvector_before_effect.size(); i++) {
-        for (size_t j = 0; j < pathvector_before_effect[i].size_closed(); j++) {
-            if ((!pathvector_before_effect[i].closed() && 
-                 pathvector_before_effect[i].size_closed() == j+1 && 
-                 isNodeSelected( pathvector_before_effect[i][j].finalPoint())) ||
-                 isNodeSelected( pathvector_before_effect[i][j].initialPoint()))
-            {
-                result.push_back(counter);
+        if (path_it->empty()) {
+            continue;
+        }
+        Geom::Path::const_iterator curve_it1 = path_it->begin();
+        Geom::Path::const_iterator curve_endit = path_it->end_default();
+        if (path_it->closed()) {
+          const Geom::Curve &closingline = path_it->back_closed(); 
+          // the closing line segment is always of type 
+          // Geom::LineSegment.
+          if (are_near(closingline.initialPoint(), closingline.finalPoint())) {
+            // closingline.isDegenerate() did not work, because it only checks for
+            // *exact* zero length, which goes wrong for relative coordinates and
+            // rounding errors...
+            // the closing line segment has zero-length. So stop before that one!
+            curve_endit = path_it->end_open();
+          }
+        }
+        size_t i = 0;
+        while (curve_it1 != curve_endit) {
+            if (isNodeSelected(curve_it1->initialPoint())) {
+                selected_nodes_index.push_back(i);
             }
-            counter++;
+            ++i;
+            ++curve_it1;
+        }
+        if (isNodeSelected(path_it->finalPoint())) {
+            selected_nodes_index.push_back(i);
         }
     }
-    return result;
 }
 
+void
+Effect::setCurrentZoom(double cZ)
+{
+    current_zoom = cZ;
+}
 
 bool
-Effect::isNodeSelected(Geom::Point const &node_point) const
+Effect::isNodeSelected(Geom::Point const &nodePoint) const
 {
-    if (!_selected_nodes_pos.empty()) {
-        for (std::vector<Geom::Point>::const_iterator i = _selected_nodes_pos.begin();
-                i != _selected_nodes_pos.end(); ++i) {
-            Geom::Point p = (*i);
-            Geom::Point p2(node_point[Geom::X],node_point[Geom::Y]);
+    if (selected_nodes_pos.size() > 0) {
+        using Geom::X;
+        using Geom::Y; 
+        for (std::vector<Geom::Point>::const_iterator i = selected_nodes_pos.begin();
+                i != selected_nodes_pos.end(); ++i) {
+            Geom::Point p = *i;
+            Geom::Affine transformCoordinate = sp_lpe_item->i2dt_affine();
+            Geom::Point p2(nodePoint[X],nodePoint[Y]);
+            p2 *= transformCoordinate;
             if (Geom::are_near(p, p2, 0.01)) {
                 return true;
             }

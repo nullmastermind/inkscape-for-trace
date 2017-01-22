@@ -383,8 +383,6 @@ override) the bindings in the main default.xml.
 
   <bind key="7" action="EditNextPathEffectParameter" display="true" />
 
-  <bind action="EditSwapFillStroke" display="true" />
-
   <bind key="r" modifiers="Ctrl,Shift" action="FitCanvasToSelectionOrDrawing" display="true" />
   <bind key="R" modifiers="Ctrl,Shift" action="FitCanvasToSelectionOrDrawing" display="true" />
 

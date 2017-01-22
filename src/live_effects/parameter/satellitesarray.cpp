@@ -223,7 +223,6 @@ void SatellitesArrayParam::param_transform_multiply(Geom::Affine const &postmul,
 }
 
 void SatellitesArrayParam::addKnotHolderEntities(KnotHolder *knotholder,
-                                                 SPDesktop *desktop,
                                                  SPItem *item,
                                                  bool mirror)
 {
@@ -260,23 +259,22 @@ void SatellitesArrayParam::addKnotHolderEntities(KnotHolder *knotholder,
                             "<b>Ctrl+Alt+Click</b> reset");
                 }
                 FilletChamferKnotHolderEntity *e = new FilletChamferKnotHolderEntity(this, index);
-                e->create(desktop, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN, _(tip),_knot_shape, _knot_mode, _knot_color);
+                e->create(NULL, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN, _(tip),_knot_shape, _knot_mode, _knot_color);
                 knotholder->add(e);
             }
             index++;
         }
     }
     if (mirror) {
-        addKnotHolderEntities(knotholder, desktop, item, false);
+        addKnotHolderEntities(knotholder, item, false);
     }
 }
 
 void SatellitesArrayParam::addKnotHolderEntities(KnotHolder *knotholder,
-        SPDesktop *desktop,
         SPItem *item)
 {
     _knoth = knotholder;
-    addKnotHolderEntities(knotholder, desktop, item, true);
+    addKnotHolderEntities(knotholder, item, true);
 }
 
 FilletChamferKnotHolderEntity::FilletChamferKnotHolderEntity(

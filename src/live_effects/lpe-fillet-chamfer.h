@@ -15,13 +15,14 @@
 #include "live_effects/parameter/enum.h"
 #include "live_effects/parameter/satellitesarray.h"
 #include "live_effects/effect.h"
+#include "live_effects/parameter/unit.h"
 #include "helper/geom-pathvectorsatellites.h"
 #include "helper/geom-satellite.h"
 
 namespace Inkscape {
 namespace LivePathEffect {
 
-enum Fillet_method {
+enum Filletmethod {
     FM_AUTO,
     FM_ARC,
     FM_BEZIER,
@@ -39,24 +40,26 @@ public:
     void addChamferSteps(Geom::Path &tmp_path, Geom::Path path_chamfer, Geom::Point end_arc_point, size_t steps);
     void addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec);
     void updateSatelliteType(SatelliteType satellitetype);
+   //void convertUnit();
     void updateChamferSteps();
     void updateAmount();
     void refreshKnots();
 
-    SatellitesArrayParam _satellites_param;
+    SatellitesArrayParam satellites_param;
 
 private:
-    EnumParam<Fillet_method> _method;
-    ScalarParam _radius;
-    ScalarParam _chamfer_steps;
-    BoolParam _flexible;
-    BoolParam _mirror_knots;
-    BoolParam _only_selected;
-    BoolParam _use_knot_distance;
-    BoolParam _hide_knots;
-    BoolParam _apply_no_radius;
-    BoolParam _apply_with_radius;
-    ScalarParam _helper_size;
+    UnitParam unit;
+    EnumParam<Filletmethod> method;
+    ScalarParam radius;
+    ScalarParam chamfer_steps;
+    BoolParam flexible;
+    BoolParam mirror_knots;
+    BoolParam only_selected;
+    BoolParam use_knot_distance;
+    BoolParam hide_knots;
+    BoolParam apply_no_radius;
+    BoolParam apply_with_radius;
+    ScalarParam helper_size;
     bool _degenerate_hide;
     PathVectorSatellites *_pathvector_satellites;
     Geom::PathVector _hp;

@@ -15,6 +15,8 @@
     */
 
 #include <helper/geom-pathvectorsatellites.h>
+#include "util/units.h"
+
 Geom::PathVector PathVectorSatellites::getPathVector() const
 {
     return _pathvector;
@@ -137,6 +139,27 @@ void PathVectorSatellites::updateAmount(double radius, bool apply_no_radius, boo
                     _satellites[i][j].amount = power;
                 }
             }
+        }
+    }
+}
+
+void PathVectorSatellites::convertUnit(Glib::ustring in, Glib::ustring to, bool apply_no_radius, bool apply_with_radius)
+{
+    for (size_t i = 0; i < _satellites.size(); ++i) {
+        for (size_t j = 0; j < _satellites[i].size(); ++j) {
+            if (!_pathvector[i].closed() && j == 0) {
+                _satellites[i][j].amount = 0;
+                continue;
+            }
+            if (_pathvector[i].size() == j) {
+                continue;
+            }
+            if ((!apply_no_radius && _satellites[i][j].amount == 0) ||
+                (!apply_with_radius && _satellites[i][j].amount != 0)) 
+            {
+                continue;
+            }
+            _satellites[i][j].amount = Inkscape::Util::Quantity::convert(_satellites[i][j].amount, in.c_str(), to.c_str());
         }
     }
 }

@@ -34,6 +34,7 @@ public:
     void updateSteps(size_t steps, bool apply_no_radius, bool apply_with_radius, bool only_selected);
     void updateAmount(double radius, bool apply_no_radius, bool apply_with_radius, bool only_selected, 
                       bool use_knot_distance, bool flexible);
+    void convertUnit(Glib::ustring in, Glib::ustring to, bool apply_no_radius, bool apply_with_radius);
     void updateSatelliteType(SatelliteType satellitetype, bool apply_no_radius, bool apply_with_radius, bool only_selected);
     std::pair<size_t, size_t> getIndexData(size_t index);
     void recalculateForNewPathVector(Geom::PathVector const pathv, Satellite const S);

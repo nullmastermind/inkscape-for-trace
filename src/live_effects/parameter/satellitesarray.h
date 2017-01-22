@@ -41,12 +41,9 @@ public:
         return NULL;
     }
     virtual void setHelperSize(int hs);
-    virtual void addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop,
-                                       SPItem *item);
-    virtual void addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop,
-                                       SPItem *item, bool mirror);
-    virtual void addCanvasIndicators(SPLPEItem const *lpeitem,
-                                     std::vector<Geom::PathVector> &hp_vec);
+    virtual void addKnotHolderEntities(KnotHolder *knotholder, SPItem *item);
+    virtual void addKnotHolderEntities(KnotHolder *knotholder, SPItem *item, bool mirror);
+    virtual void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec);
     virtual void updateCanvasIndicators();
     virtual void updateCanvasIndicators(bool mirror);
     virtual bool providesKnotHolderEntities() const
