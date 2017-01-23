@@ -121,6 +121,7 @@ void SPItem::setLocked(bool locked) {
     setAttribute("sodipodi:insensitive",
                  ( locked ? "1" : NULL ));
     updateRepr();
+    document->_emitModified();
 }
 
 bool SPItem::isHidden() const {

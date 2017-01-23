@@ -79,6 +79,7 @@ public:
     static int acceptsNumClicks(EffectType type);
     int acceptsNumClicks() const { return acceptsNumClicks(effectType()); }
     void doAcceptPathPreparations(SPLPEItem *lpeitem);
+    void processObjects(LpeAction lpe_action);
 
     /*
      * isReady() indicates whether all preparations which are necessary to apply the LPE are done,
@@ -171,6 +172,7 @@ protected:
     bool concatenate_before_pwd2;
 
     SPLPEItem * sp_lpe_item; // these get stored in doBeforeEffect_impl, and derived classes may do as they please with them.
+    std::vector<const char *> items;
     double current_zoom;
     std::vector<Geom::Point> selectedNodesPoints;
 private:

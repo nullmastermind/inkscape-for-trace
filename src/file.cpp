@@ -1631,8 +1631,12 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place)
     for (Inkscape::XML::Node *obj = clipboard->firstChild() ; obj ; obj = obj->next()) {
     	if(target_document->getObjectById(obj->attribute("id"))) continue;
         Inkscape::XML::Node *obj_copy = obj->duplicate(target_document->getReprDoc());
-        target_parent->appendChild(obj_copy);
+        SPObject * pasted = desktop->currentLayer()->appendChildRepr(obj_copy);
         Inkscape::GC::release(obj_copy);
+        SPLPEItem * pasted_lpe_item = dynamic_cast<SPLPEItem *>(pasted);
+        if (pasted_lpe_item){
+            pasted_lpe_item->forkPathEffectsIfNecessary(1);
+        } 
         pasted_objects_not.push_back(obj_copy);
     }
     Inkscape::Selection *selection = desktop->getSelection();

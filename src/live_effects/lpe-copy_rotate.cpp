@@ -218,39 +218,43 @@ LPECopyRotate::toItem(Geom::Affine transform, size_t i, bool reset)
         phantom = elemref->getRepr();
     } else {
         phantom = sp_lpe_item->getRepr()->duplicate(xml_doc);
-        phantom->setAttribute("inkscape:path-effect", NULL);
-        phantom->setAttribute("inkscape:original-d", NULL);
-        phantom->setAttribute("sodipodi:type", NULL);
-        phantom->setAttribute("sodipodi:rx", NULL);
-        phantom->setAttribute("sodipodi:ry", NULL);
-        phantom->setAttribute("sodipodi:cx", NULL);
-        phantom->setAttribute("sodipodi:cy", NULL);
-        phantom->setAttribute("sodipodi:end", NULL);
-        phantom->setAttribute("sodipodi:start", NULL);
-        phantom->setAttribute("inkscape:flatsided", NULL);
-        phantom->setAttribute("inkscape:randomized", NULL);
-        phantom->setAttribute("inkscape:rounded", NULL);
-        phantom->setAttribute("sodipodi:arg1", NULL);
-        phantom->setAttribute("sodipodi:arg2", NULL);
-        phantom->setAttribute("sodipodi:r1", NULL);
-        phantom->setAttribute("sodipodi:r2", NULL);
-        phantom->setAttribute("sodipodi:sides", NULL);
-        phantom->setAttribute("inkscape:randomized", NULL);
-        phantom->setAttribute("sodipodi:argument", NULL);
-        phantom->setAttribute("sodipodi:expansion", NULL);
-        phantom->setAttribute("sodipodi:radius", NULL);
-        phantom->setAttribute("sodipodi:revolution", NULL);
-        phantom->setAttribute("sodipodi:t0", NULL);
-        phantom->setAttribute("inkscape:randomized", NULL);
-        phantom->setAttribute("inkscape:randomized", NULL);
-        phantom->setAttribute("inkscape:randomized", NULL);
-        phantom->setAttribute("x", NULL);
-        phantom->setAttribute("y", NULL);
-        phantom->setAttribute("rx", NULL);
-        phantom->setAttribute("ry", NULL);
-        phantom->setAttribute("width", NULL);
-        phantom->setAttribute("height", NULL);
+        std::vector<const char *> attrs;
+        attrs->push_back("inkscape:path-effect");
+        attrs->push_back("inkscape:original-d");
+        attrs->push_back("sodipodi:type");
+        attrs->push_back("sodipodi:rx");
+        attrs->push_back("sodipodi:ry");
+        attrs->push_back("sodipodi:cx");
+        attrs->push_back("sodipodi:cy");
+        attrs->push_back("sodipodi:end");
+        attrs->push_back("sodipodi:start");
+        attrs->push_back("inkscape:flatsided");
+        attrs->push_back("inkscape:randomized");
+        attrs->push_back("inkscape:rounded");
+        attrs->push_back("sodipodi:arg1");
+        attrs->push_back("sodipodi:arg2");
+        attrs->push_back("sodipodi:r1");
+        attrs->push_back("sodipodi:r2");
+        attrs->push_back("sodipodi:sides");
+        attrs->push_back("inkscape:randomized");
+        attrs->push_back("sodipodi:argument");
+        attrs->push_back("sodipodi:expansion");
+        attrs->push_back("sodipodi:radius");
+        attrs->push_back("sodipodi:revolution");
+        attrs->push_back("sodipodi:t0");
+        attrs->push_back("inkscape:randomized");
+        attrs->push_back("inkscape:randomized");
+        attrs->push_back("inkscape:randomized");
+        attrs->push_back("x");
+        attrs->push_back("y");
+        attrs->push_back("rx");
+        attrs->push_back("ry");
+        attrs->push_back("width");
+        attrs->push_back("height");
         phantom->setAttribute("id", elemref_id);
+        for(const char * attr : attrs) { 
+            phantom->setAttribute(attr, NULL);
+        }
     }
     if (!elemref) {
         elemref = container->appendChildRepr(phantom);
@@ -703,8 +707,6 @@ LPECopyRotate::resetDefaults(SPItem const* item)
     original_bbox(SP_LPE_ITEM(item));
 }
 
-
-//TODO: Migrate the tree next function to effect.cpp/h to avoid duplication
 void
 LPECopyRotate::doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/)
 {
@@ -720,63 +722,6 @@ LPECopyRotate::doOnRemove (SPLPEItem const* /*lpeitem*/)
         return;
     }
     processObjects(LPE_ERASE);
-}
-
-void 
-LPECopyRotate::processObjects(LpeAction lpe_action)
-{
-    SPDocument * document = SP_ACTIVE_DOCUMENT;
-    for (std::vector<const char *>::iterator el_it = items.begin(); 
-         el_it != items.end(); ++el_it) {
-        const char * id = *el_it;
-        if (!id || strlen(id) == 0) {
-            return;
-        }
-        SPObject *elemref = NULL;
-        if (elemref = document->getObjectById(id)) {
-            Inkscape::XML::Node * elemnode = elemref->getRepr();
-            std::vector<SPItem*> item_list;
-            item_list.push_back(SP_ITEM(elemref));
-            std::vector<Inkscape::XML::Node*> item_to_select;
-            std::vector<SPItem*> item_selected;
-            SPCSSAttr *css;
-            Glib::ustring css_str;
-            switch (lpe_action){
-            case LPE_TO_OBJECTS:
-                if (SP_ITEM(elemref)->isHidden()) {
-                    elemref->deleteObject();
-                } else {
-                    if (elemnode->attribute("inkscape:path-effect")) {
-                        sp_item_list_to_curves(item_list, item_selected, item_to_select);
-                    }
-                    elemnode->setAttribute("sodipodi:insensitive", NULL);
-                }
-                break;
-
-            case LPE_ERASE:
-                elemref->deleteObject();
-                break;
-
-            case LPE_VISIBILITY:
-                css = sp_repr_css_attr_new();
-                sp_repr_css_attr_add_from_string(css, elemref->getRepr()->attribute("style"));
-                if (!this->isVisible()/* && std::strcmp(elemref->getId(),sp_lpe_item->getId()) != 0*/) {
-                    css->setAttribute("display", "none");
-                } else {
-                    css->setAttribute("display", NULL);
-                }
-                sp_repr_css_write_string(css,css_str);
-                elemnode->setAttribute("style", css_str.c_str());
-                break;
-
-            default:
-                break;
-            }
-        }
-    }
-    if (lpe_action == LPE_ERASE || lpe_action == LPE_TO_OBJECTS) {
-        items.clear();
-    }
 }
 
 } //namespace LivePathEffect

@@ -51,6 +51,9 @@ try:
 except locale.Error:
     locale.setlocale(locale.LC_ALL, 'C')
 
+# Initialize gettext for messages outside an inkex derived class
+inkex.localize() 
+
 # third party
 try:
     import numpy

@@ -413,8 +413,7 @@ PathVector PathIntersectionGraph::_getResult(bool enter_a, bool enter_b)
     /*if (n_processed != size() * 2) {
         std::cerr << "Processed " << n_processed << " intersections, expected " << (size() * 2) << std::endl;
     }*/
-    //Comented by jtx to prevent crashes. need uncomment
-    //assert(n_processed == size() * 2);
+    assert(n_processed == size() * 2);
 
     return result;
 }

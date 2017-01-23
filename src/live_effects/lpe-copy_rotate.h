@@ -39,7 +39,6 @@ public:
     virtual void doOnRemove (SPLPEItem const* /*lpeitem*/);
     virtual void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/);
     virtual Gtk::Widget * newWidget();
-    void processObjects(LpeAction lpe_action);
     void toItem(Geom::Affine transform, size_t i, bool reset);
     void cloneD(SPObject *origin, SPObject *dest, bool root, bool reset);
     void resetStyles();
@@ -65,7 +64,6 @@ private:
     Geom::Point previous_start_point;
     double dist_angle_handle;
     double previous_num_copies;
-    std::vector<const char *> items;
     bool reset;
     SPObject * container;
     LPECopyRotate(const LPECopyRotate&);
