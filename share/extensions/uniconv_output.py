@@ -122,7 +122,7 @@ def get_command():
             inkex.errormsg(_('You need to install the UniConvertor software.\n'+\
                          'For GNU/Linux: install the package python-uniconvertor.\n'+\
                          'For Windows: download it from\n'+\
-                         'http://sk1project.org/modules.php?name=Products&product=uniconvertor\n'+\
+                         'https://sk1project.net/modules.php?name=Products&product=uniconvertor&op=download\n'+\
                          'and install into your Inkscape\'s Python location\n'))
             sys.exit(1)
         cmd = 'python -c "import uniconvertor; uniconvertor.uniconv_run();"'
