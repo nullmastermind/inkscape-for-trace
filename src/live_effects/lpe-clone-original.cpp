@@ -26,7 +26,7 @@ LPECloneOriginal::LPECloneOriginal(LivePathEffectObject *lpeobject) :
     preserve_position(_("Preserve position"), _("Preserve position"), "preserve_position", &wr, this, false),
     inverse(_("Inverse clone"), _("Use LPE item as origin"), "inverse", &wr, this, false),
     d(_("Clone shape -d-"), _("Clone shape -d-"), "d", &wr, this, true),
-    transform(_("Clone transforms"), _("Clone transforms"), "d", &wr, this, true),
+    transform(_("Clone transforms"), _("Clone transforms"), "transform", &wr, this, true),
     fill(_("Clone fill"), _("Clone fill"), "fill", &wr, this, false),
     stroke(_("Clone stroke"), _("Clone stroke"), "stroke", &wr, this, false),
     paintorder(_("Clone paint order"), _("Clone paint order"), "paintorder", &wr, this, false),
@@ -57,20 +57,6 @@ LPECloneOriginal::LPECloneOriginal(LivePathEffectObject *lpeobject) :
     style_attributes.param_hide_canvas_text();
     preserve_position_changed = preserve_position;
     preserve_affine = Geom::identity();
-}
-
-bool hasLinkedTransform( const char * attributes) {
-    gchar ** attarray = g_strsplit(attributes, ",", 0);
-    gchar ** iter = attarray;
-    bool has_linked_transform = false;
-    while (*iter != NULL) {
-        const char* attribute = (*iter);
-        if ( std::strcmp(attribute, "transform") == 0 ) {
-            has_linked_transform = true;
-        }
-        iter++;
-    }
-    return has_linked_transform;
 }
 
 void
@@ -237,14 +223,18 @@ LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){
             }
             preserve_position_changed = preserve_position;
         }
-        Glib::ustring attr = Glib::ustring(attributes.param_getSVGValue()).append(",");
+        Glib::ustring attr = "";
         if (d) {
             attr.append("d,");
         }
         if (transform) {
             attr.append("transform,");
         }
-        Glib::ustring style_attr = Glib::ustring(style_attributes.param_getSVGValue()).append(",");
+        attr.append(Glib::ustring(attributes.param_getSVGValue()).append(","));
+        if (attr.size()  && !Glib::ustring(attributes.param_getSVGValue()).size()) {
+            attr.erase (attr.size()-1, 1);
+        }
+        Glib::ustring style_attr = "";
         if (fill) {
             style_attr.append("fill,").append("fill-rule,");
         }
@@ -263,6 +253,10 @@ LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){
         if (opacity) {
             style_attr.append("opacity,");
         }
+        if (style_attr.size() && !Glib::ustring(style_attributes.param_getSVGValue()).size()) {
+            style_attr.erase (style_attr.size()-1, 1);
+        }
+        style_attr.append(Glib::ustring(style_attributes.param_getSVGValue()).append(","));
         if (inverse) {
             cloneAttrbutes(SP_OBJECT(sp_lpe_item), linked_item.getObject(), true, g_strdup(attr.c_str()), g_strdup(style_attr.c_str()), true);
         } else {
