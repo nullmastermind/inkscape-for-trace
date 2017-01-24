@@ -588,6 +588,7 @@ LPECopyRotate::doEffect_path (Geom::PathVector const & path_in)
         triangle.push_back(divider);
         Geom::PathIntersectionGraph *pig = new Geom::PathIntersectionGraph(triangle, path_out);
         if (pig && ! path_out.empty() && !triangle.empty()) {
+            //TODO: Here can produce a crash because some knows problems in new boolops code
             path_out = pig->getIntersection();
         }
         Geom::Affine r = Geom::identity();

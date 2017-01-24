@@ -79,6 +79,8 @@ public:
     static int acceptsNumClicks(EffectType type);
     int acceptsNumClicks() const { return acceptsNumClicks(effectType()); }
     void doAcceptPathPreparations(SPLPEItem *lpeitem);
+    SPShape * getCurrentShape(){ return sp_shape; };
+    void setCurrentShape(SPShape * shape);
     void processObjects(LpeAction lpe_action);
 
     /*
@@ -172,6 +174,7 @@ protected:
     bool concatenate_before_pwd2;
 
     SPLPEItem * sp_lpe_item; // these get stored in doBeforeEffect_impl, and derived classes may do as they please with them.
+    SPShape * sp_shape; // these get stored in doBeforeEffect_impl before doEffect chain, or in performPathEffects on groups, and derived classes may do as they please with them.
     std::vector<const char *> items;
     double current_zoom;
     std::vector<Geom::Point> selectedNodesPoints;

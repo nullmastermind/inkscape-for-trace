@@ -160,6 +160,7 @@ void Inkscape::DocumentUndo::maybeDone(SPDocument *doc, const gchar *key, const 
 		sp_repr_begin_transaction (doc->rdoc);
 		return;
 	}
+
 	if (key && !doc->actionkey.empty() && (doc->actionkey == key) && !doc->priv->undo.empty()) {
                 (doc->priv->undo.back())->event =
                     sp_repr_coalesce_log ((doc->priv->undo.back())->event, log);
@@ -169,6 +170,7 @@ void Inkscape::DocumentUndo::maybeDone(SPDocument *doc, const gchar *key, const 
 		doc->priv->history_size++;
 		doc->priv->undoStackObservers.notifyUndoCommitEvent(event);
 	}
+
         if ( key ) {
             doc->actionkey = key;
         } else {
@@ -179,6 +181,7 @@ void Inkscape::DocumentUndo::maybeDone(SPDocument *doc, const gchar *key, const 
         doc->setModifiedSinceSave();
 
 	sp_repr_begin_transaction (doc->rdoc);
+
   doc->priv->commit_signal.emit();
 }
 

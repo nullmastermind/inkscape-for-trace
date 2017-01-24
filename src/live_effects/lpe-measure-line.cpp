@@ -225,7 +225,7 @@ LPEMeasureLine::createArrowMarker(const char * mode)
         elemref = SP_OBJECT(document->getDefs()->appendChildRepr(arrow));
         Inkscape::GC::release(arrow);
     }
-    elements.push_back(mode);
+    items.push_back(mode);
 }
 
 void
@@ -365,7 +365,7 @@ LPEMeasureLine::createTextLabel(Geom::Point pos, double length, Geom::Coord angl
         copy->setAttribute("id", id);
         elemref = elemref_copy;
     }
-    elements.push_back(id);
+    items.push_back(id);
     Geom::OptRect bounds = SP_ITEM(elemref)->bounds(SPItem::GEOMETRIC_BBOX);
     if (bounds) {
         anotation_width = bounds->width() * 1.4;
@@ -479,7 +479,7 @@ LPEMeasureLine::createLine(Geom::Point start,Geom::Point end, const char * id, b
         elemref->deleteObject();
         copy->setAttribute("id", id);
     }
-    elements.push_back(id);
+    items.push_back(id);
 }
 
 void
@@ -531,7 +531,7 @@ LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
             sp_lpe_item->getCurrentLPE() != this){
             return;
         }
-        elements.clear();
+        items.clear();
         start_stored = start;
         end_stored = end;
         Geom::Point hstart = start;
@@ -677,58 +677,10 @@ LPEMeasureLine::doOnRemove (SPLPEItem const* /*lpeitem*/)
     //unset "erase_extra_objects" hook on sp-lpe-item.cpp
     if (!erase_extra_objects) {
         processObjects(LPE_TO_OBJECTS);
-        elements.clear();
+        items.clear();
         return;
     }
     processObjects(LPE_ERASE);
-}
-
-void 
-LPEMeasureLine::processObjects(LpeAction lpe_action)
-{
-    SPDocument * document = SP_ACTIVE_DOCUMENT;
-    for (std::vector<const char *>::iterator el_it = elements.begin(); 
-         el_it != elements.end(); ++el_it) {
-        const char * id = *el_it;
-        if (!id || strlen(id) == 0) {
-            return;
-        }
-        SPObject *elemref = NULL;
-        if (elemref = document->getObjectById(id)) {
-            SPCSSAttr *css;
-            Glib::ustring css_str;
-            switch (lpe_action){
-            case LPE_TO_OBJECTS:
-                elemref->getRepr()->setAttribute("inkscape:path-effect", NULL);
-                elemref->getRepr()->setAttribute("sodipodi:insensitive", NULL);
-                break;
-
-            case LPE_ERASE:
-                if (std::strcmp(elemref->getId(),id_origin.param_getSVGValue()) != 0) {
-                    elemref->deleteObject();
-                }
-                break;
-
-            case LPE_VISIBILITY:
-                css = sp_repr_css_attr_new();
-                sp_repr_css_attr_add_from_string(css, elemref->getRepr()->attribute("style"));
-                if (!this->isVisible() && std::strcmp(elemref->getId(),id_origin.param_getSVGValue()) != 0) {
-                    css->setAttribute("display", "none");
-                } else {
-                    css->setAttribute("display", NULL);
-                }
-                sp_repr_css_write_string(css,css_str);
-                elemref->getRepr()->setAttribute("style", css_str.c_str());
-                break;
-
-            default:
-                break;
-            }
-        }
-    }
-    if (lpe_action == LPE_ERASE) {
-        elements.clear();
-    }
 }
 
 Gtk::Widget *LPEMeasureLine::newWidget()
