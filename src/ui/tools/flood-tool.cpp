@@ -89,10 +89,10 @@ Glib::ustring ch_init[8] = {
 const std::vector<Glib::ustring> FloodTool::channel_list( ch_init, ch_init+8 );
 
 Glib::ustring gap_init[4] = {
-    C_("Flood autogap", "None"),
-    C_("Flood autogap", "Small"),
-    C_("Flood autogap", "Medium"),
-    C_("Flood autogap", "Large")
+    NC_("Flood autogap", "None"),
+    NC_("Flood autogap", "Small"),
+    NC_("Flood autogap", "Medium"),
+    NC_("Flood autogap", "Large")
 };
 const std::vector<Glib::ustring> FloodTool::gap_list( gap_init, gap_init+4 );
 
@@ -446,7 +446,7 @@ static void do_trace(bitmap_coords_info bci, guchar *trace_px, SPDesktop *deskto
                     ngettext("Area filled, path with <b>%d</b> node created and unioned with selection.","Area filled, path with <b>%d</b> nodes created and unioned with selection.",
                     SP_PATH(reprobj)->nodesInPath()), SP_PATH(reprobj)->nodesInPath() );
                 selection->add(reprobj);
-                sp_selected_path_union_skip_undo(desktop->getSelection());
+                selection->pathUnion(true);
             } else {
                 desktop->messageStack()->flashF( Inkscape::WARNING_MESSAGE,
                     ngettext("Area filled, path with <b>%d</b> node created.","Area filled, path with <b>%d</b> nodes created.",

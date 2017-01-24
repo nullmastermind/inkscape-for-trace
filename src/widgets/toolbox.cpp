@@ -362,8 +362,6 @@ static gchar const * ui_descr =
         "    <separator />"
         "    <toolitem action='MeasureScaleAction' />"
         "    <separator />"
-        "    <toolitem action='MeasureOffsetAction' />"
-        "    <separator />"
         "    <toolitem action='measure_units_label' />"
         "    <toolitem action='MeasureUnitsAction' />"
         "    <toolitem action='MeasureIgnore1stAndLast' />"
@@ -373,8 +371,9 @@ static gchar const * ui_descr =
         "    <toolitem action='MeasureReverse' />"
         "    <toolitem action='MeasureToPhantom' />"
         "    <toolitem action='MeasureToGuides' />"
-        "    <toolitem action='MeasureMarkDimension' />"
         "    <toolitem action='MeasureToItem' />"
+        "    <toolitem action='MeasureMarkDimension' />"
+        "    <toolitem action='MeasureOffsetAction' />"
         "  </toolbar>" 
 
         "  <toolbar name='StarToolbar'>"
@@ -508,18 +507,19 @@ static gchar const * ui_descr =
 
         "  <toolbar name='TextToolbar'>"
         "    <toolitem action='TextFontFamilyAction' />"
-        "    <toolitem action='TextFontSizeAction' />"
         "    <toolitem action='TextFontStyleAction' />"
-//        "    <toolitem action='TextBoldAction' />"
-//        "    <toolitem action='TextItalicAction' />"
+        "    <separator />"
+        "    <toolitem action='TextOuterStyleAction' />"
+        "    <toolitem action='TextFontSizeAction' />"
+        "    <toolitem action='TextLineHeightAction' />"
+        "    <toolitem action='TextLineHeightUnitsAction' />"
+        "    <toolitem action='TextLineHeightUnsetAction' />"
         "    <separator />"
         "    <toolitem action='TextAlignAction' />"
         "    <separator />"
         "    <toolitem action='TextSuperscriptAction' />"
         "    <toolitem action='TextSubscriptAction' />"
         "    <separator />"
-        "    <toolitem action='TextLineHeightAction' />"
-        "    <toolitem action='TextLineHeightUnitsAction' />"
         "    <toolitem action='TextLetterSpacingAction' />"
         "    <toolitem action='TextWordSpacingAction' />"
         "    <toolitem action='TextDxAction' />"
@@ -574,7 +574,12 @@ static gchar const * ui_descr =
         "    <toolitem action='MeshPickColorsAction' />"
         "    <toolitem action='MeshFitInBoundingBoxAction' />"
         "    <separator />"
+        "    <toolitem action='MeshShowHandlesAction' />"
+        "    <toolitem action='MeshEditFillAction' />"
+        "    <toolitem action='MeshEditStrokeAction' />"
+        "    <separator />"
         "    <toolitem action='MeshWarningAction' />"
+        "    <separator />"
         "    <toolitem action='MeshSmoothAction' />"
         "  </toolbar>"
 
@@ -655,7 +660,7 @@ Glib::RefPtr<VerbAction> VerbAction::create(Inkscape::Verb* verb, Inkscape::Verb
 }
 
 VerbAction::VerbAction(Inkscape::Verb* verb, Inkscape::Verb* verb2, Inkscape::UI::View::View *view) :
-    Gtk::Action(Glib::ustring(verb->get_id()), Gtk::StockID(verb->get_image()), Glib::ustring(g_dpgettext2(NULL, "ContextVerb", verb->get_name())), Glib::ustring(_(verb->get_tip()))),
+    Gtk::Action(Glib::ustring(verb->get_id()), verb->get_image(), Glib::ustring(g_dpgettext2(NULL, "ContextVerb", verb->get_name())), Glib::ustring(_(verb->get_tip()))),
     verb(verb),
     verb2(verb2),
     view(view),
@@ -670,7 +675,7 @@ VerbAction::~VerbAction()
 Gtk::Widget* VerbAction::create_menu_item_vfunc()
 {
 // First call in to get the icon rendered if present in SVG
-    Gtk::Widget *widget = sp_icon_get_icon( property_stock_id().get_value().get_string(), Inkscape::ICON_SIZE_MENU );
+    Gtk::Widget *widget = sp_icon_get_icon( get_icon_name(), Inkscape::ICON_SIZE_MENU );
     delete widget;
     widget = 0;
 

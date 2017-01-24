@@ -76,8 +76,15 @@ include(CMakeScripts/ConfigPaths.cmake) # Installation Paths
 # -----------------------------------------------------------------------------
 # Test Harness
 # -----------------------------------------------------------------------------
-set(GMOCK_DIR "${CMAKE_SOURCE_DIR}/gtest/gmock-1.7.0"
-    CACHE PATH "The path to the GoogleMock test framework.")
+if(NOT GMOCK_DIR)
+    find_path(GMOCK_DIR
+	      NAMES src/gmock.cc
+	      PATHS "$ENV{GMOCK_DIR}"
+		    "/usr/src/googletest/googlemock"
+	            "/usr/src/gmock"
+		    "${CMAKE_SOURCE_DIR}/gtest/gmock-1.7.0"
+	     )
+endif(NOT GMOCK_DIR)
 
 if(EXISTS "${GMOCK_DIR}" AND IS_DIRECTORY "${GMOCK_DIR}")
     set(GMOCK_PRESENT ON)
@@ -91,7 +98,9 @@ include(CMakeScripts/HelperMacros.cmake) # Misc Utility Macros
 
 # -----------------------------------------------------------------------------
 # BAD HACKS, NEED TO INVESTIGATE MAKING THESE LESS BAD
-add_definitions(-D_FORTIFY_SOURCE=2)
+if (NOT CMAKE_BUILD_TYPE MATCHES Debug)
+  add_definitions(-D_FORTIFY_SOURCE=2)
+endif()
 add_definitions(-DORBIT2=1)
 add_definitions(-DHAVE_CONFIG_H)
 add_definitions(-DHAVE_CAIRO_PDF=1)  # needed for src/libnrtype/Layout-TNG.h
@@ -114,10 +123,21 @@ endif()
 # -----------------------------------------------------------------------------
 # Dist Target
 # -----------------------------------------------------------------------------
+if(EXISTS ${CMAKE_SOURCE_DIR}/.bzr/)
+    execute_process(COMMAND
+        bzr revno --tree ${CMAKE_SOURCE_DIR}
+                OUTPUT_VARIABLE INKSCAPE_REVISION
+                OUTPUT_STRIP_TRAILING_WHITESPACE)
+else()
+    set(INKSCAPE_REVISION "unknown")
+endif()
 set(INKSCAPE_DIST_PREFIX "${PROJECT_NAME}-${INKSCAPE_VERSION}")
 add_custom_target(dist
-    COMMAND bzr export --root=${INKSCAPE_DIST_PREFIX}
-    "${CMAKE_BINARY_DIR}/${INKSCAPE_DIST_PREFIX}.tar.bz2"
+    COMMAND sed -i "s/unknown/r${INKSCAPE_REVISION}/" CMakeScripts/inkscape-version.cmake
+    && sed -i "s/custom//" CMakeScripts/inkscape-version.cmake
+    && bzr export --uncommitted --root=${INKSCAPE_DIST_PREFIX}
+    "${CMAKE_BINARY_DIR}/${INKSCAPE_DIST_PREFIX}.tar.bz2" 
+    && bzr revert ${CMAKE_SOURCE_DIR}/CMakeScripts/inkscape-version.cmake
     WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
 
 # -----------------------------------------------------------------------------
@@ -175,10 +195,7 @@ endif()
 # -----------------------------------------------------------------------------
 # Installation
 # -----------------------------------------------------------------------------
-if(NOT WIN32)
-  # this should probably be done no matter what the platform is, just set SHARE_INSTALL first
-  add_subdirectory(share)
-endif()
+add_subdirectory(share)
 	
 include(CMakeScripts/Install.cmake)
 

@@ -35,7 +35,6 @@
 #endif
 
 #include <gtkmm/expander.h>
-#include <gtkmm/stock.h>
 
 #include <glibmm/convert.h>
 #include <glibmm/fileutils.h>
@@ -555,7 +554,7 @@ bool SVGPreview::set(Glib::ustring &fileName, int dialogType)
         Glib::ustring fileNameUtf8 = Glib::filename_to_utf8(fileName);
         gchar *fName = const_cast<gchar *>(
             fileNameUtf8.c_str()); // const-cast probably not necessary? (not necessary on Windows version of stat())
-        struct stat info;
+        GStatBuf info;
         if (g_stat(fName, &info)) // stat returns 0 upon success
         {
             g_warning("SVGPreview::set() : %s : %s", fName, strerror(errno));
@@ -735,8 +734,8 @@ FileOpenDialogImplGtk::FileOpenDialogImplGtk(Gtk::Window &parentWindow, const Gl
     //###### Add the file types menu
     createFilterMenu();
 
-    add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
-    set_default(*add_button(Gtk::Stock::OPEN, Gtk::RESPONSE_OK));
+    add_button(_("_Cancel"), Gtk::RESPONSE_CANCEL);
+    set_default(*add_button(_("_Open"), Gtk::RESPONSE_OK));
 
     //###### Allow easy access to our examples folder
     if (Inkscape::IO::file_test(INKSCAPE_EXAMPLESDIR, G_FILE_TEST_EXISTS) &&
@@ -1050,8 +1049,8 @@ FileSaveDialogImplGtk::FileSaveDialogImplGtk(Gtk::Window &parentWindow, const Gl
     // if (extension == NULL)
     //    checkbox.set_sensitive(FALSE);
 
-    add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
-    set_default(*add_button(Gtk::Stock::SAVE, Gtk::RESPONSE_OK));
+    add_button(_("_Cancel"), Gtk::RESPONSE_CANCEL);
+    set_default(*add_button(_("_Save"), Gtk::RESPONSE_OK));
 
     show_all_children();
 }
@@ -1597,8 +1596,8 @@ FileExportDialogImpl::FileExportDialogImpl(Gtk::Window &parentWindow, const Glib
     // if (extension == NULL)
     //    checkbox.set_sensitive(FALSE);
 
-    add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
-    set_default(*add_button(Gtk::Stock::SAVE, Gtk::RESPONSE_OK));
+    add_button(_("_Cancel"), Gtk::RESPONSE_CANCEL);
+    set_default(*add_button(_("_Save"), Gtk::RESPONSE_OK));
 
     show_all_children();
 }

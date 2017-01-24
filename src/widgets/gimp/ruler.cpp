@@ -12,7 +12,9 @@
  *  - We use a default font size of PANGO_SCALE_X_SMALL for labels,
  *    GIMP uses PANGO_SCALE_SMALL (i.e., a bit larger than ours).
  *
- *  - We abbreviate large numbers in tick-labels (e.g., 10000 -> 10k) 
+ *  - We abbreviate large numbers in tick-labels (e.g., 10000 -> 10k)
+ *
+ *  - GtkStateFlags are read from GtkStyleContext objects where appropriate
  *
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
@@ -548,7 +550,7 @@ sp_ruler_size_allocate (GtkWidget     *widget,
   resized = (widget_allocation.width  != allocation->width ||
              widget_allocation.height != allocation->height);
 
-  gtk_widget_set_allocation(widget, allocation);
+  GTK_WIDGET_CLASS (parent_class)->size_allocate (widget, allocation);
 
   if (gtk_widget_get_realized (widget))
     {
@@ -578,7 +580,9 @@ sp_ruler_size_request (GtkWidget      *widget,
   GtkStyleContext *context = gtk_widget_get_style_context (widget);
   GtkBorder        border;
 
-  gtk_style_context_get_border (context, static_cast<GtkStateFlags>(0), &border);
+  GtkStateFlags state_flags = gtk_style_context_get_state (context);
+
+  gtk_style_context_get_border (context, state_flags, &border);
   
   requisition->width  = border.left + border.right;
   requisition->height = border.top  + border.bottom;
@@ -725,7 +729,17 @@ sp_ruler_draw_pos (SPRuler *ruler,
       cairo_fill (cr);
     }
 
-  priv->last_pos_rect = pos_rect;
+  if (priv->last_pos_rect.width  != 0 &&
+      priv->last_pos_rect.height != 0)
+    {
+      gdk_rectangle_union (&priv->last_pos_rect,
+                           &pos_rect,
+                           &priv->last_pos_rect);
+    }
+  else
+    {
+      priv->last_pos_rect = pos_rect;
+    }
 }
 
 /**
@@ -999,6 +1013,12 @@ sp_ruler_set_position (SPRuler *ruler,
           (ABS (xdiff) > IMMEDIATE_REDRAW_THRESHOLD ||
            ABS (ydiff) > IMMEDIATE_REDRAW_THRESHOLD))
         {
+          if (priv->pos_redraw_idle_id)
+            {
+              g_source_remove (priv->pos_redraw_idle_id);
+              priv->pos_redraw_idle_id = 0;
+            }
+
           sp_ruler_queue_pos_redraw (ruler);
         }
       else if (! priv->pos_redraw_idle_id)
@@ -1072,7 +1092,9 @@ sp_ruler_draw_ticks (SPRuler *ruler)
 
     gtk_widget_get_allocation (widget, &allocation);
 
-    gtk_style_context_get_border (context, static_cast<GtkStateFlags>(0), &border);
+    GtkStateFlags state_flags = gtk_style_context_get_state (context);
+
+    gtk_style_context_get_border (context, state_flags, &border);
 
     layout = sp_ruler_get_layout (widget, "0123456789");
     pango_layout_get_extents (layout, &ink_rect, &logical_rect);
@@ -1284,7 +1306,9 @@ sp_ruler_get_pos_rect (SPRuler *ruler,
   GtkStyleContext *context = gtk_widget_get_style_context (widget);
   GtkBorder padding;
 
-  gtk_style_context_get_border(context, static_cast<GtkStateFlags>(0), &padding);
+  GtkStateFlags state_flags = gtk_style_context_get_state (context);
+
+  gtk_style_context_get_border(context, state_flags, &padding);
 
   xthickness = padding.left + padding.right;
   ythickness = padding.top + padding.bottom;
@@ -1351,15 +1375,16 @@ sp_ruler_queue_pos_redraw (SPRuler *ruler)
 
   gtk_widget_get_allocation (GTK_WIDGET(ruler), &allocation);
 
-  gtk_widget_queue_draw_area (GTK_WIDGET(ruler),
+  gtk_widget_queue_draw_area (GTK_WIDGET (ruler),
                               rect.x + allocation.x,
                               rect.y + allocation.y,
                               rect.width,
                               rect.height);
 
-  if (priv->last_pos_rect.width != 0 || priv->last_pos_rect.height != 0)
+  if (priv->last_pos_rect.width  != 0  &&
+      priv->last_pos_rect.height != 0)
     {
-      gtk_widget_queue_draw_area (GTK_WIDGET(ruler),
+      gtk_widget_queue_draw_area (GTK_WIDGET (ruler),
                                   priv->last_pos_rect.x + allocation.x,
                                   priv->last_pos_rect.y + allocation.y,
                                   priv->last_pos_rect.width,

@@ -25,8 +25,6 @@
 #include "document-undo.h"
 #include "message-stack.h"
 #include "message-context.h"
-#include "ui/tools-switch.h"
-#include "ui/tools/tool-base.h"
 #include "ui/tools/node-tool.h"
 #include <gtk/gtk.h>
 
@@ -71,6 +69,7 @@ SPKnot::SPKnot(SPDesktop *desktop, gchar const *tip)
     this->flags = 0;
 
     this->size = 8;
+    this->angle = 0;
     this->pos = Geom::Point(0, 0);
     this->grabbed_rel_pos = Geom::Point(0, 0);
     this->anchor = SP_ANCHOR_CENTER;
@@ -111,6 +110,7 @@ SPKnot::SPKnot(SPDesktop *desktop, gchar const *tip)
                                     SP_TYPE_CTRL,
                                     "anchor", SP_ANCHOR_CENTER,
                                     "size", 8.0,
+                                    "angle", 0.0,
                                     "filled", TRUE,
                                     "fill_color", 0xffffff00,
                                     "stroked", TRUE,
@@ -214,7 +214,7 @@ static int sp_knot_handler(SPCanvasItem */*item*/, GdkEvent *event, SPKnot *knot
         if ((event->button.button == 1) && knot->desktop && knot->desktop->event_context && !knot->desktop->event_context->space_panning) {
             Geom::Point const p = knot->desktop->w2d(Geom::Point(event->button.x, event->button.y));
             knot->startDragging(p, (gint) event->button.x, (gint) event->button.y, event->button.time);
-
+            knot->grabbed_signal.emit(knot, event->button.state);
             consumed = TRUE;
         }
         break;
@@ -252,10 +252,7 @@ static int sp_knot_handler(SPCanvasItem */*item*/, GdkEvent *event, SPKnot *knot
                 consumed = TRUE;
             }
         }
-        if (tools_isactive(knot->desktop, TOOLS_NODES)) {
-            Inkscape::UI::Tools::NodeTool *nt = static_cast<Inkscape::UI::Tools::NodeTool*>(knot->desktop->event_context);
-            nt->update_helperpath();
-        }
+        Inkscape::UI::Tools::sp_update_helperpath();
         break;
     case GDK_MOTION_NOTIFY:
         if (grabbed && knot->desktop && knot->desktop->event_context && !knot->desktop->event_context->space_panning) {
@@ -279,8 +276,6 @@ static int sp_knot_handler(SPCanvasItem */*item*/, GdkEvent *event, SPKnot *knot
             }
 
             if (!moved) {
-                knot->grabbed_signal.emit(knot, event->motion.state);
-
                 knot->setFlag(SP_KNOT_DRAGGING, TRUE);
             }
 
@@ -288,10 +283,7 @@ static int sp_knot_handler(SPCanvasItem */*item*/, GdkEvent *event, SPKnot *knot
             sp_knot_handler_request_position(event, knot);
             moved = TRUE;
         }
-        if (tools_isactive(knot->desktop, TOOLS_NODES)) {
-            Inkscape::UI::Tools::NodeTool *nt = static_cast<Inkscape::UI::Tools::NodeTool*>(knot->desktop->event_context);
-            nt->update_helperpath();
-        }
+        Inkscape::UI::Tools::sp_update_helperpath();
         break;
     case GDK_ENTER_NOTIFY:
         knot->setFlag(SP_KNOT_MOUSEOVER, TRUE);
@@ -449,6 +441,7 @@ void SPKnot::updateCtrl() {
     g_object_set(this->item, "shape", this->shape, NULL);
     g_object_set(this->item, "mode", this->mode, NULL);
     g_object_set(this->item, "size", (gdouble) this->size, NULL);
+    g_object_set(this->item, "angle", this->angle, NULL);
     g_object_set(this->item, "anchor", this->anchor, NULL);
 
     if (this->pixbuf) {
@@ -490,6 +483,10 @@ void SPKnot::setMode(guint i) {
 
 void SPKnot::setPixbuf(gpointer p) {
     pixbuf = p;
+}
+
+void SPKnot::setAngle(double i) {
+    angle = i;
 }
 
 void SPKnot::setFill(guint32 normal, guint32 mouseover, guint32 dragging) {

@@ -37,7 +37,6 @@
 // If this is not done, then errors will be generate relating to Glib::Threads being undefined
 #include <gtkmm/filechooserdialog.h>
 #include <gtkmm/messagedialog.h>
-#include <gtkmm/stock.h>
 
 #include "desktop.h"
 
@@ -1087,6 +1086,9 @@ void EditVerb::perform(SPAction *action, void *data)
         case SP_VERB_EDIT_NEXT_PATHEFFECT_PARAMETER:
             sp_selection_next_patheffect_param(dt);
             break;
+        case SP_VERB_EDIT_SWAP_FILL_STROKE:
+            dt->selection->swapFillStroke();
+            break;
         case SP_VERB_EDIT_LINK_COLOR_PROFILE:
             break;
         case SP_VERB_EDIT_REMOVE_COLOR_PROFILE:
@@ -1115,22 +1117,22 @@ void SelectionVerb::perform(SPAction *action, void *data)
     bool handled = true;
     switch (reinterpret_cast<std::size_t>(data)) {
         case SP_VERB_SELECTION_UNION:
-            sp_selected_path_union(selection, dt);
+            selection->pathUnion();
             break;
         case SP_VERB_SELECTION_INTERSECT:
-            sp_selected_path_intersect(selection, dt);
+            selection->pathIntersect();
             break;
         case SP_VERB_SELECTION_DIFF:
-            sp_selected_path_diff(selection, dt);
+            selection->pathDiff();
             break;
         case SP_VERB_SELECTION_SYMDIFF:
-            sp_selected_path_symdiff(selection, dt);
+            selection->pathSymDiff();
             break;
         case SP_VERB_SELECTION_CUT:
-            sp_selected_path_cut(selection, dt);
+            selection->pathCut();
             break;
         case SP_VERB_SELECTION_SLICE:
-            sp_selected_path_slice(selection, dt);
+            selection->pathSlice();
             break;
         case SP_VERB_SELECTION_GROW:
         {
@@ -2586,6 +2588,8 @@ Verb *Verb::_base_verbs[] = {
                  N_("Create four guides aligned with the page borders"), NULL),
     new EditVerb(SP_VERB_EDIT_NEXT_PATHEFFECT_PARAMETER, "EditNextPathEffectParameter", N_("Next path effect parameter"),
                  N_("Show next editable path effect parameter"), INKSCAPE_ICON("path-effect-parameter-next")),
+    new EditVerb(SP_VERB_EDIT_SWAP_FILL_STROKE, "EditSwapFillStroke", N_("Swap fill and stroke"),
+                 N_("Swap fill and stroke of an object"), NULL),
 
     // Selection
     new SelectionVerb(SP_VERB_SELECTION_TO_FRONT, "SelectionToFront", N_("Raise to _Top"),

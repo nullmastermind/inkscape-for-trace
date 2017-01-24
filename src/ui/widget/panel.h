@@ -18,9 +18,9 @@
 #endif
 
 #include <gtkmm/box.h>
-#include <gtkmm/arrow.h>
 #include <gtkmm/button.h>
 #include <gtkmm/eventbox.h>
+#include <gtkmm/image.h>
 #include <gtkmm/label.h>
 #include "enums.h"
 #include <vector>
@@ -101,7 +101,6 @@ public:
     /* Methods providing a Gtk::Dialog like interface for adding buttons that emit Gtk::RESPONSE
      * signals on click. */
     Gtk::Button* addResponseButton (const Glib::ustring &button_text, int response_id, bool pack_start=false);
-    Gtk::Button* addResponseButton (const Gtk::StockID &stock_id, int response_id, bool pack_start=false);
     void setDefaultResponse(int response_id);
     void setResponseSensitive(int response_id, bool setting);
 
@@ -157,7 +156,7 @@ private:
     Gtk::VBox        _right_bar;
     Gtk::VBox        _contents;
     Gtk::Label       _tab_title;
-    Gtk::Arrow       _temp_arrow;
+    Gtk::Image       _temp_arrow;
     Gtk::EventBox    _menu_popper;
     Gtk::Button      _close_button;
     Gtk::Menu       *_menu;

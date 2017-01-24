@@ -116,8 +116,8 @@ CdrImportDialog::CdrImportDialog(const std::vector<RVNGString> &vec)
      // CONTROLS
 
      // Buttons
-     cancelbutton = Gtk::manage(new class Gtk::Button(Gtk::StockID("gtk-cancel")));
-     okbutton = Gtk::manage(new class Gtk::Button(Gtk::StockID("gtk-ok")));
+     cancelbutton = Gtk::manage(new Gtk::Button(_("_Cancel"), true));
+     okbutton     = Gtk::manage(new Gtk::Button(_("_OK"),     true));
 
      // Labels
      _labelSelect = Gtk::manage(new class Gtk::Label(_("Select page:")));
@@ -214,6 +214,13 @@ void CdrImportDialog::_setPreviewPage()
 
 SPDocument *CdrInput::open(Inkscape::Extension::Input * /*mod*/, const gchar * uri)
 {
+     #ifdef WIN32
+          // RVNGFileStream uses fopen() internally which unfortunately only uses ANSI encoding on Windows
+          // therefore attempt to convert uri to the system codepage
+          // even if this is not possible the alternate short (8.3) file name will be used if available
+          uri = g_win32_locale_filename_from_utf8(uri);
+     #endif
+
      RVNGFileStream input(uri);
 
      if (!libcdr::CDRDocument::isSupported(&input)) {

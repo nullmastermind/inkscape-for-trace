@@ -79,6 +79,9 @@ GradientTool::~GradientTool() {
     delete this->subselcon;
 }
 
+// This must match GrPointType enum sp-gradient.h
+// We should move this to a shared header (can't simply move to gradient.h since that would require
+// including <glibmm/i18n.h> which messes up "N_" in extensions... argh!).
 const gchar *gr_handle_descr [] = {
     N_("Linear gradient <b>start</b>"), //POINT_LG_BEGIN
     N_("Linear gradient <b>end</b>"),
@@ -88,7 +91,10 @@ const gchar *gr_handle_descr [] = {
     N_("Radial gradient <b>radius</b>"),
     N_("Radial gradient <b>focus</b>"), // POINT_RG_FOCUS
     N_("Radial gradient <b>mid stop</b>"),
-    N_("Radial gradient <b>mid stop</b>")
+    N_("Radial gradient <b>mid stop</b>"),
+    N_("Mesh gradient <b>corner</b>"),
+    N_("Mesh gradient <b>handle</b>"),
+    N_("Mesh gradient <b>tensor</b>")
 };
 
 void GradientTool::selection_changed(Inkscape::Selection*) {
@@ -829,6 +835,16 @@ bool GradientTool::root_handler(GdkEvent* event) {
             // with any modifiers:
             sp_gradient_context_add_stops_between_selected_stops (this);
             ret = TRUE;
+            break;
+
+        case GDK_KEY_i:
+        case GDK_KEY_I:
+            if (MOD__SHIFT_ONLY(event)) {
+                // Shift+I - insert stops (alternate keybinding for keyboards
+                //           that don't have the Insert key)
+                sp_gradient_context_add_stops_between_selected_stops (this);
+                ret = TRUE;
+            }
             break;
 
         case GDK_KEY_Delete:

@@ -14,8 +14,7 @@
 #include <libnrtype/font-lister.h>
 #include "inkscape.h"
 #include "xml/node.h"
-#include "uri.h"
-#include "uri-references.h"
+#include "xml/sp-css-attr.h"
 #include "preferences.h"
 #include "util/units.h"
 #include "svg/svg-length.h"
@@ -29,7 +28,6 @@
 #include "sp-item.h"
 #include "sp-shape.h"
 #include "sp-path.h"
-#include "desktop.h"
 #include "document.h"
 #include <iomanip>
 
@@ -54,16 +52,17 @@ LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
     orientation(_("Orientation"), _("Orientation method"), "orientation", OMConverter, &wr, this, OM_PARALLEL, false),
     curve_linked(_("Curve on origin"), _("Curve on origin, set 0 to start/end"), "curve_linked", &wr, this, 1),
     precision(_("Precision*"), _("Precision"), "precision", &wr, this, 2),
-    position(_("Positon*"), _("Positon"), "position", &wr, this, 5),
+    position(_("Position*"), _("Position"), "position", &wr, this, 5),
     text_top_bottom(_("Text top/bottom*"), _("Text top/bottom"), "text_top_bottom", &wr, this, 0),
     text_right_left(_("Text right/left*"), _("Text right/left"), "text_right_left", &wr, this, 0),
     helpline_distance(_("Helpline distance*"), _("Helpline distance"), "helpline_distance", &wr, this, 0.0),
     helpline_overlap(_("Helpline overlap*"), _("Helpline overlap"), "helpline_overlap", &wr, this, 2.0),
     scale(_("Scale*"), _("Scaling factor"), "scale", &wr, this, 1.0),
-    format(_("Format*"), _("Format the number ex:{measure} {unit}, return to save"), "format", &wr, this,"measure unit"),
+    format(_("Format*"), _("Format the number ex:{measure} {unit}, return to save"), "format", &wr, this,"{measure}{unit}"),
+    id_origin("id_origin", "id_origin", "id_origin", &wr, this,""),
     arrows_outside(_("Arrows outside"), _("Arrows outside"), "arrows_outside", &wr, this, false),
     flip_side(_("Flip side*"), _("Flip side"), "flip_side", &wr, this, false),
-    scale_insensitive(_("Scale insensitive*"), _("Scale insensitive to transforms in element, parents..."), "scale_insensitive", &wr, this, true),
+    scale_sensitive(_("Scale sensitive*"), _("Costrained scale sensitive to transformed containers"), "scale_sensitive", &wr, this, true),
     local_locale(_("Local Number Format*"), _("Local number format"), "local_locale", &wr, this, true),
     line_group_05(_("Line Group 0.5*"), _("Line Group 0.5, from 0.7"), "line_group_05", &wr, this, true),
     rotate_anotation(_("Rotate Anotation*"), _("Rotate Anotation"), "rotate_anotation", &wr, this, true),
@@ -88,7 +87,7 @@ LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
     registerParameter(&format);
     registerParameter(&arrows_outside);
     registerParameter(&flip_side);
-    registerParameter(&scale_insensitive);
+    registerParameter(&scale_sensitive);
     registerParameter(&local_locale);
     registerParameter(&line_group_05);
     registerParameter(&rotate_anotation);
@@ -97,6 +96,8 @@ LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
     registerParameter(&helperlines_format);
     registerParameter(&anotation_format);
     registerParameter(&arrows_format);
+    registerParameter(&id_origin);
+    id_origin.param_hide_canvas_text();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     Glib::ustring fontbutton_value = prefs->getString("/live_effects/measure-line/fontbutton");
     if(fontbutton_value.empty()){
@@ -124,7 +125,7 @@ LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
     anotation_format.param_update_default(prefs->getString("/live_effects/measure-line/anotation_format"));
     arrows_format.param_update_default(prefs->getString("/live_effects/measure-line/arrows_format"));
     flip_side.param_update_default(prefs->getBool("/live_effects/measure-line/flip_side"));
-    scale_insensitive.param_update_default(prefs->getBool("/live_effects/measure-line/scale_insensitive"));
+    scale_sensitive.param_update_default(prefs->getBool("/live_effects/measure-line/scale_sensitive"));
     local_locale.param_update_default(prefs->getBool("/live_effects/measure-line/local_locale"));
     line_group_05.param_update_default(prefs->getBool("/live_effects/measure-line/line_group_05"));
     rotate_anotation.param_update_default(prefs->getBool("/live_effects/measure-line/rotate_anotation"));
@@ -158,7 +159,8 @@ LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
     helpline_overlap.param_set_range(-999999.0, 999999.0);
     helpline_overlap.param_set_increments(1, 1);
     helpline_overlap.param_set_digits(2);
-    erase = true;
+    start_stored = Geom::Point(0,0);
+    end_stored = Geom::Point(0,0);
 }
 
 LPEMeasureLine::~LPEMeasureLine() {}
@@ -168,6 +170,322 @@ void swap(Geom::Point &A, Geom::Point &B){
     A = B;
     B = tmp;
 }
+
+void
+LPEMeasureLine::createArrowMarker(const char * mode)
+{
+    SPDocument * document = SP_ACTIVE_DOCUMENT;
+    Inkscape::XML::Document *xml_doc = document->getReprDoc();
+    SPObject *elemref = NULL;
+    Inkscape::XML::Node *arrow = NULL;
+    if (elemref = document->getObjectById(mode)) {
+        Inkscape::XML::Node *arrow= elemref->getRepr();
+        if (arrow) {
+            arrow->setAttribute("sodipodi:insensitive", "true");
+            arrow->setAttribute("transform", NULL);
+            Inkscape::XML::Node *arrow_data = arrow->firstChild();
+            if (arrow_data) {
+                SPCSSAttr *css = sp_repr_css_attr_new();
+                sp_repr_css_set_property (css, "fill","#000000");
+                sp_repr_css_set_property (css, "stroke","none");
+                arrow_data->setAttribute("transform", NULL);
+                sp_repr_css_attr_add_from_string(css, arrows_format.param_getSVGValue());
+                Glib::ustring css_str;
+                sp_repr_css_write_string(css,css_str);
+                arrow_data->setAttribute("style", css_str.c_str());
+            }
+        }
+    } else {
+        arrow = xml_doc->createElement("svg:marker");
+        arrow->setAttribute("id", mode);
+        arrow->setAttribute("inkscape:stockid", mode);
+        arrow->setAttribute("orient", "auto");
+        arrow->setAttribute("refX", "0.0");
+        arrow->setAttribute("refY", "0.0");
+        arrow->setAttribute("style", "overflow:visible");
+        arrow->setAttribute("sodipodi:insensitive", "true");
+        /* Create <path> */
+        Inkscape::XML::Node *arrow_path = xml_doc->createElement("svg:path");
+        if (std::strcmp(mode, "ArrowDIN-start") == 0) {
+            arrow_path->setAttribute("d", "M -8,0 8,-2.11 8,2.11 z");
+        } else if (std::strcmp(mode, "ArrowDIN-end") == 0) {
+            arrow_path->setAttribute("d", "M 8,0 -8,2.11 -8,-2.11 z");
+        } else if (std::strcmp(mode, "ArrowDINout-start") == 0) {
+            arrow_path->setAttribute("d", "M 0,0 -16,2.11 -16,0.5 -26,0.5 -26,-0.5 -16,-0.5 -16,-2.11 z");
+        } else {
+            arrow_path->setAttribute("d", "M 0,0 16,2.11 16,0.5 26,0.5 26,-0.5 16,-0.5 16,-2.11 z");
+        }
+        
+        arrow_path->setAttribute("id", Glib::ustring(mode).append("_path").c_str());
+        SPCSSAttr *css = sp_repr_css_attr_new();
+        sp_repr_css_set_property (css, "fill","#000000");
+        sp_repr_css_set_property (css, "stroke","none");
+        sp_repr_css_attr_add_from_string(css, arrows_format.param_getSVGValue());
+        Glib::ustring css_str;
+        sp_repr_css_write_string(css,css_str);
+        arrow_path->setAttribute("style", css_str.c_str());
+        arrow->addChild(arrow_path, NULL);
+        Inkscape::GC::release(arrow_path);
+        elemref = SP_OBJECT(document->getDefs()->appendChildRepr(arrow));
+        Inkscape::GC::release(arrow);
+    }
+    elements.push_back(mode);
+}
+
+void
+LPEMeasureLine::createTextLabel(Geom::Point pos, double length, Geom::Coord angle, bool remove, bool valid)
+{
+    SPDocument * document = SP_ACTIVE_DOCUMENT;
+    Inkscape::XML::Document *xml_doc = document->getReprDoc();
+    Inkscape::XML::Node *rtext = NULL;
+    double doc_w = document->getRoot()->width.value;
+    Geom::Scale scale = document->getDocumentScale();
+    SPNamedView *nv = sp_document_namedview(document, NULL);
+    Glib::ustring display_unit = nv->display_units->abbr;
+    if (display_unit.empty()) {
+        display_unit = "px";
+    }
+    //only check constrain viewbox on X
+    doc_scale = Inkscape::Util::Quantity::convert( scale[Geom::X], "px", nv->display_units );
+    if( doc_scale > 0 ) {
+        doc_scale= 1.0/doc_scale;
+    } else {
+        doc_scale = 1.0;
+    }
+    const char * id = g_strdup(Glib::ustring("text-on-").append(this->getRepr()->attribute("id")).c_str());
+    SPObject *elemref = NULL;
+    Inkscape::XML::Node *rtspan = NULL;
+    if (elemref = document->getObjectById(id)) {
+        if (remove) {
+            elemref->deleteObject();
+            return;
+        }
+        pos = pos - Point::polar(angle, text_right_left);
+        rtext = elemref->getRepr();
+        sp_repr_set_svg_double(rtext, "x", pos[Geom::X]);
+        sp_repr_set_svg_double(rtext, "y", pos[Geom::Y]);
+        rtext->setAttribute("sodipodi:insensitive", "true");
+        rtext->setAttribute("transform", NULL);
+    } else {
+        if (remove) {
+            return;
+        }
+        rtext = xml_doc->createElement("svg:text");
+        rtext->setAttribute("xml:space", "preserve");
+        rtext->setAttribute("id", id);
+        rtext->setAttribute("sodipodi:insensitive", "true");
+        pos = pos - Point::polar(angle, text_right_left);
+        sp_repr_set_svg_double(rtext, "x", pos[Geom::X]);
+        sp_repr_set_svg_double(rtext, "y", pos[Geom::Y]);
+        rtspan = xml_doc->createElement("svg:tspan");
+        rtspan->setAttribute("sodipodi:role", "line");
+    }
+    const char * transform;
+    Geom::Affine affine = Geom::Affine(Geom::Translate(pos).inverse());
+    angle = std::fmod(angle, 2*M_PI);
+    if (angle < 0) angle += 2*M_PI;
+    if (angle >= rad_from_deg(90) && angle < rad_from_deg(270)) {
+        angle = std::fmod(angle + rad_from_deg(180), 2*M_PI);
+        if (angle < 0) angle += 2*M_PI;
+    }
+    affine *= Geom::Rotate(angle);
+    affine *= Geom::Translate(pos);
+    if (rotate_anotation) {
+        transform = sp_svg_transform_write(affine);
+    } else {
+        transform = NULL;
+    }
+    rtext->setAttribute("transform", transform);
+    SPCSSAttr *css = sp_repr_css_attr_new();
+    sp_repr_css_attr_add_from_string(css, anotation_format.param_getSVGValue());
+    Inkscape::FontLister *fontlister = Inkscape::FontLister::get_instance();
+    fontlister->fill_css(css, Glib::ustring(fontbutton.param_getSVGValue()));
+    std::stringstream font_size;
+    font_size.imbue(std::locale::classic());
+    font_size <<  fontsize << "pt";
+    sp_repr_css_set_property (css, "font-size",font_size.str().c_str());
+    sp_repr_css_set_property (css, "line-height","125%");
+    sp_repr_css_set_property (css, "letter-spacing","0");
+    sp_repr_css_set_property (css, "word-spacing", "0");
+    sp_repr_css_set_property (css, "text-align", "center");
+    sp_repr_css_set_property (css, "text-anchor", "middle");
+    sp_repr_css_set_property (css, "fill", "#000000");
+    sp_repr_css_set_property (css, "fill-opacity", "1");
+    sp_repr_css_set_property (css, "stroke", "none");
+    sp_repr_css_attr_add_from_string(css, anotation_format.param_getSVGValue());
+    Glib::ustring css_str;
+    sp_repr_css_write_string(css,css_str);
+    if (!rtspan) {
+        rtspan = rtext->firstChild();
+    }
+    rtext->setAttribute("style", css_str.c_str());
+    rtspan->setAttribute("style", NULL);
+    rtspan->setAttribute("transform", NULL);
+    sp_repr_css_attr_unref (css);
+    if (!elemref) {
+        rtext->addChild(rtspan, NULL);
+        Inkscape::GC::release(rtspan);
+    }
+    length = Inkscape::Util::Quantity::convert(length / doc_scale, display_unit.c_str(), unit.get_abbreviation());
+    std::stringstream length_str;
+    length_str.precision(precision);
+    length_str.setf(std::ios::fixed, std::ios::floatfield);
+    if (local_locale) {
+        length_str.imbue(std::locale(""));
+    } else {
+        length_str.imbue(std::locale::classic());
+    }
+    length_str << std::fixed << length;
+    Glib::ustring label_value = Glib::ustring(format.param_getSVGValue());
+    size_t s = label_value.find(Glib::ustring("{measure}"),0);
+    if(s < label_value.length()) {
+        label_value.replace(s,s+9,length_str.str());
+    }
+    s = label_value.find(Glib::ustring("{unit}"),0);
+    if(s < label_value.length()) {
+        label_value.replace(s,s+6,unit.get_abbreviation());
+    }
+    if ( !valid ) {
+        label_value = Glib::ustring(_("Non Uniform Scale"));
+    }
+    Inkscape::XML::Node *rstring = NULL;
+    if (!elemref) {
+        rstring = xml_doc->createTextNode(label_value.c_str());
+        rtspan->addChild(rstring, NULL);
+        Inkscape::GC::release(rstring);
+    } else {
+        rstring = rtspan->firstChild();
+        rstring->setContent(label_value.c_str());
+    }
+    if (!elemref) {
+        elemref = sp_lpe_item->parent->appendChildRepr(rtext);
+        Inkscape::GC::release(rtext);
+    } else if (elemref->parent != sp_lpe_item->parent) {
+        Inkscape::XML::Node *old_repr = elemref->getRepr();
+        Inkscape::XML::Node *copy = old_repr->duplicate(xml_doc);
+        SPObject * elemref_copy = sp_lpe_item->parent->appendChildRepr(copy);
+        Inkscape::GC::release(copy);
+        elemref->deleteObject();
+        copy->setAttribute("id", id);
+        elemref = elemref_copy;
+    }
+    elements.push_back(id);
+    Geom::OptRect bounds = SP_ITEM(elemref)->bounds(SPItem::GEOMETRIC_BBOX);
+    if (bounds) {
+        anotation_width = bounds->width() * 1.4;
+    }
+}
+
+void
+LPEMeasureLine::createLine(Geom::Point start,Geom::Point end, const char * id, bool main, bool overflow, bool remove, bool arrows)
+{
+    SPDocument * document = SP_ACTIVE_DOCUMENT;
+    Inkscape::XML::Document *xml_doc = document->getReprDoc();
+    SPObject *elemref = NULL;
+    Inkscape::XML::Node *line = NULL;
+    if (!main) {
+        Geom::Ray ray(start, end);
+        Geom::Coord angle = ray.angle();
+        start = start + Point::polar(angle, helpline_distance );
+        end = end + Point::polar(angle, helpline_overlap );
+    }
+    Geom::PathVector line_pathv;
+    if (main && std::abs(text_top_bottom) < fontsize/1.5 && hide_back && !overflow){
+        Geom::Path line_path;
+        double k = 0;
+        if (flip_side) {
+            k = (Geom::distance(start,end)/2.0) + arrow_gap - (anotation_width/2.0);
+        } else {
+            k = (Geom::distance(start,end)/2.0) - arrow_gap - (anotation_width/2.0);
+        }
+        if (Geom::distance(start,end) < anotation_width){
+            return;
+        }
+        Geom::Ray ray(end, start);
+        Geom::Coord angle = ray.angle();
+        line_path.start(start);
+        line_path.appendNew<Geom::LineSegment>(start - Point::polar(angle, k));
+        line_pathv.push_back(line_path);
+        line_path.clear();
+        line_path.start(end + Point::polar(angle, k));
+        line_path.appendNew<Geom::LineSegment>(end);
+        line_pathv.push_back(line_path);
+    } else {
+        Geom::Path line_path;
+        line_path.start(start);
+        line_path.appendNew<Geom::LineSegment>(end);
+        line_pathv.push_back(line_path);
+    }
+    if (elemref = document->getObjectById(id)) {
+        if (remove) {
+            elemref->deleteObject();
+            return;
+        }
+        line = elemref->getRepr();
+       
+        const char * line_str = sp_svg_write_path( line_pathv );
+        line->setAttribute("d" , line_str);
+        line->setAttribute("transform", NULL);
+    } else {
+        if (remove) {
+            return;
+        }
+        line = xml_doc->createElement("svg:path");
+        line->setAttribute("id", id);
+        const char * line_str = sp_svg_write_path( line_pathv );
+        line->setAttribute("d" , line_str);
+    }
+    line->setAttribute("sodipodi:insensitive", "true");
+    line_pathv.clear();
+        
+    Glib::ustring style = Glib::ustring("stroke:#000000;fill:none;");
+    if (overflow && !arrows) {
+        line->setAttribute("inkscape:label", "downline");
+    } else if (main) {
+        line->setAttribute("inkscape:label", "dinline");
+        if (arrows_outside) {
+            style = style + Glib::ustring("marker-start:url(#ArrowDINout-start);marker-end:url(#ArrowDINout-end);");
+        } else {
+            style = style + Glib::ustring("marker-start:url(#ArrowDIN-start);marker-end:url(#ArrowDIN-end);");
+        }
+    } else {
+        line->setAttribute("inkscape:label", "dinhelpline");
+    }
+    std::stringstream stroke_w;
+    stroke_w.imbue(std::locale::classic());
+    if (line_group_05) {
+        double stroke_width = Inkscape::Util::Quantity::convert(0.25 / doc_scale, "mm", display_unit.c_str());
+        stroke_w <<  stroke_width;
+        style = style + Glib::ustring("stroke-width:" + stroke_w.str());
+    } else {
+        double stroke_width = Inkscape::Util::Quantity::convert(0.35 / doc_scale, "mm", display_unit.c_str());
+        stroke_w <<  stroke_width;
+        style = style + Glib::ustring("stroke-width:" + stroke_w.str());
+    }
+    SPCSSAttr *css = sp_repr_css_attr_new();
+    sp_repr_css_attr_add_from_string(css, style.c_str());
+    if (main) {
+        sp_repr_css_attr_add_from_string(css, dimline_format.param_getSVGValue());
+    } else {
+        sp_repr_css_attr_add_from_string(css, helperlines_format.param_getSVGValue());
+    }
+    Glib::ustring css_str;
+    sp_repr_css_write_string(css,css_str);
+    line->setAttribute("style", css_str.c_str());
+    if (!elemref) {
+        elemref = sp_lpe_item->parent->appendChildRepr(line);
+        Inkscape::GC::release(line);
+    } else if (elemref->parent != sp_lpe_item->parent) {
+        Inkscape::XML::Node *old_repr = elemref->getRepr();
+        Inkscape::XML::Node *copy = old_repr->duplicate(xml_doc);
+        SPObject * elemref_copy = sp_lpe_item->parent->appendChildRepr(copy);
+        Inkscape::GC::release(copy);
+        elemref->deleteObject();
+        copy->setAttribute("id", id);
+    }
+    elements.push_back(id);
+}
+
 void
 LPEMeasureLine::doOnApply(SPLPEItem const* lpeitem)
 {
@@ -176,605 +494,243 @@ LPEMeasureLine::doOnApply(SPLPEItem const* lpeitem)
         SPLPEItem * item = const_cast<SPLPEItem*>(lpeitem);
         item->removeCurrentPathEffect(false);
     }
-}
-
-void
-LPEMeasureLine::doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/)
-{
-    if (SPDesktop *desktop = SP_ACTIVE_DESKTOP) {
-        Inkscape::URI SVGElem_uri(((Glib::ustring)"#" +  (Glib::ustring)"text-on-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
-        Inkscape::URIReference* SVGElemRef = new Inkscape::URIReference(desktop->doc());
-        SVGElemRef->attach(SVGElem_uri);
-        SPObject *elemref = NULL;
-        Inkscape::XML::Node *node = NULL;
-        if (elemref = SVGElemRef->getObject()) {
-            node = elemref->getRepr();
-            if (!this->isVisible()) {
-                node->setAttribute("style", "display:none");
-            } else {
-                node->setAttribute("style", NULL);
-            }
-        }
-        Inkscape::URI SVGElem_uri2(((Glib::ustring)"#" +  (Glib::ustring)"infoline-on-start-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
-        SVGElemRef->attach(SVGElem_uri2);
-        if (elemref = SVGElemRef->getObject()) {
-            node = elemref->getRepr();
-            if (!this->isVisible()) {
-                node->setAttribute("style", "display:none");
-            } else {
-                node->setAttribute("style", NULL);
-            }
-        }
-        Inkscape::URI SVGElem_uri3(((Glib::ustring)"#" +  (Glib::ustring)"infoline-on-end-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
-        SVGElemRef->attach(SVGElem_uri3);
-        if (elemref = SVGElemRef->getObject()) {
-            node = elemref->getRepr();
-            if (!this->isVisible()) {
-                node->setAttribute("style", "display:none");
-            } else {
-                node->setAttribute("style", NULL);
-            }
-        }
-        Inkscape::URI SVGElem_uri4(((Glib::ustring)"#" +  (Glib::ustring)"infoline-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
-        SVGElemRef->attach(SVGElem_uri4);
-        if (elemref = SVGElemRef->getObject()) {
-            node = elemref->getRepr();
-            if (!this->isVisible()) {
-                node->setAttribute("style", "display:none");
-            } else {
-                node->setAttribute("style", NULL);
-            }
-        }
-        Inkscape::URI SVGElem_uri5(((Glib::ustring)"#" +  (Glib::ustring)"downline-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
-        SVGElemRef->attach(SVGElem_uri5);
-        if (elemref = SVGElemRef->getObject()) {
-            node = elemref->getRepr();
-            if (!this->isVisible()) {
-                node->setAttribute("style", "display:none");
-            } else {
-                node->setAttribute("style", NULL);
-            }
-        }
-    }
-}
-
-void
-LPEMeasureLine::createArrowMarker(Glib::ustring mode)
-{
-    if (SPDesktop *desktop = SP_ACTIVE_DESKTOP) {
-        Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
-        Inkscape::URI SVGElem_uri(((Glib::ustring)"#" + mode).c_str());
-        Inkscape::URIReference* SVGElemRef = new Inkscape::URIReference(desktop->doc());
-        SVGElemRef->attach(SVGElem_uri);
-        SPObject *elemref = NULL;
-        Inkscape::XML::Node *arrow = NULL;
-        if (!(elemref = SVGElemRef->getObject())) {
-            arrow = xml_doc->createElement("svg:marker");
-            arrow->setAttribute("id", mode.c_str());
-            arrow->setAttribute("inkscape:stockid", mode.c_str());
-            arrow->setAttribute("orient", "auto");
-            arrow->setAttribute("refX", "0.0");
-            arrow->setAttribute("refY", "0.0");
-            arrow->setAttribute("style", "overflow:visible");
-            arrow->setAttribute("sodipodi:insensitive", "true");
-            /* Create <path> */
-            Inkscape::XML::Node *arrow_path = xml_doc->createElement("svg:path");
-            if (mode == (Glib::ustring)"ArrowDIN-start") {
-                arrow_path->setAttribute("d", "M -8,0 8,-2.11 8,2.11 z");
-            } else if (mode == (Glib::ustring)"ArrowDIN-end") {
-                arrow_path->setAttribute("d", "M 8,0 -8,2.11 -8,-2.11 z");
-            } else if (mode == (Glib::ustring)"ArrowDINout-start") {
-                arrow_path->setAttribute("d", "M 0,0 -16,2.11 -16,0.5 -26,0.5 -26,-0.5 -16,-0.5 -16,-2.11 z");
-            } else {
-                arrow_path->setAttribute("d", "M 0,0 16,2.11 16,0.5 26,0.5 26,-0.5 16,-0.5 16,-2.11 z");
-            }
-            
-            arrow_path->setAttribute("id", (mode + (Glib::ustring)"_path").c_str());
-            SPCSSAttr *css = sp_repr_css_attr_new();
-            sp_repr_css_set_property (css, "fill","#000000");
-            sp_repr_css_set_property (css, "stroke","none" );
-            sp_repr_css_attr_add_from_string(css, arrows_format.param_getSVGValue());
-            Glib::ustring css_str;
-            sp_repr_css_write_string(css,css_str);
-            arrow_path->setAttribute("style", css_str.c_str());
-            arrow->addChild(arrow_path, NULL);
-            Inkscape::GC::release(arrow_path);
-            elemref = SP_OBJECT(desktop->getDocument()->getDefs()->appendChildRepr(arrow));
-            Inkscape::GC::release(arrow);
-        } else {
-            Inkscape::XML::Node *arrow= elemref->getRepr();
-            if (arrow) {
-                arrow->setAttribute("sodipodi:insensitive", "true");
-                Inkscape::XML::Node *arrow_data = arrow->firstChild();
-                if (arrow_data) {
-                    SPCSSAttr *css = sp_repr_css_attr_new();
-                    sp_repr_css_set_property (css, "fill","#000000");
-                    sp_repr_css_set_property (css, "stroke","none" );
-                    sp_repr_css_attr_add_from_string(css, arrows_format.param_getSVGValue());
-                    Glib::ustring css_str;
-                    sp_repr_css_write_string(css,css_str);
-                    arrow_data->setAttribute("style", css_str.c_str());
-                }
-            }
-        }
-    }
-}
-
-void
-LPEMeasureLine::createTextLabel(Geom::Point pos, double length, Geom::Coord angle, bool remove)
-{
-    if (SPDesktop *desktop = SP_ACTIVE_DESKTOP) {
-        Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
-        Inkscape::XML::Node *rtext = NULL;
-        double doc_w = desktop->getDocument()->getRoot()->width.value;
-        Geom::Scale scale = desktop->getDocument()->getDocumentScale();
-        SPNamedView *nv = desktop->getNamedView();
-        Glib::ustring display_unit = nv->display_units->abbr;
-        if (display_unit.empty()) {
-            display_unit = "px";
-        }
-        //only check constrain viewbox on X
-        doc_scale = Inkscape::Util::Quantity::convert( scale[Geom::X], "px", nv->display_units );
-        if( doc_scale > 0 ) {
-            doc_scale= 1.0/doc_scale;
-        } else {
-            doc_scale = 1.0;
-        }
-        Inkscape::URI SVGElem_uri(((Glib::ustring)"#" +  (Glib::ustring)"text-on-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
-        Inkscape::URIReference* SVGElemRef = new Inkscape::URIReference(desktop->doc());
-        SVGElemRef->attach(SVGElem_uri);
-        SPObject *elemref = NULL;
-        Inkscape::XML::Node *rtspan = NULL;
-        
-        if (elemref = SVGElemRef->getObject()) {
-            if (remove) {
-                elemref->deleteObject();
-                return;
-            }
-            pos = pos - Point::polar(angle, text_right_left);
-            rtext = elemref->getRepr();
-            sp_repr_set_svg_double(rtext, "x", pos[Geom::X]);
-            sp_repr_set_svg_double(rtext, "y", pos[Geom::Y]);
-            rtext->setAttribute("sodipodi:insensitive", "true");
-        } else {
-            if (remove) {
-                return;
-            }
-            rtext = xml_doc->createElement("svg:text");
-            rtext->setAttribute("xml:space", "preserve");
-            rtext->setAttribute("id", ( (Glib::ustring)"text-on-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
-            rtext->setAttribute("sodipodi:insensitive", "true");
-            pos = pos - Point::polar(angle, text_right_left);
-            sp_repr_set_svg_double(rtext, "x", pos[Geom::X]);
-            sp_repr_set_svg_double(rtext, "y", pos[Geom::Y]);
-            rtspan = xml_doc->createElement("svg:tspan");
-            rtspan->setAttribute("sodipodi:role", "line");
-        }
-        gchar * transform;
-        Geom::Affine affine = Geom::Affine(Geom::Translate(pos).inverse());
-        angle = std::fmod(angle, 2*M_PI);
-        if (angle < 0) angle += 2*M_PI;
-        if (angle >= rad_from_deg(90) && angle < rad_from_deg(270)) {
-            angle = std::fmod(angle + rad_from_deg(180), 2*M_PI);
-            if (angle < 0) angle += 2*M_PI;
-        }
-        affine *= Geom::Rotate(angle);
-        affine *= Geom::Translate(pos);
-        if (rotate_anotation) {
-            transform = sp_svg_transform_write(affine);
-        } else {
-            transform = NULL;
-        }
-        rtext->setAttribute("transform", transform);
-        SPCSSAttr *css = sp_repr_css_attr_new();
-        sp_repr_css_attr_add_from_string(css, anotation_format.param_getSVGValue());
-        Inkscape::FontLister *fontlister = Inkscape::FontLister::get_instance();
-        fontlister->fill_css( css, (Glib::ustring)fontbutton.param_getSVGValue() );
-        std::stringstream font_size;
-        font_size.imbue(std::locale::classic());
-        font_size <<  fontsize << "pt";
-
-        sp_repr_css_set_property (css, "font-size",font_size.str().c_str());
-        sp_repr_css_set_property (css, "line-height","125%");
-        sp_repr_css_set_property (css, "letter-spacing","0");
-        sp_repr_css_set_property (css, "word-spacing", "0");
-        sp_repr_css_set_property (css, "text-align", "center");
-        sp_repr_css_set_property (css, "text-anchor", "middle");
-        sp_repr_css_set_property (css, "fill", "#000000");
-        sp_repr_css_set_property (css, "fill-opacity", "1");
-        sp_repr_css_set_property (css, "stroke", "none");
-        sp_repr_css_attr_add_from_string(css, anotation_format.param_getSVGValue());
-        Glib::ustring css_str;
-        sp_repr_css_write_string(css,css_str);
-        if (!rtspan) {
-            rtspan = rtext->firstChild();
-        }
-        rtext->setAttribute("style", css_str.c_str());
-        rtspan->setAttribute("style", NULL);
-        sp_repr_css_attr_unref (css);
-        if (!elemref) {
-            rtext->addChild(rtspan, NULL);
-            Inkscape::GC::release(rtspan);
-        }
-        length = Inkscape::Util::Quantity::convert(length / doc_scale, display_unit.c_str(), unit.get_abbreviation());
-        std::stringstream length_str;
-        length_str.precision(precision);
-        length_str.setf(std::ios::fixed, std::ios::floatfield);
-        if (local_locale) {
-            length_str.imbue(std::locale(""));
-        } else {
-            length_str.imbue(std::locale::classic());
-        }
-        length_str << std::fixed << length;
-        Glib::ustring label_value = Glib::ustring(format.param_getSVGValue());
-        size_t s = label_value.find((Glib::ustring)"{measure}",0);
-        if(s < label_value.length()) {
-            label_value.replace(s,s+9,length_str.str());
-        }
-        s = label_value.find((Glib::ustring)"{unit}",0);
-        if(s < label_value.length()) {
-            label_value.replace(s,s+6,unit.get_abbreviation());
-        }
-        Inkscape::XML::Node *rstring = NULL;
-        if (!elemref) {
-            rstring = xml_doc->createTextNode(label_value.c_str());
-            rtspan->addChild(rstring, NULL);
-            Inkscape::GC::release(rstring);
-        } else {
-            rstring = rtspan->firstChild();
-            rstring->setContent(label_value.c_str());
-        }
-        if (!elemref) {
-            elemref = SP_OBJECT(desktop->currentLayer()->appendChildRepr(rtext));
-            Inkscape::GC::release(rtext);
-        }
-        Inkscape::XML::Node *tmp_node = rtext->duplicate(xml_doc);
-        affine = Geom::Affine(Geom::Scale(1.4));
-        tmp_node->setAttribute("transform", sp_svg_transform_write(affine));
-        SPObject * tmp_obj = SP_OBJECT(desktop->currentLayer()->appendChildRepr(tmp_node));
-        Inkscape::GC::release(tmp_node);
-        tmp_obj->updateRepr();
-        Geom::OptRect bounds = SP_ITEM(tmp_obj)->bounds(SPItem::GEOMETRIC_BBOX);
-        if (bounds) {
-            anotation_width = bounds->width();
-        }
-        tmp_obj->deleteObject();
-    }
-}
-
-void
-LPEMeasureLine::createLine(Geom::Point start,Geom::Point end, Glib::ustring id, bool main, bool overflow, bool remove, bool arrows)
-{
-    if (SPDesktop *desktop = SP_ACTIVE_DESKTOP) {
-        Inkscape::XML::Document *xml_doc = desktop->doc()->getReprDoc();
-        Inkscape::URI SVGElem_uri(((Glib::ustring)"#" + id).c_str());
-        Inkscape::URIReference* SVGElemRef = new Inkscape::URIReference(desktop->doc());
-        SVGElemRef->attach(SVGElem_uri);
-        SPObject *elemref = NULL;
-        Inkscape::XML::Node *line = NULL;
-        if (!main) {
-            Geom::Ray ray(start, end);
-            Geom::Coord angle = ray.angle();
-            start = start + Point::polar(angle, helpline_distance );
-            end = end + Point::polar(angle, helpline_overlap );
-        }
-        Geom::PathVector line_pathv;
-        if (main && std::abs(text_top_bottom) < fontsize/1.5 && hide_back && !overflow){
-            Geom::Path line_path;
-            double k = 0;
-            if (flip_side) {
-                k = (Geom::distance(start,end)/2.0) + arrow_gap - (anotation_width/2.0);
-            } else {
-                k = (Geom::distance(start,end)/2.0) - arrow_gap - (anotation_width/2.0);
-            }
-            if (Geom::distance(start,end) < anotation_width){
-                return;
-            }
-            Geom::Ray ray(end, start);
-            Geom::Coord angle = ray.angle();
-            line_path.start(start);
-            line_path.appendNew<Geom::LineSegment>(start - Point::polar(angle, k));
-            line_pathv.push_back(line_path);
-            line_path.clear();
-            line_path.start(end + Point::polar(angle, k));
-            line_path.appendNew<Geom::LineSegment>(end);
-            line_pathv.push_back(line_path);
-        } else {
-            Geom::Path line_path;
-            line_path.start(start);
-            line_path.appendNew<Geom::LineSegment>(end);
-            line_pathv.push_back(line_path);
-        }
-        
-        if (elemref = SVGElemRef->getObject()) {
-            if (remove) {
-                elemref->deleteObject();
-                return;
-            }
-            line = elemref->getRepr();
-           
-            gchar * line_str = sp_svg_write_path( line_pathv );
-            line->setAttribute("d" , line_str);
-        } else {
-            if (remove) {
-                return;
-            }
-            line = xml_doc->createElement("svg:path");
-            line->setAttribute("id", id.c_str());
-            gchar * line_str = sp_svg_write_path( line_pathv );
-            line->setAttribute("d" , line_str);
-        }
-        line->setAttribute("sodipodi:insensitive", "true");
-        line_pathv.clear();
-        
-        Glib::ustring style = (Glib::ustring)"stroke:#000000;fill:none;";
-        if (overflow && !arrows) {
-            line->setAttribute("inkscape:label", "downline");
-        } else if (main) {
-            line->setAttribute("inkscape:label", "dinline");
-            if (arrows_outside) {
-                style = style + (Glib::ustring)"marker-start:url(#ArrowDINout-start);marker-end:url(#ArrowDINout-end);";
-            } else {
-                style = style + (Glib::ustring)"marker-start:url(#ArrowDIN-start);marker-end:url(#ArrowDIN-end);";
-            }
-        } else {
-            line->setAttribute("inkscape:label", "dinhelpline");
-        }
-        std::stringstream stroke_w;
-        stroke_w.imbue(std::locale::classic());
-        if (line_group_05) {
-            double stroke_width = Inkscape::Util::Quantity::convert(0.25 / doc_scale, "mm", display_unit.c_str());
-            stroke_w <<  stroke_width;
-            style = style + (Glib::ustring)"stroke-width:" + (Glib::ustring)stroke_w.str();
-        } else {
-            double stroke_width = Inkscape::Util::Quantity::convert(0.35 / doc_scale, "mm", display_unit.c_str());
-            stroke_w <<  stroke_width;
-            style = style + (Glib::ustring)"stroke-width:" + (Glib::ustring)stroke_w.str();
-        }
-        SPCSSAttr *css = sp_repr_css_attr_new();
-        sp_repr_css_attr_add_from_string(css, style.c_str());
-        if (main) {
-            sp_repr_css_attr_add_from_string(css, dimline_format.param_getSVGValue());
-        } else {
-            sp_repr_css_attr_add_from_string(css, helperlines_format.param_getSVGValue());
-        }
-        Glib::ustring css_str;
-        sp_repr_css_write_string(css,css_str);
-        line->setAttribute("style", css_str.c_str());
-        if (!elemref) {
-            elemref = SP_OBJECT(desktop->currentLayer()->appendChildRepr(line));
-            Inkscape::GC::release(line);
-        }
-    }
+    id_origin.param_setValue(Glib::ustring(lpeitem->getId()));
+    id_origin.write_to_SVG();
 }
 
 void
 LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
 {
     SPLPEItem * splpeitem = const_cast<SPLPEItem *>(lpeitem);
+    sp_lpe_item->parent = dynamic_cast<SPObject *>(splpeitem->parent);
+    SPDocument * document = SP_ACTIVE_DOCUMENT;
+    Inkscape::XML::Node *root = splpeitem->document->getReprRoot();
+    Inkscape::XML::Node *root_origin = document->getReprRoot();
+    if (root_origin != root) {
+        return;
+    }
     SPPath *sp_path = dynamic_cast<SPPath *>(splpeitem);
     if (sp_path) {
-        SPDocument * doc = SP_ACTIVE_DOCUMENT;
-        Geom::Affine affinetransform = i2anc_affine(SP_OBJECT(lpeitem)->parent, SP_OBJECT(doc->getRoot()));
-        double parents_scale = (affinetransform.inverse().expansionX() + affinetransform.inverse().expansionY()) / 2.0;
-        
+        Geom::Affine affinetransform = i2anc_affine(SP_OBJECT(lpeitem), SP_OBJECT(document->getRoot()));
         Geom::PathVector pathvector = sp_path->get_original_curve()->get_pathvector();
-        pathvector *= affinetransform;
-        if (arrows_outside) {
-            createArrowMarker((Glib::ustring)"ArrowDINout-start");
-            createArrowMarker((Glib::ustring)"ArrowDINout-end");
-        } else {
-            createArrowMarker((Glib::ustring)"ArrowDIN-start");
-            createArrowMarker((Glib::ustring)"ArrowDIN-end");
+        Geom::Affine writed_transform = Geom::identity();
+        sp_svg_transform_read(splpeitem->getAttribute("transform"), &writed_transform );
+        pathvector *= writed_transform;
+        if ((Glib::ustring(format.param_getSVGValue()).empty())) {
+            format.param_setValue(Glib::ustring("{measure}{unit}"));
+            this->upd_params = true;
         }
-        if (SPDesktop *desktop = SP_ACTIVE_DESKTOP) {
-            if (((Glib::ustring)format.param_getSVGValue()).empty()) {
-                format.param_setValue((Glib::ustring)"{measure}{unit}");
-                this->upd_params = true;
-            }
-            size_t ncurves = pathvector.curveCount();
+        size_t ncurves = pathvector.curveCount();
+        if (ncurves != (size_t)curve_linked.param_get_max()) {
             curve_linked.param_set_range(0, ncurves);
-            Geom::Point start = pathvector.initialPoint();
-            Geom::Point end =  pathvector.finalPoint();
-            if (curve_linked) { //!0 
-                start = pathvector.pointAt(curve_linked -1);
-                end = pathvector.pointAt(curve_linked);
+        }
+        Geom::Point start = pathvector.initialPoint();
+        Geom::Point end =  pathvector.finalPoint();
+        if (curve_linked) { //!0 
+            start = pathvector.pointAt(curve_linked -1);
+            end = pathvector.pointAt(curve_linked);
+        }
+        if (Geom::are_near(start, start_stored, 0.01) && 
+            Geom::are_near(end, end_stored, 0.01) &&
+            sp_lpe_item->getCurrentLPE() != this){
+            return;
+        }
+        elements.clear();
+        start_stored = start;
+        end_stored = end;
+        Geom::Point hstart = start;
+        Geom::Point hend = end;
+        bool remove = false;
+        if (Geom::are_near(hstart, hend)) {
+            remove = true;
+        }
+        if (orientation == OM_VERTICAL) {
+            Coord xpos = std::max(hstart[Geom::X],hend[Geom::X]);
+            if (flip_side) {
+                xpos = std::min(hstart[Geom::X],hend[Geom::X]);
             }
-            Geom::Point hstart = start;
-            Geom::Point hend = end;
-            bool remove = false;
-            if (Geom::are_near(hstart, hend)) {
+            hstart[Geom::X] = xpos;
+            hend[Geom::X] = xpos;
+            if (hstart[Geom::Y] > hend[Geom::Y]) {
+                swap(hstart,hend);
+                swap(start,end);
+            }
+            if (Geom::are_near(hstart[Geom::Y], hend[Geom::Y])) {
                 remove = true;
             }
-            if (orientation == OM_VERTICAL) {
-                Coord xpos = std::max(hstart[Geom::X],hend[Geom::X]);
-                if (flip_side) {
-                    xpos = std::min(hstart[Geom::X],hend[Geom::X]);
-                }
-                hstart[Geom::X] = xpos;
-                hend[Geom::X] = xpos;
-                if (hstart[Geom::Y] > hend[Geom::Y]) {
-                    swap(hstart,hend);
-                    swap(start,end);
-                }
-                if (Geom::are_near(hstart[Geom::Y], hend[Geom::Y])) {
-                    remove = true;
-                }
-            }
-            if (orientation == OM_HORIZONTAL) {
-                Coord ypos = std::max(hstart[Geom::Y],hend[Geom::Y]);
-                if (flip_side) {
-                    ypos = std::min(hstart[Geom::Y],hend[Geom::Y]);
-                }
-                hstart[Geom::Y] = ypos;
-                hend[Geom::Y] = ypos;
-                if (hstart[Geom::X] < hend[Geom::X]) {
-                    swap(hstart,hend);
-                    swap(start,end);
-                }
-                if (Geom::are_near(hstart[Geom::X], hend[Geom::X])) {
-                    remove = true;
-                }
-            }
-            double length = Geom::distance(hstart,hend)  * scale;
-            Geom::Point pos = Geom::middle_point(hstart,hend);
-            Geom::Ray ray(hstart,hend);
-            Geom::Coord angle = ray.angle();
+        }
+        if (orientation == OM_HORIZONTAL) {
+            Coord ypos = std::max(hstart[Geom::Y],hend[Geom::Y]);
             if (flip_side) {
-                angle = std::fmod(angle + rad_from_deg(180), 2*M_PI);
-                if (angle < 0) angle += 2*M_PI;
+                ypos = std::min(hstart[Geom::Y],hend[Geom::Y]);
             }
-            //We get the font size to offset the text to the middle
-            Pango::FontDescription fontdesc((Glib::ustring)fontbutton.param_getSVGValue());
-            fontsize = fontdesc.get_size()/(double)Pango::SCALE;
-            fontsize *= desktop->doc()->getRoot()->c2p.inverse().expansionX();
-            Geom::Coord angle_cross = std::fmod(angle + rad_from_deg(90), 2*M_PI);
-            if (angle_cross < 0) angle_cross += 2*M_PI;
-            angle = std::fmod(angle, 2*M_PI);
+            hstart[Geom::Y] = ypos;
+            hend[Geom::Y] = ypos;
+            if (hstart[Geom::X] < hend[Geom::X]) {
+                swap(hstart,hend);
+                swap(start,end);
+            }
+            if (Geom::are_near(hstart[Geom::X], hend[Geom::X])) {
+                remove = true;
+            }
+        }
+        double length = Geom::distance(hstart,hend)  * scale;
+        Geom::Point pos = Geom::middle_point(hstart,hend);
+        Geom::Ray ray(hstart,hend);
+        Geom::Coord angle = ray.angle();
+        if (flip_side) {
+            angle = std::fmod(angle + rad_from_deg(180), 2*M_PI);
             if (angle < 0) angle += 2*M_PI;
-            if (angle >= rad_from_deg(90) && angle < rad_from_deg(270)) {
-                pos = pos - Point::polar(angle_cross, (position - text_top_bottom) + fontsize/2.5);
-            } else {
-                pos = pos - Point::polar(angle_cross, (position + text_top_bottom) - fontsize/2.5);
+        }
+        if (arrows_outside) {
+            createArrowMarker("ArrowDINout-start");
+            createArrowMarker("ArrowDINout-end");
+        } else {
+            createArrowMarker("ArrowDIN-start");
+            createArrowMarker("ArrowDIN-end");
+        }
+        //We get the font size to offset the text to the middle
+        Pango::FontDescription fontdesc(Glib::ustring(fontbutton.param_getSVGValue()));
+        fontsize = fontdesc.get_size()/(double)Pango::SCALE;
+        fontsize *= document->getRoot()->c2p.inverse().expansionX();
+        Geom::Coord angle_cross = std::fmod(angle + rad_from_deg(90), 2*M_PI);
+        if (angle_cross < 0) angle_cross += 2*M_PI;
+        angle = std::fmod(angle, 2*M_PI);
+        if (angle < 0) angle += 2*M_PI;
+        if (angle >= rad_from_deg(90) && angle < rad_from_deg(270)) {
+            pos = pos - Point::polar(angle_cross, (position - text_top_bottom) + fontsize/2.5);
+        } else {
+            pos = pos - Point::polar(angle_cross, (position + text_top_bottom) - fontsize/2.5);
+        }
+        double parents_scale = (affinetransform.expansionX() + affinetransform.expansionY()) / 2.0;
+        if (scale_sensitive) {
+            length *= parents_scale;
+        }
+        if (scale_sensitive && !affinetransform.preservesAngles()) {
+            createTextLabel(pos, length, angle, remove, false);
+        } else {
+            createTextLabel(pos, length, angle, remove, true);
+        }
+        bool overflow = false;
+        const char * downline = g_strdup(Glib::ustring("downline-").append(this->getRepr()->attribute("id")).c_str());
+        if ((anotation_width/2) + std::abs(text_right_left) > Geom::distance(start,end)/2.0) {
+            Geom::Point sstart = end - Point::polar(angle_cross, position);
+            Geom::Point send = end - Point::polar(angle_cross, position);
+            if (text_right_left < 0 && flip_side || text_right_left > 0 && !flip_side) {
+                sstart = start - Point::polar(angle_cross, position);
+                send = start - Point::polar(angle_cross, position);
             }
-            if (scale_insensitive) {
-                length *= parents_scale;
-            }
-            createTextLabel(pos, length, angle, remove);
-            bool overflow = false;
-            if ((anotation_width/2) + std::abs(text_right_left) > Geom::distance(start,end)/2.0) {
-                Geom::Point sstart = end - Point::polar(angle_cross, position);
-                Geom::Point send = end - Point::polar(angle_cross, position);
-                if (text_right_left < 0 && flip_side || text_right_left > 0 && !flip_side) {
-                    sstart = start - Point::polar(angle_cross, position);
-                    send = start - Point::polar(angle_cross, position);
-                }
-                Geom::Point prog_end = Geom::Point();
-                if (std::abs(text_top_bottom) < fontsize/1.5 && hide_back) { 
-                    if (text_right_left > 0 ) {
-                        prog_end = sstart - Point::polar(angle, std::abs(text_right_left) - (anotation_width/1.9) - (Geom::distance(start,end)/2.0));
-                    } else {
-                        prog_end = sstart + Point::polar(angle, std::abs(text_right_left) - (anotation_width/1.9) - (Geom::distance(start,end)/2.0));
-                    }
+            Geom::Point prog_end = Geom::Point();
+            if (std::abs(text_top_bottom) < fontsize/1.5 && hide_back) { 
+                if (text_right_left > 0 ) {
+                    prog_end = sstart - Point::polar(angle, std::abs(text_right_left) - (anotation_width/1.9) - (Geom::distance(start,end)/2.0));
                 } else {
-                    if (text_right_left > 0 ) {
-                        prog_end = sstart - Point::polar(angle,(anotation_width/2) + std::abs(text_right_left) - (Geom::distance(start,end)/2.0));
-                    } else {
-                        prog_end = sstart + Point::polar(angle,(anotation_width/2) + std::abs(text_right_left) - (Geom::distance(start,end)/2.0));
-                    }
+                    prog_end = sstart + Point::polar(angle, std::abs(text_right_left) - (anotation_width/1.9) - (Geom::distance(start,end)/2.0));
                 }
-                overflow = true;
-                createLine(sstart, prog_end, (Glib::ustring)"downline-" + (Glib::ustring)this->getRepr()->attribute("id"), true, overflow, false, false);
             } else {
-                //erase it
-                createLine(Geom::Point(),Geom::Point(), (Glib::ustring)"downline-" + (Glib::ustring)this->getRepr()->attribute("id"), true, overflow, true, false);
+                if (text_right_left > 0 ) {
+                    prog_end = sstart - Point::polar(angle,(anotation_width/2) + std::abs(text_right_left) - (Geom::distance(start,end)/2.0));
+                } else {
+                    prog_end = sstart + Point::polar(angle,(anotation_width/2) + std::abs(text_right_left) - (Geom::distance(start,end)/2.0));
+                }
             }
-            //LINE
-            arrow_gap = 8 * Inkscape::Util::Quantity::convert(0.35 / doc_scale, "mm", display_unit.c_str());
-            if (line_group_05) {
-                arrow_gap = 8 * Inkscape::Util::Quantity::convert(0.25 / doc_scale, "mm", display_unit.c_str());
-            }
-            SPCSSAttr *css = sp_repr_css_attr_new();
-            sp_repr_css_attr_add_from_string(css, dimline_format.param_getSVGValue());
-            setlocale(LC_NUMERIC, std::locale::classic().name().c_str());
-            double width_line =  atof(sp_repr_css_property(css,"stroke-width","-1"));
-            setlocale(LC_NUMERIC, std::locale("").name().c_str());
-            if (width_line > -0.0001) {
-                 arrow_gap = 8 * Inkscape::Util::Quantity::convert(width_line/ doc_scale, "mm", display_unit.c_str());
-            }
-            if (flip_side) {
-                arrow_gap *= -1;
-            }
-            hstart = hstart - Point::polar(angle_cross, position);
-            Glib::ustring id = (Glib::ustring)"infoline-on-start-" + (Glib::ustring)this->getRepr()->attribute("id");
-            createLine(start, hstart, id, false, false, remove);
-            hend = hend - Point::polar(angle_cross, position);
-            id = (Glib::ustring)"infoline-on-end-" + (Glib::ustring)this->getRepr()->attribute("id");
-            createLine(end, hend, id, false, false, remove);
-            if (!arrows_outside) {
-                hstart = hstart + Point::polar(angle, arrow_gap);
-                hend = hend - Point::polar(angle, arrow_gap );
-            }
-            id = (Glib::ustring)"infoline-" + (Glib::ustring)this->getRepr()->attribute("id");
-            createLine(hstart, hend, id, true, overflow, remove, true);
+            overflow = true;
+            createLine(sstart, prog_end, downline, true, overflow, false, false);
+        } else {
+            //erase it
+            createLine(Geom::Point(),Geom::Point(), downline, true, overflow, true, false);
         }
+        //LINE
+        arrow_gap = 8 * Inkscape::Util::Quantity::convert(0.35 / doc_scale, "mm", display_unit.c_str());
+        if (line_group_05) {
+            arrow_gap = 8 * Inkscape::Util::Quantity::convert(0.25 / doc_scale, "mm", display_unit.c_str());
+        }
+        SPCSSAttr *css = sp_repr_css_attr_new();
+        sp_repr_css_attr_add_from_string(css, dimline_format.param_getSVGValue());
+        setlocale(LC_NUMERIC, std::locale::classic().name().c_str());
+        double width_line =  atof(sp_repr_css_property(css,"stroke-width","-1"));
+        setlocale(LC_NUMERIC, std::locale("").name().c_str());
+        if (width_line > -0.0001) {
+             arrow_gap = 8 * Inkscape::Util::Quantity::convert(width_line/ doc_scale, "mm", display_unit.c_str());
+        }
+        if (flip_side) {
+            arrow_gap *= -1;
+        }
+        hstart = hstart - Point::polar(angle_cross, position);
+        createLine(start, hstart, g_strdup(Glib::ustring("infoline-on-start-").append(this->getRepr()->attribute("id")).c_str()), false, false, remove);
+        hend = hend - Point::polar(angle_cross, position);
+        createLine(end, hend, g_strdup(Glib::ustring("infoline-on-end-").append(this->getRepr()->attribute("id")).c_str()), false, false, remove);
+        if (!arrows_outside) {
+            hstart = hstart + Point::polar(angle, arrow_gap);
+            hend = hend - Point::polar(angle, arrow_gap );
+        }
+        createLine(hstart, hend, g_strdup(Glib::ustring("infoline-").append(this->getRepr()->attribute("id")).c_str()), true, overflow, remove, true);     
     }
 }
 
-void LPEMeasureLine::doOnRemove (SPLPEItem const* lpeitem)
+void
+LPEMeasureLine::doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/)
 {
-    if (!erase) return;
-    
-    if (SPDesktop *desktop = SP_ACTIVE_DESKTOP) {
-        Inkscape::URI SVGElem_uri(((Glib::ustring)"#" + (Glib::ustring)"text-on-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
-        Inkscape::URIReference* SVGElemRef = new Inkscape::URIReference(desktop->doc());
-        SVGElemRef->attach(SVGElem_uri);
-        SPObject *elemref = NULL;
-        if (elemref = SVGElemRef->getObject()) {
-            elemref->deleteObject();
-        }
-        Inkscape::URI SVGElem_uri2(((Glib::ustring)"#" + (Glib::ustring)"infoline-on-end-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
-        SVGElemRef->attach(SVGElem_uri2);
-        if (elemref = SVGElemRef->getObject()) {
-            elemref->deleteObject();
-        }
-        Inkscape::URI SVGElem_uri3(((Glib::ustring)"#" + (Glib::ustring)"infoline-on-start-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
-        SVGElemRef->attach(SVGElem_uri3);
-        if (elemref = SVGElemRef->getObject()) {
-            elemref->deleteObject();
-        }
-        Inkscape::URI SVGElem_uri4(((Glib::ustring)"#" + (Glib::ustring)"infoline-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
-        SVGElemRef->attach(SVGElem_uri4);
-        if (elemref = SVGElemRef->getObject()) {
-            elemref->deleteObject();
-        }
-        Inkscape::URI SVGElem_uri5(((Glib::ustring)"#" + (Glib::ustring)"downline-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
-        SVGElemRef->attach(SVGElem_uri5);
-        if (elemref = SVGElemRef->getObject()) {
-            elemref->deleteObject();
-        }
-    }
+    processObjects(LPE_VISIBILITY);
 }
 
-void LPEMeasureLine::toObjects()
+void 
+LPEMeasureLine::doOnRemove (SPLPEItem const* /*lpeitem*/)
 {
-    if (SPDesktop *desktop = SP_ACTIVE_DESKTOP) {
-        
-        Inkscape::URI SVGElem_uri(((Glib::ustring)"#" + (Glib::ustring)"text-on-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
-        Inkscape::URIReference* SVGElemRef = new Inkscape::URIReference(desktop->doc());
-        SVGElemRef->attach(SVGElem_uri);
+    //unset "erase_extra_objects" hook on sp-lpe-item.cpp
+    if (!erase_extra_objects) {
+        processObjects(LPE_TO_OBJECTS);
+        elements.clear();
+        return;
+    }
+    processObjects(LPE_ERASE);
+}
+
+void 
+LPEMeasureLine::processObjects(LpeAction lpe_action)
+{
+    SPDocument * document = SP_ACTIVE_DOCUMENT;
+    for (std::vector<const char *>::iterator el_it = elements.begin(); 
+         el_it != elements.end(); ++el_it) {
+        const char * id = *el_it;
+        if (!id || strlen(id) == 0) {
+            return;
+        }
         SPObject *elemref = NULL;
-        if (elemref = SVGElemRef->getObject()) {
-            elemref->getRepr()->setAttribute("sodipodi:insensitive", NULL);
+        if (elemref = document->getObjectById(id)) {
+            SPCSSAttr *css;
+            Glib::ustring css_str;
+            switch (lpe_action){
+            case LPE_TO_OBJECTS:
+                elemref->getRepr()->setAttribute("inkscape:path-effect", NULL);
+                elemref->getRepr()->setAttribute("sodipodi:insensitive", NULL);
+                break;
+
+            case LPE_ERASE:
+                if (std::strcmp(elemref->getId(),id_origin.param_getSVGValue()) != 0) {
+                    elemref->deleteObject();
+                }
+                break;
+
+            case LPE_VISIBILITY:
+                css = sp_repr_css_attr_new();
+                sp_repr_css_attr_add_from_string(css, elemref->getRepr()->attribute("style"));
+                if (!this->isVisible() && std::strcmp(elemref->getId(),id_origin.param_getSVGValue()) != 0) {
+                    css->setAttribute("display", "none");
+                } else {
+                    css->setAttribute("display", NULL);
+                }
+                sp_repr_css_write_string(css,css_str);
+                elemref->getRepr()->setAttribute("style", css_str.c_str());
+                break;
+
+            default:
+                break;
+            }
         }
-        Inkscape::URI SVGElem_uri2(((Glib::ustring)"#" + (Glib::ustring)"infoline-on-end-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
-        SVGElemRef->attach(SVGElem_uri2);
-        if (elemref = SVGElemRef->getObject()) {
-            elemref->getRepr()->setAttribute("sodipodi:insensitive", NULL);
-        }
-        Inkscape::URI SVGElem_uri3(((Glib::ustring)"#" + (Glib::ustring)"infoline-on-start-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
-        SVGElemRef->attach(SVGElem_uri3);
-        if (elemref = SVGElemRef->getObject()) {
-            elemref->getRepr()->setAttribute("sodipodi:insensitive", NULL);
-        }
-        Inkscape::URI SVGElem_uri4(((Glib::ustring)"#" + (Glib::ustring)"infoline-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
-        SVGElemRef->attach(SVGElem_uri4);
-        if (elemref = SVGElemRef->getObject()) {
-            elemref->getRepr()->setAttribute("sodipodi:insensitive", NULL);
-        }
-        Inkscape::URI SVGElem_uri5(((Glib::ustring)"#" + (Glib::ustring)"downline-" + (Glib::ustring)this->getRepr()->attribute("id")).c_str());
-        SVGElemRef->attach(SVGElem_uri5);
-        if (elemref = SVGElemRef->getObject()) {
-            elemref->getRepr()->setAttribute("sodipodi:insensitive", NULL);
-        }
-        erase = false;
-        sp_lpe_item->removeCurrentPathEffect(true);
-        //TODO: find better way to refresh effect list
-        if (SP_IS_OBJECT(sp_lpe_item)){
-            Inkscape::Selection *selection = SP_ACTIVE_DESKTOP->getSelection();
-            selection->remove(SP_OBJECT(sp_lpe_item));
-            selection->add(SP_OBJECT(sp_lpe_item));
-        }
+    }
+    if (lpe_action == LPE_ERASE) {
+        elements.clear();
     }
 }
 
@@ -790,7 +746,6 @@ Gtk::Widget *LPEMeasureLine::newWidget()
 
     std::vector<Parameter *>::iterator it = param_vector.begin();
     Gtk::HBox * button1 = Gtk::manage(new Gtk::HBox(true,0));
-    Gtk::HBox * button2 = Gtk::manage(new Gtk::HBox(true,0));
     Gtk::VBox * vbox_expander = Gtk::manage( new Gtk::VBox(Effect::newWidget()) );
     vbox_expander->set_border_width(0);
     vbox_expander->set_spacing(2);
@@ -822,16 +777,12 @@ Gtk::Widget *LPEMeasureLine::newWidget()
     Gtk::Button *save_default = Gtk::manage(new Gtk::Button(Glib::ustring(_("Save '*' as default"))));
     save_default->signal_clicked().connect(sigc::mem_fun(*this, &LPEMeasureLine::saveDefault));
     button1->pack_start(*save_default, true, true, 2);
-    Gtk::Button *remove = Gtk::manage(new Gtk::Button(Glib::ustring(_("Convert to objects"))));
-    remove->signal_clicked().connect(sigc::mem_fun(*this, &LPEMeasureLine::toObjects));
-    button2->pack_start(*remove, true, true, 2);
     expander = Gtk::manage(new Gtk::Expander(Glib::ustring(_("Show DIM CSS style override"))));
     expander->add(*vbox_expander);
     expander->set_expanded(expanded);
     expander->property_expanded().signal_changed().connect(sigc::mem_fun(*this, &LPEMeasureLine::onExpanderChanged) );
     vbox->pack_start(*expander, true, true, 2);
     vbox->pack_start(*button1, true, true, 2);
-    vbox->pack_start(*button2, true, true, 2);
     return dynamic_cast<Gtk::Widget *>(vbox);
 }
 
@@ -856,21 +807,21 @@ void
 LPEMeasureLine::saveDefault()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    prefs->setString("/live_effects/measure-line/fontbutton", (Glib::ustring)fontbutton.param_getSVGValue());
+    prefs->setString("/live_effects/measure-line/fontbutton", Glib::ustring(fontbutton.param_getSVGValue()));
     prefs->setDouble("/live_effects/measure-line/scale", scale);
     prefs->setInt("/live_effects/measure-line/precision", precision);
     prefs->setDouble("/live_effects/measure-line/position", position);
     prefs->setDouble("/live_effects/measure-line/text_top_bottom", text_top_bottom);
     prefs->setDouble("/live_effects/measure-line/helpline_distance", helpline_distance);
     prefs->setDouble("/live_effects/measure-line/helpline_overlap", helpline_overlap);
-    prefs->setString("/live_effects/measure-line/unit", (Glib::ustring)unit.get_abbreviation());
-    prefs->setString("/live_effects/measure-line/format", (Glib::ustring)format.param_getSVGValue());
-    prefs->setString("/live_effects/measure-line/dimline_format", (Glib::ustring)dimline_format.param_getSVGValue());
-    prefs->setString("/live_effects/measure-line/helperlines_format", (Glib::ustring)helperlines_format.param_getSVGValue());
-    prefs->setString("/live_effects/measure-line/anotation_format", (Glib::ustring)anotation_format.param_getSVGValue());
-    prefs->setString("/live_effects/measure-line/arrows_format", (Glib::ustring)arrows_format.param_getSVGValue());
+    prefs->setString("/live_effects/measure-line/unit", Glib::ustring(unit.get_abbreviation()));
+    prefs->setString("/live_effects/measure-line/format", Glib::ustring(format.param_getSVGValue()));
+    prefs->setString("/live_effects/measure-line/dimline_format", Glib::ustring(dimline_format.param_getSVGValue()));
+    prefs->setString("/live_effects/measure-line/helperlines_format", Glib::ustring(helperlines_format.param_getSVGValue()));
+    prefs->setString("/live_effects/measure-line/anotation_format", Glib::ustring(anotation_format.param_getSVGValue()));
+    prefs->setString("/live_effects/measure-line/arrows_format", Glib::ustring(arrows_format.param_getSVGValue()));
     prefs->setBool("/live_effects/measure-line/flip_side", flip_side);
-    prefs->setBool("/live_effects/measure-line/scale_insensitive", scale_insensitive);
+    prefs->setBool("/live_effects/measure-line/scale_sensitive", scale_sensitive);
     prefs->setBool("/live_effects/measure-line/local_locale", local_locale);
     prefs->setBool("/live_effects/measure-line/line_group_05", line_group_05);
     prefs->setBool("/live_effects/measure-line/rotate_anotation", rotate_anotation);

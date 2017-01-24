@@ -26,7 +26,6 @@
 #include <gtkmm/entry.h>
 #include <gtkmm/grid.h>
 #include <gtkmm/spinbutton.h>
-#include <gtkmm/stock.h>
 
 #ifdef WITH_GNOME_VFS
 # include <libgnomevfs/gnome-vfs-init.h>  // gnome_vfs_initialized
@@ -142,7 +141,7 @@ Export::Export (void) :
     units_label(_("Units:")),
     filename_box(false, 5),
     browse_label(_("_Export As..."), 1),
-    browse_image(Gtk::StockID(Gtk::Stock::INDEX), Gtk::ICON_SIZE_BUTTON),
+    browse_image(),
     batch_box(false, 5),
     batch_export(_("B_atch export all selected objects"), _("Export each selected object into its own PNG file, using export hints if any (caution, overwrites without asking!)")),
     interlacing(_("Use interlacing"),_("Enables ADAM7 interlacing for PNG output. This results in slightly heavier images, but big images will look better sooner when loading the file")),
@@ -152,12 +151,12 @@ Export::Export (void) :
     zlib_compression(),
     pHYs_label(_("pHYs dpi")),
     pHYs_sb(pHYs_adj, 1.0, 2),
+    antialiasing_label(_("Antialiasing")),
+    antialiasing_cb(),
     hide_box(false, 5),
-    hide_export(_("Hide a_ll except selected"), _("In the exported image, hide all objects except those that are selected")),
+    hide_export(_("Hide all except selected"), _("In the exported image, hide all objects except those that are selected")),
     closeWhenDone(_("Close when complete"), _("Once the export completes, close this dialog")),
     button_box(false, 3),
-    export_label(_("_Export"), 1),
-    export_image(Gtk::StockID(Gtk::Stock::APPLY), Gtk::ICON_SIZE_BUTTON),
     _prog(),
     prog_dlg(NULL),
     interrupted(false),
@@ -290,6 +289,7 @@ Export::Export (void) :
         filename_box.pack_start (filename_entry, true, true, 0);
 
         Gtk::HBox* browser_im_label = new Gtk::HBox(false, 3);
+        browse_image.set_from_icon_name("folder", Gtk::ICON_SIZE_BUTTON);
         browser_im_label->pack_start(browse_image);
         browser_im_label->pack_start(browse_label);
         browse_button.add(*browser_im_label);
@@ -318,11 +318,8 @@ Export::Export (void) :
 
     /* Export Button row */
     button_box.set_border_width(3);
-    Gtk::HBox* export_image_label = new Gtk::HBox(false, 3);
-    export_image_label->pack_start(export_image);
-    export_image_label->pack_start(export_label);
-
-    export_button.add(*export_image_label);
+    export_button.set_label(_("_Export"));
+    export_button.set_use_underline();
     export_button.set_tooltip_text (_("Export the bitmap file with these settings"));
 
     button_box.pack_start(closeWhenDone, true, true, 0 );
@@ -345,6 +342,10 @@ Export::Export (void) :
     pHYs_sb.set_width_chars(7);
     pHYs_sb.set_tooltip_text( _("Will force-set the physical dpi for the png file. Set this to 72 if you're planning to work on your png with Photoshop") );
     zlib_compression.set_hexpand();
+    const char* const antialising_list[] = {"CAIRO_ANTIALIAS_NONE","CAIRO_ANTIALIAS_FAST","CAIRO_ANTIALIAS_GOOD (default)","CAIRO_ANTIALIAS_BEST"};
+    for(int i=0; i<4; ++i)
+        antialiasing_cb.append(antialising_list[i]);
+    antialiasing_cb.set_active_text(antialising_list[2]);
     auto table = new Gtk::Grid();
     gtk_container_add(GTK_CONTAINER(expander.gobj()), (GtkWidget*)(table->gobj()));
     table->attach(interlacing,0,0,1,1);
@@ -354,6 +355,8 @@ Export::Export (void) :
     table->attach(zlib_compression,1,2,1,1);
     table->attach(pHYs_label,0,3,1,1);
     table->attach(pHYs_sb,1,3,1,1);
+    table->attach(antialiasing_label,0,4,1,1);
+    table->attach(antialiasing_cb,1,4,1,1);
     table->show();
 
     /* Main dialog */
@@ -906,7 +909,7 @@ Gtk::Dialog * Export::create_progress_dialog (Glib::ustring progress_text) {
     auto CA = dlg->get_content_area();
     CA->pack_start(*prg, FALSE, FALSE, 4);
 
-    Gtk::Button* btn = dlg->add_button (Gtk::Stock::CANCEL,Gtk::RESPONSE_CANCEL );
+    Gtk::Button* btn = dlg->add_button (_("_Cancel"),Gtk::RESPONSE_CANCEL );
 
     btn->signal_clicked().connect( sigc::mem_fun(*this, &Export::onProgressCancel) );
     dlg->signal_delete_event().connect( sigc::mem_fun(*this, &Export::onProgressDelete) );
@@ -991,6 +994,7 @@ void Export::onExport ()
     int bitdepths[] = {1,2,4,8,16,8,16,8,16,8,16};
     int color_type = colortypes[bitdepth_cb.get_active_row_number()] ;
     int bit_depth = bitdepths[bitdepth_cb.get_active_row_number()] ;
+    int antialiasing = antialiasing_cb.get_active_row_number();
 
 
     if (batch_export.get_active ()) {
@@ -1060,7 +1064,7 @@ void Export::onExport ()
                                              onProgressCallback, (void*)prog_dlg,
                                              TRUE,  // overwrite without asking
                                              hide ? selected : x, 
-                                             do_interlace, color_type, bit_depth, zlib
+                                             do_interlace, color_type, bit_depth, zlib, antialiasing
                                             )) {
                         gchar * error = g_strdup_printf(_("Could not export to filename %s.\n"), safeFile);
 
@@ -1156,7 +1160,7 @@ void Export::onExport ()
                               onProgressCallback, (void*)prog_dlg,
                               FALSE,
                               hide ? selected : x, 
-                              do_interlace, color_type, bit_depth, zlib
+                              do_interlace, color_type, bit_depth, zlib, antialiasing
                               );
         if (status == EXPORT_ERROR) {
             gchar * safeFile = Inkscape::IO::sanitizeString(path.c_str());

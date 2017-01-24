@@ -13,7 +13,6 @@
 #endif
 
 #include "display/cairo-utils.h"
-#include <arpa/inet.h>
 
 #include <stdexcept>
 #include <glib/gstdio.h>
@@ -291,7 +290,7 @@ Pixbuf *Pixbuf::create_from_file(std::string const &fn)
     if (!g_file_test(fn.c_str(), G_FILE_TEST_EXISTS)) { 
         return NULL;
     }
-    struct stat stdir;
+    GStatBuf stdir;
     int val = g_stat(fn.c_str(), &stdir);
     if (val == 0 && stdir.st_mode & S_IFDIR){
         return NULL;

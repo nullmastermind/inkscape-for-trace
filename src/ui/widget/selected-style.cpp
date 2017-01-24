@@ -781,56 +781,7 @@ void SelectedStyle::on_stroke_paste() {
 }
 
 void SelectedStyle::on_fillstroke_swap() {
-    SPCSSAttr *css = sp_repr_css_attr_new ();
-
-    switch (_mode[SS_FILL]) {
-    case SS_NA:
-    case SS_MANY:
-        break;
-    case SS_NONE:
-        sp_repr_css_set_property (css, "stroke", "none");
-        break;
-    case SS_UNSET:
-        sp_repr_css_unset_property (css, "stroke");
-        break;
-    case SS_COLOR:
-        gchar c[64];
-        sp_svg_write_color (c, sizeof(c), _thisselected[SS_FILL]);
-        sp_repr_css_set_property (css, "stroke", c);
-        break;
-    case SS_LGRADIENT:
-    case SS_RGRADIENT:
-    case SS_PATTERN:
-        sp_repr_css_set_property (css, "stroke", _paintserver_id[SS_FILL].c_str());
-        break;
-    }
-
-    switch (_mode[SS_STROKE]) {
-    case SS_NA:
-    case SS_MANY:
-        break;
-    case SS_NONE:
-        sp_repr_css_set_property (css, "fill", "none");
-        break;
-    case SS_UNSET:
-        sp_repr_css_unset_property (css, "fill");
-        break;
-    case SS_COLOR:
-        gchar c[64];
-        sp_svg_write_color (c, sizeof(c), _thisselected[SS_STROKE]);
-        sp_repr_css_set_property (css, "fill", c);
-        break;
-    case SS_LGRADIENT:
-    case SS_RGRADIENT:
-    case SS_PATTERN:
-        sp_repr_css_set_property (css, "fill", _paintserver_id[SS_STROKE].c_str());
-        break;
-    }
-
-    sp_desktop_set_style (_desktop, css);
-    sp_repr_css_attr_unref (css);
-    DocumentUndo::done(_desktop->getDocument(), SP_VERB_DIALOG_FILL_STROKE,
-                       _("Swap fill and stroke"));
+    _desktop->getSelection()->swapFillStroke();
 }
 
 void SelectedStyle::on_fill_edit() {

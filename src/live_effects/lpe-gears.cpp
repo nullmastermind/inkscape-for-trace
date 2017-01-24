@@ -7,10 +7,9 @@
  */
 
 #include "live_effects/lpe-gears.h"
-
-#include <glibmm/i18n.h>
-
 #include <2geom/bezier-to-sbasis.h>
+// TODO due to internal breakage in glibmm headers, this must be last:
+#include <glibmm/i18n.h>
 
 using std::vector;
 using namespace Geom;
@@ -208,7 +207,7 @@ LPEGears::LPEGears(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
     teeth(_("_Teeth:"), _("The number of teeth"), "teeth", &wr, this, 10),
     phi(_("_Phi:"), _("Tooth pressure angle (typically 20-25 deg).  The ratio of teeth not in contact."), "phi", &wr, this, 5),
-    min_radius(_("Min Radius:"), _("Minimun radius, low balues can slow"), "min_radius", &wr, this, 5.0)
+    min_radius(_("Min Radius:"), _("Minimum radius, low values can be slow"), "min_radius", &wr, this, 5.0)
 {
     /* Tooth pressure angle: The angle between the tooth profile and a perpendicular to the pitch
      * circle, usually at the point where the pitch circle meets the tooth profile. Standard angles

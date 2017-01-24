@@ -11,6 +11,9 @@
  */
 
 #include "live_effects/effect.h"
+
+#include <gtkmm/expander.h>
+
 #include "live_effects/parameter/enum.h"
 #include "live_effects/parameter/fontbutton.h"
 #include "live_effects/parameter/text.h"
@@ -32,20 +35,27 @@ enum OrientationMethod {
     OM_END
 };
 
+enum LpeAction {
+    LPE_ERASE = 0,
+    LPE_TO_OBJECTS,
+    LPE_VISIBILITY
+};
+
 class LPEMeasureLine : public Effect {
 public:
     LPEMeasureLine(LivePathEffectObject *lpeobject);
     virtual ~LPEMeasureLine();
     virtual void doBeforeEffect (SPLPEItem const* lpeitem);
     virtual void doOnApply(SPLPEItem const* lpeitem);
-    virtual void doOnRemove (SPLPEItem const* lpeitem);
+    virtual void doOnRemove (SPLPEItem const* /*lpeitem*/);
+    virtual void doEffect (SPCurve * curve){}; //stop the chain
     virtual void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/);
     virtual Geom::PathVector doEffect_path(Geom::PathVector const &path_in);
-    void createLine(Geom::Point start,Geom::Point end,Glib::ustring id, bool main, bool overflow, bool remove, bool arrows = false);
-    void createTextLabel(Geom::Point pos, double length, Geom::Coord angle, bool remove);
+    void processObjects(LpeAction lpe_action);
+    void createLine(Geom::Point start,Geom::Point end, const char * id, bool main, bool overflow, bool remove, bool arrows = false);
+    void createTextLabel(Geom::Point pos, double length, Geom::Coord angle, bool remove, bool valid);
     void onExpanderChanged();
-    void toObjects();
-    void createArrowMarker(Glib::ustring mode);
+    void createArrowMarker(const char * mode);
     void saveDefault();
     virtual Gtk::Widget *newWidget();
 private:
@@ -61,9 +71,10 @@ private:
     ScalarParam helpline_overlap;
     ScalarParam scale;
     TextParam format;
+    TextParam id_origin;
     BoolParam arrows_outside;
     BoolParam flip_side;
-    BoolParam scale_insensitive;
+    BoolParam scale_sensitive;
     BoolParam local_locale;
     BoolParam line_group_05;
     BoolParam rotate_anotation;
@@ -79,7 +90,9 @@ private:
     double fontsize;
     double anotation_width;
     double arrow_gap;
-    bool erase;
+    Geom::Point start_stored;
+    Geom::Point end_stored; 
+    std::vector<const char *> elements;
 /*    Geom::Affine affine_over;*/
     LPEMeasureLine(const LPEMeasureLine &);
     LPEMeasureLine &operator=(const LPEMeasureLine &);

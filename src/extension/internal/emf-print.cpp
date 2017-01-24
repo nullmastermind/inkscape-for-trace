@@ -205,7 +205,7 @@ unsigned int PrintEmf::begin(Inkscape::Extension::Print *mod, SPDocument *doc)
     } else {
         p = ansi_uri;
     }
-    snprintf(buff, sizeof(buff) - 1, "Inkscape %s (%s)\1%s\1", Inkscape::version_string, __DATE__, p);
+    snprintf(buff, sizeof(buff) - 1, "Inkscape %s \1%s\1", Inkscape::version_string, p);
     uint16_t *Description = U_Utf8ToUtf16le(buff, 0, NULL);
     int cbDesc = 2 + wchar16len(Description);      // also count the final terminator
     (void) U_Utf16leEdit(Description, '\1', '\0'); // swap the temporary \1 characters for nulls
@@ -1064,7 +1064,7 @@ void  PrintEmf::do_clip_if_present(SPStyle const *style){
                         g_error("Fatal programming error in PrintEmf::image at U_EMRSAVEDC_set");
                     }
                     (void) draw_pathv_to_EMF(combined_pathvector, tf);
-                    rec = U_EMRSELECTCLIPPATH_set(U_RGN_OR);
+                    rec = U_EMRSELECTCLIPPATH_set(U_RGN_COPY);
                     if (!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)) {
                         g_error("Fatal programming error in PrintEmf::do_clip_if_present at U_EMRSELECTCLIPPATH_set");
                     }

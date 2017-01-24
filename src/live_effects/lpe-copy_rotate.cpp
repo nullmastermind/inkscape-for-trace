@@ -11,35 +11,17 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include <gtkmm.h>
 #include <gdk/gdk.h>
 #include <2geom/path-intersection.h>
 #include <2geom/sbasis-to-bezier.h>
+#include <2geom/intersection-graph.h>
 #include "live_effects/lpe-copy_rotate.h"
-
-#include "knotholder.h"
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
 
 namespace Inkscape {
 namespace LivePathEffect {
-
-namespace CR {
-
-class KnotHolderEntityStartingAngle : public LPEKnotHolderEntity {
-public:
-    KnotHolderEntityStartingAngle(LPECopyRotate *effect) : LPEKnotHolderEntity(effect) {};
-    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state);
-    virtual Geom::Point knot_get() const;
-};
-
-class KnotHolderEntityRotationAngle : public LPEKnotHolderEntity {
-public:
-    KnotHolderEntityRotationAngle(LPECopyRotate *effect) : LPEKnotHolderEntity(effect) {};
-    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, guint state);
-    virtual Geom::Point knot_get() const;
-};
-
-} // namespace CR
 
 bool 
 pointInTriangle(Geom::Point const &p, Geom::Point const &p1, Geom::Point const &p2, Geom::Point const &p3)
@@ -58,34 +40,72 @@ pointInTriangle(Geom::Point const &p, Geom::Point const &p1, Geom::Point const &
 
 LPECopyRotate::LPECopyRotate(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
-    origin(_("Origin"), _("Origin of the rotation"), "origin", &wr, this),
-    starting_angle(_("Starting:"), _("Angle of the first copy"), "starting_angle", &wr, this, 0.0),
-    rotation_angle(_("Rotation angle:"), _("Angle between two successive copies"), "rotation_angle", &wr, this, 60.0),
-    num_copies(_("Number of copies:"), _("Number of copies of the original path"), "num_copies", &wr, this, 6),
+    origin(_("Origin"), _("Adjust origin of the rotation"), "origin", &wr, this,  _("Adjust origin of the rotation")),
+    starting_point(_("Start point"), _("Starting point to define start angle"), "starting_point", &wr, this, _("Adjust starting point to define start angle")),
+    starting_angle(_("Starting angle"), _("Angle of the first copy"), "starting_angle", &wr, this, 0.0),
+    rotation_angle(_("Rotation angle"), _("Angle between two successive copies"), "rotation_angle", &wr, this, 60.0),
+    num_copies(_("Number of copies"), _("Number of copies of the original path"), "num_copies", &wr, this, 6),
     copies_to_360(_("360º Copies"), _("No rotation angle, fixed to 360º"), "copies_to_360", &wr, this, true),
-    fuse_paths(_("Fuse paths"), _("Fuse paths by helper line, use fill-rule: evenodd for best result"), "fuse_paths", &wr, this, false),
+    fuse_paths(_("Kaleidoskope"), _("Kaleidoskope by helper line, use fill-rule: evenodd for best result"), "fuse_paths", &wr, this, false),
+    join_paths(_("Join paths"), _("Join paths, use fill-rule: evenodd for best result"), "join_paths", &wr, this, false),
     dist_angle_handle(100.0)
 {
     show_orig_path = true;
     _provides_knotholder_entities = true;
-    apply_to_clippath_and_mask = true;
-
     // register all your parameters here, so Inkscape knows which parameters this effect has:
     registerParameter(&copies_to_360);
     registerParameter(&fuse_paths);
+    registerParameter(&join_paths);
     registerParameter(&starting_angle);
+    registerParameter(&starting_point);
     registerParameter(&rotation_angle);
     registerParameter(&num_copies);
     registerParameter(&origin);
 
     num_copies.param_make_integer(true);
     num_copies.param_set_range(0, 1000);
+    apply_to_clippath_and_mask = true;
 }
 
 LPECopyRotate::~LPECopyRotate()
 {
 
 }
+
+Gtk::Widget * LPECopyRotate::newWidget()
+{
+    // use manage here, because after deletion of Effect object, others might
+    // still be pointing to this widget.
+    Gtk::VBox *vbox = Gtk::manage(new Gtk::VBox(Effect::newWidget()));
+
+    vbox->set_border_width(5);
+    vbox->set_homogeneous(false);
+    vbox->set_spacing(2);
+
+    std::vector<Parameter *>::iterator it = param_vector.begin();
+    while (it != param_vector.end()) {
+        if ((*it)->widget_is_visible) {
+            Parameter *param = *it;
+            Gtk::Widget *widg = dynamic_cast<Gtk::Widget *>(param->param_newWidget());
+            Glib::ustring *tip = param->param_getTooltip();
+            if (widg) {
+                if (param->param_key != "starting_point") {
+                    vbox->pack_start(*widg, true, true, 2);
+                    if (tip) {
+                        widg->set_tooltip_text(*tip);
+                    } else {
+                        widg->set_tooltip_text("");
+                        widg->set_has_tooltip(false);
+                    }
+                }
+            }
+        }
+
+        ++it;
+    }
+    return dynamic_cast<Gtk::Widget *>(vbox);
+}
+
 
 void
 LPECopyRotate::doOnApply(SPLPEItem const* lpeitem)
@@ -95,7 +115,7 @@ LPECopyRotate::doOnApply(SPLPEItem const* lpeitem)
 
     A = Point(boundingbox_X.min(), boundingbox_Y.middle());
     B = Point(boundingbox_X.middle(), boundingbox_Y.middle());
-    origin.param_setValue(A);
+    origin.param_setValue(A, true);
     origin.param_update_default(A);
     dist_angle_handle = L2(B - A);
     dir = unit_vector(B - A);
@@ -104,11 +124,6 @@ LPECopyRotate::doOnApply(SPLPEItem const* lpeitem)
 void
 LPECopyRotate::transform_multiply(Geom::Affine const& postmul, bool set)
 {
-    if(fuse_paths) {
-        Geom::Coord angle  = Geom::deg_from_rad(atan(-postmul[1]/postmul[0]));
-        angle += starting_angle;
-        starting_angle.param_set_value(angle);
-    }
     // cycle through all parameters. Most parameters will not need transformation, but path and point params do.
 
     for (std::vector<Parameter *>::iterator it = param_vector.begin(); it != param_vector.end(); ++it) {
@@ -146,14 +161,25 @@ LPECopyRotate::doBeforeEffect (SPLPEItem const* lpeitem)
     dir = unit_vector(B - A);
     // I first suspected the minus sign to be a bug in 2geom but it is
     // likely due to SVG's choice of coordinate system orientation (max)
+    bool near = Geom::are_near(previous_start_point, (Geom::Point)starting_point, 0.01);
+    if (!near) { 
+        starting_angle.param_set_value(deg_from_rad(-angle_between(dir, starting_point - origin)));
+        if (GDK_SHIFT_MASK) {
+            dist_angle_handle = L2(B - A);
+        } else {
+            dist_angle_handle = L2(starting_point - origin);
+        }
+    }
     start_pos = origin + dir * Rotate(-rad_from_deg(starting_angle)) * dist_angle_handle;
     rot_pos = origin + dir * Rotate(-rad_from_deg(rotation_angle+starting_angle)) * dist_angle_handle;
+    near = Geom::are_near(start_pos, (Geom::Point)starting_point, 0.01);
+    if (!near) { 
+        starting_point.param_setValue(start_pos, true);
+    }
+    previous_start_point = (Geom::Point)starting_point;
     if ( fuse_paths || copies_to_360 ) {
         rot_pos = origin;
     }
-    SPLPEItem * item = const_cast<SPLPEItem*>(lpeitem);
-    item->apply_to_clippath(item);
-    item->apply_to_mask(item);
 }
 
 void
@@ -235,19 +261,8 @@ LPECopyRotate::setFusion(Geom::PathVector &path_on, Geom::Path divider, double s
             if (i%2 != 0) {
                 Geom::Point A = (Geom::Point)origin;
                 Geom::Point B = origin + dir * Geom::Rotate(-Geom::rad_from_deg((rotation_angle*i)+starting_angle)) * size_divider;
-                Geom::Translate m1(A[0], A[1]);
-                double hyp = Geom::distance(A, B);
-                double c = (B[0] - A[0]) / hyp; // cos(alpha)
-                double s = (B[1] - A[1]) / hyp; // sin(alpha)
-
-                Geom::Affine m2(c, -s, s, c, 0.0, 0.0);
-                Geom::Scale sca(1.0, -1.0);
-
-                Geom::Affine tmp_m = m1.inverse() * m2;
-                m = tmp_m;
-                m = m * sca;
-                m = m * m2.inverse();
-                m = m * m1;
+                Geom::Line ls(A,B);
+                m = Geom::reflection (ls.vector(), A);
             } else {
                 append_path = original;
             }
@@ -388,10 +403,26 @@ LPECopyRotate::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & p
             output = paths_to_pw(path_out);
         }
     } else {
+        Geom::PathVector output_pv = path_from_piecewise(output , 0.01);
         for (int i = 0; i < num_copies; ++i) {
             Rotate rot(-rad_from_deg(rotation_angle * i));
             Affine t = pre * rot * Translate(origin);
-            output.concat(pwd2_in * t);
+            if (join_paths) {
+                Geom::PathVector join_pv = path_from_piecewise(pwd2_in * t , 0.01);
+                Geom::PathIntersectionGraph *pig = new Geom::PathIntersectionGraph(output_pv, join_pv);
+                if (pig) {
+                    if (!output_pv.empty()) {
+                        output_pv = pig->getUnion();
+                    } else {
+                        output_pv = join_pv;
+                    }
+                }
+            } else {
+                output.concat(pwd2_in * t);
+            }
+        }
+        if (join_paths) {
+            output = paths_to_pw(output_pv);
         }
     }
     return output;
@@ -417,85 +448,6 @@ LPECopyRotate::resetDefaults(SPItem const* item)
     Effect::resetDefaults(item);
     original_bbox(SP_LPE_ITEM(item));
 }
-
-void
-LPECopyRotate::addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item)
-{
-    {
-        KnotHolderEntity *e = new CR::KnotHolderEntityStartingAngle(this);
-        e->create( desktop, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN,
-                   _("Adjust the starting angle"));
-        knotholder->add(e);
-    }
-    {
-        KnotHolderEntity *e = new CR::KnotHolderEntityRotationAngle(this);
-        e->create( desktop, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN,
-                   _("Adjust the rotation angle"));
-        knotholder->add(e);
-    }
-};
-
-namespace CR {
-
-using namespace Geom;
-
-void
-KnotHolderEntityStartingAngle::knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, guint state)
-{
-    LPECopyRotate* lpe = dynamic_cast<LPECopyRotate *>(_effect);
-
-    Geom::Point const s = snap_knot_position(p, state);
-
-    // I first suspected the minus sign to be a bug in 2geom but it is
-    // likely due to SVG's choice of coordinate system orientation (max)
-    lpe->starting_angle.param_set_value(deg_from_rad(-angle_between(lpe->dir, s - lpe->origin)));
-    if (state & GDK_SHIFT_MASK) {
-        lpe->dist_angle_handle = L2(lpe->B - lpe->A);
-    } else {
-        lpe->dist_angle_handle = L2(p - lpe->origin);
-    }
-
-    // FIXME: this should not directly ask for updating the item. It should write to SVG, which triggers updating.
-    sp_lpe_item_update_patheffect (SP_LPE_ITEM(item), false, true);
-}
-
-void
-KnotHolderEntityRotationAngle::knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, guint state)
-{
-    LPECopyRotate* lpe = dynamic_cast<LPECopyRotate *>(_effect);
-
-    Geom::Point const s = snap_knot_position(p, state);
-
-    // I first suspected the minus sign to be a bug in 2geom but it is
-    // likely due to SVG's choice of coordinate system orientation (max)
-    lpe->rotation_angle.param_set_value(deg_from_rad(-angle_between(lpe->dir, s - lpe->origin)) - lpe->starting_angle);
-    if (state & GDK_SHIFT_MASK) {
-        lpe->dist_angle_handle = L2(lpe->B - lpe->A);
-    } else {
-        lpe->dist_angle_handle = L2(p - lpe->origin);
-    }
-
-    // FIXME: this should not directly ask for updating the item. It should write to SVG, which triggers updating.
-    sp_lpe_item_update_patheffect (SP_LPE_ITEM(item), false, true);
-}
-
-Geom::Point
-KnotHolderEntityStartingAngle::knot_get() const
-{
-    LPECopyRotate const *lpe = dynamic_cast<LPECopyRotate const*>(_effect);
-    return lpe->start_pos;
-}
-
-Geom::Point
-KnotHolderEntityRotationAngle::knot_get() const
-{
-    LPECopyRotate const *lpe = dynamic_cast<LPECopyRotate const*>(_effect);
-    return lpe->rot_pos;
-}
-
-} // namespace CR
-
-/* ######################## */
 
 } //namespace LivePathEffect
 } /* namespace Inkscape */

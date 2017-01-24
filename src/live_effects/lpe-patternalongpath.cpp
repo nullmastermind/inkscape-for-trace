@@ -11,7 +11,10 @@
 #include <2geom/bezier-to-sbasis.h>
 
 #include "knotholder.h"
+#include <cmath>
 #include <algorithm>
+// TODO due to internal breakage in glibmm headers, this must be last:
+#include <glibmm/i18n.h>
 
 using std::vector;
 
@@ -61,7 +64,7 @@ static const Util::EnumDataConverter<PAPCopyType> PAPCopyTypeConverter(PAPCopyTy
 LPEPatternAlongPath::LPEPatternAlongPath(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
     pattern(_("Pattern source:"), _("Path to put along the skeleton path"), "pattern", &wr, this, "M0,0 L1,0"),
-    original_height(0),
+    original_height(0.0),
     prop_scale(_("_Width:"), _("Width of the pattern"), "prop_scale", &wr, this, 1.0),
     copytype(_("Pattern copies:"), _("How many pattern copies to place along the skeleton path"),
         "copytype", PAPCopyTypeConverter, &wr, this, PAPCT_SINGLE_STRETCHED),
@@ -142,15 +145,15 @@ LPEPatternAlongPath::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > con
         double xspace  = spacing;
         double noffset = normal_offset;
         double toffset = tang_offset;
-        if (prop_units.get_value() && pattBndsY){
+        if (prop_units.get_value()){
             xspace  *= pattBndsX->extent();
             noffset *= pattBndsY->extent();
             toffset *= pattBndsX->extent();
         }
 
         //Prevent more than 90% overlap...
-        if (xspace < -pattBndsX->extent()*.9) {
-            xspace = -pattBndsX->extent()*.9;
+        if (xspace < -pattBndsX->extent() * 0.9) {
+            xspace = -pattBndsX->extent() * 0.9;
         }
         //TODO: dynamical update of parameter ranges?
         //if (prop_units.get_value()){
@@ -159,7 +162,7 @@ LPEPatternAlongPath::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > con
         //        spacing.param_set_range(-pattBndsX.extent()*.9, Geom::infinity());
         //    }
 
-        y0+=noffset;
+        y0 += noffset;
 
         std::vector<Geom::Piecewise<Geom::D2<Geom::SBasis> > > paths_in;
         paths_in = split_at_discontinuities(pwd2_in);
@@ -168,11 +171,14 @@ LPEPatternAlongPath::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > con
             Geom::Piecewise<Geom::D2<Geom::SBasis> > path_i = paths_in[idx];
             Piecewise<SBasis> x = x0;
             Piecewise<SBasis> y = y0;
-            Piecewise<D2<SBasis> > uskeleton = arc_length_parametrization(path_i,2,.1);
-            uskeleton = remove_short_cuts(uskeleton,.01);
+            Piecewise<D2<SBasis> > uskeleton = arc_length_parametrization(path_i,2, 0.1);
+            uskeleton = remove_short_cuts(uskeleton, 0.01);
             Piecewise<D2<SBasis> > n = rot90(derivative(uskeleton));
-            n = force_continuity(remove_short_cuts(n,.1));
-            
+            if (Geom::are_near(pwd2_in[0].at0(),pwd2_in[pwd2_in.size()-1].at1(), 0.01)) {
+                n = force_continuity(remove_short_cuts(n, 0.1), 0.01);
+            } else {
+                n = force_continuity(remove_short_cuts(n, 0.1));
+            }            
             int nbCopies = 0;
             double scaling = 1;
             switch(type) {
@@ -192,7 +198,7 @@ LPEPatternAlongPath::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > con
                     
                 case PAPCT_REPEATED_STRETCHED:
                     // if uskeleton is closed:
-                    if(path_i.segs.front().at0() == path_i.segs.back().at1()){
+                    if (are_near(path_i.segs.front().at0(), path_i.segs.back().at1())){
                         nbCopies = std::max(1, static_cast<int>(std::floor((uskeleton.domain().extent() - toffset)/(pattBndsX->extent()+xspace))));
                         pattBndsX = Interval(pattBndsX->min(),pattBndsX->max()+xspace);
                         scaling = (uskeleton.domain().extent() - toffset)/(((double)nbCopies)*pattBndsX->extent());
@@ -208,18 +214,18 @@ LPEPatternAlongPath::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > con
                     return pwd2_in;
             };
             
+            //Ceil to 6 decimals
+            scaling = ceil(scaling * 1000000) / 1000000;
             double pattWidth = pattBndsX->extent() * scaling;
             
-            if (scaling != 1.0) {
-                x*=scaling;
-            }
+            x *= scaling;
             if ( scale_y_rel.get_value() ) {
-                y*=(scaling*prop_scale);
+                y *= prop_scale * scaling;
             } else {
-                if (prop_scale != 1.0) y *= prop_scale;
+                y *= prop_scale;
             }
             x += toffset;
-            
+
             double offs = 0;
             for (int i=0; i<nbCopies; i++){
                 if (fuse_tolerance > 0){        
@@ -232,7 +238,7 @@ LPEPatternAlongPath::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > con
                 offs+=pattWidth;
             }
         }
-        if (fuse_tolerance > 0){        
+        if (fuse_tolerance > 0){
             pre_output = fuse_nearby_ends(pre_output, fuse_tolerance);
             for (unsigned i=0; i<pre_output.size(); i++){
                 output.concat(pre_output[i]);
@@ -261,7 +267,6 @@ LPEPatternAlongPath::transform_multiply(Geom::Affine const& postmul, bool set)
         pattern.param_transform_multiply(postmul, set);
         pattern.write_to_SVG();
     }
-    sp_lpe_item_update_patheffect (sp_lpe_item, false, true);
 }
 
 void
@@ -272,10 +277,10 @@ LPEPatternAlongPath::addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vect
 
 
 void 
-LPEPatternAlongPath::addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item)
+LPEPatternAlongPath::addKnotHolderEntities(KnotHolder *knotholder, SPItem *item)
 {
     KnotHolderEntity *e = new WPAP::KnotHolderEntityWidthPatternAlongPath(this);
-    e->create(desktop, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN, _("Change the width"), SP_KNOT_SHAPE_CIRCLE);
+    e->create(NULL, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN, _("Change the width"), SP_KNOT_SHAPE_CIRCLE);
     knotholder->add(e);
 }
 

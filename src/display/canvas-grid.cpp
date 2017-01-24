@@ -139,7 +139,7 @@ grid_canvasitem_update (SPCanvasItem *item, Geom::Affine const &affine, unsigned
     };
 
 CanvasGrid::CanvasGrid(SPNamedView * nv, Inkscape::XML::Node * in_repr, SPDocument *in_doc, GridType type)
-    : visible(true), gridtype(type)
+    : visible(true), gridtype(type), legacy(false), pixel(false)
 {
     repr = in_repr;
     doc = in_doc;
@@ -413,7 +413,12 @@ static inline void attach_all(Gtk::Grid &table, Gtk::Widget const *const arr[], 
                 table.attach(const_cast<Gtk::Widget&>(*arr[i+1]), 1, r, 2, 1);
             } else if (arr[i]) {
                 Gtk::Label& label = reinterpret_cast<Gtk::Label&> (const_cast<Gtk::Widget&>(*arr[i]));
+#if GTK_CHECK_VERSION(3,16,0)
+                label.set_xalign(0.0);
+                label.set_yalign(0.5);
+#else
                 label.set_alignment (0.0);
+#endif
                 label.set_hexpand();
                 label.set_valign(Gtk::ALIGN_CENTER);
                 table.attach(label, 0, r, 3, 1);
@@ -528,6 +533,10 @@ CanvasXYGrid::readRepr()
         if( q.unit->type == UNIT_TYPE_LINEAR ) {
             // Legacy grid not in 'user units'
             origin[Geom::X] = q.value("px");
+            legacy = true;
+            if (q.unit->abbr == "px" ) {
+                pixel = true;
+            }
         } else {
             // Grid in 'user units'
             origin[Geom::X] = q.quantity * scale_x;
@@ -541,6 +550,10 @@ CanvasXYGrid::readRepr()
         if( q.unit->type == UNIT_TYPE_LINEAR ) {
             // Legacy grid not in 'user units'
             origin[Geom::Y] = q.value("px");
+            legacy = true;
+            if (q.unit->abbr == "px" ) {
+                pixel = true;
+            }
         } else {
             // Grid in 'user units'
             origin[Geom::Y] = q.quantity * scale_y;
@@ -559,6 +572,10 @@ CanvasXYGrid::readRepr()
             if( q.unit->type == UNIT_TYPE_LINEAR ) {
                 // Legacy grid not in 'user units'
                 spacing[Geom::X] = q.value("px");
+                legacy = true;
+                if (q.unit->abbr == "px" ) {
+                    pixel = true;
+                }
             } else {
                 // Grid in 'user units'
                 spacing[Geom::X] = q.quantity * scale_x;
@@ -578,6 +595,10 @@ CanvasXYGrid::readRepr()
             if( q.unit->type == UNIT_TYPE_LINEAR ) {
                 // Legacy grid not in 'user units'
                 spacing[Geom::Y] = q.value("px");
+                legacy = true;
+                if (q.unit->abbr == "px" ) {
+                    pixel = true;
+                }
             } else {
                 // Grid in 'user units'
                 spacing[Geom::Y] = q.quantity * scale_y;
@@ -798,7 +819,23 @@ CanvasXYGrid::updateWidgets()
 */
 }
 
+// For correcting old SVG Inkscape files
+void
+CanvasXYGrid::Scale (Geom::Scale const &scale ) {
+    origin *= scale;
+    spacing *= scale;
 
+    // Write out in 'user-units'
+    Inkscape::SVGOStringStream os_x, os_y, ss_x, ss_y;
+    os_x << origin[Geom::X];
+    os_y << origin[Geom::Y];
+    ss_x << spacing[Geom::X];
+    ss_y << spacing[Geom::Y];
+    repr->setAttribute("originx",  os_x.str().c_str());
+    repr->setAttribute("originy",  os_y.str().c_str());
+    repr->setAttribute("spacingx", ss_x.str().c_str());
+    repr->setAttribute("spacingy", ss_y.str().c_str());
+}
 
 void
 CanvasXYGrid::Update (Geom::Affine const &affine, unsigned int /*flags*/)

@@ -20,8 +20,7 @@
 
 #include "live_effects/lpe-skeleton.h"
 
-// You might need to include other 2geom files. You can add them here:
-
+// TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
 
 namespace Inkscape {
@@ -98,10 +97,10 @@ public:
 } // namespace Skeleton
 
 void
-LPESkeleton::addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item) {
+LPESkeleton::addKnotHolderEntities(KnotHolder *knotholder, SPItem *item) {
     {
         KnotHolderEntityMyHandle *e = new KnotHolderEntityMyHandle(this);
-        e->create(  desktop, item, knotholder,
+        e->create( NULL, item, knotholder,
                     _("Text describing what this handle does"),
                     //optional: knot_shape, knot_mode, knot_color);
         knotholder->add(e);

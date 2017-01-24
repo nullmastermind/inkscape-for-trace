@@ -100,7 +100,7 @@ public:
     // /TODO: in view of providesOwnFlashPaths() below, this is somewhat redundant
     //       (but spiro lpe still needs it!)
     virtual LPEPathFlashType pathFlashType() const { return DEFAULT; }
-    void addHandles(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item);
+    void addHandles(KnotHolder *knotholder, SPItem *item);
     std::vector<Geom::PathVector> getCanvasIndicators(SPLPEItem const* lpeitem);
     void update_helperpath();
 
@@ -123,6 +123,7 @@ public:
 
     void editNextParamOncanvas(SPItem * item, SPDesktop * desktop);
     bool apply_to_clippath_and_mask;
+    bool erase_extra_objects; // set this to false allow retain extra generated objects, see measure line LPE
     bool upd_params;
 
 protected:
@@ -141,7 +142,7 @@ protected:
     void registerParameter(Parameter * param);
     Parameter * getNextOncanvasEditableParam();
 
-    virtual void addKnotHolderEntities(KnotHolder * /*knotholder*/, SPDesktop * /*desktop*/, SPItem * /*item*/) {};
+    virtual void addKnotHolderEntities(KnotHolder * /*knotholder*/, SPItem * /*item*/) {};
 
     virtual void addCanvasIndicators(SPLPEItem const* lpeitem, std::vector<Geom::PathVector> &hp_vec);
 

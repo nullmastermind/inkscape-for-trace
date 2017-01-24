@@ -76,7 +76,8 @@ enum MeshCornerOperation {
   MG_CORNER_SIDE_ARC,
   MG_CORNER_TENSOR_TOGGLE,
   MG_CORNER_COLOR_SMOOTH,
-  MG_CORNER_COLOR_PICK
+  MG_CORNER_COLOR_PICK,
+  MG_CORNER_INSERT
 };
 
 enum MeshNodeOperation {
@@ -192,6 +193,7 @@ public:
   unsigned int tensor_toggle( std::vector< unsigned int > );
   unsigned int color_smooth( std::vector< unsigned int > );
   unsigned int color_pick( std::vector< unsigned int >, SPItem* );
+  unsigned int insert( std::vector< unsigned int > );
 
   // Update other nodes in response to a node move.
   void update_handles( unsigned int corner, std::vector< unsigned int > selected_corners, Geom::Point old_p, MeshNodeOperation op );
@@ -201,6 +203,9 @@ public:
 
   // Transform array
   void transform(Geom::Affine const &m);
+
+  // Transform mesh to fill box. Return true if not identity transform.
+  bool fill_box(Geom::OptRect &box);
 
   // Find bounding box
   // Geom::OptRect findBoundingBox();

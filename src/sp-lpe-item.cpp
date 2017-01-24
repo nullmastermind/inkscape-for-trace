@@ -125,7 +125,8 @@ void SPLPEItem::set(unsigned int key, gchar const* value) {
                 {
                     if (!value) {
                         LivePathEffectObject *lpeobj = (*it)->lpeobject;
-                        if (Inkscape::LivePathEffect::LPEMeasureLine * lpe = dynamic_cast<Inkscape::LivePathEffect::LPEMeasureLine *>(lpeobj->get_lpe())) {
+                        Inkscape::LivePathEffect::Effect * lpe = lpeobj->get_lpe();
+                        if (dynamic_cast<Inkscape::LivePathEffect::LPEMeasureLine *>(lpe)){
                             lpe->doOnRemove(this);
                         }
                     }
@@ -288,22 +289,6 @@ sp_lpe_item_update_patheffect (SPLPEItem *lpeitem, bool wholetree, bool write)
 
     if (!lpeitem->pathEffectsEnabled())
         return;
-
-    // TODO: hack! this will be removed when path length measuring is reimplemented in a better way
-    PathEffectList lpelist = lpeitem->getEffectList();
-    std::list<Inkscape::LivePathEffect::LPEObjectReference *>::iterator i;
-    for (i = lpelist.begin(); i != lpelist.end(); ++i) {
-        if ((*i)->lpeobject) {
-            Inkscape::LivePathEffect::Effect *lpe = (*i)->lpeobject->get_lpe();
-            if (dynamic_cast<Inkscape::LivePathEffect::LPEPathLength *>(lpe)) {
-                if (!lpe->isVisible()) {
-                    // we manually disable text for LPEPathLength
-                    // use static_cast, because we already checked for the right type above
-                    static_cast<Inkscape::LivePathEffect::LPEPathLength *>(lpe)->hideCanvasText();
-                }
-            }
-        }
-    }
 
     SPLPEItem *top = NULL;
 
@@ -514,6 +499,21 @@ void SPLPEItem::removeCurrentPathEffect(bool keep_paths)
  */
 void SPLPEItem::removeAllPathEffects(bool keep_paths)
 {
+    if (keep_paths) {
+        if (path_effect_list->empty()) {
+            return;
+        }
+
+        for (PathEffectList::const_iterator it = path_effect_list->begin(); it != path_effect_list->end(); ++it)
+        {
+            LivePathEffectObject *lpeobj = (*it)->lpeobject;
+            if (lpeobj) {
+                Inkscape::LivePathEffect::Effect * lpe = lpeobj->get_lpe();
+                lpe->erase_extra_objects = false;
+            }
+        }
+    }
+
     this->getRepr()->setAttribute("inkscape:path-effect", NULL);
 
     if (!keep_paths) {

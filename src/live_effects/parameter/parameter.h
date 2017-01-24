@@ -68,7 +68,7 @@ public:
 
     // overload these for your particular parameter to make it provide knotholder handles or canvas helperpaths
     virtual bool providesKnotHolderEntities() const { return false; }
-    virtual void addKnotHolderEntities(KnotHolder */*knotholder*/, SPDesktop */*desktop*/, SPItem */*item*/) {};
+    virtual void addKnotHolderEntities(KnotHolder */*knotholder*/, SPItem */*item*/) {};
     virtual void addCanvasIndicators(SPLPEItem const*/*lpeitem*/, std::vector<Geom::PathVector> &/*hp_vec*/) {};
 
     virtual void param_editOncanvas(SPItem * /*item*/, SPDesktop * /*dt*/) {};
@@ -118,6 +118,8 @@ public:
     void param_set_digits(unsigned digits);
     void param_set_increments(double step, double page);
     void addSlider(bool add_slider_widget) { add_slider = add_slider_widget; };
+    double param_get_max() { return max; };
+    double param_get_min() { return min; };
 
     void param_overwrite_widget(bool overwrite_widget);
     virtual Gtk::Widget * param_newWidget();

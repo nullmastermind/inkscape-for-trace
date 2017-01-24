@@ -3,13 +3,12 @@
 # Jānis Eisaks <jancs@dv.lv>, 2012-2015.
 # Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>, 2014.
 #
-#: ../src/ui/dialog/clonetiler.cpp:1010
 msgid ""
 msgstr ""
 "Project-Id-Version: Inkscape\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
-"POT-Creation-Date: 2016-06-08 09:06+0200\n"
-"PO-Revision-Date: 2016-01-17 18:23+0200\n"
+"POT-Creation-Date: 2016-07-20 21:14+0300\n"
+"PO-Revision-Date: 2016-07-20 21:17+0300\n"
 "Last-Translator: Jānis Eisaks <je@dv.lv>\n"
 "Language-Team: Latvian <lata-l10n@googlegroups.com>\n"
 "Language: lv\n"
@@ -18,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
 "2);\n"
-"X-Generator: Poedit 1.8.4\n"
+"X-Generator: Poedit 1.8.6\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #: ../inkscape.appdata.xml.in.h:1 ../inkscape.desktop.in.h:1
@@ -46,9 +45,8 @@ msgid ""
 msgstr ""
 
 #: ../inkscape.appdata.xml.in.h:5
-#, fuzzy
 msgid "Main application window"
-msgstr "Dublēt logu"
+msgstr "Galvenais lietotnes logs"
 
 #: ../inkscape.desktop.in.h:3
 msgid "Inkscape Vector Graphics Editor"
@@ -687,7 +685,8 @@ msgstr "Melnais caurums"
 #: ../share/filters/filters.svg.h:279 ../share/filters/filters.svg.h:835
 #: ../share/filters/filters.svg.h:839 ../share/filters/filters.svg.h:843
 #: ../src/extension/internal/filter/morphology.h:76
-#: ../src/extension/internal/filter/morphology.h:203 ../src/filter-enums.cpp:32
+#: ../src/extension/internal/filter/morphology.h:203
+#: ../src/filter-enums.cpp:32
 msgid "Morphology"
 msgstr "Morfoloģija"
 
@@ -5072,7 +5071,8 @@ msgstr "Pielāgojamais slieksnis"
 #: ../src/ui/widget/page-sizer.cpp:249
 #: ../src/widgets/calligraphy-toolbar.cpp:430
 #: ../src/widgets/eraser-toolbar.cpp:154 ../src/widgets/spray-toolbar.cpp:297
-#: ../src/widgets/tweak-toolbar.cpp:128 ../share/extensions/foldablebox.inx.h:2
+#: ../src/widgets/tweak-toolbar.cpp:128
+#: ../share/extensions/foldablebox.inx.h:2
 msgid "Width:"
 msgstr "Platums:"
 
@@ -6523,13 +6523,15 @@ msgid "Transparency type:"
 msgstr "Caurspīdīguma tips:"
 
 #: ../src/extension/internal/filter/bumps.h:353
-#: ../src/extension/internal/filter/morphology.h:176 ../src/filter-enums.cpp:91
+#: ../src/extension/internal/filter/morphology.h:176
+#: ../src/filter-enums.cpp:91
 msgid "Atop"
 msgstr "Virs"
 
 #: ../src/extension/internal/filter/bumps.h:354
 #: ../src/extension/internal/filter/distort.h:70
-#: ../src/extension/internal/filter/morphology.h:174 ../src/filter-enums.cpp:89
+#: ../src/extension/internal/filter/morphology.h:174
+#: ../src/filter-enums.cpp:89
 msgid "In"
 msgstr "Pēc"
 
@@ -7047,7 +7049,8 @@ msgid "Felt Feather"
 msgstr "Filca spalvas"
 
 #: ../src/extension/internal/filter/distort.h:71
-#: ../src/extension/internal/filter/morphology.h:175 ../src/filter-enums.cpp:90
+#: ../src/extension/internal/filter/morphology.h:175
+#: ../src/filter-enums.cpp:90
 msgid "Out"
 msgstr "Ārā"
 
@@ -7242,11 +7245,13 @@ msgstr "Slēpt attēlu"
 msgid "Composite type:"
 msgstr "Saliktais tips:"
 
-#: ../src/extension/internal/filter/morphology.h:173 ../src/filter-enums.cpp:88
+#: ../src/extension/internal/filter/morphology.h:173
+#: ../src/filter-enums.cpp:88
 msgid "Over"
 msgstr "Pāri"
 
-#: ../src/extension/internal/filter/morphology.h:177 ../src/filter-enums.cpp:92
+#: ../src/extension/internal/filter/morphology.h:177
+#: ../src/filter-enums.cpp:92
 msgid "XOR"
 msgstr "XOR"
 
@@ -7320,8 +7325,8 @@ msgstr "Aizpildīt ar troksni"
 #: ../src/ui/dialog/tracedialog.cpp:747
 #: ../share/extensions/color_HSL_adjust.inx.h:2
 #: ../share/extensions/color_custom.inx.h:2
-#: ../share/extensions/color_randomize.inx.h:2 ../share/extensions/dots.inx.h:2
-#: ../share/extensions/dxf_input.inx.h:2
+#: ../share/extensions/color_randomize.inx.h:2
+#: ../share/extensions/dots.inx.h:2 ../share/extensions/dxf_input.inx.h:2
 #: ../share/extensions/dxf_outlines.inx.h:2
 #: ../share/extensions/gcodetools_area.inx.h:29
 #: ../share/extensions/gcodetools_engraving.inx.h:7
@@ -7919,13 +7924,15 @@ msgstr "Vertikālā nobīde:"
 #: ../src/extension/internal/grid.cpp:209
 #: ../src/ui/dialog/inkscape-preferences.cpp:1532
 #: ../share/extensions/draw_from_triangle.inx.h:58
-#: ../share/extensions/eqtexsvg.inx.h:4 ../share/extensions/foldablebox.inx.h:9
+#: ../share/extensions/eqtexsvg.inx.h:4
+#: ../share/extensions/foldablebox.inx.h:9
 #: ../share/extensions/funcplot.inx.h:38
 #: ../share/extensions/grid_cartesian.inx.h:23
 #: ../share/extensions/grid_isometric.inx.h:11
 #: ../share/extensions/grid_polar.inx.h:22
 #: ../share/extensions/guides_creator.inx.h:25
-#: ../share/extensions/hershey.inx.h:52 ../share/extensions/layout_nup.inx.h:35
+#: ../share/extensions/hershey.inx.h:52
+#: ../share/extensions/layout_nup.inx.h:35
 #: ../share/extensions/lindenmayer.inx.h:34
 #: ../share/extensions/nicechart.inx.h:45
 #: ../share/extensions/param_curves.inx.h:30
@@ -8276,7 +8283,8 @@ msgid "Map all fill patterns to standard WMF hatches"
 msgstr "Kartēt visas aizpildījuma faktūras pret standarta WMF iesvītrojumiem"
 
 #: ../src/extension/internal/wmf-inout.cpp:3208
-#: ../share/extensions/wmf_input.inx.h:2 ../share/extensions/wmf_output.inx.h:2
+#: ../share/extensions/wmf_input.inx.h:2
+#: ../share/extensions/wmf_output.inx.h:2
 msgid "Windows Metafile (*.wmf)"
 msgstr "Windows Metafile (*.wmf)"
 
@@ -8548,7 +8556,8 @@ msgstr "Griezt nokrāsu"
 msgid "Luminance to Alpha"
 msgstr "Spilgtumu par alfa"
 
-#: ../src/filter-enums.cpp:87 ../share/extensions/jessyInk_mouseHandler.inx.h:3
+#: ../src/filter-enums.cpp:87
+#: ../share/extensions/jessyInk_mouseHandler.inx.h:3
 #: ../share/extensions/jessyInk_transitions.inx.h:7
 #: ../share/extensions/measure.inx.h:20 ../share/extensions/nicechart.inx.h:33
 msgid "Default"
@@ -8860,7 +8869,8 @@ msgstr "Ikonizēt šo doku"
 msgid "Close this dock"
 msgstr "Aizvērt šo doku"
 
-#: ../src/libgdl/gdl-dock-item-grip.c:723 ../src/libgdl/gdl-dock-tablabel.c:125
+#: ../src/libgdl/gdl-dock-item-grip.c:723
+#: ../src/libgdl/gdl-dock-tablabel.c:125
 msgid "Controlling dock item"
 msgstr "Vadošā doka elements"
 
@@ -9026,7 +9036,8 @@ msgstr "Pašreizējās lapas indekss"
 #: ../src/libgdl/gdl-dock-object.c:125
 #: ../src/live_effects/parameter/originalpatharray.cpp:82
 #: ../src/ui/dialog/inkscape-preferences.cpp:1566
-#: ../src/ui/widget/page-sizer.cpp:285 ../src/widgets/gradient-selector.cpp:150
+#: ../src/ui/widget/page-sizer.cpp:285
+#: ../src/widgets/gradient-selector.cpp:150
 #: ../src/widgets/sp-xmlview-attr-list.cpp:49
 msgid "Name"
 msgstr "Nosaukums"
@@ -9901,11 +9912,11 @@ msgstr "Režģa izmērs X virzienā."
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:103
 msgid "IMPORTANT! New version soon..."
-msgstr ""
+msgstr "Svarīgi! Drīzumā jauna versija..."
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:107
 msgid "Not compatible. Convert to path after."
-msgstr ""
+msgstr "Nav savietojams. Pēc tam pārvērtiet par ceļu."
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:165
 #: ../src/ui/dialog/lpe-fillet-chamfer-properties.cpp:72
@@ -10063,19 +10074,16 @@ msgid "Extrapolated arc"
 msgstr "Ekstrapolēts loks"
 
 #: ../src/live_effects/lpe-jointype.cpp:36
-#, fuzzy
 msgid "Extrapolated arc Alt1"
-msgstr "Ekstrapolēts loks"
+msgstr "Ekstrapolēts loks Alt1"
 
 #: ../src/live_effects/lpe-jointype.cpp:37
-#, fuzzy
 msgid "Extrapolated arc Alt2"
-msgstr "Ekstrapolēts loks"
+msgstr "Ekstrapolēts loks Alt2"
 
 #: ../src/live_effects/lpe-jointype.cpp:38
-#, fuzzy
 msgid "Extrapolated arc Alt3"
-msgstr "Ekstrapolēts loks"
+msgstr "Ekstrapolēts loks Alt3"
 
 #: ../src/live_effects/lpe-jointype.cpp:42
 #: ../src/live_effects/lpe-powerstroke.cpp:149
@@ -10595,9 +10603,8 @@ msgid "Envelope deformation"
 msgstr "Aploksnes deformācija"
 
 #: ../src/live_effects/lpe-perspective-envelope.cpp:45
-#, fuzzy
 msgid "Overflow perspective"
-msgstr "Perspektīva"
+msgstr ""
 
 #: ../src/live_effects/lpe-perspective-envelope.cpp:46
 msgid "Type"
@@ -11046,7 +11053,8 @@ msgstr "Iezīmes attālu_ms:"
 msgid "Distance between successive ruler marks"
 msgstr "Attālums starp blakus esošām mērjoslas aizzīmēm"
 
-#: ../src/live_effects/lpe-ruler.cpp:42 ../share/extensions/foldablebox.inx.h:7
+#: ../src/live_effects/lpe-ruler.cpp:42
+#: ../share/extensions/foldablebox.inx.h:7
 #: ../share/extensions/interp_att_g.inx.h:9
 #: ../share/extensions/layout_nup.inx.h:3
 #: ../share/extensions/printing_marks.inx.h:11
@@ -11388,9 +11396,8 @@ msgid "Elastic transform mode"
 msgstr "Elastīgās pārveidošanas režīms"
 
 #: ../src/live_effects/lpe-transform_2pts.cpp:32
-#, fuzzy
 msgid "From original width"
-msgstr "Klonēt sākotnējo ceļu"
+msgstr "No sākotnējā platuma"
 
 #: ../src/live_effects/lpe-transform_2pts.cpp:33
 #, fuzzy
@@ -11431,9 +11438,8 @@ msgid "Stretch the result"
 msgstr "Izstiept rezultātu"
 
 #: ../src/live_effects/lpe-transform_2pts.cpp:40
-#, fuzzy
 msgid "Offset from knots"
-msgstr "Pārbīdes punkti"
+msgstr "Nobīde no mezgliem"
 
 #: ../src/live_effects/lpe-transform_2pts.cpp:41
 msgid "First Knot"
@@ -12423,7 +12429,8 @@ msgstr "<b>Nekas</b> nav izdzēst."
 #: ../src/widgets/eraser-toolbar.cpp:120
 #: ../src/widgets/gradient-toolbar.cpp:1181
 #: ../src/widgets/gradient-toolbar.cpp:1195
-#: ../src/widgets/gradient-toolbar.cpp:1209 ../src/widgets/node-toolbar.cpp:401
+#: ../src/widgets/gradient-toolbar.cpp:1209
+#: ../src/widgets/node-toolbar.cpp:401
 msgid "Delete"
 msgstr "Dzēst"
 
@@ -12450,19 +12457,16 @@ msgid "Group"
 msgstr "Grupēt"
 
 #: ../src/selection-chemistry.cpp:798
-#, fuzzy
 msgid "<b>No objects selected</b> to pop out of group."
-msgstr "<b>Nav atlasīts neviens objekts</b>, no kura varētu aizgūt stilu."
+msgstr ""
 
 #: ../src/selection-chemistry.cpp:808
-#, fuzzy
 msgid "Selection <b>not in a group</b>."
-msgstr "Atlasiet atgrupējamo <b>grupu</b>."
+msgstr ""
 
 #: ../src/selection-chemistry.cpp:822
-#, fuzzy
 msgid "Pop selection from group"
-msgstr "Iz_turēties pret atlasīto kā pret grupu"
+msgstr ""
 
 #: ../src/selection-chemistry.cpp:830
 msgid "Select a <b>group</b> to ungroup."
@@ -13304,8 +13308,8 @@ msgstr "Grupēšana pēc nosacījuma"
 
 #: ../src/sp-text.cpp:361 ../src/verbs.cpp:347
 #: ../share/extensions/lorem_ipsum.inx.h:8
-#: ../share/extensions/replace_font.inx.h:11 ../share/extensions/split.inx.h:10
-#: ../share/extensions/text_braille.inx.h:2
+#: ../share/extensions/replace_font.inx.h:11
+#: ../share/extensions/split.inx.h:10 ../share/extensions/text_braille.inx.h:2
 #: ../share/extensions/text_extract.inx.h:14
 #: ../share/extensions/text_flipcase.inx.h:2
 #: ../share/extensions/text_lowercase.inx.h:2
@@ -13951,19 +13955,16 @@ msgid "Selection Area"
 msgstr "Atlasītais laukums"
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1097
-#, fuzzy
 msgid "Middle of selection"
-msgstr "Iezīmējuma platums"
+msgstr ""
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1098
-#, fuzzy
 msgid "Min value"
-msgstr "Rakstsavirzes lielums:"
+msgstr ""
 
 #: ../src/ui/dialog/align-and-distribute.cpp:1099
-#, fuzzy
 msgid "Max value"
-msgstr "X sākuma vērtība:"
+msgstr ""
 
 #: ../src/ui/dialog/calligraphic-profile-rename.cpp:40
 #: ../src/ui/dialog/calligraphic-profile-rename.cpp:138
@@ -14826,14 +14827,11 @@ msgid "Back_ground color:"
 msgstr "Fo_na krāsa:"
 
 #: ../src/ui/dialog/document-properties.cpp:123
-#, fuzzy
 msgid ""
 "Color of the page background. Note: transparency setting ignored while "
 "editing if 'Checkerboard background' unset (but used when exporting to "
 "bitmap)."
 msgstr ""
-"Lapas fona krāsa. Piezīme: caurspīdīguma iestatījums labošanas laikā netiek "
-"ņemts vērā, taču tiek izmantots eksportējot bitkarti."
 
 #: ../src/ui/dialog/document-properties.cpp:124
 msgid "Border _color:"
@@ -15019,7 +15017,8 @@ msgstr "_Aizvākt"
 msgid "Remove selected grid."
 msgstr "Aizvākt izvēlēto režģi."
 
-#: ../src/ui/dialog/document-properties.cpp:162 ../src/widgets/toolbox.cpp:1903
+#: ../src/ui/dialog/document-properties.cpp:162
+#: ../src/widgets/toolbox.cpp:1903
 msgid "Guides"
 msgstr "Palīglīnijas"
 
@@ -15458,7 +15457,8 @@ msgstr "Informācija"
 #: ../share/extensions/jitternodes.inx.h:12
 #: ../share/extensions/layout_nup.inx.h:24
 #: ../share/extensions/lindenmayer.inx.h:13
-#: ../share/extensions/lorem_ipsum.inx.h:6 ../share/extensions/measure.inx.h:33
+#: ../share/extensions/lorem_ipsum.inx.h:6
+#: ../share/extensions/measure.inx.h:33
 #: ../share/extensions/pathalongpath.inx.h:16
 #: ../share/extensions/pathscatter.inx.h:18
 #: ../share/extensions/restack.inx.h:25 ../share/extensions/split.inx.h:8
@@ -17619,9 +17619,8 @@ msgstr ""
 "platumu)"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:213
-#, fuzzy
 msgid "Base simplify:"
-msgstr "Vienkāršot"
+msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:213
 msgid "on dynamic LPE simplify"
@@ -18531,10 +18530,9 @@ msgid "Set the language for menus and number formats"
 msgstr "Iestatiet valodu izvēlnēm un skaitļu formātiem"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:616
-#, fuzzy
 msgctxt "Icon size"
 msgid "Larger"
-msgstr "Lielas"
+msgstr ""
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:616
 #, fuzzy
@@ -19791,9 +19789,8 @@ msgstr "Ritināšana"
 
 #. Snapping options
 #: ../src/ui/dialog/inkscape-preferences.cpp:1275
-#, fuzzy
 msgid "Snap indicator"
-msgstr "Ieslēgt piesaistes rādītāju"
+msgstr "Piesaistes indikators"
 
 #: ../src/ui/dialog/inkscape-preferences.cpp:1277
 msgid "Enable snap indicator"
@@ -20667,7 +20664,8 @@ msgstr "X slīpums"
 msgid "Y tilt"
 msgstr "Y slīpums"
 
-#: ../src/ui/dialog/input.cpp:1616 ../src/ui/widget/color-wheel-selector.cpp:29
+#: ../src/ui/dialog/input.cpp:1616
+#: ../src/ui/widget/color-wheel-selector.cpp:29
 msgid "Wheel"
 msgstr "Ritenis"
 
@@ -20677,17 +20675,14 @@ msgid "None"
 msgstr "Neviena"
 
 #: ../src/ui/dialog/knot-properties.cpp:59
-#, fuzzy
 msgid "Position X:"
-msgstr "Pozīcija:"
+msgstr "Pozīcija X:"
 
 #: ../src/ui/dialog/knot-properties.cpp:66
-#, fuzzy
 msgid "Position Y:"
-msgstr "Pozīcija:"
+msgstr "Pozīcija Y:"
 
 #: ../src/ui/dialog/knot-properties.cpp:120
-#, fuzzy
 msgid "Modify Knot Position"
 msgstr "Mainīt mezgla pozīciju"
 
@@ -20699,14 +20694,14 @@ msgid "_Move"
 msgstr "Pār_vietot"
 
 #: ../src/ui/dialog/knot-properties.cpp:180
-#, fuzzy, c-format
+#, c-format
 msgid "Position X (%s):"
-msgstr "Pozīcija (%):"
+msgstr "Pozīcija X (%s):"
 
 #: ../src/ui/dialog/knot-properties.cpp:181
-#, fuzzy, c-format
+#, c-format
 msgid "Position Y (%s):"
-msgstr "Pozīcija (%):"
+msgstr "Pozīcija Y (%s):"
 
 #: ../src/ui/dialog/layer-properties.cpp:55
 msgid "Layer name:"
@@ -21477,15 +21472,18 @@ msgstr "Kopfa-Lišinska algoritms"
 msgid "Output"
 msgstr "Izvade"
 
-#: ../src/ui/dialog/pixelartdialog.cpp:297 ../src/ui/dialog/tracedialog.cpp:814
+#: ../src/ui/dialog/pixelartdialog.cpp:297
+#: ../src/ui/dialog/tracedialog.cpp:814
 msgid "Reset all settings to defaults"
 msgstr "Atiestatīt visus iestatījumus uz noklusētajiem"
 
-#: ../src/ui/dialog/pixelartdialog.cpp:302 ../src/ui/dialog/tracedialog.cpp:819
+#: ../src/ui/dialog/pixelartdialog.cpp:302
+#: ../src/ui/dialog/tracedialog.cpp:819
 msgid "Abort a trace in progress"
 msgstr "Atcelt notiekošo vektorizēšanu"
 
-#: ../src/ui/dialog/pixelartdialog.cpp:306 ../src/ui/dialog/tracedialog.cpp:823
+#: ../src/ui/dialog/pixelartdialog.cpp:306
+#: ../src/ui/dialog/tracedialog.cpp:823
 msgid "Execute the trace"
 msgstr "Izpildīt vektorizēšanu"
 
@@ -21856,7 +21854,8 @@ msgid "Preview Text:"
 msgstr "Teksta priekšskatījums:"
 
 #: ../src/ui/dialog/swatches.cpp:202 ../src/ui/tools/gradient-tool.cpp:360
-#: ../src/ui/tools/gradient-tool.cpp:458 ../src/widgets/gradient-vector.cpp:801
+#: ../src/ui/tools/gradient-tool.cpp:458
+#: ../src/widgets/gradient-vector.cpp:801
 msgid "Add gradient stop"
 msgstr "Pievienot krāsu pārejas pieturpunktu"
 
@@ -22016,9 +22015,8 @@ msgid "Vertical text"
 msgstr "Vertikāls teksts"
 
 #: ../src/ui/dialog/text-edit.cpp:130 ../src/ui/dialog/text-edit.cpp:131
-#, fuzzy
 msgid "Spacing between baselines (percent of font size)"
-msgstr "Atstarpe starp rindām (procentos no fonta izmēra)"
+msgstr ""
 
 #: ../src/ui/dialog/text-edit.cpp:147
 msgid "Text path offset"
@@ -22660,9 +22658,8 @@ msgstr "Ievadiet (ieejiet) grupu(ā) #%1"
 
 #. Pop selection out of group
 #: ../src/ui/interface.cpp:1528
-#, fuzzy
 msgid "_Pop selection out of group"
-msgstr "Iz_turēties pret atlasīto kā pret grupu"
+msgstr ""
 
 #. Item dialog
 #: ../src/ui/interface.cpp:1656 ../src/verbs.cpp:2940
@@ -23135,10 +23132,9 @@ msgstr ""
 "turus"
 
 #: ../src/ui/tool/node.cpp:529
-#, fuzzy
 msgctxt "Path handle tip"
 msgid "<b>Ctrl</b>: Snap handle to steps defined in BSpline Live Path Effect"
-msgstr "<b>Ctrl</b>: Move handle by his actual steps in BSpline Live Effect"
+msgstr ""
 
 #: ../src/ui/tool/node.cpp:532
 #, c-format
@@ -23277,7 +23273,8 @@ msgid "Rotate handle"
 msgstr "Griešanas turis "
 
 #. We need to call MPM's method because it could have been our last node
-#: ../src/ui/tool/path-manipulator.cpp:1555 ../src/widgets/node-toolbar.cpp:397
+#: ../src/ui/tool/path-manipulator.cpp:1555
+#: ../src/widgets/node-toolbar.cpp:397
 msgid "Delete node"
 msgstr "Dzēst mezglu"
 
@@ -23960,9 +23957,9 @@ msgid "Add global measure line"
 msgstr ""
 
 #: ../src/ui/tools/measure-tool.cpp:1290 ../src/ui/tools/measure-tool.cpp:1292
-#, fuzzy, c-format
+#, c-format
 msgid "Crossing %lu"
-msgstr "Šķērsaizmiglošana"
+msgstr ""
 
 #. TRANSLATORS: Mind the space in front. This is part of a compound message
 #: ../src/ui/tools/mesh-tool.cpp:122 ../src/ui/tools/mesh-tool.cpp:133
@@ -24138,40 +24135,32 @@ msgstr ""
 "no šī punkta.  Shift+klikšķis izveido aso mezglu."
 
 #: ../src/ui/tools/pen-tool.cpp:1797
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Curve segment</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to "
 "snap angle, <b>Enter</b> or <b>Shift+Enter</b> to finish the path"
 msgstr ""
-"<b>Līknes posms</b>: leņķis %3.2f&#176;, attālums %s; ar <b>Ctrl</b>-"
-"pievilkt leņķim, <b>Enter</b> - pabeigt ceļu"
 
 #: ../src/ui/tools/pen-tool.cpp:1798
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Line segment</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to "
 "snap angle, <b>Enter</b> or <b>Shift+Enter</b> to finish the path"
 msgstr ""
-"<b>Līnijas posms</b>: leņķis %3.2f&#176;, attālums %s; ar <b>Ctrl</b> - "
-"pievilkt leņķim, <b>Enter</b> - pabeigt ceļu"
 
 #: ../src/ui/tools/pen-tool.cpp:1801
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Curve segment</b>: angle %3.2f&#176;, distance %s; with <b>Shift+Click</"
 "b> make a cusp node, <b>Enter</b> or <b>Shift+Enter</b> to finish the path"
 msgstr ""
-"<b>Līknes posms</b>: leņķis %3.2f&#176;, attālums %s;  <b>Shift+klikšķi</b> "
-"izveido aso mezglu, <b>Enter</b> - pabeigt ceļu"
 
 #: ../src/ui/tools/pen-tool.cpp:1802
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Line segment</b>: angle %3.2f&#176;, distance %s; with <b>Shift+Click</b> "
 "make a cusp node, <b>Enter</b> or <b>Shift+Enter</b> to finish the path"
 msgstr ""
-"<b>Līnijas posms</b>: leņķis %3.2f&#176;, attālums %s; <b>Shift+klikšķi</b> "
-"izveido aso mezglu, <b>Enter</b> - pabeigt ceļu"
 
 #: ../src/ui/tools/pen-tool.cpp:1819
 #, c-format
@@ -26698,14 +26687,12 @@ msgid "Ungroup selected groups"
 msgstr "Atgrupēt iezīmētās grupas"
 
 #: ../src/verbs.cpp:2565
-#, fuzzy
 msgid "_Pop selected objects out of group"
-msgstr "Grupēt iezīmētos objektus"
+msgstr ""
 
 #: ../src/verbs.cpp:2566
-#, fuzzy
 msgid "Pop selected objects out of group"
-msgstr "Grupēt iezīmētos objektus"
+msgstr ""
 
 #: ../src/verbs.cpp:2568
 msgid "_Put on Path"
@@ -28226,9 +28213,8 @@ msgid "Fit the page to the drawing"
 msgstr "Pielāgot lapu zīmējumam"
 
 #: ../src/verbs.cpp:3008
-#, fuzzy
 msgid "_Resize Page to Selection"
-msgstr "Pielāgot lapu atlasītajam"
+msgstr ""
 
 #: ../src/verbs.cpp:3009
 msgid ""
@@ -29000,28 +28986,24 @@ msgstr "Izgriezt no objektiem"
 
 #. Width
 #: ../src/widgets/eraser-toolbar.cpp:151
-#, fuzzy
 msgid "(no width)"
-msgstr "Nulles platums"
+msgstr "(nav platuma)"
 
 #: ../src/widgets/eraser-toolbar.cpp:155
 msgid "The width of the eraser pen (relative to the visible canvas area)"
 msgstr "Dzēšgumijas platums (attiecībā pret redzamo auduma laukumu)"
 
 #: ../src/widgets/eraser-toolbar.cpp:171
-#, fuzzy
 msgid "Eraser Mass"
-msgstr "Dzēšgumija"
+msgstr ""
 
 #: ../src/widgets/eraser-toolbar.cpp:172
-#, fuzzy
 msgid "Increase to make the eraser drag behind, as if slowed by inertia"
-msgstr "Palieliniet, lai pele atpaliktu it kā inerces pēc"
+msgstr ""
 
 #: ../src/widgets/eraser-toolbar.cpp:186 ../src/widgets/eraser-toolbar.cpp:187
-#, fuzzy
 msgid "Break apart cut items"
-msgstr "Sašķelt"
+msgstr ""
 
 #: ../src/widgets/fill-style.cpp:356
 msgid "Change fill rule"
@@ -29142,27 +29124,33 @@ msgstr "radiāls"
 msgid "Create radial (elliptic or circular) gradient"
 msgstr "Izveidot radiālu (eliptisku vai riņķveida) krāsu pāreju"
 
-#: ../src/widgets/gradient-toolbar.cpp:1044 ../src/widgets/mesh-toolbar.cpp:387
+#: ../src/widgets/gradient-toolbar.cpp:1044
+#: ../src/widgets/mesh-toolbar.cpp:387
 msgid "New:"
 msgstr "Jauns:"
 
-#: ../src/widgets/gradient-toolbar.cpp:1067 ../src/widgets/mesh-toolbar.cpp:410
+#: ../src/widgets/gradient-toolbar.cpp:1067
+#: ../src/widgets/mesh-toolbar.cpp:410
 msgid "fill"
 msgstr "aizpildīt"
 
-#: ../src/widgets/gradient-toolbar.cpp:1067 ../src/widgets/mesh-toolbar.cpp:410
+#: ../src/widgets/gradient-toolbar.cpp:1067
+#: ../src/widgets/mesh-toolbar.cpp:410
 msgid "Create gradient in the fill"
 msgstr "Izveidot krāsu pāreju aizpildījumā"
 
-#: ../src/widgets/gradient-toolbar.cpp:1071 ../src/widgets/mesh-toolbar.cpp:414
+#: ../src/widgets/gradient-toolbar.cpp:1071
+#: ../src/widgets/mesh-toolbar.cpp:414
 msgid "stroke"
 msgstr "apmale"
 
-#: ../src/widgets/gradient-toolbar.cpp:1071 ../src/widgets/mesh-toolbar.cpp:414
+#: ../src/widgets/gradient-toolbar.cpp:1071
+#: ../src/widgets/mesh-toolbar.cpp:414
 msgid "Create gradient in the stroke"
 msgstr "Izveidot krāsu pāreju uz apmales"
 
-#: ../src/widgets/gradient-toolbar.cpp:1074 ../src/widgets/mesh-toolbar.cpp:417
+#: ../src/widgets/gradient-toolbar.cpp:1074
+#: ../src/widgets/mesh-toolbar.cpp:417
 msgid "on:"
 msgstr "uz:"
 
@@ -29262,7 +29250,8 @@ msgstr "Saistīt krāsu pārejas"
 msgid "Link gradients to change all related gradients"
 msgstr "Sasaistīt krāsu pārejas, lai mainītu visas saistītās krāsu pārejas"
 
-#: ../src/widgets/gradient-vector.cpp:317 ../src/widgets/paint-selector.cpp:965
+#: ../src/widgets/gradient-vector.cpp:317
+#: ../src/widgets/paint-selector.cpp:965
 #: ../src/widgets/stroke-marker-selector.cpp:154
 msgid "No document selected"
 msgstr "Nav izvēlēts neviens dokuments"
@@ -29302,27 +29291,24 @@ msgid "Change gradient stop color"
 msgstr "Mainīt krāsu pārejas pieturpunkta krāsu"
 
 #: ../src/widgets/image-menu-item.c:151
-#, fuzzy
 msgid "Image widget"
-msgstr "Attēla datne"
+msgstr ""
 
 #: ../src/widgets/image-menu-item.c:152
 msgid "Child widget to appear next to the menu text"
 msgstr ""
 
 #: ../src/widgets/image-menu-item.c:167
-#, fuzzy
 msgid "Use stock"
-msgstr "Ielīmēt apmali"
+msgstr ""
 
 #: ../src/widgets/image-menu-item.c:168
 msgid "Whether to use the label text to create a stock menu item"
 msgstr ""
 
 #: ../src/widgets/image-menu-item.c:183
-#, fuzzy
 msgid "Accel Group"
-msgstr "Grupa"
+msgstr ""
 
 #: ../src/widgets/image-menu-item.c:184
 msgid "The Accel Group to use for stock accelerator keys"
@@ -29410,11 +29396,11 @@ msgstr ""
 
 #: ../src/widgets/measure-toolbar.cpp:175
 msgid "Show all crossings."
-msgstr ""
+msgstr "Rādīt visas krustošanās."
 
 #: ../src/widgets/measure-toolbar.cpp:177
 msgid "Show visible crossings."
-msgstr ""
+msgstr "Rādīt redzamās krustošanās."
 
 #: ../src/widgets/measure-toolbar.cpp:193
 msgid "Use all layers in the measure."
@@ -29480,9 +29466,8 @@ msgstr "Neņemt vērā pirmo un pēdējo"
 
 #: ../src/widgets/measure-toolbar.cpp:352
 #: ../src/widgets/measure-toolbar.cpp:353
-#, fuzzy
 msgid "Show hidden intersections"
-msgstr "palīglīniju krustpunkts"
+msgstr ""
 
 #: ../src/widgets/measure-toolbar.cpp:363
 #: ../src/widgets/measure-toolbar.cpp:364
@@ -29492,7 +29477,7 @@ msgstr ""
 #: ../src/widgets/measure-toolbar.cpp:374
 #: ../src/widgets/measure-toolbar.cpp:375
 msgid "Measure all layers"
-msgstr ""
+msgstr "Mērīt visos slāņos"
 
 #: ../src/widgets/measure-toolbar.cpp:385
 #: ../src/widgets/measure-toolbar.cpp:386
@@ -29616,18 +29601,16 @@ msgid "Smoothing:"
 msgstr "Nogludināšana:"
 
 #: ../src/widgets/mesh-toolbar.cpp:537
-#, fuzzy
 msgid "Toggle Sides"
-msgstr "Ieslēgt augšrakstu"
+msgstr "Pārslēgt malas"
 
 #: ../src/widgets/mesh-toolbar.cpp:538
 msgid "Toggle selected sides between Beziers and lines."
 msgstr ""
 
 #: ../src/widgets/mesh-toolbar.cpp:541
-#, fuzzy
 msgid "Toggle side:"
-msgstr "Pārslēgt fokusēšanas režīmu"
+msgstr "Pārslēgt malu:"
 
 #: ../src/widgets/mesh-toolbar.cpp:548
 msgid "Make elliptical"
@@ -29644,18 +29627,16 @@ msgid "Make elliptical:"
 msgstr "Pārveidot par elipsi:"
 
 #: ../src/widgets/mesh-toolbar.cpp:559
-#, fuzzy
 msgid "Pick colors:"
-msgstr "Punktu krāsa"
+msgstr "Izvēlieties krāsas:"
 
 #: ../src/widgets/mesh-toolbar.cpp:560
 msgid "Pick colors for selected corner nodes from underneath mesh."
 msgstr ""
 
 #: ../src/widgets/mesh-toolbar.cpp:563
-#, fuzzy
 msgid "Pick Color"
-msgstr "Aizpildījuma krāsa"
+msgstr "Izvēlieties krāsu"
 
 #: ../src/widgets/node-toolbar.cpp:341
 msgid "Insert node"
@@ -30269,10 +30250,9 @@ msgstr "X:"
 
 #. shortLabel
 #: ../src/widgets/select-toolbar.cpp:443
-#, fuzzy
 msgctxt "Select toolbar"
 msgid "Horizontal coordinate of selection"
-msgstr "Iezīmējuma horizontalā koordināte"
+msgstr ""
 
 #. name
 #: ../src/widgets/select-toolbar.cpp:460
@@ -30288,10 +30268,9 @@ msgstr "Y:"
 
 #. shortLabel
 #: ../src/widgets/select-toolbar.cpp:462
-#, fuzzy
 msgctxt "Select toolbar"
 msgid "Vertical coordinate of selection"
-msgstr "Iezīmējuma vertikālā koordināte"
+msgstr ""
 
 #. name
 #: ../src/widgets/select-toolbar.cpp:479
@@ -30307,10 +30286,9 @@ msgstr "P:"
 
 #. shortLabel
 #: ../src/widgets/select-toolbar.cpp:481
-#, fuzzy
 msgctxt "Select toolbar"
 msgid "Width of selection"
-msgstr "Iezīmējuma platums"
+msgstr ""
 
 #: ../src/widgets/select-toolbar.cpp:499
 msgid "Lock width and height"
@@ -30334,10 +30312,9 @@ msgstr "H:"
 
 #. shortLabel
 #: ../src/widgets/select-toolbar.cpp:513
-#, fuzzy
 msgctxt "Select toolbar"
 msgid "Height of selection"
-msgstr "Iezīmējuma augstums"
+msgstr ""
 
 #: ../src/widgets/select-toolbar.cpp:575
 msgid "Scale rounded corners"
@@ -30934,29 +30911,24 @@ msgid "Square cap"
 msgstr "Stūrains, noslēgts gals"
 
 #: ../src/widgets/stroke-style.cpp:392
-#, fuzzy
 msgid "Fill, Stroke, Markers"
-msgstr "Apmaļu stilu marķieri"
+msgstr ""
 
 #: ../src/widgets/stroke-style.cpp:396
-#, fuzzy
 msgid "Stroke, Fill, Markers"
-msgstr "Apmaļu stilu marķieri"
+msgstr ""
 
 #: ../src/widgets/stroke-style.cpp:400
-#, fuzzy
 msgid "Fill, Markers, Stroke"
-msgstr "Aizpildījums un apmale"
+msgstr ""
 
 #: ../src/widgets/stroke-style.cpp:408
-#, fuzzy
 msgid "Markers, Fill, Stroke"
-msgstr "Aizpildījums un apmale"
+msgstr ""
 
 #: ../src/widgets/stroke-style.cpp:412
-#, fuzzy
 msgid "Stroke, Markers, Fill"
-msgstr "Apmaļu stilu marķieri"
+msgstr ""
 
 #: ../src/widgets/stroke-style.cpp:416
 msgid "Markers, Stroke, Fill"
@@ -31003,9 +30975,8 @@ msgid "Text: Change line-height"
 msgstr "Teksts: mainīt rindas augstumu"
 
 #: ../src/widgets/text-toolbar.cpp:728
-#, fuzzy
 msgid "Text: Change line-height unit"
-msgstr "Teksts: mainīt rindas augstumu"
+msgstr ""
 
 #: ../src/widgets/text-toolbar.cpp:777
 msgid "Text: Change word-spacing"
@@ -31182,9 +31153,8 @@ msgstr "Rinda:"
 
 #. short label
 #: ../src/widgets/text-toolbar.cpp:1852
-#, fuzzy
 msgid "Spacing between baselines (times font size)"
-msgstr "Atstarpe starp rindām (fonta izmēra reizēs)"
+msgstr ""
 
 #. Drop down menu
 #: ../src/widgets/text-toolbar.cpp:1884 ../src/widgets/text-toolbar.cpp:1915
@@ -32118,7 +32088,7 @@ msgstr ""
 "saglabāt, par ceļiem."
 
 #: ../share/extensions/inkex.py:116
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "The fantastic lxml wrapper for libxml2 is required by inkex.py and therefore "
 "this extension.Please download and install the latest version from http://"
@@ -32128,14 +32098,6 @@ msgid ""
 "Technical details:\n"
 "%s"
 msgstr ""
-"Modulim inkex.py un līdz ar to arī paplašinājumam ir nepieciešams "
-"fantastiskais libxml2 bibliotēkas ietvars. lūdzu, lejupielādējiet un "
-"uzstādiet jaunāko tā versiju no  http://cheeseshop.python.org/pypi/lxml/, "
-"vai arī uzstādiet to ar pakotņu vadības rīka palīdzību, piemēram, ar "
-"komandu: sudo apt-get install python-lxml\n"
-"\n"
-"Tehniskā informācija:\n"
-"%s"
 
 #: ../share/extensions/inkex.py:184
 #, python-format
@@ -32192,7 +32154,6 @@ msgstr ""
 "\n"
 
 #: ../share/extensions/jessyInk_autoTexts.py:53
-#, python-brace-format
 msgid ""
 "Node with id '{0}' is not a suitable text node and was therefore ignored.\n"
 "\n"
@@ -32225,7 +32186,6 @@ msgstr ""
 "pamatslaida izvēle.\n"
 
 #: ../share/extensions/jessyInk_summary.py:68
-#, python-brace-format
 msgid "JessyInk script version {0} installed."
 msgstr "JessyInk skripts ar versijas numuru {0} uzstādīts."
 
@@ -32250,7 +32210,6 @@ msgstr ""
 "Slaids {0!s}:"
 
 #: ../share/extensions/jessyInk_summary.py:93
-#, python-brace-format
 msgid "{0}Layer name: {1}"
 msgstr "{0}Slāņa nosaukums: {1}"
 
@@ -32259,7 +32218,6 @@ msgid "{0}Transition in: {1} ({2!s} s)"
 msgstr "{0}Parādīšanās pāreja: {1} ({2!s} s)"
 
 #: ../share/extensions/jessyInk_summary.py:103
-#, python-brace-format
 msgid "{0}Transition in: {1}"
 msgstr "{0}Parādīšanās pāreja: {1}"
 
@@ -32268,12 +32226,10 @@ msgid "{0}Transition out: {1} ({2!s} s)"
 msgstr "{0}Izgaišanas pāreja: {1} ({2!s} s)"
 
 #: ../share/extensions/jessyInk_summary.py:112
-#, python-brace-format
 msgid "{0}Transition out: {1}"
 msgstr "{0}Izgaišanas pāreja: {1}"
 
 #: ../share/extensions/jessyInk_summary.py:119
-#, python-brace-format
 msgid ""
 "\n"
 "{0}Auto-texts:"
@@ -32282,12 +32238,10 @@ msgstr ""
 "{0}Auto-teksti:"
 
 #: ../share/extensions/jessyInk_summary.py:122
-#, python-brace-format
 msgid "{0}\t\"{1}\" (object id \"{2}\") will be replaced by \"{3}\"."
 msgstr "{0}\t\"{1}\" (objekta id \"{2}\") tiks aizvietots ar \"{3}\"."
 
 #: ../share/extensions/jessyInk_summary.py:167
-#, python-brace-format
 msgid ""
 "\n"
 "{0}Initial effect (order number {1}):"
@@ -32304,12 +32258,10 @@ msgstr ""
 "{0}efekts {1!s} (kārtas numurs {2}):"
 
 #: ../share/extensions/jessyInk_summary.py:173
-#, python-brace-format
 msgid "{0}\tView will be set according to object \"{1}\""
 msgstr "{0}\tSkats tiks iestatīts atbilstoši objektam \"{1}\""
 
 #: ../share/extensions/jessyInk_summary.py:175
-#, python-brace-format
 msgid "{0}\tObject \"{1}\""
 msgstr "{0}\tObjekts \"{1}\""
 
@@ -32322,7 +32274,6 @@ msgid " will disappear"
 msgstr " pazudīs"
 
 #: ../share/extensions/jessyInk_summary.py:183
-#, python-brace-format
 msgid " using effect \"{0}\""
 msgstr "  izmantojot efektu \"{0}\""
 
@@ -32388,7 +32339,8 @@ msgid "Area is zero, cannot calculate Center of Mass"
 msgstr "Laukums ir vienāds ar nulli, nav iespējams aprēķināt smaguma centru"
 
 #: ../share/extensions/pathalongpath.py:207
-#: ../share/extensions/pathscatter.py:226 ../share/extensions/perspective.py:50
+#: ../share/extensions/pathscatter.py:226
+#: ../share/extensions/perspective.py:50
 msgid "This extension requires two selected paths."
 msgstr "Šim paplašinājumam nepieciešami divi atlasīti ceļi."
 
@@ -32427,7 +32379,8 @@ msgstr ""
 "veidīgā sistēmā tas ir paveicams ar komandu sudo apt-get install python-"
 "numpy."
 
-#: ../share/extensions/perspective.py:58 ../share/extensions/summersnight.py:49
+#: ../share/extensions/perspective.py:58
+#: ../share/extensions/summersnight.py:49
 #, python-format
 msgid ""
 "The first selected object is of type '%s'.\n"
@@ -32436,14 +32389,16 @@ msgstr ""
 "Pirmā atlasītā objekta tips ir '%s'.\n"
 "Mēģiniet izmantot darbību Ceļš->Objektu par ceļu."
 
-#: ../share/extensions/perspective.py:65 ../share/extensions/summersnight.py:57
+#: ../share/extensions/perspective.py:65
+#: ../share/extensions/summersnight.py:57
 msgid ""
 "This extension requires that the second selected path be four nodes long."
 msgstr ""
 "Šim paplašinājuma ir nepieciešams, lai otrais atlasītais ceļš būtu četrus "
 "mezglus garš."
 
-#: ../share/extensions/perspective.py:91 ../share/extensions/summersnight.py:90
+#: ../share/extensions/perspective.py:91
+#: ../share/extensions/summersnight.py:90
 msgid ""
 "The second selected object is a group, not a path.\n"
 "Try using the procedure Object->Ungroup."
@@ -32451,7 +32406,8 @@ msgstr ""
 "Otrais atlasītais objekts ir grupa, nevis ceļš.\n"
 "Mēģiniet izmantot darbību Objekts ->Atgrupēt."
 
-#: ../share/extensions/perspective.py:93 ../share/extensions/summersnight.py:92
+#: ../share/extensions/perspective.py:93
+#: ../share/extensions/summersnight.py:92
 msgid ""
 "The second selected object is not a path.\n"
 "Try using the procedure Path->Object to Path."
@@ -32459,7 +32415,8 @@ msgstr ""
 "Otrais atlasītais objekts nav ceļš.\n"
 "Mēģiniet izmantot darbību Ceļš->Objektu par ceļu."
 
-#: ../share/extensions/perspective.py:96 ../share/extensions/summersnight.py:95
+#: ../share/extensions/perspective.py:96
+#: ../share/extensions/summersnight.py:95
 msgid ""
 "The first selected object is not a path.\n"
 "Try using the procedure Path->Object to Path."
@@ -32476,9 +32433,8 @@ msgstr ""
 "plotēt, par ceļiem."
 
 #: ../share/extensions/plotter.py:146
-#, fuzzy
 msgid "pySerial is not installed. Please follow these steps:"
-msgstr "pySerial nav uzstādīts."
+msgstr ""
 
 #: ../share/extensions/plotter.py:147
 msgid "1. Download and extract (unzip) this file to your local harddisk:"
@@ -32998,24 +32954,24 @@ msgid "Randomize"
 msgstr "Dažādot"
 
 #: ../share/extensions/color_randomize.inx.h:4
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Hue range (%)"
-msgstr "Nokrāsas griešana (°)"
+msgstr ""
 
 #: ../share/extensions/color_randomize.inx.h:6
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Saturation range (%)"
-msgstr "Piesātinājums (%)"
+msgstr ""
 
 #: ../share/extensions/color_randomize.inx.h:8
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Lightness range (%)"
-msgstr "Gaišums (%)"
+msgstr ""
 
 #: ../share/extensions/color_randomize.inx.h:10
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Opacity range (%)"
-msgstr "Necaurspīdība (%)"
+msgstr ""
 
 #: ../share/extensions/color_randomize.inx.h:12
 msgid ""
@@ -34989,7 +34945,6 @@ msgid "Regular guides"
 msgstr "Regulāras palīglīnijas"
 
 #: ../share/extensions/guides_creator.inx.h:3
-#, fuzzy
 msgid "Guides preset:"
 msgstr "Palīglīniju priekšiestatījumi:"
 
@@ -35271,12 +35226,14 @@ msgstr ""
 "pārliecinieties, ka ir uzstādīts UniConverter un tad mēģiniet atvērt vēlreiz."
 
 #: ../share/extensions/hpgl_input.inx.h:3
-#: ../share/extensions/hpgl_output.inx.h:4 ../share/extensions/plotter.inx.h:32
+#: ../share/extensions/hpgl_output.inx.h:4
+#: ../share/extensions/plotter.inx.h:32
 msgid "Resolution X (dpi):"
 msgstr "Izšķirtspēja X (dpi):"
 
 #: ../share/extensions/hpgl_input.inx.h:4
-#: ../share/extensions/hpgl_output.inx.h:5 ../share/extensions/plotter.inx.h:33
+#: ../share/extensions/hpgl_output.inx.h:5
+#: ../share/extensions/plotter.inx.h:33
 msgid ""
 "The amount of steps the plotter moves if it moves for 1 inch on the X axis "
 "(Default: 1016.0)"
@@ -35285,12 +35242,14 @@ msgstr ""
 "1016.0)"
 
 #: ../share/extensions/hpgl_input.inx.h:5
-#: ../share/extensions/hpgl_output.inx.h:6 ../share/extensions/plotter.inx.h:34
+#: ../share/extensions/hpgl_output.inx.h:6
+#: ../share/extensions/plotter.inx.h:34
 msgid "Resolution Y (dpi):"
 msgstr "Izšķirtspēja Y (dpi):"
 
 #: ../share/extensions/hpgl_input.inx.h:6
-#: ../share/extensions/hpgl_output.inx.h:7 ../share/extensions/plotter.inx.h:35
+#: ../share/extensions/hpgl_output.inx.h:7
+#: ../share/extensions/plotter.inx.h:35
 msgid ""
 "The amount of steps the plotter moves if it moves for 1 inch on the Y axis "
 "(Default: 1016.0)"
@@ -35331,15 +35290,18 @@ msgstr ""
 "ceļiem. Lūdzu, izmantojiet plotera paplašinājumu (Paplašinājumu izvēlnē), "
 "lai plotētu tieši ploteri izmantojot seriālo savienojumu."
 
-#: ../share/extensions/hpgl_output.inx.h:3 ../share/extensions/plotter.inx.h:31
+#: ../share/extensions/hpgl_output.inx.h:3
+#: ../share/extensions/plotter.inx.h:31
 msgid "Plotter Settings "
 msgstr "Plotera iestatījumi"
 
-#: ../share/extensions/hpgl_output.inx.h:8 ../share/extensions/plotter.inx.h:36
+#: ../share/extensions/hpgl_output.inx.h:8
+#: ../share/extensions/plotter.inx.h:36
 msgid "Pen number:"
 msgstr "Spalvas numurs:"
 
-#: ../share/extensions/hpgl_output.inx.h:9 ../share/extensions/plotter.inx.h:37
+#: ../share/extensions/hpgl_output.inx.h:9
+#: ../share/extensions/plotter.inx.h:37
 msgid "The number of the pen (tool) to use (Standard: '1')"
 msgstr "Izmantojamās spalvas (rīka) numurs. (Noklusētais: '1')"
 
@@ -35527,7 +35489,6 @@ msgstr "Pamata"
 
 #. render images like in 0.48
 #: ../share/extensions/image_attributes.inx.h:5
-#, fuzzy
 msgid "Support non-uniform scaling"
 msgstr "Atbalstīt nevienādu mērogošanu"
 
@@ -35559,7 +35520,6 @@ msgstr "meetOrSlice:"
 
 #. image-rendering
 #: ../share/extensions/image_attributes.inx.h:17
-#, fuzzy
 msgid "Scope:"
 msgstr "Darbības lauks"
 
@@ -35596,9 +35556,8 @@ msgid "Apply attribute to parent group of selection"
 msgstr "Pielietot pārveidojumu atlasītajam"
 
 #: ../share/extensions/image_attributes.inx.h:28
-#, fuzzy
 msgid "Apply attribute to SVG root"
-msgstr "Iestatāmais atribūts:"
+msgstr "Pielietot atribūtu SVG saknei"
 
 #: ../share/extensions/ink2canvas.inx.h:1
 msgid "Convert to html5 canvas"
@@ -35639,9 +35598,8 @@ msgstr "Pogu un peles komandu saraksts"
 
 #. i18n. Please don't translate it unless a page exists in your language
 #: ../share/extensions/inkscape_help_keys.inx.h:3
-#, fuzzy
 msgid "http://inkscape.org/doc/keys092.html"
-msgstr "http://inkscape.org/doc/keys091.html"
+msgstr ""
 
 #: ../share/extensions/inkscape_help_manual.inx.h:1
 msgid "Inkscape Manual"
@@ -35658,9 +35616,8 @@ msgstr "Kas jauns šajā versijā"
 
 #. i18n. Please don't translate it unless a page exists in your language
 #: ../share/extensions/inkscape_help_relnotes.inx.h:3
-#, fuzzy
 msgid "http://wiki.inkscape.org/wiki/index.php/Release_notes/0.92"
-msgstr "http://wiki.inkscape.org/wiki/index.php/Release_notes/0.91"
+msgstr ""
 
 #: ../share/extensions/inkscape_help_reportabug.inx.h:1
 msgid "Report a Bug"
@@ -35690,12 +35647,14 @@ msgstr "Dubultot beigu ceļus"
 msgid "Interpolate style"
 msgstr "Interpolēt stilu"
 
-#: ../share/extensions/interp.inx.h:7 ../share/extensions/interp_att_g.inx.h:10
+#: ../share/extensions/interp.inx.h:7
+#: ../share/extensions/interp_att_g.inx.h:10
 #, fuzzy
 msgid "Use Z-order"
 msgstr "Izcelta mala"
 
-#: ../share/extensions/interp.inx.h:8 ../share/extensions/interp_att_g.inx.h:11
+#: ../share/extensions/interp.inx.h:8
+#: ../share/extensions/interp_att_g.inx.h:11
 msgid "Workaround for reversed selection order in Live Preview cycles"
 msgstr ""
 
@@ -36295,23 +36254,20 @@ msgid "Distribution of the displacements:"
 msgstr ""
 
 #: ../share/extensions/jitternodes.inx.h:8
-#, fuzzy
 msgid "Uniform"
-msgstr "Ķīļraksts"
+msgstr ""
 
 #: ../share/extensions/jitternodes.inx.h:9
 msgid "Pareto"
 msgstr ""
 
 #: ../share/extensions/jitternodes.inx.h:10
-#, fuzzy
 msgid "Gaussian"
-msgstr "Gausa aizmiglošana"
+msgstr ""
 
 #: ../share/extensions/jitternodes.inx.h:11
-#, fuzzy
 msgid "Log-normal"
-msgstr "normāls"
+msgstr ""
 
 #: ../share/extensions/jitternodes.inx.h:13
 msgid ""
@@ -36787,28 +36743,24 @@ msgid "NiceCharts"
 msgstr ""
 
 #: ../share/extensions/nicechart.inx.h:2
-#, fuzzy
 msgid "Data"
-msgstr "Datu Iev/Izv"
+msgstr ""
 
 #: ../share/extensions/nicechart.inx.h:3
-#, fuzzy
 msgid "Data from file"
-msgstr "Ielādēt no datnes"
+msgstr ""
 
 #: ../share/extensions/nicechart.inx.h:5
-#, fuzzy
 msgid "Delimiter:"
-msgstr "Salaiduma ierobežojums"
+msgstr ""
 
 #: ../share/extensions/nicechart.inx.h:6
 msgid "Column that contains the keys:"
 msgstr ""
 
 #: ../share/extensions/nicechart.inx.h:7
-#, fuzzy
 msgid "Column that contains the values:"
-msgstr "Konstanta svara vērtība"
+msgstr ""
 
 #: ../share/extensions/nicechart.inx.h:8
 msgid "File encoding (e.g. utf-8):"
@@ -36819,19 +36771,16 @@ msgid "First line contains headings"
 msgstr ""
 
 #: ../share/extensions/nicechart.inx.h:10
-#, fuzzy
 msgid "Direct input"
-msgstr "Virziens"
+msgstr ""
 
 #: ../share/extensions/nicechart.inx.h:11
-#, fuzzy
 msgid "Data:"
-msgstr "Datu Iev/Izv"
+msgstr ""
 
 #: ../share/extensions/nicechart.inx.h:12
-#, fuzzy
 msgid "Enter the full path to a CSV file:"
-msgstr "Pilnais ceļš līdz žurnāla datnei:"
+msgstr ""
 
 #: ../share/extensions/nicechart.inx.h:13
 msgid "Type in comma separated values:"
@@ -36842,48 +36791,40 @@ msgid "(format like this: apples:3,bananas:5)"
 msgstr ""
 
 #: ../share/extensions/nicechart.inx.h:15
-#, fuzzy
 msgid "Labels"
-msgstr "Etiķete"
+msgstr ""
 
 #: ../share/extensions/nicechart.inx.h:16
-#, fuzzy
 msgid "Font:"
-msgstr "_Fonts"
+msgstr ""
 
 #: ../share/extensions/nicechart.inx.h:18
-#, fuzzy
 msgid "Font color:"
-msgstr "Mēnešu krāsa:"
+msgstr ""
 
 #: ../share/extensions/nicechart.inx.h:19
 msgid "Charts"
 msgstr ""
 
 #: ../share/extensions/nicechart.inx.h:20
-#, fuzzy
 msgid "Draw horizontally"
-msgstr "Pārvietot horizontāli"
+msgstr ""
 
 #: ../share/extensions/nicechart.inx.h:21
-#, fuzzy
 msgid "Bar length:"
-msgstr "Gal_venais garums:"
+msgstr ""
 
 #: ../share/extensions/nicechart.inx.h:22
-#, fuzzy
 msgid "Bar width:"
-msgstr "Aizmiglošanas platums:"
+msgstr ""
 
 #: ../share/extensions/nicechart.inx.h:23
-#, fuzzy
 msgid "Pie radius:"
-msgstr "Iekšējais rādiuss:"
+msgstr ""
 
 #: ../share/extensions/nicechart.inx.h:24
-#, fuzzy
 msgid "Bar offset:"
-msgstr "Sākuma nobīde:"
+msgstr ""
 
 #: ../share/extensions/nicechart.inx.h:26
 msgid "Offset between chart and labels:"
@@ -36898,48 +36839,40 @@ msgid "Work around aliasing effects (creates overlapping segments)"
 msgstr ""
 
 #: ../share/extensions/nicechart.inx.h:29
-#, fuzzy
 msgid "Color scheme:"
-msgstr "_Krāsas:"
+msgstr ""
 
 #: ../share/extensions/nicechart.inx.h:30
-#, fuzzy
 msgid "Custom colors:"
-msgstr "Reljefa krāsa"
+msgstr ""
 
 #: ../share/extensions/nicechart.inx.h:31
-#, fuzzy
 msgid "Reverse color scheme"
-msgstr "Aizvākt apmales krāsu"
+msgstr ""
 
 #: ../share/extensions/nicechart.inx.h:32
-#, fuzzy
 msgid "Drop shadow"
-msgstr "Krītošā ēna"
+msgstr ""
 
 #: ../share/extensions/nicechart.inx.h:37
 msgid "SAP"
 msgstr ""
 
 #: ../share/extensions/nicechart.inx.h:38
-#, fuzzy
 msgid "Values"
-msgstr "Vērtība"
+msgstr ""
 
 #: ../share/extensions/nicechart.inx.h:39
-#, fuzzy
 msgid "Show values"
-msgstr "Rādīt turus"
+msgstr ""
 
 #: ../share/extensions/nicechart.inx.h:40
-#, fuzzy
 msgid "Chart type:"
-msgstr "Ēnas tips:"
+msgstr ""
 
 #: ../share/extensions/nicechart.inx.h:41
-#, fuzzy
 msgid "Bar chart"
-msgstr "Joslas augstums:"
+msgstr ""
 
 #: ../share/extensions/nicechart.inx.h:42
 msgid "Pie chart"
@@ -37367,7 +37300,8 @@ msgstr ""
 msgid "AutoCAD Plot Input"
 msgstr "AutoCAD Plot ievade"
 
-#: ../share/extensions/plt_input.inx.h:2 ../share/extensions/plt_output.inx.h:2
+#: ../share/extensions/plt_input.inx.h:2
+#: ../share/extensions/plt_output.inx.h:2
 msgid "HP Graphics Language Plot file [AutoCAD] (*.plt)"
 msgstr "HP Graphics Language plotera datne [AutoCAD] (*.plt)"
 
@@ -37832,7 +37766,6 @@ msgid "Vertical:"
 msgstr "Vertikāli:"
 
 #: ../share/extensions/restack.inx.h:8
-#, fuzzy
 msgid "Restack Direction"
 msgstr "Pārkārtošanas virziens"
 
@@ -37889,9 +37822,8 @@ msgid "Based on Z-Order"
 msgstr "Izcelta mala"
 
 #: ../share/extensions/restack.inx.h:22
-#, fuzzy
 msgid "Restack Mode"
-msgstr "Pārkārtot"
+msgstr "Pārkārtošanas režīms"
 
 #: ../share/extensions/restack.inx.h:23
 #, fuzzy
@@ -37956,9 +37888,8 @@ msgid "Optimized SVG Output"
 msgstr "Optimizēta SVG izvade"
 
 #: ../share/extensions/scour.inx.h:3
-#, fuzzy
 msgid "Number of significant digits for coordinates:"
-msgstr "Zīmīgo ciparu skaits koordinātēm:"
+msgstr ""
 
 #: ../share/extensions/scour.inx.h:4
 msgid ""
@@ -37990,9 +37921,8 @@ msgid ""
 msgstr ""
 
 #: ../share/extensions/scour.inx.h:9
-#, fuzzy
 msgid "Collapse groups"
-msgstr "Sakļaut visu"
+msgstr "Savērst grupas"
 
 #: ../share/extensions/scour.inx.h:10
 msgid ""
@@ -38039,9 +37969,8 @@ msgid ""
 msgstr ""
 
 #: ../share/extensions/scour.inx.h:20
-#, fuzzy
 msgid "Remove the XML declaration"
-msgstr "Dzēst xml deklarāciju"
+msgstr ""
 
 #: ../share/extensions/scour.inx.h:21
 msgid ""
@@ -38070,9 +37999,8 @@ msgid "Remove all XML comments from output."
 msgstr ""
 
 #: ../share/extensions/scour.inx.h:26
-#, fuzzy
 msgid "Embed raster images"
-msgstr "Iegult rastrus"
+msgstr "Iegult rastra attēlus"
 
 #: ../share/extensions/scour.inx.h:27
 msgid ""
@@ -38103,9 +38031,8 @@ msgid ""
 msgstr ""
 
 #: ../share/extensions/scour.inx.h:33
-#, fuzzy
 msgid "Indentation characters:"
-msgstr "Unikoda rakstzīme:"
+msgstr ""
 
 #: ../share/extensions/scour.inx.h:34
 msgid ""
@@ -38115,9 +38042,8 @@ msgid ""
 msgstr ""
 
 #: ../share/extensions/scour.inx.h:35
-#, fuzzy
 msgid "Depth of indentation:"
-msgstr "Dziļuma funkcija:"
+msgstr ""
 
 #: ../share/extensions/scour.inx.h:36
 msgid ""
@@ -38139,12 +38065,11 @@ msgstr ""
 #: ../share/extensions/scour.inx.h:39
 #, fuzzy
 msgid "Document options"
-msgstr "_Dokumenta īpašības..."
+msgstr "Dokumenta"
 
 #: ../share/extensions/scour.inx.h:40
-#, fuzzy
 msgid "Pretty-printing"
-msgstr "Glezna"
+msgstr ""
 
 #: ../share/extensions/scour.inx.h:41
 msgid "Space"
@@ -38160,14 +38085,12 @@ msgid "None"
 msgstr "Neviena"
 
 #: ../share/extensions/scour.inx.h:44
-#, fuzzy
 msgid "IDs"
 msgstr "ID"
 
 #: ../share/extensions/scour.inx.h:45
-#, fuzzy
 msgid "Remove unused IDs"
-msgstr "Aizvākt sarkano"
+msgstr "Aizvākt neizmantotos ID"
 
 #: ../share/extensions/scour.inx.h:46
 msgid ""
@@ -38195,9 +38118,8 @@ msgid "Prepend shortened IDs with the specified prefix."
 msgstr ""
 
 #: ../share/extensions/scour.inx.h:51
-#, fuzzy
 msgid "Preserve manually created IDs not ending with digits"
-msgstr "Saglabāt ar roku izveidotos ID nosaukumus, kas nebeidzas ar skaitļiem"
+msgstr ""
 
 #: ../share/extensions/scour.inx.h:52
 msgid ""
@@ -38208,26 +38130,24 @@ msgid ""
 msgstr ""
 
 #: ../share/extensions/scour.inx.h:53
-#, fuzzy
 msgid "Preserve the following IDs:"
-msgstr ""
-"Atrasti sekojošie fonti:\n"
-"%s"
+msgstr "Saglabāt sekojošos ID:"
 
 #: ../share/extensions/scour.inx.h:54
 msgid "A comma-separated list of IDs that are to be preserved."
-msgstr ""
+msgstr "Ar komatu atdalītu saglabājamo ID saraksts."
 
 #: ../share/extensions/scour.inx.h:55
-#, fuzzy
 msgid "Preserve IDs starting with:"
-msgstr "Saglabāt ID nosaukums, kas sākas ar:"
+msgstr "Saglabāt ID, kas sākas ar:"
 
 #: ../share/extensions/scour.inx.h:56
 msgid ""
 "Preserve all IDs that start with the specified prefix (e.g. specify \"flag\" "
 "to preserve \"flag-mx\", \"flag-pt\", etc.)."
 msgstr ""
+"Saglabāt visis ID, kas sākas ar noteiktu priedēkli (piemēram, norādiet \"flag"
+"\", lai saglabātu \"flag-mx\", \"flag-pt\", utt.)."
 
 #: ../share/extensions/scour.inx.h:57
 msgid "Optimized SVG (*.svg)"
@@ -38253,9 +38173,8 @@ msgid "Custom Height (px):"
 msgstr "Pielāgot augstums (piks.):"
 
 #: ../share/extensions/seamless_pattern.inx.h:4
-#, fuzzy
 msgid "This extension overwrites the current document"
-msgstr "Šis paplašinājums pārrakstīs atvērto dokumentu"
+msgstr ""
 
 #: ../share/extensions/seamless_pattern_procedural.inx.h:1
 #, fuzzy
@@ -38290,7 +38209,8 @@ msgstr "Apakšgarums:"
 msgid "sK1 vector graphics files input"
 msgstr "sK1 vektoru grafikas datņu ievade"
 
-#: ../share/extensions/sk1_input.inx.h:2 ../share/extensions/sk1_output.inx.h:2
+#: ../share/extensions/sk1_input.inx.h:2
+#: ../share/extensions/sk1_output.inx.h:2
 msgid "sK1 vector graphics files (*.sk1)"
 msgstr "sK1 vektoru grafikas datnes (.sk1)"
 
@@ -38759,24 +38679,20 @@ msgid "From Side c and Angles a, b"
 msgstr "No malas c un leņķiem a, b"
 
 #: ../share/extensions/ungroup_deep.inx.h:1
-#, fuzzy
 msgid "Deep Ungroup"
-msgstr "Atgrupēt"
+msgstr ""
 
 #: ../share/extensions/ungroup_deep.inx.h:2
-#, fuzzy
 msgid "Ungroup all groups in the selected object."
-msgstr "Izveidot klipu grupu, izmantojot par pamatu atlasītos objektus"
+msgstr ""
 
 #: ../share/extensions/ungroup_deep.inx.h:3
-#, fuzzy
 msgid "Starting Depth"
-msgstr "Sākuma ceļš:"
+msgstr ""
 
 #: ../share/extensions/ungroup_deep.inx.h:4
-#, fuzzy
 msgid "Stopping Depth (from top)"
-msgstr "Aizvākt izgriešanas ceļu no atlasītā"
+msgstr ""
 
 #: ../share/extensions/ungroup_deep.inx.h:5
 msgid "Depth to Keep (from bottom)"
@@ -38799,9 +38715,8 @@ msgid "Show the bounding box"
 msgstr "Rādīt robežrāmi"
 
 #: ../share/extensions/voronoi2svg.inx.h:6
-#, fuzzy
 msgid "Triangles color"
-msgstr "Paplašināšanās"
+msgstr ""
 
 #: ../share/extensions/voronoi2svg.inx.h:7
 msgid "Delaunay Triangulation"
@@ -38820,18 +38735,16 @@ msgid "Automatic from selected objects"
 msgstr "Automātiski no izvēlētajiem objektiem"
 
 #: ../share/extensions/voronoi2svg.inx.h:12
-#, fuzzy
 msgid "Options for Delaunay Triangulation"
-msgstr "Delonē triangulācija"
+msgstr ""
 
 #: ../share/extensions/voronoi2svg.inx.h:13
 msgid "Default (Stroke black and no fill)"
 msgstr ""
 
 #: ../share/extensions/voronoi2svg.inx.h:14
-#, fuzzy
 msgid "Triangles with item color"
-msgstr "Mainiet krāsu paraugu krāsu"
+msgstr ""
 
 #: ../share/extensions/voronoi2svg.inx.h:15
 msgid "Triangles with item color (random on apply)"
@@ -39261,11 +39174,13 @@ msgstr "Slīpums (gr):"
 msgid "Hide lines behind the sphere"
 msgstr "Slēpt aiz lodes esošās līnijas"
 
-#: ../share/extensions/wmf_input.inx.h:1 ../share/extensions/wmf_output.inx.h:1
+#: ../share/extensions/wmf_input.inx.h:1
+#: ../share/extensions/wmf_output.inx.h:1
 msgid "Windows Metafile Input"
 msgstr "Windows Metafile ievade"
 
-#: ../share/extensions/wmf_input.inx.h:3 ../share/extensions/wmf_output.inx.h:3
+#: ../share/extensions/wmf_input.inx.h:3
+#: ../share/extensions/wmf_output.inx.h:3
 msgid "A popular graphics file format for clipart"
 msgstr "Bieži lietots galeriju attēlu grafiskais formāts "
 
@@ -39273,15 +39188,53 @@ msgstr "Bieži lietots galeriju attēlu grafiskais formāts "
 msgid "XAML Input"
 msgstr "XAML ievade"
 
-#~ msgid ""
-#~ "Select <b>exactly 2 paths</b> to perform difference, division, or path "
-#~ "cut."
-#~ msgstr ""
-#~ "Atlasiet <b>tieši 2 ceļus</b>, lai veiktu atņemsanu, dalīšanu vai ceļa "
-#~ "griešanu. "
+#, fuzzy
+#~ msgctxt "Path handle tip"
+#~ msgid "<b>Ctrl</b>: Move handle by his actual steps in BSpline Live Effect"
+#~ msgstr "<b>Ctrl</b>: Move handle by his actual steps in BSpline Live Effect"
 
-#~ msgid "Miter _limit:"
-#~ msgstr "Salaiduma ierobežojums:"
+#~ msgid "Crossing %u"
+#~ msgstr "Krustošanās %u"
+
+#~ msgid ""
+#~ "<b>Curve segment</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to "
+#~ "snap angle, <b>Enter</b> to finish the path"
+#~ msgstr ""
+#~ "<b>Līknes posms</b>: leņķis %3.2f&#176;, attālums %s; ar <b>Ctrl</b>-"
+#~ "pievilkt leņķim, <b>Enter</b> - pabeigt ceļu"
+
+#~ msgid ""
+#~ "<b>Line segment</b>: angle %3.2f&#176;, distance %s; with <b>Ctrl</b> to "
+#~ "snap angle, <b>Enter</b> to finish the path"
+#~ msgstr ""
+#~ "<b>Līnijas posms</b>: leņķis %3.2f&#176;, attālums %s; ar <b>Ctrl</b> - "
+#~ "pievilkt leņķim, <b>Enter</b> - pabeigt ceļu"
+
+#~ msgid ""
+#~ "<b>Curve segment</b>: angle %3.2f&#176;, distance %s; with <b>Shift"
+#~ "+Click</b> make a cusp node, <b>Enter</b> to finish the path"
+#~ msgstr ""
+#~ "<b>Līknes posms</b>: leņķis %3.2f&#176;, attālums %s;  <b>Shift+klikšķi</"
+#~ "b> izveido aso mezglu, <b>Enter</b> - pabeigt ceļu"
+
+#~ msgid ""
+#~ "<b>Line segment</b>: angle %3.2f&#176;, distance %s; with <b>Shift+Click</"
+#~ "b> make a cusp node, <b>Enter</b> to finish the path"
+#~ msgstr ""
+#~ "<b>Līnijas posms</b>: leņķis %3.2f&#176;, attālums %s; <b>Shift+klikšķi</"
+#~ "b> izveido aso mezglu, <b>Enter</b> - pabeigt ceļu"
+
+#~ msgid "Horizontal coordinate of selection"
+#~ msgstr "Iezīmējuma horizontalā koordināte"
+
+#~ msgid "Vertical coordinate of selection"
+#~ msgstr "Iezīmējuma vertikālā koordināte"
+
+#~ msgid "Width of selection"
+#~ msgstr "Iezīmējuma platums"
+
+#~ msgid "Height of selection"
+#~ msgstr "Iezīmējuma augstums"
 
 #~ msgid ""
 #~ "The selected object is not a path.\n"
@@ -39289,6 +39242,24 @@ msgstr "XAML ievade"
 #~ msgstr ""
 #~ "Atlasītais objekts nav ceļš.\n"
 #~ "Mēģiniet izmanto procedūru Ceļš->Objekts par ceļu."
+
+#~ msgid ""
+#~ "The fantastic lxml wrapper for libxml2 is required by inkex.py and "
+#~ "therefore this extension. Please download and install the latest version "
+#~ "from http://cheeseshop.python.org/pypi/lxml/, or install it through your "
+#~ "package manager by a command like: sudo apt-get install python-lxml\n"
+#~ "\n"
+#~ "Technical details:\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Modulim inkex.py un līdz ar to arī paplašinājumam ir nepieciešams "
+#~ "fantastiskais libxml2 bibliotēkas ietvars. lūdzu, lejupielādējiet un "
+#~ "uzstādiet jaunāko tā versiju no  http://cheeseshop.python.org/pypi/lxml/, "
+#~ "vai arī uzstādiet to ar pakotņu vadības rīka palīdzību, piemēram, ar "
+#~ "komandu: sudo apt-get install python-lxml\n"
+#~ "\n"
+#~ "Tehniskā informācija:\n"
+#~ "%s"
 
 #~ msgid ""
 #~ "pySerial is not installed.\n"
@@ -39307,6 +39278,34 @@ msgstr "XAML ievade"
 #~ "\\[Program files]\\inkscape\\python\\Lib\\\n"
 #~ "3. Pārstartējiet Inkscape."
 
+#~ msgid "http://inkscape.org/doc/keys091.html"
+#~ msgstr "http://inkscape.org/doc/keys091.html"
+
+#~ msgid "http://wiki.inkscape.org/wiki/index.php/Release_notes/0.91"
+#~ msgstr "http://wiki.inkscape.org/wiki/index.php/Release_notes/0.91"
+
+#~ msgid "Use normal distribution"
+#~ msgstr "Izmantot parasto sadalījumu"
+
+#~ msgid "This extension overwrite current document"
+#~ msgstr "Šis paplašinājums pārrakstīs atvērto dokumentu"
+
+#~ msgid ""
+#~ "Select <b>exactly 2 paths</b> to perform difference, division, or path "
+#~ "cut."
+#~ msgstr ""
+#~ "Atlasiet <b>tieši 2 ceļus</b>, lai veiktu atņemsanu, dalīšanu vai ceļa "
+#~ "griešanu. "
+
+#~ msgid "Spacing between lines (percent of font size)"
+#~ msgstr "Atstarpe starp rindām (procentos no fonta izmēra)"
+
+#~ msgid "Miter _limit:"
+#~ msgstr "Salaiduma ierobežojums:"
+
+#~ msgid "Spacing between lines (times font size)"
+#~ msgstr "Atstarpe starp rindām (fonta izmēra reizēs)"
+
 #~ msgid ""
 #~ "Converts to HSL, randomizes hue and/or saturation and/or lightness and "
 #~ "converts it back to RGB."
@@ -39314,11 +39313,17 @@ msgstr "XAML ievade"
 #~ "Pārvērš par HLS, brīvi dažādo nokrāsu un/vai piesātinājumu un/vai gaišumu "
 #~ "un pārvērš atpakaļ par RGB."
 
-#~ msgid "Use normal distribution"
-#~ msgstr "Izmantot parasto sadalījumu"
-
 #~ msgid "Group collapsing"
 #~ msgstr "Grupas savēršana"
+
+#~ msgid "Embed rasters"
+#~ msgstr "Iegult rastrus"
+
+#~ msgid "Remove the xml declaration"
+#~ msgstr "Dzēst xml deklarāciju"
+
+#~ msgid "Number of significant digits for coords:"
+#~ msgstr "Zīmīgo ciparu skaits koordinātēm:"
 
 #~ msgid "XML indentation (pretty-printing):"
 #~ msgstr "XML atkāpes (vizuāli uztveramai izdrukai):"
@@ -39329,8 +39334,15 @@ msgstr "XAML ievade"
 #~ msgid "Remove unused ID names for elements"
 #~ msgstr "Aizvākt elementos neizmantotos ID nosaukumus"
 
+#~ msgid "Preserve manually created ID names not ending with digits"
+#~ msgstr ""
+#~ "Saglabāt ar roku izveidotos ID nosaukumus, kas nebeidzas ar skaitļiem"
+
 #~ msgid "Preserve these ID names, comma-separated:"
 #~ msgstr "Saglabāt sekojošos, ar komatu atdalītos ID nosaukumus:"
+
+#~ msgid "Preserve ID names starting with:"
+#~ msgstr "Saglabāt ID nosaukums, kas sākas ar:"
 
 #~ msgid "Help (Options)"
 #~ msgstr "Palīdzība (papildiespējas)"
@@ -39459,6 +39471,13 @@ msgstr "XAML ievade"
 #~ "Katram atsevišķam klona izvēlieties vērtību no zīmējuma klona tuvumā un "
 #~ "piešķiriet to klonam"
 
+#~ msgid ""
+#~ "Color of the page background. Note: transparency setting ignored while "
+#~ "editing but used when exporting to bitmap."
+#~ msgstr ""
+#~ "Lapas fona krāsa. Piezīme: caurspīdīguma iestatījums labošanas laikā "
+#~ "netiek ņemts vērā, taču tiek izmantots eksportējot bitkarti."
+
 #~ msgid "Vertical"
 #~ msgstr "Vertikāls"
 
@@ -39521,6 +39540,9 @@ msgstr "XAML ievade"
 
 #~ msgid "Boolops"
 #~ msgstr "Bula darbības"
+
+#~ msgid "pySerial is not installed."
+#~ msgstr "pySerial nav uzstādīts."
 
 #~ msgid "You need to install the UniConvertor software.\n"
 #~ msgstr "Jums nepieciešams uzstādīt UniConvertor programmatūru.\n"
@@ -39700,6 +39722,10 @@ msgstr "XAML ievade"
 #~ msgctxt "Symbol"
 #~ msgid "Alternate Process"
 #~ msgstr "Alternatīvas process"
+
+#~ msgctxt "Symbol"
+#~ msgid "Data I/O"
+#~ msgstr "Datu Iev/Izv"
 
 #~ msgctxt "Symbol"
 #~ msgid "Card"

@@ -21,12 +21,6 @@
 namespace Inkscape {
 namespace LivePathEffect {
 
-namespace CR {
-// we need a separate namespace to avoid clashes with LPEPerpBisector
-class KnotHolderEntityStartingAngle;
-class KnotHolderEntityRotationAngle;
-}
-
 class LPECopyRotate : public Effect, GroupBBoxEffect {
 public:
     LPECopyRotate(LivePathEffectObject *lpeobject);
@@ -38,26 +32,25 @@ public:
     virtual void split(Geom::PathVector &path_in, Geom::Path const &divider);
     virtual void resetDefaults(SPItem const* item);
     virtual void transform_multiply(Geom::Affine const& postmul, bool set);
-    /* the knotholder entity classes must be declared friends */
-    friend class CR::KnotHolderEntityStartingAngle;
-    friend class CR::KnotHolderEntityRotationAngle;
-    void addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item);
-
+    virtual Gtk::Widget * newWidget();
 protected:
     virtual void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec);
 
 private:
     PointParam origin;
+    PointParam starting_point;
     ScalarParam starting_angle;
     ScalarParam rotation_angle;
     ScalarParam num_copies;
     BoolParam copies_to_360;
     BoolParam fuse_paths;
+    BoolParam join_paths;
     Geom::Point A;
     Geom::Point B;
     Geom::Point dir;
     Geom::Point start_pos;
     Geom::Point rot_pos;
+    Geom::Point previous_start_point;
     double dist_angle_handle;
     LPECopyRotate(const LPECopyRotate&);
     LPECopyRotate& operator=(const LPECopyRotate&);

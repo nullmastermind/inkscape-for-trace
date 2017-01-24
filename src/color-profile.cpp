@@ -307,7 +307,7 @@ void ColorProfile::set(unsigned key, gchar const *value) {
                     //# 1.  Get complete URI of document
                     gchar const *docbase = doc->getURI();
 
-                    gchar* escaped = g_uri_escape_string(this->href, "!*'();:@=+$,/?#", TRUE);
+                    gchar* escaped = g_uri_escape_string(this->href, "!*'();@=+$,/?#", TRUE);
 
                     //g_message("docbase:%s\n", docbase);
                     //org::w3c::dom::URI docUri(docbase);
@@ -781,7 +781,7 @@ std::vector<std::pair<Glib::ustring, bool> > ColorProfile::getBaseProfileDirs() 
 static bool isIccFile( gchar const *filepath )
 {
     bool isIccFile = false;
-    struct stat st;
+    GStatBuf st;
     if ( g_stat(filepath, &st) == 0 && (st.st_size > 128) ) {
         //0-3 == size
         //36-39 == 'acsp' 0x61637370
