@@ -118,7 +118,7 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {RULER,                 N_("Ruler"),                   "ruler"},
 /* 0.91 */
     {POWERSTROKE,           N_("Power stroke"),            "powerstroke"},
-    {CLONE_ORIGINAL,        N_("Clone original path"),     "clone_original"},
+    {CLONE_ORIGINAL,        N_("Clone original"),          "clone_original"},
 /* 0.92 */
     {SIMPLIFY,              N_("Simplify"),                "simplify"},
     {LATTICE2,              N_("Lattice Deformation 2"),   "lattice2"},
