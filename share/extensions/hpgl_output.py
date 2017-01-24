@@ -45,6 +45,7 @@ class HpglOutput(inkex.Effect):
         self.OptionParser.add_option('--precut',        action='store', type='inkbool', dest='precut',        default='TRUE',  help='Use precut')
         self.OptionParser.add_option('--flat',          action='store', type='float',   dest='flat',          default=1.2,     help='Curve flatness')
         self.OptionParser.add_option('--autoAlign',     action='store', type='inkbool', dest='autoAlign',     default='TRUE',  help='Auto align')
+        self.DOCROTATE = "{http://www.inkscape.org/namespaces/inkscape}document_rotation"
 
     def effect(self):
         self.options.debug = False
@@ -54,8 +55,8 @@ class HpglOutput(inkex.Effect):
         nv = svg.xpath(xpathStr, namespaces=NSS)
         document_rotate = "0"
         if nv != []:
-            document_rotate = nv[0].get("{http://www.inkscape.org/namespaces/inkscape}document-rotation")
-            nv[0].set("{http://www.inkscape.org/namespaces/inkscape}document-rotation","0")
+            document_rotate = nv[0].get(self.DOCROTATE)
+            nv[0].set(self.DOCROTATE,"0")
         myHpglEncoder = hpgl_encoder.hpglEncoder(self)
         try:
             self.hpgl, debugObject = myHpglEncoder.getHpgl()
@@ -65,12 +66,12 @@ class HpglOutput(inkex.Effect):
                 inkex.errormsg(_("No paths where found. Please convert all objects you want to save into paths."))
                 self.hpgl = ''
                 if nv != [] and document_rotate:
-                    nv[0].set("{http://www.inkscape.org/namespaces/inkscape}document_rotation",document_rotate)
+                    nv[0].set("inkscape:document_rotation",document_rotate)
                 return
             else:
                 type, value, traceback = sys.exc_info()
                 if nv != [] and document_rotate:
-                    nv[0].set("{http://www.inkscape.org/namespaces/inkscape}document_rotation",document_rotate)
+                    nv[0].set("inkscape:document_rotation",document_rotate)
                 raise ValueError, ("", type, value), traceback
         # convert raw HPGL to HPGL
         hpglInit = 'IN'
@@ -80,7 +81,7 @@ class HpglOutput(inkex.Effect):
             hpglInit += ';VS%d' % self.options.speed
         self.hpgl = hpglInit + self.hpgl + ';SP0;PU0,0;IN; '
         if nv != [] and document_rotate:
-            nv[0].set("{http://www.inkscape.org/namespaces/inkscape}document_rotation",document_rotate)
+            nv[0].set("inkscape:document_rotation",document_rotate)
 
     def output(self):
         # print to file
