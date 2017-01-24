@@ -73,8 +73,7 @@ public:
     static int acceptsNumClicks(EffectType type);
     int acceptsNumClicks() const { return acceptsNumClicks(effectType()); }
     void doAcceptPathPreparations(SPLPEItem *lpeitem);
-    SPShape * getCurrentShape(){ return sp_shape; };
-    void setCurrentShape(SPShape * shape);
+
     /*
      * isReady() indicates whether all preparations which are necessary to apply the LPE are done,
      * e.g., waiting for a parameter path either before the effect is created or when it needs a
@@ -164,10 +163,9 @@ protected:
     // instead of normally 'splitting' the path into continuous pwd2 paths and calling doEffect_pwd2 for each.
     bool concatenate_before_pwd2;
 
-    SPLPEItem * sp_lpe_item; // these get stored in doBeforeEffect_impl, and derived classes may do as they please with them.z
-    SPShape * sp_shape; // these get stored in doBeforeEffect_impl before doEffect chain, or in performPathEffects on groups, and derived classes may do as they please with them.
+    SPLPEItem * sp_lpe_item; // these get stored in doBeforeEffect_impl, and derived classes may do as they please with them.
     double current_zoom;
-    std::vector<Geom::Point> selected_nodes_points;
+    std::vector<Geom::Point> selectedNodesPoints;
     SPCurve * sp_curve;
     Geom::PathVector pathvector_before_effect;
 private:

@@ -410,8 +410,6 @@ const gchar *ClipboardManagerImpl::getFirstObjectID()
            strcmp(ch->name(), "svg:use") &&
            strcmp(ch->name(), "svg:text") &&
            strcmp(ch->name(), "svg:image") &&
-           strcmp(ch->name(), "svg:ellipse") &&
-           strcmp(ch->name(), "svg:circle") &&
            strcmp(ch->name(), "svg:rect")
         ) {
         ch = ch->next();
