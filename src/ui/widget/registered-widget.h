@@ -50,7 +50,7 @@ class Registry;
 template <class W>
 class RegisteredWidget : public W {
 public:
-    void set_undo_parameters(const unsigned int _event_type, Glib::ustring const _event_description)
+    void set_undo_parameters(const unsigned int _event_type, Glib::ustring _event_description)
     {
         event_type = _event_type;
         event_description = _event_description;

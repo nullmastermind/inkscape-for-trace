@@ -198,6 +198,9 @@ ScalarParam::param_set_increments(double step, double page)
     inc_page = page;
 }
 
+
+
+
 } /* namespace LivePathEffect */
 } /* namespace Inkscape */
 

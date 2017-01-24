@@ -664,7 +664,6 @@ LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
     }
 }
 
-//TODO: Migrate the tree next function to effect.cpp/h to avoid duplication
 void
 LPEMeasureLine::doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/)
 {

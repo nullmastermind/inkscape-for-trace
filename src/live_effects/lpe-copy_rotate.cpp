@@ -20,7 +20,6 @@
 #include "display/curve.h"
 #include "svg/path-string.h"
 #include "svg/svg.h"
-#include "path-chemistry.h"
 #include "style.h"
 #include "helper/geom.h"
 #include "xml/sp-css-attr.h"

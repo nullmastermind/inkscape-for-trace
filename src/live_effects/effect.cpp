@@ -70,6 +70,8 @@
 #include "ui/tools/node-tool.h"
 #include "ui/tools-switch.h"
 #include "knotholder.h"
+#include "path-chemistry.h"
+#include "xml/sp-css-attr.h"
 #include "live_effects/lpeobject.h"
 #include "display/curve.h"
 
