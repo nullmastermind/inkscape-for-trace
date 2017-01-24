@@ -119,7 +119,17 @@ LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem)
             }
             previous_num_copies = num_copies;
         }
-        
+        SPObject *elemref = NULL;
+        char * id = g_strdup(Glib::ustring("rotated-").append("1").append("-").append(sp_lpe_item->getRepr()->attribute("id")).c_str());
+        guint counter = 0;
+        while(elemref = document->getObjectById(id)) {
+            if (SP_ITEM(elemref)->isHidden()) {
+                items.push_back(id);
+            }
+            id = g_strdup(Glib::ustring("rotated-").append(std::to_string(counter)).append("-").append(sp_lpe_item->getRepr()->attribute("id")).c_str());
+            counter++;
+        }
+        g_free(id);
         double diagonal = Geom::distance(Geom::Point(boundingbox_X.min(),boundingbox_Y.min()),Geom::Point(boundingbox_X.max(),boundingbox_Y.max()));
         Geom::Rect bbox(Geom::Point(boundingbox_X.min(),boundingbox_Y.min()),Geom::Point(boundingbox_X.max(),boundingbox_Y.max()));
         double size_divider = Geom::distance(origin,bbox) + (diagonal * 2);
@@ -354,7 +364,7 @@ LPECopyRotate::doBeforeEffect (SPLPEItem const* lpeitem)
     if (copies_to_360) {
         rotation_angle.param_set_value(360.0/(double)num_copies);
     }
-    if (fuse_paths && rotation_angle * num_copies > 360 && rotation_angle > 0) {
+    if (fuse_paths && rotation_angle * num_copies > 360.1 && rotation_angle > 0) {
         num_copies.param_set_value(floor(360/rotation_angle));
     }
     if (fuse_paths && copies_to_360) {
@@ -616,7 +626,7 @@ LPECopyRotate::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & p
 {
     using namespace Geom;
 
-    if (num_copies == 1 && !fuse_paths) {
+    if ((num_copies == 1 && !fuse_paths) || split_items) {
         return pwd2_in;
     }
 

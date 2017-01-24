@@ -965,16 +965,15 @@ sp_group_perform_patheffect(SPGroup *group, SPGroup *topgroup, bool write)
                     c->transform(i2anc_affine(subitem, topgroup));
                     success = topgroup->performPathEffect(c, subShape);
                     c->transform(i2anc_affine(subitem, topgroup).inverse());
-
+                    Inkscape::XML::Node *repr = subitem->getRepr();
                     if (c && success) {
                         subShape->setCurve(c, TRUE);
                         if (write) {
-                            Inkscape::XML::Node *repr = subitem->getRepr();
                             gchar *str = sp_svg_write_path(c->get_pathvector());
                             repr->setAttribute("d", str);
-    #ifdef GROUP_VERBOSE
+#ifdef GROUP_VERBOSE
                             g_message("sp_group_perform_patheffect writes 'd' attribute");
-    #endif
+#endif
                             g_free(str);
                         }
                         c->unref();
