@@ -293,10 +293,12 @@ bool sp_file_open(const Glib::ustring &uri,
                   bool replace_empty)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    Inkscape::Display::TemporaryItem *page_border_rotated = NULL;
     if (desktop) {
         desktop->setWaitingCursor();
+        page_border_rotated = sp_document_namedview(desktop->getDocument(), NULL)->page_border_rotated;
     }
-
+    
     SPDocument *doc = NULL;
     bool cancelled = false;
     try {
@@ -315,7 +317,6 @@ bool sp_file_open(const Glib::ustring &uri,
     }
 
     if (doc) {
-
         SPDocument *existing = desktop ? desktop->getDocument() : NULL;
 
         if (existing && existing->virgin && replace_empty) {
@@ -323,6 +324,7 @@ bool sp_file_open(const Glib::ustring &uri,
             doc->ensureUpToDate(); // TODO this will trigger broken link warnings, etc.
             desktop->change_document(doc);
             doc->emitResizedSignal(doc->getWidth().value("px"), doc->getHeight().value("px"));
+            desktop->remove_temporary_canvasitem(page_border_rotated);
         } else {
             // create a whole new desktop and window
             SPViewWidget *dtw = sp_desktop_widget_new(sp_document_namedview(doc, NULL)); // TODO this will trigger broken link warnings, etc.

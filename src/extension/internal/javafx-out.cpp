@@ -843,7 +843,8 @@ void JavaFXOutput::reset()
 bool JavaFXOutput::saveDocument(SPDocument *doc, gchar const *filename_utf8)
 {
     reset();
-
+    doc->getRoot()->c2p = doc->getRoot()->rotation.inverse() * doc->getRoot()->c2p;
+    doc->ensureUpToDate();
 
     name = Glib::path_get_basename(filename_utf8);
     int pos = name.find('.');
@@ -856,12 +857,14 @@ bool JavaFXOutput::saveDocument(SPDocument *doc, gchar const *filename_utf8)
     //# Lets do the curves first, to get the stats
 
     if (!doTree(doc)) {
+        doc->getRoot()->c2p *= doc->getRoot()->rotation;
         return false;
     }
     String curveBuf = outbuf;
     outbuf.clear();
 
     if (!doHeader()) {
+        doc->getRoot()->c2p *= doc->getRoot()->rotation;
         return false;
     }
 
@@ -875,6 +878,7 @@ bool JavaFXOutput::saveDocument(SPDocument *doc, gchar const *filename_utf8)
     doBody(doc, doc->getRoot());
 
     if (!doTail()) {
+        doc->getRoot()->c2p *= doc->getRoot()->rotation;
         return false;
     }
 
@@ -884,6 +888,7 @@ bool JavaFXOutput::saveDocument(SPDocument *doc, gchar const *filename_utf8)
     FILE *f = Inkscape::IO::fopen_utf8name(filename_utf8, "w");
     if (!f)
         {
+        doc->getRoot()->c2p *= doc->getRoot()->rotation;
         err("Could open JavaFX file '%s' for writing", filename_utf8);
         return false;
         }
@@ -894,7 +899,7 @@ bool JavaFXOutput::saveDocument(SPDocument *doc, gchar const *filename_utf8)
         }
 
     fclose(f);
-
+    doc->getRoot()->c2p *= doc->getRoot()->rotation;
     return true;
 }
 
