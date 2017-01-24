@@ -23,6 +23,7 @@
 #include "style.h"
 #include "helper/geom.h"
 #include "xml/sp-css-attr.h"
+#include "path-chemistry.h"
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
 
@@ -218,38 +219,38 @@ LPECopyRotate::toItem(Geom::Affine transform, size_t i, bool reset)
     } else {
         phantom = sp_lpe_item->getRepr()->duplicate(xml_doc);
         std::vector<const char *> attrs;
-        attrs->push_back("inkscape:path-effect");
-        attrs->push_back("inkscape:original-d");
-        attrs->push_back("sodipodi:type");
-        attrs->push_back("sodipodi:rx");
-        attrs->push_back("sodipodi:ry");
-        attrs->push_back("sodipodi:cx");
-        attrs->push_back("sodipodi:cy");
-        attrs->push_back("sodipodi:end");
-        attrs->push_back("sodipodi:start");
-        attrs->push_back("inkscape:flatsided");
-        attrs->push_back("inkscape:randomized");
-        attrs->push_back("inkscape:rounded");
-        attrs->push_back("sodipodi:arg1");
-        attrs->push_back("sodipodi:arg2");
-        attrs->push_back("sodipodi:r1");
-        attrs->push_back("sodipodi:r2");
-        attrs->push_back("sodipodi:sides");
-        attrs->push_back("inkscape:randomized");
-        attrs->push_back("sodipodi:argument");
-        attrs->push_back("sodipodi:expansion");
-        attrs->push_back("sodipodi:radius");
-        attrs->push_back("sodipodi:revolution");
-        attrs->push_back("sodipodi:t0");
-        attrs->push_back("inkscape:randomized");
-        attrs->push_back("inkscape:randomized");
-        attrs->push_back("inkscape:randomized");
-        attrs->push_back("x");
-        attrs->push_back("y");
-        attrs->push_back("rx");
-        attrs->push_back("ry");
-        attrs->push_back("width");
-        attrs->push_back("height");
+        attrs.push_back("inkscape:path-effect");
+        attrs.push_back("inkscape:original-d");
+        attrs.push_back("sodipodi:type");
+        attrs.push_back("sodipodi:rx");
+        attrs.push_back("sodipodi:ry");
+        attrs.push_back("sodipodi:cx");
+        attrs.push_back("sodipodi:cy");
+        attrs.push_back("sodipodi:end");
+        attrs.push_back("sodipodi:start");
+        attrs.push_back("inkscape:flatsided");
+        attrs.push_back("inkscape:randomized");
+        attrs.push_back("inkscape:rounded");
+        attrs.push_back("sodipodi:arg1");
+        attrs.push_back("sodipodi:arg2");
+        attrs.push_back("sodipodi:r1");
+        attrs.push_back("sodipodi:r2");
+        attrs.push_back("sodipodi:sides");
+        attrs.push_back("inkscape:randomized");
+        attrs.push_back("sodipodi:argument");
+        attrs.push_back("sodipodi:expansion");
+        attrs.push_back("sodipodi:radius");
+        attrs.push_back("sodipodi:revolution");
+        attrs.push_back("sodipodi:t0");
+        attrs.push_back("inkscape:randomized");
+        attrs.push_back("inkscape:randomized");
+        attrs.push_back("inkscape:randomized");
+        attrs.push_back("x");
+        attrs.push_back("y");
+        attrs.push_back("rx");
+        attrs.push_back("ry");
+        attrs.push_back("width");
+        attrs.push_back("height");
         phantom->setAttribute("id", elemref_id);
         for(const char * attr : attrs) { 
             phantom->setAttribute(attr, NULL);
