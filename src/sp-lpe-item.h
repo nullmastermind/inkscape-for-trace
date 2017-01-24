@@ -23,6 +23,7 @@
 
 class LivePathEffectObject;
 class SPCurve;
+class SPShape;
 class SPDesktop;
 
 namespace Inkscape{ 
@@ -69,11 +70,11 @@ public:
 
     virtual void update_patheffect(bool write);
 
-    bool performPathEffect(SPCurve *curve, bool is_clip_or_mask = false);
+    bool performPathEffect(SPCurve *curve, SPShape *current = NULL, bool is_clip_or_mask = false);
 
     bool pathEffectsEnabled() const;
     bool hasPathEffect() const;
-    bool hasPathEffectOfType(int const type) const;
+    bool hasPathEffectOfType(int const type, bool is_ready = true) const;
     bool hasPathEffectRecursive() const;
     Inkscape::LivePathEffect::Effect* getPathEffectOfType(int type);
     Inkscape::LivePathEffect::Effect const* getPathEffectOfType(int type) const;
