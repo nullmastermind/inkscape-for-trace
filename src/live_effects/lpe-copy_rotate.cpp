@@ -604,8 +604,7 @@ LPECopyRotate::doEffect_path (Geom::PathVector const & path_in)
         Geom::Affine r = Geom::identity();
         Geom::Point dir = unit_vector(Geom::middle_point(line_start,line_end) - (Geom::Point)origin);
         Geom::Point gap = dir * split_gap;
-        r *= Geom::Translate(gap);
-        path_out *= r;
+        path_out *= Geom::Translate(gap);
     } else {
         // default behavior
         for (unsigned int i=0; i < path_in.size(); i++) {
