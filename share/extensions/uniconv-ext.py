@@ -51,7 +51,8 @@ if cmd == None:
         import imp
         imp.find_module("uniconvertor")
     except ImportError:
-        sys.stderr.write(_('You need to install the UniConvertor software.\n'+\
+        inkex.localize()
+        inkex.errormsg(_('You need to install the UniConvertor software.\n'+\
                      'For GNU/Linux: install the package python-uniconvertor.\n'+\
                      'For Windows: download it from\n'+\
                      'http://sk1project.org/modules.php?name=Products&product=uniconvertor\n'+\
