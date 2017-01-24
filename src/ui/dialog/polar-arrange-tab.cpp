@@ -43,14 +43,14 @@ PolarArrangeTab::PolarArrangeTab(ArrangeDialog *parent_)
 	anchorPointLabel.set_alignment(Gtk::ALIGN_START);
 	pack_start(anchorPointLabel, false, false);
 
-	anchorBoundingBoxRadio.set_label(C_("Polar arrange tab", "Object's bounding box:"));
+	anchorBoundingBoxRadio.set_label(C_("Polar arrange tab", "Objects' bounding boxes:"));
 	anchorRadioGroup = anchorBoundingBoxRadio.get_group();
 	anchorBoundingBoxRadio.signal_toggled().connect(sigc::mem_fun(*this, &PolarArrangeTab::on_anchor_radio_changed));
 	pack_start(anchorBoundingBoxRadio, false, false);
 
 	pack_start(anchorSelector, false, false);
 
-	anchorObjectPivotRadio.set_label(C_("Polar arrange tab", "Object's rotational center"));
+	anchorObjectPivotRadio.set_label(C_("Polar arrange tab", "Objects' rotational centers"));
 	anchorObjectPivotRadio.set_group(anchorRadioGroup);
 	anchorObjectPivotRadio.signal_toggled().connect(sigc::mem_fun(*this, &PolarArrangeTab::on_anchor_radio_changed));
 	pack_start(anchorObjectPivotRadio, false, false);
