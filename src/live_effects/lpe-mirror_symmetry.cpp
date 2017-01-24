@@ -345,60 +345,6 @@ LPEMirrorSymmetry::doOnRemove (SPLPEItem const* /*lpeitem*/)
     processObjects(LPE_ERASE);
 }
 
-void 
-LPEMirrorSymmetry::processObjects(LpeAction lpe_action)
-{
-    SPDocument * document = SP_ACTIVE_DOCUMENT;
-    for (std::vector<const char *>::iterator el_it = items.begin(); 
-         el_it != items.end(); ++el_it) {
-        const char * id = *el_it;
-        if (!id || strlen(id) == 0) {
-            return;
-        }
-        SPObject *elemref = NULL;
-        if (elemref = document->getObjectById(id)) {
-            Inkscape::XML::Node * elemnode = elemref->getRepr();
-            std::vector<SPItem*> item_list;
-            item_list.push_back(SP_ITEM(elemref));
-            std::vector<Inkscape::XML::Node*> item_to_select;
-            std::vector<SPItem*> item_selected;
-            SPCSSAttr *css;
-            Glib::ustring css_str;
-            switch (lpe_action){
-            case LPE_TO_OBJECTS:
-                if (elemnode->attribute("inkscape:path-effect")) {
-                    sp_item_list_to_curves(item_list, item_selected, item_to_select);
-                }
-                elemnode->setAttribute("sodipodi:insensitive", NULL);
-                break;
-
-            case LPE_ERASE:
-                elemref->deleteObject();
-                break;
-
-            case LPE_VISIBILITY:
-                css = sp_repr_css_attr_new();
-                sp_repr_css_attr_add_from_string(css, elemref->getRepr()->attribute("style"));
-                if (!this->isVisible()/* && std::strcmp(elemref->getId(),sp_lpe_item->getId()) != 0*/) {
-                    css->setAttribute("display", "none");
-                } else {
-                    css->setAttribute("display", NULL);
-                }
-                sp_repr_css_write_string(css,css_str);
-                elemnode->setAttribute("style", css_str.c_str());
-                break;
-
-            default:
-                break;
-            }
-        }
-    }
-    if (lpe_action == LPE_ERASE || lpe_action == LPE_TO_OBJECTS) {
-        items.clear();
-    }
-}
-
-
 void
 LPEMirrorSymmetry::transform_multiply(Geom::Affine const& postmul, bool set)
 {

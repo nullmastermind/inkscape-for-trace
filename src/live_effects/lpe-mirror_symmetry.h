@@ -47,7 +47,6 @@ public:
     virtual void doOnRemove (SPLPEItem const* /*lpeitem*/);
     virtual void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/);
     virtual Gtk::Widget * newWidget();
-    void processObjects(LpeAction lpe_action);
     void toMirror(Geom::Affine transform);
     //    void cloneAttrbutes(Inkscape::XML::Node * origin, Inkscape::XML::Node * dest, const char * first_attribute, ...);
     void cloneD(SPObject *origin, SPObject *dest, bool live, bool root);
@@ -67,7 +66,6 @@ private:
     PointParam center_point;
     TextParam id_origin;
     Geom::Point previous_center;
-    std::vector<const char *> items;
     SPObject * container;
     LPEMirrorSymmetry(const LPEMirrorSymmetry&);
     LPEMirrorSymmetry& operator=(const LPEMirrorSymmetry&);
