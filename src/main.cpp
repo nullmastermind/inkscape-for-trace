@@ -420,7 +420,7 @@ struct poptOption options[] = {
     {"export-pdf-version", 0,
      POPT_ARG_STRING, &sp_export_pdf_version, SP_ARG_EXPORT_PDF_VERSION,
      // TRANSLATORS: "--export-pdf-version" is an Inkscape command line option; see "inkscape --help"
-     N_("Export PDF to given version. (hint: make sure to input the exact string found in the PDF export dialog, e.g. \"PDF 1.4\" which is PDF-a conformant)"),
+     N_("Export PDF to given version. (hint: make sure to input a version found in the PDF export dialog, e.g. \"1.4\" which is PDF-a conformant)"),
      N_("PDF_VERSION")},
 
     {"export-latex", 0,

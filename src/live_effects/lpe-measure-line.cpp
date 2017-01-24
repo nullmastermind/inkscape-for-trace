@@ -21,9 +21,7 @@
 #include "svg/svg-color.h"
 #include "svg/svg.h"
 #include "display/curve.h"
-#include "helper/geom.h"
 #include "2geom/affine.h"
-#include "path-chemistry.h"
 #include "style.h"
 #include "sp-root.h"
 #include "sp-defs.h"
@@ -166,6 +164,12 @@ LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
 }
 
 LPEMeasureLine::~LPEMeasureLine() {}
+
+void swap(Geom::Point &A, Geom::Point &B){
+    Geom::Point tmp = A;
+    A = B;
+    B = tmp;
+}
 
 void
 LPEMeasureLine::createArrowMarker(const char * mode)
@@ -664,7 +668,6 @@ LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
     }
 }
 
-//TODO: Migrate the tree next function to effect.cpp/h to avoid duplication
 void
 LPEMeasureLine::doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/)
 {

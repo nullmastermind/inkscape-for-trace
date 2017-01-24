@@ -843,13 +843,6 @@ recursive_bezier4(const double x1, const double y1,
         recursive_bezier4(x1234, y1234, x234, y234, x34, y34, x4, y4, m_points, level + 1); 
 }
 
-void 
-swap(Geom::Point &A, Geom::Point &B){
-    Geom::Point tmp = A;
-    A = B;
-    B = tmp;
-}
-
 /*
   Local Variables:
   mode:c++

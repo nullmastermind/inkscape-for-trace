@@ -19,7 +19,7 @@
 class  SPDocument;
 class  SPDesktop;
 class  SPItem;
-class  LivePathEffectObject;
+class LivePathEffectObject;
 class  SPLPEItem;
 class  KnotHolder;
 class  KnotHolderEntity;
@@ -42,12 +42,6 @@ enum LPEPathFlashType {
     SUPPRESS_FLASH,
 //    PERMANENT_FLASH,
     DEFAULT
-};
-
-enum LpeAction {
-    LPE_ERASE = 0,
-    LPE_TO_OBJECTS,
-    LPE_VISIBILITY
 };
 
 class Effect {
@@ -131,9 +125,7 @@ public:
     bool apply_to_clippath_and_mask;
     bool erase_extra_objects; // set this to false allow retain extra generated objects, see measure line LPE
     bool upd_params;
-    BoolParam is_visible;
-    SPCurve * sp_curve;
-    Geom::PathVector pathvector_before_effect;
+
 protected:
     Effect(LivePathEffectObject *lpeobject);
 
@@ -158,6 +150,7 @@ protected:
     bool _provides_knotholder_entities;
 
     int oncanvasedit_it;
+    BoolParam is_visible;
 
     bool show_orig_path; // set this to true in derived effects to automatically have the original
                          // path displayed as helperpath
@@ -173,6 +166,8 @@ protected:
     SPLPEItem * sp_lpe_item; // these get stored in doBeforeEffect_impl, and derived classes may do as they please with them.
     double current_zoom;
     std::vector<Geom::Point> selectedNodesPoints;
+    SPCurve * sp_curve;
+    Geom::PathVector pathvector_before_effect;
 private:
     bool provides_own_flash_paths; // if true, the standard flash path is suppressed
 

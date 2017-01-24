@@ -32,7 +32,7 @@ void recursive_bezier4(const double x1, const double y1, const double x2, const 
                        const double x3, const double y3, const double x4, const double y4,
                        std::vector<Geom::Point> &pointlist,
                        int level);
-void swap(Geom::Point &A, Geom::Point &B);
+
 #endif  // INKSCAPE_HELPER_GEOM_H
 
 /*

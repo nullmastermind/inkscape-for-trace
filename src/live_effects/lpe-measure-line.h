@@ -35,6 +35,12 @@ enum OrientationMethod {
     OM_END
 };
 
+enum LpeAction {
+    LPE_ERASE = 0,
+    LPE_TO_OBJECTS,
+    LPE_VISIBILITY
+};
+
 class LPEMeasureLine : public Effect {
 public:
     LPEMeasureLine(LivePathEffectObject *lpeobject);

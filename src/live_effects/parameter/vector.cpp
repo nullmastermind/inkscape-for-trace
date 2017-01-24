@@ -116,7 +116,7 @@ VectorParam::set_and_write_new_values(Geom::Point const &new_origin, Geom::Point
 void
 VectorParam::param_transform_multiply(Geom::Affine const& postmul, bool /*set*/)
 {
-        set_and_write_new_values( origin * postmul, vector * postmul.withoutTranslation() );
+    set_and_write_new_values( origin * postmul, vector * postmul.withoutTranslation() );
 }
 
 

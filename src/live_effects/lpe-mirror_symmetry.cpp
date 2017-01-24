@@ -237,38 +237,42 @@ LPEMirrorSymmetry::toMirror(Geom::Affine transform)
         phantom = elemref->getRepr();
     } else {
         phantom = sp_lpe_item->getRepr()->duplicate(xml_doc);
-        phantom->setAttribute("inkscape:path-effect", NULL);
-        phantom->setAttribute("inkscape:original-d", NULL);
-        phantom->setAttribute("sodipodi:type", NULL);
-        phantom->setAttribute("sodipodi:rx", NULL);
-        phantom->setAttribute("sodipodi:ry", NULL);
-        phantom->setAttribute("sodipodi:cx", NULL);
-        phantom->setAttribute("sodipodi:cy", NULL);
-        phantom->setAttribute("sodipodi:end", NULL);
-        phantom->setAttribute("sodipodi:start", NULL);
-        phantom->setAttribute("inkscape:flatsided", NULL);
-        phantom->setAttribute("inkscape:randomized", NULL);
-        phantom->setAttribute("inkscape:rounded", NULL);
-        phantom->setAttribute("sodipodi:arg1", NULL);
-        phantom->setAttribute("sodipodi:arg2", NULL);
-        phantom->setAttribute("sodipodi:r1", NULL);
-        phantom->setAttribute("sodipodi:r2", NULL);
-        phantom->setAttribute("sodipodi:sides", NULL);
-        phantom->setAttribute("inkscape:randomized", NULL);
-        phantom->setAttribute("sodipodi:argument", NULL);
-        phantom->setAttribute("sodipodi:expansion", NULL);
-        phantom->setAttribute("sodipodi:radius", NULL);
-        phantom->setAttribute("sodipodi:revolution", NULL);
-        phantom->setAttribute("sodipodi:t0", NULL);
-        phantom->setAttribute("inkscape:randomized", NULL);
-        phantom->setAttribute("inkscape:randomized", NULL);
-        phantom->setAttribute("inkscape:randomized", NULL);
-        phantom->setAttribute("x", NULL);
-        phantom->setAttribute("y", NULL);
-        phantom->setAttribute("rx", NULL);
-        phantom->setAttribute("ry", NULL);
-        phantom->setAttribute("width", NULL);
-        phantom->setAttribute("height", NULL);
+        std::vector<const char *> attrs;
+        attrs->push_back("inkscape:path-effect");
+        attrs->push_back("inkscape:original-d");
+        attrs->push_back("sodipodi:type");
+        attrs->push_back("sodipodi:rx");
+        attrs->push_back("sodipodi:ry");
+        attrs->push_back("sodipodi:cx");
+        attrs->push_back("sodipodi:cy");
+        attrs->push_back("sodipodi:end");
+        attrs->push_back("sodipodi:start");
+        attrs->push_back("inkscape:flatsided");
+        attrs->push_back("inkscape:randomized");
+        attrs->push_back("inkscape:rounded");
+        attrs->push_back("sodipodi:arg1");
+        attrs->push_back("sodipodi:arg2");
+        attrs->push_back("sodipodi:r1");
+        attrs->push_back("sodipodi:r2");
+        attrs->push_back("sodipodi:sides");
+        attrs->push_back("inkscape:randomized");
+        attrs->push_back("sodipodi:argument");
+        attrs->push_back("sodipodi:expansion");
+        attrs->push_back("sodipodi:radius");
+        attrs->push_back("sodipodi:revolution");
+        attrs->push_back("sodipodi:t0");
+        attrs->push_back("inkscape:randomized");
+        attrs->push_back("inkscape:randomized");
+        attrs->push_back("inkscape:randomized");
+        attrs->push_back("x");
+        attrs->push_back("y");
+        attrs->push_back("rx");
+        attrs->push_back("ry");
+        attrs->push_back("width");
+        attrs->push_back("height");
+        for(const char * attr : attrs) { 
+            phantom->setAttribute(attr, NULL);
+        }
     }
     phantom->setAttribute("id", elemref_id);
     if (!elemref) {
@@ -404,7 +408,6 @@ LPEMirrorSymmetry::transform_multiply(Geom::Affine const& postmul, bool set)
         param->param_transform_multiply(postmul, set);
     }
     previous_center = Geom::middle_point((Geom::Point)start_point, (Geom::Point)end_point);
-    sp_lpe_item_update_patheffect(sp_lpe_item, false, false);
 }
 
 void

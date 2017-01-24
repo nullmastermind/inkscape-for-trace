@@ -85,6 +85,7 @@ LicenseForceSelection off
 !define MUI_LICENSEPAGE_TEXT_BOTTOM "$(LICENSE_BOTTOM_TEXT)"
 !insertmacro MUI_PAGE_LICENSE ..\..\Copying
 ; Components page {{{6
+!define MUI_PAGE_CUSTOMFUNCTION_SHOW SortTranslationsSection
 !insertmacro MUI_PAGE_COMPONENTS
 InstType "$(Full)"
 InstType "$(Optimal)"
@@ -114,9 +115,11 @@ ShowUninstDetails hide
 !verbose 3
 !insertmacro MUI_LANGUAGE "English"
 !insertmacro LANGFILE_INCLUDE "languages\English.nsh"
+!insertmacro LANGFILE_INCLUDE "languages\English_languageNames.nsh"
 !macro INKLANGFILE  LocaleName LocaleID
   !insertmacro MUI_LANGUAGE "${LocaleName}"
   !insertmacro LANGFILE_INCLUDE_WITHDEFAULT "languages\${LocaleName}.nsh" "languages\English.nsh"
+  !insertmacro LANGFILE_INCLUDE_WITHDEFAULT "languages\${LocaleName}_languageNames.nsh" "languages\English_languageNames.nsh"
 !macroend
 ; include list of available installer translations from /languages/_language_lists.nsh
 !insertmacro INSTALLER_TRANSLATIONS INKLANGFILE
@@ -542,7 +545,7 @@ SectionGroupEnd ; SecAddfiles }}}
 
 SectionGroup "$(Languages)" SecLanguages ; Languages sections {{{
   !macro Language SecName lng ; A macro to create each section {{{
-    Section /o "$(lng_${lng}) (${lng})" Sec${SecName}
+    Section /o "$(lng_${lng})" Sec${SecName}
       SectionIn 1 ; flags will be adjusted below, see LanguageAutoSelect in .onInit
     !ifndef DUMMYINSTALL
       DetailPrint "Installing translations and translated content for ${SecName} (${lng}) locale..."
@@ -676,6 +679,63 @@ SectionEnd ; -FinalizeInstallation }}}
   !insertmacro MUI_DESCRIPTION_TEXT ${SecDictionaries} "$(DictionariesDesc)"
   !insertmacro MUI_DESCRIPTION_TEXT ${SecLanguages} "$(LanguagesDesc)"
 !insertmacro MUI_FUNCTION_DESCRIPTION_END ; Section descriptions }}}
+
+
+Function SortTranslationsSection ; sorts the available translations in the component dialog alphabetically
+  ; originally from http://nsis.sourceforge.net/Sorting_Components
+  
+  ; defines
+  !define TVGN_ROOT        0
+  !define TVGN_NEXT        1
+  !define TVGN_NEXTVISIBLE 6
+
+  !define TVIF_TEXT   1
+
+  !define TVM_GETNEXTITEM  4362
+  !define TVM_GETITEMA      4364
+  !define TVM_GETITEMW      4414
+  !define TVM_GETITEM      4414
+  !define TVM_SORTCHILDREN 4371
+
+  !define TVITEM '(i, i, i, i, i, i, i, i, i, i)'
+
+  ; get the window handle and search for the tree view control
+  FindWindow $0 "#32770" "" $HWNDPARENT
+  GetDlgItem $0 $0 1032
+
+  ; find the first tree item
+  SendMessage $0 ${TVM_GETNEXTITEM} ${TVGN_ROOT} 0 $1
+
+  ; allocate a string in memory to store the section name
+  System::Alloc ${NSIS_MAX_STRLEN}
+  Pop $2
+
+  ; loop through all tree view items until the one containing the translations is found
+  loopSections:
+    ; allocate a TVITEM (https://msdn.microsoft.com/en-us/library/windows/desktop/bb773456.aspx) structure in memory
+    System::Call '*${TVITEM}(${TVIF_TEXT}, r1,,, r2, ${NSIS_MAX_STRLEN},,,,) i .r3'
+    ; send TVM_GETITEM message (https://msdn.microsoft.com/de-de/library/windows/desktop/bb773596.aspx)
+    ; which stores information on the current tree item in the structure
+    SendMessage $0 ${TVM_GETITEM} 0 $3
+    ; read the string pointed to by pszText (which is the displayed text of the tree item)
+    System::Call '*$2(&t${NSIS_MAX_STRLEN} .r4)'
+    ; check if this matches the localized string for "Translations", i.e. the Section we're looking for
+    StrCmp $4 "$(Languages)" 0 +2
+      Goto foundSection
+
+    ; send TVM_GETNEXTITEM message (https://msdn.microsoft.com/de-de/library/windows/desktop/bb773622.aspx)
+    ; will return 0 if the last item was reached (if this happens something went wrong and we did not find the translations section)
+    SendMessage $0 ${TVM_GETNEXTITEM} ${TVGN_NEXTVISIBLE} $1 $1
+    StrCmp 0 $1 doneSections loopSections
+
+  ; sort the children of the translations section alphabetically
+  foundSection:
+    SendMessage $0 ${TVM_SORTCHILDREN} 0 $1
+
+  doneSections:
+    System::Free $2
+    System::Free $3
+FunctionEnd
 
 
 Function .onInit ; initialise the installer {{{2

@@ -1,12 +1,21 @@
 #!/usr/bin/python
 
 from __future__ import print_function
+from __future__ import unicode_literals # make all literals unicode strings by default (even in Python 2)
 
 import os
 import re
 import uuid
+from io import open # needed for support of encoding parameter in Python 2
 
 from helpers import get_inkscape_dist_dir, get_inkscape_locales_and_names
+
+# basestring is not available in Python 3
+try:
+  basestring
+except NameError:
+  basestring = (str,bytes)
+
 
 directory_ids = {}
 file_ids = {}
@@ -88,7 +97,7 @@ inkscape_dist_dir = get_inkscape_dist_dir()
 # get locales currently supported by Inkscape (dict of the form {'de': 'German (de)'})
 locales = get_inkscape_locales_and_names()
 
-with open('files.wxs', 'w') as wxs:
+with open('files.wxs', 'w', encoding='utf-8') as wxs:
 	wxs.write("<!-- do not edit, this file is created by files.py tool any changes will be lost -->\n")
 	wxs.write("<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>\n")
 	wxs.write(indent(1) + "<?include version.wxi?>\n")
@@ -125,8 +134,9 @@ with open('files.wxs', 'w') as wxs:
 
 	# create a FeatureGroup for translations
 	wxs.write(indent(2) + "<FeatureGroup Id='Translations'>\n")
-	for lang_code in sorted(locales):
-		wxs.write(indent(3) + "<Feature Id='Translation_" + valid_id(lang_code) + "' Level='1' Title='" + locales[lang_code] + "' AllowAdvertise='no'>\n")
+	sorted_locales = sorted( ((v,k) for k,v in locales.items()) )  # sort by language name (instead of language code)
+	for lang_name, lang_code in sorted_locales:
+		wxs.write(indent(3) + "<Feature Id='Translation_" + valid_id(lang_code) + "' Level='1' Title='" + lang_name + "' AllowAdvertise='no'>\n")
 		wxs.write(indent(4) + "<ComponentGroupRef Id='Translation_" + valid_id(lang_code) + "' />\n")
 		wxs.write(indent(3) + "</Feature>\n")
 	wxs.write(indent(2) + "</FeatureGroup>\n")

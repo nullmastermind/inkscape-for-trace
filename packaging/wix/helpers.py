@@ -1,10 +1,12 @@
 #!/usr/bin/python
 
 from __future__ import print_function
+from __future__ import unicode_literals # make all literals unicode strings by default (even in Python 2)
 
 import os
 import re
 import sys
+from io import open # needed for support of encoding parameter in Python 2
 
 
 # check where to look for the Inkscape files to bundle
@@ -35,13 +37,15 @@ def get_inkscape_locales():
 
 
 # get the list of available Inkscape UI translations (by parsing inkscape-preferences.cpp)
+# (note that this is also used in /packaging/win32/languages/_language_lists.py, don't break it!)
 def get_inkscape_locales_and_names():
     re_languages = re.compile(r'Glib::ustring languages\[\] = \{(.+?)\};', re.DOTALL)
     re_langValues = re.compile(r'Glib::ustring langValues\[\] = \{(.+?)\};', re.DOTALL)
     re_quotes = re.compile(r'"(.*?)"')
 
     # get the raw array contents from inkscape-preferences.cpp
-    with open('..\\..\\src\\ui\\dialog\\inkscape-preferences.cpp', 'r') as f:
+    filepath = os.path.join(os.path.dirname(__file__), '../../src/ui/dialog/inkscape-preferences.cpp')
+    with open(filepath, 'r', encoding='utf-8') as f:
         languages = re.search(re_languages, f.read())
         f.seek(0)
         langValues = re.search(re_langValues, f.read())

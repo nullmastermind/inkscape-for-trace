@@ -24,7 +24,6 @@
 #include "live_effects/lpeobject.h"
 #include "live_effects/lpeobject-reference.h"
 #include "live_effects/lpe-measure-line.h"
-#include "live_effects/lpe-mirror_symmetry.h"
 
 #include "sp-path.h"
 #include "sp-item-group.h"
@@ -127,9 +126,7 @@ void SPLPEItem::set(unsigned int key, gchar const* value) {
                     if (!value) {
                         LivePathEffectObject *lpeobj = (*it)->lpeobject;
                         Inkscape::LivePathEffect::Effect * lpe = lpeobj->get_lpe();
-                        if (dynamic_cast<Inkscape::LivePathEffect::LPEMirrorSymmetry *>(lpe) ||
-                            dynamic_cast<Inkscape::LivePathEffect::LPEMeasureLine *>(lpe) )
-                        {
+                        if (dynamic_cast<Inkscape::LivePathEffect::LPEMeasureLine *>(lpe)){
                             lpe->doOnRemove(this);
                         }
                     }
@@ -260,8 +257,6 @@ bool SPLPEItem::performPathEffect(SPCurve *curve, bool is_clip_or_mask) {
                         return false;
                     }
                     if (!SP_IS_GROUP(this)) {
-                        lpe->pathvector_before_effect = curve->get_pathvector();
-                        lpe->sp_curve->set_pathvector(lpe->pathvector_before_effect);
                         lpe->doAfterEffect(this);
                     }
                 }
@@ -609,7 +604,7 @@ bool SPLPEItem::hasPathEffect() const
     return true;
 }
 
-bool SPLPEItem::hasPathEffectOfType(int const type, bool is_ready) const
+bool SPLPEItem::hasPathEffectOfType(int const type) const
 {
     if (path_effect_list->empty()) {
         return false;
@@ -621,9 +616,7 @@ bool SPLPEItem::hasPathEffectOfType(int const type, bool is_ready) const
         if (lpeobj) {
             Inkscape::LivePathEffect::Effect const* lpe = lpeobj->get_lpe();
             if (lpe && (lpe->effectType() == type)) {
-                if (is_ready || lpe->isReady()) {
-                    return true;
-                }
+                return true;
             }
         }
     }

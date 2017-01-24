@@ -318,9 +318,6 @@ public:
     SPObject *lastChild() { return children.empty() ? nullptr : &children.back(); }
     SPObject const *lastChild() const { return children.empty() ? nullptr : &children.back(); }
 
-    SPObject *nthChild(unsigned index);
-    SPObject const *nthChild(unsigned index) const;
-
     enum Action { ActionGeneral, ActionBBox, ActionUpdate, ActionShow };
 
     /**
