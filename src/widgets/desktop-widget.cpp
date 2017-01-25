@@ -614,7 +614,7 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     
     // Rotate status spinbutton
     dtw->rotation_status = gtk_spin_button_new_with_range (-360.0,360.0, 1.0);
-    gtk_widget_set_tooltip_text (dtw->rotation_status, _("Rotation. Can be interactive with CTRL+SPACEBAR or CTRL+MMB"));
+    gtk_widget_set_tooltip_text (dtw->rotation_status, _("Rotation. Can be interactive with CTRL+MMB"));
     gtk_widget_set_size_request (dtw->rotation_status, STATUS_ROTATION_WIDTH, -1);
     gtk_entry_set_width_chars (GTK_ENTRY (dtw->rotation_status), 7);
     gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (dtw->rotation_status), FALSE);

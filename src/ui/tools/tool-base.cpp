@@ -732,13 +732,13 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 break;
 
             case GDK_KEY_space:
-                if (event->key.state & GDK_CONTROL_MASK) {
-                    sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate), event->button.time);
-                    desktop->canvas->startRotateTo(desktop->namedview->document_rotation);
-                    this->rotating_mode = true;
-                    this->message_context->set(Inkscape::INFORMATION_MESSAGE,
-                            _("<b>Space+mouse move</b> to rotate canvas, use modifiers on screen to change snaps"));
-                } else {
+//                if (event->key.state & GDK_CONTROL_MASK) {
+//                    sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate), event->button.time);
+//                    desktop->canvas->startRotateTo(desktop->namedview->document_rotation);
+//                    this->rotating_mode = true;
+//                    this->message_context->set(Inkscape::INFORMATION_MESSAGE,
+//                            _("<b>Space+mouse move</b> to rotate canvas, use modifiers on screen to change snaps"));
+//                } else {
                     within_tolerance = true;
                     xp = yp = 0;
                     if (!allow_panning) break;
@@ -746,7 +746,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
                     this->space_panning = true;
                     this->message_context->set(Inkscape::INFORMATION_MESSAGE,
                             _("<b>Space+mouse move</b> to pan canvas"));
-                }
+//                }
                 ret = TRUE;
                 break;
 
@@ -805,14 +805,14 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
             switch (get_group0_keyval(&event->key)) {
             case GDK_KEY_space:
-                if (this->rotating_mode) {
-                    desktop->canvas->clearRotateTo();
-                    this->rotating_mode = false;
-                    ret = TRUE;
-                    if (desktop->canvas->endRotateTo()) {
-                        sp_repr_set_svg_double(desktop->namedview->getRepr(), "inkscape:document-rotation", angle);
-                    }
-                }
+//                if (this->rotating_mode) {
+//                    desktop->canvas->clearRotateTo();
+//                    this->rotating_mode = false;
+//                    ret = TRUE;
+//                    if (desktop->canvas->endRotateTo()) {
+//                        sp_repr_set_svg_double(desktop->namedview->getRepr(), "inkscape:document-rotation", angle);
+//                    }
+//                }
                 if (within_tolerance) {
                     // Space was pressed, but not panned
                     sp_toggle_selector(desktop);
