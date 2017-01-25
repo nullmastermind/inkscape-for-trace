@@ -46,6 +46,7 @@ private:
     BoolParam filter;
     TextParam attributes;
     TextParam style_attributes;
+    Geom::Point origin;
     bool preserve_position_changed;
     bool expanded;
     Gtk::Expander * expander;
