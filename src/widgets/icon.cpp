@@ -35,6 +35,7 @@
 #include "display/drawing.h"
 #include "io/sys.h"
 #include "sp-root.h"
+#include "sp-namedview.h"
 #include "util/units.h"
 
 #include "icon.h"
@@ -1162,6 +1163,19 @@ sp_icon_doc_icon( SPDocument *doc, Inkscape::Drawing &drawing,
                 cairo_surface_t *s = cairo_image_surface_create_for_data(px,
                     CAIRO_FORMAT_ARGB32, psize, psize, stride);
                 Inkscape::DrawingContext dc(s, ua.min());
+
+                SPNamedView *nv = sp_document_namedview(doc, NULL);
+                float bg_r = SP_RGBA32_R_F(nv->pagecolor);
+                float bg_g = SP_RGBA32_G_F(nv->pagecolor);
+                float bg_b = SP_RGBA32_B_F(nv->pagecolor);
+                float bg_a = SP_RGBA32_A_F(nv->pagecolor);
+
+                cairo_t *cr = cairo_create(s);
+                cairo_set_source_rgba(cr, bg_r, bg_g, bg_b, bg_a);
+                cairo_rectangle(cr, 0, 0, psize, psize);
+                cairo_fill(cr);
+                cairo_save(cr);
+                cairo_destroy(cr);
 
                 drawing.render(dc, ua);
                 cairo_surface_destroy(s);

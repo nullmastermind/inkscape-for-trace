@@ -34,7 +34,8 @@ LPECloneOriginal::LPECloneOriginal(LivePathEffectObject *lpeobject) :
     filter(_("Clone filter"), _("Clone filter"), "filter", &wr, this, false),
     attributes("Attributes linked", "Attributes linked, comma separated atributes", "attributes", &wr, this,""),
     style_attributes("Style attributes linked", "Style attributes linked, comma separated atributes", "style_attributes", &wr, this,""),
-    expanded(false)
+    expanded(false),
+    origin(Geom::Point(0,0))
 {
     registerParameter(&linked_path);
     registerParameter(&linked_item);
@@ -259,8 +260,26 @@ LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){
         style_attr.append(Glib::ustring(style_attributes.param_getSVGValue()).append(","));
         if (inverse) {
             cloneAttrbutes(SP_OBJECT(sp_lpe_item), linked_item.getObject(), true, g_strdup(attr.c_str()), g_strdup(style_attr.c_str()), true);
+            Geom::OptRect bbox = SP_ITEM(sp_lpe_item)->geometricBounds();
+            if (bbox && preserve_position && origin != Geom::Point(0,0)) {
+                origin = (*bbox).corner(0) - origin;
+                SP_ITEM(linked_item.getObject())->transform *= Geom::Translate(origin);
+            }
+            bbox = SP_ITEM(sp_lpe_item)->geometricBounds();
+            if (bbox && preserve_position) {
+                origin = (*bbox).corner(0);
+            }
         } else {
             cloneAttrbutes(linked_item.getObject(), SP_OBJECT(sp_lpe_item), true, g_strdup(attr.c_str()), g_strdup(style_attr.c_str()), true);
+            Geom::OptRect bbox = SP_ITEM(linked_item.getObject())->geometricBounds();
+            if (bbox && preserve_position && origin != Geom::Point(0,0)) {
+                origin = (*bbox).corner(0) - origin;
+                SP_ITEM(sp_lpe_item)->transform *= Geom::Translate(origin);
+            }
+            bbox = SP_ITEM(linked_item.getObject())->geometricBounds();
+            if (bbox && preserve_position) {
+                origin = (*bbox).corner(0);
+            }
         }
     }
 }
