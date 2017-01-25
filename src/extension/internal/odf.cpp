@@ -72,6 +72,7 @@
 #include "sp-path.h"
 #include "sp-text.h"
 #include "sp-flowtext.h"
+#include "sp-root.h"
 #include "svg/svg.h"
 #include "text-editing.h"
 #include "util/units.h"
@@ -2095,7 +2096,8 @@ void OdfOutput::reset()
 void OdfOutput::save(Inkscape::Extension::Output */*mod*/, SPDocument *doc, gchar const *filename)
 {
     reset();
-
+    doc->getRoot()->c2p = doc->getRoot()->rotation.inverse() * doc->getRoot()->c2p;
+    doc->ensureUpToDate();
     documentUri = Inkscape::URI(filename);
 
     ZipFile zf;
@@ -2104,25 +2106,30 @@ void OdfOutput::save(Inkscape::Extension::Output */*mod*/, SPDocument *doc, gcha
     if (!writeManifest(zf))
         {
         g_warning("Failed to write manifest");
+        doc->getRoot()->c2p *= doc->getRoot()->rotation;
         return;
         }
 
     if (!writeContent(zf, doc->rroot))
         {
         g_warning("Failed to write content");
+        doc->getRoot()->c2p *= doc->getRoot()->rotation;
         return;
         }
 
     if (!writeMeta(zf))
         {
         g_warning("Failed to write metafile");
+        doc->getRoot()->c2p *= doc->getRoot()->rotation;
         return;
         }
 
     if (!zf.writeFile(filename))
         {
+        doc->getRoot()->c2p *= doc->getRoot()->rotation;
         return;
         }
+    doc->getRoot()->c2p *= doc->getRoot()->rotation;
 }
 
 

@@ -68,6 +68,7 @@ static bool
 ps_print_document_to_file(SPDocument *doc, gchar const *filename, unsigned int level, bool texttopath, bool omittext,
                           bool filtertobitmap, int resolution, const gchar * const exportId, bool exportDrawing, bool exportCanvas, float bleedmargin_px, bool eps = false)
 {
+    doc->getRoot()->c2p = doc->getRoot()->rotation.inverse() * doc->getRoot()->c2p;
     doc->ensureUpToDate();
 
     SPItem *base = NULL;
@@ -84,9 +85,10 @@ ps_print_document_to_file(SPDocument *doc, gchar const *filename, unsigned int l
         pageBoundingBox = !exportDrawing;
     }
 
-    if (!base)
+    if (!base) {
+        doc->getRoot()->c2p *= doc->getRoot()->rotation;
         return false;
-
+    }
     Inkscape::Drawing drawing;
     unsigned dkey = SPItem::display_key_new(1);
     base->invoke_show(drawing, dkey, SP_ITEM_SHOW_DISPLAY);
@@ -115,6 +117,7 @@ ps_print_document_to_file(SPDocument *doc, gchar const *filename, unsigned int l
 
     renderer->destroyContext(ctx);
     delete renderer;
+    doc->getRoot()->c2p *= doc->getRoot()->rotation;
 
     return ret;
 }

@@ -616,11 +616,13 @@ void PovOutput::reset()
 void PovOutput::saveDocument(SPDocument *doc, gchar const *filename_utf8)
 {
     reset();
-
+    doc->getRoot()->c2p = doc->getRoot()->rotation.inverse() * doc->getRoot()->c2p;
+    doc->ensureUpToDate();
     //###### SAVE IN POV FORMAT TO BUFFER
     //# Lets do the curves first, to get the stats
     if (!doTree(doc))
         {
+        doc->getRoot()->c2p *= doc->getRoot()->rotation;
         err("Could not output curves for %s", filename_utf8);
         return;
         }
@@ -630,6 +632,7 @@ void PovOutput::saveDocument(SPDocument *doc, gchar const *filename_utf8)
 
     if (!doHeader())
         {
+        doc->getRoot()->c2p *= doc->getRoot()->rotation;
         err("Could not write header for %s", filename_utf8);
         return;
         }
@@ -638,6 +641,7 @@ void PovOutput::saveDocument(SPDocument *doc, gchar const *filename_utf8)
 
     if (!doTail())
         {
+        doc->getRoot()->c2p *= doc->getRoot()->rotation;
         err("Could not write footer for %s", filename_utf8);
         return;
         }
@@ -648,9 +652,11 @@ void PovOutput::saveDocument(SPDocument *doc, gchar const *filename_utf8)
     //###### WRITE TO FILE
     Inkscape::IO::dump_fopen_call(filename_utf8, "L");
     FILE *f = Inkscape::IO::fopen_utf8name(filename_utf8, "w");
-    if (!f)
+    if (!f){
+        doc->getRoot()->c2p *= doc->getRoot()->rotation;
         return;
-
+    }
+    
     for (String::iterator iter = outbuf.begin() ; iter!=outbuf.end(); ++iter)
         {
         int ch = *iter;
@@ -658,6 +664,7 @@ void PovOutput::saveDocument(SPDocument *doc, gchar const *filename_utf8)
         }
 
     fclose(f);
+    doc->getRoot()->c2p *= doc->getRoot()->rotation;
 }
 
 

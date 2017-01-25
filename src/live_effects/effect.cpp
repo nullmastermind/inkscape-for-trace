@@ -70,6 +70,8 @@
 #include "ui/tools/node-tool.h"
 #include "ui/tools-switch.h"
 #include "knotholder.h"
+#include "path-chemistry.h"
+#include "xml/sp-css-attr.h"
 #include "live_effects/lpeobject.h"
 #include "display/curve.h"
 
@@ -115,7 +117,7 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {RULER,                 N_("Ruler"),                   "ruler"},
 /* 0.91 */
     {POWERSTROKE,           N_("Power stroke"),            "powerstroke"},
-    {CLONE_ORIGINAL,        N_("Clone original path"),     "clone_original"},
+    {CLONE_ORIGINAL,        N_("Clone original"),          "clone_original"},
 /* 0.92 */
     {SIMPLIFY,              N_("Simplify"),                "simplify"},
     {LATTICE2,              N_("Lattice Deformation 2"),   "lattice2"},
@@ -356,6 +358,7 @@ Effect::Effect(LivePathEffectObject *lpeobject)
       sp_lpe_item(NULL),
       current_zoom(1),
       upd_params(true),
+      sp_shape(NULL),
       sp_curve(NULL),
       provides_own_flash_paths(true), // is automatically set to false if providesOwnFlashPaths() is not overridden
       is_ready(false) // is automatically set to false if providesOwnFlashPaths() is not overridden
@@ -392,12 +395,19 @@ Effect::doOnApply (SPLPEItem const*/*lpeitem*/)
 }
 
 void
+Effect::setCurrentZoom(double cZ)
+{
+    current_zoom = cZ;
+}
+
+void
 Effect::setSelectedNodePos(std::vector<Geom::Point> selected_nodes_pos_data)
 {
     selected_nodes_pos = selected_nodes_pos_data;
 }
 
 void
+
 Effect::setSelectedNodeIndex(Geom::PathVector pv)
 {
     selected_nodes_index.clear();
@@ -435,12 +445,6 @@ Effect::setSelectedNodeIndex(Geom::PathVector pv)
     }
 }
 
-void
-Effect::setCurrentZoom(double cZ)
-{
-    current_zoom = cZ;
-}
-
 bool
 Effect::isNodeSelected(Geom::Point const &nodePoint) const
 {
@@ -459,6 +463,74 @@ Effect::isNodeSelected(Geom::Point const &nodePoint) const
         }
     }
     return false;
+}
+
+void 
+Effect::processObjects(LpeAction lpe_action)
+{
+    SPDocument * document = SP_ACTIVE_DOCUMENT;
+    for (std::vector<const char *>::iterator el_it = items.begin(); 
+         el_it != items.end(); ++el_it) {
+        const char * id = *el_it;
+        if (!id || strlen(id) == 0) {
+            return;
+        }
+        SPObject *elemref = NULL;
+        if (elemref = document->getObjectById(id)) {
+            Inkscape::XML::Node * elemnode = elemref->getRepr();
+            std::vector<SPItem*> item_list;
+            item_list.push_back(SP_ITEM(elemref));
+            std::vector<Inkscape::XML::Node*> item_to_select;
+            std::vector<SPItem*> item_selected;
+            SPCSSAttr *css;
+            Glib::ustring css_str;
+            switch (lpe_action){
+            case LPE_TO_OBJECTS:
+                if (SP_ITEM(elemref)->isHidden()) {
+                    elemref->deleteObject();
+                } else {
+                    if (elemnode->attribute("inkscape:path-effect")) {
+                        sp_item_list_to_curves(item_list, item_selected, item_to_select);
+                    }
+                    elemnode->setAttribute("sodipodi:insensitive", NULL);
+                }
+                break;
+
+            case LPE_ERASE:
+                elemref->deleteObject();
+                break;
+
+            case LPE_VISIBILITY:
+                css = sp_repr_css_attr_new();
+                sp_repr_css_attr_add_from_string(css, elemref->getRepr()->attribute("style"));
+                if (!this->isVisible()/* && std::strcmp(elemref->getId(),sp_lpe_item->getId()) != 0*/) {
+                    css->setAttribute("display", "none");
+                } else {
+                    css->setAttribute("display", NULL);
+                }
+                sp_repr_css_write_string(css,css_str);
+                elemnode->setAttribute("style", css_str.c_str());
+                break;
+
+            default:
+                break;
+            }
+        }
+    }
+    if (lpe_action == LPE_ERASE || lpe_action == LPE_TO_OBJECTS) {
+        items.clear();
+    }
+}
+
+void Effect::setCurrentShape(SPShape * shape){ 
+    if(shape){
+        sp_shape = shape;
+        if (!(sp_curve = sp_shape->getCurve())) {
+           // oops
+            return;
+        }
+        pathvector_before_effect = sp_curve->get_pathvector();
+    }
 }
 
 /**
@@ -484,8 +556,12 @@ void Effect::doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/)
 void Effect::doOnApply_impl(SPLPEItem const* lpeitem)
 {
     sp_lpe_item = const_cast<SPLPEItem *>(lpeitem);
-    /*sp_curve = SP_SHAPE(sp_lpe_item)->getCurve();
-    pathvector_before_effect = sp_curve->get_pathvector();*/
+    sp_curve = SP_SHAPE(sp_lpe_item)->getCurve();
+    pathvector_before_effect = sp_curve->get_pathvector();
+    SPShape * shape = dynamic_cast<SPShape *>(sp_lpe_item);
+    if(shape){
+        setCurrentShape(shape);
+    }
     doOnApply(lpeitem);
 }
 
@@ -495,6 +571,7 @@ void Effect::doBeforeEffect_impl(SPLPEItem const* lpeitem)
     //printf("(SPLPEITEM*) %p\n", sp_lpe_item);
     SPShape * shape = dynamic_cast<SPShape *>(sp_lpe_item);
     if(shape){
+        setCurrentShape(shape);
         sp_curve = shape->getCurve();
         pathvector_before_effect = sp_curve->get_pathvector();
     }

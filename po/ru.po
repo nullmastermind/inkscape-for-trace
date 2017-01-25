@@ -26985,9 +26985,8 @@ msgid "tutorial-tracing.svg"
 msgstr "tutorial-tracing.ru.svg"
 
 #: ../src/verbs.cpp:2230
-#, fuzzy
 msgid "tutorial-tracing-pixelart.svg"
-msgstr "tutorial-tracing.ru.svg"
+msgstr "tutorial-tracing-pixelart.ru.svg"
 
 #. TRANSLATORS: See "tutorial-basic.svg" comment.
 #: ../src/verbs.cpp:2234
