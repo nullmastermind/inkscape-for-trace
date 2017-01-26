@@ -1679,7 +1679,7 @@ SPDesktopWidget* SPDesktopWidget::createInstance(SPNamedView *namedview)
     gtk_widget_set_name(dtw->menubar, "MenuBar");
     gtk_widget_show_all (dtw->menubar);
     SPNamedView *nv = dtw->desktop->namedview;
-    gtk_box_pack_start (GTK_BOX (dtw->vbox), dtw->menubar, TRUE, TRUE, 0);
+    gtk_box_pack_start (GTK_BOX (dtw->vbox), dtw->menubar, FALSE, FALSE, 0);
     dtw->layoutWidgets();
     gtk_spin_button_set_value(GTK_SPIN_BUTTON (dtw->rotation_status), namedview->document_rotation);
     sp_namedview_set_document_rotation(namedview);
