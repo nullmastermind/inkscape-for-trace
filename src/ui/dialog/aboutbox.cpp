@@ -152,10 +152,7 @@ Gtk::Widget *build_splash_widget() {
        the `screens' directory.  Thus the translation of "about.svg" should be
        the filename of its translated version, e.g. about.zh.svg for Chinese.
 
-       N.B. about.svg changes once per release.  (We should probably rename
-       the original to about-0.40.svg etc. as soon as we have a translation.
-       If we do so, then add an item to release-checklist saying that the
-       string here should be changed.) */
+       Please don't translate the filename unless the translated picture exists. */
 
     // FIXME? INKSCAPE_SCREENSDIR and "about.svg" are in UTF-8, not the
     // native filename encoding... and the filename passed to sp_document_new
