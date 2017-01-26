@@ -210,6 +210,7 @@ class Layout::Calculator
  */
 static void dumpPangoItemsOut(ParagraphInfo *para){
     std::cout << "Pango items: " << para->pango_items.size() << std::endl;
+    font_factory * factory = font_factory::Default();
     for(unsigned pidx = 0 ; pidx < para->pango_items.size(); pidx++){
         std::cout 
         << "idx: " << pidx 
@@ -217,6 +218,8 @@ static void dumpPangoItemsOut(ParagraphInfo *para){
         << para->pango_items[pidx].item->offset
         << " length: "
         << para->pango_items[pidx].item->length
+        << " font: "
+        << factory->ConstructFontSpecification( para->pango_items[pidx].font )
         << std::endl;
     }
 }
