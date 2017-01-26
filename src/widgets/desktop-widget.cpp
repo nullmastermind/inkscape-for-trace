@@ -606,7 +606,7 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     dtw->zoom_update = g_signal_connect (G_OBJECT (dtw->zoom_status), "value_changed", G_CALLBACK (sp_dtw_zoom_value_changed), dtw);
     dtw->zoom_update = g_signal_connect (G_OBJECT (dtw->zoom_status), "populate_popup", G_CALLBACK (sp_dtw_zoom_populate_popup), dtw);
     auto css_provider_spinbutton = Gtk::CssProvider::create();
-    css_provider_spinbutton->load_from_data("* { padding-left: 2; padding-right: 2; padding-top: 0; padding-bottom: 0;}");
+    css_provider_spinbutton->load_from_data("* { padding-left: 2px; padding-right: 2px; padding-top: 0px; padding-bottom: 0px;}");
     auto zoomstat = Glib::wrap(dtw->zoom_status);
     zoomstat->set_name("ZoomStatus");
     auto context_zoom = zoomstat->get_style_context();
