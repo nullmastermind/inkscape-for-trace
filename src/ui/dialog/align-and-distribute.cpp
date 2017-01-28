@@ -614,7 +614,7 @@ private :
     }
 };
 
-// instantiae the private static member
+// instantiate the private static member
 boost::optional<Geom::Point> ActionExchangePositions::center;
 
 class ActionUnclump : public Action {
@@ -928,7 +928,7 @@ AlignAndDistribute::AlignAndDistribute()
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
-    //Instanciate the align buttons
+    //Instantiate the align buttons
     addAlignButton(INKSCAPE_ICON("align-horizontal-right-to-anchor"),
                    _("Align right edges of objects to the left edge of the anchor"),
                    0, 0);
