@@ -276,7 +276,7 @@ void Inkscape::XML::rebase_hrefs(SPDocument *const doc, gchar const *const new_b
 #ifdef WIN32
                 /* Native Windows path separators are replaced with / so that the href
                  * also works on Gnu/Linux and OSX */
-                std::replace(href.begin(), href.end(), '\\', '/');
+                std::replace(new_href.begin(), new_href.end(), '\\', '/');
 #endif
                 ir->setAttribute("xlink:href", new_href.c_str());
             } else {
