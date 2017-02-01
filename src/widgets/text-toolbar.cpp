@@ -588,17 +588,14 @@ static void sp_text_lineheight_value_changed( GtkAdjustment *adj, GObject *tbl )
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
 
-    // Only save if not relative unit
-    if ( !is_relative(unit) ) {
-        // This nonsense is to get SP_CSS_UNIT_xx value corresponding to unit so
-        // we can save it (allows us to adjust line height value when unit changes).
-        SPILength temp_length;
-        Inkscape::CSSOStringStream temp_stream;
-        temp_stream << 1 << unit->abbr;
-        temp_length.read(temp_stream.str().c_str());
-        prefs->setInt("/tools/text/lineheight/display_unit", temp_length.unit);
-        g_object_set_data( tbl, "lineheight_unit", GINT_TO_POINTER(temp_length.unit));
-    }
+    // This nonsense is to get SP_CSS_UNIT_xx value corresponding to unit so
+    // we can save it (allows us to adjust line height value when unit changes).
+    SPILength temp_length;
+    Inkscape::CSSOStringStream temp_stream;
+    temp_stream << 1 << unit->abbr;
+    temp_length.read(temp_stream.str().c_str());
+    prefs->setInt("/tools/text/lineheight/display_unit", temp_length.unit);
+    g_object_set_data( tbl, "lineheight_unit", GINT_TO_POINTER(temp_length.unit));
 
     // Set css line height.
     SPCSSAttr *css = sp_repr_css_attr_new ();
@@ -701,16 +698,13 @@ static void sp_text_lineheight_unit_changed( gpointer /* */, GObject *tbl )
     g_return_if_fail(unit != NULL);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
-    // Only save if not relative unit
-    if ( !is_relative(unit) ) {
-        // This nonsense is to get SP_CSS_UNIT_xx value corresponding to unit.
-        SPILength temp_length;
-        Inkscape::CSSOStringStream temp_stream;
-        temp_stream << 1 << unit->abbr;
-        temp_length.read(temp_stream.str().c_str());
-        prefs->setInt("/tools/text/lineheight/display_unit", temp_length.unit);
-        g_object_set_data( tbl, "lineheight_unit", GINT_TO_POINTER(temp_length.unit));
-    }
+    // This nonsense is to get SP_CSS_UNIT_xx value corresponding to unit.
+    SPILength temp_length;
+    Inkscape::CSSOStringStream temp_stream;
+    temp_stream << 1 << unit->abbr;
+    temp_length.read(temp_stream.str().c_str());
+    prefs->setInt("/tools/text/lineheight/display_unit", temp_length.unit);
+    g_object_set_data( tbl, "lineheight_unit", GINT_TO_POINTER(temp_length.unit));
 
     // Read current line height value
     EgeAdjustmentAction *line_height_act =

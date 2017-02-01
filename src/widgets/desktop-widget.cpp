@@ -1749,7 +1749,14 @@ void SPDesktopWidget::namedviewModified(SPObject *obj, guint flags)
                 if (GTK_IS_CONTAINER(i->data)) {
                     GList *grch = gtk_container_get_children (GTK_CONTAINER(i->data));
                     for (GList *j = grch; j != NULL; j = j->next) {
+
                         if (!GTK_IS_WIDGET(j->data)) // wasn't a widget
+                            continue;
+
+                        // Don't apply to text toolbar. We want to be able to
+                        // use different units for text. (Bug 1562217)
+                        const gchar* name = gtk_widget_get_name( (GTK_WIDGET(j->data)) );
+                        if (strcmp( name, "TextToolbar") == 0)
                             continue;
 
                         gpointer t = sp_search_by_data_recursive(GTK_WIDGET(j->data), (gpointer) "tracker");
