@@ -301,10 +301,23 @@ static void sp_text_fontstyle_value_changed( Ink_ComboBoxEntry_Action *act, GObj
 
         SPDesktop   *desktop    = SP_ACTIVE_DESKTOP;
         sp_desktop_set_style (desktop, css, true, true);
+
+
+        // If no selected objects, set default.
+        SPStyle query(SP_ACTIVE_DOCUMENT);
+        int result_style =
+            sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_FONTSTYLE);
+        if (result_style == QUERY_STYLE_NOTHING) {
+            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+            prefs->mergeStyle("/tools/text/style", css);
+        } else {
+            // Save for undo
+            DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_TEXT,
+                               _("Text: Change font style"));
+        }
+
         sp_repr_css_attr_unref (css);
 
-        DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_TEXT,
-                           _("Text: Change font style"));
     }
 
     g_object_set_data( tbl, "freeze", GINT_TO_POINTER(FALSE) );
@@ -1164,8 +1177,7 @@ static void sp_text_toolbox_selection_changed(Inkscape::Selection */*selection*/
     std::cout << "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&" << std::endl;
     std::cout << "sp_text_toolbox_selection_changed: start " << count << std::endl;
 
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    Inkscape::Selection *selection = desktop->getSelection();
+    Inkscape::Selection *selection = (SP_ACTIVE_DESKTOP)->getSelection();
     auto itemlist0= selection->items();
     for(auto i=itemlist0.begin();i!=itemlist0.end(); ++i) {
         const gchar* id = (*i)->getId();
