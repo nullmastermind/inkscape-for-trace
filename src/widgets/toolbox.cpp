@@ -530,6 +530,8 @@ static gchar const * ui_descr =
         "    <toolitem action='TextWritingModeAction' />"
         "    <separator />"
         "    <toolitem action='TextOrientationAction' />"
+        "    <separator />"
+        "    <toolitem action='TextDirectionAction' />"
         "  </toolbar>"
 
         "  <toolbar name='LPEToolToolbar'>"
