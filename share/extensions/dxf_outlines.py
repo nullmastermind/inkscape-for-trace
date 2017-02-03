@@ -340,6 +340,7 @@ class MyEffect(inkex.Effect):
         scale = eval(self.options.units)
         if not scale:
             scale = 25.4/96     # if no scale is specified, assume inch as baseunit
+        scale /= self.unittouu('1px')
         h = self.unittouu(self.document.getroot().xpath('@height', namespaces=inkex.NSS)[0])
         self.groupmat = [[[scale, 0.0, 0.0], [0.0, -scale, h*scale]]]
         doc = self.document.getroot()
