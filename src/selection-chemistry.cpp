@@ -3905,6 +3905,7 @@ void ObjectSet::setClipGroup()
                 || apply_to_layer){
 
             Geom::Affine oldtr=(*i)->transform;
+            oldtr *= SP_ITEM((*i)->parent)->i2doc_affine().inverse();
             (*i)->doWriteTransform((*i)->getRepr(), (*i)->i2doc_affine());
             Inkscape::XML::Node *dup = (*i)->getRepr()->duplicate(xml_doc);
             (*i)->doWriteTransform((*i)->getRepr(), oldtr);
