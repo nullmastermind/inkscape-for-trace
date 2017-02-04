@@ -24,6 +24,7 @@ public:
 
 private:
     OriginalPathArrayParam linked_paths;
+    BoolParam fuse;
 
 private:
     LPEFillBetweenMany(const LPEFillBetweenMany&);

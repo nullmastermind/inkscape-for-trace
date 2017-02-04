@@ -18,11 +18,15 @@ LPEFillBetweenStrokes::LPEFillBetweenStrokes(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
     linked_path(_("Linked path:"), _("Path from which to take the original path data"), "linkedpath", &wr, this),
     second_path(_("Second path:"), _("Second path from which to take the original path data"), "secondpath", &wr, this),
-    reverse_second(_("Reverse Second"), _("Reverses the second path order"), "reversesecond", &wr, this)
+    reverse_second(_("Reverse Second"), _("Reverses the second path order"), "reversesecond", &wr, this),
+    close(_("Close path"), _("Close path"), "close", &wr, this),
+    fuse(_("Fuse coincident points"), _("Fuse coincident points"), "fuse", &wr, this)
 {
     registerParameter( dynamic_cast<Parameter *>(&linked_path) );
     registerParameter( dynamic_cast<Parameter *>(&second_path) );
     registerParameter( dynamic_cast<Parameter *>(&reverse_second) );
+    registerParameter( dynamic_cast<Parameter *>(&close) );
+    registerParameter( dynamic_cast<Parameter *>(&fuse) );
     //perceived_path = true;
 }
 
@@ -51,22 +55,22 @@ void LPEFillBetweenStrokes::doEffect (SPCurve * curve)
             }
 
             if ( !result_linked_pathv.empty() && !result_second_pathv.empty() && !result_linked_pathv.front().closed() ) {
-                if (reverse_second.get_value())
-                {
-                    result_linked_pathv.front().appendNew<Geom::LineSegment>(result_second_pathv.front().finalPoint());
-                    result_linked_pathv.front().append(result_second_pathv.front().reversed());
+                if (reverse_second.get_value()) {
+                    result_second_pathv.front() = result_second_pathv.front().reversed();
                 }
-                else
-                {
+                if (!are_near(result_linked_pathv.front().finalPoint(), result_second_pathv.front().initialPoint(),0.01) || !fuse) {
                     result_linked_pathv.front().appendNew<Geom::LineSegment>(result_second_pathv.front().initialPoint());
-                    result_linked_pathv.front().append(result_second_pathv.front());
+                } else {
+                    result_second_pathv.front().setInitial(result_linked_pathv.front().finalPoint());
+                }
+                result_linked_pathv.front().append(result_second_pathv.front());
+                if (close) {
+                    result_linked_pathv.front().close();
                 }
                 curve->set_pathvector(result_linked_pathv);
-            }
-            else if ( !result_linked_pathv.empty() ) {
+            } else if ( !result_linked_pathv.empty() ) {
                 curve->set_pathvector(result_linked_pathv);
-            }
-            else if ( !result_second_pathv.empty() ) {
+            } else if ( !result_second_pathv.empty() ) {
                 curve->set_pathvector(result_second_pathv);
             }
         }
