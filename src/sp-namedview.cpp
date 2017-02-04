@@ -958,26 +958,26 @@ static void sp_namedview_lock_guides(SPNamedView *nv)
     }
 }
 
-void sp_namedview_doc_rotate_guides(SPNamedView *nv)
-{
-    bool saved = DocumentUndo::getUndoSensitive(nv->document);
-    DocumentUndo::setUndoSensitive(nv->document, false);
-    SPRoot * root = nv->document->getRoot();
-    Geom::Point page_center = root->viewBox.midpoint() * root->vbt;
-    Geom::Affine rot = Geom::identity();
-    rot *= Geom::Translate(page_center).inverse(); 
-    rot *= Geom::Rotate(Geom::rad_from_deg((nv->document_rotation - root->get_rotation()) * -1));
-    rot *=  Geom::Translate(page_center);
-    for(std::vector<SPGuide *>::iterator it=nv->guides.begin();it!=nv->guides.end();++it ) {
-        Geom::Point const on_line = (*it)->getPoint() * rot ;
-        (*it)->moveto(on_line, true);
-        Geom::Affine rot_normal_affine = Geom::Rotate(Geom::rad_from_deg((nv->document_rotation - root->get_rotation()) * -1));
-        Geom::Point const rot_normal = (*it)->getNormal() * rot_normal_affine;
-        (*it)->set_normal(rot_normal, true);
-    }
-    DocumentUndo::setUndoSensitive(nv->document, saved);
-    nv->document->setModifiedSinceSave();
-}
+//void sp_namedview_doc_rotate_guides(SPNamedView *nv)
+//{
+//    bool saved = DocumentUndo::getUndoSensitive(nv->document);
+//    DocumentUndo::setUndoSensitive(nv->document, false);
+//    SPRoot * root = nv->document->getRoot();
+//    Geom::Point page_center = root->viewBox.midpoint() * root->vbt;
+//    Geom::Affine rot = Geom::identity();
+//    rot *= Geom::Translate(page_center).inverse(); 
+//    rot *= Geom::Rotate(Geom::rad_from_deg((nv->document_rotation - root->get_rotation()) * -1));
+//    rot *=  Geom::Translate(page_center);
+//    for(std::vector<SPGuide *>::iterator it=nv->guides.begin();it!=nv->guides.end();++it ) {
+//        Geom::Point const on_line = (*it)->getPoint() * rot ;
+//        (*it)->moveto(on_line, true);
+//        Geom::Affine rot_normal_affine = Geom::Rotate(Geom::rad_from_deg((nv->document_rotation - root->get_rotation()) * -1));
+//        Geom::Point const rot_normal = (*it)->getNormal() * rot_normal_affine;
+//        (*it)->set_normal(rot_normal, true);
+//    }
+//    DocumentUndo::setUndoSensitive(nv->document, saved);
+//    nv->document->setModifiedSinceSave();
+//}
 
 void sp_namedview_set_document_rotation(SPNamedView *nv)
 {
@@ -1005,7 +1005,7 @@ void sp_namedview_set_document_rotation(SPNamedView *nv)
             sp_canvas_item_affine_absolute(canvas_border, rot * root->vbt);
             nv->page_border_rotated = desktop->add_temporary_canvasitem(canvas_border, 0); 
         }
-        sp_namedview_doc_rotate_guides(nv);
+        //sp_namedview_doc_rotate_guides(nv);
         nv->document->getRoot()->set_rotation(nv->document_rotation);
         c->unref();
     }
