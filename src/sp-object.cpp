@@ -1061,7 +1061,9 @@ Inkscape::XML::Node* SPObject::write(Inkscape::XML::Document *doc, Inkscape::XML
         }
 
         if (style) {
-            Glib::ustring s = style->write(SP_STYLE_FLAG_IFSET);
+            // Write if property set by style attribute in this object
+            Glib::ustring s =
+                style->write(SP_STYLE_FLAG_IFSET & SP_STYLE_FLAG_IFSRC, SP_STYLE_SRC_STYLE_PROP);
 
             // Check for valid attributes. This may be time consuming.
             // It is useful, though, for debugging Inkscape code.
