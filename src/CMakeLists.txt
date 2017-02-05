@@ -200,6 +200,7 @@ set(inkscape_SRC
   event-log.cpp
   extract-uri.cpp
   file.cpp
+  file-update.cpp
   filter-chemistry.cpp
   filter-enums.cpp
   gc-anchored.cpp

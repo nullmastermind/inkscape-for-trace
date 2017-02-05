@@ -203,7 +203,8 @@ void sp_file_print (Gtk::Window& parentWindow);
  * clean unused defs out of file
  */
 void sp_file_vacuum (SPDocument *doc);
-
+void sp_file_convert_text_baseline_spacing(SPDocument *doc);
+void sp_file_convert_font_name(SPDocument *doc);
 
 #endif // SEEN_SP_FILE_H
 

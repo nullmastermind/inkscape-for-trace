@@ -30,6 +30,24 @@
 #include <set>
 #include <deque>
 
+// This variable is introduced with 0.92.1
+// with the introduction of automatic fix 
+// for files detected to have been created 
+// with previous versions to have a similar
+// look in 0.92+.
+extern bool sp_no_convert_text_baseline_spacing;
+
+
+
+// This variable is introduced with 0.92.1
+// with the introduction of automatic fix 
+// for files detected to have been created 
+// with previous versions to have a similar
+// look in 0.92+.
+extern bool sp_do_not_fix_pre_92;
+
+
+
 namespace Avoid {
 class Router;
 }

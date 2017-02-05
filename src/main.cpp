@@ -166,6 +166,7 @@ enum {
     SP_ARG_SHELL,
     SP_ARG_VERSION,
     SP_ARG_VACUUM_DEFS,
+    SP_ARG_NO_CONVERT_TEXT_BASELINE_SPACING,
 #ifdef WITH_DBUS
     SP_ARG_DBUS_LISTEN,
     SP_ARG_DBUS_NAME,
@@ -235,7 +236,6 @@ static gchar *sp_xverbs_yaml_utf8 = NULL;
 static gchar *sp_xverbs_yaml = NULL;
 #endif // WITH_YAML
 
-
 /**
  *  Reset variables to default values.
  */
@@ -274,6 +274,7 @@ static void resetCommandlineGlobals() {
         sp_query_all = FALSE;
         sp_query_id = NULL;
         sp_vacuum_defs = FALSE;
+        sp_no_convert_text_baseline_spacing = FALSE;
 #ifdef WITH_DBUS
         sp_dbus_listen = FALSE;
         sp_dbus_name = NULL;
@@ -524,6 +525,11 @@ struct poptOption options[] = {
      POPT_ARG_NONE, &sp_shell, SP_ARG_SHELL,
      N_("Start Inkscape in interactive shell mode."),
      NULL},
+
+    {"no-convert-text-baseline-spacing", 0,
+    POPT_ARG_NONE, &sp_no_convert_text_baseline_spacing, SP_ARG_NO_CONVERT_TEXT_BASELINE_SPACING,
+    N_("Do not fix legacy (pre-0.92) files' text baseline spacing on opening."),
+    NULL},
 
     POPT_AUTOHELP POPT_TABLEEND
 };
@@ -1635,7 +1641,6 @@ static int sp_do_export_png(SPDocument *doc)
 
     return retcode;
 }
-
 
 /**
  *  Perform a PDF/PS/EPS export
