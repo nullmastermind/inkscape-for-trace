@@ -7,11 +7,13 @@
  * Released under GNU GPL, read the file 'COPYING' for more information.
  */
 
+#include "sp-use-reference.h"
+
 #include <cstring>
 #include <string>
 
+#include "bad-uri-exception.h"
 #include "enums.h"
-#include "sp-use-reference.h"
 
 #include "display/curve.h"
 #include "livarot/Path.h"

@@ -16,11 +16,14 @@
 #include <config.h>
 #endif
 
+#include "sp-pattern.h"
+
 #include <cstring>
 #include <string>
 #include <glibmm.h>
 #include <2geom/transforms.h>
 
+#include "bad-uri-exception.h"
 #include "svg/svg.h"
 #include "display/cairo-utils.h"
 #include "display/drawing-context.h"
@@ -29,7 +32,6 @@
 #include "display/drawing-group.h"
 #include "attributes.h"
 #include "document-private.h"
-#include "sp-pattern.h"
 
 #include "sp-factory.h"
 

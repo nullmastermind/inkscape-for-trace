@@ -6,11 +6,12 @@
  * Released under GNU GPL, read the file 'COPYING' for more information.
  */
 
+#include "sp-tag-use-reference.h"
+
 #include <cstring>
 #include <string>
 
-#include "sp-tag-use-reference.h"
-
+#include "bad-uri-exception.h"
 #include "livarot/Path.h"
 #include "preferences.h"
 #include "sp-shape.h"

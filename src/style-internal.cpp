@@ -27,6 +27,10 @@
 #endif
 
 #include "style-internal.h"
+
+#include <glibmm/regex.h>
+
+#include "bad-uri-exception.h"
 #include "style.h"
 
 #include "svg/svg.h"
@@ -39,8 +43,6 @@
 #include "preferences.h"
 #include "svg/css-ostringstream.h"
 #include "util/units.h"
-
-#include <glibmm/regex.h>
 
 // TODO REMOVE OR MAKE MEMBER FUNCTIONS
 void sp_style_fill_paint_server_ref_changed(  SPObject *old_ref, SPObject *ref, SPStyle *style);

@@ -23,10 +23,15 @@
 #include <config.h>
 #endif
 
+#include "style.h"
+
 #include <cstring>
 #include <string>
 #include <algorithm>
 
+#include <glibmm/regex.h>
+
+#include "bad-uri-exception.h"
 #include "libcroco/cr-sel-eng.h"
 #include "xml/croco-node-iface.h"
 
@@ -38,13 +43,10 @@
 #include "uri-references.h"
 #include "uri.h"
 #include "sp-paint-server.h"
-#include "style.h"
 #include "svg/css-ostringstream.h"
 #include "xml/simple-document.h"
 #include "util/units.h"
 #include "preferences.h"
-
-#include <glibmm/regex.h>
 
 using Inkscape::CSSOStringStream;
 using std::vector;
