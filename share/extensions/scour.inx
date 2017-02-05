@@ -99,6 +99,14 @@
             <param name="spacer" type="description">&#160;</param>
             <_param name="about_link_desc" type="description">For details please refer to</_param>
             <param name="about_link" type="description">    https://github.com/scour-project/scour</param>
+            <param name="spacer" type="description">&#160;</param>
+            <param name="spacer" type="description">&#160;</param>
+            <param name="spacer" type="description">&#160;</param>
+            <_param name="about_version_desc" type="description">This version of the extension is designed for</_param>
+            <param name="about_version" type="description">Scour 0.31+</param>
+            <param name="version" type="string" gui-hidden="true">0.31</param>
+            <param _gui-text="Show warnings for older versions of Scour"
+                   name="version_warn_old" type="boolean" indent="1">true</param>
         </page>
     </param>
     <output>
