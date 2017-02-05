@@ -1003,7 +1003,7 @@ SPStyle::readIfUnset( gint id, gchar const *val, SPStyleSrc const &source ) {
 Glib::ustring
 SPStyle::write( guint const flags, SPStyleSrc const &style_src_req, SPStyle const *const base ) const {
 
-    // std::cout << "SPStyle::write" << std::endl;
+    // std::cout << "SPStyle::write: flags: " << flags << std::endl;
 
     Glib::ustring style_string;
     for(std::vector<SPIBase*>::size_type i = 0; i != _properties.size(); ++i) {
@@ -1114,7 +1114,7 @@ SPStyle::_mergeString( gchar const *const p ) {
     CRDeclaration *const decl_list
         = cr_declaration_parse_list_from_buf(reinterpret_cast<guchar const *>(p), CR_UTF_8);
     if (decl_list) {
-        _mergeDeclList( decl_list, SP_STYLE_SRC_ATTRIBUTE );
+        _mergeDeclList( decl_list, SP_STYLE_SRC_STYLE_PROP );
         cr_declaration_destroy(decl_list);
     }
 }
