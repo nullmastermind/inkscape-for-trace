@@ -82,8 +82,19 @@ private:
 
     template <typename R>
     void invokeForAll(R (PathManipulator::*method)()) {
-        for (MapType::iterator i = _mmap.begin(); i != _mmap.end(); ++i) {
-            ((i->second.get())->*method)();
+        for (MapType::iterator i = _mmap.begin(); i != _mmap.end(); ) {
+            // Sometimes the PathManipulator got freed at loop end, thus
+            // invalidating the iterator so make sure that next_i will
+            // be a valid iterator and then assign i to it.
+            MapType::iterator next_i = i;
+            ++next_i;
+            // i->second is a boost::shared_ptr so try to hold on to it so
+            // it won't get freed prematurely by the WriteXML() method or
+            // whatever. See https://bugs.launchpad.net/inkscape/+bug/1617615
+            // Applicable to empty paths.
+            boost::shared_ptr<PathManipulator> hold(i->second);
+            ((hold.get())->*method)();
+            i = next_i;
         }
     }
     template <typename R, typename A>
