@@ -26,6 +26,8 @@ private:
     OriginalPathParam  linked_path;
     OriginalPathParam  second_path;
     BoolParam reverse_second;
+    BoolParam close;
+    BoolParam fuse;
 
 private:
     LPEFillBetweenStrokes(const LPEFillBetweenStrokes&);

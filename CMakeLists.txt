@@ -41,6 +41,13 @@ if(CMAKE_COMPILER_IS_GNUCC)
     endif()
 endif()
 
+# console output is slow as hell on Windows and as a result status messages of the "install" target slow down
+# the whole build process considerably (especially since we also copy a lot of files from the devlibs)
+# TODO: Is this worth to be configurable / also applicable to other platforms?
+if(WIN32)
+    set(CMAKE_INSTALL_MESSAGE "LAZY")
+endif()
+
 
 # -----------------------------------------------------------------------------
 # Redirect output files
@@ -196,7 +203,7 @@ endif()
 # Installation
 # -----------------------------------------------------------------------------
 add_subdirectory(share)
-	
+
 include(CMakeScripts/Install.cmake)
 
 # -----------------------------------------------------------------------------

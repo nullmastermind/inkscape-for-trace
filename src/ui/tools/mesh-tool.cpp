@@ -1137,7 +1137,7 @@ static void sp_mesh_new_default(MeshTool &rc) {
             Inkscape::FOR_FILL : Inkscape::FOR_STROKE;
 
         // Ensure mesh is immediately editable.
-        // Editting both fill and stroke at same time doesn't work well so avoid.
+        // Editing both fill and stroke at same time doesn't work well so avoid.
         if (fill_or_stroke == Inkscape::FOR_FILL) {
             prefs->setBool("/tools/mesh/edit_fill",   true );
             prefs->setBool("/tools/mesh/edit_stroke", false);

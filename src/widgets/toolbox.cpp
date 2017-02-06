@@ -204,6 +204,7 @@ static struct {
       SP_VERB_CONTEXT_ERASER_PREFS, "/tools/eraser", _("TBD")},
     { "/tools/lpetool", "lpetool_toolbox", 0, sp_lpetool_toolbox_prep, "LPEToolToolbar",
       SP_VERB_CONTEXT_LPETOOL_PREFS, "/tools/lpetool", _("TBD")},
+    // If you change TextToolbar here, change it also in desktop-widget.cpp
     { "/tools/text",   "text_toolbox",   0, sp_text_toolbox_prep, "TextToolbar",
       SP_VERB_INVALID, 0, 0},
     { "/tools/dropper", "dropper_toolbox", 0, sp_dropper_toolbox_prep,         "DropperToolbar",
@@ -529,6 +530,8 @@ static gchar const * ui_descr =
         "    <toolitem action='TextWritingModeAction' />"
         "    <separator />"
         "    <toolitem action='TextOrientationAction' />"
+        "    <separator />"
+        "    <toolitem action='TextDirectionAction' />"
         "  </toolbar>"
 
         "  <toolbar name='LPEToolToolbar'>"
@@ -1428,7 +1431,7 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
 
             auto kludge = dataHolders[aux_toolboxes[i].type_name];
             auto holder = gtk_grid_new();
-            gtk_widget_set_name( holder, "ToolbarHolder" );
+            gtk_widget_set_name( holder, aux_toolboxes[i].ui_name );
             gtk_grid_attach( GTK_GRID(holder), kludge, 2, 0, 1, 1);
             gchar* tmp = g_strdup_printf( "/ui/%s", aux_toolboxes[i].ui_name );
             GtkWidget* toolBar = gtk_ui_manager_get_widget( mgr, tmp );

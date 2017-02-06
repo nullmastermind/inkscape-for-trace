@@ -30,6 +30,24 @@
 #include <set>
 #include <deque>
 
+// This variable is introduced with 0.92.1
+// with the introduction of automatic fix 
+// for files detected to have been created 
+// with previous versions to have a similar
+// look in 0.92+.
+extern bool sp_no_convert_text_baseline_spacing;
+
+
+
+// This variable is introduced with 0.92.1
+// with the introduction of automatic fix 
+// for files detected to have been created 
+// with previous versions to have a similar
+// look in 0.92+.
+extern bool sp_do_not_fix_pre_92;
+
+
+
 namespace Avoid {
 class Router;
 }
@@ -178,6 +196,9 @@ public:
     SPObject *getObjectById(Glib::ustring const &id) const;
     SPObject *getObjectById(char const *id) const;
     sigc::connection connectIdChanged(const char *id, IDChangedSignal::slot_type slot);
+
+    std::vector<SPObject *> getObjectsByClass(Glib::ustring const &klass) const;
+    std::vector<SPObject *> getObjectsByElement(Glib::ustring const &element) const;
 
     void bindObjectToRepr(Inkscape::XML::Node *repr, SPObject *object);
     SPObject *getObjectByRepr(Inkscape::XML::Node *repr) const;

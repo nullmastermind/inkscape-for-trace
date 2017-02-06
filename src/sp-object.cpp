@@ -775,6 +775,21 @@ void SPObject::appendChild(Inkscape::XML::Node *child) {
     repr->appendChild(child);
 }
 
+SPObject* SPObject::nthChild(unsigned index) {
+    g_assert(this->repr);
+    if (hasChildren()) {
+        std::vector<SPObject*> l;
+        unsigned counter = 0;
+        for (auto& child: children) {
+            if (counter == index) {
+                return &child;
+            }
+            counter++;
+        }
+    }
+    return NULL;
+}
+
 void SPObject::addChild(Inkscape::XML::Node *child, Inkscape::XML::Node * prev)
 {
     g_assert(this->repr);
@@ -1046,7 +1061,9 @@ Inkscape::XML::Node* SPObject::write(Inkscape::XML::Document *doc, Inkscape::XML
         }
 
         if (style) {
-            Glib::ustring s = style->write(SP_STYLE_FLAG_IFSET);
+            // Write if property set by style attribute in this object
+            Glib::ustring s =
+                style->write(SP_STYLE_FLAG_IFSET | SP_STYLE_FLAG_IFSRC, SP_STYLE_SRC_STYLE_PROP);
 
             // Check for valid attributes. This may be time consuming.
             // It is useful, though, for debugging Inkscape code.

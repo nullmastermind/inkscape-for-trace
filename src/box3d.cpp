@@ -15,12 +15,14 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include "box3d.h"
+
 #include <glibmm/i18n.h>
 #include "attributes.h"
 #include "xml/document.h"
 #include "xml/repr.h"
 
-#include "box3d.h"
+#include "bad-uri-exception.h"
 #include "box3d-side.h"
 #include "ui/tools/box3d-tool.h"
 #include "perspective-line.h"

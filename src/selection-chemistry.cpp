@@ -97,6 +97,7 @@ SPCycleType SP_CYCLING = SP_CYCLE_FOCUS;
 #include "live_effects/parameter/originalpath.h"
 #include "layer-manager.h"
 #include "object-set.h"
+#include "svg/svg-color.h"
 
 // For clippath editing
 #include "ui/tools/node-tool.h"
@@ -1241,7 +1242,6 @@ void ObjectSet::pasteStyle()
         DocumentUndo::done(document(), SP_VERB_EDIT_PASTE_STYLE, _("Paste style"));
     }
 }
-
 
 void ObjectSet::pastePathEffect()
 {
@@ -3905,6 +3905,7 @@ void ObjectSet::setClipGroup()
                 || apply_to_layer){
 
             Geom::Affine oldtr=(*i)->transform;
+            oldtr *= SP_ITEM((*i)->parent)->i2doc_affine().inverse();
             (*i)->doWriteTransform((*i)->getRepr(), (*i)->i2doc_affine());
             Inkscape::XML::Node *dup = (*i)->getRepr()->duplicate(xml_doc);
             (*i)->doWriteTransform((*i)->getRepr(), oldtr);
@@ -4169,6 +4170,75 @@ bool ObjectSet::fitCanvas(bool with_margins, bool skip_undo)
     }
 }
 
+void ObjectSet::swapFillStroke()
+{
+    if (desktop() == NULL) {
+        return;
+    }
+
+    SPIPaint *paint;
+    SPPaintServer *server;
+    Glib::ustring _paintserver_id;
+
+    auto list= items();
+    for (auto itemlist=list.begin();itemlist!=list.end();++itemlist) {
+        SPItem *item = *itemlist;
+        
+        SPCSSAttr *css = sp_repr_css_attr_new ();
+
+        _paintserver_id.clear();
+        paint = &(item->style->fill);
+        if (paint->set && paint->isNone())
+            sp_repr_css_set_property (css, "stroke", "none");
+        else if (paint->set && paint->isColor()) {
+            guint32 color = paint->value.color.toRGBA32(SP_SCALE24_TO_FLOAT (item->style->fill_opacity.value));
+            gchar c[64];
+            sp_svg_write_color (c, sizeof(c), color);
+            sp_repr_css_set_property (css, "stroke", c);
+        }
+        else if (!paint->set)
+            sp_repr_css_unset_property (css, "stroke");
+        else if (paint->set && paint->isPaintserver()) {
+            server = SP_STYLE_FILL_SERVER(item->style);
+            if (server) {
+                Inkscape::XML::Node *srepr = server->getRepr();
+                _paintserver_id += "url(#";
+                _paintserver_id += srepr->attribute("id");
+                _paintserver_id += ")";
+                sp_repr_css_set_property (css, "stroke", _paintserver_id.c_str());
+            }
+        }
+
+        _paintserver_id.clear();
+        paint = &(item->style->stroke);
+        if (paint->set && paint->isNone())
+            sp_repr_css_set_property (css, "fill", "none");
+        else if (paint->set && paint->isColor()) {
+            guint32 color = paint->value.color.toRGBA32(SP_SCALE24_TO_FLOAT (item->style->stroke_opacity.value));
+            gchar c[64];
+            sp_svg_write_color (c, sizeof(c), color);
+            sp_repr_css_set_property (css, "fill", c);
+        }
+        else if (!paint->set)
+            sp_repr_css_unset_property (css, "fill");
+        else if (paint->set && paint->isPaintserver()) {
+            server = SP_STYLE_STROKE_SERVER(item->style);
+            if (server) {
+                Inkscape::XML::Node *srepr = server->getRepr();
+                _paintserver_id += "url(#";
+                _paintserver_id += srepr->attribute("id");
+                _paintserver_id += ")";
+                sp_repr_css_set_property (css, "fill", _paintserver_id.c_str());
+            }
+        }
+
+        sp_desktop_apply_css_recursive(item, css, true);
+        sp_repr_css_attr_unref (css);
+    }
+
+    DocumentUndo::done(document(), SP_VERB_EDIT_SWAP_FILL_STROKE,
+                _("Swap fill and stroke of an object"));
+}
 
 /**
  * \param with_margins margins defined in the xml under <sodipodi:namedview>

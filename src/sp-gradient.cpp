@@ -24,6 +24,8 @@
 #define noSP_GRADIENT_VERBOSE
 //#define OBJECT_TRACE
 
+#include "sp-gradient.h"
+
 #include <cstring>
 #include <string>
 
@@ -34,12 +36,12 @@
 #include <sigc++/functors/ptr_fun.h>
 #include <sigc++/adaptors/bind.h>
 
+#include "bad-uri-exception.h"
 #include "display/cairo-utils.h"
 #include "svg/svg.h"
 #include "svg/css-ostringstream.h"
 #include "attributes.h"
 #include "document-private.h"
-#include "sp-gradient.h"
 #include "gradient-chemistry.h"
 #include "sp-gradient-reference.h"
 #include "sp-linear-gradient.h"

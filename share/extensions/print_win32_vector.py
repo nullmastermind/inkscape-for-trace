@@ -35,6 +35,7 @@ import simplestyle
 import simpletransform
 import cubicsuperpath
 
+inkex.localize()                        # Initialize gettext
 if not inkex.sys.platform.startswith('win'):
     exit(_("sorry, this will run only on Windows, exiting..."))
 
@@ -61,7 +62,7 @@ class MyEffect(inkex.Effect):
                 if style['stroke'] and style['stroke'] != 'none' and style['stroke'][0:3] != 'url':
                     rgb = simplestyle.parseColor(style['stroke'])
             if style.has_key('stroke-width'):
-                stroke = self.unittouu(style['stroke-width'])
+                stroke = self.unittouu(style['stroke-width'])/self.unittouu('1px')
                 stroke = int(stroke*self.scale)
             if style.has_key('fill'):
                 if style['fill'] and style['fill'] != 'none' and style['fill'][0:3] != 'url':
@@ -198,6 +199,7 @@ class MyEffect(inkex.Effect):
             exit()                      # user clicked Cancel
 
         self.scale = (ord(pDevMode[58]) + 256.0*ord(pDevMode[59]))/96    # use PrintQuality from DEVMODE
+        self.scale /= self.unittouu('1px')
         self.groupmat = [[[self.scale, 0.0, 0.0], [0.0, self.scale, 0.0]]]
         doc = self.document.getroot()
         self.process_group(doc)

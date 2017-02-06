@@ -644,7 +644,6 @@ Glib::ustring ClipboardManagerImpl::getShapeOrTextObjectId(SPDesktop *desktop)
     return svgd;
 }
 
-
 /**
  * Iterate over a list of items and copy them to the clipboard.
  */
@@ -690,25 +689,6 @@ void ClipboardManagerImpl::_copySelection(ObjectSet *selection)
             else
                 obj_copy = _copyNode(obj, _doc, _clipnode);
 
-            // For lpe items, copy lpe stack if applicable
-            SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
-            if (lpeitem) {
-                Inkscape::SVGOStringStream os;
-                if (lpeitem->hasPathEffect()) {
-                    for (PathEffectList::iterator it = lpeitem->path_effect_list->begin(); it != lpeitem->path_effect_list->end(); ++it)
-                    {
-                        LivePathEffectObject *lpeobj = (*it)->lpeobject;
-                        if (lpeobj) {
-                            Inkscape::XML::Node * lpeobjcopy = _copyNode(lpeobj->getRepr(), _doc, _defs);
-                            gchar *new_conflict_id = sp_object_get_unique_id(lpeobj, lpeobj->getAttribute("id"));
-                            lpeobjcopy->setAttribute("id", new_conflict_id);
-                            g_free(new_conflict_id);
-                            os << "#" << lpeobjcopy->attribute("id") << ";";
-                        }
-                    }
-                }
-                obj_copy->setAttribute("inkscape:path-effect", os.str().c_str());
-            }
             // copy complete inherited style
             SPCSSAttr *css = sp_repr_css_attr_inherited(obj, "style");
             sp_repr_css_set(obj_copy, css, "style");
@@ -739,6 +719,13 @@ void ClipboardManagerImpl::_copySelection(ObjectSet *selection)
             SPCSSAttr *style = take_style_from_item(item);
             sp_repr_css_set(_clipnode, style, "style");
             sp_repr_css_attr_unref(style);
+        }
+        // copy path effect from the first path
+        if (object) {
+            gchar const *effect =object->getRepr()->attribute("inkscape:path-effect");
+            if (effect) {
+                _clipnode->setAttribute("inkscape:path-effect", effect);
+            }
         }
     }
 
@@ -839,6 +826,19 @@ void ClipboardManagerImpl::_copyUsedDefs(SPItem *item)
         SPObject *filter = style->getFilter();
         if (dynamic_cast<SPFilter *>(filter)) {
             _copyNode(filter->getRepr(), _doc, _defs);
+        }
+    }
+
+    // For lpe items, copy lpe stack if applicable
+    SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
+    if (lpeitem) {
+        if (lpeitem->hasPathEffect()) {
+            for (PathEffectList::iterator it = lpeitem->path_effect_list->begin(); it != lpeitem->path_effect_list->end(); ++it){
+                LivePathEffectObject *lpeobj = (*it)->lpeobject;
+                if (lpeobj) {
+                  _copyNode(lpeobj->getRepr(), _doc, _defs);
+                }
+            }
         }
     }
 

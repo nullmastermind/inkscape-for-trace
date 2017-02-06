@@ -94,7 +94,7 @@ Emf::print_document_to_file(SPDocument *doc, const gchar *filename)
     const gchar *oldconst;
     gchar *oldoutput;
     unsigned int ret;
-
+    doc->getRoot()->c2p = doc->getRoot()->rotation.inverse() * doc->getRoot()->c2p;
     doc->ensureUpToDate();
 
     mod = Inkscape::Extension::get_print(PRINT_EMF);
@@ -114,6 +114,7 @@ Emf::print_document_to_file(SPDocument *doc, const gchar *filename)
     /* Print document */
     ret = mod->begin(doc);
     if (ret) {
+        doc->getRoot()->c2p *= doc->getRoot()->rotation;
         g_free(oldoutput);
         throw Inkscape::Extension::Output::save_failed();
     }
@@ -127,7 +128,7 @@ Emf::print_document_to_file(SPDocument *doc, const gchar *filename)
 
     mod->set_param_string("destination", oldoutput);
     g_free(oldoutput);
-
+    doc->getRoot()->c2p *= doc->getRoot()->rotation;
     return;
 }
 

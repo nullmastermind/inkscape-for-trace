@@ -36,7 +36,14 @@ public:
 
   /* Child to parent additional transform */
   Geom::Affine c2p;
+  Geom::Affine vbt;
+  Geom::Affine rotation;
+  double angle;
+  double previous_angle;
+  bool rotated;
 
+  double get_rotation();
+  void set_rotation(double angle_val);
   void set_viewBox(const gchar* value);
   void set_preserveAspectRatio(const gchar* value);
 

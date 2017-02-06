@@ -865,7 +865,7 @@ CairoRenderContext::_finishSurfaceSetup(cairo_surface_t *surface, cairo_matrix_t
         cairo_scale(_cr, Inkscape::Util::Quantity::convert(1, "px", "pt"), Inkscape::Util::Quantity::convert(1, "px", "pt"));
     } else if (cairo_surface_get_content(_surface) != CAIRO_CONTENT_ALPHA) {
         // set background color on non-alpha surfaces
-        // TODO: bgcolor should be derived from SPDocument
+        // TODO: bgcolor should be derived from SPDocument (see IconImpl)
         cairo_set_source_rgb(_cr, 1.0, 1.0, 1.0);
         cairo_rectangle(_cr, 0, 0, _width, _height);
         cairo_fill(_cr);

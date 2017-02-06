@@ -54,6 +54,7 @@ LPECurveStitch::LPECurveStitch(LivePathEffectObject *lpeobject) :
 
     prop_scale.param_set_digits(3);
     prop_scale.param_set_increments(0.01, 0.10);
+    transformed = false;
 }
 
 LPECurveStitch::~LPECurveStitch()
@@ -106,8 +107,9 @@ LPECurveStitch::doEffect_path (Geom::PathVector const & path_in)
         
                 if (!Geom::are_near(start,end)) {
                     gdouble scaling_y = 1.0;
-                    if (scale_y_rel.get_value()) {
+                    if (scale_y_rel.get_value() || transformed) {
                         scaling_y = (L2(end-start)/scaling)*prop_scale;
+                        transformed = false;
                     } else {
                         scaling_y = prop_scale;
                     }
@@ -193,12 +195,8 @@ LPECurveStitch::transform_multiply(Geom::Affine const& postmul, bool set)
     if (postmul.isTranslation()) {
         strokepath.param_transform_multiply(postmul, set);
     } else if (!scale_y_rel.get_value()) {
-  // this basically means that for this transformation, the result should be the same as normal scaling the result path
-  // don't know how to do this yet.
-//        Geom::Affine new_postmul;
-        //new_postmul.setIdentity();
-//        new_postmul.setTranslation(postmul.translation());
-//        Effect::transform_multiply(new_postmul, set);
+        transformed = true;
+        strokepath.param_transform_multiply(postmul, set);
     }
 }
 

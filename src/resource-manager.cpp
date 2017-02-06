@@ -126,7 +126,21 @@ public:
      */
     std::map<Glib::ustring, Glib::ustring> locateLinks(Glib::ustring const & docbase, std::vector<Glib::ustring> const & brokenLinks);
 
+
+    /**
+     * Try to parse href into a local filename using standard methods.
+     *
+     * @return true if successfull.
+     */
     bool extractFilepath( Glib::ustring const &href, std::string &uri );
+
+    /**
+     * Try to parse href into a local filename using some non-standard methods.
+     * This means the href is likely invalid and should be rewritten.
+     *
+     * @return true if successfull.
+     */
+    bool reconstructFilepath( Glib::ustring const &href, std::string &uri );
 
     bool searchUpwards( std::string const &base, std::string const &subpath, std::string &dest );
 
@@ -156,9 +170,13 @@ bool ResourceManagerImpl::extractFilepath( Glib::ustring const &href, std::strin
             // TODO debug g_message("--- is a file URI                 [%s]", href.c_str());
 
             // throws Glib::ConvertError:
-            uri = Glib::filename_from_uri(href); // TODO see if we can get this to throw
-            // TODO debug g_message("                                  [%s]", uri.c_str());
-            isFile = true;
+            try {
+                uri = Glib::filename_from_uri(href);
+                // TODO debug g_message("                                  [%s]", uri.c_str());
+                isFile = true;
+            } catch(Glib::ConvertError e) {
+                g_warning("%s", e.what().c_str());
+            }
         }
     } else {
         // No scheme. Assuming it is a file path (absolute or relative).
@@ -167,6 +185,26 @@ bool ResourceManagerImpl::extractFilepath( Glib::ustring const &href, std::strin
         isFile = true;
     }
 
+    return isFile;
+}
+
+bool ResourceManagerImpl::reconstructFilepath( Glib::ustring const &href, std::string &uri )
+{                    
+    bool isFile = false;
+
+    uri.clear();
+
+    std::string scheme = Glib::uri_parse_scheme(href);
+    if ( !scheme.empty() ) {
+        if ( scheme == "file" ) {
+            // try to build a relative filename for URIs like "file:image.png"
+            // they're not standard conformant but not uncommon
+            Glib::ustring href_new = Glib::ustring(href, 5);
+            uri = Glib::filename_from_utf8(href_new);
+            // TODO debug g_message("reconstructed path for '%s' into '%s'", href.c_str(), uri.c_str());
+            isFile = true;
+        }
+    }
     return isFile;
 }
 
@@ -192,11 +230,14 @@ std::vector<Glib::ustring> ResourceManagerImpl::findBrokenLinks( SPDocument *doc
                         }
                     } else {
                         std::string combined = Glib::build_filename(doc->getBase(), uri);
-                        if ( !Glib::file_test(uri, Glib::FILE_TEST_EXISTS) ) {
+                        if ( !Glib::file_test(combined, Glib::FILE_TEST_EXISTS) ) {
                             result.push_back(href);
                             uniques.insert(href);
                         }
                     }
+                } else if ( reconstructFilepath( href, uri ) ) {
+                    result.push_back(href);
+                    uniques.insert(href);
                 }
             }
         }        
@@ -228,7 +269,7 @@ std::map<Glib::ustring, Glib::ustring> ResourceManagerImpl::locateLinks(Glib::us
                     priorLocations.push_back(path);
                 }
             } catch (Glib::ConvertError e) {
-                g_warning("Bad URL ignored [%s]", uri.c_str());
+                g_warning("%s", e.what().c_str());
             }
         }
     }
@@ -238,7 +279,7 @@ std::map<Glib::ustring, Glib::ustring> ResourceManagerImpl::locateLinks(Glib::us
         // TODO debug g_message("========{%s}", it->c_str());
 
         std::string uri;
-        if ( extractFilepath( *it, uri ) ) {
+        if ( extractFilepath( *it, uri ) || reconstructFilepath( *it, uri ) ) {
             // We were able to get some path. Check it
             std::string origPath = uri;
 
@@ -247,32 +288,31 @@ std::map<Glib::ustring, Glib::ustring> ResourceManagerImpl::locateLinks(Glib::us
                 // TODO debug g_message("         not absolute. Fixing up as [%s]", uri.c_str());
             }
 
-            if ( !Glib::file_test(uri, Glib::FILE_TEST_EXISTS) ) {
-                // TODO debug g_message("                                  DOES NOT EXIST.");
-                std::string remainder;
-                bool exists = searchUpwards( docbase, origPath, remainder );
+            bool exists = Glib::file_test(uri, Glib::FILE_TEST_EXISTS);
 
-                if ( !exists ) {
-                    // TODO debug g_message("Expanding the search...");
+            // search in parent folders
+            if (!exists) {
+                exists = searchUpwards( docbase, origPath, uri );
+            }
 
-                    // Check if the MRU bases point us to it.
-                    if ( !Glib::path_is_absolute(origPath) ) {
-                        for ( std::vector<std::string>::iterator it = priorLocations.begin(); !exists && (it != priorLocations.end()); ++it ) {
-                            exists = searchUpwards( *it, origPath, remainder );
-                        }
+            // Check if the MRU bases point us to it.
+            if ( !exists ) {
+                if ( !Glib::path_is_absolute(origPath) ) {
+                    for ( std::vector<std::string>::iterator it = priorLocations.begin(); !exists && (it != priorLocations.end()); ++it ) {
+                        exists = searchUpwards( *it, origPath, uri );
                     }
                 }
+            }
 
-                if ( exists ) {
-                    if ( Glib::path_is_absolute( remainder ) ) {
-                        // TODO debug g_message("Need to convert to relative if possible [%s]", remainder.c_str());
-                        remainder = convertPathToRelative( remainder, docbase );
-                    }
-
-                    bool isAbsolute = Glib::path_is_absolute( remainder );
-                    Glib::ustring replacement = isAbsolute ? Glib::filename_to_uri( remainder ) : Glib::filename_to_utf8( remainder );
-                    result[*it] = replacement;
+            if ( exists ) {
+                if ( Glib::path_is_absolute( uri ) ) {
+                    // TODO debug g_message("Need to convert to relative if possible [%s]", uri.c_str());
+                    uri = convertPathToRelative( uri, docbase );
                 }
+
+                bool isAbsolute = Glib::path_is_absolute( uri );
+                Glib::ustring replacement = isAbsolute ? Glib::filename_to_uri( uri ) : Glib::filename_to_utf8( uri );
+                result[*it] = replacement;
             }
         }
     }

@@ -49,6 +49,7 @@
 #include "display/drawing.h"
 #include "document-private.h"
 #include "document-undo.h"
+#include "file.h"
 #include "id-clash.h"
 #include "inkscape.h"
 #include "inkscape-version.h"
@@ -71,7 +72,7 @@ using Inkscape::Util::unit_table;
 // since we want it to happen when there are no more updates.
 #define SP_DOCUMENT_REROUTING_PRIORITY (G_PRIORITY_HIGH_IDLE - 1)
 
-
+bool sp_no_convert_text_baseline_spacing = false;
 static gint sp_document_idle_handler(gpointer data);
 static gint sp_document_rerouting_handler(gpointer data);
 
@@ -386,6 +387,7 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
         if (!bordercolor.empty()) {
             rnew->setAttribute("bordercolor", bordercolor.data());
         }
+        sp_repr_set_svg_double(rnew, "inkscape:document-rotation", 0.);
         sp_repr_set_svg_double(rnew, "borderopacity",
             prefs->getDouble("/template/base/borderopacity", 1.0));
         sp_repr_set_svg_double(rnew, "objecttolerance",
@@ -407,6 +409,11 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
         rroot->addChild(rnew, NULL);
         // clean up
         Inkscape::GC::release(rnew);
+    } else {
+        Inkscape::XML::Node *nv_repr = sp_item_group_get_child_by_name(document->root, NULL, "sodipodi:namedview")->getRepr();
+        if (!nv_repr->attribute("inkscape:document-rotation")) {
+            sp_repr_set_svg_double(nv_repr, "inkscape:document-rotation", 0.);
+        }
     }
 
     // Defs
@@ -445,6 +452,17 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
                 sigc::ptr_fun(&DocumentUndo::resetKey), document)
     ));
     document->oldSignalsConnected = true;
+
+    /** Fix baseline spacing (pre-92 files) **/
+    if ( (!sp_no_convert_text_baseline_spacing)
+         && sp_version_inside_range( document->root->version.inkscape, 0, 1, 0, 92 ) ) {
+        sp_file_convert_text_baseline_spacing(document);
+    }
+
+    /** Fix font names in legacy documents (pre-92 files) **/
+    if ( sp_version_inside_range( document->root->version.inkscape, 0, 1, 0, 92 ) ) {
+        sp_file_convert_font_name(document);
+    }
 
     return document;
 }
@@ -1045,6 +1063,60 @@ sigc::connection SPDocument::connectIdChanged(gchar const *id,
                                               SPDocument::IDChangedSignal::slot_type slot)
 {
     return priv->id_changed_signals[g_quark_from_string(id)].connect(slot);
+}
+
+void _getObjectsByClassRecursive(Glib::ustring const &klass, SPObject *parent, std::vector<SPObject *> &objects)
+{
+    if (parent) {
+        Glib::ustring class_attribute;
+        char const *temp = parent->getAttribute("class");
+        if (temp) {
+            class_attribute = temp;
+        }
+
+        if (class_attribute.find( klass ) != std::string::npos) {
+            objects.push_back( parent );
+        }
+
+        // Check children
+        for (auto& child : parent->children) {
+            _getObjectsByClassRecursive( klass, &child, objects );
+        }
+    }
+}
+
+std::vector<SPObject *> SPDocument::getObjectsByClass(Glib::ustring const &klass) const
+{
+    std::vector<SPObject *> objects;
+    g_return_val_if_fail(!klass.empty(), objects);
+
+    _getObjectsByClassRecursive(klass, root, objects);
+    return objects;
+}
+
+void _getObjectsByElementRecursive(Glib::ustring const &element, SPObject *parent,
+                                   std::vector<SPObject *> &objects)
+{
+    if (parent) {
+        Glib::ustring prefixed = "svg:" + element;
+        if (parent->getRepr()->name() == prefixed) {
+            objects.push_back(parent);
+        }
+
+        // Check children
+        for (auto& child : parent->children) {
+            _getObjectsByElementRecursive(element, &child, objects);
+        }
+    }
+}
+
+std::vector<SPObject *> SPDocument::getObjectsByElement(Glib::ustring const &element) const
+{
+    std::vector<SPObject *> objects;
+    g_return_val_if_fail(!element.empty(), objects);
+
+    _getObjectsByElementRecursive(element, root, objects);
+    return objects;
 }
 
 void SPDocument::bindObjectToRepr(Inkscape::XML::Node *repr, SPObject *object)

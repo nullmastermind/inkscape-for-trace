@@ -14,6 +14,7 @@
 
 struct SPCanvasItem;
 class SPDesktop;
+class SPViewBox;
 
 namespace Inkscape {
 namespace Display {

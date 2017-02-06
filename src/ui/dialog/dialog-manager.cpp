@@ -57,6 +57,8 @@
 #include "ui/dialog/svg-fonts-dialog.h"
 #include "ui/dialog/objects.h"
 #include "ui/dialog/tags.h"
+#include "ui/dialog/styledialog.h"
+#include "ui/dialog/cssdialog.h"
 
 namespace Inkscape {
 namespace UI {
@@ -125,6 +127,8 @@ DialogManager::DialogManager() {
         registerFactory("Swatches",            &create<SwatchesPanel,        FloatingBehavior>);
         registerFactory("TileDialog",          &create<ArrangeDialog,        FloatingBehavior>);
         registerFactory("Symbols",             &create<SymbolsDialog,        FloatingBehavior>);
+        registerFactory("StyleDialog",         &create<StyleDialog,          FloatingBehavior>);
+        registerFactory("CssDialog",           &create<CssDialog,            FloatingBehavior>);
 
 #if HAVE_POTRACE
         registerFactory("Trace",               &create<TraceDialog,          FloatingBehavior>);
@@ -164,6 +168,8 @@ DialogManager::DialogManager() {
         registerFactory("Swatches",            &create<SwatchesPanel,        DockBehavior>);
         registerFactory("TileDialog",          &create<ArrangeDialog,        DockBehavior>);
         registerFactory("Symbols",             &create<SymbolsDialog,        DockBehavior>);
+        registerFactory("StyleDialog",         &create<StyleDialog,          DockBehavior>);
+        registerFactory("CssDialog",           &create<CssDialog,            DockBehavior>);
 
 #if HAVE_POTRACE
         registerFactory("Trace",               &create<TraceDialog,          DockBehavior>);

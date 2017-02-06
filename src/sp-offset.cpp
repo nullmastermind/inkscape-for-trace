@@ -18,13 +18,17 @@
 #include <config.h>
 #endif
 
+#include "sp-offset.h"
+
 #include <cstring>
 #include <string>
 
+#include <glibmm/i18n.h>
+
+#include "bad-uri-exception.h"
 #include "svg/svg.h"
 #include "attributes.h"
 #include "display/curve.h"
-#include <glibmm/i18n.h>
 
 #include "livarot/Path.h"
 #include "livarot/Shape.h"
@@ -32,7 +36,6 @@
 #include "enums.h"
 #include "preferences.h"
 #include "sp-text.h"
-#include "sp-offset.h"
 #include "sp-use-reference.h"
 #include "uri.h"
 

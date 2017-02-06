@@ -1086,6 +1086,9 @@ void EditVerb::perform(SPAction *action, void *data)
         case SP_VERB_EDIT_NEXT_PATHEFFECT_PARAMETER:
             sp_selection_next_patheffect_param(dt);
             break;
+        case SP_VERB_EDIT_SWAP_FILL_STROKE:
+            dt->selection->swapFillStroke();
+            break;
         case SP_VERB_EDIT_LINK_COLOR_PROFILE:
             break;
         case SP_VERB_EDIT_REMOVE_COLOR_PROFILE:
@@ -2154,6 +2157,12 @@ void DialogVerb::perform(SPAction *action, void *data)
         case SP_VERB_DIALOG_PRINT_COLORS_PREVIEW:
             dt->_dlg_mgr->showDialog("PrintColorsPreviewDialog");
             break;
+        case SP_VERB_DIALOG_STYLE:
+            dt->_dlg_mgr->showDialog("StyleDialog");
+           break;
+        case SP_VERB_DIALOG_CSS:
+            dt->_dlg_mgr->showDialog("CssDialog");
+            break;
 
         default:
             break;
@@ -2585,6 +2594,8 @@ Verb *Verb::_base_verbs[] = {
                  N_("Create four guides aligned with the page borders"), NULL),
     new EditVerb(SP_VERB_EDIT_NEXT_PATHEFFECT_PARAMETER, "EditNextPathEffectParameter", N_("Next path effect parameter"),
                  N_("Show next editable path effect parameter"), INKSCAPE_ICON("path-effect-parameter-next")),
+    new EditVerb(SP_VERB_EDIT_SWAP_FILL_STROKE, "EditSwapFillStroke", N_("Swap fill and stroke"),
+                 N_("Swap fill and stroke of an object"), NULL),
 
     // Selection
     new SelectionVerb(SP_VERB_SELECTION_TO_FRONT, "SelectionToFront", N_("Raise to _Top"),
@@ -3000,6 +3011,10 @@ Verb *Verb::_base_verbs[] = {
                    N_("View Objects"), INKSCAPE_ICON("dialog-layers")),
     new DialogVerb(SP_VERB_DIALOG_TAGS, "DialogTags", N_("Selection se_ts..."),
                    N_("View Tags"), INKSCAPE_ICON("edit-select-all-layers")),
+    new DialogVerb(SP_VERB_DIALOG_STYLE, "DialogStyle", N_("Style Dialog..."),
+                   N_("View Style Dialog"), NULL),
+    new DialogVerb(SP_VERB_DIALOG_CSS, "DialogCss", N_("Css Dialog..."),
+                   N_("View Css Dialog"), NULL),
     new DialogVerb(SP_VERB_DIALOG_LIVE_PATH_EFFECT, "DialogLivePathEffect", N_("Path E_ffects ..."),
                    N_("Manage, edit, and apply path effects"), INKSCAPE_ICON("dialog-path-effects")),
     new DialogVerb(SP_VERB_DIALOG_FILTER_EFFECTS, "DialogFilterEffects", N_("Filter _Editor..."),

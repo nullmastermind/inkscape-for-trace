@@ -14,12 +14,15 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include "image.h"
+
 #include <sigc++/bind.h>
+
+#include "bad-uri-exception.h"
 #include "display/nr-filter-image.h"
 #include "uri.h"
 #include "uri-references.h"
 #include "attributes.h"
-#include "image.h"
 #include "xml/repr.h"
 
 #include "display/nr-filter.h"

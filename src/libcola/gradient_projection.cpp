@@ -18,7 +18,6 @@
 #include "gradient_projection.h"
 #include <iostream>
 #include <2geom/math-utils.h>
-#include "isinf.h"
 #include <math.h>
 
 using namespace std;

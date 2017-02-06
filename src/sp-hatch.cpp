@@ -12,11 +12,15 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include "sp-hatch.h"
+
 #include <cstring>
 #include <string>
+
 #include <2geom/transforms.h>
 #include <sigc++/functors/mem_fun.h>
 
+#include "bad-uri-exception.h"
 #include "svg/svg.h"
 #include "display/cairo-utils.h"
 #include "display/drawing-context.h"
@@ -25,7 +29,6 @@
 #include "display/drawing-pattern.h"
 #include "attributes.h"
 #include "document-private.h"
-#include "sp-hatch.h"
 #include "sp-hatch-path.h"
 
 SPHatch::SPHatch()

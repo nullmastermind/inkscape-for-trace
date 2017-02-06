@@ -22,6 +22,7 @@
 #define SP_TAG_USE(obj)            (dynamic_cast<SPTagUse*> (obj))
 #define SP_IS_TAG_USE(obj)         (dynamic_cast<SPTagUse*> (obj) != NULL)
 
+class SPItem;
 class SPTagUse;
 class SPTagUseReference;
 

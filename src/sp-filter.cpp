@@ -17,20 +17,24 @@
 #include <config.h>
 #endif
 
+#include "sp-filter.h"
+
 #include <map>
 #include <string.h>
-using std::map;
-using std::pair;
 
 #include <glibmm.h>
+
+#include "bad-uri-exception.h"
 #include "attributes.h"
 #include "display/nr-filter.h"
 #include "document.h"
-#include "sp-filter.h"
 #include "sp-filter-reference.h"
 #include "sp-filter-primitive.h"
 #include "uri.h"
 #include "xml/repr.h"
+
+using std::map;
+using std::pair;
 
 #define SP_MACROS_SILENT
 

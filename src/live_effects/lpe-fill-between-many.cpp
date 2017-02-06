@@ -19,9 +19,11 @@ namespace LivePathEffect {
 
 LPEFillBetweenMany::LPEFillBetweenMany(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
-    linked_paths(_("Linked path:"), _("Paths from which to take the original path data"), "linkedpaths", &wr, this)
+    linked_paths(_("Linked path:"), _("Paths from which to take the original path data"), "linkedpaths", &wr, this),
+    fuse(_("Fuse coincident points"), _("Fuse coincident points"), "fuse", &wr, this)
 {
     registerParameter( dynamic_cast<Parameter *>(&linked_paths) );
+    registerParameter( dynamic_cast<Parameter *>(&fuse) );
     //perceived_path = true;
 }
 
@@ -46,7 +48,11 @@ void LPEFillBetweenMany::doEffect (SPCurve * curve)
             
             if (!res_pathv.empty()) {
                 linked_path = linked_path * SP_ITEM(obj)->getRelativeTransform(firstObj);
-                res_pathv.front().appendNew<Geom::LineSegment>(linked_path.initialPoint());
+                if (!are_near(res_pathv.front().finalPoint(), linked_path.initialPoint(), 0.01) || !fuse) {
+                    res_pathv.front().appendNew<Geom::LineSegment>(linked_path.initialPoint());
+                } else {
+                    linked_path.setInitial(res_pathv.front().finalPoint());
+                }
                 res_pathv.front().append(linked_path);
             } else {
                 firstObj = SP_ITEM(obj);

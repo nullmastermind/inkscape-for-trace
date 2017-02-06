@@ -92,6 +92,22 @@
                    _gui-description="Preserve all IDs that start with the specified prefix (e.g. specify &quot;flag&quot; to preserve &quot;flag-mx&quot;, &quot;flag-pt&quot;, etc.)."
                    name="protect-ids-prefix" type="string"></param>
         </page>
+        <page name="About" _gui-text="About">
+            <param name="spacer" type="description">&#160;</param>
+            <_param name="about_name_desc" type="description">Optimized SVG Output is provided by</_param>
+            <param name="about_name" type="description" appearance="header">        Scour - An SVG Scrubber</param>
+            <param name="spacer" type="description">&#160;</param>
+            <_param name="about_link_desc" type="description">For details please refer to</_param>
+            <param name="about_link" type="description">    https://github.com/scour-project/scour</param>
+            <param name="spacer" type="description">&#160;</param>
+            <param name="spacer" type="description">&#160;</param>
+            <param name="spacer" type="description">&#160;</param>
+            <_param name="about_version_desc" type="description">This version of the extension is designed for</_param>
+            <param name="about_version" type="description">Scour 0.31+</param>
+            <param name="version" type="string" gui-hidden="true">0.31</param>
+            <param _gui-text="Show warnings for older versions of Scour"
+                   name="version_warn_old" type="boolean" indent="1">true</param>
+        </page>
     </param>
     <output>
         <extension>.svg</extension>

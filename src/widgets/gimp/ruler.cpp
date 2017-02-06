@@ -34,11 +34,10 @@
 #include <cstdio>
 
 #include "ruler.h"
-#include "round.h"
 #include <glibmm/i18n.h>
 #include "util/units.h"
 
-#define ROUND(x) ((int) ((x) + 0.5))
+#define ROUND(x) ((int) round(x))
 
 #define GTK_PARAM_READWRITE G_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_STATIC_NICK|G_PARAM_STATIC_BLURB
 
@@ -1217,7 +1216,7 @@ sp_ruler_draw_ticks (SPRuler *ruler)
             // be e.g. 641.50000000000; rounding behaviour is not defined in such a case (see round.h)
             // and jitter will be apparent (upon redrawing some of the lines on the ruler might jump a
             // by a pixel, and jump back on the next redraw). This is suppressed by adding 1e-9 (that's only one nanopixel ;-))
-            pos = gint(Inkscape::round((cur - lower) * increment + 1e-12));
+            pos = gint(round((cur - lower) * increment + 1e-12));
 
             if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
              {

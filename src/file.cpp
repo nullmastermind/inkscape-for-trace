@@ -293,10 +293,12 @@ bool sp_file_open(const Glib::ustring &uri,
                   bool replace_empty)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+    Inkscape::Display::TemporaryItem *page_border_rotated = NULL;
     if (desktop) {
         desktop->setWaitingCursor();
+        page_border_rotated = sp_document_namedview(desktop->getDocument(), NULL)->page_border_rotated;
     }
-
+    
     SPDocument *doc = NULL;
     bool cancelled = false;
     try {
@@ -315,7 +317,6 @@ bool sp_file_open(const Glib::ustring &uri,
     }
 
     if (doc) {
-
         SPDocument *existing = desktop ? desktop->getDocument() : NULL;
 
         if (existing && existing->virgin && replace_empty) {
@@ -323,6 +324,7 @@ bool sp_file_open(const Glib::ustring &uri,
             doc->ensureUpToDate(); // TODO this will trigger broken link warnings, etc.
             desktop->change_document(doc);
             doc->emitResizedSignal(doc->getWidth().value("px"), doc->getHeight().value("px"));
+            desktop->remove_temporary_canvasitem(page_border_rotated);
         } else {
             // create a whole new desktop and window
             SPViewWidget *dtw = sp_desktop_widget_new(sp_document_namedview(doc, NULL)); // TODO this will trigger broken link warnings, etc.
@@ -1631,8 +1633,12 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place)
     for (Inkscape::XML::Node *obj = clipboard->firstChild() ; obj ; obj = obj->next()) {
     	if(target_document->getObjectById(obj->attribute("id"))) continue;
         Inkscape::XML::Node *obj_copy = obj->duplicate(target_document->getReprDoc());
-        target_parent->appendChild(obj_copy);
+        SPObject * pasted = desktop->currentLayer()->appendChildRepr(obj_copy);
         Inkscape::GC::release(obj_copy);
+        SPLPEItem * pasted_lpe_item = dynamic_cast<SPLPEItem *>(pasted);
+        if (pasted_lpe_item){
+            pasted_lpe_item->forkPathEffectsIfNecessary(1);
+        } 
         pasted_objects_not.push_back(obj_copy);
     }
     Inkscape::Selection *selection = desktop->getSelection();
