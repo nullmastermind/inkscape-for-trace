@@ -79,6 +79,7 @@ public:
     // be able to figure that out
     sigc::signal<void, SPKnot *, unsigned int> click_signal;
     sigc::signal<void, SPKnot*, unsigned int> doubleclicked_signal;
+    sigc::signal<void, SPKnot*, unsigned int> mousedown_signal;
     sigc::signal<void, SPKnot*, unsigned int> grabbed_signal;
     sigc::signal<void, SPKnot *, unsigned int> ungrabbed_signal;
     sigc::signal<void, SPKnot *, Geom::Point const &, unsigned int> moved_signal;

@@ -214,7 +214,7 @@ static int sp_knot_handler(SPCanvasItem */*item*/, GdkEvent *event, SPKnot *knot
         if ((event->button.button == 1) && knot->desktop && knot->desktop->event_context && !knot->desktop->event_context->space_panning) {
             Geom::Point const p = knot->desktop->w2d(Geom::Point(event->button.x, event->button.y));
             knot->startDragging(p, (gint) event->button.x, (gint) event->button.y, event->button.time);
-            knot->grabbed_signal.emit(knot, event->button.state);
+            knot->mousedown_signal.emit(knot, event->button.state);
             consumed = TRUE;
         }
         break;
@@ -241,7 +241,6 @@ static int sp_knot_handler(SPCanvasItem */*item*/, GdkEvent *event, SPKnot *knot
 
                 if (moved) {
                     knot->setFlag(SP_KNOT_DRAGGING, FALSE);
-
                     knot->ungrabbed_signal.emit(knot, event->button.state);
                 } else {
                     knot->click_signal.emit(knot, event->button.state);
@@ -277,6 +276,7 @@ static int sp_knot_handler(SPCanvasItem */*item*/, GdkEvent *event, SPKnot *knot
 
             if (!moved) {
                 knot->setFlag(SP_KNOT_DRAGGING, TRUE);
+                knot->grabbed_signal.emit(knot, event->button.state);
             }
 
             sp_event_context_snap_delay_handler(knot->desktop->event_context, NULL, knot, (GdkEventMotion *)event, Inkscape::UI::Tools::DelayedSnapEvent::KNOT_HANDLER);

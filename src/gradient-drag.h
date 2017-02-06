@@ -130,7 +130,7 @@ private:
     sigc::connection _moved_connection;
     sigc::connection _clicked_connection;
     sigc::connection _doubleclicked_connection;
-    sigc::connection _grabbed_connection;
+    sigc::connection _mousedown_connection;
     sigc::connection _ungrabbed_connection;
 };
 
