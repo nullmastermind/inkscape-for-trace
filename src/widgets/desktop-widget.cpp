@@ -68,11 +68,6 @@
 #include <gtkmm/messagedialog.h>
 #include <iomanip>
 
-#if defined (SOLARIS) && (SOLARIS == 8)
-#include "round.h"
-using Inkscape::round;
-#endif
-
 using Inkscape::UI::Widget::UnitTracker;
 using Inkscape::UI::UXManager;
 using Inkscape::UI::ToolboxFactory;
