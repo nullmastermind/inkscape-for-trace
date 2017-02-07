@@ -1034,7 +1034,7 @@ void SPCanvas::handle_realize(GtkWidget *widget)
     attributes.width = allocation.width;
     attributes.height = allocation.height;
     attributes.wclass = GDK_INPUT_OUTPUT;
-    attributes.visual = gdk_visual_get_system();
+    attributes.visual = gdk_screen_get_system_visual(gdk_screen_get_default());
 
     attributes.event_mask = (gtk_widget_get_events (widget) |
                              GDK_EXPOSURE_MASK |
