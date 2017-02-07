@@ -48,6 +48,11 @@ if(WIN32)
     set(CMAKE_INSTALL_MESSAGE "LAZY")
 endif()
 
+# Define a very strict set of build flags that will prevent any use of deprecated symbols.
+# This will almost certainly cause compilation failure and is intended only for developer use.
+set(CMAKE_BUILD_TYPE Strict)
+set(CMAKE_CXX_FLAGS_STRICT "${CMAKE_CXX_FLAGS_DEBUG} -Werror=deprecated-declarations -DGTK_DISABLE_DEPRECATED -DGDK_DISABLE_DEPRECATED -DGTKMM_DISABLE_DEPRECATED -DGDKMM_DISABLE_DEPRECATED")
+set(CMAKE_C_FLAGS_STRICT   "${CMAKE_C_FLAGS_DEBUG}   -Werror=deprecated-declarations -DGTK_DISABLE_DEPRECATED -DGDK_DISABLE_DEPRECATED -DGTKMM_DISABLE_DEPRECATED -DGDKMM_DISABLE_DEPRECATED")
 
 # -----------------------------------------------------------------------------
 # Redirect output files
