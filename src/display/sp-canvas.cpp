@@ -48,6 +48,10 @@
 #include <iomanip>
 #include <glibmm/i18n.h>
 
+#if GTK_CHECK_VERSION(3,20,0)
+# include <gdkmm/seat.h>
+#endif
+
 using Inkscape::Debug::GdkEventLatencyTracker;
 
 // gtk_check_version returns non-NULL on failure
@@ -72,8 +76,14 @@ struct SPCanvasGroupClass {
 static void ungrab_default_client_pointer(guint32 const time = GDK_CURRENT_TIME)
 {
     auto const display = Gdk::Display::get_default();
+
+#if GTK_CHECK_VERSION(3,20,0)
+    auto const seat   = display->get_default_seat();
+    auto const device = seat->get_pointer();
+#else
     auto const dm = display->get_device_manager();
     auto const device = dm->get_client_pointer();
+#endif
     device->ungrab(time);
 }
 
@@ -625,9 +635,16 @@ int sp_canvas_item_grab(SPCanvasItem *item, guint event_mask, GdkCursor *cursor,
 
     // fixme: Top hack (Lauris)
     // fixme: If we add key masks to event mask, Gdk will abort (Lauris)
-    // fixme: But Canvas actualle does get key events, so all we need is routing these here
-    auto dm = gdk_display_get_device_manager(gdk_display_get_default());
+    // fixme: But Canvas actually does get key events, so all we need is routing these here
+    auto display = gdk_display_get_default();
+#if GTK_CHECK_VERSION(3,20,0)
+    auto seat   = gdk_display_get_default_seat(display);
+    auto device = gdk_seat_get_pointer(seat);
+#else
+    auto dm = gdk_display_get_device_manager(display);
     auto device = gdk_device_manager_get_client_pointer(dm);
+#endif
+
     gdk_device_grab(device, 
                     getWindow(item->canvas),
                     GDK_OWNERSHIP_NONE,
@@ -1694,8 +1711,14 @@ bool SPCanvas::paintRect(int xx0, int yy0, int xx1, int yy1)
     gint x, y;
 
     auto const display = Gdk::Display::get_default();
+
+#if GTK_CHECK_VERSION(3,20,0)
+    auto const seat   = display->get_default_seat();
+    auto const device = seat->get_pointer();
+#else
     auto const dm = display->get_device_manager();
     auto const device = dm->get_client_pointer();
+#endif
 
     gdk_window_get_device_position(gtk_widget_get_window(GTK_WIDGET(this)),
                                    device->gobj(),
