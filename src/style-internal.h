@@ -121,7 +121,7 @@ public:
           inherits(inherits),
           set(false),
           inherit(false),
-          style_src(SP_STYLE_SRC_UNSET),
+          style_src(SP_STYLE_SRC_STYLE_PROP), // Default to property, see bug 1662285.
           style(NULL)
     {}
 
@@ -132,7 +132,9 @@ public:
     virtual void readIfUnset( gchar const *str, SPStyleSrc const &source = SP_STYLE_SRC_STYLE_PROP ) {
         if ( !set ) {
             read( str );
-            style_src = source;
+            if ( set ) {
+                style_src = source;
+            }
         }
     }
 
