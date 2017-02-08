@@ -16,8 +16,11 @@
 #include "sp-object.h"
 #include "selection.h"
 #include "xml/attribute-record.h"
+#include "attribute-rel-svg.h"
+
+#include <glibmm/i18n.h>
 #include <glibmm/regex.h>
- 
+
 using Inkscape::Util::List;
 using Inkscape::XML::AttributeRecord;
 
@@ -169,9 +172,15 @@ void StyleDialog::_addSelector()
      * is added to a new style element.
      */
     Gtk::Dialog *textDialogPtr =  new Gtk::Dialog();
-    Gtk::Entry *textEditPtr = manage ( new Gtk::Entry() );
     textDialogPtr->add_button("Add", Gtk::RESPONSE_OK);
+
+    Gtk::Entry *textEditPtr = manage ( new Gtk::Entry() );
     textDialogPtr->get_vbox()->pack_start(*textEditPtr, Gtk::PACK_SHRINK);
+
+    Gtk::Label *textLabelPtr = manage ( new Gtk::Label(
+      _("Invalid entry: Not an id (#), class (.), or element CSS selector.")
+    ) );
+    textDialogPtr->get_vbox()->pack_start(*textLabelPtr, Gtk::PACK_SHRINK);
 
     /**
      * By default, the entrybox contains 'Class1' as text. However, if object(s)
@@ -179,35 +188,44 @@ void StyleDialog::_addSelector()
      * entrybox will have the id(s) of the selected objects as text.
      */
     if (_desktop->getSelection()->isEmpty()) {
-        textEditPtr->set_text("Class1");
-    }
-    else {
+        textEditPtr->set_text(".Class1");
+    } else {
         Inkscape::Selection* selection = _desktop->getSelection();
-        std::vector<SPObject*> selected = std::vector<SPObject *>(selection
-                                                                  ->objects().begin(),
-                                                                  selection->
-                                                                  objects().end());
+        std::vector<SPObject*> selected =
+            std::vector<SPObject *>(selection->objects().begin(),
+                                    selection->objects().end());
         textEditPtr->set_text(_setClassAttribute(selected));
     }
 
     textDialogPtr->set_size_request(200, 100);
-    textDialogPtr->show_all();
-    int result = textDialogPtr->run();
+    textEditPtr->show();
+    textLabelPtr->hide();
+    textDialogPtr->show();
 
-    /**
-     * @brief selectorName
-     * This string stores selector name. The text from entrybox is saved as name
-     * for selector. If the entrybox is empty, the text (thus selectorName) is
-     * set to ".Class1"
-     */
-    if (!textEditPtr->get_text().empty()) {
+    int result = -1;
+    bool invalid = true;
+    
+    while (invalid) {
+        result = textDialogPtr->run();
+
+        /**
+         * @brief selectorName
+         * This string stores selector name. The text from entrybox is saved as name
+         * for selector. If the entrybox is empty, the text (thus selectorName) is
+         * set to ".Class1"
+         */
         _selectorName = textEditPtr->get_text();
-    }
-    else {
-        _selectorName = ".Class1";
-    }
 
-    del->set_sensitive(true);
+        del->set_sensitive(true);
+
+        if (_selectorName[0] == '.' ||
+            _selectorName[0] == '#' ||
+            SPAttributeRelSVG::isSVGElement( _selectorName ) ) {
+            invalid = false;
+        } else {
+            textLabelPtr->show();
+        }
+    }
 
     /**
      * The selector name objects is set to the text that the user sets in the
