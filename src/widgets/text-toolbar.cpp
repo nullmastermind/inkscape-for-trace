@@ -2023,7 +2023,7 @@ void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
 
         g_object_set( act, "short_label", "NotUsed", NULL );
         gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
-        g_object_set_data( holder, "TextDirectAction", act );
+        g_object_set_data( holder, "TextDirectionAction", act );
 
         ege_select_one_action_set_appearance( act, "full" );
         ege_select_one_action_set_radio_action_type( act, INK_RADIO_ACTION_TYPE );
