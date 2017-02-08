@@ -30,16 +30,16 @@ namespace Dialog {
 
 /**
  * @brief The StyleDialog class
- * A list of CSS selectors will show up in this dialog. This dialog allows to
- * add and delete selectors. Objects can be added to and removed from the selectors
- * in the dialog. Besides, selection of any selector row selects the matching
- * objects in the drawing and vice-versa.
+ * A list of CSS selectors will show up in this dialog. This dialog allows one to
+ * add and delete selectors. Elements can be added to and removed from the selectors
+ * in the dialog. Selection of any selector row selects the matching  objects in
+ * the drawing and vice-versa.
  */
 typedef std::pair<std::pair<std::string, std::vector<SPObject *> >, std::string>
 _selectorVecType;
 
-class StyleDialog : public UI::Widget::Panel
-{
+class StyleDialog : public Widget::Panel {
+
 public:
     StyleDialog();
     ~StyleDialog();
@@ -73,8 +73,11 @@ private:
     class ModelColumns : public Gtk::TreeModel::ColumnRecord
     {
     public:
-        ModelColumns()
-        { add(_selectorLabel); add(_colAddRemove); add(_colObj); }
+        ModelColumns() {
+            add(_selectorLabel);
+            add(_colAddRemove);
+            add(_colObj);
+        }
         Gtk::TreeModelColumn<Glib::ustring> _selectorLabel;
         Gtk::TreeModelColumn<bool> _colAddRemove;
         Gtk::TreeModelColumn<std::vector<SPObject *> > _colObj;
@@ -115,3 +118,14 @@ private:
 } // namespace Inkscape
 
 #endif // STYLEDIALOG_H
+
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :
