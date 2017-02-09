@@ -1474,7 +1474,9 @@ static SPItem *find_group_at_point(unsigned int dkey, SPGroup *group, Geom::Poin
         if (SP_IS_GROUP(&o) && SP_GROUP(&o)->effectiveLayerMode(dkey) != SPGroup::LAYER ) {
             SPItem *child = SP_ITEM(&o);
             Inkscape::DrawingItem *arenaitem = child->get_arenaitem(dkey);
-            arenaitem->drawing().update();
+            if (arenaitem) {
+                arenaitem->drawing().update();
+            }
 
             // seen remembers the last (topmost) of groups pickable at this point
             if (arenaitem && arenaitem->pick(p, delta, 1) != NULL) {
