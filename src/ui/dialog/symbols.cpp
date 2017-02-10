@@ -25,6 +25,7 @@
 #include <gtkmm/comboboxtext.h>
 #include <gtkmm/iconview.h>
 #include <gtkmm/liststore.h>
+#include <glibmm/regex.h>
 #include <glibmm/stringutils.h>
 #include <glibmm/markup.h>
 #include <glibmm/i18n.h>
