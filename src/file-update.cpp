@@ -19,6 +19,7 @@
 #include "style.h"
 #include "document.h"
 #include <string>
+#include <clocale>
 #include "text-editing.h"
 
 using namespace std;
@@ -149,10 +150,12 @@ void fix_update(SPObject *o) {
 
 void sp_file_convert_text_baseline_spacing(SPDocument *doc)
 {
+    setlocale(LC_NUMERIC,"C");
     sp_file_text_run_recursive(fix_blank_line, doc->getRoot());
     sp_file_text_run_recursive(fix_line_spacing, doc->getRoot());
     sp_file_text_run_recursive(fix_font_size, doc->getRoot());
     sp_file_text_run_recursive(fix_update, doc->getRoot());
+    setlocale(LC_NUMERIC,"");
 }
 
 void sp_file_convert_font_name(SPDocument *doc)
