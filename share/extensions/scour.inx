@@ -104,9 +104,9 @@
             <param name="spacer" type="description">&#160;</param>
             <_param name="about_version_desc" type="description">This version of the extension is designed for</_param>
             <param name="about_version" type="description">Scour 0.31+</param>
-            <param name="version" type="string" gui-hidden="true">0.31</param>
+            <param name="scour-version" type="string" gui-hidden="true">0.31</param> <!-- this parameter is checked programatically in the extension to show a warning -->
             <param _gui-text="Show warnings for older versions of Scour"
-                   name="version_warn_old" type="boolean" indent="1">true</param>
+                   name="scour-version-warn-old" type="boolean" indent="1">true</param>
         </page>
     </param>
     <output>
