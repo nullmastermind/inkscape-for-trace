@@ -218,10 +218,12 @@ SPDocument *CdrInput::open(Inkscape::Extension::Input * /*mod*/, const gchar * u
           // RVNGFileStream uses fopen() internally which unfortunately only uses ANSI encoding on Windows
           // therefore attempt to convert uri to the system codepage
           // even if this is not possible the alternate short (8.3) file name will be used if available
-          uri = g_win32_locale_filename_from_utf8(uri);
+          gchar * converted_uri = g_win32_locale_filename_from_utf8(uri);
+          RVNGFileStream input(converted_uri);
+          g_free(converted_uri);
+     #else
+          RVNGFileStream input(uri);
      #endif
-
-     RVNGFileStream input(uri);
 
      if (!libcdr::CDRDocument::isSupported(&input)) {
           return NULL;

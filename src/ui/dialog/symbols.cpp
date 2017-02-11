@@ -463,6 +463,10 @@ SPDocument* read_vss( gchar* fullname, Glib::ustring name ) {
 
   RVNGFileStream input(fullname);
 
+  #ifdef WIN32
+    g_free(fullname);
+  #endif
+
   if (!libvisio::VisioDocument::isSupported(&input)) {
     return NULL;
   }
