@@ -1617,9 +1617,9 @@ sp_item_path_outline(SPItem *item, SPDesktop *desktop, bool legacy)
                 sp_repr_css_change(out, r_style, "style");
                 sp_repr_css_attr_unref(r_style);
                 if (unique) {
-                    out->setPosition(pos > 0 ? pos : 0);
                     parent->appendChild(out);
                     parent->removeChild(g_repr);
+                    out->setPosition(pos > 0 ? pos : 0);
                 }
                 out->setAttribute("transform", item->getRepr()->attribute("transform"));
                 //bug lp:1290573 : completely destroy the old object first
