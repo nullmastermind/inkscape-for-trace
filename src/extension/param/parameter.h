@@ -37,7 +37,7 @@ class Extension;
  */
 extern Glib::ustring const extension_pref_root;
 
-/** 
+/**
  * A class to represent the parameter of an extension.
  *
  * This is really a super class that allows them to abstract all
@@ -62,6 +62,7 @@ public:
               const Parameter::_scope_t scope,
               bool gui_hidden,
               gchar const *gui_tip,
+              int indent,
               Inkscape::Extension::Extension * ext);
 
     Parameter(gchar const *name,
@@ -144,6 +145,9 @@ public:
     /** Indicates if the GUI for this parameter is hidden or not */
     bool get_gui_hidden() const { return _gui_hidden; }
 
+    /** Indentation level of the parameter */
+    int get_indent() const { return _indent; }
+
     virtual void string(std::list <std::string> &list) const;
 
     /**
@@ -170,6 +174,9 @@ protected:
 
     /** A tip for the GUI if there is one. */
     gchar *  _gui_tip;
+
+    /** Indentation level of the parameter. */
+    int _indent;
 
 
     /* **** funcs **** */

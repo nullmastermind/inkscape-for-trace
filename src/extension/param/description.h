@@ -34,16 +34,17 @@ public:
                      const gchar * desc,
                      const Parameter::_scope_t scope,
                      bool gui_hidden,
-                     const gchar * gui_tip, 
+                     const gchar * gui_tip,
+                     int indent,
                      Inkscape::Extension::Extension * ext,
                      Inkscape::XML::Node * xml,
                      AppearanceMode mode);
+
     Gtk::Widget * get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal);
 private:
     /** \brief  Internal value. */
     gchar * _value;
     AppearanceMode _mode;
-    int _indent;
     const gchar* _context;
 };
 

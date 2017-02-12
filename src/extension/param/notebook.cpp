@@ -54,8 +54,16 @@ private:
 public:
     static ParamNotebookPage * makepage (Inkscape::XML::Node * in_repr, Inkscape::Extension::Extension * in_ext);
 
-    ParamNotebookPage(const gchar * name, const gchar * guitext, const gchar * desc, const Parameter::_scope_t scope, bool gui_hidden, const gchar * gui_tip, Inkscape::Extension::Extension * ext, Inkscape::XML::Node * xml);
+    ParamNotebookPage(const gchar * name,
+                      const gchar * guitext,
+                      const gchar * desc,
+                      const Parameter::_scope_t scope,
+                      bool gui_hidden,
+                      const gchar * gui_tip,
+                      Inkscape::Extension::Extension * ext,
+                      Inkscape::XML::Node * xml);
     ~ParamNotebookPage(void);
+
     Gtk::Widget * get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal);
     void paramString (std::list <std::string> &list);
     gchar * get_guitext (void) {return _text;};
@@ -63,8 +71,15 @@ public:
 }; /* class ParamNotebookPage */
 
 
-ParamNotebookPage::ParamNotebookPage (const gchar * name, const gchar * guitext, const gchar * desc, const Parameter::_scope_t scope, bool gui_hidden, const gchar * gui_tip, Inkscape::Extension::Extension * ext, Inkscape::XML::Node * xml) :
-    Parameter(name, guitext, desc, scope, gui_hidden, gui_tip, ext)
+ParamNotebookPage::ParamNotebookPage(const gchar * name,
+                                     const gchar * guitext,
+                                     const gchar * desc,
+                                     const Parameter::_scope_t scope,
+                                     bool gui_hidden,
+                                     const gchar * gui_tip,
+                                     Inkscape::Extension::Extension * ext,
+                                     Inkscape::XML::Node * xml)
+    : Parameter(name, guitext, desc, scope, gui_hidden, gui_tip, /*indent*/ 0, ext)
 {
     parameters = NULL;
 
@@ -206,9 +221,11 @@ Gtk::Widget * ParamNotebookPage::get_widget(SPDocument * doc, Inkscape::XML::Nod
         Parameter * param = reinterpret_cast<Parameter *>(list->data);
         Gtk::Widget * widg = param->get_widget(doc, node, changeSignal);
         if (widg) {
-            gchar const * tip = param->get_tooltip();
-    //        printf("Tip: '%s'\n", tip);
+            int indent = param->get_indent();
+            widg->set_margin_left(indent*12);
             vbox->pack_start(*widg, false, false, 2);
+
+            gchar const * tip = param->get_tooltip();
             if (tip) {
                 widg->set_tooltip_text(_(tip));
             } else {
@@ -224,8 +241,16 @@ Gtk::Widget * ParamNotebookPage::get_widget(SPDocument * doc, Inkscape::XML::Nod
 }
 
 
-ParamNotebook::ParamNotebook (const gchar * name, const gchar * guitext, const gchar * desc, const Parameter::_scope_t scope, bool gui_hidden, const gchar * gui_tip, Inkscape::Extension::Extension * ext, Inkscape::XML::Node * xml) :
-    Parameter(name, guitext, desc, scope, gui_hidden, gui_tip, ext)
+ParamNotebook::ParamNotebook(const gchar * name,
+                             const gchar * guitext,
+                             const gchar * desc,
+                             const Parameter::_scope_t scope,
+                             bool gui_hidden,
+                             const gchar * gui_tip,
+                             int indent,
+                             Inkscape::Extension::Extension * ext,
+                             Inkscape::XML::Node * xml)
+    : Parameter(name, guitext, desc, scope, gui_hidden, gui_tip, indent, ext)
 {
     pages = NULL;
 

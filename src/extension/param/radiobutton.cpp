@@ -57,17 +57,20 @@ public:
     Glib::ustring * guitext;
 };
 
-ParamRadioButton::ParamRadioButton (const gchar * name,
-                                    const gchar * guitext,
-                                    const gchar * desc,
-                                    const Parameter::_scope_t scope,
-                                    bool gui_hidden,
-                                    const gchar * gui_tip,
-                                    Inkscape::Extension::Extension * ext,
-                                    Inkscape::XML::Node * xml,
-                                    AppearanceMode mode) :
-    Parameter(name, guitext, desc, scope, gui_hidden, gui_tip, ext),
-    _value(0), _mode(mode), _indent(0), choices(0)
+ParamRadioButton::ParamRadioButton(const gchar * name,
+                                   const gchar * guitext,
+                                   const gchar * desc,
+                                   const Parameter::_scope_t scope,
+                                   bool gui_hidden,
+                                   const gchar * gui_tip,
+                                   int indent,
+                                   Inkscape::Extension::Extension * ext,
+                                   Inkscape::XML::Node * xml,
+                                   AppearanceMode mode)
+    : Parameter(name, guitext, desc, scope, gui_hidden, gui_tip, indent, ext)
+    , _value(0)
+    , _mode(mode)
+    , choices(0)
 {
     // Read XML tree to add enumeration items:
     // printf("Extension Constructor: ");
@@ -116,11 +119,6 @@ ParamRadioButton::ParamRadioButton (const gchar * name,
     const char * defaultval = NULL;
     if (choices) {
         defaultval = (static_cast<optionentry*> (choices->data))->value->c_str();
-    }
-
-    const char *indent = xml ? xml->attribute("indent") : NULL;
-    if (indent != NULL) {
-        _indent = atoi(indent) * 12;
     }
 
     gchar * pref_name = this->pref_name();
@@ -310,7 +308,7 @@ Gtk::Widget * ParamRadioButton::get_widget(SPDocument * doc, Inkscape::XML::Node
 
     Gtk::Label * label = Gtk::manage(new Gtk::Label(_(_text), Gtk::ALIGN_START, Gtk::ALIGN_START));
     label->show();
-    hbox->pack_start(*label, false, false, _indent);
+    hbox->pack_start(*label, false, false);
 
     Gtk::ComboBoxText* cbt = 0;
     bool comboSet = false;

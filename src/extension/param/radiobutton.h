@@ -40,10 +40,12 @@ public:
                      const Parameter::_scope_t scope,
                      bool gui_hidden,
                      const gchar * gui_tip,
+                     int indent,
                      Inkscape::Extension::Extension * ext,
                      Inkscape::XML::Node * xml,
                      AppearanceMode mode);
     virtual ~ParamRadioButton(void);
+
     Gtk::Widget * get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal);
 
     // Explicitly call superclass version to avoid method being hidden.
@@ -63,7 +65,6 @@ private:
                 It is the value of the current selected string */
     gchar * _value;
     AppearanceMode _mode;
-    int _indent;
     GSList * choices; /**< A table to store the choice strings  */
 
 }; /* class ParamRadioButton */

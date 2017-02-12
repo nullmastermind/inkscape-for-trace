@@ -46,12 +46,17 @@ public:
 };
 
 
-ParamComboBox::ParamComboBox(const gchar *name, const gchar *guitext, const gchar *desc,
-                             const Parameter::_scope_t scope, bool gui_hidden, const gchar *gui_tip,
-                             Inkscape::Extension::Extension *ext, Inkscape::XML::Node *xml)
-    : Parameter(name, guitext, desc, scope, gui_hidden, gui_tip, ext)
+ParamComboBox::ParamComboBox(const gchar * name,
+                             const gchar * guitext,
+                             const gchar * desc,
+                             const Parameter::_scope_t scope,
+                             bool gui_hidden,
+                             const gchar * gui_tip,
+                             int indent,
+                             Inkscape::Extension::Extension * ext,
+                             Inkscape::XML::Node * xml)
+    : Parameter(name, guitext, desc, scope, gui_hidden, gui_tip, indent, ext)
     , _value(NULL)
-    , _indent(0)
     , choices(NULL)
 {
     const char *xmlval = NULL; // the value stored in XML
@@ -94,16 +99,11 @@ ParamComboBox::ParamComboBox(const gchar *name, const gchar *guitext, const gcha
                 }
             }
         }
-    
+
         // Initialize _value with the default value from xml
         // for simplicity : default to the contents of the first xml-child
         if (xml->firstChild() && xml->firstChild()->firstChild()) {
             xmlval = xml->firstChild()->attribute("value");
-        }
-
-        const char *indent = xml->attribute("indent");
-        if (indent != NULL) {
-            _indent = atoi(indent) * 12;
         }
     }
 
@@ -253,7 +253,7 @@ Gtk::Widget *ParamComboBox::get_widget(SPDocument * doc, Inkscape::XML::Node * n
     Gtk::HBox * hbox = Gtk::manage(new Gtk::HBox(false, 4));
     Gtk::Label * label = Gtk::manage(new Gtk::Label(_(_text), Gtk::ALIGN_START));
     label->show();
-    hbox->pack_start(*label, false, false, _indent);
+    hbox->pack_start(*label, false, false);
 
     ParamComboBoxEntry * combo = Gtk::manage(new ParamComboBoxEntry(this, doc, node, changeSignal));
     // add choice strings:

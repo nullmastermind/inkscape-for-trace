@@ -78,6 +78,17 @@ Parameter *Parameter::make(Inkscape::XML::Node *in_repr, Inkscape::Extension::Ex
             /* else stays false */
         }
     }
+    int indent = 0;
+    {
+        const char *indent_attr = in_repr->attribute("indent");
+        if (indent_attr != NULL) {
+            if (strcmp(indent_attr, "true") == 0) {
+                indent = 1;
+            } else {
+                indent = atoi(indent_attr);
+            }
+        }
+    }
     const gchar* appearance = in_repr->attribute("appearance");
 
     Parameter::_scope_t scope = Parameter::SCOPE_USER;
@@ -96,21 +107,21 @@ Parameter *Parameter::make(Inkscape::XML::Node *in_repr, Inkscape::Extension::Ex
 
     Parameter * param = NULL;
     if (!strcmp(type, "boolean")) {
-        param = new ParamBool(name, guitext, desc, scope, gui_hidden, gui_tip, in_ext, in_repr);
+        param = new ParamBool(name, guitext, desc, scope, gui_hidden, gui_tip, indent, in_ext, in_repr);
     } else if (!strcmp(type, "int")) {
         if (appearance && !strcmp(appearance, "full")) {
-            param = new ParamInt(name, guitext, desc, scope, gui_hidden, gui_tip, in_ext, in_repr, ParamInt::FULL);
+            param = new ParamInt(name, guitext, desc, scope, gui_hidden, gui_tip, indent, in_ext, in_repr, ParamInt::FULL);
         } else {
-            param = new ParamInt(name, guitext, desc, scope, gui_hidden, gui_tip, in_ext, in_repr, ParamInt::MINIMAL);
+            param = new ParamInt(name, guitext, desc, scope, gui_hidden, gui_tip, indent, in_ext, in_repr, ParamInt::MINIMAL);
         }
     } else if (!strcmp(type, "float")) {
         if (appearance && !strcmp(appearance, "full")) {
-            param = new ParamFloat(name, guitext, desc, scope, gui_hidden, gui_tip, in_ext, in_repr, ParamFloat::FULL);
+            param = new ParamFloat(name, guitext, desc, scope, gui_hidden, gui_tip, indent, in_ext, in_repr, ParamFloat::FULL);
         } else {
-            param = new ParamFloat(name, guitext, desc, scope, gui_hidden, gui_tip, in_ext, in_repr, ParamFloat::MINIMAL);
+            param = new ParamFloat(name, guitext, desc, scope, gui_hidden, gui_tip, indent, in_ext, in_repr, ParamFloat::MINIMAL);
         }
     } else if (!strcmp(type, "string")) {
-        param = new ParamString(name, guitext, desc, scope, gui_hidden, gui_tip, in_ext, in_repr);
+        param = new ParamString(name, guitext, desc, scope, gui_hidden, gui_tip, indent, in_ext, in_repr);
         gchar const * max_length = in_repr->attribute("max_length");
         if (max_length != NULL) {
             ParamString * ps = dynamic_cast<ParamString *>(param);
@@ -118,22 +129,22 @@ Parameter *Parameter::make(Inkscape::XML::Node *in_repr, Inkscape::Extension::Ex
         }
     } else if (!strcmp(type, "description")) {
         if (appearance && !strcmp(appearance, "header")) {
-            param = new ParamDescription(name, guitext, desc, scope, gui_hidden, gui_tip, in_ext, in_repr, ParamDescription::HEADER);
+            param = new ParamDescription(name, guitext, desc, scope, gui_hidden, gui_tip, indent, in_ext, in_repr, ParamDescription::HEADER);
         } else {
-            param = new ParamDescription(name, guitext, desc, scope, gui_hidden, gui_tip, in_ext, in_repr, ParamDescription::DESC);
-        }   
+            param = new ParamDescription(name, guitext, desc, scope, gui_hidden, gui_tip, indent, in_ext, in_repr, ParamDescription::DESC);
+        }
     } else if (!strcmp(type, "enum")) {
-        param = new ParamComboBox(name, guitext, desc, scope, gui_hidden, gui_tip, in_ext, in_repr);
+        param = new ParamComboBox(name, guitext, desc, scope, gui_hidden, gui_tip, indent, in_ext, in_repr);
     } else if (!strcmp(type, "notebook")) {
-        param = new ParamNotebook(name, guitext, desc, scope, gui_hidden, gui_tip, in_ext, in_repr);
+        param = new ParamNotebook(name, guitext, desc, scope, gui_hidden, gui_tip, indent, in_ext, in_repr);
     } else if (!strcmp(type, "optiongroup")) {
         if (appearance && !strcmp(appearance, "minimal")) {
-            param = new ParamRadioButton(name, guitext, desc, scope, gui_hidden, gui_tip, in_ext, in_repr, ParamRadioButton::MINIMAL);
+            param = new ParamRadioButton(name, guitext, desc, scope, gui_hidden, gui_tip, indent, in_ext, in_repr, ParamRadioButton::MINIMAL);
         } else {
-            param = new ParamRadioButton(name, guitext, desc, scope, gui_hidden, gui_tip, in_ext, in_repr, ParamRadioButton::FULL);
+            param = new ParamRadioButton(name, guitext, desc, scope, gui_hidden, gui_tip, indent, in_ext, in_repr, ParamRadioButton::FULL);
         }
     } else if (!strcmp(type, "color")) {
-        param = new ParamColor(name, guitext, desc, scope, gui_hidden, gui_tip, in_ext, in_repr);
+        param = new ParamColor(name, guitext, desc, scope, gui_hidden, gui_tip, indent, in_ext, in_repr);
     }
 
     // Note: param could equal NULL
@@ -280,12 +291,13 @@ Parameter::set_color (guint32 in, SPDocument * doc, Inkscape::XML::Node * node)
 
 
 /** Oop, now that we need a parameter, we need it's name. */
-Parameter::Parameter(gchar const * name, gchar const * guitext, gchar const * desc, const Parameter::_scope_t scope, bool gui_hidden, gchar const * gui_tip, Inkscape::Extension::Extension * ext) :
+Parameter::Parameter(gchar const * name, gchar const * guitext, gchar const * desc, const Parameter::_scope_t scope, bool gui_hidden, gchar const * gui_tip, int indent, Inkscape::Extension::Extension * ext) :
     _desc(0),
     _scope(scope),
     _text(0),
     _gui_hidden(gui_hidden),
     _gui_tip(0),
+    _indent(indent),
     extension(ext),
     _name(0)
 {
@@ -316,6 +328,7 @@ Parameter::Parameter (gchar const * name, gchar const * guitext, Inkscape::Exten
     _text(0),
     _gui_hidden(false),
     _gui_tip(0),
+    _indent(0),
     extension(ext),
     _name(0)
 {
