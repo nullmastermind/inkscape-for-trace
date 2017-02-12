@@ -694,8 +694,8 @@ public:
      */
     void addWidget(Gtk::Widget *widg, gchar const *tooltip, int indent) {
         if (widg) {
-            widg->set_margin_left(indent*12);
-            this->pack_start(*widg, false, false, 2);
+            widg->set_margin_left(indent * Parameter::GUI_INDENTATION);
+            this->pack_start(*widg, false, false, 0);
             if (tooltip) {
                 widg->set_tooltip_text(_(tooltip));
             } else {
@@ -722,6 +722,8 @@ Extension::autogui (SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<v
     if (!_gui || param_visible_count() == 0) return NULL;
 
     AutoGUI * agui = Gtk::manage(new AutoGUI());
+    agui->set_border_width(Parameter::GUI_BOX_MARGIN);
+    agui->set_spacing(Parameter::GUI_BOX_SPACING);
 
     //go through the list of parameters to see if there are any non-hidden ones
     for (GSList * list = parameters; list != NULL; list = g_slist_next(list)) {

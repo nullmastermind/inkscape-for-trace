@@ -214,7 +214,8 @@ Gtk::Widget * ParamNotebookPage::get_widget(SPDocument * doc, Inkscape::XML::Nod
     }
 
     Gtk::VBox * vbox = Gtk::manage(new Gtk::VBox);
-    vbox->set_border_width(5);
+    vbox->set_border_width(Parameter::GUI_BOX_MARGIN);
+    vbox->set_spacing(Parameter::GUI_BOX_SPACING);
 
     // add parameters onto page (if any)
     for (GSList * list = parameters; list != NULL; list = g_slist_next(list)) {
@@ -222,8 +223,8 @@ Gtk::Widget * ParamNotebookPage::get_widget(SPDocument * doc, Inkscape::XML::Nod
         Gtk::Widget * widg = param->get_widget(doc, node, changeSignal);
         if (widg) {
             int indent = param->get_indent();
-            widg->set_margin_left(indent*12);
-            vbox->pack_start(*widg, false, false, 2);
+            widg->set_margin_left(indent * Parameter::GUI_INDENTATION);
+            vbox->pack_start(*widg, false, false, 0);
 
             gchar const * tip = param->get_tooltip();
             if (tip) {

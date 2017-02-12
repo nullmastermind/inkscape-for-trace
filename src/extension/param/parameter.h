@@ -159,6 +159,15 @@ public:
     /** All the code in Notebook::get_param to get the notebook content. */
     virtual Parameter *get_param(gchar const *name);
 
+
+    /** Recommended margin of boxes containing parameters */
+    const static int GUI_BOX_MARGIN = 10;
+    /** Recommended spacing between individual parameters when packing into boxes */
+    const static int GUI_BOX_SPACING = 4;
+    /** Recommended indentation width of parameters */
+    const static int GUI_INDENTATION = 12;
+
+
 protected:
     /** Description of the parameter. */
     gchar *       _desc;
