@@ -208,6 +208,9 @@ if(WIN32)
   install(DIRECTORY ${DEVLIBS_PATH}/share/poppler
     DESTINATION ${CMAKE_INSTALL_PREFIX}/share)
 
+  install(DIRECTORY ${DEVLIBS_PATH}/share/glib-2.0/schemas
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/share/glib-2.0)
+
   install(DIRECTORY ${DEVLIBS_PATH}/etc/fonts
     DESTINATION ${CMAKE_INSTALL_PREFIX}/etc)
 
