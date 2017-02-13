@@ -301,7 +301,7 @@ Gtk::Widget * ParamRadioButton::get_widget(SPDocument * doc, Inkscape::XML::Node
         return NULL;
     }
 
-    auto hbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, 4));
+    auto hbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, Parameter::GUI_PARAM_WIDGETS_SPACING));
     hbox->set_homogeneous(false);
     auto vbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL, 0));
     vbox->set_homogeneous(false);

@@ -84,9 +84,22 @@ ParamDescription::get_widget (SPDocument * /*doc*/, Inkscape::XML::Node * /*node
         label = Gtk::manage(new Gtk::Label(newguitext, Gtk::ALIGN_START));
     }
     label->set_line_wrap();
+    label->set_xalign(0);
+
+    // TODO: Ugly "fix" for gtk3 width/height calculation of labels.
+    //   - If not applying any limits long labels will make the window grow horizontally until it uses up
+    //     most of the available space (i.e. most of the screen area) which is ridicously wide
+    //   - By using "set_default_size(0,0)" in prefidalog.cpp we tell the window to shrink as much as possible,
+    //     however this can result in a much to narrow dialog instead and much unnecessary wrapping
+    //   - Here we set a lower limit of GUI_MAX_LINE_LENGTH characters per line that long texts will always use
+    //     This means texts can not shrink anymore (they can still grow, though) and it's also necessary
+    //     to prevent https://bugzilla.gnome.org/show_bug.cgi?id=773572
+    int len = newguitext.length();
+    label->set_width_chars(len > Parameter::GUI_MAX_LINE_LENGTH ? Parameter::GUI_MAX_LINE_LENGTH : len);
+
     label->show();
 
-    Gtk::HBox * hbox = Gtk::manage(new Gtk::HBox(false, 4));
+    Gtk::HBox * hbox = Gtk::manage(new Gtk::HBox());
     hbox->pack_start(*label, true, true);
     hbox->show();
 

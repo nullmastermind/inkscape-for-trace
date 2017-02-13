@@ -50,6 +50,8 @@ PrefDialog::PrefDialog (Glib::ustring name, gchar const * help, Gtk::Widget * co
     _effect(effect),
     _exEnv(NULL)
 {
+    this->set_default_size(0,0);  // we want the window to be as small as possible instead of clobbering up space
+
     Gtk::HBox * hbox = Gtk::manage(new Gtk::HBox());
     if (controls == NULL) {
         if (_effect == NULL) {

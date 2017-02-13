@@ -174,7 +174,7 @@ Gtk::Widget * ParamFloat::get_widget(SPDocument * doc, Inkscape::XML::Node * nod
         return NULL;
     }
 
-    Gtk::HBox * hbox = Gtk::manage(new Gtk::HBox(false, 4));
+    Gtk::HBox * hbox = Gtk::manage(new Gtk::HBox(false, Parameter::GUI_PARAM_WIDGETS_SPACING));
 
     auto pfa = new ParamFloatAdjustment(this, doc, node, changeSignal);
     Glib::RefPtr<Gtk::Adjustment> fadjust(pfa);

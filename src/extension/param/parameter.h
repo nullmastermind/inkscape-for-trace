@@ -160,12 +160,16 @@ public:
     virtual Parameter *get_param(gchar const *name);
 
 
-    /** Recommended margin of boxes containing parameters */
+    /** Recommended margin of boxes containing multiple Parameters (in px) */
     const static int GUI_BOX_MARGIN = 10;
-    /** Recommended spacing between individual parameters when packing into boxes */
+    /** Recommended spacing between multiple Parameters packed into a box (in px) */
     const static int GUI_BOX_SPACING = 4;
-    /** Recommended indentation width of parameters */
+    /** Recommended spacing between the widgets making up a signle Parameter (e.g. label and input) (in px) */
+    const static int GUI_PARAM_WIDGETS_SPACING = 4;
+    /** Recommended indentation width of parameters (in px) */
     const static int GUI_INDENTATION = 12;
+    /** Recommended maximum line lenght for wrapping textual parameters (in chars) */
+    const static int GUI_MAX_LINE_LENGTH = 60;
 
 
 protected:

@@ -106,9 +106,9 @@ Gtk::Widget *ParamColor::get_widget( SPDocument * /*doc*/, Inkscape::XML::Node *
         _color_changed.block(false);
     }
 
-    Gtk::HBox *hbox = Gtk::manage(new Gtk::HBox(false, 4));
+    Gtk::HBox *hbox = Gtk::manage(new Gtk::HBox(false, Parameter::GUI_PARAM_WIDGETS_SPACING));
     Gtk::Widget *selector = Gtk::manage(new ColorNotebook(_color));
-    hbox->pack_start (*selector, true, true, 0);
+    hbox->pack_start(*selector, true, true, 0);
     selector->show();
     hbox->show();
     return hbox;
