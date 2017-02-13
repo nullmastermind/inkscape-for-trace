@@ -135,11 +135,15 @@ Parameter *Parameter::make(Inkscape::XML::Node *in_repr, Inkscape::Extension::Ex
             ps->setMaxLength(atoi(max_length));
         }
     } else if (!strcmp(type, "description")) {
-        if (appearance && !strcmp(appearance, "header")) {
-            param = new ParamDescription(name, guitext, desc, scope, gui_hidden, gui_tip, indent, in_ext, in_repr, ParamDescription::HEADER);
-        } else {
-            param = new ParamDescription(name, guitext, desc, scope, gui_hidden, gui_tip, indent, in_ext, in_repr, ParamDescription::DESC);
+        ParamDescription::AppearanceMode appearance_mode = ParamDescription::DESC;
+        if (appearance) {
+            if (!strcmp(appearance, "header")) {
+                appearance_mode = ParamDescription::HEADER;
+            } else if (!strcmp(appearance, "url")) {
+                appearance_mode = ParamDescription::URL;
+            }
         }
+        param = new ParamDescription(name, guitext, desc, scope, gui_hidden, gui_tip, indent, in_ext, in_repr, appearance_mode);
     } else if (!strcmp(type, "enum")) {
         param = new ParamComboBox(name, guitext, desc, scope, gui_hidden, gui_tip, indent, in_ext, in_repr);
     } else if (!strcmp(type, "notebook")) {

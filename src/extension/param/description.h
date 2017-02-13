@@ -27,7 +27,7 @@ namespace Extension {
 class ParamDescription : public Parameter {
 public:
     enum AppearanceMode {
-        DESC, HEADER
+        DESC, HEADER, URL
     };
     ParamDescription(const gchar * name,
                      const gchar * guitext,

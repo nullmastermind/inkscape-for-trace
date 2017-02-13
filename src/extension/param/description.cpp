@@ -80,6 +80,9 @@ ParamDescription::get_widget (SPDocument * /*doc*/, Inkscape::XML::Node * /*node
         label->set_markup(Glib::ustring("<b>") + Glib::Markup::escape_text(newguitext) + Glib::ustring("</b>"));
         label->set_margin_top(5);
         label->set_margin_bottom(5);
+    } else if (_mode == URL) {
+        Glib::ustring escaped_url = Glib::Markup::escape_text(newguitext);
+        label->set_markup(Glib::ustring::compose("<a href='%1'>%1</a>", escaped_url));
     } else {
         label->set_text(newguitext);
     }
