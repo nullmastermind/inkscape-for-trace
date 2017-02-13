@@ -115,7 +115,7 @@ AboutBox::AboutBox() : Gtk::Dialog(_("About Inkscape")) {
 
     Gtk::Label *link = new Gtk::Label();
     const gchar *website_link =
-        "<a href=\"https://www.inkscape.org\"> https://www.inkscape.org</a>";
+        "<a href=\"https://www.inkscape.org\">https://www.inkscape.org</a>";
 
     link->set_markup(website_link);
     link->set_alignment(Gtk::ALIGN_END);
