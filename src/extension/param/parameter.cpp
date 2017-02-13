@@ -50,9 +50,16 @@ Parameter *Parameter::make(Inkscape::XML::Node *in_repr, Inkscape::Extension::Ex
     const char *name = in_repr->attribute("name");
     const char *type = in_repr->attribute("type");
 
-    // In this case we just don't have enough information
-    if (!name || !type) {
+    // we can't create a parameter without type
+    if (!type) {
         return NULL;
+    }
+    // also require name unless it's a pure UI element that does not store its value
+    if (!name) {
+        static std::vector<std::string> ui_elements = {"description"};
+        if (std::find(ui_elements.begin(), ui_elements.end(), type) == ui_elements.end()) {
+            return NULL;
+        }
     }
 
     const char *guitext = in_repr->attribute("gui-text");
