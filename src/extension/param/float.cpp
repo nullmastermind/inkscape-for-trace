@@ -184,7 +184,7 @@ Gtk::Widget * ParamFloat::get_widget(SPDocument * doc, Inkscape::XML::Node * nod
         UI::Widget::SpinScale *scale = new UI::Widget::SpinScale(_(_text), fadjust, _precision);
         scale->set_size_request(400, -1);
         scale->show();
-        hbox->pack_start(*scale, false, false);
+        hbox->pack_start(*scale, true, true);
 
     }
     else if (_mode == MINIMAL) {

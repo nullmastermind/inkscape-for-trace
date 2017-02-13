@@ -165,7 +165,7 @@ ParamInt::get_widget (SPDocument * doc, Inkscape::XML::Node * node, sigc::signal
         UI::Widget::SpinScale *scale = new UI::Widget::SpinScale(_(_text), fadjust, 0);
         scale->set_size_request(400, -1);
         scale->show();
-        hbox->pack_start(*scale, false, false);
+        hbox->pack_start(*scale, true, true);
     }
     else if (_mode == MINIMAL) {
 
