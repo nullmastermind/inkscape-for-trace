@@ -16,6 +16,7 @@
 #include <gtkmm/box.h>
 #include <gtkmm/label.h>
 #include <glibmm/i18n.h>
+#include <glibmm/markup.h>
 
 #include "xml/node.h"
 #include "extension/extension.h"
@@ -74,18 +75,17 @@ ParamDescription::get_widget (SPDocument * /*doc*/, Inkscape::XML::Node * /*node
         newguitext = _(_value);
     }
 
-    Gtk::Label * label;
+    Gtk::Label * label = Gtk::manage(new Gtk::Label());
     if (_mode == HEADER) {
-        label = Gtk::manage(new Gtk::Label(Glib::ustring("<b>") +newguitext + Glib::ustring("</b>"), Gtk::ALIGN_START));
+        label->set_markup(Glib::ustring("<b>") + Glib::Markup::escape_text(newguitext) + Glib::ustring("</b>"));
         label->set_margin_top(5);
         label->set_margin_bottom(5);
-        label->set_use_markup(true);
     } else {
-        label = Gtk::manage(new Gtk::Label(newguitext, Gtk::ALIGN_START));
+        label->set_text(newguitext);
     }
     label->set_line_wrap();
     //label->set_xalign(0); // requires gtkmm 3.16
-    label->set_alignment(0);
+    label->set_alignment(Gtk::ALIGN_START);
 
     // TODO: Ugly "fix" for gtk3 width/height calculation of labels.
     //   - If not applying any limits long labels will make the window grow horizontally until it uses up
