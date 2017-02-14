@@ -3,8 +3,10 @@
  */
 /* Authors:
  *   Kamalpreet Kaur Grewal
+ *   Tavmjong Bah
  *
  * Copyright (C) Kamalpreet Kaur Grewal 2016 <grewalkamal005@gmail.com>
+ * Copyright (C) Tavmjong Bah 2017 <tavmjong@free.fr>
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
@@ -33,11 +35,12 @@ namespace Dialog {
  * A list of CSS selectors will show up in this dialog. This dialog allows one to
  * add and delete selectors. Elements can be added to and removed from the selectors
  * in the dialog. Selection of any selector row selects the matching  objects in
- * the drawing and vice-versa.
+ * the drawing and vice-versa. (Only simple selectors supported for now.)
+ *
+ * This class must keep two things in sync:
+ *   1. The text node of the style element.
+ *   2. The Gtk::TreeModel.
  */
-typedef std::pair<std::pair<std::string, std::vector<SPObject *> >, std::string>
-_selectorVecType;
-
 class StyleDialog : public Widget::Panel {
 
 public:
@@ -45,75 +48,75 @@ public:
     ~StyleDialog();
 
     static StyleDialog &getInstance() { return *new StyleDialog(); }
+
     void setDesktop(SPDesktop* desktop);
 
 private:
-    void _styleButton(Gtk::Button& btn, char const* iconName, char const* tooltip);
-    std::string _setClassAttribute(std::vector<SPObject *>);
 
-    class InkSelector {
-    public:
-        std::string _selector;
-        std::vector<SPObject *> _matchingObjs;
-        std::string _xmlContent;
-    };
-
-    InkSelector inkSelector;
-    std::vector<InkSelector> _selectorVec;
-    std::vector<InkSelector> _getSelectorVec();
-    std::string _populateTree(std::vector<InkSelector>);
-    bool _handleButtonEvent(GdkEventButton *event);
-    void _buttonEventsSelectObjs(GdkEventButton *event);
-    void _selectObjects(int, int);
-    void _checkAllChildren(Gtk::TreeModel::Children& children);
-    Inkscape::XML::Node *_styleElementNode();
-    void _updateStyleContent();
-    void _selectRow(Selection *);
-
-    class ModelColumns : public Gtk::TreeModel::ColumnRecord
-    {
+    // Data structure
+    class ModelColumns : public Gtk::TreeModel::ColumnRecord {
     public:
         ModelColumns() {
-            add(_selectorLabel);
+            add(_colSelector);
             add(_colAddRemove);
             add(_colObj);
+            add(_colProperties);
         }
-        Gtk::TreeModelColumn<Glib::ustring> _selectorLabel;
-        Gtk::TreeModelColumn<bool> _colAddRemove;
-        Gtk::TreeModelColumn<std::vector<SPObject *> > _colObj;
+        Gtk::TreeModelColumn<Glib::ustring> _colSelector;       // Selector or matching object id.
+        Gtk::TreeModelColumn<bool> _colAddRemove;               // Selector row or child object row.
+        Gtk::TreeModelColumn<std::vector<SPObject *> > _colObj; // List of matching objects.
+        Gtk::TreeModelColumn<Glib::ustring> _colProperties;     // List of properties.
     };
-
-    SPDesktop* _desktop;
-    SPDesktop* _targetDesktop;
     ModelColumns _mColumns;
+
+    // TreeView
+    Gtk::TreeView _treeView;
+    Glib::RefPtr<Gtk::TreeStore> _store;
+
+    // Widgets
     Gtk::VPaned _paned;
     Gtk::VBox _mainBox;
     Gtk::HBox _buttonBox;
-    Gtk::TreeView _treeView;
-    Glib::RefPtr<Gtk::TreeStore> _store;
     Gtk::ScrolledWindow _scrolledWindow;
     Gtk::Button* del;
     Gtk::Button* create;
-    SPDocument* _document;
-    bool _styleExists;
-    Inkscape::XML::Node *_styleChild;
-    std::string _selectorName;
-    std::string _selectorValue;
-    bool _newDrawing;
     CssDialog *_cssPane;
-    void _selAdd(Gtk::TreeModel::Row row);
+
+    // Variables - Inkscape
+    SPDesktop* _desktop;  // To do: use panel _desktop
+    SPDocument* _document;
+    bool _updating;
+    
+    // Reading and writing the style element.
+    Inkscape::XML::Node *_getStyleTextNode();
+    void _readStyleElement();
+    void _writeStyleElement();
+    
+    // Manipulate Tree
+    void _addToSelector(Gtk::TreeModel::Row row);
+    void _removeFromSelector(Gtk::TreeModel::Row row);
+    Glib::ustring _getIdList(std::vector<SPObject *>);
+    std::vector<SPObject *> _getObjVec(Glib::ustring selector);
+    void _insertClass(const std::vector<SPObject *>& objVec, const Glib::ustring& className);
+    void _selectObjects(int, int);
 
     // Signal handlers
     void _addSelector();
     void _delSelector();
+    bool _handleButtonEvent(GdkEventButton *event);
+    void _buttonEventsSelectObjs(GdkEventButton *event);
+    void _selectRow(Selection *); // Select row in tree when selection changed.
     void _selChanged();
 
-    // Signal handler for CssDialog
+    // Signal handlers for CssDialog
     void _handleEdited(const Glib::ustring& path, const Glib::ustring& new_text);
     bool _delProperty(GdkEventButton *event);
+
+    // GUI
+    void _styleButton(Gtk::Button& btn, char const* iconName, char const* tooltip);
 };
 
-} // namespace Dialog
+} // namespace Dialogc
 } // namespace UI
 } // namespace Inkscape
 
