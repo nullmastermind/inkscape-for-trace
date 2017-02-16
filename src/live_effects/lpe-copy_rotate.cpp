@@ -187,7 +187,7 @@ LPECopyRotate::cloneD(SPObject *origin, SPObject *dest, bool root, bool reset)
     }
     SPShape * shape =  SP_SHAPE(origin);
     SPPath * path =  SP_PATH(dest);
-    if (!path && !SP_IS_GROUP(dest) && shape) {
+    if (shape && !path) {
         Inkscape::XML::Node *dest_node = sp_selected_item_to_curved_repr(SP_ITEM(dest), 0);
         dest->updateRepr(xml_doc, dest_node, SP_OBJECT_WRITE_ALL);
         path =  SP_PATH(dest);
