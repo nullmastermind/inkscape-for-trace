@@ -168,9 +168,6 @@ LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem)
         processObjects(LPE_ERASE);
         items.clear();
     }
-    
-    std::cout << previous_num_copies << "previous_num_copies\n";
-    std::cout << num_copies << "num_copies\n";
 }
 
 void
@@ -190,7 +187,7 @@ LPECopyRotate::cloneD(SPObject *origin, SPObject *dest, bool root, bool reset)
     }
     SPShape * shape =  SP_SHAPE(origin);
     SPPath * path =  SP_PATH(dest);
-    if (!path && !SP_IS_GROUP(dest)) {
+    if (!path && !SP_IS_GROUP(dest) && shape) {
         Inkscape::XML::Node *dest_node = sp_selected_item_to_curved_repr(SP_ITEM(dest), 0);
         dest->updateRepr(xml_doc, dest_node, SP_OBJECT_WRITE_ALL);
         path =  SP_PATH(dest);

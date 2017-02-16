@@ -196,7 +196,7 @@ LPEMirrorSymmetry::cloneD(SPObject *origin, SPObject *dest, bool live, bool root
     }
     SPShape * shape =  SP_SHAPE(origin);
     SPPath * path =  SP_PATH(dest);
-    if (!path && !SP_IS_GROUP(dest)) {
+    if (!path && !SP_IS_GROUP(dest) && shape) {
         Inkscape::XML::Node *dest_node = sp_selected_item_to_curved_repr(SP_ITEM(dest), 0);
         dest->updateRepr(xml_doc, dest_node, SP_OBJECT_WRITE_ALL);
         path =  SP_PATH(dest);
