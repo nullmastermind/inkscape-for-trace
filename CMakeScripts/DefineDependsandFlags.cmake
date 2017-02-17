@@ -85,19 +85,21 @@ if(WITH_GNOME_VFS)
 endif()
 
 if(ENABLE_LCMS)
+    unset(HAVE_LIBLCMS1)
+    unset(HAVE_LIBLCMS2)
     find_package(LCMS2)
     if(LCMS2_FOUND)
 	list(APPEND INKSCAPE_INCS_SYS ${LCMS2_INCLUDE_DIRS})
 	list(APPEND INKSCAPE_LIBS ${LCMS2_LIBRARIES})
 	add_definitions(${LCMS2_DEFINITIONS})
-        set (HAVE_LIBLCMS2 1)
+        set (HAVE_LIBLCMS2 ON)
     else()
         find_package(LCMS)
         if(LCMS_FOUND)
             list(APPEND INKSCAPE_INCS_SYS ${LCMS_INCLUDE_DIRS})
             list(APPEND INKSCAPE_LIBS ${LCMS_LIBRARIES})
             add_definitions(${LCMS_DEFINITIONS})
-            set (HAVE_LIBLCMS1 1)
+            set (HAVE_LIBLCMS1 ON)
         else()
             set(ENABLE_LCMS OFF)
         endif()
@@ -247,7 +249,7 @@ endif()
 # CMake's builtin
 # ----------------------------------------------------------------------------
 
-set(TRY_GTKSPELL 1)
+set(TRY_GTKSPELL ON)
 # Include dependencies:
 # use patched version until GTK2_CAIROMMCONFIG_INCLUDE_DIR is added
     pkg_check_modules(
@@ -270,14 +272,15 @@ set(TRY_GTKSPELL 1)
 
     if("${GTKMM_3_10_FOUND}")
         message("Using Gtkmm 3.10 build")
-        set (WITH_GTKMM_3_10 1)
+        set (WITH_GTKMM_3_10 ON)
     endif()
 
     pkg_check_modules(GDL_3_6 gdl-3.0>=3.6)
 
     if("${GDL_3_6_FOUND}")
         message("Using GDL 3.6 or higher")
-        set (WITH_GDL_3_6 1)
+        add_definitions(-DWITH_GDL_3_6)
+        set (WITH_GDL_3_6 ON)
     endif()
 
     set(TRY_GTKSPELL )
@@ -285,7 +288,7 @@ set(TRY_GTKSPELL 1)
 
     if("${GTKSPELL3_FOUND}")
         message("Using GtkSpell 3")
-        set (WITH_GTKSPELL 1)
+        set (WITH_GTKSPELL ON)
     else()
         unset(WITH_GTKSPELL)
     endif()
