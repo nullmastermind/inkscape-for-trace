@@ -92,11 +92,13 @@ LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem)
 {
     if (split_items) {
         SPDocument * document = SP_ACTIVE_DOCUMENT;
+        if (!document) {
+            return;
+        }
         items.clear();
         container = dynamic_cast<SPObject *>(sp_lpe_item->parent);
-        SPDocument * doc = SP_ACTIVE_DOCUMENT;
         Inkscape::XML::Node *root = sp_lpe_item->document->getReprRoot();
-        Inkscape::XML::Node *root_origin = doc->getReprRoot();
+        Inkscape::XML::Node *root_origin = document->getReprRoot();
         if (root_origin != root) {
             return;
         }
@@ -174,6 +176,9 @@ void
 LPECopyRotate::cloneD(SPObject *origin, SPObject *dest, bool root, bool reset) 
 {
     SPDocument * document = SP_ACTIVE_DOCUMENT;
+    if (!document) {
+        return;
+    }
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
     if ( SP_IS_GROUP(origin) && SP_IS_GROUP(dest) && SP_GROUP(origin)->getItemCount() == SP_GROUP(dest)->getItemCount() ) {
         std::vector< SPObject * > childs = origin->childList(true);
@@ -216,6 +221,9 @@ void
 LPECopyRotate::toItem(Geom::Affine transform, size_t i, bool reset)
 {
     SPDocument * document = SP_ACTIVE_DOCUMENT;
+    if (!document) {
+        return;
+    }
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
     const char * elemref_id = g_strdup(Glib::ustring("rotated-").append(std::to_string(i)).append("-").append(sp_lpe_item->getRepr()->attribute("id")).c_str());
     items.push_back(elemref_id);

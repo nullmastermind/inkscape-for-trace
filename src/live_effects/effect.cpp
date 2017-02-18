@@ -430,6 +430,9 @@ void
 Effect::processObjects(LpeAction lpe_action)
 {
     SPDocument * document = SP_ACTIVE_DOCUMENT;
+    if (!document) {
+        return;
+    }
     for (std::vector<const char *>::iterator el_it = items.begin(); 
          el_it != items.end(); ++el_it) {
         const char * id = *el_it;
