@@ -691,18 +691,22 @@ main(int argc, char **argv)
         RegistryTool rt;
         rt.setPathInfo();
     }
-#elif defined(ENABLE_NLS)
-# ifdef ENABLE_BINRELOC
+
+    // disable "client side decorations" as they prevent window borders and titlebars to be drawn with native theming
+    // see also https://bugzilla.gnome.org/show_bug.cgi?id=778791
+    g_setenv("GTK_CSD", "0", FALSE);
+#endif
+
+#ifdef ENABLE_NLS
+# ifndef WIN32
+#  ifdef ENABLE_BINRELOC
     bindtextdomain(GETTEXT_PACKAGE, BR_LOCALEDIR(""));
-# else
+#  else
     bindtextdomain(GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
     // needed by Python/Gettext
     g_setenv("PACKAGE_LOCALE_DIR", PACKAGE_LOCALE_DIR, TRUE);
+#  endif
 # endif
-#endif
-
-    // the bit below compiles regardless of platform
-#ifdef ENABLE_NLS
     // Allow the user to override the locale directory by setting
     // the environment variable INKSCAPE_LOCALEDIR.
     char const *inkscape_localedir = g_getenv("INKSCAPE_LOCALEDIR");
