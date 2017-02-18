@@ -53,6 +53,8 @@ public:
 
 private:
 
+    class NodeObserver;
+
     // Data structure
     class ModelColumns : public Gtk::TreeModel::ColumnRecord {
     public:
@@ -86,6 +88,7 @@ private:
     SPDesktop* _desktop;  // To do: use panel _desktop
     SPDocument* _document;
     bool _updating;
+    Inkscape::XML::Node *_textNode;
     
     // Reading and writing the style element.
     Inkscape::XML::Node *_getStyleTextNode();
@@ -99,6 +102,7 @@ private:
     std::vector<SPObject *> _getObjVec(Glib::ustring selector);
     void _insertClass(const std::vector<SPObject *>& objVec, const Glib::ustring& className);
     void _selectObjects(int, int);
+    void _updateCSSPanel();
 
     // Signal handlers
     void _addSelector();

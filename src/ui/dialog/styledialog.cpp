@@ -18,13 +18,16 @@
 #include "sp-object.h"
 #include "selection.h"
 #include "xml/attribute-record.h"
+#include "xml/node-observer.h"
 #include "attribute-rel-svg.h"
+#include "document-undo.h"
 
 #include <glibmm/i18n.h>
 #include <glibmm/regex.h>
 
 //#define DEBUG_STYLEDIALOG
 
+using Inkscape::DocumentUndo;
 using Inkscape::Util::List;
 using Inkscape::XML::AttributeRecord;
 
@@ -39,6 +42,38 @@ namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
+class StyleDialog::NodeObserver : public Inkscape::XML::NodeObserver {
+public:
+    NodeObserver(StyleDialog* styleDialog) :
+        _styleDialog(styleDialog)
+    {
+#ifdef DEBUG_STYLEDIALOG
+    std::cout << "StyleDialog::NodeObserver: Constructor" << std::endl;
+#endif
+    };
+
+    virtual void notifyContentChanged(Inkscape::XML::Node &node,
+                                      Inkscape::Util::ptr_shared<char> old_content,
+                                      Inkscape::Util::ptr_shared<char> new_content);
+
+    StyleDialog * _styleDialog;
+};
+
+
+void
+StyleDialog::NodeObserver::notifyContentChanged(
+    Inkscape::XML::Node &/*node*/,
+    Inkscape::Util::ptr_shared<char> /*old_content*/,
+    Inkscape::Util::ptr_shared<char> /*new_content*/ ) {
+
+#ifdef DEBUG_STYLEDIALOG
+    std::cout << "StyleDialog::NodeObserver::notifyContentChanged" << std::endl;
+#endif
+
+    _styleDialog->_readStyleElement();
+    _styleDialog->_selectRow(NULL);
+}
+
 
 /**
  * Constructor
@@ -49,8 +84,12 @@ namespace Dialog {
 StyleDialog::StyleDialog() :
     UI::Widget::Panel("", "/dialogs/style", SP_VERB_DIALOG_STYLE),
     _desktop(0),
-    _updating(false)
+    _updating(false),
+    _textNode(NULL)
 {
+#ifdef DEBUG_STYLEDIALOG
+    std::cout << "StyleDialog::StyleDialog" << std::endl;
+#endif
 
     // Tree
     Inkscape::UI::Widget::AddToIcon * addRenderer = manage(
@@ -134,6 +173,7 @@ StyleDialog::StyleDialog() :
     _document = _desktop->doc();
 
     _readStyleElement();
+    _selectRow(NULL);
 
     if (!_store->children().empty()) {
         del->set_sensitive(true);
@@ -148,6 +188,9 @@ StyleDialog::StyleDialog() :
  */
 StyleDialog::~StyleDialog()
 {
+#ifdef DEBUG_STYLEDIALOOG
+    std::cout << "StyleDialog::~StyleDialog" << std::endl;
+#endif
     setDesktop(NULL);
 }
 
@@ -176,36 +219,49 @@ void StyleDialog::setDesktop( SPDesktop* desktop )
  */
 Inkscape::XML::Node* StyleDialog::_getStyleTextNode()
 {
+
+    Inkscape::XML::Node *styleNode = NULL;
+    Inkscape::XML::Node *textNode = NULL;
+
     Inkscape::XML::Node *root = _document->getReprRoot();
     for (unsigned i = 0; i < root->childCount(); ++i) {
         if (Glib::ustring(root->nthChild(i)->name()) == "svg:style") {
-            Inkscape::XML::Node * styleNode = root->nthChild(i);
+
+            styleNode = root->nthChild(i);
 
             for (unsigned j = 0; j < styleNode->childCount(); ++j) {
                 if (styleNode->nthChild(j)->type() == Inkscape::XML::TEXT_NODE) {
-                    return styleNode->nthChild(j);
+                    textNode = styleNode->nthChild(j);
                 }
             }
 
-            // Style element found but does not contain text node!
-            std::cerr << "StyleDialog::_getStyleTextNode(): No text node!" << std::endl;
-            Inkscape::XML::Node *textNode = _document->getReprDoc()->createTextNode("");
-            styleNode->appendChild(textNode);
-            Inkscape::GC::release(textNode);
-
-            return textNode;
+            if (textNode == NULL) {
+                // Style element found but does not contain text node!
+                std::cerr << "StyleDialog::_getStyleTextNode(): No text node!" << std::endl;
+                textNode = _document->getReprDoc()->createTextNode("");
+                styleNode->appendChild(textNode);
+                Inkscape::GC::release(textNode);
+            }
         }
     }
 
-    // Style element not found, create one
-    Inkscape::XML::Node *styleNode = _document->getReprDoc()->createElement("svg:style");
-    Inkscape::XML::Node *textNode  = _document->getReprDoc()->createTextNode("");
+    if (styleNode == NULL) {
+        // Style element not found, create one
+        styleNode = _document->getReprDoc()->createElement("svg:style");
+        textNode  = _document->getReprDoc()->createTextNode("");
 
-    styleNode->appendChild(textNode);
-    Inkscape::GC::release(textNode);
+        styleNode->appendChild(textNode);
+        Inkscape::GC::release(textNode);
 
-    root->addChild(styleNode, NULL);
-    Inkscape::GC::release(styleNode);
+        root->addChild(styleNode, NULL);
+        Inkscape::GC::release(styleNode);
+    }
+
+    if (_textNode != textNode) {
+        _textNode = textNode;
+        NodeObserver *no = new NodeObserver(this);
+        textNode->addObserver(*no);
+    }
 
     return textNode;
 }
@@ -213,11 +269,11 @@ Inkscape::XML::Node* StyleDialog::_getStyleTextNode()
 
 /**
  * @brief StyleDialog::_readStyleElement
- * @return selVec
  * Fill the Gtk::TreeStore from the svg:style element.
  */
 void StyleDialog::_readStyleElement()
 {
+    _store->clear();
 
     Inkscape::XML::Node * textNode = _getStyleTextNode();
     if (textNode == NULL) {
@@ -301,6 +357,8 @@ void StyleDialog::_writeStyleElement()
 
     Inkscape::XML::Node *textNode = _getStyleTextNode();
     textNode->setContent(styleContent.c_str());
+
+    DocumentUndo::done(_document, SP_VERB_DIALOG_STYLE, _("Edited style element."));
 
 #ifdef DEBUG_STYLEDIALOG
     std::cout << "StyleDialog::_writeStyleElement(): |" << styleContent << "|" << std::endl;
@@ -789,6 +847,37 @@ bool StyleDialog::_handleButtonEvent(GdkEventButton *event)
     return false;
 }
 
+/**
+ * @brief StyleDialog::_updateCSSPanel
+ * Updates CSS panel according to row in Style panel.
+ */
+void StyleDialog::_updateCSSPanel()
+{
+#ifdef DEBUG_STYLEDIALOG
+    std::cout << "StyleDialog::_updateCSSPanel" << std::endl;
+#endif
+    // This should probably be in a member function of CSSDialog.
+    _cssPane->_store->clear();
+
+    Glib::RefPtr<Gtk::TreeSelection> refTreeSelection = _treeView.get_selection();
+    Gtk::TreeModel::iterator iter = refTreeSelection->get_selected();
+    if (iter) {
+        Gtk::TreeModel::Row row = *iter;
+        Glib::ustring properties = row[_mColumns._colProperties];
+        REMOVE_SPACES(properties); // Remove leading/trailing spaces
+
+        std::vector<Glib::ustring> tokens =
+            Glib::Regex::split_simple("\\s*;\\s*", properties);
+        for (auto& token: tokens) {
+            if (!token.empty()) {
+                _cssPane->_propRow = *(_cssPane->_store->append());
+                _cssPane->_propRow[_cssPane->_cssColumns._colUnsetProp] = false;
+                _cssPane->_propRow[_cssPane->_cssColumns._propertyLabel] = token;
+            }
+        }
+    }
+}
+
 
 /**
  * @brief StyleDialog::_buttonEventsSelectObjs
@@ -814,26 +903,7 @@ void StyleDialog::_buttonEventsSelectObjs(GdkEventButton* event )
         //int y = static_cast<int>(event->y);
         //_selectObjects(x, y);
 
-        _cssPane->_store->clear();
-
-        // This should probably be in a member function of CSSDialog.
-        Glib::RefPtr<Gtk::TreeSelection> refTreeSelection = _treeView.get_selection();
-        Gtk::TreeModel::iterator iter = refTreeSelection->get_selected();
-        if (iter) {
-            Gtk::TreeModel::Row row = *iter;
-            Glib::ustring properties = row[_mColumns._colProperties];
-            REMOVE_SPACES(properties); // Remove leading/trailing spaces
-
-            std::vector<Glib::ustring> tokens =
-                Glib::Regex::split_simple("\\s*;\\s*", properties);
-            for (auto& token: tokens) {
-                if (!token.empty()) {
-                    _cssPane->_propRow = *(_cssPane->_store->append());
-                    _cssPane->_propRow[_cssPane->_cssColumns._colUnsetProp] = false;
-                    _cssPane->_propRow[_cssPane->_cssColumns._propertyLabel] = token;
-                }
-            }
-        }
+        _updateCSSPanel();
     }
     _updating = false;
 }
@@ -846,6 +916,9 @@ void StyleDialog::_buttonEventsSelectObjs(GdkEventButton* event )
  */
 void StyleDialog::_selectRow(Selection */*sel*/)
 {
+#ifdef DEBUG_STYLEDIALOG
+    std::cout << "StyleDialog::_selectRow: updating: " << (_updating?"true":"false") << std::endl;
+#endif
     if (_updating) return; // Avoid updating if we have set row via dialog.
 
     Inkscape::Selection* selection = _desktop->getSelection();
@@ -861,6 +934,7 @@ void StyleDialog::_selectRow(Selection */*sel*/)
             for (unsigned i = 0; i < objVec.size(); ++i) {
                 if (obj->getId() == objVec[i]->getId()) {
                     _treeView.get_selection()->select(row);
+                    _updateCSSPanel();
                     return;
                 }
             }
@@ -869,6 +943,7 @@ void StyleDialog::_selectRow(Selection */*sel*/)
 
     // Selection empty or no row matches.
     _treeView.get_selection()->unselect_all();
+    _updateCSSPanel();
 }
 
 
