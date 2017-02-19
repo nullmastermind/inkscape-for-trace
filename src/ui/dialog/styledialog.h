@@ -53,6 +53,7 @@ public:
 
 private:
 
+    // Monitor <style> element for changes.
     class NodeObserver;
 
     // Data structure
@@ -71,9 +72,30 @@ private:
     };
     ModelColumns _mColumns;
 
+    // Override Gtk::TreeStore to control drag-n-drop (only allow dragging and dropping of selectors).
+    // See: https://developer.gnome.org/gtkmm-tutorial/stable/sec-treeview-examples.html.en
+    //
+    // TreeStore implements simple drag and drop (DND) but there appears no way to know when a DND
+    // has been completed (other than doing the whole DND ourselves). As a hack, we use
+    // on_row_deleted to trigger write of style element.
+    class TreeStore : public Gtk::TreeStore {
+    protected:
+        TreeStore();
+        bool row_draggable_vfunc(const Gtk::TreeModel::Path& path) const override;
+        bool row_drop_possible_vfunc(const Gtk::TreeModel::Path& path,
+                                     const Gtk::SelectionData& selection_data) const override;
+        void on_row_deleted(const TreeModel::Path& path) override;
+
+    public:
+        static Glib::RefPtr<StyleDialog::TreeStore> create(StyleDialog *styledialog);
+
+    private:
+        StyleDialog *_styledialog;
+    };
+
     // TreeView
     Gtk::TreeView _treeView;
-    Glib::RefPtr<Gtk::TreeStore> _store;
+    Glib::RefPtr<TreeStore> _store;
 
     // Widgets
     Gtk::VPaned _paned;
@@ -87,7 +109,7 @@ private:
     // Variables - Inkscape
     SPDesktop* _desktop;  // To do: use panel _desktop
     SPDocument* _document;
-    bool _updating;
+    bool _updating;  // Prevent cyclic actions: read <-> write, select via dialog <-> via desktop
     Inkscape::XML::Node *_textNode;
     
     // Reading and writing the style element.

@@ -75,6 +75,71 @@ StyleDialog::NodeObserver::notifyContentChanged(
 }
 
 
+StyleDialog::TreeStore::TreeStore()
+{
+}
+
+
+/**
+ * Allow dragging only selectors.
+ */
+bool
+StyleDialog::TreeStore::row_draggable_vfunc(const Gtk::TreeModel::Path& path) const
+{
+#ifdef DEBUG_STYLEDIALOG
+    std::cout << "StyleDialog::TreeStore::row_draggable_vfunc" << std::endl;
+#endif
+    auto unconstThis = const_cast<StyleDialog::TreeStore*>(this);
+    const_iterator iter = unconstThis->get_iter(path);
+    if (iter) {
+        Gtk::TreeModel::Row row = *iter;
+        bool is_draggable      = row[_styledialog->_mColumns._colAddRemove];
+        return is_draggable;
+    }
+    return Gtk::TreeStore::row_draggable_vfunc(path);
+}
+
+
+/**
+ * Allow dropping only inbetween other selectors.
+ */
+bool
+StyleDialog::TreeStore::row_drop_possible_vfunc(const Gtk::TreeModel::Path& dest,
+                                                const Gtk::SelectionData& selection_data) const
+{
+#ifdef DEBUG_STYLEDIALOG
+    std::cout << "StyleDialog::TreeStore::row_drop_possible_vfunc" << std::endl;
+#endif
+
+    Gtk::TreeModel::Path dest_parent = dest;
+    dest_parent.up();
+    return dest_parent.empty();
+}
+
+
+// This is only here to handle updating style element after a drag and drop.
+void
+StyleDialog::TreeStore::on_row_deleted(const TreeModel::Path& path)
+{
+#ifdef DEBUG_STYLEDIALOG
+    std::cout << "on_row_deleted" << std::endl;
+#endif
+
+    if (_styledialog->_updating) return;  // Don't write if we deleted row (other than from DND)
+
+    _styledialog->_writeStyleElement();
+}
+
+
+Glib::RefPtr<StyleDialog::TreeStore> StyleDialog::TreeStore::create(StyleDialog *styledialog)
+{
+    StyleDialog::TreeStore * store = new StyleDialog::TreeStore();
+    store->_styledialog = styledialog;
+    store->set_column_types( store->_styledialog->_mColumns );
+    return Glib::RefPtr<StyleDialog::TreeStore>( store );
+}
+
+
 /**
  * Constructor
  * A treeview and a set of two buttons are added to the dialog. _addSelector
@@ -94,19 +159,21 @@ StyleDialog::StyleDialog() :
     // Tree
     Inkscape::UI::Widget::AddToIcon * addRenderer = manage(
                 new Inkscape::UI::Widget::AddToIcon() );
-    addRenderer->property_active() = true;
 
-    _store = Gtk::TreeStore::create(_mColumns);
+    _store = TreeStore::create(this);
     _treeView.set_model(_store);
-    _treeView.set_headers_visible(false);
-    int addCol = _treeView.append_column("type", *addRenderer) - 1;
+    _treeView.set_headers_visible(true);
+    _treeView.enable_model_drag_source();
+    _treeView.enable_model_drag_dest( Gdk::ACTION_MOVE );
+
+    int addCol = _treeView.append_column("", *addRenderer) - 1;
     Gtk::TreeViewColumn *col = _treeView.get_column(addCol);
     if ( col ) {
         col->add_attribute( addRenderer->property_active(), _mColumns._colAddRemove );
     }
-    _treeView.append_column("Selector Name", _mColumns._colSelector);
+    _treeView.append_column("CSS Selector", _mColumns._colSelector);
     _treeView.set_expander_column(*(_treeView.get_column(1)));
-    
+
     // Pack widgets
     _paned.pack1(_mainBox, Gtk::SHRINK);
     _mainBox.pack_start(_scrolledWindow, Gtk::PACK_EXPAND_WIDGET);
@@ -273,6 +340,13 @@ Inkscape::XML::Node* StyleDialog::_getStyleTextNode()
  */
 void StyleDialog::_readStyleElement()
 {
+#ifdef DEBUG_STYLEDIALOG
+    std::cout << "StyleDialog::_readStyleElement: updating " << (_updating?"true":"false")<< std::endl;
+#endif
+
+    if (_updating) return; // Don't read if we wrote style element.
+    _updating = true;
+
     _store->clear();
 
     Inkscape::XML::Node * textNode = _getStyleTextNode();
@@ -338,6 +412,7 @@ void StyleDialog::_readStyleElement()
             childrow[_mColumns._colProperties] = "";  // Unused
         }
     }
+    _updating = false;
 }
 
 
@@ -347,6 +422,8 @@ void StyleDialog::_readStyleElement()
  */
 void StyleDialog::_writeStyleElement()
 {
+    _updating = true;
+
     Glib::ustring styleContent;
     for (auto& row: _store->children()) {
         styleContent = styleContent + row[_mColumns._colSelector] +
@@ -360,6 +437,7 @@ void StyleDialog::_writeStyleElement()
 
     DocumentUndo::done(_document, SP_VERB_DIALOG_STYLE, _("Edited style element."));
 
+    _updating = false;
 #ifdef DEBUG_STYLEDIALOG
     std::cout << "StyleDialog::_writeStyleElement(): |" << styleContent << "|" << std::endl;
 #endif
@@ -802,7 +880,9 @@ void StyleDialog::_delSelector()
     Gtk::TreeModel::iterator iter = refTreeSelection->get_selected();
     if (iter) {
         Gtk::TreeModel::Row row = *iter;
+        _updating = true;
         _store->erase(iter);
+        _updating = false;
         _writeStyleElement();
     }
 }

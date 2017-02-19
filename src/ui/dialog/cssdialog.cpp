@@ -38,7 +38,7 @@ CssDialog::CssDialog():
 {
     set_size_request(20, 15);
     _mainBox.pack_start(_scrolledWindow, Gtk::PACK_EXPAND_WIDGET);
-    _treeView.set_headers_visible(false);
+    _treeView.set_headers_visible(true);
     _scrolledWindow.add(_treeView);
     _scrolledWindow.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
 
@@ -48,7 +48,7 @@ CssDialog::CssDialog():
     Inkscape::UI::Widget::AddToIcon * addRenderer = manage(new Inkscape::UI::Widget::AddToIcon());
     addRenderer->property_active() = false;
 
-    int addCol = _treeView.append_column("Unset Property", *addRenderer) - 1;
+    int addCol = _treeView.append_column("", *addRenderer) - 1;
     Gtk::TreeViewColumn *col = _treeView.get_column(addCol);
     if (col) {
         col->add_attribute(addRenderer->property_active(), _cssColumns._colUnsetProp);
@@ -56,7 +56,7 @@ CssDialog::CssDialog():
     _textRenderer = Gtk::manage(new Gtk::CellRendererText());
     _textRenderer->property_editable() = true;
 
-    int nameColNum = _treeView.append_column("Property", *_textRenderer) - 1;
+    int nameColNum = _treeView.append_column("CSS Property", *_textRenderer) - 1;
     _propCol = _treeView.get_column(nameColNum);
     if (_propCol) {
       _propCol->add_attribute(_textRenderer->property_text(),
