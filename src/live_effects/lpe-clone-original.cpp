@@ -347,7 +347,6 @@ void
 LPECloneOriginal::transform_multiply(Geom::Affine const& postmul, bool set)
 {
     if (linked_item.linksToItem()) {
-        bool changed = false;
         linked_item.getObject()->requestModified(SP_OBJECT_MODIFIED_FLAG);
     }
 }
