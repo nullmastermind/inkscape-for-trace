@@ -814,10 +814,9 @@ void StyleDialog::_addSelector()
         _insertClass(objVec, className);
     }
 
-    // If 'id' selector, regenerate objVec in case user modified list.
-    if (selectorValue[0] == '#') {
-        // To do
-    }
+    // Generate a new object vector (we could have an element selector,
+    // the user could have edited the id selector list, etc.).
+    objVec = _getObjVec( selectorValue );
 
     // Add entry to GUI tree
     Gtk::TreeModel::Row row = *(_store->append());
