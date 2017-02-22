@@ -628,42 +628,13 @@ Glib::ustring StyleDialog::_getIdList(std::vector<SPObject*> sel)
 
 /**
  * @brief StyleDialog::_getObjVec
- * @return objVec
- * Return a vector of all objects that selector matches. This only handles simple id, class, and
- * element selectors. Expanding this would take integrating a true CSS parser.
+ * @param selector: a valid CSS selector string.
+ * @return objVec: a vector of pointers to SPObject's the selector matches.
+ * Return a vector of all objects that selector matches.
  */
 std::vector<SPObject *> StyleDialog::_getObjVec(Glib::ustring selector) {
 
-    // Split selector string into individual selectors (which are comma separated).
-    std::vector<Glib::ustring> tokens = Glib::Regex::split_simple("\\s*,\\s*", selector );
-
-    std::vector<SPObject *> objVec;
-
-    for (auto& token: tokens) {
-
-        // Find objects that match class selector
-        if (token[0] == '.') {
-            token.erase(0,1);
-            std::vector<SPObject *> objects = _document->getObjectsByClass( token );
-            objVec.insert(objVec.end(), objects.begin(), objects.end());
-        }
-
-        // Find objects that match id selector
-        else if (token[0] == '#') {
-            token.erase(0,1);
-            SPObject * object = _document->getObjectById( token );
-            if (object) {
-                objVec.push_back(object);
-            }
-        }
-
-        // Find objects that match element selector
-        else {
-            std::vector<SPObject *> objects = _document->getObjectsByElement( token );
-            objVec.insert(objVec.end(), objects.begin(), objects.end());
-        }
-
-    }
+    std::vector<SPObject *> objVec = _document->getObjectsBySelector( selector );
 
 #ifdef DEBUG_STYLEDIALOG
     std::cout << "StyleDialog::_getObjVec: |" << selector << "|" << std::endl;
@@ -792,8 +763,6 @@ void StyleDialog::_addSelector()
     textDialogPtr->get_preferred_size(sreq1, sreq2);
     int minWidth = 200;
     int minHeight = 100;
-    std::cout << "  preferred: " << sreq2.width << "x" << sreq2.height << std::endl;
-    std::cout << "  minimum:   " << minWidth    << "x" << minHeight    << std::endl;
     minWidth  = (sreq2.width  > minWidth  ? sreq2.width  : minWidth );
     minHeight = (sreq2.height > minHeight ? sreq2.height : minHeight);
     textDialogPtr->set_size_request(minWidth, minHeight);
@@ -820,12 +789,14 @@ void StyleDialog::_addSelector()
          * set to ".Class1"
          */
         selectorValue = textEditPtr->get_text();
+        Glib::ustring firstWord = selectorValue.substr(0, selectorValue.find(" "));
 
         del->set_sensitive(true);
 
         if (selectorValue[0] == '.' ||
             selectorValue[0] == '#' ||
-            SPAttributeRelSVG::isSVGElement( selectorValue ) ) {
+            selectorValue[0] == '*' ||
+            SPAttributeRelSVG::isSVGElement( firstWord ) ) {
             invalid = false;
         } else {
             textLabelPtr->show();

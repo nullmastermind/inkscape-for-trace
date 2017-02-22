@@ -62,6 +62,11 @@
 #include "sp-symbol.h"
 #include "xml/rebase-hrefs.h"
 
+#include "libcroco/cr-sel-eng.h"
+#include "libcroco/cr-selector.h"
+#include "libcroco/cr-parser.h"
+#include "src/xml/croco-node-iface.h"
+
 using Inkscape::DocumentUndo;
 using Inkscape::Util::unit_table;
 
@@ -1116,6 +1121,50 @@ std::vector<SPObject *> SPDocument::getObjectsByElement(Glib::ustring const &ele
     g_return_val_if_fail(!element.empty(), objects);
 
     _getObjectsByElementRecursive(element, root, objects);
+    return objects;
+}
+
+void _getObjectsBySelectorRecursive(SPObject *parent,
+                                    CRSelEng *sel_eng, CRSimpleSel *simple_sel,
+                                    std::vector<SPObject *> &objects)
+{
+    if (parent) {
+        gboolean result = false;
+        cr_sel_eng_matches_node( sel_eng, simple_sel, parent->getRepr(), &result );
+        if (result) {
+            objects.push_back(parent);
+        }
+
+        // Check children
+        for (auto& child : parent->children) {
+            _getObjectsBySelectorRecursive(&child, sel_eng, simple_sel, objects);
+        }
+    }
+}
+
+std::vector<SPObject *> SPDocument::getObjectsBySelector(Glib::ustring const &selector) const
+{
+    // std::cout << "\nSPDocument::getObjectsBySelector: " << selector << std::endl;
+
+    std::vector<SPObject *> objects;
+    g_return_val_if_fail(!selector.empty(), objects);
+
+    static CRSelEng *sel_eng = NULL;
+    if (!sel_eng) {
+        sel_eng = cr_sel_eng_new();
+        cr_sel_eng_set_node_iface(sel_eng, &Inkscape::XML::croco_node_iface);
+    }
+
+    Glib::ustring my_selector = selector + " {";  // Parsing fails sometimes without '{'. Fix me
+    CRSelector *cr_selector = cr_selector_parse_from_buf ((guchar*)my_selector.c_str(), CR_UTF_8);
+    // char * cr_string = (char*)cr_selector_to_string( cr_selector );
+    // std::cout << "  selector: |" << (cr_string?cr_string:"Empty") << "|" << std::endl;
+    CRSelector const *cur = NULL;
+    for (cur = cr_selector; cur; cur = cur->next) {
+        if (cur->simple_sel ) {
+            _getObjectsBySelectorRecursive(root, sel_eng, cur->simple_sel, objects);
+        }
+    }
     return objects;
 }
 
