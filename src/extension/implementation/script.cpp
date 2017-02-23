@@ -963,6 +963,9 @@ void Script::checkStderr (const Glib::ustring &data,
 
     warning.run();
 
+    delete textview;
+    delete scrollwindow;
+
     return;
 }
 

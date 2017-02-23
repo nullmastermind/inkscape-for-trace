@@ -50,6 +50,8 @@ PrefDialog::PrefDialog (Glib::ustring name, gchar const * help, Gtk::Widget * co
     _effect(effect),
     _exEnv(NULL)
 {
+    this->set_default_size(0,0);  // we want the window to be as small as possible instead of clobbering up space
+
     Gtk::HBox * hbox = Gtk::manage(new Gtk::HBox());
     if (controls == NULL) {
         if (_effect == NULL) {
@@ -59,11 +61,10 @@ PrefDialog::PrefDialog (Glib::ustring name, gchar const * help, Gtk::Widget * co
         controls = _effect->get_imp()->prefs_effect(_effect, SP_ACTIVE_DESKTOP, &_signal_param_change, NULL);
         _signal_param_change.connect(sigc::mem_fun(this, &PrefDialog::param_change));
     }
-
-    hbox->pack_start(*controls, true, true, 6);
+    hbox->pack_start(*controls, true, true, 0);
     hbox->show();
 
-    this->get_content_area()->pack_start(*hbox, true, true, 6);
+    this->get_content_area()->pack_start(*hbox, true, true, 0);
 
     /*
     Gtk::Button * help_button = add_button(Gtk::Stock::HELP, Gtk::RESPONSE_HELP);
@@ -88,15 +89,16 @@ PrefDialog::PrefDialog (Glib::ustring name, gchar const * help, Gtk::Widget * co
         auto sep = Gtk::manage(new Gtk::Separator());
         sep->show();
 
-        this->get_content_area()->pack_start(*sep, true, true, 4);
+        this->get_content_area()->pack_start(*sep, false, false, Parameter::GUI_BOX_SPACING);
 
         hbox = Gtk::manage(new Gtk::HBox());
+        hbox->set_border_width(Parameter::GUI_BOX_MARGIN);
         _button_preview = _param_preview->get_widget(NULL, NULL, &_signal_preview);
         _button_preview->show();
-        hbox->pack_start(*_button_preview, true, true,6);
+        hbox->pack_start(*_button_preview, true, true, 0);
         hbox->show();
 
-        this->get_content_area()->pack_start(*hbox, true, true, 6);
+        this->get_content_area()->pack_start(*hbox, false, false, 0);
 
         Gtk::Box * hbox = dynamic_cast<Gtk::Box *>(_button_preview);
         if (hbox != NULL) {

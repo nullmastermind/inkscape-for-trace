@@ -3,8 +3,10 @@
  */
 /* Authors:
  *   Kamalpreet Kaur Grewal
+ *   Tavmjong Bah
  *
  * Copyright (C) Kamalpreet Kaur Grewal 2016 <grewalkamal005@gmail.com>
+ * Copyright (C) Tavmjong Bah 2017 <tavmjong@free.fr>
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
@@ -38,32 +40,39 @@ public:
     ~CssDialog();
 
     static CssDialog &getInstance() { return *new CssDialog(); }
-    void setDesktop(SPDesktop* desktop);
 
-    class CssColumns : public Gtk::TreeModel::ColumnRecord
-    {
+    // Data structure
+    class CssColumns : public Gtk::TreeModel::ColumnRecord {
     public:
-        CssColumns()
-        { add(_colUnsetProp); add(_propertyLabel); }
+        CssColumns() {
+	  add(_colUnsetProp);
+	  add(_propertyLabel);
+	}
         Gtk::TreeModelColumn<bool> _colUnsetProp;
         Gtk::TreeModelColumn<Glib::ustring> _propertyLabel;
     };
-
-    SPDesktop* _desktop;
-    SPDesktop* _targetDesktop;
     CssColumns _cssColumns;
-    Gtk::VBox _mainBox;
-    Gtk::HBox _buttonBox;
+
+    // TreeView
     Gtk::TreeView _treeView;
     Glib::RefPtr<Gtk::ListStore> _store;
-    Gtk::ScrolledWindow _scrolledWindow;
     Gtk::TreeModel::Row _propRow;
     Gtk::CellRendererText *_textRenderer;
     Gtk::TreeViewColumn *_propCol;
-    Glib::ustring _editedProp;
-    bool _newProperty;
 
+    // Widgets
+    Gtk::VBox _mainBox;
+    Gtk::ScrolledWindow _scrolledWindow;
+    Gtk::HBox _buttonBox;
+
+    // Variables - Inkscape
+    SPDesktop* _desktop;
+
+    // Helper functions
+    void setDesktop(SPDesktop* desktop);
     void _styleButton(Gtk::Button& btn, char const* iconName, char const* tooltip);
+
+    // Signal handlers
     void _addProperty();
 };
 

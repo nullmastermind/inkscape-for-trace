@@ -1618,7 +1618,7 @@ void ObjectSet::applyAffine(Geom::Affine const &affine, bool set_i2d, bool compe
                     for (auto& itm: region.children) {
                         SPUse *use = dynamic_cast<SPUse *>(&itm);
                         if ( use ) {
-                            use->doWriteTransform(use->getRepr(), use->transform.inverse(), NULL, compensate);
+                            use->doWriteTransform(use->getRepr(), item->transform.inverse(), NULL, compensate);
                         }
                     }
                 }

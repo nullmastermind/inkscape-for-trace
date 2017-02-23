@@ -32,7 +32,15 @@ public:
     /**
      * Use the superclass' allocator and set the \c _value.
      */
-    ParamBool(const gchar * name, const gchar * guitext, const gchar * desc, const Parameter::_scope_t scope, bool gui_hidden, const gchar * gui_tip, Inkscape::Extension::Extension * ext, Inkscape::XML::Node * xml);
+    ParamBool(const gchar * name,
+              const gchar * guitext,
+              const gchar * desc,
+              const Parameter::_scope_t scope,
+              bool gui_hidden,
+              const gchar * gui_tip,
+              int indent,
+              Inkscape::Extension::Extension * ext,
+              Inkscape::XML::Node * xml);
 
     /**
      * Returns the current state/value.
@@ -69,7 +77,6 @@ public:
 private:
     /** Internal value. */
     bool _value;
-    int _indent;
 };
 
 }  // namespace Extension

@@ -1067,7 +1067,7 @@ static void gr_knot_moved_midpoint_handler(SPKnot */*knot*/, Geom::Point const &
 
 
 
-static void gr_knot_grabbed_handler(SPKnot */*knot*/, unsigned int /*state*/, gpointer data)
+static void gr_knot_mousedown_handler(SPKnot */*knot*/, unsigned int /*state*/, gpointer data)
 {
     GrDragger *dragger = (GrDragger *) data;
     GrDrag *drag = dragger->parent;
@@ -1688,7 +1688,7 @@ GrDragger::GrDragger(GrDrag *parent, Geom::Point p, GrDraggable *draggable)
     this->sizeUpdatedConn = ControlManager::getManager().connectCtrlSizeChanged(sigc::mem_fun(*this, &GrDragger::updateControlSizes));
     this->_clicked_connection = this->knot->click_signal.connect(sigc::bind(sigc::ptr_fun(gr_knot_clicked_handler), this));
     this->_doubleclicked_connection = this->knot->doubleclicked_signal.connect(sigc::bind(sigc::ptr_fun(gr_knot_doubleclicked_handler), this));
-    this->_grabbed_connection = this->knot->grabbed_signal.connect(sigc::bind(sigc::ptr_fun(gr_knot_grabbed_handler), this));
+    this->_mousedown_connection = this->knot->mousedown_signal.connect(sigc::bind(sigc::ptr_fun(gr_knot_mousedown_handler), this));
     this->_ungrabbed_connection = this->knot->ungrabbed_signal.connect(sigc::bind(sigc::ptr_fun(gr_knot_ungrabbed_handler), this));
 
     // add the initial draggable
@@ -1712,7 +1712,7 @@ GrDragger::~GrDragger()
     this->_moved_connection.disconnect();
     this->_clicked_connection.disconnect();
     this->_doubleclicked_connection.disconnect();
-    this->_grabbed_connection.disconnect();
+    this->_mousedown_connection.disconnect();
     this->_ungrabbed_connection.disconnect();
 
     /* unref should call destroy */

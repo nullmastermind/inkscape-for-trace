@@ -1105,7 +1105,10 @@ Inkscape::XML::Node* SPObject::write(Inkscape::XML::Document *doc, Inkscape::XML
          * possibly we should write property attributes instead of a style
          * attribute.
          */
-        sp_style_unset_property_attrs (this);
+        // With the changes to preserves style source this is no longer needed
+        // and the above comment no longer applies. I leave it here until these
+        // change are well tested.
+        // sp_style_unset_property_attrs (this);
     }
 
 #ifdef OBJECT_TRACE

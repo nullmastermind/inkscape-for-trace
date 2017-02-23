@@ -48,6 +48,23 @@ if(WIN32)
     set(CMAKE_INSTALL_MESSAGE "LAZY")
 endif()
 
+# Define a very strict set of build flags that will prevent any use of deprecated symbols.
+# This will almost certainly cause compilation failure and is intended only for developer use.
+set(CMAKE_CXX_FLAGS_STRICT "${CMAKE_CXX_FLAGS_DEBUG} -Werror=deprecated-declarations -DGTK_DISABLE_DEPRECATED -DGDK_DISABLE_DEPRECATED -DGTKMM_DISABLE_DEPRECATED -DGDKMM_DISABLE_DEPRECATED"
+	CACHE STRING
+	"Flags used by C++ compiler during Strict builds"
+	FORCE)
+set(CMAKE_C_FLAGS_STRICT   "${CMAKE_C_FLAGS_DEBUG}   -Werror=deprecated-declarations -DGTK_DISABLE_DEPRECATED -DGDK_DISABLE_DEPRECATED -DGTKMM_DISABLE_DEPRECATED -DGDKMM_DISABLE_DEPRECATED"
+	CACHE STRING
+	"Flags used by C compiler during Strict builds"
+	FORCE)
+mark_as_advanced(
+	CMAKE_CXX_FLAGS_STRICT
+	CMAKE_C_FLAGS_STRICT)
+
+set(CMAKE_BUILD_TYPE ${CMAKE_BUILD_TYPE} CACHE STRING
+	"Choose the type of build, options are: None(CMAKE_CXXFLAGS or CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel Strict."
+	FORCE)
 
 # -----------------------------------------------------------------------------
 # Redirect output files

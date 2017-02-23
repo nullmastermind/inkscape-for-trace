@@ -1,6 +1,6 @@
 /** \file
  *
- * Inkscape::Extension::Extension: 
+ * Inkscape::Extension::Extension:
  * the ability to have features that are more modular so that they
  * can be added and removed easily.  This is the basis for defining
  * those actions.
@@ -144,15 +144,15 @@ Extension::~Extension (void)
     delete timer;
     timer = NULL;
     /** \todo Need to do parameters here */
-    
-    // delete parameters: 
+
+    // delete parameters:
     for (GSList * list = parameters; list != NULL; list = g_slist_next(list)) {
         Parameter * param = reinterpret_cast<Parameter *>(list->data);
         delete param;
     }
     g_slist_free(parameters);
-    
-    
+
+
     for (unsigned int i = 0 ; i < _deps.size(); i++) {
         delete _deps[i];
     }
@@ -330,7 +330,7 @@ Extension::get_repr (void)
 }
 
 /**
-    \return  bool 
+    \return  bool
     \brief   Whether this extension should hide the "working, please wait" dialog
 */
 bool
@@ -444,7 +444,7 @@ Extension::get_param_enum (const gchar * name, const SPDocument * doc, const Ink
 
 /**
  * This is useful to find out, if a given string \c value is selectable in a ComboBox named \cname.
- * 
+ *
  * @param name The name of the enum parameter to get.
  * @param doc The document to look in for document specific parameters.
  * @param node The node to look in for a specific parameter.
@@ -692,9 +692,10 @@ public:
      * @param widg Widget to add.
      * @param tooltip Tooltip for the widget.
      */
-    void addWidget(Gtk::Widget *widg, gchar const *tooltip) {
+    void addWidget(Gtk::Widget *widg, gchar const *tooltip, int indent) {
         if (widg) {
-            this->pack_start(*widg, false, false, 2);
+            widg->set_margin_left(indent * Parameter::GUI_INDENTATION);
+            this->pack_start(*widg, false, false, 0);
             if (tooltip) {
                 widg->set_tooltip_text(_(tooltip));
             } else {
@@ -713,7 +714,7 @@ public:
     a Gtk::VBox, which is then returned to the calling function.
 
     If there are no visible parameters, this function just returns NULL.
-    If all parameters are gui_visible = false NULL is returned as well.    
+    If all parameters are gui_visible = false NULL is returned as well.
 */
 Gtk::Widget *
 Extension::autogui (SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal)
@@ -721,6 +722,8 @@ Extension::autogui (SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<v
     if (!_gui || param_visible_count() == 0) return NULL;
 
     AutoGUI * agui = Gtk::manage(new AutoGUI());
+    agui->set_border_width(Parameter::GUI_BOX_MARGIN);
+    agui->set_spacing(Parameter::GUI_BOX_SPACING);
 
     //go through the list of parameters to see if there are any non-hidden ones
     for (GSList * list = parameters; list != NULL; list = g_slist_next(list)) {
@@ -728,9 +731,10 @@ Extension::autogui (SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<v
         if (param->get_gui_hidden()) continue; //Ignore hidden parameters
         Gtk::Widget * widg = param->get_widget(doc, node, changeSignal);
         gchar const * tip = param->get_tooltip();
-        agui->addWidget(widg, tip);
-    }    
-    
+        int indent = param->get_indent();
+        agui->addWidget(widg, tip, indent);
+    }
+
     agui->show();
     return agui;
 };
@@ -780,7 +784,7 @@ void Extension::add_val(Glib::ustring labelstr, Glib::ustring valuestr, Gtk::Gri
     Gtk::Label * label;
     Gtk::Label * value;
 
-    (*row)++; 
+    (*row)++;
     label = Gtk::manage(new Gtk::Label(labelstr));
     value = Gtk::manage(new Gtk::Label(valuestr));
 
@@ -824,13 +828,13 @@ Extension::get_params_widget(void)
     return retval;
 }
 
-unsigned int Extension::param_visible_count ( ) 
+unsigned int Extension::param_visible_count ( )
 {
     unsigned int _visible_count = 0;
     for (GSList * list = parameters; list != NULL; list = g_slist_next(list)) {
         Parameter * param = reinterpret_cast<Parameter *>(list->data);
         if (!param->get_gui_hidden()) _visible_count++;
-    }    
+    }
     return _visible_count;
 }
 

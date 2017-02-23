@@ -87,11 +87,14 @@ LPEMirrorSymmetry::~LPEMirrorSymmetry()
 void
 LPEMirrorSymmetry::doAfterEffect (SPLPEItem const* lpeitem)
 {
+    SPDocument * document = SP_ACTIVE_DOCUMENT;
+    if (!document) {
+        return;
+    }
     if (split_items && !discard_orig_path) {
         container = dynamic_cast<SPObject *>(sp_lpe_item->parent);
-        SPDocument * doc = SP_ACTIVE_DOCUMENT;
         Inkscape::XML::Node *root = sp_lpe_item->document->getReprRoot();
-        Inkscape::XML::Node *root_origin = doc->getReprRoot();
+        Inkscape::XML::Node *root_origin = document->getReprRoot();
         if (root_origin != root) {
             return;
         }
@@ -161,20 +164,24 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
         }
     } else if ( mode == MT_V){
         SPDocument * document = SP_ACTIVE_DOCUMENT;
-        Geom::Affine transform = i2anc_affine(SP_OBJECT(lpeitem), NULL).inverse();
-        Geom::Point sp = Geom::Point(document->getWidth().value("px")/2.0, 0) * transform;
-        start_point.param_setValue(sp, true);
-        Geom::Point ep = Geom::Point(document->getWidth().value("px")/2.0, document->getHeight().value("px")) * transform;
-        end_point.param_setValue(ep, true);
-        center_point.param_setValue(Geom::middle_point((Geom::Point)start_point, (Geom::Point)end_point), true);
+        if (document) {
+            Geom::Affine transform = i2anc_affine(SP_OBJECT(lpeitem), NULL).inverse();
+            Geom::Point sp = Geom::Point(document->getWidth().value("px")/2.0, 0) * transform;
+            start_point.param_setValue(sp, true);
+            Geom::Point ep = Geom::Point(document->getWidth().value("px")/2.0, document->getHeight().value("px")) * transform;
+            end_point.param_setValue(ep, true);
+            center_point.param_setValue(Geom::middle_point((Geom::Point)start_point, (Geom::Point)end_point), true);
+        }
     } else { //horizontal page
         SPDocument * document = SP_ACTIVE_DOCUMENT;
-        Geom::Affine transform = i2anc_affine(SP_OBJECT(lpeitem), NULL).inverse();
-        Geom::Point sp = Geom::Point(0, document->getHeight().value("px")/2.0) * transform;
-        start_point.param_setValue(sp, true);
-        Geom::Point ep = Geom::Point(document->getWidth().value("px"), document->getHeight().value("px")/2.0) * transform;
-        end_point.param_setValue(ep, true);
-        center_point.param_setValue(Geom::middle_point((Geom::Point)start_point, (Geom::Point)end_point), true);
+        if (document) {
+            Geom::Affine transform = i2anc_affine(SP_OBJECT(lpeitem), NULL).inverse();
+            Geom::Point sp = Geom::Point(0, document->getHeight().value("px")/2.0) * transform;
+            start_point.param_setValue(sp, true);
+            Geom::Point ep = Geom::Point(document->getWidth().value("px"), document->getHeight().value("px")/2.0) * transform;
+            end_point.param_setValue(ep, true);
+            center_point.param_setValue(Geom::middle_point((Geom::Point)start_point, (Geom::Point)end_point), true);
+        }
     }
     previous_center = center_point;
 }
@@ -183,6 +190,9 @@ void
 LPEMirrorSymmetry::cloneD(SPObject *origin, SPObject *dest, bool live, bool root) 
 {
     SPDocument * document = SP_ACTIVE_DOCUMENT;
+    if (!document) {
+        return;
+    }
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
     if ( SP_IS_GROUP(origin) && SP_IS_GROUP(dest) && SP_GROUP(origin)->getItemCount() == SP_GROUP(dest)->getItemCount() ) {
         std::vector< SPObject * > childs = origin->childList(true);
@@ -196,7 +206,7 @@ LPEMirrorSymmetry::cloneD(SPObject *origin, SPObject *dest, bool live, bool root
     }
     SPShape * shape =  SP_SHAPE(origin);
     SPPath * path =  SP_PATH(dest);
-    if (!path && !SP_IS_GROUP(dest)) {
+    if (shape && !path) {
         Inkscape::XML::Node *dest_node = sp_selected_item_to_curved_repr(SP_ITEM(dest), 0);
         dest->updateRepr(xml_doc, dest_node, SP_OBJECT_WRITE_ALL);
         path =  SP_PATH(dest);
@@ -226,67 +236,69 @@ void
 LPEMirrorSymmetry::toMirror(Geom::Affine transform)
 {
     SPDocument * document = SP_ACTIVE_DOCUMENT;
-    Inkscape::XML::Document *xml_doc = document->getReprDoc();
-    const char * id_origin_char = id_origin.param_getSVGValue();
-    const char * elemref_id = g_strdup(Glib::ustring("mirror-").append(id_origin_char).c_str());
-    items.clear();
-    items.push_back(elemref_id);
-    SPObject *elemref= NULL;
-    Inkscape::XML::Node *phantom = NULL;
-    if (elemref = document->getObjectById(elemref_id)) {
-        phantom = elemref->getRepr();
-    } else {
-        phantom = sp_lpe_item->getRepr()->duplicate(xml_doc);
-        std::vector<const char *> attrs;
-        attrs.push_back("inkscape:path-effect");
-        attrs.push_back("inkscape:original-d");
-        attrs.push_back("sodipodi:type");
-        attrs.push_back("sodipodi:rx");
-        attrs.push_back("sodipodi:ry");
-        attrs.push_back("sodipodi:cx");
-        attrs.push_back("sodipodi:cy");
-        attrs.push_back("sodipodi:end");
-        attrs.push_back("sodipodi:start");
-        attrs.push_back("inkscape:flatsided");
-        attrs.push_back("inkscape:randomized");
-        attrs.push_back("inkscape:rounded");
-        attrs.push_back("sodipodi:arg1");
-        attrs.push_back("sodipodi:arg2");
-        attrs.push_back("sodipodi:r1");
-        attrs.push_back("sodipodi:r2");
-        attrs.push_back("sodipodi:sides");
-        attrs.push_back("inkscape:randomized");
-        attrs.push_back("sodipodi:argument");
-        attrs.push_back("sodipodi:expansion");
-        attrs.push_back("sodipodi:radius");
-        attrs.push_back("sodipodi:revolution");
-        attrs.push_back("sodipodi:t0");
-        attrs.push_back("inkscape:randomized");
-        attrs.push_back("inkscape:randomized");
-        attrs.push_back("inkscape:randomized");
-        attrs.push_back("x");
-        attrs.push_back("y");
-        attrs.push_back("rx");
-        attrs.push_back("ry");
-        attrs.push_back("width");
-        attrs.push_back("height");
-        for(const char * attr : attrs) { 
-            phantom->setAttribute(attr, NULL);
+    if (document) {
+        Inkscape::XML::Document *xml_doc = document->getReprDoc();
+        const char * id_origin_char = id_origin.param_getSVGValue();
+        const char * elemref_id = g_strdup(Glib::ustring("mirror-").append(id_origin_char).c_str());
+        items.clear();
+        items.push_back(elemref_id);
+        SPObject *elemref= NULL;
+        Inkscape::XML::Node *phantom = NULL;
+        if (elemref = document->getObjectById(elemref_id)) {
+            phantom = elemref->getRepr();
+        } else {
+            phantom = sp_lpe_item->getRepr()->duplicate(xml_doc);
+            std::vector<const char *> attrs;
+            attrs.push_back("inkscape:path-effect");
+            attrs.push_back("inkscape:original-d");
+            attrs.push_back("sodipodi:type");
+            attrs.push_back("sodipodi:rx");
+            attrs.push_back("sodipodi:ry");
+            attrs.push_back("sodipodi:cx");
+            attrs.push_back("sodipodi:cy");
+            attrs.push_back("sodipodi:end");
+            attrs.push_back("sodipodi:start");
+            attrs.push_back("inkscape:flatsided");
+            attrs.push_back("inkscape:randomized");
+            attrs.push_back("inkscape:rounded");
+            attrs.push_back("sodipodi:arg1");
+            attrs.push_back("sodipodi:arg2");
+            attrs.push_back("sodipodi:r1");
+            attrs.push_back("sodipodi:r2");
+            attrs.push_back("sodipodi:sides");
+            attrs.push_back("inkscape:randomized");
+            attrs.push_back("sodipodi:argument");
+            attrs.push_back("sodipodi:expansion");
+            attrs.push_back("sodipodi:radius");
+            attrs.push_back("sodipodi:revolution");
+            attrs.push_back("sodipodi:t0");
+            attrs.push_back("inkscape:randomized");
+            attrs.push_back("inkscape:randomized");
+            attrs.push_back("inkscape:randomized");
+            attrs.push_back("x");
+            attrs.push_back("y");
+            attrs.push_back("rx");
+            attrs.push_back("ry");
+            attrs.push_back("width");
+            attrs.push_back("height");
+            for(const char * attr : attrs) { 
+                phantom->setAttribute(attr, NULL);
+            }
         }
-    }
-    phantom->setAttribute("id", elemref_id);
-    if (!elemref) {
-        elemref = container->appendChildRepr(phantom);
-        Inkscape::GC::release(phantom);
-    }
-    cloneD(SP_OBJECT(sp_lpe_item), elemref, true, true);
-    elemref->getRepr()->setAttribute("transform" , sp_svg_transform_write(transform));
-    if (elemref->parent != container) {
-        Inkscape::XML::Node *copy = phantom->duplicate(xml_doc);
-        copy->setAttribute("id", elemref_id);
-        container->appendChildRepr(copy);
-        Inkscape::GC::release(copy);
-        elemref->deleteObject();
+        phantom->setAttribute("id", elemref_id);
+        if (!elemref) {
+            elemref = container->appendChildRepr(phantom);
+            Inkscape::GC::release(phantom);
+        }
+        cloneD(SP_OBJECT(sp_lpe_item), elemref, true, true);
+        elemref->getRepr()->setAttribute("transform" , sp_svg_transform_write(transform));
+        if (elemref->parent != container) {
+            Inkscape::XML::Node *copy = phantom->duplicate(xml_doc);
+            copy->setAttribute("id", elemref_id);
+            container->appendChildRepr(copy);
+            Inkscape::GC::release(copy);
+            elemref->deleteObject();
+        }
     }
 }
 

@@ -92,11 +92,13 @@ LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem)
 {
     if (split_items) {
         SPDocument * document = SP_ACTIVE_DOCUMENT;
+        if (!document) {
+            return;
+        }
         items.clear();
         container = dynamic_cast<SPObject *>(sp_lpe_item->parent);
-        SPDocument * doc = SP_ACTIVE_DOCUMENT;
         Inkscape::XML::Node *root = sp_lpe_item->document->getReprRoot();
-        Inkscape::XML::Node *root_origin = doc->getReprRoot();
+        Inkscape::XML::Node *root_origin = document->getReprRoot();
         if (root_origin != root) {
             return;
         }
@@ -168,15 +170,15 @@ LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem)
         processObjects(LPE_ERASE);
         items.clear();
     }
-    
-    std::cout << previous_num_copies << "previous_num_copies\n";
-    std::cout << num_copies << "num_copies\n";
 }
 
 void
 LPECopyRotate::cloneD(SPObject *origin, SPObject *dest, bool root, bool reset) 
 {
     SPDocument * document = SP_ACTIVE_DOCUMENT;
+    if (!document) {
+        return;
+    }
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
     if ( SP_IS_GROUP(origin) && SP_IS_GROUP(dest) && SP_GROUP(origin)->getItemCount() == SP_GROUP(dest)->getItemCount() ) {
         std::vector< SPObject * > childs = origin->childList(true);
@@ -190,7 +192,7 @@ LPECopyRotate::cloneD(SPObject *origin, SPObject *dest, bool root, bool reset)
     }
     SPShape * shape =  SP_SHAPE(origin);
     SPPath * path =  SP_PATH(dest);
-    if (!path && !SP_IS_GROUP(dest)) {
+    if (shape && !path) {
         Inkscape::XML::Node *dest_node = sp_selected_item_to_curved_repr(SP_ITEM(dest), 0);
         dest->updateRepr(xml_doc, dest_node, SP_OBJECT_WRITE_ALL);
         path =  SP_PATH(dest);
@@ -219,6 +221,9 @@ void
 LPECopyRotate::toItem(Geom::Affine transform, size_t i, bool reset)
 {
     SPDocument * document = SP_ACTIVE_DOCUMENT;
+    if (!document) {
+        return;
+    }
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
     const char * elemref_id = g_strdup(Glib::ustring("rotated-").append(std::to_string(i)).append("-").append(sp_lpe_item->getRepr()->attribute("id")).c_str());
     items.push_back(elemref_id);
@@ -377,11 +382,11 @@ LPECopyRotate::doBeforeEffect (SPLPEItem const* lpeitem)
         num_copies.param_set_increments(1.0, 10.0);
     }
 
-    if (dist_angle_handle < 1.0) {
-        dist_angle_handle = 1.0;
-    }
     A = Point(boundingbox_X.min(), boundingbox_Y.middle());
     B = Point(boundingbox_X.middle(), boundingbox_Y.middle());
+    if (Geom::are_near(A, B, 0.01)) {
+        B += Geom::Point(1.0, 0.0);
+    }
     dir = unit_vector(B - A);
     // I first suspected the minus sign to be a bug in 2geom but it is
     // likely due to SVG's choice of coordinate system orientation (max)
@@ -393,6 +398,9 @@ LPECopyRotate::doBeforeEffect (SPLPEItem const* lpeitem)
         } else {
             dist_angle_handle = L2(starting_point - origin);
         }
+    }
+    if (dist_angle_handle < 1.0) {
+        dist_angle_handle = 1.0;
     }
     start_pos = origin + dir * Rotate(-rad_from_deg(starting_angle)) * dist_angle_handle;
     rot_pos = origin + dir * Rotate(-rad_from_deg(rotation_angle+starting_angle)) * dist_angle_handle;

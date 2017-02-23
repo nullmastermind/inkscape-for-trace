@@ -171,6 +171,9 @@ void
 LPEMeasureLine::createArrowMarker(const char * mode)
 {
     SPDocument * document = SP_ACTIVE_DOCUMENT;
+    if (!document) {
+        return;
+    }
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
     SPObject *elemref = NULL;
     Inkscape::XML::Node *arrow = NULL;
@@ -232,6 +235,9 @@ void
 LPEMeasureLine::createTextLabel(Geom::Point pos, double length, Geom::Coord angle, bool remove, bool valid)
 {
     SPDocument * document = SP_ACTIVE_DOCUMENT;
+    if (!document) {
+        return;
+    }
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
     Inkscape::XML::Node *rtext = NULL;
     double doc_w = document->getRoot()->width.value;
@@ -376,6 +382,9 @@ void
 LPEMeasureLine::createLine(Geom::Point start,Geom::Point end, const char * id, bool main, bool overflow, bool remove, bool arrows)
 {
     SPDocument * document = SP_ACTIVE_DOCUMENT;
+    if (!document) {
+        return;
+    }
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
     SPObject *elemref = NULL;
     Inkscape::XML::Node *line = NULL;
@@ -500,6 +509,9 @@ LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
     SPLPEItem * splpeitem = const_cast<SPLPEItem *>(lpeitem);
     sp_lpe_item->parent = dynamic_cast<SPObject *>(splpeitem->parent);
     SPDocument * document = SP_ACTIVE_DOCUMENT;
+    if (!document) {
+        return;
+    }
     Inkscape::XML::Node *root = splpeitem->document->getReprRoot();
     Inkscape::XML::Node *root_origin = document->getReprRoot();
     if (root_origin != root) {

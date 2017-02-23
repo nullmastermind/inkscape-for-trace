@@ -199,7 +199,8 @@ public:
 
     std::vector<SPObject *> getObjectsByClass(Glib::ustring const &klass) const;
     std::vector<SPObject *> getObjectsByElement(Glib::ustring const &element) const;
-
+    std::vector<SPObject *> getObjectsBySelector(Glib::ustring const &selector) const;
+    
     void bindObjectToRepr(Inkscape::XML::Node *repr, SPObject *object);
     SPObject *getObjectByRepr(Inkscape::XML::Node *repr) const;
 
