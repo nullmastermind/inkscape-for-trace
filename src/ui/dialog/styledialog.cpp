@@ -93,7 +93,7 @@ StyleDialog::TreeStore::row_draggable_vfunc(const Gtk::TreeModel::Path& path) co
     const_iterator iter = unconstThis->get_iter(path);
     if (iter) {
         Gtk::TreeModel::Row row = *iter;
-        bool is_draggable      = row[_styledialog->_mColumns._colAddRemove];
+        bool is_draggable      = row[_styledialog->_mColumns._colIsSelector];
         return is_draggable;
     }
     return Gtk::TreeStore::row_draggable_vfunc(path);
@@ -169,7 +169,7 @@ StyleDialog::StyleDialog() :
     int addCol = _treeView.append_column("", *addRenderer) - 1;
     Gtk::TreeViewColumn *col = _treeView.get_column(addCol);
     if ( col ) {
-        col->add_attribute( addRenderer->property_active(), _mColumns._colAddRemove );
+        col->add_attribute( addRenderer->property_active(), _mColumns._colIsSelector );
     }
     _treeView.append_column("CSS Selector", _mColumns._colSelector);
     _treeView.set_expander_column(*(_treeView.get_column(1)));
@@ -216,6 +216,9 @@ StyleDialog::StyleDialog() :
 
     _treeView.get_selection()->signal_changed().connect(
         sigc::mem_fun(*this, &StyleDialog::_selChanged));
+
+    _objObserver.signal_changed().connect(sigc::mem_fun(*this, &StyleDialog::_objChanged));
+
 
     // Add CSS dialog
     _cssPane = new CssDialog;
@@ -399,7 +402,7 @@ void StyleDialog::_readStyleElement()
 
         Gtk::TreeModel::Row row = *(_store->append());
         row[_mColumns._colSelector]   = selector;
-        row[_mColumns._colAddRemove]  = true;
+        row[_mColumns._colIsSelector] = true;
         row[_mColumns._colObj]        = objVec;
         row[_mColumns._colProperties] = properties;
         
@@ -407,7 +410,7 @@ void StyleDialog::_readStyleElement()
         for (auto& obj: objVec) {
             Gtk::TreeModel::Row childrow = *(_store->append(row->children()));
             childrow[_mColumns._colSelector]   = "#" + Glib::ustring(obj->getId());
-            childrow[_mColumns._colAddRemove]  = false;
+            childrow[_mColumns._colIsSelector] = false;
             childrow[_mColumns._colObj]        = std::vector<SPObject *>(1, obj);
             childrow[_mColumns._colProperties] = "";  // Unused
         }
@@ -482,9 +485,10 @@ void StyleDialog::_addToSelector(Gtk::TreeModel::Row row)
 
                     // Add child row
                     Gtk::TreeModel::Row childrow = *(_store->append(row->children()));
-                    childrow[_mColumns._colSelector]  = "#" + Glib::ustring(obj->getId());
-                    childrow[_mColumns._colAddRemove] = false;
-                    childrow[_mColumns._colObj]       = std::vector<SPObject *>(1, obj);
+                    childrow[_mColumns._colSelector]   = "#" + Glib::ustring(obj->getId());
+                    childrow[_mColumns._colIsSelector] = false;
+                    childrow[_mColumns._colObj]        = std::vector<SPObject *>(1, obj);
+                    childrow[_mColumns._colProperties] = "";  // Unused
                 }
             }
         }
@@ -509,9 +513,10 @@ void StyleDialog::_addToSelector(Gtk::TreeModel::Row row)
             for (auto& obj: objVec) {
                 // Add child row
                 Gtk::TreeModel::Row childrow = *(_store->append(row->children()));
-                childrow[_mColumns._colSelector]  = "#" + Glib::ustring(obj->getId());
-                childrow[_mColumns._colAddRemove] = false;
-                childrow[_mColumns._colObj]       = std::vector<SPObject *>(1, obj);
+                childrow[_mColumns._colSelector]   = "#" + Glib::ustring(obj->getId());
+                childrow[_mColumns._colIsSelector] = false;
+                childrow[_mColumns._colObj]        = std::vector<SPObject *>(1, obj);
+                childrow[_mColumns._colProperties] = "";  // Unused
             }
         }
 
@@ -820,16 +825,16 @@ void StyleDialog::_addSelector()
 
     // Add entry to GUI tree
     Gtk::TreeModel::Row row = *(_store->append());
-    row[_mColumns._colSelector]  = selectorValue;
-    row[_mColumns._colAddRemove] = true;
-    row[_mColumns._colObj]       = objVec;
+    row[_mColumns._colSelector]   = selectorValue;
+    row[_mColumns._colIsSelector] = true;
+    row[_mColumns._colObj]        = objVec;
 
     // Add as children objects that match selector.
     for (auto& obj: objVec) {
         Gtk::TreeModel::Row childrow = *(_store->append(row->children()));
-        childrow[_mColumns._colSelector]  = "#" + Glib::ustring(obj->getId());
-        childrow[_mColumns._colAddRemove] = false;
-        childrow[_mColumns._colObj]       = std::vector<SPObject *>(1, obj);
+        childrow[_mColumns._colSelector]   = "#" + Glib::ustring(obj->getId());
+        childrow[_mColumns._colIsSelector] = false;
+        childrow[_mColumns._colObj]        = std::vector<SPObject *>(1, obj);
     }
 
     // Add entry to style element
@@ -906,6 +911,8 @@ void StyleDialog::_updateCSSPanel()
 #ifdef DEBUG_STYLEDIALOG
     std::cout << "StyleDialog::_updateCSSPanel" << std::endl;
 #endif
+    _updating = true;
+
     // This should probably be in a member function of CSSDialog.
     _cssPane->_store->clear();
 
@@ -913,7 +920,17 @@ void StyleDialog::_updateCSSPanel()
     Gtk::TreeModel::iterator iter = refTreeSelection->get_selected();
     if (iter) {
         Gtk::TreeModel::Row row = *iter;
-        Glib::ustring properties = row[_mColumns._colProperties];
+        Glib::ustring properties;
+        if (row[_mColumns._colIsSelector]) {
+            properties = row[_mColumns._colProperties];
+            _objObserver.set( NULL );
+        } else {
+            std::vector<SPObject *> objects = row[_mColumns._colObj];
+            _objObserver.set( objects[0] );
+            if (objects[0] && objects[0]->getAttribute("style") != NULL) {
+                properties =  objects[0]->getAttribute("style");
+            }
+        }
         REMOVE_SPACES(properties); // Remove leading/trailing spaces
 
         std::vector<Glib::ustring> tokens =
@@ -926,6 +943,8 @@ void StyleDialog::_updateCSSPanel()
             }
         }
     }
+
+    _updating = false;
 }
 
 
@@ -1006,6 +1025,16 @@ void StyleDialog::_selChanged() {
 #endif
 }
 
+
+void StyleDialog::_objChanged() {
+#ifdef DEBUG_STYLEDIALOG
+    std::cout << "StyleDialog::_objChanged" << std::endl;
+#endif
+    if (_updating) return;
+    _updateCSSPanel();
+}
+
+
 /**
  * @brief StyleDialog::_handleEdited
  * @param path
@@ -1080,6 +1109,19 @@ bool StyleDialog::_delProperty(GdkEventButton *event)
                         Gtk::TreeModel::Row row = *iter;
                         row[_mColumns._colProperties] = properties;
                         _writeStyleElement();        
+
+                        // Update style attribute
+                        if (!row[_mColumns._colIsSelector]) {
+                            std::vector<SPObject *> objects = row[_mColumns._colObj];
+                            if (objects[0]) {
+                                Glib::ustring properties = row[_mColumns._colProperties];
+                                if (properties.empty()) {
+                                    objects[0]->setAttribute("style", NULL);
+                                } else {
+                                    objects[0]->setAttribute("style", properties);
+                                }
+                            }
+                        }
                     }
                 }
             }

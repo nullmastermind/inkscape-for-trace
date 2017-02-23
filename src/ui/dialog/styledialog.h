@@ -26,6 +26,8 @@
 #include "document.h"
 #include "ui/dialog/cssdialog.h"
 
+#include "xml/helper-observer.h"
+
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
@@ -61,12 +63,12 @@ private:
     public:
         ModelColumns() {
             add(_colSelector);
-            add(_colAddRemove);
+            add(_colIsSelector);
             add(_colObj);
             add(_colProperties);
         }
         Gtk::TreeModelColumn<Glib::ustring> _colSelector;       // Selector or matching object id.
-        Gtk::TreeModelColumn<bool> _colAddRemove;               // Selector row or child object row.
+        Gtk::TreeModelColumn<bool> _colIsSelector;              // Selector row or child object row.
         Gtk::TreeModelColumn<std::vector<SPObject *> > _colObj; // List of matching objects.
         Gtk::TreeModelColumn<Glib::ustring> _colProperties;     // List of properties.
     };
@@ -111,7 +113,8 @@ private:
     SPDocument* _document;
     bool _updating;  // Prevent cyclic actions: read <-> write, select via dialog <-> via desktop
     Inkscape::XML::Node *_textNode;
-    
+    Inkscape::XML::SignalObserver _objObserver; // Track object in selected row (to update CSS panel).
+
     // Reading and writing the style element.
     Inkscape::XML::Node *_getStyleTextNode();
     void _readStyleElement();
@@ -133,6 +136,7 @@ private:
     void _buttonEventsSelectObjs(GdkEventButton *event);
     void _selectRow(Selection *); // Select row in tree when selection changed.
     void _selChanged();
+    void _objChanged();
 
     // Signal handlers for CssDialog
     void _handleEdited(const Glib::ustring& path, const Glib::ustring& new_text);
