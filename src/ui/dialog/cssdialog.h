@@ -47,9 +47,13 @@ public:
         CssColumns() {
 	  add(_colUnsetProp);
 	  add(_propertyLabel);
+	  add(_styleSheetVal);
+	  add(_styleAttrVal);
 	}
         Gtk::TreeModelColumn<bool> _colUnsetProp;
         Gtk::TreeModelColumn<Glib::ustring> _propertyLabel;
+        Gtk::TreeModelColumn<Glib::ustring> _styleSheetVal;
+        Gtk::TreeModelColumn<Glib::ustring> _styleAttrVal;
     };
     CssColumns _cssColumns;
 
@@ -57,13 +61,18 @@ public:
     Gtk::TreeView _treeView;
     Glib::RefPtr<Gtk::ListStore> _store;
     Gtk::TreeModel::Row _propRow;
-    Gtk::CellRendererText *_textRenderer;
+    Gtk::CellRendererText *_propRenderer;
+    Gtk::CellRendererText *_sheetRenderer;
+    Gtk::CellRendererText *_attrRenderer;
     Gtk::TreeViewColumn *_propCol;
+    Gtk::TreeViewColumn *_sheetCol;
+    Gtk::TreeViewColumn *_attrCol;
 
     // Widgets
     Gtk::VBox _mainBox;
     Gtk::ScrolledWindow _scrolledWindow;
     Gtk::HBox _buttonBox;
+    Gtk::Button _buttonAddProperty;
 
     // Variables - Inkscape
     SPDesktop* _desktop;

@@ -139,7 +139,9 @@ private:
     void _objChanged();
 
     // Signal handlers for CssDialog
-    void _handleEdited(const Glib::ustring& path, const Glib::ustring& new_text);
+    void _handleProp( const Glib::ustring& path, const Glib::ustring& new_text);
+    void _handleSheet(const Glib::ustring& path, const Glib::ustring& new_text);
+    void _handleAttr( const Glib::ustring& path, const Glib::ustring& new_text);
     bool _delProperty(GdkEventButton *event);
 
     // GUI

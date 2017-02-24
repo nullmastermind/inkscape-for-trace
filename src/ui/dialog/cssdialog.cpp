@@ -53,27 +53,41 @@ CssDialog::CssDialog():
     if (col) {
         col->add_attribute(addRenderer->property_active(), _cssColumns._colUnsetProp);
     }
-    _textRenderer = Gtk::manage(new Gtk::CellRendererText());
-    _textRenderer->property_editable() = true;
 
-    int nameColNum = _treeView.append_column("CSS Property", *_textRenderer) - 1;
+    _propRenderer = Gtk::manage(new Gtk::CellRendererText());
+    _propRenderer->property_editable() = true;
+    int nameColNum = _treeView.append_column("CSS Property", *_propRenderer) - 1;
     _propCol = _treeView.get_column(nameColNum);
     if (_propCol) {
-      _propCol->add_attribute(_textRenderer->property_text(),
-			      _cssColumns._propertyLabel);
+      _propCol->add_attribute(_propRenderer->property_text(), _cssColumns._propertyLabel);
     }
 
-    Gtk::Button* create = manage(new Gtk::Button());
-    _styleButton(*create, "list-add", "Add a new property");
+    _sheetRenderer = Gtk::manage(new Gtk::CellRendererText());
+    _sheetRenderer->property_editable() = true;
+    int sheetColNum = _treeView.append_column("Style Sheet", *_sheetRenderer) - 1;
+    _sheetCol = _treeView.get_column(sheetColNum);
+    if (_sheetCol) {
+      _sheetCol->add_attribute(_sheetRenderer->property_text(), _cssColumns._styleSheetVal);
+    }
+
+    _attrRenderer = Gtk::manage(new Gtk::CellRendererText());
+    _attrRenderer->property_editable() = false;
+    int attrColNum = _treeView.append_column("Style Attribute", *_attrRenderer) - 1;
+    _attrCol = _treeView.get_column(attrColNum);
+    if (_attrCol) {
+      _attrCol->add_attribute(_attrRenderer->property_text(), _cssColumns._styleAttrVal);
+    }
+
+    _styleButton(_buttonAddProperty, "list-add", "Add a new property");
 
     _mainBox.pack_end(_buttonBox, Gtk::PACK_SHRINK);
-    _buttonBox.pack_start(*create, Gtk::PACK_SHRINK);
+    _buttonBox.pack_start(_buttonAddProperty, Gtk::PACK_SHRINK);
 
     _getContents()->pack_start(_mainBox, Gtk::PACK_EXPAND_WIDGET);
 
     setDesktop(getDesktop());
 
-    create->signal_clicked().connect(sigc::mem_fun(*this, &CssDialog::_addProperty));
+    _buttonAddProperty.signal_clicked().connect(sigc::mem_fun(*this, &CssDialog::_addProperty));
 }
 
 

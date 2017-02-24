@@ -25,6 +25,8 @@
 #include <glibmm/i18n.h>
 #include <glibmm/regex.h>
 
+#include <map>
+
 //#define DEBUG_STYLEDIALOG
 
 using Inkscape::DocumentUndo;
@@ -139,7 +141,6 @@ Glib::RefPtr<StyleDialog::TreeStore> StyleDialog::TreeStore::create(StyleDialog 
     return Glib::RefPtr<StyleDialog::TreeStore>( store );
 }
 
-
 /**
  * Constructor
  * A treeview and a set of two buttons are added to the dialog. _addSelector
@@ -225,8 +226,12 @@ StyleDialog::StyleDialog() :
     _paned.pack2(*_cssPane, Gtk::SHRINK);
     _cssPane->show_all();
 
-    _cssPane->_textRenderer->signal_edited().connect(
-        sigc::mem_fun(*this, &StyleDialog::_handleEdited));
+    _cssPane->_propRenderer->signal_edited().connect(
+        sigc::mem_fun(*this, &StyleDialog::_handleProp));
+    _cssPane->_sheetRenderer->signal_edited().connect(
+        sigc::mem_fun(*this, &StyleDialog::_handleSheet));
+    _cssPane->_attrRenderer->signal_edited().connect(
+        sigc::mem_fun(*this, &StyleDialog::_handleAttr));
     _cssPane->_treeView.signal_button_release_event().connect(
         sigc::mem_fun(*this, &StyleDialog::_delProperty),
         false);
@@ -902,18 +907,41 @@ bool StyleDialog::_handleButtonEvent(GdkEventButton *event)
     return false;
 }
 
+// -------------------------------------------------------------------
+
+class PropertyData
+{
+public:
+    PropertyData() {};
+    PropertyData(Glib::ustring name) : _name(name) {};
+
+    void _setSheetValue(Glib::ustring value) { _sheetValue = value; };
+    void _setAttrValue(Glib::ustring value)  { _attrValue  = value; };
+    Glib::ustring _getName()       { return _name;       };
+    Glib::ustring _getSheetValue() { return _sheetValue; };
+    Glib::ustring _getAttrValue()  { return _attrValue;  };
+
+private:
+    Glib::ustring _name;
+    Glib::ustring _sheetValue;
+    Glib::ustring _attrValue;
+};
+
+// -------------------------------------------------------------------
+
+
 /**
  * @brief StyleDialog::_updateCSSPanel
  * Updates CSS panel according to row in Style panel.
  */
 void StyleDialog::_updateCSSPanel()
 {
+    // This should probably be in a member function of CSSDialog.
 #ifdef DEBUG_STYLEDIALOG
     std::cout << "StyleDialog::_updateCSSPanel" << std::endl;
 #endif
     _updating = true;
 
-    // This should probably be in a member function of CSSDialog.
     _cssPane->_store->clear();
 
     Glib::RefPtr<Gtk::TreeSelection> refTreeSelection = _treeView.get_selection();
@@ -921,26 +949,86 @@ void StyleDialog::_updateCSSPanel()
     if (iter) {
         Gtk::TreeModel::Row row = *iter;
         Glib::ustring properties;
+        Glib::ustring sheet;
+        Glib::ustring attr;
         if (row[_mColumns._colIsSelector]) {
+            _cssPane->_propRenderer->property_editable() = true;
+            _cssPane->_sheetRenderer->property_editable() = true;
+            _cssPane->_sheetRenderer->property_foreground_rgba() = Gdk::RGBA("black");
+            _cssPane->_attrRenderer->property_editable() = false;
+            _cssPane->_buttonAddProperty.set_sensitive(true);
+
             properties = row[_mColumns._colProperties];
+            sheet = row[_mColumns._colProperties];
             _objObserver.set( NULL );
         } else {
+            _cssPane->_propRenderer->property_editable() = false;
+            _cssPane->_sheetRenderer->property_editable() = false;
+            _cssPane->_sheetRenderer->property_foreground_rgba() = Gdk::RGBA("gray");
+            _cssPane->_attrRenderer->property_editable() = false; // false for now...
+            _cssPane->_buttonAddProperty.set_sensitive(false);
+
             std::vector<SPObject *> objects = row[_mColumns._colObj];
+            Gtk::TreeModel::iterator piter = row.parent();
+            if (piter) {
+                Gtk::TreeModel::Row prow = *piter;
+                sheet = prow[_mColumns._colProperties];
+            }
             _objObserver.set( objects[0] );
             if (objects[0] && objects[0]->getAttribute("style") != NULL) {
                 properties =  objects[0]->getAttribute("style");
+                attr =  objects[0]->getAttribute("style");
             }
         }
         REMOVE_SPACES(properties); // Remove leading/trailing spaces
 
-        std::vector<Glib::ustring> tokens =
-            Glib::Regex::split_simple("\\s*;\\s*", properties);
-        for (auto& token: tokens) {
-            if (!token.empty()) {
-                _cssPane->_propRow = *(_cssPane->_store->append());
-                _cssPane->_propRow[_cssPane->_cssColumns._colUnsetProp] = false;
-                _cssPane->_propRow[_cssPane->_cssColumns._propertyLabel] = token;
+        std::map<Glib::ustring, PropertyData> propMap;
+
+        std::vector<Glib::ustring> sheetList = Glib::Regex::split_simple("\\s*;\\s*", sheet);
+        for (auto& token: sheetList) {
+
+            if (token.empty()) break;
+
+            std::vector<Glib::ustring> pair =
+                Glib::Regex::split_simple("\\s*:\\s*", token);
+            if( pair.size() > 1) {
+                PropertyData temp( pair[0] );
+                temp._setSheetValue( pair[1] );
+                propMap[pair[0]] = temp;
             }
+        }
+
+        std::vector<Glib::ustring> attrList = Glib::Regex::split_simple("\\s*;\\s*", attr);
+        for (auto& token: attrList) {
+
+            if (token.empty()) break;
+
+            std::vector<Glib::ustring> pair =
+                Glib::Regex::split_simple("\\s*:\\s*", token);
+
+            if( pair.size() > 1) {
+                auto it = propMap.find(pair[0]);
+                if (it != propMap.end()) {
+                    (*it).second._setAttrValue( pair[1] );
+                } else {
+                    PropertyData temp(pair[0]);
+                    temp._setAttrValue( pair[1] );
+                    propMap[pair[0]] = temp;
+                }
+            }
+        }
+
+        for (auto it : propMap) {
+            // std::cout << " " << it.first
+            //           << " " << it.second._getName()
+            //           << " " << it.second._getSheetValue()
+            //           << " " << it.second._getAttrValue()
+            //           << std::endl;
+            _cssPane->_propRow = *(_cssPane->_store->append());
+            _cssPane->_propRow[_cssPane->_cssColumns._colUnsetProp] = false;
+            _cssPane->_propRow[_cssPane->_cssColumns._propertyLabel] = it.second._getName();
+            _cssPane->_propRow[_cssPane->_cssColumns._styleSheetVal] = it.second._getSheetValue();
+            _cssPane->_propRow[_cssPane->_cssColumns._styleAttrVal ] = it.second._getAttrValue();
         }
     }
 
@@ -1036,15 +1124,15 @@ void StyleDialog::_objChanged() {
 
 
 /**
- * @brief StyleDialog::_handleEdited
+ * @brief StyleDialog::_handleProp
  * @param path
  * @param new_text
- * Update trees when new text is entered into a CSS dialog row.
+ * Called when new text is entered into a "prop" cell..
  */
-void StyleDialog::_handleEdited(const Glib::ustring& path, const Glib::ustring& new_text)
+void StyleDialog::_handleProp(const Glib::ustring& path, const Glib::ustring& new_text)
 {
 #ifdef DEBUG_STYLEDIALOG
-    std::cout << "StyleDialog::_handleEdited: path: " << path
+    std::cout << "StyleDialog::_handleProp: path: " << path
               << "  new_text: " << new_text << std::endl;
 #endif
 
@@ -1054,9 +1142,35 @@ void StyleDialog::_handleEdited(const Glib::ustring& path, const Glib::ustring& 
         row[_cssPane->_cssColumns._propertyLabel] = new_text;
     }
 
+    // To do: validate.
+}
+
+/**
+ * @brief StyleDialog::_handleSheet
+ * @param path
+ * @param new_text
+ * Called when new text is entered into a "sheet" cell..
+ */
+void StyleDialog::_handleSheet(const Glib::ustring& path, const Glib::ustring& new_text)
+{
+#ifdef DEBUG_STYLEDIALOG
+    std::cout << "StyleDialog::_handleSheet: path: " << path
+              << "  new_text: " << new_text << std::endl;
+#endif
+
+    Gtk::TreeModel::iterator iterCss = _cssPane->_treeView.get_model()->get_iter(path);
+    if (iterCss) {
+        Gtk::TreeModel::Row row = *iterCss;
+        row[_cssPane->_cssColumns._styleSheetVal] = new_text;
+    }
+
+    // To do: validate (run through style.read()/style.write()?).
+
     Glib::ustring properties;
     for (auto& crow: _cssPane->_store->children()) {
-        properties = properties + crow[_cssPane->_cssColumns._propertyLabel] + "; ";
+        properties = properties +
+            crow[_cssPane->_cssColumns._propertyLabel] + ": " +
+            crow[_cssPane->_cssColumns._styleSheetVal] + "; ";
     }
 
     // Update selector data.
@@ -1067,6 +1181,37 @@ void StyleDialog::_handleEdited(const Glib::ustring& path, const Glib::ustring& 
         row[_mColumns._colProperties] = properties;
         _writeStyleElement();        
     }
+}
+
+/**
+ * @brief StyleDialog::_handleAttr
+ * @param path
+ * @param new_text
+ * Called when new text is entered into an "attr" cell..
+ */
+void StyleDialog::_handleAttr(const Glib::ustring& path, const Glib::ustring& new_text)
+{
+#ifdef DEBUG_STYLEDIALOG
+    std::cout << "StyleDialog::_handleAttr: path: " << path
+              << "  new_text: " << new_text << std::endl;
+#endif
+
+    Gtk::TreeModel::iterator iterCss = _cssPane->_treeView.get_model()->get_iter(path);
+    if (iterCss) {
+        Gtk::TreeModel::Row row = *iterCss;
+        row[_cssPane->_cssColumns._styleAttrVal] = new_text;
+    }
+
+    // To do: validate (run through style.read()/style.write()?).
+
+    Glib::ustring properties;
+    for (auto& crow: _cssPane->_store->children()) {
+        properties = properties +
+            crow[_cssPane->_cssColumns._propertyLabel] + ": ";
+            crow[_cssPane->_cssColumns._styleAttrVal] + "; ";
+    }
+
+    std::cout << "StyleDialog::_handlerAttr(): Unimplemented write." << std::endl;
 }
 
 /**
@@ -1095,31 +1240,68 @@ bool StyleDialog::_delProperty(GdkEventButton *event)
                 Gtk::TreeModel::iterator cssIter =
                     _cssPane->_treeView.get_selection()->get_selected();
                 if (cssIter) {
-                    _cssPane->_store->erase(cssIter);
 
-                    Glib::ustring properties;
-                    for (auto& crow: _cssPane->_store->children()) {
-                        properties = properties + crow[_cssPane->_cssColumns._propertyLabel] + "; ";
-                    }
+                    Gtk::TreeModel::Row cssRow = *cssIter;
 
                     // Update selector data.
                     Glib::RefPtr<Gtk::TreeSelection> refTreeSelection = _treeView.get_selection();
                     Gtk::TreeModel::iterator iter = refTreeSelection->get_selected();
                     if (iter) {
-                        Gtk::TreeModel::Row row = *iter;
-                        row[_mColumns._colProperties] = properties;
-                        _writeStyleElement();        
 
-                        // Update style attribute
-                        if (!row[_mColumns._colIsSelector]) {
+                        Gtk::TreeModel::Row row = *iter;
+
+                        if ( row[_mColumns._colIsSelector]) {
+
+                            // We only care about style sheet for selectors so erase row in CSS pane.
+                            _cssPane->_store->erase(cssIter);
+
+                            // Update style sheet
+                            Glib::ustring properties;
+                            for (auto& crow: _cssPane->_store->children()) {
+                                Glib::ustring sheetVal = crow[_cssPane->_cssColumns._styleSheetVal];
+                                if (!sheetVal.empty()) {
+                                    properties = properties +
+                                        crow[_cssPane->_cssColumns._propertyLabel] + ": " +
+                                        crow[_cssPane->_cssColumns._styleSheetVal] + "; ";
+                                }
+                            }
+
+                            row[_mColumns._colProperties] = properties;
+                            _writeStyleElement();
+
+                        } else {
+
+                            // We only erase row if style sheet does not contain deleted property.
+                            // Otherwise we set style attr value to empty string.
+                            Gtk::TreeModel::Row cssRow = *cssIter;
+                            Glib::ustring val = cssRow[_cssPane->_cssColumns._styleSheetVal];
+                            if (val.empty()) {
+                                _cssPane->_store->erase(cssIter);
+                            } else {
+                                cssRow[_cssPane->_cssColumns._styleAttrVal] = Glib::ustring();
+                            }
+
+                            // Update style attribute
                             std::vector<SPObject *> objects = row[_mColumns._colObj];
+                            Glib::ustring properties;
+                            for (auto& crow: _cssPane->_store->children()) {
+                                Glib::ustring attrVal = crow[_cssPane->_cssColumns._styleAttrVal];
+                                if (!attrVal.empty()) {
+                                    properties = properties +
+                                        crow[_cssPane->_cssColumns._propertyLabel] + ": " +
+                                        crow[_cssPane->_cssColumns._styleAttrVal]  + "; ";
+                                }
+                            }
+
                             if (objects[0]) {
-                                Glib::ustring properties = row[_mColumns._colProperties];
                                 if (properties.empty()) {
                                     objects[0]->setAttribute("style", NULL);
                                 } else {
                                     objects[0]->setAttribute("style", properties);
                                 }
+                                DocumentUndo::done(_document, SP_VERB_DIALOG_STYLE,
+                                                   _("Deleted property from style attribute."));
+
                             }
                         }
                     }
