@@ -205,6 +205,7 @@ static void sp_text_fontsize_value_changed( Ink_ComboBoxEntry_Action *act, GObje
     if (endptr == text) {  // Conversion failed, non-numeric input.
         g_warning( "Conversion of size text to double failed, input: %s\n", text );
         g_free( text );
+        g_object_set_data( tbl, "freeze", GINT_TO_POINTER(FALSE) );
         return;
     }
     g_free( text );
