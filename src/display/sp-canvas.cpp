@@ -78,13 +78,13 @@ static void ungrab_default_client_pointer(guint32 const time = GDK_CURRENT_TIME)
     auto const display = Gdk::Display::get_default();
 
 #if GTK_CHECK_VERSION(3,20,0)
-    auto const seat   = display->get_default_seat();
-    auto const device = seat->get_pointer();
+    auto const seat = display->get_default_seat();
+    seat->ungrab();
 #else
     auto const dm = display->get_device_manager();
     auto const device = dm->get_client_pointer();
-#endif
     device->ungrab(time);
+#endif
 }
 
 /**
@@ -639,11 +639,17 @@ int sp_canvas_item_grab(SPCanvasItem *item, guint event_mask, GdkCursor *cursor,
     auto display = gdk_display_get_default();
 #if GTK_CHECK_VERSION(3,20,0)
     auto seat   = gdk_display_get_default_seat(display);
-    auto device = gdk_seat_get_pointer(seat);
+    gdk_seat_grab(seat,
+                  getWindow(item->canvas),
+                  GDK_SEAT_CAPABILITY_ALL_POINTING,
+                  FALSE,
+                  cursor,
+                  NULL,
+                  NULL,
+                  NULL);
 #else
     auto dm = gdk_display_get_device_manager(display);
     auto device = gdk_device_manager_get_client_pointer(dm);
-#endif
 
     gdk_device_grab(device, 
                     getWindow(item->canvas),
@@ -652,6 +658,7 @@ int sp_canvas_item_grab(SPCanvasItem *item, guint event_mask, GdkCursor *cursor,
                     (GdkEventMask)(event_mask & (~(GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK))),
                     cursor,
                     etime);
+#endif
 
     item->canvas->_grabbed_item = item;
     item->canvas->_grabbed_event_mask = event_mask;
