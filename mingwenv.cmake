@@ -10,9 +10,6 @@ set(ENV_DEVLIBS_PATH C:/devlibs64)
 # Directory containing the MinGW instance used for compilation. Usually c:\mingw or c:\mingw64
 set(ENV_MINGW_PATH C:/mingw64)
 
-# Directory containing the (optional) Ghostscript installation.
-set(ENV_GS_PATH C:/latex/gs/gs8.61)
-
 # -----------------------------------------------------------------------------
 # MinGW Configuration
 # -----------------------------------------------------------------------------
@@ -33,19 +30,10 @@ else()
   message(STATUS "  Setting path to MinGW from environment: $ENV{MINGW_PATH}")
   set(MINGW_PATH $ENV{MINGW_PATH})
 endif()
-
-if("$ENV{GS_PATH}" STREQUAL "")
-  message(STATUS "  Setting path to Ghostscript from mingwenv.cmake: ${ENV_GS_PATH}")
-  set(GS_PATH ${ENV_GS_PATH})
-else()
-  message(STATUS "  Setting path to Ghostscript from environment: $ENV{GS_PATH}")
-  set(GS_PATH $ENV{GS_PATH})
-endif()
   
 # Normalize directory separator slashes.
 string(REGEX REPLACE "\\\\" "/" DEVLIBS_PATH ${DEVLIBS_PATH})
 string(REGEX REPLACE "\\\\" "/" MINGW_PATH ${MINGW_PATH})
-string(REGEX REPLACE "\\\\" "/" GS_PATH ${GS_PATH})
 
 # -----------------------------------------------------------------------------
 # DEVLIBS CHECKS
@@ -187,19 +175,6 @@ if(HAVE_MSYS)
 	
 	message(STATUS "  Setting path to ar.exe: ${CMAKE_AR}")
   endif()
-endif()
-
-# -----------------------------------------------------------------------------
-# GHOSTSCRIPT CHECKS
-# -----------------------------------------------------------------------------
-
-# Check for Ghostscript.
-set(GS_BIN "${GS_PATH}/bin")
-
-if(EXISTS "${GS_BIN}")
-  set(HAVE_GS_BIN ON)
-else()
-  set(HAVE_GS_BIN OFF)
 endif()
 
 # -----------------------------------------------------------------------------

@@ -312,8 +312,6 @@ message("DEVLIBS_PATH:            ${DEVLIBS_PATH}")
 message("DEVLIBS_LIB:             ${DEVLIBS_LIB}")
 message("DEVLIBS_BIN:             ${DEVLIBS_BIN}")
 message("PKG_CONFIG_PATH:         ${PKG_CONFIG_PATH}")
-message("GS_PATH                  ${GS_PATH}")
-message("GS_BIN                   ${GS_BIN}")
 endif()
 
 message("------------------------------------------------------------------------")
