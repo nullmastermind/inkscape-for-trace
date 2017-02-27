@@ -22,8 +22,7 @@
 #include <gtkmm/treeselection.h>
 #include <gtkmm/paned.h>
 
-#include "desktop.h"
-#include "document.h"
+#include "ui/dialog/desktop-tracker.h"
 #include "ui/dialog/cssdialog.h"
 
 #include "xml/helper-observer.h"
@@ -46,14 +45,15 @@ namespace Dialog {
 class StyleDialog : public Widget::Panel {
 
 public:
-    StyleDialog();
     ~StyleDialog();
 
     static StyleDialog &getInstance() { return *new StyleDialog(); }
 
-    void setDesktop(SPDesktop* desktop);
-
 private:
+    // No default constructor, noncopyable, nonassignable
+    StyleDialog();
+    StyleDialog(StyleDialog const &d);
+    StyleDialog operator=(StyleDialog const &d);
 
     // Monitor <style> element for changes.
     class NodeObserver;
@@ -108,13 +108,6 @@ private:
     Gtk::Button* create;
     CssDialog *_cssPane;
 
-    // Variables - Inkscape
-    SPDesktop* _desktop;  // To do: use panel _desktop
-    SPDocument* _document;
-    bool _updating;  // Prevent cyclic actions: read <-> write, select via dialog <-> via desktop
-    Inkscape::XML::Node *_textNode;
-    Inkscape::XML::SignalObserver _objObserver; // Track object in selected row (to update CSS panel).
-
     // Reading and writing the style element.
     Inkscape::XML::Node *_getStyleTextNode();
     void _readStyleElement();
@@ -129,13 +122,29 @@ private:
     void _selectObjects(int, int);
     void _updateCSSPanel();
 
-    // Signal handlers
+    // Variables
+    bool _updating;  // Prevent cyclic actions: read <-> write, select via dialog <-> via desktop
+    Inkscape::XML::Node *_textNode; // Track so we know when to add a NodeObserver.
+
+    // Signals and handlers - External
+    sigc::connection _document_replaced_connection;
+    sigc::connection _desktop_changed_connection;
+    sigc::connection _selection_changed_connection;
+
+    void _handleDocumentReplaced(SPDesktop* desktop, SPDocument *document);
+    void _handleDesktopChanged(SPDesktop* desktop);
+    void _handleSelectionChanged();
+
+    DesktopTracker _desktopTracker;
+
+    Inkscape::XML::SignalObserver _objObserver; // Track object in selected row (for style change).
+
+    // Signal and handlers - Internal
     void _addSelector();
     void _delSelector();
     bool _handleButtonEvent(GdkEventButton *event);
     void _buttonEventsSelectObjs(GdkEventButton *event);
-    void _selectRow(Selection *); // Select row in tree when selection changed.
-    void _selChanged();
+    void _selectRow(); // Select row in tree when selection changed.
     void _objChanged();
 
     // Signal handlers for CssDialog

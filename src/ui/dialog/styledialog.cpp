@@ -20,6 +20,7 @@
 #include "xml/attribute-record.h"
 #include "xml/node-observer.h"
 #include "attribute-rel-svg.h"
+#include "inkscape.h"
 #include "document-undo.h"
 
 #include <glibmm/i18n.h>
@@ -73,7 +74,7 @@ StyleDialog::NodeObserver::notifyContentChanged(
 #endif
 
     _styleDialog->_readStyleElement();
-    _styleDialog->_selectRow(NULL);
+    _styleDialog->_selectRow();
 }
 
 
@@ -149,9 +150,9 @@ Glib::RefPtr<StyleDialog::TreeStore> StyleDialog::TreeStore::create(StyleDialog 
  */
 StyleDialog::StyleDialog() :
     UI::Widget::Panel("", "/dialogs/style", SP_VERB_DIALOG_STYLE),
-    _desktop(0),
     _updating(false),
-    _textNode(NULL)
+    _textNode(NULL),
+    _desktopTracker()
 {
 #ifdef DEBUG_STYLEDIALOG
     std::cout << "StyleDialog::StyleDialog" << std::endl;
@@ -200,7 +201,7 @@ StyleDialog::StyleDialog() :
     // Dialog size request
     Gtk::Requisition sreq1, sreq2;
     get_preferred_size(sreq1, sreq2);
-    int minWidth = 200;
+    int minWidth = 300;
     int minHeight = 300;
     minWidth  = (sreq2.width  > minWidth  ? sreq2.width  : minWidth );
     minHeight = (sreq2.height > minHeight ? sreq2.height : minHeight);
@@ -215,8 +216,8 @@ StyleDialog::StyleDialog() :
         sigc::mem_fun(*this, &StyleDialog::_buttonEventsSelectObjs),
         false);
 
-    _treeView.get_selection()->signal_changed().connect(
-        sigc::mem_fun(*this, &StyleDialog::_selChanged));
+    //_treeView.get_selection()->signal_changed().connect(
+    //    sigc::mem_fun(*this, &StyleDialog::_selChanged));
 
     _objObserver.signal_changed().connect(sigc::mem_fun(*this, &StyleDialog::_objChanged));
 
@@ -236,19 +237,20 @@ StyleDialog::StyleDialog() :
         sigc::mem_fun(*this, &StyleDialog::_delProperty),
         false);
 
-    // Document & Desktop  TO DO: Fix this brokeness
-    setDesktop(getDesktop());  // Adds signal handler
+    // Document & Desktop
+    _desktop_changed_connection = _desktopTracker.connectDesktopChanged(
+        sigc::mem_fun(*this, &StyleDialog::_handleDesktopChanged) );
+    _desktopTracker.connect(GTK_WIDGET(gobj()));
 
-    /**
-     * @brief document
-     * If an existing document is opened, its XML representation is obtained
-     * and is then used to populate the treeview with the already existing
-     * selectors in the style element.
-     */
-    _document = _desktop->doc();
+    _document_replaced_connection = getDesktop()->connectDocumentReplaced(
+        sigc::mem_fun(this, &StyleDialog::_handleDocumentReplaced));
 
+    _selection_changed_connection = getDesktop()->getSelection()->connectChanged(
+        sigc::hide(sigc::mem_fun(this, &StyleDialog::_handleSelectionChanged)));
+
+    // Load tree
     _readStyleElement();
-    _selectRow(NULL);
+    _selectRow();
 
     if (!_store->children().empty()) {
         del->set_sensitive(true);
@@ -266,23 +268,9 @@ StyleDialog::~StyleDialog()
 #ifdef DEBUG_STYLEDIALOOG
     std::cout << "StyleDialog::~StyleDialog" << std::endl;
 #endif
-    setDesktop(NULL);
-}
-
-
-/**
- * @brief StyleDialog::setDesktop
- * @param desktop
- * Set the 'desktop' for the Style Dialog.
- */
-void StyleDialog::setDesktop( SPDesktop* desktop )
-{
-#ifdef DEBUG_STYLEDIALOOG
-    std::cout << "StyleDialog::setDesktop" << std::endl;
-#endif
-    Panel::setDesktop(desktop);
-    _desktop = Panel::getDesktop();
-    _desktop->getSelection()->connectChanged(sigc::mem_fun(*this, &StyleDialog::_selectRow));
+    _desktop_changed_connection.disconnect();
+    _document_replaced_connection.disconnect();
+    _selection_changed_connection.disconnect();
 }
 
 
@@ -298,7 +286,7 @@ Inkscape::XML::Node* StyleDialog::_getStyleTextNode()
     Inkscape::XML::Node *styleNode = NULL;
     Inkscape::XML::Node *textNode = NULL;
 
-    Inkscape::XML::Node *root = _document->getReprRoot();
+    Inkscape::XML::Node *root = SP_ACTIVE_DOCUMENT->getReprRoot();
     for (unsigned i = 0; i < root->childCount(); ++i) {
         if (Glib::ustring(root->nthChild(i)->name()) == "svg:style") {
 
@@ -313,7 +301,7 @@ Inkscape::XML::Node* StyleDialog::_getStyleTextNode()
             if (textNode == NULL) {
                 // Style element found but does not contain text node!
                 std::cerr << "StyleDialog::_getStyleTextNode(): No text node!" << std::endl;
-                textNode = _document->getReprDoc()->createTextNode("");
+                textNode = SP_ACTIVE_DOCUMENT->getReprDoc()->createTextNode("");
                 styleNode->appendChild(textNode);
                 Inkscape::GC::release(textNode);
             }
@@ -322,8 +310,8 @@ Inkscape::XML::Node* StyleDialog::_getStyleTextNode()
 
     if (styleNode == NULL) {
         // Style element not found, create one
-        styleNode = _document->getReprDoc()->createElement("svg:style");
-        textNode  = _document->getReprDoc()->createTextNode("");
+        styleNode = SP_ACTIVE_DOCUMENT->getReprDoc()->createElement("svg:style");
+        textNode  = SP_ACTIVE_DOCUMENT->getReprDoc()->createTextNode("");
 
         styleNode->appendChild(textNode);
         Inkscape::GC::release(textNode);
@@ -354,7 +342,6 @@ void StyleDialog::_readStyleElement()
 
     if (_updating) return; // Don't read if we wrote style element.
     _updating = true;
-
     _store->clear();
 
     Inkscape::XML::Node * textNode = _getStyleTextNode();
@@ -364,7 +351,7 @@ void StyleDialog::_readStyleElement()
 
     // Get content from style text node.
     std::string content = (textNode->content() ? textNode->content() : "");
-    
+
     // Remove end-of-lines (check it works on Windoze).
     content.erase(std::remove(content.begin(), content.end(), '\n'), content.end());
 
@@ -384,6 +371,7 @@ void StyleDialog::_readStyleElement()
 
     // If text node is empty, return (avoids problem with negative below).
     if (tokens.size() == 0) {
+        _updating = false;
         return;
     }
 
@@ -443,7 +431,7 @@ void StyleDialog::_writeStyleElement()
     Inkscape::XML::Node *textNode = _getStyleTextNode();
     textNode->setContent(styleContent.c_str());
 
-    DocumentUndo::done(_document, SP_VERB_DIALOG_STYLE, _("Edited style element."));
+    DocumentUndo::done(SP_ACTIVE_DOCUMENT, SP_VERB_DIALOG_STYLE, _("Edited style element."));
 
     _updating = false;
 #ifdef DEBUG_STYLEDIALOG
@@ -468,7 +456,7 @@ void StyleDialog::_addToSelector(Gtk::TreeModel::Row row)
 
         if (selector[0] == '#') {
             // 'id' selector... add selected object's id's to list.
-            Inkscape::Selection* selection = _desktop->getSelection();
+            Inkscape::Selection* selection = getDesktop()->getSelection();
             for (auto& obj: selection->objects()) {
 
                 Glib::ustring id = (obj->getId()?obj->getId():"");
@@ -507,7 +495,7 @@ void StyleDialog::_addToSelector(Gtk::TreeModel::Row row)
             className.erase(0,1);
 
             // Get list of objects to modify
-            Inkscape::Selection* selection = _desktop->getSelection();
+            Inkscape::Selection* selection = getDesktop()->getSelection();
             std::vector<SPObject *> objVec( selection->objects().begin(),
                                             selection->objects().end() );
 
@@ -644,7 +632,7 @@ Glib::ustring StyleDialog::_getIdList(std::vector<SPObject*> sel)
  */
 std::vector<SPObject *> StyleDialog::_getObjVec(Glib::ustring selector) {
 
-    std::vector<SPObject *> objVec = _document->getObjectsBySelector( selector );
+    std::vector<SPObject *> objVec = SP_ACTIVE_DOCUMENT->getObjectsBySelector( selector );
 
 #ifdef DEBUG_STYLEDIALOG
     std::cout << "StyleDialog::_getObjVec: |" << selector << "|" << std::endl;
@@ -704,7 +692,7 @@ void StyleDialog::_selectObjects(int eventX, int eventY)
     std::cout << "StyleDialog::_selectObjects: " << eventX << ", " << eventY << std::endl;
 #endif
 
-    _desktop->selection->clear();
+    getDesktop()->selection->clear();
     Gtk::TreeViewColumn *col = _treeView.get_column(1);
     Gtk::TreeModel::Path path;
     int x2 = 0;
@@ -719,7 +707,7 @@ void StyleDialog::_selectObjects(int eventX, int eventY)
                 std::vector<SPObject *> objVec = row[_mColumns._colObj];
                 for (unsigned i = 0; i < objVec.size(); ++i) {
                     SPObject *obj = objVec[i];
-                    _desktop->selection->add(obj);
+                    getDesktop()->selection->add(obj);
                 }
             }
         }
@@ -741,7 +729,7 @@ void StyleDialog::_addSelector()
 #endif
 
     // Store list of selected elements on desktop (not to be confused with selector).
-    Inkscape::Selection* selection = _desktop->getSelection();
+    Inkscape::Selection* selection = getDesktop()->getSelection();
     std::vector<SPObject *> objVec( selection->objects().begin(),
                                     selection->objects().end() );
 
@@ -763,7 +751,7 @@ void StyleDialog::_addSelector()
      * is(are) selected and user clicks '+' at the bottom of dialog, the
      * entrybox will have the id(s) of the selected objects as text.
      */
-    if (_desktop->getSelection()->isEmpty()) {
+    if (getDesktop()->getSelection()->isEmpty()) {
         textEditPtr->set_text(".Class1");
     } else {
         textEditPtr->set_text(_getIdList(objVec));
@@ -1037,6 +1025,70 @@ void StyleDialog::_updateCSSPanel()
 
 
 /**
+ * Handle document replaced. (Happens when a default document is immediately replaced by another
+ * document in a new window.)
+ */
+void
+StyleDialog::_handleDocumentReplaced(SPDesktop *desktop, SPDocument * /* document */)
+{
+#ifdef DEBUG_STYLEDIALOG
+    std::cout << "StyleDialog::handleDocumentReplaced()" << std::endl;
+#endif
+
+    _selection_changed_connection.disconnect();
+
+    _selection_changed_connection = desktop->getSelection()->connectChanged(
+        sigc::hide(sigc::mem_fun(this, &StyleDialog::_handleSelectionChanged)));
+
+    _readStyleElement();
+    _selectRow();
+}
+
+
+/*
+ * When a dialog is floating, it is connected to the active desktop.
+ */
+void
+StyleDialog::_handleDesktopChanged(SPDesktop* desktop) {
+#ifdef DEBUG_STYLEDIALOG
+    std::cout << "StyleDialog::handleDesktopReplaced()" << std::endl;
+#endif
+
+    if (getDesktop() == desktop) {
+        // This will happen after construction of dialog. We've already
+        // set up signals so just return.
+        return;
+    }
+
+    _selection_changed_connection.disconnect();
+    _document_replaced_connection.disconnect();
+
+    setDesktop( desktop );
+
+    _selection_changed_connection = desktop->getSelection()->connectChanged(
+        sigc::hide(sigc::mem_fun(this, &StyleDialog::_handleSelectionChanged)));
+    _document_replaced_connection = desktop->connectDocumentReplaced(
+        sigc::mem_fun(this, &StyleDialog::_handleDocumentReplaced));
+
+    _readStyleElement();
+    _selectRow();
+}
+
+
+/*
+ * Handle a change in which objects are selected in a document.
+ */
+void
+StyleDialog::_handleSelectionChanged() {
+#ifdef DEBUG_STYLEDIALOG
+    std::cout << "StyleDialog::_handleSelectionChanged()" << std::endl;
+#endif
+
+    _selectRow();
+}
+
+
+/**
  * @brief StyleDialog::_buttonEventsSelectObjs
  * @param event
  * This function detects single or double click on a selector in any row. Clicking
@@ -1048,6 +1100,7 @@ void StyleDialog::_buttonEventsSelectObjs(GdkEventButton* event )
 #ifdef DEBUG_STYLEDIALOG
     std::cout << "StyleDialog::_buttonEventsSelectObjs" << std::endl;
 #endif
+
     _updating = true;
 
     if (event->type == GDK_BUTTON_RELEASE && event->button == 1) {
@@ -1071,14 +1124,19 @@ void StyleDialog::_buttonEventsSelectObjs(GdkEventButton* event )
  * This function selects the row in treeview corresponding to an object selected
  * in the drawing. If more than one row matches, the first is chosen.
  */
-void StyleDialog::_selectRow(Selection */*sel*/)
+void StyleDialog::_selectRow()
 {
 #ifdef DEBUG_STYLEDIALOG
     std::cout << "StyleDialog::_selectRow: updating: " << (_updating?"true":"false") << std::endl;
 #endif
-    if (_updating) return; // Avoid updating if we have set row via dialog.
+    if (_updating || !getDesktop()) return; // Avoid updating if we have set row via dialog.
 
-    Inkscape::Selection* selection = _desktop->getSelection();
+    if (SP_ACTIVE_DESKTOP != getDesktop()) {
+        std::cerr << "StyleDialog::_selectRow: SP_ACTIVE_DESKTOP != getDesktop()" << std::endl;
+        return;
+    }
+
+    Inkscape::Selection* selection = getDesktop()->getSelection();
     if (!selection->isEmpty()) {
         SPObject *obj = selection->objects().back();
 
@@ -1101,16 +1159,6 @@ void StyleDialog::_selectRow(Selection */*sel*/)
     // Selection empty or no row matches.
     _treeView.get_selection()->unselect_all();
     _updateCSSPanel();
-}
-
-
-/**
- * @brief StyleDialog::_selChanged
- */
-void StyleDialog::_selChanged() {
-#ifdef DEBUG_STYLEDIALOG
-    std::cout << "StyleDialog::_selChanged" << std::endl;
-#endif
 }
 
 
@@ -1299,7 +1347,7 @@ bool StyleDialog::_delProperty(GdkEventButton *event)
                                 } else {
                                     objects[0]->setAttribute("style", properties);
                                 }
-                                DocumentUndo::done(_document, SP_VERB_DIALOG_STYLE,
+                                DocumentUndo::done(SP_ACTIVE_DOCUMENT, SP_VERB_DIALOG_STYLE,
                                                    _("Deleted property from style attribute."));
 
                             }
