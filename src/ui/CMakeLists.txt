@@ -99,6 +99,7 @@ set(ui_SRC
 	dialog/polar-arrange-tab.cpp
 	dialog/print-colors-preview-dialog.cpp
 	dialog/print.cpp
+	dialog/prototype.cpp
 	dialog/spellcheck.cpp
         dialog/styledialog.cpp
 	dialog/svg-fonts-dialog.cpp
@@ -241,6 +242,7 @@ set(ui_SRC
 	dialog/polar-arrange-tab.h
 	dialog/print-colors-preview-dialog.h
 	dialog/print.h
+	dialog/prototype.h
 	dialog/spellcheck.h
         dialog/styledialog.h
 	dialog/svg-fonts-dialog.h

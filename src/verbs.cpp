@@ -2058,6 +2058,9 @@ void DialogVerb::perform(SPAction *action, void *data)
     g_assert(dt->_dlg_mgr != NULL);
 
     switch (reinterpret_cast<std::size_t>(data)) {
+        case SP_VERB_DIALOG_PROTOTYPE:
+            dt->_dlg_mgr->showDialog("Prototype");
+           break;
         case SP_VERB_DIALOG_DISPLAY:
             //sp_display_dialog();
             dt->_dlg_mgr->showDialog("InkscapePreferences");
@@ -2956,6 +2959,8 @@ Verb *Verb::_base_verbs[] = {
                  N_("Zoom to fit selection in window"), INKSCAPE_ICON("zoom-fit-selection")),
 
     // Dialogs
+    new DialogVerb(SP_VERB_DIALOG_PROTOTYPE, "DialogPrototype", N_("Prototype..."),
+                   N_("Prototype Dialog"), INKSCAPE_ICON("gtk-preferences")),
     new DialogVerb(SP_VERB_DIALOG_DISPLAY, "DialogPreferences", N_("P_references..."),
                    N_("Edit global Inkscape preferences"), INKSCAPE_ICON("gtk-preferences")),
     new DialogVerb(SP_VERB_DIALOG_NAMEDVIEW, "DialogDocumentProperties", N_("_Document Properties..."),

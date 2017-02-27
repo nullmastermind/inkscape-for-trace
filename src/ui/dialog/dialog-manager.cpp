@@ -19,6 +19,7 @@
 
 #include "ui/dialog/dialog-manager.h"
 
+#include "ui/dialog/prototype.h"
 #include "ui/dialog/align-and-distribute.h"
 #include "ui/dialog/document-metadata.h"
 #include "ui/dialog/document-properties.h"
@@ -105,6 +106,7 @@ DialogManager::DialogManager() {
     registerFactory("InkscapePreferences", &create<InkscapePreferences,  FloatingBehavior>);
 
     if (dialogs_type == FLOATING) {
+        registerFactory("Prototype",           &create<Prototype,            FloatingBehavior>);
         registerFactory("AlignAndDistribute",  &create<AlignAndDistribute,   FloatingBehavior>);
         registerFactory("DocumentMetadata",    &create<DocumentMetadata,     FloatingBehavior>);
         registerFactory("DocumentProperties",  &create<DocumentProperties,   FloatingBehavior>);
@@ -146,6 +148,7 @@ DialogManager::DialogManager() {
 
     } else {
 
+        registerFactory("Prototype",           &create<Prototype,            DockBehavior>);
         registerFactory("AlignAndDistribute",  &create<AlignAndDistribute,   DockBehavior>);
         registerFactory("DocumentMetadata",    &create<DocumentMetadata,     DockBehavior>);
         registerFactory("DocumentProperties",  &create<DocumentProperties,   DockBehavior>);
