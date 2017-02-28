@@ -46,8 +46,13 @@ Prototype::Prototype() :
         sigc::mem_fun(*this, &Prototype::handleDesktopChanged) );
     desktopTracker.connect(GTK_WIDGET(gobj()));
 
+    // This results in calling handleDocumentReplaced twice. Fix me!
     connectionDocumentReplaced = getDesktop()->connectDocumentReplaced(
         sigc::mem_fun(this, &Prototype::handleDocumentReplaced));
+
+    // Alternative mechanism but results in calling handleDocumentReplaced four times.
+    // signalDocumentReplaced().connect(
+    //    sigc::mem_fun(this, &Prototype::handleDocumentReplaced));
 
     connectionSelectionChanged = getDesktop()->getSelection()->connectChanged(
         sigc::hide(sigc::mem_fun(this, &Prototype::handleSelectionChanged)));
