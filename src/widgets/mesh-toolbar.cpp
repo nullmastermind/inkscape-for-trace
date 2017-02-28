@@ -20,7 +20,6 @@
 
 #include <gtkmm.h>
 
-// REVIEW THESE AT END OF REWRITE
 #include "ui/widget/color-preview.h"
 #include "toolbox.h"
 #include "mesh-toolbar.h"

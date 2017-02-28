@@ -72,6 +72,7 @@
 #include "sp-mask.h"
 #include "message-stack.h"
 #include "ui/dialog/layer-properties.h"
+#include "extension/find_extension_by_mime.h"
 
 using Inkscape::DocumentUndo;
 
@@ -1234,15 +1235,7 @@ sp_ui_drag_data_received(GtkWidget *widget,
         case PNG_DATA:
         case JPEG_DATA:
         case IMAGE_DATA: {
-            const char *mime = (info == JPEG_DATA ? "image/jpeg" : "image/png");
-
-            Inkscape::Extension::DB::InputList o;
-            Inkscape::Extension::db.get_input_list(o);
-            Inkscape::Extension::DB::InputList::const_iterator i = o.begin();
-            while (i != o.end() && strcmp( (*i)->get_mimetype(), mime ) != 0) {
-                ++i;
-            }
-            Inkscape::Extension::Extension *ext = *i;
+            Inkscape::Extension::Extension *ext = Inkscape::Extension::find_by_mime((info == JPEG_DATA ? "image/jpeg" : "image/png"));
             bool save = (strcmp(ext->get_param_optiongroup("link"), "embed") == 0);
             ext->set_param_optiongroup("link", "embed");
             ext->set_gui(false);
