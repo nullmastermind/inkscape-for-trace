@@ -143,6 +143,11 @@ private:
     Inkscape::XML::Node *_clipnode; ///< The node that holds extra information
     Inkscape::XML::Document *_doc; ///< Reference to the clipboard's Inkscape::XML::Document
     std::set<SPItem*> cloned_elements;
+    std::vector<SPCSSAttr*> te_selected_style;
+    std::vector<unsigned> te_selected_style_positions;
+    int nr_blocks = 0;
+    unsigned copied_style_length = 0;
+
 
     // we need a way to copy plain text AND remember its style;
     // the standard _clipnode is only available in an SVG tree, hence this special storage
@@ -241,6 +246,9 @@ void ClipboardManagerImpl::copy(ObjectSet *set)
                 sp_repr_css_attr_unref(_text_style);
                 _text_style = NULL;
             }
+            te_selected_style.clear();
+            te_selected_style_positions.clear();
+            te_selected_style = Inkscape::UI::Tools::sp_text_get_selected_style(desktop->event_context, &copied_style_length, &nr_blocks, &te_selected_style_positions);
             _text_style = Inkscape::UI::Tools::sp_text_get_style_at_cursor(desktop->event_context);
             return;
         }
@@ -983,7 +991,42 @@ bool ClipboardManagerImpl::_pasteText(SPDesktop *desktop)
 
     // if the text editing tool is active, paste the text into the active text object
     if (tools_isactive(desktop, TOOLS_TEXT)) {
-        return Inkscape::UI::Tools::sp_text_paste_inline(desktop->event_context);
+        if(Inkscape::UI::Tools::sp_text_paste_inline(desktop->event_context) == false)
+            return false;
+        //apply the saved style to pasted text
+        Glib::RefPtr<Gtk::Clipboard> refClipboard = Gtk::Clipboard::get();
+        Glib::ustring const clip_text = refClipboard->wait_for_text();
+        Glib::ustring text(clip_text);
+        if(text.length() == copied_style_length)
+        {
+            Inkscape::UI::Tools::TextTool *tc = SP_TEXT_CONTEXT(desktop->event_context);
+            Inkscape::Text::Layout const *layout = te_get_layout(tc->text);
+            Inkscape::Text::Layout::iterator it_next;
+            Inkscape::Text::Layout::iterator it = tc->text_sel_end;
+
+            SPCSSAttr *css = take_style_from_item(tc->text);
+            for (int i = 0; i < nr_blocks; ++i)
+            {
+                gchar const *w = sp_repr_css_property(css, "font-size", "40px");
+                if (w)
+                    sp_repr_css_set_property(te_selected_style[i], "font-size", w);
+            }
+
+            for (int i = 0; i < text.length(); ++i)
+                it.prevCharacter();
+            it_next = layout->charIndexToIterator(layout->iteratorToCharIndex(it));
+
+            for (int i = 0; i < nr_blocks; ++i)
+            {
+                for (int j = te_selected_style_positions[i]; j < te_selected_style_positions[i+1]; ++j)
+                    it_next.nextCharacter();
+                sp_te_apply_style(tc->text, it, it_next, te_selected_style[i]);
+                te_update_layout_now_recursive(tc->text);
+                for (int j = te_selected_style_positions[i]; j < te_selected_style_positions[i+1]; ++j)
+                    it.nextCharacter();
+            }
+        }
+        return true;
     }
 
     // try to parse the text as a color and, if successful, apply it as the current style
