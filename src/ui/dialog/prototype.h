@@ -47,9 +47,9 @@ private:
     Prototype operator=(Prototype const &d);
 
     // Signals and handlers
-    sigc::connection documentReplacedConnection;
-    sigc::connection desktopChangedConnection;
-    sigc::connection selectionChangedConnection;
+    sigc::connection connectionDocumentReplaced;
+    sigc::connection connectionDesktopChanged;
+    sigc::connection connectionSelectionChanged;
 
     void handleDocumentReplaced(SPDesktop* desktop, SPDocument *document);
     void handleDesktopChanged(SPDesktop* desktop);

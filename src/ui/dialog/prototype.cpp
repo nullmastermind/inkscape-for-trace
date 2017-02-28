@@ -42,14 +42,14 @@ Prototype::Prototype() :
         std::cerr << "Prototype::Prototype: desktop is NULL!" << std::endl;
     }
 
-    desktopChangedConnection = desktopTracker.connectDesktopChanged(
+    connectionDesktopChanged = desktopTracker.connectDesktopChanged(
         sigc::mem_fun(*this, &Prototype::handleDesktopChanged) );
     desktopTracker.connect(GTK_WIDGET(gobj()));
 
-    documentReplacedConnection = getDesktop()->connectDocumentReplaced(
+    connectionDocumentReplaced = getDesktop()->connectDocumentReplaced(
         sigc::mem_fun(this, &Prototype::handleDocumentReplaced));
 
-    selectionChangedConnection = getDesktop()->getSelection()->connectChanged(
+    connectionSelectionChanged = getDesktop()->getSelection()->connectChanged(
         sigc::hide(sigc::mem_fun(this, &Prototype::handleSelectionChanged)));
 
     updateLabel();
@@ -59,9 +59,9 @@ Prototype::~Prototype()
 {
     // Never actually called.
     std::cout << "Prototype::~Prototype()" << std::endl;
-    desktopChangedConnection.disconnect();
-    documentReplacedConnection.disconnect();
-    selectionChangedConnection.disconnect();
+    connectionDesktopChanged.disconnect();
+    connectionDocumentReplaced.disconnect();
+    connectionSelectionChanged.disconnect();
 }
 
 /*
@@ -89,9 +89,9 @@ Prototype::handleDocumentReplaced(SPDesktop *desktop, SPDocument * /* document *
         std::cerr << "Prototype::handleDocumentReplaced(): Error: panel desktop not equal to existing desktop!" << std::endl;
     }
 
-    selectionChangedConnection.disconnect();
+    connectionSelectionChanged.disconnect();
 
-    selectionChangedConnection = desktop->getSelection()->connectChanged(
+    connectionSelectionChanged = desktop->getSelection()->connectChanged(
         sigc::hide(sigc::mem_fun(this, &Prototype::handleSelectionChanged)));
 
     // Update demonstration widget.
@@ -112,16 +112,15 @@ Prototype::handleDesktopChanged(SPDesktop* desktop) {
         return;
     }
 
-    // Need to either remove return above or connect these in constructor.
-    // We've choosen the later.
-    selectionChangedConnection.disconnect();
-    documentReplacedConnection.disconnect();
+    // Connections are disconnect safe.
+    connectionSelectionChanged.disconnect();
+    connectionDocumentReplaced.disconnect();
 
     setDesktop( desktop );
 
-    selectionChangedConnection = desktop->getSelection()->connectChanged(
+    connectionSelectionChanged = desktop->getSelection()->connectChanged(
         sigc::hide(sigc::mem_fun(this, &Prototype::handleSelectionChanged)));
-    documentReplacedConnection = desktop->connectDocumentReplaced(
+    connectionDocumentReplaced = desktop->connectDocumentReplaced(
         sigc::mem_fun(this, &Prototype::handleDocumentReplaced));
 
     // Update demonstration widget.
