@@ -1971,18 +1971,18 @@ UINT_PTR CALLBACK FileSaveDialogImplWin32::GetSaveFileName_hookproc(
               if(dlgFont) SendMessage(pImpl->_title_edit, WM_SETFONT, (WPARAM)dlgFont, MAKELPARAM(FALSE, 0));
               SetWindowPos(pImpl->_title_edit, NULL, rCB1.left-rROOT.left, rCB1.top+ydelta-rROOT.top,
                            rCB1.right-rCB1.left, rCB1.bottom-rCB1.top, SWP_SHOWWINDOW|SWP_NOZORDER);
-              // TODO: make sure this works for Unicode
-              SetWindowText(pImpl->_title_edit, pImpl->myDocTitle.c_str());
+              SetWindowTextW(pImpl->_title_edit,
+                             (const wchar_t*)g_utf8_to_utf16(pImpl->myDocTitle.c_str(), -1, NULL, NULL, NULL));
             }
         }
         break;
     case WM_DESTROY:
       {
         if(pImpl->_title_edit) {
-          int length = GetWindowTextLength(pImpl->_title_edit)+1;
-          char* temp_title = new char[length];
-          GetWindowText(pImpl->_title_edit, temp_title, length);
-          pImpl->myDocTitle = temp_title;
+          int length = GetWindowTextLengthW(pImpl->_title_edit)+1;
+          wchar_t* temp_title = new wchar_t[length];
+          GetWindowTextW(pImpl->_title_edit, temp_title, length);
+          pImpl->myDocTitle = g_utf16_to_utf8((gunichar2*)temp_title, -1, NULL, NULL, NULL);
           delete[] temp_title;
           DestroyWindow(pImpl->_title_label);
           pImpl->_title_label = NULL;
