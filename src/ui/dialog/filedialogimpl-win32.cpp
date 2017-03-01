@@ -792,7 +792,7 @@ LRESULT CALLBACK FileOpenDialogImplWin32::preview_wnd_proc(HWND hwnd, UINT uMsg,
                 _wsplitpath(pImpl->_path_string, NULL, NULL, szFileName, NULL);
 
                 const int iLength = snwprintf(szCaption,
-                    sizeof(szCaption), L"%s\n%d kB",
+                    sizeof(szCaption), L"%ls\n%d kB",
                     szFileName, pImpl->_preview_file_size);
 
                 DrawTextW(dc, szCaption, iLength, &rcCaptionRect,
@@ -1494,7 +1494,7 @@ int FileOpenDialogImplWin32::format_caption(wchar_t *caption, int caption_size)
     _wsplitpath(_path_string, NULL, NULL, szFileName, NULL);
 
     return snwprintf(caption, caption_size,
-        L"%s\n%d kB\n%d \xD7 %d", szFileName, _preview_file_size,
+        L"%ls\n%d kB\n%d \xD7 %d", szFileName, _preview_file_size,
         (int)_preview_document_width, (int)_preview_document_height);
 }
 
