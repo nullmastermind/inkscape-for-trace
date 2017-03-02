@@ -1234,17 +1234,8 @@ bool FileOpenDialogImplWin32::set_emf_preview()
         const double emfWidth = w;
         const double emfHeight = h;
 
-        // Find the minimum scale to fit the image inside the preview area
-        const double scaleFactorX =    PreviewSize / emfWidth;
-        const double scaleFactorY =    PreviewSize / emfHeight;
-        const double scaleFactor = (scaleFactorX > scaleFactorY) ? scaleFactorY : scaleFactorX;
-
-        // Now get the resized values
-        const double scaledEmfWidth  = scaleFactor * emfWidth;
-        const double scaledEmfHeight = scaleFactor * emfHeight;
-
-        _preview_document_width = scaledEmfWidth;
-        _preview_document_height = scaledEmfHeight;
+        _preview_document_width = emfWidth / 2540 * 96; // width is in units of 0.01 mm
+        _preview_document_height = emfHeight / 2540 * 96; // height is in units of 0.01 mm
         _preview_image_width = emfWidth;
         _preview_image_height = emfHeight;
 
@@ -1494,7 +1485,7 @@ int FileOpenDialogImplWin32::format_caption(wchar_t *caption, int caption_size)
     _wsplitpath(_path_string, NULL, NULL, szFileName, NULL);
 
     return snwprintf(caption, caption_size,
-        L"%ls\n%d kB\n%d \xD7 %d", szFileName, _preview_file_size,
+        L"%ls\n%d\u2009kB\n%d\u2009px \xD7 %d\u2009px", szFileName, _preview_file_size,
         (int)_preview_document_width, (int)_preview_document_height);
 }
 
