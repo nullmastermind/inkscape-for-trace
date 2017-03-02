@@ -39,20 +39,12 @@ SPGenericEllipse::SPGenericEllipse()
     , start(0)
     , end(SP_2PI)
     , type(SP_GENERIC_ELLIPSE_UNDEFINED)
-    , _closed(true)
+    , arc_type(SP_GENERIC_ELLIPSE_ARC_TYPE_ARC)
 {
 }
 
 SPGenericEllipse::~SPGenericEllipse()
 {
-}
-
-void SPGenericEllipse::setClosed(bool value) {
-    _closed = value;
-}
-
-bool SPGenericEllipse::closed() {
-    return _closed;
 }
 
 void SPGenericEllipse::build(SPDocument *document, Inkscape::XML::Node *repr)
@@ -69,6 +61,7 @@ void SPGenericEllipse::build(SPDocument *document, Inkscape::XML::Node *repr)
             this->readAttr("sodipodi:start");
             this->readAttr("sodipodi:end");
             this->readAttr("sodipodi:open");
+            this->readAttr("sodipodi:arc-type");
             break;
 
         case SP_GENERIC_ELLIPSE_CIRCLE:
@@ -166,7 +159,25 @@ void SPGenericEllipse::set(unsigned int key, gchar const *value)
         break;
 
     case SP_ATTR_SODIPODI_OPEN:
-        this->_closed = (!value);
+        // This is only for reading in old files so rely on constructor to set default.
+        if (!value) { // Only set if not "true"
+            this->arc_type = SP_GENERIC_ELLIPSE_ARC_TYPE_SLICE;
+        }
+        this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+        break;
+
+    case SP_ATTR_SODIPODI_ARC_TYPE:
+        // To read in old files that use 'open', we need to not set if value is null.
+        // We could also check inkscape version.
+        if (value) {
+            if (!strcmp(value,"arc")) {
+                this->arc_type = SP_GENERIC_ELLIPSE_ARC_TYPE_ARC;
+            } else if (!strcmp(value,"chord")) {
+                this->arc_type = SP_GENERIC_ELLIPSE_ARC_TYPE_CHORD;
+            } else {
+                this->arc_type = SP_GENERIC_ELLIPSE_ARC_TYPE_SLICE;
+            }
+        }
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         break;
 
@@ -285,11 +296,28 @@ Inkscape::XML::Node *SPGenericEllipse::write(Inkscape::XML::Document *xml_doc, I
                     sp_repr_set_svg_double(repr, "sodipodi:start", start);
                     sp_repr_set_svg_double(repr, "sodipodi:end", end);
 
-                    repr->setAttribute("sodipodi:open", (!_closed) ? "true" : NULL);
+                    switch ( arc_type ) {
+                        case SP_GENERIC_ELLIPSE_ARC_TYPE_SLICE:
+                            repr->setAttribute("sodipodi:open", NULL); // For backwards compat.
+                            repr->setAttribute("sodipodi:arc-type", "slice");
+                            break;
+                        case SP_GENERIC_ELLIPSE_ARC_TYPE_CHORD:
+                            // A chord's path isn't "open" but its fill most closely resembles an arc.
+                            repr->setAttribute("sodipodi:open", "true"); // For backwards compat.
+                            repr->setAttribute("sodipodi:arc-type", "chord");
+                            break;
+                        case SP_GENERIC_ELLIPSE_ARC_TYPE_ARC:
+                            repr->setAttribute("sodipodi:open", "true"); // For backwards compat.
+                            repr->setAttribute("sodipodi:arc-type", "arc");
+                            break;
+                        default:
+                            std::cerr << "SPGenericEllipse::write: unknown arc-type." << std::endl;
+                    }
                 } else {
                     repr->setAttribute("sodipodi:end", NULL);
                     repr->setAttribute("sodipodi:start", NULL);
                     repr->setAttribute("sodipodi:open", NULL);
+                    repr->setAttribute("sodipodi:arc-type", NULL);
                 }
             }
 
@@ -310,6 +338,7 @@ Inkscape::XML::Node *SPGenericEllipse::write(Inkscape::XML::Document *xml_doc, I
             repr->setAttribute("sodipodi:end", NULL );
             repr->setAttribute("sodipodi:start", NULL );
             repr->setAttribute("sodipodi:open", NULL );
+            repr->setAttribute("sodipodi:arc-type", NULL);
             repr->setAttribute("sodipodi:type", NULL );
             repr->setAttribute("d", NULL );
             break;
@@ -327,6 +356,7 @@ Inkscape::XML::Node *SPGenericEllipse::write(Inkscape::XML::Document *xml_doc, I
             repr->setAttribute("sodipodi:end", NULL );
             repr->setAttribute("sodipodi:start", NULL );
             repr->setAttribute("sodipodi:open", NULL );
+            repr->setAttribute("sodipodi:arc-type", NULL);
             repr->setAttribute("sodipodi:type", NULL );
             repr->setAttribute("d", NULL );
             break;
@@ -350,10 +380,16 @@ const char *SPGenericEllipse::displayName() const
         case SP_GENERIC_ELLIPSE_ARC:
 
             if (_isSlice()) {
-                if (_closed) {
-                    return _("Segment");
-                } else {
-                    return _("Arc");
+                switch ( arc_type ) {
+                    case SP_GENERIC_ELLIPSE_ARC_TYPE_SLICE:
+                        return _("Slice");
+                        break;
+                    case SP_GENERIC_ELLIPSE_ARC_TYPE_CHORD:
+                        return _("Chord");
+                        break;
+                    case SP_GENERIC_ELLIPSE_ARC_TYPE_ARC:
+                        return _("Arc");
+                        break;
                 }
             } else {
                 return _("Ellipse");
@@ -419,10 +455,10 @@ void SPGenericEllipse::set_shape()
     }
     Geom::PathBuilder pb;
     pb.append(path);
-    if (this->_isSlice() && this->_closed) {
+    if (this->_isSlice() && this->arc_type == SP_GENERIC_ELLIPSE_ARC_TYPE_SLICE) {
         pb.lineTo(Geom::Point(0, 0));
     }
-    if (this->_closed) {
+    if ( !(this->arc_type == SP_GENERIC_ELLIPSE_ARC_TYPE_ARC) ) {
         pb.closePath();
     } else {
         pb.flush();
@@ -543,7 +579,8 @@ void SPGenericEllipse::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, 
     bool slice = this->_isSlice();
 
     // Add the centre, if we have a closed slice or when explicitly asked for
-    if (snapprefs->isTargetSnappable(Inkscape::SNAPTARGET_NODE_CUSP) && slice && this->_closed) {
+    if (snapprefs->isTargetSnappable(Inkscape::SNAPTARGET_NODE_CUSP) && slice &&
+        this->arc_type == SP_GENERIC_ELLIPSE_ARC_TYPE_SLICE) {
         Geom::Point pt = Geom::Point(cx, cy) * i2dt;
         p.push_back(Inkscape::SnapCandidatePoint(pt, Inkscape::SNAPSOURCE_NODE_CUSP, Inkscape::SNAPTARGET_NODE_CUSP));
     }
@@ -654,7 +691,7 @@ void SPGenericEllipse::position_set(gdouble x, gdouble y, gdouble rx, gdouble ry
         this->end = Geom::Angle::from_degrees(prefs->getDouble("/tools/shapes/arc/end", 0.0)).radians0();
     }
 
-    this->_closed = !prefs->getBool("/tools/shapes/arc/open");
+    this->arc_type = (GenericEllipseArcType)prefs->getInt("/tools/shapes/arc/arc_type", 0);
 
     this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }

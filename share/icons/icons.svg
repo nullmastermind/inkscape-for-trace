@@ -3055,11 +3055,15 @@ http://www.inkscape.org/</dc:description>
 </g>
 <g style="fill:none" id="draw-ellipse-segment" transform="translate(20)" inkscape:label="#circle_closed_arc">
 <rect id="rect4316" width="16" height="16" x="500" y="150" />
-<path d="m 514,158 a 6,6 0 0 1 -4.9581,5.9088 6,6 0 0 1 -6.6801,-3.8567 A 6,6 0 0 1 505,152.8038 L 508,158 Z" sodipodi:ry="6" sodipodi:rx="6" sodipodi:cy="158" sodipodi:cx="508" id="path4318" style="fill:#b0c5da;stroke:#0000ff;stroke-miterlimit:1.5" sodipodi:type="arc" sodipodi:start="0" sodipodi:end="4.18879" />
+<path d="m 514,158 a 6,6 0 0 1 -4.9581,5.9088 6,6 0 0 1 -6.6801,-3.8567 A 6,6 0 0 1 505,152.8038 L 508,158 Z" sodipodi:ry="6" sodipodi:rx="6" sodipodi:cy="158" sodipodi:cx="508" id="path4318" style="fill:#b0c5da;stroke:#0000ff;stroke-miterlimit:1.5" sodipodi:type="arc" sodipodi:start="0" sodipodi:end="4.18879" sodipodi:arc-type="slice" />
 </g>
 <g transform="translate(40)" id="draw-ellipse-arc" style="fill:none" inkscape:label="#circle_open_arc">
-<rect y="150" x="500" height="16" width="16" id="rect4326" />
-<path sodipodi:end="4.18879" sodipodi:start="0" sodipodi:type="arc" style="fill:#b0c5da;stroke:#0000ff;stroke-miterlimit:1.5" id="path4328" sodipodi:cx="508" sodipodi:cy="158" sodipodi:rx="6" sodipodi:ry="6" d="m 514,158 a 6,6 0 0 1 -4.9581,5.9088 6,6 0 0 1 -6.6801,-3.8567 6,6 0 0 1 2.6382,-7.2483" sodipodi:open="true" />
+<rect y="150" x="500" height="16" width="16" id="draw-ellipse-arc-rect" />
+<path sodipodi:end="4.18879" sodipodi:start="0" sodipodi:type="arc" style="fill:#b0c5da;stroke:#0000ff;stroke-miterlimit:1.5" id="draw-ellipse-arc-arc" sodipodi:cx="508" sodipodi:cy="158" sodipodi:rx="6" sodipodi:ry="6" d="m 514,158 a 6,6 0 0 1 -4.9581,5.9088 6,6 0 0 1 -6.6801,-3.8567 6,6 0 0 1 2.6382,-7.2483" sodipodi:arc-type="arc" />
+</g>
+<g transform="translate(60)" id="draw-ellipse-chord" style="fill:none" inkscape:label="#circle_chord">
+<rect y="150" x="500" height="16" width="16" id="draw-ellipse-chord-rect" />
+<path sodipodi:end="4.18879" sodipodi:start="0" sodipodi:type="arc" style="fill:#b0c5da;stroke:#0000ff;stroke-miterlimit:1.5" id="draw-ellipse-chord-arc" sodipodi:cx="508" sodipodi:cy="158" sodipodi:rx="6" sodipodi:ry="6" d="m 514,158 a 6,6 0 0 1 -4.9581,5.9088 6,6 0 0 1 -6.6801,-3.8567 6,6 0 0 1 2.6382,-7.2483" sodipodi:arc-type="chord" />
 </g>
 <g id="draw-cuboid" inkscape:label="#draw_3dbox">
 <path style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.0492821px;stroke-linejoin:round" d="M 604.0245,114.9402 592.1873,119.5308 591.9578,132.5813 600.8438,138.7786 612.1565,135.1716 612.3859,122.613 604.0245,114.9402 Z" id="path5192" inkscape:connector-curvature="0" />
