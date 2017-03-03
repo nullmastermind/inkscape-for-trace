@@ -142,7 +142,7 @@ void SelectTool::setup() {
     this->_describer = new Inkscape::SelectionDescriber(
                 desktop->selection, 
                 desktop->messageStack(),
-                _("Click selection to toggle scale/rotation handles"),
+                _("Click selection to toggle scale/rotation handles (or Shift+s)"),
                 _("No objects selected. Click, Shift+click, Alt+scroll mouse on top of objects, or drag around objects to select.")
     );
 
