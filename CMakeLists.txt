@@ -221,7 +221,11 @@ endif()
 # -----------------------------------------------------------------------------
 add_subdirectory(share)
 
-include(CMakeScripts/Install.cmake)
+if(HAVE_MSYS2)
+  include(CMakeScripts/InstallMSYS2.cmake)
+else()
+  include(CMakeScripts/Install.cmake)
+endif()
 
 # -----------------------------------------------------------------------------
 # Clean
