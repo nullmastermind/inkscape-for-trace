@@ -124,8 +124,12 @@ if(WIN32)
     # these are not picked up by 'ldd' but are required for SVG support in gdk-pixbuf-2.0
     ${MINGW_BIN}/libcroco-0.6-3.dll
     ${MINGW_BIN}/librsvg-2-2.dll
-    # required by lxml
+    # required by python2-lxml
     ${MINGW_BIN}/libexslt-0.dll
+    # required by python2-numpy
+    ${MINGW_BIN}/libgfortran-3.dll
+    ${MINGW_BIN}/libopenblas.dll
+    ${MINGW_BIN}/libquadmath-0.dll
     DESTINATION ${CMAKE_INSTALL_PREFIX})
   # There are differences for 64-Bit and 32-Bit build environments.
   if(HAVE_MINGW64)
