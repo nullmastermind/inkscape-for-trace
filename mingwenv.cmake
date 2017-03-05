@@ -15,7 +15,7 @@ set(ENV_MINGW_PATH C:/mingw64)
 # -----------------------------------------------------------------------------
 message(STATUS "Configuring MinGW environment:")
 
-if($MSYSTEM_CHOST STREQUAL "")
+if("$ENV{MSYSTEM_CHOST}" STREQUAL "")
   if("$ENV{DEVLIBS_PATH}" STREQUAL "")
     message(STATUS "  Setting path to development libraries from mingwenv.cmake: ${ENV_DEVLIBS_PATH}")
     set(DEVLIBS_PATH ${ENV_DEVLIBS_PATH})
