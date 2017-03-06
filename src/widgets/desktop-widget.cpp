@@ -1883,7 +1883,7 @@ sp_dtw_rotation_output (GtkSpinButton *spin, gpointer /*data*/)
     double val = gtk_spin_button_get_value (spin);
     std::ostringstream s;
     s.imbue(std::locale(""));;
-    s << std::fixed << std::setprecision(2) << val << "º";
+    s << std::fixed << std::setprecision(2) << val << "°";
     gtk_entry_set_text (GTK_ENTRY (spin), s.str().c_str());
     return TRUE;
 }
@@ -2039,44 +2039,44 @@ sp_dtw_rotation_populate_popup (GtkEntry */*entry*/, GtkMenu *menu, gpointer dat
     }
     g_list_free (children);
 
-    item = gtk_menu_item_new_with_label ("-180º");
+    item = gtk_menu_item_new_with_label ("-180°");
     g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (sp_dtw_rotate_minus_180), dtw);
     gtk_widget_show (item);
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
     
-    item = gtk_menu_item_new_with_label ("-135º");
+    item = gtk_menu_item_new_with_label ("-135°");
     g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (sp_dtw_rotate_minus_135), dtw);
     gtk_widget_show (item);
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
     
-    item = gtk_menu_item_new_with_label ("-90º");
+    item = gtk_menu_item_new_with_label ("-90°");
     g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (sp_dtw_rotate_minus_90), dtw);
     gtk_widget_show (item);
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
     
-    item = gtk_menu_item_new_with_label ("-45º");
+    item = gtk_menu_item_new_with_label ("-45°");
     g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (sp_dtw_rotate_minus_45), dtw);
     gtk_widget_show (item);
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
     
-    item = gtk_menu_item_new_with_label ("0º");
+    item = gtk_menu_item_new_with_label ("0°");
     g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (sp_dtw_rotate_0), dtw);
     gtk_widget_show (item);
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
     
-    item = gtk_menu_item_new_with_label ("45º");
+    item = gtk_menu_item_new_with_label ("45°");
     g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (sp_dtw_rotate_45), dtw);
     gtk_widget_show (item);
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
     
     
-    item = gtk_menu_item_new_with_label ("90º");
+    item = gtk_menu_item_new_with_label ("90°");
     g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (sp_dtw_rotate_90), dtw);
     gtk_widget_show (item);
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
     
     
-    item = gtk_menu_item_new_with_label ("135º");
+    item = gtk_menu_item_new_with_label ("135°");
     g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (sp_dtw_rotate_135), dtw);
     gtk_widget_show (item);
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
