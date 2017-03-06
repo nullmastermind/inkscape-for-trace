@@ -282,7 +282,7 @@ gboolean Inkscape::DocumentUndo::undo(SPDocument *doc)
     if (ret) INKSCAPE.external_change();
 
     SPObject *updated = doc->getRoot();
-    if (updated) {
+    if (updated && !ret) {
         updated->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
     }
     return ret;
