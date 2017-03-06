@@ -1832,16 +1832,21 @@ sp_dtw_zoom_display_to_value (gdouble value)
 static gint
 sp_dtw_zoom_input (GtkSpinButton *spin, gdouble *new_val, gpointer /*data*/)
 {
-    gdouble new_scrolled = gtk_spin_button_get_value (spin);
-    const gchar *b = gtk_entry_get_text (GTK_ENTRY (spin));
-    gdouble new_typed = atof (b);
+    gchar *b = g_strdup (gtk_entry_get_text (GTK_ENTRY (spin)));
 
-    if (sp_dtw_zoom_value_to_display (new_scrolled) == new_typed) { // the new value is set by scrolling
-        *new_val = new_scrolled;
-    } else { // the new value is typed in
-        *new_val = sp_dtw_zoom_display_to_value (new_typed);
+    gchar *comma = g_strstr_len (b, -1, ",");
+    if (comma) {
+        *comma = '.';
     }
 
+    char *oldlocale = g_strdup (setlocale(LC_NUMERIC, NULL));
+    setlocale (LC_NUMERIC, "C");
+    gdouble new_typed = atof (b);
+    setlocale (LC_NUMERIC, oldlocale);
+    g_free (oldlocale);
+    g_free (b);
+
+    *new_val = sp_dtw_zoom_display_to_value (new_typed);
     return TRUE;
 }
 
