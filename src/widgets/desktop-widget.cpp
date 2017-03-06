@@ -66,7 +66,6 @@
 #include <gtkmm/cssprovider.h>
 #include <gtkmm/paned.h>
 #include <gtkmm/messagedialog.h>
-#include <iomanip>
 
 using Inkscape::UI::Widget::UnitTracker;
 using Inkscape::UI::UXManager;
@@ -1863,16 +1862,21 @@ sp_dtw_zoom_output (GtkSpinButton *spin, gpointer /*data*/)
 static gint
 sp_dtw_rotation_input (GtkSpinButton *spin, gdouble *new_val, gpointer /*data*/)
 {
-    gdouble new_scrolled = gtk_spin_button_get_value (spin);
-    const gchar *b = gtk_entry_get_text (GTK_ENTRY (spin));
-    gdouble new_typed = atof (b);
+    gchar *b = g_strdup (gtk_entry_get_text (GTK_ENTRY (spin)));
 
-    if (new_scrolled == new_typed) { // the new value is set by scrolling
-        *new_val = new_scrolled;
-    } else { // the new value is typed in
-        *new_val = new_typed;
+    gchar *comma = g_strstr_len (b, -1, ",");
+    if (comma) {
+        *comma = '.';
     }
 
+    char *oldlocale = g_strdup (setlocale(LC_NUMERIC, NULL));
+    setlocale (LC_NUMERIC, "C");
+    gdouble new_value = atof (b);
+    setlocale (LC_NUMERIC, oldlocale);
+    g_free (oldlocale);
+    g_free (b);
+    
+    *new_val = new_value;
     return TRUE;
 }
 
@@ -1881,10 +1885,9 @@ sp_dtw_rotation_output (GtkSpinButton *spin, gpointer /*data*/)
 {
     gchar b[64];
     double val = gtk_spin_button_get_value (spin);
-    std::ostringstream s;
-    s.imbue(std::locale(""));;
-    s << std::fixed << std::setprecision(2) << val << "°";
-    gtk_entry_set_text (GTK_ENTRY (spin), s.str().c_str());
+    g_snprintf (b, 64, "%3.2f°", val);
+
+    gtk_entry_set_text (GTK_ENTRY (spin), b);
     return TRUE;
 }
 
