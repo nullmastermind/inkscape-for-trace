@@ -329,19 +329,20 @@ LPEMeasureLine::createTextLabel(Geom::Point pos, double length, Geom::Coord angl
         Inkscape::GC::release(rtspan);
     }
     length = Inkscape::Util::Quantity::convert(length / doc_scale, display_unit.c_str(), unit.get_abbreviation());
-    std::stringstream length_str;
-    length_str.precision(precision);
-    length_str.setf(std::ios::fixed, std::ios::floatfield);
+    char *oldlocale = g_strdup (setlocale(LC_NUMERIC, NULL));
     if (local_locale) {
-        length_str.imbue(std::locale(""));
+        setlocale (LC_NUMERIC, "");
     } else {
-        length_str.imbue(std::locale::classic());
+        setlocale (LC_NUMERIC, "C");
     }
-    length_str << std::fixed << length;
+    gchar length_str[64];
+    g_snprintf(length_str, 64, "%.*f", (int)precision, length);
+    setlocale (LC_NUMERIC, oldlocale);
+    g_free (oldlocale);
     Glib::ustring label_value = Glib::ustring(format.param_getSVGValue());
     size_t s = label_value.find(Glib::ustring("{measure}"),0);
     if(s < label_value.length()) {
-        label_value.replace(s,s+9,length_str.str());
+        label_value.replace(s,s+9,length_str);
     }
     s = label_value.find(Glib::ustring("{unit}"),0);
     if(s < label_value.length()) {
@@ -655,9 +656,11 @@ LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
         }
         SPCSSAttr *css = sp_repr_css_attr_new();
         sp_repr_css_attr_add_from_string(css, dimline_format.param_getSVGValue());
-        setlocale(LC_NUMERIC, std::locale::classic().name().c_str());
+        char *oldlocale = g_strdup (setlocale(LC_NUMERIC, NULL));
+        setlocale (LC_NUMERIC, "C");
         double width_line =  atof(sp_repr_css_property(css,"stroke-width","-1"));
-        setlocale(LC_NUMERIC, std::locale("").name().c_str());
+        setlocale (LC_NUMERIC, oldlocale);
+        g_free (oldlocale);
         if (width_line > -0.0001) {
              arrow_gap = 8 * Inkscape::Util::Quantity::convert(width_line/ doc_scale, "mm", display_unit.c_str());
         }
