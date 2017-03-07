@@ -1890,7 +1890,7 @@ sp_dtw_rotation_output (GtkSpinButton *spin, gpointer /*data*/)
 {
     gchar b[64];
     double val = gtk_spin_button_get_value (spin);
-    g_snprintf (b, 64, "%3.2f°", val);
+    g_snprintf (b, 64, "%7.2f°", val);
 
     gtk_entry_set_text (GTK_ENTRY (spin), b);
     return TRUE;
