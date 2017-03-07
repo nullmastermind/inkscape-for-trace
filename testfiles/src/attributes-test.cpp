@@ -461,6 +461,7 @@ std::vector<AttributeInfo> getKnownAttrs()
         AttributeInfo("inkscape:window-y", true),
         AttributeInfo("inkscape:zoom", true),
         AttributeInfo("osb:paint", true),
+        AttributeInfo("sodipodi:arc-type", true),
         AttributeInfo("sodipodi:arg1", true),
         AttributeInfo("sodipodi:arg2", true),
         AttributeInfo("sodipodi:argument", true),
