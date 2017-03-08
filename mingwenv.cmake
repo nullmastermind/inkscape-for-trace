@@ -93,11 +93,8 @@ endif()
 set(HAVE_MINGW ON)
 
 # Try to determine the MinGW processor architecture.
-if(EXISTS "${MINGW_PATH}/mingw32")
+if(EXISTS "${MINGW_PATH}/i686-w64-mingw32")
   set(HAVE_MINGW64 OFF)
-  set(MINGW_ARCH mingw32)
-elseif(EXISTS "${MINGW_PATH}/i686-w64-mingw32")
-  set(HAVE_MINGW64 ON)
   set(MINGW_ARCH i686-w64-mingw32)
 elseif(EXISTS "${MINGW_PATH}/x86_64-w64-mingw32")
   set(HAVE_MINGW64 ON)
@@ -133,28 +130,26 @@ if(NOT EXISTS ${MINGW_INCLUDE})
   message(FATAL_ERROR "MinGW include directory does not exist: ${MINGW_INCLUDE}")
 endif()
 
-# Add general MinGW headers to compiler include path.
+# Add MinGW headers to compiler include path.
 include_directories(SYSTEM ${MINGW_INCLUDE})
 
-if(HAVE_MINGW64)
-  set(MINGW64_LIB "${MINGW_ARCH_PATH}/lib")
+set(MINGW_ARCH_LIB "${MINGW_ARCH_PATH}/lib")
 
-  if(NOT EXISTS ${MINGW64_LIB})
-    message(FATAL_ERROR "MinGW 64-Bit libraries directory does not exist: ${MINGW64_LIB}")
-  endif()
-
-  # Add 64-Bit libraries to linker path.
-  link_directories(${MINGW64_LIB})
-
-  set(MINGW64_INCLUDE "${MINGW_ARCH_PATH}/include")
-
-  if(NOT EXISTS ${MINGW64_INCLUDE})
-    message(FATAL_ERROR "MinGW 64-Bit include directory does not exist: ${MINGW64_INCLUDE}")
-  endif()
-
-  # Add 64-Bit MinGW headers to compiler include path.
-  include_directories(${MINGW64_INCLUDE})
+if(NOT EXISTS ${MINGW_ARCH_LIB})
+  message(FATAL_ERROR "MinGW toolchainlibraries directory does not exist: ${MINGW_ARCH_LIB}")
 endif()
+
+# Add MinGW toolchain libraries to linker path.
+link_directories(${MINGW_ARCH_LIB})
+
+set(MINGW_ARCH_INCLUDE "${MINGW_ARCH_PATH}/include")
+
+if(NOT EXISTS ${MINGW_ARCH_INCLUDE})
+  message(FATAL_ERROR "MinGW toolchaininclude directory does not exist: ${MINGW_ARCH_INCLUDE}")
+endif()
+
+# Add MinGW toolchain headers to compiler include path.
+include_directories(${MINGW_ARCH_INCLUDE})
 
 # -----------------------------------------------------------------------------
 # MSYS CHECKS
@@ -191,7 +186,3 @@ endif()
 # Tweak CMake into using Unix-style library names.
 set(CMAKE_FIND_LIBRARY_PREFIXES "lib")
 set(CMAKE_FIND_LIBRARY_SUFFIXES ".dll.a" ".dll")
-
-if(NOT HAVE_MINGW64)
-  list(APPEND CMAKE_FIND_LIBRARY_SUFFIXES ".a")
-endif()

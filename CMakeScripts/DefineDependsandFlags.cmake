@@ -23,21 +23,16 @@ list(APPEND INKSCAPE_CXX_FLAGS "-std=c++11")
 if(WIN32)
 	# Set the link and include directories
 	get_property(dirs DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY INCLUDE_DIRECTORIES)
-	
-	# MinGW supplied STL does not define these floating point constants.. :/
-	add_definitions(-DFLT_EPSILON=1e-9)
-	add_definitions(-DFLT_MAX=1e+37)
-	add_definitions(-DFLT_MIN=1e-37)
 
 	list(APPEND INKSCAPE_LIBS "-lmscms")
 
 	list(APPEND INKSCAPE_CXX_FLAGS "-mwindows")
 	list(APPEND INKSCAPE_CXX_FLAGS "-mthreads")
+
+	list(APPEND INKSCAPE_LIBS "-lgomp")
+	list(APPEND INKSCAPE_LIBS "-lwinpthread")
 	
 	if(HAVE_MINGW64)
-		list(APPEND INKSCAPE_LIBS "-lgomp")
-		list(APPEND INKSCAPE_LIBS "-lwinpthread")
-	
 		list(APPEND INKSCAPE_CXX_FLAGS "-m64")
 	else()
 		list(APPEND INKSCAPE_CXX_FLAGS "-m32")
