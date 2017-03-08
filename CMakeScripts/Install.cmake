@@ -202,9 +202,6 @@ if(WIN32)
   install(DIRECTORY ${DEVLIBS_PATH}/share/icons/Adwaita
     DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons)
 
-  install(DIRECTORY ${DEVLIBS_PATH}/share/themes
-    DESTINATION ${CMAKE_INSTALL_PREFIX}/share)
-
   install(DIRECTORY ${DEVLIBS_PATH}/share/locale
     DESTINATION ${CMAKE_INSTALL_PREFIX}/share
     PATTERN "*gtk20.mo" EXCLUDE)

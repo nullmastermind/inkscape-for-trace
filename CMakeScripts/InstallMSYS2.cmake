@@ -167,9 +167,6 @@ if(WIN32)
   install(DIRECTORY ${MINGW_PATH}/share/icons/Adwaita
     DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons)
 
-  install(DIRECTORY ${MINGW_PATH}/share/themes
-    DESTINATION ${CMAKE_INSTALL_PREFIX}/share)
-
   install(DIRECTORY ${MINGW_PATH}/share/locale
     DESTINATION ${CMAKE_INSTALL_PREFIX}/share
     PATTERN "*gtk20.mo" EXCLUDE)
