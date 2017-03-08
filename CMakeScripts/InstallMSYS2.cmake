@@ -159,9 +159,10 @@ if(WIN32)
     PATTERN CMakeLists.txt EXCLUDE
     PATTERN *.am EXCLUDE)
 
-  # Generate a dummy file in hicolor/index.theme to avoid bug 1635207
-  file(GENERATE OUTPUT ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/index.theme
-    CONTENT "[Icon Theme]\nName=hicolor\nDirectories=")
+  # Install hicolor/index.theme to avoid bug 1635207
+  install(FILES
+    ${MINGW_PATH}/share/icons/hicolor/index.theme
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor)
 
   install(DIRECTORY ${MINGW_PATH}/share/icons/Adwaita
     DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons)
