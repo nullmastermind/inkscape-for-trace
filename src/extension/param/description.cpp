@@ -87,8 +87,11 @@ ParamDescription::get_widget (SPDocument * /*doc*/, Inkscape::XML::Node * /*node
         label->set_text(newguitext);
     }
     label->set_line_wrap();
-    //label->set_xalign(0); // requires gtkmm 3.16
-    label->set_halign(Gtk::ALIGN_START);
+#if GTK_CHECK_VERSION(3,16,0)
+    label->set_xalign(0);
+#else
+    label->set_alignment(Gtk::ALIGN_START);
+#endif
 
     // TODO: Ugly "fix" for gtk3 width/height calculation of labels.
     //   - If not applying any limits long labels will make the window grow horizontally until it uses up
