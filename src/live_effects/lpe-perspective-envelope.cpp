@@ -369,12 +369,12 @@ LPEPerspectiveEnvelope::newWidget()
                         Gtk::Label* handles = Gtk::manage(new Gtk::Label(Glib::ustring(_("Handles:")),Gtk::ALIGN_START));
                         vbox->pack_start(*handles, false, false, 2);
                         hbox_up_handles->pack_start(*widg, true, true, 2);
-                        hbox_up_handles->pack_start(*Gtk::manage(new Gtk::VSeparator()), Gtk::PACK_EXPAND_WIDGET);
+                        hbox_up_handles->pack_start(*Gtk::manage(new Gtk::Separator(Gtk::ORIENTATION_VERTICAL)), Gtk::PACK_EXPAND_WIDGET);
                     } else if(param->param_key == "up_right_point") {
                         hbox_up_handles->pack_start(*widg, true, true, 2);
                     } else if(param->param_key == "down_left_point") {
                         hbox_down_handles->pack_start(*widg, true, true, 2);
-                        hbox_down_handles->pack_start(*Gtk::manage(new Gtk::VSeparator()), Gtk::PACK_EXPAND_WIDGET);
+                        hbox_down_handles->pack_start(*Gtk::manage(new Gtk::Separator(Gtk::ORIENTATION_VERTICAL)), Gtk::PACK_EXPAND_WIDGET);
                     } else {
                         hbox_down_handles->pack_start(*widg, true, true, 2);
                     }
@@ -403,8 +403,8 @@ LPEPerspectiveEnvelope::newWidget()
     }
     vbox->pack_start(*hbox_up_handles,true, true, 2);
     Gtk::HBox * hbox_middle = Gtk::manage(new Gtk::HBox(true,2));
-    hbox_middle->pack_start(*Gtk::manage(new Gtk::HSeparator()), Gtk::PACK_EXPAND_WIDGET);
-    hbox_middle->pack_start(*Gtk::manage(new Gtk::HSeparator()), Gtk::PACK_EXPAND_WIDGET);
+    hbox_middle->pack_start(*Gtk::manage(new Gtk::Separator(Gtk::ORIENTATION_HORIZONTAL)), Gtk::PACK_EXPAND_WIDGET);
+    hbox_middle->pack_start(*Gtk::manage(new Gtk::Separator(Gtk::ORIENTATION_HORIZONTAL)), Gtk::PACK_EXPAND_WIDGET);
     vbox->pack_start(*hbox_middle, false, true, 2);
     vbox->pack_start(*hbox_down_handles, true, true, 2);
     Gtk::HBox * hbox = Gtk::manage(new Gtk::HBox(false,0));

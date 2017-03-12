@@ -120,7 +120,7 @@ Gtk::Widget *LPERoughen::newWidget()
                         Gtk::ALIGN_START));
                 method_label->set_use_markup(true);
                 vbox->pack_start(*method_label, false, false, 2);
-                vbox->pack_start(*Gtk::manage(new Gtk::HSeparator()),
+                vbox->pack_start(*Gtk::manage(new Gtk::Separator(Gtk::ORIENTATION_HORIZONTAL)),
                                  Gtk::PACK_EXPAND_WIDGET);
             }
             if (param->param_key == "displace_x") {
@@ -129,7 +129,7 @@ Gtk::Widget *LPERoughen::newWidget()
                                                  Gtk::ALIGN_START));
                 displace_x_label->set_use_markup(true);
                 vbox->pack_start(*displace_x_label, false, false, 2);
-                vbox->pack_start(*Gtk::manage(new Gtk::HSeparator()),
+                vbox->pack_start(*Gtk::manage(new Gtk::Separator(Gtk::ORIENTATION_HORIZONTAL)),
                                  Gtk::PACK_EXPAND_WIDGET);
             }
             if (param->param_key == "global_randomize") {
@@ -138,7 +138,7 @@ Gtk::Widget *LPERoughen::newWidget()
                                                  Gtk::ALIGN_START));
                 global_rand->set_use_markup(true);
                 vbox->pack_start(*global_rand, false, false, 2);
-                vbox->pack_start(*Gtk::manage(new Gtk::HSeparator()),
+                vbox->pack_start(*Gtk::manage(new Gtk::Separator(Gtk::ORIENTATION_HORIZONTAL)),
                                  Gtk::PACK_EXPAND_WIDGET);
             }
             if (param->param_key == "handles") {
@@ -147,7 +147,7 @@ Gtk::Widget *LPERoughen::newWidget()
                                                  Gtk::ALIGN_START));
                 options->set_use_markup(true);
                 vbox->pack_start(*options, false, false, 2);
-                vbox->pack_start(*Gtk::manage(new Gtk::HSeparator()),
+                vbox->pack_start(*Gtk::manage(new Gtk::Separator(Gtk::ORIENTATION_HORIZONTAL)),
                                  Gtk::PACK_EXPAND_WIDGET);
             }
             Glib::ustring *tip = param->param_getTooltip();

@@ -226,15 +226,28 @@ LPEPerspectivePath::newWidget()
         ++it;
     }
     Gtk::HBox * perspectiveId = Gtk::manage(new Gtk::HBox(true,0));
+
+#if WITH_GTKMM_3_10
+    Gtk::Label* labelPerspective = Gtk::manage(new Gtk::Label("Perspective ID:", Gtk::ALIGN_START, Gtk::ALIGN_START));
+#else
     Gtk::Label* labelPerspective = Gtk::manage(new Gtk::Label("Perspective ID:", 0., 0.));
+#endif
+
     Gtk::Entry* perspective = Gtk::manage(new Gtk::Entry());
     perspective->set_text(perspectiveID);
     perspective->set_tooltip_text("Set the perspective ID to apply");
     perspectiveId->pack_start(*labelPerspective, true, true, 2);
     perspectiveId->pack_start(*perspective, true, true, 2);
     vbox->pack_start(*perspectiveId, true, true, 2);
-    Gtk::Button* apply3D = Gtk::manage(new Gtk::Button(Glib::ustring(_("Refresh perspective"))));
-    apply3D->set_alignment(0.0, 0.5);
+    Gtk::Button* apply3D = Gtk::manage(new Gtk::Button());
+
+#if WITH_GTKMM_3_10
+    Gtk::Label *apply3DLabel = Gtk::manage(new Gtk::Label(_("Refresh perspective"), Gtk::ALIGN_START, Gtk::ALIGN_CENTER));
+#else
+    Gtk::Label *apply3DLabel = Gtk::manage(new Gtk::Label(_("Refresh perspective"), 0.0, 0.5));
+#endif
+
+    apply3D->add(*apply3DLabel);
     apply3D->signal_clicked().connect(sigc::bind<Gtk::Entry*>(sigc::mem_fun(*this,&LPEPerspectivePath::refresh),perspective));
     Gtk::Widget* apply3DWidget = dynamic_cast<Gtk::Widget *>(apply3D);
     apply3DWidget->set_tooltip_text("Refresh perspective");
