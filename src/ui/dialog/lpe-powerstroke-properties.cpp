@@ -40,14 +40,15 @@ PowerstrokePropertiesDialog::PowerstrokePropertiesDialog()
 {
     Gtk::Box *mainVBox = get_vbox();
 
-    _layout_table.set_spacings(4);
-    _layout_table.resize (2, 2);
+    _layout_table.set_row_spacing(4);
+    _layout_table.set_column_spacing(4);
 
     // Layer name widgets
     _powerstroke_position_entry.set_activates_default(true);
     _powerstroke_position_entry.set_digits(4);
     _powerstroke_position_entry.set_increments(1,1);
     _powerstroke_position_entry.set_range(-SCALARPARAM_G_MAXDOUBLE, SCALARPARAM_G_MAXDOUBLE);
+    _powerstroke_position_entry.set_hexpand();
     _powerstroke_position_label.set_label(_("Position:"));
     _powerstroke_position_label.set_alignment(1.0, 0.5);
 
@@ -55,16 +56,14 @@ PowerstrokePropertiesDialog::PowerstrokePropertiesDialog()
     _powerstroke_width_entry.set_digits(4);
     _powerstroke_width_entry.set_increments(1,1);
     _powerstroke_width_entry.set_range(-SCALARPARAM_G_MAXDOUBLE, SCALARPARAM_G_MAXDOUBLE);
+    _powerstroke_width_entry.set_hexpand();
     _powerstroke_width_label.set_label(_("Width:"));
     _powerstroke_width_label.set_alignment(1.0, 0.5);
 
-    _layout_table.attach(_powerstroke_position_label,
-                         0, 1, 0, 1, Gtk::FILL, Gtk::FILL);
-    _layout_table.attach(_powerstroke_position_entry,
-                         1, 2, 0, 1, Gtk::FILL | Gtk::EXPAND, Gtk::FILL);
-
-    _layout_table.attach(_powerstroke_width_label, 0, 1, 1, 2, Gtk::FILL, Gtk::FILL);
-    _layout_table.attach(_powerstroke_width_entry, 1, 2, 1, 2, Gtk::FILL | Gtk::EXPAND, Gtk::FILL);
+    _layout_table.attach(_powerstroke_position_label,0,0,1,1);
+    _layout_table.attach(_powerstroke_position_entry,1,0,1,1);
+    _layout_table.attach(_powerstroke_width_label,   0,1,1,1);
+    _layout_table.attach(_powerstroke_width_entry,   1,1,1,1);
 
     mainVBox->pack_start(_layout_table, true, true, 4);
 

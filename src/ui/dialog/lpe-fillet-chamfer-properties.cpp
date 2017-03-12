@@ -53,7 +53,7 @@ FilletChamferPropertiesDialog::FilletChamferPropertiesDialog()
     _fillet_chamfer_chamfer_subdivisions.set_increments(1,1);
     //todo: get tha max aloable infinity freeze the widget
     _fillet_chamfer_chamfer_subdivisions.set_range(0, SCALARPARAM_G_MAXDOUBLE);
-    _fillet_chamfer_chamfer_subdivisions.set_hexpand(0, SCALARPARAM_G_MAXDOUBLE);
+    _fillet_chamfer_chamfer_subdivisions.set_hexpand();
     
     _fillet_chamfer_chamfer_subdivisions_label.set_label(_("Chamfer subdivisions:"));
     _fillet_chamfer_chamfer_subdivisions_label.set_alignment(1.0, 0.5);
