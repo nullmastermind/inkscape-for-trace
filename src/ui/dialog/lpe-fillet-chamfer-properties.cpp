@@ -34,34 +34,32 @@ FilletChamferPropertiesDialog::FilletChamferPropertiesDialog()
 {
     Gtk::Box *mainVBox = get_vbox();
     mainVBox->set_homogeneous(false);
-    _layout_table.set_spacings(4);
-    _layout_table.resize(3, 3);
+    _layout_table.set_row_spacing(4);
+    _layout_table.set_column_spacing(4);
 
     // Layer name widgets
     _fillet_chamfer_position_numeric.set_digits(4);
     _fillet_chamfer_position_numeric.set_increments(1,1);
     //todo: get tha max aloable infinity freeze the widget
     _fillet_chamfer_position_numeric.set_range(0., SCALARPARAM_G_MAXDOUBLE);
+    _fillet_chamfer_position_numeric.set_hexpand();
     
     _fillet_chamfer_position_label.set_label(_("Radius (pixels):"));
     _fillet_chamfer_position_label.set_alignment(1.0, 0.5);
 
-    _layout_table.attach(_fillet_chamfer_position_label, 0, 1, 0, 1, Gtk::FILL,
-                         Gtk::FILL);
-    _layout_table.attach(_fillet_chamfer_position_numeric, 1, 2, 0, 1,
-                         Gtk::FILL | Gtk::EXPAND, Gtk::FILL);
+    _layout_table.attach(_fillet_chamfer_position_label, 0, 0, 1, 1);
+    _layout_table.attach(_fillet_chamfer_position_numeric, 1, 0, 1, 1);
     _fillet_chamfer_chamfer_subdivisions.set_digits(0);
     _fillet_chamfer_chamfer_subdivisions.set_increments(1,1);
     //todo: get tha max aloable infinity freeze the widget
     _fillet_chamfer_chamfer_subdivisions.set_range(0, SCALARPARAM_G_MAXDOUBLE);
+    _fillet_chamfer_chamfer_subdivisions.set_hexpand(0, SCALARPARAM_G_MAXDOUBLE);
     
     _fillet_chamfer_chamfer_subdivisions_label.set_label(_("Chamfer subdivisions:"));
     _fillet_chamfer_chamfer_subdivisions_label.set_alignment(1.0, 0.5);
 
-    _layout_table.attach(_fillet_chamfer_chamfer_subdivisions_label, 0, 1, 1, 2, Gtk::FILL,
-                         Gtk::FILL);
-    _layout_table.attach(_fillet_chamfer_chamfer_subdivisions, 1, 2, 1, 2,
-                         Gtk::FILL | Gtk::EXPAND, Gtk::FILL);
+    _layout_table.attach(_fillet_chamfer_chamfer_subdivisions_label, 0, 1, 1, 1);
+    _layout_table.attach(_fillet_chamfer_chamfer_subdivisions, 1, 1, 1, 1);
     _fillet_chamfer_type_fillet.set_label(_("Fillet"));
     _fillet_chamfer_type_fillet.set_group(_fillet_chamfer_type_group);
     _fillet_chamfer_type_inverse_fillet.set_label(_("Inverse fillet"));
