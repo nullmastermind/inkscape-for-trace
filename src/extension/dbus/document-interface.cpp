@@ -606,11 +606,7 @@ document_interface_document_set_display_area (DocumentInterface *doc_interface,
 {
     SPDesktop *desk = doc_interface->target.getDesktop();
     g_return_val_if_fail(ensure_desktop_valid(desk, error), FALSE);
-    desk->set_display_area (x0,
-                    y0,
-                    x1,
-                    y1,
-                    border, false);
+    desk->set_display_area (Geom::Rect( Geom::Point(x0,y0), Geom::Point(x1,y1), border, false ));
     return TRUE;
 }
 
