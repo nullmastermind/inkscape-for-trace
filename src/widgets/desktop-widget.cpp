@@ -867,7 +867,7 @@ sp_desktop_widget_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
             double newshortside = MIN(newarea.width(), newarea.height());
             zoom *= newshortside / oldshortside;
         }
-        dtw->desktop->zoom_absolute(area.midpoint()[Geom::X], area.midpoint()[Geom::Y], zoom);
+        dtw->desktop->zoom_absolute_center_point (area.midpoint(), zoom);
 
         // TODO - Should call show_dialogs() from sp_namedview_window_from_document only.
         // But delaying the call to here solves dock sizing issues on OS X, (see #171579)
@@ -897,7 +897,7 @@ sp_desktop_widget_realize (GtkWidget *widget)
 
     if (d.width() < 1.0 || d.height() < 1.0) return;
 
-    dtw->desktop->set_display_area (d.left(), d.top(), d.right(), d.bottom(), 10);
+    dtw->desktop->set_display_area (d, 10);
 
     dtw->updateNamedview();
 }
@@ -1787,15 +1787,9 @@ sp_desktop_widget_adjustment_value_changed (GtkAdjustment */*adj*/, SPDesktopWid
 
     dtw->update = 1;
 
-    dtw->canvas->scrollTo(gtk_adjustment_get_value(dtw->hadj), 
-                          gtk_adjustment_get_value(dtw->vadj), FALSE);
-    sp_desktop_widget_update_rulers (dtw);
-
-    /*  update perspective lines if we are in the 3D box tool (so that infinite ones are shown correctly) */
-    //sp_box3d_context_update_lines(dtw->desktop->event_context);
-    if (SP_IS_BOX3D_CONTEXT(dtw->desktop->event_context)) {
-		SP_BOX3D_CONTEXT(dtw->desktop->event_context)->_vpdrag->updateLines();
-	}
+    // Do not call canvas->scrollTo directly... messes up 'offset'.
+    dtw->desktop->scroll_absolute( Geom::Point(gtk_adjustment_get_value(dtw->hadj), 
+                                               gtk_adjustment_get_value(dtw->vadj)), false);
 
     dtw->update = 0;
 }
@@ -1906,7 +1900,7 @@ sp_dtw_zoom_value_changed (GtkSpinButton *spin, gpointer data)
 
     Geom::Rect const d = desktop->get_display_area();
     g_signal_handler_block (spin, dtw->zoom_update);
-    desktop->zoom_absolute (d.midpoint()[Geom::X], d.midpoint()[Geom::Y], zoom_factor);
+    desktop->zoom_absolute_center_point (d.midpoint(), zoom_factor);
     g_signal_handler_unblock (spin, dtw->zoom_update);
 
     spinbutton_defocus (GTK_WIDGET(spin));
@@ -2142,7 +2136,7 @@ static void
 sp_dtw_zoom_menu_handler (SPDesktop *dt, gdouble factor)
 {
     Geom::Rect const d = dt->get_display_area();
-    dt->zoom_absolute(d.midpoint()[Geom::X], d.midpoint()[Geom::Y], factor);
+    dt->zoom_absolute_center_point (d.midpoint(), factor);
 }
 
 

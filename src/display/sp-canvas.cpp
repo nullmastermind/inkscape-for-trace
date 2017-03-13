@@ -1937,9 +1937,15 @@ double start_angle = 0;
 bool started = false;
 bool rotated = false;
 
-void SPCanvas::scrollTo(double cx, double cy, unsigned int clear, bool is_scrolling)
+/**
+ * Scroll screen to point 'c'. 'c' is measured in screen pixels.
+ */
+void SPCanvas::scrollTo( Geom::Point const &c, unsigned int clear, bool is_scrolling)
 {
     GtkAllocation allocation;
+
+    double cx = c[Geom::X];
+    double cy = c[Geom::Y];
 
     int ix = (int) round(cx); // ix and iy are the new canvas coordinates (integer screen pixels)
     int iy = (int) round(cy); // cx might be negative, so (int)(cx + 0.5) will not do!

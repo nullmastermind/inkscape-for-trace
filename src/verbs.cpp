@@ -1890,7 +1890,10 @@ void ZoomVerb::perform(SPAction *action, void *data)
         zcorr = prefs->getDouble("/options/zoomcorrection/value", 1.0);
 
     Geom::Rect const d = dt->get_display_area();
-            
+
+    Geom::Rect const d_canvas = dt->getCanvas()->getViewbox(); // Not SVG 'viewBox'
+    Geom::Point midpoint = dt->w2d(d_canvas.midpoint()); // Midpoint of drawing on canvas.
+
     switch (reinterpret_cast<std::size_t>(data)) {
         case SP_VERB_ZOOM_IN:
         {
@@ -1907,7 +1910,7 @@ void ZoomVerb::perform(SPAction *action, void *data)
                 }
             }
 
-            dt->zoom_relative( d.midpoint()[Geom::X], d.midpoint()[Geom::Y], mul*zoom_inc);
+            dt->zoom_relative_center_point( midpoint, mul*zoom_inc);
             break;
         }
         case SP_VERB_ZOOM_OUT:
@@ -1924,17 +1927,17 @@ void ZoomVerb::perform(SPAction *action, void *data)
                 }
             }
 
-            dt->zoom_relative( d.midpoint()[Geom::X], d.midpoint()[Geom::Y], 1 / (mul*zoom_inc) );
+            dt->zoom_relative_center_point( midpoint, 1 / (mul*zoom_inc) );
             break;
         }
         case SP_VERB_ZOOM_1_1:
-            dt->zoom_absolute( d.midpoint()[Geom::X], d.midpoint()[Geom::Y], 1.0 * zcorr );
+            dt->zoom_absolute_center_point( midpoint, 1.0 * zcorr );
             break;
         case SP_VERB_ZOOM_1_2:
-            dt->zoom_absolute( d.midpoint()[Geom::X], d.midpoint()[Geom::Y], 0.5 * zcorr );
+            dt->zoom_absolute_center_point( midpoint, 0.5 * zcorr );
             break;
         case SP_VERB_ZOOM_2_1:
-            dt->zoom_absolute( d.midpoint()[Geom::X], d.midpoint()[Geom::Y], 2.0 * zcorr );
+            dt->zoom_absolute_center_point( midpoint, 2.0 * zcorr );
             break;
         case SP_VERB_ZOOM_PAGE:
             dt->zoom_page();
@@ -1949,10 +1952,10 @@ void ZoomVerb::perform(SPAction *action, void *data)
             dt->zoom_selection();
             break;
         case SP_VERB_ZOOM_NEXT:
-            dt->next_zoom();
+            dt->next_transform();
             break;
         case SP_VERB_ZOOM_PREV:
-            dt->prev_zoom();
+            dt->prev_transform();
             break;
         case SP_VERB_TOGGLE_RULERS:
             dt->toggleRulers();
@@ -2895,6 +2898,7 @@ Verb *Verb::_base_verbs[] = {
     // Zoom/View
     new ZoomVerb(SP_VERB_ZOOM_IN, "ZoomIn", N_("Zoom In"), N_("Zoom in"), INKSCAPE_ICON("zoom-in")),
     new ZoomVerb(SP_VERB_ZOOM_OUT, "ZoomOut", N_("Zoom Out"), N_("Zoom out"), INKSCAPE_ICON("zoom-out")),
+    // WHY ARE THE FOLLOWING ZoomVerbs???
     new ZoomVerb(SP_VERB_TOGGLE_RULERS, "ToggleRulers", N_("_Rulers"), N_("Show or hide the canvas rulers"), NULL),
     new ZoomVerb(SP_VERB_TOGGLE_SCROLLBARS, "ToggleScrollbars", N_("Scroll_bars"), N_("Show or hide the canvas scrollbars"), NULL),
     new ZoomVerb(SP_VERB_TOGGLE_GRID, "ToggleGrid", N_("Page _Grid"), N_("Show or hide the page grid"), INKSCAPE_ICON("show-grid")),

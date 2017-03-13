@@ -839,17 +839,17 @@ void sp_namedview_window_from_document(SPDesktop *desktop)
         }
     }
 
+    // Cancel any history of transforms up to this point (must be before call to zoom).
+    desktop->clear_transform_history();
+
     // restore zoom and view
     if (nv->zoom != 0 && nv->zoom != HUGE_VAL && !IS_NAN(nv->zoom)
         && nv->cx != HUGE_VAL && !IS_NAN(nv->cx)
         && nv->cy != HUGE_VAL && !IS_NAN(nv->cy)) {
-        desktop->zoom_absolute(nv->cx, nv->cy, nv->zoom);
+        desktop->zoom_absolute_center_point( Geom::Point(nv->cx, nv->cy), nv->zoom );
     } else if (desktop->getDocument()) { // document without saved zoom, zoom to its page
         desktop->zoom_page();
     }
-
-    // cancel any history of zooms up to this point
-    desktop->zooms_past.clear();
 
     if (show_dialogs) {
         desktop->show_dialogs();
@@ -1280,7 +1280,7 @@ void SPNamedView::translateGrids(Geom::Translate const &tr) {
 
 void SPNamedView::scrollAllDesktops(double dx, double dy, bool is_scrolling) {
     for(std::vector<SPDesktop *>::iterator it=this->views.begin();it!=this->views.end();++it ) {
-        (*it)->scroll_world_in_svg_coords(dx, dy, is_scrolling);
+        (*it)->scroll_relative_in_svg_coords(dx, dy, is_scrolling);
     }
 }
 

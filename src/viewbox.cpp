@@ -268,7 +268,7 @@ void SPViewBox::apply_viewbox(const Geom::Rect& in, double scale_none) {
         center_rotation *= Geom::Rotate(Geom::rad_from_deg(this->angle - this->previous_angle));
         center_rotation *= Geom::Translate(page_center * vbt);
         view_center = desktop->dt2doc(view_center * center_rotation);
-        desktop->zoom_relative(view_center[Geom::X], view_center[Geom::Y], 1.0);
+        desktop->zoom_relative_center_point(view_center, 1.0);
         this->rotated = false;
     }
 }

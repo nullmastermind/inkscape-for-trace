@@ -2554,9 +2554,7 @@ void scroll_to_show_item(SPDesktop *desktop, SPItem *item)
         Geom::Point const d_dt = dbox.midpoint();
         Geom::Point const d_w = desktop->d2w(d_dt);
         Geom::Point const moved_w( d_w - s_w );
-        gint const dx = (gint) moved_w[X];
-        gint const dy = (gint) moved_w[Y];
-        desktop->scroll_world(dx, dy);
+        desktop->scroll_relative(moved_w);
     }
 }
 

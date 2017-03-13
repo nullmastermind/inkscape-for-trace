@@ -497,7 +497,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
 
                     Geom::Point const motion_w(event->motion.x, event->motion.y);
                     Geom::Point const moved_w(motion_w - button_w);
-                    this->desktop->scroll_world(moved_w, true); // we're still scrolling, do not redraw
+                    this->desktop->scroll_relative(moved_w, true); // we're still scrolling, do not redraw
                     ret = TRUE;
                 }
             } else if (zoom_rb) {
@@ -575,7 +575,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
                     Geom::Point const motion_w(event->button.x, event->button.y);
                     Geom::Point const moved_w(motion_w - button_w);
 
-                    this->desktop->scroll_world(moved_w);
+                    this->desktop->scroll_relative(moved_w);
                     desktop->updateNow();
                     ret = TRUE;
                 } else if (zoom_rb == event->button.button) {
@@ -675,7 +675,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
                             acceleration, desktop->getCanvas()));
 
                     gobble_key_events(get_group0_keyval(&event->key), GDK_CONTROL_MASK);
-                    this->desktop->scroll_world(i, 0);
+                    this->desktop->scroll_relative(Geom::Point(i, 0));
                     ret = TRUE;
                 }
                 break;
@@ -688,7 +688,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
                             acceleration, desktop->getCanvas()));
 
                     gobble_key_events(get_group0_keyval(&event->key), GDK_CONTROL_MASK);
-                    this->desktop->scroll_world(0, i);
+                    this->desktop->scroll_relative(Geom::Point(0, i));
                     ret = TRUE;
                 }
                 break;
@@ -701,7 +701,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
                             acceleration, desktop->getCanvas()));
 
                     gobble_key_events(get_group0_keyval(&event->key), GDK_CONTROL_MASK);
-                    this->desktop->scroll_world(-i, 0);
+                    this->desktop->scroll_relative(Geom::Point(-i, 0));
                     ret = TRUE;
                 }
                 break;
@@ -714,7 +714,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
                             acceleration, desktop->getCanvas()));
 
                     gobble_key_events(get_group0_keyval(&event->key), GDK_CONTROL_MASK);
-                    this->desktop->scroll_world(0, -i);
+                    this->desktop->scroll_relative(Geom::Point(0, -i));
                     ret = TRUE;
                 }
                 break;
@@ -856,11 +856,11 @@ bool ToolBase::root_handler(GdkEvent* event) {
             if (event->scroll.state & GDK_SHIFT_MASK) {
                 switch (event->scroll.direction) {
                 case GDK_SCROLL_UP:
-                    desktop->scroll_world(wheel_scroll, 0);
+                    desktop->scroll_relative(Geom::Point(wheel_scroll, 0));
                     break;
 
                 case GDK_SCROLL_DOWN:
-                    desktop->scroll_world(-wheel_scroll, 0);
+                    desktop->scroll_relative(Geom::Point(-wheel_scroll, 0));
                     break;
 
                 default:
@@ -896,24 +896,24 @@ bool ToolBase::root_handler(GdkEvent* event) {
             } else {
                 switch (event->scroll.direction) {
                 case GDK_SCROLL_UP:
-                    desktop->scroll_world(0, wheel_scroll);
+                    desktop->scroll_relative(Geom::Point(0, wheel_scroll));
                     break;
 
                 case GDK_SCROLL_DOWN:
-                    desktop->scroll_world(0, -wheel_scroll);
+                    desktop->scroll_relative(Geom::Point(0, -wheel_scroll));
                     break;
 
                 case GDK_SCROLL_LEFT:
-                    desktop->scroll_world(wheel_scroll, 0);
+                    desktop->scroll_relative(Geom::Point(wheel_scroll, 0));
                     break;
 
                 case GDK_SCROLL_RIGHT:
-                    desktop->scroll_world(-wheel_scroll, 0);
+                    desktop->scroll_relative(Geom::Point(-wheel_scroll, 0));
                     break;
 
                 case GDK_SCROLL_SMOOTH:
                     gdk_event_get_scroll_deltas(event, &delta_x, &delta_y);
-                    desktop->scroll_world(delta_x, delta_y);
+                    desktop->scroll_relative(Geom::Point(delta_x, delta_y));
                     break;
                 }
             }
