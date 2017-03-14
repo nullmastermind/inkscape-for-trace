@@ -1170,54 +1170,32 @@ SPDesktop::scroll_relative_in_svg_coords (double dx, double dy, bool is_scrollin
 
 
 /**
- * Scroll screen so as to keep point 'p' visible in window. 'p' is in drawing coordinates.
+ * Scroll screen so as to keep point 'p' visible in window.
  * (Used, for example, when a node is being dragged.)
+ * 'p': The point in desktop coordinates.
+ * 'autoscrollspeed': The scroll speed (or zero to use preferences' value).
  */
 bool
 SPDesktop::scroll_to_point (Geom::Point const &p, gdouble autoscrollspeed)
 {
-    using Geom::X;
-    using Geom::Y;
-
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+
+    // autoscrolldistance is in screen pixels.
     gdouble autoscrolldistance = (gdouble) prefs->getIntLimited("/options/autoscrolldistance/value", 0, -1000, 10000);
 
-    // autoscrolldistance is in screen pixels, but the display area is in document units
-    autoscrolldistance /= _current_affine.getZoom();
-    // FIXME: This 2geom idiom doesn't allow us to declare dbox const
-    Geom::Rect dbox = get_display_area();
-    dbox.expandBy(-autoscrolldistance);
+    Geom::Rect w = canvas->getViewbox(); // Window in screen coordinates.
+    w.expandBy(-autoscrolldistance);  // Shrink window
 
-    if (!(p[X] > dbox.min()[X] && p[X] < dbox.max()[X]) ||
-        !(p[Y] > dbox.min()[Y] && p[Y] < dbox.max()[Y])   ) {
+    Geom::Point c = d2w(p);  // Point 'p' in screen coordinates.
+    if (!w.contains(c)) {
 
-        Geom::Point const s_w( p * _current_affine.d2w() );
-
-        gdouble x_to;
-        if (p[X] < dbox.min()[X])
-            x_to = dbox.min()[X];
-        else if (p[X] > dbox.max()[X])
-            x_to = dbox.max()[X];
-        else
-            x_to = p[X];
-
-        gdouble y_to;
-        if (p[Y] < dbox.min()[Y])
-            y_to = dbox.min()[Y];
-        else if (p[Y] > dbox.max()[Y])
-            y_to = dbox.max()[Y];
-        else
-            y_to = p[Y];
-
-        Geom::Point const d_dt(x_to, y_to);
-        Geom::Point const d_w( d_dt * _current_affine.d2w() );
-        Geom::Point const moved_w( d_w - s_w );
+        Geom::Point c2 = w.clamp(c); // Constrain c to window.
 
         if (autoscrollspeed == 0)
             autoscrollspeed = prefs->getDoubleLimited("/options/autoscrollspeed/value", 1, 0, 10);
 
         if (autoscrollspeed != 0)
-            scroll_relative (autoscrollspeed * moved_w);
+            scroll_relative (autoscrollspeed * (c2 - c) );
 
         return true;
     }
