@@ -1086,6 +1086,48 @@ SPDesktop::zoom_grab_focus()
 
 
 /**
+ * Rotate keeping the point 'c' fixed in the desktop window.
+ */
+void
+SPDesktop::rotate_absolute_keep_point (Geom::Point const &c, double rotate)
+{
+    Geom::Point w = d2w( c ); // Must be before rotate changed.
+    _current_affine.setRotate( rotate );
+    set_display_area( c, w );
+}
+
+
+void 
+SPDesktop::rotate_relative_keep_point (Geom::Point const &c, double rotate)
+{
+    Geom::Point w = d2w( c ); // Must be before rotate changed.
+    _current_affine.addRotate( rotate );
+    set_display_area( c, w );
+}
+
+
+/**
+ * Rotate aligning the point 'c' to the center of desktop window.
+ */
+void 
+SPDesktop::rotate_absolute_center_point (Geom::Point const &c, double rotate)
+{
+    _current_affine.setRotate( rotate );
+    Geom::Rect viewbox = canvas->getViewbox();
+    set_display_area( c, viewbox.midpoint() );
+}
+
+
+void 
+SPDesktop::rotate_relative_center_point (Geom::Point const &c, double rotate)
+{
+    _current_affine.addRotate( rotate );
+    Geom::Rect viewbox = canvas->getViewbox();
+    set_display_area( c, viewbox.midpoint() );
+}
+
+
+/**
  * Scroll canvas by to a particular point (window coordinates).
  */
 void

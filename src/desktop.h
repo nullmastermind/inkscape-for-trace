@@ -346,6 +346,11 @@ public:
 
     void zoom_grab_focus();
 
+    void rotate_absolute_keep_point   (Geom::Point const &c, double const rotate);
+    void rotate_relative_keep_point   (Geom::Point const &c, double const rotate);
+    void rotate_absolute_center_point (Geom::Point const &c, double const rotate);
+    void rotate_relative_center_point (Geom::Point const &c, double const rotate);
+
     void scroll_absolute (Geom::Point const &point, bool is_scrolling = false);
     void scroll_relative (Geom::Point const &delta, bool is_scrolling = false);
     void scroll_relative_in_svg_coords (double dx, double dy, bool is_scrolling = false);
