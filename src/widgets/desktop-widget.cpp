@@ -1898,9 +1898,11 @@ sp_dtw_zoom_value_changed (GtkSpinButton *spin, gpointer data)
     SPDesktopWidget *dtw = SP_DESKTOP_WIDGET (data);
     SPDesktop *desktop = dtw->desktop;
 
-    Geom::Rect const d = desktop->get_display_area();
+    // Zoom around center of window
+    Geom::Rect const d_canvas = desktop->getCanvas()->getViewbox();
+    Geom::Point midpoint = desktop->w2d(d_canvas.midpoint());
     g_signal_handler_block (spin, dtw->zoom_update);
-    desktop->zoom_absolute_center_point (d.midpoint(), zoom_factor);
+    desktop->zoom_absolute_center_point (midpoint, zoom_factor);
     g_signal_handler_unblock (spin, dtw->zoom_update);
 
     spinbutton_defocus (GTK_WIDGET(spin));
