@@ -102,7 +102,7 @@ void SatellitesArrayParam::updateCanvasIndicators(bool mirror)
                     (!_vector[i][j].has_mirror && mirror == true) || //Ignore if not have mirror and we are in mirror loop
                     _vector[i][j].amount == 0 || //no helper in 0 value
                     pathv[i].size() == j || //ignore last satellite in open paths with fillet chamfer effect
-                    !pathv[i].closed() && j == 0)  //ignore first satellites on open paths
+                    (!pathv[i].closed() && j == 0))  //ignore first satellites on open paths
                 {
                     continue;
                 }
@@ -306,7 +306,7 @@ void FilletChamferKnotHolderEntity::knot_set(Geom::Point const &p,
     Satellite satellite = _pparam->_vector[path_index][curve_index];
     Geom::PathVector pathv = _pparam->_last_pathvector_satellites->getPathVector();
     if (satellite.hidden ||
-        !pathv[path_index].closed() && curve_index == 0 ||//ignore first satellites on open paths
+        (!pathv[path_index].closed() && curve_index == 0) ||//ignore first satellites on open paths
         pathv[path_index].size() == curve_index) //ignore last satellite in open paths with fillet chamfer effect
     {
         return;
