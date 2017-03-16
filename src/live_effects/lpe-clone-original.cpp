@@ -193,7 +193,7 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, bool live, co
     while (*styleiter != NULL) {
         const char* attribute = (*styleiter);
         const char* origin_attribute = sp_repr_css_property(css_origin, attribute, "");
-        if (origin_attribute == "") {
+        if (!strlen(origin_attribute)) { //==0
             sp_repr_css_set_property (css_dest, attribute, NULL);
         } else {
             sp_repr_css_set_property (css_dest, attribute, origin_attribute);

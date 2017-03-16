@@ -177,7 +177,7 @@ LPEMeasureLine::createArrowMarker(const char * mode)
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
     SPObject *elemref = NULL;
     Inkscape::XML::Node *arrow = NULL;
-    if (elemref = document->getObjectById(mode)) {
+    if ((elemref = document->getObjectById(mode))) {
         Inkscape::XML::Node *arrow= elemref->getRepr();
         if (arrow) {
             arrow->setAttribute("sodipodi:insensitive", "true");
@@ -257,7 +257,7 @@ LPEMeasureLine::createTextLabel(Geom::Point pos, double length, Geom::Coord angl
     const char * id = g_strdup(Glib::ustring("text-on-").append(this->getRepr()->attribute("id")).c_str());
     SPObject *elemref = NULL;
     Inkscape::XML::Node *rtspan = NULL;
-    if (elemref = document->getObjectById(id)) {
+    if ((elemref = document->getObjectById(id))) {
         if (remove) {
             elemref->deleteObject();
             return;
@@ -422,7 +422,7 @@ LPEMeasureLine::createLine(Geom::Point start,Geom::Point end, const char * id, b
         line_path.appendNew<Geom::LineSegment>(end);
         line_pathv.push_back(line_path);
     }
-    if (elemref = document->getObjectById(id)) {
+    if ((elemref = document->getObjectById(id))) {
         if (remove) {
             elemref->deleteObject();
             return;
@@ -625,7 +625,7 @@ LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
         if ((anotation_width/2) + std::abs(text_right_left) > Geom::distance(start,end)/2.0) {
             Geom::Point sstart = end - Point::polar(angle_cross, position);
             Geom::Point send = end - Point::polar(angle_cross, position);
-            if (text_right_left < 0 && flip_side || text_right_left > 0 && !flip_side) {
+            if ((text_right_left < 0 && flip_side) || (text_right_left > 0 && !flip_side)) {
                 sstart = start - Point::polar(angle_cross, position);
                 send = start - Point::polar(angle_cross, position);
             }
