@@ -213,6 +213,7 @@ ImageMagick::effect (Inkscape::Extension::Effect *module, Inkscape::UI::View::Vi
 
             dc->_nodes[i]->setAttribute("xlink:href", dc->_caches[i], true);            
             dc->_nodes[i]->setAttribute("sodipodi:absref", NULL, true);
+            delete blob;
         }
         catch (Magick::Exception &error_) {
             printf("Caught exception: %s \n", error_.what());

@@ -1,3 +1,7 @@
+# Override error flag just for this folder
+if (CMAKE_BUILD_TYPE MATCHES Strict)
+	set(CMAKE_CXX_FLAGS_STRICT "${CMAKE_CXX_FLAGS_STRICT} -Wno-error=deprecated-declarations")
+endif()
 
 set(2geom_SRC
 	affine.cpp

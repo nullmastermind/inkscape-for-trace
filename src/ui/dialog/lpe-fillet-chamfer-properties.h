@@ -51,7 +51,7 @@ protected:
     Gtk::Label _fillet_chamfer_chamfer_subdivisions_label;
     Gtk::SpinButton _fillet_chamfer_chamfer_subdivisions;
 
-    Gtk::Table _layout_table;
+    Gtk::Grid _layout_table;
     bool _position_visible;
 
     Gtk::Button _close_button;

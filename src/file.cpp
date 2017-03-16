@@ -908,7 +908,7 @@ void sp_file_revert_dialog()
         reverted = sp_file_open(uri,NULL);
         if (reverted) {
             // restore zoom and view
-            desktop->zoom_absolute(c[Geom::X], c[Geom::Y], zoom);
+            desktop->zoom_absolute_center_point(c, zoom);
         }
     } else {
         reverted = false;

@@ -104,6 +104,7 @@ public:
     void setDefaultResponse(int response_id);
     void setResponseSensitive(int response_id, bool setting);
 
+    /* Return signals. Signals emited by PanelDialog. */
     virtual sigc::signal<void, SPDesktop *, SPDocument *> &signalDocumentReplaced();
     virtual sigc::signal<void, SPDesktop *> &signalActivateDesktop();
     virtual sigc::signal<void, SPDesktop *> &signalDeactiveDesktop();

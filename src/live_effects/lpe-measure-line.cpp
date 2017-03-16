@@ -171,6 +171,9 @@ void
 LPEMeasureLine::createArrowMarker(const char * mode)
 {
     SPDocument * document = SP_ACTIVE_DOCUMENT;
+    if (!document) {
+        return;
+    }
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
     SPObject *elemref = NULL;
     Inkscape::XML::Node *arrow = NULL;
@@ -232,6 +235,9 @@ void
 LPEMeasureLine::createTextLabel(Geom::Point pos, double length, Geom::Coord angle, bool remove, bool valid)
 {
     SPDocument * document = SP_ACTIVE_DOCUMENT;
+    if (!document) {
+        return;
+    }
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
     Inkscape::XML::Node *rtext = NULL;
     double doc_w = document->getRoot()->width.value;
@@ -323,19 +329,20 @@ LPEMeasureLine::createTextLabel(Geom::Point pos, double length, Geom::Coord angl
         Inkscape::GC::release(rtspan);
     }
     length = Inkscape::Util::Quantity::convert(length / doc_scale, display_unit.c_str(), unit.get_abbreviation());
-    std::stringstream length_str;
-    length_str.precision(precision);
-    length_str.setf(std::ios::fixed, std::ios::floatfield);
+    char *oldlocale = g_strdup (setlocale(LC_NUMERIC, NULL));
     if (local_locale) {
-        length_str.imbue(std::locale(""));
+        setlocale (LC_NUMERIC, "");
     } else {
-        length_str.imbue(std::locale::classic());
+        setlocale (LC_NUMERIC, "C");
     }
-    length_str << std::fixed << length;
+    gchar length_str[64];
+    g_snprintf(length_str, 64, "%.*f", (int)precision, length);
+    setlocale (LC_NUMERIC, oldlocale);
+    g_free (oldlocale);
     Glib::ustring label_value = Glib::ustring(format.param_getSVGValue());
     size_t s = label_value.find(Glib::ustring("{measure}"),0);
     if(s < label_value.length()) {
-        label_value.replace(s,s+9,length_str.str());
+        label_value.replace(s,s+9,length_str);
     }
     s = label_value.find(Glib::ustring("{unit}"),0);
     if(s < label_value.length()) {
@@ -376,6 +383,9 @@ void
 LPEMeasureLine::createLine(Geom::Point start,Geom::Point end, const char * id, bool main, bool overflow, bool remove, bool arrows)
 {
     SPDocument * document = SP_ACTIVE_DOCUMENT;
+    if (!document) {
+        return;
+    }
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
     SPObject *elemref = NULL;
     Inkscape::XML::Node *line = NULL;
@@ -500,6 +510,9 @@ LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
     SPLPEItem * splpeitem = const_cast<SPLPEItem *>(lpeitem);
     sp_lpe_item->parent = dynamic_cast<SPObject *>(splpeitem->parent);
     SPDocument * document = SP_ACTIVE_DOCUMENT;
+    if (!document) {
+        return;
+    }
     Inkscape::XML::Node *root = splpeitem->document->getReprRoot();
     Inkscape::XML::Node *root_origin = document->getReprRoot();
     if (root_origin != root) {
@@ -643,9 +656,11 @@ LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
         }
         SPCSSAttr *css = sp_repr_css_attr_new();
         sp_repr_css_attr_add_from_string(css, dimline_format.param_getSVGValue());
-        setlocale(LC_NUMERIC, std::locale::classic().name().c_str());
+        char *oldlocale = g_strdup (setlocale(LC_NUMERIC, NULL));
+        setlocale (LC_NUMERIC, "C");
         double width_line =  atof(sp_repr_css_property(css,"stroke-width","-1"));
-        setlocale(LC_NUMERIC, std::locale("").name().c_str());
+        setlocale (LC_NUMERIC, oldlocale);
+        g_free (oldlocale);
         if (width_line > -0.0001) {
              arrow_gap = 8 * Inkscape::Util::Quantity::convert(width_line/ doc_scale, "mm", display_unit.c_str());
         }

@@ -386,7 +386,7 @@ void OriginalPathArrayParam::setPathVector(SPObject *linked_obj, guint /*flags*/
     }
     SPCurve *curve = NULL;
     if (SP_IS_SHAPE(linked_obj)) {
-        curve = SP_SHAPE(linked_obj)->getCurveBeforeLPE();
+        curve = SP_SHAPE(linked_obj)->getCurve();
     }
     if (SP_IS_TEXT(linked_obj)) {
         curve = SP_TEXT(linked_obj)->getNormalizedBpath();

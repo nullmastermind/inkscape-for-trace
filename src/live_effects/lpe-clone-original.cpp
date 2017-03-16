@@ -64,6 +64,9 @@ void
 LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, bool live, const char * attributes, const char * style_attributes, bool root) 
 {
     SPDocument * document = SP_ACTIVE_DOCUMENT;
+    if (!document) {
+        return;
+    }
     if ( SP_IS_GROUP(origin) && SP_IS_GROUP(dest) && SP_GROUP(origin)->getItemCount() == SP_GROUP(dest)->getItemCount() ) {
         std::vector< SPObject * > childs = origin->childList(true);
         size_t index = 0;
@@ -258,28 +261,18 @@ LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){
             style_attr.erase (style_attr.size()-1, 1);
         }
         style_attr.append(Glib::ustring(style_attributes.param_getSVGValue()).append(","));
-        if (inverse) {
-            cloneAttrbutes(SP_OBJECT(sp_lpe_item), linked_item.getObject(), true, g_strdup(attr.c_str()), g_strdup(style_attr.c_str()), true);
-            Geom::OptRect bbox = SP_ITEM(sp_lpe_item)->geometricBounds();
-            if (bbox && preserve_position && origin != Geom::Point(0,0)) {
-                origin = (*bbox).corner(0) - origin;
-                SP_ITEM(linked_item.getObject())->transform *= Geom::Translate(origin);
-            }
-            bbox = SP_ITEM(sp_lpe_item)->geometricBounds();
-            if (bbox && preserve_position) {
-                origin = (*bbox).corner(0);
-            }
-        } else {
-            cloneAttrbutes(linked_item.getObject(), SP_OBJECT(sp_lpe_item), true, g_strdup(attr.c_str()), g_strdup(style_attr.c_str()), true);
-            Geom::OptRect bbox = SP_ITEM(linked_item.getObject())->geometricBounds();
-            if (bbox && preserve_position && origin != Geom::Point(0,0)) {
-                origin = (*bbox).corner(0) - origin;
-                SP_ITEM(sp_lpe_item)->transform *= Geom::Translate(origin);
-            }
-            bbox = SP_ITEM(linked_item.getObject())->geometricBounds();
-            if (bbox && preserve_position) {
-                origin = (*bbox).corner(0);
-            }
+
+        SPItem * from =  inverse ? SP_ITEM(sp_lpe_item) : SP_ITEM(linked_item.getObject()); 
+        SPItem * to   = !inverse ? SP_ITEM(sp_lpe_item) : SP_ITEM(linked_item.getObject()); 
+        cloneAttrbutes(from, to, true, g_strdup(attr.c_str()), g_strdup(style_attr.c_str()), true);
+        Geom::OptRect bbox = from->geometricBounds();
+        if (bbox && preserve_position && origin != Geom::Point(0,0)) {
+            origin = (*bbox).corner(0) - origin;
+            to->transform *= Geom::Translate(origin);
+        }
+        bbox = from->geometricBounds();
+        if (bbox && preserve_position) {
+            origin = (*bbox).corner(0);
         }
     }
 }
@@ -354,7 +347,6 @@ void
 LPECloneOriginal::transform_multiply(Geom::Affine const& postmul, bool set)
 {
     if (linked_item.linksToItem()) {
-        bool changed = false;
         linked_item.getObject()->requestModified(SP_OBJECT_MODIFIED_FLAG);
     }
 }

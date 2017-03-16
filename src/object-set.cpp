@@ -20,7 +20,7 @@
 
 namespace Inkscape {
 
-bool ObjectSet::add(SPObject* object) {
+bool ObjectSet::add(SPObject* object, bool nosignal) {
     g_return_val_if_fail(object != NULL, false);
     g_return_val_if_fail(SP_IS_OBJECT(object), false);
 
@@ -37,7 +37,8 @@ bool ObjectSet::add(SPObject* object) {
     _removeDescendantsFromSet(object);
 
     _add(object);
-    _emitSignals();
+    if (!nosignal)
+        _emitSignals();
     return true;
 }
 
@@ -246,9 +247,10 @@ void ObjectSet::setReprList(std::vector<XML::Node*> const &list) {
     for (auto iter = list.rbegin(); iter != list.rend(); ++iter) {
         SPObject *obj = document()->getObjectById((*iter)->attribute("id"));
         if (obj) {
-            add(obj);
+            add(obj, true);
         }
     }
+    _emitSignals();
     if(dynamic_cast<Inkscape::Selection*>(this))
         return dynamic_cast<Inkscape::Selection*>(this)->_emitChanged();//
 }

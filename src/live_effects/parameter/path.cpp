@@ -5,10 +5,16 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "ui/widget/point.h"
+#include "live_effects/parameter/path.h"
+
 #include <glibmm/i18n.h>
 
-#include "live_effects/parameter/path.h"
+#include <gtkmm/button.h>
+#include <gtkmm/label.h>
+
+#include "bad-uri-exception.h"
+#include "ui/widget/point.h"
+
 #include "live_effects/effect.h"
 #include "svg/svg.h"
 #include <2geom/svg-path-parser.h>
@@ -17,7 +23,6 @@
 #include <2geom/d2.h>
 
 #include "widgets/icon.h"
-#include <gtk/gtk.h>
 #include "selection-chemistry.h"
 #include "xml/repr.h"
 #include "desktop.h"
@@ -44,8 +49,6 @@
 #include "ui/tool/multi-path-manipulator.h"
 #include "ui/tool/shape-record.h"
 
-#include <gtkmm/button.h>
-#include <gtkmm/label.h>
 #include "ui/icon-names.h"
 
 namespace Inkscape {

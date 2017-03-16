@@ -200,6 +200,7 @@ set(inkscape_SRC
   event-log.cpp
   extract-uri.cpp
   file.cpp
+  file-update.cpp
   filter-chemistry.cpp
   filter-enums.cpp
   gc-anchored.cpp
@@ -325,7 +326,6 @@ set(inkscape_SRC
   id-clash.h
   inkscape-version.h
   inkscape.h
-  isinf.h
   knot-enums.h
   knot-holder-entity.h
   knot-ptr.h
@@ -366,7 +366,6 @@ set(inkscape_SRC
   removeoverlap.h
   require-config.h
   resource-manager.h
-  round.h
   rubberband.h
   satisfied-guide-cns.h
   selcue.h

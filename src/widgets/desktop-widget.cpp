@@ -66,26 +66,12 @@
 #include <gtkmm/cssprovider.h>
 #include <gtkmm/paned.h>
 #include <gtkmm/messagedialog.h>
-#include <iomanip>
-
-#if defined (SOLARIS) && (SOLARIS == 8)
-#include "round.h"
-using Inkscape::round;
-#endif
 
 using Inkscape::UI::Widget::UnitTracker;
 using Inkscape::UI::UXManager;
 using Inkscape::UI::ToolboxFactory;
 using ege::AppearTimeTracker;
 using Inkscape::Util::unit_table;
-
-enum {
-    ACTIVATE,
-    DEACTIVATE,
-    MODIFIED,
-    EVENT_CONTEXT_CHANGED,
-    LAST_SIGNAL
-};
 
 
 //---------------------------------------------------------------------
@@ -606,7 +592,7 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     dtw->zoom_update = g_signal_connect (G_OBJECT (dtw->zoom_status), "value_changed", G_CALLBACK (sp_dtw_zoom_value_changed), dtw);
     dtw->zoom_update = g_signal_connect (G_OBJECT (dtw->zoom_status), "populate_popup", G_CALLBACK (sp_dtw_zoom_populate_popup), dtw);
     auto css_provider_spinbutton = Gtk::CssProvider::create();
-    css_provider_spinbutton->load_from_data("* { padding-left: 2; padding-right: 2; padding-top: 0; padding-bottom: 0;}");
+    css_provider_spinbutton->load_from_data("* { padding-left: 2px; padding-right: 2px; padding-top: 0px; padding-bottom: 0px;}");
     auto zoomstat = Glib::wrap(dtw->zoom_status);
     zoomstat->set_name("ZoomStatus");
     auto context_zoom = zoomstat->get_style_context();
@@ -881,7 +867,7 @@ sp_desktop_widget_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
             double newshortside = MIN(newarea.width(), newarea.height());
             zoom *= newshortside / oldshortside;
         }
-        dtw->desktop->zoom_absolute(area.midpoint()[Geom::X], area.midpoint()[Geom::Y], zoom);
+        dtw->desktop->zoom_absolute_center_point (area.midpoint(), zoom);
 
         // TODO - Should call show_dialogs() from sp_namedview_window_from_document only.
         // But delaying the call to here solves dock sizing issues on OS X, (see #171579)
@@ -911,7 +897,7 @@ sp_desktop_widget_realize (GtkWidget *widget)
 
     if (d.width() < 1.0 || d.height() < 1.0) return;
 
-    dtw->desktop->set_display_area (d.left(), d.top(), d.right(), d.bottom(), 10);
+    dtw->desktop->set_display_area (d, 10);
 
     dtw->updateNamedview();
 }
@@ -1679,7 +1665,7 @@ SPDesktopWidget* SPDesktopWidget::createInstance(SPNamedView *namedview)
     gtk_widget_set_name(dtw->menubar, "MenuBar");
     gtk_widget_show_all (dtw->menubar);
     SPNamedView *nv = dtw->desktop->namedview;
-    gtk_box_pack_start (GTK_BOX (dtw->vbox), dtw->menubar, TRUE, TRUE, 0);
+    gtk_box_pack_start (GTK_BOX (dtw->vbox), dtw->menubar, FALSE, FALSE, 0);
     dtw->layoutWidgets();
     gtk_spin_button_set_value(GTK_SPIN_BUTTON (dtw->rotation_status), namedview->document_rotation);
     sp_namedview_set_document_rotation(namedview);
@@ -1749,7 +1735,14 @@ void SPDesktopWidget::namedviewModified(SPObject *obj, guint flags)
                 if (GTK_IS_CONTAINER(i->data)) {
                     GList *grch = gtk_container_get_children (GTK_CONTAINER(i->data));
                     for (GList *j = grch; j != NULL; j = j->next) {
+
                         if (!GTK_IS_WIDGET(j->data)) // wasn't a widget
+                            continue;
+
+                        // Don't apply to text toolbar. We want to be able to
+                        // use different units for text. (Bug 1562217)
+                        const gchar* name = gtk_widget_get_name( (GTK_WIDGET(j->data)) );
+                        if (strcmp( name, "TextToolbar") == 0)
                             continue;
 
                         gpointer t = sp_search_by_data_recursive(GTK_WIDGET(j->data), (gpointer) "tracker");
@@ -1794,15 +1787,9 @@ sp_desktop_widget_adjustment_value_changed (GtkAdjustment */*adj*/, SPDesktopWid
 
     dtw->update = 1;
 
-    dtw->canvas->scrollTo(gtk_adjustment_get_value(dtw->hadj), 
-                          gtk_adjustment_get_value(dtw->vadj), FALSE);
-    sp_desktop_widget_update_rulers (dtw);
-
-    /*  update perspective lines if we are in the 3D box tool (so that infinite ones are shown correctly) */
-    //sp_box3d_context_update_lines(dtw->desktop->event_context);
-    if (SP_IS_BOX3D_CONTEXT(dtw->desktop->event_context)) {
-		SP_BOX3D_CONTEXT(dtw->desktop->event_context)->_vpdrag->updateLines();
-	}
+    // Do not call canvas->scrollTo directly... messes up 'offset'.
+    dtw->desktop->scroll_absolute( Geom::Point(gtk_adjustment_get_value(dtw->hadj), 
+                                               gtk_adjustment_get_value(dtw->vadj)), false);
 
     dtw->update = 0;
 }
@@ -1839,16 +1826,21 @@ sp_dtw_zoom_display_to_value (gdouble value)
 static gint
 sp_dtw_zoom_input (GtkSpinButton *spin, gdouble *new_val, gpointer /*data*/)
 {
-    gdouble new_scrolled = gtk_spin_button_get_value (spin);
-    const gchar *b = gtk_entry_get_text (GTK_ENTRY (spin));
-    gdouble new_typed = atof (b);
+    gchar *b = g_strdup (gtk_entry_get_text (GTK_ENTRY (spin)));
 
-    if (sp_dtw_zoom_value_to_display (new_scrolled) == new_typed) { // the new value is set by scrolling
-        *new_val = new_scrolled;
-    } else { // the new value is typed in
-        *new_val = sp_dtw_zoom_display_to_value (new_typed);
+    gchar *comma = g_strstr_len (b, -1, ",");
+    if (comma) {
+        *comma = '.';
     }
 
+    char *oldlocale = g_strdup (setlocale(LC_NUMERIC, NULL));
+    setlocale (LC_NUMERIC, "C");
+    gdouble new_typed = atof (b);
+    setlocale (LC_NUMERIC, oldlocale);
+    g_free (oldlocale);
+    g_free (b);
+
+    *new_val = sp_dtw_zoom_display_to_value (new_typed);
     return TRUE;
 }
 
@@ -1869,16 +1861,21 @@ sp_dtw_zoom_output (GtkSpinButton *spin, gpointer /*data*/)
 static gint
 sp_dtw_rotation_input (GtkSpinButton *spin, gdouble *new_val, gpointer /*data*/)
 {
-    gdouble new_scrolled = gtk_spin_button_get_value (spin);
-    const gchar *b = gtk_entry_get_text (GTK_ENTRY (spin));
-    gdouble new_typed = atof (b);
+    gchar *b = g_strdup (gtk_entry_get_text (GTK_ENTRY (spin)));
 
-    if (new_scrolled == new_typed) { // the new value is set by scrolling
-        *new_val = new_scrolled;
-    } else { // the new value is typed in
-        *new_val = new_typed;
+    gchar *comma = g_strstr_len (b, -1, ",");
+    if (comma) {
+        *comma = '.';
     }
 
+    char *oldlocale = g_strdup (setlocale(LC_NUMERIC, NULL));
+    setlocale (LC_NUMERIC, "C");
+    gdouble new_value = atof (b);
+    setlocale (LC_NUMERIC, oldlocale);
+    g_free (oldlocale);
+    g_free (b);
+    
+    *new_val = new_value;
     return TRUE;
 }
 
@@ -1887,10 +1884,9 @@ sp_dtw_rotation_output (GtkSpinButton *spin, gpointer /*data*/)
 {
     gchar b[64];
     double val = gtk_spin_button_get_value (spin);
-    std::ostringstream s;
-    s.imbue(std::locale(""));;
-    s << std::fixed << std::setprecision(2) << val << "º";
-    gtk_entry_set_text (GTK_ENTRY (spin), s.str().c_str());
+    g_snprintf (b, 64, "%7.2f°", val);
+
+    gtk_entry_set_text (GTK_ENTRY (spin), b);
     return TRUE;
 }
 
@@ -1902,9 +1898,11 @@ sp_dtw_zoom_value_changed (GtkSpinButton *spin, gpointer data)
     SPDesktopWidget *dtw = SP_DESKTOP_WIDGET (data);
     SPDesktop *desktop = dtw->desktop;
 
-    Geom::Rect const d = desktop->get_display_area();
+    // Zoom around center of window
+    Geom::Rect const d_canvas = desktop->getCanvas()->getViewbox();
+    Geom::Point midpoint = desktop->w2d(d_canvas.midpoint());
     g_signal_handler_block (spin, dtw->zoom_update);
-    desktop->zoom_absolute (d.midpoint()[Geom::X], d.midpoint()[Geom::Y], zoom_factor);
+    desktop->zoom_absolute_center_point (midpoint, zoom_factor);
     g_signal_handler_unblock (spin, dtw->zoom_update);
 
     spinbutton_defocus (GTK_WIDGET(spin));
@@ -2045,44 +2043,44 @@ sp_dtw_rotation_populate_popup (GtkEntry */*entry*/, GtkMenu *menu, gpointer dat
     }
     g_list_free (children);
 
-    item = gtk_menu_item_new_with_label ("-180º");
+    item = gtk_menu_item_new_with_label ("-180°");
     g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (sp_dtw_rotate_minus_180), dtw);
     gtk_widget_show (item);
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
     
-    item = gtk_menu_item_new_with_label ("-135º");
+    item = gtk_menu_item_new_with_label ("-135°");
     g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (sp_dtw_rotate_minus_135), dtw);
     gtk_widget_show (item);
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
     
-    item = gtk_menu_item_new_with_label ("-90º");
+    item = gtk_menu_item_new_with_label ("-90°");
     g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (sp_dtw_rotate_minus_90), dtw);
     gtk_widget_show (item);
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
     
-    item = gtk_menu_item_new_with_label ("-45º");
+    item = gtk_menu_item_new_with_label ("-45°");
     g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (sp_dtw_rotate_minus_45), dtw);
     gtk_widget_show (item);
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
     
-    item = gtk_menu_item_new_with_label ("0º");
+    item = gtk_menu_item_new_with_label ("0°");
     g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (sp_dtw_rotate_0), dtw);
     gtk_widget_show (item);
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
     
-    item = gtk_menu_item_new_with_label ("45º");
+    item = gtk_menu_item_new_with_label ("45°");
     g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (sp_dtw_rotate_45), dtw);
     gtk_widget_show (item);
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
     
     
-    item = gtk_menu_item_new_with_label ("90º");
+    item = gtk_menu_item_new_with_label ("90°");
     g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (sp_dtw_rotate_90), dtw);
     gtk_widget_show (item);
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
     
     
-    item = gtk_menu_item_new_with_label ("135º");
+    item = gtk_menu_item_new_with_label ("135°");
     g_signal_connect (G_OBJECT (item), "activate", G_CALLBACK (sp_dtw_rotate_135), dtw);
     gtk_widget_show (item);
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
@@ -2140,7 +2138,7 @@ static void
 sp_dtw_zoom_menu_handler (SPDesktop *dt, gdouble factor)
 {
     Geom::Rect const d = dt->get_display_area();
-    dt->zoom_absolute(d.midpoint()[Geom::X], d.midpoint()[Geom::Y], factor);
+    dt->zoom_absolute_center_point (d.midpoint(), factor);
 }
 
 

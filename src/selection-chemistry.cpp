@@ -1618,7 +1618,7 @@ void ObjectSet::applyAffine(Geom::Affine const &affine, bool set_i2d, bool compe
                     for (auto& itm: region.children) {
                         SPUse *use = dynamic_cast<SPUse *>(&itm);
                         if ( use ) {
-                            use->doWriteTransform(use->getRepr(), use->transform.inverse(), NULL, compensate);
+                            use->doWriteTransform(use->getRepr(), item->transform.inverse(), NULL, compensate);
                         }
                     }
                 }
@@ -2554,9 +2554,7 @@ void scroll_to_show_item(SPDesktop *desktop, SPItem *item)
         Geom::Point const d_dt = dbox.midpoint();
         Geom::Point const d_w = desktop->d2w(d_dt);
         Geom::Point const moved_w( d_w - s_w );
-        gint const dx = (gint) moved_w[X];
-        gint const dy = (gint) moved_w[Y];
-        desktop->scroll_world(dx, dy);
+        desktop->scroll_relative(moved_w);
     }
 }
 
@@ -3905,6 +3903,7 @@ void ObjectSet::setClipGroup()
                 || apply_to_layer){
 
             Geom::Affine oldtr=(*i)->transform;
+            oldtr *= SP_ITEM((*i)->parent)->i2doc_affine().inverse();
             (*i)->doWriteTransform((*i)->getRepr(), (*i)->i2doc_affine());
             Inkscape::XML::Node *dup = (*i)->getRepr()->duplicate(xml_doc);
             (*i)->doWriteTransform((*i)->getRepr(), oldtr);

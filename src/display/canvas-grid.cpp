@@ -841,7 +841,9 @@ void
 CanvasXYGrid::Update (Geom::Affine const &affine, unsigned int /*flags*/)
 {
     ow = origin * affine;
-    sw = spacing * affine;
+    // Temp hack to insure grid doesn't collapse with rotation.
+    sw[0] = spacing[0] * sqrt(affine[0]*affine[0] + affine[1]*affine[1]);
+    sw[1] = spacing[1] * sqrt(affine[2]*affine[2] + affine[3]*affine[3]);
     sw -= Geom::Point(affine[4], affine[5]);
 
     for(int dim = 0; dim < 2; dim++) {

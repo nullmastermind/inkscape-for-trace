@@ -16,13 +16,15 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include "sp-tref.h"
+
 #include <glibmm/i18n.h>
 
+#include "bad-uri-exception.h"
 #include "attributes.h"
 #include "document.h"
 #include "sp-factory.h"
 #include "sp-text.h"
-#include "sp-tref.h"
 #include "style.h"
 #include "text-editing.h"
 

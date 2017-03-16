@@ -174,7 +174,8 @@ static SPStyleProp const props[] = {
     {SP_ATTR_SODIPODI_RY, "sodipodi:ry"},
     {SP_ATTR_SODIPODI_START, "sodipodi:start"},
     {SP_ATTR_SODIPODI_END, "sodipodi:end"},
-    {SP_ATTR_SODIPODI_OPEN, "sodipodi:open"},
+    {SP_ATTR_SODIPODI_OPEN, "sodipodi:open"}, // Deprecated
+    {SP_ATTR_SODIPODI_ARC_TYPE, "sodipodi:arc-type"},
     /* SPStar */
     {SP_ATTR_SODIPODI_SIDES, "sodipodi:sides"},
     {SP_ATTR_SODIPODI_R1, "sodipodi:r1"},

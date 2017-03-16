@@ -2002,7 +2002,7 @@ cr_parser_parse_simple_sels (CRParser * a_this,
  *Returns CR_OK upon successful completion, an error
  *code otherwise.
  */
-static enum CRStatus
+enum CRStatus
 cr_parser_parse_selector (CRParser * a_this, 
                           CRSelector ** a_selector)
 {

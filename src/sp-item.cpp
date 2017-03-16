@@ -17,6 +17,10 @@
 #endif
 
 #include "sp-item.h"
+
+#include <glibmm/i18n.h>
+
+#include "bad-uri-exception.h"
 #include "svg/svg.h"
 #include "print.h"
 #include "display/drawing-item.h"
@@ -25,10 +29,7 @@
 #include "uri.h"
 #include "inkscape.h"
 #include "desktop.h"
-
-
 #include "style.h"
-#include <glibmm/i18n.h>
 #include "sp-root.h"
 #include "sp-clippath.h"
 #include "sp-mask.h"

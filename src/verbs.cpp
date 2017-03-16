@@ -1890,7 +1890,10 @@ void ZoomVerb::perform(SPAction *action, void *data)
         zcorr = prefs->getDouble("/options/zoomcorrection/value", 1.0);
 
     Geom::Rect const d = dt->get_display_area();
-            
+
+    Geom::Rect const d_canvas = dt->getCanvas()->getViewbox(); // Not SVG 'viewBox'
+    Geom::Point midpoint = dt->w2d(d_canvas.midpoint()); // Midpoint of drawing on canvas.
+
     switch (reinterpret_cast<std::size_t>(data)) {
         case SP_VERB_ZOOM_IN:
         {
@@ -1907,7 +1910,7 @@ void ZoomVerb::perform(SPAction *action, void *data)
                 }
             }
 
-            dt->zoom_relative( d.midpoint()[Geom::X], d.midpoint()[Geom::Y], mul*zoom_inc);
+            dt->zoom_relative_center_point( midpoint, mul*zoom_inc);
             break;
         }
         case SP_VERB_ZOOM_OUT:
@@ -1924,17 +1927,17 @@ void ZoomVerb::perform(SPAction *action, void *data)
                 }
             }
 
-            dt->zoom_relative( d.midpoint()[Geom::X], d.midpoint()[Geom::Y], 1 / (mul*zoom_inc) );
+            dt->zoom_relative_center_point( midpoint, 1 / (mul*zoom_inc) );
             break;
         }
         case SP_VERB_ZOOM_1_1:
-            dt->zoom_absolute( d.midpoint()[Geom::X], d.midpoint()[Geom::Y], 1.0 * zcorr );
+            dt->zoom_absolute_center_point( midpoint, 1.0 * zcorr );
             break;
         case SP_VERB_ZOOM_1_2:
-            dt->zoom_absolute( d.midpoint()[Geom::X], d.midpoint()[Geom::Y], 0.5 * zcorr );
+            dt->zoom_absolute_center_point( midpoint, 0.5 * zcorr );
             break;
         case SP_VERB_ZOOM_2_1:
-            dt->zoom_absolute( d.midpoint()[Geom::X], d.midpoint()[Geom::Y], 2.0 * zcorr );
+            dt->zoom_absolute_center_point( midpoint, 2.0 * zcorr );
             break;
         case SP_VERB_ZOOM_PAGE:
             dt->zoom_page();
@@ -1949,10 +1952,10 @@ void ZoomVerb::perform(SPAction *action, void *data)
             dt->zoom_selection();
             break;
         case SP_VERB_ZOOM_NEXT:
-            dt->next_zoom();
+            dt->next_transform();
             break;
         case SP_VERB_ZOOM_PREV:
-            dt->prev_zoom();
+            dt->prev_transform();
             break;
         case SP_VERB_TOGGLE_RULERS:
             dt->toggleRulers();
@@ -2058,6 +2061,9 @@ void DialogVerb::perform(SPAction *action, void *data)
     g_assert(dt->_dlg_mgr != NULL);
 
     switch (reinterpret_cast<std::size_t>(data)) {
+        case SP_VERB_DIALOG_PROTOTYPE:
+            dt->_dlg_mgr->showDialog("Prototype");
+           break;
         case SP_VERB_DIALOG_DISPLAY:
             //sp_display_dialog();
             dt->_dlg_mgr->showDialog("InkscapePreferences");
@@ -2156,6 +2162,12 @@ void DialogVerb::perform(SPAction *action, void *data)
             break;
         case SP_VERB_DIALOG_PRINT_COLORS_PREVIEW:
             dt->_dlg_mgr->showDialog("PrintColorsPreviewDialog");
+            break;
+        case SP_VERB_DIALOG_STYLE:
+            dt->_dlg_mgr->showDialog("StyleDialog");
+           break;
+        case SP_VERB_DIALOG_CSS:
+            dt->_dlg_mgr->showDialog("CssDialog");
             break;
 
         default:
@@ -2886,6 +2898,7 @@ Verb *Verb::_base_verbs[] = {
     // Zoom/View
     new ZoomVerb(SP_VERB_ZOOM_IN, "ZoomIn", N_("Zoom In"), N_("Zoom in"), INKSCAPE_ICON("zoom-in")),
     new ZoomVerb(SP_VERB_ZOOM_OUT, "ZoomOut", N_("Zoom Out"), N_("Zoom out"), INKSCAPE_ICON("zoom-out")),
+    // WHY ARE THE FOLLOWING ZoomVerbs???
     new ZoomVerb(SP_VERB_TOGGLE_RULERS, "ToggleRulers", N_("_Rulers"), N_("Show or hide the canvas rulers"), NULL),
     new ZoomVerb(SP_VERB_TOGGLE_SCROLLBARS, "ToggleScrollbars", N_("Scroll_bars"), N_("Show or hide the canvas scrollbars"), NULL),
     new ZoomVerb(SP_VERB_TOGGLE_GRID, "ToggleGrid", N_("Page _Grid"), N_("Show or hide the page grid"), INKSCAPE_ICON("show-grid")),
@@ -2950,6 +2963,8 @@ Verb *Verb::_base_verbs[] = {
                  N_("Zoom to fit selection in window"), INKSCAPE_ICON("zoom-fit-selection")),
 
     // Dialogs
+    new DialogVerb(SP_VERB_DIALOG_PROTOTYPE, "DialogPrototype", N_("Prototype..."),
+                   N_("Prototype Dialog"), INKSCAPE_ICON("gtk-preferences")),
     new DialogVerb(SP_VERB_DIALOG_DISPLAY, "DialogPreferences", N_("P_references..."),
                    N_("Edit global Inkscape preferences"), INKSCAPE_ICON("gtk-preferences")),
     new DialogVerb(SP_VERB_DIALOG_NAMEDVIEW, "DialogDocumentProperties", N_("_Document Properties..."),
@@ -3005,6 +3020,10 @@ Verb *Verb::_base_verbs[] = {
                    N_("View Objects"), INKSCAPE_ICON("dialog-layers")),
     new DialogVerb(SP_VERB_DIALOG_TAGS, "DialogTags", N_("Selection se_ts..."),
                    N_("View Tags"), INKSCAPE_ICON("edit-select-all-layers")),
+    new DialogVerb(SP_VERB_DIALOG_STYLE, "DialogStyle", N_("Style Dialog..."),
+                   N_("View Style Dialog"), NULL),
+    new DialogVerb(SP_VERB_DIALOG_CSS, "DialogCss", N_("Css Dialog..."),
+                   N_("View Css Dialog"), NULL),
     new DialogVerb(SP_VERB_DIALOG_LIVE_PATH_EFFECT, "DialogLivePathEffect", N_("Path E_ffects ..."),
                    N_("Manage, edit, and apply path effects"), INKSCAPE_ICON("dialog-path-effects")),
     new DialogVerb(SP_VERB_DIALOG_FILTER_EFFECTS, "DialogFilterEffects", N_("Filter _Editor..."),

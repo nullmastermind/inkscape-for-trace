@@ -11,16 +11,19 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include "uri-references.h"
+
 #include <iostream>
 #include <cstring>
 
+#include <glibmm/miscutils.h>
+
+#include "bad-uri-exception.h"
 #include "document.h"
 #include "sp-object.h"
 #include "uri.h"
-#include "uri-references.h"
 #include "extract-uri.h"
 #include "sp-tag-use.h"
-#include <glibmm/miscutils.h>
 
 namespace Inkscape {
 
@@ -103,7 +106,7 @@ bool URIReference::_acceptObject(SPObject *obj) const
 
 
 
-void URIReference::attach(const URI &uri) throw(BadURIException)
+void URIReference::attach(const URI &uri)
 {
     SPDocument *document = NULL;
 

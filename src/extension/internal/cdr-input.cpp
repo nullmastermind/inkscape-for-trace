@@ -41,6 +41,7 @@
 #endif
 
 #include <gtkmm/alignment.h>
+#include <gtkmm/grid.h>
 #include <gtkmm/spinbutton.h>
 
 #include "extension/system.h"
@@ -83,6 +84,8 @@ private:
      class Gtk::Widget * _previewArea;
      class Gtk::Button * cancelbutton;
      class Gtk::Button * okbutton;
+
+     class Gtk::HBox  * _page_selector_box;
      class Gtk::Label * _labelSelect;
      class Gtk::Label * _labelTotalPages;
      class Gtk::SpinButton * _pageNumberSpin;
@@ -114,36 +117,38 @@ CdrImportDialog::CdrImportDialog(const std::vector<RVNGString> &vec)
      this->get_content_area()->pack_start(*vbox1);
 
      // CONTROLS
+     _page_selector_box = Gtk::manage(new Gtk::HBox());
 
-     // Buttons
-     cancelbutton = Gtk::manage(new Gtk::Button(_("_Cancel"), true));
-     okbutton     = Gtk::manage(new Gtk::Button(_("_OK"),     true));
-
-     // Labels
+     // "Select page:" label
      _labelSelect = Gtk::manage(new class Gtk::Label(_("Select page:")));
      _labelTotalPages = Gtk::manage(new class Gtk::Label());
      _labelSelect->set_line_wrap(false);
      _labelSelect->set_use_markup(false);
      _labelSelect->set_selectable(false);
+     _page_selector_box->pack_start(*_labelSelect, Gtk::PACK_SHRINK);
+
+     // Adjustment + spinner
+     auto pageNumberSpin_adj = Gtk::Adjustment::create(1, 1, _vec.size(), 1, 10, 0);
+     _pageNumberSpin = Gtk::manage(new Gtk::SpinButton(pageNumberSpin_adj, 1, 0));
+     _pageNumberSpin->set_can_focus();
+     _pageNumberSpin->set_update_policy(Gtk::UPDATE_ALWAYS);
+     _pageNumberSpin->set_numeric(true);
+     _pageNumberSpin->set_wrap(false);
+     _page_selector_box->pack_start(*_pageNumberSpin, Gtk::PACK_SHRINK);
+
      _labelTotalPages->set_line_wrap(false);
      _labelTotalPages->set_use_markup(false);
      _labelTotalPages->set_selectable(false);
      gchar *label_text = g_strdup_printf(_("out of %i"), num_pages);
      _labelTotalPages->set_label(label_text);
      g_free(label_text);
+     _page_selector_box->pack_start(*_labelTotalPages, Gtk::PACK_SHRINK);
 
-     // Adjustment + spinner
-     auto _pageNumberSpin_adj = Gtk::Adjustment::create(1, 1, _vec.size(), 1, 10, 0);
-     _pageNumberSpin = Gtk::manage(new Gtk::SpinButton(_pageNumberSpin_adj, 1, 0));
-     _pageNumberSpin->set_can_focus();
-     _pageNumberSpin->set_update_policy(Gtk::UPDATE_ALWAYS);
-     _pageNumberSpin->set_numeric(true);
-     _pageNumberSpin->set_wrap(false);
+     vbox1->pack_end(*_page_selector_box, Gtk::PACK_SHRINK);
 
-     this->get_action_area()->property_layout_style().set_value(Gtk::BUTTONBOX_END);
-     this->get_action_area()->add(*_labelSelect);
-     this->add_action_widget(*_pageNumberSpin, Gtk::RESPONSE_ACCEPT);
-     this->get_action_area()->add(*_labelTotalPages);
+     // Buttons
+     cancelbutton = Gtk::manage(new Gtk::Button(_("_Cancel"), true));
+     okbutton     = Gtk::manage(new Gtk::Button(_("_OK"),     true));
      this->add_action_widget(*cancelbutton, Gtk::RESPONSE_CANCEL);
      this->add_action_widget(*okbutton, Gtk::RESPONSE_OK);
 
@@ -218,10 +223,12 @@ SPDocument *CdrInput::open(Inkscape::Extension::Input * /*mod*/, const gchar * u
           // RVNGFileStream uses fopen() internally which unfortunately only uses ANSI encoding on Windows
           // therefore attempt to convert uri to the system codepage
           // even if this is not possible the alternate short (8.3) file name will be used if available
-          uri = g_win32_locale_filename_from_utf8(uri);
+          gchar * converted_uri = g_win32_locale_filename_from_utf8(uri);
+          RVNGFileStream input(converted_uri);
+          g_free(converted_uri);
+     #else
+          RVNGFileStream input(uri);
      #endif
-
-     RVNGFileStream input(uri);
 
      if (!libcdr::CDRDocument::isSupported(&input)) {
           return NULL;

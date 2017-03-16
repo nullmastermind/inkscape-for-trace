@@ -8,6 +8,7 @@
 #include "display/curve.h"
 #include "sp-shape.h"
 #include "sp-text.h"
+#include "svg/svg.h"
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
 
@@ -18,12 +19,20 @@ LPEFillBetweenStrokes::LPEFillBetweenStrokes(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
     linked_path(_("Linked path:"), _("Path from which to take the original path data"), "linkedpath", &wr, this),
     second_path(_("Second path:"), _("Second path from which to take the original path data"), "secondpath", &wr, this),
-    reverse_second(_("Reverse Second"), _("Reverses the second path order"), "reversesecond", &wr, this)
+    reverse_second(_("Reverse Second"), _("Reverses the second path order"), "reversesecond", &wr, this),
+    fuse(_("Fuse coincident points"), _("Fuse coincident points"), "fuse", &wr, this, false),
+    allow_transforms(_("Allow transforms"), _("Allow transforms"), "allow_transforms", &wr, this, false),
+    join(_("Join subpaths"), _("Join subpaths"), "join", &wr, this, true),
+    close(_("Close"), _("Close path"), "close", &wr, this, true)
 {
     registerParameter( dynamic_cast<Parameter *>(&linked_path) );
     registerParameter( dynamic_cast<Parameter *>(&second_path) );
     registerParameter( dynamic_cast<Parameter *>(&reverse_second) );
-    //perceived_path = true;
+    registerParameter( dynamic_cast<Parameter *>(&fuse) );
+    registerParameter( dynamic_cast<Parameter *>(&allow_transforms) );
+    registerParameter( dynamic_cast<Parameter *>(&join) );
+    registerParameter( dynamic_cast<Parameter *>(&close) );
+    transformmultiply = false;
 }
 
 LPEFillBetweenStrokes::~LPEFillBetweenStrokes()
@@ -34,6 +43,13 @@ LPEFillBetweenStrokes::~LPEFillBetweenStrokes()
 void LPEFillBetweenStrokes::doEffect (SPCurve * curve)
 {
     if (curve) {
+        Geom::Affine affine = Geom::identity();
+        if(!allow_transforms && !transformmultiply) {
+            sp_svg_transform_read(SP_ITEM(sp_lpe_item)->getAttribute("transform"), &affine);
+        }
+        if(transformmultiply) {
+            transformmultiply = false;
+        }
         if ( linked_path.linksToPath() && second_path.linksToPath() && linked_path.getObject() && second_path.getObject() ) {
             Geom::PathVector linked_pathv = linked_path.get_pathvector();
             Geom::PathVector second_pathv = second_path.get_pathvector();
@@ -51,22 +67,33 @@ void LPEFillBetweenStrokes::doEffect (SPCurve * curve)
             }
 
             if ( !result_linked_pathv.empty() && !result_second_pathv.empty() && !result_linked_pathv.front().closed() ) {
-                if (reverse_second.get_value())
-                {
-                    result_linked_pathv.front().appendNew<Geom::LineSegment>(result_second_pathv.front().finalPoint());
-                    result_linked_pathv.front().append(result_second_pathv.front().reversed());
+                if (reverse_second.get_value()) {
+                    result_second_pathv.front() = result_second_pathv.front().reversed();
                 }
-                else
-                {
-                    result_linked_pathv.front().appendNew<Geom::LineSegment>(result_second_pathv.front().initialPoint());
+                if (join) {
+                    if (!are_near(result_linked_pathv.front().finalPoint(), result_second_pathv.front().initialPoint(),0.01) || !fuse) {
+                        result_linked_pathv.front().appendNew<Geom::LineSegment>(result_second_pathv.front().initialPoint());
+                    } else {
+                        result_second_pathv.front().setInitial(result_linked_pathv.front().finalPoint());
+                    }
                     result_linked_pathv.front().append(result_second_pathv.front());
+                    if (close) {
+                        result_linked_pathv.front().close();
+                    }
+                } else {
+                    if (close) {
+                        result_linked_pathv.front().close();
+                        result_second_pathv.front().close();
+                    }
+                    result_linked_pathv.push_back(result_second_pathv.front());
                 }
+                result_linked_pathv *= affine.inverse();
                 curve->set_pathvector(result_linked_pathv);
-            }
-            else if ( !result_linked_pathv.empty() ) {
+            } else if ( !result_linked_pathv.empty() ) {
+                result_linked_pathv *= affine.inverse();
                 curve->set_pathvector(result_linked_pathv);
-            }
-            else if ( !result_second_pathv.empty() ) {
+            } else if ( !result_second_pathv.empty() ) {
+                result_second_pathv *= affine.inverse();
                 curve->set_pathvector(result_second_pathv);
             }
         }
@@ -79,6 +106,10 @@ void LPEFillBetweenStrokes::doEffect (SPCurve * curve)
                 result_pathv.push_back((*iter));
             }
             if ( !result_pathv.empty() ) {
+                result_pathv *= affine.inverse();
+                if (close) {
+                    result_pathv.front().close();
+                }
                 curve->set_pathvector(result_pathv);
             }
         }
@@ -91,9 +122,23 @@ void LPEFillBetweenStrokes::doEffect (SPCurve * curve)
                 result_pathv.push_back((*iter));
             }
             if ( !result_pathv.empty() ) {
+                result_pathv *= affine.inverse();
+                if (close) {
+                    result_pathv.front().close();
+                }
                 curve->set_pathvector(result_pathv);
             }
         }
+    }
+}
+
+void
+LPEFillBetweenStrokes::transform_multiply(Geom::Affine const& postmul, bool set)
+{
+    if(!allow_transforms && sp_lpe_item) {
+        SP_ITEM(sp_lpe_item)->transform *= postmul.inverse();
+        transformmultiply = true;
+        sp_lpe_item_update_patheffect(sp_lpe_item, false, false);
     }
 }
 

@@ -48,6 +48,10 @@
 #include <iomanip>
 #include <glibmm/i18n.h>
 
+#if GTK_CHECK_VERSION(3,20,0)
+# include <gdkmm/seat.h>
+#endif
+
 using Inkscape::Debug::GdkEventLatencyTracker;
 
 // gtk_check_version returns non-NULL on failure
@@ -72,9 +76,15 @@ struct SPCanvasGroupClass {
 static void ungrab_default_client_pointer(guint32 const time = GDK_CURRENT_TIME)
 {
     auto const display = Gdk::Display::get_default();
+
+#if GTK_CHECK_VERSION(3,20,0)
+    auto const seat = display->get_default_seat();
+    seat->ungrab();
+#else
     auto const dm = display->get_device_manager();
     auto const device = dm->get_client_pointer();
     device->ungrab(time);
+#endif
 }
 
 /**
@@ -625,9 +635,22 @@ int sp_canvas_item_grab(SPCanvasItem *item, guint event_mask, GdkCursor *cursor,
 
     // fixme: Top hack (Lauris)
     // fixme: If we add key masks to event mask, Gdk will abort (Lauris)
-    // fixme: But Canvas actualle does get key events, so all we need is routing these here
-    auto dm = gdk_display_get_device_manager(gdk_display_get_default());
+    // fixme: But Canvas actually does get key events, so all we need is routing these here
+    auto display = gdk_display_get_default();
+#if GTK_CHECK_VERSION(3,20,0)
+    auto seat   = gdk_display_get_default_seat(display);
+    gdk_seat_grab(seat,
+                  getWindow(item->canvas),
+                  GDK_SEAT_CAPABILITY_ALL_POINTING,
+                  FALSE,
+                  cursor,
+                  NULL,
+                  NULL,
+                  NULL);
+#else
+    auto dm = gdk_display_get_device_manager(display);
     auto device = gdk_device_manager_get_client_pointer(dm);
+
     gdk_device_grab(device, 
                     getWindow(item->canvas),
                     GDK_OWNERSHIP_NONE,
@@ -635,6 +658,7 @@ int sp_canvas_item_grab(SPCanvasItem *item, guint event_mask, GdkCursor *cursor,
                     (GdkEventMask)(event_mask & (~(GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK))),
                     cursor,
                     etime);
+#endif
 
     item->canvas->_grabbed_item = item;
     item->canvas->_grabbed_event_mask = event_mask;
@@ -1034,7 +1058,7 @@ void SPCanvas::handle_realize(GtkWidget *widget)
     attributes.width = allocation.width;
     attributes.height = allocation.height;
     attributes.wclass = GDK_INPUT_OUTPUT;
-    attributes.visual = gdk_visual_get_system();
+    attributes.visual = gdk_screen_get_system_visual(gdk_screen_get_default());
 
     attributes.event_mask = (gtk_widget_get_events (widget) |
                              GDK_EXPOSURE_MASK |
@@ -1694,8 +1718,14 @@ bool SPCanvas::paintRect(int xx0, int yy0, int xx1, int yy1)
     gint x, y;
 
     auto const display = Gdk::Display::get_default();
+
+#if GTK_CHECK_VERSION(3,20,0)
+    auto const seat   = display->get_default_seat();
+    auto const device = seat->get_pointer();
+#else
     auto const dm = display->get_device_manager();
     auto const device = dm->get_client_pointer();
+#endif
 
     gdk_window_get_device_position(gtk_widget_get_window(GTK_WIDGET(this)),
                                    device->gobj(),
@@ -1907,9 +1937,15 @@ double start_angle = 0;
 bool started = false;
 bool rotated = false;
 
-void SPCanvas::scrollTo(double cx, double cy, unsigned int clear, bool is_scrolling)
+/**
+ * Scroll screen to point 'c'. 'c' is measured in screen pixels.
+ */
+void SPCanvas::scrollTo( Geom::Point const &c, unsigned int clear, bool is_scrolling)
 {
     GtkAllocation allocation;
+
+    double cx = c[Geom::X];
+    double cy = c[Geom::Y];
 
     int ix = (int) round(cx); // ix and iy are the new canvas coordinates (integer screen pixels)
     int iy = (int) round(cy); // cx might be negative, so (int)(cx + 0.5) will not do!

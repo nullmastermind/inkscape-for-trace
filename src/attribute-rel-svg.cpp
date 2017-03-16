@@ -28,6 +28,27 @@ SPAttributeRelSVG * SPAttributeRelSVG::instance = NULL;
 bool SPAttributeRelSVG::foundFile = false;
 
 /*
+ * This function returns true if element is an SVG element.
+ */
+bool SPAttributeRelSVG::isSVGElement(Glib::ustring element)
+{
+    if (SPAttributeRelSVG::instance == NULL) {
+        SPAttributeRelSVG::instance = new SPAttributeRelSVG();
+    }
+
+    // Always valid if data file not found!
+    if( !foundFile ) return true;
+
+    // Strip off "svg:" from the element's name
+    Glib::ustring temp = element;
+    if ( temp.find("svg:") != std::string::npos ) {
+        temp.erase( temp.find("svg:"), 4 );
+    }
+
+    return (SPAttributeRelSVG::instance->attributesOfElements.count(temp) > 0);
+}
+
+/*
  * This functions checks whether an element -> attribute pair is allowed or not
  */
 bool SPAttributeRelSVG::findIfValid(Glib::ustring attribute, Glib::ustring element)
@@ -39,7 +60,7 @@ bool SPAttributeRelSVG::findIfValid(Glib::ustring attribute, Glib::ustring eleme
     // Always valid if data file not found!
     if( !foundFile ) return true;
 
-    // Strip of "svg:" from the element's name
+    // Strip off "svg:" from the element's name
     Glib::ustring temp = element;
     if ( temp.find("svg:") != std::string::npos ) {
         temp.erase( temp.find("svg:"), 4 );

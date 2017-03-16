@@ -84,6 +84,8 @@ private:
      class Gtk::Widget * _previewArea;
      class Gtk::Button * cancelbutton;
      class Gtk::Button * okbutton;
+
+     class Gtk::HBox  * _page_selector_box;
      class Gtk::Label * _labelSelect;
      class Gtk::Label * _labelTotalPages;
      class Gtk::SpinButton * _pageNumberSpin;
@@ -116,10 +118,7 @@ VsdImportDialog::VsdImportDialog(const std::vector<RVNGString> &vec)
      this->get_content_area()->pack_start(*vbox1);
 
      // CONTROLS
-
-     // Buttons
-     cancelbutton = Gtk::manage(new Gtk::Button(_("_Cancel"), true));
-     okbutton     = Gtk::manage(new Gtk::Button(_("_OK"),     true));
+     _page_selector_box = Gtk::manage(new Gtk::HBox());
 
      // Labels
      _labelSelect = Gtk::manage(new class Gtk::Label(_("Select page:")));
@@ -127,12 +126,7 @@ VsdImportDialog::VsdImportDialog(const std::vector<RVNGString> &vec)
      _labelSelect->set_line_wrap(false);
      _labelSelect->set_use_markup(false);
      _labelSelect->set_selectable(false);
-     _labelTotalPages->set_line_wrap(false);
-     _labelTotalPages->set_use_markup(false);
-     _labelTotalPages->set_selectable(false);
-     gchar *label_text = g_strdup_printf(_("out of %i"), num_pages);
-     _labelTotalPages->set_label(label_text);
-     g_free(label_text);
+     _page_selector_box->pack_start(*_labelSelect, Gtk::PACK_SHRINK);
 
      // Adjustment + spinner
      auto _pageNumberSpin_adj = Gtk::Adjustment::create(1, 1, _vec.size(), 1, 10, 0);
@@ -141,11 +135,21 @@ VsdImportDialog::VsdImportDialog(const std::vector<RVNGString> &vec)
      _pageNumberSpin->set_update_policy(Gtk::UPDATE_ALWAYS);
      _pageNumberSpin->set_numeric(true);
      _pageNumberSpin->set_wrap(false);
+     _page_selector_box->pack_start(*_pageNumberSpin, Gtk::PACK_SHRINK);
 
-     this->get_action_area()->property_layout_style().set_value(Gtk::BUTTONBOX_END);
-     this->get_action_area()->add(*_labelSelect);
-     this->add_action_widget(*_pageNumberSpin, Gtk::RESPONSE_ACCEPT);
-     this->get_action_area()->add(*_labelTotalPages);
+     _labelTotalPages->set_line_wrap(false);
+     _labelTotalPages->set_use_markup(false);
+     _labelTotalPages->set_selectable(false);
+     gchar *label_text = g_strdup_printf(_("out of %i"), num_pages);
+     _labelTotalPages->set_label(label_text);
+     g_free(label_text);
+     _page_selector_box->pack_start(*_labelTotalPages, Gtk::PACK_SHRINK);
+
+     vbox1->pack_end(*_page_selector_box, Gtk::PACK_SHRINK);
+     
+     // Buttons
+     cancelbutton = Gtk::manage(new Gtk::Button(_("_Cancel"), true));
+     okbutton     = Gtk::manage(new Gtk::Button(_("_OK"),     true));
      this->add_action_widget(*cancelbutton, Gtk::RESPONSE_CANCEL);
      this->add_action_widget(*okbutton, Gtk::RESPONSE_OK);
 
@@ -220,10 +224,12 @@ SPDocument *VsdInput::open(Inkscape::Extension::Input * /*mod*/, const gchar * u
           // RVNGFileStream uses fopen() internally which unfortunately only uses ANSI encoding on Windows
           // therefore attempt to convert uri to the system codepage
           // even if this is not possible the alternate short (8.3) file name will be used if available
-          uri = g_win32_locale_filename_from_utf8(uri);
+          gchar * converted_uri = g_win32_locale_filename_from_utf8(uri);
+          RVNGFileStream input(converted_uri);
+          g_free(converted_uri);
+     #else
+          RVNGFileStream input(uri);
      #endif
-
-     RVNGFileStream input(uri);
 
      if (!libvisio::VisioDocument::isSupported(&input)) {
           return NULL;

@@ -1008,28 +1008,6 @@ void sp_repr_write_stream_element( Node * repr, Writer & out,
         add_whitespace = false;
     }
 
-    // THIS DOESN'T APPEAR TO DO ANYTHING. Can it be commented out or deleted?
-    {
-        GQuark const href_key = g_quark_from_static_string("xlink:href");
-        //GQuark const absref_key = g_quark_from_static_string("sodipodi:absref");
-
-        gchar const *xxHref = 0;
-        //gchar const *xxAbsref = 0;
-        for ( List<AttributeRecord const> ai(attributes); ai; ++ai ) {
-            if ( ai->key == href_key ) {
-                xxHref = ai->value;
-            //} else if ( ai->key == absref_key ) {
-                //xxAbsref = ai->value;
-            }
-        }
-
-        // Might add a special case for absref but no href.
-        if ( old_href_base && new_href_base && xxHref ) {
-            //g_message("href rebase test with [%s] and [%s]", xxHref, xxAbsref);
-            //std::string newOne = rebase_href_attrs( old_href_base, new_href_base, xxHref, xxAbsref );
-        }
-    }
-
     for ( List<AttributeRecord const> iter = rebase_href_attrs(old_href_base, new_href_base,
                                                                attributes);
           iter ; ++iter )

@@ -37,7 +37,7 @@ class Extension;
  */
 extern Glib::ustring const extension_pref_root;
 
-/** 
+/**
  * A class to represent the parameter of an extension.
  *
  * This is really a super class that allows them to abstract all
@@ -62,6 +62,7 @@ public:
               const Parameter::_scope_t scope,
               bool gui_hidden,
               gchar const *gui_tip,
+              int indent,
               Inkscape::Extension::Extension * ext);
 
     Parameter(gchar const *name,
@@ -144,6 +145,9 @@ public:
     /** Indicates if the GUI for this parameter is hidden or not */
     bool get_gui_hidden() const { return _gui_hidden; }
 
+    /** Indentation level of the parameter */
+    int get_indent() const { return _indent; }
+
     virtual void string(std::list <std::string> &list) const;
 
     /**
@@ -154,6 +158,19 @@ public:
 
     /** All the code in Notebook::get_param to get the notebook content. */
     virtual Parameter *get_param(gchar const *name);
+
+
+    /** Recommended margin of boxes containing multiple Parameters (in px) */
+    const static int GUI_BOX_MARGIN = 10;
+    /** Recommended spacing between multiple Parameters packed into a box (in px) */
+    const static int GUI_BOX_SPACING = 4;
+    /** Recommended spacing between the widgets making up a signle Parameter (e.g. label and input) (in px) */
+    const static int GUI_PARAM_WIDGETS_SPACING = 4;
+    /** Recommended indentation width of parameters (in px) */
+    const static int GUI_INDENTATION = 12;
+    /** Recommended maximum line lenght for wrapping textual parameters (in chars) */
+    const static int GUI_MAX_LINE_LENGTH = 60;
+
 
 protected:
     /** Description of the parameter. */
@@ -170,6 +187,9 @@ protected:
 
     /** A tip for the GUI if there is one. */
     gchar *  _gui_tip;
+
+    /** Indentation level of the parameter. */
+    int _indent;
 
 
     /* **** funcs **** */

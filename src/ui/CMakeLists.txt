@@ -57,6 +57,7 @@ set(ui_SRC
 	dialog/calligraphic-profile-rename.cpp
 	dialog/clonetiler.cpp
 	dialog/color-item.cpp
+       dialog/cssdialog.cpp
 	dialog/debug.cpp
 	dialog/desktop-tracker.cpp
 	dialog/dialog-manager.cpp
@@ -98,7 +99,9 @@ set(ui_SRC
 	dialog/polar-arrange-tab.cpp
 	dialog/print-colors-preview-dialog.cpp
 	dialog/print.cpp
+	dialog/prototype.cpp
 	dialog/spellcheck.cpp
+        dialog/styledialog.cpp
 	dialog/svg-fonts-dialog.cpp
 	dialog/swatches.cpp
 	dialog/symbols.cpp
@@ -195,6 +198,7 @@ set(ui_SRC
 	dialog/calligraphic-profile-rename.h
 	dialog/clonetiler.h
 	dialog/color-item.h
+       dialog/cssdialog.h
 	dialog/debug.h
 	dialog/desktop-tracker.h
 	dialog/dialog-manager.h
@@ -238,7 +242,9 @@ set(ui_SRC
 	dialog/polar-arrange-tab.h
 	dialog/print-colors-preview-dialog.h
 	dialog/print.h
+	dialog/prototype.h
 	dialog/spellcheck.h
+        dialog/styledialog.h
 	dialog/svg-fonts-dialog.h
 	dialog/swatches.h
 	dialog/symbols.h

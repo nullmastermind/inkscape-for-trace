@@ -19,6 +19,8 @@
 #include <2geom/transforms.h>
 #include <glibmm/i18n.h>
 #include <glibmm/markup.h>
+
+#include "bad-uri-exception.h"
 #include "display/drawing-group.h"
 #include "attributes.h"
 #include "document.h"

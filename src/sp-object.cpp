@@ -1061,7 +1061,9 @@ Inkscape::XML::Node* SPObject::write(Inkscape::XML::Document *doc, Inkscape::XML
         }
 
         if (style) {
-            Glib::ustring s = style->write(SP_STYLE_FLAG_IFSET);
+            // Write if property set by style attribute in this object
+            Glib::ustring s =
+                style->write(SP_STYLE_FLAG_IFSET | SP_STYLE_FLAG_IFSRC, SP_STYLE_SRC_STYLE_PROP);
 
             // Check for valid attributes. This may be time consuming.
             // It is useful, though, for debugging Inkscape code.
@@ -1103,7 +1105,10 @@ Inkscape::XML::Node* SPObject::write(Inkscape::XML::Document *doc, Inkscape::XML
          * possibly we should write property attributes instead of a style
          * attribute.
          */
-        sp_style_unset_property_attrs (this);
+        // With the changes to preserves style source this is no longer needed
+        // and the above comment no longer applies. I leave it here until these
+        // change are well tested.
+        // sp_style_unset_property_attrs (this);
     }
 
 #ifdef OBJECT_TRACE

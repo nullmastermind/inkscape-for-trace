@@ -1196,13 +1196,19 @@ sp_item_path_outline(SPItem *item, SPDesktop *desktop, bool legacy)
         // remember old stroke style, to be set on fill
         SPStyle *i_style = item->style;
         //Stroke - and markers
+        gchar const *opacity;
+        gchar const *filter;
+
         SPCSSAttr *ncss = 0;
         {
             ncss = sp_css_attr_from_style(i_style, SP_STYLE_FLAG_ALWAYS);
             gchar const *s_val = sp_repr_css_property(ncss, "stroke", NULL);
             gchar const *s_opac = sp_repr_css_property(ncss, "stroke-opacity", NULL);
-
+            opacity = sp_repr_css_property(ncss, "opacity", NULL);
+            filter = sp_repr_css_property(ncss, "filter", NULL);
             sp_repr_css_set_property(ncss, "stroke", "none");
+            sp_repr_css_set_property(ncss, "filter", NULL);
+            sp_repr_css_set_property(ncss, "opacity", NULL);
             sp_repr_css_set_property(ncss, "stroke-opacity", "1.0");
             sp_repr_css_set_property(ncss, "fill", s_val);
             if ( s_opac ) {
@@ -1220,6 +1226,8 @@ sp_item_path_outline(SPItem *item, SPDesktop *desktop, bool legacy)
             ncsf = sp_css_attr_from_style(i_style, SP_STYLE_FLAG_ALWAYS);
             sp_repr_css_set_property(ncsf, "stroke", "none");
             sp_repr_css_set_property(ncsf, "stroke-opacity", "1.0");
+            sp_repr_css_set_property(ncsf, "filter", NULL);
+            sp_repr_css_set_property(ncsf, "opacity", NULL);
             sp_repr_css_unset_property(ncsf, "marker-start");
             sp_repr_css_unset_property(ncsf, "marker-mid");
             sp_repr_css_unset_property(ncsf, "marker-end");
@@ -1504,7 +1512,11 @@ sp_item_path_outline(SPItem *item, SPDesktop *desktop, bool legacy)
                 gchar const *paint_order = sp_repr_css_property(ncss, "paint-order", NULL);
                 SPIPaintOrder temp;
                 temp.read( paint_order );
-                if (temp.layer[0] != SP_CSS_PAINT_ORDER_NORMAL && !legacy) {
+                bool unique = false;
+                if ((!fill && !markers) || (!fill && !stroke) || (!markers && !stroke)) {
+                    unique = true;
+                }
+                if (temp.layer[0] != SP_CSS_PAINT_ORDER_NORMAL && !legacy && !unique) {
 
                     if (temp.layer[0] == SP_CSS_PAINT_ORDER_FILL) {
                         if (temp.layer[1] == SP_CSS_PAINT_ORDER_STROKE) {
@@ -1574,7 +1586,7 @@ sp_item_path_outline(SPItem *item, SPDesktop *desktop, bool legacy)
                         }
                     }
 
-                } else {
+                } else if (!unique) {
                     if ( fill ) {
                         g_repr->appendChild(fill);
                     }
@@ -1588,35 +1600,41 @@ sp_item_path_outline(SPItem *item, SPDesktop *desktop, bool legacy)
                 if( fill || stroke || markers ) {
                     did = true;
                 }
+                
                 Inkscape::XML::Node *out = NULL;
-                if (!fill && !markers) {
+                if (!fill && !markers && did) {
                     out = stroke;
-                    parent->mergeFrom(g_repr, "");
-                    parent->removeChild(g_repr);
-                } else if (!fill && !stroke) {
+                } else if (!fill && !stroke  && did) {
                     out = markers;
-                    parent->mergeFrom(g_repr, "");
-                    parent->removeChild(g_repr);
-                } else if (!markers && !stroke) {
+                } else if (!markers && !stroke  && did) {
                     out = fill;
-                    parent->mergeFrom(g_repr, "");
-                    parent->removeChild(g_repr);
-                } else {
+                } else if(did) {
                     out = g_repr;
                 }
-                
+                SPCSSAttr *r_style = sp_repr_css_attr_new();
+                sp_repr_css_set_property(r_style, "opacity", opacity);
+                sp_repr_css_set_property(r_style, "filter", filter);
+                sp_repr_css_change(out, r_style, "style");
+                sp_repr_css_attr_unref(r_style);
+                if (unique) {
+                    parent->appendChild(out);
+                    parent->removeChild(g_repr);
+                    out->setPosition(pos > 0 ? pos : 0);
+                }
+                out->setAttribute("transform", item->getRepr()->attribute("transform"));
                 //bug lp:1290573 : completely destroy the old object first
                 curve->unref();
                 //Check for recursive markers to path
-                if( selection->includes(item) ){
-                    selection->remove(item);
-                    item->deleteObject(false);
-                    selection->add(out);
-                } else {
-                    item->deleteObject(false);
+                if (did) {
+                    if( selection->includes(item) ){
+                        selection->remove(item);
+                        item->deleteObject(false);
+                        selection->add(out);
+                    } else {
+                        item->deleteObject(false);
+                    }
+                    Inkscape::GC::release(g_repr);
                 }
-                Inkscape::GC::release(g_repr);
-
             }
         }
 

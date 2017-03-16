@@ -176,7 +176,7 @@ public:
 
 private:
     void             make_param       (Inkscape::XML::Node * paramrepr);
-    
+
     /**
      * This function looks through the linked list for a parameter
      * structure with the name of the passed in name.

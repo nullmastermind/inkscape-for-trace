@@ -9,7 +9,7 @@
  * Authors:
  *   Johan Engelen
  *   Steren Giannini
- *   Noé Falzon
+ *   NoÃ© Falzon
  *   Victor Navez
  *   ~suv
  *   Jabiertxo Arraiza

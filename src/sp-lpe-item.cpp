@@ -15,9 +15,10 @@
 #ifdef HAVE_CONFIG_H
 #endif
 
-#include "ui/tool/multi-path-manipulator.h"
-
 #include <glibmm/i18n.h>
+
+#include "bad-uri-exception.h"
+#include "ui/tool/multi-path-manipulator.h"
 
 #include "live_effects/effect.h"
 #include "live_effects/lpe-path_length.h"

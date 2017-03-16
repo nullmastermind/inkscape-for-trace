@@ -195,18 +195,18 @@ if(WIN32)
     PATTERN CMakeLists.txt EXCLUDE
     PATTERN *.am EXCLUDE)
 
+  # Generate a dummy file in hicolor/index.theme to avoid bug 1635207
+  file(GENERATE OUTPUT ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/index.theme
+    CONTENT "[Icon Theme]\nName=hicolor\nDirectories=")
+
   install(DIRECTORY ${DEVLIBS_PATH}/share/icons/Adwaita
     DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons)
 
-  install(DIRECTORY ${DEVLIBS_PATH}/share/themes
-    DESTINATION ${CMAKE_INSTALL_PREFIX}/share)
-
-  install(DIRECTORY ${DEVLIBS_PATH}/share/locale
-    DESTINATION ${CMAKE_INSTALL_PREFIX}/share
-    PATTERN "*gtk20.mo" EXCLUDE)
-
   install(DIRECTORY ${DEVLIBS_PATH}/share/poppler
     DESTINATION ${CMAKE_INSTALL_PREFIX}/share)
+
+  install(DIRECTORY ${DEVLIBS_PATH}/share/glib-2.0/schemas
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/share/glib-2.0)
 
   install(DIRECTORY ${DEVLIBS_PATH}/etc/fonts
     DESTINATION ${CMAKE_INSTALL_PREFIX}/etc)

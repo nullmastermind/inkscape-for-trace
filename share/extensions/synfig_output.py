@@ -1046,17 +1046,11 @@ def extract_width(style, width_attrib, mtx):
 ###### Main Class #########################################
 class SynfigExport(SynfigPrep):
     def __init__(self):
-        svg = self.document.getroot()
-        xpathStr = '//http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd}:namedview'
-        res = svg.xpath(xpathStr, namespaces=inkex.NSS)
-        self.document_rotate =  res[0].get("inkscape:document_rotation")
-        res[0].set("inkscape:document_rotation","0")
         SynfigPrep.__init__(self)
 
     def effect(self):
         # Prepare the document for exporting
         SynfigPrep.effect(self)
-
         svg = self.document.getroot()
         width = get_dimension(svg.get("width", 1024))
         height = get_dimension(svg.get("height", 768))
@@ -1078,10 +1072,6 @@ class SynfigExport(SynfigPrep):
             root_canvas.append(layer)
 
         d.get_root_tree().write(sys.stdout)
-        svg = self.document.getroot()
-        xpathStr = '//http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd}:namedview'
-        res = svg.xpath(xpathStr, namespaces=inkex.NSS)
-        res[0].set("inkscape:document_rotation",self.document_rotate)
 
     def convert_node(self, node, d):
         """Convert an SVG node to a list of Synfig layers"""

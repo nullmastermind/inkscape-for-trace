@@ -42,7 +42,6 @@
 #include "2geom/line.h"
 #include "2geom/angle.h"
 #include "helper/mathfns.h"
-#include "round.h"
 #include "util/units.h"
 
 using Inkscape::Util::unit_table;

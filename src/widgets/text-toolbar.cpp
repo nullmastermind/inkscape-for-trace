@@ -205,6 +205,7 @@ static void sp_text_fontsize_value_changed( Ink_ComboBoxEntry_Action *act, GObje
     if (endptr == text) {  // Conversion failed, non-numeric input.
         g_warning( "Conversion of size text to double failed, input: %s\n", text );
         g_free( text );
+        g_object_set_data( tbl, "freeze", GINT_TO_POINTER(FALSE) );
         return;
     }
     g_free( text );
@@ -301,10 +302,23 @@ static void sp_text_fontstyle_value_changed( Ink_ComboBoxEntry_Action *act, GObj
 
         SPDesktop   *desktop    = SP_ACTIVE_DESKTOP;
         sp_desktop_set_style (desktop, css, true, true);
+
+
+        // If no selected objects, set default.
+        SPStyle query(SP_ACTIVE_DOCUMENT);
+        int result_style =
+            sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_FONTSTYLE);
+        if (result_style == QUERY_STYLE_NOTHING) {
+            Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+            prefs->mergeStyle("/tools/text/style", css);
+        } else {
+            // Save for undo
+            DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_TEXT,
+                               _("Text: Change font style"));
+        }
+
         sp_repr_css_attr_unref (css);
 
-        DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_TEXT,
-                           _("Text: Change font style"));
     }
 
     g_object_set_data( tbl, "freeze", GINT_TO_POINTER(FALSE) );
@@ -588,17 +602,14 @@ static void sp_text_lineheight_value_changed( GtkAdjustment *adj, GObject *tbl )
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
 
-    // Only save if not relative unit
-    if ( !is_relative(unit) ) {
-        // This nonsense is to get SP_CSS_UNIT_xx value corresponding to unit so
-        // we can save it (allows us to adjust line height value when unit changes).
-        SPILength temp_length;
-        Inkscape::CSSOStringStream temp_stream;
-        temp_stream << 1 << unit->abbr;
-        temp_length.read(temp_stream.str().c_str());
-        prefs->setInt("/tools/text/lineheight/display_unit", temp_length.unit);
-        g_object_set_data( tbl, "lineheight_unit", GINT_TO_POINTER(temp_length.unit));
-    }
+    // This nonsense is to get SP_CSS_UNIT_xx value corresponding to unit so
+    // we can save it (allows us to adjust line height value when unit changes).
+    SPILength temp_length;
+    Inkscape::CSSOStringStream temp_stream;
+    temp_stream << 1 << unit->abbr;
+    temp_length.read(temp_stream.str().c_str());
+    prefs->setInt("/tools/text/lineheight/display_unit", temp_length.unit);
+    g_object_set_data( tbl, "lineheight_unit", GINT_TO_POINTER(temp_length.unit));
 
     // Set css line height.
     SPCSSAttr *css = sp_repr_css_attr_new ();
@@ -701,16 +712,13 @@ static void sp_text_lineheight_unit_changed( gpointer /* */, GObject *tbl )
     g_return_if_fail(unit != NULL);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
-    // Only save if not relative unit
-    if ( !is_relative(unit) ) {
-        // This nonsense is to get SP_CSS_UNIT_xx value corresponding to unit.
-        SPILength temp_length;
-        Inkscape::CSSOStringStream temp_stream;
-        temp_stream << 1 << unit->abbr;
-        temp_length.read(temp_stream.str().c_str());
-        prefs->setInt("/tools/text/lineheight/display_unit", temp_length.unit);
-        g_object_set_data( tbl, "lineheight_unit", GINT_TO_POINTER(temp_length.unit));
-    }
+    // This nonsense is to get SP_CSS_UNIT_xx value corresponding to unit.
+    SPILength temp_length;
+    Inkscape::CSSOStringStream temp_stream;
+    temp_stream << 1 << unit->abbr;
+    temp_length.read(temp_stream.str().c_str());
+    prefs->setInt("/tools/text/lineheight/display_unit", temp_length.unit);
+    g_object_set_data( tbl, "lineheight_unit", GINT_TO_POINTER(temp_length.unit));
 
     // Read current line height value
     EgeAdjustmentAction *line_height_act =
@@ -723,7 +731,10 @@ static void sp_text_lineheight_unit_changed( gpointer /* */, GObject *tbl )
     auto itemlist = selection->items();
 
     // Convert between units
-    if        ((unit->abbr == "" || unit->abbr == "em") && old_unit == SP_CSS_UNIT_EX) {
+    if        ((unit->abbr == "" || unit->abbr == "em") &&
+               (old_unit == SP_CSS_UNIT_NONE || old_unit == SP_CSS_UNIT_EM)) {
+        // Do nothing
+    } else if ((unit->abbr == "" || unit->abbr == "em") && old_unit == SP_CSS_UNIT_EX) {
         line_height *= 0.5;
     } else if ((unit->abbr) == "ex" && (old_unit == SP_CSS_UNIT_EM || old_unit == SP_CSS_UNIT_NONE) ) {
         line_height *= 2.0;
@@ -1130,6 +1141,54 @@ static void sp_text_orientation_changed( EgeSelectOneAction *act, GObject *tbl )
     g_object_set_data( tbl, "freeze", GINT_TO_POINTER(FALSE) );
 }
 
+static void sp_text_direction_changed( EgeSelectOneAction *act, GObject *tbl )
+{
+    // quit if run by the _changed callbacks
+    if (g_object_get_data(G_OBJECT(tbl), "freeze")) {
+        return;
+    }
+    g_object_set_data( tbl, "freeze", GINT_TO_POINTER(TRUE) );
+
+    int mode = ege_select_one_action_get_active( act );
+
+    SPCSSAttr   *css        = sp_repr_css_attr_new ();
+    switch (mode)
+    {
+        case 0:
+        {
+            sp_repr_css_set_property (css, "direction", "ltr");
+            break;
+        }
+
+        case 1:
+        {
+            sp_repr_css_set_property (css, "direction", "rtl");
+            break;
+        }
+    }
+
+    SPStyle query(SP_ACTIVE_DOCUMENT);
+    int result_numbers =
+        sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_FONTNUMBERS);
+
+    // If querying returned nothing, update default style.
+    if (result_numbers == QUERY_STYLE_NOTHING)
+    {
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        prefs->mergeStyle("/tools/text/style", css);
+    }
+
+    sp_desktop_set_style (SP_ACTIVE_DESKTOP, css, true, true);
+    if(result_numbers != QUERY_STYLE_NOTHING)
+    {
+        DocumentUndo::done(SP_ACTIVE_DESKTOP->getDocument(), SP_VERB_CONTEXT_TEXT,
+                       _("Text: Change direction"));
+    }
+    sp_repr_css_attr_unref (css);
+
+    g_object_set_data( tbl, "freeze", GINT_TO_POINTER(FALSE) );
+}
+
 /*
  * Set the default list of font sizes, scaled to the users preferred unit
  */
@@ -1170,8 +1229,7 @@ static void sp_text_toolbox_selection_changed(Inkscape::Selection */*selection*/
     std::cout << "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&" << std::endl;
     std::cout << "sp_text_toolbox_selection_changed: start " << count << std::endl;
 
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    Inkscape::Selection *selection = desktop->getSelection();
+    Inkscape::Selection *selection = (SP_ACTIVE_DESKTOP)->getSelection();
     auto itemlist0= selection->items();
     for(auto i=itemlist0.begin();i!=itemlist0.end(); ++i) {
         const gchar* id = (*i)->getId();
@@ -1493,6 +1551,15 @@ static void sp_text_toolbox_selection_changed(Inkscape::Selection */*selection*/
         gtk_list_store_set( model, &iter, /* column */ 3, activeButton2 != 0, -1 );
 
         ege_select_one_action_update_sensitive( textOrientationAction );
+
+        // Direction
+        int activeButton4 = 0;
+        if (query.direction.computed == SP_CSS_DIRECTION_LTR ) activeButton4 = 0;
+        if (query.direction.computed == SP_CSS_DIRECTION_RTL ) activeButton4 = 1;
+
+        EgeSelectOneAction* textDirectionAction =
+            EGE_SELECT_ONE_ACTION( g_object_get_data( tbl, "TextDirectionAction" ) );
+        ege_select_one_action_set_active( textDirectionAction, activeButton4 );
 
     }
 
@@ -1924,6 +1991,52 @@ void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
         gint mode = prefs->getInt("/tools/text/text_orientation", 0);
         ege_select_one_action_set_active( act, mode );
         g_signal_connect_after( G_OBJECT(act), "changed", G_CALLBACK(sp_text_orientation_changed), holder );
+    }
+
+
+    // Text direction (predominant direction of horizontal text).
+    {
+        GtkListStore* model = gtk_list_store_new( 4, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN );
+
+        GtkTreeIter iter;
+
+        gtk_list_store_append( model, &iter );
+        gtk_list_store_set( model, &iter,
+                            0, _("LTR"),
+                            1, _("Left to right text"),
+                            2, INKSCAPE_ICON("format-text-direction-horizontal"),
+                            3, true,
+                            -1 );
+
+        gtk_list_store_append( model, &iter );
+        gtk_list_store_set( model, &iter,
+                            0, _("RTL"),
+                            1, _("Right to left text"),
+                            2, INKSCAPE_ICON("format-text-direction-r2l"),
+                            3, true,
+                            -1 );
+
+        EgeSelectOneAction* act = ege_select_one_action_new( "TextDirectionAction", // Name
+                                                             _("Text direction"),        // Label
+                                                             _("Text direction for normally horizontal text."),   // Tooltip
+                                                             NULL,                    // Icon name
+                                                             GTK_TREE_MODEL(model) ); // Model
+
+        g_object_set( act, "short_label", "NotUsed", NULL );
+        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
+        g_object_set_data( holder, "TextDirectionAction", act );
+
+        ege_select_one_action_set_appearance( act, "full" );
+        ege_select_one_action_set_radio_action_type( act, INK_RADIO_ACTION_TYPE );
+        g_object_set( G_OBJECT(act), "icon-property", "iconId", NULL );
+        ege_select_one_action_set_icon_column( act, 2 );
+        ege_select_one_action_set_icon_size( act, secondarySize );
+        ege_select_one_action_set_tooltip_column( act, 1  );
+        ege_select_one_action_set_sensitive_column( act, 3 );
+
+        gint mode = prefs->getInt("/tools/text/text_direction", 0);
+        ege_select_one_action_set_active( act, mode );
+        g_signal_connect_after( G_OBJECT(act), "changed", G_CALLBACK(sp_text_direction_changed), holder );
     }
 
     /* Line height unit tracker */

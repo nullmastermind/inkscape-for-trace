@@ -24,9 +24,17 @@
 namespace Inkscape {
 namespace Extension {
 
-ParamBool::ParamBool(const gchar * name, const gchar * guitext, const gchar * desc, const Parameter::_scope_t scope, bool gui_hidden, const gchar * gui_tip, Inkscape::Extension::Extension * ext, Inkscape::XML::Node * xml) :
-        Parameter(name, guitext, desc, scope, gui_hidden, gui_tip, ext),
-                  _value(false), _indent(0)
+ParamBool::ParamBool(const gchar * name,
+                     const gchar * guitext,
+                     const gchar * desc,
+                     const Parameter::_scope_t scope,
+                     bool gui_hidden,
+                     const gchar * gui_tip,
+                     int indent,
+                     Inkscape::Extension::Extension * ext,
+                     Inkscape::XML::Node * xml)
+    : Parameter(name, guitext, desc, scope, gui_hidden, gui_tip, indent, ext)
+    , _value(false)
 {
     const char * defaultval = NULL;
     if (xml->firstChild() != NULL) {
@@ -37,11 +45,6 @@ ParamBool::ParamBool(const gchar * name, const gchar * guitext, const gchar * de
         _value = true;
     } else {
         _value = false;
-    }
-
-    const char * indent = xml->attribute("indent");
-    if (indent != NULL) {
-        _indent = atoi(indent) * 12;
     }
 
     gchar * pref_name = this->pref_name();
@@ -66,7 +69,7 @@ bool ParamBool::set( bool in, SPDocument * /*doc*/, Inkscape::XML::Node * /*node
 
 bool ParamBool::get(const SPDocument * /*doc*/, const Inkscape::XML::Node * /*node*/) const
 {
-    return _value; 
+    return _value;
 }
 
 /**
@@ -130,7 +133,7 @@ Gtk::Widget *ParamBool::get_widget(SPDocument * doc, Inkscape::XML::Node * node,
         return NULL;
     }
 
-    auto hbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, 4));
+    auto hbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, Parameter::GUI_PARAM_WIDGETS_SPACING));
     hbox->set_homogeneous(false);
 
     Gtk::Label * label = Gtk::manage(new Gtk::Label(_(_text), Gtk::ALIGN_START));
@@ -139,7 +142,7 @@ Gtk::Widget *ParamBool::get_widget(SPDocument * doc, Inkscape::XML::Node * node,
 
     ParamBoolCheckButton * checkbox = Gtk::manage(new ParamBoolCheckButton(this, doc, node, changeSignal));
     checkbox->show();
-    hbox->pack_start(*checkbox, false, false, _indent);
+    hbox->pack_start(*checkbox, false, false);
 
     hbox->show();
 
