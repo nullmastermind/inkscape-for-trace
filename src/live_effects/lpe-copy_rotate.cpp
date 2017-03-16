@@ -112,7 +112,7 @@ LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem)
                         return;
                     }
                     SPObject *elemref = NULL;
-                    if (elemref = document->getObjectById(id)) {
+                    if ((elemref = document->getObjectById(id))) {
                         SP_ITEM(elemref)->setHidden(true);
                     }
                     counter++;
@@ -124,7 +124,7 @@ LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem)
         SPObject *elemref = NULL;
         char * id = g_strdup(Glib::ustring("rotated-").append("1").append("-").append(sp_lpe_item->getRepr()->attribute("id")).c_str());
         guint counter = 0;
-        while(elemref = document->getObjectById(id)) {
+        while((elemref = document->getObjectById(id))) {
             if (SP_ITEM(elemref)->isHidden()) {
                 items.push_back(id);
             }
@@ -229,7 +229,7 @@ LPECopyRotate::toItem(Geom::Affine transform, size_t i, bool reset)
     items.push_back(elemref_id);
     SPObject *elemref= NULL;
     Inkscape::XML::Node *phantom = NULL;
-    if (elemref = document->getObjectById(elemref_id)) {
+    if ((elemref = document->getObjectById(elemref_id))) {
         phantom = elemref->getRepr();
     } else {
         phantom = sp_lpe_item->getRepr()->duplicate(xml_doc);

@@ -479,7 +479,7 @@ Effect::processObjects(LpeAction lpe_action)
             return;
         }
         SPObject *elemref = NULL;
-        if (elemref = document->getObjectById(id)) {
+        if ((elemref = document->getObjectById(id))) {
             Inkscape::XML::Node * elemnode = elemref->getRepr();
             std::vector<SPItem*> item_list;
             item_list.push_back(SP_ITEM(elemref));

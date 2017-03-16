@@ -244,7 +244,7 @@ LPEMirrorSymmetry::toMirror(Geom::Affine transform)
         items.push_back(elemref_id);
         SPObject *elemref= NULL;
         Inkscape::XML::Node *phantom = NULL;
-        if (elemref = document->getObjectById(elemref_id)) {
+        if ((elemref = document->getObjectById(elemref_id))) {
             phantom = elemref->getRepr();
         } else {
             phantom = sp_lpe_item->getRepr()->duplicate(xml_doc);
