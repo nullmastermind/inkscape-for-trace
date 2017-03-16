@@ -378,7 +378,7 @@ Geom::Point FilletChamferKnotHolderEntity::knot_get() const
     Satellite satellite = _pparam->_vector[path_index][curve_index];
     Geom::PathVector pathv = _pparam->_last_pathvector_satellites->getPathVector();
     if (satellite.hidden ||
-        !pathv[path_index].closed() && curve_index == 0 ||//ignore first satellites on open paths
+        (!pathv[path_index].closed() && curve_index == 0) ||//ignore first satellites on open paths
         pathv[path_index].size() == curve_index) //ignore last satellite in open paths with fillet chamfer effect
     {
         return Geom::Point(Geom::infinity(), Geom::infinity());
@@ -434,7 +434,7 @@ void FilletChamferKnotHolderEntity::knot_click(guint state)
         return;
     }
     Geom::PathVector pathv = _pparam->_last_pathvector_satellites->getPathVector();
-    if (!pathv[path_index].closed() && curve_index == 0 ||//ignore first satellites on open paths
+    if ((!pathv[path_index].closed() && curve_index == 0) ||//ignore first satellites on open paths
         pathv[path_index].size() == curve_index) //ignore last satellite in open paths with fillet chamfer effect
     {
         return;
@@ -532,7 +532,7 @@ void FilletChamferKnotHolderEntity::knot_set_offset(Satellite satellite)
     }
     Geom::PathVector pathv = _pparam->_last_pathvector_satellites->getPathVector();
     if (satellite.hidden ||
-        !pathv[path_index].closed() && curve_index == 0 ||//ignore first satellites on open paths
+        (!pathv[path_index].closed() && curve_index == 0) ||//ignore first satellites on open paths
         pathv[path_index].size() == curve_index) //ignore last satellite in open paths with fillet chamfer effect
     {
         return;
