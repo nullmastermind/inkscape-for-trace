@@ -148,7 +148,7 @@ public:
                             be different in the X or Y direction, hence two
                             variables */
     Geom::Point ow;      /**< Transformed origin by the affine for the zoom */
-    Geom::Point sw;      /**< Transformed spacing by the affine for the zoom */
+    Geom::Point sw[2];   /**< Transformed spacing by the affine for the zoom */
 
 protected:
     virtual Gtk::Widget * newSpecificWidget();
