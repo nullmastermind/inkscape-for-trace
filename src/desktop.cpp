@@ -1531,12 +1531,16 @@ SPDesktop::setDocument (SPDocument *doc)
     layers->setDocument(doc);
     selection->setDocument(doc);
 
-	// remove old EventLog if it exists (see also: bug #1071082)
-	if (event_log) {
-		doc->removeUndoObserver(*event_log);
-		delete event_log;
-		event_log = 0;
-	}
+    if (event_log) {
+        // Remove it from the replaced document. This prevents Inkscape from
+        // crashing since we access it in the replaced document's destructor
+        // which results in an undefined behavior. (See also: bug #1670688)
+        if (this->doc()) {
+            this->doc()->removeUndoObserver(*event_log);
+        }
+        delete event_log;
+        event_log = 0;
+    }
 
     /* setup EventLog */
     event_log = new Inkscape::EventLog(doc);
