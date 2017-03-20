@@ -61,7 +61,6 @@ pdf_render_document_to_file(SPDocument *doc, gchar const *filename, unsigned int
                             bool texttopath, bool omittext, bool filtertobitmap, int resolution,
                             const gchar * const exportId, bool exportDrawing, bool exportCanvas, float bleedmargin_px)
 {
-    doc->getRoot()->c2p = doc->getRoot()->rotation.inverse() * doc->getRoot()->c2p;
     doc->ensureUpToDate();
 
 /* Start */
@@ -81,7 +80,6 @@ pdf_render_document_to_file(SPDocument *doc, gchar const *filename, unsigned int
     }
 
     if (!base) {
-        doc->getRoot()->c2p *= doc->getRoot()->rotation;
         return false;
     }
     
@@ -114,7 +112,7 @@ pdf_render_document_to_file(SPDocument *doc, gchar const *filename, unsigned int
 
     renderer->destroyContext(ctx);
     delete renderer;
-    doc->getRoot()->c2p *= doc->getRoot()->rotation;
+
     return ret;
 }
 

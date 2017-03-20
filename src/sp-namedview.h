@@ -21,16 +21,12 @@
 #include "snap.h"
 #include "document.h"
 #include "util/units.h"
-#include "display/sp-canvas.h"
 #include <vector>
 
 namespace Inkscape {
     class CanvasGrid;
     namespace Util {
         class Unit;
-    }
-    namespace Display {
-        class TemporaryItem;
     }
 }
 
@@ -42,7 +38,7 @@ enum {
     SP_BORDER_LAYER_TOP
 };
 
-class SPNamedView : public SPObjectGroup{
+class SPNamedView : public SPObjectGroup {
 public:
 	SPNamedView();
 	virtual ~SPNamedView();
@@ -58,7 +54,6 @@ public:
     double zoom;
     double cx;
     double cy;
-    double document_rotation;
     int window_width;
     int window_height;
     int window_x;
@@ -71,7 +66,7 @@ public:
 
     Inkscape::Util::Unit const *display_units;   // Units used for the UI (*not* the same as units of SVG coordinates)
     Inkscape::Util::Unit const *page_size_units; // Only used in "Custom size" part of Document Properties dialog 
-    Inkscape::Display::TemporaryItem *page_border_rotated;
+    
     GQuark default_layer_id;
 
     double connector_spacing;
@@ -126,7 +121,7 @@ SPNamedView const *sp_document_namedview(SPDocument const *document, char const 
 void sp_namedview_window_from_document(SPDesktop *desktop);
 void sp_namedview_document_from_window(SPDesktop *desktop);
 void sp_namedview_update_layers_from_document (SPDesktop *desktop);
-void sp_namedview_set_document_rotation(SPNamedView *nv);
+
 void sp_namedview_toggle_guides(SPDocument *doc, Inkscape::XML::Node *repr);
 void sp_namedview_guides_toggle_lock(SPDocument *doc, Inkscape::XML::Node *repr);
 void sp_namedview_show_grids(SPNamedView *namedview, bool show, bool dirty_document);

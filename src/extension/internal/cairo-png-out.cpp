@@ -53,10 +53,11 @@ png_render_document_to_file(SPDocument *doc, gchar const *filename)
 {
     CairoRenderer *renderer;
     CairoRenderContext *ctx;
-    doc->getRoot()->c2p = doc->getRoot()->rotation.inverse() * doc->getRoot()->c2p;
+
     doc->ensureUpToDate();
 
 /* Start */
+
     SPItem *base = doc->getRoot();
     Inkscape::Drawing drawing;
     unsigned dkey = SPItem::display_key_new(1);
@@ -76,7 +77,6 @@ png_render_document_to_file(SPDocument *doc, gchar const *filename)
     renderer->destroyContext(ctx);
 
     base->invoke_hide(dkey);
-    doc->getRoot()->c2p *= doc->getRoot()->rotation;
 /* end */
     delete renderer;
 

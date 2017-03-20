@@ -351,6 +351,8 @@ public:
     void rotate_absolute_center_point (Geom::Point const &c, double const rotate);
     void rotate_relative_center_point (Geom::Point const &c, double const rotate);
 
+    double current_rotation() const { return _current_affine.getRotation(); }
+
     void scroll_absolute (Geom::Point const &point, bool is_scrolling = false);
     void scroll_relative (Geom::Point const &delta, bool is_scrolling = false);
     void scroll_relative_in_svg_coords (double dx, double dy, bool is_scrolling = false);
@@ -476,6 +478,10 @@ private:
 
         double getZoom() const {
             return _d2w.descrim();
+        }
+
+        double getRotation() const {
+            return _rotate.angle();
         }
 
         void setOffset( Geom::Point offset ) {

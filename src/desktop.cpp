@@ -838,6 +838,7 @@ SPDesktop::set_display_area (bool log)
     _widget->updateRulers();
     _widget->updateScrollbars(_current_affine.getZoom());
     _widget->updateZoom();
+    _widget->updateRotation();
 
     signal_zoom_changed.emit(_current_affine.getZoom());
 }

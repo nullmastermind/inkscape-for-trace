@@ -49,7 +49,6 @@ bool LatexOutput::check(Inkscape::Extension::Extension * /*module*/)
 void LatexOutput::save(Inkscape::Extension::Output * /*mod2*/, SPDocument *doc, gchar const *filename)
 {
     SPPrintContext context;
-    doc->getRoot()->c2p = doc->getRoot()->rotation.inverse() * doc->getRoot()->c2p;
     doc->ensureUpToDate();
 
     Inkscape::Extension::Print *mod = Inkscape::Extension::get_print(SP_MODULE_KEY_PRINT_LATEX);
@@ -77,7 +76,6 @@ void LatexOutput::save(Inkscape::Extension::Output * /*mod2*/, SPDocument *doc, 
 
     mod->set_param_string("destination", oldoutput);
     g_free(oldoutput);
-    doc->getRoot()->c2p *= doc->getRoot()->rotation;
 }
 
 #include "clear-n_.h"

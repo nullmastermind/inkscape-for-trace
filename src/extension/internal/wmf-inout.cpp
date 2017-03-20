@@ -95,7 +95,7 @@ Wmf::print_document_to_file(SPDocument *doc, const gchar *filename)
     SPPrintContext context;
     const gchar *oldconst;
     gchar *oldoutput;
-    doc->getRoot()->c2p = doc->getRoot()->rotation.inverse() * doc->getRoot()->c2p;
+
     doc->ensureUpToDate();
 
     mod = Inkscape::Extension::get_print(PRINT_WMF);
@@ -115,7 +115,6 @@ Wmf::print_document_to_file(SPDocument *doc, const gchar *filename)
     /* Print document */
     if (mod->begin(doc)) {
         g_free(oldoutput);
-        doc->getRoot()->c2p *= doc->getRoot()->rotation;
         throw Inkscape::Extension::Output::save_failed();
     }
     mod->base->invoke_print(&context);
@@ -128,7 +127,7 @@ Wmf::print_document_to_file(SPDocument *doc, const gchar *filename)
 
     mod->set_param_string("destination", oldoutput);
     g_free(oldoutput);
-    doc->getRoot()->c2p *= doc->getRoot()->rotation;
+
     return;
 }
 
@@ -136,8 +135,6 @@ Wmf::print_document_to_file(SPDocument *doc, const gchar *filename)
 void
 Wmf::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *filename)
 {
-    doc->getRoot()->c2p = doc->getRoot()->rotation.inverse() * doc->getRoot()->c2p;
-    doc->ensureUpToDate();
     Inkscape::Extension::Extension * ext;
 
     ext = Inkscape::Extension::db.get(PRINT_WMF);

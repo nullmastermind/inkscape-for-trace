@@ -19,12 +19,7 @@
 #include "event-log.h"
 #include <2geom/transforms.h>
 
-#include "display/sp-canvas-group.h"
-#include "display/canvas-bpath.h"
-#include "display/canvas-temporary-item.h"
-#include "display/canvas-temporary-item-list.h"
 #include "display/canvas-grid.h"
-#include "display/curve.h"
 #include "util/units.h"
 #include "svg/svg-color.h"
 #include "xml/repr.h"
@@ -34,15 +29,12 @@
 #include "desktop-events.h"
 
 #include "sp-guide.h"
-#include "sp-root.h"
 #include "sp-item-group.h"
 #include "sp-namedview.h"
 #include "preferences.h"
 #include "desktop.h"
-#include "selection.h"
-#include "object-set.h"
-#include "inkscape.h"
 #include "conn-avoid-ref.h" // for defaultConnSpacing.
+#include "sp-root.h"
 #include <gtkmm/window.h>
 
 using Inkscape::DocumentUndo;
@@ -80,7 +72,6 @@ SPNamedView::SPNamedView() : SPObjectGroup(), snap_manager(this) {
     this->pagecolor = 0;
     this->cx = 0;
     this->pageshadow = 0;
-    this->document_rotation = 0;
     this->window_width = 0;
     this->window_height = 0;
     this->window_maximized = 0;
@@ -101,13 +92,9 @@ SPNamedView::SPNamedView() : SPObjectGroup(), snap_manager(this) {
     this->default_layer_id = 0;
 
     this->connector_spacing = defaultConnSpacing;
-    this->page_border_rotated = NULL;
 }
 
 SPNamedView::~SPNamedView() {
-    if(!this->getViewList().empty()) { // >0 Desktops
-        this->getViewList()[0]->remove_temporary_canvasitem(this->page_border_rotated);
-    }
 }
 
 static void sp_namedview_generate_old_grid(SPNamedView * /*nv*/, SPDocument *document, Inkscape::XML::Node *repr) {
@@ -225,7 +212,6 @@ void SPNamedView::build(SPDocument *document, Inkscape::XML::Node *repr) {
     this->readAttr( "inkscape:zoom" );
     this->readAttr( "inkscape:cx" );
     this->readAttr( "inkscape:cy" );
-    this->readAttr( "inkscape:document-rotation" );
     this->readAttr( "inkscape:window-width" );
     this->readAttr( "inkscape:window-height" );
     this->readAttr( "inkscape:window-x" );
@@ -421,11 +407,6 @@ void SPNamedView::set(unsigned int key, const gchar* value) {
             break;
     case SP_ATTR_INKSCAPE_CY:
             this->cy = value ? g_ascii_strtod(value, NULL) : HUGE_VAL; // HUGE_VAL means not set
-            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
-            break;
-    case SP_ATTR_INKSCAPE_DOCUMENT_ROTATION:
-            this->document_rotation = value ? g_ascii_strtod(value, NULL) : 0; 
-            sp_namedview_set_document_rotation(this);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
             break;
     case SP_ATTR_INKSCAPE_WINDOW_WIDTH:
@@ -970,81 +951,6 @@ static void sp_namedview_lock_guides(SPNamedView *nv)
     }
 }
 
-//void sp_namedview_doc_rotate_guides(SPNamedView *nv)
-//{
-//    bool saved = DocumentUndo::getUndoSensitive(nv->document);
-//    DocumentUndo::setUndoSensitive(nv->document, false);
-//    SPRoot * root = nv->document->getRoot();
-//    Geom::Point page_center = root->viewBox.midpoint() * root->vbt;
-//    Geom::Affine rot = Geom::identity();
-//    rot *= Geom::Translate(page_center).inverse(); 
-//    rot *= Geom::Rotate(Geom::rad_from_deg((nv->document_rotation - root->get_rotation()) * -1));
-//    rot *=  Geom::Translate(page_center);
-//    for(std::vector<SPGuide *>::iterator it=nv->guides.begin();it!=nv->guides.end();++it ) {
-//        Geom::Point const on_line = (*it)->getPoint() * rot ;
-//        (*it)->moveto(on_line, true);
-//        Geom::Affine rot_normal_affine = Geom::Rotate(Geom::rad_from_deg((nv->document_rotation - root->get_rotation()) * -1));
-//        Geom::Point const rot_normal = (*it)->getNormal() * rot_normal_affine;
-//        (*it)->set_normal(rot_normal, true);
-//    }
-//    DocumentUndo::setUndoSensitive(nv->document, saved);
-//    nv->document->setModifiedSinceSave();
-//}
-
-void sp_namedview_set_document_rotation(SPNamedView *nv)
-{
-    if ( nv->document->getRoot()->get_rotation() == nv->document_rotation) return;
-    if(!nv->getViewList().empty()) { // >0 Desktops
-        SPDesktop *desktop = nv->getViewList()[0]; 
-        desktop->remove_temporary_canvasitem(nv->page_border_rotated);
-        SPRoot * root = nv->document->getRoot();
-        SPCurve *c = new SPCurve();
-        c->moveto(root->viewBox.min());
-        c->lineto(Geom::Point(root->viewBox.max()[Geom::X],root->viewBox.min()[Geom::Y]));
-        c->lineto(Geom::Point(root->viewBox.max()[Geom::X],root->viewBox.max()[Geom::Y]));
-        c->lineto(Geom::Point(root->viewBox.min()[Geom::X],root->viewBox.max()[Geom::Y]));
-        c->closepath();
-        Geom::Point page_center = root->viewBox.midpoint();
-        Geom::PathVector const box = c->get_pathvector();
-        Geom::Affine rot = Geom::identity();
-        rot *= Geom::Translate(page_center).inverse(); 
-        rot *= Geom::Rotate(Geom::rad_from_deg(nv->document_rotation * -1));
-        rot *=  Geom::Translate(page_center);
-        if (nv->document_rotation) {
-            SPCanvasItem *canvas_border = sp_canvas_bpath_new(desktop->getTempGroup(), c, true);
-            sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(canvas_border), 0xFF00009A, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
-            sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(canvas_border), 0, SP_WIND_RULE_NONZERO);
-            sp_canvas_item_affine_absolute(canvas_border, rot * root->vbt);
-            nv->page_border_rotated = desktop->add_temporary_canvasitem(canvas_border, 0); 
-        }
-        //sp_namedview_doc_rotate_guides(nv);
-        nv->document->getRoot()->set_rotation(nv->document_rotation);
-        c->unref();
-    }
-    if (nv->document_rotation) {
-        nv->showborder = FALSE;
-    } else {
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        nv->showborder = prefs->getBool("/template/base/showborder", 1.0);
-    }
-   
-    SPDesktop * desktop = SP_ACTIVE_DESKTOP;
-    if (desktop) {
-//TODO: Remove knots of shapes on selected items
-//        Inkscape::Selection * sel = desktop->getSelection();
-//        std::vector<SPItem*> il(sel->items().begin(), sel->items().end());
-//        for (std::vector<SPItem*>::const_iterator l = il.begin(); l != il.end(); l++){
-//            SPItem *item = *l;
-//            sel->remove(item->getRepr());
-//            sel->add(item->getRepr());
-//        }
-        SPObject *updated = desktop->getDocument()->getRoot();
-        if (updated) {
-            updated->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-        }
-    }
-}
-
 static void sp_namedview_show_single_guide(SPGuide* guide, bool show)
 {
     if (show) {
@@ -1058,8 +964,6 @@ static void sp_namedview_lock_single_guide(SPGuide* guide, bool locked)
 {
     guide->set_locked(locked, true);
 }
-
-
 
 void sp_namedview_toggle_guides(SPDocument *doc, Inkscape::XML::Node *repr)
 {

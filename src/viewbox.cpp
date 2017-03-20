@@ -17,8 +17,6 @@
 #include "viewbox.h"
 #include "enums.h"
 #include "sp-item.h"
-#include "inkscape.h"
-#include "desktop.h"
 
 SPViewBox::SPViewBox()
     : viewBox_set(false)
@@ -27,11 +25,6 @@ SPViewBox::SPViewBox()
     , aspect_align(SP_ASPECT_XMID_YMID) // Default per spec
     , aspect_clip(SP_ASPECT_MEET)
     , c2p(Geom::identity())
-    , vbt(Geom::identity())
-    , rotation(Geom::identity())
-    , angle(0)
-    , previous_angle(0)
-    , rotated(false)
 {
 }
 
@@ -166,16 +159,6 @@ void SPViewBox::set_preserveAspectRatio(const gchar* value) {
   }
 }
 
-double SPViewBox::get_rotation() {
-    return this->angle;
-}
-
-void SPViewBox::set_rotation(double angle_val) {
-    this->previous_angle = this->angle;
-    this->angle = angle_val;
-    this->rotated = true;
-}
-
 // Apply scaling from viewbox
 void SPViewBox::apply_viewbox(const Geom::Rect& in, double scale_none) {
 
@@ -239,40 +222,21 @@ void SPViewBox::apply_viewbox(const Geom::Rect& in, double scale_none) {
           break;
       }
     }
-    /* Viewbox transform from scale and position */
-    vbt = Geom::identity();
-    vbt[0] = scale_x;
-    vbt[1] = 0.0;
-    vbt[2] = 0.0;
-    vbt[3] = scale_y;
-    vbt[4] = x - scale_x * this->viewBox.left();
-    vbt[5] = y - scale_y * this->viewBox.top();
-    /* Append viewbox and turn transformation */
-    Geom::Point page_center = this->viewBox.midpoint();
-    SPDesktop * desktop = SP_ACTIVE_DESKTOP;
-    if (this->angle > 0.0 || this->angle < 0.0 ) { //!0
-        if (desktop) {
-            rotation = Geom::Translate(page_center).inverse() * Geom::Rotate(Geom::rad_from_deg(angle)) * Geom::Translate(page_center);
-            this->c2p = rotation * vbt * this->c2p;
-        } else {
-            this->c2p = vbt * this->c2p;
-        }
-    } else {
-        this->c2p = vbt * this->c2p;
-    }
-    if (desktop && this->rotated) {
-        Geom::Rect view = desktop->get_display_area();
-        Geom::Point view_center = desktop->doc2dt(view.midpoint());
-        Geom::Affine center_rotation = Geom::identity();
-        center_rotation *= Geom::Translate(page_center * vbt).inverse();
-        center_rotation *= Geom::Rotate(Geom::rad_from_deg(this->angle - this->previous_angle));
-        center_rotation *= Geom::Translate(page_center * vbt);
-        view_center = desktop->dt2doc(view_center * center_rotation);
-        desktop->zoom_relative_center_point(view_center, 1.0);
-        this->rotated = false;
-    }
-}
 
+    /* Viewbox transform from scale and position */
+    Geom::Affine q;
+    q[0] = scale_x;
+    q[1] = 0.0;
+    q[2] = 0.0;
+    q[3] = scale_y;
+    q[4] = x - scale_x * this->viewBox.left();
+    q[5] = y - scale_y * this->viewBox.top();
+
+    // std::cout << "  q\n" << q << std::endl;
+
+    /* Append viewbox transformation */
+    this->c2p = q * this->c2p;
+}
 
 SPItemCtx SPViewBox::get_rctx(const SPItemCtx* ictx, double scale_none) {
 

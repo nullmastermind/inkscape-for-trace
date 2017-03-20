@@ -155,10 +155,6 @@ static gint sp_dt_ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidge
                     }
                 }
 
-                SPNamedView *namedview = desktop->namedview;
-                //if (namedview && namedview->document_rotation) {
-                //    normal *= Geom::Rotate(Geom::rad_from_deg(namedview->document_rotation * -1));
-                //}
                 guide = sp_guideline_new(desktop->guides, NULL, event_dt, normal);
                 sp_guideline_set_color(SP_GUIDELINE(guide), desktop->namedview->guidehicolor);
 

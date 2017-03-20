@@ -41,6 +41,7 @@
 #include "desktop.h"
 
 #include "display/curve.h"
+#include "display/sp-canvas.h"
 #include "document.h"
 #include "ui/tools/freehand-base.h"
 #include "extension/effect.h"
