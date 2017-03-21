@@ -1885,7 +1885,8 @@ void ZoomVerb::perform(SPAction *action, void *data)
     gdouble zoom_inc   =
         prefs->getDoubleLimited( "/options/zoomincrement/value",  M_SQRT2, 1.01, 10 );
     gdouble rotate_inc =
-        prefs->getDoubleLimited( "/options/rotateincrement/value", M_PI/90, M_PI/180, M_PI/4, "°" );
+        prefs->getDoubleLimited( "/options/rotateincrement/value", 15, 1, 90, "°" );
+    rotate_inc *= M_PI/180.0;
 
     double zcorr = 1.0;
     Glib::ustring abbr = prefs->getString("/options/zoomcorrection/unit");

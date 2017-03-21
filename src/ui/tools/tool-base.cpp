@@ -760,8 +760,9 @@ bool ToolBase::root_handler(GdkEvent* event) {
             /* ctrl + shift, rotate */
 
             double rotate_inc = prefs->getDoubleLimited(
-                    "/options/rotateincrement/value", M_PI/90, M_PI/180, M_PI/4, "°" );
-
+                    "/options/rotateincrement/value", 15, 1, 90, "°" );
+            rotate_inc *= M_PI/180.0;
+            
             switch (event->scroll.direction) {
             case GDK_SCROLL_UP:
                 // Do nothing

@@ -215,6 +215,7 @@ protected:
     UI::Widget::PrefSpinUnit    _steps_scale;
     UI::Widget::PrefSpinUnit    _steps_inset;
     UI::Widget::PrefSpinButton  _steps_zoom;
+    UI::Widget::PrefSpinButton  _steps_rotate;
 
     UI::Widget::PrefRadioButton _t_sel_trans_obj;
     UI::Widget::PrefRadioButton _t_sel_trans_outl;

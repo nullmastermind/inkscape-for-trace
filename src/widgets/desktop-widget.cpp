@@ -595,8 +595,9 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
     gtk_widget_set_tooltip_text (dtw->rotation_status, _("Rotation. (Also Ctrl+Shift+Scroll)"));
     gtk_widget_set_size_request (dtw->rotation_status, STATUS_ROTATION_WIDTH, -1);
     gtk_entry_set_width_chars (GTK_ENTRY (dtw->rotation_status), 7);
-    gtk_spin_button_set_numeric (GTK_SPIN_BUTTON (dtw->rotation_status), FALSE);
-    gtk_spin_button_set_digits (GTK_SPIN_BUTTON (dtw->rotation_status), 2);
+    gtk_spin_button_set_numeric    (GTK_SPIN_BUTTON (dtw->rotation_status), FALSE);
+    gtk_spin_button_set_digits     (GTK_SPIN_BUTTON (dtw->rotation_status), 2);
+    gtk_spin_button_set_increments (GTK_SPIN_BUTTON (dtw->rotation_status), 1.0, 15.0);
     gtk_spin_button_set_update_policy (GTK_SPIN_BUTTON (dtw->rotation_status), GTK_UPDATE_ALWAYS);
 
     // Callbacks
