@@ -759,26 +759,26 @@ bool ToolBase::root_handler(GdkEvent* event) {
         if (ctrl & shift) {
             /* ctrl + shift, rotate */
 
-            double rel_rotate;
-            double rotate_inc = 2.0 * M_PI/180.0;
+            double rotate_inc = prefs->getDoubleLimited(
+                    "/options/rotateincrement/value", M_PI/90, M_PI/180, M_PI/4, "°" );
 
             switch (event->scroll.direction) {
             case GDK_SCROLL_UP:
-                rel_rotate = rotate_inc;
+                // Do nothing
                 break;
 
             case GDK_SCROLL_DOWN:
-                rel_rotate = -rotate_inc;
+                rotate_inc = -rotate_inc;
                 break;
 
             default:
-                rel_rotate = 0.0;
+                rotate_inc = 0.0;
                 break;
             }
 
-            if (rel_rotate != 0.0) {
+            if (rotate_inc != 0.0) {
                 Geom::Point const scroll_dt = desktop->point();
-                desktop->rotate_relative_keep_point(scroll_dt, rel_rotate);
+                desktop->rotate_relative_keep_point(scroll_dt, rotate_inc);
             }
 
         } else if (event->scroll.state & GDK_SHIFT_MASK) {
