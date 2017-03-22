@@ -1996,6 +1996,40 @@ void ZoomVerb::perform(SPAction *action, void *data)
         case SP_VERB_ROTATE_ZERO:
             dt->rotate_absolute_center_point( midpoint, 0.0 );
             break;
+        case SP_VERB_FLIP_HORIZONTAL:
+        {
+            // While drawing with the pen/pencil tool, flip towards the end of the unfinished path
+            if (tools_isactive(dt, TOOLS_FREEHAND_PENCIL) || tools_isactive(dt, TOOLS_FREEHAND_PEN)) {
+                SPCurve *rc = SP_DRAW_CONTEXT(ec)->red_curve;
+                if (!rc->is_empty()) {
+                    Geom::Point const flip_to (*rc->last_point());
+                    dt->flip_relative_keep_point(flip_to, SPDesktop::FLIP_HORIZONTAL);
+                    break;
+                }
+            }
+
+            dt->flip_relative_center_point( midpoint, SPDesktop::FLIP_HORIZONTAL);
+            break;
+        }
+        case SP_VERB_FLIP_VERTICAL:
+        {
+            gint mul = 1 + Inkscape::UI::Tools::gobble_key_events( GDK_KEY_parenright, 0);
+            // While drawing with the pen/pencil tool, flip towards the end of the unfinished path
+            if (tools_isactive(dt, TOOLS_FREEHAND_PENCIL) || tools_isactive(dt, TOOLS_FREEHAND_PEN)) {
+                SPCurve *rc = SP_DRAW_CONTEXT(ec)->red_curve;
+                if (!rc->is_empty()) {
+                    Geom::Point const flip_to (*rc->last_point());
+                    dt->flip_relative_keep_point(flip_to, SPDesktop::FLIP_VERTICAL);
+                    break;
+                }
+            }
+
+            dt->flip_relative_center_point( midpoint, SPDesktop::FLIP_VERTICAL);
+            break;
+        }
+        case SP_VERB_FLIP_NONE:
+            dt->flip_absolute_center_point( midpoint, SPDesktop::FLIP_NONE);
+            break;
         case SP_VERB_TOGGLE_RULERS:
             dt->toggleRulers();
             break;
@@ -2960,6 +2994,10 @@ Verb *Verb::_base_verbs[] = {
     new ZoomVerb(SP_VERB_ROTATE_CW,   "RotateClockwise",        N_("Rotate Clockwise"),         N_("Rotate canvas clockwise"),         NULL),
     new ZoomVerb(SP_VERB_ROTATE_CCW,  "RotateCounterClockwise", N_("Rotate Counter-Clockwise"), N_("Rotate canvas counter-clockwise"), NULL),
     new ZoomVerb(SP_VERB_ROTATE_ZERO, "RotateZero",             N_("Rotate Zero"),              N_("Reset canvas rotation to zero"),   NULL),
+
+    new ZoomVerb(SP_VERB_FLIP_HORIZONTAL, "FlipHorizontal",     N_("Flip Horizontal"), N_("Flip canvas horizontally"), INKSCAPE_ICON("object-flip-horizontal")),
+    new ZoomVerb(SP_VERB_FLIP_VERTICAL,   "FlipVertical",       N_("Flip Vertical"),   N_("Flip canvas vertically"),   INKSCAPE_ICON("object-flip-vertical")),
+    new ZoomVerb(SP_VERB_FLIP_NONE,       "FlipNone",           N_("Flip None"),       N_("Undo any flip"),            NULL),
 
 
 // WHY ARE THE FOLLOWING ZoomVerbs???

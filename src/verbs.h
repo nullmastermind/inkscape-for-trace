@@ -271,6 +271,11 @@ enum {
     SP_VERB_ROTATE_CCW,
     SP_VERB_ROTATE_ZERO,
 
+    /* Canvas Flip */
+    SP_VERB_FLIP_HORIZONTAL,
+    SP_VERB_FLIP_VERTICAL,
+    SP_VERB_FLIP_NONE,
+
     /* Desktop settings */
     SP_VERB_TOGGLE_RULERS,
     SP_VERB_TOGGLE_SCROLLBARS,

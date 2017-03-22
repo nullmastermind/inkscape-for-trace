@@ -853,7 +853,7 @@ CanvasXYGrid::Update (Geom::Affine const &affine, unsigned int /*flags*/)
             scaling_factor = 5;
 
         scaled[dim] = false;
-        while (sw[dim].length() < 8.0) {
+        while (fabs(sw[dim].length()) < 8.0) {
             scaled[dim] = true;
             sw[dim] *= scaling_factor;
             /* First pass, go up to the major line spacing, then
@@ -927,8 +927,8 @@ CanvasXYGrid::Render (SPCanvasBuf *buf)
         Geom::Line axis = Geom::Line::from_origin_and_vector( ow, sw[dim]       );
         Geom::Line orth = Geom::Line::from_origin_and_vector( ow, sw[(dim+1)%2] );
 
-        double spacing = fabs( sw[(dim+1)%2].length());  // Spacing between grid lines.
-        double dash    = fabs( sw[dim].length());        // Total length of dash pattern.
+        double spacing = sw[(dim+1)%2].length();  // Spacing between grid lines.
+        double dash    = sw[dim].length();        // Total length of dash pattern.
 
         // std::cout << "  axis: " << axis.origin() << ", " << axis.vector() << std::endl;
         // std::cout << "  spacing: " << spacing << std::endl;
@@ -941,9 +941,12 @@ CanvasXYGrid::Render (SPCanvasBuf *buf)
 
             // We need signed distance... lib2geom offers only positive distance.
             double distance = signed_distance( buf->rect.corner(c), axis );
-            if (dim == 1 ) { // YFLIP?
+
+            // Correct it for coordinate flips (inverts handedness).
+            if (Geom::cross( axis.vector(), orth.vector() ) > 0 ) {
                 distance = -distance;
             }
+
             if (distance < min)
                 min = distance;
             if (distance > max)
@@ -996,7 +999,9 @@ CanvasXYGrid::Render (SPCanvasBuf *buf)
                     // Dash pattern must use spacing from orthogonal direction.
                     // Offset is to center dash on orthogonal lines.
                     double offset = fmod( signed_distance( x[0], orth ), sw[dim].length());
-                    if (dim == 1) offset = -offset;
+                    if (Geom::cross( axis.vector(), orth.vector() ) > 0 ) {
+                        offset = -offset;
+                    }
 
                     double dashes[2];
                     if (!scaled[dim] && (j % empspacing) != 0) {

@@ -124,7 +124,8 @@ void CtrlRect::render(SPCanvasBuf *buf)
         if (_shadow_width > 0 && !_dashed) {
 
             // Offset by half stroke width (_shadow_width is in window coordinates).
-            Geom::Point shadow( _shadow_width/2.0, _shadow_width/2.0 );
+            // Need to handle change in handedness with flips.
+            Geom::Point shadow( _shadow_width/2.0, (_affine.det()>0?-1:1)*_shadow_width/2.0 );
             shadow *= Geom::Rotate( rotation );
 
             if (axis_aligned) {

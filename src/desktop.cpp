@@ -1129,6 +1129,48 @@ SPDesktop::rotate_relative_center_point (Geom::Point const &c, double rotate)
 
 
 /**
+ * Flip keeping the point 'c' fixed in the desktop window.
+ */
+void
+SPDesktop::flip_absolute_keep_point (Geom::Point const &c, CanvasFlip flip)
+{
+    Geom::Point w = d2w( c ); // Must be before flip.
+    _current_affine.setFlip( flip );
+    set_display_area( c, w );
+}
+
+
+void
+SPDesktop::flip_relative_keep_point (Geom::Point const &c, CanvasFlip flip)
+{
+    Geom::Point w = d2w( c ); // Must be before flip.
+    _current_affine.addFlip( flip );
+    set_display_area( c, w );
+}
+
+
+/**
+ * Flip aligning the point 'c' to the center of desktop window.
+ */
+void 
+SPDesktop::flip_absolute_center_point (Geom::Point const &c, CanvasFlip flip)
+{
+    _current_affine.setFlip( flip );
+    Geom::Rect viewbox = canvas->getViewbox();
+    set_display_area( c, viewbox.midpoint() );
+}
+
+
+void 
+SPDesktop::flip_relative_center_point (Geom::Point const &c, CanvasFlip flip)
+{
+    _current_affine.addFlip( flip );
+    Geom::Rect viewbox = canvas->getViewbox();
+    set_display_area( c, viewbox.midpoint() );
+}
+
+
+/**
  * Scroll canvas by to a particular point (window coordinates).
  */
 void
