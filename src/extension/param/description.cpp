@@ -17,6 +17,7 @@
 #include <gtkmm/label.h>
 #include <glibmm/i18n.h>
 #include <glibmm/markup.h>
+#include <glibmm/regex.h>
 
 #include "xml/node.h"
 #include "extension/extension.h"
@@ -40,18 +41,28 @@ ParamDescription::ParamDescription(const gchar * name,
     : Parameter(name, guitext, desc, scope, gui_hidden, gui_tip, indent, ext)
     , _value(NULL)
     , _mode(mode)
+    , _preserve_whitespace(false)
 {
-    // printf("Building Description\n");
-    const char * defaultval = NULL;
-    if (xml->firstChild() != NULL) {
-        defaultval = xml->firstChild()->content();
+    Glib::ustring defaultval;
+    Inkscape::XML::Node * cur_child = xml->firstChild();
+    while (cur_child != NULL) {
+        if (cur_child->type() == XML::TEXT_NODE && cur_child->content() != NULL) {
+            defaultval += cur_child->content();
+        } else if (cur_child->type() == XML::ELEMENT_NODE && !g_strcmp0(cur_child->name(), "extension:br")) {
+            defaultval += "<br/>";
+        }
+        cur_child = cur_child->next();
     }
 
-    if (defaultval != NULL) {
-        _value = g_strdup(defaultval);
+    if (defaultval != Glib::ustring("")) {
+        _value = g_strdup(defaultval.c_str());
     }
 
     _context = xml->attribute("msgctxt");
+
+    if (g_strcmp0(xml->attribute("xml:space"), "preserve") == 0) {
+        _preserve_whitespace = true;
+    }
 
     return;
 }
@@ -67,13 +78,26 @@ ParamDescription::get_widget (SPDocument * /*doc*/, Inkscape::XML::Node * /*node
         return NULL;
     }
 
-    Glib::ustring newguitext;
+    Glib::ustring newguitext = _value;
 
-    if (_context != NULL) {
-        newguitext = g_dpgettext2(NULL, _context, _value);
+    // do replacements in the source string matching those performed by xgettext to allow for proper translation
+    if (_preserve_whitespace) {
+        // xgettext copies the source string verbatim in this case, so no changes needed
     } else {
-        newguitext = _(_value);
+        // remove all whitespace from start/end of string and replace intermediate whitespace with a single space
+        newguitext = Glib::Regex::create("^\\s+|\\s+$")->replace_literal(newguitext, 0, "", (Glib::RegexMatchFlags)0);
+        newguitext = Glib::Regex::create("\\s+")->replace_literal(newguitext, 0, " ", (Glib::RegexMatchFlags)0);
     }
+
+    // translate
+    if (_context != NULL) {
+        newguitext = g_dpgettext2(NULL, _context, newguitext.c_str());
+    } else {
+        newguitext = _(newguitext.c_str());
+    }
+
+    // finally replace all remaining <br/> with a real newline character
+    newguitext = Glib::Regex::create("<br/>")->replace_literal(newguitext, 0, "\n", (Glib::RegexMatchFlags)0);
 
     Gtk::Label * label = Gtk::manage(new Gtk::Label());
     if (_mode == HEADER) {
