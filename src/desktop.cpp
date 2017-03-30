@@ -40,7 +40,9 @@
 #include "desktop-style.h"
 #include "device-manager.h"
 #include "display/canvas-arena.h"
+#include "display/canvas-debug.h"
 #include "display/canvas-grid.h"
+#include "display/canvas-rotate.h"
 #include "display/canvas-temporary-item-list.h"
 #include "display/drawing-group.h"
 #include "display/gnome-canvas-acetate.h"
@@ -129,7 +131,6 @@ SPDesktop::SPDesktop() :
     layers->_layer_deactivated_signal.connect(sigc::bind(sigc::ptr_fun(_layer_deactivated), this));
     layers->_layer_changed_signal.connect(sigc::bind(sigc::ptr_fun(_layer_hierarchy_changed), this));
     selection = Inkscape::GC::release( new Inkscape::Selection(layers, this) );
-    // _current_affine.setRotate(M_PI/4); // To test zooming with rotation
 }
 
 void
@@ -221,10 +222,10 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *aCanvas, Inkscape::UI::View::EditWid
     // being selected? or does it intercept some of the events that should have gone to the
     // node handler? see bug https://bugs.launchpad.net/inkscape/+bug/414142)
     gridgroup = (SPCanvasGroup *) sp_canvas_item_new (main, SP_TYPE_CANVAS_GROUP, NULL);
-    guides = (SPCanvasGroup *) sp_canvas_item_new (main, SP_TYPE_CANVAS_GROUP, NULL);
-    sketch = (SPCanvasGroup *) sp_canvas_item_new (main, SP_TYPE_CANVAS_GROUP, NULL);
+    guides    = (SPCanvasGroup *) sp_canvas_item_new (main, SP_TYPE_CANVAS_GROUP, NULL);
+    sketch    = (SPCanvasGroup *) sp_canvas_item_new (main, SP_TYPE_CANVAS_GROUP, NULL);
     tempgroup = (SPCanvasGroup *) sp_canvas_item_new (main, SP_TYPE_CANVAS_GROUP, NULL);
-    controls = (SPCanvasGroup *) sp_canvas_item_new (main, SP_TYPE_CANVAS_GROUP, NULL);
+    controls  = (SPCanvasGroup *) sp_canvas_item_new (main, SP_TYPE_CANVAS_GROUP, NULL);
 
     // Set the select tool as the active tool.
     set_event_context2("/tools/select");
@@ -252,7 +253,8 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *aCanvas, Inkscape::UI::View::EditWid
     _doc2dt[5] = document->getHeight().value("px");
     sp_canvas_item_affine_absolute (SP_CANVAS_ITEM (drawing), _doc2dt);
 
-    _modified_connection = namedview->connectModified(sigc::bind<2>(sigc::ptr_fun(&_namedview_modified), this));
+    _modified_connection =
+        namedview->connectModified(sigc::bind<2>(sigc::ptr_fun(&_namedview_modified), this));
 
     Inkscape::DrawingItem *ai = document->getRoot()->invoke_show(
             SP_CANVAS_ARENA (drawing)->drawing,
@@ -314,6 +316,10 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *aCanvas, Inkscape::UI::View::EditWid
 
     temporary_item_list = new Inkscape::Display::TemporaryItemList( this );
     snapindicator = new Inkscape::Display::SnapIndicator ( this );
+
+    canvas_rotate = sp_canvas_item_new (root, SP_TYPE_CANVAS_ROTATE, NULL);
+    sp_canvas_item_hide( canvas_rotate );
+    // canvas_debug = sp_canvas_item_new (main, SP_TYPE_CANVAS_DEBUG, NULL);
 }
 
 

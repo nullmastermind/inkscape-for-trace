@@ -4,7 +4,9 @@ set(display_SRC
 	canvas-arena.cpp
 	canvas-axonomgrid.cpp
 	canvas-bpath.cpp
+	canvas-debug.cpp
 	canvas-grid.cpp
+	canvas-rotate.cpp
 	canvas-temporary-item-list.cpp
 	canvas-temporary-item.cpp
 	canvas-text.cpp
@@ -64,7 +66,9 @@ set(display_SRC
 	canvas-arena.h
 	canvas-axonomgrid.h
 	canvas-bpath.h
+	canvas-debug.h
 	canvas-grid.h
+	canvas-rotate.h
 	canvas-temporary-item-list.h
 	canvas-temporary-item.h
 	canvas-text.h

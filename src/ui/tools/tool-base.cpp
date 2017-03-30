@@ -22,12 +22,21 @@
 
 #include "shortcuts.h"
 #include "file.h"
+
+#include "ui/interface.h"
+#include "ui/event-debug.h"
+#include "ui/tool/control-point.h"
+#include "ui/shape-editor.h"
 #include "ui/tools/tool-base.h"
+#include "ui/tools-switch.h"
+#include "ui/tools/lpe-tool.h"
 
 #include <gdk/gdkkeysyms.h>
 #include <glibmm/i18n.h>
 
 #include "display/sp-canvas.h"
+#include "display/sp-canvas-group.h"
+#include "display/canvas-rotate.h"
 #include "xml/node-event-vector.h"
 #include "sp-cursor.h"
 #include "desktop.h"
@@ -36,16 +45,11 @@
 #include "desktop-style.h"
 #include "sp-namedview.h"
 #include "selection.h"
-#include "ui/interface.h"
 #include "macros.h"
-#include "ui/tools-switch.h"
 #include "message-context.h"
 #include "gradient-drag.h"
 #include "rubberband.h"
 #include "selcue.h"
-#include "ui/tools/lpe-tool.h"
-#include "ui/tool/control-point.h"
-#include "ui/shape-editor.h"
 #include "sp-guide.h"
 #include "knot-ptr.h"
 
@@ -323,6 +327,8 @@ static gdouble accelerate_scroll(GdkEvent *event, gdouble acceleration,
 }
 
 bool ToolBase::root_handler(GdkEvent* event) {
+
+    // ui_dump_event (event, "ToolBase::root_handler");
     static Geom::Point button_w;
     static unsigned int panning = 0;
     static unsigned int panning_cursor = 0;
@@ -374,7 +380,22 @@ bool ToolBase::root_handler(GdkEvent* event) {
             break;
 
         case 2:
-            if (event->button.state & GDK_SHIFT_MASK) {
+            if (event->button.state & GDK_CONTROL_MASK) {
+                // On screen canvas rotation preview
+
+                // Grab background before doing anything else
+                sp_canvas_rotate_start (SP_CANVAS_ROTATE(desktop->canvas_rotate),
+                                        desktop->canvas->_backing_store);
+                sp_canvas_item_ungrab (desktop->acetate, event->button.time);
+                sp_canvas_item_show (desktop->canvas_rotate);
+                sp_canvas_item_grab (desktop->canvas_rotate,
+                                     GDK_KEY_PRESS_MASK    | GDK_KEY_RELEASE_MASK    |
+                                     GDK_BUTTON_RELEASE_MASK |
+                                     GDK_POINTER_MOTION_MASK,
+                                     NULL, event->button.time );
+                // sp_canvas_item_hide (desktop->drawing);
+
+            } else if (event->button.state & GDK_SHIFT_MASK) {
                 zoom_rb = 2;
             } else {
                 // When starting panning, make sure there are no snap events pending because these might disable the panning again
@@ -384,9 +405,9 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 panning = 2;
 
                 sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
-                        GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK
-                                | GDK_POINTER_MOTION_HINT_MASK, NULL,
-                        event->button.time - 1);
+                                    GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK |
+                                    GDK_POINTER_MOTION_HINT_MASK,
+                                    NULL, event->button.time - 1);
 
             }
 
@@ -496,6 +517,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
         break;
 
     case GDK_BUTTON_RELEASE:
+
         xp = yp = 0;
 
         if (panning_cursor == 1) {
@@ -1187,47 +1209,6 @@ sp_event_context_get_shape_editor(ToolBase *ec) {
     return ec->shape_editor;
 }
 
-void event_context_print_event_info(GdkEvent *event, bool print_return) {
-    switch (event->type) {
-    case GDK_BUTTON_PRESS:
-        g_print("GDK_BUTTON_PRESS");
-        break;
-    case GDK_2BUTTON_PRESS:
-        g_print("GDK_2BUTTON_PRESS");
-        break;
-    case GDK_3BUTTON_PRESS:
-        g_print("GDK_3BUTTON_PRESS");
-        break;
-
-    case GDK_MOTION_NOTIFY:
-        g_print("GDK_MOTION_NOTIFY");
-        break;
-    case GDK_ENTER_NOTIFY:
-        g_print("GDK_ENTER_NOTIFY");
-        break;
-
-    case GDK_LEAVE_NOTIFY:
-        g_print("GDK_LEAVE_NOTIFY");
-        break;
-    case GDK_BUTTON_RELEASE:
-        g_print("GDK_BUTTON_RELEASE");
-        break;
-
-    case GDK_KEY_PRESS:
-        g_print("GDK_KEY_PRESS: %d", get_group0_keyval(&event->key));
-        break;
-    case GDK_KEY_RELEASE:
-        g_print("GDK_KEY_RELEASE: %d", get_group0_keyval(&event->key));
-        break;
-    default:
-        //g_print ("even type not recognized");
-        break;
-    }
-
-    if (print_return) {
-        g_print("\n");
-    }
-}
 
 /**
  * Analyses the current event, calculates the mouse speed, turns snapping off (temporarily) if the

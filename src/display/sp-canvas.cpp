@@ -1507,7 +1507,7 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
     buf.buf = NULL;
     buf.buf_rowstride = 0;
     buf.rect = paint_rect;
-    buf.visible_rect = canvas_rect;
+    buf.canvas_rect = canvas_rect;
     buf.is_empty = true;
 
     // create temporary surface
@@ -1571,7 +1571,7 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
 }
 
 struct PaintRectSetup {
-    Geom::IntRect big_rect;
+    Geom::IntRect canvas_rect;
     GTimeVal start_time;
     int max_pixels;
     Geom::Point mouse_loc;
@@ -1630,7 +1630,7 @@ int SPCanvas::paintRectInternal(PaintRectSetup const *setup, Geom::IntRect const
         gdk_window_begin_paint_rect(window, &r);
         */
 
-        paintSingleBuffer(this_rect, setup->big_rect, bw);
+        paintSingleBuffer(this_rect, setup->canvas_rect, bw);
         //gdk_window_end_paint(window);
         return 1;
     }
@@ -1695,6 +1695,7 @@ bool SPCanvas::paintRect(int xx0, int yy0, int xx1, int yy1)
 
     gtk_widget_get_allocation(GTK_WIDGET(this), &allocation);
 
+    // Find window rectangle in 'world coordinates'.
     Geom::IntRect canvas_rect = Geom::IntRect::from_xywh(_x0, _y0,
         allocation.width, allocation.height);
     Geom::IntRect paint_rect(xx0, yy0, xx1, yy1);
@@ -1705,7 +1706,7 @@ bool SPCanvas::paintRect(int xx0, int yy0, int xx1, int yy1)
     paint_rect = *area;
 
     PaintRectSetup setup;
-    setup.big_rect = paint_rect;
+    setup.canvas_rect = canvas_rect;
 
     // Save the mouse location
     gint x, y;

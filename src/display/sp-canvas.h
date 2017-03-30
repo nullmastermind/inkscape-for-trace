@@ -51,7 +51,7 @@ enum {
 struct SPCanvasBuf {
     cairo_t *ct;
     Geom::IntRect rect;
-    Geom::IntRect visible_rect;
+    Geom::IntRect canvas_rect; // visible window in world coordinates (i.e. offset by _x0, _y0)
 
     unsigned char *buf;
     int buf_rowstride;
@@ -174,8 +174,8 @@ public:
     bool _is_dragging;
     double _dx0;
     double _dy0;
-    int _x0; ///< World coordinate of the leftmost pixels
-    int _y0; ///< World coordinate of the topmost pixels
+    int _x0; ///< World coordinate of the leftmost pixels of window
+    int _y0; ///< World coordinate of the topmost pixels of window
 
     /// Image surface storing the contents of the widget
     cairo_surface_t *_backing_store;

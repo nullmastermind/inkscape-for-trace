@@ -177,6 +177,8 @@ public:
     SPCanvasGroup *tempgroup;   ///< contains temporary canvas items
     SPCanvasItem  *page;        ///< page background
     SPCanvasItem  *page_border; ///< page border
+    SPCanvasItem  *canvas_rotate; ///< quickly show canvas rotation
+    SPCanvasItem  *canvas_debug;  ///< shows tiling
     SPCSSAttr     *current;     ///< current style
     bool           _focusMode;  ///< Whether we're focused working or general working
 
