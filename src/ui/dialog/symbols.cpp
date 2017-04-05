@@ -547,9 +547,11 @@ SPDocument* read_vss( gchar* fullname, Glib::ustring name ) {
 
     tmpSVGOutput += "    <symbol id=\"" + ss.str() + "\">\n";
 
+#if WITH_LIBVISIO01
     if (titles.size() == output.size() && titles[i] != "") {
       tmpSVGOutput += "      <title>" + Glib::ustring(RVNGString::escapeXML(titles[i].cstr()).cstr()) + "</title>\n";
     }
+#endif
 
     std::istringstream iss( output[i].cstr() );
     std::string line;
