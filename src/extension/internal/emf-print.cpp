@@ -251,11 +251,7 @@ unsigned int PrintEmf::begin(Inkscape::Extension::Print *mod, SPDocument *doc)
             g_error("Fatal programming error in PrintEmf::begin at textcomment_set 1");
         }
 
-        char *oldlocale = g_strdup(setlocale(LC_NUMERIC, NULL));
-        setlocale(LC_NUMERIC, "C");
         snprintf(buff, sizeof(buff) - 1, "Drawing=%.1fx%.1fpx, %.1fx%.1fmm", _width, _height, Inkscape::Util::Quantity::convert(dwInchesX, "in", "mm"), Inkscape::Util::Quantity::convert(dwInchesY, "in", "mm"));
-        setlocale(LC_NUMERIC, oldlocale);
-        g_free(oldlocale);
         rec = textcomment_set(buff);
         if (!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)) {
             g_error("Fatal programming error in PrintEmf::begin at textcomment_set 1");
