@@ -167,6 +167,13 @@ if(WIN32)
   install(DIRECTORY ${MINGW_PATH}/share/icons/Adwaita
     DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons)
 
+  # translations for libraries (we usually shouldn't need many)
+  install(DIRECTORY ${MINGW_PATH}/share/locale
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/share
+    FILES_MATCHING
+    PATTERN "*gtk30.mo"
+    PATTERN "*gtkspell3.mo")
+    
   install(DIRECTORY ${MINGW_PATH}/share/poppler
     DESTINATION ${CMAKE_INSTALL_PREFIX}/share)
 
@@ -195,6 +202,11 @@ if(WIN32)
   # Aspell dictionaries
   install(DIRECTORY ${MINGW_LIB}/aspell-0.60
     DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
+
+  # Aspell backend for Enchant (gtkspell uses Enchant to access Aspell dictionaries)
+  install(FILES
+    ${MINGW_LIB}/enchant/libenchant_aspell.dll
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/enchant)
 
   # Necessary to run extensions on windows if it is not in the path
   if (HAVE_MINGW64)
