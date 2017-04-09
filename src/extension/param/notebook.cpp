@@ -55,27 +55,27 @@ public:
     static ParamNotebookPage * makepage (Inkscape::XML::Node * in_repr, Inkscape::Extension::Extension * in_ext);
 
     ParamNotebookPage(const gchar * name,
-                      const gchar * guitext,
-                      const gchar * desc,
-                      bool gui_hidden,
+                      const gchar * text,
+                      const gchar * description,
+                      bool hidden,
                       Inkscape::Extension::Extension * ext,
                       Inkscape::XML::Node * xml);
     ~ParamNotebookPage(void);
 
     Gtk::Widget * get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal);
     void paramString (std::list <std::string> &list);
-    gchar * get_guitext (void) {return _text;};
+    gchar * get_text (void) {return _text;};
     Parameter * get_param (const gchar * name);
 }; /* class ParamNotebookPage */
 
 
 ParamNotebookPage::ParamNotebookPage(const gchar * name,
-                                     const gchar * guitext,
-                                     const gchar * desc,
-                                     bool gui_hidden,
+                                     const gchar * text,
+                                     const gchar * description,
+                                     bool hidden,
                                      Inkscape::Extension::Extension * ext,
                                      Inkscape::XML::Node * xml)
-    : Parameter(name, guitext, desc, gui_hidden, /*indent*/ 0, ext)
+    : Parameter(name, text, description, hidden, /*indent*/ 0, ext)
 {
     parameters = NULL;
 
@@ -147,23 +147,23 @@ ParamNotebookPage *
 ParamNotebookPage::makepage (Inkscape::XML::Node * in_repr, Inkscape::Extension::Extension * in_ext)
 {
     const char * name;
-    const char * guitext;
-    const char * desc;
-    bool gui_hidden = false;
-    const char * gui_hide;
+    const char * text;
+    const char * description;
+    bool hidden = false;
+    const char * hide;
 
     name = in_repr->attribute("name");
-    guitext = in_repr->attribute("gui-text");
-    if (guitext == NULL)
-        guitext = in_repr->attribute("_gui-text");
-    desc = in_repr->attribute("gui-description");
-    if (desc == NULL)
-        desc = in_repr->attribute("_gui-description");
-    gui_hide = in_repr->attribute("gui-hidden");
-    if (gui_hide != NULL) {
-        if (strcmp(gui_hide, "1") == 0 ||
-            strcmp(gui_hide, "true") == 0) {
-                gui_hidden = true;
+    text = in_repr->attribute("gui-text");
+    if (text == NULL)
+        text = in_repr->attribute("_gui-text");
+    description = in_repr->attribute("gui-description");
+    if (description == NULL)
+        description = in_repr->attribute("_gui-description");
+    hide = in_repr->attribute("gui-hidden");
+    if (hide != NULL) {
+        if (strcmp(hide, "1") == 0 ||
+            strcmp(hide, "true") == 0) {
+                hidden = true;
         }
         /* else stays false */
     }
@@ -173,7 +173,7 @@ ParamNotebookPage::makepage (Inkscape::XML::Node * in_repr, Inkscape::Extension:
         return NULL;
     }
 
-    ParamNotebookPage * page = new ParamNotebookPage(name, guitext, desc, gui_hidden, in_ext, in_repr);
+    ParamNotebookPage * page = new ParamNotebookPage(name, text, description, hidden, in_ext, in_repr);
 
     /* Note: page could equal NULL */
     return page;
@@ -188,7 +188,7 @@ ParamNotebookPage::makepage (Inkscape::XML::Node * in_repr, Inkscape::Extension:
  */
 Gtk::Widget * ParamNotebookPage::get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal)
 {
-    if (_gui_hidden) {
+    if (_hidden) {
         return NULL;
     }
 
@@ -226,13 +226,13 @@ Gtk::Widget * ParamNotebookPage::get_widget(SPDocument * doc, Inkscape::XML::Nod
 
 
 ParamNotebook::ParamNotebook(const gchar * name,
-                             const gchar * guitext,
-                             const gchar * desc,
-                             bool gui_hidden,
+                             const gchar * text,
+                             const gchar * description,
+                             bool hidden,
                              int indent,
                              Inkscape::Extension::Extension * ext,
                              Inkscape::XML::Node * xml)
-    : Parameter(name, guitext, desc, gui_hidden, indent, ext)
+    : Parameter(name, text, description, hidden, indent, ext)
 {
     pages = NULL;
 
@@ -423,7 +423,7 @@ Parameter *ParamNotebookPage::get_param(const gchar * name)
  */
 Gtk::Widget * ParamNotebook::get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal)
 {
-    if (_gui_hidden) {
+    if (_hidden) {
         return NULL;
     }
 
@@ -436,7 +436,7 @@ Gtk::Widget * ParamNotebook::get_widget(SPDocument * doc, Inkscape::XML::Node * 
         i++;
         ParamNotebookPage * page = reinterpret_cast<ParamNotebookPage *>(list->data);
         Gtk::Widget * widg = page->get_widget(doc, node, changeSignal);
-        nb->append_page(*widg, _(page->get_guitext()));
+        nb->append_page(*widg, _(page->get_text()));
         if (!strcmp(_value, page->name())) {
             pagenr = i; // this is the page to be displayed?
         }

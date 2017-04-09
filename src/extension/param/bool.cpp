@@ -25,13 +25,13 @@ namespace Inkscape {
 namespace Extension {
 
 ParamBool::ParamBool(const gchar * name,
-                     const gchar * guitext,
-                     const gchar * desc,
-                     bool gui_hidden,
+                     const gchar * text,
+                     const gchar * description,
+                     bool hidden,
                      int indent,
                      Inkscape::Extension::Extension * ext,
                      Inkscape::XML::Node * xml)
-    : Parameter(name, guitext, desc, gui_hidden, indent, ext)
+    : Parameter(name, text, description, hidden, indent, ext)
     , _value(false)
 {
     const char * defaultval = NULL;
@@ -127,7 +127,7 @@ void ParamBool::string(std::string &string) const
 
 Gtk::Widget *ParamBool::get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal)
 {
-    if (_gui_hidden) {
+    if (_hidden) {
         return NULL;
     }
 

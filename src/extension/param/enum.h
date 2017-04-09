@@ -38,9 +38,9 @@ private:
 
 public:
     ParamComboBox(const gchar * name,
-                  const gchar * guitext,
-                  const gchar * desc,
-                  bool gui_hidden,
+                  const gchar * text,
+                  const gchar * description,
+                  bool hidden,
                   int indent,
                   Inkscape::Extension::Extension * ext,
                   Inkscape::XML::Node * xml);
@@ -58,9 +58,9 @@ public:
     const gchar * set (const gchar * in, SPDocument * doc, Inkscape::XML::Node * node);
 
     /**
-     * @returns true if guitext is part of this enum
+     * @returns true if text is part of this enum
      */
-    bool contains(const gchar * guitext, SPDocument const * /*doc*/, Inkscape::XML::Node const * /*node*/) const;
+    bool contains(const gchar * text, SPDocument const * /*doc*/, Inkscape::XML::Node const * /*node*/) const;
 
     void changed (void);
 }; /* class ParamComboBox */

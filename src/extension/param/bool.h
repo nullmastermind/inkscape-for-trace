@@ -33,9 +33,9 @@ public:
      * Use the superclass' allocator and set the \c _value.
      */
     ParamBool(const gchar * name,
-              const gchar * guitext,
-              const gchar * desc,
-              bool gui_hidden,
+              const gchar * text,
+              const gchar * description,
+              bool hidden,
               int indent,
               Inkscape::Extension::Extension * ext,
               Inkscape::XML::Node * xml);

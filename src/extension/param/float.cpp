@@ -28,14 +28,14 @@ namespace Extension {
 
 /** Use the superclass' allocator and set the \c _value. */
 ParamFloat::ParamFloat(const gchar * name,
-                       const gchar * guitext,
-                       const gchar * desc,
-                       bool gui_hidden,
+                       const gchar * text,
+                       const gchar * description,
+                       bool hidden,
                        int indent,
                        Inkscape::Extension::Extension * ext,
                        Inkscape::XML::Node * xml,
                        AppearanceMode mode)
-    : Parameter(name, guitext, desc, gui_hidden, indent, ext)
+    : Parameter(name, text, description, hidden, indent, ext)
     , _value(0.0)
     , _mode(mode)
     , _min(0.0)
@@ -168,7 +168,7 @@ void ParamFloatAdjustment::val_changed(void)
  */
 Gtk::Widget * ParamFloat::get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal)
 {
-    if (_gui_hidden) {
+    if (_hidden) {
         return NULL;
     }
 

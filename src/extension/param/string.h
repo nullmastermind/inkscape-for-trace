@@ -24,9 +24,9 @@ private:
     gint _max_length;
 public:
     ParamString(const gchar * name,
-                const gchar * guitext,
-                const gchar * desc,
-                bool gui_hidden,
+                const gchar * text,
+                const gchar * description,
+                bool hidden,
                 int indent,
                 Inkscape::Extension::Extension * ext,
                 Inkscape::XML::Node * xml);

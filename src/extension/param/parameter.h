@@ -49,14 +49,14 @@ class Parameter {
 
 public:
     Parameter(gchar const *name,
-              gchar const *guitext,
-              gchar const *desc,
-              bool gui_hidden,
+              gchar const *text,
+              gchar const *description,
+              bool hidden,
               int indent,
               Inkscape::Extension::Extension * ext);
 
     Parameter(gchar const *name,
-              gchar const *guitext,
+              gchar const *text,
               Inkscape::Extension::Extension * ext);
 
     virtual ~Parameter(void);
@@ -130,10 +130,10 @@ public:
 
     virtual Gtk::Widget * get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal);
 
-    gchar const * get_tooltip(void) const { return _desc; }
+    gchar const * get_tooltip(void) const { return _description; }
 
     /** Indicates if the GUI for this parameter is hidden or not */
-    bool get_gui_hidden() const { return _gui_hidden; }
+    bool get_hidden() const { return _hidden; }
 
     /** Indentation level of the parameter */
     int get_indent() const { return _indent; }
@@ -163,14 +163,14 @@ public:
 
 
 protected:
-    /** Description of the parameter. */
-    gchar *       _desc;
+    /** Parameter text to show as the GUI label. */
+    gchar * _text;
 
-    /** Text for the GUI selection of this. */
-    gchar *  _text;
+    /** Extended description of the parameter (crrently shown as tooltip on hover). */
+    gchar * _description;
 
-    /** Whether the GUI is visible. */
-    bool _gui_hidden;
+    /** Whether the parameter is visible. */
+    bool _hidden;
 
     /** Indentation level of the parameter. */
     int _indent;
@@ -191,7 +191,7 @@ protected:
 
 private:
     /** Which extension is this parameter attached to. */
-    Inkscape::Extension::Extension *extension;
+    Inkscape::Extension::Extension *_extension;
 
     /** The name of this parameter. */
     gchar *_name;

@@ -53,13 +53,13 @@ guint32 ParamColor::set( guint32 in, SPDocument * /*doc*/, Inkscape::XML::Node *
 }
 
 ParamColor::ParamColor(const gchar * name,
-                       const gchar * guitext,
-                       const gchar * desc,
-                       bool gui_hidden,
+                       const gchar * text,
+                       const gchar * description,
+                       bool hidden,
                        int indent,
                        Inkscape::Extension::Extension * ext,
                        Inkscape::XML::Node * xml)
-    : Parameter(name, guitext, desc, gui_hidden, indent, ext)
+    : Parameter(name, text, description, hidden, indent, ext)
     , _changeSignal(0)
 {
     const char * defaulthex = NULL;
@@ -92,7 +92,7 @@ Gtk::Widget *ParamColor::get_widget( SPDocument * /*doc*/, Inkscape::XML::Node *
 {
     using Inkscape::UI::Widget::ColorNotebook;
 
-    if (_gui_hidden) return NULL;
+    if (_hidden) return NULL;
 
     if (changeSignal) {
         _changeSignal = new sigc::signal<void>(*changeSignal);
