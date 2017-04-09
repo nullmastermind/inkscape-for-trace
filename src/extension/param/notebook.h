@@ -46,7 +46,6 @@ public:
                   const gchar * desc,
                   const Parameter::_scope_t scope,
                   bool gui_hidden,
-                  const gchar * gui_tip,
                   int indent,
                   Inkscape::Extension::Extension * ext,
                   Inkscape::XML::Node * xml);

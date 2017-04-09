@@ -61,7 +61,6 @@ public:
               gchar const *desc,
               const Parameter::_scope_t scope,
               bool gui_hidden,
-              gchar const *gui_tip,
               int indent,
               Inkscape::Extension::Extension * ext);
 
@@ -184,9 +183,6 @@ protected:
 
     /** Whether the GUI is visible. */
     bool _gui_hidden;
-
-    /** A tip for the GUI if there is one. */
-    gchar *  _gui_tip;
 
     /** Indentation level of the parameter. */
     int _indent;

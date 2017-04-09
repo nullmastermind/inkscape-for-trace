@@ -32,12 +32,11 @@ ParamFloat::ParamFloat(const gchar * name,
                        const gchar * desc,
                        const Parameter::_scope_t scope,
                        bool gui_hidden,
-                       const gchar * gui_tip,
                        int indent,
                        Inkscape::Extension::Extension * ext,
                        Inkscape::XML::Node * xml,
                        AppearanceMode mode)
-    : Parameter(name, guitext, desc, scope, gui_hidden, gui_tip, indent, ext)
+    : Parameter(name, guitext, desc, scope, gui_hidden, indent, ext)
     , _value(0.0)
     , _mode(mode)
     , _min(0.0)

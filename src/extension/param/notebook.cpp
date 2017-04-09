@@ -59,7 +59,6 @@ public:
                       const gchar * desc,
                       const Parameter::_scope_t scope,
                       bool gui_hidden,
-                      const gchar * gui_tip,
                       Inkscape::Extension::Extension * ext,
                       Inkscape::XML::Node * xml);
     ~ParamNotebookPage(void);
@@ -76,10 +75,9 @@ ParamNotebookPage::ParamNotebookPage(const gchar * name,
                                      const gchar * desc,
                                      const Parameter::_scope_t scope,
                                      bool gui_hidden,
-                                     const gchar * gui_tip,
                                      Inkscape::Extension::Extension * ext,
                                      Inkscape::XML::Node * xml)
-    : Parameter(name, guitext, desc, scope, gui_hidden, gui_tip, /*indent*/ 0, ext)
+    : Parameter(name, guitext, desc, scope, gui_hidden, /*indent*/ 0, ext)
 {
     parameters = NULL;
 
@@ -157,15 +155,11 @@ ParamNotebookPage::makepage (Inkscape::XML::Node * in_repr, Inkscape::Extension:
     Parameter::_scope_t scope = Parameter::SCOPE_USER;
     bool gui_hidden = false;
     const char * gui_hide;
-    const char * gui_tip;
 
     name = in_repr->attribute("name");
     guitext = in_repr->attribute("gui-text");
     if (guitext == NULL)
         guitext = in_repr->attribute("_gui-text");
-    gui_tip = in_repr->attribute("gui-tip");
-    if (gui_tip == NULL)
-        gui_tip = in_repr->attribute("_gui-tip");
     desc = in_repr->attribute("gui-description");
     if (desc == NULL)
         desc = in_repr->attribute("_gui-description");
@@ -194,7 +188,7 @@ ParamNotebookPage::makepage (Inkscape::XML::Node * in_repr, Inkscape::Extension:
         }
     }
 
-    ParamNotebookPage * page = new ParamNotebookPage(name, guitext, desc, scope, gui_hidden, gui_tip, in_ext, in_repr);
+    ParamNotebookPage * page = new ParamNotebookPage(name, guitext, desc, scope, gui_hidden, in_ext, in_repr);
 
     /* Note: page could equal NULL */
     return page;
@@ -251,11 +245,10 @@ ParamNotebook::ParamNotebook(const gchar * name,
                              const gchar * desc,
                              const Parameter::_scope_t scope,
                              bool gui_hidden,
-                             const gchar * gui_tip,
                              int indent,
                              Inkscape::Extension::Extension * ext,
                              Inkscape::XML::Node * xml)
-    : Parameter(name, guitext, desc, scope, gui_hidden, gui_tip, indent, ext)
+    : Parameter(name, guitext, desc, scope, gui_hidden, indent, ext)
 {
     pages = NULL;
 
