@@ -47,19 +47,10 @@ extern Glib::ustring const extension_pref_root;
  */
 class Parameter {
 
-protected:
-    /** List of possible scopes. */
-    typedef enum {
-        SCOPE_USER,     /**<  Parameter value is saved in the user's configuration file. (default) */
-        SCOPE_DOCUMENT, /**<  Parameter value is saved in the document. */
-        SCOPE_NODE      /**<  Parameter value is attached to the node. */
-    } _scope_t;
-
 public:
     Parameter(gchar const *name,
               gchar const *guitext,
               gchar const *desc,
-              const Parameter::_scope_t scope,
               bool gui_hidden,
               int indent,
               Inkscape::Extension::Extension * ext);
@@ -174,9 +165,6 @@ public:
 protected:
     /** Description of the parameter. */
     gchar *       _desc;
-
-    /** Scope of the parameter. */
-    _scope_t _scope;
 
     /** Text for the GUI selection of this. */
     gchar *  _text;

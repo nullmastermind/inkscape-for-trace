@@ -57,7 +57,6 @@ public:
     ParamNotebookPage(const gchar * name,
                       const gchar * guitext,
                       const gchar * desc,
-                      const Parameter::_scope_t scope,
                       bool gui_hidden,
                       Inkscape::Extension::Extension * ext,
                       Inkscape::XML::Node * xml);
@@ -73,11 +72,10 @@ public:
 ParamNotebookPage::ParamNotebookPage(const gchar * name,
                                      const gchar * guitext,
                                      const gchar * desc,
-                                     const Parameter::_scope_t scope,
                                      bool gui_hidden,
                                      Inkscape::Extension::Extension * ext,
                                      Inkscape::XML::Node * xml)
-    : Parameter(name, guitext, desc, scope, gui_hidden, /*indent*/ 0, ext)
+    : Parameter(name, guitext, desc, gui_hidden, /*indent*/ 0, ext)
 {
     parameters = NULL;
 
@@ -151,8 +149,6 @@ ParamNotebookPage::makepage (Inkscape::XML::Node * in_repr, Inkscape::Extension:
     const char * name;
     const char * guitext;
     const char * desc;
-    const char * scope_str;
-    Parameter::_scope_t scope = Parameter::SCOPE_USER;
     bool gui_hidden = false;
     const char * gui_hide;
 
@@ -163,7 +159,6 @@ ParamNotebookPage::makepage (Inkscape::XML::Node * in_repr, Inkscape::Extension:
     desc = in_repr->attribute("gui-description");
     if (desc == NULL)
         desc = in_repr->attribute("_gui-description");
-    scope_str = in_repr->attribute("scope");
     gui_hide = in_repr->attribute("gui-hidden");
     if (gui_hide != NULL) {
         if (strcmp(gui_hide, "1") == 0 ||
@@ -178,17 +173,7 @@ ParamNotebookPage::makepage (Inkscape::XML::Node * in_repr, Inkscape::Extension:
         return NULL;
     }
 
-    if (scope_str != NULL) {
-        if (!strcmp(scope_str, "user")) {
-            scope = Parameter::SCOPE_USER;
-        } else if (!strcmp(scope_str, "document")) {
-            scope = Parameter::SCOPE_DOCUMENT;
-        } else if (!strcmp(scope_str, "node")) {
-            scope = Parameter::SCOPE_NODE;
-        }
-    }
-
-    ParamNotebookPage * page = new ParamNotebookPage(name, guitext, desc, scope, gui_hidden, in_ext, in_repr);
+    ParamNotebookPage * page = new ParamNotebookPage(name, guitext, desc, gui_hidden, in_ext, in_repr);
 
     /* Note: page could equal NULL */
     return page;
@@ -243,12 +228,11 @@ Gtk::Widget * ParamNotebookPage::get_widget(SPDocument * doc, Inkscape::XML::Nod
 ParamNotebook::ParamNotebook(const gchar * name,
                              const gchar * guitext,
                              const gchar * desc,
-                             const Parameter::_scope_t scope,
                              bool gui_hidden,
                              int indent,
                              Inkscape::Extension::Extension * ext,
                              Inkscape::XML::Node * xml)
-    : Parameter(name, guitext, desc, scope, gui_hidden, indent, ext)
+    : Parameter(name, guitext, desc, gui_hidden, indent, ext)
 {
     pages = NULL;
 

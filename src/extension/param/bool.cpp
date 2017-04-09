@@ -27,12 +27,11 @@ namespace Extension {
 ParamBool::ParamBool(const gchar * name,
                      const gchar * guitext,
                      const gchar * desc,
-                     const Parameter::_scope_t scope,
                      bool gui_hidden,
                      int indent,
                      Inkscape::Extension::Extension * ext,
                      Inkscape::XML::Node * xml)
-    : Parameter(name, guitext, desc, scope, gui_hidden, indent, ext)
+    : Parameter(name, guitext, desc, gui_hidden, indent, ext)
     , _value(false)
 {
     const char * defaultval = NULL;

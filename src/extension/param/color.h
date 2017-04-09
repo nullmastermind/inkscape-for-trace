@@ -34,7 +34,6 @@ public:
     ParamColor(const gchar * name,
                const gchar * guitext,
                const gchar * desc,
-               const Parameter::_scope_t scope,
                bool gui_hidden,
                int indent,
                Inkscape::Extension::Extension * ext,

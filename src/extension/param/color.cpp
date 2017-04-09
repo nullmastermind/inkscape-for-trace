@@ -55,12 +55,11 @@ guint32 ParamColor::set( guint32 in, SPDocument * /*doc*/, Inkscape::XML::Node *
 ParamColor::ParamColor(const gchar * name,
                        const gchar * guitext,
                        const gchar * desc,
-                       const Parameter::_scope_t scope,
                        bool gui_hidden,
                        int indent,
                        Inkscape::Extension::Extension * ext,
                        Inkscape::XML::Node * xml)
-    : Parameter(name, guitext, desc, scope, gui_hidden, indent, ext)
+    : Parameter(name, guitext, desc, gui_hidden, indent, ext)
     , _changeSignal(0)
 {
     const char * defaulthex = NULL;
