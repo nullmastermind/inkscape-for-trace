@@ -782,6 +782,12 @@ public:
     virtual void knot_click(unsigned int state);
 };
 
+class ArcKnotHolderEntityCenter : public KnotHolderEntity {
+public:
+    virtual Geom::Point knot_get() const;
+    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state);
+};
+
 /*
  * return values:
  *   1  : inside
@@ -983,6 +989,30 @@ ArcKnotHolderEntityRY::knot_click(unsigned int state)
     }
 }
 
+void
+ArcKnotHolderEntityCenter::knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, unsigned int state)
+{
+    SPGenericEllipse *ge = dynamic_cast<SPGenericEllipse *>(item);
+    g_assert(ge != NULL);
+
+    Geom::Point const s = snap_knot_position(p, state);
+
+    ge->cx = s[Geom::X];
+    ge->cy = s[Geom::Y];
+
+    item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+}
+
+Geom::Point
+ArcKnotHolderEntityCenter::knot_get() const
+{
+    SPGenericEllipse const *ge = dynamic_cast<SPGenericEllipse *>(item);
+    g_assert(ge != NULL);
+
+    return Geom::Point(ge->cx.computed, ge->cy.computed);
+}
+
+
 ArcKnotHolder::ArcKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderReleasedFunc relhandler) :
     KnotHolder(desktop, item, relhandler)
 {
@@ -990,6 +1020,7 @@ ArcKnotHolder::ArcKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderRelea
     ArcKnotHolderEntityRY *entity_ry = new ArcKnotHolderEntityRY();
     ArcKnotHolderEntityStart *entity_start = new ArcKnotHolderEntityStart();
     ArcKnotHolderEntityEnd *entity_end = new ArcKnotHolderEntityEnd();
+    ArcKnotHolderEntityCenter *entity_center = new ArcKnotHolderEntityCenter();
 
     entity_rx->create(desktop, item, this, Inkscape::CTRL_TYPE_SIZER,
                       _("Adjust ellipse <b>width</b>, with <b>Ctrl</b> to make circle"),
@@ -1011,10 +1042,15 @@ ArcKnotHolder::ArcKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderRelea
                          "ellipse for arc, <b>outside</b> for segment"),
                        SP_KNOT_SHAPE_CIRCLE, SP_KNOT_MODE_XOR);
 
+    entity_center->create(desktop, item, this, Inkscape::CTRL_TYPE_POINT,
+                          _("Move the ellipse"),
+                          SP_KNOT_SHAPE_CROSS);
+
     entity.push_back(entity_rx);
     entity.push_back(entity_ry);
     entity.push_back(entity_start);
     entity.push_back(entity_end);
+    entity.push_back(entity_center);
 
     add_pattern_knotholder();
 }
