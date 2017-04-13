@@ -2067,17 +2067,6 @@ sp_selected_path_do_offset(SPDesktop *desktop, bool expand, double prefOffset)
             res->Reset();
             theRes->ConvertToForme(res);
 
-            if (o_width >= 1.0)
-            {
-                res->ConvertEvenLines(1.0);
-                res->Simplify(1.0);
-            }
-            else
-            {
-                res->ConvertEvenLines(1.0*o_width);
-                res->Simplify(1.0 * o_width);
-            }
-
             delete theShape;
             delete theRes;
         }
