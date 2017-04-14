@@ -50,22 +50,22 @@ LPELattice::LPELattice(LivePathEffectObject *lpeobject) :
     
 {
     // register all your parameters here, so Inkscape knows which parameters this effect has:
-    registerParameter( dynamic_cast<Parameter *>(&grid_point0) );
-    registerParameter( dynamic_cast<Parameter *>(&grid_point1) );
-    registerParameter( dynamic_cast<Parameter *>(&grid_point2) );
-    registerParameter( dynamic_cast<Parameter *>(&grid_point3) );
-    registerParameter( dynamic_cast<Parameter *>(&grid_point4) );
-    registerParameter( dynamic_cast<Parameter *>(&grid_point5) );
-    registerParameter( dynamic_cast<Parameter *>(&grid_point6) );
-    registerParameter( dynamic_cast<Parameter *>(&grid_point7) );
-    registerParameter( dynamic_cast<Parameter *>(&grid_point8) );
-    registerParameter( dynamic_cast<Parameter *>(&grid_point9) );
-    registerParameter( dynamic_cast<Parameter *>(&grid_point10) );
-    registerParameter( dynamic_cast<Parameter *>(&grid_point11) );
-    registerParameter( dynamic_cast<Parameter *>(&grid_point12) );
-    registerParameter( dynamic_cast<Parameter *>(&grid_point13) );
-    registerParameter( dynamic_cast<Parameter *>(&grid_point14) );
-    registerParameter( dynamic_cast<Parameter *>(&grid_point15) );
+    registerParameter(&grid_point0);
+    registerParameter(&grid_point1);
+    registerParameter(&grid_point2);
+    registerParameter(&grid_point3);
+    registerParameter(&grid_point4);
+    registerParameter(&grid_point5);
+    registerParameter(&grid_point6);
+    registerParameter(&grid_point7);
+    registerParameter(&grid_point8);
+    registerParameter(&grid_point9);
+    registerParameter(&grid_point10);
+    registerParameter(&grid_point11);
+    registerParameter(&grid_point12);
+    registerParameter(&grid_point13);
+    registerParameter(&grid_point14);
+    registerParameter(&grid_point15);
 
     apply_to_clippath_and_mask = true;
 }

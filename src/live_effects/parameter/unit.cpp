@@ -55,9 +55,9 @@ UnitParam::param_set_default()
 }
 
 void 
-UnitParam::param_update_default(const Glib::ustring default_unit)
+UnitParam::param_update_default(const gchar * default_unit)
 {
-    defunit = unit_table.getUnit(default_unit);
+    defunit = unit_table.getUnit((Glib::ustring)default_unit);
 }
 
 void

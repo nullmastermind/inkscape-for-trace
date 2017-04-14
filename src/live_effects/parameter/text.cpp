@@ -50,9 +50,9 @@ TextParam::param_set_default()
 }
 
 void
-TextParam::param_update_default(Glib::ustring default_value)
+TextParam::param_update_default(const gchar * default_value)
 {
-    defvalue = default_value;
+    defvalue = (Glib::ustring)default_value;
 }
 
 void
@@ -130,7 +130,7 @@ TextParam::param_newWidget()
 }
 
 void
-TextParam::param_setValue(const Glib::ustring newvalue)
+TextParam::param_setValue(Glib::ustring newvalue)
 {
     param_effect->upd_params = true;
     value = newvalue;

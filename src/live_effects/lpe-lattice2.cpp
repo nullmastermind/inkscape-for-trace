@@ -256,12 +256,27 @@ LPELattice2::newWidget()
 
         ++it;
     }
-
+    if (show_default_widgets) {
+        Gtk::Label *default_label = Gtk::manage(new Gtk::Label(
+                                                Glib::ustring(_("<b>Defaults</b> set defaultable parameters")),
+                                                Gtk::ALIGN_START));
+        default_label->set_use_markup(true);
+        vbox->pack_start(*default_label, true, true, 2);
+        Gtk::HBox * defaultBox = Gtk::manage(new Gtk::HBox(true,0));
+        Gtk::Button *set_default = Gtk::manage(new Gtk::Button(Glib::ustring(_("Set"))));
+        set_default->signal_clicked().connect(sigc::mem_fun(*this, &LPELattice2::setDefaultParams));
+        Gtk::Button *reset_default = Gtk::manage(new Gtk::Button(Glib::ustring(_("Reset"))));
+        reset_default->signal_clicked().connect(sigc::mem_fun(*this, &LPELattice2::resetDefaultParams));
+        defaultBox->pack_start(*set_default, true, true, 2);
+        defaultBox->pack_start(*reset_default, true, true, 2);
+        vbox->pack_start(*defaultBox, true, true, 2);
+    }
     expander = Gtk::manage(new Gtk::Expander(Glib::ustring(_("Show Points"))));
     expander->add(*vbox_expander);
     expander->set_expanded(expanded);
     vbox->pack_start(*expander, true, true, 2);
     expander->property_expanded().signal_changed().connect(sigc::mem_fun(*this, &LPELattice2::onExpanderChanged) );
+    
     return dynamic_cast<Gtk::Widget *>(vbox);
 }
 

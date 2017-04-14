@@ -33,9 +33,11 @@ FontButtonParam::param_set_default()
 {
     param_setValue(defvalue);
 }
+
 void 
-FontButtonParam::param_update_default(const Glib::ustring default_value){
-    defvalue = default_value;
+FontButtonParam::param_update_default(const gchar * default_value)
+{
+    defvalue = (Glib::ustring)strdup(default_value);
 }
 
 bool
@@ -63,7 +65,7 @@ FontButtonParam::param_newWidget()
                                                         *param_wr,
                                                         param_effect->getRepr(),
                                                         param_effect->getSPDoc() ) );
-    Glib::ustring fontspec = param_getSVGValue();
+    Glib::ustring fontspec = (Glib::ustring)param_getSVGValue();
     fontbuttonwdg->setValue( fontspec);
     fontbuttonwdg->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change font button parameter"));
     param_effect->upd_params = false;
@@ -71,10 +73,11 @@ FontButtonParam::param_newWidget()
 }
 
 void
-FontButtonParam::param_setValue(const Glib::ustring newvalue)
+FontButtonParam::param_setValue(Glib::ustring newvalue)
 {
     value = newvalue;
 }
+
 
 } /* namespace LivePathEffect */
 

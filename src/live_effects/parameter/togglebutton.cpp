@@ -60,6 +60,18 @@ ToggleButtonParam::param_getSVGValue() const
     return str;
 }
 
+void 
+ToggleButtonParam::param_update_default(bool default_value)
+{
+    defvalue = default_value;
+}
+
+void 
+ToggleButtonParam::param_update_default(const gchar * default_value)
+{
+    param_update_default(helperfns_read_bool(default_value, defvalue));
+}
+
 Gtk::Widget *
 ToggleButtonParam::param_newWidget()
 {

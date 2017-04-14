@@ -37,9 +37,15 @@ BoolParam::param_set_default()
 }
 
 void 
-BoolParam::param_update_default(bool const default_value)
+BoolParam::param_update_default(bool default_value)
 {
     defvalue = default_value;
+}
+
+void 
+BoolParam::param_update_default(const gchar * default_value)
+{
+    param_update_default(helperfns_read_bool(default_value, defvalue));
 }
 
 bool

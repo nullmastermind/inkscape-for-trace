@@ -350,6 +350,21 @@ Gtk::Widget *LPETransform2Pts::newWidget()
     vbox->pack_start(*button2, true, true, 2);
     vbox->pack_start(*button3, true, true, 2);
     vbox->pack_start(*button4, true, true, 2);
+    if (show_default_widgets) {
+        Gtk::Label *default_label = Gtk::manage(new Gtk::Label(
+                                                Glib::ustring(_("<b>Defaults</b> set defaultable parameters")),
+                                                Gtk::ALIGN_START));
+        default_label->set_use_markup(true);
+        vbox->pack_start(*default_label, true, true, 2);
+        Gtk::HBox * defaultBox = Gtk::manage(new Gtk::HBox(true,0));
+        Gtk::Button *set_default = Gtk::manage(new Gtk::Button(Glib::ustring(_("Set"))));
+        set_default->signal_clicked().connect(sigc::mem_fun(*this, &LPETransform2Pts::setDefaultParams));
+        Gtk::Button *reset_default = Gtk::manage(new Gtk::Button(Glib::ustring(_("Reset"))));
+        reset_default->signal_clicked().connect(sigc::mem_fun(*this, &LPETransform2Pts::resetDefaultParams));
+        defaultBox->pack_start(*set_default, true, true, 2);
+        defaultBox->pack_start(*reset_default, true, true, 2);
+        vbox->pack_start(*defaultBox, true, true, 2);
+    }
     return dynamic_cast<Gtk::Widget *>(vbox);
 }
 
