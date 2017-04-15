@@ -26,8 +26,7 @@ PointParam::PointParam( const Glib::ustring& label, const Glib::ustring& tip,
     :   Parameter(label, tip, key, wr, effect), 
         defvalue(default_value),
         liveupdate(live_update),
-        knoth(NULL),
-        _pointwdg(NULL)
+        knoth(NULL)
 {
     knot_shape = SP_KNOT_SHAPE_DIAMOND;
     knot_mode  = SP_KNOT_MODE_XOR;
@@ -59,7 +58,7 @@ PointParam::param_get_default() const{
 }
 
 void
-PointParam::param_update_default(const Geom::Point default_point)
+PointParam::param_update_default(Geom::Point default_point)
 {
     defvalue = default_point;
 }
@@ -78,9 +77,7 @@ PointParam::param_setValue(Geom::Point newpoint, bool write)
     if(knoth && liveupdate){
         knoth->update_knots();
     }
-    if (_pointwdg) {
-        _pointwdg->setValue( newpoint );
-    }
+    param_effect->upd_params = true;
 }
 
 bool
@@ -116,7 +113,7 @@ PointParam::param_transform_multiply(Geom::Affine const& postmul, bool /*set*/)
 Gtk::Widget *
 PointParam::param_newWidget()
 {
-    _pointwdg = Gtk::manage(
+    Inkscape::UI::Widget::RegisteredTransformedPoint * pointwdg = Gtk::manage(
         new Inkscape::UI::Widget::RegisteredTransformedPoint( param_label,
                                                               param_tooltip,
                                                               param_key,
@@ -125,13 +122,13 @@ PointParam::param_newWidget()
                                                               param_effect->getSPDoc() ) );
     Geom::Affine transf = Geom::Scale(1, -1);
     transf[5] = SP_ACTIVE_DOCUMENT->getHeight().value("px");
-    _pointwdg->setTransform(transf);
-    _pointwdg->setValue( *this );
-    _pointwdg->clearProgrammatically();
-    _pointwdg->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change point parameter"));
+    pointwdg->setTransform(transf);
+    pointwdg->setValue( *this );
+    pointwdg->clearProgrammatically();
+    pointwdg->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change point parameter"));
 
     Gtk::HBox * hbox = Gtk::manage( new Gtk::HBox() );
-    static_cast<Gtk::HBox*>(hbox)->pack_start(*_pointwdg, true, true);
+    static_cast<Gtk::HBox*>(hbox)->pack_start(*pointwdg, true, true);
     static_cast<Gtk::HBox*>(hbox)->show_all_children();
     param_effect->upd_params = false;
     return dynamic_cast<Gtk::Widget *> (hbox);
