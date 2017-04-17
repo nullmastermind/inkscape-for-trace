@@ -66,7 +66,7 @@ class HpglOutput(inkex.Effect):
             hpglInit += ';FS%d' % self.options.force
         if self.options.speed > 0:
             hpglInit += ';VS%d' % self.options.speed
-        self.hpgl = hpglInit + self.hpgl + ';SP0;PU0,0;IN; '
+        self.hpgl = hpglInit + self.hpgl + ';PU0,0;SP0;IN; '
 
     def output(self):
         # print to file
