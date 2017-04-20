@@ -158,7 +158,8 @@ void Path::Outline(Path *dest, double width, JoinType join, ButtType butt, doubl
                                              join, butt, miter, false, false, endPos, endButt);
                     Geom::Point endNor=endButt.ccw();
                     if (butt == butt_round) {
-                        dest->ArcTo (endPos+width*endNor,  1.0001 * width, 1.0001 * width, 0.0, true, true);
+                        dest->ArcTo (endPos+width*endButt, width, width, 0.0, false, true);
+                        dest->ArcTo (endPos+width*endNor, width, width, 0.0, false, true);
                     }  else if (butt == butt_square) {
                         dest->LineTo (endPos-width*endNor+width*endButt);
                         dest->LineTo (endPos+width*endNor+width*endButt);
@@ -175,7 +176,8 @@ void Path::Outline(Path *dest, double width, JoinType join, ButtType butt, doubl
 
                     endNor=endButt.ccw();
                     if (butt == butt_round) {
-                        dest->ArcTo (endPos+width*endNor, 1.0001 * width, 1.0001 * width, 0.0, true, true);
+                        dest->ArcTo (endPos+width*endButt, width, width, 0.0, false, true);
+                        dest->ArcTo (endPos+width*endNor, width, width, 0.0, false, true);
                     } else if (butt == butt_square) {
                         dest->LineTo (endPos-width*endNor+width*endButt);
                         dest->LineTo (endPos+width*endNor+width*endButt);
