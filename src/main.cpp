@@ -146,6 +146,7 @@ enum {
     SP_ARG_EXPORT_BACKGROUND,
     SP_ARG_EXPORT_BACKGROUND_OPACITY,
     SP_ARG_EXPORT_SVG,
+    SP_ARG_EXPORT_INKSCAPE_SVG,
     SP_ARG_EXPORT_PS,
     SP_ARG_EXPORT_EPS,
     SP_ARG_EXPORT_PS_LEVEL,
@@ -205,6 +206,7 @@ static gboolean sp_export_area_snap = FALSE;
 static gboolean sp_export_use_hints = FALSE;
 static gboolean sp_export_id_only = FALSE;
 static gchar *sp_export_svg = NULL;
+static gchar *sp_export_inkscape_svg = NULL;
 static gchar *sp_export_ps = NULL;
 static gchar *sp_export_eps = NULL;
 static gint sp_export_ps_level = 3;
@@ -229,6 +231,7 @@ static gchar *sp_dbus_name = NULL;
 #endif // WITH_DBUS
 static gchar *sp_export_png_utf8 = NULL;
 static gchar *sp_export_svg_utf8 = NULL;
+static gchar *sp_export_inkscape_svg_utf8 = NULL;
 static gchar *sp_global_printer_utf8 = NULL;
 
 #ifdef WITH_YAML
@@ -257,6 +260,7 @@ static void resetCommandlineGlobals() {
         sp_export_use_hints = FALSE;
         sp_export_id_only = FALSE;
         sp_export_svg = NULL;
+        sp_export_inkscape_svg = NULL;
         sp_export_ps = NULL;
         sp_export_eps = NULL;
         sp_export_ps_level = 3;
@@ -282,6 +286,7 @@ static void resetCommandlineGlobals() {
 
         sp_export_png_utf8 = NULL;
         sp_export_svg_utf8 = NULL;
+        sp_export_inkscape_svg_utf8 = NULL;
         sp_global_printer_utf8 = NULL;
 }
 
@@ -392,6 +397,10 @@ struct poptOption options[] = {
      N_("Background opacity of exported bitmap (either 0.0 to 1.0, or 1 to 255)"),
      N_("VALUE")},
 
+    {"export-inkscape-svg", 0,
+     POPT_ARG_STRING, &sp_export_inkscape_svg, SP_ARG_EXPORT_INKSCAPE_SVG,
+     N_("Export document to an inkscape SVG file (similar to save as.)"),
+     N_("FILENAME")},
     {"export-plain-svg", 'l',
      POPT_ARG_STRING, &sp_export_svg, SP_ARG_EXPORT_SVG,
      N_("Export document to plain SVG file (no sodipodi or inkscape namespaces)"),
@@ -903,6 +912,7 @@ static int sp_common_main( int argc, char const **argv, GSList **flDest )
     {
         fixupSingleFilename( &sp_export_png, &sp_export_png_utf8 );
         fixupSingleFilename( &sp_export_svg, &sp_export_svg_utf8 );
+        fixupSingleFilename( &sp_export_inkscape_svg, &sp_export_inkscape_svg_utf8 );
         fixupSingleFilename( &sp_global_printer, &sp_global_printer_utf8 );
 #ifdef WITH_YAML
         fixupSingleFilename( &sp_xverbs_yaml, &sp_xverbs_yaml_utf8 );
@@ -914,6 +924,8 @@ static int sp_common_main( int argc, char const **argv, GSList **flDest )
             sp_export_png_utf8 = g_strdup( sp_export_png );
         if ( sp_export_svg )
             sp_export_svg_utf8 = g_strdup( sp_export_svg );
+        if ( sp_export_inkscape_svg )
+            sp_export_inkscape_svg_utf8 = g_strdup( sp_export_inkscape_svg );
         if ( sp_global_printer )
             sp_global_printer_utf8 = g_strdup( sp_global_printer );
 #ifdef WITH_YAML
@@ -1135,20 +1147,21 @@ static int sp_process_file_list(GSList *fl)
             }
 #endif // WITH_DBUS
 
-            if (!sp_export_svg && (sp_vacuum_defs || has_performed_actions)) {
+            if (!sp_export_svg && !sp_export_inkscape_svg && (sp_vacuum_defs || has_performed_actions)) {
                 // save under the name given in the command line
                 Inkscape::Extension::save(Inkscape::Extension::db.get("org.inkscape.output.svg.inkscape"), doc, filename, false,
                             false, false, Inkscape::Extension::FILE_SAVE_METHOD_INKSCAPE_SVG);
             }
+
             if (sp_global_printer) {
                 sp_print_document_to_file(doc, sp_global_printer);
             }
             if (sp_export_png || (sp_export_id && sp_export_use_hints)) {
                 retVal |= sp_do_export_png(doc);
             }
-            if (sp_export_svg) {
+            if (sp_export_svg || sp_export_inkscape_svg) {
                 if (sp_export_text_to_path) {
-                	std::vector<SPItem*> items;
+                    std::vector<SPItem*> items;
                     SPRoot *root = doc->getRoot();
                     doc->ensureUpToDate();
                     for (auto& iter: root->children) {
@@ -1180,9 +1193,15 @@ static int sp_process_file_list(GSList *fl)
                     s.set(obj);
                     s.fitCanvas(false);
                 }
-
-                Inkscape::Extension::save(Inkscape::Extension::db.get("org.inkscape.output.svg.plain"), doc, sp_export_svg, false,
-                            false, false, Inkscape::Extension::FILE_SAVE_METHOD_SAVE_COPY);
+                if (sp_export_svg) {
+                    Inkscape::Extension::save(Inkscape::Extension::db.get("org.inkscape.output.svg.plain"), doc, sp_export_svg, false,
+                                false, false, Inkscape::Extension::FILE_SAVE_METHOD_SAVE_COPY);
+                }
+                if (sp_export_inkscape_svg) {
+                    // Export as inkscape SVG.
+                    Inkscape::Extension::save(Inkscape::Extension::db.get("org.inkscape.output.svg.inkscape"), doc, sp_export_inkscape_svg, false,
+                                false, false, Inkscape::Extension::FILE_SAVE_METHOD_INKSCAPE_SVG);
+                }
             }
             if (sp_export_ps) {
                 retVal |= do_export_ps_pdf(doc, sp_export_ps, "image/x-postscript");
