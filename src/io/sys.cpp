@@ -68,20 +68,18 @@ void Inkscape::IO::dump_fopen_call( char const *utf8name, char const *id )
 FILE *Inkscape::IO::fopen_utf8name( char const *utf8name, char const *mode )
 {
     FILE* fp = NULL;
-#ifndef WIN32
     gchar *filename = g_filename_from_utf8( utf8name, -1, NULL, NULL, NULL );
     if ( filename )
     {
-        fp = std::fopen(filename, mode);
+        Glib::ustring how( mode );
+        if ( how.find("b") == Glib::ustring::npos )
+        {
+            how.append("b"); // not needed in POSIX but doesn't hurt either
+        }
+        fp = g_fopen(filename, how.c_str());
         g_free(filename);
         filename = 0;
     }
-#else
-    Glib::ustring how( mode );
-    how.append("b");
-
-    fp = g_fopen(utf8name, how.c_str());
-#endif
     return fp;
 }
 
@@ -89,19 +87,13 @@ FILE *Inkscape::IO::fopen_utf8name( char const *utf8name, char const *mode )
 int Inkscape::IO::mkdir_utf8name( char const *utf8name )
 {
     int retval = -1;
-#ifndef WIN32
     gchar *filename = g_filename_from_utf8( utf8name, -1, NULL, NULL, NULL );
     if ( filename )
     {
-        retval = ::mkdir(filename, S_IRWXU | S_IRGRP | S_IXGRP);
+        retval = g_mkdir(filename, S_IRWXU | S_IRGRP | S_IXGRP); // The mode argument is ignored on Windows.
         g_free(filename);
         filename = 0;
     }
-#else
-
-    // Mode should be ingnored inside of glib on the way in
-    retval = g_mkdir( utf8name, 0 );
-#endif
     return retval;
 }
 
