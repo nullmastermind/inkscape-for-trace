@@ -54,7 +54,7 @@ private:
     ScalarParam split_gap;
     BoolParam copies_to_360;
     BoolParam fuse_paths;
-    BoolParam join_paths;
+    BoolParam mirror_copies;
     BoolParam split_items;
     Geom::Point A;
     Geom::Point B;
