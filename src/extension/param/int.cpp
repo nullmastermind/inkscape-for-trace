@@ -28,16 +28,14 @@ namespace Extension {
 
 /** Use the superclass' allocator and set the \c _value. */
 ParamInt::ParamInt(const gchar * name,
-                   const gchar * guitext,
-                   const gchar * desc,
-                   const Parameter::_scope_t scope,
-                   bool gui_hidden,
-                   const gchar * gui_tip,
+                   const gchar * text,
+                   const gchar * description,
+                   bool hidden,
                    int indent,
                    Inkscape::Extension::Extension * ext,
                    Inkscape::XML::Node * xml,
                    AppearanceMode mode)
-    : Parameter(name, guitext, desc, scope, gui_hidden, gui_tip, indent, ext)
+    : Parameter(name, text, description, hidden, indent, ext)
     , _value(0)
     , _mode(mode)
     , _min(0)
@@ -151,7 +149,7 @@ void ParamIntAdjustment::val_changed(void)
 Gtk::Widget *
 ParamInt::get_widget (SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal)
 {
-    if (_gui_hidden) {
+    if (_hidden) {
         return NULL;
     }
 
