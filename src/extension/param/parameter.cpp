@@ -20,7 +20,6 @@
 #endif
 
 #include <cstring>
-#include <glibmm/i18n.h>
 
 #include "ui/widget/color-notebook.h"
 #include <xml/node.h>

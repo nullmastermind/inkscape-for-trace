@@ -15,7 +15,6 @@
 #include <gtkmm/scale.h>
 #include "ui/widget/spinbutton.h"
 #include "ui/widget/spin-scale.h"
-#include <glib/gi18n.h>
 
 #include "xml/node.h"
 #include "extension/extension.h"
