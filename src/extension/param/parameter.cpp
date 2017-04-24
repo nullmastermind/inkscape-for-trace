@@ -80,6 +80,14 @@ Parameter *Parameter::make(Inkscape::XML::Node *in_repr, Inkscape::Extension::Ex
     const char *description = in_repr->attribute("gui-description");
     if (description == NULL) {
         description = in_repr->attribute("_gui-description");
+        if (description != NULL) {
+            const char *context = in_repr->attribute("msgctxt");
+            if (context != NULL) {
+                description = g_dpgettext2(NULL, context, description);
+            } else {
+                description = _(description);
+            }
+        }
     }
     bool hidden = false;
     {

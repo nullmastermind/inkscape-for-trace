@@ -211,7 +211,7 @@ Gtk::Widget * ParamNotebookPage::get_widget(SPDocument * doc, Inkscape::XML::Nod
 
             gchar const * tip = param->get_tooltip();
             if (tip) {
-                widg->set_tooltip_text(_(tip));
+                widg->set_tooltip_text(tip);
             } else {
                 widg->set_tooltip_text("");
                 widg->set_has_tooltip(false);
