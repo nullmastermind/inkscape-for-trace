@@ -43,8 +43,6 @@ private:
     /** \brief  Internal value. */
     gchar * _value;
     AppearanceMode _mode;
-    const gchar* _context;
-    bool _preserve_whitespace;
 };
 
 }  /* namespace Extension */

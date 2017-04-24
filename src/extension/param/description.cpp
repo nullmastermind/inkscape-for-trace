@@ -39,7 +39,6 @@ ParamDescription::ParamDescription(const gchar * name,
     : Parameter(name, text, description, hidden, indent, ext)
     , _value(NULL)
     , _mode(mode)
-    , _preserve_whitespace(false)
 {
     // construct the text content by concatenating all (non-empty) text nodes,
     // removing all other nodes (e.g. comment nodes) and replacing <extension:br> elements with "<br/>"
@@ -71,9 +70,9 @@ ParamDescription::ParamDescription(const gchar * name,
 
     // translate if underscored version (_param) was used
     if (g_str_has_prefix(xml->name(), "extension:_")) {
-        _context = xml->attribute("msgctxt");
-        if (_context != NULL) {
-            value = g_dpgettext2(NULL, _context, value.c_str());
+        const gchar * context = xml->attribute("msgctxt");
+        if (context != NULL) {
+            value = g_dpgettext2(NULL, context, value.c_str());
         } else {
             value = _(value.c_str());
         }
