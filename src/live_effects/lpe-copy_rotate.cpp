@@ -138,41 +138,23 @@ LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem)
         Geom::Point line_start  = origin + dir * Geom::Rotate(-(Geom::rad_from_deg(starting_angle))) * size_divider;
         Geom::Point line_end = origin + dir * Geom::Rotate(-(Geom::rad_from_deg(rotation_angle + starting_angle))) * size_divider;
         Geom::Affine m = Geom::Translate(-origin) * Geom::Rotate(-(Geom::rad_from_deg(starting_angle)));
-        Geom::Affine r = Geom::identity();
         Geom::Point dir = unit_vector((Geom::Point)origin - Geom::middle_point(line_start,line_end));
-        if (mirror_copies) {
-            r *= Geom::Rotate(Geom::Angle(dir)).inverse();
-            r *= Geom::Scale(1, -1);
-            r *= Geom::Rotate(Geom::Angle(dir));
-        }
-        if (fuse_paths) {
-            size_t rest = 0;
-            for (size_t i = 1; i < num_copies; ++i) {
-                Geom::Rotate rot(-(Geom::rad_from_deg(rotation_angle * i)));
-                Geom::Affine t;
-                if( rest%2 == 0) {
-                    t = m * r * rot * Geom::Rotate(Geom::rad_from_deg(starting_angle)) * Geom::Translate(origin);
-                } else {
-                    t = m * rot * Geom::Rotate(Geom::rad_from_deg(starting_angle)) * Geom::Translate(origin);
-                }
-                t *= sp_lpe_item->transform;
-                toItem(t, i-1, reset);
-                rest ++;
+        size_t rest = 0;
+        for (size_t i = 1; i < num_copies; ++i) {
+            Geom::Affine r = Geom::identity();
+            if( rest%2 == 0 && mirror_copies) {
+                r *= Geom::Rotate(Geom::Angle(dir)).inverse();
+                r *= Geom::Scale(1, -1);
+                r *= Geom::Rotate(Geom::Angle(dir));
             }
-        } else {
-            size_t rest = 0;
-            for (size_t i = 1; i < num_copies; ++i) {
-                Geom::Rotate rot(-(Geom::rad_from_deg(rotation_angle * i)));
-                Geom::Affine t;
-                if( rest%2 == 0) {
-                    t = m * r * rot * Geom::Rotate(Geom::rad_from_deg(starting_angle)) * Geom::Translate(origin);
-                } else {
-                    t = m * rot * Geom::Rotate(Geom::rad_from_deg(starting_angle)) * Geom::Translate(origin);
-                }
-                t *= sp_lpe_item->transform;
-                toItem(t, i - 1, reset);
-                rest ++;
+            Geom::Rotate rot(-(Geom::rad_from_deg(rotation_angle * i)));
+            Geom::Affine t = m * r * rot * Geom::Rotate(Geom::rad_from_deg(starting_angle)) * Geom::Translate(origin);
+            if( rest%2 == 0 && mirror_copies) {
+                t = m * r * rot * Geom::Rotate(Geom::rad_from_deg(starting_angle)).inverse() * Geom::Translate(origin);
             }
+            t *= sp_lpe_item->transform;
+            toItem(t, i-1, reset);
+            rest ++;
         }
         reset = false;
     } else {
