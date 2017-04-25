@@ -15,6 +15,7 @@
  */
 
 #include "live_effects/effect.h"
+#include "live_effects/parameter/enum.h"
 #include "live_effects/parameter/parameter.h"
 #include "live_effects/parameter/text.h"
 #include "live_effects/parameter/point.h"
@@ -22,6 +23,13 @@
 
 namespace Inkscape {
 namespace LivePathEffect {
+
+enum RotateMethod {
+    RM_NORMAL,
+    RM_KALEIDOSCOPE,
+    RM_FUSE,
+    RM_END
+};
 
 class LPECopyRotate : public Effect, GroupBBoxEffect {
 public:
@@ -53,14 +61,13 @@ private:
     ScalarParam num_copies;
     ScalarParam split_gap;
     BoolParam copies_to_360;
-    BoolParam fuse_paths;
-    BoolParam kaleidoscope;
+    EnumParam<RotateMethod> method;
     BoolParam mirror_copies;
     BoolParam split_items;
     Geom::Point A;
     Geom::Point B;
     Geom::Point dir;
-    Geom::Point dir_gap;
+    Geom::Point half_dir;
     Geom::Point start_pos;
     Geom::Point rot_pos;
     Geom::Point previous_start_point;

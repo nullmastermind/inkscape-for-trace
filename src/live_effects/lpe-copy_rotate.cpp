@@ -30,6 +30,14 @@
 namespace Inkscape {
 namespace LivePathEffect {
 
+static const Util::EnumData<RotateMethod> RotateMethodData[RM_END] = {
+    { RM_NORMAL, N_("Normal"), "normal" },
+    { RM_KALEIDOSCOPE, N_("Kaleidoscope"), "kaleidoskope" },
+    { RM_FUSE, N_("Fuse paths"), "fuse_paths" }
+};
+static const Util::EnumDataConverter<RotateMethod>
+RMConverter(RotateMethodData, RM_END);
+
 bool 
 pointInTriangle(Geom::Point const &p, Geom::Point const &p1, Geom::Point const &p2, Geom::Point const &p3)
 {
@@ -54,26 +62,31 @@ LPECopyRotate::LPECopyRotate(LivePathEffectObject *lpeobject) :
     num_copies(_("Number of copies"), _("Number of copies of the original path"), "num_copies", &wr, this, 6),
     split_gap(_("Gap on split"), _("Gap on split"), "split_gap", &wr, this, -0.001),
     copies_to_360(_("360º Copies"), _("No rotation angle, fixed to 360º"), "copies_to_360", &wr, this, true),
-    fuse_paths(_("Fuse Paths"), _("Fuse by helper line, use fill-rule: evenodd for best result"), "fuse_paths", &wr, this, false),
+    method(_("Method:"), _("Rotate methods"), "method", RMConverter, &wr, this, RM_NORMAL),
     mirror_copies(_("Mirror copies"), _("Mirror between copies"), "mirror_copies", &wr, this, false),
     split_items(_("Split elements"), _("Split elements, this allow gradients and other paints."), "split_items", &wr, this, false),
-    kaleidoscope(_("Kaleidoscope"), _("Kaleidoscope, use fill-rule: evenodd for best result"), "kaleidoscope", &wr, this, false),
     dist_angle_handle(100.0)
 {
     show_orig_path = true;
     _provides_knotholder_entities = true;
+    //0.92 compatibility
+    if (strcmp(this->getRepr()->attribute("fuse_paths"), "true") == 0){
+        this->getRepr()->setAttribute("fuse_paths", NULL);
+        this->getRepr()->setAttribute("method", "kaleidoskope");
+        this->getRepr()->setAttribute("mirror_copies", "true");
+    };
     // register all your parameters here, so Inkscape knows which parameters this effect has:
-    registerParameter(&copies_to_360);
-    registerParameter(&fuse_paths);
-    registerParameter(&kaleidoscope);
-    registerParameter(&mirror_copies);
-    registerParameter(&split_items);
+    registerParameter(&method);
     registerParameter(&starting_angle);
     registerParameter(&starting_point);
     registerParameter(&rotation_angle);
     registerParameter(&num_copies);
     registerParameter(&split_gap);
     registerParameter(&origin);
+    registerParameter(&copies_to_360);
+    registerParameter(&mirror_copies);
+    registerParameter(&split_items);
+
     split_gap.param_set_range(-999999.0, 999999.0);
     split_gap.param_set_increments(0.1, 0.1);
     split_gap.param_set_digits(5);
@@ -134,29 +147,21 @@ LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem)
             counter++;
         }
         g_free(id);
-        double diagonal = Geom::distance(Geom::Point(boundingbox_X.min(),boundingbox_Y.min()),Geom::Point(boundingbox_X.max(),boundingbox_Y.max()));
-        Geom::Rect bbox(Geom::Point(boundingbox_X.min(),boundingbox_Y.min()),Geom::Point(boundingbox_X.max(),boundingbox_Y.max()));
-        double size_divider = Geom::distance(origin,bbox) + (diagonal * 2);
-        Geom::Point line_start  = origin + dir * Geom::Rotate(-(Geom::rad_from_deg(starting_angle))) * size_divider;
-        Geom::Point line_end = origin + dir * Geom::Rotate(-(Geom::rad_from_deg(rotation_angle + starting_angle))) * size_divider;
         Geom::Affine m = Geom::Translate(-origin) * Geom::Rotate(-(Geom::rad_from_deg(starting_angle)));
-        Geom::Point dir = unit_vector((Geom::Point)origin - Geom::middle_point(line_start,line_end));
-        size_t rest = 0;
         for (size_t i = 1; i < num_copies; ++i) {
             Geom::Affine r = Geom::identity();
-            if( rest%2 == 0 && mirror_copies) {
-                r *= Geom::Rotate(Geom::Angle(dir)).inverse();
+            if( i%2 != 0 && mirror_copies) {
+                r *= Geom::Rotate(Geom::Angle(half_dir)).inverse();
                 r *= Geom::Scale(1, -1);
-                r *= Geom::Rotate(Geom::Angle(dir));
+                r *= Geom::Rotate(Geom::Angle(half_dir));
             }
             Geom::Rotate rot(-(Geom::rad_from_deg(rotation_angle * i)));
             Geom::Affine t = m * r * rot * Geom::Rotate(Geom::rad_from_deg(starting_angle)) * Geom::Translate(origin);
-            if( rest%2 == 0 && mirror_copies) {
+            if( i%2 != 0 && mirror_copies) {
                 t = m * r * rot * Geom::Rotate(Geom::rad_from_deg(starting_angle)).inverse() * Geom::Translate(origin);
             }
             t *= sp_lpe_item->transform;
             toItem(t, i-1, reset);
-            rest ++;
         }
         reset = false;
     } else {
@@ -295,15 +300,6 @@ Gtk::Widget * LPECopyRotate::newWidget()
     vbox->set_border_width(5);
     vbox->set_homogeneous(false);
     vbox->set_spacing(2);
-    Gtk::HBox * hbox = Gtk::manage(new Gtk::HBox(false,0));
-    Gtk::VBox * vbox_expander = Gtk::manage( new Gtk::VBox(Effect::newWidget()) );
-    vbox_expander->set_border_width(0);
-    vbox_expander->set_spacing(2);
-    Gtk::Button * reset_button = Gtk::manage(new Gtk::Button(Glib::ustring(_("Reset styles"))));
-    reset_button->signal_clicked().connect(sigc::mem_fun (*this,&LPECopyRotate::resetStyles));
-    reset_button->set_size_request(140,30);
-    vbox->pack_start(*hbox, true,true,2);
-    hbox->pack_start(*reset_button, false, false,2);
     std::vector<Parameter *>::iterator it = param_vector.begin();
     while (it != param_vector.end()) {
         if ((*it)->widget_is_visible) {
@@ -325,6 +321,12 @@ Gtk::Widget * LPECopyRotate::newWidget()
 
         ++it;
     }
+    Gtk::HBox * hbox = Gtk::manage(new Gtk::HBox(false,0));
+    Gtk::Button * reset_button = Gtk::manage(new Gtk::Button(Glib::ustring(_("Reset styles"))));
+    reset_button->signal_clicked().connect(sigc::mem_fun (*this,&LPECopyRotate::resetStyles));
+    reset_button->set_size_request(110,20);
+    vbox->pack_start(*hbox, true,true,2);
+    hbox->pack_start(*reset_button, false, false,2);
     return dynamic_cast<Gtk::Widget *>(vbox);
 }
 
@@ -364,11 +366,11 @@ LPECopyRotate::doBeforeEffect (SPLPEItem const* lpeitem)
         rotation_angle.param_set_value(360.0/(double)num_copies);
     }
 
-    if (kaleidoscope && rotation_angle * num_copies > 360.1 && rotation_angle > 0) {
+    if ((method == RM_KALEIDOSCOPE || method == RM_FUSE) && rotation_angle * num_copies > 360.1 && rotation_angle > 0) {
         this->upd_params = true;
         num_copies.param_set_value(floor(360/rotation_angle));
     }
-    if (kaleidoscope && copies_to_360) {
+    if ((method == RM_KALEIDOSCOPE || method == RM_FUSE)  && copies_to_360) {
         this->upd_params = true;
         num_copies.param_set_increments(2.0,10.0);
         if ((int)num_copies%2 !=0) {
@@ -409,7 +411,7 @@ LPECopyRotate::doBeforeEffect (SPLPEItem const* lpeitem)
         starting_point.param_setValue(start_pos, true);
     }
     previous_start_point = (Geom::Point)starting_point;
-    if ( fuse_paths || copies_to_360 ) {
+    if ( method == RM_FUSE || copies_to_360 ) {
         rot_pos = origin;
     }
 }
@@ -599,9 +601,9 @@ LPECopyRotate::doEffect_path (Geom::PathVector const & path_in)
     divider.appendNew<Geom::LineSegment>((Geom::Point)origin);
     divider.appendNew<Geom::LineSegment>(line_end);
     divider.close();
-    dir_gap = unit_vector(Geom::middle_point(line_start,line_end) - (Geom::Point)origin);
-    if (split_items && (fuse_paths || kaleidoscope)) {
-        if (!kaleidoscope && fuse_paths) {
+    half_dir = unit_vector(Geom::middle_point(line_start,line_end) - (Geom::Point)origin);
+    if (method == RM_KALEIDOSCOPE || method == RM_FUSE) {
+        if (method != RM_KALEIDOSCOPE) {
             for (unsigned int i=0; i < path_in.size(); i++) {
                 Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2_in = path_in[i].toPwSb();
                 Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2_out = doEffect_pwd2(pwd2_in);
@@ -625,9 +627,9 @@ LPECopyRotate::doEffect_path (Geom::PathVector const & path_in)
             path_out = pig->getIntersection();
         }
         Geom::Affine r = Geom::identity();
-        Geom::Point gap = dir_gap * split_gap;
+        Geom::Point gap = half_dir * split_gap;
         path_out *= Geom::Translate(gap);
-        if ( kaleidoscope && !split_items ) {
+        if ( !split_items ) {
             path_out *= Geom::Translate(gap).inverse();
             Geom::PathVector path_out_c;
             for (unsigned int i=0; i < path_out.size(); i++) {
@@ -660,7 +662,7 @@ LPECopyRotate::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & p
 {
     using namespace Geom;
 
-    if ((num_copies == 1 && !fuse_paths) || (split_items && !fuse_paths && !kaleidoscope)) {
+    if ((num_copies == 1 && method != RM_FUSE) || (split_items && method != RM_FUSE && method != RM_KALEIDOSCOPE)) {
         return pwd2_in;
     }
 
@@ -671,18 +673,19 @@ LPECopyRotate::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & p
     for (int i = 0; i < num_copies; ++i) {
         Rotate rot(-rad_from_deg(rotation_angle * i));
         Geom::Affine r = Geom::identity();
-        if (mirror_copies && i%2 != 0) {
-            r *= Geom::Rotate(Geom::Angle(dir_gap)).inverse();
+        if( i%2 != 0 && mirror_copies) {
+            r *= Geom::Rotate(Geom::Angle(half_dir)).inverse();
             r *= Geom::Scale(1, -1);
-            r *= Geom::Rotate(Geom::Angle(dir_gap));
+            r *= Geom::Rotate(Geom::Angle(half_dir));
         }
-        Affine t = pre * r * rot * Translate(origin);
-        if (fuse_paths || kaleidoscope) {
+        Geom::Affine t = pre * r * rot * Geom::Rotate(Geom::rad_from_deg(starting_angle)) * Geom::Translate(origin);
+        if(mirror_copies && i%2 != 0) {
+            t = pre * r * rot * Geom::Rotate(Geom::rad_from_deg(starting_angle)).inverse() * Geom::Translate(origin);
+        }
+        if (method == RM_FUSE || method == RM_KALEIDOSCOPE) {
             Geom::PathVector join_pv = path_from_piecewise(pwd2_in * t , 0.01);
-            if (kaleidoscope) {
-                Geom::Point gap = dir_gap * rot * -0.01;
-                join_pv *= Geom::Translate(gap);
-            }
+            Geom::Point gap = half_dir * rot * -0.01;
+            join_pv *= Geom::Translate(gap);
             Geom::PathIntersectionGraph *pig = new Geom::PathIntersectionGraph(output_pv, join_pv);
             if (pig) {
                 if (!output_pv.empty()) {
@@ -695,7 +698,7 @@ LPECopyRotate::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & p
             output.concat(pwd2_in * t);
         }
     }
-    if (fuse_paths || kaleidoscope) {
+    if (method == RM_FUSE || method == RM_KALEIDOSCOPE) {
         output = paths_to_pw(output_pv);
     }
     return output;
