@@ -37,7 +37,7 @@ public:
     virtual ~LPECopyRotate();
     virtual void doOnApply (SPLPEItem const* lpeitem);
     virtual Geom::PathVector doEffect_path (Geom::PathVector const & path_in);
-    virtual Geom::Piecewise<Geom::D2<Geom::SBasis> > doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in);
+    Geom::PathVector doEffect_path_post (Geom::PathVector const & path_in);
     virtual void doBeforeEffect (SPLPEItem const* lpeitem);
     virtual void doAfterEffect (SPLPEItem const* lpeitem);
     virtual void setFusion(Geom::PathVector &path_in, Geom::Path divider, double sizeDivider);
@@ -59,7 +59,7 @@ private:
     ScalarParam starting_angle;
     ScalarParam rotation_angle;
     ScalarParam num_copies;
-    ScalarParam split_gap;
+    ScalarParam gap;
     BoolParam copies_to_360;
     EnumParam<RotateMethod> method;
     BoolParam mirror_copies;

@@ -60,7 +60,7 @@ LPECopyRotate::LPECopyRotate(LivePathEffectObject *lpeobject) :
     starting_angle(_("Starting angle"), _("Angle of the first copy"), "starting_angle", &wr, this, 0.0),
     rotation_angle(_("Rotation angle"), _("Angle between two successive copies"), "rotation_angle", &wr, this, 60.0),
     num_copies(_("Number of copies"), _("Number of copies of the original path"), "num_copies", &wr, this, 6),
-    split_gap(_("Gap on split"), _("Gap on split"), "split_gap", &wr, this, -0.001),
+    gap(_("Gap"), _("Gap"), "gap", &wr, this, -0.0001),
     copies_to_360(_("360º Copies"), _("No rotation angle, fixed to 360º"), "copies_to_360", &wr, this, true),
     method(_("Method:"), _("Rotate methods"), "method", RMConverter, &wr, this, RM_NORMAL),
     mirror_copies(_("Mirror copies"), _("Mirror between copies"), "mirror_copies", &wr, this, false),
@@ -70,27 +70,27 @@ LPECopyRotate::LPECopyRotate(LivePathEffectObject *lpeobject) :
     show_orig_path = true;
     _provides_knotholder_entities = true;
     //0.92 compatibility
-    if (strcmp(this->getRepr()->attribute("fuse_paths"), "true") == 0){
+    if (this->getRepr()->attribute("fuse_paths") && strcmp(this->getRepr()->attribute("fuse_paths"), "true") == 0){
         this->getRepr()->setAttribute("fuse_paths", NULL);
         this->getRepr()->setAttribute("method", "kaleidoskope");
         this->getRepr()->setAttribute("mirror_copies", "true");
     };
     // register all your parameters here, so Inkscape knows which parameters this effect has:
     registerParameter(&method);
+    registerParameter(&num_copies);
     registerParameter(&starting_angle);
     registerParameter(&starting_point);
     registerParameter(&rotation_angle);
-    registerParameter(&num_copies);
-    registerParameter(&split_gap);
     registerParameter(&origin);
+    registerParameter(&gap);
     registerParameter(&copies_to_360);
     registerParameter(&mirror_copies);
     registerParameter(&split_items);
 
-    split_gap.param_set_range(-999999.0, 999999.0);
-    split_gap.param_set_increments(0.1, 0.1);
-    split_gap.param_set_digits(5);
-    num_copies.param_set_range(0, 999999);
+    gap.param_set_range(-999999.0, 999999.0);
+    gap.param_set_increments(0.1, 0.1);
+    gap.param_set_digits(5);
+    num_copies.param_set_range(1, 999999);
     num_copies.param_make_integer(true);
     apply_to_clippath_and_mask = true;
     previous_num_copies = num_copies;
@@ -361,7 +361,7 @@ LPECopyRotate::doBeforeEffect (SPLPEItem const* lpeitem)
 {
     using namespace Geom;
     original_bbox(lpeitem);
-    if (copies_to_360) {
+    if (copies_to_360 && num_copies > 2) {
         this->upd_params = true;
         rotation_angle.param_set_value(360.0/(double)num_copies);
     }
@@ -370,7 +370,7 @@ LPECopyRotate::doBeforeEffect (SPLPEItem const* lpeitem)
         this->upd_params = true;
         num_copies.param_set_value(floor(360/rotation_angle));
     }
-    if ((method == RM_KALEIDOSCOPE || method == RM_FUSE)  && copies_to_360) {
+    if ((method == RM_KALEIDOSCOPE || method == RM_FUSE)  && mirror_copies && copies_to_360) {
         this->upd_params = true;
         num_copies.param_set_increments(2.0,10.0);
         if ((int)num_copies%2 !=0) {
@@ -594,7 +594,7 @@ LPECopyRotate::doEffect_path (Geom::PathVector const & path_in)
     Geom::PathVector path_out;
     double diagonal = Geom::distance(Geom::Point(boundingbox_X.min(),boundingbox_Y.min()),Geom::Point(boundingbox_X.max(),boundingbox_Y.max()));
     Geom::OptRect bbox = sp_lpe_item->geometricBounds();
-    size_divider = Geom::distance(origin,bbox) + (diagonal * 2);
+    size_divider = Geom::distance(origin,bbox) + (diagonal * 6);
     Geom::Point line_start  = origin + dir * Geom::Rotate(-(Geom::rad_from_deg(starting_angle))) * size_divider;
     Geom::Point line_end = origin + dir * Geom::Rotate(-(Geom::rad_from_deg(rotation_angle + starting_angle))) * size_divider;
     divider = Geom::Path(line_start);
@@ -604,15 +604,7 @@ LPECopyRotate::doEffect_path (Geom::PathVector const & path_in)
     half_dir = unit_vector(Geom::middle_point(line_start,line_end) - (Geom::Point)origin);
     if (method == RM_KALEIDOSCOPE || method == RM_FUSE) {
         if (method != RM_KALEIDOSCOPE) {
-            for (unsigned int i=0; i < path_in.size(); i++) {
-                Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2_in = path_in[i].toPwSb();
-                Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2_out = doEffect_pwd2(pwd2_in);
-                Geom::PathVector path = Geom::path_from_piecewise( pwd2_out, LPE_CONVERSION_TOLERANCE);
-                // add the output path vector to the already accumulated vector:
-                for (unsigned int j=0; j < path.size(); j++) {
-                    path_out.push_back(path[j]);
-                }
-            }
+            path_out = doEffect_path_post(path_in);
         } else {
             path_out = pathv_to_linear_and_cubic_beziers(path_in);
         }
@@ -622,56 +614,33 @@ LPECopyRotate::doEffect_path (Geom::PathVector const & path_in)
         Geom::PathVector triangle;
         triangle.push_back(divider);
         Geom::PathIntersectionGraph *pig = new Geom::PathIntersectionGraph(triangle, path_out);
-        if (pig && ! path_out.empty() && !triangle.empty()) {
-            //TODO: Here can produce a crash because some knows problems in new boolops code
+        if (pig && !path_out.empty() && !triangle.empty()) {
             path_out = pig->getIntersection();
         }
-        Geom::Affine r = Geom::identity();
-        Geom::Point gap = half_dir * split_gap;
-        path_out *= Geom::Translate(gap);
+        path_out *= Geom::Translate(half_dir * gap);
         if ( !split_items ) {
-            path_out *= Geom::Translate(gap).inverse();
-            Geom::PathVector path_out_c;
-            for (unsigned int i=0; i < path_out.size(); i++) {
-                Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2_in = path_out[i].toPwSb();
-                Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2_out = doEffect_pwd2(pwd2_in);
-                Geom::PathVector path = Geom::path_from_piecewise( pwd2_out, LPE_CONVERSION_TOLERANCE);
-                // add the output path vector to the already accumulated vector:
-                for (unsigned int j=0; j < path.size(); j++) {
-                    path_out_c.push_back(path[j]);
-                }
-            }
-            path_out = path_out_c;
+            path_out *= Geom::Translate(half_dir * gap).inverse();
+            path_out = doEffect_path_post(path_out);
         }
     } else {
-        for (unsigned int i=0; i < path_in.size(); i++) {
-            Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2_in = path_in[i].toPwSb();
-            Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2_out = doEffect_pwd2(pwd2_in);
-            Geom::PathVector path = Geom::path_from_piecewise( pwd2_out, LPE_CONVERSION_TOLERANCE);
-            // add the output path vector to the already accumulated vector:
-            for (unsigned int j=0; j < path.size(); j++) {
-                path_out.push_back(path[j]);
-            }
-        }
+        path_out = doEffect_path_post(path_in);
     }
     return pathv_to_linear_and_cubic_beziers(path_out);
 }
 
-Geom::Piecewise<Geom::D2<Geom::SBasis> >
-LPECopyRotate::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in)
+Geom::PathVector
+LPECopyRotate::doEffect_path_post (Geom::PathVector const & path_in)
 {
-    using namespace Geom;
-
-    if ((num_copies == 1 && method != RM_FUSE) || (split_items && method != RM_FUSE && method != RM_KALEIDOSCOPE)) {
-        return pwd2_in;
+    if ((split_items || num_copies == 1) && method != RM_FUSE && method != RM_KALEIDOSCOPE) {
+        return path_in;
     }
 
-    Piecewise<D2<SBasis> > output;
-    Affine pre = Translate(-origin) * Rotate(-rad_from_deg(starting_angle));
-    PathVector const original_pathv = pathv_to_linear_and_cubic_beziers(path_from_piecewise(remove_short_cuts(pwd2_in, 0.1), 0.001));
+    Geom::Affine pre = Geom::Translate(-origin) * Geom::Rotate(-Geom::rad_from_deg(starting_angle));
+    Geom::PathVector original_pathv = pathv_to_linear_and_cubic_beziers(path_in);
     Geom::PathVector output_pv;
+    Geom::PathVector output;
     for (int i = 0; i < num_copies; ++i) {
-        Rotate rot(-rad_from_deg(rotation_angle * i));
+        Geom::Rotate rot(-Geom::rad_from_deg(rotation_angle * i));
         Geom::Affine r = Geom::identity();
         if( i%2 != 0 && mirror_copies) {
             r *= Geom::Rotate(Geom::Angle(half_dir)).inverse();
@@ -683,9 +652,8 @@ LPECopyRotate::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & p
             t = pre * r * rot * Geom::Rotate(Geom::rad_from_deg(starting_angle)).inverse() * Geom::Translate(origin);
         }
         if (method == RM_FUSE || method == RM_KALEIDOSCOPE) {
-            Geom::PathVector join_pv = path_from_piecewise(pwd2_in * t , 0.01);
-            Geom::Point gap = half_dir * rot * -0.01;
-            join_pv *= Geom::Translate(gap);
+            Geom::PathVector join_pv = original_pathv * t;
+            join_pv *= Geom::Translate(half_dir * rot * gap);
             Geom::PathIntersectionGraph *pig = new Geom::PathIntersectionGraph(output_pv, join_pv);
             if (pig) {
                 if (!output_pv.empty()) {
@@ -695,11 +663,12 @@ LPECopyRotate::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & p
                 }
             }
         } else {
-            output.concat(pwd2_in * t);
+            output_pv = path_in * t;
+            output.insert(output.end(), output_pv.begin(), output_pv.end());
         }
     }
     if (method == RM_FUSE || method == RM_KALEIDOSCOPE) {
-        output = paths_to_pw(output_pv);
+        output = output_pv;
     }
     return output;
 }
