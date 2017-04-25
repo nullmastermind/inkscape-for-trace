@@ -81,13 +81,13 @@ LPECopyRotate::LPECopyRotate(LivePathEffectObject *lpeobject) :
     registerParameter(&starting_angle);
     registerParameter(&starting_point);
     registerParameter(&rotation_angle);
-    registerParameter(&origin);
     registerParameter(&gap);
+    registerParameter(&origin);
     registerParameter(&copies_to_360);
     registerParameter(&mirror_copies);
     registerParameter(&split_items);
 
-    gap.param_set_range(-999999.0, 999999.0);
+    gap.param_set_range(-99999.0, 99999.0);
     gap.param_set_increments(0.1, 0.1);
     gap.param_set_digits(5);
     num_copies.param_set_range(1, 999999);
