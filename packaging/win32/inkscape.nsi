@@ -136,11 +136,13 @@ ReserveFile /plugin UserInfo.dll
 ; Find inkscape distribution directory (uncomment line below to manually define)
 ;!define INKSCAPE_DIST_DIR ..\..\inkscape
 !ifdef INKSCAPE_DIST_DIR
-  ${!ifnexist} ${INKSCAPE_DIST_DIR}\inkscape.exe
+  ${!defineifexist} ${INKSCAPE_DIST_DIR}\inkscape.exe FOUND 1
+  !ifndef FOUND
     !error "inkscape.exe not found in INKSCAPE_DIST_DIR ('${INKSCAPE_DIST_DIR}')"
+  !endif
 !endif
 !ifndef INKSCAPE_DIST_DIR
-  ${!defineifexist} ${INKSCAPE_DIST_DIR}\inkscape.exe INKSCAPE_DIST_DIR ..\..\inkscape ; btool default
+  ${!defineifexist} ..\..\inkscape\inkscape.exe INKSCAPE_DIST_DIR ..\..\inkscape ; btool default
 !endif
 !ifndef INKSCAPE_DIST_DIR
   ${!defineifexist} ..\..\build\inkscape\inkscape.exe INKSCAPE_DIST_DIR ..\..\build\inkscape ; cmake default
@@ -424,6 +426,7 @@ SectionGroup "$(Shortcuts)" SecShortcuts ; Create shortcuts for the user {{{
 Section "$(Startmenu)" SecStartMenu ; Start menu shortcut {{{
   SectionIn 1 2 3
 !ifndef DUMMYINSTALL
+  SetOutPath $INSTDIR
   CreateShortcut $SMPROGRAMS\Inkscape.lnk $INSTDIR\inkscape.exe
 !endif
 SectionEnd ; SecStartMenu }}}
@@ -431,6 +434,7 @@ SectionEnd ; SecStartMenu }}}
 Section "$(Desktop)" SecDesktop ; Desktop shortcut {{{
   SectionIn 1 2 3
 !ifndef DUMMYINSTALL
+  SetOutPath $INSTDIR
   CreateShortCut $DESKTOP\Inkscape.lnk $INSTDIR\inkscape.exe
 !endif
 SectionEnd ; SecDesktop }}}
@@ -438,6 +442,7 @@ SectionEnd ; SecDesktop }}}
 Section "$(Quicklaunch)" SecQuickLaunch ; Quick Launch shortcut {{{
   SectionIn 1 2 3
 !ifndef DUMMYINSTALL
+  SetOutPath $INSTDIR
   ${IfThen} $QUICKLAUNCH != $TEMP ${|} CreateShortCut $QUICKLAUNCH\Inkscape.lnk $INSTDIR\inkscape.exe ${|}
 !endif
 SectionEnd ; SecQuickLaunch }}}
