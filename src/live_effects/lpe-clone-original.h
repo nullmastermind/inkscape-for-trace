@@ -32,8 +32,7 @@ public:
     void cloneAttrbutes(SPObject *origin, SPObject *dest, bool live, const char * attributes, const char * style_attributes, bool root);
 
 private:
-    OriginalPathParam  linked_path;
-    OriginalItemParam  linked_item;
+    OriginalItemParam  linkeditem;
     ScalarParam scale;
     BoolParam preserve_position;
     BoolParam inverse;

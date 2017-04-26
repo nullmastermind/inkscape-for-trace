@@ -77,15 +77,13 @@ void ParamString::string(std::string &string) const
 
 /** Initialize the object, to do that, copy the data. */
 ParamString::ParamString(const gchar * name,
-                         const gchar * guitext,
-                         const gchar * desc,
-                         const Parameter::_scope_t scope,
-                         bool gui_hidden,
-                         const gchar * gui_tip,
+                         const gchar * text,
+                         const gchar * description,
+                         bool hidden,
                          int indent,
                          Inkscape::Extension::Extension * ext,
                          Inkscape::XML::Node * xml)
-    : Parameter(name, guitext, desc, scope, gui_hidden, gui_tip, indent, ext)
+    : Parameter(name, text, description, hidden, indent, ext)
     , _value(NULL)
 {
     const char * defaultval = NULL;
@@ -164,12 +162,12 @@ void ParamStringEntry::changed_text(void)
  */
 Gtk::Widget * ParamString::get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal)
 {
-    if (_gui_hidden) {
+    if (_hidden) {
         return NULL;
     }
 
     Gtk::HBox * hbox = Gtk::manage(new Gtk::HBox(false, Parameter::GUI_PARAM_WIDGETS_SPACING));
-    Gtk::Label * label = Gtk::manage(new Gtk::Label(_(_text), Gtk::ALIGN_START));
+    Gtk::Label * label = Gtk::manage(new Gtk::Label(_text, Gtk::ALIGN_START));
     label->show();
     hbox->pack_start(*label, false, false);
 

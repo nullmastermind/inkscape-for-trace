@@ -62,25 +62,39 @@ Parameter *Parameter::make(Inkscape::XML::Node *in_repr, Inkscape::Extension::Ex
         }
     }
 
-    const char *guitext = in_repr->attribute("gui-text");
-    if (guitext == NULL) {
-        guitext = in_repr->attribute("_gui-text");
+    const char *text = in_repr->attribute("gui-text");
+    if (text == NULL) {
+        text = in_repr->attribute("_gui-text");
+        if (text == NULL) {
+            // text = ""; // propably better to require devs to explicitly set an empty gui-text if this is what they want
+        } else {
+            const char *context = in_repr->attribute("msgctxt");
+            if (context != NULL) {
+                text = g_dpgettext2(NULL, context, text);
+            } else {
+                text = _(text);
+            }
+        }
     }
-    const char *gui_tip = in_repr->attribute("gui-tip");
-    if (gui_tip == NULL) {
-        gui_tip = in_repr->attribute("_gui-tip");
+    const char *description = in_repr->attribute("gui-description");
+    if (description == NULL) {
+        description = in_repr->attribute("_gui-description");
+        if (description != NULL) {
+            const char *context = in_repr->attribute("msgctxt");
+            if (context != NULL) {
+                description = g_dpgettext2(NULL, context, description);
+            } else {
+                description = _(description);
+            }
+        }
     }
-    const char *desc = in_repr->attribute("gui-description");
-    if (desc == NULL) {
-        desc = in_repr->attribute("_gui-description");
-    }
-    bool gui_hidden = false;
+    bool hidden = false;
     {
         const char *gui_hide = in_repr->attribute("gui-hidden");
         if (gui_hide != NULL) {
             if (strcmp(gui_hide, "1") == 0 ||
                 strcmp(gui_hide, "true") == 0) {
-                gui_hidden = true;
+                hidden = true;
             }
             /* else stays false */
         }
@@ -98,44 +112,30 @@ Parameter *Parameter::make(Inkscape::XML::Node *in_repr, Inkscape::Extension::Ex
     }
     const gchar* appearance = in_repr->attribute("appearance");
 
-    Parameter::_scope_t scope = Parameter::SCOPE_USER;
-    {
-        const char *scope_str = in_repr->attribute("scope");
-        if (scope_str != NULL) {
-            if (!strcmp(scope_str, "user")) {
-                scope = Parameter::SCOPE_USER;
-            } else if (!strcmp(scope_str, "document")) {
-                scope = Parameter::SCOPE_DOCUMENT;
-            } else if (!strcmp(scope_str, "node")) {
-                scope = Parameter::SCOPE_NODE;
-            }
-        }
-    }
-
     Parameter * param = NULL;
     if (!strcmp(type, "boolean")) {
-        param = new ParamBool(name, guitext, desc, scope, gui_hidden, gui_tip, indent, in_ext, in_repr);
+        param = new ParamBool(name, text, description, hidden, indent, in_ext, in_repr);
     } else if (!strcmp(type, "int")) {
         if (appearance && !strcmp(appearance, "full")) {
-            param = new ParamInt(name, guitext, desc, scope, gui_hidden, gui_tip, indent, in_ext, in_repr, ParamInt::FULL);
+            param = new ParamInt(name, text, description, hidden, indent, in_ext, in_repr, ParamInt::FULL);
         } else {
-            param = new ParamInt(name, guitext, desc, scope, gui_hidden, gui_tip, indent, in_ext, in_repr, ParamInt::MINIMAL);
+            param = new ParamInt(name, text, description, hidden, indent, in_ext, in_repr, ParamInt::MINIMAL);
         }
     } else if (!strcmp(type, "float")) {
         if (appearance && !strcmp(appearance, "full")) {
-            param = new ParamFloat(name, guitext, desc, scope, gui_hidden, gui_tip, indent, in_ext, in_repr, ParamFloat::FULL);
+            param = new ParamFloat(name, text, description, hidden, indent, in_ext, in_repr, ParamFloat::FULL);
         } else {
-            param = new ParamFloat(name, guitext, desc, scope, gui_hidden, gui_tip, indent, in_ext, in_repr, ParamFloat::MINIMAL);
+            param = new ParamFloat(name, text, description, hidden, indent, in_ext, in_repr, ParamFloat::MINIMAL);
         }
     } else if (!strcmp(type, "string")) {
-        param = new ParamString(name, guitext, desc, scope, gui_hidden, gui_tip, indent, in_ext, in_repr);
+        param = new ParamString(name, text, description, hidden, indent, in_ext, in_repr);
         gchar const * max_length = in_repr->attribute("max_length");
         if (max_length != NULL) {
             ParamString * ps = dynamic_cast<ParamString *>(param);
             ps->setMaxLength(atoi(max_length));
         }
     } else if (!strcmp(type, "description")) {
-        ParamDescription::AppearanceMode appearance_mode = ParamDescription::DESC;
+        ParamDescription::AppearanceMode appearance_mode = ParamDescription::DESCRIPTION;
         if (appearance) {
             if (!strcmp(appearance, "header")) {
                 appearance_mode = ParamDescription::HEADER;
@@ -143,19 +143,19 @@ Parameter *Parameter::make(Inkscape::XML::Node *in_repr, Inkscape::Extension::Ex
                 appearance_mode = ParamDescription::URL;
             }
         }
-        param = new ParamDescription(name, guitext, desc, scope, gui_hidden, gui_tip, indent, in_ext, in_repr, appearance_mode);
+        param = new ParamDescription(name, text, description, hidden, indent, in_ext, in_repr, appearance_mode);
     } else if (!strcmp(type, "enum")) {
-        param = new ParamComboBox(name, guitext, desc, scope, gui_hidden, gui_tip, indent, in_ext, in_repr);
+        param = new ParamComboBox(name, text, description, hidden, indent, in_ext, in_repr);
     } else if (!strcmp(type, "notebook")) {
-        param = new ParamNotebook(name, guitext, desc, scope, gui_hidden, gui_tip, indent, in_ext, in_repr);
+        param = new ParamNotebook(name, text, description, hidden, indent, in_ext, in_repr);
     } else if (!strcmp(type, "optiongroup")) {
         if (appearance && !strcmp(appearance, "minimal")) {
-            param = new ParamRadioButton(name, guitext, desc, scope, gui_hidden, gui_tip, indent, in_ext, in_repr, ParamRadioButton::MINIMAL);
+            param = new ParamRadioButton(name, text, description, hidden, indent, in_ext, in_repr, ParamRadioButton::MINIMAL);
         } else {
-            param = new ParamRadioButton(name, guitext, desc, scope, gui_hidden, gui_tip, indent, in_ext, in_repr, ParamRadioButton::FULL);
+            param = new ParamRadioButton(name, text, description, hidden, indent, in_ext, in_repr, ParamRadioButton::FULL);
         }
     } else if (!strcmp(type, "color")) {
-        param = new ParamColor(name, guitext, desc, scope, gui_hidden, gui_tip, indent, in_ext, in_repr);
+        param = new ParamColor(name, text, description, hidden, indent, in_ext, in_repr);
     }
 
     // Note: param could equal NULL
@@ -302,29 +302,24 @@ Parameter::set_color (guint32 in, SPDocument * doc, Inkscape::XML::Node * node)
 
 
 /** Oop, now that we need a parameter, we need it's name. */
-Parameter::Parameter(gchar const * name, gchar const * guitext, gchar const * desc, const Parameter::_scope_t scope, bool gui_hidden, gchar const * gui_tip, int indent, Inkscape::Extension::Extension * ext) :
-    _desc(0),
-    _scope(scope),
+Parameter::Parameter(gchar const * name, gchar const * text, gchar const * description, bool hidden, int indent, Inkscape::Extension::Extension * ext) :
+    _description(0),
     _text(0),
-    _gui_hidden(gui_hidden),
-    _gui_tip(0),
+    _hidden(hidden),
     _indent(indent),
-    extension(ext),
+    _extension(ext),
     _name(0)
 {
     if (name != NULL) {
         _name = g_strdup(name);
     }
-    if (desc != NULL) {
-        _desc = g_strdup(desc);
-//        printf("Adding description: '%s' on '%s'\n", _desc, _name);
-    }
-    if (gui_tip != NULL) {
-        _gui_tip = g_strdup(gui_tip);
+
+    if (description != NULL) {
+        _description = g_strdup(description);
     }
 
-    if (guitext != NULL) {
-        _text = g_strdup(guitext);
+    if (text != NULL) {
+        _text = g_strdup(text);
     } else {
         _text = g_strdup(name);
     }
@@ -333,21 +328,19 @@ Parameter::Parameter(gchar const * name, gchar const * guitext, gchar const * de
 }
 
 /** Oop, now that we need a parameter, we need it's name. */
-Parameter::Parameter (gchar const * name, gchar const * guitext, Inkscape::Extension::Extension * ext) :
-    _desc(0),
-    _scope(Parameter::SCOPE_USER),
+Parameter::Parameter (gchar const * name, gchar const * text, Inkscape::Extension::Extension * ext) :
+    _description(0),
     _text(0),
-    _gui_hidden(false),
-    _gui_tip(0),
+    _hidden(false),
     _indent(0),
-    extension(ext),
+    _extension(ext),
     _name(0)
 {
     if (name != NULL) {
         _name = g_strdup(name);
     }
-    if (guitext != NULL) {
-        _text = g_strdup(guitext);
+    if (text != NULL) {
+        _text = g_strdup(text);
     } else {
         _text = g_strdup(name);
     }
@@ -363,16 +356,13 @@ Parameter::~Parameter(void)
     g_free(_text);
     _text = 0;
 
-    g_free(_gui_tip);
-    _gui_tip = 0;
-
-    g_free(_desc);
-    _desc = 0;
+    g_free(_description);
+    _description = 0;
 }
 
 gchar *Parameter::pref_name(void) const
 {
-    return g_strdup_printf("%s.%s", extension->get_id(), _name);
+    return g_strdup_printf("%s.%s", _extension->get_id(), _name);
 }
 
 Inkscape::XML::Node *
@@ -405,7 +395,7 @@ Inkscape::XML::Node *Parameter::document_param_node(SPDocument * doc)
             child != NULL;
             child = child->next()) {
         if ((GQuark)child->code() == name_quark &&
-                !strcmp(child->attribute("extension"), extension->get_id())) {
+                !strcmp(child->attribute("extension"), _extension->get_id())) {
             params = child;
             break;
         }
@@ -413,7 +403,7 @@ Inkscape::XML::Node *Parameter::document_param_node(SPDocument * doc)
 
     if (params == NULL) {
         params = xml_doc->createElement("inkscape:extension-param");
-        params->setAttribute("extension", extension->get_id());
+        params->setAttribute("extension", _extension->get_id());
         defs->appendChild(params);
         Inkscape::GC::release(params);
     }

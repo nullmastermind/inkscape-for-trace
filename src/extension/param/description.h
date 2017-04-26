@@ -27,14 +27,12 @@ namespace Extension {
 class ParamDescription : public Parameter {
 public:
     enum AppearanceMode {
-        DESC, HEADER, URL
+        DESCRIPTION, HEADER, URL
     };
     ParamDescription(const gchar * name,
-                     const gchar * guitext,
-                     const gchar * desc,
-                     const Parameter::_scope_t scope,
-                     bool gui_hidden,
-                     const gchar * gui_tip,
+                     const gchar * text,
+                     const gchar * description,
+                     bool hidden,
                      int indent,
                      Inkscape::Extension::Extension * ext,
                      Inkscape::XML::Node * xml,
@@ -45,8 +43,6 @@ private:
     /** \brief  Internal value. */
     gchar * _value;
     AppearanceMode _mode;
-    const gchar* _context;
-    bool _preserve_whitespace;
 };
 
 }  /* namespace Extension */

@@ -44,6 +44,7 @@ public:
     Geom::Point param_get_default() const;
     void param_set_liveupdate(bool live_update);
     void param_update_default(Geom::Point default_point);
+
     virtual void param_update_default(const gchar * default_point);
     virtual void param_transform_multiply(Geom::Affine const& /*postmul*/, bool /*set*/);
 
@@ -62,7 +63,6 @@ private:
     SPKnotModeType knot_mode;
     guint32 knot_color;
     gchar *handle_tip;
-    Inkscape::UI::Widget::RegisteredTransformedPoint * _pointwdg;
 };
 
 

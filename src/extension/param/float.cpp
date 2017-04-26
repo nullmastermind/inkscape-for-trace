@@ -15,7 +15,6 @@
 #include <gtkmm/scale.h>
 #include "ui/widget/spinbutton.h"
 #include "ui/widget/spin-scale.h"
-#include <glib/gi18n.h>
 
 #include "xml/node.h"
 #include "extension/extension.h"
@@ -28,16 +27,14 @@ namespace Extension {
 
 /** Use the superclass' allocator and set the \c _value. */
 ParamFloat::ParamFloat(const gchar * name,
-                       const gchar * guitext,
-                       const gchar * desc,
-                       const Parameter::_scope_t scope,
-                       bool gui_hidden,
-                       const gchar * gui_tip,
+                       const gchar * text,
+                       const gchar * description,
+                       bool hidden,
                        int indent,
                        Inkscape::Extension::Extension * ext,
                        Inkscape::XML::Node * xml,
                        AppearanceMode mode)
-    : Parameter(name, guitext, desc, scope, gui_hidden, gui_tip, indent, ext)
+    : Parameter(name, text, description, hidden, indent, ext)
     , _value(0.0)
     , _mode(mode)
     , _min(0.0)
@@ -170,7 +167,7 @@ void ParamFloatAdjustment::val_changed(void)
  */
 Gtk::Widget * ParamFloat::get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal)
 {
-    if (_gui_hidden) {
+    if (_hidden) {
         return NULL;
     }
 
@@ -181,7 +178,7 @@ Gtk::Widget * ParamFloat::get_widget(SPDocument * doc, Inkscape::XML::Node * nod
 
     if (_mode == FULL) {
 
-        UI::Widget::SpinScale *scale = new UI::Widget::SpinScale(_(_text), fadjust, _precision);
+        UI::Widget::SpinScale *scale = new UI::Widget::SpinScale(_text, fadjust, _precision);
         scale->set_size_request(400, -1);
         scale->show();
         hbox->pack_start(*scale, true, true);
@@ -189,7 +186,7 @@ Gtk::Widget * ParamFloat::get_widget(SPDocument * doc, Inkscape::XML::Node * nod
     }
     else if (_mode == MINIMAL) {
 
-        Gtk::Label * label = Gtk::manage(new Gtk::Label(_(_text), Gtk::ALIGN_START));
+        Gtk::Label * label = Gtk::manage(new Gtk::Label(_text, Gtk::ALIGN_START));
         label->show();
         hbox->pack_start(*label, true, true);
 

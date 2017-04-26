@@ -708,7 +708,7 @@ void ClipboardManagerImpl::_copySelection(ObjectSet *selection)
             // (we're dealing with unattached representations, so we write to their attributes
             // instead of using sp_item_set_transform)
             SPUse *use=dynamic_cast<SPUse *>(item);
-            if( use && selection->includes(use->get_original()) ){//we are copying something whose parent is also copied (!)
+            if( use && use->get_original() && use->get_original()->parent ){//we are copying something whose parent is also copied (!)
                 transform = ((SPItem*)(use->get_original()->parent))->i2doc_affine().inverse() * transform;
             }
             gchar *transform_str = sp_svg_transform_write(transform );
