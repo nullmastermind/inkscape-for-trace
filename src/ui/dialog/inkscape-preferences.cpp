@@ -27,7 +27,10 @@
 #include "preferences.h"
 #include "verbs.h"
 #include "selcue.h"
-
+#include "live_effects/effect-enum.h"
+#include "live_effects/effect.h"
+#include "live_effects/lpeobject.h"
+#include "sp-defs.h"
 #include "extension/internal/gdkpixbuf-input.h"
 #include "message-stack.h"
 #include "style.h"
@@ -820,6 +823,39 @@ void InkscapePreferences::initPageUI()
     this->AddPage(_page_grids, _("Grids"), iter_ui, PREFS_PAGE_UI_GRIDS);
 
     initKeyboardShortcuts(iter_ui);
+    
+    _page_le.add_group_header( _("Live Effects"));
+    SPDocument * doc = SP_ACTIVE_DOCUMENT;
+    Inkscape::XML::Document *xml_doc = doc->getReprDoc();
+    Inkscape::XML::Node *lpe_repr = xml_doc->createElement("inkscape:path-effect");
+    lpe_repr->setAttribute("id", "deleteme");
+    SPObject *lpeo = SP_OBJECT(doc->getDefs()->appendChildRepr(lpe_repr));
+    Inkscape::GC::release(lpe_repr);
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    for ( int le = Inkscape::LivePathEffect::EffectType::BEND_PATH; le != Inkscape::LivePathEffect::EffectType::INVALID_LPE; le++ ){
+        Inkscape::LivePathEffect::EffectType lpenr = static_cast<Inkscape::LivePathEffect::EffectType>(le);
+        Glib::ustring effectname = (Glib::ustring)Inkscape::LivePathEffect::LPETypeConverter.get_label(lpenr);
+        Glib::ustring effectkey = (Glib::ustring)Inkscape::LivePathEffect::LPETypeConverter.get_key(lpenr);
+        bool is_text_label_lpe = effectkey == (Glib::ustring)"text_label";
+        if (!effectname.empty() && !is_text_label_lpe){
+            lpeo->setAttribute("effect", effectkey.c_str());
+            LivePathEffectObject * lpeobj = dynamic_cast<LivePathEffectObject *>(lpeo);
+            Glib::ustring liveeffect = effectname +(Glib::ustring)_(":"); 
+            _page_le.add_group_header(liveeffect.c_str());
+            Inkscape::LivePathEffect::Effect* effect = Inkscape::LivePathEffect::Effect::New(lpenr, lpeobj);
+            std::vector<Inkscape::LivePathEffect::Parameter *> param_vector = effect->getParamVector();
+            std::vector<Inkscape::LivePathEffect::Parameter *>::iterator it = param_vector.begin();
+            while (it != param_vector.end()) {
+                Inkscape::LivePathEffect::Parameter * param = *it;
+                const gchar * key = param->param_key.c_str();
+                const gchar * value = param->param_label.c_str();
+                _page_le.add_group_header(value);
+                ++it;
+            }
+        }
+    }
+    lpeo->deleteObject();
+    this->AddPage(_page_le, _("Live Effects"), iter_ui, PREFS_PAGE_UI_LE);
 }
 
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
@@ -2042,7 +2078,7 @@ bool InkscapePreferences::PresentPage(const Gtk::TreeModel::iterator& iter)
             _page_list.expand_row(_path_tools, false);
         if (desired_page >= PREFS_PAGE_TOOLS_SHAPES && desired_page <= PREFS_PAGE_TOOLS_SHAPES_SPIRAL)
             _page_list.expand_row(_path_shapes, false);
-        if (desired_page >= PREFS_PAGE_UI && desired_page <= PREFS_PAGE_UI_KEYBOARD_SHORTCUTS)
+        if (desired_page >= PREFS_PAGE_UI && desired_page <= PREFS_PAGE_UI_LE)
             _page_list.expand_row(_path_ui, false);
         if (desired_page >= PREFS_PAGE_BEHAVIOR && desired_page <= PREFS_PAGE_BEHAVIOR_MASKS)
             _page_list.expand_row(_path_behavior, false);

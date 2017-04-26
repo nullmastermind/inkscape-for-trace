@@ -136,7 +136,8 @@ public:
     bool upd_params;
     BoolParam is_visible;
     SPCurve * sp_curve;
-
+    std::vector<Parameter *> getParamVector() { return param_vector; }
+    
     Geom::PathVector pathvector_before_effect;
 protected:
     Effect(LivePathEffectObject *lpeobject);

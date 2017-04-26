@@ -73,6 +73,7 @@ enum {
     PREFS_PAGE_UI_WINDOWS,
     PREFS_PAGE_UI_GRIDS,
     PREFS_PAGE_UI_KEYBOARD_SHORTCUTS,
+    PREFS_PAGE_UI_LE,
     PREFS_PAGE_BEHAVIOR,
     PREFS_PAGE_BEHAVIOR_SELECTING,
     PREFS_PAGE_BEHAVIOR_TRANSFORMS,
@@ -187,6 +188,7 @@ protected:
     UI::Widget::DialogPage _page_spellcheck;
 
     UI::Widget::DialogPage _page_keyshortcuts;
+    UI::Widget::DialogPage _page_le;
 
     UI::Widget::PrefSpinButton _mouse_sens;
     UI::Widget::PrefSpinButton _mouse_thres;
