@@ -657,14 +657,14 @@ Effect::readallParameters(Inkscape::XML::Node const* repr)
                 g_warning("Effect::readallParameters - '%s' not accepted for %s", value, key);
             }
         } else {
-            Glib::ustring prefs_path = (Glib::ustring)"/live_effects/" +
+            Glib::ustring pref_path = (Glib::ustring)"/live_effects/" +
                                        (Glib::ustring)LPETypeConverter.get_key(effectType()).c_str() +
                                        (Glib::ustring)"/" + 
                                        (Glib::ustring)key;
-            bool valid = prefs->getEntry(prefs_path).isValid();
+            bool valid = prefs->getEntry(pref_path).isValid();
             //add to preferences-skeleton the parameters you want reseteable
-            if(valid  && prefs->getString(prefs_path) != DEFAULT_PREF_VALUE){
-                param->param_update_default(prefs->getString(prefs_path).c_str());
+            if(valid  && prefs->getString(pref_path) != DEFAULT_PREF_VALUE){
+                param->param_update_default(prefs->getString(pref_path).c_str());
             } else {
                 param->param_set_default();
             }

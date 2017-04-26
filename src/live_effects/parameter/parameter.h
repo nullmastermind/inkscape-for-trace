@@ -77,6 +77,7 @@ public:
     virtual void param_transform_multiply(Geom::Affine const& /*postmul*/, bool /*set*/) {};
 
     Glib::ustring param_key;
+    Glib::ustring param_tooltip;
     Inkscape::UI::Widget::Registry * param_wr;
     Glib::ustring param_label;
 
@@ -84,7 +85,6 @@ public:
     bool widget_is_visible;
 
 protected:
-    Glib::ustring param_tooltip;
 
     Effect* param_effect;
 

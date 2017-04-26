@@ -58,8 +58,18 @@ FontButtonParam::param_getSVGValue() const
 Gtk::Widget *
 FontButtonParam::param_newWidget()
 {
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    Glib::ustring effectkey = (Glib::ustring)Inkscape::LivePathEffect::LPETypeConverter.get_key(param_effect->effectType());
+    Glib::ustring pref_path = (Glib::ustring)"/live_effects/" +
+                                effectkey +
+                               (Glib::ustring)"/" + 
+                               (Glib::ustring)param_key;
+    Glib::ustring label = param_label;
+    if(prefs->getEntry(pref_path).isValid()){
+        label = (Glib::ustring)"* " + param_label;
+    }
     Inkscape::UI::Widget::RegisteredFontButton * fontbuttonwdg = Gtk::manage(
-        new Inkscape::UI::Widget::RegisteredFontButton( param_label,
+        new Inkscape::UI::Widget::RegisteredFontButton( label,
                                                         param_tooltip,
                                                         param_key,
                                                         *param_wr,

@@ -824,14 +824,16 @@ void InkscapePreferences::initPageUI()
 
     initKeyboardShortcuts(iter_ui);
     
-    _page_le.add_group_header( _("Live Effects"));
+    _page_lpe.add_group_header( _("Allow set default to this parameters:"));
     SPDocument * doc = SP_ACTIVE_DOCUMENT;
     Inkscape::XML::Document *xml_doc = doc->getReprDoc();
     Inkscape::XML::Node *lpe_repr = xml_doc->createElement("inkscape:path-effect");
     lpe_repr->setAttribute("id", "deleteme");
     SPObject *lpeo = SP_OBJECT(doc->getDefs()->appendChildRepr(lpe_repr));
     Inkscape::GC::release(lpe_repr);
+    Inkscape::UI::Widget::Registry * wr;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+
     for ( int le = Inkscape::LivePathEffect::EffectType::BEND_PATH; le != Inkscape::LivePathEffect::EffectType::INVALID_LPE; le++ ){
         Inkscape::LivePathEffect::EffectType lpenr = static_cast<Inkscape::LivePathEffect::EffectType>(le);
         Glib::ustring effectname = (Glib::ustring)Inkscape::LivePathEffect::LPETypeConverter.get_label(lpenr);
@@ -841,21 +843,63 @@ void InkscapePreferences::initPageUI()
             lpeo->setAttribute("effect", effectkey.c_str());
             LivePathEffectObject * lpeobj = dynamic_cast<LivePathEffectObject *>(lpeo);
             Glib::ustring liveeffect = effectname +(Glib::ustring)_(":"); 
-            _page_le.add_group_header(liveeffect.c_str());
             Inkscape::LivePathEffect::Effect* effect = Inkscape::LivePathEffect::Effect::New(lpenr, lpeobj);
             std::vector<Inkscape::LivePathEffect::Parameter *> param_vector = effect->getParamVector();
             std::vector<Inkscape::LivePathEffect::Parameter *>::iterator it = param_vector.begin();
+            Gtk::VBox * vbox_expander = Gtk::manage( new Gtk::VBox() );
+            vbox_expander->set_border_width(10);
+            vbox_expander->set_spacing(2);
             while (it != param_vector.end()) {
                 Inkscape::LivePathEffect::Parameter * param = *it;
                 const gchar * key = param->param_key.c_str();
                 const gchar * value = param->param_label.c_str();
-                _page_le.add_group_header(value);
+                const gchar * tooltip = (param->param_tooltip + (Glib::ustring)_(". Toogling this widget in preferences reset custom values for this parameter")).c_str();
+                Glib::ustring pref_path = (Glib::ustring)"/live_effects/" +
+                                            effectkey +
+                                           (Glib::ustring)"/" + 
+                                           (Glib::ustring)key;
+                bool valid = prefs->getEntry(pref_path).isValid();
+                bool set = false;
+                if(valid){
+                    set = true;
+                }
+                Inkscape::UI::Widget::RegisteredCheckButton * checkwdg = Gtk::manage(
+                    new Inkscape::UI::Widget::RegisteredCheckButton( param->param_label,
+                                                                     param->param_tooltip,
+                                                                     param->param_key,
+                                                                     *wr,
+                                                                     false,
+                                                                     NULL,
+                                                                     NULL) );
+                checkwdg->setActive(set);
+                checkwdg->setProgrammatically = false;
+                checkwdg->signal_toggled().connect(sigc::bind<Glib::ustring, Inkscape::UI::Widget::RegisteredCheckButton *>(sigc::mem_fun(*this, &InkscapePreferences::defaultLpeUpdater), pref_path, checkwdg));
+                vbox_expander->pack_start(*dynamic_cast<Gtk::Widget *> (checkwdg), true, true, 2);
                 ++it;
             }
+            
+            Gtk::Expander * expander = Gtk::manage(new Gtk::Expander(liveeffect));
+            expander->add(*vbox_expander);
+            expander->set_expanded(false);
+            Glib::ustring tip = (Glib::ustring)_("Set defaultables parameters for ") + liveeffect;
+            _page_lpe.add_line( true, "", *dynamic_cast<Gtk::Widget *>(expander), "", tip.c_str() );
         }
     }
     lpeo->deleteObject();
-    this->AddPage(_page_le, _("Live Effects"), iter_ui, PREFS_PAGE_UI_LE);
+    this->AddPage(_page_lpe, _("Live Effects"), iter_ui, PREFS_PAGE_UI_LPE);
+}
+
+void 
+InkscapePreferences::defaultLpeUpdater(Glib::ustring pref_path, Inkscape::UI::Widget::RegisteredCheckButton * checkwdg)
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    if (checkwdg->get_active()) 
+    {
+        prefs->setString(pref_path, "--default");
+    
+    } else {
+        prefs->remove(pref_path);
+    }
 }
 
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
@@ -2078,7 +2122,7 @@ bool InkscapePreferences::PresentPage(const Gtk::TreeModel::iterator& iter)
             _page_list.expand_row(_path_tools, false);
         if (desired_page >= PREFS_PAGE_TOOLS_SHAPES && desired_page <= PREFS_PAGE_TOOLS_SHAPES_SPIRAL)
             _page_list.expand_row(_path_shapes, false);
-        if (desired_page >= PREFS_PAGE_UI && desired_page <= PREFS_PAGE_UI_LE)
+        if (desired_page >= PREFS_PAGE_UI && desired_page <= PREFS_PAGE_UI_LPE)
             _page_list.expand_row(_path_ui, false);
         if (desired_page >= PREFS_PAGE_BEHAVIOR && desired_page <= PREFS_PAGE_BEHAVIOR_MASKS)
             _page_list.expand_row(_path_behavior, false);
