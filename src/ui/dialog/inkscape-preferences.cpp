@@ -834,7 +834,7 @@ void InkscapePreferences::initPageUI()
     Inkscape::UI::Widget::Registry * wr;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
-    for ( int le = Inkscape::LivePathEffect::EffectType::BEND_PATH; le != Inkscape::LivePathEffect::EffectType::INVALID_LPE; le++ ){
+    for ( int le = Inkscape::LivePathEffect::EffectType::BEND_PATH; le != Inkscape::LivePathEffect::EffectType::INVALID_LPE; ++le){
         Inkscape::LivePathEffect::EffectType lpenr = static_cast<Inkscape::LivePathEffect::EffectType>(le);
         Glib::ustring effectname = (Glib::ustring)Inkscape::LivePathEffect::LPETypeConverter.get_label(lpenr);
         Glib::ustring effectkey = (Glib::ustring)Inkscape::LivePathEffect::LPETypeConverter.get_key(lpenr);
@@ -845,6 +845,9 @@ void InkscapePreferences::initPageUI()
             Glib::ustring liveeffect = effectname +(Glib::ustring)_(":"); 
             Inkscape::LivePathEffect::Effect* effect = Inkscape::LivePathEffect::Effect::New(lpenr, lpeobj);
             std::vector<Inkscape::LivePathEffect::Parameter *> param_vector = effect->getParamVector();
+            if (param_vector.size() == 1) {
+                continue;
+            }
             std::vector<Inkscape::LivePathEffect::Parameter *>::iterator it = param_vector.begin();
             Gtk::VBox * vbox_expander = Gtk::manage( new Gtk::VBox() );
             vbox_expander->set_border_width(10);
@@ -852,8 +855,13 @@ void InkscapePreferences::initPageUI()
             while (it != param_vector.end()) {
                 Inkscape::LivePathEffect::Parameter * param = *it;
                 const gchar * key = param->param_key.c_str();
+                if (strcmp(key,"is_visible") == 0 ){
+                    ++it;
+                    continue;
+                }
                 const gchar * value = param->param_label.c_str();
-                const gchar * tooltip = (param->param_tooltip + (Glib::ustring)_(". Toogling this widget in preferences reset custom values for this parameter")).c_str();
+                const gchar * tooltip_extra = _(". Toogling this check in preferences reset to default custom values for this parameter");
+                Glib::ustring tooltip = param->param_tooltip + (Glib::ustring)tooltip_extra;
                 Glib::ustring pref_path = (Glib::ustring)"/live_effects/" +
                                             effectkey +
                                            (Glib::ustring)"/" + 
@@ -865,7 +873,7 @@ void InkscapePreferences::initPageUI()
                 }
                 Inkscape::UI::Widget::RegisteredCheckButton * checkwdg = Gtk::manage(
                     new Inkscape::UI::Widget::RegisteredCheckButton( param->param_label,
-                                                                     param->param_tooltip,
+                                                                     tooltip,
                                                                      param->param_key,
                                                                      *wr,
                                                                      false,

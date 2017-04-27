@@ -320,7 +320,7 @@ LPECloneOriginal::newWidget()
     vbox->pack_start(*expander, true, true, 2);
     if (show_default_widgets) {
         Gtk::Label *default_label = Gtk::manage(new Gtk::Label(
-                                                Glib::ustring(_("<b>Defaults</b> set defaultable parameters")),
+                                                Glib::ustring(_("<b>Defaults</b> set defaultable -prefs- parameters (*)")),
                                                 Gtk::ALIGN_START));
         default_label->set_use_markup(true);
         vbox->pack_start(*default_label, true, true, 2);

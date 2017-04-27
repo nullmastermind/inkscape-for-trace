@@ -142,7 +142,7 @@ Gtk::Widget *LPEBSpline::newWidget()
     Gtk::HBox * defaultBox = Gtk::manage(new Gtk::HBox(true,0));
     if (show_default_widgets) {
         Gtk::Label *default_label = Gtk::manage(new Gtk::Label(
-                                                Glib::ustring(_("<b>Defaults</b> set defaultable parameters")),
+                                                Glib::ustring(_("<b>Defaults</b> set defaultable -prefs- parameters (*)")),
                                                 Gtk::ALIGN_START));
         default_label->set_use_markup(true);
         vbox->pack_start(*default_label, true, true, 2);
