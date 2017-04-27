@@ -907,6 +907,8 @@ InkscapePreferences::defaultLpeUpdater(Glib::ustring pref_path, Inkscape::UI::Wi
     
     } else {
         prefs->remove(pref_path);
+        prefs->remove((Glib::ustring)"/live_effects/gdsgddssdggdsgdsgdsgs");
+        prefs->remove((Glib::ustring)"/ddsdsdsgdsg");
     }
 }
 

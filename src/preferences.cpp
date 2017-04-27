@@ -512,6 +512,35 @@ void Preferences::remove(Glib::ustring const &pref_path)
     Inkscape::XML::Node *node = _getNode(pref_path, false);
     if (node && node->parent()) {
         node->parent()->removeChild(node);
+    } else { //Handle to remove also attributes in path not only the container node
+        // verify path
+        g_assert( pref_path.at(0) == '/' );
+        if (_prefs_doc == NULL){
+            return;
+        }
+        node = _prefs_doc->root();
+        Inkscape::XML::Node *child = NULL;
+        gchar **splits = g_strsplit(pref_path.c_str(), "/", 0);
+        if ( splits ) {
+            for (int part_i = 0; splits[part_i]; ++part_i) {
+                // skip empty path segments
+                if (!splits[part_i][0]) {
+                    continue;
+                }
+                if (!node->firstChild()) {
+                    node->setAttribute(splits[part_i], NULL);
+                    g_strfreev(splits);
+                    return;
+                }
+                for (child = node->firstChild(); child; child = child->next()) {
+                    if (!strcmp(splits[part_i], child->attribute("id"))) {
+                        break;
+                    }
+                }
+                node = child;
+            }
+        }
+        g_strfreev(splits);
     }
 }
 
