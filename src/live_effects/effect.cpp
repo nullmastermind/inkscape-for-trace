@@ -74,72 +74,73 @@
 #include "xml/sp-css-attr.h"
 #include "live_effects/lpeobject.h"
 #include "display/curve.h"
-
+#include <stdio.h>
+#include <string.h>
 
 namespace Inkscape {
 
 namespace LivePathEffect {
-
+const Glib::ustring DEFAULT_PREF_VALUE = "--default";
 const Util::EnumData<EffectType> LPETypeData[] = {
     // {constant defined in effect-enum.h, N_("name of your effect"), "name of your effect in SVG"}
 #ifdef LPE_ENABLE_TEST_EFFECTS
-    {DOEFFECTSTACK_TEST,    N_("doEffect stack test"),     "doeffectstacktest"},
-    {ANGLE_BISECTOR,        N_("Angle bisector"),          "angle_bisector"},
+    {DOEFFECTSTACK_TEST,    N_("doEffect stack test"),             "doeffectstacktest"},
+    {ANGLE_BISECTOR,        N_("Angle bisector"),                  "angle_bisector"},
     {CIRCLE_WITH_RADIUS,    N_("Circle (by center and radius)"),   "circle_with_radius"},
-    {CIRCLE_3PTS,           N_("Circle by 3 points"),      "circle_3pts"},
-    {DYNASTROKE,            N_("Dynamic stroke"),          "dynastroke"},
-    {EXTRUDE,               N_("Extrude"),                 "extrude"},
-    {LATTICE,               N_("Lattice Deformation"),     "lattice"},
-    {LINE_SEGMENT,          N_("Line Segment"),            "line_segment"},
-    {OFFSET,                N_("Offset"),                  "offset"},
-    {PARALLEL,              N_("Parallel"),                "parallel"},
-    {PATH_LENGTH,           N_("Path length"),             "path_length"},
-    {PERP_BISECTOR,         N_("Perpendicular bisector"),  "perp_bisector"},
-    {PERSPECTIVE_PATH,      N_("Perspective path"),        "perspective_path"},
-    {RECURSIVE_SKELETON,    N_("Recursive skeleton"),      "recursive_skeleton"},
-    {TANGENT_TO_CURVE,      N_("Tangent to curve"),        "tangent_to_curve"},
-    {TEXT_LABEL,            N_("Text label"),              "text_label"},
-    {FILLET_CHAMFER,        N_("Fillet/Chamfer"),          "fillet-chamfer"},
+    {CIRCLE_3PTS,           N_("Circle by 3 points"),              "circle_3pts"},
+    {DYNASTROKE,            N_("Dynamic stroke"),                  "dynastroke"},
+    {EXTRUDE,               N_("Extrude"),                         "extrude"},
+    {LATTICE,               N_("Lattice Deformation"),             "lattice"},
+    {LINE_SEGMENT,          N_("Line Segment"),                    "line_segment"},
+    {OFFSET,                N_("Offset"),                          "offset"},
+    {PARALLEL,              N_("Parallel"),                        "parallel"},
+    {PATH_LENGTH,           N_("Path length"),                     "path_length"},
+    {PERP_BISECTOR,         N_("Perpendicular bisector"),          "perp_bisector"},
+    {PERSPECTIVE_PATH,      N_("Perspective path"),                "perspective_path"},
+    {RECURSIVE_SKELETON,    N_("Recursive skeleton"),              "recursive_skeleton"},
+    {TANGENT_TO_CURVE,      N_("Tangent to curve"),                "tangent_to_curve"},
+    {TEXT_LABEL,            N_("Text label"),                      "text_label"},
+    {FILLET_CHAMFER,        N_("Fillet/Chamfer"),                  "fillet_chamfer"},
 #endif
 /* 0.46 */
-    {BEND_PATH,             N_("Bend"),                    "bend_path"},
-    {GEARS,                 N_("Gears"),                   "gears"},
-    {PATTERN_ALONG_PATH,    N_("Pattern Along Path"),      "skeletal"},   // for historic reasons, this effect is called skeletal(strokes) in Inkscape:SVG
-    {CURVE_STITCH,          N_("Stitch Sub-Paths"),        "curvestitching"},
+    {BEND_PATH,             N_("Bend"),                            "bend_path"},
+    {GEARS,                 N_("Gears"),                           "gears"},
+    {PATTERN_ALONG_PATH,    N_("Pattern Along Path"),              "skeletal"},   // for historic reasons, this effect is called skeletal(strokes) in Inkscape:SVG
+    {CURVE_STITCH,          N_("Stitch Sub-Paths"),                "curvestitching"},
 /* 0.47 */
-    {VONKOCH,               N_("VonKoch"),                 "vonkoch"},
-    {KNOT,                  N_("Knot"),                    "knot"},
-    {CONSTRUCT_GRID,        N_("Construct grid"),          "construct_grid"},
-    {SPIRO,                 N_("Spiro spline"),            "spiro"},
-    {ENVELOPE,              N_("Envelope Deformation"),    "envelope"},
-    {INTERPOLATE,           N_("Interpolate Sub-Paths"),   "interpolate"},
-    {ROUGH_HATCHES,         N_("Hatches (rough)"),         "rough_hatches"},
-    {SKETCH,                N_("Sketch"),                  "sketch"},
-    {RULER,                 N_("Ruler"),                   "ruler"},
+    {VONKOCH,               N_("VonKoch"),                         "vonkoch"},
+    {KNOT,                  N_("Knot"),                            "knot"},
+    {CONSTRUCT_GRID,        N_("Construct grid"),                  "construct_grid"},
+    {SPIRO,                 N_("Spiro spline"),                    "spiro"},
+    {ENVELOPE,              N_("Envelope Deformation"),            "envelope"},
+    {INTERPOLATE,           N_("Interpolate Sub-Paths"),           "interpolate"},
+    {ROUGH_HATCHES,         N_("Hatches (rough)"),                 "rough_hatches"},
+    {SKETCH,                N_("Sketch"),                          "sketch"},
+    {RULER,                 N_("Ruler"),                           "ruler"},
 /* 0.91 */
-    {POWERSTROKE,           N_("Power stroke"),            "powerstroke"},
-    {CLONE_ORIGINAL,        N_("Clone original"),          "clone_original"},
+    {POWERSTROKE,           N_("Power stroke"),                    "powerstroke"},
+    {CLONE_ORIGINAL,        N_("Clone original"),                  "clone_original"},
 /* 0.92 */
-    {SIMPLIFY,              N_("Simplify"),                "simplify"},
-    {LATTICE2,              N_("Lattice Deformation 2"),   "lattice2"},
-    {PERSPECTIVE_ENVELOPE,  N_("Perspective/Envelope"),    "perspective-envelope"},
-    {INTERPOLATE_POINTS,    N_("Interpolate points"),      "interpolate_points"},
-    {TRANSFORM_2PTS,        N_("Transform by 2 points"),   "transform_2pts"},
-    {SHOW_HANDLES,          N_("Show handles"),            "show_handles"},
-    {ROUGHEN,               N_("Roughen"),                 "roughen"},
-    {BSPLINE,               N_("BSpline"),                 "bspline"},
-    {JOIN_TYPE,             N_("Join type"),               "join_type"},
-    {TAPER_STROKE,          N_("Taper stroke"),            "taper_stroke"},
-    {MIRROR_SYMMETRY,       N_("Mirror symmetry"),         "mirror_symmetry"},
-    {COPY_ROTATE,           N_("Rotate copies"),           "copy_rotate"},
+    {SIMPLIFY,              N_("Simplify"),                        "simplify"},
+    {LATTICE2,              N_("Lattice Deformation 2"),           "lattice2"},
+    {PERSPECTIVE_ENVELOPE,  N_("Perspective/Envelope"),            "perspective-envelope"}, //TODO:Wrong name with "-"
+    {INTERPOLATE_POINTS,    N_("Interpolate points"),              "interpolate_points"},
+    {TRANSFORM_2PTS,        N_("Transform by 2 points"),           "transform_2pts"},
+    {SHOW_HANDLES,          N_("Show handles"),                    "show_handles"},
+    {ROUGHEN,               N_("Roughen"),                         "roughen"},
+    {BSPLINE,               N_("BSpline"),                         "bspline"},
+    {JOIN_TYPE,             N_("Join type"),                       "join_type"},
+    {TAPER_STROKE,          N_("Taper stroke"),                    "taper_stroke"},
+    {MIRROR_SYMMETRY,       N_("Mirror symmetry"),                 "mirror_symmetry"},
+    {COPY_ROTATE,           N_("Rotate copies"),                   "copy_rotate"},
 /* Ponyscape -> Inkscape 0.92*/
-    {ATTACH_PATH,           N_("Attach path"),             "attach_path"},
-    {FILL_BETWEEN_STROKES,  N_("Fill between strokes"),    "fill_between_strokes"},
-    {FILL_BETWEEN_MANY,     N_("Fill between many"),       "fill_between_many"},
-    {ELLIPSE_5PTS,          N_("Ellipse by 5 points"),     "ellipse_5pts"},
-    {BOUNDING_BOX,          N_("Bounding Box"),            "bounding_box"},
+    {ATTACH_PATH,           N_("Attach path"),                     "attach_path"},
+    {FILL_BETWEEN_STROKES,  N_("Fill between strokes"),            "fill_between_strokes"},
+    {FILL_BETWEEN_MANY,     N_("Fill between many"),               "fill_between_many"},
+    {ELLIPSE_5PTS,          N_("Ellipse by 5 points"),             "ellipse_5pts"},
+    {BOUNDING_BOX,          N_("Bounding Box"),                    "bounding_box"},
 /* 9.93 */
-    {MEASURE_LINE,          N_("Measure Line"),            "measure-line"},
+    {MEASURE_LINE,          N_("Measure Line"),                    "measure_line"},
 };
 const Util::EnumDataConverter<EffectType> LPETypeConverter(LPETypeData, sizeof(LPETypeData)/sizeof(*LPETypeData));
 
