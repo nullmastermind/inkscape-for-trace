@@ -44,9 +44,9 @@ namespace Extension {
      Note that value and text MUST be non-NULL. This is ensured by newing only at one location in the code where non-NULL checks are made. */
 class optionentry {
 public:
-    optionentry (Glib::ustring * val, Glib::ustring * text) {
+    optionentry (Glib::ustring * val, Glib::ustring * txt) {
         value = val;
-        text = text;
+        text = txt;
     }
     ~optionentry() {
         delete value;
