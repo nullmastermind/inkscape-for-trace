@@ -241,26 +241,26 @@ LPERoughHatches::LPERoughHatches(LivePathEffectObject *lpeobject) :
 //
     bender(_("Global bending"), _("Relative position to a reference point defines global bending direction and amount"), "bender", &wr, this, Geom::Point(-5,0))
 {
-    registerParameter( dynamic_cast<Parameter *>(&direction) );
-    registerParameter( dynamic_cast<Parameter *>(&dist_rdm) );
-    registerParameter( dynamic_cast<Parameter *>(&growth) );
-    registerParameter( dynamic_cast<Parameter *>(&do_bend) );
-    registerParameter( dynamic_cast<Parameter *>(&bender) );
-    registerParameter( dynamic_cast<Parameter *>(&top_edge_variation) );
-    registerParameter( dynamic_cast<Parameter *>(&bot_edge_variation) );
-    registerParameter( dynamic_cast<Parameter *>(&top_tgt_variation) );
-    registerParameter( dynamic_cast<Parameter *>(&bot_tgt_variation) );
-    registerParameter( dynamic_cast<Parameter *>(&scale_tf) );
-    registerParameter( dynamic_cast<Parameter *>(&scale_tb) );
-    registerParameter( dynamic_cast<Parameter *>(&scale_bf) );
-    registerParameter( dynamic_cast<Parameter *>(&scale_bb) );
-    registerParameter( dynamic_cast<Parameter *>(&top_smth_variation) );
-    registerParameter( dynamic_cast<Parameter *>(&bot_smth_variation) );
-    registerParameter( dynamic_cast<Parameter *>(&fat_output) );
-    registerParameter( dynamic_cast<Parameter *>(&stroke_width_top) );
-    registerParameter( dynamic_cast<Parameter *>(&stroke_width_bot) );
-    registerParameter( dynamic_cast<Parameter *>(&front_thickness) );
-    registerParameter( dynamic_cast<Parameter *>(&back_thickness) );
+    registerParameter(&direction);
+    registerParameter(&dist_rdm);
+    registerParameter(&growth);
+    registerParameter(&do_bend);
+    registerParameter(&bender);
+    registerParameter(&top_edge_variation);
+    registerParameter(&bot_edge_variation);
+    registerParameter(&top_tgt_variation);
+    registerParameter(&bot_tgt_variation);
+    registerParameter(&scale_tf);
+    registerParameter(&scale_tb);
+    registerParameter(&scale_bf);
+    registerParameter(&scale_bb);
+    registerParameter(&top_smth_variation);
+    registerParameter(&bot_smth_variation);
+    registerParameter(&fat_output);
+    registerParameter(&stroke_width_top);
+    registerParameter(&stroke_width_bot);
+    registerParameter(&front_thickness);
+    registerParameter(&back_thickness);
 
     //hatch_dist.param_set_range(0.1, Geom::infinity());
     growth.param_set_range(0, Geom::infinity());

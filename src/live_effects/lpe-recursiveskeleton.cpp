@@ -28,7 +28,7 @@ LPERecursiveSkeleton::LPERecursiveSkeleton(LivePathEffectObject *lpeobject) :
     concatenate_before_pwd2 = true;
     iterations.param_make_integer(true);
     iterations.param_set_range(1, 15);
-    registerParameter( dynamic_cast<Parameter *>(&iterations) );
+    registerParameter(&iterations);
 
 }
 

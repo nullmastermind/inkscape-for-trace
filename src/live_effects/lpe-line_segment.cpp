@@ -32,7 +32,7 @@ LPELineSegment::LPELineSegment(LivePathEffectObject *lpeobject) :
     end_type(_("End type:"), _("Determines on which side the line or line segment is infinite."), "end_type", EndTypeConverter, &wr, this, END_OPEN_BOTH)
 {
     /* register all your parameters here, so Inkscape knows which parameters this effect has: */
-    registerParameter( dynamic_cast<Parameter *>(&end_type) );
+    registerParameter(&end_type);
 }
 
 LPELineSegment::~LPELineSegment()

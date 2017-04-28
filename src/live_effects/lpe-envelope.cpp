@@ -23,12 +23,12 @@ LPEEnvelope::LPEEnvelope(LivePathEffectObject *lpeobject) :
     xx(_("_Enable left & right paths"), _("Enable the left and right deformation paths"), "xx", &wr, this, true),
     yy(_("_Enable top & bottom paths"), _("Enable the top and bottom deformation paths"), "yy", &wr, this, true)
 {
-    registerParameter( dynamic_cast<Parameter *>(&yy) );
-    registerParameter( dynamic_cast<Parameter *>(&xx) );
-    registerParameter( dynamic_cast<Parameter *>(&bend_path1) );
-    registerParameter( dynamic_cast<Parameter *>(&bend_path2) );
-    registerParameter( dynamic_cast<Parameter *>(&bend_path3) );
-    registerParameter( dynamic_cast<Parameter *>(&bend_path4) );
+    registerParameter(&yy);
+    registerParameter(&xx);
+    registerParameter(&bend_path1);
+    registerParameter(&bend_path2);
+    registerParameter(&bend_path3);
+    registerParameter(&bend_path4);
     concatenate_before_pwd2 = true;
     apply_to_clippath_and_mask = true;
 }

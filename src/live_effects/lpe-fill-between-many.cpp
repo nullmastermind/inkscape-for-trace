@@ -25,11 +25,11 @@ LPEFillBetweenMany::LPEFillBetweenMany(LivePathEffectObject *lpeobject) :
     join(_("Join subpaths"), _("Join subpaths"), "join", &wr, this, true),
     close(_("Close"), _("Close path"), "close", &wr, this, true)
 {
-    registerParameter( dynamic_cast<Parameter *>(&linked_paths) );
-    registerParameter( dynamic_cast<Parameter *>(&fuse) );
-    registerParameter( dynamic_cast<Parameter *>(&allow_transforms) );
-    registerParameter( dynamic_cast<Parameter *>(&join) );
-    registerParameter( dynamic_cast<Parameter *>(&close) );
+    registerParameter(&linked_paths);
+    registerParameter(&fuse);
+    registerParameter(&allow_transforms);
+    registerParameter(&join);
+    registerParameter(&close);
     transformmultiply = false;
 }
 
