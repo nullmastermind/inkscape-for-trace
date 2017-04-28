@@ -60,10 +60,10 @@ LPETangentToCurve::LPETangentToCurve(LivePathEffectObject *lpeobject) :
     show_orig_path = true;
     _provides_knotholder_entities = true;
 
-    registerParameter( dynamic_cast<Parameter *>(&angle) );
-    registerParameter( dynamic_cast<Parameter *>(&t_attach) );
-    registerParameter( dynamic_cast<Parameter *>(&length_left) );
-    registerParameter( dynamic_cast<Parameter *>(&length_right) );
+    registerParameter(&angle);
+    registerParameter(&t_attach);
+    registerParameter(&length_left);
+    registerParameter(&length_right);
 }
 
 LPETangentToCurve::~LPETangentToCurve()

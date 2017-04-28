@@ -25,13 +25,13 @@ LPEFillBetweenStrokes::LPEFillBetweenStrokes(LivePathEffectObject *lpeobject) :
     join(_("Join subpaths"), _("Join subpaths"), "join", &wr, this, true),
     close(_("Close"), _("Close path"), "close", &wr, this, true)
 {
-    registerParameter( dynamic_cast<Parameter *>(&linked_path) );
-    registerParameter( dynamic_cast<Parameter *>(&second_path) );
-    registerParameter( dynamic_cast<Parameter *>(&reverse_second) );
-    registerParameter( dynamic_cast<Parameter *>(&fuse) );
-    registerParameter( dynamic_cast<Parameter *>(&allow_transforms) );
-    registerParameter( dynamic_cast<Parameter *>(&join) );
-    registerParameter( dynamic_cast<Parameter *>(&close) );
+    registerParameter(&linked_path);
+    registerParameter(&second_path);
+    registerParameter(&reverse_second);
+    registerParameter(&fuse);
+    registerParameter(&allow_transforms);
+    registerParameter(&join);
+    registerParameter(&close);
     transformmultiply = false;
 }
 

@@ -53,15 +53,15 @@ LPEVonKoch::LPEVonKoch(LivePathEffectObject *lpeobject) :
     maxComplexity(_("_Max complexity:"), _("Disable effect if the output is too complex"), "maxComplexity", &wr, this, 1000)
 {
     //FIXME: a path is used here instead of 2 points to work around path/point param incompatibility bug.
-    registerParameter( dynamic_cast<Parameter *>(&ref_path) );
-    //registerParameter( dynamic_cast<Parameter *>(&refA) );
-    //registerParameter( dynamic_cast<Parameter *>(&refB) );
-    registerParameter( dynamic_cast<Parameter *>(&generator) );
-    registerParameter( dynamic_cast<Parameter *>(&similar_only) );
-    registerParameter( dynamic_cast<Parameter *>(&nbgenerations) );
-    registerParameter( dynamic_cast<Parameter *>(&drawall) );
-    registerParameter( dynamic_cast<Parameter *>(&maxComplexity) );
-    //registerParameter( dynamic_cast<Parameter *>(&draw_boxes) );
+    registerParameter(&ref_path);
+    //registerParameter(&refA) );
+    //registerParameter(&refB) );
+    registerParameter(&generator);
+    registerParameter(&similar_only);
+    registerParameter(&nbgenerations);
+    registerParameter(&drawall);
+    registerParameter(&maxComplexity);
+    //registerParameter(&draw_boxes) );
     apply_to_clippath_and_mask = true;
     nbgenerations.param_make_integer();
     nbgenerations.param_set_range(0, Geom::infinity());

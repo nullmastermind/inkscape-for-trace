@@ -85,16 +85,16 @@ LPEPatternAlongPath::LPEPatternAlongPath(LivePathEffectObject *lpeobject) :
     fuse_tolerance(_("_Fuse nearby ends:"), _("Fuse ends closer than this number. 0 means don't fuse."),
         "fuse_tolerance", &wr, this, 0)
 {
-    registerParameter( dynamic_cast<Parameter *>(&pattern) );
-    registerParameter( dynamic_cast<Parameter *>(&copytype) );
-    registerParameter( dynamic_cast<Parameter *>(&prop_scale) );
-    registerParameter( dynamic_cast<Parameter *>(&scale_y_rel) );
-    registerParameter( dynamic_cast<Parameter *>(&spacing) );
-    registerParameter( dynamic_cast<Parameter *>(&normal_offset) );
-    registerParameter( dynamic_cast<Parameter *>(&tang_offset) );
-    registerParameter( dynamic_cast<Parameter *>(&prop_units) );
-    registerParameter( dynamic_cast<Parameter *>(&vertical_pattern) );
-    registerParameter( dynamic_cast<Parameter *>(&fuse_tolerance) );
+    registerParameter(&pattern);
+    registerParameter(&copytype);
+    registerParameter(&prop_scale);
+    registerParameter(&scale_y_rel);
+    registerParameter(&spacing);
+    registerParameter(&normal_offset);
+    registerParameter(&tang_offset);
+    registerParameter(&prop_units);
+    registerParameter(&vertical_pattern);
+    registerParameter(&fuse_tolerance);
     prop_scale.param_set_digits(3);
     prop_scale.param_set_increments(0.01, 0.10);
 

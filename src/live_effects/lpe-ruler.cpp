@@ -45,15 +45,15 @@ LPERuler::LPERuler(LivePathEffectObject *lpeobject) :
     offset(_("_Offset:"), _("Offset of first mark"), "offset", &wr, this, 0.0),
     border_marks(_("Border marks:"), _("Choose whether to draw marks at the beginning and end of the path"), "border_marks", BorderMarkTypeConverter, &wr, this, BORDERMARK_BOTH)
 {
-    registerParameter(dynamic_cast<Parameter *>(&unit));
-    registerParameter(dynamic_cast<Parameter *>(&mark_distance));
-    registerParameter(dynamic_cast<Parameter *>(&mark_length));
-    registerParameter(dynamic_cast<Parameter *>(&minor_mark_length));
-    registerParameter(dynamic_cast<Parameter *>(&major_mark_steps));
-    registerParameter(dynamic_cast<Parameter *>(&shift));
-    registerParameter(dynamic_cast<Parameter *>(&offset));
-    registerParameter(dynamic_cast<Parameter *>(&mark_dir));
-    registerParameter(dynamic_cast<Parameter *>(&border_marks));
+    registerParameter(&unit);
+    registerParameter(&mark_distance);
+    registerParameter(&mark_length);
+    registerParameter(&minor_mark_length);
+    registerParameter(&major_mark_steps);
+    registerParameter(&shift);
+    registerParameter(&offset);
+    registerParameter(&mark_dir);
+    registerParameter(&border_marks);
 
     major_mark_steps.param_make_integer();
     major_mark_steps.param_set_range(1, 1000);

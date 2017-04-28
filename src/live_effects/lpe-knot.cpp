@@ -356,12 +356,12 @@ LPEKnot::LPEKnot(LivePathEffectObject *lpeobject) :
     switcher(0.,0.)
 {
     // register all your parameters here, so Inkscape knows which parameters this effect has:
-    registerParameter( dynamic_cast<Parameter *>(&interruption_width) );
-    registerParameter( dynamic_cast<Parameter *>(&prop_to_stroke_width) );
-    registerParameter( dynamic_cast<Parameter *>(&add_stroke_width) );
-    registerParameter( dynamic_cast<Parameter *>(&add_other_stroke_width) );
-    registerParameter( dynamic_cast<Parameter *>(&switcher_size) );
-    registerParameter( dynamic_cast<Parameter *>(&crossing_points_vector) );
+    registerParameter(&interruption_width);
+    registerParameter(&prop_to_stroke_width);
+    registerParameter(&add_stroke_width);
+    registerParameter(&add_other_stroke_width);
+    registerParameter(&switcher_size);
+    registerParameter(&crossing_points_vector);
 
     _provides_knotholder_entities = true;
 }
