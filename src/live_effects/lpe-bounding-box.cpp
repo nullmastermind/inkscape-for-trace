@@ -20,8 +20,8 @@ LPEBoundingBox::LPEBoundingBox(LivePathEffectObject *lpeobject) :
     linked_path(_("Linked path:"), _("Path from which to take the original path data"), "linkedpath", &wr, this),
     visual_bounds(_("Visual Bounds"), _("Uses the visual bounding box"), "visualbounds", &wr, this)
 {
-    registerParameter(&linked_path);
-    registerParameter(&visual_bounds);
+    registerParameter( dynamic_cast<Parameter *>(&linked_path) );
+    registerParameter( dynamic_cast<Parameter *>(&visual_bounds) );
     //perceived_path = true;
 }
 

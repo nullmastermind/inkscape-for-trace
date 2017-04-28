@@ -39,16 +39,16 @@ public:
     virtual bool param_readSVGValue(const gchar * strvalue);
     virtual gchar * param_getSVGValue() const;
 
-    void param_setValue(Glib::ustring newvalue);
+    void param_setValue(const Glib::ustring newvalue);
     void param_hide_canvas_text();
     virtual void param_set_default();
-    virtual void param_update_default(const gchar * default_value);
+    void param_update_default(Glib::ustring default_value);
     void setPos(Geom::Point pos);
     void setPosAndAnchor(const Geom::Piecewise<Geom::D2<Geom::SBasis> > &pwd2,
 			 const double t, const double length, bool use_curvature = false);
     void setAnchor(double x_value, double y_value);
 
-    const Glib::ustring get_value() const { return value; };
+    const Glib::ustring get_value() const { return defvalue; };
 
 private:
     TextParam(const TextParam&);

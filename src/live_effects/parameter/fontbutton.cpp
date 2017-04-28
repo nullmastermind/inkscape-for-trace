@@ -33,11 +33,9 @@ FontButtonParam::param_set_default()
 {
     param_setValue(defvalue);
 }
-
 void 
-FontButtonParam::param_update_default(const gchar * default_value)
-{
-    defvalue = (Glib::ustring)strdup(default_value);
+FontButtonParam::param_update_default(const Glib::ustring default_value){
+    defvalue = default_value;
 }
 
 bool
@@ -58,24 +56,14 @@ FontButtonParam::param_getSVGValue() const
 Gtk::Widget *
 FontButtonParam::param_newWidget()
 {
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    Glib::ustring effectkey = (Glib::ustring)Inkscape::LivePathEffect::LPETypeConverter.get_key(param_effect->effectType());
-    Glib::ustring pref_path = (Glib::ustring)"/live_effects/" +
-                                effectkey +
-                               (Glib::ustring)"/" + 
-                               (Glib::ustring)param_key;
-    Glib::ustring label = param_label;
-    if(prefs->getEntry(pref_path).isValid()){
-        label = (Glib::ustring)"* " + param_label;
-    }
     Inkscape::UI::Widget::RegisteredFontButton * fontbuttonwdg = Gtk::manage(
-        new Inkscape::UI::Widget::RegisteredFontButton( label,
+        new Inkscape::UI::Widget::RegisteredFontButton( param_label,
                                                         param_tooltip,
                                                         param_key,
                                                         *param_wr,
                                                         param_effect->getRepr(),
                                                         param_effect->getSPDoc() ) );
-    Glib::ustring fontspec = (Glib::ustring)param_getSVGValue();
+    Glib::ustring fontspec = param_getSVGValue();
     fontbuttonwdg->setValue( fontspec);
     fontbuttonwdg->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change font button parameter"));
     param_effect->upd_params = false;
@@ -83,11 +71,10 @@ FontButtonParam::param_newWidget()
 }
 
 void
-FontButtonParam::param_setValue(Glib::ustring newvalue)
+FontButtonParam::param_setValue(const Glib::ustring newvalue)
 {
     value = newvalue;
 }
-
 
 } /* namespace LivePathEffect */
 

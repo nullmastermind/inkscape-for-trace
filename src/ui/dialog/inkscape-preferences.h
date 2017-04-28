@@ -22,7 +22,6 @@
 #include <iostream>
 #include <vector>
 #include "ui/widget/preferences-widget.h"
-#include "ui/widget/registered-widget.h"
 #include "ui/widget/button.h"
 #include <stddef.h>
 #include <gtkmm/colorbutton.h>
@@ -31,7 +30,6 @@
 #include <gtkmm/treeview.h>
 #include <gtkmm/frame.h>
 #include <gtkmm/notebook.h>
-#include <gtkmm/expander.h>
 #include <gtkmm/textview.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/liststore.h>
@@ -75,7 +73,6 @@ enum {
     PREFS_PAGE_UI_WINDOWS,
     PREFS_PAGE_UI_GRIDS,
     PREFS_PAGE_UI_KEYBOARD_SHORTCUTS,
-    PREFS_PAGE_UI_LPE,
     PREFS_PAGE_BEHAVIOR,
     PREFS_PAGE_BEHAVIOR_SELECTING,
     PREFS_PAGE_BEHAVIOR_TRANSFORMS,
@@ -190,7 +187,6 @@ protected:
     UI::Widget::DialogPage _page_spellcheck;
 
     UI::Widget::DialogPage _page_keyshortcuts;
-    UI::Widget::DialogPage _page_lpe;
 
     UI::Widget::PrefSpinButton _mouse_sens;
     UI::Widget::PrefSpinButton _mouse_thres;
@@ -494,7 +490,7 @@ protected:
     Gtk::TreeModel::iterator AddPage(UI::Widget::DialogPage& p, Glib::ustring title, Gtk::TreeModel::iterator parent, int id);
     bool SetMaxDialogSize(const Gtk::TreeModel::iterator& iter);
     bool PresentPage(const Gtk::TreeModel::iterator& iter);
-    void defaultLpeUpdater(Glib::ustring pref_path, Inkscape::UI::Widget::RegisteredCheckButton * checkwdg);
+
     static void AddSelcueCheckbox(UI::Widget::DialogPage& p, Glib::ustring const &prefs_path, bool def_value);
     static void AddGradientCheckbox(UI::Widget::DialogPage& p, Glib::ustring const &prefs_path, bool def_value);
     static void AddConvertGuidesCheckbox(UI::Widget::DialogPage& p, Glib::ustring const &prefs_path, bool def_value);

@@ -37,15 +37,9 @@ BoolParam::param_set_default()
 }
 
 void 
-BoolParam::param_update_default(bool default_value)
+BoolParam::param_update_default(bool const default_value)
 {
     defvalue = default_value;
-}
-
-void 
-BoolParam::param_update_default(const gchar * default_value)
-{
-    param_update_default(helperfns_read_bool(default_value, defvalue));
 }
 
 bool
@@ -66,18 +60,8 @@ Gtk::Widget *
 BoolParam::param_newWidget()
 {
     if(!hide_widget){
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        Glib::ustring effectkey = (Glib::ustring)Inkscape::LivePathEffect::LPETypeConverter.get_key(param_effect->effectType());
-        Glib::ustring pref_path = (Glib::ustring)"/live_effects/" +
-                                    effectkey +
-                                   (Glib::ustring)"/" + 
-                                   (Glib::ustring)param_key;
-        Glib::ustring label = param_label;
-        if(prefs->getEntry(pref_path).isValid()){
-            label = (Glib::ustring)"* " + param_label;
-        }
         Inkscape::UI::Widget::RegisteredCheckButton * checkwdg = Gtk::manage(
-            new Inkscape::UI::Widget::RegisteredCheckButton( label,
+            new Inkscape::UI::Widget::RegisteredCheckButton( param_label,
                                                              param_tooltip,
                                                              param_key,
                                                              *param_wr,

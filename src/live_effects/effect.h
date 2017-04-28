@@ -136,8 +136,6 @@ public:
     bool upd_params;
     BoolParam is_visible;
     SPCurve * sp_curve;
-    std::vector<Parameter *> getParamVector() { return param_vector; }
-    
     Geom::PathVector pathvector_before_effect;
 protected:
     Effect(LivePathEffectObject *lpeobject);
@@ -158,14 +156,12 @@ protected:
     virtual void addKnotHolderEntities(KnotHolder * /*knotholder*/, SPItem * /*item*/) {};
 
     virtual void addCanvasIndicators(SPLPEItem const* lpeitem, std::vector<Geom::PathVector> &hp_vec);
-    std::vector<Parameter *> param_vector;
-    void setDefaultParams();
-    void resetDefaultParams();
 
+    std::vector<Parameter *> param_vector;
     bool _provides_knotholder_entities;
 
     int oncanvasedit_it;
-    bool show_default_widgets;
+
     bool show_orig_path; // set this to true in derived effects to automatically have the original
                          // path displayed as helperpath
 

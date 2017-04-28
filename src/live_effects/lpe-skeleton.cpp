@@ -37,7 +37,7 @@ LPESkeleton::LPESkeleton(LivePathEffectObject *lpeobject) :
     //_provides_knotholder_entities
 
     /* register all your parameters here, so Inkscape knows which parameters this effect has: */
-    registerParameter(&number);
+    registerParameter( dynamic_cast<Parameter *>(&number) );
 }
 
 LPESkeleton::~LPESkeleton()

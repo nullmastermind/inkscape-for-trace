@@ -47,20 +47,10 @@ OriginalPathParam::~OriginalPathParam()
 Gtk::Widget *
 OriginalPathParam::param_newWidget()
 {
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    Glib::ustring effectkey = (Glib::ustring)Inkscape::LivePathEffect::LPETypeConverter.get_key(param_effect->effectType());
-    Glib::ustring pref_path = (Glib::ustring)"/live_effects/" +
-                                effectkey +
-                               (Glib::ustring)"/" + 
-                               (Glib::ustring)param_key;
-    Glib::ustring label = param_label;
-    if(prefs->getEntry(pref_path).isValid()){
-        label = (Glib::ustring)"* " + param_label;
-    }
     Gtk::HBox *_widget = Gtk::manage(new Gtk::HBox());
 
     { // Label
-        Gtk::Label *pLabel = Gtk::manage(new Gtk::Label(label));
+        Gtk::Label *pLabel = Gtk::manage(new Gtk::Label(param_label));
         static_cast<Gtk::HBox*>(_widget)->pack_start(*pLabel, true, true);
         pLabel->set_tooltip_text(param_tooltip);
     }

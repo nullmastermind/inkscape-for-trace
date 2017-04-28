@@ -27,7 +27,7 @@ LPEExtrude::LPEExtrude(LivePathEffectObject *lpeobject) :
     show_orig_path = true;
     concatenate_before_pwd2 = false;
 
-    registerParameter(&extrude_vector);
+    registerParameter( dynamic_cast<Parameter *>(&extrude_vector) );
 }
 
 LPEExtrude::~LPEExtrude()

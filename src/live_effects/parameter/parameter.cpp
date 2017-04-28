@@ -107,16 +107,6 @@ ScalarParam::param_update_default(gdouble default_value)
     defvalue = default_value;
 }
 
-void 
-ScalarParam::param_update_default(const gchar * default_value)
-{
-    double newval;
-    unsigned int success = sp_svg_number_read_d(default_value, &newval);
-    if (success == 1) {
-        param_update_default(newval);
-    }
-}
-
 void
 ScalarParam::param_set_value(gdouble val)
 {
@@ -172,18 +162,8 @@ Gtk::Widget *
 ScalarParam::param_newWidget()
 {
     if(!hide_widget){
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        Glib::ustring effectkey = (Glib::ustring)Inkscape::LivePathEffect::LPETypeConverter.get_key(param_effect->effectType());
-        Glib::ustring pref_path = (Glib::ustring)"/live_effects/" +
-                                    effectkey +
-                                   (Glib::ustring)"/" + 
-                                   (Glib::ustring)param_key;
-        Glib::ustring label = param_label;
-        if(prefs->getEntry(pref_path).isValid()){
-            label = (Glib::ustring)"* " + param_label;
-        }
         Inkscape::UI::Widget::RegisteredScalar *rsu = Gtk::manage( new Inkscape::UI::Widget::RegisteredScalar(
-            label, param_tooltip, param_key, *param_wr, param_effect->getRepr(), param_effect->getSPDoc() ) );
+            param_label, param_tooltip, param_key, *param_wr, param_effect->getRepr(), param_effect->getSPDoc() ) );
 
         rsu->setValue(value);
         rsu->setDigits(digits);

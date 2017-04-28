@@ -50,9 +50,9 @@ TextParam::param_set_default()
 }
 
 void
-TextParam::param_update_default(const gchar * default_value)
+TextParam::param_update_default(Glib::ustring default_value)
 {
-    defvalue = (Glib::ustring)default_value;
+    defvalue = default_value;
 }
 
 void
@@ -119,18 +119,8 @@ TextParam::param_getSVGValue() const
 Gtk::Widget *
 TextParam::param_newWidget()
 {
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    Glib::ustring effectkey = (Glib::ustring)Inkscape::LivePathEffect::LPETypeConverter.get_key(param_effect->effectType());
-    Glib::ustring pref_path = (Glib::ustring)"/live_effects/" +
-                                effectkey +
-                               (Glib::ustring)"/" + 
-                               (Glib::ustring)param_key;
-    Glib::ustring label = param_label;
-    if(prefs->getEntry(pref_path).isValid()){
-        label = (Glib::ustring)"* " + param_label;
-    }
     Inkscape::UI::Widget::RegisteredText *rsu = Gtk::manage(new Inkscape::UI::Widget::RegisteredText(
-        label, param_tooltip, param_key, *param_wr, param_effect->getRepr(), param_effect->getSPDoc()));
+        param_label, param_tooltip, param_key, *param_wr, param_effect->getRepr(), param_effect->getSPDoc()));
     rsu->setText(value);
     rsu->setProgrammatically = false;
 
@@ -140,7 +130,7 @@ TextParam::param_newWidget()
 }
 
 void
-TextParam::param_setValue(Glib::ustring newvalue)
+TextParam::param_setValue(const Glib::ustring newvalue)
 {
     param_effect->upd_params = true;
     value = newvalue;

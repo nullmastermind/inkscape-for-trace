@@ -74,73 +74,72 @@
 #include "xml/sp-css-attr.h"
 #include "live_effects/lpeobject.h"
 #include "display/curve.h"
-#include <stdio.h>
-#include <string.h>
+
 
 namespace Inkscape {
 
 namespace LivePathEffect {
-const Glib::ustring DEFAULT_PREF_VALUE = "--default";
+
 const Util::EnumData<EffectType> LPETypeData[] = {
     // {constant defined in effect-enum.h, N_("name of your effect"), "name of your effect in SVG"}
 #ifdef LPE_ENABLE_TEST_EFFECTS
-    {DOEFFECTSTACK_TEST,    N_("doEffect stack test"),             "doeffectstacktest"},
-    {ANGLE_BISECTOR,        N_("Angle bisector"),                  "angle_bisector"},
+    {DOEFFECTSTACK_TEST,    N_("doEffect stack test"),     "doeffectstacktest"},
+    {ANGLE_BISECTOR,        N_("Angle bisector"),          "angle_bisector"},
     {CIRCLE_WITH_RADIUS,    N_("Circle (by center and radius)"),   "circle_with_radius"},
-    {CIRCLE_3PTS,           N_("Circle by 3 points"),              "circle_3pts"},
-    {DYNASTROKE,            N_("Dynamic stroke"),                  "dynastroke"},
-    {EXTRUDE,               N_("Extrude"),                         "extrude"},
-    {LATTICE,               N_("Lattice Deformation"),             "lattice"},
-    {LINE_SEGMENT,          N_("Line Segment"),                    "line_segment"},
-    {OFFSET,                N_("Offset"),                          "offset"},
-    {PARALLEL,              N_("Parallel"),                        "parallel"},
-    {PATH_LENGTH,           N_("Path length"),                     "path_length"},
-    {PERP_BISECTOR,         N_("Perpendicular bisector"),          "perp_bisector"},
-    {PERSPECTIVE_PATH,      N_("Perspective path"),                "perspective_path"},
-    {RECURSIVE_SKELETON,    N_("Recursive skeleton"),              "recursive_skeleton"},
-    {TANGENT_TO_CURVE,      N_("Tangent to curve"),                "tangent_to_curve"},
-    {TEXT_LABEL,            N_("Text label"),                      "text_label"},
-    {FILLET_CHAMFER,        N_("Fillet/Chamfer"),                  "fillet_chamfer"},
+    {CIRCLE_3PTS,           N_("Circle by 3 points"),      "circle_3pts"},
+    {DYNASTROKE,            N_("Dynamic stroke"),          "dynastroke"},
+    {EXTRUDE,               N_("Extrude"),                 "extrude"},
+    {LATTICE,               N_("Lattice Deformation"),     "lattice"},
+    {LINE_SEGMENT,          N_("Line Segment"),            "line_segment"},
+    {OFFSET,                N_("Offset"),                  "offset"},
+    {PARALLEL,              N_("Parallel"),                "parallel"},
+    {PATH_LENGTH,           N_("Path length"),             "path_length"},
+    {PERP_BISECTOR,         N_("Perpendicular bisector"),  "perp_bisector"},
+    {PERSPECTIVE_PATH,      N_("Perspective path"),        "perspective_path"},
+    {RECURSIVE_SKELETON,    N_("Recursive skeleton"),      "recursive_skeleton"},
+    {TANGENT_TO_CURVE,      N_("Tangent to curve"),        "tangent_to_curve"},
+    {TEXT_LABEL,            N_("Text label"),              "text_label"},
+    {FILLET_CHAMFER,        N_("Fillet/Chamfer"),          "fillet-chamfer"},
 #endif
 /* 0.46 */
-    {BEND_PATH,             N_("Bend"),                            "bend_path"},
-    {GEARS,                 N_("Gears"),                           "gears"},
-    {PATTERN_ALONG_PATH,    N_("Pattern Along Path"),              "skeletal"},   // for historic reasons, this effect is called skeletal(strokes) in Inkscape:SVG
-    {CURVE_STITCH,          N_("Stitch Sub-Paths"),                "curvestitching"},
+    {BEND_PATH,             N_("Bend"),                    "bend_path"},
+    {GEARS,                 N_("Gears"),                   "gears"},
+    {PATTERN_ALONG_PATH,    N_("Pattern Along Path"),      "skeletal"},   // for historic reasons, this effect is called skeletal(strokes) in Inkscape:SVG
+    {CURVE_STITCH,          N_("Stitch Sub-Paths"),        "curvestitching"},
 /* 0.47 */
-    {VONKOCH,               N_("VonKoch"),                         "vonkoch"},
-    {KNOT,                  N_("Knot"),                            "knot"},
-    {CONSTRUCT_GRID,        N_("Construct grid"),                  "construct_grid"},
-    {SPIRO,                 N_("Spiro spline"),                    "spiro"},
-    {ENVELOPE,              N_("Envelope Deformation"),            "envelope"},
-    {INTERPOLATE,           N_("Interpolate Sub-Paths"),           "interpolate"},
-    {ROUGH_HATCHES,         N_("Hatches (rough)"),                 "rough_hatches"},
-    {SKETCH,                N_("Sketch"),                          "sketch"},
-    {RULER,                 N_("Ruler"),                           "ruler"},
+    {VONKOCH,               N_("VonKoch"),                 "vonkoch"},
+    {KNOT,                  N_("Knot"),                    "knot"},
+    {CONSTRUCT_GRID,        N_("Construct grid"),          "construct_grid"},
+    {SPIRO,                 N_("Spiro spline"),            "spiro"},
+    {ENVELOPE,              N_("Envelope Deformation"),    "envelope"},
+    {INTERPOLATE,           N_("Interpolate Sub-Paths"),   "interpolate"},
+    {ROUGH_HATCHES,         N_("Hatches (rough)"),         "rough_hatches"},
+    {SKETCH,                N_("Sketch"),                  "sketch"},
+    {RULER,                 N_("Ruler"),                   "ruler"},
 /* 0.91 */
-    {POWERSTROKE,           N_("Power stroke"),                    "powerstroke"},
-    {CLONE_ORIGINAL,        N_("Clone original"),                  "clone_original"},
+    {POWERSTROKE,           N_("Power stroke"),            "powerstroke"},
+    {CLONE_ORIGINAL,        N_("Clone original"),          "clone_original"},
 /* 0.92 */
-    {SIMPLIFY,              N_("Simplify"),                        "simplify"},
-    {LATTICE2,              N_("Lattice Deformation 2"),           "lattice2"},
-    {PERSPECTIVE_ENVELOPE,  N_("Perspective/Envelope"),            "perspective-envelope"}, //TODO:Wrong name with "-"
-    {INTERPOLATE_POINTS,    N_("Interpolate points"),              "interpolate_points"},
-    {TRANSFORM_2PTS,        N_("Transform by 2 points"),           "transform_2pts"},
-    {SHOW_HANDLES,          N_("Show handles"),                    "show_handles"},
-    {ROUGHEN,               N_("Roughen"),                         "roughen"},
-    {BSPLINE,               N_("BSpline"),                         "bspline"},
-    {JOIN_TYPE,             N_("Join type"),                       "join_type"},
-    {TAPER_STROKE,          N_("Taper stroke"),                    "taper_stroke"},
-    {MIRROR_SYMMETRY,       N_("Mirror symmetry"),                 "mirror_symmetry"},
-    {COPY_ROTATE,           N_("Rotate copies"),                   "copy_rotate"},
+    {SIMPLIFY,              N_("Simplify"),                "simplify"},
+    {LATTICE2,              N_("Lattice Deformation 2"),   "lattice2"},
+    {PERSPECTIVE_ENVELOPE,  N_("Perspective/Envelope"),    "perspective-envelope"},
+    {INTERPOLATE_POINTS,    N_("Interpolate points"),      "interpolate_points"},
+    {TRANSFORM_2PTS,        N_("Transform by 2 points"),   "transform_2pts"},
+    {SHOW_HANDLES,          N_("Show handles"),            "show_handles"},
+    {ROUGHEN,               N_("Roughen"),                 "roughen"},
+    {BSPLINE,               N_("BSpline"),                 "bspline"},
+    {JOIN_TYPE,             N_("Join type"),               "join_type"},
+    {TAPER_STROKE,          N_("Taper stroke"),            "taper_stroke"},
+    {MIRROR_SYMMETRY,       N_("Mirror symmetry"),         "mirror_symmetry"},
+    {COPY_ROTATE,           N_("Rotate copies"),           "copy_rotate"},
 /* Ponyscape -> Inkscape 0.92*/
-    {ATTACH_PATH,           N_("Attach path"),                     "attach_path"},
-    {FILL_BETWEEN_STROKES,  N_("Fill between strokes"),            "fill_between_strokes"},
-    {FILL_BETWEEN_MANY,     N_("Fill between many"),               "fill_between_many"},
-    {ELLIPSE_5PTS,          N_("Ellipse by 5 points"),             "ellipse_5pts"},
-    {BOUNDING_BOX,          N_("Bounding Box"),                    "bounding_box"},
+    {ATTACH_PATH,           N_("Attach path"),             "attach_path"},
+    {FILL_BETWEEN_STROKES,  N_("Fill between strokes"),    "fill_between_strokes"},
+    {FILL_BETWEEN_MANY,     N_("Fill between many"),       "fill_between_many"},
+    {ELLIPSE_5PTS,          N_("Ellipse by 5 points"),     "ellipse_5pts"},
+    {BOUNDING_BOX,          N_("Bounding Box"),            "bounding_box"},
 /* 9.93 */
-    {MEASURE_LINE,          N_("Measure Line"),                    "measure_line"},
+    {MEASURE_LINE,          N_("Measure Line"),            "measure-line"},
 };
 const Util::EnumDataConverter<EffectType> LPETypeConverter(LPETypeData, sizeof(LPETypeData)/sizeof(*LPETypeData));
 
@@ -351,7 +350,6 @@ Effect::Effect(LivePathEffectObject *lpeobject)
     : apply_to_clippath_and_mask(false),
       _provides_knotholder_entities(false),
       oncanvasedit_it(0),
-      show_default_widgets(true),
       is_visible(_("Is visible?"), _("If unchecked, the effect remains applied to the object but is temporarily disabled on canvas"), "is_visible", &wr, this, true),
       show_orig_path(false),
       erase_extra_objects(true),
@@ -646,7 +644,6 @@ void
 Effect::readallParameters(Inkscape::XML::Node const* repr)
 {
     std::vector<Parameter *>::iterator it = param_vector.begin();
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     while (it != param_vector.end()) {
         Parameter * param = *it;
         const gchar * key = param->param_key.c_str();
@@ -657,18 +654,10 @@ Effect::readallParameters(Inkscape::XML::Node const* repr)
                 g_warning("Effect::readallParameters - '%s' not accepted for %s", value, key);
             }
         } else {
-            Glib::ustring pref_path = (Glib::ustring)"/live_effects/" +
-                                       (Glib::ustring)LPETypeConverter.get_key(effectType()).c_str() +
-                                       (Glib::ustring)"/" + 
-                                       (Glib::ustring)key;
-            bool valid = prefs->getEntry(pref_path).isValid();
-            //add to preferences-skeleton the parameters you want reseteable
-            if(valid  && prefs->getString(pref_path) != DEFAULT_PREF_VALUE){
-                param->param_update_default(prefs->getString(pref_path).c_str());
-            } else {
-                param->param_set_default();
-            }
+            // set default value
+            param->param_set_default();
         }
+
         ++it;
     }
 }
@@ -678,7 +667,6 @@ void
 Effect::setParameter(const gchar * key, const gchar * new_value)
 {
     Parameter * param = getParameter(key);
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (param) {
         if (new_value) {
             bool accepted = param->param_readSVGValue(new_value);
@@ -686,6 +674,7 @@ Effect::setParameter(const gchar * key, const gchar * new_value)
                 g_warning("Effect::setParameter - '%s' not accepted for %s", new_value, key);
             }
         } else {
+            // set default value
             param->param_set_default();
         }
     }
@@ -784,21 +773,6 @@ Effect::newWidget()
         ++it;
     }
     upd_params = false;
-    if (show_default_widgets) {
-        Gtk::Label *default_label = Gtk::manage(new Gtk::Label(
-                                                Glib::ustring(_("<b>Defaults</b> set defaultable -prefs- parameters (*)")),
-                                                Gtk::ALIGN_START));
-        default_label->set_use_markup(true);
-        vbox->pack_start(*default_label, true, true, 2);
-        Gtk::HBox * defaultBox = Gtk::manage(new Gtk::HBox(true,0));
-        Gtk::Button *set_default = Gtk::manage(new Gtk::Button(Glib::ustring(_("Set"))));
-        set_default->signal_clicked().connect(sigc::mem_fun(*this, &Effect::setDefaultParams));
-        Gtk::Button *reset_default = Gtk::manage(new Gtk::Button(Glib::ustring(_("Reset"))));
-        reset_default->signal_clicked().connect(sigc::mem_fun(*this, &Effect::resetDefaultParams));
-        defaultBox->pack_start(*set_default, true, true, 2);
-        defaultBox->pack_start(*reset_default, true, true, 2);
-        vbox->pack_start(*defaultBox, true, true, 2);
-    }
     return dynamic_cast<Gtk::Widget *>(vbox);
 }
 
@@ -889,45 +863,6 @@ Effect::resetDefaults(SPItem const* /*item*/)
     for (p = param_vector.begin(); p != param_vector.end(); ++p) {
         (*p)->param_set_default();
         (*p)->write_to_SVG();
-    }
-}
-
-void
-Effect::setDefaultParams()
-{
-    std::vector<Parameter *>::iterator it = param_vector.begin();
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    while (it != param_vector.end()) {
-        Parameter * param = *it;
-        const gchar * key = param->param_key.c_str();
-        Glib::ustring prefs_path = (Glib::ustring)"/live_effects/" +
-                                   (Glib::ustring)LPETypeConverter.get_key(effectType()).c_str() +
-                                   (Glib::ustring)"/" + 
-                                   (Glib::ustring)key;
-        bool valid = prefs->getEntry(prefs_path).isValid();
-        if (valid){
-            prefs->setString(prefs_path, (Glib::ustring)param->param_getSVGValue());
-        }
-        ++it;
-    }
-}
-
-void 
-Effect::resetDefaultParams(){
-    std::vector<Parameter *>::iterator it = param_vector.begin();
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    while (it != param_vector.end()) {
-        Parameter * param = *it;
-        const gchar * key = param->param_key.c_str();
-        Glib::ustring prefs_path = (Glib::ustring)"/live_effects/" +
-                                   (Glib::ustring)LPETypeConverter.get_key(effectType()).c_str() +
-                                   (Glib::ustring)"/" + 
-                                   (Glib::ustring)key;
-        bool valid = prefs->getEntry(prefs_path).isValid();
-        if (valid){
-            prefs->setString(prefs_path, DEFAULT_PREF_VALUE);
-        }
-        ++it;
     }
 }
 

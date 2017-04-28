@@ -27,7 +27,7 @@ LPEOffset::LPEOffset(LivePathEffectObject *lpeobject) :
 {
     show_orig_path = true;
     apply_to_clippath_and_mask = true;
-    registerParameter(&offset_pt);
+    registerParameter(dynamic_cast<Parameter *>(&offset_pt));
 }
 
 LPEOffset::~LPEOffset()

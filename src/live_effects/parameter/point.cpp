@@ -64,19 +64,6 @@ PointParam::param_update_default(Geom::Point default_point)
 }
 
 void
-PointParam::param_update_default(const gchar * default_point)
-{
-    gchar ** strarray = g_strsplit(default_point, ",", 2);
-    double newx, newy;
-    unsigned int success = sp_svg_number_read_d(strarray[0], &newx);
-    success += sp_svg_number_read_d(strarray[1], &newy);
-    g_strfreev (strarray);
-    if (success == 2) {
-        param_update_default( Geom::Point(newx, newy) );
-    }
-}
-
-void
 PointParam::param_setValue(Geom::Point newpoint, bool write)
 {
     *dynamic_cast<Geom::Point *>( this ) = newpoint;
@@ -126,18 +113,8 @@ PointParam::param_transform_multiply(Geom::Affine const& postmul, bool /*set*/)
 Gtk::Widget *
 PointParam::param_newWidget()
 {
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    Glib::ustring effectkey = (Glib::ustring)Inkscape::LivePathEffect::LPETypeConverter.get_key(param_effect->effectType());
-    Glib::ustring pref_path = (Glib::ustring)"/live_effects/" +
-                                effectkey +
-                               (Glib::ustring)"/" + 
-                               (Glib::ustring)param_key;
-    Glib::ustring label = param_label;
-    if(prefs->getEntry(pref_path).isValid()){
-        label = (Glib::ustring)"* " + param_label;
-    }
     Inkscape::UI::Widget::RegisteredTransformedPoint * pointwdg = Gtk::manage(
-        new Inkscape::UI::Widget::RegisteredTransformedPoint( label,
+        new Inkscape::UI::Widget::RegisteredTransformedPoint( param_label,
                                                               param_tooltip,
                                                               param_key,
                                                               *param_wr,

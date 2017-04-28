@@ -27,10 +27,7 @@
 #include "preferences.h"
 #include "verbs.h"
 #include "selcue.h"
-#include "live_effects/effect-enum.h"
-#include "live_effects/effect.h"
-#include "live_effects/lpeobject.h"
-#include "sp-defs.h"
+
 #include "extension/internal/gdkpixbuf-input.h"
 #include "message-stack.h"
 #include "style.h"
@@ -823,93 +820,6 @@ void InkscapePreferences::initPageUI()
     this->AddPage(_page_grids, _("Grids"), iter_ui, PREFS_PAGE_UI_GRIDS);
 
     initKeyboardShortcuts(iter_ui);
-    
-    _page_lpe.add_group_header( _("Allow set default to this parameters:"));
-    SPDocument * doc = SP_ACTIVE_DOCUMENT;
-    Inkscape::XML::Document *xml_doc = doc->getReprDoc();
-    Inkscape::XML::Node *lpe_repr = xml_doc->createElement("inkscape:path-effect");
-    lpe_repr->setAttribute("id", "deleteme");
-    SPObject *lpeo = SP_OBJECT(doc->getDefs()->appendChildRepr(lpe_repr));
-    Inkscape::GC::release(lpe_repr);
-    Inkscape::UI::Widget::Registry * wr;
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-
-    for ( int le = Inkscape::LivePathEffect::EffectType::BEND_PATH; le != Inkscape::LivePathEffect::EffectType::INVALID_LPE; ++le){
-        Inkscape::LivePathEffect::EffectType lpenr = static_cast<Inkscape::LivePathEffect::EffectType>(le);
-        Glib::ustring effectname = (Glib::ustring)Inkscape::LivePathEffect::LPETypeConverter.get_label(lpenr);
-        Glib::ustring effectkey = (Glib::ustring)Inkscape::LivePathEffect::LPETypeConverter.get_key(lpenr);
-        bool is_text_label_lpe = effectkey == (Glib::ustring)"text_label";
-        if (!effectname.empty() && !is_text_label_lpe){
-            lpeo->setAttribute("effect", effectkey.c_str());
-            LivePathEffectObject * lpeobj = dynamic_cast<LivePathEffectObject *>(lpeo);
-            Glib::ustring liveeffect = effectname +(Glib::ustring)_(":"); 
-            Inkscape::LivePathEffect::Effect* effect = Inkscape::LivePathEffect::Effect::New(lpenr, lpeobj);
-            std::vector<Inkscape::LivePathEffect::Parameter *> param_vector = effect->getParamVector();
-            if (param_vector.size() == 1) {
-                continue;
-            }
-            std::vector<Inkscape::LivePathEffect::Parameter *>::iterator it = param_vector.begin();
-            Gtk::VBox * vbox_expander = Gtk::manage( new Gtk::VBox() );
-            vbox_expander->set_border_width(10);
-            vbox_expander->set_spacing(2);
-            while (it != param_vector.end()) {
-                Inkscape::LivePathEffect::Parameter * param = *it;
-                const gchar * key = param->param_key.c_str();
-                if (strcmp(key,"is_visible") == 0 ){
-                    ++it;
-                    continue;
-                }
-                const gchar * value = param->param_label.c_str();
-                const gchar * tooltip_extra = _(". Toogling this check in preferences reset to default custom values for this parameter");
-                Glib::ustring tooltip = param->param_tooltip + (Glib::ustring)tooltip_extra;
-                Glib::ustring pref_path = (Glib::ustring)"/live_effects/" +
-                                            effectkey +
-                                           (Glib::ustring)"/" + 
-                                           (Glib::ustring)key;
-                bool valid = prefs->getEntry(pref_path).isValid();
-                bool set = false;
-                if(valid){
-                    set = true;
-                }
-                Inkscape::UI::Widget::RegisteredCheckButton * checkwdg = Gtk::manage(
-                    new Inkscape::UI::Widget::RegisteredCheckButton( param->param_label,
-                                                                     tooltip,
-                                                                     param->param_key,
-                                                                     *wr,
-                                                                     false,
-                                                                     NULL,
-                                                                     NULL) );
-                checkwdg->setActive(set);
-                checkwdg->setProgrammatically = false;
-                checkwdg->signal_toggled().connect(sigc::bind<Glib::ustring, Inkscape::UI::Widget::RegisteredCheckButton *>(sigc::mem_fun(*this, &InkscapePreferences::defaultLpeUpdater), pref_path, checkwdg));
-                vbox_expander->pack_start(*dynamic_cast<Gtk::Widget *> (checkwdg), true, true, 2);
-                ++it;
-            }
-            
-            Gtk::Expander * expander = Gtk::manage(new Gtk::Expander(liveeffect));
-            expander->add(*vbox_expander);
-            expander->set_expanded(false);
-            Glib::ustring tip = (Glib::ustring)_("Set defaultables parameters for ") + liveeffect;
-            _page_lpe.add_line( true, "", *dynamic_cast<Gtk::Widget *>(expander), "", tip.c_str() );
-        }
-    }
-    lpeo->deleteObject();
-    this->AddPage(_page_lpe, _("Live Effects"), iter_ui, PREFS_PAGE_UI_LPE);
-}
-
-void 
-InkscapePreferences::defaultLpeUpdater(Glib::ustring pref_path, Inkscape::UI::Widget::RegisteredCheckButton * checkwdg)
-{
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if (checkwdg->get_active()) 
-    {
-        prefs->setString(pref_path, "--default");
-    
-    } else {
-        prefs->remove(pref_path);
-        prefs->remove((Glib::ustring)"/live_effects/gdsgddssdggdsgdsgdsgs");
-        prefs->remove((Glib::ustring)"/ddsdsdsgdsg");
-    }
 }
 
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
@@ -2132,7 +2042,7 @@ bool InkscapePreferences::PresentPage(const Gtk::TreeModel::iterator& iter)
             _page_list.expand_row(_path_tools, false);
         if (desired_page >= PREFS_PAGE_TOOLS_SHAPES && desired_page <= PREFS_PAGE_TOOLS_SHAPES_SPIRAL)
             _page_list.expand_row(_path_shapes, false);
-        if (desired_page >= PREFS_PAGE_UI && desired_page <= PREFS_PAGE_UI_LPE)
+        if (desired_page >= PREFS_PAGE_UI && desired_page <= PREFS_PAGE_UI_KEYBOARD_SHORTCUTS)
             _page_list.expand_row(_path_ui, false);
         if (desired_page >= PREFS_PAGE_BEHAVIOR && desired_page <= PREFS_PAGE_BEHAVIOR_MASKS)
             _page_list.expand_row(_path_behavior, false);

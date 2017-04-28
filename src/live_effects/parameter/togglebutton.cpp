@@ -60,37 +60,15 @@ ToggleButtonParam::param_getSVGValue() const
     return str;
 }
 
-void 
-ToggleButtonParam::param_update_default(bool default_value)
-{
-    defvalue = default_value;
-}
-
-void 
-ToggleButtonParam::param_update_default(const gchar * default_value)
-{
-    param_update_default(helperfns_read_bool(default_value, defvalue));
-}
-
 Gtk::Widget *
 ToggleButtonParam::param_newWidget()
 {
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    Glib::ustring effectkey = (Glib::ustring)Inkscape::LivePathEffect::LPETypeConverter.get_key(param_effect->effectType());
-    Glib::ustring pref_path = (Glib::ustring)"/live_effects/" +
-                                effectkey +
-                               (Glib::ustring)"/" + 
-                               (Glib::ustring)param_key;
-    Glib::ustring label = param_label;
-    if(prefs->getEntry(pref_path).isValid()){
-        label = (Glib::ustring)"* " + param_label;
-    }
     if (_toggled_connection.connected()) {
         _toggled_connection.disconnect();
     }
 
    checkwdg = Gtk::manage(
-        new Inkscape::UI::Widget::RegisteredToggleButton( label,
+        new Inkscape::UI::Widget::RegisteredToggleButton( param_label,
                                                          param_tooltip,
                                                          param_key,
                                                          *param_wr,

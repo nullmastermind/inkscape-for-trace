@@ -327,23 +327,6 @@ Gtk::Widget * LPECopyRotate::newWidget()
     reset_button->set_size_request(110,20);
     vbox->pack_start(*hbox, true,true,2);
     hbox->pack_start(*reset_button, false, false,2);
-
-    if (show_default_widgets) {
-        Gtk::Label *default_label = Gtk::manage(new Gtk::Label(
-                                                Glib::ustring(_("<b>Defaults</b> set defaultable -prefs- parameters (*)")),
-                                                Gtk::ALIGN_START));
-        default_label->set_use_markup(true);
-        vbox->pack_start(*default_label, true, true, 2);
-        Gtk::HBox * defaultBox = Gtk::manage(new Gtk::HBox(true,0));
-        Gtk::Button *set_default = Gtk::manage(new Gtk::Button(Glib::ustring(_("Set"))));
-        set_default->signal_clicked().connect(sigc::mem_fun(*this, &LPECopyRotate::setDefaultParams));
-        Gtk::Button *reset_default = Gtk::manage(new Gtk::Button(Glib::ustring(_("Reset"))));
-        reset_default->signal_clicked().connect(sigc::mem_fun(*this, &LPECopyRotate::resetDefaultParams));
-        defaultBox->pack_start(*set_default, true, true, 2);
-        defaultBox->pack_start(*reset_default, true, true, 2);
-        vbox->pack_start(*defaultBox, true, true, 2);
-    }
-
     return dynamic_cast<Gtk::Widget *>(vbox);
 }
 

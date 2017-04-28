@@ -60,10 +60,6 @@ ItemParam::param_set_default()
     param_readSVGValue(defvalue);
 }
 
-void
-ItemParam::param_update_default(const gchar * default_value){
-    defvalue = strdup(default_value);
-}
 
 void
 ItemParam::param_set_and_write_default()
@@ -108,20 +104,10 @@ ItemParam::param_getSVGValue() const
 Gtk::Widget *
 ItemParam::param_newWidget()
 {
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    Glib::ustring effectkey = (Glib::ustring)Inkscape::LivePathEffect::LPETypeConverter.get_key(param_effect->effectType());
-    Glib::ustring pref_path = (Glib::ustring)"/live_effects/" +
-                                effectkey +
-                               (Glib::ustring)"/" + 
-                               (Glib::ustring)param_key;
-    Glib::ustring label = param_label;
-    if(prefs->getEntry(pref_path).isValid()){
-        label = (Glib::ustring)"* " + param_label;
-    }
     Gtk::HBox * _widget = Gtk::manage(new Gtk::HBox());
     Gtk::Widget*  pIcon = Gtk::manage( sp_icon_get_icon( INKSCAPE_ICON("edit-clone"), Inkscape::ICON_SIZE_BUTTON) );
     Gtk::Button * pButton = Gtk::manage(new Gtk::Button());
-    Gtk::Label* pLabel = Gtk::manage(new Gtk::Label(label));
+    Gtk::Label* pLabel = Gtk::manage(new Gtk::Label(param_label));
     static_cast<Gtk::HBox*>(_widget)->pack_start(*pLabel, true, true);
     pLabel->set_tooltip_text(param_tooltip);
     pButton->set_relief(Gtk::RELIEF_NONE);
