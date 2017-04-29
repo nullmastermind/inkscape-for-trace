@@ -59,7 +59,7 @@ public:
         g_strfreev (strarray);
         return true;
     }
-
+    virtual void param_update_default(const gchar * default_value){};
     virtual gchar * param_getSVGValue() const {
         Inkscape::SVGOStringStream os;
         writesvg(os, _vector);

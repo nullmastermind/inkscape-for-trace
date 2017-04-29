@@ -49,7 +49,6 @@ public:
     void createTextLabel(Geom::Point pos, double length, Geom::Coord angle, bool remove, bool valid);
     void onExpanderChanged();
     void createArrowMarker(const char * mode);
-    void saveDefault();
     virtual Gtk::Widget *newWidget();
 private:
     UnitParam unit;

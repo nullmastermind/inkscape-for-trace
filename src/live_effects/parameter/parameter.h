@@ -60,7 +60,7 @@ public:
     void write_to_SVG();
  
     virtual void param_set_default() = 0;
-
+    virtual void param_update_default(const gchar * default_value) = 0;
     // This creates a new widget (newed with Gtk::manage(new ...);)
     virtual Gtk::Widget * param_newWidget() = 0;
 
@@ -77,6 +77,7 @@ public:
     virtual void param_transform_multiply(Geom::Affine const& /*postmul*/, bool /*set*/) {};
 
     Glib::ustring param_key;
+    Glib::ustring param_tooltip;
     Inkscape::UI::Widget::Registry * param_wr;
     Glib::ustring param_label;
 
@@ -84,7 +85,6 @@ public:
     bool widget_is_visible;
 
 protected:
-    Glib::ustring param_tooltip;
 
     Effect* param_effect;
 
@@ -112,6 +112,7 @@ public:
 
     virtual void param_set_default();
     void param_update_default(gdouble default_value);
+    virtual void param_update_default(const gchar * default_value);
     void param_set_value(gdouble val);
     void param_make_integer(bool yes = true);
     void param_set_range(gdouble min, gdouble max);
@@ -120,7 +121,6 @@ public:
     void addSlider(bool add_slider_widget) { add_slider = add_slider_widget; };
     double param_get_max() { return max; };
     double param_get_min() { return min; };
-
     void param_overwrite_widget(bool overwrite_widget);
     virtual Gtk::Widget * param_newWidget();
 

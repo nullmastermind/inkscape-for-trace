@@ -55,6 +55,7 @@ public:
     virtual void set_chamfer_steps(int value_chamfer_steps);
     virtual void addCanvasIndicators(SPLPEItem const *lpeitem,
                                      std::vector<Geom::PathVector> &hp_vec);
+    virtual void param_update_default(const gchar * default_value){};
     virtual bool providesKnotHolderEntities() const {
         return true;
     }
