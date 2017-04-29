@@ -27,6 +27,9 @@ if(WIN32)
 	LGPL2.1.txt
     DESTINATION ${CMAKE_INSTALL_PREFIX})
 
+  install(DIRECTORY doc
+    DESTINATION ${CMAKE_INSTALL_PREFIX})
+
   # mingw dlls
   install(FILES
     ${MINGW_BIN}/LIBEAY32.dll
@@ -141,23 +144,6 @@ if(WIN32)
       ${MINGW_BIN}/libgcc_s_dw2-1.dll
       DESTINATION ${CMAKE_INSTALL_PREFIX})
   endif()
-
-  # Setup application data directories, poppler files, locales, icons and themes
-  file(MAKE_DIRECTORY
-    data
-    doc
-    modules
-    plugins)
-
-  install(DIRECTORY
-    data
-    doc
-    modules
-    plugins
-    DESTINATION ${CMAKE_INSTALL_PREFIX}
-    PATTERN hicolor/index.theme EXCLUDE   # NOTE: Empty index.theme in hicolor icon theme causes SIGSEGV.
-    PATTERN CMakeLists.txt EXCLUDE
-    PATTERN *.am EXCLUDE)
 
   # Install hicolor/index.theme to avoid bug 1635207
   install(FILES

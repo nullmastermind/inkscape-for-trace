@@ -34,6 +34,9 @@ if(WIN32)
 	LGPL2.1.txt
     DESTINATION ${CMAKE_INSTALL_PREFIX})
 
+  install(DIRECTORY doc
+    DESTINATION ${CMAKE_INSTALL_PREFIX})
+    
   # devlibs and mingw dlls
 
   # There are differences in the devlibs for 64-Bit and 32-Bit build environments.
@@ -177,23 +180,6 @@ if(WIN32)
       ${MINGW_BIN}/libgomp-1.dll
       DESTINATION ${CMAKE_INSTALL_PREFIX})
   endif()
-
-  # Setup application data directories, poppler files, locales, icons and themes
-  file(MAKE_DIRECTORY
-    data
-    doc
-    modules
-    plugins)
-
-  install(DIRECTORY
-    data
-    doc
-    modules
-    plugins
-    DESTINATION ${CMAKE_INSTALL_PREFIX}
-    PATTERN hicolor/index.theme EXCLUDE   # NOTE: Empty index.theme in hicolor icon theme causes SIGSEGV.
-    PATTERN CMakeLists.txt EXCLUDE
-    PATTERN *.am EXCLUDE)
 
   # Generate a dummy file in hicolor/index.theme to avoid bug 1635207
   file(GENERATE OUTPUT ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/index.theme
