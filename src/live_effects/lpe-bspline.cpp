@@ -86,7 +86,7 @@ Gtk::Widget *LPEBSpline::newWidget()
     // use manage here, because after deletion of Effect object, others might
     // still be pointing to this widget.
     Gtk::VBox *vbox = Gtk::manage(new Gtk::VBox(Effect::newWidget()));
-
+    vbox->set_homogeneous(false);
     vbox->set_border_width(5);
     std::vector<Parameter *>::iterator it = param_vector.begin();
     while (it != param_vector.end()) {

@@ -91,6 +91,7 @@ ScalarParam::param_getSVGValue() const
 {
     Inkscape::SVGOStringStream os;
     os << value;
+    std::cout << value << "value\n";
     gchar * str = g_strdup(os.str().c_str());
     return str;
 }

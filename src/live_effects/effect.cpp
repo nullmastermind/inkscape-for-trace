@@ -795,17 +795,15 @@ Effect::defaultParamSet()
     // use manage here, because after deletion of Effect object, others might still be pointing to this widget.
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     Gtk::VBox * vbox = Gtk::manage( new Gtk::VBox() );
-
-    vbox->set_border_width(5);
     Gtk::VBox * vbox_expander = Gtk::manage( new Gtk::VBox() );
-    vbox_expander->set_border_width(10);
-    vbox_expander->set_spacing(2);
     Glib::ustring effectname = (Glib::ustring)Inkscape::LivePathEffect::LPETypeConverter.get_label(effectType());
     Glib::ustring effectkey = (Glib::ustring)Inkscape::LivePathEffect::LPETypeConverter.get_key(effectType());
     std::vector<Parameter *>::iterator it = param_vector.begin();
     Inkscape::UI::Widget::Registry * wr;
+    bool has_params = false;
     while (it != param_vector.end()) {
         if ((*it)->widget_is_visible) {
+            has_params = true;
             Parameter * param = *it;
             Glib::ustring * tip = param->param_getTooltip();
             const gchar * key = param->param_key.c_str();
@@ -843,13 +841,17 @@ Effect::defaultParamSet()
         }
         ++it;
     }
-    Glib::ustring tip = "<b>" + effectname + (Glib::ustring)_("</b>: Set default parameters to current values");
+    Glib::ustring tip = "<b>" + effectname + (Glib::ustring)_("</b>: Set default parameters");
     Gtk::Expander * expander = Gtk::manage(new Gtk::Expander(tip));
     expander->set_use_markup(true);
     expander->add(*vbox_expander);
     expander->set_expanded(false);
     vbox->pack_start(*dynamic_cast<Gtk::Widget *> (expander), true, true, 2);
-    return dynamic_cast<Gtk::Widget *>(vbox);
+    if (has_params) {
+        return dynamic_cast<Gtk::Widget *>(vbox);
+    } else {
+        return NULL;
+    }
 }
 
 void
