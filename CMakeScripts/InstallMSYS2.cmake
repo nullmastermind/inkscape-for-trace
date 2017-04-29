@@ -173,7 +173,7 @@ if(WIN32)
     FILES_MATCHING
     PATTERN "*gtk30.mo"
     PATTERN "*gtkspell3.mo")
-    
+
   install(DIRECTORY ${MINGW_PATH}/share/poppler
     DESTINATION ${CMAKE_INSTALL_PREFIX}/share)
 
@@ -234,5 +234,27 @@ if(WIN32)
     ${MINGW_BIN}/libpython2.7.dll
     DESTINATION ${CMAKE_INSTALL_PREFIX})
   install(DIRECTORY ${MINGW_LIB}/python2.7
-    DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
+    PATTERN "python2.7/site-packages" EXCLUDE)
+
+  set(site_packages "lib/python2.7/site-packages")
+  # Python packages installed via pacman
+  set(packages "python2-lxml" "python2-numpy")
+  foreach(package ${packages})
+    list_files_pacman(${package} paths)
+    install_list(FILES ${paths}
+      ROOT ${MINGW_PATH}
+      INCLUDE ${site_packages} # only include content from "site-packages" (we might consider to install everything)
+    )
+  endforeach()
+  # Python packages installed via pip
+  set(packages "coverage" "pyserial" "scour" "six")
+  foreach(package ${packages})
+    list_files_pip(${package} paths)
+    install_list(FILES ${paths}
+      ROOT ${MINGW_PATH}/${site_packages}
+      DESTINATION ${site_packages}/
+      EXCLUDE "^\\.\\.\\/" # exclude content in parent directories (notably scripts installed to /bin)
+    )
+  endforeach()
 endif()

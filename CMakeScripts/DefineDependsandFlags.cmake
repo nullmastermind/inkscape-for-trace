@@ -39,6 +39,7 @@ if(WIN32)
 	endif()
 endif()
 
+find_package(PkgConfig REQUIRED)
 pkg_check_modules(INKSCAPE_DEP REQUIRED
 	          harfbuzz
 	          pangocairo
