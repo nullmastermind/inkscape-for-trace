@@ -404,7 +404,12 @@ Document *sp_repr_read_mem (const gchar * buffer, gint length, const gchar *defa
 
     g_return_val_if_fail (buffer != NULL, NULL);
 
-    doc = xmlParseMemory (const_cast<gchar *>(buffer), length);
+    int parser_options = XML_PARSE_HUGE | XML_PARSE_RECOVER;
+    parser_options |= XML_PARSE_NONET; // TODO: should we allow network access?
+                                       // proper solution would be to check the preference "/options/externalresources/xml/allow_net_access"
+                                       // as done in XmlSource::readXml which gets called by the analogous sp_repr_read_file()
+                                       // but sp_repr_read_mem() seems to be called in locations where Inkscape::Preferences::get() fails badly
+    doc = xmlReadMemory (const_cast<gchar *>(buffer), length, NULL, NULL, parser_options);
 
     rdoc = sp_repr_do_read (doc, default_ns);
     if (doc) {
