@@ -913,7 +913,8 @@ static void spdc_free_colors(FreehandBase *dc)
 }
 
 void spdc_create_single_dot(ToolBase *ec, Geom::Point const &pt, char const *tool, guint event_state) {
-    g_return_if_fail(!strcmp(tool, "/tools/freehand/pen") || !strcmp(tool, "/tools/freehand/pencil"));
+    g_return_if_fail(!strcmp(tool, "/tools/freehand/pen") || !strcmp(tool, "/tools/freehand/pencil") 
+            || !strcmp(tool, "/tools/calligraphic") );
     Glib::ustring tool_path = tool;
 
     SPDesktop *desktop = ec->desktop;
@@ -937,7 +938,8 @@ void spdc_create_single_dot(ToolBase *ec, Geom::Point const &pt, char const *too
 
     // unset stroke and set fill color to former stroke color
     gchar * str;
-    str = g_strdup_printf("fill:#%06x;stroke:none;", sp_desktop_get_color_tool(desktop, tool, false) >> 8);
+    str = strcmp(tool, "/tools/calligraphic") ? g_strdup_printf("fill:#%06x;stroke:none;", sp_desktop_get_color_tool(desktop, tool, false) >> 8)
+        : g_strdup_printf("fill:#%06x;stroke:#%06x;", sp_desktop_get_color_tool(desktop, tool, true) >> 8, sp_desktop_get_color_tool(desktop, tool, false) >> 8);
     repr->setAttribute("style", str);
     g_free(str);
 
@@ -948,6 +950,8 @@ void spdc_create_single_dot(ToolBase *ec, Geom::Point const &pt, char const *too
     Geom::Affine const i2d (item->i2dt_affine ());
     Geom::Point pp = pt * i2d.inverse();
     double rad = 0.5 * prefs->getDouble(tool_path + "/dot-size", 3.0);
+    if (!strcmp(tool, "/tools/calligraphic"))
+        rad = 0.1 * prefs->getDouble(tool_path + "/width", 3.0) / desktop->current_zoom();
     if (event_state & GDK_MOD1_MASK) {
         // TODO: We vary the dot size between 0.5*rad and 1.5*rad, where rad is the dot size
         // as specified in prefs. Very simple, but it might be sufficient in practice. If not,
