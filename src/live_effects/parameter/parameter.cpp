@@ -121,7 +121,6 @@ ScalarParam::param_update_default(const gchar * default_value)
 void
 ScalarParam::param_set_value(gdouble val)
 {
-    param_effect->upd_params = true;
     value = val;
     if (integer)
         value = round(value);
@@ -139,7 +138,6 @@ ScalarParam::param_set_range(gdouble min, gdouble max)
     // Once again, in gtk2, this is not a problem. But in gtk3,
     // widgets get allocated the amount of size they ask for,
     // leading to excessively long widgets.
-    param_effect->upd_params = true;
     if (min >= -SCALARPARAM_G_MAXDOUBLE) {
         this->min = min;
     } else {
@@ -156,7 +154,6 @@ ScalarParam::param_set_range(gdouble min, gdouble max)
 void
 ScalarParam::param_make_integer(bool yes)
 {
-    param_effect->upd_params = true;
     integer = yes;
     digits = 0;
     inc_step = 1;
@@ -187,7 +184,6 @@ ScalarParam::param_newWidget()
         if(!overwrite_widget){
             rsu->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change scalar parameter"));
         }
-        param_effect->upd_params = false;
         return dynamic_cast<Gtk::Widget *> (rsu);
     } else {
         return NULL;
@@ -197,14 +193,12 @@ ScalarParam::param_newWidget()
 void
 ScalarParam::param_set_digits(unsigned digits)
 {
-    param_effect->upd_params = true;
     this->digits = digits;
 }
 
 void
 ScalarParam::param_set_increments(double step, double page)
 {
-    param_effect->upd_params = true;
     inc_step = step;
     inc_page = page;
 }

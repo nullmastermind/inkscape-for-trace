@@ -27,6 +27,9 @@ if(WIN32)
 	LGPL2.1.txt
     DESTINATION ${CMAKE_INSTALL_PREFIX})
 
+  install(DIRECTORY doc
+    DESTINATION ${CMAKE_INSTALL_PREFIX})
+
   # mingw dlls
   install(FILES
     ${MINGW_BIN}/LIBEAY32.dll
@@ -142,23 +145,6 @@ if(WIN32)
       DESTINATION ${CMAKE_INSTALL_PREFIX})
   endif()
 
-  # Setup application data directories, poppler files, locales, icons and themes
-  file(MAKE_DIRECTORY
-    data
-    doc
-    modules
-    plugins)
-
-  install(DIRECTORY
-    data
-    doc
-    modules
-    plugins
-    DESTINATION ${CMAKE_INSTALL_PREFIX}
-    PATTERN hicolor/index.theme EXCLUDE   # NOTE: Empty index.theme in hicolor icon theme causes SIGSEGV.
-    PATTERN CMakeLists.txt EXCLUDE
-    PATTERN *.am EXCLUDE)
-
   # Install hicolor/index.theme to avoid bug 1635207
   install(FILES
     ${MINGW_PATH}/share/icons/hicolor/index.theme
@@ -173,7 +159,7 @@ if(WIN32)
     FILES_MATCHING
     PATTERN "*gtk30.mo"
     PATTERN "*gtkspell3.mo")
-    
+
   install(DIRECTORY ${MINGW_PATH}/share/poppler
     DESTINATION ${CMAKE_INSTALL_PREFIX}/share)
 
@@ -234,5 +220,27 @@ if(WIN32)
     ${MINGW_BIN}/libpython2.7.dll
     DESTINATION ${CMAKE_INSTALL_PREFIX})
   install(DIRECTORY ${MINGW_LIB}/python2.7
-    DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
+    PATTERN "python2.7/site-packages" EXCLUDE)
+
+  set(site_packages "lib/python2.7/site-packages")
+  # Python packages installed via pacman
+  set(packages "python2-lxml" "python2-numpy")
+  foreach(package ${packages})
+    list_files_pacman(${package} paths)
+    install_list(FILES ${paths}
+      ROOT ${MINGW_PATH}
+      INCLUDE ${site_packages} # only include content from "site-packages" (we might consider to install everything)
+    )
+  endforeach()
+  # Python packages installed via pip
+  set(packages "coverage" "pyserial" "scour" "six")
+  foreach(package ${packages})
+    list_files_pip(${package} paths)
+    install_list(FILES ${paths}
+      ROOT ${MINGW_PATH}/${site_packages}
+      DESTINATION ${site_packages}/
+      EXCLUDE "^\\.\\.\\/" # exclude content in parent directories (notably scripts installed to /bin)
+    )
+  endforeach()
 endif()

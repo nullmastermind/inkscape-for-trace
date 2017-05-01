@@ -68,7 +68,6 @@ FontButtonParam::param_newWidget()
     Glib::ustring fontspec = param_getSVGValue();
     fontbuttonwdg->setValue( fontspec);
     fontbuttonwdg->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change font button parameter"));
-    param_effect->upd_params = false;
     return dynamic_cast<Gtk::Widget *> (fontbuttonwdg);
 }
 
