@@ -185,7 +185,6 @@ LivePathEffectEditor::~LivePathEffectEditor()
     if (current_desktop) {
         selection_changed_connection.disconnect();
         selection_modified_connection.disconnect();
-        selection_moved_connection.disconnect();
     }
 }
 

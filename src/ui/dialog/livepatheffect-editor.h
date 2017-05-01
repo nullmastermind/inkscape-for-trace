@@ -63,7 +63,6 @@ private:
     sigc::connection desktopChangeConn;
     sigc::connection selection_changed_connection;
     sigc::connection selection_modified_connection;
-    sigc::connection selection_moved_connection;
 
     // void add_entry(const char* name );
     void effect_list_reload(SPLPEItem *lpeitem);
