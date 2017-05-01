@@ -527,7 +527,6 @@ LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
         pathvector *= writed_transform;
         if ((Glib::ustring(format.param_getSVGValue()).empty())) {
             format.param_setValue(Glib::ustring("{measure}{unit}"));
-            this->upd_params = true;
         }
         size_t ncurves = pathvector.curveCount();
         if (ncurves != (size_t)curve_linked.param_get_max()) {

@@ -362,23 +362,19 @@ LPECopyRotate::doBeforeEffect (SPLPEItem const* lpeitem)
     using namespace Geom;
     original_bbox(lpeitem);
     if (copies_to_360 && num_copies > 2) {
-        this->upd_params = true;
         rotation_angle.param_set_value(360.0/(double)num_copies);
     }
 
     if ((method == RM_KALEIDOSCOPE || method == RM_FUSE) && rotation_angle * num_copies > 360.1 && rotation_angle > 0) {
-        this->upd_params = true;
         num_copies.param_set_value(floor(360/rotation_angle));
     }
     if ((method == RM_KALEIDOSCOPE || method == RM_FUSE)  && mirror_copies && copies_to_360) {
-        this->upd_params = true;
         num_copies.param_set_increments(2.0,10.0);
         if ((int)num_copies%2 !=0) {
             num_copies.param_set_value(num_copies+1);
             rotation_angle.param_set_value(360.0/(double)num_copies);
         }
     } else {
-        this->upd_params = true;
         num_copies.param_set_increments(1.0, 10.0);
     }
 
@@ -392,7 +388,6 @@ LPECopyRotate::doBeforeEffect (SPLPEItem const* lpeitem)
     // likely due to SVG's choice of coordinate system orientation (max)
     bool near = Geom::are_near(previous_start_point, (Geom::Point)starting_point, 0.01);
     if (!near) {
-        this->upd_params = true;
         starting_angle.param_set_value(deg_from_rad(-angle_between(dir, starting_point - origin)));
         if (GDK_SHIFT_MASK) {
             dist_angle_handle = L2(B - A);
@@ -407,7 +402,6 @@ LPECopyRotate::doBeforeEffect (SPLPEItem const* lpeitem)
     rot_pos = origin + dir * Rotate(-rad_from_deg(rotation_angle+starting_angle)) * dist_angle_handle;
     near = Geom::are_near(start_pos, (Geom::Point)starting_point, 0.01);
     if (!near) {
-        this->upd_params = true;
         starting_point.param_setValue(start_pos, true);
     }
     previous_start_point = (Geom::Point)starting_point;

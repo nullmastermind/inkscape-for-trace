@@ -112,7 +112,6 @@ ToggleButtonParam::param_newWidget()
     checkwdg->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change togglebutton parameter"));
 
     _toggled_connection = checkwdg->signal_toggled().connect(sigc::mem_fun(*this, &ToggleButtonParam::toggled));
-    param_effect->upd_params = false;
     return checkwdg;
 }
 
@@ -159,8 +158,6 @@ ToggleButtonParam::param_setValue(bool newvalue)
 
 void
 ToggleButtonParam::toggled() {
-    //Force redraw for update widgets
-    param_effect->upd_params = true;
     if (SP_ACTIVE_DESKTOP) {
         Inkscape::Selection *selection = SP_ACTIVE_DESKTOP->getSelection();
         selection->emitModified();

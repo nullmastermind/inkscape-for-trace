@@ -493,8 +493,8 @@ void SPLPEItem::removeCurrentPathEffect(bool keep_paths)
     }
     PathEffectList new_list = *this->path_effect_list;
     new_list.remove(lperef); //current lpe ref is always our 'own' pointer from the path_effect_list
+    *this->path_effect_list = new_list;
     this->getRepr()->setAttribute("inkscape:path-effect", patheffectlist_svg_string(new_list));
-
     if (!keep_paths) {
         // Make sure that ellipse is stored as <svg:circle> or <svg:ellipse> if possible.
         if( SP_IS_GENERICELLIPSE(this)) {

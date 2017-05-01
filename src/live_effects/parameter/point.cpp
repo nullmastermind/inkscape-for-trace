@@ -77,7 +77,6 @@ PointParam::param_setValue(Geom::Point newpoint, bool write)
     if(knoth && liveupdate){
         knoth->update_knots();
     }
-    param_effect->upd_params = true;
 }
 
 bool
@@ -130,7 +129,6 @@ PointParam::param_newWidget()
     Gtk::HBox * hbox = Gtk::manage( new Gtk::HBox() );
     static_cast<Gtk::HBox*>(hbox)->pack_start(*pointwdg, true, true);
     static_cast<Gtk::HBox*>(hbox)->show_all_children();
-    param_effect->upd_params = false;
     return dynamic_cast<Gtk::Widget *> (hbox);
 }
 

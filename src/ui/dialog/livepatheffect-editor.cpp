@@ -47,17 +47,18 @@ namespace Dialog {
 /*####################
  * Callback functions
  */
+
+
 void lpeeditor_selection_changed (Inkscape::Selection * selection, gpointer data)
 {
     LivePathEffectEditor *lpeeditor = static_cast<LivePathEffectEditor *>(data);
     lpeeditor->lpe_list_locked = false;
-    lpeeditor->onSelectionChanged(selection, true);
+    lpeeditor->onSelectionChanged(selection);
 }
 
-static void lpeeditor_selection_modified (Inkscape::Selection * selection, guint /*flags*/, gpointer data)
+void lpeeditor_selection_modified (Inkscape::Selection * selection, guint /*flags*/, gpointer data)
 {
-    LivePathEffectEditor *lpeeditor = static_cast<LivePathEffectEditor *>(data);
-    lpeeditor->onSelectionChanged(selection);
+    lpeeditor_selection_changed (selection, data);
 }
 
 static void lpe_style_button(Gtk::Button& btn, char const* iconName)
@@ -184,16 +185,13 @@ LivePathEffectEditor::~LivePathEffectEditor()
     if (current_desktop) {
         selection_changed_connection.disconnect();
         selection_modified_connection.disconnect();
+        selection_moved_connection.disconnect();
     }
 }
 
 void
 LivePathEffectEditor::showParams(LivePathEffect::Effect& effect)
 {
-    if ( ! effect.upd_params ) {
-        return;
-    }
-
     if (effectwidget) {
         effectcontrol_vbox.remove(*effectwidget);
         delete effectwidget;
@@ -254,16 +252,15 @@ LivePathEffectEditor::set_sensitize_all(bool sensitive)
 }
 
 void
-LivePathEffectEditor::onSelectionChanged(Inkscape::Selection *sel, bool upd_params)
+LivePathEffectEditor::onSelectionChanged(Inkscape::Selection *sel)
 {
     if (lpe_list_locked) {
         // this was triggered by selecting a row in the list, so skip reloading
         lpe_list_locked = false;
         return;
     }
-
-    effectlist_store->clear();
     current_lpeitem = NULL;
+    effectlist_store->clear();
 
     if ( sel && !sel->isEmpty() ) {
         SPItem *item = sel->singleItem();
@@ -278,9 +275,6 @@ LivePathEffectEditor::onSelectionChanged(Inkscape::Selection *sel, bool upd_para
                 if ( lpeitem->hasPathEffect() ) {
                     Inkscape::LivePathEffect::Effect *lpe = lpeitem->getCurrentLPE();
                     if (lpe) {
-                        if (upd_params) {
-                            lpe->upd_params = true;
-                        }
                         showParams(*lpe);
                         lpe_list_locked = true;
                         selectInList(lpe);
@@ -484,18 +478,12 @@ LivePathEffectEditor::onRemove()
         SPItem *item = sel->singleItem();
         SPLPEItem *lpeitem  = dynamic_cast<SPLPEItem *>(item);
         if ( lpeitem ) {
-            if (current_lperef && current_lperef->lpeobject) {
-                LivePathEffect::Effect * effect = current_lperef->lpeobject->get_lpe();
-                if (effect) {
-                    effect->upd_params = true;
-                }
-            }
             lpeitem->removeCurrentPathEffect(false);
-
+            current_lperef = NULL;
             DocumentUndo::done( current_desktop->getDocument(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
                                 _("Remove path effect") );
-
-            effect_list_reload(lpeitem);
+            lpe_list_locked = false;
+            onSelectionChanged(sel);
         }
     }
 
@@ -512,7 +500,7 @@ void LivePathEffectEditor::onUp()
 
             DocumentUndo::done( current_desktop->getDocument(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
                                 _("Move path effect up") );
-
+            
             effect_list_reload(lpeitem);
         }
     }
@@ -529,7 +517,6 @@ void LivePathEffectEditor::onDown()
 
             DocumentUndo::done( current_desktop->getDocument(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
                                 _("Move path effect down") );
-
             effect_list_reload(lpeitem);
         }
     }
@@ -554,7 +541,6 @@ void LivePathEffectEditor::on_effect_selection_changed()
             current_lperef = lperef;
             LivePathEffect::Effect * effect = lperef->lpeobject->get_lpe();
             if (effect) {
-                effect->upd_params = true;
                 showParams(*effect);
             }
         }
@@ -563,6 +549,7 @@ void LivePathEffectEditor::on_effect_selection_changed()
 
 void LivePathEffectEditor::on_visibility_toggled( Glib::ustring const& str )
 {
+
     Gtk::TreeModel::Children::iterator iter = effectlist_view.get_model()->get_iter(str);
     Gtk::TreeModel::Row row = *iter;
 

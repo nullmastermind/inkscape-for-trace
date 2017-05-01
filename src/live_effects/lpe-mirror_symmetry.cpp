@@ -335,7 +335,6 @@ LPEMirrorSymmetry::newWidget()
 
         ++it;
     }
-    this->upd_params = false;
     return dynamic_cast<Gtk::Widget *>(vbox);
 }
 
