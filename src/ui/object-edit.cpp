@@ -1071,6 +1071,12 @@ public:
     virtual void knot_click(unsigned int state);
 };
 
+class StarKnotHolderEntityCenter : public KnotHolderEntity {
+public:
+    virtual Geom::Point knot_get() const;
+    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state);
+};
+
 void
 StarKnotHolderEntity1::knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, unsigned int state)
 {
@@ -1128,6 +1134,17 @@ StarKnotHolderEntity2::knot_set(Geom::Point const &p, Geom::Point const &/*origi
     }
 }
 
+void
+StarKnotHolderEntityCenter::knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, unsigned int state)
+{
+    SPStar *star = dynamic_cast<SPStar *>(item);
+    g_assert(star != NULL);
+
+    star->center = snap_knot_position(p, state);
+
+    item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+}
+
 Geom::Point
 StarKnotHolderEntity1::knot_get() const
 {
@@ -1149,6 +1166,17 @@ StarKnotHolderEntity2::knot_get() const
     g_assert(star != NULL);
 
     return sp_star_get_xy(star, SP_STAR_POINT_KNOT2, 0);
+}
+
+Geom::Point
+StarKnotHolderEntityCenter::knot_get() const
+{
+    g_assert(item != NULL);
+
+    SPStar const *star = dynamic_cast<SPStar const *>(item);
+    g_assert(star != NULL);
+
+    return star->center;
 }
 
 static void
@@ -1201,6 +1229,12 @@ StarKnotHolder::StarKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderRel
                           "radial (no skew); with <b>Shift</b> to round; with <b>Alt</b> to randomize"));
         entity.push_back(entity2);
     }
+
+    StarKnotHolderEntityCenter *entity_center = new StarKnotHolderEntityCenter();
+    entity_center->create(desktop, item, this, Inkscape::CTRL_TYPE_POINT,
+                          _("Move the star"),
+                          SP_KNOT_SHAPE_CROSS);
+    entity.push_back(entity_center);
 
     add_pattern_knotholder();
 }
