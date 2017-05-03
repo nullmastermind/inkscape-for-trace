@@ -221,7 +221,9 @@ if(WIN32)
     DESTINATION ${CMAKE_INSTALL_PREFIX})
   install(DIRECTORY ${MINGW_LIB}/python2.7
     DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
-    PATTERN "python2.7/site-packages" EXCLUDE)
+    PATTERN "python2.7/site-packages" EXCLUDE # specify individual packages to install below
+    PATTERN "python2.7/test" EXCLUDE # we don't need the Python testsuite
+  )
 
   set(site_packages "lib/python2.7/site-packages")
   # Python packages installed via pacman
