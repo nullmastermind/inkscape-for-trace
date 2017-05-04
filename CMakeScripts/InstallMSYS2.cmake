@@ -166,7 +166,20 @@ if(WIN32)
   install(DIRECTORY ${MINGW_PATH}/share/glib-2.0/schemas
     DESTINATION ${CMAKE_INSTALL_PREFIX}/share/glib-2.0)
 
+  # fontconfig
   install(DIRECTORY ${MINGW_PATH}/etc/fonts
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/etc
+    FILES_MATCHING PATTERN "fonts.conf" EXCLUDE)
+  # adjust fonts.conf to store font cache in AppData
+  set(cachedir_default "\\t^<cachedir^>/var/cache/fontconfig^</cachedir^>") # the '^' are needed to escape angle brackets on Windows command shell
+  set(cachedir_appdata "\\t^<cachedir^>LOCAL_APPDATA_FONTCONFIG_CACHE^</cachedir^>")
+  add_custom_command(
+    OUTPUT ${CMAKE_BINARY_DIR}/etc/fonts/fonts.conf
+    COMMAND sed 's!${cachedir_default}!${cachedir_appdata}\\n${cachedir_default}!' ${MINGW_PATH}/etc/fonts/fonts.conf  > ${CMAKE_BINARY_DIR}/etc/fonts/fonts.conf
+    MAIN_DEPENDENCY ${MINGW_PATH}/etc/fonts/fonts.conf
+  )
+  add_custom_target(fonts_conf ALL DEPENDS ${CMAKE_BINARY_DIR}/etc/fonts/fonts.conf)
+  install(DIRECTORY ${CMAKE_BINARY_DIR}/etc/fonts
     DESTINATION ${CMAKE_INSTALL_PREFIX}/etc)
 
   # GTK 3.0
