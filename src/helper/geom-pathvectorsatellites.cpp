@@ -67,7 +67,9 @@ void PathVectorSatellites::setSelected(std::vector<size_t> selected)
     size_t counter = 0;
     for (size_t i = 0; i < _satellites.size(); ++i) {
         for (size_t j = 0; j < _satellites[i].size(); ++j) {
+            std::cout << j;
             if (find (selected.begin(), selected.end(), counter) != selected.end()) {
+                
                 _satellites[i][j].setSelected(true);
             } else {
                 _satellites[i][j].setSelected(false);

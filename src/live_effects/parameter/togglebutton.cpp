@@ -60,6 +60,18 @@ ToggleButtonParam::param_getSVGValue() const
     return str;
 }
 
+void 
+ToggleButtonParam::param_update_default(bool default_value)
+{
+    defvalue = default_value;
+}
+
+void 
+ToggleButtonParam::param_update_default(const gchar * default_value)
+{
+    param_update_default(helperfns_read_bool(default_value, defvalue));
+}
+
 Gtk::Widget *
 ToggleButtonParam::param_newWidget()
 {
@@ -68,7 +80,7 @@ ToggleButtonParam::param_newWidget()
     }
 
    checkwdg = Gtk::manage(
-        new Inkscape::UI::Widget::RegisteredToggleButton( param_label,
+        new Inkscape::UI::Widget::RegisteredToggleButton(param_label,
                                                          param_tooltip,
                                                          param_key,
                                                          *param_wr,
@@ -112,7 +124,6 @@ ToggleButtonParam::param_newWidget()
     checkwdg->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change togglebutton parameter"));
 
     _toggled_connection = checkwdg->signal_toggled().connect(sigc::mem_fun(*this, &ToggleButtonParam::toggled));
-    param_effect->upd_params = false;
     return checkwdg;
 }
 
@@ -153,14 +164,13 @@ ToggleButtonParam::refresh_button()
 void
 ToggleButtonParam::param_setValue(bool newvalue)
 {
+    param_effect->upd_params = true;
     value = newvalue;
     refresh_button();
 }
 
 void
 ToggleButtonParam::toggled() {
-    //Force redraw for update widgets
-    param_effect->upd_params = true;
     if (SP_ACTIVE_DESKTOP) {
         Inkscape::Selection *selection = SP_ACTIVE_DESKTOP->getSelection();
         selection->emitModified();

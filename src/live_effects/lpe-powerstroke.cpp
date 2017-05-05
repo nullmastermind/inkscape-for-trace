@@ -179,14 +179,14 @@ LPEPowerStroke::LPEPowerStroke(LivePathEffectObject *lpeobject) :
     interpolator_beta.addSlider(true);
     interpolator_beta.param_set_range(0.,1.);
 
-    registerParameter( dynamic_cast<Parameter *>(&offset_points) );
-    registerParameter( dynamic_cast<Parameter *>(&sort_points) );
-    registerParameter( dynamic_cast<Parameter *>(&interpolator_type) );
-    registerParameter( dynamic_cast<Parameter *>(&interpolator_beta) );
-    registerParameter( dynamic_cast<Parameter *>(&start_linecap_type) );
-    registerParameter( dynamic_cast<Parameter *>(&linejoin_type) );
-    registerParameter( dynamic_cast<Parameter *>(&miter_limit) );
-    registerParameter( dynamic_cast<Parameter *>(&end_linecap_type) );
+    registerParameter(&offset_points);
+    registerParameter(&sort_points);
+    registerParameter(&interpolator_type);
+    registerParameter(&interpolator_beta);
+    registerParameter(&start_linecap_type);
+    registerParameter(&linejoin_type);
+    registerParameter(&miter_limit);
+    registerParameter(&end_linecap_type);
 }
 
 LPEPowerStroke::~LPEPowerStroke()

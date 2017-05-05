@@ -136,7 +136,7 @@ include_directories(SYSTEM ${MINGW_INCLUDE})
 set(MINGW_ARCH_LIB "${MINGW_ARCH_PATH}/lib")
 
 if(NOT EXISTS ${MINGW_ARCH_LIB})
-  message(FATAL_ERROR "MinGW toolchainlibraries directory does not exist: ${MINGW_ARCH_LIB}")
+  message(FATAL_ERROR "MinGW-w64 toolchain libraries directory does not exist: ${MINGW_ARCH_LIB}")
 endif()
 
 # Add MinGW toolchain libraries to linker path.
@@ -145,7 +145,7 @@ link_directories(${MINGW_ARCH_LIB})
 set(MINGW_ARCH_INCLUDE "${MINGW_ARCH_PATH}/include")
 
 if(NOT EXISTS ${MINGW_ARCH_INCLUDE})
-  message(FATAL_ERROR "MinGW toolchaininclude directory does not exist: ${MINGW_ARCH_INCLUDE}")
+  message(FATAL_ERROR "MinGW-w64 toolchain include directory does not exist: ${MINGW_ARCH_INCLUDE}")
 endif()
 
 # Add MinGW toolchain headers to compiler include path.

@@ -62,25 +62,25 @@ LPESketch::LPESketch(LivePathEffectObject *lpeobject) :
     // register all your parameters here, so Inkscape knows which parameters this effect has:
     //Add some comment in the UI:  *warning* the precise output of this effect might change in future releases!
     //convert to path if you want to keep exact output unchanged in future releases...
-    //registerParameter( dynamic_cast<Parameter *>(&testpointA) );
-    registerParameter( dynamic_cast<Parameter *>(&nbiter_approxstrokes) );
-    registerParameter( dynamic_cast<Parameter *>(&strokelength) );
-    registerParameter( dynamic_cast<Parameter *>(&strokelength_rdm) );
-    registerParameter( dynamic_cast<Parameter *>(&strokeoverlap) );
-    registerParameter( dynamic_cast<Parameter *>(&strokeoverlap_rdm) );
-    registerParameter( dynamic_cast<Parameter *>(&ends_tolerance) );
-    registerParameter( dynamic_cast<Parameter *>(&parallel_offset) );
-    registerParameter( dynamic_cast<Parameter *>(&tremble_size) );
-    registerParameter( dynamic_cast<Parameter *>(&tremble_frequency) );
+    //registerParameter(&testpointA) );
+    registerParameter(&nbiter_approxstrokes);
+    registerParameter(&strokelength);
+    registerParameter(&strokelength_rdm);
+    registerParameter(&strokeoverlap);
+    registerParameter(&strokeoverlap_rdm);
+    registerParameter(&ends_tolerance);
+    registerParameter(&parallel_offset);
+    registerParameter(&tremble_size);
+    registerParameter(&tremble_frequency);
 #ifdef LPE_SKETCH_USE_CONSTRUCTION_LINES
-    registerParameter( dynamic_cast<Parameter *>(&nbtangents) );
-    registerParameter( dynamic_cast<Parameter *>(&tgt_places_rdmness) );
-    registerParameter( dynamic_cast<Parameter *>(&tgtscale) );
-    registerParameter( dynamic_cast<Parameter *>(&tgtlength) );
-    registerParameter( dynamic_cast<Parameter *>(&tgtlength_rdm) );
+    registerParameter(&nbtangents);
+    registerParameter(&tgt_places_rdmness);
+    registerParameter(&tgtscale);
+    registerParameter(&tgtlength);
+    registerParameter(&tgtlength_rdm);
 #ifdef LPE_SKETCH_USE_CURVATURE
-    registerParameter( dynamic_cast<Parameter *>(&min_curvature) );
-    registerParameter( dynamic_cast<Parameter *>(&max_curvature) );
+    registerParameter(&min_curvature);
+    registerParameter(&max_curvature);
 #endif
 #endif
 

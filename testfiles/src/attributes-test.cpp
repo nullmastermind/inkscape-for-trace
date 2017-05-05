@@ -393,7 +393,6 @@ std::vector<AttributeInfo> getKnownAttrs()
         AttributeInfo("inkscape:current-layer", true),
         AttributeInfo("inkscape:cx", true),
         AttributeInfo("inkscape:cy", true),
-        AttributeInfo("inkscape:document-rotation", true),
         AttributeInfo("inkscape:document-units", true),
         AttributeInfo("inkscape:dstBox", true),
         AttributeInfo("inkscape:dstColumn", true),

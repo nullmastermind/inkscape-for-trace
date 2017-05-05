@@ -51,6 +51,8 @@ public:
     
     sigc::signal<void>& signal_toggled() { return _signal_toggled; }
     virtual void toggled();
+    void param_update_default(bool default_value);
+    virtual void param_update_default(const gchar * default_value);
 
 private:
     ToggleButtonParam(const ToggleButtonParam&);

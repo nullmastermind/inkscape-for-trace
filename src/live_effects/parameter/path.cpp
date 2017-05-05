@@ -439,6 +439,10 @@ PathParam::linked_modified_callback(SPObject *linked_obj, guint /*flags*/)
     SP_OBJECT(param_effect->getLPEObj())->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
+void
+PathParam::param_update_default(const gchar * default_value){
+    defvalue = strdup(default_value);
+}
 
 /* CALLBACK FUNCTIONS FOR THE BUTTONS */
 void

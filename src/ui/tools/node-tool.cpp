@@ -297,9 +297,8 @@ void sp_update_helperpath() {
                 Inkscape::UI::Node *n = dynamic_cast<Inkscape::UI::Node *>(*i);
                 selectedNodesPositions.push_back(n->position());
             }
-            lpe->setSelectedNodePos(selectedNodesPositions);
+            lpe->setSelectedNodePoints(selectedNodesPositions);
             lpe->setCurrentZoom(desktop->current_zoom());
-            
             SPCurve *c = new SPCurve();
             SPCurve *cc = new SPCurve();
             std::vector<Geom::PathVector> cs = lpe->getCanvasIndicators(SP_LPE_ITEM(selection->singleItem()));

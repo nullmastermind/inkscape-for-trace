@@ -33,11 +33,6 @@
 #include "display/sp-canvas-group.h"
 #include "display/rendermode.h"
 #include "display/cairo-utils.h"
-#include "display/cairo-templates.h"
-#include "display/drawing-context.h"
-#include "display/drawing-item.h"
-#include "display/nr-filter-colormatrix.h"
-#include "display/canvas-arena.h"
 #include "preferences.h"
 #include "inkscape.h"
 #include "sodipodi-ctrlrect.h"
@@ -45,8 +40,6 @@
 #include "debug/gdk-event-latency-tracker.h"
 #include "desktop.h"
 #include "color.h"
-#include <iomanip>
-#include <glibmm/i18n.h>
 
 #if GTK_CHECK_VERSION(3,20,0)
 # include <gdkmm/seat.h>
@@ -1514,7 +1507,7 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
     buf.buf = NULL;
     buf.buf_rowstride = 0;
     buf.rect = paint_rect;
-    buf.visible_rect = canvas_rect;
+    buf.canvas_rect = canvas_rect;
     buf.is_empty = true;
 
     // create temporary surface
@@ -1578,7 +1571,7 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
 }
 
 struct PaintRectSetup {
-    Geom::IntRect big_rect;
+    Geom::IntRect canvas_rect;
     GTimeVal start_time;
     int max_pixels;
     Geom::Point mouse_loc;
@@ -1637,7 +1630,7 @@ int SPCanvas::paintRectInternal(PaintRectSetup const *setup, Geom::IntRect const
         gdk_window_begin_paint_rect(window, &r);
         */
 
-        paintSingleBuffer(this_rect, setup->big_rect, bw);
+        paintSingleBuffer(this_rect, setup->canvas_rect, bw);
         //gdk_window_end_paint(window);
         return 1;
     }
@@ -1702,6 +1695,7 @@ bool SPCanvas::paintRect(int xx0, int yy0, int xx1, int yy1)
 
     gtk_widget_get_allocation(GTK_WIDGET(this), &allocation);
 
+    // Find window rectangle in 'world coordinates'.
     Geom::IntRect canvas_rect = Geom::IntRect::from_xywh(_x0, _y0,
         allocation.width, allocation.height);
     Geom::IntRect paint_rect(xx0, yy0, xx1, yy1);
@@ -1712,7 +1706,7 @@ bool SPCanvas::paintRect(int xx0, int yy0, int xx1, int yy1)
     paint_rect = *area;
 
     PaintRectSetup setup;
-    setup.big_rect = paint_rect;
+    setup.canvas_rect = canvas_rect;
 
     // Save the mouse location
     gint x, y;
@@ -1733,10 +1727,16 @@ bool SPCanvas::paintRect(int xx0, int yy0, int xx1, int yy1)
 
     setup.mouse_loc = sp_canvas_window_to_world(this, Geom::Point(x,y));
 
+    static unsigned tile_multiplier = 0;
+    if (tile_multiplier == 0) {
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        tile_multiplier = prefs->getIntLimited("/options/rendering/tile-multiplier", 1, 1, 64);
+    }
+
     if (_rendermode != Inkscape::RENDERMODE_OUTLINE) {
         // use 256K as a compromise to not slow down gradients
         // 256K is the cached buffer and we need 4 channels
-        setup.max_pixels = 65536; // 256K/4
+        setup.max_pixels = 65536 * tile_multiplier; // 256K/4
     } else {
         // paths only, so 1M works faster
         // 1M is the cached buffer and we need 4 channels
@@ -1924,19 +1924,6 @@ SPCanvasGroup *SPCanvas::getRoot()
     return SP_CANVAS_GROUP(_root);
 }
 
-gdouble grayscale_value_matrix[20] = {
-   0.21, 0.72, 0.072, 0, 0,
-   0.21, 0.72, 0.072, 0, 0,
-   0.21, 0.72, 0.072, 0, 0,
-   0   , 0   , 0    , 1, 0
-   };
-cairo_surface_t *surface_rotated;
-cairo_surface_t *surface_origin;
-cairo_surface_t *surface_measure;
-double start_angle = 0;
-bool started = false;
-bool rotated = false;
-
 /**
  * Scroll screen to point 'c'. 'c' is measured in screen pixels.
  */
@@ -1965,14 +1952,10 @@ void SPCanvas::scrollTo( Geom::Point const &c, unsigned int clear, bool is_scrol
     cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
     // Paint the background
     cairo_translate(cr, -ix, -iy);
-    if (rotated) {
-        cairo_translate(cr, dx, dy);
-        rotated = false;
-    }
     cairo_set_source(cr, _background);
     cairo_paint(cr);
+
     // Copy the old backing store contents
-    
     cairo_set_source_surface(cr, _backing_store, _x0, _y0);
     cairo_rectangle(cr, _x0, _y0, allocation.width, allocation.height);
     cairo_clip(cr);
@@ -2006,271 +1989,6 @@ void SPCanvas::scrollTo( Geom::Point const &c, unsigned int clear, bool is_scrol
             }
         }
     }
-    addIdle();
-}
-
-void SPCanvas::startRotateTo(double angle)
-{
-    if (!_backing_store || started) {
-        return; 
-    }
-    start_angle = angle;
-    started = true;
-    GtkAllocation allocation;
-    gtk_widget_get_allocation(&_widget, &allocation);
-    int half_w = allocation.width/2;
-    int half_h = allocation.height/2;
-    int half_min = std::min(half_w,half_h);
-    
-    cairo_surface_t *new_backing_store = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, allocation.width, allocation.height);
-    cairo_t *cr = cairo_create(new_backing_store);
-    cairo_arc(cr, half_w, half_h, half_min-15, 0, 2*M_PI);
-    cairo_fill(cr);
-    cairo_set_operator(cr, CAIRO_OPERATOR_IN);
-    cairo_set_source_surface(cr, _backing_store, 0, 0);
-    cairo_paint(cr);
-    cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-    cairo_arc(cr, half_w, half_h, half_min-16, 0, 2*M_PI);
-    cairo_set_source_rgba (cr, 1, 1, 1, 0.5);
-    cairo_stroke(cr);
-    cairo_destroy(cr);
-    surface_rotated = new_backing_store;
-    
-    cairo_surface_t *new_backing_store_measure = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, allocation.width, allocation.height);
-    cr = cairo_create(new_backing_store_measure);
-    cairo_arc(cr, half_w, half_h, half_min-15, 0, 2*M_PI);
-    cairo_set_source_rgba (cr, 1, 1, 1, 0.2);
-    cairo_fill(cr);
-    cairo_translate(cr, half_w, half_h);
-    cairo_select_font_face(cr, "sans-serif", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL);
-    cairo_set_font_size(cr, 10.0);
-    for (gint x = 0; x < 360 ; x++){
-        gint ang = 360 - x ;//+ 90;
-        if (ang > 180) {
-            ang -= 360;
-        }
-        double rot = (-180.0 + x)*(M_PI/180.);
-        double dist = half_min-9;
-        gint inverse = 1;
-        if((x) < 91 || (x) > 270) {
-            inverse = -1;
-        }
-        if(x%10 == 0) {
-            cairo_rotate(cr, -rot);
-            cairo_text_extents_t extents;
-            std::string s = std::to_string(ang) + "º";
-            cairo_text_extents(cr, s.c_str(), &extents);
-            //std::cout << extents.width/2 << "extents.x_bearing\n";
-            cairo_translate(cr, (extents.width/2) * inverse * -1, (dist + ((extents.height/2)* inverse)));
-            if((x) < 91 || (x) > 270) {
-                cairo_rotate(cr, 180*(M_PI/180.0));
-            }
-            cairo_text_path(cr, s.c_str());
-            if((x) < 91 || (x) > 270) {
-                cairo_rotate(cr, -180*(M_PI/180.0));
-            }
-            cairo_translate(cr, (extents.width/2) * inverse , (dist + ((extents.height/2)* inverse)) * -1);
-            cairo_set_source_rgba (cr, 1, 1, 1, 1);
-            cairo_fill(cr);
-            cairo_rotate(cr, rot);
-        }
-        cairo_rotate(cr, x*(M_PI/180.));
-        if(x%5 == 0) {
-            cairo_move_to(cr, 0, half_min-30); 
-            cairo_line_to(cr, 0, half_min-17);
-        } else { 
-            cairo_move_to(cr, 0, half_min-20);
-            cairo_line_to(cr, 0, half_min-15); 
-        }
-        cairo_line_to(cr, 0, half_min-15);
-        cairo_set_source_rgba (cr, 0, 0, 0, 0.4);
-        cairo_set_line_width (cr,1);
-        cairo_stroke(cr);
-        cairo_rotate(cr, -x*(M_PI/180.));
-    }
-    cairo_set_operator(cr, CAIRO_OPERATOR_CLEAR);
-    cairo_translate(cr, -half_w, -half_h);
-    cairo_arc(cr, half_w, half_h, half_min-30, 0, 2*M_PI);
-    cairo_set_source_rgba (cr, 1, 1, 1, 1);
-    cairo_fill(cr);
-    cairo_translate(cr, half_w, half_h);
-    cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-    cairo_rotate(cr, start_angle*(M_PI/180.));
-    cairo_move_to(cr, 0, 0); 
-    cairo_line_to(cr, 0, (half_min-17) * -1);
-    cairo_set_source_rgba (cr, 1, 1, 1, 0.25);
-    cairo_set_line_cap(cr, CAIRO_LINE_CAP_ROUND); 
-    cairo_set_line_width (cr,5);
-    cairo_stroke(cr);
-    cairo_move_to(cr, 0, 0); 
-    cairo_line_to(cr, 0, (half_min-17) * -1);
-    cairo_set_source_rgba (cr, 1, 0, 0, 0.9);
-    cairo_set_line_width (cr,1);
-    cairo_stroke(cr);
-    cairo_rotate(cr, -start_angle*(M_PI/180.));
-    cairo_destroy(cr);
-    surface_measure = new_backing_store_measure;
-
-    cairo_surface_t *new_backing_store_grey = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, allocation.width, allocation.height);
-    cr = cairo_create(new_backing_store_grey);
-    cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
-    cairo_set_source_surface(cr, _backing_store, 0, 0);
-    cairo_paint(cr);
-    Inkscape::Filters::FilterColorMatrix::ColorMatrixMatrix _grayscale_colormatrix = std::vector<gdouble> (grayscale_value_matrix, grayscale_value_matrix + 20);
-    cairo_surface_t *out = ink_cairo_surface_create_identical(new_backing_store_grey);
-    ink_cairo_surface_filter(new_backing_store_grey, out, _grayscale_colormatrix);
-    cairo_set_source_surface(cr, out, 0, 0);
-    cairo_surface_destroy(out);
-    cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
-    cairo_paint(cr);
-    cairo_destroy(cr);
-    surface_origin  = new_backing_store_grey;
-}
-
-bool SPCanvas::endRotateTo()
-{
-    if (!_backing_store || !started) {
-        return false; 
-    }
-    started = false;
-    surface_rotated = NULL;
-    surface_origin  = NULL;
-    gtk_widget_queue_draw(GTK_WIDGET(this));
-    dirtyAll();
-    addIdle();
-    rotated = true;
-    return true;
-}
-
-void SPCanvas::clearRotateTo()
-{
-    if (!started) {
-        return; 
-    }
-    gtk_widget_queue_draw(GTK_WIDGET(this));
-    dirtyAll();
-    addIdle();
-}
-
-void SPCanvas::rotateTo(double angle)
-{
-    if (!_backing_store || !started) {
-        return; 
-    }
-    GtkAllocation allocation;
-    gtk_widget_get_allocation(&_widget, &allocation);
-    int half_w = allocation.width/2;
-    int half_h = allocation.height/2;
-    int half_min = std::min(half_w,half_h);
-    cairo_surface_t *new_backing_store = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, allocation.width, allocation.height);
-    cairo_t *cr = cairo_create(new_backing_store);
-    cairo_set_source_surface(cr, surface_origin, 0, 0);
-    cairo_paint(cr);
-    cairo_set_source_rgba (cr, 0, 0, 0, 0.5);
-    cairo_paint(cr);
-    cairo_pattern_t *source_pattern;
-    cairo_matrix_t matrix;
-    source_pattern = cairo_pattern_create_for_surface (surface_rotated);
-    cairo_matrix_init_identity (&matrix);
-    cairo_matrix_translate (&matrix, allocation.width/2.0, allocation.height/2.0);
-    cairo_matrix_rotate (&matrix, Geom::rad_from_deg(angle - start_angle) * -1);
-    cairo_matrix_translate (&matrix, -allocation.width/2.0, -allocation.height/2.0);
-    cairo_pattern_set_matrix (source_pattern, &matrix);
-    cairo_set_source(cr, source_pattern);
-    cairo_paint(cr);
-    cairo_set_source_surface(cr, surface_measure, 0, 0);
-    cairo_paint(cr);
-    cairo_translate(cr, half_w, half_h);
-    cairo_rotate(cr, angle*(M_PI/180.));
-    cairo_move_to(cr, 0, 0); 
-    cairo_line_to(cr, 0, (half_min-17) * -1);
-    cairo_set_source_rgba (cr, 1, 1, 1, 0.25);
-    cairo_set_line_cap(cr, CAIRO_LINE_CAP_ROUND); 
-    cairo_set_line_width (cr,5);
-    cairo_stroke(cr);
-    cairo_move_to(cr, 0, 0); 
-    cairo_line_to(cr, 0, (half_min-17) * -1);
-    cairo_set_source_rgba (cr, 1, 1, 1, 0.9);
-    cairo_set_line_width (cr,1);
-    cairo_stroke(cr);
-    cairo_move_to(cr, 0, 0); 
-    cairo_line_to(cr, 0, (half_min-17) * -1);
-    cairo_set_source_rgba (cr, 1, 0, 0, 0.9);
-    const double dashed[] = {6.0, 3.0};
-    int len  = sizeof(dashed) / sizeof(dashed[0]);
-    cairo_set_dash(cr, dashed, len, 1);
-    cairo_stroke(cr);
-    cairo_translate(cr, -half_w, -half_h);
-    cairo_set_source_rgba (cr, 1, 1, 1, 0.25);
-    cairo_arc(cr, half_w, half_h, 7, 0, 2*M_PI);
-    cairo_fill(cr);
-    cairo_set_source_rgba (cr, 1, 0, 0, 0.7);
-    cairo_arc(cr, half_w, half_h, 5, 0, 2*M_PI);
-    cairo_fill(cr);
-    cairo_translate(cr, half_w, half_h);
-    cairo_rotate(cr, -angle*(M_PI/180.));
-    cairo_select_font_face(cr, "sans-serif", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL);
-    cairo_set_font_size(cr, 15.0);
-    cairo_text_extents_t extents;
-    std::ostringstream s;
-    s << _("Original angle ") << std::fixed << std::setprecision(2) << start_angle << "º";
-    cairo_text_extents(cr, s.str().c_str(), &extents);
-    cairo_translate(cr, half_w - extents.width -15 ,-half_h + 25);
-    cairo_set_source_rgba (cr, 1, 1, 1, 1);
-    cairo_text_path(cr, s.str().c_str());
-    cairo_fill(cr);
-    cairo_translate(cr, (half_w - extents.width -15) *-1 ,(-half_h + 25) *-1);
-    s.str("");
-    s << _("New angle ") << std::fixed << std::setprecision(2) << angle << "º";
-    cairo_text_extents(cr, s.str().c_str(), &extents);
-    cairo_translate(cr, half_w - extents.width -15 ,-half_h + 45);
-    cairo_text_path(cr, s.str().c_str());
-    cairo_fill(cr);
-    cairo_translate(cr, (half_w - extents.width -15) *-1 ,(-half_h + 45) *-1);
-    s.str("");
-    s << _("Gap ") << std::fixed << std::setprecision(2) << std::abs(start_angle-angle) << "º";
-    cairo_text_extents(cr, s.str().c_str(), &extents);
-    cairo_translate(cr, half_w - extents.width -15 ,-half_h + 65);
-    cairo_text_path(cr, s.str().c_str());
-    cairo_fill(cr);
-    cairo_translate(cr, (half_w - extents.width -15) *-1 ,(-half_h + 65) *-1);
-    cairo_translate(cr, -half_w + 10 ,-half_h + 25);
-    s.str("");
-    cairo_set_font_size(cr, 12.0);
-    s << _("Normal mode, 1º round step");
-    cairo_text_path(cr, s.str().c_str());
-    cairo_fill(cr);
-    cairo_translate(cr, (-half_w +10) * -1 ,(-half_h + 25) * -1);
-    cairo_translate(cr, -half_w + 10 ,-half_h + 40);
-    s.str("");
-    s << _("+ALT, Fractional degrees");
-    cairo_text_path(cr, s.str().c_str());
-    cairo_fill(cr);
-    cairo_translate(cr, (-half_w + 10) * -1 ,(-half_h + 40) * -1);
-    cairo_translate(cr, -half_w + 10 ,-half_h + 55);
-    s.str("");
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    s << _("+CTRL, ") << 180.0/prefs->getInt("/options/rotationsnapsperpi/value", 12) << _("º round step");
-    cairo_text_path(cr, s.str().c_str());
-    cairo_fill(cr);
-    cairo_translate(cr, (-half_w + 10) * -1 ,(-half_h + 55) * -1);
-    cairo_translate(cr, -half_w + 10 ,-half_h + 70);
-    s.str("");
-    s << _("+SHIFT, Reset");
-    cairo_text_path(cr, s.str().c_str());
-    cairo_fill(cr);
-    cairo_translate(cr, (-half_w + 10) * -1 ,(-half_h + 70) * -1);
-    cairo_translate(cr, -half_w + 10 ,-half_h + 85);
-    s.str("");
-    s << _("+CTRL+SHIFT, 0º");
-    cairo_text_path(cr, s.str().c_str());
-    cairo_fill(cr);
-    //cairo_translate(cr, (-half_w + 10) * -1 ,(-half_h + 60) * -1);
-    cairo_destroy(cr);
-    cairo_surface_destroy(_backing_store);
-    _backing_store = new_backing_store;
-    cairo_pattern_destroy (source_pattern);
-    gtk_widget_queue_draw(GTK_WIDGET(this));
     addIdle();
 }
 

@@ -41,6 +41,7 @@
 #include "desktop.h"
 
 #include "display/curve.h"
+#include "display/sp-canvas.h"
 #include "document.h"
 #include "ui/tools/freehand-base.h"
 #include "extension/effect.h"
@@ -1881,8 +1882,11 @@ void ZoomVerb::perform(SPAction *action, void *data)
     Inkscape::XML::Node *repr = dt->namedview->getRepr();
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    gdouble zoom_inc =
-        prefs->getDoubleLimited( "/options/zoomincrement/value", M_SQRT2, 1.01, 10 );
+    gdouble zoom_inc   =
+        prefs->getDoubleLimited( "/options/zoomincrement/value",  M_SQRT2, 1.01, 10 );
+    gdouble rotate_inc =
+        prefs->getDoubleLimited( "/options/rotateincrement/value", 15, 1, 90, "°" );
+    rotate_inc *= M_PI/180.0;
 
     double zcorr = 1.0;
     Glib::ustring abbr = prefs->getString("/options/zoomcorrection/unit");
@@ -1956,6 +1960,75 @@ void ZoomVerb::perform(SPAction *action, void *data)
             break;
         case SP_VERB_ZOOM_PREV:
             dt->prev_transform();
+            break;
+        case SP_VERB_ROTATE_CW:
+        {
+            gint mul = 1 + Inkscape::UI::Tools::gobble_key_events( GDK_KEY_parenleft, 0);
+            // While drawing with the pen/pencil tool, rotate towards the end of the unfinished path
+            if (tools_isactive(dt, TOOLS_FREEHAND_PENCIL) || tools_isactive(dt, TOOLS_FREEHAND_PEN)) {
+                SPCurve *rc = SP_DRAW_CONTEXT(ec)->red_curve;
+                if (!rc->is_empty()) {
+                    Geom::Point const rotate_to (*rc->last_point());
+                    dt->rotate_relative_keep_point(rotate_to, -mul*rotate_inc);
+                    break;
+                }
+            }
+
+            dt->rotate_relative_center_point( midpoint, -mul*rotate_inc);
+            break;
+        }
+        case SP_VERB_ROTATE_CCW:
+        {
+            gint mul = 1 + Inkscape::UI::Tools::gobble_key_events( GDK_KEY_parenright, 0);
+            // While drawing with the pen/pencil tool, rotate towards the end of the unfinished path
+            if (tools_isactive(dt, TOOLS_FREEHAND_PENCIL) || tools_isactive(dt, TOOLS_FREEHAND_PEN)) {
+                SPCurve *rc = SP_DRAW_CONTEXT(ec)->red_curve;
+                if (!rc->is_empty()) {
+                    Geom::Point const rotate_to (*rc->last_point());
+                    dt->rotate_relative_keep_point(rotate_to, mul*rotate_inc);
+                    break;
+                }
+            }
+
+            dt->rotate_relative_center_point( midpoint, mul*rotate_inc);
+            break;
+        }
+        case SP_VERB_ROTATE_ZERO:
+            dt->rotate_absolute_center_point( midpoint, 0.0 );
+            break;
+        case SP_VERB_FLIP_HORIZONTAL:
+        {
+            // While drawing with the pen/pencil tool, flip towards the end of the unfinished path
+            if (tools_isactive(dt, TOOLS_FREEHAND_PENCIL) || tools_isactive(dt, TOOLS_FREEHAND_PEN)) {
+                SPCurve *rc = SP_DRAW_CONTEXT(ec)->red_curve;
+                if (!rc->is_empty()) {
+                    Geom::Point const flip_to (*rc->last_point());
+                    dt->flip_relative_keep_point(flip_to, SPDesktop::FLIP_HORIZONTAL);
+                    break;
+                }
+            }
+
+            dt->flip_relative_center_point( midpoint, SPDesktop::FLIP_HORIZONTAL);
+            break;
+        }
+        case SP_VERB_FLIP_VERTICAL:
+        {
+            gint mul = 1 + Inkscape::UI::Tools::gobble_key_events( GDK_KEY_parenright, 0);
+            // While drawing with the pen/pencil tool, flip towards the end of the unfinished path
+            if (tools_isactive(dt, TOOLS_FREEHAND_PENCIL) || tools_isactive(dt, TOOLS_FREEHAND_PEN)) {
+                SPCurve *rc = SP_DRAW_CONTEXT(ec)->red_curve;
+                if (!rc->is_empty()) {
+                    Geom::Point const flip_to (*rc->last_point());
+                    dt->flip_relative_keep_point(flip_to, SPDesktop::FLIP_VERTICAL);
+                    break;
+                }
+            }
+
+            dt->flip_relative_center_point( midpoint, SPDesktop::FLIP_VERTICAL);
+            break;
+        }
+        case SP_VERB_FLIP_NONE:
+            dt->flip_absolute_center_point( midpoint, SPDesktop::FLIP_NONE);
             break;
         case SP_VERB_TOGGLE_RULERS:
             dt->toggleRulers();
@@ -2895,10 +2968,41 @@ Verb *Verb::_base_verbs[] = {
                     N_("Open Preferences for the Eraser tool"), NULL),
     new ContextVerb(SP_VERB_CONTEXT_LPETOOL_PREFS, "LPEToolPrefs", N_("LPE Tool Preferences"),
                     N_("Open Preferences for the LPETool tool"), NULL),
-    // Zoom/View
+
+    // Zoom
     new ZoomVerb(SP_VERB_ZOOM_IN, "ZoomIn", N_("Zoom In"), N_("Zoom in"), INKSCAPE_ICON("zoom-in")),
     new ZoomVerb(SP_VERB_ZOOM_OUT, "ZoomOut", N_("Zoom Out"), N_("Zoom out"), INKSCAPE_ICON("zoom-out")),
-    // WHY ARE THE FOLLOWING ZoomVerbs???
+    new ZoomVerb(SP_VERB_ZOOM_NEXT, "ZoomNext", N_("Nex_t Zoom"), N_("Next zoom (from the history of zooms)"),
+                 INKSCAPE_ICON("zoom-next")),
+    new ZoomVerb(SP_VERB_ZOOM_PREV, "ZoomPrev", N_("Pre_vious Zoom"), N_("Previous zoom (from the history of zooms)"),
+                 INKSCAPE_ICON("zoom-previous")),
+    new ZoomVerb(SP_VERB_ZOOM_1_1, "Zoom1:0", N_("Zoom 1:_1"), N_("Zoom to 1:1"),
+                 INKSCAPE_ICON("zoom-original")),
+    new ZoomVerb(SP_VERB_ZOOM_1_2, "Zoom1:2", N_("Zoom 1:_2"), N_("Zoom to 1:2"),
+                 INKSCAPE_ICON("zoom-half-size")),
+    new ZoomVerb(SP_VERB_ZOOM_2_1, "Zoom2:1", N_("_Zoom 2:1"), N_("Zoom to 2:1"),
+                 INKSCAPE_ICON("zoom-double-size")),
+    new ZoomVerb(SP_VERB_ZOOM_PAGE, "ZoomPage", N_("_Page"),
+                 N_("Zoom to fit page in window"), INKSCAPE_ICON("zoom-fit-page")),
+    new ZoomVerb(SP_VERB_ZOOM_PAGE_WIDTH, "ZoomPageWidth", N_("Page _Width"),
+                 N_("Zoom to fit page width in window"), INKSCAPE_ICON("zoom-fit-width")),
+    new ZoomVerb(SP_VERB_ZOOM_DRAWING, "ZoomDrawing", N_("_Drawing"),
+                 N_("Zoom to fit drawing in window"), INKSCAPE_ICON("zoom-fit-drawing")),
+    new ZoomVerb(SP_VERB_ZOOM_SELECTION, "ZoomSelection", N_("_Selection"),
+                 N_("Zoom to fit selection in window"), INKSCAPE_ICON("zoom-fit-selection")),
+
+    new ZoomVerb(SP_VERB_ROTATE_CW,   "RotateClockwise",        N_("Rotate Clockwise"),         N_("Rotate canvas clockwise"),         NULL),
+    new ZoomVerb(SP_VERB_ROTATE_CCW,  "RotateCounterClockwise", N_("Rotate Counter-Clockwise"), N_("Rotate canvas counter-clockwise"), NULL),
+    new ZoomVerb(SP_VERB_ROTATE_ZERO, "RotateZero",             N_("Rotate Zero"),              N_("Reset canvas rotation to zero"),   NULL),
+
+    new ZoomVerb(SP_VERB_FLIP_HORIZONTAL, "FlipHorizontal",     N_("Flip Horizontal"), N_("Flip canvas horizontally"), INKSCAPE_ICON("object-flip-horizontal")),
+    new ZoomVerb(SP_VERB_FLIP_VERTICAL,   "FlipVertical",       N_("Flip Vertical"),   N_("Flip canvas vertically"),   INKSCAPE_ICON("object-flip-vertical")),
+    new ZoomVerb(SP_VERB_FLIP_NONE,       "FlipNone",           N_("Flip None"),       N_("Undo any flip"),            NULL),
+
+
+// WHY ARE THE FOLLOWING ZoomVerbs???
+
+    // View
     new ZoomVerb(SP_VERB_TOGGLE_RULERS, "ToggleRulers", N_("_Rulers"), N_("Show or hide the canvas rulers"), NULL),
     new ZoomVerb(SP_VERB_TOGGLE_SCROLLBARS, "ToggleScrollbars", N_("Scroll_bars"), N_("Show or hide the canvas scrollbars"), NULL),
     new ZoomVerb(SP_VERB_TOGGLE_GRID, "ToggleGrid", N_("Page _Grid"), N_("Show or hide the page grid"), INKSCAPE_ICON("show-grid")),
@@ -2910,16 +3014,7 @@ Verb *Verb::_base_verbs[] = {
     new ZoomVerb(SP_VERB_TOGGLE_TOOLBOX, "ToggleToolbox", N_("_Toolbox"), N_("Show or hide the main toolbox (on the left)"), NULL),
     new ZoomVerb(SP_VERB_TOGGLE_PALETTE, "TogglePalette", N_("_Palette"), N_("Show or hide the color palette"), NULL),
     new ZoomVerb(SP_VERB_TOGGLE_STATUSBAR, "ToggleStatusbar", N_("_Statusbar"), N_("Show or hide the statusbar (at the bottom of the window)"), NULL),
-    new ZoomVerb(SP_VERB_ZOOM_NEXT, "ZoomNext", N_("Nex_t Zoom"), N_("Next zoom (from the history of zooms)"),
-                 INKSCAPE_ICON("zoom-next")),
-    new ZoomVerb(SP_VERB_ZOOM_PREV, "ZoomPrev", N_("Pre_vious Zoom"), N_("Previous zoom (from the history of zooms)"),
-                 INKSCAPE_ICON("zoom-previous")),
-    new ZoomVerb(SP_VERB_ZOOM_1_1, "Zoom1:0", N_("Zoom 1:_1"), N_("Zoom to 1:1"),
-                 INKSCAPE_ICON("zoom-original")),
-    new ZoomVerb(SP_VERB_ZOOM_1_2, "Zoom1:2", N_("Zoom 1:_2"), N_("Zoom to 1:2"),
-                 INKSCAPE_ICON("zoom-half-size")),
-    new ZoomVerb(SP_VERB_ZOOM_2_1, "Zoom2:1", N_("_Zoom 2:1"), N_("Zoom to 2:1"),
-                 INKSCAPE_ICON("zoom-double-size")),
+
     new ZoomVerb(SP_VERB_FULLSCREEN, "FullScreen", N_("_Fullscreen"), N_("Stretch this document window to full screen"),
                  INKSCAPE_ICON("view-fullscreen")),
     new ZoomVerb(SP_VERB_FULLSCREENFOCUS, "FullScreenFocus", N_("Fullscreen & Focus Mode"), N_("Stretch this document window to full screen"),
@@ -2953,14 +3048,6 @@ Verb *Verb::_base_verbs[] = {
 
     new ZoomVerb(SP_VERB_VIEW_ICON_PREVIEW, "ViewIconPreview", N_("Ico_n Preview..."),
                  N_("Open a window to preview objects at different icon resolutions"), INKSCAPE_ICON("dialog-icon-preview")),
-    new ZoomVerb(SP_VERB_ZOOM_PAGE, "ZoomPage", N_("_Page"),
-                 N_("Zoom to fit page in window"), INKSCAPE_ICON("zoom-fit-page")),
-    new ZoomVerb(SP_VERB_ZOOM_PAGE_WIDTH, "ZoomPageWidth", N_("Page _Width"),
-                 N_("Zoom to fit page width in window"), INKSCAPE_ICON("zoom-fit-width")),
-    new ZoomVerb(SP_VERB_ZOOM_DRAWING, "ZoomDrawing", N_("_Drawing"),
-                 N_("Zoom to fit drawing in window"), INKSCAPE_ICON("zoom-fit-drawing")),
-    new ZoomVerb(SP_VERB_ZOOM_SELECTION, "ZoomSelection", N_("_Selection"),
-                 N_("Zoom to fit selection in window"), INKSCAPE_ICON("zoom-fit-selection")),
 
     // Dialogs
     new DialogVerb(SP_VERB_DIALOG_PROTOTYPE, "DialogPrototype", N_("Prototype..."),

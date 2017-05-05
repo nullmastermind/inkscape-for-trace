@@ -27,6 +27,9 @@ if(WIN32)
 	LGPL2.1.txt
     DESTINATION ${CMAKE_INSTALL_PREFIX})
 
+  install(DIRECTORY doc
+    DESTINATION ${CMAKE_INSTALL_PREFIX})
+
   # mingw dlls
   install(FILES
     ${MINGW_BIN}/LIBEAY32.dll
@@ -142,23 +145,6 @@ if(WIN32)
       DESTINATION ${CMAKE_INSTALL_PREFIX})
   endif()
 
-  # Setup application data directories, poppler files, locales, icons and themes
-  file(MAKE_DIRECTORY
-    data
-    doc
-    modules
-    plugins)
-
-  install(DIRECTORY
-    data
-    doc
-    modules
-    plugins
-    DESTINATION ${CMAKE_INSTALL_PREFIX}
-    PATTERN hicolor/index.theme EXCLUDE   # NOTE: Empty index.theme in hicolor icon theme causes SIGSEGV.
-    PATTERN CMakeLists.txt EXCLUDE
-    PATTERN *.am EXCLUDE)
-
   # Install hicolor/index.theme to avoid bug 1635207
   install(FILES
     ${MINGW_PATH}/share/icons/hicolor/index.theme
@@ -167,13 +153,33 @@ if(WIN32)
   install(DIRECTORY ${MINGW_PATH}/share/icons/Adwaita
     DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons)
 
+  # translations for libraries (we usually shouldn't need many)
+  install(DIRECTORY ${MINGW_PATH}/share/locale
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/share
+    FILES_MATCHING
+    PATTERN "*gtk30.mo"
+    PATTERN "*gtkspell3.mo")
+
   install(DIRECTORY ${MINGW_PATH}/share/poppler
     DESTINATION ${CMAKE_INSTALL_PREFIX}/share)
 
   install(DIRECTORY ${MINGW_PATH}/share/glib-2.0/schemas
     DESTINATION ${CMAKE_INSTALL_PREFIX}/share/glib-2.0)
 
+  # fontconfig
   install(DIRECTORY ${MINGW_PATH}/etc/fonts
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/etc
+    FILES_MATCHING PATTERN "fonts.conf" EXCLUDE)
+  # adjust fonts.conf to store font cache in AppData
+  set(cachedir_default "\\t^<cachedir^>/var/cache/fontconfig^</cachedir^>") # the '^' are needed to escape angle brackets on Windows command shell
+  set(cachedir_appdata "\\t^<cachedir^>LOCAL_APPDATA_FONTCONFIG_CACHE^</cachedir^>")
+  add_custom_command(
+    OUTPUT ${CMAKE_BINARY_DIR}/etc/fonts/fonts.conf
+    COMMAND sed 's!${cachedir_default}!${cachedir_appdata}\\n${cachedir_default}!' ${MINGW_PATH}/etc/fonts/fonts.conf  > ${CMAKE_BINARY_DIR}/etc/fonts/fonts.conf
+    MAIN_DEPENDENCY ${MINGW_PATH}/etc/fonts/fonts.conf
+  )
+  add_custom_target(fonts_conf ALL DEPENDS ${CMAKE_BINARY_DIR}/etc/fonts/fonts.conf)
+  install(DIRECTORY ${CMAKE_BINARY_DIR}/etc/fonts
     DESTINATION ${CMAKE_INSTALL_PREFIX}/etc)
 
   # GTK 3.0
@@ -195,6 +201,11 @@ if(WIN32)
   # Aspell dictionaries
   install(DIRECTORY ${MINGW_LIB}/aspell-0.60
     DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
+
+  # Aspell backend for Enchant (gtkspell uses Enchant to access Aspell dictionaries)
+  install(FILES
+    ${MINGW_LIB}/enchant/libenchant_aspell.dll
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/enchant)
 
   # Necessary to run extensions on windows if it is not in the path
   if (HAVE_MINGW64)
@@ -222,5 +233,29 @@ if(WIN32)
     ${MINGW_BIN}/libpython2.7.dll
     DESTINATION ${CMAKE_INSTALL_PREFIX})
   install(DIRECTORY ${MINGW_LIB}/python2.7
-    DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
+    DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
+    PATTERN "python2.7/site-packages" EXCLUDE # specify individual packages to install below
+    PATTERN "python2.7/test" EXCLUDE # we don't need the Python testsuite
+  )
+
+  set(site_packages "lib/python2.7/site-packages")
+  # Python packages installed via pacman
+  set(packages "python2-lxml" "python2-numpy")
+  foreach(package ${packages})
+    list_files_pacman(${package} paths)
+    install_list(FILES ${paths}
+      ROOT ${MINGW_PATH}
+      INCLUDE ${site_packages} # only include content from "site-packages" (we might consider to install everything)
+    )
+  endforeach()
+  # Python packages installed via pip
+  set(packages "coverage" "pyserial" "scour" "six")
+  foreach(package ${packages})
+    list_files_pip(${package} paths)
+    install_list(FILES ${paths}
+      ROOT ${MINGW_PATH}/${site_packages}
+      DESTINATION ${site_packages}/
+      EXCLUDE "^\\.\\.\\/" # exclude content in parent directories (notably scripts installed to /bin)
+    )
+  endforeach()
 endif()

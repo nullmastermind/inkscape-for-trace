@@ -51,11 +51,11 @@ LPEPerspectivePath::LPEPerspectivePath(LivePathEffectObject *lpeobject) :
     uses_plane_xy(_("Uses XY plane?"), _("If true, put the path on the left side of an imaginary box, otherwise on the right side"), "uses_plane_xy", &wr, this, true)
 {
     // register all your parameters here, so Inkscape knows which parameters this effect has:
-    registerParameter( dynamic_cast<Parameter *>(&scalex) );
-    registerParameter( dynamic_cast<Parameter *>(&scaley) );
-    registerParameter( dynamic_cast<Parameter *>(&offsetx) );
-    registerParameter( dynamic_cast<Parameter *>(&offsety) );
-    registerParameter( dynamic_cast<Parameter *>(&uses_plane_xy) );
+    registerParameter( &scalex);
+    registerParameter( &scaley);
+    registerParameter( &offsetx);
+    registerParameter( &offsety);
+    registerParameter( &uses_plane_xy);
 
     concatenate_before_pwd2 = true; // don't split the path into its subpaths
     _provides_knotholder_entities = true;

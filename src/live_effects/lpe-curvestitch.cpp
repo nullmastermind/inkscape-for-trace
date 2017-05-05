@@ -40,14 +40,14 @@ LPECurveStitch::LPECurveStitch(LivePathEffectObject *lpeobject) :
     prop_scale(_("Scale _width:"), _("Scale the width of the stitch path"), "prop_scale", &wr, this, 1),
     scale_y_rel(_("Scale _width relative to length"), _("Scale the width of the stitch path relative to its length"), "scale_y_rel", &wr, this, false)
 {
-    registerParameter( dynamic_cast<Parameter *>(&nrofpaths) );
-    registerParameter( dynamic_cast<Parameter *>(&startpoint_edge_variation) );
-    registerParameter( dynamic_cast<Parameter *>(&startpoint_spacing_variation) );
-    registerParameter( dynamic_cast<Parameter *>(&endpoint_edge_variation) );
-    registerParameter( dynamic_cast<Parameter *>(&endpoint_spacing_variation) );
-    registerParameter( dynamic_cast<Parameter *>(&strokepath) );
-    registerParameter( dynamic_cast<Parameter *>(&prop_scale) );
-    registerParameter( dynamic_cast<Parameter *>(&scale_y_rel) );
+    registerParameter(&nrofpaths);
+    registerParameter(&startpoint_edge_variation);
+    registerParameter(&startpoint_spacing_variation);
+    registerParameter(&endpoint_edge_variation);
+    registerParameter(&endpoint_spacing_variation);
+    registerParameter(&strokepath );
+    registerParameter(&prop_scale);
+    registerParameter(&scale_y_rel);
 
     nrofpaths.param_make_integer();
     nrofpaths.param_set_range(2, Geom::infinity());

@@ -26,10 +26,10 @@ LPEPathLength::LPEPathLength(LivePathEffectObject *lpeobject) :
     unit(_("Unit:"), _("Unit"), "unit", &wr, this),
     display_unit(_("Display unit"), _("Print unit after path length"), "display_unit", &wr, this, true)
 {
-    registerParameter(dynamic_cast<Parameter *>(&scale));
-    registerParameter(dynamic_cast<Parameter *>(&info_text));
-    registerParameter(dynamic_cast<Parameter *>(&unit));
-    registerParameter(dynamic_cast<Parameter *>(&display_unit));
+    registerParameter(&scale);
+    registerParameter(&info_text);
+    registerParameter(&unit);
+    registerParameter(&display_unit);
 }
 
 LPEPathLength::~LPEPathLength()

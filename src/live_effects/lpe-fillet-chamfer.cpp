@@ -305,6 +305,8 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
         } else {
             satellites_param.setHelperSize(helper_size);
         }
+        std::vector<size_t> selected_nodes_index;
+        size_t index = 0;
         for (size_t i = 0; i < satellites.size(); ++i) {
             for (size_t j = 0; j < satellites[i].size(); ++j) {
                 if (satellites[i][j].is_time != flexible) {
@@ -326,6 +328,11 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
                     satellites[i][j].has_mirror = mirror_knots;
                 }
                 satellites[i][j].hidden = hide_knots;
+                Geom::Curve const &curve_in = pathv[i][j];
+                if (only_selected && isNodePointSelected(curve_in.initialPoint()) ){
+                    selected_nodes_index.push_back(index);
+                }
+                index ++;
             }
         }
         if (!_pathvector_satellites) {
@@ -334,7 +341,6 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
         _pathvector_satellites->setPathVector(pathv);
         _pathvector_satellites->setSatellites(satellites);
         if (only_selected) {
-            setSelectedNodeIndex(pathv);
             _pathvector_satellites->setSelected(selected_nodes_index);
         }
         satellites_param.setPathVectorSatellites(_pathvector_satellites);

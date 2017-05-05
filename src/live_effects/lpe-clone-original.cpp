@@ -20,8 +20,7 @@ namespace LivePathEffect {
 
 LPECloneOriginal::LPECloneOriginal(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
-    linked_path("LEGACY FALLBACK", "LEGACY FALLBACK", "linkedpath", &wr, this),
-    linked_item(_("Linked Item:"), _("Item from which to take the original data"), "linked_item", &wr, this),
+    linkeditem(_("Linked Item:"), _("Item from which to take the original data"), "linkeditem", &wr, this),
     scale(_("Scale %"), _("Scale item %"), "scale", &wr, this, 100.0),
     preserve_position(_("Preserve position"), _("Preserve position"), "preserve_position", &wr, this, false),
     inverse(_("Inverse clone"), _("Use LPE item as origin"), "inverse", &wr, this, false),
@@ -37,8 +36,15 @@ LPECloneOriginal::LPECloneOriginal(LivePathEffectObject *lpeobject) :
     expanded(false),
     origin(Geom::Point(0,0))
 {
-    registerParameter(&linked_path);
-    registerParameter(&linked_item);
+    //0.92 compatibility
+    const gchar * linkedpath = this->getRepr()->attribute("linkedpath");
+    if (linkedpath && strcmp(linkedpath, "") != 0){
+        this->getRepr()->setAttribute("linkeditem", linkedpath);
+        this->getRepr()->setAttribute("linkedpath", NULL);
+        this->getRepr()->setAttribute("transform", "false");
+    };
+
+    registerParameter(&linkeditem);
     registerParameter(&scale);
     registerParameter(&attributes);
     registerParameter(&style_attributes);
@@ -208,19 +214,8 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, bool live, co
 
 void
 LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){
-    if (linked_path.linksToPath()) { //Legacy staff
-        Glib::ustring attributes_value("d");
-        attributes.param_setValue(attributes_value);
-        attributes.write_to_SVG();
-        Glib::ustring style_attributes_value("");
-        style_attributes.param_setValue(style_attributes_value);
-        style_attributes.write_to_SVG();
-        linked_item.param_readSVGValue(linked_path.param_getSVGValue());
-        linked_path.param_readSVGValue("");
-    }
-
-    if (linked_item.linksToItem()) {
-        linked_item.setInverse(inverse);
+    if (linkeditem.linksToItem()) {
+        linkeditem.setInverse(inverse);
         if ( preserve_position_changed != preserve_position ) {
             if (!preserve_position) {
                 sp_svg_transform_read(SP_ITEM(sp_lpe_item)->getAttribute("transform"), &preserve_affine);
@@ -262,8 +257,8 @@ LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){
         }
         style_attr.append(Glib::ustring(style_attributes.param_getSVGValue()).append(","));
 
-        SPItem * from =  inverse ? SP_ITEM(sp_lpe_item) : SP_ITEM(linked_item.getObject()); 
-        SPItem * to   = !inverse ? SP_ITEM(sp_lpe_item) : SP_ITEM(linked_item.getObject()); 
+        SPItem * from =  inverse ? SP_ITEM(sp_lpe_item) : SP_ITEM(linkeditem.getObject()); 
+        SPItem * to   = !inverse ? SP_ITEM(sp_lpe_item) : SP_ITEM(linkeditem.getObject()); 
         cloneAttrbutes(from, to, true, g_strdup(attr.c_str()), g_strdup(style_attr.c_str()), true);
         Geom::OptRect bbox = from->geometricBounds();
         if (bbox && preserve_position && origin != Geom::Point(0,0)) {
@@ -323,7 +318,6 @@ LPECloneOriginal::newWidget()
     expander->set_expanded(expanded);
     expander->property_expanded().signal_changed().connect(sigc::mem_fun(*this, &LPECloneOriginal::onExpanderChanged) );
     vbox->pack_start(*expander, true, true, 2);
-    this->upd_params = false;
     return dynamic_cast<Gtk::Widget *>(vbox);
 }
 
@@ -346,15 +340,15 @@ LPECloneOriginal::~LPECloneOriginal()
 void
 LPECloneOriginal::transform_multiply(Geom::Affine const& postmul, bool set)
 {
-    if (linked_item.linksToItem()) {
-        linked_item.getObject()->requestModified(SP_OBJECT_MODIFIED_FLAG);
+    if (linkeditem.linksToItem()) {
+        linkeditem.getObject()->requestModified(SP_OBJECT_MODIFIED_FLAG);
     }
 }
 
 void 
 LPECloneOriginal::doEffect (SPCurve * curve)
 {
-    if (linked_item.linksToItem() && !inverse) {
+    if (linkeditem.linksToItem() && !inverse) {
         SPShape * shape = getCurrentShape();
         if(shape){
             curve->set_pathvector(shape->getCurve()->get_pathvector());

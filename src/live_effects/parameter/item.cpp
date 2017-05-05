@@ -60,6 +60,10 @@ ItemParam::param_set_default()
     param_readSVGValue(defvalue);
 }
 
+void
+ItemParam::param_update_default(const gchar * default_value){
+    defvalue = strdup(default_value);
+}
 
 void
 ItemParam::param_set_and_write_default()

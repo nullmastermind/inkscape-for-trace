@@ -94,7 +94,7 @@ Emf::print_document_to_file(SPDocument *doc, const gchar *filename)
     const gchar *oldconst;
     gchar *oldoutput;
     unsigned int ret;
-    doc->getRoot()->c2p = doc->getRoot()->rotation.inverse() * doc->getRoot()->c2p;
+
     doc->ensureUpToDate();
 
     mod = Inkscape::Extension::get_print(PRINT_EMF);
@@ -114,7 +114,6 @@ Emf::print_document_to_file(SPDocument *doc, const gchar *filename)
     /* Print document */
     ret = mod->begin(doc);
     if (ret) {
-        doc->getRoot()->c2p *= doc->getRoot()->rotation;
         g_free(oldoutput);
         throw Inkscape::Extension::Output::save_failed();
     }
@@ -128,7 +127,7 @@ Emf::print_document_to_file(SPDocument *doc, const gchar *filename)
 
     mod->set_param_string("destination", oldoutput);
     g_free(oldoutput);
-    doc->getRoot()->c2p *= doc->getRoot()->rotation;
+
     return;
 }
 
@@ -166,7 +165,15 @@ Emf::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *filena
     ext->set_param_bool("FixImageRot",new_FixImageRot);
     ext->set_param_bool("textToPath", new_val);
 
+    // ensure usage of dot as decimal separator in scanf/printf functions (indepentendly of current locale)
+    char *oldlocale = g_strdup(setlocale(LC_NUMERIC, NULL));
+    setlocale(LC_NUMERIC, "C");
+
     print_document_to_file(doc, filename);
+
+    // restore decimal separator used in scanf/printf functions to initial value
+    setlocale(LC_NUMERIC, oldlocale);
+    g_free(oldlocale);
 
     return;
 }
@@ -3525,6 +3532,10 @@ Emf::open( Inkscape::Extension::Input * /*mod*/, const gchar *uri )
         return NULL;
     }
 
+    // ensure usage of dot as decimal separator in scanf/printf functions (indepentendly of current locale)
+    char *oldlocale = g_strdup(setlocale(LC_NUMERIC, NULL));
+    setlocale(LC_NUMERIC, "C");
+
     EMF_CALLBACK_DATA d;
 
     d.n_obj   = 0;     //these might not be set otherwise if the input file is corrupt
@@ -3588,6 +3599,10 @@ Emf::open( Inkscape::Extension::Input * /*mod*/, const gchar *uri )
     d.tri = trinfo_release_except_FC(d.tri);
 
     // in earlier versions no viewbox was generated and a call to setViewBoxIfMissing() was needed here.
+
+    // restore decimal separator used in scanf/printf functions to initial value
+    setlocale(LC_NUMERIC, oldlocale);
+    g_free(oldlocale);
 
     return doc;
 }

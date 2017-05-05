@@ -46,6 +46,7 @@
 #include "splivarot.h"
 #include "verbs.h"
 #include "2geom/svg-path-parser.h" // to get from SVG on boolean to Geom::Path
+#include "util/units.h"            // to get abbr for document units
 
 using Inkscape::DocumentUndo;
 
@@ -1688,7 +1689,7 @@ void
 sp_selected_path_offset(SPDesktop *desktop)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    double prefOffset = prefs->getDouble("/options/defaultoffsetwidth/value", 1.0, "px");
+    double prefOffset = prefs->getDouble("/options/defaultoffsetwidth/value", 1.0, desktop->getDocument()->getDisplayUnit()->abbr);
 
     sp_selected_path_do_offset(desktop, true, prefOffset);
 }
@@ -1696,7 +1697,7 @@ void
 sp_selected_path_inset(SPDesktop *desktop)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    double prefOffset = prefs->getDouble("/options/defaultoffsetwidth/value", 1.0, "px");
+    double prefOffset = prefs->getDouble("/options/defaultoffsetwidth/value", 1.0, desktop->getDocument()->getDisplayUnit()->abbr);
 
     sp_selected_path_do_offset(desktop, false, prefOffset);
 }
@@ -1782,7 +1783,7 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
     {
         {
             Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-            o_width = prefs->getDouble("/options/defaultoffsetwidth/value", 1.0, "px");
+            o_width = prefs->getDouble("/options/defaultoffsetwidth/value", 1.0, desktop->getDocument()->getDisplayUnit()->abbr);
         }
 
         if (o_width < 0.01){
@@ -2065,17 +2066,6 @@ sp_selected_path_do_offset(SPDesktop *desktop, bool expand, double prefOffset)
 
             res->Reset();
             theRes->ConvertToForme(res);
-
-            if (o_width >= 1.0)
-            {
-                res->ConvertEvenLines(1.0);
-                res->Simplify(1.0);
-            }
-            else
-            {
-                res->ConvertEvenLines(1.0*o_width);
-                res->Simplify(1.0 * o_width);
-            }
 
             delete theShape;
             delete theRes;

@@ -177,6 +177,7 @@ set(ui_SRC
 	control-types.h
 	dialog-events.h
 	draw-anchor.h
+	event-debug.h
 	icon-names.h
 	interface.h
 	object-edit.h

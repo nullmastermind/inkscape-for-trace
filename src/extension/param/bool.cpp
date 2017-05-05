@@ -14,7 +14,6 @@
 #include <gtkmm/box.h>
 #include <gtkmm/spinbutton.h>
 #include <gtkmm/checkbutton.h>
-#include <glib/gi18n.h>
 
 #include "xml/node.h"
 #include "../extension.h"
@@ -25,15 +24,13 @@ namespace Inkscape {
 namespace Extension {
 
 ParamBool::ParamBool(const gchar * name,
-                     const gchar * guitext,
-                     const gchar * desc,
-                     const Parameter::_scope_t scope,
-                     bool gui_hidden,
-                     const gchar * gui_tip,
+                     const gchar * text,
+                     const gchar * description,
+                     bool hidden,
                      int indent,
                      Inkscape::Extension::Extension * ext,
                      Inkscape::XML::Node * xml)
-    : Parameter(name, guitext, desc, scope, gui_hidden, gui_tip, indent, ext)
+    : Parameter(name, text, description, hidden, indent, ext)
     , _value(false)
 {
     const char * defaultval = NULL;
@@ -129,14 +126,14 @@ void ParamBool::string(std::string &string) const
 
 Gtk::Widget *ParamBool::get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal)
 {
-    if (_gui_hidden) {
+    if (_hidden) {
         return NULL;
     }
 
     auto hbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, Parameter::GUI_PARAM_WIDGETS_SPACING));
     hbox->set_homogeneous(false);
 
-    Gtk::Label * label = Gtk::manage(new Gtk::Label(_(_text), Gtk::ALIGN_START));
+    Gtk::Label * label = Gtk::manage(new Gtk::Label(_text, Gtk::ALIGN_START));
     label->show();
     hbox->pack_end(*label, true, true);
 

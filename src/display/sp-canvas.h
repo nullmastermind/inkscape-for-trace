@@ -51,7 +51,7 @@ enum {
 struct SPCanvasBuf {
     cairo_t *ct;
     Geom::IntRect rect;
-    Geom::IntRect visible_rect;
+    Geom::IntRect canvas_rect; // visible window in world coordinates (i.e. offset by _x0, _y0)
 
     unsigned char *buf;
     int buf_rowstride;
@@ -72,10 +72,7 @@ GType sp_canvas_get_type() G_GNUC_CONST;
 struct SPCanvas {
     /// Scrolls canvas to specific position (c is measured in screen pixels).
     void scrollTo(Geom::Point const &c, unsigned int clear, bool is_scrolling = false);
-    void startRotateTo(double angle);
-    void rotateTo(double angle);
-    bool endRotateTo();
-    void clearRotateTo();
+
     /// Synchronously updates the canvas if necessary.
     void updateNow();
 
@@ -177,8 +174,8 @@ public:
     bool _is_dragging;
     double _dx0;
     double _dy0;
-    int _x0; ///< World coordinate of the leftmost pixels
-    int _y0; ///< World coordinate of the topmost pixels
+    int _x0; ///< World coordinate of the leftmost pixels of window
+    int _y0; ///< World coordinate of the topmost pixels of window
 
     /// Image surface storing the contents of the widget
     cairo_surface_t *_backing_store;

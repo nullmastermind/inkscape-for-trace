@@ -60,6 +60,7 @@
 #include "verbs.h"
 
 #include "ui/tools/calligraphic-tool.h"
+#include "ui/tools/freehand-base.h"
 
 using Inkscape::DocumentUndo;
 
@@ -771,6 +772,8 @@ bool CalligraphicTool::root_handler(GdkEvent* event) {
 
             this->message_context->clear();
             ret = TRUE;
+        } else if (!this->dragging && event->button.button == 1 && !this->space_panning){
+            spdc_create_single_dot(this, this->desktop->w2d(motion_w), "/tools/calligraphic", event->button.state);
         }
         break;
     }

@@ -57,7 +57,10 @@
     #include <librevenge-stream/librevenge-stream.h>
 
     using librevenge::RVNGFileStream;
+    using librevenge::RVNGString;
     using librevenge::RVNGStringVector;
+    using librevenge::RVNGPropertyList;
+    using librevenge::RVNGSVGDrawingGenerator;
   #else
     #include <libwpd-stream/libwpd-stream.h>
 
@@ -451,6 +454,31 @@ void SymbolsDialog::iconChanged() {
 }
 
 #ifdef WITH_LIBVISIO
+
+#if WITH_LIBVISIO01
+// Extend libvisio's native RVNGSVGDrawingGenerator with support for extracting stencil names (to be used as ID/title)
+class REVENGE_API RVNGSVGDrawingGenerator_WithTitle : public RVNGSVGDrawingGenerator {
+  public:
+    RVNGSVGDrawingGenerator_WithTitle(RVNGStringVector &output, RVNGStringVector &titles, const RVNGString &nmSpace)
+      : RVNGSVGDrawingGenerator(output, nmSpace)
+      , _titles(titles)
+    {}
+
+    void startPage(const RVNGPropertyList &propList)
+    {
+      RVNGSVGDrawingGenerator::startPage(propList);
+      if (propList["draw:name"]) {
+          _titles.append(propList["draw:name"]->getStr());
+      } else {
+          _titles.append("");
+      }
+    }
+
+  private:
+    RVNGStringVector &_titles;
+};
+#endif
+
 // Read Visio stencil files
 SPDocument* read_vss( gchar* fullname, Glib::ustring name ) {
 
@@ -472,8 +500,9 @@ SPDocument* read_vss( gchar* fullname, Glib::ustring name ) {
   }
 
   RVNGStringVector output;
+  RVNGStringVector titles;
 #if WITH_LIBVISIO01
-  librevenge::RVNGSVGDrawingGenerator generator(output, "svg");
+  RVNGSVGDrawingGenerator_WithTitle generator(output, titles, "svg");
 
   if (!libvisio::VisioDocument::parseStencils(&input, &generator)) {
 #else
@@ -488,7 +517,7 @@ SPDocument* read_vss( gchar* fullname, Glib::ustring name ) {
 
   // prepare a valid title for the symbol file
   Glib::ustring title = Glib::Markup::escape_text(name);
-  // prepare a valid id prefix for the symbols (unfortunately libvisio doesn't give us a name)
+  // prepare a valid id prefix for symbols libvisio doesn't give us a name for
   Glib::RefPtr<Glib::Regex> regex1 = Glib::Regex::create("[^a-zA-Z0-9_-]");
   Glib::ustring id = regex1->replace(name, 0, "_", Glib::REGEX_MATCH_PARTIAL);
 
@@ -505,25 +534,30 @@ SPDocument* read_vss( gchar* fullname, Glib::ustring name ) {
   tmpSVGOutput += "</title>\n";
   tmpSVGOutput += "  <defs>\n";
 
-  // Each "symbol" is in it's own SVG file, we wrap with <symbol> and merge into one file.
+  // Each "symbol" is in its own SVG file, we wrap with <symbol> and merge into one file.
   for (unsigned i=0; i<output.size(); ++i) {
 
     std::stringstream ss;
-    ss << i;
+    if (titles.size() == output.size() && titles[i] != "") {
+      // TODO: Do we need to check for duplicated titles?
+      ss << regex1->replace(titles[i].cstr(), 0, "_", Glib::REGEX_MATCH_PARTIAL);
+    } else {
+      ss << id << "_" << i;
+    }
 
-    tmpSVGOutput += "    <symbol id=\"";
-    tmpSVGOutput += id;
-    tmpSVGOutput += "_";
-    tmpSVGOutput += ss.str();
-    tmpSVGOutput += "\">\n";
+    tmpSVGOutput += "    <symbol id=\"" + ss.str() + "\">\n";
+
+#if WITH_LIBVISIO01
+    if (titles.size() == output.size() && titles[i] != "") {
+      tmpSVGOutput += "      <title>" + Glib::ustring(RVNGString::escapeXML(titles[i].cstr()).cstr()) + "</title>\n";
+    }
+#endif
 
     std::istringstream iss( output[i].cstr() );
     std::string line;
     while( std::getline( iss, line ) ) {
-      // std::cout << line << std::endl;
       if( line.find( "svg:svg" ) == std::string::npos ) {
-        tmpSVGOutput += line;
-        tmpSVGOutput += "\n";
+        tmpSVGOutput += "      " + line + "\n";
       }
     }
 

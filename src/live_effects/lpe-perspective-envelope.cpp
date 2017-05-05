@@ -110,15 +110,15 @@ void LPEPerspectiveEnvelope::doEffect(SPCurve *curve)
             int position_c = Geom::sgn(Geom::cross(handles[2] - handles[3], handles[0] - handles[3]));
             if (position_a != 1 && move0) {
                 Geom::Point point_a = line_a.pointAt(line_a.nearestTime(handles[0]));
-                down_left_point.param_setValue(point_a, true);
+                down_left_point.param_setValue(point_a);
             }
             if (position_b == 1 && move0) {
                 Geom::Point point_b = line_b.pointAt(line_b.nearestTime(handles[0]));
-                down_left_point.param_setValue(point_b, true);
+                down_left_point.param_setValue(point_b);
             }
             if (position_c == 1 && move0) {
                 Geom::Point point_c = line_c.pointAt(line_c.nearestTime(handles[0]));
-                down_left_point.param_setValue(point_c, true);
+                down_left_point.param_setValue(point_c);
             }
             line_a.setPoints(handles[0],handles[2]);
             line_b.setPoints(handles[2],handles[3]);
@@ -128,15 +128,15 @@ void LPEPerspectiveEnvelope::doEffect(SPCurve *curve)
             position_c = Geom::sgn(Geom::cross(handles[3] - handles[0], handles[1] - handles[0]));
             if (position_a != 1 && move1) {
                 Geom::Point point_a = line_a.pointAt(line_a.nearestTime(handles[1]));
-                up_left_point.param_setValue(point_a, true);
+                up_left_point.param_setValue(point_a);
             }
             if (position_b == 1 && move1) {
                 Geom::Point point_b = line_b.pointAt(line_b.nearestTime(handles[1]));
-                up_left_point.param_setValue(point_b, true);
+                up_left_point.param_setValue(point_b);
             }
             if (position_c == 1 && move1) {
                 Geom::Point point_c = line_c.pointAt(line_c.nearestTime(handles[1]));
-                up_left_point.param_setValue(point_c, true);
+                up_left_point.param_setValue(point_c);
             }
             line_a.setPoints(handles[1],handles[3]);
             line_b.setPoints(handles[3],handles[0]);
@@ -146,15 +146,15 @@ void LPEPerspectiveEnvelope::doEffect(SPCurve *curve)
             position_c = Geom::sgn(Geom::cross(handles[0] - handles[1], handles[2] - handles[1]));
             if (position_a != 1 && move2) {
                 Geom::Point point_a = line_a.pointAt(line_a.nearestTime(handles[2]));
-                up_right_point.param_setValue(point_a, true);
+                up_right_point.param_setValue(point_a);
             }
             if (position_b == 1 && move2) {
                 Geom::Point point_b = line_b.pointAt(line_b.nearestTime(handles[2]));
-                up_right_point.param_setValue(point_b, true);
+                up_right_point.param_setValue(point_b);
             }
             if (position_c == 1 && move2) {
                 Geom::Point point_c = line_c.pointAt(line_c.nearestTime(handles[2]));
-                up_right_point.param_setValue(point_c, true);
+                up_right_point.param_setValue(point_c);
             }
             line_a.setPoints(handles[2],handles[0]);
             line_b.setPoints(handles[0],handles[1]);
@@ -164,15 +164,15 @@ void LPEPerspectiveEnvelope::doEffect(SPCurve *curve)
             position_c = Geom::sgn(Geom::cross(handles[1] - handles[2], handles[3] - handles[2]));
             if (position_a != 1 && move3) {
                 Geom::Point point_a = line_a.pointAt(line_a.nearestTime(handles[3]));
-                down_right_point.param_setValue(point_a, true);
+                down_right_point.param_setValue(point_a);
             }
             if (position_b == 1 && move3) {
                 Geom::Point point_b = line_b.pointAt(line_b.nearestTime(handles[3]));
-                down_right_point.param_setValue(point_b, true);
+                down_right_point.param_setValue(point_b);
             }
             if (position_c == 1 && move3) {
                 Geom::Point point_c = line_c.pointAt(line_c.nearestTime(handles[3]));
-                down_right_point.param_setValue(point_c, true);
+                down_right_point.param_setValue(point_c);
             }
         } else {
             handles.resize(4);
@@ -434,8 +434,8 @@ LPEPerspectiveEnvelope::vertical(PointParam &param_one, PointParam &param_two, G
     }
     A[Geom::X] = nearest[Geom::X] - distance_middle;
     B[Geom::X] = nearest[Geom::X] + distance_middle;
-    param_one.param_setValue(A, true);
-    param_two.param_setValue(B, true);
+    param_one.param_setValue(A);
+    param_two.param_setValue(B);
 }
 
 void
@@ -455,8 +455,8 @@ LPEPerspectiveEnvelope::horizontal(PointParam &param_one, PointParam &param_two,
     }
     A[Geom::Y] = nearest[Geom::Y] - distance_middle;
     B[Geom::Y] = nearest[Geom::Y] + distance_middle;
-    param_one.param_setValue(A, true);
-    param_two.param_setValue(B, true);
+    param_one.param_setValue(A);
+    param_two.param_setValue(B);
 }
 
 void

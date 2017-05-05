@@ -146,7 +146,7 @@ VsdImportDialog::VsdImportDialog(const std::vector<RVNGString> &vec)
      _page_selector_box->pack_start(*_labelTotalPages, Gtk::PACK_SHRINK);
 
      vbox1->pack_end(*_page_selector_box, Gtk::PACK_SHRINK);
-     
+
      // Buttons
      cancelbutton = Gtk::manage(new Gtk::Button(_("_Cancel"), true));
      okbutton     = Gtk::manage(new Gtk::Button(_("_OK"),     true));
@@ -211,6 +211,19 @@ void VsdImportDialog::_setPreviewPage()
      }
 
      SPDocument *doc = SPDocument::createNewDocFromMem(_vec[_current_page-1].cstr(), strlen(_vec[_current_page-1].cstr()), 0);
+     if(!doc) {
+           g_warning("VSD import: Could not create preview for page %d", _current_page);
+           gchar const *no_preview_template =
+                "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>"
+                "  <path style='fill:none;stroke:#ff0000;stroke-width:2px;' d='M 82,10 18,74 m 0,-64 64,64' />"
+                "  <rect style='fill:none;stroke:#000000;stroke-width:1.5px;' width='64' height='64' x='18' y='10' />"
+                "  <text x='50' y='92' style='font-size:10px;text-anchor:middle;font-family:sans-serif;'>%s</text>"
+                "</svg>";
+           gchar * no_preview = g_strdup_printf(no_preview_template, _("No preview"));
+           doc = SPDocument::createNewDocFromMem(no_preview, strlen(no_preview), 0);
+           g_free(no_preview);
+     }
+
      Gtk::Widget * tmpPreviewArea = Glib::wrap(sp_svg_view_widget_new(doc));
      std::swap(_previewArea, tmpPreviewArea);
      delete tmpPreviewArea;

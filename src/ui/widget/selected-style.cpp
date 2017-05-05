@@ -1380,13 +1380,8 @@ RotateableStrokeWidth::value_adjust(double current, double by, guint /*modifier*
 {
     double newval;
     // by is -1..1
-    if (by < 0) {
-        // map negative 0..-1 to current..0
-        newval = current * (1  +  by);
-    } else {
-        // map positive 0..1 to current..4*current
-        newval = current * (1  +  by) * (1  +  by);
-    }
+    double max_f = 50;  // maximum width is (current * max_f), minimum - zero
+    newval = current * (std::exp(std::log(max_f-1) * (by+1)) - 1) / (max_f-2);
 
     SPCSSAttr *css = sp_repr_css_attr_new ();
     if (final && newval < 1e-6) {
@@ -1394,6 +1389,7 @@ RotateableStrokeWidth::value_adjust(double current, double by, guint /*modifier*
         // if it's not final, leave it a chance to increase again (which is not possible with "none")
         sp_repr_css_set_property (css, "stroke", "none");
     } else {
+        newval = Inkscape::Util::Quantity::convert(newval, parent->_sw_unit, "px");
         Inkscape::CSSOStringStream os;
         os << newval;
         sp_repr_css_set_property (css, "stroke-width", os.str().c_str());

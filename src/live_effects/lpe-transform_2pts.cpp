@@ -138,14 +138,22 @@ LPETransform2Pts::doBeforeEffect (SPLPEItem const* lpeitem)
         size_t nnodes = nodeCount(pathvector);
         first_knot.param_set_range(1, last_knot-1);
         last_knot.param_set_range(first_knot+1, nnodes);
-        from_original_width.param_setValue(false);
+        if (from_original_width){
+            from_original_width.param_setValue(false);
+        }
     } else {
-        first_knot.param_set_value(1);
-        last_knot.param_set_value(2);
+        if (first_knot != 1){
+            first_knot.param_set_value(1);
+        }
+        if (last_knot != 2){
+            last_knot.param_set_value(2);
+        }
         first_knot.param_set_range(1,1);
         last_knot.param_set_range(2,2);
-        from_original_width.param_setValue(true);
         append_path = false;
+        if (!from_original_width){
+            from_original_width.param_setValue(true);
+        }
     }
     if(lock_lenght && !lock_angle && previous_lenght != -1) {
         Geom::Ray transformed((Geom::Point)start,(Geom::Point)end);
@@ -251,6 +259,8 @@ LPETransform2Pts::reset()
         first_knot.param_set_value(1);
         last_knot.param_set_value(2);
     }
+    offset.param_set_value(0.0);
+    stretch.param_set_value(1.0);
     Geom::Ray transformed(point_a, point_b);
     previous_angle = transformed.angle();
     previous_lenght = Geom::distance(point_a, point_b);

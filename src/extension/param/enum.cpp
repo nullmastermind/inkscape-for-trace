@@ -33,29 +33,27 @@ namespace Inkscape {
 namespace Extension {
 
 /* For internal use only.
-     Note that value and guitext MUST be non-NULL. This is ensured by newing only at one location in the code where non-NULL checks are made. */
+     Note that value and text MUST be non-NULL. This is ensured by newing only at one location in the code where non-NULL checks are made. */
 class enumentry {
 public:
     enumentry (Glib::ustring &val, Glib::ustring &text) :
         value(val),
-        guitext(text)
+        text(text)
     {}
 
     Glib::ustring value;
-    Glib::ustring guitext;
+    Glib::ustring text;
 };
 
 
 ParamComboBox::ParamComboBox(const gchar * name,
-                             const gchar * guitext,
-                             const gchar * desc,
-                             const Parameter::_scope_t scope,
-                             bool gui_hidden,
-                             const gchar * gui_tip,
+                             const gchar * text,
+                             const gchar * description,
+                             bool hidden,
                              int indent,
                              Inkscape::Extension::Extension * ext,
                              Inkscape::XML::Node * xml)
-    : Parameter(name, guitext, desc, scope, gui_hidden, gui_tip, indent, ext)
+    : Parameter(name, text, description, hidden, indent, ext)
     , _value(NULL)
     , choices(NULL)
 {
@@ -66,7 +64,7 @@ ParamComboBox::ParamComboBox(const gchar * name,
         for (Inkscape::XML::Node *node = xml->firstChild(); node; node = node->next()) {
             char const * chname = node->name();
             if (!strcmp(chname, INKSCAPE_EXTENSION_NS "item") || !strcmp(chname, INKSCAPE_EXTENSION_NS "_item")) {
-                Glib::ustring newguitext, newvalue;
+                Glib::ustring newtext, newvalue;
                 const char * contents = NULL;
                 if (node->firstChild()) {
                     contents = node->firstChild()->content();
@@ -77,12 +75,12 @@ ParamComboBox::ParamComboBox(const gchar * name,
                     //       still need to include if are to be localized
                     if (!strcmp(chname, INKSCAPE_EXTENSION_NS "_item")) {
                         if (node->attribute("msgctxt") != NULL) {
-                            newguitext =  g_dpgettext2(NULL, node->attribute("msgctxt"), contents);
+                            newtext =  g_dpgettext2(NULL, node->attribute("msgctxt"), contents);
                         } else {
-                            newguitext =  _(contents);
+                            newtext =  _(contents);
                         }
                     } else {
-                        newguitext =  contents;
+                        newtext =  contents;
                     }
                 } else
                     continue;
@@ -94,8 +92,8 @@ ParamComboBox::ParamComboBox(const gchar * name,
                     newvalue = contents;
                 }
 
-                if ( (!newguitext.empty()) && (!newvalue.empty()) ) {   // logical error if this is not true here
-                    choices = g_slist_append( choices, new enumentry(newvalue, newguitext) );
+                if ( (!newtext.empty()) && (!newvalue.empty()) ) {   // logical error if this is not true here
+                    choices = g_slist_append( choices, new enumentry(newvalue, newtext) );
                 }
             }
         }
@@ -155,7 +153,7 @@ const gchar *ParamComboBox::set(const gchar * in, SPDocument * /*doc*/, Inkscape
     Glib::ustring settext;
     for (GSList * list = choices; list != NULL; list = g_slist_next(list)) {
         enumentry * entr = reinterpret_cast<enumentry *>(list->data);
-        if ( !entr->guitext.compare(in) ) {
+        if ( !entr->text.compare(in) ) {
             settext = entr->value;
             break;  // break out of for loop
         }
@@ -175,20 +173,20 @@ const gchar *ParamComboBox::set(const gchar * in, SPDocument * /*doc*/, Inkscape
 }
 
 /**
- * function to test if \c guitext is selectable
+ * function to test if \c text is selectable
  */
-bool ParamComboBox::contains(const gchar * guitext, SPDocument const * /*doc*/, Inkscape::XML::Node const * /*node*/) const
+bool ParamComboBox::contains(const gchar * text, SPDocument const * /*doc*/, Inkscape::XML::Node const * /*node*/) const
 {
-    if (guitext == NULL) {
+    if (text == NULL) {
         return false; /* Can't have NULL string */
     }
 
     for (GSList * list = choices; list != NULL; list = g_slist_next(list)) {
         enumentry * entr = reinterpret_cast<enumentry *>(list->data);
-        if ( !entr->guitext.compare(guitext) )
+        if ( !entr->text.compare(text) )
             return true;
     }
-    // if we did not find the guitext in this ParamComboBox:
+    // if we did not find the text in this ParamComboBox:
     return false;
 }
 
@@ -246,12 +244,12 @@ ParamComboBoxEntry::changed (void)
  */
 Gtk::Widget *ParamComboBox::get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal)
 {
-    if (_gui_hidden) {
+    if (_hidden) {
         return NULL;
     }
 
     Gtk::HBox * hbox = Gtk::manage(new Gtk::HBox(false, Parameter::GUI_PARAM_WIDGETS_SPACING));
-    Gtk::Label * label = Gtk::manage(new Gtk::Label(_(_text), Gtk::ALIGN_START));
+    Gtk::Label * label = Gtk::manage(new Gtk::Label(_text, Gtk::ALIGN_START));
     label->show();
     hbox->pack_start(*label, false, false);
 
@@ -260,11 +258,11 @@ Gtk::Widget *ParamComboBox::get_widget(SPDocument * doc, Inkscape::XML::Node * n
     Glib::ustring settext;
     for (GSList * list = choices; list != NULL; list = g_slist_next(list)) {
         enumentry * entr = reinterpret_cast<enumentry *>(list->data);
-        Glib::ustring text = entr->guitext;
+        Glib::ustring text = entr->text;
         combo->append(text);
 
         if ( _value && !entr->value.compare(_value) ) {
-            settext = entr->guitext;
+            settext = entr->text;
         }
     }
     if (!settext.empty()) {

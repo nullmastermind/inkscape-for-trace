@@ -177,6 +177,8 @@ public:
     SPCanvasGroup *tempgroup;   ///< contains temporary canvas items
     SPCanvasItem  *page;        ///< page background
     SPCanvasItem  *page_border; ///< page border
+    SPCanvasItem  *canvas_rotate; ///< quickly show canvas rotation
+    SPCanvasItem  *canvas_debug;  ///< shows tiling
     SPCSSAttr     *current;     ///< current style
     bool           _focusMode;  ///< Whether we're focused working or general working
 
@@ -351,6 +353,18 @@ public:
     void rotate_absolute_center_point (Geom::Point const &c, double const rotate);
     void rotate_relative_center_point (Geom::Point const &c, double const rotate);
 
+    enum CanvasFlip {
+        FLIP_NONE       = 0,
+        FLIP_HORIZONTAL = 1,
+        FLIP_VERTICAL   = 2
+    };
+    void flip_absolute_keep_point   (Geom::Point const &c, CanvasFlip flip);
+    void flip_relative_keep_point   (Geom::Point const &c, CanvasFlip flip);
+    void flip_absolute_center_point (Geom::Point const &c, CanvasFlip flip);
+    void flip_relative_center_point (Geom::Point const &c, CanvasFlip flip);
+
+    double current_rotation() const { return _current_affine.getRotation(); }
+
     void scroll_absolute (Geom::Point const &point, bool is_scrolling = false);
     void scroll_relative (Geom::Point const &delta, bool is_scrolling = false);
     void scroll_relative_in_svg_coords (double dx, double dy, bool is_scrolling = false);
@@ -474,8 +488,27 @@ private:
             _update();
         }
 
+        void setFlip( CanvasFlip flip ) {
+            _flip = Geom::Scale();
+            addFlip( flip );
+        }
+
+        void addFlip( CanvasFlip flip ) {
+            if (flip & FLIP_HORIZONTAL) {
+                _flip *= Geom::Scale(-1.0, 1.0);
+            }
+            if (flip & FLIP_VERTICAL) {
+                _flip *= Geom::Scale(1.0, -1.0);
+            }
+            _update();
+        }
+
         double getZoom() const {
             return _d2w.descrim();
+        }
+
+        double getRotation() const {
+            return _rotate.angle();
         }
 
         void setOffset( Geom::Point offset ) {
@@ -490,13 +523,14 @@ private:
 
       private:
         void _update() {
-            _d2w = _rotate * _scale;
+            _d2w = _rotate * _scale * _flip;
             _w2d = _d2w.inverse();
         }            
         Geom::Affine  _w2d;      // Window to desktop
         Geom::Affine  _d2w;      // Desktop to window
         Geom::Rotate  _rotate;   // Rotate part of _w2d
         Geom::Scale   _scale;    // Scale part of _w2d
+        Geom::Scale   _flip;     // Flip part of _w2d
         Geom::Point   _offset;   // Point on canvas to align to (0,0) of window
     };
 

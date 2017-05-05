@@ -48,6 +48,7 @@ ColorScales::ColorScales(SelectedColor &color, SPColorScalesMode mode)
     , _rangeLimit(255.0)
     , _updating(FALSE)
     , _dragging(FALSE)
+    , _mode(SP_COLOR_SCALES_MODE_NONE)
 {
     for (gint i = 0; i < 5; i++) {
         _l[i] = 0;

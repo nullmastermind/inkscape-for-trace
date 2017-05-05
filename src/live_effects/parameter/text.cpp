@@ -50,9 +50,9 @@ TextParam::param_set_default()
 }
 
 void
-TextParam::param_update_default(Glib::ustring default_value)
+TextParam::param_update_default(const gchar * default_value)
 {
-    defvalue = default_value;
+    defvalue = (Glib::ustring)default_value;
 }
 
 void
@@ -125,14 +125,12 @@ TextParam::param_newWidget()
     rsu->setProgrammatically = false;
 
     rsu->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change text parameter"));
-    param_effect->upd_params = false;
     return dynamic_cast<Gtk::Widget *> (rsu);
 }
 
 void
 TextParam::param_setValue(const Glib::ustring newvalue)
 {
-    param_effect->upd_params = true;
     value = newvalue;
     if (!_hide_canvas_text) {
         sp_canvastext_set_text (canvas_text, newvalue.c_str());

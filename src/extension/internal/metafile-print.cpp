@@ -355,27 +355,6 @@ int PrintMetafile::hold_gradient(void *gr, int mode)
     return 1;
 }
 
-/*  behaves like snprintf() but makes sure decimal separators are formatted as dots
-    otherwise invalid strings can be produced depending on the set locale
-*/
-int PrintMetafile::snprintf_dots(char * s, size_t n, const char * format, ...)
-{
-    int nChars;
-
-    char *oldlocale = g_strdup(setlocale(LC_NUMERIC, NULL));
-    setlocale(LC_NUMERIC, "C");
-    
-    va_list argptr;
-    va_start(argptr, format);
-    nChars = vsnprintf(s, n,  format, argptr);
-    va_end(argptr);
-
-    setlocale(LC_NUMERIC, oldlocale);
-    g_free(oldlocale);
-
-    return nChars;
-}
-
 /*  convert from center ellipse to SVGEllipticalArc ellipse
 
     From:
@@ -411,7 +390,7 @@ Geom::PathVector PrintMetafile::center_ellipse_as_SVG_PathV(Geom::Point ctr, dou
     y2 = ctr[Y]  +  sin(F) * rx * cos(M_PI)   +   cos(F)  * ry * sin(M_PI);
 
     char text[256];
-    snprintf_dots(text, 256, " M %f,%f A %f %f %f 0 0 %f %f A %f %f %f 0 0 %f %f z",
+    snprintf(text, 256, " M %f,%f A %f %f %f 0 0 %f %f A %f %f %f 0 0 %f %f z",
                   x1, y1,  rx, ry, F * 360. / (2.*M_PI), x2, y2,   rx, ry, F * 360. / (2.*M_PI), x1, y1);
     Geom::PathVector outres =  Geom::parse_svg_path(text);
     return outres;
@@ -440,7 +419,7 @@ Geom::PathVector PrintMetafile::center_elliptical_ring_as_SVG_PathV(Geom::Point 
     y22 = ctr[Y]  +  sin(F) * rx2 * cos(M_PI)   +   cos(F)  * ry2 * sin(M_PI);
 
     char text[512];
-    snprintf_dots(text, 512, " M %f,%f A %f %f %f 0 1 %f %f A %f %f %f 0 1 %f %f z M %f,%f  A %f %f %f 0 0 %f %f A %f %f %f 0 0 %f %f z",
+    snprintf(text, 512, " M %f,%f A %f %f %f 0 1 %f %f A %f %f %f 0 1 %f %f z M %f,%f  A %f %f %f 0 0 %f %f A %f %f %f 0 0 %f %f z",
                   x11, y11,  rx1, ry1, degrot, x12, y12,   rx1, ry1, degrot, x11, y11,
                   x21, y21,  rx2, ry2, degrot, x22, y22,   rx2, ry2, degrot, x21, y21);
     Geom::PathVector outres = Geom::parse_svg_path(text);
@@ -462,7 +441,7 @@ Geom::PathVector PrintMetafile::center_elliptical_hole_as_SVG_PathV(Geom::Point 
     y2 = ctr[Y]  +  sin(F) * rx * cos(M_PI)   +   cos(F)  * ry * sin(M_PI);
 
     char text[256];
-    snprintf_dots(text, 256, " M %f,%f A %f %f %f 0 0 %f %f A %f %f %f 0 0 %f %f z M 50000,50000 50000,-50000 -50000,-50000 -50000,50000 z",
+    snprintf(text, 256, " M %f,%f A %f %f %f 0 0 %f %f A %f %f %f 0 0 %f %f z M 50000,50000 50000,-50000 -50000,-50000 -50000,50000 z",
                   x1, y1,  rx, ry, F * 360. / (2.*M_PI), x2, y2,   rx, ry, F * 360. / (2.*M_PI), x1, y1);
     Geom::PathVector outres =  Geom::parse_svg_path(text);
     return outres;

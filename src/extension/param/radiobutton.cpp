@@ -41,33 +41,31 @@ namespace Inkscape {
 namespace Extension {
 
 /* For internal use only.
-     Note that value and guitext MUST be non-NULL. This is ensured by newing only at one location in the code where non-NULL checks are made. */
+     Note that value and text MUST be non-NULL. This is ensured by newing only at one location in the code where non-NULL checks are made. */
 class optionentry {
 public:
-    optionentry (Glib::ustring * val, Glib::ustring * text) {
+    optionentry (Glib::ustring * val, Glib::ustring * txt) {
         value = val;
-        guitext = text;
+        text = txt;
     }
     ~optionentry() {
         delete value;
-        delete guitext;
+        delete text;
     }
 
     Glib::ustring * value;
-    Glib::ustring * guitext;
+    Glib::ustring * text;
 };
 
 ParamRadioButton::ParamRadioButton(const gchar * name,
-                                   const gchar * guitext,
-                                   const gchar * desc,
-                                   const Parameter::_scope_t scope,
-                                   bool gui_hidden,
-                                   const gchar * gui_tip,
+                                   const gchar * text,
+                                   const gchar * description,
+                                   bool hidden,
                                    int indent,
                                    Inkscape::Extension::Extension * ext,
                                    Inkscape::XML::Node * xml,
                                    AppearanceMode mode)
-    : Parameter(name, guitext, desc, scope, gui_hidden, gui_tip, indent, ext)
+    : Parameter(name, text, description, hidden, indent, ext)
     , _value(0)
     , _mode(mode)
     , choices(0)
@@ -79,7 +77,7 @@ ParamRadioButton::ParamRadioButton(const gchar * name,
         while (child_repr != NULL) {
             char const * chname = child_repr->name();
             if (!strcmp(chname, INKSCAPE_EXTENSION_NS "option") || !strcmp(chname, INKSCAPE_EXTENSION_NS "_option")) {
-                Glib::ustring * newguitext = NULL;
+                Glib::ustring * newtext = NULL;
                 Glib::ustring * newvalue = NULL;
                 const char * contents = child_repr->firstChild()->content();
 
@@ -87,12 +85,12 @@ ParamRadioButton::ParamRadioButton(const gchar * name,
                     // don't translate when 'item' but do translate when '_option'
                     if (!strcmp(chname, INKSCAPE_EXTENSION_NS "_option")) {
                         if (child_repr->attribute("msgctxt") != NULL) {
-                            newguitext =  new Glib::ustring(g_dpgettext2(NULL, child_repr->attribute("msgctxt"), contents));
+                            newtext =  new Glib::ustring(g_dpgettext2(NULL, child_repr->attribute("msgctxt"), contents));
                         } else {
-                            newguitext =  new Glib::ustring(_(contents));
+                            newtext =  new Glib::ustring(_(contents));
                         }
                     } else {
-                        newguitext =  new Glib::ustring(contents);
+                        newtext =  new Glib::ustring(contents);
                     }
                 } else {
                     continue;
@@ -106,8 +104,8 @@ ParamRadioButton::ParamRadioButton(const gchar * name,
                     newvalue = new Glib::ustring(contents);
                 }
 
-                if ( (newguitext) && (newvalue) ) {   // logical error if this is not true here
-                    choices = g_slist_append( choices, new optionentry(newvalue, newguitext) );
+                if ( (newtext) && (newvalue) ) {   // logical error if this is not true here
+                    choices = g_slist_append( choices, new optionentry(newvalue, newtext) );
                 }
             }
             child_repr = child_repr->next();
@@ -282,7 +280,7 @@ Glib::ustring ParamRadioButton::value_from_label(const Glib::ustring label)
 
     for (GSList * list = choices; list != NULL; list = g_slist_next(list)) {
         optionentry * entr = reinterpret_cast<optionentry *>(list->data);
-        if ( !entr->guitext->compare(label) ) {
+        if ( !entr->text->compare(label) ) {
             value = *(entr->value);
             break;
         }
@@ -297,7 +295,7 @@ Glib::ustring ParamRadioButton::value_from_label(const Glib::ustring label)
  */
 Gtk::Widget * ParamRadioButton::get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal)
 {
-    if (_gui_hidden) {
+    if (_hidden) {
         return NULL;
     }
 
@@ -306,7 +304,7 @@ Gtk::Widget * ParamRadioButton::get_widget(SPDocument * doc, Inkscape::XML::Node
     auto vbox = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL, 0));
     vbox->set_homogeneous(false);
 
-    Gtk::Label * label = Gtk::manage(new Gtk::Label(_(_text), Gtk::ALIGN_START, Gtk::ALIGN_START));
+    Gtk::Label * label = Gtk::manage(new Gtk::Label(_text, Gtk::ALIGN_START, Gtk::ALIGN_START));
     label->show();
     hbox->pack_start(*label, false, false);
 
@@ -323,7 +321,7 @@ Gtk::Widget * ParamRadioButton::get_widget(SPDocument * doc, Inkscape::XML::Node
     Gtk::RadioButtonGroup group;
     for (GSList * list = choices; list != NULL; list = g_slist_next(list)) {
         optionentry * entr = reinterpret_cast<optionentry *>(list->data);
-        Glib::ustring * text = entr->guitext;
+        Glib::ustring * text = entr->text;
         switch ( _mode ) {
             case MINIMAL:
             {

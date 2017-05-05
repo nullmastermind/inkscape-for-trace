@@ -79,7 +79,6 @@ unsigned int sp_print_text(SPPrintContext *ctx, char const *text, Geom::Point p,
 void
 sp_print_document(Gtk::Window& parentWindow, SPDocument *doc)
 {
-    doc->getRoot()->c2p = doc->getRoot()->rotation.inverse() * doc->getRoot()->c2p;
     doc->ensureUpToDate();
 
     // Build arena
@@ -89,7 +88,6 @@ sp_print_document(Gtk::Window& parentWindow, SPDocument *doc)
     Inkscape::UI::Dialog::Print printop(doc,base);
     Gtk::PrintOperationResult res = printop.run(Gtk::PRINT_OPERATION_ACTION_PRINT_DIALOG, parentWindow);
     (void)res; // TODO handle this
-    doc->getRoot()->c2p *= doc->getRoot()->rotation;
 }
 
 void sp_print_document_to_file(SPDocument *doc, gchar const *filename)

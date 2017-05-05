@@ -1310,6 +1310,9 @@ void InkscapePreferences::initPageBehavior()
     _steps_zoom.init ( "/options/zoomincrement/value", 101.0, 500.0, 1.0, 1.0, M_SQRT2, true, true);
     _page_steps.add_line( false, _("_Zoom in/out by:"), _steps_zoom, _("%"),
                           _("Zoom tool click, +/- keys, and middle click zoom in and out by this multiplier"), false);
+    _steps_rotate.init ( "/options/rotateincrement/value", 1, 90, 1.0, 5.0, 15, false, false);
+    _page_steps.add_line( false, _("_Rotate canvas by:"), _steps_rotate, _("degrees"),
+                          _("Rotate canvas clockwise and counter-clockwise by this amount."), false);
     this->AddPage(_page_steps, _("Steps"), iter_behavior, PREFS_PAGE_BEHAVIOR_STEPS);
 
     // Clones options
@@ -1407,6 +1410,10 @@ void InkscapePreferences::initPageRendering()
     // rendering cache
     _rendering_cache_size.init("/options/renderingcache/size", 0.0, 4096.0, 1.0, 32.0, 64.0, true, false);
     _page_rendering.add_line( false, _("Rendering _cache size:"), _rendering_cache_size, C_("mebibyte (2^20 bytes) abbreviation","MiB"), _("Set the amount of memory per document which can be used to store rendered parts of the drawing for later reuse; set to zero to disable caching"), false);
+
+    // rendering tile multiplier
+    _rendering_tile_multiplier.init("/options/rendering/tile-multiplier", 1.0, 64.0, 1.0, 4.0, 1.0, true, false);
+    _page_rendering.add_line( false, _("Rendering tile multiplier:"), _rendering_tile_multiplier, _("requires restart"), _("Set the relative size of tiles used to render the canvas. The larger the value, the bigger the tile size."), false);
 
     /* blur quality */
     _blur_quality_best.init ( _("Best quality (slowest)"), "/options/blurquality/value",

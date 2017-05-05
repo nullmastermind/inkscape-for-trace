@@ -215,6 +215,7 @@ protected:
     UI::Widget::PrefSpinUnit    _steps_scale;
     UI::Widget::PrefSpinUnit    _steps_inset;
     UI::Widget::PrefSpinButton  _steps_zoom;
+    UI::Widget::PrefSpinButton  _steps_rotate;
 
     UI::Widget::PrefRadioButton _t_sel_trans_obj;
     UI::Widget::PrefRadioButton _t_sel_trans_outl;
@@ -294,6 +295,7 @@ protected:
     UI::Widget::PrefCombo       _switcher_style;
     UI::Widget::PrefCheckButton _rendering_image_outline;
     UI::Widget::PrefSpinButton  _rendering_cache_size;
+    UI::Widget::PrefSpinButton  _rendering_tile_multiplier;
     UI::Widget::PrefSpinButton  _filter_multi_threaded;
 
     UI::Widget::PrefCheckButton _trans_scale_stroke;

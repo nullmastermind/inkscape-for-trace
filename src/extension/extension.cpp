@@ -701,7 +701,7 @@ public:
 #endif
             this->pack_start(*widg, false, false, 0);
             if (tooltip) {
-                widg->set_tooltip_text(_(tooltip));
+                widg->set_tooltip_text(tooltip);
             } else {
                 widg->set_tooltip_text("");
                 widg->set_has_tooltip(false);
@@ -718,7 +718,7 @@ public:
     a Gtk::VBox, which is then returned to the calling function.
 
     If there are no visible parameters, this function just returns NULL.
-    If all parameters are gui_visible = false NULL is returned as well.
+    If all parameters are gui_hidden = true NULL is returned as well.
 */
 Gtk::Widget *
 Extension::autogui (SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal)
@@ -732,7 +732,7 @@ Extension::autogui (SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<v
     //go through the list of parameters to see if there are any non-hidden ones
     for (GSList * list = parameters; list != NULL; list = g_slist_next(list)) {
         Parameter * param = reinterpret_cast<Parameter *>(list->data);
-        if (param->get_gui_hidden()) continue; //Ignore hidden parameters
+        if (param->get_hidden()) continue; //Ignore hidden parameters
         Gtk::Widget * widg = param->get_widget(doc, node, changeSignal);
         gchar const * tip = param->get_tooltip();
         int indent = param->get_indent();
@@ -837,7 +837,7 @@ unsigned int Extension::param_visible_count ( )
     unsigned int _visible_count = 0;
     for (GSList * list = parameters; list != NULL; list = g_slist_next(list)) {
         Parameter * param = reinterpret_cast<Parameter *>(list->data);
-        if (!param->get_gui_hidden()) _visible_count++;
+        if (!param->get_hidden()) _visible_count++;
     }
     return _visible_count;
 }
