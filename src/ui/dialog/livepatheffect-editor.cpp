@@ -200,7 +200,6 @@ LivePathEffectEditor::showParams(LivePathEffect::Effect& effect)
         lpe_changed = false;
         return;
     }
-    std::cout << "trialara\n";
     if (effectwidget) {
         effectcontrol_vbox.remove(*effectwidget);
         delete effectwidget;
