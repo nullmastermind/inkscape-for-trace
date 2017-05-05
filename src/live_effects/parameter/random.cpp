@@ -94,6 +94,7 @@ RandomParam::param_update_default(const gchar * default_value){
 void
 RandomParam::param_set_value(gdouble val, long newseed)
 {
+    param_effect->upd_params = true;
     value = val;
     if (integer)
         value = round(value);

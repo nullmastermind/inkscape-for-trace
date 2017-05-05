@@ -121,7 +121,9 @@ ScalarParam::param_update_default(const gchar * default_value)
 void
 ScalarParam::param_set_value(gdouble val)
 {
-    param_effect->upd_params = true;
+    if (value != val) {
+        param_effect->upd_params = true;
+    }
     value = val;
     if (integer)
         value = round(value);
