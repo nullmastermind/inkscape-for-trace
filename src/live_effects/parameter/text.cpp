@@ -131,6 +131,9 @@ TextParam::param_newWidget()
 void
 TextParam::param_setValue(const Glib::ustring newvalue)
 {
+    if (value != newvalue) {
+        param_effect->upd_params = true;
+    }
     value = newvalue;
     if (!_hide_canvas_text) {
         sp_canvastext_set_text (canvas_text, newvalue.c_str());
