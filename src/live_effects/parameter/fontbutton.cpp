@@ -72,6 +72,7 @@ FontButtonParam::param_newWidget()
 void
 FontButtonParam::param_setValue(const Glib::ustring newvalue)
 {
+    param_effect->upd_params = true;
     value = newvalue;
 }
 

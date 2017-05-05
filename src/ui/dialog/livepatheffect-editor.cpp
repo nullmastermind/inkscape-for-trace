@@ -53,12 +53,16 @@ void lpeeditor_selection_changed (Inkscape::Selection * selection, gpointer data
 {
     LivePathEffectEditor *lpeeditor = static_cast<LivePathEffectEditor *>(data);
     lpeeditor->lpe_list_locked = false;
+    lpeeditor->lpe_changed = true;
     lpeeditor->onSelectionChanged(selection);
 }
 
 void lpeeditor_selection_modified (Inkscape::Selection * selection, guint /*flags*/, gpointer data)
 {
-    lpeeditor_selection_changed (selection, data);
+    
+    LivePathEffectEditor *lpeeditor = static_cast<LivePathEffectEditor *>(data);
+    lpeeditor->lpe_list_locked = false;
+    lpeeditor->onSelectionChanged(selection);
 }
 
 static void lpe_style_button(Gtk::Button& btn, char const* iconName)
@@ -81,6 +85,7 @@ LivePathEffectEditor::LivePathEffectEditor()
     : UI::Widget::Panel("", "/dialogs/livepatheffect", SP_VERB_DIALOG_LIVE_PATH_EFFECT),
       deskTrack(),
       lpe_list_locked(false),
+      lpe_changed(true),
       effectwidget(NULL),
       status_label("", Gtk::ALIGN_CENTER),
       effectcontrol_frame(""),
@@ -191,6 +196,11 @@ LivePathEffectEditor::~LivePathEffectEditor()
 void
 LivePathEffectEditor::showParams(LivePathEffect::Effect& effect)
 {
+    if (!effect.upd_params && !lpe_changed) {
+        lpe_changed = false;
+        return;
+    }
+    std::cout << "trialara\n";
     if (effectwidget) {
         effectcontrol_vbox.remove(*effectwidget);
         delete effectwidget;
@@ -209,6 +219,8 @@ LivePathEffectEditor::showParams(LivePathEffect::Effect& effect)
     effectcontrol_frame.show();
     effectcontrol_vbox.show_all_children();
     // fixme: add resizing of dialog
+    effect.upd_params = false;
+    lpe_changed = false;
 }
 
 void
@@ -540,6 +552,7 @@ void LivePathEffectEditor::on_effect_selection_changed()
             current_lperef = lperef;
             LivePathEffect::Effect * effect = lperef->lpeobject->get_lpe();
             if (effect) {
+                lpe_changed = true;
                 showParams(*effect);
             }
         }

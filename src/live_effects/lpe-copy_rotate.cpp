@@ -339,7 +339,7 @@ LPECopyRotate::doOnApply(SPLPEItem const* lpeitem)
 
     A = Point(boundingbox_X.min(), boundingbox_Y.middle());
     B = Point(boundingbox_X.middle(), boundingbox_Y.middle());
-    origin.param_setValue(A, true);
+    origin.param_setValue(A);
     origin.param_update_default(A);
     dist_angle_handle = L2(B - A);
     dir = unit_vector(B - A);
@@ -402,7 +402,7 @@ LPECopyRotate::doBeforeEffect (SPLPEItem const* lpeitem)
     rot_pos = origin + dir * Rotate(-rad_from_deg(rotation_angle+starting_angle)) * dist_angle_handle;
     near = Geom::are_near(start_pos, (Geom::Point)starting_point, 0.01);
     if (!near) {
-        starting_point.param_setValue(start_pos, true);
+        starting_point.param_setValue(start_pos);
     }
     previous_start_point = (Geom::Point)starting_point;
     if ( method == RM_FUSE || copies_to_360 ) {
