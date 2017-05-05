@@ -44,6 +44,8 @@ public:
     Geom::Point param_get_default() const;
     void param_set_liveupdate(bool live_update);
     void param_update_default(Geom::Point default_point);
+
+    virtual void param_update_default(const gchar * default_point);
     virtual void param_transform_multiply(Geom::Affine const& /*postmul*/, bool /*set*/);
 
     void set_oncanvas_looks(SPKnotShapeType shape, SPKnotModeType mode, guint32 color);

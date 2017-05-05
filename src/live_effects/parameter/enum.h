@@ -76,7 +76,15 @@ public:
     void param_set_default() {
         param_set_value(defvalue);
     }
-
+    
+    void param_update_default(E default_value) {
+        defvalue = default_value;
+    }
+    
+    virtual void param_update_default(const gchar * default_value) {
+        param_update_default(enumdataconv->get_id_from_key(Glib::ustring(default_value)));
+    }
+    
     void param_set_value(E val) {
         param_effect->upd_params = true;
         value = val;

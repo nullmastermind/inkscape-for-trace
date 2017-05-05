@@ -36,6 +36,7 @@ public:
     virtual gchar * param_getSVGValue() const;
 
     virtual void param_set_default();
+    virtual void param_update_default(const gchar * default_value);
     void param_set_and_write_default();
     virtual void addCanvasIndicators(SPLPEItem const* lpeitem, std::vector<Geom::PathVector> &hp_vec);
 

@@ -73,6 +73,7 @@
 #include "path-chemistry.h"
 #include "xml/sp-css-attr.h"
 #include "live_effects/lpeobject.h"
+#include <pangomm/layout.h>
 #include "display/curve.h"
 #include <stdio.h>
 #include <string.h>
@@ -80,7 +81,7 @@
 namespace Inkscape {
 
 namespace LivePathEffect {
-const Glib::ustring DEFAULT_PREF_VALUE = "--default";
+
 const Util::EnumData<EffectType> LPETypeData[] = {
     // {constant defined in effect-enum.h, N_("name of your effect"), "name of your effect in SVG"}
 #ifdef LPE_ENABLE_TEST_EFFECTS
@@ -645,6 +646,7 @@ void
 Effect::readallParameters(Inkscape::XML::Node const* repr)
 {
     std::vector<Parameter *>::iterator it = param_vector.begin();
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     while (it != param_vector.end()) {
         Parameter * param = *it;
         const gchar * key = param->param_key.c_str();
@@ -655,10 +657,17 @@ Effect::readallParameters(Inkscape::XML::Node const* repr)
                 g_warning("Effect::readallParameters - '%s' not accepted for %s", value, key);
             }
         } else {
-            // set default value
-            param->param_set_default();
+            Glib::ustring pref_path = (Glib::ustring)"/live_effects/" +
+                                       (Glib::ustring)LPETypeConverter.get_key(effectType()).c_str() +
+                                       (Glib::ustring)"/" + 
+                                       (Glib::ustring)key;
+            bool valid = prefs->getEntry(pref_path).isValid();
+            if(valid){
+                param->param_update_default(prefs->getString(pref_path).c_str());
+            } else {
+                param->param_set_default();
+            }
         }
-
         ++it;
     }
 }
@@ -776,6 +785,93 @@ Effect::newWidget()
     return dynamic_cast<Gtk::Widget *>(vbox);
 }
 
+/**
+ * This *creates* a new widget, with default values setter
+ */
+Gtk::Widget *
+Effect::defaultParamSet()
+{
+    // use manage here, because after deletion of Effect object, others might still be pointing to this widget.
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    Gtk::VBox * vbox = Gtk::manage( new Gtk::VBox() );
+    Gtk::VBox * vbox_expander = Gtk::manage( new Gtk::VBox() );
+    Glib::ustring effectname = (Glib::ustring)Inkscape::LivePathEffect::LPETypeConverter.get_label(effectType());
+    Glib::ustring effectkey = (Glib::ustring)Inkscape::LivePathEffect::LPETypeConverter.get_key(effectType());
+    std::vector<Parameter *>::iterator it = param_vector.begin();
+    Inkscape::UI::Widget::Registry * wr;
+    bool has_params = false;
+    while (it != param_vector.end()) {
+        if ((*it)->widget_is_visible) {
+            has_params = true;
+            Parameter * param = *it;
+            Glib::ustring * tip = param->param_getTooltip();
+            const gchar * key = param->param_key.c_str();
+            const gchar * value = param->param_label.c_str();
+            const gchar * tooltip_extra = _(". Change custom values for this parameter");
+            Glib::ustring tooltip = param->param_tooltip + (Glib::ustring)tooltip_extra;
+            Glib::ustring pref_path = (Glib::ustring)"/live_effects/" +
+                                       effectkey +
+                                      (Glib::ustring)"/" + 
+                                      (Glib::ustring)key;
+            bool valid = prefs->getEntry(pref_path).isValid();
+            const gchar * set_or_upd;
+            if (valid) {
+                set_or_upd = _("Update");
+            } else {
+                set_or_upd = _("Set");
+            }
+            Gtk::HBox * vbox_param = Gtk::manage( new Gtk::HBox(true) );
+            Gtk::Label *parameter_label = Gtk::manage(new Gtk::Label(value, Gtk::ALIGN_START));
+            parameter_label->set_use_markup(true);
+            parameter_label->set_use_underline (true);
+            parameter_label->set_ellipsize(Pango::ELLIPSIZE_END);
+            vbox_param->pack_start(*parameter_label, true, true, 2);
+            Gtk::Button *set = Gtk::manage(new Gtk::Button((Glib::ustring)set_or_upd));
+            Gtk::Button *unset = Gtk::manage(new Gtk::Button(Glib::ustring(_("Unset"))));
+            unset->signal_clicked().connect(sigc::bind<Glib::ustring, Gtk::Button *, Gtk::Button *>(sigc::mem_fun(*this, &Effect::unsetDefaultParam), pref_path, set, unset));
+            set->signal_clicked().connect(sigc::bind<Glib::ustring, gchar *, Gtk::Button *, Gtk::Button *>(sigc::mem_fun(*this, &Effect::setDefaultParam), pref_path, param->param_getSVGValue(), set, unset));
+            if (!valid) {
+                unset->set_sensitive(false);
+            }
+            vbox_param->pack_start(*set, true, true, 2);
+            vbox_param->pack_start(*unset, true, true, 2);
+
+            vbox_expander->pack_start(*vbox_param, true, true, 2);
+        }
+        ++it;
+    }
+    Glib::ustring tip = "<b>" + effectname + (Glib::ustring)_("</b>: Set default parameters");
+    Gtk::Expander * expander = Gtk::manage(new Gtk::Expander(tip));
+    expander->set_use_markup(true);
+    expander->add(*vbox_expander);
+    expander->set_expanded(false);
+    vbox->pack_start(*dynamic_cast<Gtk::Widget *> (expander), true, true, 2);
+    if (has_params) {
+        return dynamic_cast<Gtk::Widget *>(vbox);
+    } else {
+        return NULL;
+    }
+}
+
+void
+Effect::setDefaultParam(Glib::ustring pref_path, gchar * value, Gtk::Button *set , Gtk::Button *unset)
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    prefs->setString(pref_path, (Glib::ustring)value);
+    gchar * label = _("Update");
+    set->set_label((Glib::ustring)label);
+    unset->set_sensitive(true);
+}
+
+void
+Effect::unsetDefaultParam(Glib::ustring pref_path, Gtk::Button *set, Gtk::Button *unset)
+{
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    prefs->remove(pref_path);
+    gchar * label = _("Set");
+    set->set_label((Glib::ustring)label);
+    unset->set_sensitive(false);
+}
 
 Inkscape::XML::Node *Effect::getRepr()
 {

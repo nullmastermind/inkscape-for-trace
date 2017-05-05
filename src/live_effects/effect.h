@@ -94,7 +94,7 @@ public:
     virtual void doEffect (SPCurve * curve);
 
     virtual Gtk::Widget * newWidget();
-
+    virtual Gtk::Widget * defaultParamSet();
     /**
      * Sets all parameters to their default values and writes them to SVG.
      */
@@ -172,13 +172,15 @@ protected:
     // this boolean defaults to false, it concatenates the input path to one pwd2,
     // instead of normally 'splitting' the path into continuous pwd2 paths and calling doEffect_pwd2 for each.
     bool concatenate_before_pwd2;
-
     SPLPEItem * sp_lpe_item; // these get stored in doBeforeEffect_impl, and derived classes may do as they please with them.
     SPShape * sp_shape; // these get stored in doBeforeEffect_impl before doEffect chain, or in performPathEffects on groups, and derived classes may do as they please with them.
     std::vector<const char *> items;
     double current_zoom;
     std::vector<Geom::Point> selectedNodesPoints;
+
 private:
+    void setDefaultParam(Glib::ustring pref_path, gchar * value, Gtk::Button *set , Gtk::Button *unset);
+    void unsetDefaultParam(Glib::ustring pref_path, Gtk::Button *set , Gtk::Button *unset);
     bool provides_own_flash_paths; // if true, the standard flash path is suppressed
 
     bool is_ready;

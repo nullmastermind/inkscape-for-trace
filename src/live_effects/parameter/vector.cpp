@@ -48,6 +48,25 @@ VectorParam::param_set_default()
     setVector(defvalue);
 }
 
+void
+VectorParam::param_update_default(Geom::Point default_point)
+{
+    defvalue = default_point;
+}
+
+void
+VectorParam::param_update_default(const gchar * default_point)
+{
+    gchar ** strarray = g_strsplit(default_point, ",", 2);
+    double newx, newy;
+    unsigned int success = sp_svg_number_read_d(strarray[0], &newx);
+    success += sp_svg_number_read_d(strarray[1], &newy);
+    g_strfreev (strarray);
+    if (success == 2) {
+        param_update_default( Geom::Point(newx, newy) );
+    }
+}
+
 bool
 VectorParam::param_readSVGValue(const gchar * strvalue)
 {

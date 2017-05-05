@@ -40,6 +40,7 @@ public:
     virtual gchar * param_getSVGValue() const;
 
     virtual void param_set_default();
+    virtual void param_update_default(const gchar * default_value);
     void param_set_and_write_default();
     void set_new_value (Geom::PathVector const &newpath, bool write_to_svg);
     void set_new_value (Geom::Piecewise<Geom::D2<Geom::SBasis> > const &newpath, bool write_to_svg);
