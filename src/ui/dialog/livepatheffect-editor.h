@@ -96,7 +96,7 @@ private:
     };
 
     bool lpe_list_locked;
-
+    bool lpe_changed;
     //Inkscape::UI::Widget::ComboBoxEnum<LivePathEffect::EffectType> combo_effecttype;
     
     Gtk::Widget * effectwidget;

@@ -164,6 +164,7 @@ ToggleButtonParam::refresh_button()
 void
 ToggleButtonParam::param_setValue(bool newvalue)
 {
+    param_effect->upd_params = true;
     value = newvalue;
     refresh_button();
 }

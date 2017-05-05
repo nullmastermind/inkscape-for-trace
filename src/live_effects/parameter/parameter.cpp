@@ -39,6 +39,7 @@ Parameter::Parameter( const Glib::ustring& label, const Glib::ustring& tip,
 void
 Parameter::param_write_to_repr(const char * svgd)
 {
+    param_effect->upd_params = true;
     param_effect->getRepr()->setAttribute(param_key.c_str(), svgd);
 }
 
@@ -120,6 +121,7 @@ ScalarParam::param_update_default(const gchar * default_value)
 void
 ScalarParam::param_set_value(gdouble val)
 {
+    param_effect->upd_params = true;
     value = val;
     if (integer)
         value = round(value);

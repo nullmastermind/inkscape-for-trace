@@ -181,7 +181,7 @@ PointParamKnotHolderEntity::knot_set(Geom::Point const &p, Geom::Point const &or
             s = A;
         }
     }
-    pparam->param_setValue(s, this->pparam->liveupdate);
+    pparam->param_setValue(s);
     SPLPEItem * splpeitem = dynamic_cast<SPLPEItem *>(item);
     if(splpeitem && this->pparam->liveupdate){
         sp_lpe_item_update_patheffect(splpeitem, false, false);
