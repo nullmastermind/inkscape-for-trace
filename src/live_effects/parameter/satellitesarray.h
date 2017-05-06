@@ -55,7 +55,7 @@ public:
     void setCurrentZoom(double current_zoom);
     void setGlobalKnotHide(bool global_knot_hide);
     void setEffectType(EffectType et);
-    void setPathVectorSatellites(PathVectorSatellites *pathVectorSatellites);
+    void setPathVectorSatellites(PathVectorSatellites *pathVectorSatellites, bool write = true);
     void set_oncanvas_looks(SPKnotShapeType shape, SPKnotModeType mode, guint32 color);
 
     friend class FilletChamferKnotHolderEntity;

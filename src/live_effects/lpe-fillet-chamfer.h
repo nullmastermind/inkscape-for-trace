@@ -40,7 +40,8 @@ public:
     void addChamferSteps(Geom::Path &tmp_path, Geom::Path path_chamfer, Geom::Point end_arc_point, size_t steps);
     void addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec);
     void updateSatelliteType(SatelliteType satellitetype);
-   //void convertUnit();
+    void setSelected(PathVectorSatellites *_pathvector_satellites);
+    //void convertUnit();
     void updateChamferSteps();
     void updateAmount();
     void refreshKnots();

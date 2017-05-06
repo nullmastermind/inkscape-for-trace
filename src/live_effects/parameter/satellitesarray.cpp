@@ -39,6 +39,7 @@ SatellitesArrayParam::SatellitesArrayParam(const Glib::ustring &label,
     _last_pathvector_satellites = NULL;
 }
 
+
 void SatellitesArrayParam::set_oncanvas_looks(SPKnotShapeType shape,
         SPKnotModeType mode,
         guint32 color)
@@ -48,10 +49,14 @@ void SatellitesArrayParam::set_oncanvas_looks(SPKnotShapeType shape,
     _knot_color = color;
 }
 
-void SatellitesArrayParam::setPathVectorSatellites(PathVectorSatellites *pathVectorSatellites)
+void SatellitesArrayParam::setPathVectorSatellites(PathVectorSatellites *pathVectorSatellites, bool write)
 {
     _last_pathvector_satellites = pathVectorSatellites;
-    param_set_and_write_new_value(_last_pathvector_satellites->getSatellites());
+    if (write) {
+        param_set_and_write_new_value(_last_pathvector_satellites->getSatellites());
+    } else {
+        param_setValue(_last_pathvector_satellites->getSatellites());
+    }
 }
 
 void SatellitesArrayParam::setUseDistance(bool use_knot_distance)
@@ -226,6 +231,9 @@ void SatellitesArrayParam::addKnotHolderEntities(KnotHolder *knotholder,
                                                  SPItem *item,
                                                  bool mirror)
 {
+    if (!_last_pathvector_satellites) {
+        return;
+    }
     Geom::PathVector pathv = _last_pathvector_satellites->getPathVector();
     size_t index = 0;
     for (size_t i = 0; i < _vector.size(); ++i) {
@@ -442,7 +450,6 @@ void FilletChamferKnotHolderEntity::knot_click(guint state)
     if (state & GDK_CONTROL_MASK) {
         if (state & GDK_MOD1_MASK) {
             _pparam->_vector[path_index][curve_index].amount = 0.0;
-            _pparam->param_set_and_write_new_value(_pparam->_vector);
             sp_lpe_item_update_patheffect(SP_LPE_ITEM(item), false, false);
         } else {
             using namespace Geom;
@@ -462,7 +469,6 @@ void FilletChamferKnotHolderEntity::knot_click(guint state)
                 break;
             }
             _pparam->_vector[path_index][curve_index].satellite_type = type;
-            _pparam->param_set_and_write_new_value(_pparam->_vector);
             sp_lpe_item_update_patheffect(SP_LPE_ITEM(item), false, false);
             const gchar *tip;
             if (type == CHAMFER) {
@@ -555,7 +561,6 @@ void FilletChamferKnotHolderEntity::knot_set_offset(Satellite satellite)
     satellite.amount = amount;
     _pparam->_vector[path_index][curve_index] = satellite;
     this->parent_holder->knot_ungrabbed_handler(this->knot, 0);
-    _pparam->param_set_and_write_new_value(_pparam->_vector);
     SPLPEItem *splpeitem = dynamic_cast<SPLPEItem *>(item);
     if (splpeitem) {
         sp_lpe_item_update_patheffect(splpeitem, false, false);
