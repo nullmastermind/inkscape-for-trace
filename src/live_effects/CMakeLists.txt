@@ -59,7 +59,6 @@ set(live_effects_SRC
 
 	parameter/array.cpp
 	parameter/bool.cpp
-	parameter/filletchamferpointarray.cpp
 	parameter/item-reference.cpp
 	parameter/item.cpp
 	parameter/originalitem.cpp
@@ -70,6 +69,7 @@ set(live_effects_SRC
 	parameter/path.cpp
 	parameter/point.cpp
 	parameter/powerstrokepointarray.cpp
+	parameter/satellitesarray.cpp
 	parameter/random.cpp
 	parameter/text.cpp
 	parameter/fontbutton.cpp
@@ -144,7 +144,6 @@ set(live_effects_SRC
 	parameter/array.h
 	parameter/bool.h
 	parameter/enum.h
-	parameter/filletchamferpointarray.h
 	parameter/item.h
 	parameter/item-reference.h
 	parameter/originalitem.h
@@ -155,6 +154,7 @@ set(live_effects_SRC
 	parameter/path.h
 	parameter/point.h
 	parameter/powerstrokepointarray.h
+	parameter/satellitesarray.h
 	parameter/random.h
 	parameter/text.h
 	parameter/fontbutton.h

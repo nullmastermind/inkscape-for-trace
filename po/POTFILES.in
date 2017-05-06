@@ -153,7 +153,7 @@ src/live_effects/lpe-transform_2pts.cpp
 src/live_effects/lpe-vonkoch.cpp
 src/live_effects/parameter/bool.cpp
 src/live_effects/parameter/enum.h
-src/live_effects/parameter/filletchamferpointarray.cpp
+src/live_effects/parameter/satellitearray.cpp
 src/live_effects/parameter/fontbutton.cpp
 src/live_effects/parameter/originalpath.cpp
 src/live_effects/parameter/originalpatharray.cpp

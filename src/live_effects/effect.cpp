@@ -101,7 +101,6 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {RECURSIVE_SKELETON,    N_("Recursive skeleton"),              "recursive_skeleton"},
     {TANGENT_TO_CURVE,      N_("Tangent to curve"),                "tangent_to_curve"},
     {TEXT_LABEL,            N_("Text label"),                      "text_label"},
-    {FILLET_CHAMFER,        N_("Fillet/Chamfer"),                  "fillet_chamfer"},
 #endif
 /* 0.46 */
     {BEND_PATH,             N_("Bend"),                            "bend_path"},
@@ -142,6 +141,7 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {BOUNDING_BOX,          N_("Bounding Box"),                    "bounding_box"},
 /* 9.93 */
     {MEASURE_LINE,          N_("Measure Line"),                    "measure_line"},
+    {FILLET_CHAMFER,        N_("Fillet/Chamfer"),                  "fillet_chamfer"},
 };
 const Util::EnumDataConverter<EffectType> LPETypeConverter(LPETypeData, sizeof(LPETypeData)/sizeof(*LPETypeData));
 

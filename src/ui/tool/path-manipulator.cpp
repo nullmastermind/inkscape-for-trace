@@ -12,7 +12,6 @@
 
 #include "live_effects/lpe-powerstroke.h"
 #include "live_effects/lpe-bspline.h"
-#include "live_effects/lpe-fillet-chamfer.h"
 #include <2geom/bezier-utils.h>
 #include <2geom/path-sink.h>
 #include "ui/tool/path-manipulator.h"
@@ -1362,13 +1361,6 @@ void PathManipulator::_createGeometryFromControlPoints(bool alert_LPE)
                 LivePathEffect::LPEPowerStroke *lpe_pwr = dynamic_cast<LivePathEffect::LPEPowerStroke*>(this_effect->getLPEObj()->get_lpe());
                 if (lpe_pwr) {
                     lpe_pwr->adjustForNewPath(pathv);
-                }
-            }
-            this_effect = _path->getPathEffectOfType(Inkscape::LivePathEffect::FILLET_CHAMFER);
-            if(this_effect){
-                LivePathEffect::LPEFilletChamfer *lpe_fll = dynamic_cast<LivePathEffect::LPEFilletChamfer*>(this_effect->getLPEObj()->get_lpe());
-                if (lpe_fll) {
-                    lpe_fll->adjustForNewPath(pathv);
                 }
             }
         }
