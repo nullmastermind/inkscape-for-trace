@@ -130,7 +130,7 @@ protected:
             str << ",";
             str << vector_data[i].angle;
             str << ",";
-            str << vector_data[i].steps;
+            str << static_cast<int>(vector_data[i].steps);
         }
     }
 
