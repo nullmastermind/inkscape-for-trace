@@ -51,15 +51,15 @@ public:
     {
         hidden = set_hidden;
     }
-    void setAmount(bool set_amount)
+    void setAmount(double set_amount)
     {
         amount = set_amount;
     }
-    void setAngle(bool set_angle)
+    void setAngle(double set_angle)
     {
         angle = set_angle;
     }
-    void setSteps(bool set_steps)
+    void setSteps(size_t set_steps)
     {
         steps = set_steps;
     }

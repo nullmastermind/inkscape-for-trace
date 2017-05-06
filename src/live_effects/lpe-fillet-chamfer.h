@@ -16,6 +16,7 @@
 #include "live_effects/parameter/satellitesarray.h"
 #include "live_effects/effect.h"
 #include "live_effects/parameter/unit.h"
+#include "live_effects/parameter/hidden.h"
 #include "helper/geom-pathvectorsatellites.h"
 #include "helper/geom-satellite.h"
 
@@ -54,6 +55,7 @@ private:
     ScalarParam radius;
     ScalarParam chamfer_steps;
     BoolParam flexible;
+    HiddenParam mode;
     BoolParam mirror_knots;
     BoolParam only_selected;
     BoolParam use_knot_distance;

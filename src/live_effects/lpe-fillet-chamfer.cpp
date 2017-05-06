@@ -37,6 +37,8 @@ LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject)
                        "satellites_param", &wr, this),
       method(_("Method:"), _("Methods to calculate the fillet or chamfer"),
              "method", FMConverter, &wr, this, FM_AUTO),
+      mode(_("Mode:"), _("Mode, fillet or chamfer"),
+             "mode", &wr, this, "F"),
       radius(_("Radius (unit or %):"), _("Radius, in unit or %"), "radius", &wr,
              this, 0.0),
       chamfer_steps(_("Chamfer steps:"), _("Chamfer steps"), "chamfer_steps",
@@ -63,6 +65,7 @@ LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject)
     registerParameter(&satellites_param);
     registerParameter(&unit);
     registerParameter(&method);
+    registerParameter(&mode);
     registerParameter(&radius);
     registerParameter(&chamfer_steps);
     registerParameter(&helper_size);
@@ -94,6 +97,22 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
     if (shape) {
         Geom::PathVector const pathv = pathv_to_linear_and_cubic_beziers(shape->getCurve()->get_pathvector());
         Satellites satellites;
+        double power = radius;
+        std::cout << power << "power\n";
+        if (!flexible) {
+            SPDocument * document = SP_ACTIVE_DOCUMENT;
+            SPNamedView *nv = sp_document_namedview(document, NULL);
+            Glib::ustring display_unit = nv->display_units->abbr;
+            power = Inkscape::Util::Quantity::convert(power, unit.get_abbreviation(), display_unit.c_str());
+        }
+        std::cout << power << "power22222222\n";
+        SatelliteType satellite_type = FILLET;
+        std::map<std::string, SatelliteType> gchar_map_to_satellite_type =
+        boost::assign::map_list_of("F", FILLET)("IF", INVERSE_FILLET)("C", CHAMFER)("IC", INVERSE_CHAMFER)("KO", INVALID_SATELLITE);
+        std::map<std::string, SatelliteType>::iterator it = gchar_map_to_satellite_type.find(std::string(mode.param_getSVGValue()));
+        if (it != gchar_map_to_satellite_type.end()) {
+            satellite_type = it->second;
+        }
         for (Geom::PathVector::const_iterator path_it = pathv.begin(); path_it !=  pathv.end(); ++path_it) {
             if (path_it->empty()) {
                 continue;
@@ -104,8 +123,12 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
                 //if (curve_it->isDegenerate()) {
                 //  continue 
                 //}
-                Satellite satellite(FILLET);
+                Satellite satellite(satellite_type);
                 satellite.setSteps(chamfer_steps);
+                satellite.setAmount(power);
+                satellite.setIsTime(flexible);
+                satellite.setHasMirror(mirror_knots);
+                satellite.setHidden(hide_knots);
                 subpath_satellites.push_back(satellite);
             }
             //we add the last satellite on open path because _pathvector_satellites is related to nodes, not curves
@@ -113,8 +136,12 @@ void LPEFilletChamfer::doOnApply(SPLPEItem const *lpeItem)
             //dont remove for this effect because _pathvector_satellites class has methods when the path is modiffied
             //and we want one method for all uses
             if (!path_it->closed()) {
-                Satellite satellite(FILLET);
+                Satellite satellite(satellite_type);
                 satellite.setSteps(chamfer_steps);
+                satellite.setAmount(power);
+                satellite.setIsTime(flexible);
+                satellite.setHasMirror(mirror_knots);
+                satellite.setHidden(hide_knots);
                 subpath_satellites.push_back(satellite);
             }
             satellites.push_back(subpath_satellites);
@@ -265,6 +292,9 @@ void LPEFilletChamfer::updateChamferSteps()
 
 void LPEFilletChamfer::updateSatelliteType(SatelliteType satellitetype)
 {
+    std::map<SatelliteType, gchar const *> satellite_type_to_gchar_map =
+    boost::assign::map_list_of(FILLET, "F")(INVERSE_FILLET, "IF")(CHAMFER, "C")(INVERSE_CHAMFER, "IC")(INVALID_SATELLITE, "KO");
+    mode.param_setValue((Glib::ustring)satellite_type_to_gchar_map.at(satellitetype));
     setSelected(_pathvector_satellites);
     _pathvector_satellites->updateSatelliteType(satellitetype, apply_no_radius, apply_with_radius, only_selected);
     satellites_param.setPathVectorSatellites(_pathvector_satellites);
@@ -306,7 +336,25 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
             size_t number_nodes = pathv.nodes().size();
             size_t previous_number_nodes = _pathvector_satellites->getTotalSatellites();
             if (number_nodes != previous_number_nodes) {
-                Satellite satellite(FILLET);
+                Geom::PathVector const pathv = pathv_to_linear_and_cubic_beziers(sp_curve->get_pathvector());
+                Satellites satellites;
+                double power = radius;
+                if (!flexible) {
+                    SPDocument * document = SP_ACTIVE_DOCUMENT;
+                    SPNamedView *nv = sp_document_namedview(document, NULL);
+                    Glib::ustring display_unit = nv->display_units->abbr;
+                    power = Inkscape::Util::Quantity::convert(power, unit.get_abbreviation(), display_unit.c_str());
+                }
+                SatelliteType satellite_type = FILLET;
+                std::map<std::string, SatelliteType> gchar_map_to_satellite_type =
+                boost::assign::map_list_of("F", FILLET)("IF", INVERSE_FILLET)("C", CHAMFER)("IC", INVERSE_CHAMFER)("KO", INVALID_SATELLITE);
+                std::map<std::string, SatelliteType>::iterator it = gchar_map_to_satellite_type.find(std::string(mode.param_getSVGValue()));
+                if (it != gchar_map_to_satellite_type.end()) {
+                    satellite_type = it->second;
+                }
+                Satellite satellite(satellite_type);
+                satellite.setSteps(chamfer_steps);
+                satellite.setAmount(power);
                 satellite.setIsTime(flexible);
                 satellite.setHasMirror(mirror_knots);
                 satellite.setHidden(hide_knots);

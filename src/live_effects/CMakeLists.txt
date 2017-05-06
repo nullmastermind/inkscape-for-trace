@@ -59,6 +59,7 @@ set(live_effects_SRC
 
 	parameter/array.cpp
 	parameter/bool.cpp
+	parameter/hidden.cpp
 	parameter/item-reference.cpp
 	parameter/item.cpp
 	parameter/originalitem.cpp
@@ -143,6 +144,7 @@ set(live_effects_SRC
 
 	parameter/array.h
 	parameter/bool.h
+	parameter/hidden.h
 	parameter/enum.h
 	parameter/item.h
 	parameter/item-reference.h
