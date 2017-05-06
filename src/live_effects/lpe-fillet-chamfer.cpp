@@ -305,7 +305,6 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
         } else {
             satellites_param.setHelperSize(helper_size);
         }
-        std::vector<size_t> selected_nodes_index;
         size_t index = 0;
         for (size_t i = 0; i < satellites.size(); ++i) {
             for (size_t j = 0; j < satellites[i].size(); ++j) {
