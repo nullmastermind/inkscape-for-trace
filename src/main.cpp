@@ -680,19 +680,19 @@ main(int argc, char **argv)
 #endif
 
 #ifdef WIN32
-    gchar *exedir = g_strdup(win32_getExePath().data());
-    _win32_set_inkscape_env(exedir);
+    gchar *datadir = g_win32_get_package_installation_directory_of_module(NULL);
+    _win32_set_inkscape_env(datadir);
 
 # ifdef ENABLE_NLS
     // obtain short path to executable dir and pass it
     // to bindtextdomain (it doesn't understand UTF-8)
-    gchar *shortexedir = g_win32_locale_filename_from_utf8(exedir);
-    gchar *localepath = g_build_filename(shortexedir, PACKAGE_LOCALE_DIR, NULL);
+    gchar *shortdatadir = g_win32_locale_filename_from_utf8(datadir);
+    gchar *localepath = g_build_filename(shortdatadir, PACKAGE_LOCALE_DIR, NULL);
     bindtextdomain(GETTEXT_PACKAGE, localepath);
-    g_free(shortexedir);
+    g_free(shortdatadir);
     g_free(localepath);
 # endif
-    g_free(exedir);
+    g_free(datadir);
 
     // Don't touch the registry (works fine without it) for Inkscape Portable
     gchar const *val = g_getenv("INKSCAPE_PORTABLE_PROFILE_DIR");
