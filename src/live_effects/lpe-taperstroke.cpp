@@ -91,6 +91,7 @@ LPETaperStroke::LPETaperStroke(LivePathEffectObject *lpeobject) :
 void LPETaperStroke::doOnApply(SPLPEItem const* lpeitem)
 {
     if (SP_IS_SHAPE(lpeitem)) {
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         SPLPEItem* item = const_cast<SPLPEItem*>(lpeitem);
         double width = (lpeitem && lpeitem->style) ? lpeitem->style->stroke_width.computed : 1.;
 
@@ -117,8 +118,14 @@ void LPETaperStroke::doOnApply(SPLPEItem const* lpeitem)
 
         sp_desktop_apply_css_recursive(item, css, true);
         sp_repr_css_attr_unref (css);
-
-        line_width.param_set_value(width);
+        Glib::ustring pref_path = (Glib::ustring)"/live_effects/" +
+                                       (Glib::ustring)LPETypeConverter.get_key(effectType()).c_str() +
+                                       (Glib::ustring)"/" + 
+                                       (Glib::ustring)"stroke_width";
+        bool valid = prefs->getEntry(pref_path).isValid();
+        if(!valid){
+            line_width.param_set_value(width);
+        }
         line_width.write_to_SVG();
     } else {
         printf("WARNING: It only makes sense to apply Taper stroke to paths (not groups).\n");
