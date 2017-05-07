@@ -80,6 +80,7 @@
 #include "debug/log-display-config.h"
 
 #include "helper/action-context.h"
+#include "helper/gettext.h"
 #include "helper/png-write.h"
 
 #include <extension/extension.h>
@@ -679,19 +680,13 @@ main(int argc, char **argv)
     fpsetmask(fpgetmask() & ~(FP_X_DZ | FP_X_INV));
 #endif
 
+#ifdef ENABLE_NLS
+    Inkscape::initialize_gettext();
+#endif
+
 #ifdef WIN32
     gchar *datadir = g_win32_get_package_installation_directory_of_module(NULL);
     _win32_set_inkscape_env(datadir);
-
-# ifdef ENABLE_NLS
-    // obtain short path to executable dir and pass it
-    // to bindtextdomain (it doesn't understand UTF-8)
-    gchar *shortdatadir = g_win32_locale_filename_from_utf8(datadir);
-    gchar *localepath = g_build_filename(shortdatadir, PACKAGE_LOCALE_DIR, NULL);
-    bindtextdomain(GETTEXT_PACKAGE, localepath);
-    g_free(shortdatadir);
-    g_free(localepath);
-# endif
     g_free(datadir);
 
     // Don't touch the registry (works fine without it) for Inkscape Portable
@@ -705,29 +700,6 @@ main(int argc, char **argv)
     // see also https://bugzilla.gnome.org/show_bug.cgi?id=778791
     g_setenv("GTK_CSD", "0", FALSE);
 #endif
-
-#ifdef ENABLE_NLS
-# ifndef WIN32
-#  ifdef ENABLE_BINRELOC
-    bindtextdomain(GETTEXT_PACKAGE, BR_LOCALEDIR(""));
-#  else
-    bindtextdomain(GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
-    // needed by Python/Gettext
-    g_setenv("PACKAGE_LOCALE_DIR", PACKAGE_LOCALE_DIR, TRUE);
-#  endif
-# endif
-    // Allow the user to override the locale directory by setting
-    // the environment variable INKSCAPE_LOCALEDIR.
-    char const *inkscape_localedir = g_getenv("INKSCAPE_LOCALEDIR");
-    if (inkscape_localedir != NULL) {
-        bindtextdomain(GETTEXT_PACKAGE, inkscape_localedir);
-    }
-
-    // common setup
-    bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
-    textdomain(GETTEXT_PACKAGE);
-#endif
-
     set_extensions_env();
 
     // Prevents errors like "Unable to wrap GdkPixbuf..." (in nr-filter-image.cpp for example)
