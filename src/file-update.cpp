@@ -150,12 +150,15 @@ void fix_update(SPObject *o) {
 
 void sp_file_convert_text_baseline_spacing(SPDocument *doc)
 {
+    char *oldlocale = g_strdup(setlocale(LC_NUMERIC, NULL));
     setlocale(LC_NUMERIC,"C");
     sp_file_text_run_recursive(fix_blank_line, doc->getRoot());
     sp_file_text_run_recursive(fix_line_spacing, doc->getRoot());
     sp_file_text_run_recursive(fix_font_size, doc->getRoot());
+    setlocale(LC_NUMERIC, oldlocale);
+    g_free(oldlocale);
+
     sp_file_text_run_recursive(fix_update, doc->getRoot());
-    setlocale(LC_NUMERIC,"");
 }
 
 void sp_file_convert_font_name(SPDocument *doc)

@@ -270,11 +270,6 @@ int main (int argc, char **argv)
     sp_modulesys_init();
 #endif /* WITH_MODULES */
 
-    /* We must set LC_NUMERIC to default, or otherwise */
-    /* we'll end with localised SVG files :-( */
-
-    setlocale (LC_NUMERIC, "C");
-
     Inkscape::Application::create(argv[0], true);
 
     if(filenames.empty())

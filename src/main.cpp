@@ -1325,7 +1325,6 @@ int sp_main_console(int argc, char const **argv)
 
     char **argv2 = const_cast<char **>(argv);
     gtk_init_check( &argc, &argv2 );
-    //setlocale(LC_ALL, "");
 
     GSList *fl = NULL;
     int retVal = sp_common_main( argc, argv, &fl );
