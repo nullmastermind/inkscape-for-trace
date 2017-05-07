@@ -52,13 +52,21 @@ LivePathEffectAdd::LivePathEffectAdd() :
     /**
      * Initialize Effect list
      */
+    int show = LivePathEffect::ATTACH_PATH;
+#ifdef LPE_ENABLE_TEST_EFFECTS
+    //TODO: Handle when showing the experimental effects without setting flag
+    show = LivePathEffect::ANGLE_BISECTOR;
+#elif WITH_LPETOOL
+    //TODO: Handle when showing the experimental effects without setting flag
+    show = LivePathEffect::ANGLE_BISECTOR;
+#endif
+
     for(int i = 0; i < static_cast<int>(converter._length); ++i) {
         Gtk::TreeModel::Row row = *(effectlist_store->append());
         const Util::EnumData<LivePathEffect::EffectType>* data = &converter.data(i);
         row[_columns.name] = _( converter.get_label(data->id).c_str() );
         row[_columns.data] = data;
-
-        if (i == 0) {
+        if (i == show) {
             Glib::RefPtr<Gtk::TreeSelection> select = effectlist_treeview.get_selection();
             select->select(row);
         }

@@ -84,24 +84,6 @@ namespace LivePathEffect {
 
 const Util::EnumData<EffectType> LPETypeData[] = {
     // {constant defined in effect-enum.h, N_("name of your effect"), "name of your effect in SVG"}
-#ifdef LPE_ENABLE_TEST_EFFECTS
-    {DOEFFECTSTACK_TEST,    N_("doEffect stack test"),             "doeffectstacktest"},
-    {ANGLE_BISECTOR,        N_("Angle bisector"),                  "angle_bisector"},
-    {CIRCLE_WITH_RADIUS,    N_("Circle (by center and radius)"),   "circle_with_radius"},
-    {CIRCLE_3PTS,           N_("Circle by 3 points"),              "circle_3pts"},
-    {DYNASTROKE,            N_("Dynamic stroke"),                  "dynastroke"},
-    {EXTRUDE,               N_("Extrude"),                         "extrude"},
-    {LATTICE,               N_("Lattice Deformation"),             "lattice"},
-    {LINE_SEGMENT,          N_("Line Segment"),                    "line_segment"},
-    {OFFSET,                N_("Offset"),                          "offset"},
-    {PARALLEL,              N_("Parallel"),                        "parallel"},
-    {PATH_LENGTH,           N_("Path length"),                     "path_length"},
-    {PERP_BISECTOR,         N_("Perpendicular bisector"),          "perp_bisector"},
-    {PERSPECTIVE_PATH,      N_("Perspective path"),                "perspective_path"},
-    {RECURSIVE_SKELETON,    N_("Recursive skeleton"),              "recursive_skeleton"},
-    {TANGENT_TO_CURVE,      N_("Tangent to curve"),                "tangent_to_curve"},
-    {TEXT_LABEL,            N_("Text label"),                      "text_label"},
-#endif
 /* 0.46 */
     {BEND_PATH,             N_("Bend"),                            "bend_path"},
     {GEARS,                 N_("Gears"),                           "gears"},
@@ -142,6 +124,25 @@ const Util::EnumData<EffectType> LPETypeData[] = {
 /* 9.93 */
     {MEASURE_LINE,          N_("Measure Line"),                    "measure_line"},
     {FILLET_CHAMFER,        N_("Fillet/Chamfer"),                  "fillet_chamfer"},
+#ifdef LPE_ENABLE_TEST_EFFECTS
+    {DOEFFECTSTACK_TEST,    N_("doEffect stack test"),             "doeffectstacktest"},
+    {ANGLE_BISECTOR,        N_("Angle bisector"),                  "angle_bisector"},
+    {CIRCLE_WITH_RADIUS,    N_("Circle (by center and radius)"),   "circle_with_radius"},
+    {CIRCLE_3PTS,           N_("Circle by 3 points"),              "circle_3pts"},
+    {DYNASTROKE,            N_("Dynamic stroke"),                  "dynastroke"},
+    {EXTRUDE,               N_("Extrude"),                         "extrude"},
+    {LATTICE,               N_("Lattice Deformation"),             "lattice"},
+    {LINE_SEGMENT,          N_("Line Segment"),                    "line_segment"},
+    {OFFSET,                N_("Offset"),                          "offset"},
+    {PARALLEL,              N_("Parallel"),                        "parallel"},
+    {PATH_LENGTH,           N_("Path length"),                     "path_length"},
+    {PERP_BISECTOR,         N_("Perpendicular bisector"),          "perp_bisector"},
+    {PERSPECTIVE_PATH,      N_("Perspective path"),                "perspective_path"},
+    {RECURSIVE_SKELETON,    N_("Recursive skeleton"),              "recursive_skeleton"},
+    {TANGENT_TO_CURVE,      N_("Tangent to curve"),                "tangent_to_curve"},
+    {TEXT_LABEL,            N_("Text label"),                      "text_label"},
+#endif
+
 };
 const Util::EnumDataConverter<EffectType> LPETypeConverter(LPETypeData, sizeof(LPETypeData)/sizeof(*LPETypeData));
 
