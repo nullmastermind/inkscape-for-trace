@@ -80,8 +80,10 @@
 #include "debug/log-display-config.h"
 
 #include "helper/action-context.h"
-#include "helper/gettext.h"
 #include "helper/png-write.h"
+#ifdef ENABLE_NLS
+#include "helper/gettext.h"
+#endif
 
 #include <extension/extension.h>
 #include <extension/db.h>
@@ -107,10 +109,6 @@
 #include <glibmm/main.h>
 #include <gtkmm/main.h>
 #include <gtkmm/window.h>
-
-#ifndef HAVE_BIND_TEXTDOMAIN_CODESET
-#define bind_textdomain_codeset(p,c)
-#endif
 
 #include "main-cmdlineact.h"
 #include "main-cmdlinexact.h"
@@ -851,13 +849,10 @@ static GSList *fixupFilenameEncoding( GSList* fl )
 
 static int sp_common_main( int argc, char const **argv, GSList **flDest )
 {
-    /// \todo fixme: Move these to some centralized location (Lauris)
-    //sp_object_type_register("sodipodi:namedview", SP_TYPE_NAMEDVIEW);
-    //sp_object_type_register("sodipodi:guide", SP_TYPE_GUIDE);
-
-
+#ifdef ENABLE_NLS
     // temporarily switch gettext encoding to locale, so that help messages can be output properly
     Inkscape::bind_textdomain_codeset_console();
+#endif
 
     poptContext ctx = poptGetContext(NULL, argc, argv, options, 0);
     poptSetOtherOptionHelp(ctx, _("[OPTIONS...] [FILE...]\n\nAvailable options:"));
@@ -866,9 +861,11 @@ static int sp_common_main( int argc, char const **argv, GSList **flDest )
     /* Collect own arguments */
     GSList *fl = sp_process_args(ctx);
     poptFreeContext(ctx);
-
+   
+#ifdef ENABLE_NLS
     // now switch gettext back to UTF-8 (for GUI)
     Inkscape::bind_textdomain_codeset_utf8();
+#endif
 
     // Now let's see if the file list still holds up
     if ( needToRecodeParams )
