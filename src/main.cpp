@@ -857,10 +857,7 @@ static int sp_common_main( int argc, char const **argv, GSList **flDest )
 
 
     // temporarily switch gettext encoding to locale, so that help messages can be output properly
-    std::string charset;
-    Glib::get_charset(charset);
-
-    bind_textdomain_codeset(GETTEXT_PACKAGE, charset.c_str());
+    Inkscape::bind_textdomain_codeset_console();
 
     poptContext ctx = poptGetContext(NULL, argc, argv, options, 0);
     poptSetOtherOptionHelp(ctx, _("[OPTIONS...] [FILE...]\n\nAvailable options:"));
@@ -871,7 +868,7 @@ static int sp_common_main( int argc, char const **argv, GSList **flDest )
     poptFreeContext(ctx);
 
     // now switch gettext back to UTF-8 (for GUI)
-    bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
+    Inkscape::bind_textdomain_codeset_utf8();
 
     // Now let's see if the file list still holds up
     if ( needToRecodeParams )

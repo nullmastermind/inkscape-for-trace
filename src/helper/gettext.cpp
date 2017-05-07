@@ -27,11 +27,17 @@
 # include "config.h"
 #endif
 
-#include <glib.h>
-#include <glib/gi18n.h>
+#ifdef WIN32
+#include <windows.h>
+#endif
+
+#include <string>
+#include <glibmm.h>
+#include <glibmm/i18n.h>
 
 namespace Inkscape {
 
+/** does all required gettext initialization and takes care of the respective locale directory paths */
 void initialize_gettext() {
 #ifdef WIN32
     gchar *datadir = g_win32_get_package_installation_directory_of_module(NULL);
@@ -66,6 +72,26 @@ void initialize_gettext() {
     // common setup
     bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
     textdomain(GETTEXT_PACKAGE);
+}
+
+/** set gettext codeset to UTF8 */
+void bind_textdomain_codeset_utf8() {
+    bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
+}
+
+/** set gettext codeset to codeset of the console
+ *   - on *nix this is typically the current locale,
+ *   - on Windows it has to be determined using GetConsoleOutputCP() */
+void bind_textdomain_codeset_console() {
+    std::string charset;
+    Glib::get_charset(charset);
+    
+    // TODO: does not work properly as we spawn a child process on Windows
+    //      (inkscape.exe is not a console application and can never print directly to console)
+    //unsigned int test = GetConsoleOutputCP();
+    //g_message("CP%u", test);
+
+    bind_textdomain_codeset(GETTEXT_PACKAGE, charset.c_str());
 }
  
 }

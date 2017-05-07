@@ -28,6 +28,8 @@
 
 namespace Inkscape {
      void initialize_gettext();
+     void bind_textdomain_codeset_utf8();
+     void bind_textdomain_codeset_console();
 }
 
 #endif // SEEN_GETTEXT_HELPER_H
