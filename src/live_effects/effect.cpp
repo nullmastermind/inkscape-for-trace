@@ -492,7 +492,7 @@ Effect::processObjects(LpeAction lpe_action)
 void Effect::setCurrentShape(SPShape * shape){ 
     if(shape){
         sp_shape = shape;
-        if (!(sp_curve = sp_shape->getCurve())) {
+        if (!(sp_curve = sp_shape->getCurveBeforeLPE())) {
            // oops
             return;
         }
@@ -523,25 +523,16 @@ void Effect::doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/)
 void Effect::doOnApply_impl(SPLPEItem const* lpeitem)
 {
     sp_lpe_item = const_cast<SPLPEItem *>(lpeitem);
-    sp_curve = SP_SHAPE(sp_lpe_item)->getCurve();
-    pathvector_before_effect = sp_curve->get_pathvector();
     SPShape * shape = dynamic_cast<SPShape *>(sp_lpe_item);
-    if(shape){
-        setCurrentShape(shape);
-    }
+    setCurrentShape(shape);
     doOnApply(lpeitem);
 }
 
 void Effect::doBeforeEffect_impl(SPLPEItem const* lpeitem)
 {
     sp_lpe_item = const_cast<SPLPEItem *>(lpeitem);
-    //printf("(SPLPEITEM*) %p\n", sp_lpe_item);
     SPShape * shape = dynamic_cast<SPShape *>(sp_lpe_item);
-    if(shape){
-        setCurrentShape(shape);
-        sp_curve = shape->getCurve();
-        pathvector_before_effect = sp_curve->get_pathvector();
-    }
+    setCurrentShape(shape);
     doBeforeEffect(lpeitem);
     if (apply_to_clippath_and_mask && SP_IS_GROUP(sp_lpe_item)) {
         sp_lpe_item->apply_to_clippath(sp_lpe_item);

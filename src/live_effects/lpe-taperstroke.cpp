@@ -477,7 +477,6 @@ void KnotHolderEntityAttachBegin::knot_set(Geom::Point const &p, Geom::Point con
     // use that object.
     
     Geom::PathVector pathv = lpe->pathvector_before_effect;
-    
     Piecewise<D2<SBasis> > pwd2;
     Geom::Path p_in = return_at_first_cusp(pathv[0]);
     pwd2.concat(p_in.toPwSb());

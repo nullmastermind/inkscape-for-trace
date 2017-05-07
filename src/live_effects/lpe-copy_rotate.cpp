@@ -199,7 +199,7 @@ LPECopyRotate::cloneD(SPObject *origin, SPObject *dest, bool root, bool reset)
         SPCurve *c = NULL;
         if (root) {
             c = new SPCurve();
-            c->set_pathvector(pathvector_before_effect);
+            c->set_pathvector(pathvector_after_effect);
         } else {
             c = shape->getCurve();
         }

@@ -137,6 +137,7 @@ public:
     BoolParam is_visible;
     SPCurve * sp_curve;
     Geom::PathVector pathvector_before_effect;
+    Geom::PathVector pathvector_after_effect;
 protected:
     Effect(LivePathEffectObject *lpeobject);
 
