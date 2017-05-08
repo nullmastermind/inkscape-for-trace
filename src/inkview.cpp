@@ -34,7 +34,6 @@
 #include <sys/stat.h>
 #include <locale.h>
 
-#include <glibmm/optionentry.h>
 
 #include <gtkmm/applicationwindow.h>
 #include <gtkmm/button.h>
@@ -49,16 +48,18 @@
 #include "preferences.h"
 
 #include <glibmm/i18n.h>
+#include <glibmm/optionentry.h>
+
 #include "document.h"
 #include "svg-view.h"
 #include "svg-view-widget.h"
 #include "util/units.h"
+#ifdef ENABLE_NLS
+#include "helper/gettext.h"
+#endif
+
 
 #include "inkscape.h"
-
-#ifndef HAVE_BIND_TEXTDOMAIN_CODESET
-#define bind_textdomain_codeset(p,c)
-#endif
 
 #include "ui/icon-names.h"
 
@@ -231,6 +232,7 @@ public:
         _entry_timer.set_short_name('t');
         _entry_timer.set_long_name("timer");
         _entry_timer.set_arg_description(_("NUM"));
+        _entry_timer.set_description(_("Reset timer:"));
         add_entry(_entry_timer, timer);
 
         // Entry for the remaining non-option arguments
@@ -248,27 +250,22 @@ private:
 
 int main (int argc, char **argv)
 {
+#ifdef ENABLE_NLS
+    Inkscape::initialize_gettext();
+#endif
+
     Glib::OptionContext opt(_("Open SVG files"));
     InkviewOptionsGroup grp;
     opt.set_main_group(grp);
-    
+
     // Prevents errors like "Unable to wrap GdkPixbuf..." (in nr-filter-image.cpp for example)
     Gtk::Main::init_gtkmm_internals();
     Gtk::Main main_instance (argc, argv, opt);
-
-    bindtextdomain (GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
-    bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
-    textdomain (GETTEXT_PACKAGE);
 
     LIBXML_TEST_VERSION
 
     Inkscape::GC::init();
     Inkscape::Preferences::get(); // ensure preferences are initialized
-
-#ifdef lalaWITH_MODULES
-    g_warning ("Have to autoinit modules (lauris)");
-    sp_modulesys_init();
-#endif /* WITH_MODULES */
 
     Inkscape::Application::create(argv[0], true);
 

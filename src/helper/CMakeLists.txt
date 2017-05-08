@@ -10,12 +10,13 @@ set(sp_marshal_SRC
 
 set(helper_SRC
 	action.cpp
-  action-context.cpp
+	action-context.cpp
 	geom.cpp
 	geom-nodetype.cpp
 	geom-pathstroke.cpp
 	geom-pathvectorsatellites.cpp
 	geom-satellite.cpp
+	gettext.cpp
 	gnome-utils.cpp
 	pixbuf-ops.cpp
 	png-write.cpp
@@ -30,13 +31,14 @@ set(helper_SRC
 	# -------
 	# Headers
 	action.h
-  action-context.h
+	action-context.h
 	geom-curves.h
 	geom-nodetype.h
 	geom-pathstroke.h
 	geom-pathvectorsatellites.h
 	geom-satellite.h
 	geom.h
+	gettext.h
 	gnome-utils.h
 	mathfns.h
 	pixbuf-ops.h

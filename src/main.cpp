@@ -81,6 +81,9 @@
 
 #include "helper/action-context.h"
 #include "helper/png-write.h"
+#ifdef ENABLE_NLS
+#include "helper/gettext.h"
+#endif
 
 #include <extension/extension.h>
 #include <extension/db.h>
@@ -106,10 +109,6 @@
 #include <glibmm/main.h>
 #include <gtkmm/main.h>
 #include <gtkmm/window.h>
-
-#ifndef HAVE_BIND_TEXTDOMAIN_CODESET
-#define bind_textdomain_codeset(p,c)
-#endif
 
 #include "main-cmdlineact.h"
 #include "main-cmdlinexact.h"
@@ -679,20 +678,14 @@ main(int argc, char **argv)
     fpsetmask(fpgetmask() & ~(FP_X_DZ | FP_X_INV));
 #endif
 
-#ifdef WIN32
-    gchar *exedir = g_strdup(win32_getExePath().data());
-    _win32_set_inkscape_env(exedir);
+#ifdef ENABLE_NLS
+    Inkscape::initialize_gettext();
+#endif
 
-# ifdef ENABLE_NLS
-    // obtain short path to executable dir and pass it
-    // to bindtextdomain (it doesn't understand UTF-8)
-    gchar *shortexedir = g_win32_locale_filename_from_utf8(exedir);
-    gchar *localepath = g_build_filename(shortexedir, PACKAGE_LOCALE_DIR, NULL);
-    bindtextdomain(GETTEXT_PACKAGE, localepath);
-    g_free(shortexedir);
-    g_free(localepath);
-# endif
-    g_free(exedir);
+#ifdef WIN32
+    gchar *datadir = g_win32_get_package_installation_directory_of_module(NULL);
+    _win32_set_inkscape_env(datadir);
+    g_free(datadir);
 
     // Don't touch the registry (works fine without it) for Inkscape Portable
     gchar const *val = g_getenv("INKSCAPE_PORTABLE_PROFILE_DIR");
@@ -705,29 +698,6 @@ main(int argc, char **argv)
     // see also https://bugzilla.gnome.org/show_bug.cgi?id=778791
     g_setenv("GTK_CSD", "0", FALSE);
 #endif
-
-#ifdef ENABLE_NLS
-# ifndef WIN32
-#  ifdef ENABLE_BINRELOC
-    bindtextdomain(GETTEXT_PACKAGE, BR_LOCALEDIR(""));
-#  else
-    bindtextdomain(GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
-    // needed by Python/Gettext
-    g_setenv("PACKAGE_LOCALE_DIR", PACKAGE_LOCALE_DIR, TRUE);
-#  endif
-# endif
-    // Allow the user to override the locale directory by setting
-    // the environment variable INKSCAPE_LOCALEDIR.
-    char const *inkscape_localedir = g_getenv("INKSCAPE_LOCALEDIR");
-    if (inkscape_localedir != NULL) {
-        bindtextdomain(GETTEXT_PACKAGE, inkscape_localedir);
-    }
-
-    // common setup
-    bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
-    textdomain(GETTEXT_PACKAGE);
-#endif
-
     set_extensions_env();
 
     // Prevents errors like "Unable to wrap GdkPixbuf..." (in nr-filter-image.cpp for example)
@@ -879,16 +849,10 @@ static GSList *fixupFilenameEncoding( GSList* fl )
 
 static int sp_common_main( int argc, char const **argv, GSList **flDest )
 {
-    /// \todo fixme: Move these to some centralized location (Lauris)
-    //sp_object_type_register("sodipodi:namedview", SP_TYPE_NAMEDVIEW);
-    //sp_object_type_register("sodipodi:guide", SP_TYPE_GUIDE);
-
-
+#ifdef ENABLE_NLS
     // temporarily switch gettext encoding to locale, so that help messages can be output properly
-    std::string charset;
-    Glib::get_charset(charset);
-
-    bind_textdomain_codeset(GETTEXT_PACKAGE, charset.c_str());
+    Inkscape::bind_textdomain_codeset_console();
+#endif
 
     poptContext ctx = poptGetContext(NULL, argc, argv, options, 0);
     poptSetOtherOptionHelp(ctx, _("[OPTIONS...] [FILE...]\n\nAvailable options:"));
@@ -897,9 +861,11 @@ static int sp_common_main( int argc, char const **argv, GSList **flDest )
     /* Collect own arguments */
     GSList *fl = sp_process_args(ctx);
     poptFreeContext(ctx);
-
+   
+#ifdef ENABLE_NLS
     // now switch gettext back to UTF-8 (for GUI)
-    bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
+    Inkscape::bind_textdomain_codeset_utf8();
+#endif
 
     // Now let's see if the file list still holds up
     if ( needToRecodeParams )
