@@ -10,6 +10,11 @@ if(WIN32)
 	DESTINATION ${CMAKE_INSTALL_PREFIX}
 	RENAME inkscape.com
   )
+  install(PROGRAMS
+	${EXECUTABLE_OUTPUT_PATH}/inkview_com.exe
+	DESTINATION ${CMAKE_INSTALL_PREFIX}
+	RENAME inkview.com
+  )
 
   install(FILES
     ${LIBRARY_OUTPUT_PATH}/libinkscape_base.dll

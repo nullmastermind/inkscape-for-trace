@@ -491,9 +491,12 @@ if(WIN32)
 	list(APPEND view_SRC inkscape.rc)
   endif()
   
-  # Build the windows MS-DOS console executable.
+  # Build console applications as wrappers around inkscape/inkview.exe as GUI applications can't print to the console.
   add_executable(inkscape_com winconsole.cpp)
   set_target_properties(inkscape_com
+                        PROPERTIES LINK_FLAGS "-mconsole")
+  add_executable(inkview_com winconsole.cpp)
+  set_target_properties(inkview_com
                         PROPERTIES LINK_FLAGS "-mconsole")
 endif()
 
