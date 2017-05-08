@@ -485,19 +485,25 @@ if(WIN32)
   # Add the platform specific resource files (enabling the app icon).
   if(${HAVE_MINGW64})
     list(APPEND main_SRC inkscape-x64.rc)
-	list(APPEND view_SRC inkscape-x64.rc)
+    list(APPEND view_SRC inkscape-x64.rc)
   else()
     list(APPEND main_SRC inkscape.rc)
-	list(APPEND view_SRC inkscape.rc)
+    list(APPEND view_SRC inkscape.rc)
   endif()
   
   # Build console applications as wrappers around inkscape/inkview.exe as GUI applications can't print to the console.
   add_executable(inkscape_com winconsole.cpp)
   set_target_properties(inkscape_com
-                        PROPERTIES LINK_FLAGS "-mconsole")
+                        PROPERTIES
+                          LINK_FLAGS "-mconsole"
+                          OUTPUT_NAME "inkscape"
+                          SUFFIX ".com")
   add_executable(inkview_com winconsole.cpp)
   set_target_properties(inkview_com
-                        PROPERTIES LINK_FLAGS "-mconsole")
+                        PROPERTIES
+                          LINK_FLAGS "-mconsole"
+                          OUTPUT_NAME "inkview"
+                          SUFFIX ".com")
 endif()
 
 # make executables for inkscape and inkview
@@ -541,8 +547,10 @@ target_link_libraries(inkscape_base PRIVATE ${INKSCAPE_TARGET_LIBS} PUBLIC ${INK
 target_link_libraries(inkscape inkscape_base)
 target_link_libraries(inkview inkscape_base)
 
+
+
+#Define the installation
 if(NOT WIN32)
-  #Define the installation
   install(TARGETS
     inkscape_base
     inkscape
@@ -550,4 +558,12 @@ if(NOT WIN32)
     RUNTIME DESTINATION bin
     LIBRARY DESTINATION lib/inkscape
     ARCHIVE DESTINATION lib/inkscape)
+else()
+  install(TARGETS
+    inkscape_base
+    inkscape
+    inkscape_com
+    inkview
+    inkview_com
+    DESTINATION .)
 endif()
