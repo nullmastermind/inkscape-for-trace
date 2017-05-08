@@ -565,5 +565,5 @@ else()
     inkscape_com
     inkview
     inkview_com
-    DESTINATION .)
+    RUNTIME DESTINATION .)
 endif()
