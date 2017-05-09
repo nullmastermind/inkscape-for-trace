@@ -52,5 +52,3 @@ if(APPLE)
   pkg_check_variable(gtk+-2.0 target)
   message("GTK2 backend: ${GTK+_2.0_TARGET}")
 endif()
-
-include(CMakeScripts/ConfigPaths.cmake)

@@ -8,6 +8,7 @@ message("Binary Dir: ${CMAKE_CURRENT_BINARY_DIR}")
 
 include(CMakeScripts/HelperFunctions.cmake)
 include(CMakeScripts/ConfigEnv.cmake)
+include(CMakeScripts/ConfigPaths.cmake)
 
 # -----------------------------------------------------------------------------
 # CMake Configuration
@@ -94,8 +95,6 @@ option(WITH_NLS "Compile with Native Language Support (using gettext)" ON)
 option(WITH_YAML "Compile with YAML support (enables xverbs)" ON)
 
 option(ENABLE_BINRELOC "Enable relocatable binaries" OFF)
-
-include(CMakeScripts/ConfigPaths.cmake) # Installation Paths
 
 # -----------------------------------------------------------------------------
 # Test Harness
