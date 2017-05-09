@@ -15,10 +15,10 @@ if(WIN32)
 	GPL2.txt
 	GPL3.txt
 	LGPL2.1.txt
-    DESTINATION ${CMAKE_INSTALL_PREFIX})
+    DESTINATION .)
 
   install(DIRECTORY doc
-    DESTINATION ${CMAKE_INSTALL_PREFIX})
+    DESTINATION .)
     
   # devlibs and mingw dlls
 
@@ -94,7 +94,7 @@ if(WIN32)
       ${MINGW_BIN}/libwinpthread-1.dll
       ${MINGW_BIN}/libgcc_s_seh-1.dll
       ${MINGW_BIN}/libgomp-1.dll
-      DESTINATION ${CMAKE_INSTALL_PREFIX})
+      DESTINATION .)
   else()
     install(FILES
       ${DEVLIBS_BIN}/bzip2.dll
@@ -161,66 +161,66 @@ if(WIN32)
       ${DEVLIBS_BIN}/zlib1.dll
       ${MINGW_BIN}/mingwm10.dll
       ${MINGW_BIN}/libgomp-1.dll
-      DESTINATION ${CMAKE_INSTALL_PREFIX})
+      DESTINATION .)
   endif()
 
   # Generate a dummy file in hicolor/index.theme to avoid bug 1635207
-  file(GENERATE OUTPUT ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/index.theme
+  file(GENERATE OUTPUT share/icons/hicolor/index.theme
     CONTENT "[Icon Theme]\nName=hicolor\nDirectories=")
 
   install(DIRECTORY ${DEVLIBS_PATH}/share/icons/Adwaita
-    DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons)
+    DESTINATION share/icons)
 
   install(DIRECTORY ${DEVLIBS_PATH}/share/poppler
-    DESTINATION ${CMAKE_INSTALL_PREFIX}/share)
+    DESTINATION share)
 
   install(DIRECTORY ${DEVLIBS_PATH}/share/glib-2.0/schemas
-    DESTINATION ${CMAKE_INSTALL_PREFIX}/share/glib-2.0)
+    DESTINATION share/glib-2.0)
 
   install(DIRECTORY ${DEVLIBS_PATH}/etc/fonts
-    DESTINATION ${CMAKE_INSTALL_PREFIX}/etc)
+    DESTINATION etc)
 
   # GTK 3.0
   install(DIRECTORY ${DEVLIBS_LIB}/gtk-3.0
-    DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
+    DESTINATION lib
     FILES_MATCHING
     PATTERN "*.dll"
     PATTERN "*.cache")
 
   install(DIRECTORY ${DEVLIBS_PATH}/etc/gtk-3.0
-    DESTINATION ${CMAKE_INSTALL_PREFIX}/etc)
+    DESTINATION etc)
 
   install(DIRECTORY ${DEVLIBS_LIB}/gdk-pixbuf-2.0
-    DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
+    DESTINATION lib
     FILES_MATCHING
     PATTERN "*.dll"
     PATTERN "*.cache")
 
   # Aspell dictionaries
   install(DIRECTORY ${DEVLIBS_LIB}/aspell-0.60
-    DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
+    DESTINATION lib)
 
   # Necessary to run extensions on windows if it is not in the path
   if (HAVE_MINGW64)
     install(FILES
       ${DEVLIBS_BIN}/gspawn-win64-helper.exe
       ${DEVLIBS_BIN}/gspawn-win64-helper-console.exe
-      DESTINATION ${CMAKE_INSTALL_PREFIX})
+      DESTINATION .)
   else()
     install(FILES
       ${DEVLIBS_BIN}/gspawn-win32-helper.exe
       ${DEVLIBS_BIN}/gspawn-win32-helper-console.exe
-      DESTINATION ${CMAKE_INSTALL_PREFIX})
+      DESTINATION .)
   endif()
 
   # Perl
   install(FILES
     ${DEVLIBS_PATH}/perl/bin/perl58.dll
-    DESTINATION ${CMAKE_INSTALL_PREFIX})
+    DESTINATION .)
 
   # Python
   install(DIRECTORY ${DEVLIBS_PATH}/python
-    DESTINATION ${CMAKE_INSTALL_PREFIX}
+    DESTINATION .
     PATTERN "python/include" EXCLUDE
     PATTERN "python/libs" EXCLUDE
     PATTERN "*.pyc" EXCLUDE)

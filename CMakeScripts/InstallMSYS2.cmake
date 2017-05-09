@@ -8,10 +8,10 @@ if(WIN32)
 	GPL2.txt
 	GPL3.txt
 	LGPL2.1.txt
-    DESTINATION ${CMAKE_INSTALL_PREFIX})
+    DESTINATION .)
 
   install(DIRECTORY doc
-    DESTINATION ${CMAKE_INSTALL_PREFIX})
+    DESTINATION .)
 
   # mingw dlls
   install(FILES
@@ -116,42 +116,42 @@ if(WIN32)
     ${MINGW_BIN}/libgfortran-3.dll
     ${MINGW_BIN}/libopenblas.dll
     ${MINGW_BIN}/libquadmath-0.dll
-    DESTINATION ${CMAKE_INSTALL_PREFIX})
+    DESTINATION .)
   # There are differences for 64-Bit and 32-Bit build environments.
   if(HAVE_MINGW64)
     install(FILES
       ${MINGW_BIN}/libgcc_s_seh-1.dll
-      DESTINATION ${CMAKE_INSTALL_PREFIX})
+      DESTINATION .)
   else()
     install(FILES
       ${MINGW_BIN}/libgcc_s_dw2-1.dll
-      DESTINATION ${CMAKE_INSTALL_PREFIX})
+      DESTINATION .)
   endif()
 
   # Install hicolor/index.theme to avoid bug 1635207
   install(FILES
     ${MINGW_PATH}/share/icons/hicolor/index.theme
-    DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor)
+    DESTINATION share/icons/hicolor)
 
   install(DIRECTORY ${MINGW_PATH}/share/icons/Adwaita
-    DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons)
+    DESTINATION share/icons)
 
   # translations for libraries (we usually shouldn't need many)
   install(DIRECTORY ${MINGW_PATH}/share/locale
-    DESTINATION ${CMAKE_INSTALL_PREFIX}/share
+    DESTINATION share
     FILES_MATCHING
     PATTERN "*gtk30.mo"
     PATTERN "*gtkspell3.mo")
 
   install(DIRECTORY ${MINGW_PATH}/share/poppler
-    DESTINATION ${CMAKE_INSTALL_PREFIX}/share)
+    DESTINATION share)
 
   install(DIRECTORY ${MINGW_PATH}/share/glib-2.0/schemas
-    DESTINATION ${CMAKE_INSTALL_PREFIX}/share/glib-2.0)
+    DESTINATION share/glib-2.0)
 
   # fontconfig
   install(DIRECTORY ${MINGW_PATH}/etc/fonts
-    DESTINATION ${CMAKE_INSTALL_PREFIX}/etc
+    DESTINATION etc
     FILES_MATCHING PATTERN "fonts.conf" EXCLUDE)
   # adjust fonts.conf to store font cache in AppData
   set(cachedir_default "\\t^<cachedir^>/var/cache/fontconfig^</cachedir^>") # the '^' are needed to escape angle brackets on Windows command shell
@@ -163,60 +163,60 @@ if(WIN32)
   )
   add_custom_target(fonts_conf ALL DEPENDS ${CMAKE_BINARY_DIR}/etc/fonts/fonts.conf)
   install(DIRECTORY ${CMAKE_BINARY_DIR}/etc/fonts
-    DESTINATION ${CMAKE_INSTALL_PREFIX}/etc)
+    DESTINATION etc)
 
   # GTK 3.0
   install(DIRECTORY ${MINGW_LIB}/gtk-3.0
-    DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
+    DESTINATION lib
     FILES_MATCHING
     PATTERN "*.dll"
     PATTERN "*.cache")
 
   install(DIRECTORY ${MINGW_PATH}/etc/gtk-3.0
-    DESTINATION ${CMAKE_INSTALL_PREFIX}/etc)
+    DESTINATION etc)
 
   install(DIRECTORY ${MINGW_LIB}/gdk-pixbuf-2.0
-    DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
+    DESTINATION lib
     FILES_MATCHING
     PATTERN "*.dll"
     PATTERN "*.cache")
 
   # Aspell dictionaries
   install(DIRECTORY ${MINGW_LIB}/aspell-0.60
-    DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
+    DESTINATION lib)
 
   # Aspell backend for Enchant (gtkspell uses Enchant to access Aspell dictionaries)
   install(FILES
     ${MINGW_LIB}/enchant/libenchant_aspell.dll
-    DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/enchant)
+    DESTINATION lib/enchant)
 
   # Necessary to run extensions on windows if it is not in the path
   if (HAVE_MINGW64)
     install(FILES
       ${MINGW_BIN}/gspawn-win64-helper.exe
       ${MINGW_BIN}/gspawn-win64-helper-console.exe
-      DESTINATION ${CMAKE_INSTALL_PREFIX})
+      DESTINATION .)
   else()
     install(FILES
       ${MINGW_BIN}/gspawn-win32-helper.exe
       ${MINGW_BIN}/gspawn-win32-helper-console.exe
-      DESTINATION ${CMAKE_INSTALL_PREFIX})
+      DESTINATION .)
   endif()
 
   # Python (a bit hacky for backwards compatibility with devlibs at this point)
   install(FILES
     ${MINGW_BIN}/python2.exe
     RENAME python.exe
-    DESTINATION ${CMAKE_INSTALL_PREFIX})
+    DESTINATION .)
   install(FILES
     ${MINGW_BIN}/python2w.exe
     RENAME pythonw.exe
-    DESTINATION ${CMAKE_INSTALL_PREFIX})
+    DESTINATION .)
   install(FILES
     ${MINGW_BIN}/libpython2.7.dll
-    DESTINATION ${CMAKE_INSTALL_PREFIX})
+    DESTINATION .)
   install(DIRECTORY ${MINGW_LIB}/python2.7
-    DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
+    DESTINATION lib
     PATTERN "python2.7/site-packages" EXCLUDE # specify individual packages to install below
     PATTERN "python2.7/test" EXCLUDE # we don't need the Python testsuite
   )
