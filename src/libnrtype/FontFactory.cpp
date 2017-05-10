@@ -298,6 +298,12 @@ void font_factory::GetUIFamilies(std::vector<PangoFontFamily *>& out)
             std::cerr << "font_factory::GetUIFamilies: Missing displayName! " << std::endl;
             continue;
         }
+        if (!g_utf8_validate(displayName, -1, 0)) {
+            // TODO: can can do anything about this or does it always indicate broken fonts that should not be used?
+            std::cerr << "font_factory::GetUIFamilies: Illegal characters in displayName. ";
+            std::cerr << "Ignoring font '" << displayName << "'" << std::endl;
+            continue;
+        }
         sorted.push_back(std::make_pair(families[currentFamily], displayName));
     }
 
