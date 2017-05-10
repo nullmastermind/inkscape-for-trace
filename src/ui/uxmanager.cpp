@@ -20,20 +20,7 @@
 #include "util/ege-tags.h"
 #include "widgets/toolbox.h"
 
-#ifdef GDK_WINDOWING_X11
-#include <gdk/gdkx.h>
-#endif // GDK_WINDOWING_X11
-
-#ifdef GDK_WINDOWING_WAYLAND
-#include <gdk/gdkwayland.h>
-#endif
-
 using std::vector;
-
-
-gchar const* KDE_WINDOW_MANAGER_NAME = "KWin";
-gchar const* UNKOWN_WINDOW_MANAGER_NAME = "unknown";
-
 
 class TrackItem
 {
