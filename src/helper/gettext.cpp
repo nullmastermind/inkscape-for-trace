@@ -49,9 +49,8 @@ void initialize_gettext() {
     bindtextdomain(GETTEXT_PACKAGE, localepath);
     g_free(shortdatadir);
     g_free(localepath);
-    
-    g_free(datadir);
 
+    g_free(datadir);
 #else
 # ifdef ENABLE_BINRELOC
     bindtextdomain(GETTEXT_PACKAGE, BR_LOCALEDIR(""));
@@ -79,21 +78,23 @@ void bind_textdomain_codeset_utf8() {
     bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
 }
 
-/** set gettext codeset to codeset of the console
+/** set gettext codeset to codeset of the system console
  *   - on *nix this is typically the current locale,
- *   - on Windows it has to be determined using GetConsoleOutputCP() */
+ *   - on Windows we don't care and simply use UTF8
+ *       any conversion would need to happen in our console wrappers (see winconsole.cpp) anyway
+ *       as we have no easy way of determining console encoding from inkscape/inkview.exe process;
+ *       for now do something even easier - switch console encoding to UTF8 and be done with it!
+ *     this also works nicely on MSYS consoles where UTF8 encoding is used by default, too  */
 void bind_textdomain_codeset_console() {
+#ifdef WIN32
+    bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
+#else
     std::string charset;
     Glib::get_charset(charset);
-    
-    // TODO: does not work properly as we spawn a child process on Windows
-    //      (inkscape.exe is not a console application and can never print directly to console)
-    //unsigned int test = GetConsoleOutputCP();
-    //g_message("CP%u", test);
-
     bind_textdomain_codeset(GETTEXT_PACKAGE, charset.c_str());
+#endif
 }
- 
+
 }
 
 
