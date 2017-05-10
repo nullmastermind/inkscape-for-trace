@@ -101,11 +101,9 @@ public:
     virtual gint getDefaultTask( SPDesktop *desktop );
     virtual void setTask(SPDesktop* dt, gint val);
 
-    virtual bool isFloatWindowProblem() const;
     virtual bool isWidescreen() const;
 
 private:
-    bool _floatwindowIssues;
     bool _widescreen;
 };
 
@@ -127,7 +125,6 @@ UXManager::~UXManager()
 }
 
 UXManagerImpl::UXManagerImpl() :
-    _floatwindowIssues(false),
     _widescreen(false)
 {
     ege::TagSet tags;
@@ -135,33 +132,6 @@ UXManagerImpl::UXManagerImpl() :
 
     tags.addTag(ege::Tag("General"));
     tags.addTag(ege::Tag("Icons"));
-
-// Nobody seems to use floatwindowIssues... we can probably delete all this code!
-// See: https://developer.gnome.org/gdk3/stable/gdk3-Wayland-Interaction.html
-    GdkDisplay* display = gdk_display_get_default();
-#ifdef GDK_WINDOWING_WAYLAND
-    if (GDK_IS_WAYLAND_DISPLAY (display) ) {
-        // std::cout << "Using Wayland!" << std::endl;
-    }
-#endif
-
-#ifdef GDK_WINDOWING_X11
-    if (GDK_IS_X11_DISPLAY (display) ) {
-        // std::cout << "Using X11!" << std::endl;
-        char const* wmName = gdk_x11_screen_get_window_manager_name( gdk_screen_get_default() );
-        //g_message("Window manager is [%s]", wmName);
-
-        //if (g_ascii_strcasecmp( wmName, UNKOWN_WINDOW_MANAGER_NAME ) == 0) {
-        if (g_ascii_strcasecmp( wmName, KDE_WINDOW_MANAGER_NAME ) == 0) {
-            _floatwindowIssues = true;
-        }
-    }
-#endif
-
-#ifdef GDK_WINDOWING_WIN32
-    _floatwindowIssues = true;
-#endif // GDK_WINDOWING_WIN32
-
 
     Glib::RefPtr<Gdk::Screen> defaultScreen = Gdk::Screen::get_default();
     if (defaultScreen) {
@@ -176,11 +146,6 @@ UXManagerImpl::UXManagerImpl() :
 
 UXManagerImpl::~UXManagerImpl()
 {
-}
-
-bool UXManagerImpl::isFloatWindowProblem() const
-{
-    return _floatwindowIssues;
 }
 
 bool UXManagerImpl::isWidescreen() const
