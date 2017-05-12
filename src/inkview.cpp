@@ -281,7 +281,7 @@ int main (int argc, char **argv)
 
     if(filenames.empty())
     {
-        g_print(opt.get_help().c_str());
+        g_print("%s", opt.get_help().c_str());
         exit(EXIT_FAILURE);
     }
 
