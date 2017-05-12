@@ -365,7 +365,7 @@ LPECopyRotate::doBeforeEffect (SPLPEItem const* lpeitem)
         rotation_angle.param_set_value(360.0/(double)num_copies);
     }
 
-    if ((method == RM_KALEIDOSCOPE || method == RM_FUSE) && rotation_angle * num_copies > 360.1 && rotation_angle > 0) {
+    if ((method == RM_KALEIDOSCOPE || method == RM_FUSE) && rotation_angle * num_copies > 360.1 && rotation_angle > 0 && copies_to_360) {
         num_copies.param_set_value(floor(360/rotation_angle));
     }
     if ((method == RM_KALEIDOSCOPE || method == RM_FUSE)  && mirror_copies && copies_to_360) {
@@ -657,6 +657,10 @@ LPECopyRotate::doEffect_path_post (Geom::PathVector const & path_in)
                 }
             }
         } else {
+            t = pre * Geom::Rotate(-Geom::rad_from_deg(starting_angle)) * r * rot * Geom::Rotate(Geom::rad_from_deg(starting_angle)) * Geom::Translate(origin);
+            if(mirror_copies && i%2 != 0) {
+                t = pre * Geom::Rotate(Geom::rad_from_deg(-starting_angle-rotation_angle)) * r * rot * Geom::Rotate(-Geom::rad_from_deg(starting_angle)) * Geom::Translate(origin);
+            }
             output_pv = path_in * t;
             output.insert(output.end(), output_pv.begin(), output_pv.end());
         }
