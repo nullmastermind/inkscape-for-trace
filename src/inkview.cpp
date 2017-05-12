@@ -248,8 +248,22 @@ private:
     Glib::OptionEntry _entry_args;
 };
 
+
+#ifdef WIN32
+// minimal print handler (just prints the string to stdout)
+void g_print_no_convert(const gchar *buf)
+{
+    fputs(buf, stdout);
+}
+#endif
+
 int main (int argc, char **argv)
 {
+#ifdef WIN32
+    // Ugly hack to make g_print emit UTF-8 encoded characters. Otherwise glib will *always*
+    // perform character conversion to the system's ANSI code page making UTF-8 output impossible.
+    g_set_print_handler(g_print_no_convert);
+#endif
 #ifdef ENABLE_NLS
     Inkscape::initialize_gettext();
 #endif
@@ -275,7 +289,7 @@ int main (int argc, char **argv)
 
     if(filenames.empty())
     {
-        std::cout << opt.get_help();
+        g_print(opt.get_help().c_str());
         exit(EXIT_FAILURE);
     }
 
