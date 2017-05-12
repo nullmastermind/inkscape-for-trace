@@ -223,22 +223,22 @@ class InkviewOptionsGroup : public Glib::OptionGroup
 public:
     InkviewOptionsGroup()
         :
-            Glib::OptionGroup(_("Inkscape Options"),
-                              _("Default program options")),
+            Glib::OptionGroup(N_("Inkscape Options"),
+                              N_("Default program options")),
             _entry_timer(),
             _entry_args()
     {
         // Entry for the "timer" option
         _entry_timer.set_short_name('t');
         _entry_timer.set_long_name("timer");
-        _entry_timer.set_arg_description(_("NUM"));
-        _entry_timer.set_description(_("Reset timer:"));
+        _entry_timer.set_arg_description(N_("NUM"));
+        _entry_timer.set_description(N_("Reset timer:"));
         add_entry(_entry_timer, timer);
 
         // Entry for the remaining non-option arguments
         _entry_args.set_short_name('\0');
         _entry_args.set_long_name(G_OPTION_REMAINING);
-        _entry_args.set_arg_description(_("FILES..."));
+        _entry_args.set_arg_description(N_("FILES..."));
 
         add_entry(_entry_args, filenames);
     }
@@ -254,8 +254,12 @@ int main (int argc, char **argv)
     Inkscape::initialize_gettext();
 #endif
 
-    Glib::OptionContext opt(_("Open SVG files"));
+    Glib::OptionContext opt(N_("Open SVG files"));
+    opt.set_translation_domain(GETTEXT_PACKAGE);
+    
     InkviewOptionsGroup grp;
+    grp.set_translation_domain(GETTEXT_PACKAGE);
+    
     opt.set_main_group(grp);
 
     // Prevents errors like "Unable to wrap GdkPixbuf..." (in nr-filter-image.cpp for example)
