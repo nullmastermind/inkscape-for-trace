@@ -144,12 +144,6 @@ SPSlideShow::SPSlideShow(std::vector<Glib::ustring> const &slides)
     show();
 }
 
-static void usage();
-
-
-// Dummy functions to keep linker happy
-int sp_main_gui (int, char const**) { return 0; }
-int sp_main_console (int, char const**) { return 0; }
 
 static int sp_svgview_main_delete (GtkWidget */*widget*/,
                                    GdkEvent */*event*/,
@@ -238,7 +232,7 @@ public:
         // Entry for the remaining non-option arguments
         _entry_args.set_short_name('\0');
         _entry_args.set_long_name(G_OPTION_REMAINING);
-        _entry_args.set_arg_description(N_("FILES..."));
+        _entry_args.set_arg_description(N_("FILES …"));
 
         add_entry(_entry_args, filenames);
     }
@@ -276,8 +270,6 @@ int main (int argc, char **argv)
     
     opt.set_main_group(grp);
 
-    // Prevents errors like "Unable to wrap GdkPixbuf..." (in nr-filter-image.cpp for example)
-    Gtk::Main::init_gtkmm_internals();
     Gtk::Main main_instance (argc, argv, opt);
 
     LIBXML_TEST_VERSION
