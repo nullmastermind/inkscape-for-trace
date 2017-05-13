@@ -31,7 +31,6 @@
 #endif
 
 #include <cstring>
-#include <sys/stat.h>
 #include <locale.h>
 
 
@@ -53,6 +52,8 @@
 #include "document.h"
 #include "svg-view.h"
 #include "svg-view-widget.h"
+
+#include "io/sys.h"
 #include "util/units.h"
 #ifdef ENABLE_NLS
 #include "helper/gettext.h"
@@ -289,10 +290,8 @@ int main (int argc, char **argv)
 
     for(auto file : filenames)
     {
-        struct stat st;
-        if (stat(file.c_str(), &st)
-                || !S_ISREG (st.st_mode)
-                || (st.st_size < 64)) {
+        if (!Inkscape::IO::file_test( file.c_str(), G_FILE_TEST_EXISTS ))
+        {
             std::cerr << "could not open file " << file << std::endl;
         } else {
             auto doc = SPDocument::createNewDoc(file.c_str(), TRUE, false);
