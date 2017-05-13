@@ -246,10 +246,8 @@ private:
 
 #ifdef WIN32
 // minimal print handler (just prints the string to stdout)
-void g_print_no_convert(const gchar *buf)
-{
-    fputs(buf, stdout);
-}
+void g_print_no_convert(const gchar *buf) { fputs(buf, stdout); }
+void g_printerr_no_convert(const gchar *buf) { fputs(buf, stderr); }
 #endif
 
 int main (int argc, char **argv)
@@ -258,6 +256,7 @@ int main (int argc, char **argv)
     // Ugly hack to make g_print emit UTF-8 encoded characters. Otherwise glib will *always*
     // perform character conversion to the system's ANSI code page making UTF-8 output impossible.
     g_set_print_handler(g_print_no_convert);
+    g_set_printerr_handler(g_print_no_convert);
 #endif
 #ifdef ENABLE_NLS
     Inkscape::initialize_gettext();
@@ -290,9 +289,8 @@ int main (int argc, char **argv)
 
     for(auto file : filenames)
     {
-        if (!Inkscape::IO::file_test( file.c_str(), G_FILE_TEST_EXISTS ))
-        {
-            std::cerr << "could not open file " << file << std::endl;
+        if (!Inkscape::IO::file_test( file.c_str(), G_FILE_TEST_EXISTS )) {
+            g_printerr("File does not exist: %s\n", file.c_str());
         } else {
             auto doc = SPDocument::createNewDoc(file.c_str(), TRUE, false);
 
