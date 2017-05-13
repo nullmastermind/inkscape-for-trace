@@ -244,6 +244,29 @@ private:
 };
 
 
+/** get a list of valid SVG files from a list of strings */
+std::vector<Glib::ustring> get_valid_files(std::vector<Glib::ustring> filenames)
+{
+    std::vector<Glib::ustring> valid_files;
+
+    for(auto file : filenames)
+    {
+        if (!Inkscape::IO::file_test( file.c_str(), G_FILE_TEST_EXISTS )) {
+            g_printerr("File does not exist: %s\n", file.c_str());
+        } else {
+            auto doc = SPDocument::createNewDoc(file.c_str(), TRUE, false);
+
+            if(doc)
+            {
+                /* Append to list */
+                valid_files.push_back(file);
+            }
+        }
+    }
+    
+    return valid_files;
+}
+
 #ifdef WIN32
 // minimal print handler (just prints the string to stdout)
 void g_print_no_convert(const gchar *buf) { fputs(buf, stdout); }
@@ -285,23 +308,7 @@ int main (int argc, char **argv)
         exit(EXIT_FAILURE);
     }
 
-    std::vector<Glib::ustring> valid_files;
-
-    for(auto file : filenames)
-    {
-        if (!Inkscape::IO::file_test( file.c_str(), G_FILE_TEST_EXISTS )) {
-            g_printerr("File does not exist: %s\n", file.c_str());
-        } else {
-            auto doc = SPDocument::createNewDoc(file.c_str(), TRUE, false);
-
-            if(doc)
-            {
-                /* Append to list */
-                valid_files.push_back(file);
-            }
-        }
-    }
-
+    std::vector<Glib::ustring> valid_files = get_valid_files(filenames);
     if(valid_files.empty()) {
        return 1; /* none of the slides loadable */
     }
