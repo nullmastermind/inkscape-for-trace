@@ -93,7 +93,12 @@ public:
     /// Update the window title with current document name
     void update_title()
     {
-        set_title(_doc->getName());
+        Glib::ustring title(_doc->getName());
+        if (_slides.size() > 1) {
+            title += Glib::ustring::compose("  (%1/%2)", _current+1, _slides.size());
+        }
+
+        set_title(title);
     }
 
     SPSlideShow(std::vector<Glib::ustring> const &slides);
