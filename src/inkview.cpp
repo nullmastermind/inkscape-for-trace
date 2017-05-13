@@ -205,7 +205,6 @@ static int sp_svgview_main_key_press (GtkWidget */*widget*/,
             break;
     }
 
-    ss->update_title();
     return TRUE;
 }
 
@@ -429,6 +428,7 @@ void SPSlideShow::set_document(SPDocument *doc,
         reinterpret_cast<SPSVGView*>(SP_VIEW_WIDGET_VIEW (_view))->setDocument (doc);
         _doc = doc;
         _current = current;
+        update_title();
     }
 }
 
