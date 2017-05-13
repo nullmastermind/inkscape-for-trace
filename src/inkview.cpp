@@ -269,11 +269,11 @@ std::vector<Glib::ustring> get_valid_files(std::vector<Glib::ustring> filenames,
                 }
             } else {
                 auto doc = SPDocument::createNewDoc(file.c_str(), TRUE, false);
-
-                if(doc)
-                {
+                if(doc) {
                     /* Append to list */
                     valid_files.push_back(file);
+                } else {
+                    g_printerr("%s: %s\n", _("Could not open file"), file.c_str());
                 }
             }
         }
