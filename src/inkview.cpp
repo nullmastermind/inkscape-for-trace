@@ -46,8 +46,8 @@
 #include "inkgc/gc-core.h"
 #include "preferences.h"
 
+#include <glibmm.h>
 #include <glibmm/i18n.h>
-#include <glibmm/optionentry.h>
 
 #include "document.h"
 #include "svg-view.h"
@@ -245,21 +245,36 @@ private:
 
 
 /** get a list of valid SVG files from a list of strings */
-std::vector<Glib::ustring> get_valid_files(std::vector<Glib::ustring> filenames)
+std::vector<Glib::ustring> get_valid_files(std::vector<Glib::ustring> filenames, bool recursive = false)
 {
     std::vector<Glib::ustring> valid_files;
 
     for(auto file : filenames)
     {
         if (!Inkscape::IO::file_test( file.c_str(), G_FILE_TEST_EXISTS )) {
-            g_printerr("File does not exist: %s\n", file.c_str());
+            g_printerr("%s: %s\n", _("File or folder does not exist"), file.c_str());
         } else {
-            auto doc = SPDocument::createNewDoc(file.c_str(), TRUE, false);
+            if (Inkscape::IO::file_test( file.c_str(), G_FILE_TEST_IS_DIR )) {
+                if (recursive) {
+                    std::vector<Glib::ustring> new_filenames;
+                    Glib::Dir directory(file);
+                    for (auto new_file: directory) {
+                        Glib::ustring extension = new_file.substr( new_file.find_last_of(".") + 1 );
+                        if (!extension.compare("svg") || !extension.compare("svgz")) {
+                            new_filenames.push_back(Glib::build_filename(file, new_file));
+                        }
+                    }
+                    std::vector<Glib::ustring> new_files = get_valid_files(new_filenames);
+                    valid_files.insert(valid_files.end(), new_files.begin(), new_files.end());
+                }
+            } else {
+                auto doc = SPDocument::createNewDoc(file.c_str(), TRUE, false);
 
-            if(doc)
-            {
-                /* Append to list */
-                valid_files.push_back(file);
+                if(doc)
+                {
+                    /* Append to list */
+                    valid_files.push_back(file);
+                }
             }
         }
     }
@@ -308,7 +323,7 @@ int main (int argc, char **argv)
         exit(EXIT_FAILURE);
     }
 
-    std::vector<Glib::ustring> valid_files = get_valid_files(filenames);
+    std::vector<Glib::ustring> valid_files = get_valid_files(filenames, true);
     if(valid_files.empty()) {
        return 1; /* none of the slides loadable */
     }
