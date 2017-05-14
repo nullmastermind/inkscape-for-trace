@@ -260,6 +260,7 @@ set(inkscape_SRC
   snapper.cpp
   style-internal.cpp
   style.cpp
+  svg-view-slideshow.cpp
   svg-view-widget.cpp
   svg-view.cpp
   text-chemistry.cpp
@@ -390,6 +391,7 @@ set(inkscape_SRC
   style-internal.h
   style.h
   svg-profile.h
+  svg-view-slideshow.h
   svg-view-widget.h
   svg-view.h
   syseq.h
