@@ -29,6 +29,8 @@
 # include "config.h"
 #endif
 
+#include <glibmm/main.h>
+
 #include <gtkmm/button.h>
 #include <gtkmm/buttonbox.h>
 #include <gtkmm/image.h>
@@ -44,15 +46,14 @@
 
 
 
-SPSlideShow::SPSlideShow(std::vector<Glib::ustring> const &slides)
-    :
-        _slides(slides),
-        _current(0),
-        _doc(SPDocument::createNewDoc(_slides[0].c_str(), true, false)),
-        _view(NULL),
-        is_fullscreen(false),
-        _timer(0),
-        _ctrlwin(NULL)
+SPSlideShow::SPSlideShow(std::vector<Glib::ustring> const &slides, int timer)
+    : _slides(slides)
+    , _current(0)
+    , _doc(SPDocument::createNewDoc(_slides[0].c_str(), true, false))
+    , _timer(timer)
+    , _view(NULL)
+    , _ctrlwin(NULL)
+    , is_fullscreen(false)
 {
     update_title();
 
@@ -72,6 +73,10 @@ SPSlideShow::SPSlideShow(std::vector<Glib::ustring> const &slides)
     add(*Glib::wrap(_view));
 
     show();
+
+    if(_timer) {
+        Glib::signal_timeout().connect_seconds(sigc::mem_fun(*this, &timer_callback), _timer);
+    }
 }
 
 
@@ -238,6 +243,18 @@ void SPSlideShow::goto_last()
     set_document(doc, current + 1);
 
     normal_cursor();
+}
+
+bool SPSlideShow::timer_callback()
+{
+    show_next();
+    
+    // stop the timer if the last slide is reached
+    if (_current == _slides.size()-1) {
+        return false;
+    } else {
+        return true;
+    }
 }
 
 bool SPSlideShow::ctrlwin_delete (GdkEventAny */*event*/)

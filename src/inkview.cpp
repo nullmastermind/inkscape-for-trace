@@ -172,8 +172,7 @@ int main (int argc, char **argv)
        return 1; /* none of the slides loadable */
     }
     
-    SPSlideShow ss(valid_files);
-    ss.set_timer(timer);
+    SPSlideShow ss(valid_files, timer);
     main_instance.run();
 
     return 0;

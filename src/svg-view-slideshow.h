@@ -36,8 +36,8 @@
  */
 class SPSlideShow : public Gtk::ApplicationWindow {
 public:
-    SPSlideShow(std::vector<Glib::ustring> const &slides);
-    void set_timer(int timer) {_timer = timer;}
+    SPSlideShow(std::vector<Glib::ustring> const &slides,
+                int timer);
 
 private:
     std::vector<Glib::ustring>  _slides;  ///< List of filenames for each slide
@@ -55,6 +55,7 @@ private:
     void show_prev();
     void goto_first();
     void goto_last();
+    bool timer_callback();
 
     bool key_press (GdkEventKey *event);
     bool main_delete (GdkEventAny *event);
