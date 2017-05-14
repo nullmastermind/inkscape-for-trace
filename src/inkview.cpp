@@ -56,18 +56,26 @@
 class InkviewOptionsGroup : public Glib::OptionGroup
 {
 public:
-    /// List of all input filenames
+    // list of all input filenames;
+    // this list contains all arguments that are not recognized as an option (so needs to be checked)
     Glib::OptionGroup::vecustrings filenames;
 
-    /// timer for the slideshow
-    int timer = 0;
-    
-    /// scale factor for images (currently only applied to the first image - others are resized to window dimensions)
-    double scale = 1;
+    bool fullscreen = false; // wether to launch in fullscreen mode
+    int timer = 0;           // time (in seconds) after which the next image of the slideshow is automatically loaded
+    double scale = 1;        // scale factor for images
+                             //   (currently only applied to the first image - others are resized to window dimensions)
 
     InkviewOptionsGroup() : Glib::OptionGroup(N_("Inkscape Options"),
                                               N_("Default program options"))
     {
+        // Entry for the "fullscreen" option
+        Glib::OptionEntry entry_fullscreen;
+        entry_fullscreen.set_short_name('f');
+        entry_fullscreen.set_long_name("fullscreen");
+        //entry_fullscreen.set_arg_description(N_("NUM"));
+        entry_fullscreen.set_description(N_("Launch in fullscreen mode"));
+        add_entry(entry_fullscreen, fullscreen);
+
         // Entry for the "timer" option
         Glib::OptionEntry entry_timer;
         entry_timer.set_short_name('t');
@@ -191,7 +199,7 @@ int main (int argc, char **argv)
        return 1; /* none of the slides loadable */
     }
 
-    SPSlideShow ss(valid_files, options.timer, options.scale);
+    SPSlideShow ss(valid_files, options.fullscreen, options.timer, options.scale);
     main_instance.run();
 
     return 0;

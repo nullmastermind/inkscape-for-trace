@@ -37,20 +37,19 @@
 class SPSlideShow : public Gtk::ApplicationWindow {
 public:
     SPSlideShow(std::vector<Glib::ustring> const &slides,
+                bool fullscreen,
                 int timer,
                 double scale);
 
-private:
-    std::vector<Glib::ustring>  _slides;  ///< list of filenames for each slide
-    int                         _current; ///< index of the currently displayed slide
-    SPDocument                 *_doc;     ///< parsed SPDocument of the currently displayed slide
-    int                         _timer;   ///< time after which slides are automatically changed (in seconds)
-    double                      _scale;   ///< scale factor for images
-    GtkWidget                  *_view;    ///< the canvas to which the images are drawn
-    Gtk::Window                *_ctrlwin; ///< window containing slideshow control buttons
-
-    /// Current state of application (full-screen or windowed)
-    bool is_fullscreen;
+private:                                     
+    std::vector<Glib::ustring>  _slides;     // list of filenames for each slide
+    int                         _current;    // index of the currently displayed slide
+    SPDocument                 *_doc;        // parsed SPDocument of the currently displayed slide
+    bool                        _fullscreen; // is window fullscreen? (also controls wether to launch in fullscreen mode)
+    int                         _timer;      // time after which slides are automatically changed (in seconds)
+    double                      _scale;      // scale factor for images
+    GtkWidget                  *_view;       // the canvas to which the images are drawn
+    Gtk::Window                *_ctrlwin;    // window containing slideshow control buttons
 
     void control_show();
     void show_next();

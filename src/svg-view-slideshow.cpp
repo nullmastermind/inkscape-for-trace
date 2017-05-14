@@ -46,15 +46,15 @@
 
 
 
-SPSlideShow::SPSlideShow(std::vector<Glib::ustring> const &slides, int timer, double scale)
+SPSlideShow::SPSlideShow(std::vector<Glib::ustring> const &slides, bool full_screen, int timer, double scale)
     : _slides(slides)
     , _current(0)
     , _doc(SPDocument::createNewDoc(_slides[0].c_str(), true, false))
+    , _fullscreen(full_screen)
     , _timer(timer)
     , _scale(scale)
     , _view(NULL)
     , _ctrlwin(NULL)
-    , is_fullscreen(false)
 {
     // setup initial document
     auto default_screen = Gdk::Screen::get_default();
@@ -65,9 +65,12 @@ SPSlideShow::SPSlideShow(std::vector<Glib::ustring> const &slides, int timer, do
     SP_SVG_VIEW_WIDGET(_view)->setResize( false, _doc->getWidth().value("px"), _doc->getHeight().value("px") );
     gtk_widget_show (_view);
     add(*Glib::wrap(_view));
-    
+
     update_title();
     show();
+    if(_fullscreen) {
+        fullscreen();
+    }
 
     // connect signals
     this->signal_key_press_event().connect(sigc::mem_fun(*this, &SPSlideShow::key_press), false);
@@ -280,12 +283,12 @@ bool SPSlideShow::key_press(GdkEventKey* event)
             goto_last();
             break;
         case GDK_KEY_F11:
-            if (is_fullscreen) {
+            if (_fullscreen) {
                 unfullscreen();
-                is_fullscreen = false;
+                _fullscreen = false;
             } else {
                 fullscreen();
-                is_fullscreen = true;
+                _fullscreen = true;
             }
             break;
         case GDK_KEY_Return:
