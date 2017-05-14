@@ -46,19 +46,20 @@
 
 
 
-SPSlideShow::SPSlideShow(std::vector<Glib::ustring> const &slides, int timer)
+SPSlideShow::SPSlideShow(std::vector<Glib::ustring> const &slides, int timer, double scale)
     : _slides(slides)
     , _current(0)
     , _doc(SPDocument::createNewDoc(_slides[0].c_str(), true, false))
     , _timer(timer)
+    , _scale(scale)
     , _view(NULL)
     , _ctrlwin(NULL)
     , is_fullscreen(false)
 {
     // setup initial document
     auto default_screen = Gdk::Screen::get_default();
-    set_default_size(MIN ((int)_doc->getWidth().value("px"),  default_screen->get_width()  - 64),
-                     MIN ((int)_doc->getHeight().value("px"), default_screen->get_height() - 64));
+    set_default_size(MIN ((int)_doc->getWidth().value("px")*_scale,  default_screen->get_width()  - 64),
+                     MIN ((int)_doc->getHeight().value("px")*_scale, default_screen->get_height() - 64));
 
     _view = sp_svg_view_widget_new(_doc);
     SP_SVG_VIEW_WIDGET(_view)->setResize( false, _doc->getWidth().value("px"), _doc->getHeight().value("px") );

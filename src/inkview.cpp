@@ -59,26 +59,37 @@ public:
     /// List of all input filenames
     Glib::OptionGroup::vecustrings filenames;
 
-    /// Input timer option
+    /// timer for the slideshow
     int timer = 0;
+    
+    /// scale factor for images (currently only applied to the first image - others are resized to window dimensions)
+    double scale = 1;
 
     InkviewOptionsGroup() : Glib::OptionGroup(N_("Inkscape Options"),
                                               N_("Default program options"))
     {
         // Entry for the "timer" option
-        Glib::OptionEntry _entry_timer;
-        _entry_timer.set_short_name('t');
-        _entry_timer.set_long_name("timer");
-        _entry_timer.set_arg_description(N_("NUM"));
-        _entry_timer.set_description(N_("Change image every NUM seconds"));
-        add_entry(_entry_timer, timer);
+        Glib::OptionEntry entry_timer;
+        entry_timer.set_short_name('t');
+        entry_timer.set_long_name("timer");
+        entry_timer.set_arg_description(N_("NUM"));
+        entry_timer.set_description(N_("Change image every NUM seconds"));
+        add_entry(entry_timer, timer);
+
+        // Entry for the "scale" option
+        Glib::OptionEntry entry_scale;
+        entry_scale.set_short_name('s');
+        entry_scale.set_long_name("scale");
+        entry_scale.set_arg_description(N_("NUM"));
+        entry_scale.set_description(N_("Scale image by factor NUM"));
+        add_entry(entry_scale, scale);
 
         // Entry for the remaining non-option arguments
-        Glib::OptionEntry _entry_args;
-        _entry_args.set_long_name(G_OPTION_REMAINING);
-        _entry_args.set_arg_description(N_("FILES/FOLDERS …"));
+        Glib::OptionEntry entry_args;
+        entry_args.set_long_name(G_OPTION_REMAINING);
+        entry_args.set_arg_description(N_("FILES/FOLDERS …"));
 
-        add_entry(_entry_args, filenames);
+        add_entry(entry_args, filenames);
     }
 };
 
@@ -173,7 +184,7 @@ int main (int argc, char **argv)
        return 1; /* none of the slides loadable */
     }
 
-    SPSlideShow ss(valid_files, options.timer);
+    SPSlideShow ss(valid_files, options.timer, options.scale);
     main_instance.run();
 
     return 0;
