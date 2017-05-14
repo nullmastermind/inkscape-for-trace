@@ -76,7 +76,7 @@ SPSlideShow::SPSlideShow(std::vector<Glib::ustring> const &slides, bool full_scr
     this->signal_key_press_event().connect(sigc::mem_fun(*this, &SPSlideShow::key_press), false);
     this->signal_delete_event().connect(sigc::mem_fun(*this, &SPSlideShow::main_delete), false);
     if(_timer) {
-        Glib::signal_timeout().connect_seconds(sigc::mem_fun(*this, &timer_callback), _timer);
+        Glib::signal_timeout().connect_seconds(sigc::mem_fun(*this, &SPSlideShow::timer_callback), _timer);
     }
 }
 
