@@ -210,7 +210,8 @@ int main (int argc, char **argv)
 
     std::vector<Glib::ustring> valid_files = get_valid_files(options.filenames, options.recursive, true);
     if(valid_files.empty()) {
-       return 1; /* none of the slides loadable */
+        g_printerr("%s\n", _("No valid files to load."));
+        return 1; /* none of the slides loadable */
     }
 
     SPSlideShow ss(valid_files, options.fullscreen, options.timer, options.scale);
