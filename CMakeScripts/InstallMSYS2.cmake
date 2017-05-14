@@ -140,6 +140,7 @@ if(WIN32)
   install(DIRECTORY ${MINGW_PATH}/share/locale
     DESTINATION share
     FILES_MATCHING
+    PATTERN "*glib20.mo"
     PATTERN "*gtk30.mo"
     PATTERN "*gtkspell3.mo")
 
