@@ -29,6 +29,8 @@
 #ifndef SEEN_SP_SVG_SLIDESHOW_H
 #define SEEN_SP_SVG_SLIDESHOW_H
 
+#include <gtkmm/applicationwindow.h>
+
 /**
  * The main application window for the slideshow
  */
@@ -48,18 +50,6 @@ private:
     /// Current state of application (full-screen or windowed)
     bool is_fullscreen;
 
-    /// Update the window title with current document name
-    void update_title()
-    {
-        Glib::ustring title(_doc->getName());
-        if (_slides.size() > 1) {
-            title += Glib::ustring::compose("  (%1/%2)", _current+1, _slides.size());
-        }
-
-        set_title(title);
-    }
-
-
     void control_show();
     void show_next();
     void show_prev();
@@ -70,7 +60,7 @@ private:
     bool main_delete (GdkEventAny *event);
     bool ctrlwin_delete (GdkEventAny *event);
 
-protected:
+    void update_title();
     void waiting_cursor();
     void normal_cursor();
     void set_document(SPDocument *doc,

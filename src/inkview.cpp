@@ -29,7 +29,6 @@
 # include "config.h"
 #endif
 
-#include <gtkmm/applicationwindow.h>
 #include <gtkmm/main.h>
 
 #include <libxml/tree.h>

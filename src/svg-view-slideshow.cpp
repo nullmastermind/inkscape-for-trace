@@ -29,7 +29,6 @@
 # include "config.h"
 #endif
 
-#include <gtkmm/applicationwindow.h>
 #include <gtkmm/button.h>
 #include <gtkmm/buttonbox.h>
 #include <gtkmm/image.h>
@@ -147,6 +146,18 @@ void SPSlideShow::normal_cursor()
     if (_ctrlwin) {
         _ctrlwin->get_window()->set_cursor();
     }
+}
+
+
+/// Update the window title with current document name
+void SPSlideShow::update_title()
+{
+    Glib::ustring title(_doc->getName());
+    if (_slides.size() > 1) {
+        title += Glib::ustring::compose("  (%1/%2)", _current+1, _slides.size());
+    }
+
+    set_title(title);
 }
 
 void SPSlideShow::set_document(SPDocument *doc,
