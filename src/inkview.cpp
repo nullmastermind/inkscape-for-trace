@@ -61,6 +61,7 @@ public:
     Glib::OptionGroup::vecustrings filenames;
 
     bool fullscreen = false; // wether to launch in fullscreen mode
+    bool recursive = false;  // wether to search folders for SVG files recursively
     int timer = 0;           // time (in seconds) after which the next image of the slideshow is automatically loaded
     double scale = 1;        // scale factor for images
                              //   (currently only applied to the first image - others are resized to window dimensions)
@@ -72,9 +73,15 @@ public:
         Glib::OptionEntry entry_fullscreen;
         entry_fullscreen.set_short_name('f');
         entry_fullscreen.set_long_name("fullscreen");
-        //entry_fullscreen.set_arg_description(N_("NUM"));
         entry_fullscreen.set_description(N_("Launch in fullscreen mode"));
         add_entry(entry_fullscreen, fullscreen);
+
+        // Entry for the "recursive" option
+        Glib::OptionEntry entry_recursive;
+        entry_recursive.set_short_name('r');
+        entry_recursive.set_long_name("recursive");
+        entry_recursive.set_description(N_("Search folders recursively"));
+        add_entry(entry_recursive, recursive);
 
         // Entry for the "timer" option
         Glib::OptionEntry entry_timer;
@@ -95,7 +102,7 @@ public:
         // Entry for the remaining non-option arguments
         Glib::OptionEntry entry_args;
         entry_args.set_long_name(G_OPTION_REMAINING);
-        entry_args.set_arg_description(N_("FILES/FOLDERS …"));
+        entry_args.set_arg_description(N_("FILES/FOLDERS…"));
 
         add_entry(entry_args, filenames);
     }
@@ -103,7 +110,7 @@ public:
 
 
 /** get a list of valid SVG files from a list of strings */
-std::vector<Glib::ustring> get_valid_files(std::vector<Glib::ustring> filenames, bool recursive = false)
+std::vector<Glib::ustring> get_valid_files(std::vector<Glib::ustring> filenames, bool recursive = false, bool first_iteration = false)
 {
     std::vector<Glib::ustring> valid_files;
 
@@ -111,28 +118,35 @@ std::vector<Glib::ustring> get_valid_files(std::vector<Glib::ustring> filenames,
     {
         if (!Inkscape::IO::file_test( file.c_str(), G_FILE_TEST_EXISTS )) {
             g_printerr("%s: %s\n", _("File or folder does not exist"), file.c_str());
+            continue;
+        }
+
+        if (Inkscape::IO::file_test( file.c_str(), G_FILE_TEST_IS_DIR )) {
+            // only recurse into directories if explicitly specified by user on command line or if recursive = true
+            if (first_iteration || recursive) {
+                std::vector<Glib::ustring> new_filenames;
+                Glib::Dir directory(file);
+                for (auto new_file: directory) {
+                        new_filenames.push_back(Glib::build_filename(file, new_file));
+                }
+                std::vector<Glib::ustring> new_valid_files = get_valid_files(new_filenames, recursive);
+                valid_files.insert(valid_files.end(), new_valid_files.begin(), new_valid_files.end());
+            }
         } else {
-            if (Inkscape::IO::file_test( file.c_str(), G_FILE_TEST_IS_DIR )) {
-                if (recursive) {
-                    std::vector<Glib::ustring> new_filenames;
-                    Glib::Dir directory(file);
-                    for (auto new_file: directory) {
-                        Glib::ustring extension = new_file.substr( new_file.find_last_of(".") + 1 );
-                        if (!extension.compare("svg") || !extension.compare("svgz")) {
-                            new_filenames.push_back(Glib::build_filename(file, new_file));
-                        }
-                    }
-                    std::vector<Glib::ustring> new_files = get_valid_files(new_filenames);
-                    valid_files.insert(valid_files.end(), new_files.begin(), new_files.end());
+            if (!first_iteration) {
+                // filter out files based on extension if they were not explicitly specified on command line
+                Glib::ustring extension = file.substr( file.find_last_of(".") + 1 );
+                if (extension.compare("svg") && extension.compare("svgz")) {
+                    continue;
                 }
+            }
+
+            auto doc = SPDocument::createNewDoc(file.c_str(), TRUE, false);
+            if(doc) {
+                /* Append to list */
+                valid_files.push_back(file);
             } else {
-                auto doc = SPDocument::createNewDoc(file.c_str(), TRUE, false);
-                if(doc) {
-                    /* Append to list */
-                    valid_files.push_back(file);
-                } else {
-                    g_printerr("%s: %s\n", _("Could not open file"), file.c_str());
-                }
+                g_printerr("%s: %s\n", _("Could not open file"), file.c_str());
             }
         }
     }
@@ -194,7 +208,7 @@ int main (int argc, char **argv)
         exit(EXIT_FAILURE);
     }
 
-    std::vector<Glib::ustring> valid_files = get_valid_files(options.filenames, true);
+    std::vector<Glib::ustring> valid_files = get_valid_files(options.filenames, options.recursive, true);
     if(valid_files.empty()) {
        return 1; /* none of the slides loadable */
     }
