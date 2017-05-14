@@ -70,14 +70,13 @@ public:
         _entry_timer.set_short_name('t');
         _entry_timer.set_long_name("timer");
         _entry_timer.set_arg_description(N_("NUM"));
-        _entry_timer.set_description(N_("Reset timer:"));
+        _entry_timer.set_description(N_("Change image every NUM seconds"));
         add_entry(_entry_timer, timer);
 
         // Entry for the remaining non-option arguments
         Glib::OptionEntry _entry_args;
-        _entry_args.set_short_name('\0');
         _entry_args.set_long_name(G_OPTION_REMAINING);
-        _entry_args.set_arg_description(N_("FILES …"));
+        _entry_args.set_arg_description(N_("FILES/FOLDERS …"));
 
         add_entry(_entry_args, filenames);
     }
@@ -140,7 +139,13 @@ int main (int argc, char **argv)
     Inkscape::initialize_gettext();
 #endif
 
-    Glib::OptionContext context(N_("Open SVG files"));
+    Glib::OptionContext context(N_("- display SVG files"));
+    context.set_summary(N_(
+        "Quickly browse through a collection of .svg(z) files\n"
+        "or show them as a slide show."));
+    context.set_description(N_(
+        "Example:\n"
+        "  inkview -t 3 file1.svg file2.svgz series*.svg more_files"));
     context.set_translation_domain(GETTEXT_PACKAGE);
 
     InkviewOptionsGroup options;
