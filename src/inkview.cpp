@@ -48,11 +48,7 @@
 
 
 
-/// List of all input filenames
-static Glib::OptionGroup::vecustrings filenames;
 
-/// Input timer option
-static int timer = 0;
 
 /**
  * \brief Set of command-line options for Inkview
@@ -60,14 +56,17 @@ static int timer = 0;
 class InkviewOptionsGroup : public Glib::OptionGroup
 {
 public:
-    InkviewOptionsGroup()
-        :
-            Glib::OptionGroup(N_("Inkscape Options"),
-                              N_("Default program options")),
-            _entry_timer(),
-            _entry_args()
+    /// List of all input filenames
+    Glib::OptionGroup::vecustrings filenames;
+
+    /// Input timer option
+    int timer = 0;
+
+    InkviewOptionsGroup() : Glib::OptionGroup(N_("Inkscape Options"),
+                                              N_("Default program options"))
     {
         // Entry for the "timer" option
+        Glib::OptionEntry _entry_timer;
         _entry_timer.set_short_name('t');
         _entry_timer.set_long_name("timer");
         _entry_timer.set_arg_description(N_("NUM"));
@@ -75,16 +74,13 @@ public:
         add_entry(_entry_timer, timer);
 
         // Entry for the remaining non-option arguments
+        Glib::OptionEntry _entry_args;
         _entry_args.set_short_name('\0');
         _entry_args.set_long_name(G_OPTION_REMAINING);
         _entry_args.set_arg_description(N_("FILES …"));
 
         add_entry(_entry_args, filenames);
     }
-
-private:
-    Glib::OptionEntry _entry_timer;
-    Glib::OptionEntry _entry_args;
 };
 
 
@@ -122,7 +118,7 @@ std::vector<Glib::ustring> get_valid_files(std::vector<Glib::ustring> filenames,
             }
         }
     }
-    
+
     return valid_files;
 }
 
@@ -144,15 +140,15 @@ int main (int argc, char **argv)
     Inkscape::initialize_gettext();
 #endif
 
-    Glib::OptionContext opt(N_("Open SVG files"));
-    opt.set_translation_domain(GETTEXT_PACKAGE);
-    
-    InkviewOptionsGroup grp;
-    grp.set_translation_domain(GETTEXT_PACKAGE);
-    
-    opt.set_main_group(grp);
+    Glib::OptionContext context(N_("Open SVG files"));
+    context.set_translation_domain(GETTEXT_PACKAGE);
 
-    Gtk::Main main_instance (argc, argv, opt);
+    InkviewOptionsGroup options;
+    options.set_translation_domain(GETTEXT_PACKAGE);
+
+    context.set_main_group(options);
+
+    Gtk::Main main_instance (argc, argv, context);
 
     LIBXML_TEST_VERSION
 
@@ -161,18 +157,18 @@ int main (int argc, char **argv)
 
     Inkscape::Application::create(argv[0], true);
 
-    if(filenames.empty())
+    if(options.filenames.empty())
     {
-        g_print("%s", opt.get_help().c_str());
+        g_print("%s", context.get_help().c_str());
         exit(EXIT_FAILURE);
     }
 
-    std::vector<Glib::ustring> valid_files = get_valid_files(filenames, true);
+    std::vector<Glib::ustring> valid_files = get_valid_files(options.filenames, true);
     if(valid_files.empty()) {
        return 1; /* none of the slides loadable */
     }
-    
-    SPSlideShow ss(valid_files, timer);
+
+    SPSlideShow ss(valid_files, options.timer);
     main_instance.run();
 
     return 0;
