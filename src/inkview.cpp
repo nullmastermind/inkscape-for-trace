@@ -164,7 +164,14 @@ int main (int argc, char **argv)
 
     context.set_main_group(options);
 
-    Gtk::Main main_instance (argc, argv, context);
+    Gtk::Main main_instance(true);
+    try {
+        context.parse(argc, argv);
+    } catch (const Glib::Error& ex) {
+        g_printerr("%s\n\n", ex.what().c_str());
+        g_print("%s", context.get_help().c_str());
+        exit(EXIT_FAILURE);
+    }
 
     LIBXML_TEST_VERSION
 
