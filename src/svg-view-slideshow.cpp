@@ -55,25 +55,22 @@ SPSlideShow::SPSlideShow(std::vector<Glib::ustring> const &slides, int timer)
     , _ctrlwin(NULL)
     , is_fullscreen(false)
 {
-    update_title();
-
+    // setup initial document
     auto default_screen = Gdk::Screen::get_default();
-
     set_default_size(MIN ((int)_doc->getWidth().value("px"),  default_screen->get_width()  - 64),
-            MIN ((int)_doc->getHeight().value("px"), default_screen->get_height() - 64));
+                     MIN ((int)_doc->getHeight().value("px"), default_screen->get_height() - 64));
 
-    this->signal_key_press_event().connect(sigc::mem_fun(*this, &SPSlideShow::key_press), false);
-    this->signal_delete_event().connect(sigc::mem_fun(*this, &SPSlideShow::main_delete), false);
-
-    _doc->ensureUpToDate();
-    _view = sp_svg_view_widget_new (_doc);
-    _doc->doUnref ();
+    _view = sp_svg_view_widget_new(_doc);
     SP_SVG_VIEW_WIDGET(_view)->setResize( false, _doc->getWidth().value("px"), _doc->getHeight().value("px") );
     gtk_widget_show (_view);
     add(*Glib::wrap(_view));
-
+    
+    update_title();
     show();
 
+    // connect signals
+    this->signal_key_press_event().connect(sigc::mem_fun(*this, &SPSlideShow::key_press), false);
+    this->signal_delete_event().connect(sigc::mem_fun(*this, &SPSlideShow::main_delete), false);
     if(_timer) {
         Glib::signal_timeout().connect_seconds(sigc::mem_fun(*this, &timer_callback), _timer);
     }
@@ -248,7 +245,7 @@ void SPSlideShow::goto_last()
 bool SPSlideShow::timer_callback()
 {
     show_next();
-    
+
     // stop the timer if the last slide is reached
     if (_current == _slides.size()-1) {
         return false;
