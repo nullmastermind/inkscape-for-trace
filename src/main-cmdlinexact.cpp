@@ -108,6 +108,7 @@ void xFileOpen( const Glib::ustring &uri )
         SPDocument *old_document = desktop->getDocument();
         desktop->setWaitingCursor();
         Inkscape::DocumentUndo::clearRedo(old_document);
+        Inkscape::DocumentUndo::clearUndo(old_document);
     }
 
     SPDocument *doc = NULL;
