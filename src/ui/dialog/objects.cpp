@@ -486,7 +486,7 @@ void ObjectsPanel::_objectsSelected( Selection *sel ) {
         if (_desktop->currentLayer() && SP_IS_ITEM(_desktop->currentLayer())) {
             item = SP_ITEM(_desktop->currentLayer());
             _setCompositingValues(item);
-            _store->foreach(sigc::bind<SPItem *, bool>( sigc::mem_fun(*this, &ObjectsPanel::_checkForSelected), item, true, true));
+            _store->foreach(sigc::bind<SPItem *, bool>( sigc::mem_fun(*this, &ObjectsPanel::_checkForSelected), item, false, true));
         }
     }
     _selectedConnection.unblock();
