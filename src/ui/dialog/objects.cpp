@@ -360,6 +360,7 @@ void ObjectsPanel::_addObject(SPObject* obj, Gtk::TreeModel::Row* parentRow)
                 if (SP_IS_GROUP(obj) && SP_GROUP(obj)->expanded())
                 {
                     _tree.expand_to_path( _store->get_path(iter) );
+                    _tree.collapse_row( _store->get_path(iter) );
                 }
 
                 //Add an object watcher to the item
@@ -479,13 +480,13 @@ void ObjectsPanel::_objectsSelected( Selection *sel ) {
             _setCompositingValues(item);
             setOpacity = false;
         }
-        _store->foreach(sigc::bind<SPItem *, bool>( sigc::mem_fun(*this, &ObjectsPanel::_checkForSelected), item, (*i)==items.back()));
+        _store->foreach(sigc::bind<SPItem *, bool>( sigc::mem_fun(*this, &ObjectsPanel::_checkForSelected), item, (*i)==items.back(), false));
     }
     if (!item) {
         if (_desktop->currentLayer() && SP_IS_ITEM(_desktop->currentLayer())) {
             item = SP_ITEM(_desktop->currentLayer());
             _setCompositingValues(item);
-            _store->foreach(sigc::bind<SPItem *, bool>( sigc::mem_fun(*this, &ObjectsPanel::_checkForSelected), item, true));
+            _store->foreach(sigc::bind<SPItem *, bool>( sigc::mem_fun(*this, &ObjectsPanel::_checkForSelected), item, true, true));
         }
     }
     _selectedConnection.unblock();
@@ -551,7 +552,7 @@ void ObjectsPanel::_setCompositingValues(SPItem *item)
  * @param scrollto Whether to scroll to the item
  * @return Whether to continue searching the tree
  */
-bool ObjectsPanel::_checkForSelected(const Gtk::TreePath &path, const Gtk::TreeIter& iter, SPItem* item, bool scrollto)
+bool ObjectsPanel::_checkForSelected(const Gtk::TreePath &path, const Gtk::TreeIter& iter, SPItem* item, bool scrollto, bool expand)
 {
     bool stopGoing = false;
 
@@ -560,13 +561,16 @@ bool ObjectsPanel::_checkForSelected(const Gtk::TreePath &path, const Gtk::TreeI
     {
         //We found the item!  Expand to the path and select it in the tree.
         _tree.expand_to_path( path );
+        if (!expand)
+            // but don't expand itself, just the path
+            _tree.collapse_row(path);
 
         Glib::RefPtr<Gtk::TreeSelection> select = _tree.get_selection();
 
         select->select(iter);
         if (scrollto) {
             //Scroll to the item in the tree
-            _tree.scroll_to_row(path);
+            _tree.scroll_to_row(path, 0.5);
         }
 
         stopGoing = true;

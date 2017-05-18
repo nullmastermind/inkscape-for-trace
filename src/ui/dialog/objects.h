@@ -216,7 +216,7 @@ private:
     bool _checkForUpdated(const Gtk::TreeIter& iter, SPObject* obj);
 
     void _objectsSelected(Selection *sel);
-    bool _checkForSelected(const Gtk::TreePath& path, const Gtk::TreeIter& iter, SPItem* item, bool scrollto);
+    bool _checkForSelected(const Gtk::TreePath& path, const Gtk::TreeIter& iter, SPItem* item, bool scrollto, bool expand);
 
     void _objectsChanged(SPObject *obj);
     void _addObject( SPObject* obj, Gtk::TreeModel::Row* parentRow );
