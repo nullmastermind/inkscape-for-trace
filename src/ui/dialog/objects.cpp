@@ -350,7 +350,10 @@ void ObjectsPanel::_addObject(SPObject* obj, Gtk::TreeModel::Row* parentRow)
                 row[_model->_colLocked] = !item->isSensitive();
                 row[_model->_colType] = group ? (group->layerMode() == SPGroup::LAYER ? 2 : 1) : 0;
                 row[_model->_colHighlight] = item->isHighlightSet() ? item->highlight_color() : item->highlight_color() & 0xffffff00;
-                row[_model->_colClipMask] = item->clip_ref && item->clip_ref->getObject() ? 1 : (item->mask_ref && item->mask_ref->getObject() ? 2 : 0);
+                row[_model->_colClipMask] = item ? (
+                    (item->clip_ref && item->clip_ref->getObject() ? 1 : 0) |
+                    (item->mask_ref && item->mask_ref->getObject() ? 2 : 0)
+                ) : 0;
                 //row[_model->_colInsertOrder] = group ? (group->insertBottom() ? 2 : 1) : 0;
 
                 //If our parent object is a group and it's expanded, expand the tree
@@ -413,7 +416,10 @@ bool ObjectsPanel::_checkForUpdated(const Gtk::TreeIter& iter, SPObject* obj)
         row[_model->_colLocked] = item ? !item->isSensitive() : false;
         row[_model->_colType] = group ? (group->layerMode() == SPGroup::LAYER ? 2 : 1) : 0;
         row[_model->_colHighlight] = item ? (item->isHighlightSet() ? item->highlight_color() : item->highlight_color() & 0xffffff00) : 0;
-        row[_model->_colClipMask] = item ? (item->clip_ref && item->clip_ref->getObject() ?  1 : (item->mask_ref && item->mask_ref->getObject() ? 2 : 0)) : 0;
+        row[_model->_colClipMask] = item ? (
+            (item->clip_ref && item->clip_ref->getObject() ? 1 : 0) |
+            (item->mask_ref && item->mask_ref->getObject() ? 2 : 0)
+        ) : 0;
         //row[_model->_colInsertOrder] = group ? (group->insertBottom() ? 2 : 1) : 0;
 
         return true;
