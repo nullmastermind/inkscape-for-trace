@@ -393,6 +393,7 @@ const gchar *SPPattern::produce(const std::vector<Inkscape::XML::Node *> &reprs,
     if(transform != Geom::Affine()){ 
         gchar *t = sp_svg_transform_write(transform);
         repr->setAttribute("patternTransform", t);
+        g_free(t);
     }
     defsrepr->appendChild(repr);
     const gchar *pat_id = repr->attribute("id");

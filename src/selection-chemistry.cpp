@@ -3175,8 +3175,11 @@ void ObjectSet::toSymbol()
     the_parent_repr->appendChild(clone);
 
     if( single_group && transform.isTranslation() ) {
-        if( !transform.isIdentity() )
-            clone->setAttribute("transform", sp_svg_transform_write( transform ));
+        if( !transform.isIdentity() ) {
+            gchar *c = sp_svg_transform_write( transform );
+            clone->setAttribute("transform", c);
+            g_free(c);
+        }
     }
 
     // Change selection to new <use> element.

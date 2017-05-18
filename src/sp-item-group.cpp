@@ -594,6 +594,7 @@ sp_item_group_ungroup (SPGroup *group, std::vector<SPItem*> &children, bool do_d
                     Geom::Affine ttrans = ctrans.inverse() * SP_ITEM(text)->transform * ctrans;
                     gchar *affinestr = sp_svg_transform_write(ttrans);
                     nrepr->setAttribute("transform", affinestr);
+                    g_free(affinestr);
                 }
             } else {
                 nrepr->setAttribute("transform", affinestr);

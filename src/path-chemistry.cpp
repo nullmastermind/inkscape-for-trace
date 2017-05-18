@@ -255,8 +255,9 @@ ObjectSet::breakApart(bool skip_undo)
                 repr->setAttribute("inkscape:original-d", str);
             else
                 repr->setAttribute("d", str);
+            str = sp_svg_transform_write(transform);
+            repr->setAttribute("transform", str);
             g_free(str);
-            repr->setAttribute("transform", sp_svg_transform_write(transform));
             
             // add the new repr to the parent
             parent->appendChild(repr);
