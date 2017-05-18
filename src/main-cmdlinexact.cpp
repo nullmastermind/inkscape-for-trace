@@ -6,38 +6,9 @@
  *
  * Released under GNU GPL v2, read the file 'COPYING' for more information
  *
- * Format of xverbs.yaml
- * using: $ inkscape -B xverbs.yaml
- *
- * verbose: yes # only "verbose: yes" enable logging
- * run:
- *  # open document to process
- *  - xverb-id: XFileOpen, gfx_sources/loading_screen/sandclock_atlas.svg
- *  - xverb-id: XUndoLabel, fresh_document # set label for UndoToLabel xverb works
- *  # note: if something wrong with undo labels use verb EditUndo instead of XUndoLabel and UndoToLabel at all
- *
- *  # select element to handle
- *  - xverb-id: XSelectElement, top_sand
- *
- *  # verbs
- *  - verb-id: EditInvertInAllLayers
- *  - verb-id: EditDelete
- *  - verb-id: FitCanvasToDrawing
- *
- *  # save element to separated svg document
- *  - xverb-id: XFileSaveAs, output/thegame/linux/data/gfx/loading_screen/top_sand.svg
- *
- *  # also save png preview
- *  - xverb-id: XFileExportPNG, output/thegame/linux/data/gfx_preview/loading_screen/top_sand.png
- *
- *  # return to the fresh_state of document
- *  - xverb-id: UndoToLabel, fresh_document
- *
- *  # do any other handling
- *
- *  # inkscape have a lot of useful verbs
- *  - verb-id: FileQuit
+ * more details: http://wiki.inkscape.org/wiki/index.php/Using_xverbs
  */
+
 #ifdef WITH_YAML
 #include <ui/view/view.h>
 #include <desktop.h>
@@ -137,6 +108,7 @@ void xFileOpen( const Glib::ustring &uri )
         SPDocument *old_document = desktop->getDocument();
         desktop->setWaitingCursor();
         Inkscape::DocumentUndo::clearRedo(old_document);
+        Inkscape::DocumentUndo::clearUndo(old_document);
     }
 
     SPDocument *doc = NULL;
@@ -504,9 +476,9 @@ CmdLineXAction::createActionsFromYAML( gchar const *yaml_filename )
                 continue;
             }
             undo_labels_map[verb.args[1]] = undo_counter;
-        } else if (verb_word == "UndoToLabel") {
+        } else if (verb_word == "XUndoToLabel") {
             if (verb.args.size() < 2) {
-                printf("bad arguments for UndoToLabel\n");
+                printf("bad arguments for XUndoToLabel\n");
                 continue;
             }
 
