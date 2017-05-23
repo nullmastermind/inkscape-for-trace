@@ -1150,8 +1150,12 @@ void ObjectSet::stackUp(bool skip_undo) {
     sort(selection.begin(), selection.end(), sp_item_repr_compare_position_bool);
 
     for (auto item: selection | boost::adaptors::reversed) {
-        if (!item->raiseOne()) // stop if top was reached
-            break;
+        if (!item->raiseOne()) { // stop if top was reached
+            if(document() && !skip_undo)
+                DocumentUndo::cancel(document());
+            selection_display_message(desktop(), Inkscape::WARNING_MESSAGE, _("We hit top."));
+            return;
+        }
     }
 
     if(document() && !skip_undo)
@@ -1170,8 +1174,12 @@ void ObjectSet::stackDown(bool skip_undo) {
     sort(selection.begin(), selection.end(), sp_item_repr_compare_position_bool);
 
     for (auto item: selection) {
-        if (!item->lowerOne()) // stop if bottom was reached
-            break;
+        if (!item->lowerOne()) { // stop if bottom was reached
+            if(document() && !skip_undo)
+                DocumentUndo::cancel(document());
+            selection_display_message(desktop(), Inkscape::WARNING_MESSAGE, _("We hit bottom."));
+            return;
+        }
     }
 
     if(document() && !skip_undo)
