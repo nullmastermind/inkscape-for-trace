@@ -698,17 +698,19 @@ bool ObjectsPanel::_handleKeyEvent(GdkEventKey *event)
     switch (Inkscape::UI::Tools::get_group0_keyval(event)) {
         case GDK_KEY_Return:
         case GDK_KEY_KP_Enter:
-        case GDK_KEY_F2:
         {
-            Gtk::TreeModel::iterator iter = _tree.get_selection()->get_selected();
-            if (iter && !_text_renderer->property_editable()) {
+            Gtk::TreeModel::Path path;
+            Gtk::TreeViewColumn *focus_column = 0;
+
+            _tree.get_cursor(path, focus_column);
+            if (focus_column == _name_column && !_text_renderer->property_editable()) {
                 //Rename item
-                Gtk::TreeModel::Path *path = new Gtk::TreeModel::Path(iter);
                 _text_renderer->property_editable() = true;
-                _tree.set_cursor(*path, *_name_column, true);
+                _tree.set_cursor(path, *_name_column, true);
                 grab_focus();
                 return true;
             }
+            return false;
         }
         break;
         case GDK_KEY_Home:
