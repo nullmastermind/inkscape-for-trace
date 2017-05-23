@@ -722,14 +722,14 @@ bool ObjectsPanel::_handleKeyEvent(GdkEventKey *event)
         case GDK_KEY_Page_Up:
         {
             //Move item(s) up in containing group/layer
-            int ch = event->state & GDK_SHIFT_MASK ? SP_VERB_LAYER_MOVE_TO_NEXT : SP_VERB_SELECTION_RAISE;
+            int ch = event->state & GDK_SHIFT_MASK ? SP_VERB_LAYER_MOVE_TO_NEXT : SP_VERB_SELECTION_STACK_UP;
             _fireAction( empty ? SP_VERB_LAYER_RAISE : ch );
             break;
         }
         case GDK_KEY_Page_Down:
         {
             //Move item(s) down in containing group/layer
-            int ch = event->state & GDK_SHIFT_MASK ? SP_VERB_LAYER_MOVE_TO_PREV : SP_VERB_SELECTION_LOWER;
+            int ch = event->state & GDK_SHIFT_MASK ? SP_VERB_LAYER_MOVE_TO_PREV : SP_VERB_SELECTION_STACK_DOWN;
             _fireAction( empty ? SP_VERB_LAYER_LOWER : ch );
             break;
         }
@@ -1182,7 +1182,7 @@ bool ObjectsPanel::_executeAction()
                 }
                 else
                 {
-                    _fireAction( SP_VERB_SELECTION_RAISE );
+                    _fireAction( SP_VERB_SELECTION_STACK_UP );
                 }
             }
             break;
@@ -1194,7 +1194,7 @@ bool ObjectsPanel::_executeAction()
                 }
                 else
                 {
-                    _fireAction( SP_VERB_SELECTION_LOWER );
+                    _fireAction( SP_VERB_SELECTION_STACK_DOWN );
                 }
             }
             break;
@@ -1903,8 +1903,8 @@ ObjectsPanel::ObjectsPanel() :
 
         _popupMenu.append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
 
-        _watchingNonTop.push_back( &_addPopupItem( targetDesktop, SP_VERB_SELECTION_RAISE, "gtk-go-up", _("Up"), (int)BUTTON_UP ) );
-        _watchingNonBottom.push_back( &_addPopupItem( targetDesktop, SP_VERB_SELECTION_LOWER, "gtk-go-down", _("Down"), (int)BUTTON_DOWN ) );
+        _watchingNonTop.push_back( &_addPopupItem( targetDesktop, SP_VERB_SELECTION_STACK_UP, "gtk-go-up", _("Up"), (int)BUTTON_UP ) );
+        _watchingNonBottom.push_back( &_addPopupItem( targetDesktop, SP_VERB_SELECTION_STACK_DOWN, "gtk-go-down", _("Down"), (int)BUTTON_DOWN ) );
 
         _popupMenu.append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
         

@@ -1179,6 +1179,12 @@ void SelectionVerb::perform(SPAction *action, void *data)
         case SP_VERB_SELECTION_LOWER:
             selection->lower();
             break;
+        case SP_VERB_SELECTION_STACK_UP:
+            selection->stackUp();
+            break;
+        case SP_VERB_SELECTION_STACK_DOWN:
+            selection->stackDown();
+            break;
         case SP_VERB_SELECTION_GROUP:
             selection->group();
             break;
@@ -2685,6 +2691,14 @@ Verb *Verb::_base_verbs[] = {
                       N_("Raise selection one step"), INKSCAPE_ICON("selection-raise")),
     new SelectionVerb(SP_VERB_SELECTION_LOWER, "SelectionLower", N_("_Lower"),
                       N_("Lower selection one step"), INKSCAPE_ICON("selection-lower")),
+
+
+    new SelectionVerb(SP_VERB_SELECTION_STACK_UP, "SelectionStackUp", N_("_Stack up"),
+                      N_("Stack selection one step up"), INKSCAPE_ICON("layer-raise")),
+    new SelectionVerb(SP_VERB_SELECTION_STACK_DOWN, "SelectionStackDown", N_("_Stack down"),
+                      N_("Stack selection one step down"), INKSCAPE_ICON("layer-lower")),
+
+
     new SelectionVerb(SP_VERB_SELECTION_GROUP, "SelectionGroup", N_("_Group"),
                       N_("Group selected objects"), INKSCAPE_ICON("object-group")),
     new SelectionVerb(SP_VERB_SELECTION_UNGROUP, "SelectionUnGroup", N_("_Ungroup"),

@@ -377,8 +377,10 @@ public:
     
     //z-order management
     //in selection-chemistry.cpp
+    void stackUp(bool skip_undo = false);
     void raise(bool skip_undo = false);
     void raiseToTop(bool skip_undo = false);
+    void stackDown(bool skip_undo = false);
     void lower(bool skip_undo = false);
     void lowerToBottom(bool skip_undo = false);
     void toNextLayer(bool skip_undo = false);

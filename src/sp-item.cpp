@@ -306,15 +306,17 @@ void SPItem::raiseToTop() {
     }
 }
 
-void SPItem::raiseOne() {
+bool SPItem::raiseOne() {
     auto next_higher = std::find_if(++parent->children.iterator_to(*this), parent->children.end(), &is_item);
     if (next_higher != parent->children.end()) {
         Inkscape::XML::Node *ref = next_higher->getRepr();
         getRepr()->parent()->changeOrder(getRepr(), ref);
+        return true;
     }
+    return false;
 }
 
-void SPItem::lowerOne() {
+bool SPItem::lowerOne() {
     using Inkscape::Algorithms::find_last_if;
 
     auto next_lower = find_last_if(parent->children.begin(), parent->children.iterator_to(*this), &is_item);
@@ -325,7 +327,9 @@ void SPItem::lowerOne() {
             ref = next_lower->getRepr();
         }
         getRepr()->parent()->changeOrder(getRepr(), ref);
+        return true;
     }
+    return false;
 }
 
 void SPItem::lowerToBottom() {
