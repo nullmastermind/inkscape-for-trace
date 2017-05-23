@@ -1744,6 +1744,8 @@ ObjectsPanel::ObjectsPanel() :
     //Set the expander and search columns
     _tree.set_expander_column( *_tree.get_column(nameColNum) );
     _tree.set_search_column(_model->_colLabel);
+    // use ctrl+f to start search
+    _tree.set_enable_search(false);
 
     //Set up the tree selection
     _tree.get_selection()->set_mode(Gtk::SELECTION_MULTIPLE);
