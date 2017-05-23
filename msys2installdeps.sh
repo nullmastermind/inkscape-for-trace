@@ -50,7 +50,8 @@ $ARCH-libwpg \
 $ARCH-aspell \
 $ARCH-aspell-en \
 $ARCH-gtkspell \
-$ARCH-gtkspell3
+$ARCH-gtkspell3 \
+$ARCH-libyaml
 
 # install ImageMagick (as Inkscape requires old version ImageMagick 6 we have to specify it explicitly)
 # to prevent future updates:

@@ -103,6 +103,7 @@ if(WIN32)
     ${MINGW_BIN}/libwpg-0.3.dll
     ${MINGW_BIN}/libxml2-2.dll
     ${MINGW_BIN}/libxslt-1.dll
+    ${MINGW_BIN}/libyaml-0-2.dll
     ${MINGW_BIN}/nss3.dll
     ${MINGW_BIN}/nssutil3.dll
     ${MINGW_BIN}/smime3.dll
