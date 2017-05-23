@@ -260,7 +260,7 @@ LPEMeasureLine::createTextLabel(Geom::Point pos, double length, Geom::Coord angl
         rtspan = xml_doc->createElement("svg:tspan");
         rtspan->setAttribute("sodipodi:role", "line");
     }
-    const char * transform;
+    gchar * transform;
     Geom::Affine affine = Geom::Affine(Geom::Translate(pos).inverse());
     angle = std::fmod(angle, 2*M_PI);
     if (angle < 0) angle += 2*M_PI;
@@ -276,6 +276,7 @@ LPEMeasureLine::createTextLabel(Geom::Point pos, double length, Geom::Coord angl
         transform = NULL;
     }
     rtext->setAttribute("transform", transform);
+    g_free(transform);
     SPCSSAttr *css = sp_repr_css_attr_new();
     sp_repr_css_attr_add_from_string(css, anotation_format.param_getSVGValue());
     Inkscape::FontLister *fontlister = Inkscape::FontLister::get_instance();
@@ -317,7 +318,7 @@ LPEMeasureLine::createTextLabel(Geom::Point pos, double length, Geom::Coord angl
     g_snprintf(length_str, 64, "%.*f", (int)precision, length);
     setlocale (LC_NUMERIC, oldlocale);
     g_free (oldlocale);
-    Glib::ustring label_value = Glib::ustring(format.param_getSVGValue());
+    Glib::ustring label_value(format.param_getSVGValue());
     size_t s = label_value.find(Glib::ustring("{measure}"),0);
     if(s < label_value.length()) {
         label_value.replace(s,s+9,length_str);
@@ -413,17 +414,19 @@ LPEMeasureLine::createLine(Geom::Point start,Geom::Point end, const char * id, b
         }
         line = elemref->getRepr();
        
-        const char * line_str = sp_svg_write_path( line_pathv );
+        gchar * line_str = sp_svg_write_path( line_pathv );
         line->setAttribute("d" , line_str);
         line->setAttribute("transform", NULL);
+        g_free(line_str);
     } else {
         if (remove) {
             return;
         }
         line = xml_doc->createElement("svg:path");
         line->setAttribute("id", id);
-        const char * line_str = sp_svg_write_path( line_pathv );
+        gchar * line_str = sp_svg_write_path( line_pathv );
         line->setAttribute("d" , line_str);
+        g_free(line_str);
     }
     line->setAttribute("sodipodi:insensitive", "true");
     line_pathv.clear();
