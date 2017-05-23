@@ -138,10 +138,14 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, bool live, co
                     dest_affine *= Geom::Translate(preserve_affine.translation());
                     affine_previous = preserve_affine;
                     preserve_affine = Geom::identity();
-                    SP_ITEM(dest)->getRepr()->setAttribute("transform",sp_svg_transform_write(dest_affine));
+                    gchar * str = sp_svg_transform_write(dest_affine);
+                    SP_ITEM(dest)->getRepr()->setAttribute("transform", str);
+                    g_free(str);
                 }
             } else {
-                SP_ITEM(dest)->getRepr()->setAttribute("transform",sp_svg_transform_write(affine_origin));
+                gchar * str = sp_svg_transform_write(affine_origin);
+                SP_ITEM(dest)->getRepr()->setAttribute("transform", str);
+                g_free(str);
             }
         } else if ( shape_dest && shape_origin && live && (std::strcmp(attribute, "d") == 0)) {
             SPCurve *c = NULL;
@@ -176,7 +180,9 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, bool live, co
                 c->set_pathvector(c_pv);
                 if (!path_origin) {
                     shape_dest->setCurveInsync(c, TRUE);
-                    dest->getRepr()->setAttribute(attribute, sp_svg_write_path(c_pv));
+                    gchar *str = sp_svg_write_path(c_pv);
+                    dest->getRepr()->setAttribute(attribute, str);
+                    g_free(str);
                 } else {
                     shape_dest->setCurve(c, TRUE);
                 }

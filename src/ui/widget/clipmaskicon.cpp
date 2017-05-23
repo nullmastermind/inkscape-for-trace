@@ -27,13 +27,13 @@ namespace Widget {
 ClipMaskIcon::ClipMaskIcon() :
     Glib::ObjectBase(typeid(ClipMaskIcon)),
     Gtk::CellRendererPixbuf(),
-    _pixClipName(INKSCAPE_ICON("path-intersection")),
-    _pixInverseName(INKSCAPE_ICON("path-difference")),
-    _pixMaskName(INKSCAPE_ICON("mask-intersection")),
+    _pixClipName(INKSCAPE_ICON("path-cut")),
+    _pixMaskName(INKSCAPE_ICON("path-difference")),
+    _pixBothName(INKSCAPE_ICON("bitmap-trace")),
     _property_active(*this, "active", 0),
     _property_pixbuf_clip(*this, "pixbuf_on", Glib::RefPtr<Gdk::Pixbuf>(0)),
-    _property_pixbuf_inverse(*this, "pixbuf_on", Glib::RefPtr<Gdk::Pixbuf>(0)),
-    _property_pixbuf_mask(*this, "pixbuf_off", Glib::RefPtr<Gdk::Pixbuf>(0))
+    _property_pixbuf_mask(*this, "pixbuf_off", Glib::RefPtr<Gdk::Pixbuf>(0)),
+    _property_pixbuf_both(*this, "pixbuf_on", Glib::RefPtr<Gdk::Pixbuf>(0))
 {
     
     property_mode() = Gtk::CELL_RENDERER_MODE_ACTIVATABLE;
@@ -43,21 +43,21 @@ ClipMaskIcon::ClipMaskIcon() :
     if (!icon_theme->has_icon(_pixClipName)) {
         Inkscape::queueIconPrerender( INKSCAPE_ICON(_pixClipName.data()), Inkscape::ICON_SIZE_DECORATION );
     }
-    if (!icon_theme->has_icon(_pixInverseName)) {
-        Inkscape::queueIconPrerender( INKSCAPE_ICON(_pixInverseName.data()), Inkscape::ICON_SIZE_DECORATION );
-    }
     if (!icon_theme->has_icon(_pixMaskName)) {
         Inkscape::queueIconPrerender( INKSCAPE_ICON(_pixMaskName.data()), Inkscape::ICON_SIZE_DECORATION );
+    }
+    if (!icon_theme->has_icon(_pixBothName)) {
+        Inkscape::queueIconPrerender( INKSCAPE_ICON(_pixBothName.data()), Inkscape::ICON_SIZE_DECORATION );
     }
 
     if (icon_theme->has_icon(_pixClipName)) {
         _property_pixbuf_clip = icon_theme->load_icon(_pixClipName, phys, (Gtk::IconLookupFlags)0);
     }
-    if (icon_theme->has_icon(_pixInverseName)) {
-        _property_pixbuf_inverse = icon_theme->load_icon(_pixInverseName, phys, (Gtk::IconLookupFlags)0);
-    }
     if (icon_theme->has_icon(_pixMaskName)) {
         _property_pixbuf_mask = icon_theme->load_icon(_pixMaskName, phys, (Gtk::IconLookupFlags)0);
+    }
+    if (icon_theme->has_icon(_pixBothName)) {
+        _property_pixbuf_both = icon_theme->load_icon(_pixBothName, phys, (Gtk::IconLookupFlags)0);
     }
 
     property_pixbuf() = Glib::RefPtr<Gdk::Pixbuf>(0);
@@ -108,7 +108,7 @@ void ClipMaskIcon::render_vfunc( const Cairo::RefPtr<Cairo::Context>& cr,
             property_pixbuf() = _property_pixbuf_mask;
             break;
         case 3:
-            property_pixbuf() = _property_pixbuf_inverse;
+            property_pixbuf() = _property_pixbuf_both;
             break;
         default:
             property_pixbuf() = Glib::RefPtr<Gdk::Pixbuf>(0);

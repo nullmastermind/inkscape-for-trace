@@ -1140,6 +1140,53 @@ void ObjectSet::lowerToBottom(bool skip_undo){
     }
 }
 
+void ObjectSet::stackUp(bool skip_undo) {
+    if (isEmpty()) {
+        selection_display_message(desktop(), Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to stack up."));
+        return;
+    }
+
+    std::vector<SPItem*> selection(items().begin(), items().end());
+    sort(selection.begin(), selection.end(), sp_item_repr_compare_position_bool);
+
+    for (auto item: selection | boost::adaptors::reversed) {
+        if (!item->raiseOne()) { // stop if top was reached
+            if(document() && !skip_undo)
+                DocumentUndo::cancel(document());
+            selection_display_message(desktop(), Inkscape::WARNING_MESSAGE, _("We hit top."));
+            return;
+        }
+    }
+
+    if(document() && !skip_undo)
+        DocumentUndo::done(document(), SP_VERB_SELECTION_STACK_UP,
+           //TRANSLATORS: undo history: "stack up" means to raise an object of its ordinal position by 1
+           C_("Undo action", "stack up"));
+}
+
+void ObjectSet::stackDown(bool skip_undo) {
+    if (isEmpty()) {
+        selection_display_message(desktop(), Inkscape::WARNING_MESSAGE, _("Select <b>object(s)</b> to stack down."));
+        return;
+    }
+
+    std::vector<SPItem*> selection(items().begin(), items().end());
+    sort(selection.begin(), selection.end(), sp_item_repr_compare_position_bool);
+
+    for (auto item: selection) {
+        if (!item->lowerOne()) { // stop if bottom was reached
+            if(document() && !skip_undo)
+                DocumentUndo::cancel(document());
+            selection_display_message(desktop(), Inkscape::WARNING_MESSAGE, _("We hit bottom."));
+            return;
+        }
+    }
+
+    if(document() && !skip_undo)
+        DocumentUndo::done(document(), SP_VERB_SELECTION_STACK_DOWN,
+           //TRANSLATORS: undo history: "stack down" means to lower an object of its ordinal position by 1
+           C_("Undo action", "stack down"));
+}
 
 void
 sp_undo(SPDesktop *desktop, SPDocument *)
@@ -3175,8 +3222,11 @@ void ObjectSet::toSymbol()
     the_parent_repr->appendChild(clone);
 
     if( single_group && transform.isTranslation() ) {
-        if( !transform.isIdentity() )
-            clone->setAttribute("transform", sp_svg_transform_write( transform ));
+        if( !transform.isIdentity() ) {
+            gchar *c = sp_svg_transform_write( transform );
+            clone->setAttribute("transform", c);
+            g_free(c);
+        }
     }
 
     // Change selection to new <use> element.
