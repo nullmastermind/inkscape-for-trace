@@ -30,6 +30,7 @@
 #include "helper/action.h"
 #include "inkscape.h"
 #include "layer-manager.h"
+#include "shortcuts.h"
 #include "sp-clippath.h"
 #include "sp-mask.h"
 #include "sp-root.h"
@@ -692,7 +693,41 @@ void ObjectsPanel::_setLockedIter( const Gtk::TreeModel::iterator& iter, const b
  */
 bool ObjectsPanel::_handleKeyEvent(GdkEventKey *event)
 {
+    if (!_desktop)
+        return false;
 
+    unsigned int shortcut;
+    shortcut = Inkscape::UI::Tools::get_group0_keyval(event) |
+        ( event->state & GDK_SHIFT_MASK ?
+          SP_SHORTCUT_SHIFT_MASK : 0 ) |
+        ( event->state & GDK_CONTROL_MASK ?
+          SP_SHORTCUT_CONTROL_MASK : 0 ) |
+        ( event->state & GDK_MOD1_MASK ?
+          SP_SHORTCUT_ALT_MASK : 0 );
+
+    switch (shortcut) {
+        // how to get users key binding for the action “start-interactive-search” ??
+        // ctrl+f is just the default
+        case GDK_KEY_f | SP_SHORTCUT_CONTROL_MASK:
+            return false;
+            break;
+        // shall we slurp ctrl+w to close panel?
+
+        // defocus:
+        case GDK_KEY_Escape:
+            if (_desktop->canvas) {
+                gtk_widget_grab_focus (GTK_WIDGET(_desktop->canvas));
+                return true;
+            }
+            break;
+    }
+
+    // invoke user defined shortcuts first
+    bool done = sp_shortcut_invoke(shortcut, _desktop);
+    if (done)
+        return true;
+
+    // handle events for the treeview
     bool empty = _desktop->selection->isEmpty();
 
     switch (Inkscape::UI::Tools::get_group0_keyval(event)) {
@@ -711,36 +746,10 @@ bool ObjectsPanel::_handleKeyEvent(GdkEventKey *event)
                 return true;
             }
             return false;
-        }
-        break;
-        case GDK_KEY_Home:
-            //Move item(s) to top of containing group/layer
-            _fireAction( empty ? SP_VERB_LAYER_TO_TOP : SP_VERB_SELECTION_TO_FRONT );
-            break;
-        case GDK_KEY_End:
-            //Move item(s) to bottom of containing group/layer
-            _fireAction( empty ? SP_VERB_LAYER_TO_BOTTOM : SP_VERB_SELECTION_TO_BACK );
-            break;
-        case GDK_KEY_Page_Up:
-        {
-            //Move item(s) up in containing group/layer
-            int ch = event->state & GDK_SHIFT_MASK ? SP_VERB_LAYER_MOVE_TO_NEXT : SP_VERB_SELECTION_STACK_UP;
-            _fireAction( empty ? SP_VERB_LAYER_RAISE : ch );
             break;
         }
-        case GDK_KEY_Page_Down:
-        {
-            //Move item(s) down in containing group/layer
-            int ch = event->state & GDK_SHIFT_MASK ? SP_VERB_LAYER_MOVE_TO_PREV : SP_VERB_SELECTION_STACK_DOWN;
-            _fireAction( empty ? SP_VERB_LAYER_LOWER : ch );
-            break;
-        }
-
-        //TODO: Handle Ctrl-A, etc.
-        default:
-            return false;
     }
-    return true;
+    return false;
 }
 
 /**
