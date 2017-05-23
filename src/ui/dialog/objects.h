@@ -77,6 +77,9 @@ private:
     //Connection for when the document changes
     sigc::connection _documentChangedConnection;
     
+    //Connection for when the active layer changes
+    sigc::connection _documentChangedCurrentLayer;
+
     //Connection for when the active selection in the document changes
     sigc::connection _selectionChangedConnection;
 

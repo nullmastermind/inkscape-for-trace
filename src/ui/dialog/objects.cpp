@@ -309,11 +309,13 @@ void ObjectsPanel::_objectsChanged(SPObject */*obj*/)
         SPRoot* root = document->getRoot();
         if ( root ) {
             _selectedConnection.block();
+            _documentChangedCurrentLayer.block();
             //Clear the tree store
             _store->clear();
             //Add all items recursively
             _addObject( root, 0 );
             _selectedConnection.unblock();
+            _documentChangedCurrentLayer.unblock();
             //Set the tree selection
             _objectsSelected(_desktop->selection);
             //Handle button sensitivity
@@ -588,6 +590,7 @@ void ObjectsPanel::_pushTreeSelectionToCurrent()
     if ( _desktop && _desktop->currentRoot() ) {
         //block connections for selection and compositing values to prevent interference
         _selectionChangedConnection.block();
+        _documentChangedCurrentLayer.block();
     
         //Clear the selection and then iterate over the tree selection, pushing each item to the desktop
         _desktop->selection->clear();
@@ -595,6 +598,7 @@ void ObjectsPanel::_pushTreeSelectionToCurrent()
         _tree.get_selection()->selected_foreach_iter( sigc::bind<bool *>(sigc::mem_fun(*this, &ObjectsPanel::_selected_row_callback), &setOpacity));
         //unblock connections
         _selectionChangedConnection.unblock();
+        _documentChangedCurrentLayer.unblock();
         
         _checkTreeSelection();
     }
@@ -2056,6 +2060,7 @@ void ObjectsPanel::setDesktop( SPDesktop* desktop )
 
     if ( desktop != _desktop ) {
         _documentChangedConnection.disconnect();
+        _documentChangedCurrentLayer.disconnect();
         _selectionChangedConnection.disconnect();
         if ( _desktop ) {
             _desktop = 0;
@@ -2065,6 +2070,9 @@ void ObjectsPanel::setDesktop( SPDesktop* desktop )
         if ( _desktop ) {
             //Connect desktop signals
             _documentChangedConnection = _desktop->connectDocumentReplaced( sigc::mem_fun(*this, &ObjectsPanel::setDocument));
+
+            _documentChangedCurrentLayer = _desktop->connectCurrentLayerChanged( sigc::mem_fun(*this, &ObjectsPanel::_objectsChanged));
+
             _selectionChangedConnection = _desktop->selection->connectChanged( sigc::mem_fun(*this, &ObjectsPanel::_objectsSelected));
             
             setDocument(_desktop, _desktop->doc());
