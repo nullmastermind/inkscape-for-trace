@@ -628,6 +628,13 @@ Geom::PathVector
 LPECopyRotate::doEffect_path_post (Geom::PathVector const & path_in)
 {
     if ((split_items || num_copies == 1) && method != RM_FUSE && method != RM_KALEIDOSCOPE) {
+        if (split_items) {
+            Geom::PathVector path_out = pathv_to_linear_and_cubic_beziers(path_in);
+            Geom::Affine m = Geom::Translate(-origin) * Geom::Rotate(-(Geom::rad_from_deg(starting_angle)));
+            Geom::Rotate rot(-(Geom::rad_from_deg(rotation_angle)));
+            Geom::Affine t = m * Geom::Rotate(-Geom::rad_from_deg(starting_angle)) * rot * Geom::Rotate(Geom::rad_from_deg(starting_angle)) * Geom::Translate(origin);
+            return path_out * t;
+        }
         return path_in;
     }
 
