@@ -54,6 +54,7 @@ protected:
     virtual void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec);
 
 private:
+    EnumParam<RotateMethod> method;
     PointParam origin;
     PointParam starting_point;
     ScalarParam starting_angle;
@@ -61,7 +62,6 @@ private:
     ScalarParam num_copies;
     ScalarParam gap;
     BoolParam copies_to_360;
-    EnumParam<RotateMethod> method;
     BoolParam mirror_copies;
     BoolParam split_items;
     Geom::Point A;
