@@ -49,7 +49,7 @@ public:
     virtual Gtk::Widget * newWidget();
     void toMirror(Geom::Affine transform);
     //    void cloneAttrbutes(Inkscape::XML::Node * origin, Inkscape::XML::Node * dest, const char * first_attribute, ...);
-    void cloneD(SPObject *origin, SPObject *dest, bool live, bool root);
+    void cloneD(SPObject *orig, SPObject *dest, bool live, bool root);
 
 protected:
     virtual void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec);

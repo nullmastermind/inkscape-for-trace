@@ -94,6 +94,8 @@ LPECopyRotate::LPECopyRotate(LivePathEffectObject *lpeobject) :
     num_copies.param_make_integer(true);
     apply_to_clippath_and_mask = true;
     previous_num_copies = num_copies;
+    previous_origin = Geom::Point(0,0);
+    previous_start_point = Geom::Point(0,0);
     reset = false;
 }
 
@@ -137,28 +139,34 @@ LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem)
             previous_num_copies = num_copies;
         }
         SPObject *elemref = NULL;
-        char * id = g_strdup(Glib::ustring("rotated-").append("1").append("-").append(sp_lpe_item->getRepr()->attribute("id")).c_str());
+        const char * id = g_strdup(Glib::ustring("rotated-").append("0").append("-").append(sp_lpe_item->getRepr()->attribute("id")).c_str());
         guint counter = 0;
         while((elemref = document->getObjectById(id))) {
+            id = g_strdup(Glib::ustring("rotated-").append(std::to_string(counter)).append("-").append(sp_lpe_item->getRepr()->attribute("id")).c_str());
             if (SP_ITEM(elemref)->isHidden()) {
                 items.push_back(id);
             }
-            id = g_strdup(Glib::ustring("rotated-").append(std::to_string(counter)).append("-").append(sp_lpe_item->getRepr()->attribute("id")).c_str());
             counter++;
         }
-        g_free(id);
         Geom::Affine m = Geom::Translate(-origin) * Geom::Rotate(-(Geom::rad_from_deg(starting_angle)));
         for (size_t i = 1; i < num_copies; ++i) {
             Geom::Affine r = Geom::identity();
-            if( i%2 != 0 && mirror_copies) {
+            if(mirror_copies && i%2 != 0) {
                 r *= Geom::Rotate(Geom::Angle(half_dir)).inverse();
                 r *= Geom::Scale(1, -1);
                 r *= Geom::Rotate(Geom::Angle(half_dir));
             }
+
             Geom::Rotate rot(-(Geom::rad_from_deg(rotation_angle * i)));
             Geom::Affine t = m * r * rot * Geom::Rotate(Geom::rad_from_deg(starting_angle)) * Geom::Translate(origin);
-            if( i%2 != 0 && mirror_copies) {
-                t = m * r * rot * Geom::Rotate(Geom::rad_from_deg(starting_angle)).inverse() * Geom::Translate(origin);
+            if (method != RM_NORMAL) {
+                if(mirror_copies && i%2 != 0) {
+                    t = m *  r * rot * Geom::Rotate(-Geom::rad_from_deg(starting_angle)) * Geom::Translate(origin);
+                }
+            } else {
+                if(mirror_copies && i%2 != 0) {
+                    t = m * Geom::Rotate(Geom::rad_from_deg(-rotation_angle)) * r * rot * Geom::Rotate(-Geom::rad_from_deg(starting_angle)) * Geom::Translate(origin);
+                }
             }
             t *= sp_lpe_item->transform;
             toItem(t, i-1, reset);
@@ -171,28 +179,30 @@ LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem)
 }
 
 void
-LPECopyRotate::cloneD(SPObject *origin, SPObject *dest, bool root, bool reset) 
+LPECopyRotate::cloneD(SPObject *orig, SPObject *dest, Geom::Affine transform, bool root, bool reset) 
 {
     SPDocument * document = SP_ACTIVE_DOCUMENT;
     if (!document) {
         return;
     }
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
-    if ( SP_IS_GROUP(origin) && SP_IS_GROUP(dest) && SP_GROUP(origin)->getItemCount() == SP_GROUP(dest)->getItemCount() ) {
-        std::vector< SPObject * > childs = origin->childList(true);
+    if ( SP_IS_GROUP(orig) && SP_IS_GROUP(dest) && SP_GROUP(orig)->getItemCount() == SP_GROUP(dest)->getItemCount() ) {
+        std::vector< SPObject * > childs = orig->childList(true);
         size_t index = 0;
         for (std::vector<SPObject * >::iterator obj_it = childs.begin(); 
              obj_it != childs.end(); ++obj_it) {
             SPObject *dest_child = dest->nthChild(index); 
-            cloneD(*obj_it, dest_child, false, reset); 
+            cloneD(*obj_it, dest_child, transform, false, reset); 
             index++;
         }
     }
-    SPShape * shape =  SP_SHAPE(origin);
+    SPShape * shape =  SP_SHAPE(orig);
     SPPath * path =  SP_PATH(dest);
     if (shape && !path) {
+        const char * id = dest->getId();
         Inkscape::XML::Node *dest_node = sp_selected_item_to_curved_repr(SP_ITEM(dest), 0);
         dest->updateRepr(xml_doc, dest_node, SP_OBJECT_WRITE_ALL);
+        dest->getRepr()->setAttribute("d", id);
         path =  SP_PATH(dest);
     }
     if (path && shape) {
@@ -273,7 +283,7 @@ LPECopyRotate::toItem(Geom::Affine transform, size_t i, bool reset)
         elemref = container->appendChildRepr(phantom);
         Inkscape::GC::release(phantom);
     }
-    cloneD(SP_OBJECT(sp_lpe_item), elemref, true, reset);
+    cloneD(SP_OBJECT(sp_lpe_item), elemref, transform, true, reset);
     gchar *str = sp_svg_transform_write(transform);
     elemref->getRepr()->setAttribute("transform" , str);
     g_free(str);
@@ -353,7 +363,9 @@ LPECopyRotate::transform_multiply(Geom::Affine const& postmul, bool set)
     // cycle through all parameters. Most parameters will not need transformation, but path and point params do.
     for (std::vector<Parameter *>::iterator it = param_vector.begin(); it != param_vector.end(); ++it) {
         Parameter * param = *it;
-        param->param_transform_multiply(postmul, set);
+        if(param->param_key != "starting_point" || postmul.isRotation()) {
+            param->param_transform_multiply(postmul, set);
+        }
     }
     sp_lpe_item_update_patheffect(sp_lpe_item, false, false);
 }
@@ -366,11 +378,10 @@ LPECopyRotate::doBeforeEffect (SPLPEItem const* lpeitem)
     if (copies_to_360 && num_copies > 2) {
         rotation_angle.param_set_value(360.0/(double)num_copies);
     }
-
-    if ((method == RM_KALEIDOSCOPE || method == RM_FUSE) && rotation_angle * num_copies > 360.1 && rotation_angle > 0 && copies_to_360) {
+    if (method != RM_NORMAL && rotation_angle * num_copies > 360.1 && rotation_angle > 0 && copies_to_360) {
         num_copies.param_set_value(floor(360/rotation_angle));
     }
-    if ((method == RM_KALEIDOSCOPE || method == RM_FUSE)  && mirror_copies && copies_to_360) {
+    if (method != RM_NORMAL  && mirror_copies && copies_to_360) {
         num_copies.param_set_increments(2.0,10.0);
         if ((int)num_copies%2 !=0) {
             num_copies.param_set_value(num_copies+1);
@@ -388,8 +399,9 @@ LPECopyRotate::doBeforeEffect (SPLPEItem const* lpeitem)
     dir = unit_vector(B - A);
     // I first suspected the minus sign to be a bug in 2geom but it is
     // likely due to SVG's choice of coordinate system orientation (max)
-    bool near = Geom::are_near(previous_start_point, (Geom::Point)starting_point, 0.01);
-    if (!near) {
+    bool near_start_point = Geom::are_near(previous_start_point, (Geom::Point)starting_point, 0.01);
+    bool near_origin = Geom::are_near(previous_origin, (Geom::Point)origin, 0.01);
+    if (!near_start_point) {
         starting_angle.param_set_value(deg_from_rad(-angle_between(dir, starting_point - origin)));
         if (GDK_SHIFT_MASK) {
             dist_angle_handle = L2(B - A);
@@ -400,16 +412,17 @@ LPECopyRotate::doBeforeEffect (SPLPEItem const* lpeitem)
     if (dist_angle_handle < 1.0) {
         dist_angle_handle = 1.0;
     }
-    start_pos = origin + dir * Rotate(-rad_from_deg(starting_angle)) * dist_angle_handle;
-    rot_pos = origin + dir * Rotate(-rad_from_deg(rotation_angle+starting_angle)) * dist_angle_handle;
-    near = Geom::are_near(start_pos, (Geom::Point)starting_point, 0.01);
-    if (!near) {
+    double distance = dist_angle_handle;
+    if (previous_start_point != Geom::Point(0,0) || previous_origin != Geom::Point(0,0)) {
+        distance = Geom::distance(previous_origin, starting_point);
+    }
+    start_pos = origin + dir * Rotate(-rad_from_deg(starting_angle)) * distance;
+    if (!near_start_point || !near_origin || split_items) {
         starting_point.param_setValue(start_pos);
     }
+
+    previous_origin = (Geom::Point)origin;
     previous_start_point = (Geom::Point)starting_point;
-    if ( method == RM_FUSE || copies_to_360 ) {
-        rot_pos = origin;
-    }
 }
 
 void
@@ -598,7 +611,7 @@ LPECopyRotate::doEffect_path (Geom::PathVector const & path_in)
     divider.appendNew<Geom::LineSegment>(line_end);
     divider.close();
     half_dir = unit_vector(Geom::middle_point(line_start,line_end) - (Geom::Point)origin);
-    if (method == RM_KALEIDOSCOPE || method == RM_FUSE) {
+    if (method != RM_NORMAL) {
         if (method != RM_KALEIDOSCOPE) {
             path_out = doEffect_path_post(path_in);
         } else {
@@ -627,14 +640,13 @@ LPECopyRotate::doEffect_path (Geom::PathVector const & path_in)
 Geom::PathVector
 LPECopyRotate::doEffect_path_post (Geom::PathVector const & path_in)
 {
-    if ((split_items || num_copies == 1) && method != RM_FUSE && method != RM_KALEIDOSCOPE) {
-        if (split_items) {
-            Geom::PathVector path_out = pathv_to_linear_and_cubic_beziers(path_in);
-            Geom::Affine m = Geom::Translate(-origin) * Geom::Rotate(-(Geom::rad_from_deg(starting_angle)));
-            Geom::Rotate rot(-(Geom::rad_from_deg(rotation_angle)));
-            Geom::Affine t = m * Geom::Rotate(-Geom::rad_from_deg(starting_angle)) * rot * Geom::Rotate(Geom::rad_from_deg(starting_angle)) * Geom::Translate(origin);
-            return path_out * t;
-        }
+    if ((split_items || num_copies == 1) && method == RM_NORMAL) {
+         if (split_items) {
+             Geom::PathVector path_out = pathv_to_linear_and_cubic_beziers(path_in);
+             Geom::Affine m = Geom::Translate(-origin) * Geom::Rotate(-(Geom::rad_from_deg(starting_angle)));
+             Geom::Affine t = m * Geom::Rotate(-Geom::rad_from_deg(starting_angle)) * Geom::Rotate(Geom::rad_from_deg(starting_angle)) * Geom::Translate(origin);
+             return path_out * t;
+         }
         return path_in;
     }
 
@@ -654,7 +666,7 @@ LPECopyRotate::doEffect_path_post (Geom::PathVector const & path_in)
         if(mirror_copies && i%2 != 0) {
             t = pre * r * rot * Geom::Rotate(Geom::rad_from_deg(starting_angle)).inverse() * Geom::Translate(origin);
         }
-        if (method == RM_FUSE || method == RM_KALEIDOSCOPE) {
+        if (method != RM_NORMAL) {
             Geom::PathVector join_pv = original_pathv * t;
             join_pv *= Geom::Translate(half_dir * rot * gap);
             Geom::PathIntersectionGraph *pig = new Geom::PathIntersectionGraph(output_pv, join_pv);
@@ -674,7 +686,7 @@ LPECopyRotate::doEffect_path_post (Geom::PathVector const & path_in)
             output.insert(output.end(), output_pv.begin(), output_pv.end());
         }
     }
-    if (method == RM_FUSE || method == RM_KALEIDOSCOPE) {
+    if (method != RM_NORMAL) {
         output = output_pv;
     }
     return output;
@@ -688,7 +700,7 @@ LPECopyRotate::addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geo
     Geom::Path hp;
     hp.start(start_pos);
     hp.appendNew<Geom::LineSegment>((Geom::Point)origin);
-    hp.appendNew<Geom::LineSegment>(origin + dir * Rotate(-rad_from_deg(rotation_angle+starting_angle)) * dist_angle_handle);
+    hp.appendNew<Geom::LineSegment>(origin + dir * Rotate(-rad_from_deg(rotation_angle+starting_angle)) * Geom::distance(origin,starting_point));
     Geom::PathVector pathv;
     pathv.push_back(hp);
     hp_vec.push_back(pathv);

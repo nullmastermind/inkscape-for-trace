@@ -439,7 +439,7 @@ Effect::processObjects(LpeAction lpe_action)
     for (std::vector<const char *>::iterator el_it = items.begin(); 
          el_it != items.end(); ++el_it) {
         const char * id = *el_it;
-        if (!id || strlen(id) == 0) {
+        if (!id) {
             return;
         }
         SPObject *elemref = NULL;

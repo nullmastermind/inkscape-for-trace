@@ -48,7 +48,7 @@ public:
     virtual void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/);
     virtual Gtk::Widget * newWidget();
     void toItem(Geom::Affine transform, size_t i, bool reset);
-    void cloneD(SPObject *origin, SPObject *dest, bool root, bool reset);
+    void cloneD(SPObject *orig, SPObject *dest, Geom::Affine transform, bool root, bool reset);
     void resetStyles();
 protected:
     virtual void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec);
@@ -69,7 +69,7 @@ private:
     Geom::Point dir;
     Geom::Point half_dir;
     Geom::Point start_pos;
-    Geom::Point rot_pos;
+    Geom::Point previous_origin;
     Geom::Point previous_start_point;
     double dist_angle_handle;
     double size_divider;

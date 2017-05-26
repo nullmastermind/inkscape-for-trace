@@ -187,15 +187,15 @@ LPEMirrorSymmetry::doBeforeEffect (SPLPEItem const* lpeitem)
 }
 
 void
-LPEMirrorSymmetry::cloneD(SPObject *origin, SPObject *dest, bool live, bool root) 
+LPEMirrorSymmetry::cloneD(SPObject *orig, SPObject *dest, bool live, bool root) 
 {
     SPDocument * document = SP_ACTIVE_DOCUMENT;
     if (!document) {
         return;
     }
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
-    if ( SP_IS_GROUP(origin) && SP_IS_GROUP(dest) && SP_GROUP(origin)->getItemCount() == SP_GROUP(dest)->getItemCount() ) {
-        std::vector< SPObject * > childs = origin->childList(true);
+    if ( SP_IS_GROUP(orig) && SP_IS_GROUP(dest) && SP_GROUP(orig)->getItemCount() == SP_GROUP(dest)->getItemCount() ) {
+        std::vector< SPObject * > childs = orig->childList(true);
         size_t index = 0;
         for (std::vector<SPObject * >::iterator obj_it = childs.begin(); 
              obj_it != childs.end(); ++obj_it) {
@@ -204,7 +204,7 @@ LPEMirrorSymmetry::cloneD(SPObject *origin, SPObject *dest, bool live, bool root
             index++;
         }
     }
-    SPShape * shape =  SP_SHAPE(origin);
+    SPShape * shape =  SP_SHAPE(orig);
     SPPath * path =  SP_PATH(dest);
     if (shape && !path) {
         Inkscape::XML::Node *dest_node = sp_selected_item_to_curved_repr(SP_ITEM(dest), 0);
@@ -227,7 +227,7 @@ LPEMirrorSymmetry::cloneD(SPObject *origin, SPObject *dest, bool live, bool root
                 dest->getRepr()->setAttribute("d", NULL);
             }
         } else {
-            dest->getRepr()->setAttribute("d", origin->getRepr()->attribute("d"));
+            dest->getRepr()->setAttribute("d", orig->getRepr()->attribute("d"));
         }
     }
 }
