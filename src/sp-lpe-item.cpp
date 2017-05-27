@@ -220,6 +220,7 @@ bool SPLPEItem::performPathEffect(SPCurve *curve, SPShape *current, bool is_clip
     if (!curve) {
         return false;
     }
+    bool has_lpe_clipmask = false;
     if (this->hasPathEffect() && this->pathEffectsEnabled()) {
         for (PathEffectList::iterator it = this->path_effect_list->begin(); it != this->path_effect_list->end(); ++it)
         {
@@ -244,6 +245,9 @@ bool SPLPEItem::performPathEffect(SPCurve *curve, SPShape *current, bool is_clip
                     // if the effect expects mouse input before being applied and the input is not finished
                     // yet, we don't alter the path
                     return false;
+                }
+                if (lpe->apply_to_clippath_and_mask) {
+                    has_lpe_clipmask = true;
                 }
                 if (!is_clip_or_mask || (is_clip_or_mask && lpe->apply_to_clippath_and_mask)) {
                     // Groups have their doBeforeEffect called elsewhere
@@ -272,7 +276,7 @@ bool SPLPEItem::performPathEffect(SPCurve *curve, SPShape *current, bool is_clip
                 }
             }
         }
-        if(!SP_IS_GROUP(this) && !is_clip_or_mask){
+        if(!SP_IS_GROUP(this) && !is_clip_or_mask && has_lpe_clipmask){
             this->apply_to_clippath(this);
             this->apply_to_mask(this);
         }
