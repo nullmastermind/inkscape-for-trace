@@ -519,7 +519,7 @@ void SPLPEItem::removeAllPathEffects(bool keep_paths)
             LivePathEffectObject *lpeobj = (*it)->lpeobject;
             if (lpeobj) {
                 Inkscape::LivePathEffect::Effect * lpe = lpeobj->get_lpe();
-                lpe->erase_extra_objects = false;
+                lpe->keep_paths = true;
             }
         }
     }

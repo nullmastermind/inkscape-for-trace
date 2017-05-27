@@ -55,7 +55,7 @@ void Parameter::write_to_SVG(void)
  */
 ScalarParam::ScalarParam( const Glib::ustring& label, const Glib::ustring& tip,
                       const Glib::ustring& key, Inkscape::UI::Widget::Registry* wr,
-                      Effect* effect, gdouble default_value, bool no_widget)
+                      Effect* effect, gdouble default_value, bool is_visible)
     : Parameter(label, tip, key, wr, effect),
       value(default_value),
       min(-SCALARPARAM_G_MAXDOUBLE),
@@ -67,7 +67,7 @@ ScalarParam::ScalarParam( const Glib::ustring& label, const Glib::ustring& tip,
       inc_page(1),
       add_slider(false),
       overwrite_widget(false),
-      hide_widget(no_widget)
+      widget_is_visible(is_visible)
 {
 }
 
@@ -172,7 +172,7 @@ ScalarParam::param_overwrite_widget(bool overwrite_widget)
 Gtk::Widget *
 ScalarParam::param_newWidget()
 {
-    if(!hide_widget){
+    if(widget_is_visible){
         Inkscape::UI::Widget::RegisteredScalar *rsu = Gtk::manage( new Inkscape::UI::Widget::RegisteredScalar(
             param_label, param_tooltip, param_key, *param_wr, param_effect->getRepr(), param_effect->getSPDoc() ) );
 
