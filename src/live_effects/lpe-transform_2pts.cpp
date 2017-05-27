@@ -64,9 +64,9 @@ LPETransform2Pts::LPETransform2Pts(LivePathEffectObject *lpeobject) :
     registerParameter(&lock_angle);
 
     first_knot.param_make_integer(true);
-    first_knot.param_overwrite_widget(true);
+    first_knot.param_set_undo(false);
     last_knot.param_make_integer(true);
-    last_knot.param_overwrite_widget(true);
+    last_knot.param_set_undo(false);
     helper_size.param_set_range(0, 999);
     helper_size.param_set_increments(1, 1);
     helper_size.param_set_digits(0);

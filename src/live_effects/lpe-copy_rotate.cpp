@@ -96,6 +96,7 @@ LPECopyRotate::LPECopyRotate(LivePathEffectObject *lpeobject) :
     previous_num_copies = num_copies;
     previous_origin = Geom::Point(0,0);
     previous_start_point = Geom::Point(0,0);
+    starting_point.param_widget_is_visible(false);
     reset = false;
 }
 
@@ -319,14 +320,12 @@ Gtk::Widget * LPECopyRotate::newWidget()
             Gtk::Widget *widg = dynamic_cast<Gtk::Widget *>(param->param_newWidget());
             Glib::ustring *tip = param->param_getTooltip();
             if (widg) {
-                if (param->param_key != "starting_point") {
-                    vbox->pack_start(*widg, true, true, 2);
-                    if (tip) {
-                        widg->set_tooltip_text(*tip);
-                    } else {
-                        widg->set_tooltip_text("");
-                        widg->set_has_tooltip(false);
-                    }
+                vbox->pack_start(*widg, true, true, 2);
+                if (tip) {
+                    widg->set_tooltip_text(*tip);
+                } else {
+                    widg->set_tooltip_text("");
+                    widg->set_has_tooltip(false);
                 }
             }
         }

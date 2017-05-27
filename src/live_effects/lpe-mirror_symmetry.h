@@ -46,7 +46,6 @@ public:
     virtual Geom::PathVector doEffect_path (Geom::PathVector const & path_in);
     virtual void doOnRemove (SPLPEItem const* /*lpeitem*/);
     virtual void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/);
-    virtual Gtk::Widget * newWidget();
     void toMirror(Geom::Affine transform);
     //    void cloneAttrbutes(Inkscape::XML::Node * origin, Inkscape::XML::Node * dest, const char * first_attribute, ...);
     void cloneD(SPObject *orig, SPObject *dest, bool live, bool root);

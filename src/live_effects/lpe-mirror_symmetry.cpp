@@ -78,6 +78,8 @@ LPEMirrorSymmetry::LPEMirrorSymmetry(LivePathEffectObject *lpeobject) :
     split_gap.param_set_digits(5);
     apply_to_clippath_and_mask = true;
     previous_center = Geom::Point(0,0);
+    id_origin.param_widget_is_visible(false);
+    center_point.param_widget_is_visible(false);
 }
 
 LPEMirrorSymmetry::~LPEMirrorSymmetry()
@@ -302,42 +304,6 @@ LPEMirrorSymmetry::toMirror(Geom::Affine transform)
             elemref->deleteObject();
         }
     }
-}
-
-Gtk::Widget *
-LPEMirrorSymmetry::newWidget()
-{
-    // use manage here, because after deletion of Effect object, others might
-    // still be pointing to this widget.
-    Gtk::VBox *vbox = Gtk::manage(new Gtk::VBox(Effect::newWidget()));
-    vbox->set_border_width(5);
-    vbox->set_homogeneous(false);
-    vbox->set_spacing(2);
-
-    std::vector<Parameter *>::iterator it = param_vector.begin();
-    while (it != param_vector.end()) {
-        if ((*it)->widget_is_visible) {
-            Parameter * param = *it;
-            if (param->param_key == "id_origin" || param->param_key == "center_point") {
-                ++it;
-                continue;
-            }
-            Gtk::Widget * widg = param->param_newWidget();
-            Glib::ustring * tip = param->param_getTooltip();
-            if (widg) {
-                vbox->pack_start(*widg, true, true, 2);
-                if (tip) {
-                    widg->set_tooltip_text(*tip);
-                } else {
-                    widg->set_tooltip_text("");
-                    widg->set_has_tooltip(false);
-                }
-            }
-        }
-
-        ++it;
-    }
-    return dynamic_cast<Gtk::Widget *>(vbox);
 }
 
 //TODO: Migrate the tree next function to effect.cpp/h to avoid duplication

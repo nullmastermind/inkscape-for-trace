@@ -25,8 +25,7 @@ public:
                const Glib::ustring& key,
                Inkscape::UI::Widget::Registry* wr,
                Effect* effect,
-               bool default_value = false,
-               bool widget_is_visible = true);
+               bool default_value = false);
     virtual ~BoolParam();
 
     virtual Gtk::Widget * param_newWidget();
@@ -40,7 +39,6 @@ public:
     virtual void param_update_default(const gchar * default_value);
     bool get_value() const { return value; };
     inline operator bool() const { return value; };
-    bool widget_is_visible;
 
 private:
     BoolParam(const BoolParam&);

@@ -25,10 +25,9 @@ HiddenParam::HiddenParam( const Glib::ustring& label, const Glib::ustring& tip,
                       Effect* effect, const Glib::ustring default_value, bool is_visible)
     : Parameter(label, tip, key, wr, effect),
       value(default_value),
-      defvalue(default_value),
-      //This last is to allow set or unset default parameters on hidden ones
-      widget_is_visible(is_visible)
+      defvalue(default_value)
 {
+    param_widget_is_visible(is_visible);
 }
 
 void
