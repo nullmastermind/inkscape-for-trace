@@ -104,7 +104,7 @@ public:
                 Inkscape::UI::Widget::Registry* wr,
                 Effect* effect,
                 gdouble default_value = 1.0,
-                bool no_widget = false);
+                bool widget_is_visible = true);
     virtual ~ScalarParam();
 
     virtual bool param_readSVGValue(const gchar * strvalue);
@@ -125,6 +125,7 @@ public:
     virtual Gtk::Widget * param_newWidget();
 
     inline operator gdouble() const { return value; };
+    bool widget_is_visible;
 
 protected:
     gdouble value;
@@ -137,7 +138,6 @@ protected:
     double inc_page;
     bool add_slider;
     bool overwrite_widget;
-    bool hide_widget;
 
 private:
     ScalarParam(const ScalarParam&);

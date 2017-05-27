@@ -350,8 +350,8 @@ LPEMirrorSymmetry::doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/)
 void 
 LPEMirrorSymmetry::doOnRemove (SPLPEItem const* /*lpeitem*/)
 {
-    //unset "erase_extra_objects" hook on sp-lpe-item.cpp
-    if (!erase_extra_objects) {
+    //set "keep paths" hook on sp-lpe-item.cpp
+    if (keep_paths) {
         processObjects(LPE_TO_OBJECTS);
         return;
     }

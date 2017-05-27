@@ -21,8 +21,8 @@ namespace LivePathEffect {
 
 BoolParam::BoolParam( const Glib::ustring& label, const Glib::ustring& tip,
                       const Glib::ustring& key, Inkscape::UI::Widget::Registry* wr,
-                      Effect* effect, bool default_value , bool no_widget)
-    : Parameter(label, tip, key, wr, effect), value(default_value), defvalue(default_value), hide_widget(no_widget)
+                      Effect* effect, bool default_value , bool is_visible)
+    : Parameter(label, tip, key, wr, effect), value(default_value), defvalue(default_value), widget_is_visible(is_visible)
 {
 }
 
@@ -65,7 +65,7 @@ BoolParam::param_getSVGValue() const
 Gtk::Widget *
 BoolParam::param_newWidget()
 {
-    if(!hide_widget){
+    if(widget_is_visible){
         Inkscape::UI::Widget::RegisteredCheckButton * checkwdg = Gtk::manage(
             new Inkscape::UI::Widget::RegisteredCheckButton( param_label,
                                                              param_tooltip,

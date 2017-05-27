@@ -38,7 +38,7 @@ LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject)
       method(_("Method:"), _("Methods to calculate the fillet or chamfer"),
              "method", FMConverter, &wr, this, FM_AUTO),
       mode(_("Mode:"), _("Mode, fillet or chamfer"),
-             "mode", &wr, this, "F"),
+             "mode", &wr, this, "F", true),
       radius(_("Radius (unit or %):"), _("Radius, in unit or %"), "radius", &wr,
              this, 0.0),
       chamfer_steps(_("Chamfer steps:"), _("Chamfer steps"), "chamfer_steps",
