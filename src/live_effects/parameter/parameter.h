@@ -57,6 +57,7 @@ public:
 
     virtual bool param_readSVGValue(const gchar * strvalue) = 0;   // returns true if new value is valid / accepted.
     virtual gchar * param_getSVGValue() const = 0;
+    virtual void param_widget_is_visible(bool is_visible) {widget_is_visible = is_visible;}
     void write_to_SVG();
  
     virtual void param_set_default() = 0;
@@ -103,8 +104,7 @@ public:
                 const Glib::ustring& key,
                 Inkscape::UI::Widget::Registry* wr,
                 Effect* effect,
-                gdouble default_value = 1.0,
-                bool widget_is_visible = true);
+                gdouble default_value = 1.0);
     virtual ~ScalarParam();
 
     virtual bool param_readSVGValue(const gchar * strvalue);
@@ -121,11 +121,10 @@ public:
     void addSlider(bool add_slider_widget) { add_slider = add_slider_widget; };
     double param_get_max() { return max; };
     double param_get_min() { return min; };
-    void param_overwrite_widget(bool overwrite_widget);
+    void param_set_undo(bool set_undo);
     virtual Gtk::Widget * param_newWidget();
 
     inline operator gdouble() const { return value; };
-    bool widget_is_visible;
 
 protected:
     gdouble value;
@@ -137,7 +136,7 @@ protected:
     double inc_step;
     double inc_page;
     bool add_slider;
-    bool overwrite_widget;
+    bool _set_undo;
 
 private:
     ScalarParam(const ScalarParam&);

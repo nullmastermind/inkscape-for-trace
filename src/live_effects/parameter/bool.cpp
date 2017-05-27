@@ -21,8 +21,8 @@ namespace LivePathEffect {
 
 BoolParam::BoolParam( const Glib::ustring& label, const Glib::ustring& tip,
                       const Glib::ustring& key, Inkscape::UI::Widget::Registry* wr,
-                      Effect* effect, bool default_value , bool is_visible)
-    : Parameter(label, tip, key, wr, effect), value(default_value), defvalue(default_value), widget_is_visible(is_visible)
+                      Effect* effect, bool default_value)
+    : Parameter(label, tip, key, wr, effect), value(default_value), defvalue(default_value)
 {
 }
 

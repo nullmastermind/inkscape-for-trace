@@ -43,7 +43,7 @@ public:
     virtual void param_update_default(const gchar * default_value);
 
     const Glib::ustring get_value() const { return value; };
-    bool widget_is_visible;
+
 private:
     HiddenParam(const HiddenParam&);
     HiddenParam& operator=(const HiddenParam&);
