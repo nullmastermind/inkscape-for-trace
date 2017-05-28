@@ -356,6 +356,7 @@ Effect::Effect(LivePathEffectObject *lpeobject)
       is_visible(_("Is visible?"), _("If unchecked, the effect remains applied to the object but is temporarily disabled on canvas"), "is_visible", &wr, this, true),
       show_orig_path(false),
       keep_paths(false),
+      is_load(true),
       lpeobj(lpeobject),
       concatenate_before_pwd2(false),
       sp_lpe_item(NULL),
@@ -511,6 +512,7 @@ Effect::doBeforeEffect (SPLPEItem const*/*lpeitem*/)
 
 void Effect::doAfterEffect (SPLPEItem const* /*lpeitem*/)
 {
+    is_load = false;
 }
 
 void Effect::doOnRemove (SPLPEItem const* /*lpeitem*/)
