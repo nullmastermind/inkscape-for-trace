@@ -239,7 +239,6 @@ bool SPLPEItem::hasPathEffectOnClipOrMask()  const
             }
         }
     }
-    std::cout << has_clipormask_lpe << "has_clipormask_lpe\n";
     return has_clipormask_lpe;
 }
 
