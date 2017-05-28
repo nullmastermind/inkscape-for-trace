@@ -129,12 +129,7 @@ void SPLPEItem::set(unsigned int key, gchar const* value) {
                     if (!value) {
                         LivePathEffectObject *lpeobj = (*it)->lpeobject;
                         Inkscape::LivePathEffect::Effect * lpe = lpeobj->get_lpe();
-                        if (dynamic_cast<Inkscape::LivePathEffect::LPEMirrorSymmetry *>(lpe) ||
-                            dynamic_cast<Inkscape::LivePathEffect::LPEMeasureLine *>(lpe) ||
-                            dynamic_cast<Inkscape::LivePathEffect::LPECopyRotate *>(lpe) )
-                        {
-                            lpe->doOnRemove(this);
-                        }
+                        lpe->doOnRemove(this);
                     }
                     (*it)->unlink();
                     delete *it;
