@@ -89,6 +89,7 @@ LPEMirrorSymmetry::~LPEMirrorSymmetry()
 void
 LPEMirrorSymmetry::doAfterEffect (SPLPEItem const* lpeitem)
 {
+    is_load = false;
     SPDocument * document = SP_ACTIVE_DOCUMENT;
     if (!document) {
         return;
