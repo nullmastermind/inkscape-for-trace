@@ -129,7 +129,9 @@ void SPLPEItem::set(unsigned int key, gchar const* value) {
                     if (!value) {
                         LivePathEffectObject *lpeobj = (*it)->lpeobject;
                         Inkscape::LivePathEffect::Effect * lpe = lpeobj->get_lpe();
-                        lpe->doOnRemove(this);
+                        if (lpe) {
+                            lpe->doOnRemove(this);
+                        }
                     }
                     (*it)->unlink();
                     delete *it;
