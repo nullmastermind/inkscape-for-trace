@@ -66,9 +66,12 @@ HiddenParam::param_newWidget()
 }
 
 void
-HiddenParam::param_setValue(const Glib::ustring newvalue)
+HiddenParam::param_setValue(const Glib::ustring newvalue, bool write)
 {
     value = newvalue;
+    if (write) {
+        param_write_to_repr(value.c_str());
+    }
 }
 
 } /* namespace LivePathEffect */
