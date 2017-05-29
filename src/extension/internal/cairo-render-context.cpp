@@ -1580,13 +1580,13 @@ bool CairoRenderContext::renderImage(Inkscape::Pixbuf *pb,
         //      http://www.w3.org/TR/css4-images/#the-image-rendering
         //      style.h/style.cpp
         switch (style->image_rendering.computed) {
-            case SP_CSS_COLOR_RENDERING_AUTO:
-                // Do nothing
-                break;
-            case SP_CSS_COLOR_RENDERING_OPTIMIZEQUALITY:
+            case SP_CSS_IMAGE_RENDERING_AUTO:
+            case SP_CSS_IMAGE_RENDERING_OPTIMIZEQUALITY:
+            case SP_CSS_IMAGE_RENDERING_CRISPEDGES:
                 cairo_pattern_set_filter(cairo_get_source(_cr), CAIRO_FILTER_BEST );
                 break;
-            case SP_CSS_COLOR_RENDERING_OPTIMIZESPEED:
+            case SP_CSS_IMAGE_RENDERING_OPTIMIZESPEED:
+            case SP_CSS_IMAGE_RENDERING_PIXELATED:
             default:
                 cairo_pattern_set_filter(cairo_get_source(_cr), CAIRO_FILTER_NEAREST );
                 break;
