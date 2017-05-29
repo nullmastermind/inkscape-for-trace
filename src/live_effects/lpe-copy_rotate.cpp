@@ -96,6 +96,7 @@ LPECopyRotate::LPECopyRotate(LivePathEffectObject *lpeobject) :
     previous_num_copies = num_copies;
     previous_origin = Geom::Point(0,0);
     previous_start_point = Geom::Point(0,0);
+    starting_point.param_widget_is_visible(false);
     reset = false;
 }
 
@@ -108,6 +109,7 @@ void
 LPECopyRotate::doAfterEffect (SPLPEItem const* lpeitem)
 {
     if (split_items) {
+        is_load = false;
         SPDocument * document = SP_ACTIVE_DOCUMENT;
         if (!document) {
             return;
@@ -319,14 +321,12 @@ Gtk::Widget * LPECopyRotate::newWidget()
             Gtk::Widget *widg = dynamic_cast<Gtk::Widget *>(param->param_newWidget());
             Glib::ustring *tip = param->param_getTooltip();
             if (widg) {
-                if (param->param_key != "starting_point") {
-                    vbox->pack_start(*widg, true, true, 2);
-                    if (tip) {
-                        widg->set_tooltip_text(*tip);
-                    } else {
-                        widg->set_tooltip_text("");
-                        widg->set_has_tooltip(false);
-                    }
+                vbox->pack_start(*widg, true, true, 2);
+                if (tip) {
+                    widg->set_tooltip_text(*tip);
+                } else {
+                    widg->set_tooltip_text("");
+                    widg->set_has_tooltip(false);
                 }
             }
         }
@@ -722,8 +722,8 @@ LPECopyRotate::doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/)
 void 
 LPECopyRotate::doOnRemove (SPLPEItem const* /*lpeitem*/)
 {
-    //unset "erase_extra_objects" hook on sp-lpe-item.cpp
-    if (!erase_extra_objects) {
+    //set "keep paths" hook on sp-lpe-item.cpp
+    if (keep_paths) {
         processObjects(LPE_TO_OBJECTS);
         return;
     }

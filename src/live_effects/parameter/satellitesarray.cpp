@@ -37,6 +37,7 @@ SatellitesArrayParam::SatellitesArrayParam(const Glib::ustring &label,
     _current_zoom = 0;
     _effectType = FILLET_CHAMFER;
     _last_pathvector_satellites = NULL;
+    param_widget_is_visible(false);
 }
 
 

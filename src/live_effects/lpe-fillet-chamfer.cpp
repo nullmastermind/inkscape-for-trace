@@ -38,7 +38,7 @@ LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject)
       method(_("Method:"), _("Methods to calculate the fillet or chamfer"),
              "method", FMConverter, &wr, this, FM_AUTO),
       mode(_("Mode:"), _("Mode, fillet or chamfer"),
-             "mode", &wr, this, "F"),
+             "mode", &wr, this, "F", true),
       radius(_("Radius (unit or %):"), _("Radius, in unit or %"), "radius", &wr,
              this, 0.0),
       chamfer_steps(_("Chamfer steps:"), _("Chamfer steps"), "chamfer_steps",
@@ -80,7 +80,7 @@ LPEFilletChamfer::LPEFilletChamfer(LivePathEffectObject *lpeobject)
     radius.param_set_range(0.0, Geom::infinity());
     radius.param_set_increments(1, 1);
     radius.param_set_digits(4);
-    radius.param_overwrite_widget(true);
+    radius.param_set_undo(false);
     chamfer_steps.param_set_range(1, 999);
     chamfer_steps.param_set_increments(1, 1);
     chamfer_steps.param_set_digits(0);

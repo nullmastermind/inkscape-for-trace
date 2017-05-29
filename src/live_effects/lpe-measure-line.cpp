@@ -141,6 +141,7 @@ LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
     helpline_overlap.param_set_digits(2);
     start_stored = Geom::Point(0,0);
     end_stored = Geom::Point(0,0);
+    id_origin.param_widget_is_visible(false);
 }
 
 LPEMeasureLine::~LPEMeasureLine() {}
@@ -674,8 +675,8 @@ LPEMeasureLine::doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/)
 void 
 LPEMeasureLine::doOnRemove (SPLPEItem const* /*lpeitem*/)
 {
-    //unset "erase_extra_objects" hook on sp-lpe-item.cpp
-    if (!erase_extra_objects) {
+    //set "keep paths" hook on sp-lpe-item.cpp
+    if (keep_paths) {
         processObjects(LPE_TO_OBJECTS);
         items.clear();
         return;
@@ -700,24 +701,22 @@ Gtk::Widget *LPEMeasureLine::newWidget()
     while (it != param_vector.end()) {
         if ((*it)->widget_is_visible) {
             Parameter *param = *it;
-            if (param->param_key != "id_origin") {
-                Gtk::Widget *widg = dynamic_cast<Gtk::Widget *>(param->param_newWidget());
-                Glib::ustring *tip = param->param_getTooltip();
-                if (widg) {
-                    if (param->param_key != "dimline_format" &&
-                        param->param_key != "helperlines_format" &&
-                        param->param_key != "arrows_format" &&
-                        param->param_key != "anotation_format") {
-                        vbox->pack_start(*widg, true, true, 2);
-                    } else {
-                        vbox_expander->pack_start(*widg, true, true, 2);
-                    }
-                    if (tip) {
-                        widg->set_tooltip_text(*tip);
-                    } else {
-                        widg->set_tooltip_text("");
-                        widg->set_has_tooltip(false);
-                    }
+            Gtk::Widget *widg = dynamic_cast<Gtk::Widget *>(param->param_newWidget());
+            Glib::ustring *tip = param->param_getTooltip();
+            if (widg) {
+                if (param->param_key != "dimline_format" &&
+                    param->param_key != "helperlines_format" &&
+                    param->param_key != "arrows_format" &&
+                    param->param_key != "anotation_format") {
+                    vbox->pack_start(*widg, true, true, 2);
+                } else {
+                    vbox_expander->pack_start(*widg, true, true, 2);
+                }
+                if (tip) {
+                    widg->set_tooltip_text(*tip);
+                } else {
+                    widg->set_tooltip_text("");
+                    widg->set_has_tooltip(false);
                 }
             }
         }

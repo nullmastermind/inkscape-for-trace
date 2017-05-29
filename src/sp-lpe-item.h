@@ -70,6 +70,8 @@ public:
 
     virtual void update_patheffect(bool write);
 
+    bool hasPathEffectOnClipOrMask() const;
+    bool hasPathEffectOnClipOrMaskRecursive() const;
     bool performPathEffect(SPCurve *curve, SPShape *current = NULL, bool is_clip_or_mask = false);
 
     bool pathEffectsEnabled() const;

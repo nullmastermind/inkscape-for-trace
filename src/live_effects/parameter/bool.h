@@ -25,8 +25,7 @@ public:
                const Glib::ustring& key,
                Inkscape::UI::Widget::Registry* wr,
                Effect* effect,
-               bool default_value = false,
-               bool no_widget = false);
+               bool default_value = false);
     virtual ~BoolParam();
 
     virtual Gtk::Widget * param_newWidget();
@@ -47,7 +46,6 @@ private:
 
     bool value;
     bool defvalue;
-    bool hide_widget;
 };
 
 

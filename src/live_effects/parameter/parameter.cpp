@@ -55,7 +55,7 @@ void Parameter::write_to_SVG(void)
  */
 ScalarParam::ScalarParam( const Glib::ustring& label, const Glib::ustring& tip,
                       const Glib::ustring& key, Inkscape::UI::Widget::Registry* wr,
-                      Effect* effect, gdouble default_value, bool no_widget)
+                      Effect* effect, gdouble default_value)
     : Parameter(label, tip, key, wr, effect),
       value(default_value),
       min(-SCALARPARAM_G_MAXDOUBLE),
@@ -66,8 +66,7 @@ ScalarParam::ScalarParam( const Glib::ustring& label, const Glib::ustring& tip,
       inc_step(0.1),
       inc_page(1),
       add_slider(false),
-      overwrite_widget(false),
-      hide_widget(no_widget)
+      _set_undo(true)
 {
 }
 
@@ -164,15 +163,15 @@ ScalarParam::param_make_integer(bool yes)
 }
 
 void
-ScalarParam::param_overwrite_widget(bool overwrite_widget)
+ScalarParam::param_set_undo(bool set_undo)
 {
-    this->overwrite_widget = overwrite_widget;
+    _set_undo = set_undo;
 }
 
 Gtk::Widget *
 ScalarParam::param_newWidget()
 {
-    if(!hide_widget){
+    if(widget_is_visible){
         Inkscape::UI::Widget::RegisteredScalar *rsu = Gtk::manage( new Inkscape::UI::Widget::RegisteredScalar(
             param_label, param_tooltip, param_key, *param_wr, param_effect->getRepr(), param_effect->getSPDoc() ) );
 
@@ -184,7 +183,7 @@ ScalarParam::param_newWidget()
         if (add_slider) {
             rsu->addSlider();
         }
-        if(!overwrite_widget){
+        if(_set_undo){
             rsu->set_undo_parameters(SP_VERB_DIALOG_LIVE_PATH_EFFECT, _("Change scalar parameter"));
         }
         return dynamic_cast<Gtk::Widget *> (rsu);

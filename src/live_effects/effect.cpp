@@ -47,6 +47,7 @@
 #include "live_effects/lpe-perp_bisector.h"
 #include "live_effects/lpe-perspective-envelope.h"
 #include "live_effects/lpe-perspective_path.h"
+#include "live_effects/lpe-powerclip.h"
 #include "live_effects/lpe-powerstroke.h"
 #include "live_effects/lpe-recursiveskeleton.h"
 #include "live_effects/lpe-roughen.h"
@@ -124,6 +125,7 @@ const Util::EnumData<EffectType> LPETypeData[] = {
 /* 9.93 */
     {MEASURE_LINE,          N_("Measure Line"),                    "measure_line"},
     {FILLET_CHAMFER,        N_("Fillet/Chamfer"),                  "fillet_chamfer"},
+    {POWERCLIP,             N_("Power clip"),                      "powerclip"},
 #ifdef LPE_ENABLE_TEST_EFFECTS
     {DOEFFECTSTACK_TEST,    N_("doEffect stack test"),             "doeffectstacktest"},
     {ANGLE_BISECTOR,        N_("Angle bisector"),                  "angle_bisector"},
@@ -302,6 +304,9 @@ Effect::New(EffectType lpenr, LivePathEffectObject *lpeobj)
         case FILLET_CHAMFER:
             neweffect = static_cast<Effect*> ( new LPEFilletChamfer(lpeobj) );
             break;
+        case POWERCLIP:
+            neweffect = static_cast<Effect*> ( new LPEPowerClip(lpeobj) );
+            break;
         case ROUGHEN:
             neweffect = static_cast<Effect*> ( new LPERoughen(lpeobj) );
             break;
@@ -355,7 +360,8 @@ Effect::Effect(LivePathEffectObject *lpeobject)
       oncanvasedit_it(0),
       is_visible(_("Is visible?"), _("If unchecked, the effect remains applied to the object but is temporarily disabled on canvas"), "is_visible", &wr, this, true),
       show_orig_path(false),
-      erase_extra_objects(true),
+      keep_paths(false),
+      is_load(true),
       lpeobj(lpeobject),
       concatenate_before_pwd2(false),
       sp_lpe_item(NULL),
@@ -511,6 +517,7 @@ Effect::doBeforeEffect (SPLPEItem const*/*lpeitem*/)
 
 void Effect::doAfterEffect (SPLPEItem const* /*lpeitem*/)
 {
+    is_load = false;
 }
 
 void Effect::doOnRemove (SPLPEItem const* /*lpeitem*/)

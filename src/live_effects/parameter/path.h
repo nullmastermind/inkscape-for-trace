@@ -44,7 +44,7 @@ public:
     void param_set_and_write_default();
     void set_new_value (Geom::PathVector const &newpath, bool write_to_svg);
     void set_new_value (Geom::Piecewise<Geom::D2<Geom::SBasis> > const &newpath, bool write_to_svg);
-
+    void set_buttons(bool edit_button, bool copy_button, bool paste_button, bool link_button);
     virtual void param_editOncanvas(SPItem * item, SPDesktop * dt);
     virtual void param_setup_nodepath(Inkscape::NodePath::Path *np);
     virtual void addCanvasIndicators(SPLPEItem const* lpeitem, std::vector<Geom::PathVector> &hp_vec);
@@ -91,6 +91,10 @@ protected:
     gchar * defvalue;
 
 private:
+    bool _edit_button;
+    bool _copy_button;
+    bool _paste_button;
+    bool _link_button;
     PathParam(const PathParam&);
     PathParam& operator=(const PathParam&);
 };

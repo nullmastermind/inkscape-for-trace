@@ -29,7 +29,8 @@ public:
                const Glib::ustring& key,
                Inkscape::UI::Widget::Registry* wr,
                Effect* effect,
-               const Glib::ustring default_value = "");
+               const Glib::ustring default_value = "",
+               bool widget_is_visible = false);
     virtual ~HiddenParam() {}
 
     virtual Gtk::Widget * param_newWidget();
@@ -37,7 +38,7 @@ public:
     virtual bool param_readSVGValue(const gchar * strvalue);
     virtual gchar * param_getSVGValue() const;
 
-    void param_setValue(Glib::ustring newvalue);
+    void param_setValue(Glib::ustring newvalue, bool write = false);
     virtual void param_set_default();
     virtual void param_update_default(const gchar * default_value);
 

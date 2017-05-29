@@ -368,7 +368,10 @@ void gather_items(NodeTool *nt, SPItem *base, SPObject *obj, Inkscape::UI::Shape
     }
 
     //XML Tree being used directly here while it shouldn't be.
-    if (SP_IS_PATH(obj) && obj->getRepr()->attribute("inkscape:original-d") != NULL) {
+    if (SP_IS_PATH(obj) && 
+        obj->getRepr()->attribute("inkscape:original-d") != NULL &&
+        !SP_LPE_ITEM(obj)->hasPathEffectOfType(LivePathEffect::POWERCLIP)) 
+    {
         ShapeRecord r;
         r.item = static_cast<SPItem*>(obj);
         r.edit_transform = Geom::identity(); // TODO wrong?
@@ -383,7 +386,7 @@ void gather_items(NodeTool *nt, SPItem *base, SPObject *obj, Inkscape::UI::Shape
         ShapeRecord r;
         r.item = item;
         // TODO add support for objectBoundingBox
-        r.edit_transform = base ? base->i2doc_affine() : Geom::identity();
+        r.edit_transform = base || role == SHAPE_ROLE_CLIPPING_PATH ? base->i2doc_affine() : Geom::identity();
         r.role = role;
 
         if (s.insert(r).second) {

@@ -44,12 +44,12 @@ LPEBSpline::LPEBSpline(LivePathEffectObject *lpeobject)
     weight.param_set_range(NO_POWER, 100.0);
     weight.param_set_increments(0.1, 0.1);
     weight.param_set_digits(4);
-    weight.param_overwrite_widget(true);
+    weight.param_set_undo(false);
 
     steps.param_set_range(1, 10);
     steps.param_set_increments(1, 1);
     steps.param_set_digits(0);
-    steps.param_overwrite_widget(true);
+    steps.param_set_undo(false);
 
     helper_size.param_set_range(0.0, 999.0);
     helper_size.param_set_increments(1, 1);
