@@ -199,15 +199,13 @@ LPECopyRotate::cloneD(SPObject *orig, SPObject *dest, Geom::Affine transform, bo
         }
     }
     SPShape * shape =  SP_SHAPE(orig);
-    SPPath * path =  SP_PATH(dest);
-    if (shape && !path) {
+    if (shape && !SP_IS_PATH(dest)) {
         const char * id = dest->getId();
         Inkscape::XML::Node *dest_node = sp_selected_item_to_curved_repr(SP_ITEM(dest), 0);
         dest->updateRepr(xml_doc, dest_node, SP_OBJECT_WRITE_ALL);
         dest->getRepr()->setAttribute("d", id);
-        path =  SP_PATH(dest);
     }
-    if (path && shape) {
+    if (SP_IS_PATH(dest) && shape) {
         SPCurve *c = NULL;
         if (root) {
             c = new SPCurve();
@@ -216,7 +214,7 @@ LPECopyRotate::cloneD(SPObject *orig, SPObject *dest, Geom::Affine transform, bo
             c = shape->getCurve();
         }
         if (c) {
-            path->setCurve(c, TRUE);
+            SP_PATH(dest)->setCurve(c, TRUE);
             c->unref();
         } else {
             dest->getRepr()->setAttribute("d", NULL);
@@ -725,6 +723,7 @@ LPECopyRotate::doOnRemove (SPLPEItem const* /*lpeitem*/)
     //set "keep paths" hook on sp-lpe-item.cpp
     if (keep_paths) {
         processObjects(LPE_TO_OBJECTS);
+        items.clear();
         return;
     }
     processObjects(LPE_ERASE);

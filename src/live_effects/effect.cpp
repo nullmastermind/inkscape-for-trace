@@ -457,10 +457,13 @@ Effect::processObjects(LpeAction lpe_action)
             std::vector<SPItem*> item_selected;
             SPCSSAttr *css;
             Glib::ustring css_str;
+            SPItem *item = SP_ITEM(elemref);
             switch (lpe_action){
             case LPE_TO_OBJECTS:
-                if (SP_ITEM(elemref)->isHidden()) {
-                    elemref->deleteObject();
+                if (item->isHidden()) {
+                    sp_object_ref(item, 0 );
+                    item->deleteObject(true);
+                    sp_object_unref(item);
                 } else {
                     if (elemnode->attribute("inkscape:path-effect")) {
                         sp_item_list_to_curves(item_list, item_selected, item_to_select);
@@ -470,7 +473,9 @@ Effect::processObjects(LpeAction lpe_action)
                 break;
 
             case LPE_ERASE:
-                elemref->deleteObject();
+                sp_object_ref(item, 0 );
+                item->deleteObject(true);
+                sp_object_unref(item);
                 break;
 
             case LPE_VISIBILITY:
