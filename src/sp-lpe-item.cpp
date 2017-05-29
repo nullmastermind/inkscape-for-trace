@@ -122,17 +122,8 @@ void SPLPEItem::set(unsigned int key, gchar const* value) {
 
                 this->lpe_modified_connection_list->clear();
                 // Clear the path effect list
-                PathEffectList::iterator it = this->path_effect_list->begin();
-
-                while ( it != this->path_effect_list->end() )
-                {
-                    if (!value) {
-                        LivePathEffectObject *lpeobj = (*it)->lpeobject;
-                        Inkscape::LivePathEffect::Effect * lpe = lpeobj->get_lpe();
-                        if (lpe) {
-                            lpe->doOnRemove(this);
-                        }
-                    }
+                PathEffectList::iterator it =  this->path_effect_list->begin();
+                while ( it !=  this->path_effect_list->end()) {
                     (*it)->unlink();
                     delete *it;
                     it = this->path_effect_list->erase(it);
@@ -539,11 +530,11 @@ void SPLPEItem::removeCurrentPathEffect(bool keep_paths)
         return;
 
     if (Inkscape::LivePathEffect::Effect* effect_ = this->getCurrentLPE()) {
+        effect_->keep_paths = keep_paths;
         effect_->doOnRemove(this);
     }
     PathEffectList new_list = *this->path_effect_list;
     new_list.remove(lperef); //current lpe ref is always our 'own' pointer from the path_effect_list
-    *this->path_effect_list = new_list;
     this->getRepr()->setAttribute("inkscape:path-effect", patheffectlist_svg_string(new_list));
     if (!keep_paths) {
         // Make sure that ellipse is stored as <svg:circle> or <svg:ellipse> if possible.
@@ -563,15 +554,18 @@ void SPLPEItem::removeAllPathEffects(bool keep_paths)
         if (path_effect_list->empty()) {
             return;
         }
-
-        for (PathEffectList::const_iterator it = path_effect_list->begin(); it != path_effect_list->end(); ++it)
-        {
-            LivePathEffectObject *lpeobj = (*it)->lpeobject;
-            if (lpeobj) {
-                Inkscape::LivePathEffect::Effect * lpe = lpeobj->get_lpe();
-                lpe->keep_paths = true;
-            }
+    }
+    for (PathEffectList::const_iterator it = path_effect_list->begin(); it != path_effect_list->end(); ++it)
+    {
+        LivePathEffectObject *lpeobj = (*it)->lpeobject;
+        if (lpeobj) {
+            Inkscape::LivePathEffect::Effect * lpe = lpeobj->get_lpe();
+            lpe->keep_paths = keep_paths;
+            lpe->doOnRemove(this);
         }
+        (*it)->unlink();
+        delete *it;
+        it = this->path_effect_list->erase(it);
     }
 
     this->getRepr()->setAttribute("inkscape:path-effect", NULL);
