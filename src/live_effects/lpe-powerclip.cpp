@@ -17,6 +17,14 @@
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
 
+// FIXME: expose these from sp-clippath/mask.cpp
+struct SPClipPathView {
+    SPClipPathView *next;
+    unsigned int key;
+    Inkscape::DrawingItem *arenaitem;
+    Geom::OptRect bbox;
+};
+
 namespace Inkscape {
 namespace LivePathEffect {
 
@@ -48,28 +56,34 @@ LPEPowerClip::doBeforeEffect (SPLPEItem const* lpeitem){
     const Glib::ustring uri = (Glib::ustring)sp_lpe_item->getRepr()->attribute("clip-path");
     SPClipPath *clip_path = SP_ITEM(lpeitem)->clip_ref->getObject();
     SPItem * item = SP_ITEM(lpeitem);
-    if(hide_clip) {
+    bool update_lpe = false;
+    if(clip_path && hide_clip) {
         SPItemView *v;
         for (v = item->display; v != NULL; v = v->next) {
-             clip_path->hide(v->arenaitem->key());
+             if (clip_path->display->arenaitem && clip_path->display->arenaitem->visible()) {
+                clip_path->hide(v->arenaitem->key());
+                update_lpe = true;
+             }
         }
-        Geom::OptRect bbox = item->geometricBounds();
-        clip_path->setBBox(v->arenaitem->key(), bbox);
-        item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-    } else if (!hide_clip) {
+    } else if (clip_path && !hide_clip) {
         Geom::OptRect bbox = item->geometricBounds();
         for (SPItemView *v = item->display; v != NULL; v = v->next) {
-             if (!v->arenaitem->key()) {
-                 v->arenaitem->setKey(SPItem::display_key_new(3));
-             }
-             Inkscape::DrawingItem *ai = clip_path->show(
-                                                v->arenaitem->drawing(),
-                                                v->arenaitem->key());
-             v->arenaitem->setClip(ai);
-             clip_path->setBBox(v->arenaitem->key(), bbox);
-             clip_path->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+            if (!clip_path->display->arenaitem->key()) {
+                v->arenaitem->setKey(SPItem::display_key_new(3));
+            }
+            if (clip_path->display->arenaitem && !clip_path->display->arenaitem->visible()) {
+                Inkscape::DrawingItem *ai = clip_path->show(
+                                                       v->arenaitem->drawing(),
+                                                       v->arenaitem->key());
+                v->arenaitem->setClip(ai);
+                clip_path->setBBox(v->arenaitem->key(), bbox);
+                update_lpe = true;
+            }
         }
-        item->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+    }
+    if (update_lpe) {
+        clip_path->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+        sp_lpe_item_update_patheffect(sp_lpe_item, true, true);
     }
     Geom::Point topleft      = Geom::Point(boundingbox_X.min() - 5,boundingbox_Y.max() + 5);
     Geom::Point topright     = Geom::Point(boundingbox_X.max() + 5,boundingbox_Y.max() + 5);

@@ -120,7 +120,9 @@ public:
     void setBlendMode(unsigned blend_mode);
     void setTransform(Geom::Affine const &trans);
     void setClip(DrawingItem *item);
+    DrawingItem * getClip(){ return _clip;}
     void setMask(DrawingItem *item);
+    DrawingItem * getMask(){ return _mask;}
     void setFillPattern(DrawingPattern *pattern);
     void setStrokePattern(DrawingPattern *pattern);
     void setZOrder(unsigned z);

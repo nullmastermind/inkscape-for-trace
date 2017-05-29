@@ -35,7 +35,6 @@ struct SPClipPathView {
     Inkscape::DrawingItem *arenaitem;
     Geom::OptRect bbox;
 };
-
 static SPClipPathView*      sp_clippath_view_new_prepend(SPClipPathView *list, unsigned int key, Inkscape::DrawingItem *arenaitem);
 static SPClipPathView*      sp_clippath_view_list_remove(SPClipPathView *list, SPClipPathView *view);
 
@@ -227,15 +226,20 @@ void SPClipPath::hide(unsigned int key) {
             SP_ITEM(&child)->invoke_hide(key);
         }
     }
-
+    bool is_hided = false;
     for (SPClipPathView *v = display; v != NULL; v = v->next) {
+        if (!v->arenaitem->getClip()) {
+            is_hided = true;
+        }
         if (v->key == key) {
             /* We simply unref and let item to manage this in handler */
             display = sp_clippath_view_list_remove(display, v);
             return;
         }
     }
-
+    if (is_hided) {
+        return;
+    }
     g_assert_not_reached();
 }
 
