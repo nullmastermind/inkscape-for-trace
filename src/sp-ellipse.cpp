@@ -408,7 +408,7 @@ const char *SPGenericEllipse::displayName() const
 }
 
 // Create path for rendering shape on screen
-void SPGenericEllipse::set_shape()
+void SPGenericEllipse::set_shape(bool force)
 {
     // std::cout << "SPGenericEllipse::set_shape: Entrance" << std::endl;
     if (hasBrokenPathEffect()) {
@@ -475,6 +475,12 @@ void SPGenericEllipse::set_shape()
 
     /* Reset the shape's curve to the "original_curve"
      * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
+    if(this->getCurveBeforeLPE()) {
+        if(!force && this->getCurveBeforeLPE()->get_pathvector() == curve->get_pathvector()) {
+            curve->unref();
+            return;
+        }
+    }
     this->setCurveInsync(curve, TRUE);
     this->setCurveBeforeLPE(curve);
 
@@ -617,7 +623,7 @@ void SPGenericEllipse::modified(guint flags)
 
 void SPGenericEllipse::update_patheffect(bool write)
 {
-    this->set_shape();
+    this->set_shape(true);
 
     if (write) {
         Inkscape::XML::Node *repr = this->getRepr();

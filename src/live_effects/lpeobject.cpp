@@ -112,6 +112,7 @@ void LivePathEffectObject::set(unsigned key, gchar const *value) {
                 this->effecttype_set = true;
             } else {
                 this->effecttype = Inkscape::LivePathEffect::INVALID_LPE;
+                this->lpe = NULL;
                 this->effecttype_set = false;
             }
 
