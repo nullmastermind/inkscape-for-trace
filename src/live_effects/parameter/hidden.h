@@ -38,7 +38,7 @@ public:
     virtual bool param_readSVGValue(const gchar * strvalue);
     virtual gchar * param_getSVGValue() const;
 
-    void param_setValue(Glib::ustring newvalue);
+    void param_setValue(Glib::ustring newvalue, bool write = false);
     virtual void param_set_default();
     virtual void param_update_default(const gchar * default_value);
 
