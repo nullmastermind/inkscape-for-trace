@@ -35,6 +35,7 @@ struct SPClipPathView {
     Inkscape::DrawingItem *arenaitem;
     Geom::OptRect bbox;
 };
+
 static SPClipPathView*      sp_clippath_view_new_prepend(SPClipPathView *list, unsigned int key, Inkscape::DrawingItem *arenaitem);
 static SPClipPathView*      sp_clippath_view_list_remove(SPClipPathView *list, SPClipPathView *view);
 

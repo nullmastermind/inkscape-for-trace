@@ -57,7 +57,6 @@ public:
     void setEffectType(EffectType et);
     void setPathVectorSatellites(PathVectorSatellites *pathVectorSatellites, bool write = true);
     void set_oncanvas_looks(SPKnotShapeType shape, SPKnotModeType mode, guint32 color);
-    bool widget_is_visible;
 
     friend class FilletChamferKnotHolderEntity;
     friend class LPEFilletChamfer;

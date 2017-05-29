@@ -386,7 +386,7 @@ void gather_items(NodeTool *nt, SPItem *base, SPObject *obj, Inkscape::UI::Shape
         ShapeRecord r;
         r.item = item;
         // TODO add support for objectBoundingBox
-        r.edit_transform = base || role == SHAPE_ROLE_CLIPPING_PATH ? base->i2doc_affine() : Geom::identity();
+        r.edit_transform = base ? base->i2doc_affine() : Geom::identity();
         r.role = role;
 
         if (s.insert(r).second) {

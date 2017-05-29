@@ -30,7 +30,6 @@ namespace LivePathEffect {
 
 LPEPowerClip::LPEPowerClip(LivePathEffectObject *lpeobject)
     : Effect(lpeobject),
-    hide_clip(_("Temporary hide"), _("Hide clip, not storeable, reset on doc load"), "hide_clip", &wr, this, false),
     inverse(_("Inverse clip"), _("Inverse clip"), "inverse", &wr, this, false),
     flatten(_("Flatten clip"), _("Flatten clip"), "flatten", &wr, this, false),
     fillrule(_("Set/unset evenodd fill rule"), _("Set/unset evenodd fill rule (this is overwriting your current value)."), "fillrule", &wr, this, false),
@@ -43,47 +42,18 @@ LPEPowerClip::LPEPowerClip(LivePathEffectObject *lpeobject)
     registerParameter(&fillrule);
     registerParameter(&convert_shapes);
     registerParameter(&is_inverse);
-    registerParameter(&hide_clip);
     is_clip = false;
     previous_fillrule = fillrule;
-    previous_hide_clip = false;
+    hide_clip = false;
 }
 
 LPEPowerClip::~LPEPowerClip() {}
 
 void
 LPEPowerClip::doBeforeEffect (SPLPEItem const* lpeitem){
-    if (is_load) {
-        hide_clip.param_setValue(false);
-    }
+    original_bbox(lpeitem);
     const Glib::ustring uri = (Glib::ustring)sp_lpe_item->getRepr()->attribute("clip-path");
     SPClipPath *clip_path = SP_ITEM(lpeitem)->clip_ref->getObject();
-    SPItem * item = SP_ITEM(lpeitem);
-    if (!is_load) {
-        if(clip_path && hide_clip && previous_hide_clip != hide_clip) {
-            SPItemView *v;
-            for (v = item->display; v != NULL; v = v->next) {
-                clip_path->hide(v->arenaitem->key());
-            }
-        } else if (clip_path && !hide_clip && previous_hide_clip != hide_clip) {
-            Geom::OptRect bbox = item->geometricBounds();
-            for (SPItemView *v = item->display; v != NULL; v = v->next) {
-                if (!v->arenaitem->key()) {
-                    v->arenaitem->setKey(SPItem::display_key_new(3));
-                }
-                Inkscape::DrawingItem *ai = clip_path->show(
-                                                       v->arenaitem->drawing(),
-                                                       v->arenaitem->key());
-                v->arenaitem->setClip(ai);
-                clip_path->setBBox(v->arenaitem->key(), bbox);
-            }
-        }
-    }
-    if(!is_load && previous_hide_clip != hide_clip) {
-        clip_path->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-    }
-    previous_hide_clip = hide_clip;
-    original_bbox(lpeitem);
     Geom::Point topleft      = Geom::Point(boundingbox_X.min() - 5,boundingbox_Y.max() + 5);
     Geom::Point topright     = Geom::Point(boundingbox_X.max() + 5,boundingbox_Y.max() + 5);
     Geom::Point bottomright  = Geom::Point(boundingbox_X.max() + 5,boundingbox_Y.min() - 5);
@@ -152,17 +122,17 @@ LPEPowerClip::addInverse (SPItem * clip_data){
             SP_SHAPE(clip_data)->setCurve(c, TRUE);
             c->unref();
             is_inverse.param_setValue((Glib::ustring)"true", true);
-//            SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-//            if (desktop) {
-//                if (tools_isactive(desktop, TOOLS_NODES)) {
-//                    Inkscape::Selection * sel = SP_ACTIVE_DESKTOP->getSelection();
-//                    SPItem * item = sel->singleItem();
-//                    if (item != NULL) {
-//                        sel->remove(item);
-//                        sel->add(item);
-//                    }
-//                }
-//            }
+            SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+            if (desktop) {
+                if (tools_isactive(desktop, TOOLS_NODES)) {
+                    Inkscape::Selection * sel = SP_ACTIVE_DESKTOP->getSelection();
+                    SPItem * item = sel->singleItem();
+                    if (item != NULL) {
+                        sel->remove(item);
+                        sel->add(item);
+                    }
+                }
+            }
         }
     }
 }
@@ -187,20 +157,90 @@ LPEPowerClip::removeInverse (SPItem * clip_data){
                 SP_SHAPE(clip_data)->setCurve(c, TRUE);
                 c->unref();
                 is_inverse.param_setValue((Glib::ustring)"false", true);
-//                SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-//                if (desktop) {
-//                    if (tools_isactive(desktop, TOOLS_NODES)) {
-//                        Inkscape::Selection * sel = SP_ACTIVE_DESKTOP->getSelection();
-//                        SPItem * item = sel->singleItem();
-//                        if (item != NULL) {
-//                            sel->remove(item);
-//                            sel->add(item);
-//                        }
-//                    }
-//                }
+                SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+                if (desktop) {
+                    if (tools_isactive(desktop, TOOLS_NODES)) {
+                        Inkscape::Selection * sel = SP_ACTIVE_DESKTOP->getSelection();
+                        SPItem * item = sel->singleItem();
+                        if (item != NULL) {
+                            sel->remove(item);
+                            sel->add(item);
+                        }
+                    }
+                }
             }
         }
     }
+}
+
+void
+LPEPowerClip::toggleClip() {
+    SPItem * item = SP_ITEM(sp_lpe_item);
+    if (item) {
+        SPClipPath *clip_path = item->clip_ref->getObject();
+        if (clip_path) {
+            hide_clip = !hide_clip;
+            if(hide_clip) {
+                SPItemView *v;
+                for (v = item->display; v != NULL; v = v->next) {
+                    clip_path->hide(v->arenaitem->key());
+                }
+            } else {
+                Geom::OptRect bbox = item->geometricBounds();
+                for (SPItemView *v = item->display; v != NULL; v = v->next) {
+                    if (!v->arenaitem->key()) {
+                        v->arenaitem->setKey(SPItem::display_key_new(3));
+                    }
+                    Inkscape::DrawingItem *ai = clip_path->show(
+                                                           v->arenaitem->drawing(),
+                                                           v->arenaitem->key());
+                    v->arenaitem->setClip(ai);
+                    clip_path->setBBox(v->arenaitem->key(), bbox);
+                }
+            }
+            clip_path->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+        }
+    }
+}
+
+Gtk::Widget *
+LPEPowerClip::newWidget()
+{
+    // use manage here, because after deletion of Effect object, others might still be pointing to this widget.
+    Gtk::VBox * vbox = Gtk::manage( new Gtk::VBox(Effect::newWidget()) );
+
+    vbox->set_border_width(5);
+    vbox->set_homogeneous(false);
+    vbox->set_spacing(6);
+    Gtk::HBox * hbox = Gtk::manage(new Gtk::HBox(false,0));
+    Gtk::Button * toggle_button = Gtk::manage(new Gtk::Button(Glib::ustring(_("Toggle clip visibiliy"))));
+    toggle_button->signal_clicked().connect(sigc::mem_fun (*this,&LPEPowerClip::toggleClip));
+    toggle_button->set_size_request(140,30);
+    vbox->pack_start(*hbox, true,true,2);
+    hbox->pack_start(*toggle_button, false, false,2);
+    std::vector<Parameter *>::iterator it = param_vector.begin();
+    while (it != param_vector.end()) {
+        if ((*it)->widget_is_visible) {
+            Parameter * param = *it;
+            Gtk::Widget * widg = dynamic_cast<Gtk::Widget *>(param->param_newWidget());
+            if(param->param_key == "grid") {
+                widg = NULL;
+            }
+            Glib::ustring * tip = param->param_getTooltip();
+            if (widg) {
+                vbox->pack_start(*widg, true, true, 2);
+                if (tip) {
+                    widg->set_tooltip_text(*tip);
+                } else {
+                    widg->set_tooltip_text("");
+                    widg->set_has_tooltip(false);
+                }
+            }
+        }
+
+        ++it;
+    }
+    return dynamic_cast<Gtk::Widget *>(vbox);
 }
 
 void 

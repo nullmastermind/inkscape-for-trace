@@ -23,6 +23,8 @@ public:
     virtual Geom::PathVector doEffect_path (Geom::PathVector const & path_in);
     //virtual void doOnVisibilityToggled(SPLPEItem const* lpeitem);
     virtual void doOnRemove (SPLPEItem const* /*lpeitem*/);
+    virtual Gtk::Widget * newWidget();
+    void toggleClip();
     void addInverse (SPItem * clip_data);
     void removeInverse (SPItem * clip_data);
     void flattenClip(SPItem * clip_data, Geom::PathVector &path_in);
@@ -31,7 +33,6 @@ protected:
     //virtual void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec);
 
 private:
-    BoolParam hide_clip;
     BoolParam inverse;
     BoolParam flatten;
     BoolParam fillrule;
@@ -39,6 +40,7 @@ private:
     HiddenParam is_inverse;
     Geom::Path clip_box;
     bool is_clip;
+    bool hide_clip;
     bool previous_fillrule;
     bool previous_hide_clip;
 };
