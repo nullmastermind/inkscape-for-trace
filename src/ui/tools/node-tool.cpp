@@ -370,7 +370,7 @@ void gather_items(NodeTool *nt, SPItem *base, SPObject *obj, Inkscape::UI::Shape
     //XML Tree being used directly here while it shouldn't be.
     if (SP_IS_PATH(obj) && 
         obj->getRepr()->attribute("inkscape:original-d") != NULL &&
-        !SP_LPE_ITEM(obj)->hasPathEffectOfType(LivePathEffect::POWERCLIP)) 
+        !SP_LPE_ITEM(obj)->hasPathEffectOfType(Inkscape::LivePathEffect::POWERCLIP)) 
     {
         ShapeRecord r;
         r.item = static_cast<SPItem*>(obj);
