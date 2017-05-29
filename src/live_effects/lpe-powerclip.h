@@ -40,6 +40,7 @@ private:
     Geom::Path clip_box;
     bool is_clip;
     bool previous_fillrule;
+    bool previous_hide_clip;
 };
 
 } //namespace LivePathEffect

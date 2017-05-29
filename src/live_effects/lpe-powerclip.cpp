@@ -30,7 +30,7 @@ namespace LivePathEffect {
 
 LPEPowerClip::LPEPowerClip(LivePathEffectObject *lpeobject)
     : Effect(lpeobject),
-    hide_clip(_("Hide clip"), _("Hide clip"), "hide_clip", &wr, this, false),
+    hide_clip(_("Temporary hide"), _("Hide clip, not storeable, reset on doc load"), "hide_clip", &wr, this, false),
     inverse(_("Inverse clip"), _("Inverse clip"), "inverse", &wr, this, false),
     flatten(_("Flatten clip"), _("Flatten clip"), "flatten", &wr, this, false),
     fillrule(_("Set/unset evenodd fill rule"), _("Set/unset evenodd fill rule (this is overwriting your current value)."), "fillrule", &wr, this, false),
@@ -38,53 +38,52 @@ LPEPowerClip::LPEPowerClip(LivePathEffectObject *lpeobject)
     //tooltip empty to no show in default param set
     is_inverse("Store the last inverse apply", "", "is_inverse", &wr, this, "false", false)
 {
-    registerParameter(&hide_clip);
     registerParameter(&inverse);
     registerParameter(&flatten);
     registerParameter(&fillrule);
     registerParameter(&convert_shapes);
     registerParameter(&is_inverse);
+    registerParameter(&hide_clip);
     is_clip = false;
     previous_fillrule = fillrule;
+    previous_hide_clip = false;
 }
 
 LPEPowerClip::~LPEPowerClip() {}
 
 void
 LPEPowerClip::doBeforeEffect (SPLPEItem const* lpeitem){
-    original_bbox(lpeitem);
+    if (is_load) {
+        hide_clip.param_setValue(false);
+    }
     const Glib::ustring uri = (Glib::ustring)sp_lpe_item->getRepr()->attribute("clip-path");
     SPClipPath *clip_path = SP_ITEM(lpeitem)->clip_ref->getObject();
     SPItem * item = SP_ITEM(lpeitem);
-    bool update_lpe = false;
-    if(clip_path && hide_clip) {
-        SPItemView *v;
-        for (v = item->display; v != NULL; v = v->next) {
-             if (clip_path->display->arenaitem && clip_path->display->arenaitem->visible()) {
+    if (!is_load) {
+        if(clip_path && hide_clip && previous_hide_clip != hide_clip) {
+            SPItemView *v;
+            for (v = item->display; v != NULL; v = v->next) {
                 clip_path->hide(v->arenaitem->key());
-                update_lpe = true;
-             }
-        }
-    } else if (clip_path && !hide_clip) {
-        Geom::OptRect bbox = item->geometricBounds();
-        for (SPItemView *v = item->display; v != NULL; v = v->next) {
-            if (!clip_path->display->arenaitem->key()) {
-                v->arenaitem->setKey(SPItem::display_key_new(3));
             }
-            if (clip_path->display->arenaitem && !clip_path->display->arenaitem->visible()) {
+        } else if (clip_path && !hide_clip && previous_hide_clip != hide_clip) {
+            Geom::OptRect bbox = item->geometricBounds();
+            for (SPItemView *v = item->display; v != NULL; v = v->next) {
+                if (!v->arenaitem->key()) {
+                    v->arenaitem->setKey(SPItem::display_key_new(3));
+                }
                 Inkscape::DrawingItem *ai = clip_path->show(
                                                        v->arenaitem->drawing(),
                                                        v->arenaitem->key());
                 v->arenaitem->setClip(ai);
                 clip_path->setBBox(v->arenaitem->key(), bbox);
-                update_lpe = true;
             }
         }
     }
-    if (update_lpe) {
+    if(!is_load && previous_hide_clip != hide_clip) {
         clip_path->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-        sp_lpe_item_update_patheffect(sp_lpe_item, true, true);
     }
+    previous_hide_clip = hide_clip;
+    original_bbox(lpeitem);
     Geom::Point topleft      = Geom::Point(boundingbox_X.min() - 5,boundingbox_Y.max() + 5);
     Geom::Point topright     = Geom::Point(boundingbox_X.max() + 5,boundingbox_Y.max() + 5);
     Geom::Point bottomright  = Geom::Point(boundingbox_X.max() + 5,boundingbox_Y.min() - 5);

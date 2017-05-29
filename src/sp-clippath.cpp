@@ -226,18 +226,16 @@ void SPClipPath::hide(unsigned int key) {
             SP_ITEM(&child)->invoke_hide(key);
         }
     }
-    bool is_hided = false;
+    bool no_clippathview = true;
     for (SPClipPathView *v = display; v != NULL; v = v->next) {
-        if (!v->arenaitem->getClip()) {
-            is_hided = true;
-        }
+        no_clippathview = false;
         if (v->key == key) {
             /* We simply unref and let item to manage this in handler */
             display = sp_clippath_view_list_remove(display, v);
             return;
         }
     }
-    if (is_hided) {
+    if (no_clippathview) {
         return;
     }
     g_assert_not_reached();
