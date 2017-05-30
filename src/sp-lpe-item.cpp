@@ -555,19 +555,21 @@ void SPLPEItem::removeAllPathEffects(bool keep_paths)
             return;
         }
     }
-    for (PathEffectList::const_iterator it = path_effect_list->begin(); it != path_effect_list->end(); ++it)
-    {
+    
+    PathEffectList::iterator it = this->path_effect_list->begin();
+    
+    while ( it != this->path_effect_list->end() ) {
         LivePathEffectObject *lpeobj = (*it)->lpeobject;
         if (lpeobj) {
             Inkscape::LivePathEffect::Effect * lpe = lpeobj->get_lpe();
             lpe->keep_paths = keep_paths;
             lpe->doOnRemove(this);
         }
+        // unlink and delete all references in the list
         (*it)->unlink();
         delete *it;
         it = this->path_effect_list->erase(it);
     }
-
     this->getRepr()->setAttribute("inkscape:path-effect", NULL);
 
     if (!keep_paths) {
