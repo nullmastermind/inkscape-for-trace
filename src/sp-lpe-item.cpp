@@ -555,6 +555,9 @@ void SPLPEItem::removeAllPathEffects(bool keep_paths)
             return;
         }
     }
+    
+    PathEffectList::iterator it = this->path_effect_list->begin();
+    
     while ( it != this->path_effect_list->end() ) {
         LivePathEffectObject *lpeobj = (*it)->lpeobject;
         if (lpeobj) {
