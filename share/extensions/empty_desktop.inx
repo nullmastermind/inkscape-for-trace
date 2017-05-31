@@ -16,6 +16,9 @@
         <item value="1920x1080">1920x1080 (FHD)</item>
         <item value="1920x1200">1920x1200 (WUXGA)</item>
         <item value="2560x1600">2560x1600 (WQXGA)</item>
+        <item value="3840x2160">3840x2160 (4K)</item>
+        <item value="5120x2880">5120x2880 (5K)</item>
+        <item value="7680x4320">7680x4320 (8K)</item>
     </param>
 
     <!-- Maximum size is '16k' -->
