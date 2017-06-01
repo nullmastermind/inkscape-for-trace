@@ -946,8 +946,8 @@ void PdfInput::init(void) {
             "<input>\n"
                 "<extension>.pdf</extension>\n"
                 "<mimetype>application/pdf</mimetype>\n"
-                "<filetypename>" N_("Adobe PDF (*.pdf)") "</filetypename>\n"
-                "<filetypetooltip>" N_("Adobe Portable Document Format") "</filetypetooltip>\n"
+                "<filetypename>" N_("Portable Document Format (*.pdf)") "</filetypename>\n"
+                "<filetypetooltip>" N_("Portable Document Format") "</filetypetooltip>\n"
             "</input>\n"
         "</inkscape-extension>", new PdfInput());
 
