@@ -293,9 +293,11 @@ parseVerbsYAMLFile(gchar const *yaml_filename)
 
     FILE *fh = fopen(yaml_filename, "r");
     if(fh == NULL) {
-        printf("Failed to open file!\n");
+        printf("Failed to open file %s\n", yaml_filename);
         fflush(stdout);
-        return verbs_list;
+
+        // exit with error
+        exit(1);
     }
 
     yaml_parser_t parser;
