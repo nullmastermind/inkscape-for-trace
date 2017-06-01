@@ -6,7 +6,7 @@
     <input>
         <extension>.wmf</extension>
         <mimetype>application/x-wmf</mimetype>
-        <_filetypename>Windows Metafile (*.wmf)</_filetypename>
+        <_filetypename>Windows Metafile (UC) (*.wmf)</_filetypename>
         <_filetypetooltip>A popular graphics file format for clipart</_filetypetooltip>
     </input>
     <script>
