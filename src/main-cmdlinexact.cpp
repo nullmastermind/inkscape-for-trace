@@ -120,6 +120,7 @@ void xFileOpen( const Glib::ustring &uri )
         std::string exeption_mgs = e.what();
         printf("Error: open %s:%s\n",uri.c_str(), exeption_mgs.c_str() );
         fflush(stdout);
+        return;
     }
 
     // Set viewBox if it doesn't exist
