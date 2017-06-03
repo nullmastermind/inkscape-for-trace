@@ -118,7 +118,7 @@ void xFileOpen( const Glib::ustring &uri )
     Glib::ustring document_filename = getDocumentPathRelatedYaml(uri);
 
     if (!Inkscape::IO::file_test(document_filename.c_str(), (GFileTest)(G_FILE_TEST_EXISTS))) {
-        printf("document is not exists: %s\n", document_filename.c_str());
+        printf("SVG document does not exist: %s\n", document_filename.c_str());
         exit(1);
     }
 
@@ -319,7 +319,7 @@ parseVerbsYAMLFile(gchar const *yaml_filename)
 
     FILE *fh = fopen(yaml_filename, "r");
     if(fh == NULL) {
-        printf("Failed to open file %s\n", yaml_filename);
+        printf("Failed to read from file %s\n", yaml_filename);
         fflush(stdout);
 
         // exit with error
