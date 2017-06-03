@@ -119,7 +119,7 @@ void xFileOpen( const Glib::ustring &uri )
 
     if (!Inkscape::IO::file_test(document_filename.c_str(), (GFileTest)(G_FILE_TEST_EXISTS))) {
         printf("document is not exists: %s\n", document_filename.c_str());
-        return;
+        exit(1);
     }
 
     if (s_verbose) {
