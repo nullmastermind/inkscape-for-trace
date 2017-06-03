@@ -41,7 +41,7 @@
 #include <document-undo.h>
 #include <ui/view/view-widget.h>
 #include <ui/interface.h>
-#include <verbs.h>
+#include <io/sys.h>
 
 #define DPI_BASE Inkscape::Util::Quantity::convert(1, "in", "px")
 
@@ -98,6 +98,11 @@ std::vector<std::string> vectorFromString(const std::string &csv)
 
 void xFileOpen( const Glib::ustring &uri )
 {
+    if (!Inkscape::IO::file_test(uri.c_str(), (GFileTest)(G_FILE_TEST_EXISTS))) {
+        printf("document is not exists: %s\n", uri.c_str());
+        return;
+    }
+
     if (s_verbose) {
         printf("open %s\n", uri.c_str());
         fflush(stdout);
@@ -120,7 +125,6 @@ void xFileOpen( const Glib::ustring &uri )
         std::string exeption_mgs = e.what();
         printf("Error: open %s:%s\n",uri.c_str(), exeption_mgs.c_str() );
         fflush(stdout);
-        return;
     }
 
     // Set viewBox if it doesn't exist
