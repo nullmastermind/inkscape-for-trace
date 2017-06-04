@@ -481,7 +481,7 @@ SPDocument *SPDocument::createChildDoc(std::string const &uri)
     SPDocument *document = NULL;
 
     while(parent != NULL && parent->getURI() != NULL && document == NULL) {
-        // Check myself and any parents int he chain
+        // Check myself and any parents in the chain
         if(uri == parent->getURI()) {
             document = parent;
             break;
@@ -500,8 +500,14 @@ SPDocument *SPDocument::createChildDoc(std::string const &uri)
 
     // Load a fresh document from the svg source.
     if(!document) {
-        const char *path = uri.c_str();
-        document = createNewDoc(path, false, false, this);
+        std::string path;
+        if(uri.find('/') == -1) {
+            path = this->getBase() + uri;
+        } else {
+            path = uri;
+        }
+        std::cout << "Added base: '" << path << "'\n";
+        document = createNewDoc(path.c_str(), false, false, this);
     }
     return document;
 }
