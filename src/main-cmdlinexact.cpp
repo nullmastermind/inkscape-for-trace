@@ -29,6 +29,7 @@
 #include "extension/system.h"
 #include "file.h"
 #include <glib.h>
+#include <glib/gstdio.h>
 #include "sp-root.h"
 #include "document-undo.h"
 #include "util/units.h"
@@ -41,13 +42,14 @@
 #include <document-undo.h>
 #include <ui/view/view-widget.h>
 #include <ui/interface.h>
-#include <verbs.h>
+#include <io/sys.h>
 
 #define DPI_BASE Inkscape::Util::Quantity::convert(1, "in", "px")
 
 namespace
 {
 bool s_verbose = false;
+Glib::ustring s_yaml_filename("");
 
 bool createDirForFilename( const std::string &filename )
 {
@@ -96,10 +98,33 @@ std::vector<std::string> vectorFromString(const std::string &csv)
     return result;
 }
 
+Glib::ustring getDocumentPathRelatedYaml( const Glib::ustring &uri )
+{
+    if (g_path_is_absolute (uri.c_str()))
+        return uri;
+
+    gchar *yaml_dirname = g_path_get_dirname(s_yaml_filename.c_str());
+    gchar *document_path = g_build_filename(yaml_dirname, uri.c_str(), NULL);
+
+    Glib::ustring result(document_path);
+
+    g_free(document_path);
+    g_free(yaml_dirname);
+
+    return result;
+}
+
 void xFileOpen( const Glib::ustring &uri )
 {
+    Glib::ustring document_filename = getDocumentPathRelatedYaml(uri);
+
+    if (!Inkscape::IO::file_test(document_filename.c_str(), (GFileTest)(G_FILE_TEST_EXISTS))) {
+        printf("SVG document does not exist: %s\n", document_filename.c_str());
+        exit(1);
+    }
+
     if (s_verbose) {
-        printf("open %s\n", uri.c_str());
+        printf("open %s\n", document_filename.c_str());
         fflush(stdout);
     }
 
@@ -114,11 +139,11 @@ void xFileOpen( const Glib::ustring &uri )
     SPDocument *doc = NULL;
     Inkscape::Extension::Extension *key = NULL;
     try {
-        doc = Inkscape::Extension::open(key, uri.c_str());
+        doc = Inkscape::Extension::open(key, document_filename.c_str());
     } catch (std::exception &e) {
         doc = NULL;
         std::string exeption_mgs = e.what();
-        printf("Error: open %s:%s\n",uri.c_str(), exeption_mgs.c_str() );
+        printf("Error: open %s:%s\n",document_filename.c_str(), exeption_mgs.c_str() );
         fflush(stdout);
     }
 
@@ -157,31 +182,33 @@ void xFileOpen( const Glib::ustring &uri )
 
 void xFileSaveAs( Inkscape::ActionContext const & context, const Glib::ustring &uri )
 {
+    Glib::ustring document_filename = getDocumentPathRelatedYaml(uri);
     SPDocument *doc = context.getDocument();
     if (s_verbose) {
-        printf("save as %s\n", uri.c_str());
+        printf("save as %s\n", document_filename.c_str());
         fflush(stdout);
     }
 
-    if( createDirForFilename( uri )) {
+    if( createDirForFilename( document_filename )) {
         Inkscape::Extension::save(
             Inkscape::Extension::db.get("org.inkscape.output.svg.inkscape"),
-            doc, uri.c_str(), false, false, true, Inkscape::Extension::FILE_SAVE_METHOD_SAVE_AS);
+            doc, document_filename.c_str(), false, false, true, Inkscape::Extension::FILE_SAVE_METHOD_SAVE_AS);
         if (s_verbose) {
-            printf("save done: %s\n", uri.c_str() );
+            printf("save done: %s\n", document_filename.c_str() );
             fflush(stdout);
         }
     }
     else {
-        printf("can't create dirs for filename %s\n", uri.c_str() );
+        printf("can't create dirs for filename %s\n", document_filename.c_str() );
         fflush(stdout);
     }
 }
 
 void xFileExportPNG( Inkscape::ActionContext const & context, const Glib::ustring &uri )
 {
+    Glib::ustring document_filename = getDocumentPathRelatedYaml(uri);
     if (s_verbose) {
-        printf("export png %s\n", uri.c_str());
+        printf("export png %s\n", document_filename.c_str());
         fflush(stdout);
     }
 
@@ -204,27 +231,27 @@ void xFileExportPNG( Inkscape::ActionContext const & context, const Glib::ustrin
 
     SPNamedView *nv = desktop->getNamedView();
 
-    ExportResult status = sp_export_png_file(doc, uri.c_str(),
+    ExportResult status = sp_export_png_file(doc, document_filename.c_str(),
                           Geom::Rect(Geom::Point(0,0), Geom::Point(width, height)), png_width, png_height, dpi, dpi,
                           nv->pagecolor, 0, 0, TRUE);
 }
 
-void xSelectElement( Inkscape::ActionContext const & context, const Glib::ustring &uri )
+void xSelectElement( Inkscape::ActionContext const & context, const Glib::ustring &element_name )
 {
     if (context.getDocument() == NULL || context.getSelection() == NULL) {
         return;
     }
 
     if (s_verbose) {
-        printf("select element: %s\n", uri.c_str());
+        printf("select element: %s\n", element_name.c_str());
         fflush(stdout);
     }
 
     SPDocument * doc = context.getDocument();
-    SPObject * obj = doc->getObjectById(uri);
+    SPObject * obj = doc->getObjectById(element_name);
 
     if (obj == NULL) {
-        printf(_("Unable to find node ID: '%s'\n"), uri.c_str());
+        printf(_("Unable to find node ID: '%s'\n"), element_name.c_str());
         fflush(stdout);
         return;
     }
@@ -233,7 +260,7 @@ void xSelectElement( Inkscape::ActionContext const & context, const Glib::ustrin
     selection->add(obj);
 
     if (s_verbose) {
-        printf("select done %s\n", uri.c_str());
+        printf("select done %s\n", element_name.c_str());
         fflush(stdout);
     }
 }
@@ -291,11 +318,13 @@ parseVerbsYAMLFile(gchar const *yaml_filename)
 {
     verbs_list_t verbs_list;
 
-    FILE *fh = fopen(yaml_filename, "r");
+    FILE *fh = g_fopen(yaml_filename, "r");
     if(fh == NULL) {
-        printf("Failed to open file!\n");
+        printf("Failed to read from file %s\n", yaml_filename);
         fflush(stdout);
-        return verbs_list;
+
+        // exit with error
+        exit(1);
     }
 
     yaml_parser_t parser;
@@ -437,6 +466,8 @@ parseVerbsYAMLFile(gchar const *yaml_filename)
 void
 CmdLineXAction::createActionsFromYAML( gchar const *yaml_filename )
 {
+    s_yaml_filename = Glib::ustring(yaml_filename);
+
     verbs_list_t verbs_list = parseVerbsYAMLFile(yaml_filename);
 
     typedef std::map<std::string,int> undo_labels_map_t;
