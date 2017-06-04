@@ -29,6 +29,7 @@
 #include "extension/system.h"
 #include "file.h"
 #include <glib.h>
+#include <glib/gstdio.h>
 #include "sp-root.h"
 #include "document-undo.h"
 #include "util/units.h"
@@ -317,7 +318,7 @@ parseVerbsYAMLFile(gchar const *yaml_filename)
 {
     verbs_list_t verbs_list;
 
-    FILE *fh = fopen(yaml_filename, "r");
+    FILE *fh = g_fopen(yaml_filename, "r");
     if(fh == NULL) {
         printf("Failed to read from file %s\n", yaml_filename);
         fflush(stdout);
