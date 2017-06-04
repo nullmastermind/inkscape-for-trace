@@ -15,6 +15,7 @@
  * ... and various people who have worked with various projects
  *   Jon A. Cruz <jon@oncruz.org>
  *   Abhishek Sharma
+ *   Marc Jeanmougin
  *
  * Copyright (C) 1999-2004 authors
  * Copyright (C) 2001-2002 Ximian, Inc.
@@ -167,6 +168,7 @@ enum {
     SP_ARG_VERSION,
     SP_ARG_VACUUM_DEFS,
     SP_ARG_NO_CONVERT_TEXT_BASELINE_SPACING,
+    SP_ARG_CONVERT_DPI_METHOD,
 #ifdef WITH_DBUS
     SP_ARG_DBUS_LISTEN,
     SP_ARG_DBUS_NAME,
@@ -278,6 +280,7 @@ static void resetCommandlineGlobals() {
         sp_query_id = NULL;
         sp_vacuum_defs = FALSE;
         sp_no_convert_text_baseline_spacing = FALSE;
+        sp_file_convert_dpi_method_commandline = -1;
 #ifdef WITH_DBUS
         sp_dbus_listen = FALSE;
         sp_dbus_name = NULL;
@@ -538,6 +541,11 @@ struct poptOption options[] = {
     POPT_ARG_NONE, &sp_no_convert_text_baseline_spacing, SP_ARG_NO_CONVERT_TEXT_BASELINE_SPACING,
     N_("Do not fix legacy (pre-0.92) files' text baseline spacing on opening."),
     NULL},
+
+    {"convert-dpi-method", 0,
+    POPT_ARG_STRING, NULL, SP_ARG_CONVERT_DPI_METHOD,
+    N_("Method used to convert pre-.92 document dpi, if needed."),
+    "[none|scale-viewbox|scale-document]"},
 
     POPT_AUTOHELP POPT_TABLEEND
 };
@@ -2177,6 +2185,21 @@ sp_process_args(poptContext ctx)
                 if (arg != NULL) {
                     // printf("Adding in: %s\n", arg);
                     new Inkscape::CmdLineAction((a == SP_ARG_VERB), arg);
+                }
+                break;
+            }
+            case SP_ARG_CONVERT_DPI_METHOD: {
+                gchar const *arg = poptGetOptArg(ctx);
+                if (arg != NULL) {
+                    if (!strcmp(arg,"none")) {
+                        sp_file_convert_dpi_method_commandline = FILE_DPI_UNCHANGED;
+                    } else if (!strcmp(arg,"scale-viewbox")) {
+                        sp_file_convert_dpi_method_commandline = FILE_DPI_VIEWBOX_SCALED;
+                    } else if (!strcmp(arg,"scale-document")) {
+                        sp_file_convert_dpi_method_commandline = FILE_DPI_DOCUMENT_SCALED;
+                    } else {
+                        g_warning("Invalid update option");
+                    }
                 }
                 break;
             }
