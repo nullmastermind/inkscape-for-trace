@@ -51,6 +51,7 @@ public:
     unsigned int flags;
 
     unsigned int size;      /**< Always square. */
+    double angle;      /**< Angle of mesh handle. */
     Geom::Point pos;   /**< Our desktop coordinates. */
     Geom::Point grabbed_rel_pos;  /**< Grabbed relative position. */
     Geom::Point drag_origin;      /**< Origin of drag. */
@@ -78,6 +79,7 @@ public:
     // be able to figure that out
     sigc::signal<void, SPKnot *, unsigned int> click_signal;
     sigc::signal<void, SPKnot*, unsigned int> doubleclicked_signal;
+    sigc::signal<void, SPKnot*, unsigned int> mousedown_signal;
     sigc::signal<void, SPKnot*, unsigned int> grabbed_signal;
     sigc::signal<void, SPKnot *, unsigned int> ungrabbed_signal;
     sigc::signal<void, SPKnot *, Geom::Point const &, unsigned int> moved_signal;
@@ -92,6 +94,7 @@ public:
     void setAnchor(unsigned int i);
     void setMode(unsigned int i);
     void setPixbuf(void* p);
+    void setAngle(double i);
 
     void setFill(guint32 normal, guint32 mouseover, guint32 dragging);
     void setStroke(guint32 normal, guint32 mouseover, guint32 dragging);

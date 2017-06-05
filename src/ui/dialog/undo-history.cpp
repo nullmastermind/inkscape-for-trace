@@ -12,43 +12,30 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+#include "config.h"
 #endif
 
 #include "undo-history.h"
-#include <glibmm/i18n.h>
-#include <stddef.h>
-#include <sigc++/sigc++.h>
 
 #include "document.h"
 #include "document-undo.h"
 #include "inkscape.h"
-#include "verbs.h"
 
 #include "util/signal-blocker.h"
 
 #include "desktop.h"
-#include <gtkmm/invisible.h>
+#include <gtkmm/icontheme.h>
 
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
 /* Rendering functions for custom cell renderers */
-#if WITH_GTKMM_3_0
 void CellRendererSPIcon::render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr,
                                       Gtk::Widget& widget,
                                       const Gdk::Rectangle& background_area,
                                       const Gdk::Rectangle& cell_area,
                                       Gtk::CellRendererState flags)
-#else
-void CellRendererSPIcon::render_vfunc(const Glib::RefPtr<Gdk::Drawable>& window,
-                                      Gtk::Widget& widget,
-                                      const Gdk::Rectangle& background_area,
-                                      const Gdk::Rectangle& cell_area,
-                                      const Gdk::Rectangle& expose_area,
-                                      Gtk::CellRendererState flags)
-#endif
 {
     // if this event type doesn't have an icon...
     if ( !Inkscape::Verb::get(_property_event_type)->get_image() ) return;
@@ -56,8 +43,8 @@ void CellRendererSPIcon::render_vfunc(const Glib::RefPtr<Gdk::Drawable>& window,
     // if the icon isn't cached, render it to a pixbuf
     if ( !_icon_cache[_property_event_type] ) {
 
-        Glib::ustring image = Inkscape::Verb::get(_property_event_type)->get_image();
-        Gtk::Widget* icon = sp_icon_get_icon(image, Inkscape::ICON_SIZE_MENU);
+        Glib::ustring image_name = Inkscape::Verb::get(_property_event_type)->get_image();
+        Gtk::Widget* icon = sp_icon_get_icon(image_name, Inkscape::ICON_SIZE_MENU);
 
         if (icon) {
 
@@ -67,13 +54,8 @@ void CellRendererSPIcon::render_vfunc(const Glib::RefPtr<Gdk::Drawable>& window,
                 sp_icon_fetch_pixbuf(sp_icon);
                 _property_icon = Glib::wrap(sp_icon->pb, true);
             } else if ( GTK_IS_IMAGE(icon->gobj()) ) {
-#if WITH_GTKMM_3_0
-                _property_icon = Gtk::Invisible().render_icon_pixbuf(Gtk::StockID(image),
-                                                                     Gtk::ICON_SIZE_MENU);
-#else
-                _property_icon = Gtk::Invisible().render_icon(Gtk::StockID(image),
-                                                              Gtk::ICON_SIZE_MENU);
-#endif
+                auto icon_theme = Gtk::IconTheme::get_default();
+                _property_icon = icon_theme->load_icon(image_name, 16);
             } else {
                 delete icon;
                 return;
@@ -87,42 +69,23 @@ void CellRendererSPIcon::render_vfunc(const Glib::RefPtr<Gdk::Drawable>& window,
         property_pixbuf() = _icon_cache[_property_event_type];
     }
 
-#if WITH_GTKMM_3_0
     Gtk::CellRendererPixbuf::render_vfunc(cr, widget, background_area,
                                           cell_area, flags);
-#else
-    Gtk::CellRendererPixbuf::render_vfunc(window, widget, background_area,
-                                          cell_area, expose_area, flags);
-#endif
 }
 
 
-#if WITH_GTKMM_3_0
 void CellRendererInt::render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr,
                                    Gtk::Widget& widget,
                                    const Gdk::Rectangle& background_area,
                                    const Gdk::Rectangle& cell_area,
                                    Gtk::CellRendererState flags)
-#else
-void CellRendererInt::render_vfunc(const Glib::RefPtr<Gdk::Drawable>& window,
-                                   Gtk::Widget& widget,
-                                   const Gdk::Rectangle& background_area,
-                                   const Gdk::Rectangle& cell_area,
-                                   const Gdk::Rectangle& expose_area,
-                                   Gtk::CellRendererState flags)
-#endif
 {
     if( _filter(_property_number) ) {
         std::ostringstream s;
         s << _property_number << std::flush;
         property_text() = s.str();
-#if WITH_GTKMM_3_0
         Gtk::CellRendererText::render_vfunc(cr, widget, background_area,
                                             cell_area, flags);
-#else
-        Gtk::CellRendererText::render_vfunc(window, widget, background_area,
-                                            cell_area, expose_area, flags);
-#endif
     }
 }
 

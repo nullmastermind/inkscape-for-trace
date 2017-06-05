@@ -13,15 +13,17 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include <config.h>
 #endif
+
+#include "sp-pattern.h"
 
 #include <cstring>
 #include <string>
 #include <glibmm.h>
 #include <2geom/transforms.h>
-#include <sigc++/functors/mem_fun.h>
 
+#include "bad-uri-exception.h"
 #include "svg/svg.h"
 #include "display/cairo-utils.h"
 #include "display/drawing-context.h"
@@ -30,10 +32,6 @@
 #include "display/drawing-group.h"
 #include "attributes.h"
 #include "document-private.h"
-#include "uri.h"
-#include "style.h"
-#include "sp-pattern.h"
-#include "xml/repr.h"
 
 #include "sp-factory.h"
 
@@ -223,8 +221,8 @@ void SPPattern::_getChildren(std::list<SPObject *> &l)
 {
     for (SPPattern *pat_i = this; pat_i != NULL; pat_i = pat_i->ref ? pat_i->ref->getObject() : NULL) {
         if (pat_i->firstChild()) { // find the first one with children
-            for (SPObject *child = pat_i->firstChild(); child; child = child->getNext()) {
-                l.push_back(child);
+            for (auto& child: pat_i->children) {
+                l.push_back(&child);
             }
             break; // do not go further up the chain if children are found
         }
@@ -319,8 +317,8 @@ guint SPPattern::_countHrefs(SPObject *o) const
         i++;
     }
 
-    for (SPObject *child = o->firstChild(); child != NULL; child = child->next) {
-        i += _countHrefs(child);
+    for (auto& child: o->children) {
+        i += _countHrefs(&child);
     }
 
     return i;
@@ -374,8 +372,9 @@ void SPPattern::transform_multiply(Geom::Affine postmul, bool set)
     }
     _pattern_transform_set = true;
 
-    Glib::ustring c = sp_svg_transform_write(_pattern_transform);
+    gchar *c = sp_svg_transform_write(_pattern_transform);
     getRepr()->setAttribute("patternTransform", c);
+    g_free(c);
 }
 
 const gchar *SPPattern::produce(const std::vector<Inkscape::XML::Node *> &reprs, Geom::Rect bounds,
@@ -392,8 +391,9 @@ const gchar *SPPattern::produce(const std::vector<Inkscape::XML::Node *> &reprs,
     sp_repr_set_svg_double(repr, "height", bounds.dimensions()[Geom::Y]);
     //TODO: Maybe is better handle it in sp_svg_transform_write
     if(transform != Geom::Affine()){ 
-        Glib::ustring t = sp_svg_transform_write(transform);
+        gchar *t = sp_svg_transform_write(transform);
         repr->setAttribute("patternTransform", t);
+        g_free(t);
     }
     defsrepr->appendChild(repr);
     const gchar *pat_id = repr->attribute("id");
@@ -508,13 +508,13 @@ Geom::OptRect SPPattern::viewbox() const
 
 bool SPPattern::_hasItemChildren() const
 {
-    bool hasChildren = false;
-    for (SPObject const *child = firstChild(); child && !hasChildren; child = child->getNext()) {
-        if (SP_IS_ITEM(child)) {
-            hasChildren = true;
+    for (auto& child: children) {
+        if (SP_IS_ITEM(&child)) {
+            return true;
         }
     }
-    return hasChildren;
+
+    return false;
 }
 
 bool SPPattern::isValid() const
@@ -558,12 +558,12 @@ cairo_pattern_t *SPPattern::pattern_new(cairo_t *base_ct, Geom::OptRect const &b
     Inkscape::DrawingGroup *root = new Inkscape::DrawingGroup(drawing);
     drawing.setRoot(root);
 
-    for (SPObject *child = shown->firstChild(); child != NULL; child = child->getNext()) {
-        if (SP_IS_ITEM(child)) {
+    for (auto& child: shown->children) {
+        if (SP_IS_ITEM(&child)) {
             // for each item in pattern, show it on our drawing, add to the group,
             // and connect to the release signal in case the item gets deleted
             Inkscape::DrawingItem *cai;
-            cai = SP_ITEM(child)->invoke_show(drawing, dkey, SP_ITEM_SHOW_DISPLAY);
+            cai = SP_ITEM(&child)->invoke_show(drawing, dkey, SP_ITEM_SHOW_DISPLAY);
             root->appendChild(cai);
         }
     }
@@ -654,9 +654,9 @@ cairo_pattern_t *SPPattern::pattern_new(cairo_t *base_ct, Geom::OptRect const &b
     // Render drawing to pattern_surface via drawing context, this calls root->render
     // which is really DrawingItem->render().
     drawing.render(dc, one_tile);
-    for (SPObject *child = shown->firstChild(); child != NULL; child = child->getNext()) {
-        if (SP_IS_ITEM(child)) {
-            SP_ITEM(child)->invoke_hide(dkey);
+    for (auto& child: shown->children) {
+        if (SP_IS_ITEM(&child)) {
+            SP_ITEM(&child)->invoke_hide(dkey);
         }
     }
 
@@ -674,10 +674,20 @@ cairo_pattern_t *SPPattern::pattern_new(cairo_t *base_ct, Geom::OptRect const &b
         dc.paint(opacity);     // apply opacity
     }
 
-    cairo_pattern_t *cp = cairo_pattern_create_for_surface(pattern_surface.raw());
     // Apply transformation to user space. Also compensate for oversampling.
-    ink_cairo_pattern_set_matrix(cp, ps2user.inverse() * pattern_surface.drawingTransform());
+    Geom::Affine raw_transform = ps2user.inverse() * pattern_surface.drawingTransform();
 
+    // Cairo doesn't like large values of x0 and y0. We can replace x0 and y0 by equivalent
+    // values close to zero (since one tile on a grid is the same as another it doesn't
+    // matter which tile is used as the base tile).
+    int w = one_tile[Geom::X].extent();
+    int h = one_tile[Geom::Y].extent();
+    int m = raw_transform[4] / w;
+    int n = raw_transform[5] / h;
+    raw_transform *= Geom::Translate( -m*w, -n*h );
+
+    cairo_pattern_t *cp = cairo_pattern_create_for_surface(pattern_surface.raw());
+    ink_cairo_pattern_set_matrix(cp, raw_transform);
     cairo_pattern_set_extend(cp, CAIRO_EXTEND_REPEAT);
 
     return cp;

@@ -1,3 +1,7 @@
+# Override error flag just for this folder
+if (CMAKE_BUILD_TYPE MATCHES Strict)
+	set(CMAKE_CXX_FLAGS_STRICT "${CMAKE_CXX_FLAGS_STRICT} -Wno-error=deprecated-declarations")
+endif()
 
 set(2geom_SRC
 	affine.cpp
@@ -60,13 +64,16 @@ set(2geom_SRC
 	bezier-to-sbasis.h
 	bezier-utils.h
 	bezier.h
+	cairo-path-sink.h
 	choose.h
 	circle.h
+	circulator.h
 	concepts.h
 	conic_section_clipper.h
 	conic_section_clipper_cr.h
 	conic_section_clipper_impl.h
 	conicsec.h
+	convex-hull.h
 	coord.h
 	crossing.h
 	curve.h
@@ -82,10 +89,13 @@ set(2geom_SRC
 	int-interval.h
 	int-point.h
 	int-rect.h
+	intersection-graph.h
+	intersection.h
 	interval.h
 	line.h
 	linear.h
 	math-utils.h
+	nearest-time.h
 	ord.h
 	path-intersection.h
 	path-sink.h
@@ -106,8 +116,8 @@ set(2geom_SRC
 	solver.h
 	svg-path-parser.h
 	svg-path-writer.h
-	sweeper.h
 	sweep-bounds.h
+	sweeper.h
 	toposweep.h
 	transforms.h
 	utils.h

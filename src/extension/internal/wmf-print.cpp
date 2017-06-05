@@ -312,7 +312,7 @@ unsigned int PrintWmf::finish(Inkscape::Extension::Print * /*mod*/)
         g_error("Fatal programming error in PrintWmf::finish");
     }
     (void) wmf_finish(wt); // Finalize and write out the WMF
-    wmf_free(&wt);              // clean up
+    uwmf_free(&wt);              // clean up
     wmf_htable_free(&wht);          // clean up
 
     return 0;
@@ -598,7 +598,28 @@ int PrintWmf::create_pen(SPStyle const *style, const Geom::Affine &transform)
 
         if (!style->stroke_dasharray.values.empty()) {
             if (!FixPPTDashLine) { // if this is set code elsewhere will break dots/dashes into many smaller lines.
-                penstyle = U_PS_DASH;// userstyle not supported apparently, for now map all Inkscape dot/dash to just dash
+                int n_dash = style->stroke_dasharray.values.size();
+                /* options are dash, dot, dashdot and dashdotdot.  Try to pick the closest one. */
+                int mark_short=INT_MAX;
+                int mark_long =0;
+                int i;
+                for (i=0;i<n_dash;i++) {
+                  int mark = style->stroke_dasharray.values[i];
+                  if (mark>mark_long) { mark_long = mark; }
+                  if (mark<mark_short) { mark_short = mark; }
+                }
+                if(mark_long == mark_short){  // only one mark size
+                   penstyle = U_PS_DOT;
+                }
+                else if (n_dash==2) { 
+                   penstyle = U_PS_DASH;
+                }
+                else if (n_dash==4) {
+                   penstyle = U_PS_DASHDOT;
+                }
+                else {
+                   penstyle = U_PS_DASHDOTDOT;
+                }
             }
         }
 

@@ -23,12 +23,7 @@
 
 #include "widgets/dash-selector.h"
 #include <gtkmm/radiobutton.h>
-
-#if WITH_GTKMM_3_0
 #include <gtkmm/grid.h>
-#else
-#include <gtkmm/table.h>
-#endif
 
 #include <glibmm/i18n.h>
 
@@ -154,7 +149,7 @@ private:
     };
 
     void updateLine();
-    void updateAllMarkers(std::vector<SPItem*> const &objects);
+    void updateAllMarkers(std::vector<SPItem*> const &objects, bool skip_undo = false);
     void updateMarkerHist(SPMarkerLoc const which);
     void setDashSelectorFromStyle(SPDashSelector *dsel, SPStyle *style);
     void setJoinType (unsigned const jointype);
@@ -182,6 +177,7 @@ private:
     void miterLimitChangedCB();
     void lineDashChangedCB();
     void unitChangedCB();
+    bool shouldMarkersBeUpdated();
     static void markerSelectCB(MarkerComboBox *marker_combo, StrokeStyle *spw, SPMarkerLoc const which);
     static void buttonToggledCB(StrokeStyleButton *tb, StrokeStyle *spw);
 
@@ -189,15 +185,9 @@ private:
     MarkerComboBox *startMarkerCombo;
     MarkerComboBox *midMarkerCombo;
     MarkerComboBox *endMarkerCombo;
-#if WITH_GTKMM_3_0
     Gtk::Grid *table;
     Glib::RefPtr<Gtk::Adjustment> *widthAdj;
     Glib::RefPtr<Gtk::Adjustment> *miterLimitAdj;
-#else
-    Gtk::Table *table;
-    Gtk::Adjustment *widthAdj;
-    Gtk::Adjustment *miterLimitAdj;
-#endif
     Inkscape::UI::Widget::SpinButton *miterLimitSpin;
     Inkscape::UI::Widget::SpinButton *widthSpin;
     Inkscape::UI::Widget::UnitMenu *unitSelector;

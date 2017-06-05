@@ -124,7 +124,7 @@ std::vector<Layout::ScanlineMaker::ScanRun> Layout::ShapeScanlineMaker::makeScan
     FloatLigne line_rasterization;
     FloatLigne line_decent_length_runs;
     float line_text_height = (float)(line_height.emSize());
-    if (line_text_height == 0.0)
+    if (line_text_height < 0.001)
         line_text_height = 0.001;     // Scan() doesn't work for zero height so this will have to do
 
     _current_line_height = (float)line_height.emSize();

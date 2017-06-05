@@ -742,8 +742,6 @@ void Layout::fitToPathAlign(SVGLength const &startOffset, Path const &path)
                             if (endpoint != startpoint) {
                                 tangent = endpoint - startpoint;
                                 tangent.normalize();
-                            } else {
-                                tangent = Geom::Point (0,0);
                             }
                         }
                         g_free(end_otp);
@@ -868,6 +866,23 @@ double Layout::getActualLength() const
 
 }//namespace Text
 }//namespace Inkscape
+
+std::ostream &operator<<(std::ostream &out, const Inkscape::Text::Layout::FontMetrics &f) {
+    out << " emSize: "  << f.emSize()
+        << " ascent: "  << f.ascent
+        << " descent: " << f.descent
+        << " xheight: " << f.xheight;
+    return out;
+}
+
+std::ostream &operator<<(std::ostream &out, const Inkscape::Text::Layout::FontMetrics *f) {
+    out << " emSize: "  << f->emSize()
+        << " ascent: "  << f->ascent
+        << " descent: " << f->descent
+        << " xheight: " << f->xheight;
+    return out;
+}
+
 
 
 /*

@@ -63,6 +63,11 @@ h1.kmr {
     list-style:none;
 }
 
+.kmr-toc li {
+    padding-left: 5px;
+    text-indent: -5px;
+}
+
 .kmr-toc-section {
     font-size: 1.4em;
     font-weight: bold;
@@ -83,7 +88,7 @@ h1.kmr {
 
 /*-- [4.1. Headings] --*/
 
-h2.kmr,h3.kmr {
+h2.kmr, h3.kmr {
     padding-bottom: 0em;
     margin-bottom: 0.2em;
 }
@@ -98,8 +103,8 @@ h3.kmr {
     font-size: 1.1em;
     font-style: italic;
     margin-top: 1em;
-    margin-left:40px;
-    margin-right:40px;
+    margin-left: 40px;
+    margin-right: 40px;
     padding-left: 20px;
     border-bottom: 1px solid #999;
 }
@@ -115,7 +120,7 @@ table.kmr {
     -webkit-border-radius: 10px;
     border-radius: 10px;
     border: 0;
-    margin:0;
+    margin: 0;
     padding: 4px;
     width: 100%;
 }
@@ -149,6 +154,10 @@ table.kmr {
 
 /*-- [4.3. Shortcuts list] --*/
 
+.kmr td {
+    vertical-align: top;
+}
+
 .kmr-keys {
     text-align: right;
     line-height: 1.5em;
@@ -164,7 +173,6 @@ table.kmr {
     background-color: #eeeee6;
     padding: 1px 5px;
     border: 1px solid #999999;
-    margin: 0 -2px;
     -moz-border-radius: 0.3em;
     -webkit-border-radius: 0.3em;
     border-radius: 0.3em;
@@ -177,6 +185,10 @@ table.kmr {
 .kmr-action {
     line-height: 1.5em;
     padding-left: 10px;
+}
+
+span.kmr-action {
+    display: block;
 }
 
 .kmr-note {

@@ -27,7 +27,6 @@
 #include "message-stack.h"
 #include "message-context.h"
 #include "sp-path.h"
-#include "preferences.h"
 #include "snap.h"
 #include "pixmaps/cursor-pencil.xpm"
 #include <2geom/sbasis-to-bezier.h>
@@ -36,13 +35,9 @@
 #include <glibmm/i18n.h>
 #include "context-fns.h"
 #include "sp-namedview.h"
-#include "xml/repr.h"
-#include "document.h"
 #include "desktop-style.h"
-#include "macros.h"
 #include "display/sp-canvas.h"
 #include "display/curve.h"
-#include "livarot/Path.h"
 #include "ui/tool/event-utils.h"
 
 namespace Inkscape {
@@ -492,7 +487,7 @@ bool PencilTool::_handleKeyPress(GdkEventKey const &event) {
         case GDK_KEY_g:
         case GDK_KEY_G:
             if (Inkscape::UI::held_only_shift(event)) {
-                sp_selection_to_guides(this->desktop);
+                this->desktop->selection->toGuides();
                 ret = true;
             }
             break;
@@ -593,8 +588,8 @@ void PencilTool::_setEndpoint(Geom::Point const &p) {
  * Still not sure, how it will make most sense.
  */
 void PencilTool::_finishEndpoint() {
-    if ( ( this->red_curve->is_empty() )
-         || ( *(this->red_curve->first_point()) == *(this->red_curve->second_point())   ) )
+    if (this->red_curve->is_unset() || 
+        this->red_curve->first_point() == this->red_curve->second_point())
     {
         this->red_curve->reset();
         sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), NULL);
@@ -852,7 +847,7 @@ void PencilTool::_fitAndSplit() {
         SPCurve *curve = this->red_curve->copy();
 
         /// \todo fixme:
-        SPCanvasItem *cshape = sp_canvas_bpath_new(this->desktop->getSketch(), curve);
+        SPCanvasItem *cshape = sp_canvas_bpath_new(this->desktop->getSketch(), curve, true);
         curve->unref();
 
         this->highlight_color = SP_ITEM(this->desktop->currentLayer())->highlight_color();

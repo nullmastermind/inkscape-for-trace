@@ -27,9 +27,6 @@
 // TODO: reduce header bloat if possible
 
 #include "file.h" // for file_import, used in _pasteImage
-#include <list>
-#include <algorithm>
-#include <glibmm/ustring.h>
 #include <glibmm/i18n.h>
 #include <glib/gstdio.h> // for g_file_set_contents etc., used in _onGet and paste
 #include "inkgc/gc-core.h"
@@ -41,7 +38,6 @@
 #include "desktop-style.h" // for sp_desktop_set_style, used in _pasteStyle
 #include "document.h"
 #include "document-private.h"
-#include "selection.h"
 #include "message-stack.h"
 #include "context-fns.h"
 #include "ui/tools/dropper-tool.h" // used in copy()
@@ -50,17 +46,13 @@
 #include "extension/input.h"
 #include "extension/output.h"
 #include "selection-chemistry.h"
-#include <2geom/rect.h>
 #include <2geom/transforms.h>
 #include "box3d.h"
 #include "gradient-drag.h"
 #include "sp-marker.h"
-#include "sp-item.h"
 #include "sp-item-transform.h" // for sp_item_scale_rel, used in _pasteSize
 #include "sp-path.h"
 #include "sp-pattern.h"
-#include "sp-shape.h"
-#include "sp-gradient.h"
 #include "sp-gradient-reference.h"
 #include "sp-linear-gradient.h"
 #include "sp-radial-gradient.h"
@@ -68,8 +60,7 @@
 #include "sp-mask.h"
 #include "sp-textpath.h"
 #include "sp-rect.h"
-#include "sp-use.h"
-#include "sp-symbol.h"
+#include "sp-object.h"
 #include "live_effects/lpeobject.h"
 #include "live_effects/lpeobject-reference.h"
 #include "live_effects/parameter/path.h"
@@ -83,9 +74,9 @@
 #include "helper/png-write.h"
 #include "svg/svg-color.h"
 #include "sp-namedview.h"
-#include "snap.h"
 #include "persp3d.h"
-#include "preferences.h"
+#include "object-set.h"
+#include "extension/find_extension_by_mime.h"
 
 /// Made up mimetype to represent Gdk::Pixbuf clipboard contents.
 #define CLIPBOARD_GDK_PIXBUF_TARGET "image/x-gdk-pixbuf"
@@ -105,13 +96,13 @@ namespace UI {
  */
 class ClipboardManagerImpl : public ClipboardManager {
 public:
-    virtual void copy(SPDesktop *desktop);
+    virtual void copy(ObjectSet *set);
     virtual void copyPathParameter(Inkscape::LivePathEffect::PathParam *);
     virtual void copySymbol(Inkscape::XML::Node* symbol, gchar const* style, bool user_symbol);
     virtual bool paste(SPDesktop *desktop, bool in_place);
-    virtual bool pasteStyle(SPDesktop *desktop);
-    virtual bool pasteSize(SPDesktop *desktop, bool separately, bool apply_x, bool apply_y);
-    virtual bool pastePathEffect(SPDesktop *desktop);
+    virtual bool pasteStyle(ObjectSet *set);
+    virtual bool pasteSize(ObjectSet *set, bool separately, bool apply_x, bool apply_y);
+    virtual bool pastePathEffect(ObjectSet *set);
     virtual Glib::ustring getPathParameter(SPDesktop* desktop);
     virtual Glib::ustring getShapeOrTextObjectId(SPDesktop *desktop);
     virtual const gchar *getFirstObjectID();
@@ -120,7 +111,7 @@ public:
     ~ClipboardManagerImpl();
 
 private:
-    void _copySelection(Inkscape::Selection *);
+    void _copySelection(ObjectSet *);
     void _copyUsedDefs(SPItem *);
     void _copyGradient(SPGradient *);
     void _copyPattern(SPPattern *);
@@ -153,6 +144,11 @@ private:
     Inkscape::XML::Node *_clipnode; ///< The node that holds extra information
     Inkscape::XML::Document *_doc; ///< Reference to the clipboard's Inkscape::XML::Document
     std::set<SPItem*> cloned_elements;
+    std::vector<SPCSSAttr*> te_selected_style;
+    std::vector<unsigned> te_selected_style_positions;
+    int nr_blocks = 0;
+    unsigned copied_style_length = 0;
+
 
     // we need a way to copy plain text AND remember its style;
     // the standard _clipnode is only available in an SVG tree, hence this special storage
@@ -195,76 +191,77 @@ ClipboardManagerImpl::~ClipboardManagerImpl() {}
 /**
  * Copy selection contents to the clipboard.
  */
-void ClipboardManagerImpl::copy(SPDesktop *desktop)
+void ClipboardManagerImpl::copy(ObjectSet *set)
 {
-    if ( desktop == NULL ) {
-        return;
-    }
-    Inkscape::Selection *selection = desktop->getSelection();
+    if ( set->desktop() ) {
+        SPDesktop *desktop = set->desktop();
 
-    // Special case for when the gradient dragger is active - copies gradient color
-    if (desktop->event_context->get_drag()) {
-        GrDrag *drag = desktop->event_context->get_drag();
-        if (drag->hasSelection()) {
-            guint32 col = drag->getColor();
+        // Special case for when the gradient dragger is active - copies gradient color
+        if (desktop->event_context->get_drag()) {
+            GrDrag *drag = desktop->event_context->get_drag();
+            if (drag->hasSelection()) {
+                guint32 col = drag->getColor();
 
-            // set the color as clipboard content (text in RRGGBBAA format)
-            _setClipboardColor(col);
+                // set the color as clipboard content (text in RRGGBBAA format)
+                _setClipboardColor(col);
 
-            // create a style with this color on fill and opacity in master opacity, so it can be
-            // pasted on other stops or objects
+                // create a style with this color on fill and opacity in master opacity, so it can be
+                // pasted on other stops or objects
+                if (_text_style) {
+                    sp_repr_css_attr_unref(_text_style);
+                    _text_style = NULL;
+                }
+                _text_style = sp_repr_css_attr_new();
+                // print and set properties
+                gchar color_str[16];
+                g_snprintf(color_str, 16, "#%06x", col >> 8);
+                sp_repr_css_set_property(_text_style, "fill", color_str);
+                float opacity = SP_RGBA32_A_F(col);
+                if (opacity > 1.0) {
+                    opacity = 1.0; // safeguard
+                }
+                Inkscape::CSSOStringStream opcss;
+                opcss << opacity;
+                sp_repr_css_set_property(_text_style, "opacity", opcss.str().data());
+
+                _discardInternalClipboard();
+                return;
+            }
+        }
+
+        // Special case for when the color picker ("dropper") is active - copies color under cursor
+        if (tools_isactive(desktop, TOOLS_DROPPER)) {
+            //_setClipboardColor(sp_dropper_context_get_color(desktop->event_context));
+            _setClipboardColor(SP_DROPPER_CONTEXT(desktop->event_context)->get_color());
+            _discardInternalClipboard();
+            return;
+        }
+
+        // Special case for when the text tool is active - if some text is selected, copy plain text,
+        // not the object that holds it; also copy the style at cursor into
+        if (tools_isactive(desktop, TOOLS_TEXT)) {
+            _discardInternalClipboard();
+            Glib::ustring selected_text = Inkscape::UI::Tools::sp_text_get_selected_text(desktop->event_context);
+            _clipboard->set_text(selected_text);
             if (_text_style) {
                 sp_repr_css_attr_unref(_text_style);
                 _text_style = NULL;
             }
-            _text_style = sp_repr_css_attr_new();
-            // print and set properties
-            gchar color_str[16];
-            g_snprintf(color_str, 16, "#%06x", col >> 8);
-            sp_repr_css_set_property(_text_style, "fill", color_str);
-            float opacity = SP_RGBA32_A_F(col);
-            if (opacity > 1.0) {
-                opacity = 1.0; // safeguard
-            }
-            Inkscape::CSSOStringStream opcss;
-            opcss << opacity;
-            sp_repr_css_set_property(_text_style, "opacity", opcss.str().data());
-
-            _discardInternalClipboard();
+            te_selected_style.clear();
+            te_selected_style_positions.clear();
+            te_selected_style = Inkscape::UI::Tools::sp_text_get_selected_style(desktop->event_context, &copied_style_length, &nr_blocks, &te_selected_style_positions);
+            _text_style = Inkscape::UI::Tools::sp_text_get_style_at_cursor(desktop->event_context);
             return;
         }
     }
-
-    // Special case for when the color picker ("dropper") is active - copies color under cursor
-    if (tools_isactive(desktop, TOOLS_DROPPER)) {
-        //_setClipboardColor(sp_dropper_context_get_color(desktop->event_context));
-        _setClipboardColor(SP_DROPPER_CONTEXT(desktop->event_context)->get_color());
-        _discardInternalClipboard();
-        return;
-    }
-
-    // Special case for when the text tool is active - if some text is selected, copy plain text,
-    // not the object that holds it; also copy the style at cursor into
-    if (tools_isactive(desktop, TOOLS_TEXT)) {
-        _discardInternalClipboard();
-        Glib::ustring selected_text = Inkscape::UI::Tools::sp_text_get_selected_text(desktop->event_context);
-        _clipboard->set_text(selected_text);
-        if (_text_style) {
-            sp_repr_css_attr_unref(_text_style);
-            _text_style = NULL;
-        }
-        _text_style = Inkscape::UI::Tools::sp_text_get_style_at_cursor(desktop->event_context);
-        return;
-    }
-
-    if (selection->isEmpty()) {  // check whether something is selected
-        _userWarn(desktop, _("Nothing was copied."));
+    if (set->isEmpty()) {  // check whether something is selected
+        _userWarn(set->desktop(), _("Nothing was copied."));
         return;
     }
     _discardInternalClipboard();
 
     _createInternalClipboard();   // construct a new clipboard document
-    _copySelection(selection);   // copy all items in the selection to the internal clipboard
+    _copySelection(set);   // copy all items in the selection to the internal clipboard
     fit_canvas_to_drawing(_clipboardSPDoc);
 
     _setClipboardTargets();
@@ -438,16 +435,15 @@ const gchar *ClipboardManagerImpl::getFirstObjectID()
 /**
  * Implements the Paste Style action.
  */
-bool ClipboardManagerImpl::pasteStyle(SPDesktop *desktop)
+bool ClipboardManagerImpl::pasteStyle(ObjectSet *set)
 {
-    if (desktop == NULL) {
+    if (set->desktop() == NULL) {
         return false;
     }
 
     // check whether something is selected
-    Inkscape::Selection *selection = desktop->getSelection();
-    if (selection->isEmpty()) {
-        _userWarn(desktop, _("Select <b>object(s)</b> to paste style to."));
+    if (set->isEmpty()) {
+        _userWarn(set->desktop(), _("Select <b>object(s)</b> to paste style to."));
         return false;
     }
 
@@ -455,10 +451,10 @@ bool ClipboardManagerImpl::pasteStyle(SPDesktop *desktop)
     if ( tempdoc == NULL ) {
         // no document, but we can try _text_style
         if (_text_style) {
-            sp_desktop_set_style(desktop, _text_style);
+            sp_desktop_set_style(set, set->desktop(), _text_style);
             return true;
         } else {
-            _userWarn(desktop, _("No style on the clipboard."));
+            _userWarn(set->desktop(), _("No style on the clipboard."));
             return false;
         }
     }
@@ -469,13 +465,13 @@ bool ClipboardManagerImpl::pasteStyle(SPDesktop *desktop)
     bool pasted = false;
 
     if (clipnode) {
-        desktop->doc()->importDefs(tempdoc);
+        set->document()->importDefs(tempdoc);
         SPCSSAttr *style = sp_repr_css_attr(clipnode, "style");
-        sp_desktop_set_style(desktop, style);
+        sp_desktop_set_style(set, set->desktop(), style);
         pasted = true;
     }
     else {
-        _userWarn(desktop, _("No style on the clipboard."));
+        _userWarn(set->desktop(), _("No style on the clipboard."));
     }
 
     tempdoc->doUnref();
@@ -489,29 +485,31 @@ bool ClipboardManagerImpl::pasteStyle(SPDesktop *desktop)
  * @param apply_x Whether to scale the width of objects / selection
  * @param apply_y Whether to scale the height of objects / selection
  */
-bool ClipboardManagerImpl::pasteSize(SPDesktop *desktop, bool separately, bool apply_x, bool apply_y)
+bool ClipboardManagerImpl::pasteSize(ObjectSet *set, bool separately, bool apply_x, bool apply_y)
 {
     if (!apply_x && !apply_y) {
         return false; // pointless parameters
     }
 
-    if ( desktop == NULL ) {
+/*    if ( desktop == NULL ) {
         return false;
     }
-    Inkscape::Selection *selection = desktop->getSelection();
-    if (selection->isEmpty()) {
-        _userWarn(desktop, _("Select <b>object(s)</b> to paste size to."));
+    Inkscape::Selection *selection = desktop->getSelection();*/
+    if (set->isEmpty()) {
+        if(set->desktop())
+            _userWarn(set->desktop(), _("Select <b>object(s)</b> to paste size to."));
         return false;
     }
 
     // FIXME: actually, this should accept arbitrary documents
     SPDocument *tempdoc = _retrieveClipboard("image/x-inkscape-svg");
     if ( tempdoc == NULL ) {
-        _userWarn(desktop, _("No size on the clipboard."));
+        if(set->desktop())
+            _userWarn(set->desktop(), _("No size on the clipboard."));
         return false;
     }
 
-    // retrieve size ifomration from the clipboard
+    // retrieve size information from the clipboard
     Inkscape::XML::Node *root = tempdoc->getReprRoot();
     Inkscape::XML::Node *clipnode = sp_repr_lookup_name(root, "inkscape:clipboard", 1);
     bool pasted = false;
@@ -522,13 +520,13 @@ bool ClipboardManagerImpl::pasteSize(SPDesktop *desktop, bool separately, bool a
 
         // resize each object in the selection
         if (separately) {
-            std::vector<SPItem*> itemlist=selection->itemList();
-            for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();++i){
+            auto itemlist= set->items();
+            for(auto i=itemlist.begin();i!=itemlist.end();++i){
                 SPItem *item = *i;
                 if (item) {
                     Geom::OptRect obj_size = item->desktopVisualBounds();
                     if ( obj_size ) {
-                        sp_item_scale_rel(item, _getScale(desktop, min, max, *obj_size, apply_x, apply_y));
+                        sp_item_scale_rel(item, _getScale(set->desktop(), min, max, *obj_size, apply_x, apply_y));
                     }
                 } else {
                     g_assert_not_reached();
@@ -537,10 +535,10 @@ bool ClipboardManagerImpl::pasteSize(SPDesktop *desktop, bool separately, bool a
         }
         // resize the selection as a whole
         else {
-            Geom::OptRect sel_size = selection->visualBounds();
+            Geom::OptRect sel_size = set->visualBounds();
             if ( sel_size ) {
-                sp_selection_scale_relative(selection, sel_size->midpoint(),
-                                            _getScale(desktop, min, max, *sel_size, apply_x, apply_y));
+                set->setScaleRelative(sel_size->midpoint(),
+                                             _getScale(set->desktop(), min, max, *sel_size, apply_x, apply_y));
             }
         }
         pasted = true;
@@ -553,18 +551,18 @@ bool ClipboardManagerImpl::pasteSize(SPDesktop *desktop, bool separately, bool a
 /**
  * Applies a path effect from the clipboard to the selected path.
  */
-bool ClipboardManagerImpl::pastePathEffect(SPDesktop *desktop)
+bool ClipboardManagerImpl::pastePathEffect(ObjectSet *set)
 {
     /** @todo FIXME: pastePathEffect crashes when moving the path with the applied effect,
         segfaulting in fork_private_if_necessary(). */
 
-    if ( desktop == NULL ) {
+    if ( set->desktop() == NULL ) {
         return false;
     }
 
-    Inkscape::Selection *selection = desktop->getSelection();
-    if (!selection || selection->isEmpty()) {
-        _userWarn(desktop, _("Select <b>object(s)</b> to paste live path effect to."));
+    //Inkscape::Selection *selection = desktop->getSelection();
+    if (!set || set->isEmpty()) {
+        _userWarn(set->desktop(), _("Select <b>object(s)</b> to paste live path effect to."));
         return false;
     }
 
@@ -575,11 +573,11 @@ bool ClipboardManagerImpl::pastePathEffect(SPDesktop *desktop)
         if ( clipnode ) {
             gchar const *effectstack = clipnode->attribute("inkscape:path-effect");
             if ( effectstack ) {
-                desktop->doc()->importDefs(tempdoc);
+                set->document()->importDefs(tempdoc);
                 // make sure all selected items are converted to paths first (i.e. rectangles)
-                sp_selected_to_lpeitems(desktop);
-                std::vector<SPItem*> itemlist=selection->itemList();
-                for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();++i){
+                set->toLPEItems();
+                auto itemlist= set->items();
+                for(auto i=itemlist.begin();i!=itemlist.end();++i){
                     SPItem *item = *i;
                     _applyPathEffect(item, effectstack);
                 }
@@ -590,7 +588,7 @@ bool ClipboardManagerImpl::pastePathEffect(SPDesktop *desktop)
     }
 
     // no_effect:
-    _userWarn(desktop, _("No effect on the clipboard."));
+    _userWarn(set->desktop(), _("No effect on the clipboard."));
     return false;
 }
 
@@ -654,16 +652,15 @@ Glib::ustring ClipboardManagerImpl::getShapeOrTextObjectId(SPDesktop *desktop)
     return svgd;
 }
 
-
 /**
  * Iterate over a list of items and copy them to the clipboard.
  */
-void ClipboardManagerImpl::_copySelection(Inkscape::Selection *selection)
+void ClipboardManagerImpl::_copySelection(ObjectSet *selection)
 {
     // copy the defs used by all items
-    std::vector<SPItem*> itemlist=selection->itemList();
+    auto itemlist= selection->items();
     cloned_elements.clear();
-    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();++i){
+    for(auto i=itemlist.begin();i!=itemlist.end();++i){
         SPItem *item = *i;
         if (item) {
             _copyUsedDefs(item);
@@ -674,7 +671,7 @@ void ClipboardManagerImpl::_copySelection(Inkscape::Selection *selection)
 
     // copy the representation of the items
     std::vector<SPObject*> sorted_items;
-    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();++i)
+    for(auto i=itemlist.begin();i!=itemlist.end();++i)
         sorted_items.push_back(*i);
     sort(sorted_items.begin(),sorted_items.end(),sp_object_compare_position_bool);
 
@@ -700,7 +697,6 @@ void ClipboardManagerImpl::_copySelection(Inkscape::Selection *selection)
             else
                 obj_copy = _copyNode(obj, _doc, _clipnode);
 
-
             // copy complete inherited style
             SPCSSAttr *css = sp_repr_css_attr_inherited(obj, "style");
             sp_repr_css_set(obj_copy, css, "style");
@@ -712,7 +708,7 @@ void ClipboardManagerImpl::_copySelection(Inkscape::Selection *selection)
             // (we're dealing with unattached representations, so we write to their attributes
             // instead of using sp_item_set_transform)
             SPUse *use=dynamic_cast<SPUse *>(item);
-            if( use && selection->includes(use->get_original()) ){//we are copying something whose parent is also copied (!)
+            if( use && use->get_original() && use->get_original()->parent ){//we are copying something whose parent is also copied (!)
                 transform = ((SPItem*)(use->get_original()->parent))->i2doc_affine().inverse() * transform;
             }
             gchar *transform_str = sp_svg_transform_write(transform );
@@ -732,7 +728,6 @@ void ClipboardManagerImpl::_copySelection(Inkscape::Selection *selection)
             sp_repr_css_set(_clipnode, style, "style");
             sp_repr_css_attr_unref(style);
         }
-
         // copy path effect from the first path
         if (object) {
             gchar const *effect =object->getRepr()->attribute("inkscape:path-effect");
@@ -796,20 +791,6 @@ void ClipboardManagerImpl::_copyUsedDefs(SPItem *item)
         }
     }
 
-    // For lpe items, copy lpe stack if applicable
-    SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
-    if (lpeitem) {
-        if (lpeitem->hasPathEffect()) {
-            for (PathEffectList::iterator it = lpeitem->path_effect_list->begin(); it != lpeitem->path_effect_list->end(); ++it)
-            {
-                LivePathEffectObject *lpeobj = (*it)->lpeobject;
-                if (lpeobj) {
-                    _copyNode(lpeobj->getRepr(), _doc, _defs);
-                }
-            }
-        }
-    }
-
     // For 3D boxes, copy perspectives
     {
         SPBox3D *box = dynamic_cast<SPBox3D *>(item);
@@ -839,8 +820,8 @@ void ClipboardManagerImpl::_copyUsedDefs(SPItem *item)
             SPObject *mask = item->mask_ref->getObject();
             _copyNode(mask->getRepr(), _doc, _defs);
             // recurse into the mask for its gradients etc.
-            for (SPObject *o = mask->children ; o != NULL ; o = o->next) {
-                SPItem *childItem = dynamic_cast<SPItem *>(o);
+            for(auto& o: mask->children) {
+                SPItem *childItem = dynamic_cast<SPItem *>(&o);
                 if (childItem) {
                     _copyUsedDefs(childItem);
                 }
@@ -856,9 +837,22 @@ void ClipboardManagerImpl::_copyUsedDefs(SPItem *item)
         }
     }
 
+    // For lpe items, copy lpe stack if applicable
+    SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(item);
+    if (lpeitem) {
+        if (lpeitem->hasPathEffect()) {
+            for (PathEffectList::iterator it = lpeitem->path_effect_list->begin(); it != lpeitem->path_effect_list->end(); ++it){
+                LivePathEffectObject *lpeobj = (*it)->lpeobject;
+                if (lpeobj) {
+                  _copyNode(lpeobj->getRepr(), _doc, _defs);
+                }
+            }
+        }
+    }
+
     // recurse
-    for (SPObject *o = item->children ; o != NULL ; o = o->next) {
-        SPItem *childItem = dynamic_cast<SPItem *>(o);
+    for(auto& o: item->children) {
+        SPItem *childItem = dynamic_cast<SPItem *>(&o);
         if (childItem) {
             _copyUsedDefs(childItem);
         }
@@ -894,8 +888,8 @@ void ClipboardManagerImpl::_copyPattern(SPPattern *pattern)
         _copyNode(pattern->getRepr(), _doc, _defs);
 
         // items in the pattern may also use gradients and other patterns, so recurse
-        for ( SPObject *child = pattern->firstChild() ; child ; child = child->getNext() ) {
-            SPItem *childItem = dynamic_cast<SPItem *>(child);
+        for (auto& child: pattern->children) {
+            SPItem *childItem = dynamic_cast<SPItem *>(&child);
             if (childItem) {
                 _copyUsedDefs(childItem);
             }
@@ -960,15 +954,7 @@ bool ClipboardManagerImpl::_pasteImage(SPDocument *doc)
         return false;
     }
 
-    // TODO unify with interface.cpp's sp_ui_drag_data_received()
-    // AARGH stupid
-    Inkscape::Extension::DB::InputList o;
-    Inkscape::Extension::db.get_input_list(o);
-    Inkscape::Extension::DB::InputList::const_iterator i = o.begin();
-    while (i != o.end() && strcmp( (*i)->get_mimetype(), "image/png" ) != 0) {
-        ++i;
-    }
-    Inkscape::Extension::Extension *png = *i;
+    Inkscape::Extension::Extension *png = Inkscape::Extension::find_by_mime("image/png");
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     Glib::ustring attr_saved = prefs->getString("/dialogs/import/link");
     bool ask_saved = prefs->getBool("/dialogs/import/ask");
@@ -998,7 +984,42 @@ bool ClipboardManagerImpl::_pasteText(SPDesktop *desktop)
 
     // if the text editing tool is active, paste the text into the active text object
     if (tools_isactive(desktop, TOOLS_TEXT)) {
-        return Inkscape::UI::Tools::sp_text_paste_inline(desktop->event_context);
+        if(Inkscape::UI::Tools::sp_text_paste_inline(desktop->event_context) == false)
+            return false;
+        //apply the saved style to pasted text
+        Glib::RefPtr<Gtk::Clipboard> refClipboard = Gtk::Clipboard::get();
+        Glib::ustring const clip_text = refClipboard->wait_for_text();
+        Glib::ustring text(clip_text);
+        if(text.length() == copied_style_length)
+        {
+            Inkscape::UI::Tools::TextTool *tc = SP_TEXT_CONTEXT(desktop->event_context);
+            Inkscape::Text::Layout const *layout = te_get_layout(tc->text);
+            Inkscape::Text::Layout::iterator it_next;
+            Inkscape::Text::Layout::iterator it = tc->text_sel_end;
+
+            SPCSSAttr *css = take_style_from_item(tc->text);
+            for (int i = 0; i < nr_blocks; ++i)
+            {
+                gchar const *w = sp_repr_css_property(css, "font-size", "40px");
+                if (w)
+                    sp_repr_css_set_property(te_selected_style[i], "font-size", w);
+            }
+
+            for (int i = 0; i < text.length(); ++i)
+                it.prevCharacter();
+            it_next = layout->charIndexToIterator(layout->iteratorToCharIndex(it));
+
+            for (int i = 0; i < nr_blocks; ++i)
+            {
+                for (int j = te_selected_style_positions[i]; j < te_selected_style_positions[i+1]; ++j)
+                    it_next.nextCharacter();
+                sp_te_apply_style(tc->text, it, it_next, te_selected_style[i]);
+                te_update_layout_now_recursive(tc->text);
+                for (int j = te_selected_style_positions[i]; j < te_selected_style_positions[i+1]; ++j)
+                    it.nextCharacter();
+            }
+        }
+        return true;
     }
 
     // try to parse the text as a color and, if successful, apply it as the current style
@@ -1282,7 +1303,7 @@ Geom::Scale ClipboardManagerImpl::_getScale(SPDesktop *desktop, Geom::Point cons
     }
     // If the "lock aspect ratio" button is pressed and we paste only a single coordinate,
     // resize the second one by the same ratio too
-    if (desktop->isToolboxButtonActive("lock")) {
+    if (desktop && desktop->isToolboxButtonActive("lock")) {
         if (apply_x && !apply_y) {
             scale_y = scale_x;
         }
@@ -1300,11 +1321,7 @@ Geom::Scale ClipboardManagerImpl::_getScale(SPDesktop *desktop, Geom::Point cons
  */
 Glib::ustring ClipboardManagerImpl::_getBestTarget()
 {
-#if WITH_GTKMM_3_0
-    std::vector<Glib::ustring> targets = _clipboard->wait_for_targets();
-#else
-    std::list<Glib::ustring> targets = _clipboard->wait_for_targets();
-#endif
+    auto targets = _clipboard->wait_for_targets();
 
     // clipboard target debugging snippet
     /*
@@ -1363,12 +1380,7 @@ void ClipboardManagerImpl::_setClipboardTargets()
 {
     Inkscape::Extension::DB::OutputList outlist;
     Inkscape::Extension::db.get_output_list(outlist);
-
-#if WITH_GTKMM_3_0
     std::vector<Gtk::TargetEntry> target_list;
-#else
-    std::list<Gtk::TargetEntry> target_list;
-#endif
 
     bool plaintextSet = false;
     for (Inkscape::Extension::DB::OutputList::const_iterator out = outlist.begin() ; out != outlist.end() ; ++out) {
@@ -1453,7 +1465,8 @@ void ClipboardManagerImpl::_setClipboardColor(guint32 color)
  */
 void ClipboardManagerImpl::_userWarn(SPDesktop *desktop, char const *msg)
 {
-    desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, msg);
+    if(desktop)
+        desktop->messageStack()->flash(Inkscape::WARNING_MESSAGE, msg);
 }
 
 /* #######################################

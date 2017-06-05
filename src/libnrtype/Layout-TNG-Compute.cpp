@@ -210,6 +210,7 @@ class Layout::Calculator
  */
 static void dumpPangoItemsOut(ParagraphInfo *para){
     std::cout << "Pango items: " << para->pango_items.size() << std::endl;
+    font_factory * factory = font_factory::Default();
     for(unsigned pidx = 0 ; pidx < para->pango_items.size(); pidx++){
         std::cout 
         << "idx: " << pidx 
@@ -217,6 +218,8 @@ static void dumpPangoItemsOut(ParagraphInfo *para){
         << para->pango_items[pidx].item->offset
         << " length: "
         << para->pango_items[pidx].item->length
+        << " font: "
+        << factory->ConstructFontSpecification( para->pango_items[pidx].font )
         << std::endl;
     }
 }
@@ -1182,10 +1185,34 @@ unsigned Layout::Calculator::_buildSpansForPara(ParagraphInfo *para) const
     for(input_index = para->first_input_index ; input_index < _flow._input_stream.size() ; input_index++) {
         if (_flow._input_stream[input_index]->Type() == CONTROL_CODE) {
             Layout::InputStreamControlCode const *control_code = static_cast<Layout::InputStreamControlCode const *>(_flow._input_stream[input_index]);
+
             if (   control_code->code == SHAPE_BREAK
-                   || control_code->code == PARAGRAPH_BREAK)
+                   || control_code->code == PARAGRAPH_BREAK) {
+
+                // Add span to be used to calculate line spacing of blank lines.
+                UnbrokenSpan new_span;
+                new_span.pango_item_index    = -1;
+                new_span.input_index         = input_index;
+
+                // No pango object, so find font and line height ourselves.
+                SPObject * object = static_cast<SPObject *>(control_code->source_cookie);
+                if (object) {
+                    SPStyle * style = object->style;
+                    if (style) {
+                        new_span.font_size = style->font_size.computed * _flow.getTextLengthMultiplierDue();
+                        font_factory * factory = font_factory::Default();
+                        font_instance * font = factory->FaceFromStyle( style );
+                        new_span.line_height_multiplier = _computeFontLineHeight( object->style );
+                        new_span.line_height.set( font );
+                        new_span.line_height *= new_span.font_size;
+                    }
+                }
+                new_span.text_bytes          = 0;
+                new_span.char_index_in_para  = char_index_in_para;
+                para->unbroken_spans.push_back(new_span);
+                TRACE(("add empty span for break %lu\n", para->unbroken_spans.size() - 1));
                 break;                                    // stop at the end of the paragraph
-            else if (control_code->code == ARBITRARY_GAP) {
+            } else if (control_code->code == ARBITRARY_GAP) {
                 UnbrokenSpan new_span;
                 new_span.pango_item_index    = -1;
                 new_span.input_index         = input_index;
@@ -1459,11 +1486,18 @@ bool Layout::Calculator::_findChunksForLine(ParagraphInfo const &para,
 
     UnbrokenSpanPosition span_pos;
     for( ; ; ) {
+
+        // Get regions where one can place one line of text (can be more than one, if filling a
+        // donut for example).
         std::vector<ScanlineMaker::ScanRun> scan_runs;
         scan_runs = _scanline_maker->makeScanline(*line_box_height); // Only one line with "InfiniteScanlineMaker
+
+        // If scan_runs is empty, we must have reached the bottom of a shape. Go to next shape.
         while (scan_runs.empty()) {
             // Only used by ShapeScanlineMaker
             if (!_goToNextWrapShape()) return false;  // no more shapes to wrap in to
+
+            *line_box_height = *strut_height;
             scan_runs = _scanline_maker->makeScanline(*line_box_height);
         }
 
@@ -1474,13 +1508,21 @@ bool Layout::Calculator::_findChunksForLine(ParagraphInfo const &para,
         unsigned scan_run_index;
         span_pos = *start_span_pos;
         for (scan_run_index = 0 ; scan_run_index < scan_runs.size() ; scan_run_index++) {
-            if (!_buildChunksInScanRun(para, span_pos, scan_runs[scan_run_index], chunk_info, line_box_height, strut_height))
+
+            // Returns false if some text in line requires a taller line_box_height.
+            // (We try again with a larger line_box_height.)
+            if (!_buildChunksInScanRun(para, span_pos, scan_runs[scan_run_index], chunk_info, line_box_height, strut_height)) {
                 break;
+            }
+
             if (!chunk_info->empty() && !chunk_info->back().broken_spans.empty())
                 span_pos = chunk_info->back().broken_spans.back().end;
         }
+
         if (scan_run_index == scan_runs.size()) break;  // ie when buildChunksInScanRun() succeeded
-    }
+
+    } // End for loop
+
     *start_span_pos = span_pos;
     TRACE(("    final line_box_height: %f\n", line_box_height->emSize() ));
     TRACE(("  end _findChunksForLine: chunks: %lu\n", chunk_info->size()));
@@ -1554,6 +1596,8 @@ bool Layout::Calculator::_buildChunksInScanRun(ParagraphInfo const &para,
              new_span_height.descent > line_height->descent + std::numeric_limits<float>::epsilon() ) {
             // Take larger of each of the two ascents and two descents per CSS
             line_height->max(new_span_height);
+
+            // Currently always true for flowed text and false for Inkscape multiline text.
             if (!_scanline_maker->canExtendCurrentScanline(*line_height)) {
                 return false;
             }
@@ -1619,8 +1663,8 @@ bool Layout::Calculator::_buildChunksInScanRun(ParagraphInfo const &para,
     *line_height = *strut_height;
     for (std::vector<ChunkInfo>::const_iterator it_chunk = chunk_info->begin() ; it_chunk != chunk_info->end() ; it_chunk++) {
         for (std::vector<BrokenSpan>::const_iterator it_span = it_chunk->broken_spans.begin() ; it_span != it_chunk->broken_spans.end() ; it_span++) {
-            TRACE(("      brokenspan line_height: %f\n", it_span->start.iter_span->line_height.emSize() ));
             FontMetrics span_height = it_span->start.iter_span->line_height;
+            TRACE(("      brokenspan line_height: %f\n", span_height.emSize() ));
             span_height.computeEffective( it_span->start.iter_span->line_height_multiplier );
             line_height->max( span_height );
         }
@@ -1728,12 +1772,20 @@ bool Layout::Calculator::calculate()
         span_pos.char_byte = 0;
         span_pos.char_index = 0;
 
+        bool keep_going = true;
         do {   // for each line in the paragraph
             TRACE(("begin line\n"));
-            std::vector<ChunkInfo> line_chunk_info;
-            if (!_findChunksForLine(para, &span_pos, &line_chunk_info, &line_box_height, &strut_height ))
-                break;   // out of shapes to wrap in to
 
+            std::vector<ChunkInfo> line_chunk_info;
+            if (!_findChunksForLine(para, &span_pos, &line_chunk_info, &line_box_height, &strut_height )) {
+                keep_going = false;
+                break;   // out of shapes to wrap in to
+            }
+
+            if (line_box_height.emSize() < 0.001 && line_chunk_info.empty()) {
+                keep_going = false;
+                break;   // No room for text and not useful to try again at same place.
+            }
             _outputLine(para, line_box_height, line_chunk_info);
             _scanline_maker->setLineHeight( line_box_height );
             _scanline_maker->completeLine(); // Increments y by line height
@@ -1741,7 +1793,7 @@ bool Layout::Calculator::calculate()
         } while (span_pos.iter_span != para.unbroken_spans.end());
 
         TRACE(("para %lu end\n\n", _flow._paragraphs.size() - 1));
-        if (_scanline_maker != NULL) {
+        if (keep_going) {
             bool is_empty_para = _flow._characters.empty() || _flow._characters.back().line(&_flow).in_paragraph != _flow._paragraphs.size() - 1;
             if ((is_empty_para && para_end_input_index + 1 >= _flow._input_stream.size())
                 || para_end_input_index + 1 < _flow._input_stream.size()) {

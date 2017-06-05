@@ -14,14 +14,10 @@
 #include "display/curve.h"
 //# include <libnr/n-art-bpath.h>
 
-#include <2geom/path.h>
-#include <2geom/sbasis.h>
-#include <2geom/sbasis-geometric.h>
 #include <2geom/bezier-to-sbasis.h>
-#include <2geom/sbasis-to-bezier.h>
-#include <2geom/d2.h>
 #include <2geom/sbasis-math.h>
-#include <2geom/piecewise.h>
+// TODO due to internal breakage in glibmm headers, this must be last:
+#include <glibmm/i18n.h>
 
 namespace Inkscape {
 namespace LivePathEffect {
@@ -59,17 +55,17 @@ LPEDynastroke::LPEDynastroke(LivePathEffectObject *lpeobject) :
     capping(_("Capping:"), _("left capping"), "capping", &wr, this, "M 100,5 C 50,5 0,0 0,0 0,0 50,-5 100,-5")
 {
 
-    registerParameter( dynamic_cast<Parameter *>(& method) );
-    registerParameter( dynamic_cast<Parameter *>(& width) );
-    registerParameter( dynamic_cast<Parameter *>(& roundness) );
-    registerParameter( dynamic_cast<Parameter *>(& angle) );
-    //registerParameter( dynamic_cast<Parameter *>(& modulo_pi) );
-    registerParameter( dynamic_cast<Parameter *>(& start_cap) );
-    registerParameter( dynamic_cast<Parameter *>(& growfor) );
-    registerParameter( dynamic_cast<Parameter *>(& end_cap) );
-    registerParameter( dynamic_cast<Parameter *>(& fadefor) );
-    registerParameter( dynamic_cast<Parameter *>(& round_ends) );
-    registerParameter( dynamic_cast<Parameter *>(& capping) );
+    registerParameter(&method);
+    registerParameter(&width);
+    registerParameter(&roundness);
+    registerParameter(&angle);
+    //registerParameter(&modulo_pi) );
+    registerParameter(&start_cap);
+    registerParameter(&growfor);
+    registerParameter(&end_cap);
+    registerParameter(&fadefor);
+    registerParameter(&round_ends);
+    registerParameter(&capping);
 
     width.param_set_range(0, Geom::infinity());
     roundness.param_set_range(0.01, 1);

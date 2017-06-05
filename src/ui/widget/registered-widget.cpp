@@ -14,32 +14,20 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+#include <config.h>
 #endif
 
 #include "registered-widget.h"
-#include <gtkmm/radiobutton.h>
 
-#include "ui/widget/color-picker.h"
-#include "ui/widget/registry.h"
-#include "ui/widget/scalar-unit.h"
-#include "ui/widget/point.h"
-#include "ui/widget/random.h"
 #include "widgets/spinbutton-events.h"
 
-#include "xml/repr.h"
 #include "svg/svg-color.h"
 #include "svg/stringstream.h"
 
 #include "verbs.h"
-
-// for interruptability bug:
-#include "display/sp-canvas.h"
-
-#include "desktop.h"
-
-
 #include "sp-root.h"
+
+#include <gtkmm/radiobutton.h>
 
 namespace Inkscape {
 namespace UI {
@@ -113,10 +101,8 @@ RegisteredToggleButton::~RegisteredToggleButton()
     _toggled_connection.disconnect();
 }
 
-RegisteredToggleButton::RegisteredToggleButton (const Glib::ustring& /*label*/, const Glib::ustring& tip, const Glib::ustring& key, Registry& wr, bool right, Inkscape::XML::Node* repr_in, SPDocument *doc_in, char const *active_str, char const *inactive_str)
+RegisteredToggleButton::RegisteredToggleButton (const Glib::ustring& /*label*/, const Glib::ustring& tip, const Glib::ustring& key, Registry& wr, bool right, Inkscape::XML::Node* repr_in, SPDocument *doc_in, char const *icon_active, char const *icon_inactive)
     : RegisteredWidget<Gtk::ToggleButton>()
-    , _active_str(active_str)
-    , _inactive_str(inactive_str)
 {
     init_parent(key, wr, repr_in, doc_in);
     setProgrammatically = false;
@@ -149,7 +135,7 @@ RegisteredToggleButton::on_toggled()
         return;
     _wr->setUpdating (true);
 
-    write_to_xml(get_active() ? _active_str : _inactive_str);
+    write_to_xml(get_active() ? "true" : "false");
     //The slave button is greyed out if the master button is untoggled
     for (std::list<Gtk::Widget*>::const_iterator i = _slavewidgets.begin(); i != _slavewidgets.end(); ++i) {
         (*i)->set_sensitive(get_active());
@@ -299,7 +285,6 @@ RegisteredScalar::on_value_changed()
         setProgrammatically = false;
         return;
     }
-
     if (_wr->isUpdating()) {
         return;
     }
@@ -333,8 +318,6 @@ RegisteredText::RegisteredText ( const Glib::ustring& label, const Glib::ustring
     init_parent(key, wr, repr_in, doc_in);
 
     setProgrammatically = false;
-
-    setText("");
     _activate_connection = signal_activate().connect (sigc::mem_fun (*this, &RegisteredText::on_activate));
 }
 
@@ -350,16 +333,12 @@ RegisteredText::on_activate()
         return;
     }
     _wr->setUpdating (true);
-
-    Inkscape::SVGOStringStream os;
-    os << getText();
-
+    Glib::ustring str(getText());
     set_sensitive(false);
+    Inkscape::SVGOStringStream os;
+    os << str;
     write_to_xml(os.str().c_str());
     set_sensitive(true);
-
-    setText(os.str().c_str());
-
     _wr->setUpdating (false);
 }
 
@@ -801,6 +780,47 @@ RegisteredRandom::on_value_changed()
     set_sensitive(false);
     write_to_xml(os.str().c_str());
     set_sensitive(true);
+
+    _wr->setUpdating (false);
+}
+
+/*#########################################
+ * Registered FONT-BUTTON
+ */
+
+RegisteredFontButton::~RegisteredFontButton()
+{
+    _signal_font_set.disconnect();
+}
+
+RegisteredFontButton::RegisteredFontButton ( const Glib::ustring& label, const Glib::ustring& tip,
+                        const Glib::ustring& key, Registry& wr, Inkscape::XML::Node* repr_in,
+                        SPDocument* doc_in )
+    : RegisteredWidget<FontButton>(label, tip)
+{
+    init_parent(key, wr, repr_in, doc_in);
+    _signal_font_set =  signal_font_value_changed().connect (sigc::mem_fun (*this, &RegisteredFontButton::on_value_changed));
+}
+
+void
+RegisteredFontButton::setValue (Glib::ustring fontspec)
+{
+    FontButton::setValue(fontspec);
+}
+
+void
+RegisteredFontButton::on_value_changed()
+{
+
+    if (_wr->isUpdating())
+        return;
+
+    _wr->setUpdating (true);
+
+    Inkscape::SVGOStringStream os;
+    os << getValue();
+
+    write_to_xml(os.str().c_str());
 
     _wr->setUpdating (false);
 }

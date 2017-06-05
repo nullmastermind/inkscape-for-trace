@@ -14,9 +14,9 @@
  */
 
 #include "layer-properties.h"
-#include <gtkmm/stock.h>
-#include <glibmm/main.h>
 #include <glibmm/i18n.h>
+#include <glibmm/main.h>
+
 #include "inkscape.h"
 #include "desktop.h"
 #include "document.h"
@@ -24,10 +24,7 @@
 #include "layer-manager.h"
 #include "message-stack.h"
 
-#include "sp-object.h"
-#include "sp-item.h"
 #include "verbs.h"
-#include "selection.h"
 #include "selection-chemistry.h"
 #include "ui/icon-names.h"
 #include "ui/widget/imagetoggler.h"
@@ -38,24 +35,21 @@ namespace UI {
 namespace Dialogs {
 
 LayerPropertiesDialog::LayerPropertiesDialog()
-: _strategy(NULL), _desktop(NULL), _layer(NULL), _position_visible(false)
+    : _strategy(NULL),
+      _desktop(NULL),
+      _layer(NULL),
+      _position_visible(false),
+      _close_button(_("_Cancel"), true)
 {
-#if WITH_GTKMM_3_0
-    Gtk::Box *mainVBox = get_content_area();
+    auto mainVBox = get_content_area();
     _layout_table.set_row_spacing(4);
     _layout_table.set_column_spacing(4);
-#else
-    Gtk::Box *mainVBox = get_vbox();
-    _layout_table.set_spacings(4);
-    _layout_table.resize (1, 2);
-#endif
 
     // Layer name widgets
     _layer_name_entry.set_activates_default(true);
     _layer_name_label.set_label(_("Layer name:"));
     _layer_name_label.set_alignment(1.0, 0.5);
 
-#if WITH_GTKMM_3_0
     _layer_name_label.set_halign(Gtk::ALIGN_FILL);
     _layer_name_label.set_valign(Gtk::ALIGN_FILL);
     _layout_table.attach(_layer_name_label, 0, 0, 1, 1);
@@ -64,18 +58,10 @@ LayerPropertiesDialog::LayerPropertiesDialog()
     _layer_name_entry.set_valign(Gtk::ALIGN_FILL);
     _layer_name_entry.set_hexpand();
     _layout_table.attach(_layer_name_entry, 1, 0, 1, 1);
-#else
-    _layout_table.attach(_layer_name_label,
-                         0, 1, 0, 1, Gtk::FILL, Gtk::FILL);
-    _layout_table.attach(_layer_name_entry,
-                         1, 2, 0, 1, Gtk::FILL | Gtk::EXPAND, Gtk::FILL);
-#endif
 
     mainVBox->pack_start(_layout_table, true, true, 4);
 
     // Buttons
-    _close_button.set_use_stock(true);
-    _close_button.set_label(Gtk::Stock::CANCEL.id);
     _close_button.set_can_default();
 
     _apply_button.set_use_underline(true);
@@ -146,7 +132,7 @@ LayerPropertiesDialog::_close()
     destroy_();
     Glib::signal_idle().connect(
         sigc::bind_return(
-            sigc::bind(sigc::ptr_fun(&::operator delete), this),
+            sigc::bind(sigc::ptr_fun<void*, void>(&::operator delete), this),
             false 
         )
     );
@@ -166,10 +152,6 @@ LayerPropertiesDialog::_setup_position_controls() {
     _layer_position_combo.set_cell_data_func(_label_renderer,
                                              sigc::mem_fun(*this, &LayerPropertiesDialog::_prepareLabelRenderer));
 
-#if !WITH_GTKMM_3_0
-    _layout_table.resize (2, 2);
-#endif
-
     Gtk::ListStore::iterator row;
     row = _dropdown_list->append();
     row->set_value(_dropdown_columns.position, LPOS_ABOVE);
@@ -185,7 +167,6 @@ LayerPropertiesDialog::_setup_position_controls() {
     _layer_position_label.set_label(_("Position:"));
     _layer_position_label.set_alignment(1.0, 0.5);
     
-#if WITH_GTKMM_3_0
     _layer_position_combo.set_halign(Gtk::ALIGN_FILL);
     _layer_position_combo.set_valign(Gtk::ALIGN_FILL);
     _layer_position_combo.set_hexpand();
@@ -194,12 +175,6 @@ LayerPropertiesDialog::_setup_position_controls() {
     _layer_position_label.set_halign(Gtk::ALIGN_FILL);
     _layer_position_label.set_valign(Gtk::ALIGN_FILL);
     _layout_table.attach(_layer_position_label, 0, 1, 1, 1);
-#else
-    _layout_table.attach(_layer_position_combo,
-                         1, 2, 1, 2, Gtk::FILL | Gtk::EXPAND, Gtk::FILL);
-    _layout_table.attach(_layer_position_label,
-                         0, 1, 1, 2, Gtk::FILL, Gtk::FILL);
-#endif
 
     show_all_children();
 }
@@ -254,16 +229,11 @@ LayerPropertiesDialog::_setup_layers_controls() {
     _layout_table.remove(_layer_name_entry);
     _layout_table.remove(_layer_name_label);
 
-#if WITH_GTKMM_3_0
     _scroller.set_halign(Gtk::ALIGN_FILL);
     _scroller.set_valign(Gtk::ALIGN_FILL);
     _scroller.set_hexpand();
     _scroller.set_vexpand();
     _layout_table.attach(_scroller, 0, 1, 2, 1);
-#else
-    _layout_table.attach(_scroller,
-                         0, 2, 1, 2, Gtk::FILL | Gtk::EXPAND, Gtk::FILL | Gtk::EXPAND);
-#endif
 
     show_all_children();
 }
@@ -415,7 +385,7 @@ void LayerPropertiesDialog::Move::setup(LayerPropertiesDialog &dialog) {
 void LayerPropertiesDialog::Move::perform(LayerPropertiesDialog &dialog) {
 
     SPObject *moveto = dialog._selectedLayer();
-    sp_selection_to_layer(dialog._desktop, moveto, false);
+    dialog._desktop->selection->toLayer(moveto);
 }
 
 void LayerPropertiesDialog::_setDesktop(SPDesktop *desktop) {

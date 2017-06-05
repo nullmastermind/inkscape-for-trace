@@ -43,11 +43,7 @@ Scalar::Scalar(Glib::ustring const &label, Glib::ustring const &tooltip,
 }
 
 Scalar::Scalar(Glib::ustring const &label, Glib::ustring const &tooltip,
-#if WITH_GTKMM_3_0
                Glib::RefPtr<Gtk::Adjustment> &adjust,
-#else
-               Gtk::Adjustment &adjust,
-#endif
                unsigned digits,
                Glib::ustring const &suffix,
                Glib::ustring const &icon,
@@ -126,10 +122,12 @@ void Scalar::setRange(double min, double max)
     static_cast<SpinButton*>(_widget)->set_range(min, max);
 }
 
-void Scalar::setValue(double value)
+void Scalar::setValue(double value, bool setProg)
 {
     g_assert(_widget != NULL);
-    setProgrammatically = true; // callback is supposed to reset back, if it cares
+    if (setProg) {
+        setProgrammatically = true; // callback is supposed to reset back, if it cares
+    }
     static_cast<SpinButton*>(_widget)->set_value(value);
 }
 
@@ -141,11 +139,7 @@ void Scalar::update()
 
 void Scalar::addSlider()
 {
-#if WITH_GTKMM_3_0
-    Gtk::Scale *scale = new Gtk::Scale(static_cast<SpinButton*>(_widget)->get_adjustment());
-#else
-    Gtk::HScale *scale = new Gtk::HScale( * static_cast<SpinButton*>(_widget)->get_adjustment() );
-#endif
+    auto scale = new Gtk::Scale(static_cast<SpinButton*>(_widget)->get_adjustment());
     scale->set_draw_value(false);
     add (*manage (scale));
 }

@@ -7,12 +7,13 @@
  * Released under GNU GPL, read the file 'COPYING' for more information.
  */
 
+#include "sp-use-reference.h"
+
 #include <cstring>
 #include <string>
-#include <string.h>
 
+#include "bad-uri-exception.h"
 #include "enums.h"
-#include "sp-use-reference.h"
 
 #include "display/curve.h"
 #include "livarot/Path.h"
@@ -20,8 +21,6 @@
 #include "sp-shape.h"
 #include "sp-text.h"
 #include "uri.h"
-
-
 
 bool SPUseReference::_acceptObject(SPObject * const obj) const
 {

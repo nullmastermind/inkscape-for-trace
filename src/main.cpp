@@ -15,6 +15,7 @@
  * ... and various people who have worked with various projects
  *   Jon A. Cruz <jon@oncruz.org>
  *   Abhishek Sharma
+ *   Marc Jeanmougin
  *
  * Copyright (C) 1999-2004 authors
  * Copyright (C) 2001-2002 Ximian, Inc.
@@ -38,9 +39,6 @@
 #include <ieeefp.h>
 #endif
 #include <cstring>
-#include <string>
-#include <locale.h>
-#include <stdlib.h>
 
 #include <popt.h>
 #ifndef POPT_TABLEEND
@@ -48,14 +46,8 @@
 #endif /* Not def: POPT_TABLEEND */
 
 #include <libxml/tree.h>
-#include <glib/gprintf.h>
-#include <glib-object.h>
-#include <gtk/gtk.h>
 
-#if GTK_CHECK_VERSION(3,0,0)
-#include <gtkmm/cssprovider.h>
 #include <gdkmm/screen.h>
-#endif
 
 #include "inkgc/gc-core.h"
 
@@ -63,16 +55,13 @@
 #undef AND
 #endif
 
-#include "macros.h"
 #include "file.h"
 #include "document.h"
 #include "layer-model.h"
 #include "selection.h"
-#include "sp-object.h"
 #include "ui/interface.h"
 #include "print.h"
 #include "color.h"
-#include "sp-item.h"
 #include "sp-root.h"
 
 #include "svg/svg.h"
@@ -93,10 +82,11 @@
 
 #include "helper/action-context.h"
 #include "helper/png-write.h"
-#include "helper/geom.h"
+#ifdef ENABLE_NLS
+#include "helper/gettext.h"
+#endif
 
 #include <extension/extension.h>
-#include <extension/system.h>
 #include <extension/db.h>
 #include <extension/output.h>
 #include <extension/input.h>
@@ -114,24 +104,22 @@
 #endif // WITH_DBUS
 
 #include <glibmm/i18n.h>
-#include <glibmm/main.h>
+#include <glibmm/convert.h>
+#include <glibmm/fileutils.h>
 #include <glibmm/miscutils.h>
-
+#include <glibmm/main.h>
 #include <gtkmm/main.h>
-
-#ifndef HAVE_BIND_TEXTDOMAIN_CODESET
-#define bind_textdomain_codeset(p,c)
-#endif
+#include <gtkmm/window.h>
 
 #include "main-cmdlineact.h"
+#include "main-cmdlinexact.h"
 #include "widgets/icon.h"
 
 #include <errno.h>
 #include "verbs.h"
 
-#include <gdk/gdkkeysyms.h>
-
 #include "path-chemistry.h"
+#include "object-set.h"
 #include "sp-text.h"
 #include "sp-flowtext.h"
 #include "text-editing.h"
@@ -141,6 +129,7 @@ enum {
     SP_ARG_NOGUI,
     SP_ARG_GUI,
     SP_ARG_FILE,
+    SP_ARG_XVERBS,
     SP_ARG_PRINT,
     SP_ARG_EXPORT_PNG,
     SP_ARG_EXPORT_DPI,
@@ -157,6 +146,7 @@ enum {
     SP_ARG_EXPORT_BACKGROUND,
     SP_ARG_EXPORT_BACKGROUND_OPACITY,
     SP_ARG_EXPORT_SVG,
+    SP_ARG_EXPORT_INKSCAPE_SVG,
     SP_ARG_EXPORT_PS,
     SP_ARG_EXPORT_EPS,
     SP_ARG_EXPORT_PS_LEVEL,
@@ -177,6 +167,8 @@ enum {
     SP_ARG_SHELL,
     SP_ARG_VERSION,
     SP_ARG_VACUUM_DEFS,
+    SP_ARG_NO_CONVERT_TEXT_BASELINE_SPACING,
+    SP_ARG_CONVERT_DPI_METHOD,
 #ifdef WITH_DBUS
     SP_ARG_DBUS_LISTEN,
     SP_ARG_DBUS_NAME,
@@ -215,6 +207,7 @@ static gboolean sp_export_area_snap = FALSE;
 static gboolean sp_export_use_hints = FALSE;
 static gboolean sp_export_id_only = FALSE;
 static gchar *sp_export_svg = NULL;
+static gchar *sp_export_inkscape_svg = NULL;
 static gchar *sp_export_ps = NULL;
 static gchar *sp_export_eps = NULL;
 static gint sp_export_ps_level = 3;
@@ -239,8 +232,13 @@ static gchar *sp_dbus_name = NULL;
 #endif // WITH_DBUS
 static gchar *sp_export_png_utf8 = NULL;
 static gchar *sp_export_svg_utf8 = NULL;
+static gchar *sp_export_inkscape_svg_utf8 = NULL;
 static gchar *sp_global_printer_utf8 = NULL;
 
+#ifdef WITH_YAML
+static gchar *sp_xverbs_yaml_utf8 = NULL;
+static gchar *sp_xverbs_yaml = NULL;
+#endif // WITH_YAML
 
 /**
  *  Reset variables to default values.
@@ -263,6 +261,7 @@ static void resetCommandlineGlobals() {
         sp_export_use_hints = FALSE;
         sp_export_id_only = FALSE;
         sp_export_svg = NULL;
+        sp_export_inkscape_svg = NULL;
         sp_export_ps = NULL;
         sp_export_eps = NULL;
         sp_export_ps_level = 3;
@@ -280,6 +279,8 @@ static void resetCommandlineGlobals() {
         sp_query_all = FALSE;
         sp_query_id = NULL;
         sp_vacuum_defs = FALSE;
+        sp_no_convert_text_baseline_spacing = FALSE;
+        sp_file_convert_dpi_method_commandline = -1;
 #ifdef WITH_DBUS
         sp_dbus_listen = FALSE;
         sp_dbus_name = NULL;
@@ -287,6 +288,7 @@ static void resetCommandlineGlobals() {
 
         sp_export_png_utf8 = NULL;
         sp_export_svg_utf8 = NULL;
+        sp_export_inkscape_svg_utf8 = NULL;
         sp_global_printer_utf8 = NULL;
 }
 
@@ -314,7 +316,12 @@ struct poptOption options[] = {
      POPT_ARG_STRING, NULL, SP_ARG_FILE,
      N_("Open specified document(s) (option string may be excluded)"),
      N_("FILENAME")},
-
+#ifdef WITH_YAML
+    {"xverbs", 0,
+     POPT_ARG_STRING, &sp_xverbs_yaml, SP_ARG_XVERBS,
+     N_("xverbs command"),
+     N_("XVERBS_FILENAME")},
+#endif // WITH_YAML
     {"print", 'p',
      POPT_ARG_STRING, &sp_global_printer, SP_ARG_PRINT,
      N_("Print document(s) to specified output file (use '| program' for pipe)"),
@@ -392,6 +399,10 @@ struct poptOption options[] = {
      N_("Background opacity of exported bitmap (either 0.0 to 1.0, or 1 to 255)"),
      N_("VALUE")},
 
+    {"export-inkscape-svg", 0,
+     POPT_ARG_STRING, &sp_export_inkscape_svg, SP_ARG_EXPORT_INKSCAPE_SVG,
+     N_("Export document to an inkscape SVG file (similar to save as.)"),
+     N_("FILENAME")},
     {"export-plain-svg", 'l',
      POPT_ARG_STRING, &sp_export_svg, SP_ARG_EXPORT_SVG,
      N_("Export document to plain SVG file (no sodipodi or inkscape namespaces)"),
@@ -421,7 +432,7 @@ struct poptOption options[] = {
     {"export-pdf-version", 0,
      POPT_ARG_STRING, &sp_export_pdf_version, SP_ARG_EXPORT_PDF_VERSION,
      // TRANSLATORS: "--export-pdf-version" is an Inkscape command line option; see "inkscape --help"
-     N_("Export PDF to given version. (hint: make sure to input the exact string found in the PDF export dialog, e.g. \"PDF 1.4\" which is PDF-a conformant)"),
+     N_("Export PDF to given version. (hint: make sure to input a version found in the PDF export dialog, e.g. \"1.4\" which is PDF-a conformant)"),
      N_("PDF_VERSION")},
 
     {"export-latex", 0,
@@ -525,6 +536,16 @@ struct poptOption options[] = {
      POPT_ARG_NONE, &sp_shell, SP_ARG_SHELL,
      N_("Start Inkscape in interactive shell mode."),
      NULL},
+
+    {"no-convert-text-baseline-spacing", 0,
+    POPT_ARG_NONE, &sp_no_convert_text_baseline_spacing, SP_ARG_NO_CONVERT_TEXT_BASELINE_SPACING,
+    N_("Do not fix legacy (pre-0.92) files' text baseline spacing on opening."),
+    NULL},
+
+    {"convert-dpi-method", 0,
+    POPT_ARG_STRING, NULL, SP_ARG_CONVERT_DPI_METHOD,
+    N_("Method used to convert pre-.92 document dpi, if needed."),
+    "[none|scale-viewbox|scale-document]"},
 
     POPT_AUTOHELP POPT_TABLEEND
 };
@@ -665,20 +686,14 @@ main(int argc, char **argv)
     fpsetmask(fpgetmask() & ~(FP_X_DZ | FP_X_INV));
 #endif
 
-#ifdef WIN32
-    gchar *exedir = g_strdup(win32_getExePath().data());
-    _win32_set_inkscape_env(exedir);
+#ifdef ENABLE_NLS
+    Inkscape::initialize_gettext();
+#endif
 
-# ifdef ENABLE_NLS
-    // obtain short path to executable dir and pass it
-    // to bindtextdomain (it doesn't understand UTF-8)
-    gchar *shortexedir = g_win32_locale_filename_from_utf8(exedir);
-    gchar *localepath = g_build_filename(shortexedir, PACKAGE_LOCALE_DIR, NULL);
-    bindtextdomain(GETTEXT_PACKAGE, localepath);
-    g_free(shortexedir);
-    g_free(localepath);
-# endif
-    g_free(exedir);
+#ifdef WIN32
+    gchar *datadir = g_win32_get_package_installation_directory_of_module(NULL);
+    _win32_set_inkscape_env(datadir);
+    g_free(datadir);
 
     // Don't touch the registry (works fine without it) for Inkscape Portable
     gchar const *val = g_getenv("INKSCAPE_PORTABLE_PROFILE_DIR");
@@ -686,30 +701,11 @@ main(int argc, char **argv)
         RegistryTool rt;
         rt.setPathInfo();
     }
-#elif defined(ENABLE_NLS)
-# ifdef ENABLE_BINRELOC
-    bindtextdomain(GETTEXT_PACKAGE, BR_LOCALEDIR(""));
-# else
-    bindtextdomain(GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
-    // needed by Python/Gettext
-    g_setenv("PACKAGE_LOCALE_DIR", PACKAGE_LOCALE_DIR, TRUE);
-# endif
+
+    // disable "client side decorations" as they prevent window borders and titlebars to be drawn with native theming
+    // see also https://bugzilla.gnome.org/show_bug.cgi?id=778791
+    g_setenv("GTK_CSD", "0", FALSE);
 #endif
-
-    // the bit below compiles regardless of platform
-#ifdef ENABLE_NLS
-    // Allow the user to override the locale directory by setting
-    // the environment variable INKSCAPE_LOCALEDIR.
-    char const *inkscape_localedir = g_getenv("INKSCAPE_LOCALEDIR");
-    if (inkscape_localedir != NULL) {
-        bindtextdomain(GETTEXT_PACKAGE, inkscape_localedir);
-    }
-
-    // common setup
-    bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
-    textdomain(GETTEXT_PACKAGE);
-#endif
-
     set_extensions_env();
 
     // Prevents errors like "Unable to wrap GdkPixbuf..." (in nr-filter-image.cpp for example)
@@ -861,16 +857,10 @@ static GSList *fixupFilenameEncoding( GSList* fl )
 
 static int sp_common_main( int argc, char const **argv, GSList **flDest )
 {
-    /// \todo fixme: Move these to some centralized location (Lauris)
-    //sp_object_type_register("sodipodi:namedview", SP_TYPE_NAMEDVIEW);
-    //sp_object_type_register("sodipodi:guide", SP_TYPE_GUIDE);
-
-
+#ifdef ENABLE_NLS
     // temporarily switch gettext encoding to locale, so that help messages can be output properly
-    gchar const *charset;
-    g_get_charset(&charset);
-
-    bind_textdomain_codeset(GETTEXT_PACKAGE, charset);
+    Inkscape::bind_textdomain_codeset_console();
+#endif
 
     poptContext ctx = poptGetContext(NULL, argc, argv, options, 0);
     poptSetOtherOptionHelp(ctx, _("[OPTIONS...] [FILE...]\n\nAvailable options:"));
@@ -879,9 +869,11 @@ static int sp_common_main( int argc, char const **argv, GSList **flDest )
     /* Collect own arguments */
     GSList *fl = sp_process_args(ctx);
     poptFreeContext(ctx);
-
+   
+#ifdef ENABLE_NLS
     // now switch gettext back to UTF-8 (for GUI)
-    bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
+    Inkscape::bind_textdomain_codeset_utf8();
+#endif
 
     // Now let's see if the file list still holds up
     if ( needToRecodeParams )
@@ -894,7 +886,11 @@ static int sp_common_main( int argc, char const **argv, GSList **flDest )
     {
         fixupSingleFilename( &sp_export_png, &sp_export_png_utf8 );
         fixupSingleFilename( &sp_export_svg, &sp_export_svg_utf8 );
+        fixupSingleFilename( &sp_export_inkscape_svg, &sp_export_inkscape_svg_utf8 );
         fixupSingleFilename( &sp_global_printer, &sp_global_printer_utf8 );
+#ifdef WITH_YAML
+        fixupSingleFilename( &sp_xverbs_yaml, &sp_xverbs_yaml_utf8 );
+#endif // WITH_YAML
     }
     else
     {
@@ -902,8 +898,14 @@ static int sp_common_main( int argc, char const **argv, GSList **flDest )
             sp_export_png_utf8 = g_strdup( sp_export_png );
         if ( sp_export_svg )
             sp_export_svg_utf8 = g_strdup( sp_export_svg );
+        if ( sp_export_inkscape_svg )
+            sp_export_inkscape_svg_utf8 = g_strdup( sp_export_inkscape_svg );
         if ( sp_global_printer )
             sp_global_printer_utf8 = g_strdup( sp_global_printer );
+#ifdef WITH_YAML
+        if ( sp_xverbs_yaml )
+            sp_xverbs_yaml_utf8 = g_strdup( sp_xverbs_yaml );
+#endif // WITH_YAML
     }
 
 #ifdef WITH_DBUS
@@ -1014,16 +1016,6 @@ snooper(GdkEvent *event, gpointer /*data*/) {
     gtk_main_do_event (event);
 }
 
-static std::vector<Glib::ustring> getDirectorySet(const gchar* userDir, const gchar* const * systemDirs) {
-    std::vector<Glib::ustring> listing;
-    listing.push_back(userDir);
-    for ( const char* const* cur = systemDirs; *cur; cur++ )
-    {
-        listing.push_back(*cur);
-    }
-    return listing;
-}
-
 int
 sp_main_gui(int argc, char const **argv)
 {
@@ -1033,106 +1025,23 @@ sp_main_gui(int argc, char const **argv)
     int retVal = sp_common_main( argc, argv, &fl );
     g_return_val_if_fail(retVal == 0, 1);
 
-    // Add possible icon entry directories
-    std::vector<Glib::ustring> dataDirs = getDirectorySet( g_get_user_data_dir(),
-                                                           g_get_system_data_dirs() );
-    for (std::vector<Glib::ustring>::iterator it = dataDirs.begin(); it != dataDirs.end(); ++it)
-    {
-        std::vector<Glib::ustring> listing;
-        listing.push_back(*it);
-        listing.push_back("inkscape");
-        listing.push_back("icons");
-        Glib::ustring dir = Glib::build_filename(listing);
-        gtk_icon_theme_append_search_path(gtk_icon_theme_get_default(), dir.c_str());
-    }
-
-    // Add our icon directory to the search path for icon theme lookups.
-    gchar *usericondir = Inkscape::Application::profile_path("icons");
-    gtk_icon_theme_append_search_path(gtk_icon_theme_get_default(), usericondir);
-    gtk_icon_theme_append_search_path(gtk_icon_theme_get_default(), INKSCAPE_PIXMAPDIR);
-#ifdef INKSCAPE_THEMEDIR
-    gtk_icon_theme_append_search_path(gtk_icon_theme_get_default(), INKSCAPE_THEMEDIR);
-    gtk_icon_theme_rescan_if_needed (gtk_icon_theme_get_default());
-#endif
-    g_free(usericondir);
-
-
-#if GTK_CHECK_VERSION(3,0,0)
-    // Add style sheet (GTK3)
-    Glib::RefPtr<Gdk::Screen> screen = Gdk::Screen::get_default();
-
-    Glib::ustring inkscape_style = INKSCAPE_UIDIR;
-    inkscape_style += "/style.css";
-    // std::cout << "CSS Stylesheet Inkscape: " << inkscape_style << std::endl;
-
-    if (g_file_test (inkscape_style.c_str(), G_FILE_TEST_EXISTS)) {
-      Glib::RefPtr<Gtk::CssProvider> provider = Gtk::CssProvider::create();
-
-      // From 3.16, throws an error which we must catch.
-      try {
-          provider->load_from_path (inkscape_style);
-      }
-#if GTK_CHECK_VERSION(3,16,0)
-      // Gtk::CssProviderError not defined until 3.16.
-      catch (const Gtk::CssProviderError& ex)
-      {
-          std::cerr << "CSSProviderError::load_from_path(): failed to load: " << inkscape_style
-                    << "\n  (" << ex.what() << ")" << std::endl;
-      }
-#else
-      catch (...)
-      {}
-#endif
-
-      Gtk::StyleContext::add_provider_for_screen (screen, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-    } else {
-        std::cerr << "sp_main_gui: Cannot find default style file:\n  (" << inkscape_style
-                  << ")" << std::endl;
-    }
-
-    Glib::ustring user_style = Inkscape::Application::profile_path("ui/style.css");
-    // std::cout << "CSS Stylesheet User: " << user_style << std::endl;
-
-    if (g_file_test (user_style.c_str(), G_FILE_TEST_EXISTS)) {
-      Glib::RefPtr<Gtk::CssProvider> provider2 = Gtk::CssProvider::create();
-
-      // From 3.16, throws an error which we must catch.
-      try {
-          provider2->load_from_path (user_style);
-      }
-#if GTK_CHECK_VERSION(3,16,0)
-      // Gtk::CssProviderError not defined until 3.16.
-      catch (const Gtk::CssProviderError& ex)
-      {
-        std::cerr << "CSSProviderError::load_from_path(): failed to load: " << user_style
-                  << "\n  (" << ex.what() << ")" << std::endl;
-      }
-#else
-      catch (...)
-      {}
-#endif
-
-      Gtk::StyleContext::add_provider_for_screen (screen, provider2, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-    }
-#endif
-
     gdk_event_handler_set((GdkEventFunc)snooper, NULL, NULL);
     Inkscape::Debug::log_display_config();
 
     // Set default window icon. Obeys the theme.
-    gtk_window_set_default_icon_name("inkscape");
+    Gtk::Window::set_default_icon_name("inkscape");
     // Do things that were previously in inkscape_gtk_stock_init().
     sp_icon_get_phys_size(GTK_ICON_SIZE_MENU);
     Inkscape::UI::Widget::Panel::prep();
 
-    gboolean create_new = TRUE;
+    bool create_new = true;
 
     /// \todo FIXME BROKEN - non-UTF-8 sneaks in here.
     Inkscape::Application::create(argv[0], true);
 
     while (fl) {
         if (sp_file_open((gchar *)fl->data,NULL)) {
-            create_new=FALSE;
+            create_new=false;
         }
         fl = g_slist_remove(fl, fl->data);
     }
@@ -1212,24 +1121,25 @@ static int sp_process_file_list(GSList *fl)
             }
 #endif // WITH_DBUS
 
-            if (!sp_export_svg && (sp_vacuum_defs || has_performed_actions)) {
+            if (!sp_export_svg && !sp_export_inkscape_svg && (sp_vacuum_defs || has_performed_actions)) {
                 // save under the name given in the command line
                 Inkscape::Extension::save(Inkscape::Extension::db.get("org.inkscape.output.svg.inkscape"), doc, filename, false,
                             false, false, Inkscape::Extension::FILE_SAVE_METHOD_INKSCAPE_SVG);
             }
+
             if (sp_global_printer) {
                 sp_print_document_to_file(doc, sp_global_printer);
             }
             if (sp_export_png || (sp_export_id && sp_export_use_hints)) {
                 retVal |= sp_do_export_png(doc);
             }
-            if (sp_export_svg) {
+            if (sp_export_svg || sp_export_inkscape_svg) {
                 if (sp_export_text_to_path) {
-                	std::vector<SPItem*> items;
+                    std::vector<SPItem*> items;
                     SPRoot *root = doc->getRoot();
                     doc->ensureUpToDate();
-                    for ( SPObject *iter = root->firstChild(); iter ; iter = iter->getNext()) {
-                        SPItem* item = (SPItem*) iter;
+                    for (auto& iter: root->children) {
+                        SPItem* item = (SPItem*) &iter;
                         if (! (SP_IS_TEXT(item) || SP_IS_FLOWTEXT(item) || SP_IS_GROUP(item))) {
                             continue;
                         }
@@ -1249,20 +1159,23 @@ static int sp_process_file_list(GSList *fl)
 
                     // "crop" the document to the specified object, cleaning as we go.
                     SPObject *obj = doc->getObjectById(sp_export_id);
-                    Geom::OptRect const bbox(SP_ITEM(obj)->visualBounds());
-
-                    if (bbox) {
-                        doc->fitToRect(*bbox, false);
-                    }
-
                     if (sp_export_id_only) {
                         // If -j then remove all other objects to complete the "crop"
                         doc->getRoot()->cropToObject(obj);
                     }
+                    Inkscape::ObjectSet s(doc);
+                    s.set(obj);
+                    s.fitCanvas(false);
                 }
-
-                Inkscape::Extension::save(Inkscape::Extension::db.get("org.inkscape.output.svg.plain"), doc, sp_export_svg, false,
-                            false, false, Inkscape::Extension::FILE_SAVE_METHOD_SAVE_COPY);
+                if (sp_export_svg) {
+                    Inkscape::Extension::save(Inkscape::Extension::db.get("org.inkscape.output.svg.plain"), doc, sp_export_svg, false,
+                                false, false, Inkscape::Extension::FILE_SAVE_METHOD_SAVE_COPY);
+                }
+                if (sp_export_inkscape_svg) {
+                    // Export as inkscape SVG.
+                    Inkscape::Extension::save(Inkscape::Extension::db.get("org.inkscape.output.svg.inkscape"), doc, sp_export_inkscape_svg, false,
+                                false, false, Inkscape::Extension::FILE_SAVE_METHOD_INKSCAPE_SVG);
+                }
             }
             if (sp_export_ps) {
                 retVal |= do_export_ps_pdf(doc, sp_export_ps, "image/x-postscript");
@@ -1386,7 +1299,6 @@ int sp_main_console(int argc, char const **argv)
 
     char **argv2 = const_cast<char **>(argv);
     gtk_init_check( &argc, &argv2 );
-    //setlocale(LC_ALL, "");
 
     GSList *fl = NULL;
     int retVal = sp_common_main( argc, argv, &fl );
@@ -1483,10 +1395,8 @@ do_query_all_recurse (SPObject *o)
         }
     }
 
-    SPObject *child = o->children;
-    while (child) {
-        do_query_all_recurse (child);
-        child = child->next;
+    for(auto& child: o->children) {
+        do_query_all_recurse (&child);
     }
 }
 
@@ -1727,7 +1637,6 @@ static int sp_do_export_png(SPDocument *doc)
 
     return retcode;
 }
-
 
 /**
  *  Perform a PDF/PS/EPS export
@@ -2240,8 +2149,18 @@ sp_process_args(poptContext ctx)
                 }
                 break;
             }
+#ifdef WITH_YAML
+            case SP_ARG_XVERBS: {
+                gchar const *fn = poptGetOptArg(ctx);
+                if (fn != NULL) {
+                    sp_xverbs_yaml = g_strdup(fn);
+                    Inkscape::CmdLineXAction::createActionsFromYAML((const char *)sp_xverbs_yaml);
+                }
+                break;
+            }
+#endif // WITH_YAML
             case SP_ARG_VERSION: {
-                printf("Inkscape %s (%s)\n", Inkscape::version_string, __DATE__);
+                printf("Inkscape %s\n", Inkscape::version_string);
                 exit(0);
                 break;
             }
@@ -2266,6 +2185,21 @@ sp_process_args(poptContext ctx)
                 if (arg != NULL) {
                     // printf("Adding in: %s\n", arg);
                     new Inkscape::CmdLineAction((a == SP_ARG_VERB), arg);
+                }
+                break;
+            }
+            case SP_ARG_CONVERT_DPI_METHOD: {
+                gchar const *arg = poptGetOptArg(ctx);
+                if (arg != NULL) {
+                    if (!strcmp(arg,"none")) {
+                        sp_file_convert_dpi_method_commandline = FILE_DPI_UNCHANGED;
+                    } else if (!strcmp(arg,"scale-viewbox")) {
+                        sp_file_convert_dpi_method_commandline = FILE_DPI_VIEWBOX_SCALED;
+                    } else if (!strcmp(arg,"scale-document")) {
+                        sp_file_convert_dpi_method_commandline = FILE_DPI_DOCUMENT_SCALED;
+                    } else {
+                        g_warning("Invalid update option");
+                    }
                 }
                 break;
             }

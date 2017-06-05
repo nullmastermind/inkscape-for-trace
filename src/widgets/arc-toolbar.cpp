@@ -25,7 +25,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+#include <config.h>
 #endif
 
 #include <glibmm/i18n.h>
@@ -37,9 +37,9 @@
 #include "widgets/ege-adjustment-action.h"
 #include "widgets/ege-output-action.h"
 #include "widgets/ege-select-one-action.h"
-#include "widgets/ink-action.h"
+#include "ink-action.h"
+#include "ink-radio-action.h"
 #include "mod360.h"
-#include "preferences.h"
 #include "selection.h"
 #include "sp-ellipse.h"
 #include "toolbox.h"
@@ -49,7 +49,6 @@
 #include "verbs.h"
 #include "widgets/spinbutton-events.h"
 #include "xml/node-event-vector.h"
-#include "xml/repr.h"
 
 using Inkscape::UI::UXManager;
 using Inkscape::DocumentUndo;
@@ -97,8 +96,8 @@ sp_arctb_startend_value_changed(GtkAdjustment *adj, GObject *tbl, gchar const *v
     gchar* namespaced_name = g_strconcat("sodipodi:", value_name, NULL);
 
     bool modmade = false;
-    std::vector<SPItem*> itemlist=desktop->getSelection()->itemList();
-    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();++i){
+    auto itemlist= desktop->getSelection()->items();
+    for(auto i=itemlist.begin();i!=itemlist.end();++i){
         SPItem *item = *i;
         if (SP_IS_GENERICELLIPSE(item)) {
 
@@ -149,7 +148,7 @@ static void sp_arctb_open_state_changed( EgeSelectOneAction *act, GObject *tbl )
     SPDesktop *desktop = static_cast<SPDesktop *>(g_object_get_data( tbl, "desktop" ));
     if (DocumentUndo::getUndoSensitive(desktop->getDocument())) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        prefs->setBool("/tools/shapes/arc/open", ege_select_one_action_get_active(act) != 0);
+        prefs->setInt("/tools/shapes/arc/arc_type", ege_select_one_action_get_active(act));
     }
 
     // quit if run by the attr_changed listener
@@ -160,35 +159,43 @@ static void sp_arctb_open_state_changed( EgeSelectOneAction *act, GObject *tbl )
     // in turn, prevent listener from responding
     g_object_set_data( tbl, "freeze", GINT_TO_POINTER(TRUE) );
 
-    bool modmade = false;
 
-    if ( ege_select_one_action_get_active(act) != 0 ) {
-    	std::vector<SPItem*> itemlist=desktop->getSelection()->itemList();
-        for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();++i){
-            SPItem *item = *i;
-            if (SP_IS_GENERICELLIPSE(item)) {
-                Inkscape::XML::Node *repr = item->getRepr();
-                repr->setAttribute("sodipodi:open", "true");
-                item->updateRepr();
-                modmade = true;
-            }
-        }
-    } else {
-    	std::vector<SPItem*> itemlist=desktop->getSelection()->itemList();
-        for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();++i){
-            SPItem *item = *i;
-            if (SP_IS_GENERICELLIPSE(item)) {
-                Inkscape::XML::Node *repr = item->getRepr();
-                repr->setAttribute("sodipodi:open", NULL);
-                item->updateRepr();
-                modmade = true;
-            }
+    int mode = ege_select_one_action_get_active(act);
+    Glib::ustring arc_type = "slice";
+    bool open = false;
+    switch (mode) {
+        case 0:
+            arc_type = "slice";
+            open = false;
+            break;
+        case 1:
+            arc_type = "arc";
+            open = true;
+            break;
+        case 2:
+            arc_type = "chord";
+            open = true; // For backward compat, not truly open but chord most like arc.
+            break;
+        default:
+            std::cerr << "sp_arctb_open_state_changed: bad arc type: " << mode << std::endl;
+    }
+               
+    bool modmade = false;
+    auto itemlist= desktop->getSelection()->items();
+    for(auto i=itemlist.begin();i!=itemlist.end();++i){
+        SPItem *item = *i;
+        if (SP_IS_GENERICELLIPSE(item)) {
+            Inkscape::XML::Node *repr = item->getRepr();
+            repr->setAttribute("sodipodi:open", (open?"true":NULL) );
+            repr->setAttribute("sodipodi:arc-type", arc_type.c_str());
+            item->updateRepr();
+            modmade = true;
         }
     }
 
     if (modmade) {
         DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_ARC,
-                           _("Arc: Change open/closed"));
+                           _("Arc: Changed arc type"));
     }
 
     g_object_set_data( tbl, "freeze", GINT_TO_POINTER(FALSE) );
@@ -235,14 +242,22 @@ static void arc_tb_event_attr_changed(Inkscape::XML::Node *repr, gchar const * /
 
     sp_arctb_sensitivize( tbl, gtk_adjustment_get_value(adj1), gtk_adjustment_get_value(adj2) );
 
-    char const *openstr = NULL;
-    openstr = repr->attribute("sodipodi:open");
+    char const *arctypestr = NULL;
+    arctypestr = repr->attribute("sodipodi:arc-type");
+    if (!arctypestr) { // For old files.
+        char const *openstr = NULL;
+        openstr = repr->attribute("sodipodi:open");
+        arctypestr = (openstr ? "arc" : "slice");
+    }
+
     EgeSelectOneAction *ocb = EGE_SELECT_ONE_ACTION( g_object_get_data( tbl, "open_action" ) );
 
-    if (openstr) {
+    if (!strcmp(arctypestr,"slice")) {
+        ege_select_one_action_set_active( ocb, 0 );
+    } else if (!strcmp(arctypestr,"arc")) {
         ege_select_one_action_set_active( ocb, 1 );
     } else {
-        ege_select_one_action_set_active( ocb, 0 );
+        ege_select_one_action_set_active( ocb, 2 );
     }
 
     g_object_set_data( tbl, "freeze", GINT_TO_POINTER(FALSE) );
@@ -264,8 +279,8 @@ static void sp_arc_toolbox_selection_changed(Inkscape::Selection *selection, GOb
 
     purge_repr_listener( tbl, tbl );
 
-    std::vector<SPItem*> itemlist=selection->itemList();
-    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();++i){
+    auto itemlist= selection->items();
+    for(auto i=itemlist.begin();i!=itemlist.end();++i){
         SPItem *item = *i;
         if (SP_IS_GENERICELLIPSE(item)) {
             n_selected++;
@@ -339,23 +354,30 @@ void sp_arc_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObjec
         gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
     }
 
-    /* Segments / Pie checkbox */
+    /* Arc: Slice, Arc, Chord */
     {
         GtkListStore* model = gtk_list_store_new( 3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING );
 
         GtkTreeIter iter;
         gtk_list_store_append( model, &iter );
         gtk_list_store_set( model, &iter,
-                            0, _("Closed arc"),
-                            1, _("Switch to segment (closed shape with two radii)"),
+                            0, _("Slice"),
+                            1, _("Switch to slice (closed shape with two radii)"),
                             2, INKSCAPE_ICON("draw-ellipse-segment"),
                             -1 );
 
         gtk_list_store_append( model, &iter );
         gtk_list_store_set( model, &iter,
-                            0, _("Open Arc"),
+                            0, _("Arc (Open)"),
                             1, _("Switch to arc (unclosed shape)"),
                             2, INKSCAPE_ICON("draw-ellipse-arc"),
+                            -1 );
+
+        gtk_list_store_append( model, &iter );
+        gtk_list_store_set( model, &iter,
+                            0, _("Chord"),
+                            1, _("Switch to chord (closed shape)"),
+                            2, INKSCAPE_ICON("draw-ellipse-chord"),
                             -1 );
 
         EgeSelectOneAction* act = ege_select_one_action_new( "ArcOpenAction", (""), (""), NULL, GTK_TREE_MODEL(model) );
@@ -369,8 +391,8 @@ void sp_arc_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObjec
         ege_select_one_action_set_icon_size( act, secondarySize );
         ege_select_one_action_set_tooltip_column( act, 1  );
 
-        bool isClosed = !prefs->getBool("/tools/shapes/arc/open", false);
-        ege_select_one_action_set_active( act, isClosed ? 0 : 1 );
+        int arc_type = prefs->getInt("/tools/shapes/arc/arc_type", 0);
+        ege_select_one_action_set_active( act, arc_type );
         g_signal_connect_after( G_OBJECT(act), "changed", G_CALLBACK(sp_arctb_open_state_changed), holder );
     }
 

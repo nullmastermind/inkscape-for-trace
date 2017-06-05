@@ -180,6 +180,10 @@ DrawingShape::_renderStroke(DrawingContext &dc)
     if( has_stroke ) {
         // TODO: remove segments outside of bbox when no dashes present
         dc.path(_curve->get_pathvector());
+        if (_style && _style->vector_effect.computed == SP_VECTOR_EFFECT_NON_SCALING_STROKE) {
+            dc.restore();
+            dc.save();
+        }
         _nrstyle.applyStroke(dc);
         dc.strokePreserve();
         dc.newPath(); // clear path
@@ -231,19 +235,23 @@ DrawingShape::_renderItem(DrawingContext &dc, Geom::IntRect const &area, unsigne
             Inkscape::DrawingContext::Save save(dc);
             dc.transform(_ctm);
 
+
             // update fill and stroke paints.
             // this cannot be done during nr_arena_shape_update, because we need a Cairo context
             // to render svg:pattern
             bool has_fill   = _nrstyle.prepareFill(dc, _item_bbox, _fill_pattern);
             bool has_stroke = _nrstyle.prepareStroke(dc, _item_bbox, _stroke_pattern);
             has_stroke &= (_nrstyle.stroke_width != 0);
-
             if (has_fill || has_stroke) {
-                // TODO: remove segments outside of bbox when no dashes present
                 dc.path(_curve->get_pathvector());
+                // TODO: remove segments outside of bbox when no dashes present
                 if (has_fill) {
                     _nrstyle.applyFill(dc);
                     dc.fillPreserve();
+                }
+                if (_style && _style->vector_effect.computed == SP_VECTOR_EFFECT_NON_SCALING_STROKE) {
+                    dc.restore();
+                    dc.save();
                 }
                 if (has_stroke) {
                     _nrstyle.applyStroke(dc);

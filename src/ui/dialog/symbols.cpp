@@ -15,25 +15,17 @@
 #include <iostream>
 #include <algorithm>
 #include <locale>
-#include <functional>
 #include <sstream>
 
 #include <gtkmm/buttonbox.h>
 #include <gtkmm/label.h>
-
-#if WITH_GTKMM_3_0
-# include <gtkmm/togglebutton.h>
-# include <gtkmm/grid.h>
-#else
-# include <gtkmm/table.h>
-#endif
-
+#include <gtkmm/togglebutton.h>
+#include <gtkmm/grid.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/comboboxtext.h>
 #include <gtkmm/iconview.h>
 #include <gtkmm/liststore.h>
-#include <gtkmm/treemodelcolumn.h>
-#include <gtkmm/clipboard.h>
+#include <glibmm/regex.h>
 #include <glibmm/stringutils.h>
 #include <glibmm/markup.h>
 #include <glibmm/i18n.h>
@@ -65,7 +57,10 @@
     #include <librevenge-stream/librevenge-stream.h>
 
     using librevenge::RVNGFileStream;
+    using librevenge::RVNGString;
     using librevenge::RVNGStringVector;
+    using librevenge::RVNGPropertyList;
+    using librevenge::RVNGSVGDrawingGenerator;
   #else
     #include <libwpd-stream/libwpd-stream.h>
 
@@ -76,8 +71,6 @@
 
 #include "verbs.h"
 #include "helper/action.h"
-#include "helper/action-context.h"
-#include "xml/repr.h"
 
 namespace Inkscape {
 namespace UI {
@@ -121,11 +114,7 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
 {
 
   /********************    Table    *************************/
-#if WITH_GTKMM_3_0
-  Gtk::Grid *table = new Gtk::Grid();
-#else
-  Gtk::Table *table = new Gtk::Table(2, 4, false);
-#endif
+  auto table = new Gtk::Grid();
 
   // panel is a cloked Gtk::VBox
   _getContents()->pack_start(*Gtk::manage(table), Gtk::PACK_EXPAND_WIDGET);
@@ -133,28 +122,16 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
 
   /******************** Symbol Sets *************************/
   Gtk::Label* labelSet = new Gtk::Label(_("Symbol set: "));
-
-#if WITH_GTKMM_3_0
   table->attach(*Gtk::manage(labelSet),0,row,1,1);
-#else
-  table->attach(*Gtk::manage(labelSet),0,1,row,row+1,Gtk::SHRINK,Gtk::SHRINK);
-#endif
-
   symbolSet = new Gtk::ComboBoxText();  // Fill in later
   symbolSet->append(_("Current Document"));
   symbolSet->set_active_text(_("Current Document"));
-
-#if WITH_GTKMM_3_0
   symbolSet->set_hexpand();
   table->attach(*Gtk::manage(symbolSet),1,row,1,1);
-#else
-  table->attach(*Gtk::manage(symbolSet),1,2,row,row+1,Gtk::FILL|Gtk::EXPAND,Gtk::SHRINK);
-#endif
-
   sigc::connection connSet = symbolSet->signal_changed().connect(
           sigc::mem_fun(*this, &SymbolsDialog::rebuild));
   instanceConns.push_back(connSet);
-  
+
   ++row;
 
   /********************* Icon View **************************/
@@ -183,14 +160,9 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   Gtk::ScrolledWindow *scroller = new Gtk::ScrolledWindow();
   scroller->set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_ALWAYS);
   scroller->add(*Gtk::manage(iconView));
-
-#if WITH_GTKMM_3_0
   scroller->set_hexpand();
   scroller->set_vexpand();
   table->attach(*Gtk::manage(scroller),0,row,2,1);
-#else
-  table->attach(*Gtk::manage(scroller),0,2,row,row+1,Gtk::EXPAND|Gtk::FILL,Gtk::EXPAND|Gtk::FILL);
-#endif
 
   ++row;
 
@@ -199,12 +171,8 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   Gtk::HBox* tools = new Gtk::HBox();
 
   //tools->set_layout( Gtk::BUTTONBOX_END );
-#if WITH_GTKMM_3_0
   scroller->set_hexpand();
   table->attach(*Gtk::manage(tools),0,row,2,1);
-#else
-  table->attach(*Gtk::manage(tools),0,2,row,row+1,Gtk::EXPAND|Gtk::FILL,Gtk::FILL);
-#endif
 
   addSymbol = Gtk::manage(new Gtk::Button());
   addSymbol->add(*Gtk::manage(Glib::wrap(
@@ -378,7 +346,7 @@ void SymbolsDialog::rebuild() {
     addSymbol->set_sensitive( true );
     removeSymbol->set_sensitive( true );
   } else {
-    addSymbol->set_sensitive( false );                                              
+    addSymbol->set_sensitive( false );
     removeSymbol->set_sensitive( false );
   }
   add_symbols( symbolDocument );
@@ -398,11 +366,7 @@ void SymbolsDialog::revertSymbol() {
 
 void SymbolsDialog::iconDragDataGet(const Glib::RefPtr<Gdk::DragContext>& /*context*/, Gtk::SelectionData& data, guint /*info*/, guint /*time*/)
 {
-#if WITH_GTKMM_3_0
-  std::vector<Gtk::TreePath> iconArray = iconView->get_selected_items();
-#else
-  Gtk::IconView::ArrayHandle_TreePaths iconArray = iconView->get_selected_items();
-#endif
+  auto iconArray = iconView->get_selected_items();
 
   if( iconArray.empty() ) {
     //std::cout << "  iconArray empty: huh? " << std::endl;
@@ -455,11 +419,7 @@ SPDocument* SymbolsDialog::selectedSymbols() {
 
 Glib::ustring SymbolsDialog::selectedSymbolId() {
 
-#if WITH_GTKMM_3_0
-  std::vector<Gtk::TreePath> iconArray = iconView->get_selected_items();
-#else
-  Gtk::IconView::ArrayHandle_TreePaths iconArray = iconView->get_selected_items();
-#endif
+  auto iconArray = iconView->get_selected_items();
 
   if( !iconArray.empty() ) {
     Gtk::TreeModel::Path const & path = *iconArray.begin();
@@ -476,11 +436,6 @@ void SymbolsDialog::iconChanged() {
   SPObject* symbol = symbolDocument->getObjectById(symbol_id);
 
   if( symbol ) {
-    if( symbolDocument == currentDocument ) {
-      // Select the symbol on the canvas so it can be manipulated
-      currentDesktop->selection->set( symbol, false );
-    }
-
     // Find style for use in <use>
     // First look for default style stored in <symbol>
     gchar const* style = symbol->getAttribute("inkscape:symbol-style");
@@ -499,18 +454,55 @@ void SymbolsDialog::iconChanged() {
 }
 
 #ifdef WITH_LIBVISIO
+
+#if WITH_LIBVISIO01
+// Extend libvisio's native RVNGSVGDrawingGenerator with support for extracting stencil names (to be used as ID/title)
+class REVENGE_API RVNGSVGDrawingGenerator_WithTitle : public RVNGSVGDrawingGenerator {
+  public:
+    RVNGSVGDrawingGenerator_WithTitle(RVNGStringVector &output, RVNGStringVector &titles, const RVNGString &nmSpace)
+      : RVNGSVGDrawingGenerator(output, nmSpace)
+      , _titles(titles)
+    {}
+
+    void startPage(const RVNGPropertyList &propList)
+    {
+      RVNGSVGDrawingGenerator::startPage(propList);
+      if (propList["draw:name"]) {
+          _titles.append(propList["draw:name"]->getStr());
+      } else {
+          _titles.append("");
+      }
+    }
+
+  private:
+    RVNGStringVector &_titles;
+};
+#endif
+
 // Read Visio stencil files
-SPDocument* read_vss( gchar* fullname, gchar* filename ) {
+SPDocument* read_vss( gchar* fullname, Glib::ustring name ) {
+
+  #ifdef WIN32
+    // RVNGFileStream uses fopen() internally which unfortunately only uses ANSI encoding on Windows
+    // therefore attempt to convert uri to the system codepage
+    // even if this is not possible the alternate short (8.3) file name will be used if available
+    fullname = g_win32_locale_filename_from_utf8(fullname);
+  #endif
 
   RVNGFileStream input(fullname);
+
+  #ifdef WIN32
+    g_free(fullname);
+  #endif
 
   if (!libvisio::VisioDocument::isSupported(&input)) {
     return NULL;
   }
 
   RVNGStringVector output;
+  RVNGStringVector titles;
 #if WITH_LIBVISIO01
-  librevenge::RVNGSVGDrawingGenerator generator(output, "svg");
+  RVNGSVGDrawingGenerator_WithTitle generator(output, titles, "svg");
 
   if (!libvisio::VisioDocument::parseStencils(&input, &generator)) {
 #else
@@ -523,6 +515,12 @@ SPDocument* read_vss( gchar* fullname, gchar* filename ) {
     return NULL;
   }
 
+  // prepare a valid title for the symbol file
+  Glib::ustring title = Glib::Markup::escape_text(name);
+  // prepare a valid id prefix for symbols libvisio doesn't give us a name for
+  Glib::RefPtr<Glib::Regex> regex1 = Glib::Regex::create("[^a-zA-Z0-9_-]");
+  Glib::ustring id = regex1->replace(name, 0, "_", Glib::REGEX_MATCH_PARTIAL);
+
   Glib::ustring tmpSVGOutput;
   tmpSVGOutput += "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n";
   tmpSVGOutput += "<svg\n";
@@ -532,36 +530,34 @@ SPDocument* read_vss( gchar* fullname, gchar* filename ) {
   tmpSVGOutput += "  version=\"1.1\"\n";
   tmpSVGOutput += "  style=\"fill:none;stroke:#000000;stroke-width:2\">\n";
   tmpSVGOutput += "  <title>";
-  tmpSVGOutput += filename;
+  tmpSVGOutput += title;
   tmpSVGOutput += "</title>\n";
   tmpSVGOutput += "  <defs>\n";
 
-  // Create a string we can use for the symbol id (libvisio doesn't give us a name)
-  std::string sanitized( filename );
-  sanitized.erase( sanitized.find_last_of(".vss")-3 );
-  sanitized.erase( std::remove_if( sanitized.begin(), sanitized.end(), ispunct ), sanitized.end() );
-  std::replace( sanitized.begin(), sanitized.end(), ' ', '_' );
-  // std::cout << filename << "   |" << sanitized << "|" << std::endl;
-
-  // Each "symbol" is in it's own SVG file, we wrap with <symbol> and merge into one file.
+  // Each "symbol" is in its own SVG file, we wrap with <symbol> and merge into one file.
   for (unsigned i=0; i<output.size(); ++i) {
 
     std::stringstream ss;
-    ss << i;
+    if (titles.size() == output.size() && titles[i] != "") {
+      // TODO: Do we need to check for duplicated titles?
+      ss << regex1->replace(titles[i].cstr(), 0, "_", Glib::REGEX_MATCH_PARTIAL);
+    } else {
+      ss << id << "_" << i;
+    }
 
-    tmpSVGOutput += "    <symbol id=\"";
-    tmpSVGOutput += sanitized;
-    tmpSVGOutput += "_";
-    tmpSVGOutput += ss.str();
-    tmpSVGOutput += "\">\n";
+    tmpSVGOutput += "    <symbol id=\"" + ss.str() + "\">\n";
+
+#if WITH_LIBVISIO01
+    if (titles.size() == output.size() && titles[i] != "") {
+      tmpSVGOutput += "      <title>" + Glib::ustring(RVNGString::escapeXML(titles[i].cstr()).cstr()) + "</title>\n";
+    }
+#endif
 
     std::istringstream iss( output[i].cstr() );
     std::string line;
     while( std::getline( iss, line ) ) {
-      // std::cout << line << std::endl;
       if( line.find( "svg:svg" ) == std::string::npos ) {
-        tmpSVGOutput += line;
-        tmpSVGOutput += "\n";
+        tmpSVGOutput += "      " + line + "\n";
       }
     }
 
@@ -570,12 +566,12 @@ SPDocument* read_vss( gchar* fullname, gchar* filename ) {
 
   tmpSVGOutput += "  </defs>\n";
   tmpSVGOutput += "</svg>\n";
-        
+
   return SPDocument::createNewDocFromMem( tmpSVGOutput.c_str(), strlen( tmpSVGOutput.c_str()), 0 );
 
 }
 #endif
-                        
+
 /* Hunts preference directories for symbol files */
 void SymbolsDialog::get_symbols() {
 
@@ -614,11 +610,14 @@ void SymbolsDialog::get_symbols() {
 
 #ifdef WITH_LIBVISIO
           if( tag.compare( "vss" ) == 0 ) {
+            // strip extension from filename and use it as name for the symbol set
+            Glib::ustring name = Glib::ustring(filename);
+            name = name.erase(name.rfind('.'));
 
-            symbol_doc = read_vss( fullname, filename );
+            symbol_doc = read_vss( fullname, name );
             if( symbol_doc ) {
-              symbolSets[Glib::ustring(filename)]= symbol_doc;
-              symbolSet->append(filename);
+              symbolSets[name]= symbol_doc;
+              symbolSet->append(name);
             }
           }
 #endif
@@ -663,8 +662,8 @@ GSList* SymbolsDialog::symbols_in_doc_recursive (SPObject *r, GSList *l)
     l = g_slist_prepend (l, r);
   }
 
-  for (SPObject *child = r->firstChild(); child; child = child->getNext()) {
-    l = symbols_in_doc_recursive( child, l );
+  for (auto& child: r->children) {
+    l = symbols_in_doc_recursive( &child, l );
   }
 
   return l;
@@ -679,14 +678,14 @@ GSList* SymbolsDialog::symbols_in_doc( SPDocument* symbolDocument ) {
 }
 
 GSList* SymbolsDialog::use_in_doc_recursive (SPObject *r, GSList *l)
-{ 
+{
 
   if ( dynamic_cast<SPUse *>(r) ) {
     l = g_slist_prepend (l, r);
   }
 
-  for (SPObject *child = r->firstChild(); child; child = child->getNext()) {
-    l = use_in_doc_recursive( child, l );
+  for (auto& child: r->children) {
+    l = use_in_doc_recursive( &child, l );
   }
 
   return l;
@@ -865,7 +864,7 @@ SPDocument* SymbolsDialog::symbols_preview_doc()
 "     xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\""
 "     xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\""
 "     xmlns:xlink=\"http://www.w3.org/1999/xlink\">"
-"  <defs id=\"defs\">"  
+"  <defs id=\"defs\">"
 "    <symbol id=\"the_symbol\"/>"
 "  </defs>"
 "  <use id=\"the_use\" xlink:href=\"#the_symbol\"/>"

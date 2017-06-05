@@ -1,7 +1,7 @@
 /*
  * Boolean operation live path effect
  *
- * Copyright (C) 2016 Michael Soegtrop
+ * Copyright (C) 2016-2017 Michael Soegtrop
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */

@@ -9,15 +9,12 @@
 
 #include "ui/widget/dock.h"
 
-#include "dock-item.h"
 #include "desktop.h"
 #include "inkscape.h"
-#include "preferences.h"
 #include "ui/icon-names.h"
 #include "widgets/icon.h"
 
 #include <gtkmm/icontheme.h>
-#include <gtkmm/stockitem.h>
 #include <glibmm/exceptionhandler.h>
 
 namespace Inkscape {
@@ -49,22 +46,11 @@ DockItem::DockItem(Dock& dock, const Glib::ustring& name, const Glib::ustring& l
         if (!iconTheme->has_icon(icon_name)) {
             Inkscape::queueIconPrerender( INKSCAPE_ICON(icon_name.data()), Inkscape::ICON_SIZE_MENU );
         }
-        // Icon might be in the icon theme, or might be a stock item. Check the proper source:
         if ( iconTheme->has_icon(icon_name) ) {
             int width = 0;
             int height = 0;
             Gtk::IconSize::lookup(Gtk::ICON_SIZE_MENU, width, height);
             _icon_pixbuf = iconTheme->load_icon(icon_name, width);
-        } else {
-            Gtk::StockItem item;
-            Gtk::StockID stockId(icon_name);
-            if ( Gtk::StockItem::lookup(stockId, item) ) {
-#if WITH_GTKMM_3_0
-                _icon_pixbuf = _dock.getWidget().render_icon_pixbuf( stockId, Gtk::ICON_SIZE_MENU );
-#else
-                _icon_pixbuf = _dock.getWidget().render_icon( stockId, Gtk::ICON_SIZE_MENU );
-#endif
-            }
         }
     }
 
@@ -175,12 +161,8 @@ DockItem::set_size_request(int width, int height)
 
 void DockItem::size_request(Gtk::Requisition& requisition)
 {
-#if WITH_GTKMM_3_0
     Gtk::Requisition req_natural;
     getWidget().get_preferred_size(req_natural, requisition);
-#else
-    requisition = getWidget().size_request();
-#endif
 }
 
 void
@@ -433,6 +415,8 @@ void
 DockItem::_onStateChanged(State /*prev_state*/, State new_state)
 {
     _window = getWindow();
+    if(_window)
+        _window->set_type_hint(Gdk::WINDOW_TYPE_HINT_NORMAL);
 
     if (new_state == FLOATING_STATE && _window) {
         _window->signal_hide().connect(sigc::mem_fun(*this, &Inkscape::UI::Widget::DockItem::_onHideWindow));

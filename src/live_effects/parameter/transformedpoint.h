@@ -51,7 +51,9 @@ public:
 
     void set_vector_oncanvas_looks(SPKnotShapeType shape, SPKnotModeType mode, guint32 color);
     void set_oncanvas_color(guint32 color);
-
+    Geom::Point param_get_default() { return defvalue; }
+    void param_update_default(Geom::Point default_point);
+    virtual void param_update_default(const gchar * default_point);
     virtual bool providesKnotHolderEntities() const { return true; }
     virtual void addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item);
 

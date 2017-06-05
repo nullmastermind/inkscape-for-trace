@@ -125,7 +125,7 @@ void Filter::effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::Vie
     Inkscape::Selection * selection = ((SPDesktop *)document)->selection;
 
     // TODO need to properly refcount the items, at least
-    std::vector<SPItem*> items(selection->itemList());
+    std::vector<SPItem*> items(selection->items().begin(), selection->items().end());
 
 	Inkscape::XML::Document * xmldoc = document->doc()->getReprDoc();
 	Inkscape::XML::Node * defsrepr = document->doc()->getDefs()->getRepr();
@@ -143,6 +143,7 @@ void Filter::effect(Inkscape::Extension::Effect *module, Inkscape::UI::View::Vie
 			Inkscape::XML::Node * newfilterroot = xmldoc->createElement("svg:filter");
 			merge_filters(newfilterroot, filterdoc->root(), xmldoc);
 			defsrepr->appendChild(newfilterroot);
+                        document->doc()->priv->resources_changed_signals[g_quark_from_string("filter")].emit();
 
 			Glib::ustring url = "url(#"; url += newfilterroot->attribute("id"); url += ")";
 

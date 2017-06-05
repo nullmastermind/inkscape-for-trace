@@ -35,6 +35,8 @@ namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
+class EntryAttr;
+//class SpinButtonAttr;
 class DualSpinButton;
 class MultiSpinButton;
 class FilterEffectsDialog : public UI::Widget::Panel {
@@ -163,7 +165,6 @@ private:
         static const int size = 24;
         
     protected:
-#if WITH_GTKMM_3_0
         virtual void get_preferred_width_vfunc(Gtk::Widget& widget,
                                                int& minimum_width,
                                                int& natural_width) const;
@@ -181,10 +182,6 @@ private:
                                                           int width,
                                                           int& minimum_height,
                                                           int& natural_height) const;
-#else
-        virtual void get_size_vfunc(Gtk::Widget& widget, const Gdk::Rectangle* cell_area,
-                                    int* x_offset, int* y_offset, int* width, int* height) const;
-#endif
     private:
         // void* should be SPFilterPrimitive*, some weirdness with properties prevents this
         Glib::Property<void*> _primitive;
@@ -211,9 +208,6 @@ private:
     protected:
         bool on_draw_signal(const Cairo::RefPtr<Cairo::Context> &cr);
 
-#if !WITH_GTKMM_3_0
-        bool on_expose_signal(GdkEventExpose*);
-#endif
 
         bool on_button_press_event(GdkEventButton*);
         bool on_motion_notify_event(GdkEventMotion*);
@@ -266,6 +260,8 @@ private:
     void remove_primitive();
     void duplicate_primitive();
     void convolve_order_changed();
+    void image_x_changed();
+    void image_y_changed();
 
     void set_attr_direct(const UI::Widget::AttrWidget*);
     void set_child_attr_direct(const UI::Widget::AttrWidget*);
@@ -283,11 +279,7 @@ private:
     Gtk::ScrolledWindow* _sw_infobox;
 
     // View/add primitives
-#if WITH_GTKMM_3_0
     Gtk::Paned* _primitive_box;
-#else
-    Gtk::VPaned* _primitive_box;
-#endif
     
     UI::Widget::ComboBoxEnum<Inkscape::Filters::FilterPrimitiveType> _add_primitive_type;
     Gtk::Button _add_primitive;
@@ -320,6 +312,10 @@ private:
     DualSpinButton* _convolve_order;
     MultiSpinButton* _convolve_target;
 
+    // Image
+    EntryAttr* _image_x;
+    EntryAttr* _image_y;
+    
     // For controlling setting sensitivity
     Gtk::Widget* _k1, *_k2, *_k3, *_k4;
 

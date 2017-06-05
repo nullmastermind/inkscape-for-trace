@@ -48,11 +48,6 @@
 #include "sp-filter-units.h"
 #include "preferences.h"
 
-#if defined (SOLARIS) && (SOLARIS == 8)
-#include "round.h"
-using Inkscape::round;
-#endif
-
 namespace Inkscape {
 namespace Filters {
 

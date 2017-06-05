@@ -11,21 +11,20 @@
    <body class="kmr">
       <div id="header">
          <h1 class="kmr">Inkscape keyboard and mouse reference</h1>
-         <div class="kmr-releaseinfo">Version 0.91</div>
-         <div class="kmr-pubdate">Last revision: 2015-02-04</div>
+         <div class="kmr-releaseinfo">Version 0.92</div>
+         <div class="kmr-pubdate">Last revision: 2017-01-23</div>
       </div>
       <div id="kmr-preface">
     
          <p>This document describes the default keyboard and mouse shortcuts of Inkscape, corresponding to the
-share/keys/default.xml file in Inkscape distribution. Most (but not all) of these keys
-are configurable by the user; see the default.xml file for details on how to do that.</p>
+share/keys/default.xml file in your Inkscape installation. Some of the keyboard shortcuts may not be available for non-US keyboard layouts, but most (not all) of these shortcuts are configurable by the user. You can create custom shortcuts and load custom keyboard shortcut files in the Inkscape Preferences, or by following the instructions in the default.xml file.</p>
 
     
          <p>Unless noted otherwise, keypad keys (such as arrows, Home, End, +, -, digits) are
 supposed to work the same as corresponding regular keys. If you have a new shortcut
 idea, please contact the developers (by writing to the <a href="http://lists.sourceforge.net/lists/listinfo/inkscape-devel">devel mailing list</a>
-or by <a href="https://bugs.launchpad.net/inkscape">submitting an
-RFE</a>).</p>
+or by <a href="https://bugs.launchpad.net/inkscape">submitting a
+feature request</a>).</p>
 
       </div>
       <div class="kmr-toc">
@@ -48,7 +47,7 @@ RFE</a>).</p>
                </li>
             </ul>
             <li>
-               <a class="kmr-toc-section" href="#d0e610">Controls bar</a>
+               <a class="kmr-toc-section" href="#d0e610">Tool controls bar</a>
             </li>
             <ul>
                <li>
@@ -81,415 +80,415 @@ RFE</a>).</p>
                   <a class="kmr-toc-group" href="#d0e976">Guides, grids, snapping</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e1075">Display mode</a>
+                  <a class="kmr-toc-group" href="#d0e1074">Display mode</a>
                </li>
             </ul>
             <li>
-               <a class="kmr-toc-section" href="#d0e1092">Palette</a>
+               <a class="kmr-toc-section" href="#d0e1091">Palette</a>
             </li>
             <li>
-               <a class="kmr-toc-section" href="#d0e1161">File</a>
+               <a class="kmr-toc-section" href="#d0e1160">File</a>
             </li>
             <li>
-               <a class="kmr-toc-section" href="#d0e1268">Window</a>
+               <a class="kmr-toc-section" href="#d0e1267">Window</a>
             </li>
             <li>
-               <a class="kmr-toc-section" href="#d0e1411">Extensions</a>
+               <a class="kmr-toc-section" href="#d0e1410">Extensions</a>
             </li>
             <li>
-               <a class="kmr-toc-section" href="#d0e1442">Layers</a>
+               <a class="kmr-toc-section" href="#d0e1441">Layers</a>
             </li>
             <ul>
                <li>
-                  <a class="kmr-toc-group" href="#d0e1539">Hide/lock</a>
+                  <a class="kmr-toc-group" href="#d0e1538">Hide/lock</a>
                </li>
             </ul>
             <li>
-               <a class="kmr-toc-section" href="#d0e1571">Object</a>
+               <a class="kmr-toc-section" href="#d0e1570">Object</a>
             </li>
             <ul>
                <li>
-                  <a class="kmr-toc-group" href="#d0e1576">Undo/redo</a>
+                  <a class="kmr-toc-group" href="#d0e1575">Undo/redo</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e1620">Clipboard</a>
+                  <a class="kmr-toc-group" href="#d0e1619">Clipboard</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e1729">Duplicate</a>
+                  <a class="kmr-toc-group" href="#d0e1728">Duplicate</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e1748">Clone</a>
+                  <a class="kmr-toc-group" href="#d0e1747">Clone</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e1801">Bitmaps</a>
+                  <a class="kmr-toc-group" href="#d0e1800">Bitmaps</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e1838">Patterns</a>
+                  <a class="kmr-toc-group" href="#d0e1837">Patterns</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e1872">Guides</a>
+                  <a class="kmr-toc-group" href="#d0e1871">Guides</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e1888">Group</a>
+                  <a class="kmr-toc-group" href="#d0e1887">Group</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e1939">Z-order</a>
+                  <a class="kmr-toc-group" href="#d0e1938">Z-order</a>
                </li>
             </ul>
             <li>
-               <a class="kmr-toc-section" href="#d0e1974">Path</a>
+               <a class="kmr-toc-section" href="#d0e1973">Path</a>
             </li>
             <ul>
                <li>
-                  <a class="kmr-toc-group" href="#d0e1979">Convert to path</a>
+                  <a class="kmr-toc-group" href="#d0e1978">Convert to path</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e2009">Boolean operations</a>
+                  <a class="kmr-toc-group" href="#d0e2008">Boolean operations</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e2101">Offsets</a>
+                  <a class="kmr-toc-group" href="#d0e2100">Offsets</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e2218">Combine</a>
+                  <a class="kmr-toc-group" href="#d0e2217">Combine</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e2258">Simplify</a>
+                  <a class="kmr-toc-group" href="#d0e2257">Simplify</a>
+               </li>
+               <li>
+                  <a class="kmr-toc-group" href="#d0e2282">Path effects</a>
                </li>
             </ul>
             <li>
-               <a class="kmr-toc-section" href="#d0e2287">Selector</a>
+               <a class="kmr-toc-section" href="#d0e2299">Selector</a>
             </li>
             <ul>
                <li>
-                  <a class="kmr-toc-group" href="#d0e2292">Select (mouse)</a>
+                  <a class="kmr-toc-group" href="#d0e2304">Select (mouse)</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e2340">Rubberband, touch selection</a>
+                  <a class="kmr-toc-group" href="#d0e2349">Rubberband, touch selection</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e2399">Select (keyboard)</a>
+                  <a class="kmr-toc-group" href="#d0e2408">Select (keyboard)</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e2501">Select within group, select under</a>
+                  <a class="kmr-toc-group" href="#d0e2510">Select within group, select under</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e2615">Move (mouse)</a>
+                  <a class="kmr-toc-group" href="#d0e2624">Move (mouse)</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e2689">Move (keyboard)</a>
+                  <a class="kmr-toc-group" href="#d0e2698">Move (keyboard)</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e2740">Transform (mouse)</a>
+                  <a class="kmr-toc-group" href="#d0e2749">Transform (mouse)</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e2773">Scale by handles</a>
+                  <a class="kmr-toc-group" href="#d0e2782">Scale by handles</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e2824">Scale (keyboard)</a>
+                  <a class="kmr-toc-group" href="#d0e2833">Scale (keyboard)</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e2928">Rotate/skew by handles</a>
+                  <a class="kmr-toc-group" href="#d0e2937">Rotate/skew by handles</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e2967">Rotate (keyboard)</a>
+                  <a class="kmr-toc-group" href="#d0e2986">Rotate (keyboard)</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e3025">Flip</a>
+                  <a class="kmr-toc-group" href="#d0e3044">Flip</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e3048">Rotation center</a>
+                  <a class="kmr-toc-group" href="#d0e3067">Rotation center</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e3087">Cancel</a>
+                  <a class="kmr-toc-group" href="#d0e3106">Cancel</a>
                </li>
             </ul>
             <li>
-               <a class="kmr-toc-section" href="#d0e3107">Node tool</a>
+               <a class="kmr-toc-section" href="#d0e3126">Node tool</a>
             </li>
             <ul>
                <li>
-                  <a class="kmr-toc-group" href="#d0e3112">Select objects (mouse)</a>
+                  <a class="kmr-toc-group" href="#d0e3131">Select objects (mouse)</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e3158">Select nodes (mouse)</a>
+                  <a class="kmr-toc-group" href="#d0e3177">Select nodes (mouse)</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e3207">Rubberband selection</a>
+                  <a class="kmr-toc-group" href="#d0e3226">Rubberband selection</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e3239">Select nodes (keyboard)</a>
+                  <a class="kmr-toc-group" href="#d0e3258">Select nodes (keyboard)</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e3322">Grow/shrink node selection</a>
+                  <a class="kmr-toc-group" href="#d0e3341">Grow/shrink node selection</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e3382">Move nodes (mouse)</a>
+                  <a class="kmr-toc-group" href="#d0e3401">Move nodes (mouse)</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e3481">Move nodes (keyboard)</a>
+                  <a class="kmr-toc-group" href="#d0e3500">Move nodes (keyboard)</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e3532">Move node handle (mouse)</a>
+                  <a class="kmr-toc-group" href="#d0e3551">Move node handle (mouse)</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e3594">Scale handle (1 node selected)</a>
+                  <a class="kmr-toc-group" href="#d0e3613">Scale handle (1 node selected)</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e3700">Rotate handle (1 node selected)</a>
+                  <a class="kmr-toc-group" href="#d0e3719">Rotate handle (1 node selected)</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e3786">Handles visibility</a>
+                  <a class="kmr-toc-group" href="#d0e3805">Handles visibility</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e3802">Scale nodes (&gt;1 nodes selected)</a>
+                  <a class="kmr-toc-group" href="#d0e3821">Scale nodes (&gt;1 nodes selected)</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e3878">Rotate nodes (&gt;1 nodes selected)</a>
+                  <a class="kmr-toc-group" href="#d0e3897">Rotate nodes (&gt;1 nodes selected)</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e3922">Flip nodes (&gt;1 nodes selected)</a>
+                  <a class="kmr-toc-group" href="#d0e3941">Flip nodes (&gt;1 nodes selected)</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e3948">Change segment(s)</a>
+                  <a class="kmr-toc-group" href="#d0e3967">Change segment(s)</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e3977">Change node type</a>
+                  <a class="kmr-toc-group" href="#d0e3996">Change node type</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e4042">Join/break</a>
+                  <a class="kmr-toc-group" href="#d0e4061">Join/break</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e4087">Delete, create, duplicate</a>
+                  <a class="kmr-toc-group" href="#d0e4106">Delete, create, duplicate</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e4197">Reverse</a>
+                  <a class="kmr-toc-group" href="#d0e4213">Reverse</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e4213">Edit shapes</a>
+                  <a class="kmr-toc-group" href="#d0e4229">Edit shapes</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e4225">Edit fills and path effects</a>
+                  <a class="kmr-toc-group" href="#d0e4241">Edit fills and path effects</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e4234">Cancel</a>
+                  <a class="kmr-toc-group" href="#d0e4250">Cancel</a>
                </li>
             </ul>
             <li>
-               <a class="kmr-toc-section" href="#d0e4254">Tweak tool</a>
+               <a class="kmr-toc-section" href="#d0e4270">Tweak tool</a>
             </li>
             <ul>
                <li>
-                  <a class="kmr-toc-group" href="#d0e4259">Operation</a>
+                  <a class="kmr-toc-group" href="#d0e4275">Operation</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e4307">Modes</a>
+                  <a class="kmr-toc-group" href="#d0e4323">Modes</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e4533">Parameters</a>
+                  <a class="kmr-toc-group" href="#d0e4549">Parameters</a>
                </li>
             </ul>
             <li>
-               <a class="kmr-toc-section" href="#d0e4576">Zoom tool</a>
+               <a class="kmr-toc-section" href="#d0e4592">Zoom tool</a>
             </li>
             <li>
-               <a class="kmr-toc-section" href="#d0e4609">Measure tool</a>
+               <a class="kmr-toc-section" href="#d0e4625">Measure tool</a>
             </li>
             <li>
-               <a class="kmr-toc-section" href="#d0e4648">Rectangle tool</a>
+               <a class="kmr-toc-section" href="#d0e4664">Rectangle tool</a>
             </li>
             <ul>
                <li>
-                  <a class="kmr-toc-group" href="#d0e4653">Draw</a>
+                  <a class="kmr-toc-group" href="#d0e4669">Draw</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e4692">Select</a>
+                  <a class="kmr-toc-group" href="#d0e4708">Select</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e4744">Resize by handles</a>
+                  <a class="kmr-toc-group" href="#d0e4760">Resize by handles</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e4773">Round corners by handles</a>
+                  <a class="kmr-toc-group" href="#d0e4789">Round corners by handles</a>
                </li>
             </ul>
             <li>
-               <a class="kmr-toc-section" href="#d0e4826">3D box tool</a>
+               <a class="kmr-toc-section" href="#d0e4842">3D box tool</a>
             </li>
             <ul>
                <li>
-                  <a class="kmr-toc-group" href="#d0e4831">Draw</a>
+                  <a class="kmr-toc-group" href="#d0e4847">Draw</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e4854">Select</a>
+                  <a class="kmr-toc-group" href="#d0e4870">Select</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e4903">Edit by handles</a>
+                  <a class="kmr-toc-group" href="#d0e4919">Edit by handles</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e4942">Edit perspectives</a>
+                  <a class="kmr-toc-group" href="#d0e4958">Edit perspectives</a>
                </li>
             </ul>
             <li>
-               <a class="kmr-toc-section" href="#d0e5042">Ellipse tool</a>
+               <a class="kmr-toc-section" href="#d0e5058">Ellipse tool</a>
             </li>
             <ul>
                <li>
-                  <a class="kmr-toc-group" href="#d0e5047">Draw</a>
+                  <a class="kmr-toc-group" href="#d0e5063">Draw</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e5107">Select</a>
+                  <a class="kmr-toc-group" href="#d0e5123">Select</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e5159">Edit by handles</a>
+                  <a class="kmr-toc-group" href="#d0e5175">Edit by handles</a>
                </li>
             </ul>
             <li>
-               <a class="kmr-toc-section" href="#d0e5212">Star tool</a>
+               <a class="kmr-toc-section" href="#d0e5228">Star tool</a>
             </li>
             <ul>
                <li>
-                  <a class="kmr-toc-group" href="#d0e5217">Draw</a>
+                  <a class="kmr-toc-group" href="#d0e5233">Draw</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e5243">Select</a>
+                  <a class="kmr-toc-group" href="#d0e5259">Select</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e5295">Edit by handles</a>
+                  <a class="kmr-toc-group" href="#d0e5311">Edit by handles</a>
                </li>
             </ul>
             <li>
-               <a class="kmr-toc-section" href="#d0e5368">Spiral tool</a>
+               <a class="kmr-toc-section" href="#d0e5384">Spiral tool</a>
             </li>
             <ul>
                <li>
-                  <a class="kmr-toc-group" href="#d0e5373">Draw</a>
+                  <a class="kmr-toc-group" href="#d0e5389">Draw</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e5399">Select</a>
+                  <a class="kmr-toc-group" href="#d0e5415">Select</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e5450">Edit by handles</a>
+                  <a class="kmr-toc-group" href="#d0e5466">Edit by handles</a>
                </li>
             </ul>
             <li>
-               <a class="kmr-toc-section" href="#d0e5564">Pencil tool</a>
+               <a class="kmr-toc-section" href="#d0e5580">Pencil tool</a>
             </li>
             <ul>
                <li>
-                  <a class="kmr-toc-group" href="#d0e5615">Create dots</a>
+                  <a class="kmr-toc-group" href="#d0e5638">Create dots</a>
                </li>
             </ul>
             <li>
-               <a class="kmr-toc-section" href="#d0e5659">Pen (Bezier) tool</a>
+               <a class="kmr-toc-section" href="#d0e5682">Pen (Bezier) tool</a>
             </li>
             <ul>
                <li>
-                  <a class="kmr-toc-group" href="#d0e5664">Create nodes</a>
+                  <a class="kmr-toc-group" href="#d0e5687">Create nodes</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e5728">Move last node</a>
+                  <a class="kmr-toc-group" href="#d0e5751">Move last node</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e5782">Create/modify segments</a>
+                  <a class="kmr-toc-group" href="#d0e5805">Create/modify segments</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e5821">Create dots</a>
+                  <a class="kmr-toc-group" href="#d0e5844">Create dots</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e5864">Finish</a>
+                  <a class="kmr-toc-group" href="#d0e5887">Finish</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e5897">Cancel</a>
+                  <a class="kmr-toc-group" href="#d0e5917">Cancel</a>
                </li>
             </ul>
             <li>
-               <a class="kmr-toc-section" href="#d0e5927">Calligraphy tool</a>
+               <a class="kmr-toc-section" href="#d0e5947">Calligraphy tool</a>
             </li>
             <li>
-               <a class="kmr-toc-section" href="#d0e6025">Text tool</a>
+               <a class="kmr-toc-section" href="#d0e6045">Text tool</a>
             </li>
             <ul>
                <li>
-                  <a class="kmr-toc-group" href="#d0e6030">Select/create</a>
+                  <a class="kmr-toc-group" href="#d0e6050">Select/create</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e6058">Navigate in text</a>
+                  <a class="kmr-toc-group" href="#d0e6078">Navigate in text</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e6147">Flowed text (internal frame)</a>
+                  <a class="kmr-toc-group" href="#d0e6167">Flowed text (internal frame)</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e6186">Flowed text (external frame)</a>
+                  <a class="kmr-toc-group" href="#d0e6206">Flowed text (external frame)</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e6236">Text on path</a>
+                  <a class="kmr-toc-group" href="#d0e6256">Text on path</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e6255">Edit text</a>
+                  <a class="kmr-toc-group" href="#d0e6275">Edit text</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e6309">Select text</a>
+                  <a class="kmr-toc-group" href="#d0e6329">Select text</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e6437">Style selection</a>
+                  <a class="kmr-toc-group" href="#d0e6454">Style selection</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e6466">Letter spacing</a>
+                  <a class="kmr-toc-group" href="#d0e6483">Letter spacing</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e6522">Line spacing</a>
+                  <a class="kmr-toc-group" href="#d0e6539">Line spacing</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e6586">Kerning and shifting</a>
+                  <a class="kmr-toc-group" href="#d0e6603">Kerning and shifting</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e6626">Rotate</a>
+                  <a class="kmr-toc-group" href="#d0e6643">Rotate</a>
                </li>
             </ul>
             <li>
-               <a class="kmr-toc-section" href="#d0e6676">Spray tool</a>
+               <a class="kmr-toc-section" href="#d0e6693">Spray tool</a>
             </li>
             <ul>
                <li>
-                  <a class="kmr-toc-group" href="#d0e6681">Modes</a>
+                  <a class="kmr-toc-group" href="#d0e6698">Modes</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e6717">Parameters</a>
+                  <a class="kmr-toc-group" href="#d0e6734">Parameters</a>
                </li>
             </ul>
             <li>
-               <a class="kmr-toc-section" href="#d0e6757">Eraser tool</a>
+               <a class="kmr-toc-section" href="#d0e6774">Eraser tool</a>
             </li>
             <li>
-               <a class="kmr-toc-section" href="#d0e6788">Paint Bucket</a>
+               <a class="kmr-toc-section" href="#d0e6805">Paint Bucket</a>
             </li>
             <li>
-               <a class="kmr-toc-section" href="#d0e6871">Gradient tool</a>
+               <a class="kmr-toc-section" href="#d0e6888">Gradient tool</a>
             </li>
             <ul>
                <li>
-                  <a class="kmr-toc-group" href="#d0e6876">Select objects</a>
+                  <a class="kmr-toc-group" href="#d0e6893">Select objects</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e6909">Create gradients</a>
+                  <a class="kmr-toc-group" href="#d0e6926">Create gradients</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e6938">Select handles</a>
+                  <a class="kmr-toc-group" href="#d0e6952">Select handles</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e7008">Create/delete intermediate stops</a>
+                  <a class="kmr-toc-group" href="#d0e7022">Create/delete intermediate stops</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e7071">Move handles/stops</a>
+                  <a class="kmr-toc-group" href="#d0e7084">Move handles/stops</a>
                </li>
                <li>
-                  <a class="kmr-toc-group" href="#d0e7161">Reverse</a>
-               </li>
-               <li>
-                  <a class="kmr-toc-group" href="#d0e7182">Gradient editor</a>
+                  <a class="kmr-toc-group" href="#d0e7174">Reverse</a>
                </li>
             </ul>
             <li>
-               <a class="kmr-toc-section" href="#d0e7202">Dropper tool</a>
+               <a class="kmr-toc-section" href="#d0e7194">Dropper tool</a>
             </li>
          </ul>
       </div>
@@ -529,7 +528,7 @@ RFE</a>).</p>
 
                <tr>
                   <td colspan="2" class="kmr-note">
-                     <span>When the "Left mouse button pans when Space is pressed" option is on in Preferences, Space+mouse drag pans canvas instead of switching to Selector.</span>
+                     <span>When the "Mouse move pans when Space is pressed" option is on in Preferences, Space+mouse drag pans canvas instead of switching to/from Selector.</span>
                   </td>
                </tr>
 
@@ -771,7 +770,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Ctrl</span>
-                        <span class="plussign">+</span>F</span>
+                        <span class="kmr-plussign">+</span>F</span>
                   </td>
                   <td>
                      <span class="kmr-action">Fill and Stroke</span>
@@ -784,7 +783,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Ctrl</span>
-                        <span class="plussign">+</span>W</span>
+                        <span class="kmr-plussign">+</span>W</span>
                   </td>
                   <td>
                      <span class="kmr-action">Swatches</span>
@@ -797,7 +796,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Ctrl</span>
-                        <span class="plussign">+</span>T</span>
+                        <span class="kmr-plussign">+</span>T</span>
                   </td>
                   <td>
                      <span class="kmr-action">Text and Font</span>
@@ -810,7 +809,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Ctrl</span>
-                        <span class="plussign">+</span>M</span>
+                        <span class="kmr-plussign">+</span>M</span>
                   </td>
                   <td>
                      <span class="kmr-action">Transform</span>
@@ -823,7 +822,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Ctrl</span>
-                        <span class="plussign">+</span>L</span>
+                        <span class="kmr-plussign">+</span>L</span>
                   </td>
                   <td>
                      <span class="kmr-action">Layers</span>
@@ -836,7 +835,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Ctrl</span>
-                        <span class="plussign">+</span>A</span>
+                        <span class="kmr-plussign">+</span>A</span>
                   </td>
                   <td>
                      <span class="kmr-action">Align and Distribute</span>
@@ -849,7 +848,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Ctrl</span>
-                        <span class="plussign">+</span>O</span>
+                        <span class="kmr-plussign">+</span>O</span>
                   </td>
                   <td>
                      <span class="kmr-action">Object Properties</span>
@@ -862,7 +861,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Ctrl</span>
-                        <span class="plussign">+</span>H</span>
+                        <span class="kmr-plussign">+</span>H</span>
                   </td>
                   <td>
                      <span class="kmr-action">Undo History</span>
@@ -875,7 +874,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Ctrl</span>
-                        <span class="plussign">+</span>X</span>
+                        <span class="kmr-plussign">+</span>X</span>
                   </td>
                   <td>
                      <span class="kmr-action">XML Editor</span>
@@ -888,10 +887,10 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Ctrl</span>
-                        <span class="plussign">+</span>D</span>
+                        <span class="kmr-plussign">+</span>D</span>
                   </td>
                   <td>
-                     <span class="kmr-action">Document Preferences</span>
+                     <span class="kmr-action">Document Properties</span>
                   </td>
                </tr>
 
@@ -901,7 +900,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Ctrl</span>
-                        <span class="plussign">+</span>P</span>
+                        <span class="kmr-plussign">+</span>P</span>
                   </td>
                   <td>
                      <span class="kmr-action">Inkscape Preferences</span>
@@ -914,7 +913,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Ctrl</span>
-                        <span class="plussign">+</span>E</span>
+                        <span class="kmr-plussign">+</span>E</span>
                   </td>
                   <td>
                      <span class="kmr-action">Export to PNG</span>
@@ -938,7 +937,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Alt</span>
-                        <span class="plussign">+</span>B</span>
+                        <span class="kmr-plussign">+</span>B</span>
                   </td>
                   <td>
                      <span class="kmr-action">Trace Bitmap</span>
@@ -951,7 +950,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Ctrl</span>
-                        <span class="plussign">+</span>7</span>
+                        <span class="kmr-plussign">+</span>7</span>
                   </td>
                   <td>
                      <span class="kmr-action">Path Effects</span>
@@ -964,7 +963,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Ctrl</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Alt</span>
-                        <span class="plussign">+</span>K</span>
+                        <span class="kmr-plussign">+</span>K</span>
                   </td>
                   <td>
                      <span class="kmr-action">Check Spelling</span>
@@ -1116,7 +1115,7 @@ RFE</a>).</p>
          </div>
          <div class="kmr-sect">
             <a name="d0e610"/>
-            <h2 class="kmr">Controls bar</h2>
+            <h2 class="kmr">Tool controls bar</h2>
             <table class="kmr kmr-color3">
 
 
@@ -1131,7 +1130,7 @@ RFE</a>).</p>
 
                <tr>
                   <td colspan="2" class="kmr-note">
-                     <span>The Controls bar at the top of the document window provides different buttons and controls for each tool.</span>
+                     <span>The tool controls bar at the top of the document window provides different buttons and controls for each tool.</span>
                   </td>
                </tr>
 
@@ -1178,7 +1177,7 @@ RFE</a>).</p>
 
                <tr>
                   <td colspan="2" class="kmr-note">
-                     <span>Use these to navigate between fields in the Controls bar (the value in the field you leave, if changed, is accepted).</span>
+                     <span>Use these to navigate between fields in the tool controls bar (the value in the field you leave, if changed, is accepted).</span>
                   </td>
                </tr>
 
@@ -1625,7 +1624,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Ctrl</span>
-                        <span class="plussign">+</span>mouse drag</span>
+                        <span class="kmr-plussign">+</span>mouse drag</span>
                   </td>
                   <td>
                      <span class="kmr-action">rotate guide with angle snapping</span>
@@ -1651,19 +1650,19 @@ RFE</a>).</p>
                         <span class="kmr-plussign">+</span>\</span>
                   </td>
                   <td>
-                     <span class="kmr-action">toggle guides and snapping to guides</span>
+                     <span class="kmr-action">toggle guide visibility</span>
                   </td>
                </tr>
 
                <tr>
                   <td colspan="2" class="kmr-note">
-                     <span>If you want to see the guides but not snap to them, use the global snapping toggle (% key).</span>
+                     <span>For activating / deactivating snapping to guides, use the snap bar or the global snapping toggle (% key).</span>
                   </td>
                </tr>
 
                <tr>
                   <td colspan="2" class="kmr-note">
-                     <span>When you create a new guide by dragging off the ruler, guide visibility and snapping are turned on.</span>
+                     <span>When you create a new guide by dragging off the ruler, guide visibility is automatically turned on.</span>
                   </td>
                </tr>
 
@@ -1675,13 +1674,13 @@ RFE</a>).</p>
                         <span class="kmr-plussign">+</span>3</span>
                   </td>
                   <td>
-                     <span class="kmr-action">toggle grids and snapping to grids</span>
+                     <span class="kmr-action">toggle grids visibility</span>
                   </td>
                </tr>
 
                <tr>
                   <td colspan="2" class="kmr-note">
-                     <span>If you want to see the grids but not snap to them, use the global snapping toggle (% key).</span>
+                     <span>For activating / deactivating snapping to grids, use the snap bar or the global snapping toggle (% key).</span>
                   </td>
                </tr>
 
@@ -1702,7 +1701,7 @@ RFE</a>).</p>
 
                <tr>
                   <td colspan="2" class="kmr-note">
-                     <span>This toggle affects snapping to grids, guides, and objects in all tools.</span>
+                     <span>This toggle affects snapping to grids, guides, and objects in all tools. The settings in the snap bar determine which snap targets and snapping points will snap.</span>
                   </td>
                </tr>
 
@@ -1712,7 +1711,7 @@ RFE</a>).</p>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e1075"/>Display mode</h3>
+                        <a name="d0e1074"/>Display mode</h3>
                   </td>
                </tr>
 
@@ -1732,7 +1731,7 @@ RFE</a>).</p>
             </table>
          </div>
          <div class="kmr-sect">
-            <a name="d0e1092"/>
+            <a name="d0e1091"/>
             <h2 class="kmr">Palette</h2>
             <table class="kmr kmr-color5">
 
@@ -1820,7 +1819,7 @@ RFE</a>).</p>
             </table>
          </div>
          <div class="kmr-sect">
-            <a name="d0e1161"/>
+            <a name="d0e1160"/>
             <h2 class="kmr">File</h2>
             <table class="kmr kmr-color6">
 
@@ -1855,7 +1854,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Ctrl</span>
-                        <span class="plussign">+</span>E</span>
+                        <span class="kmr-plussign">+</span>E</span>
                   </td>
                   <td>
                      <span class="kmr-action">export to PNG</span>
@@ -1901,7 +1900,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Ctrl</span>
-                        <span class="plussign">+</span>S</span>
+                        <span class="kmr-plussign">+</span>S</span>
                   </td>
                   <td>
                      <span class="kmr-action">save under a new name</span>
@@ -1914,9 +1913,9 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Ctrl</span>
-                        <span class="plussign">+</span>
+                        <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Alt</span>
-                        <span class="plussign">+</span>S</span>
+                        <span class="kmr-plussign">+</span>S</span>
                   </td>
                   <td>
                      <span class="kmr-action">save a copy</span>
@@ -1939,7 +1938,7 @@ RFE</a>).</p>
             </table>
          </div>
          <div class="kmr-sect">
-            <a name="d0e1268"/>
+            <a name="d0e1267"/>
             <h2 class="kmr">Window</h2>
             <table class="kmr kmr-color7">
 
@@ -1974,7 +1973,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Alt</span>
-                        <span class="plussign">+</span>P</span>
+                        <span class="kmr-plussign">+</span>P</span>
                   </td>
                   <td>
                      <span class="kmr-action">toggle palette</span>
@@ -2083,7 +2082,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Ctrl</span>
-                        <span class="plussign">+</span>Tab</span>
+                        <span class="kmr-plussign">+</span>Tab</span>
                   </td>
                   <td>
                      <span class="kmr-action">previous document window</span>
@@ -2101,7 +2100,7 @@ RFE</a>).</p>
             </table>
          </div>
          <div class="kmr-sect">
-            <a name="d0e1411"/>
+            <a name="d0e1410"/>
             <h2 class="kmr">Extensions</h2>
             <table class="kmr kmr-color8">
 
@@ -2125,7 +2124,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Alt</span>
-                        <span class="plussign">+</span>Q</span>
+                        <span class="kmr-plussign">+</span>Q</span>
                   </td>
                   <td>
                      <span class="kmr-action">previous extension settings</span>
@@ -2137,7 +2136,7 @@ RFE</a>).</p>
             </table>
          </div>
          <div class="kmr-sect">
-            <a name="d0e1442"/>
+            <a name="d0e1441"/>
             <h2 class="kmr">Layers</h2>
             <table class="kmr kmr-color9">
 
@@ -2150,7 +2149,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Ctrl</span>
-                        <span class="plussign">+</span>N</span>
+                        <span class="kmr-plussign">+</span>N</span>
                   </td>
                   <td>
                      <span class="kmr-action">create new layer</span>
@@ -2195,7 +2194,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Ctrl</span>
-                        <span class="plussign">+</span>PgUp</span>
+                        <span class="kmr-plussign">+</span>PgUp</span>
                   </td>
                   <td>
                      <span class="kmr-action">raise layer</span>
@@ -2208,7 +2207,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Ctrl</span>
-                        <span class="plussign">+</span>PgDn</span>
+                        <span class="kmr-plussign">+</span>PgDn</span>
                   </td>
                   <td>
                      <span class="kmr-action">lower layer</span>
@@ -2221,7 +2220,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Ctrl</span>
-                        <span class="plussign">+</span>Home</span>
+                        <span class="kmr-plussign">+</span>Home</span>
                   </td>
                   <td>
                      <span class="kmr-action">raise layer to top</span>
@@ -2234,7 +2233,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Ctrl</span>
-                        <span class="plussign">+</span>End</span>
+                        <span class="kmr-plussign">+</span>End</span>
                   </td>
                   <td>
                      <span class="kmr-action">lower layer to bottom</span>
@@ -2253,7 +2252,7 @@ RFE</a>).</p>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e1539"/>Hide/lock</h3>
+                        <a name="d0e1538"/>Hide/lock</h3>
                   </td>
                </tr>
 
@@ -2272,7 +2271,9 @@ RFE</a>).</p>
                   <td class="kmr-keys">
                      <span class="kmr-shortcut">
                         <span class="kmr-keypad">Shift</span>
-                        <span class="kmr-plussign">+</span>Alt<span class="plussign">+</span>click</span>
+                        <span class="kmr-plussign">+</span>
+                        <span class="kmr-keypad">Alt</span>
+                        <span class="kmr-plussign">+</span>click</span>
                   </td>
                   <td>
                      <span class="kmr-action">toggle visibility (eye icon) or lock status (lock icon) on the unselected layers</span>
@@ -2289,7 +2290,7 @@ RFE</a>).</p>
             </table>
          </div>
          <div class="kmr-sect">
-            <a name="d0e1571"/>
+            <a name="d0e1570"/>
             <h2 class="kmr">Object</h2>
             <table class="kmr kmr-color10">
 
@@ -2299,7 +2300,7 @@ RFE</a>).</p>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e1576"/>Undo/redo</h3>
+                        <a name="d0e1575"/>Undo/redo</h3>
                   </td>
                </tr>
 
@@ -2309,7 +2310,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Ctrl</span>
-                        <span class="plussign">+</span>Y</span>,
+                        <span class="kmr-plussign">+</span>Y</span>,
 <span class="kmr-shortcut">
                         <span class="kmr-keypad">Ctrl</span>
                         <span class="kmr-plussign">+</span>Z</span>
@@ -2325,7 +2326,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Ctrl</span>
-                        <span class="plussign">+</span>Z</span>,
+                        <span class="kmr-plussign">+</span>Z</span>,
 <span class="kmr-shortcut">
                         <span class="kmr-keypad">Ctrl</span>
                         <span class="kmr-plussign">+</span>Y</span>
@@ -2341,7 +2342,7 @@ RFE</a>).</p>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e1620"/>Clipboard</h3>
+                        <a name="d0e1619"/>Clipboard</h3>
                   </td>
                </tr>
 
@@ -2405,7 +2406,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Ctrl</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Alt</span>
-                        <span class="plussign">+</span>V</span>
+                        <span class="kmr-plussign">+</span>V</span>
                   </td>
                   <td>
                      <span class="kmr-action">paste in place</span>
@@ -2424,7 +2425,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Ctrl</span>
-                        <span class="plussign">+</span>V</span>
+                        <span class="kmr-plussign">+</span>V</span>
                   </td>
                   <td>
                      <span class="kmr-action">paste style</span>
@@ -2466,7 +2467,7 @@ RFE</a>).</p>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e1729"/>Duplicate</h3>
+                        <a name="d0e1728"/>Duplicate</h3>
                   </td>
                </tr>
 
@@ -2493,7 +2494,7 @@ RFE</a>).</p>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e1748"/>Clone</h3>
+                        <a name="d0e1747"/>Clone</h3>
                   </td>
                </tr>
 
@@ -2532,7 +2533,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Alt</span>
-                        <span class="plussign">+</span>D</span>
+                        <span class="kmr-plussign">+</span>D</span>
                   </td>
                   <td>
                      <span class="kmr-action">unlink clone</span>
@@ -2568,7 +2569,7 @@ RFE</a>).</p>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e1801"/>Bitmaps</h3>
+                        <a name="d0e1800"/>Bitmaps</h3>
                   </td>
                </tr>
 
@@ -2585,7 +2586,7 @@ RFE</a>).</p>
 
                <tr>
                   <td colspan="2" class="kmr-note">
-                     <span>This exports the selected object(s) (all other objects hidden) as PNG in the document's directory and imports it back.</span>
+                     <span>This exports the selected object(s) (all other objects hidden) as PNG in the document's directory and imports it back as embedded bitmap.</span>
                   </td>
                </tr>
 
@@ -2601,7 +2602,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Alt</span>
-                        <span class="plussign">+</span>B</span>
+                        <span class="kmr-plussign">+</span>B</span>
                   </td>
                   <td>
                      <span class="kmr-action">trace bitmap</span>
@@ -2620,7 +2621,7 @@ RFE</a>).</p>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e1838"/>Patterns</h3>
+                        <a name="d0e1837"/>Patterns</h3>
                   </td>
                </tr>
 
@@ -2647,7 +2648,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Alt</span>
-                        <span class="plussign">+</span>I</span>
+                        <span class="kmr-plussign">+</span>I</span>
                   </td>
                   <td>
                      <span class="kmr-action">pattern to object(s)</span>
@@ -2666,7 +2667,7 @@ RFE</a>).</p>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e1872"/>Guides</h3>
+                        <a name="d0e1871"/>Guides</h3>
                   </td>
                </tr>
 
@@ -2687,7 +2688,7 @@ RFE</a>).</p>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e1888"/>Group</h3>
+                        <a name="d0e1887"/>Group</h3>
                   </td>
                </tr>
 
@@ -2697,7 +2698,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Ctrl</span>
-                        <span class="plussign">+</span>U</span>,
+                        <span class="kmr-plussign">+</span>U</span>,
 <span class="kmr-shortcut">
                         <span class="kmr-keypad">Ctrl</span>
                         <span class="kmr-plussign">+</span>G</span>
@@ -2719,7 +2720,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Ctrl</span>
-                        <span class="plussign">+</span>G</span>,
+                        <span class="kmr-plussign">+</span>G</span>,
 <span class="kmr-shortcut">
                         <span class="kmr-keypad">Ctrl</span>
                         <span class="kmr-plussign">+</span>U</span>
@@ -2741,7 +2742,7 @@ RFE</a>).</p>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e1939"/>Z-order</h3>
+                        <a name="d0e1938"/>Z-order</h3>
                   </td>
                </tr>
 
@@ -2786,7 +2787,7 @@ RFE</a>).</p>
             </table>
          </div>
          <div class="kmr-sect">
-            <a name="d0e1974"/>
+            <a name="d0e1973"/>
             <h2 class="kmr">Path</h2>
             <table class="kmr kmr-color11">
 
@@ -2796,7 +2797,7 @@ RFE</a>).</p>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e1979"/>Convert to path</h3>
+                        <a name="d0e1978"/>Convert to path</h3>
                   </td>
                </tr>
 
@@ -2806,7 +2807,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Ctrl</span>
-                        <span class="plussign">+</span>C</span>
+                        <span class="kmr-plussign">+</span>C</span>
                   </td>
                   <td>
                      <span class="kmr-action">convert selected object(s) to path</span>
@@ -2819,7 +2820,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Ctrl</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Alt</span>
-                        <span class="plussign">+</span>C</span>
+                        <span class="kmr-plussign">+</span>C</span>
                   </td>
                   <td>
                      <span class="kmr-action">convert stroke to path</span>
@@ -2832,7 +2833,7 @@ RFE</a>).</p>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e2009"/>Boolean operations</h3>
+                        <a name="d0e2008"/>Boolean operations</h3>
                   </td>
                </tr>
 
@@ -2927,7 +2928,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Ctrl</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Alt</span>
-                        <span class="plussign">+</span>/</span>
+                        <span class="kmr-plussign">+</span>/</span>
                   </td>
                   <td>
                      <span class="kmr-action">cut path</span>
@@ -2958,7 +2959,7 @@ RFE</a>).</p>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e2101"/>Offsets</h3>
+                        <a name="d0e2100"/>Offsets</h3>
                   </td>
                </tr>
 
@@ -3018,7 +3019,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Alt</span>
-                        <span class="plussign">+</span>(</span>
+                        <span class="kmr-plussign">+</span>(</span>
                   </td>
                   <td>
                      <span class="kmr-action">inset path by 10 pixels</span>
@@ -3031,7 +3032,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Alt</span>
-                        <span class="plussign">+</span>)</span>
+                        <span class="kmr-plussign">+</span>)</span>
                   </td>
                   <td>
                      <span class="kmr-action">outset path by 10 pixels</span>
@@ -3067,7 +3068,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Ctrl</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Alt</span>
-                        <span class="plussign">+</span>J</span>
+                        <span class="kmr-plussign">+</span>J</span>
                   </td>
                   <td>
                      <span class="kmr-action">create linked offset</span>
@@ -3103,7 +3104,7 @@ RFE</a>).</p>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e2218"/>Combine</h3>
+                        <a name="d0e2217"/>Combine</h3>
                   </td>
                </tr>
 
@@ -3142,7 +3143,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Ctrl</span>
-                        <span class="plussign">+</span>K</span>
+                        <span class="kmr-plussign">+</span>K</span>
                   </td>
                   <td>
                      <span class="kmr-action">break paths apart</span>
@@ -3161,7 +3162,7 @@ RFE</a>).</p>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e2258"/>Simplify</h3>
+                        <a name="d0e2257"/>Simplify</h3>
                   </td>
                </tr>
 
@@ -3196,10 +3197,29 @@ RFE</a>).</p>
 
 
 
+
+               <tr>
+                  <td colspan="2">
+                     <h3 class="kmr">
+                        <a name="d0e2282"/>Path effects</h3>
+                  </td>
+               </tr>
+
+               <tr>
+                  <td class="kmr-keys">
+                     <span class="kmr-shortcut">7</span>
+                  </td>
+                  <td>
+                     <span class="kmr-action">show next editable path effect parameter</span>
+                  </td>
+               </tr>
+
+
+
             </table>
          </div>
          <div class="kmr-sect">
-            <a name="d0e2287"/>
+            <a name="d0e2299"/>
             <h2 class="kmr">Selector</h2>
             <table class="kmr kmr-color12">
 
@@ -3209,7 +3229,7 @@ RFE</a>).</p>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e2292"/>Select (mouse)</h3>
+                        <a name="d0e2304"/>Select (mouse)</h3>
                   </td>
                </tr>
 
@@ -3247,7 +3267,7 @@ RFE</a>).</p>
 
                <tr>
                   <td class="kmr-keys">
-                     <span class="kmr-shortcut">click<span class="kmr-plussign">+</span>click</span>
+                     <span class="kmr-shortcut">double-click</span>
                   </td>
                   <td>
                      <span class="kmr-action">edit the object</span>
@@ -3278,7 +3298,7 @@ RFE</a>).</p>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e2340"/>Rubberband, touch selection</h3>
+                        <a name="d0e2349"/>Rubberband, touch selection</h3>
                   </td>
                </tr>
 
@@ -3329,7 +3349,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Alt</span>
-                        <span class="plussign">+</span>mouse drag</span>
+                        <span class="kmr-plussign">+</span>mouse drag</span>
                   </td>
                   <td>
                      <span class="kmr-action">select by touch</span>
@@ -3360,7 +3380,7 @@ RFE</a>).</p>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e2399"/>Select (keyboard)</h3>
+                        <a name="d0e2408"/>Select (keyboard)</h3>
                   </td>
                </tr>
 
@@ -3431,7 +3451,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Ctrl</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Alt</span>
-                        <span class="plussign">+</span>A</span>
+                        <span class="kmr-plussign">+</span>A</span>
                   </td>
                   <td>
                      <span class="kmr-action">select all (all layers)</span>
@@ -3501,7 +3521,7 @@ RFE</a>).</p>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e2501"/>Select within group, select under</h3>
+                        <a name="d0e2510"/>Select within group, select under</h3>
                   </td>
                </tr>
 
@@ -3528,7 +3548,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Ctrl</span>
-                        <span class="plussign">+</span>click</span>
+                        <span class="kmr-plussign">+</span>click</span>
                   </td>
                   <td>
                      <span class="kmr-action">toggle selection within group</span>
@@ -3582,7 +3602,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Alt</span>
-                        <span class="plussign">+</span>click</span>
+                        <span class="kmr-plussign">+</span>click</span>
                   </td>
                   <td>
                      <span class="kmr-action">toggle under</span>
@@ -3595,7 +3615,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Ctrl</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Alt</span>
-                        <span class="plussign">+</span>click</span>
+                        <span class="kmr-plussign">+</span>click</span>
                   </td>
                   <td>
                      <span class="kmr-action">select under, in groups</span>
@@ -3608,9 +3628,9 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Ctrl</span>
-                        <span class="plussign">+</span>
+                        <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Alt</span>
-                        <span class="plussign">+</span>click</span>
+                        <span class="kmr-plussign">+</span>click</span>
                   </td>
                   <td>
                      <span class="kmr-action">toggle under, in groups</span>
@@ -3645,7 +3665,7 @@ RFE</a>).</p>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e2615"/>Move (mouse)</h3>
+                        <a name="d0e2624"/>Move (mouse)</h3>
                   </td>
                </tr>
 
@@ -3717,7 +3737,7 @@ RFE</a>).</p>
 
                <tr>
                   <td colspan="2" class="kmr-note">
-                     <span>This temporarily disables snapping to grid or guides when you are dragging with grid or guides on.</span>
+                     <span>This temporarily disables snapping when you are dragging with snapping activated.</span>
                   </td>
                </tr>
 
@@ -3748,7 +3768,7 @@ RFE</a>).</p>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e2689"/>Move (keyboard)</h3>
+                        <a name="d0e2698"/>Move (keyboard)</h3>
                   </td>
                </tr>
 
@@ -3795,7 +3815,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Alt</span>
-                        <span class="plussign">+</span>arrows</span>
+                        <span class="kmr-plussign">+</span>arrows</span>
                   </td>
                   <td>
                      <span class="kmr-action">move selection by 10 pixels</span>
@@ -3814,7 +3834,7 @@ RFE</a>).</p>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e2740"/>Transform (mouse)</h3>
+                        <a name="d0e2749"/>Transform (mouse)</h3>
                   </td>
                </tr>
 
@@ -3854,7 +3874,7 @@ RFE</a>).</p>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e2773"/>Scale by handles</h3>
+                        <a name="d0e2782"/>Scale by handles</h3>
                   </td>
                </tr>
 
@@ -3919,7 +3939,7 @@ RFE</a>).</p>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e2824"/>Scale (keyboard)</h3>
+                        <a name="d0e2833"/>Scale (keyboard)</h3>
                   </td>
                </tr>
 
@@ -4013,7 +4033,7 @@ RFE</a>).</p>
 
                <tr>
                   <td colspan="2" class="kmr-note">
-                     <span>Scaling is uniform around the center, so that the size increment applies to the larger of the two dimensions.</span>
+                     <span>The default size increment is added to (or subtracted from) either the selection's height or width, whichever one is larger. Scaling is done around the center of the selection's bounding box and keeps the proportions of the selected object(s).</span>
                   </td>
                </tr>
 
@@ -4023,7 +4043,7 @@ RFE</a>).</p>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e2928"/>Rotate/skew by handles</h3>
+                        <a name="d0e2937"/>Rotate/skew by handles</h3>
                   </td>
                </tr>
 
@@ -4070,13 +4090,24 @@ RFE</a>).</p>
                   </td>
                </tr>
 
+               <tr>
+                  <td class="kmr-keys">
+                     <span class="kmr-shortcut">
+                        <span class="kmr-keypad">Shift</span>
+                        <span class="kmr-plussign">+</span>mouse drag</span>
+                  </td>
+                  <td>
+                     <span class="kmr-action">rotate around opposite corner</span>
+                  </td>
+               </tr>
+
 
 
 
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e2967"/>Rotate (keyboard)</h3>
+                        <a name="d0e2986"/>Rotate (keyboard)</h3>
                   </td>
                </tr>
 
@@ -4142,7 +4173,7 @@ RFE</a>).</p>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e3025"/>Flip</h3>
+                        <a name="d0e3044"/>Flip</h3>
                   </td>
                </tr>
 
@@ -4176,7 +4207,7 @@ RFE</a>).</p>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e3048"/>Rotation center</h3>
+                        <a name="d0e3067"/>Rotation center</h3>
                   </td>
                </tr>
 
@@ -4229,7 +4260,7 @@ RFE</a>).</p>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e3087"/>Cancel</h3>
+                        <a name="d0e3106"/>Cancel</h3>
                   </td>
                </tr>
 
@@ -4253,7 +4284,7 @@ RFE</a>).</p>
             </table>
          </div>
          <div class="kmr-sect">
-            <a name="d0e3107"/>
+            <a name="d0e3126"/>
             <h2 class="kmr">Node tool</h2>
             <table class="kmr kmr-color13">
 
@@ -4263,7 +4294,7 @@ RFE</a>).</p>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e3112"/>Select objects (mouse)</h3>
+                        <a name="d0e3131"/>Select objects (mouse)</h3>
                   </td>
                </tr>
 
@@ -4321,7 +4352,7 @@ RFE</a>).</p>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e3158"/>Select nodes (mouse)</h3>
+                        <a name="d0e3177"/>Select nodes (mouse)</h3>
                   </td>
                </tr>
 
@@ -4393,7 +4424,7 @@ RFE</a>).</p>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e3207"/>Rubberband selection</h3>
+                        <a name="d0e3226"/>Rubberband selection</h3>
                   </td>
                </tr>
 
@@ -4441,7 +4472,7 @@ RFE</a>).</p>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e3239"/>Select nodes (keyboard)</h3>
+                        <a name="d0e3258"/>Select nodes (keyboard)</h3>
                   </td>
                </tr>
 
@@ -4494,7 +4525,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Ctrl</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Alt</span>
-                        <span class="plussign">+</span>A</span>
+                        <span class="kmr-plussign">+</span>A</span>
                   </td>
                   <td>
                      <span class="kmr-action">select all nodes in path</span>
@@ -4554,7 +4585,7 @@ RFE</a>).</p>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e3322"/>Grow/shrink node selection</h3>
+                        <a name="d0e3341"/>Grow/shrink node selection</h3>
                   </td>
                </tr>
 
@@ -4610,7 +4641,7 @@ RFE</a>).</p>
 
                <tr>
                   <td colspan="2" class="kmr-note">
-                     <span>Each key press or wheel click selects the nearest unselected node or deselects the farthest selected node.</span>
+                     <span>Each key press or turn of the mouse wheel selects the nearest unselected node or deselects the farthest selected node.</span>
                   </td>
                </tr>
 
@@ -4626,7 +4657,7 @@ RFE</a>).</p>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e3382"/>Move nodes (mouse)</h3>
+                        <a name="d0e3401"/>Move nodes (mouse)</h3>
                   </td>
                </tr>
 
@@ -4656,7 +4687,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Ctrl</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Alt</span>
-                        <span class="plussign">+</span>mouse drag</span>
+                        <span class="kmr-plussign">+</span>mouse drag</span>
                   </td>
                   <td>
                      <span class="kmr-action">move along handles</span>
@@ -4665,7 +4696,7 @@ RFE</a>).</p>
 
                <tr>
                   <td colspan="2" class="kmr-note">
-                     <span>This restricts movement to the directions of the node's handles, their continuations and perpendiculars (total 8 snaps).</span>
+                     <span>This restricts movement to the directions of the node's handles, their counter directions and perpendiculars (total 8 snaps).</span>
                   </td>
                </tr>
 
@@ -4759,7 +4790,7 @@ RFE</a>).</p>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e3481"/>Move nodes (keyboard)</h3>
+                        <a name="d0e3500"/>Move nodes (keyboard)</h3>
                   </td>
                </tr>
 
@@ -4806,7 +4837,7 @@ RFE</a>).</p>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Alt</span>
-                        <span class="plussign">+</span>arrows</span>
+                        <span class="kmr-plussign">+</span>arrows</span>
                   </td>
                   <td>
                      <span class="kmr-action">move selected node(s) by 10 pixels</span>
@@ -4825,7 +4856,7 @@ RFE</a>).</p>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e3532"/>Move node handle (mouse)</h3>
+                        <a name="d0e3551"/>Move node handle (mouse)</h3>
                   </td>
                </tr>
 
@@ -4851,7 +4882,7 @@ RFE</a>).</p>
 
                <tr>
                   <td colspan="2" class="kmr-note">
-                     <span>The default angle step is 15 degrees. This also snaps to the handle's original angle, its continuation and perpendiculars.</span>
+                     <span>The default angle step is 15 degrees. This also snaps to the handle's original angle, its counter direction and perpendiculars.</span>
                   </td>
                </tr>
 
@@ -4906,7 +4937,7 @@ RFE</a>).</p>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e3594"/>Scale handle (1 node selected)</h3>
+                        <a name="d0e3613"/>Scale handle (1 node selected)</h3>
                   </td>
                </tr>
 
@@ -5000,7 +5031,7 @@ RFE</a>).</p>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e3700"/>Rotate handle (1 node selected)</h3>
+                        <a name="d0e3719"/>Rotate handle (1 node selected)</h3>
                   </td>
                </tr>
 
@@ -5082,7 +5113,7 @@ RFE</a>).</p>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e3786"/>Handles visibility</h3>
+                        <a name="d0e3805"/>Handles visibility</h3>
                   </td>
                </tr>
 
@@ -5102,7 +5133,7 @@ RFE</a>).</p>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e3802"/>Scale nodes (&gt;1 nodes selected)</h3>
+                        <a name="d0e3821"/>Scale nodes (&gt;1 nodes selected)</h3>
                   </td>
                </tr>
 
@@ -5180,7 +5211,7 @@ RFE</a>).</p>
 
                <tr>
                   <td colspan="2" class="kmr-note">
-                     <span>Scaling is uniform around the center, so that the size increment applies to the larger of the two dimensions.</span>
+                     <span>The default size increment is added to (or subtracted from) either the node selection's height or width, whichever one is larger. Scaling keeps the proportions of the node selection.</span>
                   </td>
                </tr>
 
@@ -5190,7 +5221,7 @@ RFE</a>).</p>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e3878"/>Rotate nodes (&gt;1 nodes selected)</h3>
+                        <a name="d0e3897"/>Rotate nodes (&gt;1 nodes selected)</h3>
                   </td>
                </tr>
 
@@ -5248,7 +5279,7 @@ RFE</a>).</p>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e3922"/>Flip nodes (&gt;1 nodes selected)</h3>
+                        <a name="d0e3941"/>Flip nodes (&gt;1 nodes selected)</h3>
                   </td>
                </tr>
 
@@ -5288,7 +5319,7 @@ RFE</a>).</p>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e3948"/>Change segment(s)</h3>
+                        <a name="d0e3967"/>Change segment(s)</h3>
                   </td>
                </tr>
 
@@ -5326,7 +5357,7 @@ RFE</a>).</p>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e3977"/>Change node type</h3>
+                        <a name="d0e3996"/>Change node type</h3>
                   </td>
                </tr>
 
@@ -5410,7 +5441,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e4042"/>Join/break</h3>
+                        <a name="d0e4061"/>Join/break</h3>
                   </td>
                </tr>
 
@@ -5471,7 +5502,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e4087"/>Delete, create, duplicate</h3>
+                        <a name="d0e4106"/>Delete, create, duplicate</h3>
                   </td>
                </tr>
 
@@ -5528,7 +5559,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                         <span class="kmr-keypad">Ctrl</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Alt</span>
-                        <span class="plussign">+</span>click</span>
+                        <span class="kmr-plussign">+</span>click</span>
                   </td>
                   <td>
                      <span class="kmr-action">create/delete node</span>
@@ -5549,7 +5580,7 @@ with the segment; another Shift+S will expand a second handle.</span>
 
                <tr>
                   <td class="kmr-keys">
-                     <span class="kmr-shortcut">click<span class="kmr-plussign">+</span>click</span>
+                     <span class="kmr-shortcut">double-click</span>
                   </td>
                   <td>
                      <span class="kmr-action">create node</span>
@@ -5606,7 +5637,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e4197"/>Reverse</h3>
+                        <a name="d0e4213"/>Reverse</h3>
                   </td>
                </tr>
 
@@ -5627,7 +5658,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e4213"/>Edit shapes</h3>
+                        <a name="d0e4229"/>Edit shapes</h3>
                   </td>
                </tr>
 
@@ -5649,7 +5680,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e4225"/>Edit fills and path effects</h3>
+                        <a name="d0e4241"/>Edit fills and path effects</h3>
                   </td>
                </tr>
 
@@ -5665,7 +5696,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e4234"/>Cancel</h3>
+                        <a name="d0e4250"/>Cancel</h3>
                   </td>
                </tr>
 
@@ -5689,7 +5720,7 @@ with the segment; another Shift+S will expand a second handle.</span>
             </table>
          </div>
          <div class="kmr-sect">
-            <a name="d0e4254"/>
+            <a name="d0e4270"/>
             <h2 class="kmr">Tweak tool</h2>
             <table class="kmr kmr-color14">
 
@@ -5699,7 +5730,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e4259"/>Operation</h3>
+                        <a name="d0e4275"/>Operation</h3>
                   </td>
                </tr>
 
@@ -5730,7 +5761,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                         <span class="kmr-plussign">+</span>mouse drag</span>
                   </td>
                   <td>
-                     <span class="kmr-action">act temporarily switching to shrink mode</span>
+                     <span class="kmr-action">temporarily switch to shrink mode</span>
                   </td>
                </tr>
 
@@ -5740,10 +5771,10 @@ with the segment; another Shift+S will expand a second handle.</span>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Ctrl</span>
-                        <span class="plussign">+</span>mouse drag</span>
+                        <span class="kmr-plussign">+</span>mouse drag</span>
                   </td>
                   <td>
-                     <span class="kmr-action">act temporarily switching to grow mode</span>
+                     <span class="kmr-action">temporarily switch to grow mode</span>
                   </td>
                </tr>
 
@@ -5759,7 +5790,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e4307"/>Modes</h3>
+                        <a name="d0e4323"/>Modes</h3>
                   </td>
                </tr>
 
@@ -5972,7 +6003,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e4533"/>Parameters</h3>
+                        <a name="d0e4549"/>Parameters</h3>
                   </td>
                </tr>
 
@@ -5992,7 +6023,7 @@ with the segment; another Shift+S will expand a second handle.</span>
 <span class="kmr-shortcut">End</span>
                   </td>
                   <td>
-                     <span class="kmr-action">set brush width to 1 / 100</span>
+                     <span class="kmr-action">set brush width to its minimum or maximum</span>
                   </td>
                </tr>
 
@@ -6017,7 +6048,7 @@ with the segment; another Shift+S will expand a second handle.</span>
             </table>
          </div>
          <div class="kmr-sect">
-            <a name="d0e4576"/>
+            <a name="d0e4592"/>
             <h2 class="kmr">Zoom tool</h2>
             <table class="kmr kmr-color15">
 
@@ -6057,7 +6088,7 @@ with the segment; another Shift+S will expand a second handle.</span>
             </table>
          </div>
          <div class="kmr-sect">
-            <a name="d0e4609"/>
+            <a name="d0e4625"/>
             <h2 class="kmr">Measure tool</h2>
             <table class="kmr kmr-color16">
 
@@ -6080,7 +6111,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                         <span class="kmr-plussign">+</span>mouse drag</span>
                   </td>
                   <td>
-                     <span class="kmr-action">set the measure base to the cursor</span>
+                     <span class="kmr-action">set base of angle measurement to cursor position</span>
                   </td>
                </tr>  
 
@@ -6105,7 +6136,7 @@ with the segment; another Shift+S will expand a second handle.</span>
             </table>
          </div>
          <div class="kmr-sect">
-            <a name="d0e4648"/>
+            <a name="d0e4664"/>
             <h2 class="kmr">Rectangle tool</h2>
             <table class="kmr kmr-color17">
 
@@ -6115,7 +6146,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e4653"/>Draw</h3>
+                        <a name="d0e4669"/>Draw</h3>
                   </td>
                </tr>
 
@@ -6141,7 +6172,7 @@ with the segment; another Shift+S will expand a second handle.</span>
 
                <tr>
                   <td colspan="2" class="kmr-note">
-                     <span>This restricts rectangle so its height/width ratio is a whole number.</span>
+                     <span>This restricts width/height ratio or its inverse to a whole number or the golden ratio.</span>
                   </td>
                </tr>
 
@@ -6168,7 +6199,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e4692"/>Select</h3>
+                        <a name="d0e4708"/>Select</h3>
                   </td>
                </tr>
 
@@ -6190,7 +6221,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                         <span class="kmr-keypad">Ctrl</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Alt</span>
-                        <span class="plussign">+</span>click</span>
+                        <span class="kmr-plussign">+</span>click</span>
                   </td>
                   <td>
                      <span class="kmr-action">select under</span>
@@ -6229,7 +6260,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e4744"/>Resize by handles</h3>
+                        <a name="d0e4760"/>Resize by handles</h3>
                   </td>
                </tr>
 
@@ -6271,7 +6302,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e4773"/>Round corners by handles</h3>
+                        <a name="d0e4789"/>Round corners by handles</h3>
                   </td>
                </tr>
 
@@ -6340,7 +6371,7 @@ with the segment; another Shift+S will expand a second handle.</span>
             </table>
          </div>
          <div class="kmr-sect">
-            <a name="d0e4826"/>
+            <a name="d0e4842"/>
             <h2 class="kmr">3D box tool</h2>
             <table class="kmr kmr-color18">
 
@@ -6350,7 +6381,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e4831"/>Draw</h3>
+                        <a name="d0e4847"/>Draw</h3>
                   </td>
                </tr>
 
@@ -6380,7 +6411,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e4854"/>Select</h3>
+                        <a name="d0e4870"/>Select</h3>
                   </td>
                </tr>
 
@@ -6402,7 +6433,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                         <span class="kmr-keypad">Ctrl</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Alt</span>
-                        <span class="plussign">+</span>click</span>
+                        <span class="kmr-plussign">+</span>click</span>
                   </td>
                   <td>
                      <span class="kmr-action">select under</span>
@@ -6435,7 +6466,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e4903"/>Edit by handles</h3>
+                        <a name="d0e4919"/>Edit by handles</h3>
                   </td>
                </tr>
 
@@ -6488,7 +6519,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e4942"/>Edit perspectives</h3>
+                        <a name="d0e4958"/>Edit perspectives</h3>
                   </td>
                </tr>
 
@@ -6592,7 +6623,7 @@ with the segment; another Shift+S will expand a second handle.</span>
             </table>
          </div>
          <div class="kmr-sect">
-            <a name="d0e5042"/>
+            <a name="d0e5058"/>
             <h2 class="kmr">Ellipse tool</h2>
             <table class="kmr kmr-color19">
 
@@ -6602,7 +6633,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e5047"/>Draw</h3>
+                        <a name="d0e5063"/>Draw</h3>
                   </td>
                </tr>
 
@@ -6640,7 +6671,7 @@ with the segment; another Shift+S will expand a second handle.</span>
 
                <tr>
                   <td colspan="2" class="kmr-note">
-                     <span>This restricts ellipse so its height/width ratio is a whole number.</span>
+                     <span>This restricts width/height ratio or its inverse to a whole number or the golden ratio.</span>
                   </td>
                </tr>
 
@@ -6667,7 +6698,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                         <span class="kmr-keypad">Ctrl</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Alt</span>
-                        <span class="plussign">+</span>mouse drag</span>
+                        <span class="kmr-plussign">+</span>mouse drag</span>
                   </td>
                   <td>
                      <span class="kmr-action">create circle passing through the starting and ending point</span>
@@ -6686,7 +6717,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e5107"/>Select</h3>
+                        <a name="d0e5123"/>Select</h3>
                   </td>
                </tr>
 
@@ -6708,7 +6739,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                         <span class="kmr-keypad">Ctrl</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Alt</span>
-                        <span class="plussign">+</span>click</span>
+                        <span class="kmr-plussign">+</span>click</span>
                   </td>
                   <td>
                      <span class="kmr-action">select under</span>
@@ -6747,7 +6778,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e5159"/>Edit by handles</h3>
+                        <a name="d0e5175"/>Edit by handles</h3>
                   </td>
                </tr>
 
@@ -6816,7 +6847,7 @@ with the segment; another Shift+S will expand a second handle.</span>
             </table>
          </div>
          <div class="kmr-sect">
-            <a name="d0e5212"/>
+            <a name="d0e5228"/>
             <h2 class="kmr">Star tool</h2>
             <table class="kmr kmr-color20">
 
@@ -6826,7 +6857,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e5217"/>Draw</h3>
+                        <a name="d0e5233"/>Draw</h3>
                   </td>
                </tr>
 
@@ -6862,7 +6893,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e5243"/>Select</h3>
+                        <a name="d0e5259"/>Select</h3>
                   </td>
                </tr>
 
@@ -6884,7 +6915,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                         <span class="kmr-keypad">Ctrl</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Alt</span>
-                        <span class="plussign">+</span>click</span>
+                        <span class="kmr-plussign">+</span>click</span>
                   </td>
                   <td>
                      <span class="kmr-action">select under</span>
@@ -6923,7 +6954,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e5295"/>Edit by handles</h3>
+                        <a name="d0e5311"/>Edit by handles</h3>
                   </td>
                </tr>
 
@@ -6989,7 +7020,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                         <span class="kmr-keypad">Ctrl</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Alt</span>
-                        <span class="plussign">+</span>click</span>
+                        <span class="kmr-plussign">+</span>click</span>
                   </td>
                   <td>
                      <span class="kmr-action">remove randomization</span>
@@ -7000,7 +7031,7 @@ with the segment; another Shift+S will expand a second handle.</span>
             </table>
          </div>
          <div class="kmr-sect">
-            <a name="d0e5368"/>
+            <a name="d0e5384"/>
             <h2 class="kmr">Spiral tool</h2>
             <table class="kmr kmr-color21">
 
@@ -7010,7 +7041,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e5373"/>Draw</h3>
+                        <a name="d0e5389"/>Draw</h3>
                   </td>
                </tr>
 
@@ -7046,7 +7077,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e5399"/>Select</h3>
+                        <a name="d0e5415"/>Select</h3>
                   </td>
                </tr>
 
@@ -7068,7 +7099,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                         <span class="kmr-keypad">Ctrl</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Alt</span>
-                        <span class="plussign">+</span>click</span>
+                        <span class="kmr-plussign">+</span>click</span>
                   </td>
                   <td>
                      <span class="kmr-action">select under</span>
@@ -7107,7 +7138,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e5450"/>Edit by handles</h3>
+                        <a name="d0e5466"/>Edit by handles</h3>
                   </td>
                </tr>
 
@@ -7146,7 +7177,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                         <span class="kmr-keypad">Ctrl</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Alt</span>
-                        <span class="plussign">+</span>click</span>
+                        <span class="kmr-plussign">+</span>click</span>
                   </td>
                   <td>
                      <span class="kmr-action">reset divergence (inner handle)</span>
@@ -7248,7 +7279,7 @@ with the segment; another Shift+S will expand a second handle.</span>
             </table>
          </div>
          <div class="kmr-sect">
-            <a name="d0e5564"/>
+            <a name="d0e5580"/>
             <h2 class="kmr">Pencil tool</h2>
             <table class="kmr kmr-color22">
 
@@ -7260,7 +7291,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                      <span class="kmr-shortcut">mouse drag</span>
                   </td>
                   <td>
-                     <span class="kmr-action">draw a freehand line</span>
+                     <span class="kmr-action">draw a freehand path</span>
                   </td>
                </tr>
 
@@ -7277,7 +7308,7 @@ with the segment; another Shift+S will expand a second handle.</span>
 
                <tr>
                   <td colspan="2" class="kmr-note">
-                     <span>If a path is selected, Shift+clicking anywhere starts a new subpath instead of a new independent path.</span>
+                     <span>If a path is selected, Shift+dragging from anywhere starts a new subpath instead of a new independent path.</span>
                   </td>
                </tr>
 
@@ -7294,7 +7325,7 @@ with the segment; another Shift+S will expand a second handle.</span>
 
                <tr>
                   <td colspan="2" class="kmr-note">
-                     <span>This temporarily disables snapping to grid or guides when you are dragging with grid or guides on.</span>
+                     <span>This temporarily disables snapping when you are dragging with snapping activated.</span>
                   </td>
                </tr>
 
@@ -7309,13 +7340,22 @@ with the segment; another Shift+S will expand a second handle.</span>
                   </td>
                </tr>
 
+               <tr>
+                  <td class="kmr-keys">
+                     <span class="kmr-shortcut">click</span>
+                  </td>
+                  <td>
+                     <span class="kmr-action">start a straight path (finish with another click)</span>
+                  </td>
+               </tr>
+
 
 
 
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e5615"/>Create dots</h3>
+                        <a name="d0e5638"/>Create dots</h3>
                   </td>
                </tr>
 
@@ -7342,7 +7382,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Ctrl</span>
-                        <span class="plussign">+</span>click</span>
+                        <span class="kmr-plussign">+</span>click</span>
                   </td>
                   <td>
                      <span class="kmr-action">create a double-sized dot</span>
@@ -7355,7 +7395,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                         <span class="kmr-keypad">Ctrl</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Alt</span>
-                        <span class="plussign">+</span>click</span>
+                        <span class="kmr-plussign">+</span>click</span>
                   </td>
                   <td>
                      <span class="kmr-action">create a random-sized dot</span>
@@ -7366,7 +7406,7 @@ with the segment; another Shift+S will expand a second handle.</span>
             </table>
          </div>
          <div class="kmr-sect">
-            <a name="d0e5659"/>
+            <a name="d0e5682"/>
             <h2 class="kmr">Pen (Bezier) tool</h2>
             <table class="kmr kmr-color23">
 
@@ -7376,7 +7416,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e5664"/>Create nodes</h3>
+                        <a name="d0e5687"/>Create nodes</h3>
                   </td>
                </tr>
 
@@ -7462,7 +7502,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e5728"/>Move last node</h3>
+                        <a name="d0e5751"/>Move last node</h3>
                   </td>
                </tr>
 
@@ -7515,7 +7555,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Alt</span>
-                        <span class="plussign">+</span>arrows</span>
+                        <span class="kmr-plussign">+</span>arrows</span>
                   </td>
                   <td>
                      <span class="kmr-action">move last node by 10 pixels</span>
@@ -7534,7 +7574,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e5782"/>Create/modify segments</h3>
+                        <a name="d0e5805"/>Create/modify segments</h3>
                   </td>
                </tr>
 
@@ -7589,7 +7629,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e5821"/>Create dots</h3>
+                        <a name="d0e5844"/>Create dots</h3>
                   </td>
                </tr>
 
@@ -7616,7 +7656,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Ctrl</span>
-                        <span class="plussign">+</span>click</span>
+                        <span class="kmr-plussign">+</span>click</span>
                   </td>
                   <td>
                      <span class="kmr-action">create a double-sized dot</span>
@@ -7629,7 +7669,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                         <span class="kmr-keypad">Ctrl</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Alt</span>
-                        <span class="plussign">+</span>click</span>
+                        <span class="kmr-plussign">+</span>click</span>
                   </td>
                   <td>
                      <span class="kmr-action">create a random-sized dot</span>
@@ -7642,7 +7682,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e5864"/>Finish</h3>
+                        <a name="d0e5887"/>Finish</h3>
                   </td>
                </tr>
 
@@ -7651,7 +7691,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                      <span class="kmr-shortcut">Enter</span>
                   </td>
                   <td>
-                     <span class="kmr-action">finish current line</span>
+                     <span class="kmr-action">finish current path</span>
                   </td>
                </tr>
 
@@ -7660,22 +7700,22 @@ with the segment; another Shift+S will expand a second handle.</span>
                      <span class="kmr-shortcut">right click</span>
                   </td>
                   <td>
-                     <span class="kmr-action">finish current line</span>
+                     <span class="kmr-action">finish current path</span>
                   </td>
                </tr>
 
                <tr>
                   <td class="kmr-keys">
-                     <span class="kmr-shortcut">click<span class="kmr-plussign">+</span>click</span>
+                     <span class="kmr-shortcut">double-click</span>
                   </td>
                   <td>
-                     <span class="kmr-action">finish current line</span>
+                     <span class="kmr-action">finish current path</span>
                   </td>
                </tr>
 
                <tr>
                   <td colspan="2" class="kmr-note">
-                     <span>Enter, right click, or double left click finish the current line, discarding the last unfinished (red) segment.</span>
+                     <span>Enter or right click finish the current line, discarding the last unfinished (red) segment. Double left click finishes the current line where double-clicked.</span>
                   </td>
                </tr>
 
@@ -7685,7 +7725,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e5897"/>Cancel</h3>
+                        <a name="d0e5917"/>Cancel</h3>
                   </td>
                </tr>
 
@@ -7716,7 +7756,7 @@ with the segment; another Shift+S will expand a second handle.</span>
             </table>
          </div>
          <div class="kmr-sect">
-            <a name="d0e5927"/>
+            <a name="d0e5947"/>
             <h2 class="kmr">Calligraphy tool</h2>
             <table class="kmr kmr-color24">
 
@@ -7728,7 +7768,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                      <span class="kmr-shortcut">mouse drag</span>
                   </td>
                   <td>
-                     <span class="kmr-action">draw a calligraphic line</span>
+                     <span class="kmr-action">draw a calligraphic stroke</span>
                   </td>
                </tr>
 
@@ -7799,7 +7839,7 @@ with the segment; another Shift+S will expand a second handle.</span>
 <span class="kmr-shortcut">End</span>
                   </td>
                   <td>
-                     <span class="kmr-action">set pen width to 1 or 100</span>
+                     <span class="kmr-action">set pen width to its minimum or maximum</span>
                   </td>
                </tr>
 
@@ -7833,7 +7873,7 @@ with the segment; another Shift+S will expand a second handle.</span>
             </table>
          </div>
          <div class="kmr-sect">
-            <a name="d0e6025"/>
+            <a name="d0e6045"/>
             <h2 class="kmr">Text tool</h2>
             <table class="kmr kmr-color25">
 
@@ -7843,7 +7883,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e6030"/>Select/create</h3>
+                        <a name="d0e6050"/>Select/create</h3>
                   </td>
                </tr>
 
@@ -7884,7 +7924,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e6058"/>Navigate in text</h3>
+                        <a name="d0e6078"/>Navigate in text</h3>
                   </td>
                </tr>
 
@@ -7961,7 +8001,7 @@ with the segment; another Shift+S will expand a second handle.</span>
 
                <tr>
                   <td colspan="2" class="kmr-note">
-                     <span>All these commands cancel current text selection, if any. Use them with Shift to extend selection instead.</span>
+                     <span>All these commands cancel current text selection, if any. Use them with Shift to add to / subtract from selection instead.</span>
                   </td>
                </tr>
 
@@ -7971,7 +8011,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e6147"/>Flowed text (internal frame)</h3>
+                        <a name="d0e6167"/>Flowed text (internal frame)</h3>
                   </td>
                </tr>
 
@@ -8028,7 +8068,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e6186"/>Flowed text (external frame)</h3>
+                        <a name="d0e6206"/>Flowed text (external frame)</h3>
                   </td>
                </tr>
 
@@ -8061,7 +8101,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Alt</span>
-                        <span class="plussign">+</span>W</span>
+                        <span class="kmr-plussign">+</span>W</span>
                   </td>
                   <td>
                      <span class="kmr-action">unflow text from frame</span>
@@ -8097,7 +8137,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e6236"/>Text on path</h3>
+                        <a name="d0e6256"/>Text on path</h3>
                   </td>
                </tr>
 
@@ -8124,7 +8164,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e6255"/>Edit text</h3>
+                        <a name="d0e6275"/>Edit text</h3>
                   </td>
                </tr>
 
@@ -8207,7 +8247,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e6309"/>Select text</h3>
+                        <a name="d0e6329"/>Select text</h3>
                   </td>
                </tr>
 
@@ -8243,7 +8283,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Ctrl</span>
-                        <span class="plussign">+</span>arrows</span>
+                        <span class="kmr-plussign">+</span>arrows</span>
                   </td>
                   <td>
                      <span class="kmr-action">select text by word</span>
@@ -8270,12 +8310,12 @@ with the segment; another Shift+S will expand a second handle.</span>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Ctrl</span>
-                        <span class="plussign">+</span>Home</span>,
+                        <span class="kmr-plussign">+</span>Home</span>,
 <span class="kmr-shortcut">
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Ctrl</span>
-                        <span class="plussign">+</span>End</span>
+                        <span class="kmr-plussign">+</span>End</span>
                   </td>
                   <td>
                      <span class="kmr-action">select to beginning/end of text</span>
@@ -8298,7 +8338,7 @@ with the segment; another Shift+S will expand a second handle.</span>
 
                <tr>
                   <td class="kmr-keys">
-                     <span class="kmr-shortcut">click<span class="kmr-plussign">+</span>click</span>
+                     <span class="kmr-shortcut">double-click</span>
                   </td>
                   <td>
                      <span class="kmr-action">select word</span>
@@ -8307,7 +8347,7 @@ with the segment; another Shift+S will expand a second handle.</span>
 
                <tr>
                   <td class="kmr-keys">
-                     <span class="kmr-shortcut">click<span class="kmr-plussign">+</span>click<span class="plussign">+</span>click</span>
+                     <span class="kmr-shortcut">click<span class="kmr-plussign">+</span>click<span class="kmr-plussign">+</span>click</span>
                   </td>
                   <td>
                      <span class="kmr-action">select line</span>
@@ -8337,7 +8377,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e6437"/>Style selection</h3>
+                        <a name="d0e6454"/>Style selection</h3>
                   </td>
                </tr>
 
@@ -8375,7 +8415,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e6466"/>Letter spacing</h3>
+                        <a name="d0e6483"/>Letter spacing</h3>
                   </td>
                </tr>
 
@@ -8396,7 +8436,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Alt</span>
-                        <span class="plussign">+</span>&gt;</span>
+                        <span class="kmr-plussign">+</span>&gt;</span>
                   </td>
                   <td>
                      <span class="kmr-action">expand line/paragraph by 10 pixels</span>
@@ -8420,7 +8460,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Alt</span>
-                        <span class="plussign">+</span>&lt;</span>
+                        <span class="kmr-plussign">+</span>&lt;</span>
                   </td>
                   <td>
                      <span class="kmr-action">contract line/paragraph by 10 pixels</span>
@@ -8445,7 +8485,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e6522"/>Line spacing</h3>
+                        <a name="d0e6539"/>Line spacing</h3>
                   </td>
                </tr>
 
@@ -8455,7 +8495,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                         <span class="kmr-keypad">Ctrl</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Alt</span>
-                        <span class="plussign">+</span>&gt;</span>
+                        <span class="kmr-plussign">+</span>&gt;</span>
                   </td>
                   <td>
                      <span class="kmr-action">make the text object taller by 1 pixel</span>
@@ -8468,9 +8508,9 @@ with the segment; another Shift+S will expand a second handle.</span>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Ctrl</span>
-                        <span class="plussign">+</span>
+                        <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Alt</span>
-                        <span class="plussign">+</span>&gt;</span>
+                        <span class="kmr-plussign">+</span>&gt;</span>
                   </td>
                   <td>
                      <span class="kmr-action">make the text object taller by 10 pixels</span>
@@ -8483,7 +8523,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                         <span class="kmr-keypad">Ctrl</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Alt</span>
-                        <span class="plussign">+</span>&lt;</span>
+                        <span class="kmr-plussign">+</span>&lt;</span>
                   </td>
                   <td>
                      <span class="kmr-action">make the text object shorter by 1 pixel</span>
@@ -8496,9 +8536,9 @@ with the segment; another Shift+S will expand a second handle.</span>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Ctrl</span>
-                        <span class="plussign">+</span>
+                        <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Alt</span>
-                        <span class="plussign">+</span>&lt;</span>
+                        <span class="kmr-plussign">+</span>&lt;</span>
                   </td>
                   <td>
                      <span class="kmr-action">make the text object shorter by 10 pixels</span>
@@ -8523,7 +8563,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e6586"/>Kerning and shifting</h3>
+                        <a name="d0e6603"/>Kerning and shifting</h3>
                   </td>
                </tr>
 
@@ -8544,7 +8584,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Alt</span>
-                        <span class="plussign">+</span>arrows</span>
+                        <span class="kmr-plussign">+</span>arrows</span>
                   </td>
                   <td>
                      <span class="kmr-action">shift characters by 10 pixels</span>
@@ -8581,7 +8621,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e6626"/>Rotate</h3>
+                        <a name="d0e6643"/>Rotate</h3>
                   </td>
                </tr>
 
@@ -8636,7 +8676,7 @@ with the segment; another Shift+S will expand a second handle.</span>
             </table>
          </div>
          <div class="kmr-sect">
-            <a name="d0e6676"/>
+            <a name="d0e6693"/>
             <h2 class="kmr">Spray tool</h2>
             <table class="kmr kmr-color26">
 
@@ -8646,7 +8686,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e6681"/>Modes</h3>
+                        <a name="d0e6698"/>Modes</h3>
                   </td>
                </tr>
 
@@ -8689,7 +8729,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e6717"/>Parameters</h3>
+                        <a name="d0e6734"/>Parameters</h3>
                   </td>
                </tr>
 
@@ -8719,7 +8759,7 @@ with the segment; another Shift+S will expand a second handle.</span>
 <span class="kmr-shortcut">End</span>
                   </td>
                   <td>
-                     <span class="kmr-action">set spray width to 1 / 100</span>
+                     <span class="kmr-action">set spray width to its minimum or maximum</span>
                   </td>
                </tr>
 
@@ -8728,7 +8768,7 @@ with the segment; another Shift+S will expand a second handle.</span>
             </table>
          </div>
          <div class="kmr-sect">
-            <a name="d0e6757"/>
+            <a name="d0e6774"/>
             <h2 class="kmr">Eraser tool</h2>
             <table class="kmr kmr-color1">
 
@@ -8751,7 +8791,7 @@ with the segment; another Shift+S will expand a second handle.</span>
 <span class="kmr-shortcut">End</span>
                   </td>
                   <td>
-                     <span class="kmr-action">set eraser width to 1 / 100</span>
+                     <span class="kmr-action">set eraser width to its minimum or maximum</span>
                   </td>
                </tr>
 
@@ -8760,7 +8800,7 @@ with the segment; another Shift+S will expand a second handle.</span>
             </table>
          </div>
          <div class="kmr-sect">
-            <a name="d0e6788"/>
+            <a name="d0e6805"/>
             <h2 class="kmr">Paint Bucket</h2>
             <table class="kmr kmr-color2">
 
@@ -8821,7 +8861,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                         <span class="kmr-plussign">+</span>mouse drag</span>
                   </td>
                   <td>
-                     <span class="kmr-action">fill from each point same as initial point</span>
+                     <span class="kmr-action">fill from each point similar to the initial point</span>
                   </td>
                </tr>
 
@@ -8854,7 +8894,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Ctrl</span>
-                        <span class="plussign">+</span>click</span>
+                        <span class="kmr-plussign">+</span>click</span>
                   </td>
                   <td>
                      <span class="kmr-action">set stroke color</span>
@@ -8872,7 +8912,7 @@ with the segment; another Shift+S will expand a second handle.</span>
             </table>
          </div>
          <div class="kmr-sect">
-            <a name="d0e6871"/>
+            <a name="d0e6888"/>
             <h2 class="kmr">Gradient tool</h2>
             <table class="kmr kmr-color3">
 
@@ -8882,7 +8922,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e6876"/>Select objects</h3>
+                        <a name="d0e6893"/>Select objects</h3>
                   </td>
                </tr>
 
@@ -8923,7 +8963,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e6909"/>Create gradients</h3>
+                        <a name="d0e6926"/>Create gradients</h3>
                   </td>
                </tr>
 
@@ -8938,13 +8978,13 @@ with the segment; another Shift+S will expand a second handle.</span>
 
                <tr>
                   <td colspan="2" class="kmr-note">
-                     <span>This creates gradient on selected objects. The Controls bar lets you select linear/radial and fill/stroke for the new gradient.</span>
+                     <span>This creates gradient on selected objects. The tool controls bar lets you select linear/radial and fill/stroke for the new gradient.</span>
                   </td>
                </tr>
 
                <tr>
                   <td class="kmr-keys">
-                     <span class="kmr-shortcut">click<span class="kmr-plussign">+</span>click</span>
+                     <span class="kmr-shortcut">double-click</span>
                   </td>
                   <td>
                      <span class="kmr-action">create default gradient</span>
@@ -8963,7 +9003,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e6938"/>Select handles</h3>
+                        <a name="d0e6952"/>Select handles</h3>
                   </td>
                </tr>
 
@@ -9050,7 +9090,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e7008"/>Create/delete intermediate stops</h3>
+                        <a name="d0e7022"/>Create/delete intermediate stops</h3>
                   </td>
                </tr>
 
@@ -9060,16 +9100,8 @@ with the segment; another Shift+S will expand a second handle.</span>
                         <span class="kmr-keypad">Ctrl</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Alt</span>
-                        <span class="plussign">+</span>click</span>
-                  </td>
-                  <td>
-                     <span class="kmr-action">create a stop</span>
-                  </td>
-               </tr>
-
-               <tr>
-                  <td class="kmr-keys">
-                     <span class="kmr-shortcut">click<span class="kmr-plussign">+</span>click</span>
+                        <span class="kmr-plussign">+</span>click</span>,
+<span class="kmr-shortcut">double-click</span>
                   </td>
                   <td>
                      <span class="kmr-action">create a stop</span>
@@ -9088,7 +9120,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                         <span class="kmr-keypad">Ctrl</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Alt</span>
-                        <span class="plussign">+</span>click</span>
+                        <span class="kmr-plussign">+</span>click</span>
                   </td>
                   <td>
                      <span class="kmr-action">delete stop</span>
@@ -9103,7 +9135,10 @@ with the segment; another Shift+S will expand a second handle.</span>
 
                <tr>
                   <td class="kmr-keys">
-                     <span class="kmr-shortcut">Ins</span>
+                     <span class="kmr-shortcut">Ins</span>,
+<span class="kmr-shortcut">
+                        <span class="kmr-keypad">Shift</span>
+                        <span class="kmr-plussign">+</span>I</span>
                   </td>
                   <td>
                      <span class="kmr-action">insert new stop(s)</span>
@@ -9112,7 +9147,7 @@ with the segment; another Shift+S will expand a second handle.</span>
 
                <tr>
                   <td colspan="2" class="kmr-note">
-                     <span>This adds new stop(s) in the middle(s) of selected segment(s), so it requires that more than two adjacent handles be selected.</span>
+                     <span>This adds new stop(s) in the middle(s) between adjacent, selected stops or, if only one stop is selected, in the middle of the segment that starts with the selected stop.</span>
                   </td>
                </tr>
 
@@ -9131,7 +9166,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e7071"/>Move handles/stops</h3>
+                        <a name="d0e7084"/>Move handles/stops</h3>
                   </td>
                </tr>
 
@@ -9221,7 +9256,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                         <span class="kmr-keypad">Shift</span>
                         <span class="kmr-plussign">+</span>
                         <span class="kmr-keypad">Alt</span>
-                        <span class="plussign">+</span>arrows</span>
+                        <span class="kmr-plussign">+</span>arrows</span>
                   </td>
                   <td>
                      <span class="kmr-action">move selected handle by 10 pixels</span>
@@ -9252,7 +9287,7 @@ with the segment; another Shift+S will expand a second handle.</span>
                <tr>
                   <td colspan="2">
                      <h3 class="kmr">
-                        <a name="d0e7161"/>Reverse</h3>
+                        <a name="d0e7174"/>Reverse</h3>
                   </td>
                </tr>
 
@@ -9275,36 +9310,10 @@ with the segment; another Shift+S will expand a second handle.</span>
 
 
 
-
-
-               <tr>
-                  <td colspan="2">
-                     <h3 class="kmr">
-                        <a name="d0e7182"/>Gradient editor</h3>
-                  </td>
-               </tr>
-
-               <tr>
-                  <td class="kmr-keys">
-                     <span class="kmr-shortcut">click<span class="kmr-plussign">+</span>click</span>
-                  </td>
-                  <td>
-                     <span class="kmr-action">open gradient editor</span>
-                  </td>
-               </tr>
-
-               <tr>
-                  <td colspan="2" class="kmr-note">
-                     <span>Double clicking a gradient handle opens the Gradient Editor with that gradient and the clicked handle chosen in the stops list.</span>
-                  </td>
-               </tr>
-
-
-
             </table>
          </div>
          <div class="kmr-sect">
-            <a name="d0e7202"/>
+            <a name="d0e7194"/>
             <h2 class="kmr">Dropper tool</h2>
             <table class="kmr kmr-color4">
 

@@ -39,6 +39,8 @@ try:
     from numpy import *
     from numpy.linalg import *
 except:
+    # Initialize gettext for messages outside an inkex derived class
+    inkex.localize() 
     inkex.errormsg(_("Failed to import the numpy or numpy.linalg modules. These modules are required by this extension. Please install them and try again.  On a Debian-like system this can be done with the command, sudo apt-get install python-numpy."))
     exit()
 

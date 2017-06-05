@@ -14,7 +14,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+#include <config.h>
 #endif
 
 #include <cstring>
@@ -27,8 +27,6 @@
 #include "display/curve.h"
 #include "xml/repr.h"
 #include "document.h"
-
-#include <2geom/pathvector.h>
 
 #include "sp-star.h"
 
@@ -225,7 +223,7 @@ void SPStar::update(SPCtx *ctx, guint flags) {
 }
 
 void SPStar::update_patheffect(bool write) {
-    this->set_shape();
+    this->set_shape(true);
 
     if (write) {
         Inkscape::XML::Node *repr = this->getRepr();
@@ -365,7 +363,7 @@ sp_star_get_curvepoint (SPStar *star, SPStarPoint point, gint index, bool previ)
 #define NEXT false
 #define PREV true
 
-void SPStar::set_shape() {
+void SPStar::set_shape(bool force) {
     // perhaps we should convert all our shapes into LPEs without source path
     // and with knotholders for parameters, then this situation will be handled automatically
     // by disabling the entire stack (including the shape LPE)
@@ -448,6 +446,12 @@ void SPStar::set_shape() {
 
     /* Reset the shape'scurve to the "original_curve"
      * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
+    if(this->getCurveBeforeLPE()) {
+        if(!force && this->getCurveBeforeLPE()->get_pathvector() == c->get_pathvector()) {
+            c->unref();
+            return;
+        }
+    }
     this->setCurveInsync( c, TRUE);
     this->setCurveBeforeLPE( c );
 

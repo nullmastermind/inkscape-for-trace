@@ -14,7 +14,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+#include <config.h>
 #endif
 
 #include <gtkmm/clipboard.h>
@@ -23,7 +23,6 @@
 #include <display/sp-ctrlquadr.h>
 #include <gdk/gdkkeysyms.h>
 #include <glibmm/i18n.h>
-#include <sstream>
 
 #include "context-fns.h"
 
@@ -36,7 +35,6 @@
 #include "message-stack.h"
 #include "pixmaps/cursor-text-insert.xpm"
 #include "pixmaps/cursor-text.xpm"
-#include "preferences.h"
 #include "rubberband.h"
 #include "selection-chemistry.h"
 #include "selection.h"
@@ -50,8 +48,8 @@
 #include "ui/control-manager.h"
 #include "verbs.h"
 #include "xml/node-event-vector.h"
-#include "xml/repr.h"
-#include <gtk/gtk.h>
+#include "xml/attribute-record.h"
+#include "xml/sp-css-attr.h"
 
 using Inkscape::ControlManager;
 using Inkscape::DocumentUndo;
@@ -1361,6 +1359,59 @@ SPCSSAttr *sp_text_get_style_at_cursor(ToolBase const *ec)
     return NULL;
 }
 
+static bool css_attrs_are_equal(SPCSSAttr const *first, SPCSSAttr const *second)
+{
+    Inkscape::Util::List<Inkscape::XML::AttributeRecord const> attrs = first->attributeList();
+    for ( ; attrs ; attrs++) {
+        gchar const *other_attr = second->attribute(g_quark_to_string(attrs->key));
+        if (other_attr == NULL || strcmp(attrs->value, other_attr))
+            return false;
+    }
+    attrs = second->attributeList();
+    for ( ; attrs ; attrs++) {
+        gchar const *other_attr = first->attribute(g_quark_to_string(attrs->key));
+        if (other_attr == NULL || strcmp(attrs->value, other_attr))
+            return false;
+    }
+    return true;
+}
+
+std::vector<SPCSSAttr*> sp_text_get_selected_style(ToolBase const *ec, unsigned *k, int *b, std::vector<unsigned> *positions)
+{
+    std::vector<SPCSSAttr*> vec;
+    SPCSSAttr *css, *css_new;
+    TextTool *tc = SP_TEXT_CONTEXT(ec);
+    Inkscape::Text::Layout::iterator i = std::min(tc->text_sel_start, tc->text_sel_end);
+    SPObject const *obj = sp_te_object_at_position(tc->text, i);
+    if (obj) {
+        css = take_style_from_item(const_cast<SPObject*>(obj));
+    }
+    vec.push_back(css);
+    positions->push_back(0);
+    i.nextCharacter();
+    *k = 1;
+    *b = 1;
+    while (i != std::max(tc->text_sel_start, tc->text_sel_end))
+    {
+        obj = sp_te_object_at_position(tc->text, i);
+        if (obj) {
+            css_new = take_style_from_item(const_cast<SPObject*>(obj));
+        }
+        if(!css_attrs_are_equal(css, css_new))
+        {
+            vec.push_back(css_new);
+            css = sp_repr_css_attr_new();
+            sp_repr_css_merge(css, css_new);
+            positions->push_back(*k);
+            (*b)++;
+        }
+        i.nextCharacter();
+        (*k)++;
+    }
+    positions->push_back(*k);
+    return vec;
+}
+
 /**
  Deletes the currently selected characters. Returns false if there is no
  text selection currently.
@@ -1446,7 +1497,6 @@ bool TextTool::_styleSet(SPCSSAttr const *css)
                _("Set text style"));
     sp_text_context_update_cursor(this);
     sp_text_context_update_text_selection(this);
-
     return true;
 }
 

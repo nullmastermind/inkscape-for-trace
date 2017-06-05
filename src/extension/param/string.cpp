@@ -24,7 +24,7 @@
 
 namespace Inkscape {
 namespace Extension {
-    
+
 
 /** Free the allocated data. */
 ParamString::~ParamString(void)
@@ -76,18 +76,19 @@ void ParamString::string(std::string &string) const
 }
 
 /** Initialize the object, to do that, copy the data. */
-ParamString::ParamString (const gchar * name, const gchar * guitext, const gchar * desc, const Parameter::_scope_t scope, bool gui_hidden, const gchar * gui_tip, Inkscape::Extension::Extension * ext, Inkscape::XML::Node * xml) :
-    Parameter(name, guitext, desc, scope, gui_hidden, gui_tip, ext),
-              _value(NULL), _indent(0)
+ParamString::ParamString(const gchar * name,
+                         const gchar * text,
+                         const gchar * description,
+                         bool hidden,
+                         int indent,
+                         Inkscape::Extension::Extension * ext,
+                         Inkscape::XML::Node * xml)
+    : Parameter(name, text, description, hidden, indent, ext)
+    , _value(NULL)
 {
     const char * defaultval = NULL;
     if (xml->firstChild() != NULL) {
         defaultval = xml->firstChild()->content();
-    }
-
-    const char * indent = xml->attribute("indent");
-    if (indent != NULL) {
-        _indent = atoi(indent) * 12;
     }
 
     gchar * pref_name = this->pref_name();
@@ -161,14 +162,14 @@ void ParamStringEntry::changed_text(void)
  */
 Gtk::Widget * ParamString::get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal)
 {
-    if (_gui_hidden) {
+    if (_hidden) {
         return NULL;
     }
 
-    Gtk::HBox * hbox = Gtk::manage(new Gtk::HBox(false, 4));
+    Gtk::HBox * hbox = Gtk::manage(new Gtk::HBox(false, Parameter::GUI_PARAM_WIDGETS_SPACING));
     Gtk::Label * label = Gtk::manage(new Gtk::Label(_text, Gtk::ALIGN_START));
     label->show();
-    hbox->pack_start(*label, false, false, _indent);
+    hbox->pack_start(*label, false, false);
 
     ParamStringEntry * textbox = new ParamStringEntry(this, doc, node, changeSignal);
     textbox->show();

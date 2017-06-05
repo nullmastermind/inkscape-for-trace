@@ -25,7 +25,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+#include <config.h>
 #endif
 
 #include <glibmm/i18n.h>
@@ -38,9 +38,9 @@
 #include "document-undo.h"
 #include "widgets/ege-adjustment-action.h"
 #include "widgets/ege-output-action.h"
-#include "preferences.h"
 #include "toolbox.h"
-#include "widgets/ink-action.h"
+#include "ink-action.h"
+#include "ink-toggle-action.h"
 #include "ui/icon-names.h"
 #include "ui/tools/measure-tool.h"
 #include "ui/widget/unit-tracker.h"
@@ -326,7 +326,7 @@ void sp_measure_toolbox_prep(SPDesktop * desktop, GtkActionGroup* mainActions, G
     {
         eact = create_adjustment_action( "MeasureOffsetAction",
                                          _("Offset"), _("Offset:"),
-                                         _("The offset size"),
+                                         _("Mark dimension offset"),
                                          "/tools/measure/offset", 5.0,
                                          GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
                                          0.0, 90000.0, 1.0, 4.0,

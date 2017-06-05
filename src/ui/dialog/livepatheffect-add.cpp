@@ -9,23 +9,21 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+#include "config.h"
 #endif
 
 #include "livepatheffect-add.h"
 #include <glibmm/i18n.h>
-#include <gtkmm/stock.h>
 
 #include "desktop.h"
-#include "live_effects/effect-enum.h"
 
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
 LivePathEffectAdd::LivePathEffectAdd() :
-    add_button(Gtk::Stock::ADD),
-    close_button(Gtk::Stock::CANCEL),
+    add_button(_("_Add"), true),
+    close_button(_("_Cancel"), true),
     converter(Inkscape::LivePathEffect::LPETypeConverter),
     applied(false)
 {
@@ -54,13 +52,21 @@ LivePathEffectAdd::LivePathEffectAdd() :
     /**
      * Initialize Effect list
      */
+    int show = LivePathEffect::ATTACH_PATH;
+#ifdef LPE_ENABLE_TEST_EFFECTS
+    //TODO: Handle when showing the experimental effects without setting flag
+    show = LivePathEffect::ANGLE_BISECTOR;
+#elif WITH_LPETOOL
+    //TODO: Handle when showing the experimental effects without setting flag
+    show = LivePathEffect::ANGLE_BISECTOR;
+#endif
+
     for(int i = 0; i < static_cast<int>(converter._length); ++i) {
         Gtk::TreeModel::Row row = *(effectlist_store->append());
         const Util::EnumData<LivePathEffect::EffectType>* data = &converter.data(i);
         row[_columns.name] = _( converter.get_label(data->id).c_str() );
         row[_columns.data] = data;
-
-        if (i == 0) {
+        if (i == show) {
             Glib::RefPtr<Gtk::TreeSelection> select = effectlist_treeview.get_selection();
             select->select(row);
         }
@@ -69,16 +75,11 @@ LivePathEffectAdd::LivePathEffectAdd() :
     /**
      * Buttons
      */
-    close_button.set_use_stock(true);
     //close_button.set_can_default();
     add_button.set_use_underline(true);
     add_button.set_can_default();
 
-#if WITH_GTKMM_3_0
-    Gtk::Box *mainVBox = get_content_area();
-#else
-    Gtk::Box *mainVBox = get_vbox();
-#endif
+    auto mainVBox = get_content_area();
 
     mainVBox->pack_start(scrolled_window, true, true);
     add_action_widget(close_button, Gtk::RESPONSE_CLOSE);

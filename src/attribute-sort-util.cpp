@@ -11,7 +11,6 @@
 
 #include <fstream>
 #include <sstream>
-#include <string>
 #include <iostream>
 #include <vector>
 #include <utility>      // std::pair
@@ -21,7 +20,6 @@
 
 #include "xml/repr.h"
 #include "xml/attribute-record.h"
-#include "xml/sp-css-attr.h"
 
 #include "attributes.h"
 
@@ -65,9 +63,11 @@ void sp_attribute_sort_recursive(Node *repr) {
  */
 bool cmp(std::pair< Glib::ustring, Glib::ustring > const &a,
          std::pair< Glib::ustring, Glib::ustring > const &b) {
+    unsigned val_a = sp_attribute_lookup(a.first.c_str());
     unsigned val_b = sp_attribute_lookup(b.first.c_str());
-    if (val_b == 0) return true; // Unknown attributes at end.
-    return sp_attribute_lookup(a.first.c_str()) < val_b;
+    if (val_a == 0) return false; // Unknown attributes at end.
+    if (val_b == 0) return true;  // Unknown attributes at end.
+    return val_a < val_b;
 }
 
 /**
@@ -103,12 +103,17 @@ void sp_attribute_sort_element(Node *repr) {
   //for (auto it: my_list) {
   for (std::vector<std::pair< Glib::ustring, Glib::ustring > >::iterator it = my_list.begin();
                               it != my_list.end(); ++it) {
-       repr->setAttribute( it->first.c_str(), NULL, false );
+      // Removing "inkscape:label" results in crash when Layers dialog is open.
+      if (it->first != "inkscape:label") {
+          repr->setAttribute( it->first.c_str(), NULL, false );
+      }
   }
   // Insert all attributes in proper order
   for (std::vector<std::pair< Glib::ustring, Glib::ustring > >::iterator it = my_list.begin();
                               it != my_list.end(); ++it) {
-      repr->setAttribute( it->first.c_str(), it->second.c_str(), false );
+      if (it->first != "inkscape:label") {
+          repr->setAttribute( it->first.c_str(), it->second.c_str(), false );
+      }
   } 
 }
 

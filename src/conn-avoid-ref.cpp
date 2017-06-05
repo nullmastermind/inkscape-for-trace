@@ -18,17 +18,12 @@
 #include "sp-item.h"
 #include "display/curve.h"
 #include "2geom/line.h"
-#include "2geom/crossing.h"
 #include "2geom/convex-hull.h"
-#include "helper/geom-curves.h"
 #include "svg/stringstream.h"
 #include "conn-avoid-ref.h"
 #include "sp-conn-end.h"
 #include "sp-path.h"
 #include "libavoid/router.h"
-#include "libavoid/connector.h"
-#include "libavoid/geomtypes.h"
-#include "libavoid/shape.h"
 #include "xml/node.h"
 #include "document.h"
 #include "desktop.h"
@@ -38,7 +33,6 @@
 #include "sp-item-group.h"
 #include "inkscape.h"
 #include "verbs.h"
-#include <glibmm/i18n.h>
 
 using Inkscape::DocumentUndo;
 
@@ -334,19 +328,19 @@ static Avoid::Polygon avoid_item_poly(SPItem const *item)
 std::vector<SPItem *> get_avoided_items(std::vector<SPItem *> &list, SPObject *from, SPDesktop *desktop,
         bool initialised)
 {
-    for (SPObject *child = from->firstChild() ; child != NULL; child = child->next ) {
-        if (SP_IS_ITEM(child) &&
-            !desktop->isLayer(SP_ITEM(child)) &&
-            !SP_ITEM(child)->isLocked() &&
-            !desktop->itemIsHidden(SP_ITEM(child)) &&
-            (!initialised || SP_ITEM(child)->avoidRef->shapeRef)
+    for (auto& child: from->children) {
+        if (SP_IS_ITEM(&child) &&
+            !desktop->isLayer(SP_ITEM(&child)) &&
+            !SP_ITEM(&child)->isLocked() &&
+            !desktop->itemIsHidden(SP_ITEM(&child)) &&
+            (!initialised || SP_ITEM(&child)->avoidRef->shapeRef)
             )
         {
-            list.push_back(SP_ITEM(child));
+            list.push_back(SP_ITEM(&child));
         }
 
-        if (SP_IS_ITEM(child) && desktop->isLayer(SP_ITEM(child))) {
-            list = get_avoided_items(list, child, desktop, initialised);
+        if (SP_IS_ITEM(&child) && desktop->isLayer(SP_ITEM(&child))) {
+            list = get_avoided_items(list, &child, desktop, initialised);
         }
     }
 

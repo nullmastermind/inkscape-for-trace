@@ -8,7 +8,6 @@
  */
 
 #include "prefdialog.h"
-#include <gtkmm/stock.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/separator.h>
 #include <glibmm/i18n.h>
@@ -41,11 +40,7 @@ namespace Extension {
     them.  It also places the passed-in widgets into the dialog.
 */
 PrefDialog::PrefDialog (Glib::ustring name, gchar const * help, Gtk::Widget * controls, Effect * effect) :
-#if WITH_GTKMM_3_0
     Gtk::Dialog(_(name.c_str()), true),
-#else
-    Gtk::Dialog(_(name.c_str()), true, true),
-#endif
     _help(help),
     _name(name),
     _button_ok(NULL),
@@ -55,6 +50,8 @@ PrefDialog::PrefDialog (Glib::ustring name, gchar const * help, Gtk::Widget * co
     _effect(effect),
     _exEnv(NULL)
 {
+    this->set_default_size(0,0);  // we want the window to be as small as possible instead of clobbering up space
+
     Gtk::HBox * hbox = Gtk::manage(new Gtk::HBox());
     if (controls == NULL) {
         if (_effect == NULL) {
@@ -64,26 +61,18 @@ PrefDialog::PrefDialog (Glib::ustring name, gchar const * help, Gtk::Widget * co
         controls = _effect->get_imp()->prefs_effect(_effect, SP_ACTIVE_DESKTOP, &_signal_param_change, NULL);
         _signal_param_change.connect(sigc::mem_fun(this, &PrefDialog::param_change));
     }
-
-    hbox->pack_start(*controls, true, true, 6);
+    hbox->pack_start(*controls, true, true, 0);
     hbox->show();
 
-#if WITH_GTKMM_3_0
-    this->get_content_area()->pack_start(*hbox, true, true, 6);
-#else
-    this->get_vbox()->pack_start(*hbox, true, true, 6);
-#endif
+    this->get_content_area()->pack_start(*hbox, true, true, 0);
 
     /*
     Gtk::Button * help_button = add_button(Gtk::Stock::HELP, Gtk::RESPONSE_HELP);
     if (_help == NULL)
         help_button->set_sensitive(false);
     */
-    _button_cancel = add_button(_effect == NULL ? Gtk::Stock::CANCEL : Gtk::Stock::CLOSE, Gtk::RESPONSE_CANCEL);
-    _button_cancel->set_use_stock(true);
-
-    _button_ok = add_button(_effect == NULL ? Gtk::Stock::OK : Gtk::Stock::APPLY, Gtk::RESPONSE_OK);
-    _button_ok->set_use_stock(true);
+    _button_cancel = add_button(_effect == NULL ? _("_Cancel") : _("_Close"), Gtk::RESPONSE_CANCEL);
+    _button_ok     = add_button(_effect == NULL ? _("_OK")     : _("_Apply"), Gtk::RESPONSE_OK);
     set_default_response(Gtk::RESPONSE_OK);
     _button_ok->grab_focus();
 
@@ -97,39 +86,23 @@ PrefDialog::PrefDialog (Glib::ustring name, gchar const * help, Gtk::Widget * co
             _param_preview = Parameter::make(doc->root(), _effect);
         }
 
-#if WITH_GTKMM_3_0
-        Gtk::Separator * sep = Gtk::manage(new Gtk::Separator());
-#else
-        Gtk::HSeparator * sep = Gtk::manage(new Gtk::HSeparator());
-#endif
-
+        auto sep = Gtk::manage(new Gtk::Separator());
         sep->show();
 
-#if WITH_GTKMM_3_0
-        this->get_content_area()->pack_start(*sep, true, true, 4);
-#else
-        this->get_vbox()->pack_start(*sep, true, true, 4);
-#endif
+        this->get_content_area()->pack_start(*sep, false, false, Parameter::GUI_BOX_SPACING);
 
         hbox = Gtk::manage(new Gtk::HBox());
+        hbox->set_border_width(Parameter::GUI_BOX_MARGIN);
         _button_preview = _param_preview->get_widget(NULL, NULL, &_signal_preview);
         _button_preview->show();
-        hbox->pack_start(*_button_preview, true, true,6);
+        hbox->pack_start(*_button_preview, true, true, 0);
         hbox->show();
 
-#if WITH_GTKMM_3_0
-        this->get_content_area()->pack_start(*hbox, true, true, 6);
-#else
-        this->get_vbox()->pack_start(*hbox, true, true, 6);
-#endif
+        this->get_content_area()->pack_start(*hbox, false, false, 0);
 
         Gtk::Box * hbox = dynamic_cast<Gtk::Box *>(_button_preview);
         if (hbox != NULL) {
-#if WITH_GTKMM_3_0
             _checkbox_preview = dynamic_cast<Gtk::CheckButton *>(hbox->get_children().front());
-#else
-            _checkbox_preview = dynamic_cast<Gtk::CheckButton *>(hbox->children().back().get_widget());
-#endif
         }
 
         preview_toggle();
@@ -273,7 +246,7 @@ PrefDialog::on_response (int signal) {
 
 #include "internal/clear-n_.h"
 
-const char * PrefDialog::live_param_xml = "<param name=\"__live_effect__\" type=\"boolean\" _gui-text=\"" N_("Live preview") "\" gui-description=\"" N_("Is the effect previewed live on canvas?") "\" scope=\"user\">false</param>";
+const char * PrefDialog::live_param_xml = "<param name=\"__live_effect__\" type=\"boolean\" _gui-text=\"" N_("Live preview") "\" gui-description=\"" N_("Is the effect previewed live on canvas?") "\">false</param>";
 
 }; }; /* namespace Inkscape, Extension */
 

@@ -128,6 +128,9 @@ struct EditWidgetInterface
     /// The zoom display will get the keyboard focus.
     virtual void letZoomGrabFocus() = 0;
 
+    /// Temporarily block signals and update rotation display
+    virtual void updateRotation() = 0;
+
     /// In auxiliary toolbox, set focus to widget having specific id
     virtual void setToolboxFocusTo (const gchar *) = 0;
 

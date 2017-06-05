@@ -4,13 +4,8 @@
 
 #define noDEBUG_LCMS
 
-#if WITH_GTKMM_3_0
-# include <gdkmm/rgba.h>
-#else
-# include <gdkmm/color.h>
-#endif
+#include <gdkmm/rgba.h>
 
-#include <glibmm/checksum.h>
 #include <glib/gstdio.h>
 #include <fcntl.h>
 #include <glib/gi18n.h>
@@ -21,7 +16,6 @@
 
 #include <unistd.h>
 #include <cstring>
-#include <string>
 #include <io/sys.h>
 
 #ifdef WIN32
@@ -46,14 +40,13 @@
 #include "inkscape.h"
 #include "document.h"
 #include "preferences.h"
-
+#include <glibmm/checksum.h>
+#include <glibmm/convert.h>
 #include "uri.h"
 
 #ifdef WIN32
 #include <icm.h>
 #endif // WIN32
-
-#include <glibmm/convert.h>
 
 using Inkscape::ColorProfile;
 using Inkscape::ColorProfileImpl;
@@ -314,7 +307,7 @@ void ColorProfile::set(unsigned key, gchar const *value) {
                     //# 1.  Get complete URI of document
                     gchar const *docbase = doc->getURI();
 
-                    gchar* escaped = g_uri_escape_string(this->href, "!*'();:@=+$,/?#", TRUE);
+                    gchar* escaped = g_uri_escape_string(this->href, "!*'();@=+$,/?#", TRUE);
 
                     //g_message("docbase:%s\n", docbase);
                     //org::w3c::dom::URI docUri(docbase);
@@ -588,7 +581,11 @@ bool ColorProfile::GamutCheck(SPColor color)
         static_cast<guchar>(SP_RGBA32_G_U(val)),
         static_cast<guchar>(SP_RGBA32_B_U(val)),
         255};
-    cmsDoTransform(ColorProfile::getTransfGamutCheck(), &check_color, &outofgamut, 1);
+
+    cmsHTRANSFORM gamutCheck = ColorProfile::getTransfGamutCheck();
+    if (gamutCheck) {
+        cmsDoTransform(gamutCheck, &check_color, &outofgamut, 1);
+    }
 
 #if HAVE_LIBLCMS1
     cmsSetAlarmCodes(alarm_r, alarm_g, alarm_b);
@@ -615,8 +612,6 @@ private:
     cmsColorSpaceSignature _profileSpace;
     cmsProfileClassSignature _profileClass;
 };
-
-#include <iostream>
 
 ProfileInfo::ProfileInfo( cmsHPROFILE prof, Glib::ustring const & path ) :
     _path( path ),
@@ -708,7 +703,7 @@ gint Inkscape::CMSSystem::getChannelCount(ColorProfile const *profile)
 // sort home dir before the rest, and alphabetically oterhwise
 bool compareProfileBoolPair(const std::pair<Glib::ustring, bool> & a, const std::pair<Glib::ustring, bool> & b)
 {
-    if (a.second != b.second) return a.second; // a comes first iff it's home, i.e., second == true
+    if (a.second != b.second) return a.second; // a comes first iff its home, i.e., second is true
     return a.first < b.first;
 }
 
@@ -786,7 +781,7 @@ std::vector<std::pair<Glib::ustring, bool> > ColorProfile::getBaseProfileDirs() 
 static bool isIccFile( gchar const *filepath )
 {
     bool isIccFile = false;
-    struct stat st;
+    GStatBuf st;
     if ( g_stat(filepath, &st) == 0 && (st.st_size > 128) ) {
         //0-3 == size
         //36-39 == 'acsp' 0x61637370
@@ -998,11 +993,7 @@ void loadProfiles()
 
 static bool gamutWarn = false;
 
-#if WITH_GTKMM_3_0
 static Gdk::RGBA lastGamutColor("#808080");
-#else
-static Gdk::Color lastGamutColor("#808080");
-#endif
 
 static bool lastBPC = false;
 #if defined(cmsFLAGS_PRESERVEBLACK)
@@ -1148,12 +1139,7 @@ cmsHTRANSFORM Inkscape::CMSSystem::getDisplayTransform()
     bool preserveBlack = prefs->getBool( "/options/softproof/preserveblack");
 #endif //defined(cmsFLAGS_PRESERVEBLACK)
     Glib::ustring colorStr = prefs->getString("/options/softproof/gamutcolor");
-
-#if WITH_GTKMM_3_0
     Gdk::RGBA gamutColor( colorStr.empty() ? "#808080" : colorStr );
-#else
-    Gdk::Color gamutColor( colorStr.empty() ? "#808080" : colorStr );
-#endif
 
     if ( (warn != gamutWarn)
          || (lastIntent != intent)
@@ -1185,15 +1171,9 @@ cmsHTRANSFORM Inkscape::CMSSystem::getDisplayTransform()
             if ( gamutWarn ) {
                 dwFlags |= cmsFLAGS_GAMUTCHECK;
 
-#if WITH_GTKMM_3_0
-                gushort gamutColor_r = gamutColor.get_red_u();
-                gushort gamutColor_g = gamutColor.get_green_u();
-                gushort gamutColor_b = gamutColor.get_blue_u();
-#else
-                gushort gamutColor_r = gamutColor.get_red();
-                gushort gamutColor_g = gamutColor.get_green();
-                gushort gamutColor_b = gamutColor.get_blue();
-#endif
+                auto gamutColor_r = gamutColor.get_red_u();
+                auto gamutColor_g = gamutColor.get_green_u();
+                auto gamutColor_b = gamutColor.get_blue_u();
 
 #if HAVE_LIBLCMS1
                 cmsSetAlarmCodes(gamutColor_r >> 8, gamutColor_g >> 8, gamutColor_b >> 8);
@@ -1334,12 +1314,7 @@ cmsHTRANSFORM Inkscape::CMSSystem::getDisplayPer( Glib::ustring const& id )
                 bool preserveBlack = prefs->getBool( "/options/softproof/preserveblack");
 #endif //defined(cmsFLAGS_PRESERVEBLACK)
                 Glib::ustring colorStr = prefs->getString("/options/softproof/gamutcolor");
-
-#if WITH_GTKMM_3_0
                 Gdk::RGBA gamutColor( colorStr.empty() ? "#808080" : colorStr );
-#else
-                Gdk::Color gamutColor( colorStr.empty() ? "#808080" : colorStr );
-#endif
 
                 if ( (warn != gamutWarn)
                      || (lastIntent != intent)
@@ -1369,16 +1344,9 @@ cmsHTRANSFORM Inkscape::CMSSystem::getDisplayPer( Glib::ustring const& id )
                         cmsUInt32Number dwFlags = cmsFLAGS_SOFTPROOFING;
                         if ( gamutWarn ) {
                             dwFlags |= cmsFLAGS_GAMUTCHECK;
-
-#if WITH_GTKMM_3_0
-                            gushort gamutColor_r = gamutColor.get_red_u();
-                            gushort gamutColor_g = gamutColor.get_green_u();
-                            gushort gamutColor_b = gamutColor.get_blue_u();
-#else
-                            gushort gamutColor_r = gamutColor.get_red();
-                            gushort gamutColor_g = gamutColor.get_green();
-                            gushort gamutColor_b = gamutColor.get_blue();
-#endif
+                            auto gamutColor_r = gamutColor.get_red_u();
+                            auto gamutColor_g = gamutColor.get_green_u();
+                            auto gamutColor_b = gamutColor.get_blue_u();
 
 #if HAVE_LIBLCMS1
                             cmsSetAlarmCodes(gamutColor_r >> 8, gamutColor_g >> 8, gamutColor_b >> 8);
