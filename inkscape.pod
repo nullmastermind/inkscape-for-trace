@@ -63,6 +63,7 @@ options:
     -z, --without-gui                 
 
         --vacuum-defs
+        --no-convert-text-baseline-spacing
 
         --g-fatal-warnings
 
@@ -341,6 +342,15 @@ complete valid Inkscape command line but without the Inkscape program name, for 
 Remove all unused items from the <lt>defs<gt> section of the SVG file.  If this
 option is invoked in conjunction with --export-plain-svg, only the exported file
 will be affected.  If it is used alone, the specified file will be modified in place.
+
+=item B<--no-convert-text-baseline-spacing>
+
+Do not automatically fix text baselines in legacy (pre-0.92) files on
+opening.  Inkscape 0.92 adopts the CSS standard definition for the
+'line-height' property, which differs from past versions.  By default,
+the line height values in files created prior to Inkscape 0.92 will be
+adjusted on loading to preserve the intended text layout.  This command
+line option will skip that adjustment.
 
 =item B<-z>, B<--without-gui>
 

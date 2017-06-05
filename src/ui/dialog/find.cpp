@@ -11,30 +11,25 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+#include "config.h"
 #endif
 
 #include "find.h"
 
 #include <gtkmm/entry.h>
-#include <gtkmm/widget.h>
 
 #include "verbs.h"
 
 #include "message-stack.h"
 #include "helper/window.h"
-#include "macros.h"
 #include "inkscape.h"
 #include "desktop.h"
 #include "document.h"
 #include "document-undo.h"
-#include "selection.h"
 
 
 #include "ui/dialog-events.h"
-#include "verbs.h"
 #include "ui/interface.h"
-#include "preferences.h"
 #include "sp-text.h"
 #include "sp-flowtext.h"
 #include "sp-flowdiv.h"
@@ -51,11 +46,9 @@
 #include "sp-line.h"
 #include "sp-polyline.h"
 #include "sp-item-group.h"
-#include "sp-use.h"
 #include "sp-image.h"
 #include "sp-offset.h"
 #include "sp-root.h"
-#include "xml/repr.h"
 #include "xml/node-iterators.h"
 #include "xml/attribute-record.h"
 
@@ -747,22 +740,22 @@ std::vector<SPItem*> &Find::all_items (SPObject *r, std::vector<SPItem*> &l, boo
         return l; // we're not interested in metadata
     }
 
-    for (SPObject *child = r->firstChild(); child; child = child->getNext()) {
-        SPItem *item = dynamic_cast<SPItem *>(child);
-        if (item && !child->cloned && !desktop->isLayer(item)) {
+    for (auto& child: r->children) {
+        SPItem *item = dynamic_cast<SPItem *>(&child);
+        if (item && !child.cloned && !desktop->isLayer(item)) {
             if ((hidden || !desktop->itemIsHidden(item)) && (locked || !item->isLocked())) {
-                l.insert(l.begin(),(SPItem*)child);
+                l.insert(l.begin(),(SPItem*)&child);
             }
         }
-        l = all_items (child, l, hidden, locked);
+        l = all_items (&child, l, hidden, locked);
     }
     return l;
 }
 
 std::vector<SPItem*> &Find::all_selection_items (Inkscape::Selection *s, std::vector<SPItem*> &l, SPObject *ancestor, bool hidden, bool locked)
 {
-	std::vector<SPItem*> itemlist=s->itemList();
-    for(std::vector<SPItem*>::const_reverse_iterator i=itemlist.rbegin(); itemlist.rend() != i; ++i) {
+	auto itemlist= s->items();
+    for(auto i=boost::rbegin(itemlist); boost::rend(itemlist) != i; ++i) {
         SPObject *obj = *i;
         SPItem *item = dynamic_cast<SPItem *>(obj);
         g_assert(item != NULL);

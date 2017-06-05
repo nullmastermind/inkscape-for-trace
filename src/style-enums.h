@@ -309,6 +309,10 @@ enum SPTextRendering {
     SP_CSS_TEXT_RENDERING_GEOMETRICPRECISION
 };
 
+enum SPVectorEffect {
+    SP_VECTOR_EFFECT_NONE,
+    SP_VECTOR_EFFECT_NON_SCALING_STROKE
+};
 
 struct SPStyleEnum {
     char const *key;
@@ -636,8 +640,8 @@ static SPStyleEnum const enum_image_rendering[] = {
     {"auto",                  SP_CSS_IMAGE_RENDERING_AUTO},
     {"optimizeSpeed",         SP_CSS_IMAGE_RENDERING_OPTIMIZESPEED},
     {"optimizeQuality",       SP_CSS_IMAGE_RENDERING_OPTIMIZEQUALITY},
-    {"-inkscape-crisp-edges", SP_CSS_IMAGE_RENDERING_CRISPEDGES},
-    {"-inkscape-pixelated",   SP_CSS_IMAGE_RENDERING_PIXELATED},
+    {"crisp-edges",           SP_CSS_IMAGE_RENDERING_CRISPEDGES},
+    {"pixelated",             SP_CSS_IMAGE_RENDERING_PIXELATED},
     {NULL, -1}
 };
 
@@ -665,6 +669,12 @@ static SPStyleEnum const enum_color_interpolation[] = {
     {"auto", SP_CSS_COLOR_INTERPOLATION_AUTO},
     {"sRGB", SP_CSS_COLOR_INTERPOLATION_SRGB},
     {"linearRGB", SP_CSS_COLOR_INTERPOLATION_LINEARRGB},
+    {NULL, -1}
+};
+
+static SPStyleEnum const enum_vector_effect[] = {
+    {"none",               SP_VECTOR_EFFECT_NONE},
+    {"non-scaling-stroke", SP_VECTOR_EFFECT_NON_SCALING_STROKE},
     {NULL, -1}
 };
 

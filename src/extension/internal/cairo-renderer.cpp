@@ -541,8 +541,7 @@ static void sp_item_invoke_render(SPItem *item, CairoRenderContext *ctx)
         return;
     }
 
-    SPStyle* style = item->style;
-    if((ctx->getFilterToBitmap() == TRUE) && (style->filter.set != 0)) {
+    if(ctx->getFilterToBitmap() && (item->style->filter.set != 0)) {
         return sp_asbitmap_render(item, ctx);
     }
 
@@ -599,8 +598,7 @@ static void sp_item_invoke_render(SPItem *item, CairoRenderContext *ctx)
 void
 CairoRenderer::setStateForItem(CairoRenderContext *ctx, SPItem const *item)
 {
-    SPStyle const *style = item->style;
-    ctx->setStateForStyle(style);
+    ctx->setStateForStyle(item->style);
 
     CairoRenderState *state = ctx->getCurrentState();
     state->clip_path = item->clip_ref->getObject();
@@ -741,8 +739,8 @@ CairoRenderer::applyClipPath(CairoRenderContext *ctx, SPClipPath const *cp)
 
     TRACE(("BEGIN clip\n"));
     SPObject const *co = cp;
-    for ( SPObject const *child = co->firstChild() ; child; child = child->getNext() ) {
-        SPItem const *item = dynamic_cast<SPItem const *>(child);
+    for (auto& child: co->children) {
+        SPItem const *item = dynamic_cast<SPItem const *>(&child);
         if (item) {
 
             // combine transform of the item in clippath and the item using clippath:
@@ -800,8 +798,8 @@ CairoRenderer::applyMask(CairoRenderContext *ctx, SPMask const *mask)
 
     TRACE(("BEGIN mask\n"));
     SPObject const *co = mask;
-    for ( SPObject const *child = co->firstChild() ; child; child = child->getNext() ) {
-        SPItem const *item = dynamic_cast<SPItem const *>(child);
+    for (auto& child: co->children) {
+        SPItem const *item = dynamic_cast<SPItem const *>(&child);
         if (item) {
             // TODO fix const correctness:
             renderItem(ctx, const_cast<SPItem*>(item));

@@ -13,7 +13,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+#include <config.h>
 #endif
 #include "db.h"
 #include "input.h"
@@ -35,6 +35,76 @@ DB db;
 DB::DB (void) {
 }
 
+
+struct ModuleInputCmp {
+  bool operator()(Input* module1, Input* module2) const {
+
+    // Ensure SVG files are at top
+    int n1 = 0;
+    int n2 = 0;
+    //                             12345678901234567890123456789012
+    if (strncmp(module1->get_id(),"org.inkscape.input.svg",  22) == 0) n1 = 1;
+    if (strncmp(module2->get_id(),"org.inkscape.input.svg",  22) == 0) n2 = 1;
+    if (strncmp(module1->get_id(),"org.inkscape.input.svgz", 23) == 0) n1 = 2;
+    if (strncmp(module2->get_id(),"org.inkscape.input.svgz", 23) == 0) n2 = 2;
+
+    if (n1 != 0 && n2 != 0) return (n1 < n2);
+    if (n1 != 0) return true;
+    if (n2 != 0) return false;
+
+    // GDK filetypenames begin with lower case letters and thus are sorted at the end.
+    // Special case "sK1" which starts with a lower case letter to keep it out of GDK region.
+    if (strncmp(module1->get_id(),"org.inkscape.input.sk1",  22) == 0) {
+      return ( strcmp("SK1", module2->get_filetypename()) <= 0 );
+    }
+    if (strncmp(module2->get_id(),"org.inkscape.input.sk1",  22) == 0) {
+      return ( strcmp(module1->get_filetypename(), "SK1" ) <= 0 );
+    }
+
+    return ( strcmp(module1->get_filetypename(), module2->get_filetypename()) <= 0 );
+  }
+};
+
+
+struct ModuleOutputCmp {
+  bool operator()(Output* module1, Output* module2) const {
+
+    // Ensure SVG files are at top
+    int n1 = 0;
+    int n2 = 0;
+    //                             12345678901234567890123456789012
+    if (strncmp(module1->get_id(),"org.inkscape.output.svg.inkscape",  32) == 0) n1 = 1;
+    if (strncmp(module2->get_id(),"org.inkscape.output.svg.inkscape",  32) == 0) n2 = 1;
+    if (strncmp(module1->get_id(),"org.inkscape.output.svg.plain",     29) == 0) n1 = 2;
+    if (strncmp(module2->get_id(),"org.inkscape.output.svg.plain",     29) == 0) n2 = 2;
+    if (strncmp(module1->get_id(),"org.inkscape.output.svgz.inkscape", 33) == 0) n1 = 3;
+    if (strncmp(module2->get_id(),"org.inkscape.output.svgz.inkscape", 33) == 0) n2 = 3;
+    if (strncmp(module1->get_id(),"org.inkscape.output.svgz.plain",    30) == 0) n1 = 4;
+    if (strncmp(module2->get_id(),"org.inkscape.output.svgz.plain",    30) == 0) n2 = 4;
+    if (strncmp(module1->get_id(),"org.inkscape.output.scour",         25) == 0) n1 = 5;
+    if (strncmp(module2->get_id(),"org.inkscape.output.scour",         25) == 0) n2 = 5;
+    if (strncmp(module1->get_id(),"org.inkscape.output.ZIP",           23) == 0) n1 = 6;
+    if (strncmp(module2->get_id(),"org.inkscape.output.ZIP",           23) == 0) n2 = 6;
+    if (strncmp(module1->get_id(),"org.inkscape.output.LAYERS",        26) == 0) n1 = 7;
+    if (strncmp(module2->get_id(),"org.inkscape.output.LAYERS",        26) == 0) n2 = 7;
+
+    if (n1 != 0 && n2 != 0) return (n1 < n2);
+    if (n1 != 0) return true;
+    if (n2 != 0) return false;
+
+    // Special case "sK1" which starts with a lower case letter.
+    if (strncmp(module1->get_id(),"org.inkscape.output.sk1",  23) == 0) {
+      return ( strcmp("SK1", module2->get_filetypename()) <= 0 );
+    }
+    if (strncmp(module2->get_id(),"org.inkscape.output.sk1",  23) == 0) {
+      return ( strcmp(module1->get_filetypename(), "SK1" ) <= 0 );
+    }
+
+    return ( strcmp(module1->get_filetypename(), module2->get_filetypename()) <= 0 );
+  }
+};
+
+
 /**
 	\brief     Add a module to the module database
 	\param     module  The module to be registered.
@@ -49,10 +119,12 @@ DB::register_ext (Extension *module)
         bool add_to_list = 
                ( moduledict.find(module->get_id()) == moduledict.end());
         
-	//printf("Registering: '%s' add:%d\n", module->get_id(), add_to_list);
+	//printf("Registering: '%s' '%s' add:%d\n", module->get_id(), module->get_name(), add_to_list);
 	moduledict[module->get_id()] = module;
 
-	if (add_to_list) modulelist.push_back(module);
+	if (add_to_list) {
+	  modulelist.push_back( module );
+	}
 }
 
 /**
@@ -85,7 +157,7 @@ DB::unregister_ext (Extension * module)
 Extension *
 DB::get (const gchar *key)
 {
-	if (key == NULL) return NULL;
+        if (key == NULL) return NULL;
 
 	Extension *mod = moduledict[key];
 	if ( !mod || mod->deactivated() )
@@ -207,6 +279,7 @@ DB::InputList &
 DB::get_input_list (DB::InputList &ou_list)
 {
 	foreach(input_internal, (gpointer)&ou_list);
+	ou_list.sort( ModuleInputCmp() );
 	return ou_list;
 }
 
@@ -220,6 +293,7 @@ DB::OutputList &
 DB::get_output_list (DB::OutputList &ou_list)
 {
 	foreach(output_internal, (gpointer)&ou_list);
+	ou_list.sort( ModuleOutputCmp() );
 	return ou_list;
 }
 

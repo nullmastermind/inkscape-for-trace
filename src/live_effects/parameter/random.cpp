@@ -78,8 +78,23 @@ RandomParam::param_set_default()
 }
 
 void
+RandomParam::param_update_default(gdouble default_value){
+    defvalue = default_value;
+}
+
+void
+RandomParam::param_update_default(const gchar * default_value){
+    double newval;
+    unsigned int success = sp_svg_number_read_d(default_value, &newval);
+    if (success == 1) {
+        param_update_default(newval);
+    }
+}
+
+void
 RandomParam::param_set_value(gdouble val, long newseed)
 {
+    param_effect->upd_params = true;
     value = val;
     if (integer)
         value = round(value);

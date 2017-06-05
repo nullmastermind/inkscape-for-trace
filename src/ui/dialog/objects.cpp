@@ -10,17 +10,13 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+#include "config.h"
 #endif
 
 #include "objects.h"
-#include <gtkmm/widget.h>
 #include <gtkmm/icontheme.h>
 #include <gtkmm/imagemenuitem.h>
 #include <gtkmm/separatormenuitem.h>
-#include <gtkmm/stock.h>
-
-#include <glibmm/i18n.h>
 #include <glibmm/main.h>
 
 #include "desktop.h"
@@ -34,12 +30,9 @@
 #include "helper/action.h"
 #include "inkscape.h"
 #include "layer-manager.h"
-#include "preferences.h"
-#include "selection.h"
+#include "shortcuts.h"
 #include "sp-clippath.h"
 #include "sp-mask.h"
-#include "sp-item.h"
-#include "sp-object.h"
 #include "sp-root.h"
 #include "sp-shape.h"
 #include "style.h"
@@ -52,13 +45,10 @@
 #include "ui/widget/clipmaskicon.h"
 #include "ui/widget/highlight-picker.h"
 #include "ui/tools/node-tool.h"
-#include "ui/tools/tool-base.h"
 #include "verbs.h"
 #include "ui/widget/color-notebook.h"
 #include "widgets/icon.h"
-#include "xml/node.h"
 #include "xml/node-observer.h"
-#include "xml/repr.h"
 
 //#define DUMP_LAYERS 1
 
@@ -319,11 +309,13 @@ void ObjectsPanel::_objectsChanged(SPObject */*obj*/)
         SPRoot* root = document->getRoot();
         if ( root ) {
             _selectedConnection.block();
+            _documentChangedCurrentLayer.block();
             //Clear the tree store
             _store->clear();
             //Add all items recursively
             _addObject( root, 0 );
             _selectedConnection.unblock();
+            _documentChangedCurrentLayer.unblock();
             //Set the tree selection
             _objectsSelected(_desktop->selection);
             //Handle button sensitivity
@@ -340,12 +332,11 @@ void ObjectsPanel::_objectsChanged(SPObject */*obj*/)
 void ObjectsPanel::_addObject(SPObject* obj, Gtk::TreeModel::Row* parentRow)
 {
     if ( _desktop && obj ) {
-        for ( SPObject *child = obj->children; child != NULL; child = child->next) {
-
-            if (SP_IS_ITEM(child))
+        for(auto& child: obj->children) {
+            if (SP_IS_ITEM(&child))
             {
-                SPItem * item = SP_ITEM(child);
-                SPGroup * group = SP_IS_GROUP(child) ? SP_GROUP(child) : 0;
+                SPItem * item = SP_ITEM(&child);
+                SPGroup * group = SP_IS_GROUP(&child) ? SP_GROUP(&child) : 0;
                 
                 //Add the item to the tree and set the column information
                 Gtk::TreeModel::iterator iter = parentRow ? _store->prepend(parentRow->children()) : _store->prepend();
@@ -362,24 +353,28 @@ void ObjectsPanel::_addObject(SPObject* obj, Gtk::TreeModel::Row* parentRow)
                 row[_model->_colLocked] = !item->isSensitive();
                 row[_model->_colType] = group ? (group->layerMode() == SPGroup::LAYER ? 2 : 1) : 0;
                 row[_model->_colHighlight] = item->isHighlightSet() ? item->highlight_color() : item->highlight_color() & 0xffffff00;
-                row[_model->_colClipMask] = item->clip_ref && item->clip_ref->getObject() ? 1 : (item->mask_ref && item->mask_ref->getObject() ? 2 : 0);
+                row[_model->_colClipMask] = item ? (
+                    (item->clip_ref && item->clip_ref->getObject() ? 1 : 0) |
+                    (item->mask_ref && item->mask_ref->getObject() ? 2 : 0)
+                ) : 0;
                 //row[_model->_colInsertOrder] = group ? (group->insertBottom() ? 2 : 1) : 0;
 
                 //If our parent object is a group and it's expanded, expand the tree
                 if (SP_IS_GROUP(obj) && SP_GROUP(obj)->expanded())
                 {
                     _tree.expand_to_path( _store->get_path(iter) );
+                    _tree.collapse_row( _store->get_path(iter) );
                 }
 
                 //Add an object watcher to the item
-                ObjectsPanel::ObjectWatcher *w = new ObjectsPanel::ObjectWatcher(this, child);
-                child->getRepr()->addObserver(*w);
+                ObjectsPanel::ObjectWatcher *w = new ObjectsPanel::ObjectWatcher(this, &child);
+                child.getRepr()->addObserver(*w);
                 _objectWatchers.push_back(w);
                 
                 //If the item is a group, recursively add its children
                 if (group)
                 {
-                    _addObject( child, &row );
+                    _addObject( &child, &row );
                 }
             }
         }
@@ -399,9 +394,8 @@ void ObjectsPanel::_updateObject( SPObject *obj, bool recurse ) {
     //end mark
     if (recurse)
     {
-        for (SPObject * iter = obj->children; iter != NULL; iter = iter->next)
-        {
-            _updateObject(iter, recurse);
+        for (auto& iter: obj->children) {
+            _updateObject(&iter, recurse);
         }
     }
 }
@@ -426,7 +420,10 @@ bool ObjectsPanel::_checkForUpdated(const Gtk::TreeIter& iter, SPObject* obj)
         row[_model->_colLocked] = item ? !item->isSensitive() : false;
         row[_model->_colType] = group ? (group->layerMode() == SPGroup::LAYER ? 2 : 1) : 0;
         row[_model->_colHighlight] = item ? (item->isHighlightSet() ? item->highlight_color() : item->highlight_color() & 0xffffff00) : 0;
-        row[_model->_colClipMask] = item ? (item->clip_ref && item->clip_ref->getObject() ?  1 : (item->mask_ref && item->mask_ref->getObject() ? 2 : 0)) : 0;
+        row[_model->_colClipMask] = item ? (
+            (item->clip_ref && item->clip_ref->getObject() ? 1 : 0) |
+            (item->mask_ref && item->mask_ref->getObject() ? 2 : 0)
+        ) : 0;
         //row[_model->_colInsertOrder] = group ? (group->insertBottom() ? 2 : 1) : 0;
 
         return true;
@@ -478,21 +475,21 @@ void ObjectsPanel::_objectsSelected( Selection *sel ) {
     _selectedConnection.block();
     _tree.get_selection()->unselect_all();
     SPItem *item = NULL;
-    std::vector<SPItem*> const items = sel->itemList();
-    for(std::vector<SPItem*>::const_iterator i=items.begin(); i!=items.end(); ++i){
+    auto items = sel->items();
+    for(auto i=items.begin(); i!=items.end(); ++i){
         item = *i;
         if (setOpacity)
         {
             _setCompositingValues(item);
             setOpacity = false;
         }
-        _store->foreach(sigc::bind<SPItem *, bool>( sigc::mem_fun(*this, &ObjectsPanel::_checkForSelected), item, (*i)==items.back()));
+        _store->foreach(sigc::bind<SPItem *, bool>( sigc::mem_fun(*this, &ObjectsPanel::_checkForSelected), item, (*i)==items.back(), false));
     }
     if (!item) {
         if (_desktop->currentLayer() && SP_IS_ITEM(_desktop->currentLayer())) {
             item = SP_ITEM(_desktop->currentLayer());
             _setCompositingValues(item);
-            _store->foreach(sigc::bind<SPItem *, bool>( sigc::mem_fun(*this, &ObjectsPanel::_checkForSelected), item, true));
+            _store->foreach(sigc::bind<SPItem *, bool>( sigc::mem_fun(*this, &ObjectsPanel::_checkForSelected), item, false, true));
         }
     }
     _selectedConnection.unblock();
@@ -511,28 +508,27 @@ void ObjectsPanel::_setCompositingValues(SPItem *item)
     _blurConnection.block();
 
     //Set the opacity
-#if WITH_GTKMM_3_0
     _opacity_adjustment->set_value((item->style->opacity.set ? SP_SCALE24_TO_FLOAT(item->style->opacity.value) : 1) * _opacity_adjustment->get_upper());
-#else
-    _opacity_adjustment.set_value((item->style->opacity.set ? SP_SCALE24_TO_FLOAT(item->style->opacity.value) : 1) * _opacity_adjustment.get_upper());
-#endif
     SPFeBlend *spblend = NULL;
     SPGaussianBlur *spblur = NULL;
     if (item->style->getFilter())
     {
-        for(SPObject *primitive_obj = item->style->getFilter()->children; primitive_obj && SP_IS_FILTER_PRIMITIVE(primitive_obj); primitive_obj = primitive_obj->next) {
-                if(SP_IS_FEBLEND(primitive_obj) && !spblend) {
-                    //Get the blend mode
-                    spblend = SP_FEBLEND(primitive_obj);
-                }
-                
-                if(SP_IS_GAUSSIANBLUR(primitive_obj) && !spblur) {
-                    //Get the blur value
-                    spblur = SP_GAUSSIANBLUR(primitive_obj);
-                }
+        for (auto& primitive_obj: item->style->getFilter()->children) {
+            if (!SP_IS_FILTER_PRIMITIVE(&primitive_obj)) {
+                break;
             }
+            if(SP_IS_FEBLEND(&primitive_obj) && !spblend) {
+                //Get the blend mode
+                spblend = SP_FEBLEND(&primitive_obj);
+            }
+
+            if(SP_IS_GAUSSIANBLUR(&primitive_obj) && !spblur) {
+                //Get the blur value
+                spblur = SP_GAUSSIANBLUR(&primitive_obj);
+            }
+        }
     }
-    
+
     //Set the blend mode
     _fe_cb.set_blend_mode(spblend ? spblend->blend_mode : Inkscape::Filters::BLEND_NORMAL);
     
@@ -559,7 +555,7 @@ void ObjectsPanel::_setCompositingValues(SPItem *item)
  * @param scrollto Whether to scroll to the item
  * @return Whether to continue searching the tree
  */
-bool ObjectsPanel::_checkForSelected(const Gtk::TreePath &path, const Gtk::TreeIter& iter, SPItem* item, bool scrollto)
+bool ObjectsPanel::_checkForSelected(const Gtk::TreePath &path, const Gtk::TreeIter& iter, SPItem* item, bool scrollto, bool expand)
 {
     bool stopGoing = false;
 
@@ -568,13 +564,16 @@ bool ObjectsPanel::_checkForSelected(const Gtk::TreePath &path, const Gtk::TreeI
     {
         //We found the item!  Expand to the path and select it in the tree.
         _tree.expand_to_path( path );
+        if (!expand)
+            // but don't expand itself, just the path
+            _tree.collapse_row(path);
 
         Glib::RefPtr<Gtk::TreeSelection> select = _tree.get_selection();
 
         select->select(iter);
         if (scrollto) {
             //Scroll to the item in the tree
-            _tree.scroll_to_row(path);
+            _tree.scroll_to_row(path, 0.5);
         }
 
         stopGoing = true;
@@ -591,6 +590,7 @@ void ObjectsPanel::_pushTreeSelectionToCurrent()
     if ( _desktop && _desktop->currentRoot() ) {
         //block connections for selection and compositing values to prevent interference
         _selectionChangedConnection.block();
+        _documentChangedCurrentLayer.block();
     
         //Clear the selection and then iterate over the tree selection, pushing each item to the desktop
         _desktop->selection->clear();
@@ -598,6 +598,7 @@ void ObjectsPanel::_pushTreeSelectionToCurrent()
         _tree.get_selection()->selected_foreach_iter( sigc::bind<bool *>(sigc::mem_fun(*this, &ObjectsPanel::_selected_row_callback), &setOpacity));
         //unblock connections
         _selectionChangedConnection.unblock();
+        _documentChangedCurrentLayer.unblock();
         
         _checkTreeSelection();
     }
@@ -696,53 +697,63 @@ void ObjectsPanel::_setLockedIter( const Gtk::TreeModel::iterator& iter, const b
  */
 bool ObjectsPanel::_handleKeyEvent(GdkEventKey *event)
 {
+    if (!_desktop)
+        return false;
 
+    unsigned int shortcut;
+    shortcut = Inkscape::UI::Tools::get_group0_keyval(event) |
+        ( event->state & GDK_SHIFT_MASK ?
+          SP_SHORTCUT_SHIFT_MASK : 0 ) |
+        ( event->state & GDK_CONTROL_MASK ?
+          SP_SHORTCUT_CONTROL_MASK : 0 ) |
+        ( event->state & GDK_MOD1_MASK ?
+          SP_SHORTCUT_ALT_MASK : 0 );
+
+    switch (shortcut) {
+        // how to get users key binding for the action “start-interactive-search” ??
+        // ctrl+f is just the default
+        case GDK_KEY_f | SP_SHORTCUT_CONTROL_MASK:
+            return false;
+            break;
+        // shall we slurp ctrl+w to close panel?
+
+        // defocus:
+        case GDK_KEY_Escape:
+            if (_desktop->canvas) {
+                gtk_widget_grab_focus (GTK_WIDGET(_desktop->canvas));
+                return true;
+            }
+            break;
+    }
+
+    // invoke user defined shortcuts first
+    bool done = sp_shortcut_invoke(shortcut, _desktop);
+    if (done)
+        return true;
+
+    // handle events for the treeview
     bool empty = _desktop->selection->isEmpty();
 
     switch (Inkscape::UI::Tools::get_group0_keyval(event)) {
         case GDK_KEY_Return:
         case GDK_KEY_KP_Enter:
-        case GDK_KEY_F2:
         {
-            Gtk::TreeModel::iterator iter = _tree.get_selection()->get_selected();
-            if (iter && !_text_renderer->property_editable()) {
+            Gtk::TreeModel::Path path;
+            Gtk::TreeViewColumn *focus_column = 0;
+
+            _tree.get_cursor(path, focus_column);
+            if (focus_column == _name_column && !_text_renderer->property_editable()) {
                 //Rename item
-                Gtk::TreeModel::Path *path = new Gtk::TreeModel::Path(iter);
                 _text_renderer->property_editable() = true;
-                _tree.set_cursor(*path, *_name_column, true);
+                _tree.set_cursor(path, *_name_column, true);
                 grab_focus();
                 return true;
             }
-        }
-        break;
-        case GDK_KEY_Home:
-            //Move item(s) to top of containing group/layer
-            _fireAction( empty ? SP_VERB_LAYER_TO_TOP : SP_VERB_SELECTION_TO_FRONT );
-            break;
-        case GDK_KEY_End:
-            //Move item(s) to bottom of containing group/layer
-            _fireAction( empty ? SP_VERB_LAYER_TO_BOTTOM : SP_VERB_SELECTION_TO_BACK );
-            break;
-        case GDK_KEY_Page_Up:
-        {
-            //Move item(s) up in containing group/layer
-            int ch = event->state & GDK_SHIFT_MASK ? SP_VERB_LAYER_MOVE_TO_NEXT : SP_VERB_SELECTION_RAISE;
-            _fireAction( empty ? SP_VERB_LAYER_RAISE : ch );
-            break;
-        }
-        case GDK_KEY_Page_Down:
-        {
-            //Move item(s) down in containing group/layer
-            int ch = event->state & GDK_SHIFT_MASK ? SP_VERB_LAYER_MOVE_TO_PREV : SP_VERB_SELECTION_LOWER;
-            _fireAction( empty ? SP_VERB_LAYER_LOWER : ch );
-            break;
-        }
-
-        //TODO: Handle Ctrl-A, etc.
-        default:
             return false;
+            break;
+        }
     }
-    return true;
+    return false;
 }
 
 /**
@@ -1186,7 +1197,7 @@ bool ObjectsPanel::_executeAction()
                 }
                 else
                 {
-                    _fireAction( SP_VERB_SELECTION_RAISE );
+                    _fireAction( SP_VERB_SELECTION_STACK_UP );
                 }
             }
             break;
@@ -1198,7 +1209,7 @@ bool ObjectsPanel::_executeAction()
                 }
                 else
                 {
-                    _fireAction( SP_VERB_SELECTION_LOWER );
+                    _fireAction( SP_VERB_SELECTION_STACK_DOWN );
                 }
             }
             break;
@@ -1292,9 +1303,9 @@ bool ObjectsPanel::_executeAction()
             break;
             case BUTTON_COLLAPSE_ALL:
             {
-                for (SPObject* obj = _document->getRoot()->firstChild(); obj != NULL; obj = obj->next) {
-                    if (SP_IS_GROUP(obj)) {
-                        _setCollapsed(SP_GROUP(obj));
+                for (auto& obj: _document->getRoot()->children) {
+                    if (SP_IS_GROUP(&obj)) {
+                        _setCollapsed(SP_GROUP(&obj));
                     }
                 }
                 _objectsChanged(_document->getRoot());
@@ -1404,9 +1415,10 @@ void ObjectsPanel::_setCollapsed(SPGroup * group)
 {
     group->setExpanded(false);
     group->updateRepr(SP_OBJECT_WRITE_NO_CHILDREN | SP_OBJECT_WRITE_EXT);
-    for (SPObject *iter = group->children; iter != NULL; iter = iter->next)
-    {
-        if (SP_IS_GROUP(iter)) _setCollapsed(SP_GROUP(iter));
+    for (auto& iter: group->children) {
+        if (SP_IS_GROUP(&iter)) {
+            _setCollapsed(SP_GROUP(&iter));
+        }
     }
 }
 
@@ -1481,11 +1493,7 @@ void ObjectsPanel::_opacityChangedIter(const Gtk::TreeIter& iter)
     if (item)
     {
         item->style->opacity.set = TRUE;
-#if WITH_GTKMM_3_0
         item->style->opacity.value = SP_SCALE24_FROM_FLOAT(_opacity_adjustment->get_value() / _opacity_adjustment->get_upper());
-#else
-        item->style->opacity.value = SP_SCALE24_FROM_FLOAT(_opacity_adjustment.get_value() / _opacity_adjustment.get_upper());
-#endif
         item->updateRepr(SP_OBJECT_WRITE_NO_CHILDREN | SP_OBJECT_WRITE_EXT);
     }
 }
@@ -1521,25 +1529,38 @@ void ObjectsPanel::_blendChangedIter(const Gtk::TreeIter& iter, Glib::ustring bl
         if (blendmode != "normal") {
             gdouble radius = 0;
             if (item->style->getFilter()) {
-                for (SPObject *primitive = item->style->getFilter()->children; primitive && SP_IS_FILTER_PRIMITIVE(primitive); primitive = primitive->next) {
-                    if (SP_IS_GAUSSIANBLUR(primitive)) {
+                for (auto& primitive: item->style->getFilter()->children) {
+                    if (!SP_IS_FILTER_PRIMITIVE(&primitive)) {
+                        break;
+                    }
+                    if (SP_IS_GAUSSIANBLUR(&primitive)) {
                         Geom::OptRect bbox = item->bounds(SPItem::GEOMETRIC_BBOX);
                         if (bbox) {
-                            radius = SP_GAUSSIANBLUR(primitive)->stdDeviation.getNumber();
+                            double perimeter = bbox->dimensions()[Geom::X] + bbox->dimensions()[Geom::Y];   // fixme: this is only half the perimeter, is that correct?
+                            radius =  _fe_blur.get_blur_value() * perimeter / 400;
                         }
                     }
                 }
             }
+            if (radius != 0) {
+                // The modify function expects radius to be in display pixels.
+                Geom::Affine i2d (item->i2dt_affine());
+                double expansion = i2d.descrim();
+                radius *= expansion;
+            }
             SPFilter *filter = new_filter_simple_from_item(_document, item, blendmode.c_str(), radius);
             sp_style_set_property_url(item, "filter", filter, false);
         } else {
-            for (SPObject *primitive = item->style->getFilter()->children; primitive && SP_IS_FILTER_PRIMITIVE(primitive); primitive = primitive->next) {
-                if (SP_IS_FEBLEND(primitive)) {
-                    primitive->deleteObject();
+            for (auto& primitive: item->style->getFilter()->children) {
+                if (!SP_IS_FILTER_PRIMITIVE(&primitive)) {
+                    break;
+                }
+                if (SP_IS_FEBLEND(&primitive)) {
+                    primitive.deleteObject();
                     break;
                 }
             }
-            if (!item->style->getFilter()->children) {
+            if (!item->style->getFilter()->firstChild()) {
                 remove_filter(item, false);
             }
         }
@@ -1590,13 +1611,16 @@ void ObjectsPanel::_blurChangedIter(const Gtk::TreeIter& iter, double blur)
                 SPFilter *filter = modify_filter_gaussian_blur_from_item(_document, item, radius);
                 sp_style_set_property_url(item, "filter", filter, false);
             } else if (item->style->filter.set && item->style->getFilter()) {
-                for (SPObject *primitive = item->style->getFilter()->children; primitive && SP_IS_FILTER_PRIMITIVE(primitive); primitive = primitive->next) {
-                    if (SP_IS_GAUSSIANBLUR(primitive)) {
-                        primitive->deleteObject();
+                for (auto& primitive: item->style->getFilter()->children) {
+                    if (!SP_IS_FILTER_PRIMITIVE(&primitive)) {
+                        break;
+                    }
+                    if (SP_IS_GAUSSIANBLUR(&primitive)) {
+                        primitive.deleteObject();
                         break;
                     }
                 }
-                if (!item->style->getFilter()->children) {
+                if (!item->style->getFilter()->firstChild()) {
                     remove_filter(item, false);
                 }
             }
@@ -1628,11 +1652,7 @@ ObjectsPanel::ObjectsPanel() :
     _opacity_vbox(false, 0),
     _opacity_label(_("Opacity:")),
     _opacity_label_unit(_("%")),
-#if WITH_GTKMM_3_0
     _opacity_adjustment(Gtk::Adjustment::create(100.0, 0.0, 100.0, 1.0, 1.0, 0.0)),
-#else
-    _opacity_adjustment(100.0, 0.0, 100.0, 1.0, 1.0, 0.0),
-#endif
     _opacity_hscale(_opacity_adjustment),
     _opacity_spin_button(_opacity_adjustment, 0.01, 1),
     _fe_cb(UI::Widget::SimpleFilterModifier::BLEND),
@@ -1739,6 +1759,8 @@ ObjectsPanel::ObjectsPanel() :
     //Set the expander and search columns
     _tree.set_expander_column( *_tree.get_column(nameColNum) );
     _tree.set_search_column(_model->_colLabel);
+    // use ctrl+f to start search
+    _tree.set_enable_search(false);
 
     //Set up the tree selection
     _tree.get_selection()->set_mode(Gtk::SELECTION_MULTIPLE);
@@ -1762,12 +1784,8 @@ ObjectsPanel::ObjectsPanel() :
     _scroller.set_policy( Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC );
     _scroller.set_shadow_type(Gtk::SHADOW_IN);
     Gtk::Requisition sreq;
-#if WITH_GTKMM_3_0
     Gtk::Requisition sreq_natural;
     _scroller.get_preferred_size(sreq_natural, sreq);
-#else
-    sreq = _scroller.size_request();
-#endif
     int minHeight = 70;
     if (sreq.height < minHeight) {
         // Set a min height to see the layers when used with Ubuntu liboverlay-scrollbar
@@ -1800,13 +1818,8 @@ ObjectsPanel::ObjectsPanel() :
     _opacity_hbox.pack_start(_opacity_spin_button, false, false, 0);
     _opacity_hbox.pack_start(_opacity_label_unit, false, false, 3);
     _opacity_hscale.set_draw_value(false);
-#if WITH_GTKMM_3_0
     _opacityConnection = _opacity_adjustment->signal_value_changed().connect(sigc::mem_fun(*this, &ObjectsPanel::_opacityValueChanged));
     _opacity_label.set_mnemonic_widget(_opacity_hscale);
-#else
-    _opacityConnection = _opacity_adjustment.signal_value_changed().connect(sigc::mem_fun(*this, &ObjectsPanel::_opacityValueChanged));
-    _opacity_label.set_mnemonic_widget(_opacity_hscale);
-#endif
     
     //Keep the labels aligned
     GtkSizeGroup *labels = gtk_size_group_new(GTK_SIZE_GROUP_HORIZONTAL);
@@ -1907,8 +1920,8 @@ ObjectsPanel::ObjectsPanel() :
 
         _popupMenu.append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
 
-        _watchingNonTop.push_back( &_addPopupItem( targetDesktop, SP_VERB_SELECTION_RAISE, "gtk-go-up", _("Up"), (int)BUTTON_UP ) );
-        _watchingNonBottom.push_back( &_addPopupItem( targetDesktop, SP_VERB_SELECTION_LOWER, "gtk-go-down", _("Down"), (int)BUTTON_DOWN ) );
+        _watchingNonTop.push_back( &_addPopupItem( targetDesktop, SP_VERB_SELECTION_STACK_UP, "gtk-go-up", _("Up"), (int)BUTTON_UP ) );
+        _watchingNonBottom.push_back( &_addPopupItem( targetDesktop, SP_VERB_SELECTION_STACK_DOWN, "gtk-go-down", _("Down"), (int)BUTTON_DOWN ) );
 
         _popupMenu.append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
         
@@ -2047,6 +2060,7 @@ void ObjectsPanel::setDesktop( SPDesktop* desktop )
 
     if ( desktop != _desktop ) {
         _documentChangedConnection.disconnect();
+        _documentChangedCurrentLayer.disconnect();
         _selectionChangedConnection.disconnect();
         if ( _desktop ) {
             _desktop = 0;
@@ -2056,6 +2070,9 @@ void ObjectsPanel::setDesktop( SPDesktop* desktop )
         if ( _desktop ) {
             //Connect desktop signals
             _documentChangedConnection = _desktop->connectDocumentReplaced( sigc::mem_fun(*this, &ObjectsPanel::setDocument));
+
+            _documentChangedCurrentLayer = _desktop->connectCurrentLayerChanged( sigc::mem_fun(*this, &ObjectsPanel::_objectsChanged));
+
             _selectionChangedConnection = _desktop->selection->connectChanged( sigc::mem_fun(*this, &ObjectsPanel::_objectsSelected));
             
             setDocument(_desktop, _desktop->doc());

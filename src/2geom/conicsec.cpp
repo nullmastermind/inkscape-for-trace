@@ -249,7 +249,7 @@ std::vector<Point> decompose_degenerate(xAx const & C1, xAx const & C2, xAx cons
                  (-A[1][0]*b[0] +  A[0][0]*b[1]));
         B0 *= ideterm;
         Point n0, n1;
-        // Are these just the eigenvectors of A11?
+        // Are these just the eigenvectors of A[1][1]?
         if(xC0.c[0] == xC0.c[2]) {
             double b = 0.5*xC0.c[1]/xC0.c[0];
             double c = xC0.c[2]/xC0.c[0];

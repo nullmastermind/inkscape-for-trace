@@ -30,11 +30,11 @@ public:
 
     static DialogManager &getInstance();
 
-    sigc::signal<void> show_dialogs;
-    sigc::signal<void> show_f12;
-    sigc::signal<void> hide_dialogs;
-    sigc::signal<void> hide_f12;
-    sigc::signal<void> transientize;
+    // sigc::signal<void> show_dialogs;
+    // sigc::signal<void> show_f12;
+    // sigc::signal<void> hide_dialogs;
+    // sigc::signal<void> hide_f12;
+    // sigc::signal<void> transientize;
 
     /* generic dialog management start */
     typedef std::map<GQuark, DialogFactory> FactoryMap;

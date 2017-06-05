@@ -56,7 +56,7 @@ OriginalPathParam::param_newWidget()
     }
 
     { // Paste path to link button
-        Gtk::Widget *pIcon = Gtk::manage( sp_icon_get_icon( INKSCAPE_ICON("edit-paste"), Inkscape::ICON_SIZE_BUTTON) );
+        Gtk::Widget *pIcon = Gtk::manage( sp_icon_get_icon( INKSCAPE_ICON("edit-clone"), Inkscape::ICON_SIZE_BUTTON) );
         Gtk::Button *pButton = Gtk::manage(new Gtk::Button());
         pButton->set_relief(Gtk::RELIEF_NONE);
         pIcon->show();
@@ -89,7 +89,7 @@ OriginalPathParam::linked_modified_callback(SPObject *linked_obj, guint /*flags*
 {
     SPCurve *curve = NULL;
     if (SP_IS_SHAPE(linked_obj)) {
-        curve = SP_SHAPE(linked_obj)->getCurveBeforeLPE();
+        curve = SP_SHAPE(linked_obj)->getCurve();
     }
     if (SP_IS_TEXT(linked_obj)) {
         curve = SP_TEXT(linked_obj)->getNormalizedBpath();

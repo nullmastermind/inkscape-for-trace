@@ -8,7 +8,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+#include <config.h>
 #endif
 
 #include "ui/widget/clipmaskicon.h"
@@ -27,13 +27,13 @@ namespace Widget {
 ClipMaskIcon::ClipMaskIcon() :
     Glib::ObjectBase(typeid(ClipMaskIcon)),
     Gtk::CellRendererPixbuf(),
-    _pixClipName(INKSCAPE_ICON("path-intersection")),
-    _pixInverseName(INKSCAPE_ICON("path-difference")),
-    _pixMaskName(INKSCAPE_ICON("mask-intersection")),
+    _pixClipName(INKSCAPE_ICON("path-cut")),
+    _pixMaskName(INKSCAPE_ICON("path-difference")),
+    _pixBothName(INKSCAPE_ICON("bitmap-trace")),
     _property_active(*this, "active", 0),
     _property_pixbuf_clip(*this, "pixbuf_on", Glib::RefPtr<Gdk::Pixbuf>(0)),
-    _property_pixbuf_inverse(*this, "pixbuf_on", Glib::RefPtr<Gdk::Pixbuf>(0)),
-    _property_pixbuf_mask(*this, "pixbuf_off", Glib::RefPtr<Gdk::Pixbuf>(0))
+    _property_pixbuf_mask(*this, "pixbuf_off", Glib::RefPtr<Gdk::Pixbuf>(0)),
+    _property_pixbuf_both(*this, "pixbuf_on", Glib::RefPtr<Gdk::Pixbuf>(0))
 {
     
     property_mode() = Gtk::CELL_RENDERER_MODE_ACTIVATABLE;
@@ -43,28 +43,26 @@ ClipMaskIcon::ClipMaskIcon() :
     if (!icon_theme->has_icon(_pixClipName)) {
         Inkscape::queueIconPrerender( INKSCAPE_ICON(_pixClipName.data()), Inkscape::ICON_SIZE_DECORATION );
     }
-    if (!icon_theme->has_icon(_pixInverseName)) {
-        Inkscape::queueIconPrerender( INKSCAPE_ICON(_pixInverseName.data()), Inkscape::ICON_SIZE_DECORATION );
-    }
     if (!icon_theme->has_icon(_pixMaskName)) {
         Inkscape::queueIconPrerender( INKSCAPE_ICON(_pixMaskName.data()), Inkscape::ICON_SIZE_DECORATION );
+    }
+    if (!icon_theme->has_icon(_pixBothName)) {
+        Inkscape::queueIconPrerender( INKSCAPE_ICON(_pixBothName.data()), Inkscape::ICON_SIZE_DECORATION );
     }
 
     if (icon_theme->has_icon(_pixClipName)) {
         _property_pixbuf_clip = icon_theme->load_icon(_pixClipName, phys, (Gtk::IconLookupFlags)0);
     }
-    if (icon_theme->has_icon(_pixInverseName)) {
-        _property_pixbuf_inverse = icon_theme->load_icon(_pixInverseName, phys, (Gtk::IconLookupFlags)0);
-    }
     if (icon_theme->has_icon(_pixMaskName)) {
         _property_pixbuf_mask = icon_theme->load_icon(_pixMaskName, phys, (Gtk::IconLookupFlags)0);
+    }
+    if (icon_theme->has_icon(_pixBothName)) {
+        _property_pixbuf_both = icon_theme->load_icon(_pixBothName, phys, (Gtk::IconLookupFlags)0);
     }
 
     property_pixbuf() = Glib::RefPtr<Gdk::Pixbuf>(0);
 }
 
-
-#if WITH_GTKMM_3_0
 void ClipMaskIcon::get_preferred_height_vfunc(Gtk::Widget& widget,
                                               int& min_h,
                                               int& nat_h) const
@@ -94,39 +92,12 @@ void ClipMaskIcon::get_preferred_width_vfunc(Gtk::Widget& widget,
         nat_w += (nat_w) >> 1;
     }
 }
-#else
-void ClipMaskIcon::get_size_vfunc(Gtk::Widget& widget,
-                                  const Gdk::Rectangle* cell_area,
-                                  int* x_offset,
-                                  int* y_offset,
-                                  int* width,
-                                  int* height ) const
-{
-    Gtk::CellRendererPixbuf::get_size_vfunc( widget, cell_area, x_offset, y_offset, width, height );
 
-    if ( width ) {
-        *width = phys;//+= (*width) >> 1;
-    }
-    if ( height ) {
-        *height =phys;//+= (*height) >> 1;
-    }
-}
-#endif
-
-#if WITH_GTKMM_3_0
 void ClipMaskIcon::render_vfunc( const Cairo::RefPtr<Cairo::Context>& cr,
                                  Gtk::Widget& widget,
                                  const Gdk::Rectangle& background_area,
                                  const Gdk::Rectangle& cell_area,
                                  Gtk::CellRendererState flags )
-#else
-void ClipMaskIcon::render_vfunc( const Glib::RefPtr<Gdk::Drawable>& window,
-                                 Gtk::Widget& widget,
-                                 const Gdk::Rectangle& background_area,
-                                 const Gdk::Rectangle& cell_area,
-                                 const Gdk::Rectangle& expose_area,
-                                 Gtk::CellRendererState flags )
-#endif
 {
     switch (_property_active.get_value())
     {
@@ -137,17 +108,13 @@ void ClipMaskIcon::render_vfunc( const Glib::RefPtr<Gdk::Drawable>& window,
             property_pixbuf() = _property_pixbuf_mask;
             break;
         case 3:
-            property_pixbuf() = _property_pixbuf_inverse;
+            property_pixbuf() = _property_pixbuf_both;
             break;
         default:
             property_pixbuf() = Glib::RefPtr<Gdk::Pixbuf>(0);
             break;
     }
-#if WITH_GTKMM_3_0
     Gtk::CellRendererPixbuf::render_vfunc( cr, widget, background_area, cell_area, flags );
-#else
-    Gtk::CellRendererPixbuf::render_vfunc( window, widget, background_area, cell_area, expose_area, flags );
-#endif
 }
 
 bool ClipMaskIcon::activate_vfunc(GdkEvent* /*event*/,

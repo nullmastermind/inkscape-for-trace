@@ -8,12 +8,11 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+#include <config.h>
 #endif
 
 #include <gtkmm/box.h>
 #include <gtkmm/eventbox.h>
-#include <glibmm/i18n.h>
 #include <2geom/point.h>
 #include "ui/tools/tool-base.h"
 #include "rotateable.h"
@@ -35,6 +34,7 @@ Rotateable::Rotateable():
     signal_button_press_event().connect(sigc::mem_fun(*this, &Rotateable::on_click));
     signal_motion_notify_event().connect(sigc::mem_fun(*this, &Rotateable::on_motion));
     signal_button_release_event().connect(sigc::mem_fun(*this, &Rotateable::on_release));
+    gtk_widget_add_events(GTK_WIDGET(gobj()), GDK_SCROLL_MASK);
     signal_scroll_event().connect(sigc::mem_fun(*this, &Rotateable::on_scroll));
 
 }

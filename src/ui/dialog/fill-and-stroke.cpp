@@ -22,7 +22,6 @@
 #include "fill-and-stroke.h"
 #include "filter-chemistry.h"
 #include "inkscape.h"
-#include "selection.h"
 #include "preferences.h"
 #include "style.h"
 #include "svg/css-ostringstream.h"
@@ -32,11 +31,8 @@
 #include "widgets/icon.h"
 #include "widgets/paint-selector.h"
 #include "widgets/stroke-style.h"
-#include "xml/repr.h"
 
 #include "ui/view/view-widget.h"
-
-#include <gtkmm/table.h>
 
 namespace Inkscape {
 namespace UI {
@@ -111,11 +107,7 @@ void FillAndStroke::setTargetDesktop(SPDesktop *desktop)
     }
 }
 
-#if WITH_GTKMM_3_0
 void FillAndStroke::_onSwitchPage(Gtk::Widget * /*page*/, guint pagenum)
-#else
-void FillAndStroke::_onSwitchPage(GtkNotebookPage * /*page*/, guint pagenum)
-#endif
 {
     _savePagePref(pagenum);
 }
@@ -132,24 +124,14 @@ void
 FillAndStroke::_layoutPageFill()
 {
     fillWdgt = Gtk::manage(sp_fill_style_widget_new());
-
-#if WITH_GTKMM_3_0
     _page_fill->table().attach(*fillWdgt, 0, 0, 1, 1);
-#else
-    _page_fill->table().attach(*fillWdgt, 0, 1, 0, 1);
-#endif
 }
 
 void
 FillAndStroke::_layoutPageStrokePaint()
 {
     strokeWdgt = Gtk::manage(sp_stroke_style_paint_widget_new());
-
-#if WITH_GTKMM_3_0
     _page_stroke_paint->table().attach(*strokeWdgt, 0, 0, 1, 1);
-#else
-    _page_stroke_paint->table().attach(*strokeWdgt, 0, 1, 0, 1);
-#endif
 }
 
 void
@@ -158,12 +140,7 @@ FillAndStroke::_layoutPageStrokeStyle()
     //Gtk::Widget *strokeStyleWdgt = manage(Glib::wrap(sp_stroke_style_line_widget_new()));
     //Gtk::Widget *strokeStyleWdgt = static_cast<Gtk::Widget *>(sp_stroke_style_line_widget_new());
     strokeStyleWdgt = sp_stroke_style_line_widget_new();
-
-#if WITH_GTKMM_3_0
     _page_stroke_style->table().attach(*strokeStyleWdgt, 0, 0, 1, 1);
-#else
-    _page_stroke_style->table().attach(*strokeStyleWdgt, 0, 1, 0, 1);
-#endif
 }
 
 void

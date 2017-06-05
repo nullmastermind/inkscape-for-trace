@@ -82,6 +82,25 @@ TransformedPointParam::param_getSVGValue() const
     return str;
 }
 
+void
+TransformedPointParam::param_update_default(Geom::Point default_point)
+{
+    defvalue = default_point;
+}
+
+void
+TransformedPointParam::param_update_default(const gchar * default_point)
+{
+    gchar ** strarray = g_strsplit(default_point, ",", 2);
+    double newx, newy;
+    unsigned int success = sp_svg_number_read_d(strarray[0], &newx);
+    success += sp_svg_number_read_d(strarray[1], &newy);
+    g_strfreev (strarray);
+    if (success == 2) {
+        param_update_default( Geom::Point(newx, newy) );
+    }
+}
+
 Gtk::Widget *
 TransformedPointParam::param_newWidget()
 {

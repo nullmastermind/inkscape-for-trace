@@ -16,12 +16,7 @@
 #endif
 
 #include <gtkmm/box.h>
-
-#if WITH_GTKMM_3_0
-# include <gtkmm/grid.h>
-#else
-# include <gtkmm/table.h>
-#endif
+#include <gtkmm/grid.h>
 
 #include <gtkmm/label.h>
 #include <gtkmm/eventbox.h>
@@ -136,15 +131,12 @@ public:
     guint _mode[2];
 
     double current_stroke_width;
+    Inkscape::Util::Unit const *_sw_unit; // points to object in UnitTable, do not delete
 
 protected:
     SPDesktop *_desktop;
 
-#if WITH_GTKMM_3_0
     Gtk::Grid _table;
-#else
-    Gtk::Table _table;
-#endif
 
     Gtk::Label _fill_label;
     Gtk::Label _stroke_label;
@@ -157,11 +149,7 @@ protected:
     Gtk::EventBox _stroke_flag_place;
 
     Gtk::EventBox _opacity_place;
-#if WITH_GTKMM_3_0
     Glib::RefPtr<Gtk::Adjustment> _opacity_adjustment;
-#else
-    Gtk::Adjustment _opacity_adjustment;
-#endif
     Inkscape::UI::Widget::SpinButton _opacity_sb;
 
     Gtk::Label _na[2];
@@ -283,8 +271,6 @@ protected:
     void on_popup_units(Inkscape::Util::Unit const *u);
     void on_popup_preset(int i);
     Gtk::MenuItem _popup_sw_remove;
-
-    Inkscape::Util::Unit const *_sw_unit;  /// points to object in UnitTable, do not delete
 
     void *_drop[2];
     bool _dropEnabled[2];

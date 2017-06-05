@@ -11,12 +11,10 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <glibmm/i18n.h>
-
 #include "live_effects/lpe-path_length.h"
 #include "util/units.h"
-
-#include "2geom/sbasis-geometric.h"
+// TODO due to internal breakage in glibmm headers, this must be last:
+#include <glibmm/i18n.h>
 
 namespace Inkscape {
 namespace LivePathEffect {
@@ -28,21 +26,15 @@ LPEPathLength::LPEPathLength(LivePathEffectObject *lpeobject) :
     unit(_("Unit:"), _("Unit"), "unit", &wr, this),
     display_unit(_("Display unit"), _("Print unit after path length"), "display_unit", &wr, this, true)
 {
-    registerParameter(dynamic_cast<Parameter *>(&scale));
-    registerParameter(dynamic_cast<Parameter *>(&info_text));
-    registerParameter(dynamic_cast<Parameter *>(&unit));
-    registerParameter(dynamic_cast<Parameter *>(&display_unit));
+    registerParameter(&scale);
+    registerParameter(&info_text);
+    registerParameter(&unit);
+    registerParameter(&display_unit);
 }
 
 LPEPathLength::~LPEPathLength()
 {
 
-}
-
-void
-LPEPathLength::hideCanvasText() {
-    // this is only used in sp-lpe-item.cpp to hide the canvas text when the effect is invisible
-    info_text.param_setValue("");
 }
 
 Geom::Piecewise<Geom::D2<Geom::SBasis> >
@@ -71,7 +63,9 @@ LPEPathLength::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const & p
         //g_print ("Area is zero\n");
     }
     //g_print ("Area: %f\n", area);
-
+    if (!this->isVisible()) {
+        info_text.param_setValue("");
+    }
     return pwd2_in;
 }
 

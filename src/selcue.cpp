@@ -11,8 +11,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <string.h>
-
 #include "desktop.h"
 
 #include "selection.h"
@@ -23,7 +21,6 @@
 #include "text-editing.h"
 #include "sp-text.h"
 #include "sp-flowtext.h"
-#include "preferences.h"
 #include "selcue.h"
 
 Inkscape::SelCue::BoundingBoxPrefsObserver::BoundingBoxPrefsObserver(SelCue &sel_cue) :
@@ -96,15 +93,15 @@ void Inkscape::SelCue::_updateItemBboxes(Inkscape::Preferences *prefs)
 
 void Inkscape::SelCue::_updateItemBboxes(gint mode, int prefs_bbox)
 {
-    const std::vector<SPItem*> items = _selection->itemList();
-    if (_item_bboxes.size() != items.size()) {
+    auto items = _selection->items();
+    if (_item_bboxes.size() != boost::distance(items)) {
         _newItemBboxes();
         return;
     }
 
     int bcount = 0;
-    std::vector<SPItem*> ll=_selection->itemList();
-    for (std::vector<SPItem*>::const_iterator l = ll.begin(); l != ll.end(); ++l) {
+    auto ll= _selection->items();
+    for (auto l = ll.begin(); l != ll.end(); ++l) {
         SPItem *item = *l;
         SPCanvasItem* box = _item_bboxes[bcount ++];
 
@@ -146,8 +143,8 @@ void Inkscape::SelCue::_newItemBboxes()
 
     int prefs_bbox = prefs->getBool("/tools/bounding_box");
     
-    std::vector<SPItem*> ll=_selection->itemList();
-    for (std::vector<SPItem*>::const_iterator l = ll.begin(); l != ll.end(); ++l) {
+    auto ll= _selection->items();
+    for (auto l = ll.begin(); l != ll.end(); ++l) {
         SPItem *item = *l;
 
         Geom::OptRect const b = (prefs_bbox == 0) ?
@@ -201,8 +198,8 @@ void Inkscape::SelCue::_newTextBaselines()
     }
     _text_baselines.clear();
 
-    std::vector<SPItem*> ll = _selection->itemList();
-    for (std::vector<SPItem*>::const_iterator l=ll.begin();l!=ll.end();++l) {
+    auto ll = _selection->items();
+    for (auto l=ll.begin();l!=ll.end();++l) {
         SPItem *item = *l;
 
         SPCanvasItem* baseline_point = NULL;

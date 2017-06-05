@@ -14,15 +14,13 @@
  */
 
 #include <gtkmm.h>
-#include "desktop.h"
 #include "live_effects/lpe-roughen.h"
 #include "display/curve.h"
-#include "live_effects/parameter/parameter.h"
 #include <boost/functional/hash.hpp>
 #include "helper/geom.h"
-#include "sp-item-group.h"
+
+// TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
-#include <cmath>
 
 namespace Inkscape {
 namespace LivePathEffect {
@@ -122,7 +120,7 @@ Gtk::Widget *LPERoughen::newWidget()
                         Gtk::ALIGN_START));
                 method_label->set_use_markup(true);
                 vbox->pack_start(*method_label, false, false, 2);
-                vbox->pack_start(*Gtk::manage(new Gtk::HSeparator()),
+                vbox->pack_start(*Gtk::manage(new Gtk::Separator(Gtk::ORIENTATION_HORIZONTAL)),
                                  Gtk::PACK_EXPAND_WIDGET);
             }
             if (param->param_key == "displace_x") {
@@ -131,7 +129,7 @@ Gtk::Widget *LPERoughen::newWidget()
                                                  Gtk::ALIGN_START));
                 displace_x_label->set_use_markup(true);
                 vbox->pack_start(*displace_x_label, false, false, 2);
-                vbox->pack_start(*Gtk::manage(new Gtk::HSeparator()),
+                vbox->pack_start(*Gtk::manage(new Gtk::Separator(Gtk::ORIENTATION_HORIZONTAL)),
                                  Gtk::PACK_EXPAND_WIDGET);
             }
             if (param->param_key == "global_randomize") {
@@ -140,7 +138,7 @@ Gtk::Widget *LPERoughen::newWidget()
                                                  Gtk::ALIGN_START));
                 global_rand->set_use_markup(true);
                 vbox->pack_start(*global_rand, false, false, 2);
-                vbox->pack_start(*Gtk::manage(new Gtk::HSeparator()),
+                vbox->pack_start(*Gtk::manage(new Gtk::Separator(Gtk::ORIENTATION_HORIZONTAL)),
                                  Gtk::PACK_EXPAND_WIDGET);
             }
             if (param->param_key == "handles") {
@@ -149,7 +147,7 @@ Gtk::Widget *LPERoughen::newWidget()
                                                  Gtk::ALIGN_START));
                 options->set_use_markup(true);
                 vbox->pack_start(*options, false, false, 2);
-                vbox->pack_start(*Gtk::manage(new Gtk::HSeparator()),
+                vbox->pack_start(*Gtk::manage(new Gtk::Separator(Gtk::ORIENTATION_HORIZONTAL)),
                                  Gtk::PACK_EXPAND_WIDGET);
             }
             Glib::ustring *tip = param->param_getTooltip();
@@ -229,7 +227,7 @@ void LPERoughen::doEffect(SPCurve *curve)
                 nCurve->lineto(curve_it1->finalPoint());
             }
             last_move = Geom::Point(0, 0);
-            double length = curve_it1->length(0.001);
+            double length = curve_it1->length(0.01);
             std::size_t splits = 0;
             if (method == DM_SEGMENTS) {
                 splits = segments;
@@ -354,9 +352,6 @@ SPCurve const * LPERoughen::addNodesAndJitter(Geom::Curve const * A, Geom::Point
             point_a3 = seg1[3] + point_a3;
             ray.setPoints(prev,A->initialPoint());
             point_a1  = A->initialPoint() + Geom::Point::polar(ray.angle(), max_lenght);
-            if(prev == Geom::Point(0,0)){
-                point_a1 = randomize(max_lenght);
-            }
             if(last){
                 Geom::Path b2(point_b3);
                 b2.appendNew<Geom::LineSegment>(point_a3);

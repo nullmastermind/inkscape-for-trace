@@ -4,7 +4,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "ui/widget/registered-widget.h"
 #include "live_effects/parameter/point.h"
 #include "live_effects/effect.h"
 #include "svg/svg.h"
@@ -15,9 +14,6 @@
 #include "verbs.h"
 #include "knotholder.h"
 #include <glibmm/i18n.h>
-
-// needed for on-canvas editting:
-#include "desktop.h"
 
 namespace Inkscape {
 
@@ -62,9 +58,22 @@ PointParam::param_get_default() const{
 }
 
 void
-PointParam::param_update_default(Geom::Point newpoint)
+PointParam::param_update_default(Geom::Point default_point)
 {
-    defvalue = newpoint;
+    defvalue = default_point;
+}
+
+void
+PointParam::param_update_default(const gchar * default_point)
+{
+    gchar ** strarray = g_strsplit(default_point, ",", 2);
+    double newx, newy;
+    unsigned int success = sp_svg_number_read_d(strarray[0], &newx);
+    success += sp_svg_number_read_d(strarray[1], &newy);
+    g_strfreev (strarray);
+    if (success == 2) {
+        param_update_default( Geom::Point(newx, newy) );
+    }
 }
 
 void
@@ -123,9 +132,8 @@ PointParam::param_newWidget()
                                                               *param_wr,
                                                               param_effect->getRepr(),
                                                               param_effect->getSPDoc() ) );
-    // TODO: fix to get correct desktop (don't use SP_ACTIVE_DESKTOP)
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    Geom::Affine transf = desktop->doc2dt();
+    Geom::Affine transf = Geom::Scale(1, -1);
+    transf[5] = SP_ACTIVE_DOCUMENT->getHeight().value("px");
     pointwdg->setTransform(transf);
     pointwdg->setValue( *this );
     pointwdg->clearProgrammatically();
@@ -134,7 +142,6 @@ PointParam::param_newWidget()
     Gtk::HBox * hbox = Gtk::manage( new Gtk::HBox() );
     static_cast<Gtk::HBox*>(hbox)->pack_start(*pointwdg, true, true);
     static_cast<Gtk::HBox*>(hbox)->show_all_children();
-
     return dynamic_cast<Gtk::Widget *> (hbox);
 }
 
@@ -174,7 +181,7 @@ PointParamKnotHolderEntity::knot_set(Geom::Point const &p, Geom::Point const &or
             s = A;
         }
     }
-    pparam->param_setValue(s, this->pparam->liveupdate);
+    pparam->param_setValue(s);
     SPLPEItem * splpeitem = dynamic_cast<SPLPEItem *>(item);
     if(splpeitem && this->pparam->liveupdate){
         sp_lpe_item_update_patheffect(splpeitem, false, false);
@@ -191,23 +198,23 @@ void
 PointParamKnotHolderEntity::knot_click(guint state)
 {
     if (state & GDK_CONTROL_MASK) {
-            if (state & GDK_MOD1_MASK) {
-                this->pparam->param_set_default();
-                SPLPEItem * splpeitem = dynamic_cast<SPLPEItem *>(item);
-                if(splpeitem){
-                    sp_lpe_item_update_patheffect(splpeitem, false, false);
-                }
+        if (state & GDK_MOD1_MASK) {
+            this->pparam->param_set_default();
+            SPLPEItem * splpeitem = dynamic_cast<SPLPEItem *>(item);
+            if(splpeitem){
+                sp_lpe_item_update_patheffect(splpeitem, false, false);
             }
+        }
     }
 }
 
 void
-PointParam::addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item)
+PointParam::addKnotHolderEntities(KnotHolder *knotholder, SPItem *item)
 {
     knoth = knotholder;
     PointParamKnotHolderEntity *e = new PointParamKnotHolderEntity(this);
     // TODO: can we ditch handleTip() etc. because we have access to handle_tip etc. itself???
-    e->create(desktop, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN, handleTip(), knot_shape, knot_mode, knot_color);
+    e->create(NULL, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN, handleTip(), knot_shape, knot_mode, knot_color);
     knotholder->add(e);
 }
 

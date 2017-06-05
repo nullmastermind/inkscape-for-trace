@@ -77,6 +77,9 @@ private:
     //Connection for when the document changes
     sigc::connection _documentChangedConnection;
     
+    //Connection for when the active layer changes
+    sigc::connection _documentChangedCurrentLayer;
+
     //Connection for when the active selection in the document changes
     sigc::connection _selectionChangedConnection;
 
@@ -134,15 +137,9 @@ private:
     Gtk::TreeView _tree;
     Gtk::CellRendererText *_text_renderer;
     Gtk::TreeView::Column *_name_column;
-#if WITH_GTKMM_3_0
     Gtk::Box _buttonsRow;
     Gtk::Box _buttonsPrimary;
     Gtk::Box _buttonsSecondary;
-#else
-    Gtk::HBox _buttonsRow;
-    Gtk::HBox _buttonsPrimary;
-    Gtk::HBox _buttonsSecondary;
-#endif
     Gtk::ScrolledWindow _scroller;
     Gtk::Menu _popupMenu;
     Inkscape::UI::Widget::SpinButton _spinBtn;
@@ -161,11 +158,7 @@ private:
     Gtk::HBox       _opacity_hbox;
     Gtk::Label      _opacity_label;
     Gtk::Label      _opacity_label_unit;
-#if WITH_GTKMM_3_0
     Glib::RefPtr<Gtk::Adjustment> _opacity_adjustment;
-#else
-    Gtk::Adjustment _opacity_adjustment;
-#endif
     Gtk::HScale     _opacity_hscale;
     Inkscape::UI::Widget::SpinButton _opacity_spin_button;
     
@@ -226,7 +219,7 @@ private:
     bool _checkForUpdated(const Gtk::TreeIter& iter, SPObject* obj);
 
     void _objectsSelected(Selection *sel);
-    bool _checkForSelected(const Gtk::TreePath& path, const Gtk::TreeIter& iter, SPItem* item, bool scrollto);
+    bool _checkForSelected(const Gtk::TreePath& path, const Gtk::TreeIter& iter, SPItem* item, bool scrollto, bool expand);
 
     void _objectsChanged(SPObject *obj);
     void _addObject( SPObject* obj, Gtk::TreeModel::Row* parentRow );

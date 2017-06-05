@@ -22,6 +22,7 @@
 # include <config.h>
 #endif
 
+#include <gtkmm/alignment.h>
 #include <gtkmm/box.h>
 #include <gtkmm/notebook.h>
 #include <gtkmm/button.h>
@@ -198,21 +199,10 @@ private:
     Gtk::RadioButton align_center;
     Gtk::RadioButton align_right;
     Gtk::RadioButton align_justify;
-
-#if WITH_GTKMM_3_0
     Gtk::Separator  align_sep;
-#else
-    Gtk::VSeparator align_sep;
-#endif
-
     Gtk::RadioButton text_vertical;
     Gtk::RadioButton text_horizontal;
-
-#if WITH_GTKMM_3_0
     Gtk::Separator  text_sep;
-#else
-    Gtk::VSeparator text_sep;
-#endif
 
     GtkWidget *spacing_combo;
 

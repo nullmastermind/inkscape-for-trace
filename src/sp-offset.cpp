@@ -15,16 +15,20 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+#include <config.h>
 #endif
+
+#include "sp-offset.h"
 
 #include <cstring>
 #include <string>
 
+#include <glibmm/i18n.h>
+
+#include "bad-uri-exception.h"
 #include "svg/svg.h"
 #include "attributes.h"
 #include "display/curve.h"
-#include <glibmm/i18n.h>
 
 #include "livarot/Path.h"
 #include "livarot/Shape.h"
@@ -32,14 +36,8 @@
 #include "enums.h"
 #include "preferences.h"
 #include "sp-text.h"
-#include "sp-offset.h"
 #include "sp-use-reference.h"
 #include "uri.h"
-
-#include <2geom/affine.h>
-#include <2geom/pathvector.h>
-
-#include "xml/repr.h"
 
 class SPDocument;
 

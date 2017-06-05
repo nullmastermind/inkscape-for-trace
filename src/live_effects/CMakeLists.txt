@@ -27,6 +27,7 @@ set(live_effects_SRC
 	lpe-lattice.cpp
 	lpe-lattice2.cpp
 	lpe-line_segment.cpp
+	lpe-measure-line.cpp
 	lpe-mirror_symmetry.cpp
 	lpe-offset.cpp
 	lpe-parallel.cpp
@@ -61,7 +62,10 @@ set(live_effects_SRC
 
 	parameter/array.cpp
 	parameter/bool.cpp
-	parameter/filletchamferpointarray.cpp
+	parameter/hidden.cpp
+	parameter/item-reference.cpp
+	parameter/item.cpp
+	parameter/originalitem.cpp
 	parameter/originalpath.cpp
 	parameter/originalpatharray.cpp
 	parameter/parameter.cpp
@@ -69,8 +73,10 @@ set(live_effects_SRC
 	parameter/path.cpp
 	parameter/point.cpp
 	parameter/powerstrokepointarray.cpp
+	parameter/satellitesarray.cpp
 	parameter/random.cpp
 	parameter/text.cpp
+	parameter/fontbutton.cpp
 	parameter/togglebutton.cpp
 	parameter/transformedpoint.cpp
 	parameter/unit.cpp
@@ -108,6 +114,7 @@ set(live_effects_SRC
 	lpe-lattice.h
 	lpe-lattice2.h
 	lpe-line_segment.h
+	lpe-measure-line.h
 	lpe-mirror_symmetry.h
 	lpe-offset.h
 	lpe-parallel.h
@@ -143,8 +150,11 @@ set(live_effects_SRC
 
 	parameter/array.h
 	parameter/bool.h
+	parameter/hidden.h
 	parameter/enum.h
-	parameter/filletchamferpointarray.h
+	parameter/item.h
+	parameter/item-reference.h
+	parameter/originalitem.h
 	parameter/originalpath.h
 	parameter/originalpatharray.h
 	parameter/parameter.h
@@ -152,8 +162,10 @@ set(live_effects_SRC
 	parameter/path.h
 	parameter/point.h
 	parameter/powerstrokepointarray.h
+	parameter/satellitesarray.h
 	parameter/random.h
 	parameter/text.h
+	parameter/fontbutton.h
 	parameter/togglebutton.h
 	parameter/transformedpoint.h
 	parameter/unit.h

@@ -6,26 +6,11 @@
  */
 
 #include "live_effects/lpe-bendpath.h"
-#include "sp-shape.h"
-#include "sp-item.h"
-#include "sp-path.h"
 #include "sp-item-group.h"
-#include "svg/svg.h"
-#include "ui/widget/scalar.h"
-
-#include <2geom/sbasis.h>
-#include <2geom/sbasis-geometric.h>
-#include <2geom/bezier-to-sbasis.h>
-#include <2geom/sbasis-to-bezier.h>
-#include <2geom/d2.h>
-#include <2geom/piecewise.h>
-
 #include "knot-holder-entity.h"
 #include "knotholder.h"
-
+// TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
-
-#include <algorithm>
 
 using std::vector;
 
@@ -72,10 +57,10 @@ LPEBendPath::LPEBendPath(LivePathEffectObject *lpeobject) :
     scale_y_rel(_("W_idth in units of length"), _("Scale the width of the path in units of its length"), "scale_y_rel", &wr, this, false),
     vertical_pattern(_("_Original path is vertical"), _("Rotates the original 90 degrees, before bending it along the bend path"), "vertical", &wr, this, false)
 {
-    registerParameter( dynamic_cast<Parameter *>(&bend_path) );
-    registerParameter( dynamic_cast<Parameter *>(&prop_scale) );
-    registerParameter( dynamic_cast<Parameter *>(&scale_y_rel) );
-    registerParameter( dynamic_cast<Parameter *>(&vertical_pattern) );
+    registerParameter( &bend_path );
+    registerParameter( &prop_scale);
+    registerParameter( &scale_y_rel);
+    registerParameter( &vertical_pattern);
 
     prop_scale.param_set_digits(3);
     prop_scale.param_set_increments(0.01, 0.10);

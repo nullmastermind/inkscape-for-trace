@@ -1,30 +1,24 @@
-/*
- * A simple dialog for creating grid type arrangements of selected objects
- *
- * Authors:
- *   Bob Jamison ( based off trace dialog)
- *   John Cliff
- *   Other dudes from The Inkscape Organization
- *   Abhishek Sharma
- *   Declara Denis
- *
- * Copyright (C) 2004 Bob Jamison
- * Copyright (C) 2004 John Cliff
- *
- * Released under GNU GPL, read the file 'COPYING' for more information
- */
-//#define DEBUG_GRID_ARRANGE 1
+    /*
+     * A simple dialog for creating grid type arrangements of selected objects
+     *
+     * Authors:
+     *   Bob Jamison ( based off trace dialog)
+     *   John Cliff
+     *   Other dudes from The Inkscape Organization
+     *   Abhishek Sharma
+     *   Declara Denis
+     *
+     * Copyright (C) 2004 Bob Jamison
+     * Copyright (C) 2004 John Cliff
+     *
+     * Released under GNU GPL, read the file 'COPYING' for more information
+     */
+    //#define DEBUG_GRID_ARRANGE 1
 
 #include "ui/dialog/grid-arrange-tab.h"
-#include <gtk/gtk.h> //for GTK_RESPONSE* types
 #include <glibmm/i18n.h>
-#include <gtkmm/stock.h>
 
-#if WITH_GTKMM_3_0
-# include <gtkmm/grid.h>
-#else
-# include <gtkmm/table.h>
-#endif
+#include <gtkmm/grid.h>
 
 #include <2geom/transforms.h>
 
@@ -32,195 +26,197 @@
 #include "preferences.h"
 #include "inkscape.h"
 
-#include "selection.h"
 #include "document.h"
 #include "document-undo.h"
-#include "sp-item.h"
 #include "widgets/icon.h"
 #include "desktop.h"
-//#include "sp-item-transform.h" FIXME
+    //#include "sp-item-transform.h" FIXME
 #include "ui/dialog/tile.h" // for Inkscape::UI::Dialog::ArrangeDialog
 
-/*
- *    Sort items by their x co-ordinates, taking account of y (keeps rows intact)
- *
- *    <0 *elem1 goes before *elem2
- *    0  *elem1 == *elem2
- *    >0  *elem1 goes after *elem2
- */
-static bool sp_compare_x_position(SPItem *first, SPItem *second)
-{
-    using Geom::X;
-    using Geom::Y;
+    /*
+     *    Sort items by their x co-ordinates, taking account of y (keeps rows intact)
+     *
+     *    <0 *elem1 goes before *elem2
+     *    0  *elem1 == *elem2
+     *    >0  *elem1 goes after *elem2
+     */
+    static bool sp_compare_x_position(SPItem *first, SPItem *second)
+    {
+        using Geom::X;
+        using Geom::Y;
 
-    Geom::OptRect a = first->documentVisualBounds();
-    Geom::OptRect b = second->documentVisualBounds();
+        Geom::OptRect a = first->documentVisualBounds();
+        Geom::OptRect b = second->documentVisualBounds();
 
-    if ( !a || !b ) {
-        // FIXME?
+        if ( !a || !b ) {
+            // FIXME?
+            return false;
+        }
+
+        double const a_height = a->dimensions()[Y];
+        double const b_height = b->dimensions()[Y];
+
+        bool a_in_b_vert = false;
+        if ((a->min()[Y] < b->min()[Y] + 0.1) && (a->min()[Y] > b->min()[Y] - b_height)) {
+            a_in_b_vert = true;
+        } else if ((b->min()[Y] < a->min()[Y] + 0.1) && (b->min()[Y] > a->min()[Y] - a_height)) {
+            a_in_b_vert = true;
+        } else if (b->min()[Y] == a->min()[Y]) {
+            a_in_b_vert = true;
+        } else {
+            a_in_b_vert = false;
+        }
+
+        if (!a_in_b_vert) { // a and b are not in the same row
+            return (a->min()[Y] < b->min()[Y]);
+        }
+        return (a->min()[X] < b->min()[X]);
+    }
+
+    /*
+     *    Sort items by their y co-ordinates.
+     */
+    static bool sp_compare_y_position(SPItem *first, SPItem *second)
+    {
+        Geom::OptRect a = first->documentVisualBounds();
+        Geom::OptRect b = second->documentVisualBounds();
+
+        if ( !a || !b ) {
+            // FIXME?
+            return false;
+        }
+
+        if (a->min()[Geom::Y] > b->min()[Geom::Y]) {
+            return false;
+        }
+        if (a->min()[Geom::Y] < b->min()[Geom::Y]) {
+            return true;
+        }
+
         return false;
     }
 
-    double const a_height = a->dimensions()[Y];
-    double const b_height = b->dimensions()[Y];
 
-    bool a_in_b_vert = false;
-    if ((a->min()[Y] < b->min()[Y] + 0.1) && (a->min()[Y] > b->min()[Y] - b_height)) {
-        a_in_b_vert = true;
-    } else if ((b->min()[Y] < a->min()[Y] + 0.1) && (b->min()[Y] > a->min()[Y] - a_height)) {
-        a_in_b_vert = true;
-    } else if (b->min()[Y] == a->min()[Y]) {
-        a_in_b_vert = true;
-    } else {
-        a_in_b_vert = false;
-    }
-
-    if (!a_in_b_vert) { // a and b are not in the same row
-        return (a->min()[Y] < b->min()[Y]);
-    }
-    return (a->min()[X] < b->min()[X]);
-}
-
-/*
- *    Sort items by their y co-ordinates.
- */
-static bool sp_compare_y_position(SPItem *first, SPItem *second)
-{
-    Geom::OptRect a = first->documentVisualBounds();
-    Geom::OptRect b = second->documentVisualBounds();
-
-    if ( !a || !b ) {
-        // FIXME?
-        return false;
-    }
-
-    if (a->min()[Geom::Y] > b->min()[Geom::Y]) {
-        return false;
-    }
-    if (a->min()[Geom::Y] < b->min()[Geom::Y]) {
-        return true;
-    }
-
-    return false;
-}
+    namespace Inkscape {
+    namespace UI {
+    namespace Dialog {
 
 
-namespace Inkscape {
-namespace UI {
-namespace Dialog {
+    //#########################################################################
+    //## E V E N T S
+    //#########################################################################
 
+    /*
+     *
+     * This arranges the selection in a grid pattern.
+     *
+     */
 
-//#########################################################################
-//## E V E N T S
-//#########################################################################
+    void GridArrangeTab::arrange()
+    {
 
-/*
- *
- * This arranges the selection in a grid pattern.
- *
- */
+        int cnt,row_cnt,col_cnt,a,row,col;
+        double grid_left,grid_top,col_width,row_height,paddingx,paddingy,width, height, new_x, new_y;
+        double total_col_width,total_row_height;
+        col_width = 0;
+        row_height = 0;
+        total_col_width=0;
+        total_row_height=0;
 
-void GridArrangeTab::arrange()
-{
+        // check for correct numbers in the row- and col-spinners
+        on_col_spinbutton_changed();
+        on_row_spinbutton_changed();
 
-    int cnt,row_cnt,col_cnt,a,row,col;
-    double grid_left,grid_top,col_width,row_height,paddingx,paddingy,width, height, new_x, new_y;
-    double total_col_width,total_row_height;
-    col_width = 0;
-    row_height = 0;
-    total_col_width=0;
-    total_row_height=0;
+        // set padding to manual values
+        paddingx = XPadding.getValue("px");
+        paddingy = YPadding.getValue("px");
 
-    // check for correct numbers in the row- and col-spinners
-    on_col_spinbutton_changed();
-    on_row_spinbutton_changed();
+        std::vector<double> row_heights;
+        std::vector<double> col_widths;
+        std::vector<double> row_ys;
+        std::vector<double> col_xs;
 
-    // set padding to manual values
-    paddingx = XPadding.getValue("px");
-    paddingy = YPadding.getValue("px");
+        int NoOfCols = NoOfColsSpinner.get_value_as_int();
+        int NoOfRows = NoOfRowsSpinner.get_value_as_int();
 
-    std::vector<double> row_heights;
-    std::vector<double> col_widths;
-    std::vector<double> row_ys;
-    std::vector<double> col_xs;
-
-    int NoOfCols = NoOfColsSpinner.get_value_as_int();
-    int NoOfRows = NoOfRowsSpinner.get_value_as_int();
-
-    width = 0;
-    for (a=0;a<NoOfCols; a++){
-        col_widths.push_back(width);
-    }
-
-    height = 0;
-    for (a=0;a<NoOfRows; a++){
-        row_heights.push_back(height);
-    }
-    grid_left = 99999;
-    grid_top = 99999;
-
-    SPDesktop *desktop = Parent->getDesktop();
-    desktop->getDocument()->ensureUpToDate();
-
-    Inkscape::Selection *selection = desktop->getSelection();
-    const std::vector<SPItem*> items = selection ? selection->itemList() : std::vector<SPItem*>();
-    for(std::vector<SPItem*>::const_iterator i = items.begin();i!=items.end(); ++i){
-        SPItem *item = *i;
-        Geom::OptRect b = item->documentVisualBounds();
-        if (!b) {
-            continue;
+        width = 0;
+        for (a=0;a<NoOfCols; a++){
+            col_widths.push_back(width);
         }
 
-        width = b->dimensions()[Geom::X];
-        height = b->dimensions()[Geom::Y];
-
-        if (b->min()[Geom::X] < grid_left) {
-            grid_left = b->min()[Geom::X];
+        height = 0;
+        for (a=0;a<NoOfRows; a++){
+            row_heights.push_back(height);
         }
-        if (b->min()[Geom::Y] < grid_top) {
-            grid_top = b->min()[Geom::Y];
+        grid_left = 99999;
+        grid_top = 99999;
+
+        SPDesktop *desktop = Parent->getDesktop();
+        desktop->getDocument()->ensureUpToDate();
+
+        Inkscape::Selection *selection = desktop->getSelection();
+        std::vector<SPItem*> items;
+        if (selection) {
+            items.insert(items.end(), selection->items().begin(), selection->items().end());
         }
-        if (width > col_width) {
-            col_width = width;
-        }
-        if (height > row_height) {
-            row_height = height;
-        }
-    }
 
-
-    // require the sorting done before we can calculate row heights etc.
-
-    g_return_if_fail(selection);
-    std::vector<SPItem*> sorted(selection->itemList());
-    sort(sorted.begin(),sorted.end(),sp_compare_y_position);
-    sort(sorted.begin(),sorted.end(),sp_compare_x_position);
-
-
-    // Calculate individual Row and Column sizes if necessary
-
-
-        cnt=0;
-        const std::vector<SPItem*> sizes(sorted);
-        for (std::vector<SPItem*>::const_iterator i = sizes.begin();i!=sizes.end(); ++i) {
+        for(std::vector<SPItem*>::const_iterator i = items.begin();i!=items.end(); ++i){
             SPItem *item = *i;
             Geom::OptRect b = item->documentVisualBounds();
-            if (b) {
-                width = b->dimensions()[Geom::X];
-                height = b->dimensions()[Geom::Y];
-                if (width > col_widths[(cnt % NoOfCols)]) {
-                    col_widths[(cnt % NoOfCols)] = width;
-                }
-                if (height > row_heights[(cnt / NoOfCols)]) {
-                    row_heights[(cnt / NoOfCols)] = height;
-                }
+            if (!b) {
+                continue;
             }
 
-            cnt++;
+            width = b->dimensions()[Geom::X];
+            height = b->dimensions()[Geom::Y];
+
+            if (b->min()[Geom::X] < grid_left) {
+                grid_left = b->min()[Geom::X];
+            }
+            if (b->min()[Geom::Y] < grid_top) {
+                grid_top = b->min()[Geom::Y];
+            }
+            if (width > col_width) {
+                col_width = width;
+            }
+            if (height > row_height) {
+                row_height = height;
+            }
         }
 
 
-    /// Make sure the top and left of the grid dont move by compensating for align values.
+        // require the sorting done before we can calculate row heights etc.
+
+        g_return_if_fail(selection);
+        std::vector<SPItem*> sorted(selection->items().begin(), selection->items().end());
+        sort(sorted.begin(),sorted.end(),sp_compare_y_position);
+        sort(sorted.begin(),sorted.end(),sp_compare_x_position);
+
+
+        // Calculate individual Row and Column sizes if necessary
+
+
+            cnt=0;
+            const std::vector<SPItem*> sizes(sorted);
+            for (std::vector<SPItem*>::const_iterator i = sizes.begin();i!=sizes.end(); ++i) {
+                SPItem *item = *i;
+                Geom::OptRect b = item->documentVisualBounds();
+                if (b) {
+                    width = b->dimensions()[Geom::X];
+                    height = b->dimensions()[Geom::Y];
+                    if (width > col_widths[(cnt % NoOfCols)]) {
+                        col_widths[(cnt % NoOfCols)] = width;
+                    }
+                    if (height > row_heights[(cnt / NoOfCols)]) {
+                        row_heights[(cnt / NoOfCols)] = height;
+                    }
+                }
+
+                cnt++;
+            }
+
+
+        /// Make sure the top and left of the grid dont move by compensating for align values.
     if (RowHeightButton.get_active()){
         grid_top = grid_top - (((row_height - row_heights[0]) / 2)*(VertAlign));
     }
@@ -368,8 +364,7 @@ void GridArrangeTab::on_row_spinbutton_changed()
     Inkscape::Selection *selection = desktop ? desktop->selection : 0;
     g_return_if_fail( selection );
 
-    std::vector<SPItem*> const items = selection->itemList();
-    int selcount = items.size();
+    int selcount = (int) boost::distance(selection->items());
 
     double PerCol = ceil(selcount / NoOfColsSpinner.get_value());
     NoOfRowsSpinner.set_value(PerCol);
@@ -394,7 +389,7 @@ void GridArrangeTab::on_col_spinbutton_changed()
     Inkscape::Selection *selection = desktop ? desktop->selection : 0;
     g_return_if_fail(selection);
 
-    int selcount = selection->itemList().size();
+    int selcount = (int) boost::distance(selection->items());
 
     double PerRow = ceil(selcount / NoOfRowsSpinner.get_value());
     NoOfColsSpinner.set_value(PerRow);
@@ -531,7 +526,10 @@ void GridArrangeTab::updateSelection()
     updating = true;
     SPDesktop *desktop = Parent->getDesktop();
     Inkscape::Selection *selection = desktop ? desktop->selection : 0;
-    std::vector<SPItem*> const items = selection ? selection->itemList() : std::vector<SPItem*>();
+    std::vector<SPItem*> items;
+    if (selection) {
+        items.insert(items.end(), selection->items().begin(), selection->items().end());
+    }
 
     if (!items.empty()) {
         int selcount = items.size();
@@ -570,11 +568,7 @@ GridArrangeTab::GridArrangeTab(ArrangeDialog *parent)
     : Parent(parent),
       XPadding(_("X:"), _("Horizontal spacing between columns."), UNIT_TYPE_LINEAR, "", "object-columns", &PaddingUnitMenu),
       YPadding(_("Y:"), _("Vertical spacing between rows."), XPadding, "", "object-rows", &PaddingUnitMenu),
-#if WITH_GTKMM_3_0
       PaddingTable(Gtk::manage(new Gtk::Grid()))
-#else
-      PaddingTable(Gtk::manage(new Gtk::Table(2, 2, false)))
-#endif
 {
      // bool used by spin button callbacks to stop loops where they change each other.
     updating = false;
@@ -602,7 +596,7 @@ GridArrangeTab::GridArrangeTab(ArrangeDialog *parent)
     g_return_if_fail( selection );
     int selcount = 1;
     if (!selection->isEmpty()) {
-        selcount = selection->itemList().size();
+        selcount = (int) boost::distance(selection->items());
     }
 
 
@@ -736,20 +730,11 @@ GridArrangeTab::GridArrangeTab(ArrangeDialog *parent)
     }
 
     PaddingTable->set_border_width(MARGIN);
-
-#if WITH_GTKMM_3_0
     PaddingTable->set_row_spacing(MARGIN);
     PaddingTable->set_column_spacing(MARGIN);
     PaddingTable->attach(XPadding,        0, 0, 1, 1);
     PaddingTable->attach(PaddingUnitMenu, 1, 0, 1, 1);
     PaddingTable->attach(YPadding,        0, 1, 1, 1);
-#else
-    PaddingTable->set_row_spacings(MARGIN);
-    PaddingTable->set_col_spacings(MARGIN);
-    PaddingTable->attach(XPadding, 0, 1, 0, 1, Gtk::SHRINK, Gtk::SHRINK);
-    PaddingTable->attach(PaddingUnitMenu, 1, 2, 0, 1, Gtk::SHRINK, Gtk::SHRINK);
-    PaddingTable->attach(YPadding, 0, 1, 1, 2, Gtk::SHRINK, Gtk::SHRINK);
-#endif
 
     TileBox.pack_start(*PaddingTable, false, false, MARGIN);
 

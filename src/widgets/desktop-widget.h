@@ -40,6 +40,7 @@ void sp_desktop_widget_iconify(SPDesktopWidget *dtw);
 void sp_desktop_widget_maximize(SPDesktopWidget *dtw);
 void sp_desktop_widget_fullscreen(SPDesktopWidget *dtw);
 void sp_desktop_widget_update_zoom(SPDesktopWidget *dtw);
+void sp_desktop_widget_update_rotation(SPDesktopWidget *dtw);
 void sp_desktop_widget_update_rulers (SPDesktopWidget *dtw);
 void sp_desktop_widget_update_hruler (SPDesktopWidget *dtw);
 void sp_desktop_widget_update_vruler (SPDesktopWidget *dtw);
@@ -97,7 +98,9 @@ struct SPDesktopWidget {
     GtkWidget *select_status;
     GtkWidget *select_status_eventbox;
     GtkWidget *zoom_status;
+    GtkWidget *rotation_status;
     gulong zoom_update;
+    gulong rotation_update;
 
     Inkscape::UI::Widget::Dock *dock;
 
@@ -191,6 +194,8 @@ struct SPDesktopWidget {
             { sp_desktop_widget_update_zoom (_dtw); }
         virtual void letZoomGrabFocus()
             { _dtw->letZoomGrabFocus(); }
+        virtual void updateRotation()
+            { sp_desktop_widget_update_rotation (_dtw); }
         virtual void setToolboxFocusTo (const gchar * id)
             { _dtw->setToolboxFocusTo (id); }
         virtual void setToolboxAdjustmentValue (const gchar *id, double val)

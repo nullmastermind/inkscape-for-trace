@@ -5,6 +5,7 @@
  * Copyright (C) Lauris Kaplinski 2000
  *   Abhishek Sharma
  *   Jon A. Cruz <jon@joncruz.org>
+ * Copyright (C) Tavmong Bah 2017 <tavmjong@free.fr>
  */
 
 /* As a general comment, I am not exactly proud of how things are done.
@@ -19,12 +20,7 @@
 
 #include <gtkmm/box.h>
 #include <gtkmm/label.h>
-
-#if WITH_GTKMM_3_0
-# include <gtkmm/grid.h>
-#else
-# include <gtkmm/table.h>
-#endif
+#include <gtkmm/grid.h>
 
 #include <glibmm/i18n.h>
 
@@ -144,7 +140,7 @@ grid_canvasitem_update (SPCanvasItem *item, Geom::Affine const &affine, unsigned
     };
 
 CanvasGrid::CanvasGrid(SPNamedView * nv, Inkscape::XML::Node * in_repr, SPDocument *in_doc, GridType type)
-    : visible(true), gridtype(type)
+    : visible(true), gridtype(type), legacy(false), pixel(false)
 {
     repr = in_repr;
     doc = in_doc;
@@ -400,15 +396,10 @@ void CanvasGrid::setOrigin(Geom::Point const &origin_px)
 **/
 #define SPACE_SIZE_X 15
 #define SPACE_SIZE_Y 10
-#if WITH_GTKMM_3_0
 static inline void attach_all(Gtk::Grid &table, Gtk::Widget const *const arr[], unsigned size, int start = 0)
-#else
-static inline void attach_all(Gtk::Table &table, Gtk::Widget const *const arr[], unsigned size, int start = 0)
-#endif
 {
     for (unsigned i=0, r=start; i<size/sizeof(Gtk::Widget*); i+=2) {
         if (arr[i] && arr[i+1]) {
-#if WITH_GTKMM_3_0
             (const_cast<Gtk::Widget&>(*arr[i])).set_hexpand();
             (const_cast<Gtk::Widget&>(*arr[i])).set_valign(Gtk::ALIGN_CENTER);
             table.attach(const_cast<Gtk::Widget&>(*arr[i]),   1, r, 1, 1);
@@ -416,44 +407,28 @@ static inline void attach_all(Gtk::Table &table, Gtk::Widget const *const arr[],
             (const_cast<Gtk::Widget&>(*arr[i+1])).set_hexpand();
             (const_cast<Gtk::Widget&>(*arr[i+1])).set_valign(Gtk::ALIGN_CENTER);
             table.attach(const_cast<Gtk::Widget&>(*arr[i+1]), 2, r, 1, 1);
-#else
-            table.attach (const_cast<Gtk::Widget&>(*arr[i]),   1, 2, r, r+1,
-                          Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
-            table.attach (const_cast<Gtk::Widget&>(*arr[i+1]), 2, 3, r, r+1,
-                          Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
-#endif
         } else {
             if (arr[i+1]) {
-#if WITH_GTKMM_3_0
                 (const_cast<Gtk::Widget&>(*arr[i+1])).set_hexpand();
                 (const_cast<Gtk::Widget&>(*arr[i+1])).set_valign(Gtk::ALIGN_CENTER);
                 table.attach(const_cast<Gtk::Widget&>(*arr[i+1]), 1, r, 2, 1);
-#else
-                table.attach (const_cast<Gtk::Widget&>(*arr[i+1]), 1, 3, r, r+1,
-                              Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
-#endif
             } else if (arr[i]) {
                 Gtk::Label& label = reinterpret_cast<Gtk::Label&> (const_cast<Gtk::Widget&>(*arr[i]));
+#if GTK_CHECK_VERSION(3,16,0)
+                label.set_xalign(0.0);
+                label.set_yalign(0.5);
+#else
                 label.set_alignment (0.0);
-#if WITH_GTKMM_3_0
+#endif
                 label.set_hexpand();
                 label.set_valign(Gtk::ALIGN_CENTER);
                 table.attach(label, 0, r, 3, 1);
-#else
-                table.attach (label, 0, 3, r, r+1,
-                              Gtk::FILL|Gtk::EXPAND, (Gtk::AttachOptions)0,0,0);
-#endif
             } else {
                 Gtk::HBox *space = Gtk::manage (new Gtk::HBox);
                 space->set_size_request (SPACE_SIZE_X, SPACE_SIZE_Y);
-#if WITH_GTKMM_3_0
                 space->set_halign(Gtk::ALIGN_CENTER);
                 space->set_valign(Gtk::ALIGN_CENTER);
                 table.attach(*space, 0, r, 1, 1);
-#else
-                table.attach (*space, 0, 1, r, r+1,
-                              (Gtk::AttachOptions)0, (Gtk::AttachOptions)0,0,0);
-#endif
             }
         }
         ++r;
@@ -559,6 +534,10 @@ CanvasXYGrid::readRepr()
         if( q.unit->type == UNIT_TYPE_LINEAR ) {
             // Legacy grid not in 'user units'
             origin[Geom::X] = q.value("px");
+            legacy = true;
+            if (q.unit->abbr == "px" ) {
+                pixel = true;
+            }
         } else {
             // Grid in 'user units'
             origin[Geom::X] = q.quantity * scale_x;
@@ -572,6 +551,10 @@ CanvasXYGrid::readRepr()
         if( q.unit->type == UNIT_TYPE_LINEAR ) {
             // Legacy grid not in 'user units'
             origin[Geom::Y] = q.value("px");
+            legacy = true;
+            if (q.unit->abbr == "px" ) {
+                pixel = true;
+            }
         } else {
             // Grid in 'user units'
             origin[Geom::Y] = q.quantity * scale_y;
@@ -590,6 +573,10 @@ CanvasXYGrid::readRepr()
             if( q.unit->type == UNIT_TYPE_LINEAR ) {
                 // Legacy grid not in 'user units'
                 spacing[Geom::X] = q.value("px");
+                legacy = true;
+                if (q.unit->abbr == "px" ) {
+                    pixel = true;
+                }
             } else {
                 // Grid in 'user units'
                 spacing[Geom::X] = q.quantity * scale_x;
@@ -609,6 +596,10 @@ CanvasXYGrid::readRepr()
             if( q.unit->type == UNIT_TYPE_LINEAR ) {
                 // Legacy grid not in 'user units'
                 spacing[Geom::Y] = q.value("px");
+                legacy = true;
+                if (q.unit->abbr == "px" ) {
+                    pixel = true;
+                }
             } else {
                 // Grid in 'user units'
                 spacing[Geom::Y] = q.quantity * scale_y;
@@ -684,14 +675,9 @@ CanvasXYGrid::onReprAttrChanged(Inkscape::XML::Node */*repr*/, gchar const */*ke
 Gtk::Widget *
 CanvasXYGrid::newSpecificWidget()
 {
-#if WITH_GTKMM_3_0
-    Gtk::Grid * table = Gtk::manage( new Gtk::Grid() );
+    auto table = Gtk::manage( new Gtk::Grid() );
     table->set_row_spacing(2);
     table->set_column_spacing(2);
-#else
-    Gtk::Table * table = Gtk::manage( new Gtk::Table(1,1) );
-    table->set_spacings(2);
-#endif
 
     Inkscape::UI::Widget::RegisteredUnitMenu *_rumg = Gtk::manage( new Inkscape::UI::Widget::RegisteredUnitMenu(
             _("Grid _units:"), "units", _wr, repr, doc) );
@@ -834,25 +820,41 @@ CanvasXYGrid::updateWidgets()
 */
 }
 
+// For correcting old SVG Inkscape files
+void
+CanvasXYGrid::Scale (Geom::Scale const &scale ) {
+    origin *= scale;
+    spacing *= scale;
 
+    // Write out in 'user-units'
+    Inkscape::SVGOStringStream os_x, os_y, ss_x, ss_y;
+    os_x << origin[Geom::X];
+    os_y << origin[Geom::Y];
+    ss_x << spacing[Geom::X];
+    ss_y << spacing[Geom::Y];
+    repr->setAttribute("originx",  os_x.str().c_str());
+    repr->setAttribute("originy",  os_y.str().c_str());
+    repr->setAttribute("spacingx", ss_x.str().c_str());
+    repr->setAttribute("spacingy", ss_y.str().c_str());
+}
 
 void
 CanvasXYGrid::Update (Geom::Affine const &affine, unsigned int /*flags*/)
 {
     ow = origin * affine;
-    sw = spacing * affine;
-    sw -= Geom::Point(affine[4], affine[5]);
+    sw[0] = Geom::Point(spacing[0], 0) * affine.withoutTranslation();
+    sw[1] = Geom::Point(0, spacing[1]) * affine.withoutTranslation();
 
+    // Find suitable grid spacing for display
     for(int dim = 0; dim < 2; dim++) {
         gint scaling_factor = empspacing;
 
         if (scaling_factor <= 1)
             scaling_factor = 5;
 
-        scaled[dim] = FALSE;
-        sw[dim] = fabs (sw[dim]);
-        while (sw[dim] < 8.0) {
-            scaled[dim] = TRUE;
+        scaled[dim] = false;
+        while (fabs(sw[dim].length()) < 8.0) {
+            scaled[dim] = true;
             sw[dim] *= scaling_factor;
             /* First pass, go up to the major line spacing, then
                keep increasing by two. */
@@ -862,49 +864,45 @@ CanvasXYGrid::Update (Geom::Affine const &affine, unsigned int /*flags*/)
 }
 
 
-static void
-grid_hline (SPCanvasBuf *buf, gint y, gint xs, gint xe, guint32 rgba)
+// Find intersections of line with rectangle. There should be zero or two.
+// If line is degenerate with rectangle side, two corner points are returned.
+static std::vector<Geom::Point>
+intersect_line_rectangle( Geom::Line const &line, Geom::Rect const &rect )
 {
-    if ((y < buf->rect.top()) || (y >= buf->rect.bottom()))
-        return;
-
-    cairo_move_to(buf->ct, 0.5 + xs, 0.5 + y);
-    cairo_line_to(buf->ct, 0.5 + xe, 0.5 + y);
-    ink_cairo_set_source_rgba32(buf->ct, rgba);
-    cairo_stroke(buf->ct);
+    std::vector<Geom::Point> intersections;
+    for (unsigned i = 0; i < 4; ++i) {
+        Geom::LineSegment side( rect.corner(i), rect.corner((i+1)%4) );
+        try {
+            Geom::OptCrossing oc = Geom::intersection(line, side);
+            if (oc) {
+                intersections.push_back( line.pointAt((*oc).ta));
+            }
+        } catch (Geom::InfiniteSolutions) {
+            intersections.clear();
+            intersections.push_back( side.pointAt(0) );
+            intersections.push_back( side.pointAt(1) );
+            return intersections;
+        }
+    }
+    return intersections;
 }
 
-static void
-grid_vline (SPCanvasBuf *buf, gint x, gint ys, gint ye, guint32 rgba)
-{
-    if ((x < buf->rect.left()) || (x >= buf->rect.right()))
-        return;
-
-    cairo_move_to(buf->ct, 0.5 + x, 0.5 + ys);
-    cairo_line_to(buf->ct, 0.5 + x, 0.5 + ye);
-    ink_cairo_set_source_rgba32(buf->ct, rgba);
-    cairo_stroke(buf->ct);
-}
-
-static void
-grid_dot (SPCanvasBuf *buf, gint x, gint y, guint32 rgba)
-{
-    if ( (y < buf->rect.top()) || (y >= buf->rect.bottom())
-         || (x < buf->rect.left()) || (x >= buf->rect.right()) )
-        return;
-
-    cairo_rectangle(buf->ct, x, y, 1, 1);
-    ink_cairo_set_source_rgba32(buf->ct, rgba);
-    cairo_fill(buf->ct);
+// Find the signed distance of a point to a line. The distance is negative if
+// the point lies to the left of the line considering the line's versor.
+static double
+signed_distance( Geom::Point const &point, Geom::Line const &line ) {
+    Geom::Coord t = line.nearestTime( point );
+    Geom::Point p = line.pointAt(t);
+    double distance = Geom::distance( p, point );
+    if ( Geom::cross( Geom::Line( p, point ).versor(), line.versor() ) < 0.0 ) {
+        distance = -distance;
+    }
+    return distance;
 }
 
 void
 CanvasXYGrid::Render (SPCanvasBuf *buf)
 {
-    gdouble const sxg = floor ((buf->rect.left() - ow[Geom::X]) / sw[Geom::X]) * sw[Geom::X] + ow[Geom::X];
-    gint const  xlinestart = round((sxg - ow[Geom::X]) / sw[Geom::X]);
-    gdouble const syg = floor ((buf->rect.top() - ow[Geom::Y]) / sw[Geom::Y]) * sw[Geom::Y] + ow[Geom::Y];
-    gint const  ylinestart = round((syg - ow[Geom::Y]) / sw[Geom::Y]);
 
     // no_emphasize_when_zoomedout determines color (minor or major) when only major grid lines/dots shown.
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
@@ -921,75 +919,128 @@ CanvasXYGrid::Render (SPCanvasBuf *buf)
     cairo_set_line_width(buf->ct, 1.0);
     cairo_set_line_cap(buf->ct, CAIRO_LINE_CAP_SQUARE);
 
-    if (!render_dotted) {
-        // Line grid
-        gint ylinenum;
-        gdouble y;
-        for (y = syg, ylinenum = ylinestart; y < buf->rect.bottom(); y += sw[Geom::Y], ylinenum++) {
-            gint const y0 = round(y);
-            if (!scaled[Geom::Y] && (ylinenum % empspacing) != 0) {
-                grid_hline (buf, y0, buf->rect.left(), buf->rect.right() - 1, color);
-            } else {
-                grid_hline (buf, y0, buf->rect.left(), buf->rect.right() - 1, _empcolor);
+    for (unsigned dim = 0; dim < 2; ++dim) {
+
+        // std::cout << "\n  " << (dim==0?"Horizontal":"Vertical") << "   ------------" << std::endl;
+
+        // Construct an axis line through origin with direction normal to grid spacing.
+        Geom::Line axis = Geom::Line::from_origin_and_vector( ow, sw[dim]       );
+        Geom::Line orth = Geom::Line::from_origin_and_vector( ow, sw[(dim+1)%2] );
+
+        double spacing = sw[(dim+1)%2].length();  // Spacing between grid lines.
+        double dash    = sw[dim].length();        // Total length of dash pattern.
+
+        // std::cout << "  axis: " << axis.origin() << ", " << axis.vector() << std::endl;
+        // std::cout << "  spacing: " << spacing << std::endl;
+        // std::cout << "  dash period: " << dash << std::endl;
+
+        // Find the minimum and maximum distances of the buffer corners from axis.
+        double min =  1000000;
+        double max = -1000000;
+        for (unsigned c = 0; c < 4; ++c) {
+
+            // We need signed distance... lib2geom offers only positive distance.
+            double distance = signed_distance( buf->rect.corner(c), axis );
+
+            // Correct it for coordinate flips (inverts handedness).
+            if (Geom::cross( axis.vector(), orth.vector() ) > 0 ) {
+                distance = -distance;
             }
+
+            if (distance < min)
+                min = distance;
+            if (distance > max)
+                max = distance;
         }
+        int start = floor( min/spacing );
+        int stop  = floor( max/spacing );
 
-        gint xlinenum;
-        gdouble x;
-        for (x = sxg, xlinenum = xlinestart; x < buf->rect.right(); x += sw[Geom::X], xlinenum++) {
-            gint const ix = round(x);
-            if (!scaled[Geom::X] && (xlinenum % empspacing) != 0) {
-                grid_vline (buf, ix, buf->rect.top(), buf->rect.bottom(), color);
-            } else {
-                grid_vline (buf, ix, buf->rect.top(), buf->rect.bottom(), _empcolor);
-            }
-        }
-    } else {
-        // Dotted grid
-        gint ylinenum;
-        gdouble y;
+        // std::cout << "  rect: " << buf->rect << std::endl;
+        // std::cout << "  min: " << min << "  max: " << max << std::endl;
+        // std::cout << "  start: " << start << "  stop: " << stop << std::endl;
 
-        // alpha needs to be larger than in the line case to maintain a similar visual impact but
-        // setting it to the maximal value makes the dots dominant in some cases. Solution,
-        // increase the alpha by a factor of 4. This then allows some user adjustment.
-        guint32 _empdot = (_empcolor & 0xff) << 2;
-        if (_empdot > 0xff)
-            _empdot = 0xff;
-        _empdot += (_empcolor & 0xffffff00);
+        // Loop over grid lines that intersected buf rectangle.
+        for (int j = start+1; j <= stop; ++j) {
+            
+            Geom::Line grid_line = Geom::make_parallel_line( ow + j * sw[(dim+1)%2], axis );
 
-        guint32 _colordot = (color & 0xff) << 2;
-        if (_colordot > 0xff)
-            _colordot = 0xff;
-        _colordot += (color & 0xffffff00);
+            std::vector<Geom::Point> x = intersect_line_rectangle( grid_line, buf->rect );
 
-        for (y = syg, ylinenum = ylinestart; y < buf->rect.bottom(); y += sw[Geom::Y], ylinenum++) {
-            gint const iy = round(y);
+            // If we have two intersections, grid line intersects buffer rectangle.
+            if (x.size() == 2 ) {
 
-            gint xlinenum;
-            gdouble x;
-            for (x = sxg, xlinenum = xlinestart; x < buf->rect.right(); x += sw[Geom::X], xlinenum++) {
-                gint const ix = round(x);
-                if ( (!scaled[Geom::X] && (xlinenum % empspacing) != 0)
-                     || (!scaled[Geom::Y] && (ylinenum % empspacing) != 0)
-                     || ((scaled[Geom::X] || scaled[Geom::Y]) && no_emp_when_zoomed_out) )
-                {
-                    // Minor point: dot only
-                    grid_dot (buf, ix, iy, _colordot); // | (guint32)0x000000FF); // put alpha to max value
-                } else {
-                    // Major point: small cross
-                    gint const pitch = 1;
-                    grid_dot (buf, ix-pitch, iy, _empcolor);
-                    grid_dot (buf, ix+pitch, iy, _empcolor);
-
-                    grid_dot (buf, ix, iy, _empdot ); // | (guint32)0x000000FF);  // put alpha to max value
-
-                    grid_dot (buf, ix, iy-pitch, _empcolor);
-                    grid_dot (buf, ix, iy+pitch, _empcolor);
+                // Make sure lines are always drawn in the same direction (or dashes misplaced).
+                Geom::Line vector( x[0], x[1]);
+                if (Geom::dot( vector.vector(), axis.vector() ) < 0.0) {
+                    std::swap(x[0], x[1]);
                 }
-            }
 
+                // Set up line.
+                cairo_move_to(buf->ct, x[0][Geom::X] + 0.5, x[0][Geom::Y] + 0.5);
+                cairo_line_to(buf->ct, x[1][Geom::X] + 0.5, x[1][Geom::Y] + 0.5);
+
+                // Set dash pattern and color.
+                if (render_dotted) {
+
+                    // alpha needs to be larger than in the line case to maintain a similar
+                    // visual impact but setting it to the maximal value makes the dots
+                    // dominant in some cases. Solution, increase the alpha by a factor of
+                    // 4. This then allows some user adjustment.
+                    guint32 _empdot = (_empcolor & 0xff) << 2;
+                    if (_empdot > 0xff)
+                        _empdot = 0xff;
+                    _empdot += (_empcolor & 0xffffff00);
+
+                    guint32 _colordot = (color & 0xff) << 2;
+                    if (_colordot > 0xff)
+                        _colordot = 0xff;
+                    _colordot += (color & 0xffffff00);
+
+                    // Dash pattern must use spacing from orthogonal direction.
+                    // Offset is to center dash on orthogonal lines.
+                    double offset = fmod( signed_distance( x[0], orth ), sw[dim].length());
+                    if (Geom::cross( axis.vector(), orth.vector() ) > 0 ) {
+                        offset = -offset;
+                    }
+
+                    double dashes[2];
+                    if (!scaled[dim] && (j % empspacing) != 0) {
+                        // Minor lines
+                        dashes[0] = 1;
+                        dashes[1] = dash -1;
+                        offset -= 0.5;
+                        ink_cairo_set_source_rgba32(buf->ct, _colordot);
+                    } else {
+                        // Major lines
+                        dashes[0] = 3;
+                        dashes[1] = dash - 3;
+                        offset -= 1.5; // Center dash on intersection.
+                        ink_cairo_set_source_rgba32(buf->ct, _empdot);
+                    }
+
+                    cairo_set_line_cap(buf->ct, CAIRO_LINE_CAP_BUTT);
+                    cairo_set_dash(buf->ct, dashes, 2, -offset);
+
+                } else {
+
+                    // Solid lines
+
+                    // Set color
+                    if (!scaled[dim] && (j % empspacing) != 0) {
+                        ink_cairo_set_source_rgba32(buf->ct, color );
+                    } else {
+                        ink_cairo_set_source_rgba32(buf->ct, _empcolor );
+                    }
+                }
+
+                cairo_stroke(buf->ct);
+
+            } else {
+                std::cerr << "CanvasXYGrid::render: Grid line doesn't intersect!" << std::endl;
+            }
         }
     }
+
     cairo_restore(buf->ct);
 }
 
@@ -1028,7 +1079,7 @@ CanvasXYGridSnapper::_getSnapLines(Geom::Point const &p) const
 
         if (getSnapVisibleOnly()) {
             // Only snapping to visible grid lines
-            spacing = grid->sw[i]; // this is the spacing of the visible grid lines measured in screen pixels
+            spacing = grid->sw[i].length(); // this is the spacing of the visible grid lines measured in screen pixels
             // convert screen pixels to px
             // FIXME: after we switch to snapping dist in screen pixels, this will be unnecessary
             SPDesktop const *dt = _snapmanager->getDesktop();

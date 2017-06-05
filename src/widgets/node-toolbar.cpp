@@ -25,7 +25,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+#include <config.h>
 #endif
 
 #include "ui/tool/multi-path-manipulator.h"
@@ -35,18 +35,16 @@
 #include "desktop.h"
 #include "document-undo.h"
 #include "widgets/ege-adjustment-action.h"
-#include "widgets/ink-action.h"
+#include "ink-toggle-action.h"
+#include "ink-tool-menu-action.h"
 #include "inkscape.h"
-#include "preferences.h"
 #include "selection-chemistry.h"
-#include "selection.h"
 #include "sp-namedview.h"
 #include "toolbox.h"
 #include "ui/icon-names.h"
 #include "ui/tool/control-point-selection.h"
 #include "ui/tools/node-tool.h"
 #include "ui/widget/unit-tracker.h"
-#include "util/units.h"
 #include "verbs.h"
 #include "widgets/widget-sizes.h"
 

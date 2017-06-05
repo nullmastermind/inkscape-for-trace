@@ -1,6 +1,6 @@
 /** \file
  * SPGradient, SPStop, SPLinearGradient, SPRadialGradient,
- * SPMesh, SPMeshRow, SPMeshPatch
+ * SPMeshGradient, SPMeshRow, SPMeshPatch
  */
 /*
  * Authors:
@@ -22,6 +22,9 @@
  */
 
 #define noSP_GRADIENT_VERBOSE
+//#define OBJECT_TRACE
+
+#include "sp-gradient.h"
 
 #include <cstring>
 #include <string>
@@ -33,26 +36,20 @@
 #include <sigc++/functors/ptr_fun.h>
 #include <sigc++/adaptors/bind.h>
 
+#include "bad-uri-exception.h"
 #include "display/cairo-utils.h"
 #include "svg/svg.h"
-#include "svg/svg-color.h"
 #include "svg/css-ostringstream.h"
 #include "attributes.h"
 #include "document-private.h"
-#include "sp-gradient.h"
 #include "gradient-chemistry.h"
 #include "sp-gradient-reference.h"
 #include "sp-linear-gradient.h"
 #include "sp-radial-gradient.h"
-#include "sp-mesh.h"
+#include "sp-mesh-gradient.h"
 #include "sp-mesh-row.h"
 #include "sp-mesh-patch.h"
 #include "sp-stop.h"
-#include "streq.h"
-#include "uri.h"
-#include "xml/repr.h"
-#include "style.h"
-#include "display/grayscale.h"
 
 /// Has to be power of 2   Seems to be unused.
 //#define NCOLORS NR_GRADIENT_VECTOR_LENGTH
@@ -121,7 +118,7 @@ bool SPGradient::isEquivalent(SPGradient *that)
         else if (
             (SP_IS_LINEARGRADIENT(this) && SP_IS_LINEARGRADIENT(that)) ||
             (SP_IS_RADIALGRADIENT(this) && SP_IS_RADIALGRADIENT(that)) ||
-            (SP_IS_MESH(this)           && SP_IS_MESH(that))) {
+            (SP_IS_MESHGRADIENT(this)   && SP_IS_MESHGRADIENT(that))) {
             if(!this->isAligned(that))break;
         }
         else { break; }  // this should never happen, some unhandled type of gradient
@@ -132,7 +129,7 @@ bool SPGradient::isEquivalent(SPGradient *that)
         bool effective = true;
         while (effective && (as && bs)) {
             if (!as->getEffectiveColor().isClose(bs->getEffectiveColor(), 0.001) ||
-                    as->offset != bs->offset) {
+                    as->offset != bs->offset || as->opacity != bs->opacity ) {
                 effective = false;
                 break;
             } 
@@ -206,9 +203,9 @@ bool SPGradient::isAligned(SPGradient *that)
                     (sg->fy.computed != tg->fy.computed)  ) { break; }
             } else if(  sg->cx._set || sg->cy._set || sg->fx._set || sg->fy._set || sg->r._set ) { break; } // some mix of set and not set
             // none set? assume aligned and fall through
-        } else if (SP_IS_MESH(this) && SP_IS_MESH(that)) {
-            SPMesh *sg=SP_MESH(this);
-            SPMesh *tg=SP_MESH(that);
+        } else if (SP_IS_MESHGRADIENT(this) && SP_IS_MESHGRADIENT(that)) {
+            SPMeshGradient *sg=SP_MESHGRADIENT(this);
+            SPMeshGradient *tg=SP_MESHGRADIENT(that);
  
             if( sg->x._set  !=  !tg->x._set) { break; }
             if( sg->y._set  !=  !tg->y._set) { break; }
@@ -235,8 +232,6 @@ SPGradient::SPGradient() : SPPaintServer(), units(),
         state(2),
         vector() {
 
-	this->has_patches = 0;
-
     this->ref = new SPGradientReference(this);
     this->ref->changedSignal().connect(sigc::bind(sigc::ptr_fun(SPGradient::gradientRefChanged), this));
 
@@ -256,6 +251,7 @@ SPGradient::SPGradient() : SPPaintServer(), units(),
     this->spread_set = FALSE;
 
     this->has_stops = FALSE;
+    this->has_patches = FALSE;
 
     this->vector.built = false;
     this->vector.stops.clear();
@@ -276,10 +272,21 @@ void SPGradient::build(SPDocument *document, Inkscape::XML::Node *repr)
 
     SPPaintServer::build(document, repr);
 
-    for ( SPObject *ochild = this->firstChild() ; ochild ; ochild = ochild->getNext() ) {
-        if (SP_IS_STOP(ochild)) {
+    for (auto& ochild: children) {
+        if (SP_IS_STOP(&ochild)) {
             this->has_stops = TRUE;
             break;
+        }
+        if (SP_IS_MESHROW(&ochild)) {
+            for (auto& ochild2: ochild.children) {
+                if (SP_IS_MESHPATCH(&ochild2)) {
+                    this->has_patches = TRUE;
+                    break;
+                }
+            }
+            if (this->has_patches == TRUE) {
+                break;
+            }
         }
     }
 
@@ -325,6 +332,12 @@ void SPGradient::release()
  */
 void SPGradient::set(unsigned key, gchar const *value)
 {
+#ifdef OBJECT_TRACE
+    std::stringstream temp;
+    temp << "SPGradient::set: " << key  << " " << (value?value:"null");
+    objectTrace( temp.str() );
+#endif
+
     switch (key) {
         case SP_ATTR_GRADIENTUNITS:
             if (value) {
@@ -416,6 +429,10 @@ void SPGradient::set(unsigned key, gchar const *value)
             SPPaintServer::set(key, value);
             break;
     }
+
+#ifdef OBJECT_TRACE
+    objectTrace( "SPGradient::set", false );
+#endif
 }
 
 /**
@@ -466,6 +483,9 @@ void SPGradient::child_added(Inkscape::XML::Node *child, Inkscape::XML::Node *re
             }
         }
     }
+    if ( ochild && SP_IS_MESHROW(ochild) ) {
+        this->has_patches = TRUE;
+    }
 
     /// \todo Fixme: should we schedule "modified" here?
     this->requestModified(SP_OBJECT_MODIFIED_FLAG);
@@ -481,10 +501,22 @@ void SPGradient::remove_child(Inkscape::XML::Node *child)
     SPPaintServer::remove_child(child);
 
     this->has_stops = FALSE;
-    for ( SPObject *ochild = this->firstChild() ; ochild ; ochild = ochild->getNext() ) {
-        if (SP_IS_STOP(ochild)) {
+    this->has_patches = FALSE;
+    for (auto& ochild: children) {
+        if (SP_IS_STOP(&ochild)) {
             this->has_stops = TRUE;
             break;
+        }
+        if (SP_IS_MESHROW(&ochild)) {
+            for (auto& ochild2: ochild.children) {
+                if (SP_IS_MESHPATCH(&ochild2)) {
+                    this->has_patches = TRUE;
+                    break;
+                }
+            }
+            if (this->has_patches == TRUE) {
+                break;
+            }
         }
     }
 
@@ -505,29 +537,24 @@ void SPGradient::remove_child(Inkscape::XML::Node *child)
  */
 void SPGradient::modified(guint flags)
 {
+#ifdef OBJECT_TRACE
+    objectTrace( "SPGradient::modified" );
+#endif
+
     if (flags & SP_OBJECT_CHILD_MODIFIED_FLAG) {
-        // CPPIFY
-        // This comparison has never worked (i. e. always evaluated to false),
-        // the right value would have been SP_TYPE_MESH
-        //if( this->get_type() != SP_GRADIENT_TYPE_MESH ) {
-//        if (!SP_IS_MESH(this)) {
-//            this->invalidateVector();
-//        } else {
-//            this->invalidateArray();
-//        }
-        this->invalidateVector();
+        if (SP_IS_MESHGRADIENT(this)) {
+            this->invalidateArray();
+        } else {
+            this->invalidateVector();
+        }
     }
 
     if (flags & SP_OBJECT_STYLE_MODIFIED_FLAG) {
-        // CPPIFY
-        // see above
-        //if( this->get_type() != SP_GRADIENT_TYPE_MESH ) {
-//        if (!SP_IS_MESH(this)) {
-//            this->ensureVector();
-//        } else {
-//            this->ensureArray();
-//        }
-        this->ensureVector();
+        if (SP_IS_MESHGRADIENT(this)) {
+            this->ensureArray();
+        } else {
+            this->ensureVector();
+        }
     }
 
     if (flags & SP_OBJECT_MODIFIED_FLAG) flags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
@@ -536,9 +563,9 @@ void SPGradient::modified(guint flags)
     // FIXME: climb up the ladder of hrefs
     GSList *l = NULL;
 
-    for (SPObject *child = this->firstChild() ; child; child = child->getNext() ) {
-        sp_object_ref(child);
-        l = g_slist_prepend(l, child);
+    for (auto& child: children) {
+        sp_object_ref(&child);
+        l = g_slist_prepend(l, &child);
     }
 
     l = g_slist_reverse(l);
@@ -553,14 +580,19 @@ void SPGradient::modified(guint flags)
 
         sp_object_unref(child);
     }
+
+#ifdef OBJECT_TRACE
+    objectTrace( "SPGradient::modified", false );
+#endif
 }
 
 SPStop* SPGradient::getFirstStop()
 {
-    SPStop* first = 0;
-    for (SPObject *ochild = firstChild(); ochild && !first; ochild = ochild->getNext()) {
-        if (SP_IS_STOP(ochild)) {
-            first = SP_STOP(ochild);
+    SPStop* first = nullptr;
+    for (auto& ochild: children) {
+        if (SP_IS_STOP(&ochild)) {
+            first = SP_STOP(&ochild);
+            break;
         }
     }
     return first;
@@ -582,13 +614,17 @@ int SPGradient::getStopCount() const
  */
 Inkscape::XML::Node *SPGradient::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags)
 {
+#ifdef OBJECT_TRACE
+    objectTrace( "SPGradient::write" );
+#endif
+
     SPPaintServer::write(xml_doc, repr, flags);
 
     if (flags & SP_OBJECT_WRITE_BUILD) {
         GSList *l = NULL;
 
-        for (SPObject *child = this->firstChild(); child; child = child->getNext()) {
-            Inkscape::XML::Node *crepr = child->updateRepr(xml_doc, NULL, flags);
+        for (auto& child: children) {
+            Inkscape::XML::Node *crepr = child.updateRepr(xml_doc, NULL, flags);
 
             if (crepr) {
                 l = g_slist_prepend(l, crepr);
@@ -652,6 +688,9 @@ Inkscape::XML::Node *SPGradient::write(Inkscape::XML::Document *xml_doc, Inkscap
         repr->setAttribute( "osb:paint", 0 );
     }
 
+#ifdef OBJECT_TRACE
+    objectTrace( "SPGradient::write", false );
+#endif
     return repr;
 }
 
@@ -755,6 +794,14 @@ static bool has_stopsFN(SPGradient const *gr)
 }
 
 /**
+ * True if gradient has patches (i.e. a mesh).
+ */
+static bool has_patchesFN(SPGradient const *gr)
+{
+    return gr->hasPatches();
+}
+
+/**
  * True if gradient has spread set.
  */
 static bool has_spread_set(SPGradient const *gr)
@@ -775,9 +822,21 @@ has_units_set(SPGradient const *gr)
 SPGradient *SPGradient::getVector(bool force_vector)
 {
     SPGradient * src = chase_hrefs(this, has_stopsFN);
+    if (src == NULL) {
+        src = this;
+    }
 
     if (force_vector) {
         src = sp_gradient_ensure_vector_normalized(src);
+    }
+    return src;
+}
+
+SPGradient *SPGradient::getArray(bool force_vector)
+{
+    SPGradient * src = chase_hrefs(this, has_patchesFN);
+    if (src == NULL) {
+        src = this;
     }
     return src;
 }
@@ -904,7 +963,7 @@ bool SPGradient::invalidateArray()
 
     if (array.built) {
         array.built = false;
-        array.clear();
+        // array.clear();
         ret = true;
     }
 
@@ -915,8 +974,8 @@ bool SPGradient::invalidateArray()
 void SPGradient::rebuildVector()
 {
     gint len = 0;
-    for ( SPObject *child = firstChild() ; child ; child = child->getNext() ) {
-        if (SP_IS_STOP(child)) {
+    for (auto& child: children) {
+        if (SP_IS_STOP(&child)) {
             len ++;
         }
     }
@@ -937,9 +996,9 @@ void SPGradient::rebuildVector()
         }
     }
 
-    for ( SPObject *child = firstChild(); child; child = child->getNext() ) {
-        if (SP_IS_STOP(child)) {
-            SPStop *stop = SP_STOP(child);
+    for (auto& child: children) {
+        if (SP_IS_STOP(&child)) {
+            SPStop *stop = SP_STOP(&child);
 
             SPGradientStop gstop;
             if (!vector.stops.empty()) {
@@ -1014,39 +1073,13 @@ void SPGradient::rebuildArray()
 {
     // std::cout << "SPGradient::rebuildArray()" << std::endl;
 
-    if( !SP_IS_MESH(this) ) {
+    if( !SP_IS_MESHGRADIENT(this) ) {
         g_warning( "SPGradient::rebuildArray() called for non-mesh gradient" );
         return;
     }
 
-    array.read( SP_MESH( this ) );
-
-    has_patches = false;
-    for ( SPObject *ro = firstChild() ; ro ; ro = ro->getNext() ) {
-        if (SP_IS_MESHROW(ro)) {
-            has_patches = true;
-            // std::cout << "  Has Patches" << std::endl;
-            break;
-        }
-    }
-
-    // MESH_FIXME: TO PROPERLY COPY
-    SPGradient *reffed = ref->getObject();
-    if ( !hasPatches() && reffed ) {
-        std::cout << "SPGradient::rebuildArray(): reffed array    NOT IMPLEMENTED!!!" << std::endl;
-        /* Copy array from referenced gradient */
-        array.built = true;   // Prevent infinite recursion.
-        reffed->ensureArray();
-        // if (!reffed->array.nodes.empty()) {
-        //     array.built = reffed->array.built;
-        //     for( uint i = 0; i < reffed->array.nodes.size(); ++i ) {
-        //         array.nodes[i].assign(reffed->array.nodes[i].begin(), reffed->array.nodes[i].end());
-
-        //         // FILL ME
-        //     }
-        //     return;
-        // }
-    }
+    array.read( SP_MESHGRADIENT( this ) );
+    has_patches = array.patch_columns() > 0;
 }
 
 Geom::Affine
@@ -1115,15 +1148,17 @@ sp_gradient_pattern_common_setup(cairo_pattern_t *cp,
     }
 
     // add stops
-    for (std::vector<SPGradientStop>::iterator i = gr->vector.stops.begin();
-         i != gr->vector.stops.end(); ++i)
-    {
-        // multiply stop opacity by paint opacity
-        cairo_pattern_add_color_stop_rgba(cp, i->offset,
-            i->color.v.c[0], i->color.v.c[1], i->color.v.c[2], i->opacity * opacity);
+    if (!SP_IS_MESHGRADIENT(gr)) {
+        for (std::vector<SPGradientStop>::iterator i = gr->vector.stops.begin();
+             i != gr->vector.stops.end(); ++i)
+        {
+            // multiply stop opacity by paint opacity
+            cairo_pattern_add_color_stop_rgba(cp, i->offset,
+                                              i->color.v.c[0], i->color.v.c[1], i->color.v.c[2], i->opacity * opacity);
+        }
     }
 
-    // set pattern matrix
+    // set pattern transform matrix
     Geom::Affine gs2user = gr->gradientTransform;
     if (gr->getUnits() == SP_GRADIENT_UNITS_OBJECTBOUNDINGBOX && bbox) {
         Geom::Affine bbox2user(bbox->width(), 0, 0, bbox->height(), bbox->left(), bbox->top());
@@ -1137,9 +1172,7 @@ sp_gradient_create_preview_pattern(SPGradient *gr, double width)
 {
     cairo_pattern_t *pat = NULL;
 
-    // CPPIFY
-    //if( gr->get_type() != SP_GRADIENT_TYPE_MESH ) {
-    if (!SP_IS_MESH(gr)) {
+    if (!SP_IS_MESHGRADIENT(gr)) {
         gr->ensureVector();
 
         pat = cairo_pattern_create_linear(0, 0, width, 0);
@@ -1149,6 +1182,20 @@ sp_gradient_create_preview_pattern(SPGradient *gr, double width)
         {
             cairo_pattern_add_color_stop_rgba(pat, i->offset,
               i->color.v.c[0], i->color.v.c[1], i->color.v.c[2], i->opacity);
+        }
+    } else {
+
+        // For the moment, use the top row of nodes for preview.
+        unsigned columns = gr->array.patch_columns();
+
+        double offset = 1.0/double(columns);
+
+        pat = cairo_pattern_create_linear(0, 0, width, 0);
+
+        for (unsigned i = 0; i < columns+1; ++i) {
+            SPMeshNode* node = gr->array.node( 0, i*3 );
+            cairo_pattern_add_color_stop_rgba(pat, i*offset,
+              node->color.v.c[0], node->color.v.c[1], node->color.v.c[2], node->opacity);
         }
     }
 

@@ -10,29 +10,17 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+#include <config.h>
 #endif
 
 #include "widgets/desktop-widget.h"
-#include <algorithm>
 
 #include "uxmanager.h"
 #include "desktop.h"
 #include "util/ege-tags.h"
 #include "widgets/toolbox.h"
-#include "preferences.h"
-#include "gdkmm/screen.h"
-
-#ifdef GDK_WINDOWING_X11
-#include <gdk/gdkx.h>
-#endif // GDK_WINDOWING_X11
 
 using std::vector;
-
-
-gchar const* KDE_WINDOW_MANAGER_NAME = "KWin";
-gchar const* UNKOWN_WINDOW_MANAGER_NAME = "unknown";
-
 
 class TrackItem
 {
@@ -100,11 +88,9 @@ public:
     virtual gint getDefaultTask( SPDesktop *desktop );
     virtual void setTask(SPDesktop* dt, gint val);
 
-    virtual bool isFloatWindowProblem() const;
     virtual bool isWidescreen() const;
 
 private:
-    bool _floatwindowIssues;
     bool _widescreen;
 };
 
@@ -126,7 +112,6 @@ UXManager::~UXManager()
 }
 
 UXManagerImpl::UXManagerImpl() :
-    _floatwindowIssues(false),
     _widescreen(false)
 {
     ege::TagSet tags;
@@ -134,19 +119,6 @@ UXManagerImpl::UXManagerImpl() :
 
     tags.addTag(ege::Tag("General"));
     tags.addTag(ege::Tag("Icons"));
-
-#if defined(GDK_WINDOWING_X11)
-    char const* wmName = gdk_x11_screen_get_window_manager_name( gdk_screen_get_default() );
-    //g_message("Window manager is [%s]", wmName);
-
-    //if (g_ascii_strcasecmp( wmName, UNKOWN_WINDOW_MANAGER_NAME ) == 0) {
-    if (g_ascii_strcasecmp( wmName, KDE_WINDOW_MANAGER_NAME ) == 0) {
-        _floatwindowIssues = true;
-    }
-#elif defined(GDK_WINDOWING_WIN32)
-    _floatwindowIssues = true;
-#endif // GDK_WINDOWING_WIN32
-
 
     Glib::RefPtr<Gdk::Screen> defaultScreen = Gdk::Screen::get_default();
     if (defaultScreen) {
@@ -161,11 +133,6 @@ UXManagerImpl::UXManagerImpl() :
 
 UXManagerImpl::~UXManagerImpl()
 {
-}
-
-bool UXManagerImpl::isFloatWindowProblem() const
-{
-    return _floatwindowIssues;
 }
 
 bool UXManagerImpl::isWidescreen() const

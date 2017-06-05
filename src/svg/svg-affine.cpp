@@ -12,7 +12,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
+#include "config.h"
 #endif
 
 #include <cstring>
@@ -21,13 +21,8 @@
 #include <cstdio>
 #include <glib.h>
 #include <2geom/transforms.h>
-#include <2geom/angle.h>
 #include "svg.h"
 #include "preferences.h"
-
-#ifndef M_PI
-# define M_PI 3.14159265358979323846
-#endif
 
 bool
 sp_svg_transform_read(gchar const *str, Geom::Affine *transform)

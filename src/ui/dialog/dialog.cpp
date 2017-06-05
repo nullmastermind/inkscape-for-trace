@@ -14,12 +14,11 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+#include "config.h"
 #endif
 
 #include "dialog-manager.h"
 #include <gtkmm/dialog.h>
-#include <gtkmm/stock.h>
 #include <gdk/gdkkeysyms.h>
 
 #include "inkscape.h"
@@ -27,12 +26,9 @@
 #include "desktop.h"
 
 #include "shortcuts.h"
-#include "preferences.h"
 #include "ui/interface.h"
 #include "verbs.h"
 #include "ui/tool/event-utils.h"
-
-#include <gtk/gtk.h>
 
 #define MIN_ONSCREEN_DISTANCE 50
 

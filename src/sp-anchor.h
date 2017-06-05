@@ -24,10 +24,14 @@ public:
 	virtual ~SPAnchor();
 
 	char *href;
+	char *type;
+	char *title;
+        SPDocument *page;
 
 	virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
 	virtual void release();
 	virtual void set(unsigned int key, char const* value);
+        virtual void updatePageAnchor();
 	virtual Inkscape::XML::Node* write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags);
 
     virtual const char* displayName() const;

@@ -48,11 +48,6 @@
 #include "sp-filter-units.h"
 #include "preferences.h"
 
-#if defined (SOLARIS) && (SOLARIS == 8)
-#include "round.h"
-using Inkscape::round;
-#endif
-
 namespace Inkscape {
 namespace Filters {
 
@@ -108,7 +103,9 @@ int Filter::render(Inkscape::DrawingItem const *item, DrawingContext &graphic, D
         graphic.setOperator(CAIRO_OPERATOR_OVER);
         return 1;
     }
-
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    item->drawing().setFilterQuality(prefs->getInt("/options/filterquality/value", 0));
+    item->drawing().setBlurQuality(prefs->getInt("/options/blurquality/value", 0));
     FilterQuality const filterquality = (FilterQuality)item->drawing().filterQuality();
     int const blurquality = item->drawing().blurQuality();
 

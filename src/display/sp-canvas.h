@@ -51,7 +51,7 @@ enum {
 struct SPCanvasBuf {
     cairo_t *ct;
     Geom::IntRect rect;
-    Geom::IntRect visible_rect;
+    Geom::IntRect canvas_rect; // visible window in world coordinates (i.e. offset by _x0, _y0)
 
     unsigned char *buf;
     int buf_rowstride;
@@ -70,8 +70,8 @@ GType sp_canvas_get_type() G_GNUC_CONST;
  * Port of GnomeCanvas for inkscape needs.
  */
 struct SPCanvas {
-    /// Scrolls canvas to specific position (cx and cy are measured in screen pixels).
-    void scrollTo(double cx, double cy, unsigned int clear, bool is_scrolling = false);
+    /// Scrolls canvas to specific position (c is measured in screen pixels).
+    void scrollTo(Geom::Point const &c, unsigned int clear, bool is_scrolling = false);
 
     /// Synchronously updates the canvas if necessary.
     void updateNow();
@@ -145,12 +145,8 @@ public:
     static void dispose(GObject *object);
     static void handle_realize(GtkWidget *widget);
     static void handle_unrealize(GtkWidget *widget);
-#if GTK_CHECK_VERSION(3,0,0)
     static void handle_get_preferred_width(GtkWidget *widget, gint *min_w, gint *nat_w);
     static void handle_get_preferred_height(GtkWidget *widget, gint *min_h, gint *nat_h);
-#else
-    static void handle_size_request(GtkWidget *widget, GtkRequisition *req);
-#endif
     static void handle_size_allocate(GtkWidget *widget, GtkAllocation *allocation);
     static gint handle_button(GtkWidget *widget, GdkEventButton *event);
 
@@ -162,9 +158,6 @@ public:
     static gint handle_scroll(GtkWidget *widget, GdkEventScroll *event);
     static gint handle_motion(GtkWidget *widget, GdkEventMotion *event);
     static gboolean handle_draw(GtkWidget *widget, cairo_t *cr);
-#if !GTK_CHECK_VERSION(3,0,0)
-    static gboolean handle_expose(GtkWidget *widget, GdkEventExpose *event);
-#endif
     static gint handle_key_event(GtkWidget *widget, GdkEventKey *event);
     static gint handle_crossing(GtkWidget *widget, GdkEventCrossing *event);
     static gint handle_focus_in(GtkWidget *widget, GdkEventFocus *event);
@@ -181,8 +174,8 @@ public:
     bool _is_dragging;
     double _dx0;
     double _dy0;
-    int _x0; ///< World coordinate of the leftmost pixels
-    int _y0; ///< World coordinate of the topmost pixels
+    int _x0; ///< World coordinate of the leftmost pixels of window
+    int _y0; ///< World coordinate of the topmost pixels of window
 
     /// Image surface storing the contents of the widget
     cairo_surface_t *_backing_store;

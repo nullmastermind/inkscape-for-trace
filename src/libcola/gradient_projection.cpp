@@ -18,7 +18,6 @@
 #include "gradient_projection.h"
 #include <iostream>
 #include <2geom/math-utils.h>
-#include "isinf.h"
 #include <math.h>
 
 using namespace std;
@@ -51,7 +50,7 @@ unsigned GradientProjection::solve(double * b) {
     //cerr << "in gradient projection: n=" << n << endl;
     for (i=0;i<n;i++) {
         assert(!IS_NAN(place[i]));
-        assert(!isinf(place[i]));
+        assert(IS_FINITE(place[i]));
         vars[i]->desiredPosition=place[i];
     }
     try {
@@ -99,7 +98,7 @@ unsigned GradientProjection::solve(double * b) {
 		for (i=0; i<n; i++) {
 			place[i]-=alpha*g[i];
             assert(!IS_NAN(place[i]));
-            assert(!isinf(place[i]));
+            assert(IS_FINITE(place[i]));
             vars[i]->desiredPosition=place[i];
 		}
         for (DummyVars::iterator it=dummy_vars.begin();it!=dummy_vars.end();++it){

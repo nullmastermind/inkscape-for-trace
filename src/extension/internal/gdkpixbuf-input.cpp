@@ -134,8 +134,13 @@ GdkpixbufInput::open(Inkscape::Extension::Input *mod, char const *uri)
         }
 
         // Add it to the current layer
-        doc->getRoot()->appendChildRepr(image_node);
+        Inkscape::XML::Node *layer_node = xml_doc->createElement("svg:g");
+        layer_node->setAttribute("inkscape:groupmode", "layer");
+        layer_node->setAttribute("inkscape:label", "Image");
+        doc->getRoot()->appendChildRepr(layer_node);
+        layer_node->appendChild(image_node);
         Inkscape::GC::release(image_node);
+        Inkscape::GC::release(layer_node);
         fit_canvas_to_drawing(doc);
         
         // Set viewBox if it doesn't exist
@@ -208,7 +213,7 @@ GdkpixbufInput::init(void)
                     "<_option value='optimizeSpeed' >" N_("Blocky (optimizeSpeed)") "</_option>\n"
                   "</param>\n"
 
-                  "<param name=\"do_not_ask\" _gui-description='" N_("Hide the dialog next time and always apply the same actions.") "' gui-text=\"" N_("Don't ask again") "\" type=\"boolean\" >false</param>\n"
+                  "<param name=\"do_not_ask\" _gui-description='" N_("Hide the dialog next time and always apply the same actions.") "' _gui-text=\"" N_("Don't ask again") "\" type=\"boolean\" >false</param>\n"
                   "<input>\n"
                     "<extension>.%s</extension>\n"
                     "<mimetype>%s</mimetype>\n"

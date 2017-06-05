@@ -293,20 +293,22 @@ void PrintMetafile::brush_classify(SPObject *parent, int depth, Inkscape::Pixbuf
             }
 
             // still looking?  Look at this pattern's children, if there are any
-            SPObject *child = pat_i->firstChild();
-            while (child && !(*epixbuf) && (*hatchType == -1)) {
-                brush_classify(child, depth, epixbuf, hatchType, hatchColor, bkColor);
-                child = child->getNext();
+            for (auto& child: pat_i->children) {
+                if (*epixbuf || *hatchType != -1) {
+                    break;
+                }
+                brush_classify(&child, depth, epixbuf, hatchType, hatchColor, bkColor);
             }
         }
     } else if (SP_IS_IMAGE(parent)) {
         *epixbuf = ((SPImage *)parent)->pixbuf;
         return;
     } else { // some inkscape rearrangements pass through nodes between pattern and image which are not classified as either.
-        SPObject *child = parent->firstChild();
-        while (child && !(*epixbuf) && (*hatchType == -1)) {
-            brush_classify(child, depth, epixbuf, hatchType, hatchColor, bkColor);
-            child = child->getNext();
+        for (auto& child: parent->children) {
+            if (*epixbuf || *hatchType != -1) {
+                break;
+            }
+            brush_classify(&child, depth, epixbuf, hatchType, hatchColor, bkColor);
         }
     }
 }
@@ -388,7 +390,8 @@ Geom::PathVector PrintMetafile::center_ellipse_as_SVG_PathV(Geom::Point ctr, dou
     y2 = ctr[Y]  +  sin(F) * rx * cos(M_PI)   +   cos(F)  * ry * sin(M_PI);
 
     char text[256];
-    sprintf(text, " M %f,%f A %f %f %f 0 0 %f %f A %f %f %f 0 0 %f %f z", x1, y1,  rx, ry, F * 360. / (2.*M_PI), x2, y2,   rx, ry, F * 360. / (2.*M_PI), x1, y1);
+    snprintf(text, 256, " M %f,%f A %f %f %f 0 0 %f %f A %f %f %f 0 0 %f %f z",
+                  x1, y1,  rx, ry, F * 360. / (2.*M_PI), x2, y2,   rx, ry, F * 360. / (2.*M_PI), x1, y1);
     Geom::PathVector outres =  Geom::parse_svg_path(text);
     return outres;
 }
@@ -416,9 +419,9 @@ Geom::PathVector PrintMetafile::center_elliptical_ring_as_SVG_PathV(Geom::Point 
     y22 = ctr[Y]  +  sin(F) * rx2 * cos(M_PI)   +   cos(F)  * ry2 * sin(M_PI);
 
     char text[512];
-    sprintf(text, " M %f,%f A %f %f %f 0 1 %f %f A %f %f %f 0 1 %f %f z M %f,%f  A %f %f %f 0 0 %f %f A %f %f %f 0 0 %f %f z",
-            x11, y11,  rx1, ry1, degrot, x12, y12,   rx1, ry1, degrot, x11, y11,
-            x21, y21,  rx2, ry2, degrot, x22, y22,   rx2, ry2, degrot, x21, y21);
+    snprintf(text, 512, " M %f,%f A %f %f %f 0 1 %f %f A %f %f %f 0 1 %f %f z M %f,%f  A %f %f %f 0 0 %f %f A %f %f %f 0 0 %f %f z",
+                  x11, y11,  rx1, ry1, degrot, x12, y12,   rx1, ry1, degrot, x11, y11,
+                  x21, y21,  rx2, ry2, degrot, x22, y22,   rx2, ry2, degrot, x21, y21);
     Geom::PathVector outres = Geom::parse_svg_path(text);
 
     return outres;
@@ -438,8 +441,8 @@ Geom::PathVector PrintMetafile::center_elliptical_hole_as_SVG_PathV(Geom::Point 
     y2 = ctr[Y]  +  sin(F) * rx * cos(M_PI)   +   cos(F)  * ry * sin(M_PI);
 
     char text[256];
-    sprintf(text, " M %f,%f A %f %f %f 0 0 %f %f A %f %f %f 0 0 %f %f z M 50000,50000 50000,-50000 -50000,-50000 -50000,50000 z",
-            x1, y1,  rx, ry, F * 360. / (2.*M_PI), x2, y2,   rx, ry, F * 360. / (2.*M_PI), x1, y1);
+    snprintf(text, 256, " M %f,%f A %f %f %f 0 0 %f %f A %f %f %f 0 0 %f %f z M 50000,50000 50000,-50000 -50000,-50000 -50000,50000 z",
+                  x1, y1,  rx, ry, F * 360. / (2.*M_PI), x2, y2,   rx, ry, F * 360. / (2.*M_PI), x1, y1);
     Geom::PathVector outres =  Geom::parse_svg_path(text);
     return outres;
 }

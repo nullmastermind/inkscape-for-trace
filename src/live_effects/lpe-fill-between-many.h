@@ -19,12 +19,16 @@ class LPEFillBetweenMany : public Effect {
 public:
     LPEFillBetweenMany(LivePathEffectObject *lpeobject);
     virtual ~LPEFillBetweenMany();
-    
+    virtual void transform_multiply(Geom::Affine const& postmul, bool set);
     virtual void doEffect (SPCurve * curve);
 
 private:
     OriginalPathArrayParam linked_paths;
-
+    BoolParam fuse;
+    BoolParam allow_transforms;
+    BoolParam join;
+    BoolParam close;
+    bool transformmultiply;
 private:
     LPEFillBetweenMany(const LPEFillBetweenMany&);
     LPEFillBetweenMany& operator=(const LPEFillBetweenMany&);

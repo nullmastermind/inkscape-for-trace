@@ -51,6 +51,8 @@ public:
     
     sigc::signal<void>& signal_toggled() { return _signal_toggled; }
     virtual void toggled();
+    void param_update_default(bool default_value);
+    virtual void param_update_default(const gchar * default_value);
 
 private:
     ToggleButtonParam(const ToggleButtonParam&);
@@ -59,10 +61,10 @@ private:
     void refresh_button();
     bool value;
     bool defvalue;
-    const Glib::ustring inactiveLabel;
-    const char * iconActive;
-    const char * iconInactive;
-    Inkscape::IconSize  iconSize;
+    const Glib::ustring inactive_label;
+    const char * _icon_active;
+    const char * _icon_inactive;
+    Inkscape::IconSize  _icon_size;
     Inkscape::UI::Widget::RegisteredToggleButton * checkwdg;
 
     sigc::signal<void> _signal_toggled;

@@ -2,14 +2,10 @@
 #include "config.h"
 #endif
 
-#include <math.h>
 #include <gtkmm/adjustment.h>
 #include <glibmm/i18n.h>
 
-#include <gtk/gtk.h>
-#include <map>
 #include <set>
-#include <vector>
 
 #include "ui/dialog-events.h"
 #include "ui/widget/color-icc-selector.h"
@@ -87,7 +83,6 @@ GtkAttachOptions operator|(GtkAttachOptions lhs, GtkAttachOptions rhs)
 void attachToGridOrTable(GtkWidget *parent, GtkWidget *child, guint left, guint top, guint width, guint height,
                          bool hexpand = false, bool centered = false, guint xpadding = XPAD, guint ypadding = YPAD)
 {
-#if GTK_CHECK_VERSION(3, 0, 0)
   #if GTK_CHECK_VERSION(3, 12, 0)
     gtk_widget_set_margin_start(child, xpadding);
     gtk_widget_set_margin_end(child, xpadding);
@@ -106,14 +101,6 @@ void attachToGridOrTable(GtkWidget *parent, GtkWidget *child, guint left, guint 
         gtk_widget_set_valign(child, GTK_ALIGN_CENTER);
     }
     gtk_grid_attach(GTK_GRID(parent), child, left, top, width, height);
-#else
-    GtkAttachOptions xoptions =
-        centered ? static_cast<GtkAttachOptions>(0) : hexpand ? (GTK_EXPAND | GTK_FILL) : GTK_FILL;
-    GtkAttachOptions yoptions = centered ? static_cast<GtkAttachOptions>(0) : GTK_FILL;
-
-    gtk_table_attach(GTK_TABLE(parent), child, left, left + width, top, top + height, xoptions, yoptions, xpadding,
-                     ypadding);
-#endif
 }
 
 } // namespace
@@ -431,12 +418,7 @@ void ColorICCSelector::init()
 
         _impl->_compUI[i]._label = gtk_label_new_with_mnemonic(labelStr.c_str());
 
-#if GTK_CHECK_VERSION(3,0,0)
         gtk_widget_set_halign(_impl->_compUI[i]._label, GTK_ALIGN_END);
-#else
-        gtk_misc_set_alignment(GTK_MISC(_impl->_compUI[i]._label), 1.0, 0.5);
-#endif
-
         gtk_widget_show(_impl->_compUI[i]._label);
         gtk_widget_set_no_show_all(_impl->_compUI[i]._label, TRUE);
 
@@ -495,12 +477,7 @@ void ColorICCSelector::init()
     // Label
     _impl->_label = gtk_label_new_with_mnemonic(_("_A:"));
 
-#if GTK_CHECK_VERSION(3,0,0)
     gtk_widget_set_halign(_impl->_label, GTK_ALIGN_END);
-#else
-    gtk_misc_set_alignment(GTK_MISC(_impl->_label), 1.0, 0.5);
-#endif
-
     gtk_widget_show(_impl->_label);
 
     attachToGridOrTable(t, _impl->_label, 0, row, 1, 1);
@@ -633,9 +610,10 @@ void ColorICCSelectorImpl::_switchToProfile(gchar const *name)
 #endif // DEBUG_LCMS
                         tmp.set(SP_RGBA32_U_COMPOSE(pre[0], pre[1], pre[2], 0xff));
                     }
+
+                    dirty = true;
                 }
             }
-            dirty = true;
         }
     }
     else {
@@ -671,6 +649,20 @@ void ColorICCSelectorImpl::_switchToProfile(gchar const *name)
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
+struct _cmp {
+  bool operator()(const SPObject * const & a, const SPObject * const & b)
+  {
+    const Inkscape::ColorProfile &a_prof = reinterpret_cast<const Inkscape::ColorProfile &>(*a);
+    const Inkscape::ColorProfile &b_prof = reinterpret_cast<const Inkscape::ColorProfile &>(*b);
+    gchar *a_name_casefold = g_utf8_casefold(a_prof.name, -1 );
+    gchar *b_name_casefold = g_utf8_casefold(b_prof.name, -1 );
+    int result = g_strcmp0(a_name_casefold, b_name_casefold);
+    g_free(a_name_casefold);
+    g_free(b_name_casefold);
+    return result < 0;
+  }
+};
+
 void ColorICCSelectorImpl::_profilesChanged(std::string const &name)
 {
     GtkComboBox *combo = GTK_COMBO_BOX(_profileSel);
@@ -688,7 +680,8 @@ void ColorICCSelectorImpl::_profilesChanged(std::string const &name)
 
     int index = 1;
     std::vector<SPObject *> current = SP_ACTIVE_DOCUMENT->getResourceList("iccprofile");
-    for (std::vector<SPObject *>::const_iterator it = current.begin(); it != current.end(); ++it) {
+    std::set<SPObject *, _cmp> _current(current.begin(), current.end());
+    for (std::set<SPObject *, _cmp>::const_iterator it = _current.begin(); it != _current.end(); ++it) {
         SPObject *obj = *it;
         Inkscape::ColorProfile *prof = reinterpret_cast<Inkscape::ColorProfile *>(obj);
 
@@ -711,11 +704,7 @@ void ColorICCSelectorImpl::_profilesChanged(std::string const & /*name*/) {}
 
 void ColorICCSelector::on_show()
 {
-#if GTK_CHECK_VERSION(3, 0, 0)
     Gtk::Grid::on_show();
-#else
-    Gtk::Table::on_show();
-#endif
     _colorChanged();
 }
 

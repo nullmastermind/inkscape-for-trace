@@ -52,9 +52,15 @@ guint32 ParamColor::set( guint32 in, SPDocument * /*doc*/, Inkscape::XML::Node *
     return in;
 }
 
-ParamColor::ParamColor (const gchar * name, const gchar * guitext, const gchar * desc, const Parameter::_scope_t scope, bool gui_hidden, const gchar * gui_tip, Inkscape::Extension::Extension * ext, Inkscape::XML::Node * xml) :
-    Parameter(name, guitext, desc, scope, gui_hidden, gui_tip, ext),
-    _changeSignal(0)
+ParamColor::ParamColor(const gchar * name,
+                       const gchar * text,
+                       const gchar * description,
+                       bool hidden,
+                       int indent,
+                       Inkscape::Extension::Extension * ext,
+                       Inkscape::XML::Node * xml)
+    : Parameter(name, text, description, hidden, indent, ext)
+    , _changeSignal(0)
 {
     const char * defaulthex = NULL;
     if (xml->firstChild() != NULL)
@@ -86,7 +92,7 @@ Gtk::Widget *ParamColor::get_widget( SPDocument * /*doc*/, Inkscape::XML::Node *
 {
     using Inkscape::UI::Widget::ColorNotebook;
 
-    if (_gui_hidden) return NULL; 
+    if (_hidden) return NULL;
 
     if (changeSignal) {
         _changeSignal = new sigc::signal<void>(*changeSignal);
@@ -98,9 +104,9 @@ Gtk::Widget *ParamColor::get_widget( SPDocument * /*doc*/, Inkscape::XML::Node *
         _color_changed.block(false);
     }
 
-    Gtk::HBox *hbox = Gtk::manage(new Gtk::HBox(false, 4));
+    Gtk::HBox *hbox = Gtk::manage(new Gtk::HBox(false, Parameter::GUI_PARAM_WIDGETS_SPACING));
     Gtk::Widget *selector = Gtk::manage(new ColorNotebook(_color));
-    hbox->pack_start (*selector, true, true, 0);
+    hbox->pack_start(*selector, true, true, 0);
     selector->show();
     hbox->show();
     return hbox;

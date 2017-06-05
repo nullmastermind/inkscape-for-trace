@@ -11,17 +11,12 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <glibmm/i18n.h>
-
 #include "live_effects/lpe-offset.h"
 #include "sp-shape.h"
 #include "display/curve.h"
-
-#include <2geom/path.h>
-#include <2geom/piecewise.h>
-#include <2geom/sbasis-geometric.h>
 #include <2geom/elliptical-arc.h>
-#include <2geom/transforms.h>
+// TODO due to internal breakage in glibmm headers, this must be last:
+#include <glibmm/i18n.h>
 
 namespace Inkscape {
 namespace LivePathEffect {
@@ -32,7 +27,7 @@ LPEOffset::LPEOffset(LivePathEffectObject *lpeobject) :
 {
     show_orig_path = true;
     apply_to_clippath_and_mask = true;
-    registerParameter(dynamic_cast<Parameter *>(&offset_pt));
+    registerParameter(&offset_pt);
 }
 
 LPEOffset::~LPEOffset()
@@ -44,7 +39,7 @@ LPEOffset::doOnApply(SPLPEItem const* lpeitem)
 {
     Geom::Point offset = *(SP_SHAPE(lpeitem)->_curve->first_point());
     offset_pt.param_update_default(offset);
-    offset_pt.param_setValue(offset,true);
+    offset_pt.param_setValue(offset);
 }
 
 static void append_half_circle(Geom::Piecewise<Geom::D2<Geom::SBasis> > &pwd2,
