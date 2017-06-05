@@ -39,6 +39,9 @@ public:
     // Map of OpenType tables found in font (convert to std::set?)
     std::map<Glib::ustring, int> openTypeTables;
 
+    // Map of substitutions indexed by table
+    std::map<Glib::ustring, Glib::ustring> openTypeSubstitutions;
+
     font_instance(void);
     virtual ~font_instance(void);
 
