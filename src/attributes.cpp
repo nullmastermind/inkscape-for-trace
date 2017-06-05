@@ -14,7 +14,6 @@
 
 #include <glib.h> // g_assert()
 #include "attributes.h"
-#include <iostream>
 
 typedef struct {
     gint code;
@@ -174,7 +173,8 @@ static SPStyleProp const props[] = {
     {SP_ATTR_SODIPODI_RY, "sodipodi:ry"},
     {SP_ATTR_SODIPODI_START, "sodipodi:start"},
     {SP_ATTR_SODIPODI_END, "sodipodi:end"},
-    {SP_ATTR_SODIPODI_OPEN, "sodipodi:open"},
+    {SP_ATTR_SODIPODI_OPEN, "sodipodi:open"}, // Deprecated
+    {SP_ATTR_SODIPODI_ARC_TYPE, "sodipodi:arc-type"},
     /* SPStar */
     {SP_ATTR_SODIPODI_SIDES, "sodipodi:sides"},
     {SP_ATTR_SODIPODI_R1, "sodipodi:r1"},
@@ -443,6 +443,7 @@ static SPStyleProp const props[] = {
     {SP_PROP_PAINT_ORDER, "paint-order" },
     {SP_PROP_SOLID_COLOR, "solid-color"},
     {SP_PROP_SOLID_OPACITY, "solid-opacity"},
+    {SP_PROP_VECTOR_EFFECT, "vector-effect"},
 
     /* CSS Blending/Compositing */
     {SP_PROP_MIX_BLEND_MODE, "mix-blend-mode"},

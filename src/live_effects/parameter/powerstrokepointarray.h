@@ -38,14 +38,14 @@ public:
     float median_width();
 
     virtual bool providesKnotHolderEntities() const { return true; }
-    virtual void addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item);
+    virtual void addKnotHolderEntities(KnotHolder *knotholder, SPItem *item);
+    virtual void param_update_default(const gchar * default_value){};
 
     void set_pwd2(Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in, Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_normal_in);
     Geom::Piecewise<Geom::D2<Geom::SBasis> > const & get_pwd2() const { return last_pwd2; }
     Geom::Piecewise<Geom::D2<Geom::SBasis> > const & get_pwd2_normal() const { return last_pwd2_normal; }
 
     void recalculate_controlpoints_for_new_pwd2(Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in);
-
     friend class PowerStrokePointArrayParamKnotHolderEntity;
 
 private:

@@ -13,25 +13,24 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include "config.h"
 #endif
 
-#include "ui/tool/multi-path-manipulator.h"
-
 #include <glibmm/i18n.h>
+
+#include "bad-uri-exception.h"
+#include "ui/tool/multi-path-manipulator.h"
 
 #include "live_effects/effect.h"
 #include "live_effects/lpe-path_length.h"
 #include "live_effects/lpeobject.h"
 #include "live_effects/lpeobject-reference.h"
+#include "live_effects/lpe-measure-line.h"
+#include "live_effects/lpe-mirror_symmetry.h"
+#include "live_effects/lpe-copy_rotate.h"
 
 #include "sp-path.h"
 #include "sp-item-group.h"
-#include "streq.h"
-#include "macros.h"
 #include "attributes.h"
-#include "sp-lpe-item.h"
-#include "xml/repr.h"
 #include "uri.h"
 #include "message-stack.h"
 #include "inkscape.h"
@@ -40,14 +39,10 @@
 #include "sp-ellipse.h"
 #include "display/curve.h"
 #include "svg/svg.h"
-#include <2geom/pathvector.h>
 #include "sp-clippath.h"
 #include "sp-mask.h"
 #include "ui/tools-switch.h"
 #include "ui/tools/node-tool.h"
-#include "ui/tools/tool-base.h"
-
-#include <algorithm>
 
 /* LPEItem base class */
 static void sp_lpe_item_enable_path_effects(SPLPEItem *lpeitem, bool enable);
@@ -55,7 +50,7 @@ static void sp_lpe_item_enable_path_effects(SPLPEItem *lpeitem, bool enable);
 static void lpeobject_ref_modified(SPObject *href, guint flags, SPLPEItem *lpeitem);
 
 static void sp_lpe_item_create_original_path_recursive(SPLPEItem *lpeitem);
-static void sp_lpe_item_cleanup_original_path_recursive(SPLPEItem *lpeitem);
+static void sp_lpe_item_cleanup_original_path_recursive(SPLPEItem *lpeitem, bool keep_paths);
 
 typedef std::list<std::string> HRefList;
 static std::string patheffectlist_svg_string(PathEffectList const & list);
@@ -82,6 +77,7 @@ void SPLPEItem::build(SPDocument *document, Inkscape::XML::Node *repr) {
 
 void SPLPEItem::release() {
     // disconnect all modified listeners:
+    
     for (std::list<sigc::connection>::iterator mod_it = this->lpe_modified_connection_list->begin();
          mod_it != this->lpe_modified_connection_list->end(); ++mod_it)
     {
@@ -92,7 +88,7 @@ void SPLPEItem::release() {
     this->lpe_modified_connection_list = NULL;
 
     PathEffectList::iterator it = this->path_effect_list->begin();
-
+    
     while ( it != this->path_effect_list->end() ) {
         // unlink and delete all references in the list
         (*it)->unlink();
@@ -126,10 +122,8 @@ void SPLPEItem::set(unsigned int key, gchar const* value) {
 
                 this->lpe_modified_connection_list->clear();
                 // Clear the path effect list
-                PathEffectList::iterator it = this->path_effect_list->begin();
-
-                while ( it != this->path_effect_list->end() )
-                {
+                PathEffectList::iterator it =  this->path_effect_list->begin();
+                while ( it !=  this->path_effect_list->end()) {
                     (*it)->unlink();
                     delete *it;
                     it = this->path_effect_list->erase(it);
@@ -209,14 +203,52 @@ Inkscape::XML::Node* SPLPEItem::write(Inkscape::XML::Document *xml_doc, Inkscape
 /**
  * returns true when LPE was successful.
  */
-bool SPLPEItem::performPathEffect(SPCurve *curve, bool is_clip_or_mask) {
-    if (!this) {
-        return false;
+bool SPLPEItem::hasPathEffectOnClipOrMask()  const
+{
+    bool has_clipormask_lpe = false;
+    if (this->hasPathEffect() && this->pathEffectsEnabled()) {
+        for (PathEffectList::iterator it = this->path_effect_list->begin(); it != this->path_effect_list->end(); ++it)
+        {
+            LivePathEffectObject *lpeobj = (*it)->lpeobject;
+            if (!lpeobj) {
+                return false;
+            }
+            Inkscape::LivePathEffect::Effect *lpe = lpeobj->get_lpe();
+            if (!lpe) {
+                return false;
+            }
+            if (lpe->isVisible()) {
+                if (lpe->acceptsNumClicks() > 0 && !lpe->isReady()) {
+                    return false;
+                }
+                if (lpe->apply_to_clippath_and_mask) {
+                    has_clipormask_lpe = true;
+                }
+            }
+        }
     }
+    return has_clipormask_lpe;
+}
+
+bool SPLPEItem::hasPathEffectOnClipOrMaskRecursive() const
+{
+    if (parent && SP_IS_LPE_ITEM(parent)) {
+        return hasPathEffectOnClipOrMask() || SP_LPE_ITEM(parent)->hasPathEffectOnClipOrMaskRecursive();
+    }
+    else {
+        return hasPathEffectOnClipOrMask();
+    }
+}
+
+/**
+ * returns true when LPE was successful.
+ */
+bool SPLPEItem::performPathEffect(SPCurve *curve, SPShape *current, bool is_clip_or_mask) {
 
     if (!curve) {
         return false;
     }
+    bool has_clipormask_lpe = false;
     if (this->hasPathEffect() && this->pathEffectsEnabled()) {
         for (PathEffectList::iterator it = this->path_effect_list->begin(); it != this->path_effect_list->end(); ++it)
         {
@@ -242,14 +274,20 @@ bool SPLPEItem::performPathEffect(SPCurve *curve, bool is_clip_or_mask) {
                     // yet, we don't alter the path
                     return false;
                 }
+                if (lpe->apply_to_clippath_and_mask) {
+                    has_clipormask_lpe = true;
+                }
                 if (!is_clip_or_mask || (is_clip_or_mask && lpe->apply_to_clippath_and_mask)) {
                     // Groups have their doBeforeEffect called elsewhere
+                    if (current) {
+                        lpe->setCurrentShape(current);
+                    }
                     if (!SP_IS_GROUP(this)) {
                         lpe->doBeforeEffect_impl(this);
                     }
 
                     try {
-                            lpe->doEffect(curve);
+                        lpe->doEffect(curve);
                     }
                     catch (std::exception & e) {
                         g_warning("Exception during LPE %s execution. \n %s", lpe->getName().c_str(), e.what());
@@ -260,12 +298,13 @@ bool SPLPEItem::performPathEffect(SPCurve *curve, bool is_clip_or_mask) {
                         return false;
                     }
                     if (!SP_IS_GROUP(this)) {
+                        lpe->pathvector_after_effect = curve->get_pathvector();
                         lpe->doAfterEffect(this);
                     }
                 }
             }
         }
-        if(!SP_IS_GROUP(this) && !is_clip_or_mask){
+        if(!SP_IS_GROUP(this) && !is_clip_or_mask && has_clipormask_lpe){
             this->apply_to_clippath(this);
             this->apply_to_mask(this);
         }
@@ -292,22 +331,6 @@ sp_lpe_item_update_patheffect (SPLPEItem *lpeitem, bool wholetree, bool write)
 
     if (!lpeitem->pathEffectsEnabled())
         return;
-
-    // TODO: hack! this will be removed when path length measuring is reimplemented in a better way
-    PathEffectList lpelist = lpeitem->getEffectList();
-    std::list<Inkscape::LivePathEffect::LPEObjectReference *>::iterator i;
-    for (i = lpelist.begin(); i != lpelist.end(); ++i) {
-        if ((*i)->lpeobject) {
-            Inkscape::LivePathEffect::Effect *lpe = (*i)->lpeobject->get_lpe();
-            if (dynamic_cast<Inkscape::LivePathEffect::LPEPathLength *>(lpe)) {
-                if (!lpe->isVisible()) {
-                    // we manually disable text for LPEPathLength
-                    // use static_cast, because we already checked for the right type above
-                    static_cast<Inkscape::LivePathEffect::LPEPathLength *>(lpe)->hideCanvasText();
-                }
-            }
-        }
-    }
 
     SPLPEItem *top = NULL;
 
@@ -349,10 +372,10 @@ sp_lpe_item_create_original_path_recursive(SPLPEItem *lpeitem)
     {
         sp_lpe_item_create_original_path_recursive(SP_LPE_ITEM(mask->firstChild()));
     }
-    SPClipPath * clipPath = lpeitem->clip_ref->getObject();
-    if(clipPath)
+    SPClipPath * clip_path = lpeitem->clip_ref->getObject();
+    if(clip_path)
     {
-        sp_lpe_item_create_original_path_recursive(SP_LPE_ITEM(clipPath->firstChild()));
+        sp_lpe_item_create_original_path_recursive(SP_LPE_ITEM(clip_path->firstChild()));
     }
     if (SP_IS_GROUP(lpeitem)) {
     	std::vector<SPItem*> item_list = sp_item_group_item_list(SP_GROUP(lpeitem));
@@ -372,48 +395,49 @@ sp_lpe_item_create_original_path_recursive(SPLPEItem *lpeitem)
 }
 
 static void
-sp_lpe_item_cleanup_original_path_recursive(SPLPEItem *lpeitem)
+sp_lpe_item_cleanup_original_path_recursive(SPLPEItem *lpeitem, bool keep_paths)
 {
     g_return_if_fail(lpeitem != NULL);
-
     if (SP_IS_GROUP(lpeitem)) {
-        if (!lpeitem->hasPathEffectRecursive()) {
+        if (!lpeitem->hasPathEffectOnClipOrMaskRecursive()) {
             SPMask * mask = lpeitem->mask_ref->getObject();
             if(mask)
             {
-                sp_lpe_item_cleanup_original_path_recursive(SP_LPE_ITEM(mask->firstChild()));
+                sp_lpe_item_cleanup_original_path_recursive(SP_LPE_ITEM(mask->firstChild()), keep_paths);
             }
-            SPClipPath * clipPath = lpeitem->clip_ref->getObject();
-            if(clipPath)
+            SPClipPath * clip_path = lpeitem->clip_ref->getObject();
+            if(clip_path)
             {
-                sp_lpe_item_cleanup_original_path_recursive(SP_LPE_ITEM(clipPath->firstChild()));
+                sp_lpe_item_cleanup_original_path_recursive(SP_LPE_ITEM(clip_path->firstChild()), keep_paths);
             }
         }
         std::vector<SPItem*> item_list = sp_item_group_item_list(SP_GROUP(lpeitem));
         for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
             SPObject *subitem = *iter;
             if (SP_IS_LPE_ITEM(subitem)) {
-                sp_lpe_item_cleanup_original_path_recursive(SP_LPE_ITEM(subitem));
+                sp_lpe_item_cleanup_original_path_recursive(SP_LPE_ITEM(subitem), keep_paths);
             }
         }
-    }
-    else if (SP_IS_PATH(lpeitem)) {
+    } else if (SP_IS_PATH(lpeitem)) {
         Inkscape::XML::Node *repr = lpeitem->getRepr();
-        if (!lpeitem->hasPathEffectRecursive() && repr->attribute("inkscape:original-d")) {
-            SPMask * mask = lpeitem->mask_ref->getObject();
-            if(mask)
-            {
-                sp_lpe_item_cleanup_original_path_recursive(SP_LPE_ITEM(mask->firstChild()));
-            }
-            SPClipPath * clipPath = lpeitem->clip_ref->getObject();
-            if(clipPath)
-            {
-                sp_lpe_item_cleanup_original_path_recursive(SP_LPE_ITEM(clipPath->firstChild()));
-            }
-            repr->setAttribute("d", repr->attribute("inkscape:original-d"));
-            repr->setAttribute("inkscape:original-d", NULL);
+        SPMask * mask = lpeitem->mask_ref->getObject();
+        if(mask) {
+            sp_lpe_item_cleanup_original_path_recursive(SP_LPE_ITEM(mask->firstChild()), keep_paths);
         }
-        else {
+        SPClipPath * clip_path = lpeitem->clip_ref->getObject();
+        if(clip_path) {
+            sp_lpe_item_cleanup_original_path_recursive(SP_LPE_ITEM(clip_path->firstChild()), keep_paths);
+        }
+        mask = dynamic_cast<SPMask *>(lpeitem->parent);
+        clip_path = dynamic_cast<SPClipPath *>(lpeitem->parent);
+        if ((!lpeitem->hasPathEffectRecursive() && repr->attribute("inkscape:original-d")) ||
+            ((mask || clip_path) && !lpeitem->hasPathEffectOnClipOrMaskRecursive() && repr->attribute("inkscape:original-d"))) 
+        {
+            if (!keep_paths) {
+                repr->setAttribute("d", repr->attribute("inkscape:original-d"));
+            }
+            repr->setAttribute("inkscape:original-d", NULL);
+        } else {
             sp_lpe_item_update_patheffect(lpeitem, true, true);
         }
     }
@@ -467,12 +491,21 @@ void SPLPEItem::addPathEffect(std::string value, bool reset)
 
         // Apply the path effect
         sp_lpe_item_update_patheffect(this, true, true);
-        
+        SPMask * mask = mask_ref->getObject();
+        if(mask && !hasPathEffectOnClipOrMaskRecursive())
+        {
+            sp_lpe_item_cleanup_original_path_recursive(SP_LPE_ITEM(mask->firstChild()), false);
+        }
+        SPClipPath * clip_path = clip_ref->getObject();
+        if(clip_path  && !hasPathEffectOnClipOrMaskRecursive())
+        {
+            sp_lpe_item_cleanup_original_path_recursive(SP_LPE_ITEM(clip_path->firstChild()), false);
+        }
         //fix bug 1219324
         if (SP_ACTIVE_DESKTOP ) {
         Inkscape::UI::Tools::ToolBase *ec = SP_ACTIVE_DESKTOP->event_context;
             if (INK_IS_NODE_TOOL(ec)) {
-                tools_switch(SP_ACTIVE_DESKTOP, TOOLS_LPETOOL); //mhh
+                tools_switch(SP_ACTIVE_DESKTOP, TOOLS_SELECT); //mhh
                 tools_switch(SP_ACTIVE_DESKTOP, TOOLS_NODES);
             }
         }
@@ -488,7 +521,7 @@ void SPLPEItem::addPathEffect(LivePathEffectObject * new_lpeobj)
 }
 
 /**
- *  If keep_path == true, the item should not be updated, effectively 'flattening' the LPE.
+ *  If keep_path is true, the item should not be updated, effectively 'flattening' the LPE.
  */
 void SPLPEItem::removeCurrentPathEffect(bool keep_paths)
 {
@@ -497,27 +530,46 @@ void SPLPEItem::removeCurrentPathEffect(bool keep_paths)
         return;
 
     if (Inkscape::LivePathEffect::Effect* effect_ = this->getCurrentLPE()) {
+        effect_->keep_paths = keep_paths;
         effect_->doOnRemove(this);
-    }    
+    }
     PathEffectList new_list = *this->path_effect_list;
     new_list.remove(lperef); //current lpe ref is always our 'own' pointer from the path_effect_list
     this->getRepr()->setAttribute("inkscape:path-effect", patheffectlist_svg_string(new_list));
-
     if (!keep_paths) {
         // Make sure that ellipse is stored as <svg:circle> or <svg:ellipse> if possible.
         if( SP_IS_GENERICELLIPSE(this)) {
             SP_GENERICELLIPSE(this)->write( this->getRepr()->document(), this->getRepr(), SP_OBJECT_WRITE_EXT );
         }
-
-        sp_lpe_item_cleanup_original_path_recursive(this);
     }
+    sp_lpe_item_cleanup_original_path_recursive(this, keep_paths);
 }
 
 /**
- *  If keep_path == true, the item should not be updated, effectively 'flattening' the LPE.
+ *  If keep_path is true, the item should not be updated, effectively 'flattening' the LPE.
  */
 void SPLPEItem::removeAllPathEffects(bool keep_paths)
 {
+    if (keep_paths) {
+        if (path_effect_list->empty()) {
+            return;
+        }
+    }
+    
+    PathEffectList::iterator it = this->path_effect_list->begin();
+    
+    while ( it != this->path_effect_list->end() ) {
+        LivePathEffectObject *lpeobj = (*it)->lpeobject;
+        if (lpeobj) {
+            Inkscape::LivePathEffect::Effect * lpe = lpeobj->get_lpe();
+            lpe->keep_paths = keep_paths;
+            lpe->doOnRemove(this);
+        }
+        // unlink and delete all references in the list
+        (*it)->unlink();
+        delete *it;
+        it = this->path_effect_list->erase(it);
+    }
     this->getRepr()->setAttribute("inkscape:path-effect", NULL);
 
     if (!keep_paths) {
@@ -525,9 +577,8 @@ void SPLPEItem::removeAllPathEffects(bool keep_paths)
         if (SP_IS_GENERICELLIPSE(this)) {
             SP_GENERICELLIPSE(this)->write(this->getRepr()->document(), this->getRepr(), SP_OBJECT_WRITE_EXT);
         }
-
-        sp_lpe_item_cleanup_original_path_recursive(this);
     }
+    sp_lpe_item_cleanup_original_path_recursive(this, keep_paths);
 }
 
 void SPLPEItem::downCurrentPathEffect()
@@ -548,7 +599,7 @@ void SPLPEItem::downCurrentPathEffect()
 
     this->getRepr()->setAttribute("inkscape:path-effect", patheffectlist_svg_string(new_list));
 
-    sp_lpe_item_cleanup_original_path_recursive(this);
+    sp_lpe_item_cleanup_original_path_recursive(this, false);
 }
 
 void SPLPEItem::upCurrentPathEffect()
@@ -567,7 +618,7 @@ void SPLPEItem::upCurrentPathEffect()
 
     this->getRepr()->setAttribute("inkscape:path-effect", patheffectlist_svg_string(new_list));
 
-    sp_lpe_item_cleanup_original_path_recursive(this);
+    sp_lpe_item_cleanup_original_path_recursive(this, false);
 }
 
 /** used for shapes so they can see if they should also disable shape calculation and read from d= */
@@ -592,7 +643,7 @@ bool SPLPEItem::hasBrokenPathEffect() const
 
 bool SPLPEItem::hasPathEffect() const
 {
-    if (path_effect_list->empty()) {
+    if (!path_effect_list || path_effect_list->empty()) {
         return false;
     }
 
@@ -608,7 +659,7 @@ bool SPLPEItem::hasPathEffect() const
     return true;
 }
 
-bool SPLPEItem::hasPathEffectOfType(int const type) const
+bool SPLPEItem::hasPathEffectOfType(int const type, bool is_ready) const
 {
     if (path_effect_list->empty()) {
         return false;
@@ -620,7 +671,9 @@ bool SPLPEItem::hasPathEffectOfType(int const type) const
         if (lpeobj) {
             Inkscape::LivePathEffect::Effect const* lpe = lpeobj->get_lpe();
             if (lpe && (lpe->effectType() == type)) {
-                return true;
+                if (is_ready || lpe->isReady()) {
+                    return true;
+                }
             }
         }
     }
@@ -637,13 +690,17 @@ bool SPLPEItem::hasPathEffectRecursive() const
         return hasPathEffect();
     }
 }
+
 void
 SPLPEItem::apply_to_clippath(SPItem *item)
 {
-    SPClipPath *clipPath = item->clip_ref->getObject();
-    if(clipPath) {
-        SPObject * clip_data = clipPath->firstChild();
-        apply_to_clip_or_mask(SP_ITEM(clip_data), item);
+    SPClipPath *clip_path = item->clip_ref->getObject();
+    if(clip_path) {
+        std::vector<SPObject*> clip_path_list = clip_path->childList(true);
+        for ( std::vector<SPObject*>::const_iterator iter=clip_path_list.begin();iter!=clip_path_list.end();++iter) {
+            SPObject * clip_data = *iter;
+            apply_to_clip_or_mask(SP_ITEM(clip_data), item);
+        }
     }
     if(SP_IS_GROUP(item)){
     	std::vector<SPItem*> item_list = sp_item_group_item_list(SP_GROUP(item));
@@ -659,8 +716,11 @@ SPLPEItem::apply_to_mask(SPItem *item)
 {
     SPMask *mask = item->mask_ref->getObject();
     if(mask) {
-        SPObject *mask_data = mask->firstChild();
-        apply_to_clip_or_mask(SP_ITEM(mask_data), item);
+        std::vector<SPObject*> mask_list = mask->childList(true);
+        for ( std::vector<SPObject*>::const_iterator iter=mask_list.begin();iter!=mask_list.end();++iter) {
+            SPObject * mask_data = *iter;
+            apply_to_clip_or_mask(SP_ITEM(mask_data), item);
+        }
     }
     if(SP_IS_GROUP(item)){
     	std::vector<SPItem*> item_list = sp_item_group_item_list(SP_GROUP(item));
@@ -693,10 +753,10 @@ SPLPEItem::apply_to_clip_or_mask(SPItem *clip_mask, SPItem *item)
             try {
                 if(SP_IS_GROUP(this)){
                     c->transform(i2anc_affine(SP_GROUP(item), SP_GROUP(this)));
-                    success = this->performPathEffect(c, true);
+                    success = this->performPathEffect(c, SP_SHAPE(clip_mask), true);
                     c->transform(i2anc_affine(SP_GROUP(item), SP_GROUP(this)).inverse());
                 } else {
-                    success = this->performPathEffect(c, true);
+                    success = this->performPathEffect(c, SP_SHAPE(clip_mask), true);
                 }
             } catch (std::exception & e) {
                 g_warning("Exception during LPE execution. \n %s", e.what());
@@ -707,22 +767,25 @@ SPLPEItem::apply_to_clip_or_mask(SPItem *clip_mask, SPItem *item)
                 success = false;
             }
             Inkscape::XML::Node *repr = clip_mask->getRepr();
-            if (success) {
+            // This c check allow to not apply LPE if curve is NULL after performPathEffect used in clone.obgets LPE
+            if (success && c) {
                 gchar *str = sp_svg_write_path(c->get_pathvector());
                 repr->setAttribute("d", str);
                 g_free(str);
             } else {
-                // LPE was unsuccesfull. Read the old 'd'-attribute.
+                 // LPE was unsuccesfull or doeffect stack return null.. Read the old 'd'-attribute.
                 if (gchar const * value = repr->attribute("d")) {
                     Geom::PathVector pv = sp_svg_read_pathv(value);
-                    SPCurve *oldcurve = new SPCurve(pv);
+                    SPCurve *oldcurve = new (std::nothrow) SPCurve(pv);
                     if (oldcurve) {
                         SP_SHAPE(clip_mask)->setCurve(oldcurve, TRUE);
                         oldcurve->unref();
                     }
                 }
             }
-            c->unref();
+            if (c) {
+               c->unref();
+            }
         }
     }
 }
@@ -783,7 +846,7 @@ void SPLPEItem::remove_child(Inkscape::XML::Node * child) {
         SPObject *ochild = this->get_child_by_repr(child);
 
         if ( ochild && SP_IS_LPE_ITEM(ochild) ) {
-            sp_lpe_item_cleanup_original_path_recursive(SP_LPE_ITEM(ochild));
+            sp_lpe_item_cleanup_original_path_recursive(SP_LPE_ITEM(ochild), false);
         }
     }
 

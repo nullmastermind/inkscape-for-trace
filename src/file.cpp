@@ -11,9 +11,10 @@
  *   Jon A. Cruz <jon@joncruz.org>
  *   Abhishek Sharma
  *   David Xiong
+ *   Tavmjong Bah
  *
  * Copyright (C) 2006 Johan Engelen <johan@shouraizou.nl>
- * Copyright (C) 1999-2012 Authors
+ * Copyright (C) 1999-2016 Authors
  * Copyright (C) 2004 David Turner
  * Copyright (C) 2001-2002 Ximian, Inc.
  *
@@ -30,17 +31,18 @@
 # include "config.h"
 #endif
 
+#include <gtkmm.h>
+
 #include "ui/dialog/ocaldialogs.h"
 #include "desktop.h"
 
-#include "dir-util.h"
+#include "extension/effect.h"
 #include "document-private.h"
 #include "document-undo.h"
 #include "ui/tools/tool-base.h"
 #include "extension/db.h"
 #include "extension/input.h"
 #include "extension/output.h"
-#include "extension/system.h"
 #include "file.h"
 #include "helper/png-write.h"
 #include "id-clash.h"
@@ -48,33 +50,21 @@
 #include "inkscape-version.h"
 #include "ui/interface.h"
 #include "io/sys.h"
-#include "message.h"
 #include "message-stack.h"
 #include "path-prefix.h"
-#include "preferences.h"
 #include "print.h"
 #include "resource-manager.h"
 #include "rdf.h"
 #include "selection-chemistry.h"
-#include "selection.h"
 #include "sp-namedview.h"
 #include "style.h"
 #include "ui/view/view-widget.h"
-#include "uri.h"
 #include "xml/rebase-hrefs.h"
 #include "xml/sp-css-attr.h"
 #include "verbs.h"
 #include "event-log.h"
 #include "ui/dialog/font-substitution.h"
 
-#include <gtk/gtk.h>
-#include <gtkmm/main.h>
-
-#include <glibmm/convert.h>
-#include <glibmm/i18n.h>
-#include <glibmm/miscutils.h>
-
-#include <string>
 
 using Inkscape::DocumentUndo;
 
@@ -138,15 +128,6 @@ SPDesktop *sp_file_new(const std::string &templ)
         DocumentUndo::setUndoSensitive(doc, false);
         sp_repr_unparent(nodeToRemove);
         delete nodeToRemove;
-        DocumentUndo::setUndoSensitive(doc, true);
-    }
-    
-    // Set viewBox if it doesn't exist
-    if (!doc->getRoot()->viewBox_set
-    && (doc->getRoot()->width.unit != SVGLength::PERCENT)
-    && (doc->getRoot()->height.unit != SVGLength::PERCENT)) {
-        DocumentUndo::setUndoSensitive(doc, false);
-        doc->setViewBox(Geom::Rect::from_xywh(0, 0, doc->getWidth().value(doc->getDisplayUnit()), doc->getHeight().value(doc->getDisplayUnit())));
         DocumentUndo::setUndoSensitive(doc, true);
     }
     
@@ -252,6 +233,7 @@ sp_file_exit()
 }
 
 
+
 /*######################
 ## O P E N
 ######################*/
@@ -290,14 +272,6 @@ bool sp_file_open(const Glib::ustring &uri,
     }
 
     if (doc) {
-        // Set viewBox if it doesn't exist
-        if (!doc->getRoot()->viewBox_set
-        && (doc->getRoot()->width.unit != SVGLength::PERCENT)
-        && (doc->getRoot()->height.unit != SVGLength::PERCENT)) {
-            DocumentUndo::setUndoSensitive(doc, false);
-            doc->setViewBox(Geom::Rect::from_xywh(0, 0, doc->getWidth().value(doc->getDisplayUnit()), doc->getHeight().value(doc->getDisplayUnit())));
-            DocumentUndo::setUndoSensitive(doc, true);
-        }
 
         SPDocument *existing = desktop ? desktop->getDocument() : NULL;
 
@@ -323,6 +297,13 @@ bool sp_file_open(const Glib::ustring &uri,
         // This is the only place original values should be set.
         root->original.inkscape = root->version.inkscape;
         root->original.svg      = root->version.svg;
+
+        if (INKSCAPE.use_gui()) {
+            if (sp_version_inside_range(root->version.inkscape, 0, 1, 0, 92)) {
+                sp_file_convert_dpi(doc);
+            }
+        }  // If use_gui
+
 
         // resize the window to match the document properties
         sp_namedview_window_from_document(desktop);
@@ -397,7 +378,7 @@ void sp_file_revert_dialog()
         reverted = sp_file_open(uri,NULL);
         if (reverted) {
             // restore zoom and view
-            desktop->zoom_absolute(c[Geom::X], c[Geom::Y], zoom);
+            desktop->zoom_absolute_center_point(c, zoom);
         }
     } else {
         reverted = false;
@@ -1122,21 +1103,25 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place)
     for (Inkscape::XML::Node *obj = clipboard->firstChild() ; obj ; obj = obj->next()) {
     	if(target_document->getObjectById(obj->attribute("id"))) continue;
         Inkscape::XML::Node *obj_copy = obj->duplicate(target_document->getReprDoc());
-        target_parent->appendChild(obj_copy);
+        SPObject * pasted = desktop->currentLayer()->appendChildRepr(obj_copy);
         Inkscape::GC::release(obj_copy);
+        SPLPEItem * pasted_lpe_item = dynamic_cast<SPLPEItem *>(pasted);
+        if (pasted_lpe_item){
+            pasted_lpe_item->forkPathEffectsIfNecessary(1);
+        } 
         pasted_objects_not.push_back(obj_copy);
     }
     Inkscape::Selection *selection = desktop->getSelection();
     selection->setReprList(pasted_objects_not);
     Geom::Affine doc2parent = SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
-    sp_selection_apply_affine(selection, desktop->dt2doc() * doc2parent * desktop->doc2dt(), true, false, false);
-    sp_selection_delete(desktop);
+    selection->applyAffine(desktop->dt2doc() * doc2parent * desktop->doc2dt(), true, false, false);
+    selection->deleteItems();
 
     // Change the selection to the freshly pasted objects
     selection->setReprList(pasted_objects);
 
     // Apply inverse of parent transform
-    sp_selection_apply_affine(selection, desktop->dt2doc() * doc2parent * desktop->doc2dt(), true, false, false);
+    selection->applyAffine(desktop->dt2doc() * doc2parent * desktop->doc2dt(), true, false, false);
 
     // Update (among other things) all curves in paths, for bounds() to work
     target_document->ensureUpToDate();
@@ -1166,8 +1151,9 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place)
             m.unSetup();
         }
 
-        sp_selection_move_relative(selection, offset);
+        selection->moveRelative(offset);
     }
+    target_document->emitReconstructionFinish();
 }
 
 
@@ -1204,10 +1190,21 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
 
         // Count the number of top-level items in the imported document.
         guint items_count = 0;
-        for ( SPObject *child = doc->getRoot()->firstChild(); child; child = child->getNext()) {
-            if (SP_IS_ITEM(child)) {
+        SPObject *o = NULL;
+        for (auto& child: doc->getRoot()->children) {
+            if (SP_IS_ITEM(&child)) {
                 items_count++;
+                o = &child;
             }
+        }
+
+        //ungroup if necessary
+        bool did_ungroup = false;
+        while(items_count==1 && o && SP_IS_GROUP(o) && o->children.size()==1){
+            std::vector<SPItem *>v;
+            sp_item_group_ungroup(SP_GROUP(o),v,false);
+            o = v.empty() ? NULL : v[0];
+            did_ungroup=true;
         }
 
         // Create a new group if necessary.
@@ -1234,9 +1231,9 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
         // Construct a new object representing the imported image,
         // and insert it into the current document.
         SPObject *new_obj = NULL;
-        for ( SPObject *child = doc->getRoot()->firstChild(); child; child = child->getNext() ) {
-            if (SP_IS_ITEM(child)) {
-                Inkscape::XML::Node *newitem = child->getRepr()->duplicate(xml_in_doc);
+        for (auto& child: doc->getRoot()->children) {
+            if (SP_IS_ITEM(&child)) {
+                Inkscape::XML::Node *newitem = did_ungroup ? o->getRepr()->duplicate(xml_in_doc) : child.getRepr()->duplicate(xml_in_doc);
 
                 // convert layers to groups, and make sure they are unlocked
                 // FIXME: add "preserve layers" mode where each layer from
@@ -1249,13 +1246,14 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
             }
 
             // don't lose top-level defs or style elements
-            else if (child->getRepr()->type() == Inkscape::XML::ELEMENT_NODE) {
-                const gchar *tag = child->getRepr()->name();
+            else if (child.getRepr()->type() == Inkscape::XML::ELEMENT_NODE) {
+                const gchar *tag = child.getRepr()->name();
                 if (!strcmp(tag, "svg:style")) {
-                    in_doc->getRoot()->appendChildRepr(child->getRepr()->duplicate(xml_in_doc));
+                    in_doc->getRoot()->appendChildRepr(child.getRepr()->duplicate(xml_in_doc));
                 }
             }
         }
+        in_doc->emitReconstructionFinish();
         if (newgroup) new_obj = place_to_insert->appendChildRepr(newgroup);
 
         // release some stuff
@@ -1271,7 +1269,7 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
             // c2p is identity matrix at this point unless ensureUpToDate is called
             doc->ensureUpToDate();
             Geom::Affine affine = doc->getRoot()->c2p * SP_ITEM(place_to_insert)->i2doc_affine().inverse();
-            sp_selection_apply_affine(selection, desktop->dt2doc() * affine * desktop->doc2dt(), true, false, false);
+            selection->applyAffine(desktop->dt2doc() * affine * desktop->doc2dt(), true, false, false);
 
             // move to mouse pointer
             {
@@ -1279,7 +1277,7 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
                 Geom::OptRect sel_bbox = selection->visualBounds();
                 if (sel_bbox) {
                     Geom::Point m( desktop->point() - sel_bbox->midpoint() );
-                    sp_selection_move_relative(selection, m, false);
+                    selection->moveRelative(m, false);
                 }
             }
         }

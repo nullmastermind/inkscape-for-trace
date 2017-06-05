@@ -35,7 +35,6 @@ public:
     virtual gint getDefaultTask( SPDesktop *desktop ) = 0;
     virtual void setTask( SPDesktop* dt, gint val ) = 0;
 
-    virtual bool isFloatWindowProblem() const = 0;
     virtual bool isWidescreen() const = 0;
 
 protected:

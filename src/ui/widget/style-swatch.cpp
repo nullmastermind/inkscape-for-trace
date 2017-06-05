@@ -13,9 +13,6 @@
 
 #include "style-swatch.h"
 
-#include <cstring>
-#include <string>
-
 #include "widgets/spw-utilities.h"
 #include "ui/widget/color-preview.h"
 
@@ -23,22 +20,15 @@
 #include "sp-linear-gradient.h"
 #include "sp-radial-gradient.h"
 #include "sp-pattern.h"
-#include "xml/repr.h"
 #include "xml/sp-css-attr.h"
 #include "widgets/widget-sizes.h"
 #include "util/units.h"
 #include "helper/action.h"
-#include "helper/action-context.h"
-#include "preferences.h"
 #include "inkscape.h"
 #include "verbs.h"
 #include <glibmm/i18n.h>
 
-#if WITH_GTKMM_3_0
-# include <gtkmm/grid.h>
-#else
-# include <gtkmm/table.h>
-#endif
+#include <gtkmm/grid.h>
 
 enum {
     SS_FILL,
@@ -117,11 +107,7 @@ StyleSwatch::StyleSwatch(SPCSSAttr *css, gchar const *main_tip)
       _css(NULL),
       _tool_obs(NULL),
       _style_obs(NULL),
-#if WITH_GTKMM_3_0
       _table(Gtk::manage(new Gtk::Grid())),
-#else
-      _table(Gtk::manage(new Gtk::Table(2, 6))),
-#endif
       _sw_unit(NULL)
 {
     set_name("StyleSwatch");
@@ -139,13 +125,8 @@ StyleSwatch::StyleSwatch(SPCSSAttr *css, gchar const *main_tip)
     _opacity_value.set_alignment(0.0, 0.5);
     _opacity_value.set_padding(0, 0);
 
-#if WITH_GTKMM_3_0
     _table->set_column_spacing(2);
     _table->set_row_spacing(0);
-#else
-    _table->set_col_spacings(2);
-    _table->set_row_spacings(0);
-#endif
 
     _stroke.pack_start(_place[SS_STROKE]);
     _stroke_width_place.add(_stroke_width);
@@ -153,19 +134,11 @@ StyleSwatch::StyleSwatch(SPCSSAttr *css, gchar const *main_tip)
     
     _opacity_place.add(_opacity_value);
 
-#if WITH_GTKMM_3_0
     _table->attach(_label[SS_FILL],   0, 0, 1, 1);
     _table->attach(_label[SS_STROKE], 0, 1, 1, 1);
     _table->attach(_place[SS_FILL],   1, 0, 1, 1);
     _table->attach(_stroke,           1, 1, 1, 1);
     _table->attach(_opacity_place,    2, 0, 1, 2);
-#else
-    _table->attach(_label[SS_FILL], 0,1, 0,1, Gtk::FILL, Gtk::SHRINK);
-    _table->attach(_label[SS_STROKE], 0,1, 1,2, Gtk::FILL, Gtk::SHRINK);
-    _table->attach(_place[SS_FILL], 1,2, 0,1);
-    _table->attach(_stroke, 1,2, 1,2);
-    _table->attach(_opacity_place, 2,3, 0,2, Gtk::SHRINK, Gtk::SHRINK);
-#endif
 
     _swatch.add(*_table);
     pack_start(_swatch, true, true, 0);

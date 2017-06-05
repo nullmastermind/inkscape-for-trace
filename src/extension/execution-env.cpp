@@ -8,10 +8,8 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <config.h>
-
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+#include <config.h>
 #endif
 
 #include "gtkmm/messagedialog.h"
@@ -25,7 +23,6 @@
 #include "document.h"
 #include "document-undo.h"
 #include "desktop.h"
-#include "ui/view/view.h"
 #include "sp-namedview.h"
 
 #include "display/sp-canvas.h"
@@ -58,8 +55,8 @@ ExecutionEnv::ExecutionEnv (Effect * effect, Inkscape::UI::View::View * doc, Imp
     sp_namedview_document_from_window(desktop);
 
     if (desktop != NULL) {
-    	std::vector<SPItem*> selected = desktop->getSelection()->itemList();
-        for(std::vector<SPItem*>::const_iterator x = selected.begin(); x != selected.end(); ++x){
+        auto selected = desktop->getSelection()->items();
+        for(auto x = selected.begin(); x != selected.end(); ++x){
             Glib::ustring selected_id;
             selected_id = (*x)->getId();
             _selected.insert(_selected.end(), selected_id);

@@ -5,30 +5,20 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#include "config.h"
 #endif
 
 #include <gtkmm.h>
 #include "lpe-fillet-chamfer-properties.h"
 #include <boost/lexical_cast.hpp>
-#include <glibmm/main.h>
 #include <glibmm/i18n.h>
 #include "inkscape.h"
 #include "desktop.h"
-#include "document.h"
 #include "document-undo.h"
 #include "layer-manager.h"
 #include "message-stack.h"
 
-#include "sp-object.h"
-#include "sp-item.h"
-#include "verbs.h"
-#include "selection.h"
 #include "selection-chemistry.h"
-#include "ui/icon-names.h"
-#include "ui/widget/imagetoggler.h"
-#include "live_effects/parameter/parameter.h"
-#include <cmath>
 
 //#include "event-context.h"
 
@@ -37,38 +27,37 @@ namespace UI {
 namespace Dialogs {
 
 FilletChamferPropertiesDialog::FilletChamferPropertiesDialog()
-    : _desktop(NULL), _knotpoint(NULL), _position_visible(false)
+    : _desktop(NULL),
+      _knotpoint(NULL),
+      _position_visible(false),
+      _close_button(_("_Cancel"), true)
 {
     Gtk::Box *mainVBox = get_vbox();
     mainVBox->set_homogeneous(false);
-    _layout_table.set_spacings(4);
-    _layout_table.resize(3, 3);
+    _layout_table.set_row_spacing(4);
+    _layout_table.set_column_spacing(4);
 
     // Layer name widgets
     _fillet_chamfer_position_numeric.set_digits(4);
     _fillet_chamfer_position_numeric.set_increments(1,1);
     //todo: get tha max aloable infinity freeze the widget
     _fillet_chamfer_position_numeric.set_range(0., SCALARPARAM_G_MAXDOUBLE);
-    
+    _fillet_chamfer_position_numeric.set_hexpand();
     _fillet_chamfer_position_label.set_label(_("Radius (pixels):"));
     _fillet_chamfer_position_label.set_alignment(1.0, 0.5);
 
-    _layout_table.attach(_fillet_chamfer_position_label, 0, 1, 0, 1, Gtk::FILL,
-                         Gtk::FILL);
-    _layout_table.attach(_fillet_chamfer_position_numeric, 1, 2, 0, 1,
-                         Gtk::FILL | Gtk::EXPAND, Gtk::FILL);
+    _layout_table.attach(_fillet_chamfer_position_label, 0, 0, 1, 1);
+    _layout_table.attach(_fillet_chamfer_position_numeric, 1, 0, 1, 1);
     _fillet_chamfer_chamfer_subdivisions.set_digits(0);
     _fillet_chamfer_chamfer_subdivisions.set_increments(1,1);
     //todo: get tha max aloable infinity freeze the widget
     _fillet_chamfer_chamfer_subdivisions.set_range(0, SCALARPARAM_G_MAXDOUBLE);
-    
+    _fillet_chamfer_chamfer_subdivisions.set_hexpand();
     _fillet_chamfer_chamfer_subdivisions_label.set_label(_("Chamfer subdivisions:"));
     _fillet_chamfer_chamfer_subdivisions_label.set_alignment(1.0, 0.5);
 
-    _layout_table.attach(_fillet_chamfer_chamfer_subdivisions_label, 0, 1, 1, 2, Gtk::FILL,
-                         Gtk::FILL);
-    _layout_table.attach(_fillet_chamfer_chamfer_subdivisions, 1, 2, 1, 2,
-                         Gtk::FILL | Gtk::EXPAND, Gtk::FILL);
+    _layout_table.attach(_fillet_chamfer_chamfer_subdivisions_label, 0, 1, 1, 1);
+    _layout_table.attach(_fillet_chamfer_chamfer_subdivisions, 1, 1, 1, 1);
     _fillet_chamfer_type_fillet.set_label(_("Fillet"));
     _fillet_chamfer_type_fillet.set_group(_fillet_chamfer_type_group);
     _fillet_chamfer_type_inverse_fillet.set_label(_("Inverse fillet"));
@@ -86,8 +75,6 @@ FilletChamferPropertiesDialog::FilletChamferPropertiesDialog()
     mainVBox->pack_start(_fillet_chamfer_type_inverse_chamfer, true, true, 4);
 
     // Buttons
-    _close_button.set_use_stock(true);
-    _close_button.set_label(Gtk::Stock::CANCEL.id);
     _close_button.set_can_default();
 
     _apply_button.set_use_underline(true);
@@ -115,23 +102,26 @@ FilletChamferPropertiesDialog::FilletChamferPropertiesDialog()
 FilletChamferPropertiesDialog::~FilletChamferPropertiesDialog()
 {
 
-    _set_desktop(NULL);
+    _setDesktop(NULL);
 }
 
 void FilletChamferPropertiesDialog::showDialog(
-    SPDesktop *desktop, Geom::Point knotpoint,
+    SPDesktop *desktop, 
+    double _amount,
     const Inkscape::LivePathEffect::
-    FilletChamferPointArrayParamKnotHolderEntity *pt,
-    bool use_distance,
-    bool aprox_radius)
+    FilletChamferKnotHolderEntity *pt,
+    bool _use_distance,
+    bool _aprox_radius,
+    Satellite _satellite)
 {
     FilletChamferPropertiesDialog *dialog = new FilletChamferPropertiesDialog();
 
-    dialog->_set_desktop(desktop);
-    dialog->_set_use_distance(use_distance);
-    dialog->_set_aprox(aprox_radius);
-    dialog->_set_knot_point(knotpoint);
-    dialog->_set_pt(pt);
+    dialog->_setDesktop(desktop);
+    dialog->_setUseDistance(_use_distance);
+    dialog->_setAprox(_aprox_radius);
+    dialog->_setAmount(_amount);
+    dialog->_setSatellite(_satellite);
+    dialog->_setPt(pt);
 
     dialog->set_title(_("Modify Fillet-Chamfer"));
     dialog->_apply_button.set_label(_("_Modify"));
@@ -146,38 +136,42 @@ void FilletChamferPropertiesDialog::showDialog(
 
 void FilletChamferPropertiesDialog::_apply()
 {
-    double d_width;
+
     double d_pos =  _fillet_chamfer_position_numeric.get_value();
-    if (d_pos) {
+    if (d_pos >= 0) {
         if (_fillet_chamfer_type_fillet.get_active() == true) {
-            d_width = 1;
+            _satellite.satellite_type = FILLET;
         } else if (_fillet_chamfer_type_inverse_fillet.get_active() == true) {
-            d_width = 2;
+            _satellite.satellite_type = INVERSE_FILLET;
         } else if (_fillet_chamfer_type_inverse_chamfer.get_active() == true) {
-            d_width = _fillet_chamfer_chamfer_subdivisions.get_value() + 4000;
+            _satellite.satellite_type = INVERSE_CHAMFER;
         } else {
-            d_width = _fillet_chamfer_chamfer_subdivisions.get_value() + 3000;
+            _satellite.satellite_type = CHAMFER;
         }
         if (_flexible) {
             if (d_pos > 99.99999 || d_pos < 0) {
                 d_pos = 0;
             }
-            d_pos = _index + (d_pos / 100);
-        } else {
-            d_pos = d_pos * -1;
+            d_pos = d_pos / 100;
         }
-        _knotpoint->knot_set_offset(Geom::Point(d_pos, d_width));
+        _satellite.amount = d_pos;
+        size_t steps = (size_t)_fillet_chamfer_chamfer_subdivisions.get_value();
+        if (steps < 1) {
+            steps = 1;
+        }
+        _satellite.steps = steps;
+        _knotpoint->knot_set_offset(_satellite);
     }
     _close();
 }
 
 void FilletChamferPropertiesDialog::_close()
 {
-    _set_desktop(NULL);
+    _setDesktop(NULL);
     destroy_();
     Glib::signal_idle().connect(
         sigc::bind_return(
-            sigc::bind(sigc::ptr_fun(&::operator delete), this),
+            sigc::bind(sigc::ptr_fun<void*, void>(&::operator delete), this),
             false
         )
     );
@@ -195,62 +189,68 @@ void FilletChamferPropertiesDialog::_handleButtonEvent(GdkEventButton *event)
     }
 }
 
-void FilletChamferPropertiesDialog::_set_knot_point(Geom::Point knotpoint)
+void FilletChamferPropertiesDialog::_setSatellite(Satellite satellite)
 {
     double position;
     std::string distance_or_radius = std::string(_("Radius"));
-    if(aprox){
+    if (_aprox) {
         distance_or_radius = std::string(_("Radius approximated"));
     }
-    if(use_distance){
+    if (_use_distance) {
         distance_or_radius = std::string(_("Knot distance"));
     }
-    if (knotpoint.x() > 0) {
-        double intpart;
-        position = modf(knotpoint[Geom::X], &intpart) * 100;
+    if (satellite.is_time) {
+        position = _amount * 100;
         _flexible = true;
-        _index = intpart;
         _fillet_chamfer_position_label.set_label(_("Position (%):"));
     } else {
         _flexible = false;
         std::string posConcat = Glib::ustring::compose (_("%1:"), distance_or_radius);
         _fillet_chamfer_position_label.set_label(_(posConcat.c_str()));
-        position = knotpoint[Geom::X] * -1;
+        position = _amount;
     }
     _fillet_chamfer_position_numeric.set_value(position);
-    if (knotpoint.y() == 1) {
+    _fillet_chamfer_chamfer_subdivisions.set_value(satellite.steps);
+    if (satellite.satellite_type == FILLET) {
         _fillet_chamfer_type_fillet.set_active(true);
-    } else if (knotpoint.y() == 2) {
+    } else if (satellite.satellite_type == INVERSE_FILLET) {
         _fillet_chamfer_type_inverse_fillet.set_active(true);
-    } else if (knotpoint.y() >= 3000 && knotpoint.y() < 4000) {
-        _fillet_chamfer_chamfer_subdivisions.set_value(knotpoint.y() - 3000);
+    } else if (satellite.satellite_type == CHAMFER) {
         _fillet_chamfer_type_chamfer.set_active(true);
-    } else if (knotpoint.y() >= 4000 && knotpoint.y() < 5000) {
-        _fillet_chamfer_chamfer_subdivisions.set_value(knotpoint.y() - 4000);
+    } else if (satellite.satellite_type == INVERSE_CHAMFER) {
         _fillet_chamfer_type_inverse_chamfer.set_active(true);
     }
+    _satellite = satellite;
 }
 
-void FilletChamferPropertiesDialog::_set_pt(
+void FilletChamferPropertiesDialog::_setPt(
     const Inkscape::LivePathEffect::
-    FilletChamferPointArrayParamKnotHolderEntity *pt)
+    FilletChamferKnotHolderEntity *pt)
 {
     _knotpoint = const_cast<
-                 Inkscape::LivePathEffect::FilletChamferPointArrayParamKnotHolderEntity *>(
+                 Inkscape::LivePathEffect::FilletChamferKnotHolderEntity *>(
                      pt);
 }
 
-void FilletChamferPropertiesDialog::_set_use_distance(bool use_knot_distance)
+
+void FilletChamferPropertiesDialog::_setAmount(double amount)
 {
-    use_distance = use_knot_distance;
+    _amount = amount;
 }
 
-void FilletChamferPropertiesDialog::_set_aprox(bool aprox_radius)
+
+
+void FilletChamferPropertiesDialog::_setUseDistance(bool use_knot_distance)
 {
-    aprox = aprox_radius;
+    _use_distance = use_knot_distance;
 }
 
-void FilletChamferPropertiesDialog::_set_desktop(SPDesktop *desktop)
+void FilletChamferPropertiesDialog::_setAprox(bool _aprox_radius)
+{
+    _aprox = _aprox_radius;
+}
+
+void FilletChamferPropertiesDialog::_setDesktop(SPDesktop *desktop)
 {
     if (desktop) {
         Inkscape::GC::anchor(desktop);
@@ -274,6 +274,4 @@ void FilletChamferPropertiesDialog::_set_desktop(SPDesktop *desktop)
   fill-column:99
   End:
 */
-// vim:
-// filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99
-// :
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99

@@ -3,14 +3,11 @@
 
 #include <cmath>
 
-#include "round.h"
-
-
 namespace Inkscape {
 
 /** Returns x rounded to the nearest \a nplaces decimal places.
 
-    Implemented in terms of Inkscape::round, i.e. we make no guarantees as to what happens if x is
+    Implemented in terms of std::round, i.e. we make no guarantees as to what happens if x is
     half way between two rounded numbers.  Add a note to the documentation if you care which
     candidate is chosen for such case (round towards -infinity, +infinity, 0, or "even").
 
@@ -25,7 +22,7 @@ inline double
 decimal_round(double const x, int const nplaces)
 {
     double const multiplier = std::pow(10.0, nplaces);
-    return Inkscape::round( x * multiplier ) / multiplier;
+    return round( x * multiplier ) / multiplier;
 }
 
 }

@@ -205,7 +205,7 @@ unsigned int PrintEmf::begin(Inkscape::Extension::Print *mod, SPDocument *doc)
     } else {
         p = ansi_uri;
     }
-    snprintf(buff, sizeof(buff) - 1, "Inkscape %s (%s)\1%s\1", Inkscape::version_string, __DATE__, p);
+    snprintf(buff, sizeof(buff) - 1, "Inkscape %s \1%s\1", Inkscape::version_string, p);
     uint16_t *Description = U_Utf8ToUtf16le(buff, 0, NULL);
     int cbDesc = 2 + wchar16len(Description);      // also count the final terminator
     (void) U_Utf16leEdit(Description, '\1', '\0'); // swap the temporary \1 characters for nulls
@@ -251,11 +251,7 @@ unsigned int PrintEmf::begin(Inkscape::Extension::Print *mod, SPDocument *doc)
             g_error("Fatal programming error in PrintEmf::begin at textcomment_set 1");
         }
 
-        char *oldlocale = g_strdup(setlocale(LC_NUMERIC, NULL));
-        setlocale(LC_NUMERIC, "C");
         snprintf(buff, sizeof(buff) - 1, "Drawing=%.1fx%.1fpx, %.1fx%.1fmm", _width, _height, Inkscape::Util::Quantity::convert(dwInchesX, "in", "mm"), Inkscape::Util::Quantity::convert(dwInchesY, "in", "mm"));
-        setlocale(LC_NUMERIC, oldlocale);
-        g_free(oldlocale);
         rec = textcomment_set(buff);
         if (!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)) {
             g_error("Fatal programming error in PrintEmf::begin at textcomment_set 1");
@@ -1042,8 +1038,12 @@ void  PrintEmf::do_clip_if_present(SPStyle const *style){
                 /* find the clipping path */
                 Geom::PathVector combined_pathvector;
                 Geom::Affine tfc;   // clipping transform, generally not the same as item transform
-                for(item = SP_ITEM(scp->firstChild()); item; item=SP_ITEM(item->getNext())){
-                    if (SP_IS_GROUP(item)) {      // not implemented 
+                for (auto& child: scp->children) {
+                    item = SP_ITEM(&child);
+                    if (!item) {
+                        break;
+                    }
+                    if (SP_IS_GROUP(item)) {      // not implemented
                         // return sp_group_render(item);
                         combined_pathvector = merge_PathVector_with_group(combined_pathvector, item, tfc);
                     } else if (SP_IS_SHAPE(item)) {                
@@ -1060,7 +1060,7 @@ void  PrintEmf::do_clip_if_present(SPStyle const *style){
                         g_error("Fatal programming error in PrintEmf::image at U_EMRSAVEDC_set");
                     }
                     (void) draw_pathv_to_EMF(combined_pathvector, tf);
-                    rec = U_EMRSELECTCLIPPATH_set(U_RGN_OR);
+                    rec = U_EMRSELECTCLIPPATH_set(U_RGN_COPY);
                     if (!rec || emf_append((PU_ENHMETARECORD)rec, et, U_REC_FREE)) {
                         g_error("Fatal programming error in PrintEmf::do_clip_if_present at U_EMRSELECTCLIPPATH_set");
                     }
@@ -1081,7 +1081,11 @@ Geom::PathVector PrintEmf::merge_PathVector_with_group(Geom::PathVector const &c
     new_combined_pathvector = combined_pathvector;
     SPGroup *group = SP_GROUP(item);
     Geom::Affine tfc = item->transform * transform;
-    for(SPItem *item = SP_ITEM(group->firstChild()); item; item=SP_ITEM(item->getNext())){
+    for (auto& child: group->children) {
+        item = SP_ITEM(&child);
+        if (!item) {
+            break;
+        }
         if (SP_IS_GROUP(item)) {
             new_combined_pathvector = merge_PathVector_with_group(new_combined_pathvector, item, tfc); // could be endlessly recursive on a badly formed SVG
         } else if (SP_IS_SHAPE(item)) {                

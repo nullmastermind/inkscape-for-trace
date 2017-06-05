@@ -14,11 +14,12 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+#include "config.h"
 #endif
 
 #include "ui/dialog/dialog-manager.h"
 
+#include "ui/dialog/prototype.h"
 #include "ui/dialog/align-and-distribute.h"
 #include "ui/dialog/document-metadata.h"
 #include "ui/dialog/document-properties.h"
@@ -45,11 +46,8 @@
 #include "ui/dialog/panel-dialog.h"
 #include "ui/dialog/layers.h"
 #include "ui/dialog/icon-preview.h"
-#include "ui/dialog/floating-behavior.h"
-#include "ui/dialog/dock-behavior.h"
 //#include "ui/dialog/print-colors-preview-dialog.h"
 #include "util/ege-appear-time-tracker.h"
-#include "preferences.h"
 #include "ui/dialog/object-attributes.h"
 #include "ui/dialog/object-properties.h"
 #include "ui/dialog/text-edit.h"
@@ -60,6 +58,8 @@
 #include "ui/dialog/svg-fonts-dialog.h"
 #include "ui/dialog/objects.h"
 #include "ui/dialog/tags.h"
+#include "ui/dialog/styledialog.h"
+#include "ui/dialog/cssdialog.h"
 
 namespace Inkscape {
 namespace UI {
@@ -106,6 +106,7 @@ DialogManager::DialogManager() {
     registerFactory("InkscapePreferences", &create<InkscapePreferences,  FloatingBehavior>);
 
     if (dialogs_type == FLOATING) {
+        registerFactory("Prototype",           &create<Prototype,            FloatingBehavior>);
         registerFactory("AlignAndDistribute",  &create<AlignAndDistribute,   FloatingBehavior>);
         registerFactory("DocumentMetadata",    &create<DocumentMetadata,     FloatingBehavior>);
         registerFactory("DocumentProperties",  &create<DocumentProperties,   FloatingBehavior>);
@@ -128,6 +129,8 @@ DialogManager::DialogManager() {
         registerFactory("Swatches",            &create<SwatchesPanel,        FloatingBehavior>);
         registerFactory("TileDialog",          &create<ArrangeDialog,        FloatingBehavior>);
         registerFactory("Symbols",             &create<SymbolsDialog,        FloatingBehavior>);
+        registerFactory("StyleDialog",         &create<StyleDialog,          FloatingBehavior>);
+        registerFactory("CssDialog",           &create<CssDialog,            FloatingBehavior>);
 
 #if HAVE_POTRACE
         registerFactory("Trace",               &create<TraceDialog,          FloatingBehavior>);
@@ -145,6 +148,7 @@ DialogManager::DialogManager() {
 
     } else {
 
+        registerFactory("Prototype",           &create<Prototype,            DockBehavior>);
         registerFactory("AlignAndDistribute",  &create<AlignAndDistribute,   DockBehavior>);
         registerFactory("DocumentMetadata",    &create<DocumentMetadata,     DockBehavior>);
         registerFactory("DocumentProperties",  &create<DocumentProperties,   DockBehavior>);
@@ -167,6 +171,8 @@ DialogManager::DialogManager() {
         registerFactory("Swatches",            &create<SwatchesPanel,        DockBehavior>);
         registerFactory("TileDialog",          &create<ArrangeDialog,        DockBehavior>);
         registerFactory("Symbols",             &create<SymbolsDialog,        DockBehavior>);
+        registerFactory("StyleDialog",         &create<StyleDialog,          DockBehavior>);
+        registerFactory("CssDialog",           &create<CssDialog,            DockBehavior>);
 
 #if HAVE_POTRACE
         registerFactory("Trace",               &create<TraceDialog,          DockBehavior>);

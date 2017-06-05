@@ -16,28 +16,26 @@
 # include "config.h"
 #endif
 
+#include <glibmm/fileutils.h>
+#include <glibmm/miscutils.h>
 #include <gtkmm/icontheme.h>
 #include <cstring>
-#include <glib.h>
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
 #include <gtkmm/image.h>
-#include <gdkmm/pixbuf.h>
-#include <glibmm/fileutils.h>
-#include <glibmm/miscutils.h>
 #include <2geom/transforms.h>
 
 #include "path-prefix.h"
 #include "preferences.h"
 #include "inkscape.h"
 #include "document.h"
-#include "sp-item.h"
 #include "display/cairo-utils.h"
 #include "display/drawing-context.h"
 #include "display/drawing-item.h"
 #include "display/drawing.h"
 #include "io/sys.h"
 #include "sp-root.h"
+#include "sp-namedview.h"
 #include "util/units.h"
 
 #include "icon.h"
@@ -63,10 +61,6 @@ struct IconImpl {
 
     static void sizeAllocate(GtkWidget *widget, GtkAllocation *allocation);
     static gboolean draw(GtkWidget *widget, cairo_t *cr);
-
-#if !GTK_CHECK_VERSION(3,0,0)
-    static gboolean expose(GtkWidget *widget, GdkEventExpose *event);
-#endif
 
     static void screenChanged( GtkWidget *widget, GdkScreen *previous_screen );
     static void styleSet( GtkWidget *widget, GtkStyle *previous_style );
@@ -149,14 +143,9 @@ sp_icon_class_init(SPIconClass *klass)
 
     object_class->dispose = IconImpl::dispose;
 
-#if GTK_CHECK_VERSION(3,0,0)
     widget_class->get_preferred_width = IconImpl::getPreferredWidth;
     widget_class->get_preferred_height = IconImpl::getPreferredHeight;
     widget_class->draw = IconImpl::draw;
-#else
-    widget_class->size_request = IconImpl::sizeRequest;
-    widget_class->expose_event = IconImpl::expose;
-#endif
     widget_class->size_allocate = IconImpl::sizeAllocate;
     widget_class->screen_changed = IconImpl::screenChanged;
     widget_class->style_set = IconImpl::styleSet;
@@ -244,37 +233,15 @@ gboolean IconImpl::draw(GtkWidget *widget, cairo_t* cr)
     bool unref_image = false;
 
     /* copied from the expose function of GtkImage */
-#if GTK_CHECK_VERSION(3,0,0)
     if (gtk_widget_get_state_flags (GTK_WIDGET(icon)) != GTK_STATE_FLAG_NORMAL && image) {
-#else
-    if (gtk_widget_get_state (GTK_WIDGET(icon)) != GTK_STATE_NORMAL && image) {
-        std::cerr << "IconImpl::draw: Ooops! It is called in GTK2" << std::endl;
-#endif
         std::cerr << "IconImpl::draw: No image, creating fallback" << std::endl;
 
-#if GTK_CHECK_VERSION(3,0,0)
-        // image = gtk_render_icon_pixbuf(gtk_widget_get_style_context(widget), 
-        //                                source, 
-        //                                (GtkIconSize)-1);
-
-        // gtk_render_icon_pixbuf deprecated, replaced by:
         GtkIconTheme *icon_theme = gtk_icon_theme_get_default();
         image = gtk_icon_theme_load_icon (icon_theme,
                                           "gtk-image",
                                           32,
                                           (GtkIconLookupFlags)0,
                                           NULL);
-#else
-        GtkIconSource *source = gtk_icon_source_new();
-        gtk_icon_source_set_pixbuf(source, icon->pb);
-        gtk_icon_source_set_size(source, GTK_ICON_SIZE_SMALL_TOOLBAR); // note: this is boilerplate and not used
-        gtk_icon_source_set_size_wildcarded(source, FALSE);
-        image = gtk_style_render_icon(gtk_widget_get_style(widget), source, 
-			gtk_widget_get_direction(widget),
-			(GtkStateType) gtk_widget_get_state(widget), 
-			(GtkIconSize)-1, widget, "gtk-image");
-        gtk_icon_source_free(source);
-#endif
 
         unref_image = true;
     }
@@ -283,12 +250,7 @@ gboolean IconImpl::draw(GtkWidget *widget, cairo_t* cr)
         GtkAllocation allocation;
 	GtkRequisition requisition;
 	gtk_widget_get_allocation(widget, &allocation);
-
-#if GTK_CHECK_VERSION(3,0,0)
         gtk_widget_get_preferred_size(widget, &requisition, NULL);
-#else
-	gtk_widget_get_requisition(widget, &requisition);
-#endif
 
         int x = floor(allocation.x + ((allocation.width - requisition.width) * 0.5));
         int y = floor(allocation.y + ((allocation.height - requisition.height) * 0.5));
@@ -307,21 +269,6 @@ gboolean IconImpl::draw(GtkWidget *widget, cairo_t* cr)
     
     return TRUE;
 }
-
-#if !GTK_CHECK_VERSION(3,0,0)
-gboolean IconImpl::expose(GtkWidget *widget, GdkEventExpose * /*event*/)
-{
-    gboolean result = TRUE;
-
-    if (gtk_widget_is_drawable(widget)) {
-	cairo_t * cr = gdk_cairo_create(gtk_widget_get_window(widget));
-        result = draw(widget, cr);
-	cairo_destroy(cr);
-    }
-
-    return result;
-}
-#endif
 
 // PUBLIC CALL:
 void sp_icon_fetch_pixbuf( SPIcon *icon )
@@ -1216,6 +1163,19 @@ sp_icon_doc_icon( SPDocument *doc, Inkscape::Drawing &drawing,
                 cairo_surface_t *s = cairo_image_surface_create_for_data(px,
                     CAIRO_FORMAT_ARGB32, psize, psize, stride);
                 Inkscape::DrawingContext dc(s, ua.min());
+
+                SPNamedView *nv = sp_document_namedview(doc, NULL);
+                float bg_r = SP_RGBA32_R_F(nv->pagecolor);
+                float bg_g = SP_RGBA32_G_F(nv->pagecolor);
+                float bg_b = SP_RGBA32_B_F(nv->pagecolor);
+                float bg_a = SP_RGBA32_A_F(nv->pagecolor);
+
+                cairo_t *cr = cairo_create(s);
+                cairo_set_source_rgba(cr, bg_r, bg_g, bg_b, bg_a);
+                cairo_rectangle(cr, 0, 0, psize, psize);
+                cairo_fill(cr);
+                cairo_save(cr);
+                cairo_destroy(cr);
 
                 drawing.render(dc, ua);
                 cairo_surface_destroy(s);

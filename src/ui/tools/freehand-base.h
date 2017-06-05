@@ -76,8 +76,10 @@ public:
     GSList *white_curves;
     GSList *white_anchors;
 
-    //ALternative curve to use on continuing exisiting curve in case of bspline or spirolive 
-    //because usigh anchor curves give memory and random bugs, - and obscure code- in some plataform reported by su_v in mac
+    // Alternative curve to use on continuing the exisiting curve in case of
+    // bspline or spirolive, because using anchor curves gives random memory
+    // bugs as reported by su_v when running this code on macOS (as well as
+    // making the code hard to understand).
     SPCurve *overwrite_curve;
 
     // Start anchor

@@ -35,7 +35,6 @@
 #endif
 
 #include <gtkmm/expander.h>
-#include <gtkmm/stock.h>
 
 #include <glibmm/convert.h>
 #include <glibmm/fileutils.h>
@@ -555,7 +554,7 @@ bool SVGPreview::set(Glib::ustring &fileName, int dialogType)
         Glib::ustring fileNameUtf8 = Glib::filename_to_utf8(fileName);
         gchar *fName = const_cast<gchar *>(
             fileNameUtf8.c_str()); // const-cast probably not necessary? (not necessary on Windows version of stat())
-        struct stat info;
+        GStatBuf info;
         if (g_stat(fName, &info)) // stat returns 0 upon success
         {
             g_warning("SVGPreview::set() : %s : %s", fName, strerror(errno));
@@ -735,8 +734,8 @@ FileOpenDialogImplGtk::FileOpenDialogImplGtk(Gtk::Window &parentWindow, const Gl
     //###### Add the file types menu
     createFilterMenu();
 
-    add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
-    set_default(*add_button(Gtk::Stock::OPEN, Gtk::RESPONSE_OK));
+    add_button(_("_Cancel"), Gtk::RESPONSE_CANCEL);
+    set_default(*add_button(_("_Open"), Gtk::RESPONSE_OK));
 
     //###### Allow easy access to our examples folder
     if (Inkscape::IO::file_test(INKSCAPE_EXAMPLESDIR, G_FILE_TEST_EXISTS) &&
@@ -754,16 +753,9 @@ FileOpenDialogImplGtk::~FileOpenDialogImplGtk()
 
 void FileOpenDialogImplGtk::addFilterMenu(Glib::ustring name, Glib::ustring pattern)
 {
-
-#if WITH_GTKMM_3_0
-    Glib::RefPtr<Gtk::FileFilter> allFilter = Gtk::FileFilter::create();
+    auto allFilter = Gtk::FileFilter::create();
     allFilter->set_name(_(name.c_str()));
     allFilter->add_pattern(pattern);
-#else
-    Gtk::FileFilter allFilter;
-    allFilter.set_name(_(name.c_str()));
-    allFilter.add_pattern(pattern);
-#endif
     extensionMap[Glib::ustring(_("All Files"))] = NULL;
     add_filter(allFilter);
 }
@@ -775,51 +767,27 @@ void FileOpenDialogImplGtk::createFilterMenu()
     }
 
     if (_dialogType == EXE_TYPES) {
-#if WITH_GTKMM_3_0
-        Glib::RefPtr<Gtk::FileFilter> allFilter = Gtk::FileFilter::create();
+        auto allFilter = Gtk::FileFilter::create();
         allFilter->set_name(_("All Files"));
         allFilter->add_pattern("*");
-#else
-        Gtk::FileFilter allFilter;
-        allFilter.set_name(_("All Files"));
-        allFilter.add_pattern("*");
-#endif
         extensionMap[Glib::ustring(_("All Files"))] = NULL;
         add_filter(allFilter);
     } else {
-#if WITH_GTKMM_3_0
-        Glib::RefPtr<Gtk::FileFilter> allInkscapeFilter = Gtk::FileFilter::create();
+        auto allInkscapeFilter = Gtk::FileFilter::create();
         allInkscapeFilter->set_name(_("All Inkscape Files"));
 
-        Glib::RefPtr<Gtk::FileFilter> allFilter = Gtk::FileFilter::create();
+        auto allFilter = Gtk::FileFilter::create();
         allFilter->set_name(_("All Files"));
         allFilter->add_pattern("*");
 
-        Glib::RefPtr<Gtk::FileFilter> allImageFilter = Gtk::FileFilter::create();
+        auto allImageFilter = Gtk::FileFilter::create();
         allImageFilter->set_name(_("All Images"));
 
-        Glib::RefPtr<Gtk::FileFilter> allVectorFilter = Gtk::FileFilter::create();
+        auto allVectorFilter = Gtk::FileFilter::create();
         allVectorFilter->set_name(_("All Vectors"));
 
-        Glib::RefPtr<Gtk::FileFilter> allBitmapFilter = Gtk::FileFilter::create();
+        auto allBitmapFilter = Gtk::FileFilter::create();
         allBitmapFilter->set_name(_("All Bitmaps"));
-#else
-        Gtk::FileFilter allInkscapeFilter;
-        allInkscapeFilter.set_name(_("All Inkscape Files"));
-
-        Gtk::FileFilter allFilter;
-        allFilter.set_name(_("All Files"));
-        allFilter.add_pattern("*");
-
-        Gtk::FileFilter allImageFilter;
-        allImageFilter.set_name(_("All Images"));
-
-        Gtk::FileFilter allVectorFilter;
-        allVectorFilter.set_name(_("All Vectors"));
-
-        Gtk::FileFilter allBitmapFilter;
-        allBitmapFilter.set_name(_("All Bitmaps"));
-#endif
         extensionMap[Glib::ustring(_("All Inkscape Files"))] = NULL;
         add_filter(allInkscapeFilter);
 
@@ -854,29 +822,16 @@ void FileOpenDialogImplGtk::createFilterMenu()
 
             Glib::ustring uname(_(imod->get_filetypename()));
 
-#if WITH_GTKMM_3_0
-            Glib::RefPtr<Gtk::FileFilter> filter = Gtk::FileFilter::create();
+            auto filter = Gtk::FileFilter::create();
             filter->set_name(uname);
             filter->add_pattern(upattern);
-#else
-            Gtk::FileFilter filter;
-            filter.set_name(uname);
-            filter.add_pattern(upattern);
-#endif
-
             add_filter(filter);
             extensionMap[uname] = imod;
 
 // g_message("ext %s:%s '%s'\n", ioext->name, ioext->mimetype, upattern.c_str());
-#if WITH_GTKMM_3_0
             allInkscapeFilter->add_pattern(upattern);
             if (strncmp("image", imod->get_mimetype(), 5) == 0)
                 allImageFilter->add_pattern(upattern);
-#else
-            allInkscapeFilter.add_pattern(upattern);
-            if (strncmp("image", imod->get_mimetype(), 5) == 0)
-                allImageFilter.add_pattern(upattern);
-#endif
 
             // uncomment this to find out all mime types supported by Inkscape import/open
             // g_print ("%s\n", imod->get_mimetype());
@@ -896,17 +851,9 @@ void FileOpenDialogImplGtk::createFilterMenu()
                 strncmp("image/x-tga", imod->get_mimetype(), 11) == 0 ||
                 strncmp("image/x-pcx", imod->get_mimetype(), 11) == 0)
             {
-#if WITH_GTKMM_3_0
                 allBitmapFilter->add_pattern(upattern);
-#else
-                allBitmapFilter.add_pattern(upattern);
-#endif
              } else {
-#if WITH_GTKMM_3_0
                 allVectorFilter->add_pattern(upattern);
-#else
-                allVectorFilter.add_pattern(upattern);
-#endif
             }
         }
     }
@@ -972,18 +919,13 @@ Glib::ustring FileOpenDialogImplGtk::getFilename(void)
  */
 std::vector<Glib::ustring> FileOpenDialogImplGtk::getFilenames()
 {
-#if WITH_GTKMM_3_0
-    std::vector<std::string> result_tmp = get_filenames();
+    auto result_tmp = get_filenames();
 
     // Copy filenames to a vector of type Glib::ustring
     std::vector<Glib::ustring> result;
 
-    for (std::vector<std::string>::iterator it = result_tmp.begin(); it != result_tmp.end(); ++it)
-        result.push_back(*it);
-
-#else
-    std::vector<Glib::ustring> result = get_filenames();
-#endif
+    for (auto it : result_tmp)
+        result.push_back(it);
 
 #ifdef WITH_GNOME_VFS
     if (result.empty() && gnome_vfs_initialized())
@@ -1107,8 +1049,8 @@ FileSaveDialogImplGtk::FileSaveDialogImplGtk(Gtk::Window &parentWindow, const Gl
     // if (extension == NULL)
     //    checkbox.set_sensitive(FALSE);
 
-    add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
-    set_default(*add_button(Gtk::Stock::SAVE, Gtk::RESPONSE_OK));
+    add_button(_("_Cancel"), Gtk::RESPONSE_CANCEL);
+    set_default(*add_button(_("_Save"), Gtk::RESPONSE_OK));
 
     show_all_children();
 }
@@ -1170,13 +1112,8 @@ void FileSaveDialogImplGtk::fileTypeChangedCallback()
     // g_message("selected: %s\n", type.name.c_str());
 
     extension = type.extension;
-#if WITH_GTKMM_3_0
-    Glib::RefPtr<Gtk::FileFilter> filter = Gtk::FileFilter::create();
+    auto filter = Gtk::FileFilter::create();
     filter->add_pattern(type.pattern);
-#else
-    Gtk::FileFilter filter;
-    filter.add_pattern(type.pattern);
-#endif
     set_filter(filter);
 
     updateNameAndExtension();
@@ -1659,8 +1596,8 @@ FileExportDialogImpl::FileExportDialogImpl(Gtk::Window &parentWindow, const Glib
     // if (extension == NULL)
     //    checkbox.set_sensitive(FALSE);
 
-    add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
-    set_default(*add_button(Gtk::Stock::SAVE, Gtk::RESPONSE_OK));
+    add_button(_("_Cancel"), Gtk::RESPONSE_CANCEL);
+    set_default(*add_button(_("_Save"), Gtk::RESPONSE_OK));
 
     show_all_children();
 }

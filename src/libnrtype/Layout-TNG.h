@@ -194,7 +194,7 @@ public:
     /** For expressing paragraph alignment. These values are rotated in the
     case of vertical text, but are not dependent on whether the paragraph is
     rtl or ltr, thus LEFT is always either left or top. */
-    enum Alignment {LEFT, CENTER, RIGHT, FULL};
+    enum Alignment {LEFT, CENTER, RIGHT, FULL, NONE};
 
     /** The CSS spec allows line-height:normal to be whatever the user agent
     thinks will look good. This is our value, as a multiple of font-size. */
@@ -629,7 +629,7 @@ public:
         
         void reset() {
             ascent      =  0.8;
-            descent     = -0.2;
+            descent     =  0.2;
             xheight     =  0.5;
             ascent_max  =  0.8;
             descent_max =  0.2;
@@ -664,7 +664,7 @@ public:
 
         // private:
         double ascent;      // Typographic ascent.
-        double descent;     // Typographic descent.
+        double descent;     // Typographic descent. (Normally positive).
         double xheight;     // Height of 'x' measured from alphabetic baseline.
         double ascent_max;  // Maximum ascent of all glyphs in font.
         double descent_max; // Maximum descent of all glyphs in font.
@@ -1144,7 +1144,7 @@ inline unsigned Layout::paragraphIndex(iterator const &it) const
     {return it._char_index == _characters.size() ? _paragraphs.size() - 1 : _characters[it._char_index].line(this).in_paragraph;}
 
 inline Layout::Alignment Layout::paragraphAlignment(iterator const &it) const
-    {return _paragraphs[paragraphIndex(it)].alignment;}
+    {return (_paragraphs.size() == 0) ? NONE : _paragraphs[paragraphIndex(it)].alignment;}
 
 inline bool Layout::iterator::nextGlyph()
 {
@@ -1188,6 +1188,10 @@ inline bool Layout::iterator::prevCharacter()
 
 }//namespace Text
 }//namespace Inkscape
+
+std::ostream &operator<<(std::ostream &out, const Inkscape::Text::Layout::FontMetrics &f);
+std::ostream &operator<<(std::ostream &out, const Inkscape::Text::Layout::FontMetrics *f);
+
 
 #endif
 

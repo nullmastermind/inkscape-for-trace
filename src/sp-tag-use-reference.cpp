@@ -6,14 +6,12 @@
  * Released under GNU GPL, read the file 'COPYING' for more information.
  */
 
-#include <cstring>
-#include <string>
-#include <string.h>
-
-#include "enums.h"
 #include "sp-tag-use-reference.h"
 
-#include "display/curve.h"
+#include <cstring>
+#include <string>
+
+#include "bad-uri-exception.h"
 #include "livarot/Path.h"
 #include "preferences.h"
 #include "sp-shape.h"

@@ -31,34 +31,40 @@ namespace Tools {
 
 class MeshTool : public ToolBase {
 public:
-	MeshTool();
-	virtual ~MeshTool();
+    MeshTool();
+    virtual ~MeshTool();
 
     Geom::Point origin;
-
-    bool cursor_addnode;
-
-    bool node_added;
 
     Geom::Point mousepoint_doc; // stores mousepoint when over_line in doc coords
 
     sigc::connection *selcon;
     sigc::connection *subselcon;
 
-	static const std::string prefsPath;
+    static const std::string prefsPath;
 
-	virtual void setup();
-	virtual bool root_handler(GdkEvent* event);
+    virtual void setup();
+    virtual void set(const Inkscape::Preferences::Entry& val);
+    virtual bool root_handler(GdkEvent* event);
 
-	virtual const std::string& getPrefsPath();
+    virtual const std::string& getPrefsPath();
 
 private:
-	void selection_changed(Inkscape::Selection* sel);
+    void selection_changed(Inkscape::Selection* sel);
+
+    bool cursor_addnode;
+    bool node_added;
+    bool show_handles;
+    bool edit_fill;
+    bool edit_stroke;
+
+
 };
 
 void sp_mesh_context_select_next(ToolBase *event_context);
 void sp_mesh_context_select_prev(ToolBase *event_context);
 void sp_mesh_context_corner_operation(MeshTool *event_context, MeshCornerOperation operation );
+void sp_mesh_context_fit_mesh_in_bbox(MeshTool *event_context);
 
 }
 }

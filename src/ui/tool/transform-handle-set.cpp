@@ -18,11 +18,7 @@
 #include "sp-namedview.h"
 
 #include "display/sodipodi-ctrlrect.h"
-#include "preferences.h"
 #include "pure-transform.h"
-#include "snap.h"
-#include "snap-candidate.h"
-#include "sp-namedview.h"
 #include "ui/tool/commit-events.h"
 #include "ui/tool/control-point-selection.h"
 #include "ui/tool/selectable-control-point.h"
@@ -187,6 +183,11 @@ void TransformHandle::ungrabbed(GdkEventButton *)
     _setState(_state);
     endTransform();
     _th.signal_commit.emit(getCommitEvent());
+
+    //updates the positions of the nodes
+    Inkscape::UI::Tools::NodeTool *nt = INK_NODE_TOOL(_th._desktop->event_context);
+    ControlPointSelection* selection = nt->_selected_nodes;
+    selection->setOriginalPoints();
 }
 
 

@@ -11,7 +11,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+#include <config.h>
 #endif
 
 #include <cstring>
@@ -39,7 +39,6 @@
 #include "preferences.h"
 
 #include <glibmm/miscutils.h>
-#include <map>
 
 using Inkscape::IO::Writer;
 using Inkscape::Util::List;
@@ -405,7 +404,12 @@ Document *sp_repr_read_mem (const gchar * buffer, gint length, const gchar *defa
 
     g_return_val_if_fail (buffer != NULL, NULL);
 
-    doc = xmlParseMemory (const_cast<gchar *>(buffer), length);
+    int parser_options = XML_PARSE_HUGE | XML_PARSE_RECOVER;
+    parser_options |= XML_PARSE_NONET; // TODO: should we allow network access?
+                                       // proper solution would be to check the preference "/options/externalresources/xml/allow_net_access"
+                                       // as done in XmlSource::readXml which gets called by the analogous sp_repr_read_file()
+                                       // but sp_repr_read_mem() seems to be called in locations where Inkscape::Preferences::get() fails badly
+    doc = xmlReadMemory (const_cast<gchar *>(buffer), length, NULL, NULL, parser_options);
 
     rdoc = sp_repr_do_read (doc, default_ns);
     if (doc) {
@@ -1007,28 +1011,6 @@ void sp_repr_write_stream_element( Node * repr, Writer & out,
     gchar const *xml_space_attr = repr->attribute("xml:space");
     if (xml_space_attr != NULL && !strcmp(xml_space_attr, "preserve")) {
         add_whitespace = false;
-    }
-
-    // THIS DOESN'T APPEAR TO DO ANYTHING. Can it be commented out or deleted?
-    {
-        GQuark const href_key = g_quark_from_static_string("xlink:href");
-        //GQuark const absref_key = g_quark_from_static_string("sodipodi:absref");
-
-        gchar const *xxHref = 0;
-        //gchar const *xxAbsref = 0;
-        for ( List<AttributeRecord const> ai(attributes); ai; ++ai ) {
-            if ( ai->key == href_key ) {
-                xxHref = ai->value;
-            //} else if ( ai->key == absref_key ) {
-                //xxAbsref = ai->value;
-            }
-        }
-
-        // Might add a special case for absref but no href.
-        if ( old_href_base && new_href_base && xxHref ) {
-            //g_message("href rebase test with [%s] and [%s]", xxHref, xxAbsref);
-            //std::string newOne = rebase_href_attrs( old_href_base, new_href_base, xxHref, xxAbsref );
-        }
     }
 
     for ( List<AttributeRecord const> iter = rebase_href_attrs(old_href_base, new_href_base,

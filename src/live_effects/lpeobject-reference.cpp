@@ -6,10 +6,11 @@
  * Released under GNU GPL, read the file 'COPYING' for more information.
  */
 
+#include "live_effects/lpeobject-reference.h"
+
 #include <string.h>
 
-#include "enums.h"
-#include "live_effects/lpeobject-reference.h"
+#include "bad-uri-exception.h"
 #include "live_effects/lpeobject.h"
 #include "uri.h"
 

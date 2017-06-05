@@ -18,13 +18,11 @@
 #define noSP_SS_VERBOSE
 
 #include "stroke-style.h"
-#include "gradient-chemistry.h"
-#include "sp-gradient.h"
 #include "sp-stop.h"
 #include "svg/svg-color.h"
-#include "util/units.h"
 #include "ui/widget/unit-menu.h"
 #include "desktop-widget.h"
+#include "widgets/style-utils.h"
 
 using Inkscape::DocumentUndo;
 using Inkscape::Util::unit_table;
@@ -155,17 +153,9 @@ StrokeStyle::StrokeStyle() :
     Gtk::HBox *f = new Gtk::HBox(false, 0);
     f->show();
     add(*f);
-
-#if WITH_GTKMM_3_0
     table = new Gtk::Grid();
     table->set_border_width(4);
     table->set_row_spacing(4);
-#else
-    table = new Gtk::Table(3, 6, false);
-    table->set_border_width(4);
-    table->set_row_spacings(4);
-#endif
-    
     table->show();
     f->add(*table);
 
@@ -181,13 +171,7 @@ StrokeStyle::StrokeStyle() :
 // stroke_width_set_unit will be removed (because ScalarUnit takes care of conversions itself), and
 // with it, the two remaining calls of stroke_average_width, allowing us to get rid of that
 // function in desktop-style.
-
-#if WITH_GTKMM_3_0
     widthAdj = new Glib::RefPtr<Gtk::Adjustment>(Gtk::Adjustment::create(1.0, 0.0, 1000.0, 0.1, 10.0, 0.0));
-#else
-    widthAdj = new Gtk::Adjustment(1.0, 0.0, 1000.0, 0.1, 10.0, 0.0);
-#endif
-
     widthSpin = new Inkscape::UI::Widget::SpinButton(*widthAdj, 0.1, 3);
     widthSpin->set_tooltip_text(_("Stroke width"));
     widthSpin->show();
@@ -213,12 +197,7 @@ StrokeStyle::StrokeStyle() :
     us->show();
 
     hb->pack_start(*us, FALSE, FALSE, 0);
-
-#if WITH_GTKMM_3_0
     (*widthAdj)->signal_value_changed().connect(sigc::mem_fun(*this, &StrokeStyle::widthChangedCB));
-#else
-    widthAdj->signal_value_changed().connect(sigc::mem_fun(*this, &StrokeStyle::widthChangedCB));
-#endif
     i++;
 
     /* Dash */
@@ -230,16 +209,10 @@ StrokeStyle::StrokeStyle() :
     dashSelector = Gtk::manage(new SPDashSelector);
 
     dashSelector->show();
-
-#if WITH_GTKMM_3_0
     dashSelector->set_hexpand();
     dashSelector->set_halign(Gtk::ALIGN_FILL);
     dashSelector->set_valign(Gtk::ALIGN_CENTER);
     table->attach(*dashSelector, 1, i, 3, 1);
-#else
-    table->attach(*dashSelector, 1, 4, i, i+1, (Gtk::EXPAND | Gtk::FILL), static_cast<Gtk::AttachOptions>(0), 0, 0);
-#endif
-
     dashSelector->changed_signal.connect(sigc::mem_fun(*this, &StrokeStyle::lineDashChangedCB));
 
     i++;
@@ -323,28 +296,14 @@ StrokeStyle::StrokeStyle() :
     //  miter limit is to cut off such spikes (i.e. convert them into bevels)
     //  when they become too long.
     //spw_label(t, _("Miter _limit:"), 0, i);
-
-#if WITH_GTKMM_3_0
     miterLimitAdj = new Glib::RefPtr<Gtk::Adjustment>(Gtk::Adjustment::create(4.0, 0.0, 100.0, 0.1, 10.0, 0.0));
     miterLimitSpin = new Inkscape::UI::Widget::SpinButton(*miterLimitAdj, 0.1, 2);
-#else
-    miterLimitAdj = new Gtk::Adjustment(4.0, 0.0, 100.0, 0.1, 10.0, 0.0);
-    miterLimitSpin = new Inkscape::UI::Widget::SpinButton(*miterLimitAdj, 0.1, 2);
-#endif
-
     miterLimitSpin->set_tooltip_text(_("Maximum length of the miter (in units of stroke width)"));
     miterLimitSpin->show();
     sp_dialog_defocus_on_enter_cpp(miterLimitSpin);
 
     hb->pack_start(*miterLimitSpin, false, false, 0);
-
-#if WITH_GTKMM_3_0
     (*miterLimitAdj)->signal_value_changed().connect(sigc::mem_fun(*this, &StrokeStyle::miterLimitChangedCB));
-
-#else
-    miterLimitAdj->signal_value_changed().connect(sigc::mem_fun(*this, &StrokeStyle::miterLimitChangedCB));
-#endif
-
     i++;
 
     /* Cap type */
@@ -479,6 +438,12 @@ StrokeStyle::makeRadioButton(Gtk::RadioButtonGroup &grp,
     return tb;
 }
 
+bool StrokeStyle::shouldMarkersBeUpdated()
+{
+    return startMarkerCombo->update() || midMarkerCombo->update() ||
+                          endMarkerCombo->update();
+}
+
 /**
  * Handles when user selects one of the markers from the marker combobox.
  * Gets the marker uri string and applies it to all selected
@@ -486,11 +451,7 @@ StrokeStyle::makeRadioButton(Gtk::RadioButtonGroup &grp,
  */
 void StrokeStyle::markerSelectCB(MarkerComboBox *marker_combo, StrokeStyle *spw, SPMarkerLoc const /*which*/)
 {
-    bool markers_update = spw->startMarkerCombo->update() ||
-                          spw->midMarkerCombo->update() ||
-                          spw->endMarkerCombo->update();
-
-    if (spw->update || markers_update) {
+    if (spw->update || spw->shouldMarkersBeUpdated()) {
         return;
     }
 
@@ -515,8 +476,8 @@ void StrokeStyle::markerSelectCB(MarkerComboBox *marker_combo, StrokeStyle *spw,
     //spw->updateMarkerHist(which);
 
     Inkscape::Selection *selection = spw->desktop->getSelection();
-    std::vector<SPItem*> itemlist=selection->itemList();
-    for(std::vector<SPItem*>::const_iterator i=itemlist.begin();i!=itemlist.end();++i){
+    auto itemlist= selection->items();
+    for(auto i=itemlist.begin();i!=itemlist.end();++i){
         SPItem *item = *i;
         if (!SP_IS_SHAPE(item) || SP_IS_RECT(item)) { // can't set marker to rect, until it's converted to using <path>
             continue;
@@ -927,17 +888,9 @@ StrokeStyle::updateLine()
 
         if (unit->type == Inkscape::Util::UNIT_TYPE_LINEAR) {
             double avgwidth = Inkscape::Util::Quantity::convert(query.stroke_width.computed, "px", unit);
-#if WITH_GTKMM_3_0
             (*widthAdj)->set_value(avgwidth);
-#else
-            widthAdj->set_value(avgwidth);
-#endif
         } else {
-#if WITH_GTKMM_3_0
             (*widthAdj)->set_value(100);
-#else
-            widthAdj->set_value(100);
-#endif
         }
 
         // if none of the selected objects has a stroke, than quite some controls should be disabled
@@ -958,28 +911,22 @@ StrokeStyle::updateLine()
     }
 
     if (result_ml != QUERY_STYLE_NOTHING)
-#if WITH_GTKMM_3_0
         (*miterLimitAdj)->set_value(query.stroke_miterlimit.value); // TODO: reflect averagedness?
-#else
-        miterLimitAdj->set_value(query.stroke_miterlimit.value); // TODO: reflect averagedness?
-#endif
 
-    if (result_join != QUERY_STYLE_MULTIPLE_DIFFERENT &&
-        result_join != QUERY_STYLE_NOTHING ) {
+    using Inkscape::is_query_style_updateable;
+    if (! is_query_style_updateable(result_join)) {
         setJoinType(query.stroke_linejoin.value);
     } else {
         setJoinButtons(NULL);
     }
 
-    if (result_cap != QUERY_STYLE_MULTIPLE_DIFFERENT &&
-        result_cap != QUERY_STYLE_NOTHING ) {
+    if (! is_query_style_updateable(result_cap)) {
         setCapType (query.stroke_linecap.value);
     } else {
         setCapButtons(NULL);
     }
 
-    if (result_order != QUERY_STYLE_MULTIPLE_DIFFERENT &&
-        result_order != QUERY_STYLE_NOTHING ) {
+    if (! is_query_style_updateable(result_order)) {
         setPaintOrder (query.paint_order.value);
     } else {
         setPaintOrder (NULL);
@@ -988,12 +935,12 @@ StrokeStyle::updateLine()
     if (!sel || sel->isEmpty())
         return;
 
-    std::vector<SPItem*> const objects = sel->itemList();
+    std::vector<SPItem*> const objects(sel->items().begin(), sel->items().end());
     SPObject * const object = objects[0];
     SPStyle * const style = object->style;
 
     /* Markers */
-    updateAllMarkers(objects); // FIXME: make this desktop query too
+    updateAllMarkers(objects, true); // FIXME: make this desktop query too
 
     /* Dash */
     setDashSelectorFromStyle(dashSelector, style); // FIXME: make this desktop query too
@@ -1030,6 +977,16 @@ StrokeStyle::setScaledDash(SPCSSAttr *css,
     }
 }
 
+static inline double calcScaleLineWidth(const double width_typed, SPItem *const item, Inkscape::Util::Unit const *const unit)
+{
+    if (unit->type == Inkscape::Util::UNIT_TYPE_LINEAR) {
+        return Inkscape::Util::Quantity::convert(width_typed, unit, "px");
+    } else { // percentage
+        const gdouble old_w = item->style->stroke_width.computed;
+        return old_w * width_typed / 100;
+    }
+}
+
 /**
  * Sets line properties like width, dashes, markers, etc. on all currently selected items.
  */
@@ -1044,19 +1001,14 @@ StrokeStyle::scaleLine()
     
     SPDocument *document = desktop->getDocument();
     Inkscape::Selection *selection = desktop->getSelection();
-    std::vector<SPItem*> items=selection->itemList();
+    auto items= selection->items();
 
     /* TODO: Create some standardized method */
     SPCSSAttr *css = sp_repr_css_attr_new();
 
     if (!items.empty()) {
-#if WITH_GTKMM_3_0
         double width_typed = (*widthAdj)->get_value();
         double const miterlimit = (*miterLimitAdj)->get_value();
-#else
-        double width_typed = widthAdj->get_value();
-        double const miterlimit = miterLimitAdj->get_value();
-#endif
 
         Inkscape::Util::Unit const *const unit = unitSelector->getUnit();
 
@@ -1064,15 +1016,9 @@ StrokeStyle::scaleLine()
         int ndash;
         dashSelector->get_dash(&ndash, &dash, &offset);
 
-        for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();++i){
+        for(auto i=items.begin();i!=items.end();++i){
             /* Set stroke width */
-            double width;
-            if (unit->type == Inkscape::Util::UNIT_TYPE_LINEAR) {
-                width = Inkscape::Util::Quantity::convert(width_typed, unit, "px");
-            } else { // percentage
-                gdouble old_w = (*i)->style->stroke_width.computed;
-                width = old_w * width_typed / 100;
-            }
+            const double width = calcScaleLineWidth(width_typed, (*i), unit);
 
             {
                 Inkscape::CSSOStringStream os_width;
@@ -1096,11 +1042,7 @@ StrokeStyle::scaleLine()
 
         if (unit->type != Inkscape::Util::UNIT_TYPE_LINEAR) {
             // reset to 100 percent
-#if WITH_GTKMM_3_0
             (*widthAdj)->set_value(100.0);
-#else
-            widthAdj->set_value(100.0);
-#endif
         }
 
     }
@@ -1250,7 +1192,7 @@ StrokeStyle::setPaintOrderButtons(Gtk::ToggleButton *active)
  * that marker.
  */
 void
-StrokeStyle::updateAllMarkers(std::vector<SPItem*> const &objects)
+StrokeStyle::updateAllMarkers(std::vector<SPItem*> const &objects, bool skip_undo)
 {
     struct { MarkerComboBox *key; int loc; } const keyloc[] = {
             { startMarkerCombo, SP_MARKER_LOC_START },
@@ -1304,9 +1246,11 @@ StrokeStyle::updateAllMarkers(std::vector<SPItem*> const &objects)
             if (update) {
                 setMarkerColor(marker, combo->get_loc(), SP_ITEM(object));
 
-                SPDocument *document = desktop->getDocument();
-                DocumentUndo::done(document, SP_VERB_DIALOG_FILL_STROKE,
+                if (!skip_undo) {
+                    SPDocument *document = desktop->getDocument();
+                    DocumentUndo::maybeDone(document, "UaM", SP_VERB_DIALOG_FILL_STROKE,
                                    _("Set marker color"));
+                }
             }
 
         } else {

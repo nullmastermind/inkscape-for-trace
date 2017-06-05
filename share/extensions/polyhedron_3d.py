@@ -57,6 +57,9 @@ import inkex
 import simplestyle
 from simpletransform import computePointInNode
 
+# Initialize gettext for messages outside an inkex derived class
+inkex.localize() 
+
 # third party
 try:
     from numpy import *

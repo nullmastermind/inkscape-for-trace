@@ -17,7 +17,7 @@ file(GLOB _FILES
       "*.inx"
     )
 
-install(FILES ${_FILES} DESTINATION ${SHARE_INSTALL}/inkscape/extensions)
+install(FILES ${_FILES} DESTINATION ${INKSCAPE_SHARE_INSTALL}/extensions)
 
 # Install the executable scripts
 file(GLOB _SCRIPTS
@@ -26,17 +26,27 @@ file(GLOB _SCRIPTS
       "*.sh"
       "*.rb"
     )
-
-install(PROGRAMS ${_SCRIPTS} DESTINATION ${SHARE_INSTALL}/inkscape/extensions)
+# These files don't need the +x bit
+set(_SCRIPTS_NOEXEC
+    "hersheydata.py"
+    "hpgl_decoder.py"
+    "hpgl_encoder.py"
+    "simplepath.py"
+    "simplestyle.py"
+    "simpletransform.py"
+)
+list(REMOVE_ITEM _SCRIPTS ${_SCRIPTS_NOEXEC})
+install(PROGRAMS ${_SCRIPTS} DESTINATION ${INKSCAPE_SHARE_INSTALL}/extensions)
+install(FILES ${_SCRIPTS_NOEXEC} DESTINATION ${INKSCAPE_SHARE_INSTALL}/extensions)
 
 file(GLOB _FILES "alphabet_soup/*.svg")
-install(FILES ${_FILES} DESTINATION ${SHARE_INSTALL}/inkscape/extensions/alphabet_soup)
+install(FILES ${_FILES} DESTINATION ${INKSCAPE_SHARE_INSTALL}/extensions/alphabet_soup)
 
 file(GLOB _FILES "Barcode/*.py")
-install(FILES ${_FILES} DESTINATION ${SHARE_INSTALL}/inkscape/extensions/Barcode)
+install(FILES ${_FILES} DESTINATION ${INKSCAPE_SHARE_INSTALL}/extensions/Barcode)
 
 file(GLOB _FILES "Poly3DObjects/*.obj")
-install(FILES ${_FILES} DESTINATION ${SHARE_INSTALL}/inkscape/extensions/Poly3DObjects)
+install(FILES ${_FILES} DESTINATION ${INKSCAPE_SHARE_INSTALL}/extensions/Poly3DObjects)
 
 # file(GLOB _FILES
 #       "test/*.svg"
@@ -45,10 +55,10 @@ install(FILES ${_FILES} DESTINATION ${SHARE_INSTALL}/inkscape/extensions/Poly3DO
 #       "test/*.js"
 #       "test/run-all-extension-tests"
 #     )
-# install(FILES ${_FILES} DESTINATION ${SHARE_INSTALL}/inkscape/extensions/test)
+# install(FILES ${_FILES} DESTINATION ${INKSCAPE_SHARE_INSTALL}/extensions/test)
 
 file(GLOB _FILES "ink2canvas/*.py")
-install(FILES ${_FILES} DESTINATION ${SHARE_INSTALL}/inkscape/extensions/ink2canvas)
+install(FILES ${_FILES} DESTINATION ${INKSCAPE_SHARE_INSTALL}/extensions/ink2canvas)
 
 file(GLOB _FILES "xaml2svg/*.xsl")
-install(FILES ${_FILES} DESTINATION ${SHARE_INSTALL}/inkscape/extensions/xaml2svg)
+install(FILES ${_FILES} DESTINATION ${INKSCAPE_SHARE_INSTALL}/extensions/xaml2svg)

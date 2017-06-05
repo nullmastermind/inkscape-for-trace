@@ -12,15 +12,8 @@
 #include <algorithm>
 #include "helper/geom.h"
 #include "helper/geom-curves.h"
-#include <typeinfo>
-#include <2geom/pathvector.h>
-#include <2geom/path.h>
 #include <2geom/curves.h>
-#include <2geom/transforms.h>
-#include <2geom/rect.h>
-#include <2geom/coord.h>
 #include <2geom/sbasis-to-bezier.h>
-#include <math.h> // for M_PI
 
 using Geom::X;
 using Geom::Y;
@@ -848,6 +841,13 @@ recursive_bezier4(const double x1, const double y1,
         //----------------------
         recursive_bezier4(x1, y1, x12, y12, x123, y123, x1234, y1234, m_points, level + 1); 
         recursive_bezier4(x1234, y1234, x234, y234, x34, y34, x4, y4, m_points, level + 1); 
+}
+
+void 
+swap(Geom::Point &A, Geom::Point &B){
+    Geom::Point tmp = A;
+    A = B;
+    B = tmp;
 }
 
 /*

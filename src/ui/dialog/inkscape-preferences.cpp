@@ -19,30 +19,22 @@
 
 #include "inkscape-preferences.h"
 #include <glibmm/i18n.h>
-#include <glibmm/markup.h>
 #include <glibmm/miscutils.h>
+#include <glibmm/markup.h>
 #include <gtkmm/main.h>
-#include <gtkmm/frame.h>
-#include <gtkmm/scrolledwindow.h>
 #include <gtkmm/alignment.h>
 
 #include "preferences.h"
 #include "verbs.h"
 #include "selcue.h"
-#include "util/units.h"
-#include <iostream>
-#include "enums.h"
 
 #include "extension/internal/gdkpixbuf-input.h"
 #include "message-stack.h"
 #include "style.h"
 #include "selection.h"
 #include "selection-chemistry.h"
-#include "xml/repr.h"
 #include "ui/widget/style-swatch.h"
-#include "ui/widget/spinbutton.h"
 #include "display/nr-filter-gaussian.h"
-#include "display/nr-filter-types.h"
 #include "cms-system.h"
 #include "color-profile.h"
 #include "display/canvas-grid.h"
@@ -86,12 +78,8 @@ InkscapePreferences::InkscapePreferences()
     _getContents()->add(*sb);
     show_all_children();
     Gtk::Requisition sreq;
-#if WITH_GTKMM_3_0
     Gtk::Requisition sreq_natural;
     sb->get_preferred_size(sreq_natural, sreq);
-#else
-    sreq = sb->size_request();
-#endif
     _sb_width = sreq.width;
     _getContents()->remove(*sb);
     delete sb;
@@ -546,7 +534,7 @@ void InkscapePreferences::initPageUI()
         _("Hebrew (he)"), _("Hindi (hi)"), _("Hungarian (hu)"),
         _("Icelandic (is)"), _("Indonesian (id)"), _("Irish (ga)"), _("Italian (it)"),
         _("Japanese (ja)"),
-        _("Kannada (kn)"), _("Kashmiri in Peso-Arabic script (ks@aran)"), _("Kashmiri in Devanagari script (ks@deva)"), _("Khmer (km)"), _("Kinyarwanda (rw)"), _("Konkani (kok)"), _("Konkani in Latin script (kok@latin)"), _("Korean (ko)"),
+        _("Kannada (kn)"), _("Kashmiri in Perso-Arabic script (ks@aran)"), _("Kashmiri in Devanagari script (ks@deva)"), _("Khmer (km)"), _("Kinyarwanda (rw)"), _("Konkani (kok)"), _("Konkani in Latin script (kok@latin)"), _("Korean (ko)"),
         _("Latvian (lv)"), _("Lithuanian (lt)"),
         _("Macedonian (mk)"), _("Maithili (mai)"), _("Malayalam (ml)"), _("Manipuri (mni)"), _("Manipuri in Bengali script (mni@beng)"), _("Marathi (mr)"), _("Mongolian (mn)"),
         _("Nepali (ne)"), _("Norwegian Bokmål (nb)"), _("Norwegian Nynorsk (nn)"),
@@ -643,7 +631,7 @@ void InkscapePreferences::initPageUI()
     _page_ui.add_line( false, _("Maximum documents in Open _Recent:"), _misc_recent, "",
                               _("Set the maximum length of the Open Recent list in the File menu, or clear the list"), false, reset_recent);
 
-    _ui_zoom_correction.init(300, 30, 1.00, 200.0, 1.0, 10.0, 1.0);
+    _ui_zoom_correction.init(300, 30, 1.00, 500.0, 1.0, 10.0, 1.0);
     _page_ui.add_line( false, _("_Zoom correction factor (in %):"), _ui_zoom_correction, "",
                               _("Adjust the slider until the length of the ruler on your screen matches its real length. This information is used when zooming to 1:1, 1:2, etc., to display objects in their true sizes"), true);
 
@@ -863,17 +851,10 @@ static void proofComboChanged( Gtk::ComboBoxText* combo )
 }
 
 static void gamutColorChanged( Gtk::ColorButton* btn ) {
-#if WITH_GTKMM_3_0
-    Gdk::RGBA rgba = btn->get_rgba();
-    gushort r = rgba.get_red_u();
-    gushort g = rgba.get_green_u();
-    gushort b = rgba.get_blue_u();
-#else
-    Gdk::Color color = btn->get_color();
-    gushort r = color.get_red();
-    gushort g = color.get_green();
-    gushort b = color.get_blue();
-#endif
+    auto rgba = btn->get_rgba();
+    auto r = rgba.get_red_u();
+    auto g = rgba.get_green_u();
+    auto b = rgba.get_blue_u();
 
     gchar* tmp = g_strdup_printf("#%02x%02x%02x", (r >> 8), (g >> 8), (b >> 8) );
 
@@ -1043,13 +1024,8 @@ void InkscapePreferences::initPageIO()
 
     Glib::ustring colorStr = prefs->getString("/options/softproof/gamutcolor");
 
-#if WITH_GTKMM_3_0
     Gdk::RGBA tmpColor( colorStr.empty() ? "#00ff00" : colorStr);
     _cms_gamutcolor.set_rgba( tmpColor );
-#else
-    Gdk::Color tmpColor( colorStr.empty() ? "#00ff00" : colorStr);
-    _cms_gamutcolor.set_color( tmpColor );
-#endif
 
     _page_cms.add_line( true, _("Out of gamut warning color:"), _cms_gamutcolor, "",
                         _("Selects the color used for out of gamut warning"), false);
@@ -1331,9 +1307,12 @@ void InkscapePreferences::initPageBehavior()
     _steps_rot_relative.init ( _("Relative snapping of guideline angles"), "/options/relativeguiderotationsnap/value", false);
     _page_steps.add_line( false, "", _steps_rot_relative, "",
                             _("When on, the snap angles when rotating a guideline will be relative to the original angle"));
-    _steps_zoom.init ( "/options/zoomincrement/value", 101.0, 500.0, 1.0, 1.0, 1.414213562, true, true);
+    _steps_zoom.init ( "/options/zoomincrement/value", 101.0, 500.0, 1.0, 1.0, M_SQRT2, true, true);
     _page_steps.add_line( false, _("_Zoom in/out by:"), _steps_zoom, _("%"),
                           _("Zoom tool click, +/- keys, and middle click zoom in and out by this multiplier"), false);
+    _steps_rotate.init ( "/options/rotateincrement/value", 1, 90, 1.0, 5.0, 15, false, false);
+    _page_steps.add_line( false, _("_Rotate canvas by:"), _steps_rotate, _("degrees"),
+                          _("Rotate canvas clockwise and counter-clockwise by this amount."), false);
     this->AddPage(_page_steps, _("Steps"), iter_behavior, PREFS_PAGE_BEHAVIOR_STEPS);
 
     // Clones options
@@ -1431,6 +1410,10 @@ void InkscapePreferences::initPageRendering()
     // rendering cache
     _rendering_cache_size.init("/options/renderingcache/size", 0.0, 4096.0, 1.0, 32.0, 64.0, true, false);
     _page_rendering.add_line( false, _("Rendering _cache size:"), _rendering_cache_size, C_("mebibyte (2^20 bytes) abbreviation","MiB"), _("Set the amount of memory per document which can be used to store rendered parts of the drawing for later reuse; set to zero to disable caching"), false);
+
+    // rendering tile multiplier
+    _rendering_tile_multiplier.init("/options/rendering/tile-multiplier", 1.0, 64.0, 1.0, 4.0, 1.0, true, false);
+    _page_rendering.add_line( false, _("Rendering tile multiplier:"), _rendering_tile_multiplier, _("requires restart"), _("Set the relative size of tiles used to render the canvas. The larger the value, the bigger the tile size."), false);
 
     /* blur quality */
     _blur_quality_best.init ( _("Best quality (slowest)"), "/options/blurquality/value",
@@ -1594,31 +1577,19 @@ void InkscapePreferences::initKeyboardShortcuts(Gtk::TreeModel::iterator iter_ui
 
     int row = 3;
 
-#if WITH_GTKMM_3_0
     scroller->set_hexpand();
     scroller->set_vexpand();
     _page_keyshortcuts.attach(*scroller, 0, row, 2, 1);
-#else
-    _page_keyshortcuts.attach(*scroller, 0, 2, row, row+1, Gtk::EXPAND | Gtk::FILL, Gtk::EXPAND | Gtk::FILL);
-#endif
 
     row++;
 
-#if WITH_GTKMM_3_0
-    Gtk::ButtonBox *box_buttons = Gtk::manage(new Gtk::ButtonBox);
-#else
-    Gtk::HButtonBox *box_buttons = Gtk::manage (new Gtk::HButtonBox);
-#endif
+    auto box_buttons = Gtk::manage(new Gtk::ButtonBox);
 
     box_buttons->set_layout(Gtk::BUTTONBOX_END);
     box_buttons->set_spacing(4);
 
-#if WITH_GTKMM_3_0
     box_buttons->set_hexpand();
     _page_keyshortcuts.attach(*box_buttons, 0, row, 3, 1);
-#else
-    _page_keyshortcuts.attach(*box_buttons, 0, 3, row, row+1, Gtk::EXPAND | Gtk::FILL, Gtk::SHRINK);
-#endif
 
     UI::Widget::Button *kb_reset = Gtk::manage(new UI::Widget::Button(_("Reset"), _("Remove all your customized keyboard shortcuts, and revert to the shortcuts in the shortcut file listed above")));
     box_buttons->pack_start(*kb_reset, true, true, 6);
@@ -2051,12 +2022,8 @@ bool InkscapePreferences::SetMaxDialogSize(const Gtk::TreeModel::iterator& iter)
     _page_frame.add(*page);
     this->show_all_children();
     Gtk::Requisition sreq;
-#if WITH_GTKMM_3_0
     Gtk::Requisition sreq_natural;
     this->get_preferred_size(sreq_natural, sreq);
-#else
-    sreq = this->size_request();
-#endif
     _max_dialog_width=std::max(_max_dialog_width, sreq.width);
     _max_dialog_height=std::max(_max_dialog_height, sreq.height);
     _page_frame.remove();

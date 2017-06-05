@@ -19,12 +19,17 @@ private:
     /** \brief  Internal value.  This should point to a string that has
                 been allocated in memory.  And should be free'd. */
     gchar * _value;
-    /** \brief Internal value. This indicates the maximum leght of the string. Zero meaning unlimited. 
+    /** \brief Internal value. This indicates the maximum lenth of the string. Zero meaning unlimited.
       */
-    int _indent;
     gint _max_length;
 public:
-    ParamString(const gchar * name, const gchar * guitext, const gchar * desc, const Parameter::_scope_t scope, bool gui_hidden, const gchar * gui_tip, Inkscape::Extension::Extension * ext, Inkscape::XML::Node * xml);
+    ParamString(const gchar * name,
+                const gchar * text,
+                const gchar * description,
+                bool hidden,
+                int indent,
+                Inkscape::Extension::Extension * ext,
+                Inkscape::XML::Node * xml);
     virtual ~ParamString(void);
 
     /** \brief  Returns \c _value, with a \i const to protect it. */

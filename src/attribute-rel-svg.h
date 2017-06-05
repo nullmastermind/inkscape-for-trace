@@ -22,6 +22,7 @@ typedef std::map<Glib::ustring, std::set<Glib::ustring> > hashList;
  */
 class SPAttributeRelSVG {
 public:
+    static bool isSVGElement(Glib::ustring element);
     static bool findIfValid(Glib::ustring attribute, Glib::ustring element);
 
 private:

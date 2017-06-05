@@ -45,7 +45,6 @@
 
 #ifdef GDK_WINDOWING_X11
 #include <X11/Xlib.h>
-#include <X11/Xatom.h>
 
 #include <gdk/gdkx.h>
 #endif /* GDK_WINDOWING_X11 */
@@ -377,7 +376,13 @@ void track_screen( GdkScreen* screen, EgeColorProfTracker* tracker )
         g_signal_connect( G_OBJECT(screen), "size-changed", G_CALLBACK( screen_size_changed_cb ), tracker );
 
 #ifdef GDK_WINDOWING_X11
-        add_x11_tracking_for_screen(screen, newTrack);
+        GdkDisplay* display = gdk_display_get_default();
+        if (GDK_IS_X11_DISPLAY (display) ) {
+            // printf( "track_screen: Display is using X11\n" );
+            add_x11_tracking_for_screen(screen, newTrack);
+        } else {
+            // printf( "track_screen: Display is not using X11\n" );
+        }
 #endif // GDK_WINDOWING_X11
     }
 }
@@ -466,7 +471,8 @@ void screen_size_changed_cb(GdkScreen* screen, gpointer user_data)
             for ( i = track->profiles->len; i < (guint)numMonitors; i++ ) {
                 g_ptr_array_add( track->profiles, 0 );
 #ifdef GDK_WINDOWING_X11
-                {
+                GdkDisplay* display = gdk_display_get_default();
+                if (GDK_IS_X11_DISPLAY (display) ) {
                     gchar* name = g_strdup_printf( "_ICC_PROFILE_%d", i );
                     handle_property_change( screen, name );
                     g_free(name);

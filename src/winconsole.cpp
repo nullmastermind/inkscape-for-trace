@@ -100,6 +100,11 @@ int main()
     // it guarantees perfect behavior w.r.t. quoting
     WCHAR *cmd = GetCommandLineW();
 
+    // temporarily switch console encoding to UTF8 while the spwaned process runs
+    // as everything else is a mess and it seems to work just fine
+    const unsigned int initial_cp = GetConsoleOutputCP();
+    SetConsoleOutputCP(CP_UTF8);
+
     // set up the pipes and handles
     stdin.echo_read = GetStdHandle(STD_INPUT_HANDLE);
     stdout.echo_write = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -147,6 +152,9 @@ int main()
 
     // wait until the standard output thread terminates
     WaitForSingleObject(stdout_thread, INFINITE);
+
+    // switch back to initial console encoding
+    SetConsoleOutputCP(initial_cp);
 
     return 0;
 }

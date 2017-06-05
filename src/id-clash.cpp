@@ -23,8 +23,6 @@
 #include "sp-object.h"
 #include "style.h"
 #include "sp-paint-server.h"
-#include "xml/node.h"
-#include "xml/repr.h"
 #include "sp-root.h"
 #include "sp-gradient.h"
 
@@ -187,9 +185,9 @@ find_references(SPObject *elem, refmap_type &refmap)
     }
     
     // recurse
-    for (SPObject *child = elem->firstChild(); child; child = child->getNext() )
+    for (auto& child: elem->children)
     {
-        find_references(child, refmap);
+        find_references(&child, refmap);
     }
 }
 
@@ -242,9 +240,9 @@ change_clashing_ids(SPDocument *imported_doc, SPDocument *current_doc,
 
 
     // recurse
-    for (SPObject *child = elem->firstChild(); child; child = child->getNext() )
+    for (auto& child: elem->children)
     {
-        change_clashing_ids(imported_doc, current_doc, child, refmap, id_changes);
+        change_clashing_ids(imported_doc, current_doc, &child, refmap, id_changes);
     }
 }
 
@@ -375,9 +373,9 @@ void rename_id(SPObject *elem, Glib::ustring const &new_name)
     gchar *id = g_strdup(new_name.c_str()); //id is not empty here as new_name is check to be not empty
     g_strcanon (id, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.:", '_');
     Glib::ustring new_name2 = id; //will not fail as id can not be NULL, see length check on new_name
-    g_free (id);
     if (!isalnum (new_name2[0])) {
         g_message("Invalid Id, will not change.");
+        g_free (id);
         return;
     }
 
@@ -398,7 +396,7 @@ void rename_id(SPObject *elem, Glib::ustring const &new_name)
                 break;
         }
     }
-
+    g_free (id);
     // Change to the new ID
     elem->getRepr()->setAttribute("id", new_name2);
     // Make a note of this change, if we need to fix up refs to it

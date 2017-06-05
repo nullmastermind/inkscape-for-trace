@@ -11,7 +11,7 @@
 
 #include <glib.h>
 #include <2geom/point.h>
-
+#include "ui/widget/registered-widget.h"
 #include "live_effects/parameter/parameter.h"
 
 #include "knot-holder-entity.h"
@@ -43,14 +43,15 @@ public:
     void param_set_default();
     Geom::Point param_get_default() const;
     void param_set_liveupdate(bool live_update);
-    void param_update_default(Geom::Point newpoint);
+    void param_update_default(Geom::Point default_point);
+
+    virtual void param_update_default(const gchar * default_point);
     virtual void param_transform_multiply(Geom::Affine const& /*postmul*/, bool /*set*/);
 
     void set_oncanvas_looks(SPKnotShapeType shape, SPKnotModeType mode, guint32 color);
 
     virtual bool providesKnotHolderEntities() const { return true; }
-    virtual void addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item);
-
+    virtual void addKnotHolderEntities(KnotHolder *knotholder, SPItem *item);
     friend class PointParamKnotHolderEntity;
 private:
     PointParam(const PointParam&);

@@ -158,6 +158,12 @@ public:
  */
     SPGradient *getVector(bool force_private = false);
 
+ /**
+ * Returns private mesh of given gradient (the gradient at the end of the href chain which has
+ * patches), optionally normalizing it.
+ */
+    SPGradient *getArray(bool force_private = false);
+
     //static GType getType();
 
     /** Forces vector to be built, if not present (i.e. changed) */
@@ -165,9 +171,6 @@ public:
 
     /** Forces array (mesh) to be built, if not present (i.e. changed) */
     void ensureArray();
-
-    /** Ensures that color array is populated */
-    void ensureColors();
 
     /**
      * Set spread property of gradient and emit modified.
@@ -209,8 +212,6 @@ sp_gradient_pattern_common_setup(cairo_pattern_t *cp,
 /* Gradient repr methods */
 void sp_gradient_repr_write_vector(SPGradient *gr);
 void sp_gradient_repr_clear_vector(SPGradient *gr);
-
-void sp_mesh_repr_write(SPMesh *mg);
 
 cairo_pattern_t *sp_gradient_create_preview_pattern(SPGradient *gradient, double width);
 

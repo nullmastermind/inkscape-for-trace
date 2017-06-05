@@ -14,8 +14,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "config.h"
-
 
 #include "svg/svg.h"
 #include "attributes.h"
@@ -199,7 +197,7 @@ void SPSpiral::update(SPCtx *ctx, guint flags) {
 }
 
 void SPSpiral::update_patheffect(bool write) {
-    this->set_shape();
+    this->set_shape(true);
 
     if (write) {
         Inkscape::XML::Node *repr = this->getRepr();
@@ -312,7 +310,7 @@ void SPSpiral::fitAndDraw(SPCurve* c, double dstep, Geom::Point darray[], Geom::
     g_assert (is_unit_vector (hat2));
 }
 
-void SPSpiral::set_shape() {
+void SPSpiral::set_shape(bool force) {
     if (hasBrokenPathEffect()) {
         g_warning ("The spiral shape has unknown LPE on it! Convert to path to make it editable preserving the appearance; editing it as spiral will remove the bad LPE");
 
@@ -367,6 +365,12 @@ void SPSpiral::set_shape() {
 
     /* Reset the shape'scurve to the "original_curve"
      * This is very important for LPEs to work properly! (the bbox might be recalculated depending on the curve in shape)*/
+    if(this->getCurveBeforeLPE()) {
+        if(!force && this->getCurveBeforeLPE()->get_pathvector() == c->get_pathvector()) {
+            c->unref();
+            return;
+        }
+    }
     setCurveInsync( c, TRUE);
     setCurveBeforeLPE( c );
 

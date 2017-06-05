@@ -1,10 +1,23 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import sys, platform, inkex
+
+import platform
+import sys
+
+from distutils.version import StrictVersion
+
+import inkex
 
 try:
     import scour
-    from scour.scour import scourString
+    try:
+        from scour.scour import scourString
+    except ImportError:  # compatibility for very old Scour (<= 0.26) - deprecated!
+        try:
+            from scour import scourString
+            scour.__version__ = scour.VER
+        except:
+            raise
 except Exception as e:
     inkex.errormsg("Failed to import Python module 'scour'.\nPlease make sure it is installed (e.g. using 'pip install scour' or 'sudo apt-get install python-scour') and try again.")
     inkex.errormsg("\nDetails:\n" + str(e))
@@ -17,10 +30,13 @@ except Exception as e:
     inkex.errormsg("\nDetails:\n" + str(e))
     sys.exit()
 
+
 class ScourInkscape (inkex.Effect):
 
     def __init__(self):
         inkex.Effect.__init__(self)
+
+        # Scour options
         self.OptionParser.add_option("--tab",                      type="string",  action="store", dest="tab")
         self.OptionParser.add_option("--simplify-colors",          type="inkbool", action="store", dest="simple_colors")
         self.OptionParser.add_option("--style-to-xml",             type="inkbool", action="store", dest="style_to_xml")
@@ -46,7 +62,26 @@ class ScourInkscape (inkex.Effect):
         self.OptionParser.add_option("--enable-comment-stripping", type="inkbool", action="store", dest="strip_comments")
         self.OptionParser.add_option("--renderer-workaround",      type="inkbool", action="store", dest="renderer_workaround")
 
+        # options for internal use of the extension
+        self.OptionParser.add_option("--scour-version",            type="string",  action="store", dest="scour_version")
+        self.OptionParser.add_option("--scour-version-warn-old",   type="inkbool", action="store", dest="scour_version_warn_old")
+
     def effect(self):
+        # version check if enabled in options
+        if (self.options.scour_version_warn_old):
+            scour_version = scour.__version__
+            scour_version_min = self.options.scour_version
+            if (StrictVersion(scour_version) < StrictVersion(scour_version_min)):
+                inkex.errormsg("The extension 'Optimized SVG Output' is designed for Scour " + scour_version_min + " and later "
+                               "but you're using the older version Scour " + scour_version + ".")
+                inkex.errormsg("This usually works just fine but not all options available in the UI might be supported "
+                               "by the version of Scour installed on your system "
+                               "(see https://github.com/scour-project/scour/blob/master/HISTORY.md for release notes of Scour).")
+                inkex.errormsg("Note: You can permanently disable this message on the 'About' tab of the extension window.")
+        del self.options.scour_version
+        del self.options.scour_version_warn_old
+
+        # do the scouring
         try:
             input = file(self.args[0], "r")
             self.options.infilename = self.args[0]
@@ -60,6 +95,7 @@ class ScourInkscape (inkex.Effect):
             inkex.errormsg("Python version: " + sys.version)
             inkex.errormsg("Scour version: " + scour.__version__)
             sys.exit()
+
 
 if __name__ == '__main__':
     e = ScourInkscape()

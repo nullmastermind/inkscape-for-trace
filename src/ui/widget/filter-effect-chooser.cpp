@@ -10,12 +10,8 @@
  */
 
 #include "filter-effect-chooser.h"
-#include <glibmm/i18n.h>
-
-#include "desktop.h"
 
 #include "document.h"
-#include "inkscape.h"
 
 namespace Inkscape {
 namespace UI {
@@ -55,10 +51,6 @@ sigc::signal<void>& SimpleFilterModifier::signal_blend_blur_changed()
 
 const Glib::ustring SimpleFilterModifier::get_blend_mode()
 {
-    if (!(_flags & BLEND)) {
-        return "normal";
-    }
-
     const Util::EnumData<Inkscape::Filters::FilterBlendMode> *d = _blend.get_active_data();
     if (d) {
         return _blend.get_active_data()->key;

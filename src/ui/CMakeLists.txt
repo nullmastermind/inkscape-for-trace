@@ -57,6 +57,7 @@ set(ui_SRC
 	dialog/calligraphic-profile-rename.cpp
 	dialog/clonetiler.cpp
 	dialog/color-item.cpp
+       dialog/cssdialog.cpp
 	dialog/debug.cpp
 	dialog/desktop-tracker.cpp
 	dialog/dialog-manager.cpp
@@ -98,7 +99,9 @@ set(ui_SRC
 	dialog/polar-arrange-tab.cpp
 	dialog/print-colors-preview-dialog.cpp
 	dialog/print.cpp
+	dialog/prototype.cpp
 	dialog/spellcheck.cpp
+        dialog/styledialog.cpp
 	dialog/svg-fonts-dialog.cpp
 	dialog/swatches.cpp
 	dialog/symbols.cpp
@@ -128,10 +131,9 @@ set(ui_SRC
 	widget/entity-entry.cpp
 	widget/entry.cpp
 	widget/filter-effect-chooser.cpp
+	widget/font-button.cpp
 	widget/font-variants.cpp
 	widget/frame.cpp
-	widget/gimpcolorwheel.c
-	widget/gimpspinscale.c
 	widget/highlight-picker.cpp
 	widget/imageicon.cpp
 	widget/imagetoggler.cpp
@@ -175,6 +177,7 @@ set(ui_SRC
 	control-types.h
 	dialog-events.h
 	draw-anchor.h
+	event-debug.h
 	icon-names.h
 	interface.h
 	object-edit.h
@@ -196,6 +199,7 @@ set(ui_SRC
 	dialog/calligraphic-profile-rename.h
 	dialog/clonetiler.h
 	dialog/color-item.h
+       dialog/cssdialog.h
 	dialog/debug.h
 	dialog/desktop-tracker.h
 	dialog/dialog-manager.h
@@ -239,7 +243,9 @@ set(ui_SRC
 	dialog/polar-arrange-tab.h
 	dialog/print-colors-preview-dialog.h
 	dialog/print.h
+	dialog/prototype.h
 	dialog/spellcheck.h
+        dialog/styledialog.h
 	dialog/svg-fonts-dialog.h
 	dialog/swatches.h
 	dialog/symbols.h
@@ -248,6 +254,7 @@ set(ui_SRC
 	dialog/template-widget.h
 	dialog/text-edit.h
 	dialog/tile.h
+	dialog/tracedialog.h
 	dialog/transformation.h
 	dialog/undo-history.h
 	dialog/xml-tree.h
@@ -275,14 +282,15 @@ set(ui_SRC
 	tools/dropper-tool.h
 	tools/dynamic-base.h
 	tools/eraser-tool.h
+	tools/flood-tool.h
 	tools/freehand-base.h
 	tools/gradient-tool.h
 	tools/lpe-tool.h
 	tools/measure-tool.h
 	tools/mesh-tool.h
 	tools/node-tool.h
-	tools/pencil-tool.h
 	tools/pen-tool.h
+	tools/pencil-tool.h
 	tools/rect-tool.h
 	tools/select-tool.h
 	tools/spiral-tool.h
@@ -312,10 +320,9 @@ set(ui_SRC
 	widget/entity-entry.h
 	widget/entry.h
 	widget/filter-effect-chooser.h
+	widget/font-button.h
 	widget/font-variants.h
 	widget/frame.h
-	widget/gimpspinscale.h
-	widget/gimpcolorwheel.h
 	widget/highlight-picker.h
 	widget/insertordericon.h
 	widget/imageicon.h

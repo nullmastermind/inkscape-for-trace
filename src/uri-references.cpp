@@ -3,6 +3,7 @@
  *
  * Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
+ *   Marc Jeanmougin
  *
  * Copyright (C) 2001-2002 Lauris Kaplinski
  * Copyright (C) 2001 Ximian, Inc.
@@ -10,18 +11,19 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include "uri-references.h"
+
 #include <iostream>
 #include <cstring>
-#include <string>
 
+#include <glibmm/miscutils.h>
+
+#include "bad-uri-exception.h"
 #include "document.h"
 #include "sp-object.h"
 #include "uri.h"
-#include "uri-references.h"
 #include "extract-uri.h"
 #include "sp-tag-use.h"
-#include <glibmm/miscutils.h>
-#include <sigc++/functors/mem_fun.h>
 
 namespace Inkscape {
 
@@ -50,13 +52,10 @@ URIReference::~URIReference() { detach(); }
  * The main ideas here are:
  * (1) "If we are inside a clone, then we can accept if and only if our "original thing" can accept the reference"
  * (this caused problems when there are clones because a change in ids triggers signals for the object hrefing this id,
- *but also its cloned reprs
- * (descendants of <use> referencing an ancestor of the href'ing object)). The way it is done here is *atrocious*, but i
- *could not find a better way.
- * FIXME: find a better and safer way to find the "original object" of anyone with the flag ->cloned
+ * but also its cloned reprs(descendants of <use> referencing an ancestor of the href'ing object)). 
  *
  * (2) Once we have an (potential owner) object, it can accept a href to obj, iff the graph of objects where directed
- *edges are
+ * edges are
  * either parent->child relations , *** or href'ing to href'ed *** relations, stays acyclic.
  * We can go either from owner and up in the tree, or from obj and down, in either case this will be in the worst case
  *linear in the number of objects.
@@ -72,28 +71,17 @@ bool URIReference::_acceptObject(SPObject *obj) const
     SPObject *owner = getOwner();
     if (!owner)
         return true;
+    
     while (owner->cloned) {
-        std::vector<int> positions;
-        while (owner->cloned) {
-            int position = 0;
-            SPObject *c = owner->parent->firstChild();
-            while (c != owner && dynamic_cast<SPObject *>(c)) {
-                position++;
-                c = c->next;
-            }
-            positions.push_back(position);
+        if(!owner->clone_original)//happens when the clone is existing and linking to something, even before the original objects exists.
+                                  //for instance, it can happen when you paste a filtered object in a already cloned group: The construction of the 
+                                  //clone representation of the filtered object will finish before the original object, so the cloned repr will
+                                  //have to _accept the filter even though the original does not exist yet. In that case, we'll accept iff the parent of the 
+                                  //original can accept it: loops caused by other relations than parent-child would be prevented when created on their base object.
+                                  //Fixes bug 1636533.
             owner = owner->parent;
-        }
-        if (dynamic_cast<SPUse *>(owner))
-            owner = ((SPUse *)owner)->get_original();
-        else if (dynamic_cast<SPTagUse *>(owner))
-            owner = ((SPTagUse *)owner)->get_original();
-        else {
-            g_warning("cloned object with no known type\n");
-            return false;
-        }
-        for (int i = positions.size() - 2; i >= 0; i--)
-            owner = owner->childList(false)[positions[i]];
+        else
+            owner = owner->clone_original;
     }
     // once we have the "original" object (hopefully) we look at who is referencing it
     if (obj == owner)
@@ -118,7 +106,7 @@ bool URIReference::_acceptObject(SPObject *obj) const
 
 
 
-void URIReference::attach(const URI &uri) throw(BadURIException)
+void URIReference::attach(const URI &uri)
 {
     SPDocument *document = NULL;
 

@@ -14,28 +14,22 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+# include "config.h"
 #endif
+
 #include "ui/dialog/knot-properties.h"
+
 #include <boost/lexical_cast.hpp>
-#include <gtkmm/stock.h>
-#include <glibmm/main.h>
 #include <glibmm/i18n.h>
+#include <glibmm/main.h>
 #include "inkscape.h"
 #include "util/units.h"
 #include "desktop.h"
 #include "document.h"
 #include "document-undo.h"
 #include "layer-manager.h"
-#include "message-stack.h"
 
-#include "sp-object.h"
-#include "sp-item.h"
-#include "verbs.h"
-#include "selection.h"
 #include "selection-chemistry.h"
-#include "ui/icon-names.h"
-#include "ui/widget/imagetoggler.h"
 
 //#include "event-context.h"
 
@@ -44,7 +38,10 @@ namespace UI {
 namespace Dialogs {
 
 KnotPropertiesDialog::KnotPropertiesDialog()
-: _desktop(NULL), _knotpoint(NULL), _position_visible(false)
+    : _desktop(NULL),
+      _knotpoint(NULL),
+      _position_visible(false),
+      _close_button(_("_Close"), true)
 {
     Gtk::Box *mainVBox = get_vbox();
 
@@ -77,8 +74,6 @@ KnotPropertiesDialog::KnotPropertiesDialog()
     mainVBox->pack_start(_layout_table, true, true, 4);
 
     // Buttons
-    _close_button.set_use_stock(true);
-    _close_button.set_label(Gtk::Stock::CANCEL.id);
     _close_button.set_can_default();
 
     _apply_button.set_use_underline(true);
@@ -145,7 +140,7 @@ KnotPropertiesDialog::_close()
     destroy_();
     Glib::signal_idle().connect(
         sigc::bind_return(
-            sigc::bind(sigc::ptr_fun(&::operator delete), this),
+            sigc::bind(sigc::ptr_fun<void*, void>(&::operator delete), this),
             false 
         )
     );
