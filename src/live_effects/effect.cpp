@@ -118,8 +118,6 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {MIRROR_SYMMETRY,       N_("Mirror symmetry"),                 "mirror_symmetry"},
     {COPY_ROTATE,           N_("Rotate copies"),                   "copy_rotate"},
 /* Ponyscape -> Inkscape 0.92*/
-    {EMBRODERY_STITCH,      N_("Embrodery stitch"),                "embrodery_stitch"},
-    {BOOL_OP,               N_("Boolean operation"),               "bool_op"},
     {ATTACH_PATH,           N_("Attach path"),                     "attach_path"},
     {FILL_BETWEEN_STROKES,  N_("Fill between strokes"),            "fill_between_strokes"},
     {FILL_BETWEEN_MANY,     N_("Fill between many"),               "fill_between_many"},
@@ -128,6 +126,8 @@ const Util::EnumData<EffectType> LPETypeData[] = {
 /* 9.93 */
     {MEASURE_LINE,          N_("Measure Line"),                    "measure_line"},
     {FILLET_CHAMFER,        N_("Fillet/Chamfer"),                  "fillet_chamfer"},
+    {BOOL_OP,               N_("Boolean operation"),               "bool_op"},
+    {EMBRODERY_STITCH,      N_("Embrodery stitch"),                "embrodery_stitch"},
 #ifdef LPE_ENABLE_TEST_EFFECTS
     {DOEFFECTSTACK_TEST,    N_("doEffect stack test"),             "doeffectstacktest"},
     {ANGLE_BISECTOR,        N_("Angle bisector"),                  "angle_bisector"},
@@ -171,11 +171,9 @@ Effect::New(EffectType lpenr, LivePathEffectObject *lpeobj)
         case EMBRODERY_STITCH:
             neweffect = static_cast<Effect*> ( new LPEEmbroderyStitch(lpeobj) );
             break;
-
         case BOOL_OP:
             neweffect = static_cast<Effect*> ( new LPEBool(lpeobj) );
             break;
-
         case PATTERN_ALONG_PATH:
             neweffect = static_cast<Effect*> ( new LPEPatternAlongPath(lpeobj) );
             break;
