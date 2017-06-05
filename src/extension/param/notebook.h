@@ -41,8 +41,15 @@ private:
                               This only gets created if there are pages in this
                               notebook */
 public:
-    ParamNotebook(const gchar * name, const gchar * guitext, const gchar * desc, const Parameter::_scope_t scope, bool gui_hidden, const gchar * gui_tip, Inkscape::Extension::Extension * ext, Inkscape::XML::Node * xml);
+    ParamNotebook(const gchar * name,
+                  const gchar * text,
+                  const gchar * description,
+                  bool hidden,
+                  int indent,
+                  Inkscape::Extension::Extension * ext,
+                  Inkscape::XML::Node * xml);
     virtual ~ParamNotebook(void);
+
     Gtk::Widget * get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal);
 
     /**

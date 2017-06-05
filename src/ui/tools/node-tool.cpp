@@ -24,25 +24,21 @@
 #include "message-context.h"
 #include "selection.h"
 #include "ui/shape-editor.h" // temporary!
-#include "live_effects/effect.h"
-#include "display/curve.h"
 #include "snap.h"
 #include "sp-namedview.h"
 #include "sp-clippath.h"
 #include "sp-item-group.h"
 #include "sp-mask.h"
-#include "sp-object-group.h"
-#include "sp-path.h"
 #include "sp-text.h"
 #include "ui/control-manager.h"
 #include "ui/tools/node-tool.h"
+#include "ui/tools-switch.h"
+#include "ui/tools/tool-base.h"
 #include "ui/tool/control-point-selection.h"
 #include "ui/tool/event-utils.h"
-#include "ui/tool/manipulator.h"
 #include "ui/tool/multi-path-manipulator.h"
 #include "ui/tool/path-manipulator.h"
 #include "ui/tool/selector.h"
-#include "ui/tool/shape-record.h"
 
 #include "pixmaps/cursor-node.xpm"
 #include "pixmaps/cursor-node-d.xpm"
@@ -164,11 +160,6 @@ NodeTool::~NodeTool() {
     if (this->helperpath_tmpitem) {
         this->desktop->remove_temporary_canvasitem(this->helperpath_tmpitem);
     }
-
-    if (this->helperpath_tmpitem) {
-        this->desktop->remove_temporary_canvasitem(this->helperpath_tmpitem);
-    }
-
     this->_selection_changed_connection.disconnect();
     //this->_selection_modified_connection.disconnect();
     this->_mouseover_changed_connection.disconnect();
@@ -220,7 +211,7 @@ void NodeTool::setup() {
     this->_sizeUpdatedConn = ControlManager::getManager().connectCtrlSizeChanged(
             sigc::mem_fun(this, &NodeTool::handleControlUiStyleChange)
     );
-    
+    this->helperpath_tmpitem = NULL;
     this->_selected_nodes = new Inkscape::UI::ControlPointSelection(this->desktop, this->_transform_handle_group);
 
     data.node_data.selection = this->_selected_nodes;
@@ -248,14 +239,12 @@ void NodeTool::setup() {
         )))
     );
 
-    this->helperpath_tmpitem = NULL;
     this->cursor_drag = false;
     this->show_transform_handles = true;
     this->single_node_transform_handles = false;
     this->flash_tempitem = NULL;
     this->flashed_item = NULL;
     this->_last_over = NULL;
-    this->helperpath_tmpitem = NULL;
 
     // read prefs before adding items to selection to prevent momentarily showing the outline
     sp_event_context_read(this, "show_handles");
@@ -282,31 +271,34 @@ void NodeTool::setup() {
     }
 
     this->desktop->emitToolSubselectionChanged(NULL); // sets the coord entry fields to inactive
-    this->update_helperpath();
+    sp_update_helperpath();
 }
 
 // show helper paths of the applied LPE, if any
-void  NodeTool::update_helperpath () {
-    Inkscape::Selection *selection = this->desktop->getSelection();
-
-    if (this->helperpath_tmpitem) {
-        this->desktop->remove_temporary_canvasitem(this->helperpath_tmpitem);
-        this->helperpath_tmpitem = NULL;
+void sp_update_helperpath() {
+    SPDesktop * desktop = SP_ACTIVE_DESKTOP;
+    if (!desktop || !tools_isactive(desktop, TOOLS_NODES)) {
+        return;
+    }
+    Inkscape::UI::Tools::NodeTool *nt = static_cast<Inkscape::UI::Tools::NodeTool*>(desktop->event_context);
+    Inkscape::Selection *selection = desktop->getSelection();
+    if (nt->helperpath_tmpitem) {
+        desktop->remove_temporary_canvasitem(nt->helperpath_tmpitem);
+        nt->helperpath_tmpitem = NULL;
     }
 
     if (SP_IS_LPE_ITEM(selection->singleItem())) {
         Inkscape::LivePathEffect::Effect *lpe = SP_LPE_ITEM(selection->singleItem())->getCurrentLPE();
         if (lpe && lpe->isVisible()/* && lpe->showOrigPath()*/) {
-            Inkscape::UI::ControlPointSelection::Set &selectionNodes = _selected_nodes->allPoints();
+            
+            Inkscape::UI::ControlPointSelection *selectionNodes = nt->_selected_nodes;
             std::vector<Geom::Point> selectedNodesPositions;
-            for (Inkscape::UI::ControlPointSelection::Set::iterator i = selectionNodes.begin(); i != selectionNodes.end(); ++i) {
-                if ((*i)->selected()) {
-                    Inkscape::UI::Node *n = dynamic_cast<Inkscape::UI::Node *>(*i);
-                    selectedNodesPositions.push_back(n->position());
-                }
+            for (Inkscape::UI::ControlPointSelection::iterator i = selectionNodes->begin(); i != selectionNodes->end(); ++i) {
+                Inkscape::UI::Node *n = dynamic_cast<Inkscape::UI::Node *>(*i);
+                selectedNodesPositions.push_back(n->position());
             }
             lpe->setSelectedNodePoints(selectedNodesPositions);
-            lpe->setCurrentZoom(this->desktop->current_zoom());
+            lpe->setCurrentZoom(desktop->current_zoom());
             SPCurve *c = new SPCurve();
             SPCurve *cc = new SPCurve();
             std::vector<Geom::PathVector> cs = lpe->getCanvasIndicators(SP_LPE_ITEM(selection->singleItem()));
@@ -316,11 +308,11 @@ void  NodeTool::update_helperpath () {
                 cc->reset();
             }
             if (!c->is_empty()) {
-                SPCanvasItem *helperpath = sp_canvas_bpath_new(this->desktop->getTempGroup(), c);
+                SPCanvasItem *helperpath = sp_canvas_bpath_new(desktop->getTempGroup(), c, true);
                 sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(helperpath), 0x0000ff9A, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
                 sp_canvas_bpath_set_fill(SP_CANVAS_BPATH(helperpath), 0, SP_WIND_RULE_NONZERO);
                 sp_canvas_item_affine_absolute(helperpath, selection->singleItem()->i2dt_affine());
-                this->helperpath_tmpitem = this->desktop->add_temporary_canvasitem(helperpath, 0);
+                nt->helperpath_tmpitem = desktop->add_temporary_canvasitem(helperpath, 0);
             }
             c->unref();
             cc->unref();
@@ -383,8 +375,8 @@ void gather_items(NodeTool *nt, SPItem *base, SPObject *obj, Inkscape::UI::Shape
         r.role = role;
         s.insert(r);
     } else if (role != SHAPE_ROLE_NORMAL && (SP_IS_GROUP(obj) || SP_IS_OBJECTGROUP(obj))) {
-        for (SPObject *c = obj->children; c; c = c->next) {
-            gather_items(nt, base, c, role, s);
+        for (auto& c: obj->children) {
+            gather_items(nt, base, &c, role, s);
         }
     } else if (SP_IS_ITEM(obj)) {
         SPItem *item = static_cast<SPItem*>(obj);
@@ -412,8 +404,8 @@ void NodeTool::selection_changed(Inkscape::Selection *sel) {
 
     std::set<ShapeRecord> shapes;
 
-    std::vector<SPItem*> items=sel->itemList();
-    for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end();++i){
+    auto items= sel->items();
+    for(auto i=items.begin();i!=items.end();++i){
         SPObject *obj = *i;
 
         if (SP_IS_ITEM(obj)) {
@@ -448,8 +440,9 @@ void NodeTool::selection_changed(Inkscape::Selection *sel) {
         }
     }
 
+    std::vector<SPItem *> vec(sel->items().begin(), sel->items().end());
     _previous_selection = _current_selection;
-    _current_selection = sel->itemList();
+    _current_selection = vec;
 
     this->_multipath->setItems(shapes);
     this->update_tip(NULL);
@@ -478,13 +471,11 @@ bool NodeTool::root_handler(GdkEvent* event) {
     if (this->_selected_nodes->event(this, event)) {
         return true;
     }
-
     switch (event->type)
     {
     case GDK_MOTION_NOTIFY: {
-        this->update_helperpath();
+        sp_update_helperpath(); 
         combine_motion_events(desktop->canvas, event->motion, 0);
-        this->update_helperpath();
         SPItem *over_item = sp_event_context_find_item (desktop, event_point(event->button),
                 FALSE, TRUE);
 
@@ -537,7 +528,7 @@ bool NodeTool::root_handler(GdkEvent* event) {
             }
 
             c->transform(over_item->i2dt_affine());
-            SPCanvasItem *flash = sp_canvas_bpath_new(desktop->getTempGroup(), c);
+            SPCanvasItem *flash = sp_canvas_bpath_new(desktop->getTempGroup(), c, true);
 
             sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(flash),
                 //prefs->getInt("/tools/nodes/highlight_color", 0xff0000ff), 1.0,
@@ -639,7 +630,6 @@ bool NodeTool::root_handler(GdkEvent* event) {
 
 void NodeTool::update_tip(GdkEvent *event) {
     using namespace Inkscape::UI;
-
     if (event && (event->type == GDK_KEY_PRESS || event->type == GDK_KEY_RELEASE)) {
         unsigned new_state = state_after_event(event);
 

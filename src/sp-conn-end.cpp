@@ -1,17 +1,16 @@
+#include "sp-conn-end.h"
 
 #include <cstring>
 #include <string>
 #include <limits>
 
+#include "bad-uri-exception.h"
 #include "display/curve.h"
 #include "xml/repr.h"
-#include "sp-conn-end.h"
 #include "sp-path.h"
 #include "uri.h"
 #include "document.h"
 #include "sp-item-group.h"
-#include "2geom/path.h"
-#include "2geom/pathvector.h"
 #include "2geom/path-intersection.h"
 
 

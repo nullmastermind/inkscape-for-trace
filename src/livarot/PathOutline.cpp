@@ -158,7 +158,8 @@ void Path::Outline(Path *dest, double width, JoinType join, ButtType butt, doubl
                                              join, butt, miter, false, false, endPos, endButt);
                     Geom::Point endNor=endButt.ccw();
                     if (butt == butt_round) {
-                        dest->ArcTo (endPos+width*endNor,  1.0001 * width, 1.0001 * width, 0.0, true, true);
+                        dest->ArcTo (endPos+width*endButt, width, width, 0.0, false, true);
+                        dest->ArcTo (endPos+width*endNor, width, width, 0.0, false, true);
                     }  else if (butt == butt_square) {
                         dest->LineTo (endPos-width*endNor+width*endButt);
                         dest->LineTo (endPos+width*endNor+width*endButt);
@@ -175,7 +176,8 @@ void Path::Outline(Path *dest, double width, JoinType join, ButtType butt, doubl
 
                     endNor=endButt.ccw();
                     if (butt == butt_round) {
-                        dest->ArcTo (endPos+width*endNor, 1.0001 * width, 1.0001 * width, 0.0, true, true);
+                        dest->ArcTo (endPos+width*endButt, width, width, 0.0, false, true);
+                        dest->ArcTo (endPos+width*endNor, width, width, 0.0, false, true);
                     } else if (butt == butt_square) {
                         dest->LineTo (endPos-width*endNor+width*endButt);
                         dest->LineTo (endPos+width*endNor+width*endButt);
@@ -424,7 +426,7 @@ void Path::SubContractOutline(int off, int num_pd,
 		}
 		else if (nType == descr_close)
 		{
-			if (doFirst == false)
+			if (! doFirst)
 			{
 				if (Geom::LInfty (curX - firstP) < 0.0001)
 				{
@@ -810,7 +812,7 @@ void Path::SubContractOutline(int off, int num_pd,
 	}
 	if (closeIfNeeded)
 	{
-		if (doFirst == false)
+		if (! doFirst)
 		{
 		}
 	}
@@ -853,7 +855,7 @@ Path::IsNulCurve (std::vector<PathDescr*> const &cmd, int curD, Geom::Point cons
     {
 		PathDescrArcTo* nData = dynamic_cast<PathDescrArcTo*>(cmd[curD]);
 		if ( Geom::LInfty(nData->p - curX) < 0.00001) {
-			if ((nData->large == false)
+			if ((! nData->large)
 				|| (fabs (nData->rx) < 0.00001
 					|| fabs (nData->ry) < 0.00001)) {
 				return true;
@@ -1004,7 +1006,7 @@ void Path::TangentOnArcAt(double at, const Geom::Point &iS, PathDescrArcTo const
 
 	if (wise)
 	{
-		if (large == true)
+		if (large)
 		{
 			drx = -drx;
 			dry = -dry;
@@ -1021,7 +1023,7 @@ void Path::TangentOnArcAt(double at, const Geom::Point &iS, PathDescrArcTo const
 	}
 	else
 	{
-		if (large == false)
+		if (! large)
 		{
 			drx = -drx;
 			dry = -dry;
@@ -1195,7 +1197,7 @@ Path::OutlineJoin (Path * dest, Geom::Point pos, Geom::Point stNor, Geom::Point 
             if ((dest->descr_cmd[dest->descr_cmd.size() - 1]->getType() == descr_lineto) && (nType == descr_lineto)) {
                 Geom::Point const biss = unit_vector(Geom::rot90( stNor - enNor ));
                 double c2 = Geom::dot (biss, enNor);
-                if (fabs(c2) > 0.707107) {    // apply only to obtuse angles
+                if (fabs(c2) > M_SQRT1_2) {    // apply only to obtuse angles
                     double l = width / c2;
                     PathDescrLineTo* nLine = dynamic_cast<PathDescrLineTo*>(dest->descr_cmd[dest->descr_cmd.size() - 1]);
                     nLine->p = pos + l*biss;  // relocate to bisector

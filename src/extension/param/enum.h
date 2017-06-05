@@ -34,12 +34,18 @@ private:
                 been allocated in memory.  And should be free'd.
                 It is the value of the current selected string */
     gchar * _value;
-    int _indent;
     GSList * choices; /**< A table to store the choice strings  */
 
 public:
-    ParamComboBox(const gchar * name, const gchar * guitext, const gchar * desc, const Parameter::_scope_t scope, bool gui_hidden, const gchar * gui_tip, Inkscape::Extension::Extension * ext, Inkscape::XML::Node * xml);
+    ParamComboBox(const gchar * name,
+                  const gchar * text,
+                  const gchar * description,
+                  bool hidden,
+                  int indent,
+                  Inkscape::Extension::Extension * ext,
+                  Inkscape::XML::Node * xml);
     virtual ~ParamComboBox(void);
+
     Gtk::Widget * get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal);
 
     // Explicitly call superclass version to avoid method being hidden.
@@ -52,9 +58,9 @@ public:
     const gchar * set (const gchar * in, SPDocument * doc, Inkscape::XML::Node * node);
 
     /**
-     * @returns true if guitext is part of this enum
+     * @returns true if text is part of this enum
      */
-    bool contains(const gchar * guitext, SPDocument const * /*doc*/, Inkscape::XML::Node const * /*node*/) const;
+    bool contains(const gchar * text, SPDocument const * /*doc*/, Inkscape::XML::Node const * /*node*/) const;
 
     void changed (void);
 }; /* class ParamComboBox */

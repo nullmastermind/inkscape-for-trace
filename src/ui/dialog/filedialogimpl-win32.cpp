@@ -18,38 +18,23 @@
 #endif
 #include "filedialogimpl-win32.h"
 //General includes
-#include <list>
-#include <unistd.h>
-#include <sys/stat.h>
-#include <errno.h>
-#include <set>
+#include <cairomm/win32_surface.h>
 #include <gdk/gdkwin32.h>
-#include <glib/gstdio.h>
-#include <glibmm/i18n.h>
+#include <gdkmm/general.h>
 #include <glibmm/fileutils.h>
-#include <gtkmm/window.h>
+#include <glibmm/i18n.h>
 
 //Inkscape includes
-#include "inkscape.h"
-#include "ui/dialog-events.h"
+#include "display/cairo-utils.h"
+#include "document.h"
+#include "extension/db.h"
 #include "extension/input.h"
 #include "extension/output.h"
-#include "extension/db.h"
-
-//#include "display/drawing-item.h"
-//#include "display/drawing.h"
-#include "sp-item.h"
-#include "display/canvas-arena.h"
-
 #include "filedialog.h"
-
-#include "sp-root.h"
+#include "helper/pixbuf-ops.h"
 #include "preferences.h"
+#include "util/units.h"
 
-#include <zlib.h>
-#include <cairomm/win32_surface.h>
-#include <cairomm/context.h>
-#include <gdkmm/general.h>
 
 using namespace std;
 using namespace Glib;
@@ -128,11 +113,7 @@ FileDialogBaseWin32::FileDialogBaseWin32(Gtk::Window &parent,
 
     Glib::RefPtr<const Gdk::Window> parentWindow = parent.get_window();
     g_assert(parentWindow->gobj() != NULL);
-#if WITH_GTKMM_3_0
     _ownerHwnd = (HWND)gdk_win32_window_get_handle((GdkWindow*)parentWindow->gobj());
-#else
-    _ownerHwnd = (HWND)gdk_win32_drawable_get_handle((GdkDrawable*)parentWindow->gobj());
-#endif
 }
 
 FileDialogBaseWin32::~FileDialogBaseWin32()
@@ -811,7 +792,7 @@ LRESULT CALLBACK FileOpenDialogImplWin32::preview_wnd_proc(HWND hwnd, UINT uMsg,
                 _wsplitpath(pImpl->_path_string, NULL, NULL, szFileName, NULL);
 
                 const int iLength = snwprintf(szCaption,
-                    sizeof(szCaption), L"%s\n%d kB",
+                    sizeof(szCaption), L"%ls\n%d kB",
                     szFileName, pImpl->_preview_file_size);
 
                 DrawTextW(dc, szCaption, iLength, &rcCaptionRect,
@@ -1024,15 +1005,11 @@ void FileOpenDialogImplWin32::free_preview()
 
 bool FileOpenDialogImplWin32::set_svg_preview()
 {
-    return false;
-    // NOTE: it's not worth the effort to fix this to use Cairo.
-    // Native file dialogs are unmaintainable and should be removed anyway.
-    #if 0
     const int PreviewSize = 512;
 
     gchar *utf8string = g_utf16_to_utf8((const gunichar2*)_path_string,
         _MAX_PATH, NULL, NULL, NULL);
-    SPDocument *svgDoc = SPDocument::createNewDoc (utf8string, true);
+    SPDocument *svgDoc = SPDocument::createNewDoc (utf8string, 0);
     g_free(utf8string);
 
     // Check the document loaded properly
@@ -1046,87 +1023,39 @@ bool FileOpenDialogImplWin32::set_svg_preview()
     }
 
     // Get the size of the document
-    const double svgWidth = svgDoc->getWidth();
-    const double svgHeight = svgDoc->getHeight();
+    Inkscape::Util::Quantity svgWidth = svgDoc->getWidth();
+    Inkscape::Util::Quantity svgHeight = svgDoc->getHeight();
+    const double svgWidth_px = svgWidth.value("px");
+    const double svgHeight_px = svgHeight.value("px");
 
     // Find the minimum scale to fit the image inside the preview area
-    const double scaleFactorX =    PreviewSize / svgWidth;
-    const double scaleFactorY =    PreviewSize / svgHeight;
+    const double scaleFactorX = PreviewSize / svgWidth_px;
+    const double scaleFactorY = PreviewSize / svgHeight_px;
     const double scaleFactor = (scaleFactorX > scaleFactorY) ? scaleFactorY : scaleFactorX;
 
     // Now get the resized values
-    const double scaledSvgWidth  = scaleFactor * svgWidth;
-    const double scaledSvgHeight = scaleFactor * svgHeight;
+    const int scaledSvgWidth  = round(scaleFactor * svgWidth_px);
+    const int scaledSvgHeight = round(scaleFactor * svgHeight_px);
 
-    Geom::Rect area(Geom::Point(0, 0), Geom::Point(scaledSvgWidth, scaledSvgHeight));
-    NRRectL areaL = {0, 0, scaledSvgWidth, scaledSvgHeight};
-    NRRectL bbox = {0, 0, scaledSvgWidth, scaledSvgHeight};
-
-    // write object bbox to area
-    svgDoc->ensureUpToDate();
-    Geom::OptRect maybeArea = area | svgDoc->getRoot()->desktopVisualBounds();
-
-    NRArena *const arena = NRArena::create();
-
-    unsigned const key = SPItem::display_key_new(1);
-
-    NRArenaItem *root = svgDoc->getRoot()->invoke_show(
-        arena, key, SP_ITEM_SHOW_DISPLAY);
-
-    NRGC gc(NULL);
-    gc.transform = Geom::Affine(Geom::Scale(scaleFactor, scaleFactor));
-
-    nr_arena_item_invoke_update (root, NULL, &gc,
-        NR_ARENA_ITEM_STATE_ALL, NR_ARENA_ITEM_STATE_NONE);
-
-    // Prepare a GDI compatible NRPixBlock
-    NRPixBlock pixBlock;
-    pixBlock.size = NR_PIXBLOCK_SIZE_BIG;
-    pixBlock.mode = NR_PIXBLOCK_MODE_R8G8B8;
-    pixBlock.empty = 1;
-    pixBlock.visible_area.x0 = pixBlock.area.x0 = 0;
-    pixBlock.visible_area.y0 = pixBlock.area.y0 = 0;
-    pixBlock.visible_area.x1 = pixBlock.area.x1 = scaledSvgWidth;
-    pixBlock.visible_area.y1 = pixBlock.area.y1 = scaledSvgHeight;
-    pixBlock.rs = 4 * ((3 * (int)scaledSvgWidth + 3) / 4);
-    pixBlock.data.px = g_try_new (unsigned char, pixBlock.rs * scaledSvgHeight);
-
-    // Fail if the pixblock failed to allocate
-    if(pixBlock.data.px == NULL)
-    {
-        svgDoc->doUnref();
-        return false;
-    }
-
-    memset(pixBlock.data.px, 0xFF, pixBlock.rs * scaledSvgHeight);
-
-    memcpy(&root->bbox, &areaL, sizeof(areaL));
-
-    // Render the image
-    nr_arena_item_invoke_render(NULL, root, &bbox, &pixBlock, /*0*/NR_ARENA_ITEM_RENDER_NO_CACHE);
+    const double dpi = 96*scaleFactor;
+    Inkscape::Pixbuf * pixbuf = sp_generate_internal_bitmap(svgDoc, NULL, 0, 0, svgWidth_px, svgHeight_px, scaledSvgWidth, scaledSvgHeight, dpi, dpi, (guint32) 0xffffff00, NULL);
 
     // Tidy up
     svgDoc->doUnref();
-    svgDoc->getRoot()->invoke_hide(key);
-    nr_object_unref((NRObject *) arena);
+    if (pixbuf == NULL) {
+        return false;
+    }
 
     // Create the GDK pixbuf
     _mutex->lock();
-
-    _preview_bitmap_image = Gdk::Pixbuf::create_from_data(
-        pixBlock.data.px, Gdk::COLORSPACE_RGB, false, 8,
-        (int)scaledSvgWidth, (int)scaledSvgHeight, pixBlock.rs,
-        sigc::ptr_fun(destroy_svg_rendering));
-
-    _preview_document_width = scaledSvgWidth;
-    _preview_document_height = scaledSvgHeight;
-    _preview_image_width = svgWidth;
-    _preview_image_height = svgHeight;
-
+    _preview_bitmap_image = Glib::wrap(pixbuf->getPixbufRaw());
+    _preview_document_width = svgWidth_px;
+    _preview_document_height = svgHeight_px;
+    _preview_image_width = scaledSvgWidth;
+    _preview_image_height = scaledSvgHeight;
     _mutex->unlock();
 
     return true;
-    #endif
 }
 
 void FileOpenDialogImplWin32::destroy_svg_rendering(const guint8 *buffer)
@@ -1305,17 +1234,8 @@ bool FileOpenDialogImplWin32::set_emf_preview()
         const double emfWidth = w;
         const double emfHeight = h;
 
-        // Find the minimum scale to fit the image inside the preview area
-        const double scaleFactorX =    PreviewSize / emfWidth;
-        const double scaleFactorY =    PreviewSize / emfHeight;
-        const double scaleFactor = (scaleFactorX > scaleFactorY) ? scaleFactorY : scaleFactorX;
-
-        // Now get the resized values
-        const double scaledEmfWidth  = scaleFactor * emfWidth;
-        const double scaledEmfHeight = scaleFactor * emfHeight;
-
-        _preview_document_width = scaledEmfWidth;
-        _preview_document_height = scaledEmfHeight;
+        _preview_document_width = emfWidth / 2540 * 96; // width is in units of 0.01 mm
+        _preview_document_height = emfHeight / 2540 * 96; // height is in units of 0.01 mm
         _preview_image_width = emfWidth;
         _preview_image_height = emfHeight;
 
@@ -1374,17 +1294,13 @@ void FileOpenDialogImplWin32::render_preview()
     }
 
     // Find the minimum scale to fit the image inside the preview area
-    const double scaleFactorX =
-        ((double)_preview_width - pagePadding * 2 - blurRadius)  / _preview_document_width;
-    const double scaleFactorY =
-        ((double)_preview_height - pagePadding * 2
-        - shaddowOffsetY - halfBlurRadius - captionHeight) / _preview_document_height;
-    double scaleFactor = (scaleFactorX > scaleFactorY) ? scaleFactorY : scaleFactorX;
-    scaleFactor = (scaleFactor > 1.0) ? 1.0 : scaleFactor;
+    const double scaleFactorX = ((double)_preview_width - pagePadding * 2 - blurRadius)  / _preview_image_width;
+    const double scaleFactorY = ((double)_preview_height - pagePadding * 2 - shaddowOffsetY - halfBlurRadius - captionHeight)  / _preview_image_height;
+    const double scaleFactor = (scaleFactorX > scaleFactorY) ? scaleFactorY : scaleFactorX;
 
     // Now get the resized values
-    const double scaledSvgWidth  = scaleFactor * _preview_document_width;
-    const double scaledSvgHeight = scaleFactor * _preview_document_height;
+    const double scaledSvgWidth  = scaleFactor * _preview_image_width;
+    const double scaledSvgHeight = scaleFactor * _preview_image_height;
 
     const int svgX = pagePadding + halfBlurRadius;
     const int svgY = pagePadding;
@@ -1569,7 +1485,7 @@ int FileOpenDialogImplWin32::format_caption(wchar_t *caption, int caption_size)
     _wsplitpath(_path_string, NULL, NULL, szFileName, NULL);
 
     return snwprintf(caption, caption_size,
-        L"%s\n%d kB\n%d \xD7 %d", szFileName, _preview_file_size,
+        L"%ls\n%d\u2009kB\n%d\u2009px \xD7 %d\u2009px", szFileName, _preview_file_size,
         (int)_preview_document_width, (int)_preview_document_height);
 }
 
@@ -1975,18 +1891,18 @@ UINT_PTR CALLBACK FileSaveDialogImplWin32::GetSaveFileName_hookproc(
               if(dlgFont) SendMessage(pImpl->_title_edit, WM_SETFONT, (WPARAM)dlgFont, MAKELPARAM(FALSE, 0));
               SetWindowPos(pImpl->_title_edit, NULL, rCB1.left-rROOT.left, rCB1.top+ydelta-rROOT.top,
                            rCB1.right-rCB1.left, rCB1.bottom-rCB1.top, SWP_SHOWWINDOW|SWP_NOZORDER);
-              // TODO: make sure this works for Unicode
-              SetWindowText(pImpl->_title_edit, pImpl->myDocTitle.c_str());
+              SetWindowTextW(pImpl->_title_edit,
+                             (const wchar_t*)g_utf8_to_utf16(pImpl->myDocTitle.c_str(), -1, NULL, NULL, NULL));
             }
         }
         break;
     case WM_DESTROY:
       {
         if(pImpl->_title_edit) {
-          int length = GetWindowTextLength(pImpl->_title_edit)+1;
-          char* temp_title = new char[length];
-          GetWindowText(pImpl->_title_edit, temp_title, length);
-          pImpl->myDocTitle = temp_title;
+          int length = GetWindowTextLengthW(pImpl->_title_edit)+1;
+          wchar_t* temp_title = new wchar_t[length];
+          GetWindowTextW(pImpl->_title_edit, temp_title, length);
+          pImpl->myDocTitle = g_utf16_to_utf8((gunichar2*)temp_title, -1, NULL, NULL, NULL);
           delete[] temp_title;
           DestroyWindow(pImpl->_title_label);
           pImpl->_title_label = NULL;

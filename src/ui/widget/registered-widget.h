@@ -22,6 +22,7 @@
 #include "ui/widget/text.h"
 #include "ui/widget/random.h"
 #include "ui/widget/unit-menu.h"
+#include "ui/widget/font-button.h"
 #include "ui/widget/color-picker.h"
 #include "inkscape.h"
 
@@ -77,6 +78,8 @@ protected:
     RegisteredWidget( A& a, B& b, C c, D d ): W( a, b, c, d ) { construct(); }
     template< typename A, typename B, typename C, typename D, typename E , typename F>
     RegisteredWidget( A& a, B& b, C c, D& d, E& e, F* f): W( a, b, c, d, e, f) { construct(); }
+    template< typename A, typename B, typename C, typename D, typename E , typename F, typename G>
+    RegisteredWidget( A& a, B& b, C& c, D& d, E& e, F f, G& g): W( a, b, c, d, e, f, g) { construct(); }
 
     virtual ~RegisteredWidget() {};
 
@@ -132,7 +135,7 @@ private:
         repr = NULL;
         doc = NULL;
         write_undo = false;
-        event_type = -1;
+        event_type = 0; //SP_VERB_INVALID
     }
 };
 
@@ -166,7 +169,7 @@ protected:
 class RegisteredToggleButton : public RegisteredWidget<Gtk::ToggleButton> {
 public:
     virtual ~RegisteredToggleButton();
-    RegisteredToggleButton (const Glib::ustring& label, const Glib::ustring& tip, const Glib::ustring& key, Registry& wr, bool right=true, Inkscape::XML::Node* repr_in=NULL, SPDocument *doc_in=NULL, char const *active_str = "true", char const *inactive_str = "false");
+    RegisteredToggleButton (const Glib::ustring& label, const Glib::ustring& tip, const Glib::ustring& key, Registry& wr, bool right=true, Inkscape::XML::Node* repr_in=NULL, SPDocument *doc_in=NULL, char const *icon_active = "true", char const *icon_inactive = "false");
 
     void setActive (bool);
 
@@ -183,7 +186,6 @@ public:
                                 // if a callback checks it, it must reset it back to false
 
 protected:
-    char const *_active_str, *_inactive_str;
     sigc::connection  _toggled_connection;
     void on_toggled();
 };
@@ -416,6 +418,23 @@ public:
 protected:
     sigc::connection  _value_changed_connection;
     sigc::connection  _reseeded_connection;
+    void on_value_changed();
+};
+
+class RegisteredFontButton : public RegisteredWidget<FontButton> {
+public:
+    virtual ~RegisteredFontButton();
+    RegisteredFontButton ( const Glib::ustring& label,
+                             const Glib::ustring& tip,
+                             const Glib::ustring& key,
+                             Registry& wr,
+                             Inkscape::XML::Node* repr_in = NULL,
+                             SPDocument *doc_in = NULL);
+
+    void setValue (Glib::ustring fontspec);
+
+protected:
+    sigc::connection  _signal_font_set;
     void on_value_changed();
 };
 

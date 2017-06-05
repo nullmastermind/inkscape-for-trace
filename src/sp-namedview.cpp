@@ -14,14 +14,12 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "config.h"
 #include <cstring>
 #include <string>
 #include "event-log.h"
 #include <2geom/transforms.h>
 
 #include "display/canvas-grid.h"
-#include "display/guideline.h"
 #include "util/units.h"
 #include "svg/svg-color.h"
 #include "xml/repr.h"
@@ -59,25 +57,25 @@ static gboolean sp_str_to_bool(const gchar *str);
 static gboolean sp_nv_read_opacity(const gchar *str, guint32 *color);
 
 SPNamedView::SPNamedView() : SPObjectGroup(), snap_manager(this) {
-	this->zoom = 0;
-	this->guidecolor = 0;
-	this->guidehicolor = 0;
-	this->views.clear();
-	this->borderlayer = 0;
-	this->page_size_units = NULL;
-	this->window_x = 0;
-	this->cy = 0;
-	this->window_y = 0;
-    this->svg_units = unit_table.getUnit("px"); // legacy behavior: if no viewbox present, default to 'px' units
+
+    this->zoom = 0;
+    this->guidecolor = 0;
+    this->guidehicolor = 0;
+    this->views.clear();
+    this->borderlayer = 0;
+    this->page_size_units = NULL;
+    this->window_x = 0;
+    this->cy = 0;
+    this->window_y = 0;
     this->display_units = NULL;
-	this->page_size_units = NULL;
-	this->pagecolor = 0;
-	this->cx = 0;
-	this->pageshadow = 0;
-	this->window_width = 0;
-	this->window_height = 0;
-	this->window_maximized = 0;
-	this->bordercolor = 0;
+    this->page_size_units = NULL;
+    this->pagecolor = 0;
+    this->cx = 0;
+    this->pageshadow = 0;
+    this->window_width = 0;
+    this->window_height = 0;
+    this->window_maximized = 0;
+    this->bordercolor = 0;
 
     this->editable = TRUE;
     this->showguides = TRUE;
@@ -248,9 +246,9 @@ void SPNamedView::build(SPDocument *document, Inkscape::XML::Node *repr) {
     this->readAttr( "inkscape:lockguides" );
 
     /* Construct guideline list */
-    for (SPObject *o = this->firstChild() ; o; o = o->getNext() ) {
-        if (SP_IS_GUIDE(o)) {
-            SPGuide * g = SP_GUIDE(o);
+    for (auto& o: children) {
+        if (SP_IS_GUIDE(&o)) {
+            SPGuide * g = SP_GUIDE(&o);
             this->guides.push_back(g);
             //g_object_set(G_OBJECT(g), "color", nv->guidecolor, "hicolor", nv->guidehicolor, NULL);
             g->setColor(this->guidecolor);
@@ -261,16 +259,6 @@ void SPNamedView::build(SPDocument *document, Inkscape::XML::Node *repr) {
 
     // backwards compatibility with grid settings (pre 0.46)
     sp_namedview_generate_old_grid(this, document, repr);
-
-    // If viewbox defined: try to calculate the SVG unit from document width and viewbox
-    if (document->getRoot()->viewBox_set) {
-        Inkscape::Util::Quantity svgwidth = document->getWidth();
-        Geom::Rect viewbox = document->getRoot()->viewBox;
-        double factor = svgwidth.value(unit_table.primary(Inkscape::Util::UNIT_TYPE_LINEAR)) / viewbox.width(); 
-        svg_units = unit_table.findUnit(factor, Inkscape::Util::UNIT_TYPE_LINEAR);
-    } else {  // force the document units to be px
-        repr->setAttribute("inkscape:document-units", "px");
-    }
 }
 
 void SPNamedView::release() {
@@ -747,7 +735,7 @@ void SPNamedView::show(SPDesktop *desktop)
 
 namespace {
 
-gint const MIN_ONSCREEN_DISTANCE = 50;
+gint const MIN_ONSCREEN_DISTANCE = 100;
 gdouble const NEWDOC_X_SCALE = 0.75;
 gdouble const NEWDOC_Y_SCALE = NEWDOC_X_SCALE;
 
@@ -767,12 +755,6 @@ Geom::Point calcAnchorPoint(gint const x, gint const y,
 
 } // namespace
 
-void SPNamedView::writeNewGrid(SPDocument *document,int gridtype)
-{
-    g_assert(this->getRepr() != NULL);
-    Inkscape::CanvasGrid::writeNewGridToRepr(this->getRepr(),document,static_cast<Inkscape::GridType>(gridtype));
-}
-
 /*
  * Restores window geometry from the document settings or defaults in prefs
  */
@@ -781,22 +763,42 @@ void sp_namedview_window_from_document(SPDesktop *desktop)
     SPNamedView *nv = desktop->namedview;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool geometry_from_file = (1 == prefs->getInt("/options/savewindowgeometry/value", 0));
+    bool geometry_from_last = (2 == prefs->getInt("/options/savewindowgeometry/value", 0));
     gint default_geometry = prefs->getInt("/options/defaultwindowsize/value", 1);
     bool new_document = (nv->window_width <= 0) || (nv->window_height <= 0);
     bool show_dialogs = true;
 
     // restore window size and position stored with the document
-    bool sizeSet = false;
-
-    if ((geometry_from_file && nv->window_maximized) || (new_document && (default_geometry == 2))) {
+    if (geometry_from_last) {
+        // do nothing, as we already have code for that in interface.cpp
+        // TODO: Probably should not do similar things in two places
+    } else if ((geometry_from_file && nv->window_maximized) || (new_document && (default_geometry == 2))) {
         Gtk::Window *win = desktop->getToplevel();
         if (win) {
             win->maximize();
         }
-        sizeSet = true;
-    } else if (geometry_from_file && !nv->window_maximized) {
-        gint w = MIN(gdk_screen_width(), nv->window_width);
-        gint h = MIN(gdk_screen_height(), nv->window_height);
+    } else {
+        // gdk_screen_width() / gdk_screen_height() return the dimensions of all displays combined
+        // therefore we have to get the dimensions of one monitor explicitly (currently the primary monitor)
+        // TODO: account for multi-monitor setups (i.e. on which monitor do we want to display Inkscape?)
+        gint monitor_number;
+        GdkRectangle monitor_geometry;
+        monitor_number = gdk_screen_get_primary_monitor(gdk_screen_get_default());
+        gdk_screen_get_monitor_geometry(gdk_screen_get_default(), monitor_number, &monitor_geometry);
+
+        gint w = monitor_geometry.width;
+        gint h = monitor_geometry.height;
+        bool move_to_screen = false;
+        if (geometry_from_file and !new_document) {
+            w = MIN(w, nv->window_width);
+            h = MIN(h, nv->window_height);          
+            move_to_screen = true;
+        } else if (default_geometry == 1) {
+            w *= NEWDOC_X_SCALE;
+            h *= NEWDOC_Y_SCALE;
+        } else if (default_geometry == 0) {
+            w = h = 0; // use the smallest possible window size; could be a factor like NEWDOC_X_SCALE in future
+        } 
         if ((w > 0) && (h > 0)) {
 #ifndef WIN32
             gint dx= 0;
@@ -810,37 +812,35 @@ void sp_namedview_window_from_document(SPDesktop *desktop)
                 show_dialogs = FALSE;
             }
 #endif
-            Geom::Point origin = calcAnchorPoint(nv->window_x, nv->window_y, w, h, MIN_ONSCREEN_DISTANCE);
             desktop->setWindowSize(w, h);
-            desktop->setWindowPosition(origin);
-            sizeSet = true;
+            if (move_to_screen) {
+                Geom::Point origin = calcAnchorPoint(nv->window_x, nv->window_y, w, h, MIN_ONSCREEN_DISTANCE);
+                desktop->setWindowPosition(origin);
+            }
         }
     }
 
-    if (!sizeSet && new_document && (default_geometry == 1))
-    {
-        gint w = gdk_screen_width() * NEWDOC_X_SCALE;
-        gint h = gdk_screen_height() * NEWDOC_Y_SCALE;
-        Geom::Point origin = calcAnchorPoint(nv->window_x, nv->window_y, w, h, MIN_ONSCREEN_DISTANCE);
-        desktop->setWindowSize(w, h);
-        desktop->setWindowPosition(origin);
-    }
+    // Cancel any history of transforms up to this point (must be before call to zoom).
+    desktop->clear_transform_history();
 
     // restore zoom and view
     if (nv->zoom != 0 && nv->zoom != HUGE_VAL && !IS_NAN(nv->zoom)
         && nv->cx != HUGE_VAL && !IS_NAN(nv->cx)
         && nv->cy != HUGE_VAL && !IS_NAN(nv->cy)) {
-        desktop->zoom_absolute(nv->cx, nv->cy, nv->zoom);
+        desktop->zoom_absolute_center_point( Geom::Point(nv->cx, nv->cy), nv->zoom );
     } else if (desktop->getDocument()) { // document without saved zoom, zoom to its page
         desktop->zoom_page();
     }
 
-    // cancel any history of zooms up to this point
-    desktop->zooms_past.clear();
-
     if (show_dialogs) {
         desktop->show_dialogs();
     }
+}
+
+void SPNamedView::writeNewGrid(SPDocument *document,int gridtype)
+{
+    g_assert(this->getRepr() != NULL);
+    Inkscape::CanvasGrid::writeNewGridToRepr(this->getRepr(),document,static_cast<Inkscape::GridType>(gridtype));
 }
 
 bool SPNamedView::getSnapGlobal() const
@@ -868,9 +868,9 @@ void sp_namedview_update_layers_from_document (SPDesktop *desktop)
     }
     // if that didn't work out, look for the topmost layer
     if (!layer) {
-        for ( SPObject *iter = document->getRoot()->firstChild(); iter ; iter = iter->getNext() ) {
-            if (desktop->isLayer(iter)) {
-                layer = iter;
+        for (auto& iter: document->getRoot()->children) {
+            if (desktop->isLayer(&iter)) {
+                layer = &iter;
             }
         }
     }
@@ -1098,7 +1098,6 @@ void SPNamedView::setGuides(bool v)
     g_assert(this->getRepr() != NULL);
     sp_repr_set_boolean(this->getRepr(), "showguides", v);
     sp_repr_set_boolean(this->getRepr(), "inkscape:guide-bbox", v);
-    sp_repr_set_boolean(this->getRepr(), "inkscape:locked", false);
 }
 
 bool SPNamedView::getGuides()
@@ -1155,12 +1154,6 @@ Inkscape::Util::Unit const * SPNamedView::getDisplayUnit() const
     return display_units ? display_units : unit_table.getUnit("px");
 }
 
-Inkscape::Util::Unit const & SPNamedView::getSVGUnit() const
-{
-    assert(svg_units);
-    return *svg_units; 
-}
-
 /**
  * Returns the first grid it could find that isEnabled(). Returns NULL, if none is enabled
  */
@@ -1191,7 +1184,7 @@ void SPNamedView::translateGrids(Geom::Translate const &tr) {
 
 void SPNamedView::scrollAllDesktops(double dx, double dy, bool is_scrolling) {
     for(std::vector<SPDesktop *>::iterator it=this->views.begin();it!=this->views.end();++it ) {
-        (*it)->scroll_world_in_svg_coords(dx, dy, is_scrolling);
+        (*it)->scroll_relative_in_svg_coords(dx, dy, is_scrolling);
     }
 }
 

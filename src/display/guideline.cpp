@@ -10,12 +10,15 @@
  * Copyright (C) 2000-2002 Lauris Kaplinski
  * Copyright (C) 2007 Johan Engelen
  * Copyright (C) 2009 Maximilian Albert
+ * Copyright (C) 2017 Tavmjong Bah
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
 #include <2geom/coord.h>
 #include <2geom/transforms.h>
+#include <2geom/line.h>
+
 #include "sp-canvas-util.h"
 #include "guideline.h"
 #include "display/cairo-utils.h"
@@ -28,8 +31,6 @@ static void sp_guideline_update(SPCanvasItem *item, Geom::Affine const &affine, 
 static void sp_guideline_render(SPCanvasItem *item, SPCanvasBuf *buf);
 
 static double sp_guideline_point(SPCanvasItem *item, Geom::Point p, SPCanvasItem **actual_item);
-
-static void sp_guideline_drawline (SPCanvasBuf *buf, gint x0, gint y0, gint x1, gint y1, guint32 rgba);
 
 G_DEFINE_TYPE(SPGuideLine, sp_guideline, SP_TYPE_CANVAS_ITEM);
 
@@ -48,7 +49,7 @@ static void sp_guideline_init(SPGuideLine *gl)
 
     gl->locked = false;
     gl->normal_to_line = Geom::Point(0,1);
-    gl->angle = 3.14159265358979323846/2;
+    gl->angle = M_PI_2;
     gl->point_on_line = Geom::Point(0,0);
     gl->sensitive = 0;
 
@@ -76,10 +77,6 @@ static void sp_guideline_destroy(SPCanvasItem *object)
 
 static void sp_guideline_render(SPCanvasItem *item, SPCanvasBuf *buf)
 {
-    //TODO: the routine that renders the label of a specific guideline sometimes
-    // ends up erasing the labels of the other guidelines.
-    // Maybe we should render all labels everytime.
-
     SPGuideLine const *gl = SP_GUIDELINE (item);
 
     cairo_save(buf->ct);
@@ -89,8 +86,9 @@ static void sp_guideline_render(SPCanvasItem *item, SPCanvasBuf *buf)
     cairo_set_line_cap(buf->ct, CAIRO_LINE_CAP_SQUARE);
     cairo_set_font_size(buf->ct, 10);
 
-    Geom::Point normal_dt = /*unit_vector*/(gl->normal_to_line * gl->affine.withoutTranslation()); // note that normal_dt does not have unit length
-    Geom::Point point_on_line_dt = gl->point_on_line * gl->affine;
+    // normal_dt does not have unit length
+    Geom::Point normal_dt        = gl->normal_to_line * gl->affine.withoutTranslation();
+    Geom::Point point_on_line_dt = gl->point_on_line  * gl->affine;
 
     if (gl->label) {
         int px = round(point_on_line_dt[Geom::X]);
@@ -104,55 +102,54 @@ static void sp_guideline_render(SPCanvasItem *item, SPCanvasBuf *buf)
         cairo_restore(buf->ct);
     }
 
-    if ( Geom::are_near(normal_dt[Geom::Y], 0.) ) { // is vertical?
+    // Draw guide.
+    // Special case horizontal and vertical lines so they snap to pixels.
+    // Don't use isHorizontal()/isVertical() as they test only exact matches.
+    if ( Geom::are_near(normal_dt[Geom::Y], 0.0) ) { // Vertical?
+
         int position = round(point_on_line_dt[Geom::X]);
         cairo_move_to(buf->ct, position + 0.5, buf->rect.top() + 0.5);
         cairo_line_to(buf->ct, position + 0.5, buf->rect.bottom() - 0.5);
         cairo_stroke(buf->ct);
-    } else if ( Geom::are_near(normal_dt[Geom::X], 0.) ) { // is horizontal?
+
+    } else if ( Geom::are_near(normal_dt[Geom::X], 0.0) ) { // Horizontal?
+
         int position = round(point_on_line_dt[Geom::Y]);
         cairo_move_to(buf->ct, buf->rect.left() + 0.5, position + 0.5);
         cairo_line_to(buf->ct, buf->rect.right() - 0.5, position + 0.5);
         cairo_stroke(buf->ct);
+
     } else {
-        // render angled line. Once intersection has been detected, draw from there.
-        Geom::Point parallel_to_line( normal_dt.ccw() );
 
-        //try to intersect with left vertical of rect
-        double y_intersect_left = (buf->rect.left() - point_on_line_dt[Geom::X]) * parallel_to_line[Geom::Y] / parallel_to_line[Geom::X] + point_on_line_dt[Geom::Y];
-        if ( (y_intersect_left >= buf->rect.top()) && (y_intersect_left <= buf->rect.bottom()) ) {
-            // intersects with left vertical!
-            double y_intersect_right = (buf->rect.right() - point_on_line_dt[Geom::X]) * parallel_to_line[Geom::Y] / parallel_to_line[Geom::X] + point_on_line_dt[Geom::Y];
-            sp_guideline_drawline (buf, buf->rect.left(), static_cast<gint>(round(y_intersect_left)), buf->rect.right(), static_cast<gint>(round(y_intersect_right)), gl->rgba);
-            goto end;
+        Geom::Line guide =
+            Geom::Line::from_origin_and_vector( point_on_line_dt, Geom::rot90(normal_dt) );
+
+        // Find intersections of guide with buf rectangle. There should be zero or two.
+        std::vector<Geom::Point> intersections;
+        for (unsigned i = 0; i < 4; ++i) {
+            Geom::LineSegment side( buf->rect.corner(i), buf->rect.corner((i+1)%4) );
+            try {
+                Geom::OptCrossing oc = Geom::intersection(guide, side);
+                if (oc) {
+                    intersections.push_back( guide.pointAt((*oc).ta));
+                }
+            } catch (Geom::InfiniteSolutions) {
+                // Shouldn't happen as we have already taken care of horizontal/vertical guides.
+                std::cerr << "sp_guideline_render: Error: Infinite intersections." << std::endl;
+            }
         }
 
-        //try to intersect with right vertical of rect
-        double y_intersect_right = (buf->rect.right() - point_on_line_dt[Geom::X]) * parallel_to_line[Geom::Y] / parallel_to_line[Geom::X] + point_on_line_dt[Geom::Y];
-        if ( (y_intersect_right >= buf->rect.top()) && (y_intersect_right <= buf->rect.bottom()) ) {
-            // intersects with right vertical!
-            sp_guideline_drawline (buf, buf->rect.right(), static_cast<gint>(round(y_intersect_right)), buf->rect.left(), static_cast<gint>(round(y_intersect_left)), gl->rgba);
-            goto end;
-        }
-
-        //try to intersect with top horizontal of rect
-        double x_intersect_top = (buf->rect.top() - point_on_line_dt[Geom::Y]) * parallel_to_line[Geom::X] / parallel_to_line[Geom::Y] + point_on_line_dt[Geom::X];
-        if ( (x_intersect_top >= buf->rect.left()) && (x_intersect_top <= buf->rect.right()) ) {
-            // intersects with top horizontal!
-            double x_intersect_bottom = (buf->rect.bottom() - point_on_line_dt[Geom::Y]) * parallel_to_line[Geom::X] / parallel_to_line[Geom::Y] + point_on_line_dt[Geom::X];
-            sp_guideline_drawline (buf, static_cast<gint>(round(x_intersect_top)), buf->rect.top(), static_cast<gint>(round(x_intersect_bottom)), buf->rect.bottom(), gl->rgba);
-            goto end;
-        }
-
-        //try to intersect with bottom horizontal of rect
-        double x_intersect_bottom = (buf->rect.bottom() - point_on_line_dt[Geom::Y]) * parallel_to_line[Geom::X] / parallel_to_line[Geom::Y] + point_on_line_dt[Geom::X];
-        if ( (x_intersect_top >= buf->rect.left()) && (x_intersect_top <= buf->rect.right()) ) {
-            // intersects with bottom horizontal!
-            sp_guideline_drawline (buf, static_cast<gint>(round(x_intersect_bottom)), buf->rect.bottom(), static_cast<gint>(round(x_intersect_top)), buf->rect.top(), gl->rgba);
-            goto end;
+        if (intersections.size() == 2) {
+            double x0 = intersections[0][Geom::X];
+            double x1 = intersections[1][Geom::X];
+            double y0 = intersections[0][Geom::Y];
+            double y1 = intersections[1][Geom::Y];
+            cairo_move_to(buf->ct, x0, y0);
+            cairo_line_to(buf->ct, x1, y1);
+            cairo_stroke(buf->ct);
         }
     }
-    end:
+
     cairo_restore(buf->ct);
 }
 
@@ -179,15 +176,10 @@ static void sp_guideline_update(SPCanvasItem *item, Geom::Affine const &affine, 
     }
 
     gl->affine = affine;
-    Geom::Point pol_transformed = gl->point_on_line * affine;
-    if (gl->is_horizontal()) {
-        sp_canvas_update_bbox (item, -1000000, round(pol_transformed[Geom::Y] - 16), 1000000, round(pol_transformed[Geom::Y] + 1));
-    } else if (gl->is_vertical()) {
-        sp_canvas_update_bbox (item, round(pol_transformed[Geom::X]), -1000000, round(pol_transformed[Geom::X] + 16), 1000000);
-    } else {
-        //TODO: labels in angled guidelines are not showing up for some reason.
-        sp_canvas_update_bbox (item, -1000000, -1000000, 1000000, 1000000);
-    }
+
+    // Rotated canvas requires large bbox for all guides.
+    sp_canvas_update_bbox (item, -1000000, -1000000, 1000000, 1000000);
+
 }
 
 // Returns 0.0 if point is on the guideline
@@ -274,14 +266,6 @@ void sp_guideline_set_sensitive(SPGuideLine *gl, int sensitive)
 void sp_guideline_delete(SPGuideLine *gl)
 {
     sp_canvas_item_destroy(SP_CANVAS_ITEM(gl));
-}
-
-static void
-sp_guideline_drawline (SPCanvasBuf *buf, gint x0, gint y0, gint x1, gint y1, guint32 /*rgba*/)
-{
-    cairo_move_to(buf->ct, x0 + 0.5, y0 + 0.5);
-    cairo_line_to(buf->ct, x1 + 0.5, y1 + 0.5);
-    cairo_stroke(buf->ct);
 }
 
 /*

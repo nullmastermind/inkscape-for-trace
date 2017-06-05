@@ -12,11 +12,15 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include "sp-hatch.h"
+
 #include <cstring>
 #include <string>
+
 #include <2geom/transforms.h>
 #include <sigc++/functors/mem_fun.h>
 
+#include "bad-uri-exception.h"
 #include "svg/svg.h"
 #include "display/cairo-utils.h"
 #include "display/drawing-context.h"
@@ -25,11 +29,7 @@
 #include "display/drawing-pattern.h"
 #include "attributes.h"
 #include "document-private.h"
-#include "uri.h"
-#include "style.h"
-#include "sp-hatch.h"
 #include "sp-hatch-path.h"
-#include "xml/repr.h"
 
 SPHatch::SPHatch()
     : SPPaintServer(),
@@ -233,14 +233,13 @@ void SPHatch::set(unsigned int key, const gchar* value)
 
 bool SPHatch::_hasHatchPatchChildren(SPHatch const *hatch)
 {
-    bool matched = false;
-    for (SPObject const *child = hatch->firstChild(); child && !matched; child = child->getNext() ) {
-        SPHatchPath const *hatchPath = dynamic_cast<SPHatchPath const *>(child);
+    for (auto& child: hatch->children) {
+        SPHatchPath const *hatchPath = dynamic_cast<SPHatchPath const *>(&child);
         if (hatchPath) {
-            matched = true;
+            return true;
         }
     }
-    return matched;
+    return false;
 }
 
 std::vector<SPHatchPath*> SPHatch::hatchPaths()
@@ -249,8 +248,8 @@ std::vector<SPHatchPath*> SPHatch::hatchPaths()
     SPHatch *src = chase_hrefs<SPHatch>(this, sigc::ptr_fun(&_hasHatchPatchChildren));
 
     if (src) {
-        for (SPObject *child = src->firstChild(); child; child = child->getNext()) {
-            SPHatchPath *hatchPath = dynamic_cast<SPHatchPath *>(child);
+        for (auto& child: src->children) {
+            SPHatchPath *hatchPath = dynamic_cast<SPHatchPath *>(&child);
             if (hatchPath) {
                 list.push_back(hatchPath);
             }
@@ -265,8 +264,8 @@ std::vector<SPHatchPath const*> SPHatch::hatchPaths() const
     SPHatch const *src = chase_hrefs<SPHatch const>(this, sigc::ptr_fun(&_hasHatchPatchChildren));
 
     if (src) {
-        for (SPObject const *child = src->firstChild(); child; child = child->getNext()) {
-            SPHatchPath const *hatchPath = dynamic_cast<SPHatchPath const*>(child);
+        for (auto& child: src->children) {
+            SPHatchPath const *hatchPath = dynamic_cast<SPHatchPath const*>(&child);
             if (hatchPath) {
                 list.push_back(hatchPath);
             }

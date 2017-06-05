@@ -26,33 +26,31 @@ public:
     LPEEmbroderyStitch(LivePathEffectObject *lpeobject);
     virtual ~LPEEmbroderyStitch();
 
-    virtual Geom::PathVector doEffect_path (Geom::PathVector const & path_in);
+    virtual Geom::PathVector doEffect_path(Geom::PathVector const &path_in);
 
-    virtual void resetDefaults(SPItem const* item);
+    virtual void resetDefaults(SPItem const *item);
 
-    virtual void transform_multiply(Geom::Affine const& postmul, bool set);
+    virtual void transform_multiply(Geom::Affine const &postmul, bool set);
 
-    enum order_method
-	{
-    	order_method_no_reorder,
-    	order_method_zigzag,
-    	order_method_zigzag_rev_first,
-		order_method_closest,
-		order_method_closest_rev_first,
-		order_method_tsp_kopt_2,
-		order_method_tsp_kopt_3,
-		order_method_tsp_kopt_4,
-		order_method_tsp_kopt_5,
-		order_method_count
-	};
-    enum connect_method
-	{
-    	connect_method_line,
-		connect_method_move_point_from,
-		connect_method_move_point_mid,
-		connect_method_move_point_to,
-		connect_method_count
-	};
+    enum order_method {
+        order_method_no_reorder,
+        order_method_zigzag,
+        order_method_zigzag_rev_first,
+        order_method_closest,
+        order_method_closest_rev_first,
+        order_method_tsp_kopt_2,
+        order_method_tsp_kopt_3,
+        order_method_tsp_kopt_4,
+        order_method_tsp_kopt_5,
+        order_method_count
+    };
+    enum connect_method {
+        connect_method_line,
+        connect_method_move_point_from,
+        connect_method_move_point_mid,
+        connect_method_move_point_to,
+        connect_method_count
+    };
 
 private:
     EnumParam<order_method> ordering;
@@ -64,14 +62,14 @@ private:
     ScalarParam show_stitch_gap;
     ScalarParam jump_if_longer;
 
-    LPEEmbroderyStitch(const LPEEmbroderyStitch&);
-    LPEEmbroderyStitch& operator=(const LPEEmbroderyStitch&);
+    LPEEmbroderyStitch(const LPEEmbroderyStitch &);
+    LPEEmbroderyStitch &operator=(const LPEEmbroderyStitch &);
 
-    double GetPatternInitialStep( int pattern, int line );
-    Geom::Point GetStartPointInterpolAfterRev( std::vector<OrderingInfo> const & info, unsigned i);
-    Geom::Point GetEndPointInterpolAfterRev( std::vector<OrderingInfo> const & info, unsigned i);
-    Geom::Point GetStartPointInterpolBeforeRev( std::vector<OrderingInfo> const & info, unsigned i);
-    Geom::Point GetEndPointInterpolBeforeRev( std::vector<OrderingInfo> const & info, unsigned i);
+    double GetPatternInitialStep(int pattern, int line);
+    Geom::Point GetStartPointInterpolAfterRev(std::vector<OrderingInfo> const &info, unsigned i);
+    Geom::Point GetEndPointInterpolAfterRev(std::vector<OrderingInfo> const &info, unsigned i);
+    Geom::Point GetStartPointInterpolBeforeRev(std::vector<OrderingInfo> const &info, unsigned i);
+    Geom::Point GetEndPointInterpolBeforeRev(std::vector<OrderingInfo> const &info, unsigned i);
 };
 
 } //namespace LivePathEffect

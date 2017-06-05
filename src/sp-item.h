@@ -212,8 +212,8 @@ public:
 
     Geom::Affine getRelativeTransform(SPObject const *obj) const;
 
-    void raiseOne();
-    void lowerOne();
+    bool raiseOne();
+    bool lowerOne();
     void raiseToTop();
     void lowerToBottom();
 
@@ -258,6 +258,7 @@ public:
     Geom::OptRect documentVisualBounds() const;
 
     Geom::OptRect documentBounds(BBoxType type) const;
+    Geom::OptRect documentPreferredBounds() const;
 
     /**
      * Get item's geometric bbox in desktop coordinate system.

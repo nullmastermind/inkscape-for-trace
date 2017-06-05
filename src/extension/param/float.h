@@ -29,15 +29,15 @@ public:
     enum AppearanceMode {
         FULL, MINIMAL
     };
-    ParamFloat (const gchar * name,
-                const gchar * guitext,
-                const gchar * desc,
-                const Parameter::_scope_t scope,
-                bool gui_hidden,
-                const gchar * gui_tip,
-                Inkscape::Extension::Extension * ext,
-                Inkscape::XML::Node * xml,
-                AppearanceMode mode);
+    ParamFloat(const gchar * name,
+               const gchar * text,
+               const gchar * description,
+               bool hidden,
+               int indent,
+               Inkscape::Extension::Extension * ext,
+               Inkscape::XML::Node * xml,
+               AppearanceMode mode);
+
     /** Returns \c _value. */
     float get(const SPDocument * /*doc*/, const Inkscape::XML::Node * /*node*/) const { return _value; }
 
@@ -60,7 +60,6 @@ private:
     /** Internal value. */
     float _value;
     AppearanceMode _mode;
-    int _indent;
     float _min;
     float _max;
     int _precision;

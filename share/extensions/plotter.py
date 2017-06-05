@@ -27,7 +27,6 @@ import gettext
 import hpgl_decoder
 import hpgl_encoder
 import inkex
-inkex.localize()
 
 
 class Plot(inkex.Effect):
@@ -105,7 +104,7 @@ class Plot(inkex.Effect):
             hpglInit += ';FS%d' % self.options.force
         if self.options.speed > 0:
             hpglInit += ';VS%d' % self.options.speed
-        self.hpgl = hpglInit + self.hpgl + ';SP0;PU0,0;IN; '
+        self.hpgl = hpglInit + self.hpgl + ';PU0,0;SP0;IN; '
 
     def convertToDmpl(self):
         # convert HPGL to DMPL
@@ -128,7 +127,7 @@ class Plot(inkex.Effect):
         if self.options.speed > 0:
             dmplInit += 'V%d' % self.options.speed
         dmplInit += 'EC1'
-        self.hpgl = dmplInit + self.hpgl[1:] + ',P0,U0,0,Z '
+        self.hpgl = dmplInit + self.hpgl[1:] + ',U0,0,P0,Z '
 
     def convertToKNK(self):
         # convert HPGL to KNK Plotter Language
@@ -137,7 +136,7 @@ class Plot(inkex.Effect):
             hpglInit += ';FS%d' % self.options.force
         if self.options.speed > 0:
             hpglInit += ';VS%d' % self.options.speed
-        self.hpgl = hpglInit + self.hpgl + ';SP0;PU0,0;@ '
+        self.hpgl = hpglInit + self.hpgl + ';PU0,0;SP0;@ '
 
     def sendHpglToSerial(self):
         # gracefully exit script when pySerial is missing
@@ -148,7 +147,7 @@ class Plot(inkex.Effect):
                 + "\n\n" + _("1. Download and extract (unzip) this file to your local harddisk:")
                 + "\n"   +   "   https://pypi.python.org/packages/source/p/pyserial/pyserial-2.7.tar.gz"
                 + "\n"   + _("2. Copy the \"serial\" folder (Can be found inside the just extracted folder)")
-                + "\n"   + _("   into the following Inkscape folder: C:\\<Program files>\\inkscape\\python\\Lib\\")
+                + "\n"   + _("   into the following Inkscape folder: C:\\[Program files]\\inkscape\\python\\Lib\\")
                 + "\n"   + _("3. Close and restart Inkscape."))
             return
         # init serial framework
@@ -197,7 +196,7 @@ class Plot(inkex.Effect):
         try:
             mySerial.open()
         except Exception as inst:
-            if 'ould not open port' in inst.args[0]:
+            if inst.strerror is not None and 'ould not open port' in inst.strerror:
                 inkex.errormsg(_("Could not open port. Please check that your plotter is running, connected and the settings are correct."))
                 return
             else:

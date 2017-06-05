@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">
+    <_name>Pre-Process File Save As...</_name>
+    <id>com.vaxxine.file.saveas.preprocess</id>
+    <dependency type="executable" location="extensions">prepare_file_save_as.py</dependency>
+    <dependency type="executable" location="extensions">inkex.py</dependency>
+    <effect>
+        <object-type>path</object-type>
+        <effects-menu>
+            <submenu _name="Export"/>
+        </effects-menu>
+    </effect>
+    <script>
+        <command reldir="extensions" interpreter="python">prepare_file_save_as.py</command>
+    </script>
+</inkscape-extension>

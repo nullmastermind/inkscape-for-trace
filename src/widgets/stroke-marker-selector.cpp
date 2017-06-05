@@ -18,17 +18,13 @@
 
 #include "stroke-marker-selector.h"
 
-#include <cstring>
-#include <string>
 #include <glibmm/i18n.h>
-#include <2geom/coord.h>
 
 
 #include "style.h"
 #include "ui/dialog-events.h"
 
 #include "desktop-style.h"
-#include "preferences.h"
 #include "path-prefix.h"
 #include "io/sys.h"
 #include "sp-marker.h"
@@ -39,10 +35,8 @@
 #include "gradient-vector.h"
 
 #include <gtkmm/icontheme.h>
-#include <gtkmm/adjustment.h>
 #include "ui/widget/spinbutton.h"
 #include "stroke-style.h"
-#include "gradient-chemistry.h"
 
 static Inkscape::UI::Cache::SvgPreview svg_preview_cache;
 
@@ -60,8 +54,13 @@ MarkerComboBox::MarkerComboBox(gchar const *id, int l) :
     set_cell_data_func(image_renderer, sigc::mem_fun(*this, &MarkerComboBox::prepareImageRenderer));
     gtk_combo_box_set_row_separator_func(GTK_COMBO_BOX(gobj()), MarkerComboBox::separator_cb, NULL, NULL);
 
+    Glib::ustring no_marker("no-marker");
+    Glib::RefPtr<Gtk::IconTheme> iconTheme = Gtk::IconTheme::get_default();
+    if (!iconTheme->has_icon(no_marker)) {
+        Inkscape::queueIconPrerender( INKSCAPE_ICON(no_marker.data()), Inkscape::ICON_SIZE_SMALL_TOOLBAR );
+    }
     empty_image = new Gtk::Image( Glib::wrap(
-        sp_pixbuf_new( Inkscape::ICON_SIZE_SMALL_TOOLBAR, INKSCAPE_ICON("no-marker") ) ) );
+        sp_pixbuf_new( Inkscape::ICON_SIZE_SMALL_TOOLBAR, INKSCAPE_ICON(no_marker.data()) ) ) );
 
     sandbox = ink_markers_preview_doc ();
     desktop = SP_ACTIVE_DESKTOP;
@@ -77,6 +76,7 @@ MarkerComboBox::MarkerComboBox(gchar const *id, int l) :
 MarkerComboBox::~MarkerComboBox() {
     delete combo_id;
     delete sandbox;
+    delete empty_image;
 
     if (doc) {
         modified_connection.disconnect();
@@ -335,10 +335,10 @@ GSList *MarkerComboBox::get_marker_list (SPDocument *source)
         return NULL;
     }
 
-    for ( SPObject *child = defs->firstChild(); child; child = child->getNext() )
+    for (auto& child: defs->children)
     {
-        if (SP_IS_MARKER(child)) {
-            ml = g_slist_prepend (ml, child);
+        if (SP_IS_MARKER(&child)) {
+            ml = g_slist_prepend (ml, &child);
         }
     }
     return ml;
@@ -399,7 +399,7 @@ void MarkerComboBox::add_markers (GSList *marker_list, SPDocument *source, gbool
         gchar const *markid = repr->attribute("inkscape:stockid") ? repr->attribute("inkscape:stockid") : repr->attribute("id");
 
         // generate preview
-        Gtk::Image *prv = create_marker_image (22, repr->attribute("id"), source, drawing, visionkey);
+        Gtk::Image *prv = create_marker_image (24, repr->attribute("id"), source, drawing, visionkey);
         prv->show();
 
         // Add history before separator, others after
@@ -430,14 +430,14 @@ void
 MarkerComboBox::update_marker_image(gchar const *mname)
 {
     gchar *cache_name = g_strconcat(combo_id, mname, NULL);
-    Glib::ustring key = svg_preview_cache.cache_key(doc->getURI(), cache_name, 22);
+    Glib::ustring key = svg_preview_cache.cache_key(doc->getURI(), cache_name, 24);
     g_free (cache_name);
     svg_preview_cache.remove_preview_from_cache(key);
 
     Inkscape::Drawing drawing;
     unsigned const visionkey = SPItem::display_key_new(1);
     drawing.setRoot(sandbox->getRoot()->invoke_show(drawing, visionkey, SP_ITEM_SHOW_DISPLAY));
-    Gtk::Image *prv = create_marker_image(22, mname, doc, drawing, visionkey);
+    Gtk::Image *prv = create_marker_image(24, mname, doc, drawing, visionkey);
     if (prv) {
         prv->show();
     }

@@ -9,18 +9,15 @@
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
-
-#include <glibmm/i18n.h>
-
 #include "live_effects/lpe-interpolate.h"
 
-#include <2geom/path.h>
 #include <2geom/sbasis-to-bezier.h>
-#include <2geom/piecewise.h>
-#include <2geom/sbasis-geometric.h>
 
 #include "sp-path.h"
 #include "display/curve.h"
+// TODO due to internal breakage in glibmm headers, this must be last:
+#include <glibmm/i18n.h>
+
 
 namespace Inkscape {
 namespace LivePathEffect {
@@ -33,9 +30,9 @@ LPEInterpolate::LPEInterpolate(LivePathEffectObject *lpeobject) :
 {
     show_orig_path = true;
 
-    registerParameter( dynamic_cast<Parameter *>(&trajectory_path) );
-    registerParameter( dynamic_cast<Parameter *>(&equidistant_spacing) );
-    registerParameter( dynamic_cast<Parameter *>(&number_of_steps) );
+    registerParameter(&trajectory_path);
+    registerParameter(&equidistant_spacing);
+    registerParameter(&number_of_steps);
 
     number_of_steps.param_make_integer();
     number_of_steps.param_set_range(2, Geom::infinity());

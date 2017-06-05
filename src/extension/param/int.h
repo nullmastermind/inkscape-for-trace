@@ -29,15 +29,14 @@ public:
     enum AppearanceMode {
         FULL, MINIMAL
     };
-    ParamInt (const gchar * name,
-              const gchar * guitext,
-              const gchar * desc,
-              const Parameter::_scope_t scope,
-              bool gui_hidden,
-              const gchar * gui_tip,
-              Inkscape::Extension::Extension * ext,
-              Inkscape::XML::Node * xml,
-              AppearanceMode mode);
+    ParamInt(const gchar * name,
+             const gchar * text,
+             const gchar * description,
+             bool hidden,
+             int indent,
+             Inkscape::Extension::Extension * ext,
+             Inkscape::XML::Node * xml,
+             AppearanceMode mode);
 
     /** Returns \c _value. */
     int get(const SPDocument * /*doc*/, const Inkscape::XML::Node * /*node*/) const { return _value; }
@@ -59,7 +58,6 @@ private:
     /** Internal value. */
     int _value;
     AppearanceMode _mode;
-    int _indent;
     int _min;
     int _max;
 };

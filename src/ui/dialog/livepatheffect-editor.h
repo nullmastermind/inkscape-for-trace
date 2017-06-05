@@ -46,6 +46,7 @@ public:
     static LivePathEffectEditor &getInstance() { return *new LivePathEffectEditor(); }
 
     void onSelectionChanged(Inkscape::Selection *sel);
+    void onSelectionModified(Inkscape::Selection *sel);
     virtual void on_effect_selection_changed();
     void setDesktop(SPDesktop *desktop);
 
@@ -63,14 +64,14 @@ private:
     sigc::connection selection_changed_connection;
     sigc::connection selection_modified_connection;
 
+    // void add_entry(const char* name );
+    void effect_list_reload(SPLPEItem *lpeitem);
+
     void set_sensitize_all(bool sensitive);
 
     void showParams(LivePathEffect::Effect& effect);
     void showText(Glib::ustring const &str);
     void selectInList(LivePathEffect::Effect* effect);
-
-   // void add_entry(const char* name );
-    void effect_list_reload(SPLPEItem *lpeitem);
 
     // callback methods for buttons on grids page.
     void onAdd();
@@ -95,7 +96,7 @@ private:
     };
 
     bool lpe_list_locked;
-
+    bool lpe_changed;
     //Inkscape::UI::Widget::ComboBoxEnum<LivePathEffect::EffectType> combo_effecttype;
     
     Gtk::Widget * effectwidget;
@@ -112,11 +113,7 @@ private:
 
     void on_visibility_toggled( Glib::ustring const& str );
 
-#if WITH_GTKMM_3_0
     Gtk::ButtonBox toolbar_hbox;
-#else
-    Gtk::HButtonBox toolbar_hbox;
-#endif
     Gtk::Button button_add;
     Gtk::Button button_remove;
     Gtk::Button button_up;
@@ -126,7 +123,10 @@ private:
     
     SPLPEItem * current_lpeitem;
 
+    LivePathEffect::LPEObjectReference * current_lperef;
+
     friend void lpeeditor_selection_changed (Inkscape::Selection * selection, gpointer data);
+    friend void lpeeditor_selection_modified (Inkscape::Selection * selection, guint /*flags*/, gpointer data);
 
     LivePathEffectEditor(LivePathEffectEditor const &d);
     LivePathEffectEditor& operator=(LivePathEffectEditor const &d);

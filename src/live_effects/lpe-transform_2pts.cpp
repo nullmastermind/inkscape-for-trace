@@ -14,14 +14,12 @@
 
 #include "live_effects/lpe-transform_2pts.h"
 #include "display/curve.h"
-#include <2geom/transforms.h>
-#include <2geom/pathvector.h>
-#include "sp-path.h"
 #include "ui/icon-names.h"
 #include "svg/svg.h"
 #include "verbs.h"
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
+
 
 namespace Inkscape {
 namespace LivePathEffect {
@@ -36,7 +34,7 @@ LPETransform2Pts::LPETransform2Pts(LivePathEffectObject *lpeobject) :
     flip_vertical(_("Flip vertical"), _("Flip vertical"), "flip_vertical", &wr, this, false,"", INKSCAPE_ICON("on"), INKSCAPE_ICON("off")),
     start(_("Start"), _("Start point"), "start", &wr, this, "Start point"),
     end(_("End"), _("End point"), "end", &wr, this, "End point"),
-    strech(_("Stretch"), _("Stretch the result"), "strech", &wr, this, 1),
+    stretch(_("Stretch"), _("Stretch the result"), "stretch", &wr, this, 1),
     offset(_("Offset"), _("Offset from knots"), "offset", &wr, this, 0),
     first_knot(_("First Knot"), _("First Knot"), "first_knot", &wr, this, 1),
     last_knot(_("Last Knot"), _("Last Knot"), "last_knot", &wr, this, 1),
@@ -54,7 +52,7 @@ LPETransform2Pts::LPETransform2Pts(LivePathEffectObject *lpeobject) :
     registerParameter(&first_knot);
     registerParameter(&last_knot);
     registerParameter(&helper_size);
-    registerParameter(&strech);
+    registerParameter(&stretch);
     registerParameter(&offset);
     registerParameter(&start);
     registerParameter(&end);
@@ -66,18 +64,18 @@ LPETransform2Pts::LPETransform2Pts(LivePathEffectObject *lpeobject) :
     registerParameter(&lock_angle);
 
     first_knot.param_make_integer(true);
-    first_knot.param_overwrite_widget(true);
+    first_knot.param_set_undo(false);
     last_knot.param_make_integer(true);
-    last_knot.param_overwrite_widget(true);
+    last_knot.param_set_undo(false);
     helper_size.param_set_range(0, 999);
     helper_size.param_set_increments(1, 1);
     helper_size.param_set_digits(0);
     offset.param_set_range(-999999.0, 999999.0);
     offset.param_set_increments(1, 1);
     offset.param_set_digits(2);
-    strech.param_set_range(0, 999.0);
-    strech.param_set_increments(0.01, 0.01);
-    strech.param_set_digits(4);
+    stretch.param_set_range(0, 999.0);
+    stretch.param_set_increments(0.01, 0.01);
+    stretch.param_set_digits(4);
     apply_to_clippath_and_mask = true;
 }
 
@@ -90,7 +88,6 @@ LPETransform2Pts::doOnApply(SPLPEItem const* lpeitem)
 {
     using namespace Geom;
     original_bbox(lpeitem);
-
     point_a = Point(boundingbox_X.min(), boundingbox_Y.middle());
     point_b = Point(boundingbox_X.max(), boundingbox_Y.middle());
     SPLPEItem * splpeitem = const_cast<SPLPEItem *>(lpeitem);
@@ -141,14 +138,22 @@ LPETransform2Pts::doBeforeEffect (SPLPEItem const* lpeitem)
         size_t nnodes = nodeCount(pathvector);
         first_knot.param_set_range(1, last_knot-1);
         last_knot.param_set_range(first_knot+1, nnodes);
-        from_original_width.param_setValue(false);
+        if (from_original_width){
+            from_original_width.param_setValue(false);
+        }
     } else {
-        first_knot.param_set_value(1);
-        last_knot.param_set_value(2);
+        if (first_knot != 1){
+            first_knot.param_set_value(1);
+        }
+        if (last_knot != 2){
+            last_knot.param_set_value(2);
+        }
         first_knot.param_set_range(1,1);
         last_knot.param_set_range(2,2);
-        from_original_width.param_setValue(true);
         append_path = false;
+        if (!from_original_width){
+            from_original_width.param_setValue(true);
+        }
     }
     if(lock_lenght && !lock_angle && previous_lenght != -1) {
         Geom::Ray transformed((Geom::Point)start,(Geom::Point)end);
@@ -254,6 +259,8 @@ LPETransform2Pts::reset()
         first_knot.param_set_value(1);
         last_knot.param_set_value(2);
     }
+    offset.param_set_value(0.0);
+    stretch.param_set_value(1.0);
     Geom::Ray transformed(point_a, point_b);
     previous_angle = transformed.angle();
     previous_lenght = Geom::distance(point_a, point_b);
@@ -382,9 +389,9 @@ LPETransform2Pts::doEffect_pwd2 (Geom::Piecewise<Geom::D2<Geom::SBasis> > const 
         m *= Geom::Scale(-1,1);
         m *= Geom::Rotate(original_angle);
     }
-    if(strech != 1){
+    if(stretch != 1){
         m *= Geom::Rotate(-original_angle);
-        m *= Geom::Scale(1,strech);
+        m *= Geom::Scale(1,stretch);
         m *= Geom::Rotate(original_angle);
     }
     if(elastic) {
@@ -434,7 +441,7 @@ LPETransform2Pts::addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<
     }
     if(!lock_angle && lock_lenght) {
         char const * svgd;
-        svgd = "m 7.07,7.07 c -3.9,3.91 -10.24,3.91 -14.14,0 -3.91,-3.9 -3.91,-10.24 0,-14.14 3.9,-3.91 10.24,-3.91 14.14,0 l -2.83,-4.24 -0.7,2.12";
+        svgd = "M 0,9.94 C -2.56,9.91 -5.17,8.98 -7.07,7.07 c -3.91,-3.9 -3.91,-10.24 0,-14.14 1.97,-1.97 4.51,-3.02 7.07,-3.04 2.56,0.02 5.1,1.07 7.07,3.04 3.91,3.9 3.91,10.24 0,14.14 C 5.17,8.98 2.56,9.91 0,9.94 Z";
         PathVector pathv_turn = sp_svg_read_pathv(svgd);
         pathv_turn *= Geom::Rotate(previous_angle);
         pathv_turn *= Affine(r,0,0,r,0,0) * Translate(Geom::Point(end));

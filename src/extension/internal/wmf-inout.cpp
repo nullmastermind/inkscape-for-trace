@@ -161,7 +161,15 @@ Wmf::save(Inkscape::Extension::Output *mod, SPDocument *doc, gchar const *filena
     ext->set_param_bool("FixPPTPatternAsHatch",new_FixPPTPatternAsHatch);
     ext->set_param_bool("textToPath", new_val);
 
+    // ensure usage of dot as decimal separator in scanf/printf functions (indepentendly of current locale)
+    char *oldlocale = g_strdup(setlocale(LC_NUMERIC, NULL));
+    setlocale(LC_NUMERIC, "C");
+
     print_document_to_file(doc, filename);
+
+    // restore decimal separator used in scanf/printf functions to initial value
+    setlocale(LC_NUMERIC, oldlocale);
+    g_free(oldlocale);
 
     return;
 }
@@ -1762,11 +1770,20 @@ std::cout << "BEFORE DRAW"
  << " test0 " << ( d->mask & U_DRAW_VISIBLE)
  << " test1 " << ( d->mask & U_DRAW_FORCE)
  << " test2 " << (wmr_mask & U_DRAW_ALTERS)
+ << " test2.5 " << ((d->mask & U_DRAW_NOFILL) != (wmr_mask & U_DRAW_NOFILL)  )
  << " test3 " << (wmr_mask & U_DRAW_VISIBLE)
  << " test4 " << !(d->mask & U_DRAW_ONLYTO)
  << " test5 " << ((d->mask & U_DRAW_ONLYTO) && !(wmr_mask & U_DRAW_ONLYTO)  )
  << std::endl;
 */
+    /* spurious moveto records should not affect the drawing.  However, they set the NOFILL
+       bit and that messes up the logic about when to emit a path.  So prune out any
+       stray moveto records.  That is those which were never followed by a lineto.
+    */
+    if((d->mask & U_DRAW_NOFILL) && !(d->mask & U_DRAW_VISIBLE) &&
+       !(wmr_mask & U_DRAW_ONLYTO) && (wmr_mask & U_DRAW_VISIBLE)){
+       d->mask ^= U_DRAW_NOFILL;
+    }
 
     if(
         (wmr_mask != U_WMR_INVALID)                             &&              // next record is valid type
@@ -1774,6 +1791,7 @@ std::cout << "BEFORE DRAW"
         (
             (d->mask & U_DRAW_FORCE)                            ||              // This draw is forced by STROKE/FILL/STROKEANDFILL PATH
             (wmr_mask & U_DRAW_ALTERS)                          ||              // Next record would alter the drawing environment in some way
+            ((d->mask & U_DRAW_NOFILL) != (wmr_mask & U_DRAW_NOFILL)) ||        // Fill<->!Fill requires a draw between
             (  (wmr_mask & U_DRAW_VISIBLE)                      &&              // Next record is visible...
                 (
                     ( !(d->mask & U_DRAW_ONLYTO) )              ||              //   Non *TO records cannot be followed by any Visible
@@ -3087,6 +3105,10 @@ Wmf::open( Inkscape::Extension::Input * /*mod*/, const gchar *uri )
         return NULL;
     }
 
+    // ensure usage of dot as decimal separator in scanf/printf functions (indepentendly of current locale)
+    char *oldlocale = g_strdup(setlocale(LC_NUMERIC, NULL));
+    setlocale(LC_NUMERIC, "C");
+
     WMF_CALLBACK_DATA d;
     
     d.n_obj = 0;     //these might not be set otherwise if the input file is corrupt
@@ -3167,6 +3189,10 @@ Wmf::open( Inkscape::Extension::Input * /*mod*/, const gchar *uri )
 
     // in earlier versions no viewbox was generated and a call to setViewBoxIfMissing() was needed here.
 
+    // restore decimal separator used in scanf/printf functions to initial value
+    setlocale(LC_NUMERIC, oldlocale);
+    g_free(oldlocale);
+
     return doc;
 }
 
@@ -3193,15 +3219,15 @@ Wmf::init (void)
         "<inkscape-extension xmlns=\"" INKSCAPE_EXTENSION_URI "\">\n"
             "<name>" N_("WMF Output") "</name>\n"
             "<id>org.inkscape.output.wmf</id>\n"
-            "<param name=\"textToPath\" gui-text=\"" N_("Convert texts to paths") "\" type=\"boolean\">true</param>\n"
-            "<param name=\"TnrToSymbol\" gui-text=\"" N_("Map Unicode to Symbol font") "\" type=\"boolean\">true</param>\n"
-            "<param name=\"TnrToWingdings\" gui-text=\"" N_("Map Unicode to Wingdings") "\" type=\"boolean\">true</param>\n"
-            "<param name=\"TnrToZapfDingbats\" gui-text=\"" N_("Map Unicode to Zapf Dingbats") "\" type=\"boolean\">true</param>\n"
-            "<param name=\"UsePUA\" gui-text=\"" N_("Use MS Unicode PUA (0xF020-0xF0FF) for converted characters") "\" type=\"boolean\">false</param>\n"
-            "<param name=\"FixPPTCharPos\" gui-text=\"" N_("Compensate for PPT font bug") "\" type=\"boolean\">false</param>\n"
-            "<param name=\"FixPPTDashLine\" gui-text=\"" N_("Convert dashed/dotted lines to single lines") "\" type=\"boolean\">false</param>\n"
-            "<param name=\"FixPPTGrad2Polys\" gui-text=\"" N_("Convert gradients to colored polygon series") "\" type=\"boolean\">false</param>\n"
-            "<param name=\"FixPPTPatternAsHatch\" gui-text=\"" N_("Map all fill patterns to standard WMF hatches") "\" type=\"boolean\">false</param>\n"
+            "<param name=\"textToPath\" _gui-text=\"" N_("Convert texts to paths") "\" type=\"boolean\">true</param>\n"
+            "<param name=\"TnrToSymbol\" _gui-text=\"" N_("Map Unicode to Symbol font") "\" type=\"boolean\">true</param>\n"
+            "<param name=\"TnrToWingdings\" _gui-text=\"" N_("Map Unicode to Wingdings") "\" type=\"boolean\">true</param>\n"
+            "<param name=\"TnrToZapfDingbats\" _gui-text=\"" N_("Map Unicode to Zapf Dingbats") "\" type=\"boolean\">true</param>\n"
+            "<param name=\"UsePUA\" _gui-text=\"" N_("Use MS Unicode PUA (0xF020-0xF0FF) for converted characters") "\" type=\"boolean\">false</param>\n"
+            "<param name=\"FixPPTCharPos\" _gui-text=\"" N_("Compensate for PPT font bug") "\" type=\"boolean\">false</param>\n"
+            "<param name=\"FixPPTDashLine\" _gui-text=\"" N_("Convert dashed/dotted lines to single lines") "\" type=\"boolean\">false</param>\n"
+            "<param name=\"FixPPTGrad2Polys\" _gui-text=\"" N_("Convert gradients to colored polygon series") "\" type=\"boolean\">false</param>\n"
+            "<param name=\"FixPPTPatternAsHatch\" _gui-text=\"" N_("Map all fill patterns to standard WMF hatches") "\" type=\"boolean\">false</param>\n"
             "<output>\n"
                 "<extension>.wmf</extension>\n"
                 "<mimetype>image/x-wmf</mimetype>\n"

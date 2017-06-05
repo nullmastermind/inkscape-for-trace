@@ -15,14 +15,15 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "filedialogimpl-win32.h"
-#include "filedialogimpl-gtkmm.h"
-#include "filedialog.h"
+#ifdef WIN32
+# include "filedialogimpl-win32.h"
+# include "preferences.h"
+#endif
 
-#include "inkgc/gc-core.h"
+#include "filedialogimpl-gtkmm.h"
+
 #include "ui/dialog-events.h"
 #include "extension/output.h"
-#include "preferences.h"
 
 #include <glibmm/convert.h>
 

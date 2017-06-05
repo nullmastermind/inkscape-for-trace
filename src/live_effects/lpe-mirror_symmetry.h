@@ -18,18 +18,13 @@
 
 #include "live_effects/effect.h"
 #include "live_effects/parameter/parameter.h"
+#include "live_effects/parameter/text.h"
 #include "live_effects/parameter/point.h"
-#include "live_effects/parameter/path.h"
 #include "live_effects/parameter/enum.h"
 #include "live_effects/lpegroupbbox.h"
 
 namespace Inkscape {
 namespace LivePathEffect {
-
-namespace MS {
-// we need a separate namespace to avoid clashes with LPEPerpBisector
-class KnotHolderEntityCenterMirrorSymmetry;
-}
 
 enum ModeType {
     MT_V,
@@ -46,25 +41,31 @@ public:
     virtual ~LPEMirrorSymmetry();
     virtual void doOnApply (SPLPEItem const* lpeitem);
     virtual void doBeforeEffect (SPLPEItem const* lpeitem);
+    virtual void doAfterEffect (SPLPEItem const* lpeitem);
+    virtual void transform_multiply(Geom::Affine const& postmul, bool set);
     virtual Geom::PathVector doEffect_path (Geom::PathVector const & path_in);
-    /* the knotholder entity classes must be declared friends */
-    friend class MS::KnotHolderEntityCenterMirrorSymmetry;
-    void addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item);
+    virtual void doOnRemove (SPLPEItem const* /*lpeitem*/);
+    virtual void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/);
+    void toMirror(Geom::Affine transform);
+    //    void cloneAttrbutes(Inkscape::XML::Node * origin, Inkscape::XML::Node * dest, const char * first_attribute, ...);
+    void cloneD(SPObject *orig, SPObject *dest, bool live, bool root);
 
 protected:
     virtual void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec);
 
 private:
     EnumParam<ModeType> mode;
+    ScalarParam split_gap;
     BoolParam discard_orig_path;
     BoolParam fuse_paths;
     BoolParam oposite_fuse;
+    BoolParam split_items;
     PointParam start_point;
     PointParam end_point;
-    Geom::Line line_separation;
+    PointParam center_point;
+    TextParam id_origin;
     Geom::Point previous_center;
-    Geom::Point center_point;
-
+    SPObject * container;
     LPEMirrorSymmetry(const LPEMirrorSymmetry&);
     LPEMirrorSymmetry& operator=(const LPEMirrorSymmetry&);
 };

@@ -84,6 +84,8 @@ private:
      class Gtk::Widget * _previewArea;
      class Gtk::Button * cancelbutton;
      class Gtk::Button * okbutton;
+
+     class Gtk::HBox  * _page_selector_box;
      class Gtk::Label * _labelSelect;
      class Gtk::Label * _labelTotalPages;
      class Gtk::SpinButton * _pageNumberSpin;
@@ -113,18 +115,10 @@ VsdImportDialog::VsdImportDialog(const std::vector<RVNGString> &vec)
      _previewArea = Gtk::manage(new class Gtk::VBox());
      vbox1 = Gtk::manage(new class Gtk::VBox());
      vbox1->pack_start(*_previewArea, Gtk::PACK_EXPAND_WIDGET, 0);
-#if WITH_GTKMM_3_0
      this->get_content_area()->pack_start(*vbox1);
-#else
-     this->get_vbox()->pack_start(*vbox1);
-#endif
-
 
      // CONTROLS
-
-     // Buttons
-     cancelbutton = Gtk::manage(new class Gtk::Button(Gtk::StockID("gtk-cancel")));
-     okbutton = Gtk::manage(new class Gtk::Button(Gtk::StockID("gtk-ok")));
+     _page_selector_box = Gtk::manage(new Gtk::HBox());
 
      // Labels
      _labelSelect = Gtk::manage(new class Gtk::Label(_("Select page:")));
@@ -132,30 +126,30 @@ VsdImportDialog::VsdImportDialog(const std::vector<RVNGString> &vec)
      _labelSelect->set_line_wrap(false);
      _labelSelect->set_use_markup(false);
      _labelSelect->set_selectable(false);
+     _page_selector_box->pack_start(*_labelSelect, Gtk::PACK_SHRINK);
+
+     // Adjustment + spinner
+     auto _pageNumberSpin_adj = Gtk::Adjustment::create(1, 1, _vec.size(), 1, 10, 0);
+     _pageNumberSpin = Gtk::manage(new Gtk::SpinButton(_pageNumberSpin_adj, 1, 0));
+     _pageNumberSpin->set_can_focus();
+     _pageNumberSpin->set_update_policy(Gtk::UPDATE_ALWAYS);
+     _pageNumberSpin->set_numeric(true);
+     _pageNumberSpin->set_wrap(false);
+     _page_selector_box->pack_start(*_pageNumberSpin, Gtk::PACK_SHRINK);
+
      _labelTotalPages->set_line_wrap(false);
      _labelTotalPages->set_use_markup(false);
      _labelTotalPages->set_selectable(false);
      gchar *label_text = g_strdup_printf(_("out of %i"), num_pages);
      _labelTotalPages->set_label(label_text);
      g_free(label_text);
+     _page_selector_box->pack_start(*_labelTotalPages, Gtk::PACK_SHRINK);
 
-     // Adjustment + spinner
-#if WITH_GTKMM_3_0
-     Glib::RefPtr<Gtk::Adjustment> _pageNumberSpin_adj = Gtk::Adjustment::create(1, 1, _vec.size(), 1, 10, 0);
-     _pageNumberSpin = Gtk::manage(new Gtk::SpinButton(_pageNumberSpin_adj, 1, 0));
-#else
-     Gtk::Adjustment *_pageNumberSpin_adj = Gtk::manage(new class Gtk::Adjustment(1, 1, _vec.size(), 1, 10, 0));
-     _pageNumberSpin = Gtk::manage(new Gtk::SpinButton(*_pageNumberSpin_adj, 1, 0));
-#endif
-     _pageNumberSpin->set_can_focus();
-     _pageNumberSpin->set_update_policy(Gtk::UPDATE_ALWAYS);
-     _pageNumberSpin->set_numeric(true);
-     _pageNumberSpin->set_wrap(false);
+     vbox1->pack_end(*_page_selector_box, Gtk::PACK_SHRINK);
 
-     this->get_action_area()->property_layout_style().set_value(Gtk::BUTTONBOX_END);
-     this->get_action_area()->add(*_labelSelect);
-     this->add_action_widget(*_pageNumberSpin, Gtk::RESPONSE_ACCEPT);
-     this->get_action_area()->add(*_labelTotalPages);
+     // Buttons
+     cancelbutton = Gtk::manage(new Gtk::Button(_("_Cancel"), true));
+     okbutton     = Gtk::manage(new Gtk::Button(_("_OK"),     true));
      this->add_action_widget(*cancelbutton, Gtk::RESPONSE_CANCEL);
      this->add_action_widget(*okbutton, Gtk::RESPONSE_OK);
 
@@ -217,6 +211,19 @@ void VsdImportDialog::_setPreviewPage()
      }
 
      SPDocument *doc = SPDocument::createNewDocFromMem(_vec[_current_page-1].cstr(), strlen(_vec[_current_page-1].cstr()), 0);
+     if(!doc) {
+           g_warning("VSD import: Could not create preview for page %d", _current_page);
+           gchar const *no_preview_template =
+                "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>"
+                "  <path style='fill:none;stroke:#ff0000;stroke-width:2px;' d='M 82,10 18,74 m 0,-64 64,64' />"
+                "  <rect style='fill:none;stroke:#000000;stroke-width:1.5px;' width='64' height='64' x='18' y='10' />"
+                "  <text x='50' y='92' style='font-size:10px;text-anchor:middle;font-family:sans-serif;'>%s</text>"
+                "</svg>";
+           gchar * no_preview = g_strdup_printf(no_preview_template, _("No preview"));
+           doc = SPDocument::createNewDocFromMem(no_preview, strlen(no_preview), 0);
+           g_free(no_preview);
+     }
+
      Gtk::Widget * tmpPreviewArea = Glib::wrap(sp_svg_view_widget_new(doc));
      std::swap(_previewArea, tmpPreviewArea);
      delete tmpPreviewArea;
@@ -226,7 +233,16 @@ void VsdImportDialog::_setPreviewPage()
 
 SPDocument *VsdInput::open(Inkscape::Extension::Input * /*mod*/, const gchar * uri)
 {
-     RVNGFileStream input(uri);
+     #ifdef WIN32
+          // RVNGFileStream uses fopen() internally which unfortunately only uses ANSI encoding on Windows
+          // therefore attempt to convert uri to the system codepage
+          // even if this is not possible the alternate short (8.3) file name will be used if available
+          gchar * converted_uri = g_win32_locale_filename_from_utf8(uri);
+          RVNGFileStream input(converted_uri);
+          g_free(converted_uri);
+     #else
+          RVNGFileStream input(uri);
+     #endif
 
      if (!libvisio::VisioDocument::isSupported(&input)) {
           return NULL;

@@ -4,14 +4,17 @@
 /**
  * @file
  * Simple non-transformed rectangle, usable for rubberband.
+ * Modified to work with rotated canvas.
  */
 /*
  * Authors:
  *   Lauris Kaplinski <lauris@ximian.com>
  *   Carl Hetherington <inkscape@carlh.net>
+ *   Tavmjong Bah <tavjong@free.fr>
  *
  * Copyright (C) 1999-2001 Lauris Kaplinski
  * Copyright (C) 2000-2001 Ximian, Inc.
+ * Copyright (C) 2017 Tavmjong Bah
  *
  * Released under GNU GPL
  *
@@ -21,6 +24,7 @@
 #include "sp-canvas-item.h"
 #include <2geom/rect.h>
 #include <2geom/int-rect.h>
+#include <2geom/transforms.h>
 
 struct SPCanvasBuf;
 
@@ -48,23 +52,24 @@ private:
     void _requestUpdate();
     
     Geom::Rect _rect;
+    Geom::Affine _affine;
+
     bool _has_fill;
     bool _dashed;
     bool _checkerboard;
 
     Geom::OptIntRect _area;
-    gint _shadow_size;
+    gint _shadow_width;
     guint32 _border_color;
     guint32 _fill_color;
     guint32 _shadow_color;    
-    int _shadow;
 };
 
 struct CtrlRectClass : public SPCanvasItemClass {};
 
 GType sp_ctrlrect_get_type();
 
-#endif // SEEN_RUBBERBAND_H
+#endif // SEEN_CTRLRECT_H
 
 /*
   Local Variables:

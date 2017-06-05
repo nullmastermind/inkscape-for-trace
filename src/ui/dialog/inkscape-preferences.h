@@ -97,11 +97,7 @@ enum {
 };
 
 namespace Gtk {
-#if WITH_GTKMM_3_0
 class Scale;
-#else
-class HScale;
-#endif
 }
 
 namespace Inkscape {
@@ -206,11 +202,7 @@ protected:
     UI::Widget::PrefCheckButton _scroll_space;
     UI::Widget::PrefCheckButton _wheel_zoom;
 
-#if WITH_GTKMM_3_0
     Gtk::Scale      *_slider_snapping_delay;
-#else
-    Gtk::HScale     *_slider_snapping_delay;
-#endif
 
     UI::Widget::PrefCheckButton _snap_indicator;
     UI::Widget::PrefCheckButton _snap_closest_only;
@@ -223,6 +215,7 @@ protected:
     UI::Widget::PrefSpinUnit    _steps_scale;
     UI::Widget::PrefSpinUnit    _steps_inset;
     UI::Widget::PrefSpinButton  _steps_zoom;
+    UI::Widget::PrefSpinButton  _steps_rotate;
 
     UI::Widget::PrefRadioButton _t_sel_trans_obj;
     UI::Widget::PrefRadioButton _t_sel_trans_outl;
@@ -302,6 +295,7 @@ protected:
     UI::Widget::PrefCombo       _switcher_style;
     UI::Widget::PrefCheckButton _rendering_image_outline;
     UI::Widget::PrefSpinButton  _rendering_cache_size;
+    UI::Widget::PrefSpinButton  _rendering_tile_multiplier;
     UI::Widget::PrefSpinButton  _filter_multi_threaded;
 
     UI::Widget::PrefCheckButton _trans_scale_stroke;

@@ -20,24 +20,25 @@
 #include "extension/extension.h"
 #include "preferences.h"
 #include "float.h"
-#include <glibmm/i18n.h>
 
 namespace Inkscape {
 namespace Extension {
 
 
 /** Use the superclass' allocator and set the \c _value. */
-ParamFloat::ParamFloat (const gchar * name,
-                        const gchar * guitext,
-                        const gchar * desc,
-                        const Parameter::_scope_t scope,
-                        bool gui_hidden,
-                        const gchar * gui_tip,
-                        Inkscape::Extension::Extension * ext,
-                        Inkscape::XML::Node * xml,
-                        AppearanceMode mode) :
-        Parameter(name, guitext, desc, scope, gui_hidden, gui_tip, ext),
-                  _value(0.0), _mode(mode), _indent(0), _min(0.0), _max(10.0)
+ParamFloat::ParamFloat(const gchar * name,
+                       const gchar * text,
+                       const gchar * description,
+                       bool hidden,
+                       int indent,
+                       Inkscape::Extension::Extension * ext,
+                       Inkscape::XML::Node * xml,
+                       AppearanceMode mode)
+    : Parameter(name, text, description, hidden, indent, ext)
+    , _value(0.0)
+    , _mode(mode)
+    , _min(0.0)
+    , _max(10.0)
 {
     const gchar * defaultval = NULL;
     if (xml->firstChild() != NULL) {
@@ -67,11 +68,6 @@ ParamFloat::ParamFloat (const gchar * name,
     if (_max < _min) {
         _max = 10.0;
         _min = 0.0;
-    }
-
-    const char * indent = xml->attribute("indent");
-    if (indent != NULL) {
-        _indent = atoi(indent) * 12;
     }
 
     gchar * pref_name = this->pref_name();
@@ -171,38 +167,30 @@ void ParamFloatAdjustment::val_changed(void)
  */
 Gtk::Widget * ParamFloat::get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal)
 {
-    if (_gui_hidden) {
+    if (_hidden) {
         return NULL;
     }
 
-    Gtk::HBox * hbox = Gtk::manage(new Gtk::HBox(false, 4));
+    Gtk::HBox * hbox = Gtk::manage(new Gtk::HBox(false, Parameter::GUI_PARAM_WIDGETS_SPACING));
 
-#if WITH_GTKMM_3_0
-    ParamFloatAdjustment * pfa = new ParamFloatAdjustment(this, doc, node, changeSignal);
+    auto pfa = new ParamFloatAdjustment(this, doc, node, changeSignal);
     Glib::RefPtr<Gtk::Adjustment> fadjust(pfa);
-#else
-    ParamFloatAdjustment * fadjust = Gtk::manage(new ParamFloatAdjustment(this, doc, node, changeSignal));
-#endif
-    
+
     if (_mode == FULL) {
 
-        UI::Widget::SpinScale *scale = new UI::Widget::SpinScale(_(_text), fadjust, _precision);
+        UI::Widget::SpinScale *scale = new UI::Widget::SpinScale(_text, fadjust, _precision);
         scale->set_size_request(400, -1);
         scale->show();
-        hbox->pack_start(*scale, false, false);
+        hbox->pack_start(*scale, true, true);
 
     }
     else if (_mode == MINIMAL) {
 
-        Gtk::Label * label = Gtk::manage(new Gtk::Label(_(_text), Gtk::ALIGN_START));
+        Gtk::Label * label = Gtk::manage(new Gtk::Label(_text, Gtk::ALIGN_START));
         label->show();
-        hbox->pack_start(*label, true, true, _indent);
+        hbox->pack_start(*label, true, true);
 
-#if WITH_GTKMM_3_0
-    Inkscape::UI::Widget::SpinButton * spin = Gtk::manage(new Inkscape::UI::Widget::SpinButton(fadjust, 0.1, _precision));
-#else
-    Inkscape::UI::Widget::SpinButton * spin = Gtk::manage(new Inkscape::UI::Widget::SpinButton(*fadjust, 0.1, _precision));
-#endif
+	auto spin = Gtk::manage(new Inkscape::UI::Widget::SpinButton(fadjust, 0.1, _precision));
         spin->show();
         hbox->pack_start(*spin, false, false);
     }

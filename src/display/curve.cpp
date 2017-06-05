@@ -302,6 +302,18 @@ SPCurve::is_empty() const
 }
 
 /**
+ * True if paths are in curve. If it only contains a path with only a moveto, the path is considered as unset FALSE
+ */
+bool
+SPCurve::is_unset() const
+{
+    if (get_segment_count()) {
+        return false;
+    }
+    return true;
+}
+
+/**
  * True iff all subpaths are closed.
  * Returns false if the curve is empty.
  */
@@ -320,6 +332,20 @@ SPCurve::is_closed() const
         }
         return closed;
     }
+}
+
+/**
+ * True if both curves are equal
+ */
+bool
+SPCurve::is_equal(SPCurve * other) const
+{
+    if(other == NULL) {
+        return false;
+    } else if(_pathv == other->get_pathvector()){
+        return true;
+    }
+    return false;
 }
 
 /**

@@ -65,12 +65,11 @@ public:
     virtual bool param_readSVGValue(const gchar * strvalue);
     virtual gchar * param_getSVGValue() const;
     virtual void param_set_default();
-    
+    virtual void param_update_default(const gchar * default_value){};
     /** Disable the canvas indicators of parent class by overriding this method */
     virtual void param_editOncanvas(SPItem * /*item*/, SPDesktop * /*dt*/) {};
     /** Disable the canvas indicators of parent class by overriding this method */
     virtual void addCanvasIndicators(SPLPEItem const* /*lpeitem*/, std::vector<Geom::PathVector> & /*hp_vec*/) {};
-    
     std::vector<PathAndDirection*> _vector;
     
 protected:

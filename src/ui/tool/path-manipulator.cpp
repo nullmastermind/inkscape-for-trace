@@ -12,37 +12,23 @@
 
 #include "live_effects/lpe-powerstroke.h"
 #include "live_effects/lpe-bspline.h"
-#include "live_effects/lpe-fillet-chamfer.h"
-#include <string>
-#include <sstream>
-#include <deque>
-#include <stdexcept>
-#include <boost/shared_ptr.hpp>
-#include <2geom/bezier-curve.h>
 #include <2geom/bezier-utils.h>
 #include <2geom/path-sink.h>
-#include <glibmm/i18n.h>
 #include "ui/tool/path-manipulator.h"
-#include "desktop.h"
 
 #include "display/sp-canvas.h"
 #include "display/sp-canvas-util.h"
 #include "display/curve.h"
 #include "display/canvas-bpath.h"
-#include "document.h"
-#include "live_effects/effect.h"
 #include "live_effects/lpeobject.h"
 #include "live_effects/lpeobject-reference.h"
 #include "live_effects/parameter/path.h"
-#include "sp-path.h"
 #include "helper/geom.h"
-#include "preferences.h"
 #include "style.h"
 #include "ui/tool/control-point-selection.h"
 #include "ui/tool/curve-drag-point.h"
 #include "ui/tool/event-utils.h"
 #include "ui/tool/multi-path-manipulator.h"
-#include "xml/node.h"
 #include "xml/node-observer.h"
 
 namespace Inkscape {
@@ -1377,13 +1363,6 @@ void PathManipulator::_createGeometryFromControlPoints(bool alert_LPE)
                     lpe_pwr->adjustForNewPath(pathv);
                 }
             }
-            this_effect = _path->getPathEffectOfType(Inkscape::LivePathEffect::FILLET_CHAMFER);
-            if(this_effect){
-                LivePathEffect::LPEFilletChamfer *lpe_fll = dynamic_cast<LivePathEffect::LPEFilletChamfer*>(this_effect->getLPEObj()->get_lpe());
-                if (lpe_fll) {
-                    lpe_fll->adjustForNewPath(pathv);
-                }
-            }
         }
     }
 
@@ -1505,11 +1484,14 @@ void PathManipulator::_setGeometry()
         }
     } else {
         if (empty()) return;
-        //XML Tree being used here directly while it shouldn't be.
-        if (_path->getRepr()->attribute("inkscape:original-d"))
-            _path->set_original_curve(_spcurve, false, false);
-        else
+        if (SPCurve * original = _path->get_original_curve()){
+            if(!_spcurve->is_equal(original)) {
+                _path->set_original_curve(_spcurve, false, false);
+                delete original;
+            }
+        } else if(!_spcurve->is_equal(_path->get_curve())) {
             _path->setCurve(_spcurve, false);
+        }
     }
 }
 

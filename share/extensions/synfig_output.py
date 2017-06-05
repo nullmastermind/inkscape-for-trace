@@ -1051,7 +1051,6 @@ class SynfigExport(SynfigPrep):
     def effect(self):
         # Prepare the document for exporting
         SynfigPrep.effect(self)
-
         svg = self.document.getroot()
         width = get_dimension(svg.get("width", 1024))
         height = get_dimension(svg.get("height", 768))

@@ -40,7 +40,7 @@ protected:
     Gtk::SpinButton   _powerstroke_position_entry;
     Gtk::Label        _powerstroke_width_label;
     Gtk::SpinButton   _powerstroke_width_entry;
-    Gtk::Table        _layout_table;
+    Gtk::Grid         _layout_table;
     bool              _position_visible;
 
     Gtk::Button       _close_button;

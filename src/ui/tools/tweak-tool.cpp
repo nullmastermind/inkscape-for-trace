@@ -11,8 +11,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include "config.h"
-
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 #include <glibmm/i18n.h>
@@ -21,7 +19,6 @@
 
 #include "svg/svg.h"
 
-#include <glib.h>
 #include "macros.h"
 #include "document.h"
 #include "document-undo.h"
@@ -48,34 +45,27 @@
 #include "pixmaps/cursor-push.xpm"
 #include "pixmaps/cursor-roughen.xpm"
 #include "pixmaps/cursor-color.xpm"
-#include <boost/optional.hpp>
-#include "xml/repr.h"
 #include "context-fns.h"
-#include "sp-item.h"
 #include "inkscape.h"
-#include "color.h"
-#include "svg/svg-color.h"
 #include "splivarot.h"
 #include "sp-item-group.h"
 #include "sp-shape.h"
 #include "sp-path.h"
 #include "path-chemistry.h"
-#include "sp-gradient.h"
 #include "sp-stop.h"
 #include "sp-gradient-reference.h"
 #include "sp-linear-gradient.h"
 #include "sp-radial-gradient.h"
+#include "sp-mesh-gradient.h"
+#include "sp-mesh-array.h"
 #include "gradient-chemistry.h"
 #include "sp-text.h"
 #include "sp-flowtext.h"
 #include "display/sp-canvas.h"
-#include "display/canvas-bpath.h"
 #include "display/canvas-arena.h"
 #include "display/curve.h"
 #include "livarot/Shape.h"
-#include <2geom/transforms.h>
 #include <2geom/circle.h>
-#include "preferences.h"
 #include "style.h"
 #include "box3d.h"
 #include "sp-item-transform.h"
@@ -153,7 +143,7 @@ void TweakTool::update_cursor (bool with_shift) {
     gchar *sel_message = NULL;
 
     if (!desktop->selection->isEmpty()) {
-        num = desktop->selection->itemList().size();
+        num = (guint) boost::distance(desktop->selection->items());
         sel_message = g_strdup_printf(ngettext("<b>%i</b> object selected","<b>%i</b> objects selected",num), num);
     } else {
         sel_message = g_strdup_printf("%s", _("<b>Nothing</b> selected"));
@@ -385,9 +375,9 @@ sp_tweak_dilate_recursive (Inkscape::Selection *selection, SPItem *item, Geom::P
 
     if (dynamic_cast<SPGroup *>(item) && !dynamic_cast<SPBox3D *>(item)) {
         GSList *children = NULL;
-        for (SPObject *child = item->firstChild() ; child; child = child->getNext() ) {
-            if (dynamic_cast<SPItem *>(static_cast<SPObject *>(child))) {
-                children = g_slist_prepend(children, child);
+        for (auto& child: item->children) {
+            if (dynamic_cast<SPItem *>(static_cast<SPObject *>(&child))) {
+                children = g_slist_prepend(children, &child);
             }
         }
 
@@ -773,112 +763,132 @@ static void tweak_colors_in_gradient(SPItem *item, Inkscape::PaintTarget fill_or
     p *= (gradient->gradientTransform).inverse();
     // now p is in gradient's original coordinates
 
-    double pos = 0;
-    double r = 0;
-
     SPLinearGradient *lg = dynamic_cast<SPLinearGradient *>(gradient);
-    if (lg) {
-        Geom::Point p1(lg->x1.computed, lg->y1.computed);
-        Geom::Point p2(lg->x2.computed, lg->y2.computed);
-        Geom::Point pdiff(p2 - p1);
-        double vl = Geom::L2(pdiff);
+    SPRadialGradient *rg = dynamic_cast<SPRadialGradient *>(gradient);
+    if (lg || rg) {
 
-        // This is the matrix which moves and rotates the gradient line
-        // so it's oriented along the X axis:
-        Geom::Affine norm = Geom::Affine(Geom::Translate(-p1)) * Geom::Affine(Geom::Rotate(-atan2(pdiff[Geom::Y], pdiff[Geom::X])));
+        double pos = 0;
+        double r = 0;
 
-        // Transform the mouse point by it to find out its projection onto the gradient line:
-        Geom::Point pnorm = p * norm;
+        if (lg) {
+            Geom::Point p1(lg->x1.computed, lg->y1.computed);
+            Geom::Point p2(lg->x2.computed, lg->y2.computed);
+            Geom::Point pdiff(p2 - p1);
+            double vl = Geom::L2(pdiff);
 
-        // Scale its X coordinate to match the length of the gradient line:
-        pos = pnorm[Geom::X] / vl;
-        // Calculate radius in lenfth-of-gradient-line units
-        r = radius / vl;
+            // This is the matrix which moves and rotates the gradient line
+            // so it's oriented along the X axis:
+            Geom::Affine norm = Geom::Affine(Geom::Translate(-p1)) *
+                Geom::Affine(Geom::Rotate(-atan2(pdiff[Geom::Y], pdiff[Geom::X])));
 
-    } else {
-        SPRadialGradient *rg = dynamic_cast<SPRadialGradient *>(gradient);
+            // Transform the mouse point by it to find out its projection onto the gradient line:
+            Geom::Point pnorm = p * norm;
+
+            // Scale its X coordinate to match the length of the gradient line:
+            pos = pnorm[Geom::X] / vl;
+            // Calculate radius in lenfth-of-gradient-line units
+            r = radius / vl;
+
+        }
         if (rg) {
             Geom::Point c (rg->cx.computed, rg->cy.computed);
             pos = Geom::L2(p - c) / rg->r.computed;
             r = radius / rg->r.computed;
         }
-    }
 
-    // Normalize pos to 0..1, taking into accound gradient spread:
-    double pos_e = pos;
-    if (gradient->getSpread() == SP_GRADIENT_SPREAD_PAD) {
-        if (pos > 1) {
-            pos_e = 1;
-        }
-        if (pos < 0) {
-            pos_e = 0;
-        }
-    } else if (gradient->getSpread() == SP_GRADIENT_SPREAD_REPEAT) {
-        if (pos > 1 || pos < 0) {
-            pos_e = pos - floor(pos);
-        }
-    } else if (gradient->getSpread() == SP_GRADIENT_SPREAD_REFLECT) {
-        if (pos > 1 || pos < 0) {
-            bool odd = ((int)(floor(pos)) % 2 == 1);
-            pos_e = pos - floor(pos);
-            if (odd) {
-                pos_e = 1 - pos_e;
+        // Normalize pos to 0..1, taking into accound gradient spread:
+        double pos_e = pos;
+        if (gradient->getSpread() == SP_GRADIENT_SPREAD_PAD) {
+            if (pos > 1) {
+                pos_e = 1;
+            }
+            if (pos < 0) {
+                pos_e = 0;
+            }
+        } else if (gradient->getSpread() == SP_GRADIENT_SPREAD_REPEAT) {
+            if (pos > 1 || pos < 0) {
+                pos_e = pos - floor(pos);
+            }
+        } else if (gradient->getSpread() == SP_GRADIENT_SPREAD_REFLECT) {
+            if (pos > 1 || pos < 0) {
+                bool odd = ((int)(floor(pos)) % 2 == 1);
+                pos_e = pos - floor(pos);
+                if (odd) {
+                    pos_e = 1 - pos_e;
+                }
             }
         }
-    }
 
-    SPGradient *vector = sp_gradient_get_forked_vector_if_necessary(gradient, false);
+        SPGradient *vector = sp_gradient_get_forked_vector_if_necessary(gradient, false);
 
-    double offset_l = 0;
-    double offset_h = 0;
-    SPObject *child_prev = NULL;
-    for (SPObject *child = vector->firstChild(); child; child = child->getNext()) {
-        SPStop *stop = dynamic_cast<SPStop *>(child);
-        if (!stop) {
-            continue;
-        }
+        double offset_l = 0;
+        double offset_h = 0;
+        SPObject *child_prev = NULL;
+        for (auto& child: vector->children) {
+            SPStop *stop = dynamic_cast<SPStop *>(&child);
+            if (!stop) {
+                continue;
+            }
 
-        offset_h = stop->offset;
+            offset_h = stop->offset;
 
-        if (child_prev) {
-            SPStop *prevStop = dynamic_cast<SPStop *>(child_prev);
-            g_assert(prevStop != NULL);
+            if (child_prev) {
+                SPStop *prevStop = dynamic_cast<SPStop *>(child_prev);
+                g_assert(prevStop != NULL);
 
-            if (offset_h - offset_l > r && pos_e >= offset_l && pos_e <= offset_h) {
-                // the summit falls in this interstop, and the radius is small,
-                // so it only affects the ends of this interstop;
-                // distribute the force between the two endstops so that they
-                // get all the painting even if they are not touched by the brush
-                tweak_color (mode, stop->specified_color.v.c, rgb_goal,
-                                  force * (pos_e - offset_l) / (offset_h - offset_l),
-                                  do_h, do_s, do_l);
-                tweak_color(mode, prevStop->specified_color.v.c, rgb_goal,
-                            force * (offset_h - pos_e) / (offset_h - offset_l),
-                            do_h, do_s, do_l);
-                stop->updateRepr();
-                child_prev->updateRepr();
-                break;
-            } else {
-                // wide brush, may affect more than 2 stops,
-                // paint each stop by the force from the profile curve
-                if (offset_l <= pos_e && offset_l > pos_e - r) {
-                    tweak_color(mode, prevStop->specified_color.v.c, rgb_goal,
-                                force * tweak_profile (fabs (pos_e - offset_l), r),
-                                do_h, do_s, do_l);
-                    child_prev->updateRepr();
-                }
-
-                if (offset_h >= pos_e && offset_h < pos_e + r) {
+                if (offset_h - offset_l > r && pos_e >= offset_l && pos_e <= offset_h) {
+                    // the summit falls in this interstop, and the radius is small,
+                    // so it only affects the ends of this interstop;
+                    // distribute the force between the two endstops so that they
+                    // get all the painting even if they are not touched by the brush
                     tweak_color (mode, stop->specified_color.v.c, rgb_goal,
-                                 force * tweak_profile (fabs (pos_e - offset_h), r),
+                                 force * (pos_e - offset_l) / (offset_h - offset_l),
                                  do_h, do_s, do_l);
+                    tweak_color(mode, prevStop->specified_color.v.c, rgb_goal,
+                                force * (offset_h - pos_e) / (offset_h - offset_l),
+                                do_h, do_s, do_l);
+                    stop->updateRepr();
+                    child_prev->updateRepr();
+                    break;
+                } else {
+                    // wide brush, may affect more than 2 stops,
+                    // paint each stop by the force from the profile curve
+                    if (offset_l <= pos_e && offset_l > pos_e - r) {
+                        tweak_color(mode, prevStop->specified_color.v.c, rgb_goal,
+                                    force * tweak_profile (fabs (pos_e - offset_l), r),
+                                    do_h, do_s, do_l);
+                        child_prev->updateRepr();
+                    }
+
+                    if (offset_h >= pos_e && offset_h < pos_e + r) {
+                        tweak_color (mode, stop->specified_color.v.c, rgb_goal,
+                                     force * tweak_profile (fabs (pos_e - offset_h), r),
+                                     do_h, do_s, do_l);
+                        stop->updateRepr();
+                    }
+                }
+            }
+
+            offset_l = offset_h;
+            child_prev = &child;
+        }
+    } else {
+        // Mesh
+        SPMeshGradient *mg = dynamic_cast<SPMeshGradient *>(gradient);
+        if (mg) {
+            SPMeshGradient *mg_array = dynamic_cast<SPMeshGradient *>(mg->getArray());
+            SPMeshNodeArray *array = &(mg_array->array);
+            // Every third node is a corner node
+            for( unsigned i=0; i < array->nodes.size(); i+=3 ) {
+                for( unsigned j=0; j < array->nodes[i].size(); j+=3 ) {
+                    SPStop *stop = array->nodes[i][j]->stop;
+                    double distance = Geom::L2(Geom::Point(p - array->nodes[i][j]->p)); 
+                    tweak_color (mode, stop->specified_color.v.c, rgb_goal,
+                                 force * tweak_profile (distance, radius), do_h, do_s, do_l);
                     stop->updateRepr();
                 }
             }
         }
-
-        offset_l = offset_h;
-        child_prev = child;
     }
 }
 
@@ -894,8 +904,8 @@ sp_tweak_color_recursive (guint mode, SPItem *item, SPItem *item_at_point,
     bool did = false;
 
     if (dynamic_cast<SPGroup *>(item)) {
-        for (SPObject *child = item->firstChild() ; child; child = child->getNext() ) {
-            SPItem *childItem = dynamic_cast<SPItem *>(child);
+        for (auto& child: item->children) {
+            SPItem *childItem = dynamic_cast<SPItem *>(&child);
             if (childItem) {
                 if (sp_tweak_color_recursive (mode, childItem, item_at_point,
                                           fill_goal, do_fill,
@@ -951,9 +961,8 @@ sp_tweak_color_recursive (guint mode, SPItem *item, SPItem *item_at_point,
                 Geom::Affine i2dt = item->i2dt_affine ();
                 if (style->filter.set && style->getFilter()) {
                     //cycle through filter primitives
-                    SPObject *primitive_obj = style->getFilter()->children;
-                    while (primitive_obj) {
-                        SPFilterPrimitive *primitive = dynamic_cast<SPFilterPrimitive *>(primitive_obj);
+                    for (auto& primitive_obj: style->getFilter()->children) {
+                        SPFilterPrimitive *primitive = dynamic_cast<SPFilterPrimitive *>(&primitive_obj);
                         if (primitive) {
                             //if primitive is gaussianblur
                             SPGaussianBlur * spblur = dynamic_cast<SPGaussianBlur *>(primitive);
@@ -962,7 +971,6 @@ sp_tweak_color_recursive (guint mode, SPItem *item, SPItem *item_at_point,
                                 blur_now += num * i2dt.descrim(); // sum all blurs in the filter
                             }
                         }
-                        primitive_obj = primitive_obj->next;
                     }
                 }
                 double perimeter = bbox->dimensions()[Geom::X] + bbox->dimensions()[Geom::Y];
@@ -1076,8 +1084,9 @@ sp_tweak_dilate (TweakTool *tc, Geom::Point event_p, Geom::Point p, Geom::Point 
     double move_force = get_move_force(tc);
     double color_force = MIN(sqrt(path_force)/20.0, 1);
 
-    std::vector<SPItem*> items=selection->itemList();
-    for(std::vector<SPItem*>::const_iterator i=items.begin();i!=items.end(); ++i){
+//    auto items= selection->items();
+    std::vector<SPItem*> items(selection->items().begin(), selection->items().end());
+    for(auto i=items.begin();i!=items.end(); ++i){
         SPItem *item = *i;
 
         if (is_color_mode (tc->mode)) {
@@ -1185,7 +1194,7 @@ bool TweakTool::root_handler(GdkEvent* event) {
 
                 guint num = 0;
                 if (!desktop->selection->isEmpty()) {
-                    num = desktop->selection->itemList().size();
+                    num = (guint) boost::distance(desktop->selection->items());
                 }
                 if (num == 0) {
                     this->message_context->flash(Inkscape::ERROR_MESSAGE, _("<b>Nothing selected!</b> Select objects to tweak."));

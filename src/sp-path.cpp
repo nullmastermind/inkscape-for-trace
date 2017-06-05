@@ -16,7 +16,7 @@
  */
 
 #ifdef HAVE_CONFIG_H
-# include <config.h>
+#include <config.h>
 #endif
 
 #include <glibmm/i18n.h>
@@ -27,7 +27,6 @@
 #include "sp-lpe-item.h"
 
 #include "display/curve.h"
-#include <2geom/pathvector.h>
 #include <2geom/curves.h>
 #include "helper/geom-curves.h"
 
@@ -46,7 +45,6 @@
 #include "inkscape.h"
 #include "style.h"
 #include "message-stack.h"
-#include "selection.h"
 
 #define noPATH_VERBOSE
 
@@ -189,35 +187,35 @@ void SPPath::release() {
 void SPPath::set(unsigned int key, const gchar* value) {
     switch (key) {
         case SP_ATTR_INKSCAPE_ORIGINAL_D:
-			if (value) {
-				Geom::PathVector pv = sp_svg_read_pathv(value);
-				SPCurve *curve = new SPCurve(pv);
+            if (value) {
+                Geom::PathVector pv = sp_svg_read_pathv(value);
+                SPCurve *curve = new SPCurve(pv);
 
-				if (curve) {
-					this->set_original_curve(curve, TRUE, true);
-					curve->unref();
-				}
-			} else {
-				this->set_original_curve(NULL, TRUE, true);
-			}
+                if (curve) {
+                    this->set_original_curve(curve, TRUE, true);
+                    curve->unref();
+                }
+            } else {
+                this->set_original_curve(NULL, TRUE, true);
+            }
 
-			this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+            this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
 
        case SP_ATTR_D:
-			if (value) {
-				Geom::PathVector pv = sp_svg_read_pathv(value);
-				SPCurve *curve = new SPCurve(pv);
+            if (value) {
+                Geom::PathVector pv = sp_svg_read_pathv(value);
+                SPCurve *curve = new SPCurve(pv);
 
-				if (curve) {
-					this->setCurve(curve, TRUE);
-					curve->unref();
-				}
-			} else {
-				this->setCurve(NULL, TRUE);
-			}
+                if (curve) {
+                    this->setCurve(curve, TRUE);
+                    curve->unref();
+                }
+            } else {
+                this->setCurve(NULL, TRUE);
+            }
 
-			this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+            this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
             break;
 
         case SP_PROP_MARKER:
@@ -278,13 +276,13 @@ g_message("sp_path_write writes 'd' attribute");
 }
 
 void SPPath::update(SPCtx *ctx, guint flags) {
-	if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
-		flags &= ~SP_OBJECT_USER_MODIFIED_FLAG_B; // since we change the description, it's not a "just translation" anymore
-	}
+    if (flags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG | SP_OBJECT_VIEWPORT_MODIFIED_FLAG)) {
+        flags &= ~SP_OBJECT_USER_MODIFIED_FLAG_B; // since we change the description, it's not a "just translation" anymore
+    }
 
-	SPShape::update(ctx, flags);
+    SPShape::update(ctx, flags);
 
-	this->connEndPair.update();
+    this->connEndPair.update();
 }
 
 Geom::Affine SPPath::set_transform(Geom::Affine const &transform) {
@@ -294,9 +292,14 @@ Geom::Affine SPPath::set_transform(Geom::Affine const &transform) {
 
     // Transform the original-d path if this is a valid LPE this, other else the (ordinary) path
     if (_curve_before_lpe && hasPathEffectRecursive()) {
-        if (this->hasPathEffectOfType(Inkscape::LivePathEffect::CLONE_ORIGINAL) || this->hasPathEffectOfType(Inkscape::LivePathEffect::BEND_PATH)) {
+        if (this->hasPathEffectOfType(Inkscape::LivePathEffect::CLONE_ORIGINAL) || 
+            this->hasPathEffectOfType(Inkscape::LivePathEffect::BEND_PATH) || 
+            this->hasPathEffectOfType(Inkscape::LivePathEffect::FILL_BETWEEN_MANY) ||
+            this->hasPathEffectOfType(Inkscape::LivePathEffect::FILL_BETWEEN_STROKES) ) 
+        {
             // if path has the CLONE_ORIGINAL LPE applied, don't write the transform to the pathdata, but write it 'unoptimized'
             // also if the effect is type BEND PATH to fix bug #179842
+            this->adjust_livepatheffect(transform);
             return transform;
         } else {
             _curve_before_lpe->transform(transform);

@@ -30,6 +30,12 @@ enum GenericEllipseType {
     SP_GENERIC_ELLIPSE_ELLIPSE
 };
 
+enum GenericEllipseArcType {
+    SP_GENERIC_ELLIPSE_ARC_TYPE_SLICE, // Default
+    SP_GENERIC_ELLIPSE_ARC_TYPE_CHORD,
+    SP_GENERIC_ELLIPSE_ARC_TYPE_ARC
+};
+
 class SPGenericEllipse : public SPShape {
 public:
     SPGenericEllipse();
@@ -42,14 +48,13 @@ public:
     SVGLength rx;
     SVGLength ry;
 
-    /**
-     * If we have a slice, returns whether the shape is closed ("pizza slice") or not (arc only).
-     */
-    bool closed();
-    void setClosed(bool value);
+    // Return slice, chord, or arc.
+    GenericEllipseArcType arcType() { return arc_type; };
+    void setArcType(GenericEllipseArcType type) { arc_type = type; };
 
     double start, end;
     GenericEllipseType type;
+    GenericEllipseArcType arc_type;
 
     virtual void build(SPDocument *document, Inkscape::XML::Node *repr);
 
@@ -59,7 +64,7 @@ public:
     virtual Inkscape::XML::Node *write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, unsigned int flags);
     virtual const char *displayName() const;
 
-    virtual void set_shape();
+    virtual void set_shape(bool force = false);
     virtual Geom::Affine set_transform(Geom::Affine const &xform);
 
     virtual void snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::SnapPreferences const *snapprefs) const;
@@ -83,8 +88,6 @@ protected:
      * @brief Determines whether the shape is a part of an ellipse.
      */
     bool _isSlice() const;
-
-    bool _closed;
 };
 
 #endif

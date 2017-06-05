@@ -10,10 +10,14 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
+#include "sp-tag-use.h"
+
 #include <cstring>
 #include <string>
 
 #include <glibmm/i18n.h>
+
+#include "bad-uri-exception.h"
 #include "display/drawing-group.h"
 #include "attributes.h"
 #include "document.h"
@@ -23,7 +27,6 @@
 #include "style.h"
 #include "sp-factory.h"
 #include "sp-symbol.h"
-#include "sp-tag-use.h"
 #include "sp-tag-use-reference.h"
 
 SPTagUse::SPTagUse()
