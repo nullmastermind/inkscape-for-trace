@@ -234,10 +234,14 @@ namespace Widget {
     _feature_list.set_justify( Gtk::JUSTIFY_LEFT );
     _feature_list.set_line_wrap( true );
 
+    _feature_substitutions.set_justify( Gtk::JUSTIFY_LEFT );
+    _feature_substitutions.set_line_wrap( true );
+
     // Add to frame
     _feature_vbox.add( _feature_entry );
     _feature_vbox.add( _feature_label );
     _feature_vbox.add( _feature_list  );
+    _feature_vbox.add( _feature_substitutions );
     _feature_frame.add( _feature_vbox );
     add( _feature_frame );
 
@@ -565,6 +569,36 @@ namespace Widget {
           }
 
           _feature_list.set_text( ott_list.c_str() );
+
+          // "<span foreground='darkblue'>";
+          Glib::ustring markup;
+
+          for (auto table: res->openTypeSubstitutions) {
+
+              markup += table.first;
+              markup += ": ";
+
+              markup += "<span font_family='";
+              markup += sp_font_description_get_family(res->descr);
+              markup += "'>";
+              markup += Glib::Markup::escape_text(table.second);
+              markup += "</span>";
+
+              markup += " → ";
+
+              markup += "<span font_family='";
+              markup += sp_font_description_get_family(res->descr);
+              markup += "'>";
+              markup += "<span font_features='";
+              markup += table.first;
+              markup += "'>";
+              markup += Glib::Markup::escape_text(table.second);
+              markup += "</span>";
+              markup += "</span>\n";
+
+          }
+
+          _feature_substitutions.set_markup ( markup.c_str() );
 
       } else {
           std::cerr << "FontVariants::update(): Couldn't find font_instance for: "
