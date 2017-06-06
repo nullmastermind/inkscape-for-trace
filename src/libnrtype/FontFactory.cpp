@@ -747,6 +747,7 @@ font_instance *font_factory::Face(PangoFontDescription *descr, bool canFail)
             }
         }
 
+#if HB_VERSION_ATLEAST(1,2,3)
         // Find glyphs in OpenType substitution tables ('gsub').
         // Note that pango's functions are just dummies. Must use harfbuzz.
 
@@ -825,6 +826,11 @@ font_instance *font_factory::Face(PangoFontDescription *descr, bool canFail)
         // for (auto table: res->openTypeSubstitutions) {
         //     std::cout << table.first << ": " << table.second << std::endl;
         // }
+#else
+        std::cerr << "Requires Harfbuzz 1.2.3 for visualizing alternative glyph OpenType tables. "
+                  << "Compiled with: " << HB_VERSION_STRING << "." << std::endl;
+#endif
+
         hb_face_destroy (face);
         g_free(scripts_hb);
     } else {
