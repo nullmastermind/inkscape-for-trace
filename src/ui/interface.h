@@ -172,6 +172,10 @@ class ContextMenu : public Gtk::Menu
         
         void EnterGroup(Gtk::MenuItem* mi);
         void LeaveGroup(void);
+        void LockSelected(void);
+        void HideSelected(void);
+        void UnLockBelow(std::vector<SPItem *> items);
+        void UnHideBelow(std::vector<SPItem *> items);
         //////////////////////////////////////////
         //callbacks for the context menu entries of an SP_TYPE_ITEM object
         void ItemProperties(void);

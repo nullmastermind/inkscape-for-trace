@@ -1553,11 +1553,11 @@ static SPItem *find_group_at_point(unsigned int dkey, SPGroup *group, Geom::Poin
  * Assumes box is normalized (and g_asserts it!)
  *
  */
-std::vector<SPItem*> SPDocument::getItemsInBox(unsigned int dkey, Geom::Rect const &box, bool into_groups) const
+std::vector<SPItem*> SPDocument::getItemsInBox(unsigned int dkey, Geom::Rect const &box, bool take_insensitive, bool into_groups) const
 {
     std::vector<SPItem*> x;
     g_return_val_if_fail(this->priv != NULL, x);
-    return find_items_in_area(x, SP_GROUP(this->root), dkey, box, is_within, false, into_groups);
+    return find_items_in_area(x, SP_GROUP(this->root), dkey, box, is_within, take_insensitive, into_groups);
 }
 
 /*
@@ -1567,11 +1567,11 @@ std::vector<SPItem*> SPDocument::getItemsInBox(unsigned int dkey, Geom::Rect con
  *
  */
 
-std::vector<SPItem*> SPDocument::getItemsPartiallyInBox(unsigned int dkey, Geom::Rect const &box, bool into_groups) const
+std::vector<SPItem*> SPDocument::getItemsPartiallyInBox(unsigned int dkey, Geom::Rect const &box, bool take_insensitive, bool into_groups) const
 {
     std::vector<SPItem*> x;
     g_return_val_if_fail(this->priv != NULL, x);
-    return find_items_in_area(x, SP_GROUP(this->root), dkey, box, overlaps, false, into_groups);
+    return find_items_in_area(x, SP_GROUP(this->root), dkey, box, overlaps, take_insensitive, into_groups);
 }
 
 std::vector<SPItem*> SPDocument::getItemsAtPoints(unsigned const key, std::vector<Geom::Point> points, bool all_layers, size_t limit) const 
