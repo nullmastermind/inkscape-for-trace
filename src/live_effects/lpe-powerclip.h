@@ -28,17 +28,14 @@ public:
     void addInverse (SPItem * clip_data);
     void removeInverse (SPItem * clip_data);
     void flattenClip(SPItem * clip_data, Geom::PathVector &path_in);
-    void setClipRule(SPItem * clip_data);
-protected:
-    //virtual void addCanvasIndicators(SPLPEItem const *lpeitem, std::vector<Geom::PathVector> &hp_vec);
-
+    void convertShapes();
 private:
     BoolParam inverse;
     BoolParam flatten;
-    BoolParam convert_shapes;
     HiddenParam is_inverse;
     Geom::Path clip_box;
     bool is_clip;
+    bool convert_shapes;
     bool hide_clip;
     bool previous_hide_clip;
 };

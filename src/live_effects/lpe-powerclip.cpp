@@ -32,16 +32,15 @@ LPEPowerClip::LPEPowerClip(LivePathEffectObject *lpeobject)
     : Effect(lpeobject),
     inverse(_("Inverse clip"), _("Inverse clip"), "inverse", &wr, this, false),
     flatten(_("Flatten clip"), _("Flatten clip, see fill rule once convert to paths"), "flatten", &wr, this, false),
-    convert_shapes(_("Convert clip shapes to paths"), _("Convert clip shapes to paths (this is overwriting your current value)."), "convert_shapes", &wr, this, false),
     //tooltip empty to no show in default param set
     is_inverse("Store the last inverse apply", "", "is_inverse", &wr, this, "false", false)
 {
     registerParameter(&inverse);
     registerParameter(&flatten);
-    registerParameter(&convert_shapes);
     registerParameter(&is_inverse);
     is_clip = false;
     hide_clip = false;
+    convert_shapes = false;
 }
 
 LPEPowerClip::~LPEPowerClip() {}
@@ -235,6 +234,12 @@ LPEPowerClip::toggleClip() {
     }
 }
 
+void
+LPEPowerClip::convertShapes() {
+    convert_shapes = true;
+    sp_lpe_item_update_patheffect(SP_LPE_ITEM(sp_lpe_item), false, false);
+}
+
 Gtk::Widget *
 LPEPowerClip::newWidget()
 {
@@ -244,12 +249,7 @@ LPEPowerClip::newWidget()
     vbox->set_border_width(5);
     vbox->set_homogeneous(false);
     vbox->set_spacing(6);
-    Gtk::HBox * hbox = Gtk::manage(new Gtk::HBox(false,0));
-    Gtk::Button * toggle_button = Gtk::manage(new Gtk::Button(Glib::ustring(_("Toggle clip visibiliy"))));
-    toggle_button->signal_clicked().connect(sigc::mem_fun (*this,&LPEPowerClip::toggleClip));
-    toggle_button->set_size_request(140,30);
-    vbox->pack_start(*hbox, true,true,2);
-    hbox->pack_start(*toggle_button, false, false,2);
+
     std::vector<Parameter *>::iterator it = param_vector.begin();
     while (it != param_vector.end()) {
         if ((*it)->widget_is_visible) {
@@ -272,6 +272,18 @@ LPEPowerClip::newWidget()
 
         ++it;
     }
+    Gtk::HBox * hbox = Gtk::manage(new Gtk::HBox(false,0));
+    Gtk::Button * toggle_button = Gtk::manage(new Gtk::Button(Glib::ustring(_("Toggle clip visibiliy"))));
+    toggle_button->signal_clicked().connect(sigc::mem_fun (*this,&LPEPowerClip::toggleClip));
+    toggle_button->set_size_request(140,30);
+    vbox->pack_start(*hbox, true,true,2);
+    hbox->pack_start(*toggle_button, false, false,2);
+    Gtk::HBox * hbox2 = Gtk::manage(new Gtk::HBox(false,0));
+    Gtk::Button * topaths_button = Gtk::manage(new Gtk::Button(Glib::ustring(_("Convert clips to paths, undoable"))));
+    topaths_button->signal_clicked().connect(sigc::mem_fun (*this,&LPEPowerClip::convertShapes));
+    topaths_button->set_size_request(200,30);
+    vbox->pack_start(*hbox2, true,true,2);
+    hbox2->pack_start(*topaths_button, false, false,2);
     return dynamic_cast<Gtk::Widget *>(vbox);
 }
 
