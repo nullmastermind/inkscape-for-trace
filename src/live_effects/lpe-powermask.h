@@ -20,24 +20,14 @@ public:
     LPEPowerMask(LivePathEffectObject *lpeobject);
     virtual ~LPEPowerMask();
     virtual void doBeforeEffect (SPLPEItem const* lpeitem);
-    virtual Geom::PathVector doEffect_path (Geom::PathVector const & path_in);
-    //virtual void doOnVisibilityToggled(SPLPEItem const* lpeitem);
     virtual void doOnRemove (SPLPEItem const* /*lpeitem*/);
     virtual Gtk::Widget * newWidget();
     void toggleMask();
-    void addInverse (SPItem * mask_data);
-    void removeInverse (SPItem * mask_data);
-    void flattenMask(SPItem * mask_data, Geom::PathVector &path_in);
-    void convertShapes();
+    void setInverse();
 private:
     BoolParam inverse;
-    BoolParam flatten;
-    HiddenParam is_inverse;
     Geom::Path mask_box;
-    bool is_mask;
-    bool convert_shapes;
     bool hide_mask;
-    bool previous_hide_mask;
 };
 
 } //namespace LivePathEffect

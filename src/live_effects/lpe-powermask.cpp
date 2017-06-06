@@ -10,7 +10,9 @@
 #include "sp-mask.h"
 #include "sp-path.h"
 #include "sp-shape.h"
+#include "sp-defs.h"
 #include "sp-item-group.h"
+#include "svg/svg.h"
 #include "ui/tools-switch.h"
 #include "path-chemistry.h"
 
@@ -22,17 +24,10 @@ namespace LivePathEffect {
 
 LPEPowerMask::LPEPowerMask(LivePathEffectObject *lpeobject)
     : Effect(lpeobject),
-    inverse(_("Inverse mask"), _("Inverse mask"), "inverse", &wr, this, false),
-    flatten(_("Flatten mask"), _("Flatten mask, see fill rule once convert to paths"), "flatten", &wr, this, false),
-    //tooltip empty to no show in default param set
-    is_inverse("Store the last inverse apply", "", "is_inverse", &wr, this, "false", false)
+    inverse(_("Inverse mask"), _("Inverse mask"), "inverse", &wr, this, false)
 {
     registerParameter(&inverse);
-    registerParameter(&flatten);
-    registerParameter(&is_inverse);
-    is_mask = false;
     hide_mask = false;
-    convert_shapes = false;
 }
 
 LPEPowerMask::~LPEPowerMask() {}
@@ -41,7 +36,7 @@ void
 LPEPowerMask::doBeforeEffect (SPLPEItem const* lpeitem){
     original_bbox(lpeitem);
     const Glib::ustring uri = (Glib::ustring)sp_lpe_item->getRepr()->attribute("mask-path");
-    SPMaskPath *mask_path = SP_ITEM(lpeitem)->mask_ref->getObject();
+    SPMask *mask = SP_ITEM(lpeitem)->mask_ref->getObject();
     Geom::Point topleft      = Geom::Point(boundingbox_X.min() - 5,boundingbox_Y.max() + 5);
     Geom::Point topright     = Geom::Point(boundingbox_X.max() + 5,boundingbox_Y.max() + 5);
     Geom::Point bottomright  = Geom::Point(boundingbox_X.max() + 5,boundingbox_Y.min() - 5);
@@ -52,147 +47,72 @@ LPEPowerMask::doBeforeEffect (SPLPEItem const* lpeitem){
     mask_box.appendNew<Geom::LineSegment>(bottomright);
     mask_box.appendNew<Geom::LineSegment>(bottomleft);
     mask_box.close();
-    //mask_path *= sp_lpe_item->i2dt_affine();
-    if(mask_path) {
-        is_mask = true;
-        std::vector<SPObject*> mask_path_list = mask_path->childList(true);
-        for ( std::vector<SPObject*>::const_iterator iter=mask_path_list.begin();iter!=mask_path_list.end();++iter) {
-            SPObject * mask_data = *iter;
-            SPObject * mask_to_path = NULL;
-            if (SP_IS_SHAPE(mask_data) && !SP_IS_PATH(mask_data) && convert_shapes) {
-                SPDocument * document = SP_ACTIVE_DOCUMENT;
-                if (!document) {
-                    return;
-                }
-                Inkscape::XML::Document *xml_doc = document->getReprDoc();
-                Inkscape::XML::Node *mask_path_node = sp_selected_item_to_curved_repr(SP_ITEM(mask_data), 0);
-                // remember the position of the item
-                gint pos = mask_data->getRepr()->position();
-                // remember parent
-                Inkscape::XML::Node *parent = mask_data->getRepr()->parent();
-                // remember id
-                char const *id = mask_data->getRepr()->attribute("id");
-                // remember title
-                gchar *title = mask_data->title();
-                // remember description
-                gchar *desc = mask_data->desc();
+    //mask *= sp_lpe_item->i2dt_affine();
+    if(mask) {
+        setInverse();
+    }
+}
 
-                // It's going to resurrect, so we delete without notifying listeners.
-                mask_data->deleteObject(false);
-
-                // restore id
-                mask_path_node->setAttribute("id", id);
-                // add the new repr to the parent
-                parent->appendChild(mask_path_node);
-                mask_to_path = document->getObjectByRepr(mask_path_node);
-                if (title && mask_to_path) {
-                    mask_to_path->setTitle(title);
-                    g_free(title);
-                }
-                if (desc && mask_to_path) {
-                    mask_to_path->setDesc(desc);
-                    g_free(desc);
-                }
-                // move to the saved position
-                mask_path_node->setPosition(pos > 0 ? pos : 0);
-                Inkscape::GC::release(mask_path_node);
-                mask_to_path->emitModified(SP_OBJECT_MODIFIED_CASCADE);
-            }
-            if( inverse && isVisible()) {
-                if (mask_to_path) {
-                    addInverse(SP_ITEM(mask_to_path));
-                } else {
-                    addInverse(SP_ITEM(mask_data));
-                }
-            } else if(is_inverse.param_getSVGValue() == (Glib::ustring)"true") {
-                if (mask_to_path) {
-                    removeInverse(SP_ITEM(mask_to_path));
-                } else {
-                    removeInverse(SP_ITEM(mask_data));
-                }
-            }
-        }
+void
+LPEPowerMask::setInverse(){
+    SPMask *mask = SP_ITEM(sp_lpe_item)->mask_ref->getObject();
+    SPObject *elemref = NULL;
+    SPDocument * document = SP_ACTIVE_DOCUMENT;
+    if(!document || !mask) {
+        return;
+    }
+    Inkscape::XML::Document *xml_doc = document->getReprDoc();
+    Inkscape::XML::Node *box = NULL;
+    Inkscape::XML::Node *filter = NULL;
+    SPDefs * defs = document->getDefs();
+    if (inverse) {
+//        if (!(elemref = document->getObjectById((Glib::ustring)mask->getId() + (Glib::ustring)"_transparentbox"))) {
+//            std::vector<SPObject*> mask_list = mask->childList(true);
+//            box = xml_doc->createElement("svg:path");
+//            box->setAttribute("id", (Glib::ustring)mask->getId() + (Glib::ustring)"_transparentbox");
+//            box->setAttribute("style", "fill:#000");
+//            gchar * box_str = sp_svg_write_path( mask_box );
+//            box->setAttribute("d" , box_str);
+//            g_free(box_str);
+//            elemref = mask->appendChildRepr(box);
+//            box->setPosition(mask_list.size());
+//            Inkscape::GC::release(box);
+//            mask_list.clear();
+//        }
+//        if (!(elemref = document->getObjectById((Glib::ustring)mask->getId() + (Glib::ustring)"_inverse"))) {
+//            filter = xml_doc->createElement("svg:filter");
+//            filter->setAttribute("id", (Glib::ustring)mask->getId() + (Glib::ustring)"_inverse");
+//            filter->setAttribute("color-interpolation-filters", "sRGB");
+//            filter->setAttribute("height", "100");
+//            filter->setAttribute("width", "100");
+//            filter->setAttribute("x", "-50");
+//            filter->setAttribute("y", "-50");
+//            Inkscape::XML::Node *primitive1 =  xml_doc->createElement("svg:feColorMatrix");
+//            primitive1->setAttribute("id", (Glib::ustring)mask->getId() + (Glib::ustring)"_primitive1");
+//            primitive1->setAttribute("values", "1");
+//            primitive1->setAttribute("type", "saturate");
+//            primitive1->setAttribute("result", "fbSourceGraphic");
+//            Inkscape::XML::Node *primitive2 =  xml_doc->createElement("svg:feColorMatrix");
+//            primitive2->setAttribute("id", (Glib::ustring)mask->getId() + (Glib::ustring)"_primitive2");
+//            primitive2->setAttribute("values", "-1 0 0 0 1 0 -1 0 0 1 0 0 -1 0 1 0 0 0 1 0 ");
+//            primitive2->setAttribute("in", "fbSourceGraphic");
+//            elemref = defs->appendChildRepr(filter);
+//            filter->appendChild(primitive1);
+//            filter->appendChild(primitive2);
+//            Inkscape::GC::release(filter);
+//            Inkscape::GC::release(primitive1);
+//            Inkscape::GC::release(primitive2);
+//        }
+//        mask->getRepr()->setAttribute("css", (Glib::ustring)"filter:#" + (Glib::ustring)mask->getId() + (Glib::ustring)"_inverse");
     } else {
-        is_mask = false;
-    }
-}
+//        if ((elemref = document->getObjectById((Glib::ustring)mask->getId() + (Glib::ustring)"_transparentbox"))) {
+//            elemref->deleteObject(true);
+//        }
 
-void
-LPEPowerMask::addInverse (SPItem * mask_data){
-    if (SP_IS_GROUP(mask_data)) {
-        std::vector<SPItem*> item_list = sp_item_group_item_list(SP_GROUP(mask_data));
-        for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
-            SPItem *subitem = *iter;
-            addInverse(subitem);
-        }
-    } else if (SP_IS_PATH(mask_data)) {
-        SPCurve * c = NULL;
-        c = SP_SHAPE(mask_data)->getCurve();
-        if (c) {
-            Geom::PathVector c_pv = c->get_pathvector();
-            if(c_pv.size() > 1 && is_inverse.param_getSVGValue() == (Glib::ustring)"true") {
-               c_pv.pop_back();
-            }
-            //TODO: this can be not correct but no better way
-            bool dir_a = Geom::path_direction(c_pv[0]);
-            bool dir_b = Geom::path_direction(mask_box);
-            if (dir_a == dir_b) {
-               mask_box = mask_box.reversed();
-            }
-            c_pv.push_back(mask_box);
-            c->set_pathvector(c_pv);
-            SP_SHAPE(mask_data)->setCurve(c, TRUE);
-            c->unref();
-            is_inverse.param_setValue((Glib::ustring)"true", true);
-            SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-            if (desktop) {
-                if (tools_isactive(desktop, TOOLS_NODES)) {
-                    Inkscape::Selection * sel = SP_ACTIVE_DESKTOP->getSelection();
-                    SPItem * item = sel->singleItem();
-                    if (item != NULL) {
-                        sel->remove(item);
-                        sel->add(item);
-                    }
-                }
-            }
-        }
-    }
-}
-
-void
-LPEPowerMask::removeInverse (SPItem * mask_data){
-    if(is_inverse.param_getSVGValue() == (Glib::ustring)"true") {
-        if (SP_IS_GROUP(mask_data)) {
-             std::vector<SPItem*> item_list = sp_item_group_item_list(SP_GROUP(mask_data));
-             for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
-                 SPItem *subitem = *iter;
-                 removeInverse(subitem);
-             }
-        } else if (SP_IS_PATH(mask_data)) {
-            SPCurve * c = NULL;
-            c = SP_SHAPE(mask_data)->getCurve();
-            if (c) {
-                Geom::PathVector c_pv = c->get_pathvector();
-                if(c_pv.size() > 1) {
-                    c_pv.pop_back();
-                }
-                c->set_pathvector(c_pv);
-                SP_SHAPE(mask_data)->setCurve(c, TRUE);
-                c->unref();
-                is_inverse.param_setValue((Glib::ustring)"false", true);
-                SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-                if (desktop) {
-                    if (tools_isactive(desktop, TOOLS_NODES)) {
-                        Inkscape::Selection * sel = SP_ACTIVE_DESKTOP->getSelection();
-                        SPItem * item = sel->singleItem();
-                        if (item != NULL) {
-                            sel->remove(item);
-                            sel->add(item);
-                        }
-                    }
-                }
-            }
-        }
+//        if ((elemref = document->getObjectById((Glib::ustring)mask->getId() + (Glib::ustring)"_inverse"))) {
+//            elemref->deleteObject(true);
+//        }
+        //mask->getRepr()->setAttribute("css", NULL);
     }
 }
 
@@ -200,13 +120,13 @@ void
 LPEPowerMask::toggleMask() {
     SPItem * item = SP_ITEM(sp_lpe_item);
     if (item) {
-        SPMaskPath *mask_path = item->mask_ref->getObject();
-        if (mask_path) {
+        SPMask *mask = item->mask_ref->getObject();
+        if (mask) {
             hide_mask = !hide_mask;
             if(hide_mask) {
                 SPItemView *v;
                 for (v = item->display; v != NULL; v = v->next) {
-                    mask_path->hide(v->arenaitem->key());
+                    mask->sp_mask_hide(v->arenaitem->key());
                 }
             } else {
                 Geom::OptRect bbox = item->geometricBounds();
@@ -214,22 +134,16 @@ LPEPowerMask::toggleMask() {
                     if (!v->arenaitem->key()) {
                         v->arenaitem->setKey(SPItem::display_key_new(3));
                     }
-                    Inkscape::DrawingItem *ai = mask_path->show(
+                    Inkscape::DrawingItem *ai = mask->sp_mask_show(
                                                            v->arenaitem->drawing(),
                                                            v->arenaitem->key());
                     v->arenaitem->setMask(ai);
-                    mask_path->setBBox(v->arenaitem->key(), bbox);
+                    mask->sp_mask_set_bbox(v->arenaitem->key(), bbox);
                 }
             }
-            mask_path->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+            mask->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         }
     }
-}
-
-void
-LPEPowerMask::convertShapes() {
-    convert_shapes = true;
-    sp_lpe_item_update_patheffect(SP_LPE_ITEM(sp_lpe_item), false, false);
 }
 
 Gtk::Widget *
@@ -270,74 +184,17 @@ LPEPowerMask::newWidget()
     toggle_button->set_size_request(140,30);
     vbox->pack_start(*hbox, true,true,2);
     hbox->pack_start(*toggle_button, false, false,2);
-    Gtk::HBox * hbox2 = Gtk::manage(new Gtk::HBox(false,0));
-    Gtk::Button * topaths_button = Gtk::manage(new Gtk::Button(Glib::ustring(_("Convert masks to paths, undoable"))));
-    topaths_button->signal_clicked().connect(sigc::mem_fun (*this,&LPEPowerMask::convertShapes));
-    topaths_button->set_size_request(200,30);
-    vbox->pack_start(*hbox2, true,true,2);
-    hbox2->pack_start(*topaths_button, false, false,2);
     return dynamic_cast<Gtk::Widget *>(vbox);
 }
 
 void 
 LPEPowerMask::doOnRemove (SPLPEItem const* /*lpeitem*/)
 {
-    SPMaskPath *mask_path = SP_ITEM(sp_lpe_item)->mask_ref->getObject();
+    SPMask *mask = SP_ITEM(sp_lpe_item)->mask_ref->getObject();
     if(!keep_paths) {
-        if(mask_path) {
-            is_mask = true;
-            std::vector<SPObject*> mask_path_list = mask_path->childList(true);
-            for ( std::vector<SPObject*>::const_iterator iter=mask_path_list.begin();iter!=mask_path_list.end();++iter) {
-                SPObject * mask_data = *iter;
-                if(is_inverse.param_getSVGValue() == (Glib::ustring)"true") {
-                    removeInverse(SP_ITEM(mask_data));
-                    is_inverse.param_setValue((Glib::ustring)"false");
-                }
-            }
-        }
-    } else {
-        if (flatten && mask_path) {
-            mask_path->deleteObject();
-            sp_lpe_item->getRepr()->setAttribute("mask-path", NULL);
-        }
-    }
-}
-
-Geom::PathVector
-LPEPowerMask::doEffect_path(Geom::PathVector const & path_in){
-    Geom::PathVector path_out = pathv_to_linear_and_cubic_beziers(path_in);
-    if (flatten && is_mask && isVisible()) {
-        SPMaskPath *mask_path = SP_ITEM(sp_lpe_item)->mask_ref->getObject();
-        if(mask_path) {
-            std::vector<SPObject*> mask_path_list = mask_path->childList(true);
-            for ( std::vector<SPObject*>::const_iterator iter=mask_path_list.begin();iter!=mask_path_list.end();++iter) {
-                SPObject * mask_data = *iter;
-                flattenMask(SP_ITEM(mask_data), path_out);
-            }
-        }
-    }
-    return path_out;
-}
-
-void
-LPEPowerMask::flattenMask(SPItem * mask_data, Geom::PathVector &path_in)
-{
-    if (SP_IS_GROUP(mask_data)) {
-         std::vector<SPItem*> item_list = sp_item_group_item_list(SP_GROUP(mask_data));
-         for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
-             SPItem *subitem = *iter;
-             flattenMask(subitem, path_in);
-         }
-    } else if (SP_IS_PATH(mask_data)) {
-        SPCurve * c = NULL;
-        c = SP_SHAPE(mask_data)->getCurve();
-        if (c) {
-            Geom::PathVector c_pv = c->get_pathvector();
-            Geom::PathIntersectionGraph *pig = new Geom::PathIntersectionGraph(c_pv, path_in);
-            if (pig && !c_pv.empty() && !path_in.empty()) {
-                path_in = pig->getIntersection();
-            }
-            c->unref();
+        if(mask) {
+            inverse.param_setValue(false);
+            setInverse();
         }
     }
 }
