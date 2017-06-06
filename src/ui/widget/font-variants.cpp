@@ -231,9 +231,17 @@ namespace Widget {
     // Add tooltips
     _feature_entry.set_tooltip_text( _("Feature settings in CSS form. No sanity checking is performed."));
 
+    _feature_list.set_justify( Gtk::JUSTIFY_LEFT );
+    _feature_list.set_line_wrap( true );
+
+    _feature_substitutions.set_justify( Gtk::JUSTIFY_LEFT );
+    _feature_substitutions.set_line_wrap( true );
+
     // Add to frame
     _feature_vbox.add( _feature_entry );
     _feature_vbox.add( _feature_label );
+    _feature_vbox.add( _feature_list  );
+    _feature_vbox.add( _feature_substitutions );
     _feature_frame.add( _feature_vbox );
     add( _feature_frame );
 
@@ -532,30 +540,65 @@ namespace Widget {
 
           // Make list of tables not handled above... eventually add Gtk::Label with
           // this info.
-          // std::map<Glib::ustring,int> table_copy = res->openTypeTables;
-          // if( (it = table_copy.find("liga")) != table_copy.end() ) table_copy.erase( it );
-          // if( (it = table_copy.find("clig")) != table_copy.end() ) table_copy.erase( it );
-          // if( (it = table_copy.find("dlig")) != table_copy.end() ) table_copy.erase( it );
-          // if( (it = table_copy.find("hlig")) != table_copy.end() ) table_copy.erase( it );
-          // if( (it = table_copy.find("calt")) != table_copy.end() ) table_copy.erase( it );
-          // if( (it = table_copy.find("subs")) != table_copy.end() ) table_copy.erase( it );
-          // if( (it = table_copy.find("sups")) != table_copy.end() ) table_copy.erase( it );
-          // if( (it = table_copy.find("smcp")) != table_copy.end() ) table_copy.erase( it );
-          // if( (it = table_copy.find("c2sc")) != table_copy.end() ) table_copy.erase( it );
-          // if( (it = table_copy.find("pcap")) != table_copy.end() ) table_copy.erase( it );
-          // if( (it = table_copy.find("unic")) != table_copy.end() ) table_copy.erase( it );
-          // if( (it = table_copy.find("titl")) != table_copy.end() ) table_copy.erase( it );
-          // if( (it = table_copy.find("lnum")) != table_copy.end() ) table_copy.erase( it );
-          // if( (it = table_copy.find("onum")) != table_copy.end() ) table_copy.erase( it );
-          // if( (it = table_copy.find("pnum")) != table_copy.end() ) table_copy.erase( it );
-          // if( (it = table_copy.find("tnum")) != table_copy.end() ) table_copy.erase( it );
-          // if( (it = table_copy.find("frac")) != table_copy.end() ) table_copy.erase( it );
-          // if( (it = table_copy.find("afrc")) != table_copy.end() ) table_copy.erase( it );
-          // if( (it = table_copy.find("ordn")) != table_copy.end() ) table_copy.erase( it );
-          // if( (it = table_copy.find("zero")) != table_copy.end() ) table_copy.erase( it );
-          // for(it = table_copy.begin(); it != table_copy.end(); ++it) {
-          //     std::cout << "Other: " << it->first << "  Occurances: " << it->second << std::endl;
-          // }
+          std::map<Glib::ustring,int> table_copy = res->openTypeTables;
+          if( (it = table_copy.find("liga")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("clig")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("dlig")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("hlig")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("calt")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("subs")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("sups")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("smcp")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("c2sc")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("pcap")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("unic")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("titl")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("lnum")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("onum")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("pnum")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("tnum")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("frac")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("afrc")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("ordn")) != table_copy.end() ) table_copy.erase( it );
+          if( (it = table_copy.find("zero")) != table_copy.end() ) table_copy.erase( it );
+          std::string ott_list = "OpenType tables not included above: ";
+          for(it = table_copy.begin(); it != table_copy.end(); ++it) {
+              // std::cout << "Other: " << it->first << "  Occurances: " << it->second << std::endl;
+              ott_list += it->first;
+              ott_list += ", ";
+          }
+
+          _feature_list.set_text( ott_list.c_str() );
+
+          // "<span foreground='darkblue'>";
+          Glib::ustring markup;
+
+          for (auto table: res->openTypeSubstitutions) {
+
+              markup += table.first;
+              markup += ": ";
+
+              markup += "<span font_family='";
+              markup += sp_font_description_get_family(res->descr);
+              markup += "'>";
+              markup += Glib::Markup::escape_text(table.second);
+              markup += "</span>";
+
+              markup += " → ";
+
+              markup += "<span font_family='";
+              markup += sp_font_description_get_family(res->descr);
+              markup += "'>";
+              markup += "<span font_features='";
+              markup += table.first;
+              markup += "'>";
+              markup += Glib::Markup::escape_text(table.second);
+              markup += "</span>";
+              markup += "</span>\n";
+
+          }
+
+          _feature_substitutions.set_markup ( markup.c_str() );
 
       } else {
           std::cerr << "FontVariants::update(): Couldn't find font_instance for: "

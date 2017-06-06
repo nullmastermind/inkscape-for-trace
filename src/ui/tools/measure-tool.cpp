@@ -1260,7 +1260,7 @@ void MeasureTool::showCanvasItems(bool to_guides, bool to_item, bool to_phantom,
     std::vector<SPItem*> items;
     SPDocument *doc = desktop->getDocument();
     Geom::Rect rect(start_p, end_p);
-    items = doc->getItemsPartiallyInBox(desktop->dkey, rect, true);
+    items = doc->getItemsPartiallyInBox(desktop->dkey, rect, false, true);
     Inkscape::LayerModel *layer_model = NULL;
     SPObject *current_layer = NULL;
     if(desktop){

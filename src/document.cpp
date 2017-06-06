@@ -469,6 +469,11 @@ SPDocument *SPDocument::createDoc(Inkscape::XML::Document *rdoc,
         sp_file_convert_font_name(document);
     }
 
+    /** Fix dpi (pre-92 files) **/
+    if ( !(INKSCAPE.use_gui()) && sp_version_inside_range( document->root->version.inkscape, 0, 1, 0, 92 ) ) {
+        sp_file_convert_dpi(document);
+    }
+
     return document;
 }
 
@@ -481,7 +486,7 @@ SPDocument *SPDocument::createChildDoc(std::string const &uri)
     SPDocument *document = NULL;
 
     while(parent != NULL && parent->getURI() != NULL && document == NULL) {
-        // Check myself and any parents int he chain
+        // Check myself and any parents in the chain
         if(uri == parent->getURI()) {
             document = parent;
             break;
@@ -500,8 +505,14 @@ SPDocument *SPDocument::createChildDoc(std::string const &uri)
 
     // Load a fresh document from the svg source.
     if(!document) {
-        const char *path = uri.c_str();
-        document = createNewDoc(path, false, false, this);
+        std::string path;
+        if(uri.find('/') == -1) {
+            path = this->getBase() + uri;
+        } else {
+            path = uri;
+        }
+        std::cout << "Added base: '" << path << "'\n";
+        document = createNewDoc(path.c_str(), false, false, this);
     }
     return document;
 }
@@ -1542,11 +1553,11 @@ static SPItem *find_group_at_point(unsigned int dkey, SPGroup *group, Geom::Poin
  * Assumes box is normalized (and g_asserts it!)
  *
  */
-std::vector<SPItem*> SPDocument::getItemsInBox(unsigned int dkey, Geom::Rect const &box, bool into_groups) const
+std::vector<SPItem*> SPDocument::getItemsInBox(unsigned int dkey, Geom::Rect const &box, bool take_insensitive, bool into_groups) const
 {
     std::vector<SPItem*> x;
     g_return_val_if_fail(this->priv != NULL, x);
-    return find_items_in_area(x, SP_GROUP(this->root), dkey, box, is_within, false, into_groups);
+    return find_items_in_area(x, SP_GROUP(this->root), dkey, box, is_within, take_insensitive, into_groups);
 }
 
 /*
@@ -1556,11 +1567,11 @@ std::vector<SPItem*> SPDocument::getItemsInBox(unsigned int dkey, Geom::Rect con
  *
  */
 
-std::vector<SPItem*> SPDocument::getItemsPartiallyInBox(unsigned int dkey, Geom::Rect const &box, bool into_groups) const
+std::vector<SPItem*> SPDocument::getItemsPartiallyInBox(unsigned int dkey, Geom::Rect const &box, bool take_insensitive, bool into_groups) const
 {
     std::vector<SPItem*> x;
     g_return_val_if_fail(this->priv != NULL, x);
-    return find_items_in_area(x, SP_GROUP(this->root), dkey, box, overlaps, false, into_groups);
+    return find_items_in_area(x, SP_GROUP(this->root), dkey, box, overlaps, take_insensitive, into_groups);
 }
 
 std::vector<SPItem*> SPDocument::getItemsAtPoints(unsigned const key, std::vector<Geom::Point> points, bool all_layers, size_t limit) const 

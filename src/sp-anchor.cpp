@@ -5,6 +5,7 @@
  *   Lauris Kaplinski <lauris@kaplinski.com>
  *   Abhishek Sharma
  *
+ * Copyright (C) 2017 Martin Owens
  * Copyright (C) 2001-2002 Lauris Kaplinski
  * Copyright (C) 2001 Ximian, Inc.
  *
@@ -23,6 +24,9 @@
 
 SPAnchor::SPAnchor() : SPGroup() {
     this->href = NULL;
+    this->type = NULL;
+    this->title = NULL;
+    this->page = NULL;
 }
 
 SPAnchor::~SPAnchor() {
@@ -46,6 +50,18 @@ void SPAnchor::release() {
         g_free(this->href);
         this->href = NULL;
     }
+    if (this->type) {
+        g_free(this->type);
+        this->type = NULL;
+    }
+    if (this->title) {
+        g_free(this->title);
+        this->title = NULL;
+    }
+    if (this->page) {
+        g_free(this->page);
+        this->page = NULL;
+    }
 
     SPGroup::release();
 }
@@ -56,12 +72,21 @@ void SPAnchor::set(unsigned int key, const gchar* value) {
             g_free(this->href);
             this->href = g_strdup(value);
             this->requestModified(SP_OBJECT_MODIFIED_FLAG);
+            this->updatePageAnchor();
             break;
-
 	case SP_ATTR_XLINK_TYPE:
+            g_free(this->type);
+            this->type = g_strdup(value);
+            this->updatePageAnchor();
+            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
+            break;
 	case SP_ATTR_XLINK_ROLE:
 	case SP_ATTR_XLINK_ARCROLE:
 	case SP_ATTR_XLINK_TITLE:
+            g_free(this->title);
+            this->title = g_strdup(value);
+            this->requestModified(SP_OBJECT_MODIFIED_FLAG);
+            break;
 	case SP_ATTR_XLINK_SHOW:
 	case SP_ATTR_XLINK_ACTUATE:
 	case SP_ATTR_TARGET:
@@ -74,6 +99,17 @@ void SPAnchor::set(unsigned int key, const gchar* value) {
     }
 }
 
+/*
+ * Detect if this anchor qualifies as a page link and append
+ * the new page document to this document.
+ */
+void SPAnchor::updatePageAnchor() {
+    if (this->type && !strcmp(this->type, "page")) {
+        if (this->href && !this->page) {
+             this->page = this->document->createChildDoc(this->href);
+        }
+    }    
+}
 
 #define COPY_ATTR(rd,rs,key) (rd)->setAttribute((key), rs->attribute(key));
 
@@ -83,14 +119,14 @@ Inkscape::XML::Node* SPAnchor::write(Inkscape::XML::Document *xml_doc, Inkscape:
     }
 
     repr->setAttribute("xlink:href", this->href);
+    if (this->type) repr->setAttribute("xlink:type", this->type);
+    if (this->title) repr->setAttribute("xlink:title", this->title);
 
     if (repr != this->getRepr()) {
         // XML Tree being directly used while it shouldn't be in the
         //  below COPY_ATTR lines
-        COPY_ATTR(repr, this->getRepr(), "xlink:type");
         COPY_ATTR(repr, this->getRepr(), "xlink:role");
         COPY_ATTR(repr, this->getRepr(), "xlink:arcrole");
-        COPY_ATTR(repr, this->getRepr(), "xlink:title");
         COPY_ATTR(repr, this->getRepr(), "xlink:show");
         COPY_ATTR(repr, this->getRepr(), "xlink:actuate");
         COPY_ATTR(repr, this->getRepr(), "target");

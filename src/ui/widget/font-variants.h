@@ -86,7 +86,9 @@ protected:
     Gtk::VBox           _feature_vbox;
     Gtk::Entry          _feature_entry;
     Gtk::Label          _feature_label;
-    
+    Gtk::Label          _feature_list;
+    Gtk::Label          _feature_substitutions;
+
 private:
     void ligatures_init();
     void ligatures_callback();
