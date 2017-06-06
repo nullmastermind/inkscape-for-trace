@@ -31,19 +31,16 @@ namespace LivePathEffect {
 LPEPowerClip::LPEPowerClip(LivePathEffectObject *lpeobject)
     : Effect(lpeobject),
     inverse(_("Inverse clip"), _("Inverse clip"), "inverse", &wr, this, false),
-    flatten(_("Flatten clip"), _("Flatten clip"), "flatten", &wr, this, false),
-    fillrule(_("Set/unset evenodd fill rule"), _("Set/unset evenodd fill rule (this is overwriting your current value)."), "fillrule", &wr, this, false),
+    flatten(_("Flatten clip"), _("Flatten clip, see fill rule once convert to paths"), "flatten", &wr, this, false),
     convert_shapes(_("Convert clip shapes to paths"), _("Convert clip shapes to paths (this is overwriting your current value)."), "convert_shapes", &wr, this, false),
     //tooltip empty to no show in default param set
     is_inverse("Store the last inverse apply", "", "is_inverse", &wr, this, "false", false)
 {
     registerParameter(&inverse);
     registerParameter(&flatten);
-    registerParameter(&fillrule);
     registerParameter(&convert_shapes);
     registerParameter(&is_inverse);
     is_clip = false;
-    previous_fillrule = fillrule;
     hide_clip = false;
 }
 
@@ -70,23 +67,58 @@ LPEPowerClip::doBeforeEffect (SPLPEItem const* lpeitem){
         std::vector<SPObject*> clip_path_list = clip_path->childList(true);
         for ( std::vector<SPObject*>::const_iterator iter=clip_path_list.begin();iter!=clip_path_list.end();++iter) {
             SPObject * clip_data = *iter;
+            SPObject * clip_to_path = NULL;
             if (SP_IS_SHAPE(clip_data) && !SP_IS_PATH(clip_data) && convert_shapes) {
                 SPDocument * document = SP_ACTIVE_DOCUMENT;
                 if (!document) {
                     return;
                 }
                 Inkscape::XML::Document *xml_doc = document->getReprDoc();
-                const char * id = clip_data->getId();
                 Inkscape::XML::Node *clip_path_node = sp_selected_item_to_curved_repr(SP_ITEM(clip_data), 0);
-                clip_data->updateRepr(xml_doc, clip_path_node, SP_OBJECT_WRITE_ALL);
-                clip_data->getRepr()->setAttribute("id", id);
-                clip_path->emitModified(SP_OBJECT_MODIFIED_CASCADE);
-                std::cout << "toshapes\n";
+                // remember the position of the item
+                gint pos = clip_data->getRepr()->position();
+                // remember parent
+                Inkscape::XML::Node *parent = clip_data->getRepr()->parent();
+                // remember id
+                char const *id = clip_data->getRepr()->attribute("id");
+                // remember title
+                gchar *title = clip_data->title();
+                // remember description
+                gchar *desc = clip_data->desc();
+
+                // It's going to resurrect, so we delete without notifying listeners.
+                clip_data->deleteObject(false);
+
+                // restore id
+                clip_path_node->setAttribute("id", id);
+                // add the new repr to the parent
+                parent->appendChild(clip_path_node);
+                clip_to_path = document->getObjectByRepr(clip_path_node);
+                if (title && clip_to_path) {
+                    clip_to_path->setTitle(title);
+                    g_free(title);
+                }
+                if (desc && clip_to_path) {
+                    clip_to_path->setDesc(desc);
+                    g_free(desc);
+                }
+                // move to the saved position
+                clip_path_node->setPosition(pos > 0 ? pos : 0);
+                Inkscape::GC::release(clip_path_node);
+                clip_to_path->emitModified(SP_OBJECT_MODIFIED_CASCADE);
             }
             if( inverse && isVisible()) {
-                addInverse(SP_ITEM(clip_data));
+                if (clip_to_path) {
+                    addInverse(SP_ITEM(clip_to_path));
+                } else {
+                    addInverse(SP_ITEM(clip_data));
+                }
             } else if(is_inverse.param_getSVGValue() == (Glib::ustring)"true") {
-                removeInverse(SP_ITEM(clip_data));
+                if (clip_to_path) {
+                    removeInverse(SP_ITEM(clip_to_path));
+                } else {
+                    removeInverse(SP_ITEM(clip_data));
+                }
             }
         }
     } else {
@@ -103,12 +135,11 @@ LPEPowerClip::addInverse (SPItem * clip_data){
             addInverse(subitem);
         }
     } else if (SP_IS_PATH(clip_data)) {
-        setFillRule(clip_data);
         SPCurve * c = NULL;
         c = SP_SHAPE(clip_data)->getCurve();
         if (c) {
             Geom::PathVector c_pv = c->get_pathvector();
-            if(is_inverse.param_getSVGValue() == (Glib::ustring)"true") {
+            if(c_pv.size() > 1 && is_inverse.param_getSVGValue() == (Glib::ustring)"true") {
                c_pv.pop_back();
             }
             //TODO: this can be not correct but no better way
@@ -147,12 +178,13 @@ LPEPowerClip::removeInverse (SPItem * clip_data){
                  removeInverse(subitem);
              }
         } else if (SP_IS_PATH(clip_data)) {
-            setFillRule(clip_data);
             SPCurve * c = NULL;
             c = SP_SHAPE(clip_data)->getCurve();
             if (c) {
                 Geom::PathVector c_pv = c->get_pathvector();
-                c_pv.pop_back();
+                if(c_pv.size() > 1) {
+                    c_pv.pop_back();
+                }
                 c->set_pathvector(c_pv);
                 SP_SHAPE(clip_data)->setCurve(c, TRUE);
                 c->unref();
@@ -293,17 +325,6 @@ LPEPowerClip::flattenClip(SPItem * clip_data, Geom::PathVector &path_in)
              flattenClip(subitem, path_in);
          }
     } else if (SP_IS_PATH(clip_data)) {
-        if (!SP_IS_PATH(clip_data) && convert_shapes) {
-            SPDocument * document = SP_ACTIVE_DOCUMENT;
-            if (!document) {
-                return;
-            }
-            Inkscape::XML::Document *xml_doc = document->getReprDoc();
-            const char * id = clip_data->getId();
-            Inkscape::XML::Node *clip_path_node = sp_selected_item_to_curved_repr(clip_data, 0);
-            clip_data->updateRepr(xml_doc, clip_path_node, SP_OBJECT_WRITE_ALL);
-            clip_data->getRepr()->setAttribute("id", id);
-        }
         SPCurve * c = NULL;
         c = SP_SHAPE(clip_data)->getCurve();
         if (c) {
@@ -314,24 +335,6 @@ LPEPowerClip::flattenClip(SPItem * clip_data, Geom::PathVector &path_in)
             }
             c->unref();
         }
-    }
-}
-
-void
-LPEPowerClip::setFillRule(SPItem * clip_data)
-{
-    if (previous_fillrule != fillrule) {
-        SPCSSAttr *css = sp_repr_css_attr_new();
-        sp_repr_css_attr_add_from_string(css, clip_data->getRepr()->attribute("style"));
-        if (fillrule) {
-           sp_repr_css_set_property (css, "fill-rule", "evenodd");
-        } else {
-           sp_repr_css_set_property (css, "fill-rule", "nonzero");
-        }
-        Glib::ustring css_str;
-        sp_repr_css_write_string(css,css_str);
-        clip_data->getRepr()->setAttribute("style", css_str.c_str());
-        previous_fillrule = fillrule;
     }
 }
 
