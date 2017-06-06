@@ -37,6 +37,7 @@ set(live_effects_SRC
 	lpe-perspective-envelope.cpp
 	lpe-perspective_path.cpp
 	lpe-powerclip.cpp
+	lpe-powermask.cpp
 	lpe-powerstroke.cpp
 	lpe-recursiveskeleton.cpp
 	lpe-rough-hatches.cpp
@@ -123,6 +124,7 @@ set(live_effects_SRC
 	lpe-perspective_path.h
 	lpe-powerstroke-interpolators.h
 	lpe-powerclip.h
+	lpe-powermask.h
 	lpe-powerstroke.h
 	lpe-recursiveskeleton.h
 	lpe-rough-hatches.h

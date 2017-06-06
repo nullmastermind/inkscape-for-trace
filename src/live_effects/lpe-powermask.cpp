@@ -1,13 +1,13 @@
 /*
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
-#include "live_effects/lpe-powerclip.h"
+#include "live_effects/lpe-powermask.h"
 #include <2geom/path-intersection.h>
 #include <2geom/intersection-graph.h>
 #include "display/drawing-item.h"
 #include "display/curve.h"
 #include "helper/geom.h"
-#include "sp-clippath.h"
+#include "sp-mask.h"
 #include "sp-path.h"
 #include "sp-shape.h"
 #include "sp-item-group.h"
@@ -20,114 +20,114 @@
 namespace Inkscape {
 namespace LivePathEffect {
 
-LPEPowerClip::LPEPowerClip(LivePathEffectObject *lpeobject)
+LPEPowerMask::LPEPowerMask(LivePathEffectObject *lpeobject)
     : Effect(lpeobject),
-    inverse(_("Inverse clip"), _("Inverse clip"), "inverse", &wr, this, false),
-    flatten(_("Flatten clip"), _("Flatten clip, see fill rule once convert to paths"), "flatten", &wr, this, false),
+    inverse(_("Inverse mask"), _("Inverse mask"), "inverse", &wr, this, false),
+    flatten(_("Flatten mask"), _("Flatten mask, see fill rule once convert to paths"), "flatten", &wr, this, false),
     //tooltip empty to no show in default param set
     is_inverse("Store the last inverse apply", "", "is_inverse", &wr, this, "false", false)
 {
     registerParameter(&inverse);
     registerParameter(&flatten);
     registerParameter(&is_inverse);
-    is_clip = false;
-    hide_clip = false;
+    is_mask = false;
+    hide_mask = false;
     convert_shapes = false;
 }
 
-LPEPowerClip::~LPEPowerClip() {}
+LPEPowerMask::~LPEPowerMask() {}
 
 void
-LPEPowerClip::doBeforeEffect (SPLPEItem const* lpeitem){
+LPEPowerMask::doBeforeEffect (SPLPEItem const* lpeitem){
     original_bbox(lpeitem);
-    const Glib::ustring uri = (Glib::ustring)sp_lpe_item->getRepr()->attribute("clip-path");
-    SPClipPath *clip_path = SP_ITEM(lpeitem)->clip_ref->getObject();
+    const Glib::ustring uri = (Glib::ustring)sp_lpe_item->getRepr()->attribute("mask-path");
+    SPMaskPath *mask_path = SP_ITEM(lpeitem)->mask_ref->getObject();
     Geom::Point topleft      = Geom::Point(boundingbox_X.min() - 5,boundingbox_Y.max() + 5);
     Geom::Point topright     = Geom::Point(boundingbox_X.max() + 5,boundingbox_Y.max() + 5);
     Geom::Point bottomright  = Geom::Point(boundingbox_X.max() + 5,boundingbox_Y.min() - 5);
     Geom::Point bottomleft   = Geom::Point(boundingbox_X.min() - 5,boundingbox_Y.min() - 5);
-    clip_box.clear();
-    clip_box.start(topleft);
-    clip_box.appendNew<Geom::LineSegment>(topright);
-    clip_box.appendNew<Geom::LineSegment>(bottomright);
-    clip_box.appendNew<Geom::LineSegment>(bottomleft);
-    clip_box.close();
-    //clip_path *= sp_lpe_item->i2dt_affine();
-    if(clip_path) {
-        is_clip = true;
-        std::vector<SPObject*> clip_path_list = clip_path->childList(true);
-        for ( std::vector<SPObject*>::const_iterator iter=clip_path_list.begin();iter!=clip_path_list.end();++iter) {
-            SPObject * clip_data = *iter;
-            SPObject * clip_to_path = NULL;
-            if (SP_IS_SHAPE(clip_data) && !SP_IS_PATH(clip_data) && convert_shapes) {
+    mask_box.clear();
+    mask_box.start(topleft);
+    mask_box.appendNew<Geom::LineSegment>(topright);
+    mask_box.appendNew<Geom::LineSegment>(bottomright);
+    mask_box.appendNew<Geom::LineSegment>(bottomleft);
+    mask_box.close();
+    //mask_path *= sp_lpe_item->i2dt_affine();
+    if(mask_path) {
+        is_mask = true;
+        std::vector<SPObject*> mask_path_list = mask_path->childList(true);
+        for ( std::vector<SPObject*>::const_iterator iter=mask_path_list.begin();iter!=mask_path_list.end();++iter) {
+            SPObject * mask_data = *iter;
+            SPObject * mask_to_path = NULL;
+            if (SP_IS_SHAPE(mask_data) && !SP_IS_PATH(mask_data) && convert_shapes) {
                 SPDocument * document = SP_ACTIVE_DOCUMENT;
                 if (!document) {
                     return;
                 }
                 Inkscape::XML::Document *xml_doc = document->getReprDoc();
-                Inkscape::XML::Node *clip_path_node = sp_selected_item_to_curved_repr(SP_ITEM(clip_data), 0);
+                Inkscape::XML::Node *mask_path_node = sp_selected_item_to_curved_repr(SP_ITEM(mask_data), 0);
                 // remember the position of the item
-                gint pos = clip_data->getRepr()->position();
+                gint pos = mask_data->getRepr()->position();
                 // remember parent
-                Inkscape::XML::Node *parent = clip_data->getRepr()->parent();
+                Inkscape::XML::Node *parent = mask_data->getRepr()->parent();
                 // remember id
-                char const *id = clip_data->getRepr()->attribute("id");
+                char const *id = mask_data->getRepr()->attribute("id");
                 // remember title
-                gchar *title = clip_data->title();
+                gchar *title = mask_data->title();
                 // remember description
-                gchar *desc = clip_data->desc();
+                gchar *desc = mask_data->desc();
 
                 // It's going to resurrect, so we delete without notifying listeners.
-                clip_data->deleteObject(false);
+                mask_data->deleteObject(false);
 
                 // restore id
-                clip_path_node->setAttribute("id", id);
+                mask_path_node->setAttribute("id", id);
                 // add the new repr to the parent
-                parent->appendChild(clip_path_node);
-                clip_to_path = document->getObjectByRepr(clip_path_node);
-                if (title && clip_to_path) {
-                    clip_to_path->setTitle(title);
+                parent->appendChild(mask_path_node);
+                mask_to_path = document->getObjectByRepr(mask_path_node);
+                if (title && mask_to_path) {
+                    mask_to_path->setTitle(title);
                     g_free(title);
                 }
-                if (desc && clip_to_path) {
-                    clip_to_path->setDesc(desc);
+                if (desc && mask_to_path) {
+                    mask_to_path->setDesc(desc);
                     g_free(desc);
                 }
                 // move to the saved position
-                clip_path_node->setPosition(pos > 0 ? pos : 0);
-                Inkscape::GC::release(clip_path_node);
-                clip_to_path->emitModified(SP_OBJECT_MODIFIED_CASCADE);
+                mask_path_node->setPosition(pos > 0 ? pos : 0);
+                Inkscape::GC::release(mask_path_node);
+                mask_to_path->emitModified(SP_OBJECT_MODIFIED_CASCADE);
             }
             if( inverse && isVisible()) {
-                if (clip_to_path) {
-                    addInverse(SP_ITEM(clip_to_path));
+                if (mask_to_path) {
+                    addInverse(SP_ITEM(mask_to_path));
                 } else {
-                    addInverse(SP_ITEM(clip_data));
+                    addInverse(SP_ITEM(mask_data));
                 }
             } else if(is_inverse.param_getSVGValue() == (Glib::ustring)"true") {
-                if (clip_to_path) {
-                    removeInverse(SP_ITEM(clip_to_path));
+                if (mask_to_path) {
+                    removeInverse(SP_ITEM(mask_to_path));
                 } else {
-                    removeInverse(SP_ITEM(clip_data));
+                    removeInverse(SP_ITEM(mask_data));
                 }
             }
         }
     } else {
-        is_clip = false;
+        is_mask = false;
     }
 }
 
 void
-LPEPowerClip::addInverse (SPItem * clip_data){
-    if (SP_IS_GROUP(clip_data)) {
-        std::vector<SPItem*> item_list = sp_item_group_item_list(SP_GROUP(clip_data));
+LPEPowerMask::addInverse (SPItem * mask_data){
+    if (SP_IS_GROUP(mask_data)) {
+        std::vector<SPItem*> item_list = sp_item_group_item_list(SP_GROUP(mask_data));
         for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
             SPItem *subitem = *iter;
             addInverse(subitem);
         }
-    } else if (SP_IS_PATH(clip_data)) {
+    } else if (SP_IS_PATH(mask_data)) {
         SPCurve * c = NULL;
-        c = SP_SHAPE(clip_data)->getCurve();
+        c = SP_SHAPE(mask_data)->getCurve();
         if (c) {
             Geom::PathVector c_pv = c->get_pathvector();
             if(c_pv.size() > 1 && is_inverse.param_getSVGValue() == (Glib::ustring)"true") {
@@ -135,13 +135,13 @@ LPEPowerClip::addInverse (SPItem * clip_data){
             }
             //TODO: this can be not correct but no better way
             bool dir_a = Geom::path_direction(c_pv[0]);
-            bool dir_b = Geom::path_direction(clip_box);
+            bool dir_b = Geom::path_direction(mask_box);
             if (dir_a == dir_b) {
-               clip_box = clip_box.reversed();
+               mask_box = mask_box.reversed();
             }
-            c_pv.push_back(clip_box);
+            c_pv.push_back(mask_box);
             c->set_pathvector(c_pv);
-            SP_SHAPE(clip_data)->setCurve(c, TRUE);
+            SP_SHAPE(mask_data)->setCurve(c, TRUE);
             c->unref();
             is_inverse.param_setValue((Glib::ustring)"true", true);
             SPDesktop *desktop = SP_ACTIVE_DESKTOP;
@@ -160,24 +160,24 @@ LPEPowerClip::addInverse (SPItem * clip_data){
 }
 
 void
-LPEPowerClip::removeInverse (SPItem * clip_data){
+LPEPowerMask::removeInverse (SPItem * mask_data){
     if(is_inverse.param_getSVGValue() == (Glib::ustring)"true") {
-        if (SP_IS_GROUP(clip_data)) {
-             std::vector<SPItem*> item_list = sp_item_group_item_list(SP_GROUP(clip_data));
+        if (SP_IS_GROUP(mask_data)) {
+             std::vector<SPItem*> item_list = sp_item_group_item_list(SP_GROUP(mask_data));
              for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
                  SPItem *subitem = *iter;
                  removeInverse(subitem);
              }
-        } else if (SP_IS_PATH(clip_data)) {
+        } else if (SP_IS_PATH(mask_data)) {
             SPCurve * c = NULL;
-            c = SP_SHAPE(clip_data)->getCurve();
+            c = SP_SHAPE(mask_data)->getCurve();
             if (c) {
                 Geom::PathVector c_pv = c->get_pathvector();
                 if(c_pv.size() > 1) {
                     c_pv.pop_back();
                 }
                 c->set_pathvector(c_pv);
-                SP_SHAPE(clip_data)->setCurve(c, TRUE);
+                SP_SHAPE(mask_data)->setCurve(c, TRUE);
                 c->unref();
                 is_inverse.param_setValue((Glib::ustring)"false", true);
                 SPDesktop *desktop = SP_ACTIVE_DESKTOP;
@@ -197,16 +197,16 @@ LPEPowerClip::removeInverse (SPItem * clip_data){
 }
 
 void
-LPEPowerClip::toggleClip() {
+LPEPowerMask::toggleMask() {
     SPItem * item = SP_ITEM(sp_lpe_item);
     if (item) {
-        SPClipPath *clip_path = item->clip_ref->getObject();
-        if (clip_path) {
-            hide_clip = !hide_clip;
-            if(hide_clip) {
+        SPMaskPath *mask_path = item->mask_ref->getObject();
+        if (mask_path) {
+            hide_mask = !hide_mask;
+            if(hide_mask) {
                 SPItemView *v;
                 for (v = item->display; v != NULL; v = v->next) {
-                    clip_path->hide(v->arenaitem->key());
+                    mask_path->hide(v->arenaitem->key());
                 }
             } else {
                 Geom::OptRect bbox = item->geometricBounds();
@@ -214,26 +214,26 @@ LPEPowerClip::toggleClip() {
                     if (!v->arenaitem->key()) {
                         v->arenaitem->setKey(SPItem::display_key_new(3));
                     }
-                    Inkscape::DrawingItem *ai = clip_path->show(
+                    Inkscape::DrawingItem *ai = mask_path->show(
                                                            v->arenaitem->drawing(),
                                                            v->arenaitem->key());
-                    v->arenaitem->setClip(ai);
-                    clip_path->setBBox(v->arenaitem->key(), bbox);
+                    v->arenaitem->setMask(ai);
+                    mask_path->setBBox(v->arenaitem->key(), bbox);
                 }
             }
-            clip_path->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+            mask_path->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
         }
     }
 }
 
 void
-LPEPowerClip::convertShapes() {
+LPEPowerMask::convertShapes() {
     convert_shapes = true;
     sp_lpe_item_update_patheffect(SP_LPE_ITEM(sp_lpe_item), false, false);
 }
 
 Gtk::Widget *
-LPEPowerClip::newWidget()
+LPEPowerMask::newWidget()
 {
     // use manage here, because after deletion of Effect object, others might still be pointing to this widget.
     Gtk::VBox * vbox = Gtk::manage( new Gtk::VBox(Effect::newWidget()) );
@@ -265,14 +265,14 @@ LPEPowerClip::newWidget()
         ++it;
     }
     Gtk::HBox * hbox = Gtk::manage(new Gtk::HBox(false,0));
-    Gtk::Button * toggle_button = Gtk::manage(new Gtk::Button(Glib::ustring(_("Toggle clip visibiliy"))));
-    toggle_button->signal_clicked().connect(sigc::mem_fun (*this,&LPEPowerClip::toggleClip));
+    Gtk::Button * toggle_button = Gtk::manage(new Gtk::Button(Glib::ustring(_("Toggle mask visibiliy"))));
+    toggle_button->signal_clicked().connect(sigc::mem_fun (*this,&LPEPowerMask::toggleMask));
     toggle_button->set_size_request(140,30);
     vbox->pack_start(*hbox, true,true,2);
     hbox->pack_start(*toggle_button, false, false,2);
     Gtk::HBox * hbox2 = Gtk::manage(new Gtk::HBox(false,0));
-    Gtk::Button * topaths_button = Gtk::manage(new Gtk::Button(Glib::ustring(_("Convert clips to paths, undoable"))));
-    topaths_button->signal_clicked().connect(sigc::mem_fun (*this,&LPEPowerClip::convertShapes));
+    Gtk::Button * topaths_button = Gtk::manage(new Gtk::Button(Glib::ustring(_("Convert masks to paths, undoable"))));
+    topaths_button->signal_clicked().connect(sigc::mem_fun (*this,&LPEPowerMask::convertShapes));
     topaths_button->set_size_request(200,30);
     vbox->pack_start(*hbox2, true,true,2);
     hbox2->pack_start(*topaths_button, false, false,2);
@@ -280,39 +280,39 @@ LPEPowerClip::newWidget()
 }
 
 void 
-LPEPowerClip::doOnRemove (SPLPEItem const* /*lpeitem*/)
+LPEPowerMask::doOnRemove (SPLPEItem const* /*lpeitem*/)
 {
-    SPClipPath *clip_path = SP_ITEM(sp_lpe_item)->clip_ref->getObject();
+    SPMaskPath *mask_path = SP_ITEM(sp_lpe_item)->mask_ref->getObject();
     if(!keep_paths) {
-        if(clip_path) {
-            is_clip = true;
-            std::vector<SPObject*> clip_path_list = clip_path->childList(true);
-            for ( std::vector<SPObject*>::const_iterator iter=clip_path_list.begin();iter!=clip_path_list.end();++iter) {
-                SPObject * clip_data = *iter;
+        if(mask_path) {
+            is_mask = true;
+            std::vector<SPObject*> mask_path_list = mask_path->childList(true);
+            for ( std::vector<SPObject*>::const_iterator iter=mask_path_list.begin();iter!=mask_path_list.end();++iter) {
+                SPObject * mask_data = *iter;
                 if(is_inverse.param_getSVGValue() == (Glib::ustring)"true") {
-                    removeInverse(SP_ITEM(clip_data));
+                    removeInverse(SP_ITEM(mask_data));
                     is_inverse.param_setValue((Glib::ustring)"false");
                 }
             }
         }
     } else {
-        if (flatten && clip_path) {
-            clip_path->deleteObject();
-            sp_lpe_item->getRepr()->setAttribute("clip-path", NULL);
+        if (flatten && mask_path) {
+            mask_path->deleteObject();
+            sp_lpe_item->getRepr()->setAttribute("mask-path", NULL);
         }
     }
 }
 
 Geom::PathVector
-LPEPowerClip::doEffect_path(Geom::PathVector const & path_in){
+LPEPowerMask::doEffect_path(Geom::PathVector const & path_in){
     Geom::PathVector path_out = pathv_to_linear_and_cubic_beziers(path_in);
-    if (flatten && is_clip && isVisible()) {
-        SPClipPath *clip_path = SP_ITEM(sp_lpe_item)->clip_ref->getObject();
-        if(clip_path) {
-            std::vector<SPObject*> clip_path_list = clip_path->childList(true);
-            for ( std::vector<SPObject*>::const_iterator iter=clip_path_list.begin();iter!=clip_path_list.end();++iter) {
-                SPObject * clip_data = *iter;
-                flattenClip(SP_ITEM(clip_data), path_out);
+    if (flatten && is_mask && isVisible()) {
+        SPMaskPath *mask_path = SP_ITEM(sp_lpe_item)->mask_ref->getObject();
+        if(mask_path) {
+            std::vector<SPObject*> mask_path_list = mask_path->childList(true);
+            for ( std::vector<SPObject*>::const_iterator iter=mask_path_list.begin();iter!=mask_path_list.end();++iter) {
+                SPObject * mask_data = *iter;
+                flattenMask(SP_ITEM(mask_data), path_out);
             }
         }
     }
@@ -320,17 +320,17 @@ LPEPowerClip::doEffect_path(Geom::PathVector const & path_in){
 }
 
 void
-LPEPowerClip::flattenClip(SPItem * clip_data, Geom::PathVector &path_in)
+LPEPowerMask::flattenMask(SPItem * mask_data, Geom::PathVector &path_in)
 {
-    if (SP_IS_GROUP(clip_data)) {
-         std::vector<SPItem*> item_list = sp_item_group_item_list(SP_GROUP(clip_data));
+    if (SP_IS_GROUP(mask_data)) {
+         std::vector<SPItem*> item_list = sp_item_group_item_list(SP_GROUP(mask_data));
          for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
              SPItem *subitem = *iter;
-             flattenClip(subitem, path_in);
+             flattenMask(subitem, path_in);
          }
-    } else if (SP_IS_PATH(clip_data)) {
+    } else if (SP_IS_PATH(mask_data)) {
         SPCurve * c = NULL;
-        c = SP_SHAPE(clip_data)->getCurve();
+        c = SP_SHAPE(mask_data)->getCurve();
         if (c) {
             Geom::PathVector c_pv = c->get_pathvector();
             Geom::PathIntersectionGraph *pig = new Geom::PathIntersectionGraph(c_pv, path_in);

@@ -48,6 +48,7 @@
 #include "live_effects/lpe-perspective-envelope.h"
 #include "live_effects/lpe-perspective_path.h"
 #include "live_effects/lpe-powerclip.h"
+#include "live_effects/lpe-powermask.h"
 #include "live_effects/lpe-powerstroke.h"
 #include "live_effects/lpe-recursiveskeleton.h"
 #include "live_effects/lpe-roughen.h"
@@ -126,6 +127,7 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {MEASURE_LINE,          N_("Measure Line"),                    "measure_line"},
     {FILLET_CHAMFER,        N_("Fillet/Chamfer"),                  "fillet_chamfer"},
     {POWERCLIP,             N_("Power clip"),                      "powerclip"},
+    {POWERMASK,             N_("Power mask"),                      "powermask"},
 #ifdef LPE_ENABLE_TEST_EFFECTS
     {DOEFFECTSTACK_TEST,    N_("doEffect stack test"),             "doeffectstacktest"},
     {ANGLE_BISECTOR,        N_("Angle bisector"),                  "angle_bisector"},
@@ -305,6 +307,9 @@ Effect::New(EffectType lpenr, LivePathEffectObject *lpeobj)
             neweffect = static_cast<Effect*> ( new LPEFilletChamfer(lpeobj) );
             break;
         case POWERCLIP:
+            neweffect = static_cast<Effect*> ( new LPEPowerClip(lpeobj) );
+            break;
+        case POWERMASK:
             neweffect = static_cast<Effect*> ( new LPEPowerClip(lpeobj) );
             break;
         case ROUGHEN:
