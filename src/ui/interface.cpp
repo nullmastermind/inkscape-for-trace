@@ -1438,13 +1438,58 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPItem *item) :
     AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_EDIT_DELETE));
     
     positionOfLastDialog = 10; // 9 in front + 1 for the separator in the next if; used to position the dialog menu entries below each other
+    Geom::Rect b(_desktop->point(),_desktop->point() + Geom::Point(1,1));
+    std::vector< SPItem * > down_items = _desktop->getDocument()->getItemsPartiallyInBox( _desktop->dkey, b, true, true);
+    bool has_down_hidden = false;
+    bool has_down_locked = false;
+    for(std::vector< SPItem * >::iterator down = down_items.begin(); down != down_items.end(); ++down){
+        if((*down)->isHidden()) {
+            has_down_hidden = true;
+        }
+        if((*down)->isLocked()) {
+            has_down_locked = true;
+        }
+    }
+    AddSeparator();
+    Gtk::MenuItem* mi;
 
+    mi = Gtk::manage(new Gtk::MenuItem(_("Hide selected objects"),1));
+    mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::HideSelected));
+    if (_desktop->selection->isEmpty()) {
+        mi->set_sensitive(false);
+    }
+    mi->show();
+    append(*mi);//insert(*mi,positionOfLastDialog++);
+
+    mi = Gtk::manage(new Gtk::MenuItem(_("Unhide objects below"),1));
+    mi->signal_activate().connect(sigc::bind<std::vector< SPItem * > >(sigc::mem_fun(*this, &ContextMenu::UnHideBelow), down_items));
+    if (!has_down_hidden) {
+        mi->set_sensitive(false);
+    }
+    mi->show();
+    append(*mi);//insert(*mi,positionOfLastDialog++);
+
+    mi = Gtk::manage(new Gtk::MenuItem(_("Lock selected objects"),1));
+    mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::LockSelected));
+    if (_desktop->selection->isEmpty()) {
+        mi->set_sensitive(false);
+    }
+    mi->show();
+    append(*mi);//insert(*mi,positionOfLastDialog++);
+
+    mi = Gtk::manage(new Gtk::MenuItem(_("Unlock objects below"),1));
+    mi->signal_activate().connect(sigc::bind<std::vector< SPItem * > >(sigc::mem_fun(*this, &ContextMenu::UnLockBelow), down_items));
+    if (!has_down_locked) {
+        mi->set_sensitive(false);
+    }
+    mi->show();
+    append(*mi);//insert(*mi,positionOfLastDialog++);
     /* Item menu */
     if (item!=NULL) {
         AddSeparator();
         MakeObjectMenu();
     }
-    
+    AddSeparator();
     /* layer menu */
     SPGroup *group=NULL;
     if (item) {
@@ -1505,6 +1550,44 @@ void ContextMenu::EnterGroup(Gtk::MenuItem* mi)
 void ContextMenu::LeaveGroup(void)
 {
     _desktop->setCurrentLayer(_desktop->currentLayer()->parent);
+}
+
+void ContextMenu::LockSelected(void) 
+{
+    auto itemlist = _desktop->selection->items();
+    for(auto i=itemlist.begin();i!=itemlist.end(); ++i) {
+         (*i)->setLocked(true);
+    }
+}
+
+void ContextMenu::HideSelected(void)
+{
+    auto itemlist =_desktop->selection->items();
+    for(auto i=itemlist.begin();i!=itemlist.end(); ++i) {
+         (*i)->setHidden(true);
+    }
+}
+
+void ContextMenu::UnLockBelow(std::vector<SPItem *> items)
+{
+    _desktop->selection->clear();
+    for(auto i=items.begin();i!=items.end(); ++i) {
+        if ((*i)->isLocked()) {
+            (*i)->setLocked(false);
+            _desktop->selection->add(*i);
+        }
+    }
+}
+
+void ContextMenu::UnHideBelow(std::vector<SPItem *> items)
+{
+    _desktop->selection->clear();
+    for(auto i=items.begin();i!=items.end(); ++i) {
+        if ((*i)->isHidden()) {
+            (*i)->setHidden(false);
+            _desktop->selection->add(*i);
+        }
+    }
 }
 
 void ContextMenu::AppendItemFromVerb(Inkscape::Verb *verb)//, SPDesktop *view)//, bool radio, GSList *group)
