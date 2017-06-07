@@ -1438,6 +1438,13 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPItem *item) :
     AppendItemFromVerb(Inkscape::Verb::get(SP_VERB_EDIT_DELETE));
     
     positionOfLastDialog = 10; // 9 in front + 1 for the separator in the next if; used to position the dialog menu entries below each other
+    /* Item menu */
+    if (item!=NULL) {
+        AddSeparator();
+        MakeObjectMenu();
+    }
+    AddSeparator();
+    /* Lock/Unock Hide/Unhide*/
     Geom::Rect b(_desktop->point(),_desktop->point() + Geom::Point(1,1));
     std::vector< SPItem * > down_items = _desktop->getDocument()->getItemsPartiallyInBox( _desktop->dkey, b, true, true);
     bool has_down_hidden = false;
@@ -1450,7 +1457,6 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPItem *item) :
             has_down_locked = true;
         }
     }
-    AddSeparator();
     Gtk::MenuItem* mi;
 
     mi = Gtk::manage(new Gtk::MenuItem(_("Hide selected objects"),1));
@@ -1484,12 +1490,6 @@ ContextMenu::ContextMenu(SPDesktop *desktop, SPItem *item) :
     }
     mi->show();
     append(*mi);//insert(*mi,positionOfLastDialog++);
-    /* Item menu */
-    if (item!=NULL) {
-        AddSeparator();
-        MakeObjectMenu();
-    }
-    AddSeparator();
     /* layer menu */
     SPGroup *group=NULL;
     if (item) {

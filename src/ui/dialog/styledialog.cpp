@@ -355,6 +355,12 @@ void StyleDialog::_readStyleElement()
     // Remove end-of-lines (check it works on Windoze).
     content.erase(std::remove(content.begin(), content.end(), '\n'), content.end());
 
+    // Remove comments (/* xxx */)
+    while(content.find("/*") != std::string::npos) {
+        size_t start = content.find("/*");
+        content.erase(start, (content.find("*/", start) - start) +2);
+    }
+
     // First split into selector/value chunks.
     // An attempt to use Glib::Regex failed. A C++11 version worked but
     // reportedly has problems on Windows. Using split_simple() is simpler
@@ -787,7 +793,7 @@ void StyleDialog::_addSelector()
          * set to ".Class1"
          */
         selectorValue = textEditPtr->get_text();
-        Glib::ustring firstWord = selectorValue.substr(0, selectorValue.find(" "));
+        Glib::ustring firstWord = selectorValue.substr(0, selectorValue.find_first_of(" >+~"));
 
         del->set_sensitive(true);
 
