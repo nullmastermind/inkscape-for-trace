@@ -62,6 +62,7 @@
 #include "live_effects/lpe-test-doEffect-stack.h"
 #include "live_effects/lpe-text_label.h"
 #include "live_effects/lpe-vonkoch.h"
+#include "live_effects/lpe-embrodery-stitch.h"
 #include "live_effects/lpe-bool.h"
 
 #include "xml/node-event-vector.h"
@@ -126,6 +127,7 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {MEASURE_LINE,          N_("Measure Line"),                    "measure_line"},
     {FILLET_CHAMFER,        N_("Fillet/Chamfer"),                  "fillet_chamfer"},
     {BOOL_OP,               N_("Boolean operation"),               "bool_op"},
+    {EMBRODERY_STITCH,      N_("Embrodery stitch"),                "embrodery_stitch"},
 #ifdef LPE_ENABLE_TEST_EFFECTS
     {DOEFFECTSTACK_TEST,    N_("doEffect stack test"),             "doeffectstacktest"},
     {ANGLE_BISECTOR,        N_("Angle bisector"),                  "angle_bisector"},
@@ -166,6 +168,9 @@ Effect::New(EffectType lpenr, LivePathEffectObject *lpeobj)
 {
     Effect* neweffect = NULL;
     switch (lpenr) {
+        case EMBRODERY_STITCH:
+            neweffect = static_cast<Effect*> ( new LPEEmbroderyStitch(lpeobj) );
+            break;
         case BOOL_OP:
             neweffect = static_cast<Effect*> ( new LPEBool(lpeobj) );
             break;
