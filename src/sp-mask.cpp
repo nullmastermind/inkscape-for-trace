@@ -23,7 +23,8 @@
 #include "attributes.h"
 #include "document.h"
 #include "document-private.h"
-
+#include "style.h"
+#include "attributes.h"
 #include "sp-mask.h"
 
 struct SPMaskView {

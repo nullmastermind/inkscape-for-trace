@@ -247,9 +247,6 @@ LPEPowerClip::newWidget()
         if ((*it)->widget_is_visible) {
             Parameter * param = *it;
             Gtk::Widget * widg = dynamic_cast<Gtk::Widget *>(param->param_newWidget());
-            if(param->param_key == "grid") {
-                widg = NULL;
-            }
             Glib::ustring * tip = param->param_getTooltip();
             if (widg) {
                 vbox->pack_start(*widg, true, true, 2);

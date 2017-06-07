@@ -315,7 +315,7 @@ Effect::New(EffectType lpenr, LivePathEffectObject *lpeobj)
             neweffect = static_cast<Effect*> ( new LPEPowerClip(lpeobj) );
             break;
         case POWERMASK:
-            neweffect = static_cast<Effect*> ( new LPEPowerClip(lpeobj) );
+            neweffect = static_cast<Effect*> ( new LPEPowerMask(lpeobj) );
             break;
         case ROUGHEN:
             neweffect = static_cast<Effect*> ( new LPERoughen(lpeobj) );

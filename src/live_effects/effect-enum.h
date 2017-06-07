@@ -49,8 +49,6 @@ enum EffectType {
     BOUNDING_BOX,
     MEASURE_LINE,
     FILLET_CHAMFER,
-    POWERCLIP,
-    POWERMASK,
     BOOL_OP,
     POWERCLIP,
     POWERMASK,

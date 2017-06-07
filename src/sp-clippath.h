@@ -21,7 +21,6 @@
 struct SPClipPathView;
 
 #include <cstdio>
-
 #include "sp-object-group.h"
 #include "uri-references.h"
 #include "xml/node.h"

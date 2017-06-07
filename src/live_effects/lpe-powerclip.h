@@ -9,7 +9,6 @@
 
 #include "live_effects/effect.h"
 #include "live_effects/parameter/hidden.h"
-#include "live_effects/parameter/path.h"
 #include "live_effects/lpegroupbbox.h"
 
 namespace Inkscape {
