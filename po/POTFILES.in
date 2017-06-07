@@ -119,6 +119,7 @@ src/libnrtype/FontFactory.cpp
 src/live_effects/effect.cpp
 src/live_effects/lpe-attach-path.cpp
 src/live_effects/lpe-bendpath.cpp
+src/live_effects/lpe-bool.cpp
 src/live_effects/lpe-bounding-box.cpp
 src/live_effects/lpe-bspline.cpp
 src/live_effects/lpe-clone-original.cpp
