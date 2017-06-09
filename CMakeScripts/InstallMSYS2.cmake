@@ -59,9 +59,9 @@ if(WIN32)
     ${MINGW_BIN}/libharfbuzz-0.dll
     ${MINGW_BIN}/libhogweed-4.dll
     ${MINGW_BIN}/libiconv-2.dll
-    ${MINGW_BIN}/libicudt57.dll
-    ${MINGW_BIN}/libicuin57.dll
-    ${MINGW_BIN}/libicuuc57.dll
+    ${MINGW_BIN}/libicudt58.dll
+    ${MINGW_BIN}/libicuin58.dll
+    ${MINGW_BIN}/libicuuc58.dll
     ${MINGW_BIN}/libidn-11.dll
     ${MINGW_BIN}/libintl-8.dll
     ${MINGW_BIN}/libjpeg-8.dll
