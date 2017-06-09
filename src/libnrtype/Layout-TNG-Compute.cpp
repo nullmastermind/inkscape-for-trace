@@ -19,6 +19,8 @@
 namespace Inkscape {
 namespace Text {
 
+//#define DEBUG_LAYOUT_TNG_COMPUTE
+
 //#define IFTRACE(_code) _code
 #define IFTRACE(_code)
 
@@ -203,6 +205,8 @@ class Layout::Calculator
 /* *********************************************************************************************************/
 //                             Per-line functions
 
+
+#ifdef DEBUG_LAYOUT_TNG_COMPUTE
 /**
  * For debugging, not called in distributed code
  *
@@ -241,7 +245,7 @@ static void dumpUnbrokenSpans(ParagraphInfo *para){
         << std::endl;
     }
 }
-
+#endif //DEBUG_LAYOUT_TNG_COMPUTE
 
 
     bool _goToNextWrapShape();
