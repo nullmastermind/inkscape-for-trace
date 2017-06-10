@@ -9,9 +9,22 @@ before_script:
   # Testing Tools
   - apt-get install -y -qq google-mock libgtest-dev
   # Generate Makefiles
-  - cmake .
 
 inkscape:
   script:
+    - mkdir build
+    - cd build
+    - cmake ..
     - make
-  stage: build
+    - cd ..
+    - tar vfcz inkscape.tgz build/
+  artifacts:
+    paths:
+      - inkscape.tgz
+
+test:
+  stage: test
+  script:
+    - tar xvfz inkscape.tgz
+    - cd build
+    - make test
