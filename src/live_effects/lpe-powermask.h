@@ -30,9 +30,6 @@ private:
     TextParam background_style;
     Geom::Path mask_box;
     bool hide_mask;
-    bool previous_invert;
-    bool previous_wrap;
-    const gchar * previous_background_style;
 };
 
 } //namespace LivePathEffect

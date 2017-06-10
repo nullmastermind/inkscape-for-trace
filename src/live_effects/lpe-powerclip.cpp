@@ -40,7 +40,6 @@ LPEPowerClip::~LPEPowerClip() {}
 void
 LPEPowerClip::doBeforeEffect (SPLPEItem const* lpeitem){
     original_bbox(lpeitem);
-    const Glib::ustring uri = (Glib::ustring)sp_lpe_item->getRepr()->attribute("clip-path");
     SPClipPath *clip_path = SP_ITEM(lpeitem)->clip_ref->getObject();
     Geom::Point topleft      = Geom::Point(boundingbox_X.min() - 5,boundingbox_Y.max() + 5);
     Geom::Point topright     = Geom::Point(boundingbox_X.max() + 5,boundingbox_Y.max() + 5);
@@ -55,6 +54,7 @@ LPEPowerClip::doBeforeEffect (SPLPEItem const* lpeitem){
     //clip_path *= sp_lpe_item->i2dt_affine();
     if(clip_path) {
         is_clip = true;
+        const Glib::ustring uri = (Glib::ustring)sp_lpe_item->getRepr()->attribute("clip-path");
         std::vector<SPObject*> clip_path_list = clip_path->childList(true);
         for ( std::vector<SPObject*>::const_iterator iter=clip_path_list.begin();iter!=clip_path_list.end();++iter) {
             SPObject * clip_data = *iter;

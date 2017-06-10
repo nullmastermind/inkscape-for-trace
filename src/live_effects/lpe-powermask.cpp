@@ -26,9 +26,9 @@ namespace LivePathEffect {
 LPEPowerMask::LPEPowerMask(LivePathEffectObject *lpeobject)
     : Effect(lpeobject),
     invert(_("Invert mask"), _("Invert mask"), "invert", &wr, this, false),
-    wrap(_("Wrap filtered clip data"), _("Wrap filtered clip data"), "wrap", &wr, this, false),
+    wrap(_("Wrap clip data"), _("Wrap clip data allowing previous filters"), "wrap", &wr, this, false),
     background(_("Add background to mask"), _("Add background to mask"), "background", &wr, this, false),
-    background_style(_("Background Style"), _("CSS to background"), "background_style", &wr, this,"fill:#ffffff;opacity:0.7;")
+    background_style(_("Background Style"), _("CSS to background"), "background_style", &wr, this,"fill:#ffffff;opacity:1;")
    
 {
     registerParameter(&invert);
@@ -37,9 +37,6 @@ LPEPowerMask::LPEPowerMask(LivePathEffectObject *lpeobject)
     registerParameter(&background_style);
     background_style.param_hide_canvas_text();
     hide_mask = false;
-    previous_invert = !invert;
-    previous_wrap = !wrap;
-    previous_background_style = "";
 }
 
 LPEPowerMask::~LPEPowerMask() {}
@@ -78,110 +75,128 @@ LPEPowerMask::setMask(){
     Inkscape::XML::Node *filter = NULL;
     SPDefs * defs = document->getDefs();
     Glib::ustring mask_id = (Glib::ustring)mask->getId();
-    Glib::ustring box_id = mask_id + (Glib::ustring)"_transparentbox";
+    Glib::ustring box_id = mask_id + (Glib::ustring)"_box";
     Glib::ustring filter_id = mask_id + (Glib::ustring)"_inverse";
-    Glib::ustring filter_uri = (Glib::ustring)"url(#" + mask_id + (Glib::ustring)"_inverse)";
-    if (previous_invert != invert || previous_wrap != wrap) {
-        if (invert) {
-            if (!(elemref = document->getObjectById(filter_id))) {
-                filter = xml_doc->createElement("svg:filter");
-                filter->setAttribute("id", filter_id.c_str());
-                filter->setAttribute("color-interpolation-filters", "sRGB");
-                filter->setAttribute("height", "100");
-                filter->setAttribute("width", "100");
-                filter->setAttribute("x", "-50");
-                filter->setAttribute("y", "-50");
-                Inkscape::XML::Node *primitive1 =  xml_doc->createElement("svg:feColorMatrix");
-                Glib::ustring primitive1_id = (mask_id + (Glib::ustring)"_primitive1").c_str();
-                primitive1->setAttribute("id", primitive1_id.c_str());
-                primitive1->setAttribute("values", "1");
-                primitive1->setAttribute("type", "saturate");
-                primitive1->setAttribute("result", "fbSourceGraphic");
-                Inkscape::XML::Node *primitive2 =  xml_doc->createElement("svg:feColorMatrix");
-                Glib::ustring primitive2_id = (mask_id + (Glib::ustring)"_primitive2").c_str();
-                primitive2->setAttribute("id", primitive2_id.c_str());
-                primitive2->setAttribute("values", "-1 0 0 0 1 0 -1 0 0 1 0 0 -1 0 1 0 0 0 1 0 ");
-                primitive2->setAttribute("in", "fbSourceGraphic");
-                elemref = defs->appendChildRepr(filter);
-                filter->appendChild(primitive1);
-                filter->appendChild(primitive2);
-                Inkscape::GC::release(filter);
-                Inkscape::GC::release(primitive1);
-                Inkscape::GC::release(primitive2);
-            }
-        } else {
-            if ((elemref = document->getObjectById(filter_id))) {
-                elemref->deleteObject(true);
-            }
-            filter_uri = "";
-        }
-        std::vector<SPObject*> mask_list = mask->childList(true);
-        for ( std::vector<SPObject*>::const_iterator iter=mask_list.begin();iter!=mask_list.end();++iter) {
-            SPItem * mask_data = SP_ITEM(*iter);
-            if (! strcmp(mask_data->getId(), box_id.c_str())){
-                continue;
-            }
-            Glib::ustring mask_data_id = (Glib::ustring)mask_data->getId();
-            SPCSSAttr *css = sp_repr_css_attr_new();
-            if(mask_data->getRepr()->attribute("style")) {
-                sp_repr_css_attr_add_from_string(css, mask_data->getRepr()->attribute("style"));
-            }
-            char const* filter = sp_repr_css_property (css, "filter", "");
-            if(!filter ||! strcmp(filter, filter_uri.c_str())) {
-                if (filter_uri.empty()) {
-                    sp_repr_css_set_property (css, "filter", NULL);
-                } else {
-                    sp_repr_css_set_property (css, "filter", filter_uri.c_str());
-                }
-                Glib::ustring css_str;
-                sp_repr_css_write_string(css, css_str);
-                mask_data->getRepr()->setAttribute("style", css_str.c_str());
-            } else if(wrap){
-                Glib::ustring g_data_id = mask_data_id + (Glib::ustring)"_container";
-                Inkscape::XML::Node * container = xml_doc->createElement("svg:g");
-                container->setAttribute("id", g_data_id.c_str());
-                mask->appendChildRepr(container);
-                container->setPosition(mask_data->getPosition());
-                container->appendChild(mask_data->getRepr());
-                Inkscape::GC::release(container);
-                SPCSSAttr *css = sp_repr_css_attr_new();
-                if (filter_uri.empty()) {
-                    sp_repr_css_set_property (css, "filter", NULL);
-                } else {
-                    sp_repr_css_set_property (css, "filter", filter_uri.c_str());
-                }
-                Glib::ustring css_str;
-                sp_repr_css_write_string(css, css_str);
-                container->setAttribute("style", css_str.c_str());
-            }
-        }
+    Glib::ustring filter_label = (Glib::ustring)"filter" + mask_id;
+    Glib::ustring filter_uri = (Glib::ustring)"url(#" + filter_id + (Glib::ustring)")";
+    if (!(elemref = document->getObjectById(filter_id))) {
+        filter = xml_doc->createElement("svg:filter");
+        filter->setAttribute("id", filter_id.c_str());
+        filter->setAttribute("inkscape:label", filter_label.c_str());
+        SPCSSAttr *css = sp_repr_css_attr_new();
+        sp_repr_css_set_property(css, "color-interpolation-filters", "sRGB");
+        sp_repr_css_change(filter, css, "style");
+        sp_repr_css_attr_unref(css);
+        filter->setAttribute("height", "100");
+        filter->setAttribute("width", "100");
+        filter->setAttribute("x", "-50");
+        filter->setAttribute("y", "-50");
+        Inkscape::XML::Node *primitive1 =  xml_doc->createElement("svg:feColorMatrix");
+        Glib::ustring primitive1_id = (mask_id + (Glib::ustring)"_primitive1").c_str();
+        primitive1->setAttribute("id", primitive1_id.c_str());
+        primitive1->setAttribute("values", "1");
+        primitive1->setAttribute("type", "saturate");
+        primitive1->setAttribute("result", "fbSourceGraphic");
+        Inkscape::XML::Node *primitive2 =  xml_doc->createElement("svg:feColorMatrix");
+        Glib::ustring primitive2_id = (mask_id + (Glib::ustring)"_primitive2").c_str();
+        primitive2->setAttribute("id", primitive2_id.c_str());
+        primitive2->setAttribute("values", "-1 0 0 0 1 0 -1 0 0 1 0 0 -1 0 1 0 0 0 1 0 ");
+        primitive2->setAttribute("in", "fbSourceGraphic");
+        elemref = defs->appendChildRepr(filter);
+        Inkscape::GC::release(filter);
+        filter->appendChild(primitive1);
+        Inkscape::GC::release(primitive1);
+        filter->appendChild(primitive2);
+        Inkscape::GC::release(primitive2);
     }
     if (background) {
         if ((elemref = document->getObjectById(box_id))) {
-            if (strcmp(previous_background_style, background_style.param_getSVGValue())) {
-                elemref->getRepr()->setAttribute("style", background_style.param_getSVGValue());
-            }
-        } else {
-            std::vector<SPObject*> mask_list = mask->childList(true);
-            box = xml_doc->createElement("svg:path");
-            box->setAttribute("id", box_id.c_str());
-            box->setAttribute("style", background_style.param_getSVGValue());
-            gchar * box_str = sp_svg_write_path( mask_box );
-            box->setAttribute("d" , box_str);
-            g_free(box_str);
-            elemref = mask->appendChildRepr(box);
-            box->setPosition(mask_list.size());
-            Inkscape::GC::release(box);
-            mask_list.clear();
-        }
-    } else {
-        if ((elemref = document->getObjectById(box_id))) {
             elemref->deleteObject(true);
         }
+        box = xml_doc->createElement("svg:path");
+        box->setAttribute("id", box_id.c_str());
+        box->setAttribute("style", background_style.param_getSVGValue());
+        gchar * box_str = sp_svg_write_path( mask_box );
+        box->setAttribute("d" , box_str);
+        g_free(box_str);
+        elemref = mask->appendChildRepr(box);
+        box->setPosition(1);
+        Inkscape::GC::release(box);
     }
-    previous_invert = invert;
-    previous_wrap = wrap;
-    previous_background_style = background_style.param_getSVGValue();
+    if(wrap){
+        Glib::ustring g_data_id = mask_id + (Glib::ustring)"_container";
+        if((elemref = document->getObjectById(g_data_id))){
+            elemref->getRepr()->setPosition(-1);
+        } else {
+            Inkscape::XML::Node * container = xml_doc->createElement("svg:g");
+            container->setAttribute("id", g_data_id.c_str());
+            mask->appendChildRepr(container);
+            std::vector<SPObject*> mask_list = mask->childList(true);
+            container->setPosition(-1);
+            Inkscape::GC::release(container);
+            for ( std::vector<SPObject*>::const_iterator iter=mask_list.begin();iter!=mask_list.end();++iter) {
+                SPItem * mask_data = SP_ITEM(*iter);
+                Inkscape::XML::Node *mask_node = mask_data->getRepr();
+                if (! strcmp(mask_data->getId(), box_id.c_str()) ||
+                    ! strcmp(mask_data->getId(), g_data_id.c_str()))
+                {
+                    continue;
+                }
+                SPCSSAttr *css = sp_repr_css_attr_new();
+                if(mask_node->attribute("style")) {
+                    sp_repr_css_attr_add_from_string(css, mask_node->attribute("style"));
+                }
+                char const* filter = sp_repr_css_property (css, "filter", NULL);
+                if(!filter || !strcmp(filter, filter_uri.c_str())) {
+                    sp_repr_css_set_property (css, "filter", NULL);
+                }
+                Glib::ustring css_str;
+                sp_repr_css_write_string(css, css_str);
+                mask_node->setAttribute("style", css_str.c_str());
+                mask->getRepr()->removeChild(mask_node);
+                container->appendChild(mask_node);
+                Inkscape::GC::release(mask_node);
+            }
+        }
+    } else {
+        Glib::ustring g_data_id = mask_id + (Glib::ustring)"_container";
+        if((elemref = document->getObjectById(g_data_id))){
+            std::vector<SPItem*> item_list = sp_item_group_item_list(SP_GROUP(elemref));
+            for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
+                Inkscape::XML::Node *mask_node = (*iter)->getRepr();
+                elemref->getRepr()->removeChild(mask_node);
+                mask->getRepr()->appendChild(mask_node);
+                Inkscape::GC::release(mask_node);
+            }
+            sp_object_ref(elemref, 0 );
+            elemref->deleteObject(true);
+            sp_object_unref(elemref);
+        }
+    }
+    std::vector<SPObject*> mask_list = mask->childList(true);
+    for ( std::vector<SPObject*>::const_iterator iter=mask_list.begin();iter!=mask_list.end();++iter) {
+        SPItem * mask_data = SP_ITEM(*iter);
+        Inkscape::XML::Node *mask_node = mask_data->getRepr();
+        if (! strcmp(mask_data->getId(), box_id.c_str())){
+            continue;
+        }
+        Glib::ustring mask_data_id = (Glib::ustring)mask_data->getId();
+        SPCSSAttr *css = sp_repr_css_attr_new();
+        if(mask_node->attribute("style")) {
+            sp_repr_css_attr_add_from_string(css, mask_node->attribute("style"));
+        }
+        char const* filter = sp_repr_css_property (css, "filter", NULL);
+        if(!filter || !strcmp(filter, filter_uri.c_str())) {
+            if (invert) {
+                sp_repr_css_set_property (css, "filter", filter_uri.c_str());
+            } else {
+                sp_repr_css_set_property (css, "filter", NULL);
+            }
+            Glib::ustring css_str;
+            sp_repr_css_write_string(css, css_str);
+            mask_node->setAttribute("style", css_str.c_str());
+        }
+    }
 }
 
 void
@@ -262,6 +277,13 @@ LPEPowerMask::doOnRemove (SPLPEItem const* /*lpeitem*/)
             wrap.param_setValue(false);
             background.param_setValue(false);
             setMask();
+            SPObject *elemref = NULL;
+            SPDocument * document = SP_ACTIVE_DOCUMENT;
+            Glib::ustring mask_id = (Glib::ustring)mask->getId();
+            Glib::ustring filter_id = mask_id + (Glib::ustring)"_inverse";
+            if ((elemref = document->getObjectById(filter_id))) {
+                elemref->deleteObject(true);
+            }
         }
     }
 }
