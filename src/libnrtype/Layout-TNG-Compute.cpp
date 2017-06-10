@@ -183,17 +183,26 @@ class Layout::Calculator
         std::vector<PangoLogAttr> char_attributes;    ///< For every character in the paragraph.
         std::vector<UnbrokenSpan> unbroken_spans;
 
-        template<typename T> static void free_sequence(T &seq);
-        void free();
+        template<typename T> static void free_sequence(T &seq)
+        {
+            for (typename T::iterator it(seq.begin()); it != seq.end(); ++it) {
+                it->free();
+            }
+            seq.clear();
+        }
+
+        void free()
+        {
+            free_sequence(input_items);
+            free_sequence(pango_items);
+            free_sequence(unbroken_spans);
+        }
     };
+
+
 
 /* *********************************************************************************************************/
 //                       Initialisation of ParagraphInfo structure
-
-
-#if 0 /* unused */
-    void _initialiseInputItems(ParagraphInfo *para) const;
-#endif
 
     void _buildPangoItemizationForPara(ParagraphInfo *para) const;
 
@@ -951,21 +960,6 @@ void Layout::Calculator::BrokenSpan::setZero()
     each_whitespace_width = 0.0;
     letter_spacing = 0.0;
     word_spacing = 0.0;
-}
-
-template<typename T> void Layout::Calculator::ParagraphInfo::free_sequence(T &seq)
-{
-    for (typename T::iterator it(seq.begin()); it != seq.end(); ++it) {
-        it->free();
-    }
-    seq.clear();
-}
-
-void Layout::Calculator::ParagraphInfo::free()
-{
-    free_sequence(input_items);
-    free_sequence(pango_items);
-    free_sequence(unbroken_spans);
 }
 
 ///**
