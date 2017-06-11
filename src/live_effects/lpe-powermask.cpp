@@ -67,7 +67,12 @@ LPEPowerMask::setMask(){
     SPMask *mask = SP_ITEM(sp_lpe_item)->mask_ref->getObject();
     SPObject *elemref = NULL;
     SPDocument * document = SP_ACTIVE_DOCUMENT;
-    if(!document || !mask) {
+    if (!document || !mask) {
+        return;
+    }
+    Inkscape::XML::Node *root = sp_lpe_item->document->getReprRoot();
+    Inkscape::XML::Node *root_origin = document->getReprRoot();
+    if (root_origin != root) {
         return;
     }
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
@@ -109,10 +114,10 @@ LPEPowerMask::setMask(){
         filter->appendChild(primitive2);
         Inkscape::GC::release(primitive2);
     }
+    if ((elemref = document->getObjectById(box_id))) {
+        elemref->deleteObject(true);
+    }
     if (background) {
-        if ((elemref = document->getObjectById(box_id))) {
-            elemref->deleteObject(true);
-        }
         box = xml_doc->createElement("svg:path");
         box->setAttribute("id", box_id.c_str());
         box->setAttribute("style", background_style.param_getSVGValue());
@@ -187,9 +192,12 @@ LPEPowerMask::setMask(){
         }
         char const* filter = sp_repr_css_property (css, "filter", NULL);
         if(!filter || !strcmp(filter, filter_uri.c_str())) {
+            
             if (invert) {
+            std::cout << "qqqqqqqqqqqqqqqqqqqqqqqqq\n";
                 sp_repr_css_set_property (css, "filter", filter_uri.c_str());
             } else {
+            std::cout << "aaaaaaaaaaaaaaaaaaaaaaaaaaaaqq\n";
                 sp_repr_css_set_property (css, "filter", NULL);
             }
             Glib::ustring css_str;
@@ -197,6 +205,13 @@ LPEPowerMask::setMask(){
             mask_node->setAttribute("style", css_str.c_str());
         }
     }
+    mask->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+}
+
+void
+LPEPowerMask::doEffect (SPCurve * curve)
+{
+
 }
 
 void

@@ -19,6 +19,7 @@ public:
     LPEPowerMask(LivePathEffectObject *lpeobject);
     virtual ~LPEPowerMask();
     virtual void doBeforeEffect (SPLPEItem const* lpeitem);
+    virtual void doEffect (SPCurve * curve);
     virtual void doOnRemove (SPLPEItem const* /*lpeitem*/);
     virtual Gtk::Widget * newWidget();
     void toggleMask();
