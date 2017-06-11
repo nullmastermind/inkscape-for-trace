@@ -57,6 +57,6 @@ pages:
     - cp -r scan public
   artifacts:
     paths:
-      - public/
+      - public
   only:
     - master
