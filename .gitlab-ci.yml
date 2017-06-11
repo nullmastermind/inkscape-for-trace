@@ -22,7 +22,7 @@ inkscape:
   script:
     - mkdir -p build
     - cd build
-    - cmake .. -DCMAKE_C_COMPILER=ccache -DCMAKE_CXX_COMPILER=ccache -DCMAKE_BUILD_TYPE=Debug
+    - cmake .. -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_BUILD_TYPE=Debug
     - make
     - cd ..
     - tar vfcz inkscape-build.tgz build/
