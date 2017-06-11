@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# ------------------------------------------------------------------------------
-# This script installs all dependecies required for building Inkscape with MSYS2
+# -------------------------------------------------------------------------------
+# This script installs all dependencies required for building Inkscape with MSYS2
 #   execute it once on an MSYS shell, i.e.
 #    - use the "MSYS2 MSYS" shortcut in the start menu or
 #    - run "msys2.exe" in MSYS2's installation folder
@@ -8,12 +8,20 @@
 # MSYS2 and installed libraries can be updated later by executing
 #   pacman -Syu --ignore=mingw-w64-*-imagemagick
 # in an MSYS shell
-# ------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------
 
 # select if you want to build 32-bit (i686), 64-bit (x86_64), or both
-#ARCH=mingw-w64-i686
-#ARCH=mingw-w64-x86_64
-ARCH={mingw-w64-i686,mingw-w64-x86_64}
+case "$MSYSTEM" in
+  MINGW32)
+    ARCH=mingw-w64-i686
+    ;;
+  MINGW64)
+    ARCH=mingw-w64-x86_64
+    ;;
+  *)
+    ARCH={mingw-w64-i686,mingw-w64-x86_64}
+    ;;
+esac
 
 # sync package databases
 pacman -Sy
