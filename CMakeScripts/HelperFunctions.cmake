@@ -35,16 +35,27 @@ endfunction()
 
 # Checks if the last call to execute_process() was sucessful and throws an error otherwise.
 # ${result} and ${stderr} should hold the value of RESULT_VARIABLE and ERROR_VARIABLE respectively
-function(check_error result stderr)
+# ${command} can be empty or the command that was executed during the last call of execute_process()
+function(check_error result stderr command)
+    string(STRIP "${result}" result)
+    string(STRIP "${stderr}" stderr)
+    string(STRIP "${command}" command)
+
+    if ("${command}" STREQUAL "")
+        set(command "Process")
+    else()
+        set(command "'${command}'")
+    endif()
+
     if("${result}" STREQUAL 0)
         if(NOT "${stderr}" STREQUAL "")
-            MESSAGE(WARNING "Process returned sucessfully but the following was output to stderr: ${stderr}")
+            MESSAGE(WARNING "${command} returned sucessfully but the following was output to stderr: ${stderr}")
         endif()
     else()
         if("${stderr}" STREQUAL "")
-            MESSAGE(FATAL_ERROR "Process failed with error code: ${result}")
+            MESSAGE(FATAL_ERROR "${command} failed with error code: ${result}")
         else()
-            MESSAGE(FATAL_ERROR "Process failed with error code: ${result} (stderr: ${stderr})")
+            MESSAGE(FATAL_ERROR "${command} failed with error code: ${result} (stderr: ${stderr})")
         endif()
     endif()
 endfunction(check_error)
@@ -64,7 +75,7 @@ function(list_files_pacman package_name file_list)
         RESULT_VARIABLE res
         ERROR_VARIABLE err
     )
-    check_error("${res}" "${err}")
+    check_error("${res}" "${err}" "pacman -Ql ${MINGW_PACKAGE_PREFIX}-${package_name}")
 
     # clean up output
     execute_process(
@@ -77,7 +88,7 @@ function(list_files_pacman package_name file_list)
         RESULT_VARIABLE res
         ERROR_VARIABLE err
     )
-    check_error("${res}" "${err}")
+    check_error("${res}" "${err}" "Parsing result of 'pacman -Ql ${MINGW_PACKAGE_PREFIX}-${package_name}'")
 
     SET(${file_list} ${out} PARENT_SCOPE)
     file(REMOVE ${CMAKE_CURRENT_BINARY_DIR}/list_files_pacman_temp.txt)
@@ -95,7 +106,7 @@ function(list_files_pip package_name file_list)
         RESULT_VARIABLE res
         ERROR_VARIABLE err
     )
-    check_error("${res}" "${err}")
+    check_error("${res}" "${err}" "pip show -f ${package_name}")
 
     # clean up output
     execute_process(
@@ -107,7 +118,7 @@ function(list_files_pip package_name file_list)
         RESULT_VARIABLE res
         ERROR_VARIABLE err
     )
-    check_error("${res}" "${err}")
+    check_error("${res}" "${err}" "Parsing result of 'pip show -f ${package_name}'")
 
     SET(${file_list} ${out} PARENT_SCOPE)
     file(REMOVE ${CMAKE_CURRENT_BINARY_DIR}/list_files_pip_temp.txt)
