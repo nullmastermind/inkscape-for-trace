@@ -12,17 +12,13 @@ before_script:
   - mkdir -p ccache
   - export CCACHE_BASEDIR=${PWD}
   - export CCACHE_DIR=${PWD}/ccache
-  - export CMAKE_C_COMPILER=ccache
-  - export CMAKE_CXX_COMPILER=ccache
-  # CMake Config
-  - export CMAKE_BUILD_TYPE=Debug
 
 inkscape:
   stage: build
   script:
-    - mkdir build
+    - mkdir -p build
     - cd build
-    - cmake ..
+    - cmake .. -DCMAKE_C_COMPILER=ccache -DCMAKE_CXX_COMPILER=ccache -DCMAKE_BUILD_TYPE=Debug
     - make
     - cd ..
     - tar vfcz inkscape-build.tgz build/
