@@ -33,10 +33,10 @@ inkscape:
 clang:
   stage: build
   script:
-    - apt-get install -y clang-3.8
+    - apt-get install -y clang-3.8 clang
     - mkdir -p clang-build
     - cd clang-build
-    - scan-build -o cmake .. -DCMAKE_BUILD_TYPE=Debug
+    - scan-build cmake .. -DCMAKE_BUILD_TYPE=Debug
     - VERBOSE=1 scan-build -o ../scan make
   artifacts:
     paths:
