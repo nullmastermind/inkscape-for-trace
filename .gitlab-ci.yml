@@ -13,6 +13,10 @@ before_script:
   - export CCACHE_BASEDIR=${PWD}
   - export CCACHE_DIR=${PWD}/ccache
 
+cache:
+  paths:
+    - ccache/
+
 inkscape:
   stage: build
   script:
