@@ -207,6 +207,7 @@ protected:
     CairoClipMode _clip_mode;
 
     CairoOmitTextPageState _omittext_state;
+    int _omittext_missing_pages;
 
     cairo_pattern_t *_createPatternForPaintServer(SPPaintServer const *const paintserver,
                                                   Geom::OptRect const &pbox, float alpha);

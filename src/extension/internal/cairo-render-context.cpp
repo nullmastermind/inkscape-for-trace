@@ -128,7 +128,8 @@ CairoRenderContext::CairoRenderContext(CairoRenderer *parent) :
     _renderer(parent),
     _render_mode(RENDER_MODE_NORMAL),
     _clip_mode(CLIP_MODE_MASK),
-    _omittext_state(EMPTY)
+    _omittext_state(EMPTY),
+    _omittext_missing_pages(0)
 {
 }
 
@@ -884,6 +885,13 @@ CairoRenderContext::finish(void)
     if (_vector_based_target)
         cairo_show_page(_cr);
 
+    // PDF+TeX Output, see CairoRenderContext::_prepareRenderGraphic()
+    while (_omittext_missing_pages > 0) {
+            _omittext_missing_pages--;
+            g_warning("PDF+TeX output: issuing blank PDF page at end (workaround for previous error)");
+            cairo_show_page(_cr);
+    }
+
     cairo_destroy(_cr);
     cairo_surface_finish(_surface);
     cairo_status_t status = cairo_surface_status(_surface);
@@ -1435,8 +1443,29 @@ CairoRenderContext::_prepareRenderGraphic()
     // Only PDFLaTeX supports importing a single page of a graphics file,
     // so only PDF backend gets interleaved text/graphics
     if (_is_omittext && _target == CAIRO_SURFACE_TYPE_PDF) {
-        if (_omittext_state == NEW_PAGE_ON_GRAPHIC)
-            cairo_show_page(_cr);
+        if (_omittext_state == NEW_PAGE_ON_GRAPHIC) {
+            if (cairo_get_group_target(_cr) != cairo_get_target(_cr)) {
+                // we are in the middle of a group, i. e., between cairo_push_group() and cairo_pop_group().
+                // cairo_show_page() has no effect here!
+                // To ensure that the the generated TeX source doesn't try to include non-existing pages,
+                // we will later output an extra blank page.
+                // This is a workaround for bug #1417470.
+                g_warning("PDF+TeX output: Found text inside a clipped/masked group. This is not supported, the Z-order will be incorrect. Blank pages will be added to the PDF output to work around bug #1417470.");
+                _omittext_missing_pages++;
+            } else {
+                // no group is active, create new page
+                cairo_show_page(_cr);
+                // Output missing pages (workaround for the 'if' case above).
+                // With this solution, the Z-order is more wrong than necessary.
+                // It would be better to print the blank pages first, and then the actual current page.
+                // However, this isn't easily possible with cairo.
+                while (_omittext_missing_pages > 0) {
+                    _omittext_missing_pages--;
+                    g_warning("PDF+TeX output: issuing blank PDF page (workaround for previous error)");
+                    cairo_show_page(_cr);
+                }
+            }
+        }
         _omittext_state = GRAPHIC_ON_TOP;
     }
 }
