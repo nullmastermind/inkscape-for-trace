@@ -44,7 +44,6 @@ LPEPowerMask::~LPEPowerMask() {}
 void
 LPEPowerMask::doBeforeEffect (SPLPEItem const* lpeitem){
     original_bbox(lpeitem);
-    const Glib::ustring uri = (Glib::ustring)sp_lpe_item->getRepr()->attribute("mask");
     SPMask *mask = SP_ITEM(lpeitem)->mask_ref->getObject();
     Geom::Point topleft      = Geom::Point(boundingbox_X.min() - 5,boundingbox_Y.max() + 5);
     Geom::Point topright     = Geom::Point(boundingbox_X.max() + 5,boundingbox_Y.max() + 5);
@@ -56,7 +55,6 @@ LPEPowerMask::doBeforeEffect (SPLPEItem const* lpeitem){
     mask_box.appendNew<Geom::LineSegment>(bottomright);
     mask_box.appendNew<Geom::LineSegment>(bottomleft);
     mask_box.close();
-    //mask *= sp_lpe_item->i2dt_affine();
     if(mask) {
         setMask();
     }
@@ -114,21 +112,7 @@ LPEPowerMask::setMask(){
         filter->appendChild(primitive2);
         Inkscape::GC::release(primitive2);
     }
-    if ((elemref = document->getObjectById(box_id))) {
-        elemref->deleteObject(true);
-    }
-    if (background) {
-        box = xml_doc->createElement("svg:path");
-        box->setAttribute("id", box_id.c_str());
-        box->setAttribute("style", background_style.param_getSVGValue());
-        gchar * box_str = sp_svg_write_path( mask_box );
-        box->setAttribute("d" , box_str);
-        g_free(box_str);
-        elemref = mask->appendChildRepr(box);
-        box->setPosition(1);
-        Inkscape::GC::release(box);
-    }
-    if(wrap){
+    if(wrap && is_visible){
         Glib::ustring g_data_id = mask_id + (Glib::ustring)"_container";
         if((elemref = document->getObjectById(g_data_id))){
             elemref->getRepr()->setPosition(-1);
@@ -192,12 +176,9 @@ LPEPowerMask::setMask(){
         }
         char const* filter = sp_repr_css_property (css, "filter", NULL);
         if(!filter || !strcmp(filter, filter_uri.c_str())) {
-            
-            if (invert) {
-            std::cout << "qqqqqqqqqqqqqqqqqqqqqqqqq\n";
+            if (invert && is_visible) {
                 sp_repr_css_set_property (css, "filter", filter_uri.c_str());
             } else {
-            std::cout << "aaaaaaaaaaaaaaaaaaaaaaaaaaaaqq\n";
                 sp_repr_css_set_property (css, "filter", NULL);
             }
             Glib::ustring css_str;
@@ -205,13 +186,32 @@ LPEPowerMask::setMask(){
             mask_node->setAttribute("style", css_str.c_str());
         }
     }
+    if ((elemref = document->getObjectById(box_id))) {
+        elemref->deleteObject(true);
+    }
+    if (background && is_visible) {
+        box = xml_doc->createElement("svg:path");
+        box->setAttribute("id", box_id.c_str());
+        box->setAttribute("style", background_style.param_getSVGValue());
+        gchar * box_str = sp_svg_write_path( mask_box );
+        box->setAttribute("d" , box_str);
+        g_free(box_str);
+        elemref = mask->appendChildRepr(box);
+        box->setPosition(1);
+        Inkscape::GC::release(box);
+    }
     mask->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+}
+
+void 
+LPEPowerMask::doOnVisibilityToggled(SPLPEItem const* lpeitem)
+{
+    doBeforeEffect(lpeitem);
 }
 
 void
 LPEPowerMask::doEffect (SPCurve * curve)
 {
-
 }
 
 void
@@ -283,11 +283,11 @@ LPEPowerMask::newWidget()
 }
 
 void 
-LPEPowerMask::doOnRemove (SPLPEItem const* /*lpeitem*/)
+LPEPowerMask::doOnRemove (SPLPEItem const* lpeitem)
 {
-    SPMask *mask = SP_ITEM(sp_lpe_item)->mask_ref->getObject();
     if(!keep_paths) {
-        if(mask) {
+        SPMask *mask = lpeitem->mask_ref->getObject();
+        if (mask) {
             invert.param_setValue(false);
             wrap.param_setValue(false);
             background.param_setValue(false);

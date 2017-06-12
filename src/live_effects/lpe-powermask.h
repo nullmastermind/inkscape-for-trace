@@ -22,6 +22,7 @@ public:
     virtual void doEffect (SPCurve * curve);
     virtual void doOnRemove (SPLPEItem const* /*lpeitem*/);
     virtual Gtk::Widget * newWidget();
+    virtual void doOnVisibilityToggled(SPLPEItem const* lpeitem);
     void toggleMask();
     void setMask();
 private:
