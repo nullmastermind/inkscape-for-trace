@@ -23,7 +23,7 @@ inkscape:
     - mkdir -p build
     - cd build
     - cmake .. -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_BUILD_TYPE=Debug
-    - make
+    - make -j3
     - cd ..
   artifacts:
     expire_in: 1 year
