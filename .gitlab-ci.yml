@@ -26,6 +26,7 @@ inkscape:
     - make
     - cd ..
   artifacts:
+    expire_in: 1 year
     paths:
       - build/
 
