@@ -463,7 +463,9 @@ void SPFlowtext::rebuildLayout()
     _buildLayoutInput(this, exclusion_shape, &shapes, &pending_line_break_object);
     delete exclusion_shape;
     layout.calculateFlow();
-    //g_print("%s", layout.dumpAsText().c_str());
+#if DEBUG_TEXTLAYOUT_DUMPASTEXT
+    g_print("%s", layout.dumpAsText().c_str());
+#endif
 }
 
 void SPFlowtext::_clearFlow(Inkscape::DrawingGroup *in_arena)

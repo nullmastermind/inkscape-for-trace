@@ -515,6 +515,7 @@ void Layout::showGlyphs(CairoRenderContext *ctx) const
 }
 #endif
 
+#if DEBUG_TEXTLAYOUT_DUMPASTEXT
 // these functions are for dumpAsText() only. No need to translate
 static char const *direction_to_text(Layout::Direction d)
 {
@@ -557,6 +558,7 @@ static char const *weight_to_text(PangoWeight w)
     }
     return "???";
 }
+#endif //DEBUG_TEXTLAYOUT_DUMPASTEXT
 
 Glib::ustring Layout::getFontFamily(unsigned span_index) const
 {
@@ -570,6 +572,7 @@ Glib::ustring Layout::getFontFamily(unsigned span_index) const
     return "";
 }
 
+#if DEBUG_TEXTLAYOUT_DUMPASTEXT
 Glib::ustring Layout::dumpAsText() const
 {
     Glib::ustring result;
@@ -609,7 +612,13 @@ Glib::ustring Layout::dumpAsText() const
                  _lines[_chunks[_spans[span_index].in_chunk].in_line].in_shape)
                +  Glib::ustring::compose("  in chunk %1 (x=%2, baselineshift=%3)\n", _spans[span_index].in_chunk, _chunks[_spans[span_index].in_chunk].left_x, _spans[span_index].baseline_shift);
         if (_spans[span_index].font) {
-            result += Glib::ustring::compose("    font '%1' %2 %3 %4\n", sp_font_description_get_family(_spans[span_index].font->descr), _spans[span_index].font_size, style_to_text(pango_font_description_get_style(_spans[span_index].font->descr)), weight_to_text(pango_font_description_get_weight(_spans[span_index].font->descr)));
+            result += Glib::ustring::compose(
+                "    font '%1' %2 %3 %4\n",
+                sp_font_description_get_family(_spans[span_index].font->descr),
+                _spans[span_index].font_size,
+                style_to_text( pango_font_description_get_style(_spans[span_index].font->descr) ),
+                weight_to_text( pango_font_description_get_weight(_spans[span_index].font->descr) )
+            );
         }
         result += Glib::ustring::compose("    x_start = %1, x_end = %2\n", _spans[span_index].x_start, _spans[span_index].x_end)
                +  Glib::ustring::compose("    line height: ascent %1, descent %2\n", _spans[span_index].line_height.ascent, _spans[span_index].line_height.descent)
@@ -640,6 +649,7 @@ Glib::ustring Layout::dumpAsText() const
     result += "EOT\n";
     return result;
 }
+#endif //DEBUG_TEXTLAYOUT_DUMPASTEXT
 
 void Layout::fitToPathAlign(SVGLength const &startOffset, Path const &path)
 {

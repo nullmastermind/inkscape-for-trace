@@ -620,12 +620,16 @@ void SPText::rebuildLayout()
         if (SP_IS_TEXTPATH(&child)) {
             SPTextPath const *textpath = SP_TEXTPATH(&child);
             if (textpath->originalPath != NULL) {
-                //g_print("%s", layout.dumpAsText().c_str());
+#if DEBUG_TEXTLAYOUT_DUMPASTEXT
+                g_print("%s", layout.dumpAsText().c_str());
+#endif
                 layout.fitToPathAlign(textpath->startOffset, *textpath->originalPath);
             }
         }
     }
-    //g_print("%s", layout.dumpAsText().c_str());
+#if DEBUG_TEXTLAYOUT_DUMPASTEXT
+    g_print("%s", layout.dumpAsText().c_str());
+#endif
 
     // set the x,y attributes on role:line spans
     for (auto& child: children) {

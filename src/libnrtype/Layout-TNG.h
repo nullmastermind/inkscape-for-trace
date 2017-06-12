@@ -11,6 +11,8 @@
 #ifndef __LAYOUT_TNG_H__
 #define __LAYOUT_TNG_H__
 
+//#define DEBUG_TEXTLAYOUT_DUMPASTEXT
+
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
@@ -402,10 +404,12 @@ public:
     /** Returns the font family of the indexed span */
     Glib::ustring getFontFamily(unsigned span_index) const;
 
+#if DEBUG_TEXTLAYOUT_DUMPASTEXT
     /** debug and unit test method. Creates a textual representation of the
     contents of this object. The output is designed to be both human-readable
     and comprehensible when diffed with a known-good dump. */
     Glib::ustring dumpAsText() const;
+#endif
 
     /** Moves all the glyphs in the structure so that the baseline of all
     the characters sits neatly along the path specified. If the text has
