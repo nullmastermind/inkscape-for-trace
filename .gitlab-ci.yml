@@ -23,16 +23,15 @@ inkscape:
     - mkdir -p build
     - cd build
     - cmake .. -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_BUILD_TYPE=Debug
-    - make
+    - make -j3
     - cd ..
-    - tar vfcz inkscape-build.tgz build/
   artifacts:
+    expire_in: 1 year
     paths:
-      - inkscape-build.tgz
+      - build/
 
 test:
   stage: test
   script:
-    - tar xvfz inkscape-build.tgz
     - cd build
     - make test
