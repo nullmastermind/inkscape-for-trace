@@ -3,7 +3,7 @@ if(WIN32)
     AUTHORS
     COPYING
     NEWS
-    README
+    README.md
     TRANSLATORS
 	GPL2.txt
 	GPL3.txt
