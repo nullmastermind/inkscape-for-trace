@@ -16,8 +16,7 @@ EOF
 
 
 
-# update/install dependecies
-pacman -Suu --needed --noconfirm --noprogressbar
+# install dependecies
 pacman -S $MINGW_PACKAGE_PREFIX-ccache --needed --noconfirm --noprogressbar
 source ../msys2installdeps.sh
 
