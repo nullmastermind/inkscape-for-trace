@@ -16,22 +16,24 @@ EOF
 
 
 
-# install dependecies
+# install dependencies
 pacman -S $MINGW_PACKAGE_PREFIX-ccache --needed --noconfirm --noprogressbar
 source ../msys2installdeps.sh
 
 # configure
 ccache --max-size=200M
-cmake .. -G Ninja -DCMAKE_C_COMPILER_LAUNCHER="ccache" -DCMAKE_CXX_COMPILER_LAUNCHER="ccache"
+cmake .. -G Ninja -DCMAKE_C_COMPILER_LAUNCHER="ccache" -DCMAKE_CXX_COMPILER_LAUNCHER="ccache" || exit 1
 
 # build
 ccache --zero-stats
-ninja
+ninja || exit 1
 ccache --show-stats
-ninja install
+
+# install
+ninja install || exit 1
 
 # test
-inkscape/inkscape.exe -V
+inkscape/inkscape.exe -V || exit 1
 
 # package
 7z a inkscape.7z inkscape
