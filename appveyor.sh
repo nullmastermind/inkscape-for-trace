@@ -22,7 +22,11 @@ source ../msys2installdeps.sh
 
 # configure
 ccache --max-size=200M
-cmake .. -G Ninja -DCMAKE_C_COMPILER_LAUNCHER="ccache" -DCMAKE_CXX_COMPILER_LAUNCHER="ccache" || exit 1
+cmake .. -G Ninja \
+    -DCMAKE_C_COMPILER_LAUNCHER="ccache" \
+    -DCMAKE_CXX_COMPILER_LAUNCHER="ccache" \
+    -DCMAKE_INSTALL_MESSAGE="NEVER" \
+    || exit 1
 
 # build
 ccache --zero-stats
