@@ -45,7 +45,7 @@ endif()
 # console output is slow as hell on Windows and as a result status messages of the "install" target slow down
 # the whole build process considerably (especially since we also copy a lot of files from the devlibs)
 # TODO: Is this worth to be configurable / also applicable to other platforms?
-if(WIN32)
+if(WIN32 AND NOT CMAKE_INSTALL_MESSAGE)
     set(CMAKE_INSTALL_MESSAGE "LAZY")
 endif()
 
