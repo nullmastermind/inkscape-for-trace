@@ -17,6 +17,7 @@ cache:
   paths:
     - ccache/
 
+# Building inkscape
 inkscape:
   stage: build
   script:
@@ -30,14 +31,19 @@ inkscape:
     paths:
       - inkscape-build.tgz
 
+# This job is a static analysis build by clang.
+# It takes MORE THAN 3 HOURS, and depending on worker sometimes 4 hours.
+# Make sure the timeout of the build is big enough
 clang:
   stage: build
+  only: 
+    - schedules
   script:
     - apt-get install -y clang-3.8 clang
     - mkdir -p clang-build
     - cd clang-build
     - scan-build cmake .. -DCMAKE_BUILD_TYPE=Debug
-    - VERBOSE=1 scan-build -o ../scan make
+    - VERBOSE=1 scan-build -o ../scan make -j2
   artifacts:
     paths:
       - scan/
@@ -49,6 +55,7 @@ test:
     - cd build
     - make test
 
+# uploads the clang scan to user.gitlab.io/inkscape/
 pages:
   stage: deploy
   dependencies:
