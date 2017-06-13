@@ -1,4 +1,3 @@
-
 Inkscape. Draw Freely.
 ======================
 
@@ -33,12 +32,12 @@ Inkscape version 0.92 and newer can be build using cmake:
   make install
 
 Other platforms such as Windows and Mac require a lot more and are considered
-a developer and packager task. These instructions are kept on the inkscape wiki
+a developer and packager task. These instructions are kept on the Inkscape wiki.
 
 Required Dependencies
 =====================
 The Inkscape core depends on several other libraries that you will need
-install, if they're not already present on your system.  The most
+install, if they are not already present on your system.  The most
 typical libraries you may need to install are:
 
    * Boehm-GC 
@@ -59,10 +58,10 @@ installed and working.  Unfortunately, there is a great deal of
 variability in how you can get these functioning properly.  Here are
 some recommendations:
 
-First, make sure you have Perl and Python.  If you're on Windows you
+First, make sure you have Perl and Python.  If you are on Windows you
 should also install Cygwin.
 
-Next, you'll need to ensure the dependencies for each extension is
+Next, you will need to ensure the dependencies for each extension is
 present.  Depending on which extensions you need, the dependencies are
 going to vary, but here are some you may need to install:
 
