@@ -54,7 +54,7 @@ pages:
   dependencies:
     - clang
   script:
-    - cp -r scan public
+    - cp -r scan/* public
   artifacts:
     paths:
       - public
