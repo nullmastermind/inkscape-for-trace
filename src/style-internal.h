@@ -447,6 +447,60 @@ public:
 };
 
 
+/// Extended length type internal to SPStyle.
+// Used for: font-variation-settings
+class SPIVariableFontAxisOrNormal : public SPILength
+{
+
+public:
+    SPIVariableFontAxisOrNormal()
+        : SPILength( "anonymous_length" ),
+          axis_name( "" ),
+          normal(true)
+    {}
+
+    SPIVariableFontAxisOrNormal( Glib::ustring const &name, gchar const *axis = NULL, float value = 0 )
+        : SPILength( name, value ),
+          normal(true)
+    {
+        strncpy(axis_name, axis, 5);
+    }
+
+    virtual ~SPIVariableFontAxisOrNormal()
+    {}
+
+    virtual void read( gchar const *str );
+    virtual const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
+                                       SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
+                                       SPIBase const *const base = NULL ) const;
+    virtual void clear() {
+        SPILength::clear();
+        axis_name[0] = '\0';
+        normal = true;
+    }
+
+    virtual void cascade( const SPIBase* const parent );
+    virtual void merge(   const SPIBase* const parent );
+
+    SPIVariableFontAxisOrNormal& operator=(const SPIVariableFontAxisOrNormal& rhs) {
+        SPILength::operator=(rhs);
+        strncpy(axis_name, rhs.axis_name, 5);
+        normal = rhs.normal;
+        return *this;
+    }
+
+    virtual bool operator==(const SPIBase& rhs);
+    virtual bool operator!=(const SPIBase& rhs) {
+        return !(*this == rhs);
+    }
+
+  // To do: make private
+public:
+    bool normal : 1;
+    gchar axis_name[5];
+};
+
+
 /// Enum type internal to SPStyle.
 // Used for many properties. 'font-stretch' and 'font-weight' must be special cased.
 class SPIEnum : public SPIBase

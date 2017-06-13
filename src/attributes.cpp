@@ -480,6 +480,9 @@ static SPStyleProp const props[] = {
     {SP_PROP_FONT_VARIANT_EAST_ASIAN, "font-variant-east-asian"},
     {SP_PROP_FONT_FEATURE_SETTINGS,   "font-feature-settings"},
 
+    /* Variable Fonts (CSS Fonts Module Level 4) */
+    {SP_PROP_FONT_VARIATION_SETTINGS,   "font-variation-settings"},
+
     /* Text */
     {SP_PROP_TEXT_INDENT, "text-indent"},
     {SP_PROP_TEXT_ALIGN, "text-align"},
