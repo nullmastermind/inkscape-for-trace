@@ -66,3 +66,4 @@ pages:
       - public
   only:
     - master
+    - schedules
