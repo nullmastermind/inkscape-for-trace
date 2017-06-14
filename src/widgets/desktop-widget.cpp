@@ -66,6 +66,7 @@
 #include <gtkmm/cssprovider.h>
 #include <gtkmm/paned.h>
 #include <gtkmm/messagedialog.h>
+#include "inkscape-version.h"
 
 using Inkscape::UI::Widget::UnitTracker;
 using Inkscape::UI::UXManager;
@@ -761,69 +762,52 @@ SPDesktopWidget::updateTitle(gchar const* uri)
     Gtk::Window *window = static_cast<Gtk::Window*>(g_object_get_data(G_OBJECT(this), "window"));
 
     if (window) {
-        gchar const *fname = uri;
-        GString *name = g_string_new ("");
 
-        gchar const *grayscalename = N_("grayscale");
-        gchar const *grayscalenamecomma = N_(", grayscale");
-        gchar const *printcolorsname = N_("print colors preview");
-        gchar const *printcolorsnamecomma = N_(", print colors preview");
-        gchar const *outlinename = N_("outline");
-        gchar const *nofiltersname = N_("no filters");
-        gchar const *colormodename = NULL;
-        gchar const *colormodenamecomma = NULL;
-        gchar const *rendermodename = NULL;
-        gchar const *modifiedname = "";
         SPDocument *doc = this->desktop->doc();
+
+        std::string Name;
         if (doc->isModifiedSinceSave()) {
-            modifiedname = "*";
+            Name += "*";
         }
 
-        if (this->desktop->getColorMode() == Inkscape::COLORMODE_GRAYSCALE) {
-                colormodename = grayscalename;
-                colormodenamecomma = grayscalenamecomma;
-        } else if (this->desktop->getColorMode() == Inkscape::COLORMODE_PRINT_COLORS_PREVIEW) {
-                colormodename = printcolorsname;
-                colormodenamecomma = printcolorsnamecomma;
-        }
-        if (this->desktop->getMode() == Inkscape::RENDERMODE_OUTLINE) {
-                rendermodename = outlinename;
-        } else if (this->desktop->getMode() == Inkscape::RENDERMODE_NO_FILTERS) {
-                rendermodename = nofiltersname;
-        }
-        
+        Name += uri;
 
-        if (this->desktop->number > 1) {
-            if (rendermodename) {
-                if (colormodenamecomma) {
-                    g_string_printf (name, _("%s%s: %d (%s%s) - Inkscape"), modifiedname, fname, this->desktop->number, _(rendermodename), _(colormodenamecomma));
-                } else {
-                    g_string_printf (name, _("%s%s: %d (%s) - Inkscape"), modifiedname, fname, this->desktop->number, _(rendermodename));
-                }
-            } else {
-                 if (colormodename) {
-                    g_string_printf (name, _("%s%s: %d (%s) - Inkscape"), modifiedname, fname, this->desktop->number, _(colormodename));
-                } else {
-                    g_string_printf (name, _("%s%s: %d - Inkscape"), modifiedname, fname, this->desktop->number);
-                }
-            }
+        if (desktop->number > 1) {
+            Name += ": ";
+            Name += std::to_string(desktop->number);
+        }
+        Name += " (";
+
+        if (desktop->getMode() == Inkscape::RENDERMODE_OUTLINE) {
+            Name += N_("outline");
+        } else if (desktop->getMode() == Inkscape::RENDERMODE_NO_FILTERS) {
+            Name += N_("no filters");
+        }
+
+        if (desktop->getColorMode() != Inkscape::COLORMODE_NORMAL &&
+            desktop->getMode()      != Inkscape::RENDERMODE_NORMAL) {
+                Name += ", ";
+        }
+
+        if (desktop->getColorMode() == Inkscape::COLORMODE_GRAYSCALE) {
+            Name += N_("grayscale");
+        } else if (desktop->getColorMode() == Inkscape::COLORMODE_PRINT_COLORS_PREVIEW) {
+            Name += N_("print colors preview");
+        }
+
+        if (*Name.rbegin() == '(') {  // Can not use C++11 .back() or .pop_back() with ustring!
+            Name.erase(Name.size() - 2);
         } else {
-            if (rendermodename) {
-                if (colormodenamecomma) {
-                    g_string_printf (name, _("%s%s (%s%s) - Inkscape"), modifiedname, fname, _(rendermodename), _(colormodenamecomma));
-                } else {
-                    g_string_printf (name, _("%s%s (%s) - Inkscape"), modifiedname, fname, _(rendermodename));
-                }
-            } else {
-                 if (colormodename) {
-                    g_string_printf (name, _("%s%s (%s) - Inkscape"), modifiedname, fname, _(colormodename));
-                } else {
-                    g_string_printf (name, _("%s%s - Inkscape"), modifiedname, fname);
-                }
-            }
+            Name += ")";
         }
-        window->set_title (name->str);
-        g_string_free (name, TRUE);
+
+        Name += " - Inkscape";
+
+        // Name += " (";
+        // Name += Inkscape::version_string;
+        // Name += ")";
+
+        window->set_title (Name);
     }
 }
 
