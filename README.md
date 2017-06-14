@@ -1,7 +1,7 @@
 Inkscape. Draw Freely.
 ======================
 
-http://www.inkscape.org/
+[https://www.inkscape.org/](https://www.inkscape.org/)
 
 Inkscape is an open source drawing tool with capabilities similar to
 Illustrator, Freehand, and CorelDraw that uses the W3C standard scalable
@@ -25,27 +25,29 @@ Basic Installation
 
 Inkscape version 0.92 and newer can be build using cmake:
 
-  mkdir build
-  cd build
-  cmake ..
-  make
-  make install
+```bash
+mkdir build
+cd build
+cmake ..
+make
+make install
+```
 
 Other platforms such as Windows and Mac require a lot more and are considered
 a developer and packager task. These instructions are kept on the Inkscape wiki.
 
 Required Dependencies
 =====================
+
 The Inkscape core depends on several other libraries that you will need
 install, if they are not already present on your system.  The most
 typical libraries you may need to install are:
 
-   * Boehm-GC 
-   * libsigc++
-   * glibmm  
-   * gtkmm  
+   * [Boehm-GC](http://www.hboehm.info/gc/)
+   * [libsigc++](http://libsigc.sourceforge.net/)
+   * [gtkmm](https://www.gtkmm.org/)
 
-Please see http://wiki.inkscape.org/wiki/index.php/CompilingInkscape for the
+Please see [the wiki page on compiling Inkscape](http://wiki.inkscape.org/wiki/index.php/CompilingInkscape) for the
 most current dependencies, including links to the source tarballs.
 
 
@@ -59,14 +61,14 @@ variability in how you can get these functioning properly.  Here are
 some recommendations:
 
 First, make sure you have Perl and Python.  If you are on Windows you
-should also install Cygwin.
+should also install [Cygwin](https://www.cygwin.com/).
 
 Next, you will need to ensure the dependencies for each extension is
 present.  Depending on which extensions you need, the dependencies are
 going to vary, but here are some you may need to install:
 
-   * XML::Parser
-   * XML::XQL
+   * [XML::Parser](http://search.cpan.org/dist/XML-Parser/)
+   * [XML::XQL](http://search.cpan.org/dist/XML-XQL/)
 
 If you install dependencies to non-standard locations, such as
 installing XML::Parser someplace in your home directory, you may need to
