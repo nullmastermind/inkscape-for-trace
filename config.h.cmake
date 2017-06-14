@@ -73,13 +73,6 @@
 /* Define to 1 if you have the `gettimeofday' function. */
 #cmakedefine HAVE_GETTIMEOFDAY 1
 
-/* Define to 1 if you have the `gtk_window_fullscreen' function. */
-#cmakedefine HAVE_GTK_WINDOW_FULLSCREEN 1
-
-/* Define to 1 if you have the `gtk_window_set_default_icon_from_file'
-   function. */
-#cmakedefine HAVE_GTK_WINDOW_SET_DEFAULT_ICON_FROM_FILE 1
-
 /* Build with Gtkmm 3.0.x or higher */
 #cmakedefine WITH_GTKMM_3_0 1
 
