@@ -60,7 +60,7 @@ pages:
   dependencies:
     - clang
   script:
-    - cp -r scan/* public
+    - if test -e scan; then cp -r scan/* public; fi
   artifacts:
     paths:
       - public
