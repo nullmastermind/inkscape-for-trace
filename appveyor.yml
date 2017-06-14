@@ -16,3 +16,5 @@ artifacts:
 
 cache:
   - C:\msys64\home\appveyor\.ccache
+
+test: off
