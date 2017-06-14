@@ -407,6 +407,7 @@ void StyleDialog::_readStyleElement()
         
         // Add as children, objects that match selector.
         for (auto& obj: objVec) {
+            if (obj->cloned) continue; // Skip cloned objects (they also don't have 'id').
             Gtk::TreeModel::Row childrow = *(_store->append(row->children()));
             childrow[_mColumns._colSelector]   = "#" + Glib::ustring(obj->getId());
             childrow[_mColumns._colIsSelector] = false;
