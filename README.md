@@ -19,6 +19,7 @@ lightweight core with powerful features added as extensions, and the
 establishment of a friendly, open, community-oriented development
 processes.
 
+[![build status](https://gitlab.com/inkscape/inkscape/badges/master/build.svg)](https://gitlab.com/inkscape/inkscape/commits/master)
 
 Basic Installation
 ==================
