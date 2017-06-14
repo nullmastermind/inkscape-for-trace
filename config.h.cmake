@@ -118,9 +118,6 @@
 /* Define to 1 if you have the `memset' function. */
 #cmakedefine HAVE_MEMSET 1
 
-/* Define to 1 if you have the `mkdir' function. */
-#cmakedefine HAVE_MKDIR 1
-
 /* Use OpenMP (via cmake) */
 #cmakedefine HAVE_OPENMP 1
 
@@ -169,9 +166,6 @@
 
 /* Define to 1 if you have the <string.h> header file. */
 #cmakedefine HAVE_STRING_H 1
-
-/* Define to 1 if you have the `strncasecmp' function. */
-#cmakedefine HAVE_STRNCASECMP 1
 
 /* Define to 1 if you have the `strpbrk' function. */
 #cmakedefine HAVE_STRPBRK 1
