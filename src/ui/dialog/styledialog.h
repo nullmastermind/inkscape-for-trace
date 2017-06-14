@@ -58,6 +58,14 @@ private:
     // Monitor <style> element for changes.
     class NodeObserver;
 
+    // Monitor all objects for addition/removal/attribute change
+    class NodeWatcher;
+
+    std::vector<StyleDialog::NodeWatcher*> _nodeWatchers;
+    void _nodeAdded(   Inkscape::XML::Node &repr );
+    void _nodeRemoved( Inkscape::XML::Node &repr );
+    void _nodeChanged( Inkscape::XML::Node &repr );
+
     // Data structure
     class ModelColumns : public Gtk::TreeModel::ColumnRecord {
     public:
@@ -112,6 +120,10 @@ private:
     Inkscape::XML::Node *_getStyleTextNode();
     void _readStyleElement();
     void _writeStyleElement();
+
+    // Update watchers
+    void _addWatcherRecursive(Inkscape::XML::Node *node);
+    void _updateWatchers();
     
     // Manipulate Tree
     void _addToSelector(Gtk::TreeModel::Row row);
