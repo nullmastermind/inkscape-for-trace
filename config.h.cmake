@@ -33,9 +33,6 @@
 /* Define to 1 if you have the `bind_textdomain_codeset' function. */
 #cmakedefine HAVE_BIND_TEXTDOMAIN_CODESET 1
 
-/* Define to 1 if you have the <concept_check.hpp> header file. */
-#cmakedefine HAVE_BOOST_CONCEPT_CHECK_HPP 1
-
 /* Whether the Cairo PDF backend is available */
 #cmakedefine HAVE_CAIRO_PDF 1
 #cmakedefine PANGO_ENABLE_ENGINE 1
@@ -58,12 +55,6 @@
 
 /* Define to 1 if you have the `fpsetmask' function. */
 #cmakedefine HAVE_FPSETMASK 1
-
-/* Define to 1 if you have the <gc/gc.h> header file. */
-#cmakedefine HAVE_GC_GC_H 1
-
-/* Define to 1 if you have the <gc.h> header file. */
-#cmakedefine HAVE_GC_H 1
 
 #cmakedefine HAVE_GETOPT_H 1
 
@@ -93,9 +84,6 @@
 
 /* Define if your <locale.h> file defines LC_MESSAGES. */
 #cmakedefine HAVE_LC_MESSAGES 1
-
-/* Define to 1 if you have the <libintl.h> header file. */
-#cmakedefine HAVE_LIBINTL_H 1
 
 /* Define to 1 if you have the `m' library (-lm). */
 #cmakedefine HAVE_LIBM 1
@@ -211,12 +199,6 @@
 
 /* Define to 1 if you have the <unistd.h> header file. */
 #cmakedefine HAVE_UNISTD_H 1
-
-/* Define to 1 if you have the <unordered_set> header file. */
-#cmakedefine HAVE_NATIVE_UNORDERED_SET 1
-
-/* Define to 1 if you have the <zlib.h> header file. */
-#cmakedefine HAVE_ZLIB_H 1
 
 /* Base data directory -- only path-prefix.h should use it! */
 #define INKSCAPE_DATADIR "${INKSCAPE_DATADIR}"
