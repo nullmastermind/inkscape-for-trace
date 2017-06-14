@@ -22,20 +22,7 @@ set(TEST_SOURCES
 
 set(TEST_LIBS
 	gmock_main
-	inkscape_base
-	nrtype_LIB
-	croco_LIB
-	avoid_LIB
-	cola_LIB
-	vpsc_LIB
-	livarot_LIB
-	uemf_LIB
-	2geom_LIB
-	depixelize_LIB
-	util_LIB
-	gc_LIB
-	${INKSCAPE_LIBS}
-)
+	inkscape_base)
 
 foreach(source ${TEST_SOURCES})
 	add_executable(${source} src/${source}.cpp unittest.cpp doc-per-case-test.cpp)
