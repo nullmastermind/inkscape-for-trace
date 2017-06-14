@@ -82,14 +82,8 @@
 /* Define to 1 if you have the <inttypes.h> header file. */
 #cmakedefine HAVE_INTTYPES_H 1
 
-/* Define if your <locale.h> file defines LC_MESSAGES. */
-#cmakedefine HAVE_LC_MESSAGES 1
-
 /* Define to 1 if you have the `m' library (-lm). */
 #cmakedefine HAVE_LIBM 1
-
-/* Define to 1 if you have the <locale.h> header file. */
-#cmakedefine HAVE_LOCALE_H 1
 
 /* Define to 1 if you have the `mallinfo' function. */
 #cmakedefine HAVE_MALLINFO 1
@@ -137,23 +131,11 @@
    zero-length file name argument. */
 #cmakedefine HAVE_STAT_EMPTY_STRING_BUG 1
 
-/* Define to 1 if you have the <stddef.h> header file. */
-#cmakedefine HAVE_STDDEF_H 1
-
 /* Define to 1 if you have the <stdint.h> header file. */
 #cmakedefine HAVE_STDINT_H 1
 
-/* Define to 1 if you have the <stdlib.h> header file. */
-#cmakedefine HAVE_STDLIB_H 1
-
 /* Define to 1 if you have the `strftime' function. */
 #cmakedefine HAVE_STRFTIME 1
-
-/* Define to 1 if you have the <strings.h> header file. */
-#cmakedefine HAVE_STRINGS_H 1
-
-/* Define to 1 if you have the <string.h> header file. */
-#cmakedefine HAVE_STRING_H 1
 
 /* Define to 1 if you have the `strpbrk' function. */
 #cmakedefine HAVE_STRPBRK 1
@@ -242,9 +224,6 @@
 
 /* Define to 1 if the `S_IS*' macros in <sys/stat.h> do not work properly. */
 #cmakedefine STAT_MACROS_BROKEN 1
-
-/* Define to 1 if you have the ANSI C header files. */
-#cmakedefine STDC_HEADERS 1
 
 /* Define to 1 if you can safely include both <sys/time.h> and <time.h>. */
 #cmakedefine TIME_WITH_SYS_TIME 1

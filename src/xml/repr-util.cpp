@@ -17,13 +17,9 @@
 
 #include "config.h"
 
-#if HAVE_STRING_H
 # include <cstring>
-#endif
 
-#if HAVE_STDLIB_H
 # include <cstdlib>
-#endif
 
 
 #include <glib.h>
