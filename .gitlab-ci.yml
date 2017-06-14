@@ -57,6 +57,7 @@ test:
 # uploads the clang scan to user.gitlab.io/inkscape/
 pages:
   stage: deploy
+  when: manual
   dependencies:
     - clang
   script:
@@ -66,4 +67,3 @@ pages:
       - public
   only:
     - master
-    - schedules
