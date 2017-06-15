@@ -1,17 +1,13 @@
 # -----------------------------------------------------------------------------
 #
 # -----------------------------------------------------------------------------
-add_subdirectory(${GMOCK_DIR} ${CMAKE_BINARY_DIR}/gmock)
+if(NOT GTEST_FOUND) # not required for gtest 1.8.0 and later
+    add_subdirectory(${GMOCK_DIR} ${CMAKE_BINARY_DIR}/gmock)
 
-include_directories(SYSTEM ${GMOCK_DIR}/gtest/include
-                           ${GMOCK_DIR}/include
-                           ${CMAKE_SOURCE_DIR}/gtest/gtest/include)
-
-set_source_files_properties(
-		${CMAKE_BINARY_DIR}/src/inkscape-version.cpp
-		PROPERTIES GENERATED TRUE)
-
-include_directories(${CMAKE_BINARY_DIR}/src)
+    include_directories(SYSTEM ${GMOCK_DIR}/gtest/include
+                               ${GMOCK_DIR}/include
+                               ${CMAKE_SOURCE_DIR}/gtest/gtest/include)
+endif()
 
 set(TEST_SOURCES
 	attributes-test
