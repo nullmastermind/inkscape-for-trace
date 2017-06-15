@@ -419,72 +419,26 @@ br_extract_prefix (const char *path)
 
 
 #ifdef __WIN32__
-
 /**
  * Provide a similar mechanism for Win32.  Enable a macro,
  * WIN32_DATADIR, that can look up subpaths for inkscape resources 
- */ 
- 
-#include <windows.h>
-#include <glibmm/ustring.h>
-
-/**
- * Return the directory of the .exe that is currently running
  */
-Glib::ustring win32_getExePath()
-{
-    gunichar2 path[2048];
-    GetModuleFileNameW(0, (WCHAR*) path, 2048);
-    gchar *exe = g_utf16_to_utf8(path, -1, 0,0,0);
-    gchar *dir = g_path_get_dirname(exe);
-    Glib::ustring ret = dir;
-    g_free(dir);
-    g_free(exe);
-    return ret;
-}
-
 
 /**
- * Return the relocatable version of the datadir,
- * probably c:\inkscape 
+ * Gets the directory where folders like "lib" and "share" are located and appends a relative path
+ * Handles the case where inkscape.exe is located in a "bin" subfolder as well
  */
-static Glib::ustring win32_getDataDir()
+char *win32_append_module_path(const char *relative_path)
 {
-    Glib::ustring dir = win32_getExePath();
-    if (INKSCAPE_DATADIR && *INKSCAPE_DATADIR &&
-        strcmp(INKSCAPE_DATADIR, ".") != 0)
-        {
-        dir += "\\";
-        dir += INKSCAPE_DATADIR;
-        }
-    return dir;
-}
+    if (!relative_path) {
+        relative_path = "";
+    }
 
-static Glib::ustring win32_getResourcePath(const Glib::ustring &childPath)
-{
-    Glib::ustring dir = win32_getDataDir();
-    if (childPath.size() > 0)
-        {
-        dir += "\\";
-        dir += childPath;
-        }
-    return dir;
-}
+    gchar *module_path = g_win32_get_package_installation_directory_of_module(NULL);
+    gchar *return_path = g_build_filename(module_path, relative_path, NULL);
+    g_free(module_path);
 
-
-/**
- * This is the visible utility function
- */ 
-char *win32_relative_path(const char *childPath)
-{
-    static char *returnPath = 0;
-    if (!childPath)
-        childPath = "";
-    Glib::ustring resourcePath = win32_getResourcePath(childPath);
-    if (returnPath)
-        free(returnPath);
-    returnPath = strdup(resourcePath.c_str());
-    return returnPath;
+    return return_path;
 }
 #endif /* __WIN32__ */
 

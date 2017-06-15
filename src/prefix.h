@@ -122,10 +122,9 @@ char *br_extract_prefix(const char *path);
 
 #include <glibmm/ustring.h>
 
-Glib::ustring win32_getExePath();
-char *win32_relative_path(const char *childPath);
+char *win32_append_module_path(const char *relative_path);
 
-#define WIN32_DATADIR(suffix) (win32_relative_path(suffix))
+#define WIN32_DATADIR(suffix) (win32_append_module_path(suffix))
 
 #endif
 
