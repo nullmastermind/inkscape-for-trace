@@ -425,20 +425,31 @@ br_extract_prefix (const char *path)
  */
 
 /**
- * Gets the directory where folders like "lib" and "share" are located and appends a relative path
- * Handles the case where inkscape.exe is located in a "bin" subfolder as well
+ * Get the Windows-equivalent of INKSCAPE_DATADIR and append a relative path
+ *
+ *  - by default INKSCAPE_DATADIR will be relative to the called executable
+ *    (typically inkscape/share but also handles the case where the executable is in a /bin subfolder)
+ *  - to override set the INKSCAPE_DATADIR environment variable
  */
-char *win32_append_module_path(const char *relative_path)
+char *win32_append_datadir(const char *relative_path)
 {
+    static gchar *datadir;
+    if (!datadir) {
+        gchar const *inkscape_datadir = g_getenv("INKSCAPE_DATADIR");
+        if (inkscape_datadir) {
+            datadir = g_strdup(inkscape_datadir);
+        } else {
+            gchar *module_path = g_win32_get_package_installation_directory_of_module(NULL);
+            datadir = g_build_filename(module_path, "share", NULL);
+            g_free(module_path);
+        }
+    }
+
     if (!relative_path) {
         relative_path = "";
     }
 
-    gchar *module_path = g_win32_get_package_installation_directory_of_module(NULL);
-    gchar *return_path = g_build_filename(module_path, relative_path, NULL);
-    g_free(module_path);
-
-    return return_path;
+    return g_build_filename(datadir, relative_path, NULL);
 }
 #endif /* __WIN32__ */
 
