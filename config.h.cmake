@@ -38,15 +38,6 @@
 #cmakedefine PANGO_ENABLE_ENGINE 1
 #cmakedefine RENDER_WITH_PANGO_CAIRO 1
 
-/* define to 1 if Carbon is available */
-#cmakedefine HAVE_CARBON 1
-
-/* Define to 1 if you have the `dcgettext' function. */
-#cmakedefine HAVE_DCGETTEXT 1
-
-/* Define to 1 if you have the `ecvt' function. */
-#cmakedefine HAVE_ECVT 1
-
 /* Define to 1 if you have the <fcntl.h> header file. */
 #cmakedefine HAVE_FCNTL_H 1
 
@@ -55,11 +46,6 @@
 
 /* Define to 1 if you have the `fpsetmask' function. */
 #cmakedefine HAVE_FPSETMASK 1
-
-#cmakedefine HAVE_GETOPT_H 1
-
-/* Define if the GNU gettext() function is already present or preinstalled. */
-#cmakedefine HAVE_GETTEXT 1
 
 /* Define to 1 if you have the `gettimeofday' function. */
 #cmakedefine HAVE_GETTIMEOFDAY 1
@@ -70,9 +56,6 @@
 /* Build with Gtkmm 3.10.x or higher */
 #cmakedefine WITH_GTKMM_3_10 1
 
-/* Build with external GDL */
-#cmakedefine WITH_EXT_GDL 1
-
 /* Build with GDL 3.6 or higher */
 #cmakedefine WITH_GDL_3_6 1
 
@@ -81,9 +64,6 @@
 
 /* Define to 1 if you have the <inttypes.h> header file. */
 #cmakedefine HAVE_INTTYPES_H 1
-
-/* Define to 1 if you have the `m' library (-lm). */
-#cmakedefine HAVE_LIBM 1
 
 /* Define to 1 if you have the `mallinfo' function. */
 #cmakedefine HAVE_MALLINFO 1
@@ -127,15 +107,8 @@
 /* Define to 1 if you have the `sqrt' function. */
 #cmakedefine HAVE_SQRT 1
 
-/* Define to 1 if `stat' has the bug that it succeeds when given the
-   zero-length file name argument. */
-#cmakedefine HAVE_STAT_EMPTY_STRING_BUG 1
-
 /* Define to 1 if you have the <stdint.h> header file. */
 #cmakedefine HAVE_STDINT_H 1
-
-/* Define to 1 if you have the `strftime' function. */
-#cmakedefine HAVE_STRFTIME 1
 
 /* Define to 1 if you have the `strpbrk' function. */
 #cmakedefine HAVE_STRPBRK 1
@@ -185,18 +158,8 @@
 /* Base library directory -- only path-prefix.h should use it! */
 #define INKSCAPE_LIBDIR "${INKSCAPE_LIBDIR}"
 
-/* Define to 1 if `lstat' dereferences a symlink specified with a trailing
-   slash. */
-#cmakedefine LSTAT_FOLLOWS_SLASHED_SYMLINK 1
-
-/* Define to 1 if your C compiler doesn't accept -c and -o together. */
-#cmakedefine NO_MINUS_C_MINUS_O 1
-
 /* Name of package */
 #define PACKAGE "${PROJECT_NAME}"
-
-/* Define to the address where bug reports for this package should be sent. */
-#cmakedefine PACKAGE_BUGREPORT ""
 
 /* Localization directory */
 #define PACKAGE_LOCALE_DIR "${PACKAGE_LOCALE_DIR}"
@@ -216,18 +179,6 @@
 /* Build in dbus */
 #cmakedefine WITH_DBUS 1
 
-/* Define as the return type of signal handlers (`int' or `void'). */
-#cmakedefine RETSIGTYPE
-
-/* Define to 1 if the `S_IS*' macros in <sys/stat.h> do not work properly. */
-#cmakedefine STAT_MACROS_BROKEN 1
-
-/* Define to 1 if you can safely include both <sys/time.h> and <time.h>. */
-#cmakedefine TIME_WITH_SYS_TIME 1
-
-/* Define to 1 if your <sys/time.h> declares `struct tm'. */
-#cmakedefine TM_IN_SYS_TIME 1
-
 /* Use gnome vfs file load functionality */
 #cmakedefine WITH_GNOME_VFS 1
 
@@ -239,12 +190,6 @@
 
 /* Use libjpeg */
 #cmakedefine HAVE_JPEG 1
-
-/* Build in Inkboard support */
-#cmakedefine WITH_INKBOARD 1
-
-/* Build in SSL support for Inkboard */
-#cmakedefine WITH_INKBOARD_SSL 1
 
 /* Build in libcdr */
 #cmakedefine WITH_LIBCDR 1
@@ -276,30 +221,12 @@
 /* Build in libwpg-0.3 */
 #cmakedefine WITH_LIBWPG03 1
 
-/* Use MMX optimizations, if CPU supports it */
-#cmakedefine WITH_MMX 1
-
-/* Use experimental module support */
-#cmakedefine WITH_MODULES 1
-
-/* use Perl for embedded scripting */
-#cmakedefine WITH_PERL 1
-
-/* use Python for embedded scripting */
-#cmakedefine WITH_PYTHON 1
-
-/* Use Xft font database */
-#cmakedefine WITH_XFT 1
-
 /* Define to 1 if your processor stores words with the most significant byte
    first (like Motorola and SPARC, unlike Intel and VAX). */
 #cmakedefine WORDS_BIGENDIAN 1
 
 /* Do we want experimental, unsupported, unguaranteed, etc., LivePathEffects enabled? */
 #cmakedefine LPE_ENABLE_TEST_EFFECTS 1
-
-/* Define to `int' if <sys/types.h> does not define. */
-#cmakedefine mode_t
 
 #endif /* _CONFIG_H_ */
 
