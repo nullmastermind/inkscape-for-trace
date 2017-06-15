@@ -119,13 +119,8 @@ char *br_extract_prefix(const char *path);
 #endif /* __cplusplus */
 
 #ifdef __WIN32__
-
-#include <glibmm/ustring.h>
-
 char *win32_append_module_path(const char *relative_path);
-
 #define WIN32_DATADIR(suffix) (win32_append_module_path(suffix))
-
 #endif
 
 #endif /* _PREFIX_H_ */
