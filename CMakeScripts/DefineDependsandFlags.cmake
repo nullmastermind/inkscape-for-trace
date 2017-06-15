@@ -57,18 +57,6 @@ add_definitions(${INKSCAPE_DEP_CFLAGS_OTHER})
 if(APPLE AND DEFINED ENV{CMAKE_PREFIX_PATH})
     list(APPEND INKSCAPE_LIBS "-L$ENV{CMAKE_PREFIX_PATH}/lib")
 endif()
-if(APPLE)
-    if(${GTK+_2.0_TARGET} MATCHES "x11")
-    pkg_check_modules(x11 REQUIRED x11)
-    list(APPEND INKSCAPE_LIBS ${x11_LDFLAGS})
-    endif()
-elseif(WIN32)
-# X11 not available on windows
-else()
-    pkg_check_modules(x11 REQUIRED x11)
-    list(APPEND INKSCAPE_LIBS ${x11_LDFLAGS})
-
-endif()
 
 if(WITH_GNOME_VFS)
     find_package(GnomeVFS2)
