@@ -1219,7 +1219,6 @@ static void setupToolboxCommon( GtkWidget *toolbox,
     } else {
       char const *filename = get_filename(UI, descr);
       gtk_ui_manager_add_ui_from_file( mgr, filename, &errVal );
-      g_warning("RET CODE: %d", errVal);
     }
 
     GtkWidget* toolBar = gtk_ui_manager_get_widget( mgr, toolbarName );
@@ -1324,60 +1323,10 @@ void ToolboxFactory::setOrientation(GtkWidget* toolbox, GtkOrientation orientati
 
 void setup_tool_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
 {
-    gchar const * descr = "tool-toolbar.ui";
-    /*
-        "<ui>"
-        "  <toolbar name='ToolToolbar'>"
-
-        "   <!-- Basics -->"
-        "    <toolitem action='ToolSelector' />"
-        "    <toolitem action='FooBar' />"
-        "    <toolitem action='ToolNode' />"
-        "    <toolitem action='ToolTweak' />"
-        "    <toolitem action='ToolZoom' />"
-        "    <toolitem action='ToolMeasure' />"
-
-        "   <!-- Shapes -->"
-        "    <toolitem action='ToolRect' />"
-        "    <toolitem action='Tool3DBox' />"
-        "    <toolitem action='ToolArc' />"
-        "    <toolitem action='ToolStar' />"
-        "    <toolitem action='ToolSpiral' />"
-
-        "   <!-- Paths -->"
-        "    <toolitem action='ToolPencil' />"
-        "    <toolitem action='ToolPen' />"
-        "    <toolitem action='ToolCalligraphic' />"
-
-        "   <!-- Text -->"
-        "    <toolitem action='ToolText' />"
-
-        "   <!-- Paint large areas -->"
-        "    <toolitem action='ToolSpray' />"
-        "    <toolitem action='ToolEraser' />"
-
-#if HAVE_POTRACE
-        "   <!-- Fill -->"
-        "    <toolitem action='ToolPaintBucket' />"
-#endif
-
-        "    <toolitem action='ToolGradient' />"
-#ifdef WITH_MESH
-        "    <toolitem action='ToolMesh' />"
-#endif
-        "    <toolitem action='ToolDropper' />"
-
-        "    <toolitem action='ToolConnector' />"
-#ifdef WITH_LPETOOL
-        "    <toolitem action='ToolLPETool' />"
-#endif
-        "  </toolbar>"
-        "</ui>";
-*/
-
-    setupToolboxCommon( toolbox, desktop, descr,
-                        "/ui/ToolToolbar",
-                        "/toolbox/tools/small");
+    setupToolboxCommon( toolbox, desktop,
+            "tool-toolbar.ui",
+            "/ui/ToolToolbar",
+            "/toolbox/tools/small");
 }
 
 void update_tool_toolbox( SPDesktop *desktop, ToolBase *eventcontext, GtkWidget * /*toolbox*/ )
