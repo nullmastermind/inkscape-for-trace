@@ -1,4 +1,7 @@
-image: registry.gitlab.com/ted.gould/inkscape-ci-docker/master
+# Dependencies are managed in the Dockerfile in the inkscape-ci-docker
+# Git repository. Change them there, wait a bit, and then we'll use
+# the new ones here in these builds.
+image: registry.gitlab.com/inkscape/inkscape-ci-docker/master
 
 before_script:
   # CCache Config
