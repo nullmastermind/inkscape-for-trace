@@ -167,9 +167,6 @@
 /* Define to 1 if `usmblks' is member of `struct mallinfo'. */
 #cmakedefine HAVE_STRUCT_MALLINFO_USMBLKS 1
 
-/* Define to 1 if you have the <sys/filio.h> header file. */
-#cmakedefine HAVE_SYS_FILIO_H 1
-
 /* Define to 1 if you have the <sys/stat.h> header file. */
 #cmakedefine HAVE_SYS_STAT_H 1
 
