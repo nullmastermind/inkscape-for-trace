@@ -1,4 +1,4 @@
-image: tedg/inkscape-ci-docker
+image: registry.gitlab.com/ted.gould/inkscape-ci-docker/master
 
 before_script:
   # CCache Config
