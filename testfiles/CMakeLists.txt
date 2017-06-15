@@ -27,7 +27,7 @@ set(TEST_LIBS
 foreach(source ${TEST_SOURCES})
 	add_executable(${source} src/${source}.cpp unittest.cpp doc-per-case-test.cpp)
 	target_link_libraries(${source} ${TEST_LIBS})
-	add_test(NAME ${source} COMMAND ${EXECUTABLE_OUTPUT_PATH}/${source})
+	add_test(NAME ${source} COMMAND ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${source})
 	add_dependencies(${source} inkscape_version)
 	add_dependencies(check ${source})
 endforeach()
