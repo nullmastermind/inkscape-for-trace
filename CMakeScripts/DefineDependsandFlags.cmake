@@ -45,7 +45,6 @@ pkg_check_modules(INKSCAPE_DEP REQUIRED
 	          pangocairo
 		  pangoft2
 		  fontconfig
-		  gthread-2.0
 		  gsl
 		  gmodule-2.0)
 
@@ -286,10 +285,6 @@ set(TRY_GTKSPELL ON)
         ${GTK3_LIBRARIES}
         ${GTKSPELL3_LIBRARIES}
     )
-
-find_package(Freetype REQUIRED)
-list(APPEND INKSCAPE_INCS_SYS ${FREETYPE_INCLUDE_DIRS})
-list(APPEND INKSCAPE_LIBS ${FREETYPE_LIBRARIES})
 
 find_package(Boost 1.19.0 REQUIRED)
 list(APPEND INKSCAPE_INCS_SYS ${Boost_INCLUDE_DIRS})
