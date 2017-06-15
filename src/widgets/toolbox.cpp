@@ -61,7 +61,7 @@
 #include "../xml/attribute-record.h"
 #include "../xml/node-event-vector.h"
 #include "ui/uxmanager.h"
-
+#include "io/resource.h"
 
 #include "arc-toolbar.h"
 #include "box3d-toolbar.h"
@@ -100,6 +100,9 @@ using Inkscape::DocumentUndo;
 using Inkscape::UI::PrefPusher;
 using Inkscape::UI::ToolboxFactory;
 using Inkscape::UI::Tools::ToolBase;
+
+using Inkscape::IO::Resource::get_filename;
+using Inkscape::IO::Resource::UI;
 
 typedef void (*SetupFunction)(GtkWidget *toolbox, SPDesktop *desktop);
 typedef void (*UpdateFunction)(SPDesktop *desktop, ToolBase *eventcontext, GtkWidget *toolbox);
@@ -1209,7 +1212,15 @@ static void setupToolboxCommon( GtkWidget *toolbox,
     GtkOrientation orientation = GTK_ORIENTATION_HORIZONTAL;
 
     gtk_ui_manager_insert_action_group( mgr, mainActions->gobj(), 0 );
-    gtk_ui_manager_add_ui_from_string( mgr, descr, -1, &errVal );
+
+    // This isn't good, but it is flexible.
+    if(descr[0] == '<') {
+      gtk_ui_manager_add_ui_from_string( mgr, descr, -1, &errVal );
+    } else {
+      char const *filename = get_filename(UI, descr);
+      gtk_ui_manager_add_ui_from_file( mgr, filename, &errVal );
+      g_warning("RET CODE: %d", errVal);
+    }
 
     GtkWidget* toolBar = gtk_ui_manager_get_widget( mgr, toolbarName );
     if ( prefs->getBool("/toolbox/icononly", true) ) {
@@ -1313,12 +1324,14 @@ void ToolboxFactory::setOrientation(GtkWidget* toolbox, GtkOrientation orientati
 
 void setup_tool_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
 {
-    gchar const * descr =
+    gchar const * descr = "tool-toolbar.ui";
+    /*
         "<ui>"
         "  <toolbar name='ToolToolbar'>"
 
         "   <!-- Basics -->"
         "    <toolitem action='ToolSelector' />"
+        "    <toolitem action='FooBar' />"
         "    <toolitem action='ToolNode' />"
         "    <toolitem action='ToolTweak' />"
         "    <toolitem action='ToolZoom' />"
@@ -1360,6 +1373,7 @@ void setup_tool_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
 #endif
         "  </toolbar>"
         "</ui>";
+*/
 
     setupToolboxCommon( toolbox, desktop, descr,
                         "/ui/ToolToolbar",
