@@ -27,6 +27,14 @@ source ../msys2installdeps.sh
 pacman -S $MINGW_PACKAGE_PREFIX-ccache --needed --noconfirm --noprogressbar
 ccache --max-size=200M
 
+# pending package updates, see
+#   - https://github.com/Alexpux/MINGW-packages/pull/2597
+#   - https://github.com/Alexpux/MINGW-packages/pull/2588
+wget -nv https://gitlab.com/Ede123/bintray/raw/master/$MINGW_PACKAGE_PREFIX-gc-7.6.0-1-any.pkg.tar.xz \
+    && pacman -U $MINGW_PACKAGE_PREFIX-gc-7.6.0-1-any.pkg.tar.xz --noconfirm
+wget -nv https://gitlab.com/Ede123/bintray/raw/master/$MINGW_PACKAGE_PREFIX-gtest-1.8.0-1-any.pkg.tar.xz \
+    && pacman -U $MINGW_PACKAGE_PREFIX-gtest-1.8.0-1-any.pkg.tar.xz --noconfirm
+
 
 
 ### build / test
