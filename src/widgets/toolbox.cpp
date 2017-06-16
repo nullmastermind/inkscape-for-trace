@@ -156,6 +156,9 @@ static struct {
 	{ "/tools/eraser",   "eraser_tool",    SP_VERB_CONTEXT_ERASER, SP_VERB_CONTEXT_ERASER_PREFS },
 #if HAVE_POTRACE
 	{ "/tools/paintbucket",    "paintbucket_tool",     SP_VERB_CONTEXT_PAINTBUCKET, SP_VERB_CONTEXT_PAINTBUCKET_PREFS },
+#else
+        // Replacement blank action for ToolPaintBucket to prevent loading errors in ui file
+	{ "/tools/paintbucket",    "ToolPaintBucket",     SP_VERB_NONE, SP_VERB_NONE },
 #endif
 	{ "/tools/text",     "text_tool",      SP_VERB_CONTEXT_TEXT, SP_VERB_CONTEXT_TEXT_PREFS },
 	{ "/tools/connector","connector_tool", SP_VERB_CONTEXT_CONNECTOR, SP_VERB_CONTEXT_CONNECTOR_PREFS },
@@ -221,6 +224,8 @@ static struct {
 #if HAVE_POTRACE
     { "/tools/paintbucket",  "paintbucket_toolbox",  0, sp_paintbucket_toolbox_prep, "PaintbucketToolbar",
       SP_VERB_CONTEXT_PAINTBUCKET_PREFS, "/tools/paintbucket", N_("Style of Paint Bucket fill objects")},
+#else
+    { "/tools/paintbucket",  "paintbucket_toolbox",  0, NULL, "PaintbucketToolbar", SP_VERB_NONE, "/tools/paintbucket", N_("Disabled")},
 #endif
     { NULL, NULL, NULL, NULL, NULL, SP_VERB_INVALID, NULL, NULL }
 };
@@ -614,6 +619,12 @@ static Glib::RefPtr<Gtk::ActionGroup> create_or_fetch_actions( SPDesktop* deskto
                 if ( i == 0 ) {
                     va->set_active(true);
                 }
+            } else {
+                // This creates a blank action using the data_name, this can replace
+                // tools that have been disabled by compile time options.
+                Glib::RefPtr<Gtk::Action> act = Gtk::Action::create(Glib::ustring(tools[i].data_name));
+                act->set_sensitive(false);
+                mainActions->add(act);
             }
         }
     }
