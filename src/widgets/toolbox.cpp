@@ -833,6 +833,7 @@ static void setupToolboxCommon( GtkWidget *toolbox,
     gtk_ui_manager_add_ui_from_file( mgr, filename, &err );
     if(err) {
         g_warning("Failed to load %s: %s", filename, err->message);
+        g_error_free(err);
         return;
     }
 
@@ -976,6 +977,7 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
     guint ret = gtk_ui_manager_add_ui_from_file(mgr, filename, &err);
     if(err) {
       g_warning("Failed to load aux toolbar %s: %s", filename, err->message);
+      g_error_free(err);
       return;
     }
 
