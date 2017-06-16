@@ -225,390 +225,6 @@ static struct {
     { NULL, NULL, NULL, NULL, NULL, SP_VERB_INVALID, NULL, NULL }
 };
 
-static gchar const * ui_descr =
-        "<ui>"
-        "  <toolbar name='SelectToolbar'>"
-        "    <toolitem action='EditSelectAll' />"
-        "    <toolitem action='EditSelectAllInAllLayers' />"
-        "    <toolitem action='EditDeselect' />"
-        "    <separator />"
-        "    <toolitem action='ObjectRotate90CCW' />"
-        "    <toolitem action='ObjectRotate90' />"
-        "    <toolitem action='ObjectFlipHorizontally' />"
-        "    <toolitem action='ObjectFlipVertically' />"
-        "    <separator />"
-        "    <toolitem action='SelectionToBack' />"
-        "    <toolitem action='SelectionLower' />"
-        "    <toolitem action='SelectionRaise' />"
-        "    <toolitem action='SelectionToFront' />"
-        "    <separator />"
-        "    <toolitem action='XAction' />"
-        "    <toolitem action='YAction' />"
-        "    <toolitem action='WidthAction' />"
-        "    <toolitem action='LockAction' />"
-        "    <toolitem action='HeightAction' />"
-        "    <toolitem action='UnitsAction' />"
-        "    <separator />"
-        "    <toolitem action='transform_stroke' />"
-        "    <toolitem action='transform_corners' />"
-        "    <toolitem action='transform_gradient' />"
-        "    <toolitem action='transform_pattern' />"
-        "  </toolbar>"
-
-        "  <toolbar name='NodeToolbar'>"
-        "    <separator />"
-        "    <toolitem action='NodeInsertAction'>"
-        "      <menu action='NodeInsertActionMenu'>"
-        "        <menuitem action='NodeInsertActionMinX' />"
-        "        <menuitem action='NodeInsertActionMaxX' />"
-        "        <menuitem action='NodeInsertActionMinY' />"
-        "        <menuitem action='NodeInsertActionMaxY' />"
-        "      </menu>"
-        "    </toolitem>"
-        "    <toolitem action='NodeDeleteAction' />"
-        "    <separator />"
-        "    <toolitem action='NodeJoinAction' />"
-        "    <toolitem action='NodeBreakAction' />"
-        "    <separator />"
-        "    <toolitem action='NodeJoinSegmentAction' />"
-        "    <toolitem action='NodeDeleteSegmentAction' />"
-        "    <separator />"
-        "    <toolitem action='NodeCuspAction' />"
-        "    <toolitem action='NodeSmoothAction' />"
-        "    <toolitem action='NodeSymmetricAction' />"
-        "    <toolitem action='NodeAutoAction' />"
-        "    <separator />"
-        "    <toolitem action='NodeLineAction' />"
-        "    <toolitem action='NodeCurveAction' />"
-        "    <separator />"
-        "    <toolitem action='ObjectToPath' />"
-        "    <toolitem action='StrokeToPath' />"
-        "    <separator />"
-        "    <toolitem action='NodeXAction' />"
-        "    <toolitem action='NodeYAction' />"
-        "    <toolitem action='NodeUnitsAction' />"
-        "    <separator />"
-        "    <toolitem action='ObjectEditClipPathAction' />"
-        "    <toolitem action='ObjectEditMaskPathAction' />"
-        "    <toolitem action='EditNextPathEffectParameter' />"
-        "    <separator />"
-        "    <toolitem action='NodesShowTransformHandlesAction' />"
-        "    <toolitem action='NodesShowHandlesAction' />"
-        "    <toolitem action='NodesShowHelperpath' />"
-        "  </toolbar>"
-
-        "  <toolbar name='TweakToolbar'>"
-        "    <toolitem action='TweakWidthAction' />"
-        "    <separator />"
-        "    <toolitem action='TweakForceAction' />"
-        "    <toolitem action='TweakPressureAction' />"
-        "    <separator />"
-        "    <toolitem action='TweakModeAction' />"
-        "    <separator />"
-        "    <toolitem action='TweakFidelityAction' />"
-        "    <separator />"
-        "    <toolitem action='TweakChannelsLabel' />"
-        "    <toolitem action='TweakDoH' />"
-        "    <toolitem action='TweakDoS' />"
-        "    <toolitem action='TweakDoL' />"
-        "    <toolitem action='TweakDoO' />"
-        "  </toolbar>"
-
-        "  <toolbar name='SprayToolbar'>"
-        "    <toolitem action='SprayModeAction' />"
-        "    <separator />"
-        "    <toolitem action='SprayWidthAction' />"
-        "    <toolitem action='SprayPressureWidthAction' />"
-        "    <toolitem action='SprayPopulationAction' />"
-        "    <toolitem action='SprayPressurePopulationAction' />"
-        "    <separator />"
-        "    <toolitem action='SprayRotationAction' />"
-        "    <toolitem action='SprayScaleAction' />"
-        "    <toolitem action='SprayPressureScaleAction' />"
-        "    <separator />"
-        "    <toolitem action='SprayStandard_deviationAction' />"
-        "    <toolitem action='SprayMeanAction' />"
-        "    <separator />"
-        "    <toolitem action='SprayOverNoTransparentAction' />"
-        "    <toolitem action='SprayOverTransparentAction' />"
-        "    <toolitem action='SprayPickNoOverlapAction' />"
-        "    <toolitem action='SprayNoOverlapAction' />"
-        "    <toolitem action='SprayToolOffsetAction' />"
-        "    <separator />"
-        "    <toolitem action='SprayPickColorAction' />"
-        "    <toolitem action='SprayPickFillAction' />"
-        "    <toolitem action='SprayPickStrokeAction' />"
-        "    <toolitem action='SprayPickInverseValueAction' />"
-        "    <toolitem action='SprayPickCenterAction' />"
-        "  </toolbar>"
-
-        "  <toolbar name='ZoomToolbar'>"
-        "    <toolitem action='ZoomIn' />"
-        "    <toolitem action='ZoomOut' />"
-        "    <separator />"
-        "    <toolitem action='Zoom1:0' />"
-        "    <toolitem action='Zoom1:2' />"
-        "    <toolitem action='Zoom2:1' />"
-        "    <separator />"
-        "    <toolitem action='ZoomSelection' />"
-        "    <toolitem action='ZoomDrawing' />"
-        "    <toolitem action='ZoomPage' />"
-        "    <toolitem action='ZoomPageWidth' />"
-        "    <separator />"
-        "    <toolitem action='ZoomPrev' />"
-        "    <toolitem action='ZoomNext' />"
-        "  </toolbar>"
-
-        "  <toolbar name='MeasureToolbar'>"
-        "    <toolitem action='MeasureFontSizeAction' />"
-        "    <separator />"
-        "    <toolitem action='MeasurePrecisionAction' />"
-        "    <separator />"
-        "    <toolitem action='MeasureScaleAction' />"
-        "    <separator />"
-        "    <toolitem action='measure_units_label' />"
-        "    <toolitem action='MeasureUnitsAction' />"
-        "    <toolitem action='MeasureIgnore1stAndLast' />"
-        "    <toolitem action='MeasureInBettween' />"
-        "    <toolitem action='MeasureShowHidden' />"
-        "    <toolitem action='MeasureAllLayers' />"
-        "    <toolitem action='MeasureReverse' />"
-        "    <toolitem action='MeasureToPhantom' />"
-        "    <toolitem action='MeasureToGuides' />"
-        "    <toolitem action='MeasureToItem' />"
-        "    <toolitem action='MeasureMarkDimension' />"
-        "    <toolitem action='MeasureOffsetAction' />"
-        "  </toolbar>" 
-
-        "  <toolbar name='StarToolbar'>"
-        "    <separator />"
-        "    <toolitem action='StarStateAction' />"
-        "    <separator />"
-        "    <toolitem action='FlatAction' />"
-        "    <separator />"
-        "    <toolitem action='MagnitudeAction' />"
-        "    <toolitem action='SpokeAction' />"
-        "    <toolitem action='RoundednessAction' />"
-        "    <toolitem action='RandomizationAction' />"
-        "    <separator />"
-        "    <toolitem action='StarResetAction' />"
-        "  </toolbar>"
-
-        "  <toolbar name='RectToolbar'>"
-        "    <toolitem action='RectStateAction' />"
-        "    <toolitem action='RectWidthAction' />"
-        "    <toolitem action='RectHeightAction' />"
-        "    <toolitem action='RadiusXAction' />"
-        "    <toolitem action='RadiusYAction' />"
-        "    <toolitem action='RectUnitsAction' />"
-        "    <separator />"
-        "    <toolitem action='RectResetAction' />"
-        "  </toolbar>"
-
-        "  <toolbar name='3DBoxToolbar'>"
-        "    <toolitem action='3DBoxAngleXAction' />"
-        "    <toolitem action='3DBoxVPXStateAction' />"
-        "    <separator />"
-        "    <toolitem action='3DBoxAngleYAction' />"
-        "    <toolitem action='3DBoxVPYStateAction' />"
-        "    <separator />"
-        "    <toolitem action='3DBoxAngleZAction' />"
-        "    <toolitem action='3DBoxVPZStateAction' />"
-        "  </toolbar>"
-
-        "  <toolbar name='SpiralToolbar'>"
-        "    <toolitem action='SpiralStateAction' />"
-        "    <toolitem action='SpiralRevolutionAction' />"
-        "    <toolitem action='SpiralExpansionAction' />"
-        "    <toolitem action='SpiralT0Action' />"
-        "    <separator />"
-        "    <toolitem action='SpiralResetAction' />"
-        "  </toolbar>"
-
-        "  <toolbar name='PenToolbar'>"
-        "    <toolitem action='FreehandModeActionPen' />"
-        "    <separator />"
-        "    <toolitem action='SetPenShapeAction'/>"
-        "  </toolbar>"
-
-        "  <toolbar name='PencilToolbar'>"
-        "    <toolitem action='FreehandModeActionPencil' />"
-        "    <separator />"
-        "    <toolitem action='PencilToleranceAction' />"
-        "    <toolitem action='PencilLpeSimplify' />"
-        "    <toolitem action='PencilLpeSimplifyFlatten' />"
-        "    <separator />"
-        "    <toolitem action='PencilResetAction' />"
-        "    <separator />"
-        "    <toolitem action='SetPencilShapeAction'/>"
-        "  </toolbar>"
-
-        "  <toolbar name='CalligraphyToolbar'>"
-        "    <separator />"
-        "    <toolitem action='SetProfileAction'/>"
-        "    <toolitem action='ProfileEditAction'/>"
-        "    <separator />"
-        "    <toolitem action='CalligraphyWidthAction' />"
-        "    <toolitem action='PressureAction' />"
-        "    <toolitem action='TraceAction' />"
-        "    <toolitem action='ThinningAction' />"
-        "    <separator />"
-        "    <toolitem action='AngleAction' />"
-        "    <toolitem action='TiltAction' />"
-        "    <toolitem action='FixationAction' />"
-        "    <separator />"
-        "    <toolitem action='CapRoundingAction' />"
-        "    <separator />"
-        "    <toolitem action='TremorAction' />"
-        "    <toolitem action='WiggleAction' />"
-        "    <toolitem action='MassAction' />"
-        "    <separator />"
-        "  </toolbar>"
-
-        "  <toolbar name='ArcToolbar'>"
-        "    <toolitem action='ArcStateAction' />"
-        "    <separator />"
-        "    <toolitem action='ArcStartAction' />"
-        "    <toolitem action='ArcEndAction' />"
-        "    <separator />"
-        "    <toolitem action='ArcOpenAction' />"
-        "    <separator />"
-        "    <toolitem action='ArcResetAction' />"
-        "    <separator />"
-        "  </toolbar>"
-
-#if HAVE_POTRACE
-        "  <toolbar name='PaintbucketToolbar'>"
-        "    <toolitem action='ChannelsAction' />"
-        "    <separator />"
-        "    <toolitem action='ThresholdAction' />"
-        "    <separator />"
-        "    <toolitem action='OffsetAction' />"
-        "    <toolitem action='PaintbucketUnitsAction' />"
-        "    <separator />"
-        "    <toolitem action='AutoGapAction' />"
-        "    <separator />"
-        "    <toolitem action='PaintbucketResetAction' />"
-        "  </toolbar>"
-#endif
-
-        "  <toolbar name='EraserToolbar'>"
-        "    <toolitem action='EraserModeAction' />"
-        "    <separator />"
-        "    <toolitem action='EraserWidthAction' />"
-        "    <toolitem action='EraserPressureAction' />"
-        "    <separator />"
-        "    <toolitem action='EraserThinningAction' />"
-        "    <separator />"
-        "    <toolitem action='EraserCapRoundingAction' />"
-        "    <separator />"
-        "    <toolitem action='EraserTremorAction' />"
-        "    <separator />"
-        "    <toolitem action='EraserMassAction' />"
-        "    <separator />"
-        "    <toolitem action='EraserBreakAppart' />"
-        "  </toolbar>"
-
-        "  <toolbar name='TextToolbar'>"
-        "    <toolitem action='TextFontFamilyAction' />"
-        "    <toolitem action='TextFontStyleAction' />"
-        "    <separator />"
-        "    <toolitem action='TextOuterStyleAction' />"
-        "    <toolitem action='TextFontSizeAction' />"
-        "    <toolitem action='TextLineHeightAction' />"
-        "    <toolitem action='TextLineHeightUnitsAction' />"
-        "    <toolitem action='TextLineHeightUnsetAction' />"
-        "    <separator />"
-        "    <toolitem action='TextAlignAction' />"
-        "    <separator />"
-        "    <toolitem action='TextSuperscriptAction' />"
-        "    <toolitem action='TextSubscriptAction' />"
-        "    <separator />"
-        "    <toolitem action='TextLetterSpacingAction' />"
-        "    <toolitem action='TextWordSpacingAction' />"
-        "    <toolitem action='TextDxAction' />"
-        "    <toolitem action='TextDyAction' />"
-        "    <toolitem action='TextRotationAction' />"
-        "    <separator />"
-        "    <toolitem action='TextWritingModeAction' />"
-        "    <separator />"
-        "    <toolitem action='TextOrientationAction' />"
-        "    <separator />"
-        "    <toolitem action='TextDirectionAction' />"
-        "  </toolbar>"
-
-        "  <toolbar name='LPEToolToolbar'>"
-        "    <toolitem action='LPEToolModeAction' />"
-        "    <separator />"
-        "    <toolitem action='LPEShowBBoxAction' />"
-        "    <toolitem action='LPEBBoxFromSelectionAction' />"
-        "    <separator />"
-        "    <toolitem action='LPELineSegmentAction' />"
-        "    <separator />"
-        "    <toolitem action='LPEMeasuringAction' />"
-        "    <toolitem action='LPEToolUnitsAction' />"
-        "    <separator />"
-        "    <toolitem action='LPEOpenLPEDialogAction' />"
-        "  </toolbar>"
-
-        "  <toolbar name='GradientToolbar'>"
-        "    <toolitem action='GradientNewTypeAction' />"
-        "    <toolitem action='GradientNewFillStrokeAction' />"
-        "    <separator />"
-        "    <toolitem action='GradientSelectGradientAction' />"
-        "    <toolitem action='GradientEditLinkAction' />"
-        "    <toolitem action='GradientEditReverseAction' />"
-        "    <toolitem action='GradientSelectRepeatAction' />"
-        "    <separator />"
-        "    <toolitem action='GradientEditStopsAction' />"
-        "    <toolitem action='GradientEditOffsetAction' />"
-        "    <toolitem action='GradientEditAddAction' />"
-        "    <toolitem action='GradientEditDeleteAction' />"
-        "  </toolbar>"
-
-        "  <toolbar name='MeshToolbar'>"
-        "    <toolitem action='MeshNewTypeAction' />"
-        "    <toolitem action='MeshNewFillStrokeAction' />"
-        "    <toolitem action='MeshRowAction' />"
-        "    <toolitem action='MeshColumnAction' />"
-        "    <separator />"
-//        "    <toolitem action='MeshEditFillAction' />"
-//        "    <toolitem action='MeshEditStrokeAction' />"
-//        "    <toolitem action='MeshShowHandlesAction' />"
-        "    <toolitem action='MeshToggleSidesAction' />"
-        "    <toolitem action='MeshMakeEllipticalAction' />"
-        "    <toolitem action='MeshPickColorsAction' />"
-        "    <toolitem action='MeshFitInBoundingBoxAction' />"
-        "    <separator />"
-        "    <toolitem action='MeshShowHandlesAction' />"
-        "    <toolitem action='MeshEditFillAction' />"
-        "    <toolitem action='MeshEditStrokeAction' />"
-        "    <separator />"
-        "    <toolitem action='MeshWarningAction' />"
-        "    <separator />"
-        "    <toolitem action='MeshSmoothAction' />"
-        "  </toolbar>"
-
-        "  <toolbar name='DropperToolbar'>"
-        "    <toolitem action='DropperOpacityAction' />"
-        "    <toolitem action='DropperPickAlphaAction' />"
-        "    <toolitem action='DropperSetAlphaAction' />"
-        "  </toolbar>"
-
-        "  <toolbar name='ConnectorToolbar'>"
-        "    <toolitem action='ConnectorAvoidAction' />"
-        "    <toolitem action='ConnectorIgnoreAction' />"
-        "    <toolitem action='ConnectorOrthogonalAction' />"
-        "    <toolitem action='ConnectorCurvatureAction' />"
-        "    <toolitem action='ConnectorSpacingAction' />"
-        "    <toolitem action='ConnectorGraphAction' />"
-        "    <toolitem action='ConnectorLengthAction' />"
-        "    <toolitem action='ConnectorDirectedAction' />"
-        "    <toolitem action='ConnectorOverlapAction' />"
-        "  </toolbar>"
-
-        "</ui>"
-;
 
 static Glib::RefPtr<Gtk::ActionGroup> create_or_fetch_actions( SPDesktop* desktop );
 
@@ -1199,7 +815,7 @@ void ToolboxFactory::setToolboxDesktop(GtkWidget *toolbox, SPDesktop *desktop)
 
 static void setupToolboxCommon( GtkWidget *toolbox,
                                 SPDesktop *desktop,
-                                gchar const *descr,
+                                gchar const *ui_file,
                                 gchar const* toolbarName,
                                 gchar const* sizePref )
 {
@@ -1207,18 +823,17 @@ static void setupToolboxCommon( GtkWidget *toolbox,
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     GtkUIManager* mgr = gtk_ui_manager_new();
-    GError* errVal = 0;
+    GError* err = 0;
 
     GtkOrientation orientation = GTK_ORIENTATION_HORIZONTAL;
 
     gtk_ui_manager_insert_action_group( mgr, mainActions->gobj(), 0 );
 
-    // This isn't good, but it is flexible.
-    if(descr[0] == '<') {
-      gtk_ui_manager_add_ui_from_string( mgr, descr, -1, &errVal );
-    } else {
-      char const *filename = get_filename(UI, descr);
-      gtk_ui_manager_add_ui_from_file( mgr, filename, &errVal );
+    char const *filename = get_filename(UI, ui_file);
+    gtk_ui_manager_add_ui_from_file( mgr, filename, &err );
+    if(err) {
+        g_warning("Failed to load %s: %s", filename, err->message);
+        return;
     }
 
     GtkWidget* toolBar = gtk_ui_manager_get_widget( mgr, toolbarName );
@@ -1354,9 +969,15 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
     GtkSizeGroup* grouper = gtk_size_group_new( GTK_SIZE_GROUP_BOTH );
     Glib::RefPtr<Gtk::ActionGroup> mainActions = create_or_fetch_actions( desktop );
     GtkUIManager* mgr = gtk_ui_manager_new();
-    GError* errVal = 0;
+    GError *err = 0;
     gtk_ui_manager_insert_action_group( mgr, mainActions->gobj(), 0 );
-    gtk_ui_manager_add_ui_from_string( mgr, ui_descr, -1, &errVal );
+
+    char const *filename = get_filename(UI, "select-toolbar.ui");
+    guint ret = gtk_ui_manager_add_ui_from_file(mgr, filename, &err);
+    if(err) {
+      g_warning("Failed to load aux toolbar %s: %s", filename, err->message);
+      return;
+    }
 
     std::map<std::string, GtkWidget*> dataHolders;
 
@@ -1457,49 +1078,10 @@ void update_aux_toolbox(SPDesktop * /*desktop*/, ToolBase *eventcontext, GtkWidg
 
 void setup_commands_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
 {
-    gchar const * descr =
-        "<ui>"
-        "  <toolbar name='CommandsToolbar'>"
-        "    <toolitem action='FileNew' />"
-        "    <toolitem action='FileOpen' />"
-        "    <toolitem action='FileSave' />"
-        "    <toolitem action='FilePrint' />"
-        "    <separator />"
-        "    <toolitem action='FileImport' />"
-        "    <toolitem action='DialogExport' />"
-        "    <separator />"
-        "    <toolitem action='EditUndo' />"
-        "    <toolitem action='EditRedo' />"
-        "    <separator />"
-        "    <toolitem action='EditCopy' />"
-        "    <toolitem action='EditCut' />"
-        "    <toolitem action='EditPaste' />"
-        "    <separator />"
-        "    <toolitem action='ZoomSelection' />"
-        "    <toolitem action='ZoomDrawing' />"
-        "    <toolitem action='ZoomPage' />"
-        "    <separator />"
-        "    <toolitem action='EditDuplicate' />"
-        "    <toolitem action='EditClone' />"
-        "    <toolitem action='EditUnlinkClone' />"
-        "    <separator />"
-        "    <toolitem action='SelectionGroup' />"
-        "    <toolitem action='SelectionUnGroup' />"
-        "    <separator />"
-        "    <toolitem action='DialogFillStroke' />"
-        "    <toolitem action='DialogText' />"
-        "    <toolitem action='DialogLayers' />"
-        "    <toolitem action='DialogXMLEditor' />"
-        "    <toolitem action='DialogAlignDistribute' />"
-        "    <separator />"
-        "    <toolitem action='DialogDocumentProperties' />"
-        "    <toolitem action='DialogPreferences' />"
-        "  </toolbar>"
-        "</ui>";
-
-    setupToolboxCommon( toolbox, desktop, descr,
-                        "/ui/CommandsToolbar",
-                        "/toolbox/small" );
+    setupToolboxCommon( toolbox, desktop,
+            "commands-toolbar.ui",
+            "/ui/CommandsToolbar",
+            "/toolbox/small" );
 }
 
 void update_commands_toolbox(SPDesktop * /*desktop*/, ToolBase * /*eventcontext*/, GtkWidget * /*toolbox*/)
@@ -1634,36 +1216,6 @@ static void toggle_snap_callback(GtkToggleAction *act, gpointer data) //data poi
 void setup_snap_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
 {
     Glib::RefPtr<Gtk::ActionGroup> mainActions = create_or_fetch_actions(desktop);
-
-    gchar const * descr =
-        "<ui>"
-        "  <toolbar name='SnapToolbar'>"
-        "    <toolitem action='ToggleSnapGlobal' />"
-        "    <separator />"
-        "    <toolitem action='ToggleSnapFromBBoxCorner' />"
-        "    <toolitem action='ToggleSnapToBBoxPath' />"
-        "    <toolitem action='ToggleSnapToBBoxNode' />"
-        "    <toolitem action='ToggleSnapToFromBBoxEdgeMidpoints' />"
-        "    <toolitem action='ToggleSnapToFromBBoxCenters' />"
-        "    <separator />"
-        "    <toolitem action='ToggleSnapFromNode' />"
-        "    <toolitem action='ToggleSnapToItemPath' />"
-        "    <toolitem action='ToggleSnapToPathIntersections' />"
-        "    <toolitem action='ToggleSnapToItemNode' />"
-        "    <toolitem action='ToggleSnapToSmoothNodes' />"
-        "    <toolitem action='ToggleSnapToFromLineMidpoints' />"
-        "    <separator />"
-        "    <toolitem action='ToggleSnapFromOthers' />"
-        "    <toolitem action='ToggleSnapToFromObjectCenters' />"
-        "    <toolitem action='ToggleSnapToFromRotationCenter' />"
-        "    <toolitem action='ToggleSnapToFromTextBaseline' />"
-        "    <separator />"
-        "    <toolitem action='ToggleSnapToPageBorder' />"
-        "    <toolitem action='ToggleSnapToGrids' />"
-        "    <toolitem action='ToggleSnapToGuides' />"
-        //"    <toolitem action='ToggleSnapToGridGuideIntersections' />"
-        "  </toolbar>"
-        "</ui>";
 
     Inkscape::IconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
 
@@ -1843,9 +1395,10 @@ void setup_snap_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
         g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(toggle_snap_callback), toolbox );
     }
 
-    setupToolboxCommon( toolbox, desktop, descr,
-                        "/ui/SnapToolbar",
-                        "/toolbox/secondary" );
+    setupToolboxCommon( toolbox, desktop,
+            "snap-toolbar.ui",
+            "/ui/SnapToolbar",
+            "/toolbox/secondary" );
 }
 
 Glib::ustring ToolboxFactory::getToolboxName(GtkWidget* toolbox)
