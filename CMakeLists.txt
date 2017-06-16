@@ -246,8 +246,9 @@ add_custom_target(clean-all
 #-----------------------------------------------------------------------------
 if(GMOCK_PRESENT)
     set(CMAKE_CTEST_COMMAND ctest -V)
+    set(CMAKE_CTEST_ENV INKSCAPE_DATADIR=${CMAKE_CURRENT_SOURCE_DIR}/share)
     enable_testing()
-    add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND})
+    add_custom_target(check COMMAND ${CMAKE_COMMAND} -E env ${CMAKE_CTEST_ENV} ${CMAKE_CTEST_COMMAND})
     add_subdirectory(testfiles)
 endif()
 
