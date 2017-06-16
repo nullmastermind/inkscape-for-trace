@@ -2,7 +2,8 @@
 
 ### functions
 message() { echo -e "\e[1;32m\n${1}\n\e[0m"; }
-error() { echo -e "\e[1;31m\nError: ${1}\n\e[0m"; exit 1; }
+warning() { echo -e "\e[1;33m\nWarning: ${1}\n\e[0m"; }
+error()   { echo -e "\e[1;31m\nError: ${1}\n\e[0m";  exit 1; }
 
 
 
@@ -61,7 +62,17 @@ ninja install || error "installation failed"
 
 # test
 message "--- Running tests"
-inkscape/inkscape.exe -V || error "tests failed"
+# check if the installed executable works
+inkscape/inkscape.exe -V || error "installed executable won't run"
+PATH= inkscape/inkscape.exe -V >/dev/null || error "installed executable won't run with empty PATH (missing dependecies?)"
+err=$(PATH= inkscape/inkscape.exe -V 2>&1 >/dev/null)
+if [ -n "$err" ]; then warning "installed executable produces output on stderr:"; echo "$err"; fi
+# check if the uninstalled executable works
+INKSCAPE_DATADIR=../share bin/inkscape.exe -V >/dev/null || error "uninstalled executable won't run"
+err=$(INKSCAPE_DATADIR=../share bin/inkscape.exe -V 2>&1 >/dev/null)
+if [ -n "$err" ]; then warning "installed executable produces output on stderr:"; echo "$err"; fi
+# run tests (don't fail yet as most tests SEGFAULT on exit)
+ninja check || warning "tests failed"
 
 message "##### BUILD SUCCESSFULL #####\n\n"
 
