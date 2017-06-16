@@ -1,9 +1,5 @@
 version: '{branch}-{build}'
 
-branches:
-  only:
-    - master
-
 clone_depth: 10
 
 environment:
@@ -20,3 +16,5 @@ artifacts:
 
 cache:
   - C:\msys64\home\appveyor\.ccache
+
+test: off
