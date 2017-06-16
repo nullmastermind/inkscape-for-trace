@@ -449,21 +449,22 @@ public:
 
 /// Extended length type internal to SPStyle.
 // Used for: font-variation-settings
-class SPIVariableFontAxisOrNormal : public SPILength
+class SPIVariableFontAxisOrNormal : public SPIFloat
 {
 
 public:
     SPIVariableFontAxisOrNormal()
-        : SPILength( "anonymous_length" ),
+        : SPIFloat( "anonymous_float" ),
           axis_name( "" ),
           normal(true)
     {}
 
     SPIVariableFontAxisOrNormal( Glib::ustring const &name, gchar const *axis = NULL, float value = 0 )
-        : SPILength( name, value ),
+        : SPIFloat( name, value ),
           normal(true)
     {
-        strncpy(axis_name, axis, 5);
+        if (axis) strncpy(axis_name, axis, 5);
+        else axis_name[0] = '\0';
     }
 
     virtual ~SPIVariableFontAxisOrNormal()
@@ -474,7 +475,7 @@ public:
                                        SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
                                        SPIBase const *const base = NULL ) const;
     virtual void clear() {
-        SPILength::clear();
+        SPIFloat::clear();
         axis_name[0] = '\0';
         normal = true;
     }
@@ -483,7 +484,7 @@ public:
     virtual void merge(   const SPIBase* const parent );
 
     SPIVariableFontAxisOrNormal& operator=(const SPIVariableFontAxisOrNormal& rhs) {
-        SPILength::operator=(rhs);
+        SPIFloat::operator=(rhs);
         strncpy(axis_name, rhs.axis_name, 5);
         normal = rhs.normal;
         return *this;

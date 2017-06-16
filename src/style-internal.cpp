@@ -531,17 +531,19 @@ SPIVariableFontAxisOrNormal::read( gchar const *str ) {
     if ( !strcmp(str, "normal") ) {
         set = true;
         inherit = false;
-        unit = SP_CSS_UNIT_NONE;
-        value = computed = 0.0;
+        value = 0.0;
         normal = true;
         return;
     }
 
-    if (strlen(str) >= 6 && str[4]==' ') {
-        strncpy(axis_name, str, 4);
+    if (strlen(str) >= 8
+        && (str[0] == '\"' || str[0] == '\'')
+        && (str[5] == '\"' || str[5] == '\'')
+        && str[6] == ' ') {
+        strncpy(axis_name, &str[1], 4);
         axis_name[4] = '\0';
 
-        SPILength::read( str + 5);
+        SPIFloat::read(&str[7]);
         normal = false;
     }
 };
@@ -549,14 +551,14 @@ SPIVariableFontAxisOrNormal::read( gchar const *str ) {
 const Glib::ustring
 SPIVariableFontAxisOrNormal::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase const *const base) const {
 
-    SPILength const *const my_base = dynamic_cast<const SPILength*>(base);
+    SPIFloat const *const my_base = dynamic_cast<const SPIFloat*>(base);
     bool dfp = (!inherits || !my_base || (my_base != this)); // Different from parent
     bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
     if (should_write(flags, set, dfp, src)) {
         if (this->normal) {
             return (name + ":normal;");
         } else {
-            return "\"" + Glib::ustring(axis_name) + "\" " + SPILength::write(flags, style_src_req, base);
+            return "\"" + Glib::ustring(axis_name) + "\" " + SPIFloat::write(flags, style_src_req, base);
         }
     }
     return Glib::ustring("");
@@ -577,7 +579,7 @@ SPIVariableFontAxisOrNormal::operator==(const SPIBase& rhs) {
     if( const SPIVariableFontAxisOrNormal* r = dynamic_cast<const SPIVariableFontAxisOrNormal*>(&rhs) ) {
         if( normal && r->normal ) { return true; }
         if( normal != r->normal ) { return false; }
-        return SPILength::operator==(rhs) && !strncmp(axis_name, r->axis_name, 4);
+        return SPIFloat::operator==(rhs) && !strncmp(axis_name, r->axis_name, 4);
     } else {
         return false;
     }
