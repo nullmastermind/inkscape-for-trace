@@ -589,20 +589,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
         case GDK_KEY_Tab:
         case GDK_KEY_ISO_Left_Tab:
         case GDK_KEY_F1:
-            shortcut = get_group0_keyval(&event->key);
-
-            if (event->key.state & GDK_SHIFT_MASK) {
-                shortcut |= SP_SHORTCUT_SHIFT_MASK;
-            }
-
-            if (event->key.state & GDK_CONTROL_MASK) {
-                shortcut |= SP_SHORTCUT_CONTROL_MASK;
-            }
-
-            if (event->key.state & GDK_MOD1_MASK) {
-                shortcut |= SP_SHORTCUT_ALT_MASK;
-            }
-
+            shortcut = sp_shortcut_get_for_event((GdkEventKey*)event);
             ret = sp_shortcut_invoke(shortcut, desktop);
             break;
 
@@ -1153,14 +1140,18 @@ void sp_event_show_modifier_tip(Inkscape::MessageContext *message_context,
  * Use this instead of simply event->keyval, so that your keyboard shortcuts
  * work regardless of layouts (e.g., in Cyrillic).
  */
-guint get_group0_keyval(GdkEventKey const *event) {
+guint get_group0_keyval(GdkEventKey const *event, guint *consumed_modifiers /*= NULL*/) {
     guint keyval = 0;
+    GdkModifierType modifiers;
 
-    gdk_keymap_translate_keyboard_state(gdk_keymap_get_for_display(
-            gdk_display_get_default()), event->hardware_keycode,
-            (GdkModifierType) event->state, 0 /*event->key.group*/, &keyval,
-            NULL, NULL, NULL);
+    gdk_keymap_translate_keyboard_state(
+            gdk_keymap_get_for_display(gdk_display_get_default()),
+            event->hardware_keycode, (GdkModifierType) event->state, 0 /*event->group*/,
+            &keyval, NULL, NULL, &modifiers);
 
+    if (consumed_modifiers) {
+        *consumed_modifiers = modifiers;
+    }
     return keyval;
 }
 

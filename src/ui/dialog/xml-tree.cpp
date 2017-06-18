@@ -327,13 +327,7 @@ void XmlTree::attr_reset_context(gint attr)
 
 bool XmlTree::sp_xml_tree_key_press(GdkEventKey *event)
 {
-    unsigned int shortcut = Inkscape::UI::Tools::get_group0_keyval (event) |
-        ( event->state & GDK_SHIFT_MASK ?
-          SP_SHORTCUT_SHIFT_MASK : 0 ) |
-        ( event->state & GDK_CONTROL_MASK ?
-          SP_SHORTCUT_CONTROL_MASK : 0 ) |
-        ( event->state & GDK_MOD1_MASK ?
-          SP_SHORTCUT_ALT_MASK : 0 );
+    unsigned int shortcut = sp_shortcut_get_for_event((GdkEventKey*)event);
 
     /* fixme: if you need to add more xml-tree-specific callbacks, you should probably upgrade
      * the sp_shortcut mechanism to take into account windows. */

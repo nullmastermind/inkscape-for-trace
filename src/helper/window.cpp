@@ -13,20 +13,12 @@
 #include "desktop.h"
 #include "inkscape.h"
 #include "shortcuts.h"
-#include "ui/tools/tool-base.h"
 #include "window.h"
 
 static bool on_window_key_press(GdkEventKey* event)
 {
     unsigned shortcut = 0;
-    // FIXME why?
-    shortcut = Inkscape::UI::Tools::get_group0_keyval (event) |
-	           ( event->state & GDK_SHIFT_MASK ?
-	             SP_SHORTCUT_SHIFT_MASK : 0 ) |
-	           ( event->state & GDK_CONTROL_MASK ?
-	             SP_SHORTCUT_CONTROL_MASK : 0 ) |
-	           ( event->state & GDK_MOD1_MASK ?
-	             SP_SHORTCUT_ALT_MASK : 0 );
+    shortcut = sp_shortcut_get_for_event(event);
     return sp_shortcut_invoke (shortcut, SP_ACTIVE_DESKTOP);
 }
 

@@ -932,7 +932,7 @@ namespace Inkscape {
 namespace UI {
 namespace Tools {
 
-guint get_group0_keyval(GdkEventKey const* event);
+guint get_group0_keyval(GdkEventKey const* event, guint *consumed_modifiers = NULL);
 
 }
 }

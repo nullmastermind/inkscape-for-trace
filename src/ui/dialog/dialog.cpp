@@ -266,13 +266,7 @@ bool Dialog::_onEvent(GdkEvent *event)
 bool Dialog::_onKeyPress(GdkEventKey *event)
 {
     unsigned int shortcut;
-    shortcut = Inkscape::UI::Tools::get_group0_keyval(event) |
-        ( event->state & GDK_SHIFT_MASK ?
-          SP_SHORTCUT_SHIFT_MASK : 0 ) |
-        ( event->state & GDK_CONTROL_MASK ?
-          SP_SHORTCUT_CONTROL_MASK : 0 ) |
-        ( event->state & GDK_MOD1_MASK ?
-          SP_SHORTCUT_ALT_MASK : 0 );
+    shortcut = sp_shortcut_get_for_event((GdkEventKey*)event);
     return sp_shortcut_invoke(shortcut, SP_ACTIVE_DESKTOP);
 }
 

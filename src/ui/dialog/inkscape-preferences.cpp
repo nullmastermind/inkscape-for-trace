@@ -1679,7 +1679,7 @@ void InkscapePreferences::onKBTreeEdited (const Glib::ustring& path, guint accel
         return;
     }
 
-    unsigned int const new_shortcut_id =  sp_gdkmodifier_to_shortcut(accel_key, accel_mods, hardware_keycode);
+    unsigned int const new_shortcut_id =  sp_shortcut_get_from_gdk_event(accel_key, accel_mods, hardware_keycode);
     if (new_shortcut_id) {
 
         // Delete current shortcut if it existed

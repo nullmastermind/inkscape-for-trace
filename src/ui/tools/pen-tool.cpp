@@ -1050,13 +1050,7 @@ bool PenTool::_handleKeyPress(GdkEvent *event) {
 
     // Check for undo if we have started drawing a path.
     if (this->npoints > 0) {
-        unsigned int shortcut = Inkscape::UI::Tools::get_group0_keyval (&event->key) |
-                   ( event->key.state & GDK_SHIFT_MASK ?
-                     SP_SHORTCUT_SHIFT_MASK : 0 ) |
-                   ( event->key.state & GDK_CONTROL_MASK ?
-                     SP_SHORTCUT_CONTROL_MASK : 0 ) |
-                   ( event->key.state & GDK_MOD1_MASK ?
-                     SP_SHORTCUT_ALT_MASK : 0 );
+        unsigned int shortcut = sp_shortcut_get_for_event((GdkEventKey*)event);
         Inkscape::Verb* verb = sp_shortcut_get_verb(shortcut);
         if (verb) {
             unsigned int vcode = verb->get_code();

@@ -107,29 +107,90 @@ static void try_shortcuts_file(char const *filename) {
 }
 
 /*
- *  Inkscape expects to add the Shift modifier to any accel_keys create with Shift
- *  For exmaple on en_US keyboard <Shift>+6 = "&" - in this case return <Shift>+&
- *  See get_group0_keyval() for explanation on why
+ * Return the keyval corresponding to the key event in group 0 and the effective modifiers.
+ *
+ * Usage of group 0 (i.e. the main, typically English layout) instead of simply event->keyval
+ * ensures that shortcuts work regardless of the active keyboard layouts (e.g. Cyrillic).
+ *
+ * The effective modifiers are the modifers that were not "consumed" by the translation and
+ * can be used by the application to define a shortcut, e.g.
+ *  - when pressing "Shift+9" the resulting character is "("
+ *    the shift key was "consumed" to make this character and should not be part of the shortcut
+ *  - when pressing "Ctrl+9" the resulting character is also "9"
+ *    the ctrl key was *not* consumed to make this character and must be included in the shortcut
+ *  - Exception: letter keys like [A-Z] always need the shift modifier,
+ *               otherwise lower case and uper case keys are treated as equivalent
+ * The modifier values are already transformed from the default GDK_*_MASK into the equivalent high-bit masks
+ * defined by SP_SHORTCUT_*_MASK to allow for subsequent packing of the whole shortcut into a single int
+ *
+ * Note: Don't call this function directly but use the wrappers
+ *        - sp_shortcut_get_from_event() - create a new shortcut from a key event
+ *        - sp_shortcut_get_for_event()  - get an existing shortcut for a key event
+ *       (they correctly handle the packing of modifier keys into the keyval)
  */
-unsigned int sp_gdkmodifier_to_shortcut(guint accel_key, Gdk::ModifierType gdkmodifier, guint hardware_keycode) {
+guint sp_shortcut_translate_event(GdkEventKey const *event, guint *effective_modifiers) {
+    guint keyval = 0;
 
+    guint initial_modifiers = event->state;
+    guint consumed_modifiers = 0;
+    guint remaining_modifiers = 0;
+    guint resulting_modifiers = 0;  // remaining modifiers encoded in high-bit mask
 
-    unsigned int shortcut = 0;
+    keyval = Inkscape::UI::Tools::get_group0_keyval(event, &consumed_modifiers);
+
+    remaining_modifiers = initial_modifiers & ~consumed_modifiers;
+    resulting_modifiers = ( remaining_modifiers & GDK_SHIFT_MASK ? SP_SHORTCUT_SHIFT_MASK : 0 ) |
+	                      ( remaining_modifiers & GDK_CONTROL_MASK ? SP_SHORTCUT_CONTROL_MASK : 0 ) |
+	                      ( remaining_modifiers & GDK_MOD1_MASK ? SP_SHORTCUT_ALT_MASK : 0 );
+
+    // enforce the Shift modifier for uppercase letters (otherwise plain A and Shift+A are equivalent)
+    // for characters that are not letters both (is_upper and is_lower) return TRUE, so the condition is false
+    if (gdk_keyval_is_upper(keyval) && !gdk_keyval_is_lower(keyval)) {
+        resulting_modifiers |= SP_SHORTCUT_SHIFT_MASK;
+    }
+
+    *effective_modifiers = resulting_modifiers;
+    return keyval;
+}
+
+/*
+ * Returns a new Inkscape shortcut parsed from a key event.
+ */
+unsigned int sp_shortcut_get_from_event(GdkEventKey const *event) {
+    guint effective_modifiers;
+
+    sp_shortcut_translate_event(event, &effective_modifiers);
+
+    // return the actual keyval and the corresponding modifiers for creating the shortcut
+    // we must not return the translated keyval, otherwise we end up with illegal shortcuts like "Shift+9" instead of "("
+    return (event->keyval) | effective_modifiers;
+}
+
+/*
+ * Returns a new Inkscape shortcut parsed from a key event.
+ * (equivalent to sp_shortcut_get_from_event() but accepts the arguments of Gtk::CellRendererAccel::signal_accel_edited)
+ */
+unsigned int sp_shortcut_get_from_gdk_event(guint accel_key, Gdk::ModifierType accel_mods, guint hardware_keycode) {
     GdkEventKey event;
-    event.state = gdkmodifier;
     event.keyval = accel_key;
+    event.state = accel_mods;
     event.hardware_keycode = hardware_keycode;
-    guint keyval = Inkscape::UI::Tools::get_group0_keyval (&event);
 
-    shortcut = accel_key |
-               ( (gdkmodifier & GDK_SHIFT_MASK) || ( accel_key != keyval) ?
-                 SP_SHORTCUT_SHIFT_MASK : 0 ) |
-               ( gdkmodifier & GDK_CONTROL_MASK ?
-                 SP_SHORTCUT_CONTROL_MASK : 0 ) |
-               ( gdkmodifier & GDK_MOD1_MASK ?
-                 SP_SHORTCUT_ALT_MASK : 0 );
+    return sp_shortcut_get_from_event(&event);
+}
 
-    return shortcut;
+/*
+ * Returns the Inkscape-internal integral shortcut representation for a key event.
+ * Use this to compare the received key event to known shortcuts.
+ */
+unsigned int sp_shortcut_get_for_event(GdkEventKey const *event) {
+    guint keyval;
+    guint effective_modifiers;
+
+    keyval = sp_shortcut_translate_event(event, &effective_modifiers);
+
+    // return the keyval translated to group 0 (English keyboard layout) and corresponding modifiers
+    return keyval | effective_modifiers;
 }
 
 Glib::ustring sp_shortcut_to_label(unsigned int const shortcut) {

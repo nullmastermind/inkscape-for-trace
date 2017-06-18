@@ -701,13 +701,7 @@ bool ObjectsPanel::_handleKeyEvent(GdkEventKey *event)
         return false;
 
     unsigned int shortcut;
-    shortcut = Inkscape::UI::Tools::get_group0_keyval(event) |
-        ( event->state & GDK_SHIFT_MASK ?
-          SP_SHORTCUT_SHIFT_MASK : 0 ) |
-        ( event->state & GDK_CONTROL_MASK ?
-          SP_SHORTCUT_CONTROL_MASK : 0 ) |
-        ( event->state & GDK_MOD1_MASK ?
-          SP_SHORTCUT_ALT_MASK : 0 );
+    shortcut = sp_shortcut_get_for_event(event);
 
     switch (shortcut) {
         // how to get users key binding for the action “start-interactive-search” ??
