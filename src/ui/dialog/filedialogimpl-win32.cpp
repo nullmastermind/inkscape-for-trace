@@ -1586,10 +1586,15 @@ FileSaveDialogImplWin32::FileSaveDialogImplWin32(Gtk::Window &parent,
             if (len != 0 && udir[len - 1] == '\\') udir.erase(len - 1);
 
             // Remove the extension: remove everything past the last period found past the last slash
-            size_t last_slash_index = udir.find_last_of( '\\' );
-            size_t last_period_index = udir.find_last_of( '.' );
-            if (last_period_index > last_slash_index) {
-                myFilename = udir.substr(0, last_period_index ); 
+            // (not for CUSTOM_TYPE as we can not automatically add a file extension in that case yet)
+            if (dialogType == CUSTOM_TYPE) {
+                myFilename = udir;
+            } else {
+                size_t last_slash_index = udir.find_last_of( '\\' );
+                size_t last_period_index = udir.find_last_of( '.' );
+                if (last_period_index > last_slash_index) {
+                    myFilename = udir.substr(0, last_period_index ); 
+                }
             }
 
             // remove one slash if double
