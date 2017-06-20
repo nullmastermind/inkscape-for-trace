@@ -392,13 +392,14 @@ void sp_shortcut_file_export()
        Inkscape::UI::Dialog::FileSaveDialog::create(
             *(desktop->getToplevel()),
             open_path,
-        Inkscape::UI::Dialog::CUSTOM_TYPE,
-        _("Select a filename for exporting"),
-        "",
-        "",
-        Inkscape::Extension::FILE_SAVE_METHOD_SAVE_AS
+            Inkscape::UI::Dialog::CUSTOM_TYPE,
+            _("Select a filename for exporting"),
+            "",
+            "",
+            Inkscape::Extension::FILE_SAVE_METHOD_SAVE_AS
         );
-    saveDialog->addFileType("All Files", "*");
+    saveDialog->addFileType(_("Inkscape shortcuts (*.xml)"), ".xml");
+    
 
     bool success = saveDialog->show();
     if (!success) {
