@@ -84,7 +84,7 @@ if(WIN32)
     ${MINGW_BIN}/libplc4.dll
     ${MINGW_BIN}/libplds4.dll
     ${MINGW_BIN}/libpng16-16.dll
-    ${MINGW_BIN}/libpoppler-66.dll
+    ${MINGW_BIN}/libpoppler-67.dll
     ${MINGW_BIN}/libpoppler-glib-8.dll
     ${MINGW_BIN}/libpopt-0.dll
     ${MINGW_BIN}/libpotrace-0.dll
