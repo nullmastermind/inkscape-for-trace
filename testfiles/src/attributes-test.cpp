@@ -38,7 +38,8 @@ typedef std::vector<AttributeInfo>::iterator AttrItr;
 
 std::vector<AttributeInfo> getKnownAttrs()
 {
-/* Extracted mechanically from http://www.w3.org/TR/SVG11/attindex.html:
+/* Originally extracted mechanically from
+   http://www.w3.org/TR/SVG11/attindex.html:
 
    tidy -wrap 999 -asxml < attindex.html 2>/dev/null |
    tr -d \\n |
@@ -146,6 +147,7 @@ std::vector<AttributeInfo> getKnownAttrs()
         AttributeInfo("font-variant-numeric", true),
         AttributeInfo("font-variant-east-asian", true),
         AttributeInfo("font-variant-alternates", true),
+        AttributeInfo("font-variation-settings", true),
         AttributeInfo("font-weight", true),
         AttributeInfo("format", false),
         AttributeInfo("from", true),
