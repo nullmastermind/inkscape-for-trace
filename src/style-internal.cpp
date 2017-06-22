@@ -566,12 +566,12 @@ SPIVariableFontAxisOrNormal::write( guint const flags, SPStyleSrc const &style_s
 
 void
 SPIVariableFontAxisOrNormal::cascade( const SPIBase* const parent ) {
-    std::cerr << "SPIVariableFontAxisOrNormal::cascade(): TODO: Implement-me!" << std::endl;
+//    std::cerr << "SPIVariableFontAxisOrNormal::cascade(): TODO: Implement-me!" << std::endl;
 }
 
 void
 SPIVariableFontAxisOrNormal::merge( const SPIBase* const parent ) {
-    std::cerr << "SPIVariableFontAxisOrNormal::merge(): TODO: Implement-me!" << std::endl;
+//    std::cerr << "SPIVariableFontAxisOrNormal::merge(): TODO: Implement-me!" << std::endl;
 }
 
 bool
