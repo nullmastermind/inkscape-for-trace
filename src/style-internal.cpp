@@ -558,6 +558,7 @@ SPIFontVariationSettings::read( gchar const *str ) {
             }
             normal = false;
         }
+        i++;
     }
     g_strfreev (strarray);
 };
