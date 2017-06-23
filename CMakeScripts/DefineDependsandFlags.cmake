@@ -45,7 +45,6 @@ pkg_check_modules(INKSCAPE_DEP REQUIRED
 	          pangocairo
 		  pangoft2
 		  fontconfig
-		  gthread-2.0
 		  gsl
 		  gmodule-2.0)
 
@@ -56,18 +55,6 @@ add_definitions(${INKSCAPE_DEP_CFLAGS_OTHER})
 
 if(APPLE AND DEFINED ENV{CMAKE_PREFIX_PATH})
     list(APPEND INKSCAPE_LIBS "-L$ENV{CMAKE_PREFIX_PATH}/lib")
-endif()
-if(APPLE)
-    if(${GTK+_2.0_TARGET} MATCHES "x11")
-    pkg_check_modules(x11 REQUIRED x11)
-    list(APPEND INKSCAPE_LIBS ${x11_LDFLAGS})
-    endif()
-elseif(WIN32)
-# X11 not available on windows
-else()
-    pkg_check_modules(x11 REQUIRED x11)
-    list(APPEND INKSCAPE_LIBS ${x11_LDFLAGS})
-
 endif()
 
 if(WITH_GNOME_VFS)
@@ -299,11 +286,7 @@ set(TRY_GTKSPELL ON)
         ${GTKSPELL3_LIBRARIES}
     )
 
-find_package(Freetype REQUIRED)
-list(APPEND INKSCAPE_INCS_SYS ${FREETYPE_INCLUDE_DIRS})
-list(APPEND INKSCAPE_LIBS ${FREETYPE_LIBRARIES})
-
-find_package(Boost REQUIRED)
+find_package(Boost 1.19.0 REQUIRED)
 list(APPEND INKSCAPE_INCS_SYS ${Boost_INCLUDE_DIRS})
 # list(APPEND INKSCAPE_LIBS ${Boost_LIBRARIES})
 

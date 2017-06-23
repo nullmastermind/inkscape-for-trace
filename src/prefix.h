@@ -119,14 +119,10 @@ char *br_extract_prefix(const char *path);
 #endif /* __cplusplus */
 
 #ifdef __WIN32__
-
-#include <glibmm/ustring.h>
-
-Glib::ustring win32_getExePath();
-char *win32_relative_path(const char *childPath);
-
-#define WIN32_DATADIR(suffix) (win32_relative_path(suffix))
-
+char *win32_append_datadir(const char *relative_path);
+#undef INKSCAPE_DATADIR
+#define INKSCAPE_DATADIR win32_append_datadir(NULL)
+#define WIN32_DATADIR(suffix) (win32_append_datadir(suffix))
 #endif
 
 #endif /* _PREFIX_H_ */
