@@ -116,7 +116,7 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     font_feature_settings(  "font-feature-settings",   "normal" ),
 
     // Variable Fonts
-    font_variation_settings( "font-variation-settings" ),  // SPIVariableFontAxisOrNormal
+    font_variation_settings( "font-variation-settings" ),  // SPIFontVariationSettings
 
     // Text related properties
     text_indent(      "text-indent",                     0.0 ),  // SPILength

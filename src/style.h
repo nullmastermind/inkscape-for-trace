@@ -129,7 +129,7 @@ public:
     SPIString font_feature_settings;
 
     /** Font variation settings (Low level access to OpenType variable font design-coordinate values) */
-    SPIVariableFontAxisOrNormal font_variation_settings;
+    SPIFontVariationSettings font_variation_settings;
 
     /* Text ----------------------------- */
 

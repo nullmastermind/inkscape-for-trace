@@ -29,6 +29,7 @@
 #include "xml/repr.h"
 
 #include <vector>
+#include <map>
 
 struct SPStyleEnum;
 
@@ -449,25 +450,21 @@ public:
 
 /// Extended length type internal to SPStyle.
 // Used for: font-variation-settings
-class SPIVariableFontAxisOrNormal : public SPIFloat
+class SPIFontVariationSettings : public SPIBase
 {
 
 public:
-    SPIVariableFontAxisOrNormal()
-        : SPIFloat( "anonymous_float" ),
-          axis_name( "" ),
+    SPIFontVariationSettings()
+        : SPIBase( "anonymous_fontvariationsettings" ),
           normal(true)
     {}
 
-    SPIVariableFontAxisOrNormal( Glib::ustring const &name, gchar const *axis = NULL, float value = 0 )
-        : SPIFloat( name, value ),
+    SPIFontVariationSettings( Glib::ustring const &name )
+        : SPIBase( name ),
           normal(true)
-    {
-        if (axis) strncpy(axis_name, axis, 5);
-        else axis_name[0] = '\0';
-    }
+    {}
 
-    virtual ~SPIVariableFontAxisOrNormal()
+    virtual ~SPIFontVariationSettings()
     {}
 
     virtual void read( gchar const *str );
@@ -475,17 +472,15 @@ public:
                                        SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
                                        SPIBase const *const base = NULL ) const;
     virtual void clear() {
-        SPIFloat::clear();
-        axis_name[0] = '\0';
+        axes.empty();
         normal = true;
     }
 
     virtual void cascade( const SPIBase* const parent );
     virtual void merge(   const SPIBase* const parent );
 
-    SPIVariableFontAxisOrNormal& operator=(const SPIVariableFontAxisOrNormal& rhs) {
-        SPIFloat::operator=(rhs);
-        strncpy(axis_name, rhs.axis_name, 5);
+    SPIFontVariationSettings& operator=(const SPIFontVariationSettings& rhs) {
+        axes = rhs.axes;
         normal = rhs.normal;
         return *this;
     }
@@ -498,7 +493,8 @@ public:
   // To do: make private
 public:
     bool normal : 1;
-    gchar axis_name[5];
+    bool inherit : 1;
+    std::map<char*, float> axes;
 };
 
 

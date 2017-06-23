@@ -521,65 +521,84 @@ SPILengthOrNormal::operator==(const SPIBase& rhs) {
 }
 
 
-// SPIVariableFontAxisOrNormal ----------------------------------------------------
+// SPIFontVariationSettings ----------------------------------------------------
 
 void
-SPIVariableFontAxisOrNormal::read( gchar const *str ) {
+SPIFontVariationSettings::read( gchar const *str ) {
 
     if( !str ) return;
 
     if ( !strcmp(str, "normal") ) {
         set = true;
         inherit = false;
-        value = 0.0;
         normal = true;
+        axes.empty();
         return;
     }
 
-    if (strlen(str) >= 8
-        && (str[0] == '\"' || str[0] == '\'')
-        && (str[5] == '\"' || str[5] == '\'')
-        && str[6] == ' ') {
-        strncpy(axis_name, &str[1], 4);
-        axis_name[4] = '\0';
+    gchar ** strarray = g_strsplit(str, " ", 0);
+    unsigned int i=0;
+    while (strarray[i]){
+        char axis_name[5];
+        if (strlen(strarray[i]) >= 8
+            && (strarray[i][0] == '\"' || strarray[i][0] == '\'')
+            && (strarray[i][5] == '\"' || strarray[i][5] == '\'')
+            && strarray[i][6] == ' ') {
+            strncpy(axis_name, &strarray[i][1], 4);
+            axis_name[4] = '\0';
 
-        SPIFloat::read(&str[7]);
-        normal = false;
+            gfloat value;
+            if (sp_svg_number_read_f(&strarray[i][7], &value)) {
+                set = true;
+                inherit = false;
+                axes.insert(std::pair<char*,float>(axis_name,value));
+            } else {
+                //invalid syntax while parsing attribute
+                break;
+            }
+            normal = false;
+        }
     }
+    g_strfreev (strarray);
 };
 
 const Glib::ustring
-SPIVariableFontAxisOrNormal::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase const *const base) const {
+SPIFontVariationSettings::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase const *const base) const {
 
-    SPIFloat const *const my_base = dynamic_cast<const SPIFloat*>(base);
+    SPIFontVariationSettings const *const my_base = dynamic_cast<const SPIFontVariationSettings*>(base);
     bool dfp = (!inherits || !my_base || (my_base != this)); // Different from parent
     bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
     if (should_write(flags, set, dfp, src)) {
         if (this->normal) {
             return (name + ":normal;");
         } else {
-            return "\"" + Glib::ustring(axis_name) + "\" " + SPIFloat::write(flags, style_src_req, base);
+            Inkscape::CSSOStringStream os;
+            for (std::map<char*,float>::const_iterator it=axes.begin(); it!=axes.end(); ++it){
+                os << "\"" << it->first << "\" " << it->second << " ";
+                // FIXME: can we avoid the last space char ?
+            }
+            return os.str();
         }
     }
     return Glib::ustring("");
 }
 
 void
-SPIVariableFontAxisOrNormal::cascade( const SPIBase* const parent ) {
+SPIFontVariationSettings::cascade( const SPIBase* const parent ) {
 //    std::cerr << "SPIVariableFontAxisOrNormal::cascade(): TODO: Implement-me!" << std::endl;
 }
 
 void
-SPIVariableFontAxisOrNormal::merge( const SPIBase* const parent ) {
+SPIFontVariationSettings::merge( const SPIBase* const parent ) {
 //    std::cerr << "SPIVariableFontAxisOrNormal::merge(): TODO: Implement-me!" << std::endl;
 }
 
 bool
-SPIVariableFontAxisOrNormal::operator==(const SPIBase& rhs) {
-    if( const SPIVariableFontAxisOrNormal* r = dynamic_cast<const SPIVariableFontAxisOrNormal*>(&rhs) ) {
+SPIFontVariationSettings::operator==(const SPIBase& rhs) {
+    if( const SPIFontVariationSettings* r = dynamic_cast<const SPIFontVariationSettings*>(&rhs) ) {
         if( normal && r->normal ) { return true; }
         if( normal != r->normal ) { return false; }
-        return SPIFloat::operator==(rhs) && !strncmp(axis_name, r->axis_name, 4);
+        return axes == r->axes;
     } else {
         return false;
     }
