@@ -1,0 +1,39 @@
+<ui>
+  <toolbar name='ToolToolbar'>
+   <!-- Basics -->
+    <toolitem action='ToolSelector' />
+    <toolitem action='ToolNode' />
+    <toolitem action='ToolTweak' />
+    <toolitem action='ToolZoom' />
+    <toolitem action='ToolMeasure' />
+
+   <!-- Shapes -->
+    <toolitem action='ToolRect' />
+    <toolitem action='Tool3DBox' />
+    <toolitem action='ToolArc' />
+    <toolitem action='ToolStar' />
+    <toolitem action='ToolSpiral' />
+
+   <!-- Paths -->
+    <toolitem action='ToolPencil' />
+    <toolitem action='ToolPen' />
+    <toolitem action='ToolCalligraphic' />
+
+   <!-- Text -->
+    <toolitem action='ToolText' />
+
+   <!-- Paint large areas -->
+    <toolitem action='ToolSpray' />
+    <toolitem action='ToolEraser' />
+
+   <!-- Fill -->
+    <toolitem action='ToolPaintBucket' />
+
+    <toolitem action='ToolGradient' />
+    <toolitem action='ToolMesh' />
+    <toolitem action='ToolDropper' />
+
+    <toolitem action='ToolConnector' />
+    <toolitem action='ToolLPETool' />
+  </toolbar>
+</ui>

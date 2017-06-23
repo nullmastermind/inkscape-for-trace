@@ -48,6 +48,8 @@ enum Domain {
 Util::ptr_shared<char> get_path(Domain domain, Type type,
                                 char const *filename=NULL);
 
+Util::ptr_shared<char> get_filename(Type type, char const *filename=NULL);
+
 }
 
 }
