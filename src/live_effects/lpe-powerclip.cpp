@@ -24,12 +24,15 @@ LPEPowerClip::LPEPowerClip(LivePathEffectObject *lpeobject)
     : Effect(lpeobject),
     inverse(_("Inverse clip"), _("Inverse clip"), "inverse", &wr, this, false),
     flatten(_("Flatten clip"), _("Flatten clip, see fill rule once convert to paths"), "flatten", &wr, this, false),
+    //loock(_("Lock clip"), _("Lock clip"), "lock", &wr, this, false),
     //tooltip empty to no show in default param set
     is_inverse("Store the last inverse apply", "", "is_inverse", &wr, this, "false", false)
 {
     registerParameter(&inverse);
     registerParameter(&flatten);
     registerParameter(&is_inverse);
+    //registerParameter(&lock);
+    //lock.param_setValue(false);
     is_clip = false;
     hide_clip = false;
     convert_shapes = false;
@@ -52,7 +55,7 @@ LPEPowerClip::doBeforeEffect (SPLPEItem const* lpeitem){
     clip_box.appendNew<Geom::LineSegment>(bottomleft);
     clip_box.close();
     //clip_path *= sp_lpe_item->i2dt_affine();
-    if(clip_path) {
+    if (clip_path) {
         is_clip = true;
         const Glib::ustring uri = (Glib::ustring)sp_lpe_item->getRepr()->attribute("clip-path");
         std::vector<SPObject*> clip_path_list = clip_path->childList(true);
@@ -98,13 +101,13 @@ LPEPowerClip::doBeforeEffect (SPLPEItem const* lpeitem){
                 Inkscape::GC::release(clip_path_node);
                 clip_to_path->emitModified(SP_OBJECT_MODIFIED_CASCADE);
             }
-            if( inverse && isVisible()) {
+            if( is_inverse.param_getSVGValue() == (Glib::ustring)"false" && inverse && isVisible()) {
                 if (clip_to_path) {
                     addInverse(SP_ITEM(clip_to_path));
                 } else {
                     addInverse(SP_ITEM(clip_data));
                 }
-            } else if(is_inverse.param_getSVGValue() == (Glib::ustring)"true") {
+            } else if(is_inverse.param_getSVGValue() == (Glib::ustring)"true" && !inverse && isVisible()) {
                 if (clip_to_path) {
                     removeInverse(SP_ITEM(clip_to_path));
                 } else {
@@ -119,44 +122,48 @@ LPEPowerClip::doBeforeEffect (SPLPEItem const* lpeitem){
 
 void
 LPEPowerClip::addInverse (SPItem * clip_data){
-    if (SP_IS_GROUP(clip_data)) {
-        std::vector<SPItem*> item_list = sp_item_group_item_list(SP_GROUP(clip_data));
-        for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
-            SPItem *subitem = *iter;
-            addInverse(subitem);
-        }
-    } else if (SP_IS_PATH(clip_data)) {
-        SPCurve * c = NULL;
-        c = SP_SHAPE(clip_data)->getCurve();
-        if (c) {
-            Geom::PathVector c_pv = c->get_pathvector();
-            if(c_pv.size() > 1 && is_inverse.param_getSVGValue() == (Glib::ustring)"true") {
-               c_pv.pop_back();
+    if(is_inverse.param_getSVGValue() == (Glib::ustring)"false") {
+        if (SP_IS_GROUP(clip_data)) {
+            std::vector<SPItem*> item_list = sp_item_group_item_list(SP_GROUP(clip_data));
+            for ( std::vector<SPItem*>::const_iterator iter=item_list.begin();iter!=item_list.end();++iter) {
+                SPItem *subitem = *iter;
+                addInverse(subitem);
             }
-            //TODO: this can be not correct but no better way
-            bool dir_a = Geom::path_direction(c_pv[0]);
-            bool dir_b = Geom::path_direction(clip_box);
-            if (dir_a == dir_b) {
-               clip_box = clip_box.reversed();
-            }
-            c_pv.push_back(clip_box);
-            c->set_pathvector(c_pv);
-            SP_SHAPE(clip_data)->setCurve(c, TRUE);
-            c->unref();
-            is_inverse.param_setValue((Glib::ustring)"true", true);
-            SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-            if (desktop) {
-                if (tools_isactive(desktop, TOOLS_NODES)) {
-                    Inkscape::Selection * sel = SP_ACTIVE_DESKTOP->getSelection();
-                    SPItem * item = sel->singleItem();
-                    if (item != NULL) {
-                        sel->remove(item);
-                        sel->add(item);
+        } else if (SP_IS_PATH(clip_data)) {
+            SPCurve * c = NULL;
+            c = SP_SHAPE(clip_data)->getCurve();
+            if (c) {
+                Geom::PathVector c_pv = c->get_pathvector();
+                //TODO: this can be not correct but no better way
+                bool dir_a = Geom::path_direction(c_pv[0]);
+                bool dir_b = Geom::path_direction(clip_box);
+                if (dir_a == dir_b) {
+                   clip_box = clip_box.reversed();
+                }
+                c_pv.push_back(clip_box);
+                c->set_pathvector(c_pv);
+                SP_SHAPE(clip_data)->setCurve(c, TRUE);
+                c->unref();
+                is_inverse.param_setValue((Glib::ustring)"true", true);
+                SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+                if (desktop) {
+                    if (tools_isactive(desktop, TOOLS_NODES)) {
+                        Inkscape::Selection * sel = SP_ACTIVE_DESKTOP->getSelection();
+                        SPItem * item = sel->singleItem();
+                        if (item != NULL) {
+                            sel->remove(item);
+                            sel->add(item);
+                        }
                     }
                 }
             }
         }
     }
+}
+
+void
+LPEPowerClip::doEffect (SPCurve * curve)
+{
 }
 
 void
@@ -258,19 +265,18 @@ LPEPowerClip::newWidget()
                 }
             }
         }
-
         ++it;
     }
     Gtk::HBox * hbox = Gtk::manage(new Gtk::HBox(false,0));
     Gtk::Button * toggle_button = Gtk::manage(new Gtk::Button(Glib::ustring(_("Toggle clip visibiliy"))));
     toggle_button->signal_clicked().connect(sigc::mem_fun (*this,&LPEPowerClip::toggleClip));
-    toggle_button->set_size_request(140,30);
+    toggle_button->set_size_request(180,30);
     vbox->pack_start(*hbox, true,true,2);
     hbox->pack_start(*toggle_button, false, false,2);
     Gtk::HBox * hbox2 = Gtk::manage(new Gtk::HBox(false,0));
     Gtk::Button * topaths_button = Gtk::manage(new Gtk::Button(Glib::ustring(_("Convert clips to paths, undoable"))));
     topaths_button->signal_clicked().connect(sigc::mem_fun (*this,&LPEPowerClip::convertShapes));
-    topaths_button->set_size_request(200,30);
+    topaths_button->set_size_request(220,30);
     vbox->pack_start(*hbox2, true,true,2);
     hbox2->pack_start(*topaths_button, false, false,2);
     return dynamic_cast<Gtk::Widget *>(vbox);
@@ -288,7 +294,6 @@ LPEPowerClip::doOnRemove (SPLPEItem const* /*lpeitem*/)
                 SPObject * clip_data = *iter;
                 if(is_inverse.param_getSVGValue() == (Glib::ustring)"true") {
                     removeInverse(SP_ITEM(clip_data));
-                    is_inverse.param_setValue((Glib::ustring)"false");
                 }
             }
         }
@@ -315,6 +320,50 @@ LPEPowerClip::doEffect_path(Geom::PathVector const & path_in){
     }
     return path_out;
 }
+
+//void
+//LPEPowerClip::transform_multiply(Geom::Affine const& postmul, bool set)
+//{
+//    SPDocument * doc = SP_ACTIVE_DOCUMENT;
+//    SPClipPath *clip_path = SP_ITEM(sp_lpe_item)->clip_ref->getObject();
+//    if (is_clip && lock) {
+//        std::vector<SPObject*> clip_path_list = clip_path->childList(true);
+//        Glib::ustring clip_id = (Glib::ustring)clip_path->getId();
+//        Glib::ustring box_id = clip_id + (Glib::ustring)"_box";
+//        for ( std::vector<SPObject*>::const_iterator iter=clip_path_list.begin();iter!=clip_path_list.end();++iter) {
+//            SPItem * clip_data = SP_ITEM(*iter);
+//            if(inverse && is_clip && lock) {
+//                removeInverse(clip_data);
+//            }
+//            if (lock) {
+//                clip_data->transform *= postmul;
+////                if (!inverse) {
+////                    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+////                    if (desktop) {
+////                        if (tools_isactive(desktop, TOOLS_NODES)) {
+////                            Inkscape::Selection * sel = SP_ACTIVE_DESKTOP->getSelection();
+////                            SPItem * item = sel->singleItem();
+////                            if (item != NULL) {
+////                                sel->remove(item);
+////                                sel->add(item);
+////                            }
+////                        }
+////                    }
+////                }
+//            }
+//            if(inverse && is_clip && lock) {
+//                doBeforeEffect(sp_lpe_item);
+//            }
+//        }
+//    }
+//    //cycle through all parameters. Most parameters will not need transformation, but path and point params
+//    for (std::vector<Parameter *>::iterator it = param_vector.begin(); it != param_vector.end(); ++it) {
+//        Parameter * param = *it;
+//        param->param_transform_multiply(postmul, set);
+//    }
+//    toggleClip();
+//    toggleClip();
+//}
 
 void
 LPEPowerClip::flattenClip(SPItem * clip_data, Geom::PathVector &path_in)

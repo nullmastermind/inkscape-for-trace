@@ -26,15 +26,18 @@ namespace LivePathEffect {
 LPEPowerMask::LPEPowerMask(LivePathEffectObject *lpeobject)
     : Effect(lpeobject),
     invert(_("Invert mask"), _("Invert mask"), "invert", &wr, this, false),
-    wrap(_("Wrap clip data"), _("Wrap clip data allowing previous filters"), "wrap", &wr, this, false),
+    wrap(_("Wrap mask data"), _("Wrap mask data allowing previous filters"), "wrap", &wr, this, false),
     background(_("Add background to mask"), _("Add background to mask"), "background", &wr, this, false),
+    //lock(_("Lock mask"), _("Lock mask"), "lock", &wr, this, false),
     background_style(_("Background Style"), _("CSS to background"), "background_style", &wr, this,"fill:#ffffff;opacity:1;")
    
 {
     registerParameter(&invert);
     registerParameter(&wrap);
+    //registerParameter(&lock);
     registerParameter(&background);
     registerParameter(&background_style);
+    //lock.param_setValue(false);
     background_style.param_hide_canvas_text();
     hide_mask = false;
 }
@@ -190,15 +193,23 @@ LPEPowerMask::setMask(){
         elemref->deleteObject(true);
     }
     if (background && is_visible) {
-        box = xml_doc->createElement("svg:path");
-        box->setAttribute("id", box_id.c_str());
+        bool exist = true;
+        if (!(elemref = document->getObjectById(box_id))) {
+            box = xml_doc->createElement("svg:path");
+            box->setAttribute("id", box_id.c_str());
+            exist = false;
+        }
         box->setAttribute("style", background_style.param_getSVGValue());
         gchar * box_str = sp_svg_write_path( mask_box );
         box->setAttribute("d" , box_str);
         g_free(box_str);
-        elemref = mask->appendChildRepr(box);
+        if (!exist) {
+            elemref = mask->appendChildRepr(box);
+            Inkscape::GC::release(box);
+        }
         box->setPosition(1);
-        Inkscape::GC::release(box);
+    } else if ((elemref = document->getObjectById(box_id))) {
+        elemref->deleteObject(true);
     }
     mask->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
@@ -235,6 +246,7 @@ LPEPowerMask::toggleMask() {
                     Inkscape::DrawingItem *ai = mask->sp_mask_show(
                                                            v->arenaitem->drawing(),
                                                            v->arenaitem->key());
+                    bbox.unionWith(ai->geometricBounds());
                     v->arenaitem->setMask(ai);
                     mask->sp_mask_set_bbox(v->arenaitem->key(), bbox);
                 }
@@ -243,6 +255,33 @@ LPEPowerMask::toggleMask() {
         }
     }
 }
+
+//void
+//LPEPowerMask::transform_multiply(Geom::Affine const& postmul, bool set)
+//{
+//    SPMask *mask_path = SP_ITEM(sp_lpe_item)->mask_ref->getObject();
+//    if (mask_path && lock) {
+//        SPMask *mask_path = SP_ITEM(sp_lpe_item)->mask_ref->getObject();
+//        std::vector<SPObject*> mask_path_list = mask_path->childList(true);
+//        Glib::ustring mask_id = (Glib::ustring)mask_path->getId();
+//        Glib::ustring box_id = mask_id + (Glib::ustring)"_box";
+//        for ( std::vector<SPObject*>::const_iterator iter=mask_path_list.begin();iter!=mask_path_list.end();++iter) {
+//            SPObject * mask_data = *iter;
+//            if (! strcmp(mask_data->getId(), box_id.c_str())){
+//                continue;
+//            }
+//            SP_ITEM(mask_data)->transform *= postmul.inverse();
+//        }
+//    }
+//    //cycle through all parameters. Most parameters will not need transformation, but path and point params
+//    for (std::vector<Parameter *>::iterator it = param_vector.begin(); it != param_vector.end(); ++it) {
+//        Parameter * param = *it;
+//        param->param_transform_multiply(postmul, set);
+//    }
+//    sp_lpe_item_update_patheffect(SP_LPE_ITEM(sp_lpe_item), false, false);
+//}
+
+
 
 Gtk::Widget *
 LPEPowerMask::newWidget()

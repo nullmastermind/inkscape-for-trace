@@ -23,12 +23,14 @@ public:
     virtual void doOnRemove (SPLPEItem const* /*lpeitem*/);
     virtual Gtk::Widget * newWidget();
     virtual void doOnVisibilityToggled(SPLPEItem const* lpeitem);
+    //virtual void transform_multiply(Geom::Affine const& postmul, bool set);
     void toggleMask();
     void setMask();
 private:
     BoolParam invert;
     BoolParam wrap;
     BoolParam background;
+    //BoolParam lock;
     TextParam background_style;
     Geom::Path mask_box;
     bool hide_mask;

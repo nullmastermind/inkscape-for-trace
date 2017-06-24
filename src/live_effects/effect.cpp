@@ -981,6 +981,7 @@ Effect::resetDefaults(SPItem const* /*item*/)
     }
 }
 
+//Activate handle your transform filling your effect on SPPath.cpp
 void
 Effect::transform_multiply(Geom::Affine const& postmul, bool set)
 {
