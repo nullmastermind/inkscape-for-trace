@@ -20,11 +20,10 @@ public:
     virtual ~LPEPowerClip();
     virtual void doBeforeEffect (SPLPEItem const* lpeitem);
     virtual Geom::PathVector doEffect_path (Geom::PathVector const & path_in);
-    virtual void doEffect (SPCurve * curve);
     virtual void doOnRemove (SPLPEItem const* /*lpeitem*/);
     virtual Gtk::Widget * newWidget();
     //virtual void transform_multiply(Geom::Affine const& postmul, bool set);
-
+    virtual void doOnVisibilityToggled(SPLPEItem const* lpeitem);
     void toggleClip();
     void addInverse (SPItem * clip_data);
     void removeInverse (SPItem * clip_data);

@@ -113,6 +113,8 @@ LPEPowerClip::doBeforeEffect (SPLPEItem const* lpeitem){
                 } else {
                     removeInverse(SP_ITEM(clip_data));
                 }
+            } else if (inverse && !is_visible && is_inverse.param_getSVGValue() == (Glib::ustring)"true"){
+                removeInverse(SP_ITEM(clip_data));
             }
         }
     } else {
@@ -159,11 +161,6 @@ LPEPowerClip::addInverse (SPItem * clip_data){
             }
         }
     }
-}
-
-void
-LPEPowerClip::doEffect (SPCurve * curve)
-{
 }
 
 void
@@ -320,6 +317,13 @@ LPEPowerClip::doEffect_path(Geom::PathVector const & path_in){
     }
     return path_out;
 }
+
+void 
+LPEPowerClip::doOnVisibilityToggled(SPLPEItem const* lpeitem)
+{
+    doBeforeEffect(lpeitem);
+}
+
 
 //void
 //LPEPowerClip::transform_multiply(Geom::Affine const& postmul, bool set)
