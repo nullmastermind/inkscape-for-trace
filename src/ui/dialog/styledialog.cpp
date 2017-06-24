@@ -45,6 +45,7 @@ namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
+// Keeps a watch on style element
 class StyleDialog::NodeObserver : public Inkscape::XML::NodeObserver {
 public:
     NodeObserver(StyleDialog* styleDialog) :
@@ -77,6 +78,93 @@ StyleDialog::NodeObserver::notifyContentChanged(
     _styleDialog->_selectRow();
 }
 
+
+// Keeps a watch for new/removed/changed nodes
+// (Must update objects that selectors match.)
+class StyleDialog::NodeWatcher : public Inkscape::XML::NodeObserver {
+public:
+    NodeWatcher(StyleDialog* styleDialog, Inkscape::XML::Node *repr) :
+        _styleDialog(styleDialog),
+        _repr(repr)
+    {
+#ifdef DEBUG_STYLEDIALOG
+    std::cout << "StyleDialog::NodeWatcher: Constructor" << std::endl;
+#endif
+    };
+
+    virtual void notifyChildAdded( Inkscape::XML::Node &/*node*/,
+                                   Inkscape::XML::Node &child,
+                                   Inkscape::XML::Node */*prev*/ )
+    {
+        if ( _styleDialog && _repr ) {
+            _styleDialog->_nodeAdded( child );
+        }
+    }
+
+    virtual void notifyChildRemoved( Inkscape::XML::Node &/*node*/,
+                                     Inkscape::XML::Node &child,
+                                     Inkscape::XML::Node */*prev*/ )
+    {
+        if ( _styleDialog && _repr ) {
+            _styleDialog->_nodeRemoved( child );
+        }
+    }
+
+    virtual void notifyAttributeChanged( Inkscape::XML::Node &node,
+                                         GQuark qname,
+                                         Util::ptr_shared<char> /*old_value*/,
+                                         Util::ptr_shared<char> /*new_value*/ ) {
+        if ( _styleDialog && _repr ) {
+
+            // For the moment only care about attributes that are directly used in selectors.
+            const gchar * cname = g_quark_to_string (qname );
+            Glib::ustring name;
+            if (cname) {
+                name = cname;
+            }
+
+            if ( name == "id" || name == "class" ) {
+                _styleDialog->_nodeChanged( node );
+            }
+        }
+    }
+
+    StyleDialog * _styleDialog;
+    Inkscape::XML::Node * _repr;  // Need to track if document changes.
+};
+
+void
+StyleDialog::_nodeAdded( Inkscape::XML::Node &node ) {
+
+    StyleDialog::NodeWatcher *w = new StyleDialog::NodeWatcher (this, &node);
+    node.addObserver (*w);
+    _nodeWatchers.push_back(w);
+
+    _readStyleElement();
+    _selectRow();
+}
+
+void
+StyleDialog::_nodeRemoved( Inkscape::XML::Node &repr ) {
+
+    for (auto it = _nodeWatchers.begin(); it != _nodeWatchers.end(); ++it) {
+        if ( (*it)->_repr == &repr ) {
+            (*it)->_repr->removeObserver (**it);
+            _nodeWatchers.erase( it );
+            break;
+        }
+    }
+
+    _readStyleElement();
+    _selectRow();
+}
+
+void
+StyleDialog::_nodeChanged( Inkscape::XML::Node &object ) {
+
+    _readStyleElement();
+    _selectRow();
+}
 
 StyleDialog::TreeStore::TreeStore()
 {
@@ -248,6 +336,9 @@ StyleDialog::StyleDialog() :
     _selection_changed_connection = getDesktop()->getSelection()->connectChanged(
         sigc::hide(sigc::mem_fun(this, &StyleDialog::_handleSelectionChanged)));
 
+    // Add watchers
+    _updateWatchers();
+
     // Load tree
     _readStyleElement();
     _selectRow();
@@ -407,6 +498,7 @@ void StyleDialog::_readStyleElement()
         
         // Add as children, objects that match selector.
         for (auto& obj: objVec) {
+            if (obj->cloned) continue; // Skip cloned objects (they also don't have 'id').
             Gtk::TreeModel::Row childrow = *(_store->append(row->children()));
             childrow[_mColumns._colSelector]   = "#" + Glib::ustring(obj->getId());
             childrow[_mColumns._colIsSelector] = false;
@@ -443,6 +535,49 @@ void StyleDialog::_writeStyleElement()
 #ifdef DEBUG_STYLEDIALOG
     std::cout << "StyleDialog::_writeStyleElement(): |" << styleContent << "|" << std::endl;
 #endif
+}
+
+
+void StyleDialog::_addWatcherRecursive(Inkscape::XML::Node *node) {
+
+#ifdef DEBUG_STYLEDIALOG
+    std::cout << "StyleDialog::_addWatcherRecursive()" << std::endl;
+#endif
+
+    StyleDialog::NodeWatcher *w = new StyleDialog::NodeWatcher(this, node);
+    node->addObserver(*w);
+    _nodeWatchers.push_back(w);
+
+    for (unsigned i = 0; i < node->childCount(); ++i) {
+        _addWatcherRecursive(node->nthChild(i));
+    }
+}
+
+/**
+ * @brief StyleDialog::_updateWatchers
+ * Update the watchers on objects.
+ */
+void StyleDialog::_updateWatchers()
+{
+    _updating = true;
+
+    // Remove old document watchers
+    while (!_nodeWatchers.empty()) {
+        StyleDialog::NodeWatcher *w = _nodeWatchers.back();
+        w->_repr->removeObserver(*w);
+        _nodeWatchers.pop_back();
+        delete w;
+    }
+
+    // Recursively add new watchers
+    Inkscape::XML::Node *root = SP_ACTIVE_DOCUMENT->getReprRoot();
+    _addWatcherRecursive(root);
+
+#ifdef DEBUG_STYLEDIALOG
+    std::cout << "StyleDialog::_updateWatchers(): " << _nodeWatchers.size() << std::endl;
+#endif
+
+    _updating = false;
 }
 
 
@@ -711,6 +846,7 @@ void StyleDialog::_selectObjects(int eventX, int eventY)
                 Gtk::TreeModel::Row row = *iter;
                 Gtk::TreeModel::Children children = row.children();
                 std::vector<SPObject *> objVec = row[_mColumns._colObj];
+
                 for (unsigned i = 0; i < objVec.size(); ++i) {
                     SPObject *obj = objVec[i];
                     getDesktop()->selection->add(obj);
@@ -1046,6 +1182,7 @@ StyleDialog::_handleDocumentReplaced(SPDesktop *desktop, SPDocument * /* documen
     _selection_changed_connection = desktop->getSelection()->connectChanged(
         sigc::hide(sigc::mem_fun(this, &StyleDialog::_handleSelectionChanged)));
 
+    _updateWatchers();
     _readStyleElement();
     _selectRow();
 }
@@ -1076,6 +1213,7 @@ StyleDialog::_handleDesktopChanged(SPDesktop* desktop) {
     _document_replaced_connection = desktop->connectDocumentReplaced(
         sigc::mem_fun(this, &StyleDialog::_handleDocumentReplaced));
 
+    _updateWatchers();
     _readStyleElement();
     _selectRow();
 }

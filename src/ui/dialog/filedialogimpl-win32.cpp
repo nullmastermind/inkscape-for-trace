@@ -1586,10 +1586,15 @@ FileSaveDialogImplWin32::FileSaveDialogImplWin32(Gtk::Window &parent,
             if (len != 0 && udir[len - 1] == '\\') udir.erase(len - 1);
 
             // Remove the extension: remove everything past the last period found past the last slash
-            size_t last_slash_index = udir.find_last_of( '\\' );
-            size_t last_period_index = udir.find_last_of( '.' );
-            if (last_period_index > last_slash_index) {
-                myFilename = udir.substr(0, last_period_index ); 
+            // (not for CUSTOM_TYPE as we can not automatically add a file extension in that case yet)
+            if (dialogType == CUSTOM_TYPE) {
+                myFilename = udir;
+            } else {
+                size_t last_slash_index = udir.find_last_of( '\\' );
+                size_t last_period_index = udir.find_last_of( '.' );
+                if (last_period_index > last_slash_index) {
+                    myFilename = udir.substr(0, last_period_index ); 
+                }
             }
 
             // remove one slash if double
@@ -1685,28 +1690,28 @@ void FileSaveDialogImplWin32::addFileType(Glib::ustring name, Glib::ustring patt
 
     knownExtensions.clear();
 
-    int extension_index = 0;
-    int filter_length = 1;
-
-    ustring all_exe_files_filter = pattern;
     Filter all_exe_files;
 
     const gchar *all_exe_files_filter_name = name.data();
+    const gchar *all_exe_files_filter = pattern.data();
 
     // Calculate the amount of memory required
     int filter_count = 1;
-
+    int filter_length = 1;
 
     // Filter Executable Files
     all_exe_files.name = g_utf8_to_utf16(all_exe_files_filter_name,
         -1, NULL, &all_exe_files.name_length, NULL);
-    all_exe_files.filter = g_utf8_to_utf16(all_exe_files_filter.data(),
+    all_exe_files.filter = g_utf8_to_utf16(all_exe_files_filter,
             -1, NULL, &all_exe_files.filter_length, NULL);
     all_exe_files.mod = NULL;
     filter_list.push_front(all_exe_files);
+    
+    filter_length = all_exe_files.name_length + all_exe_files.filter_length + 3; // Add 3 for two \0s and a *
 
     knownExtensions.insert( Glib::ustring(all_exe_files_filter).casefold() );
 
+    int extension_index = 0;
     _extension_map = new Inkscape::Extension::Extension*[filter_count];
 
     _filter = new wchar_t[filter_length];

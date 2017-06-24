@@ -47,8 +47,4 @@ if(APPLE)
   if(DEFINED ENV{GTKMM_BASEPATH})
     message("GTKMM_BASEPATH: $ENV{GTKMM_BASEPATH}")
   endif()
-
-  # detect current GTK+ backend
-  pkg_check_variable(gtk+-2.0 target)
-  message("GTK2 backend: ${GTK+_2.0_TARGET}")
 endif()

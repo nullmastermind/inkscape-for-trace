@@ -29,6 +29,7 @@
 #include "xml/repr.h"
 
 #include <vector>
+#include <map>
 
 struct SPStyleEnum;
 
@@ -444,6 +445,56 @@ public:
   // To do: make private
 public:
     bool normal : 1;
+};
+
+
+/// Extended length type internal to SPStyle.
+// Used for: font-variation-settings
+class SPIFontVariationSettings : public SPIBase
+{
+
+public:
+    SPIFontVariationSettings()
+        : SPIBase( "anonymous_fontvariationsettings" ),
+          normal(true)
+    {}
+
+    SPIFontVariationSettings( Glib::ustring const &name )
+        : SPIBase( name ),
+          normal(true)
+    {}
+
+    virtual ~SPIFontVariationSettings()
+    {}
+
+    virtual void read( gchar const *str );
+    virtual const Glib::ustring write( guint const flags = SP_STYLE_FLAG_IFSET,
+                                       SPStyleSrc const &style_src_req = SP_STYLE_SRC_STYLE_PROP,
+                                       SPIBase const *const base = NULL ) const;
+    virtual void clear() {
+        axes.empty();
+        normal = true;
+    }
+
+    virtual void cascade( const SPIBase* const parent );
+    virtual void merge(   const SPIBase* const parent );
+
+    SPIFontVariationSettings& operator=(const SPIFontVariationSettings& rhs) {
+        axes = rhs.axes;
+        normal = rhs.normal;
+        return *this;
+    }
+
+    virtual bool operator==(const SPIBase& rhs);
+    virtual bool operator!=(const SPIBase& rhs) {
+        return !(*this == rhs);
+    }
+
+  // To do: make private
+public:
+    bool normal : 1;
+    bool inherit : 1;
+    std::map<char*, float> axes;
 };
 
 

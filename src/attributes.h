@@ -488,6 +488,9 @@ enum SPAttributeEnum {
     SP_PROP_FONT_VARIANT_EAST_ASIAN,
     SP_PROP_FONT_FEATURE_SETTINGS,
 
+    /* Variable Fonts (CSS Fonts Module Level 4) */
+    SP_PROP_FONT_VARIATION_SETTINGS,
+
     /* Text Layout */
     SP_PROP_TEXT_INDENT,
     SP_PROP_TEXT_ALIGN,

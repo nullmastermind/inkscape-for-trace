@@ -1,7 +1,9 @@
-share/filters/filters.svg.h
-share/palettes/palettes.h
-share/patterns/patterns.svg.h
-share/symbols/symbols.h
-share/templates/templates.h
 doxygen_warnings.log
 doxygen/
+build
+share/inkscape
+share/*/*.h
+
+*.old
+*.swp
+

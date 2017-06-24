@@ -115,6 +115,9 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     font_variant_east_asian("font-variant-east-asian", enum_font_variant_east_asian, SP_CSS_FONT_VARIANT_EAST_ASIAN_NORMAL ),
     font_feature_settings(  "font-feature-settings",   "normal" ),
 
+    // Variable Fonts
+    font_variation_settings( "font-variation-settings" ),  // SPIFontVariationSettings
+
     // Text related properties
     text_indent(      "text-indent",                     0.0 ),  // SPILength
     text_align(       "text-align",      enum_text_align,      SP_CSS_TEXT_ALIGN_START    ),
@@ -297,6 +300,9 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     _properties.push_back( &font_variant_alternates );
     _properties.push_back( &font_variant_east_asian );
     _properties.push_back( &font_feature_settings );
+
+    // Variable Fonts
+    _properties.push_back( &font_variation_settings );
 
     _properties.push_back( &text_indent );
     _properties.push_back( &text_align );
@@ -739,6 +745,10 @@ SPStyle::readIfUnset( gint id, gchar const *val, SPStyleSrc const &source ) {
             break;
         case SP_PROP_FONT_FEATURE_SETTINGS:
             font_feature_settings.readIfUnset( val, source );
+            break;
+
+        case SP_PROP_FONT_VARIATION_SETTINGS:
+            font_variation_settings.readIfUnset( val, source );
             break;
 
             /* Text */

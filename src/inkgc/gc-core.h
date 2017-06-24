@@ -19,11 +19,7 @@
 #include <new>
 #include <cstdlib>
 
-#ifdef HAVE_GC_GC_H
-# include <gc/gc.h>
-#else
 # include <gc.h>
-#endif
 
 namespace Inkscape {
 namespace GC {

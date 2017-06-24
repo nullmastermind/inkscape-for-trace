@@ -521,6 +521,89 @@ SPILengthOrNormal::operator==(const SPIBase& rhs) {
 }
 
 
+// SPIFontVariationSettings ----------------------------------------------------
+
+void
+SPIFontVariationSettings::read( gchar const *str ) {
+
+    if( !str ) return;
+
+    if ( !strcmp(str, "normal") ) {
+        set = true;
+        inherit = false;
+        normal = true;
+        axes.empty();
+        return;
+    }
+
+    gchar ** strarray = g_strsplit(str, " ", 0);
+    unsigned int i=0;
+    while (strarray[i]){
+        char axis_name[5];
+        if (strlen(strarray[i]) >= 8
+            && (strarray[i][0] == '\"' || strarray[i][0] == '\'')
+            && (strarray[i][5] == '\"' || strarray[i][5] == '\'')
+            && strarray[i][6] == ' ') {
+            strncpy(axis_name, &strarray[i][1], 4);
+            axis_name[4] = '\0';
+
+            gfloat value;
+            if (sp_svg_number_read_f(&strarray[i][7], &value)) {
+                set = true;
+                inherit = false;
+                axes.insert(std::pair<char*,float>(axis_name,value));
+            } else {
+                //invalid syntax while parsing attribute
+                break;
+            }
+            normal = false;
+        }
+        i++;
+    }
+    g_strfreev (strarray);
+};
+
+const Glib::ustring
+SPIFontVariationSettings::write( guint const flags, SPStyleSrc const &style_src_req, SPIBase const *const base) const {
+
+    SPIFontVariationSettings const *const my_base = dynamic_cast<const SPIFontVariationSettings*>(base);
+    bool dfp = (!inherits || !my_base || (my_base != this)); // Different from parent
+    bool src = (style_src_req == style_src || !(flags & SP_STYLE_FLAG_IFSRC));
+    if (should_write(flags, set, dfp, src)) {
+        if (this->normal) {
+            return (name + ":normal;");
+        } else {
+            Inkscape::CSSOStringStream os;
+            for (std::map<char*,float>::const_iterator it=axes.begin(); it!=axes.end(); ++it){
+                os << "\"" << it->first << "\" " << it->second << " ";
+                // FIXME: can we avoid the last space char ?
+            }
+            return os.str();
+        }
+    }
+    return Glib::ustring("");
+}
+
+void
+SPIFontVariationSettings::cascade( const SPIBase* const parent ) {
+//    std::cerr << "SPIVariableFontAxisOrNormal::cascade(): TODO: Implement-me!" << std::endl;
+}
+
+void
+SPIFontVariationSettings::merge( const SPIBase* const parent ) {
+//    std::cerr << "SPIVariableFontAxisOrNormal::merge(): TODO: Implement-me!" << std::endl;
+}
+
+bool
+SPIFontVariationSettings::operator==(const SPIBase& rhs) {
+    if( const SPIFontVariationSettings* r = dynamic_cast<const SPIFontVariationSettings*>(&rhs) ) {
+        if( normal && r->normal ) { return true; }
+        if( normal != r->normal ) { return false; }
+        return axes == r->axes;
+    } else {
+        return false;
+    }
+}
 
 // SPIEnum --------------------------------------------------------------
 

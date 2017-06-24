@@ -128,6 +128,9 @@ public:
     /** Font feature settings (Low level access to TrueType tables) */
     SPIString font_feature_settings;
 
+    /** Font variation settings (Low level access to OpenType variable font design-coordinate values) */
+    SPIFontVariationSettings font_variation_settings;
+
     /* Text ----------------------------- */
 
     /** First line indent of paragraphs (css2 16.1) */
