@@ -966,6 +966,9 @@ static void sp_canvas_init(SPCanvas *canvas)
     canvas->_drawing_disabled = false;
 
     canvas->_backing_store = NULL;
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
+    canvas->_surface_for_similar = NULL;
+#endif
     canvas->_clean_region = cairo_region_create();
     canvas->_background = cairo_pattern_create_rgb(1, 1, 1);
     canvas->_background_is_checkerboard = false;
@@ -1003,6 +1006,12 @@ void SPCanvas::dispose(GObject *object)
         cairo_surface_destroy(canvas->_backing_store);
         canvas->_backing_store = NULL;
     }
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
+    if (canvas->_surface_for_similar) {
+        cairo_surface_destroy(canvas->_surface_for_similar);
+        canvas->_surface_for_similar = NULL;
+    }
+#endif
     if (canvas->_clean_region) {
         cairo_region_destroy(canvas->_clean_region);
         canvas->_clean_region = NULL;
@@ -1125,8 +1134,14 @@ void SPCanvas::handle_size_allocate(GtkWidget *widget, GtkAllocation *allocation
         allocation->width, allocation->height);
 
     // resize backing store
-    cairo_surface_t *new_backing_store = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
-        allocation->width, allocation->height);
+    cairo_surface_t *new_backing_store = NULL;
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
+    if (canvas->_surface_for_similar != NULL)
+        new_backing_store = cairo_surface_create_similar_image(canvas->_surface_for_similar,
+                CAIRO_FORMAT_ARGB32, allocation->width, allocation->height);
+#endif
+    if (new_backing_store == NULL)
+        new_backing_store = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, allocation->width, allocation->height);
     if (canvas->_backing_store) {
         cairo_t *cr = cairo_create(new_backing_store);
         cairo_translate(cr, -canvas->_x0, -canvas->_y0);
@@ -1764,6 +1779,28 @@ void SPCanvas::endForcedFullRedraws()
 gboolean SPCanvas::handle_draw(GtkWidget *widget, cairo_t *cr) {
     SPCanvas *canvas = SP_CANVAS(widget);
 
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
+    if (canvas->_surface_for_similar == NULL && canvas->_backing_store != NULL) {
+        canvas->_surface_for_similar = cairo_surface_create_similar(
+                cairo_get_target(cr), CAIRO_CONTENT_COLOR_ALPHA, 1, 1);
+
+        // Reallocate backing store so that cairo can use shared memory
+        cairo_surface_t *new_backing_store = cairo_surface_create_similar_image(
+                canvas->_surface_for_similar, CAIRO_FORMAT_ARGB32,
+                cairo_image_surface_get_width(canvas->_backing_store),
+                cairo_image_surface_get_height(canvas->_backing_store));
+
+        // Copy the old backing store contents
+        cairo_t *cr = cairo_create(new_backing_store);
+        cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
+        cairo_set_source_surface(cr, canvas->_backing_store, 0, 0);
+        cairo_paint(cr);
+        cairo_destroy(cr);
+        cairo_surface_destroy(canvas->_backing_store);
+        canvas->_backing_store = new_backing_store;
+    }
+#endif
+
     // Blit from the backing store, without regard for the clean region.
     // This is necessary because GTK clears the widget for us, which causes
     // severe flicker while drawing if we don't blit the old contents.
@@ -1949,8 +1986,14 @@ void SPCanvas::scrollTo( Geom::Point const &c, unsigned int clear, bool is_scrol
 
     // adjust backing store contents
     assert(_backing_store);
-    cairo_surface_t *new_backing_store = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
-        allocation.width, allocation.height);
+    cairo_surface_t *new_backing_store = NULL;
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
+    if (_surface_for_similar != NULL)
+        new_backing_store = cairo_surface_create_similar_image(
+                _surface_for_similar, CAIRO_FORMAT_ARGB32, allocation.width, allocation.height);
+#endif
+    if (new_backing_store == NULL)
+        new_backing_store = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, allocation.width, allocation.height);
     cairo_t *cr = cairo_create(new_backing_store);
     cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
     // Paint the background
