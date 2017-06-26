@@ -566,7 +566,9 @@ bool SelectTool::root_handler(GdkEvent* event) {
                     /* User has dragged fast, so we get events on root (lauris)*/
                     // not only that; we will end up here when ctrl-dragging as well
                     // and also when we started within tolerance, but trespassed tolerance outside of item
-                    Inkscape::Rubberband::get(desktop)->stop();
+                    if (Inkscape::Rubberband::get(desktop)->is_started()) {
+                        Inkscape::Rubberband::get(desktop)->stop();
+                    }
                     this->defaultMessageContext()->clear();
 
                     item_at_point = desktop->getItemAtPoint(Geom::Point(event->button.x, event->button.y), FALSE);
