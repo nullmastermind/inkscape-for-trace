@@ -1853,6 +1853,7 @@ int SPCanvas::paint()
         cairo_region_get_rectangle(to_draw, i, &crect);
         if (!paintRect(crect.x, crect.y, crect.x + crect.width, crect.y + crect.height)) {
             // Aborted
+            cairo_region_destroy(to_draw);
             return FALSE;
         };
     }
@@ -1861,6 +1862,8 @@ int SPCanvas::paint()
     if (_forced_redraw_limit != -1) {
         _forced_redraw_count = 0;
     }
+
+    cairo_region_destroy(to_draw);
 
     return TRUE;
 }
