@@ -1525,8 +1525,23 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
     buf.canvas_rect = canvas_rect;
     buf.is_empty = true;
 
-    // create temporary surface
-    cairo_surface_t *imgs = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, paint_rect.width(), paint_rect.height());
+    // Make sure the following code does not go outside of _backing_store's data
+    assert(cairo_image_surface_get_format(_backing_store) == CAIRO_FORMAT_ARGB32);
+    assert(paint_rect.left() - _x0 >= 0);
+    assert(paint_rect.top() - _y0 >= 0);
+    assert(paint_rect.right() - _x0 <= cairo_image_surface_get_width(_backing_store));
+    assert(paint_rect.bottom() - _y0 <= cairo_image_surface_get_height(_backing_store));
+
+    // Create a temporary surface that draws directly to _backing_store
+    cairo_surface_flush(_backing_store);
+    unsigned char *data = cairo_image_surface_get_data(_backing_store);
+    int stride = cairo_image_surface_get_stride(_backing_store);
+    // Move to the right row
+    data += stride * (paint_rect.top() - _y0);
+    // Move to the right pixel inside of that row
+    data += 4 * (paint_rect.left() - _x0);
+    cairo_surface_t *imgs = cairo_image_surface_create_for_data(data, CAIRO_FORMAT_ARGB32,
+            paint_rect.width(), paint_rect.height(), stride);
     buf.ct = cairo_create(imgs);
 
     cairo_save(buf.ct);
@@ -1567,16 +1582,7 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
     }
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 
-    //cairo_t *xct = gdk_cairo_create(gtk_widget_get_window (widget));
-    cairo_t *xct = cairo_create(_backing_store);
-    cairo_translate(xct, paint_rect.left() - _x0, paint_rect.top() - _y0);
-    cairo_rectangle(xct, 0, 0, paint_rect.width(), paint_rect.height());
-    cairo_clip(xct);
-    cairo_set_source_surface(xct, imgs, 0, 0);
-    cairo_set_operator(xct, CAIRO_OPERATOR_SOURCE);
-    cairo_paint(xct);
-    cairo_destroy(xct);
-    cairo_surface_destroy(imgs);
+    cairo_surface_mark_dirty(_backing_store);
 
     // Mark the painted rectangle clean
     markRect(paint_rect, 0);
