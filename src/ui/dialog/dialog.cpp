@@ -19,6 +19,11 @@
 
 #include "dialog-manager.h"
 #include <gtkmm/dialog.h>
+
+#if WITH_GTKMM_3_22
+# include <gdkmm/monitor.h>
+#endif
+
 #include <gdk/gdkkeysyms.h>
 
 #include "inkscape.h"
@@ -161,10 +166,23 @@ void Dialog::read_geometry()
         resize(w, h);
     }
 
+#if WITH_GTKMM_3_22
+    auto const display = Gdk::Display::get_default();
+    auto const monitor = display->get_primary_monitor();
+
+    Gdk::Rectangle screen_geometry;
+    monitor->get_geometry(screen_geometry);
+    auto const screen_width  = screen_geometry.get_width();
+    auto const screen_height = screen_geometry.get_height();
+#else
+    auto const screen_width  = gdk_screen_width();
+    auto const screen_height = gdk_screen_width();
+#endif
+
     // If there are stored values for where the dialog should be
     // located, then restore the dialog to that position.
     // also check if (x,y) is actually onscreen with the current screen dimensions
-    if ( (x >= 0) && (y >= 0) && (x < (gdk_screen_width()-MIN_ONSCREEN_DISTANCE)) && (y < (gdk_screen_height()-MIN_ONSCREEN_DISTANCE)) ) {
+    if ( (x >= 0) && (y >= 0) && (x < (screen_width-MIN_ONSCREEN_DISTANCE)) && (y < (screen_height-MIN_ONSCREEN_DISTANCE)) ) {
         move(x, y);
     } else {
         // ...otherwise just put it in the middle of the screen

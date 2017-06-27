@@ -258,6 +258,18 @@ set(TRY_GTKSPELL ON)
         set (WITH_GTKMM_3_10 ON)
     endif()
 
+    # Check whether we can use new features in Gtkmm 3.22
+    # TODO: Drop this test and bump the version number in the GTK test above
+    #       as soon as all supported distributions provide Gtkmm >= 3.22
+    pkg_check_modules(GTKMM_3_22
+	gtkmm-3.0>=3.22,
+	)
+
+    if("${GTKMM_3_22_FOUND}")
+        message("Using Gtkmm 3.22 build")
+        set (WITH_GTKMM_3_22 ON)
+    endif()
+
     pkg_check_modules(GDL_3_6 gdl-3.0>=3.6)
 
     if("${GDL_3_6_FOUND}")

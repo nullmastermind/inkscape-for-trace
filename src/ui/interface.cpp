@@ -30,6 +30,10 @@
 #include <gtkmm/imagemenuitem.h>
 #include <gtkmm/separatormenuitem.h>
 
+#if WITH_GTKMM_3_22
+# include <gdkmm/monitor.h>
+#endif
+
 #include "inkscape.h"
 #include "extension/db.h"
 #include "extension/effect.h"
@@ -176,13 +180,26 @@ sp_create_window(SPViewWidget *vw, bool editable)
             gint full = prefs->getBool("/desktop/geometry/fullscreen");
             gint maxed = prefs->getBool("/desktop/geometry/maximized");
             if (pw>0 && ph>0) {
-                gint w = MIN(gdk_screen_width(), pw);
-                gint h = MIN(gdk_screen_height(), ph);
-                gint x = MIN(gdk_screen_width() - MIN_ONSCREEN_DISTANCE, px);
-                gint y = MIN(gdk_screen_height() - MIN_ONSCREEN_DISTANCE, py);
+#if WITH_GTKMM_3_22
+                auto const display = Gdk::Display::get_default();
+                auto const monitor = display->get_primary_monitor();
+
+                // A Gdk::Rectangle in "application pixel" units
+                Gdk::Rectangle screen_geometry;
+                monitor->get_geometry(screen_geometry);
+                auto const screen_width  = screen_geometry.get_width();
+                auto const screen_height = screen_geometry.get_height();
+#else
+                auto const screen_width  = gdk_screen_width();
+                auto const screen_height = gdk_screen_height();
+#endif
+                gint w = MIN(screen_width,  pw);
+                gint h = MIN(screen_height, ph);
+                gint x = MIN(screen_width  - MIN_ONSCREEN_DISTANCE, px);
+                gint y = MIN(screen_height - MIN_ONSCREEN_DISTANCE, py);
                 if (w>0 && h>0) {
-                    x = MIN(gdk_screen_width() - w, x);
-                    y = MIN(gdk_screen_height() - h, y);
+                    x = MIN(screen_width - w,  x);
+                    y = MIN(screen_height - h, y);
                     desktop->setWindowSize(w, h);
                 }
 
