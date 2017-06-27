@@ -406,23 +406,6 @@ sp_ui_menu_deselect(gpointer object)
     view->tipsMessageContext()->clear();
 }
 
-/**
- * Creates and attaches a scaled icon to the given menu item.
- */
-static void
-sp_ui_menuitem_add_icon( GtkWidget *item, gchar *icon_name )
-{
-    static bool iconsInjected = false;
-    if ( !iconsInjected ) {
-        iconsInjected = true;
-        injectRenamedIcons();
-    }
-    GtkWidget *icon;
-
-    icon = sp_icon_new( Inkscape::ICON_SIZE_MENU, icon_name );
-    gtk_widget_show(icon);
-    gtk_image_menu_item_set_image((GtkImageMenuItem *) item, icon);
-} // end of sp_ui_menu_add_icon
 
 void
 sp_ui_dialog_title_string(Inkscape::Verb *verb, gchar *c)
@@ -452,7 +435,6 @@ sp_ui_dialog_title_string(Inkscape::Verb *verb, gchar *c)
     }
 }
 
-
 /**
  * Appends a custom menu UI from a verb.
  * 
@@ -460,25 +442,45 @@ sp_ui_dialog_title_string(Inkscape::Verb *verb, gchar *c)
  */
 static GtkWidget *sp_ui_menu_append_item_from_verb(GtkMenu *menu, Inkscape::Verb *verb, Inkscape::UI::View::View *view, bool radio = false, GSList *group = NULL)
 {
-    SPAction *action;
     GtkWidget *item;
 
+    // Just create a menu separator if this isn't a real action.
+    // Otherwise, create a real menu item
     if (verb->get_code() == SP_VERB_NONE) {
 
         item = gtk_separator_menu_item_new();
 
     } else {
+        SPAction *action = verb->get_action(Inkscape::ActionContext(view));
 
-        action = verb->get_action(Inkscape::ActionContext(view));
         if (!action) return NULL;
 
-        if (radio) {
-            item = gtk_radio_menu_item_new_with_mnemonic(group, action->name);
-        } else {
-            item = gtk_image_menu_item_new_with_mnemonic(action->name);
+        // Create a box to contain all the widgets (icon, label, accelerator)
+        // that will go inside the menu item
+        GtkWidget *box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6);
+
+        // If there is an image associated with the action, then we can add it as an
+        // icon for the menu item
+        if(action->image) {
+            GtkWidget *icon = gtk_image_new_from_icon_name(action->image, GTK_ICON_SIZE_MENU);
+            gtk_container_add(GTK_CONTAINER(box), icon);
         }
 
-        gtk_label_set_markup_with_mnemonic( GTK_LABEL(gtk_bin_get_child(GTK_BIN (item))), action->name);
+        // Now create the label and add it to the menu item
+        GtkWidget *label = gtk_label_new_with_mnemonic(action->name);
+        gtk_label_set_markup_with_mnemonic( GTK_LABEL(label), action->name);
+        gtk_container_add(GTK_CONTAINER(box), label);
+
+        // Create the menu item itself, either as a radio menu item, or just
+        // a regular menu item depending on whether the "radio" flag is set
+        if (radio) {
+            item = gtk_radio_menu_item_new(group);
+        } else {
+            item = gtk_menu_item_new();
+        }
+
+        // Finally, pack all the widgets into the menu item
+        gtk_container_add(GTK_CONTAINER(item), box);
 
         GtkAccelGroup *accel_group =  sp_shortcut_get_accel_group();
         gtk_menu_set_accel_group(menu, accel_group);
@@ -498,9 +500,6 @@ static GtkWidget *sp_ui_menu_append_item_from_verb(GtkMenu *menu, Inkscape::Verb
             gtk_widget_set_sensitive(item, FALSE);
         }
 
-        if (action->image) {
-            sp_ui_menuitem_add_icon(item, action->image);
-        }
         gtk_widget_set_events(item, GDK_KEY_PRESS_MASK);
         g_object_set_data(G_OBJECT(item), "view", (gpointer) view);
         g_signal_connect( G_OBJECT(item), "activate", G_CALLBACK(sp_ui_menu_activate), action );
@@ -508,7 +507,7 @@ static GtkWidget *sp_ui_menu_append_item_from_verb(GtkMenu *menu, Inkscape::Verb
         g_signal_connect( G_OBJECT(item), "deselect", G_CALLBACK(sp_ui_menu_deselect_action), action );
     }
 
-    gtk_widget_show(item);
+    gtk_widget_show_all(item);
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 
     return item;
@@ -1607,6 +1606,7 @@ void ContextMenu::UnHideBelow(std::vector<SPItem *> items)
     }
 }
 
+// TODO: Update this to allow radio items to be used
 void ContextMenu::AppendItemFromVerb(Inkscape::Verb *verb)//, SPDesktop *view)//, bool radio, GSList *group)
 {
     SPAction *action;
@@ -1622,7 +1622,25 @@ void ContextMenu::AppendItemFromVerb(Inkscape::Verb *verb)//, SPDesktop *view)//
             return;
         }
         
-        Gtk::ImageMenuItem *item = Gtk::manage(new Gtk::ImageMenuItem(action->name, true));
+        // Create a box to contain all the widgets (icon, label, accelerator)
+        // that will go inside the menu item
+        auto const box = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, 6));
+
+        // If there is an image associated with the action, then we can add it as an
+        // icon for the menu item
+        if (action->image) {
+            auto const icon = Gtk::manage(new Gtk::Image());
+            icon->set_from_icon_name(action->image, Gtk::ICON_SIZE_MENU);
+            box->add(*icon);
+        }
+
+        // Now create the label and add it to the menu item (with mnemonic
+        auto const label = Gtk::manage(new Gtk::Label(action->name, true));
+        box->add(*label);
+
+        // Create the menu item itself, either as a radio menu item, or just
+        // a regular menu item depending on whether the "radio" flag is set
+        auto const item = Gtk::manage(new Gtk::MenuItem(*box));
 
         sp_shortcut_add_accelerator(GTK_WIDGET(item->gobj()), sp_shortcut_get_primary(verb));
 
@@ -1633,14 +1651,12 @@ void ContextMenu::AppendItemFromVerb(Inkscape::Verb *verb)//, SPDesktop *view)//
             item->set_sensitive(FALSE);
         }
 
-        if (action->image) {
-            sp_ui_menuitem_add_icon((GtkWidget*)item->gobj(), action->image);
-        }
+
         item->set_events(Gdk::KEY_PRESS_MASK);
         item->signal_activate().connect(sigc::bind(sigc::ptr_fun(sp_ui_menu_activate),item,action));
         item->signal_select().connect(sigc::bind(sigc::ptr_fun(sp_ui_menu_select_action),item,action));
         item->signal_deselect().connect(sigc::bind(sigc::ptr_fun(sp_ui_menu_deselect_action),item,action));
-        item->show();
+        item->show_all();
         append(*item);
     }
 }
