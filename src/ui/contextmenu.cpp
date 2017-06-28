@@ -268,25 +268,7 @@ void ContextMenu::AppendItemFromVerb(Inkscape::Verb *verb)//, SPDesktop *view)//
             return;
         }
         
-        // Create a box to contain all the widgets (icon, label, accelerator)
-        // that will go inside the menu item
-        auto const box = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, 6));
-
-        // If there is an image associated with the action, then we can add it as an
-        // icon for the menu item
-        if (action->image) {
-            auto const icon = Gtk::manage(new Gtk::Image());
-            icon->set_from_icon_name(action->image, Gtk::ICON_SIZE_MENU);
-            box->add(*icon);
-        }
-
-        // Now create the label and add it to the menu item (with mnemonic
-        auto const label = Gtk::manage(new Gtk::Label(action->name, true));
-        box->add(*label);
-
-        // Create the menu item itself, either as a radio menu item, or just
-        // a regular menu item depending on whether the "radio" flag is set
-        auto const item = Gtk::manage(new Gtk::MenuItem(*box));
+        auto const item = Gtk::manage(new Gtk::MenuItem(action->name, true));
 
         sp_shortcut_add_accelerator(GTK_WIDGET(item->gobj()), sp_shortcut_get_primary(verb));
 
