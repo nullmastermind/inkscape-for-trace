@@ -31,6 +31,7 @@
 #include <glibmm/i18n.h>
 #include "path-prefix.h"
 #include "io/sys.h"
+#include "io/resource.h"
 
 #include "ui/cache/svg_preview_cache.h"
 #include "ui/clipboard.h"
@@ -577,19 +578,15 @@ void SymbolsDialog::get_symbols() {
 
   std::list<Glib::ustring> directories;
 
-// \TODO optimize this
-
-  if( Inkscape::IO::file_test( INKSCAPE_SYMBOLSDIR, G_FILE_TEST_EXISTS ) &&
-      Inkscape::IO::file_test( INKSCAPE_SYMBOLSDIR, G_FILE_TEST_IS_DIR ) ) {
-    directories.push_back( INKSCAPE_SYMBOLSDIR );
-  }
-  if( Inkscape::IO::file_test( Inkscape::Application::profile_path("symbols"), G_FILE_TEST_EXISTS ) &&
-      Inkscape::IO::file_test( Inkscape::Application::profile_path("symbols"), G_FILE_TEST_IS_DIR ) ) {
-    directories.push_back( Inkscape::Application::profile_path("symbols") );
-  }
+  using namespace Inkscape::IO::Resource;
+  directories.push_back(get_path_ustring(USER, SYMBOLS));
+  directories.push_back(get_path_ustring(SYSTEM, SYMBOLS));
 
   std::list<Glib::ustring>::iterator it;
   for( it = directories.begin(); it != directories.end(); ++it ) {
+    if(!Inkscape::IO::file_test((*it).c_str(), G_FILE_TEST_IS_DIR)) {
+      continue;
+    }
 
     GError *err = 0;
     GDir *dir = g_dir_open( (*it).c_str(), 0, &err );

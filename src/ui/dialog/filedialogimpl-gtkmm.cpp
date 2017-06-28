@@ -27,6 +27,7 @@
 #include "ui/dialog-events.h"
 #include "ui/interface.h"
 #include "io/sys.h"
+#include "io/resource.h"
 #include "path-prefix.h"
 #include "preferences.h"
 
@@ -1038,13 +1039,12 @@ FileSaveDialogImplGtk::FileSaveDialogImplGtk(Gtk::Window &parentWindow, const Gl
     }
 
     // allow easy access to the user's own templates folder
-    gchar *templates = Inkscape::Application::profile_path("templates");
+    using namespace Inkscape::IO::Resource;
+    char const *templates = Inkscape::IO::Resource::get_path(USER, TEMPLATES);
     if (Inkscape::IO::file_test(templates, G_FILE_TEST_EXISTS) &&
         Inkscape::IO::file_test(templates, G_FILE_TEST_IS_DIR) && g_path_is_absolute(templates)) {
         add_shortcut_folder(templates);
     }
-    g_free(templates);
-
 
     // if (extension == NULL)
     //    checkbox.set_sensitive(FALSE);

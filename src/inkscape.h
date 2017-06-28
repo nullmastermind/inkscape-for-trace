@@ -147,9 +147,6 @@ public:
     void add_document (SPDocument *document);
     bool remove_document (SPDocument *document);
     
-    static char *homedir_path(const char *filename);
-    static char *profile_path(const char *filename);
-    
     // fixme: This has to be rethought
     void refresh_display ();
     

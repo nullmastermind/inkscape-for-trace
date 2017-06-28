@@ -60,6 +60,7 @@
 #endif
 #include "preferences.h"
 #include "io/sys.h"
+#include "io/resource.h"
 #ifdef WITH_DBUS
 #include "dbus/dbus-init.h"
 #endif
@@ -106,6 +107,8 @@
 
 #include "init.h"
 
+using namespace Inkscape::IO::Resource;
+
 namespace Inkscape {
 namespace Extension {
 
@@ -113,7 +116,7 @@ namespace Extension {
     the extension directory and parsed */
 #define SP_MODULE_EXTENSION  "inx"
 
-static void build_module_from_dir(gchar const *dirname);
+static void build_module_from_domain(Domain domain);
 static void check_extensions();
 
 /**
@@ -150,7 +153,7 @@ update_pref(Glib::ustring const &pref_path,
  * Invokes the init routines for internal modules.
  *
  * This should be a list of all the internal modules that need to initialized.  This is just a
- * convinent place to put them.  Also, this function calls build_module_from_dir to parse the
+ * convinent place to put them.  Also, this function calls build_module_from_domain to parse the
  * Inkscape extensions directory.
  */
 void
@@ -240,18 +243,8 @@ init()
 
     Internal::Filter::Filter::filters_all();
 
-    /* Load search path for extensions */
-    if (Inkscape::Extension::Extension::search_path.size() == 0)
-    {
-        Inkscape::Extension::Extension::search_path.push_back(Inkscape::Application::profile_path("extensions"));
-
-        Inkscape::Extension::Extension::search_path.push_back(g_strdup(INKSCAPE_EXTENSIONDIR));
-
-    }
-
-    for (unsigned int i=0; i<Inkscape::Extension::Extension::search_path.size(); i++) {
-        build_module_from_dir(Inkscape::Extension::Extension::search_path[i]);
-    }
+    build_module_from_domain(USER);
+    build_module_from_domain(SYSTEM);
 
     /* this is at the very end because it has several catch-alls
      * that are possibly over-ridden by other extensions (such as
@@ -282,8 +275,10 @@ init()
  * with their filenames.
  */
 static void
-build_module_from_dir(gchar const *dirname)
+build_module_from_domain(Domain domain)
 {
+    char const *dirname = get_path(domain, EXTENSIONS);
+
     if (!dirname) {
         g_warning("%s", _("Null external module directory name.  Modules will not be loaded."));
         return;
@@ -293,7 +288,8 @@ build_module_from_dir(gchar const *dirname)
         return;
     }
 
-    //# Hopefully doing this the Glib way is portable
+    // TODO: We may have to get to why this is needed, since it seems redundent.
+    Inkscape::Extension::Extension::search_path.push_back(dirname);
 
     GError *err;
     GDir *directory = g_dir_open(dirname, 0, &err);

@@ -102,7 +102,7 @@ using Inkscape::UI::ToolboxFactory;
 using Inkscape::UI::Tools::ToolBase;
 
 using Inkscape::IO::Resource::get_filename;
-using Inkscape::IO::Resource::UI;
+using Inkscape::IO::Resource::UIS;
 
 typedef void (*SetupFunction)(GtkWidget *toolbox, SPDesktop *desktop);
 typedef void (*UpdateFunction)(SPDesktop *desktop, ToolBase *eventcontext, GtkWidget *toolbox);
@@ -840,10 +840,10 @@ static void setupToolboxCommon( GtkWidget *toolbox,
 
     gtk_ui_manager_insert_action_group( mgr, mainActions->gobj(), 0 );
 
-    char const *filename = get_filename(UI, ui_file);
-    gtk_ui_manager_add_ui_from_file( mgr, filename, &err );
+    Glib::ustring filename = get_filename(UIS, ui_file);
+    gtk_ui_manager_add_ui_from_file( mgr, filename.c_str(), &err );
     if(err) {
-        g_warning("Failed to load %s: %s", filename, err->message);
+        g_warning("Failed to load %s: %s", filename.c_str(), err->message);
         g_error_free(err);
         return;
     }
@@ -984,10 +984,10 @@ void setup_aux_toolbox(GtkWidget *toolbox, SPDesktop *desktop)
     GError *err = 0;
     gtk_ui_manager_insert_action_group( mgr, mainActions->gobj(), 0 );
 
-    char const *filename = get_filename(UI, "select-toolbar.ui");
-    guint ret = gtk_ui_manager_add_ui_from_file(mgr, filename, &err);
+    Glib::ustring filename = get_filename(UIS, "select-toolbar.ui");
+    guint ret = gtk_ui_manager_add_ui_from_file(mgr, filename.c_str(), &err);
     if(err) {
-      g_warning("Failed to load aux toolbar %s: %s", filename, err->message);
+      g_warning("Failed to load aux toolbar %s: %s", filename.c_str(), err->message);
       g_error_free(err);
       return;
     }

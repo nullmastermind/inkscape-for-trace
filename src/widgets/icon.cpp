@@ -34,6 +34,7 @@
 #include "display/drawing-item.h"
 #include "display/drawing.h"
 #include "io/sys.h"
+#include "io/resource.h"
 #include "sp-root.h"
 #include "sp-namedview.h"
 #include "util/units.h"
@@ -1237,14 +1238,15 @@ GdkPixbuf *get_cached_pixbuf(Glib::ustring const &key) {
 
 std::list<gchar*> &IconImpl::icons_svg_paths()
 {
+    using namespace Inkscape::IO::Resource;
     static std::list<gchar *> sources;
     static bool initialized = false;
     if (!initialized) {
         // Fall back from user prefs dir into system locations.
-        gchar *userdir = Inkscape::Application::profile_path("icons");
-        sources.push_back(g_build_filename(userdir,"icons.svg", NULL));
-        sources.push_back(g_build_filename(INKSCAPE_PIXMAPDIR, "icons.svg", NULL));
-        g_free(userdir);
+        // doctormo 2017 hackfest - I've left this modification very light
+        // because there is a refactoring of the icons underway.
+        sources.push_back(g_strdup(get_path(USER, ICONS, "icons.svg")));
+        sources.push_back(g_strdup(get_path(SYSTEM, ICONS, "icons.svg")));
         initialized = true;
     }
     return sources;

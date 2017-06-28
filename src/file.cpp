@@ -50,6 +50,7 @@
 #include "inkscape-version.h"
 #include "ui/interface.h"
 #include "io/sys.h"
+#include "io/resource.h"
 #include "message-stack.h"
 #include "path-prefix.h"
 #include "print.h"
@@ -67,6 +68,7 @@
 
 
 using Inkscape::DocumentUndo;
+using Inkscape::IO::Resource::TEMPLATES;
 
 #ifdef WITH_GNOME_VFS
 # include <libgnomevfs/gnome-vfs.h>
@@ -159,48 +161,7 @@ SPDesktop *sp_file_new(const std::string &templ)
 
 Glib::ustring sp_file_default_template_uri()
 {
-    std::list<gchar *> sources;
-    sources.push_back( Inkscape::Application::profile_path("templates") ); // first try user's local dir
-    sources.push_back( g_strdup(INKSCAPE_TEMPLATESDIR) ); // then the system templates dir
-    std::list<gchar const*> baseNames;
-    gchar const* localized = _("default.svg");
-    if (strcmp("default.svg", localized) != 0) {
-        baseNames.push_back(localized);
-    }
-    baseNames.push_back("default.svg");
-    gchar *foundTemplate = 0;
-
-    for (std::list<gchar *>::iterator it = sources.begin(); (it != sources.end()) && !foundTemplate; ++it) {
-        for (std::list<gchar const*>::iterator nameIt = baseNames.begin(); (nameIt != baseNames.end()) && !foundTemplate; ++nameIt) {
-            gchar *dirname = *it;
-            if ( Inkscape::IO::file_test( dirname, (GFileTest)(G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR) ) ) {
-
-                // TRANSLATORS: default.svg is localizable - this is the name of the default document
-                //  template. This way you can localize the default pagesize, translate the name of
-                //  the default layer, etc. If you wish to localize this file, please create a
-                //  localized share/templates/default.xx.svg file, where xx is your language code.
-                char *tmp = g_build_filename(dirname, *nameIt, NULL);
-                if (Inkscape::IO::file_test(tmp, G_FILE_TEST_IS_REGULAR)) {
-                    foundTemplate = tmp;
-                } else {
-                    g_free(tmp);
-                }
-            }
-        }
-    }
-
-    for (std::list<gchar *>::iterator it = sources.begin(); it != sources.end(); ++it) {
-        g_free(*it);
-    }
-
-    Glib::ustring templateUri = foundTemplate ? foundTemplate : "";
-
-    if (foundTemplate) {
-        g_free(foundTemplate);
-        foundTemplate = 0;
-    }
-
-    return templateUri;
+    return Inkscape::IO::Resource::get_filename(TEMPLATES, "default.svg", _("default.svg"));
 }
 
 SPDesktop* sp_file_new_default()

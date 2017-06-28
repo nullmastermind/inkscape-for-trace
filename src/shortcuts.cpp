@@ -48,11 +48,7 @@
 #include "ui/dialog/filedialog.h"
 
 using namespace Inkscape;
-
-using Inkscape::IO::Resource::get_path;
-using Inkscape::IO::Resource::SYSTEM;
-using Inkscape::IO::Resource::USER;
-using Inkscape::IO::Resource::KEYS;
+using namespace Inkscape::IO::Resource;
 
 static void try_shortcuts_file(char const *filename);
 static void read_shortcuts_file(char const *filename, bool const is_user_set=false);
@@ -208,9 +204,11 @@ Inkscape::XML::Document *sp_shortcut_create_template_file(char const *filename) 
  */
 void sp_shortcut_get_file_names(std::vector<Glib::ustring> *names, std::vector<Glib::ustring> *paths) {
 
-    std::list<gchar *> sources;
-    sources.push_back( Inkscape::Application::profile_path("keys") );
-    sources.push_back( g_strdup(INKSCAPE_KEYSDIR) );
+    using namespace Inkscape::IO::Resource;
+    std::list<char *> sources;
+
+    sources.push_back(g_strdup(get_path(USER, KEYS)));
+    sources.push_back(g_strdup(get_path(SYSTEM, KEYS)));
 
     // loop through possible keyboard shortcut file locations.
     while (!sources.empty()) {
@@ -227,14 +225,12 @@ void sp_shortcut_get_file_names(std::vector<Glib::ustring> *names, std::vector<G
                 gchar *filename = 0;
                 while ((filename = (gchar *) g_dir_read_name(directory)) != NULL) {
                     gchar* lower = g_ascii_strdown(filename, -1);
-                    if (!strcmp(dirname, Inkscape::Application::profile_path("keys")) &&
-                            !strcmp(lower, "default.xml")) {
+                    if (!strcmp(lower, "default.xml")) {
                         // Dont add the users custom keys file
                         continue;
                     }
-                    if (!strcmp(dirname, INKSCAPE_KEYSDIR) &&
-                            !strcmp(lower, "inkscape.xml")) {
-                        // Dont add system inkscape.xml (since its a duplicate? of dfefault.xml)
+                    if (!strcmp(lower, "inkscape.xml")) {
+                        // Dont add system inkscape.xml (since its a duplicate? of default.xml)
                         continue;
                     }
                     if (g_str_has_suffix(lower, ".xml")) {
