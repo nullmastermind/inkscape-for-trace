@@ -66,7 +66,6 @@
 #include <gtkmm/cssprovider.h>
 #include <gtkmm/paned.h>
 #include <gtkmm/messagedialog.h>
-#include <gtkmm/menubar.h>
 #include "inkscape-version.h"
 
 using Inkscape::UI::Widget::UnitTracker;
@@ -1440,9 +1439,9 @@ void SPDesktopWidget::layoutWidgets()
     }
 
     if (!prefs->getBool(pref_root + "menu/state", true)) {
-        dtw->menubar->hide();
+        gtk_widget_hide (dtw->menubar);
     } else {
-        dtw->menubar->show_all();
+        gtk_widget_show_all (dtw->menubar);
     }
     
     if (!prefs->getBool(pref_root + "commands/state", true)) {
@@ -1648,12 +1647,10 @@ SPDesktopWidget* SPDesktopWidget::createInstance(SPNamedView *namedview)
     dtw->layer_selector->setDesktop(dtw->desktop);
 
     dtw->menubar = sp_ui_main_menubar (dtw->desktop);
-    dtw->menubar->set_name("MenuBar");
-    dtw->menubar->show_all();
+    gtk_widget_set_name(dtw->menubar, "MenuBar");
+    gtk_widget_show_all (dtw->menubar);
     SPNamedView *nv = dtw->desktop->namedview;
-    gtk_box_pack_start (GTK_BOX (dtw->vbox),
-                        GTK_WIDGET(dtw->menubar->gobj()),
-                        FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX (dtw->vbox), dtw->menubar, FALSE, FALSE, 0);
     dtw->layoutWidgets();
 
     std::vector<GtkWidget *> toolboxes;

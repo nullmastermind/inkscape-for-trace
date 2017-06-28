@@ -28,9 +28,6 @@ class SPDesktop;
 struct SPDesktopWidget;
 class SPObject;
 
-namespace Gtk {
-class MenuBar;
-}
 
 #define SP_TYPE_DESKTOP_WIDGET SPDesktopWidget::getType()
 #define SP_DESKTOP_WIDGET(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), SP_TYPE_DESKTOP_WIDGET, SPDesktopWidget))
@@ -82,8 +79,7 @@ struct SPDesktopWidget {
 
     GtkWidget *hbox;
 
-    Gtk::MenuBar *menubar;
-    GtkWidget    *statusbar;
+    GtkWidget *menubar, *statusbar;
 
     Inkscape::UI::Dialogs::SwatchesPanel *panels;
 

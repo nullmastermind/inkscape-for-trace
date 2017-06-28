@@ -24,12 +24,7 @@
 #endif
 
 #include "ui/dialog/dialog-manager.h"
-
 #include <gtkmm/icontheme.h>
-#include <gtkmm/menubar.h>
-#include <gtkmm/radiomenuitem.h>
-#include <gtkmm/separatormenuitem.h>
-
 #include "file.h"
 #include <glibmm/miscutils.h>
 
@@ -443,18 +438,14 @@ sp_ui_dialog_title_string(Inkscape::Verb *verb, gchar *c)
  * 
  * @see ContextMenu::AppendItemFromVerb for a c++ified alternative. Consider dropping sp_ui_menu_append_item_from_verb when c++ifying interface.cpp.
  */
-static Gtk::MenuItem *
-sp_ui_menu_append_item_from_verb(Gtk::Menu                *menu,
-                                 Inkscape::Verb           *verb,
-                                 Inkscape::UI::View::View *view,
-                                 bool                      radio = false)
+static GtkWidget *sp_ui_menu_append_item_from_verb(GtkMenu *menu, Inkscape::Verb *verb, Inkscape::UI::View::View *view, bool radio = false, GSList *group = NULL)
 {
-    Gtk::MenuItem *item;
+    GtkWidget *item;
 
     // Just create a menu separator if this isn't a real action.
     // Otherwise, create a real menu item
     if (verb->get_code() == SP_VERB_NONE) {
-        item = Gtk::manage(new Gtk::SeparatorMenuItem());
+        item = gtk_separator_menu_item_new();
     } else {
         SPAction *action = verb->get_action(Inkscape::ActionContext(view));
 
@@ -462,69 +453,75 @@ sp_ui_menu_append_item_from_verb(Gtk::Menu                *menu,
 
         // Create the menu item itself, either as a radio menu item, or just
         // a regular menu item depending on whether the "radio" flag is set
-        if(radio) item = Gtk::manage(new Gtk::RadioMenuItem());
-        else      item = Gtk::manage(new Gtk::MenuItem());
+        if (radio) {
+            item = gtk_radio_menu_item_new(group);
+        } else {
+            item = gtk_menu_item_new();
+        }
 
         // Create a box to contain all the widgets (icon, label, accelerator)
         // that will go inside the menu item
-        Gtk::Box *box = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_HORIZONTAL, 0));
+        GtkWidget *box = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 
         // Now create the label and add it to the menu item
-        Gtk::AccelLabel *label = Gtk::manage(new Gtk::AccelLabel(action->name));
-        label->set_markup_with_mnemonic(action->name);
-        label->set_use_underline(true);
-        label->set_xalign(0.0);
+        GtkWidget *label = gtk_accel_label_new(action->name);
+        gtk_label_set_markup_with_mnemonic( GTK_LABEL(label), action->name);
+        gtk_label_set_use_underline(GTK_LABEL(label), true);
+        gtk_label_set_xalign(GTK_LABEL(label), 0.0);
 
-        auto accel_group = Gtk::AccelGroup::create();
-        menu->set_accel_group(accel_group);
+        GtkAccelGroup *accel_group = sp_shortcut_get_accel_group();
+        gtk_menu_set_accel_group(menu, accel_group);
 
-        sp_shortcut_add_accelerator(GTK_WIDGET(item->gobj()), sp_shortcut_get_primary(verb));
-        label->set_accel_widget(*item);
+        sp_shortcut_add_accelerator(item, sp_shortcut_get_primary(verb));
+        gtk_accel_label_set_accel_widget(GTK_ACCEL_LABEL(label), item);
 
         // If there is an image associated with the action, then we can add it as an
         // icon for the menu item.  If not, give the label a bit more space
         if(action->image) {
-            Gtk::Image *icon = Gtk::manage(new Gtk::Image());
-            icon->set_from_icon_name(action->image, Gtk::ICON_SIZE_MENU);
-            box->pack_start(*icon, false, true, 0);
+            GtkWidget *icon = gtk_image_new_from_icon_name(action->image, GTK_ICON_SIZE_MENU);
+            gtk_box_pack_start(GTK_BOX(box), icon, FALSE, TRUE, 0);
         }
         else {
-            Gtk::Widget *fake_icon = Gtk::manage(new Gtk::Label(""));
-            label->set_size_request(16, 16);
-            label->set_hexpand(true);
-            box->pack_start(*fake_icon, false, true, 16);
+            GtkWidget *fake_icon = gtk_label_new("");
+            gtk_widget_set_size_request(label, 16, 16);
+            gtk_widget_set_hexpand(label, true);
+            gtk_box_pack_start(GTK_BOX(box), fake_icon, FALSE, TRUE, 16);
         }
 
-        box->pack_start(*label, true, true, 0);
+        gtk_box_pack_start(GTK_BOX(box), label, TRUE, TRUE, 0);
+
 
         // Finally, pack all the widgets into the menu item
-        item->add(*box);
+        gtk_container_add(GTK_CONTAINER(item), box);
 
-        // Handle signals from the SPAction
+
         action->signal_set_sensitive.connect(
-                sigc::mem_fun(*item, &Gtk::MenuItem::set_sensitive));
-
+            sigc::bind<0>(
+                sigc::ptr_fun(&gtk_widget_set_sensitive),
+                item));
         action->signal_set_name.connect(
             sigc::bind<0>(
                 sigc::ptr_fun(&sp_ui_menu_item_set_name),
-                GTK_WIDGET(item->gobj())));
+                item));
 
         if (!action->sensitive) {
-            item->set_sensitive(false);
+            gtk_widget_set_sensitive(item, FALSE);
         }
 
-        item->set_events(Gdk::KEY_PRESS_MASK);
+        gtk_widget_set_events(item, GDK_KEY_PRESS_MASK);
         g_object_set_data(G_OBJECT(item), "view", (gpointer) view);
         g_signal_connect( G_OBJECT(item), "activate", G_CALLBACK(sp_ui_menu_activate), action );
         g_signal_connect( G_OBJECT(item), "select", G_CALLBACK(sp_ui_menu_select_action), action );
         g_signal_connect( G_OBJECT(item), "deselect", G_CALLBACK(sp_ui_menu_deselect_action), action );
     }
 
-    item->show_all();
-    menu->append(*item);
+    gtk_widget_show_all(item);
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
 
     return item;
+
 } // end of sp_ui_menu_append_item_from_verb
+
 
 Glib::ustring getLayoutPrefPath( Inkscape::UI::View::View *view )
 {
@@ -800,7 +797,7 @@ private:
 /**
  * This function turns XML into a menu.
  *
- *  This function is relatively simple as it just goes through the XML
+ *  This function is realitively simple as it just goes through the XML
  *  and parses the individual elements.  In the case of a submenu, it
  *  just calls itself recursively.  Because it is only reasonable to have
  *  a couple of submenus, it is unlikely this will go more than two or
@@ -814,19 +811,18 @@ private:
  * @param  menu   Menu to be added to
  * @param  view   The View that this menu is being built for
  */
-static void sp_ui_build_dyn_menus(Inkscape::XML::Node      *menus,
-                                  Gtk::Menu                *menu,
-                                  Inkscape::UI::View::View *view)
+static void sp_ui_build_dyn_menus(Inkscape::XML::Node *menus, GtkWidget *menu, Inkscape::UI::View::View *view)
 {
     if (menus == NULL) return;
     if (menu == NULL)  return;
+    GSList *group = NULL;
 
     for (Inkscape::XML::Node *menu_pntr = menus;
          menu_pntr != NULL;
          menu_pntr = menu_pntr->next()) {
         if (!strcmp(menu_pntr->name(), "submenu")) {
             GtkWidget *mitem = gtk_menu_item_new_with_mnemonic(_(menu_pntr->attribute("name")));
-            Gtk::Menu *submenu = Gtk::manage(new Gtk::Menu());
+            GtkWidget *submenu = gtk_menu_new();
             sp_ui_build_dyn_menus(menu_pntr->firstChild(), submenu, view);
             gtk_menu_item_set_submenu(GTK_MENU_ITEM(mitem), GTK_WIDGET(submenu));
             gtk_menu_shell_append(GTK_MENU_SHELL(menu), mitem);
@@ -837,23 +833,9 @@ static void sp_ui_build_dyn_menus(Inkscape::XML::Node      *menus,
             Inkscape::Verb *verb = Inkscape::Verb::getbyid(verb_name);
 
             if (verb != NULL) {
-
-                // Add a radio item to the menu
                 if (menu_pntr->attribute("radio") != NULL) {
-                    auto item = sp_ui_menu_append_item_from_verb (menu, verb, view, true);
-
-                    // If the last item was also a radio item, then we need to add the new item to
-                    // its group.  Note that the Inkscape dynamic menu XML files do not support
-                    // explicit grouping yet.  Instead, groups consist of ALL adjacent radio menu items
-                    // in the file.
-                    Gtk::RadioMenuItem *last_item = dynamic_cast<Gtk::RadioMenuItem *>(menu->get_children().back());
-
-                    if(last_item != nullptr) {
-                        auto radioitem = dynamic_cast<Gtk::RadioMenuItem *>(item);
-                        radioitem->join_group(*last_item);
-                    }
-
-
+                    GtkWidget *item = sp_ui_menu_append_item_from_verb (GTK_MENU(menu), verb, view, true, group);
+                    group = gtk_radio_menu_item_get_group( GTK_RADIO_MENU_ITEM(item));
                     if (menu_pntr->attribute("default") != NULL) {
                         gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (item), TRUE);
                     }
@@ -868,7 +850,8 @@ static void sp_ui_build_dyn_menus(Inkscape::XML::Node      *menus,
                             checkitem_toggled, checkitem_update, verb);
                     }
                 } else {
-                    sp_ui_menu_append_item_from_verb(menu, verb, view);
+                    sp_ui_menu_append_item_from_verb(GTK_MENU(menu), verb, view);
+                    group = NULL;
                 }
             } else {
                 gchar string[120];
@@ -927,16 +910,11 @@ static void sp_ui_build_dyn_menus(Inkscape::XML::Node      *menus,
     }
 }
 
-Gtk::MenuBar *
-sp_ui_main_menubar(Inkscape::UI::View::View *view)
+GtkWidget *sp_ui_main_menubar(Inkscape::UI::View::View *view)
 {
-    auto menu_bar = Gtk::manage(new Gtk::MenuBar());
-
-    sp_ui_build_dyn_menus(INKSCAPE.get_menus(),
-                          dynamic_cast<Gtk::Menu *>(menu_bar),
-                          view);
-
-    return menu_bar;
+    GtkWidget *mbar = gtk_menu_bar_new();
+    sp_ui_build_dyn_menus(INKSCAPE.get_menus(), mbar, view);
+    return mbar;
 }
 
 

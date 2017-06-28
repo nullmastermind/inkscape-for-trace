@@ -23,10 +23,6 @@ class SPViewWidget;
 
 typedef struct _GtkWidget GtkWidget;
 
-namespace Gtk {
-class MenuBar;
-}
-
 namespace Inkscape {
 class Verb;
 
@@ -34,11 +30,8 @@ namespace UI {
 namespace View {
 class View;
 } // namespace View
-
-
 } // namespace UI
 } // namespace Inkscape
-
 
 /**
  *  Create a new document window.
@@ -77,7 +70,7 @@ unsigned int sp_ui_close_all (void);
  *
  * @param  view  View to build the bar for
  */
-Gtk::MenuBar * sp_ui_main_menubar(Inkscape::UI::View::View *view);
+GtkWidget *sp_ui_main_menubar (Inkscape::UI::View::View *view);
 
 void sp_menu_append_recent_documents (GtkWidget *menu);
 void sp_ui_dialog_title_string (Inkscape::Verb * verb, char* c);

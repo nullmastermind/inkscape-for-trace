@@ -651,6 +651,18 @@ sp_shortcut_unset(unsigned int const shortcut)
     }
 }
 
+GtkAccelGroup *
+sp_shortcut_get_accel_group()
+{
+    static GtkAccelGroup *accel_group = NULL;
+
+    if (!accel_group) {
+        accel_group = gtk_accel_group_new ();
+    }
+
+    return accel_group;
+}
+
 /**
  * Adds a gtk accelerator to a widget
  * Used to display the keyboard shortcuts in the main menu items
@@ -666,7 +678,7 @@ sp_shortcut_add_accelerator(GtkWidget *item, unsigned int const shortcut)
     if (accel_key > 0) {
         gtk_widget_add_accelerator (item,
                 "activate",
-                gtk_accel_group_new(),
+                sp_shortcut_get_accel_group(),
                 accel_key,
                 sp_shortcut_get_modifiers(shortcut),
                 GTK_ACCEL_VISIBLE);
