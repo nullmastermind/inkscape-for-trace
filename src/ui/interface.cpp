@@ -437,8 +437,25 @@ sp_ui_dialog_title_string(Inkscape::Verb *verb, gchar *c)
  * Appends a custom menu UI from a verb.
  * 
  * @see ContextMenu::AppendItemFromVerb for a c++ified alternative. Consider dropping sp_ui_menu_append_item_from_verb when c++ifying interface.cpp.
+ *
+ * @param menu      The menu to which the item will be appended
+ * @param verb      The verb from which the item's label, action and icon (optionally) will be read
+ * @param view
+ * @param show_icon True if an icon should be displayed before the menu item's label
+ * @param radio     True if a radio button should be displayed next to the menu item
+ * @param group     The radio button group that the item should belong to
+ *
+ * @details The show_icon flag should be used very sparingly because menu icons are not recommended
+ *          any longer under the GNOME HIG.  Also, note that the text appears after the icon, and
+ *          so will be indented relative to "normal" menu items.  As such, menus will look best if
+ *          all the items with icons are grouped together between a pair of separators.
  */
-static GtkWidget *sp_ui_menu_append_item_from_verb(GtkMenu *menu, Inkscape::Verb *verb, Inkscape::UI::View::View *view, bool radio = false, GSList *group = NULL)
+static GtkWidget *sp_ui_menu_append_item_from_verb(GtkMenu                  *menu,
+                                                   Inkscape::Verb           *verb,
+                                                   Inkscape::UI::View::View *view,
+                                                   bool                      show_icon = false,
+                                                   bool                      radio     = false,
+                                                   GSList                   *group     = NULL)
 {
     GtkWidget *item;
 
@@ -475,21 +492,19 @@ static GtkWidget *sp_ui_menu_append_item_from_verb(GtkMenu *menu, Inkscape::Verb
         sp_shortcut_add_accelerator(item, sp_shortcut_get_primary(verb));
         gtk_accel_label_set_accel_widget(GTK_ACCEL_LABEL(label), item);
 
+        GtkWidget *icon;
+
         // If there is an image associated with the action, then we can add it as an
         // icon for the menu item.  If not, give the label a bit more space
-        if(action->image) {
-            GtkWidget *icon = gtk_image_new_from_icon_name(action->image, GTK_ICON_SIZE_MENU);
-            gtk_box_pack_start(GTK_BOX(box), icon, FALSE, TRUE, 0);
+        if(show_icon && action->image) {
+            icon = gtk_image_new_from_icon_name(action->image, GTK_ICON_SIZE_MENU);
         }
         else {
-            GtkWidget *fake_icon = gtk_label_new("");
-            gtk_widget_set_size_request(label, 16, 16);
-            gtk_widget_set_hexpand(label, true);
-            gtk_box_pack_start(GTK_BOX(box), fake_icon, FALSE, TRUE, 16);
+            icon = gtk_label_new(NULL); // A fake icon just to act as a placeholder
         }
 
+        gtk_box_pack_start(GTK_BOX(box), icon, FALSE, TRUE, 0);
         gtk_box_pack_start(GTK_BOX(box), label, TRUE, TRUE, 0);
-
 
         // Finally, pack all the widgets into the menu item
         gtk_container_add(GTK_CONTAINER(item), box);
@@ -830,11 +845,19 @@ static void sp_ui_build_dyn_menus(Inkscape::XML::Node *menus, GtkWidget *menu, I
         }
         if (!strcmp(menu_pntr->name(), "verb")) {
             gchar const *verb_name = menu_pntr->attribute("verb-id");
+
+            // Check if the "show-icon" attribute is set, and set the flag here accordingly
+            bool show_icon = false;
+
+            if(menu_pntr->attribute("show-icon") != NULL) {
+                show_icon = true;
+            }
+
             Inkscape::Verb *verb = Inkscape::Verb::getbyid(verb_name);
 
             if (verb != NULL) {
                 if (menu_pntr->attribute("radio") != NULL) {
-                    GtkWidget *item = sp_ui_menu_append_item_from_verb (GTK_MENU(menu), verb, view, true, group);
+                    GtkWidget *item = sp_ui_menu_append_item_from_verb (GTK_MENU(menu), verb, view, show_icon, true, group);
                     group = gtk_radio_menu_item_get_group( GTK_RADIO_MENU_ITEM(item));
                     if (menu_pntr->attribute("default") != NULL) {
                         gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (item), TRUE);
@@ -850,7 +873,7 @@ static void sp_ui_build_dyn_menus(Inkscape::XML::Node *menus, GtkWidget *menu, I
                             checkitem_toggled, checkitem_update, verb);
                     }
                 } else {
-                    sp_ui_menu_append_item_from_verb(GTK_MENU(menu), verb, view);
+                    sp_ui_menu_append_item_from_verb(GTK_MENU(menu), verb, view, show_icon);
                     group = NULL;
                 }
             } else {
