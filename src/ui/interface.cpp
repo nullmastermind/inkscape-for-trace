@@ -142,8 +142,6 @@ static void sp_ui_menu_item_set_name(GtkWidget *data,
                                      Glib::ustring const &name);
 static void sp_recent_open(GtkRecentChooser *, gpointer);
 
-static void injectRenamedIcons();
-
 static const int MIN_ONSCREEN_DISTANCE = 50;
 
 void
@@ -1441,33 +1439,6 @@ sp_ui_menu_item_set_name(GtkWidget *data, Glib::ustring const &name)
         }
     }
 }
-
-void injectRenamedIcons()
-{
-    Glib::RefPtr<Gtk::IconTheme> iconTheme = Gtk::IconTheme::get_default();
-
-    std::vector< std::pair<Glib::ustring, Glib::ustring> > renamed;
-    renamed.push_back(std::make_pair("gtk-file", "document-x-generic"));
-    renamed.push_back(std::make_pair("gtk-directory", "folder"));
-
-    for ( std::vector< std::pair<Glib::ustring, Glib::ustring> >::iterator it = renamed.begin(); it < renamed.end(); ++it ) {
-        bool hasIcon = iconTheme->has_icon(it->first);
-        bool hasSecondIcon = iconTheme->has_icon(it->second);
-
-        if ( !hasIcon && hasSecondIcon ) {
-            Glib::ArrayHandle<int> sizes = iconTheme->get_icon_sizes(it->second);
-            for ( Glib::ArrayHandle<int>::iterator it2 = sizes.begin(); it2 < sizes.end(); ++it2 ) {
-                Glib::RefPtr<Gdk::Pixbuf> pb = iconTheme->load_icon( it->second, *it2 );
-                if ( pb ) {
-                    // install a private copy of the pixbuf to avoid pinning a theme
-                    Glib::RefPtr<Gdk::Pixbuf> pbCopy = pb->copy();
-                    Gtk::IconTheme::add_builtin_icon( it->first, *it2, pbCopy );
-                }
-            }
-        }
-    }
-}
-
 /*
   Local Variables:
   mode:c++
