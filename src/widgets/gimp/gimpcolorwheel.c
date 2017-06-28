@@ -307,20 +307,6 @@ gimp_color_wheel_get_preferred_width (GtkWidget *widget,
                                       gint      *minimum_width,
 				      gint      *natural_width)
 {
-// TODO: Sync this fix with the upstream GIMP code when available
-#if GTK_CHECK_VERSION(3,14,0)
-  gint outline_width;
-  gint padding;
-  gint outline_offset;
-
-  gtk_widget_style_get (widget,
-                        "outline-width",  &outline_width,
-			"padding",        &padding,
-                        "outline-offset", &outline_offset,
-                        NULL);
-
-  *minimum_width = *natural_width = DEFAULT_SIZE + 2 * (outline_width + padding + outline_offset);
-#else
   gint focus_width;
   gint focus_pad;
 
@@ -330,7 +316,6 @@ gimp_color_wheel_get_preferred_width (GtkWidget *widget,
                         NULL);
   
   *minimum_width = *natural_width = DEFAULT_SIZE + 2 * (focus_width + focus_pad);
-#endif
 }
 
 static void
@@ -338,20 +323,6 @@ gimp_color_wheel_get_preferred_height (GtkWidget *widget,
                                        gint      *minimum_height,
 				       gint      *natural_height)
 {
-// TODO: Sync this fix with the upstream GIMP code when available
-#if GTK_CHECK_VERSION(3,14,0)
-  gint outline_width;
-  gint padding;
-  gint outline_offset;
-
-  gtk_widget_style_get (widget,
-                        "outline-width",  &outline_width,
-			"padding",        &padding,
-                        "outline-offset", &outline_offset,
-                        NULL);
-
-  *minimum_height = *natural_height = DEFAULT_SIZE + 2 * (outline_width + padding + outline_offset);
-#else
   gint focus_width;
   gint focus_pad;
 
@@ -361,7 +332,6 @@ gimp_color_wheel_get_preferred_height (GtkWidget *widget,
                         NULL);
   
   *minimum_height = *natural_height = DEFAULT_SIZE + 2 * (focus_width + focus_pad);
-#endif
 }
 
 static void
