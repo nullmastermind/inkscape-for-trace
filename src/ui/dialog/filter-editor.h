@@ -9,8 +9,8 @@
  * Released under GNU GPL.  Read the file 'COPYING' for more information.
  */
 
-#ifndef INKSCAPE_UI_DIALOG_FILTER_EFFECTS_H
-#define INKSCAPE_UI_DIALOG_FILTER_EFFECTS_H
+#ifndef INKSCAPE_UI_DIALOG_FILTER_EDITOR_H
+#define INKSCAPE_UI_DIALOG_FILTER_EDITOR_H
 
 #include "attributes.h"
 #include "ui/widget/panel.h"
@@ -44,15 +44,7 @@ public:
 //    void set_attrs_locked(const bool);
 private:
     Glib::RefPtr<Gtk::Builder> builder;
-    Gtk::ComboBoxText *FilterList;
-    Gtk::SpinButton *FilterFERX, *FilterFERY, *FilterFERW, *FilterFERH;
-    Gtk::DrawingArea *FilterPreview;
-    Gtk::Image *FilterPrimitiveDescImage;
-    Gtk::Box *FilterPrimitiveParameters;
-    Gtk::Label *FilterPrimitiveDescText;
-    Gtk::ComboBox *FilterPrimitiveList;
-    Gtk::Button *FilterPrimitiveAdd;
-    Gtk::ListStore *FilterStore;
+    Glib::RefPtr<Glib::Object> FilterStore;
     Gtk::Box *FilterEditor;
 };
 }

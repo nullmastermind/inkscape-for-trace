@@ -29,6 +29,7 @@
 #include <glibmm/stringutils.h>
 #include <glibmm/main.h>
 #include <glibmm/convert.h>
+#include <glibmm/error.h>
 
 #include "desktop.h"
 
@@ -55,38 +56,52 @@
 #include "verbs.h"
 
 #include "io/sys.h"
+#include "io/resource.h"
 #include "selection-chemistry.h"
 
-#include <gtkmm/colorbutton.h>
-#include <gdkmm/general.h>
-#include <gtkmm/checkbutton.h>
+#include <string>
+
+#include <gtkmm.h>
 
 using namespace Inkscape::Filters;
-
+using namespace Inkscape::IO::Resource;
 namespace Inkscape::UI::Dialog {
 
-FilterEditorDialog::FilterEditorDialog() {
+FilterEditorDialog::FilterEditorDialog() : UI::Widget::Panel("", "/dialogs/filtereffects", SP_VERB_DIALOG_FILTER_EFFECTS)
+{
      
-    builder = Gtk::Builder::create_from_file("/home/mc/Desktop/test.glade");
-    builder->get_widget("FilterEditor", FilterEditor);
-    builder->get_widget("FilterList",   FilterList);
-    builder->get_widget("FilterFERX",   FilterFERX);
-    builder->get_widget("FilterFERY",   FilterFERY);
-    builder->get_widget("FilterFERH",   FilterFERH);
-    builder->get_widget("FilterFERW",   FilterFERW);
-    builder->get_widget("FilterPreview",FilterPreview);
-    builder->get_widget("FilterStore",  FilterStore);
-    builder->get_widget("FilterPrimitiveDescImage", FilterPrimitiveDescImage);
-    //builder->get_widget("FilterPrimitiveParameters",FilterPrimitiveParameters);
-    builder->get_widget("FilterPrimitiveDescText",  FilterPrimitiveDescText);
-    builder->get_widget("FilterPrimitiveList",      FilterPrimitiveList);
-    builder->get_widget("FilterPrimitiveAdd",       FilterPrimitiveAdd);
-    if (!(FilterList && FilterFERX && FilterFERY && FilterFERH && FilterFERW && FilterPreview
-        && FilterStore && FilterPrimitiveDescImage && FilterPrimitiveDescText && FilterPrimitiveList
-        && FilterPrimitiveAdd )) {
-        g_warning("Some widget does not exist!");
+    const std::string req_widgets[] = {"FilterEditor", "FilterList", "FilterFERX", "FilterFERY", "FilterFERH", "FilterFERW", "FilterPreview", "FilterPrimitiveDescImage", "FilterPrimitiveList", "FilterPrimitiveDescText", "FilterPrimitiveAdd"};
+    Glib::ustring gladefile = get_filename(UIS, "filter-editor.glade");
+    try {
+        builder = Gtk::Builder::create_from_file(gladefile);
+    } catch(const Glib::Error& ex) {
+        g_warning("Glade file loading failed for filter effect dialog");
+        return;
     }
+
+    Gtk::Object* test;
+    for(std::string w:req_widgets) {
+        builder->get_widget(w,test);
+        if(!test){
+            g_warning("Required widget %s does not exist", w);
+            return;
+            }
+    }
+
+    builder->get_widget("FilterEditor", FilterEditor);
     _getContents()->add(*FilterEditor);
+
+//test
+    Gtk::ComboBox *OptionList;
+    builder->get_widget("OptionList",OptionList);
+    FilterStore = builder->get_object("FilterStore");
+    Glib::RefPtr<Gtk::ListStore> fs = Glib::RefPtr<Gtk::ListStore>::cast_static(FilterStore); 
+    Gtk::TreeModel::Row row = *(fs->append());
+    row[3]=OptionList;
+
+
+
+
 
 }
 FilterEditorDialog::~FilterEditorDialog(){}
