@@ -149,7 +149,6 @@ void PreviewHolder::addPreview( Previewable* preview )
 			    auto target = kids[childCount - (j + 1)];
 			    int col2 = j % width;
 			    int row2 = j / width;
-			    Glib::RefPtr<Gtk::Widget> handle(target);
 			    _insides->remove( *target );
 
 			    target->set_hexpand();
