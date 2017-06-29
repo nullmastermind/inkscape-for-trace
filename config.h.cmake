@@ -56,6 +56,12 @@
 /* Build with Gtkmm 3.10.x or higher */
 #cmakedefine WITH_GTKMM_3_10 1
 
+/* Build with Gtkmm 3.12.x or higher */
+#cmakedefine WITH_GTKMM_3_12 1
+
+/* Build with Gtkmm 3.16.x or higher */
+#cmakedefine WITH_GTKMM_3_16 1
+
 /* Build with Gtkmm 3.22.x or higher */
 #cmakedefine WITH_GTKMM_3_22 1
 
