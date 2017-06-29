@@ -155,7 +155,7 @@ Gtk::MenuItem& TagsPanel::_addPopupItem( SPDesktop *desktop, unsigned int code, 
             }
 
             if ( action ) {
-                label = action->name;
+               // label = action->name;
             }
         }
     }
@@ -166,7 +166,7 @@ Gtk::MenuItem& TagsPanel::_addPopupItem( SPDesktop *desktop, unsigned int code, 
 
     Gtk::Widget* wrapped = 0;
     if ( iconWidget ) {
-        wrapped = manage(Glib::wrap(iconWidget));
+        wrapped = Gtk::manage(Glib::wrap(iconWidget));
         wrapped->show();
     }
 
