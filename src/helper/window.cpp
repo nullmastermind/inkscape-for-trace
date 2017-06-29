@@ -23,6 +23,12 @@ static bool on_window_key_press(GdkEventKey* event)
     shortcut = Inkscape::UI::Tools::get_group0_keyval (event) |
 	           ( event->state & GDK_SHIFT_MASK ?
 	             SP_SHORTCUT_SHIFT_MASK : 0 ) |
+	           ( event->state & GDK_SUPER_MASK ?
+	             SP_SHORTCUT_SUPER_MASK : 0 ) |
+	           ( event->state & GDK_HYPER_MASK ?
+	             SP_SHORTCUT_HYPER_MASK : 0 ) |
+	           ( event->state & GDK_META_MASK ?
+	             SP_SHORTCUT_META_MASK : 0 ) |
 	           ( event->state & GDK_CONTROL_MASK ?
 	             SP_SHORTCUT_CONTROL_MASK : 0 ) |
 	           ( event->state & GDK_MOD1_MASK ?
