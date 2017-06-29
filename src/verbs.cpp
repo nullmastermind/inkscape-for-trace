@@ -2234,7 +2234,7 @@ void DialogVerb::perform(SPAction *action, void *data)
             dt->_dlg_mgr->showDialog("LivePathEffect");
             break;
         case SP_VERB_DIALOG_FILTER_EFFECTS:
-            dt->_dlg_mgr->showDialog("FilterEditorDialog");
+            dt->_dlg_mgr->showDialog("FilterEffectsDialog");
             break;
         case SP_VERB_DIALOG_SVG_FONTS:
             dt->_dlg_mgr->showDialog("SvgFontsDialog");

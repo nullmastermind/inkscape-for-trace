@@ -97,7 +97,6 @@ FilterEditorDialog::FilterEditorDialog() : UI::Widget::Panel("", "/dialogs/filte
     FilterStore = builder->get_object("FilterStore");
     Glib::RefPtr<Gtk::ListStore> fs = Glib::RefPtr<Gtk::ListStore>::cast_static(FilterStore); 
     Gtk::TreeModel::Row row = *(fs->append());
-    row[3]=OptionList;
 
 
 
