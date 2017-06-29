@@ -1706,7 +1706,7 @@ static void text_toolbox_watch_ec(SPDesktop* dt, Inkscape::UI::Tools::ToolBase* 
 void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder)
 {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    Inkscape::IconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
+    GtkIconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
 
     /* Font family */
     {

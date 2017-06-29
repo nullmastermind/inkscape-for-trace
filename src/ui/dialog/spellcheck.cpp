@@ -13,7 +13,6 @@
  */
 
 #include "spellcheck.h"
-#include "widgets/icon.h"
 #include "message-stack.h"
 
 #include "helper/window.h"

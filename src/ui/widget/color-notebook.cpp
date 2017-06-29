@@ -19,7 +19,6 @@
 #include "config.h"
 #endif
 
-#include "widgets/icon.h"
 #include <glibmm/i18n.h>
 #include <gtkmm/label.h>
 #include <gtkmm/notebook.h>

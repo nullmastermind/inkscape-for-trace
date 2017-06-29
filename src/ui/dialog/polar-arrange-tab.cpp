@@ -19,7 +19,6 @@
 
 #include "document.h"
 #include "document-undo.h"
-#include "widgets/icon.h"
 #include "desktop.h"
 #include "sp-ellipse.h"
 #include "sp-item-transform.h"

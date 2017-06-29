@@ -23,6 +23,7 @@
 #include "shortcuts.h"
 #include "file.h"
 
+#include "ui/contextmenu.h"
 #include "ui/interface.h"
 #include "ui/event-debug.h"
 #include "ui/tool/control-point.h"

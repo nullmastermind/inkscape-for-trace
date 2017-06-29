@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="svg1"
+   width="16"
+   height="16"
+  >
+  <sodipodi:namedview
+     id="base"
+     showgrid="true"
+     gridspacingy="1pt"
+     gridspacingx="1pt"
+     gridoriginy="0pt"
+     gridoriginx="0pt"
+  />
+  <defs id="defs3">
+
+    <linearGradient id="linearGradient19967-4-5">
+      <stop id="stop19969-37-6" offset="0" style="stop-color:#73d216"/>
+      <stop id="stop19971-1-4" offset="1" style="stop-color:#4e9a06;stop-opacity:1"/>
+    </linearGradient>
+    <radialGradient cx="366.7874" cy="1670.756" fx="366.7874" fy="1670.756" gradientUnits="userSpaceOnUse" id="radialSnotBall" inkscape:collect="always" r="4.275793" xlink:href="#linearGradient19967-4-5"/>
+  </defs>
+<g id="boundingbox_top_right" transform="rotate(90,322.4265,952.5735)">
+  <rect height="16" id="rect7856" style="fill:none" width="16" x="-262.1471" y="475"/>
+  <path d="M -257.6471,489.5 -257.6471,479.5 -247.6471,479.5 -247.6471,481.5 -255.6471,481.5 -255.6471,489.5 Z" id="path7858" inkscape:connector-curvature="0" sodipodi:nodetypes="ccccccc" style="fill:#ffffff;stroke:#888a85;stroke-width:1px;stroke-linejoin:round"/>
+  <circle cx="366.7874" cy="1670.756" id="path7860" r="3.775792" style="fill:url(#radialSnotBall);stroke:#3a7304;stroke-width:0.9439481;stroke-miterlimit:3.3333333" transform="matrix(1.05938,0,0,1.05938,-645.2144,-1289.466)"/>
+</g>
+
+</svg>

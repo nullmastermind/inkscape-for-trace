@@ -13,7 +13,6 @@
 #include "display/cairo-utils.h"
 
 #include "highlight-picker.h"
-#include "widgets/icon.h"
 
 namespace Inkscape {
 namespace UI {

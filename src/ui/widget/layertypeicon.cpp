@@ -15,7 +15,6 @@
 
 #include <gtkmm/icontheme.h>
 
-#include "widgets/icon.h"
 #include "widgets/toolbox.h"
 #include "ui/icon-names.h"
 
@@ -37,18 +36,10 @@ LayerTypeIcon::LayerTypeIcon() :
 {
     
     property_mode() = Gtk::CELL_RENDERER_MODE_ACTIVATABLE;
-    int phys = sp_icon_get_phys_size((int)Inkscape::ICON_SIZE_DECORATION);
+    gint width, height;
+    gtk_icon_size_lookup(GTK_ICON_SIZE_MENU, &width, &height);
+    int phys = width;
     Glib::RefPtr<Gtk::IconTheme> icon_theme = Gtk::IconTheme::get_default();
-
-    if (!icon_theme->has_icon(_pixLayerName)) {
-        Inkscape::queueIconPrerender( INKSCAPE_ICON(_pixLayerName.data()), Inkscape::ICON_SIZE_DECORATION );
-    }
-    if (!icon_theme->has_icon(_pixGroupName)) {
-        Inkscape::queueIconPrerender( INKSCAPE_ICON(_pixGroupName.data()), Inkscape::ICON_SIZE_DECORATION );
-    }
-    if (!icon_theme->has_icon(_pixPathName)) {
-        Inkscape::queueIconPrerender( INKSCAPE_ICON(_pixPathName.data()), Inkscape::ICON_SIZE_DECORATION );
-    }
 
     if (icon_theme->has_icon(_pixLayerName)) {
         _property_pixbuf_layer = icon_theme->load_icon(_pixLayerName, phys, (Gtk::IconLookupFlags)0);

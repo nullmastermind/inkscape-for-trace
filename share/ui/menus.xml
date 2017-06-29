@@ -224,20 +224,20 @@
 
        <verb verb-id="SelectionPixelArt" />
        <separator/>
-       <verb verb-id="SelectionUnion" />
-       <verb verb-id="SelectionDiff" />
-       <verb verb-id="SelectionIntersect" />
-       <verb verb-id="SelectionSymDiff" />
-       <verb verb-id="SelectionDivide" />
-       <verb verb-id="SelectionCutPath" />
+       <verb verb-id="SelectionUnion"     show-icon="yes" />
+       <verb verb-id="SelectionDiff"      show-icon="yes" />
+       <verb verb-id="SelectionIntersect" show-icon="yes" />
+       <verb verb-id="SelectionSymDiff"   show-icon="yes"/>
+       <verb verb-id="SelectionDivide"    show-icon="yes"/>
+       <verb verb-id="SelectionCutPath"   show-icon="yes"/>
        <separator/>
-       <verb verb-id="SelectionCombine" />
-       <verb verb-id="SelectionBreakApart" />
+       <verb verb-id="SelectionCombine"    show-icon="yes"/>
+       <verb verb-id="SelectionBreakApart" show-icon="yes"/>
        <separator/>
-       <verb verb-id="SelectionInset" />
-       <verb verb-id="SelectionOffset" />
-       <verb verb-id="SelectionDynOffset" />
-       <verb verb-id="SelectionLinkedOffset" />
+       <verb verb-id="SelectionInset"        show-icon="yes"/>
+       <verb verb-id="SelectionOffset"       show-icon="yes"/>
+       <verb verb-id="SelectionDynOffset"    show-icon="yes"/>
+       <verb verb-id="SelectionLinkedOffset" show-icon="yes"/>
        <separator/>
        <verb verb-id="SelectionSimplify" />
        <verb verb-id="SelectionReverse" />
