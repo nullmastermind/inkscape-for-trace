@@ -37,7 +37,7 @@ InkAction* ink_action_new( const gchar *name,
                            const gchar *label,
                            const gchar *tooltip,
                            const gchar *inkId,
-                           Inkscape::IconSize size );
+                           GtkIconSize  size );
 
 
 G_END_DECLS

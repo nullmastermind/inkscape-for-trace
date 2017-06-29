@@ -13,7 +13,6 @@
 
 #include "styledialog.h"
 #include "ui/widget/addtoicon.h"
-#include "widgets/icon.h"
 #include "verbs.h"
 #include "sp-object.h"
 #include "selection.h"
@@ -1515,7 +1514,7 @@ bool StyleDialog::_delProperty(GdkEventButton *event)
 void StyleDialog::_styleButton(Gtk::Button& btn, char const* iconName,
                                char const* tooltip)
 {
-    GtkWidget *child = sp_icon_new(Inkscape::ICON_SIZE_SMALL_TOOLBAR, iconName);
+    GtkWidget *child = gtk_image_new_from_icon_name(iconName, GTK_ICON_SIZE_SMALL_TOOLBAR);
     gtk_widget_show(child);
     btn.add(*manage(Glib::wrap(child)));
     btn.set_relief(Gtk::RELIEF_NONE);

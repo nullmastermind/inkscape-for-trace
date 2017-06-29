@@ -16,8 +16,8 @@
 
 #include <2geom/forward.h>
 
-
 class SPDocument;
+class SPItem;
 
 enum ExportResult {
     EXPORT_ERROR = 0,

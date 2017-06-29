@@ -44,16 +44,13 @@ void CellRendererSPIcon::render_vfunc(const Cairo::RefPtr<Cairo::Context>& cr,
     if ( !_icon_cache[_property_event_type] ) {
 
         Glib::ustring image_name = Inkscape::Verb::get(_property_event_type)->get_image();
-        Gtk::Widget* icon = sp_icon_get_icon(image_name, Inkscape::ICON_SIZE_MENU);
+        Gtk::Image* icon = Gtk::manage(new Gtk::Image());
+        icon->set_from_icon_name(image_name, Gtk::ICON_SIZE_MENU);
 
         if (icon) {
 
             // check icon type (inkscape, gtk, none)
-            if ( SP_IS_ICON(icon->gobj()) ) {
-                SPIcon* sp_icon = SP_ICON(icon->gobj());
-                sp_icon_fetch_pixbuf(sp_icon);
-                _property_icon = Glib::wrap(sp_icon->pb, true);
-            } else if ( GTK_IS_IMAGE(icon->gobj()) ) {
+            if ( GTK_IS_IMAGE(icon->gobj()) ) {
                 auto icon_theme = Gtk::IconTheme::get_default();
                 _property_icon = icon_theme->load_icon(image_name, 16);
             } else {

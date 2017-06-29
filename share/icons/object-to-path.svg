@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="svg1"
+   width="16.052349"
+   height="16.03403"
+  >
+  <sodipodi:namedview
+     id="base"
+     showgrid="true"
+     gridspacingy="1pt"
+     gridspacingx="1pt"
+     gridoriginy="0pt"
+     gridoriginx="0pt"
+  />
+  <defs id="defs3">
+
+  </defs>
+<g id="object-to-path" inkscape:label="#object_tocurve" transform="translate(45,-174.98527)">
+  <path d="M -37.0131,188.9855 C -35.0131,192.9855 -27.81159,188.3079 -29.81159,185.3079 -31.10674,183.3652 -39.24159,185.6729 -42.56979,183.4541 -45.56979,181.4541 -45.12074,174.9746 -40.0534,175.5422 -35.41611,176.0661 -38.62555,185.7606 -37.0131,188.9855 Z" id="path4438" inkscape:connector-curvature="0" sodipodi:nodetypes="cssss" style="fill:none;stroke:#646464;stroke-width:1.0000002;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:0"/>
+  <rect height="16" id="rect4440" style="color:#000000;fill:none" width="16" x="-45" y="175"/>
+  <rect height="3.023564" id="rect4442" style="color:#000000;fill:#6464ff;fill-opacity:0.3921569;fill-rule:evenodd;stroke:#0000ff;stroke-width:1.0000025;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:0" transform="rotate(-89.99984)" width="3.009614" x="-178.495" y="-39.5126"/>
+  <rect height="3.023564" id="use6691" style="color:#000000;fill:#6464ff;fill-opacity:0.3921569;fill-rule:evenodd;stroke:#0000ff;stroke-width:1.0000025;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:0" transform="matrix(1,0,0,1,-4.027901,6.951345)" width="3.009614" x="-178.495" y="-39.5126"/>
+  <rect height="3.023564" id="use6693" style="color:#000000;fill:#6464ff;fill-opacity:0.3921569;fill-rule:evenodd;stroke:#0000ff;stroke-width:1.0000025;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:0" transform="matrix(1,0,0,1,6.948524,11.95135)" width="3.009614" x="-178.495" y="-39.5126"/>
+</g>
+
+</svg>

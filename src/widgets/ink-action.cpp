@@ -1,5 +1,4 @@
 #include "ink-action.h"
-#include "widgets/icon.h"
 
 #include <gtk/gtk.h>
 
@@ -13,7 +12,7 @@ static GtkWidget* ink_action_create_tool_item( GtkAction* action );
 struct _InkActionPrivate
 {
     gchar* iconId;
-    Inkscape::IconSize iconSize;
+    GtkIconSize iconSize;
 };
 
 #define INK_ACTION_GET_PRIVATE( o ) ( G_TYPE_INSTANCE_GET_PRIVATE( (o), INK_ACTION_TYPE, InkActionPrivate ) )
@@ -52,9 +51,9 @@ static void ink_action_class_init( InkActionClass* klass )
                                          g_param_spec_int( "iconSize",
                                                            "Icon Size",
                                                            "The size the icon",
-                                                           (int)Inkscape::ICON_SIZE_MENU,
-                                                           (int)Inkscape::ICON_SIZE_DECORATION,
-                                                           (int)Inkscape::ICON_SIZE_SMALL_TOOLBAR,
+                                                           (int)GTK_ICON_SIZE_MENU,
+                                                           (int)GTK_ICON_SIZE_DIALOG,
+                                                           (int)GTK_ICON_SIZE_SMALL_TOOLBAR,
                                                            (GParamFlags)(G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT) ) );
 
         g_type_class_add_private( klass, sizeof(InkActionClass) );
@@ -65,7 +64,7 @@ static void ink_action_init( InkAction* action )
 {
     action->private_data = INK_ACTION_GET_PRIVATE( action );
     action->private_data->iconId = 0;
-    action->private_data->iconSize = Inkscape::ICON_SIZE_SMALL_TOOLBAR;
+    action->private_data->iconSize = GTK_ICON_SIZE_SMALL_TOOLBAR;
 }
 
 static void ink_action_finalize( GObject* obj )
@@ -82,7 +81,7 @@ InkAction* ink_action_new( const gchar *name,
                            const gchar *label,
                            const gchar *tooltip,
                            const gchar *inkId,
-                           Inkscape::IconSize size )
+                           GtkIconSize size )
 {
     GObject* obj = (GObject*)g_object_new( INK_ACTION_TYPE,
                                            "name", name,
@@ -134,7 +133,7 @@ void ink_action_set_property( GObject* obj, guint propId, const GValue *value, G
 
         case PROP_INK_SIZE:
         {
-            action->private_data->iconSize = (Inkscape::IconSize)g_value_get_int( value );
+            action->private_data->iconSize = (GtkIconSize)g_value_get_int( value );
         }
         break;
 
@@ -148,33 +147,7 @@ void ink_action_set_property( GObject* obj, guint propId, const GValue *value, G
 static GtkWidget* ink_action_create_menu_item( GtkAction* action )
 {
     InkAction* act = INK_ACTION( action );
-    GtkWidget* item = 0;
-
-    if ( act->private_data->iconId ) {
-        gchar* label = 0;
-        g_object_get( G_OBJECT(act), "label", &label, NULL );
-        item = gtk_image_menu_item_new_with_mnemonic( label );
-
-        GtkWidget* child = sp_icon_new( Inkscape::ICON_SIZE_MENU, act->private_data->iconId );
-        // TODO this work-around is until SPIcon will live properly inside of a popup menu
-        if ( SP_IS_ICON(child) ) {
-            SPIcon* icon = SP_ICON(child);
-            sp_icon_fetch_pixbuf( icon );
-            GdkPixbuf* target = icon->pb;
-            if ( target ) {
-                child = gtk_image_new_from_pixbuf( target );
-                gtk_widget_set_sensitive(child, gtk_action_is_sensitive(action));
-                gtk_widget_destroy( GTK_WIDGET(icon) );
-            }
-        }
-        gtk_widget_show_all( child );
-        gtk_image_menu_item_set_image( GTK_IMAGE_MENU_ITEM(item), child );
-
-        g_free( label );
-        label = 0;
-    } else {
-        item = GTK_ACTION_CLASS(ink_action_parent_class)->create_menu_item( action );
-    }
+    GtkWidget* item = GTK_ACTION_CLASS(ink_action_parent_class)->create_menu_item( action );
 
     return item;
 }
@@ -188,7 +161,7 @@ static GtkWidget* ink_action_create_tool_item( GtkAction* action )
         if ( GTK_IS_TOOL_BUTTON(item) ) {
             GtkToolButton* button = GTK_TOOL_BUTTON(item);
 
-            GtkWidget* child = sp_icon_new( act->private_data->iconSize, act->private_data->iconId );
+            GtkWidget* child = gtk_image_new_from_icon_name( act->private_data->iconId, act->private_data->iconSize );
             gtk_tool_button_set_icon_widget( button, child );
         } else {
             // For now trigger a warning but don't do anything else

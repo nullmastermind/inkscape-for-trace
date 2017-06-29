@@ -15,7 +15,6 @@
 
 #include <gtkmm/icontheme.h>
 
-#include "widgets/icon.h"
 #include "widgets/toolbox.h"
 #include "ui/icon-names.h"
 #include "layertypeicon.h"
@@ -37,18 +36,12 @@ ClipMaskIcon::ClipMaskIcon() :
 {
     
     property_mode() = Gtk::CELL_RENDERER_MODE_ACTIVATABLE;
-    phys = sp_icon_get_phys_size((int)Inkscape::ICON_SIZE_DECORATION);
-    Glib::RefPtr<Gtk::IconTheme> icon_theme = Gtk::IconTheme::get_default();
 
-    if (!icon_theme->has_icon(_pixClipName)) {
-        Inkscape::queueIconPrerender( INKSCAPE_ICON(_pixClipName.data()), Inkscape::ICON_SIZE_DECORATION );
-    }
-    if (!icon_theme->has_icon(_pixMaskName)) {
-        Inkscape::queueIconPrerender( INKSCAPE_ICON(_pixMaskName.data()), Inkscape::ICON_SIZE_DECORATION );
-    }
-    if (!icon_theme->has_icon(_pixBothName)) {
-        Inkscape::queueIconPrerender( INKSCAPE_ICON(_pixBothName.data()), Inkscape::ICON_SIZE_DECORATION );
-    }
+    gint width, height;
+    gtk_icon_size_lookup(GTK_ICON_SIZE_MENU, &width, &height);
+    phys = width;
+
+    Glib::RefPtr<Gtk::IconTheme> icon_theme = Gtk::IconTheme::get_default();
 
     if (icon_theme->has_icon(_pixClipName)) {
         _property_pixbuf_clip = icon_theme->load_icon(_pixClipName, phys, (Gtk::IconLookupFlags)0);

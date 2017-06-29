@@ -134,7 +134,7 @@ static void sp_toogle_break_apart( GtkToggleAction* act, gpointer data )
 
 void sp_eraser_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder)
 {
-    Inkscape::IconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
+    GtkIconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     gint eraser_mode = FALSE;
     {
@@ -202,7 +202,7 @@ void sp_eraser_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
                                                       _("Eraser Pressure"),
                                                       _("Use the pressure of the input device to alter the width of the pen"),
                                                       INKSCAPE_ICON("draw-use-pressure"),
-                                                      Inkscape::ICON_SIZE_DECORATION );
+                                                      GTK_ICON_SIZE_MENU );
         gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
         PrefPusher *pusher = new PrefPusher(GTK_TOGGLE_ACTION(act), "/tools/eraser/usepressure", update_presets_list, holder);
         g_signal_connect( holder, "destroy", G_CALLBACK(delete_prefspusher), pusher);

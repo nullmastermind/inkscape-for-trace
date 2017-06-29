@@ -40,7 +40,6 @@
 #include "ui/icon-names.h"
 #include "ui/widget/unit-tracker.h"
 #include "verbs.h"
-#include "widgets/icon.h"
 #include "widgets/sp-widget.h"
 #include "widgets/widget-sizes.h"
 
@@ -345,7 +344,7 @@ static void trigger_sp_action( GtkAction* /*act*/, gpointer user_data )
     }
 }
 
-static GtkAction* create_action_for_verb( Inkscape::Verb* verb, Inkscape::UI::View::View* view, Inkscape::IconSize size )
+static GtkAction* create_action_for_verb( Inkscape::Verb* verb, Inkscape::UI::View::View* view, GtkIconSize size )
 {
     GtkAction* act = 0;
 
@@ -355,15 +354,13 @@ static GtkAction* create_action_for_verb( Inkscape::Verb* verb, Inkscape::UI::Vi
 
     g_signal_connect( G_OBJECT(inky), "activate", G_CALLBACK(trigger_sp_action), targetAction );
 
-    Inkscape::queueIconPrerender( verb->get_image(), size );
-
     return act;
 }
 
 void sp_select_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder)
 {
     Inkscape::UI::View::View *view = desktop;
-    Inkscape::IconSize secondarySize = Inkscape::UI::ToolboxFactory::prefToSize("/toolbox/secondary", 1);
+    GtkIconSize secondarySize = Inkscape::UI::ToolboxFactory::prefToSize("/toolbox/secondary", 1);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     GtkAction* act = 0;
@@ -492,7 +489,7 @@ void sp_select_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
                                                     _("Lock width and height"),
                                                     _("When locked, change both width and height by the same proportion"),
                                                     INKSCAPE_ICON("object-unlocked"),
-                                                    Inkscape::ICON_SIZE_DECORATION );
+                                                    GTK_ICON_SIZE_MENU );
     g_object_set( itact, "short_label", "Lock", NULL );
     g_object_set_data( G_OBJECT(spw), "lock", itact );
     g_signal_connect_after( G_OBJECT(itact), "toggled", G_CALLBACK(toggle_lock), desktop) ;

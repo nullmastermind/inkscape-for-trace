@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="svg1"
+   width="24"
+   height="24"
+  >
+  <sodipodi:namedview
+     id="base"
+     showgrid="true"
+     gridspacingy="1pt"
+     gridspacingx="1pt"
+     gridoriginy="0pt"
+     gridoriginx="0pt"
+  />
+  <defs id="defs3">
+
+  </defs>
+<g id="paint-order-msf" inkscape:label="#paint-order-msf" transform="translate(-944,-420)">
+  <circle cx="954" cy="430" r="9.5" style="stroke:#000000;fill:#cddbeb"/>
+  <rect height="24" style="fill:none" width="24" x="944" y="420"/>
+  <path d="m949.5 444v-18.5h18.5v9h-9.5v9.5z" style="fill:#99b6d4"/>
+  <path d="m949.5 444v-18.5h18.5m0 9h-9.5v9.5" style="stroke:#000000;fill:none"/>
+  <rect height="2" style="fill:#ffffff" width="2" x="953" y="429"/>
+  <rect height="2" id="" style="fill:#ffffff" transform="matrix(1,0,0,1,0,0)" width="2" x="953" y="429"/>
+  <rect height="2" id="" style="fill:#ffffff" transform="matrix(1,0,0,1,0,0)" width="2" x="953" y="429"/>
+  <rect height="2" id="" style="fill:#ffffff" transform="matrix(1,0,0,1,0,0)" width="2" x="953" y="429"/>
+  <rect height="2" id="" style="fill:#ffffff" transform="matrix(1,0,0,1,0,4)" width="2" x="953" y="429"/>
+  <rect height="2" id="" style="fill:#ffffff" transform="matrix(1,0,0,1,0,8)" width="2" x="953" y="429"/>
+  <rect height="2" id="" style="fill:#ffffff" transform="matrix(1,0,0,1,0,12)" width="2" x="953" y="429"/>
+  <rect height="14" style="fill:#4776a7" width="14" x="954" y="430"/>
+</g>
+
+</svg>

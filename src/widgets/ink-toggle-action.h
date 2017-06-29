@@ -35,7 +35,7 @@ InkToggleAction* ink_toggle_action_new( const gchar *name,
                                         const gchar *label,
                                         const gchar *tooltip,
                                         const gchar *inkId,
-                                        Inkscape::IconSize size,
+                                        GtkIconSize  size,
                                         SPAttributeEnum attr = SP_ATTR_INVALID);
 
 G_END_DECLS

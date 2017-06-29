@@ -10,7 +10,7 @@ static GtkWidget* ink_radio_action_create_tool_item( GtkAction* action );
 struct _InkRadioActionPrivate
 {
     gchar* iconId;
-    Inkscape::IconSize iconSize;
+    GtkIconSize iconSize;
 };
 
 #define INK_RADIO_ACTION_GET_PRIVATE( o ) ( G_TYPE_INSTANCE_GET_PRIVATE( (o), INK_RADIO_ACTION_TYPE, InkRadioActionPrivate ) )
@@ -49,9 +49,9 @@ static void ink_radio_action_class_init( InkRadioActionClass* klass )
                                          g_param_spec_int( "iconSize",
                                                            "Icon Size",
                                                            "The size the icon",
-                                                           (int)Inkscape::ICON_SIZE_MENU,
-                                                           (int)Inkscape::ICON_SIZE_DECORATION,
-                                                           (int)Inkscape::ICON_SIZE_SMALL_TOOLBAR,
+                                                           (int)GTK_ICON_SIZE_MENU,
+                                                           (int)GTK_ICON_SIZE_DIALOG,
+                                                           (int)GTK_ICON_SIZE_SMALL_TOOLBAR,
                                                            (GParamFlags)(G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT) ) );
 
         g_type_class_add_private( klass, sizeof(InkRadioActionClass) );
@@ -62,7 +62,7 @@ static void ink_radio_action_init( InkRadioAction* action )
 {
     action->private_data = INK_RADIO_ACTION_GET_PRIVATE( action );
     action->private_data->iconId = 0;
-    action->private_data->iconSize = Inkscape::ICON_SIZE_SMALL_TOOLBAR;
+    action->private_data->iconSize = GTK_ICON_SIZE_SMALL_TOOLBAR;
 }
 
 static void ink_radio_action_finalize( GObject* obj )
@@ -78,14 +78,14 @@ InkRadioAction* ink_radio_action_new( const gchar *name,
                            const gchar *label,
                            const gchar *tooltip,
                            const gchar *inkId,
-                           Inkscape::IconSize size )
+                           GtkIconSize size )
 {
     GObject* obj = (GObject*)g_object_new( INK_RADIO_ACTION_TYPE,
                                            "name", name,
                                            "label", label,
                                            "tooltip", tooltip,
                                            "iconId", inkId,
-                                           "iconSize", Inkscape::getRegisteredIconSize(size),
+                                           "iconSize", size,
                                            NULL );
 
     InkRadioAction* action = INK_RADIO_ACTION( obj );
@@ -130,7 +130,7 @@ void ink_radio_action_set_property( GObject* obj, guint propId, const GValue *va
 
         case PROP_INK_SIZE:
         {
-            action->private_data->iconSize = (Inkscape::IconSize)g_value_get_int( value );
+            action->private_data->iconSize = (GtkIconSize)g_value_get_int( value );
         }
         break;
 
@@ -157,7 +157,7 @@ static GtkWidget* ink_radio_action_create_tool_item( GtkAction* action )
         if ( GTK_IS_TOOL_BUTTON(item) ) {
             GtkToolButton* button = GTK_TOOL_BUTTON(item);
 
-            GtkWidget* child = sp_icon_new( act->private_data->iconSize, act->private_data->iconId );
+            GtkWidget* child = gtk_image_new_from_icon_name( act->private_data->iconId, act->private_data->iconSize );
 	    gtk_widget_set_hexpand(child, FALSE);
 	    gtk_widget_set_vexpand(child, FALSE);
             gtk_tool_button_set_icon_widget(button, child);
