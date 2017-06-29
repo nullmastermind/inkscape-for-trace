@@ -157,7 +157,7 @@ Glib::ustring get_filename(Type type, char const *filename, char const *locale)
     } else if(file_test(sys_filename, G_FILE_TEST_EXISTS)) {
         result = Glib::ustring(sys_filename);
     } else {
-        g_warning("Failed to load resource: %s", filename);
+        g_warning("Failed to load resource: %s from %s or %s", filename, user_filename, sys_filename);
     }
 
     if(!result.empty()) {
