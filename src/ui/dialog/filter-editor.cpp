@@ -65,7 +65,9 @@
 
 using namespace Inkscape::Filters;
 using namespace Inkscape::IO::Resource;
-namespace Inkscape::UI::Dialog {
+namespace Inkscape {
+namespace UI {
+namespace Dialog {
 
 FilterEditorDialog::FilterEditorDialog() : UI::Widget::Panel("", "/dialogs/filtereffects", SP_VERB_DIALOG_FILTER_EFFECTS)
 {
@@ -110,7 +112,9 @@ FilterEditorDialog::~FilterEditorDialog(){}
 
 
 
-} // namespace Inkscape::UI::Dialog
+} // Never put these namespaces together unless you are using gcc 6+
+}
+} // P.S. This is for Inkscape::UI::Dialog
 
 /*
   Local Variables:
