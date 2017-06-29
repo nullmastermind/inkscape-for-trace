@@ -11,7 +11,6 @@
  
 #include <gtkmm/icontheme.h>
 
-#include "widgets/icon.h"
 #include "widgets/toolbox.h"
 #include "ui/icon-names.h"
 #include "layertypeicon.h"
@@ -31,15 +30,12 @@ InsertOrderIcon::InsertOrderIcon() :
 {
     
     property_mode() = Gtk::CELL_RENDERER_MODE_ACTIVATABLE;
-    phys = sp_icon_get_phys_size((int)Inkscape::ICON_SIZE_DECORATION);
-    Glib::RefPtr<Gtk::IconTheme> icon_theme = Gtk::IconTheme::get_default();
 
-    if (!icon_theme->has_icon(_pixTopName)) {
-        Inkscape::queueIconPrerender( INKSCAPE_ICON(_pixTopName.data()), Inkscape::ICON_SIZE_DECORATION );
-    }
-    if (!icon_theme->has_icon(_pixBottomName)) {
-        Inkscape::queueIconPrerender( INKSCAPE_ICON(_pixBottomName.data()), Inkscape::ICON_SIZE_DECORATION );
-    }
+    gint width, height;
+    gtk_icon_size_lookup(GTK_ICON_SIZE_MENU, &width, &height);
+    phys=width;
+
+    Glib::RefPtr<Gtk::IconTheme> icon_theme = Gtk::IconTheme::get_default();
 
     if (icon_theme->has_icon(_pixTopName)) {
         _property_pixbuf_top = icon_theme->load_icon(_pixTopName, phys, (Gtk::IconLookupFlags)0);

@@ -26,8 +26,6 @@ namespace Inkscape {
         ICON_SIZE_DIALOG = ::GTK_ICON_SIZE_DIALOG,
         ICON_SIZE_DECORATION
     };
-
-    GtkIconSize getRegisteredIconSize( IconSize size );
 } // namespace Inkscape
 
 #endif // SEEN_ICON_SIZE_H

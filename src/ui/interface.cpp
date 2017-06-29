@@ -36,7 +36,6 @@
 #include "extension/db.h"
 #include "extension/effect.h"
 #include "extension/input.h"
-#include "widgets/icon.h"
 #include "preferences.h"
 #include "shortcuts.h"
 #include "document.h"

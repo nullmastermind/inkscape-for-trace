@@ -21,7 +21,7 @@ ink_tool_menu_action_new (const gchar *name,
                           const gchar *label,
                           const gchar *tooltip,
                           const gchar *inkId,
-                          Inkscape::IconSize size )
+                          GtkIconSize  size )
 {
     g_return_val_if_fail (name != NULL, NULL);
 

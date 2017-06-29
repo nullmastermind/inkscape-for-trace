@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="svg1"
+   width="29.99947"
+   height="20.00047"
+  >
+  <sodipodi:namedview
+     id="base"
+     showgrid="true"
+     gridspacingy="1pt"
+     gridspacingx="1pt"
+     gridoriginy="0pt"
+     gridoriginx="0pt"
+  />
+  <defs id="defs3">
+
+  </defs>
+<g id="distribute-graph" inkscape:label="#graph_layout" transform="matrix(0.173978,0,0,0.208504,-167.2882,-122.08165)">
+  <g id="g3559" transform="matrix(4.416533,0,0,3.725389,-3265.91,88.05639)"/>
+  <path d="M 1003.929,599.4599 980.8144,612.551" id="path3569" inkscape:connector-curvature="0" sodipodi:nodetypes="cc" style="fill:none;stroke:#000000;stroke-width:4.125"/>
+  <path d="M 973.761,627.7789 977.3535,658.054" id="path3575" inkscape:connector-curvature="0" sodipodi:nodetypes="cc" style="fill:none;stroke:#000000;stroke-width:4.0493159"/>
+  <path d="M 989.9269,669.145 1013.996,670.6437" id="path3577" inkscape:connector-curvature="0" sodipodi:nodetypes="cc" style="fill:none;stroke:#000000;stroke-width:4.125"/>
+  <path d="M 1029.749,663.75 1043.75,637.1262" id="path3579" inkscape:connector-curvature="0" style="fill:none;stroke:#000000;stroke-width:4.125"/>
+  <path d="M 1041.298,620.8845 1021.547,601.25" id="path3581" inkscape:connector-curvature="0" sodipodi:nodetypes="cc" style="fill:none;stroke:#000000;stroke-width:4.125"/>
+  <path d="M 1057.695,626.25 1082.252,623.882" id="path14606" inkscape:connector-curvature="0" sodipodi:nodetypes="cc" style="fill:none;stroke:#000000;stroke-width:4.125"/>
+  <path d="M 1097.34,615.4889 1113.937,601.5946" id="path3585" inkscape:connector-curvature="0" sodipodi:nodetypes="cc" style="fill:none;stroke:#000000;stroke-width:4.125"/>
+  <path d="M 1097.34,632.5749 1115.827,654.5025" id="path3587" inkscape:connector-curvature="0" sodipodi:nodetypes="cc" style="fill:none;stroke:#000000;stroke-width:4.125"/>
+  <circle cx="328" cy="215" id="use15576" r="5" style="color:#000000;fill:#99b7d5;fill-opacity:0.7019608;fill-rule:evenodd;stroke:#0000ff;stroke-width:0.8193182;stroke-linejoin:round;stroke-miterlimit:0" transform="matrix(2.158934,0,0,1.807036,304.9623,206.775)"/>
+  <circle cx="328" cy="215" id="use15574" r="5" style="color:#000000;fill:#99b7d5;fill-opacity:0.7019608;fill-rule:evenodd;stroke:#0000ff;stroke-width:0.8193182;stroke-linejoin:round;stroke-miterlimit:0" transform="matrix(2.158934,0,0,1.807036,270.4753,278.716)"/>
+  <circle cx="328" cy="215" id="use15578" r="5" style="color:#000000;fill:#99b7d5;fill-opacity:0.7019608;fill-rule:evenodd;stroke:#0000ff;stroke-width:0.8193182;stroke-linejoin:round;stroke-miterlimit:0" transform="matrix(2.158934,0,0,1.807035,316.828,283.148)"/>
+  <circle cx="328" cy="215" id="use15580" r="5" style="color:#000000;fill:#99b7d5;fill-opacity:0.7019608;fill-rule:evenodd;stroke:#0000ff;stroke-width:0.8193182;stroke-linejoin:round;stroke-miterlimit:0" transform="matrix(2.158934,0,0,1.807035,339.8194,239.9834)"/>
+  <circle cx="328" cy="215" id="use15588" r="5" style="color:#000000;fill:#99b7d5;fill-opacity:0.7019608;fill-rule:evenodd;stroke:#0000ff;stroke-width:0.8193182;stroke-linejoin:round;stroke-miterlimit:0" transform="matrix(2.158934,0,0,1.807036,385.4323,235.551)"/>
+  <circle cx="328" cy="215" id="use15590" r="5" style="color:#000000;fill:#99b7d5;fill-opacity:0.7019608;fill-rule:evenodd;stroke:#0000ff;stroke-width:0.8193182;stroke-linejoin:round;stroke-miterlimit:0" transform="matrix(2.158934,0,0,1.807036,414.1713,206.775)"/>
+  <circle cx="328" cy="215" id="use15592" r="5" style="color:#000000;fill:#99b7d5;fill-opacity:0.7019608;fill-rule:evenodd;stroke:#0000ff;stroke-width:0.8193182;stroke-linejoin:round;stroke-miterlimit:0" transform="matrix(2.158934,0,0,1.807036,414.1713,273.92)"/>
+  <use height="1250" id="use15554" style="fill:#8ab3df;fill-opacity:0.5882353;stroke:#0000ff" transform="matrix(1.957219,0,0,1.633125,337.4381,267.7929)" width="1250" x="0" xlink:href="#path5724" y="0"/>
+</g>
+
+</svg>

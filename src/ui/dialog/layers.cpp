@@ -31,7 +31,6 @@
 #include "ui/icon-names.h"
 #include "ui/widget/imagetoggler.h"
 #include "verbs.h"
-#include "widgets/icon.h"
 #include "sp-root.h"
 #include "ui/tools/tool-base.h"
 #include "selection-chemistry.h"
@@ -82,7 +81,7 @@ void LayersPanel::_styleButton( Gtk::Button& btn, SPDesktop *desktop, unsigned i
     bool set = false;
 
     if ( iconName ) {
-        GtkWidget *child = sp_icon_new( Inkscape::ICON_SIZE_SMALL_TOOLBAR, iconName );
+        GtkWidget *child = gtk_image_new_from_icon_name( iconName, GTK_ICON_SIZE_SMALL_TOOLBAR );
         gtk_widget_show( child );
         btn.add( *Gtk::manage(Glib::wrap(child)) );
         btn.set_relief(Gtk::RELIEF_NONE);
@@ -94,7 +93,7 @@ void LayersPanel::_styleButton( Gtk::Button& btn, SPDesktop *desktop, unsigned i
         if ( verb ) {
             SPAction *action = verb->get_action(Inkscape::ActionContext(desktop));
             if ( !set && action && action->image ) {
-                GtkWidget *child = sp_icon_new( Inkscape::ICON_SIZE_SMALL_TOOLBAR, action->image );
+                GtkWidget *child = gtk_image_new_from_icon_name( action->image, GTK_ICON_SIZE_SMALL_TOOLBAR );
                 gtk_widget_show( child );
                 btn.add( *Gtk::manage(Glib::wrap(child)) );
                 set = true;
@@ -118,7 +117,7 @@ Gtk::MenuItem& LayersPanel::_addPopupItem( SPDesktop *desktop, unsigned int code
     const char* label = 0;
 
     if ( iconName ) {
-        iconWidget = sp_icon_new( Inkscape::ICON_SIZE_MENU, iconName );
+        iconWidget = gtk_image_new_from_icon_name( iconName, GTK_ICON_SIZE_MENU );
     }
 
     if ( desktop ) {
@@ -126,7 +125,7 @@ Gtk::MenuItem& LayersPanel::_addPopupItem( SPDesktop *desktop, unsigned int code
         if ( verb ) {
             SPAction *action = verb->get_action(Inkscape::ActionContext(desktop));
             if ( !iconWidget && action && action->image ) {
-                iconWidget = sp_icon_new( Inkscape::ICON_SIZE_MENU, action->image );
+                iconWidget = gtk_image_new_from_icon_name( action->image, GTK_ICON_SIZE_MENU );
             }
 
             if ( action ) {

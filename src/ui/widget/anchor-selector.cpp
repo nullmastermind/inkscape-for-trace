@@ -8,15 +8,17 @@
  */
 
 #include "ui/widget/anchor-selector.h"
-#include "widgets/icon.h"
 #include "ui/icon-names.h"
+
+#include <gtkmm/image.h>
 
 namespace Inkscape {
 namespace UI {
 namespace Widget {
 
 void AnchorSelector::setupButton(const Glib::ustring& icon, Gtk::ToggleButton& button) {
-	Gtk::Widget*  buttonIcon = Gtk::manage(sp_icon_get_icon(icon, Inkscape::ICON_SIZE_SMALL_TOOLBAR));
+	Gtk::Image* buttonIcon = Gtk::manage(new Gtk::Image());
+        buttonIcon->set_from_icon_name(icon, Gtk::ICON_SIZE_SMALL_TOOLBAR);
 	buttonIcon->show();
 
 	button.set_relief(Gtk::RELIEF_NONE);

@@ -12,7 +12,6 @@
 #include "desktop.h"
 #include "inkscape.h"
 #include "ui/icon-names.h"
-#include "widgets/icon.h"
 
 #include <gtkmm/icontheme.h>
 #include <glibmm/exceptionhandler.h>
@@ -43,9 +42,6 @@ DockItem::DockItem(Dock& dock, const Glib::ustring& name, const Glib::ustring& l
     if (!icon_name.empty()) {
         Glib::RefPtr<Gtk::IconTheme> iconTheme = Gtk::IconTheme::get_default();
 
-        if (!iconTheme->has_icon(icon_name)) {
-            Inkscape::queueIconPrerender( INKSCAPE_ICON(icon_name.data()), Inkscape::ICON_SIZE_MENU );
-        }
         if ( iconTheme->has_icon(icon_name) ) {
             int width = 0;
             int height = 0;

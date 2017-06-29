@@ -19,7 +19,6 @@
 #include "inkscape.h"
 #include "desktop.h"
 #include "ui/interface.h"
-#include "widgets/icon.h"
 #include "ui/widget/dock.h"
 #include "verbs.h"
 #include "dialog.h"

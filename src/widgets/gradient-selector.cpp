@@ -29,7 +29,6 @@
 #include "verbs.h"
 #include "helper/action.h"
 #include "preferences.h"
-#include "widgets/icon.h"
 
 #include <glibmm/i18n.h>
 
@@ -98,7 +97,7 @@ static void sp_gradient_selector_class_init(SPGradientSelectorClass *klass)
 static void gradsel_style_button(GtkWidget *gtkbtn, char const *iconName)
 {
     Gtk::Button *btn = Glib::wrap(GTK_BUTTON(gtkbtn));
-    GtkWidget *child = sp_icon_new(Inkscape::ICON_SIZE_SMALL_TOOLBAR, iconName);
+    GtkWidget *child = gtk_image_new_from_icon_name(iconName, GTK_ICON_SIZE_SMALL_TOOLBAR);
     gtk_widget_show(child);
     btn->add(*manage(Glib::wrap(child)));
     btn->set_relief(Gtk::RELIEF_NONE);

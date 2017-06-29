@@ -318,7 +318,7 @@ void sp_arc_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObjec
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     EgeAdjustmentAction* eact = 0;
-    Inkscape::IconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
+    GtkIconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
 
 
     {

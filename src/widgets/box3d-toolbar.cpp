@@ -325,7 +325,7 @@ void box3d_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject
                                                       _("State of VP in X direction"),
                                                       _("Toggle VP in X direction between 'finite' and 'infinite' (=parallel)"),
                                                       INKSCAPE_ICON("perspective-parallel"),
-                                                      Inkscape::ICON_SIZE_DECORATION );
+                                                      GTK_ICON_SIZE_MENU );
         gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
         g_object_set_data( holder, "box3d_vp_x_state_action", act );
         g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(box3d_vp_x_state_changed), box3d_angle_x );
@@ -364,7 +364,7 @@ void box3d_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject
                                                       _("State of VP in Y direction"),
                                                       _("Toggle VP in Y direction between 'finite' and 'infinite' (=parallel)"),
                                                       INKSCAPE_ICON("perspective-parallel"),
-                                                      Inkscape::ICON_SIZE_DECORATION );
+                                                      GTK_ICON_SIZE_MENU );
         gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
         g_object_set_data( holder, "box3d_vp_y_state_action", act );
         g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(box3d_vp_y_state_changed), box3d_angle_y );
@@ -403,7 +403,7 @@ void box3d_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject
                                                       _("State of VP in Z direction"),
                                                       _("Toggle VP in Z direction between 'finite' and 'infinite' (=parallel)"),
                                                       INKSCAPE_ICON("perspective-parallel"),
-                                                      Inkscape::ICON_SIZE_DECORATION );
+                                                      GTK_ICON_SIZE_MENU );
         gtk_action_group_add_action( mainActions, GTK_ACTION( act ) );
         g_object_set_data( holder, "box3d_vp_z_state_action", act );
         g_signal_connect_after( G_OBJECT(act), "toggled", G_CALLBACK(box3d_vp_z_state_changed), box3d_angle_z );
