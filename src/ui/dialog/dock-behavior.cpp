@@ -39,9 +39,9 @@ DockBehavior::DockBehavior(Dialog &dialog) :
                static_cast<Widget::DockItem::State>(
                    Inkscape::Preferences::get()->getInt(_dialog._prefs_path + "/state",
                                             UI::Widget::DockItem::DOCKED_STATE)),
-                static_cast<Widget::DockItem::Placement>(
+                static_cast<GdlDockPlacement>(
                     Inkscape::Preferences::get()->getInt(_dialog._prefs_path + "/placement",
-                                             UI::Widget::DockItem::TOP)))
+                                             GDL_DOCK_TOP)))
 
 {
     // Connect signals

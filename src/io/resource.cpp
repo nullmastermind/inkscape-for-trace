@@ -20,7 +20,6 @@
 #include "config.h"
 #endif
 
-#include <glib.h> // g_assert()
 #include "path-prefix.h"
 #include "io/sys.h"
 #include "io/resource.h"
@@ -49,6 +48,7 @@ gchar *_get_path(Domain domain, Type type, char const *filename)
                 case ICONS: temp = INKSCAPE_PIXMAPDIR; break;
                 case KEYS: temp = INKSCAPE_KEYSDIR; break;
                 case MARKERS: temp = INKSCAPE_MARKERSDIR; break;
+                case NONE: g_assert_not_reached(); break;
                 case PALETTES: temp = INKSCAPE_PALETTESDIR; break;
                 case PATTERNS: temp = INKSCAPE_PATTERNSDIR; break;
                 case SCREENS: temp = INKSCAPE_SCREENSDIR; break;
@@ -71,6 +71,9 @@ gchar *_get_path(Domain domain, Type type, char const *filename)
             }
             path = g_strdup(temp);
         } break;
+        case CACHE: {
+            path = g_build_filename(g_get_user_cache_dir(), "inkscape", NULL);
+        } break;
         case USER: {
             char const *name=NULL;
             switch (type) {
@@ -80,6 +83,7 @@ gchar *_get_path(Domain domain, Type type, char const *filename)
                 case ICONS: name = "icons"; break;
                 case KEYS: name = "keys"; break;
                 case MARKERS: name = "markers"; break;
+                case NONE: name = ""; break;
                 case PALETTES: name = "palettes"; break;
                 case PATTERNS: name = "patterns"; break;
                 case SYMBOLS: name = "symbols"; break;
