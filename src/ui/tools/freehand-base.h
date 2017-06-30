@@ -44,7 +44,7 @@ namespace Tools {
 
 class FreehandBase : public ToolBase {
 public:
-	FreehandBase(gchar const *const *cursor_shape, gint hot_x, gint hot_y);
+	FreehandBase(gchar const *const *cursor_shape);
 	virtual ~FreehandBase();
 
     Inkscape::Selection *selection;

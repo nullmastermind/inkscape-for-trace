@@ -52,7 +52,7 @@ const std::string& RectTool::getPrefsPath() {
 const std::string RectTool::prefsPath = "/tools/shapes/rect";
 
 RectTool::RectTool()
-    : ToolBase(cursor_rect_xpm, 4, 4)
+    : ToolBase(cursor_rect_xpm)
     , rect(NULL)
     , rx(0)
     , ry(0)

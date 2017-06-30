@@ -76,7 +76,7 @@ const std::string TextTool::prefsPath = "/tools/text";
 
 
 TextTool::TextTool()
-    : ToolBase(cursor_text_xpm, 7, 7)
+    : ToolBase(cursor_text_xpm)
     , imc(NULL)
     , text(NULL)
     , pdoc(0, 0)
@@ -359,8 +359,6 @@ bool TextTool::item_handler(SPItem* item, GdkEvent* event) {
                 sp_canvas_item_show(this->indicator);
 
                 this->cursor_shape = cursor_text_insert_xpm;
-                this->hot_x = 7;
-                this->hot_y = 10;
                 this->sp_event_context_update_cursor();
                 sp_text_context_update_text_selection(this);
 
@@ -548,8 +546,6 @@ bool TextTool::root_handler(GdkEvent* event) {
                 this->over_text = 0;
                 // update cursor and statusbar: we are not over a text object now
                 this->cursor_shape = cursor_text_xpm;
-                this->hot_x = 7;
-                this->hot_y = 7;
                 this->sp_event_context_update_cursor();
                 desktop->event_context->defaultMessageContext()->clear();
             }

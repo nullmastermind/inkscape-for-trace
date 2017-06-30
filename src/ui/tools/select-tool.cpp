@@ -81,7 +81,7 @@ sp_load_handles(int start, int count, char const **xpm) {
 
 SelectTool::SelectTool()
     // Don't load a default cursor
-    : ToolBase(NULL, 0, 0)
+    : ToolBase(NULL)
     , dragging(false)
     , moved(false)
     , button_press_shift(false)
@@ -94,8 +94,8 @@ SelectTool::SelectTool()
     , _describer(NULL)
 {
     // cursors in select context
-    CursorSelectMouseover = sp_cursor_new_from_xpm(cursor_select_m_xpm , 1, 1);
-    CursorSelectDragging = sp_cursor_new_from_xpm(cursor_select_d_xpm , 1, 1);
+    CursorSelectMouseover = sp_cursor_from_xpm(cursor_select_m_xpm);
+    CursorSelectDragging = sp_cursor_from_xpm(cursor_select_d_xpm);
     
     // selection handles
     sp_load_handles(0, 2, handle_scale_xpm);

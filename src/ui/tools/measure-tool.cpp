@@ -322,7 +322,7 @@ void createAngleDisplayCurve(SPDesktop *desktop, Geom::Point const &center, Geom
 boost::optional<Geom::Point> explicit_base_tmp = boost::none;
 
 MeasureTool::MeasureTool()
-    : ToolBase(cursor_measure_xpm, 4, 4)
+    : ToolBase(cursor_measure_xpm)
     , grabbed(NULL)
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;

@@ -60,7 +60,7 @@ const std::string& DropperTool::getPrefsPath() {
 const std::string DropperTool::prefsPath = "/tools/dropper";
 
 DropperTool::DropperTool()
-    : ToolBase(cursor_dropper_f_xpm, 5, 5)
+    : ToolBase(cursor_dropper_f_xpm)
 	, R(0)
 	, G(0)
 	, B(0)
@@ -70,8 +70,8 @@ DropperTool::DropperTool()
 	, area(NULL)
 	, centre(0, 0)
 {
-    cursor_dropper_fill = sp_cursor_new_from_xpm(cursor_dropper_f_xpm , 5, 5);
-    cursor_dropper_stroke = sp_cursor_new_from_xpm(cursor_dropper_s_xpm , 5, 5);
+    cursor_dropper_fill = sp_cursor_from_xpm(cursor_dropper_f_xpm);
+    cursor_dropper_stroke = sp_cursor_from_xpm(cursor_dropper_s_xpm);
 }
 
 DropperTool::~DropperTool() {

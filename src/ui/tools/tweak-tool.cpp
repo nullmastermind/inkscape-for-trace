@@ -38,13 +38,13 @@
 #include "pixmaps/cursor-tweak-rotate-counterclockwise.xpm"
 #include "pixmaps/cursor-tweak-more.xpm"
 #include "pixmaps/cursor-tweak-less.xpm"
-#include "pixmaps/cursor-thin.xpm"
-#include "pixmaps/cursor-thicken.xpm"
-#include "pixmaps/cursor-attract.xpm"
-#include "pixmaps/cursor-repel.xpm"
-#include "pixmaps/cursor-push.xpm"
-#include "pixmaps/cursor-roughen.xpm"
-#include "pixmaps/cursor-color.xpm"
+#include "pixmaps/cursor-tweak-thin.xpm"
+#include "pixmaps/cursor-tweak-thicken.xpm"
+#include "pixmaps/cursor-tweak-attract.xpm"
+#include "pixmaps/cursor-tweak-repel.xpm"
+#include "pixmaps/cursor-tweak-push.xpm"
+#include "pixmaps/cursor-tweak-roughen.xpm"
+#include "pixmaps/cursor-tweak-color.xpm"
 #include "context-fns.h"
 #include "inkscape.h"
 #include "splivarot.h"
@@ -92,7 +92,7 @@ const std::string& TweakTool::getPrefsPath() {
 const std::string TweakTool::prefsPath = "/tools/tweak";
 
 TweakTool::TweakTool()
-    : ToolBase(cursor_push_xpm, 4, 4)
+    : ToolBase(cursor_push_xpm)
     , pressure(TC_DEFAULT_PRESSURE)
     , dragging(false)
     , usepressure(false)

@@ -59,7 +59,7 @@ const std::string ArcTool::prefsPath = "/tools/shapes/arc";
 
 
 ArcTool::ArcTool()
-    : ToolBase(cursor_ellipse_xpm, 4, 4)
+    : ToolBase(cursor_ellipse_xpm)
     , arc(NULL)
 {
 }
