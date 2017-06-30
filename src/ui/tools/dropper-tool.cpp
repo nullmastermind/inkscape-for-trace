@@ -46,9 +46,6 @@
 
 using Inkscape::DocumentUndo;
 
-static GdkCursor *cursor_dropper_fill = NULL;
-static GdkCursor *cursor_dropper_stroke = NULL;
-
 namespace Inkscape {
 namespace UI {
 namespace Tools {
@@ -70,8 +67,6 @@ DropperTool::DropperTool()
 	, area(NULL)
 	, centre(0, 0)
 {
-    cursor_dropper_fill = sp_cursor_from_xpm(cursor_dropper_f_xpm);
-    cursor_dropper_stroke = sp_cursor_from_xpm(cursor_dropper_s_xpm);
 }
 
 DropperTool::~DropperTool() {
@@ -117,16 +112,6 @@ void DropperTool::finish() {
         this->area = NULL;
     }
 
-    if (cursor_dropper_fill) {
-        g_object_unref(cursor_dropper_fill);
-        cursor_dropper_fill = NULL;
-    }
-    
-    if (cursor_dropper_stroke) {
-        g_object_unref(cursor_dropper_stroke);
-        cursor_dropper_fill = NULL;
-    }
-
     ToolBase::finish();
 }
 
@@ -149,6 +134,7 @@ bool DropperTool::root_handler(GdkEvent* event) {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     int ret = FALSE;
+    int draw_cursor = DONT_REDRAW_CURSOR;
 
     int pick = prefs->getInt("/tools/dropper/pick", SP_DROPPER_PICK_VISIBLE);
     bool setalpha = prefs->getBool("/tools/dropper/setalpha", true);
@@ -174,14 +160,6 @@ bool DropperTool::root_handler(GdkEvent* event) {
                 break;
             } else if (!this->space_panning) {
                 // otherwise, constantly calculate color no matter is any button pressed or not
-
-                // If one time pick with stroke set the pixmap
-                if (prefs->getBool("/tools/dropper/onetimepick", false) && prefs->getInt("/dialogs/fillstroke/page", 0) == 1) {
-                    //TODO Only set when not set already
-                    GdkWindow* window = gtk_widget_get_window(GTK_WIDGET(desktop->getCanvas()));
-                    gdk_window_set_cursor(window, cursor_dropper_stroke);
-                }
-
                 double rw = 0.0;
                 double R(0), G(0), B(0), A(0);
 
@@ -242,10 +220,17 @@ bool DropperTool::root_handler(GdkEvent* event) {
                 }
 
                 // remember color
-                this->R = R;
-                this->G = G;
-                this->B = B;
-                this->alpha = A;
+                if(R != this->R || G != this->G || B != this->B || A != this->alpha) {
+                    this->R = R;
+                    this->G = G;
+                    this->B = B;
+                    this->alpha = A;
+                    if(!(event->button.state & GDK_SHIFT_MASK)) {
+                        draw_cursor = DRAW_FILL_CURSOR;
+                    } else {
+                        draw_cursor = DRAW_STROKE_CURSOR;
+                    }
+                }
 
                 // status message
                 double alpha_to_set = setalpha? this->alpha : 1.0;
@@ -278,11 +263,10 @@ bool DropperTool::root_handler(GdkEvent* event) {
             if (event->button.button == 1 && !this->space_panning) {
                 sp_canvas_item_hide(this->area);
                 this->dragging = false;
-				
-				if (this->grabbed) {
-					sp_canvas_item_ungrab(this->grabbed, event->button.time);
-					this->grabbed = NULL;
-				}
+                if (this->grabbed) {
+                    sp_canvas_item_ungrab(this->grabbed, event->button.time);
+                    this->grabbed = NULL;
+                }
 
                 double alpha_to_set = setalpha? this->alpha : 1.0;
 
@@ -302,8 +286,7 @@ bool DropperTool::root_handler(GdkEvent* event) {
                 // REJON: set aux. toolbar input to hex color!
 
                 if (event->button.state & GDK_SHIFT_MASK) {
-                    GdkWindow* window = gtk_widget_get_window(GTK_WIDGET(desktop->getCanvas()));
-                    gdk_window_set_cursor(window, cursor_dropper_stroke);
+                    draw_cursor = DRAW_STROKE_CURSOR;
                 }
 
                 if (!(desktop->getSelection()->isEmpty())) {
@@ -340,11 +323,7 @@ bool DropperTool::root_handler(GdkEvent* event) {
             desktop->getSelection()->clear();
         case GDK_KEY_Shift_L:
         case GDK_KEY_Shift_R:
-            if (!desktop->isWaitingCursor() && !prefs->getBool("/tools/dropper/onetimepick", false)) {
-                GdkWindow* window = gtk_widget_get_window(GTK_WIDGET(desktop->getCanvas()));
-                gdk_window_set_cursor(window, cursor_dropper_stroke);
-            }
-
+            draw_cursor = DRAW_STROKE_CURSOR;
             break;
         default:
             break;
@@ -355,10 +334,7 @@ bool DropperTool::root_handler(GdkEvent* event) {
         switch (get_group0_keyval(&event->key)) {
         case GDK_KEY_Shift_L:
         case GDK_KEY_Shift_R:
-            if (!desktop->isWaitingCursor() && !prefs->getBool("/tools/dropper/onetimepick", false)) {
-                GdkWindow* window = gtk_widget_get_window(GTK_WIDGET(desktop->getCanvas()));
-                gdk_window_set_cursor(window, cursor_dropper_fill);
-            }
+            draw_cursor = DRAW_FILL_CURSOR;
             break;
 
         default:
@@ -368,6 +344,17 @@ bool DropperTool::root_handler(GdkEvent* event) {
 
     default:
         break;
+    }
+
+    if(draw_cursor != DONT_REDRAW_CURSOR && !desktop->isWaitingCursor() && !prefs->getBool("/tools/dropper/onetimepick", false)) {
+        GdkCursor *cursor;
+        if(draw_cursor == DRAW_FILL_CURSOR) {
+            cursor = sp_cursor_from_xpm(cursor_dropper_f_xpm, NULL, NULL, this->get_color());
+        } else if(draw_cursor == DRAW_STROKE_CURSOR) {
+            cursor = sp_cursor_from_xpm(cursor_dropper_s_xpm, NULL, NULL, this->get_color());
+        }
+        GdkWindow* window = gtk_widget_get_window(GTK_WIDGET(desktop->getCanvas()));
+        gdk_window_set_cursor(window, cursor);
     }
 
     if (!ret) {
