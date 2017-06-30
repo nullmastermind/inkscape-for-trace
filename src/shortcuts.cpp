@@ -625,6 +625,12 @@ static void read_shortcuts_file(char const *filename, bool const is_user_set) {
                     modifiers |= SP_SHORTCUT_HYPER_MASK;
                 } else if (!strcmp(mod, "Meta")) {
                     modifiers |= SP_SHORTCUT_META_MASK;
+                } else if (!strcmp(mod, "Primary")) {
+#ifdef __APPLE__
+                    modifiers |= SP_SHORTCUT_META_MASK;
+#else
+                    modifiers |= SP_SHORTCUT_CONTROL_MASK;
+#endif
                 } else {
                     g_warning("Unknown modifier %s for %s", mod, verb_name);
                 }
