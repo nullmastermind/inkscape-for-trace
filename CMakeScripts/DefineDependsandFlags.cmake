@@ -67,6 +67,11 @@ if(WITH_GNOME_VFS)
     endif()
 endif()
 
+find_package(JeMalloc)
+if (JEMALLOC_FOUND)
+	list(APPEND INKSCAPE_LIBS ${JEMALLOC_LIBRARIES})
+endif()
+
 if(ENABLE_LCMS)
     unset(HAVE_LIBLCMS1)
     unset(HAVE_LIBLCMS2)
