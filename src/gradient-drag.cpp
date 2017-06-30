@@ -1517,7 +1517,7 @@ void GrDragger::updateKnotShape()
 
     // For highlighting mesh handles corresponding to selected corner
     if (this->knot->shape == SP_KNOT_SHAPE_TRIANGLE) {
-        this->knot->setFill(GR_KNOT_COLOR_HIGHLIGHT, GR_KNOT_COLOR_MOUSEOVER, GR_KNOT_COLOR_MOUSEOVER);
+        this->knot->setFill(GR_KNOT_COLOR_HIGHLIGHT, GR_KNOT_COLOR_MOUSEOVER, GR_KNOT_COLOR_MOUSEOVER, GR_KNOT_COLOR_MOUSEOVER);
         if (gr_knot_shapes[last->point_type] == SP_KNOT_SHAPE_CIRCLE) {
             g_object_set (G_OBJECT (this->knot->item), "shape", SP_KNOT_SHAPE_TRIANGLE, NULL);
         }
@@ -1664,8 +1664,8 @@ GrDragger::GrDragger(GrDrag *parent, Geom::Point p, GrDraggable *draggable)
     if (draggable && draggable->point_type == POINT_MG_CORNER) {
         fill_color = GR_KNOT_COLOR_MESHCORNER;
     }
-    this->knot->setFill(fill_color, GR_KNOT_COLOR_MOUSEOVER, GR_KNOT_COLOR_MOUSEOVER);
-    this->knot->setStroke(0x0000007f, 0x0000007f, 0x0000007f);
+    this->knot->setFill(fill_color, GR_KNOT_COLOR_MOUSEOVER, GR_KNOT_COLOR_MOUSEOVER, GR_KNOT_COLOR_MOUSEOVER);
+    this->knot->setStroke(0x0000007f, 0x0000007f, 0x0000007f, 0x0000007f);
     this->updateControlSizesOverload(this->knot);
     this->knot->updateCtrl();
 
@@ -1837,9 +1837,9 @@ void GrDragger::highlightNode(SPMeshNode* node, bool highlight, Geom::Point corn
 
         SPKnot *knot = d->knot;
         if (highlight) {
-            knot->setFill(GR_KNOT_COLOR_HIGHLIGHT, GR_KNOT_COLOR_MOUSEOVER, GR_KNOT_COLOR_MOUSEOVER);
+            knot->setFill(GR_KNOT_COLOR_HIGHLIGHT, GR_KNOT_COLOR_MOUSEOVER, GR_KNOT_COLOR_MOUSEOVER, GR_KNOT_COLOR_MOUSEOVER);
         } else {
-            knot->setFill(GR_KNOT_COLOR_NORMAL, GR_KNOT_COLOR_MOUSEOVER, GR_KNOT_COLOR_MOUSEOVER);
+            knot->setFill(GR_KNOT_COLOR_NORMAL, GR_KNOT_COLOR_MOUSEOVER, GR_KNOT_COLOR_MOUSEOVER, GR_KNOT_COLOR_MOUSEOVER);
         }
 
         if (type == POINT_MG_HANDLE) {

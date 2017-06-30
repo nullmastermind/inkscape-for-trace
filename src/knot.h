@@ -68,7 +68,7 @@ public:
 
     GdkCursor *saved_cursor;
     void* pixbuf;
-
+    bool selected;
     char *tip;
 
     unsigned long _event_handler_id;
@@ -96,11 +96,11 @@ public:
     void setPixbuf(void* p);
     void setAngle(double i);
 
-    void setFill(guint32 normal, guint32 mouseover, guint32 dragging);
-    void setStroke(guint32 normal, guint32 mouseover, guint32 dragging);
-    void setImage(unsigned char* normal, unsigned char* mouseover, unsigned char* dragging);
+    void setFill(guint32 normal, guint32 mouseover, guint32 dragging, guint32 selected);
+    void setStroke(guint32 normal, guint32 mouseover, guint32 dragging, guint32 selected);
+    void setImage(unsigned char* normal, unsigned char* mouseover, unsigned char* dragging, unsigned char* selected);
 
-    void setCursor(GdkCursor* normal, GdkCursor* mouseover, GdkCursor* dragging);
+    void setCursor(GdkCursor* normal, GdkCursor* mouseover, GdkCursor* dragging, GdkCursor* selected);
 
     /**
      * Show knot on its canvas.
@@ -141,6 +141,10 @@ public:
      * Move knot to new position, without emitting a MOVED signal.
      */
     void moveto(Geom::Point const &p);
+    /**
+     * Select knot.
+     */
+    void selectKnot(bool select);
 
     /**
      * Returns position of knot.
@@ -161,6 +165,7 @@ void knot_ref(SPKnot* knot);
 void knot_unref(SPKnot* knot);
 
 #define SP_KNOT_IS_VISIBLE(k) ((k->flags & SP_KNOT_VISIBLE) != 0)
+#define SP_KNOT_IS_SELECTED(k) ((k->flags & SP_KNOT_SELECTED) != 0)
 #define SP_KNOT_IS_MOUSEOVER(k) ((k->flags & SP_KNOT_MOUSEOVER) != 0)
 #define SP_KNOT_IS_DRAGGING(k) ((k->flags & SP_KNOT_DRAGGING) != 0)
 #define SP_KNOT_IS_GRABBED(k) ((k->flags & SP_KNOT_GRABBED) != 0)

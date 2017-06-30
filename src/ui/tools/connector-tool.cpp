@@ -348,7 +348,7 @@ cc_select_handle(SPKnot* knot)
     knot->setShape(SP_KNOT_SHAPE_SQUARE);
     knot->setSize(10);
     knot->setAnchor(SP_ANCHOR_CENTER);
-    knot->setFill(0x0000ffff, 0x0000ffff, 0x0000ffff);
+    knot->setFill(0x0000ffff, 0x0000ffff, 0x0000ffff, 0x0000ffff);
     knot->updateCtrl();
 }
 
@@ -358,7 +358,7 @@ cc_deselect_handle(SPKnot* knot)
     knot->setShape(SP_KNOT_SHAPE_SQUARE);
     knot->setSize(8);
     knot->setAnchor(SP_ANCHOR_CENTER);
-    knot->setFill(0xffffff00, 0xff0000ff, 0xff0000ff);
+    knot->setFill(0xffffff00, 0xff0000ff, 0xff0000ff, 0xff0000ff);
     knot->updateCtrl();
 }
 
@@ -1058,7 +1058,7 @@ void ConnectorTool::_activeShapeAddKnot(SPItem* item) {
         knot->setShape(SP_KNOT_SHAPE_SQUARE);
         knot->setSize(8);
         knot->setAnchor(SP_ANCHOR_CENTER);
-        knot->setFill(0xffffff00, 0xff0000ff, 0xff0000ff);
+        knot->setFill(0xffffff00, 0xff0000ff, 0xff0000ff, 0xff0000ff);
         knot->updateCtrl();
 
         // We don't want to use the standard knot handler.
@@ -1176,8 +1176,8 @@ void ConnectorTool::cc_set_active_conn(SPItem *item) {
             knot->setShape(SP_KNOT_SHAPE_SQUARE);
             knot->setSize(7);
             knot->setAnchor(SP_ANCHOR_CENTER);
-            knot->setFill(0xffffff00, 0xff0000ff, 0xff0000ff);
-            knot->setStroke(0x000000ff, 0x000000ff, 0x000000ff);
+            knot->setFill(0xffffff00, 0xff0000ff, 0xff0000ff, 0xff0000ff);
+            knot->setStroke(0x000000ff, 0x000000ff, 0x000000ff, 0x000000ff);
             knot->updateCtrl();
 
             // We don't want to use the standard knot handler,

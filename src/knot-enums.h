@@ -34,6 +34,7 @@ typedef enum {
     SP_KNOT_STATE_NORMAL,
     SP_KNOT_STATE_MOUSEOVER,
     SP_KNOT_STATE_DRAGGING,
+    SP_KNOT_STATE_SELECTED,
     SP_KNOT_STATE_HIDDEN
 } SPKnotStateType;
 
@@ -43,7 +44,8 @@ enum {
     SP_KNOT_VISIBLE = 1 << 0,
     SP_KNOT_MOUSEOVER = 1 << 1,
     SP_KNOT_DRAGGING = 1 << 2,
-    SP_KNOT_GRABBED = 1 << 3
+    SP_KNOT_GRABBED = 1 << 3,
+    SP_KNOT_SELECTED = 1 << 4
 };
 
 

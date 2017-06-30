@@ -82,18 +82,22 @@ SPKnot::SPKnot(SPDesktop *desktop, gchar const *tip)
     this->fill[SP_KNOT_STATE_NORMAL] = 0xffffff00;
     this->fill[SP_KNOT_STATE_MOUSEOVER] = 0xff0000ff;
     this->fill[SP_KNOT_STATE_DRAGGING] = 0x0000ffff;
+    this->fill[SP_KNOT_STATE_SELECTED] = 0xff0000ff;
 
     this->stroke[SP_KNOT_STATE_NORMAL] = 0x01000000;
     this->stroke[SP_KNOT_STATE_MOUSEOVER] = 0x01000000;
     this->stroke[SP_KNOT_STATE_DRAGGING] = 0x01000000;
+    this->stroke[SP_KNOT_STATE_SELECTED] = 0x01000000;
 
     this->image[SP_KNOT_STATE_NORMAL] = NULL;
     this->image[SP_KNOT_STATE_MOUSEOVER] = NULL;
     this->image[SP_KNOT_STATE_DRAGGING] = NULL;
-
+    this->image[SP_KNOT_STATE_SELECTED] = NULL;
+    
     this->cursor[SP_KNOT_STATE_NORMAL] = NULL;
     this->cursor[SP_KNOT_STATE_MOUSEOVER] = NULL;
     this->cursor[SP_KNOT_STATE_DRAGGING] = NULL;
+    this->cursor[SP_KNOT_STATE_SELECTED] = NULL;
 
     this->saved_cursor = NULL;
     this->pixbuf = NULL;
@@ -172,10 +176,14 @@ void SPKnot::startDragging(Geom::Point const &p, gint x, gint y, guint32 etime) 
     if (!nograb) {
         sp_canvas_item_grab(this->item, KNOT_EVENT_MASK, this->cursor[SP_KNOT_STATE_DRAGGING], etime);
     }
-
     this->setFlag(SP_KNOT_GRABBED, TRUE);
 
     grabbed = TRUE;
+}
+
+void SPKnot::selectKnot(bool select){
+    selected = select;
+    setFlag(SP_KNOT_SELECTED, select);
 }
 
 /**
@@ -216,6 +224,7 @@ static int sp_knot_handler(SPCanvasItem */*item*/, GdkEvent *event, SPKnot *knot
             knot->startDragging(p, (gint) event->button.x, (gint) event->button.y, event->button.time);
             knot->mousedown_signal.emit(knot, event->button.state);
             consumed = TRUE;
+            knot->selectKnot(!knot->selected);
         }
         break;
     case GDK_BUTTON_RELEASE:
@@ -224,9 +233,10 @@ static int sp_knot_handler(SPCanvasItem */*item*/, GdkEvent *event, SPKnot *knot
             if (knot->desktop->event_context->_delayed_snap_event) {
                 sp_event_context_snap_watchdog_callback(knot->desktop->event_context->_delayed_snap_event);
             }
-
             sp_event_context_discard_delayed_snap_event(knot->desktop->event_context);
-
+            if(knot->flags & SP_KNOT_MOUSEOVER){
+                knot->selectKnot(!knot->selected);
+            }
             knot->pressure = 0;
 
             if (transform_escaped) {
@@ -423,6 +433,7 @@ void SPKnot::setFlag(guint flag, bool set) {
             break;
     case SP_KNOT_MOUSEOVER:
     case SP_KNOT_DRAGGING:
+    case SP_KNOT_SELECTED:
             this->_setCtrlState();
             break;
     case SP_KNOT_GRABBED:
@@ -458,8 +469,9 @@ void SPKnot::_setCtrlState() {
         state = SP_KNOT_STATE_DRAGGING;
     } else if (this->flags & SP_KNOT_MOUSEOVER) {
         state = SP_KNOT_STATE_MOUSEOVER;
+    } else if (this->flags & SP_KNOT_STATE_SELECTED) {
+        state = SP_KNOT_STATE_SELECTED;
     }
-
     g_object_set(this->item, "fill_color",   this->fill[state],   NULL);
     g_object_set(this->item, "stroke_color", this->stroke[state], NULL);
 }
@@ -489,25 +501,28 @@ void SPKnot::setAngle(double i) {
     angle = i;
 }
 
-void SPKnot::setFill(guint32 normal, guint32 mouseover, guint32 dragging) {
+void SPKnot::setFill(guint32 normal, guint32 mouseover, guint32 dragging, guint32 selected) {
     fill[SP_KNOT_STATE_NORMAL] = normal;
     fill[SP_KNOT_STATE_MOUSEOVER] = mouseover;
     fill[SP_KNOT_STATE_DRAGGING] = dragging;
+    fill[SP_KNOT_STATE_SELECTED] = selected;
 }
 
-void SPKnot::setStroke(guint32 normal, guint32 mouseover, guint32 dragging) {
+void SPKnot::setStroke(guint32 normal, guint32 mouseover, guint32 dragging, guint32 selected) {
     stroke[SP_KNOT_STATE_NORMAL] = normal;
     stroke[SP_KNOT_STATE_MOUSEOVER] = mouseover;
     stroke[SP_KNOT_STATE_DRAGGING] = dragging;
+    stroke[SP_KNOT_STATE_SELECTED] = selected;
 }
 
-void SPKnot::setImage(guchar* normal, guchar* mouseover, guchar* dragging) {
+void SPKnot::setImage(guchar* normal, guchar* mouseover, guchar* dragging, guchar* selected) {
     image[SP_KNOT_STATE_NORMAL] = normal;
     image[SP_KNOT_STATE_MOUSEOVER] = mouseover;
     image[SP_KNOT_STATE_DRAGGING] = dragging;
+    image[SP_KNOT_STATE_SELECTED] = selected;
 }
 
-void SPKnot::setCursor(GdkCursor* normal, GdkCursor* mouseover, GdkCursor* dragging) {
+void SPKnot::setCursor(GdkCursor* normal, GdkCursor* mouseover, GdkCursor* dragging, GdkCursor* selected) {
     if (cursor[SP_KNOT_STATE_NORMAL]) {
         g_object_unref(cursor[SP_KNOT_STATE_NORMAL]);
     }
@@ -536,6 +551,16 @@ void SPKnot::setCursor(GdkCursor* normal, GdkCursor* mouseover, GdkCursor* dragg
 
     if (dragging) {
         g_object_ref(dragging);
+    }
+    
+    if (cursor[SP_KNOT_STATE_SELECTED]) {
+        g_object_unref(cursor[SP_KNOT_STATE_SELECTED]);
+    }
+
+    cursor[SP_KNOT_STATE_SELECTED] = selected;
+
+    if (selected) {
+        g_object_ref(selected);
     }
 }
 

@@ -275,8 +275,8 @@ VPDragger::VPDragger(VPDrag *parent, Geom::Point p, VanishingPoint &vp)
         // create the knot
         this->knot = new SPKnot(SP_ACTIVE_DESKTOP, NULL);
         this->knot->setMode(SP_KNOT_MODE_XOR);
-        this->knot->setFill(VP_KNOT_COLOR_NORMAL, VP_KNOT_COLOR_NORMAL, VP_KNOT_COLOR_NORMAL);
-        this->knot->setStroke(0x000000ff, 0x000000ff, 0x000000ff);
+        this->knot->setFill(VP_KNOT_COLOR_NORMAL, VP_KNOT_COLOR_NORMAL, VP_KNOT_COLOR_NORMAL, VP_KNOT_COLOR_NORMAL);
+        this->knot->setStroke(0x000000ff, 0x000000ff, 0x000000ff, 0x000000ff);
         this->knot->updateCtrl();
         knot->item->ctrlType = CTRL_TYPE_ANCHOR;
         ControlManager::getManager().track(knot->item);
