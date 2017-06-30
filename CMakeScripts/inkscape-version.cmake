@@ -12,10 +12,18 @@ set(INKSCAPE_REVISION "unknown")
 set(INKSCAPE_CUSTOM "custom")
 
 if(EXISTS ${INKSCAPE_SOURCE_DIR}/.git/)
-    execute_process(COMMAND
-	git describe ${INKSCAPE_SOURCE_DIR}
-	OUTPUT_VARIABLE INKSCAPE_REVISION
-	OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+    execute_process(COMMAND git describe
+        COMMAND tr "\n" " "
+        WORKING_DIRECTORY ${INKSCAPE_SOURCE_DIR}
+        OUTPUT_VARIABLE INKSCAPE_REV1)
+    execute_process(COMMAND git show --format=format:%ad --date=short
+        COMMAND head -n 1 
+        COMMAND tr "\n" " "
+        WORKING_DIRECTORY ${INKSCAPE_SOURCE_DIR}
+	OUTPUT_VARIABLE INKSCAPE_REV2
+        OUTPUT_STRIP_TRAILING_WHITESPACE)
+    set(INKSCAPE_REVISION ${INKSCAPE_REV1} ${INKSCAPE_REV2})
 
     execute_process(COMMAND
         git status -s ${INKSCAPE_SOURCE_DIR}/src
