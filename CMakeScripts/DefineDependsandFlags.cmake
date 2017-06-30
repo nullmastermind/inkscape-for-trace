@@ -67,6 +67,11 @@ if(WITH_GNOME_VFS)
     endif()
 endif()
 
+find_package(JeMalloc)
+if (JEMALLOC_FOUND)
+	list(APPEND INKSCAPE_LIBS ${JEMALLOC_LIBRARIES})
+endif()
+
 if(ENABLE_LCMS)
     unset(HAVE_LIBLCMS1)
     unset(HAVE_LIBLCMS2)
@@ -373,7 +378,7 @@ list(APPEND INKSCAPE_INCS_SYS ${ZLIB_INCLUDE_DIRS})
 list(APPEND INKSCAPE_LIBS ${ZLIB_LIBRARIES})
 
 if(WITH_IMAGE_MAGICK)
-    pkg_check_modules(ImageMagick ImageMagick MagickCore Magick++ )
+    pkg_check_modules(ImageMagick ImageMagick++ )
     if(ImageMagick_FOUND)
 
         list(APPEND INKSCAPE_LIBS ${ImageMagick_LDFLAGS})

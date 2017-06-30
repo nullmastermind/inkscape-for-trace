@@ -66,6 +66,7 @@
 #endif
 
 #ifdef WITH_IMAGE_MAGICK
+#include <Magick++.h>
 #include "internal/bitmap/adaptiveThreshold.h"
 #include "internal/bitmap/addNoise.h"
 #include "internal/bitmap/blur.h"
@@ -204,6 +205,8 @@ init()
 
     /* Raster Effects */
 #ifdef WITH_IMAGE_MAGICK
+    Magick::InitializeMagick(NULL);
+
     Internal::Bitmap::AdaptiveThreshold::init();
     Internal::Bitmap::AddNoise::init();
     Internal::Bitmap::Blur::init();
