@@ -3,12 +3,6 @@
 # the new ones here in these builds.
 image: registry.gitlab.com/inkscape/inkscape-ci-docker/master
 
-before_script:
-  # CCache Config
-  - mkdir -p ccache
-  - export CCACHE_BASEDIR=${PWD}
-  - export CCACHE_DIR=${PWD}/ccache
-
 cache:
   paths:
     - ccache/
@@ -16,11 +10,46 @@ cache:
 # Building inkscape
 inkscape:
   stage: build
+  before_script:
+    # CCache Config
+    - mkdir -p ccache
+    - export CCACHE_BASEDIR=${PWD}
+    - export CCACHE_DIR=${PWD}/ccache
   script:
     - mkdir -p build
     - cd build
     - cmake .. -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_BUILD_TYPE=Debug
     - make -j3
+    - cd ..
+  artifacts:
+    expire_in: 1 year
+    paths:
+      - build/
+
+inkscape:mac:
+  stage: build
+  tags:
+    - mac
+  before_script:
+    - brew update
+    - brew upgrade
+    # Tools
+    - brew install cmake intltool libtool pkg-config ccache
+    # Libraries
+    - brew install bdw-gc boost gdl gettext gsl gtkmm3 libcdr libvisio libwpg pango popt poppler potrace
+    # Testing tools
+    # TODO
+    # Cleanup
+    - brew cleanup
+    # CCache Config
+    - mkdir -p ccache
+    - export CCACHE_BASEDIR=${PWD}
+    - export CCACHE_DIR=${PWD}/ccache
+  script:
+    - mkdir -p build
+    - cd build
+    - cmake .. -DIntl_INCLUDE_DIR=/usr/local/opt/gettext/include -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_BUILD_TYPE=Debug
+    - make -j1
     - cd ..
   artifacts:
     expire_in: 1 year
