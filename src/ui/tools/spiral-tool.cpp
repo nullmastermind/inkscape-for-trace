@@ -245,14 +245,6 @@ bool SpiralTool::root_handler(GdkEvent* event) {
                                                NULL,
                                                _("<b>Alt</b>: lock spiral radius"));
                     break;
-                case GDK_KEY_Up:
-                case GDK_KEY_Down:
-                case GDK_KEY_KP_Up:
-                case GDK_KEY_KP_Down:
-                    // prevent the zoom field from activation
-                    if (!MOD__CTRL_ONLY(event))
-                        ret = TRUE;
-                    break;
 
                 case GDK_KEY_x:
                 case GDK_KEY_X:

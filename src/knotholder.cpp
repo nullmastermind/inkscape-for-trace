@@ -13,31 +13,34 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <glibmm/i18n.h>
-
 #include "document.h"
 #include "document-undo.h"
-#include "sp-shape.h"
+#include "desktop.h"
+#include "verbs.h"
+#include "box3d.h"
+#include "style.h"
 #include "knot.h"
 #include "knotholder.h"
 #include "knot-holder-entity.h"
+#include "display/sp-canvas.h"
 #include "ui/tools/rect-tool.h"
 #include "ui/tools/arc-tool.h"
-#include "sp-ellipse.h"
+#include "ui/tools-switch.h"
 #include "ui/tools/tweak-tool.h"
-#include "sp-star.h"
+#include "ui/tools/node-tool.h"
+#include "ui/shape-editor.h"
 #include "ui/tools/spiral-tool.h"
+#include "ui/control-manager.h"
+#include "sp-shape.h"
+#include "sp-ellipse.h"
+#include "sp-star.h"
 #include "sp-spiral.h"
 #include "sp-offset.h"
-#include "box3d.h"
 #include "sp-pattern.h"
-#include "style.h"
 #include "live_effects/lpeobject.h"
 #include "live_effects/effect.h"
-#include "desktop.h"
-#include "display/sp-canvas.h"
-#include "verbs.h"
-#include "ui/control-manager.h"
+// TODO due to internal breakage in glibmm headers, this must be last:
+#include <glibmm/i18n.h>
 
 using Inkscape::ControlManager;
 using Inkscape::DocumentUndo;
@@ -115,12 +118,22 @@ KnotHolder::knot_clicked_handler(SPKnot *knot, guint state)
     KnotHolder *knot_holder = this;
     SPItem *saved_item = this->item;
 
+    if (!(state & GDK_SHIFT_MASK)) {
+        unselect_knots();
+    }
     for(std::list<KnotHolderEntity *>::iterator i = knot_holder->entity.begin(); i != knot_holder->entity.end(); ++i) {
         KnotHolderEntity *e = *i;
+        if (!(state & GDK_SHIFT_MASK)) {
+            e->knot->selectKnot(false);
+        }
         if (e->knot == knot) {
             // no need to test whether knot_click exists since it's virtual now
             e->knot_click(state);
-            break;
+            if (!(e->knot->flags & SP_KNOT_SELECTED) || !(state & GDK_SHIFT_MASK)){
+                e->knot->selectKnot(true);
+            } else {
+                e->knot->selectKnot(false);
+            }
         }
     }
 
@@ -181,6 +194,29 @@ KnotHolder::transform_selected(Geom::Affine transform){
     }
 }
 
+void 
+KnotHolder::unselect_knots(){
+    if (tools_isactive(desktop, TOOLS_NODES)) {
+        Inkscape::UI::Tools::NodeTool *nt = static_cast<Inkscape::UI::Tools::NodeTool*>(desktop->event_context);
+        if (nt) {
+            for(auto i=nt->_shape_editors.begin();i!=nt->_shape_editors.end();++i){
+                Inkscape::UI::ShapeEditor * shape_editor = i->second;
+                if (shape_editor && shape_editor->has_knotholder()) {
+                    KnotHolder * knotholder = shape_editor->knotholder;
+                    if (knotholder) {
+                        for(std::list<KnotHolderEntity *>::iterator i = knotholder->entity.begin(); i != knotholder->entity.end(); ++i) {
+                            KnotHolderEntity *e = *i;
+                            if (e->knot->flags & SP_KNOT_SELECTED) {
+                                e->knot->selectKnot(false);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 void
 KnotHolder::knot_moved_handler(SPKnot *knot, Geom::Point const &p, guint state)
 {
@@ -190,13 +226,23 @@ KnotHolder::knot_moved_handler(SPKnot *knot, Geom::Point const &p, guint state)
 
 	// this was a local change and the knotholder does not need to be recreated:
     this->local_change = TRUE;
-
+    if (!(state & GDK_SHIFT_MASK)) {
+        unselect_knots();
+    }
     for(std::list<KnotHolderEntity *>::iterator i = this->entity.begin(); i != this->entity.end(); ++i) {
         KnotHolderEntity *e = *i;
+        if (!(state & GDK_SHIFT_MASK)) {
+            e->knot->selectKnot(false);
+        }
         if (e->knot == knot) {
             Geom::Point const q = p * item->i2dt_affine().inverse();
             e->knot_set(q, e->knot->drag_origin * item->i2dt_affine().inverse(), state);
-            break;
+            e->knot_click(state);
+            if (!(e->knot->flags & SP_KNOT_SELECTED) || !(state & GDK_SHIFT_MASK)){
+                e->knot->selectKnot(true);
+            } else {
+                e->knot->selectKnot(false);
+            }
         }
     }
 

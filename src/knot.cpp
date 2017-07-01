@@ -223,7 +223,6 @@ static int sp_knot_handler(SPCanvasItem */*item*/, GdkEvent *event, SPKnot *knot
             knot->startDragging(p, (gint) event->button.x, (gint) event->button.y, event->button.time);
             knot->mousedown_signal.emit(knot, event->button.state);
             consumed = TRUE;
-            knot->selectKnot(!(knot->flags & SP_KNOT_SELECTED));
         }
         break;
     case GDK_BUTTON_RELEASE:
@@ -248,7 +247,6 @@ static int sp_knot_handler(SPCanvasItem */*item*/, GdkEvent *event, SPKnot *knot
                 if (moved) {
                     knot->setFlag(SP_KNOT_DRAGGING, FALSE);
                     knot->ungrabbed_signal.emit(knot, event->button.state);
-                    knot->selectKnot(true);
                 } else {
                     knot->click_signal.emit(knot, event->button.state);
                 }

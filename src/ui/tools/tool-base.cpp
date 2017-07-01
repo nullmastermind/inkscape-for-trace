@@ -328,13 +328,16 @@ bool ToolBase::_keyboardMove(GdkEventKey const &event, Geom::Point const &dir)
         if (knotholder) {
             knotholder->transform_selected(Geom::Translate(delta));
         }
-    } else {
+    } else if (tools_isactive(desktop, TOOLS_NODES)) {
         Inkscape::UI::Tools::NodeTool *nt = static_cast<Inkscape::UI::Tools::NodeTool*>(desktop->event_context);
         if (nt) {
             for(auto i=nt->_shape_editors.begin();i!=nt->_shape_editors.end();++i){
-                KnotHolder * knotholder = i->second->knotholder;
-                if (knotholder) {
-                    knotholder->transform_selected(Geom::Translate(delta));
+                ShapeEditor * shape_editor = i->second;
+                if (shape_editor && shape_editor->has_knotholder()) {
+                    KnotHolder * knotholder = shape_editor->knotholder;
+                    if (knotholder) {
+                        knotholder->transform_selected(Geom::Translate(delta));
+                    }
                 }
             }
         }

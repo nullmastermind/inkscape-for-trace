@@ -244,15 +244,6 @@ bool ArcTool::root_handler(GdkEvent* event) {
                     }
                     break;
 
-                case GDK_KEY_Up:
-                case GDK_KEY_Down:
-                case GDK_KEY_KP_Up:
-                case GDK_KEY_KP_Down:
-                    // prevent the zoom field from activation
-                    if (!MOD__CTRL_ONLY(event))
-                        handled = true;
-                    break;
-
                 case GDK_KEY_x:
                 case GDK_KEY_X:
                     if (MOD__ALT_ONLY(event)) {
