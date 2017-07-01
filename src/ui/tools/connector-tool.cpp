@@ -941,8 +941,7 @@ void ConnectorTool::_finish() {
     this->npoints = 0;
 
     if (this->newConnRef) {
-        this->newConnRef->removeFromGraph();
-        delete this->newConnRef;
+        this->newConnRef->router()->deleteConnector(this->newConnRef);
         this->newConnRef = NULL;
     }
 }

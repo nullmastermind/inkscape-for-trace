@@ -1,17 +1,44 @@
+/*
+ * vim: ts=4 sw=4 et tw=0 wm=0
+ *
+ * libcola - A library providing force-directed network layout using the 
+ *           stress-majorization method subject to separation constraints.
+ *
+ * Copyright (C) 2006-2008  Monash University
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ * See the file LICENSE.LGPL distributed with the library.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+*/
+
+
 #include <map>
 #include <list>
-#include <libvpsc/remove_rectangle_overlap.h>
-#include "cola.h"
-using namespace std;
 
+#include "libvpsc/rectangle.h"
+#include "libvpsc/assertions.h"
+#include "libcola/commondefs.h"
+#include "libcola/connected_components.h"
+
+using namespace std;
+using namespace vpsc;
 namespace cola {
     Component::~Component() {
+        /*
         for(unsigned i=0;i<scx.size();i++) {
             delete scx[i];
         }
         for(unsigned i=0;i<scy.size();i++) {
             delete scy[i];
         }
+        */
     }
     void Component::moveRectangles(double x, double y) {
         for(unsigned i=0;i<rects.size();i++) {
@@ -19,15 +46,14 @@ namespace cola {
             rects[i]->moveCentreY(rects[i]->getCentreY()+y);
         }
     }
-    Rectangle* Component::getBoundingBox() {
-        double llx=DBL_MAX, lly=DBL_MAX, urx=-DBL_MAX, ury=-DBL_MAX;
-        for(unsigned i=0;i<rects.size();i++) {
-            llx=min(llx,rects[i]->getMinX());
-            lly=min(lly,rects[i]->getMinY());
-            urx=max(urx,rects[i]->getMaxX());
-            ury=max(ury,rects[i]->getMaxY());
+    Rectangle* Component::getBoundingBox() 
+    {
+        Rectangle boundingBox;
+        for (unsigned i = 0; i < rects.size(); ++i)
+        {
+            boundingBox = boundingBox.unionWith(*(rects[i]));
         }
-        return new Rectangle(llx,urx,lly,ury);
+        return new Rectangle(boundingBox);
     }
 
     namespace ccomponents {
@@ -39,7 +65,7 @@ namespace cola {
             Rectangle* r;
         };
         // Depth first search traversal of graph to find connected component
-        static void dfs(Node* v,
+        void dfs(Node* v,
                 list<Node*>& remaining,
                 Component* component,
                 map<unsigned,pair<Component*,unsigned> > &cmap) {
@@ -63,8 +89,8 @@ namespace cola {
     void connectedComponents(
             const vector<Rectangle*> &rs,
             const vector<Edge> &es, 
-            const SimpleConstraints &scx,
-            const SimpleConstraints &scy,
+            //const SeparationConstraints &scx,
+            //const SeparationConstraints &scy,
             vector<Component*> &components) {
         unsigned n=rs.size();
         vector<Node> vs(n);
@@ -76,8 +102,7 @@ namespace cola {
             vs[i].listPos = remaining.insert(remaining.end(),&vs[i]);
         }
         vector<Edge>::const_iterator ei;
-        SimpleConstraints::const_iterator ci;
-        for(ei=es.begin();ei!=es.end();++ei) {
+        for(ei=es.begin();ei!=es.end();ei++) {
             vs[ei->first].neighbours.push_back(&vs[ei->second]);
             vs[ei->second].neighbours.push_back(&vs[ei->first]);
         }
@@ -88,39 +113,43 @@ namespace cola {
             dfs(v,remaining,component,cmap);
             components.push_back(component);
         }
-        for(ei=es.begin();ei!=es.end();++ei) {
+        for(ei=es.begin();ei!=es.end();ei++) {
             pair<Component*,unsigned> u=cmap[ei->first],
                                       v=cmap[ei->second];
-            assert(u.first==v.first);
+            COLA_ASSERT(u.first==v.first);
             u.first->edges.push_back(make_pair(u.second,v.second));
         }
-        for(ci=scx.begin();ci!=scx.end();++ci) {
-            SimpleConstraint *c=*ci;
+        /*
+        SeparationConstraints::const_iterator ci;
+        for(ci=scx.begin();ci!=scx.end();ci++) {
+            SeparationConstraint *c=*ci;
             pair<Component*,unsigned> u=cmap[c->left],
                                       v=cmap[c->right];
-            assert(u.first==v.first);
+            COLA_ASSERT(u.first==v.first);
             u.first->scx.push_back(
-                    new SimpleConstraint(u.second,v.second,c->gap));
+                    new SeparationConstraint(u.second,v.second,c->gap));
         }
-        for(ci=scy.begin();ci!=scy.end();++ci) {
-            SimpleConstraint *c=*ci;
+        for(ci=scy.begin();ci!=scy.end();ci++) {
+            SeparationConstraint *c=*ci;
             pair<Component*,unsigned> u=cmap[c->left],
                                       v=cmap[c->right];
-            assert(u.first==v.first);
+            COLA_ASSERT(u.first==v.first);
             u.first->scy.push_back(
-                    new SimpleConstraint(u.second,v.second,c->gap));
+                    new SeparationConstraint(u.second,v.second,c->gap));
         }
+        */
     }
     void separateComponents(const vector<Component*> &components) {
         unsigned n=components.size();
-        Rectangle* bbs[n];
-        double origX[n], origY[n];
+        vector<Rectangle*> bbs(n);
+        valarray<double> origX(n);
+        valarray<double> origY(n);
         for(unsigned i=0;i<n;i++) {
             bbs[i]=components[i]->getBoundingBox();
             origX[i]=bbs[i]->getCentreX();
             origY[i]=bbs[i]->getCentreY();
         }
-        removeRectangleOverlap(n,bbs,0,0);
+        removeoverlaps(bbs);
         for(unsigned i=0;i<n;i++) {
             components[i]->moveRectangles(
                     bbs[i]->getCentreX()-origX[i],
@@ -129,4 +158,3 @@ namespace cola {
         }
     }
 }
-// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=4:softtabstop=4

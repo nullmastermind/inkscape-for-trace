@@ -1,250 +1,94 @@
+/*
+ * vim: ts=4 sw=4 et tw=0 wm=0
+ *
+ * libcola - A library providing force-directed network layout using the 
+ *           stress-majorization method subject to separation constraints.
+ *
+ * Copyright (C) 2006-2008  Monash University
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ * See the file LICENSE.LGPL distributed with the library.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+*/
+
 #ifndef _GRADIENT_PROJECTION_H
 #define _GRADIENT_PROJECTION_H
 
-#include <libvpsc/solve_VPSC.h>
-#include <libvpsc/variable.h>
-#include <libvpsc/constraint.h>
-#include <libvpsc/generate-constraints.h>
-#include <vector>
 #include <iostream>
-#include <math.h>
+#include <cmath>
+#include <valarray>
 
-typedef std::vector<vpsc::Constraint*> Constraints;
-typedef std::vector<vpsc::Variable*> Variables;
-typedef std::vector<std::pair<unsigned, double> > OffsetList;
+#include "libvpsc/solve_VPSC.h"
+#include "libvpsc/variable.h"
+#include "libvpsc/constraint.h"
+#include "libvpsc/rectangle.h"
+#include "libcola/commondefs.h"
+#include "libcola/compound_constraints.h"
+#include "libcola/cluster.h"
+#include "libcola/sparse_matrix.h"
+#ifdef MOSEK_AVAILABLE
+#include "libvpsc/mosek_quad_solve.h"
+#endif
 
-class SimpleConstraint {
-public:
-    SimpleConstraint(unsigned l, unsigned r, double g) 
-        : left(l), right(r), gap(g)  {}
-    unsigned left;
-    unsigned right;
-    double gap;
-};
-typedef std::vector<SimpleConstraint*> SimpleConstraints;
-class AlignmentConstraint {
-friend class GradientProjection;
-public:
-    AlignmentConstraint(double pos) :
-        offsets(),
-        guide(NULL),
-        position(pos),
-        variable(NULL)
-        {}
-    void updatePosition() {
-        position = variable->position();
-    }
-    OffsetList offsets;
-    void* guide;
-    double position;
-private:
-    vpsc::Variable* variable;
-};
-typedef std::vector<AlignmentConstraint*> AlignmentConstraints;
+namespace straightener {
+    class Node;
+}
+namespace cola {
 
-class PageBoundaryConstraints {
-public:
-    PageBoundaryConstraints(double lm, double rm, double w)
-        : leftMargin(lm), rightMargin(rm), weight(w) { }
-    void createVarsAndConstraints(Variables &vs, Constraints &cs) {
-        vpsc::Variable* vl, * vr;
-        // create 2 dummy vars, based on the dimension we are in
-        vs.push_back(vl=new vpsc::Variable(vs.size(), leftMargin, weight));
-        vs.push_back(vr=new vpsc::Variable(vs.size(), rightMargin, weight));
-
-        // for each of the "real" variables, create a constraint that puts that var
-        // between our two new dummy vars, depending on the dimension.
-        for(OffsetList::iterator o=offsets.begin(); o!=offsets.end(); ++o)  {
-            cs.push_back(new vpsc::Constraint(vl, vs[o->first], o->second));
-            cs.push_back(new vpsc::Constraint(vs[o->first], vr, o->second));
-        }
-    }
-    OffsetList offsets;
-private:
-    double leftMargin;
-    double rightMargin;
-    double weight;
-};
-
-typedef std::vector<std::pair<unsigned, double> > CList;
-/**
- * A DummyVarPair is a pair of variables with an ideal distance between them and which have no
- * other interaction with other variables apart from through constraints.  This means that
- * the entries in the laplacian matrix for dummy vars and other vars would be 0 - thus, sparse
- * matrix techniques can be used in laplacian operations.
- * The constraints are specified by a two lists of pairs of variable indexes and required separation.
- * The two lists are:
- *   leftof: variables to which left must be to the left of, 
- *   rightof: variables to which right must be to the right of. 
- */
-class DummyVarPair {
-public:
-    DummyVarPair(double desiredDist) :
-        leftof(),
-        rightof(),
-        place_l(0),
-        place_r(0),
-        dist(desiredDist),
-        b(0),
-        left(NULL),
-        right(NULL),
-        lap2(1.0/(desiredDist*desiredDist)),
-        g(0),
-        old_place_l(0),
-        old_place_r(0)
-        {}
-    
-    CList leftof; // variables to which left dummy var must be to the left of
-    CList rightof; // variables to which right dummy var must be to the right of
-    double place_l;
-    double place_r;
-    void computeLinearTerm(double euclideanDistance) {   
-        if(euclideanDistance > 1e-30) {
-            b = place_r - place_l;
-            b /= euclideanDistance * dist;
-        } else { b=0; }
-    }
-    double stress(double euclideanDistance) {
-        double diff = dist - euclideanDistance;
-        return diff*diff / (dist*dist);
-    }
-private:
-friend class GradientProjection; 
-    /**
-     * Setup vars and constraints for an instance of the VPSC problem.
-     * Adds generated vars and constraints to the argument vectors.
-     */
-    void setupVPSC(Variables &vars, Constraints &cs) {
-        double weight=1;
-        left = new vpsc::Variable(vars.size(),place_l,weight);
-        vars.push_back(left);
-        right = new vpsc::Variable(vars.size(),place_r,weight);
-        vars.push_back(right);
-        for(CList::iterator cit=leftof.begin();
-                cit!=leftof.end(); ++cit) {
-            vpsc::Variable* v = vars[(*cit).first];
-            cs.push_back(new vpsc::Constraint(left,v,(*cit).second)); 
-        }
-        for(CList::iterator cit=rightof.begin();
-                cit!=rightof.end(); ++cit) {
-            vpsc::Variable* v = vars[(*cit).first];
-            cs.push_back(new vpsc::Constraint(v,right,(*cit).second)); 
-        }
-    }
-    /**
-     * Extract the result of a VPSC solution to the variable positions
-     */
-    void updatePosition() {
-        place_l=left->position();
-        place_r=right->position();
-    }
-    /**
-     * Compute the descent vector, also copying the current position to old_place for
-     * future reference
-     */
-    void computeDescentVector() {
-        old_place_l=place_l;
-        old_place_r=place_r;
-        g = 2.0 * ( b + lap2 * ( place_l - place_r ) );
-    }
-    /** 
-     * move in the direction of steepest descent (based on g computed by computeGradient)
-     * alpha is the step size.
-     */
-    void steepestDescent(double alpha) {
-        place_l -= alpha*g;
-        place_r += alpha*g;
-        left->desiredPosition=place_l;
-        right->desiredPosition=place_r;
-    }
-    /**
-     * add dummy vars' contribution to numerator and denominator for 
-     * beta step size calculation
-     */
-    void betaCalc(double &numerator, double &denominator) {
-        double dl = place_l-old_place_l,
-               dr = place_r-old_place_r,
-               r = 2.0 * lap2 * ( dr - dl );
-        numerator += g * ( dl - dr );
-        denominator += r*dl - r * dr;
-    }
-    /**
-     * move by stepsize beta from old_place to place
-     */
-    void feasibleDescent(double beta) {
-        left->desiredPosition = place_l = old_place_l + beta*(place_l - old_place_l);
-        right->desiredPosition = place_r = old_place_r + beta*(place_r - old_place_r);
-    }
-    double absoluteDisplacement() {
-        return fabs(place_l - old_place_l) + fabs(place_r - old_place_r);
-    }
-    double dist; // ideal distance between vars
-    double b; // linear coefficient in quad form for left (b_right = -b)
-    vpsc::Variable* left; // Variables used in constraints
-    vpsc::Variable* right;
-    double lap2; // laplacian entry
-    double g; // descent vec for quad form for left (g_right = -g)
-    double old_place_l; // old_place is where the descent vec g was computed
-    double old_place_r;
-};
-typedef std::vector<DummyVarPair*> DummyVars;
-
-enum Dim { HORIZONTAL, VERTICAL };
+enum SolveWithMosek { Off, Inner, Outer };
 
 class GradientProjection {
 public:
+    /**
+     * GradientProjection solves a linear system 
+     *   Qx=b
+     * subject to separation constraints.
+     * The usual use-case is with a dense square matrix (denseQ).
+     * However, certain CompoundConstraints and also clusters add dummy 
+     * variables and simple goal terms which populate a sparse matrix 
+     * sparseQ (constructed in this constructor).
+     * A motivated person could rewrite the constructor to allow 
+     * arbitrary sparse terms (if they had a use for it).
+     */
     GradientProjection(
-        const Dim k,
-        unsigned n, 
-        double** A,
-        double* x,
-        double tol,
-        unsigned max_iterations,
-        AlignmentConstraints* acs=NULL,
-        bool nonOverlapConstraints=false,
-        vpsc::Rectangle** rs=NULL,
-        PageBoundaryConstraints *pbc = NULL,
-        SimpleConstraints *sc = NULL)
-            : k(k), n(n), A(A), place(x), rs(rs),
-              nonOverlapConstraints(nonOverlapConstraints),
-              tolerance(tol), acs(acs), max_iterations(max_iterations),
-              g(new double[n]), d(new double[n]), old_place(new double[n]),
-              constrained(false)
-    {
+        const vpsc::Dim k,
+        std::valarray<double> *denseQ,
+        const double tol,
+        const unsigned max_iterations,
+        CompoundConstraints const *ccs,
+        UnsatisfiableConstraintInfos *unsatisfiableConstraints,
+        NonOverlapConstraintsMode nonOverlapConstraints = None,
+        RootCluster* clusterHierarchy = NULL,
+        vpsc::Rectangles* rs = NULL,
+        const bool scaling = false,
+        SolveWithMosek solveWithMosek = Off);
+    static void dumpSquareMatrix(std::valarray<double> const &L) {
+        unsigned n=static_cast<unsigned>(floor(sqrt(static_cast<double>(L.size()))));
+        printf("Matrix %dX%d\n{",n,n);
         for(unsigned i=0;i<n;i++) {
-            vars.push_back(new vpsc::Variable(i,1,1));
-        }
-        if(acs) {
-            for(AlignmentConstraints::iterator iac=acs->begin();
-                    iac!=acs->end();++iac) {
-                AlignmentConstraint* ac=*iac;
-                vpsc::Variable *v=ac->variable=new vpsc::Variable(vars.size(),ac->position,0.0001);
-                vars.push_back(v);
-                for(OffsetList::iterator o=ac->offsets.begin();
-                        o!=ac->offsets.end();
-                        ++o) {
-                    gcs.push_back(new vpsc::Constraint(v,vars[o->first],o->second,true));
-                }
+            printf("{");
+            for(unsigned j=0;j<n;j++) {
+                char c=j==n-1?'}':',';
+                printf("%f%c",1. * L[i*n+j],c);
             }
-        }
-        if (pbc)  {          
-            pbc->createVarsAndConstraints(vars,gcs);
-        }
-        if (sc) {
-            for(SimpleConstraints::iterator c=sc->begin(); c!=sc->end();++c) {
-                gcs.push_back(new vpsc::Constraint(
-                        vars[(*c)->left],vars[(*c)->right],(*c)->gap));
-            }
-        }
-        if(!gcs.empty() || nonOverlapConstraints) {
-            constrained=true;
+            char c=i==n-1?'}':',';
+            printf("%c\n",c);
         }
     }
-    virtual ~GradientProjection() {
-        delete [] g;
-        delete [] d;
-        delete [] old_place;
-        for(Constraints::iterator i(gcs.begin()); i!=gcs.end(); ++i) {
+
+    unsigned getNumStaticVars() const {
+        return numStaticVars;
+    }
+    ~GradientProjection() {
+        //destroyVPSC(solver);
+        for(vpsc::Constraints::iterator i(gcs.begin()); i!=gcs.end(); i++) {
             delete *i;
         }
         gcs.clear();
@@ -252,32 +96,70 @@ public:
             delete vars[i];
         }
     }
-    void clearDummyVars();
-    unsigned solve(double* b);
-    DummyVars dummy_vars; // special vars that must be considered in Lapl.
+    unsigned solve(std::valarray<double> const & b, std::valarray<double> & x);
+    void unfixPos(unsigned i) {
+        if(vars[i]->fixedDesiredPosition) {
+            vars[i]->weight=1;
+            vars[i]->fixedDesiredPosition=false;
+        }
+    }
+    void fixPos(const unsigned i,const double pos) {
+        vars[i]->weight=100000.;
+        vars[i]->desiredPosition=pos;
+        vars[i]->fixedDesiredPosition=true;
+    }
+    vpsc::Dim getDimension() const {
+        return k;
+    }
+    void straighten(
+        cola::SparseMatrix const * Q, 
+        std::vector<SeparationConstraint*> const & ccs,
+        std::vector<straightener::Node*> const & snodes);
+    std::valarray<double> const & getFullResult() const {
+        return result;
+    }
 private:
     vpsc::IncSolver* setupVPSC();
+    double computeCost(std::valarray<double> const &b,
+        std::valarray<double> const &x) const;
+    double computeSteepestDescentVector(
+        std::valarray<double> const &b, std::valarray<double> const &place,
+        std::valarray<double> &g) const;
+    double computeScaledSteepestDescentVector(
+        std::valarray<double> const &b, std::valarray<double> const &place,
+        std::valarray<double> &g) const;
+    double computeStepSize(
+        std::valarray<double> const & g, std::valarray<double> const & d) const;
+    bool runSolver(std::valarray<double> & result);
     void destroyVPSC(vpsc::IncSolver *vpsc);
-    Dim k;
-    unsigned n; // number of actual vars
-    double** A; // Graph laplacian matrix
-    double* place;
-    Variables vars; // all variables
-                          // computations
-    Constraints gcs; /* global constraints - persist throughout all
-                                iterations */
-    Constraints lcs; /* local constraints - only for current iteration */
-    vpsc::Rectangle** rs;
-    bool nonOverlapConstraints;
+    vpsc::Dim k;
+    unsigned numStaticVars; // number of variables that persist
+                              // throughout iterations
+    const unsigned denseSize; // denseQ has denseSize^2 entries
+    std::valarray<double> *denseQ; // dense square graph laplacian matrix
+    std::valarray<double> scaledDenseQ; // scaled dense square graph laplacian matrix
+    std::vector<vpsc::Rectangle*>* rs;
+    CompoundConstraints const *ccs;
+    UnsatisfiableConstraintInfos *unsatisfiableConstraints;
+    NonOverlapConstraintsMode nonOverlapConstraints;
+    Cluster* clusterHierarchy;
     double tolerance;
-    AlignmentConstraints* acs;
     unsigned max_iterations;
-    double* g; /* gradient */
-    double* d;
-    double* old_place;
-    bool constrained;
+    cola::SparseMatrix const * sparseQ; // sparse components of goal function
+    vpsc::Variables vars; // all variables
+                          // computations
+    vpsc::Constraints gcs; /* global constraints - persist throughout all
+                                iterations */
+    vpsc::Constraints lcs; /* local constraints - only for current iteration */
+    vpsc::Constraints cs; /* working list of constraints: gcs +lcs */
+    std::valarray<double> result;
+#ifdef MOSEK_AVAILABLE
+    MosekEnv* menv;
+#endif
+    vpsc::IncSolver* solver;
+    SolveWithMosek solveWithMosek;
+    const bool scaling;
+    std::vector<OrthogonalEdgeConstraint*> orthogonalEdges;
 };
-
+} // namespace cola
 #endif /* _GRADIENT_PROJECTION_H */
-
-// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=4:softtabstop=4 :

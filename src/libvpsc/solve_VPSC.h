@@ -1,16 +1,24 @@
-/**
- * @file
- * Solve an instance of the "Variable Placement with Separation
- * Constraints" problem.
- */
 /*
- * Authors:
- *   Tim Dwyer <tgdwyer@gmail.com>
+ * vim: ts=4 sw=4 et tw=0 wm=0
  *
- * Copyright (C) 2005 Authors
+ * libvpsc - A solver for the problem of Variable Placement with 
+ *           Separation Constraints.
  *
- * Released under GNU LGPL.  Read the file 'COPYING' for more information.
- */
+ * Copyright (C) 2005-2013  Monash University
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ * See the file LICENSE.LGPL distributed with the library.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ * Author(s):  Tim Dwyer
+ *             Michael Wybrow
+*/
 
 //
 // TODO: Really, we should have three classes: VPSC, IncrementalVPSC and
@@ -19,106 +27,104 @@
 // Also, a lot of the code specific to one or other of these concrete
 // implementations should be moved from Block and Blocks: e.g. mergeLeft etc.
 //
-#ifndef SEEN_REMOVEOVERLAP_SOLVE_VPSC_H
-#define SEEN_REMOVEOVERLAP_SOLVE_VPSC_H
+#ifndef VPSC_SOLVE_VPSC_H
+#define VPSC_SOLVE_VPSC_H
 
 #include <vector>
 
+/**
+ * @namespace vpsc
+ * @brief libvpsc: Variable Placement with Separation Constraints
+ *        quadratic program solver library.
+ *
+ * You should use VPSC via an instance of the IncSolver or Solver classes.
+ */
 namespace vpsc {
 class Variable;
+typedef std::vector<Variable*> Variables;
 class Constraint;
 class Blocks;
+typedef std::vector<Constraint*> Constraints;
 
 /**
- * Variable Placement with Separation Constraints problem instance
+ * @brief Static solver for Variable Placement with Separation Constraints 
+ *        problem instance
+ *
+ * This class attempts to solve a least-squares problem subject to a set 
+ * of separation constraints.  The solve() and satisfy() methods return true 
+ * if any constraints are active, in both cases false means an unconstrained 
+ * optimum has been found.
+ *
+ * @sa IncSolver
  */
 class Solver {
 public:
+	//! @brief  Results in an approximate solution subject to the constraints.
+    //! @return true if any constraints are active, or false if an unconstrained 
+    //!         optimum has been found.
+	virtual bool satisfy();
+	//! @brief  Results in an optimum solution subject to the constraints
+    //! @return true if any constraints are active, or false if an unconstrained 
+    //!         optimum has been found.
+	virtual bool solve();
 
-    /**
-     * Produces a feasible - though not necessarily optimal - solution by
-     * examining blocks in the partial order defined by the directed acyclic
-     * graph of constraints. For each block (when processing left to right) we
-     * maintain the invariant that all constraints to the left of the block
-     * (incoming constraints) are satisfied. This is done by repeatedly merging
-     * blocks into bigger blocks across violated constraints (most violated
-     * first) fixing the position of variables inside blocks relative to one
-     * another so that constraints internal to the block are satisfied.
-     */
-    virtual void satisfy();
-
-    /**
-     * Calculate the optimal solution. After using satisfy() to produce a
-     * feasible solution, refine() examines each block to see if further
-     * refinement is possible by splitting the block. This is done repeatedly
-     * until no further improvement is possible.
-     */
-    virtual void solve();
-
-	Solver(const unsigned n, Variable* const vs[], const unsigned m, Constraint *cs[]);
+	Solver(Variables const &vs, Constraints const &cs);
 	virtual ~Solver();
-	Constraint** getConstraints(unsigned &m) { m=this->m; return cs; }
-	const Variable* const * getVariables(unsigned &n) { n=this->n; return vs; }
+    //! @brief   Returns the Variables in this problem instance.
+    //! @returns A vector of Variable objects.
+    Variables const & getVariables() { return vs; }
 protected:
 	Blocks *bs;
-	unsigned m;
-	Constraint **cs;
-	unsigned n;
-	const Variable* const *vs;
+	size_t m;
+	std::vector<Constraint*> const &cs;
+	size_t n;
+	std::vector<Variable*> const &vs;
+    bool needsScaling;
+
 	void printBlocks();
+	void copyResult();
 private:
 	void refine();
 	bool constraintGraphIsCyclic(const unsigned n, Variable* const vs[]);
 	bool blockGraphIsCyclic();
 };
 
+/**
+ * @brief Incremental solver for Variable Placement with Separation Constraints 
+ *        problem instance
+ *
+ * This class attempts to solve a least-squares problem subject to a set 
+ * of sepation constraints.  The solve() and satisfy() methods return true 
+ * if any constraints are active, in both cases false means an unconstrained 
+ * optimum has been found.  This is an incremental version of that allows 
+ * refinement after blocks are moved.  This version is preferred if you are 
+ * using VPSC in an interactive context.
+ *
+ * @sa Solver
+ */
 class IncSolver : public Solver {
 public:
-    unsigned splitCnt;
-
-    /**
-     * incremental version of satisfy that allows refinement after blocks are
-     * moved.
-     *
-     *  - move blocks to new positions
-     *  - repeatedly merge across most violated constraint until no more
-     *    violated constraints exist
-     *
-     * Note: there is a special case to handle when the most violated constraint
-     * is between two variables in the same block.  Then, we must split the block
-     * over an active constraint between the two variables.  We choose the 
-     * constraint with the most negative lagrangian multiplier. 
-     */
-    void satisfy();
-
-    void solve();
-
-    void moveBlocks();
-
-    void splitBlocks();
-
-    IncSolver(const unsigned n, Variable* const vs[], const unsigned m, Constraint *cs[]);
+	IncSolver(Variables const &vs, Constraints const &cs);
+	//! @brief  Results in an approximate solution subject to the constraints.
+    //! @return true if any constraints are active, or false if an unconstrained 
+	bool satisfy();
+	//! @brief  Results in an optimum solution subject to the constraints
+    //! @return true if any constraints are active, or false if an unconstrained 
+    //!         optimum has been found.
+	bool solve();
+   	//! @brief  Adds a constraint to the existing VPSC solver.
+    //!
+    //! @param constraint The new additional constraint to add. 
+    void addConstraint(Constraint *constraint);
 private:
+	void moveBlocks();
+	void splitBlocks();
 
-    typedef std::vector<Constraint*> ConstraintList;
-
-    ConstraintList inactive;
-
-    /**
-     * Scan constraint list for the most violated constraint, or the first equality
-     * constraint.
-     */
-    Constraint* mostViolated(ConstraintList &l);
+	unsigned splitCnt;
+	Constraints inactive;
+	Constraints violated;
+	Constraint* mostViolated(Constraints &l);
 };
+
 }
-#endif // SEEN_REMOVEOVERLAP_SOLVE_VPSC_H
-/*
-  Local Variables:
-  mode:c++
-  c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
-  indent-tabs-mode:nil
-  fill-column:99
-  End:
-*/
-// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :
+#endif // VPSC_SOLVE_VPSC_H
