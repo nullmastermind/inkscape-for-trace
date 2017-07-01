@@ -1,5 +1,9 @@
 /*
- * Copyright 2006 MenTaLguY <mental@rydia.net>
+ * Authors:
+ *   MenTaLguY <mental@rydia.net>
+ *   Martin Owens <doctormo@gmail.com>
+ *
+ * Copyright (C) 2006-2017 Authors
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -13,6 +17,7 @@
 #ifndef SEEN_INKSCAPE_IO_RESOURCE_H
 #define SEEN_INKSCAPE_IO_RESOURCE_H
 
+#include <glibmm/ustring.h>
 #include "util/share.h"
 
 namespace Inkscape {
@@ -31,24 +36,37 @@ enum Type {
     ICONS,
     KEYS,
     MARKERS,
+    NONE,
     PALETTES,
     PATTERNS,
     SCREENS,
     TEMPLATES,
     TUTORIALS,
-    UI
+    SYMBOLS,
+    FILTERS,
+    THEMES,
+    UIS
 };
 
 enum Domain {
     SYSTEM,
     CREATE,
+    CACHE,
     USER
 };
 
 Util::ptr_shared<char> get_path(Domain domain, Type type,
                                 char const *filename=NULL);
 
-Util::ptr_shared<char> get_filename(Type type, char const *filename=NULL);
+Glib::ustring get_path_ustring(Domain domain, Type type,
+                                char const *filename=NULL);
+
+Glib::ustring get_filename(Type type, char const *filename,
+                                char const *locale=NULL);
+
+char *profile_path(const char *filename);
+char *homedir_path(const char *filename);
+char *log_path(const char *filename);
 
 }
 

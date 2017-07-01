@@ -26,6 +26,7 @@
 #include "ui/dialog/extension-editor.h"
 #include "ui/dialog/fill-and-stroke.h"
 #include "ui/dialog/filter-effects-dialog.h"
+#include "ui/dialog/filter-editor.h"
 #include "ui/dialog/find.h"
 #include "ui/dialog/glyphs.h"
 #include "ui/dialog/inkscape-preferences.h"
@@ -113,6 +114,7 @@ DialogManager::DialogManager() {
         registerFactory("ExtensionEditor",     &create<ExtensionEditor,      FloatingBehavior>);
         registerFactory("FillAndStroke",       &create<FillAndStroke,        FloatingBehavior>);
         registerFactory("FilterEffectsDialog", &create<FilterEffectsDialog,  FloatingBehavior>);
+        registerFactory("FilterEditorDialog",  &create<FilterEditorDialog,   FloatingBehavior>);
         registerFactory("Find",                &create<Find,                 FloatingBehavior>);
         registerFactory("Glyphs",              &create<GlyphsPanel,          FloatingBehavior>);
         registerFactory("IconPreviewPanel",    &create<IconPreviewPanel,     FloatingBehavior>);
@@ -155,6 +157,7 @@ DialogManager::DialogManager() {
         registerFactory("ExtensionEditor",     &create<ExtensionEditor,      DockBehavior>);
         registerFactory("FillAndStroke",       &create<FillAndStroke,        DockBehavior>);
         registerFactory("FilterEffectsDialog", &create<FilterEffectsDialog,  DockBehavior>);
+        registerFactory("FilterEditorDialog",  &create<FilterEditorDialog,   DockBehavior>);
         registerFactory("Find",                &create<Find,                 DockBehavior>);
         registerFactory("Glyphs",              &create<GlyphsPanel,          DockBehavior>);
         registerFactory("IconPreviewPanel",    &create<IconPreviewPanel,     DockBehavior>);

@@ -45,18 +45,8 @@ public:
                  ICONIFIED_DOCKED_STATE,    // item iconified in its assigned dock from dock
                  ICONIFIED_FLOATING_STATE}; // item iconified in its assigned dock from float
 
-    enum Placement { 
-        NONE     = GDL_DOCK_NONE,
-        TOP      = GDL_DOCK_TOP,
-        BOTTOM   = GDL_DOCK_BOTTOM,
-        RIGHT    = GDL_DOCK_RIGHT,
-        LEFT     = GDL_DOCK_LEFT,
-        CENTER   = GDL_DOCK_CENTER,
-        FLOATING = GDL_DOCK_FLOATING
-    };
-
     DockItem(Dock& dock, const Glib::ustring& name, const Glib::ustring& long_name, 
-             const Glib::ustring& icon_name, State state, Placement placement);
+             const Glib::ustring& icon_name, State state, GdlDockPlacement placement);
 
     ~DockItem();
 
@@ -80,7 +70,7 @@ public:
     bool isIconified() const;
     State getState() const;
     State getPrevState() const;
-    Placement getPlacement() const;
+    GdlDockPlacement getPlacement() const;
 
     Gtk::Window *getWindow();   //< gives the parent window, if the dock item has one (i.e. it's floating)
 

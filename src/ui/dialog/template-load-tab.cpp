@@ -24,6 +24,8 @@
 #include "file.h"
 #include "path-prefix.h"
 
+using namespace Inkscape::IO::Resource;
+
 namespace Inkscape {
 namespace UI {
 
@@ -57,7 +59,6 @@ TemplateLoadTab::TemplateLoadTab(NewFromTemplate* parent)
     sigc::mem_fun(*this, &TemplateLoadTab::_keywordSelected));
     this->show_all();
     
-    _loading_path = "";
     _loadTemplates();
     _initLists();
 }
@@ -207,11 +208,8 @@ void TemplateLoadTab::_refreshTemplatesList()
 
 void TemplateLoadTab::_loadTemplates()
 {
-    // user's local dir
-    _getTemplatesFromDir(Inkscape::Application::profile_path("templates") + _loading_path);
-
-    // system templates dir
-    _getTemplatesFromDir(INKSCAPE_TEMPLATESDIR + _loading_path);
+    _getTemplatesFromDomain(USER);
+    _getTemplatesFromDomain(SYSTEM);
     
     // procedural templates
     _getProceduralTemplates();
@@ -252,11 +250,12 @@ TemplateLoadTab::TemplateData TemplateLoadTab::_processTemplateFile(const std::s
 }
 
 
-void TemplateLoadTab::_getTemplatesFromDir(const std::string &path)
+void TemplateLoadTab::_getTemplatesFromDomain(Domain domain)
 {
-    if ( !Glib::file_test(path, Glib::FILE_TEST_EXISTS) ||
-         !Glib::file_test(path, Glib::FILE_TEST_IS_DIR))
+    Glib::ustring path = get_path_ustring(domain, TEMPLATES);
+    if (!Glib::file_test(path, Glib::FILE_TEST_IS_DIR)) {
         return;
+    }
     
     Glib::Dir dir(path);
 

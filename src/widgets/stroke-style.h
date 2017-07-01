@@ -52,7 +52,6 @@
 #include "svg/css-ostringstream.h"
 #include "ui/cache/svg_preview_cache.h"
 #include "ui/icon-names.h"
-#include "widgets/icon.h"
 #include "widgets/paint-selector.h"
 #include "widgets/sp-widget.h"
 #include "widgets/spw-utilities.h"

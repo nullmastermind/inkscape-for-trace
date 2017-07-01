@@ -38,7 +38,7 @@ namespace Tools {
 
 class DynamicBase : public ToolBase {
 public:
-	DynamicBase(gchar const *const *cursor_shape, gint hot_x, gint hot_y);
+	DynamicBase(gchar const *const *cursor_shape);
 	virtual ~DynamicBase();
 
 	virtual void set(const Inkscape::Preferences::Entry& val);

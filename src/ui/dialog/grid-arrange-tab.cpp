@@ -28,7 +28,6 @@
 
 #include "document.h"
 #include "document-undo.h"
-#include "widgets/icon.h"
 #include "desktop.h"
     //#include "sp-item-transform.h" FIXME
 #include "ui/dialog/tile.h" // for Inkscape::UI::Dialog::ArrangeDialog
@@ -611,6 +610,7 @@ GridArrangeTab::GridArrangeTab(ArrangeDialog *parent)
 
     NoOfRowsLabel.set_text_with_mnemonic(_("_Rows:"));
     NoOfRowsLabel.set_mnemonic_widget(NoOfRowsSpinner);
+    NoOfRowsBox.set_orientation(Gtk::ORIENTATION_VERTICAL);
     NoOfRowsBox.pack_start(NoOfRowsLabel, false, false, MARGIN);
 
     NoOfRowsSpinner.set_digits(0);
@@ -641,6 +641,7 @@ GridArrangeTab::GridArrangeTab(ArrangeDialog *parent)
 
     /*#### Label for X ####*/
     padXByYLabel.set_label(" ");
+    XByYLabelVBox.set_orientation(Gtk::ORIENTATION_VERTICAL);
     XByYLabelVBox.pack_start(padXByYLabel, false, false, MARGIN);
     XByYLabel.set_markup(" &#215; ");
     XByYLabelVBox.pack_start(XByYLabel, false, false, MARGIN);
@@ -651,6 +652,7 @@ GridArrangeTab::GridArrangeTab(ArrangeDialog *parent)
 
     NoOfColsLabel.set_text_with_mnemonic(_("_Columns:"));
     NoOfColsLabel.set_mnemonic_widget(NoOfColsSpinner);
+    NoOfColsBox.set_orientation(Gtk::ORIENTATION_VERTICAL);
     NoOfColsBox.pack_start(NoOfColsLabel, false, false, MARGIN);
 
     NoOfColsSpinner.set_digits(0);
@@ -677,6 +679,7 @@ GridArrangeTab::GridArrangeTab(ArrangeDialog *parent)
 
     SpinsHBox.pack_start(NoOfColsBox, false, false, MARGIN);
 
+    TileBox.set_orientation(Gtk::ORIENTATION_VERTICAL);
     TileBox.pack_start(SpinsHBox, false, false, MARGIN);
 
     VertAlign = prefs->getInt("/dialogs/gridtiler/VertAlign", 1);

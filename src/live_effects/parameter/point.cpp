@@ -9,7 +9,6 @@
 #include "svg/svg.h"
 #include "svg/stringstream.h"
 #include "ui/widget/point.h"
-#include "widgets/icon.h"
 #include "inkscape.h"
 #include "verbs.h"
 #include "knotholder.h"

@@ -54,6 +54,7 @@
 #include "extension/db.h"
 
 #include "io/sys.h"
+#include "io/resource.h"
 
 #include "helper/png-write.h"
 
@@ -564,7 +565,7 @@ Glib::ustring Export::create_filepath_from_id (Glib::ustring id, const Glib::ust
     }
 
     if (directory.empty()) {
-        directory = INKSCAPE.homedir_path(NULL);
+        directory = Inkscape::IO::Resource::homedir_path(NULL);
     }
 
     Glib::ustring filename = Glib::build_filename(directory, id+".png");

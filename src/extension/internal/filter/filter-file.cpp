@@ -8,6 +8,7 @@
 #include "filter.h"
 
 #include "io/sys.h"
+#include "io/resource.h"
 #include "io/inkscapestream.h"
 
 /* Directory includes */
@@ -22,27 +23,27 @@
 #include <glibmm/i18n.h>
 #include <glibmm/fileutils.h>
 
+using namespace Inkscape::IO::Resource;
+
 namespace Inkscape {
 namespace Extension {
 namespace Internal {
 namespace Filter {
 
+void filters_load_domain(Domain domain, gchar *menuname);
+
 void Filter::filters_all_files(void)
 {
-	gchar *filtersProfilePath = Inkscape::Application::profile_path("filters");
-
-	filters_load_dir(INKSCAPE_FILTERDIR, _("Bundled"));
-	filters_load_dir(filtersProfilePath, _("Personal"));
-
-	g_free(filtersProfilePath);
-	filtersProfilePath = 0;
+    filters_load_domain(SYSTEM, _("Bundled"));
+    filters_load_domain(USER, _("Personal"));
 }
 
 #define INKSCAPE_FILTER_FILE  ".svg"
 
-void
-Filter::filters_load_dir (gchar const * dirname, gchar * menuname)
+void filters_load_domain(Domain domain, gchar *menuname)
 {
+    char const *dirname = get_path(domain, FILTERS);
+
     if (!dirname) {
         g_warning("%s", _("Null external module directory name.  Filters will not be loaded."));
         return;
@@ -72,7 +73,7 @@ Filter::filters_load_dir (gchar const * dirname, gchar * menuname)
         }
 
         gchar *pathname = g_build_filename(dirname, filename, NULL);
-        filters_load_file(pathname, menuname);
+        Filter::filters_load_file(pathname, menuname);
         g_free(pathname);
     }
 

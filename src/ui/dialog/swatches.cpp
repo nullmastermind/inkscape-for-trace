@@ -512,15 +512,16 @@ compare_swatch_names(SwatchPage const *a, SwatchPage const *b) {
 
 static void loadEmUp()
 {
+    using namespace Inkscape::IO::Resource;
     static bool beenHere = false;
     gboolean userPalette = true;
     if ( !beenHere ) {
         beenHere = true;
 
         std::list<gchar *> sources;
-        sources.push_back( Inkscape::Application::profile_path("palettes") );
-        sources.push_back( g_strdup(INKSCAPE_PALETTESDIR) );
-        sources.push_back( g_strdup(CREATE_PALETTESDIR) );
+        sources.push_back(g_strdup(get_path(USER, PALETTES)));
+        sources.push_back(g_strdup(get_path(SYSTEM, PALETTES)));
+        sources.push_back(g_strdup(get_path(CREATE, PALETTES)));
 
         // Use this loop to iterate through a list of possible document locations.
         while (!sources.empty()) {

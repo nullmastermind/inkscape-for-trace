@@ -46,7 +46,7 @@ static const int PANEL_SETTING_NEXTFREE = 5;
 
 void Panel::prep() {
     GtkIconSize sizes[] = {
-        Inkscape::getRegisteredIconSize(Inkscape::ICON_SIZE_DECORATION),
+        GTK_ICON_SIZE_MENU,
         GTK_ICON_SIZE_MENU,
         GTK_ICON_SIZE_SMALL_TOOLBAR,
         GTK_ICON_SIZE_BUTTON,
@@ -270,7 +270,7 @@ void Panel::_init()
         gint height = 0;
         gtk_image_set_from_icon_name(_temp_arrow.gobj(),
                                      "pan-start-symbolic",
-                                     Inkscape::getRegisteredIconSize(Inkscape::ICON_SIZE_SMALL_TOOLBAR));
+                                     GTK_ICON_SIZE_SMALL_TOOLBAR);
         _menu_popper.add(_temp_arrow);
         _menu_popper.signal_button_press_event().connect_notify(sigc::mem_fun(*this, &Panel::_popper));
     }

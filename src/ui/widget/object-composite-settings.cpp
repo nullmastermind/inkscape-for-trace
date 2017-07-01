@@ -24,7 +24,6 @@
 #include "style.h"
 #include "svg/css-ostringstream.h"
 #include "verbs.h"
-#include "widgets/icon.h"
 #include "display/sp-canvas.h"
 #include "ui/widget/style-subject.h"
 

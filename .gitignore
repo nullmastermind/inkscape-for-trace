@@ -6,4 +6,4 @@ share/*/*.h
 
 *.old
 *.swp
-
+*~

@@ -150,7 +150,7 @@ def export_LWPOLYLINE():
             # optional group codes : (42) (bulge)
             iseqs = 0
             ibulge = 0
-            if vals[groups['70']][0]:           # closed path
+            if vals[groups['70']][0] & 1:       # closed path
                 seqs.append('20')
                 vals[groups['10']].append(vals[groups['10']][0])
                 vals[groups['20']].append(vals[groups['20']][0])
@@ -182,7 +182,7 @@ def export_LWPOLYLINE():
                     path += ' L %f,%f' % (vals[groups['10']][i], vals[groups['20']][i])
                 xold = vals[groups['10']][i]
                 yold = vals[groups['20']][i]
-            if vals[groups['70']][0]:           # closed path
+            if vals[groups['70']][0] & 1:       # closed path
                 path += ' z'
             attribs = {'d': path, 'style': style}
             inkex.etree.SubElement(layer, 'path', attribs)

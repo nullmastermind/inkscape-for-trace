@@ -36,7 +36,7 @@ const std::string& ZoomTool::getPrefsPath() {
 const std::string ZoomTool::prefsPath = "/tools/zoom";
 
 ZoomTool::ZoomTool()
-    : ToolBase(cursor_zoom_xpm, 6, 6)
+    : ToolBase(cursor_zoom_xpm)
     , grabbed(NULL)
     , escaped(false)
 {

@@ -1,7 +1,11 @@
 /*
  * Inkscape::IO::Resource - simple resource API
  *
- * Copyright 2006 MenTaLguY <mental@rydia.net>
+ * Authors:
+ *   MenTaLguY <mental@rydia.net>
+ *   Martin Owens <doctormo@gmail.com>
+ *
+ * Copyright (C) 2006-2017 Authors
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,9 +20,7 @@
 #include "config.h"
 #endif
 
-#include <glib.h> // g_assert()
 #include "path-prefix.h"
-#include "inkscape.h"
 #include "io/sys.h"
 #include "io/resource.h"
 
@@ -30,6 +32,8 @@ namespace IO {
 
 namespace Resource {
 
+#define INKSCAPE_PROFILE_DIR "inkscape"
+
 gchar *_get_path(Domain domain, Type type, char const *filename)
 {
     gchar *path=NULL;
@@ -39,16 +43,20 @@ gchar *_get_path(Domain domain, Type type, char const *filename)
             switch (type) {
                 case APPICONS: temp = INKSCAPE_APPICONDIR; break;
                 case EXTENSIONS: temp = INKSCAPE_EXTENSIONDIR; break;
+                case FILTERS: temp = INKSCAPE_FILTERDIR; break;
                 case GRADIENTS: temp = INKSCAPE_GRADIENTSDIR; break;
                 case ICONS: temp = INKSCAPE_PIXMAPDIR; break;
                 case KEYS: temp = INKSCAPE_KEYSDIR; break;
                 case MARKERS: temp = INKSCAPE_MARKERSDIR; break;
+                case NONE: g_assert_not_reached(); break;
                 case PALETTES: temp = INKSCAPE_PALETTESDIR; break;
                 case PATTERNS: temp = INKSCAPE_PATTERNSDIR; break;
                 case SCREENS: temp = INKSCAPE_SCREENSDIR; break;
+                case SYMBOLS: temp = INKSCAPE_SYMBOLSDIR; break;
                 case TEMPLATES: temp = INKSCAPE_TEMPLATESDIR; break;
+                case THEMES: temp = INKSCAPE_THEMEDIR; break;
                 case TUTORIALS: temp = INKSCAPE_TUTORIALSDIR; break;
-                case UI: temp = INKSCAPE_UIDIR; break;
+                case UIS: temp = INKSCAPE_UIDIR; break;
                 default: g_assert_not_reached();
             }
             path = g_strdup(temp);
@@ -63,21 +71,28 @@ gchar *_get_path(Domain domain, Type type, char const *filename)
             }
             path = g_strdup(temp);
         } break;
+        case CACHE: {
+            path = g_build_filename(g_get_user_cache_dir(), "inkscape", NULL);
+        } break;
         case USER: {
             char const *name=NULL;
             switch (type) {
                 case EXTENSIONS: name = "extensions"; break;
+                case FILTERS: name = "filters"; break;
                 case GRADIENTS: name = "gradients"; break;
                 case ICONS: name = "icons"; break;
                 case KEYS: name = "keys"; break;
                 case MARKERS: name = "markers"; break;
+                case NONE: name = ""; break;
                 case PALETTES: name = "palettes"; break;
                 case PATTERNS: name = "patterns"; break;
+                case SYMBOLS: name = "symbols"; break;
                 case TEMPLATES: name = "templates"; break;
-                case UI: name = "ui"; break;
+                case THEMES: name = "icons"; break;
+                case UIS: name = "ui"; break;
                 default: return _get_path(SYSTEM, type, filename);
             }
-            path = Inkscape::Application::profile_path(name);
+            path = profile_path(name);
         } break;
     }
 
@@ -97,27 +112,183 @@ Util::ptr_shared<char> get_path(Domain domain, Type type, char const *filename)
     g_free(path);
     return result;
 }
+Glib::ustring get_path_ustring(Domain domain, Type type, char const *filename)
+{
+    Glib::ustring result;
+    char *path = _get_path(domain, type, filename);
+    if(path) {
+      result = Glib::ustring(path);
+      g_free(path);
+    }
+    return result;
+}
 
 /*
  * Same as get_path, but checks for file's existance and falls back
  * from USER to SYSTEM modes.
+ *
+ *  type - The type of file to get, such as extension, template, ui etc
+ *  filename - The filename to get, i.e. preferences.xml
+ *  locale - The local language version of the file (if needed)
  */
-Util::ptr_shared<char> get_filename(Type type, char const *filename)
+Glib::ustring get_filename(Type type, char const *filename, char const *locale)
 {
-    Util::ptr_shared<char> result;
+    Glib::ustring result;
+
+    if(locale != NULL) {
+      char *user_locale = _get_path(USER, type, filename);
+      char *sys_locale = _get_path(SYSTEM, type, filename);
+
+      if (file_test(user_locale, G_FILE_TEST_EXISTS)) {
+          result = Glib::ustring(user_locale);
+      } else if(file_test(sys_locale, G_FILE_TEST_EXISTS)) {
+          result = Glib::ustring(sys_locale);
+      }
+      g_free(user_locale);
+      g_free(sys_locale);
+
+      if(!result.empty()) {
+          g_info("Using translated resource file: %s", result.c_str());
+          return result;
+      }
+    }
+
     char *user_filename = _get_path(USER, type, filename);
     char *sys_filename = _get_path(SYSTEM, type, filename);
 
     if (file_test(user_filename, G_FILE_TEST_EXISTS)) {
-        result = Util::share_string(user_filename);
+        result = Glib::ustring(user_filename);
     } else if(file_test(sys_filename, G_FILE_TEST_EXISTS)) {
-        result = Util::share_string(sys_filename);
+        result = Glib::ustring(sys_filename);
     } else {
-        g_warning("Failed to load resource: %s", filename);
+        g_warning("Failed to load resource: %s from %s or %s", filename, user_filename, sys_filename);
     }
+
+    if(!result.empty()) {
+        g_info("Using resource file: %s", result.c_str());
+    }
+
     g_free(user_filename);
     g_free(sys_filename);
     return result;
+}
+
+/**
+ * Get, or guess, or decide the location where the preferences.xml
+ * file should be located. This also indicates where all other inkscape
+ * shared files may optionally exist.
+ */
+char *profile_path(const char *filename)
+{
+    static const gchar *prefdir = NULL;
+
+
+    if (!prefdir) {
+        // First check for a custom environment variable for a "portable app"
+        gchar const *val = g_getenv("INKSCAPE_PORTABLE_PROFILE_DIR");
+        if (val) {
+            prefdir = g_strdup(val);
+        }
+        // Then check for a custom user environment variable
+        gchar const *userenv = g_getenv("INKSCAPE_PROFILE_DIR");
+        if (userenv) {
+            prefdir = g_strdup(userenv);
+        }
+
+#ifdef HAS_SHGetSpecialFolderLocation
+        // prefer c:\Documents and Settings\UserName\Application Data\ to
+        // c:\Documents and Settings\userName\;
+        if (!prefdir) {
+            ITEMIDLIST *pidl = 0;
+            if ( SHGetSpecialFolderLocation( NULL, CSIDL_APPDATA, &pidl ) == NOERROR ) {
+                gchar * utf8Path = NULL;
+
+                {
+                    wchar_t pathBuf[MAX_PATH+1];
+                    g_assert(sizeof(wchar_t) == sizeof(gunichar2));
+
+                    if ( SHGetPathFromIDListW( pidl, pathBuf ) ) {
+                        utf8Path = g_utf16_to_utf8( (gunichar2*)(&pathBuf[0]), -1, NULL, NULL, NULL );
+                    }
+                }
+
+                if ( utf8Path ) {
+                    if (!g_utf8_validate(utf8Path, -1, NULL)) {
+                        g_warning( "SHGetPathFromIDListW() resulted in invalid UTF-8");
+                        g_free( utf8Path );
+                        utf8Path = 0;
+                    } else {
+                        prefdir = utf8Path;
+                    }
+                }
+
+
+                /* not compiling yet...
+
+                // Remember to free the list pointer
+                IMalloc * imalloc = 0;
+                if ( SHGetMalloc(&imalloc) == NOERROR) {
+                    imalloc->lpVtbl->Free( imalloc, pidl );
+                    imalloc->lpVtbl->Release( imalloc );
+                }
+                */
+            }
+
+            if (prefdir) {
+                const char *prefdir_profile = g_build_filename(prefdir, INKSCAPE_PROFILE_DIR, NULL);
+                g_free((void *)prefdir);
+                prefdir = prefdir_profile;
+            }
+        }
+#endif
+        if (!prefdir) {
+            prefdir = g_build_filename(g_get_user_config_dir(), INKSCAPE_PROFILE_DIR, NULL);
+            // In case the XDG user config dir of the moment does not yet exist...
+            int mode = S_IRWXU;
+#ifdef S_IRGRP
+            mode |= S_IRGRP;
+#endif
+#ifdef S_IXGRP
+            mode |= S_IXGRP;
+#endif
+#ifdef S_IXOTH
+            mode |= S_IXOTH;
+#endif
+            if ( g_mkdir_with_parents(prefdir, mode) == -1 ) {
+                int problem = errno;
+                g_warning("Unable to create profile directory (%s) (%d)", g_strerror(problem), problem);
+            } else {
+                gchar const *userDirs[] = {"keys", "templates", "icons", "extensions", "palettes", NULL};
+                for (gchar const** name = userDirs; *name; ++name) {
+                    gchar *dir = g_build_filename(prefdir, *name, NULL);
+                    g_mkdir_with_parents(dir, mode);
+                    g_free(dir);
+                }
+            }
+        }
+    }
+    return g_build_filename(prefdir, filename, NULL);
+}
+
+/*
+ * We return the profile_path because that is where most documentation
+ * days log files will be generated in inkscape 0.92
+ */
+char *log_path(const char *filename)
+{
+  return profile_path(filename);
+}
+
+char *homedir_path(const char *filename)
+{
+    static const gchar *homedir = NULL;
+    homedir = g_get_home_dir();
+
+    // I suspect this is for handling inkscape app packages
+    /*if (!homedir && Application::exists()) {
+        homedir = g_path_get_dirname(Application::instance()._argv0);
+    }*/
+    return g_build_filename(homedir, filename, NULL);
 }
 
 }

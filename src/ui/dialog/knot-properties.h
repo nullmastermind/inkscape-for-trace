@@ -13,9 +13,9 @@
 #define INKSCAPE_DIALOG_KNOT_PROPERTIES_H
 
 #include <gtkmm/dialog.h>
+#include <gtkmm/grid.h>
 #include <gtkmm/label.h>
 #include <gtkmm/spinbutton.h>
-#include <gtkmm/table.h>
 #include <2geom/point.h>
 #include "knot.h"
 #include "ui/tools/measure-tool.h"
@@ -45,7 +45,7 @@ protected:
     Gtk::SpinButton   _knot_x_entry;
     Gtk::Label        _knot_y_label;
     Gtk::SpinButton   _knot_y_entry;
-    Gtk::Table        _layout_table;
+    Gtk::Grid         _layout_table;
     bool              _position_visible;
 
     Gtk::Button       _close_button;

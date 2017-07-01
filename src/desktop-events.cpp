@@ -521,7 +521,7 @@ gint sp_dt_guide_event(SPCanvasItem *item, GdkEvent *event, gpointer data)
 
             GdkCursor *guide_cursor = gdk_cursor_new_for_display(display, cursor_type);
             if(guide->getLocked()){
-                guide_cursor = sp_cursor_new_from_xpm(cursor_select_xpm , 1, 1);
+                guide_cursor = sp_cursor_from_xpm(cursor_select_xpm);
             }
             gdk_window_set_cursor(gtk_widget_get_window (GTK_WIDGET(desktop->getCanvas())), guide_cursor);
             g_object_unref(guide_cursor);

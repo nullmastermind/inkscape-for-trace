@@ -118,7 +118,7 @@ const std::string NodeTool::prefsPath = "/tools/nodes";
 SPCanvasGroup *create_control_group(SPDesktop *d);
 
 NodeTool::NodeTool()
-    : ToolBase(cursor_node_xpm, 1, 1)
+    : ToolBase(cursor_node_xpm)
     , _selected_nodes(NULL)
     , _multipath(NULL)
     , edit_clipping_paths(false)
@@ -776,14 +776,10 @@ void NodeTool::mouseover_changed(Inkscape::UI::ControlPoint *p) {
 
     if (cdp && !this->cursor_drag) {
         this->cursor_shape = cursor_node_d_xpm;
-        this->hot_x = 1;
-        this->hot_y = 1;
         this->sp_event_context_update_cursor();
         this->cursor_drag = true;
     } else if (!cdp && this->cursor_drag) {
         this->cursor_shape = cursor_node_xpm;
-        this->hot_x = 1;
-        this->hot_y = 1;
         this->sp_event_context_update_cursor();
         this->cursor_drag = false;
     }

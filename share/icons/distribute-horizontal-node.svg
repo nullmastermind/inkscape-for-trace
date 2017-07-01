@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="svg1"
+   width="24"
+   height="24.031853"
+  >
+  <sodipodi:namedview
+     id="base"
+     showgrid="true"
+     gridspacingy="1pt"
+     gridspacingx="1pt"
+     gridoriginy="0pt"
+     gridoriginx="0pt"
+  />
+  <defs id="defs3">
+
+  </defs>
+<g id="distribute-horizontal-node" inkscape:label="#node_hdistribute" transform="translate(-1174.999,-139.96775)">
+  <path d="M 1177.523,140.4996 1177.523,153.4996" id="use5478" inkscape:connector-curvature="0" style="fill:none;stroke:#c80000;stroke-width:1px;stroke-linecap:square" transform="matrix(1,0,0,1,0,0)"/>
+  <path d="M 1177.523,140.4996 1177.523,153.4996" id="use5482" inkscape:connector-curvature="0" style="fill:none;stroke:#c80000;stroke-width:1px;stroke-linecap:square" transform="matrix(1,0,0,1,0,0)"/>
+  <path d="M 1177.523,140.4996 1177.523,153.4996" id="path5476" inkscape:connector-curvature="0" style="fill:none;stroke:#c80000;stroke-width:1px;stroke-linecap:square"/>
+  <rect height="16" id="rect5356" style="color:#000000;fill:none" transform="rotate(-90)" width="16" x="-163.9996" y="1180.5"/>
+  <path d="M 1175.499,160.4995 C 1178.999,154.9995 1178.149,146.7868 1182.999,147.9995 1186.999,148.9995 1187.076,159.7687 1191.999,160.9995 1195.999,161.9995 1192.999,155.9995 1198.499,151.4995" id="path5358" inkscape:connector-curvature="0" sodipodi:nodetypes="cssc" style="fill:none;stroke:#969696;stroke-width:1.0000004;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:0"/>
+  <path d="M 1180.074,143.0324 1178.074,141.5005 1180.074,140.0324 1180.074,141.0005 1184.074,141.0005 1184.074,140.0005 1186.074,141.5005 1184.074,143.0005 1184.074,142.0005 1180.074,142.0005 1180.074,143.0324 Z" id="path5366" inkscape:connector-curvature="0" sodipodi:nodetypes="ccccccccccc" style="fill:#000000;fill-rule:evenodd"/>
+  <rect height="4.007167" id="use5459" style="color:#000000;fill:#8ab3de;fill-rule:evenodd;stroke:#0000ff;stroke-width:0.9999997;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:0" transform="matrix(1,0,0,1,-8.910592,12.00679)" width="4.066208" x="1184.5" y="141.5"/>
+  <rect height="4.007167" id="use5461" style="color:#000000;fill:#8ab3de;fill-rule:evenodd;stroke:#0000ff;stroke-width:0.9999997;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:0" transform="matrix(1,0,0,1,0.0894077,8.999615)" width="4.066208" x="1184.5" y="141.5"/>
+  <rect height="4.007167" id="use5463" style="color:#000000;fill:#8ab3de;fill-rule:evenodd;stroke:#0000ff;stroke-width:0.9999997;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:0" transform="matrix(1,0,0,1,9.0232,11.99962)" width="4.066208" x="1184.5" y="141.5"/>
+  <path d="M 1180.074,143.0324 1178.074,141.5005 1180.074,140.0324 1180.074,141.0005 1184.074,141.0005 1184.074,140.0005 1186.074,141.5005 1184.074,143.0005 1184.074,142.0005 1180.074,142.0005 1180.074,143.0324 Z" id="use5484" inkscape:connector-curvature="0" sodipodi:nodetypes="ccccccccccc" style="fill:#000000;fill-rule:evenodd" transform="matrix(1,0,0,1,8.9487,-0.03275)"/>
+</g>
+
+</svg>

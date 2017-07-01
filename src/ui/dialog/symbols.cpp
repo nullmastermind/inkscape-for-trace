@@ -31,6 +31,7 @@
 #include <glibmm/i18n.h>
 #include "path-prefix.h"
 #include "io/sys.h"
+#include "io/resource.h"
 
 #include "ui/cache/svg_preview_cache.h"
 #include "ui/clipboard.h"
@@ -47,7 +48,6 @@
 #include "sp-use.h"
 #include "sp-defs.h"
 #include "sp-symbol.h"
-#include "widgets/icon.h"
 
 #ifdef WITH_LIBVISIO
   #include <libvisio/libvisio.h>
@@ -174,18 +174,22 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   scroller->set_hexpand();
   table->attach(*Gtk::manage(tools),0,row,2,1);
 
+  auto addSymbolImage = Gtk::manage(new Gtk::Image());
+  addSymbolImage->set_from_icon_name("symbol-add", Gtk::ICON_SIZE_SMALL_TOOLBAR);
+
   addSymbol = Gtk::manage(new Gtk::Button());
-  addSymbol->add(*Gtk::manage(Glib::wrap(
-      sp_icon_new (Inkscape::ICON_SIZE_SMALL_TOOLBAR, INKSCAPE_ICON("symbol-add")))) );
+  addSymbol->add(*addSymbolImage);
   addSymbol->set_tooltip_text(_("Add Symbol from the current document."));
   addSymbol->set_relief( Gtk::RELIEF_NONE );
   addSymbol->set_focus_on_click( false );
   addSymbol->signal_clicked().connect(sigc::mem_fun(*this, &SymbolsDialog::insertSymbol));
   tools->pack_start(* addSymbol, Gtk::PACK_SHRINK);
 
+  auto removeSymbolImage = Gtk::manage(new Gtk::Image());
+  removeSymbolImage->set_from_icon_name("symbol-remove", Gtk::ICON_SIZE_SMALL_TOOLBAR);
+
   removeSymbol = Gtk::manage(new Gtk::Button());
-  removeSymbol->add(*Gtk::manage(Glib::wrap(
-      sp_icon_new (Inkscape::ICON_SIZE_SMALL_TOOLBAR, INKSCAPE_ICON("symbol-remove")))) );
+  removeSymbol->add(*removeSymbolImage);
   removeSymbol->set_tooltip_text(_("Remove Symbol from the current document."));
   removeSymbol->set_relief( Gtk::RELIEF_NONE );
   removeSymbol->set_focus_on_click( false );
@@ -197,18 +201,23 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
 
   // Pack size (controls display area)
   pack_size = 2; // Default 32px
+
+  auto packMoreImage = Gtk::manage(new Gtk::Image());
+  packMoreImage->set_from_icon_name("pack-more", Gtk::ICON_SIZE_SMALL_TOOLBAR);
+
   button = Gtk::manage(new Gtk::Button());
-  button->add(*Gtk::manage(Glib::wrap(
-      sp_icon_new (Inkscape::ICON_SIZE_SMALL_TOOLBAR, INKSCAPE_ICON("pack-more")))) );
+  button->add(*packMoreImage);
   button->set_tooltip_text(_("Display more icons in row."));
   button->set_relief( Gtk::RELIEF_NONE );
   button->set_focus_on_click( false );
   button->signal_clicked().connect(sigc::mem_fun(*this, &SymbolsDialog::packmore));
   tools->pack_start(* button, Gtk::PACK_SHRINK);
 
+  auto packLessImage = Gtk::manage(new Gtk::Image());
+  packLessImage->set_from_icon_name("pack-less", Gtk::ICON_SIZE_SMALL_TOOLBAR);
+
   button = Gtk::manage(new Gtk::Button());
-  button->add(*Gtk::manage(Glib::wrap(
-      sp_icon_new (Inkscape::ICON_SIZE_SMALL_TOOLBAR, INKSCAPE_ICON("pack-less")))) );
+  button->add(*packLessImage);
   button->set_tooltip_text(_("Display fewer icons in row."));
   button->set_relief( Gtk::RELIEF_NONE );
   button->set_focus_on_click( false );
@@ -216,9 +225,11 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   tools->pack_start(* button, Gtk::PACK_SHRINK);
 
   // Toggle scale to fit on/off
+  auto fitSymbolImage = Gtk::manage(new Gtk::Image());
+  fitSymbolImage->set_from_icon_name("symbol-fit", Gtk::ICON_SIZE_SMALL_TOOLBAR);
+
   fitSymbol = Gtk::manage(new Gtk::ToggleButton());
-  fitSymbol->add(*Gtk::manage(Glib::wrap(
-      sp_icon_new (Inkscape::ICON_SIZE_SMALL_TOOLBAR, INKSCAPE_ICON("symbol-fit")))) );
+  fitSymbol->add(*fitSymbolImage);
   fitSymbol->set_tooltip_text(_("Toggle 'fit' symbols in icon space."));
   fitSymbol->set_relief( Gtk::RELIEF_NONE );
   fitSymbol->set_focus_on_click( false );
@@ -228,9 +239,11 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
 
   // Render size (scales symbols within display area)
   scale_factor = 0; // Default 1:1 * pack_size/pack_size default
+  auto zoomOutImage = Gtk::manage(new Gtk::Image());
+  zoomOutImage->set_from_icon_name("symbol-smaller", Gtk::ICON_SIZE_SMALL_TOOLBAR);
+
   zoomOut = Gtk::manage(new Gtk::Button());
-  zoomOut->add(*Gtk::manage(Glib::wrap(
-      sp_icon_new (Inkscape::ICON_SIZE_SMALL_TOOLBAR, INKSCAPE_ICON("symbol-smaller")))) );
+  zoomOut->add(*zoomOutImage);
   zoomOut->set_tooltip_text(_("Make symbols smaller by zooming out."));
   zoomOut->set_relief( Gtk::RELIEF_NONE );
   zoomOut->set_focus_on_click( false );
@@ -238,9 +251,11 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   zoomOut->signal_clicked().connect(sigc::mem_fun(*this, &SymbolsDialog::zoomout));
   tools->pack_start(* zoomOut, Gtk::PACK_SHRINK);
 
+  auto zoomInImage = Gtk::manage(new Gtk::Image());
+  zoomInImage->set_from_icon_name("symbol-bigger", Gtk::ICON_SIZE_SMALL_TOOLBAR);
+
   zoomIn = Gtk::manage(new Gtk::Button());
-  zoomIn->add(*Gtk::manage(Glib::wrap(
-      sp_icon_new (Inkscape::ICON_SIZE_SMALL_TOOLBAR, INKSCAPE_ICON("symbol-bigger")))) );
+  zoomIn->add(*zoomInImage);
   zoomIn->set_tooltip_text(_("Make symbols bigger by zooming in."));
   zoomIn->set_relief( Gtk::RELIEF_NONE );
   zoomIn->set_focus_on_click( false );
@@ -577,19 +592,15 @@ void SymbolsDialog::get_symbols() {
 
   std::list<Glib::ustring> directories;
 
-// \TODO optimize this
-
-  if( Inkscape::IO::file_test( INKSCAPE_SYMBOLSDIR, G_FILE_TEST_EXISTS ) &&
-      Inkscape::IO::file_test( INKSCAPE_SYMBOLSDIR, G_FILE_TEST_IS_DIR ) ) {
-    directories.push_back( INKSCAPE_SYMBOLSDIR );
-  }
-  if( Inkscape::IO::file_test( Inkscape::Application::profile_path("symbols"), G_FILE_TEST_EXISTS ) &&
-      Inkscape::IO::file_test( Inkscape::Application::profile_path("symbols"), G_FILE_TEST_IS_DIR ) ) {
-    directories.push_back( Inkscape::Application::profile_path("symbols") );
-  }
+  using namespace Inkscape::IO::Resource;
+  directories.push_back(get_path_ustring(USER, SYMBOLS));
+  directories.push_back(get_path_ustring(SYSTEM, SYMBOLS));
 
   std::list<Glib::ustring>::iterator it;
   for( it = directories.begin(); it != directories.end(); ++it ) {
+    if(!Inkscape::IO::file_test((*it).c_str(), G_FILE_TEST_IS_DIR)) {
+      continue;
+    }
 
     GError *err = 0;
     GDir *dir = g_dir_open( (*it).c_str(), 0, &err );

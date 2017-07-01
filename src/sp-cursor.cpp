@@ -54,82 +54,92 @@ struct RGBA {
     }
 };
 
-GdkPixbuf *sp_cursor_pixbuf_from_xpm(char const *const *xpm, GdkColor const& black, GdkColor const& white, guint32 fill, guint32 stroke)
+GdkCursor *sp_cursor_from_xpm(char const *const *xpm, GdkColor *black, GdkColor *white, guint32 fill, guint32 stroke)
 {
+    GdkPixbuf *pixbuf;
+    GdkCursor *cursor;
+    GdkDisplay *display = gdk_display_get_default();
+
     int height = 0;
     int width = 0;
     int colors = 0;
     int pix = 0;
+    int hot_x = 0;
+    int hot_y = 0;
     std::stringstream ss (std::stringstream::in | std::stringstream::out);
     ss << xpm[0];
     ss >> height;
     ss >> width;
     ss >> colors;
     ss >> pix;
+    ss >> hot_x;
+    ss >> hot_y;
     
-    std::map<char, RGBA> colorMap;
+    if (gdk_display_supports_cursor_alpha(display) && gdk_display_supports_cursor_color(display)) {
+        std::map<char, RGBA> colorMap;
 
-    for (int i = 0; i < colors; i++) {
+        for (int i = 0; i < colors; i++) {
 
-        char const *p = xpm[1 + i];
-        g_assert(*p >=0);
-        unsigned char const ccode = (guchar) *p;
+            char const *p = xpm[1 + i];
+            g_assert(*p >=0);
+            unsigned char const ccode = (guchar) *p;
 
-        p++;
-        while (isspace(*p)) {
             p++;
-        }
-        p++;
-        while (isspace(*p)) {
+            while (isspace(*p)) {
+                p++;
+            }
             p++;
+            while (isspace(*p)) {
+                p++;
+            }
+
+            if (strcmp(p, "Fill") == 0) {
+                colorMap[ccode] = RGBA(SP_RGBA32_R_U(fill), SP_RGBA32_G_U(fill), SP_RGBA32_B_U(fill), SP_RGBA32_A_U(fill));
+            } else if (strcmp(p, "Stroke") == 0) {
+                colorMap[ccode] = RGBA(SP_RGBA32_R_U(stroke), SP_RGBA32_G_U(stroke), SP_RGBA32_B_U(stroke), SP_RGBA32_A_U(stroke));
+            } else if (black && strcmp(p, "#000000") == 0) {
+                colorMap[ccode] = RGBA(black->red, black->green, black->blue, 255);
+            } else if (white && strcmp(p, "#FFFFFF") == 0) {
+                colorMap[ccode] = RGBA(white->red, white->green, white->blue, 255);
+            } else if (p[0] == '#') {
+                GdkRGBA color;
+                if (gdk_rgba_parse(&color, p)) {
+                    colorMap[ccode] = RGBA(color.red * 255, color.green * 255, color.blue * 255, color.alpha * 255);
+                } else {
+                    colorMap[ccode] = RGBA();
+                }
+            } else { // Catches 'None'
+                colorMap[ccode] = RGBA();
+            }
         }
 
-        if (strcmp(p, "None") == 0) {
-            colorMap[ccode] = RGBA();
-        } else if (strcmp(p, "Fill") == 0) {
-            colorMap[ccode] = RGBA(SP_RGBA32_R_U(fill), SP_RGBA32_G_U(fill), SP_RGBA32_B_U(fill), SP_RGBA32_A_U(fill));
-        } else if (strcmp(p, "Stroke") == 0) {
-            colorMap[ccode] = RGBA(SP_RGBA32_R_U(stroke), SP_RGBA32_G_U(stroke), SP_RGBA32_B_U(stroke), SP_RGBA32_A_U(stroke));
-        } else if (strcmp(p, "#000000") == 0) {
-            colorMap[ccode] = RGBA(black.red, black.green, black.blue, 255);
-        } else if (strcmp(p, "#FFFFFF") == 0) {
-            colorMap[ccode] = RGBA(white.red, white.green, white.blue, 255);
-        } else {
-            colorMap[ccode] = RGBA();
-        }
-    }
+        guint32 *pixmap_buffer = new guint32[width * height];
 
-    guint32 *pixmap_buffer = new guint32[width * height];
-
-    for (int y = 0; y < height; y++) {
-        for (int x = 0; x < width; x++) {
-            std::map<char, RGBA>::const_iterator it = colorMap.find(xpm[1 + colors + y][x]);
-            pixmap_buffer[y * width + x] = (it == colorMap.end()) ? 0u : it->second;
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                std::map<char, RGBA>::const_iterator it = colorMap.find(xpm[1 + colors + y][x]);
+                pixmap_buffer[y * width + x] = (it == colorMap.end()) ? 0u : it->second;
+            }
         }
-    }
 
 #if G_BYTE_ORDER == G_BIG_ENDIAN
-    for (int i = 0, n = width * height; i < n; i++) {
-        guint32 v = pixmap_buffer[i];
-        pixmap_buffer[i] = ((v & 0xFF) << 24) | (((v >> 8) & 0xFF) << 16) | (((v >> 16) & 0xFF) << 8) | ((v >> 24) & 0xFF);
-    }
+        for (int i = 0, n = width * height; i < n; i++) {
+            guint32 v = pixmap_buffer[i];
+            pixmap_buffer[i] = ((v & 0xFF) << 24) | (((v >> 8) & 0xFF) << 16) | (((v >> 16) & 0xFF) << 8) | ((v >> 24) & 0xFF);
+        }
 #endif
 
-    return gdk_pixbuf_new_from_data(reinterpret_cast<guchar*>(pixmap_buffer), GDK_COLORSPACE_RGB, TRUE, 8, width, height, width * sizeof(guint32), free_cursor_data, NULL);
-}
-
-GdkCursor *sp_cursor_new_from_xpm(char const *const *xpm, int hot_x, int hot_y)
-{
-    GdkCursor *cursor = 0;
-    GdkPixbuf *pixbuf = gdk_pixbuf_new_from_xpm_data((const gchar **)xpm);
-    
-    if (pixbuf) {
-        cursor = gdk_cursor_new_from_pixbuf(gdk_display_get_default(),
-			pixbuf, hot_x, hot_y);
-
-        g_object_unref(pixbuf);
+        pixbuf = gdk_pixbuf_new_from_data(reinterpret_cast<guchar*>(pixmap_buffer), GDK_COLORSPACE_RGB, TRUE, 8, width, height, width * sizeof(guint32), free_cursor_data, NULL);
+    } else {
+	pixbuf = gdk_pixbuf_new_from_xpm_data((const gchar **)xpm);
     }
 
+    if (pixbuf != NULL) {
+	cursor = gdk_cursor_new_from_pixbuf(display, pixbuf, hot_x, hot_y);
+        g_object_unref(pixbuf);
+    } else {
+        g_warning("Failed to load cursor from xpm!");
+    }
     return cursor;
 }
 

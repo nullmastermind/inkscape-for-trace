@@ -132,11 +132,7 @@ private:
         Gtk::Button _add;
         Glib::RefPtr<Gtk::Menu> _menu;
         sigc::signal<void> _signal_filter_changed;
-#if __cplusplus <= 199711L
-        std::auto_ptr<Inkscape::XML::SignalObserver> _observer;
-#else
         std::unique_ptr<Inkscape::XML::SignalObserver> _observer;
-#endif
     };
 
     class PrimitiveColumns : public Gtk::TreeModel::ColumnRecord
@@ -244,11 +240,7 @@ private:
         sigc::connection _scroll_connection;
         int _autoscroll_y;
         int _autoscroll_x;
-#if __cplusplus <= 199711L
-        std::auto_ptr<Inkscape::XML::SignalObserver> _observer;
-#else
         std::unique_ptr<Inkscape::XML::SignalObserver> _observer;
-#endif
         int _input_type_width;
         int _input_type_height;
     };

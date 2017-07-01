@@ -57,7 +57,7 @@ const std::string& StarTool::getPrefsPath() {
 const std::string StarTool::prefsPath = "/tools/shapes/star";
 
 StarTool::StarTool()
-    : ToolBase(cursor_star_xpm, 4, 4)
+    : ToolBase(cursor_star_xpm)
     , star(NULL)
     , magnitude(5)
     , proportion(0.5)

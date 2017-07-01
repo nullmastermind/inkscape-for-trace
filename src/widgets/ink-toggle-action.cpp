@@ -1,5 +1,4 @@
 #include "ink-toggle-action.h"
-#include "icon.h"
 
 static void ink_toggle_action_finalize( GObject* obj );
 static void ink_toggle_action_get_property( GObject* obj, guint propId, GValue* value, GParamSpec * pspec );
@@ -13,7 +12,7 @@ static void ink_toggle_action_update_icon( InkToggleAction* action );
 struct _InkToggleActionPrivate
 {
     gchar* iconId;
-    Inkscape::IconSize iconSize;
+    GtkIconSize iconSize;
 };
 
 #define INK_TOGGLE_ACTION_GET_PRIVATE( o ) ( G_TYPE_INSTANCE_GET_PRIVATE( (o), INK_TOGGLE_ACTION_TYPE, InkToggleActionPrivate ) )
@@ -65,7 +64,7 @@ static void ink_toggle_action_init( InkToggleAction* action )
 {
     action->private_data = INK_TOGGLE_ACTION_GET_PRIVATE( action );
     action->private_data->iconId = 0;
-    action->private_data->iconSize = Inkscape::ICON_SIZE_SMALL_TOOLBAR;
+    action->private_data->iconSize = GTK_ICON_SIZE_SMALL_TOOLBAR;
 }
 
 static void ink_toggle_action_finalize( GObject* obj )
@@ -81,7 +80,7 @@ InkToggleAction* ink_toggle_action_new( const gchar *name,
                            const gchar *label,
                            const gchar *tooltip,
                            const gchar *inkId,
-                           Inkscape::IconSize size,
+                           GtkIconSize  size,
                            SPAttributeEnum attr)
 {
     GObject* obj = (GObject*)g_object_new( INK_TOGGLE_ACTION_TYPE,
@@ -89,7 +88,7 @@ InkToggleAction* ink_toggle_action_new( const gchar *name,
                                            "label", label,
                                            "tooltip", tooltip,
                                            "iconId", inkId,
-                                           "iconSize", Inkscape::getRegisteredIconSize(size),
+                                           "iconSize", size,
                                            //"SP_ATTR_INKSCAPE", attr, // Why doesn't this work and do I need to use g_object_set_data below?
                                            NULL );
 
@@ -138,7 +137,7 @@ void ink_toggle_action_set_property( GObject* obj, guint propId, const GValue *v
 
         case PROP_INK_SIZE:
         {
-            action->private_data->iconSize = (Inkscape::IconSize)g_value_get_int( value );
+            action->private_data->iconSize = (GtkIconSize)g_value_get_int( value );
         }
         break;
 
@@ -164,7 +163,7 @@ static GtkWidget* ink_toggle_action_create_tool_item( GtkAction* action )
     if ( GTK_IS_TOOL_BUTTON(item) ) {
         GtkToolButton* button = GTK_TOOL_BUTTON(item);
         if ( act->private_data->iconId ) {
-            GtkWidget* child = sp_icon_new( act->private_data->iconSize, act->private_data->iconId );
+            GtkWidget* child = gtk_image_new_from_icon_name( act->private_data->iconId, act->private_data->iconSize );
 
 	    gtk_widget_set_hexpand(child, FALSE);
 	    gtk_widget_set_vexpand(child, FALSE);
@@ -196,7 +195,7 @@ static void ink_toggle_action_update_icon( InkToggleAction* action )
                 if ( GTK_IS_TOOL_BUTTON(proxies->data) ) {
                     GtkToolButton* button = GTK_TOOL_BUTTON(proxies->data);
 
-                    GtkWidget* child = sp_icon_new( action->private_data->iconSize, action->private_data->iconId );
+                    GtkWidget* child = gtk_image_new_from_icon_name( action->private_data->iconId, action->private_data->iconSize );
 		    gtk_widget_set_hexpand(child, FALSE);
 		    gtk_widget_set_vexpand(child, FALSE);
 		    gtk_widget_show_all(child);

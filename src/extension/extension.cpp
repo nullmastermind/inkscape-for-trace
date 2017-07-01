@@ -33,6 +33,7 @@
 #include "dependency.h"
 #include "timer.h"
 #include "param/parameter.h"
+#include "io/resource.h"
 
 namespace Inkscape {
 namespace Extension {
@@ -658,7 +659,7 @@ Extension::set_param_color (const gchar * name, guint32 color, SPDocument * doc,
 void
 Extension::error_file_open (void)
 {
-    gchar * ext_error_file = Inkscape::Application::profile_path(EXTENSION_ERROR_LOG_FILENAME);
+    gchar * ext_error_file = Inkscape::IO::Resource::log_path(EXTENSION_ERROR_LOG_FILENAME);
     gchar * filename = g_filename_from_utf8( ext_error_file, -1, NULL, NULL, NULL );
     error_file.open(filename);
     if (!error_file.is_open()) {

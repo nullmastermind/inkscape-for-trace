@@ -151,9 +151,11 @@ endif()
 # -----------------------------------------------------------------------------
 # Dist Target
 # -----------------------------------------------------------------------------
-if(EXISTS ${CMAKE_SOURCE_DIR}/.bzr/)
-    execute_process(COMMAND
-        bzr revno --tree ${CMAKE_SOURCE_DIR}
+if(EXISTS ${CMAKE_SOURCE_DIR}/.git/)
+    execute_process(
+        COMMAND git show --format=format:"%ad %h" --date=short
+        COMMAND head -n 1
+        COMMAND tr "\n" " "
                 OUTPUT_VARIABLE INKSCAPE_REVISION
                 OUTPUT_STRIP_TRAILING_WHITESPACE)
 else()
@@ -161,11 +163,10 @@ else()
 endif()
 set(INKSCAPE_DIST_PREFIX "${PROJECT_NAME}-${INKSCAPE_VERSION}")
 add_custom_target(dist
-    COMMAND sed -i "s/unknown/r${INKSCAPE_REVISION}/" CMakeScripts/inkscape-version.cmake
+    COMMAND sed -i "s/unknown//" CMakeScripts/inkscape-version.cmake
     && sed -i "s/custom//" CMakeScripts/inkscape-version.cmake
-    && bzr export --uncommitted --root=${INKSCAPE_DIST_PREFIX}
-    "${CMAKE_BINARY_DIR}/${INKSCAPE_DIST_PREFIX}.tar.bz2" 
-    && bzr revert ${CMAKE_SOURCE_DIR}/CMakeScripts/inkscape-version.cmake
+    && tar cfz ${CMAKE_BINARY_DIR}/${INKSCAPE_DIST_PREFIX}.tar.gz ${CMAKE_SOURCE_DIR} --exclude=".*" --exclude-vcs-ignores
+    && git checkout ${CMAKE_SOURCE_DIR}/CMakeScripts/inkscape-version.cmake
     WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
 
 # -----------------------------------------------------------------------------

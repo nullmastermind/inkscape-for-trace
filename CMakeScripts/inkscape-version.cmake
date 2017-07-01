@@ -11,14 +11,22 @@
 set(INKSCAPE_REVISION "unknown")
 set(INKSCAPE_CUSTOM "custom")
 
-if(EXISTS ${INKSCAPE_SOURCE_DIR}/.bzr/)
-    execute_process(COMMAND
-	bzr revno --tree ${INKSCAPE_SOURCE_DIR}
-	OUTPUT_VARIABLE INKSCAPE_REVISION
-	OUTPUT_STRIP_TRAILING_WHITESPACE)
+if(EXISTS ${INKSCAPE_SOURCE_DIR}/.git/)
+
+    execute_process(COMMAND git describe
+        COMMAND tr "\n" " "
+        WORKING_DIRECTORY ${INKSCAPE_SOURCE_DIR}
+        OUTPUT_VARIABLE INKSCAPE_REV1)
+    execute_process(COMMAND git show --format=format:%ad --date=short
+        COMMAND head -n 1 
+        COMMAND tr "\n" " "
+        WORKING_DIRECTORY ${INKSCAPE_SOURCE_DIR}
+	OUTPUT_VARIABLE INKSCAPE_REV2
+        OUTPUT_STRIP_TRAILING_WHITESPACE)
+    set(INKSCAPE_REVISION ${INKSCAPE_REV1} ${INKSCAPE_REV2})
 
     execute_process(COMMAND
-        bzr status -S -V ${INKSCAPE_SOURCE_DIR}/src
+        git status -s ${INKSCAPE_SOURCE_DIR}/src
         OUTPUT_VARIABLE INKSCAPE_SOURCE_MODIFIED
         OUTPUT_STRIP_TRAILING_WHITESPACE)
     if(NOT INKSCAPE_SOURCE_MODIFIED STREQUAL "")

@@ -137,7 +137,7 @@ static void sp_spray_scale_rel(Geom::Point c, SPDesktop */*desktop*/, SPItem *it
 }
 
 SprayTool::SprayTool()
-    : ToolBase(cursor_spray_xpm, 4, 4, false)
+    : ToolBase(cursor_spray_xpm, false)
     , pressure(TC_DEFAULT_PRESSURE)
     , dragging(false)
     , usepressurewidth(false)

@@ -48,11 +48,7 @@
 #include "ui/dialog/filedialog.h"
 
 using namespace Inkscape;
-
-using Inkscape::IO::Resource::get_path;
-using Inkscape::IO::Resource::SYSTEM;
-using Inkscape::IO::Resource::USER;
-using Inkscape::IO::Resource::KEYS;
+using namespace Inkscape::IO::Resource;
 
 static void try_shortcuts_file(char const *filename);
 static void read_shortcuts_file(char const *filename, bool const is_user_set=false);
@@ -126,6 +122,12 @@ unsigned int sp_gdkmodifier_to_shortcut(guint accel_key, Gdk::ModifierType gdkmo
                  SP_SHORTCUT_SHIFT_MASK : 0 ) |
                ( gdkmodifier & GDK_CONTROL_MASK ?
                  SP_SHORTCUT_CONTROL_MASK : 0 ) |
+               ( gdkmodifier & GDK_SUPER_MASK ?
+                 SP_SHORTCUT_SUPER_MASK : 0 ) |
+               ( gdkmodifier & GDK_HYPER_MASK ?
+                 SP_SHORTCUT_HYPER_MASK : 0 ) |
+               ( gdkmodifier & GDK_META_MASK ?
+                 SP_SHORTCUT_META_MASK : 0 ) |
                ( gdkmodifier & GDK_MOD1_MASK ?
                  SP_SHORTCUT_ALT_MASK : 0 );
 
@@ -142,6 +144,12 @@ Glib::ustring sp_shortcut_to_label(unsigned int const shortcut) {
         modifiers += "Shift,";
     if (shortcut & SP_SHORTCUT_ALT_MASK)
         modifiers += "Alt,";
+    if (shortcut & SP_SHORTCUT_SUPER_MASK)
+        modifiers += "Super,";
+    if (shortcut & SP_SHORTCUT_HYPER_MASK)
+        modifiers += "Hyper,";
+    if (shortcut & SP_SHORTCUT_META_MASK)
+        modifiers += "Meta,";
 
     if(modifiers.length() > 0 &&
             modifiers.find(',',modifiers.length()-1)!=modifiers.npos) {
@@ -208,9 +216,11 @@ Inkscape::XML::Document *sp_shortcut_create_template_file(char const *filename) 
  */
 void sp_shortcut_get_file_names(std::vector<Glib::ustring> *names, std::vector<Glib::ustring> *paths) {
 
-    std::list<gchar *> sources;
-    sources.push_back( Inkscape::Application::profile_path("keys") );
-    sources.push_back( g_strdup(INKSCAPE_KEYSDIR) );
+    using namespace Inkscape::IO::Resource;
+    std::list<char *> sources;
+
+    sources.push_back(g_strdup(get_path(USER, KEYS)));
+    sources.push_back(g_strdup(get_path(SYSTEM, KEYS)));
 
     // loop through possible keyboard shortcut file locations.
     while (!sources.empty()) {
@@ -227,14 +237,12 @@ void sp_shortcut_get_file_names(std::vector<Glib::ustring> *names, std::vector<G
                 gchar *filename = 0;
                 while ((filename = (gchar *) g_dir_read_name(directory)) != NULL) {
                     gchar* lower = g_ascii_strdown(filename, -1);
-                    if (!strcmp(dirname, Inkscape::Application::profile_path("keys")) &&
-                            !strcmp(lower, "default.xml")) {
+                    if (!strcmp(lower, "default.xml")) {
                         // Dont add the users custom keys file
                         continue;
                     }
-                    if (!strcmp(dirname, INKSCAPE_KEYSDIR) &&
-                            !strcmp(lower, "inkscape.xml")) {
-                        // Dont add system inkscape.xml (since its a duplicate? of dfefault.xml)
+                    if (!strcmp(lower, "inkscape.xml")) {
+                        // Dont add system inkscape.xml (since its a duplicate? of default.xml)
                         continue;
                     }
                     if (g_str_has_suffix(lower, ".xml")) {
@@ -611,6 +619,18 @@ static void read_shortcuts_file(char const *filename, bool const is_user_set) {
                     modifiers |= SP_SHORTCUT_SHIFT_MASK;
                 } else if (!strcmp(mod, "Alt")) {
                     modifiers |= SP_SHORTCUT_ALT_MASK;
+                } else if (!strcmp(mod, "Super")) {
+                    modifiers |= SP_SHORTCUT_SUPER_MASK;
+                } else if (!strcmp(mod, "Hyper")) {
+                    modifiers |= SP_SHORTCUT_HYPER_MASK;
+                } else if (!strcmp(mod, "Meta")) {
+                    modifiers |= SP_SHORTCUT_META_MASK;
+                } else if (!strcmp(mod, "Primary")) {
+#ifdef __APPLE__
+                    modifiers |= SP_SHORTCUT_META_MASK;
+#else
+                    modifiers |= SP_SHORTCUT_CONTROL_MASK;
+#endif
                 } else {
                     g_warning("Unknown modifier %s for %s", mod, verb_name);
                 }
@@ -698,6 +718,9 @@ sp_shortcut_get_modifiers(unsigned int const shortcut)
     return static_cast<GdkModifierType>(
             ((shortcut & SP_SHORTCUT_SHIFT_MASK) ? GDK_SHIFT_MASK : 0) |
             ((shortcut & SP_SHORTCUT_CONTROL_MASK) ? GDK_CONTROL_MASK : 0) |
+            ((shortcut & SP_SHORTCUT_SUPER_MASK) ? GDK_SUPER_MASK : 0) |
+            ((shortcut & SP_SHORTCUT_HYPER_MASK) ? GDK_HYPER_MASK : 0) |
+            ((shortcut & SP_SHORTCUT_META_MASK) ? GDK_META_MASK : 0) |
             ((shortcut & SP_SHORTCUT_ALT_MASK) ? GDK_MOD1_MASK : 0)
             );
 }

@@ -25,6 +25,7 @@
 #include "xml/attribute-record.h"
 #include "util/units.h"
 #include "attribute-rel-util.h"
+#include "io/resource.h"
 
 #define PREFERENCES_FILE_NAME "preferences.xml"
 
@@ -82,22 +83,13 @@ private:
 };
 
 Preferences::Preferences() :
-    _prefs_basename(PREFERENCES_FILE_NAME),
-    _prefs_dir(""),
     _prefs_filename(""),
     _prefs_doc(0),
     _errorHandler(0),
     _writable(false),
     _hasError(false)
 {
-    // profile_path essentailly returns the argument prefixed by the profile directory.
-    // \TODO this is kinda hackish, but the alternative (strrchr) is worse
-
-    gchar *path = Inkscape::Application::profile_path(NULL);
-    _prefs_dir = path;
-    g_free(path);
-
-    path = Inkscape::Application::profile_path(_prefs_basename.c_str());
+    char *path = Inkscape::IO::Resource::profile_path(PREFERENCES_FILE_NAME);
     _prefs_filename = path;
     g_free(path);
 
@@ -140,16 +132,16 @@ void Preferences::_load()
 
     // 1. Does the file exist?
     if (!g_file_test(_prefs_filename.c_str(), G_FILE_TEST_EXISTS)) {
+        char *_prefs_dir = Inkscape::IO::Resource::profile_path(NULL);
         // No - we need to create one.
         // Does the profile directory exist?
-        if (!g_file_test(_prefs_dir.c_str(), G_FILE_TEST_EXISTS)) {
+        if (!g_file_test(_prefs_dir, G_FILE_TEST_EXISTS)) {
             // No - create the profile directory
-            if (g_mkdir(_prefs_dir.c_str(), 0755)) {
+            if (g_mkdir(_prefs_dir, 0755)) {
                 // the creation failed
                 //_reportError(Glib::ustring::compose(_("Cannot create profile directory %1."),
                 //    Glib::filename_to_utf8(_prefs_dir)), not_saved);
-                gchar *msg = g_strdup_printf(_("Cannot create profile directory %s."),
-                    Glib::filename_to_utf8(_prefs_dir).c_str());
+                gchar *msg = g_strdup_printf(_("Cannot create profile directory %s."), _prefs_dir);
                 _reportError(msg, not_saved);
                 g_free(msg);
                 return;
@@ -157,17 +149,17 @@ void Preferences::_load()
             // create some subdirectories for user stuff
             char const *user_dirs[] = {"keys", "templates", "icons", "extensions", "palettes", NULL};
             for (int i=0; user_dirs[i]; ++i) {
-                char *dir = Inkscape::Application::profile_path(user_dirs[i]);
+                // XXX Why are we doing this here? shouldn't this be an IO load item?
+                char *dir = Inkscape::IO::Resource::profile_path(user_dirs[i]);
                 g_mkdir(dir, 0755);
                 g_free(dir);
             }
 
-        } else if (!g_file_test(_prefs_dir.c_str(), G_FILE_TEST_IS_DIR)) {
+        } else if (!g_file_test(_prefs_dir, G_FILE_TEST_IS_DIR)) {
             // The profile dir is not actually a directory
             //_reportError(Glib::ustring::compose(_("%1 is not a valid directory."),
             //    Glib::filename_to_utf8(_prefs_dir)), not_saved);
-            gchar *msg = g_strdup_printf(_("%s is not a valid directory."),
-                Glib::filename_to_utf8(_prefs_dir).c_str());
+            gchar *msg = g_strdup_printf(_("%s is not a valid directory."), _prefs_dir);
             _reportError(msg, not_saved);
             g_free(msg);
             return;

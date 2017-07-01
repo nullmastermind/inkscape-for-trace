@@ -108,9 +108,9 @@ private:
     Glib::RefPtr<TreeStore> _store;
 
     // Widgets
-    Gtk::VPaned _paned;
-    Gtk::VBox _mainBox;
-    Gtk::HBox _buttonBox;
+    Gtk::Paned _paned;
+    Gtk::Box   _mainBox;
+    Gtk::Box   _buttonBox;
     Gtk::ScrolledWindow _scrolledWindow;
     Gtk::Button* del;
     Gtk::Button* create;

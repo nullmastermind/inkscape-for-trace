@@ -88,7 +88,7 @@ const std::string& CalligraphicTool::getPrefsPath() {
 const std::string CalligraphicTool::prefsPath = "/tools/calligraphic";
 
 CalligraphicTool::CalligraphicTool()
-    : DynamicBase(cursor_calligraphy_xpm, 4, 4)
+    : DynamicBase(cursor_calligraphy_xpm)
     , keep_selected(true)
     , hatch_spacing(0)
     , hatch_spacing_step(0)

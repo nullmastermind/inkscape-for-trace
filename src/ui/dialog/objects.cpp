@@ -47,7 +47,6 @@
 #include "ui/tools/node-tool.h"
 #include "verbs.h"
 #include "ui/widget/color-notebook.h"
-#include "widgets/icon.h"
 #include "xml/node-observer.h"
 
 //#define DUMP_LAYERS 1
@@ -224,7 +223,7 @@ public:
  */
 void ObjectsPanel::_styleButton(Gtk::Button& btn, char const* iconName, char const* tooltip)
 {
-    GtkWidget *child = sp_icon_new( Inkscape::ICON_SIZE_SMALL_TOOLBAR, iconName );
+    GtkWidget *child = gtk_image_new_from_icon_name( iconName, GTK_ICON_SIZE_SMALL_TOOLBAR );
     gtk_widget_show( child );
     btn.add( *Gtk::manage(Glib::wrap(child)) );
     btn.set_relief(Gtk::RELIEF_NONE);
@@ -242,23 +241,25 @@ void ObjectsPanel::_styleButton(Gtk::Button& btn, char const* iconName, char con
  */
 Gtk::MenuItem& ObjectsPanel::_addPopupItem( SPDesktop *desktop, unsigned int code, char const* iconName, char const* fallback, int id )
 {
-    GtkWidget* iconWidget = 0;
+    Gtk::Image *iconWidget = nullptr;
     const char* label = 0;
 
     if ( iconName ) {
-        iconWidget = sp_icon_new( Inkscape::ICON_SIZE_MENU, iconName );
+        iconWidget = Gtk::manage(new Gtk::Image());
+        iconWidget->set_from_icon_name( iconName, Gtk::ICON_SIZE_MENU );
     }
 
     if ( desktop ) {
         Verb *verb = Verb::get( code );
         if ( verb ) {
-            SPAction *action = verb->get_action(desktop);
+            SPAction *action = verb->get_action(Inkscape::ActionContext(desktop));
             if ( !iconWidget && action && action->image ) {
-                iconWidget = sp_icon_new( Inkscape::ICON_SIZE_MENU, action->image );
+                iconWidget = Gtk::manage(new Gtk::Image());
+                iconWidget->set_from_icon_name( action->image, Gtk::ICON_SIZE_MENU );
             }
 
             if ( action ) {
-               // label = action->name;
+                label = action->name;
             }
         }
     }
@@ -267,20 +268,22 @@ Gtk::MenuItem& ObjectsPanel::_addPopupItem( SPDesktop *desktop, unsigned int cod
         label = fallback;
     }
 
-    Gtk::Widget* wrapped = 0;
-    if ( iconWidget ) {
-        wrapped = Gtk::manage(Glib::wrap(iconWidget));
-        wrapped->show();
+    auto box = Gtk::manage(new Gtk::Box());
+    Gtk::MenuItem* item = Gtk::manage(new Gtk::MenuItem());
+
+    if (iconWidget) {
+        box->pack_start(*iconWidget, false, true, 0);
+    }
+    else {
+        Gtk::Label *fake_icon = Gtk::manage(new Gtk::Label(""));
+        box->pack_start(*fake_icon, false, true, 0);
     }
 
-
-    Gtk::MenuItem* item = 0;
-
-    if (wrapped) {
-        item = Gtk::manage(new Gtk::ImageMenuItem(*wrapped, label, true));
-    } else {
-	item = Gtk::manage(new Gtk::MenuItem(label, true));
-    }
+    Gtk::Label *menu_label = Gtk::manage(new Gtk::Label(label, true));
+    menu_label->set_xalign(0.0);
+    box->pack_start(*menu_label, true, true, 0);
+    item->add(*box);
+    item->show_all();
 
     item->signal_activate().connect(sigc::bind(sigc::mem_fun(*this, &ObjectsPanel::_takeAction), id));
     _popupMenu.append(*item);
