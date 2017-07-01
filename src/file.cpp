@@ -69,6 +69,7 @@
 
 using Inkscape::DocumentUndo;
 using Inkscape::IO::Resource::TEMPLATES;
+using Inkscape::IO::Resource::USER;
 
 #ifdef WITH_GNOME_VFS
 # include <libgnomevfs/gnome-vfs.h>
@@ -122,7 +123,7 @@ SPDesktop *sp_file_new(const std::string &templ)
 {
     SPDocument *doc = SPDocument::createNewDoc( !templ.empty() ? templ.c_str() : 0 , TRUE, true );
     g_return_val_if_fail(doc != NULL, NULL);
-    
+
     // Remove all the template info from xml tree
     Inkscape::XML::Node *myRoot = doc->getReprRoot();
     Inkscape::XML::Node *nodeToRemove = sp_repr_lookup_name(myRoot, "inkscape:_templateinfo");
@@ -132,11 +133,11 @@ SPDesktop *sp_file_new(const std::string &templ)
         delete nodeToRemove;
         DocumentUndo::setUndoSensitive(doc, true);
     }
-    
+
     SPDesktop *olddesktop = SP_ACTIVE_DESKTOP;
     if (olddesktop)
         olddesktop->setWaitingCursor();
-    
+
     SPViewWidget *dtw = sp_desktop_widget_new(sp_document_namedview(doc, NULL)); // TODO this will trigger broken link warnings, etc.
     g_return_val_if_fail(dtw != NULL, NULL);
     sp_create_window(dtw, TRUE);
@@ -145,12 +146,12 @@ SPDesktop *sp_file_new(const std::string &templ)
     doc->doUnref();
 
     sp_namedview_window_from_document(desktop);
-    sp_namedview_update_layers_from_document(desktop);    
+    sp_namedview_update_layers_from_document(desktop);
 
 #ifdef WITH_DBUS
     Inkscape::Extension::Dbus::dbus_init_desktop_interface(desktop);
 #endif
-    
+
     if (olddesktop)
         olddesktop->clearWaitingCursor();
     if (desktop)
@@ -1006,6 +1007,21 @@ sp_file_save_a_copy(Gtk::Window &parentWindow, gpointer /*object*/, gpointer /*d
     return sp_file_save_dialog(parentWindow, SP_ACTIVE_DOCUMENT, Inkscape::Extension::FILE_SAVE_METHOD_SAVE_COPY);
 }
 
+/**
+ *  Save a copy of a document as template.
+ */
+void
+sp_file_save_template(Gtk::Window &parentWindow)
+{
+    if (!SP_ACTIVE_DOCUMENT)
+        return;
+
+    ///auto filename =  Inkscape::IO::Resource::get_filename(TEMPLATES, "default.svg");
+    auto filename =  Inkscape::IO::Resource::get_path_ustring(USER, TEMPLATES, "default.svg");
+    file_save(parentWindow, SP_ACTIVE_DOCUMENT, filename, Inkscape::Extension::db.get(".svg"), false, false, Inkscape::Extension::FILE_SAVE_METHOD_INKSCAPE_SVG);
+}
+
+
 
 /*######################
 ## I M P O R T
@@ -1069,7 +1085,7 @@ void sp_import_document(SPDesktop *desktop, SPDocument *clipdoc, bool in_place)
         SPLPEItem * pasted_lpe_item = dynamic_cast<SPLPEItem *>(pasted);
         if (pasted_lpe_item){
             pasted_lpe_item->forkPathEffectsIfNecessary(1);
-        } 
+        }
         pasted_objects_not.push_back(obj_copy);
     }
     Inkscape::Selection *selection = desktop->getSelection();
@@ -1127,7 +1143,7 @@ file_import(SPDocument *in_doc, const Glib::ustring &uri,
 {
     SPDesktop *desktop = SP_ACTIVE_DESKTOP;
     bool cancelled = false;
-    
+
     //DEBUG_MESSAGE( fileImport, "file_import( in_doc:%p uri:[%s], key:%p", in_doc, uri, key );
     SPDocument *doc;
     try {
@@ -1660,7 +1676,7 @@ Inkscape::UI::Dialog::OCAL::ImportDialog* import_ocal_dialog = NULL;
 void on_import_from_ocal_response(Glib::ustring filename)
 {
     SPDocument *doc = SP_ACTIVE_DOCUMENT;
-    
+
     if (!filename.empty()) {
         Inkscape::Extension::Extension *selection = import_ocal_dialog->get_selection_type();
         file_import(doc, filename, selection);
@@ -1686,7 +1702,7 @@ sp_file_import_from_ocal(Gtk::Window &parent_window)
         import_ocal_dialog->signal_response().connect(
         sigc::ptr_fun(&on_import_from_ocal_response));
     }
-            
+
     import_ocal_dialog->show_all();
 }
 

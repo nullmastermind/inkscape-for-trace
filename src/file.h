@@ -110,6 +110,11 @@ bool sp_file_save_as (Gtk::Window &parentWindow, void* object, void* data);
  */
 bool sp_file_save_a_copy (Gtk::Window &parentWindow, void* object, void* data);
 
+/**
+ *  Save a copy of a document as template.
+ */
+void
+sp_file_save_template(Gtk::Window &parentWindow);
 
 /**
  *  Saves the given document.  Displays a file select dialog

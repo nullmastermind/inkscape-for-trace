@@ -70,18 +70,20 @@ void SaveTemplate::on_name_changed() {
     }
 }
 
-void SaveTemplate::save_template() {
+void SaveTemplate::save_template(Gtk::Window &parentWindow) {
 
-    std::cout
-        << "Save template: "
-        << name_text.get_text() << " "
-        << author_text.get_text() << " "
-        << description_text.get_text() << " "
-        << keywords_text.get_text() << " "
-        << is_default_template.get_active() << std::endl;
+    // std::cout
+    //     << "Save template: "
+    //     << name_text.get_text() << " "
+    //     << author_text.get_text() << " "
+    //     << description_text.get_text() << " "
+    //     << keywords_text.get_text() << " "
+    //     << is_default_template.get_active() << std::endl;
+
+    sp_file_save_template(parentWindow);
 }
 
-void SaveTemplate::save_document_as_template() {
+void SaveTemplate::save_document_as_template(Gtk::Window &parentWindow) {
 
     SaveTemplate dialog;
 
@@ -91,7 +93,7 @@ void SaveTemplate::save_document_as_template() {
 
         case Gtk::RESPONSE_OK:
 
-            dialog.save_template();
+            dialog.save_template(parentWindow);
             break;
 
         default:

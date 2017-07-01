@@ -894,7 +894,7 @@ void FileVerb::perform(SPAction *action, void *data)
             sp_file_save_a_copy(*parent, NULL, NULL);
             break;
         case SP_VERB_FILE_SAVE_TEMPLATE:
-            Inkscape::UI::Dialog::SaveTemplate::save_document_as_template();
+            Inkscape::UI::Dialog::SaveTemplate::save_document_as_template(*parent);
             break;
         case SP_VERB_FILE_PRINT:
             sp_file_print(*parent);

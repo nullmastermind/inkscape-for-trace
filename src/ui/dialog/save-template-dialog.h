@@ -17,7 +17,7 @@ class SaveTemplate : public Gtk::Dialog
 
 public:
 
-    static void save_document_as_template();
+    static void save_document_as_template(Gtk::Window &parentWindow);
 
 protected:
 
@@ -42,7 +42,7 @@ private:
     Gtk::CheckButton is_default_template;
 
     SaveTemplate();
-    void save_template();
+    void save_template(Gtk::Window &parentWindow);
 
 };
 }
