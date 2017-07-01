@@ -33,6 +33,8 @@
 #include "ui/tools/lpe-tool.h"
 #include "ui/tool/commit-events.h"
 #include "ui/tool/event-utils.h"
+#include "ui/tools/node-tool.h"
+#include "ui/tool/shape-record.h"
 
 #include <gdk/gdkkeysyms.h>
 #include <glibmm/i18n.h>
@@ -321,13 +323,20 @@ bool ToolBase::_keyboardMove(GdkEventKey const &event, Geom::Point const &dir)
         double nudge = prefs->getDoubleLimited("/options/nudgedistance/value", 2, 0, 1000, "px");
         delta *= nudge;
     }
-    std::cout << num << "zzzzzzzzzzzzzzzzzzzzzzzzzzzwww\n";
-    if (this->shape_editor && this->shape_editor->has_knotholder()) {
-        std::cout << num << "zzzzzzzzzzzzzzzzzzzzzzzzzzz\n";
+    if (shape_editor && shape_editor->has_knotholder()) {
         KnotHolder * knotholder = shape_editor->knotholder;
         if (knotholder) {
-            std::cout << num << "wwwwwwwwwwwwwwwwwwwwww\n";
             knotholder->transform_selected(Geom::Translate(delta));
+        }
+    } else {
+        Inkscape::UI::Tools::NodeTool *nt = static_cast<Inkscape::UI::Tools::NodeTool*>(desktop->event_context);
+        if (nt) {
+            for(auto i=nt->_shape_editors.begin();i!=nt->_shape_editors.end();++i){
+                KnotHolder * knotholder = i->second->knotholder;
+                if (knotholder) {
+                    knotholder->transform_selected(Geom::Translate(delta));
+                }
+            }
         }
     }
     return true;
@@ -588,8 +597,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
         int const key_scroll = prefs->getIntLimited("/options/keyscroll/value",
                 10, 0, 1000);
 
-        switch(shortcut_key(event->key)) {
-        //switch (get_group0_keyval(&event->key)) {
+        switch (get_group0_keyval(&event->key)) {
         // GDK insists on stealing these keys (F1 for no idea what, tab for cycling widgets
         // in the editing window). So we resteal them back and run our regular shortcut
         // invoker on them.

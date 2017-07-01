@@ -85,7 +85,7 @@ FilterEditorDialog::FilterEditorDialog() : UI::Widget::Panel("", "/dialogs/filte
     for(std::string w:req_widgets) {
         builder->get_widget(w,test);
         if(!test){
-            g_warning("Required widget %s does not exist", w);
+            g_warning("Required widget %s does not exist", w.c_str());
             return;
             }
     }

@@ -174,7 +174,6 @@ void
 KnotHolder::transform_selected(Geom::Affine transform){
     for (std::list<KnotHolderEntity *>::iterator i = entity.begin(); i != entity.end(); ++i) {
         SPKnot *knot = (*i)->knot;
-        std::cout << transform << "transform\n";
         if (knot->flags & SP_KNOT_SELECTED) {
             knot_moved_handler(knot, knot->pos * transform , 0);
             knot->selectKnot(true);

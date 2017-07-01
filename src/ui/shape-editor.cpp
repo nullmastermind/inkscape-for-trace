@@ -97,11 +97,11 @@ void ShapeEditor::event_attr_changed(Inkscape::XML::Node * node, gchar const *na
             // this can happen if an LPEItem's knotholder handle was dragged, in which case we want
             // to keep the knotholder; in all other cases (e.g., if the LPE itself changes) we delete it
             sh->reset_item(!strcmp(name, "d") ||
-                         !strcmp(node->name(),"svg:rect") );//||
-//                           !strcmp(node->name(),"svg:star") ||
-//                           !strcmp(node->name(),"svg:spiral") ||
-//                           !strcmp(node->name(),"svg:ellipse") ||
-//                           SP_IS_GENERICELLIPSE(SP_ACTIVE_DOCUMENT->getObjectById(node->attribute("id"))));
+                           !strcmp(node->name(),"svg:rect") ||
+                           !strcmp(node->name(),"svg:star") |
+                           !strcmp(node->name(),"svg:spiral") ||
+                           !strcmp(node->name(),"svg:ellipse") ||
+                           SP_IS_GENERICELLIPSE(SP_ACTIVE_DOCUMENT->getObjectById(node->attribute("id"))));
         }
     }
 }
@@ -119,7 +119,6 @@ void ShapeEditor::set_item(SPItem *item, bool keep_knotholder) {
     if (_blockSetItem) {
         return;
     }
-
     // this happens (and should only happen) when for an LPEItem having both knotholder and
     // nodepath the knotholder is adapted; in this case we don't want to delete the knotholder
     // since this freezes the handles
@@ -162,6 +161,7 @@ bool ShapeEditor::knot_mouseover() const {
     if (this->knotholder) {
         return knotholder->knot_mouseover();
     }
+    
 
     return false;
 }
