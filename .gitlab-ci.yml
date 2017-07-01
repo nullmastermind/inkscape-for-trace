@@ -55,7 +55,7 @@ inkscape:mac:
     expire_in: 1 year
     paths:
       - build/
-
+  allow_failure: true
 # This job is a static analysis build by clang.
 # It takes MORE THAN 3 HOURS, and depending on worker sometimes 4 hours.
 # Make sure the timeout of the build is big enough
