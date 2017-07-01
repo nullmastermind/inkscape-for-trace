@@ -24,6 +24,7 @@ static char const menus_skeleton[] =
 "       <verb verb-id=\"FileSave\" />\n"
 "       <verb verb-id=\"FileSaveAs\" />\n"
 "       <verb verb-id=\"FileSaveACopy\" />\n"
+"       <verb verb-id=\"FileSaveTemplate\" />\n"
 "       <separator/>\n"
 "       <verb verb-id=\"FileImport\" />\n"
 "       <verb verb-id=\"DialogExport\" />\n"
