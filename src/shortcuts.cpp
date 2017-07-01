@@ -626,11 +626,17 @@ static void read_shortcuts_file(char const *filename, bool const is_user_set) {
                 } else if (!strcmp(mod, "Meta")) {
                     modifiers |= SP_SHORTCUT_META_MASK;
                 } else if (!strcmp(mod, "Primary")) {
-#ifdef __APPLE__
-                    modifiers |= SP_SHORTCUT_META_MASK;
-#else
-                    modifiers |= SP_SHORTCUT_CONTROL_MASK;
-#endif
+                    GdkModifierType mod =
+                        gdk_keymap_get_modifier_mask (gdk_keymap_get_default(), GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR);
+                    gdk_keymap_add_virtual_modifiers(gdk_keymap_get_default(), &mod);
+                    if (mod & GDK_CONTROL_MASK)
+                        modifiers |= SP_SHORTCUT_CONTROL_MASK;
+                    else if (mod & GDK_META_MASK)
+                        modifiers |= SP_SHORTCUT_META_MASK;
+                     else {
+                         g_warning("unsupported primary accelerator ");
+                         modifiers |= SP_SHORTCUT_CONTROL_MASK;
+                    }
                 } else {
                     g_warning("Unknown modifier %s for %s", mod, verb_name);
                 }
