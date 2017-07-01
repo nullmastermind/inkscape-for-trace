@@ -30,71 +30,19 @@ namespace Extension {
 namespace Internal {
 namespace Filter {
 
-void filters_load_domain(Domain domain, gchar *menuname);
-
-void Filter::filters_all_files(void)
-{
-    filters_load_domain(SYSTEM, _("Bundled"));
-    filters_load_domain(USER, _("Personal"));
-}
-
-#define INKSCAPE_FILTER_FILE  ".svg"
-
-void filters_load_domain(Domain domain, gchar *menuname)
-{
-    char const *dirname = get_path(domain, FILTERS);
-
-    if (!dirname) {
-        g_warning("%s", _("Null external module directory name.  Filters will not be loaded."));
-        return;
-    }
-
-    if (!Glib::file_test(std::string(dirname), Glib::FILE_TEST_EXISTS | Glib::FILE_TEST_IS_DIR)) {
-        return;
-    }
-
-    GError *err;
-    GDir *directory = g_dir_open(dirname, 0, &err);
-    if (!directory) {
-        gchar *safeDir = Inkscape::IO::sanitizeString(dirname);
-        g_warning(_("Modules directory (%s) is unavailable.  External modules in that directory will not be loaded."), safeDir);
-        g_free(safeDir);
-        return;
-    }
-
-    gchar *filename;
-    while ((filename = (gchar *)g_dir_read_name(directory)) != NULL) {
-        if (strlen(filename) < strlen(INKSCAPE_FILTER_FILE)) {
-            continue;
-        }
-
-        if (strcmp(INKSCAPE_FILTER_FILE, filename + (strlen(filename) - strlen(INKSCAPE_FILTER_FILE)))) {
-            continue;
-        }
-
-        gchar *pathname = g_build_filename(dirname, filename, NULL);
-        Filter::filters_load_file(pathname, menuname);
-        g_free(pathname);
-    }
-
-    g_dir_close(directory);
-
-	return;
-}
-
 void
-Filter::filters_load_file (gchar * filename, gchar * menuname)
+filters_load_file (Glib::ustring filename, gchar * menuname)
 {
-    Inkscape::XML::Document *doc = sp_repr_read_file(filename, INKSCAPE_EXTENSION_URI);
+    Inkscape::XML::Document *doc = sp_repr_read_file(filename.c_str(), INKSCAPE_EXTENSION_URI);
 	if (doc == NULL) {
-		g_warning("File (%s) is not parseable as XML.  Ignored.", filename);
+		g_warning("File (%s) is not parseable as XML.  Ignored.", filename.c_str());
 		return;
 	}
 
 	Inkscape::XML::Node * root = doc->root();
 	if (strcmp(root->name(), "svg:svg")) {
 		Inkscape::GC::release(doc);
-		g_warning("File (%s) is not SVG.  Ignored.", filename);
+		g_warning("File (%s) is not SVG.  Ignored.", filename.c_str());
 		return;
 	}
 
@@ -104,7 +52,7 @@ Filter::filters_load_file (gchar * filename, gchar * menuname)
 			for (Inkscape::XML::Node * defs = child->firstChild();
 					defs != NULL; defs = defs->next()) {
 				if (!strcmp(defs->name(), "svg:filter")) {
-					filters_load_node(defs, menuname);
+                                    Filter::filters_load_node(defs, menuname);
 				} // oh!  a filter
 			} //defs
 		} // is defs
@@ -113,6 +61,17 @@ Filter::filters_load_file (gchar * filename, gchar * menuname)
 	Inkscape::GC::release(doc);
 	return;
 }
+
+void Filter::filters_all_files(void)
+{
+    for(auto &filename: get_filenames(USER, FILTERS, {".svg"})) {
+        filters_load_file(filename, _("Personal"));
+    }
+    for(auto &filename: get_filenames(SYSTEM, FILTERS, {".svg"})) {
+        filters_load_file(filename, _("Bundled"));
+    }
+}
+
 
 #include "extension/internal/clear-n_.h"
 
@@ -150,8 +109,8 @@ Filter::filters_load_node (Inkscape::XML::Node * node, gchar * menuname)
                 "<object-type>all</object-type>\n"
                 "<effects-menu>\n"
                     "<submenu name=\"" N_("Filters") "\">\n"
-         						"<submenu name=\"%s\"/>\n"
-    					      "</submenu>\n"
+                        "<submenu name=\"%s\"/>\n"
+                    "</submenu>\n"
                 "</effects-menu>\n"
                 "<menu-tip>%s</menu-tip>\n"
             "</effect>\n"
