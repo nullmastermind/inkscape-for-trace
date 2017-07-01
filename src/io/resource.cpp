@@ -23,6 +23,7 @@
 #include <glibmm/miscutils.h>
 #include <glibmm/stringutils.h>
 #include <glibmm/fileutils.h>
+
 #include "path-prefix.h"
 #include "io/sys.h"
 #include "io/resource.h"
@@ -218,13 +219,15 @@ void get_filenames_from_path(std::vector<Glib::ustring> &files, Glib::ustring pa
     while (!file.empty()){
         bool reject = false;
         for (auto &ext: extensions) {
-	    reject = reject || !Glib::str_has_suffix(file, ext);
+	    reject |= !Glib::str_has_suffix(file, ext);
         }
         for (auto &exc: exclusions) {
-	    reject = reject || (file == exc);
+	    reject |= Glib::str_has_prefix(file, exc);
         }
+        Glib::ustring filename = Glib::build_filename(path, file);
+        reject |= !Glib::file_test(filename, Glib::FILE_TEST_IS_REGULAR);
         if(!reject) {
-            files.push_back(Glib::build_filename(path, file));
+            files.push_back(filename);
         }
         file = dir.read_name();
     }
