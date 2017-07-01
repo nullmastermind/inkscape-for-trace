@@ -49,6 +49,7 @@ cd build
 cmake -DCMAKE_INSTALL_PREFIX:PATH=$PWD/../ ..
 make -j4
 export INKSCAPE_PROFILE_DIR=$PWD/conf
+PATH=$PWD/bin/:$PATH
 ./bin/inkscape
 ```
 
