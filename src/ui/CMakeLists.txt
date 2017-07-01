@@ -115,6 +115,7 @@ set(ui_SRC
 	dialog/transformation.cpp
 	dialog/undo-history.cpp
 	dialog/xml-tree.cpp
+    dialog/save-template-dialog.cpp
 
 	widget/addtoicon.cpp
 	widget/anchor-selector.cpp
@@ -262,6 +263,7 @@ set(ui_SRC
 	dialog/transformation.h
 	dialog/undo-history.h
 	dialog/xml-tree.h
+    dialog/save-template-dialog.h
 
 	tool/commit-events.h
 	tool/control-point-selection.h
