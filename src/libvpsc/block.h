@@ -1,122 +1,113 @@
 /*
- * Authors:
- *   Tim Dwyer <tgdwyer@gmail.com>
+ * vim: ts=4 sw=4 et tw=0 wm=0
  *
- * Copyright (C) 2005 Authors
+ * libvpsc - A solver for the problem of Variable Placement with 
+ *           Separation Constraints.
  *
- * Released under GNU LGPL.  Read the file 'COPYING' for more information.
- */
+ * Copyright (C) 2005-2008  Monash University
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ * See the file LICENSE.LGPL distributed with the library.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ * Author(s):  Tim Dwyer
+*/
 
-#ifndef SEEN_REMOVEOVERLAP_BLOCK_H
-#define SEEN_REMOVEOVERLAP_BLOCK_H
-
-#include <vector>
-#include <iostream>
-template <class T> class PairingHeap;
-namespace vpsc {
-class Variable;
-class Constraint;
-
-/**
- * A block is a group of variables that must be moved together to improve
+/*
+ * \brief A block is a group of variables that must be moved together to improve
  * the goal function without violating already active constraints.
  * The variables in a block are spanned by a tree of active constraints.
  */
+
+#ifndef VPSC_BLOCK_H
+#define VPSC_BLOCK_H
+
+#include <iostream>
+#include <vector>
+
+template <class T, class TCompare> class PairingHeap;
+
+namespace vpsc {
+class Variable;
+class Constraint;
+class CompareConstraints;
+class Blocks;
+
+struct PositionStats {
+	PositionStats() : scale(0), AB(0), AD(0), A2(0) {}
+	void addVariable(Variable* const v);
+	double scale;
+	double AB;
+	double AD;
+	double A2;
+};
+
 class Block
 {
 	typedef std::vector<Variable*> Variables;
-	typedef std::vector<Constraint*>::iterator Cit;
-	typedef std::vector<Variable*>::iterator Vit;
+	typedef std::vector<Constraint*> Constraints;
+	typedef Variables::iterator Vit;
+	typedef Constraints::iterator Cit;
+	typedef Constraints::const_iterator Cit_const;
 
 	friend std::ostream& operator <<(std::ostream &os,const Block &b);
 public:
 	Variables *vars;
 	double posn;
-	double weight;
-	double wposn;
-	Block(Variable* const v=NULL);
-    virtual ~Block(void);
-
-    /**
-     * finds the constraint with the minimum lagrange multiplier, that is, the constraint
-     * that most wants to split
-     */
-    Constraint* findMinLM();
-
+	//double weight;
+	//double wposn;
+	PositionStats ps;
+	Block(Blocks *blocks, Variable* const v=NULL);
+	~Block(void);
+	Constraint* findMinLM();
 	Constraint* findMinLMBetween(Variable* const lv, Variable* const rv);
 	Constraint* findMinInConstraint();
 	Constraint* findMinOutConstraint();
 	void deleteMinInConstraint();
 	void deleteMinOutConstraint();
-	double desiredWeightedPosition();
-
-    /**
-     * Merges b into this block across c.  Can be either a
-     * right merge or a left merge
-     * @param b block to merge into this
-     * @param c constraint being merged
-     * @param distance separation required to satisfy c
-     */
-    void merge(Block *b, Constraint *c, double dist);
-
-	void merge(Block *b, Constraint *c);
+	void updateWeightedPosition();
+	void merge(Block *b, Constraint *c, double dist);
+	Block* merge(Block *b, Constraint *c);
 	void mergeIn(Block *b);
 	void mergeOut(Block *b);
-
-    /**
-     * Creates two new blocks, l and r, and splits this block across constraint c,
-     * placing the left subtree of constraints (and associated variables) into l
-     * and the right into r.
-     */
-    void split(Block *&l, Block *&r, Constraint *c);
-
-    /**
-     * Block needs to be split because of a violated constraint between vl and vr.
-     * We need to search the active constraint tree between l and r and find the constraint
-     * with min lagrangrian multiplier and split at that point.
-     * Returns the split constraint
-     */
-    Constraint* splitBetween(Variable* vl, Variable* vr, Block* &lb, Block* &rb);
-
+	void split(Block *&l, Block *&r, Constraint *c);
+	Constraint* splitBetween(Variable* vl, Variable* vr, Block* &lb, Block* &rb);
 	void setUpInConstraints();
 	void setUpOutConstraints();
-
-    /**
-     * Computes the cost (squared euclidean distance from desired positions) of the
-     * current positions for variables in this block
-     */
-    double cost();
-
+	double cost();
 	bool deleted;
 	long timeStamp;
-	PairingHeap<Constraint*> *in;
-	PairingHeap<Constraint*> *out;
-	bool isActiveDirectedPathBetween(Variable* u, Variable *v);
+	PairingHeap<Constraint*,CompareConstraints> *in;
+	PairingHeap<Constraint*,CompareConstraints> *out;
+	bool getActivePathBetween(Constraints& path, Variable const* u,
+	       	Variable const* v, Variable const *w) const;
+	bool isActiveDirectedPathBetween(
+			Variable const* u, Variable const* v) const;
+	bool getActiveDirectedPathBetween(Constraints& path, Variable const * u, Variable const * v) const;
 private:
 	typedef enum {NONE, LEFT, RIGHT} Direction;
 	typedef std::pair<double, Constraint*> Pair;
 	void reset_active_lm(Variable* const v, Variable* const u);
-	double compute_dfdv(Variable* const v, Variable* const u,
-		       	Constraint *&min_lm);
-	Pair compute_dfdv_between(
-			Variable*, Variable* const, Variable* const,
-		       	const Direction, bool);
-	bool canFollowLeft(Constraint *c, const Variable* const last);
-	bool canFollowRight(Constraint *c, const Variable* const last);
-	void populateSplitBlock(Block *b, Variable* const v, Variable* const u);
-	void addVariable(Variable* const v);
-	void setUpConstraintHeap(PairingHeap<Constraint*>* &h,bool in);
-};
+	void list_active(Variable* const v, Variable* const u);
+	double compute_dfdv(Variable* const v, Variable* const u);
+	double compute_dfdv(Variable* const v, Variable* const u, Constraint *&min_lm);
+	bool split_path(Variable*, Variable* const, Variable* const, 
+			Constraint* &min_lm, bool desperation);
+	bool canFollowLeft(Constraint const* c, Variable const* last) const;
+	bool canFollowRight(Constraint const* c, Variable const* last) const;
+	void populateSplitBlock(Block *b, Variable* v, Variable const* u);
+	void addVariable(Variable* v);
+	void setUpConstraintHeap(PairingHeap<Constraint*,CompareConstraints>* &h,bool in);
 
+    // Parent container, that holds the blockTimeCtr.
+    Blocks *blocks;
+};
 }
-#endif // SEEN_REMOVEOVERLAP_BLOCK_H
-/*
-  Local Variables:
-  mode:c++
-  c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
-  indent-tabs-mode:nil
-  fill-column:99
-  End:
-*/
-// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :
+
+#endif // VPSC_BLOCK_H

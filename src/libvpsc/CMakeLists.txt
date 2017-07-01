@@ -2,24 +2,25 @@
 set(libvpsc_SRC
 	block.cpp
 	blocks.cpp
+	cbuffer.cpp
 	constraint.cpp
-	generate-constraints.cpp
-	remove_rectangle_overlap.cpp
+	rectangle.cpp
 	solve_VPSC.cpp
 	variable.cpp
-	pairingheap/PairingHeap.cpp
 
 
 	# -------
 	# Headers
+	assertions.h
 	block.h
 	blocks.h
+	cbuffer.h
 	constraint.h
-	generate-constraints.h
-	pairingheap/PairingHeap.h
-	pairingheap/dsexceptions.h
-	placement_SolveVPSC.h
-	remove_rectangle_overlap.h
+	exceptions.h
+	isnan.h
+	linesegment.h
+	pairing_heap.h
+	rectangle.h
 	solve_VPSC.h
 	variable.h
 )

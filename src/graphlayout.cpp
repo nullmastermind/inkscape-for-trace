@@ -28,26 +28,32 @@
 #include "conn-avoid-ref.h"
 #include "libavoid/router.h"
 #include "libcola/cola.h"
+#include "libcola/connected_components.h"
 
 using namespace std;
 using namespace cola;
 using namespace vpsc;
+
 /**
  * Returns true if item is a connector
  */
-bool isConnector(SPItem const *const i) {
-    SPPath *path = NULL;
-    if(SP_IS_PATH(i)) {
-        path = SP_PATH(i);
+bool isConnector(SPItem const * const item) {
+    SPPath * path = NULL;
+    if (SP_IS_PATH(item)) {
+        path = SP_PATH(item);
     }
     return path && path->connEndPair.isAutoRoutingConn();
 }
 
-struct CheckProgress : TestConvergence {
-    CheckProgress(double d,unsigned i,list<SPItem *>&
-                  selected,vector<Rectangle*>& rs,map<string,unsigned>& nodelookup) :
-        TestConvergence(d,i), selected(selected), rs(rs), nodelookup(nodelookup) {}
-    bool operator()(double new_stress, double* X, double* Y) {
+struct CheckProgress: TestConvergence {
+    CheckProgress(double d, unsigned i, list<SPItem*> & selected, Rectangles & rs,
+            map<string, unsigned> & nodelookup)
+        : TestConvergence(d, i)
+        , selected(selected)
+        , rs(rs)
+        , nodelookup(nodelookup)
+    {}
+    bool operator()(const double new_stress, valarray<double> & X, valarray<double> & Y) {
         /* This is where, if we wanted to animate the layout, we would need to update
          * the positions of all objects and redraw the canvas and maybe sleep a bit
          cout << "stress="<<new_stress<<endl;
@@ -66,109 +72,90 @@ struct CheckProgress : TestConvergence {
             }
         }
         */
-        return TestConvergence::operator()(new_stress,X,Y);
+        return TestConvergence::operator()(new_stress, X, Y);
     }
-    list<SPItem *>& selected;
-    vector<Rectangle*>& rs;
-    map<string,unsigned>& nodelookup;
+    list<SPItem*> & selected;
+    Rectangles & rs;
+    map<string, unsigned> & nodelookup;
 };
 
 /**
  * Scans the items list and places those items that are
  * not connectors in filtered
  */
-void filterConnectors(std::vector<SPItem*> const &items, list<SPItem *> &filtered) {
-    for(std::vector<SPItem*>::const_iterator i = items.begin();i !=items.end(); ++i){
-        SPItem *item = *i;
-        if(!isConnector(item)) {
+void filterConnectors(std::vector<SPItem*> const & items, list<SPItem*> & filtered) {
+    for (SPItem * item: items) {
+        if (!isConnector(item)) {
             filtered.push_back(item);
         }
     }
 }
+
 /**
-* Takes a list of inkscape items, extracts the graph defined by
-* connectors between them, and uses graph layout techniques to find
-* a nice layout
-*/
-void graphlayout(std::vector<SPItem*> const &items) {
-    if(items.empty()) {
-        return;
-    }
+ * Takes a list of inkscape items, extracts the graph defined by
+ * connectors between them, and uses graph layout techniques to find
+ * a nice layout
+ */
+void graphlayout(std::vector<SPItem*> const & items) {
+    if (items.empty()) return;
 
-    list<SPItem *> selected;
-    filterConnectors(items,selected);
-    if (selected.empty()) return;
+    list<SPItem*> selected;
+    filterConnectors(items, selected);
 
-    const unsigned n=selected.size();
-    //Check 2 or more selected objects
-    if (n < 2) return;
+    if (selected.size() < 2) return;
 
     // add the connector spacing to the size of node bounding boxes
     // so that connectors can always be routed between shapes
-    SPDesktop* desktop = SP_ACTIVE_DESKTOP;
+    SPDesktop * desktop = SP_ACTIVE_DESKTOP;
     double spacing = 0;
-    if(desktop) spacing = desktop->namedview->connector_spacing+0.1;
+    if (desktop) spacing = desktop->namedview->connector_spacing + 0.1;
 
-    map<string,unsigned> nodelookup;
-    vector<Rectangle*> rs;
+    map<string, unsigned> nodelookup;
+    Rectangles rs;
     vector<Edge> es;
-    for (list<SPItem *>::iterator i(selected.begin());
-         i != selected.end();
-         ++i)
-    {
-        SPItem *u=*i;
-        Geom::OptRect const item_box = u->desktopVisualBounds();
-        if(item_box) {
+    for (SPItem * item: selected) {
+        Geom::OptRect const item_box = item->desktopVisualBounds();
+        if (item_box) {
             Geom::Point ll(item_box->min());
             Geom::Point ur(item_box->max());
-            nodelookup[u->getId()]=rs.size();
-            rs.push_back(new Rectangle(ll[0]-spacing,ur[0]+spacing,
-                        ll[1]-spacing,ur[1]+spacing));
+            nodelookup[item->getId()] = rs.size();
+            rs.push_back(new Rectangle(ll[0] - spacing, ur[0] + spacing,
+                    ll[1] - spacing, ur[1] + spacing));
         } else {
             // I'm not actually sure if it's possible for something with a
             // NULL item-box to be attached to a connector in which case we
             // should never get to here... but if such a null box can occur it's
             // probably pretty safe to simply ignore
-            //fprintf(stderr,"NULL item_box found in graphlayout, ignoring!\n");
+            //fprintf(stderr, "NULL item_box found in graphlayout, ignoring!\n");
         }
     }
 
-    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    SimpleConstraints scx,scy;
+    Inkscape::Preferences * prefs = Inkscape::Preferences::get();
+    CompoundConstraints constraints;
     double ideal_connector_length = prefs->getDouble("/tools/connector/length", 100.0);
     double directed_edge_height_modifier = 1.0;
 
-    bool directed =       prefs->getBool("/tools/connector/directedlayout");
+    bool directed       = prefs->getBool("/tools/connector/directedlayout");
     bool avoid_overlaps = prefs->getBool("/tools/connector/avoidoverlaplayout");
 
-    for (list<SPItem *>::iterator i(selected.begin());
-         i != selected.end();
-         ++i)
-    {
-        SPItem *iu=*i;
-        map<string,unsigned>::iterator i_iter=nodelookup.find(iu->getId());
-        map<string,unsigned>::iterator i_iter_end=nodelookup.end();
-        if(i_iter==i_iter_end) {
-            continue;
-        }
-        unsigned u=i_iter->second;
-        std::vector<SPItem *> nlist=iu->avoidRef->getAttachedConnectors(Avoid::runningFrom);
-        list<SPItem *> connectors;
+    for (SPItem * item: selected) {
+        map<string, unsigned>::iterator i_iter=nodelookup.find(item->getId());
+        if (i_iter == nodelookup.end()) continue;
+        unsigned u = i_iter->second;
+        vector<SPItem*> nlist = item->avoidRef->getAttachedConnectors(Avoid::runningFrom);
+        list<SPItem*> connectors;
 
         connectors.insert(connectors.end(), nlist.begin(), nlist.end());
 
-        for (list<SPItem *>::iterator j(connectors.begin());
-                j != connectors.end();
-                ++j) {
-            SPItem *conn=*j;
-            SPItem *iv;
-            SPItem *items[2];
+        for (SPItem * conn: connectors) {
+            SPItem * iv;
+            SPItem * items[2];
             assert(isConnector(conn));
             SP_PATH(conn)->connEndPair.getAttachedItems(items);
-            if(items[0]==iu) {
-                iv=items[1];
+            if (items[0] == item) {
+                iv = items[1];
             } else {
-                iv=items[0];
+                iv = items[0];
             }
 
             if (iv == NULL) {
@@ -179,62 +166,52 @@ void graphlayout(std::vector<SPItem*> const &items) {
 
             // If iv not in nodelookup we again treat the connector
             // as disconnected and continue
-            map<string,unsigned>::iterator v_pair=nodelookup.find(iv->getId());
-            if(v_pair!=nodelookup.end()) {
-                unsigned v=v_pair->second;
+            map<string, unsigned>::iterator v_pair = nodelookup.find(iv->getId());
+            if (v_pair != nodelookup.end()) {
+                unsigned v = v_pair->second;
                 //cout << "Edge: (" << u <<","<<v<<")"<<endl;
-                es.push_back(make_pair(u,v));
-                if(conn->style->marker_end.set) {
-                    if(directed && strcmp(conn->style->marker_end.value,"none")) {
-                        scy.push_back(new SimpleConstraint(v, u,
-                                    (ideal_connector_length * directed_edge_height_modifier)));
+                es.push_back(make_pair(u, v));
+                if (conn->style->marker_end.set) {
+                    if (directed && strcmp(conn->style->marker_end.value, "none")) {
+                        constraints.push_back(new SeparationConstraint(YDIM, v, u,
+                                ideal_connector_length * directed_edge_height_modifier));
                     }
                 }
             }
         }
     }
-    const unsigned E = es.size();
-    double eweights[E];
-    fill(eweights,eweights+E,1);
+    EdgeLengths elengths(es.size(), 1);
     vector<Component*> cs;
-    connectedComponents(rs,es,scx,scy,cs);
-    for(unsigned i=0;i<cs.size();i++) {
-        Component* c=cs[i];
-        if(c->edges.size()<2) continue;
-        CheckProgress test(0.0001,100,selected,rs,nodelookup);
-        ConstrainedMajorizationLayout alg(c->rects,c->edges,eweights,ideal_connector_length,test);
-        alg.setupConstraints(NULL,NULL,avoid_overlaps,
-                NULL,NULL,&c->scx,&c->scy,NULL,NULL);
+    connectedComponents(rs, es, cs);
+    for (Component * c: cs) {
+        if (c->edges.size() < 2) continue;
+        CheckProgress test(0.0001, 100, selected, rs, nodelookup);
+        ConstrainedMajorizationLayout alg(c->rects, c->edges, NULL, ideal_connector_length, elengths, &test);
+        if (avoid_overlaps) alg.setAvoidOverlaps();
+        alg.setConstraints(&constraints);
         alg.run();
     }
     separateComponents(cs);
 
-    for (list<SPItem *>::iterator it(selected.begin());
-         it != selected.end();
-         ++it)
-    {
-        SPItem *u=*it;
-        if(!isConnector(u)) {
-            map<string,unsigned>::iterator i=nodelookup.find(u->getId());
-            if(i!=nodelookup.end()) {
-                Rectangle* r=rs[i->second];
-                Geom::OptRect item_box = u->desktopVisualBounds();
+    for (SPItem * item: selected) {
+        if (!isConnector(item)) {
+            map<string, unsigned>::iterator i = nodelookup.find(item->getId());
+            if (i != nodelookup.end()) {
+                Rectangle * r = rs[i->second];
+                Geom::OptRect item_box = item->desktopVisualBounds();
                 if (item_box) {
                     Geom::Point const curr(item_box->midpoint());
                     Geom::Point const dest(r->getCentreX(),r->getCentreY());
-                    sp_item_move_rel(u, Geom::Translate(dest - curr));
+                    sp_item_move_rel(item, Geom::Translate(dest - curr));
                 }
             }
         }
     }
-    for(unsigned i=0;i<scx.size();i++) {
-        delete scx[i];
+    for (CompoundConstraint * c: constraints) {
+        delete c;
     }
-    for(unsigned i=0;i<scy.size();i++) {
-        delete scy[i];
-    }
-    for(unsigned i=0;i<rs.size();i++) {
-        delete rs[i];
+    for (Rectangle * r: rs) {
+        delete r;
     }
 }
 // vim: set cindent

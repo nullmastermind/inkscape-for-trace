@@ -1,21 +1,27 @@
 
 set(libcola_SRC
+	box.cpp
+    cluster.cpp
 	cola.cpp
+	convex_hull.cpp
+	compound_constraints.cpp
 	conjugate_gradient.cpp
 	connected_components.cpp
-	# cycle_detector.cpp
 	gradient_projection.cpp
-	shortest_paths.cpp
+	shapepair.cpp
 	straightener.cpp
 
 
 	# -------
 	# Headers
+	box.h
+    cluster.h
 	cola.h
+	compound_constraints.h
 	conjugate_gradient.h
-	# cycle_detector.h
-	defs.h
+	convex_hull.h
 	gradient_projection.h
+	shapepair.cpp
 	shortest_paths.h
 	straightener.h
 )
