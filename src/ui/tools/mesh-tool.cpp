@@ -72,7 +72,7 @@ const std::string MeshTool::prefsPath = "/tools/mesh";
 // TODO: The gradient tool class looks like a 1:1 copy.
 
 MeshTool::MeshTool()
-    : ToolBase(cursor_gradient_xpm, 4, 4)
+    : ToolBase(cursor_gradient_xpm)
     , cursor_addnode(false)
     , node_added(false)
     , show_handles(true)

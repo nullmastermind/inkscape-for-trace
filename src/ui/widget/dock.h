@@ -37,7 +37,7 @@ public:
     Dock(Gtk::Orientation orientation=Gtk::ORIENTATION_VERTICAL);
     ~Dock();
 
-    void addItem(DockItem& item, DockItem::Placement placement);
+    void addItem(DockItem& item, GdlDockPlacement placement);
 
     Gtk::Widget& getWidget();     //< return the top widget
     Gtk::Paned *getParentPaned();

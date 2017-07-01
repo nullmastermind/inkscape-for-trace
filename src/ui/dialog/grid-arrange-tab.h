@@ -73,7 +73,7 @@ private:
     bool userHidden;
     bool updating;
 
-    Gtk::VBox             TileBox;
+    Gtk::Box               TileBox;
     Gtk::Button           *TileOkButton;
     Gtk::Button           *TileCancelButton;
 
@@ -81,22 +81,22 @@ private:
     Gtk::Label            SelectionContentsLabel;
 
 
-    Gtk::HBox             AlignHBox;
-    Gtk::HBox             SpinsHBox;
+    Gtk::Box              AlignHBox;
+    Gtk::Box              SpinsHBox;
 
     // Number per Row
-    Gtk::VBox             NoOfColsBox;
+    Gtk::Box              NoOfColsBox;
     Gtk::Label            NoOfColsLabel;
     Inkscape::UI::Widget::SpinButton NoOfColsSpinner;
     bool AutoRowSize;
     Gtk::CheckButton      RowHeightButton;
 
-    Gtk::VBox             XByYLabelVBox;
+    Gtk::Box              XByYLabelVBox;
     Gtk::Label            padXByYLabel;
     Gtk::Label            XByYLabel;
 
     // Number per Column
-    Gtk::VBox             NoOfRowsBox;
+    Gtk::Box              NoOfRowsBox;
     Gtk::Label            NoOfRowsLabel;
     Inkscape::UI::Widget::SpinButton NoOfRowsSpinner;
     bool AutoColSize;
@@ -121,15 +121,11 @@ private:
     bool ManualSpacing;
 
     // Row height
-    Gtk::VBox             RowHeightVBox;
-    Gtk::HBox             RowHeightBox;
-    Gtk::Label            RowHeightLabel;
+    Gtk::Box              RowHeightBox;
     Inkscape::UI::Widget::SpinButton RowHeightSpinner;
 
     // Column width
-    Gtk::VBox             ColumnWidthVBox;
-    Gtk::HBox             ColumnWidthBox;
-    Gtk::Label            ColumnWidthLabel;
+    Gtk::Box              ColumnWidthBox;
     Inkscape::UI::Widget::SpinButton ColumnWidthSpinner;
 };
 

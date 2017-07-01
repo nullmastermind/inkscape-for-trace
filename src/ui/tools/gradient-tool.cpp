@@ -58,7 +58,7 @@ const std::string GradientTool::prefsPath = "/tools/gradient";
 
 
 GradientTool::GradientTool()
-    : ToolBase(cursor_gradient_xpm, 4, 4)
+    : ToolBase(cursor_gradient_xpm)
     , cursor_addnode(false)
     , node_added(false)
 // TODO: Why are these connections stored as pointers?

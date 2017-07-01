@@ -54,7 +54,7 @@ const std::string& Box3dTool::getPrefsPath() {
 const std::string Box3dTool::prefsPath = "/tools/shapes/3dbox";
 
 Box3dTool::Box3dTool()
-    : ToolBase(cursor_3dbox_xpm, 4, 4)
+    : ToolBase(cursor_3dbox_xpm)
     , _vpdrag(NULL)
     , box3d(NULL)
     , ctrl_dragged(false)

@@ -18,8 +18,8 @@ namespace Inkscape {
 namespace UI {
 namespace Tools {
 
-DynamicBase::DynamicBase(gchar const *const *cursor_shape, gint hot_x, gint hot_y)
-    : ToolBase(cursor_shape, hot_x, hot_y)
+DynamicBase::DynamicBase(gchar const *const *cursor_shape)
+    : ToolBase(cursor_shape)
     , accumulated(NULL)
     , segments(NULL)
     , currentshape(NULL)

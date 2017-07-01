@@ -25,6 +25,11 @@ enum {
       SP_DROPPER_PICK_VISIBLE,
       SP_DROPPER_PICK_ACTUAL  
 };
+enum {
+  DONT_REDRAW_CURSOR,
+  DRAW_FILL_CURSOR,
+  DRAW_STROKE_CURSOR
+};
 
 namespace Inkscape {
 namespace UI {

@@ -51,7 +51,7 @@ const std::string& SpiralTool::getPrefsPath() {
 const std::string SpiralTool::prefsPath = "/tools/shapes/spiral";
 
 SpiralTool::SpiralTool()
-    : ToolBase(cursor_spiral_xpm, 4, 4)
+    : ToolBase(cursor_spiral_xpm)
     , spiral(NULL)
     , revo(3)
     , exp(1)

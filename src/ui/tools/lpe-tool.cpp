@@ -68,7 +68,7 @@ const std::string& LpeTool::getPrefsPath() {
 const std::string LpeTool::prefsPath = "/tools/lpetool";
 
 LpeTool::LpeTool()
-    : PenTool(cursor_crosshairs_xpm, 7, 7)
+    : PenTool(cursor_crosshairs_xpm)
     , shape_editor(NULL)
     , canvas_bbox(NULL)
     , mode(Inkscape::LivePathEffect::BEND_PATH)

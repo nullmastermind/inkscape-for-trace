@@ -145,7 +145,7 @@ const std::string& ConnectorTool::getPrefsPath() {
 const std::string ConnectorTool::prefsPath = "/tools/connector";
 
 ConnectorTool::ConnectorTool()
-    : ToolBase(cursor_connector_xpm, 1, 1)
+    : ToolBase(cursor_connector_xpm)
     , selection(NULL)
     , npoints(0)
     , state(SP_CONNECTOR_CONTEXT_IDLE)

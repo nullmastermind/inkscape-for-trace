@@ -264,7 +264,9 @@ StyleDialog::StyleDialog() :
     _treeView.set_expander_column(*(_treeView.get_column(1)));
 
     // Pack widgets
+    _paned.set_orientation(Gtk::ORIENTATION_VERTICAL);
     _paned.pack1(_mainBox, Gtk::SHRINK);
+    _mainBox.set_orientation(Gtk::ORIENTATION_VERTICAL);
     _mainBox.pack_start(_scrolledWindow, Gtk::PACK_EXPAND_WIDGET);
     _scrolledWindow.add(_treeView);
     _scrolledWindow.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);

@@ -17,6 +17,7 @@
 #ifndef SEEN_INKSCAPE_IO_RESOURCE_H
 #define SEEN_INKSCAPE_IO_RESOURCE_H
 
+#include <glibmm/ustring.h>
 #include "util/share.h"
 
 namespace Inkscape {
@@ -35,6 +36,7 @@ enum Type {
     ICONS,
     KEYS,
     MARKERS,
+    NONE,
     PALETTES,
     PATTERNS,
     SCREENS,
@@ -49,6 +51,7 @@ enum Type {
 enum Domain {
     SYSTEM,
     CREATE,
+    CACHE,
     USER
 };
 

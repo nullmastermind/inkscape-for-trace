@@ -107,8 +107,21 @@ AboutBox::AboutBox() : Gtk::Dialog(_("About Inkscape")) {
         g_strdup_printf("<small>Inkscape %s</small>",
               Inkscape::version_string);
     label->set_markup(label_text);
+
+#if WITH_GTKMM_3_10
+    label->set_halign(Gtk::ALIGN_END);
+    label->set_valign(Gtk::ALIGN_CENTER);
+#else
     label->set_alignment(Gtk::ALIGN_END, Gtk::ALIGN_CENTER);
+#endif
+
+#if WITH_GTKMM_3_12
+    label->set_margin_start(5);
+    label->set_margin_end(5);
+#else
     label->set_padding(5,0);
+#endif
+
     g_free(label_text);
     label->set_selectable(true);
     label->show();
@@ -118,8 +131,22 @@ AboutBox::AboutBox() : Gtk::Dialog(_("About Inkscape")) {
         "<a href=\"https://www.inkscape.org\">https://www.inkscape.org</a>";
 
     link->set_markup(website_link);
+
+#if WITH_GTKMM_3_10
+    link->set_halign(Gtk::ALIGN_END);
+#else
     link->set_alignment(Gtk::ALIGN_END);
+#endif
+
+#if WITH_GTKMM_3_12
+    label->set_margin_start(5);
+    label->set_margin_end(5);
+    label->set_margin_top(5);
+    label->set_margin_bottom(5);
+#else
     link->set_padding(5,5);
+#endif
+
     link->set_selectable(true);
     link->show();
 
