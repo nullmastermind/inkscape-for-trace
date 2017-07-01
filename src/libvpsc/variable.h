@@ -1,52 +1,95 @@
 /*
- * Authors:
- *   Tim Dwyer <tgdwyer@gmail.com>
+ * vim: ts=4 sw=4 et tw=0 wm=0
  *
- * Copyright (C) 2005 Authors
+ * libvpsc - A solver for the problem of Variable Placement with 
+ *           Separation Constraints.
  *
- * Released under GNU LGPL.  Read the file 'COPYING' for more information.
- */
-#ifndef SEEN_REMOVEOVERLAP_VARIABLE_H
-#define SEEN_REMOVEOVERLAP_VARIABLE_H
+ * Copyright (C) 2005-2008  Monash University
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ * See the file LICENSE.LGPL distributed with the library.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ * Author(s):  Tim Dwyer
+*/
+
+#ifndef VPSC_VARIABLE_H
+#define VPSC_VARIABLE_H
 
 #include <vector>
 #include <iostream>
-#include "block.h"
+
+#include "libvpsc/block.h"
+#include "libvpsc/assertions.h"
 
 namespace vpsc {
 
 class Constraint;
 typedef std::vector<Constraint*> Constraints;
+
+/**
+ * @brief A variable is comprised of an ideal position, final position and 
+ *        a weight.
+ *
+ * When creating a variable you specify an ideal value, and a weight---how 
+ * much the variable wants to be at its ideal position.  After solving the 
+ * problem you can read back the final position for the variable.
+*/
 class Variable
 {
 	friend std::ostream& operator <<(std::ostream &os, const Variable &v);
+	friend class Block;
+	friend class Constraint;
+	friend class Solver;
 public:
-	const int id; // useful in log files
+	int id; // useful in log files
 	double desiredPosition;
-	const double weight;
+	double finalPosition;
+	double weight; // how much the variable wants to 
+	               // be at it's desired position
+	double scale; // translates variable to another space
 	double offset;
 	Block *block;
 	bool visited;
+	bool fixedDesiredPosition;
 	Constraints in;
 	Constraints out;
 	char *toString();
-	inline Variable(const int id, const double desiredPos, const double weight)
+	inline Variable(const int id, const double desiredPos=-1.0, 
+			const double weight=1.0, const double scale=1.0)
 		: id(id)
 		, desiredPosition(desiredPos)
+		, finalPosition(desiredPos)
 		, weight(weight)
+		, scale(scale)
 		, offset(0)
 		, block(NULL)
 		, visited(false)
+		, fixedDesiredPosition(false)
 	{
 	}
-	inline double position() const {
-		return block->posn+offset;
+	double dfdv(void) const {
+		return 2. * weight * ( position() - desiredPosition );
 	}
-	//double position() const;
-    virtual ~Variable(void){
-		in.clear();
-		out.clear();
+private:
+    inline double position(void) const {
+                return (block->ps.scale*block->posn+offset)/scale;
+    }
+	inline double unscaledPosition(void) const {
+	    COLA_ASSERT(block->ps.scale == 1);
+        COLA_ASSERT(scale == 1);
+        return block->posn + offset;
 	}
 };
+
+//! @brief A vector of pointers to Variable objects.
+typedef std::vector<Variable*> Variables;
+
 }
-#endif // SEEN_REMOVEOVERLAP_VARIABLE_H
+#endif // VPSC_VARIABLE_H

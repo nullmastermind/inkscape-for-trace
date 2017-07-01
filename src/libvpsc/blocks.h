@@ -1,94 +1,96 @@
 /*
- * Authors:
- *   Tim Dwyer <tgdwyer@gmail.com>
+ * vim: ts=4 sw=4 et tw=0 wm=0
  *
- * Copyright (C) 2005 Authors
+ * libvpsc - A solver for the problem of Variable Placement with 
+ *           Separation Constraints.
  *
- * Released under GNU LGPL.  Read the file 'COPYING' for more information.
+ * Copyright (C) 2005-2012  Monash University
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ * See the file LICENSE.LGPL distributed with the library.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ * Author(s):  Tim Dwyer
+ *             Michael Wybrow
+*/
+
+/*
+ * @brief A block structure defined over the variables
+ *
+ * A block structure defined over the variables such that each block contains
+ * 1 or more variables, with the invariant that all constraints inside a block
+ * are satisfied by keeping the variables fixed relative to one another
+ *
  */
 
-#ifndef SEEN_REMOVEOVERLAP_BLOCKS_H
-#define SEEN_REMOVEOVERLAP_BLOCKS_H
+#ifndef VPSC_BLOCKS_H
+#define VPSC_BLOCKS_H
 
-#ifdef RECTANGLE_OVERLAP_LOGGING
-#define LOGFILE "cRectangleOverlap.log"
+#ifdef LIBVPSC_LOGGING
+#define LOGFILE "libvpsc.log"
 #endif
 
-#include <set>
 #include <list>
+#include <vector>
+
+// size_t is strangely not defined on some older MinGW GCC versions. 
+#include <cstddef>
 
 namespace vpsc {
-
 class Block;
 class Variable;
 class Constraint;
-
-/**
+/*
  * A block structure defined over the variables such that each block contains
  * 1 or more variables, with the invariant that all constraints inside a block
- * are satisfied by keeping the variables fixed relative to one another.
- *
- * @todo check on this class being copy-n-paste duplicated.
+ * are satisfied by keeping the variables fixed relative to one another
  */
-class Blocks : public std::set<Block*>
+class Blocks
 {
 public:
-    Blocks(const int n, Variable* const vs[]);
+	Blocks(std::vector<Variable*> const &vs);
+	~Blocks(void);
+	void mergeLeft(Block *r);
+	void mergeRight(Block *l);
+	void split(Block *b, Block *&l, Block *&r, Constraint *c);
+	std::list<Variable*> *totalOrder();
+	void cleanup();
+	double cost();
 
-    virtual ~Blocks(void);
-
-    /**
-     * Processes incoming constraints, most violated to least, merging with the
-     * neighbouring (left) block until no more violated constraints are found.
-     */
-    void mergeLeft(Block *r);
-
-    /**
-     * Symmetrical to mergeLeft.
-     * @see mergeLeft
-     */
-    void mergeRight(Block *l);
-
-    /**
-     * Splits block b across constraint c into two new blocks, l and r (c's left
-     * and right sides respectively).
-     */
-    void split(Block *b, Block *&l, Block *&r, Constraint *c);
-
-    /**
-     * Returns a list of variables with total ordering determined by the constraint 
-     * DAG.
-     */
-    std::list<Variable*> *totalOrder();
-
-    void cleanup();
-
-    /**
-     * Returns the cost total squared distance of variables from their desired
-     * positions.
-     */
-    double cost();
-
+    size_t size() const;
+    Block *at(size_t index) const;
+    void insert(Block *block);
+    
+    long blockTimeCtr;
 private:
-    void dfsVisit(Variable *v, std::list<Variable*> *order);
-
-    void removeBlock(Block *doomed);
-
-    Variable* const *vs;
-
-    int nvs;
+	void dfsVisit(Variable *v, std::list<Variable*> *order);
+	void removeBlock(Block *doomed);
+    
+    std::vector<Block*> m_blocks;
+	std::vector<Variable*> const &vs;
+	size_t nvs;
 };
 
-extern long blockTimeCtr;
+inline size_t Blocks::size() const
+{
+    return m_blocks.size();
 }
-#endif // SEEN_REMOVEOVERLAP_BLOCKS_H
-/*
-  Local Variables:
-  mode:c++
-  c-file-style:"stroustrup"
-  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
-  indent-tabs-mode:nil
-  fill-column:99
-  End:
-*/
-// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:fileencoding=utf-8:textwidth=99 :
+
+inline Block *Blocks::at(size_t index) const
+{
+    return m_blocks[index];
+}
+
+inline void Blocks::insert(Block *block)
+{
+    m_blocks.push_back(block);
+}
+
+}
+#endif // VPSC_BLOCKS_H
