@@ -68,7 +68,7 @@ public:
 
     GdkCursor *saved_cursor;
     void* pixbuf;
-    bool selected;
+
     char *tip;
 
     unsigned long _event_handler_id;

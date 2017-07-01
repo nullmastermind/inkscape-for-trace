@@ -53,7 +53,7 @@ public:
     void knot_moved_handler(SPKnot *knot, Geom::Point const &p, unsigned int state);
     void knot_clicked_handler(SPKnot *knot, unsigned int state);
     void knot_ungrabbed_handler(SPKnot *knot, unsigned int);
-
+    void transform_selected(Geom::Affine transform);
     void add(KnotHolderEntity *e);
 
     void add_pattern_knotholder();

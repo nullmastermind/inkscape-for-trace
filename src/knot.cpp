@@ -182,7 +182,6 @@ void SPKnot::startDragging(Geom::Point const &p, gint x, gint y, guint32 etime) 
 }
 
 void SPKnot::selectKnot(bool select){
-    selected = select;
     setFlag(SP_KNOT_SELECTED, select);
 }
 
@@ -224,7 +223,7 @@ static int sp_knot_handler(SPCanvasItem */*item*/, GdkEvent *event, SPKnot *knot
             knot->startDragging(p, (gint) event->button.x, (gint) event->button.y, event->button.time);
             knot->mousedown_signal.emit(knot, event->button.state);
             consumed = TRUE;
-            knot->selectKnot(!knot->selected);
+            knot->selectKnot(!(knot->flags & SP_KNOT_SELECTED));
         }
         break;
     case GDK_BUTTON_RELEASE:
@@ -234,9 +233,6 @@ static int sp_knot_handler(SPCanvasItem */*item*/, GdkEvent *event, SPKnot *knot
                 sp_event_context_snap_watchdog_callback(knot->desktop->event_context->_delayed_snap_event);
             }
             sp_event_context_discard_delayed_snap_event(knot->desktop->event_context);
-            if(knot->flags & SP_KNOT_MOUSEOVER){
-                knot->selectKnot(!knot->selected);
-            }
             knot->pressure = 0;
 
             if (transform_escaped) {
@@ -469,7 +465,7 @@ void SPKnot::_setCtrlState() {
         state = SP_KNOT_STATE_DRAGGING;
     } else if (this->flags & SP_KNOT_MOUSEOVER) {
         state = SP_KNOT_STATE_MOUSEOVER;
-    } else if (this->flags & SP_KNOT_STATE_SELECTED) {
+    } else if (this->flags & SP_KNOT_SELECTED) {
         state = SP_KNOT_STATE_SELECTED;
     }
     g_object_set(this->item, "fill_color",   this->fill[state],   NULL);

@@ -31,6 +31,8 @@
 #include "ui/tools/tool-base.h"
 #include "ui/tools-switch.h"
 #include "ui/tools/lpe-tool.h"
+#include "ui/tool/commit-events.h"
+#include "ui/tool/event-utils.h"
 
 #include <gdk/gdkkeysyms.h>
 #include <glibmm/i18n.h>
@@ -304,6 +306,33 @@ static gdouble accelerate_scroll(GdkEvent *event, gdouble acceleration,
     return scroll_multiply;
 }
 
+/** Moves the selected points along the supplied unit vector according to
+ * the modifier state of the supplied event. */
+bool ToolBase::_keyboardMove(GdkEventKey const &event, Geom::Point const &dir)
+{
+    if (held_control(event)) return false;
+    unsigned num = 1 + combine_key_events(shortcut_key(event), 0);
+    Geom::Point delta = dir * num; 
+    if (held_shift(event)) delta *= 10;
+    if (held_alt(event)) {
+        delta /= desktop->current_zoom();
+    } else {
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        double nudge = prefs->getDoubleLimited("/options/nudgedistance/value", 2, 0, 1000, "px");
+        delta *= nudge;
+    }
+    std::cout << num << "zzzzzzzzzzzzzzzzzzzzzzzzzzzwww\n";
+    if (this->shape_editor && this->shape_editor->has_knotholder()) {
+        std::cout << num << "zzzzzzzzzzzzzzzzzzzzzzzzzzz\n";
+        KnotHolder * knotholder = shape_editor->knotholder;
+        if (knotholder) {
+            std::cout << num << "wwwwwwwwwwwwwwwwwwwwww\n";
+            knotholder->transform_selected(Geom::Translate(delta));
+        }
+    }
+    return true;
+}
+
 bool ToolBase::root_handler(GdkEvent* event) {
 
     // ui_dump_event (event, "ToolBase::root_handler");
@@ -559,7 +588,8 @@ bool ToolBase::root_handler(GdkEvent* event) {
         int const key_scroll = prefs->getIntLimited("/options/keyscroll/value",
                 10, 0, 1000);
 
-        switch (get_group0_keyval(&event->key)) {
+        switch(shortcut_key(event->key)) {
+        //switch (get_group0_keyval(&event->key)) {
         // GDK insists on stealing these keys (F1 for no idea what, tab for cycling widgets
         // in the editing window). So we resteal them back and run our regular shortcut
         // invoker on them.
@@ -615,6 +645,8 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 gobble_key_events(get_group0_keyval(&event->key), GDK_CONTROL_MASK);
                 this->desktop->scroll_relative(Geom::Point(i, 0));
                 ret = TRUE;
+            } else {
+                ret = _keyboardMove(event->key, Geom::Point(-1, 0));
             }
             break;
 
@@ -628,6 +660,8 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 gobble_key_events(get_group0_keyval(&event->key), GDK_CONTROL_MASK);
                 this->desktop->scroll_relative(Geom::Point(0, i));
                 ret = TRUE;
+            } else {
+                ret = _keyboardMove(event->key, Geom::Point(0, 1));
             }
             break;
 
@@ -641,6 +675,8 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 gobble_key_events(get_group0_keyval(&event->key), GDK_CONTROL_MASK);
                 this->desktop->scroll_relative(Geom::Point(-i, 0));
                 ret = TRUE;
+            } else {
+                ret = _keyboardMove(event->key, Geom::Point(1, 0));
             }
             break;
 
@@ -654,6 +690,8 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 gobble_key_events(get_group0_keyval(&event->key), GDK_CONTROL_MASK);
                 this->desktop->scroll_relative(Geom::Point(0, -i));
                 ret = TRUE;
+            } else {
+                ret = _keyboardMove(event->key, Geom::Point(0, -1));
             }
             break;
 

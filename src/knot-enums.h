@@ -38,7 +38,7 @@ typedef enum {
     SP_KNOT_STATE_HIDDEN
 } SPKnotStateType;
 
-#define SP_KNOT_VISIBLE_STATES 3
+#define SP_KNOT_VISIBLE_STATES 4
 
 enum {
     SP_KNOT_VISIBLE = 1 << 0,

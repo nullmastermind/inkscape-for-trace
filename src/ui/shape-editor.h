@@ -35,20 +35,17 @@ public:
     void decrement_local_change();
 
     bool knot_mouseover() const;
-    
+    KnotHolder *knotholder;
+    bool has_knotholder();
     static void blockSetItem(bool b) { _blockSetItem = b; } // kludge
-
     static void event_attr_changed(Inkscape::XML::Node * /*repr*/, char const *name, char const * /*old_value*/,
                                    char const * /*new_value*/, bool /*is_interactive*/, void *data);
 private:
-    bool has_knotholder();
     void reset_item (bool keep_knotholder = true);
     const SPItem *get_item();
-
     static bool _blockSetItem;
 
     SPDesktop *desktop;
-    KnotHolder *knotholder;
     Inkscape::XML::Node *knotholder_listener_attached_for;
 };
 

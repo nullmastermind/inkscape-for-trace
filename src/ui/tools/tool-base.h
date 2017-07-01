@@ -14,12 +14,12 @@
 
 #include <stddef.h>
 #include <string>
-
+#include "knot.h"
+#include "knotholder.h"
 #include <2geom/point.h>
 #include <gdk/gdk.h>
 #include <glib-object.h>
 #include <sigc++/trackable.h>
-#include "knot.h"
 
 #include "preferences.h"
 
@@ -30,7 +30,7 @@ namespace Glib {
 class GrDrag;
 class SPDesktop;
 class SPItem;
-
+class KnotHolder;
 namespace Inkscape {
     class MessageContext;
     class SelCue;
@@ -41,6 +41,7 @@ namespace Inkscape {
 
 namespace Inkscape {
 namespace UI {
+
 
 class ShapeEditor;
 
@@ -219,7 +220,6 @@ public:
 
 	SPDesktop *desktop;
     bool _uses_snap; // TODO: make protected or private
-
 protected:
 	/// An xpm containing the shape of the tool's cursor.
     gchar const *const *cursor_shape;
@@ -229,7 +229,9 @@ protected:
 private:
 	ToolBase(const ToolBase&);
 	ToolBase& operator=(const ToolBase&);
+        bool _keyboardMove(GdkEventKey const &event, Geom::Point const &dir);
 
+        
 	void sp_event_context_set_cursor(GdkCursorType cursor_type);
 
 };
