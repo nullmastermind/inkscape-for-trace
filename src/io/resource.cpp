@@ -20,6 +20,9 @@
 #include "config.h"
 #endif
 
+#include <glibmm/miscutils.h>
+#include <glibmm/stringutils.h>
+#include <glibmm/fileutils.h>
 #include "path-prefix.h"
 #include "io/sys.h"
 #include "io/resource.h"
@@ -57,7 +60,7 @@ gchar *_get_path(Domain domain, Type type, char const *filename)
                 case THEMES: temp = INKSCAPE_THEMEDIR; break;
                 case TUTORIALS: temp = INKSCAPE_TUTORIALSDIR; break;
                 case UIS: temp = INKSCAPE_UIDIR; break;
-                default: g_assert_not_reached();
+                default: temp = "";
             }
             path = g_strdup(temp);
         } break;
@@ -67,7 +70,7 @@ gchar *_get_path(Domain domain, Type type, char const *filename)
                 case GRADIENTS: temp = CREATE_GRADIENTSDIR; break;
                 case PALETTES: temp = CREATE_PALETTESDIR; break;
                 case PATTERNS: temp = CREATE_PATTERNSDIR; break;
-                default: g_assert_not_reached();
+                default: temp = "";
             }
             path = g_strdup(temp);
         } break;
@@ -96,7 +99,7 @@ gchar *_get_path(Domain domain, Type type, char const *filename)
         } break;
     }
 
-    if (filename) {
+    if (filename && path) {
         gchar *temp=g_build_filename(path, filename, NULL);
         g_free(path);
         path = temp;
@@ -172,6 +175,61 @@ Glib::ustring get_filename(Type type, char const *filename, char const *locale)
     g_free(sys_filename);
     return result;
 }
+
+/*
+ * Get's all the files in a given type, for all domain types.
+ *
+ *  domain - Optional domain (overload), will check return domains if not.
+ *  type - The type of files, e.g. TEMPLATES
+ *  extentions - A list of extensions to return, e.g. xml, svg
+ *  exclusions - A list of names to exclude e.g. default.xml
+ */
+std::vector<Glib::ustring> get_filenames(Type type, std::vector<const char *> extensions, std::vector<const char *> exclusions)
+{
+    std::vector<Glib::ustring> ret;
+    get_filenames_from_path(ret, get_path_ustring(USER, type), extensions, exclusions);
+    get_filenames_from_path(ret, get_path_ustring(SYSTEM, type), extensions, exclusions);
+    get_filenames_from_path(ret, get_path_ustring(CREATE, type), extensions, exclusions);
+    return ret;
+}
+std::vector<Glib::ustring> get_filenames(Domain domain, Type type, std::vector<const char *> extensions, std::vector<const char *> exclusions)
+{
+    std::vector<Glib::ustring> ret;
+    get_filenames_from_path(ret, get_path_ustring(domain, type), extensions, exclusions);
+    return ret;
+}
+
+/*
+ * Get all the files from a specific path, populating &files vector
+ *
+ * &files - Output list to populate
+ * path - The directory to parse, will add nothing if directory doesn't exist
+ * extensions - Only add files with these extensions.
+ * exclusions - Exclude files that exactly match these names.
+ */
+void get_filenames_from_path(std::vector<Glib::ustring> &files, Glib::ustring path, std::vector<const char *> extensions, std::vector<const char *> exclusions)
+{
+    if(!Glib::file_test(path, Glib::FILE_TEST_IS_DIR)) {
+        return;
+    }
+
+    Glib::Dir dir(path);
+    std::string file = dir.read_name();
+    while (!file.empty()){
+        bool reject = false;
+        for (auto &ext: extensions) {
+	    reject = reject || !Glib::str_has_suffix(file, ext);
+        }
+        for (auto &exc: exclusions) {
+	    reject = reject || (file == exc);
+        }
+        if(!reject) {
+            files.push_back(Glib::build_filename(path, file));
+        }
+        file = dir.read_name();
+    }
+}
+
 
 /**
  * Get, or guess, or decide the location where the preferences.xml

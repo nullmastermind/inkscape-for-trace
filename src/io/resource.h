@@ -64,6 +64,20 @@ Glib::ustring get_path_ustring(Domain domain, Type type,
 Glib::ustring get_filename(Type type, char const *filename,
                                 char const *locale=NULL);
 
+std::vector<Glib::ustring> get_filenames(Type type,
+                                std::vector<const char *> extensions={},
+                                std::vector<const char *> exclusions={});
+
+std::vector<Glib::ustring> get_filenames(Domain domain, Type type,
+                                std::vector<const char *> extensions={},
+                                std::vector<const char *> exclusions={});
+
+void get_filenames_from_path(std::vector<Glib::ustring> &files,
+                              Glib::ustring path,
+                              std::vector<const char *> extensions={},
+                              std::vector<const char *> exclusions={});
+
+
 char *profile_path(const char *filename);
 char *homedir_path(const char *filename);
 char *log_path(const char *filename);
