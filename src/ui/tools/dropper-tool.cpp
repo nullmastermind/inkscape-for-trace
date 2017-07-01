@@ -39,6 +39,8 @@
 
 #include "pixmaps/cursor-dropper-f.xpm"
 #include "pixmaps/cursor-dropper-s.xpm"
+#include "pixmaps/cursor-dropping-f.xpm"
+#include "pixmaps/cursor-dropping-s.xpm"
 
 #include "ui/tools/dropper-tool.h"
 #include "message-context.h"
@@ -134,10 +136,29 @@ bool DropperTool::root_handler(GdkEvent* event) {
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     int ret = FALSE;
-    int draw_cursor = DONT_REDRAW_CURSOR;
-
     int pick = prefs->getInt("/tools/dropper/pick", SP_DROPPER_PICK_VISIBLE);
     bool setalpha = prefs->getBool("/tools/dropper/setalpha", true);
+    bool fill = !(event->button.state & GDK_SHIFT_MASK); // Stroke if Shift key held
+    bool apply = event->button.state & GDK_CONTROL_MASK; // Apply if Ctrl key held
+    int draw_cursor = fill ? DRAW_FILL_CURSOR : DRAW_STROKE_CURSOR;
+
+    // Get color from selected object instead.
+    guint32 apply_color = 0;
+    if(apply) {
+	Inkscape::Selection *selection = desktop->getSelection();
+	g_assert(selection);
+        for (auto& obj: selection->objects()) {
+          if(obj->style) {
+            if(obj->style->fill.set) {
+              double opacity = 1.0;
+              if(obj->style->fill_opacity.set) {
+                  opacity = obj->style->fill_opacity.value;
+	      }
+              apply_color = obj->style->fill.value.color.toRGBA32(opacity);
+            }
+          }
+        }
+    }
 
     switch (event->type) {
 	case GDK_BUTTON_PRESS:
@@ -146,11 +167,12 @@ bool DropperTool::root_handler(GdkEvent* event) {
                 this->dragging = true;
                 ret = TRUE;
             }
-			
-			sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
-								GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK,
-								NULL, event->button.time);
-			this->grabbed = SP_CANVAS_ITEM(desktop->acetate);
+
+            sp_canvas_item_grab(SP_CANVAS_ITEM(desktop->acetate),
+                GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_BUTTON_RELEASE_MASK |
+                GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK,
+                NULL, event->button.time);
+            this->grabbed = SP_CANVAS_ITEM(desktop->acetate);
 
             break;
 	case GDK_MOTION_NOTIFY:
@@ -225,11 +247,6 @@ bool DropperTool::root_handler(GdkEvent* event) {
                     this->G = G;
                     this->B = B;
                     this->alpha = A;
-                    if(!(event->button.state & GDK_SHIFT_MASK)) {
-                        draw_cursor = DRAW_FILL_CURSOR;
-                    } else {
-                        draw_cursor = DRAW_STROKE_CURSOR;
-                    }
                 }
 
                 // status message
@@ -261,34 +278,47 @@ bool DropperTool::root_handler(GdkEvent* event) {
 
 	case GDK_BUTTON_RELEASE:
             if (event->button.button == 1 && !this->space_panning) {
-                sp_canvas_item_hide(this->area);
-                this->dragging = false;
-                if (this->grabbed) {
-                    sp_canvas_item_ungrab(this->grabbed, event->button.time);
-                    this->grabbed = NULL;
-                }
-
                 double alpha_to_set = setalpha? this->alpha : 1.0;
+		sp_canvas_item_hide(this->area);
+		this->dragging = false;
 
-                bool fill = !(event->button.state & GDK_SHIFT_MASK); // Stroke if Shift key held
+		if (this->grabbed) {
+		    sp_canvas_item_ungrab(this->grabbed, event->button.time);
+		    this->grabbed = NULL;
+		}
 
-                if (prefs->getBool("/tools/dropper/onetimepick", false)) {
-                    // "One time" pick from Fill/Stroke dialog stroke page, always apply fill or stroke (ignore <Shift> key)
-                    fill = (prefs->getInt("/dialogs/fillstroke/page", 0) == 0)  ? true : false;
+                if(apply) {
+		    Geom::Point const button_w(event->button.x, event->button.y);
+		    // remember clicked item, disregarding groups, honoring Alt
+		    this->item_to_select = sp_event_context_find_item (desktop, button_w, event->button.state & GDK_MOD1_MASK, TRUE);
+
+                    // Change selected object to object under cursor
+                    if (this->item_to_select) {
+                        Inkscape::Selection *selection = desktop->getSelection();
+                        g_assert(selection);
+                        selection->set(this->item_to_select);
+                    }
+
+                    this->R = SP_RGBA32_R_F(apply_color);
+                    this->G = SP_RGBA32_G_F(apply_color);
+                    this->B = SP_RGBA32_B_F(apply_color);
+                    this->alpha = SP_RGBA32_A_F(apply_color);
+                    alpha_to_set = this->alpha;
+
+                } else {
+                    if (prefs->getBool("/tools/dropper/onetimepick", false)) {
+                        // "One time" pick from Fill/Stroke dialog stroke page, always apply fill or stroke (ignore <Shift> key)
+                        fill = (prefs->getInt("/dialogs/fillstroke/page", 0) == 0)  ? true : false;
+                    }
                 }
 
                 // do the actual color setting
                 sp_desktop_set_color(desktop,
-                                     (event->button.state & GDK_MOD1_MASK)?
-                                     ColorRGBA(1 - this->R, 1 - this->G, 1 - this->B, alpha_to_set) : ColorRGBA(this->R, this->G, this->B, alpha_to_set),
-                                     false,  fill);
+                     (event->button.state & GDK_MOD1_MASK)?
+                     ColorRGBA(1 - this->R, 1 - this->G, 1 - this->B, alpha_to_set) : ColorRGBA(this->R, this->G, this->B, alpha_to_set),
+                     false,  fill);
 
                 // REJON: set aux. toolbar input to hex color!
-
-                if (event->button.state & GDK_SHIFT_MASK) {
-                    draw_cursor = DRAW_STROKE_CURSOR;
-                }
-
                 if (!(desktop->getSelection()->isEmpty())) {
                     DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_DROPPER,
                                        _("Set picked color"));
@@ -348,10 +378,18 @@ bool DropperTool::root_handler(GdkEvent* event) {
 
     if(draw_cursor != DONT_REDRAW_CURSOR && !desktop->isWaitingCursor() && !prefs->getBool("/tools/dropper/onetimepick", false)) {
         GdkCursor *cursor;
-        if(draw_cursor == DRAW_FILL_CURSOR) {
-            cursor = sp_cursor_from_xpm(cursor_dropper_f_xpm, NULL, NULL, this->get_color());
-        } else if(draw_cursor == DRAW_STROKE_CURSOR) {
-            cursor = sp_cursor_from_xpm(cursor_dropper_s_xpm, NULL, NULL, this->get_color());
+        if(apply) {
+            if(draw_cursor == DRAW_FILL_CURSOR) {
+                cursor = sp_cursor_from_xpm(cursor_dropping_f_xpm, NULL, NULL, apply_color);
+            } else if(draw_cursor == DRAW_STROKE_CURSOR) {
+                cursor = sp_cursor_from_xpm(cursor_dropping_s_xpm, NULL, NULL, apply_color);
+            }
+        } else {
+            if(draw_cursor == DRAW_FILL_CURSOR) {
+                cursor = sp_cursor_from_xpm(cursor_dropper_f_xpm, NULL, NULL, this->get_color());
+            } else if(draw_cursor == DRAW_STROKE_CURSOR) {
+                cursor = sp_cursor_from_xpm(cursor_dropper_s_xpm, NULL, NULL, this->get_color());
+            }
         }
         GdkWindow* window = gtk_widget_get_window(GTK_WIDGET(desktop->getCanvas()));
         gdk_window_set_cursor(window, cursor);
