@@ -501,7 +501,7 @@ SPDocument* read_vss(Glib::ustring filename, Glib::ustring name ) {
     // RVNGFileStream uses fopen() internally which unfortunately only uses ANSI encoding on Windows
     // therefore attempt to convert uri to the system codepage
     // even if this is not possible the alternate short (8.3) file name will be used if available
-    fullname = g_win32_locale_filename_from_utf8(fullname.c_str());
+    fullname = g_win32_locale_filename_from_utf8(filename.c_str());
   #else
     filename.copy(fullname, filename.length());
   #endif
