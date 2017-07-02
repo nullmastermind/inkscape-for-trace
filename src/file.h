@@ -114,7 +114,9 @@ bool sp_file_save_a_copy (Gtk::Window &parentWindow, void* object, void* data);
  *  Save a copy of a document as template.
  */
 void
-sp_file_save_template(Gtk::Window &parentWindow);
+sp_file_save_template(Gtk::Window &parentWindow, Glib::ustring name,
+    Glib::ustring author, Glib::ustring description, Glib::ustring keywords,
+    bool isDefault);
 
 /**
  *  Saves the given document.  Displays a file select dialog

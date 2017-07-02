@@ -1011,14 +1011,83 @@ sp_file_save_a_copy(Gtk::Window &parentWindow, gpointer /*object*/, gpointer /*d
  *  Save a copy of a document as template.
  */
 void
-sp_file_save_template(Gtk::Window &parentWindow)
+sp_file_save_template(Gtk::Window &parentWindow, Glib::ustring name,
+    Glib::ustring author, Glib::ustring description, Glib::ustring keywords,
+    bool isDefault)
 {
+
     if (!SP_ACTIVE_DOCUMENT)
         return;
 
-    ///auto filename =  Inkscape::IO::Resource::get_filename(TEMPLATES, "default.svg");
-    auto filename =  Inkscape::IO::Resource::get_path_ustring(USER, TEMPLATES, "default.svg");
-    file_save(parentWindow, SP_ACTIVE_DOCUMENT, filename, Inkscape::Extension::db.get(".svg"), false, false, Inkscape::Extension::FILE_SAVE_METHOD_INKSCAPE_SVG);
+    auto document = SP_ACTIVE_DOCUMENT;
+
+    DocumentUndo::setUndoSensitive(document, false);
+
+    auto root = document->getReprRoot();
+    auto xml_doc = document->getReprDoc();
+
+    auto templateinfo_node = xml_doc->createElement("inkscape:_templateinfo");
+    Inkscape::GC::release(templateinfo_node);
+
+    auto element_node = xml_doc->createElement("inkscape:_name");
+    Inkscape::GC::release(element_node);
+
+    element_node->appendChild(xml_doc->createTextNode(name.c_str()));
+    templateinfo_node->appendChild(element_node);
+
+    element_node = xml_doc->createElement("inkscape:author");
+    Inkscape::GC::release(element_node);
+
+    element_node->appendChild(xml_doc->createTextNode(author.c_str()));
+    templateinfo_node->appendChild(element_node);
+
+    element_node = xml_doc->createElement("inkscape:_shortdesc");
+    Inkscape::GC::release(element_node);
+
+    element_node->appendChild(xml_doc->createTextNode(description.c_str()));
+    templateinfo_node->appendChild(element_node);
+
+    element_node = xml_doc->createElement("inkscape:date");
+    Inkscape::GC::release(element_node);
+
+    element_node->appendChild(xml_doc->createTextNode(
+        Glib::DateTime::create_now_local().format("%F").c_str()));
+    templateinfo_node->appendChild(element_node);
+
+    element_node = xml_doc->createElement("inkscape:_keywords");
+    Inkscape::GC::release(element_node);
+
+    element_node->appendChild(xml_doc->createTextNode(keywords.c_str()));
+    templateinfo_node->appendChild(element_node);
+
+    root->appendChild(templateinfo_node);
+
+    if (isDefault) {
+
+        auto filename =  Inkscape::IO::Resource::get_path_ustring(USER,
+            TEMPLATES, "default.svg");
+        file_save(parentWindow, document, filename,
+        Inkscape::Extension::db.get(".svg"), false, false,
+        Inkscape::Extension::FILE_SAVE_METHOD_INKSCAPE_SVG);
+    }
+
+    name += ".svg";
+
+    auto filename =  Inkscape::IO::Resource::get_path_ustring(USER, TEMPLATES,
+        name.c_str());
+    file_save(parentWindow, document, filename,
+        Inkscape::Extension::db.get(".svg"), false, false,
+        Inkscape::Extension::FILE_SAVE_METHOD_INKSCAPE_SVG);
+
+    auto nodeToRemove = sp_repr_lookup_name(root, "inkscape:_templateinfo");
+
+    if (nodeToRemove != NULL){
+
+        sp_repr_unparent(nodeToRemove);
+        delete nodeToRemove;
+    }
+
+    DocumentUndo::setUndoSensitive(document, true);
 }
 
 
