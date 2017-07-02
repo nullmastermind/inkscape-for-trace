@@ -205,7 +205,7 @@ std::vector<Glib::ustring> get_filenames(Domain domain, Type type, std::vector<c
  *
  * &files - Output list to populate
  * path - The directory to parse, will add nothing if directory doesn't exist
- * extensions - Only add files with these extensions.
+ * extensions - Only add files with these extensions, they must be duplicated
  * exclusions - Exclude files that exactly match these names.
  */
 void get_filenames_from_path(std::vector<Glib::ustring> &files, Glib::ustring path, std::vector<const char *> extensions, std::vector<const char *> exclusions)
@@ -217,15 +217,23 @@ void get_filenames_from_path(std::vector<Glib::ustring> &files, Glib::ustring pa
     Glib::Dir dir(path);
     std::string file = dir.read_name();
     while (!file.empty()){
-        bool reject = false;
+        // If not extensions are specified, don't reject ANY files.
+        bool reject = !extensions.empty();
+
+        // Unreject any file which has one of the extensions.
         for (auto &ext: extensions) {
-	    reject |= !Glib::str_has_suffix(file, ext);
+	    reject ^= Glib::str_has_suffix(file, ext);
         }
+
+        // Reject any file which matches the exclusions.
         for (auto &exc: exclusions) {
 	    reject |= Glib::str_has_prefix(file, exc);
         }
+
+        // Reject any filename which isn't a regular file
         Glib::ustring filename = Glib::build_filename(path, file);
         reject |= !Glib::file_test(filename, Glib::FILE_TEST_IS_REGULAR);
+
         if(!reject) {
             files.push_back(filename);
         }

@@ -215,79 +215,30 @@ Inkscape::XML::Document *sp_shortcut_create_template_file(char const *filename) 
  * Dont add the users custom keyboards file
  */
 void sp_shortcut_get_file_names(std::vector<Glib::ustring> *names, std::vector<Glib::ustring> *paths) {
-
     using namespace Inkscape::IO::Resource;
-    std::list<char *> sources;
 
-    sources.push_back(g_strdup(get_path(USER, KEYS)));
-    sources.push_back(g_strdup(get_path(SYSTEM, KEYS)));
+    for(auto &filename: get_filenames(KEYS, {".xml"}, {"default.xml", "inkscape.xml"})) {
+        Glib::ustring label = Glib::path_get_basename(filename);
 
-    // loop through possible keyboard shortcut file locations.
-    while (!sources.empty()) {
-        gchar *dirname = sources.front();
-        if ( Inkscape::IO::file_test( dirname, G_FILE_TEST_EXISTS )
-            && Inkscape::IO::file_test( dirname, G_FILE_TEST_IS_DIR )) {
-            GError *err = 0;
-            GDir *directory = g_dir_open(dirname, 0, &err);
-            if (!directory) {
-                gchar *safeDir = Inkscape::IO::sanitizeString(dirname);
-                g_warning(_("Keyboard directory (%s) is unavailable."), safeDir);
-                g_free(safeDir);
-            } else {
-                gchar *filename = 0;
-                while ((filename = (gchar *) g_dir_read_name(directory)) != NULL) {
-                    gchar* lower = g_ascii_strdown(filename, -1);
-                    if (!strcmp(lower, "default.xml")) {
-                        // Dont add the users custom keys file
-                        continue;
-                    }
-                    if (!strcmp(lower, "inkscape.xml")) {
-                        // Dont add system inkscape.xml (since its a duplicate? of default.xml)
-                        continue;
-                    }
-                    if (g_str_has_suffix(lower, ".xml")) {
-                        gchar* full = g_build_filename(dirname, filename, NULL);
-                        if (!Inkscape::IO::file_test(full, G_FILE_TEST_IS_DIR)) {
-
-                        	// Get the "key name" from the root element of each file
-                            XML::Document *doc=sp_repr_read_file(full, NULL);
-                            if (!doc) {
-                                g_warning("Unable to read keyboard shortcut file %s", full);
-                                continue;
-                            }
-                            XML::Node *root=doc->root();
-                            if (strcmp(root->name(), "keys")) {
-                                g_warning("Not a shortcut keys file %s", full);
-                                Inkscape::GC::release(doc);
-                                continue;
-                            }
-
-                            gchar const *name=root->attribute("name");
-                            Glib::ustring label(filename);
-                            if (name) {
-                            	label = Glib::ustring(name)+ " (" + filename + ")";
-                            }
-
-                            if (!strcmp(filename, "default.xml")) {
-                                paths->insert(paths->begin(), full);
-                                names->insert(names->begin(), label.c_str());
-                            } else {
-                                paths->push_back(full);
-                                names->push_back(label.c_str());
-                            }
-
-                            Inkscape::GC::release(doc);
-                        }
-                        g_free(full);
-                    }
-                    g_free(lower);
-                }
-                g_dir_close(directory);
-            }
+        XML::Document *doc = sp_repr_read_file(filename.c_str(), NULL);
+        if (!doc) {
+            g_warning("Unable to read keyboard shortcut file %s", filename.c_str());
+            continue;
         }
 
-        g_free(dirname);
-        sources.pop_front();
+        // Get the "key name" from the root element of each files
+        XML::Node *root=doc->root();
+        if (!strcmp(root->name(), "keys")) {
+            gchar const *name=root->attribute("name");
+            if (name) {
+                label = Glib::ustring(name) + " (" + label + ")";
+            }
+            paths->push_back(filename.c_str());
+            names->push_back(label.c_str());
+        } else {
+            g_warning("Not a shortcut keys file %s", filename.c_str());
+        }
+        Inkscape::GC::release(doc);
     }
 
 }

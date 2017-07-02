@@ -23,6 +23,7 @@
 #include "extension/input.h"
 
 #include "io/sys.h"
+#include "io/resource.h"
 #include <unistd.h>
 #include <cstring>
 #include "document.h"
@@ -62,30 +63,13 @@ Glib::ustring XSLT::solve_reldir(Inkscape::XML::Node *reprin) {
     }
 
     Glib::ustring reldir = s;
-
     if (reldir == "extensions") {
-
-        for (unsigned int i=0;
-            i < Inkscape::Extension::Extension::search_path.size();
-            i++) {
-
-            gchar * fname = g_build_filename(
-               Inkscape::Extension::Extension::search_path[i],
-               reprin->firstChild()->content(),
-               NULL);
-            Glib::ustring filename = fname;
-            g_free(fname);
-
-            if ( Inkscape::IO::file_test(filename.c_str(), G_FILE_TEST_EXISTS) )
-                return filename;
-
-        }
+        using namespace Inkscape::IO::Resource;
+        return get_filename(EXTENSIONS, reprin->firstChild()->content());
     } else {
         Glib::ustring str = reprin->firstChild()->content();
         return str;
     }
-
-    return "";
 }
 
 bool XSLT::check(Inkscape::Extension::Extension *module)

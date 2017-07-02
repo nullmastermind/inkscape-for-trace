@@ -495,20 +495,19 @@ class REVENGE_API RVNGSVGDrawingGenerator_WithTitle : public RVNGSVGDrawingGener
 #endif
 
 // Read Visio stencil files
-SPDocument* read_vss( gchar* fullname, Glib::ustring name ) {
-
+SPDocument* read_vss(Glib::ustring filename, Glib::ustring name ) {
+  gchar *fullname;
   #ifdef WIN32
     // RVNGFileStream uses fopen() internally which unfortunately only uses ANSI encoding on Windows
     // therefore attempt to convert uri to the system codepage
     // even if this is not possible the alternate short (8.3) file name will be used if available
-    fullname = g_win32_locale_filename_from_utf8(fullname);
+    fullname = g_win32_locale_filename_from_utf8(fullname.c_str());
+  #else
+    filename.copy(fullname, filename.length());
   #endif
 
   RVNGFileStream input(fullname);
-
-  #ifdef WIN32
-    g_free(fullname);
-  #endif
+  g_free(fullname);
 
   if (!libvisio::VisioDocument::isSupported(&input)) {
     return NULL;
@@ -590,74 +589,32 @@ SPDocument* read_vss( gchar* fullname, Glib::ustring name ) {
 /* Hunts preference directories for symbol files */
 void SymbolsDialog::get_symbols() {
 
-  std::list<Glib::ustring> directories;
+    using namespace Inkscape::IO::Resource;
+    SPDocument* symbol_doc = NULL;
+    Glib::ustring title;
 
-  using namespace Inkscape::IO::Resource;
-  directories.push_back(get_path_ustring(USER, SYMBOLS));
-  directories.push_back(get_path_ustring(SYSTEM, SYMBOLS));
-
-  std::list<Glib::ustring>::iterator it;
-  for( it = directories.begin(); it != directories.end(); ++it ) {
-    if(!Inkscape::IO::file_test((*it).c_str(), G_FILE_TEST_IS_DIR)) {
-      continue;
-    }
-
-    GError *err = 0;
-    GDir *dir = g_dir_open( (*it).c_str(), 0, &err );
-    if( dir ) {
-
-      gchar *filename = 0;
-      while( (filename = (gchar *)g_dir_read_name( dir ) ) != NULL) {
-
-        gchar *fullname = g_build_filename((*it).c_str(), filename, NULL);
-
-        if ( !Inkscape::IO::file_test( fullname, G_FILE_TEST_IS_DIR )
-             && ( Glib::str_has_suffix(fullname, ".svg") || Glib::str_has_suffix(fullname, ".vss") ) ) {
-
-          Glib::ustring fn( filename );
-          Glib::ustring tag = fn.substr( fn.find_last_of(".") + 1 );
-
-          SPDocument* symbol_doc = NULL;
-
-#ifdef WITH_LIBVISIO
-          if( tag.compare( "vss" ) == 0 ) {
-            // strip extension from filename and use it as name for the symbol set
-            Glib::ustring name = Glib::ustring(filename);
-            name = name.erase(name.rfind('.'));
-
-            symbol_doc = read_vss( fullname, name );
-            if( symbol_doc ) {
-              symbolSets[name]= symbol_doc;
-              symbolSet->append(name);
+    for(auto &filename: get_filenames(SYMBOLS, {".svg", ".vss"})) {
+        if(Glib::str_has_suffix(filename, ".svg")) {
+            symbol_doc = SPDocument::createNewDoc(filename.c_str(), FALSE);
+            if(symbol_doc) {
+                title = symbol_doc->getRoot()->title();
+                if(title.empty()) {
+                    title = _("Unnamed Symbols");
+                }
             }
-          }
-#endif
-          // Try to read all remaining files as SVG
-          if( !symbol_doc ) {
-
-            symbol_doc = SPDocument::createNewDoc( fullname, FALSE );
-            if( symbol_doc ) {
-
-              const gchar *title = symbol_doc->getRoot()->title();
-
-              // A user provided file may not have a title
-              if( title != NULL ) {
-                title = g_dpgettext2(NULL, "Symbol", title); // Translate
-              } else {
-                title = _("Unnamed Symbols");
-              }
-
-              symbolSets[Glib::ustring(title)] = symbol_doc;
-              symbolSet->append(title);
-            }
-          }
 
         }
-        g_free( fullname );
-      }
-      g_dir_close( dir );
+#ifdef WITH_LIBVISIO
+        if(Glib::str_has_suffix(filename, ".vss")) {
+            Glib::ustring title = filename.erase(filename.rfind('.'));
+            symbol_doc = read_vss(filename, title);
+        }
+#endif
+        if(symbol_doc) {
+            symbolSets[title]= symbol_doc;
+            symbolSet->append(title);
+        }
     }
-  }
 }
 
 GSList* SymbolsDialog::symbols_in_doc_recursive (SPObject *r, GSList *l)
