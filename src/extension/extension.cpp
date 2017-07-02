@@ -40,7 +40,6 @@ namespace Extension {
 
 /* Inkscape::Extension::Extension */
 
-std::vector<const gchar *> Extension::search_path;
 std::ofstream Extension::error_file;
 
 /**

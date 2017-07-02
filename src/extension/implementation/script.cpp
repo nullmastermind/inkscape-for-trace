@@ -33,6 +33,7 @@
 #include "extension/db.h"
 #include "inkscape.h"
 #include "io/sys.h"
+#include "io/resource.h"
 #include "preferences.h"
 #include "script.h"
 #include "selection.h"
@@ -184,25 +185,8 @@ std::string Script::solve_reldir(Inkscape::XML::Node *reprin) {
         Glib::ustring str = reprin->firstChild()->content();
         return str;
     }
-
-    Glib::ustring reldir = s;
-    for (unsigned int i=0;
-        i < Inkscape::Extension::Extension::search_path.size();
-        i++) {
-
-        gchar * fname = g_build_filename(
-           Inkscape::Extension::Extension::search_path[i],
-           reprin->firstChild()->content(),
-           NULL);
-        Glib::ustring filename = fname;
-        g_free(fname);
-        //printf("Filename: %s\n", filename.c_str());
-        if ( Inkscape::IO::file_test(filename.c_str(), G_FILE_TEST_EXISTS) ) {
-            return Glib::filename_from_utf8(filename);
-        }
-    }
-
-    return "";
+    using namespace Inkscape::IO::Resource;
+    return get_filename(EXTENSIONS, reprin->firstChild()->content());
 }
 
 

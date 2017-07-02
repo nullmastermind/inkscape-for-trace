@@ -24,6 +24,8 @@
 #include <glibmm/i18n.h>
 #include <glibmm/main.h>
 #include <glibmm/timer.h>
+#include <glibmm/fileutils.h>
+#include <glibmm/miscutils.h>
 
 #include "color-item.h"
 #include "desktop.h"
@@ -384,10 +386,11 @@ static bool parseNum( char*& str, int& val ) {
 }
 
 
-void _loadPaletteFile( gchar const *filename, gchar const *path, gboolean user/*=FALSE*/ )
+void _loadPaletteFile(Glib::ustring path, gboolean user/*=FALSE*/)
 {
+    Glib::ustring filename = Glib::path_get_basename(path);
     char block[1024];
-    FILE *f = Inkscape::IO::fopen_utf8name(path, "r" );
+    FILE *f = Inkscape::IO::fopen_utf8name(path.c_str(), "r");
     if ( f ) {
         char* result = fgets( block, sizeof(block), f );
         if ( result ) {
@@ -396,7 +399,7 @@ void _loadPaletteFile( gchar const *filename, gchar const *path, gboolean user/*
                 bool hasErr = false;
 
                 SwatchPage *onceMore = new SwatchPage();
-                onceMore->_name = filename;
+                onceMore->_name = filename.c_str();
 
                 do {
                     result = fgets( block, sizeof(block), f );
@@ -518,54 +521,16 @@ static void loadEmUp()
     if ( !beenHere ) {
         beenHere = true;
 
-        std::list<gchar *> sources;
-        sources.push_back(g_strdup(get_path(USER, PALETTES)));
-        sources.push_back(g_strdup(get_path(SYSTEM, PALETTES)));
-        sources.push_back(g_strdup(get_path(CREATE, PALETTES)));
-
-        // Use this loop to iterate through a list of possible document locations.
-        while (!sources.empty()) {
-            gchar *dirname = sources.front();
-            if ( Inkscape::IO::file_test( dirname, G_FILE_TEST_EXISTS )
-                && Inkscape::IO::file_test( dirname, G_FILE_TEST_IS_DIR )) {
-                GError *err = 0;
-                GDir *directory = g_dir_open(dirname, 0, &err);
-                if (!directory) {
-                    gchar *safeDir = Inkscape::IO::sanitizeString(dirname);
-                    g_warning(_("Palettes directory (%s) is unavailable."), safeDir);
-                    g_free(safeDir);
-                } else {
-                    gchar *filename = 0;
-                    while ((filename = (gchar *)g_dir_read_name(directory)) != NULL) {
-                        gchar* lower = g_ascii_strdown( filename, -1 );
-//                        if ( g_str_has_suffix(lower, ".gpl") ) {
-                          if ( !g_str_has_suffix(lower, "~") ) {
-                            gchar* full = g_build_filename(dirname, filename, NULL);
-                            if ( !Inkscape::IO::file_test( full, G_FILE_TEST_IS_DIR ) ) {
-                                _loadPaletteFile(filename, full, userPalette);
-                            }
-                            g_free(full);
-                          }
-//                      }
-                        g_free(lower);
-                    }
-                    g_dir_close(directory);
-                }
-            }
-
-            // toss the dirname
-            g_free(dirname);
-            sources.pop_front();
-            userPalette = false;
+        for(auto &filename: get_filenames(PALETTES, {".gpl"})) {
+            bool userPalette = Inkscape::IO::file_is_writable(filename.c_str());
+            _loadPaletteFile(filename, userPalette);
         }
     }
 
-   // Sort the list of swatches by name, grouped by user/system
-   userSwatchPages.sort(compare_swatch_names);
-   systemSwatchPages.sort(compare_swatch_names);
-
+    // Sort the list of swatches by name, grouped by user/system
+    userSwatchPages.sort(compare_swatch_names);
+    systemSwatchPages.sort(compare_swatch_names);
 }
-
 
 
 SwatchesPanel& SwatchesPanel::getInstance()

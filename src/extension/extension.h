@@ -95,7 +95,6 @@ public:
         STATE_UNLOADED,    /**< The extension has not been loaded */
         STATE_DEACTIVATED  /**< The extension is missing something which makes it unusable */
     } state_t;
-    static std::vector<const gchar *> search_path; /**< A vector of paths to search for extensions */
 
 private:
     gchar     *id;                        /**< The unique identifier for the Extension */
