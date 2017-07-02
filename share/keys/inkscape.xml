@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <keys name="Inkscape default">
 
-<!--  
+<!--
 This file contains the default Inkscape keyboard shortcuts. In each "bind" element:
 
 - The "key" attribute contains the key name. The names are the same as those in the
@@ -60,6 +60,8 @@ override) the bindings in the main default.xml.
 
   <bind key="s" modifiers="Ctrl,Shift,Alt" action="FileSaveACopy" display="true" />
   <bind key="S" modifiers="Ctrl,Shift,Alt" action="FileSaveACopy" />
+
+  <bind action="FileSaveTemplate" />
 
   <bind key="p" modifiers="Ctrl" action="FilePrint" display="true" />
   <bind key="P" modifiers="Ctrl" action="FilePrint" />
@@ -128,8 +130,8 @@ override) the bindings in the main default.xml.
   <bind action="MeasurePrefs" />
 
   <bind key="F9" modifiers="Shift" action="ToolStar" />
-  <bind key="asterisk" modifiers="Shift" action="ToolStar" /> 	 
-  <bind key="asterisk" action="ToolStar" /> 	 
+  <bind key="asterisk" modifiers="Shift" action="ToolStar" />
+  <bind key="asterisk" action="ToolStar" />
   <bind key="KP_Multiply" action="ToolStar" display="true" />
 
   <bind action="StarPrefs" />
@@ -209,7 +211,7 @@ override) the bindings in the main default.xml.
   <bind key="minus" action="ZoomOut" display="true" />
   <bind key="minus" modifiers="Shift" action="ZoomOut" />
   <bind key="underscore" action="ZoomOut" />
-  <bind key="underscore" modifiers="Shift" action="ZoomOut" />  
+  <bind key="underscore" modifiers="Shift" action="ZoomOut" />
   <bind key="KP_Subtract" action="ZoomOut" />
 
   <bind key="1" action="Zoom1:0" display="true" />
@@ -240,12 +242,12 @@ override) the bindings in the main default.xml.
   <bind key="KP_9" action="ZoomNext" />
   <bind key="grave" action="ZoomPrev" display="true" /> <!-- ` -->
   <bind key="KP_8" action="ZoomPrev" />
-  
+
 <!-- View -->
 
-  <bind key="F11" action="FullScreen" display="true" /> 
-  <bind key="F11" action="FocusToggle" modifiers="Shift" display="true" /> 
-  <bind key="F11" action="FullScreenFocus" modifiers="Ctrl" display="true" /> 
+  <bind key="F11" action="FullScreen" display="true" />
+  <bind key="F11" action="FocusToggle" modifiers="Shift" display="true" />
+  <bind key="F11" action="FullScreenFocus" modifiers="Ctrl" display="true" />
 
   <bind key="Tab" modifiers="Ctrl" action="NextWindow" display="true" />
   <bind key="ISO_Left_Tab" modifiers="Ctrl" action="NextWindow" />
@@ -254,7 +256,7 @@ override) the bindings in the main default.xml.
 
   <bind key="numbersign" modifiers="Shift" action="ToggleGrid" /> <!-- # -->
   <bind key="numbersign" action="ToggleGrid" display="true" />
-  
+
   <bind key="bar" modifiers="Shift" action="ToggleGuides" /> <!-- | -->
   <bind key="bar" action="ToggleGuides" display="true" />
 
@@ -276,7 +278,7 @@ override) the bindings in the main default.xml.
   <bind key="P" modifiers="Shift,Alt" action="TogglePalette" />
 
   <bind action="ToggleStatusbar" />
-  
+
   <bind action="ViewNew" />
   <bind action="ViewNewPreview" />
   <bind action="ViewIconPreview" />
@@ -294,7 +296,7 @@ override) the bindings in the main default.xml.
   <bind action="ViewColorModeGrayscale" />
 
 <!-- Edit -->
-  
+
   <bind key="z" modifiers="Ctrl" action="EditUndo" display="true" />
   <bind key="Z" modifiers="Ctrl" action="EditUndo" />
   <!--Do not put in Ctrl,Shift+Y, already used-->
@@ -310,7 +312,7 @@ override) the bindings in the main default.xml.
   <bind key="x" modifiers="Ctrl" action="EditCut" display="true" />
   <bind key="X" modifiers="Ctrl" action="EditCut" />
   <bind key="Delete" modifiers="Shift" action="EditCut"/>
-  
+
   <bind key="c" modifiers="Ctrl" action="EditCopy" display="true" />
   <bind key="C" modifiers="Ctrl" action="EditCopy" />
   <bind key="Insert" modifiers="Ctrl" action="EditCopy"/>
@@ -360,10 +362,10 @@ override) the bindings in the main default.xml.
   <bind key="a" modifiers="Ctrl,Alt" action="EditSelectAllInAllLayers" display="true" />
   <bind key="A" modifiers="Ctrl,Alt" action="EditSelectAllInAllLayers" />
 
-  <bind action="EditSelectSameFillStroke" />  
-  <bind action="EditSelectSameFillColor" />  
-  <bind action="EditSelectSameStrokeColor" />  
-  <bind action="EditSelectSameStrokeStyle" />  
+  <bind action="EditSelectSameFillStroke" />
+  <bind action="EditSelectSameFillColor" />
+  <bind action="EditSelectSameStrokeColor" />
+  <bind action="EditSelectSameStrokeStyle" />
 
   <bind key="a" modifiers="Shift,Alt" action="EditSelectSameObjectType" display="true" />
   <bind key="A" modifiers="Shift,Alt" action="EditSelectSameObjectType" />
@@ -379,7 +381,7 @@ override) the bindings in the main default.xml.
   <bind key="Tab" modifiers="Shift" action="EditSelectPrev" display="true" />
   <bind key="ISO_Left_Tab" modifiers="Shift" action="EditSelectPrev" />
 
-  <bind key="Escape" action="EditDeselect" /> 
+  <bind key="Escape" action="EditDeselect" />
 
   <bind key="7" action="EditNextPathEffectParameter" display="true" />
   <bind action="EditSwapFillStroke" display="true" />
@@ -406,22 +408,22 @@ override) the bindings in the main default.xml.
 
   <bind key="Page_Down" action="SelectionLower" display="true" />
   <bind key="KP_Page_Down" action="SelectionLower" />
-  
+
   <bind key="comma" action="SelectionShrink" display="true" />
   <bind key="less" action="SelectionShrink" />
-  
+
   <bind key="comma" modifiers="Alt" action="SelectionShrinkScreen" />
   <bind key="less" modifiers="Alt" action="SelectionShrinkScreen" />
-  
+
   <bind key="comma" modifiers="Ctrl" action="SelectionShrinkHalve" />
   <bind key="less" modifiers="Ctrl" action="SelectionShrinkHalve" />
-  
+
   <bind key="period" action="SelectionGrow" display="true" />
   <bind key="greater" action="SelectionGrow" />
-  
+
   <bind key="period" modifiers="Alt" action="SelectionGrowScreen" />
   <bind key="greater" modifiers="Alt" action="SelectionGrowScreen" />
-  
+
   <bind key="period" modifiers="Ctrl" action="SelectionGrowDouble" />
   <bind key="greater" modifiers="Ctrl" action="SelectionGrowDouble" />
 
@@ -448,7 +450,7 @@ override) the bindings in the main default.xml.
 
   <bind key="i" modifiers="Alt,Shift" action="ObjectsFromPattern" display="true" />
   <bind key="I" modifiers="Alt,Shift" action="ObjectsFromPattern" />
-  
+
   <bind key="g" modifiers="Shift" action="ObjectsToGuides" display="true" />
   <bind key="G" modifiers="Shift" action="ObjectsToGuides" />
 
@@ -459,14 +461,14 @@ override) the bindings in the main default.xml.
   <bind action="ObjectUnSetClipPath" />
 
   <!-- FIXME: currently these bypass the verbs, so the verbs are not bound to ctrl+[] as they should be -->
-  <bind action="ObjectRotate90" /> 
-  <bind action="ObjectRotate90CCW" /> 
+  <bind action="ObjectRotate90" />
+  <bind action="ObjectRotate90CCW" />
 
-  <bind action="ObjectRemoveTransform" /> 
+  <bind action="ObjectRemoveTransform" />
 
-  <bind action="FitCanvasToSelection" /> 
-  <bind action="FitCanvasToDrawing" /> 
-  <bind action="FitCanvasToSelectionOrDrawing" /> 
+  <bind action="FitCanvasToSelection" />
+  <bind action="FitCanvasToDrawing" />
+  <bind action="FitCanvasToSelectionOrDrawing" />
 
 <!-- Path -->
 
@@ -510,7 +512,7 @@ override) the bindings in the main default.xml.
   <bind key="parenright" modifiers="Ctrl,Shift" action="SelectionOffset" />
   <bind key="0" modifiers="Ctrl,Shift" action="SelectionOffset" />
   <bind key="0" modifiers="Ctrl" action="SelectionOffset" />
-  
+
   <bind key="parenright" modifiers="Alt" action="SelectionOffsetScreen" display="true" />
   <bind key="0" modifiers="Alt" action="SelectionOffsetScreen" />
 
@@ -586,24 +588,24 @@ override) the bindings in the main default.xml.
   <bind key="Page_Down" modifiers="Shift" action="LayerMoveToPrev" display="true" />
   <bind key="KP_Page_Down" modifiers="Shift" action="LayerMoveToPrev" />
 
-  <bind action="LayerMoveTo" />  
+  <bind action="LayerMoveTo" />
 
   <bind key="l" modifiers="Ctrl,Shift" action="DialogLayers" display="true" />
-  <bind key="L" modifiers="Ctrl,Shift" action="DialogLayers" />  
+  <bind key="L" modifiers="Ctrl,Shift" action="DialogLayers" />
 
-  <bind action="LayerDuplicate" />  
-  <bind action="LayerDelete" />  
+  <bind action="LayerDuplicate" />
+  <bind action="LayerDelete" />
 
-  <bind action="LayerHideAll" />  
-  <bind action="LayerSolo" />  
-  <bind action="LayerShowAll" />  
+  <bind action="LayerHideAll" />
+  <bind action="LayerSolo" />
+  <bind action="LayerShowAll" />
 
-  <bind action="LayerLockAll" />  
-  <bind action="LayerLockOthers" />  
-  <bind action="LayerUnlockAll" />  
+  <bind action="LayerLockAll" />
+  <bind action="LayerLockOthers" />
+  <bind action="LayerUnlockAll" />
 
-  <bind action="LayerToggleHide" />  
-  <bind action="LayerToggleLock" />  
+  <bind action="LayerToggleHide" />
+  <bind action="LayerToggleLock" />
 
 <!-- Dialogs -->
 
@@ -689,11 +691,11 @@ override) the bindings in the main default.xml.
 
 <!-- Effects -->
 
-  <bind key="q" modifiers="Alt" action="EffectLast" display="true" /> 
-  <bind key="Q" modifiers="Alt" action="EffectLast" /> 
+  <bind key="q" modifiers="Alt" action="EffectLast" display="true" />
+  <bind key="Q" modifiers="Alt" action="EffectLast" />
   <bind key="q" modifiers="Shift,Alt" action="EffectLastPref" display="true" />
   <bind key="Q" modifiers="Shift,Alt" action="EffectLastPref" />
-  
+
   <!-- You can also assign keys to individual effects. The action should be set to he
   effect id from the .inx file, for example "org.ekips.filter.addnodes" for the Add
   Nodes effect. -->
@@ -701,11 +703,11 @@ override) the bindings in the main default.xml.
   <bind key="g" modifiers="Ctrl,Alt" action="org.inkscape.typography.newglyphlayer" display="true"/>
   <bind key="G" modifiers="Ctrl,Alt" action="org.inkscape.typography.newglyphlayer"/>
 
-<!-- 
+<!--
   <bind key="h" modifiers="Ctrl,Alt" action="org.inkscape.typography.previousglyphlayer" display="true"/>
   <bind key="H" modifiers="Ctrl,Alt" action="org.inkscape.typography.previousglyphlayer"/>
  -->
- 
+
   <bind key="j" modifiers="Ctrl,Alt" action="org.inkscape.typography.nextglyphlayer" display="true"/>
   <bind key="J" modifiers="Ctrl,Alt" action="org.inkscape.typography.nextglyphlayer"/>
 
