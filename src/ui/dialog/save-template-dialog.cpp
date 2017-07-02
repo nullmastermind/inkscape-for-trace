@@ -13,10 +13,6 @@ namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
-//TODO: Tooltips
-//TODO: Sanitize filename
-//TODO: Check empty fields
-
 SaveTemplate::SaveTemplate() :
     Gtk::Dialog(_("Save Document as Template")),
     name_label(_("Name: "), Gtk::ALIGN_START),

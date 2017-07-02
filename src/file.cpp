@@ -1016,7 +1016,7 @@ sp_file_save_template(Gtk::Window &parentWindow, Glib::ustring name,
     bool isDefault)
 {
 
-    if (!SP_ACTIVE_DOCUMENT)
+    if (!SP_ACTIVE_DOCUMENT || name.length() == 0)
         return;
 
     auto document = SP_ACTIVE_DOCUMENT;
@@ -1035,17 +1035,24 @@ sp_file_save_template(Gtk::Window &parentWindow, Glib::ustring name,
     element_node->appendChild(xml_doc->createTextNode(name.c_str()));
     templateinfo_node->appendChild(element_node);
 
-    element_node = xml_doc->createElement("inkscape:author");
-    Inkscape::GC::release(element_node);
+    if (author.length() != 0) {
 
-    element_node->appendChild(xml_doc->createTextNode(author.c_str()));
-    templateinfo_node->appendChild(element_node);
+        element_node = xml_doc->createElement("inkscape:author");
+        Inkscape::GC::release(element_node);
 
-    element_node = xml_doc->createElement("inkscape:_shortdesc");
-    Inkscape::GC::release(element_node);
+        element_node->appendChild(xml_doc->createTextNode(author.c_str()));
+        templateinfo_node->appendChild(element_node);
+    }
 
-    element_node->appendChild(xml_doc->createTextNode(description.c_str()));
-    templateinfo_node->appendChild(element_node);
+    if (description.length() != 0) {
+
+        element_node = xml_doc->createElement("inkscape:_shortdesc");
+        Inkscape::GC::release(element_node);
+
+        element_node->appendChild(xml_doc->createTextNode(description.c_str()));
+        templateinfo_node->appendChild(element_node);
+
+    }
 
     element_node = xml_doc->createElement("inkscape:date");
     Inkscape::GC::release(element_node);
@@ -1054,11 +1061,15 @@ sp_file_save_template(Gtk::Window &parentWindow, Glib::ustring name,
         Glib::DateTime::create_now_local().format("%F").c_str()));
     templateinfo_node->appendChild(element_node);
 
-    element_node = xml_doc->createElement("inkscape:_keywords");
-    Inkscape::GC::release(element_node);
+    if (keywords.length() != 0) {
 
-    element_node->appendChild(xml_doc->createTextNode(keywords.c_str()));
-    templateinfo_node->appendChild(element_node);
+        element_node = xml_doc->createElement("inkscape:_keywords");
+        Inkscape::GC::release(element_node);
+
+        element_node->appendChild(xml_doc->createTextNode(keywords.c_str()));
+        templateinfo_node->appendChild(element_node);
+
+    }
 
     root->appendChild(templateinfo_node);
 
@@ -1071,7 +1082,7 @@ sp_file_save_template(Gtk::Window &parentWindow, Glib::ustring name,
         Inkscape::Extension::FILE_SAVE_METHOD_INKSCAPE_SVG);
     }
 
-    name += ".svg";
+    name.append(".svg");
 
     auto filename =  Inkscape::IO::Resource::get_path_ustring(USER, TEMPLATES,
         name.c_str());
