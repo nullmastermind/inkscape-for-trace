@@ -226,23 +226,13 @@ KnotHolder::knot_moved_handler(SPKnot *knot, Geom::Point const &p, guint state)
 
 	// this was a local change and the knotholder does not need to be recreated:
     this->local_change = TRUE;
-    if (!(state & GDK_SHIFT_MASK)) {
-        unselect_knots();
-    }
+
     for(std::list<KnotHolderEntity *>::iterator i = this->entity.begin(); i != this->entity.end(); ++i) {
         KnotHolderEntity *e = *i;
-        if (!(state & GDK_SHIFT_MASK)) {
-            e->knot->selectKnot(false);
-        }
         if (e->knot == knot) {
             Geom::Point const q = p * item->i2dt_affine().inverse();
             e->knot_set(q, e->knot->drag_origin * item->i2dt_affine().inverse(), state);
-            e->knot_click(state);
-            if (!(e->knot->flags & SP_KNOT_SELECTED) || !(state & GDK_SHIFT_MASK)){
-                e->knot->selectKnot(true);
-            } else {
-                e->knot->selectKnot(false);
-            }
+            break;
         }
     }
 
@@ -255,13 +245,30 @@ KnotHolder::knot_moved_handler(SPKnot *knot, Geom::Point const &p, guint state)
 }
 
 void
-KnotHolder::knot_ungrabbed_handler(SPKnot */*knot*/, guint)
+KnotHolder::knot_ungrabbed_handler(SPKnot *knot, guint state)
 {
-	this->dragging = false;
+    this->dragging = false;
 
-	if (this->released) {
+    if (this->released) {
         this->released(this->item);
     } else {
+        if (!(state & GDK_SHIFT_MASK)) {
+            unselect_knots();
+        }
+        for(std::list<KnotHolderEntity *>::iterator i = this->entity.begin(); i != this->entity.end(); ++i) {
+            KnotHolderEntity *e = *i;
+            if (!(state & GDK_SHIFT_MASK)) {
+                e->knot->selectKnot(false);
+            }
+            if (e->knot == knot) {
+                // no need to test whether knot_click exists since it's virtual now
+                if (!(e->knot->flags & SP_KNOT_SELECTED) || !(state & GDK_SHIFT_MASK)){
+                    e->knot->selectKnot(true);
+                } else {
+                    e->knot->selectKnot(false);
+                }
+            }
+        }
         SPObject *object = (SPObject *) this->item;
 
         // Caution: this call involves a screen update, which may process events, and as a
@@ -307,7 +314,6 @@ KnotHolder::knot_ungrabbed_handler(SPKnot */*knot*/, guint)
                 }
             }
         }
-
         DocumentUndo::done(object->document, object_verb, _("Move handle"));
     }
 }

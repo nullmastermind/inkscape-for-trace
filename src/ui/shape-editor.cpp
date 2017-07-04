@@ -17,7 +17,8 @@
 #include "desktop.h"
 #include "document.h"
 #include "knotholder.h"
-#include "sp-ellipse.h"
+#include "sp-shape.h"
+#include "sp-path.h"
 #include "inkscape.h"
 #include "ui/object-edit.h"
 #include "ui/shape-editor.h"
@@ -96,12 +97,9 @@ void ShapeEditor::event_attr_changed(Inkscape::XML::Node * node, gchar const *na
         if (changed_kh) {
             // this can happen if an LPEItem's knotholder handle was dragged, in which case we want
             // to keep the knotholder; in all other cases (e.g., if the LPE itself changes) we delete it
-            sh->reset_item(!strcmp(name, "d") ||
-                           !strcmp(node->name(),"svg:rect") ||
-                           !strcmp(node->name(),"svg:star") |
-                           !strcmp(node->name(),"svg:spiral") ||
-                           !strcmp(node->name(),"svg:ellipse") ||
-                           SP_IS_GENERICELLIPSE(SP_ACTIVE_DOCUMENT->getObjectById(node->attribute("id"))));
+            SPObject * obj = SP_ACTIVE_DOCUMENT->getObjectById(node->attribute("id"));
+            bool is_shape = SP_IS_SHAPE(obj) && !SP_IS_PATH(obj);
+            sh->reset_item(!strcmp(name, "d") || is_shape);
         }
     }
 }
