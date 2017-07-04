@@ -170,8 +170,11 @@ void Dialog::read_geometry()
     auto const display = Gdk::Display::get_default();
     auto const monitor = display->get_primary_monitor();
 
+    // If user hasn't configured a primary monitor, nullptr is returned.
     Gdk::Rectangle screen_geometry;
-    monitor->get_geometry(screen_geometry);
+    if (monitor) {
+        monitor->get_geometry(screen_geometry);
+    }
     auto const screen_width  = screen_geometry.get_width();
     auto const screen_height = screen_geometry.get_height();
 #else
