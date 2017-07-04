@@ -114,7 +114,7 @@ if(WIN32)
     # required by python2-lxml
     ${MINGW_BIN}/libexslt-0.dll
     # required by python2-numpy
-    ${MINGW_BIN}/libgfortran-3.dll
+    ${MINGW_BIN}/libgfortran-4.dll
     ${MINGW_BIN}/libopenblas.dll
     ${MINGW_BIN}/libquadmath-0.dll
     DESTINATION .)
