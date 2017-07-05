@@ -72,6 +72,10 @@ std::vector<Glib::ustring> get_filenames(Domain domain, Type type,
                                 std::vector<const char *> extensions={},
                                 std::vector<const char *> exclusions={});
 
+std::vector<Glib::ustring> get_filenames(Glib::ustring path,
+                                std::vector<const char *> extensions={},
+                                std::vector<const char *> exclusions={});
+
 void get_filenames_from_path(std::vector<Glib::ustring> &files,
                               Glib::ustring path,
                               std::vector<const char *> extensions={},

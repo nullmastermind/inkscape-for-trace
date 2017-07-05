@@ -199,11 +199,17 @@ std::vector<Glib::ustring> get_filenames(Domain domain, Type type, std::vector<c
     get_filenames_from_path(ret, get_path_ustring(domain, type), extensions, exclusions);
     return ret;
 }
+std::vector<Glib::ustring> get_filenames(Glib::ustring path, std::vector<const char *> extensions, std::vector<const char *> exclusions)
+{
+    std::vector<Glib::ustring> ret;
+    get_filenames_from_path(ret, path, extensions, exclusions);
+    return ret;
+}
 
 /*
- * Get all the files from a specific path, populating &files vector
+ * Get all the files from a specific path and any sub-dirs, populating &files vector
  *
- * &files - Output list to populate
+ * &files - Output list to populate, will be opoulated with full paths
  * path - The directory to parse, will add nothing if directory doesn't exist
  * extensions - Only add files with these extensions, they must be duplicated
  * exclusions - Exclude files that exactly match these names.
@@ -232,9 +238,10 @@ void get_filenames_from_path(std::vector<Glib::ustring> &files, Glib::ustring pa
 
         // Reject any filename which isn't a regular file
         Glib::ustring filename = Glib::build_filename(path, file);
-        reject |= !Glib::file_test(filename, Glib::FILE_TEST_IS_REGULAR);
 
-        if(!reject) {
+        if(Glib::file_test(filename, Glib::FILE_TEST_IS_DIR)) {
+            get_filenames_from_path(files, filename, extensions, exclusions);
+        } else if(Glib::file_test(filename, Glib::FILE_TEST_IS_REGULAR) && !reject) {
             files.push_back(filename);
         }
         file = dir.read_name();
@@ -290,17 +297,6 @@ char *profile_path(const char *filename)
                         prefdir = utf8Path;
                     }
                 }
-
-
-                /* not compiling yet...
-
-                // Remember to free the list pointer
-                IMalloc * imalloc = 0;
-                if ( SHGetMalloc(&imalloc) == NOERROR) {
-                    imalloc->lpVtbl->Free( imalloc, pidl );
-                    imalloc->lpVtbl->Release( imalloc );
-                }
-                */
             }
 
             if (prefdir) {
@@ -345,7 +341,7 @@ char *profile_path(const char *filename)
  */
 char *log_path(const char *filename)
 {
-  return profile_path(filename);
+    return profile_path(filename);
 }
 
 char *homedir_path(const char *filename)
