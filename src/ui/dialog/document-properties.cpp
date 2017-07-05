@@ -514,6 +514,9 @@ struct _cmp {
   }
 };
 
+template <typename From, typename To>
+struct static_caster { To * operator () (From * value) const { return static_cast<To *>(value); } };
+
 void DocumentProperties::populate_linked_profiles_box()
 {
     _LinkedProfilesListStore->clear();
@@ -523,12 +526,10 @@ void DocumentProperties::populate_linked_profiles_box()
     }
 
     std::set<Inkscape::ColorProfile *, Inkscape::ColorProfile::pointerComparator> _current;
-    std::set<Inkscape::ColorProfile> foo;
-    for (auto &profile: current) {
-        SPObject* obj = profile;
-        Inkscape::ColorProfile* prof = reinterpret_cast<Inkscape::ColorProfile*>(obj);
-        _current.insert(prof);
-    }
+    std::transform(current.begin(),
+                   current.end(),
+                   std::inserter(_current, _current.begin()),
+                   static_caster<SPObject, Inkscape::ColorProfile>());
 
     for (auto &profile: _current) {
         Gtk::TreeModel::Row row = *(_LinkedProfilesListStore->append());
