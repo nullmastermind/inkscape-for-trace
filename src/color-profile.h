@@ -1,6 +1,7 @@
 #ifndef SEEN_COLOR_PROFILE_H
 #define SEEN_COLOR_PROFILE_H
 
+#include <set>
 #include <vector>
 #include <sp-object.h>
 #include <glibmm/ustring.h>
@@ -27,15 +28,37 @@ class ColorProfileImpl;
  */
 class ColorProfile : public SPObject {
 public:
-	ColorProfile();
-	virtual ~ColorProfile();
+    ColorProfile();
+    virtual ~ColorProfile();
+
+    bool operator<(ColorProfile const &other) const;
+
+    // we use std::set with pointers to ColorProfile, just having operator< isn't enough to sort these
+    struct pointerComparator {
+        bool operator()(const ColorProfile * const & a, const ColorProfile * const & b) { return (*a) < (*b); };
+    };
 
     friend cmsHPROFILE colorprofile_get_handle( SPDocument*, unsigned int*, char const* );
     friend class CMSSystem;
 
-    static std::vector<std::pair<Glib::ustring, bool> > getBaseProfileDirs();
-    static std::vector<std::pair<Glib::ustring, bool> > getProfileFiles();
-    static std::vector<std::pair<std::pair<Glib::ustring, bool>, Glib::ustring> > getProfileFilesWithNames();
+    class FilePlusHome {
+    public:
+        FilePlusHome(Glib::ustring filename, bool isInHome);
+        FilePlusHome(const FilePlusHome &filePlusHome);
+        bool operator<(FilePlusHome const &other) const;
+        Glib::ustring filename;
+        bool isInHome;
+    };
+    class FilePlusHomeAndName: public FilePlusHome {
+    public:
+        FilePlusHomeAndName(FilePlusHome filePlusHome, Glib::ustring name);
+        bool operator<(FilePlusHomeAndName const &other) const;
+        Glib::ustring name;
+    };
+
+    static std::set<FilePlusHome> getBaseProfileDirs();
+    static std::set<FilePlusHome> getProfileFiles();
+    static std::set<FilePlusHomeAndName> getProfileFilesWithNames();
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
     //icColorSpaceSignature getColorSpace() const;
     ColorSpaceSig getColorSpace() const;
