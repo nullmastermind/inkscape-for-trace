@@ -17,6 +17,7 @@
 #include <unistd.h>
 #include <cstring>
 #include <io/sys.h>
+#include <io/resource.h>
 
 #ifdef WIN32
 #ifndef _WIN32_WINDOWS         // Allow use of features specific to Windows 98 or later. Required for correctly including icm.h
@@ -735,23 +736,13 @@ std::vector<std::pair<Glib::ustring, bool> > ColorProfile::getBaseProfileDirs() 
 
     // On OS X:
     {
-        bool onOSX = false;
         std::vector<Glib::ustring> possible;
-        possible.push_back("/System/Library/ColorSync/Profiles");
-        possible.push_back("/Library/ColorSync/Profiles");
-        for ( std::vector<Glib::ustring>::const_iterator it = possible.begin(); it != possible.end(); ++it ) {
-            if ( g_file_test(it->c_str(), G_FILE_TEST_EXISTS)  && g_file_test(it->c_str(), G_FILE_TEST_IS_DIR) ) {
-                sources.push_back(std::make_pair(it->c_str(), false));
-                onOSX = true;
-            }
-        }
-        if ( onOSX ) {
-            gchar* path = g_build_filename(g_get_home_dir(), "Library", "ColorSync", "Profiles", NULL);
-            if ( g_file_test(path, G_FILE_TEST_EXISTS)  && g_file_test(path, G_FILE_TEST_IS_DIR) ) {
-                sources.push_back(std::make_pair(path, true));
-            }
-            g_free(path);
-        }
+        sources.push_back(std::make_pair("/System/Library/ColorSync/Profiles", false));
+        sources.push_back(std::make_pair("/Library/ColorSync/Profiles", false));
+
+        gchar *path = g_build_filename(g_get_home_dir(), "Library", "ColorSync", "Profiles", NULL);
+        sources.push_back(std::make_pair(path, true));
+        g_free(path);
     }
 
 #ifdef WIN32
@@ -820,36 +811,12 @@ static bool isIccFile( gchar const *filepath )
 std::vector<std::pair<Glib::ustring, bool> > ColorProfile::getProfileFiles()
 {
     std::vector<std::pair<Glib::ustring, bool> > files;
+    using Inkscape::IO::Resource::get_filenames;
 
-    std::list<std::pair<Glib::ustring, bool> > sources;
-    {
-        std::vector<std::pair<Glib::ustring, bool> > tmp = ColorProfile::getBaseProfileDirs();
-        sources.insert(sources.begin(), tmp.begin(), tmp.end());
-    }
-    for ( std::list<std::pair<Glib::ustring, bool> >::const_iterator it = sources.begin(); it != sources.end(); ++it ) {
-        if ( g_file_test( it->first.c_str(), G_FILE_TEST_EXISTS ) && g_file_test( it->first.c_str(), G_FILE_TEST_IS_DIR ) ) {
-            GError *err = 0;
-            GDir *dir = g_dir_open(it->first.c_str(), 0, &err);
-
-            if (dir) {
-                for (gchar const *file = g_dir_read_name(dir); file != NULL; file = g_dir_read_name(dir)) {
-                    gchar *filepath = g_build_filename(it->first.c_str(), file, NULL);
-                    if ( g_file_test( filepath, G_FILE_TEST_IS_DIR ) ) {
-                        sources.push_back( std::make_pair(filepath, it->second) );
-                    } else {
-                        if ( isIccFile( filepath ) ) {
-                            files.push_back( std::make_pair(filepath, it->second) );
-                        }
-                    }
-
-                    g_free(filepath);
-                }
-                g_dir_close(dir);
-                dir = 0;
-            } else {
-                gchar *safeDir = Inkscape::IO::sanitizeString(it->first.c_str());
-                g_warning(_("Color profiles directory (%s) is unavailable."), safeDir);
-                g_free(safeDir);
+    for (auto &path: ColorProfile::getBaseProfileDirs()) {
+        for(auto &filename: get_filenames(path.first, {".icc", ".icm"})) {
+            if ( isIccFile(filename.c_str()) ) {
+                files.push_back(std::make_pair(filename, path.second));
             }
         }
     }
