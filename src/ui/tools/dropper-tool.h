@@ -44,7 +44,7 @@ public:
 
 	virtual const std::string& getPrefsPath();
 
-	guint32 get_color();
+	guint32 get_color(bool invert=false);
 
 protected:
 	virtual void setup();
@@ -57,6 +57,10 @@ private:
     double        B;
     double        alpha;
 
+    double radius;
+    bool invert;
+    bool stroke;
+    bool dropping;
     bool dragging;
 
     SPCanvasItem* grabbed;
