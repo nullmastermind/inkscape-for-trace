@@ -1067,7 +1067,7 @@ static void sp_writing_mode_changed( EgeSelectOneAction *act, GObject *tbl )
 
     SPStyle query(SP_ACTIVE_DOCUMENT);
     int result_numbers =
-        sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_FONTNUMBERS);
+        sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_WRITINGMODES);
 
     // If querying returned nothing, update default style.
     if (result_numbers == QUERY_STYLE_NOTHING)
@@ -1121,7 +1121,7 @@ static void sp_text_orientation_changed( EgeSelectOneAction *act, GObject *tbl )
 
     SPStyle query(SP_ACTIVE_DOCUMENT);
     int result_numbers =
-        sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_FONTNUMBERS);
+        sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_WRITINGMODES);
 
     // If querying returned nothing, update default style.
     if (result_numbers == QUERY_STYLE_NOTHING)
@@ -1150,7 +1150,6 @@ static void sp_text_direction_changed( EgeSelectOneAction *act, GObject *tbl )
     g_object_set_data( tbl, "freeze", GINT_TO_POINTER(TRUE) );
 
     int mode = ege_select_one_action_get_active( act );
-
     SPCSSAttr   *css        = sp_repr_css_attr_new ();
     switch (mode)
     {
@@ -1169,7 +1168,7 @@ static void sp_text_direction_changed( EgeSelectOneAction *act, GObject *tbl )
 
     SPStyle query(SP_ACTIVE_DOCUMENT);
     int result_numbers =
-        sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_FONTNUMBERS);
+        sp_desktop_query_style (SP_ACTIVE_DESKTOP, &query, QUERY_STYLE_PROPERTY_WRITINGMODES);
 
     // If querying returned nothing, update default style.
     if (result_numbers == QUERY_STYLE_NOTHING)
@@ -1556,7 +1555,6 @@ static void sp_text_toolbox_selection_changed(Inkscape::Selection */*selection*/
         int activeButton4 = 0;
         if (query.direction.computed == SP_CSS_DIRECTION_LTR ) activeButton4 = 0;
         if (query.direction.computed == SP_CSS_DIRECTION_RTL ) activeButton4 = 1;
-
         EgeSelectOneAction* textDirectionAction =
             EGE_SELECT_ONE_ACTION( g_object_get_data( tbl, "TextDirectionAction" ) );
         ege_select_one_action_set_active( textDirectionAction, activeButton4 );
