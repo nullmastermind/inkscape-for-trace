@@ -380,15 +380,15 @@ bool DropperTool::root_handler(GdkEvent* event) {
         GdkCursor *cursor;
         if(apply) {
             if(draw_cursor == DRAW_FILL_CURSOR) {
-                cursor = sp_cursor_from_xpm(cursor_dropping_f_xpm, NULL, NULL, apply_color);
+                cursor = sp_cursor_from_xpm(cursor_dropping_f_xpm, apply_color);
             } else if(draw_cursor == DRAW_STROKE_CURSOR) {
-                cursor = sp_cursor_from_xpm(cursor_dropping_s_xpm, NULL, NULL, apply_color);
+                cursor = sp_cursor_from_xpm(cursor_dropping_s_xpm, apply_color);
             }
         } else {
             if(draw_cursor == DRAW_FILL_CURSOR) {
-                cursor = sp_cursor_from_xpm(cursor_dropper_f_xpm, NULL, NULL, this->get_color());
+                cursor = sp_cursor_from_xpm(cursor_dropper_f_xpm, this->get_color());
             } else if(draw_cursor == DRAW_STROKE_CURSOR) {
-                cursor = sp_cursor_from_xpm(cursor_dropper_s_xpm, NULL, NULL, this->get_color());
+                cursor = sp_cursor_from_xpm(cursor_dropper_s_xpm, this->get_color());
             }
         }
         GdkWindow* window = gtk_widget_get_window(GTK_WIDGET(desktop->getCanvas()));

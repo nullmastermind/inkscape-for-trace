@@ -156,8 +156,6 @@ void ToolBase::sp_event_context_set_cursor(GdkCursorType cursor_type) {
 void ToolBase::sp_event_context_update_cursor() {
     GtkWidget *w = GTK_WIDGET(this->desktop->getCanvas());
     if (gtk_widget_get_window (w)) {
-        GtkStyle *style = gtk_widget_get_style(w);
-
         if (this->cursor_shape) {
             if(this->cursor) {
                 g_object_unref(this->cursor);
@@ -170,7 +168,7 @@ void ToolBase::sp_event_context_update_cursor() {
 	    double strokeOpacity = strokeHasColor ? sp_desktop_get_opacity_tool(this->desktop, this->getPrefsPath(), false) : 0;
 
             this->cursor = sp_cursor_from_xpm(
-		this->cursor_shape, &style->black, &style->white,
+		this->cursor_shape,
                 SP_RGBA32_C_COMPOSE(fillColor, fillOpacity),
                 SP_RGBA32_C_COMPOSE(strokeColor, strokeOpacity)
             );

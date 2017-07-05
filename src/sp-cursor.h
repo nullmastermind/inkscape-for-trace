@@ -6,7 +6,7 @@ typedef struct _GdkPixbuf GdkPixbuf;
 typedef struct _GdkCursor GdkCursor;
 typedef struct _GdkColor GdkColor;
 
-GdkCursor* sp_cursor_from_xpm(char const *const *xpm, GdkColor *black=NULL, GdkColor *white=NULL, guint32 fill=0, guint32 stroke=0);
+GdkCursor* sp_cursor_from_xpm(char const *const *xpm, guint32 fill=0, guint32 stroke=0);
 
 #endif
 

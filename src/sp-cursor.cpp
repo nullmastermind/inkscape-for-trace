@@ -54,7 +54,7 @@ struct RGBA {
     }
 };
 
-GdkCursor *sp_cursor_from_xpm(char const *const *xpm, GdkColor *black, GdkColor *white, guint32 fill, guint32 stroke)
+GdkCursor *sp_cursor_from_xpm(char const *const *xpm, guint32 fill, guint32 stroke)
 {
     GdkPixbuf *pixbuf;
     GdkCursor *cursor;
@@ -97,10 +97,6 @@ GdkCursor *sp_cursor_from_xpm(char const *const *xpm, GdkColor *black, GdkColor 
                 colorMap[ccode] = RGBA(SP_RGBA32_R_U(fill), SP_RGBA32_G_U(fill), SP_RGBA32_B_U(fill), SP_RGBA32_A_U(fill));
             } else if (strcmp(p, "Stroke") == 0) {
                 colorMap[ccode] = RGBA(SP_RGBA32_R_U(stroke), SP_RGBA32_G_U(stroke), SP_RGBA32_B_U(stroke), SP_RGBA32_A_U(stroke));
-            } else if (black && strcmp(p, "#000000") == 0) {
-                colorMap[ccode] = RGBA(black->red, black->green, black->blue, 255);
-            } else if (white && strcmp(p, "#FFFFFF") == 0) {
-                colorMap[ccode] = RGBA(white->red, white->green, white->blue, 255);
             } else if (p[0] == '#') {
                 GdkRGBA color;
                 if (gdk_rgba_parse(&color, p)) {
