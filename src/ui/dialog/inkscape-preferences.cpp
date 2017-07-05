@@ -986,9 +986,8 @@ void InkscapePreferences::initPageIO()
     _page_cms.add_group_header( _("Display adjustment"));
 
     Glib::ustring tmpStr;
-    std::vector<std::pair<Glib::ustring, bool> > sources = ColorProfile::getBaseProfileDirs();
-    for ( std::vector<std::pair<Glib::ustring, bool> >::const_iterator it = sources.begin(); it != sources.end(); ++it ) {
-        gchar* part = g_strdup_printf( "\n%s", it->first.c_str() );
+    for (auto &profile: ColorProfile::getBaseProfileDirs()) {
+        gchar* part = g_strdup_printf( "\n%s", profile.filename.c_str() );
         tmpStr += part;
         g_free(part);
     }

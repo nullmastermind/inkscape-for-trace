@@ -179,6 +179,32 @@ cmsHPROFILE ColorProfileImpl::getNULLProfile() {
 
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 
+ColorProfile::FilePlusHome::FilePlusHome(Glib::ustring filename, bool isInHome) : filename(filename), isInHome(isInHome) {
+}
+
+ColorProfile::FilePlusHome::FilePlusHome(const ColorProfile::FilePlusHome &filePlusHome) : FilePlusHome(filePlusHome.filename, filePlusHome.isInHome) {
+}
+
+bool ColorProfile::FilePlusHome::operator<(FilePlusHome const &other) const {
+    // if one is from home folder, other from global folder, sort home folder first. cf bug 1457126
+    bool result;
+    if (this->isInHome != other.isInHome) result = this->isInHome;
+    else                                  result = this->filename < other.filename;
+    return result;
+}
+
+ColorProfile::FilePlusHomeAndName::FilePlusHomeAndName(ColorProfile::FilePlusHome filePlusHome, Glib::ustring name)
+                                                      : FilePlusHome(filePlusHome), name(name) {
+}
+
+bool ColorProfile::FilePlusHomeAndName::operator<(ColorProfile::FilePlusHomeAndName const &other) const {
+    bool result;
+    if (this->isInHome != other.isInHome) result = this->isInHome;
+    else                                  result = this->name < other.name;
+    return result;
+}
+
+
 ColorProfile::ColorProfile() : SPObject() {
     this->impl = new ColorProfileImpl();
 
@@ -190,6 +216,15 @@ ColorProfile::ColorProfile() : SPObject() {
 }
 
 ColorProfile::~ColorProfile() {
+}
+
+bool ColorProfile::operator<(ColorProfile const &other) const {
+    gchar *a_name_casefold = g_utf8_casefold(this->name, -1 );
+    gchar *b_name_casefold = g_utf8_casefold(other.name, -1 );
+    int result = g_strcmp0(a_name_casefold, b_name_casefold);
+    g_free(a_name_casefold);
+    g_free(b_name_casefold);
+    return result < 0;
 }
 
 /**
@@ -701,16 +736,9 @@ gint Inkscape::CMSSystem::getChannelCount(ColorProfile const *profile)
 
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 
-// sort home dir before the rest, and alphabetically oterhwise
-bool compareProfileBoolPair(const std::pair<Glib::ustring, bool> & a, const std::pair<Glib::ustring, bool> & b)
-{
-    if (a.second != b.second) return a.second; // a comes first iff its home, i.e., second is true
-    return a.first < b.first;
-}
-
 // the bool return value tells if it's a user's directory or a system location
 // note that this will treat places under $HOME as system directories when they are found via $XDG_DATA_DIRS
-std::vector<std::pair<Glib::ustring, bool> > ColorProfile::getBaseProfileDirs() {
+std::set<ColorProfile::FilePlusHome> ColorProfile::getBaseProfileDirs() {
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
     static bool warnSet = false;
     if (!warnSet) {
@@ -720,28 +748,27 @@ std::vector<std::pair<Glib::ustring, bool> > ColorProfile::getBaseProfileDirs() 
         warnSet = true;
     }
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-    std::vector<std::pair<Glib::ustring, bool> > sources;
+    std::set<ColorProfile::FilePlusHome> sources;
 
     // first try user's local dir
     gchar* path = g_build_filename(g_get_user_data_dir(), "color", "icc", NULL);
-    sources.push_back(std::make_pair(path, true));
+    sources.insert(FilePlusHome(path, true));
     g_free(path);
 
     const gchar* const * dataDirs = g_get_system_data_dirs();
     for ( int i = 0; dataDirs[i]; i++ ) {
         gchar* path = g_build_filename(dataDirs[i], "color", "icc", NULL);
-        sources.push_back(std::make_pair(path, false));
+        sources.insert(FilePlusHome(path, false));
         g_free(path);
     }
 
     // On OS X:
     {
-        std::vector<Glib::ustring> possible;
-        sources.push_back(std::make_pair("/System/Library/ColorSync/Profiles", false));
-        sources.push_back(std::make_pair("/Library/ColorSync/Profiles", false));
+        sources.insert(FilePlusHome("/System/Library/ColorSync/Profiles", false));
+        sources.insert(FilePlusHome("/Library/ColorSync/Profiles", false));
 
         gchar *path = g_build_filename(g_get_home_dir(), "Library", "ColorSync", "Profiles", NULL);
-        sources.push_back(std::make_pair(path, true));
+        sources.insert(FilePlusHome(path, true));
         g_free(path);
     }
 
@@ -755,16 +782,11 @@ std::vector<std::pair<Glib::ustring, bool> > ColorProfile::getBaseProfileDirs() 
         if ( !g_utf8_validate(utf8Path, -1, NULL) ) {
             g_warning( "GetColorDirectoryW() resulted in invalid UTF-8" );
         } else {
-            sources.push_back(std::make_pair(utf8Path, false));
+            sources.insert(FilePlusHome(utf8Path, false));
         }
         g_free( utf8Path );
     }
 #endif // WIN32
-
-    std::sort(sources.begin(), sources.end(), compareProfileBoolPair);
-    std::vector<std::pair<Glib::ustring, bool> >::iterator last = std::unique(sources.begin(), sources.end());
-    sources.erase(last, sources.end());
-
 
     return sources;
 }
@@ -808,50 +830,35 @@ static bool isIccFile( gchar const *filepath )
     return isIccFile;
 }
 
-std::vector<std::pair<Glib::ustring, bool> > ColorProfile::getProfileFiles()
+std::set<ColorProfile::FilePlusHome > ColorProfile::getProfileFiles()
 {
-    std::vector<std::pair<Glib::ustring, bool> > files;
+    std::set<FilePlusHome> files;
     using Inkscape::IO::Resource::get_filenames;
 
     for (auto &path: ColorProfile::getBaseProfileDirs()) {
-        for(auto &filename: get_filenames(path.first, {".icc", ".icm"})) {
+        for(auto &filename: get_filenames(path.filename, {".icc", ".icm"})) {
             if ( isIccFile(filename.c_str()) ) {
-                files.push_back(std::make_pair(filename, path.second));
+                files.insert(FilePlusHome(filename, path.isInHome));
             }
         }
     }
 
-    std::sort(files.begin(), files.end(), compareProfileBoolPair);
-    std::vector<std::pair<Glib::ustring, bool> >::iterator last = std::unique(files.begin(), files.end());
-    files.erase(last, files.end());
-
     return files;
 }
 
-bool compareProfilePairByName(const std::pair<std::pair<Glib::ustring, bool>, Glib::ustring> & a,
-                              const std::pair<std::pair<Glib::ustring, bool>, Glib::ustring> & b)
+std::set<ColorProfile::FilePlusHomeAndName> ColorProfile::getProfileFilesWithNames()
 {
-    if (a.first.second != b.first.second) return a.first.second;
-    return a.second < b.second;
-}
-
-std::vector<std::pair<std::pair<Glib::ustring, bool>, Glib::ustring> > ColorProfile::getProfileFilesWithNames()
-{
-    std::vector<std::pair<std::pair<Glib::ustring, bool>, Glib::ustring> > result;
+    std::set<FilePlusHomeAndName> result;
 
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-    std::vector<std::pair<Glib::ustring, bool> > files = getProfileFiles();
-    for ( std::vector<std::pair<Glib::ustring, bool> >::const_iterator it = files.begin(); it != files.end(); ++it ) {
-        cmsHPROFILE hProfile = cmsOpenProfileFromFile(it->first.c_str(), "r");
+    for (auto &profile: getProfileFiles()) {
+        cmsHPROFILE hProfile = cmsOpenProfileFromFile(profile.filename.c_str(), "r");
         if ( hProfile ) {
             Glib::ustring name = getNameFromProfile(hProfile);
-            result.push_back( std::make_pair(*it, name) );
+            result.insert( FilePlusHomeAndName(profile, name) );
             cmsCloseProfile(hProfile);
         }
     }
-
-    std::sort(result.begin(), result.end(), compareProfilePairByName);
-
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 
     return result;
@@ -931,18 +938,17 @@ void loadProfiles()
     static bool profiles_searched = false;
     if ( !profiles_searched ) {
         knownProfiles.clear();
-        std::vector<std::pair<Glib::ustring, bool> > files = ColorProfile::getProfileFiles();
 
-        for ( std::vector<std::pair<Glib::ustring, bool> >::const_iterator it = files.begin(); it != files.end(); ++it ) {
-            cmsHPROFILE prof = cmsOpenProfileFromFile( it->first.c_str(), "r" );
+        for (auto &profile: ColorProfile::getProfileFiles()) {
+            cmsHPROFILE prof = cmsOpenProfileFromFile( profile.filename.c_str(), "r" );
             if ( prof ) {
-                ProfileInfo info( prof, Glib::filename_to_utf8( it->first.c_str() ) );
+                ProfileInfo info( prof, Glib::filename_to_utf8( profile.filename.c_str() ) );
                 cmsCloseProfile( prof );
                 prof = 0;
 
                 bool sameName = false;
-                for ( std::vector<ProfileInfo>::iterator it = knownProfiles.begin(); it != knownProfiles.end(); ++it ) {
-                    if ( it->getName() == info.getName() ) {
+                for(auto &knownProfile: knownProfiles) {
+                    if ( knownProfile.getName() == info.getName() ) {
                         sameName = true;
                         break;
                     }

@@ -386,26 +386,25 @@ void DocumentProperties::populate_available_profiles(){
     _AvailableProfilesListStore->clear(); // Clear any existing items in the combo box
 
     // Iterate through the list of profiles and add the name to the combo box.
-    std::vector<std::pair<std::pair<Glib::ustring, bool>, Glib::ustring> > pairs = ColorProfile::getProfileFilesWithNames();
     bool home = true; // initial value doesn't matter, it's just to avoid a compiler warning
-    for ( std::vector<std::pair<std::pair<Glib::ustring, bool>, Glib::ustring> >::const_iterator it = pairs.begin(); it != pairs.end(); ++it ) {
+    bool first = true;
+    for (auto &profile: ColorProfile::getProfileFilesWithNames()) {
         Gtk::TreeModel::Row row;
-        Glib::ustring file = it->first.first;
-        Glib::ustring name = it->second;
 
         // add a separator between profiles from the user's home directory and system profiles
-        if (it != pairs.begin() && it->first.second != home)
+        if (!first && profile.isInHome != home)
         {
           row = *(_AvailableProfilesListStore->append());
           row[_AvailableProfilesListColumns.fileColumn] = "<separator>";
           row[_AvailableProfilesListColumns.nameColumn] = "<separator>";
           row[_AvailableProfilesListColumns.separatorColumn] = true;
         }
-        home = it->first.second;
+        home = profile.isInHome;
+        first = false;
 
         row = *(_AvailableProfilesListStore->append());
-        row[_AvailableProfilesListColumns.fileColumn] = file;
-        row[_AvailableProfilesListColumns.nameColumn] = name;
+        row[_AvailableProfilesListColumns.fileColumn] = profile.filename;
+        row[_AvailableProfilesListColumns.nameColumn] = profile.name;
         row[_AvailableProfilesListColumns.separatorColumn] = false;
     }
 }
@@ -459,10 +458,11 @@ void DocumentProperties::linkSelectedProfile()
             g_warning("No color profile available.");
             return;
         }
-	
+
         // Read the filename and description from the list of available profiles
         Glib::ustring file = (*iter)[_AvailableProfilesListColumns.fileColumn];
         Glib::ustring name = (*iter)[_AvailableProfilesListColumns.nameColumn];
+
         std::vector<SPObject *> current = SP_ACTIVE_DOCUMENT->getResourceList( "iccprofile" );
         for (std::vector<SPObject *>::const_iterator it = current.begin(); it != current.end(); ++it) {
             SPObject* obj = *it;
@@ -514,6 +514,9 @@ struct _cmp {
   }
 };
 
+template <typename From, typename To>
+struct static_caster { To * operator () (From * value) const { return static_cast<To *>(value); } };
+
 void DocumentProperties::populate_linked_profiles_box()
 {
     _LinkedProfilesListStore->clear();
@@ -521,12 +524,16 @@ void DocumentProperties::populate_linked_profiles_box()
     if (! current.empty()) {
         _emb_profiles_observer.set((*(current.begin()))->parent);
     }
-    std::set<SPObject *, _cmp> _current (current.begin(), current.end());
-    for (std::set<SPObject *, _cmp>::const_iterator it = _current.begin(); it != _current.end(); ++it) {
-        SPObject* obj = *it;
-        Inkscape::ColorProfile* prof = reinterpret_cast<Inkscape::ColorProfile*>(obj);
+
+    std::set<Inkscape::ColorProfile *, Inkscape::ColorProfile::pointerComparator> _current;
+    std::transform(current.begin(),
+                   current.end(),
+                   std::inserter(_current, _current.begin()),
+                   static_caster<SPObject, Inkscape::ColorProfile>());
+
+    for (auto &profile: _current) {
         Gtk::TreeModel::Row row = *(_LinkedProfilesListStore->append());
-        row[_LinkedProfilesListColumns.nameColumn] = prof->name;
+        row[_LinkedProfilesListColumns.nameColumn] = profile->name;
 //        row[_LinkedProfilesListColumns.previewColumn] = "Color Preview";
     }
 }
