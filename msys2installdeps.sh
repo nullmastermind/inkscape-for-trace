@@ -46,7 +46,8 @@ $ARCH-gtk2 \
 $ARCH-gtkmm \
 $ARCH-gtk3 \
 $ARCH-gtkmm3 \
-$ARCH-gdl
+$ARCH-gdl \
+$ARCH-libsoup
 
 # install Inkscape dependecies (optional)
 eval pacman -S --needed --noconfirm \

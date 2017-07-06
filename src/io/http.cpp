@@ -87,7 +87,7 @@ void _get_file_callback(SoupSession *session, SoupMessage *msg, gpointer user_da
  *        your func will be called in a blocking way BEFORE this function returns.
  *
  */
-Glib::ustring get_file(Glib::ustring uri, uint timeout, callback func) {
+Glib::ustring get_file(Glib::ustring uri, unsigned int timeout, callback func) {
 
     SoupURI *s_uri = soup_uri_new(uri.c_str());
     const char *host = soup_uri_get_host(s_uri);
