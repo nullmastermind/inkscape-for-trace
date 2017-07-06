@@ -125,7 +125,7 @@ Glib::ustring get_file(Glib::ustring uri, uint timeout, callback func) {
 
     // Only then do we get the http request
     SoupMessage *msg = soup_message_new_from_uri("GET", s_uri);
-    SoupSession *session = soup_session_sync_new();
+    SoupSession *session = soup_session_new();
 
 #ifdef DEBUG_HTTP
     SoupLogger *logger;
