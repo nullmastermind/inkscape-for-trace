@@ -12,7 +12,6 @@
 #include "glyphs.h"
 
 #include <glibmm/i18n.h>
-#include <gtkmm/alignment.h>
 #include <gtkmm/comboboxtext.h>
 #include <gtkmm/grid.h>
 #include <gtkmm/iconview.h>
@@ -356,7 +355,7 @@ GlyphsPanel::GlyphsPanel(gchar const *prefsPath) :
 
         table->attach( *Gtk::manage(label), 0, row, 1, 1);
 
-        scriptCombo = new Gtk::ComboBoxText();
+        scriptCombo = Gtk::manage(new Gtk::ComboBoxText());
         for (std::map<GUnicodeScript, Glib::ustring>::iterator it = getScriptToName().begin(); it != getScriptToName().end(); ++it)
         {
             scriptCombo->append(it->second);
@@ -365,11 +364,11 @@ GlyphsPanel::GlyphsPanel(gchar const *prefsPath) :
         scriptCombo->set_active_text(getScriptToName()[G_UNICODE_SCRIPT_INVALID_CODE]);
         sigc::connection conn = scriptCombo->signal_changed().connect(sigc::mem_fun(*this, &GlyphsPanel::rebuild));
         instanceConns.push_back(conn);
-        Gtk::Alignment *align = Gtk::manage(new Gtk::Alignment(Gtk::ALIGN_START, Gtk::ALIGN_START, 0.0, 0.0));
-        align->add(*Gtk::manage(scriptCombo));
 
-        align->set_hexpand();
-        table->attach( *align, 1, row, 1, 1);
+        scriptCombo->set_halign(Gtk::ALIGN_START);
+        scriptCombo->set_valign(Gtk::ALIGN_START);
+        scriptCombo->set_hexpand();
+        table->attach(*scriptCombo, 1, row, 1, 1);
     }
 
     row++;
@@ -380,7 +379,7 @@ GlyphsPanel::GlyphsPanel(gchar const *prefsPath) :
         auto label = new Gtk::Label(_("Range: "));
         table->attach( *Gtk::manage(label), 0, row, 1, 1);
 
-        rangeCombo = new Gtk::ComboBoxText();
+        rangeCombo = Gtk::manage(new Gtk::ComboBoxText());
         for ( std::vector<NamedRange>::iterator it = getRanges().begin(); it != getRanges().end(); ++it ) {
             rangeCombo->append(it->second);
         }
@@ -388,10 +387,11 @@ GlyphsPanel::GlyphsPanel(gchar const *prefsPath) :
         rangeCombo->set_active_text(getRanges()[1].second);
         sigc::connection conn = rangeCombo->signal_changed().connect(sigc::mem_fun(*this, &GlyphsPanel::rebuild));
         instanceConns.push_back(conn);
-        Gtk::Alignment *align = new Gtk::Alignment(Gtk::ALIGN_START, Gtk::ALIGN_START, 0.0, 0.0);
-        align->add(*Gtk::manage(rangeCombo));
-        align->set_hexpand();
-        table->attach( *Gtk::manage(align), 1, row, 1, 1);
+
+        rangeCombo->set_halign(Gtk::ALIGN_START);
+        rangeCombo->set_valign(Gtk::ALIGN_START);
+        rangeCombo->set_hexpand();
+        table->attach(*rangeCombo, 1, row, 1, 1);
     }
 
     row++;

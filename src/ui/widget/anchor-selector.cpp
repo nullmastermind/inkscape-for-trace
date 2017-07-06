@@ -28,9 +28,9 @@ void AnchorSelector::setupButton(const Glib::ustring& icon, Gtk::ToggleButton& b
 }
 
 AnchorSelector::AnchorSelector()
-	: Gtk::Alignment(0.5, 0, 0, 0),
-	  _container()
+	: _container()
 {
+    set_halign(Gtk::ALIGN_CENTER);
 	setupButton(INKSCAPE_ICON("boundingbox_top_left"),     _buttons[0]);
 	setupButton(INKSCAPE_ICON("boundingbox_top"),          _buttons[1]);
 	setupButton(INKSCAPE_ICON("boundingbox_top_right"),    _buttons[2]);

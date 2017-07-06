@@ -24,7 +24,6 @@
 #include <glibmm/timer.h>
 #include <glibmm/main.h>
 
-#include <gtkmm/alignment.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/frame.h>
 #include "ui/widget/frame.h"
@@ -197,12 +196,11 @@ IconPreviewPanel::IconPreviewPanel() :
 
         buttons[i]->signal_clicked().connect( sigc::bind<int>( sigc::mem_fun(*this, &IconPreviewPanel::on_button_clicked), i) );
 
-
-        Gtk::Alignment *align = Gtk::manage(new Gtk::Alignment(0.5, 0.5, 0, 0));
-        align->add(*buttons[i]);
+        buttons[i]->set_halign(Gtk::ALIGN_CENTER);
+        buttons[i]->set_valign(Gtk::ALIGN_CENTER);
 
         if ( !pack || ( (avail == 0) && (previous == 0) ) ) {
-            verts->pack_end(*align, Gtk::PACK_SHRINK);
+            verts->pack_end(*(buttons[i]), Gtk::PACK_SHRINK);
             previous = sizes[i];
             avail = sizes[i];
         } else {
@@ -219,12 +217,12 @@ IconPreviewPanel::IconPreviewPanel() :
                     avail = previous;
                     verts->pack_end(*horiz, Gtk::PACK_SHRINK);
                 }
-                horiz->pack_start(*align, Gtk::PACK_EXPAND_WIDGET);
+                horiz->pack_start(*(buttons[i]), Gtk::PACK_EXPAND_WIDGET);
                 avail -= sizes[i];
                 avail -= pad; // a little extra for padding
             } else {
                 horiz = 0;
-                verts->pack_end(*align, Gtk::PACK_SHRINK);
+                verts->pack_end(*(buttons[i]), Gtk::PACK_SHRINK);
             }
         }
     }

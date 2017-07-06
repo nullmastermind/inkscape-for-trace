@@ -14,7 +14,7 @@
  #include "config.h"
 #endif
 
-#include <gtkmm/alignment.h>
+#include <gtkmm/bin.h>
 #include <gtkmm/togglebutton.h>
 #include <gtkmm/grid.h>
 
@@ -22,7 +22,7 @@ namespace Inkscape {
 namespace UI {
 namespace Widget {
 
-class AnchorSelector : public Gtk::Alignment
+class AnchorSelector : public Gtk::Bin
 {
 private:
 	Gtk::ToggleButton  _buttons[9];

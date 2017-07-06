@@ -11,7 +11,6 @@
 #include "template-widget.h"
 
 #include <glibmm/miscutils.h>
-#include <gtkmm/alignment.h>
 #include <gtkmm/messagedialog.h>
 
 #include "desktop.h"
@@ -42,10 +41,9 @@ TemplateWidget::TemplateWidget()
     
     _short_description_label.set_line_wrap(true);
 
-    Gtk::Alignment *align;
-    align = Gtk::manage(new Gtk::Alignment(Gtk::ALIGN_END, Gtk::ALIGN_CENTER, 0.0, 0.0));
-    pack_end(*align, Gtk::PACK_SHRINK);
-    align->add(_more_info_button);
+    _more_info_button.set_halign(Gtk::ALIGN_END);
+    _more_info_button.set_valign(Gtk::ALIGN_CENTER);
+    pack_end(_more_info_button, Gtk::PACK_SHRINK);
     
     pack_end(_short_description_label, Gtk::PACK_SHRINK, 5);
     

@@ -15,9 +15,6 @@
 #include "new-from-template.h"
 #include "file.h"
 
-#include <gtkmm/alignment.h>
-
-
 namespace Inkscape {
 namespace UI {
 
@@ -32,13 +29,16 @@ NewFromTemplate::NewFromTemplate()
 
     get_content_area()->pack_start(*_main_widget);
    
-    Gtk::Alignment *align;
-    align = Gtk::manage(new Gtk::Alignment(Gtk::ALIGN_END, Gtk::ALIGN_CENTER, 0.0, 0.0));
+    _create_template_button.set_halign(Gtk::ALIGN_END);
+    _create_template_button.set_valign(Gtk::ALIGN_END);
 
-    get_content_area()->pack_end(*align, Gtk::PACK_SHRINK);
+#if WITH_GTKMM_3_12
+    _create_template_button.set_margin_end(15);
+#else
+    _create_template_button.set_margin_right(15);
+#endif
 
-    align->set_padding(0, 0, 0, 15);
-    align->add(_create_template_button);
+    get_content_area()->pack_end(_create_template_button, Gtk::PACK_SHRINK);
     
     _create_template_button.signal_clicked().connect(
     sigc::mem_fun(*this, &NewFromTemplate::_createFromTemplate));

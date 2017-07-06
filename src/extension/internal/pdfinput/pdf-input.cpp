@@ -31,7 +31,6 @@
 #include <poppler/glib/poppler-page.h>
 #endif
 
-#include <gtkmm/alignment.h>
 #include <gtkmm/checkbutton.h>
 #include <gtkmm/comboboxtext.h>
 #include <gtkmm/drawingarea.h>
