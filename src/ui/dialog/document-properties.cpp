@@ -228,8 +228,13 @@ inline void attach_all(Gtk::Grid &table, Gtk::Widget *const arr[], unsigned cons
                     // this sets the padding for subordinate widgets on the "Page" page
                     if( i==(n-8) || i==(n-10) ) {
                         arr[i+1]->set_hexpand();
+#if WITH_GTKMM_3_12
+                        arr[i+1]->set_margin_start(20);
+                        arr[i+1]->set_margin_end(20);
+#else
                         arr[i+1]->set_margin_left(20);
                         arr[i+1]->set_margin_right(20);
+#endif
 
                         if (yoptions & Gtk::EXPAND)
                             arr[i+1]->set_vexpand();
@@ -682,8 +687,13 @@ void DocumentProperties::build_cms()
 
     _link_btn.set_halign(Gtk::ALIGN_CENTER);
     _link_btn.set_valign(Gtk::ALIGN_CENTER);
+#if WITH_GTKMM_3_12
+    _link_btn.set_margin_start(2);
+    _link_btn.set_margin_end(2);
+#else
     _link_btn.set_margin_left(2);
     _link_btn.set_margin_right(2);
+#endif
     _page_cms->table().attach(_link_btn, 1, row, 1, 1);
 
     _unlink_btn.set_halign(Gtk::ALIGN_CENTER);
@@ -782,8 +792,15 @@ void DocumentProperties::build_scripting()
 
     _external_add_btn.set_halign(Gtk::ALIGN_CENTER);
     _external_add_btn.set_valign(Gtk::ALIGN_CENTER);
+
+#if WITH_GTKMM_3_12
+    _external_add_btn.set_margin_start(2);
+    _external_add_btn.set_margin_end(2);
+#else
     _external_add_btn.set_margin_left(2);
     _external_add_btn.set_margin_right(2);
+#endif
+
     _page_external_scripts->table().attach(_external_add_btn, 1, row, 1, 1);
 
     _external_remove_btn.set_halign(Gtk::ALIGN_CENTER);
