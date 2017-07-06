@@ -46,16 +46,19 @@ pkg_check_modules(INKSCAPE_DEP REQUIRED
 		  pangoft2
 		  fontconfig
 		  gsl
-		  gmodule-2.0)
+		  gmodule-2.0
+		  libsoup-2.4)
 
 list(APPEND INKSCAPE_LIBS ${INKSCAPE_DEP_LDFLAGS})
 list(APPEND INKSCAPE_INCS_SYS ${INKSCAPE_DEP_INCLUDE_DIRS})
 list(APPEND INKSCAPE_LIBS ${INKSCAPE_DEP_LIBRARIES})
+
 add_definitions(${INKSCAPE_DEP_CFLAGS_OTHER})
 
 if(APPLE AND DEFINED ENV{CMAKE_PREFIX_PATH})
     list(APPEND INKSCAPE_LIBS "-L$ENV{CMAKE_PREFIX_PATH}/lib")
 endif()
+
 
 if(WITH_GNOME_VFS)
     find_package(GnomeVFS2)

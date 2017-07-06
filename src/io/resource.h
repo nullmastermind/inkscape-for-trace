@@ -17,6 +17,7 @@
 #ifndef SEEN_INKSCAPE_IO_RESOURCE_H
 #define SEEN_INKSCAPE_IO_RESOURCE_H
 
+#include <vector>
 #include <glibmm/ustring.h>
 #include "util/share.h"
 

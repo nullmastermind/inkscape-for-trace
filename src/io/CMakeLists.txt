@@ -7,6 +7,7 @@ set(io_SRC
 	resource.cpp
 	stringstream.cpp
 	sys.cpp
+	http.cpp
 	uristream.cpp
 	xsltstream.cpp
 
@@ -19,6 +20,7 @@ set(io_SRC
 	resource.h
 	stringstream.h
 	sys.h
+	http.h
 	uristream.h
 	xsltstream.h
 )
