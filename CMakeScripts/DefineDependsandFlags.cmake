@@ -1,4 +1,3 @@
-
 set(INKSCAPE_LIBS "")
 set(INKSCAPE_INCS "")
 set(INKSCAPE_INCS_SYS "")
@@ -47,7 +46,7 @@ pkg_check_modules(INKSCAPE_DEP REQUIRED
 		  fontconfig
 		  gsl
 		  gmodule-2.0
-		  libsoup-2.4 >= 2.42)
+		  libsoup-2.4>=2.42)
 
 list(APPEND INKSCAPE_LIBS ${INKSCAPE_DEP_LDFLAGS})
 list(APPEND INKSCAPE_INCS_SYS ${INKSCAPE_DEP_INCLUDE_DIRS})
