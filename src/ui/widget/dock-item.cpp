@@ -42,12 +42,10 @@ DockItem::DockItem(Dock& dock, const Glib::ustring& name, const Glib::ustring& l
     if (!icon_name.empty()) {
         Glib::RefPtr<Gtk::IconTheme> iconTheme = Gtk::IconTheme::get_default();
 
-        if ( iconTheme->has_icon(icon_name) ) {
-            int width = 0;
-            int height = 0;
-            Gtk::IconSize::lookup(Gtk::ICON_SIZE_MENU, width, height);
-            _icon_pixbuf = iconTheme->load_icon(icon_name, width);
-        }
+        int width = 0;
+        int height = 0;
+        Gtk::IconSize::lookup(Gtk::ICON_SIZE_MENU, width, height);
+        _icon_pixbuf = iconTheme->load_icon(icon_name, width);
     }
 
     if ( _icon_pixbuf ) {

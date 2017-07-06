@@ -36,13 +36,8 @@ InsertOrderIcon::InsertOrderIcon() :
     phys=width;
 
     Glib::RefPtr<Gtk::IconTheme> icon_theme = Gtk::IconTheme::get_default();
-
-    if (icon_theme->has_icon(_pixTopName)) {
-        _property_pixbuf_top = icon_theme->load_icon(_pixTopName, phys, (Gtk::IconLookupFlags)0);
-    }
-    if (icon_theme->has_icon(_pixBottomName)) {
-        _property_pixbuf_bottom = icon_theme->load_icon(_pixBottomName, phys, (Gtk::IconLookupFlags)0);
-    }
+    _property_pixbuf_top = icon_theme->load_icon(_pixTopName, phys, (Gtk::IconLookupFlags)0);
+    _property_pixbuf_bottom = icon_theme->load_icon(_pixBottomName, phys, (Gtk::IconLookupFlags)0);
 
     property_pixbuf() = Glib::RefPtr<Gdk::Pixbuf>(0);
 }

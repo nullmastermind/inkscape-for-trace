@@ -42,16 +42,9 @@ ClipMaskIcon::ClipMaskIcon() :
     phys = width;
 
     Glib::RefPtr<Gtk::IconTheme> icon_theme = Gtk::IconTheme::get_default();
-
-    if (icon_theme->has_icon(_pixClipName)) {
-        _property_pixbuf_clip = icon_theme->load_icon(_pixClipName, phys, (Gtk::IconLookupFlags)0);
-    }
-    if (icon_theme->has_icon(_pixMaskName)) {
-        _property_pixbuf_mask = icon_theme->load_icon(_pixMaskName, phys, (Gtk::IconLookupFlags)0);
-    }
-    if (icon_theme->has_icon(_pixBothName)) {
-        _property_pixbuf_both = icon_theme->load_icon(_pixBothName, phys, (Gtk::IconLookupFlags)0);
-    }
+    _property_pixbuf_clip = icon_theme->load_icon(_pixClipName, phys, (Gtk::IconLookupFlags)0);
+    _property_pixbuf_mask = icon_theme->load_icon(_pixMaskName, phys, (Gtk::IconLookupFlags)0);
+    _property_pixbuf_both = icon_theme->load_icon(_pixBothName, phys, (Gtk::IconLookupFlags)0);
 
     property_pixbuf() = Glib::RefPtr<Gdk::Pixbuf>(0);
 }
