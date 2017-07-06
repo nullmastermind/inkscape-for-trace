@@ -153,21 +153,19 @@ private:
     Gtk::Label _nameHeader;
 
     /* Composite Settings */
-    Gtk::VBox       _composite_vbox;
-    Gtk::VBox       _opacity_vbox;
-    Gtk::HBox       _opacity_hbox;
+    Gtk::Box        _composite_vbox;
+    Gtk::Box        _opacity_vbox;
+    Gtk::Box        _opacity_hbox;
     Gtk::Label      _opacity_label;
     Gtk::Label      _opacity_label_unit;
     Glib::RefPtr<Gtk::Adjustment> _opacity_adjustment;
-    Gtk::HScale     _opacity_hscale;
+    Gtk::Scale      _opacity_hscale;
     Inkscape::UI::Widget::SpinButton _opacity_spin_button;
     
     Inkscape::UI::Widget::SimpleFilterModifier _fe_cb;
-    Gtk::VBox       _fe_vbox;
-    Gtk::Alignment  _fe_alignment;
+    Gtk::Box        _fe_vbox;
     Inkscape::UI::Widget::SimpleFilterModifier _fe_blur;
-    Gtk::VBox       _blur_vbox;
-    Gtk::Alignment  _blur_alignment;
+    Gtk::Box        _blur_vbox;
 
     Gtk::Dialog _colorSelectorDialog;
     boost::scoped_ptr<Inkscape::UI::SelectedColor> _selectedColor;

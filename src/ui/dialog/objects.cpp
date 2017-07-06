@@ -1651,19 +1651,17 @@ ObjectsPanel::ObjectsPanel() :
     _clipmaskHeader(C_("Clip and mask", "CM")),
     _highlightHeader(C_("Highlight", "HL")),
     _nameHeader(_("Label")),
-    _composite_vbox(false, 0),
-    _opacity_vbox(false, 0),
+    _composite_vbox(Gtk::ORIENTATION_VERTICAL),
+    _opacity_vbox(Gtk::ORIENTATION_VERTICAL),
     _opacity_label(_("Opacity:")),
     _opacity_label_unit(_("%")),
     _opacity_adjustment(Gtk::Adjustment::create(100.0, 0.0, 100.0, 1.0, 1.0, 0.0)),
     _opacity_hscale(_opacity_adjustment),
     _opacity_spin_button(_opacity_adjustment, 0.01, 1),
     _fe_cb(UI::Widget::SimpleFilterModifier::BLEND),
-    _fe_vbox(false, 0),
-    _fe_alignment(1, 1, 1, 1),
+    _fe_vbox(Gtk::ORIENTATION_VERTICAL),
     _fe_blur(UI::Widget::SimpleFilterModifier::BLUR),
-    _blur_vbox(false, 0),
-    _blur_alignment(1, 1, 1, 1),
+    _blur_vbox(Gtk::ORIENTATION_VERTICAL),
     _colorSelectorDialog("dialogs.colorpickerwindow")
 {
     //Create the tree model and store
@@ -1800,16 +1798,33 @@ ObjectsPanel::ObjectsPanel() :
     //Set up the compositing items
     //Blend mode filter effect
     _composite_vbox.pack_start(_fe_vbox, false, false, 2);
-    _fe_alignment.set_padding(0, 0, 4, 0);
-    _fe_alignment.add(_fe_cb);
-    _fe_vbox.pack_start(_fe_alignment, false, false, 0);
+
+    _fe_cb.set_halign(Gtk::ALIGN_FILL);
+    _fe_cb.set_valign(Gtk::ALIGN_END);
+
+#if WITH_GTKMM_3_12
+    _fe_cb.set_margin_start(4);
+#else
+    _fe_cb.set_margin_left(4);
+#endif
+
+    _fe_vbox.pack_start(_fe_cb, false, false, 0);
     _blendConnection = _fe_cb.signal_blend_blur_changed().connect(sigc::mem_fun(*this, &ObjectsPanel::_blendValueChanged));
 
     //Blur filter effect
     _composite_vbox.pack_start(_blur_vbox, false, false, 2);
-    _blur_alignment.set_padding(0, 0, 4, 0);
-    _blur_alignment.add(_fe_blur);
-    _blur_vbox.pack_start(_blur_alignment, false, false, 0);
+
+    _fe_blur.set_hexpand();
+    _fe_blur.set_halign(Gtk::ALIGN_FILL);
+    _fe_blur.set_valign(Gtk::ALIGN_END);
+    
+#if WITH_GTKMM_3_12
+    _fe_blur.set_margin_start(4);
+#else
+    _fe_blur.set_margin_left(4);
+#endif
+
+    _blur_vbox.pack_start(_fe_blur, false, false, 0);
     _blurConnection = _fe_blur.signal_blend_blur_changed().connect(sigc::mem_fun(*this, &ObjectsPanel::_blurValueChanged));
     
     //Opacity

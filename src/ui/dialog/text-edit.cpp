@@ -58,7 +58,6 @@ namespace Dialog {
 TextEdit::TextEdit()
     : UI::Widget::Panel("", "/dialogs/textandfont", SP_VERB_DIALOG_TEXT),
       font_label(_("_Font"), true),
-      layout_frame(),
       text_label(_("_Text"), true),
       vari_label(_("_Variants"), true),
       setasdefault_button(_("Set as _default")),
@@ -128,7 +127,6 @@ TextEdit::TextEdit()
     preview_label.set_line_wrap(FALSE);
 
     font_vbox.pack_start(fontsel_hbox, true, true);
-    font_vbox.pack_start(layout_frame, false, false, VB_MARGIN);
     font_vbox.pack_start(preview_label, true, true, VB_MARGIN);
 
     /* Text tab */
