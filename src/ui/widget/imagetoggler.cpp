@@ -37,14 +37,8 @@ ImageToggler::ImageToggler( char const* on, char const* off) :
     int phys = width;
 
     Glib::RefPtr<Gtk::IconTheme> icon_theme = Gtk::IconTheme::get_default();
-
-
-    if (icon_theme->has_icon(_pixOnName)) {
-        _property_pixbuf_on = icon_theme->load_icon(_pixOnName, phys, (Gtk::IconLookupFlags)0);
-    }
-    if (icon_theme->has_icon(_pixOffName)) {
-        _property_pixbuf_off = icon_theme->load_icon(_pixOffName, phys, (Gtk::IconLookupFlags)0);
-    }
+    _property_pixbuf_on  = icon_theme->load_icon(_pixOnName,  phys, (Gtk::IconLookupFlags)0);
+    _property_pixbuf_off = icon_theme->load_icon(_pixOffName, phys, (Gtk::IconLookupFlags)0);
 
     property_pixbuf() = _property_pixbuf_off.get_value();
 }
