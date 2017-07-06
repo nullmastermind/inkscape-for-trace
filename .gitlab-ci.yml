@@ -36,7 +36,7 @@ inkscape:mac:
     # Tools
     - brew install cmake intltool libtool pkg-config ccache
     # Libraries
-    - brew install bdw-gc boost gdl gettext gsl gtkmm3 libcdr libvisio libwpg pango popt poppler potrace
+    - brew install bdw-gc boost gdl gettext gsl gtkmm3 libcdr libvisio libwpg pango popt poppler potrace libsoup
     # Testing tools
     # TODO
     # Cleanup
