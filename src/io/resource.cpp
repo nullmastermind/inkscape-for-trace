@@ -278,10 +278,10 @@ char *profile_path(const char *filename)
 #ifdef WIN32
         // prefer c:\Documents and Settings\UserName\Application Data\ to c:\Documents and Settings\userName\;
         // TODO: CSIDL_APPDATA is C:\Users\UserName\AppData\Roaming these days
-        //       should we switch to AppData\Local? Then we can simply use the portable g_get_user_config_dir()
+        //       should we migrate to AppData\Local? Then we can simply use the portable g_get_user_config_dir()
         if (!prefdir) {
             ITEMIDLIST *pidl = 0;
-            if ( SHGetSpecialFolderLocation( NULL, CSIDL_APPDATA, &pidl ) == NOERROR ) {
+            if ( SHGetFolderLocation( NULL, CSIDL_APPDATA, NULL, 0, &pidl ) == S_OK ) {
                 gchar * utf8Path = NULL;
 
                 {
