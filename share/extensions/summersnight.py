@@ -43,6 +43,15 @@ class Project(inkex.Effect):
 
         #obj is selected second
         scale = self.unittouu('1px')    # convert to document units
+        doc = self.document.getroot()
+        h = self.unittouu(doc.xpath('@height', namespaces=inkex.NSS)[0])
+        # process viewBox height attribute to correct page scaling
+        viewBox = doc.get('viewBox')
+        if viewBox:
+            viewBox2 = viewBox.split(',')
+            if len(viewBox2) < 4:
+                viewBox2 = viewBox.split(' ')
+            scale *= self.unittouu(self.addDocumentUnit(viewBox2[3])) / h
         obj = self.selected[self.options.ids[0]]
         trafo = self.selected[self.options.ids[1]]
         if obj.get(inkex.addNS('type','sodipodi')):
