@@ -153,7 +153,7 @@ endif()
 # -----------------------------------------------------------------------------
 if(EXISTS ${CMAKE_SOURCE_DIR}/.git/)
     execute_process(
-        COMMAND git log -n 1 --pretty=%ad --date=short
+        COMMAND git log -n 1 --pretty=%cd --date=short
         WORKING_DIRECTORY "${INKSCAPE_SOURCE_DIR}"
         OUTPUT_VARIABLE INKSCAPE_REVISION
         OUTPUT_STRIP_TRAILING_WHITESPACE)
