@@ -52,38 +52,6 @@
 #include "ege-color-prof-tracker.h"
 #include "helper/sp-marshal.h"
 
-/*
-#define GDK_ROOT_WINDOW()             (gdk_x11_get_default_root_xwindow ())
-#define GDK_DISPLAY()                 gdk_display
-#define             GDK_WINDOW_XDISPLAY(win)
-#define             GDK_WINDOW_XID(win)
-#define             GDK_DISPLAY_XDISPLAY(display)
-#define             GDK_SCREEN_XDISPLAY(screen)
-#define             GDK_SCREEN_XNUMBER(screen)
-#define             GDK_SCREEN_XSCREEN(screen)
-
-#define             GDK_WINDOW_XWINDOW
-#define             GDK_DRAWABLE_XID(win)
-
-GdkWindow*          gdk_window_lookup                   (GdkNativeWindow anid);
-GdkWindow*          gdk_window_lookup_for_display       (GdkDisplay *display,
-                                                         GdkNativeWindow anid);
-
-GdkDisplay*         gdk_x11_lookup_xdisplay             (Display *xdisplay);
-
-Display*            gdk_x11_display_get_xdisplay        (GdkDisplay *display);
-
-Window              gdk_x11_get_default_root_xwindow    (void);
-gint                gdk_x11_get_default_screen          (void);
-Display*            gdk_x11_get_default_xdisplay        (void);
-int                 gdk_x11_screen_get_screen_number    (GdkScreen *screen);
-Screen*             gdk_x11_screen_get_xscreen          (GdkScreen *screen);
-
-const gchar*        gdk_x11_get_xatom_name              (Atom xatom);
-const gchar*        gdk_x11_get_xatom_name_for_display  (GdkDisplay *display,
-                                                         Atom xatom);
- */
-
 enum {
     CHANGED = 0,
     ADDED,
@@ -708,3 +676,13 @@ static void set_profile( GdkScreen* screen, guint monitor, const guint8* data, g
     }
 }
 #endif /* GDK_WINDOWING_X11 */
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
