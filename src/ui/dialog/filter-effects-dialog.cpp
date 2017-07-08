@@ -2649,8 +2649,10 @@ FilterEffectsDialog::FilterEffectsDialog()
     hpaned->pack2(*_primitive_box);
     _getContents()->add(*hpaned);
     
-    _infobox_icon.set_alignment(0, 0);
-    _infobox_desc.set_alignment(0, 0);
+    _infobox_icon.set_halign(Gtk::ALIGN_START);
+    _infobox_icon.set_valign(Gtk::ALIGN_START);
+    _infobox_desc.set_halign(Gtk::ALIGN_START);
+    _infobox_desc.set_valign(Gtk::ALIGN_START);
     _infobox_desc.set_justify(Gtk::JUSTIFY_LEFT);
     _infobox_desc.set_line_wrap(true);
     _infobox_desc.set_size_request(200, -1);

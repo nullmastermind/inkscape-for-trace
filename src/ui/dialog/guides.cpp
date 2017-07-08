@@ -167,10 +167,12 @@ void GuidelinePropertiesDialog::_setup() {
     mainVBox->pack_start(_layout_table, false, false, 0);
 
     _label_name.set_label("foo0");
-    _label_name.set_alignment(0, 0.5);
+    _label_name.set_halign(Gtk::ALIGN_START);
+    _label_name.set_valign(Gtk::ALIGN_CENTER);
 
     _label_descr.set_label("foo1");
-    _label_descr.set_alignment(0, 0.5);
+    _label_descr.set_halign(Gtk::ALIGN_START);
+    _label_descr.set_valign(Gtk::ALIGN_CENTER);
     
     _label_name.set_halign(Gtk::ALIGN_FILL);
     _label_name.set_valign(Gtk::ALIGN_FILL);

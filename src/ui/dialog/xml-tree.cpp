@@ -86,7 +86,8 @@ XmlTree::XmlTree (void) :
     contents->set_spacing(0);
     contents->set_size_request(320, 260);
 
-    status.set_alignment( 0.0, 0.5);
+    status.set_halign(Gtk::ALIGN_START);
+    status.set_valign(Gtk::ALIGN_CENTER);
     status.set_size_request(1, -1);
     status.set_markup("");
     status.set_line_wrap(true);

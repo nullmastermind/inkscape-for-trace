@@ -1829,7 +1829,8 @@ ObjectsPanel::ObjectsPanel() :
     
     //Opacity
     _composite_vbox.pack_start(_opacity_vbox, false, false, 2);
-    _opacity_label.set_alignment(Gtk::ALIGN_END, Gtk::ALIGN_CENTER);
+    _opacity_label.set_halign(Gtk::ALIGN_END);
+    _opacity_label.set_valign(Gtk::ALIGN_CENTER);
     _opacity_hbox.pack_start(_opacity_label, false, false, 3);
     _opacity_vbox.pack_start(_opacity_hbox, false, false, 0);
     _opacity_hbox.pack_start(_opacity_hscale, true, true, 0);

@@ -113,9 +113,9 @@ DocumentMetadata::build_metadata()
 
     Gtk::Label *label = Gtk::manage (new Gtk::Label);
     label->set_markup (_("<b>Dublin Core Entities</b>"));
-    label->set_alignment (0.0);
-
+    label->set_halign(Gtk::ALIGN_START);
     label->set_valign(Gtk::ALIGN_CENTER);
+
     _page_metadata1.attach(*label, 0, 0, 3, 1);
 
      /* add generic metadata entry areas */
@@ -145,7 +145,7 @@ DocumentMetadata::build_metadata()
     row = 0;
     Gtk::Label *llabel = Gtk::manage (new Gtk::Label);
     llabel->set_markup (_("<b>License</b>"));
-    llabel->set_alignment (0.0);
+    llabel->set_halign(Gtk::ALIGN_START);
     llabel->set_valign(Gtk::ALIGN_CENTER);
     _page_metadata2.attach(*llabel, 0, row, 3, 1);
 

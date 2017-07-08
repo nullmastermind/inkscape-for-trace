@@ -559,7 +559,8 @@ Gtk::Widget* ColorItem::getPreview(PreviewStyle style, ViewType view, ::PreviewS
     Gtk::Widget* widget = 0;
     if ( style == PREVIEW_STYLE_BLURB) {
         Gtk::Label *lbl = new Gtk::Label(def.descr);
-        lbl->set_alignment(Gtk::ALIGN_START, Gtk::ALIGN_CENTER);
+        lbl->set_halign(Gtk::ALIGN_START);
+        lbl->set_valign(Gtk::ALIGN_CENTER);
         widget = lbl;
     } else {
         GtkWidget* eekWidget = eek_preview_new();

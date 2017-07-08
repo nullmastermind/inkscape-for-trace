@@ -264,13 +264,13 @@ inline void attach_all(Gtk::Grid &table, Gtk::Widget *const arr[], unsigned cons
                 }
             } else if (arr[i]) {
                 Gtk::Label& label = reinterpret_cast<Gtk::Label&>(*arr[i]);
-                label.set_alignment (0.0);
 
                 label.set_hexpand();
+                label.set_halign(Gtk::ALIGN_START);
                 label.set_valign(Gtk::ALIGN_CENTER);
                 table.attach(label, 0, r, 3, 1);
             } else {
-                Gtk::HBox *space = Gtk::manage (new Gtk::HBox);
+                auto space = Gtk::manage (new Gtk::Box);
                 space->set_size_request (SPACE_SIZE_X, SPACE_SIZE_Y);
 
                 space->set_halign(Gtk::ALIGN_CENTER);
@@ -650,9 +650,8 @@ void DocumentProperties::build_cms()
     _page_cms->set_spacing(4);
     gint row = 0;
 
-    label_link->set_alignment(0.0);
-
     label_link->set_hexpand();
+    label_link->set_halign(Gtk::ALIGN_START);
     label_link->set_valign(Gtk::ALIGN_CENTER);
     _page_cms->table().attach(*label_link, 0, row, 3, 1);
 
@@ -673,9 +672,8 @@ void DocumentProperties::build_cms()
 
     row++;
 
-    label_avail->set_alignment(0.0);
-
     label_avail->set_hexpand();
+    label_avail->set_halign(Gtk::ALIGN_START);
     label_avail->set_valign(Gtk::ALIGN_CENTER);
     _page_cms->table().attach(*label_avail, 0, row, 3, 1);
 
@@ -764,8 +762,8 @@ void DocumentProperties::build_scripting()
     _page_external_scripts->set_spacing(4);
     gint row = 0;
 
-    label_external->set_alignment(0.0);
     label_external->set_hexpand();
+    label_external->set_halign(Gtk::ALIGN_START);
     label_external->set_valign(Gtk::ALIGN_CENTER);
     _page_external_scripts->table().attach(*label_external, 0, row, 3, 1);
 
@@ -833,8 +831,8 @@ void DocumentProperties::build_scripting()
     _page_embedded_scripts->set_spacing(4);
     row = 0;
 
-    label_embedded->set_alignment(0.0);
     label_embedded->set_hexpand();
+    label_embedded->set_halign(Gtk::ALIGN_START);
     label_embedded->set_valign(Gtk::ALIGN_CENTER);
     _page_embedded_scripts->table().attach(*label_embedded, 0, row, 3, 1);
 
@@ -871,8 +869,8 @@ void DocumentProperties::build_scripting()
     Gtk::Label *label_embedded_content= Gtk::manage (new Gtk::Label("", Gtk::ALIGN_START));
     label_embedded_content->set_markup (_("<b>Content:</b>"));
 
-    label_embedded_content->set_alignment(0.0);
     label_embedded_content->set_hexpand();
+    label_embedded_content->set_halign(Gtk::ALIGN_START);
     label_embedded_content->set_valign(Gtk::ALIGN_CENTER);
     _page_embedded_scripts->table().attach(*label_embedded_content, 0, row, 3, 1);
 
@@ -940,8 +938,7 @@ void DocumentProperties::build_metadata()
 
     Gtk::Label *label = Gtk::manage (new Gtk::Label);
     label->set_markup (_("<b>Dublin Core Entities</b>"));
-    label->set_alignment (0.0);
-
+    label->set_halign(Gtk::ALIGN_START);
     label->set_valign(Gtk::ALIGN_CENTER);
     _page_metadata1->table().attach (*label, 0,0,3,1);
 
@@ -987,8 +984,7 @@ void DocumentProperties::build_metadata()
     row = 0;
     Gtk::Label *llabel = Gtk::manage (new Gtk::Label);
     llabel->set_markup (_("<b>License</b>"));
-    llabel->set_alignment (0.0);
-
+    llabel->set_halign(Gtk::ALIGN_START);
     llabel->set_valign(Gtk::ALIGN_CENTER);
     _page_metadata2->table().attach(*llabel, 0, row, 3, 1);
 

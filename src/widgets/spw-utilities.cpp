@@ -42,7 +42,6 @@ Gtk::Label * spw_label(Gtk::Grid *table, const gchar *label_text, int col, int r
   {
     label_widget->set_text(label_text);
   }
-  label_widget->set_alignment(1.0, 0.5);
   label_widget->show();
 
   label_widget->set_hexpand();

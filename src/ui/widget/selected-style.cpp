@@ -146,11 +146,14 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
     _drop[0] = _drop[1] = 0;
     _dropEnabled[0] = _dropEnabled[1] = false;
 
-    _fill_label.set_alignment(0.0, 0.5);
+    _fill_label.set_halign(Gtk::ALIGN_START);
+    _fill_label.set_valign(Gtk::ALIGN_CENTER);
     _fill_label.set_padding(0, 0);
-    _stroke_label.set_alignment(0.0, 0.5);
+    _stroke_label.set_halign(Gtk::ALIGN_START);
+    _stroke_label.set_valign(Gtk::ALIGN_CENTER);
     _stroke_label.set_padding(0, 0);
-    _opacity_label.set_alignment(0.0, 0.5);
+    _opacity_label.set_halign(Gtk::ALIGN_START);
+    _opacity_label.set_valign(Gtk::ALIGN_CENTER);
     _opacity_label.set_padding(0, 0);
 
     _table.set_column_spacing(2);

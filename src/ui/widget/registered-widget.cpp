@@ -55,7 +55,11 @@ RegisteredCheckButton::RegisteredCheckButton (const Glib::ustring& label, const 
     Gtk::Label *l = new Gtk::Label (label);
     l->set_use_underline (true);
     add (*manage (l));
-    set_alignment (right? 1.0 : 0.0, 0.5);
+
+    if(right) set_halign(Gtk::ALIGN_END);
+    else      set_halign(Gtk::ALIGN_START);
+
+    set_valign(Gtk::ALIGN_CENTER);
     _toggled_connection = signal_toggled().connect (sigc::mem_fun (*this, &RegisteredCheckButton::on_toggled));
 }
 
@@ -107,7 +111,11 @@ RegisteredToggleButton::RegisteredToggleButton (const Glib::ustring& /*label*/, 
     init_parent(key, wr, repr_in, doc_in);
     setProgrammatically = false;
     set_tooltip_text (tip);
-    set_alignment (right? 1.0 : 0.0, 0.5);
+
+    if(right) set_halign(Gtk::ALIGN_END);
+    else      set_halign(Gtk::ALIGN_START);
+
+    set_valign(Gtk::ALIGN_CENTER);
     _toggled_connection = signal_toggled().connect (sigc::mem_fun (*this, &RegisteredToggleButton::on_toggled));
 }
 
