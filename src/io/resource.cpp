@@ -20,6 +20,10 @@
 #include "config.h"
 #endif
 
+#ifdef WIN32
+#include <shlobj.h> // for SHGetSpecialFolderLocation
+#endif
+
 #include <glibmm/miscutils.h>
 #include <glibmm/stringutils.h>
 #include <glibmm/fileutils.h>
@@ -271,9 +275,10 @@ char *profile_path(const char *filename)
             prefdir = g_strdup(userenv);
         }
 
-#ifdef HAS_SHGetSpecialFolderLocation
-        // prefer c:\Documents and Settings\UserName\Application Data\ to
-        // c:\Documents and Settings\userName\;
+#ifdef WIN32
+        // prefer c:\Documents and Settings\UserName\Application Data\ to c:\Documents and Settings\userName\;
+        // TODO: CSIDL_APPDATA is C:\Users\UserName\AppData\Roaming these days
+        //       should we switch to AppData\Local? Then we can simply use the portable g_get_user_config_dir()
         if (!prefdir) {
             ITEMIDLIST *pidl = 0;
             if ( SHGetSpecialFolderLocation( NULL, CSIDL_APPDATA, &pidl ) == NOERROR ) {
