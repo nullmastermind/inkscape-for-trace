@@ -62,8 +62,9 @@ EntityEntry::create (rdf_work_entity_t* ent, Registry& wr)
 }
 
 EntityEntry::EntityEntry (rdf_work_entity_t* ent, Registry& wr)
-: _label(Glib::ustring(_(ent->title)), 1.0, 0.5), _packable(0), 
-  _entity(ent), _wr(&wr)
+    : _label(Glib::ustring(_(ent->title)), Gtk::ALIGN_END),
+      _packable(0),
+      _entity(ent), _wr(&wr)
 {
 }
 

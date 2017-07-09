@@ -367,7 +367,7 @@ RegisteredColorPicker::RegisteredColorPicker(const Glib::ustring& label,
 {
     init_parent("", wr, repr_in, doc_in);
 
-    _label = new Gtk::Label (label, 1.0, 0.5);
+    _label = new Gtk::Label (label, Gtk::ALIGN_END);
     _label->set_use_underline (true);
     _label->set_mnemonic_widget (*this);
     _ckey = ckey;

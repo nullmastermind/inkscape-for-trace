@@ -21,7 +21,7 @@ namespace UI {
 namespace Widget {
 
 Frame::Frame(Glib::ustring const &label_text /*= ""*/, gboolean label_bold /*= TRUE*/ )
-    : _label(label_text, 1.0, 0.5, TRUE)
+    : _label(label_text, Gtk::ALIGN_END, Gtk::ALIGN_CENTER, true)
 {
     set_shadow_type(Gtk::SHADOW_NONE);
 

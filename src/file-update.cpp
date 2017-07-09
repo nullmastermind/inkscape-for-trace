@@ -371,15 +371,16 @@ void sp_file_convert_dpi(SPDocument *doc)
             choice2_1.show();
             choice2_2.show();
 
-            Gtk::Alignment balign(0, 0, 0, 0);
-            balign.set_padding (0, 0, 30, 0);
-            balign.show();
-            balign.add(b);
+            b.set_halign(Gtk::ALIGN_START);
+            b.set_valign(Gtk::ALIGN_START);
+            b.set_hexpand(false);
+            b.set_vexpand(false);
+            b.set_margin_start(30);
             Gtk::Box *content = scale_dialog.get_content_area();
             content->pack_start(explanation, false, false, 5);
             content->pack_start(choice1, false, false, 5);
             content->pack_start(choice2, false, false, 5);
-            content->pack_start(balign, false, false, 5);
+            content->pack_start(b,       false, false, 5);
             content->pack_start(backup_button, false, false, 5);
             Gtk::Button *ok_button = scale_dialog.add_button(_("OK"), GTK_RESPONSE_ACCEPT);
             backup_button.set_active(backup);
