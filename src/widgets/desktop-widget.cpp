@@ -233,8 +233,14 @@ SPDesktopWidget::window_get_pointer()
     gint x,y;
     auto window = gtk_widget_get_window(GTK_WIDGET(canvas));
     auto display = gdk_window_get_display(window);
+
+#if GTK_CHECK_VERSION(3,20,0)
+    auto seat = gdk_display_get_default_seat(display);
+    auto device = gdk_seat_get_pointer(seat);
+#else
     auto dm = gdk_display_get_device_manager(display);
     auto device = gdk_device_manager_get_client_pointer(dm);
+#endif
     gdk_window_get_device_position(window, device, &x, &y, NULL);
 
     return Geom::Point(x,y);
@@ -943,15 +949,35 @@ void sp_dtw_color_profile_event(EgeColorProfTracker */*tracker*/, SPDesktopWidge
     // Handle profile changes
     GdkScreen* screen = gtk_widget_get_screen(GTK_WIDGET(dtw));
     GdkWindow *window = gtk_widget_get_window(gtk_widget_get_toplevel(GTK_WIDGET(dtw)));
-    gint monitor = gdk_screen_get_monitor_at_window(screen, window);
-    Glib::ustring id = Inkscape::CMSSystem::getDisplayId( monitor );
+
+    // In old Gtk+ versions, we can directly find the ID number for a monitor.
+    // In Gtk+ >= 3.22, however, we need to figure out the ID
+# if GTK_CHECK_VERSION(3,22,0)
+    auto display = gdk_display_get_default();
+    auto monitor = gdk_display_get_monitor_at_window(display, window);
+
+    int n_monitors = gdk_display_get_n_monitors(display);
+
+    int monitorNum = -1;
+
+    // Now loop through the set of monitors and figure out whether this monitor matches
+    for (int i_monitor = 0; i_monitor < n_monitors; ++i_monitor) {
+        auto monitor_at_index = gdk_display_get_monitor(display, i_monitor);
+        if(monitor_at_index == monitor) monitorNum = i_monitor;
+    }
+# else // GTK_CHECK_VERSION(3,22,0)
+    GdkScreen* screen = gtk_widget_get_screen(widget);
+    gint monitorNum = gdk_screen_get_monitor_at_window(screen, window);
+# endif // GTK_CHECK_VERSION(3,22,0)
+
+    Glib::ustring id = Inkscape::CMSSystem::getDisplayId( monitorNum );
     bool enabled = false;
     dtw->canvas->_cms_key = id;
     dtw->requestCanvasUpdate();
     enabled = !dtw->canvas->_cms_key.empty();
     cms_adjust_set_sensitive( dtw, enabled );
 }
-#else
+#else // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 void sp_dtw_color_profile_event(EgeColorProfTracker */*tracker*/, SPDesktopWidget * /*dtw*/)
 {
 }
