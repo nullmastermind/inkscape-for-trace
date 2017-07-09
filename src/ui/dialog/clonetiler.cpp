@@ -2073,7 +2073,6 @@ void CloneTiler::apply()
     // set statusbar text
     gtk_label_set_markup (GTK_LABEL(_status), _("<small>Creating tiled clones...</small>"));
     gtk_widget_queue_draw(GTK_WIDGET(_status));
-    gdk_window_process_all_updates();
 
     SPObject *obj = selection->singleItem();
     if (!obj) {
