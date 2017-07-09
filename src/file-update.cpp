@@ -375,7 +375,13 @@ void sp_file_convert_dpi(SPDocument *doc)
             b.set_valign(Gtk::ALIGN_START);
             b.set_hexpand(false);
             b.set_vexpand(false);
+
+#if GTK_CHECK_VERSION(3,12,0)
             b.set_margin_start(30);
+#else
+            b.set_margin_left(30);
+#endif
+
             Gtk::Box *content = scale_dialog.get_content_area();
             content->pack_start(explanation, false, false, 5);
             content->pack_start(choice1, false, false, 5);
