@@ -68,15 +68,6 @@ std::set<cmsUInt32Number> knownColorspaces;
 
 #endif
 
-
-/**
- * Simple helper to allow bitwise or on GtkAttachOptions.
- */
-GtkAttachOptions operator|(GtkAttachOptions lhs, GtkAttachOptions rhs)
-{
-    return static_cast<GtkAttachOptions>(static_cast<int>(lhs) | static_cast<int>(rhs));
-}
-
 /**
  * Helper function to handle GTK2/GTK3 attachment #ifdef code.
  */
