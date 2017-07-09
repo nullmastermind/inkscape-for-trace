@@ -232,7 +232,7 @@ static void removeit( GtkWidget *widget, gpointer data )
     gtk_container_remove( GTK_CONTAINER(data), widget );
 }
 
-/* extern'ed from colot-item.cpp */
+/* extern'ed from color-item.cpp */
 gboolean colorItemHandleButtonPress( GtkWidget* widget, GdkEventButton* event, gpointer user_data );
 
 gboolean colorItemHandleButtonPress( GtkWidget* widget, GdkEventButton* event, gpointer user_data )
@@ -343,7 +343,11 @@ gboolean colorItemHandleButtonPress( GtkWidget* widget, GdkEventButton* event, g
                 }
                 gtk_widget_set_sensitive( popupSubHolder, processed );
 
+#if GTK_CHECK_VERSION(3,22,0)
+                gtk_menu_popup_at_pointer(GTK_MENU(popupMenu), reinterpret_cast<GdkEvent *>(event));
+#else
                 gtk_menu_popup(GTK_MENU(popupMenu), NULL, NULL, NULL, NULL, event->button, event->time);
+#endif
                 handled = TRUE;
             }
         }
