@@ -32,7 +32,7 @@ FilletChamferPropertiesDialog::FilletChamferPropertiesDialog()
       _position_visible(false),
       _close_button(_("_Cancel"), true)
 {
-    Gtk::Box *mainVBox = get_vbox();
+    Gtk::Box *mainVBox = get_content_area();
     mainVBox->set_homogeneous(false);
     _layout_table.set_row_spacing(4);
     _layout_table.set_column_spacing(4);

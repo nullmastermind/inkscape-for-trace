@@ -1987,7 +1987,7 @@ ObjectsPanel::ObjectsPanel() :
     _colorSelectorDialog.property_modal() = true;
     _selectedColor.reset(new Inkscape::UI::SelectedColor);
     Gtk::Widget *color_selector = Gtk::manage(new Inkscape::UI::Widget::ColorNotebook(*_selectedColor));
-    _colorSelectorDialog.get_vbox()->pack_start (
+    _colorSelectorDialog.get_content_area()->pack_start (
               *color_selector, true, true, 0);
 
     _selectedColor->signal_dragged.connect(sigc::mem_fun(*this, &ObjectsPanel::_highlightPickerColorMod));

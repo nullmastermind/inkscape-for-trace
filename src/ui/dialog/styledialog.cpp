@@ -882,12 +882,12 @@ void StyleDialog::_addSelector()
     textDialogPtr->add_button(_("Add"),    Gtk::RESPONSE_OK);
 
     Gtk::Entry *textEditPtr = manage ( new Gtk::Entry() );
-    textDialogPtr->get_vbox()->pack_start(*textEditPtr, Gtk::PACK_SHRINK);
+    textDialogPtr->get_content_area()->pack_start(*textEditPtr, Gtk::PACK_SHRINK);
 
     Gtk::Label *textLabelPtr = manage ( new Gtk::Label(
       _("Invalid entry: Not an id (#), class (.), or element CSS selector.")
     ) );
-    textDialogPtr->get_vbox()->pack_start(*textLabelPtr, Gtk::PACK_SHRINK);
+    textDialogPtr->get_content_area()->pack_start(*textLabelPtr, Gtk::PACK_SHRINK);
 
     /**
      * By default, the entrybox contains 'Class1' as text. However, if object(s)
