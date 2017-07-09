@@ -64,7 +64,6 @@ static void ege_color_prof_tracker_get_property( GObject* obj, guint propId, GVa
 static void ege_color_prof_tracker_set_property( GObject* obj, guint propId, const GValue *value, GParamSpec* pspec );
 
 typedef struct _ScreenTrack {
-    GdkScreen* screen;
 #ifdef GDK_WINDOWING_X11
     gboolean zeroSeen;
     gboolean otherSeen;
@@ -76,15 +75,17 @@ typedef struct _ScreenTrack {
 #ifdef GDK_WINDOWING_X11
 GdkFilterReturn x11_win_filter(GdkXEvent *xevent, GdkEvent *event, gpointer data);
 void handle_property_change(GdkScreen* screen, const gchar* name);
-void add_x11_tracking_for_screen(GdkScreen* screen, ScreenTrack* screenTrack);
-static void fire(GdkScreen* screen, gint monitor);
-static void clear_profile( GdkScreen* screen, guint monitor );
-static void set_profile( GdkScreen* screen, guint monitor, const guint8* data, guint len );
+void add_x11_tracking_for_screen(GdkScreen* screen);
+static void fire(gint monitor);
+static void clear_profile( guint monitor );
+static void set_profile( guint monitor, const guint8* data, guint len );
 #endif /* GDK_WINDOWING_X11 */
 
 static guint signals[LAST_SIGNAL] = {0};
 
-static GSList* tracked_screens = 0;
+// There is only one GdkScreen in Gtk+ 3
+static ScreenTrack *tracked_screen = nullptr;
+
 static GSList* abstract_trackers = 0;
 
 struct _EgeColorProfTrackerPrivate
@@ -149,8 +150,7 @@ void ege_color_prof_tracker_class_init( EgeColorProfTrackerClass* klass )
                                           0,
                                           NULL, NULL,
                                           sp_marshal_VOID__INT_INT,
-                                          G_TYPE_NONE, 2,
-                                          G_TYPE_INT,
+                                          G_TYPE_NONE, 1,
                                           G_TYPE_INT);
 
         g_type_class_add_private( klass, sizeof(EgeColorProfTrackerClass) );
@@ -176,7 +176,7 @@ EgeColorProfTracker* ege_color_prof_tracker_new( GtkWidget* target )
     if ( target ) {
         g_object_weak_ref( G_OBJECT(target), target_finalized, obj );
         g_signal_connect( G_OBJECT(target), "hierarchy-changed", G_CALLBACK( target_hierarchy_changed_cb ), obj );
-        g_signal_connect( G_OBJECT(target), "screen-changed", G_CALLBACK( target_screen_changed_cb ), obj );
+        g_signal_connect( G_OBJECT(target), "screen-changed",    G_CALLBACK( target_screen_changed_cb ),    obj );
 
         /* invoke the callbacks now to connect if the widget is already visible */
         target_hierarchy_changed_cb( target, 0, obj );
@@ -184,16 +184,10 @@ EgeColorProfTracker* ege_color_prof_tracker_new( GtkWidget* target )
     } else {
         abstract_trackers = g_slist_append( abstract_trackers, obj );
 
-        GSList* curr = tracked_screens;
-        while ( curr ) {
-            ScreenTrack* track = (ScreenTrack*)curr->data;
-            gint screenNum = gdk_screen_get_number(track->screen);
-            gint monitor = 0;
-            for ( monitor = 0; monitor < (gint)track->profiles->len; monitor++ ) {
-                g_signal_emit( G_OBJECT(tracker), signals[MODIFIED], 0, screenNum, monitor );
+        if(tracked_screen) {
+            for ( gint monitor = 0; monitor < (gint)tracked_screen->profiles->len; monitor++ ) {
+                g_signal_emit( G_OBJECT(tracker), signals[MODIFIED], 0, monitor );
             }
-
-            curr = g_slist_next(curr);
         }
 
     }
@@ -208,22 +202,16 @@ void ege_color_prof_tracker_get_profile( EgeColorProfTracker const * tracker, gp
     if (tracker) {
         if (tracker->private_data->_target ) {
             GdkScreen* screen = gtk_widget_get_screen(tracker->private_data->_target);
-            GSList* curr = tracked_screens;
-            while ( curr ) {
-                ScreenTrack* screenTrack = static_cast<ScreenTrack*>(curr->data);
-                if ( screenTrack->screen == screen ) {
-                    if ( tracker->private_data->_monitor >= 0 && tracker->private_data->_monitor < (static_cast<gint>(screenTrack->profiles->len))) {
-                        GByteArray* gba = static_cast<GByteArray*>(g_ptr_array_index(screenTrack->profiles, tracker->private_data->_monitor));
-                        if ( gba ) {
-                            dataPos = gba->data;
-                            dataLen = gba->len;
-                        }
-                    } else {
-                        g_warning("No profile data tracked for the specified item.");
+            if ( tracked_screen ) {
+                if ( tracker->private_data->_monitor >= 0 && tracker->private_data->_monitor < (static_cast<gint>(tracked_screen->profiles->len))) {
+                    GByteArray* gba = static_cast<GByteArray*>(g_ptr_array_index(tracked_screen->profiles, tracker->private_data->_monitor));
+                    if ( gba ) {
+                        dataPos = gba->data;
+                        dataLen = gba->len;
                     }
-                    break;
+                } else {
+                    g_warning("No profile data tracked for the specified item.");
                 }
-                curr = g_slist_next(curr);
             }
         }
     }
@@ -235,37 +223,24 @@ void ege_color_prof_tracker_get_profile( EgeColorProfTracker const * tracker, gp
     }
 }
 
-void ege_color_prof_tracker_get_profile_for( guint screenNum, guint monitor, gpointer* ptr, guint* len )
+void ege_color_prof_tracker_get_profile_for( guint monitor, gpointer* ptr, guint* len )
 {
     gpointer dataPos = 0;
     guint dataLen = 0;
-    GdkDisplay* display = gdk_display_get_default();
-
-#if GTK_CHECK_VERSION(3,10,0)
-    GdkScreen* screen = (screenNum < 1) ? gdk_display_get_screen(display, screenNum) : 0;
-#else
-    gint numScreens = gdk_display_get_n_screens(display);
-    GdkScreen* screen = (screenNum < (guint)numScreens) ? gdk_display_get_screen(display, screenNum) : 0;
-#endif
+    GdkDisplay *display = gdk_display_get_default();
+    GdkScreen  *screen  = gdk_display_get_default_screen(display);
 
     if ( screen ) {
-        GSList* curr = tracked_screens;
-        while ( curr ) {
-            ScreenTrack* screenTrack = (ScreenTrack*)curr->data;
-            if ( screenTrack->screen == screen ) {
-                if ( monitor < screenTrack->profiles->len ) {
-                    GByteArray* gba = (GByteArray*)g_ptr_array_index( screenTrack->profiles, monitor );
-                    if ( gba ) {
-                        dataPos = gba->data;
-                        dataLen = gba->len;
-                    }
-                } else {
-                    g_warning("No profile data tracked for the specified item.");
+        if ( tracked_screen ) {
+            if ( monitor < tracked_screen->profiles->len ) {
+                GByteArray* gba = (GByteArray*)g_ptr_array_index( tracked_screen->profiles, monitor );
+                if ( gba ) {
+                    dataPos = gba->data;
+                    dataLen = gba->len;
                 }
-                break;
+            } else {
+                g_warning("No profile data tracked for the specified item.");
             }
-
-            curr = g_slist_next(curr);
         }
     }
 
@@ -303,51 +278,39 @@ void ege_color_prof_tracker_set_property( GObject* obj, guint propId, const GVal
 
 void track_screen( GdkScreen* screen, EgeColorProfTracker* tracker )
 {
-    GSList* curr = tracked_screens;
-    /* First remove the tracker from different screens */
-    while ( curr ) {
-        ScreenTrack* screenTrack = (ScreenTrack*)curr->data;
-        if ( screenTrack->screen != screen ) {
-            screenTrack->trackers = g_slist_remove_all(screenTrack->trackers, tracker);
-        }
-        curr = g_slist_next(curr);
-    }
-
-    curr = tracked_screens;
-    while ( curr && ((ScreenTrack*)curr->data)->screen != screen ) {
-        curr = g_slist_next(curr);
-    }
-
-    if ( curr ) {
+    if ( tracked_screen ) {
         /* We found the screen already being tracked */
-        ScreenTrack* screenTrack = (ScreenTrack*)curr->data;
-        GSList* trackHook = g_slist_find( screenTrack->trackers, tracker );
+        GSList* trackHook = g_slist_find( tracked_screen->trackers, tracker );
         if ( !trackHook ) {
-            screenTrack->trackers = g_slist_append( screenTrack->trackers, tracker );
+            tracked_screen->trackers = g_slist_append( tracked_screen->trackers, tracker );
         }
     } else {
-        ScreenTrack* newTrack = g_new(ScreenTrack, 1);
+        tracked_screen = g_new(ScreenTrack, 1);
+
+        GdkDisplay* display = gdk_display_get_default();
+
+#if GTK_CHECK_VERSION(3,22,0)
+        int numMonitors = gdk_display_get_n_monitors(display);
+#else
         gint numMonitors = gdk_screen_get_n_monitors(screen);
-        int i = 0;
-        newTrack->screen = screen;
+#endif
+
 #ifdef GDK_WINDOWING_X11
-        newTrack->zeroSeen = FALSE;
-        newTrack->otherSeen = FALSE;
+        tracked_screen->zeroSeen = FALSE;
+        tracked_screen->otherSeen = FALSE;
 #endif /* GDK_WINDOWING_X11 */
-        newTrack->trackers = g_slist_append( 0, tracker );
-        newTrack->profiles = g_ptr_array_new();
-        for ( i = 0; i < numMonitors; i++ ) {
-            g_ptr_array_add( newTrack->profiles, 0 );
+        tracked_screen->trackers = g_slist_append( 0, tracker );
+        tracked_screen->profiles = g_ptr_array_new();
+        for ( int i = 0; i < numMonitors; i++ ) {
+            g_ptr_array_add( tracked_screen->profiles, 0 );
         }
-        tracked_screens = g_slist_append( tracked_screens, newTrack );
 
         g_signal_connect( G_OBJECT(screen), "size-changed", G_CALLBACK( screen_size_changed_cb ), tracker );
 
 #ifdef GDK_WINDOWING_X11
-        GdkDisplay* display = gdk_display_get_default();
         if (GDK_IS_X11_DISPLAY (display) ) {
             // printf( "track_screen: Display is using X11\n" );
-            add_x11_tracking_for_screen(screen, newTrack);
+            add_x11_tracking_for_screen(screen);
         } else {
             // printf( "track_screen: Display is not using X11\n" );
         }
@@ -359,22 +322,18 @@ void track_screen( GdkScreen* screen, EgeColorProfTracker* tracker )
 void target_finalized( gpointer data, GObject* where_the_object_was )
 {
     (void)data;
-    GSList* curr = tracked_screens;
-    while ( curr ) {
-        ScreenTrack* track = (ScreenTrack*)curr->data;
-        GSList* trackHook = track->trackers;
+    if ( tracked_screen ) {
+        GSList* trackHook = tracked_screen->trackers;
         while ( trackHook ) {
             if ( (void*)(((EgeColorProfTracker*)(trackHook->data))->private_data->_target) == (void*)where_the_object_was ) {
                 /* The tracked widget is now gone, remove it */
                 ((EgeColorProfTracker*)trackHook->data)->private_data->_target = 0;
-                track->trackers = g_slist_remove( track->trackers, trackHook );
+                tracked_screen->trackers = g_slist_remove( tracked_screen->trackers, trackHook );
                 trackHook = 0;
             } else {
                 trackHook = g_slist_next( trackHook );
             }
         }
-
-        curr = g_slist_next( curr );
     }
 }
 
@@ -388,11 +347,30 @@ void window_finalized( gpointer data, GObject* where_the_object_was )
 void event_after_cb( GtkWidget* widget, GdkEvent* event, gpointer user_data )
 {
     if ( event->type == GDK_CONFIGURE ) {
-        GdkScreen* screen = gtk_widget_get_screen(widget);
         GdkWindow* window = gtk_widget_get_window (widget);
         EgeColorProfTracker* tracker = (EgeColorProfTracker*)user_data;
+
+        // In old Gtk+ versions, we can directly find the ID number for a monitor.
+        // In Gtk+ >= 3.22, however, we need to figure out the ID
+#if GTK_CHECK_VERSION(3,22,0)
+        auto display = gdk_display_get_default();
+        auto monitor = gdk_display_get_monitor_at_window(display, window);
+
+        int n_monitors = gdk_display_get_n_monitors(display);
+
+        int monitorNum = -1;
+
+        // Now loop through the set of monitors and figure out whether this monitor matches
+        for (int i_monitor = 0; i_monitor < n_monitors; ++i_monitor) {
+            auto monitor_at_index = gdk_display_get_monitor(display, i_monitor);
+            if(monitor_at_index == monitor) monitorNum = i_monitor;
+        }
+#else
+        GdkScreen* screen = gtk_widget_get_screen(widget);
         gint monitorNum = gdk_screen_get_monitor_at_window(screen, window);
-        if ( monitorNum != tracker->private_data->_monitor ) {
+#endif
+
+        if ( monitorNum != tracker->private_data->_monitor && monitorNum != -1 ) {
             tracker->private_data->_monitor = monitorNum;
             g_signal_emit( G_OBJECT(tracker), signals[CHANGED], 0 );
         }
@@ -422,24 +400,24 @@ void target_screen_changed_cb(GtkWidget* widget, GdkScreen* prev_screen, gpointe
 
 void screen_size_changed_cb(GdkScreen* screen, gpointer user_data)
 {
-    GSList* curr = tracked_screens;
     (void)user_data;
 /*     g_message("screen size changed to (%d, %d) with %d monitors for obj:%p", */
 /*               gdk_screen_get_width(screen), gdk_screen_get_height(screen), */
 /*               gdk_screen_get_n_monitors(screen), */
 /*               user_data); */
-    while ( curr && ((ScreenTrack*)curr->data)->screen != screen ) {
-        curr = g_slist_next(curr);
-    }
-    if ( curr ) {
-        ScreenTrack* track = (ScreenTrack*)curr->data;
+    if ( tracked_screen ) {
+        GdkDisplay* display = gdk_display_get_default();
+
+#if GTK_CHECK_VERSION(3,22,0)
+        int numMonitors  = gdk_display_get_n_monitors(display);
+#else
         gint numMonitors = gdk_screen_get_n_monitors(screen);
-        if ( numMonitors > (gint)track->profiles->len ) {
-            guint i = 0;
-            for ( i = track->profiles->len; i < (guint)numMonitors; i++ ) {
-                g_ptr_array_add( track->profiles, 0 );
+#endif
+
+        if ( numMonitors > (gint)tracked_screen->profiles->len ) {
+            for ( guint i = tracked_screen->profiles->len; i < (guint)numMonitors; i++ ) {
+                g_ptr_array_add( tracked_screen->profiles, 0 );
 #ifdef GDK_WINDOWING_X11
-                GdkDisplay* display = gdk_display_get_default();
                 if (GDK_IS_X11_DISPLAY (display) ) {
                     gchar* name = g_strdup_printf( "_ICC_PROFILE_%d", i );
                     handle_property_change( screen, name );
@@ -447,7 +425,7 @@ void screen_size_changed_cb(GdkScreen* screen, gpointer user_data)
                 }
 #endif /* GDK_WINDOWING_X11 */
             }
-        } else if ( numMonitors < (gint)track->profiles->len ) {
+        } else if ( numMonitors < (gint)tracked_screen->profiles->len ) {
 /*             g_message("The count of monitors decreased, remove some"); */
         }
     }
@@ -473,18 +451,10 @@ GdkFilterReturn x11_win_filter(GdkXEvent *xevent,
             if ( stat ) {
                 GdkDisplay* display = gdk_x11_lookup_xdisplay(native->xproperty.display);
                 if ( display ) {
-#if GTK_CHECK_VERSION(3,10,0)
-                    gint screenCount = 1;
-#else
-                    gint screenCount = gdk_display_get_n_screens(display);
-#endif
                     GdkScreen* targetScreen = 0;
-                    gint i = 0;
-                    for ( i = 0; i < screenCount; i++ ) {
-                        GdkScreen* sc = gdk_display_get_screen( display, i );
-                        if ( tmp.screen == GDK_SCREEN_XSCREEN(sc) ) {
-                            targetScreen = sc;
-                        }
+                    GdkScreen* sc = gdk_display_get_default_screen(display);
+                    if ( tmp.screen == GDK_SCREEN_XSCREEN(sc) ) {
+                        targetScreen = sc;
                     }
 
                     handle_property_change( targetScreen, name );
@@ -517,7 +487,7 @@ void handle_property_change(GdkScreen* screen, const gchar* name)
         unsigned long bytesAfter = 0;
         unsigned char* prop = 0;
 
-        clear_profile( screen, monitor );
+        clear_profile( monitor );
 
         if ( XGetWindowProperty( xdisplay, GDK_WINDOW_XID(gdk_screen_get_root_window(screen)),
                                  atom, 0, size, False, AnyPropertyType,
@@ -534,23 +504,23 @@ void handle_property_change(GdkScreen* screen, const gchar* name)
                                          atom, 0, size, False, AnyPropertyType,
                                          &actualType, &actualFormat, &nitems, &bytesAfter, &prop ) == Success ) {
                     gpointer profile = g_memdup( prop, nitems );
-                    set_profile( screen, monitor, (const guint8*)profile, nitems );
+                    set_profile( monitor, (const guint8*)profile, nitems );
                     XFree(prop);
                 } else {
                     g_warning("Problem reading profile from root window");
                 }
             } else {
                 /* clear it */
-                set_profile( screen, monitor, 0, 0 );
+                set_profile( monitor, 0, 0 );
             }
         } else {
             g_warning("error loading profile property");
         }
     }
-    fire(screen, monitor);
+    fire(monitor);
 }
 
-void add_x11_tracking_for_screen(GdkScreen* screen, ScreenTrack* screenTrack)
+void add_x11_tracking_for_screen(GdkScreen* screen)
 {
     Display* xdisplay = GDK_SCREEN_XDISPLAY(screen);
     GdkWindow* root = gdk_screen_get_root_window(screen);
@@ -567,12 +537,18 @@ void add_x11_tracking_for_screen(GdkScreen* screen, ScreenTrack* screenTrack)
         /* Look for any profiles attached to this root window */
         if ( propArray ) {
             int j = 0;
+
+#if GTK_CHECK_VERSION(3,22,0)
+            auto display = gdk_display_get_default();
+            int numMonitors = gdk_display_get_n_monitors(display);
+#else
             gint numMonitors = gdk_screen_get_n_monitors(screen);
+#endif
 
             if ( baseAtom != None ) {
                 for ( i = 0; i < numWinProps; i++ ) {
                     if ( baseAtom == propArray[i] ) {
-                        screenTrack->zeroSeen = TRUE;
+                        tracked_screen->zeroSeen = TRUE;
                         handle_property_change( screen, "_ICC_PROFILE" );
                     }
                 }
@@ -586,7 +562,7 @@ void add_x11_tracking_for_screen(GdkScreen* screen, ScreenTrack* screenTrack)
                 if ( atom != None ) {
                     for ( j = 0; j < numWinProps; j++ ) {
                         if ( atom == propArray[j] ) {
-                            screenTrack->otherSeen = TRUE;
+                            tracked_screen->otherSeen = TRUE;
                             handle_property_change( screen, name );
                         }
                     }
@@ -599,65 +575,46 @@ void add_x11_tracking_for_screen(GdkScreen* screen, ScreenTrack* screenTrack)
     }
 }
 
-void fire(GdkScreen* screen, gint monitor)
+void fire(gint monitor)
 {
-    GSList* curr = tracked_screens;
-    while ( curr ) {
-        ScreenTrack* track = (ScreenTrack*)curr->data;
-        if ( track->screen == screen) {
-            GSList* trackHook = track->trackers;
-            while ( trackHook ) {
-                EgeColorProfTracker* tracker = (EgeColorProfTracker*)(trackHook->data);
-                if ( (monitor == -1) || (tracker->private_data->_monitor == monitor) ) {
-                    g_signal_emit( G_OBJECT(tracker), signals[CHANGED], 0 );
-                }
-                trackHook = g_slist_next(trackHook);
+    if ( tracked_screen ) {
+        GSList* trackHook = tracked_screen->trackers;
+
+        while ( trackHook ) {
+            EgeColorProfTracker* tracker = (EgeColorProfTracker*)(trackHook->data);
+            if ( (monitor == -1) || (tracker->private_data->_monitor == monitor) ) {
+                g_signal_emit( G_OBJECT(tracker), signals[CHANGED], 0 );
             }
+            trackHook = g_slist_next(trackHook);
         }
-        curr = g_slist_next(curr);
     }
 }
 
-static void clear_profile( GdkScreen* screen, guint monitor )
+static void clear_profile( guint monitor )
 {
-    GSList* curr = tracked_screens;
-    while ( curr && ((ScreenTrack*)curr->data)->screen != screen ) {
-        curr = g_slist_next(curr);
-    }
-    if ( curr ) {
-        ScreenTrack* track = (ScreenTrack*)curr->data;
-        guint i = 0;
+    if ( tracked_screen ) {
         GByteArray* previous = 0;
-        for ( i = track->profiles->len; i <= monitor; i++ ) {
-            g_ptr_array_add( track->profiles, 0 );
+        for ( guint i = tracked_screen->profiles->len; i <= monitor; i++ ) {
+            g_ptr_array_add( tracked_screen->profiles, 0 );
         }
-        previous = (GByteArray*)g_ptr_array_index( track->profiles, monitor );
+        previous = (GByteArray*)g_ptr_array_index( tracked_screen->profiles, monitor );
         if ( previous ) {
             g_byte_array_free( previous, TRUE );
         }
 
-        track->profiles->pdata[monitor] = 0;
+        tracked_screen->profiles->pdata[monitor] = 0;
     }
 }
 
-static void set_profile( GdkScreen* screen, guint monitor, const guint8* data, guint len )
+static void set_profile( guint monitor, const guint8* data, guint len )
 {
-    GSList* curr = tracked_screens;
-    while ( curr && ((ScreenTrack*)curr->data)->screen != screen ) {
-        curr = g_slist_next(curr);
-    }
-    if ( curr ) {
-        /* Something happened to a screen being tracked. */
-        ScreenTrack* track = (ScreenTrack*)curr->data;
-        gint screenNum = gdk_screen_get_number(screen);
-        guint i = 0;
-        GByteArray* previous = 0;
+    if ( tracked_screen ) {
         GSList* abstracts = 0;
 
-        for ( i = track->profiles->len; i <= monitor; i++ ) {
-            g_ptr_array_add( track->profiles, 0 );
+        for ( guint i = tracked_screen->profiles->len; i <= monitor; i++ ) {
+            g_ptr_array_add( tracked_screen->profiles, 0 );
         }
-        previous = (GByteArray*)g_ptr_array_index( track->profiles, monitor );
+        GByteArray *previous = (GByteArray*)g_ptr_array_index( tracked_screen->profiles, monitor );
         if ( previous ) {
             g_byte_array_free( previous, TRUE );
         }
@@ -665,13 +622,13 @@ static void set_profile( GdkScreen* screen, guint monitor, const guint8* data, g
         if ( data && len ) {
             GByteArray* newBytes = g_byte_array_sized_new( len );
             newBytes = g_byte_array_append( newBytes, data, len );
-            track->profiles->pdata[monitor] = newBytes;
+            tracked_screen->profiles->pdata[monitor] = newBytes;
         } else {
-            track->profiles->pdata[monitor] = 0;
+            tracked_screen->profiles->pdata[monitor] = 0;
         }
 
         for ( abstracts = abstract_trackers; abstracts; abstracts = g_slist_next(abstracts) ) {
-            g_signal_emit( G_OBJECT(abstracts->data), signals[MODIFIED], 0, screenNum, monitor );
+            g_signal_emit( G_OBJECT(abstracts->data), signals[MODIFIED], 0, monitor );
         }
     }
 }

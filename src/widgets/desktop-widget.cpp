@@ -133,7 +133,7 @@ public:
     }
 
 private:
-    static void hook(EgeColorProfTracker *tracker, gint a, gint b, CMSPrefWatcher *watcher);
+    static void hook(EgeColorProfTracker *tracker, gint b, CMSPrefWatcher *watcher);
 
     class DisplayProfileWatcher : public Inkscape::Preferences::Observer {
     public:
@@ -172,16 +172,16 @@ private:
 };
 
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
-void CMSPrefWatcher::hook(EgeColorProfTracker * /*tracker*/, gint screen, gint monitor, CMSPrefWatcher * /*watcher*/)
+void CMSPrefWatcher::hook(EgeColorProfTracker * /*tracker*/, gint monitor, CMSPrefWatcher * /*watcher*/)
 {
     unsigned char* buf = 0;
     guint len = 0;
 
-    ege_color_prof_tracker_get_profile_for( screen, monitor, reinterpret_cast<gpointer*>(&buf), &len );
-    Glib::ustring id = Inkscape::CMSSystem::setDisplayPer( buf, len, screen, monitor );
+    ege_color_prof_tracker_get_profile_for( monitor, reinterpret_cast<gpointer*>(&buf), &len );
+    Glib::ustring id = Inkscape::CMSSystem::setDisplayPer( buf, len, monitor );
 }
 #else
-void CMSPrefWatcher::hook(EgeColorProfTracker * /*tracker*/, gint /*screen*/, gint /*monitor*/, CMSPrefWatcher * /*watcher*/)
+void CMSPrefWatcher::hook(EgeColorProfTracker * /*tracker*/, gint /*monitor*/, CMSPrefWatcher * /*watcher*/)
 {
 }
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
@@ -660,7 +660,7 @@ void SPDesktopWidget::init( SPDesktopWidget *dtw )
 #if defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
     bool fromDisplay = prefs->getBool( "/options/displayprofile/from_display");
     if ( fromDisplay ) {
-        Glib::ustring id = Inkscape::CMSSystem::getDisplayId( 0, 0 );
+        Glib::ustring id = Inkscape::CMSSystem::getDisplayId( 0 );
 
         bool enabled = false;
         dtw->canvas->_cms_key = id;
@@ -944,9 +944,8 @@ void sp_dtw_color_profile_event(EgeColorProfTracker */*tracker*/, SPDesktopWidge
     // Handle profile changes
     GdkScreen* screen = gtk_widget_get_screen(GTK_WIDGET(dtw));
     GdkWindow *window = gtk_widget_get_window(gtk_widget_get_toplevel(GTK_WIDGET(dtw)));
-    gint screenNum = gdk_screen_get_number(screen);
     gint monitor = gdk_screen_get_monitor_at_window(screen, window);
-    Glib::ustring id = Inkscape::CMSSystem::getDisplayId( screenNum, monitor );
+    Glib::ustring id = Inkscape::CMSSystem::getDisplayId( monitor );
     bool enabled = false;
     dtw->canvas->_cms_key = id;
     dtw->requestCanvasUpdate();

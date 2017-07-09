@@ -1198,7 +1198,7 @@ MemProfile::~MemProfile()
 {
 }
 
-static std::vector< std::vector<MemProfile> > perMonitorProfiles;
+static std::vector<MemProfile> perMonitorProfiles;
 
 void free_transforms()
 {
@@ -1207,43 +1207,33 @@ void free_transforms()
         transf = 0;
     }
 
-    for ( std::vector< std::vector<MemProfile> >::iterator it = perMonitorProfiles.begin(); it != perMonitorProfiles.end(); ++it ) {
-        for ( std::vector<MemProfile>::iterator it2 = it->begin(); it2 != it->end(); ++it2 ) {
-            if ( it2->transf ) {
-                cmsDeleteTransform(it2->transf);
-                it2->transf = 0;
-            }
+    for ( auto profile : perMonitorProfiles ) {
+        if ( profile.transf ) {
+            cmsDeleteTransform(profile.transf);
+            profile.transf = 0;
         }
     }
 }
 
-Glib::ustring Inkscape::CMSSystem::getDisplayId( int screen, int monitor )
+Glib::ustring Inkscape::CMSSystem::getDisplayId( int monitor )
 {
     Glib::ustring id;
 
-    if ( screen >= 0 && screen < static_cast<int>(perMonitorProfiles.size()) ) {
-        std::vector<MemProfile>& row = perMonitorProfiles[screen];
-        if ( monitor >= 0 && monitor < static_cast<int>(row.size()) ) {
-            MemProfile& item = row[monitor];
-            id = item.id;
-        }
+    if ( monitor >= 0 && monitor < static_cast<int>(perMonitorProfiles.size()) ) {
+        MemProfile& item = perMonitorProfiles[monitor];
+        id = item.id;
     }
 
     return id;
 }
 
-Glib::ustring Inkscape::CMSSystem::setDisplayPer( gpointer buf, guint bufLen, int screen, int monitor )
+Glib::ustring Inkscape::CMSSystem::setDisplayPer( gpointer buf, guint bufLen, int monitor )
 {
-    while ( static_cast<int>(perMonitorProfiles.size()) <= screen ) {
-        std::vector<MemProfile> tmp;
+    while ( static_cast<int>(perMonitorProfiles.size()) <= monitor ) {
+        MemProfile tmp;
         perMonitorProfiles.push_back(tmp);
     }
-    std::vector<MemProfile>& row = perMonitorProfiles[screen];
-    while ( static_cast<int>(row.size()) <= monitor ) {
-        MemProfile tmp;
-        row.push_back(tmp);
-    }
-    MemProfile& item = row[monitor];
+    MemProfile& item = perMonitorProfiles[monitor];
 
     if ( item.hprof ) {
         cmsCloseProfile( item.hprof );
@@ -1274,81 +1264,80 @@ cmsHTRANSFORM Inkscape::CMSSystem::getDisplayPer( Glib::ustring const& id )
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     bool found = false;
-    for ( std::vector< std::vector<MemProfile> >::iterator it = perMonitorProfiles.begin(); it != perMonitorProfiles.end() && !found; ++it ) {
-        for ( std::vector<MemProfile>::iterator it2 = it->begin(); it2 != it->end() && !found; ++it2 ) {
-            if ( id == it2->id ) {
-                MemProfile& item = *it2;
 
-                bool warn = prefs->getBool( "/options/softproof/gamutwarn");
-                int intent = prefs->getIntLimited( "/options/displayprofile/intent", 0, 0, 3 );
-                int proofIntent = prefs->getIntLimited( "/options/softproof/intent", 0, 0, 3 );
-                bool bpc = prefs->getBool( "/options/softproof/bpc");
+    for ( auto it2 = perMonitorProfiles.begin(); it2 != perMonitorProfiles.end() && !found; ++it2 ) {
+        if ( id == it2->id ) {
+            MemProfile& item = *it2;
+
+            bool warn = prefs->getBool( "/options/softproof/gamutwarn");
+            int intent = prefs->getIntLimited( "/options/displayprofile/intent", 0, 0, 3 );
+            int proofIntent = prefs->getIntLimited( "/options/softproof/intent", 0, 0, 3 );
+            bool bpc = prefs->getBool( "/options/softproof/bpc");
 #if defined(cmsFLAGS_PRESERVEBLACK)
-                bool preserveBlack = prefs->getBool( "/options/softproof/preserveblack");
+            bool preserveBlack = prefs->getBool( "/options/softproof/preserveblack");
 #endif //defined(cmsFLAGS_PRESERVEBLACK)
-                Glib::ustring colorStr = prefs->getString("/options/softproof/gamutcolor");
-                Gdk::RGBA gamutColor( colorStr.empty() ? "#808080" : colorStr );
+            Glib::ustring colorStr = prefs->getString("/options/softproof/gamutcolor");
+            Gdk::RGBA gamutColor( colorStr.empty() ? "#808080" : colorStr );
 
-                if ( (warn != gamutWarn)
-                     || (lastIntent != intent)
-                     || (lastProofIntent != proofIntent)
-                     || (bpc != lastBPC)
+            if ( (warn != gamutWarn)
+                    || (lastIntent != intent)
+                    || (lastProofIntent != proofIntent)
+                    || (bpc != lastBPC)
 #if defined(cmsFLAGS_PRESERVEBLACK)
-                     || (preserveBlack != lastPreserveBlack)
+                    || (preserveBlack != lastPreserveBlack)
 #endif // defined(cmsFLAGS_PRESERVEBLACK)
-                     || (gamutColor != lastGamutColor)
-                    ) {
-                    gamutWarn = warn;
-                    free_transforms();
-                    lastIntent = intent;
-                    lastProofIntent = proofIntent;
-                    lastBPC = bpc;
+                    || (gamutColor != lastGamutColor)
+               ) {
+                gamutWarn = warn;
+                free_transforms();
+                lastIntent = intent;
+                lastProofIntent = proofIntent;
+                lastBPC = bpc;
 #if defined(cmsFLAGS_PRESERVEBLACK)
-                    lastPreserveBlack = preserveBlack;
+                lastPreserveBlack = preserveBlack;
 #endif // defined(cmsFLAGS_PRESERVEBLACK)
-                    lastGamutColor = gamutColor;
-                }
+                lastGamutColor = gamutColor;
+            }
 
-                // Fetch these now, as they might clear the transform as a side effect.
-                cmsHPROFILE proofProf = item.hprof ? getProofProfileHandle() : 0;
+            // Fetch these now, as they might clear the transform as a side effect.
+            cmsHPROFILE proofProf = item.hprof ? getProofProfileHandle() : 0;
 
-                if ( !item.transf ) {
-                    if ( item.hprof && proofProf ) {
-                        cmsUInt32Number dwFlags = cmsFLAGS_SOFTPROOFING;
-                        if ( gamutWarn ) {
-                            dwFlags |= cmsFLAGS_GAMUTCHECK;
-                            auto gamutColor_r = gamutColor.get_red_u();
-                            auto gamutColor_g = gamutColor.get_green_u();
-                            auto gamutColor_b = gamutColor.get_blue_u();
+            if ( !item.transf ) {
+                if ( item.hprof && proofProf ) {
+                    cmsUInt32Number dwFlags = cmsFLAGS_SOFTPROOFING;
+                    if ( gamutWarn ) {
+                        dwFlags |= cmsFLAGS_GAMUTCHECK;
+                        auto gamutColor_r = gamutColor.get_red_u();
+                        auto gamutColor_g = gamutColor.get_green_u();
+                        auto gamutColor_b = gamutColor.get_blue_u();
 
 #if HAVE_LIBLCMS1
-                            cmsSetAlarmCodes(gamutColor_r >> 8, gamutColor_g >> 8, gamutColor_b >> 8);
+                        cmsSetAlarmCodes(gamutColor_r >> 8, gamutColor_g >> 8, gamutColor_b >> 8);
 #elif HAVE_LIBLCMS2
-                            cmsUInt16Number newAlarmCodes[cmsMAXCHANNELS] = {0};
-                            newAlarmCodes[0] = gamutColor_r;
-                            newAlarmCodes[1] = gamutColor_g;
-                            newAlarmCodes[2] = gamutColor_b;
-                            newAlarmCodes[3] = ~0;
-                            cmsSetAlarmCodes(newAlarmCodes);
+                        cmsUInt16Number newAlarmCodes[cmsMAXCHANNELS] = {0};
+                        newAlarmCodes[0] = gamutColor_r;
+                        newAlarmCodes[1] = gamutColor_g;
+                        newAlarmCodes[2] = gamutColor_b;
+                        newAlarmCodes[3] = ~0;
+                        cmsSetAlarmCodes(newAlarmCodes);
 #endif
-                        }
-                        if ( bpc ) {
-                            dwFlags |= cmsFLAGS_BLACKPOINTCOMPENSATION;
-                        }
-#if defined(cmsFLAGS_PRESERVEBLACK)
-                        if ( preserveBlack ) {
-                            dwFlags |= cmsFLAGS_PRESERVEBLACK;
-                        }
-#endif // defined(cmsFLAGS_PRESERVEBLACK)
-                        item.transf = cmsCreateProofingTransform( ColorProfileImpl::getSRGBProfile(), TYPE_BGRA_8, item.hprof, TYPE_BGRA_8, proofProf, intent, proofIntent, dwFlags );
-                    } else if ( item.hprof ) {
-                        item.transf = cmsCreateTransform( ColorProfileImpl::getSRGBProfile(), TYPE_BGRA_8, item.hprof, TYPE_BGRA_8, intent, 0 );
                     }
+                    if ( bpc ) {
+                        dwFlags |= cmsFLAGS_BLACKPOINTCOMPENSATION;
+                    }
+#if defined(cmsFLAGS_PRESERVEBLACK)
+                    if ( preserveBlack ) {
+                        dwFlags |= cmsFLAGS_PRESERVEBLACK;
+                    }
+#endif // defined(cmsFLAGS_PRESERVEBLACK)
+                    item.transf = cmsCreateProofingTransform( ColorProfileImpl::getSRGBProfile(), TYPE_BGRA_8, item.hprof, TYPE_BGRA_8, proofProf, intent, proofIntent, dwFlags );
+                } else if ( item.hprof ) {
+                    item.transf = cmsCreateTransform( ColorProfileImpl::getSRGBProfile(), TYPE_BGRA_8, item.hprof, TYPE_BGRA_8, intent, 0 );
                 }
-
-                result = item.transf;
-                found = true;
             }
+
+            result = item.transf;
+            found = true;
         }
     }
 
