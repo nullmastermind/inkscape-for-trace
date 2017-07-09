@@ -50,7 +50,7 @@
 using namespace Inkscape;
 using namespace Inkscape::IO::Resource;
 
-static void try_shortcuts_file(char const *filename);
+static bool try_shortcuts_file(char const *filename);
 static void read_shortcuts_file(char const *filename, bool const is_user_set=false);
 
 unsigned int sp_shortcut_get_key(unsigned int const shortcut);
@@ -78,28 +78,49 @@ static std::map<Inkscape::Verb *, unsigned int> *user_shortcuts = NULL;
 
 void sp_shortcut_init()
 {
-
     verbs = new std::map<unsigned int, Inkscape::Verb * >();
     primary_shortcuts = new std::map<Inkscape::Verb *, unsigned int>();
     user_shortcuts = new std::map<Inkscape::Verb *, unsigned int>();
 
+    // try to load shortcut file as set in preferences
+    // if preference is unset or loading fails fallback to share/keys/default.xml and finally share/keys/inkscape.xml
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     Glib::ustring shortcutfile = prefs->getString("/options/kbshortcuts/shortcutfile");
+    bool success = false;
+    gchar const *reason;
     if (shortcutfile.empty()) {
-        shortcutfile  = Glib::ustring(get_path(SYSTEM, KEYS, "default.xml"));
+        reason = "No key file set in preferences";
+    } else {
+        success = try_shortcuts_file(shortcutfile.c_str());
+        reason = "Unable to read key file set in preferences";
+    }
+    if (!success) {
+        g_info("%s. Falling back to 'default.xml'.", reason);
+        success = try_shortcuts_file(get_path(SYSTEM, KEYS, "default.xml"));
+    }
+    if (!success) {
+        g_info("Could not load 'default.xml' either. Falling back to 'inkscape.xml'.");
+        success = try_shortcuts_file(get_path(SYSTEM, KEYS, "inkscape.xml"));
+    }
+    if (!success) {
+        g_warning("Could not load any keyboard shortcut file (including fallbacks to 'default.xml' and 'inkscape.xml').");
     }
 
-    read_shortcuts_file(shortcutfile.c_str());
+    // load shortcuts adjusted by user
     try_shortcuts_file(get_path(USER, KEYS, "default.xml"));
 }
 
-static void try_shortcuts_file(char const *filename) {
+static bool try_shortcuts_file(char const *filename) {
     using Inkscape::IO::file_test;
 
     /* ah, if only we had an exception to catch... (permission, forgiveness) */
     if (file_test(filename, G_FILE_TEST_EXISTS)) {
         read_shortcuts_file(filename, true);
+        return true;
     }
+
+    g_info("Unable to read keyboard shortcuts from %s (does not exist)", filename);
+    return false;
 }
 
 /*
