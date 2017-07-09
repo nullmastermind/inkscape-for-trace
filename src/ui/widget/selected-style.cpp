@@ -148,13 +148,32 @@ SelectedStyle::SelectedStyle(bool /*layout*/)
 
     _fill_label.set_halign(Gtk::ALIGN_START);
     _fill_label.set_valign(Gtk::ALIGN_CENTER);
-    _fill_label.set_padding(0, 0);
+    _fill_label.set_margin_top(0);
+    _fill_label.set_margin_bottom(0);
     _stroke_label.set_halign(Gtk::ALIGN_START);
     _stroke_label.set_valign(Gtk::ALIGN_CENTER);
-    _stroke_label.set_padding(0, 0);
+    _stroke_label.set_margin_top(0);
+    _stroke_label.set_margin_bottom(0);
     _opacity_label.set_halign(Gtk::ALIGN_START);
     _opacity_label.set_valign(Gtk::ALIGN_CENTER);
-    _opacity_label.set_padding(0, 0);
+    _opacity_label.set_margin_top(0);
+    _opacity_label.set_margin_bottom(0);
+
+#if GTK_CHECK_VERSION(3,12,0)
+    _fill_label.set_margin_start(0);
+    _fill_label.set_margin_end(0);
+    _stroke_label.set_margin_start(0);
+    _stroke_label.set_margin_end(0);
+    _opacity_label.set_margin_start(0);
+    _opacity_label.set_margin_end(0);
+#else
+    _fill_label.set_margin_left(0);
+    _fill_label.set_margin_right(0);
+    _stroke_label.set_margin_left(0);
+    _stroke_label.set_margin_right(0);
+    _opacity_label.set_margin_left(0);
+    _opacity_label.set_margin_right(0);
+#endif
 
     _table.set_column_spacing(2);
     _table.set_row_spacing(0);
