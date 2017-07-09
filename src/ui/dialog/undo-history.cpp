@@ -117,7 +117,6 @@ UndoHistory::UndoHistory()
     // connect with the EventLog
     _connectEventLog();
 
-    _event_list_view.set_rules_hint(false);
     _event_list_view.set_enable_search(false);
     _event_list_view.set_headers_visible(false);
 
