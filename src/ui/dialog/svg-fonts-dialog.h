@@ -45,7 +45,7 @@ private:
     int _x,_y;
     SvgFont* _svgfont;
     Glib::ustring _text;
-    bool on_expose_event (GdkEventExpose *event);
+    bool on_draw(const Cairo::RefPtr<Cairo::Context> &cr) override;
 };
 
 class SPFont;

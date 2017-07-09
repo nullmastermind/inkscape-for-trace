@@ -66,10 +66,8 @@ void SvgFontDrawingArea::redraw(){
     ((Gtk::Widget*) this)->queue_draw();
 }
 
-bool SvgFontDrawingArea::on_expose_event (GdkEventExpose */*event*/){
+bool SvgFontDrawingArea::on_draw(const Cairo::RefPtr<Cairo::Context> &cr) {
   if (_svgfont){
-    Glib::RefPtr<Gdk::Window> window = get_window();
-    Cairo::RefPtr<Cairo::Context> cr = window->create_cairo_context();
     cr->set_font_face( Cairo::RefPtr<Cairo::FontFace>(new Cairo::FontFace(_svgfont->get_font_face(), false /* does not have reference */)) );
     cr->set_font_size (_y-20);
     cr->move_to (10, 10);
@@ -84,7 +82,7 @@ bool SvgFontDrawingArea::on_expose_event (GdkEventExpose */*event*/){
     cr->line_to (_x, _y-10);
     cr->stroke();
   }
-  return TRUE;
+  return true;
 }
 
 namespace Inkscape {
