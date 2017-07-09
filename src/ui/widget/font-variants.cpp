@@ -111,9 +111,9 @@ namespace Widget {
     _position_super.set_group(position_group);
 
     // Add signals
-    _position_normal.signal_pressed().connect ( sigc::mem_fun(*this, &FontVariants::position_callback) );
-    _position_sub.signal_pressed().connect ( sigc::mem_fun(*this, &FontVariants::position_callback) );
-    _position_super.signal_pressed().connect ( sigc::mem_fun(*this, &FontVariants::position_callback) );
+    _position_normal.signal_button_press_event().connect ( sigc::mem_fun(*this, &FontVariants::position_callback) );
+    _position_sub.signal_button_press_event().connect ( sigc::mem_fun(*this, &FontVariants::position_callback) );
+    _position_super.signal_button_press_event().connect ( sigc::mem_fun(*this, &FontVariants::position_callback) );
 
     // Add to frame
     _position_vbox.add( _position_normal );
@@ -270,8 +270,8 @@ namespace Widget {
       // std::cout << "FontVariants::position_init()" << std::endl;
   }
   
-  void
-  FontVariants::position_callback() {
+  bool
+  FontVariants::position_callback(GdkEventButton * /*event*/) {
       // std::cout << "FontVariants::position_callback()" << std::endl;
       _position_changed = true;
       _changed_signal.emit();

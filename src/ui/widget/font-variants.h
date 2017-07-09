@@ -94,7 +94,7 @@ private:
     void ligatures_callback();
 
     void position_init();
-    void position_callback();
+    bool position_callback(GdkEventButton *event);
 
     void caps_init();
     void caps_callback();
