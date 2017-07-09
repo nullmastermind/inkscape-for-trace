@@ -13,7 +13,8 @@ if(WIN32)
   install(DIRECTORY doc
     DESTINATION .)
 
-  # mingw dlls
+  # mingw-w64 dlls
+  #   (use msys2checkdeps.py to list required libraries / check for missing libraries)
   install(FILES
     ${MINGW_BIN}/LIBEAY32.dll
     ${MINGW_BIN}/SSLEAY32.dll
@@ -28,19 +29,23 @@ if(WIN32)
     ${MINGW_BIN}/libcairo-gobject-2.dll
     ${MINGW_BIN}/libcairomm-1.0-1.dll
     ${MINGW_BIN}/libcdr-0.1.dll
+    ${MINGW_BIN}/libcroco-0.6-3.dll
     ${MINGW_BIN}/libcurl-4.dll
     ${MINGW_BIN}/libenchant.dll
     ${MINGW_BIN}/libepoxy-0.dll
     ${MINGW_BIN}/libexpat-1.dll
+    ${MINGW_BIN}/libexslt-0.dll
     ${MINGW_BIN}/libffi-6.dll
     ${MINGW_BIN}/libfftw3-3.dll
     ${MINGW_BIN}/libfontconfig-1.dll
     ${MINGW_BIN}/libfreetype-6.dll
     ${MINGW_BIN}/libgc-1.dll
+    ${MINGW_BIN}/libgdbm-4.dll
     ${MINGW_BIN}/libgdk-3-0.dll
     ${MINGW_BIN}/libgdk_pixbuf-2.0-0.dll
     ${MINGW_BIN}/libgdkmm-3.0-1.dll
     ${MINGW_BIN}/libgdl-3-5.dll
+    ${MINGW_BIN}/libgfortran-4.dll
     ${MINGW_BIN}/libgio-2.0-0.dll
     ${MINGW_BIN}/libgiomm-2.4-1.dll
     ${MINGW_BIN}/libglib-2.0-0.dll
@@ -72,6 +77,7 @@ if(WIN32)
     ${MINGW_BIN}/libnettle-6.dll
     ${MINGW_BIN}/libnghttp2-14.dll
     ${MINGW_BIN}/libnspr4.dll
+    ${MINGW_BIN}/libopenblas.dll
     ${MINGW_BIN}/libopenjp2-7.dll
     ${MINGW_BIN}/libp11-kit-0.dll
     ${MINGW_BIN}/libpango-1.0-0.dll
@@ -88,8 +94,11 @@ if(WIN32)
     ${MINGW_BIN}/libpoppler-glib-8.dll
     ${MINGW_BIN}/libpopt-0.dll
     ${MINGW_BIN}/libpotrace-0.dll
+    ${MINGW_BIN}/libquadmath-0.dll
+    ${MINGW_BIN}/libreadline7.dll
     ${MINGW_BIN}/librevenge-0.0.dll
     ${MINGW_BIN}/librevenge-stream-0.0.dll
+    ${MINGW_BIN}/librsvg-2-2.dll
     ${MINGW_BIN}/librtmp-1.dll
     ${MINGW_BIN}/libsigc-2.0-0.dll
     ${MINGW_BIN}/libsoup-2.4-1.dll
@@ -97,9 +106,12 @@ if(WIN32)
     ${MINGW_BIN}/libssh2-1.dll
     ${MINGW_BIN}/libstdc++-6.dll
     ${MINGW_BIN}/libtasn1-6.dll
+    ${MINGW_BIN}/libtermcap-0.dll
     ${MINGW_BIN}/libtiff-5.dll
     ${MINGW_BIN}/libunistring-2.dll
     ${MINGW_BIN}/libvisio-0.1.dll
+    ${MINGW_BIN}/libwebp-7.dll
+    ${MINGW_BIN}/libwebpmux-3.dll
     ${MINGW_BIN}/libwinpthread-1.dll
     ${MINGW_BIN}/libwpd-0.10.dll
     ${MINGW_BIN}/libwpg-0.3.dll
@@ -109,16 +121,9 @@ if(WIN32)
     ${MINGW_BIN}/nss3.dll
     ${MINGW_BIN}/nssutil3.dll
     ${MINGW_BIN}/smime3.dll
+    ${MINGW_BIN}/tcl86.dll
+    ${MINGW_BIN}/tk86.dll
     ${MINGW_BIN}/zlib1.dll
-    # these are not picked up by 'ldd' but are required for SVG support in gdk-pixbuf-2.0
-    ${MINGW_BIN}/libcroco-0.6-3.dll
-    ${MINGW_BIN}/librsvg-2-2.dll
-    # required by python2-lxml
-    ${MINGW_BIN}/libexslt-0.dll
-    # required by python2-numpy
-    ${MINGW_BIN}/libgfortran-4.dll
-    ${MINGW_BIN}/libopenblas.dll
-    ${MINGW_BIN}/libquadmath-0.dll
     DESTINATION .)
   # There are differences for 64-Bit and 32-Bit build environments.
   if(HAVE_MINGW64)
