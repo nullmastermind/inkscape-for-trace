@@ -436,7 +436,7 @@ static void star_toolbox_watch_ec(SPDesktop* dt, Inkscape::UI::Tools::ToolBase* 
 
 void sp_star_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder)
 {
-    Inkscape::IconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
+    GtkIconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
 
     {
         EgeOutputAction* act = ege_output_action_new( "StarStateAction", _("<b>New:</b>"), "", 0 );
@@ -562,7 +562,7 @@ void sp_star_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
                                              _("Defaults"),
                                              _("Reset shape parameters to defaults (use Inkscape Preferences > Tools to change defaults)"),
                                              INKSCAPE_ICON("edit-clear"),
-                                             Inkscape::ICON_SIZE_SMALL_TOOLBAR);
+                                             GTK_ICON_SIZE_SMALL_TOOLBAR);
             g_signal_connect_after( G_OBJECT(inky), "activate", G_CALLBACK(sp_stb_defaults), holder );
             gtk_action_group_add_action( mainActions, GTK_ACTION(inky) );
             gtk_action_set_sensitive( GTK_ACTION(inky), TRUE );

@@ -22,7 +22,6 @@
 #include <glibmm/miscutils.h>
 #include <glibmm/markup.h>
 #include <gtkmm/main.h>
-#include <gtkmm/alignment.h>
 
 #include "preferences.h"
 #include "verbs.h"
@@ -85,7 +84,7 @@ InkscapePreferences::InkscapePreferences()
     delete sb;
 
     //Main HBox
-    Gtk::HBox* hbox_list_page = Gtk::manage(new Gtk::HBox());
+    auto hbox_list_page = Gtk::manage(new Gtk::Box());
     hbox_list_page->set_border_width(12);
     hbox_list_page->set_spacing(12);
     _getContents()->add(*hbox_list_page);
@@ -107,7 +106,7 @@ InkscapePreferences::InkscapePreferences()
     page_list_selection->set_mode(Gtk::SELECTION_BROWSE);
 
     //Pages
-    Gtk::VBox* vbox_page = Gtk::manage(new Gtk::VBox());
+    auto vbox_page = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
     Gtk::Frame* title_frame = Gtk::manage(new Gtk::Frame());
 
     Gtk::ScrolledWindow* pageScroller = Gtk::manage(new Gtk::ScrolledWindow());
@@ -266,12 +265,11 @@ void InkscapePreferences::AddNewObjectsStyle(DialogPage &p, Glib::ustring const 
                 _("Apply the style you last set on an object"));
 
     PrefRadioButton* own = Gtk::manage( new PrefRadioButton);
-    Gtk::HBox* hb = Gtk::manage( new Gtk::HBox);
-    Gtk::Alignment* align = Gtk::manage( new Gtk::Alignment);
+    auto hb = Gtk::manage( new Gtk::Box);
     own->init ( _("This tool's own style:"), prefs_path + "/usecurrent", 0, false, current);
-    align->set(0,0,0,0);
-    align->add(*own);
-    hb->add(*align);
+    own->set_halign(Gtk::ALIGN_START);
+    own->set_valign(Gtk::ALIGN_START);
+    hb->add(*own);
     p.set_tip( *own, _("Each tool may store its own style to apply to the newly created objects. Use the button below to set it."));
     p.add_line( true, "", *hb, "", "");
 
@@ -986,9 +984,8 @@ void InkscapePreferences::initPageIO()
     _page_cms.add_group_header( _("Display adjustment"));
 
     Glib::ustring tmpStr;
-    std::vector<std::pair<Glib::ustring, bool> > sources = ColorProfile::getBaseProfileDirs();
-    for ( std::vector<std::pair<Glib::ustring, bool> >::const_iterator it = sources.begin(); it != sources.end(); ++it ) {
-        gchar* part = g_strdup_printf( "\n%s", it->first.c_str() );
+    for (auto &profile: ColorProfile::getBaseProfileDirs()) {
+        gchar* part = g_strdup_printf( "\n%s", profile.filename.c_str() );
         tmpStr += part;
         g_free(part);
     }
@@ -1947,7 +1944,7 @@ void InkscapePreferences::initPageSystem()
 
         _page_system.add_group_header( _("System info"));
 
-        _sys_user_config.set_text((char const *)Inkscape::Application::profile_path(""));
+        _sys_user_config.set_text((char const *)Inkscape::IO::Resource::profile_path(""));
         _sys_user_config.set_editable(false);
         _page_system.add_line(true, _("User config: "), _sys_user_config, "", _("Location of users configuration"), true);
 

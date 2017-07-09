@@ -289,7 +289,7 @@ static void rect_toolbox_watch_ec(SPDesktop* dt, Inkscape::UI::Tools::ToolBase* 
 void sp_rect_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObject* holder)
 {
     EgeAdjustmentAction* eact = 0;
-    Inkscape::IconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
+    GtkIconSize secondarySize = ToolboxFactory::prefToSize("/toolbox/secondary", 1);
 
     {
         EgeOutputAction* act = ege_output_action_new( "RectStateAction", _("<b>New:</b>"), "", 0 );

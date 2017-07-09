@@ -3,19 +3,18 @@
 # the new ones here in these builds.
 image: registry.gitlab.com/inkscape/inkscape-ci-docker/master
 
-before_script:
-  # CCache Config
-  - mkdir -p ccache
-  - export CCACHE_BASEDIR=${PWD}
-  - export CCACHE_DIR=${PWD}/ccache
-
 cache:
   paths:
     - ccache/
 
 # Building inkscape
-inkscape:
+inkscape:linux:
   stage: build
+  before_script:
+    # CCache Config
+    - mkdir -p ccache
+    - export CCACHE_BASEDIR=${PWD}
+    - export CCACHE_DIR=${PWD}/ccache
   script:
     - mkdir -p build
     - cd build
@@ -27,6 +26,37 @@ inkscape:
     paths:
       - build/
 
+inkscape:mac:
+  stage: build
+  tags:
+    - mac
+  before_script:
+    - brew update
+    - brew upgrade
+    # Tools
+    - brew install cmake intltool libtool pkg-config ccache
+    # Libraries
+    - brew install bdw-gc boost gdl gettext gsl gtkmm3 libcdr libvisio libwpg pango popt poppler potrace libsoup
+    # Testing tools
+    # TODO
+    # Cleanup
+    - brew cleanup
+    # CCache Config
+    - mkdir -p ccache
+    - export CCACHE_BASEDIR=${PWD}
+    - export CCACHE_DIR=${PWD}/ccache
+  script:
+    - mkdir -p build
+    - cd build
+    - cmake .. -DIntl_INCLUDE_DIR=/usr/local/opt/gettext/include -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_BUILD_TYPE=Debug
+    - make -j1
+    - cd ..
+  artifacts:
+    expire_in: 1 year
+    paths:
+      - build/
+  allow_failure: true
+
 # This job is a static analysis build by clang.
 # It takes MORE THAN 3 HOURS, and depending on worker sometimes 4 hours.
 # Make sure the timeout of the build is big enough
@@ -35,7 +65,7 @@ clang:
   only: 
     - schedules
   script:
-    - apt-get install -y clang-3.8 clang
+    - apt-get update -yqq && apt-get install -y clang-3.8 clang
     - mkdir -p clang-build
     - cd clang-build
     - scan-build cmake .. -DCMAKE_BUILD_TYPE=Debug
@@ -44,8 +74,10 @@ clang:
     paths:
       - scan/
 
-test:
+test:linux:
   stage: test
+  dependencies:
+    - inkscape:linux
   script:
     - cd build
     - make test

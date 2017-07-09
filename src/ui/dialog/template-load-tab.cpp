@@ -2,7 +2,7 @@
  * @brief New From Template abstract tab implementation
  */
 /* Authors:
- *   Jan Darowski <jan.darowski@gmail.com>, supervised by Krzysztof Kosiński   
+ *   Jan Darowski <jan.darowski@gmail.com>, supervised by Krzysztof Kosiński
  *
  * Copyright (C) 2013 Authors
  * Released under GNU GPL, read the file 'COPYING' for more information
@@ -24,6 +24,8 @@
 #include "file.h"
 #include "path-prefix.h"
 
+using namespace Inkscape::IO::Resource;
+
 namespace Inkscape {
 namespace UI {
 
@@ -36,28 +38,27 @@ TemplateLoadTab::TemplateLoadTab(NewFromTemplate* parent)
     set_border_width(10);
 
     _info_widget = Gtk::manage(new TemplateWidget());
-    
+
     Gtk::Label *title;
     title = Gtk::manage(new Gtk::Label(_("Search:")));
     _search_box.pack_start(*title, Gtk::PACK_SHRINK);
     _search_box.pack_start(_keywords_combo, Gtk::PACK_SHRINK, 5);
-    
+
     _tlist_box.pack_start(_search_box, Gtk::PACK_SHRINK, 10);
-    
+
     pack_start(_tlist_box, Gtk::PACK_SHRINK);
     pack_start(*_info_widget, Gtk::PACK_EXPAND_WIDGET, 5);
-    
+
     Gtk::ScrolledWindow *scrolled;
     scrolled = Gtk::manage(new Gtk::ScrolledWindow());
     scrolled->set_policy(Gtk::POLICY_NEVER, Gtk::POLICY_AUTOMATIC);
     scrolled->add(_tlist_view);
     _tlist_box.pack_start(*scrolled, Gtk::PACK_EXPAND_WIDGET, 5);
-    
+
     _keywords_combo.signal_changed().connect(
     sigc::mem_fun(*this, &TemplateLoadTab::_keywordSelected));
     this->show_all();
-    
-    _loading_path = "";
+
     _loadTemplates();
     _initLists();
 }
@@ -90,14 +91,14 @@ void TemplateLoadTab::_displayTemplateInfo()
         _info_widget->display(_tdata[_current_template]);
         _parent_widget->setCreateButtonSensitive(true);
     }
-     
+
 }
 
 
 void TemplateLoadTab::_initKeywordsList()
 {
     _keywords_combo.append(_("All"));
-    
+
     for (std::set<Glib::ustring>::iterator it = _keywords.begin() ; it != _keywords.end() ; ++it){
         _keywords_combo.append(*it);
     }
@@ -110,15 +111,15 @@ void TemplateLoadTab::_initLists()
     _tlist_view.set_model(_tlist_store);
     _tlist_view.append_column("", _columns.textValue);
     _tlist_view.set_headers_visible(false);
-    
+
     _initKeywordsList();
     _refreshTemplatesList();
-   
+
     Glib::RefPtr<Gtk::TreeSelection> templateSelectionRef =
-    _tlist_view.get_selection(); 
+    _tlist_view.get_selection();
     templateSelectionRef->signal_changed().connect(
     sigc::mem_fun(*this, &TemplateLoadTab::_displayTemplateInfo));
-    
+
     _tlist_view.signal_row_activated().connect(
     sigc::mem_fun(*this, &TemplateLoadTab::_onRowActivated));
 }
@@ -132,10 +133,10 @@ void TemplateLoadTab::_keywordSelected()
     }
     else
         _current_search_type = LIST_KEYWORD;
-    
+
     if (_current_keyword == "" || _current_keyword == _("All"))
         _current_search_type = ALL;
-    
+
     _refreshTemplatesList();
 }
 
@@ -202,17 +203,17 @@ void TemplateLoadTab::_refreshTemplatesList()
         _info_widget->clear();
         _parent_widget->setCreateButtonSensitive(false);
     }
-} 
+}
 
 
 void TemplateLoadTab::_loadTemplates()
 {
-    // user's local dir
-    _getTemplatesFromDir(Inkscape::Application::profile_path("templates") + _loading_path);
+    for(auto &filename: get_filenames(TEMPLATES, {".svg"}, {"default.", "default_"})) {
+        TemplateData tmp = _processTemplateFile(filename);
+        if (tmp.display_name != "")
+            _tdata[tmp.display_name] = tmp;
 
-    // system templates dir
-    _getTemplatesFromDir(INKSCAPE_TEMPLATESDIR + _loading_path);
-    
+    }
     // procedural templates
     _getProceduralTemplates();
 }
@@ -224,72 +225,51 @@ TemplateLoadTab::TemplateData TemplateLoadTab::_processTemplateFile(const std::s
     result.path = path;
     result.is_procedural = false;
     result.preview_name = "";
-    
+
     // convert path into valid template name
     result.display_name = Glib::path_get_basename(path);
     gsize n = 0;
     while ((n = result.display_name.find_first_of("_", 0)) < Glib::ustring::npos){
         result.display_name.replace(n, 1, 1, ' ');
-    }   
+    }
     n =  result.display_name.rfind(".svg");
     result.display_name.replace(n, 4, 1, ' ');
-    
+
     Inkscape::XML::Document *rdoc = sp_repr_read_file(path.data(), SP_SVG_NS_URI);
     if (rdoc){
         Inkscape::XML::Node *myRoot = rdoc->root();
         if (strcmp(myRoot->name(), "svg:svg") != 0){     // Wrong file format
             return result;
         }
-        
+
         myRoot = sp_repr_lookup_name(myRoot, "inkscape:_templateinfo");
-        
+
         if (myRoot == NULL)    // No template info
             return result;
         _getDataFromNode(myRoot, result);
     }
-    
+
     return result;
 }
-
-
-void TemplateLoadTab::_getTemplatesFromDir(const std::string &path)
-{
-    if ( !Glib::file_test(path, Glib::FILE_TEST_EXISTS) ||
-         !Glib::file_test(path, Glib::FILE_TEST_IS_DIR))
-        return;
-    
-    Glib::Dir dir(path);
-
-    std::string file = Glib::build_filename(path, dir.read_name());
-    while (file != path){
-        if (Glib::str_has_suffix(file, ".svg") && !Glib::str_has_prefix(Glib::path_get_basename(file), "default.")){
-            TemplateData tmp = _processTemplateFile(file);
-            if (tmp.display_name != "")
-                _tdata[tmp.display_name] = tmp;
-        }
-        file = Glib::build_filename(path, dir.read_name());
-    }
-}
-
 
 void TemplateLoadTab::_getProceduralTemplates()
 {
     std::list<Inkscape::Extension::Effect *> effects;
     Inkscape::Extension::db.get_effect_list(effects);
-    
+
     std::list<Inkscape::Extension::Effect *>::iterator it = effects.begin();
     while (it != effects.end()){
         Inkscape::XML::Node *myRoot;
         myRoot  = (*it)->get_repr();
         myRoot = sp_repr_lookup_name(myRoot, "inkscape:_templateinfo");
-        
+
         if (myRoot){
             TemplateData result;
             result.display_name = (*it)->get_name();
             result.is_procedural = true;
             result.path = "";
             result.tpl_effect = *it;
-            
+
             _getDataFromNode(myRoot, result);
             _tdata[result.display_name] = result;
         }
@@ -313,18 +293,18 @@ void TemplateLoadTab::_getDataFromNode(Inkscape::XML::Node *dataNode, TemplateDa
         data.preview_name = currentData->firstChild()->content();
     if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:date")) != NULL)
         data.creation_date = currentData->firstChild()->content();
-        
+
     if ((currentData = sp_repr_lookup_name(dataNode, "inkscape:_keywords")) != NULL){
         Glib::ustring tplKeywords = _(currentData->firstChild()->content());
         while (!tplKeywords.empty()){
             std::size_t pos = tplKeywords.find_first_of(" ");
             if (pos == Glib::ustring::npos)
                 pos = tplKeywords.size();
-                
+
             Glib::ustring keyword = tplKeywords.substr(0, pos).data();
             data.keywords.insert(keyword.lowercase());
             _keywords.insert(keyword.lowercase());
-                
+
             if (pos == tplKeywords.size())
                 break;
             tplKeywords.erase(0, pos+1);

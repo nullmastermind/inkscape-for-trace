@@ -49,7 +49,6 @@
 #include "ui/widget/spinbutton.h"
 #include "unclump.h"
 #include "verbs.h"
-#include "widgets/icon.h"
 
 using Inkscape::DocumentUndo;
 using Inkscape::Util::unit_table;
@@ -2678,7 +2677,7 @@ GtkWidget * CloneTiler::table_x_y_rand(int values)
 	auto hb = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_box_set_homogeneous(GTK_BOX(hb), FALSE);
 
-        GtkWidget *i = sp_icon_new (Inkscape::ICON_SIZE_DECORATION, INKSCAPE_ICON("object-rows"));
+        GtkWidget *i = gtk_image_new_from_icon_name (INKSCAPE_ICON("object-rows"), GTK_ICON_SIZE_MENU);
         gtk_box_pack_start (GTK_BOX (hb), i, FALSE, FALSE, 2);
 
         GtkWidget *l = gtk_label_new ("");
@@ -2692,7 +2691,7 @@ GtkWidget * CloneTiler::table_x_y_rand(int values)
 	auto hb = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_box_set_homogeneous(GTK_BOX(hb), FALSE);
 
-        GtkWidget *i = sp_icon_new (Inkscape::ICON_SIZE_DECORATION, INKSCAPE_ICON("object-columns"));
+        GtkWidget *i = gtk_image_new_from_icon_name (INKSCAPE_ICON("object-columns"), GTK_ICON_SIZE_MENU);
         gtk_box_pack_start (GTK_BOX (hb), i, FALSE, FALSE, 2);
 
         GtkWidget *l = gtk_label_new ("");

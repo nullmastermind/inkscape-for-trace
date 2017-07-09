@@ -57,7 +57,7 @@ const std::string& PencilTool::getPrefsPath() {
 const std::string PencilTool::prefsPath = "/tools/freehand/pencil";
 
 PencilTool::PencilTool()
-    : FreehandBase(cursor_pencil_xpm, 4, 4)
+    : FreehandBase(cursor_pencil_xpm)
     , p()
     , npoints(0)
     , state(SP_PENCIL_CONTEXT_IDLE)

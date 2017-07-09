@@ -36,7 +36,6 @@
 #include "ui/icon-names.h"
 #include "ui/widget/imagetoggler.h"
 #include "verbs.h"
-#include "widgets/icon.h"
 #include "livepatheffect-add.h"
 
 namespace Inkscape {
@@ -67,7 +66,7 @@ void lpeeditor_selection_modified (Inkscape::Selection * selection, guint /*flag
 
 static void lpe_style_button(Gtk::Button& btn, char const* iconName)
 {
-    GtkWidget *child = sp_icon_new(Inkscape::ICON_SIZE_SMALL_TOOLBAR, iconName);
+    GtkWidget *child = gtk_image_new_from_icon_name(iconName, GTK_ICON_SIZE_SMALL_TOOLBAR);
     gtk_widget_show( child );
     btn.add(*Gtk::manage(Glib::wrap(child)));
     btn.set_relief(Gtk::RELIEF_NONE);

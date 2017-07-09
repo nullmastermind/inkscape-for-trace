@@ -59,7 +59,7 @@ const std::string ArcTool::prefsPath = "/tools/shapes/arc";
 
 
 ArcTool::ArcTool()
-    : ToolBase(cursor_ellipse_xpm, 4, 4)
+    : ToolBase(cursor_ellipse_xpm)
     , arc(NULL)
 {
 }
@@ -242,15 +242,6 @@ bool ArcTool::root_handler(GdkEvent* event) {
                                                    _("<b>Shift</b>: draw around the starting point"),
                                                    NULL);
                     }
-                    break;
-
-                case GDK_KEY_Up:
-                case GDK_KEY_Down:
-                case GDK_KEY_KP_Up:
-                case GDK_KEY_KP_Down:
-                    // prevent the zoom field from activation
-                    if (!MOD__CTRL_ONLY(event))
-                        handled = true;
                     break;
 
                 case GDK_KEY_x:

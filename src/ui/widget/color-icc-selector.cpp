@@ -663,6 +663,9 @@ struct _cmp {
   }
 };
 
+template <typename From, typename To>
+struct static_caster { To * operator () (From * value) const { return static_cast<To *>(value); } };
+
 void ColorICCSelectorImpl::_profilesChanged(std::string const &name)
 {
     GtkComboBox *combo = GTK_COMBO_BOX(_profileSel);
@@ -680,10 +683,15 @@ void ColorICCSelectorImpl::_profilesChanged(std::string const &name)
 
     int index = 1;
     std::vector<SPObject *> current = SP_ACTIVE_DOCUMENT->getResourceList("iccprofile");
-    std::set<SPObject *, _cmp> _current(current.begin(), current.end());
-    for (std::set<SPObject *, _cmp>::const_iterator it = _current.begin(); it != _current.end(); ++it) {
-        SPObject *obj = *it;
-        Inkscape::ColorProfile *prof = reinterpret_cast<Inkscape::ColorProfile *>(obj);
+
+    std::set<Inkscape::ColorProfile *, Inkscape::ColorProfile::pointerComparator> _current;
+    std::transform(current.begin(),
+                   current.end(),
+                   std::inserter(_current, _current.begin()),
+                   static_caster<SPObject, Inkscape::ColorProfile>());
+
+    for (auto &it: _current) {
+        Inkscape::ColorProfile *prof = it;
 
         gtk_list_store_append(store, &iter);
         gtk_list_store_set(store, &iter, 0, gr_ellipsize_text(prof->name, 25).c_str(), 1, prof->name, -1);

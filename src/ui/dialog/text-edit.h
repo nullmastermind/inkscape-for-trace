@@ -22,7 +22,6 @@
 # include <config.h>
 #endif
 
-#include <gtkmm/alignment.h>
 #include <gtkmm/box.h>
 #include <gtkmm/notebook.h>
 #include <gtkmm/button.h>
@@ -190,11 +189,10 @@ private:
 
     Gtk::VBox font_vbox;
     Gtk::Label font_label;
-    Gtk::HBox fontsel_hbox;
+    Gtk::Box fontsel_hbox;
     SPFontSelector *fsel;
 
-    Gtk::Alignment layout_frame;
-    Gtk::HBox layout_hbox;
+    Gtk::Box layout_hbox;
     Gtk::RadioButton align_left;
     Gtk::RadioButton align_center;
     Gtk::RadioButton align_right;

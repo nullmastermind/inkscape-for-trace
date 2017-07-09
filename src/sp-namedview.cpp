@@ -37,6 +37,12 @@
 #include "sp-root.h"
 #include <gtkmm/window.h>
 
+#if WITH_GTKMM_3_22
+# include <gdkmm/monitor.h>
+#else
+# include <gdkmm/screen.h>
+#endif
+
 using Inkscape::DocumentUndo;
 using Inkscape::Util::unit_table;
 
@@ -742,9 +748,22 @@ gdouble const NEWDOC_Y_SCALE = NEWDOC_X_SCALE;
 Geom::Point calcAnchorPoint(gint const x, gint const y,
                             gint const w, gint const h, gint const minOnscreen)
 {
+#if WITH_GTKMM_3_22
+    Gdk::Rectangle screen_geometry;
+
+    auto const display = Gdk::Display::get_default();
+    auto const monitor = display->get_primary_monitor();
+    monitor->get_geometry(screen_geometry);
+    int screen_width  = screen_geometry.get_width();
+    int screen_height = screen_geometry.get_height();
+#else
+    int screen_width  = gdk_screen_width();
+    int screen_height = gdk_screen_height();
+#endif
+
     // prevent the window from moving off the screen to the right or to the bottom
-    gint ax = MIN(gdk_screen_width() - minOnscreen, x);
-    gint ay = MIN(gdk_screen_height() - minOnscreen, y);
+    gint ax = MIN(screen_width  - minOnscreen, x);
+    gint ay = MIN(screen_height - minOnscreen, y);
 
     // prevent the window from moving off the screen to the left or to the top
     ax = MAX(minOnscreen - w, ax);
@@ -778,16 +797,23 @@ void sp_namedview_window_from_document(SPDesktop *desktop)
             win->maximize();
         }
     } else {
-        // gdk_screen_width() / gdk_screen_height() return the dimensions of all displays combined
-        // therefore we have to get the dimensions of one monitor explicitly (currently the primary monitor)
-        // TODO: account for multi-monitor setups (i.e. on which monitor do we want to display Inkscape?)
-        gint monitor_number;
-        GdkRectangle monitor_geometry;
-        monitor_number = gdk_screen_get_primary_monitor(gdk_screen_get_default());
-        gdk_screen_get_monitor_geometry(gdk_screen_get_default(), monitor_number, &monitor_geometry);
 
-        gint w = monitor_geometry.width;
-        gint h = monitor_geometry.height;
+        // TODO: account for multi-monitor setups (i.e. on which monitor do we want to display Inkscape?)
+        Gdk::Rectangle monitor_geometry;
+
+#if WITH_GTKMM_3_22
+        auto const display = Gdk::Display::get_default();
+        auto const monitor = display->get_primary_monitor();
+        monitor->get_geometry(monitor_geometry);
+#else
+        auto const default_screen = Gdk::Screen::get_default();
+        auto const monitor_number = default_screen->get_primary_monitor();
+        default_screen->get_monitor_geometry(monitor_number, monitor_geometry);
+#endif
+
+        int w = monitor_geometry.get_width();
+        int h = monitor_geometry.get_height();
+
         bool move_to_screen = false;
         if (geometry_from_file and !new_document) {
             w = MIN(w, nv->window_width);

@@ -24,6 +24,7 @@
 #include "sp-conn-end.h"
 #include "sp-path.h"
 #include "libavoid/router.h"
+#include "libavoid/shape.h"
 #include "xml/node.h"
 #include "document.h"
 #include "desktop.h"
@@ -57,12 +58,10 @@ SPAvoidRef::~SPAvoidRef()
 
     // If the document is being destroyed then the router instance
     // and the ShapeRefs will have been destroyed with it.
-    const bool routerInstanceExists = (item->document->router != NULL);
+    Router *router = item->document->router;
 
-    if (shapeRef && routerInstanceExists) {
-        // Deleting the shapeRef will remove it completely from 
-        // an existing Router instance.
-        delete shapeRef;
+    if (shapeRef && router) {
+        router->deleteShape(shapeRef);
     }
     shapeRef = NULL;
 }
@@ -117,17 +116,13 @@ void SPAvoidRef::handleSettingChange(void)
             GQuark itemID = g_quark_from_string(id);
 
             shapeRef = new Avoid::ShapeRef(router, poly, itemID);
-
-            router->addShape(shapeRef);
         }
     }
     else
     {
         g_assert(shapeRef);
 
-        // Deleting the shapeRef will remove it completely from 
-        // an existing Router instance.
-        delete shapeRef;
+        router->deleteShape(shapeRef);
         shapeRef = NULL;
     }
 }

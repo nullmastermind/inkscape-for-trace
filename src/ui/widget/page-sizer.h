@@ -20,7 +20,6 @@
 
 #include "util/units.h"
 
-#include <gtkmm/alignment.h>
 #include <gtkmm/expander.h>
 #include <gtkmm/frame.h>
 #include <gtkmm/grid.h>
@@ -227,15 +226,10 @@ protected:
     Gtk::Expander        _fitPageMarginExpander;
 
     Gtk::Grid            _marginTable;
-    Gtk::Alignment       _marginTopAlign;
-    Gtk::Alignment       _marginLeftAlign;
-    Gtk::Alignment       _marginRightAlign;
-    Gtk::Alignment       _marginBottomAlign;
     RegisteredScalar     _marginTop;
     RegisteredScalar     _marginLeft;
     RegisteredScalar     _marginRight;
     RegisteredScalar     _marginBottom;
-    Gtk::Alignment       _fitPageButtonAlign;
     Gtk::Button          _fitPageButton;
     bool                 _lockMarginUpdate;
 

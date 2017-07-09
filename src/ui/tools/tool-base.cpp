@@ -23,6 +23,7 @@
 #include "shortcuts.h"
 #include "file.h"
 
+#include "ui/contextmenu.h"
 #include "ui/interface.h"
 #include "ui/event-debug.h"
 #include "ui/tool/control-point.h"
@@ -30,6 +31,10 @@
 #include "ui/tools/tool-base.h"
 #include "ui/tools-switch.h"
 #include "ui/tools/lpe-tool.h"
+#include "ui/tool/commit-events.h"
+#include "ui/tool/event-utils.h"
+#include "ui/tools/node-tool.h"
+#include "ui/tool/shape-record.h"
 
 #include <gdk/gdkkeysyms.h>
 #include <glibmm/i18n.h>
@@ -85,7 +90,7 @@ SPDesktop const& ToolBase::getDesktop() const {
     return *desktop;
 }
 
-ToolBase::ToolBase(gchar const *const *cursor_shape, gint hot_x, gint hot_y, bool uses_snap)
+ToolBase::ToolBase(gchar const *const *cursor_shape, bool uses_snap)
     : pref_observer(NULL)
     , cursor(NULL)
     , xp(0)
@@ -103,8 +108,6 @@ ToolBase::ToolBase(gchar const *const *cursor_shape, gint hot_x, gint hot_y, boo
     , desktop(NULL)
     , _uses_snap(uses_snap)
     , cursor_shape(cursor_shape)
-    , hot_x(hot_x)
-    , hot_y(hot_y)
 {
 }
 
@@ -153,44 +156,22 @@ void ToolBase::sp_event_context_set_cursor(GdkCursorType cursor_type) {
 void ToolBase::sp_event_context_update_cursor() {
     GtkWidget *w = GTK_WIDGET(this->desktop->getCanvas());
     if (gtk_widget_get_window (w)) {
-    
-        GtkStyle *style = gtk_widget_get_style(w);
-
-        /* fixme: */
         if (this->cursor_shape) {
-            GdkDisplay *display = gdk_display_get_default();
-            if (gdk_display_supports_cursor_alpha(display) && gdk_display_supports_cursor_color(display)) {
-                bool fillHasColor=false, strokeHasColor=false;
-                guint32 fillColor = sp_desktop_get_color_tool(this->desktop, this->getPrefsPath(), true, &fillHasColor);
-                guint32 strokeColor = sp_desktop_get_color_tool(this->desktop, this->getPrefsPath(), false, &strokeHasColor);
-                double fillOpacity = fillHasColor ? sp_desktop_get_opacity_tool(this->desktop, this->getPrefsPath(), true) : 0;
-                double strokeOpacity = strokeHasColor ? sp_desktop_get_opacity_tool(this->desktop, this->getPrefsPath(), false) : 0;
-
-                GdkPixbuf *pixbuf = sp_cursor_pixbuf_from_xpm(
-                    this->cursor_shape,
-                    style->black, style->white,
-                    SP_RGBA32_U_COMPOSE(SP_RGBA32_R_U(fillColor),SP_RGBA32_G_U(fillColor),SP_RGBA32_B_U(fillColor),SP_COLOR_F_TO_U(fillOpacity)),
-                    SP_RGBA32_U_COMPOSE(SP_RGBA32_R_U(strokeColor),SP_RGBA32_G_U(strokeColor),SP_RGBA32_B_U(strokeColor),SP_COLOR_F_TO_U(strokeOpacity))
-                    );
-                if (pixbuf != NULL) {
-                    if (this->cursor) {
-                        g_object_unref(this->cursor);
-                    }
-                    this->cursor = gdk_cursor_new_from_pixbuf(display, pixbuf, this->hot_x, this->hot_y);
-                    g_object_unref(pixbuf);
-                }
-            } else {
-            	GdkPixbuf *pixbuf = gdk_pixbuf_new_from_xpm_data((const gchar **)this->cursor_shape);
-
-                if (pixbuf) {
-                    if (this->cursor) {
-                        g_object_unref(this->cursor);
-                    }
-                    this->cursor = gdk_cursor_new_from_pixbuf(display,
-                    pixbuf, this->hot_x, this->hot_y);
-                    g_object_unref(pixbuf);
-                }
+            if(this->cursor) {
+                g_object_unref(this->cursor);
             }
+
+	    bool fillHasColor=false, strokeHasColor=false;
+	    guint32 fillColor = sp_desktop_get_color_tool(this->desktop, this->getPrefsPath(), true, &fillHasColor);
+	    guint32 strokeColor = sp_desktop_get_color_tool(this->desktop, this->getPrefsPath(), false, &strokeHasColor);
+	    double fillOpacity = fillHasColor ? sp_desktop_get_opacity_tool(this->desktop, this->getPrefsPath(), true) : 0;
+	    double strokeOpacity = strokeHasColor ? sp_desktop_get_opacity_tool(this->desktop, this->getPrefsPath(), false) : 0;
+
+            this->cursor = sp_cursor_from_xpm(
+		this->cursor_shape,
+                SP_RGBA32_C_COMPOSE(fillColor, fillOpacity),
+                SP_RGBA32_C_COMPOSE(strokeColor, strokeOpacity)
+            );
         }
         gdk_window_set_cursor(gtk_widget_get_window (w), this->cursor);
         gdk_flush();
@@ -207,8 +188,7 @@ void ToolBase::sp_event_context_update_cursor() {
 void ToolBase::setup() {
     this->pref_observer = new ToolPrefObserver(this->getPrefsPath(), this);
     Inkscape::Preferences::get()->addObserver(*(this->pref_observer));
-
-	this->sp_event_context_update_cursor();
+    this->sp_event_context_update_cursor();
 }
 
 /**
@@ -324,6 +304,43 @@ static gdouble accelerate_scroll(GdkEvent *event, gdouble acceleration,
     scroll_keyval = event->key.keyval;
 
     return scroll_multiply;
+}
+
+/** Moves the selected points along the supplied unit vector according to
+ * the modifier state of the supplied event. */
+bool ToolBase::_keyboardMove(GdkEventKey const &event, Geom::Point const &dir)
+{
+    if (held_control(event)) return false;
+    unsigned num = 1 + combine_key_events(shortcut_key(event), 0);
+    Geom::Point delta = dir * num; 
+    if (held_shift(event)) delta *= 10;
+    if (held_alt(event)) {
+        delta /= desktop->current_zoom();
+    } else {
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        double nudge = prefs->getDoubleLimited("/options/nudgedistance/value", 2, 0, 1000, "px");
+        delta *= nudge;
+    }
+    if (shape_editor && shape_editor->has_knotholder()) {
+        KnotHolder * knotholder = shape_editor->knotholder;
+        if (knotholder) {
+            knotholder->transform_selected(Geom::Translate(delta));
+        }
+    } else if (tools_isactive(desktop, TOOLS_NODES)) {
+        Inkscape::UI::Tools::NodeTool *nt = static_cast<Inkscape::UI::Tools::NodeTool*>(desktop->event_context);
+        if (nt) {
+            for(auto i=nt->_shape_editors.begin();i!=nt->_shape_editors.end();++i){
+                ShapeEditor * shape_editor = i->second;
+                if (shape_editor && shape_editor->has_knotholder()) {
+                    KnotHolder * knotholder = shape_editor->knotholder;
+                    if (knotholder) {
+                        knotholder->transform_selected(Geom::Translate(delta));
+                    }
+                }
+            }
+        }
+    }
+    return true;
 }
 
 bool ToolBase::root_handler(GdkEvent* event) {
@@ -624,6 +641,8 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 gobble_key_events(get_group0_keyval(&event->key), GDK_CONTROL_MASK);
                 this->desktop->scroll_relative(Geom::Point(i, 0));
                 ret = TRUE;
+            } else {
+                ret = _keyboardMove(event->key, Geom::Point(-1, 0));
             }
             break;
 
@@ -637,6 +656,8 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 gobble_key_events(get_group0_keyval(&event->key), GDK_CONTROL_MASK);
                 this->desktop->scroll_relative(Geom::Point(0, i));
                 ret = TRUE;
+            } else {
+                ret = _keyboardMove(event->key, Geom::Point(0, 1));
             }
             break;
 
@@ -650,6 +671,8 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 gobble_key_events(get_group0_keyval(&event->key), GDK_CONTROL_MASK);
                 this->desktop->scroll_relative(Geom::Point(-i, 0));
                 ret = TRUE;
+            } else {
+                ret = _keyboardMove(event->key, Geom::Point(1, 0));
             }
             break;
 
@@ -663,6 +686,8 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 gobble_key_events(get_group0_keyval(&event->key), GDK_CONTROL_MASK);
                 this->desktop->scroll_relative(Geom::Point(0, -i));
                 ret = TRUE;
+            } else {
+                ret = _keyboardMove(event->key, Geom::Point(0, -1));
             }
             break;
 

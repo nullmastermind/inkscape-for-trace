@@ -44,7 +44,8 @@ FilletChamferPropertiesDialog::FilletChamferPropertiesDialog()
     _fillet_chamfer_position_numeric.set_range(0., SCALARPARAM_G_MAXDOUBLE);
     _fillet_chamfer_position_numeric.set_hexpand();
     _fillet_chamfer_position_label.set_label(_("Radius (pixels):"));
-    _fillet_chamfer_position_label.set_alignment(1.0, 0.5);
+    _fillet_chamfer_position_label.set_halign(Gtk::ALIGN_END);
+    _fillet_chamfer_position_label.set_valign(Gtk::ALIGN_CENTER);
 
     _layout_table.attach(_fillet_chamfer_position_label, 0, 0, 1, 1);
     _layout_table.attach(_fillet_chamfer_position_numeric, 1, 0, 1, 1);
@@ -54,7 +55,8 @@ FilletChamferPropertiesDialog::FilletChamferPropertiesDialog()
     _fillet_chamfer_chamfer_subdivisions.set_range(0, SCALARPARAM_G_MAXDOUBLE);
     _fillet_chamfer_chamfer_subdivisions.set_hexpand();
     _fillet_chamfer_chamfer_subdivisions_label.set_label(_("Chamfer subdivisions:"));
-    _fillet_chamfer_chamfer_subdivisions_label.set_alignment(1.0, 0.5);
+    _fillet_chamfer_chamfer_subdivisions_label.set_halign(Gtk::ALIGN_END);
+    _fillet_chamfer_chamfer_subdivisions_label.set_valign(Gtk::ALIGN_CENTER);
 
     _layout_table.attach(_fillet_chamfer_chamfer_subdivisions_label, 0, 1, 1, 1);
     _layout_table.attach(_fillet_chamfer_chamfer_subdivisions, 1, 1, 1, 1);

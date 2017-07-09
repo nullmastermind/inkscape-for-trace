@@ -40,7 +40,6 @@
   typedef libcdr::CDRStringVector RVNGStringVector;
 #endif
 
-#include <gtkmm/alignment.h>
 #include <gtkmm/grid.h>
 #include <gtkmm/spinbutton.h>
 

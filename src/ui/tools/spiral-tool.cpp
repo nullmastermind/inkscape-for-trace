@@ -51,7 +51,7 @@ const std::string& SpiralTool::getPrefsPath() {
 const std::string SpiralTool::prefsPath = "/tools/shapes/spiral";
 
 SpiralTool::SpiralTool()
-    : ToolBase(cursor_spiral_xpm, 4, 4)
+    : ToolBase(cursor_spiral_xpm)
     , spiral(NULL)
     , revo(3)
     , exp(1)
@@ -244,14 +244,6 @@ bool SpiralTool::root_handler(GdkEvent* event) {
                                                _("<b>Ctrl</b>: snap angle"),
                                                NULL,
                                                _("<b>Alt</b>: lock spiral radius"));
-                    break;
-                case GDK_KEY_Up:
-                case GDK_KEY_Down:
-                case GDK_KEY_KP_Up:
-                case GDK_KEY_KP_Down:
-                    // prevent the zoom field from activation
-                    if (!MOD__CTRL_ONLY(event))
-                        ret = TRUE;
                     break;
 
                 case GDK_KEY_x:

@@ -31,6 +31,7 @@
 #include <glibmm/i18n.h>
 #include "path-prefix.h"
 #include "io/sys.h"
+#include "io/resource.h"
 
 #include "ui/cache/svg_preview_cache.h"
 #include "ui/clipboard.h"
@@ -47,7 +48,6 @@
 #include "sp-use.h"
 #include "sp-defs.h"
 #include "sp-symbol.h"
-#include "widgets/icon.h"
 
 #ifdef WITH_LIBVISIO
   #include <libvisio/libvisio.h>
@@ -174,18 +174,22 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   scroller->set_hexpand();
   table->attach(*Gtk::manage(tools),0,row,2,1);
 
+  auto addSymbolImage = Gtk::manage(new Gtk::Image());
+  addSymbolImage->set_from_icon_name("symbol-add", Gtk::ICON_SIZE_SMALL_TOOLBAR);
+
   addSymbol = Gtk::manage(new Gtk::Button());
-  addSymbol->add(*Gtk::manage(Glib::wrap(
-      sp_icon_new (Inkscape::ICON_SIZE_SMALL_TOOLBAR, INKSCAPE_ICON("symbol-add")))) );
+  addSymbol->add(*addSymbolImage);
   addSymbol->set_tooltip_text(_("Add Symbol from the current document."));
   addSymbol->set_relief( Gtk::RELIEF_NONE );
   addSymbol->set_focus_on_click( false );
   addSymbol->signal_clicked().connect(sigc::mem_fun(*this, &SymbolsDialog::insertSymbol));
   tools->pack_start(* addSymbol, Gtk::PACK_SHRINK);
 
+  auto removeSymbolImage = Gtk::manage(new Gtk::Image());
+  removeSymbolImage->set_from_icon_name("symbol-remove", Gtk::ICON_SIZE_SMALL_TOOLBAR);
+
   removeSymbol = Gtk::manage(new Gtk::Button());
-  removeSymbol->add(*Gtk::manage(Glib::wrap(
-      sp_icon_new (Inkscape::ICON_SIZE_SMALL_TOOLBAR, INKSCAPE_ICON("symbol-remove")))) );
+  removeSymbol->add(*removeSymbolImage);
   removeSymbol->set_tooltip_text(_("Remove Symbol from the current document."));
   removeSymbol->set_relief( Gtk::RELIEF_NONE );
   removeSymbol->set_focus_on_click( false );
@@ -197,18 +201,23 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
 
   // Pack size (controls display area)
   pack_size = 2; // Default 32px
+
+  auto packMoreImage = Gtk::manage(new Gtk::Image());
+  packMoreImage->set_from_icon_name("pack-more", Gtk::ICON_SIZE_SMALL_TOOLBAR);
+
   button = Gtk::manage(new Gtk::Button());
-  button->add(*Gtk::manage(Glib::wrap(
-      sp_icon_new (Inkscape::ICON_SIZE_SMALL_TOOLBAR, INKSCAPE_ICON("pack-more")))) );
+  button->add(*packMoreImage);
   button->set_tooltip_text(_("Display more icons in row."));
   button->set_relief( Gtk::RELIEF_NONE );
   button->set_focus_on_click( false );
   button->signal_clicked().connect(sigc::mem_fun(*this, &SymbolsDialog::packmore));
   tools->pack_start(* button, Gtk::PACK_SHRINK);
 
+  auto packLessImage = Gtk::manage(new Gtk::Image());
+  packLessImage->set_from_icon_name("pack-less", Gtk::ICON_SIZE_SMALL_TOOLBAR);
+
   button = Gtk::manage(new Gtk::Button());
-  button->add(*Gtk::manage(Glib::wrap(
-      sp_icon_new (Inkscape::ICON_SIZE_SMALL_TOOLBAR, INKSCAPE_ICON("pack-less")))) );
+  button->add(*packLessImage);
   button->set_tooltip_text(_("Display fewer icons in row."));
   button->set_relief( Gtk::RELIEF_NONE );
   button->set_focus_on_click( false );
@@ -216,9 +225,11 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   tools->pack_start(* button, Gtk::PACK_SHRINK);
 
   // Toggle scale to fit on/off
+  auto fitSymbolImage = Gtk::manage(new Gtk::Image());
+  fitSymbolImage->set_from_icon_name("symbol-fit", Gtk::ICON_SIZE_SMALL_TOOLBAR);
+
   fitSymbol = Gtk::manage(new Gtk::ToggleButton());
-  fitSymbol->add(*Gtk::manage(Glib::wrap(
-      sp_icon_new (Inkscape::ICON_SIZE_SMALL_TOOLBAR, INKSCAPE_ICON("symbol-fit")))) );
+  fitSymbol->add(*fitSymbolImage);
   fitSymbol->set_tooltip_text(_("Toggle 'fit' symbols in icon space."));
   fitSymbol->set_relief( Gtk::RELIEF_NONE );
   fitSymbol->set_focus_on_click( false );
@@ -228,9 +239,11 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
 
   // Render size (scales symbols within display area)
   scale_factor = 0; // Default 1:1 * pack_size/pack_size default
+  auto zoomOutImage = Gtk::manage(new Gtk::Image());
+  zoomOutImage->set_from_icon_name("symbol-smaller", Gtk::ICON_SIZE_SMALL_TOOLBAR);
+
   zoomOut = Gtk::manage(new Gtk::Button());
-  zoomOut->add(*Gtk::manage(Glib::wrap(
-      sp_icon_new (Inkscape::ICON_SIZE_SMALL_TOOLBAR, INKSCAPE_ICON("symbol-smaller")))) );
+  zoomOut->add(*zoomOutImage);
   zoomOut->set_tooltip_text(_("Make symbols smaller by zooming out."));
   zoomOut->set_relief( Gtk::RELIEF_NONE );
   zoomOut->set_focus_on_click( false );
@@ -238,9 +251,11 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   zoomOut->signal_clicked().connect(sigc::mem_fun(*this, &SymbolsDialog::zoomout));
   tools->pack_start(* zoomOut, Gtk::PACK_SHRINK);
 
+  auto zoomInImage = Gtk::manage(new Gtk::Image());
+  zoomInImage->set_from_icon_name("symbol-bigger", Gtk::ICON_SIZE_SMALL_TOOLBAR);
+
   zoomIn = Gtk::manage(new Gtk::Button());
-  zoomIn->add(*Gtk::manage(Glib::wrap(
-      sp_icon_new (Inkscape::ICON_SIZE_SMALL_TOOLBAR, INKSCAPE_ICON("symbol-bigger")))) );
+  zoomIn->add(*zoomInImage);
   zoomIn->set_tooltip_text(_("Make symbols bigger by zooming in."));
   zoomIn->set_relief( Gtk::RELIEF_NONE );
   zoomIn->set_focus_on_click( false );
@@ -480,20 +495,19 @@ class REVENGE_API RVNGSVGDrawingGenerator_WithTitle : public RVNGSVGDrawingGener
 #endif
 
 // Read Visio stencil files
-SPDocument* read_vss( gchar* fullname, Glib::ustring name ) {
-
+SPDocument* read_vss(Glib::ustring filename, Glib::ustring name ) {
+  gchar *fullname;
   #ifdef WIN32
     // RVNGFileStream uses fopen() internally which unfortunately only uses ANSI encoding on Windows
     // therefore attempt to convert uri to the system codepage
     // even if this is not possible the alternate short (8.3) file name will be used if available
-    fullname = g_win32_locale_filename_from_utf8(fullname);
+    fullname = g_win32_locale_filename_from_utf8(filename.c_str());
+  #else
+    filename.copy(fullname, filename.length());
   #endif
 
   RVNGFileStream input(fullname);
-
-  #ifdef WIN32
-    g_free(fullname);
-  #endif
+  g_free(fullname);
 
   if (!libvisio::VisioDocument::isSupported(&input)) {
     return NULL;
@@ -575,78 +589,32 @@ SPDocument* read_vss( gchar* fullname, Glib::ustring name ) {
 /* Hunts preference directories for symbol files */
 void SymbolsDialog::get_symbols() {
 
-  std::list<Glib::ustring> directories;
+    using namespace Inkscape::IO::Resource;
+    SPDocument* symbol_doc = NULL;
+    Glib::ustring title;
 
-// \TODO optimize this
-
-  if( Inkscape::IO::file_test( INKSCAPE_SYMBOLSDIR, G_FILE_TEST_EXISTS ) &&
-      Inkscape::IO::file_test( INKSCAPE_SYMBOLSDIR, G_FILE_TEST_IS_DIR ) ) {
-    directories.push_back( INKSCAPE_SYMBOLSDIR );
-  }
-  if( Inkscape::IO::file_test( Inkscape::Application::profile_path("symbols"), G_FILE_TEST_EXISTS ) &&
-      Inkscape::IO::file_test( Inkscape::Application::profile_path("symbols"), G_FILE_TEST_IS_DIR ) ) {
-    directories.push_back( Inkscape::Application::profile_path("symbols") );
-  }
-
-  std::list<Glib::ustring>::iterator it;
-  for( it = directories.begin(); it != directories.end(); ++it ) {
-
-    GError *err = 0;
-    GDir *dir = g_dir_open( (*it).c_str(), 0, &err );
-    if( dir ) {
-
-      gchar *filename = 0;
-      while( (filename = (gchar *)g_dir_read_name( dir ) ) != NULL) {
-
-        gchar *fullname = g_build_filename((*it).c_str(), filename, NULL);
-
-        if ( !Inkscape::IO::file_test( fullname, G_FILE_TEST_IS_DIR )
-             && ( Glib::str_has_suffix(fullname, ".svg") || Glib::str_has_suffix(fullname, ".vss") ) ) {
-
-          Glib::ustring fn( filename );
-          Glib::ustring tag = fn.substr( fn.find_last_of(".") + 1 );
-
-          SPDocument* symbol_doc = NULL;
-
-#ifdef WITH_LIBVISIO
-          if( tag.compare( "vss" ) == 0 ) {
-            // strip extension from filename and use it as name for the symbol set
-            Glib::ustring name = Glib::ustring(filename);
-            name = name.erase(name.rfind('.'));
-
-            symbol_doc = read_vss( fullname, name );
-            if( symbol_doc ) {
-              symbolSets[name]= symbol_doc;
-              symbolSet->append(name);
+    for(auto &filename: get_filenames(SYMBOLS, {".svg", ".vss"})) {
+        if(Glib::str_has_suffix(filename, ".svg")) {
+            symbol_doc = SPDocument::createNewDoc(filename.c_str(), FALSE);
+            if(symbol_doc) {
+                title = symbol_doc->getRoot()->title();
+                if(title.empty()) {
+                    title = _("Unnamed Symbols");
+                }
             }
-          }
-#endif
-          // Try to read all remaining files as SVG
-          if( !symbol_doc ) {
-
-            symbol_doc = SPDocument::createNewDoc( fullname, FALSE );
-            if( symbol_doc ) {
-
-              const gchar *title = symbol_doc->getRoot()->title();
-
-              // A user provided file may not have a title
-              if( title != NULL ) {
-                title = g_dpgettext2(NULL, "Symbol", title); // Translate
-              } else {
-                title = _("Unnamed Symbols");
-              }
-
-              symbolSets[Glib::ustring(title)] = symbol_doc;
-              symbolSet->append(title);
-            }
-          }
 
         }
-        g_free( fullname );
-      }
-      g_dir_close( dir );
+#ifdef WITH_LIBVISIO
+        if(Glib::str_has_suffix(filename, ".vss")) {
+            Glib::ustring title = filename.erase(filename.rfind('.'));
+            symbol_doc = read_vss(filename, title);
+        }
+#endif
+        if(symbol_doc) {
+            symbolSets[title]= symbol_doc;
+            symbolSet->append(title);
+        }
     }
-  }
 }
 
 GSList* SymbolsDialog::symbols_in_doc_recursive (SPObject *r, GSList *l)

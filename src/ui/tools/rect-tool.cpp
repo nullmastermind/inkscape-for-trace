@@ -52,7 +52,7 @@ const std::string& RectTool::getPrefsPath() {
 const std::string RectTool::prefsPath = "/tools/shapes/rect";
 
 RectTool::RectTool()
-    : ToolBase(cursor_rect_xpm, 4, 4)
+    : ToolBase(cursor_rect_xpm)
     , rect(NULL)
     , rx(0)
     , ry(0)
@@ -274,15 +274,6 @@ bool RectTool::root_handler(GdkEvent* event) {
                                             NULL);
             }
             break;
-        case GDK_KEY_Up:
-        case GDK_KEY_Down:
-        case GDK_KEY_KP_Up:
-        case GDK_KEY_KP_Down:
-            // prevent the zoom field from activation
-            if (!MOD__CTRL_ONLY(event))
-                ret = TRUE;
-            break;
-
         case GDK_KEY_x:
         case GDK_KEY_X:
             if (MOD__ALT_ONLY(event)) {

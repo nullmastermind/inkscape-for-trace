@@ -9,7 +9,6 @@
 #include "live_effects/effect.h"
 #include "svg/svg.h"
 #include "svg/stringstream.h"
-#include "widgets/icon.h"
 #include "inkscape.h"
 #include "verbs.h"
 #include "helper-fns.h"

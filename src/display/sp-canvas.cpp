@@ -217,7 +217,7 @@ sp_canvas_item_class_init(SPCanvasItemClass *klass)
     gobject_class->dispose  = sp_canvas_item_dispose;
     gobject_class->finalize = sp_canvas_item_finalize;
     klass->destroy          = sp_canvas_item_real_destroy;
-  
+
     object_signals[DESTROY] =
       g_signal_new ("destroy",
                     G_TYPE_FROM_CLASS (gobject_class),
@@ -300,7 +300,7 @@ static void redraw_if_visible(SPCanvasItem *item)
 void sp_canvas_item_destroy(SPCanvasItem *item)
 {
   g_return_if_fail(SP_IS_CANVAS_ITEM(item));
-  
+
   if (!item->in_destruction)
     g_object_run_dispose(G_OBJECT(item));
 }
@@ -327,12 +327,12 @@ void sp_canvas_item_dispose(GObject *object)
           redraw_if_visible (item);
       }
       item->visible = FALSE;
-  
+
       if (item == item->canvas->_current_item) {
           item->canvas->_current_item = NULL;
           item->canvas->_need_repick = TRUE;
       }
-  
+
       if (item == item->canvas->_new_current_item) {
           item->canvas->_new_current_item = NULL;
           item->canvas->_need_repick = TRUE;
@@ -346,11 +346,11 @@ void sp_canvas_item_dispose(GObject *object)
       if (item == item->canvas->_focused_item) {
           item->canvas->_focused_item = NULL;
       }
- 
+
       if (item->parent) {
           SP_CANVAS_GROUP(item->parent)->remove(item);
       }
-      
+
       g_signal_emit (object, object_signals[DESTROY], 0);
       item->in_destruction = false;
     }
@@ -362,7 +362,7 @@ void sp_canvas_item_real_destroy(SPCanvasItem *object)
 {
   g_signal_handlers_destroy(object);
 }
-	
+
 void sp_canvas_item_finalize(GObject *gobject)
 {
   SPCanvasItem *object = SP_CANVAS_ITEM(gobject);
@@ -374,7 +374,7 @@ void sp_canvas_item_finalize(GObject *gobject)
 		 "reference; the initial floating reference is not owned by anyone\n"
 		 "and must be removed with g_object_ref_sink().");
     }
-  
+
   G_OBJECT_CLASS (sp_canvas_item_parent_class)->finalize (gobject);
 }
 } // namespace
@@ -482,7 +482,7 @@ void sp_canvas_item_raise(SPCanvasItem *item, int positions)
     item->canvas->_need_repick = TRUE;
 }
 
-void sp_canvas_item_raise_to_top(SPCanvasItem *item) 
+void sp_canvas_item_raise_to_top(SPCanvasItem *item)
 {
     g_return_if_fail (item != NULL);
     g_return_if_fail (SP_IS_CANVAS_ITEM (item));
@@ -521,9 +521,9 @@ void sp_canvas_item_lower(SPCanvasItem *item, int positions)
     std::list<SPCanvasItem *>::iterator l = std::find(parent->items.begin(), parent->items.end(), item);
     g_assert (l != parent->items.end());
 
-    for (int i=0; i<positions && l != parent->items.begin(); ++i) 
+    for (int i=0; i<positions && l != parent->items.begin(); ++i)
         --l;
-    
+
     parent->items.remove(item);
     parent->items.insert(l, item);
 
@@ -540,7 +540,7 @@ void sp_canvas_item_lower_to_bottom(SPCanvasItem *item)
     SPCanvasGroup *parent = SP_CANVAS_GROUP (item->parent);
     parent->items.remove(item);
     parent->items.push_front(item);
-    redraw_if_visible (item); 
+    redraw_if_visible (item);
     item->canvas->_need_repick = TRUE;
 }
 
@@ -644,7 +644,7 @@ int sp_canvas_item_grab(SPCanvasItem *item, guint event_mask, GdkCursor *cursor,
     auto dm = gdk_display_get_device_manager(display);
     auto device = gdk_device_manager_get_client_pointer(dm);
 
-    gdk_device_grab(device, 
+    gdk_device_grab(device,
                     getWindow(item->canvas),
                     GDK_OWNERSHIP_NONE,
                     FALSE,
@@ -882,7 +882,7 @@ void SPCanvasGroup::render(SPCanvasItem *item, SPCanvasBuf *buf)
 void SPCanvasGroup::viewboxChanged(SPCanvasItem *item, Geom::IntRect const &new_area)
 {
     SPCanvasGroup *group = SP_CANVAS_GROUP(item);
-    
+
     for (std::list<SPCanvasItem *>::const_iterator it = group->items.begin(); it != group->items.end(); ++it) {
         SPCanvasItem *child = *it;
         if (child->visible) {
@@ -905,7 +905,7 @@ void SPCanvasGroup::add(SPCanvasItem *item)
 
 void SPCanvasGroup::remove(SPCanvasItem *item)
 {
- 
+
     g_return_if_fail(item != NULL);
     items.remove(item);
 
@@ -962,10 +962,13 @@ static void sp_canvas_init(SPCanvas *canvas)
 
     // See comment at in sp-canvas.h.
     canvas->_gen_all_enter_events = false;
-    
+
     canvas->_drawing_disabled = false;
 
     canvas->_backing_store = NULL;
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
+    canvas->_surface_for_similar = NULL;
+#endif
     canvas->_clean_region = cairo_region_create();
     canvas->_background = cairo_pattern_create_rgb(1, 1, 1);
     canvas->_background_is_checkerboard = false;
@@ -1003,6 +1006,12 @@ void SPCanvas::dispose(GObject *object)
         cairo_surface_destroy(canvas->_backing_store);
         canvas->_backing_store = NULL;
     }
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
+    if (canvas->_surface_for_similar) {
+        cairo_surface_destroy(canvas->_surface_for_similar);
+        canvas->_surface_for_similar = NULL;
+    }
+#endif
     if (canvas->_clean_region) {
         cairo_region_destroy(canvas->_clean_region);
         canvas->_clean_region = NULL;
@@ -1115,7 +1124,7 @@ void SPCanvas::handle_size_allocate(GtkWidget *widget, GtkAllocation *allocation
 {
     SPCanvas *canvas = SP_CANVAS (widget);
     GtkAllocation old_allocation;
-   
+
     gtk_widget_get_allocation(widget, &old_allocation);
 
 //    Geom::IntRect old_area = Geom::IntRect::from_xywh(canvas->_x0, canvas->_y0,
@@ -1125,8 +1134,14 @@ void SPCanvas::handle_size_allocate(GtkWidget *widget, GtkAllocation *allocation
         allocation->width, allocation->height);
 
     // resize backing store
-    cairo_surface_t *new_backing_store = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
-        allocation->width, allocation->height);
+    cairo_surface_t *new_backing_store = NULL;
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
+    if (canvas->_surface_for_similar != NULL)
+        new_backing_store = cairo_surface_create_similar_image(canvas->_surface_for_similar,
+                CAIRO_FORMAT_ARGB32, allocation->width, allocation->height);
+#endif
+    if (new_backing_store == NULL)
+        new_backing_store = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, allocation->width, allocation->height);
     if (canvas->_backing_store) {
         cairo_t *cr = cairo_create(new_backing_store);
         cairo_translate(cr, -canvas->_x0, -canvas->_y0);
@@ -1503,6 +1518,13 @@ int SPCanvas::handle_motion(GtkWidget *widget, GdkEventMotion *event)
 
 void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect const &canvas_rect, int /*sw*/)
 {
+
+    // Prevent crash if paintSingleBuffer is called before _backing_store is
+    // initialized.
+
+    if (_backing_store == NULL)
+        return;
+
     SPCanvasBuf buf;
     buf.buf = NULL;
     buf.buf_rowstride = 0;
@@ -1510,8 +1532,23 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
     buf.canvas_rect = canvas_rect;
     buf.is_empty = true;
 
-    // create temporary surface
-    cairo_surface_t *imgs = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, paint_rect.width(), paint_rect.height());
+    // Make sure the following code does not go outside of _backing_store's data
+    assert(cairo_image_surface_get_format(_backing_store) == CAIRO_FORMAT_ARGB32);
+    assert(paint_rect.left() - _x0 >= 0);
+    assert(paint_rect.top() - _y0 >= 0);
+    assert(paint_rect.right() - _x0 <= cairo_image_surface_get_width(_backing_store));
+    assert(paint_rect.bottom() - _y0 <= cairo_image_surface_get_height(_backing_store));
+
+    // Create a temporary surface that draws directly to _backing_store
+    cairo_surface_flush(_backing_store);
+    unsigned char *data = cairo_image_surface_get_data(_backing_store);
+    int stride = cairo_image_surface_get_stride(_backing_store);
+    // Move to the right row
+    data += stride * (paint_rect.top() - _y0);
+    // Move to the right pixel inside of that row
+    data += 4 * (paint_rect.left() - _x0);
+    cairo_surface_t *imgs = cairo_image_surface_create_for_data(data, CAIRO_FORMAT_ARGB32,
+            paint_rect.width(), paint_rect.height(), stride);
     buf.ct = cairo_create(imgs);
 
     cairo_save(buf.ct);
@@ -1538,7 +1575,7 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
         } else {
             transf = Inkscape::CMSSystem::getDisplayTransform();
         }
-        
+
         if (transf) {
             cairo_surface_flush(imgs);
             unsigned char *px = cairo_image_surface_get_data(imgs);
@@ -1552,16 +1589,7 @@ void SPCanvas::paintSingleBuffer(Geom::IntRect const &paint_rect, Geom::IntRect 
     }
 #endif // defined(HAVE_LIBLCMS1) || defined(HAVE_LIBLCMS2)
 
-    //cairo_t *xct = gdk_cairo_create(gtk_widget_get_window (widget));
-    cairo_t *xct = cairo_create(_backing_store);
-    cairo_translate(xct, paint_rect.left() - _x0, paint_rect.top() - _y0);
-    cairo_rectangle(xct, 0, 0, paint_rect.width(), paint_rect.height());
-    cairo_clip(xct);
-    cairo_set_source_surface(xct, imgs, 0, 0);
-    cairo_set_operator(xct, CAIRO_OPERATOR_SOURCE);
-    cairo_paint(xct);
-    cairo_destroy(xct);
-    cairo_surface_destroy(imgs);
+    cairo_surface_mark_dirty(_backing_store);
 
     // Mark the painted rectangle clean
     markRect(paint_rect, 0);
@@ -1764,6 +1792,28 @@ void SPCanvas::endForcedFullRedraws()
 gboolean SPCanvas::handle_draw(GtkWidget *widget, cairo_t *cr) {
     SPCanvas *canvas = SP_CANVAS(widget);
 
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
+    if (canvas->_surface_for_similar == NULL && canvas->_backing_store != NULL) {
+        canvas->_surface_for_similar = cairo_surface_create_similar(
+                cairo_get_target(cr), CAIRO_CONTENT_COLOR_ALPHA, 1, 1);
+
+        // Reallocate backing store so that cairo can use shared memory
+        cairo_surface_t *new_backing_store = cairo_surface_create_similar_image(
+                canvas->_surface_for_similar, CAIRO_FORMAT_ARGB32,
+                cairo_image_surface_get_width(canvas->_backing_store),
+                cairo_image_surface_get_height(canvas->_backing_store));
+
+        // Copy the old backing store contents
+        cairo_t *cr = cairo_create(new_backing_store);
+        cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
+        cairo_set_source_surface(cr, canvas->_backing_store, 0, 0);
+        cairo_paint(cr);
+        cairo_destroy(cr);
+        cairo_surface_destroy(canvas->_backing_store);
+        canvas->_backing_store = new_backing_store;
+    }
+#endif
+
     // Blit from the backing store, without regard for the clean region.
     // This is necessary because GTK clears the widget for us, which causes
     // severe flicker while drawing if we don't blit the old contents.
@@ -1853,6 +1903,7 @@ int SPCanvas::paint()
         cairo_region_get_rectangle(to_draw, i, &crect);
         if (!paintRect(crect.x, crect.y, crect.x + crect.width, crect.y + crect.height)) {
             // Aborted
+            cairo_region_destroy(to_draw);
             return FALSE;
         };
     }
@@ -1861,6 +1912,8 @@ int SPCanvas::paint()
     if (_forced_redraw_limit != -1) {
         _forced_redraw_count = 0;
     }
+
+    cairo_region_destroy(to_draw);
 
     return TRUE;
 }
@@ -1946,8 +1999,14 @@ void SPCanvas::scrollTo( Geom::Point const &c, unsigned int clear, bool is_scrol
 
     // adjust backing store contents
     assert(_backing_store);
-    cairo_surface_t *new_backing_store = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
-        allocation.width, allocation.height);
+    cairo_surface_t *new_backing_store = NULL;
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
+    if (_surface_for_similar != NULL)
+        new_backing_store = cairo_surface_create_similar_image(
+                _surface_for_similar, CAIRO_FORMAT_ARGB32, allocation.width, allocation.height);
+#endif
+    if (new_backing_store == NULL)
+        new_backing_store = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, allocation.width, allocation.height);
     cairo_t *cr = cairo_create(new_backing_store);
     cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
     // Paint the background
@@ -2100,7 +2159,7 @@ Geom::Point sp_canvas_world_to_window(SPCanvas const *canvas, Geom::Point const 
 bool sp_canvas_world_pt_inside_window(SPCanvas const *canvas, Geom::Point const &world)
 {
     GtkAllocation allocation;
-    
+
     g_assert( canvas != NULL );
     g_assert(SP_IS_CANVAS(canvas));
 

@@ -18,6 +18,7 @@
 #include "inkscape.h"
 #include "preferences.h"
 #include "extension/extension.h"
+#include "io/resource.h"
 
 #include "error-file.h"
 
@@ -51,7 +52,7 @@ ErrorFileNotice::ErrorFileNotice (void) :
     // \FIXME change this
     /* This is some filler text, needs to change before relase */
     Glib::ustring dialog_text(_("<span weight=\"bold\" size=\"larger\">One or more extensions failed to load</span>\n\nThe failed extensions have been skipped.  Inkscape will continue to run normally but those extensions will be unavailable.  For details to troubleshoot this problem, please refer to the error log located at: "));
-    gchar * ext_error_file = Inkscape::Application::profile_path(EXTENSION_ERROR_LOG_FILENAME);
+    gchar * ext_error_file = Inkscape::IO::Resource::log_path(EXTENSION_ERROR_LOG_FILENAME);
     dialog_text += ext_error_file;
     g_free(ext_error_file);
     set_message(dialog_text, true);

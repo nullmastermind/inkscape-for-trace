@@ -39,6 +39,7 @@ SPCycleType SP_CYCLING = SP_CYCLE_FOCUS;
 #include "layer-model.h"
 #include "selection.h"
 #include "ui/tools-switch.h"
+#include "io/resource.h"
 
 #include "message-stack.h"
 #include "sp-item-transform.h"
@@ -3628,7 +3629,7 @@ void ObjectSet::createBitmapCopy()
         directory = g_path_get_dirname( doc->getURI() );
     }
     if (directory == NULL) {
-        directory = INKSCAPE.homedir_path(NULL);
+        directory = Inkscape::IO::Resource::homedir_path(NULL);
     }
     gchar *filepath = g_build_filename(directory, basename, NULL);
     g_free(directory);

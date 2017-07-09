@@ -19,7 +19,6 @@
 #include <glibmm/i18n.h>
 
 #include <gtkmm/frame.h>
-#include <gtkmm/alignment.h>
 #include <gtkmm/notebook.h>
 
 #include "verbs.h"

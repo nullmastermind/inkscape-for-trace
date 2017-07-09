@@ -23,7 +23,7 @@ namespace Tools {
 class PenTool : public FreehandBase {
 public:
     PenTool();
-    PenTool(gchar const *const *cursor_shape, gint hot_x, gint hot_y);
+    PenTool(gchar const *const *cursor_shape);
     virtual ~PenTool();
 
     enum Mode {

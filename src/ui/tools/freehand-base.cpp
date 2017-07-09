@@ -63,8 +63,8 @@ static void spdc_flush_white(FreehandBase *dc, SPCurve *gc);
 static void spdc_reset_white(FreehandBase *dc);
 static void spdc_free_colors(FreehandBase *dc);
 
-FreehandBase::FreehandBase(gchar const *const *cursor_shape, gint hot_x, gint hot_y)
-    : ToolBase(cursor_shape, hot_x, hot_y)
+FreehandBase::FreehandBase(gchar const *const *cursor_shape)
+    : ToolBase(cursor_shape)
     , selection(NULL)
     , grab(NULL)
     , attach(false)

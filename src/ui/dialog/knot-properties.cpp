@@ -45,31 +45,33 @@ KnotPropertiesDialog::KnotPropertiesDialog()
 {
     Gtk::Box *mainVBox = get_vbox();
 
-    _layout_table.set_spacings(4);
-    _layout_table.resize (2, 2);
+    _layout_table.set_row_spacing(4);
+    _layout_table.set_column_spacing(4);
     _unit_name = "";
     // Layer name widgets
     _knot_x_entry.set_activates_default(true);
     _knot_x_entry.set_digits(4);
     _knot_x_entry.set_increments(1,1);
     _knot_x_entry.set_range(-G_MAXDOUBLE, G_MAXDOUBLE);
+    _knot_x_entry.set_hexpand();
     _knot_x_label.set_label(_("Position X:"));
-    _knot_x_label.set_alignment(1.0, 0.5);
+    _knot_x_label.set_halign(Gtk::ALIGN_END);
+    _knot_x_label.set_valign(Gtk::ALIGN_CENTER);
 
     _knot_y_entry.set_activates_default(true);
     _knot_y_entry.set_digits(4);
     _knot_y_entry.set_increments(1,1);
     _knot_y_entry.set_range(-G_MAXDOUBLE, G_MAXDOUBLE);
-     _knot_y_label.set_label(_("Position Y:"));
-    _knot_y_label.set_alignment(1.0, 0.5);
+    _knot_y_entry.set_hexpand();
+    _knot_y_label.set_label(_("Position Y:"));
+    _knot_y_label.set_halign(Gtk::ALIGN_END);
+    _knot_y_label.set_valign(Gtk::ALIGN_CENTER);
 
-    _layout_table.attach(_knot_x_label,
-                         0, 1, 0, 1, Gtk::FILL, Gtk::FILL);
-    _layout_table.attach(_knot_x_entry,
-                         1, 2, 0, 1, Gtk::FILL | Gtk::EXPAND, Gtk::FILL);
+    _layout_table.attach(_knot_x_label, 0, 0, 1, 1);
+    _layout_table.attach(_knot_x_entry, 1, 0, 1, 1);
 
-    _layout_table.attach(_knot_y_label, 0, 1, 1, 2, Gtk::FILL, Gtk::FILL);
-    _layout_table.attach(_knot_y_entry, 1, 2, 1, 2, Gtk::FILL | Gtk::EXPAND, Gtk::FILL);
+    _layout_table.attach(_knot_y_label, 0, 1, 1, 1);
+    _layout_table.attach(_knot_y_entry, 1, 1, 1, 1);
 
     mainVBox->pack_start(_layout_table, true, true, 4);
 

@@ -374,37 +374,31 @@ PageSizer::PageSizer(Registry & _wr)
     _marginTable.set_row_spacing(4);
     _marginTable.set_column_spacing(4);
 
-    _marginTopAlign.set_hexpand();
-    _marginTopAlign.set_vexpand();
-    _marginTable.attach(_marginTopAlign,     0, 0, 2, 1);
+    _marginTop.set_halign(Gtk::ALIGN_CENTER);
+    _marginTop.set_hexpand();
+    _marginTop.set_vexpand();
+    _marginTable.attach(_marginTop,     0, 0, 2, 1);
 
-    _marginLeftAlign.set_hexpand();
-    _marginLeftAlign.set_vexpand();
-    _marginTable.attach(_marginLeftAlign,    0, 1, 1, 1);
+    _marginLeft.set_halign(Gtk::ALIGN_START);
+    _marginLeft.set_hexpand();
+    _marginLeft.set_vexpand();
+    _marginTable.attach(_marginLeft,    0, 1, 1, 1);
 
-    _marginRightAlign.set_hexpand();
-    _marginRightAlign.set_vexpand();
-    _marginTable.attach(_marginRightAlign,   1, 1, 1, 1);
+    _marginRight.set_halign(Gtk::ALIGN_END);
+    _marginRight.set_hexpand();
+    _marginRight.set_vexpand();
+    _marginTable.attach(_marginRight,   1, 1, 1, 1);
 
-    _marginBottomAlign.set_hexpand();
-    _marginBottomAlign.set_vexpand();
-    _marginTable.attach(_marginBottomAlign,  0, 2, 2, 1);
+    _marginBottom.set_halign(Gtk::ALIGN_CENTER);
+    _marginBottom.set_hexpand();
+    _marginBottom.set_vexpand();
+    _marginTable.attach(_marginBottom,  0, 2, 2, 1);
 
-    _fitPageButtonAlign.set_hexpand();
-    _fitPageButtonAlign.set_vexpand();
-    _marginTable.attach(_fitPageButtonAlign, 0, 3, 2, 1);
+    _fitPageButton.set_halign(Gtk::ALIGN_CENTER);
+    _fitPageButton.set_hexpand();
+    _fitPageButton.set_vexpand();
+    _marginTable.attach(_fitPageButton, 0, 3, 2, 1);
     
-    _marginTopAlign.set(0.5, 0.5, 0.0, 1.0);
-    _marginTopAlign.add(_marginTop);
-    _marginLeftAlign.set(0.0, 0.5, 0.0, 1.0);
-    _marginLeftAlign.add(_marginLeft);
-    _marginRightAlign.set(1.0, 0.5, 0.0, 1.0);
-    _marginRightAlign.add(_marginRight);
-    _marginBottomAlign.set(0.5, 0.5, 0.0, 1.0);
-    _marginBottomAlign.add(_marginBottom);
-    
-    _fitPageButtonAlign.set(0.5, 0.5, 0.0, 1.0);
-    _fitPageButtonAlign.add(_fitPageButton);
     _fitPageButton.set_use_underline();
     _fitPageButton.set_label(_("_Resize page to drawing or selection (Ctrl+Shift+R)"));
     _fitPageButton.set_tooltip_text(_("Resize the page to fit the current selection, or the entire drawing if there is no selection"));

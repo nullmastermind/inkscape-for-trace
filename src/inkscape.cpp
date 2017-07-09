@@ -30,20 +30,6 @@
 #include "debug/simple-event.h"
 #include "debug/event-tracker.h"
 
-#ifndef WIN32
-# define HAS_PROC_SELF_EXE  //to get path of executable
-#else
-
-#if !defined(_WIN32_IE) || (_WIN32_IE < 0x0400)
-# undef _WIN32_IE 
-# define _WIN32_IE 0x0400
-#endif
-//#define HAS_SHGetSpecialFolderPath
-#define HAS_SHGetSpecialFolderLocation
-#define HAS_GetModuleFileName
-# include <shlobj.h>
-#endif
-
 #include <glib/gstdio.h>
 #include <glibmm/i18n.h>
 #include <glibmm/miscutils.h>
@@ -60,6 +46,7 @@
 #include "helper/action-context.h"
 #include "inkscape.h"
 #include "io/sys.h"
+#include "io/resource.h"
 #include "message-stack.h"
 #include "path-prefix.h"
 #include "resource-manager.h"
@@ -83,9 +70,6 @@ static void (* ill_handler)  (int) = SIG_DFL;
 static void (* bus_handler)  (int) = SIG_DFL;
 #endif
 
-#define INKSCAPE_PROFILE_DIR "inkscape"
-#define INKSCAPE_PROFILE_DIR_047DEV "Inkscape"
-#define INKSCAPE_LEGACY_PROFILE_DIR ".inkscape"
 #define MENUS_FILE "menus.xml"
 
 #define SP_INDENT 8
@@ -232,14 +216,7 @@ int Application::autosave()
     GDir *autosave_dir_ptr = g_dir_open(autosave_dir.c_str(), 0, NULL);
     if (!autosave_dir_ptr) {
         // Try to create the autosave directory if it doesn't exist
-        if (g_mkdir(autosave_dir.c_str(), 0755)) {
-            // the creation failed
-            Glib::ustring msg = Glib::ustring::compose(
-                    _("Autosave failed! Cannot create directory %1."), Glib::filename_to_utf8(autosave_dir));
-            g_warning("%s", msg.c_str());
-            SP_ACTIVE_DESKTOP->messageStack()->flash(Inkscape::ERROR_MESSAGE, msg.c_str());
-            return TRUE;
-        }
+        g_mkdir(autosave_dir.c_str(), 0755);
         // Try to read dir again
         autosave_dir_ptr = g_dir_open(autosave_dir.c_str(), 0, NULL);
         if( !autosave_dir_ptr ){
@@ -390,31 +367,17 @@ void Application::argv0(char const* argv)
 void
 Application::add_icon_theme()
 {
+    using namespace Inkscape::IO::Resource;
     // Get list of the possible folders containing the theme
-    auto dataDirs = Glib::get_system_data_dirs();
-    dataDirs.insert(dataDirs.begin(), Glib::get_user_data_dir());
-
     auto icon_theme = Gtk::IconTheme::get_default();
-
-    for (auto it : dataDirs)
-    {
-        std::vector<Glib::ustring> listing;
-        listing.push_back(it);
-        listing.push_back("inkscape");
-        listing.push_back("icons");
-        auto dir = Glib::build_filename(listing);
-        icon_theme->append_search_path(dir);
-    }
-
-    // Add our icon directory to the search path for icon theme lookups.
-    auto const usericondir = Inkscape::Application::profile_path("icons");
-    icon_theme->append_search_path(usericondir);
-    icon_theme->append_search_path(INKSCAPE_PIXMAPDIR);
+    // We used to add get_system_data_dirs and get_user_data_dir, but these
+    // folders didn't seem to make much sense for Linux. More testing needed.
+    icon_theme->append_search_path(get_path_ustring(SYSTEM, ICONS));
+    icon_theme->append_search_path(get_path_ustring(USER, ICONS));
 #ifdef INKSCAPE_THEMEDIR
-    icon_theme->append_search_path(INKSCAPE_THEMEDIR);
-    icon_theme->rescan_if_needed();
+    icon_theme->append_search_path(get_path_ustring(SYSTEM, THEMES));
+    icon_theme->append_search_path(get_path_ustring(USER, THEMES));
 #endif
-    g_free(usericondir);
 }
 
 /**
@@ -423,63 +386,33 @@ Application::add_icon_theme()
 void
 Application::add_style_sheet()
 {
+    using namespace Inkscape::IO::Resource;
     // Add style sheet (GTK3)
     auto const screen = Gdk::Screen::get_default();
 
-    Glib::ustring inkscape_style = INKSCAPE_UIDIR;
-    inkscape_style += "/style.css";
-    // std::cout << "CSS Stylesheet Inkscape: " << inkscape_style << std::endl;
-
-    if (Glib::file_test(inkscape_style, Glib::FILE_TEST_EXISTS)) {
+    // Calling get_filename always returns a real filename OR
+    // if no file exists, then it will have warned already and returns empty.
+    Glib::ustring style = get_filename(UIS, "style.css");
+    if (!style.empty()) {
       auto provider = Gtk::CssProvider::create();
 
       // From 3.16, throws an error which we must catch.
       try {
-          provider->load_from_path (inkscape_style);
+          provider->load_from_path (style);
       }
 #if GTK_CHECK_VERSION(3,16,0)
       // Gtk::CssProviderError not defined until 3.16.
       catch (const Gtk::CssProviderError& ex)
       {
-          std::cerr << "CSSProviderError::load_from_path(): failed to load: " << inkscape_style
-                    << "\n  (" << ex.what() << ")" << std::endl;
+          g_error("CSSProviderError::load_from_path(): %s\n(%s)",
+                 style.c_str(), ex.what().c_str());
       }
 #else
       catch (...)
       {}
 #endif
-
       Gtk::StyleContext::add_provider_for_screen (screen, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-    } else {
-        std::cerr << "sp_main_gui: Cannot find default style file:\n  (" << inkscape_style
-                  << ")" << std::endl;
     }
-
-    Glib::ustring user_style = Inkscape::Application::profile_path("ui/style.css");
-    // std::cout << "CSS Stylesheet User: " << user_style << std::endl;
-
-    if (Glib::file_test(user_style, Glib::FILE_TEST_EXISTS)) {
-      auto provider2 = Gtk::CssProvider::create();
-
-      // From 3.16, throws an error which we must catch.
-      try {
-          provider2->load_from_path (user_style);
-      }
-#if GTK_CHECK_VERSION(3,16,0)
-      // Gtk::CssProviderError not defined until 3.16.
-      catch (const Gtk::CssProviderError& ex)
-      {
-        std::cerr << "CSSProviderError::load_from_path(): failed to load: " << user_style
-                  << "\n  (" << ex.what() << ")" << std::endl;
-      }
-#else
-      catch (...)
-      {}
-#endif
-
-      Gtk::StyleContext::add_provider_for_screen (screen, provider2, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-    }
-
 }
 /* \brief Constructor for the application.
  *  Creates a new Inkscape::Application.
@@ -813,7 +746,7 @@ Application::crash_handler (int /*signum*/)
  */
 bool Application::load_menus()
 {
-    gchar *fn = profile_path(MENUS_FILE);
+    gchar *fn = Inkscape::IO::Resource::profile_path(MENUS_FILE);
     gchar *menus_xml = 0;
     gsize len = 0;
 
@@ -1302,137 +1235,8 @@ Application::exit ()
     gtk_main_quit ();
 }
 
-char *
-Application::homedir_path(const char *filename)
-{
-    static const gchar *homedir = NULL;
-    if (!homedir) {
-        homedir = g_get_home_dir();
-    }
-    if (!homedir) {
-        if (Application::exists()) {
-            homedir = g_path_get_dirname(Application::instance()._argv0);
-        }
-    }
-    return g_build_filename(homedir, filename, NULL);
-}
 
 
-/**
- * Get, or guess, or decide the location where the preferences.xml
- * file should be located.
- */
-gchar *
-Application::profile_path(const char *filename)
-{
-    static const gchar *prefdir = NULL;
-
-
-    if (!prefdir) {
-        // First check for a custom environment variable for a "portable app"
-        gchar const *val = g_getenv("INKSCAPE_PORTABLE_PROFILE_DIR");
-        if (val) {
-            prefdir = g_strdup(val);
-        }
-        // Then check for a custom user environment variable
-        gchar const *userenv = g_getenv("INKSCAPE_PROFILE_DIR");
-        if (userenv) {
-            prefdir = g_strdup(userenv);
-        }
-
-#ifdef HAS_SHGetSpecialFolderLocation
-        // prefer c:\Documents and Settings\UserName\Application Data\ to
-        // c:\Documents and Settings\userName\;
-        if (!prefdir) {
-            ITEMIDLIST *pidl = 0;
-            if ( SHGetSpecialFolderLocation( NULL, CSIDL_APPDATA, &pidl ) == NOERROR ) {
-                gchar * utf8Path = NULL;
-
-                {
-                    wchar_t pathBuf[MAX_PATH+1];
-                    g_assert(sizeof(wchar_t) == sizeof(gunichar2));
-
-                    if ( SHGetPathFromIDListW( pidl, pathBuf ) ) {
-                        utf8Path = g_utf16_to_utf8( (gunichar2*)(&pathBuf[0]), -1, NULL, NULL, NULL );
-                    }
-                }
-
-                if ( utf8Path ) {
-                    if (!g_utf8_validate(utf8Path, -1, NULL)) {
-                        g_warning( "SHGetPathFromIDListW() resulted in invalid UTF-8");
-                        g_free( utf8Path );
-                        utf8Path = 0;
-                    } else {
-                        prefdir = utf8Path;
-                    }
-                }
-
-
-                /* not compiling yet...
-
-                // Remember to free the list pointer
-                IMalloc * imalloc = 0;
-                if ( SHGetMalloc(&imalloc) == NOERROR) {
-                    imalloc->lpVtbl->Free( imalloc, pidl );
-                    imalloc->lpVtbl->Release( imalloc );
-                }
-                */
-            }
-
-            if (prefdir) {
-                const char *prefdir_profile = g_build_filename(prefdir, INKSCAPE_PROFILE_DIR, NULL);
-                g_free((void *)prefdir);
-                prefdir = prefdir_profile;
-            }
-        }
-#endif
-        if (!prefdir) {
-            prefdir = g_build_filename(g_get_user_config_dir(), INKSCAPE_PROFILE_DIR, NULL);
-            gchar * legacyDir = homedir_path(INKSCAPE_LEGACY_PROFILE_DIR);
-            gchar * dev47Dir = g_build_filename(g_get_user_config_dir(), INKSCAPE_PROFILE_DIR_047DEV, NULL);
-
-            bool needsMigration = ( !Inkscape::IO::file_test( prefdir, G_FILE_TEST_EXISTS ) && Inkscape::IO::file_test( legacyDir, G_FILE_TEST_EXISTS ) );
-            if (needsMigration) {
-                // TODO here is a point to hook in preference migration
-                g_warning("Preferences need to be migrated from 0.46 or older %s to %s", legacyDir, prefdir);
-                Inkscape::Preferences::migrate( legacyDir, prefdir );
-            }
-
-            bool needsRenameWarning = ( !Inkscape::IO::file_test( prefdir, G_FILE_TEST_EXISTS ) && Inkscape::IO::file_test( dev47Dir, G_FILE_TEST_EXISTS ) );
-            if (needsRenameWarning) {
-                g_warning("Preferences need to be copied from  %s to %s", legacyDir, prefdir);
-            }
-
-            g_free(legacyDir);
-            legacyDir = 0;
-            g_free(dev47Dir);
-            dev47Dir = 0;
-            // In case the XDG user config dir of the moment does not yet exist...
-            int mode = S_IRWXU;
-#ifdef S_IRGRP
-            mode |= S_IRGRP;
-#endif
-#ifdef S_IXGRP
-            mode |= S_IXGRP;
-#endif
-#ifdef S_IXOTH
-            mode |= S_IXOTH;
-#endif
-            if ( g_mkdir_with_parents(prefdir, mode) == -1 ) {
-                int problem = errno;
-                g_warning("Unable to create profile directory (%s) (%d)", g_strerror(problem), problem);
-            } else {
-                gchar const *userDirs[] = {"keys", "templates", "icons", "extensions", "palettes", NULL};
-                for (gchar const** name = userDirs; *name; ++name) {
-                    gchar *dir = g_build_filename(prefdir, *name, NULL);
-                    g_mkdir_with_parents(dir, mode);
-                    g_free(dir);
-                }
-            }
-        }
-    }
-    return g_build_filename(prefdir, filename, NULL);
-}
 
 Inkscape::XML::Node *
 Application::get_menus()

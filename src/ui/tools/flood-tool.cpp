@@ -98,7 +98,7 @@ Glib::ustring gap_init[4] = {
 const std::vector<Glib::ustring> FloodTool::gap_list( gap_init, gap_init+4 );
 
 FloodTool::FloodTool()
-    : ToolBase(cursor_paintbucket_xpm, 11, 30)
+    : ToolBase(cursor_paintbucket_xpm)
     , item(NULL)
 {
     // TODO: Why does the flood tool use a hardcoded tolerance instead of a pref?

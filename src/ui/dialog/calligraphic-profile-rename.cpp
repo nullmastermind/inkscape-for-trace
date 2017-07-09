@@ -36,7 +36,8 @@ CalligraphicProfileRename::CalligraphicProfileRename() :
     _profile_name_entry.set_activates_default(true);
 
     _profile_name_label.set_label(_("Profile name:"));
-    _profile_name_label.set_alignment(1.0, 0.5);
+    _profile_name_label.set_halign(Gtk::ALIGN_END);
+    _profile_name_label.set_valign(Gtk::ALIGN_CENTER);
 
     _layout_table->attach(_profile_name_label, 0, 0, 1, 1);
 

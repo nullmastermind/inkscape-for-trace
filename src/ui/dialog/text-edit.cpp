@@ -45,7 +45,6 @@ extern "C" {
 #include "verbs.h"
 #include "ui/interface.h"
 #include "svg/css-ostringstream.h"
-#include "widgets/icon.h"
 #include "widgets/font-selector.h"
 #include <glibmm/i18n.h>
 #include <glibmm/markup.h>
@@ -59,7 +58,6 @@ namespace Dialog {
 TextEdit::TextEdit()
     : UI::Widget::Panel("", "/dialogs/textandfont", SP_VERB_DIALOG_TEXT),
       font_label(_("_Font"), true),
-      layout_frame(),
       text_label(_("_Text"), true),
       vari_label(_("_Variants"), true),
       setasdefault_button(_("Set as _default")),
@@ -103,26 +101,6 @@ TextEdit::TextEdit()
 
     layout_hbox.pack_start(text_sep, false, false, 10);
 
-    /* Line Spacing */
-    /* Commented out as this does not handle non-percentage values
-    GtkWidget *px = sp_icon_new( Inkscape::ICON_SIZE_SMALL_TOOLBAR, INKSCAPE_ICON("text_line_spacing") );
-    layout_hbox.pack_start(*Gtk::manage(Glib::wrap(px)), false, false);
-
-    spacing_combo = gtk_combo_box_text_new_with_entry ();
-    gtk_widget_set_size_request (spacing_combo, 90, -1);
-
-    const gchar *spacings[] = {"50%", "80%", "90%", "100%", "110%", "120%", "130%", "140%", "150%", "200%", "300%", NULL};
-    for (int i = 0; spacings[i]; i++) {
-        gtk_combo_box_text_append_text((GtkComboBoxText *) spacing_combo, spacings[i]);
-    }
-
-    gtk_widget_set_tooltip_text (px, _("Spacing between baselines (percent of font size)"));
-    gtk_widget_set_tooltip_text (spacing_combo, _("Spacing between baselines (percent of font size)"));
-    layout_hbox.pack_start(*Gtk::manage(Glib::wrap(spacing_combo)), false, false);
-    layout_frame.set_padding(4,4,4,4);
-    layout_frame.add(layout_hbox);
-    */
-
     // Text start Offset
     {
         startOffset = gtk_combo_box_text_new_with_entry ();
@@ -149,7 +127,6 @@ TextEdit::TextEdit()
     preview_label.set_line_wrap(FALSE);
 
     font_vbox.pack_start(fontsel_hbox, true, true);
-    font_vbox.pack_start(layout_frame, false, false, VB_MARGIN);
     font_vbox.pack_start(preview_label, true, true, VB_MARGIN);
 
     /* Text tab */
@@ -223,10 +200,7 @@ TextEdit::~TextEdit()
 
 void TextEdit::styleButton(Gtk::RadioButton *button, gchar const *tooltip, gchar const *icon_name, Gtk::RadioButton *group_button )
 {
-    GtkWidget *icon = sp_icon_new( Inkscape::ICON_SIZE_SMALL_TOOLBAR, icon_name );
-    if (!GTK_IS_IMAGE(icon)) {
-        icon = gtk_image_new_from_icon_name ( icon_name, GTK_ICON_SIZE_SMALL_TOOLBAR );
-    }
+    GtkWidget *icon = gtk_image_new_from_icon_name( icon_name, GTK_ICON_SIZE_SMALL_TOOLBAR );
 
     if (group_button) {
         Gtk::RadioButton::Group group = group_button->get_group();

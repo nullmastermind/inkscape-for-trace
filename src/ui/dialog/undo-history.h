@@ -24,7 +24,6 @@
 
 #include "event-log.h"
 
-#include "widgets/icon.h"
 #include "ui/dialog/desktop-tracker.h"
 
 class SPDesktop;

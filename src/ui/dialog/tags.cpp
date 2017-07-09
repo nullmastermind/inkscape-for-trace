@@ -31,7 +31,6 @@
 #include "ui/widget/layertypeicon.h"
 #include "ui/widget/addtoicon.h"
 #include "verbs.h"
-#include "widgets/icon.h"
 #include "xml/node-observer.h"
 #include "sp-root.h"
 #include "ui/tools/tool-base.h" //"event-context.h"
@@ -130,7 +129,7 @@ public:
 
 void TagsPanel::_styleButton(Gtk::Button& btn, char const* iconName, char const* tooltip)
 {
-    GtkWidget *child = sp_icon_new(Inkscape::ICON_SIZE_SMALL_TOOLBAR, iconName);
+    GtkWidget *child = gtk_image_new_from_icon_name(iconName, GTK_ICON_SIZE_SMALL_TOOLBAR);
     gtk_widget_show(child);
     btn.add(*manage(Glib::wrap(child)));
     btn.set_relief(Gtk::RELIEF_NONE);
@@ -144,7 +143,7 @@ Gtk::MenuItem& TagsPanel::_addPopupItem( SPDesktop *desktop, unsigned int code, 
     const char* label = 0;
 
     if ( iconName ) {
-        iconWidget = sp_icon_new( Inkscape::ICON_SIZE_MENU, iconName );
+        iconWidget = gtk_image_new_from_icon_name( iconName, GTK_ICON_SIZE_MENU );
     }
 
     if ( desktop ) {
@@ -152,11 +151,11 @@ Gtk::MenuItem& TagsPanel::_addPopupItem( SPDesktop *desktop, unsigned int code, 
         if ( verb ) {
             SPAction *action = verb->get_action(desktop);
             if ( !iconWidget && action && action->image ) {
-                iconWidget = sp_icon_new( Inkscape::ICON_SIZE_MENU, action->image );
+                iconWidget = gtk_image_new_from_icon_name( action->image, GTK_ICON_SIZE_MENU );
             }
 
             if ( action ) {
-                label = action->name;
+               // label = action->name;
             }
         }
     }
@@ -167,7 +166,7 @@ Gtk::MenuItem& TagsPanel::_addPopupItem( SPDesktop *desktop, unsigned int code, 
 
     Gtk::Widget* wrapped = 0;
     if ( iconWidget ) {
-        wrapped = manage(Glib::wrap(iconWidget));
+        wrapped = Gtk::manage(Glib::wrap(iconWidget));
         wrapped->show();
     }
 

@@ -16,7 +16,6 @@
 
 #include <gtkmm/box.h>
 #include <gtkmm/frame.h>
-#include <gtkmm/alignment.h>
 #include <gtkmm/scale.h>
 #include <gtkmm/table.h>
 
@@ -77,9 +76,7 @@ void DialogPage::add_line(bool                 indent,
     if (tip != "")
         widget.set_tooltip_text (tip);
     
-    Gtk::Alignment* label_alignment = Gtk::manage(new Gtk::Alignment());
-    
-    Gtk::HBox* hb = Gtk::manage(new Gtk::HBox());
+    auto hb = Gtk::manage(new Gtk::Box());
     hb->set_spacing(12);
     hb->pack_start(widget, expand_widget, expand_widget);
         
@@ -87,11 +84,7 @@ void DialogPage::add_line(bool                 indent,
     if (other_widget)
         hb->pack_start(*other_widget, expand_widget, expand_widget);
     
-    // Pack the widget into an alignment container so that it can
-    // be indented if desired
-    Gtk::Alignment* w_alignment = Gtk::manage(new Gtk::Alignment());
-    w_alignment->add(*hb);
-    w_alignment->set_valign(Gtk::ALIGN_CENTER);
+    hb->set_valign(Gtk::ALIGN_CENTER);
     
     // Add a label in the first column if provided
     if (label != "")
@@ -100,30 +93,36 @@ void DialogPage::add_line(bool                 indent,
                                                               Gtk::ALIGN_CENTER, true));
         label_widget->set_mnemonic_widget(widget);
         
-        // Pack the label into an alignment container so that we can indent it
-        // if necessary
-        label_alignment->add(*label_widget);
- 
-        if (indent)
-            label_alignment->set_padding(0, 0, 12, 0);
+        if (indent) {
+#if WITH_GTKMM_3_12
+            label_widget->set_margin_start(12);
+#else
+            label_widget->set_margin_left(12);
+#endif
+        }
 
-        label_alignment->set_valign(Gtk::ALIGN_CENTER);
-        add(*label_alignment);
-        attach_next_to(*w_alignment, *label_alignment, Gtk::POS_RIGHT, 1, 1);
+        label_widget->set_valign(Gtk::ALIGN_CENTER);
+        add(*label_widget);
+        attach_next_to(*hb, *label_widget, Gtk::POS_RIGHT, 1, 1);
     }
 
     // Now add the widget to the bottom of the dialog
     if (label == "")
     {
-        if (indent)
-            w_alignment->set_padding(0, 0, 12, 0);
+        if (indent) {
+#if WITH_GTKMM_3_12
+            hb->set_margin_start(12);
+#else
+            hb->set_margin_left(12);
+#endif
+        }
 
-        add(*w_alignment);
+        add(*hb);
         
         GValue width = G_VALUE_INIT;
         g_value_init(&width, G_TYPE_INT);
         g_value_set_int(&width, 2);
-        gtk_container_child_set_property(GTK_CONTAINER(gobj()), GTK_WIDGET(w_alignment->gobj()), "width", &width);
+        gtk_container_child_set_property(GTK_CONTAINER(gobj()), GTK_WIDGET(hb->gobj()), "width", &width);
     }
 
     // Add a label on the right of the widget if desired
@@ -505,24 +504,21 @@ ZoomCorrRulerSlider::init(int ruler_width, int ruler_height, double lower, doubl
     _sb.set_increments (step_increment, 0);
     _sb.set_value (value);
     _sb.set_digits(2);
+    _sb.set_halign(Gtk::ALIGN_CENTER);
+    _sb.set_valign(Gtk::ALIGN_END);
 
     _unit.set_data("sensitive", GINT_TO_POINTER(0));
     _unit.setUnitType(UNIT_TYPE_LINEAR);
     _unit.set_data("sensitive", GINT_TO_POINTER(1));
     _unit.setUnit(prefs->getString("/options/zoomcorrection/unit"));
-
-    Gtk::Alignment *alignment1 = Gtk::manage(new Gtk::Alignment(0.5,1,0,0));
-    Gtk::Alignment *alignment2 = Gtk::manage(new Gtk::Alignment(0.5,1,0,0));
-    alignment1->add(_sb);
-    alignment2->add(_unit);
+    _unit.set_halign(Gtk::ALIGN_CENTER);
+    _unit.set_valign(Gtk::ALIGN_END);
 
     auto table = Gtk::manage(new Gtk::Grid());
-    table->attach(*_slider,    0, 0, 1, 1);
-    alignment1->set_halign(Gtk::ALIGN_CENTER);
-    table->attach(*alignment1, 1, 0, 1, 1);
-    table->attach(_ruler,      0, 1, 1, 1);
-    alignment2->set_halign(Gtk::ALIGN_CENTER);
-    table->attach(*alignment2, 1, 1, 1, 1);
+    table->attach(*_slider, 0, 0, 1, 1);
+    table->attach(_sb,      1, 0, 1, 1);
+    table->attach(_ruler,   0, 1, 1, 1);
+    table->attach(_unit,    1, 1, 1, 1);
 
     pack_start(*table, Gtk::PACK_SHRINK);
 }
@@ -582,15 +578,13 @@ PrefSlider::init(Glib::ustring const &prefs_path,
     _sb.set_increments (step_increment, 0);
     _sb.set_value (value);
     _sb.set_digits(digits);
-
-    Gtk::Alignment *alignment1 = Gtk::manage(new Gtk::Alignment(0.5,1,0,0));
-    alignment1->add(_sb);
+    _sb.set_halign(Gtk::ALIGN_CENTER);
+    _sb.set_valign(Gtk::ALIGN_END);
 
     auto table = Gtk::manage(new Gtk::Grid());
     _slider->set_hexpand();
-    table->attach(*_slider,    0, 0, 1, 1);
-    alignment1->set_halign(Gtk::ALIGN_CENTER);
-    table->attach(*alignment1, 1, 0, 1, 1);
+    table->attach(*_slider, 0, 0, 1, 1);
+    table->attach(_sb,      1, 0, 1, 1);
 
     this->pack_start(*table, Gtk::PACK_EXPAND_WIDGET);
 }

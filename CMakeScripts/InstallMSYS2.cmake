@@ -92,6 +92,8 @@ if(WIN32)
     ${MINGW_BIN}/librevenge-stream-0.0.dll
     ${MINGW_BIN}/librtmp-1.dll
     ${MINGW_BIN}/libsigc-2.0-0.dll
+    ${MINGW_BIN}/libsoup-2.4-1.dll
+    ${MINGW_BIN}/libsqlite3-0.dll
     ${MINGW_BIN}/libssh2-1.dll
     ${MINGW_BIN}/libstdc++-6.dll
     ${MINGW_BIN}/libtasn1-6.dll
@@ -114,7 +116,7 @@ if(WIN32)
     # required by python2-lxml
     ${MINGW_BIN}/libexslt-0.dll
     # required by python2-numpy
-    ${MINGW_BIN}/libgfortran-3.dll
+    ${MINGW_BIN}/libgfortran-4.dll
     ${MINGW_BIN}/libopenblas.dll
     ${MINGW_BIN}/libquadmath-0.dll
     DESTINATION .)

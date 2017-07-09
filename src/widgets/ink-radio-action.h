@@ -3,8 +3,6 @@
 
 #include <gtk/gtk.h>
 
-#include "icon.h"
-
 G_BEGIN_DECLS
 
 #define INK_RADIO_ACTION_TYPE                ( ink_radio_action_get_type() )
@@ -35,7 +33,7 @@ InkRadioAction* ink_radio_action_new( const gchar *name,
                                       const gchar *label,
                                       const gchar *tooltip,
                                       const gchar *inkId,
-                                      Inkscape::IconSize size );
+                                      GtkIconSize  size );
 
 G_END_DECLS
 

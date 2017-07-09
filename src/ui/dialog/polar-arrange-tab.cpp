@@ -19,7 +19,6 @@
 
 #include "document.h"
 #include "document-undo.h"
-#include "widgets/icon.h"
 #include "desktop.h"
 #include "sp-ellipse.h"
 #include "sp-item-transform.h"
@@ -40,7 +39,7 @@ PolarArrangeTab::PolarArrangeTab(ArrangeDialog *parent_)
 	  angleX("", C_("Polar arrange tab", "End angle"), angleY)
 {
 	anchorPointLabel.set_text(C_("Polar arrange tab", "Anchor point:"));
-	anchorPointLabel.set_alignment(Gtk::ALIGN_START);
+	anchorPointLabel.set_halign(Gtk::ALIGN_START);
 	pack_start(anchorPointLabel, false, false);
 
 	anchorBoundingBoxRadio.set_label(C_("Polar arrange tab", "Objects' bounding boxes:"));
@@ -56,7 +55,7 @@ PolarArrangeTab::PolarArrangeTab(ArrangeDialog *parent_)
 	pack_start(anchorObjectPivotRadio, false, false);
 
 	arrangeOnLabel.set_text(C_("Polar arrange tab", "Arrange on:"));
-	arrangeOnLabel.set_alignment(Gtk::ALIGN_START);
+	arrangeOnLabel.set_halign(Gtk::ALIGN_START);
 	pack_start(arrangeOnLabel, false, false);
 
 	arrangeOnFirstCircleRadio.set_label(C_("Polar arrange tab", "First selected circle/ellipse/arc"));

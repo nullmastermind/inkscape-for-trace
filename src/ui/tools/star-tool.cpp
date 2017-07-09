@@ -57,7 +57,7 @@ const std::string& StarTool::getPrefsPath() {
 const std::string StarTool::prefsPath = "/tools/shapes/star";
 
 StarTool::StarTool()
-    : ToolBase(cursor_star_xpm, 4, 4)
+    : ToolBase(cursor_star_xpm)
     , star(NULL)
     , magnitude(5)
     , proportion(0.5)
@@ -258,15 +258,6 @@ bool StarTool::root_handler(GdkEvent* event) {
                                        _("<b>Ctrl</b>: snap angle; keep rays radial"),
                                        NULL,
                                        NULL);
-            break;
-
-        case GDK_KEY_Up:
-        case GDK_KEY_Down:
-        case GDK_KEY_KP_Up:
-        case GDK_KEY_KP_Down:
-            // prevent the zoom field from activation
-            if (!MOD__CTRL_ONLY(event))
-                ret = TRUE;
             break;
 
         case GDK_KEY_x:

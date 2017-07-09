@@ -13,7 +13,6 @@
 
 #include "styledialog.h"
 #include "ui/widget/addtoicon.h"
-#include "widgets/icon.h"
 #include "verbs.h"
 #include "sp-object.h"
 #include "selection.h"
@@ -265,7 +264,9 @@ StyleDialog::StyleDialog() :
     _treeView.set_expander_column(*(_treeView.get_column(1)));
 
     // Pack widgets
+    _paned.set_orientation(Gtk::ORIENTATION_VERTICAL);
     _paned.pack1(_mainBox, Gtk::SHRINK);
+    _mainBox.set_orientation(Gtk::ORIENTATION_VERTICAL);
     _mainBox.pack_start(_scrolledWindow, Gtk::PACK_EXPAND_WIDGET);
     _scrolledWindow.add(_treeView);
     _scrolledWindow.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
@@ -1515,7 +1516,7 @@ bool StyleDialog::_delProperty(GdkEventButton *event)
 void StyleDialog::_styleButton(Gtk::Button& btn, char const* iconName,
                                char const* tooltip)
 {
-    GtkWidget *child = sp_icon_new(Inkscape::ICON_SIZE_SMALL_TOOLBAR, iconName);
+    GtkWidget *child = gtk_image_new_from_icon_name(iconName, GTK_ICON_SIZE_SMALL_TOOLBAR);
     gtk_widget_show(child);
     btn.add(*manage(Glib::wrap(child)));
     btn.set_relief(Gtk::RELIEF_NONE);

@@ -84,6 +84,7 @@
 #include "ui/dialog/spellcheck.h"
 #include "ui/icon-names.h"
 #include "ui/tools/node-tool.h"
+#include "ui/dialog/save-template-dialog.h"
 
 using Inkscape::DocumentUndo;
 using Inkscape::UI::Dialog::ActionAlign;
@@ -587,7 +588,7 @@ SPAction *Verb::make_action_helper(Inkscape::ActionContext const & context, void
                            _(_tip), _image, this);
 
     if (action == NULL) return NULL;
-    
+
     action->signal_perform.connect(
         sigc::bind(
             sigc::bind(
@@ -849,7 +850,7 @@ void FileVerb::perform(SPAction *action, void *data)
     // Convert verb impls to use this where possible, to reduce static cling
     // to macros like SP_ACTIVE_DOCUMENT, which end up enforcing GUI-mode operation
     SPDocument *doc = sp_action_get_document(action);
-    
+
     // We can vacuum defs, or exit, without needing a desktop!
     bool handled = true;
     switch (reinterpret_cast<std::size_t>(data)) {
@@ -866,7 +867,7 @@ void FileVerb::perform(SPAction *action, void *data)
     if (handled) {
         return;
     }
-    
+
     g_return_if_fail(ensure_desktop_valid(action));
     SPDesktop *desktop = sp_action_get_desktop(action);
 
@@ -891,6 +892,9 @@ void FileVerb::perform(SPAction *action, void *data)
             break;
         case SP_VERB_FILE_SAVE_A_COPY:
             sp_file_save_a_copy(*parent, NULL, NULL);
+            break;
+        case SP_VERB_FILE_SAVE_TEMPLATE:
+            Inkscape::UI::Dialog::SaveTemplate::save_document_as_template(*parent);
             break;
         case SP_VERB_FILE_PRINT:
             sp_file_print(*parent);
@@ -944,7 +948,7 @@ void EditVerb::perform(SPAction *action, void *data)
     if (handled) {
         return;
     }
-    
+
     g_return_if_fail(ensure_desktop_valid(action));
     SPDesktop *dt = sp_action_get_desktop(action);
 
@@ -1297,7 +1301,7 @@ void LayerVerb::perform(SPAction *action, void *data)
     g_return_if_fail(ensure_desktop_valid(action));
     SPDesktop *dt = sp_action_get_desktop(action);
     size_t verb = reinterpret_cast<std::size_t>(data);
-    
+
     if ( !dt->currentLayer() ) {
         return;
     }
@@ -1633,12 +1637,12 @@ void TagVerb::perform( SPAction *action, void *data)
                 g_free(id);
                 id = g_strdup_printf(_("Set %d"), tag_suffix++);
             } while (dt->doc()->getObjectById(id));
-            
+
             doc = dt->doc()->getReprDoc();
             repr = doc->createElement("inkscape:tag");
             repr->setAttribute("id", id);
             g_free(id);
-            
+
             dt->doc()->getDefs()->addChild(repr, NULL);
             Inkscape::DocumentUndo::done(dt->doc(), SP_VERB_DIALOG_TAGS, _("Create new selection set"));
             break;
@@ -1657,7 +1661,7 @@ void ContextVerb::perform(SPAction *action, void *data)
     SPDesktop *dt;
     sp_verb_t verb;
     int vidx;
-    
+
     g_return_if_fail(ensure_desktop_valid(action));
     dt = sp_action_get_desktop(action);
 
@@ -2134,7 +2138,7 @@ void DialogVerb::perform(SPAction *action, void *data)
         // unhide all when opening a new dialog
         INKSCAPE.dialogs_unhide();
     }
-    
+
     g_return_if_fail(ensure_desktop_valid(action));
     SPDesktop *dt = sp_action_get_desktop(action);
     g_assert(dt->_dlg_mgr != NULL);
@@ -2564,6 +2568,8 @@ Verb *Verb::_base_verbs[] = {
                  N_("Save document under a new name"), INKSCAPE_ICON("document-save-as")),
     new FileVerb(SP_VERB_FILE_SAVE_A_COPY, "FileSaveACopy", N_("Save a Cop_y..."),
                  N_("Save a copy of the document under a new name"), NULL ),
+    new FileVerb(SP_VERB_FILE_SAVE_TEMPLATE, "FileSaveTemplate", N_("Save template ..."),
+                 N_("Save a copy of the document as template"), NULL ),
     new FileVerb(SP_VERB_FILE_PRINT, "FilePrint", N_("_Print..."), N_("Print document"),
                  INKSCAPE_ICON("document-print")),
     // TRANSLATORS: "Vacuum Defs" means "Clean up defs" (so as to remove unused definitions)
@@ -2572,7 +2578,7 @@ Verb *Verb::_base_verbs[] = {
     new FileVerb(SP_VERB_FILE_IMPORT, "FileImport", N_("_Import..."),
                  N_("Import a bitmap or SVG image into this document"), INKSCAPE_ICON("document-import")),
 //    new FileVerb(SP_VERB_FILE_EXPORT, "FileExport", N_("_Export Bitmap..."), N_("Export this document or a selection as a bitmap image"), INKSCAPE_ICON("document-export")),
-    new FileVerb(SP_VERB_FILE_IMPORT_FROM_OCAL, "FileImportFromOCAL", N_("Import Clip Art..."), 
+    new FileVerb(SP_VERB_FILE_IMPORT_FROM_OCAL, "FileImportFromOCAL", N_("Import Clip Art..."),
                 N_("Import clipart from Open Clip Art Library"), INKSCAPE_ICON("document-import-ocal")),
 //    new FileVerb(SP_VERB_FILE_EXPORT_TO_OCAL, "FileExportToOCAL", N_("Export To Open Clip Art Library"), N_("Export this document to Open Clip Art Library"), INKSCAPE_ICON_DOCUMENT_EXPORT_OCAL),
     new FileVerb(SP_VERB_FILE_NEXT_DESKTOP, "NextWindow", N_("N_ext Window"),
@@ -3199,7 +3205,7 @@ Verb *Verb::_base_verbs[] = {
                  N_("Remove a linked ICC color profile"), NULL),
     // Scripting
     new ContextVerb(SP_VERB_EDIT_ADD_EXTERNAL_SCRIPT,    "AddExternalScript",
-            N_("Add External Script"),  N_("Add an external script"), NULL), 
+            N_("Add External Script"),  N_("Add an external script"), NULL),
     new ContextVerb(SP_VERB_EDIT_ADD_EMBEDDED_SCRIPT,    "AddEmbeddedScript",
             N_("Add Embedded Script"),  N_("Add an embedded script"), NULL),
     new ContextVerb(SP_VERB_EDIT_EMBEDDED_SCRIPT,        "EditEmbeddedScript",

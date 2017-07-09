@@ -34,7 +34,6 @@
 #include "ui/tools-switch.h"
 #include "ui/dialog/filedialog.h"
 #include "verbs.h"
-#include "widgets/icon.h"
 #include "xml/node-event-vector.h"
 
 #include "rdf.h"
@@ -74,7 +73,7 @@ static Inkscape::XML::NodeEventVector const _repr_events = {
 
 static void docprops_style_button(Gtk::Button& btn, char const* iconName)
 {
-    GtkWidget *child = sp_icon_new(Inkscape::ICON_SIZE_SMALL_TOOLBAR, iconName);
+    GtkWidget *child = gtk_image_new_from_icon_name(iconName, GTK_ICON_SIZE_SMALL_TOOLBAR);
     gtk_widget_show( child );
     btn.add(*Gtk::manage(Glib::wrap(child)));
     btn.set_relief(Gtk::RELIEF_NONE);
@@ -229,8 +228,13 @@ inline void attach_all(Gtk::Grid &table, Gtk::Widget *const arr[], unsigned cons
                     // this sets the padding for subordinate widgets on the "Page" page
                     if( i==(n-8) || i==(n-10) ) {
                         arr[i+1]->set_hexpand();
+#if WITH_GTKMM_3_12
+                        arr[i+1]->set_margin_start(20);
+                        arr[i+1]->set_margin_end(20);
+#else
                         arr[i+1]->set_margin_left(20);
                         arr[i+1]->set_margin_right(20);
+#endif
 
                         if (yoptions & Gtk::EXPAND)
                             arr[i+1]->set_vexpand();
@@ -260,13 +264,13 @@ inline void attach_all(Gtk::Grid &table, Gtk::Widget *const arr[], unsigned cons
                 }
             } else if (arr[i]) {
                 Gtk::Label& label = reinterpret_cast<Gtk::Label&>(*arr[i]);
-                label.set_alignment (0.0);
 
                 label.set_hexpand();
+                label.set_halign(Gtk::ALIGN_START);
                 label.set_valign(Gtk::ALIGN_CENTER);
                 table.attach(label, 0, r, 3, 1);
             } else {
-                Gtk::HBox *space = Gtk::manage (new Gtk::HBox);
+                auto space = Gtk::manage (new Gtk::Box);
                 space->set_size_request (SPACE_SIZE_X, SPACE_SIZE_Y);
 
                 space->set_halign(Gtk::ALIGN_CENTER);
@@ -387,26 +391,25 @@ void DocumentProperties::populate_available_profiles(){
     _AvailableProfilesListStore->clear(); // Clear any existing items in the combo box
 
     // Iterate through the list of profiles and add the name to the combo box.
-    std::vector<std::pair<std::pair<Glib::ustring, bool>, Glib::ustring> > pairs = ColorProfile::getProfileFilesWithNames();
     bool home = true; // initial value doesn't matter, it's just to avoid a compiler warning
-    for ( std::vector<std::pair<std::pair<Glib::ustring, bool>, Glib::ustring> >::const_iterator it = pairs.begin(); it != pairs.end(); ++it ) {
+    bool first = true;
+    for (auto &profile: ColorProfile::getProfileFilesWithNames()) {
         Gtk::TreeModel::Row row;
-        Glib::ustring file = it->first.first;
-        Glib::ustring name = it->second;
 
         // add a separator between profiles from the user's home directory and system profiles
-        if (it != pairs.begin() && it->first.second != home)
+        if (!first && profile.isInHome != home)
         {
           row = *(_AvailableProfilesListStore->append());
           row[_AvailableProfilesListColumns.fileColumn] = "<separator>";
           row[_AvailableProfilesListColumns.nameColumn] = "<separator>";
           row[_AvailableProfilesListColumns.separatorColumn] = true;
         }
-        home = it->first.second;
+        home = profile.isInHome;
+        first = false;
 
         row = *(_AvailableProfilesListStore->append());
-        row[_AvailableProfilesListColumns.fileColumn] = file;
-        row[_AvailableProfilesListColumns.nameColumn] = name;
+        row[_AvailableProfilesListColumns.fileColumn] = profile.filename;
+        row[_AvailableProfilesListColumns.nameColumn] = profile.name;
         row[_AvailableProfilesListColumns.separatorColumn] = false;
     }
 }
@@ -460,10 +463,11 @@ void DocumentProperties::linkSelectedProfile()
             g_warning("No color profile available.");
             return;
         }
-	
+
         // Read the filename and description from the list of available profiles
         Glib::ustring file = (*iter)[_AvailableProfilesListColumns.fileColumn];
         Glib::ustring name = (*iter)[_AvailableProfilesListColumns.nameColumn];
+
         std::vector<SPObject *> current = SP_ACTIVE_DOCUMENT->getResourceList( "iccprofile" );
         for (std::vector<SPObject *>::const_iterator it = current.begin(); it != current.end(); ++it) {
             SPObject* obj = *it;
@@ -515,6 +519,9 @@ struct _cmp {
   }
 };
 
+template <typename From, typename To>
+struct static_caster { To * operator () (From * value) const { return static_cast<To *>(value); } };
+
 void DocumentProperties::populate_linked_profiles_box()
 {
     _LinkedProfilesListStore->clear();
@@ -522,12 +529,16 @@ void DocumentProperties::populate_linked_profiles_box()
     if (! current.empty()) {
         _emb_profiles_observer.set((*(current.begin()))->parent);
     }
-    std::set<SPObject *, _cmp> _current (current.begin(), current.end());
-    for (std::set<SPObject *, _cmp>::const_iterator it = _current.begin(); it != _current.end(); ++it) {
-        SPObject* obj = *it;
-        Inkscape::ColorProfile* prof = reinterpret_cast<Inkscape::ColorProfile*>(obj);
+
+    std::set<Inkscape::ColorProfile *, Inkscape::ColorProfile::pointerComparator> _current;
+    std::transform(current.begin(),
+                   current.end(),
+                   std::inserter(_current, _current.begin()),
+                   static_caster<SPObject, Inkscape::ColorProfile>());
+
+    for (auto &profile: _current) {
         Gtk::TreeModel::Row row = *(_LinkedProfilesListStore->append());
-        row[_LinkedProfilesListColumns.nameColumn] = prof->name;
+        row[_LinkedProfilesListColumns.nameColumn] = profile->name;
 //        row[_LinkedProfilesListColumns.previewColumn] = "Color Preview";
     }
 }
@@ -639,9 +650,8 @@ void DocumentProperties::build_cms()
     _page_cms->set_spacing(4);
     gint row = 0;
 
-    label_link->set_alignment(0.0);
-
     label_link->set_hexpand();
+    label_link->set_halign(Gtk::ALIGN_START);
     label_link->set_valign(Gtk::ALIGN_CENTER);
     _page_cms->table().attach(*label_link, 0, row, 3, 1);
 
@@ -662,9 +672,8 @@ void DocumentProperties::build_cms()
 
     row++;
 
-    label_avail->set_alignment(0.0);
-
     label_avail->set_hexpand();
+    label_avail->set_halign(Gtk::ALIGN_START);
     label_avail->set_valign(Gtk::ALIGN_CENTER);
     _page_cms->table().attach(*label_avail, 0, row, 3, 1);
 
@@ -676,8 +685,13 @@ void DocumentProperties::build_cms()
 
     _link_btn.set_halign(Gtk::ALIGN_CENTER);
     _link_btn.set_valign(Gtk::ALIGN_CENTER);
+#if WITH_GTKMM_3_12
+    _link_btn.set_margin_start(2);
+    _link_btn.set_margin_end(2);
+#else
     _link_btn.set_margin_left(2);
     _link_btn.set_margin_right(2);
+#endif
     _page_cms->table().attach(_link_btn, 1, row, 1, 1);
 
     _unlink_btn.set_halign(Gtk::ALIGN_CENTER);
@@ -748,8 +762,8 @@ void DocumentProperties::build_scripting()
     _page_external_scripts->set_spacing(4);
     gint row = 0;
 
-    label_external->set_alignment(0.0);
     label_external->set_hexpand();
+    label_external->set_halign(Gtk::ALIGN_START);
     label_external->set_valign(Gtk::ALIGN_CENTER);
     _page_external_scripts->table().attach(*label_external, 0, row, 3, 1);
 
@@ -776,8 +790,15 @@ void DocumentProperties::build_scripting()
 
     _external_add_btn.set_halign(Gtk::ALIGN_CENTER);
     _external_add_btn.set_valign(Gtk::ALIGN_CENTER);
+
+#if WITH_GTKMM_3_12
+    _external_add_btn.set_margin_start(2);
+    _external_add_btn.set_margin_end(2);
+#else
     _external_add_btn.set_margin_left(2);
     _external_add_btn.set_margin_right(2);
+#endif
+
     _page_external_scripts->table().attach(_external_add_btn, 1, row, 1, 1);
 
     _external_remove_btn.set_halign(Gtk::ALIGN_CENTER);
@@ -810,8 +831,8 @@ void DocumentProperties::build_scripting()
     _page_embedded_scripts->set_spacing(4);
     row = 0;
 
-    label_embedded->set_alignment(0.0);
     label_embedded->set_hexpand();
+    label_embedded->set_halign(Gtk::ALIGN_START);
     label_embedded->set_valign(Gtk::ALIGN_CENTER);
     _page_embedded_scripts->table().attach(*label_embedded, 0, row, 3, 1);
 
@@ -848,8 +869,8 @@ void DocumentProperties::build_scripting()
     Gtk::Label *label_embedded_content= Gtk::manage (new Gtk::Label("", Gtk::ALIGN_START));
     label_embedded_content->set_markup (_("<b>Content:</b>"));
 
-    label_embedded_content->set_alignment(0.0);
     label_embedded_content->set_hexpand();
+    label_embedded_content->set_halign(Gtk::ALIGN_START);
     label_embedded_content->set_valign(Gtk::ALIGN_CENTER);
     _page_embedded_scripts->table().attach(*label_embedded_content, 0, row, 3, 1);
 
@@ -917,8 +938,7 @@ void DocumentProperties::build_metadata()
 
     Gtk::Label *label = Gtk::manage (new Gtk::Label);
     label->set_markup (_("<b>Dublin Core Entities</b>"));
-    label->set_alignment (0.0);
-
+    label->set_halign(Gtk::ALIGN_START);
     label->set_valign(Gtk::ALIGN_CENTER);
     _page_metadata1->table().attach (*label, 0,0,3,1);
 
@@ -964,8 +984,7 @@ void DocumentProperties::build_metadata()
     row = 0;
     Gtk::Label *llabel = Gtk::manage (new Gtk::Label);
     llabel->set_markup (_("<b>License</b>"));
-    llabel->set_alignment (0.0);
-
+    llabel->set_halign(Gtk::ALIGN_START);
     llabel->set_valign(Gtk::ALIGN_CENTER);
     _page_metadata2->table().attach(*llabel, 0, row, 3, 1);
 
@@ -1429,8 +1448,10 @@ DocumentProperties::_createPageTabLabel(const Glib::ustring& label, const char *
 {
     Gtk::HBox *_tab_label_box = Gtk::manage(new Gtk::HBox(false, 0));
     _tab_label_box->set_spacing(4);
-    _tab_label_box->pack_start(*Glib::wrap(sp_icon_new(Inkscape::ICON_SIZE_DECORATION,
-                                                       label_image)));
+
+    auto img = Gtk::manage(new Gtk::Image());
+    img->set_from_icon_name(label_image, Gtk::ICON_SIZE_MENU);
+    _tab_label_box->pack_start(*img);
 
     Gtk::Label *_tab_label = Gtk::manage(new Gtk::Label(label, true));
     _tab_label_box->pack_start(*_tab_label);

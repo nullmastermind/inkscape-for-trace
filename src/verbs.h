@@ -51,6 +51,7 @@ enum {
     SP_VERB_FILE_SAVE,             /**< Save the current file with its saved filename */
     SP_VERB_FILE_SAVE_AS,          /**< Save the current file with a new filename */
     SP_VERB_FILE_SAVE_A_COPY,      /**< Save a copy of the current file */
+    SP_VERB_FILE_SAVE_TEMPLATE,    /**< Save the ciurrent document as template */
     SP_VERB_FILE_PRINT,
     SP_VERB_FILE_VACUUM,
     SP_VERB_FILE_IMPORT,
@@ -604,7 +605,7 @@ public:
         }
     }
     static Verb * getbyid (gchar const * id, bool verbose = true);
-    
+
     /**
      * Print a message to stderr indicating that this verb needs a GUI to run
      */

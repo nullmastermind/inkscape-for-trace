@@ -47,7 +47,6 @@
 #include "ui/tools/node-tool.h"
 #include "verbs.h"
 #include "ui/widget/color-notebook.h"
-#include "widgets/icon.h"
 #include "xml/node-observer.h"
 
 //#define DUMP_LAYERS 1
@@ -224,7 +223,7 @@ public:
  */
 void ObjectsPanel::_styleButton(Gtk::Button& btn, char const* iconName, char const* tooltip)
 {
-    GtkWidget *child = sp_icon_new( Inkscape::ICON_SIZE_SMALL_TOOLBAR, iconName );
+    GtkWidget *child = gtk_image_new_from_icon_name( iconName, GTK_ICON_SIZE_SMALL_TOOLBAR );
     gtk_widget_show( child );
     btn.add( *Gtk::manage(Glib::wrap(child)) );
     btn.set_relief(Gtk::RELIEF_NONE);
@@ -242,23 +241,25 @@ void ObjectsPanel::_styleButton(Gtk::Button& btn, char const* iconName, char con
  */
 Gtk::MenuItem& ObjectsPanel::_addPopupItem( SPDesktop *desktop, unsigned int code, char const* iconName, char const* fallback, int id )
 {
-    GtkWidget* iconWidget = 0;
+    Gtk::Image *iconWidget = nullptr;
     const char* label = 0;
 
     if ( iconName ) {
-        iconWidget = sp_icon_new( Inkscape::ICON_SIZE_MENU, iconName );
+        iconWidget = Gtk::manage(new Gtk::Image());
+        iconWidget->set_from_icon_name( iconName, Gtk::ICON_SIZE_MENU );
     }
 
     if ( desktop ) {
         Verb *verb = Verb::get( code );
         if ( verb ) {
-            SPAction *action = verb->get_action(desktop);
+            SPAction *action = verb->get_action(Inkscape::ActionContext(desktop));
             if ( !iconWidget && action && action->image ) {
-                iconWidget = sp_icon_new( Inkscape::ICON_SIZE_MENU, action->image );
+                iconWidget = Gtk::manage(new Gtk::Image());
+                iconWidget->set_from_icon_name( action->image, Gtk::ICON_SIZE_MENU );
             }
 
             if ( action ) {
-               // label = action->name;
+                label = action->name;
             }
         }
     }
@@ -267,20 +268,22 @@ Gtk::MenuItem& ObjectsPanel::_addPopupItem( SPDesktop *desktop, unsigned int cod
         label = fallback;
     }
 
-    Gtk::Widget* wrapped = 0;
-    if ( iconWidget ) {
-        wrapped = Gtk::manage(Glib::wrap(iconWidget));
-        wrapped->show();
+    auto box = Gtk::manage(new Gtk::Box());
+    Gtk::MenuItem* item = Gtk::manage(new Gtk::MenuItem());
+
+    if (iconWidget) {
+        box->pack_start(*iconWidget, false, true, 0);
+    }
+    else {
+        Gtk::Label *fake_icon = Gtk::manage(new Gtk::Label(""));
+        box->pack_start(*fake_icon, false, true, 0);
     }
 
-
-    Gtk::MenuItem* item = 0;
-
-    if (wrapped) {
-        item = Gtk::manage(new Gtk::ImageMenuItem(*wrapped, label, true));
-    } else {
-	item = Gtk::manage(new Gtk::MenuItem(label, true));
-    }
+    Gtk::Label *menu_label = Gtk::manage(new Gtk::Label(label, true));
+    menu_label->set_xalign(0.0);
+    box->pack_start(*menu_label, true, true, 0);
+    item->add(*box);
+    item->show_all();
 
     item->signal_activate().connect(sigc::bind(sigc::mem_fun(*this, &ObjectsPanel::_takeAction), id));
     _popupMenu.append(*item);
@@ -1642,19 +1645,17 @@ ObjectsPanel::ObjectsPanel() :
     _clipmaskHeader(C_("Clip and mask", "CM")),
     _highlightHeader(C_("Highlight", "HL")),
     _nameHeader(_("Label")),
-    _composite_vbox(false, 0),
-    _opacity_vbox(false, 0),
+    _composite_vbox(Gtk::ORIENTATION_VERTICAL),
+    _opacity_vbox(Gtk::ORIENTATION_VERTICAL),
     _opacity_label(_("Opacity:")),
     _opacity_label_unit(_("%")),
     _opacity_adjustment(Gtk::Adjustment::create(100.0, 0.0, 100.0, 1.0, 1.0, 0.0)),
     _opacity_hscale(_opacity_adjustment),
     _opacity_spin_button(_opacity_adjustment, 0.01, 1),
     _fe_cb(UI::Widget::SimpleFilterModifier::BLEND),
-    _fe_vbox(false, 0),
-    _fe_alignment(1, 1, 1, 1),
+    _fe_vbox(Gtk::ORIENTATION_VERTICAL),
     _fe_blur(UI::Widget::SimpleFilterModifier::BLUR),
-    _blur_vbox(false, 0),
-    _blur_alignment(1, 1, 1, 1),
+    _blur_vbox(Gtk::ORIENTATION_VERTICAL),
     _colorSelectorDialog("dialogs.colorpickerwindow")
 {
     //Create the tree model and store
@@ -1791,21 +1792,39 @@ ObjectsPanel::ObjectsPanel() :
     //Set up the compositing items
     //Blend mode filter effect
     _composite_vbox.pack_start(_fe_vbox, false, false, 2);
-    _fe_alignment.set_padding(0, 0, 4, 0);
-    _fe_alignment.add(_fe_cb);
-    _fe_vbox.pack_start(_fe_alignment, false, false, 0);
+
+    _fe_cb.set_halign(Gtk::ALIGN_FILL);
+    _fe_cb.set_valign(Gtk::ALIGN_END);
+
+#if WITH_GTKMM_3_12
+    _fe_cb.set_margin_start(4);
+#else
+    _fe_cb.set_margin_left(4);
+#endif
+
+    _fe_vbox.pack_start(_fe_cb, false, false, 0);
     _blendConnection = _fe_cb.signal_blend_blur_changed().connect(sigc::mem_fun(*this, &ObjectsPanel::_blendValueChanged));
 
     //Blur filter effect
     _composite_vbox.pack_start(_blur_vbox, false, false, 2);
-    _blur_alignment.set_padding(0, 0, 4, 0);
-    _blur_alignment.add(_fe_blur);
-    _blur_vbox.pack_start(_blur_alignment, false, false, 0);
+
+    _fe_blur.set_hexpand();
+    _fe_blur.set_halign(Gtk::ALIGN_FILL);
+    _fe_blur.set_valign(Gtk::ALIGN_END);
+    
+#if WITH_GTKMM_3_12
+    _fe_blur.set_margin_start(4);
+#else
+    _fe_blur.set_margin_left(4);
+#endif
+
+    _blur_vbox.pack_start(_fe_blur, false, false, 0);
     _blurConnection = _fe_blur.signal_blend_blur_changed().connect(sigc::mem_fun(*this, &ObjectsPanel::_blurValueChanged));
     
     //Opacity
     _composite_vbox.pack_start(_opacity_vbox, false, false, 2);
-    _opacity_label.set_alignment(Gtk::ALIGN_END, Gtk::ALIGN_CENTER);
+    _opacity_label.set_halign(Gtk::ALIGN_END);
+    _opacity_label.set_valign(Gtk::ALIGN_CENTER);
     _opacity_hbox.pack_start(_opacity_label, false, false, 3);
     _opacity_vbox.pack_start(_opacity_hbox, false, false, 0);
     _opacity_hbox.pack_start(_opacity_hscale, true, true, 0);

@@ -113,7 +113,6 @@
 
 #include "main-cmdlineact.h"
 #include "main-cmdlinexact.h"
-#include "widgets/icon.h"
 
 #include <errno.h>
 #include "verbs.h"
@@ -1030,8 +1029,6 @@ sp_main_gui(int argc, char const **argv)
 
     // Set default window icon. Obeys the theme.
     Gtk::Window::set_default_icon_name("inkscape");
-    // Do things that were previously in inkscape_gtk_stock_init().
-    sp_icon_get_phys_size(GTK_ICON_SIZE_MENU);
     Inkscape::UI::Widget::Panel::prep();
 
     bool create_new = true;

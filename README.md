@@ -46,9 +46,10 @@ For developers and others who want to run inkscape without installing it:
 ln -s . share/inkscape
 mkdir -p build/conf
 cd build
-cmake -DCMAKE_INSTALL_PREFIX:PATH=$PWD/../
+cmake -DCMAKE_INSTALL_PREFIX:PATH=$PWD/../ ..
 make -j4
 export INKSCAPE_PROFILE_DIR=$PWD/conf
+PATH=$PWD/bin/:$PATH
 ./bin/inkscape
 ```
 

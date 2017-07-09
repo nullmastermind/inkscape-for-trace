@@ -40,7 +40,6 @@
   typedef libvisio::VSDStringVector RVNGStringVector;
 #endif
 
-#include <gtkmm/alignment.h>
 #include <gtkmm/spinbutton.h>
 
 #include "extension/system.h"

@@ -54,6 +54,7 @@
 #include "extension/db.h"
 
 #include "io/sys.h"
+#include "io/resource.h"
 
 #include "helper/png-write.h"
 
@@ -502,7 +503,8 @@ Glib::RefPtr<Gtk::Adjustment> Export::createSpinbutton( gchar const * /*key*/, f
 
     if (!ll.empty()) {
         l = new Gtk::Label(ll,true);
-        l->set_alignment (1.0, 0.5);
+        l->set_halign(Gtk::ALIGN_END);
+        l->set_valign(Gtk::ALIGN_CENTER);
         l->set_hexpand();
         l->set_vexpand();
         t->attach(*l, x + pos, y, 1, 1);
@@ -525,7 +527,8 @@ Glib::RefPtr<Gtk::Adjustment> Export::createSpinbutton( gchar const * /*key*/, f
 
     if (!lr.empty()) {
         l = new Gtk::Label(lr,true);
-        l->set_alignment (0.0, 0.5);
+        l->set_halign(Gtk::ALIGN_START);
+        l->set_valign(Gtk::ALIGN_CENTER);
         l->set_hexpand();
         l->set_vexpand();
         t->attach(*l, x + pos, y, 1, 1);
@@ -564,7 +567,7 @@ Glib::ustring Export::create_filepath_from_id (Glib::ustring id, const Glib::ust
     }
 
     if (directory.empty()) {
-        directory = INKSCAPE.homedir_path(NULL);
+        directory = Inkscape::IO::Resource::homedir_path(NULL);
     }
 
     Glib::ustring filename = Glib::build_filename(directory, id+".png");

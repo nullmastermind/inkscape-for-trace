@@ -11,7 +11,6 @@
 #include <gtkmm/box.h>
 #include "live_effects/parameter/originalitem.h"
 
-#include "widgets/icon.h"
 #include <glibmm/i18n.h>
 #include <gtkmm/button.h>
 #include <gtkmm/label.h>
@@ -55,7 +54,8 @@ OriginalItemParam::param_newWidget()
     }
 
     { // Paste item to link button
-        Gtk::Widget *pIcon = Gtk::manage( sp_icon_get_icon( INKSCAPE_ICON("edit-paste"), Inkscape::ICON_SIZE_BUTTON) );
+        Gtk::Image *pIcon = Gtk::manage(new Gtk::Image());
+        pIcon->set_from_icon_name("edit-paste", Gtk::ICON_SIZE_BUTTON);
         Gtk::Button *pButton = Gtk::manage(new Gtk::Button());
         pButton->set_relief(Gtk::RELIEF_NONE);
         pIcon->show();
@@ -67,7 +67,8 @@ OriginalItemParam::param_newWidget()
     }
 
     { // Select original button
-        Gtk::Widget *pIcon = Gtk::manage( sp_icon_get_icon("edit-select-original", Inkscape::ICON_SIZE_BUTTON) );
+        Gtk::Image *pIcon = Gtk::manage(new Gtk::Image());
+        pIcon->set_from_icon_name("edit-select-original", Gtk::ICON_SIZE_BUTTON);
         Gtk::Button *pButton = Gtk::manage(new Gtk::Button());
         pButton->set_relief(Gtk::RELIEF_NONE);
         pIcon->show();

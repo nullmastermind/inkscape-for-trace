@@ -61,6 +61,7 @@ public:
     virtual bool root_handler(GdkEvent* event);
 
     virtual const std::string& getPrefsPath();
+    boost::ptr_map<SPItem*, ShapeEditor> _shape_editors;
 
 private:
     sigc::connection _selection_changed_connection;
@@ -74,7 +75,6 @@ private:
     Inkscape::UI::PathSharedData* _path_data;
     SPCanvasGroup *_transform_handle_group;
     SPItem *_last_over;
-    boost::ptr_map<SPItem*, ShapeEditor> _shape_editors;
 
     bool cursor_drag;
     bool show_handles;

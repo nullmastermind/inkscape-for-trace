@@ -25,6 +25,11 @@ enum {
       SP_DROPPER_PICK_VISIBLE,
       SP_DROPPER_PICK_ACTUAL  
 };
+enum {
+  DONT_REDRAW_CURSOR,
+  DRAW_FILL_CURSOR,
+  DRAW_STROKE_CURSOR
+};
 
 namespace Inkscape {
 namespace UI {
@@ -39,7 +44,7 @@ public:
 
 	virtual const std::string& getPrefsPath();
 
-	guint32 get_color();
+	guint32 get_color(bool invert=false);
 
 protected:
 	virtual void setup();
@@ -52,6 +57,10 @@ private:
     double        B;
     double        alpha;
 
+    double radius;
+    bool invert;
+    bool stroke;
+    bool dropping;
     bool dragging;
 
     SPCanvasItem* grabbed;

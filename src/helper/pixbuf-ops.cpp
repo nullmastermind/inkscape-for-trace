@@ -30,6 +30,8 @@
 
 #include "helper/pixbuf-ops.h"
 
+#include <gdk/gdk.h>
+
 // TODO look for copy-n-paste duplication of this function:
 /**
  * Hide all items that are not listed in list, recursively, skipping groups and defs.

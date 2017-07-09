@@ -108,7 +108,7 @@ void ObjectProperties::_init()
 
     /* Create the label for the object id */
     _label_id.set_label(_label_id.get_label() + " ");
-    _label_id.set_alignment(1, 0.5);
+    _label_id.set_halign(Gtk::ALIGN_END);
     _label_id.set_valign(Gtk::ALIGN_CENTER);
     grid_top->attach(_label_id, 0, 0, 1, 1);
 
@@ -128,8 +128,7 @@ void ObjectProperties::_init()
 
     /* Create the label for the object label */
     _label_label.set_label(_label_label.get_label() + " ");
-    _label_label.set_alignment(1, 0.5);
-
+    _label_label.set_halign(Gtk::ALIGN_END);
     _label_label.set_valign(Gtk::ALIGN_CENTER);
     grid_top->attach(_label_label, 0, 1, 1, 1);
 
@@ -149,8 +148,7 @@ void ObjectProperties::_init()
 
     /* Create the label for the object title */
     _label_title.set_label(_label_title.get_label() + " ");
-    _label_title.set_alignment (1, 0.5);
-
+    _label_title.set_halign(Gtk::ALIGN_END);
     _label_title.set_valign(Gtk::ALIGN_CENTER);
     grid_top->attach(_label_title, 0, 2, 1, 1);
 
@@ -187,8 +185,7 @@ void ObjectProperties::_init()
     /* Image rendering */
     /* Create the label for the object ImageRendering */
     _label_image_rendering.set_label(_label_image_rendering.get_label() + " ");
-    _label_image_rendering.set_alignment(1, 0.5);
-
+    _label_image_rendering.set_halign(Gtk::ALIGN_END);
     _label_image_rendering.set_valign(Gtk::ALIGN_CENTER);
     grid_top->attach(_label_image_rendering, 0, 3, 1, 1);
 

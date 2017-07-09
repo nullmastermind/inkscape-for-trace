@@ -17,6 +17,9 @@
 #include "desktop.h"
 #include "document.h"
 #include "knotholder.h"
+#include "sp-shape.h"
+#include "sp-path.h"
+#include "inkscape.h"
 #include "ui/object-edit.h"
 #include "ui/shape-editor.h"
 #include "xml/node-event-vector.h"
@@ -81,7 +84,7 @@ const SPItem *ShapeEditor::get_item() {
     return item;
 }
 
-void ShapeEditor::event_attr_changed(Inkscape::XML::Node *, gchar const *name, gchar const *, gchar const *, bool, void *data)
+void ShapeEditor::event_attr_changed(Inkscape::XML::Node * node, gchar const *name, gchar const *, gchar const *, bool, void *data)
 {
     g_assert(data);
     ShapeEditor *sh = static_cast<ShapeEditor *>(data);
@@ -94,7 +97,9 @@ void ShapeEditor::event_attr_changed(Inkscape::XML::Node *, gchar const *name, g
         if (changed_kh) {
             // this can happen if an LPEItem's knotholder handle was dragged, in which case we want
             // to keep the knotholder; in all other cases (e.g., if the LPE itself changes) we delete it
-            sh->reset_item(!strcmp(name, "d"));
+            SPObject * obj = SP_ACTIVE_DOCUMENT->getObjectById(node->attribute("id"));
+            bool is_shape = SP_IS_SHAPE(obj) && !SP_IS_PATH(obj);
+            sh->reset_item(!strcmp(name, "d") || is_shape);
         }
     }
 }
@@ -112,7 +117,6 @@ void ShapeEditor::set_item(SPItem *item, bool keep_knotholder) {
     if (_blockSetItem) {
         return;
     }
-
     // this happens (and should only happen) when for an LPEItem having both knotholder and
     // nodepath the knotholder is adapted; in this case we don't want to delete the knotholder
     // since this freezes the handles
@@ -155,6 +159,7 @@ bool ShapeEditor::knot_mouseover() const {
     if (this->knotholder) {
         return knotholder->knot_mouseover();
     }
+    
 
     return false;
 }

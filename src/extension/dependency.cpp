@@ -18,6 +18,7 @@
 #include "dependency.h"
 #include "db.h"
 #include "extension.h"
+#include "io/resource.h"
 
 namespace Inkscape {
 namespace Extension {
@@ -151,12 +152,11 @@ bool Dependency::check (void) const
             Glib::ustring location(_string);
             switch (_location) {
                 case LOCATION_EXTENSIONS: {
-                    for (unsigned int i=0; i<Inkscape::Extension::Extension::search_path.size(); i++) {
-                        std::string temploc = Glib::build_filename(Inkscape::Extension::Extension::search_path[i], location);
-                        if (Glib::file_test(temploc, filetest)) {
-                            location = temploc;
-                            break;
-                        }
+                    using namespace Inkscape::IO::Resource;
+                    Glib::ustring temploc = get_filename(EXTENSIONS, location.c_str());
+                    if(Glib::file_test(temploc, filetest)) {
+                        location = temploc;
+                        break;
                     }
                 } /* PASS THROUGH!!! */
                 case LOCATION_ABSOLUTE: {

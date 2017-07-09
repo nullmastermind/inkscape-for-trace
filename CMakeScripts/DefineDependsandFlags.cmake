@@ -1,4 +1,3 @@
-
 set(INKSCAPE_LIBS "")
 set(INKSCAPE_INCS "")
 set(INKSCAPE_INCS_SYS "")
@@ -46,16 +45,19 @@ pkg_check_modules(INKSCAPE_DEP REQUIRED
 		  pangoft2
 		  fontconfig
 		  gsl
-		  gmodule-2.0)
+		  gmodule-2.0
+		  libsoup-2.4>=2.42)
 
 list(APPEND INKSCAPE_LIBS ${INKSCAPE_DEP_LDFLAGS})
 list(APPEND INKSCAPE_INCS_SYS ${INKSCAPE_DEP_INCLUDE_DIRS})
 list(APPEND INKSCAPE_LIBS ${INKSCAPE_DEP_LIBRARIES})
+
 add_definitions(${INKSCAPE_DEP_CFLAGS_OTHER})
 
 if(APPLE AND DEFINED ENV{CMAKE_PREFIX_PATH})
     list(APPEND INKSCAPE_LIBS "-L$ENV{CMAKE_PREFIX_PATH}/lib")
 endif()
+
 
 if(WITH_GNOME_VFS)
     find_package(GnomeVFS2)
@@ -65,6 +67,11 @@ if(WITH_GNOME_VFS)
     else()
 	set(WITH_GNOME_VFS OFF)
     endif()
+endif()
+
+find_package(JeMalloc)
+if (JEMALLOC_FOUND)
+	list(APPEND INKSCAPE_LIBS ${JEMALLOC_LIBRARIES})
 endif()
 
 if(ENABLE_LCMS)
@@ -258,6 +265,42 @@ set(TRY_GTKSPELL ON)
         set (WITH_GTKMM_3_10 ON)
     endif()
 
+    # Check whether we can use new features in Gtkmm 3.12
+    # TODO: Drop this test and bump the version number in the GTK test above
+    #       as soon as all supported distributions provide Gtkmm >= 3.12
+    pkg_check_modules(GTKMM_3_12
+	gtkmm-3.0>=3.12,
+	)
+
+    if("${GTKMM_3_12_FOUND}")
+        message("Using Gtkmm 3.12 build")
+        set (WITH_GTKMM_3_12 ON)
+    endif()
+
+    # Check whether we can use new features in Gtkmm 3.16
+    # TODO: Drop this test and bump the version number in the GTK test above
+    #       as soon as all supported distributions provide Gtkmm >= 3.16
+    pkg_check_modules(GTKMM_3_16
+	gtkmm-3.0>=3.16,
+	)
+
+    if("${GTKMM_3_16_FOUND}")
+        message("Using Gtkmm 3.16 build")
+        set (WITH_GTKMM_3_16 ON)
+    endif()
+
+    # Check whether we can use new features in Gtkmm 3.22
+    # TODO: Drop this test and bump the version number in the GTK test above
+    #       as soon as all supported distributions provide Gtkmm >= 3.22
+    pkg_check_modules(GTKMM_3_22
+	gtkmm-3.0>=3.22,
+	)
+
+    if("${GTKMM_3_22_FOUND}")
+        message("Using Gtkmm 3.22 build")
+        set (WITH_GTKMM_3_22 ON)
+    endif()
+
     pkg_check_modules(GDL_3_6 gdl-3.0>=3.6)
 
     if("${GDL_3_6_FOUND}")
@@ -337,7 +380,7 @@ list(APPEND INKSCAPE_INCS_SYS ${ZLIB_INCLUDE_DIRS})
 list(APPEND INKSCAPE_LIBS ${ZLIB_LIBRARIES})
 
 if(WITH_IMAGE_MAGICK)
-    pkg_check_modules(ImageMagick ImageMagick MagickCore Magick++ )
+    pkg_check_modules(ImageMagick ImageMagick++ )
     if(ImageMagick_FOUND)
 
         list(APPEND INKSCAPE_LIBS ${ImageMagick_LDFLAGS})

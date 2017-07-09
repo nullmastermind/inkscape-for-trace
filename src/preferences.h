@@ -544,8 +544,6 @@ private:
     Preferences(Preferences const &);
     Preferences operator=(Preferences const &);
 
-    std::string _prefs_basename; ///< Basename of the prefs file
-    std::string _prefs_dir; ///< Directory in which to look for the prefs file
     std::string _prefs_filename; ///< Full filename (with directory) of the prefs file
     Glib::ustring _lastErrPrimary; ///< Last primary error message, if any.
     Glib::ustring _lastErrSecondary; ///< Last secondary error message, if any.

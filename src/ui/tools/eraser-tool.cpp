@@ -93,7 +93,7 @@ const std::string& EraserTool::getPrefsPath() {
 const std::string EraserTool::prefsPath = "/tools/eraser";
 
 EraserTool::EraserTool()
-    : DynamicBase(cursor_eraser_xpm, 4, 4)
+    : DynamicBase(cursor_eraser_xpm)
     , nowidth(false)
 {
 }

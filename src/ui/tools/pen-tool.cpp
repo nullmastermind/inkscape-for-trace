@@ -81,7 +81,7 @@ const std::string& PenTool::getPrefsPath() {
 const std::string PenTool::prefsPath = "/tools/freehand/pen";
 
 PenTool::PenTool()
-    : FreehandBase(cursor_pen_xpm, 4, 4)
+    : FreehandBase(cursor_pen_xpm)
     , p()
     , npoints(0)
     , mode(MODE_CLICK)
@@ -100,8 +100,8 @@ PenTool::PenTool()
 {
 }
 
-PenTool::PenTool(gchar const *const *cursor_shape, gint hot_x, gint hot_y)
-    : FreehandBase(cursor_shape, hot_x, hot_y)
+PenTool::PenTool(gchar const *const *cursor_shape)
+    : FreehandBase(cursor_shape)
     , p()
     , npoints(0)
     , mode(MODE_CLICK)

@@ -21,6 +21,7 @@
 #include <string>
 
 #include "xml/node.h"
+#include "io/resource.h"
 #include "extension/effect.h"
 
 
@@ -66,7 +67,6 @@ protected:
     
     Glib::ustring _current_keyword;
     Glib::ustring _current_template;
-    std::string _loading_path;
     std::map<Glib::ustring, TemplateData> _tdata;
     std::set<Glib::ustring> _keywords;
     
@@ -100,7 +100,7 @@ private:
     
     void _getDataFromNode(Inkscape::XML::Node *, TemplateData &);
     void _getProceduralTemplates();
-    void _getTemplatesFromDir(const std::string &);
+    void _getTemplatesFromDomain(Inkscape::IO::Resource::Domain domain);
     void _keywordSelected();    
     TemplateData _processTemplateFile(const std::string &);
     

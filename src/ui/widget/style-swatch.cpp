@@ -116,13 +116,15 @@ StyleSwatch::StyleSwatch(SPCSSAttr *css, gchar const *main_tip)
     _label[SS_STROKE].set_markup(_("Stroke:"));
 
     for (int i = SS_FILL; i <= SS_STROKE; i++) {
-        _label[i].set_alignment(0.0, 0.5);
+        _label[i].set_halign(Gtk::ALIGN_START);
+        _label[i].set_valign(Gtk::ALIGN_CENTER);
         _label[i].set_padding(0, 0);
 
         _color_preview[i] = new Inkscape::UI::Widget::ColorPreview (0);
     }
 
-    _opacity_value.set_alignment(0.0, 0.5);
+    _opacity_value.set_halign(Gtk::ALIGN_START);
+    _opacity_value.set_valign(Gtk::ALIGN_CENTER);
     _opacity_value.set_padding(0, 0);
 
     _table->set_column_spacing(2);

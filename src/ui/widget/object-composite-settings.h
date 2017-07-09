@@ -12,7 +12,6 @@
  */
 
 #include <gtkmm/box.h>
-#include <gtkmm/alignment.h>
 #include <gtkmm/adjustment.h>
 #include <gtkmm/label.h>
 #include <gtkmm/scale.h>

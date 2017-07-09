@@ -72,7 +72,8 @@ void ToleranceSlider::init (const Glib::ustring& label1, const Glib::ustring& la
     
     Gtk::Label *theLabel1 = Gtk::manage(new Gtk::Label(label1));
     theLabel1->set_use_underline();
-    theLabel1->set_alignment(0, 0.5);
+    theLabel1->set_halign(Gtk::ALIGN_START);
+    theLabel1->set_valign(Gtk::ALIGN_CENTER);
     // align the label with the checkbox text above by indenting 22 px.
     _hbox->pack_start(*theLabel1, Gtk::PACK_EXPAND_WIDGET, 22);
 
@@ -100,9 +101,11 @@ void ToleranceSlider::init (const Glib::ustring& label1, const Glib::ustring& la
     _button1->set_tooltip_text (tip2);
     _button2->set_tooltip_text (tip3);    
     _button1->add (*theLabel3);
-    _button1->set_alignment (0.0, 0.5);    
+    _button1->set_halign(Gtk::ALIGN_START);
+    _button1->set_valign(Gtk::ALIGN_CENTER);
     _button2->add (*theLabel2);
-    _button2->set_alignment (0.0, 0.5);
+    _button2->set_halign(Gtk::ALIGN_START);
+    _button2->set_valign(Gtk::ALIGN_CENTER);
     
     _vbox->add (*_button1);
     _vbox->add (*_button2);    

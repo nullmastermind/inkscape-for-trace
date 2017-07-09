@@ -62,7 +62,8 @@ void ColorWheelSelector::_initUI()
 
     /* Label */
     Gtk::Label *label = Gtk::manage(new Gtk::Label(_("_A:"), true));
-    label->set_alignment(1.0, 0.5);
+    label->set_halign(Gtk::ALIGN_END);
+    label->set_valign(Gtk::ALIGN_CENTER);
     label->show();
 
   #if GTK_CHECK_VERSION(3, 12, 0)

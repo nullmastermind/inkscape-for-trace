@@ -60,11 +60,13 @@
 #endif
 #include "preferences.h"
 #include "io/sys.h"
+#include "io/resource.h"
 #ifdef WITH_DBUS
 #include "dbus/dbus-init.h"
 #endif
 
 #ifdef WITH_IMAGE_MAGICK
+#include <Magick++.h>
 #include "internal/bitmap/adaptiveThreshold.h"
 #include "internal/bitmap/addNoise.h"
 #include "internal/bitmap/blur.h"
@@ -106,6 +108,8 @@
 
 #include "init.h"
 
+using namespace Inkscape::IO::Resource;
+
 namespace Inkscape {
 namespace Extension {
 
@@ -113,7 +117,6 @@ namespace Extension {
     the extension directory and parsed */
 #define SP_MODULE_EXTENSION  "inx"
 
-static void build_module_from_dir(gchar const *dirname);
 static void check_extensions();
 
 /**
@@ -150,8 +153,7 @@ update_pref(Glib::ustring const &pref_path,
  * Invokes the init routines for internal modules.
  *
  * This should be a list of all the internal modules that need to initialized.  This is just a
- * convinent place to put them.  Also, this function calls build_module_from_dir to parse the
- * Inkscape extensions directory.
+ * convinent place to put them.
  */
 void
 init()
@@ -201,6 +203,8 @@ init()
 
     /* Raster Effects */
 #ifdef WITH_IMAGE_MAGICK
+    Magick::InitializeMagick(NULL);
+
     Internal::Bitmap::AdaptiveThreshold::init();
     Internal::Bitmap::AddNoise::init();
     Internal::Bitmap::Blur::init();
@@ -240,17 +244,8 @@ init()
 
     Internal::Filter::Filter::filters_all();
 
-    /* Load search path for extensions */
-    if (Inkscape::Extension::Extension::search_path.size() == 0)
-    {
-        Inkscape::Extension::Extension::search_path.push_back(Inkscape::Application::profile_path("extensions"));
-
-        Inkscape::Extension::Extension::search_path.push_back(g_strdup(INKSCAPE_EXTENSIONDIR));
-
-    }
-
-    for (unsigned int i=0; i<Inkscape::Extension::Extension::search_path.size(); i++) {
-        build_module_from_dir(Inkscape::Extension::Extension::search_path[i]);
+    for(auto &filename: get_filenames(EXTENSIONS, {SP_MODULE_EXTENSION})) {
+        build_from_file(filename.c_str());
     }
 
     /* this is at the very end because it has several catch-alls
@@ -270,60 +265,6 @@ init()
                 // Inkscape::Extension::db.get_output_list()
         );
 }
-
-/**
- * \return    none
- * \brief     This function parses a directory for files of SP_MODULE_EXTENSION
- *            type and loads them.
- * \param     dirname  The directory that should be searched for modules
- *
- * Here is just a basic function that moves through a directory.  It looks at every entry, and
- * compares its filename with SP_MODULE_EXTENSION.  Of those that pass, build_from_file is called
- * with their filenames.
- */
-static void
-build_module_from_dir(gchar const *dirname)
-{
-    if (!dirname) {
-        g_warning("%s", _("Null external module directory name.  Modules will not be loaded."));
-        return;
-    }
-
-    if (!Glib::file_test(std::string(dirname), Glib::FILE_TEST_EXISTS | Glib::FILE_TEST_IS_DIR)) {
-        return;
-    }
-
-    //# Hopefully doing this the Glib way is portable
-
-    GError *err;
-    GDir *directory = g_dir_open(dirname, 0, &err);
-    if (!directory) {
-        gchar *safeDir = Inkscape::IO::sanitizeString(dirname);
-        g_warning(_("Modules directory (%s) is unavailable.  External modules in that directory will not be loaded."), safeDir);
-        g_free(safeDir);
-        return;
-    }
-
-    gchar *filename;
-    while ((filename = (gchar *)g_dir_read_name(directory)) != NULL) {
-        if (strlen(filename) < strlen(SP_MODULE_EXTENSION)) {
-            continue;
-        }
-
-        if (strcmp(SP_MODULE_EXTENSION, filename + (strlen(filename) - strlen(SP_MODULE_EXTENSION)))) {
-            continue;
-        }
-
-        gchar *pathname = g_build_filename(dirname, filename, (char *) NULL);
-        build_from_file(pathname);
-        g_free(pathname);
-    }
-
-    g_dir_close(directory);
-
-	return;
-}
-
 
 static void
 check_extensions_internal(Extension *in_plug, gpointer in_data)

@@ -124,12 +124,13 @@ Dock::~Dock()
     g_free(_gdl_dock_bar);
 }
 
-void Dock::addItem(DockItem& item, DockItem::Placement placement)
+void Dock::addItem(DockItem& item, GdlDockPlacement placement)
 {
     _dock_items.push_back(&item);
+
     gdl_dock_add_item(GDL_DOCK(_gdl_dock),
                       GDL_DOCK_ITEM(item.gobj()),
-                      (GdlDockPlacement)placement);
+                      placement);
 
     // FIXME: This is a hack to prevent the dock from expanding the main window, this can't be done
     // initially as the paned doesn't exist.

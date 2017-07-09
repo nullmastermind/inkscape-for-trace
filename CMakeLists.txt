@@ -151,21 +151,21 @@ endif()
 # -----------------------------------------------------------------------------
 # Dist Target
 # -----------------------------------------------------------------------------
-if(EXISTS ${CMAKE_SOURCE_DIR}/.bzr/)
-    execute_process(COMMAND
-        bzr revno --tree ${CMAKE_SOURCE_DIR}
-                OUTPUT_VARIABLE INKSCAPE_REVISION
-                OUTPUT_STRIP_TRAILING_WHITESPACE)
+if(EXISTS ${CMAKE_SOURCE_DIR}/.git/)
+    execute_process(
+        COMMAND git log -n 1 --pretty=%ad --date=short
+        WORKING_DIRECTORY "${INKSCAPE_SOURCE_DIR}"
+        OUTPUT_VARIABLE INKSCAPE_REVISION
+        OUTPUT_STRIP_TRAILING_WHITESPACE)
 else()
     set(INKSCAPE_REVISION "unknown")
 endif()
 set(INKSCAPE_DIST_PREFIX "${PROJECT_NAME}-${INKSCAPE_VERSION}")
 add_custom_target(dist
-    COMMAND sed -i "s/unknown/r${INKSCAPE_REVISION}/" CMakeScripts/inkscape-version.cmake
+    COMMAND sed -i "s/unknown//" CMakeScripts/inkscape-version.cmake
     && sed -i "s/custom//" CMakeScripts/inkscape-version.cmake
-    && bzr export --uncommitted --root=${INKSCAPE_DIST_PREFIX}
-    "${CMAKE_BINARY_DIR}/${INKSCAPE_DIST_PREFIX}.tar.bz2" 
-    && bzr revert ${CMAKE_SOURCE_DIR}/CMakeScripts/inkscape-version.cmake
+    && tar cfz ${CMAKE_BINARY_DIR}/${INKSCAPE_DIST_PREFIX}.tar.gz ${CMAKE_SOURCE_DIR} --exclude=".*" --exclude-vcs-ignores
+    && git checkout ${CMAKE_SOURCE_DIR}/CMakeScripts/inkscape-version.cmake
     WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
 
 # -----------------------------------------------------------------------------

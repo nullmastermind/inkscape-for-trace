@@ -13,7 +13,6 @@
 #include "svg/svg.h"
 #include "svg/stringstream.h"
 #include "selection.h"
-#include "widgets/icon.h"
 #include "inkscape.h"
 #include "verbs.h"
 #include "helper-fns.h"
@@ -26,7 +25,7 @@ ToggleButtonParam::ToggleButtonParam( const Glib::ustring& label, const Glib::us
                       const Glib::ustring& key, Inkscape::UI::Widget::Registry* wr,
                       Effect* effect, bool default_value, const Glib::ustring& inactive_label,
                       char const * _icon_active, char const * _icon_inactive, 
-                      Inkscape::IconSize _icon_size)
+                      GtkIconSize _icon_size)
     : Parameter(label, tip, key, wr, effect), value(default_value), defvalue(default_value),
       inactive_label(inactive_label), _icon_active(_icon_active), _icon_inactive(_icon_inactive), _icon_size(_icon_size)
 {
@@ -105,9 +104,9 @@ ToggleButtonParam::param_newWidget()
         gtk_widget_show(box_button);
         GtkWidget *icon_button = NULL;
         if(!value){ 
-            icon_button = sp_icon_new(_icon_size, _icon_inactive);
+            icon_button = gtk_image_new_from_icon_name(_icon_inactive, _icon_size);
         } else {
-            icon_button = sp_icon_new(_icon_size, _icon_active);
+            icon_button = gtk_image_new_from_icon_name(_icon_active, _icon_size);
         }
         gtk_widget_show(icon_button);
         gtk_box_pack_start (GTK_BOX(box_button), icon_button, false, false, 1);
@@ -153,11 +152,10 @@ ToggleButtonParam::refresh_button()
     if ( _icon_active ) {
         GdkPixbuf * icon_pixbuf = NULL;
         if(!value){ 
-            icon_pixbuf = sp_pixbuf_new( _icon_size, _icon_inactive );
+            gtk_image_set_from_icon_name (GTK_IMAGE(g_list_nth_data(childs, 0)), _icon_inactive, _icon_size);
         } else {
-            icon_pixbuf = sp_pixbuf_new( _icon_size, _icon_active );
+            gtk_image_set_from_icon_name (GTK_IMAGE(g_list_nth_data(childs, 0)), _icon_active, _icon_size);
         }
-        gtk_image_set_from_pixbuf (GTK_IMAGE(g_list_nth_data(childs, 0)), icon_pixbuf);
     }
 }
 

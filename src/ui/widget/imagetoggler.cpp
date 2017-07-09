@@ -13,7 +13,6 @@
 
 #include <gtkmm/icontheme.h>
 
-#include "widgets/icon.h"
 #include "widgets/toolbox.h"
 #include "ui/icon-names.h"
 
@@ -32,23 +31,14 @@ ImageToggler::ImageToggler( char const* on, char const* off) :
     _property_pixbuf_off(*this, "pixbuf_off", Glib::RefPtr<Gdk::Pixbuf>(0))
 {
     property_mode() = Gtk::CELL_RENDERER_MODE_ACTIVATABLE;
-    int phys = sp_icon_get_phys_size((int)Inkscape::ICON_SIZE_DECORATION);
+
+    gint width, height;
+    gtk_icon_size_lookup(GTK_ICON_SIZE_MENU, &width, &height);
+    int phys = width;
+
     Glib::RefPtr<Gtk::IconTheme> icon_theme = Gtk::IconTheme::get_default();
-
-    if (!icon_theme->has_icon(_pixOnName)) {
-        Inkscape::queueIconPrerender( INKSCAPE_ICON(_pixOnName.data()), Inkscape::ICON_SIZE_DECORATION );
-    }
-    if (!icon_theme->has_icon(_pixOffName)) {
-        Inkscape::queueIconPrerender( INKSCAPE_ICON(_pixOffName.data()), Inkscape::ICON_SIZE_DECORATION );
-    }
-
-
-    if (icon_theme->has_icon(_pixOnName)) {
-        _property_pixbuf_on = icon_theme->load_icon(_pixOnName, phys, (Gtk::IconLookupFlags)0);
-    }
-    if (icon_theme->has_icon(_pixOffName)) {
-        _property_pixbuf_off = icon_theme->load_icon(_pixOffName, phys, (Gtk::IconLookupFlags)0);
-    }
+    _property_pixbuf_on  = icon_theme->load_icon(_pixOnName,  phys, (Gtk::IconLookupFlags)0);
+    _property_pixbuf_off = icon_theme->load_icon(_pixOffName, phys, (Gtk::IconLookupFlags)0);
 
     property_pixbuf() = _property_pixbuf_off.get_value();
 }

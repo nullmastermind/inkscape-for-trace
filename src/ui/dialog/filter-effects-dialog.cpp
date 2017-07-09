@@ -1921,7 +1921,7 @@ bool FilterEffectsDialog::PrimitiveList::on_draw_signal(const Cairo::RefPtr<Cair
     
     auto sc = gtk_widget_get_style_context(GTK_WIDGET(gobj()));
     GdkRGBA bg_color, fg_color;
-    gtk_style_context_get_background_color(sc, GTK_STATE_FLAG_NORMAL, &bg_color);
+    gdk_rgba_parse(&bg_color, "f0f0f0"); // Fix bg as a light gray
     gtk_style_context_get_color(sc, GTK_STATE_FLAG_NORMAL, &fg_color);
 
     GdkRGBA mid_color = {(bg_color.red + fg_color.red)/2.0,
@@ -1930,7 +1930,7 @@ bool FilterEffectsDialog::PrimitiveList::on_draw_signal(const Cairo::RefPtr<Cair
                          (bg_color.alpha + fg_color.alpha)/2.0};
     
     GdkRGBA bg_color_active, fg_color_active;
-    gtk_style_context_get_background_color(sc, GTK_STATE_FLAG_ACTIVE, &bg_color_active);
+    gdk_rgba_parse(&bg_color, "f0f0f0"); // Fix bg as a light gray
     gtk_style_context_get_color(sc, GTK_STATE_FLAG_ACTIVE, &fg_color_active);
 
     GdkRGBA mid_color_active = {(bg_color_active.red + fg_color_active.red)/2.0,
@@ -2114,7 +2114,7 @@ void FilterEffectsDialog::PrimitiveList::draw_connection(const Cairo::RefPtr<Cai
     auto sc = gtk_widget_get_style_context(GTK_WIDGET(gobj()));
     
     GdkRGBA bg_color, fg_color;
-    gtk_style_context_get_background_color(sc, GTK_STATE_FLAG_NORMAL, &bg_color);
+    gdk_rgba_parse(&bg_color, "f0f0f0"); // Fix bg as a light gray
     gtk_style_context_get_color(sc, GTK_STATE_FLAG_NORMAL, &fg_color);
 
     GdkRGBA mid_color = {(bg_color.red + fg_color.red)/2.0,
@@ -2649,8 +2649,10 @@ FilterEffectsDialog::FilterEffectsDialog()
     hpaned->pack2(*_primitive_box);
     _getContents()->add(*hpaned);
     
-    _infobox_icon.set_alignment(0, 0);
-    _infobox_desc.set_alignment(0, 0);
+    _infobox_icon.set_halign(Gtk::ALIGN_START);
+    _infobox_icon.set_valign(Gtk::ALIGN_START);
+    _infobox_desc.set_halign(Gtk::ALIGN_START);
+    _infobox_desc.set_valign(Gtk::ALIGN_START);
     _infobox_desc.set_justify(Gtk::JUSTIFY_LEFT);
     _infobox_desc.set_line_wrap(true);
     _infobox_desc.set_size_request(200, -1);
