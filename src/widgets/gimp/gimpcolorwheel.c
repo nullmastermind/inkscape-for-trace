@@ -640,7 +640,7 @@ compute_v (GimpColorWheel *wheel,
 
 static void
 set_cross_grab (GimpColorWheel *wheel,
-                guint32         time)
+                GdkEvent       *event)
 {
   GimpColorWheelPrivate *priv = wheel->priv;
   GdkCursor             *cursor;
@@ -649,14 +649,28 @@ set_cross_grab (GimpColorWheel *wheel,
     gdk_cursor_new_for_display (gtk_widget_get_display (GTK_WIDGET (wheel)),
                                 GDK_CROSSHAIR);
 
-  gdk_device_grab (gtk_get_current_event_device(),
+  GdkDevice *device = gtk_get_current_event_device();
+#if GTK_CHECK_VERSION(3,20,0)
+  GdkSeat *seat = gdk_device_get_seat(device);
+  gdk_seat_grab (seat,
+                 priv->window,
+                 GDK_SEAT_CAPABILITY_ALL_POINTING,
+		 FALSE,
+		 cursor,
+		 event,
+		 NULL,
+		 NULL);
+#else
+  gdk_device_grab (device,
 		   priv->window,
 		   GDK_OWNERSHIP_NONE,
 		   FALSE,
 		   GDK_POINTER_MOTION_MASK      |
 		   GDK_POINTER_MOTION_HINT_MASK |
 		   GDK_BUTTON_RELEASE_MASK,
-		   cursor, time);
+		   cursor, event->time);
+#endif
+
   g_object_unref (cursor);
 }
 
@@ -688,7 +702,7 @@ gimp_color_wheel_button_press (GtkWidget      *widget,
   if (is_in_ring (wheel, x, y))
     {
       priv->mode = DRAG_H;
-      set_cross_grab (wheel, event->time);
+      set_cross_grab (wheel, (GdkEvent *)event);
 
       gimp_color_wheel_set_color (wheel,
                                   compute_v (wheel, x, y),
@@ -706,7 +720,7 @@ gimp_color_wheel_button_press (GtkWidget      *widget,
       gdouble s, v;
 
       priv->mode = DRAG_SV;
-      set_cross_grab (wheel, event->time);
+      set_cross_grab (wheel, (GdkEvent *)event);
 
       compute_sv (wheel, x, y, &s, &v);
       gimp_color_wheel_set_color (wheel, priv->h, s, v);
@@ -757,8 +771,14 @@ gimp_color_wheel_button_release (GtkWidget      *widget,
   else
     g_assert_not_reached ();
 
-  gdk_device_ungrab (gtk_get_current_event_device(),
-                     event->time);
+  GdkDevice *device = gtk_get_current_event_device();
+#if GTK_CHECK_VERSION(3,20,0)
+  GdkSeat *seat = gdk_device_get_seat(device);
+  gdk_seat_ungrab (seat);
+#else
+  gdk_device_ungrab (device,
+                     (GdkEvent *)event);
+#endif
 
   return TRUE;
 }
