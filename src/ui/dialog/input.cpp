@@ -512,7 +512,7 @@ private:
     void handleDeviceChange(Glib::RefPtr<InputDevice const> device);
     void updateDeviceAxes(Glib::RefPtr<InputDevice const> device);
     void updateDeviceButtons(Glib::RefPtr<InputDevice const> device);
-    static void updateDeviceLinks(Glib::RefPtr<InputDevice const> device, Gtk::TreeIter tabletIter, Glib::RefPtr<Gtk::TreeView> tree);
+    static void updateDeviceLinks(Glib::RefPtr<InputDevice const> device, Gtk::TreeIter tabletIter, Gtk::TreeView *tree);
 
     static bool findDevice(const Gtk::TreeModel::iterator& iter,
                            Glib::ustring id,
@@ -590,7 +590,6 @@ InputDialogImpl::InputDialogImpl() :
 {
     Gtk::Box *contents = _getContents();
 
-
     treeScroller.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
     treeScroller.set_shadow_type(Gtk::SHADOW_IN);
     treeScroller.add(deviceTree);
@@ -661,16 +660,6 @@ InputDialogImpl::InputDialogImpl() :
 
     int rowNum = 0;
 
-/*    Gtk::Label* lbl = Gtk::manage(new Gtk::Label(_("Name:")));
-    axisTable.attach(*lbl, 0, 1, rowNum, rowNum+ 1,
-                      ::Gtk::FILL,
-                      ::Gtk::SHRINK);
-    axisTable.attach(devName, 1, 2, rowNum, rowNum + 1,
-                      ::Gtk::SHRINK,
-                      ::Gtk::SHRINK);
-
-    rowNum++;*/
-
     axisFrame.add(axisTable);
 
     Gtk::Label *lbl = Gtk::manage(new Gtk::Label(_("Link:")));
@@ -686,19 +675,6 @@ InputDialogImpl::InputDialogImpl() :
     axisTable.attach(*lbl, 0, rowNum, 1, 1);
     axisTable.attach(devAxesCount, 1, rowNum, 1, 1);
     rowNum++;
-
-
-/*
-    lbl = Gtk::manage(new Gtk::Label(_("Actual axes count:")));
-    devDetails.attach(*lbl, 0, 1, rowNum, rowNum+ 1,
-                      ::Gtk::FILL,
-                      ::Gtk::SHRINK);
-    devDetails.attach(axesCombo, 1, 2, rowNum, rowNum + 1,
-                      ::Gtk::SHRINK,
-                      ::Gtk::SHRINK);
-
-    rowNum++;
-*/
 
     for ( guint barNum = 0; barNum < static_cast<guint>(G_N_ELEMENTS(axesValues)); barNum++ ) {
         lbl = Gtk::manage(new Gtk::Label(_("axis:")));
@@ -721,29 +697,11 @@ InputDialogImpl::InputDialogImpl() :
 
     rowNum++;
 
-/*
-    lbl = Gtk::manage(new Gtk::Label(_("Actual button count:")));
-    devDetails.attach(*lbl, 0, 1, rowNum, rowNum+ 1,
-                      ::Gtk::FILL,
-                      ::Gtk::SHRINK);
-    devDetails.attach(buttonCombo, 1, 2, rowNum, rowNum + 1,
-                      ::Gtk::SHRINK,
-                      ::Gtk::SHRINK);
-
-    rowNum++;
-*/
-
     axisTable.attach(keyVal, 0, rowNum, 2, 1);
 
     rowNum++;
 
-
     testDetector.signal_event().connect(sigc::mem_fun(*this, &InputDialogImpl::eventSnoop));
-
-//     void gdk_input_set_extension_events (GdkWindow        *window,
-//                                          gint              mask,
-//                                          GdkExtensionMode  mode);
-
 
     // TODO: Extension event stuff has been removed from public API in GTK+ 3
     // Need to check that this hasn't broken anything
@@ -756,17 +714,11 @@ InputDialogImpl::InputDialogImpl() :
 
     axisTable.set_sensitive(false);
 
-/*    detailScroller.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
-    detailScroller.set_shadow_type(Gtk::SHADOW_NONE);
-    detailScroller.set_border_width (0);
-    detailScroller.add(devDetails);*/
-
 //- 16x16/devices
 // gnome-dev-mouse-optical
 // input-mouse
 // input-tablet
 // mouse
-
 
     //Add the TreeView's view columns:
     deviceTree.append_column("I", getCols().thumbnail);
@@ -782,8 +734,7 @@ InputDialogImpl::InputDialogImpl() :
     Inkscape::DeviceManager::getManager().signalDeviceChanged().connect(sigc::mem_fun(*this, &InputDialogImpl::handleDeviceChange));
     Inkscape::DeviceManager::getManager().signalAxesChanged().connect(sigc::mem_fun(*this, &InputDialogImpl::updateDeviceAxes));
     Inkscape::DeviceManager::getManager().signalButtonsChanged().connect(sigc::mem_fun(*this, &InputDialogImpl::updateDeviceButtons));
-    Glib::RefPtr<Gtk::TreeView> treePtr(&deviceTree);
-    Inkscape::DeviceManager::getManager().signalLinkChanged().connect(sigc::bind(sigc::ptr_fun(&InputDialogImpl::updateDeviceLinks), deviceIter, treePtr));
+    Inkscape::DeviceManager::getManager().signalLinkChanged().connect(sigc::bind(sigc::ptr_fun(&InputDialogImpl::updateDeviceLinks), deviceIter, &deviceTree));
 
     deviceTree.expand_all();
     show_all_children();
@@ -1023,8 +974,7 @@ InputDialogImpl::ConfPanel::ConfPanel() :
 
     setupTree( confDeviceStore, confDeviceIter );
 
-    Glib::RefPtr<Gtk::TreeView> treePtr(&confDeviceTree);
-    Inkscape::DeviceManager::getManager().signalLinkChanged().connect(sigc::bind(sigc::ptr_fun(&InputDialogImpl::updateDeviceLinks), confDeviceIter, treePtr));
+    Inkscape::DeviceManager::getManager().signalLinkChanged().connect(sigc::bind(sigc::ptr_fun(&InputDialogImpl::updateDeviceLinks), confDeviceIter, &confDeviceTree));
 
     confDeviceTree.expand_all();
 
@@ -1316,7 +1266,7 @@ bool InputDialogImpl::findDeviceByLink(const Gtk::TreeModel::iterator& iter,
     return stop;
 }
 
-void InputDialogImpl::updateDeviceLinks(Glib::RefPtr<InputDevice const> device, Gtk::TreeIter tabletIter, Glib::RefPtr<Gtk::TreeView> tree)
+void InputDialogImpl::updateDeviceLinks(Glib::RefPtr<InputDevice const> device, Gtk::TreeIter tabletIter, Gtk::TreeView *tree)
 {
     Glib::RefPtr<Gtk::TreeStore> deviceStore = Glib::RefPtr<Gtk::TreeStore>::cast_dynamic(tree->get_model());
 
