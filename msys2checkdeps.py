@@ -6,10 +6,12 @@
 #   python msys2checkdeps.py MODE PATH
 #
 #   MODE
-#     list         - list dependencies in human-readable form with full path and list of dependents
-#     list-compact - list dependencies in compact form (as a plain list of filenames)
-#     check        - check if all dependecies are present in PATH (or the parent directory of PATH if it is a file)
-#                    exits with error code 2 if missing dependecies are found and prints the list to stderr
+#     list          - list dependencies in human-readable form with full path and list of dependents
+#     list-compact  - list dependencies in compact form (as a plain list of filenames)
+#     check         - check for missing or unused dependecies (see below for details)
+#     check-missing - check if all required dependecies are present in PATH
+#                     exits with error code 2 if missing dependecies are found and prints the list to stderr
+#     check-unused  - check if any of the libraries in the root of PATH are unused and prints the list to stderr
 #
 #  PATH
 #     full or relative path to a single file or a directory to work on (directories will be checked recursively)
@@ -116,7 +118,7 @@ if __name__ == '__main__':
 
     # get mode from command line
     mode = sys.argv[1]
-    modes = ['list', 'list-compact', 'check']
+    modes = ['list', 'list-compact', 'check', 'check-missing', 'check-unused']
     if mode not in modes:
         error("First argument needs to be a valid mode (" + (', ').join(modes) + ").")
 
@@ -125,6 +127,7 @@ if __name__ == '__main__':
     path = os.path.abspath(path)
     if not os.path.exists(path):
         error("Can't find file/folder '" + path + "'")
+    root = path if os.path.isdir(path) else os.path.dirname(path)
 
     # get dependencies for path recursively
     deps = collect_dependencies(path)
@@ -141,10 +144,17 @@ if __name__ == '__main__':
             print(dep + " - " + location + " (" + ", ".join(dependents) + ")")
         elif mode == 'list-compact':
             print(dep)
-        elif mode == 'check':
-            root = path if os.path.isdir(path) else os.path.dirname(path)
+        elif mode in ['check', 'check-missing']:
             if ((location is None) or (root not in os.path.abspath(location))):
                 warning("Missing dependency " + dep + " (" + ", ".join(dependents) + ")")
                 exit_code = 2
+
+    # check for unused libraries
+    if mode in ['check', 'check-unused']:
+        installed_libs = [file for file in os.listdir(root) if file.endswith(".dll")]
+        deps_lower = [dep.lower() for dep in deps]
+        top_level_libs = [lib for lib in installed_libs if lib.lower() not in deps_lower]
+        for top_level_lib in top_level_libs:
+            warning("Unused depedency " + top_level_lib)
 
     exit(exit_code)

@@ -14,7 +14,7 @@ if(WIN32)
     DESTINATION .)
 
   # mingw-w64 dlls
-  #   (use msys2checkdeps.py to list required libraries / check for missing libraries)
+  #   (use msys2checkdeps.py to list required libraries / check for missing or unused libraries)
   file(GLOB MINGW_LIBS
     ${MINGW_BIN}/LIBEAY32.dll
     ${MINGW_BIN}/SSLEAY32.dll
