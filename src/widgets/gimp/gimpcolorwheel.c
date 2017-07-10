@@ -7,20 +7,18 @@
  *          Jonathan Blandford <jrb@redhat.com> (cleanup for GTK+)
  *          Michael Natterer <mitch@gimp.org> (ported back to GIMP)
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 /*
@@ -381,7 +379,7 @@ hsv_to_rgb (gdouble *h,
     {
       *h = *v;
       *s = *v;
-      *v = *v; /* heh */
+   /* *v = *v; -- heh */
     }
   else
     {
@@ -1242,7 +1240,7 @@ gimp_color_wheel_focus (GtkWidget        *widget,
  *
  * Return value: A newly-created HSV color selector.
  *
- * Since: 2.14
+ * Since: 2.10
  */
 GtkWidget*
 gimp_color_wheel_new (void)
@@ -1260,7 +1258,7 @@ gimp_color_wheel_new (void)
  * Sets the current color in an HSV color selector.
  * Color component values must be in the [0.0, 1.0] range.
  *
- * Since: 2.14
+ * Since: 2.10
  */
 void
 gimp_color_wheel_set_color (GimpColorWheel *wheel,
@@ -1300,7 +1298,7 @@ gimp_color_wheel_set_color (GimpColorWheel *wheel,
  * Queries the current color in an HSV color selector.
  * Returned values will be in the [0.0, 1.0] range.
  *
- * Since: 2.14
+ * Since: 2.10
  */
 void
 gimp_color_wheel_get_color (GimpColorWheel *wheel,
@@ -1326,7 +1324,7 @@ gimp_color_wheel_get_color (GimpColorWheel *wheel,
  *
  * Sets the ring fraction of a wheel color selector.
  *
- * Since: GIMP 2.10
+ * Since: 2.10
  */
 void
 gimp_color_wheel_set_ring_fraction (GimpColorWheel *hsv,
@@ -1349,7 +1347,7 @@ gimp_color_wheel_set_ring_fraction (GimpColorWheel *hsv,
  *
  * Returns value: The ring fraction of the wheel color selector.
  *
- * Since: GIMP 2.10
+ * Since: 2.10
  */
 gdouble
 gimp_color_wheel_get_ring_fraction (GimpColorWheel *wheel)

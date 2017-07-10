@@ -160,9 +160,28 @@ bool ColorSlider::on_button_press_event(GdkEventButton *event)
         ColorScales::setScaled(_adjustment->gobj(), CLAMP((gfloat)(event->x - cx) / cw, 0.0, 1.0));
         signal_dragged.emit();
 
-        gdk_device_grab(
-            gdk_event_get_device(reinterpret_cast<GdkEvent *>(event)), _gdk_window->gobj(), GDK_OWNERSHIP_NONE, FALSE,
-            static_cast<GdkEventMask>(GDK_POINTER_MOTION_MASK | GDK_BUTTON_RELEASE_MASK), NULL, event->time);
+	auto window = _gdk_window->gobj();
+
+#if GTK_CHECK_VERSION(3,20,0)
+	auto seat = gdk_event_get_seat(reinterpret_cast<GdkEvent *>(event));
+	gdk_seat_grab(seat,
+                      window,
+                      GDK_SEAT_CAPABILITY_ALL_POINTING,
+                      FALSE,
+                      NULL,
+                      reinterpret_cast<GdkEvent *>(event),
+                      NULL,
+                      NULL);
+#else
+	auto device = gdk_event_get_device(reinterpret_cast<GdkEvent *>(event));
+        gdk_device_grab(device,
+			window,
+			GDK_OWNERSHIP_NONE,
+			FALSE,
+                        static_cast<GdkEventMask>(GDK_POINTER_MOTION_MASK | GDK_BUTTON_RELEASE_MASK),
+			NULL,
+			event->time);
+#endif
     }
 
     return false;
@@ -171,9 +190,12 @@ bool ColorSlider::on_button_press_event(GdkEventButton *event)
 bool ColorSlider::on_button_release_event(GdkEventButton *event)
 {
     if (event->button == 1) {
+#if GTK_CHECK_VERSION(3,20,0)
+        gdk_seat_ungrab(gdk_event_get_seat(reinterpret_cast<GdkEvent *>(event)));
+#else
         gdk_device_ungrab(gdk_event_get_device(reinterpret_cast<GdkEvent *>(event)),
                           gdk_event_get_time(reinterpret_cast<GdkEvent *>(event)));
-
+#endif
         _dragging = false;
         signal_released.emit();
         if (_value != _oldvalue) {
@@ -518,3 +540,13 @@ static const guchar *sp_color_slider_render_map(gint x0, gint y0, gint width, gi
 
     return buf;
 }
+/*
+  Local Variables:
+  mode:c++
+  c-file-style:"stroustrup"
+  c-file-offsets:((innamespace . 0)(inline-open . 0)(case-label . +))
+  indent-tabs-mode:nil
+  fill-column:99
+  End:
+*/
+// vim: filetype=cpp:expandtab:shiftwidth=4:tabstop=8:softtabstop=4 :
