@@ -25,7 +25,7 @@ EOF
 # install dependencies
 message "--- Installing dependencies"
 source ../msys2installdeps.sh
-pacman -S $MINGW_PACKAGE_PREFIX-{ccache,gtest} --needed --noconfirm --noprogressbar
+pacman -S $MINGW_PACKAGE_PREFIX-{ccache,gtest,ntldd-git} --needed --noconfirm --noprogressbar
 ccache --max-size=200M
 
 
@@ -51,6 +51,7 @@ ccache --show-stats
 # install
 message "--- Installing the project"
 ninja install || error "installation failed"
+python  ../msys2checkdeps.py check inkscape/ || error "missing libraries in installed project"
 
 # test
 message "--- Running tests"
@@ -62,7 +63,7 @@ if [ -n "$err" ]; then warning "installed executable produces output on stderr:"
 # check if the uninstalled executable works
 INKSCAPE_DATADIR=../share bin/inkscape.exe -V >/dev/null || error "uninstalled executable won't run"
 err=$(INKSCAPE_DATADIR=../share bin/inkscape.exe -V 2>&1 >/dev/null)
-if [ -n "$err" ]; then warning "installed executable produces output on stderr:"; echo "$err"; fi
+if [ -n "$err" ]; then warning "uninstalled executable produces output on stderr:"; echo "$err"; fi
 # run tests (don't fail yet as most tests SEGFAULT on exit)
 #ninja check || warning "tests failed" # disabled because of sporadic deadlocks :-(
 
