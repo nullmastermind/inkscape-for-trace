@@ -1294,21 +1294,22 @@ FilterEffectsDialog::LightSourceControl* FilterEffectsDialog::Settings::add_ligh
     return ls;
 }
 
-static Glib::RefPtr<Gtk::Menu> create_popup_menu(Gtk::Widget& parent, sigc::slot<void> dup,
-                                                 sigc::slot<void> rem)
+static Gtk::Menu create_popup_menu(Gtk::Widget& parent,
+                                   sigc::slot<void> dup,
+                                   sigc::slot<void> rem)
 {
-    Glib::RefPtr<Gtk::Menu> menu(new Gtk::Menu);
+    Gtk::Menu menu;
 
     Gtk::MenuItem* mi = Gtk::manage(new Gtk::MenuItem(_("_Duplicate"),true));
     mi->signal_activate().connect(dup);
     mi->show();
-    menu->append(*mi);
+    menu.append(*mi);
     
     mi = Gtk::manage(new Gtk::MenuItem(_("_Remove"), true));
-    menu->append(*mi);
+    menu.append(*mi);
     mi->signal_activate().connect(rem);
     mi->show();
-    menu->accelerate(parent);
+    menu.accelerate(parent);
 
     return menu;
 }
@@ -1358,14 +1359,16 @@ FilterEffectsDialog::FilterModifier::FilterModifier(FilterEffectsDialog& d)
     _cell_toggle.signal_toggled().connect(sigc::mem_fun(*this, &FilterModifier::on_selection_toggled));
     _list.signal_button_release_event().connect_notify(
         sigc::mem_fun(*this, &FilterModifier::filter_list_button_release));
-    _menu = create_popup_menu(*this, sigc::mem_fun(*this, &FilterModifier::duplicate_filter),
+
+    _menu = create_popup_menu(*this,
+                              sigc::mem_fun(*this, &FilterModifier::duplicate_filter),
                               sigc::mem_fun(*this, &FilterModifier::remove_filter));
     
     Gtk::MenuItem *item = Gtk::manage(new Gtk::MenuItem(_("R_ename"), true));
     item->signal_activate().connect(sigc::mem_fun(*this, &FilterModifier::rename_filter));    
     item->show();
-    _menu->append(*item);
-    _menu->accelerate(*this);
+    _menu.append(*item);
+    _menu.accelerate(*this);
 
     _list.get_selection()->signal_changed().connect(sigc::mem_fun(*this, &FilterModifier::on_filter_selection_changed));
     _observer->signal_changed().connect(signal_filter_changed().make_slot());
@@ -1613,10 +1616,10 @@ void FilterEffectsDialog::FilterModifier::filter_list_button_release(GdkEventBut
 {
     if((event->type == GDK_BUTTON_RELEASE) && (event->button == 3)) {
         const bool sensitive = get_selected_filter() != NULL;
-	std::vector<Gtk::Widget*> items = _menu->get_children();
+	std::vector<Gtk::Widget*> items = _menu.get_children();
 	items[0]->set_sensitive(sensitive);
         items[1]->set_sensitive(sensitive);
-        _menu->popup(event->button, event->time);
+        _menu.popup(event->button, event->time);
     }
 }
 
@@ -1867,9 +1870,11 @@ void FilterEffectsDialog::PrimitiveList::update()
     }
 }
 
-void FilterEffectsDialog::PrimitiveList::set_menu(Glib::RefPtr<Gtk::Menu> menu)
+void FilterEffectsDialog::PrimitiveList::set_menu(Gtk::Widget& parent,
+                                                  sigc::slot<void> dup,
+                                                  sigc::slot<void> rem)
 {
-    _primitive_menu = menu;
+    _primitive_menu = create_popup_menu(parent, dup, rem);
 }
 
 SPFilterPrimitive* FilterEffectsDialog::PrimitiveList::get_selected()
@@ -2470,10 +2475,10 @@ bool FilterEffectsDialog::PrimitiveList::on_button_release_event(GdkEventButton*
 
     if((e->type == GDK_BUTTON_RELEASE) && (e->button == 3)) {
         const bool sensitive = get_selected() != NULL;
-	std::vector<Gtk::Widget*> items = _primitive_menu->get_children();
+	auto items = _primitive_menu.get_children();
         items[0]->set_sensitive(sensitive);
         items[1]->set_sensitive(sensitive);
-        _primitive_menu->popup(e->button, e->time);
+        _primitive_menu.popup(e->button, e->time);
 
         return true;
     }
@@ -2694,8 +2699,8 @@ FilterEffectsDialog::FilterEffectsDialog()
 //    fr_settings->set_shadow_type(Gtk::SHADOW_NONE);
 //    ((Gtk::Label*)fr_settings->get_label_widget())->set_use_markup();
     _add_primitive.signal_clicked().connect(sigc::mem_fun(*this, &FilterEffectsDialog::add_primitive));
-    _primitive_list.set_menu(create_popup_menu(*this, sigc::mem_fun(*this, &FilterEffectsDialog::duplicate_primitive),
-                                               sigc::mem_fun(_primitive_list, &PrimitiveList::remove_selected)));
+    _primitive_list.set_menu(*this, sigc::mem_fun(*this, &FilterEffectsDialog::duplicate_primitive),
+                                    sigc::mem_fun(_primitive_list, &PrimitiveList::remove_selected));
 
     show_all_children();
     init_settings_widgets();

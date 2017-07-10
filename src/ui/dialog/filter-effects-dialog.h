@@ -130,7 +130,7 @@ private:
         Columns _columns;
         Gtk::CellRendererToggle _cell_toggle;
         Gtk::Button _add;
-        Glib::RefPtr<Gtk::Menu> _menu;
+        Gtk::Menu   _menu;
         sigc::signal<void> _signal_filter_changed;
         std::unique_ptr<Inkscape::XML::SignalObserver> _observer;
     };
@@ -192,7 +192,9 @@ private:
         sigc::signal<void>& signal_primitive_changed();
 
         void update();
-        void set_menu(Glib::RefPtr<Gtk::Menu>);
+        void set_menu(Gtk::Widget      &parent,
+                      sigc::slot<void>  dup,
+                      sigc::slot<void>  rem);
 
         SPFilterPrimitive* get_selected();
         void select(SPFilterPrimitive *prim);
@@ -232,7 +234,7 @@ private:
         Glib::RefPtr<Gtk::ListStore> _model;
         PrimitiveColumns _columns;
         CellRendererConnection _connection_cell;
-        Glib::RefPtr<Gtk::Menu> _primitive_menu;
+        Gtk::Menu _primitive_menu;
         Glib::RefPtr<Pango::Layout> _vertical_layout;
         int _in_drag;
         SPFilterPrimitive* _drag_prim;
