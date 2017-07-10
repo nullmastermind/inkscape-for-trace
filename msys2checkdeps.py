@@ -25,6 +25,9 @@ import subprocess
 import sys
 
 
+SYSTEMROOT = os.environ['SYSTEMROOT']
+
+
 class Dependency:
     def __init__(self):
         self.location = None
@@ -81,7 +84,7 @@ def get_dependencies(filename, deps):
         parents[indent+1] = lib
 
         # we don't care about Microsoft libraries and their dependencies
-        if location and ':\\WINDOWS\\' in location:
+        if location and SYSTEMROOT in location:
             skip_indent = indent
             continue
 
@@ -155,6 +158,6 @@ if __name__ == '__main__':
         deps_lower = [dep.lower() for dep in deps]
         top_level_libs = [lib for lib in installed_libs if lib.lower() not in deps_lower]
         for top_level_lib in top_level_libs:
-            warning("Unused depedency " + top_level_lib)
+            warning("Unused dependency " + top_level_lib)
 
     exit(exit_code)
