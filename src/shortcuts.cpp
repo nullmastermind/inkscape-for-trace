@@ -50,7 +50,7 @@
 using namespace Inkscape;
 using namespace Inkscape::IO::Resource;
 
-static void try_shortcuts_file(char const *filename);
+static bool try_shortcuts_file(char const *filename, bool const is_user_set=false);
 static void read_shortcuts_file(char const *filename, bool const is_user_set=false);
 
 unsigned int sp_shortcut_get_key(unsigned int const shortcut);
@@ -78,28 +78,49 @@ static std::map<Inkscape::Verb *, unsigned int> *user_shortcuts = NULL;
 
 void sp_shortcut_init()
 {
-
     verbs = new std::map<unsigned int, Inkscape::Verb * >();
     primary_shortcuts = new std::map<Inkscape::Verb *, unsigned int>();
     user_shortcuts = new std::map<Inkscape::Verb *, unsigned int>();
 
+    // try to load shortcut file as set in preferences
+    // if preference is unset or loading fails fallback to share/keys/default.xml and finally share/keys/inkscape.xml
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     Glib::ustring shortcutfile = prefs->getString("/options/kbshortcuts/shortcutfile");
+    bool success = false;
+    gchar const *reason;
     if (shortcutfile.empty()) {
-        shortcutfile  = Glib::ustring(get_path(SYSTEM, KEYS, "default.xml"));
+        reason = "No key file set in preferences";
+    } else {
+        success = try_shortcuts_file(shortcutfile.c_str());
+        reason = "Unable to read key file set in preferences";
+    }
+    if (!success) {
+        g_info("%s. Falling back to 'default.xml'.", reason);
+        success = try_shortcuts_file(get_path(SYSTEM, KEYS, "default.xml"));
+    }
+    if (!success) {
+        g_info("Could not load 'default.xml' either. Falling back to 'inkscape.xml'.");
+        success = try_shortcuts_file(get_path(SYSTEM, KEYS, "inkscape.xml"));
+    }
+    if (!success) {
+        g_warning("Could not load any keyboard shortcut file (including fallbacks to 'default.xml' and 'inkscape.xml').");
     }
 
-    read_shortcuts_file(shortcutfile.c_str());
-    try_shortcuts_file(get_path(USER, KEYS, "default.xml"));
+    // load shortcuts adjusted by user
+    try_shortcuts_file(get_path(USER, KEYS, "default.xml"), true);
 }
 
-static void try_shortcuts_file(char const *filename) {
+static bool try_shortcuts_file(char const *filename, bool const is_user_set) {
     using Inkscape::IO::file_test;
 
     /* ah, if only we had an exception to catch... (permission, forgiveness) */
     if (file_test(filename, G_FILE_TEST_EXISTS)) {
-        read_shortcuts_file(filename, true);
+        read_shortcuts_file(filename, is_user_set);
+        return true;
     }
+
+    g_info("Unable to read keyboard shortcuts from %s (does not exist)", filename);
+    return false;
 }
 
 /*
@@ -217,7 +238,12 @@ Inkscape::XML::Document *sp_shortcut_create_template_file(char const *filename) 
 void sp_shortcut_get_file_names(std::vector<Glib::ustring> *names, std::vector<Glib::ustring> *paths) {
     using namespace Inkscape::IO::Resource;
 
-    for(auto &filename: get_filenames(KEYS, {".xml"}, {"default.xml", "inkscape.xml"})) {
+    std::vector<Glib::ustring> filenames = get_filenames(SYSTEM, KEYS, {".xml"});
+    std::vector<Glib::ustring> filenames_user = get_filenames(USER, KEYS, {".xml"}, {"default.xml"}); // exclude default.xml as it only includes the user's modifications
+    filenames.insert(filenames.end(), filenames_user.begin(), filenames_user.end());
+
+    std::vector<std::pair<Glib::ustring, Glib::ustring>> names_and_paths;
+    for(auto &filename: filenames) {
         Glib::ustring label = Glib::path_get_basename(filename);
 
         XML::Document *doc = sp_repr_read_file(filename.c_str(), NULL);
@@ -226,21 +252,40 @@ void sp_shortcut_get_file_names(std::vector<Glib::ustring> *names, std::vector<G
             continue;
         }
 
-        // Get the "key name" from the root element of each files
+        // Get the "key name" from the root element of each file
         XML::Node *root=doc->root();
         if (!strcmp(root->name(), "keys")) {
             gchar const *name=root->attribute("name");
             if (name) {
                 label = Glib::ustring(name) + " (" + label + ")";
             }
-            paths->push_back(filename.c_str());
-            names->push_back(label.c_str());
+            std::pair<Glib::ustring, Glib::ustring> name_and_path;
+            name_and_path = std::make_pair(label, filename);
+            names_and_paths.push_back(name_and_path);
         } else {
             g_warning("Not a shortcut keys file %s", filename.c_str());
         }
         Inkscape::GC::release(doc);
     }
+    
+    // sort by name 
+    std::sort(names_and_paths.begin(), names_and_paths.end(),
+            [](std::pair<Glib::ustring, Glib::ustring>& pair1, std::pair<Glib::ustring, Glib::ustring>& pair2) {
+                return Glib::path_get_basename(pair1.first).compare(Glib::path_get_basename(pair2.first)) < 0;
+            });
+    auto it_default = std::find_if(names_and_paths.begin(), names_and_paths.end(),
+            [](std::pair<Glib::ustring, Glib::ustring>& pair) {
+                return !Glib::path_get_basename(pair.second).compare("default.xml");
+            });
+    if (it_default != names_and_paths.end()) {
+        std::rotate(names_and_paths.begin(), it_default, it_default+1);
+    }
 
+    // transform pairs to output vectors
+    std::transform(names_and_paths.begin(),names_and_paths.end(), std::back_inserter(*names), 
+            [](const std::pair<Glib::ustring, Glib::ustring>& pair) { return pair.first; });
+    std::transform(names_and_paths.begin(),names_and_paths.end(), std::back_inserter(*paths), 
+            [](const std::pair<Glib::ustring, Glib::ustring>& pair) { return pair.second; });
 }
 
 Glib::ustring sp_shortcut_get_file_path()

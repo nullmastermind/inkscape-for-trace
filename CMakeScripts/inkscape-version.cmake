@@ -11,7 +11,7 @@
 set(INKSCAPE_REVISION "unknown")
 set(INKSCAPE_CUSTOM "custom")
 
-if(EXISTS ${INKSCAPE_SOURCE_DIR}/.git/)
+if(EXISTS ${INKSCAPE_SOURCE_DIR}/.git)
 
     execute_process(COMMAND git describe
         WORKING_DIRECTORY ${INKSCAPE_SOURCE_DIR}

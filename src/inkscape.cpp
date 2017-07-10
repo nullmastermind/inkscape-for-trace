@@ -30,20 +30,6 @@
 #include "debug/simple-event.h"
 #include "debug/event-tracker.h"
 
-#ifndef WIN32
-# define HAS_PROC_SELF_EXE  //to get path of executable
-#else
-
-#if !defined(_WIN32_IE) || (_WIN32_IE < 0x0400)
-# undef _WIN32_IE 
-# define _WIN32_IE 0x0400
-#endif
-//#define HAS_SHGetSpecialFolderPath
-#define HAS_SHGetSpecialFolderLocation
-#define HAS_GetModuleFileName
-# include <shlobj.h>
-#endif
-
 #include <glib/gstdio.h>
 #include <glibmm/i18n.h>
 #include <glibmm/miscutils.h>
