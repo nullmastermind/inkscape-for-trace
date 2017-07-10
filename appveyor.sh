@@ -47,6 +47,7 @@ message "--- Compiling Inkscape"
 ccache --zero-stats
 ninja || error "compilation failed"
 ccache --show-stats
+appveyor SetVariable -Name APPVEYOR_SAVE_CACHE_ON_ERROR -Value true # build succeeded so it's safe to save the cache
 
 # install
 message "--- Installing the project"
