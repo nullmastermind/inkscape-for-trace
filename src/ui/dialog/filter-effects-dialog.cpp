@@ -2626,7 +2626,6 @@ FilterEffectsDialog::FilterEffectsDialog()
     _filter_general_settings = new Settings(*this, _settings_tab2, sigc::mem_fun(*this, &FilterEffectsDialog::set_filternode_attr),
                              1);
     _sizegroup = Gtk::SizeGroup::create(Gtk::SIZE_GROUP_HORIZONTAL);
-    _sizegroup->set_ignore_hidden();
 
     // Initialize widget hierarchy
     auto hpaned = Gtk::manage(new Gtk::Paned);
