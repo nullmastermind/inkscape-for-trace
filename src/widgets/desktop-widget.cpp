@@ -966,7 +966,6 @@ void sp_dtw_color_profile_event(EgeColorProfTracker */*tracker*/, SPDesktopWidge
         if(monitor_at_index == monitor) monitorNum = i_monitor;
     }
 # else // GTK_CHECK_VERSION(3,22,0)
-    GdkScreen* screen = gtk_widget_get_screen(widget);
     gint monitorNum = gdk_screen_get_monitor_at_window(screen, window);
 # endif // GTK_CHECK_VERSION(3,22,0)
 
