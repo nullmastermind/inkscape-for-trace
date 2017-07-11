@@ -668,7 +668,7 @@ set_cross_grab (GimpColorWheel *wheel,
 		   GDK_POINTER_MOTION_MASK      |
 		   GDK_POINTER_MOTION_HINT_MASK |
 		   GDK_BUTTON_RELEASE_MASK,
-		   cursor, event->time);
+		   cursor, gdk_get_current_event_time());
 #endif
 
   g_object_unref (cursor);
