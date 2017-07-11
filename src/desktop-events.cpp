@@ -158,13 +158,27 @@ static gint sp_dt_ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidge
                 guide = sp_guideline_new(desktop->guides, NULL, event_dt, normal);
                 sp_guideline_set_color(SP_GUIDELINE(guide), desktop->namedview->guidehicolor);
 
+                auto window = gtk_widget_get_window(widget);
+
+#if GTK_CHECK_VERSION(3,20,0)
+                auto seat = gdk_device_get_seat(device);
+                gdk_seat_grab(seat,
+                              window,
+                              GDK_SEAT_CAPABILITY_ALL_POINTING,
+                              FALSE,
+                              NULL,
+                              event,
+                              NULL,
+                              NULL);
+#else
                 gdk_device_grab(device,
-                                gtk_widget_get_window(widget), 
+                                window,
                                 GDK_OWNERSHIP_NONE,
                                 FALSE,
                                 (GdkEventMask)(GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK ),
                                 NULL,
                                 event->button.time);
+#endif
             }
             break;
     case GDK_MOTION_NOTIFY:
@@ -199,7 +213,12 @@ static gint sp_dt_ruler_event(GtkWidget *widget, GdkEvent *event, SPDesktopWidge
             if (clicked && event->button.button == 1) {
                 sp_event_context_discard_delayed_snap_event(desktop->event_context);
 
+#if GTK_CHECK_VERSION(3,20,0)
+                auto seat = gdk_device_get_seat(device);
+                gdk_seat_ungrab(seat);
+#else
                 gdk_device_ungrab(device, event->button.time);
+#endif
 
                 Geom::Point const event_w(sp_canvas_window_to_world(dtw->canvas, event_win));
                 Geom::Point event_dt(desktop->w2d(event_w));
