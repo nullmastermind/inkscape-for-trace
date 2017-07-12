@@ -804,7 +804,11 @@ void sp_namedview_window_from_document(SPDesktop *desktop)
 #if WITH_GTKMM_3_22
         auto const display = Gdk::Display::get_default();
         auto const monitor = display->get_primary_monitor();
-        monitor->get_geometry(monitor_geometry);
+
+        // If user hasn't configured a primary monitor, nullptr is returned.
+        if (monitor) {
+            monitor->get_geometry(monitor_geometry);
+        }
 #else
         auto const default_screen = Gdk::Screen::get_default();
         auto const monitor_number = default_screen->get_primary_monitor();
