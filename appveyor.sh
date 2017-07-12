@@ -72,4 +72,7 @@ message "##### BUILD SUCCESSFULL #####\n\n"
 
 
 ### package
-7z a inkscape.7z inkscape
+BRANCH=$(git branch | tail -n 1 | tr -d ' ')
+DATE=$(git log -n 1 --pretty=%cd --date=short)
+HASH=$(git rev-parse --short HEAD)
+7z a "inkscape-${BRANCH}-(${DATE}_${HASH})-${MSYSTEM_CARCH}.7z" inkscape

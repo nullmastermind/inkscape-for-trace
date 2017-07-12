@@ -12,7 +12,7 @@ build_script:
   - C:\msys64\usr\bin\bash --login -c "$(cygpath ${APPVEYOR_BUILD_FOLDER})/appveyor.sh"
 
 artifacts:
-  - path: build\inkscape.7z
+  - path: build\inkscape*.7z
 
 cache:
   - C:\msys64\home\appveyor\.ccache
