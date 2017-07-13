@@ -149,7 +149,7 @@ void ege_color_prof_tracker_class_init( EgeColorProfTrackerClass* klass )
                                           G_SIGNAL_RUN_FIRST,
                                           0,
                                           NULL, NULL,
-                                          sp_marshal_VOID__INT_INT,
+                                          sp_marshal_VOID__INT,
                                           G_TYPE_NONE, 1,
                                           G_TYPE_INT);
 
