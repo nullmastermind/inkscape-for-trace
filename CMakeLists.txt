@@ -245,11 +245,11 @@ add_custom_target(clean-all
 
 #-----------------------------------------------------------------------------
 if(GMOCK_PRESENT)
+    enable_testing()
     set(CMAKE_CTEST_COMMAND ctest -V)
     set(CMAKE_CTEST_ENV INKSCAPE_DATADIR=${CMAKE_CURRENT_SOURCE_DIR}/share)
-    enable_testing()
-    add_custom_target(check COMMAND ${CMAKE_COMMAND} -E env ${CMAKE_CTEST_ENV} ${CMAKE_CTEST_COMMAND})
     add_subdirectory(testfiles EXCLUDE_FROM_ALL)
+    add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} DEPENDS tests)
 endif()
 
 # Canonicalize the flags to speed up recompilation using ccache/etc.

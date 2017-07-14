@@ -20,9 +20,12 @@ set(TEST_LIBS
 	gmock_main
 	inkscape_base)
 
+
+add_custom_target(tests)
 foreach(source ${TEST_SOURCES})
 	add_executable(${source} src/${source}.cpp unittest.cpp doc-per-case-test.cpp)
 	target_link_libraries(${source} ${TEST_LIBS})
 	add_test(NAME ${source} COMMAND ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${source})
-	add_dependencies(check ${source})
+    set_tests_properties(${source} PROPERTIES ENVIRONMENT ${CMAKE_CTEST_ENV})
+	add_dependencies(tests ${source})
 endforeach()
