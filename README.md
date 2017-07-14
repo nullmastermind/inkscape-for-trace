@@ -59,7 +59,7 @@ the inkscape binary will be able to find it. Allowing you to change the
 inkscape shared files without rebuilding or installing.
 
 Then setting a local configuration directory, keeping your configurations
-seperate from any installed version.
+separate from any installed version.
 
 Required Dependencies
 =====================
