@@ -413,18 +413,14 @@ set(inkscape_SRC
 # Generate version file
 # -----------------------------------------------------------------------------
 
-# a custom target that is always built
-add_custom_target(
-    inkscape_version ALL
+# a custom command that is always built (as run_always.txt is never actually created)
+add_custom_command(
+    OUTPUT inkscape-version.cpp run_always.txt
     COMMAND ${CMAKE_COMMAND}
-    -DINKSCAPE_SOURCE_DIR=${CMAKE_SOURCE_DIR}
-    -DINKSCAPE_BINARY_DIR=${CMAKE_BINARY_DIR}
-    -P ${CMAKE_SOURCE_DIR}/CMakeScripts/inkscape-version.cmake)
-
-# buildinfo.h is a generated file
-set_source_files_properties(
-    ${CMAKE_BINARY_DIR}/src/inkscape-version.cpp
-    PROPERTIES GENERATED TRUE)
+        -DINKSCAPE_SOURCE_DIR=${CMAKE_SOURCE_DIR}
+        -DINKSCAPE_BINARY_DIR=${CMAKE_BINARY_DIR}
+        -P ${CMAKE_SOURCE_DIR}/CMakeScripts/inkscape-version.cmake
+    COMMENT "Generating inkscape-version.cpp")
 
 list(APPEND inkscape_SRC
   ${CMAKE_BINARY_DIR}/src/inkscape-version.cpp
@@ -535,8 +531,6 @@ set(INKSCAPE_TARGET_LIBS
 
 # Build everything except main and inkview.c in a shared library.
 add_library(inkscape_base SHARED ${inkscape_SRC} ${sp_SRC})
-
-add_dependencies(inkscape_base inkscape_version)
 
 if(WITH_DBUS)
     add_dependencies(inkscape_base inkscape_dbus)
