@@ -4,7 +4,7 @@
 if(WIN32)
   message("-- Windows build detected, setting default features")
 
-  include(mingwenv.cmake)
+  include(CMakeScripts/ConfigEnvMinGW.cmake)
   
   if(NOT HAVE_MSYS2)
     list(INSERT CMAKE_SYSTEM_INCLUDE_PATH 0 ${DEVLIBS_PATH})
