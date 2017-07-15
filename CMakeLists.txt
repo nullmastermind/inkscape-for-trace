@@ -99,7 +99,7 @@ option(ENABLE_BINRELOC "Enable relocatable binaries" OFF)
 # -----------------------------------------------------------------------------
 # Test Harness
 # -----------------------------------------------------------------------------
-find_package(gtest) # gtest 1.8.0 and later already include gmock
+find_package(GTest) # gtest 1.8.0 and later already include gmock
 if(GTEST_FOUND AND EXISTS "${GTEST_INCLUDE_DIR}/gmock" AND IS_DIRECTORY "${GTEST_INCLUDE_DIR}/gmock")
     set(GMOCK_PRESENT ON)
 else()
