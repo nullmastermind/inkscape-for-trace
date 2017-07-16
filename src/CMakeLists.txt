@@ -472,22 +472,30 @@ set(inkscape_SRC
 set(main_SRC main.cpp)
 set(view_SRC inkview.cpp)
 
-if(WIN32)  
+if(WIN32)
   # Sources for the inkscape executable on Windows.
   list(APPEND main_SRC
     registrytool.h
     registrytool.cpp
     winmain.cpp
   )
+
+  # Configure and add the platform specific resource files (enabling the app icon).
+  string(TIMESTAMP COPYRIGHT_YEAR %Y)
   
-  # Add the platform specific resource files (enabling the app icon).
-  if(${HAVE_MINGW64})
-    list(APPEND main_SRC inkscape-x64.rc)
-    list(APPEND view_SRC inkscape-x64.rc)
-  else()
-    list(APPEND main_SRC inkscape.rc)
-    list(APPEND view_SRC inkscape.rc)
-  endif()
+  set(FILE_NAME inkscape)
+  set(PROGRAM_NAME Inkscape)
+  set(PROGRAM_DESCRIPTION "Vector graphics editor")
+  configure_file(inkscape.rc ${CMAKE_BINARY_DIR}/src/inkscape.rc)
+  configure_file(inkscape-manifest.xml ${CMAKE_BINARY_DIR}/src/inkscape-manifest.xml)  
+  list(APPEND main_SRC ${CMAKE_BINARY_DIR}/src/inkscape.rc)
+  
+  set(FILE_NAME inkview)
+  set(PROGRAM_NAME Inkview)
+  set(PROGRAM_DESCRIPTION "Vector graphics viewer")
+  configure_file(inkscape.rc ${CMAKE_BINARY_DIR}/src/inkview.rc)
+  configure_file(inkscape-manifest.xml ${CMAKE_BINARY_DIR}/src/inkview-manifest.xml)
+  list(APPEND view_SRC ${CMAKE_BINARY_DIR}/src/inkview.rc)
   
   # Build console applications as wrappers around inkscape/inkview.exe as GUI applications can't print to the console.
   add_executable(inkscape_com winconsole.cpp)

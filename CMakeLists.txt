@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.0)
+cmake_minimum_required(VERSION 2.8.2)
 
 message("------------------------------")
 message("Building Makefile for Inkscape")
@@ -19,9 +19,21 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMakeScripts/Modules")
 set(CMAKE_BUILD_TYPE_INIT "Release")
 
 project(inkscape)
-
-set(INKSCAPE_VERSION 0.92+devel)
 set(PROJECT_NAME inkscape)
+
+set(INKSCAPE_VERSION_MAJOR  0)
+set(INKSCAPE_VERSION_MINOR 92)
+set(INKSCAPE_VERSION_PATCH  0)
+set(INKSCAPE_VERSION_SUFFIX "+devel")
+
+set(INKSCAPE_VERSION ${INKSCAPE_VERSION_MAJOR}.${INKSCAPE_VERSION_MINOR})
+if(INKSCAPE_VERSION_PATCH)
+    set(INKSCAPE_VERSION ${INKSCAPE_VERSION}.${INKSCAPE_VERSION_PATCH})
+endif()
+if(INKSCAPE_VERSION_SUFFIX)
+    set(INKSCAPE_VERSION ${INKSCAPE_VERSION}${INKSCAPE_VERSION_SUFFIX})
+endif()
+
 set(CMAKE_INCLUDE_CURRENT_DIR TRUE)
 
 if(APPLE)
