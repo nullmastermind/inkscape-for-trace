@@ -151,22 +151,16 @@ endif()
 # -----------------------------------------------------------------------------
 # Dist Target
 # -----------------------------------------------------------------------------
-if(EXISTS ${CMAKE_SOURCE_DIR}/.git/)
-    execute_process(
-        COMMAND git log -n 1 --pretty=%cd --date=short
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-        OUTPUT_VARIABLE INKSCAPE_REVISION
-        OUTPUT_STRIP_TRAILING_WHITESPACE)
-else()
-    set(INKSCAPE_REVISION "unknown")
-endif()
+set(INKSCAPE_SOURCE_DIR ${CMAKE_SOURCE_DIR})
+include(CMakeScripts/inkscape-version.cmake)
+
 set(INKSCAPE_DIST_PREFIX "${PROJECT_NAME}-${INKSCAPE_VERSION}")
 add_custom_target(dist
-    COMMAND sed -i "s/unknown//" CMakeScripts/inkscape-version.cmake
-    && sed -i "s/custom//" CMakeScripts/inkscape-version.cmake
-    && tar cfz ${CMAKE_BINARY_DIR}/${INKSCAPE_DIST_PREFIX}.tar.gz ${CMAKE_SOURCE_DIR} --exclude=".*" --exclude-vcs-ignores
-    && git checkout ${CMAKE_SOURCE_DIR}/CMakeScripts/inkscape-version.cmake
-    WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
+    COMMAND sed -i "s/unknown/${INKSCAPE_REVISION}/" CMakeScripts/inkscape-version.cmake
+         && tar cfz ${CMAKE_BINARY_DIR}/${INKSCAPE_DIST_PREFIX}.tar.gz ${CMAKE_SOURCE_DIR}/doc --exclude=".*" --exclude-vcs-ignores
+         || git checkout ${CMAKE_SOURCE_DIR}/CMakeScripts/inkscape-version.cmake
+    COMMAND git checkout ${CMAKE_SOURCE_DIR}/CMakeScripts/inkscape-version.cmake # duplicate to make sure we actually revert in case of error
+    WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}" VERBATIM USES_TERMINAL)
 
 # -----------------------------------------------------------------------------
 # Uninstall Target
