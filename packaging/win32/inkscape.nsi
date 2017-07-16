@@ -66,7 +66,7 @@ RequestExecutionLevel admin
 !include MUI.nsh
 ; MUI Configuration {{{4
 !define MUI_ABORTWARNING
-!define MUI_ICON ..\..\inkscape.ico
+!define MUI_ICON ..\..\share\branding\inkscape.ico
 !define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\modern-uninstall.ico"
 !define MUI_HEADERIMAGE
 !define MUI_HEADERIMAGE_BITMAP header.bmp

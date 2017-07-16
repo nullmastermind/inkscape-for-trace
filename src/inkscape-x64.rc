@@ -1,5 +1,5 @@
 
-APPLICATION_ICON    ICON          DISCARDABLE     "../inkscape.ico"
+APPLICATION_ICON    ICON          DISCARDABLE     "../share/branding/inkscape.ico"
 1                   24            DISCARDABLE     "./inkscape-manifest-x64.xml"
 
 1 VERSIONINFO
