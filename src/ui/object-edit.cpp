@@ -127,6 +127,13 @@ public:
     virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state);
 };
 
+/* handle for position */
+class RectKnotHolderEntityCenter : public KnotHolderEntity {
+public:
+    virtual Geom::Point knot_get() const;
+    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state);
+};
+
 Geom::Point
 RectKnotHolderEntityRX::knot_get() const
 {
@@ -433,6 +440,32 @@ RectKnotHolderEntityXY::knot_set(Geom::Point const &p, Geom::Point const &origin
     rect->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
+Geom::Point
+RectKnotHolderEntityCenter::knot_get() const
+{
+    SPRect *rect = dynamic_cast<SPRect *>(item);
+    g_assert(rect != NULL);
+
+    return Geom::Point(rect->x.computed + (rect->width.computed / 2.), rect->y.computed + (rect->height.computed / 2.));
+}
+
+void
+RectKnotHolderEntityCenter::knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, unsigned int state)
+{
+    SPRect *rect = dynamic_cast<SPRect *>(item);
+    g_assert(rect != NULL);
+
+    Geom::Point const s = snap_knot_position(p, state);
+
+    rect->x = s[Geom::X] - (rect->width.computed / 2.);
+    rect->y = s[Geom::Y] - (rect->height.computed / 2.);
+
+    // No need to call sp_rect_clamp_radii(): width and height haven't changed.
+    // No need to call update_knot(): the knot is set directly by the user.
+
+    rect->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+}
+
 RectKnotHolder::RectKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderReleasedFunc relhandler) :
     KnotHolder(desktop, item, relhandler)
 {
@@ -440,6 +473,7 @@ RectKnotHolder::RectKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderRel
     RectKnotHolderEntityRY *entity_ry = new RectKnotHolderEntityRY();
     RectKnotHolderEntityWH *entity_wh = new RectKnotHolderEntityWH();
     RectKnotHolderEntityXY *entity_xy = new RectKnotHolderEntityXY();
+    RectKnotHolderEntityCenter *entity_center = new RectKnotHolderEntityCenter();
 
     entity_rx->create(desktop, item, this, Inkscape::CTRL_TYPE_ROTATE,
                       _("Adjust the <b>horizontal rounding</b> radius; with <b>Ctrl</b> "
@@ -461,10 +495,15 @@ RectKnotHolder::RectKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderRel
                         "to lock ratio or stretch in one dimension only"),
                       SP_KNOT_SHAPE_SQUARE, SP_KNOT_MODE_XOR);
 
+    entity_center->create(desktop, item, this, Inkscape::CTRL_TYPE_POINT,
+                          _("Move the rectangle"),
+                          SP_KNOT_SHAPE_CROSS);
+
     entity.push_back(entity_rx);
     entity.push_back(entity_ry);
     entity.push_back(entity_wh);
     entity.push_back(entity_xy);
+    entity.push_back(entity_center);
 
     add_pattern_knotholder();
 }
