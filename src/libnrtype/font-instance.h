@@ -4,7 +4,6 @@
 #include <map>
 #include <pango/pango-types.h>
 #include <pango/pango-font.h>
-#include <require-config.h>
 #include "FontFactory.h"
 
 #include <libnrtype/font-style.h>

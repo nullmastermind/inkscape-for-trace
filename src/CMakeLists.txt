@@ -365,7 +365,6 @@ set(inkscape_SRC
   rdf.h
   remove-last.h
   removeoverlap.h
-  require-config.h
   resource-manager.h
   rubberband.h
   satisfied-guide-cns.h

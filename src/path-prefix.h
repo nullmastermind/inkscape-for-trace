@@ -13,7 +13,9 @@
 #ifndef SEEN_PATH_PREFIX_H
 #define SEEN_PATH_PREFIX_H
 
-#include "require-config.h"  // INKSCAPE_DATADIR
+#ifndef INKSCAPE_DATADIR
+# error "INKSCAPE_DATADIR undefined. Must #include config.h before anything else."
+#endif
 #include "prefix.h"
 
 //#ifdef __cplusplus
