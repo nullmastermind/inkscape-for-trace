@@ -10,7 +10,7 @@ error()   { echo -e "\e[1;31m\nError: ${1}\n\e[0m";  exit 1; }
 ### setup
 
 # do everything in /build
-cd "$(dirname "$0")"
+cd "$(cygpath ${APPVEYOR_BUILD_FOLDER})"
 mkdir build
 cd build
 
@@ -24,7 +24,7 @@ EOF
 
 # install dependencies
 message "--- Installing dependencies"
-source ../msys2installdeps.sh
+source ../buildtools/msys2installdeps.sh
 pacman -S $MINGW_PACKAGE_PREFIX-{ccache,gtest,ntldd-git} --needed --noconfirm --noprogressbar
 ccache --max-size=200M
 
@@ -52,7 +52,7 @@ appveyor SetVariable -Name APPVEYOR_SAVE_CACHE_ON_ERROR -Value true # build succ
 # install
 message "--- Installing the project"
 ninja install || error "installation failed"
-python  ../msys2checkdeps.py check inkscape/ || error "missing libraries in installed project"
+python  ../buildtools/msys2checkdeps.py check inkscape/ || error "missing libraries in installed project"
 
 # test
 message "--- Running tests"
