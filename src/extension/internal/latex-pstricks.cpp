@@ -25,6 +25,7 @@
 
 #include "extension/print.h"
 #include "extension/system.h"
+#include "inkscape-version.h"
 #include "io/sys.h"
 #include "latex-pstricks.h"
 #include "sp-item.h"
@@ -121,8 +122,8 @@ unsigned int PrintLatex::begin (Inkscape::Extension::Print *mod, SPDocument *doc
 
     if (res >= 0) {
 
-        os << "%%Creator: " << PACKAGE_STRING << "\n";
-	os << "%%Please note this file requires PSTricks extensions\n";
+        os << "%%Creator: Inkscape " << Inkscape::version_string << "\n";
+        os << "%%Please note this file requires PSTricks extensions\n";
 
         os << "\\psset{xunit=.5pt,yunit=.5pt,runit=.5pt}\n";
         // from now on we can output px, but they will be treated as pt

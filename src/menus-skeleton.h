@@ -11,7 +11,7 @@
 #endif
 
 static char const menus_skeleton[] =
-"<inkscape version=\"" VERSION "\"\n"
+"<inkscape\n"
 "  xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\"\n"
 "  xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\">\n"
 "\n"

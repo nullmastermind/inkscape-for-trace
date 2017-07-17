@@ -43,6 +43,7 @@
 
 #include "extension/system.h"
 
+#include "inkscape-version.h"
 #include "io/sys.h"
 #include "document.h"
 
@@ -153,7 +154,7 @@ LaTeXTextRenderer::setTargetFile(gchar const *filename) {
     (void) signal(SIGPIPE, SIG_IGN);
 #endif
 
-    fprintf(_stream, "%%%% Creator: Inkscape %s, www.inkscape.org\n", PACKAGE_STRING);
+    fprintf(_stream, "%%%% Creator: Inkscape %s, www.inkscape.org\n", Inkscape::version_string);
     fprintf(_stream, "%%%% PDF/EPS/PS + LaTeX output extension by Johan Engelen, 2010\n");
     fprintf(_stream, "%%%% Accompanies image file '%s' (pdf, eps, ps)\n", _filename);
     fprintf(_stream, "%%%%\n");

@@ -412,7 +412,10 @@ set(inkscape_SRC
 # Generate version file
 # -----------------------------------------------------------------------------
 
-# a custom command that is always built (as run_always.txt is never actually created)
+# configure with values known at configure time
+configure_file(inkscape-version.cpp.in ${CMAKE_BINARY_DIR}/src/inkscape-version.cpp.in @ONLY)
+
+# configure further at build time (always built as run_always.txt is never actually created)
 add_custom_command(
     OUTPUT inkscape-version.cpp run_always.txt
     COMMAND ${CMAKE_COMMAND}

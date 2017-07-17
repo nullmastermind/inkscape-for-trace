@@ -6,9 +6,6 @@
 #cmakedefine WIN32
 #endif
 
-/* This is for require-config.h */
-#define PACKAGE_TARNAME "${PROJECT_NAME} ${INKSCAPE_VERSION}"
-
 /* Use binreloc thread support? */
 #cmakedefine BR_PTHREADS 1
 
@@ -175,15 +172,6 @@
 
 /* Define to the full name of this package. */
 #define PACKAGE_NAME "${PROJECT_NAME}"
-
-/* Define to the full name and version of this package. */
-#define PACKAGE_STRING "${PROJECT_NAME} ${INKSCAPE_VERSION}"
-
-/* Define to the version of this package. */
-#define PACKAGE_VERSION "${INKSCAPE_VERSION}"
-
-/* Define the version as a string. */
-#define VERSION "${INKSCAPE_VERSION}"
 
 /* Build in dbus */
 #cmakedefine WITH_DBUS 1
