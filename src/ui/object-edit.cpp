@@ -496,7 +496,7 @@ RectKnotHolder::RectKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderRel
                       SP_KNOT_SHAPE_SQUARE, SP_KNOT_MODE_XOR);
 
     entity_center->create(desktop, item, this, Inkscape::CTRL_TYPE_POINT,
-                          _("Move the rectangle"),
+                          _("Drag to move the rectangle"),
                           SP_KNOT_SHAPE_CROSS);
 
     entity.push_back(entity_rx);
@@ -1082,7 +1082,7 @@ ArcKnotHolder::ArcKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderRelea
                        SP_KNOT_SHAPE_CIRCLE, SP_KNOT_MODE_XOR);
 
     entity_center->create(desktop, item, this, Inkscape::CTRL_TYPE_POINT,
-                          _("Move the ellipse"),
+                          _("Drag to move the ellipse"),
                           SP_KNOT_SHAPE_CROSS);
 
     entity.push_back(entity_rx);
@@ -1271,7 +1271,7 @@ StarKnotHolder::StarKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderRel
 
     StarKnotHolderEntityCenter *entity_center = new StarKnotHolderEntityCenter();
     entity_center->create(desktop, item, this, Inkscape::CTRL_TYPE_POINT,
-                          _("Move the star"),
+                          _("Drag to move the star"),
                           SP_KNOT_SHAPE_CROSS);
     entity.push_back(entity_center);
 
