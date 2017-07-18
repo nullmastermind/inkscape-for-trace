@@ -26,7 +26,8 @@ EOF
 message "--- Installing dependencies"
 source ../buildtools/msys2installdeps.sh
 pacman -S $MINGW_PACKAGE_PREFIX-{ccache,gtest,ntldd-git} --needed --noconfirm --noprogressbar
-ccache --max-size=200M
+ccache --max-size=300M
+ccache --set-config=sloppiness=include_file_ctime,include_file_mtime
 
 
 
