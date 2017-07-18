@@ -16,11 +16,6 @@
 
 #include <gtkmm.h>
 
-#ifdef WIN32
-#include <io.h>
-#include <windows.h>
-#endif
-
 #include "preferences.h"
 #include "print.h"
 
@@ -36,12 +31,7 @@
 #include <glibmm/i18n.h>
 
 
-static void draw_page(
-#ifdef WIN32
-                      GtkPrintOperation *operation,
-#else
-                      GtkPrintOperation *,
-#endif
+static void draw_page(GtkPrintOperation *,
                       GtkPrintContext   *context,
                       gint               /*page_nr*/,
                       gpointer           user_data)
