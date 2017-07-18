@@ -28,7 +28,7 @@ pacman -Sy
 
 # install basic development system, compiler toolchain and build tools
 eval pacman -S --needed --noconfirm \
-bzr \
+git \
 intltool \
 base-devel \
 $ARCH-toolchain \
@@ -42,8 +42,6 @@ $ARCH-gsl \
 $ARCH-popt \
 $ARCH-libxslt \
 $ARCH-boost \
-$ARCH-gtk2 \
-$ARCH-gtkmm \
 $ARCH-gtk3 \
 $ARCH-gtkmm3 \
 $ARCH-gdl \
@@ -58,7 +56,6 @@ $ARCH-libvisio \
 $ARCH-libwpg \
 $ARCH-aspell \
 $ARCH-aspell-en \
-$ARCH-gtkspell \
 $ARCH-gtkspell3 \
 $ARCH-libyaml
 
