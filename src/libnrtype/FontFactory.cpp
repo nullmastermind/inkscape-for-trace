@@ -198,7 +198,7 @@ const char *sp_font_description_get_family(PangoFontDescription const *fontDescr
     const char *pangoFamily = pango_font_description_get_family(fontDescr);
 
     if (pangoFamily && ((it = fontNameMap.find(pangoFamily)) != fontNameMap.end())) {
-        return ((Glib::ustring)it->second).c_str();
+        return (it->second).c_str();
     }
 
     return pangoFamily;
