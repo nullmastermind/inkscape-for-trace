@@ -15,6 +15,6 @@ artifacts:
   - path: build\inkscape*.7z
 
 cache:
-  - C:\msys64\home\appveyor\.ccache
+  - '%APPVEYOR_BUILD_FOLDER%\build\ccache'
 
 test: off
