@@ -257,7 +257,6 @@ if(GMOCK_PRESENT)
     add_subdirectory(testfiles EXCLUDE_FROM_ALL)
     add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} DEPENDS tests)
     add_dependencies(check inkscape)
-    add_dependencies(check ALL)
 endif()
 
 # Canonicalize the flags to speed up recompilation using ccache/etc.
