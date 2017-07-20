@@ -86,6 +86,7 @@ test:linux:
   script:
     - cd build
     - make test
+    - ctest -V
 
 # uploads the clang scan to user.gitlab.io/inkscape/
 pages:
