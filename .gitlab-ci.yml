@@ -81,6 +81,7 @@ test:linux:
     - inkscape:linux
   script:
     - cd build
+    - make install
     - make test
 
 # uploads the clang scan to user.gitlab.io/inkscape/
