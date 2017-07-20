@@ -19,9 +19,10 @@ inkscape:linux:
     - export CCACHE_BASEDIR=${PWD}
     - export CCACHE_DIR=${PWD}/ccache
   script:
-    - mkdir -p build
+    - mkdir -p build/conf
+    - ln -s . share/inkscape
     - cd build
-    - cmake .. -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_BUILD_TYPE=Debug
+    - cmake .. -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX:PATH=$PWD/../
     - make -j3
     - make -j3 tests
     - cd ..
@@ -84,7 +85,6 @@ test:linux:
     - inkscape:linux
   script:
     - cd build
-    - make install
     - make test
 
 # uploads the clang scan to user.gitlab.io/inkscape/
