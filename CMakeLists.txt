@@ -187,7 +187,7 @@ add_custom_target(uninstall
 
 
 # -----------------------------------------------------------------------------
-# Subdirs (on only 1 atm), but a lot happens here
+# Subdirectories
 # -----------------------------------------------------------------------------
 add_subdirectory(src)
 
@@ -195,36 +195,10 @@ if(ENABLE_NLS)
     add_subdirectory(po)
 endif(ENABLE_NLS)
 
-# -----------------------------------------------------------------------------
-# Man pages
-# -----------------------------------------------------------------------------
 if(NOT WIN32)
-	include("CMakeScripts/Pod2man.cmake")
-
-	# Load AUTHORS file contents into $INKSCAPE_AUTHORS
-	file(READ ${CMAKE_CURRENT_SOURCE_DIR}/AUTHORS content)
-	string(REGEX REPLACE "^([^\n#]+)\n" "\\1;\n" content_list "${content}")
-	
-	join(INKSCAPE_AUTHORS "," "${content_list}")
-
-	foreach(podfile
-			man/inkscape.pod
-			man/inkscape.de.pod
-			man/inkscape.el.pod
-			man/inkscape.fr.pod
-			man/inkscape.ja.pod
-			man/inkscape.sk.pod
-			man/inkscape.zh_TW.pod
-			man/inkview.pod)
-			
-		set(POD_IN ${CMAKE_CURRENT_SOURCE_DIR}/${podfile}.in)
-		set(POD_OUT ${CMAKE_CURRENT_BINARY_DIR}/${podfile})
-		
-		configure_file(${POD_IN} ${POD_OUT})
-		
-		pod2man(${POD_OUT} ${INKSCAPE_VERSION} 1 "Inkscape Commands Manual")
-	endforeach()
-endif()
+    include(CMakeScripts/Pod2man.cmake)
+    add_subdirectory(man)
+endif(NOT WIN32)
 
 # -----------------------------------------------------------------------------
 # Installation

@@ -3,6 +3,9 @@
 # the new ones here in these builds.
 image: registry.gitlab.com/inkscape/inkscape-ci-docker/master
 
+variables:
+  GIT_DEPTH: "10"
+
 cache:
   paths:
     - ccache/
