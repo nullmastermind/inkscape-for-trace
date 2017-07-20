@@ -177,13 +177,17 @@ add_custom_target(dist
 # -----------------------------------------------------------------------------
 # Uninstall Target
 # -----------------------------------------------------------------------------
-configure_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in"
-    "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
-    IMMEDIATE @ONLY)
-
-add_custom_target(uninstall
-    "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
+if(WIN32)
+    add_custom_target(uninstall
+        "${CMAKE_COMMAND}" -E remove_directory "${CMAKE_INSTALL_PREFIX}")
+else()
+    configure_file(
+        "${CMAKE_SOURCE_DIR}/CMakeScripts/cmake_uninstall.cmake.in"
+        "${CMAKE_BINARY_DIR}/cmake_uninstall.cmake"
+        @ONLY)
+    add_custom_target(uninstall
+        "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
+endif()
 
 
 # -----------------------------------------------------------------------------
@@ -198,7 +202,7 @@ endif(ENABLE_NLS)
 if(NOT WIN32)
     include(CMakeScripts/Pod2man.cmake)
     add_subdirectory(man)
-endif(NOT WIN32)
+endif()
 
 # -----------------------------------------------------------------------------
 # Installation
