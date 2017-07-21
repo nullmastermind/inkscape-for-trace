@@ -5,17 +5,6 @@
 ; 1. Install NSIS 3.0 or later (http://nsis.sourceforge.net/)
 ; 2. Compile Inkscape (http://wiki.inkscape.org/wiki/index.php/Win32Port)
 ; 3. Compile this file with NSIS.
-;
-;    There should be no need to set version  numbers in this file as it
-;    gets them from the Bazaar branch info and inkscape.rc or
-;    inkscape-version.cpp respectively. However, if the version number comes
-;    out wrong or this script didn't compile properly then you can define
-;    INKSCAPE_VERSION by uncommenting the next line and setting the correct
-;    value:
-;      !define INKSCAPE_VERSION "0.48"
-;    If you ever need to do a second, third or Nth release of the build or
-;    of the installer, then change the RELEASE_REVISION value below:
-       !define RELEASE_REVISION 1
 
 ; There should never be any need for packagers to touch anything below
 ; this line. Otherwise file a bug or write to the mailing list.
@@ -39,7 +28,6 @@ RequestExecutionLevel admin
 !include macros\ifexist.nsh
 !include macros\RequireLatestNSIS.nsh
 !include macros\SHMessageBoxCheck.nsh
-!include macros\VersionCompleteXXXX.nsh
 !include languages\_language_lists.nsh
 
 ; Advanced Uninstall Log {{{3
@@ -134,7 +122,7 @@ ReserveFile /plugin UserInfo.dll
 ; #######################################
 
 ; Find inkscape distribution directory (uncomment line below to manually define)
-;!define INKSCAPE_DIST_DIR ..\..\inkscape
+!define INKSCAPE_DIST_DIR ..\..\build64\inkscape
 !ifdef INKSCAPE_DIST_DIR
   ${!defineifexist} ${INKSCAPE_DIST_DIR}\inkscape.exe FOUND 1
   !ifndef FOUND
@@ -153,30 +141,40 @@ ReserveFile /plugin UserInfo.dll
 !echo `Bundling compiled Inkscape files from ${INKSCAPE_DIST_DIR}`
 
 ; Product details (version, name, registry keys etc.) {{{2
-; Try to find version number in inkscape.rc first (e.g. 0.92pre1) {{{3
+; Extract version number from CMakeLists.txt (e.g. 0.92pre1) {{{3
 !ifndef INKSCAPE_VERSION
-  !searchparse /noerrors /file ..\..\src\inkscape.rc `VALUE "ProductVersion", "` INKSCAPE_VERSION `"`
-  !ifdef INKSCAPE_VERSION
-    !echo `Got version number from ..\..\src\inkscape.rc: ${INKSCAPE_VERSION}`
+  !searchparse /noerrors /file ..\..\CMakeLists.txt `set(INKSCAPE_VERSION_MAJOR` INKSCAPE_VERSION_MAJOR `)`
+  !searchparse /noerrors /file ..\..\CMakeLists.txt `set(INKSCAPE_VERSION_MINOR` INKSCAPE_VERSION_MINOR `)`
+  !searchparse /noerrors /file ..\..\CMakeLists.txt `set(INKSCAPE_VERSION_PATCH` INKSCAPE_VERSION_PATCH `)`
+  !searchparse /noerrors /file ..\..\CMakeLists.txt `set(INKSCAPE_VERSION_SUFFIX` INKSCAPE_VERSION_SUFFIX `)`
+  ; strip whitespace
+  !define /redef INKSCAPE_VERSION_MAJOR ${INKSCAPE_VERSION_MAJOR}
+  !define /redef INKSCAPE_VERSION_MINOR ${INKSCAPE_VERSION_MINOR}
+  !define /redef INKSCAPE_VERSION_PATCH ${INKSCAPE_VERSION_PATCH}
+  !define /redef INKSCAPE_VERSION_SUFFIX ${INKSCAPE_VERSION_SUFFIX}
+  ; strip quotes
+  !searchparse /noerrors ${INKSCAPE_VERSION_SUFFIX} `"` INKSCAPE_VERSION_SUFFIX `"`
+  ; construct version string
+  !define INKSCAPE_VERSION "${INKSCAPE_VERSION_MAJOR}.${INKSCAPE_VERSION_MINOR}"
+  !if "${INKSCAPE_VERSION_PATCH}" != "0"
+    !if "${INKSCAPE_VERSION_PATCH}" != ""
+      !define /redef INKSCAPE_VERSION "${INKSCAPE_VERSION}.${INKSCAPE_VERSION_PATCH}"
+    !endif
+  !endif
+  !define /redef INKSCAPE_VERSION "${INKSCAPE_VERSION}${INKSCAPE_VERSION_SUFFIX}"
+  ; construct X.X.X.X version string for VIProductVersion
+  !if "${INKSCAPE_VERSION_PATCH}" != ""
+    !define VERSION_X.X.X.X ${INKSCAPE_VERSION_MAJOR}.${INKSCAPE_VERSION_MINOR}.${INKSCAPE_VERSION_PATCH}.0
+  !else
+    !define VERSION_X.X.X.X ${INKSCAPE_VERSION_MAJOR}.${INKSCAPE_VERSION_MINOR}.0.0
   !endif
 !endif
-; Find the version number in inkscape-version.cpp (e.g. 0.47+devel) {{{3
-!ifndef INKSCAPE_VERSION
-  ; Official release format (no newlines)
-  !searchparse /noerrors /file ..\..\src\inkscape-version.cpp `namespace Inkscape {  char const *version_string = "` INKSCAPE_VERSION ` r` BZR_REVISION `";  }`
-  !ifndef INKSCAPE_VERSION
-    ; Other format; sorry, it has to be done in two steps.
-    !searchparse /noerrors /file ..\..\src\inkscape-version.cpp `char const *version_string = "` INKSCAPE_VERSION `";`
-    !searchparse /noerrors `${INKSCAPE_VERSION}` `` INKSCAPE_VERSION ` r` BZR_REVISION
-  !endif
-  !ifdef INKSCAPE_VERSION
-    !echo `Got version number from ..\..\src\inkscape-version.cpp: ${INKSCAPE_VERSION}`
-  !endif
+!ifdef INKSCAPE_VERSION
+  !echo `INKSCAPE_VERSION: ${INKSCAPE_VERSION}`
+!else
+  !error "INKSCAPE_VERSION not defined and unable to get version number from CMakeLists.txt!"
 !endif
-!ifndef INKSCAPE_VERSION
-  !error "INKSCAPE_VERSION not defined and unable to get version number from either ..\..\src\inkscape.rc or ..\..\src\inkscape-version.cpp!"
-!endif
-!define FILENAME Inkscape-${INKSCAPE_VERSION}
+!define FILENAME inkscape-${INKSCAPE_VERSION}
 !define BrandingText `Inkscape ${INKSCAPE_VERSION}`
 
 ; Detect architecture of the build
@@ -190,54 +188,6 @@ ${!ifexist} ${INKSCAPE_DIST_DIR}\gspawn-win64-helper.exe
 !ifndef BITNESS
   !error "Could not detect architecture (BITNESS) of the Inkscape build"
 !endif
-
-; Check for the Bazaar revision number for lp:inkscape {{{3
-${!ifexist} ..\..\.bzr\branch\last-revision
-  !if `${BZR_REVISION}` == ``
-    !undef BZR_REVISION
-  !endif
-  !ifndef BZR_REVISION
-    !searchparse /noerrors /file ..\..\.bzr\branch\last-revision "" BZR_REVISION " "
-  !endif
-!endif
-
-; Check for devel builds and clear up bzr revision number define {{{3
-!searchparse /noerrors ${INKSCAPE_VERSION} "" INKSCAPE_VERSION_NUMBER "+devel"
-!if ${INKSCAPE_VERSION_NUMBER} != ${INKSCAPE_VERSION}
-  !define DEVEL
-!endif
-!if `${BZR_REVISION}` == ``
-  !undef BZR_REVISION
-!endif
-; For releases like 0.48pre1, throw away the preN. It's too tricky to deal with
-; it properly so I'll leave it alone. It's just a pre-release, so it doesn't
-; really matter. So long as the final release works properly.
-!ifndef DEVEL
-  !undef INKSCAPE_VERSION_NUMBER
-  !searchparse /noerrors ${INKSCAPE_VERSION} "" INKSCAPE_VERSION_NUMBER "pre" PRE_NUMBER
-!endif
-
-; Handle display version number and complete X.X version numbers into X.X.X.X {{{3
-!ifdef DEVEL & BZR_REVISION
-  !define /redef FILENAME `${FILENAME}-r${BZR_REVISION}`
-  !define /redef BrandingText `${BrandingText} r${BZR_REVISION}`
-  !define VERSION_X.X.X.X_REVISION ${BZR_REVISION}
-; Handle the installer revision number {{{4
-!else ifdef RELEASE_REVISION
-  !define /redef FILENAME `${FILENAME}-${RELEASE_REVISION}`
-  ; If we wanted the branding text to be like "Inkscape 0.48pre1 r9505" this'd do it.
-  ;!ifdef BZR_REVISION
-  ;  !define /redef BrandingText `${BrandingText} r${BZR_REVISION}`
-  ;!endif
-  !if `${RELEASE_REVISION}` != `1`
-    !define /redef BrandingText `${BrandingText}, revision ${RELEASE_REVISION}`
-  !endif
-  !define VERSION_X.X.X.X_REVISION ${RELEASE_REVISION}
-!else
-  !define VERSION_X.X.X.X_REVISION 0
-!endif
-
-${VersionCompleteXXXRevision} ${INKSCAPE_VERSION_NUMBER} VERSION_X.X.X.X ${VERSION_X.X.X.X_REVISION}
 
 ; Product definitions {{{3
 !define PRODUCT_NAME "Inkscape" ; TODO: fix up the language files to not use this and kill this line
@@ -261,14 +211,16 @@ OutFile           `${FILENAME}`
 InstallDirRegKey  HKLM "${INSTDIR_KEY}" ""
 
 ; Version information {{{3
+!define /date COPYRIGHT_YEAR "%Y"
 VIProductVersion ${VERSION_X.X.X.X}
 VIAddVersionKey /LANG=0 ProductName "Inkscape"
 VIAddVersionKey /LANG=0 Comments "Licensed under the GNU GPL"
-VIAddVersionKey /LANG=0 CompanyName "Inkscape Project"
-VIAddVersionKey /LANG=0 LegalCopyright "© 2016 Inkscape Project"
-VIAddVersionKey /LANG=0 FileDescription "Inkscape Vector Graphics Editor"
-VIAddVersionKey /LANG=0 FileVersion ${VERSION_X.X.X.X}
-VIAddVersionKey /LANG=0 ProductVersion ${VERSION_X.X.X.X}
+VIAddVersionKey /LANG=0 CompanyName "Inkscape project"
+VIAddVersionKey /LANG=0 LegalCopyright "© ${COPYRIGHT_YEAR} Inkscape project"
+VIAddVersionKey /LANG=0 FileDescription "Installer for Inkscape vector graphics editor"
+VIAddVersionKey /LANG=0 FileVersion ${INKSCAPE_VERSION}
+VIAddVersionKey /LANG=0 ProductVersion ${INKSCAPE_VERSION}
+
 
 ; Variables {{{2
 Var askMultiUser
