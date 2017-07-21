@@ -22,3 +22,41 @@ add_custom_target(dist
     COMMAND git checkout ${CMAKE_SOURCE_DIR}/CMakeScripts/inkscape-version.cmake # duplicate to make sure we actually revert in case of error
     WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
     VERBATIM)
+
+
+
+# -----------------------------------------------------------------------------
+# 'dist-win' - Windows Targets
+# -----------------------------------------------------------------------------
+if(WIN32)
+    if(HAVE_MINGW64)
+        set(bitness "x64")
+    else()
+        set(bitness "x86")
+    endif()
+    set(INKSCAPE_DIST_PREFIX ${INKSCAPE_DIST_PREFIX}-${bitness})
+
+    # -----------------------------------------------------------------------------
+    # 'dist-win-7z' - generate binary 7z archive for Windows
+    # -----------------------------------------------------------------------------
+
+    find_program(7z 7z PATHS "C:\\Program Files\\7-Zip"
+                             "C:\\Program Files (x86)\\7-Zip")
+    if(NOT 7z)
+        set(7z echo "Could not find '7z'. Please add it to your search path." && exit 1 &&)
+    endif()
+
+    # default target with very good but slow compression (needs approx. 10 GB RAM)
+    add_custom_target(dist-win-7z
+        COMMAND ${7z} a -mx9 -md512m -mfb256
+                      "${CMAKE_BINARY_DIR}/${INKSCAPE_DIST_PREFIX}.7z"
+                      "${CMAKE_INSTALL_PREFIX}")
+
+    # fast target with moderate compression
+    add_custom_target(dist-win-7z-fast
+        COMMAND ${7z} a
+                      "${CMAKE_BINARY_DIR}/${INKSCAPE_DIST_PREFIX}.7z"
+                      "${CMAKE_INSTALL_PREFIX}")
+
+    add_dependencies(dist-win-7z install/strip)
+    add_dependencies(dist-win-7z-fast install/strip)
