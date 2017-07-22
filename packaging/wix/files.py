@@ -119,7 +119,8 @@ with open('files.wxs', 'w', encoding='utf-8') as wxs:
 	wxs.write(indent(2) + "</Directory>\n")
 
 	# Python
-	ComponentGroup("Python", 'inkscape\\python\\', 2)
+	ComponentGroup("Python", ['inkscape\\python\\','inkscape\\lib\\python2.7\\',
+	                          'inkscape\\libpython', 'inkscape\\python'], 2)
 	# translations and localized content
 	for lang_code in sorted(locales):
 		ComponentGroup("Translation_" + valid_id(lang_code), ['\\' + lang_code + '\\',
@@ -128,7 +129,7 @@ with open('files.wxs', 'w', encoding='utf-8') as wxs:
 	ComponentGroup("Extensions", 'inkscape\\share\\extensions\\', 2)
 	ComponentGroup("Examples", 'inkscape\\share\\examples\\', 2)
 	ComponentGroup("Tutorials", 'inkscape\\share\\tutorials\\', 2)
-	ComponentGroup("Dictionaries", 'inkscape\\lib\\aspell-0.60\\', 2)
+	ComponentGroup("Dictionaries", ['inkscape\\lib\\aspell-0.60\\', 'inkscape\\lib\\enchant\\'], 2)
 	# everything that is left (which should be the Inkscape core unless inkscape_dist_dir contains unnecessary files or we defined our components poorly)
 	ComponentGroup("AllOther", '', 2)
 

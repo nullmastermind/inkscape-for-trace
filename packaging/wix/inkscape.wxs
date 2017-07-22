@@ -121,7 +121,7 @@
 		<UIRef Id="WixUI_Mondo" />
 		<UIRef Id="WixUI_ErrorProgressText" />
 
-		<Icon Id="inkscape.ico" SourceFile="..\..\inkscape.ico" />
+		<Icon Id="inkscape.ico" SourceFile="..\..\share\branding\inkscape.ico" />
 		<Property Id="ARPPRODUCTICON" Value="inkscape.ico" />
 	</Product>
 </Wix>
