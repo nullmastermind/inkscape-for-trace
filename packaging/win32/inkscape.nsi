@@ -180,10 +180,11 @@ ReserveFile /plugin UserInfo.dll
 ; Detect architecture of the build
 ${!ifexist} ${INKSCAPE_DIST_DIR}\gspawn-win32-helper.exe
   !define BITNESS 32
+  !define /redef FILENAME `${FILENAME}-x86`
 !endif
 ${!ifexist} ${INKSCAPE_DIST_DIR}\gspawn-win64-helper.exe
   !define BITNESS 64
-  !define /redef FILENAME `${FILENAME}-x64` ; add architecture to filename for 64-bit builds
+  !define /redef FILENAME `${FILENAME}-x64`
 !endif
 !ifndef BITNESS
   !error "Could not detect architecture (BITNESS) of the Inkscape build"
@@ -193,10 +194,14 @@ ${!ifexist} ${INKSCAPE_DIST_DIR}\gspawn-win64-helper.exe
 !define PRODUCT_NAME "Inkscape" ; TODO: fix up the language files to not use this and kill this line
 !define INSTDIR_KEY "Software\Microsoft\Windows\CurrentVersion\App Paths\inkscape.exe"
 !define UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\Inkscape"
-!define _FILENAME ${FILENAME}.exe
-!undef FILENAME
-!define FILENAME ${_FILENAME}
-!undef _FILENAME
+
+!ifdef OutFile
+  ; allow to set different output filename by defining 'OutFile' on command line
+  !define /redef FILENAME ${OutFile}
+!else
+  !define /redef FILENAME ${FILENAME}.exe
+!endif
+
 
 ; Product information {{{3
 Name              `Inkscape`
