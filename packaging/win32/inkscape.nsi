@@ -19,7 +19,7 @@
 ; Unicode, compression and admin requirement {{{2
 Unicode true
 SetCompressor /SOLID lzma
-SetCompressorDictSize 32
+SetCompressorDictSize 64
 RequestExecutionLevel admin
 
 ; Include required files {{{2
@@ -299,7 +299,7 @@ Section "$(Core)" SecCore ; Mandatory Inkscape core files section {{{
   File           /a    ${INKSCAPE_DIST_DIR}\NEWS
   File           /a    ${INKSCAPE_DIST_DIR}\gspawn-win${BITNESS}-helper.exe
   File           /a    ${INKSCAPE_DIST_DIR}\gspawn-win${BITNESS}-helper-console.exe
-  File           /a    ${INKSCAPE_DIST_DIR}\README
+  File           /a    ${INKSCAPE_DIST_DIR}\README.md
   File           /a    ${INKSCAPE_DIST_DIR}\TRANSLATORS
   !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
 

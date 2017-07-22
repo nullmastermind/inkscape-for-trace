@@ -60,3 +60,31 @@ if(WIN32)
 
     add_dependencies(dist-win-7z install/strip)
     add_dependencies(dist-win-7z-fast install/strip)
+
+
+    # -----------------------------------------------------------------------------
+    # 'dist-win-exe' - generate .exe installer (NSIS) for Windows
+    # -----------------------------------------------------------------------------
+
+    find_program (makensis makensis PATHS "C:\\Program Files\\NSIS"
+                                          "C:\\Program Files (x86)\\NSIS")
+    if(NOT makensis)
+        set(makensis echo "Could not find 'makensis'. Please add it to your search path." && exit 1 &&)
+    endif()
+
+    # default target with good but slow compression
+    add_custom_target(dist-win-exe
+        COMMAND ${makensis} /D"INKSCAPE_DIST_DIR=${CMAKE_INSTALL_PREFIX}"
+                            /D"OutFile=${CMAKE_BINARY_DIR}/${INKSCAPE_DIST_PREFIX}.exe"
+                            "${CMAKE_SOURCE_DIR}/packaging/win32/inkscape.nsi")
+
+    # fast target with low compression for testing
+    add_custom_target(dist-win-exe-fast
+        COMMAND ${makensis} /X"SetCompressor /FINAL /SOLID bzip2"
+                            /D"INKSCAPE_DIST_DIR=${CMAKE_INSTALL_PREFIX}"
+                            /D"OutFile=${CMAKE_BINARY_DIR}/${INKSCAPE_DIST_PREFIX}.exe"
+                            "${CMAKE_SOURCE_DIR}/packaging/win32/inkscape.nsi")
+
+    add_dependencies(dist-win-exe install/strip)
+    add_dependencies(dist-win-exe-fast install/strip)
+endif()
