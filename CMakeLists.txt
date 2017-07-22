@@ -172,7 +172,8 @@ add_custom_target(dist
          && tar cfz ${CMAKE_BINARY_DIR}/${INKSCAPE_DIST_PREFIX}.tar.gz ${CMAKE_SOURCE_DIR}/doc --exclude=".*" --exclude-vcs-ignores
          || git checkout ${CMAKE_SOURCE_DIR}/CMakeScripts/inkscape-version.cmake
     COMMAND git checkout ${CMAKE_SOURCE_DIR}/CMakeScripts/inkscape-version.cmake # duplicate to make sure we actually revert in case of error
-    WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}" VERBATIM USES_TERMINAL)
+    WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+    VERBATIM)
 
 # -----------------------------------------------------------------------------
 # Uninstall Target
