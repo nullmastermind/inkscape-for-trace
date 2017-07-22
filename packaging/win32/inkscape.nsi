@@ -121,8 +121,8 @@ ReserveFile /plugin UserInfo.dll
 ; SETTINGS
 ; #######################################
 
-; Find inkscape distribution directory (uncomment line below to manually define)
-!define INKSCAPE_DIST_DIR ..\..\build64\inkscape
+; Find inkscape distribution directory (define on command line or uncomment line below to manually define)
+;!define INKSCAPE_DIST_DIR ..\..\build\inkscape
 !ifdef INKSCAPE_DIST_DIR
   ${!defineifexist} ${INKSCAPE_DIST_DIR}\inkscape.exe FOUND 1
   !ifndef FOUND
