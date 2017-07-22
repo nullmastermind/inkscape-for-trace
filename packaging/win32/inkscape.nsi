@@ -287,8 +287,10 @@ Section "$(Core)" SecCore ; Mandatory Inkscape core files section {{{
 
   SetOutPath $INSTDIR
   !insertmacro UNINSTALL.LOG_OPEN_INSTALL
-  File           /a    ${INKSCAPE_DIST_DIR}\ink*.exe
-  File /nonfatal /a    ${INKSCAPE_DIST_DIR}\inkscape.com ; not created as of Inkscape 0.92pre1
+  File           /a    ${INKSCAPE_DIST_DIR}\inkscape.exe
+  File           /a    ${INKSCAPE_DIST_DIR}\inkscape.com
+  File           /a    ${INKSCAPE_DIST_DIR}\inkview.exe
+  File           /a    ${INKSCAPE_DIST_DIR}\inkview.com
   File           /a    ${INKSCAPE_DIST_DIR}\AUTHORS
   File           /a    ${INKSCAPE_DIST_DIR}\COPYING
   File           /a    ${INKSCAPE_DIST_DIR}\GPL2.txt
@@ -301,21 +303,9 @@ Section "$(Core)" SecCore ; Mandatory Inkscape core files section {{{
   File           /a    ${INKSCAPE_DIST_DIR}\TRANSLATORS
   !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
 
-  SetOutPath $INSTDIR\data
-  !insertmacro UNINSTALL.LOG_OPEN_INSTALL
-  File /nonfatal /a /r ${INKSCAPE_DIST_DIR}\data\*.*
-  !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
   SetOutPath $INSTDIR\doc
   !insertmacro UNINSTALL.LOG_OPEN_INSTALL
   File /nonfatal /a /r ${INKSCAPE_DIST_DIR}\doc\*.*
-  !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
-  SetOutPath $INSTDIR\plugins
-  !insertmacro UNINSTALL.LOG_OPEN_INSTALL
-  File /nonfatal /a /r ${INKSCAPE_DIST_DIR}\plugins\*.*
-  !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
-  SetOutPath $INSTDIR\modules
-  !insertmacro UNINSTALL.LOG_OPEN_INSTALL
-  File /nonfatal /a /r ${INKSCAPE_DIST_DIR}\modules\*.*
   !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
 
   ;exclude everything from /share for which we have separate sections below
@@ -342,11 +332,11 @@ Section "$(GTKFiles)" SecGTK ; Mandatory GTK files section {{{
   DetailPrint "Installing GTK files..."
   SetOutPath $INSTDIR
   !insertmacro UNINSTALL.LOG_OPEN_INSTALL
-  File /a /r /x python ${INKSCAPE_DIST_DIR}\*.dll
+  File /a /r /x libpython2.7.dll ${INKSCAPE_DIST_DIR}\*.dll
   !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
   SetOutPath $INSTDIR\lib
   !insertmacro UNINSTALL.LOG_OPEN_INSTALL
-  File /a /r /x locale /x aspell-0.60 ${INKSCAPE_DIST_DIR}\lib\*.*
+  File /a /r /x locale /x aspell-0.60 /x enchant /x python2.7 ${INKSCAPE_DIST_DIR}\lib\*.*
   !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
   SetOutPath $INSTDIR\etc
   !insertmacro UNINSTALL.LOG_OPEN_INSTALL
@@ -454,6 +444,15 @@ Section "$(Python)" SecPython ; Python distribution {{{
   !insertmacro UNINSTALL.LOG_OPEN_INSTALL
   File /nonfatal /a /r ${INKSCAPE_DIST_DIR}\python\*.*
   !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
+  SetOutPath $INSTDIR\lib\python2.7
+  !insertmacro UNINSTALL.LOG_OPEN_INSTALL
+  File /nonfatal /a /r ${INKSCAPE_DIST_DIR}\lib\python2.7\*.*
+  !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
+  SetOutPath $INSTDIR
+  !insertmacro UNINSTALL.LOG_OPEN_INSTALL
+  File /nonfatal /a ${INKSCAPE_DIST_DIR}\python*.exe
+  File /nonfatal /a ${INKSCAPE_DIST_DIR}\libpython*.dll
+  !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
 !endif
 SectionEnd ; SecPython }}}
 
@@ -499,6 +498,10 @@ Section "$(Dictionaries)" SecDictionaries ; Aspell dictionaries {{{
   SetOutPath $INSTDIR\lib\aspell-0.60
   !insertmacro UNINSTALL.LOG_OPEN_INSTALL
   File /nonfatal /a /r ${INKSCAPE_DIST_DIR}\lib\aspell-0.60\*.*
+  !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
+  SetOutPath $INSTDIR\lib\enchant
+  !insertmacro UNINSTALL.LOG_OPEN_INSTALL
+  File /nonfatal /a /r ${INKSCAPE_DIST_DIR}\lib\enchant\*.*
   !insertmacro UNINSTALL.LOG_CLOSE_INSTALL
 !endif
 SectionEnd ; SecDictionaries }}}
