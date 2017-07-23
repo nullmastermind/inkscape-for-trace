@@ -128,4 +128,9 @@ if(WIN32)
 
     add_dependencies(dist-win-msi install/strip)
     add_dependencies(dist-win-msi-fast install/strip)
+
+    # -----------------------------------------------------------------------------
+    # 'dist-win-all' - generate all 'dist' targets for Windows
+    # -----------------------------------------------------------------------------
+    add_custom_target(dist-win-all DEPENDS dist-win-7z dist-win-exe dist-win-msi)
 endif()
