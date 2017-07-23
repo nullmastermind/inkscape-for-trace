@@ -39,7 +39,6 @@ if(WIN32)
     # -----------------------------------------------------------------------------
     # 'dist-win-7z' - generate binary 7z archive for Windows
     # -----------------------------------------------------------------------------
-
     find_program(7z 7z PATHS "C:\\Program Files\\7-Zip"
                              "C:\\Program Files (x86)\\7-Zip")
     if(NOT 7z)
@@ -61,11 +60,9 @@ if(WIN32)
     add_dependencies(dist-win-7z install/strip)
     add_dependencies(dist-win-7z-fast install/strip)
 
-
     # -----------------------------------------------------------------------------
     # 'dist-win-exe' - generate .exe installer (NSIS) for Windows
     # -----------------------------------------------------------------------------
-
     find_program (makensis makensis PATHS "C:\\Program Files\\NSIS"
                                           "C:\\Program Files (x86)\\NSIS")
     if(NOT makensis)
@@ -87,4 +84,48 @@ if(WIN32)
 
     add_dependencies(dist-win-exe install/strip)
     add_dependencies(dist-win-exe-fast install/strip)
+
+    # -----------------------------------------------------------------------------
+    # 'dist-win-msi' - generate .exe installer (NSIS) for Windows
+    # -----------------------------------------------------------------------------
+    find_program (candle candle PATHS "C:\\Program Files\\WiX Toolset v3.10\\bin"
+                                      "C:\\Program Files (x86)\\WiX Toolset v3.10\\bin")
+    find_program (light  light  PATHS "C:\\Program Files\\WiX Toolset v3.10\\bin"
+                                      "C:\\Program Files (x86)\\WiX Toolset v3.10\\bin")
+    if(NOT candle)
+        set(candle echo "Could not find 'candle' (part of WiX Toolset). Please add it to your search path." && exit 1 &&)
+    endif()
+    if(NOT light)
+        set(light echo "Could not find 'light' (part of WiX Toolset). Please add it to your search path." && exit 1 &&)
+    endif()
+
+    # default target with fair but slow compression
+    add_custom_target(dist-win-msi
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/packaging/wix ${CMAKE_BINARY_DIR}/wix
+        COMMAND cd wix
+        COMMAND ${CMAKE_COMMAND} -E env INKSCAPE_DIST_PATH=${CMAKE_INSTALL_PREFIX}
+                    python ${CMAKE_SOURCE_DIR}/packaging/wix/files.py
+        COMMAND ${CMAKE_COMMAND} -E env INKSCAPE_DIST_PATH=${CMAKE_INSTALL_PREFIX}
+                    python ${CMAKE_SOURCE_DIR}/packaging/wix/version.py
+        COMMAND ${candle} inkscape.wxs -ext WiXUtilExtension
+        COMMAND ${candle} files.wxs
+        COMMAND ${light} -ext WixUIExtension -ext WiXUtilExtension inkscape.wixobj files.wixobj
+                         -o ${CMAKE_BINARY_DIR}/${INKSCAPE_DIST_PREFIX}.msi)
+
+    # moderately fast target with no compression for testing
+    add_custom_target(dist-win-msi-fast
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/packaging/wix ${CMAKE_BINARY_DIR}/wix
+        COMMAND cd wix
+        COMMAND sed -i 's/CompressionLevel="high"/CompressionLevel="none"/' inkscape.wxs
+        COMMAND ${CMAKE_COMMAND} -E env INKSCAPE_DIST_PATH=${CMAKE_INSTALL_PREFIX}
+                    python ${CMAKE_SOURCE_DIR}/packaging/wix/files.py
+        COMMAND ${CMAKE_COMMAND} -E env INKSCAPE_DIST_PATH=${CMAKE_INSTALL_PREFIX}
+                    python ${CMAKE_SOURCE_DIR}/packaging/wix/version.py
+        COMMAND ${candle} inkscape.wxs -ext WiXUtilExtension
+        COMMAND ${candle} files.wxs
+        COMMAND ${light} -ext WixUIExtension -ext WiXUtilExtension inkscape.wixobj files.wixobj
+                         -o ${CMAKE_BINARY_DIR}/${INKSCAPE_DIST_PREFIX}.msi)
+
+    add_dependencies(dist-win-msi install/strip)
+    add_dependencies(dist-win-msi-fast install/strip)
 endif()
