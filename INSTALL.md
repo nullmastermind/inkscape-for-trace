@@ -71,3 +71,19 @@ Second, if an extension does not work, check the file
 Windows at `%userprofile%\Application Data\Inkscape\`. Any missing
 programs will be listed.
 
+
+Build Options
+=============
+
+A number of configuration settings can be overridden through cmake.  To
+see a list of the options available for inkscape, run:
+
+ $ cmake -L
+
+or, for more advanced cmake settings:
+
+ $ cmake --help
+
+For example, to build inkscape with only SVG 1 support, and no SVG 2, do:
+
+ $ cmake . -DWITH_SVG2=OFF
