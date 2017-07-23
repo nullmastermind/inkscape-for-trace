@@ -40,16 +40,17 @@ def directory(root, breadcrumb, level, exclude=[]):
 	files = [ f for f in os.listdir(root) if os.path.isfile(os.path.join(root,f)) and f not in exclude]
 	for file in files:
 		file_key = os.path.join(root, file)
+		file_key = file_key.replace('/', '\\')  # for usage from MSYS2 shell
 		_id = '_%06d' % (len(file_ids.keys()) + 1)
 		file_ids[file_key] = 'component' + _id
 		wxs.write(indent(level)+ "<Component Id='component" + _id + "' Guid='" + str(uuid.uuid4()) + "' DiskId='1' Win64='$(var.Win64)'>\n")
 		if file == 'inkscape.exe':
-			# we refenrence inkscape.exe in inkscape.wxs
+			# we reference inkscape.exe in inkscape.wxs
 			_id = '_inkscape_exe'
 		wxs.write(indent(level + 1)+ "<File Id='file" + _id + "' Name='" + file + "' DiskId='1' Source='" + file_key + "' KeyPath='yes' />\n")
 		wxs.write(indent(level)+ "</Component>\n")
-	# then all directories
 
+	# then all directories
 	dirs = [ f for f in os.listdir(root) if os.path.isdir(os.path.join(root,f)) ]
 	for dir in dirs:
 		directory_key = breadcrumb + '__' + dir
