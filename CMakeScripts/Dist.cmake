@@ -47,12 +47,14 @@ if(WIN32)
 
     # default target with very good but slow compression (needs approx. 10 GB RAM)
     add_custom_target(dist-win-7z
+        COMMAND ${CMAKE_COMMAND} -E remove "${CMAKE_BINARY_DIR}/${INKSCAPE_DIST_PREFIX}.7z"
         COMMAND ${7z} a -mx9 -md512m -mfb256
                       "${CMAKE_BINARY_DIR}/${INKSCAPE_DIST_PREFIX}.7z"
                       "${CMAKE_INSTALL_PREFIX}")
 
     # fast target with moderate compression
     add_custom_target(dist-win-7z-fast
+        COMMAND ${CMAKE_COMMAND} -E remove "${CMAKE_BINARY_DIR}/${INKSCAPE_DIST_PREFIX}.7z"
         COMMAND ${7z} a
                       "${CMAKE_BINARY_DIR}/${INKSCAPE_DIST_PREFIX}.7z"
                       "${CMAKE_INSTALL_PREFIX}")
