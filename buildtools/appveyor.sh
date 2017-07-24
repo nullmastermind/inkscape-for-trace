@@ -75,7 +75,9 @@ message "##### BUILD SUCCESSFULL #####\n\n"
 
 
 ### package
-BRANCH=$(git branch | tail -n 1 | tr -d ' ')
-DATE=$(git log -n 1 --pretty=%cd --date=short)
-HASH=$(git rev-parse --short HEAD)
-7z a "inkscape-${BRANCH}-(${DATE}_${HASH})-${MSYSTEM_CARCH}.7z" inkscape
+if [ "$APPVEYOR_REPO_TAG" = "true" ]
+then
+    ninja dist-win-all
+else
+    ninja dist-win-7z-fast
+fi

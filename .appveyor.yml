@@ -13,6 +13,8 @@ build_script:
 
 artifacts:
   - path: build\inkscape*.7z
+  - path: build\inkscape*.exe
+  - path: build\inkscape*.msi
 
 cache:
   - '%APPVEYOR_BUILD_FOLDER%\build\ccache'

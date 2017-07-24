@@ -6,9 +6,6 @@ set(INKSCAPE_DIST_PREFIX "${PROJECT_NAME}-${INKSCAPE_VERSION}")
 set(INKSCAPE_SOURCE_DIR ${CMAKE_SOURCE_DIR})
 include(CMakeScripts/inkscape-version.cmake)
 
-if(INKSCAPE_VERSION_SUFFIX AND INKSCAPE_REVISION_DATE AND INKSCAPE_REVISION_HASH)
-    set(INKSCAPE_DIST_PREFIX ${INKSCAPE_DIST_PREFIX}_${INKSCAPE_REVISION_DATE}_${INKSCAPE_REVISION_HASH})
-endif()
 
 
 # -----------------------------------------------------------------------------
@@ -29,6 +26,9 @@ add_custom_target(dist
 # 'dist-win' - Windows Targets
 # -----------------------------------------------------------------------------
 if(WIN32)
+    if(INKSCAPE_REVISION_DATE AND INKSCAPE_REVISION_HASH)
+        set(INKSCAPE_DIST_PREFIX ${INKSCAPE_DIST_PREFIX}_${INKSCAPE_REVISION_DATE}_${INKSCAPE_REVISION_HASH})
+    endif()
     if(HAVE_MINGW64)
         set(bitness "x64")
     else()
@@ -39,8 +39,8 @@ if(WIN32)
     # -----------------------------------------------------------------------------
     # 'dist-win-7z' - generate binary 7z archive for Windows
     # -----------------------------------------------------------------------------
-    find_program(7z 7z PATHS "C:\\Program Files\\7-Zip"
-                             "C:\\Program Files (x86)\\7-Zip")
+    find_program(7z 7z PATHS "C:/Program Files/7-Zip"
+                             "C:/Program Files (x86)/7-Zip")
     if(NOT 7z)
         set(7z echo "Could not find '7z'. Please add it to your search path." && exit 1 &&)
     endif()
@@ -65,8 +65,8 @@ if(WIN32)
     # -----------------------------------------------------------------------------
     # 'dist-win-exe' - generate .exe installer (NSIS) for Windows
     # -----------------------------------------------------------------------------
-    find_program (makensis makensis PATHS "C:\\Program Files\\NSIS"
-                                          "C:\\Program Files (x86)\\NSIS")
+    find_program (makensis makensis PATHS "C:/Program Files/NSIS"
+                                          "C:/Program Files (x86)/NSIS")
     if(NOT makensis)
         set(makensis echo "Could not find 'makensis'. Please add it to your search path." && exit 1 &&)
     endif()
@@ -90,10 +90,10 @@ if(WIN32)
     # -----------------------------------------------------------------------------
     # 'dist-win-msi' - generate .exe installer (NSIS) for Windows
     # -----------------------------------------------------------------------------
-    find_program (candle candle PATHS "C:\\Program Files\\WiX Toolset v3.10\\bin"
-                                      "C:\\Program Files (x86)\\WiX Toolset v3.10\\bin")
-    find_program (light  light  PATHS "C:\\Program Files\\WiX Toolset v3.10\\bin"
-                                      "C:\\Program Files (x86)\\WiX Toolset v3.10\\bin")
+    file(GLOB wix_dirs "C:/Program Files/WiX Toolset*/bin")
+    file(GLOB wix_dirs_x86 "C:/Program Files (x86)/WiX Toolset*/bin")
+    find_program (candle candle PATHS ${wix_dirs} ${wix_dirs_x86})
+    find_program (light  light  PATHS ${wix_dirs} ${wix_dirs_x86})
     if(NOT candle)
         set(candle echo "Could not find 'candle' (part of WiX Toolset). Please add it to your search path." && exit 1 &&)
     endif()
@@ -112,7 +112,8 @@ if(WIN32)
         COMMAND ${candle} inkscape.wxs -ext WiXUtilExtension
         COMMAND ${candle} files.wxs
         COMMAND ${light} -ext WixUIExtension -ext WiXUtilExtension inkscape.wixobj files.wixobj
-                         -o ${CMAKE_BINARY_DIR}/${INKSCAPE_DIST_PREFIX}.msi)
+                         -o ${CMAKE_BINARY_DIR}/${INKSCAPE_DIST_PREFIX}.msi
+             || echo "WiX exited with non-zero exit code (which is a known issue and usually does not prevent creation of an installer). If you can, please fix it, though!")
 
     # moderately fast target with no compression for testing
     add_custom_target(dist-win-msi-fast
@@ -126,7 +127,8 @@ if(WIN32)
         COMMAND ${candle} inkscape.wxs -ext WiXUtilExtension
         COMMAND ${candle} files.wxs
         COMMAND ${light} -ext WixUIExtension -ext WiXUtilExtension inkscape.wixobj files.wixobj
-                         -o ${CMAKE_BINARY_DIR}/${INKSCAPE_DIST_PREFIX}.msi)
+                         -o ${CMAKE_BINARY_DIR}/${INKSCAPE_DIST_PREFIX}.msi
+             || echo "WiX exited with non-zero exit code (which is a known issue and usually does not prevent creation of an installer). If you can, please fix it, though!")
 
     add_dependencies(dist-win-msi install/strip)
     add_dependencies(dist-win-msi-fast install/strip)
