@@ -147,6 +147,7 @@ set(ui_SRC
 	widget/licensor.cpp
 	widget/notebook-page.cpp
 	widget/object-composite-settings.cpp
+	widget/ink-select-one-action.cpp
 	widget/page-sizer.cpp
 	widget/panel.cpp
 	widget/point.cpp
@@ -339,6 +340,7 @@ set(ui_SRC
 	widget/licensor.h
 	widget/notebook-page.h
 	widget/object-composite-settings.h
+	widget/ink-select-one-action.h
 	widget/page-sizer.h
 	widget/panel.h
 	widget/point.h
