@@ -747,7 +747,10 @@ font_instance *font_factory::Face(PangoFontDescription *descr, bool canFail)
             }
         }
 
-#if HB_VERSION_ATLEAST(1,2,3)
+// TODO: Ideally, we should use the HB_VERSION_ATLEAST macro here,
+// but this was only released in harfbuzz >= 0.9.30
+// #if HB_VERSION_ATLEAST(1,2,3)
+#if HB_VERSION_MAJOR*10000 + HB_VERSION_MINOR*100 + HB_VERSION_MICRO >= 10203
         // Find glyphs in OpenType substitution tables ('gsub').
         // Note that pango's functions are just dummies. Must use harfbuzz.
 
