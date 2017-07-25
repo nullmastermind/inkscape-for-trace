@@ -481,7 +481,12 @@ static GtkWidget *sp_ui_menu_append_item_from_verb(GtkMenu                  *men
         GtkWidget *label = gtk_accel_label_new(action->name);
         gtk_label_set_markup_with_mnemonic( GTK_LABEL(label), action->name);
         gtk_label_set_use_underline(GTK_LABEL(label), true);
+
+#if GTK_CHECK_VERSION(3,16,0)
         gtk_label_set_xalign(GTK_LABEL(label), 0.0);
+#else
+        gtk_misc_set_alignment(GTK_MISC(label), 0.0, 0.5);
+#endif
 
         GtkAccelGroup *accel_group = sp_shortcut_get_accel_group();
         gtk_menu_set_accel_group(menu, accel_group);
