@@ -21,8 +21,11 @@
      gridoriginx="0pt"
   />
   <defs id="defs3">
-
+    <clipPath id="cieClip" clipPathUnits="userSpaceOnUse">
+      <path style="fill:none;stroke:#000000;stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" d="M 8.36,47.76 C 7.751574,47.51528 7.222277,46.90182 6.784323,46.39273 5.608271,45.02566 4.964826,43.30281 4.38,41.63 3.446394,38.95956 2.627116,36.19922 2.114165,33.41042 1.415792,29.6135 0.6129846,25.78424 0.3959804,21.94278 0.2093634,18.63925 -0.036735,15.09899 0.67,11.99 1.021272,10.44473 2.335229,8.406245 3.57,7.98 4.66602,7.601652 6.456945,8.746987 7.698531,9.504755 9.584304,10.65569 11.33779,12.01369 12.9958,13.4917 17.54131,17.54374 21.81301,21.89176 26.1391,26.17398 29.19235,29.19627 32.22777,32.23682 35.27,35.27 26.3,39.43333 17.33,43.59667 8.36,47.76 Z" id="path2430" sodipodi:nodetypes="cssssssssscc" inkscape:connector-curvature="0" />
+    </clipPath>
   </defs>
+
 <g id="color-management" inkscape:label="#color_management" transform="matrix(0.33,0,0,0.33,0,0)">
   <rect height="48" id="rect8860" style="fill:none" width="48" x="0" y="0"/>
   <g id="g8862" transform="matrix(1.125,0,0,1.125,4.5,-7.3125)">
