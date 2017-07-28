@@ -746,24 +746,15 @@ Application::crash_handler (int /*signum*/)
  */
 bool Application::load_menus()
 {
-    gchar *fn = Inkscape::IO::Resource::profile_path(MENUS_FILE);
+    using namespace Inkscape::IO::Resource;
+    Glib::ustring filename = get_filename(UIS, MENUS_FILE);
     gchar *menus_xml = 0;
     gsize len = 0;
 
-    if ( g_file_get_contents(fn, &menus_xml, &len, NULL) ) {
-        // load the menus_xml file
-        _menus = sp_repr_read_mem(menus_xml, len, NULL);
-
-        g_free(menus_xml);
-        menus_xml = 0;
-    }
-    g_free(fn);
-    fn = 0;
-
+    _menus = sp_repr_read_file(filename.c_str(), NULL);
     if ( !_menus ) {
         _menus = sp_repr_read_mem(menus_skeleton, MENUS_SKELETON_SIZE, NULL);
     }
-
     return (_menus != 0);
 }
 

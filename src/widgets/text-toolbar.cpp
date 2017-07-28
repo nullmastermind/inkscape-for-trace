@@ -37,7 +37,6 @@
 #include "document-undo.h"
 #include "document.h"
 #include "widgets/ege-adjustment-action.h"
-#include "widgets/ege-select-one-action.h"
 #include "ink-radio-action.h"
 #include "ink-toggle-action.h"
 #include "widgets/ink-comboboxentry-action.h"
@@ -54,6 +53,7 @@
 #include "ui/icon-names.h"
 #include "ui/tools/text-tool.h"
 #include "ui/widget/unit-tracker.h"
+#include "ui/widget/ink-select-one-action.h"
 #include "verbs.h"
 
 using Inkscape::DocumentUndo;
@@ -435,15 +435,13 @@ static void sp_text_script_changed( InkToggleAction* act, GObject *tbl )
     g_object_set_data( tbl, "freeze", GINT_TO_POINTER(FALSE) );
 }
 
-static void sp_text_align_mode_changed( EgeSelectOneAction *act, GObject *tbl )
+static void sp_text_align_mode_changed( GObject *tbl, int mode )
 {
     // quit if run by the _changed callbacks
     if (g_object_get_data(G_OBJECT(tbl), "freeze")) {
         return;
     }
     g_object_set_data( tbl, "freeze", GINT_TO_POINTER(TRUE) );
-
-    int mode = ege_select_one_action_get_active( act );
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     prefs->setInt("/tools/text/align_mode", mode);
@@ -1033,15 +1031,13 @@ static void sp_text_rotation_value_changed( GtkAdjustment *adj, GObject *tbl )
     g_object_set_data( tbl, "freeze", GINT_TO_POINTER(FALSE) );
 }
 
-static void sp_writing_mode_changed( EgeSelectOneAction *act, GObject *tbl )
+static void sp_writing_mode_changed( GObject* tbl, int mode )
 {
     // quit if run by the _changed callbacks
     if (g_object_get_data(G_OBJECT(tbl), "freeze")) {
         return;
     }
     g_object_set_data( tbl, "freeze", GINT_TO_POINTER(TRUE) );
-
-    int mode = ege_select_one_action_get_active( act );
 
     SPCSSAttr   *css        = sp_repr_css_attr_new ();
     switch (mode)
@@ -1058,7 +1054,7 @@ static void sp_writing_mode_changed( EgeSelectOneAction *act, GObject *tbl )
             break;
         }
 
-            case 2:
+        case 2:
         {
             sp_repr_css_set_property (css, "writing-mode", "vertical-lr");
             break;
@@ -1087,15 +1083,13 @@ static void sp_writing_mode_changed( EgeSelectOneAction *act, GObject *tbl )
     g_object_set_data( tbl, "freeze", GINT_TO_POINTER(FALSE) );
 }
 
-static void sp_text_orientation_changed( EgeSelectOneAction *act, GObject *tbl )
+static void sp_text_orientation_changed( GObject* tbl, int mode )
 {
     // quit if run by the _changed callbacks
     if (g_object_get_data(G_OBJECT(tbl), "freeze")) {
         return;
     }
     g_object_set_data( tbl, "freeze", GINT_TO_POINTER(TRUE) );
-
-    int mode = ege_select_one_action_get_active( act );
 
     SPCSSAttr   *css        = sp_repr_css_attr_new ();
     switch (mode)
@@ -1141,7 +1135,7 @@ static void sp_text_orientation_changed( EgeSelectOneAction *act, GObject *tbl )
     g_object_set_data( tbl, "freeze", GINT_TO_POINTER(FALSE) );
 }
 
-static void sp_text_direction_changed( EgeSelectOneAction *act, GObject *tbl )
+static void sp_text_direction_changed( GObject *tbl, int mode )
 {
     // quit if run by the _changed callbacks
     if (g_object_get_data(G_OBJECT(tbl), "freeze")) {
@@ -1149,7 +1143,6 @@ static void sp_text_direction_changed( EgeSelectOneAction *act, GObject *tbl )
     }
     g_object_set_data( tbl, "freeze", GINT_TO_POINTER(TRUE) );
 
-    int mode = ege_select_one_action_get_active( act );
     SPCSSAttr   *css        = sp_repr_css_attr_new ();
     switch (mode)
     {
@@ -1396,24 +1389,18 @@ static void sp_text_toolbox_selection_changed(Inkscape::Selection */*selection*/
 
 
         // Alignment
-        EgeSelectOneAction* textAlignAction = EGE_SELECT_ONE_ACTION( g_object_get_data( tbl, "TextAlignAction" ) );
+        InkSelectOneAction* textAlignAction =
+            static_cast<InkSelectOneAction*>( g_object_get_data( tbl, "TextAlignAction" ) );
 
         // Note: SVG 1.1 doesn't include text-align, SVG 1.2 Tiny doesn't include text-align="justify"
         // text-align="justify" was a draft SVG 1.2 item (along with flowed text).
         // Only flowed text can be left and right justified at the same time.
         // Disable button if we don't have flowed text.
 
-        // The GtkTreeModel class doesn't have a set function so we can't
-        // simply add an ege_select_one_action_set_sensitive method!
-        // We must set values directly with the GtkListStore and then
-        // ask that the GtkAction update the sensitive parameters.
-        GtkListStore * model = GTK_LIST_STORE( ege_select_one_action_get_model( textAlignAction ) );
-        GtkTreePath * path = gtk_tree_path_new_from_string("3"); // Justify entry
-        GtkTreeIter iter;
-        gtk_tree_model_get_iter( GTK_TREE_MODEL (model), &iter, path );
-        gtk_list_store_set( model, &iter, /* column */ 3, isFlow, -1 );
-        ege_select_one_action_update_sensitive( textAlignAction );
-        // ege_select_one_action_set_sensitive( textAlignAction, 3, isFlow );
+        Glib::RefPtr<Gtk::ListStore> store = textAlignAction->get_store();
+        Gtk::TreeModel::Row row = *(store->get_iter("3"));  // Justify entry
+        InkSelectOneActionColumns columns;
+        row[columns.col_sensitive] = isFlow;
 
         int activeButton = 0;
         if (query.text_align.computed  == SP_CSS_TEXT_ALIGN_JUSTIFY)
@@ -1425,8 +1412,7 @@ static void sp_text_toolbox_selection_changed(Inkscape::Selection */*selection*/
             if (query.text_anchor.computed == SP_CSS_TEXT_ANCHOR_MIDDLE) activeButton = 1;
             if (query.text_anchor.computed == SP_CSS_TEXT_ANCHOR_END)    activeButton = 2;
         }
-        ege_select_one_action_set_active( textAlignAction, activeButton );
-
+        textAlignAction->set_active( activeButton );
 
         // Line height (spacing) and line height unit
         double height;
@@ -1520,9 +1506,9 @@ static void sp_text_toolbox_selection_changed(Inkscape::Selection */*selection*/
         if (query.writing_mode.computed == SP_CSS_WRITING_MODE_TB_RL) activeButton2 = 1;
         if (query.writing_mode.computed == SP_CSS_WRITING_MODE_TB_LR) activeButton2 = 2;
 
-        EgeSelectOneAction* writingModeAction =
-            EGE_SELECT_ONE_ACTION( g_object_get_data( tbl, "TextWritingModeAction" ) );
-        ege_select_one_action_set_active( writingModeAction, activeButton2 );
+        InkSelectOneAction* writingModeAction =
+            static_cast<InkSelectOneAction*>( g_object_get_data( tbl, "TextWritingModeAction" ) );
+        writingModeAction->set_active( activeButton2 );
 
         // Orientation
         int activeButton3 = 0;
@@ -1530,35 +1516,20 @@ static void sp_text_toolbox_selection_changed(Inkscape::Selection */*selection*/
         if (query.text_orientation.computed == SP_CSS_TEXT_ORIENTATION_UPRIGHT ) activeButton3 = 1;
         if (query.text_orientation.computed == SP_CSS_TEXT_ORIENTATION_SIDEWAYS) activeButton3 = 2;
 
-        EgeSelectOneAction* textOrientationAction =
-            EGE_SELECT_ONE_ACTION( g_object_get_data( tbl, "TextOrientationAction" ) );
-        ege_select_one_action_set_active( textOrientationAction, activeButton3 );
+        InkSelectOneAction* textOrientationAction =
+            static_cast<InkSelectOneAction*>( g_object_get_data( tbl, "TextOrientationAction" ) );
+        textOrientationAction->set_active( activeButton3 );
 
-        // Disable text orientation for horizontal text..  See above for why this nonsense
-        model = GTK_LIST_STORE( ege_select_one_action_get_model( textOrientationAction ) );
-
-        path = gtk_tree_path_new_from_string("0");
-        gtk_tree_model_get_iter( GTK_TREE_MODEL (model), &iter, path );
-        gtk_list_store_set( model, &iter, /* column */ 3, activeButton2 != 0, -1 );
-
-        path = gtk_tree_path_new_from_string("1");
-        gtk_tree_model_get_iter( GTK_TREE_MODEL (model), &iter, path );
-        gtk_list_store_set( model, &iter, /* column */ 3, activeButton2 != 0, -1 );
-
-        path = gtk_tree_path_new_from_string("2");
-        gtk_tree_model_get_iter( GTK_TREE_MODEL (model), &iter, path );
-        gtk_list_store_set( model, &iter, /* column */ 3, activeButton2 != 0, -1 );
-
-        ege_select_one_action_update_sensitive( textOrientationAction );
+        // Disable text orientation for horizontal text...
+        textOrientationAction->set_sensitive( activeButton2 != 0 );
 
         // Direction
         int activeButton4 = 0;
         if (query.direction.computed == SP_CSS_DIRECTION_LTR ) activeButton4 = 0;
         if (query.direction.computed == SP_CSS_DIRECTION_RTL ) activeButton4 = 1;
-        EgeSelectOneAction* textDirectionAction =
-            EGE_SELECT_ONE_ACTION( g_object_get_data( tbl, "TextDirectionAction" ) );
-        ege_select_one_action_set_active( textDirectionAction, activeButton4 );
-
+        InkSelectOneAction* textDirectionAction =
+            static_cast<InkSelectOneAction*>( g_object_get_data( tbl, "TextDirectionAction" ) );
+        textDirectionAction->set_active( activeButton4 );
     }
 
 #ifdef DEBUG_TEXT
@@ -1832,209 +1803,175 @@ void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
 
     /* Alignment */
     {
-        GtkListStore* model = gtk_list_store_new( 4, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN );
+        InkSelectOneActionColumns columns;
 
-        GtkTreeIter iter;
+        Glib::RefPtr<Gtk::ListStore> store = Gtk::ListStore::create(columns);
 
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter,
-                            0, _("Align left"),
-                            1, _("Align left"),
-                            2, INKSCAPE_ICON("format-justify-left"),
-                            3, true,
-                            -1 );
+        Gtk::TreeModel::Row row;
 
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter,
-                            0, _("Align center"),
-                            1, _("Align center"),
-                            2, INKSCAPE_ICON("format-justify-center"),
-                            3, true,
-                            -1 );
+        row = *(store->append());
+        row[columns.col_label    ] = _("Align left");
+        row[columns.col_tooltip  ] = _("Align left");
+        row[columns.col_icon     ] = INKSCAPE_ICON("format-justify-left");
+        row[columns.col_sensitive] = true;
 
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter,
-                            0, _("Align right"),
-                            1, _("Align right"),
-                            2, INKSCAPE_ICON("format-justify-right"),
-                            3, true,
-                            -1 );
+        row = *(store->append());
+        row[columns.col_label    ] = _("Align center");
+        row[columns.col_tooltip  ] = _("Align center");
+        row[columns.col_icon     ] = INKSCAPE_ICON("format-justify-center");
+        row[columns.col_sensitive] = true;
 
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter,
-                            0, _("Justify"),
-                            1, _("Justify (only flowed text)"),
-                            2, INKSCAPE_ICON("format-justify-fill"),
-                            3, false,
-                            -1 );
+        row = *(store->append());
+        row[columns.col_label    ] = _("Align right");
+        row[columns.col_tooltip  ] = _("Align right");
+        row[columns.col_icon     ] = INKSCAPE_ICON("format-justify-right");
+        row[columns.col_sensitive] = true;
 
-        EgeSelectOneAction* act = ege_select_one_action_new( "TextAlignAction",       // Name
-                                                             _("Alignment"),          // Label
-                                                             _("Text alignment"),     // Tooltip
-                                                             NULL,                    // Icon name
-                                                             GTK_TREE_MODEL(model) ); // Model
-        g_object_set( act, "short_label", "NotUsed", NULL );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
+        row = *(store->append());
+        row[columns.col_label    ] = _("Justify");
+        row[columns.col_tooltip  ] = _("Justify (only flowed text)");
+        row[columns.col_icon     ] = INKSCAPE_ICON("format-justify-fill");
+        row[columns.col_sensitive] = false;
+
+        InkSelectOneAction* act =
+            InkSelectOneAction::create( "TextAlignAction",   // Name
+                                        _("Alignment"),      // Label
+                                        _("Text alignment"), // Tooltip
+                                        "Not Used",          // Icon
+                                        store );             // Tree store
+        act->use_radio( false );
+        act->use_label( false );
+        gint mode = prefs->getInt("/tools/text/align_mode", 0);
+        act->set_active( mode );
+
+        gtk_action_group_add_action( mainActions, GTK_ACTION( act->gobj() ));
         g_object_set_data( holder, "TextAlignAction", act );
 
-        ege_select_one_action_set_appearance( act, "full" );
-        ege_select_one_action_set_radio_action_type( act, INK_RADIO_ACTION_TYPE );
-        g_object_set( G_OBJECT(act), "icon-property", "iconId", NULL );
-        ege_select_one_action_set_icon_column( act, 2 );
-        ege_select_one_action_set_icon_size( act, secondarySize );
-        ege_select_one_action_set_tooltip_column( act, 1  );
-        ege_select_one_action_set_sensitive_column( act, 3 );
-        gint mode = prefs->getInt("/tools/text/align_mode", 0);
-        ege_select_one_action_set_active( act, mode );
-        g_signal_connect_after( G_OBJECT(act), "changed", G_CALLBACK(sp_text_align_mode_changed), holder );
+        act->signal_changed().connect(sigc::bind<0>(sigc::ptr_fun(&sp_text_align_mode_changed), holder));
     }
 
     /* Writing mode (Horizontal, Vertical-LR, Vertical-RL) */
     {
-        GtkListStore* model = gtk_list_store_new( 3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING );
+        InkSelectOneActionColumns columns;
 
-        GtkTreeIter iter;
+        Glib::RefPtr<Gtk::ListStore> store = Gtk::ListStore::create(columns);
 
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter,
-                            0, _("Horizontal"),
-                            1, _("Horizontal text"),
-                            2, INKSCAPE_ICON("format-text-direction-horizontal"),
-                            -1 );
+        Gtk::TreeModel::Row row;
 
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter,
-                            0, _("Vertical — RL"),
-                            1, _("Vertical text — lines: right to left"),
-                            2, INKSCAPE_ICON("format-text-direction-vertical"),
-                            -1 );
+        row = *(store->append());
+        row[columns.col_label    ] = _("Horizontal");
+        row[columns.col_tooltip  ] = _("Horizontal text");
+        row[columns.col_icon     ] = INKSCAPE_ICON("format-text-direction-horizontal");
+        row[columns.col_sensitive] = true;
 
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter,
-                            0, _("Vertical — LR"),
-                            1, _("Vertical text — lines: left to right"), // Mongolian!
-                            2, INKSCAPE_ICON("format-text-direction-vertical-lr"),
-                            -1 );
+        row = *(store->append());
+        row[columns.col_label    ] = _("Vertical — RL");
+        row[columns.col_tooltip  ] = _("Vertical text — lines: right to left");
+        row[columns.col_icon     ] = INKSCAPE_ICON("format-text-direction-vertical");
+        row[columns.col_sensitive] = true;
 
-        EgeSelectOneAction* act = ege_select_one_action_new( "TextWritingModeAction", // Name
-                                                             _("Writing mode"),       // Label
-                                                             _("Block progression"),  // Tooltip
-                                                             NULL,                    // Icon name
-                                                             GTK_TREE_MODEL(model) ); // Model
+        row = *(store->append());
+        row[columns.col_label    ] = _("Vertical — LR");
+        row[columns.col_tooltip  ] = _("Vertical text — lines: left to right");
+        row[columns.col_icon     ] = INKSCAPE_ICON("format-text-direction-vertical-lr");
+        row[columns.col_sensitive] = true;
 
-        g_object_set( act, "short_label", "NotUsed", NULL );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
+        InkSelectOneAction* act =
+            InkSelectOneAction::create( "TextWritingModeAction", // Name
+                                        _("Writing mode"),       // Label
+                                        _("Block progression"),  // Tooltip
+                                        "Not Used",              // Icon
+                                        store );                 // Tree store
+        act->use_radio( false );
+        act->use_label( false );
+        gint mode = prefs->getInt("/tools/text/writing_mode", 0);
+        act->set_active( mode );
+
+        gtk_action_group_add_action( mainActions, GTK_ACTION( act->gobj() ));
         g_object_set_data( holder, "TextWritingModeAction", act );
 
-        ege_select_one_action_set_appearance( act, "full" );
-        ege_select_one_action_set_radio_action_type( act, INK_RADIO_ACTION_TYPE );
-        g_object_set( G_OBJECT(act), "icon-property", "iconId", NULL );
-        ege_select_one_action_set_icon_column( act, 2 );
-        ege_select_one_action_set_icon_size( act, secondarySize );
-        ege_select_one_action_set_tooltip_column( act, 1  );
-
-        gint mode = prefs->getInt("/tools/text/writing_mode", 0);
-        ege_select_one_action_set_active( act, mode );
-        g_signal_connect_after( G_OBJECT(act), "changed", G_CALLBACK(sp_writing_mode_changed), holder );
+        act->signal_changed().connect(sigc::bind<0>(sigc::ptr_fun(&sp_writing_mode_changed), holder));
     }
 
     /* Text (glyph) orientation (Auto (mixed), Upright, Sideways) */
     {
-        GtkListStore* model = gtk_list_store_new( 4, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN );
+        InkSelectOneActionColumns columns;
 
-        GtkTreeIter iter;
+        Glib::RefPtr<Gtk::ListStore> store = Gtk::ListStore::create(columns);
 
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter,
-                            0, _("Auto"),
-                            1, _("Auto glyph orientation"),
-                            2, INKSCAPE_ICON("text-orientation-auto"),
-                            3, true,
-                            -1 );
+        Gtk::TreeModel::Row row;
 
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter,
-                            0, _("Upright"),
-                            1, _("Upright glyph orientation"),
-                            2, INKSCAPE_ICON("text-orientation-upright"),
-                            3, true,
-                            -1 );
+        row = *(store->append());
+        row[columns.col_label    ] = _("Auto");
+        row[columns.col_tooltip  ] = _("Auto glyph orientation");
+        row[columns.col_icon     ] = INKSCAPE_ICON("text-orientation-auto");
+        row[columns.col_sensitive] = true;
 
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter,
-                            0, _("Sideways"),
-                            1, _("Sideways glyph orientation"),
-                            2, INKSCAPE_ICON("text-orientation-sideways"),
-                            3, true,
-                            -1 );
+        row = *(store->append());
+        row[columns.col_label    ] = _("Upright");
+        row[columns.col_tooltip  ] = _("Upright glyph orientation");
+        row[columns.col_icon     ] = INKSCAPE_ICON("text-orientation-upright");
+        row[columns.col_sensitive] = true;
 
-        EgeSelectOneAction* act = ege_select_one_action_new( "TextOrientationAction", // Name
-                                                             _("Text orientation"),        // Label
-                                                             _("Text (glyph) orientation in vertical text."),   // Tooltip
-                                                             NULL,                    // Icon name
-                                                             GTK_TREE_MODEL(model) ); // Model
+        row = *(store->append());
+        row[columns.col_label    ] = _("Sideways");
+        row[columns.col_tooltip  ] = _("Sideways glyph orientation");
+        row[columns.col_icon     ] = INKSCAPE_ICON("text-orientation-sideways");
+        row[columns.col_sensitive] = true;
 
-        g_object_set( act, "short_label", "NotUsed", NULL );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
+        InkSelectOneAction* act =
+            InkSelectOneAction::create( "TextOrientationAction",  // Name
+                                        _("Text orientation"),    // Label
+                                        _("Text (glyph) orientation in vertical text."),  // Tooltip
+                                        "Not Used",               // Icon
+                                        store );                  // List store
+        act->use_radio( false );
+        act->use_label( false );
+        gint mode = prefs->getInt("/tools/text/text_orientation", 0);
+        act->set_active( mode );
+
+        gtk_action_group_add_action( mainActions, GTK_ACTION( act->gobj() ));
         g_object_set_data( holder, "TextOrientationAction", act );
 
-        ege_select_one_action_set_appearance( act, "full" );
-        ege_select_one_action_set_radio_action_type( act, INK_RADIO_ACTION_TYPE );
-        g_object_set( G_OBJECT(act), "icon-property", "iconId", NULL );
-        ege_select_one_action_set_icon_column( act, 2 );
-        ege_select_one_action_set_icon_size( act, secondarySize );
-        ege_select_one_action_set_tooltip_column( act, 1  );
-        ege_select_one_action_set_sensitive_column( act, 3 );
-
-        gint mode = prefs->getInt("/tools/text/text_orientation", 0);
-        ege_select_one_action_set_active( act, mode );
-        g_signal_connect_after( G_OBJECT(act), "changed", G_CALLBACK(sp_text_orientation_changed), holder );
+        act->signal_changed().connect(sigc::bind<0>(sigc::ptr_fun(&sp_text_orientation_changed), holder));
     }
 
 
     // Text direction (predominant direction of horizontal text).
     {
-        GtkListStore* model = gtk_list_store_new( 4, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN );
+        InkSelectOneActionColumns columns;
 
-        GtkTreeIter iter;
+        Glib::RefPtr<Gtk::ListStore> store = Gtk::ListStore::create(columns);
 
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter,
-                            0, _("LTR"),
-                            1, _("Left to right text"),
-                            2, INKSCAPE_ICON("format-text-direction-horizontal"),
-                            3, true,
-                            -1 );
+        Gtk::TreeModel::Row row;
 
-        gtk_list_store_append( model, &iter );
-        gtk_list_store_set( model, &iter,
-                            0, _("RTL"),
-                            1, _("Right to left text"),
-                            2, INKSCAPE_ICON("format-text-direction-r2l"),
-                            3, true,
-                            -1 );
+        row = *(store->append());
+        row[columns.col_label    ] = _("LTR");
+        row[columns.col_tooltip  ] = _("Left to right text");
+        row[columns.col_icon     ] = INKSCAPE_ICON("format-text-direction-horizontal");
+        row[columns.col_sensitive] = true;
 
-        EgeSelectOneAction* act = ege_select_one_action_new( "TextDirectionAction", // Name
-                                                             _("Text direction"),        // Label
-                                                             _("Text direction for normally horizontal text."),   // Tooltip
-                                                             NULL,                    // Icon name
-                                                             GTK_TREE_MODEL(model) ); // Model
+        row = *(store->append());
+        row[columns.col_label    ] = _("RTL");
+        row[columns.col_tooltip  ] = _("Right to left text");
+        row[columns.col_icon     ] = INKSCAPE_ICON("format-text-direction-r2l");
+        row[columns.col_sensitive] = true;
 
-        g_object_set( act, "short_label", "NotUsed", NULL );
-        gtk_action_group_add_action( mainActions, GTK_ACTION(act) );
+        InkSelectOneAction* act =
+            InkSelectOneAction::create( "TextDirectionAction",  // Name
+                                        _("Text direction"),    // Label
+                                        _("Text direction for normally horizontal text."),  // Tooltip
+                                        "Not Used",               // Icon
+                                        store );                  // List store
+        act->use_radio( false );
+        act->use_label( false );
+        gint mode = prefs->getInt("/tools/text/text_direction", 0);
+        act->set_active( mode );
+
+        gtk_action_group_add_action( mainActions, GTK_ACTION( act->gobj() ));
         g_object_set_data( holder, "TextDirectionAction", act );
 
-        ege_select_one_action_set_appearance( act, "full" );
-        ege_select_one_action_set_radio_action_type( act, INK_RADIO_ACTION_TYPE );
-        g_object_set( G_OBJECT(act), "icon-property", "iconId", NULL );
-        ege_select_one_action_set_icon_column( act, 2 );
-        ege_select_one_action_set_icon_size( act, secondarySize );
-        ege_select_one_action_set_tooltip_column( act, 1  );
-        ege_select_one_action_set_sensitive_column( act, 3 );
-
-        gint mode = prefs->getInt("/tools/text/text_direction", 0);
-        ege_select_one_action_set_active( act, mode );
-        g_signal_connect_after( G_OBJECT(act), "changed", G_CALLBACK(sp_text_direction_changed), holder );
+        act->signal_changed().connect(sigc::bind<0>(sigc::ptr_fun(&sp_text_direction_changed), holder));
     }
 
     /* Line height unit tracker */

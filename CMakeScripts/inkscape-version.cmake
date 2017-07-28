@@ -1,8 +1,9 @@
 # This is called by cmake as an extermal process from
 # ./src/CMakeLists.txt and creates inkscape-version.cpp
 #
-# It's also included directly in ./CMakeLists.txt to
-# determine INKSCAPE_REVISION for the 'dist' target
+# It's also included directly in ./CMakeScripts/Dist.cmake to
+# determine INKSCAPE_REVISION, INKSCAPE_REVISION_HASH and INKSCAPE_REVISION_DATE
+# for the 'dist' targets
 #
 # These variables are defined by the caller, matching the CMake equivilents.
 # - ${INKSCAPE_SOURCE_DIR}
@@ -13,13 +14,13 @@ set(INKSCAPE_REVISION "unknown")
 if(EXISTS ${INKSCAPE_SOURCE_DIR}/.git)
     execute_process(COMMAND git rev-parse --short HEAD
         WORKING_DIRECTORY ${INKSCAPE_SOURCE_DIR}
-        OUTPUT_VARIABLE INKSCAPE_REV_HASH
+        OUTPUT_VARIABLE INKSCAPE_REVISION_HASH
         OUTPUT_STRIP_TRAILING_WHITESPACE)
     execute_process(COMMAND git log -n 1 --pretty=%cd --date=short
         WORKING_DIRECTORY ${INKSCAPE_SOURCE_DIR}
-        OUTPUT_VARIABLE INKSCAPE_REV_DATE
+        OUTPUT_VARIABLE INKSCAPE_REVISION_DATE
         OUTPUT_STRIP_TRAILING_WHITESPACE)
-    set(INKSCAPE_REVISION "${INKSCAPE_REV_HASH}, ${INKSCAPE_REV_DATE}")
+    set(INKSCAPE_REVISION "${INKSCAPE_REVISION_HASH}, ${INKSCAPE_REVISION_DATE}")
 
     execute_process(COMMAND
         git status -s ${INKSCAPE_SOURCE_DIR}/src

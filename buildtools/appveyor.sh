@@ -31,6 +31,11 @@ export CCACHE_DIR=$(cygpath -a ccache/master)
 ccache --max-size=200M
 ccache --set-config=sloppiness=include_file_ctime,include_file_mtime
 
+# patched cairo to avoid crash when printing
+#   - https://bugs.launchpad.net/inkscape/+bug/1665768
+#   - https://bugs.freedesktop.org/show_bug.cgi?id=101833
+wget -nv https://gitlab.com/Ede123/bintray/raw/master/$MINGW_PACKAGE_PREFIX-cairo-1.15.6-1-any.pkg.tar.xz \
+    && pacman -U $MINGW_PACKAGE_PREFIX-cairo-1.15.6-1-any.pkg.tar.xz --noconfirm
 
 
 ### build / test
@@ -75,7 +80,9 @@ message "##### BUILD SUCCESSFULL #####\n\n"
 
 
 ### package
-BRANCH=$(git branch | tail -n 1 | tr -d ' ')
-DATE=$(git log -n 1 --pretty=%cd --date=short)
-HASH=$(git rev-parse --short HEAD)
-7z a "inkscape-${BRANCH}-(${DATE}_${HASH})-${MSYSTEM_CARCH}.7z" inkscape
+if [ "$APPVEYOR_REPO_TAG" = "true" ]
+then
+    ninja dist-win-all
+else
+    ninja dist-win-7z-fast
+fi

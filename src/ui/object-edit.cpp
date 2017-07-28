@@ -1293,6 +1293,12 @@ public:
     virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state);
 };
 
+class SpiralKnotHolderEntityCenter : public KnotHolderEntity {
+public:
+    virtual Geom::Point knot_get() const;
+    virtual void knot_set(Geom::Point const &p, Geom::Point const &origin, unsigned int state);
+};
+
 
 /*
  * set attributes via inner (t=t0) knot point:
@@ -1425,6 +1431,20 @@ SpiralKnotHolderEntityOuter::knot_set(Geom::Point const &p, Geom::Point const &/
     spiral->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
+void
+SpiralKnotHolderEntityCenter::knot_set(Geom::Point const &p, Geom::Point const &/*origin*/, unsigned int state)
+{
+    SPSpiral *spiral = dynamic_cast<SPSpiral *>(item);
+    g_assert(spiral != NULL);
+
+    Geom::Point const s = snap_knot_position(p, state);
+
+    spiral->cx = s[Geom::X];
+    spiral->cy = s[Geom::Y];
+
+    spiral->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
+}
+
 Geom::Point
 SpiralKnotHolderEntityInner::knot_get() const
 {
@@ -1441,6 +1461,15 @@ SpiralKnotHolderEntityOuter::knot_get() const
     g_assert(spiral != NULL);
 
     return spiral->getXY(1.0);
+}
+
+Geom::Point
+SpiralKnotHolderEntityCenter::knot_get() const
+{
+    SPSpiral const *spiral = dynamic_cast<SPSpiral const *>(item);
+    g_assert(spiral != NULL);
+
+    return Geom::Point(spiral->cx, spiral->cy);
 }
 
 void
@@ -1461,8 +1490,25 @@ SpiralKnotHolderEntityInner::knot_click(unsigned int state)
 SpiralKnotHolder::SpiralKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderReleasedFunc relhandler) :
     KnotHolder(desktop, item, relhandler)
 {
+    SpiralKnotHolderEntityCenter *entity_center = new SpiralKnotHolderEntityCenter();
     SpiralKnotHolderEntityInner *entity_inner = new SpiralKnotHolderEntityInner();
     SpiralKnotHolderEntityOuter *entity_outer = new SpiralKnotHolderEntityOuter();
+
+    // NOTE: entity_central and entity_inner can overlap.
+    //
+    // In that case it would be a problem if the center control point was ON
+    // TOP because it would steal the mouse focus and the user would loose the
+    // ability to access the inner control point using only the mouse.
+    //
+    // However if the inner control point is ON TOP, taking focus, the
+    // situation is a lot better: the user can still move the inner control
+    // point with the mouse to regain access to the center control point.
+    //
+    // So, create entity_inner AFTER entity_center; this ensures that
+    // entity_inner gets rendered ON TOP.
+    entity_center->create(desktop, item, this, Inkscape::CTRL_TYPE_POINT,
+                          _("Drag to move the spiral"),
+                          SP_KNOT_SHAPE_CROSS);
 
     entity_inner->create(desktop, item, this, Inkscape::CTRL_TYPE_SHAPER,
                          _("Roll/unroll the spiral from <b>inside</b>; with <b>Ctrl</b> to snap angle; "
@@ -1472,6 +1518,7 @@ SpiralKnotHolder::SpiralKnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolde
                          _("Roll/unroll the spiral from <b>outside</b>; with <b>Ctrl</b> to snap angle; "
                            "with <b>Shift</b> to scale/rotate; with <b>Alt</b> to lock radius"));
 
+    entity.push_back(entity_center);
     entity.push_back(entity_inner);
     entity.push_back(entity_outer);
 

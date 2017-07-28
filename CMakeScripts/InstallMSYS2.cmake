@@ -143,12 +143,16 @@ if(WIN32)
     DESTINATION share/icons)
 
   # translations for libraries (we usually shouldn't need many)
-  install(DIRECTORY ${MINGW_PATH}/share/locale
-    DESTINATION share
-    FILES_MATCHING
-    PATTERN "*glib20.mo"
-    PATTERN "*gtk30.mo"
-    PATTERN "*gtkspell3.mo")
+  file(GLOB inkscape_translations RELATIVE ${CMAKE_SOURCE_DIR}/po/ ${CMAKE_SOURCE_DIR}/po/*.po)
+  foreach(translation ${inkscape_translations})
+    get_filename_component(translation ${translation} NAME_WE)
+    install(DIRECTORY ${MINGW_PATH}/share/locale/${translation}
+      DESTINATION share/locale
+      FILES_MATCHING
+      PATTERN "*glib20.mo"
+      PATTERN "*gtk30.mo"
+      PATTERN "*gtkspell3.mo")
+  endforeach()
 
   install(DIRECTORY ${MINGW_PATH}/share/poppler
     DESTINATION share)
