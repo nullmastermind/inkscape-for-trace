@@ -1,38 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://web.resource.org/cc/"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   id="svg1"
-   width="12.024595"
-   height="12.000681"
+   width="12"
+   height="12"
   >
-  <sodipodi:namedview
-     id="base"
-     showgrid="true"
-     gridspacingy="1pt"
-     gridspacingx="1pt"
-     gridoriginy="0pt"
-     gridoriginx="0pt"
-  />
-  <defs id="defs3">
 
-    <linearGradient id="linearGradient5740">
-      <stop id="stop5742" offset="0" style="stop-color:#ffffff;stop-opacity:1"/>
-      <stop id="stop5744" offset="1" style="stop-color:#98b6d3;stop-opacity:1"/>
+  <defs>
+    <linearGradient id="gradientVector">
+      <stop offset="0" style="stop-color:#98b6d3"/>
+      <stop offset="1" style="stop-color:#ffffff"/>
     </linearGradient>
-    <linearGradient gradientTransform="translate(714.9212,-135)" gradientUnits="userSpaceOnUse" id="linearGradient5619" inkscape:collect="always" x1="-29" x2="-40.94155" xlink:href="#linearGradient5740" y1="192.3364" y2="174.9988"/>
+    <linearGradient  id="fillGradient" gradientUnits="userSpaceOnUse" x1="0" x2="12" xlink:href="#gradientVector" y1="0" y2="12"/>
   </defs>
-<g id="object-fill" inkscape:label="#properties_fill" transform="matrix(1,0,0,0.923129,-669.92097,-36.92433)">
-  <g id="g5646" transform="matrix(0.751537,0,0,0.749817,166.4504,10.00731)">
-    <path d="M 669.9999,39.99979 685.8966,39.99881 685.9212,57.33638 669.9212,57.3354 669.9999,39.99979 Z" id="path11232" inkscape:connector-curvature="0" sodipodi:nodetypes="ccccc" style="color:#000000;fill:url(#linearGradient5619);fill-rule:evenodd;stroke-width:1px"/>
-    <rect height="16" id="rect11240" style="color:#000000;fill:none" width="16" x="669.9212" y="40"/>
+
+  <g id="object-fill" inkscape:label="#properties_fill">
+    <rect width="12" height="12" style="fill:url(#fillGradient)"/>
   </g>
-</g>
 
 </svg>
