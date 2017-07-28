@@ -22,8 +22,8 @@ inkscape:linux:
     - mkdir -p build/conf
     - ln -s . share/inkscape
     - cd build
-    - cmake .. -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX:PATH=$PWD/../
-    - make -j3
+    - cmake .. -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX:PATH=$PWD/install_dir/
+    - make -j3 install
     - make -j3 tests
     - cd ..
   artifacts:
@@ -84,6 +84,7 @@ test:linux:
   dependencies:
     - inkscape:linux
   script:
+    - apt-get update -yqq && apt-get install -y imagemagick
     - cd build
     - make test
     - ctest -V

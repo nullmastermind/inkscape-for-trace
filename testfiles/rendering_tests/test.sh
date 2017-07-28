@@ -49,7 +49,7 @@ do
         rm ${test}.png ${test}-compare.png
     else
         echo ${test} "FAILED"
-        exist_status=1
+        exit_status=1
     fi
     ${INKSCAPE_EXE} -z ${test}.svg -d 384 -e ${test}-large.png #2>/dev/null >/dev/null
     compare -metric AE ${test}-large.png expected_rendering/${test}-large.png ${test}-compare-large.png 2>.tmp 
@@ -59,6 +59,7 @@ do
         rm ${test}-large.png ${test}-compare-large.png
     else
         echo ${test}-large "FAILED"
+        exit_status=1
     fi
 done
 rm .tmp
