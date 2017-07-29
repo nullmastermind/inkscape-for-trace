@@ -374,13 +374,13 @@ void LPEFilletChamfer::doBeforeEffect(SPLPEItem const *lpeItem)
         }
         for (size_t i = 0; i < satellites.size(); ++i) {
             for (size_t j = 0; j < satellites[i].size(); ++j) {
+                if (j >= pathv[i].size()) {
+                    continue;
+                }
                 Geom::Curve const &curve_in = pathv[i][j];
                 if (satellites[i][j].is_time != flexible) {
                     satellites[i][j].is_time = flexible;
                     double amount = satellites[i][j].amount;
-                    if (pathv[i].size() == j) {
-                        continue;
-                    }
                     if (satellites[i][j].is_time) {
                         double time = timeAtArcLength(amount, curve_in);
                         satellites[i][j].amount = time;
