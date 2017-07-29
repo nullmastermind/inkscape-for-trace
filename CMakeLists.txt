@@ -225,6 +225,7 @@ if(GMOCK_PRESENT)
     set(CMAKE_CTEST_ENV INKSCAPE_DATADIR=${CMAKE_CURRENT_SOURCE_DIR}/share)
     add_subdirectory(testfiles EXCLUDE_FROM_ALL)
     add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} DEPENDS tests)
+    add_dependencies(check inkscape)
 endif()
 
 # Canonicalize the flags to speed up recompilation using ccache/etc.
