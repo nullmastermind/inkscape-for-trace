@@ -163,7 +163,7 @@ if(WIN32)
   # fontconfig
   install(DIRECTORY ${MINGW_PATH}/etc/fonts
     DESTINATION etc
-    FILES_MATCHING PATTERN "fonts.conf" EXCLUDE)
+    PATTERN "fonts.conf" EXCLUDE)
   # adjust fonts.conf to store font cache in AppData
   set(cachedir_default "\\t^<cachedir^>/var/cache/fontconfig^</cachedir^>") # the '^' are needed to escape angle brackets on Windows command shell
   set(cachedir_appdata "\\t^<cachedir^>LOCAL_APPDATA_FONTCONFIG_CACHE^</cachedir^>")

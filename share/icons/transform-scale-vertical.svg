@@ -1,53 +1,45 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://web.resource.org/cc/"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   id="svg1"
    width="24"
    height="24"
   >
-  <sodipodi:namedview
-     id="base"
-     showgrid="true"
-     gridspacingy="1pt"
-     gridspacingx="1pt"
-     gridoriginy="0pt"
-     gridoriginx="0pt"
-  />
-  <defs id="defs3">
 
-    <linearGradient gradientTransform="matrix(1.122046,0,0,1.141686,1256.157,85.12902)" gradientUnits="userSpaceOnUse" id="linearGradient5739" inkscape:collect="always" x1="10.04167" x2="14.01084" xlink:href="#linearGradient5704" y1="203.3658" y2="209.2774"/>
-    <linearGradient gradientTransform="matrix(2.873378,0,0,2.426599,875.3153,-255.174)" gradientUnits="userSpaceOnUse" id="linearGradient5737" inkscape:collect="always" x1="10.04167" x2="14.01084" xlink:href="#linearGradient5704" y1="203.3658" y2="209.2774"/>
-    <linearGradient gradientTransform="matrix(0.877647,0,0,1.384362,1256.174,23.35694)" gradientUnits="userSpaceOnUse" id="linearGradient5743" inkscape:collect="always" x1="15.74156" x2="19.38252" xlink:href="#linearGradient5740" y1="213.872" y2="219.4184"/>
-    <linearGradient gradientTransform="matrix(2.632392,0,0,2.983189,868.2229,-395.3445)" gradientUnits="userSpaceOnUse" id="linearGradient5735" inkscape:collect="always" x1="15.74156" x2="19.38252" xlink:href="#linearGradient5740" y1="213.872" y2="219.4184"/>
-    <linearGradient id="linearGradient5704">
-      <stop id="stop5706" offset="0" style="stop-color:#5a5a5a;stop-opacity:1"/>
-      <stop id="stop5708" offset="1" style="stop-color:#000000;stop-opacity:1"/>
+  <defs>
+
+    <linearGradient id="gradientVector">
+      <stop offset="0" style="stop-color:#ffffff"/>
+      <stop offset="1" style="stop-color:#98b6d3"/>
     </linearGradient>
-    <linearGradient gradientTransform="matrix(3.497619,0,0,4.978934,852.2632,-828.4634)" gradientUnits="userSpaceOnUse" id="linearGradient5733" inkscape:collect="always" x1="18.50864" x2="17.15024" xlink:href="#linearGradient5740" y1="218.8883" y2="214.5512"/>
-    <linearGradient gradientTransform="matrix(1.166116,0,0,2.310495,1250.853,-177.6338)" gradientUnits="userSpaceOnUse" id="linearGradient5741" inkscape:collect="always" x1="18.50864" x2="17.15024" xlink:href="#linearGradient5740" y1="218.8883" y2="214.5512"/>
-    <linearGradient id="linearGradient5740">
-      <stop id="stop5742" offset="0" style="stop-color:#ffffff;stop-opacity:1"/>
-      <stop id="stop5744" offset="1" style="stop-color:#98b6d3;stop-opacity:1"/>
-    </linearGradient>
+
+    <linearGradient gradientUnits="userSpaceOnUse" id="gradientFill"    x1="11.5" x2="-11.5" xlink:href="#gradientVector" y1="8.5" y2="-8.5"/>
+    <linearGradient gradientUnits="userSpaceOnUse" id="gradientStroke"  x1="-10.5" x2="10.5" xlink:href="#gradientVector" y1="-7.5" y2="7.5"/>
+
+    <linearGradient gradientUnits="userSpaceOnUse" id="gradientFill2"   x1="4.5" x2="-4.5" xlink:href="#gradientVector" y1="8.5" y2="-8.5"/>
+    <linearGradient gradientUnits="userSpaceOnUse" id="gradientStroke2" x1="-3.5" x2="3.5" xlink:href="#gradientVector" y1="-7.5" y2="7.5"/>
+
+    <g id="TheRect">
+      <rect x="-11.5" y="-8.5" width="23" height="17" style="fill:none;stroke:#222222;stroke-linejoin:round"/>
+      <rect x="-10.5" y="-7.5" width="21" height="15" style="fill:url(#gradientFill);stroke:url(#gradientStroke)"/>
+    </g>
+
+    <g id="TheRect2">
+      <rect x="-4.5" y="-8.5" width="9" height="17" style="fill:none;stroke:#222222;stroke-linejoin:round"/>
+      <rect x="-3.5" y="-7.5" width="7" height="15" style="fill:url(#gradientFill2);stroke:url(#gradientStroke2)"/>
+    </g>
   </defs>
-<g id="transform-scale-vertical" inkscape:label="#transform_scale_hor" transform="matrix(1,0,0,1,-905.0005,-272.9837)">
-  <g id="g6303" transform="translate(0,-0.0070343)">
-    <rect height="14.95563" id="rect6287" style="color:#000000;fill:url(#linearGradient5733);fill-rule:evenodd;stroke:url(#linearGradient5735);stroke-width:0.9999992;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:0" width="20.98823" x="906.5059" y="244.5435"/>
-    <rect height="16.98404" id="rect6285" style="color:#000000;fill:none;stroke:url(#linearGradient5737);stroke-linejoin:round;stroke-miterlimit:0" width="22.98326" x="905.5084" y="243.515"/>
+
+  <!-- Copy of transform-scale-horizontal but flipped and rotated. -->
+  <g id="transform-scale-vertical" inkscape:label="#transform_scale_ver" transform="matrix(0,1,1,0,0,0)">
+
+    <use xlink:href="#TheRect"  transform="translate(12,12)"/>
+    <use xlink:href="#TheRect2" transform="translate(12,12)" style="opacity:0.5"/>
+
+    <!-- Arrows -->
+    <path d="m 1,15.5 3,-2.5 v 2 h 4 v 1 h -4 v 2 z"/>
+    <path d="m 23,15.5 -3,2.5 v -2 h -4 v -1 h 4 v -2 z"/>
   </g>
-  <g id="g12100" style="opacity:0.5" transform="matrix(1,0,0,2.125424,-355.4347,-436.1096)">
-    <rect height="7.990791" id="rect12102" style="color:#000000;fill:none;stroke:url(#linearGradient5739);stroke-width:0.685926;stroke-linejoin:round;stroke-miterlimit:0" width="8.974897" x="1267.947" y="319.7563"/>
-    <rect height="6.940222" id="rect12104" style="color:#000000;fill:url(#linearGradient5741);fill-rule:evenodd;stroke:url(#linearGradient5743);stroke-width:0.6859255;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:0" width="6.997538" x="1268.938" y="320.2997"/>
-  </g>
-  <path d="M 905.9609,255.5794 908.9609,253.0794 908.9609,255.0794 925.0391,255.0794 925.0391,253.0794 928.0391,255.5794 925.0391,258.0794 925.0391,256.0794 908.9609,256.0794 908.9609,258.0794 905.9609,255.5794 Z" id="path5628" inkscape:connector-curvature="0" sodipodi:nodetypes="ccccccccccc" style="fill:#000000;fill-rule:evenodd"/>
-  <rect height="24" id="rect5634" style="color:#000000;opacity:0.5513197;fill:none;stroke-width:1px" width="24" x="905" y="240"/>
-</g>
 
 </svg>
