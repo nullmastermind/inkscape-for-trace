@@ -130,7 +130,7 @@ private:
         Columns _columns;
         Gtk::CellRendererToggle _cell_toggle;
         Gtk::Button _add;
-        Gtk::Menu   _menu;
+        Gtk::Menu   *_menu;
         sigc::signal<void> _signal_filter_changed;
         std::unique_ptr<Inkscape::XML::SignalObserver> _observer;
     };
@@ -234,7 +234,7 @@ private:
         Glib::RefPtr<Gtk::ListStore> _model;
         PrimitiveColumns _columns;
         CellRendererConnection _connection_cell;
-        Gtk::Menu _primitive_menu;
+        Gtk::Menu *_primitive_menu;
         Glib::RefPtr<Pango::Layout> _vertical_layout;
         int _in_drag;
         SPFilterPrimitive* _drag_prim;

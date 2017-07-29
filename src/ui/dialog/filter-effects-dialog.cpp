@@ -1294,22 +1294,22 @@ FilterEffectsDialog::LightSourceControl* FilterEffectsDialog::Settings::add_ligh
     return ls;
 }
 
-static Gtk::Menu create_popup_menu(Gtk::Widget& parent,
-                                   sigc::slot<void> dup,
-                                   sigc::slot<void> rem)
+static Gtk::Menu * create_popup_menu(Gtk::Widget& parent,
+                                     sigc::slot<void> dup,
+                                     sigc::slot<void> rem)
 {
-    Gtk::Menu menu;
+    auto menu = Gtk::manage(new Gtk::Menu);
 
     Gtk::MenuItem* mi = Gtk::manage(new Gtk::MenuItem(_("_Duplicate"),true));
     mi->signal_activate().connect(dup);
     mi->show();
-    menu.append(*mi);
+    menu->append(*mi);
     
     mi = Gtk::manage(new Gtk::MenuItem(_("_Remove"), true));
-    menu.append(*mi);
+    menu->append(*mi);
     mi->signal_activate().connect(rem);
     mi->show();
-    menu.accelerate(parent);
+    menu->accelerate(parent);
 
     return menu;
 }
@@ -1367,8 +1367,8 @@ FilterEffectsDialog::FilterModifier::FilterModifier(FilterEffectsDialog& d)
     Gtk::MenuItem *item = Gtk::manage(new Gtk::MenuItem(_("R_ename"), true));
     item->signal_activate().connect(sigc::mem_fun(*this, &FilterModifier::rename_filter));    
     item->show();
-    _menu.append(*item);
-    _menu.accelerate(*this);
+    _menu->append(*item);
+    _menu->accelerate(*this);
 
     _list.get_selection()->signal_changed().connect(sigc::mem_fun(*this, &FilterModifier::on_filter_selection_changed));
     _observer->signal_changed().connect(signal_filter_changed().make_slot());
@@ -1616,10 +1616,10 @@ void FilterEffectsDialog::FilterModifier::filter_list_button_release(GdkEventBut
 {
     if((event->type == GDK_BUTTON_RELEASE) && (event->button == 3)) {
         const bool sensitive = get_selected_filter() != NULL;
-	std::vector<Gtk::Widget*> items = _menu.get_children();
+	auto items = _menu->get_children();
 	items[0]->set_sensitive(sensitive);
         items[1]->set_sensitive(sensitive);
-        _menu.popup(event->button, event->time);
+        _menu->popup(event->button, event->time);
     }
 }
 
@@ -2475,10 +2475,10 @@ bool FilterEffectsDialog::PrimitiveList::on_button_release_event(GdkEventButton*
 
     if((e->type == GDK_BUTTON_RELEASE) && (e->button == 3)) {
         const bool sensitive = get_selected() != NULL;
-	auto items = _primitive_menu.get_children();
+	auto items = _primitive_menu->get_children();
         items[0]->set_sensitive(sensitive);
         items[1]->set_sensitive(sensitive);
-        _primitive_menu.popup(e->button, e->time);
+        _primitive_menu->popup(e->button, e->time);
 
         return true;
     }
