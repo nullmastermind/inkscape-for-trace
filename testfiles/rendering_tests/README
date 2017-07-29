@@ -4,7 +4,7 @@ HOWTO
   - create the svg file
   - inkscape <yourfile>.svg -d 96  -e expected_rendering/<yourfile>.png
   - inkscape <yourfile>.svg -d 384 -e expected_rendering/<yourfile>-large.png
-  - add the test in the list below
+  - add the test in CMakeLists.txt
   - use stable if possible to generate the reference png files
   - git add <yourfile>.svg expected_rendering/<yourfile>-large.png expected_rendering/<yourfile>.png
   
