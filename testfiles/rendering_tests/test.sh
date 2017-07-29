@@ -11,27 +11,28 @@ INKSCAPE_EXE=$1
 exit_status=0
 test=$2
 EXPECTED=$(dirname $test)"/expected_rendering/"$(basename $test)
+testname=$(basename $test)
 
 
-    ${INKSCAPE_EXE} -z ${test}.svg -d 96  -e ${test}.png #2>/dev/null >/dev/null
-    compare -metric AE ${test}.png ${EXPECTED}.png ${test}-compare.png 2> .tmp
+    ${INKSCAPE_EXE} -z ${test}.svg -d 96  -e ${testname}.png #2>/dev/null >/dev/null
+    compare -metric AE ${testname}.png ${EXPECTED}.png ${testname}-compare.png 2> .tmp
     test1=`cat .tmp`
     echo $test1
     if [ $test1 == 0 ]; then
-        echo ${test} "PASSED"
-        rm ${test}.png ${test}-compare.png
+        echo ${testname} "PASSED"
+        rm ${testname}.png ${testname}-compare.png
     else
-        echo ${test} "FAILED"
+        echo ${testname} "FAILED"
         exit_status=1
     fi
-    ${INKSCAPE_EXE} -z ${test}.svg -d 384 -e ${test}-large.png #2>/dev/null >/dev/null
-    compare -metric AE ${test}-large.png ${EXPECTED}-large.png ${test}-compare-large.png 2>.tmp
+    ${INKSCAPE_EXE} -z ${test}.svg -d 384 -e ${testname}-large.png #2>/dev/null >/dev/null
+    compare -metric AE ${testname}-large.png ${EXPECTED}-large.png ${testname}-compare-large.png 2>.tmp
     test2=`cat .tmp`
     if [ $test2 == 0 ]; then
-        echo ${test}-large "PASSED"
-        rm ${test}-large.png ${test}-compare-large.png
+        echo ${testname}-large "PASSED"
+        rm ${testname}-large.png ${testname}-compare-large.png
     else
-        echo ${test}-large "FAILED"
+        echo ${testname}-large "FAILED"
         exit_status=1
     fi
 
