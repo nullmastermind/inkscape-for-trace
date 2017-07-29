@@ -10,9 +10,11 @@ command -v compare >/dev/null 2>&1 || { echo >&2 "I require ImageMagick's 'compa
 INKSCAPE_EXE=$1
 exit_status=0
 test=$2
+EXPECTED=$(dirname $test)"/expected_rendering/"$(basename $test)
+
 
     ${INKSCAPE_EXE} -z ${test}.svg -d 96  -e ${test}.png #2>/dev/null >/dev/null
-    compare -metric AE ${test}.png expected_rendering/${test}.png ${test}-compare.png 2> .tmp 
+    compare -metric AE ${test}.png ${EXPECTED}.png ${test}-compare.png 2> .tmp
     test1=`cat .tmp`
     echo $test1
     if [ $test1 == 0 ]; then
@@ -23,7 +25,7 @@ test=$2
         exit_status=1
     fi
     ${INKSCAPE_EXE} -z ${test}.svg -d 384 -e ${test}-large.png #2>/dev/null >/dev/null
-    compare -metric AE ${test}-large.png expected_rendering/${test}-large.png ${test}-compare-large.png 2>.tmp 
+    compare -metric AE ${test}-large.png ${EXPECTED}-large.png ${test}-compare-large.png 2>.tmp
     test2=`cat .tmp`
     if [ $test2 == 0 ]; then
         echo ${test}-large "PASSED"
