@@ -1,0 +1,28 @@
+To update inkscape.pot run
+  intltool-update --pot && mv untitled.pot inkscape.pot
+from the /po directory
+
+This is also done by executing the cmake target 'inkscape_pot', e.g. 'make inkscape_pot' (delete inkscape.pot first)
+
+
+
+WARNING:
+If new source files are added this is not sufficient!
+
+In this case please run
+  ./generate_POTFILES.sh
+This will update POTFILES.in with the list of current source files (to exclude a file add it to POTFILES.skip)
+
+Afterwards update the inkscape.pot file as described above
+
+
+
+TODO:
+- automate these steps within CMake
+- consider dropping intltool-update and use xgettext with proper options
+  (it should be able to handle most of our source files nowadays)
+- clean up this directory, evaluate which files are still useful (and document them / add targets to CMake), see
+    check-markup (and dependecies bad.po.test, bad.po.test.exp)
+    check_for_tutorial_problems.sh
+    language_statistics.sh (and dependency LINGUAS)
+    update_po_files.sh
