@@ -11,7 +11,7 @@ else
   prog=`basename "$0"`
 fi
 
-rm -f po/POTFILES.in.new
+rm -f POTFILES.in.new
 
 (
  # enforce consistent sort order and date format
@@ -29,17 +29,23 @@ rm -f po/POTFILES.in.new
  echo "share/symbols/symbols.h"
  echo "share/templates/templates.h"
 
-
+ cd ..
  find src \( -name '*.cpp' -o -name '*.[ch]' \) -type f -print0 | xargs -0 egrep -l '(\<[QNC]?_|gettext) *\(' | sort
  find share/extensions -name '*.py' -type f -print0 | xargs -0 egrep -l '(\<[QNC]?_|gettext) *\(' | sort
  find share/extensions -name '*.inx' -type f -print | sort | sed 's%^%[type: gettext/xml] %'
+ cd po
+
+ # Todo:
+ #   - add any other UI files we might need in future
+ #   - evaluate to use xgettext with proper options directly and drop intltool-update
+ echo "[type: gettext/xml] share/ui/menus.xml"
 
  #do not include files from POTFILES.skip in the generated list
-) | grep -vx -f po/POTFILES.skip > po/POTFILES.in.new
+) | grep -vx -f POTFILES.skip > POTFILES.in.new
 
 
-diff -q po/POTFILES.in po/POTFILES.in.new ||:
-mv po/POTFILES.in.new po/POTFILES.in
+diff -q POTFILES.in POTFILES.in.new ||:
+mv POTFILES.in.new POTFILES.in
 echo "Done."
 echo ""
 echo "Now you need to run 'make distcheck' to find all the"
