@@ -1,39 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://web.resource.org/cc/"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   id="svg1"
-   width="20.063812"
-   height="24.076438"
+   width="24"
+   height="24"
   >
-  <sodipodi:namedview
-     id="base"
-     showgrid="true"
-     gridspacingy="1pt"
-     gridspacingx="1pt"
-     gridoriginy="0pt"
-     gridoriginx="0pt"
-  />
+
   <defs id="defs3">
 
-    <marker id="Arrow1Send" inkscape:stockid="Arrow1Send" orient="auto" refX="0" refY="0">
-      <path d="M 0,0 5,-5 -12.5,0 5,5 0,0 Z" id="path4834" inkscape:connector-curvature="0" style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none" transform="matrix(-0.2,0,0,-0.2,-1.2,0)"/>
+    <marker id="Arrow" orient="auto" refX="0" refY="0">
+      <path d="m 0,0 0,-2 3,2 -3,2 0,0 z"/>
     </marker>
   </defs>
-<g id="distribute-graph-directed" inkscape:label="#directed_graph" transform="translate(-812.0002,-651.92379)">
-  <path d="M 815.4504,655.5878 819.7252,661.5878" id="path3750" inkscape:connector-curvature="0" sodipodi:nodetypes="cc" style="fill:none;stroke:#000000;stroke-width:0.7856485;marker-end:url(#Arrow1Send)"/>
-  <path d="M 828.2748,655.7252 824.2748,661.4504" id="path3752" inkscape:connector-curvature="0" sodipodi:nodetypes="cc" style="fill:none;stroke:#000000;stroke-width:0.7856485;marker-end:url(#Arrow1Send)"/>
-  <circle cx="328" cy="215" id="path3762" r="5" style="color:#000000;fill:#99b7d5;fill-opacity:0.7019608;fill-rule:evenodd;stroke:#0000ff;stroke-width:0.8193182;stroke-linejoin:round;stroke-miterlimit:0" transform="matrix(0.375607,0,0,0.376774,698.833,582.9556)"/>
-  <circle cx="328" cy="215" id="path3764" r="5" style="color:#000000;fill:#99b7d5;fill-opacity:0.7019608;fill-rule:evenodd;stroke:#0000ff;stroke-width:0.8193182;stroke-linejoin:round;stroke-miterlimit:0" transform="matrix(0.375607,0,0,0.376774,690.833,572.9556)"/>
-  <circle cx="328" cy="215" id="path3766" r="5" style="color:#000000;fill:#99b7d5;fill-opacity:0.7019608;fill-rule:evenodd;stroke:#0000ff;stroke-width:0.8193182;stroke-linejoin:round;stroke-miterlimit:0" transform="matrix(0.375607,0,0,0.376774,706.833,572.9556)"/>
-  <circle cx="328" cy="215" id="path3787" r="5" style="color:#000000;fill:#99b7d5;fill-opacity:0.7019608;fill-rule:evenodd;stroke:#0000ff;stroke-width:0.8193182;stroke-linejoin:round;stroke-miterlimit:0" transform="matrix(0.375607,0,0,0.376774,698.833,592.9556)"/>
-  <path d="M 822,666 822,670.626" id="path3789" inkscape:connector-curvature="0" sodipodi:nodetypes="cc" style="fill:none;stroke:#000000;stroke-width:0.7856485;marker-end:url(#Arrow1Send)"/>
-</g>
+  <g id="distribute-graph-directed" inkscape:label="#directed_graph">
+
+    <g style="fill:none;stroke:black;marker-end:url(#Arrow)">
+      <path d="m 3.5,2.5 5,5"/>
+      <path d="m 20.5,2.5 -5,5"/>
+      <path d="m 12,11.5 0,4.5"/>
+    </g>
+
+    <g style="fill:#8ab3de;stroke:#0000ff">
+      <circle cx=" 3.5" cy=" 2.5"  r="2"/>
+      <circle cx="20.5" cy=" 2.5"  r="2"/>
+      <circle cx="12.0" cy="11.5"  r="2"/>
+      <circle cx="12.0" cy="21.5"  r="2"/>
+    </g>
+
+  </g>
 
 </svg>
