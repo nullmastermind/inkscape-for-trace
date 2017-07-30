@@ -2,7 +2,7 @@
   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape">
 
-   <submenu name="_File">
+   <submenu _name="_File">
        <verb verb-id="FileNew" />
        <verb verb-id="FileTemplates" />
        <verb verb-id="FileOpen" />
@@ -27,7 +27,7 @@
        <verb verb-id="FileClose" />
        <verb verb-id="FileQuit" />
    </submenu>
-   <submenu name="_Edit">
+   <submenu _name="_Edit">
        <verb verb-id="EditUndo" />
        <verb verb-id="EditRedo" />
        <verb verb-id="DialogUndoHistory" />
@@ -37,7 +37,7 @@
        <verb verb-id="EditPaste" />
        <verb verb-id="EditPasteInPlace" />
        <verb verb-id="EditPasteStyle" />
-       <submenu name="Paste Si_ze">
+       <submenu _name="Paste Si_ze">
            <verb verb-id="EditPasteSize" />
            <verb verb-id="EditPasteWidth" />
            <verb verb-id="EditPasteHeight" />
@@ -49,7 +49,7 @@
        <verb verb-id="DialogFind" />
        <separator/>
        <verb verb-id="EditDuplicate" />
-       <submenu name="Clo_ne">
+       <submenu _name="Clo_ne">
            <verb verb-id="EditClone" />
            <verb verb-id="DialogClonetiler" />
            <verb verb-id="EditUnlinkClone" />
@@ -64,7 +64,7 @@
        <separator/>
        <verb verb-id="EditSelectAll" />
        <verb verb-id="EditSelectAllInAllLayers" />
-       <submenu name="Select Sa_me">
+       <submenu _name="Select Sa_me">
            <verb verb-id="EditSelectSameFillStroke" />
            <verb verb-id="EditSelectSameFillColor" />
            <verb verb-id="EditSelectSameStrokeColor" />
@@ -85,8 +85,8 @@
        <verb verb-id="DialogInput" />
        <verb verb-id="DialogPreferences" />
    </submenu>
-   <submenu name="_View">
-     <submenu name="_Zoom">
+   <submenu _name="_View">
+     <submenu _name="_Zoom">
        <verb verb-id="ZoomIn" />
        <verb verb-id="ZoomOut" />
        <separator/>
@@ -102,7 +102,7 @@
        <verb verb-id="ZoomPrev" />
        <verb verb-id="ZoomNext" />
      </submenu>
-       <submenu name="_Display mode">
+       <submenu _name="_Display mode">
          <verb verb-id="ViewModeToggle"/>
          <verb verb-id="ViewModeNormal" radio="yes" default="yes"/>
          <verb verb-id="ViewModeNoFilters" radio="yes"/>
@@ -111,7 +111,7 @@
          <!--verb verb-id="ViewModePrintColorsPreview" radio="yes"/-->
          <!--verb verb-id="DialogPrintColorsPreview" /-->
        </submenu>
-       <submenu name="_Color display mode">
+       <submenu _name="_Color display mode">
          <verb verb-id="ViewColorModeToggle"/>
          <verb verb-id="ViewColorModeNormal" radio="yes" default="yes"/>
          <verb verb-id="ViewColorModeGrayscale" radio="yes"/>
@@ -124,7 +124,7 @@
        <verb verb-id="ToggleGuides" check="yes" />
        <verb verb-id="ViewCmsToggle" check="yes" />
        <separator/>
-       <submenu name="Sh_ow/Hide">
+       <submenu _name="Sh_ow/Hide">
            <objects-checkboxes/>
        </submenu>
        <verb verb-id="DialogsToggle" />
@@ -144,7 +144,7 @@
        <!-- Not quite ready to be in the menus.
          <verb verb-id="FocusToggle" /-->
    </submenu>
-   <submenu name="_Layer">
+   <submenu _name="_Layer">
        <verb verb-id="LayerNew" />
        <verb verb-id="LayerRename" />
        <separator/>
@@ -168,7 +168,7 @@
        <separator/>
        <verb verb-id="DialogLayers" />
    </submenu>
-   <submenu name="_Object">
+   <submenu _name="_Object">
        <verb verb-id="DialogObjects" />
        <verb verb-id="DialogTags" />
        <verb verb-id="DialogStyle" />
@@ -181,15 +181,15 @@
        <verb verb-id="SelectionUnGroup" />
        <verb verb-id="SelectionUnGroupPopSelection" />
        <separator/>
-       <submenu name="Cli_p">
+       <submenu _name="Cli_p">
            <verb verb-id="ObjectSetClipPath" />
            <verb verb-id="ObjectUnSetClipPath" />
        </submenu>
-       <submenu name="Mas_k">
+       <submenu _name="Mas_k">
            <verb verb-id="ObjectSetMask" />
            <verb verb-id="ObjectUnSetMask" />
        </submenu>
-       <submenu name="Patter_n">
+       <submenu _name="Patter_n">
            <verb verb-id="ObjectsToPattern" />
            <verb verb-id="ObjectsFromPattern" />
        </submenu>
@@ -214,7 +214,7 @@
        <verb verb-id="DialogArrange" />
        <verb verb-id="DialogPrototype" />
    </submenu>
-   <submenu name="_Path">
+   <submenu _name="_Path">
        <verb verb-id="ObjectToPath" />
        <verb verb-id="StrokeToPath" />
 
@@ -246,7 +246,7 @@
        <verb verb-id="PasteLivePathEffect" />
        <verb verb-id="RemoveLivePathEffect" />
    </submenu>
-   <submenu name="_Text">
+   <submenu _name="_Text">
        <verb verb-id="DialogText" />
        <verb verb-id="DialogSVGFonts" />
        <verb verb-id="DialogGlyphs" />
@@ -263,23 +263,23 @@
        <separator/>
        <verb verb-id="DialogSpellcheck" />
    </submenu>
-   <submenu name="Filter_s">
+   <submenu _name="Filter_s">
        <filters-list/>
        <separator/>
        <verb verb-id="DialogFilterEffects" />
        <verb verb-id="RemoveFilter" />
    </submenu>
-   <submenu name="Exte_nsions">
+   <submenu _name="Exte_nsions">
        <verb verb-id="EffectLast" />
        <verb verb-id="EffectLastPref" />
        <separator/>
        <effects-list/>
    </submenu>
-   <submenu name="_Help">
+   <submenu _name="_Help">
        <verb verb-id="org.inkscape.help.manual" />
        <verb verb-id="org.inkscape.help.keys" />
        <verb verb-id="org.inkscape.help.askaquestion" />
-       <submenu name="Tutorials">
+       <submenu _name="Tutorials">
            <verb verb-id="TutorialsBasic" />
            <verb verb-id="TutorialsShapes" />
            <verb verb-id="TutorialsAdvanced" />

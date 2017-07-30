@@ -838,7 +838,12 @@ static void sp_ui_build_dyn_menus(Inkscape::XML::Node *menus, GtkWidget *menu, I
          menu_pntr != NULL;
          menu_pntr = menu_pntr->next()) {
         if (!strcmp(menu_pntr->name(), "submenu")) {
-            GtkWidget *mitem = gtk_menu_item_new_with_mnemonic(_(menu_pntr->attribute("name")));
+            GtkWidget *mitem;
+            if (menu_pntr->attribute("_name") != NULL) {
+                mitem = gtk_menu_item_new_with_mnemonic(_(menu_pntr->attribute("_name")));
+            } else {
+                mitem = gtk_menu_item_new_with_mnemonic(menu_pntr->attribute("name"));
+            }
             GtkWidget *submenu = gtk_menu_new();
             sp_ui_build_dyn_menus(menu_pntr->firstChild(), submenu, view);
             gtk_menu_item_set_submenu(GTK_MENU_ITEM(mitem), GTK_WIDGET(submenu));
