@@ -64,6 +64,7 @@ Glib::ustring get_path_ustring(Domain domain, Type type,
 
 Glib::ustring get_filename(Type type, char const *filename,
                                 char const *locale=NULL);
+Glib::ustring get_filename(Glib::ustring path, Glib::ustring filename);
 
 std::vector<Glib::ustring> get_filenames(Type type,
                                 std::vector<const char *> extensions={},

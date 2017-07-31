@@ -182,10 +182,36 @@ Glib::ustring get_filename(Type type, char const *filename, char const *locale)
 }
 
 /*
+ * Similar to get_filename, but takes a path (or filename) for relative resolution
+ *
+ *  path - A directory or filename that is considered local to the path resolution.
+ *  filename - The filename that we are looking for.
+ */
+Glib::ustring get_filename(Glib::ustring path, Glib::ustring filename)
+{
+    // Test if it's a filename and get the parent directory instead
+    if (Glib::file_test(path, Glib::FILE_TEST_IS_REGULAR)) {
+        return get_filename(g_path_get_dirname(path.c_str()), filename);
+    }
+    if (g_path_is_absolute(filename.c_str())) {
+        if (Glib::file_test(filename, Glib::FILE_TEST_EXISTS)) {
+            return filename;
+        }
+    } else {
+        Glib::ustring ret = Glib::build_filename(path, filename);
+        if (Glib::file_test(ret, Glib::FILE_TEST_EXISTS)) {
+            return ret;
+        }
+    }
+    return Glib::ustring();
+}
+
+/*
  * Get's all the files in a given type, for all domain types.
  *
  *  domain - Optional domain (overload), will check return domains if not.
  *  type - The type of files, e.g. TEMPLATES
+ *  path - Instead of Domain and Type, specify the path to get the files from.
  *  extentions - A list of extensions to return, e.g. xml, svg
  *  exclusions - A list of names to exclude e.g. default.xml
  */
