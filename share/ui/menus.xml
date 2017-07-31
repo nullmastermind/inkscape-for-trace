@@ -11,6 +11,7 @@
        <verb verb-id="FileSave" />
        <verb verb-id="FileSaveAs" />
        <verb verb-id="FileSaveACopy" />
+       <verb verb-id="FileSaveTemplate" />
        <separator/>
        <verb verb-id="FileImport" />
        <verb verb-id="DialogExport" />
