@@ -208,7 +208,7 @@ void TemplateLoadTab::_refreshTemplatesList()
 
 void TemplateLoadTab::_loadTemplates()
 {
-    for(auto &filename: get_filenames(TEMPLATES, {".svg"}, {"default.", "default_"})) {
+    for(auto &filename: get_filenames(TEMPLATES, {".svg"}, {"default."})) {
         TemplateData tmp = _processTemplateFile(filename);
         if (tmp.display_name != "")
             _tdata[tmp.display_name] = tmp;
