@@ -26,7 +26,7 @@ namespace Inkscape {
 
 namespace {
 
-bool is_layer(SPObject &object) {
+static bool is_layer(SPObject &object) {
     return SP_IS_GROUP(&object) &&
            SP_GROUP(&object)->layerMode() == SPGroup::LAYER;
 }
@@ -35,7 +35,10 @@ bool is_layer(SPObject &object) {
  *
  *  @returns NULL if there are no further layers under a parent
  */
-SPObject *next_sibling_layer(SPObject *layer) {
+static SPObject *next_sibling_layer(SPObject *layer) {
+    if (layer->parent == nullptr) {
+      return nullptr;
+    }
     SPObject::ChildrenList &list = layer->parent->children;
     auto l = std::find_if(++list.iterator_to(*layer), list.end(), &is_layer);
     return l != list.end() ? &*l : nullptr;
@@ -45,7 +48,7 @@ SPObject *next_sibling_layer(SPObject *layer) {
  *
  *  @returns NULL if there are no further layers under a parent
  */
-SPObject *previous_sibling_layer(SPObject *layer) {
+static SPObject *previous_sibling_layer(SPObject *layer) {
     using Inkscape::Algorithms::find_last_if;
 
     SPObject::ChildrenList &list = layer->parent->children;
@@ -55,37 +58,34 @@ SPObject *previous_sibling_layer(SPObject *layer) {
 
 /** Finds the first child of a \a layer
  *
- *  @returns NULL if layer has no sublayers
+ *  @returns the layer itself if layer has no sublayers
  */
-SPObject *first_descendant_layer(SPObject *layer) {
-    SPObject *first_descendant = nullptr;
+static SPObject *first_descendant_layer(SPObject *layer) {
     while (true) {
-        auto tmp = std::find_if(layer->children.begin(), layer->children.end(), &is_layer);
-        if (tmp != layer->children.end()) {
-            first_descendant = layer;
-        } else {
+        auto first_descendant = std::find_if(layer->children.begin(), layer->children.end(), &is_layer);
+        if (first_descendant == layer->children.end()) {
             break;
         }
-        layer = &*tmp;
+        layer = &*first_descendant;
     }
 
-    return first_descendant;
+    return layer;
 }
 
 /** Finds the last (topmost) child of a \a layer
  *
  *  @returns NULL if layer has no sublayers
  */
-SPObject *last_child_layer(SPObject *layer) {
+static SPObject *last_child_layer(SPObject *layer) {
     using Inkscape::Algorithms::find_last_if;
 
     auto l = find_last_if(layer->children.begin(), layer->children.end(), &is_layer);
     return l != layer->children.end() ? &*l : nullptr;
 }
 
-SPObject *last_elder_layer(SPObject *root, SPObject *layer) {
+static SPObject *last_elder_layer(SPObject *root, SPObject *layer) {
     using Inkscape::Algorithms::find_last_if;
-    SPObject *result = 0;
+    SPObject *result = nullptr;
 
     while ( layer != root ) {
         SPObject *sibling(previous_sibling_layer(layer));
@@ -110,16 +110,11 @@ SPObject *next_layer(SPObject *root, SPObject *layer) {
     using std::find_if;
 
     g_return_val_if_fail(layer != NULL, NULL);
-    SPObject *result = 0;
+    SPObject *result = nullptr;
 
     SPObject *sibling = next_sibling_layer(layer);
     if (sibling) {
-        SPObject *descendant(first_descendant_layer(sibling));
-        if (descendant) {
-            result = descendant;
-        } else {
-            result = sibling;
-        }
+        result = first_descendant_layer(sibling);
     } else if ( layer->parent != root ) {
         result = layer->parent;
     }
@@ -137,7 +132,7 @@ SPObject *previous_layer(SPObject *root, SPObject *layer) {
     using Inkscape::Algorithms::find_last_if;
 
     g_return_val_if_fail(layer != NULL, NULL);
-    SPObject *result = 0;
+    SPObject *result = nullptr;
 
     SPObject *child = last_child_layer(layer);
     if (child) {
@@ -164,20 +159,20 @@ SPObject *previous_layer(SPObject *root, SPObject *layer) {
  */
 SPObject *create_layer(SPObject *root, SPObject *layer, LayerRelativePosition position) {
     SPDocument *document = root->document;
-    
+
     static int layer_suffix=1;
     gchar *id=NULL;
     do {
         g_free(id);
         id = g_strdup_printf("layer%d", layer_suffix++);
     } while (document->getObjectById(id));
-    
+
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
     Inkscape::XML::Node *repr = xml_doc->createElement("svg:g");
     repr->setAttribute("inkscape:groupmode", "layer");
     repr->setAttribute("id", id);
     g_free(id);
-    
+
     if ( LPOS_CHILD == position ) {
         root = layer;
         SPObject *child_layer = Inkscape::last_child_layer(layer);
@@ -185,18 +180,18 @@ SPObject *create_layer(SPObject *root, SPObject *layer, LayerRelativePosition po
             layer = child_layer;
         }
     }
-    
+
     if ( root == layer ) {
         root->getRepr()->appendChild(repr);
     } else {
         Inkscape::XML::Node *layer_repr = layer->getRepr();
         layer_repr->parent()->addChild(repr, layer_repr);
-        
+
         if ( LPOS_BELOW == position ) {
             SP_ITEM(document->getObjectByRepr(repr))->lowerOne();
         }
     }
-    
+
     return document->getObjectByRepr(repr);
 }
 
