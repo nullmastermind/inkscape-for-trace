@@ -20,7 +20,6 @@
 #endif
 
 #include <pango/pango.h>
-#include "nr-type-primitives.h"
 #include "style.h"
 
 /* Freetype */

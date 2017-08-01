@@ -42,8 +42,6 @@ struct SPFontSelector
     GtkWidget *family_treeview;
     GtkWidget *style_treeview;
 
-    NRNameList families;
-    NRStyleList styles;
     gfloat fontsize;
     bool fontsize_dirty;
     Glib::ustring *fontspec;
@@ -238,16 +236,6 @@ static void sp_font_selector_dispose(GObject *object)
 
     if (fsel->fontspec) {
         delete fsel->fontspec;
-    }
-
-    if (fsel->families.length > 0) {
-        nr_name_list_release(&fsel->families);
-        fsel->families.length = 0;
-    }
-
-    if (fsel->styles.length > 0) {
-        nr_style_list_release(&fsel->styles);
-        fsel->styles.length = 0;
     }
 
     if (G_OBJECT_CLASS(sp_font_selector_parent_class)->dispose) {

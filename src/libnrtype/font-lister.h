@@ -21,7 +21,6 @@
 #include <gtkmm/treemodelcolumn.h>
 #include <gtkmm/treepath.h>
 #include <glibmm/ustring.h>
-#include "nr-type-primitives.h"
 
 class SPObject;
 class SPDocument;
