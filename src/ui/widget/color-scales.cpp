@@ -377,16 +377,21 @@ void ColorScales::setMode(SPColorScalesMode mode)
             _updating = FALSE;
             break;
         case SP_COLOR_SCALES_MODE_HSV:
-            _setRangeLimit(255.0);
+            _setRangeLimit(100.0);
+
             gtk_label_set_markup_with_mnemonic(GTK_LABEL(_l[0]), _("_H:"));
             _s[0]->set_tooltip_text(_("Hue"));
             gtk_widget_set_tooltip_text(_b[0], _("Hue"));
+            gtk_adjustment_set_upper(_a[0], 360.0);
+
             gtk_label_set_markup_with_mnemonic(GTK_LABEL(_l[1]), _("_S:"));
             _s[1]->set_tooltip_text(_("Saturation"));
             gtk_widget_set_tooltip_text(_b[1], _("Saturation"));
+
             gtk_label_set_markup_with_mnemonic(GTK_LABEL(_l[2]), _("_L:"));
             _s[2]->set_tooltip_text(_("Lightness"));
             gtk_widget_set_tooltip_text(_b[2], _("Lightness"));
+
             gtk_label_set_markup_with_mnemonic(GTK_LABEL(_l[3]), _("_A:"));
             _s[3]->set_tooltip_text(_("Alpha (opacity)"));
             gtk_widget_set_tooltip_text(_b[3], _("Alpha (opacity)"));
@@ -396,11 +401,14 @@ void ColorScales::setMode(SPColorScalesMode mode)
             gtk_widget_hide(_b[4]);
             _updating = TRUE;
             c[0] = 0.0;
+
             sp_color_rgb_to_hsl_floatv(c, rgba[0], rgba[1], rgba[2]);
+
             setScaled(_a[0], c[0]);
             setScaled(_a[1], c[1]);
             setScaled(_a[2], c[2]);
             setScaled(_a[3], rgba[3]);
+
             _updateSliders(CSC_CHANNELS_ALL);
             _updating = FALSE;
             break;
