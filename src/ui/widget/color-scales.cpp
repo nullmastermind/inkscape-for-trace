@@ -164,7 +164,7 @@ void ColorScales::_recalcColor()
 
     switch (_mode) {
         case SP_COLOR_SCALES_MODE_RGB:
-        case SP_COLOR_SCALES_MODE_HSV:
+        case SP_COLOR_SCALES_MODE_HSL:
             _getRgbaFloatv(c);
             color.set(c[0], c[1], c[2]);
             alpha = c[3];
@@ -204,7 +204,7 @@ void ColorScales::_updateDisplay()
             c[3] = _color.alpha();
             c[4] = 0.0;
             break;
-        case SP_COLOR_SCALES_MODE_HSV:
+        case SP_COLOR_SCALES_MODE_HSL:
             sp_color_get_rgb_floatv(&color, tmp);
             sp_color_rgb_to_hsl_floatv(c, tmp[0], tmp[1], tmp[2]);
             c[3] = _color.alpha();
@@ -276,7 +276,7 @@ void ColorScales::_getRgbaFloatv(gfloat *rgba)
             rgba[2] = getScaled(_a[2]);
             rgba[3] = getScaled(_a[3]);
             break;
-        case SP_COLOR_SCALES_MODE_HSV:
+        case SP_COLOR_SCALES_MODE_HSL:
             sp_color_hsl_to_rgb_floatv(rgba, getScaled(_a[0]), getScaled(_a[1]), getScaled(_a[2]));
             rgba[3] = getScaled(_a[3]);
             break;
@@ -301,7 +301,7 @@ void ColorScales::_getCmykaFloatv(gfloat *cmyka)
             sp_color_rgb_to_cmyk_floatv(cmyka, getScaled(_a[0]), getScaled(_a[1]), getScaled(_a[2]));
             cmyka[4] = getScaled(_a[3]);
             break;
-        case SP_COLOR_SCALES_MODE_HSV:
+        case SP_COLOR_SCALES_MODE_HSL:
             sp_color_hsl_to_rgb_floatv(rgb, getScaled(_a[0]), getScaled(_a[1]), getScaled(_a[2]));
             sp_color_rgb_to_cmyk_floatv(cmyka, rgb[0], rgb[1], rgb[2]);
             cmyka[4] = getScaled(_a[3]);
@@ -339,7 +339,7 @@ void ColorScales::setMode(SPColorScalesMode mode)
     if (_mode == mode)
         return;
 
-    if ((_mode == SP_COLOR_SCALES_MODE_RGB) || (_mode == SP_COLOR_SCALES_MODE_HSV) ||
+    if ((_mode == SP_COLOR_SCALES_MODE_RGB) || (_mode == SP_COLOR_SCALES_MODE_HSL) ||
         (_mode == SP_COLOR_SCALES_MODE_CMYK)) {
         _getRgbaFloatv(rgba);
     }
@@ -376,7 +376,7 @@ void ColorScales::setMode(SPColorScalesMode mode)
             _updateSliders(CSC_CHANNELS_ALL);
             _updating = FALSE;
             break;
-        case SP_COLOR_SCALES_MODE_HSV:
+        case SP_COLOR_SCALES_MODE_HSL:
             _setRangeLimit(100.0);
 
             gtk_label_set_markup_with_mnemonic(GTK_LABEL(_l[0]), _("_H:"));
@@ -533,7 +533,7 @@ void ColorScales::_updateSliders(guint channels)
                                  SP_RGBA32_F_COMPOSE(getScaled(_a[0]), getScaled(_a[1]), getScaled(_a[2]), 1.0));
             }
             break;
-        case SP_COLOR_SCALES_MODE_HSV:
+        case SP_COLOR_SCALES_MODE_HSL:
             /* Hue is never updated */
             if ((channels != CSC_CHANNEL_S) && (channels != CSC_CHANNEL_A)) {
                 /* Update saturation */

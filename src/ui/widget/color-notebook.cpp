@@ -58,7 +58,7 @@ ColorNotebook::ColorNotebook(SelectedColor &color)
 
     page = new Page(new ColorScalesFactory(SP_COLOR_SCALES_MODE_RGB), true);
     _available_pages.push_back(page);
-    page = new Page(new ColorScalesFactory(SP_COLOR_SCALES_MODE_HSV), true);
+    page = new Page(new ColorScalesFactory(SP_COLOR_SCALES_MODE_HSL), true);
     _available_pages.push_back(page);
     page = new Page(new ColorScalesFactory(SP_COLOR_SCALES_MODE_CMYK), true);
     _available_pages.push_back(page);
