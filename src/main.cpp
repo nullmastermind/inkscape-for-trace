@@ -543,8 +543,8 @@ struct poptOption options[] = {
 
     {"convert-dpi-method", 0,
     POPT_ARG_STRING, NULL, SP_ARG_CONVERT_DPI_METHOD,
-    N_("Method used to convert pre-.92 document dpi, if needed."),
-    "[none|scale-viewbox|scale-document]"},
+    N_("Method used to convert pre-.92 document dpi, if needed. ([none|scale-viewbox|scale-document])"),
+    "[...]"},
 
     POPT_AUTOHELP POPT_TABLEEND
 };
