@@ -1,6 +1,6 @@
 /**
  * @file
- * A notebook with RGB, CMYK, CMS, HSL, and Wheel pages - implementation
+ * A notebook with RGB, CMYK, CMS, HSL, HSV, and Wheel pages - implementation
  */
 /* Authors:
  *   Lauris Kaplinski <lauris@kaplinski.com>
@@ -57,6 +57,8 @@ ColorNotebook::ColorNotebook(SelectedColor &color)
     Page *page;
 
     page = new Page(new ColorScalesFactory(SP_COLOR_SCALES_MODE_RGB), true);
+    _available_pages.push_back(page);
+    page = new Page(new ColorScalesFactory(SP_COLOR_SCALES_MODE_HSL), true);
     _available_pages.push_back(page);
     page = new Page(new ColorScalesFactory(SP_COLOR_SCALES_MODE_HSV), true);
     _available_pages.push_back(page);
