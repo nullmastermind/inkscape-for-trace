@@ -92,7 +92,7 @@ parts:
     plugin: copy
     files:
       packaging/snappy/snapcraft.sh: snapcraft.sh
-      README: lib/share/README
+      README.md: lib/share/README.md
 
 apps:
   inkscape:
