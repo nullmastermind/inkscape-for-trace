@@ -31,6 +31,10 @@
 #include <windows.h>
 #endif
 
+#ifdef ENABLE_BINRELOC
+#include "prefix.h"
+#endif
+
 #include <string>
 #include <glibmm.h>
 #include <glibmm/i18n.h>
