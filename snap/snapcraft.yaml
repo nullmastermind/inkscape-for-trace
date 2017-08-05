@@ -15,6 +15,7 @@ description: |
  We also aim to maintain a thriving user and developer community by using
  open, community-oriented development.
 confinement: strict
+grade: stable
 
 parts:
   inkscape:
@@ -88,14 +89,12 @@ parts:
       - libxml-xql-perl
       - python-uniconvertor
       - ruby
-    snap:
+    prime:
       - -lib/inkscape/*.a
     after: [desktop-gtk3]
   snapcraft-wrapper:
-    plugin: copy
-    files:
-      packaging/snappy/snapcraft.sh: snapcraft.sh
-      README.md: lib/share/README.md
+    plugin: dump
+    source: packaging/snappy/
 
 apps:
   inkscape:
