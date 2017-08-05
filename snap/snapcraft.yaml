@@ -1,6 +1,7 @@
 name: inkscape
 version: 0.92+devel
 summary: Vector Graphics Editor
+icon: share/branding/inkscape.svg
 description: |
  An Open Source vector graphics editor, with capabilities similar to
  Illustrator, CorelDraw, or Xara X, using the W3C standard Scalable Vector
@@ -100,6 +101,7 @@ apps:
   inkscape:
     command: snapcraft.sh desktop-launch inkscape
     plugs: [home, unity7, gsettings]
+    desktop: share/applications/inkscape.desktop
   viewer:
     command: snapcraft.sh desktop-launch inkview
     plugs: [home, unity7, gsettings]
