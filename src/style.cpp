@@ -53,8 +53,6 @@ using std::vector;
 
 #define BMAX 8192
 
-#define SP_CSS_FONT_SIZE_DEFAULT 12.0;
-
 struct SPStyleEnum;
 
 int SPStyle::_count = 0;
@@ -1542,9 +1540,15 @@ sp_style_get_css_unit_string(int unit)
  * Convert a size in pixels into another CSS unit size
  */
 double
-sp_style_css_size_px_to_units(double size, int unit)
+sp_style_css_size_px_to_units(double size, int unit, double font_size)
 {
     double unit_size = size;
+
+    if (font_size == 0) {
+        g_warning("sp_style_get_css_font_size_units: passed in zero font_size");
+        font_size = SP_CSS_FONT_SIZE_DEFAULT;
+    }
+
     switch (unit) {
 
         case SP_CSS_UNIT_NONE: unit_size = size; break;
@@ -1554,9 +1558,9 @@ sp_style_css_size_px_to_units(double size, int unit)
         case SP_CSS_UNIT_MM: unit_size = Inkscape::Util::Quantity::convert(size, "px", "mm");  break;
         case SP_CSS_UNIT_CM: unit_size = Inkscape::Util::Quantity::convert(size, "px", "cm");  break;
         case SP_CSS_UNIT_IN: unit_size = Inkscape::Util::Quantity::convert(size, "px", "in");  break;
-        case SP_CSS_UNIT_EM: unit_size = size / SP_CSS_FONT_SIZE_DEFAULT; break;
-        case SP_CSS_UNIT_EX: unit_size = size * 2.0 / SP_CSS_FONT_SIZE_DEFAULT ; break;
-        case SP_CSS_UNIT_PERCENT: unit_size = size * 100.0 / SP_CSS_FONT_SIZE_DEFAULT; break;
+        case SP_CSS_UNIT_EM: unit_size = size / font_size; break;
+        case SP_CSS_UNIT_EX: unit_size = size * 2.0 / font_size ; break;
+        case SP_CSS_UNIT_PERCENT: unit_size = size * 100.0 / font_size; break;
 
         default:
             g_warning("sp_style_get_css_font_size_units conversion to %d not implemented.", unit);
@@ -1571,13 +1575,13 @@ sp_style_css_size_px_to_units(double size, int unit)
  * Convert a size in a CSS unit size to pixels
  */
 double
-sp_style_css_size_units_to_px(double size, int unit)
+sp_style_css_size_units_to_px(double size, int unit, double font_size)
 {
     if (unit == SP_CSS_UNIT_PX) {
         return size;
     }
     //g_message("sp_style_css_size_units_to_px %f %d = %f px", size, unit, out);
-    return size * (size / sp_style_css_size_px_to_units(size, unit));;
+    return size * (size / sp_style_css_size_px_to_units(size, unit, font_size));;
 }
 
 

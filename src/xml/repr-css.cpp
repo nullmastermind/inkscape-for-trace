@@ -466,6 +466,17 @@ void sp_repr_css_change_recursive(Node *repr, SPCSSAttr *css, gchar const *attr)
     }
 }
 
+/**
+ * Return a new SPCSSAttr with all the properties found in the input SPCSSAttr unset.
+ */
+SPCSSAttr* sp_repr_css_attr_unset_all(SPCSSAttr *css)
+{
+    SPCSSAttr* css_unset = sp_repr_css_attr_new();
+    for ( List<AttributeRecord const> iter = css->attributeList() ; iter ; ++iter ) {
+        sp_repr_css_set_property (css_unset, g_quark_to_string(iter->key), "inkscape:unset");
+    }
+    return css_unset;
+}
 
 /*
   Local Variables:

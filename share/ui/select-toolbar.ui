@@ -288,6 +288,7 @@
     <toolitem action='TextLineHeightAction' />
     <toolitem action='TextLineHeightUnitsAction' />
     <toolitem action='TextLineHeightUnsetAction' />
+    <toolitem action='TextLineSpacingAction' />
     <separator />
     <toolitem action='TextAlignAction' />
     <separator />

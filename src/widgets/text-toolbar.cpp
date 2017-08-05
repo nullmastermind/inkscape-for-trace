@@ -46,6 +46,8 @@
 #include "sp-flowtext.h"
 #include "sp-root.h"
 #include "sp-text.h"
+#include "sp-tspan.h"
+#include "sp-flowdiv.h"
 #include "style.h"
 #include "svg/css-ostringstream.h"
 #include "text-editing.h"
@@ -847,6 +849,169 @@ static void sp_text_lineheight_unit_changed( gpointer /* */, GObject *tbl )
     g_object_set_data( tbl, "freeze", GINT_TO_POINTER(FALSE) );
 }
 
+// Set property for object, but unset all descendents
+// Should probably be moved to desktop_style.cpp
+static void recursively_set_properties( SPObject* object, SPCSSAttr *css ) {
+    object->changeCSS (css, "style");
+
+    SPCSSAttr *css_unset = sp_repr_css_attr_unset_all( css );
+    std::vector<SPObject *> children = object->childList(false);
+    for (auto i: children) {
+        recursively_set_properties (i, css_unset);
+    }
+    sp_repr_css_attr_unref (css_unset);
+}
+
+//
+static void sp_text_line_spacing_mode_changed( GObject *tbl, int mode )
+{
+
+    // quit if run by the _changed callbacks
+    if (g_object_get_data(G_OBJECT(tbl), "freeze")) {
+        return;
+    }
+    g_object_set_data( tbl, "freeze", GINT_TO_POINTER(TRUE) );
+
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    prefs->setInt("/tools/text/line_spacing_mode", mode);
+
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+
+    // Note: only <text> and <flowRoot> text elements are in selection!
+    // (No need to worry about <tspan>, <flowPara>, ...)
+    Inkscape::Selection *selection = desktop->getSelection();
+    std::vector<SPItem *> vec(selection->items().begin(), selection->items().end());
+
+    for (auto i: vec) {
+
+        // Only <text> and <flowRoot>, <flowRoot> => SPFlowtext
+        if (dynamic_cast<SPText*>(i) || dynamic_cast<SPFlowtext*>(i)) {
+            SPStyle* text_style = i->style;
+
+            // Make list of <tspan>, <flowPara>, <flowSpan> children
+            std::vector<SPObject *> children = i->childList(false);
+            std::vector<SPItem *> children_item;
+            for (auto j: children) {
+                if (dynamic_cast<SPItem *>(j)) {
+                    children_item.push_back( dynamic_cast<SPItem *>(j) );
+                }
+            }
+
+            SPStyle tspans; // Also flowPara/flowSpan
+            int result_numbers = sp_desktop_query_style_from_list (children_item, &tspans, QUERY_STYLE_PROPERTY_FONTNUMBERS);
+
+            Inkscape::CSSOStringStream osfs;
+            if (text_style->line_height.computed != 0 || text_style->line_height.normal) {
+
+                if (mode != 1 || text_style->line_height.unit == SP_CSS_UNIT_NONE || text_style->line_height.normal) {
+                    Glib::ustring line_height_string = text_style->line_height.write( SP_STYLE_FLAG_ALWAYS );
+                    line_height_string.erase(0, 12); // erase 'line-height:'
+                    osfs << line_height_string;
+                } else {
+                    // Convert to unitless value
+                    double line_height_value = text_style->line_height.value;
+                    // Percent values are stored as value/100;
+                    if (text_style->line_height.unit == SP_CSS_UNIT_PERCENT) {
+                        line_height_value *= 100;
+                    }
+                    osfs << sp_style_css_size_units_to_px( line_height_value,
+                                                           text_style->line_height.unit,
+                                                           text_style->font_size.computed) /
+                        text_style->font_size.computed;
+                }
+
+            } else {
+
+                if (mode != 1 || tspans.line_height.unit == SP_CSS_UNIT_NONE || tspans.line_height.normal) {
+                    Glib::ustring line_height_string = tspans.line_height.write( SP_STYLE_FLAG_ALWAYS );
+                    line_height_string.erase(0, 12); // erase 'line-height:'
+                    osfs << line_height_string;
+                } else {
+                    // Convert to unitless value
+                    double line_height_value = tspans.line_height.value;
+                    // Percent values are stored as value/100;
+                    if (tspans.line_height.unit == SP_CSS_UNIT_PERCENT) {
+                        line_height_value *= 100;
+                    }
+                    osfs << sp_style_css_size_units_to_px( line_height_value,
+                                                           tspans.line_height.unit,
+                                                           tspans.font_size.computed) /
+                        tspans.font_size.computed;
+                }
+            }
+
+            SPCSSAttr *css_text  = sp_repr_css_attr_new();
+            SPCSSAttr *css_tspan = sp_repr_css_attr_new();
+
+            sp_repr_css_set_property (css_text, "line-height", osfs.str().c_str());
+
+            switch (mode) {
+                case 0: // Adaptive
+                    // <text>: Zero text
+                    sp_repr_css_set_property (css_text,  "line-height", "0");
+                    // <tspan>:  Old text value.
+                    sp_repr_css_set_property (css_tspan, "line-height", osfs.str().c_str());
+                    break;
+
+                case 1: // Minimum
+                    // <text>: Set to old text (unitless) or if old text zero, set to old tspan.
+                    sp_repr_css_set_property (css_text, "line-height", osfs.str().c_str());
+                    // <tspan>: Unset
+                    sp_repr_css_unset_property (css_tspan, "line-height");
+                    break;
+
+                case 2: // Even
+                    // <text>: Set to old text or if old text zero, set to old tspan.
+                    sp_repr_css_set_property (css_text, "line-height", osfs.str().c_str());
+                    // <tspan>: Set to zero
+                    sp_repr_css_set_property (css_tspan,  "line-height", "0");
+                    break;
+
+                case 3: // Adjustable
+                    // Do nothing ☠
+                    break;
+            }
+
+            if (mode != 3) {
+                i->changeCSS (css_text, "style");
+                for (auto j: children) {
+                    recursively_set_properties (j, css_tspan);
+                    //j->changeCSS (css_tspan, "style");
+                }
+            }
+
+            sp_repr_css_attr_unref (css_text);
+            sp_repr_css_attr_unref (css_tspan);
+        }
+    }
+
+    // Set "Outer Style" toggle to match mode.
+    InkToggleAction* outerStyle = INK_TOGGLE_ACTION(g_object_get_data (tbl, "TextOuterStyleAction"));
+
+    switch (mode) {
+        case 0: // Adaptive
+            gtk_toggle_action_set_active( &(outerStyle->action), false );
+            prefs->setInt("/tools/text/outer_style", false);
+            break;
+
+        case 1: // Minimum
+        case 2: // Even
+            gtk_toggle_action_set_active( &(outerStyle->action), true );
+            prefs->setInt("/tools/text/outer_style", true);
+            break;
+
+        case 3: // Adjustable
+            break;
+    }
+
+            // Update widgets to reflect new state of Text Outer Style button.
+    sp_text_toolbox_selection_changed( NULL, tbl );
+
+    DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_TEXT,
+                       _("Text: Change line spacing mode"));
+
+    g_object_set_data( tbl, "freeze", GINT_TO_POINTER(FALSE) );
+}
 
 static void sp_text_wordspacing_value_changed( GtkAdjustment *adj, GObject *tbl )
 {
@@ -1478,6 +1643,79 @@ static void sp_text_toolbox_selection_changed(Inkscape::Selection */*selection*/
         gtk_action_set_sensitive(GTK_ACTION(lineHeightUnset), query.line_height.set );
         gtk_toggle_action_set_active( GTK_TOGGLE_ACTION(lineHeightUnset), query.line_height.set );
 
+
+        // Line spacing mode: requires calculating mode for each <text> element and the <tspan>s within.
+        Inkscape::Selection *selection = desktop->getSelection();
+        std::vector<SPItem *> vec(selection->items().begin(), selection->items().end());
+        int mode[4] = {0, 0, 0, 0};
+        for (auto i: vec) {
+            if (dynamic_cast<SPText*>(i) || dynamic_cast<SPFlowtext*>(i) ) {
+                bool text_line_height_set = false;
+                bool text_line_height_zero = false;
+                bool text_line_height_has_units = false;
+                bool tspan_line_height_all_unset    = true;
+                bool tspan_line_height_all_zero     = true;
+                bool tspan_line_height_all_non_zero = true;
+                if (i->style && i->style->line_height.set) {
+                    text_line_height_set = true;
+                    if (i->style->line_height.computed == 0 && !(i->style->line_height.normal)) {
+                        text_line_height_zero = true;
+                    }
+                    if (i->style->line_height.unit != SP_CSS_UNIT_NONE && !(i->style->line_height.normal)) {
+                        text_line_height_has_units = true;
+                    }
+                }
+                // TO DO: recursively check children
+                std::vector<SPObject*> children = i->childList(false);
+                for (auto j: children) {
+                    if (dynamic_cast<SPTSpan*>(j) || dynamic_cast<SPFlowpara*>(j) || dynamic_cast<SPFlowtspan*>(j) ) {
+                        if (j->style && j->style->line_height.set) {
+                            tspan_line_height_all_unset = false;
+                            if (j->style->line_height.computed != 0 || j->style->line_height.normal) {
+                                tspan_line_height_all_zero = false;
+                            } else {
+                                tspan_line_height_all_non_zero = false;
+                            }
+                        }
+                    }
+                }
+
+                if      ( text_line_height_zero && tspan_line_height_all_non_zero)   mode[0]++;
+                else if (!text_line_height_has_units && tspan_line_height_all_unset) mode[1]++;
+                else if ( text_line_height_has_units && tspan_line_height_all_unset) mode[3]++;
+                else if ( tspan_line_height_all_zero )                               mode[2]++;
+                else                                                                 mode[3]++;
+            }
+        }
+
+        int activeButtonLS = 3;
+        if (mode[0]  > 0 && mode[1] == 0 && mode[2] == 0 && mode[3] == 0) activeButtonLS = 0;
+        if (mode[0] == 0 && mode[1]  > 0 && mode[2] == 0 && mode[3] == 0) activeButtonLS = 1;
+        if (mode[0] == 0 && mode[1] == 0 && mode[2]  > 0 && mode[3] == 0) activeButtonLS = 2;
+
+        InkSelectOneAction* textLineSpacingAction =
+            static_cast<InkSelectOneAction*>( g_object_get_data( tbl, "TextLineSpacingAction" ) );
+        textLineSpacingAction->set_active( activeButtonLS );
+
+        // Enable/disable line height widget based on mode and Outer Style toggle.
+        if ( (activeButtonLS == 0 && outer)  ||   // Adaptive
+             (activeButtonLS == 1 && !outer) ||   // Minimum
+             (activeButtonLS == 2 && !outer)      // Even
+            ) {
+            gtk_action_set_sensitive (lineHeightAction, false);
+        } else {
+            gtk_action_set_sensitive (lineHeightAction, true);
+        }
+
+        // In Minimum mode, don't allow unit change (must remain unitless).
+        GtkAction* textLineHeightUnitsAction =
+            static_cast<GtkAction*>(g_object_get_data( tbl, "TextLineHeightUnitsAction") );
+        if (activeButtonLS == 1 && outer) {
+            gtk_action_set_sensitive (textLineHeightUnitsAction, false);
+        } else {
+            gtk_action_set_sensitive (textLineHeightUnitsAction, true);
+        }
+
         // Word spacing
         double wordSpacing;
         if (query.word_spacing.normal) wordSpacing = 0.0;
@@ -2020,6 +2258,55 @@ void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
         GtkAction* act = tracker->createAction( "TextLineHeightUnitsAction", _("Units"), ("") );
         gtk_action_group_add_action( mainActions, act );
         g_signal_connect_after( G_OBJECT(act), "changed", G_CALLBACK(sp_text_lineheight_unit_changed), holder );
+        g_object_set_data( holder, "TextLineHeightUnitsAction", act );
+    }
+
+    /* Line spacing mode */
+    {
+        InkSelectOneActionColumns columns;
+
+        Glib::RefPtr<Gtk::ListStore> store = Gtk::ListStore::create(columns);
+
+        Gtk::TreeModel::Row row;
+
+        row = *(store->append());
+        row[columns.col_label    ] = _("Adaptive");
+        row[columns.col_tooltip  ] = _("Line spacing adapts to font size.");
+        row[columns.col_icon     ] = INKSCAPE_ICON("text_line_spacing");
+        row[columns.col_sensitive] = true;
+
+        row = *(store->append());
+        row[columns.col_label    ] = _("Minimum");
+        row[columns.col_tooltip  ] = _("Line spacing adapts to fonts size with set minimum spacing.");
+        row[columns.col_icon     ] = INKSCAPE_ICON("text_line_spacing");
+        row[columns.col_sensitive] = true;
+        row = *(store->append());
+        row[columns.col_label    ] = _("Even");
+        row[columns.col_tooltip  ] = _("Lines evenly spaced.");
+        row[columns.col_icon     ] = INKSCAPE_ICON("text_line_spacing");
+        row[columns.col_sensitive] = true;
+
+        row = *(store->append());
+        row[columns.col_label    ] = _("Adjustable ☠");
+        row[columns.col_tooltip  ] = _("Line spacing fully adjustable");
+        row[columns.col_icon     ] = INKSCAPE_ICON("text_line_spacing");
+        row[columns.col_sensitive] = true;
+
+        InkSelectOneAction* act =
+            InkSelectOneAction::create( "TextLineSpacingAction", // Name
+                                        _("Line Spacing Mode"),   // Label
+                                        _("How should multiple lines be spaced."), // Tooltip
+                                        "Not Used",          // Icon
+                                        store );             // Tree store
+        act->use_radio( false );
+        act->use_label( true );
+        gint mode = prefs->getInt("/tools/text/line_spacing_mode", 0);
+        act->set_active( mode );
+
+        gtk_action_group_add_action( mainActions, GTK_ACTION( act->gobj() ));
+        g_object_set_data( holder, "TextLineSpacingAction", act );
+
+        act->signal_changed().connect(sigc::bind<0>(sigc::ptr_fun(&sp_text_line_spacing_mode_changed), holder));
     }
 
     /* Word spacing */
