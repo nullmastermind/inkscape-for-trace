@@ -283,7 +283,7 @@ Gtk::MenuItem& ObjectsPanel::_addPopupItem( SPDesktop *desktop, unsigned int cod
 #if WITH_GTKMM_3_16
     menu_label->set_xalign(0.0);
 #else
-    menu_label->set_set_alignment(0.0, 0.5);
+    menu_label->set_alignment(0.0, 0.5);
 #endif
     box->pack_start(*menu_label, true, true, 0);
     item->add(*box);
