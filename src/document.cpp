@@ -96,6 +96,7 @@ SPDocument::SPDocument() :
     rroot(NULL),
     root(NULL),
     style_cascade(cr_cascade_new(NULL, NULL, NULL)),
+    style_sheet(NULL),
     uri(NULL),
     base(NULL),
     name(NULL),
@@ -177,6 +178,7 @@ SPDocument::~SPDocument() {
         priv->resources.clear();
     }
 
+    // This also destroys all attached stylesheets
     cr_cascade_unref(style_cascade);
     style_cascade = NULL;
 

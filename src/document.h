@@ -113,10 +113,13 @@ public:
 
     Inkscape::XML::Document *rdoc; ///< Our Inkscape::XML::Document
     Inkscape::XML::Node *rroot; ///< Root element of Inkscape::XML::Document
+
 private:
     SPRoot *root;             ///< Our SPRoot
+
 public:
     CRCascade *style_cascade;
+    CRStyleSheet *style_sheet;
 
 protected:
     char *uri;   ///< A filename (not a URI yet), or NULL

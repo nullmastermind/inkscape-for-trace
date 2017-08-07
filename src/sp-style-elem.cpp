@@ -6,6 +6,12 @@
 #include "sp-root.h"
 #include "attributes.h"
 #include "style.h"
+
+// For external style sheets
+#include "io/resource.h"
+#include <iostream>
+#include <fstream>
+
 using Inkscape::XML::TEXT_NODE;
 
 SPStyleElem::SPStyleElem() : SPObject() {
@@ -124,13 +130,15 @@ struct ParseTmp
     CRStyleSheet *const stylesheet;
     StmtType stmtType;
     CRStatement *currStmt;
+    SPDocument *const document; // Need file location for '@import'
     unsigned magic;
     static unsigned const ParseTmp_magic = 0x23474397;  // from /dev/urandom
 
-    ParseTmp(CRStyleSheet *const stylesheet) :
+    ParseTmp(CRStyleSheet *const stylesheet, SPDocument *const document) :
         stylesheet(stylesheet),
         stmtType(NO_STMT),
         currStmt(NULL),
+        document(document),
         magic(ParseTmp_magic)
     { }
 
@@ -143,6 +151,70 @@ struct ParseTmp
         g_return_if_fail(hasMagic());
         magic = 0;
     }
+};
+
+CRParser*
+parser_init(CRStyleSheet *const stylesheet, SPDocument *const document);
+
+static void
+import_style_cb (CRDocHandler *a_handler,
+                 GList *a_media_list,
+                 CRString *a_uri,
+                 CRString *a_uri_default_ns,
+                 CRParsingLocation *a_location)
+{
+    /* a_uri_default_ns is set to NULL and is unused by libcroco */
+
+    // Get document
+    g_return_if_fail(a_handler && a_uri);
+    g_return_if_fail(a_handler->app_data != NULL);
+    ParseTmp &parse_tmp = *static_cast<ParseTmp *>(a_handler->app_data);
+    g_return_if_fail(parse_tmp.hasMagic());
+
+    SPDocument* document = parse_tmp.document;
+    if (!document) {
+        std::cerr << "import_style_cb: No document!" << std::endl;
+        return;
+    }
+    if (!document->getURI()) {
+        std::cerr << "import_style_cb: Document URI is NULL" << std::endl;
+        return;
+    }
+
+    // Get file
+    Glib::ustring import_file =
+        Inkscape::IO::Resource::get_filename (document->getURI(), a_uri->stryng->str);
+
+    // Parse file
+    CRStyleSheet *stylesheet = cr_stylesheet_new (NULL);
+    CRParser *parser = parser_init(stylesheet, document);
+    CRStatus const parse_status =
+        cr_parser_parse_file (parser, reinterpret_cast<const guchar *>(import_file.c_str()), CR_UTF_8);
+    if (parse_status == CR_OK) {
+        cr_stylesheet_append_import (document->style_sheet, stylesheet);
+    } else {
+        std::cerr << "import_style_cb: Could not parse: " << import_file << std::endl;
+        cr_stylesheet_destroy (stylesheet);
+    }
+
+    // Need to delete ParseTmp created by parser_init()
+    CRDocHandler *sac_handler = NULL;
+    cr_parser_get_sac_handler (parser, &sac_handler);
+    ParseTmp *parse_new = reinterpret_cast<ParseTmp *>(sac_handler->app_data);
+    cr_parser_destroy(parser);
+    delete parse_new;
+};
+
+/* NOT USED, incomplete libcroco implementation */
+static void
+import_style_result_cb (CRDocHandler *a_this,
+                        GList *a_media_list,
+                        CRString *a_uri,
+                        CRString *a_uri_default_ns,
+                        CRStyleSheet *a_sheet)
+{
+    /* a_uri_default_ns and a_sheet are set to NULL and are unused by libcroco */
+    std::cerr << "import_style_result_cb: unimplemented" << std::endl;
 };
 
 static void
@@ -251,6 +323,26 @@ property_cb(CRDocHandler *const a_handler,
     g_return_if_fail(append_status == CR_OK);
 }
 
+CRParser*
+parser_init(CRStyleSheet *const stylesheet, SPDocument *const document) {
+
+    ParseTmp *parse_tmp = new ParseTmp(stylesheet, document);
+
+    CRDocHandler *sac_handler = cr_doc_handler_new();
+    sac_handler->app_data = parse_tmp;
+    sac_handler->import_style = import_style_cb;
+    sac_handler->start_selector = start_selector_cb;
+    sac_handler->end_selector = end_selector_cb;
+    sac_handler->start_font_face = start_font_face_cb;
+    sac_handler->end_font_face = end_font_face_cb;
+    sac_handler->property = property_cb;
+
+    CRParser *parser = cr_parser_new (NULL);
+    cr_parser_set_sac_handler(parser, sac_handler);
+
+    return parser;
+}
+
 void update_style_recursively( SPObject *object ) {
     if (object) {
         // std::cout << "update_style_recursively: "
@@ -265,52 +357,35 @@ void update_style_recursively( SPObject *object ) {
 }
 
 void SPStyleElem::read_content() {
-    /* fixme: If there's more than one <style> element in a document, then the document stylesheet
-     * will be set to a random one of them, even switching between them.
-     *
-     * However, I don't see in the spec what's supposed to happen when there are multiple <style>
-     * elements.  The wording suggests that <style>'s content should be a full stylesheet.
-     * http://www.w3.org/TR/REC-CSS2/cascade.html#cascade says that "The author specifies style
-     * sheets for a source document according to the conventions of the document language. For
-     * instance, in HTML, style sheets may be included in the document or linked externally."
-     * (Note the plural in both sentences.)  Whereas libcroco's CRCascade allows only one author
-     * stylesheet.  CRStyleSheet has no next/prev members that I can see, nor can I see any append
-     * stuff.
-     *
-     * Dodji replies "right, that's *bug*"; just an unexpected oversight.
-     */
+
+    // This won't work when we support multiple style sheets in a file.
+    // We'll need to identify which style sheet this element corresponds to
+    // and replace just that part of the total style sheet. (The first
+    // style element would correspond to document->style_sheet, while
+    // laters ones are chained on using style_sheet->next).
+
+    if (document->style_sheet != NULL) {
+        cr_stylesheet_destroy (document->style_sheet);
+        document->style_sheet = NULL;
+    }
+    document->style_sheet = cr_stylesheet_new (NULL);
+    CRParser *parser = parser_init(document->style_sheet, document);
+
+    CRDocHandler *sac_handler = NULL;
+    cr_parser_get_sac_handler (parser, &sac_handler);
+    ParseTmp *parse_tmp = reinterpret_cast<ParseTmp *>(sac_handler->app_data);
 
     //XML Tree being used directly here while it shouldn't be.
     GString *const text = concat_children(*getRepr());
-    CRParser *parser = cr_parser_new_from_buf(reinterpret_cast<guchar *>(text->str), text->len,
-                                              CR_UTF_8, FALSE);
+    CRStatus const parse_status =
+        cr_parser_parse_buf (parser, reinterpret_cast<guchar *>(text->str), text->len, CR_UTF_8);
 
-    /* I see a cr_statement_parse_from_buf for returning a CRStatement*, but no corresponding
-       cr_stylesheet_parse_from_buf.  And cr_statement_parse_from_buf takes a char*, not a
-       CRInputBuf, and doesn't provide a way for calling it in a loop over the one buffer.
-       (I.e. it doesn't tell us where it got up to in the buffer.)
+    // std::cout << "SPStyeElem::read_content: result:" << std::endl;
+    // const gchar* string = cr_stylesheet_to_string (document->style_sheet);
+    // std::cout << (string?string:"Null") << std::endl;
 
-       There's also the generic cr_parser_parse_stylesheet (or just cr_parser_parse), but that
-       just calls user-supplied callbacks rather than constructing a CRStylesheet.
-    */
-    CRDocHandler *sac_handler = cr_doc_handler_new();
-    // impl: ref_count inited to 0, so cr_parser_destroy suffices to delete sac_handler.
-    g_return_if_fail(sac_handler);  // out of memory
-    CRStyleSheet *const stylesheet = cr_stylesheet_new(NULL);
-    ParseTmp parse_tmp(stylesheet);
-    sac_handler->app_data = &parse_tmp;
-    sac_handler->start_selector = start_selector_cb;
-    sac_handler->end_selector = end_selector_cb;
-    sac_handler->start_font_face = start_font_face_cb;
-    sac_handler->end_font_face = end_font_face_cb;
-    sac_handler->property = property_cb;
-    /* todo: start_media, end_media. */
-    /* todo: Test error condition. */
-    cr_parser_set_sac_handler(parser, sac_handler);
-    CRStatus const parse_status = cr_parser_parse(parser);
-    g_assert(sac_handler->app_data == &parse_tmp);
     if (parse_status == CR_OK) {
-        cr_cascade_set_sheet(document->style_cascade, stylesheet, ORIGIN_AUTHOR);
+        cr_cascade_set_sheet(document->style_cascade, document->style_sheet, ORIGIN_AUTHOR);
     } else {
         if (parse_status != CR_PARSING_ERROR) {
             g_printerr("parsing error code=%u\n", unsigned(parse_status));
@@ -320,19 +395,9 @@ void SPStyleElem::read_content() {
                errors/warnings/unsupported features of the current document. */
         }
     }
-    cr_parser_destroy(parser);
-    //requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 
-    // Style references via class= do not, and actually cannot, use autoupdating URIReferences.
-    // Therefore, if an object refers to a stylesheet which has not yet loaded when the object is
-    // being loaded (e.g. if the stylesheet is below or inside the object in XML), its class= has
-    // no effect (bug 1491639).  Below is a partial hack that fixes this for a single case: when
-    // the <style> is a child of the object that uses a style from it. It just forces the parent of
-    // <style> to reread its style as soon as the stylesheet is fully loaded. Naturally, this won't
-    // work if the user of the stylesheet is its grandparent or precedent.
-    //    if ( parent ) {
-    //        parent->style->readFromObject( parent );
-    //    }
+    cr_parser_destroy(parser);
+    delete parse_tmp;
 
     // If style sheet has changed, we need to cascade the entire object tree, top down
     // Get root, read style, loop through children
