@@ -1395,6 +1395,83 @@ cr_sel_eng_get_matched_rulesets (CRSelEng * a_this,
         return status;
 }
 
+enum CRStatus
+cr_sel_eng_process_stylesheet ( CRSelEng * a_eng,
+                                CRXMLNodePtr a_node,
+                                CRStyleSheet * a_stylesheet,
+                                CRStatement *** stmts_tab,
+                                gulong * tab_size,
+                                gulong * tab_len,
+                                gulong * index)
+{
+        enum CRStatus status = CR_OK;
+        CRStyleSheet *cur = NULL;
+        gushort stmts_chunck_size = 8;
+
+        // Process imported stylesheets first
+        for (cur = a_stylesheet->import ; cur ; cur = cur->next) {
+                cr_sel_eng_process_stylesheet( a_eng, a_node, cur, stmts_tab, tab_size, tab_len, index );
+        }
+
+        // Process this stylesheet
+        if (*tab_size - *index < 1) {
+                *stmts_tab = (CRStatement **) g_try_realloc
+                        (*stmts_tab, (*tab_size + stmts_chunck_size)
+                         * sizeof (CRStatement *));
+                if (!*stmts_tab) {
+                        cr_utils_trace_info ("Out of memory");
+                        status = CR_ERROR;
+                        goto cleanup;
+                }
+                *tab_size += stmts_chunck_size;
+                /*
+                 *compute the max size left for
+                 *cr_sel_eng_get_matched_rulesets_real()'s output tab
+                 */
+                *tab_len = *tab_size - *index;
+        }
+        while ((status = cr_sel_eng_get_matched_rulesets_real
+                (a_eng, a_stylesheet, a_node, *stmts_tab + *index, tab_len))
+               == CR_OUTPUT_TOO_SHORT_ERROR) {
+                *stmts_tab = (CRStatement **) g_try_realloc
+                        (*stmts_tab, (*tab_size + stmts_chunck_size)
+                         * sizeof (CRStatement *));
+                if (!*stmts_tab) {
+                        cr_utils_trace_info ("Out of memory");
+                        status = CR_ERROR;
+                        goto cleanup;
+                }
+                *tab_size += stmts_chunck_size;
+                *index += *tab_len;
+                /*
+                 *compute the max size left for
+                 *cr_sel_eng_get_matched_rulesets_real()'s output tab
+                 */
+                *tab_len = *tab_size - *index;
+        }
+        if (status != CR_OK) {
+                cr_utils_trace_info ("Error while running "
+                                     "selector engine");
+                goto cleanup;
+        }
+        *index += *tab_len;
+        *tab_len = *tab_size - *index;
+
+        // Process other document stylesheets last
+        for (cur = a_stylesheet->next ; cur ; cur = cur->next) {
+                cr_sel_eng_process_stylesheet( a_eng, a_node, cur, stmts_tab, tab_size, tab_len, index );
+        }
+
+        return status;
+
+ cleanup:
+        if (*stmts_tab) {
+                g_free (*stmts_tab);
+                *stmts_tab = NULL;
+        }
+
+        return status;
+}
 
 enum CRStatus
 cr_sel_eng_get_matched_properties_from_cascade (CRSelEng * a_this,
@@ -1420,48 +1497,13 @@ cr_sel_eng_get_matched_properties_from_cascade (CRSelEng * a_this,
                 sheet = cr_cascade_get_sheet (a_cascade, origin);
                 if (!sheet)
                         continue;
-                if (tab_size - index < 1) {
-                        stmts_tab = (CRStatement **) g_try_realloc
-                                (stmts_tab, (tab_size + stmts_chunck_size)
-                                 * sizeof (CRStatement *));
-                        if (!stmts_tab) {
-                                cr_utils_trace_info ("Out of memory");
-                                status = CR_ERROR;
-                                goto cleanup;
-                        }
-                        tab_size += stmts_chunck_size;
-                        /*
-                         *compute the max size left for
-                         *cr_sel_eng_get_matched_rulesets_real()'s output tab 
-                         */
-                        tab_len = tab_size - index;
-                }
-                while ((status = cr_sel_eng_get_matched_rulesets_real
-                        (a_this, sheet, a_node, stmts_tab + index, &tab_len))
-                       == CR_OUTPUT_TOO_SHORT_ERROR) {
-                        stmts_tab = (CRStatement **) g_try_realloc
-                                (stmts_tab, (tab_size + stmts_chunck_size)
-                                 * sizeof (CRStatement *));
-                        if (!stmts_tab) {
-                                cr_utils_trace_info ("Out of memory");
-                                status = CR_ERROR;
-                                goto cleanup;
-                        }
-                        tab_size += stmts_chunck_size;
-                        index += tab_len;
-                        /*
-                         *compute the max size left for
-                         *cr_sel_eng_get_matched_rulesets_real()'s output tab 
-                         */
-                        tab_len = tab_size - index;
-                }
+
+                status = cr_sel_eng_process_stylesheet (a_this, a_node, sheet, &stmts_tab, &tab_size, &tab_len, &index);
                 if (status != CR_OK) {
                         cr_utils_trace_info ("Error while running "
                                              "selector engine");
-                        goto cleanup;
+                        return status;
                 }
-                index += tab_len;
-                tab_len = tab_size - index;
         }
 
         /*
@@ -1472,7 +1514,6 @@ cr_sel_eng_get_matched_properties_from_cascade (CRSelEng * a_this,
          */
         for (i = 0; i < index; i++) {
                 CRStatement *stmt = stmts_tab[i];
-
                 if (!stmt)
                         continue;
                 switch (stmt->type) {
@@ -1488,11 +1529,6 @@ cr_sel_eng_get_matched_properties_from_cascade (CRSelEng * a_this,
 
         }
         status = CR_OK ;
- cleanup:
-        if (stmts_tab) {
-                g_free (stmts_tab);
-                stmts_tab = NULL;
-        }
 
         return status;
 }
