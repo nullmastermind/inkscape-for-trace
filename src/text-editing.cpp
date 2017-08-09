@@ -1214,6 +1214,7 @@ sp_te_adjust_tspan_letterspacing_screen(SPItem *text, Inkscape::Text::Layout::it
     text->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
 }
 
+// Only used for page-up and page-down and sp_te_adjust_linespacing_screen
 double
 sp_te_get_average_linespacing (SPItem *text)
 {
@@ -1227,6 +1228,91 @@ sp_te_get_average_linespacing (SPItem *text)
     return average_line_height;
 }
 
+/** Adjust the line height by 'amount'.
+ *  If top_level is true then objects without 'line-height' set or withwill get a set value,
+ *  otherwise objects that inherit line-height will not get onw=e.
+ */
+void
+sp_te_adjust_line_height (SPObject *object, double amount, double average, bool top_level = true) {
+
+    SPStyle *style = object->style;
+
+    // Always set if top level true.
+    // Also set if line_height is set to a non-zero value.
+    if (top_level ||
+        (style->line_height.set && !style->line_height.inherit && !style->line_height.computed == 0)){
+
+        // Scale default values
+        if (!style->line_height.set || style->line_height.inherit || style->line_height.normal) {
+            style->line_height.set = TRUE;
+            style->line_height.inherit = FALSE;
+            style->line_height.normal = FALSE;
+            style->line_height.unit = SP_CSS_UNIT_NONE;
+            style->line_height.value = style->line_height.computed = Inkscape::Text::Layout::LINE_HEIGHT_NORMAL;
+        }
+
+        switch (style->line_height.unit) {
+
+            case SP_CSS_UNIT_NONE:
+            default:
+                // Multiplier-type units, stored in computed
+                if (fabs(style->line_height.computed) < 0.001) {
+                    style->line_height.computed = amount < 0.0 ? -0.001 : 0.001;
+                    // the formula below could get stuck at zero
+                } else {
+                    style->line_height.computed *= (average + amount) / average;
+                }
+                style->line_height.value = style->line_height.computed;
+                break;
+
+
+            // Relative units, stored in value
+            case SP_CSS_UNIT_EM:
+            case SP_CSS_UNIT_EX:
+            case SP_CSS_UNIT_PERCENT:
+                if (fabs(style->line_height.value) < 0.001) {
+                    style->line_height.value = amount < 0.0 ? -0.001 : 0.001;
+                } else {
+                    style->line_height.value *= (average + amount) / average;
+                }
+                break;
+
+
+            // Absolute units
+            case SP_CSS_UNIT_PX:
+                style->line_height.computed += amount;
+                style->line_height.value = style->line_height.computed;
+                break;
+            case SP_CSS_UNIT_PT:
+                style->line_height.computed += Inkscape::Util::Quantity::convert(amount, "px", "pt");
+                style->line_height.value = style->line_height.computed;
+                break;
+            case SP_CSS_UNIT_PC:
+                style->line_height.computed += Inkscape::Util::Quantity::convert(amount, "px", "pc");
+                style->line_height.value = style->line_height.computed;
+                break;
+            case SP_CSS_UNIT_MM:
+                style->line_height.computed += Inkscape::Util::Quantity::convert(amount, "px", "mm");
+                style->line_height.value = style->line_height.computed;
+                break;
+            case SP_CSS_UNIT_CM:
+                style->line_height.computed += Inkscape::Util::Quantity::convert(amount, "px", "cm");
+                style->line_height.value = style->line_height.computed;
+                break;
+            case SP_CSS_UNIT_IN:
+                style->line_height.computed += Inkscape::Util::Quantity::convert(amount, "px", "in");
+                style->line_height.value = style->line_height.computed;
+                break;
+        }
+        object->updateRepr();
+    }
+
+    std::vector<SPObject*> children = object->childList(false);
+    for (auto child: children) {
+        sp_te_adjust_line_height (child, amount, average, false);
+    }
+}
+
 void
 sp_te_adjust_linespacing_screen (SPItem *text, Inkscape::Text::Layout::iterator const &/*start*/, Inkscape::Text::Layout::iterator const &/*end*/, SPDesktop *desktop, gdouble by)
 {
@@ -1235,71 +1321,30 @@ sp_te_adjust_linespacing_screen (SPItem *text, Inkscape::Text::Layout::iterator 
     g_return_if_fail (SP_IS_TEXT(text) || SP_IS_FLOWTEXT(text));
 
     Inkscape::Text::Layout const *layout = te_get_layout(text);
-    SPStyle *style = text->style;
 
-    if (!style->line_height.set || style->line_height.inherit || style->line_height.normal) {
-        style->line_height.set = TRUE;
-        style->line_height.inherit = FALSE;
-        style->line_height.normal = FALSE;
-        style->line_height.unit = SP_CSS_UNIT_PERCENT;
-        style->line_height.value = style->line_height.computed = Inkscape::Text::Layout::LINE_HEIGHT_NORMAL;
-    }
-
-    unsigned line_count = layout->lineIndex(layout->end());
-    double all_lines_height = layout->characterAnchorPoint(layout->end())[Geom::Y] - layout->characterAnchorPoint(layout->begin())[Geom::Y];
-    double average_line_height = all_lines_height / (line_count == 0 ? 1 : line_count);
+    double average_line_height = sp_te_get_average_linespacing (text);
     if (fabs(average_line_height) < 0.001) average_line_height = 0.001;
 
     // divide increment by zoom and by the number of lines,
     // so that the entire object is expanded by by pixels
+    unsigned line_count = layout->lineIndex(layout->end());
     gdouble zby = by / (desktop->current_zoom() * (line_count == 0 ? 1 : line_count));
 
     // divide increment by matrix expansion
     Geom::Affine t(text->i2doc_affine());
     zby = zby / t.descrim();
 
-    switch (style->line_height.unit) {
-        case SP_CSS_UNIT_NONE:
-        default:
-            // multiplier-type units, stored in computed
-            if (fabs(style->line_height.computed) < 0.001) style->line_height.computed = by < 0.0 ? -0.001 : 0.001;    // the formula below could get stuck at zero
-            else style->line_height.computed *= (average_line_height + zby) / average_line_height;
-            style->line_height.value = style->line_height.computed;
-            break;
-        case SP_CSS_UNIT_EM:
-        case SP_CSS_UNIT_EX:
-        case SP_CSS_UNIT_PERCENT:
-            // multiplier-type units, stored in value
-            if (fabs(style->line_height.value) < 0.001) style->line_height.value = by < 0.0 ? -0.001 : 0.001;
-            else style->line_height.value *= (average_line_height + zby) / average_line_height;
-            break;
-            // absolute-type units
-        case SP_CSS_UNIT_PX:
-            style->line_height.computed += zby;
-            style->line_height.value = style->line_height.computed;
-            break;
-        case SP_CSS_UNIT_PT:
-            style->line_height.computed += Inkscape::Util::Quantity::convert(zby, "px", "pt");
-            style->line_height.value = style->line_height.computed;
-            break;
-        case SP_CSS_UNIT_PC:
-            style->line_height.computed += (Inkscape::Util::Quantity::convert(zby, "px", "pt") / 12);
-            style->line_height.value = style->line_height.computed;
-            break;
-        case SP_CSS_UNIT_MM:
-            style->line_height.computed += Inkscape::Util::Quantity::convert(zby, "px", "mm");
-            style->line_height.value = style->line_height.computed;
-            break;
-        case SP_CSS_UNIT_CM:
-            style->line_height.computed += Inkscape::Util::Quantity::convert(zby, "px", "cm");
-            style->line_height.value = style->line_height.computed;
-            break;
-        case SP_CSS_UNIT_IN:
-            style->line_height.computed += Inkscape::Util::Quantity::convert(zby, "px", "in");
-            style->line_height.value = style->line_height.computed;
-            break;
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    gint mode = prefs->getInt("/tools/text/line_spacing_mode", 0);
+    if (mode == 0) { // Adaptive: <text> line-spacing is zero, only scale children.
+        std::vector<SPObject*> children = text->childList(false);
+        for (auto child: children) {
+            sp_te_adjust_line_height (child, zby, average_line_height, false);
+        }
+    } else {
+        sp_te_adjust_line_height (text, zby, average_line_height, true);
     }
-    text->updateRepr();
+
     text->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_TEXT_LAYOUT_MODIFIED_FLAG);
 }
 

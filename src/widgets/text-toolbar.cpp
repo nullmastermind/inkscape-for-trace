@@ -15,11 +15,13 @@
  *   Tavmjong Bah <tavmjong@free.fr>
  *   Abhishek Sharma
  *   Kris De Gussem <Kris.DeGussem@gmail.com>
+ *   Tavmjong Bah <tavmjong@free.fr>
  *
  * Copyright (C) 2004 David Turner
  * Copyright (C) 2003 MenTaLguY
  * Copyright (C) 2001-2002 Ximian, Inc.
  * Copyright (C) 1999-2013 authors
+ * Copyright (C) 2017 Tavmjong Bah
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
@@ -577,13 +579,71 @@ static void sp_text_align_mode_changed( GObject *tbl, int mode )
     }
     sp_repr_css_attr_unref (css);
 
-    gtk_widget_grab_focus (GTK_WIDGET(desktop->canvas));
+    gtk_widget_grab_focus (GTK_WIDGET(SP_ACTIVE_DESKTOP->canvas));
 
     g_object_set_data( tbl, "freeze", GINT_TO_POINTER(FALSE) );
 }
 
 static bool is_relative( Unit const *unit ) {
     return (unit->abbr == "" || unit->abbr == "em" || unit->abbr == "ex" || unit->abbr == "%");
+}
+
+// Set property for object, but unset all descendents
+// Should probably be moved to desktop_style.cpp
+static void recursively_set_properties( SPObject* object, SPCSSAttr *css ) {
+    object->changeCSS (css, "style");
+
+    SPCSSAttr *css_unset = sp_repr_css_attr_unset_all( css );
+    std::vector<SPObject *> children = object->childList(false);
+    for (auto i: children) {
+        recursively_set_properties (i, css_unset);
+    }
+    sp_repr_css_attr_unref (css_unset);
+}
+
+// Apply line height changes (line-height value changed or line-height unit changed)
+static void set_lineheight (SPCSSAttr *css) {
+
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    bool outer = prefs->getInt("/tools/text/outer_style", false);
+    gint mode  = prefs->getInt("/tools/text/line_spacing_mode", 0);
+    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+
+    // Calling sp_desktop_set_style will result in a call to TextTool::_styleSet() which
+    // will set the style on selected text inside the <text> element. If we want to set
+    // the style on the outer <text> objects we need to bypass this call.
+    if ( mode == 3 && !outer ) {
+        // This will call sp_te_apply_style via signal
+        sp_desktop_set_style (desktop, css, true, true);
+    } else {
+        Inkscape::Selection *selection = desktop->getSelection();
+        auto itemlist= selection->items();
+        for (auto i: itemlist) {
+
+            if (dynamic_cast<SPText *>(i) || dynamic_cast<SPFlowtext *>(i)) {
+                SPItem *item = i;
+
+                // Scale by inverse of accumulated parent transform
+                SPCSSAttr *css_set = sp_repr_css_attr_new();
+                sp_repr_css_merge(css_set, css);
+                Geom::Affine const local(item->i2doc_affine());
+                double const ex(local.descrim());
+                if ( (ex != 0.0) && (ex != 1.0) ) {
+                    sp_css_attr_scale(css_set, 1/ex);
+                }
+
+                if ( mode == 1 || mode == 2 || mode == 3) {  // Minimum, Even, or Adjustable w/ outer.
+                    // We change only outer style
+                    item->changeCSS(css_set,"style");
+                } else {
+                    // We change only inner style (Adaptive).
+                    for (auto child: item->childList(false)) {
+                        child->changeCSS(css_set,"style");
+                    }
+                }
+            }
+        }
+    }
 }
 
 static void sp_text_lineheight_value_changed( GtkAdjustment *adj, GObject *tbl )
@@ -622,56 +682,28 @@ static void sp_text_lineheight_value_changed( GtkAdjustment *adj, GObject *tbl )
     }
     sp_repr_css_set_property (css, "line-height", osfs.str().c_str());
 
-
-    // Apply line-height to selected objects. See comment in font size function.
-    bool outer = prefs->getInt("/tools/text/outer_style", false);
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    if (outer) {
-        Inkscape::Selection *selection = desktop->getSelection();
-        auto itemlist= selection->items();
-        for(auto i=itemlist.begin();i!=itemlist.end(); ++i){
-            if (dynamic_cast<SPText *>(*i) || dynamic_cast<SPFlowtext *>(*i)) {
-                SPItem *item = *i;
-
-                // Scale by inverse of accumulated parent transform
-                SPCSSAttr *css_set = sp_repr_css_attr_new();
-                sp_repr_css_merge(css_set, css);
-                Geom::Affine const local(item->i2doc_affine());
-                double const ex(local.descrim());
-                if ( (ex != 0.0) && (ex != 1.0) ) {
-                    sp_css_attr_scale(css_set, 1/ex);
-                }
-
-                item->changeCSS(css_set,"style");
-
-                sp_repr_css_attr_unref(css_set);
-            }
-        }
-    } else {
-        sp_desktop_set_style (desktop, css, true, true);
-    }
-
-
+    // Internal function to set line-height which is spacing mode dependent.
+    set_lineheight (css);
 
     // Only need to save for undo if a text item has been changed.
-    Inkscape::Selection *selection = desktop->getSelection();
+    Inkscape::Selection *selection = SP_ACTIVE_DESKTOP->getSelection();
     bool modmade = false;
     auto itemlist= selection->items();
     for(auto i=itemlist.begin();i!=itemlist.end(); ++i){
-        if (SP_IS_TEXT (*i)) {
+        if (dynamic_cast<SPText *>(*i) || dynamic_cast<SPFlowtext *>(*i)) {
             modmade = true;
         }
     }
 
     // Save for undo
-    if(modmade) {
+    if (modmade) {
         // Call ensureUpToDate() causes rebuild of text layout (with all proper style
         // cascading, etc.). For multi-line text with sodipodi::role="line", we must explicitly
         // save new <tspan> 'x' and 'y' attribute values by calling updateRepr().
         // Partial fix for bug #1590141.
-        desktop->getDocument()->ensureUpToDate();
+        SP_ACTIVE_DESKTOP->getDocument()->ensureUpToDate();
         for(auto i=itemlist.begin();i!=itemlist.end(); ++i){
-            if (SP_IS_TEXT (*i)) {
+            if (dynamic_cast<SPText *>(*i) || dynamic_cast<SPFlowtext *>(*i)) {
                 (*i)->updateRepr();
             }
         }
@@ -817,13 +849,22 @@ static void sp_text_lineheight_unit_changed( gpointer /* */, GObject *tbl )
     // Update GUI with line_height value.
     gtk_adjustment_set_value(line_height_adj, line_height);
 
-    // Apply line-height to selected objects.
-    sp_desktop_set_style (desktop, css, true, false);
+    // Update "climb rate"  The custom action has a step property but no way to set it.
+    if (unit->abbr == "%") {
+        gtk_adjustment_set_step_increment (line_height_adj,  1.0);
+        gtk_adjustment_set_page_increment (line_height_adj, 10.0);
+    } else {
+        gtk_adjustment_set_step_increment (line_height_adj,  0.1);
+        gtk_adjustment_set_page_increment (line_height_adj,  1.0);
+    }
+
+    // Internal function to set line-height which is spacing mode dependent.
+    set_lineheight (css);
 
     // Only need to save for undo if a text item has been changed.
     bool modmade = false;
     for(auto i=itemlist.begin();i!=itemlist.end(); ++i){
-        if (SP_IS_TEXT (*i)) {
+        if (dynamic_cast<SPText *>(*i) || dynamic_cast<SPFlowtext *>(*i)) {
             modmade = true;
         }
     }
@@ -847,19 +888,6 @@ static void sp_text_lineheight_unit_changed( gpointer /* */, GObject *tbl )
     sp_repr_css_attr_unref (css);
 
     g_object_set_data( tbl, "freeze", GINT_TO_POINTER(FALSE) );
-}
-
-// Set property for object, but unset all descendents
-// Should probably be moved to desktop_style.cpp
-static void recursively_set_properties( SPObject* object, SPCSSAttr *css ) {
-    object->changeCSS (css, "style");
-
-    SPCSSAttr *css_unset = sp_repr_css_attr_unset_all( css );
-    std::vector<SPObject *> children = object->childList(false);
-    for (auto i: children) {
-        recursively_set_properties (i, css_unset);
-    }
-    sp_repr_css_attr_unref (css_unset);
 }
 
 //
@@ -1004,11 +1032,29 @@ static void sp_text_line_spacing_mode_changed( GObject *tbl, int mode )
             break;
     }
 
-            // Update widgets to reflect new state of Text Outer Style button.
-    sp_text_toolbox_selection_changed( NULL, tbl );
+    // Outer style toggle set per mode so that line height widget should be enabled.
+    GtkAction* lineHeightAction = GTK_ACTION( g_object_get_data( tbl, "TextLineHeightAction" ) );
+    gtk_action_set_sensitive (lineHeightAction, true);
+
+    // Update "climb rate"
+    EgeAdjustmentAction *line_height_act =
+        reinterpret_cast<EgeAdjustmentAction *>(g_object_get_data(tbl, "TextLineHeightAction"));
+    GtkAdjustment *line_height_adj = ege_adjustment_action_get_adjustment( line_height_act );
+    UnitTracker *tracker = reinterpret_cast<UnitTracker*>(g_object_get_data(tbl, "tracker"));
+    Unit const *unit = tracker->getActiveUnit();
+
+    if (unit->abbr == "%") {
+        gtk_adjustment_set_step_increment (line_height_adj,  1.0);
+        gtk_adjustment_set_page_increment (line_height_adj, 10.0);
+    } else {
+        gtk_adjustment_set_step_increment (line_height_adj,  0.1);
+        gtk_adjustment_set_page_increment (line_height_adj,  1.0);
+    }
 
     DocumentUndo::done(desktop->getDocument(), SP_VERB_CONTEXT_TEXT,
                        _("Text: Change line spacing mode"));
+
+    gtk_widget_grab_focus (GTK_WIDGET(desktop->canvas));
 
     g_object_set_data( tbl, "freeze", GINT_TO_POINTER(FALSE) );
 }
@@ -1245,6 +1291,8 @@ static void sp_writing_mode_changed( GObject* tbl, int mode )
     }
     sp_repr_css_attr_unref (css);
 
+    gtk_widget_grab_focus (GTK_WIDGET(SP_ACTIVE_DESKTOP->canvas));
+
     g_object_set_data( tbl, "freeze", GINT_TO_POINTER(FALSE) );
 }
 
@@ -1297,6 +1345,8 @@ static void sp_text_orientation_changed( GObject* tbl, int mode )
     }
     sp_repr_css_attr_unref (css);
 
+    gtk_widget_grab_focus (GTK_WIDGET(SP_ACTIVE_DESKTOP->canvas));
+
     g_object_set_data( tbl, "freeze", GINT_TO_POINTER(FALSE) );
 }
 
@@ -1342,6 +1392,8 @@ static void sp_text_direction_changed( GObject *tbl, int mode )
                        _("Text: Change direction"));
     }
     sp_repr_css_attr_unref (css);
+
+    gtk_widget_grab_focus (GTK_WIDGET(SP_ACTIVE_DESKTOP->canvas));
 
     g_object_set_data( tbl, "freeze", GINT_TO_POINTER(FALSE) );
 }
@@ -1626,6 +1678,15 @@ static void sp_text_toolbox_selection_changed(Inkscape::Selection */*selection*/
             ege_adjustment_action_get_adjustment(EGE_ADJUSTMENT_ACTION( lineHeightAction ));
         gtk_adjustment_set_value( lineHeightAdjustment, height );
 
+        // Update "climb rate"
+        if (line_height_unit == SP_CSS_UNIT_PERCENT) {
+            gtk_adjustment_set_step_increment (lineHeightAdjustment,  1.0);
+            gtk_adjustment_set_page_increment (lineHeightAdjustment, 10.0);
+        } else {
+            gtk_adjustment_set_step_increment (lineHeightAdjustment,  0.1);
+            gtk_adjustment_set_page_increment (lineHeightAdjustment,  1.0);
+        }
+
         UnitTracker* tracker = reinterpret_cast<UnitTracker*>( g_object_get_data( tbl, "tracker" ) );
         if( line_height_unit == SP_CSS_UNIT_NONE ) {
             // Function 'sp_style_get_css_unit_string' returns 'px' for unit none.
@@ -1692,7 +1753,10 @@ static void sp_text_toolbox_selection_changed(Inkscape::Selection */*selection*/
         if (mode[0]  > 0 && mode[1] == 0 && mode[2] == 0 && mode[3] == 0) activeButtonLS = 0;
         if (mode[0] == 0 && mode[1]  > 0 && mode[2] == 0 && mode[3] == 0) activeButtonLS = 1;
         if (mode[0] == 0 && mode[1] == 0 && mode[2]  > 0 && mode[3] == 0) activeButtonLS = 2;
-
+        // std::cout << "  modes: " << mode[0]
+        //           << ", "<< mode[1]
+        //           << ", "<< mode[2]
+        //           << ", "<< mode[3] << std::endl;
         InkSelectOneAction* textLineSpacingAction =
             static_cast<InkSelectOneAction*>( g_object_get_data( tbl, "TextLineSpacingAction" ) );
         textLineSpacingAction->set_active( activeButtonLS );
@@ -1707,10 +1771,10 @@ static void sp_text_toolbox_selection_changed(Inkscape::Selection */*selection*/
             gtk_action_set_sensitive (lineHeightAction, true);
         }
 
-        // In Minimum mode, don't allow unit change (must remain unitless).
+        // In Minimum and Adaptive modes, don't allow unit change (must remain unitless).
         GtkAction* textLineHeightUnitsAction =
             static_cast<GtkAction*>(g_object_get_data( tbl, "TextLineHeightUnitsAction") );
-        if (activeButtonLS == 1 && outer) {
+        if (activeButtonLS == 0 || (activeButtonLS == 1 && outer)) {
             gtk_action_set_sensitive (textLineHeightUnitsAction, false);
         } else {
             gtk_action_set_sensitive (textLineHeightUnitsAction, true);
@@ -2238,7 +2302,7 @@ void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
             holder,                               /* dataKludge */
             FALSE,                                /* set alt-x keyboard shortcut? */
             NULL,                                 /* altx_mark */
-            0.0, 1000.0, 1.0, 10.0,               /* lower, upper, step (arrow up/down), page up/down */
+            0.0, 1000.0, 0.1, 1.0,                /* lower, upper, step (arrow up/down), page up/down */
             labels, values, G_N_ELEMENTS(labels), /* drop down menu */
             sp_text_lineheight_value_changed,     /* callback */
             NULL, // tracker,                     /* unit tracker */
@@ -2295,7 +2359,7 @@ void sp_text_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GObje
         InkSelectOneAction* act =
             InkSelectOneAction::create( "TextLineSpacingAction", // Name
                                         _("Line Spacing Mode"),   // Label
-                                        _("How should multiple lines be spaced."), // Tooltip
+                                        _("How should multiple baselines be spaced?\n Adapative: Line spacing adapts to font size.\n Minimum: Like Adaptive but with a set minimum.\n Even: Evenly spaced.\n Adjustable: No restrictions."), // Tooltip
                                         "Not Used",          // Icon
                                         store );             // Tree store
         act->use_radio( false );
