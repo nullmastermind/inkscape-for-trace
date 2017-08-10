@@ -328,7 +328,7 @@ void sp_shortcut_get_file_names(std::vector<Glib::ustring> *names, std::vector<G
     
     // sort by name 
     std::sort(names_and_paths.begin(), names_and_paths.end(),
-            [](std::pair<Glib::ustring, Glib::ustring>& pair1, std::pair<Glib::ustring, Glib::ustring>& pair2) {
+            [](std::pair<Glib::ustring, Glib::ustring> pair1, std::pair<Glib::ustring, Glib::ustring> pair2) {
                 return Glib::path_get_basename(pair1.first).compare(Glib::path_get_basename(pair2.first)) < 0;
             });
     auto it_default = std::find_if(names_and_paths.begin(), names_and_paths.end(),
