@@ -68,29 +68,28 @@ void AboutBox::hide_about() {
  * Constructor
  */ 
 AboutBox::AboutBox() {
-
     // call this first
     initStrings();
 
+    // Insert the Splash widget.  This is placed directly into the
+    // content area of the dialog, whereas everything else is placed
+    // automatically by the Gtk::AboutDialog parent class
     Gtk::Widget *splash=build_splash_widget();
     if (splash) {
         get_content_area()->pack_end(*manage(splash), true, true);
         splash->show_all();
     }
 
-    set_logo_icon_name(INKSCAPE_ICON("inkscape"));
+    // Set Application metadata, which will be automatically
+    // inserted into text widgets by the Gtk::AboutDialog parent class
     set_program_name("Inkscape");
     set_version(Inkscape::version_string);
-
+    set_logo_icon_name(INKSCAPE_ICON("inkscape"));
     set_website("https://www.inkscape.org");
-
-    Gtk::Requisition minimum_size;
-    Gtk::Requisition natural_size;
-    get_preferred_size(minimum_size, natural_size);
-    
-    // allow window to shrink
-    set_size_request(0, 0);
-    set_default_size(minimum_size.width, minimum_size.height);
+    set_website_label(_("Inkscape website"));
+    set_license_type(Gtk::LICENSE_GPL_3_0);
+    set_comments(_("Open Source Scalable Vector Graphics Editor\n"
+                   "Draw Freely."));
 }
 
 Gtk::Widget *build_splash_widget() {
@@ -203,8 +202,6 @@ void AboutBox::initStrings() {
     }
 
     set_translator_credits(translators_text);
-    set_license("GPL 3.0 or later"); // Overriden in next line
-    set_license_type(Gtk::LICENSE_GPL_3_0);
 }
 
 void AboutBox::on_response(int response_id) {
