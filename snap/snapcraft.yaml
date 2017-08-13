@@ -99,7 +99,7 @@ parts:
 apps:
   inkscape:
     command: snapcraft.sh desktop-launch inkscape
-    plugs: [home, unity7, gsettings]
+    plugs: [home, unity7, gsettings, cups-control, network]
     desktop: share/applications/inkscape.desktop
   viewer:
     command: snapcraft.sh desktop-launch inkview
