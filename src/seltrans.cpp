@@ -131,13 +131,13 @@ Inkscape::SelTrans::SelTrans(SPDesktop *desktop) :
     _norm = sp_canvas_item_new(desktop->getControls(),
                                SP_TYPE_CTRL,
                                "anchor", SP_ANCHOR_CENTER,
-                               "mode", SP_CTRL_MODE_COLOR,
+                               "mode", SP_CTRL_MODE_XOR,
                                "shape", SP_CTRL_SHAPE_BITMAP,
                                "size", 13.0,
                                "filled", TRUE,
                                "fill_color", 0x00000000,
                                "stroked", TRUE,
-                               "stroke_color", 0x000000a0,
+                               "stroke_color", 0xff0000b0,
                                "pixbuf", handles[12],
                                NULL);
 
@@ -150,7 +150,7 @@ Inkscape::SelTrans::SelTrans(SPDesktop *desktop) :
                                "filled", TRUE,
                                "fill_color", 0xffffff7f,
                                "stroked", TRUE,
-                               "stroke_color", 0xffffffff,
+                               "stroke_color", 0xff0000b0,
                                "pixbuf", handles[12],
                                NULL);
 
@@ -727,12 +727,16 @@ void Inkscape::SelTrans::handleClick(SPKnot */*knot*/, guint state, SPSelTransHa
 
 void Inkscape::SelTrans::handleGrab(SPKnot *knot, guint /*state*/, SPSelTransHandle const &handle)
 {
+    grab(knot->position(), handle.x, handle.y, FALSE, FALSE);
+
+    // Forcing handles visibility must be done after grab() to be effective
     switch (handle.type) {
         case HANDLE_CENTER:
             g_object_set(G_OBJECT(_grip),
                          "shape", SP_CTRL_SHAPE_BITMAP,
                          "size", 13.0,
                          NULL);
+            sp_canvas_item_hide(_norm);
             sp_canvas_item_show(_grip);
             break;
         default:
@@ -744,8 +748,6 @@ void Inkscape::SelTrans::handleGrab(SPKnot *knot, guint /*state*/, SPSelTransHan
             sp_canvas_item_show(_grip);
             break;
     }
-
-    grab(knot->position(), handle.x, handle.y, FALSE, FALSE);
 }
 
 
