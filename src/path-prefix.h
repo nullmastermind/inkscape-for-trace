@@ -31,6 +31,7 @@
 #  define INKSCAPE_APPICONDIR     BR_DATADIR( INKSCAPE_LIBPREFIX "/share/pixmaps" )
 #  define INKSCAPE_ATTRRELDIR     BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/attributes" )
 #  define INKSCAPE_BINDDIR        BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/bind" )
+#  define INKSCAPE_DOCDIR         BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/doc" )
 #  define INKSCAPE_EXAMPLESDIR    BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/examples" )
 #  define INKSCAPE_EXTENSIONDIR   BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/extensions" )
 #  define INKSCAPE_FILTERDIR      BR_DATADIR( INKSCAPE_LIBPREFIX "/share/inkscape/filters" )
@@ -55,6 +56,7 @@
 #    define INKSCAPE_APPICONDIR   WIN32_DATADIR("pixmaps")
 #    define INKSCAPE_ATTRRELDIR   WIN32_DATADIR("attributes")
 #    define INKSCAPE_BINDDIR      WIN32_DATADIR("bind")
+#    define INKSCAPE_DOCDIR       WIN32_DATADIR("doc")
 #    define INKSCAPE_EXAMPLESDIR  WIN32_DATADIR("examples")
 #    define INKSCAPE_EXTENSIONDIR WIN32_DATADIR("extensions")
 #    define INKSCAPE_FILTERDIR    WIN32_DATADIR("filters")
@@ -78,6 +80,7 @@
 #    define INKSCAPE_APPICONDIR   "Contents/Resources/share/pixmaps"
 #    define INKSCAPE_ATTRRELDIR   "Contents/Resources/share/inkscape/attributes"
 #    define INKSCAPE_BINDDIR      "Contents/Resources/share/inkscape/bind"
+#    define INKSCAPE_DOCDIR       "Contents/Resources/share/inkscape/doc"
 #    define INKSCAPE_EXAMPLESDIR  "Contents/Resources/share/inkscape/examples"
 #    define INKSCAPE_EXTENSIONDIR "Contents/Resources/share/inkscape/extensions"
 #    define INKSCAPE_FILTERDIR    "Contents/Resources/share/inkscape/filters"
@@ -101,6 +104,7 @@
 #    define INKSCAPE_APPICONDIR   INKSCAPE_DATADIR "/pixmaps"
 #    define INKSCAPE_ATTRRELDIR   INKSCAPE_DATADIR "/inkscape/attributes"
 #    define INKSCAPE_BINDDIR      INKSCAPE_DATADIR "/inkscape/bind"
+#    define INKSCAPE_DOCDIR       INKSCAPE_DATADIR "/inkscape/doc"
 #    define INKSCAPE_EXAMPLESDIR  INKSCAPE_DATADIR "/inkscape/examples"
 #    define INKSCAPE_EXTENSIONDIR INKSCAPE_DATADIR "/inkscape/extensions"
 #    define INKSCAPE_FILTERDIR    INKSCAPE_DATADIR "/inkscape/filters"
