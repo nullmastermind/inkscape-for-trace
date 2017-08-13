@@ -1,3 +1,5 @@
+doxygen_warnings.log
+doxygen/
 build
 share/inkscape
 share/*/*.h

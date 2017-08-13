@@ -227,7 +227,6 @@ void SPClipPath::hide(unsigned int key) {
             SP_ITEM(&child)->invoke_hide(key);
         }
     }
-
     for (SPClipPathView *v = display; v != NULL; v = v->next) {
         if (v->key == key) {
             /* We simply unref and let item to manage this in handler */
@@ -235,8 +234,6 @@ void SPClipPath::hide(unsigned int key) {
             return;
         }
     }
-
-    g_assert_not_reached();
 }
 
 void SPClipPath::setBBox(unsigned int key, Geom::OptRect const &bbox) {

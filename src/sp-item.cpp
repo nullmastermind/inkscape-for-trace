@@ -1373,7 +1373,7 @@ void SPItem::adjust_paint_recursive (Geom::Affine advertized_transform, Geom::Af
 // Within text, we do not fork gradients, and so must not recurse to avoid double compensation;
 // also we do not recurse into clones, because a clone's child is the ghost of its original -
 // we must not touch it
-    if (!(this && (dynamic_cast<SPText *>(this) || dynamic_cast<SPUse *>(this)))) {
+    if (!(dynamic_cast<SPText *>(this) || dynamic_cast<SPUse *>(this))) {
         for (auto& o: children) {
             SPItem *item = dynamic_cast<SPItem *>(&o);
             if (item) {
@@ -1401,7 +1401,6 @@ void SPItem::adjust_livepatheffect (Geom::Affine const &postmul, bool set)
     SPLPEItem *lpeitem = dynamic_cast<SPLPEItem *>(this);
     if ( lpeitem && lpeitem->hasPathEffect() ) {
         lpeitem->forkPathEffectsIfNecessary();
-
         // now that all LPEs are forked_if_necessary, we can apply the transform
         PathEffectList effect_list =  lpeitem->getEffectList();
         for (PathEffectList::iterator it = effect_list.begin(); it != effect_list.end(); ++it)
@@ -1496,6 +1495,10 @@ void SPItem::doWriteTransform(Inkscape::XML::Node *repr, Geom::Affine const &tra
             freeze_stroke_width_recursive(false);
         }
     } else {
+        SPLPEItem * lpeitem = SP_LPE_ITEM(this);
+        if (lpeitem && lpeitem->hasPathEffectRecursive()) {
+            lpeitem->adjust_livepatheffect(transform_attr);
+        }
         if (freeze_stroke_width) {
             freeze_stroke_width_recursive(false);
             if (compensate) {

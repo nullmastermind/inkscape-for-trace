@@ -47,6 +47,8 @@
 #include "live_effects/lpe-perp_bisector.h"
 #include "live_effects/lpe-perspective-envelope.h"
 #include "live_effects/lpe-perspective_path.h"
+#include "live_effects/lpe-powerclip.h"
+#include "live_effects/lpe-powermask.h"
 #include "live_effects/lpe-powerstroke.h"
 #include "live_effects/lpe-recursiveskeleton.h"
 #include "live_effects/lpe-roughen.h"
@@ -128,6 +130,8 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {FILLET_CHAMFER,        N_("Fillet/Chamfer"),                  "fillet_chamfer"},
     {BOOL_OP,               N_("Boolean operation"),               "bool_op"},
     {EMBRODERY_STITCH,      N_("Embrodery stitch"),                "embrodery_stitch"},
+    {POWERCLIP,             N_("Power clip"),                      "powerclip"},
+    {POWERMASK,             N_("Power mask"),                      "powermask"},
 #ifdef LPE_ENABLE_TEST_EFFECTS
     {DOEFFECTSTACK_TEST,    N_("doEffect stack test"),             "doeffectstacktest"},
     {ANGLE_BISECTOR,        N_("Angle bisector"),                  "angle_bisector"},
@@ -311,6 +315,12 @@ Effect::New(EffectType lpenr, LivePathEffectObject *lpeobj)
             break;
         case FILLET_CHAMFER:
             neweffect = static_cast<Effect*> ( new LPEFilletChamfer(lpeobj) );
+            break;
+        case POWERCLIP:
+            neweffect = static_cast<Effect*> ( new LPEPowerClip(lpeobj) );
+            break;
+        case POWERMASK:
+            neweffect = static_cast<Effect*> ( new LPEPowerMask(lpeobj) );
             break;
         case ROUGHEN:
             neweffect = static_cast<Effect*> ( new LPERoughen(lpeobj) );
@@ -971,6 +981,7 @@ Effect::resetDefaults(SPItem const* /*item*/)
     }
 }
 
+//Activate handle your transform filling your effect on SPPath.cpp
 void
 Effect::transform_multiply(Geom::Affine const& postmul, bool set)
 {
