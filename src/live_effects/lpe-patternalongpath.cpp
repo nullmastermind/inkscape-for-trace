@@ -311,7 +311,8 @@ KnotHolderEntityWidthPatternAlongPath::knot_set(Geom::Point const &p, Geom::Poin
         } else {
             lpe->prop_scale.param_set_value(Geom::distance(s , ptA)/(lpe->original_height/2.0));
         }
-        
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        prefs->setDouble("/live_effect/pap/width", lpe->prop_scale);
     }
     sp_lpe_item_update_patheffect (SP_LPE_ITEM(item), false, true);
 }

@@ -212,9 +212,13 @@ static void spdc_paste_curve_as_freehand_shape(Geom::PathVector const &newpath, 
     Effect::createAndApply(PATTERN_ALONG_PATH, dc->desktop->doc(), item);
     Effect* lpe = SP_LPE_ITEM(item)->getCurrentLPE();
     static_cast<LPEPatternAlongPath*>(lpe)->pattern.set_new_value(newpath,true);
-    double scale_doc = 1 / dc->desktop->doc()->getDocumentScale()[0];
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    double scale = prefs->getDouble("/live_effect/pap/width", 1);
+    if (!scale) {
+        scale = 1 / dc->desktop->doc()->getDocumentScale()[0];
+    }
     Inkscape::SVGOStringStream os;
-    os << scale_doc;
+    os << scale;
     lpe->getRepr()->setAttribute("prop_scale", os.str().c_str());
 }
 
@@ -249,7 +253,14 @@ static void spdc_apply_bend_shape(gchar const *svgd, FreehandBase *dc, SPItem *i
     Effect* lpe = SP_LPE_ITEM(item)->getCurrentLPE();
 
     // write bend parameters:
-    lpe->getRepr()->setAttribute("prop_scale", "1");
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    double scale = prefs->getDouble("/live_effect/bend/width", 1);
+    if (!scale) {
+        scale = 1;
+    }
+    Inkscape::SVGOStringStream os;
+    os << scale;
+    lpe->getRepr()->setAttribute("prop_scale", os.str().c_str());
     lpe->getRepr()->setAttribute("scale_y_rel", "false");
     lpe->getRepr()->setAttribute("vertical", "false");
     static_cast<LPEBendPath*>(lpe)->bend_path.paste_param_path(svgd);
@@ -287,7 +298,6 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
             previous_shape_type = shape;
         }
         if(shape == LAST_APPLIED){
-
             shape = previous_shape_type;
             if(shape == CLIPBOARD || shape == BEND_CLIPBOARD){
                 shape = LAST_APPLIED;
@@ -333,10 +343,14 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
         bool shape_applied = false;
         SPCSSAttr *css_item = sp_css_attr_from_object(item, SP_STYLE_FLAG_ALWAYS);
         const char *cstroke = sp_repr_css_property(css_item, "stroke", "none");
+        const char *cfill = sp_repr_css_property(css_item, "fill", "none");
         const char *stroke_width = sp_repr_css_property(css_item, "stroke-width", "0");
         double swidth;
         sp_svg_number_read_d(stroke_width, &swidth);
-
+        swidth = prefs->getDouble("/live_effect/power_stroke/width", swidth/2);
+        if (!swidth) {
+            swidth = swidth/2;
+        }
 #define SHAPE_LENGTH 10
 #define SHAPE_HEIGHT 10
 
@@ -348,7 +362,8 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
             {
                 // "triangle in"
                 std::vector<Geom::Point> points(1);
-                points[0] = Geom::Point(0., swidth/2);
+                
+                points[0] = Geom::Point(0., swidth);
                 //points[0] *= i2anc_affine(static_cast<SPItem *>(item->parent), NULL).inverse();
                 spdc_apply_powerstroke_shape(points, dc, item);
 
@@ -360,7 +375,7 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
                 // "triangle out"
                 guint curve_length = curve->get_segment_count();
                 std::vector<Geom::Point> points(1);
-                points[0] = Geom::Point(0, swidth/2);
+                points[0] = Geom::Point(0, swidth);
                 //points[0] *= i2anc_affine(static_cast<SPItem *>(item->parent), NULL).inverse();
                 points[0][Geom::X] = (double)curve_length;
                 spdc_apply_powerstroke_shape(points, dc, item);
@@ -476,11 +491,10 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
         if (shape_applied) {
             // apply original stroke color as fill and unset stroke; then return
             SPCSSAttr *css = sp_repr_css_attr_new();
-
-            if (!strcmp(cstroke, "none")){
-                sp_repr_css_set_property (css, "fill", "black");
-            } else {
+            if (!strcmp(cfill, "none")) {
                 sp_repr_css_set_property (css, "fill", cstroke);
+            } else {
+                sp_repr_css_set_property (css, "fill", cfill);
             }
             sp_repr_css_set_property (css, "stroke", "none");
             sp_desktop_apply_css_recursive(item, css, true);

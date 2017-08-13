@@ -164,6 +164,10 @@ PowerStrokePointArrayParamKnotHolderEntity::knot_set(Geom::Point const &p, Geom:
     double t = nearest_time(s, pwd2);
     double offset = dot(s - pwd2.valueAt(t), n.valueAt(t));
     _pparam->_vector.at(_index) = Geom::Point(t, offset);
+    if (_pparam->_vector.size() == 1 ) {
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        prefs->setDouble("/live_effect/power_stroke/width", offset);
+    }
     sp_lpe_item_update_patheffect(SP_LPE_ITEM(item), false, false);
 }
 

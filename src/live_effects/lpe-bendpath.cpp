@@ -157,10 +157,10 @@ LPEBendPath::addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom:
 }
 
 void 
-LPEBendPath::addKnotHolderEntities(KnotHolder *knotholder, SPDesktop *desktop, SPItem *item)
+LPEBendPath::addKnotHolderEntities(KnotHolder *knotholder, SPItem *item)
 {
     KnotHolderEntity *e = new BeP::KnotHolderEntityWidthBendPath(this);
-    e->create(desktop, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN, _("Change the width"), SP_KNOT_SHAPE_CIRCLE);
+    e->create(NULL, item, knotholder, Inkscape::CTRL_TYPE_UNKNOWN, _("Change the width"), SP_KNOT_SHAPE_CIRCLE);
     knotholder->add(e);
 }
 
@@ -189,6 +189,8 @@ KnotHolderEntityWidthBendPath::knot_set(Geom::Point const &p, Geom::Point const&
     } else {
         lpe->prop_scale.param_set_value(Geom::distance(s , ptA)/(lpe->original_height/2.0));
     }
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    prefs->setDouble("/live_effect/bend/width", lpe->prop_scale);
 
     sp_lpe_item_update_patheffect (SP_LPE_ITEM(item), false, true);
 }
