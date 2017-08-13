@@ -15,13 +15,13 @@
 #ifndef INKSCAPE_UI_DIALOG_ABOUTBOX_H
 #define INKSCAPE_UI_DIALOG_ABOUTBOX_H
 
-#include <gtkmm/dialog.h>
+#include <gtkmm/aboutdialog.h>
 
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
-class AboutBox : public Gtk::Dialog {
+class AboutBox : public Gtk::AboutDialog {
 
 public:
 
@@ -33,12 +33,7 @@ private:
     AboutBox();
     
     void initStrings();
-    
-    Glib::ustring authors_text;
-    Glib::ustring translators_text;
-    Glib::ustring license_text;
-
-    virtual void on_response(int response_id);
+    void on_response(int response_id) override;
 };
 
 } // namespace Dialog
