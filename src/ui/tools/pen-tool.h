@@ -39,7 +39,7 @@ public:
     };
 
     Geom::Point p[5];
-
+    Geom::Point previous;
     /** \invar npoints in {0, 2, 5}. */
     // npoints somehow determines the type of the node (what does it mean, exactly? the number of Bezier handles?)
     gint npoints;
@@ -105,7 +105,7 @@ private:
     //continues an existing curve with the union node in CUSP mode
     void _bsplineSpiroStartAnchorOff();
     //modifies the "red_curve" when it detects movement
-    void _bsplineSpiroMotion(bool shift);
+    void _bsplineSpiroMotion(guint const state);
     //closes the curve with the last node in bspline or spiro mode
     void _bsplineSpiroEndAnchorOn();
     //closes the curve with the last node in CUSP mode
