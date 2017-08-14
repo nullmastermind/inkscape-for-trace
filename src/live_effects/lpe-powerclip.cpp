@@ -71,6 +71,7 @@ LPEPowerClip::doBeforeEffect (SPLPEItem const* lpeitem){
                 Inkscape::XML::Node *clip_path_node = sp_selected_item_to_curved_repr(SP_ITEM(clip_data), 0);
                 // remember the position of the item
                 gint pos = clip_data->getRepr()->position();
+                Geom::Affine affine = SP_ITEM(clip_data)->transform;
                 // remember parent
                 Inkscape::XML::Node *parent = clip_data->getRepr()->parent();
                 // remember id
@@ -85,9 +86,24 @@ LPEPowerClip::doBeforeEffect (SPLPEItem const* lpeitem){
 
                 // restore id
                 clip_path_node->setAttribute("id", id);
+                
                 // add the new repr to the parent
                 parent->appendChild(clip_path_node);
                 clip_to_path = document->getObjectByRepr(clip_path_node);
+
+                // transform position
+                SPCurve * c = NULL;
+                c = SP_SHAPE(clip_to_path)->getCurve();
+                if (c) {
+                    Geom::PathVector c_pv = c->get_pathvector();
+                    c_pv *= affine;
+                    c->set_pathvector(c_pv);
+                    SP_SHAPE(clip_to_path)->setCurve(c, TRUE);
+                    c->unref();
+                }
+                
+                clip_path_node->setAttribute("transform", NULL);
+ 
                 if (title && clip_to_path) {
                     clip_to_path->setTitle(title);
                     g_free(title);
