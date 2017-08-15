@@ -3,6 +3,7 @@
 set(RENDERING_TESTS 
     test-empty
     test-glyph-y-pos
+    test-rtl-vertical
 )
 
 

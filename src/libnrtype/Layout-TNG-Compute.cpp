@@ -818,12 +818,7 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                         for (unsigned rtl_index = glyph_index; rtl_index < it_span->end_glyph_index ; rtl_index++) {
                             if (unbroken_span.glyph_string->glyphs[rtl_index].attr.is_cluster_start && rtl_index != glyph_index)
                                 break;
-                            if (_block_progression == LEFT_TO_RIGHT || _block_progression == RIGHT_TO_LEFT)
-                                // Vertical text
-                                cluster_width += new_span.font_size * para.pango_items[unbroken_span.pango_item_index].font->Advance(unbroken_span.glyph_string->glyphs[rtl_index].glyph, true);
-                            else
-                                // Horizontal text
-                                cluster_width += font_size_multiplier * unbroken_span.glyph_string->glyphs[rtl_index].geometry.width;
+                            cluster_width += font_size_multiplier * unbroken_span.glyph_string->glyphs[rtl_index].geometry.width;
                         }
                         new_glyph.x -= cluster_width;
                     }
