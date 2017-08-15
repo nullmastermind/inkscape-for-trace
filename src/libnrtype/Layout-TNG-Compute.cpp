@@ -767,7 +767,7 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                             if( dominant_baseline == SP_CSS_BASELINE_AUTO ) dominant_baseline = SP_CSS_BASELINE_ALPHABETIC;
                         }
 
-                        new_glyph.y += delta_y;
+                        new_glyph.y -= delta_y;
 
                         // TODO: Should also check 'glyph_orientation_vertical' if 'text-orientation' is unset...
                         if( new_span.text_orientation == SP_CSS_TEXT_ORIENTATION_SIDEWAYS ||
@@ -801,7 +801,7 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
 
                         if( dominant_baseline == SP_CSS_BASELINE_AUTO ) dominant_baseline = SP_CSS_BASELINE_ALPHABETIC;
 
-                        new_glyph.y -= delta_y;
+                        new_glyph.y += delta_y;
                         new_glyph.y += new_span.font_size * para.pango_items[unbroken_span.pango_item_index].font->GetBaselines()[ dominant_baseline ];
                         
                         new_glyph.width = unbroken_span_glyph_info->geometry.width * font_size_multiplier;
