@@ -35,6 +35,8 @@ inkscape:mac:
   stage: build
   tags:
     - mac
+  only:
+    - branches@inkscape/inkscape
   before_script:
     - brew update
     - brew upgrade
