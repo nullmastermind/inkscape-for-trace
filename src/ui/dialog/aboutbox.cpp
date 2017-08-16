@@ -124,8 +124,6 @@ void AboutBox::build_splash_widget() {
         }
         doc->ensureUpToDate();
 
-        // TODO: Return a Gdk::Pixbuf instead of a widget, for better integration
-        // with the parent Gtk::AboutDialog class
         GtkWidget *v=sp_svg_view_widget_new(doc);
 
         // temporary hack: halve the dimensions so the dialog will fit
