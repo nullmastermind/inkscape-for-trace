@@ -17,6 +17,10 @@
 
 #include <gtkmm/aboutdialog.h>
 
+namespace Gtk {
+class AspectFrame;
+}
+
 namespace Inkscape {
 namespace UI {
 namespace Dialog {
@@ -31,8 +35,15 @@ public:
 private:
 
     AboutBox();
+
+    /** A widget containing an SVG "splash screen"
+     *  image to display in the content area of the dialo
+     */
+    Gtk::AspectFrame *_splash_widget;
     
     void initStrings();
+    void build_splash_widget();
+
     void on_response(int response_id) override;
 };
 

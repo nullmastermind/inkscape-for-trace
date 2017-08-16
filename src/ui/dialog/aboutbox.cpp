@@ -47,10 +47,6 @@ namespace Inkscape {
 namespace UI {
 namespace Dialog {
 
-
-
-static Gtk::Widget *build_splash_widget();
-
 static AboutBox *window=NULL;
 
 void AboutBox::show_about() {
@@ -67,17 +63,19 @@ void AboutBox::hide_about() {
 /**
  * Constructor
  */ 
-AboutBox::AboutBox() {
+AboutBox::AboutBox()
+    : _splash_widget(nullptr)
+{
     // call this first
     initStrings();
 
     // Insert the Splash widget.  This is placed directly into the
     // content area of the dialog, whereas everything else is placed
     // automatically by the Gtk::AboutDialog parent class
-    Gtk::Widget *splash=build_splash_widget();
-    if (splash) {
-        get_content_area()->pack_end(*manage(splash), true, true);
-        splash->show_all();
+    build_splash_widget();
+    if (_splash_widget) {
+        get_content_area()->pack_end(*manage(_splash_widget), true, true);
+        _splash_widget->show_all();
     }
 
     // Set Application metadata, which will be automatically
@@ -92,7 +90,10 @@ AboutBox::AboutBox() {
                    "Draw Freely."));
 }
 
-Gtk::Widget *build_splash_widget() {
+/**
+ * @brief Create a Gtk::AspectFrame containing the splash image
+ */
+void AboutBox::build_splash_widget() {
     /* TRANSLATORS: This is the filename of the `About Inkscape' picture in
        the `screens' directory.  Thus the translation of "about.svg" should be
        the filename of its translated version, e.g. about.zh.svg for Chinese.
@@ -113,38 +114,37 @@ Gtk::Widget *build_splash_widget() {
 
     // Create an Inkscape document from the 'About Inkscape' picture
     SPDocument *doc=SPDocument::createNewDoc (about.c_str(), TRUE);
-    g_return_val_if_fail(doc != NULL, NULL);
 
-    SPObject *version = doc->getObjectById("version");
-    if ( version && SP_IS_TEXT(version) ) {
-        sp_te_set_repr_text_multiline (SP_TEXT (version), Inkscape::version_string);
+    // Leave _splash_widget as a nullptr if there is no document
+    if(doc) {
+        SPObject *version = doc->getObjectById("version");
+        if ( version && SP_IS_TEXT(version) ) {
+            sp_te_set_repr_text_multiline (SP_TEXT (version), Inkscape::version_string);
+        }
+        doc->ensureUpToDate();
+
+        // TODO: Return a Gdk::Pixbuf instead of a widget, for better integration
+        // with the parent Gtk::AboutDialog class
+        GtkWidget *v=sp_svg_view_widget_new(doc);
+
+        // temporary hack: halve the dimensions so the dialog will fit
+        double width=doc->getWidth().value("px") / 2;
+        double height=doc->getHeight().value("px") / 2;
+
+        doc->doUnref();
+
+        SP_SVG_VIEW_WIDGET(v)->setResize(false, static_cast<int>(width), static_cast<int>(height));
+
+        _splash_widget = new Gtk::AspectFrame();
+        _splash_widget->unset_label();
+        _splash_widget->set_shadow_type(Gtk::SHADOW_NONE);
+        _splash_widget->property_ratio() = width / height;
+        _splash_widget->add(*manage(Glib::wrap(v)));
     }
-    doc->ensureUpToDate();
-
-    // TODO: Return a Gdk::Pixbuf instead of a widget, for better integration
-    // with the parent Gtk::AboutDialog class
-    GtkWidget *v=sp_svg_view_widget_new(doc);
-
-    // temporary hack: halve the dimensions so the dialog will fit
-    double width=doc->getWidth().value("px") / 2;
-    double height=doc->getHeight().value("px") / 2;
-    
-    doc->doUnref();
-
-    SP_SVG_VIEW_WIDGET(v)->setResize(false, static_cast<int>(width), static_cast<int>(height));
-
-    Gtk::AspectFrame *frame=new Gtk::AspectFrame();
-    frame->unset_label();
-    frame->set_shadow_type(Gtk::SHADOW_NONE);
-    frame->property_ratio() = width / height;
-    frame->add(*manage(Glib::wrap(v)));
-
-    return frame;
 }
 
 /**
- * This method must be called before any of the texts are
- * used for making widgets
+ * @brief Read the author and translator credits from file
  */  
 void AboutBox::initStrings() {
     //##############################
