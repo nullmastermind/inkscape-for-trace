@@ -1746,6 +1746,10 @@ bool Layout::Calculator::calculate()
     if( _block_progression == RIGHT_TO_LEFT || _block_progression == LEFT_TO_RIGHT ) {
         // Vertical text, CJK
         pango_context_set_base_gravity(_pango_context, PANGO_GRAVITY_EAST);
+
+        if( _flow._blockTextOrientation() != SP_CSS_TEXT_ORIENTATION_MIXED ) {
+            pango_context_set_gravity_hint(_pango_context, PANGO_GRAVITY_HINT_STRONG);
+        }
     } else {
         // Horizontal text
         pango_context_set_base_gravity(_pango_context, PANGO_GRAVITY_AUTO);

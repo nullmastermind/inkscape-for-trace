@@ -18,6 +18,7 @@
   <g>
     <text x="50"  y="200">أبجد</text>
     <text x="300" y="200" style="writing-mode:vertical-lr;">أبجد</text>
+    <text x="500" y="200" style="writing-mode:vertical-lr;text-orientation:upright">أبجد</text>
   </g>
 
   <text class="title" x="50%" y="120">RTL text in vertical mode</text>
