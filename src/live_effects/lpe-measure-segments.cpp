@@ -542,12 +542,22 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
     if (root_origin != root) {
         return;
     }
-    SPPath *sp_path = dynamic_cast<SPPath *>(splpeitem);
-    if (sp_path) {
+
+    SPShape *shape = dynamic_cast<SPShape *>(splpeitem);
+    if (shape) {
+        SPCurve * c = NULL;
+
+        SPPath *path = dynamic_cast<SPPath *>(shape);
+        if (path) {
+            c = path->get_original_curve();
+        } else {
+            c = shape->getCurve();
+        }
         Geom::Point start_stored;
         Geom::Point end_stored; 
         Geom::Affine affinetransform = i2anc_affine(SP_OBJECT(lpeitem), SP_OBJECT(document->getRoot()));
-        Geom::PathVector pathvector = sp_path->get_original_curve()->get_pathvector();
+        Geom::PathVector pathvector =  pathv_to_linear_and_cubic_beziers(c->get_pathvector());
+        c->unref();
         Geom::Affine writed_transform = Geom::identity();
         sp_svg_transform_read(splpeitem->getAttribute("transform"), &writed_transform );
         pathvector *= writed_transform;
@@ -750,6 +760,8 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                     }
                     createLine(hstart, hend, g_strdup(Glib::ustring("infoline-").append(Glib::ustring::format(counter) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str()), true, overflow, remove, true);
                 } else {
+                    const char * downline = g_strdup(Glib::ustring("downline-").append(Glib::ustring::format(counter) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str());
+                    createLine(Geom::Point(),Geom::Point(), downline, true, true, true, true);
                     createLine(Geom::Point(), Geom::Point(), g_strdup(Glib::ustring("infoline-").append(Glib::ustring::format(counter) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str()), true, true, true, true);
                     createLine(Geom::Point(), Geom::Point(), g_strdup(Glib::ustring("infoline-on-start-").append(Glib::ustring::format(counter) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str()), true, true, true, true);
                     createLine(Geom::Point(), Geom::Point(), g_strdup(Glib::ustring("infoline-on-end-").append(Glib::ustring::format(counter) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str()), true, true, true, true);
@@ -762,6 +774,8 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
             }
         }
         for (size_t k = ncurves; k <= previous_size; k++) {
+            const char * downline = g_strdup(Glib::ustring("downline-").append(Glib::ustring::format(counter) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str());
+            createLine(Geom::Point(),Geom::Point(), downline, true, true, true, true);
             createLine(Geom::Point(), Geom::Point(), g_strdup(Glib::ustring("infoline-").append(Glib::ustring::format(k) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str()), true, true, true, true);
             createLine(Geom::Point(), Geom::Point(), g_strdup(Glib::ustring("infoline-on-start-").append(Glib::ustring::format(k) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str()), true, true, true, true);
             createLine(Geom::Point(), Geom::Point(), g_strdup(Glib::ustring("infoline-on-end-").append(Glib::ustring::format(k) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str()), true, true, true, true);

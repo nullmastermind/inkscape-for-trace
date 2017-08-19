@@ -691,8 +691,9 @@ void SPItem::update(SPCtx* ctx, guint flags) {
     }
 
     // Update libavoid with item geometry (for connector routing).
-    if (avoidRef)
+    if (avoidRef && document) {
         avoidRef->handleSettingChange();
+    }
 }
 
 void SPItem::modified(unsigned int /*flags*/)
