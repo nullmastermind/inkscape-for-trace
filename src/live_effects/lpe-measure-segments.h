@@ -1,5 +1,5 @@
-#ifndef INKSCAPE_LPE_MEASURE_LINE_H
-#define INKSCAPE_LPE_MEASURE_LINE_H
+#ifndef INKSCAPE_LPE_MEASURE_SEGMENTS_H
+#define INKSCAPE_LPE_MEASURE_SEGMENTS_H
 
 /*
  * Author(s):
@@ -35,10 +35,10 @@ enum OrientationMethod {
     OM_END
 };
 
-class LPEMeasureLine : public Effect {
+class LPEMeasureSegments : public Effect {
 public:
-    LPEMeasureLine(LivePathEffectObject *lpeobject);
-    virtual ~LPEMeasureLine();
+    LPEMeasureSegments(LivePathEffectObject *lpeobject);
+    virtual ~LPEMeasureSegments();
     virtual void doBeforeEffect (SPLPEItem const* lpeitem);
     virtual void doOnApply(SPLPEItem const* lpeitem);
     virtual void doOnRemove (SPLPEItem const* /*lpeitem*/);
@@ -46,16 +46,17 @@ public:
     virtual void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/);
     virtual Geom::PathVector doEffect_path(Geom::PathVector const &path_in);
     void createLine(Geom::Point start,Geom::Point end, const char * id, bool main, bool overflow, bool remove, bool arrows = false);
-    void createTextLabel(Geom::Point pos, double length, Geom::Coord angle, bool remove, bool valid);
+    void createTextLabel(Geom::Point pos, size_t counter, double length, Geom::Coord angle, bool remove, bool valid);
     void onExpanderChanged();
     void createArrowMarker(const char * mode);
+    bool hasMeassure (size_t i);
     virtual Gtk::Widget *newWidget();
 private:
     UnitParam unit;
     FontButtonParam fontbutton;
     EnumParam<OrientationMethod> orientation;
-    ScalarParam curve_linked;
     ScalarParam precision;
+    ScalarParam fix_crossings;
     ScalarParam position;
     ScalarParam text_top_bottom;
     ScalarParam text_right_left;
@@ -63,7 +64,8 @@ private:
     ScalarParam helpline_overlap;
     ScalarParam scale;
     TextParam format;
-    TextParam id_origin;
+    TextParam blacklist;
+    BoolParam whitelist;
     BoolParam arrows_outside;
     BoolParam flip_side;
     BoolParam scale_sensitive;
@@ -81,12 +83,11 @@ private:
     double doc_scale;
     double fontsize;
     double anotation_width;
+    double previous_size;
     double arrow_gap;
-    Geom::Point start_stored;
-    Geom::Point end_stored; 
-/*    Geom::Affine affine_over;*/
-    LPEMeasureLine(const LPEMeasureLine &);
-    LPEMeasureLine &operator=(const LPEMeasureLine &);
+
+    LPEMeasureSegments(const LPEMeasureSegments &);
+    LPEMeasureSegments &operator=(const LPEMeasureSegments &);
 
 };
 

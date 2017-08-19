@@ -24,7 +24,6 @@
 #include "live_effects/lpe-path_length.h"
 #include "live_effects/lpeobject.h"
 #include "live_effects/lpeobject-reference.h"
-#include "live_effects/lpe-measure-line.h"
 #include "live_effects/lpe-mirror_symmetry.h"
 #include "live_effects/lpe-copy_rotate.h"
 

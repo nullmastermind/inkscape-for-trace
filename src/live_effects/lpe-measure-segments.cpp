@@ -8,7 +8,7 @@
 
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
-#include "live_effects/lpe-measure-line.h"
+#include "live_effects/lpe-measure-segments.h"
 #include <pangomm/fontdescription.h>
 #include "ui/dialog/livepatheffect-editor.h"
 #include <libnrtype/font-lister.h>
@@ -32,6 +32,7 @@
 #include "sp-path.h"
 #include "document.h"
 #include <iomanip>
+#include <cmath>
 
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
@@ -47,13 +48,13 @@ static const Util::EnumData<OrientationMethod> OrientationMethodData[] = {
 };
 static const Util::EnumDataConverter<OrientationMethod> OMConverter(OrientationMethodData, OM_END);
 
-LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
+LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
     unit(_("Unit"), _("Unit"), "unit", &wr, this, "px"),
     fontbutton(_("Font"), _("Font Selector"), "fontbutton", &wr, this),
     orientation(_("Orientation"), _("Orientation method"), "orientation", OMConverter, &wr, this, OM_PARALLEL, false),
-    curve_linked(_("Curve on origin"), _("Curve on origin, set 0 to start/end"), "curve_linked", &wr, this, 1),
     precision(_("Precision"), _("Precision"), "precision", &wr, this, 2),
+    fix_crossings(_("Fix crossings °"), _("Fix crossings lines limit, 180° no fix"), "fix_crossings", &wr, this, 40),
     position(_("Position"), _("Position"), "position", &wr, this, 5),
     text_top_bottom(_("Text top/bottom"), _("Text top/bottom"), "text_top_bottom", &wr, this, 0),
     text_right_left(_("Text right/left"), _("Text right/left"), "text_right_left", &wr, this, 0),
@@ -61,7 +62,8 @@ LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
     helpline_overlap(_("Helpline overlap"), _("Helpline overlap"), "helpline_overlap", &wr, this, 2.0),
     scale(_("Scale"), _("Scaling factor"), "scale", &wr, this, 1.0),
     format(_("Format"), _("Format the number ex:{measure} {unit}, return to save"), "format", &wr, this,"{measure}{unit}"),
-    id_origin("id_origin", "id_origin", "id_origin", &wr, this,""),
+    blacklist(_("Blacklist"), _("Optional line index that exclude measure, comma limited, you can add more LPE like this to fill the holes"), "blacklist", &wr, this,""),
+    whitelist(_("Inverse blacklist"), _("Blacklist as whitelist"), "whitelist", &wr, this, false),
     arrows_outside(_("Arrows outside"), _("Arrows outside"), "arrows_outside", &wr, this, false),
     flip_side(_("Flip side"), _("Flip side"), "flip_side", &wr, this, false),
     scale_sensitive(_("Scale sensitive"), _("Costrained scale sensitive to transformed containers"), "scale_sensitive", &wr, this, true),
@@ -79,8 +81,8 @@ LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
     registerParameter(&unit);
     registerParameter(&fontbutton);
     registerParameter(&orientation);
-    registerParameter(&curve_linked);
     registerParameter(&precision);
+    registerParameter(&fix_crossings);
     registerParameter(&position);
     registerParameter(&text_top_bottom);
     registerParameter(&text_right_left);
@@ -88,6 +90,8 @@ LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
     registerParameter(&helpline_overlap);
     registerParameter(&scale);
     registerParameter(&format);
+    registerParameter(&blacklist);
+    registerParameter(&whitelist);
     registerParameter(&arrows_outside);
     registerParameter(&flip_side);
     registerParameter(&scale_sensitive);
@@ -99,9 +103,7 @@ LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
     registerParameter(&helperlines_format);
     registerParameter(&anotation_format);
     registerParameter(&arrows_format);
-    registerParameter(&id_origin);
 
-    id_origin.param_hide_canvas_text();
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
     Glib::ustring format_value = prefs->getString("/live_effects/measure-line/format");
@@ -111,6 +113,7 @@ LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
     format.param_update_default(format_value.c_str());
 
     format.param_hide_canvas_text();
+    blacklist.param_hide_canvas_text();
     dimline_format.param_hide_canvas_text();
     helperlines_format.param_hide_canvas_text();
     anotation_format.param_hide_canvas_text();
@@ -119,14 +122,16 @@ LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
     precision.param_set_increments(1, 1);
     precision.param_set_digits(0);
     precision.param_make_integer(true);
-    curve_linked.param_set_range(0, 999);
-    curve_linked.param_set_increments(1, 1);
-    curve_linked.param_set_digits(0);
-    curve_linked.param_make_integer(true);
-    precision.param_make_integer(true);
+    fix_crossings.param_set_range(0, 180);
+    fix_crossings.param_set_increments(1, 1);
+    fix_crossings.param_set_digits(0);
+    fix_crossings.param_make_integer(true);
     position.param_set_range(-999999.0, 999999.0);
     position.param_set_increments(1, 1);
     position.param_set_digits(2);
+    scale.param_set_range(-999999.0, 999999.0);
+    scale.param_set_increments(1, 1);
+    scale.param_set_digits(4);
     text_top_bottom.param_set_range(-999999.0, 999999.0);
     text_top_bottom.param_set_increments(1, 1);
     text_top_bottom.param_set_digits(2);
@@ -139,15 +144,12 @@ LPEMeasureLine::LPEMeasureLine(LivePathEffectObject *lpeobject) :
     helpline_overlap.param_set_range(-999999.0, 999999.0);
     helpline_overlap.param_set_increments(1, 1);
     helpline_overlap.param_set_digits(2);
-    start_stored = Geom::Point(0,0);
-    end_stored = Geom::Point(0,0);
-    id_origin.param_widget_is_visible(false);
 }
 
-LPEMeasureLine::~LPEMeasureLine() {}
+LPEMeasureSegments::~LPEMeasureSegments() {}
 
 void
-LPEMeasureLine::createArrowMarker(const char * mode)
+LPEMeasureSegments::createArrowMarker(const char * mode)
 {
     SPDocument * document = SP_ACTIVE_DOCUMENT;
     if (!document) {
@@ -211,7 +213,7 @@ LPEMeasureLine::createArrowMarker(const char * mode)
 }
 
 void
-LPEMeasureLine::createTextLabel(Geom::Point pos, double length, Geom::Coord angle, bool remove, bool valid)
+LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double length, Geom::Coord angle, bool remove, bool valid)
 {
     SPDocument * document = SP_ACTIVE_DOCUMENT;
     if (!document) {
@@ -233,7 +235,7 @@ LPEMeasureLine::createTextLabel(Geom::Point pos, double length, Geom::Coord angl
     } else {
         doc_scale = 1.0;
     }
-    const char * id = g_strdup(Glib::ustring("text-on-").append(this->getRepr()->attribute("id")).c_str());
+    const char * id = g_strdup(Glib::ustring("text-on-").append(Glib::ustring::format(counter) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str());
     SPObject *elemref = NULL;
     Inkscape::XML::Node *rtspan = NULL;
     if ((elemref = document->getObjectById(id))) {
@@ -360,7 +362,7 @@ LPEMeasureLine::createTextLabel(Geom::Point pos, double length, Geom::Coord angl
 }
 
 void
-LPEMeasureLine::createLine(Geom::Point start,Geom::Point end, const char * id, bool main, bool overflow, bool remove, bool arrows)
+LPEMeasureSegments::createLine(Geom::Point start,Geom::Point end, const char * id, bool main, bool overflow, bool remove, bool arrows)
 {
     SPDocument * document = SP_ACTIVE_DOCUMENT;
     if (!document) {
@@ -481,19 +483,53 @@ LPEMeasureLine::createLine(Geom::Point start,Geom::Point end, const char * id, b
 }
 
 void
-LPEMeasureLine::doOnApply(SPLPEItem const* lpeitem)
+LPEMeasureSegments::doOnApply(SPLPEItem const* lpeitem)
 {
     if (!SP_IS_SHAPE(lpeitem)) {
         g_warning("LPE measure line can only be applied to shapes (not groups).");
         SPLPEItem * item = const_cast<SPLPEItem*>(lpeitem);
         item->removeCurrentPathEffect(false);
     }
-    id_origin.param_setValue(Glib::ustring(lpeitem->getId()));
-    id_origin.write_to_SVG();
+}
+
+bool
+LPEMeasureSegments::hasMeassure (size_t i)
+{
+    std::string listsegments(std::string(blacklist.param_getSVGValue()) + std::string(","));
+    listsegments.erase(std::remove(listsegments.begin(), listsegments.end(), ' '), listsegments.end());
+    size_t s = listsegments.find(std::to_string(i) + std::string(","),0);
+    if(s < listsegments.length()) {
+        if (whitelist) {
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        if (whitelist) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    return false;
+}
+
+double getAngle(Geom::Point p1, Geom::Point p2, Geom::Point p3, bool flip_side, double fix_crossings){
+    Geom::Ray ray_1(p2,p1);
+    Geom::Ray ray_2(p3,p1);
+    bool ccw_toggle = cross(p1 - p2, p3 - p2) < 0;
+    double angle = angle_between(ray_1, ray_2, ccw_toggle);
+    if (Geom::deg_from_rad(angle) < fix_crossings ||
+        Geom::deg_from_rad(angle) > 180 || 
+        ((ccw_toggle && flip_side) || (!ccw_toggle && !flip_side)))
+    {
+        angle = 0;
+    }
+    return angle;
 }
 
 void
-LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
+LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
 {
     SPLPEItem * splpeitem = const_cast<SPLPEItem *>(lpeitem);
     sp_lpe_item->parent = dynamic_cast<SPObject *>(splpeitem->parent);
@@ -508,6 +544,8 @@ LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
     }
     SPPath *sp_path = dynamic_cast<SPPath *>(splpeitem);
     if (sp_path) {
+        Geom::Point start_stored;
+        Geom::Point end_stored; 
         Geom::Affine affinetransform = i2anc_affine(SP_OBJECT(lpeitem), SP_OBJECT(document->getRoot()));
         Geom::PathVector pathvector = sp_path->get_original_curve()->get_pathvector();
         Geom::Affine writed_transform = Geom::identity();
@@ -517,163 +555,234 @@ LPEMeasureLine::doBeforeEffect (SPLPEItem const* lpeitem)
             format.param_setValue(Glib::ustring("{measure}{unit}"));
         }
         size_t ncurves = pathvector.curveCount();
-        if (ncurves != (size_t)curve_linked.param_get_max()) {
-            curve_linked.param_set_range(0, ncurves);
-        }
-        Geom::Point start = pathvector.initialPoint();
-        Geom::Point end =  pathvector.finalPoint();
-        if (curve_linked) { //!0 
-            start = pathvector.pointAt(curve_linked -1);
-            end = pathvector.pointAt(curve_linked);
-        }
-        if (Geom::are_near(start, start_stored, 0.01) && 
-            Geom::are_near(end, end_stored, 0.01) &&
-            sp_lpe_item->getCurrentLPE() != this){
-            return;
-        }
         items.clear();
-        start_stored = start;
-        end_stored = end;
-        Geom::Point hstart = start;
-        Geom::Point hend = end;
-        bool remove = false;
-        if (Geom::are_near(hstart, hend)) {
-            remove = true;
-        }
-        if (orientation == OM_VERTICAL) {
-            Coord xpos = std::max(hstart[Geom::X],hend[Geom::X]);
-            if (flip_side) {
-                xpos = std::min(hstart[Geom::X],hend[Geom::X]);
-            }
-            hstart[Geom::X] = xpos;
-            hend[Geom::X] = xpos;
-            if (hstart[Geom::Y] > hend[Geom::Y]) {
-                swap(hstart,hend);
-                swap(start,end);
-            }
-            if (Geom::are_near(hstart[Geom::Y], hend[Geom::Y])) {
-                remove = true;
-            }
-        }
-        if (orientation == OM_HORIZONTAL) {
-            Coord ypos = std::max(hstart[Geom::Y],hend[Geom::Y]);
-            if (flip_side) {
-                ypos = std::min(hstart[Geom::Y],hend[Geom::Y]);
-            }
-            hstart[Geom::Y] = ypos;
-            hend[Geom::Y] = ypos;
-            if (hstart[Geom::X] < hend[Geom::X]) {
-                swap(hstart,hend);
-                swap(start,end);
-            }
-            if (Geom::are_near(hstart[Geom::X], hend[Geom::X])) {
-                remove = true;
-            }
-        }
-        double length = Geom::distance(hstart,hend)  * scale;
-        Geom::Point pos = Geom::middle_point(hstart,hend);
-        Geom::Ray ray(hstart,hend);
-        Geom::Coord angle = ray.angle();
-        if (flip_side) {
-            angle = std::fmod(angle + rad_from_deg(180), 2*M_PI);
-            if (angle < 0) angle += 2*M_PI;
-        }
-        if (arrows_outside) {
-            createArrowMarker("ArrowDINout-start");
-            createArrowMarker("ArrowDINout-end");
-        } else {
-            createArrowMarker("ArrowDIN-start");
-            createArrowMarker("ArrowDIN-end");
-        }
-        //We get the font size to offset the text to the middle
-        Pango::FontDescription fontdesc(Glib::ustring(fontbutton.param_getSVGValue()));
-        fontsize = fontdesc.get_size()/(double)Pango::SCALE;
-        fontsize *= document->getRoot()->c2p.inverse().expansionX();
-        Geom::Coord angle_cross = std::fmod(angle + rad_from_deg(90), 2*M_PI);
-        if (angle_cross < 0) angle_cross += 2*M_PI;
-        angle = std::fmod(angle, 2*M_PI);
-        if (angle < 0) angle += 2*M_PI;
-        if (angle >= rad_from_deg(90) && angle < rad_from_deg(270)) {
-            pos = pos - Point::polar(angle_cross, (position - text_top_bottom) + fontsize/2.5);
-        } else {
-            pos = pos - Point::polar(angle_cross, (position + text_top_bottom) - fontsize/2.5);
-        }
-        double parents_scale = (affinetransform.expansionX() + affinetransform.expansionY()) / 2.0;
-        if (scale_sensitive) {
-            length *= parents_scale;
-        }
-        if (scale_sensitive && !affinetransform.preservesAngles()) {
-            createTextLabel(pos, length, angle, remove, false);
-        } else {
-            createTextLabel(pos, length, angle, remove, true);
-        }
-        bool overflow = false;
-        const char * downline = g_strdup(Glib::ustring("downline-").append(this->getRepr()->attribute("id")).c_str());
-        //delete residual lines if exist
-        createLine(Geom::Point(),Geom::Point(), downline, true, overflow, true, false);
-        //Create it 
-        if ((anotation_width/2) + std::abs(text_right_left) > Geom::distance(start,end)/2.0) {
-            Geom::Point sstart = end - Point::polar(angle_cross, position);
-            Geom::Point send = end - Point::polar(angle_cross, position);
-            if ((text_right_left < 0 && flip_side) || (text_right_left > 0 && !flip_side)) {
-                sstart = start - Point::polar(angle_cross, position);
-                send = start - Point::polar(angle_cross, position);
-            }
-            Geom::Point prog_end = Geom::Point();
-            if (std::abs(text_top_bottom) < fontsize/1.5 && hide_back) { 
-                if (text_right_left > 0 ) {
-                    prog_end = sstart - Point::polar(angle, std::abs(text_right_left) - (anotation_width/1.9) - (Geom::distance(start,end)/2.0));
+        double start_angle_cross = 0;
+        double end_angle_cross = 0;
+        size_t counter = -1;
+        for (size_t i = 0; i < pathvector.size(); i++) {
+            for (size_t j = 0; j < pathvector[i].size(); j++) {
+                counter++;
+                if(hasMeassure(counter + 1)) {
+                    Geom::Point prev = Geom::Point(0,0);
+                    if (j == 0 && pathvector[i].closed()) {
+                        prev = pathvector.pointAt(pathvector[i].size() - 1);
+                    } else if (j != 0) {
+                        prev = pathvector[i].pointAt(j - 1);
+                    }
+                    Geom::Point start = pathvector[i].pointAt(j);
+                    Geom::Point end = pathvector[i].pointAt(j + 1);
+                    Geom::Point next = Geom::Point(0,0);
+                    if(pathvector[i].closed() && pathvector[i].size() == j+1){
+                        end = pathvector[i].pointAt(0);
+                        next = pathvector[i].pointAt(1);
+                    } else if (pathvector[i].size() > j + 1) {
+                        next = pathvector[i].pointAt(j+2);
+                    }
+                    const char * idstart = Glib::ustring("infoline-on-start-").append(Glib::ustring::format(counter) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str();
+                    SPObject *elemref = NULL;
+                    if ((elemref = document->getObjectById(idstart))) {
+                        start_stored = *SP_PATH(elemref)->get_curve()->first_point();
+                    }
+                    const char * idend = Glib::ustring("infoline-on-end-").append(Glib::ustring::format(counter) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str();
+                    elemref = NULL;
+                    if ((elemref = document->getObjectById(idend))) {
+                        end_stored = *SP_PATH(elemref)->get_curve()->first_point();
+                    }
+                    if (Geom::are_near(start, start_stored, 0.01) && 
+                        Geom::are_near(end, end_stored, 0.01))
+                    {
+                        continue;
+                    }
+                    Geom::Point hstart = start;
+                    Geom::Point hend = end;
+                    bool remove = false;
+                    if (Geom::are_near(hstart, hend)) {
+                        remove = true;
+                    }
+
+                    if (orientation == OM_VERTICAL) {
+                        Coord xpos = std::max(hstart[Geom::X],hend[Geom::X]);
+                        if (flip_side) {
+                            xpos = std::min(hstart[Geom::X],hend[Geom::X]);
+                        }
+                        hstart[Geom::X] = xpos;
+                        hend[Geom::X] = xpos;
+                        if (hstart[Geom::Y] > hend[Geom::Y]) {
+                            swap(hstart,hend);
+                            swap(start,end);
+                        }
+                        if (Geom::are_near(hstart[Geom::Y], hend[Geom::Y])) {
+                            remove = true;
+                        }
+                    } else if (orientation == OM_HORIZONTAL) {
+                        Coord ypos = std::max(hstart[Geom::Y],hend[Geom::Y]);
+                        if (flip_side) {
+                            ypos = std::min(hstart[Geom::Y],hend[Geom::Y]);
+                        }
+                        hstart[Geom::Y] = ypos;
+                        hend[Geom::Y] = ypos;
+                        if (hstart[Geom::X] < hend[Geom::X]) {
+                            swap(hstart,hend);
+                            swap(start,end);
+                        }
+                        if (Geom::are_near(hstart[Geom::X], hend[Geom::X])) {
+                            remove = true;
+                        }
+                    } else if (fix_crossings != 180) {
+                        start_angle_cross = getAngle( start, prev, end, flip_side, fix_crossings);
+                        if (prev == Geom::Point(0,0)) {
+                            start_angle_cross = 0;
+                        }
+                        end_angle_cross = getAngle(end, start, next, flip_side, fix_crossings);
+                        if (next == Geom::Point(0,0)) {
+                            end_angle_cross = 0;
+                        }
+                    }
+                    Geom::Ray ray(hstart,hend);
+                    Geom::Coord angle = ray.angle();
+                    if (flip_side) {
+                        angle = std::fmod(angle + rad_from_deg(180), 2*M_PI);
+                        if (angle < 0) angle += 2*M_PI;
+                    }
+                    Geom::Coord angle_cross = std::fmod(angle + rad_from_deg(90), 2*M_PI);
+                    if (angle_cross < 0) angle_cross += 2*M_PI;
+                    angle = std::fmod(angle, 2*M_PI);
+                    if (angle < 0) angle += 2*M_PI;
+                    double turn = Geom::rad_from_deg(-90);
+                    if (flip_side) {
+                        end_angle_cross *= -1;
+                        start_angle_cross *= -1;
+                        //turn *= -1;
+                    }
+                    if (fix_crossings != 180 && start_angle_cross != 0) {
+                        double position_turned = position / sin(start_angle_cross/2.0);
+                        hstart = hstart - Point::polar(angle_cross - (start_angle_cross/2.0) - turn, position_turned);
+                    } else {
+                        hstart = hstart - Point::polar(angle_cross, position);
+                    }
+                    createLine(start, hstart, g_strdup(Glib::ustring("infoline-on-start-").append(Glib::ustring::format(counter) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str()), false, false, remove);
+
+                    if (fix_crossings != 180 && end_angle_cross != 0) {
+                        double position_turned = position / sin(end_angle_cross/2.0);
+                        hend = hend - Point::polar(angle_cross + (end_angle_cross/2.0) + turn, position_turned);
+                    } else {
+                        hend = hend - Point::polar(angle_cross, position);
+                    }
+                    double length = Geom::distance(hstart,hend)  * scale;
+                    Geom::Point pos = Geom::middle_point(hstart,hend);
+                    if (arrows_outside) {
+                        createArrowMarker("ArrowDINout-start");
+                        createArrowMarker("ArrowDINout-end");
+                    } else {
+                        createArrowMarker("ArrowDIN-start");
+                        createArrowMarker("ArrowDIN-end");
+                    }
+                    //We get the font size to offset the text to the middle
+                    Pango::FontDescription fontdesc(Glib::ustring(fontbutton.param_getSVGValue()));
+                    fontsize = fontdesc.get_size()/(double)Pango::SCALE;
+                    fontsize *= document->getRoot()->c2p.inverse().expansionX();
+                    
+                    if (angle >= rad_from_deg(90) && angle < rad_from_deg(270)) {
+                        pos = pos - Point::polar(angle_cross, text_top_bottom + (fontsize/2.5));
+                    } else {
+                        pos = pos + Point::polar(angle_cross, text_top_bottom + (fontsize/2.5));
+                    }
+                    double parents_scale = (affinetransform.expansionX() + affinetransform.expansionY()) / 2.0;
+                    if (scale_sensitive) {
+                        length *= parents_scale;
+                    }
+                    if (scale_sensitive && !affinetransform.preservesAngles()) {
+                        createTextLabel(pos, counter, length, angle, remove, false);
+                    } else {
+                        createTextLabel(pos, counter, length, angle, remove, true);
+                    }
+                    bool overflow = false;
+                    const char * downline = g_strdup(Glib::ustring("downline-").append(Glib::ustring::format(counter) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str());
+                    //delete residual lines if exist
+                    createLine(Geom::Point(),Geom::Point(), downline, true, overflow, true, false);
+                    //Create it 
+                    if ((anotation_width/2) + std::abs(text_right_left / doc_scale) > Geom::distance(hstart,hend)/2.0) {
+                        Geom::Point sstart = hend - Point::polar(angle_cross, position);
+                        Geom::Point send = hend - Point::polar(angle_cross, position);
+                        if ((text_right_left < 0 && flip_side) || (text_right_left > 0 && !flip_side)) {
+                            sstart = hstart - Point::polar(angle_cross, position);
+                            send = hstart - Point::polar(angle_cross, position);
+                        }
+                        Geom::Point prog_end = Geom::Point();
+                        if (std::abs(text_top_bottom / doc_scale) < fontsize/1.5 && hide_back) { 
+                            if (text_right_left > 0 ) {
+                                prog_end = sstart - Point::polar(angle, std::abs(text_right_left / doc_scale) - (anotation_width/1.9) - (Geom::distance(hstart,hend)/2.0));
+                            } else {
+                                prog_end = sstart + Point::polar(angle, std::abs(text_right_left / doc_scale) - (anotation_width/1.9) - (Geom::distance(hstart,hend)/2.0));
+                            }
+                        } else {
+                            if (text_right_left / doc_scale > 0 ) {
+                                prog_end = sstart - Point::polar(angle,(anotation_width/2) + std::abs(text_right_left / doc_scale) - (Geom::distance(hstart,hend)/2.0));
+                            } else {
+                                prog_end = sstart + Point::polar(angle,(anotation_width/2) + std::abs(text_right_left / doc_scale) - (Geom::distance(hstart,hend)/2.0));
+                            }
+                        }
+                        overflow = true;
+                        createLine(sstart, prog_end, downline, true, overflow, false, false);
+                    }
+                    //LINE
+                    arrow_gap = 8 * Inkscape::Util::Quantity::convert(0.35 / doc_scale, "mm", display_unit.c_str());
+                    if (line_group_05) {
+                        arrow_gap = 8 * Inkscape::Util::Quantity::convert(0.25 / doc_scale, "mm", display_unit.c_str());
+                    }
+                    SPCSSAttr *css = sp_repr_css_attr_new();
+                    sp_repr_css_attr_add_from_string(css, dimline_format.param_getSVGValue());
+                    char *oldlocale = g_strdup (setlocale(LC_NUMERIC, NULL));
+                    setlocale (LC_NUMERIC, "C");
+                    double width_line =  atof(sp_repr_css_property(css,"stroke-width","-1"));
+                    setlocale (LC_NUMERIC, oldlocale);
+                    g_free (oldlocale);
+                    if (width_line > -0.0001) {
+                         arrow_gap = 8 * Inkscape::Util::Quantity::convert(width_line/ doc_scale, "mm", display_unit.c_str());
+                    }
+                    if(flip_side) {
+                       arrow_gap *= -1;
+                    }
+                    createLine(end, hend, g_strdup(Glib::ustring("infoline-on-end-").append(Glib::ustring::format(counter) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str()), false, false, remove);
+                    if (!arrows_outside) {
+                        hstart = hstart + Point::polar(angle, arrow_gap);
+                        hend = hend - Point::polar(angle, arrow_gap );
+                    }
+                    createLine(hstart, hend, g_strdup(Glib::ustring("infoline-").append(Glib::ustring::format(counter) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str()), true, overflow, remove, true);
                 } else {
-                    prog_end = sstart + Point::polar(angle, std::abs(text_right_left) - (anotation_width/1.9) - (Geom::distance(start,end)/2.0));
-                }
-            } else {
-                if (text_right_left > 0 ) {
-                    prog_end = sstart - Point::polar(angle,(anotation_width/2) + std::abs(text_right_left) - (Geom::distance(start,end)/2.0));
-                } else {
-                    prog_end = sstart + Point::polar(angle,(anotation_width/2) + std::abs(text_right_left) - (Geom::distance(start,end)/2.0));
+                    createLine(Geom::Point(), Geom::Point(), g_strdup(Glib::ustring("infoline-").append(Glib::ustring::format(counter) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str()), true, true, true, true);
+                    createLine(Geom::Point(), Geom::Point(), g_strdup(Glib::ustring("infoline-on-start-").append(Glib::ustring::format(counter) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str()), true, true, true, true);
+                    createLine(Geom::Point(), Geom::Point(), g_strdup(Glib::ustring("infoline-on-end-").append(Glib::ustring::format(counter) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str()), true, true, true, true);
+                    const char * id = g_strdup(Glib::ustring("text-on-").append(Glib::ustring::format(counter) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str());
+                    SPObject *elemref = NULL;
+                    if ((elemref = document->getObjectById(id))) {
+                        elemref->deleteObject();
+                    }
                 }
             }
-            overflow = true;
-            createLine(sstart, prog_end, downline, true, overflow, false, false);
         }
-        //LINE
-        arrow_gap = 8 * Inkscape::Util::Quantity::convert(0.35 / doc_scale, "mm", display_unit.c_str());
-        if (line_group_05) {
-            arrow_gap = 8 * Inkscape::Util::Quantity::convert(0.25 / doc_scale, "mm", display_unit.c_str());
+        for (size_t k = ncurves; k <= previous_size; k++) {
+            createLine(Geom::Point(), Geom::Point(), g_strdup(Glib::ustring("infoline-").append(Glib::ustring::format(k) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str()), true, true, true, true);
+            createLine(Geom::Point(), Geom::Point(), g_strdup(Glib::ustring("infoline-on-start-").append(Glib::ustring::format(k) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str()), true, true, true, true);
+            createLine(Geom::Point(), Geom::Point(), g_strdup(Glib::ustring("infoline-on-end-").append(Glib::ustring::format(k) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str()), true, true, true, true);
+            const char * id = g_strdup(Glib::ustring("text-on-").append(Glib::ustring::format(k) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str());
+            SPObject *elemref = NULL;
+            if ((elemref = document->getObjectById(id))) {
+                elemref->deleteObject();
+            }
         }
-        SPCSSAttr *css = sp_repr_css_attr_new();
-        sp_repr_css_attr_add_from_string(css, dimline_format.param_getSVGValue());
-        char *oldlocale = g_strdup (setlocale(LC_NUMERIC, NULL));
-        setlocale (LC_NUMERIC, "C");
-        double width_line =  atof(sp_repr_css_property(css,"stroke-width","-1"));
-        setlocale (LC_NUMERIC, oldlocale);
-        g_free (oldlocale);
-        if (width_line > -0.0001) {
-             arrow_gap = 8 * Inkscape::Util::Quantity::convert(width_line/ doc_scale, "mm", display_unit.c_str());
-        }
-        if (flip_side) {
-            arrow_gap *= -1;
-        }
-        hstart = hstart - Point::polar(angle_cross, position);
-        createLine(start, hstart, g_strdup(Glib::ustring("infoline-on-start-").append(this->getRepr()->attribute("id")).c_str()), false, false, remove);
-        hend = hend - Point::polar(angle_cross, position);
-        createLine(end, hend, g_strdup(Glib::ustring("infoline-on-end-").append(this->getRepr()->attribute("id")).c_str()), false, false, remove);
-        if (!arrows_outside) {
-            hstart = hstart + Point::polar(angle, arrow_gap);
-            hend = hend - Point::polar(angle, arrow_gap );
-        }
-        createLine(hstart, hend, g_strdup(Glib::ustring("infoline-").append(this->getRepr()->attribute("id")).c_str()), true, overflow, remove, true);     
+        previous_size = ncurves;
     }
 }
 
 void
-LPEMeasureLine::doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/)
+LPEMeasureSegments::doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/)
 {
     processObjects(LPE_VISIBILITY);
 }
 
 void 
-LPEMeasureLine::doOnRemove (SPLPEItem const* /*lpeitem*/)
+LPEMeasureSegments::doOnRemove (SPLPEItem const* /*lpeitem*/)
 {
     //set "keep paths" hook on sp-lpe-item.cpp
     if (keep_paths) {
@@ -684,7 +793,7 @@ LPEMeasureLine::doOnRemove (SPLPEItem const* /*lpeitem*/)
     processObjects(LPE_ERASE);
 }
 
-Gtk::Widget *LPEMeasureLine::newWidget()
+Gtk::Widget *LPEMeasureSegments::newWidget()
 {
     // use manage here, because after deletion of Effect object, others might
     // still be pointing to this widget.
@@ -726,13 +835,13 @@ Gtk::Widget *LPEMeasureLine::newWidget()
     expander = Gtk::manage(new Gtk::Expander(Glib::ustring(_("Show DIM CSS style override"))));
     expander->add(*vbox_expander);
     expander->set_expanded(expanded);
-    expander->property_expanded().signal_changed().connect(sigc::mem_fun(*this, &LPEMeasureLine::onExpanderChanged) );
+    expander->property_expanded().signal_changed().connect(sigc::mem_fun(*this, &LPEMeasureSegments::onExpanderChanged) );
     vbox->pack_start(*expander, true, true, 2);
     return dynamic_cast<Gtk::Widget *>(vbox);
 }
 
 void
-LPEMeasureLine::onExpanderChanged()
+LPEMeasureSegments::onExpanderChanged()
 {
     expanded = expander->get_expanded();
     if(expanded) {
@@ -743,7 +852,7 @@ LPEMeasureLine::onExpanderChanged()
 }
 
 Geom::PathVector
-LPEMeasureLine::doEffect_path(Geom::PathVector const &path_in)
+LPEMeasureSegments::doEffect_path(Geom::PathVector const &path_in)
 {
     return path_in;
 }

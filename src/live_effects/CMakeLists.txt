@@ -3,6 +3,7 @@ set(live_effects_SRC
 	lpe-angle_bisector.cpp
 	lpe-attach-path.cpp
 	lpe-bendpath.cpp
+	lpe-bool.cpp
 	lpe-bounding-box.cpp
 	lpe-bspline.cpp
 	lpe-circle_3pts.cpp
@@ -14,6 +15,8 @@ set(live_effects_SRC
 	lpe-curvestitch.cpp
 	lpe-dynastroke.cpp
 	lpe-ellipse_5pts.cpp
+	lpe-embrodery-stitch.cpp
+	lpe-embrodery-stitch-ordering.cpp
 	lpe-envelope.cpp
 	lpe-extrude.cpp
 	lpe-fill-between-many.cpp
@@ -27,7 +30,7 @@ set(live_effects_SRC
 	lpe-lattice.cpp
 	lpe-lattice2.cpp
 	lpe-line_segment.cpp
-	lpe-measure-line.cpp
+	lpe-measure-segments.cpp
 	lpe-mirror_symmetry.cpp
 	lpe-offset.cpp
 	lpe-parallel.cpp
@@ -55,9 +58,6 @@ set(live_effects_SRC
 	lpegroupbbox.cpp
 	lpeobject-reference.cpp
 	lpe-vonkoch.cpp
-	lpe-embrodery-stitch.cpp
-	lpe-embrodery-stitch-ordering.cpp
-	lpe-bool.cpp
 	lpeobject.cpp
 	spiro-converters.cpp
 	spiro.cpp
@@ -75,8 +75,8 @@ set(live_effects_SRC
 	parameter/path.cpp
 	parameter/point.cpp
 	parameter/powerstrokepointarray.cpp
-	parameter/satellitesarray.cpp
 	parameter/random.cpp
+	parameter/satellitesarray.cpp
 	parameter/text.cpp
 	parameter/fontbutton.cpp
 	parameter/togglebutton.cpp
@@ -92,6 +92,7 @@ set(live_effects_SRC
 	lpe-angle_bisector.h
 	lpe-attach-path.h
 	lpe-bendpath.h
+	lpe-bool.h
 	lpe-bounding-box.h
 	lpe-bspline.h
 	lpe-circle_3pts.h
@@ -103,6 +104,8 @@ set(live_effects_SRC
 	lpe-curvestitch.h
 	lpe-dynastroke.h
 	lpe-ellipse_5pts.h
+	lpe-embrodery-stitch.h
+	lpe-embrodery-stitch-ordering.h
 	lpe-envelope.h
 	lpe-extrude.h
 	lpe-fill-between-many.h
@@ -116,7 +119,7 @@ set(live_effects_SRC
 	lpe-lattice.h
 	lpe-lattice2.h
 	lpe-line_segment.h
-	lpe-measure-line.h
+	lpe-measure-segments.h
 	lpe-mirror_symmetry.h
 	lpe-offset.h
 	lpe-parallel.h
@@ -143,9 +146,6 @@ set(live_effects_SRC
 	lpe-test-doEffect-stack.h
 	lpe-text_label.h
 	lpe-vonkoch.h
-	lpe-embrodery-stitch.h
-	lpe-embrodery-stitch-ordering.h
-	lpe-bool.h
 	lpegroupbbox.h
 	lpeobject-reference.h
 	lpeobject.h
@@ -166,8 +166,8 @@ set(live_effects_SRC
 	parameter/path.h
 	parameter/point.h
 	parameter/powerstrokepointarray.h
-	parameter/satellitesarray.h
 	parameter/random.h
+	parameter/satellitesarray.h
 	parameter/text.h
 	parameter/fontbutton.h
 	parameter/togglebutton.h

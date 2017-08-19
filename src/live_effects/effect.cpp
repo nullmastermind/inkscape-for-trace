@@ -39,7 +39,7 @@
 #include "live_effects/lpe-lattice2.h"
 #include "live_effects/lpe-lattice.h"
 #include "live_effects/lpe-line_segment.h"
-#include "live_effects/lpe-measure-line.h"
+#include "live_effects/lpe-measure-segments.h"
 #include "live_effects/lpe-mirror_symmetry.h"
 #include "live_effects/lpe-offset.h"
 #include "live_effects/lpe-parallel.h"
@@ -126,7 +126,7 @@ const Util::EnumData<EffectType> LPETypeData[] = {
     {ELLIPSE_5PTS,          N_("Ellipse by 5 points"),             "ellipse_5pts"},
     {BOUNDING_BOX,          N_("Bounding Box"),                    "bounding_box"},
 /* 9.93 */
-    {MEASURE_LINE,          N_("Measure Line"),                    "measure_line"},
+    {MEASURE_SEGMENTS,      N_("Measure Segments"),                "measure_segments"},
     {FILLET_CHAMFER,        N_("Fillet/Chamfer"),                  "fillet_chamfer"},
     {BOOL_OP,               N_("Boolean operation"),               "bool_op"},
     {EMBRODERY_STITCH,      N_("Embrodery stitch"),                "embrodery_stitch"},
@@ -331,8 +331,8 @@ Effect::New(EffectType lpenr, LivePathEffectObject *lpeobj)
         case TRANSFORM_2PTS:
             neweffect = static_cast<Effect*> ( new LPETransform2Pts(lpeobj) );
             break;
-        case MEASURE_LINE:
-            neweffect = static_cast<Effect*> ( new LPEMeasureLine(lpeobj) );
+        case MEASURE_SEGMENTS:
+            neweffect = static_cast<Effect*> ( new LPEMeasureSegments(lpeobj) );
             break;
         default:
             g_warning("LivePathEffect::Effect::New called with invalid patheffect type (%d)", lpenr);
