@@ -54,7 +54,7 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     fontbutton(_("Font"), _("Font Selector"), "fontbutton", &wr, this),
     orientation(_("Orientation"), _("Orientation method"), "orientation", OMConverter, &wr, this, OM_PARALLEL, false),
     precision(_("Precision"), _("Precision"), "precision", &wr, this, 2),
-    fix_crossings(_("Fix crossings °"), _("Fix crossings lines limit, 180° no fix"), "fix_crossings", &wr, this, 40),
+    fix_overlaps(_("Fix overlaps °"), _("Min angle where overlaps are fixed, 180° no fix"), "fix_overlaps", &wr, this, 40),
     position(_("Position"), _("Position"), "position", &wr, this, 5),
     text_top_bottom(_("Text top/bottom"), _("Text top/bottom"), "text_top_bottom", &wr, this, 0),
     text_right_left(_("Text right/left"), _("Text right/left"), "text_right_left", &wr, this, 0),
@@ -62,7 +62,7 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     helpline_overlap(_("Helpline overlap"), _("Helpline overlap"), "helpline_overlap", &wr, this, 2.0),
     scale(_("Scale"), _("Scaling factor"), "scale", &wr, this, 1.0),
     format(_("Format"), _("Format the number ex:{measure} {unit}, return to save"), "format", &wr, this,"{measure}{unit}"),
-    blacklist(_("Blacklist"), _("Optional line index that exclude measure, comma limited, you can add more LPE like this to fill the holes"), "blacklist", &wr, this,""),
+    blacklist(_("Blacklist"), _("Optional segment index that exclude measure, comma limited, you can add more LPE like this to fill the holes"), "blacklist", &wr, this,""),
     whitelist(_("Inverse blacklist"), _("Blacklist as whitelist"), "whitelist", &wr, this, false),
     arrows_outside(_("Arrows outside"), _("Arrows outside"), "arrows_outside", &wr, this, false),
     flip_side(_("Flip side"), _("Flip side"), "flip_side", &wr, this, false),
@@ -82,7 +82,7 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     registerParameter(&fontbutton);
     registerParameter(&orientation);
     registerParameter(&precision);
-    registerParameter(&fix_crossings);
+    registerParameter(&fix_overlaps);
     registerParameter(&position);
     registerParameter(&text_top_bottom);
     registerParameter(&text_right_left);
@@ -122,10 +122,10 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     precision.param_set_increments(1, 1);
     precision.param_set_digits(0);
     precision.param_make_integer(true);
-    fix_crossings.param_set_range(0, 180);
-    fix_crossings.param_set_increments(1, 1);
-    fix_crossings.param_set_digits(0);
-    fix_crossings.param_make_integer(true);
+    fix_overlaps.param_set_range(0, 180);
+    fix_overlaps.param_set_increments(1, 1);
+    fix_overlaps.param_set_digits(0);
+    fix_overlaps.param_make_integer(true);
     position.param_set_range(-999999.0, 999999.0);
     position.param_set_increments(1, 1);
     position.param_set_digits(2);
@@ -514,12 +514,12 @@ LPEMeasureSegments::hasMeassure (size_t i)
     return false;
 }
 
-double getAngle(Geom::Point p1, Geom::Point p2, Geom::Point p3, bool flip_side, double fix_crossings){
+double getAngle(Geom::Point p1, Geom::Point p2, Geom::Point p3, bool flip_side, double fix_overlaps){
     Geom::Ray ray_1(p2,p1);
     Geom::Ray ray_2(p3,p1);
     bool ccw_toggle = cross(p1 - p2, p3 - p2) < 0;
     double angle = angle_between(ray_1, ray_2, ccw_toggle);
-    if (Geom::deg_from_rad(angle) < fix_crossings ||
+    if (Geom::deg_from_rad(angle) < fix_overlaps ||
         Geom::deg_from_rad(angle) > 180 || 
         ((ccw_toggle && flip_side) || (!ccw_toggle && !flip_side)))
     {
@@ -628,12 +628,12 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                         if (Geom::are_near(hstart[Geom::X], hend[Geom::X])) {
                             remove = true;
                         }
-                    } else if (fix_crossings != 180) {
-                        start_angle_cross = getAngle( start, prev, end, flip_side, fix_crossings);
+                    } else if (fix_overlaps != 180) {
+                        start_angle_cross = getAngle( start, prev, end, flip_side, fix_overlaps);
                         if (prev == Geom::Point(0,0)) {
                             start_angle_cross = 0;
                         }
-                        end_angle_cross = getAngle(end, start, next, flip_side, fix_crossings);
+                        end_angle_cross = getAngle(end, start, next, flip_side, fix_overlaps);
                         if (next == Geom::Point(0,0)) {
                             end_angle_cross = 0;
                         }
@@ -654,7 +654,7 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                         start_angle_cross *= -1;
                         //turn *= -1;
                     }
-                    if (fix_crossings != 180 && start_angle_cross != 0) {
+                    if (fix_overlaps != 180 && start_angle_cross != 0) {
                         double position_turned = position / sin(start_angle_cross/2.0);
                         hstart = hstart - Point::polar(angle_cross - (start_angle_cross/2.0) - turn, position_turned);
                     } else {
@@ -662,7 +662,7 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                     }
                     createLine(start, hstart, g_strdup(Glib::ustring("infoline-on-start-").append(Glib::ustring::format(counter) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str()), false, false, remove);
 
-                    if (fix_crossings != 180 && end_angle_cross != 0) {
+                    if (fix_overlaps != 180 && end_angle_cross != 0) {
                         double position_turned = position / sin(end_angle_cross/2.0);
                         hend = hend - Point::polar(angle_cross + (end_angle_cross/2.0) + turn, position_turned);
                     } else {

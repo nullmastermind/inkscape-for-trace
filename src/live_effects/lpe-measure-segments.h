@@ -56,7 +56,7 @@ private:
     FontButtonParam fontbutton;
     EnumParam<OrientationMethod> orientation;
     ScalarParam precision;
-    ScalarParam fix_crossings;
+    ScalarParam fix_overlaps;
     ScalarParam position;
     ScalarParam text_top_bottom;
     ScalarParam text_right_left;
