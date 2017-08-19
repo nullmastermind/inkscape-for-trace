@@ -54,7 +54,7 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     fontbutton(_("Font"), _("Font Selector"), "fontbutton", &wr, this),
     orientation(_("Orientation"), _("Orientation method"), "orientation", OMConverter, &wr, this, OM_PARALLEL, false),
     precision(_("Precision"), _("Precision"), "precision", &wr, this, 2),
-    fix_overlaps(_("Fix overlaps °"), _("Min angle where overlaps are fixed, 180° no fix"), "fix_overlaps", &wr, this, 40),
+    fix_overlaps(_("Fix overlaps °"), _("Min angle where overlaps are fixed, 180° no fix"), "fix_overlaps", &wr, this, 0),
     position(_("Position"), _("Position"), "position", &wr, this, 5),
     text_top_bottom(_("Text top/bottom"), _("Text top/bottom"), "text_top_bottom", &wr, this, 0),
     text_right_left(_("Text right/left"), _("Text right/left"), "text_right_left", &wr, this, 0),
