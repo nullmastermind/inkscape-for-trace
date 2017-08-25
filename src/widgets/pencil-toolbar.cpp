@@ -136,6 +136,13 @@ static void sp_add_freehand_mode_toggle(GtkActionGroup* mainActions, GObject* ho
                                     1, _("Create a sequence of paraxial line segments"),
                                     2, INKSCAPE_ICON("path-mode-polyline-paraxial"),
                                     -1 );
+            } else {
+                gtk_list_store_append( model, &iter );
+                gtk_list_store_set( model, &iter,
+                                    0, _("PowerStroke"),
+                                    1, _("Create a variable with with power stroke"),
+                                    2, INKSCAPE_ICON("draw-use-pressure"),
+                                    -1 );
             }
             
             EgeSelectOneAction* act = ege_select_one_action_new(tool_is_pencil ?

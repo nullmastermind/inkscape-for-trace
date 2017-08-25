@@ -11,8 +11,12 @@
 #include <2geom/d2.h>
 #include <2geom/sbasis.h>
 
-#define SP_PENCIL_CONTEXT(obj) (dynamic_cast<Inkscape::UI::Tools::PencilTool*>((ToolBase*)obj))
-#define SP_IS_PENCIL_CONTEXT(obj) (dynamic_cast<const Inkscape::UI::Tools::PencilTool*>((const ToolBase*)obj) != NULL)
+
+#define DDC_MIN_PRESSURE      0.0
+#define DDC_MAX_PRESSURE      1.0
+#define DDC_DEFAULT_PRESSURE  1.0
+#define SP_PENCIL_CONTEXT(obj) (dynamic_cast<Inkscape::UI::Tools::PencilTool*>((Inkscape::UI::Tools::ToolBase*)obj))
+#define SP_IS_PENCIL_CONTEXT(obj) (dynamic_cast<const Inkscape::UI::Tools::PencilTool*>((const Inkscape::UI::Tools::ToolBase*)obj) != NULL)
 
 namespace Inkscape {
 namespace UI {
@@ -30,8 +34,8 @@ enum PencilState {
  */
 class PencilTool : public FreehandBase {
 public:
-	PencilTool();
-	virtual ~PencilTool();
+    PencilTool();
+    virtual ~PencilTool();
 
     Geom::Point p[16];
     gint npoints;
@@ -41,35 +45,43 @@ public:
     bool is_drawing;
 
     std::vector<Geom::Point> ps;
+    std::vector<Geom::Point> pps;
+    std::vector<double> wps;
+    double previous_pressure;
+    double gap_pressure;
+    double min_distance;
+    double start_clamp;
+    double end_clamp;
 
     Geom::Piecewise<Geom::D2<Geom::SBasis> > sketch_interpolation; // the current proposal from the sketched paths
     unsigned sketch_n; // number of sketches done
 
-	static const std::string prefsPath;
+    static const std::string prefsPath;
 
-	virtual const std::string& getPrefsPath();
+    virtual const std::string& getPrefsPath();
 
 protected:
-	virtual void setup();
-	virtual bool root_handler(GdkEvent* event);
+
+    virtual void setup();
+    virtual bool root_handler(GdkEvent* event);
 
 private:
-	bool _handleButtonPress(GdkEventButton const &bevent);
-	bool _handleMotionNotify(GdkEventMotion const &mevent);
-	bool _handleButtonRelease(GdkEventButton const &revent);
-	bool _handleKeyPress(GdkEventKey const &event);
-	bool _handleKeyRelease(GdkEventKey const &event);
+    bool _handleButtonPress(GdkEventButton const &bevent);
+    bool _handleMotionNotify(GdkEventMotion const &mevent);
+    bool _handleButtonRelease(GdkEventButton const &revent);
+    bool _handleKeyPress(GdkEventKey const &event);
+    bool _handleKeyRelease(GdkEventKey const &event);
 
-	void _setStartpoint(Geom::Point const &p);
-	void _setEndpoint(Geom::Point const &p);
-	void _finishEndpoint();
-	void _addFreehandPoint(Geom::Point const &p, guint state);
-	void _fitAndSplit();
-	void _interpolate();
-	void _sketchInterpolate();
-
-	void _cancel();
-	void _endpointSnap(Geom::Point &p, guint const state);
+    void _setStartpoint(Geom::Point const &p);
+    void _setEndpoint(Geom::Point const &p);
+    void _finishEndpoint();
+    void _addFreehandPoint(Geom::Point const &p, guint state);
+    void _fitAndSplit();
+    void _interpolate();
+    void _sketchInterpolate();
+    void _extinput(GdkEvent *event);
+    void _cancel();
+    void _endpointSnap(Geom::Point &p, guint const state);
 };
 
 }

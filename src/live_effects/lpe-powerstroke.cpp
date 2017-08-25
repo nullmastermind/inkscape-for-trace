@@ -249,7 +249,9 @@ LPEPowerStroke::doOnApply(SPLPEItem const* lpeitem)
         }
         offset_points.param_set_and_write_new_value(points);
     } else {
-        g_warning("LPE Powerstroke can only be applied to shapes (not groups).");
+        if (!SP_IS_SHAPE(lpeitem)) {
+            g_warning("LPE Powerstroke can only be applied to shapes (not groups).");
+        }
     }
 }
 
@@ -557,6 +559,9 @@ LPEPowerStroke::doEffect_path (Geom::PathVector const & path_in)
     Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2_in = pathv[0].toPwSb();
     Piecewise<D2<SBasis> > der = derivative(pwd2_in);
     Piecewise<D2<SBasis> > n = unitVector(der,0.0001);
+    if (!n.size()) {
+        return path_in;
+    }
     n = rot90(n);
     offset_points.set_pwd2(pwd2_in, n);
 
@@ -620,7 +625,9 @@ LPEPowerStroke::doEffect_path (Geom::PathVector const & path_in)
 
     LineJoinType jointype = static_cast<LineJoinType>(linejoin_type.get_value());
 
-    Piecewise<D2<SBasis> > pwd2_out   = compose(pwd2_in,x) + y*compose(n,x);
+    Piecewise<D2<SBasis> > pwd2_out_1   = compose(pwd2_in,x);
+    Piecewise<D2<SBasis> > pwd2_out_2   = y*compose(n,x);
+    Piecewise<D2<SBasis> > pwd2_out   = pwd2_out_1 + pwd2_out_2;
     Piecewise<D2<SBasis> > mirrorpath = reverse(compose(pwd2_in,x) - y*compose(n,x));
 
     Geom::Path fixed_path       = path_from_piecewise_fix_cusps( pwd2_out,   y,          jointype, miter_limit, LPE_CONVERSION_TOLERANCE);

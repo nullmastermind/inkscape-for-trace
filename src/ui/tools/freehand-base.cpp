@@ -32,6 +32,7 @@
 #include "macros.h"
 #include "message-stack.h"
 #include "ui/tools/pen-tool.h"
+#include "ui/tools/pencil-tool.h"
 #include "ui/tools/lpe-tool.h"
 #include "selection-chemistry.h"
 #include "sp-item-group.h"
@@ -40,6 +41,10 @@
 #include "ui/control-manager.h"
 // clipboard support
 #include "ui/clipboard.h"
+
+#define MIN_PRESSURE      0.0
+#define MAX_PRESSURE      1.0
+#define DEFAULT_PRESSURE  1.0
 
 using Inkscape::DocumentUndo;
 
@@ -89,6 +94,7 @@ FreehandBase::FreehandBase(gchar const *const *cursor_shape)
     , waiting_LPE_type(Inkscape::LivePathEffect::INVALID_LPE)
     , red_curve_is_valid(false)
     , anchor_statusbar(false)
+    , pressure(DEFAULT_PRESSURE)
 {
 }
 
@@ -222,12 +228,56 @@ static void spdc_paste_curve_as_freehand_shape(Geom::PathVector const &newpath, 
     lpe->getRepr()->setAttribute("prop_scale", os.str().c_str());
 }
 
-static void spdc_apply_powerstroke_shape(const std::vector<Geom::Point> & points, FreehandBase *dc, SPItem *item)
+static void spdc_apply_powerstroke_shape(std::vector<Geom::Point> points, FreehandBase *dc, SPItem *item)
 {
     using namespace Inkscape::LivePathEffect;
 
+    if (SP_IS_PENCIL_CONTEXT(dc)) {
+        PencilTool *pt = SP_PENCIL_CONTEXT(dc);
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        if (prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 3) {
+            SPShape *sp_shape = dynamic_cast<SPShape *>(item);
+            Geom::PathVector pathvector;
+            if (sp_shape) {
+                pathvector = sp_shape->getCurve()->get_pathvector();
+                size_t counter = 0;
+                auto wps = pt->wps.begin();
+                double previous_pos = 0.0;
+                for (auto pps = pt->pps.begin(); pps != pt->pps.end(); ++pps,++wps) {
+                    counter++;
+                    Geom::Affine transformCoordinate = item->i2dt_affine();
+                    Geom::Point position = *pps;
+                    position *= transformCoordinate.inverse();
+                    double pos = Geom::nearest_time(position, paths_to_pw(pathvector));
+                    double width = *wps;
+                    if(pos > 1e6) {
+                        pos = 0;;
+                    }
+                    if(pos > pathvector[0].size() ) {
+                        pos = pathvector[0].size();
+                    }
+                    if ((pos - previous_pos) < pt->min_distance || 
+                        (counter == pt->wps.size() || (pos - previous_pos) < 0.1) ) 
+                    {
+                        continue;
+                    }
+                    previous_pos = pos;
+                    if (!Geom::are_near(width, 0.0, 0.1) ) {
+                        points.push_back(Geom::Point(pos,width));
+                    }
+                }
+            }
+            Effect::createAndApply(POWERSTROKE, dc->desktop->doc(), item);
+            Effect* lpe = SP_LPE_ITEM(item)->getCurrentLPE();
+
+            static_cast<LPEPowerStroke*>(lpe)->offset_points.param_set_and_write_new_value(points);
+            return;
+        }
+    }
+
     Effect::createAndApply(POWERSTROKE, dc->desktop->doc(), item);
     Effect* lpe = SP_LPE_ITEM(item)->getCurrentLPE();
+
     static_cast<LPEPowerStroke*>(lpe)->offset_points.param_set_and_write_new_value(points);
 
     // write powerstroke parameters:
@@ -321,7 +371,7 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
         }
         bool simplify = prefs->getInt(tool_name(dc) + "/simplify", 0);
         if(simplify){
-            double tol = prefs->getDoubleLimited("/tools/freehand/pencil/tolerance", 10.0, 1.0, 100.0);
+            double tol = prefs->getDoubleLimited(tool_name(dc) + "/tolerance", 10.0, 1.0, 100.0);
             tol = tol/(100.0*(102.0-tol));
             std::ostringstream ss;
             ss << tol;
@@ -339,7 +389,13 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
         if (sp_shape) {
             curve = sp_shape->getCurve();
         }
-
+        if (SP_IS_PENCIL_CONTEXT(dc)) {
+            if (prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 3) {
+                std::vector<Geom::Point> points;
+                spdc_apply_powerstroke_shape(points, dc, item);
+                shape = NONE;
+            }
+        }
         bool shape_applied = false;
         SPCSSAttr *css_item = sp_css_attr_from_object(item, SP_STYLE_FLAG_ALWAYS);
         const char *cstroke = sp_repr_css_property(css_item, "stroke", "none");

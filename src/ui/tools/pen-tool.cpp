@@ -1774,9 +1774,9 @@ void PenTool::_bsplineSpiroBuild()
         //LivePathEffectObject *lpeobj = static_cast<LivePathEffectObject*> (curve);
         //Effect *spr = static_cast<Effect*> ( new LPEbspline(lpeobj) );
         //spr->doEffect(curve);
-        if(this->bspline){
+        if (this->bspline) {
             LivePathEffect::sp_bspline_do_effect(curve, 0);
-        }else{
+        } else {
             LivePathEffect::sp_spiro_do_effect(curve);
         }
 

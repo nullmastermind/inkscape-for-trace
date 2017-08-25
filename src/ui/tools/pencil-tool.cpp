@@ -63,6 +63,11 @@ PencilTool::PencilTool()
     , state(SP_PENCIL_CONTEXT_IDLE)
     , req_tangent(0, 0)
     , is_drawing(false)
+    , previous_pressure(0.0)
+    , gap_pressure(1.0)
+    , min_distance(0.2)
+    , start_clamp(DDC_MIN_PRESSURE)
+    , end_clamp(DDC_MAX_PRESSURE)
     , sketch_n(0)
 {
 }
@@ -79,7 +84,17 @@ void PencilTool::setup() {
     this->anchor_statusbar = false;
 }
 
+
+
 PencilTool::~PencilTool() {
+}
+
+void PencilTool::_extinput(GdkEvent *event) {
+    if (gdk_event_get_axis (event, GDK_AXIS_PRESSURE, &this->pressure)) {
+        this->pressure = CLAMP (this->pressure, start_clamp, end_clamp);
+    } else {
+        this->pressure = DDC_DEFAULT_PRESSURE;
+    }
 }
 
 /** Snaps new node relative to the previous node. */
@@ -110,6 +125,7 @@ bool PencilTool::root_handler(GdkEvent* event) {
             break;
 
         case GDK_MOTION_NOTIFY:
+            this->_extinput(event);
             ret = this->_handleMotionNotify(event->motion);
             break;
 
@@ -138,7 +154,6 @@ bool PencilTool::root_handler(GdkEvent* event) {
 
 bool PencilTool::_handleButtonPress(GdkEventButton const &bevent) {
     bool ret = false;
-
     if ( bevent.button == 1  && !this->space_panning) {
         Inkscape::Selection *selection = desktop->getSelection();
 
@@ -165,7 +180,10 @@ bool PencilTool::_handleButtonPress(GdkEventButton const &bevent) {
 
         pencil_drag_origin_w = Geom::Point(bevent.x,bevent.y);
         pencil_within_tolerance = true;
-
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        if (prefs->getInt("/tools/freehand/pencil/freehand-mode", 0) == 3) {
+            this->state = SP_PENCIL_CONTEXT_FREEHAND;
+        }
         switch (this->state) {
             case SP_PENCIL_CONTEXT_ADDLINE:
                 /* Current segment will be finished with release */
@@ -224,7 +242,7 @@ bool PencilTool::_handleMotionNotify(GdkEventMotion const &mevent) {
     }
 
     bool ret = false;
-
+    
     if (this->space_panning || (mevent.state & GDK_BUTTON2_MASK) || (mevent.state & GDK_BUTTON3_MASK)) {
         // allow scrolling
         return false;
@@ -244,9 +262,8 @@ bool PencilTool::_handleMotionNotify(GdkEventMotion const &mevent) {
 
     /* Test whether we hit any anchor. */
     SPDrawAnchor *anchor = spdc_test_inside(this, Geom::Point(mevent.x, mevent.y));
-
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (pencil_within_tolerance) {
-        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         gint const tolerance = prefs->getIntLimited("/options/dragtolerance/value", 0, 0, 100);
         if ( Geom::LInfty( Geom::Point(mevent.x,mevent.y) - pencil_drag_origin_w ) < tolerance ) {
             return false;   // Do not drag if we're within tolerance from origin.
@@ -261,6 +278,10 @@ bool PencilTool::_handleMotionNotify(GdkEventMotion const &mevent) {
     switch (this->state) {
         case SP_PENCIL_CONTEXT_ADDLINE:
             /* Set red endpoint */
+            if (prefs->getInt("/tools/freehand/pencil/freehand-mode", 0) == 3) {
+                this->state = SP_PENCIL_CONTEXT_FREEHAND;
+                return true;
+            }
             if (anchor) {
                 p = anchor->dp;
             } else {
@@ -294,6 +315,9 @@ bool PencilTool::_handleMotionNotify(GdkEventMotion const &mevent) {
                         // - We cannot do this in the button press handler because at that point we don't know yet
                         //   wheter we're going into freehand mode or not
                         this->ps.push_back(this->p[0]);
+                        this->pps.push_back(this->p[0]);
+                        double pressure_computed = pow(this->pressure,3);
+                        this->wps.push_back(pressure_computed);
                     }
                     this->_addFreehandPoint(p, mevent.state);
                     ret = true;
@@ -400,6 +424,9 @@ bool PencilTool::_handleButtonRelease(GdkEventButton const &revent) {
                     spdc_concat_colors_and_flush(this, FALSE);
                     this->sa = NULL;
                     this->ea = NULL;
+                    this->ps.clear();
+                    this->wps.clear();
+                    this->pps.clear();
                     if (this->green_anchor) {
                         this->green_anchor = sp_draw_anchor_destroy(this->green_anchor);
                     }
@@ -608,7 +635,43 @@ void PencilTool::_addFreehandPoint(Geom::Point const &p, guint /*state*/) {
     if ( ( p != this->p[ this->npoints - 1 ] )
          && in_svg_plane(p) )
     {
+        
+        this->p[this->npoints++] = p;
+        this->_fitAndSplit();
+        SPCurve *c;
+        if (sa) {
+            c = sa->curve;
+            if (!green_curve->is_empty()) {
+                c->append_continuous( green_curve, 0.0625);
+            }
+        } else {
+            if (!green_curve->is_empty()) {
+                c = green_curve;
+            } else {
+                c = new SPCurve();
+            }
+        }
+        if (red_curve_is_valid && !red_curve->is_empty()) {
+            c->append_continuous(red_curve, 0.0625);
+        }
+        Geom::PathVector pathvector = c->get_pathvector();
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        double pressure = prefs->getInt("/tools/freehand/pencil/freehand-mode", 0) == 3 ? this->pressure :1;
         this->ps.push_back(p);
+        double pressure_computed = pow(this->pressure, 3) * 25;
+//        std::cout << previous_pressure <<"previous_pressure\n";
+//        std::cout << pressure_computed <<"pressure_computed\n";
+//        std::cout << std::abs(previous_pressure - pressure_computed) <<"std::abs(previous_pressure - pressure_computed)\n";
+//        std::cout << gap_pressure <<"gap_pressure\n";
+//        std::cout << Geom::distance(this->pps[this->pps.size()-1], p) << "distance\n";
+
+        if (previous_pressure == 0.0 || 
+            std::abs(previous_pressure - pressure_computed) > gap_pressure )
+        {
+            previous_pressure = pressure_computed;
+            this->pps.push_back(p);
+            this->wps.push_back(pressure_computed);
+        }
         this->p[this->npoints++] = p;
         this->_fitAndSplit();
     }
@@ -690,8 +753,7 @@ void PencilTool::_interpolate() {
                                 : Geom::unit_vector(req_vec) );
         }
     }
-
-    this->ps.clear();
+    //this->ps = b;
 }
 
 
@@ -786,6 +848,8 @@ void PencilTool::_sketchInterpolate() {
     }
 
     this->ps.clear();
+    this->pps.clear();
+    this->wps.clear();
 }
 
 void PencilTool::_fitAndSplit() {

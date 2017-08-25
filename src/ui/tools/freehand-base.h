@@ -44,8 +44,8 @@ namespace Tools {
 
 class FreehandBase : public ToolBase {
 public:
-	FreehandBase(gchar const *const *cursor_shape);
-	virtual ~FreehandBase();
+    FreehandBase(gchar const *const *cursor_shape);
+    virtual ~FreehandBase();
 
     Inkscape::Selection *selection;
     SPCanvasItem *grab;
@@ -98,12 +98,15 @@ public:
     bool red_curve_is_valid;
 
     bool anchor_statusbar;
+    
+    gdouble pressure;
+    virtual void set(const Inkscape::Preferences::Entry& val);
 
 protected:
-	virtual void setup();
-	virtual void finish();
-	virtual void set(const Inkscape::Preferences::Entry& val);
-	virtual bool root_handler(GdkEvent* event);
+
+    virtual void setup();
+    virtual void finish();
+    virtual bool root_handler(GdkEvent* event);
 };
 
 /**
