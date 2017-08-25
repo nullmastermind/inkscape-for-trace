@@ -20,6 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 '''
 # standard library
 import os
+import re
 import shutil
 from subprocess import Popen, PIPE
 import sys
@@ -74,15 +75,48 @@ class MyEffect(inkex.Effect):
     def clear_tmp(self):
         shutil.rmtree(self.tmp_dir)
 
+    def getDocumentScale(self):
+        """Returns the ratio between the SVG width and viewBox attributes.
+        """
+        documentscale = 1  # default to 1
+        svgwidth = self.getDocumentWidth()
+        viewboxstr = self.document.getroot().get('viewBox')
+        if viewboxstr:
+            param = re.compile(r'(([-+]?[0-9]+(\.[0-9]*)?|[-+]?\.[0-9]+)([eE][-+]?[0-9]+)?)')
+            p = param.match(svgwidth)
+            width = 100  # default
+            viewboxwidth = 100  # default
+            if p:
+                width = float(p.string[p.start():p.end()])
+            else:
+                errormsg(_("SVG Width not set correctly! Assuming width = 100"))
+
+            viewboxnumbers = []
+            for t in viewboxstr.split():
+                try:
+                    viewboxnumbers.append(float(t))
+                except ValueError:
+                    pass
+            if len(viewboxnumbers) == 4:  # check for correct number of numbers
+                viewboxwidth = viewboxnumbers[2]
+
+            documentscale =  self.unittouu(str(width / viewboxwidth))
+
+        return documentscale
+
     def effect(self):
         svg_file = self.args[-1]
         ttmp_orig = self.document.getroot()
         docname = ttmp_orig.get(inkex.addNS('docname',u'sodipodi'))
         if docname is None: docname = self.args[-1]
+        
+        doc_scale = self.getDocumentScale()
+        res_scale = eval(self.options.resolution) / 96.0
+        scale = doc_scale * res_scale
 
-        pageHeight = int(self.unittouu(self.xpathSingle('/svg:svg/@height').split('.')[0]))
-        pageWidth = int(self.unittouu(self.xpathSingle('/svg:svg/@width').split('.')[0]))
-
+        pageHeight = self.uutounit(self.unittouu(self.getDocumentHeight()), "px")
+        pageWidth = self.uutounit(self.unittouu(self.getDocumentWidth()), "px")
+        
         # Create os temp dir (to store exported pngs and Gimp log file)
         self.tmp_dir = tempfile.mkdtemp()
 
@@ -96,17 +130,17 @@ class MyEffect(inkex.Effect):
                 ori = guideNode.get('orientation')
                 if  ori == '0,1':
                     # This is a horizontal guide
-                    pos = int(guideNode.get('position').split(',')[1].split('.')[0])
+                    pos = self.uutounit(float(guideNode.get('position').split(',')[1]), "px") * doc_scale
                     # GIMP doesn't like guides that are outside of the image
                     if pos > 0 and pos < pageHeight:
                         # The origin is at the top in GIMP land
-                        hGuides.append(str(pageHeight - pos))
+                        hGuides.append(str(int(round((pageHeight - pos) * res_scale))))
                 elif ori == '1,0':
                     # This is a vertical guide
-                    pos = int(guideNode.get('position').split(',')[0].split('.')[0])
+                    pos = self.uutounit(float(guideNode.get('position').split(',')[0]), "px") * doc_scale
                     # GIMP doesn't like guides that are outside of the image
                     if pos > 0 and pos < pageWidth:
-                        vGuides.append(str(pos))
+                        vGuides.append(str(int(round(pos * res_scale))))
 
         hGList = ' '.join(hGuides)
         vGList = ' '.join(vGuides)
@@ -121,25 +155,36 @@ class MyEffect(inkex.Effect):
             if gridNode != None:
                 # These attributes could be nonexistant
                 spacingX = gridNode.get('spacingx')
-                if spacingX == None: spacingX = '1  '
-
+                if spacingX == None:
+                    spacingX = 1
+                else:
+                    spacingX = self.uutounit(float(spacingX),"px") * scale
                 spacingY = gridNode.get('spacingy')
-                if spacingY == None: spacingY = '1  '
-
+                if spacingY == None:
+                    spacingY = 1
+                else:
+                    spacingY = self.uutounit(float(spacingY),"px") * scale
                 originX = gridNode.get('originx')
-                if originX == None: originX = '0  '
-
+                if originX == None:
+                    originX = 0
+                else:
+                    originX = self.uutounit(float(originX),"px") * scale
                 originY = gridNode.get('originy')
-                if originY == None: originY = '0  '
+                if originY == None:
+                    originY = 0
+                else:
+                    originY = self.uutounit(float(originY),"px") * doc_scale
+                    offsetY = pageHeight % (self.uutounit(float(spacingY),"px") * doc_scale)
+                    originY = (pageHeight - originY) * res_scale
 
-                gridSpacingFunc = '(gimp-image-grid-set-spacing img %s %s)' % (spacingX[:-2], spacingY[:-2])
-                gridOriginFunc = '(gimp-image-grid-set-offset img %s %s)'% (originX[:-2], originY[:-2])
+                gridSpacingFunc = '(gimp-image-grid-set-spacing img %s %s)' % (int(round(float(spacingX))), int(round(float(spacingY))))
+                gridOriginFunc = '(gimp-image-grid-set-offset img %s %s)'% (int(round(float(originX))), int(round(float(originY))))
 
         # Layers
         area = '--export-area-page'
         opacity = '--export-background-opacity='
         resolution = '--export-dpi=' + self.options.resolution
-        
+
         if self.options.layerBackground:
             opacity += "1"
         else:
@@ -158,7 +203,7 @@ class MyEffect(inkex.Effect):
                     name = id
                 filename = os.path.join(self.tmp_dir, "%s.png" % id)
                 command = "inkscape -i \"%s\" -j %s %s -e \"%s\" %s %s" % (id, area, opacity, filename, svg_file, resolution)
-               
+
                 p = Popen(command, shell=True, stdin=PIPE, stdout=PIPE, stderr=PIPE)
                 return_code = p.wait()
                 f = p.stdout
