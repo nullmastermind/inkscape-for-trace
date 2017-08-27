@@ -37,6 +37,7 @@ if(WIN32)
     ${MINGW_BIN}/libfftw3-[0-9]*.dll
     ${MINGW_BIN}/libfontconfig-[0-9]*.dll
     ${MINGW_BIN}/libfreetype-[0-9]*.dll
+    ${MINGW_BIN}/libfribidi-[0-9]*.dll
     ${MINGW_BIN}/libgc-[0-9]*.dll
     ${MINGW_BIN}/libgdbm-[0-9]*.dll
     ${MINGW_BIN}/libgdk-3-[0-9]*.dll
@@ -66,6 +67,7 @@ if(WIN32)
     ${MINGW_BIN}/libicuin[0-9]*.dll
     ${MINGW_BIN}/libicuuc[0-9]*.dll
     ${MINGW_BIN}/libidn-[0-9]*.dll
+    ${MINGW_BIN}/libidn2-[0-9]*.dll
     ${MINGW_BIN}/libintl-[0-9]*.dll
     ${MINGW_BIN}/libjpeg-[0-9]*.dll
     ${MINGW_BIN}/liblcms2-[0-9]*.dll
@@ -93,6 +95,7 @@ if(WIN32)
     ${MINGW_BIN}/libpopt-[0-9]*.dll
     ${MINGW_BIN}/libpotrace-[0-9]*.dll
     ${MINGW_BIN}/libquadmath-[0-9]*.dll
+    ${MINGW_BIN}/libraqm-[0-9]*.dll
     ${MINGW_BIN}/libreadline[0-9]*.dll
     ${MINGW_BIN}/librevenge-0.[0-9]*.dll
     ${MINGW_BIN}/librevenge-stream-0.[0-9]*.dll
