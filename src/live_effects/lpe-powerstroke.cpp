@@ -190,7 +190,7 @@ LPEPowerStroke::LPEPowerStroke(LivePathEffectObject *lpeobject) :
     registerParameter(&scale_width);
     registerParameter(&end_linecap_type);
     scale_width.param_set_range(0.0, Geom::infinity());
-    scale_width.param_set_increments(0.01, 0.01);
+    scale_width.param_set_increments(0.1, 0.1);
     scale_width.param_set_digits(4);
 }
 
