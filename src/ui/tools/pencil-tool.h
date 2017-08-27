@@ -46,13 +46,15 @@ public:
 
     std::vector<Geom::Point> ps;
     std::vector<Geom::Point> pps;
+    std::vector<Geom::Point> points;
     std::vector<double> wps;
     double previous_pressure;
+    Geom::Point previous_point;
+    bool start;
     double gap_pressure;
-    double min_distance;
     double start_clamp;
     double end_clamp;
-
+    void addPowerStrokePoint(SPCurve * c, Geom::Point p, double pressure_data);
     Geom::Piecewise<Geom::D2<Geom::SBasis> > sketch_interpolation; // the current proposal from the sketched paths
     unsigned sketch_n; // number of sketches done
 
@@ -71,8 +73,8 @@ private:
     bool _handleButtonRelease(GdkEventButton const &revent);
     bool _handleKeyPress(GdkEventKey const &event);
     bool _handleKeyRelease(GdkEventKey const &event);
-
     void _setStartpoint(Geom::Point const &p);
+
     void _setEndpoint(Geom::Point const &p);
     void _finishEndpoint();
     void _addFreehandPoint(Geom::Point const &p, guint state);

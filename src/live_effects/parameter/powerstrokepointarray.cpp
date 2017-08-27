@@ -163,7 +163,7 @@ PowerStrokePointArrayParamKnotHolderEntity::knot_set(Geom::Point const &p, Geom:
     Geom::Point const s = snap_knot_position(p, state);
     double t = nearest_time(s, pwd2);
     double offset = dot(s - pwd2.valueAt(t), n.valueAt(t));
-    _pparam->_vector.at(_index) = Geom::Point(t, offset);
+    _pparam->_vector.at(_index) = Geom::Point(t, offset/_pparam->_scale_width);
     if (_pparam->_vector.size() == 1 ) {
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
         prefs->setDouble("/live_effect/power_stroke/width", offset);
@@ -188,7 +188,7 @@ PowerStrokePointArrayParamKnotHolderEntity::knot_get() const
         g_warning("Broken powerstroke point at %f, I won't try to add that", offset_point[X]);
         return Geom::Point(infinity(), infinity());
     }
-    Point canvas_point = pwd2.valueAt(offset_point[X]) + offset_point[Y] * n.valueAt(offset_point[X]);
+    Point canvas_point = pwd2.valueAt(offset_point[X]) + (offset_point[Y] * _pparam->_scale_width) * n.valueAt(offset_point[X]);
     return canvas_point;
 }
 

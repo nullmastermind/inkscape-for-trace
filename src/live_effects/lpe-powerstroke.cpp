@@ -167,6 +167,7 @@ LPEPowerStroke::LPEPowerStroke(LivePathEffectObject *lpeobject) :
     sort_points(_("Sort points"), _("Sort offset points according to their time value along the curve"), "sort_points", &wr, this, true),
     interpolator_type(_("Interpolator type:"), _("Determines which kind of interpolator will be used to interpolate between stroke width along the path"), "interpolator_type", InterpolatorTypeConverter, &wr, this, Geom::Interpolate::INTERP_CUBICBEZIER),
     interpolator_beta(_("Smoothness:"), _("Sets the smoothness for the CubicBezierJohan interpolator; 0 = linear interpolation, 1 = smooth"), "interpolator_beta", &wr, this, 0.2),
+    scale_width(_("Width scale:"), _("Width scale all points"), "scale_width", &wr, this, 1.0),
     start_linecap_type(_("Start cap:"), _("Determines the shape of the path's start"), "start_linecap_type", LineCapTypeConverter, &wr, this, LINECAP_BUTT),
     linejoin_type(_("Join:"), _("Determines the shape of the path's corners"), "linejoin_type", LineJoinTypeConverter, &wr, this, LINEJOIN_EXTRP_MITER_ARC),
     miter_limit(_("Miter limit:"), _("Maximum length of the miter (in units of stroke width)"), "miter_limit", &wr, this, 4.),
@@ -186,14 +187,22 @@ LPEPowerStroke::LPEPowerStroke(LivePathEffectObject *lpeobject) :
     registerParameter(&start_linecap_type);
     registerParameter(&linejoin_type);
     registerParameter(&miter_limit);
+    registerParameter(&scale_width);
     registerParameter(&end_linecap_type);
+    scale_width.param_set_range(0.0, Geom::infinity());
+    scale_width.param_set_increments(1, 1);
+    scale_width.param_set_digits(4);
 }
 
 LPEPowerStroke::~LPEPowerStroke()
 {
 
 }
-
+void 
+LPEPowerStroke::doBeforeEffect(SPLPEItem const *lpeItem)
+{
+    offset_points.set_scale_width(scale_width);
+}
 void
 LPEPowerStroke::doOnApply(SPLPEItem const* lpeitem)
 {
@@ -247,6 +256,7 @@ LPEPowerStroke::doOnApply(SPLPEItem const* lpeitem)
                 points.push_back( Geom::Point(size - 0.2,width) );
             }
         }
+        offset_points.set_scale_width(scale_width);
         offset_points.param_set_and_write_new_value(points);
     } else {
         if (!SP_IS_SHAPE(lpeitem)) {
@@ -559,7 +569,7 @@ LPEPowerStroke::doEffect_path (Geom::PathVector const & path_in)
     Geom::Piecewise<Geom::D2<Geom::SBasis> > pwd2_in = pathv[0].toPwSb();
     Piecewise<D2<SBasis> > der = derivative(pwd2_in);
     Piecewise<D2<SBasis> > n = unitVector(der,0.0001);
-    if (!n.size()) {
+    if (!n.size() || !pwd2_in.size() || !n.size()) {
         return path_in;
     }
     n = rot90(n);
@@ -568,9 +578,14 @@ LPEPowerStroke::doEffect_path (Geom::PathVector const & path_in)
     LineCapType end_linecap = static_cast<LineCapType>(end_linecap_type.get_value());
     LineCapType start_linecap = static_cast<LineCapType>(start_linecap_type.get_value());
 
-    std::vector<Geom::Point> ts = offset_points.data();
-    if (ts.empty()) {
+    std::vector<Geom::Point> ts_no_scale = offset_points.data();
+    if (ts_no_scale.empty()) {
         return path_out;
+    }
+    std::vector<Geom::Point> ts;
+    for (std::vector<Geom::Point>::iterator tsp = ts_no_scale.begin(); tsp != ts_no_scale.end(); ++tsp) {
+        Geom::Point p = Geom::Point((*tsp)[Geom::X], (*tsp)[Geom::Y] * scale_width);
+        ts.push_back(p);
     }
     if (sort_points) {
         sort(ts.begin(), ts.end(), compare_offsets);
@@ -625,10 +640,16 @@ LPEPowerStroke::doEffect_path (Geom::PathVector const & path_in)
 
     LineJoinType jointype = static_cast<LineJoinType>(linejoin_type.get_value());
 
+    if (!x.size() || !y.size()) {
+        return path_in;
+    }
     Piecewise<D2<SBasis> > pwd2_out_1   = compose(pwd2_in,x);
     Piecewise<D2<SBasis> > pwd2_out_2   = y*compose(n,x);
+    if (!pwd2_out_1.size() || !pwd2_out_2.size()) {
+        return path_in;
+    }
     Piecewise<D2<SBasis> > pwd2_out   = pwd2_out_1 + pwd2_out_2;
-    Piecewise<D2<SBasis> > mirrorpath = reverse(compose(pwd2_in,x) - y*compose(n,x));
+    Piecewise<D2<SBasis> > mirrorpath = reverse( pwd2_out_1 - pwd2_out_2);
 
     Geom::Path fixed_path       = path_from_piecewise_fix_cusps( pwd2_out,   y,          jointype, miter_limit, LPE_CONVERSION_TOLERANCE);
     Geom::Path fixed_mirrorpath = path_from_piecewise_fix_cusps( mirrorpath, reverse(y), jointype, miter_limit, LPE_CONVERSION_TOLERANCE);

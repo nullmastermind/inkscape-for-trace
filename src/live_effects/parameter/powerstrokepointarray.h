@@ -35,6 +35,7 @@ public:
 
     void set_oncanvas_looks(SPKnotShapeType shape, SPKnotModeType mode, guint32 color);
 
+    
     float median_width();
 
     virtual bool providesKnotHolderEntities() const { return true; }
@@ -46,6 +47,8 @@ public:
     Geom::Piecewise<Geom::D2<Geom::SBasis> > const & get_pwd2_normal() const { return last_pwd2_normal; }
 
     void recalculate_controlpoints_for_new_pwd2(Geom::Piecewise<Geom::D2<Geom::SBasis> > const & pwd2_in);
+    void set_scale_width(double scale_width){_scale_width = scale_width;};
+    double _scale_width;
     friend class PowerStrokePointArrayParamKnotHolderEntity;
 
 private:

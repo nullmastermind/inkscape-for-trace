@@ -208,6 +208,9 @@
   <toolbar name='PencilToolbar'>
     <toolitem action='FreehandModeActionPencil' />
     <separator />
+    <toolitem action='MinPressureAction' />
+    <toolitem action='MaxPressureAction' />
+    <separator />
     <toolitem action='FlattenSpiroBsplinePencil' />
     <separator />
     <toolitem action='PencilToleranceAction' />

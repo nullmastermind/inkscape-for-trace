@@ -83,6 +83,16 @@ static void freehand_mode_changed(EgeSelectOneAction* act, GObject* tbl)
     if (SP_IS_PEN_CONTEXT(desktop->event_context)) {
         Inkscape::UI::Tools::PenTool *pc = SP_PEN_CONTEXT(desktop->event_context);
         pc->setPolylineMode();
+    } else {
+        if (mode == 3) {
+            gtk_action_set_visible( GTK_ACTION( g_object_get_data(tbl, "shape_action") ), false );
+            gtk_action_set_visible( GTK_ACTION( g_object_get_data(tbl, "minpressure") ), true );
+            gtk_action_set_visible( GTK_ACTION( g_object_get_data(tbl, "maxpressure") ), true );
+        } else {
+            gtk_action_set_visible( GTK_ACTION( g_object_get_data(tbl, "shape_action") ), true );
+            gtk_action_set_visible( GTK_ACTION( g_object_get_data(tbl, "minpressure") ), false );
+            gtk_action_set_visible( GTK_ACTION( g_object_get_data(tbl, "maxpressure") ), false );
+        }
     }
     if (mode == 1 || mode == 2) {
         gtk_action_set_visible( GTK_ACTION( g_object_get_data(tbl, "flatten_spiro_bspline") ), true );
@@ -241,6 +251,11 @@ static void freehand_add_advanced_shape_options(GtkActionGroup* mainActions, GOb
         g_signal_connect( G_OBJECT(act1), "changed", G_CALLBACK(freehand_change_shape), holder );
         gtk_action_group_add_action( mainActions, GTK_ACTION(act1) );
         g_object_set_data( holder, "shape_action", act1 );
+        if (prefs->getInt("/tools/freehand/pencil/freehand-mode", 0) == 3) {
+            gtk_action_set_visible( GTK_ACTION(act1), false );
+        } else {
+            gtk_action_set_visible( GTK_ACTION(act1), true );
+        }
     }
 }
 
@@ -351,6 +366,26 @@ static void sp_simplify_flatten(GtkWidget * /*widget*/, GObject *obj)
     }
 }
 
+static void sp_minpressure_value_changed(GtkAdjustment *adj, GObject *tbl)
+{
+    // quit if run by the attr_changed listener
+    if (g_object_get_data( tbl, "freeze" )) {
+        return;
+    }
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    prefs->setDouble( "/tools/freehand/pencil/minpressure", gtk_adjustment_get_value(adj));
+}
+
+static void sp_maxpressure_value_changed(GtkAdjustment *adj, GObject *tbl)
+{
+    // quit if run by the attr_changed listener
+    if (g_object_get_data( tbl, "freeze" )) {
+        return;
+    }
+    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+    prefs->setDouble( "/tools/freehand/pencil/maxpressure", gtk_adjustment_get_value(adj));
+}
+
 static void sp_pencil_tb_tolerance_value_changed(GtkAdjustment *adj, GObject *tbl)
 {
     // quit if run by the attr_changed listener
@@ -445,7 +480,41 @@ void sp_pencil_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
     sp_add_freehand_mode_toggle(mainActions, holder, true);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     EgeAdjustmentAction* eact = 0;
-
+    /* min pressure */
+    {
+        eact = create_adjustment_action( "MinPressureAction",
+                                         _("Min presure"), _("Min:"), _("Min percent of pressure"),
+                                         "/tools/freehand/pencil/minpressure", 0,
+                                         GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
+                                         0, 100, 1, 0,
+                                         0, 0, 0,
+                                         sp_minpressure_value_changed, NULL, 0 ,0);
+                                         
+        gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
+        g_object_set_data( holder, "minpressure", eact );
+        if (prefs->getInt("/tools/freehand/pencil/freehand-mode", 0) == 3) {
+            gtk_action_set_visible( GTK_ACTION(eact), true );
+        } else {
+            gtk_action_set_visible( GTK_ACTION(eact), false );
+        }
+    }
+    /* max pressure */
+    {
+        eact = create_adjustment_action( "MaxPressureAction",
+                                         _("Max presure"), _("Max:"), _("Max percent of pressure"),
+                                         "/tools/freehand/pencil/maxpressure", 100,
+                                         GTK_WIDGET(desktop->canvas), holder, FALSE, NULL,
+                                         0, 100, 1, 0,
+                                         0, 0, 0,
+                                         sp_maxpressure_value_changed, NULL, 0 ,0);
+        gtk_action_group_add_action( mainActions, GTK_ACTION(eact) );
+        g_object_set_data( holder, "maxpressure", eact );
+        if (prefs->getInt("/tools/freehand/pencil/freehand-mode", 0) == 3) {
+            gtk_action_set_visible( GTK_ACTION(eact), true );
+        } else {
+            gtk_action_set_visible( GTK_ACTION(eact), false );
+        }
+    }
     /* Tolerance */
     {
         gchar const* labels[] = {_("(many nodes, rough)"), _("(default)"), 0, 0, 0, 0, _("(few nodes, smooth)")};
