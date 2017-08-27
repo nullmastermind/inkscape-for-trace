@@ -190,7 +190,7 @@ LPEPowerStroke::LPEPowerStroke(LivePathEffectObject *lpeobject) :
     registerParameter(&scale_width);
     registerParameter(&end_linecap_type);
     scale_width.param_set_range(0.0, Geom::infinity());
-    scale_width.param_set_increments(1, 1);
+    scale_width.param_set_increments(0.01, 0.01);
     scale_width.param_set_digits(4);
 }
 
@@ -640,16 +640,8 @@ LPEPowerStroke::doEffect_path (Geom::PathVector const & path_in)
 
     LineJoinType jointype = static_cast<LineJoinType>(linejoin_type.get_value());
 
-    if (!x.size() || !y.size()) {
-        return path_in;
-    }
-    Piecewise<D2<SBasis> > pwd2_out_1   = compose(pwd2_in,x);
-    Piecewise<D2<SBasis> > pwd2_out_2   = y*compose(n,x);
-    if (!pwd2_out_1.size() || !pwd2_out_2.size()) {
-        return path_in;
-    }
-    Piecewise<D2<SBasis> > pwd2_out   = pwd2_out_1 + pwd2_out_2;
-    Piecewise<D2<SBasis> > mirrorpath = reverse( pwd2_out_1 - pwd2_out_2);
+    Piecewise<D2<SBasis> > pwd2_out   = compose(pwd2_in,x) + y*compose(n,x);
+    Piecewise<D2<SBasis> > mirrorpath = reverse( compose(pwd2_in,x) - y*compose(n,x));
 
     Geom::Path fixed_path       = path_from_piecewise_fix_cusps( pwd2_out,   y,          jointype, miter_limit, LPE_CONVERSION_TOLERANCE);
     Geom::Path fixed_mirrorpath = path_from_piecewise_fix_cusps( mirrorpath, reverse(y), jointype, miter_limit, LPE_CONVERSION_TOLERANCE);
