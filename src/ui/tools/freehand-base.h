@@ -99,6 +99,8 @@ public:
 
     bool anchor_statusbar;
     
+    bool input_has_pressure;
+
     gdouble pressure;
     virtual void set(const Inkscape::Preferences::Entry& val);
 

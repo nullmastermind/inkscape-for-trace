@@ -99,6 +99,7 @@ PenTool::PenTool()
     , cl1(NULL)
     , events_disabled(false)
 {
+    input_has_pressure = false;
 }
 
 PenTool::PenTool(gchar const *const *cursor_shape)

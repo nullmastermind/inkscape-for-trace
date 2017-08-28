@@ -94,6 +94,7 @@ FreehandBase::FreehandBase(gchar const *const *cursor_shape)
     , waiting_LPE_type(Inkscape::LivePathEffect::INVALID_LPE)
     , red_curve_is_valid(false)
     , anchor_statusbar(false)
+    , input_has_pressure(false)
     , pressure(DEFAULT_PRESSURE)
 {
 }
@@ -235,7 +236,7 @@ static void spdc_apply_powerstroke_shape(std::vector<Geom::Point> points, Freeha
     if (SP_IS_PENCIL_CONTEXT(dc)) {
         PencilTool *pt = SP_PENCIL_CONTEXT(dc);
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        if (prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 3) {
+        if (dc->input_has_pressure) {
             SPShape *sp_shape = dynamic_cast<SPShape *>(item);
             if (sp_shape) {
                 SPCurve * c = sp_shape->getCurve();
@@ -401,7 +402,7 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
             swidth = swidth/2;
         }
         if (SP_IS_PENCIL_CONTEXT(dc)) {
-            if (prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 3) {
+            if (dc->input_has_pressure) {
                 std::vector<Geom::Point> points;
                 spdc_apply_powerstroke_shape(points, dc, item);
                 shape = NONE;

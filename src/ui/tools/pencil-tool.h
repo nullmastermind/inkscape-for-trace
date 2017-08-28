@@ -45,6 +45,7 @@ public:
     bool is_drawing;
 
     std::vector<Geom::Point> ps;
+
     std::vector<Geom::Point> points;
     std::vector<double> wps;
 

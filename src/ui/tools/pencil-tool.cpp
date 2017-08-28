@@ -94,9 +94,17 @@ PencilTool::~PencilTool() {
 
 void PencilTool::_extinput(GdkEvent *event) {
     if (gdk_event_get_axis (event, GDK_AXIS_PRESSURE, &this->pressure)) {
-        this->pressure = CLAMP (this->pressure, DDC_MIN_PRESSURE, DDC_MAX_PRESSURE);
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        if (prefs->getBool("/tools/freehand/pencil/pressure", true)) {
+            this->pressure = CLAMP (this->pressure, DDC_MIN_PRESSURE, DDC_MAX_PRESSURE);
+            input_has_pressure = true;
+        } else {
+            this->pressure = DDC_DEFAULT_PRESSURE;
+            input_has_pressure = false;
+        }
     } else {
         this->pressure = DDC_DEFAULT_PRESSURE;
+        input_has_pressure = false;
     }
 }
 
@@ -121,14 +129,13 @@ void PencilTool::_endpointSnap(Geom::Point &p, guint const state) {
  */
 bool PencilTool::root_handler(GdkEvent* event) {
     bool ret = false;
-
+    this->_extinput(event);
     switch (event->type) {
         case GDK_BUTTON_PRESS:
             ret = this->_handleButtonPress(event->button);
             break;
 
         case GDK_MOTION_NOTIFY:
-            this->_extinput(event);
             ret = this->_handleMotionNotify(event->motion);
             break;
 
@@ -184,7 +191,7 @@ bool PencilTool::_handleButtonPress(GdkEventButton const &bevent) {
         pencil_drag_origin_w = Geom::Point(bevent.x,bevent.y);
         pencil_within_tolerance = true;
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        if (prefs->getInt("/tools/freehand/pencil/freehand-mode", 0) == 3) {
+        if (input_has_pressure) {
             this->state = SP_PENCIL_CONTEXT_FREEHAND;
         }
         switch (this->state) {
@@ -281,7 +288,7 @@ bool PencilTool::_handleMotionNotify(GdkEventMotion const &mevent) {
     switch (this->state) {
         case SP_PENCIL_CONTEXT_ADDLINE:
             /* Set red endpoint */
-            if (prefs->getInt("/tools/freehand/pencil/freehand-mode", 0) == 3) {
+            if (input_has_pressure) {
                 this->state = SP_PENCIL_CONTEXT_FREEHAND;
                 return true;
             }
@@ -410,7 +417,7 @@ bool PencilTool::_handleButtonRelease(GdkEventButton const &revent) {
                     } else {
                         Geom::Point p_end = p;
                         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-                        if (prefs->getInt("/tools/freehand/pencil/freehand-mode", 0) != 3) {
+                        if (!input_has_pressure) {
                             this->_endpointSnap(p_end, revent.state);
                             if (p_end != p) {
                                 // then we must have snapped!
@@ -806,7 +813,7 @@ void PencilTool::_addFreehandPoint(Geom::Point const &p, guint /*state*/) {
         this->ps.push_back(p);
         this->wps.push_back(this->pressure);
         Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-        if (prefs->getInt("/tools/freehand/pencil/freehand-mode", 0) == 3) {
+        if (input_has_pressure) {
             this->addPowerStrokePencil(NULL);
         }
     }
