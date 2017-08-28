@@ -161,30 +161,6 @@ static void sp_add_freehand_mode_toggle(GtkActionGroup* mainActions, GObject* ho
             g_signal_connect_after( G_OBJECT(act), "changed", G_CALLBACK(freehand_mode_changed), holder);
         }
         {
-            if (tool_is_pencil) {
-                /* Use pressure */
-                {
-                    Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-                    InkToggleAction* itact = ink_toggle_action_new( "PencilPressureAction",
-                                                                    _("Use pressure input"),
-                                                                    _("Use pressure input"),
-                                                                    INKSCAPE_ICON("draw-use-pressure"),
-                                                                    GTK_ICON_SIZE_SMALL_TOOLBAR );
-                    bool pressure = prefs->getBool(freehand_tool_name(holder) + "/pressure", true);
-                    gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(itact), pressure );
-                    g_signal_connect_after(  G_OBJECT(itact), "toggled", G_CALLBACK(use_pencil_pressure), holder) ;
-                    gtk_action_group_add_action( mainActions, GTK_ACTION(itact) );
-                    if (pressure) {
-                        gtk_action_set_visible( GTK_ACTION( g_object_get_data(holder, "minpressure") ), true );
-                        gtk_action_set_visible( GTK_ACTION( g_object_get_data(holder, "maxpressure") ), true );
-                    } else {
-                        gtk_action_set_visible( GTK_ACTION( g_object_get_data(holder, "minpressure") ), false );
-                        gtk_action_set_visible( GTK_ACTION( g_object_get_data(holder, "maxpressure") ), false );
-                    }
-                }
-            }
-        }
-        {
             /* LPE bspline spiro flatten */
             InkAction* inky = ink_action_new( tool_is_pencil ? "FlattenSpiroBsplinePencil" :
                                                 "FlattenSpiroBsplinePen",
@@ -495,6 +471,8 @@ void sp_pencil_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
     sp_add_freehand_mode_toggle(mainActions, holder, true);
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     EgeAdjustmentAction* eact = 0;
+
+    
     /* min pressure */
     {
         eact = create_adjustment_action( "MinPressureAction",
@@ -528,6 +506,25 @@ void sp_pencil_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
             gtk_action_set_visible( GTK_ACTION(eact), true );
         } else {
             gtk_action_set_visible( GTK_ACTION(eact), false );
+        }
+    }
+    /* Use pressure */
+    {
+        InkToggleAction* itact = ink_toggle_action_new( "PencilPressureAction",
+                                                        _("Use pressure input"),
+                                                        _("Use pressure input"),
+                                                        INKSCAPE_ICON("draw-use-pressure"),
+                                                        GTK_ICON_SIZE_SMALL_TOOLBAR );
+        bool pressure = prefs->getBool(freehand_tool_name(holder) + "/pressure", true);
+        gtk_toggle_action_set_active(GTK_TOGGLE_ACTION(itact), pressure );
+        g_signal_connect_after(  G_OBJECT(itact), "toggled", G_CALLBACK(use_pencil_pressure), holder) ;
+        gtk_action_group_add_action( mainActions, GTK_ACTION(itact) );
+        if (pressure) {
+            gtk_action_set_visible( GTK_ACTION( g_object_get_data(holder, "minpressure") ), true );
+            gtk_action_set_visible( GTK_ACTION( g_object_get_data(holder, "maxpressure") ), true );
+        } else {
+            gtk_action_set_visible( GTK_ACTION( g_object_get_data(holder, "minpressure") ), false );
+            gtk_action_set_visible( GTK_ACTION( g_object_get_data(holder, "maxpressure") ), false );
         }
     }
     /* Tolerance */

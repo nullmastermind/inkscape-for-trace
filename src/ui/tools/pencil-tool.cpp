@@ -70,7 +70,6 @@ PencilTool::PencilTool()
     , req_tangent(0, 0)
     , is_drawing(false)
     , sketch_n(0)
-    , _gap_pressure(1.0)
     , _powerpreview(NULL)
 {
 }
@@ -759,7 +758,13 @@ PencilTool::addPowerStrokePencil(SPCurve * c)
     if (min > max){
         min = max;
     }
+    double gap_pressure = prefs->getDoubleLimited("/tools/freehand/pencil/gap-pressure",1.0, 0.1, 9999.0);
+    double knots_distance = prefs->getDoubleLimited("/tools/freehand/pencil/knots-distance",1.0, 0.1, 9999.0);
+    gint pressure_sensibility = prefs->getIntLimited("/tools/freehand/pencil/pressure-sensibility",12, 1, 100);
+    
+    
     double previous_pressure = 0.0;
+    double tol = knots_distance / zoom;
     Geom::Point previous_point = Geom::Point(0,0);
     bool start = true;
     auto pressure = this->wps.begin();
@@ -767,7 +772,7 @@ PencilTool::addPowerStrokePencil(SPCurve * c)
         //Maybe the 12 POW can be moved to a preferences 12 give a good results of sensibility on my tablet
         //But maybe is a tweakable value. less number = less sensibility
         //8 give an aceptable max witht to powerstoke
-        double pressure_base = pow(*pressure, 12);      
+        double pressure_base = pow(*pressure, pressure_sensibility);
         double pressure_shirnked = (pressure_base * (max - min)) + min;
         double pressure_factor = pressure_base/pressure_shirnked;
         double pressure_computed = (pressure_shirnked * 8.0 * scale) / zoom;
@@ -776,8 +781,7 @@ PencilTool::addPowerStrokePencil(SPCurve * c)
             pressure_computed = previous_pressure;
             buttonrelease = true;
         }
-        double tol = 135.0 / zoom;
-        if (start || std::abs(previous_pressure - pressure_computed) > _gap_pressure  / (zoom * pressure_factor)) {
+        if (start || std::abs(previous_pressure - pressure_computed) > gap_pressure  / (zoom * pressure_factor)) {
             Geom::Point position = *point;
             if (!live) {
                 position *= transformCoordinate.inverse();

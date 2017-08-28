@@ -69,7 +69,6 @@ private:
     bool _handleKeyPress(GdkEventKey const &event);
     bool _handleKeyRelease(GdkEventKey const &event);
     void _setStartpoint(Geom::Point const &p);
-    double _gap_pressure;
     SPItem *_powerpreview;
 
     void _setEndpoint(Geom::Point const &p);
