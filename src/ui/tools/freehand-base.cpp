@@ -372,8 +372,10 @@ static void spdc_check_for_and_apply_waiting_LPE(FreehandBase *dc, SPItem *item,
             return;
         }
         bool simplify = prefs->getInt(tool_name(dc) + "/simplify", 0);
-        if(simplify){
-            double tol = prefs->getDoubleLimited(tool_name(dc) + "/tolerance", 10.0, 1.0, 100.0);
+        Inkscape::Preferences *prefs = Inkscape::Preferences::get();
+        guint mode = prefs->getInt("/tools/freehand/pencil/freehand-mode", 0);
+        if(simplify && mode == 0){
+            double tol = prefs->getDoubleLimited("/tools/freehand/pencil/tolerance", 10.0, 1.0, 100.0);
             tol = tol/(100.0*(102.0-tol));
             std::ostringstream ss;
             ss << tol;
