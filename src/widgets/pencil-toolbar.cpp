@@ -86,10 +86,13 @@ static void freehand_mode_changed(EgeSelectOneAction* act, GObject* tbl)
     }
     if (mode == 1 || mode == 2) {
         gtk_action_set_visible( GTK_ACTION( g_object_get_data(tbl, "flatten_spiro_bspline") ), true );
+    } else {
+        gtk_action_set_visible( GTK_ACTION( g_object_get_data(tbl, "flatten_spiro_bspline") ), false );
+    }
+    if (mode == 2) {
         gtk_action_set_visible( GTK_ACTION( g_object_get_data(tbl, "flatten_simplify") ), false );
         gtk_action_set_visible( GTK_ACTION( g_object_get_data(tbl, "simplify") ), false );
     } else {
-        gtk_action_set_visible( GTK_ACTION( g_object_get_data(tbl, "flatten_spiro_bspline") ), false );
         gtk_action_set_visible( GTK_ACTION( g_object_get_data(tbl, "flatten_simplify") ), true );
         gtk_action_set_visible( GTK_ACTION( g_object_get_data(tbl, "simplify") ), true );
     }
@@ -488,7 +491,7 @@ void sp_pencil_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
         g_signal_connect_after(  G_OBJECT(itact), "toggled", G_CALLBACK(freehand_simplify_lpe), holder) ;
         gtk_action_group_add_action( mainActions, GTK_ACTION(itact) );
         guint freehandMode = prefs->getInt("/tools/freehand/pencil/freehand-mode", 0);
-        if (freehandMode == 1 || freehandMode == 2) {
+        if (freehandMode == 2) {
             gtk_action_set_visible( GTK_ACTION( g_object_get_data(holder, "simplify") ), false );
         } else {
             gtk_action_set_visible( GTK_ACTION( g_object_get_data(holder, "simplify") ), true );
@@ -505,7 +508,7 @@ void sp_pencil_toolbox_prep(SPDesktop *desktop, GtkActionGroup* mainActions, GOb
         gtk_action_group_add_action( mainActions, GTK_ACTION(inky) );
         g_object_set_data( holder, "flatten_simplify", inky );
         guint freehandMode = prefs->getInt("/tools/freehand/pencil/freehand-mode", 0);
-        if (freehandMode == 1 || freehandMode == 2 || !prefs->getInt("/tools/freehand/pencil/simplify", 0)) {
+        if (freehandMode == 2 || !prefs->getInt("/tools/freehand/pencil/simplify", 0)) {
             gtk_action_set_visible( GTK_ACTION( g_object_get_data(holder, "flatten_simplify") ), false );
         } else {
             gtk_action_set_visible( GTK_ACTION( g_object_get_data(holder, "flatten_simplify") ), true );
