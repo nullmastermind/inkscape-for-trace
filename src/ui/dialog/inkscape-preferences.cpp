@@ -207,7 +207,7 @@ void InkscapePreferences::AddPressureSensibility(DialogPage &p, Glib::ustring co
     PrefSpinButton* sb = Gtk::manage( new PrefSpinButton);
     sb->init ( prefs_path + "/pressure-sensibility", 1, 100.0, 1.0, 10.0, def_value, true, false);
     p.add_line( false, _("Pressure sensibility:"), *sb, _("on tablet usage"),
-                       _("Pressure sensibility, 12 is a good value"),
+                       _("Pressure sensibility, 12 is the default value"),
                        false );
 }
 
@@ -216,7 +216,7 @@ void InkscapePreferences::AddPowerStrokeKnotDistanceFactor(DialogPage &p, Glib::
     PrefSpinButton* sb = Gtk::manage( new PrefSpinButton);
     sb->init ( prefs_path + "/knots-distance", 0.1, 9999.0, 1.0, 10.0, def_value, false, false);
     p.add_line( false, _("Pressure min knot distance factor:"), *sb, _("on tablet usage"),
-                       _("Min distance between knots, this is a factor computed by zoom so 135 give good results"),
+                       _("Min distance between knots, this is a factor value computed with other parameters, 135 is the default one"),
                        false );
 }
 
@@ -225,7 +225,7 @@ void InkscapePreferences::AddPowerStrokeGapPressureFactor(DialogPage &p, Glib::u
     PrefSpinButton* sb = Gtk::manage( new PrefSpinButton);
     sb->init ( prefs_path + "/gap-pressure", 0.01, 9999.0, 1.0, 10.0, def_value, false, false);
     p.add_line( false, _("Pressure inputs difference for made knots:"), *sb, _("on tablet usage"),
-                       _("Diference between input pressure to make a powerstroke knot, 1 is a good value"),
+                       _("Diference between input pressure to make a powerstroke knot, this is a factor value computed with other parameters, 1 is the default value"),
                        false );
 }
 
