@@ -1969,6 +1969,10 @@ cr_parser_parse_simple_sels (CRParser * a_this,
                         READ_NEXT_CHAR (a_this, &cur_char);
                         comb = COMB_PLUS;
                         cr_parser_try_to_skip_spaces_and_comments (a_this);
+                } else if (next_char == '~') {
+                        READ_NEXT_CHAR (a_this, &cur_char);
+                        comb = COMB_TILDE;
+                        cr_parser_try_to_skip_spaces_and_comments (a_this);
                 } else if (next_char == '>') {
                         READ_NEXT_CHAR (a_this, &cur_char);
                         comb = COMB_GT;

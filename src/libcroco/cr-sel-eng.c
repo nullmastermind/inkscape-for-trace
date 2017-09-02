@@ -1349,6 +1349,45 @@ sel_matches_node_real (CRSelEng * a_this, CRSimpleSel * a_sel,
                                 goto done;
                         break;
 
+                case COMB_TILDE: /* General sibling selector. */
+                {
+                        CRXMLNodePtr n = NULL;
+                        enum CRStatus status = CR_OK;
+                        gboolean matches = FALSE;
+
+                        /*
+                         * Walk through previous sibing nodes looking for a
+                         * node that matches the preceding selector.
+                         */
+                        for (n = get_prev_element_node (node_iface, cur_node);
+                             n;
+                             n = get_prev_element_node (node_iface, n)) {
+                                status = sel_matches_node_real
+                                        (a_this, cur_sel->prev,
+                                         n, &matches, FALSE, TRUE);
+
+                                if (status != CR_OK)
+                                        goto done;
+
+                                if (matches == TRUE) {
+                                        cur_node = n ;
+                                        break;
+                                }
+                        }
+
+                        if (!n) {
+                                /*
+                                 * Didn't find any previous sibling that matches
+                                 * the previous simple selector.
+                                 */
+                                goto done;
+                        }
+                        /*
+                         * See note above in COMB_WS section.
+                         */
+                        break;
+                }
+
                 case COMB_GT:
                         cur_node = get_next_parent_element_node (node_iface, cur_node);
                         if (!cur_node)
