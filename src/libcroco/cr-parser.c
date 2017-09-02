@@ -1499,6 +1499,9 @@ cr_parser_parse_property (CRParser * a_this,
  *EMS S* | EXS S* | ANGLE S* | TIME S* | FREQ S* | function ] |
  *STRING S* | IDENT S* | URI S* | RGB S* | UNICODERANGE S* | hexcolor
  *
+ * As a special case for 'an+b', parse integer followed immediately by 'n'.
+ * The 'an' is parsed as a DIMEN.
+ *
  *TODO: handle parsing of 'RGB'
  *
  *Returns CR_OK upon successfull completion, an error code otherwise.
@@ -1595,6 +1598,13 @@ cr_parser_parse_term (CRParser * a_this, CRTerm ** a_term)
                 status = cr_term_set_hash (result, token->u.str);
                 CHECK_PARSING_STATUS (status, TRUE);
                 token->u.str = NULL;
+        } else if (token && token->type == DIMEN_TK) {
+                gboolean n = !strcmp(token->dimen->stryng->str, "n");
+                status = cr_term_set_number (result, token->u.num);
+                result->n = n; // For nth-child (an+b)
+                CHECK_PARSING_STATUS (status, TRUE);
+                token->u.num = NULL;
+                status = CR_OK;
         } else {
                 status = CR_PARSING_ERROR;
         }
@@ -1819,22 +1829,21 @@ cr_parser_parse_simple_selector (CRParser * a_this, CRSimpleSel ** a_sel)
                                 (&pseudo->location, 
                                  &token->location) ;
 
+                        /* Save selector name for use by 'type' pseudo selectors */
+                        if (sel->name)
+                                        pseudo->sel_name = cr_string_dup (sel->name);
+
                         if (token->type == IDENT_TK) {
                                 pseudo->type = IDENT_PSEUDO;
                                 pseudo->name = token->u.str;
                                 token->u.str = NULL;
                                 found_sel = TRUE;
                         } else if (token->type == FUNCTION_TK) {
-                                pseudo->name = token->u.str;
-                                token->u.str = NULL;
-                                cr_parser_try_to_skip_spaces_and_comments
-                                        (a_this);
-                                status = cr_parser_parse_ident
-                                        (a_this, &pseudo->extra);
-
+                                status = cr_tknzr_unget_token (PRIVATE (a_this)->tknzr, token);
+                                token = NULL;
+                                status = cr_parser_parse_function (a_this, &pseudo->name, &pseudo->term);
                                 ENSURE_PARSING_COND (status == CR_OK);
-                                READ_NEXT_CHAR (a_this, &cur_char);
-                                ENSURE_PARSING_COND (cur_char == ')');
+
                                 pseudo->type = FUNCTION_PSEUDO;
                                 found_sel = TRUE;
                         } else {
@@ -1863,7 +1872,7 @@ cr_parser_parse_simple_selector (CRParser * a_this, CRSimpleSel ** a_sel)
                         token = NULL;
                         break;
                 }
-        }
+        } // for loop
 
         if (status == CR_OK && found_sel == TRUE) {
                 cr_parser_try_to_skip_spaces_and_comments (a_this);
