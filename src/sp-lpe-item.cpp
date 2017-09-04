@@ -439,6 +439,28 @@ sp_lpe_item_cleanup_original_path_recursive(SPLPEItem *lpeitem, bool keep_paths)
         } else {
             sp_lpe_item_update_patheffect(lpeitem, true, true);
         }
+    } else if (SP_IS_SHAPE(lpeitem)) {
+        Inkscape::XML::Node *repr = lpeitem->getRepr();
+        SPMask * mask = lpeitem->mask_ref->getObject();
+        if(mask) {
+            sp_lpe_item_cleanup_original_path_recursive(SP_LPE_ITEM(mask->firstChild()), keep_paths);
+        }
+        SPClipPath * clip_path = lpeitem->clip_ref->getObject();
+        if(clip_path) {
+            sp_lpe_item_cleanup_original_path_recursive(SP_LPE_ITEM(clip_path->firstChild()), keep_paths);
+        }
+        mask = dynamic_cast<SPMask *>(lpeitem->parent);
+        clip_path = dynamic_cast<SPClipPath *>(lpeitem->parent);
+        if ((!lpeitem->hasPathEffectRecursive() && repr->attribute("inkscape:original-d")) ||
+            ((mask || clip_path) && !lpeitem->hasPathEffectOnClipOrMaskRecursive() && repr->attribute("inkscape:original-d"))) 
+        {
+            if (!keep_paths) {
+                repr->setAttribute("d", NULL);
+            }
+        } else {
+            sp_lpe_item_update_patheffect(lpeitem, true, true);
+        }
+    
     }
 }
 

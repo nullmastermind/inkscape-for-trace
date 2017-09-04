@@ -32,6 +32,7 @@
 #include "attributes.h"
 #include "sp-item-transform.h"
 #include "sp-root.h"
+#include "sp-rect.h"
 #include "sp-offset.h"
 #include "sp-clippath.h"
 #include "sp-mask.h"
@@ -953,11 +954,28 @@ sp_group_perform_patheffect(SPGroup *group, SPGroup *topgroup, bool write)
             SPShape *subShape = dynamic_cast<SPShape *>(subitem);
             if (subShape) {
                 SPCurve * c = NULL;
-
-                SPPath *subPath = dynamic_cast<SPPath *>(subShape);
-                if (subPath) {
-                    c = subPath->get_original_curve();
-                } else {
+                // If item is a SPRect, convert it to path first:
+                if ( dynamic_cast<SPRect *>(subShape) ) {
+                    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+                    if (desktop) {
+                        Inkscape::Selection *sel = desktop->getSelection();
+                        if ( sel && !sel->isEmpty() ) {
+                            sel->clear();
+                            sel->add(SP_ITEM(subShape));
+                            sel->toCurves();
+                            subitem = sel->singleItem();
+                            subShape = dynamic_cast<SPShape *>(subitem);
+                            if (!subShape) {
+                                continue;
+                            }
+                            sel->clear();
+                            sel->add(SP_ITEM(topgroup));
+                        }
+                    }
+                }
+                //SPPath *subPath = dynamic_cast<SPPath *>(subShape);
+                c = subShape->getCurveBeforeLPE();
+                if (!c || (subShape->getCurve() != c)) {
                     c = subShape->getCurve();
                 }
                 bool success = false;
@@ -968,7 +986,9 @@ sp_group_perform_patheffect(SPGroup *group, SPGroup *topgroup, bool write)
                     c->transform(i2anc_affine(subitem, topgroup).inverse());
                     Inkscape::XML::Node *repr = subitem->getRepr();
                     if (c && success) {
+                        subShape->setCurveInsync( subShape->getCurveBeforeLPE(), TRUE);
                         subShape->setCurve(c, TRUE);
+                        subShape->setCurveInsync( c, TRUE);
                         if (write) {
                             gchar *str = sp_svg_write_path(c->get_pathvector());
                             repr->setAttribute("d", str);
