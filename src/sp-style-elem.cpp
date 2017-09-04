@@ -176,6 +176,10 @@ import_style_cb (CRDocHandler *a_handler,
         std::cerr << "import_style_cb: No document!" << std::endl;
         return;
     }
+    if (!document->style_sheet) {
+        std::cerr << "import_style_cb: No document style sheet!" << std::endl;
+        return;
+    }
     if (!document->getURI()) {
         std::cerr << "import_style_cb: Document URI is NULL" << std::endl;
         return;
@@ -364,10 +368,6 @@ void SPStyleElem::read_content() {
     // style element would correspond to document->style_sheet, while
     // laters ones are chained on using style_sheet->next).
 
-    if (document->style_sheet != NULL) {
-        cr_stylesheet_destroy (document->style_sheet);
-        document->style_sheet = NULL;
-    }
     document->style_sheet = cr_stylesheet_new (NULL);
     CRParser *parser = parser_init(document->style_sheet, document);
 
@@ -385,8 +385,11 @@ void SPStyleElem::read_content() {
     // std::cout << (string?string:"Null") << std::endl;
 
     if (parse_status == CR_OK) {
-        cr_cascade_set_sheet(document->style_cascade, document->style_sheet, ORIGIN_AUTHOR);
+        // Also destroys old style sheet:
+        cr_cascade_set_sheet (document->style_cascade, document->style_sheet, ORIGIN_AUTHOR);
     } else {
+        cr_stylesheet_destroy (document->style_sheet);
+        document->style_sheet = NULL;
         if (parse_status != CR_PARSING_ERROR) {
             g_printerr("parsing error code=%u\n", unsigned(parse_status));
             /* Better than nothing.  TODO: Improve libcroco's error handling.  At a minimum, add a
