@@ -698,6 +698,7 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
 
             if (_flow._input_stream[unbroken_span.input_index]->Type() == TEXT_SOURCE) {
                 // the span is set up, push the glyphs and chars
+
                 InputStreamTextSource const *text_source = static_cast<InputStreamTextSource const *>(_flow._input_stream[unbroken_span.input_index]);
                 Glib::ustring::const_iterator iter_source_text = Glib::ustring::const_iterator(unbroken_span.input_stream_first_character.base() + it_span->start.char_byte) ;
                 unsigned char_index_in_unbroken_span = it_span->start.char_index;
@@ -708,9 +709,9 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
 
                 for (unsigned glyph_index = it_span->start_glyph_index ; glyph_index < it_span->end_glyph_index ; glyph_index++) {
                     unsigned char_byte              = iter_source_text.base() - unbroken_span.input_stream_first_character.base();
-                    int      newcluster             = 0;
-                    if (unbroken_span.glyph_string->glyphs[glyph_index].attr.is_cluster_start){
-                        newcluster = 1;
+                    bool     newcluster             = false;
+                    if (unbroken_span.glyph_string->glyphs[glyph_index].attr.is_cluster_start) {
+                        newcluster = true;
                         x_in_span = x_in_span_last;
                     }
 
@@ -774,7 +775,7 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                             (new_span.text_orientation == SP_CSS_TEXT_ORIENTATION_MIXED &&
                              para.pango_items[unbroken_span.pango_item_index].item->analysis.gravity == 0) ) {
 
-                            // Sideways orientation (Latin characters, CJK punctuation), 90deg rotation done at output stage. zzzzzzz
+                            // Sideways orientation (Latin characters, CJK punctuation), 90deg rotation done at output stage.
                             new_glyph.orientation = ORIENTATION_SIDEWAYS;
 
                             new_glyph.y -= new_span.font_size * para.pango_items[unbroken_span.pango_item_index].font->GetBaselines()[ dominant_baseline ];
@@ -826,8 +827,9 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
 
                     // create the Layout::Character(s)
                     double advance_width = new_glyph.width;
-                    if (newcluster){
-                        newcluster = 0;
+                    if (newcluster) {
+                        newcluster = false;
+
                         // find where the text ends for this log_cluster
                         end_byte = it_span->start.iter_span->text_bytes;  // Upper limit
                         for(int next_glyph_index = glyph_index+1; next_glyph_index < unbroken_span.glyph_string->num_glyphs; next_glyph_index++){
@@ -836,6 +838,7 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                                 break;
                             }
                         }
+
                         // Figure out how many glyphs and characters are in the log_cluster.
                         log_cluster_size_glyphs = 0;
                         log_cluster_size_chars  = 0;
@@ -843,6 +846,7 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                            if(unbroken_span.glyph_string->log_clusters[glyph_index                          ] != 
                               unbroken_span.glyph_string->log_clusters[glyph_index + log_cluster_size_glyphs])break;
                         }
+
                         Glib::ustring::const_iterator lclist = iter_source_text;
                         unsigned lcb = char_byte;
                         while(lcb < end_byte){
@@ -851,6 +855,7 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                             lcb = lclist.base() - unbroken_span.input_stream_first_character.base();
                         }
                     }
+
                     while (char_byte < end_byte) {
                         /* Hack to survive ligatures:  in log_cluster keep the number of available chars >= number of glyphs remaining.
                            When there are no ligatures these two sizes are always the same.
