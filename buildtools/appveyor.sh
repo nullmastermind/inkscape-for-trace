@@ -31,16 +31,9 @@ export CCACHE_DIR=$(cygpath -a ccache/master)
 ccache --max-size=200M
 ccache --set-config=sloppiness=include_file_ctime,include_file_mtime
 
-# patched cairo to avoid crash when printing
-#   - https://bugs.launchpad.net/inkscape/+bug/1665768
-#   - https://bugs.freedesktop.org/show_bug.cgi?id=101833
-#   - https://github.com/Alexpux/MINGW-packages/pull/2825
-wget -nv https://gitlab.com/Ede123/bintray/raw/master/$MINGW_PACKAGE_PREFIX-cairo-1.15.6-1-any.pkg.tar.xz \
-    && pacman -U $MINGW_PACKAGE_PREFIX-cairo-1.15.6-1-any.pkg.tar.xz --noconfirm
-
-# missing dependency for python2-pillow
-#   - https://github.com/Alexpux/MINGW-packages/pull/2824
-pacman -S $MINGW_PACKAGE_PREFIX-libraqm --needed --noconfirm --noprogressbar
+# temporarily use old poppler (versions >= 0.58 need compatibilty fixes due to changed "Object" API)
+wget -nv http://repo.msys2.org/mingw/$MSYSTEM_CARCH/$MINGW_PACKAGE_PREFIX-poppler-0.55.0-1-any.pkg.tar.xz \
+    && pacman -U $MINGW_PACKAGE_PREFIX-poppler-0.55.0-1-any.pkg.tar.xz --noconfirm
 
 
 ### build / test
