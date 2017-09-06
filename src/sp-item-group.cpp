@@ -986,9 +986,12 @@ sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, bool write)
                     c->transform(i2anc_affine(sub_item, top_group).inverse());
                     Inkscape::XML::Node *repr = sub_item->getRepr();
                     if (c && success) {
-                        sub_shape->setCurveInsync( sub_shape->getCurveBeforeLPE(), TRUE);
-                        sub_shape->setCurve(c, TRUE);
-                        sub_shape->setCurveInsync( c, TRUE);
+                        SPPath *sub_path = dynamic_cast<SPPath *>(sub_item);
+                        if (!sub_path) {
+                            sub_shape->setCurveInsync( sub_shape->getCurveBeforeLPE(), TRUE);
+                            sub_shape->setCurve(c, TRUE);
+                            sub_shape->setCurveInsync( c, TRUE);
+                        }
                         if (write) {
                             gchar *str = sp_svg_write_path(c->get_pathvector());
                             repr->setAttribute("d", str);
