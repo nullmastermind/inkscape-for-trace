@@ -767,7 +767,7 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                             if( dominant_baseline == SP_CSS_BASELINE_AUTO ) dominant_baseline = SP_CSS_BASELINE_ALPHABETIC;
                         }
 
-                        new_glyph.y += delta_y;
+                        new_glyph.y -= delta_y;
 
                         // TODO: Should also check 'glyph_orientation_vertical' if 'text-orientation' is unset...
                         if( new_span.text_orientation == SP_CSS_TEXT_ORIENTATION_SIDEWAYS ||
@@ -801,7 +801,7 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
 
                         if( dominant_baseline == SP_CSS_BASELINE_AUTO ) dominant_baseline = SP_CSS_BASELINE_ALPHABETIC;
 
-                        new_glyph.y -= delta_y;
+                        new_glyph.y += delta_y;
                         new_glyph.y += new_span.font_size * para.pango_items[unbroken_span.pango_item_index].font->GetBaselines()[ dominant_baseline ];
                         
                         new_glyph.width = unbroken_span_glyph_info->geometry.width * font_size_multiplier;
@@ -818,12 +818,7 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                         for (unsigned rtl_index = glyph_index; rtl_index < it_span->end_glyph_index ; rtl_index++) {
                             if (unbroken_span.glyph_string->glyphs[rtl_index].attr.is_cluster_start && rtl_index != glyph_index)
                                 break;
-                            if (_block_progression == LEFT_TO_RIGHT || _block_progression == RIGHT_TO_LEFT)
-                                // Vertical text
-                                cluster_width += new_span.font_size * para.pango_items[unbroken_span.pango_item_index].font->Advance(unbroken_span.glyph_string->glyphs[rtl_index].glyph, true);
-                            else
-                                // Horizontal text
-                                cluster_width += font_size_multiplier * unbroken_span.glyph_string->glyphs[rtl_index].geometry.width;
+                            cluster_width += font_size_multiplier * unbroken_span.glyph_string->glyphs[rtl_index].geometry.width;
                         }
                         new_glyph.x -= cluster_width;
                     }
@@ -1751,6 +1746,10 @@ bool Layout::Calculator::calculate()
     if( _block_progression == RIGHT_TO_LEFT || _block_progression == LEFT_TO_RIGHT ) {
         // Vertical text, CJK
         pango_context_set_base_gravity(_pango_context, PANGO_GRAVITY_EAST);
+
+        if( _flow._blockTextOrientation() != SP_CSS_TEXT_ORIENTATION_MIXED ) {
+            pango_context_set_gravity_hint(_pango_context, PANGO_GRAVITY_HINT_STRONG);
+        }
     } else {
         // Horizontal text
         pango_context_set_base_gravity(_pango_context, PANGO_GRAVITY_AUTO);
