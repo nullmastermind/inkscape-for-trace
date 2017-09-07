@@ -31,10 +31,6 @@ export CCACHE_DIR=$(cygpath -a ccache/master)
 ccache --max-size=200M
 ccache --set-config=sloppiness=include_file_ctime,include_file_mtime
 
-# temporarily use old poppler (versions >= 0.58 need compatibilty fixes due to changed "Object" API)
-wget -nv http://repo.msys2.org/mingw/$MSYSTEM_CARCH/$MINGW_PACKAGE_PREFIX-poppler-0.55.0-1-any.pkg.tar.xz \
-    && pacman -U $MINGW_PACKAGE_PREFIX-poppler-0.55.0-1-any.pkg.tar.xz --noconfirm
-
 
 ### build / test
 
