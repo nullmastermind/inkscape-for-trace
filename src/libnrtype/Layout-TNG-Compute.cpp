@@ -253,8 +253,7 @@ class Layout::Calculator
                                UnbrokenSpanPosition const &start_span_pos,
                                ScanlineMaker::ScanRun const &scan_run,
                                std::vector<ChunkInfo> *chunk_info,
-                               FontMetrics *line_height,
-                               FontMetrics const *strut_height) const;
+                               FontMetrics *line_height) const;
 
     bool _measureUnbrokenSpan(ParagraphInfo const &para,
                               BrokenSpan *span,
@@ -1472,8 +1471,8 @@ bool Layout::Calculator::_findChunksForLine(ParagraphInfo const &para,
     TRACE(("    initial line_box_height (em size): %f\n", line_box_height->emSize() ));
 
     UnbrokenSpanPosition span_pos;
+    static int trys = 0;
     for( ; ; ) {
-
         // Get regions where one can place one line of text (can be more than one, if filling a
         // donut for example).
         std::vector<ScanlineMaker::ScanRun> scan_runs;
@@ -1495,10 +1494,9 @@ bool Layout::Calculator::_findChunksForLine(ParagraphInfo const &para,
         unsigned scan_run_index;
         span_pos = *start_span_pos;
         for (scan_run_index = 0 ; scan_run_index < scan_runs.size() ; scan_run_index++) {
-
             // Returns false if some text in line requires a taller line_box_height.
             // (We try again with a larger line_box_height.)
-            if (!_buildChunksInScanRun(para, span_pos, scan_runs[scan_run_index], chunk_info, line_box_height, strut_height)) {
+            if (!_buildChunksInScanRun(para, span_pos, scan_runs[scan_run_index], chunk_info, line_box_height)) {
                 break;
             }
 
@@ -1534,10 +1532,11 @@ bool Layout::Calculator::_buildChunksInScanRun(ParagraphInfo const &para,
                                                UnbrokenSpanPosition const &start_span_pos,
                                                ScanlineMaker::ScanRun const &scan_run,
                                                std::vector<ChunkInfo> *chunk_info,
-                                               FontMetrics *line_height,
-                                               FontMetrics const *strut_height) const
+                                               FontMetrics *line_height) const
 {
     TRACE(("    begin _buildChunksInScanRun: chunks: %lu, em size: %f\n", chunk_info->size(), line_height->emSize() ));
+
+    FontMetrics line_height_saved = *line_height; // Store for recalculating line height if chunks are backed out
 
     ChunkInfo new_chunk;
     new_chunk.text_width = 0.0;
@@ -1647,7 +1646,7 @@ bool Layout::Calculator::_buildChunksInScanRun(ParagraphInfo const &para,
     }
 
     // Recalculate line_box_height after backing out chunks
-    *line_height = *strut_height;
+    *line_height = line_height_saved;
     for (std::vector<ChunkInfo>::const_iterator it_chunk = chunk_info->begin() ; it_chunk != chunk_info->end() ; it_chunk++) {
         for (std::vector<BrokenSpan>::const_iterator it_span = it_chunk->broken_spans.begin() ; it_span != it_chunk->broken_spans.end() ; it_span++) {
             FontMetrics span_height = it_span->start.iter_span->line_height;
