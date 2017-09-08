@@ -9,6 +9,10 @@
 #endif
 
 #include "live_effects/parameter/originalpatharray.h"
+#include "live_effects/lpe-spiro.h"
+#include "live_effects/lpe-bspline.h"
+#include "live_effects/lpeobject.h"
+#include "live_effects/lpeobject-reference.h"
 
 #include <gtkmm/widget.h>
 #include <gtkmm/icontheme.h>
@@ -100,6 +104,8 @@ OriginalPathArrayParam::OriginalPathArrayParam( const Glib::ustring& label,
     //_scroller.set_shadow_type(Gtk::SHADOW_IN);
     
     oncanvas_editable = true;
+    _from_original_d = false;
+    _allow_only_bspline_spiro = false;
     
 }
 
@@ -389,7 +395,27 @@ void OriginalPathArrayParam::setPathVector(SPObject *linked_obj, guint /*flags*/
     }
     SPCurve *curve = NULL;
     if (SP_IS_SHAPE(linked_obj)) {
-        curve = SP_SHAPE(linked_obj)->getCurve();
+        SPLPEItem * lpe_item = SP_LPE_ITEM(linked_obj);
+        if (_from_original_d) {
+            curve = SP_SHAPE(linked_obj)->getCurveBeforeLPE();
+        } else if (_allow_only_bspline_spiro && lpe_item && lpe_item->hasPathEffect()){
+            curve = SP_SHAPE(linked_obj)->getCurveBeforeLPE();
+            PathEffectList lpelist = lpe_item->getEffectList();
+            PathEffectList::iterator i;
+            for (i = lpelist.begin(); i != lpelist.end(); ++i) {
+                LivePathEffectObject *lpeobj = (*i)->lpeobject;
+                if (lpeobj) {
+                    Inkscape::LivePathEffect::Effect *lpe = lpeobj->get_lpe();
+                    if (dynamic_cast<Inkscape::LivePathEffect::LPEBSpline *>(lpe)) {
+                        LivePathEffect::sp_bspline_do_effect(curve, 0);
+                    } else if (dynamic_cast<Inkscape::LivePathEffect::LPESpiro *>(lpe)) {
+                        LivePathEffect::sp_spiro_do_effect(curve);
+                    }
+                }
+            }
+        } else {
+            curve = SP_SHAPE(linked_obj)->getCurve();
+        }
     }
     if (SP_IS_TEXT(linked_obj)) {
         curve = SP_TEXT(linked_obj)->getNormalizedBpath();

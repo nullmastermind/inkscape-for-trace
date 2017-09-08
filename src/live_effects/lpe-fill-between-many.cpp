@@ -31,6 +31,7 @@ LPEFillBetweenMany::LPEFillBetweenMany(LivePathEffectObject *lpeobject) :
     registerParameter(&join);
     registerParameter(&close);
     transformmultiply = false;
+    linked_paths.allowOnlyBsplineSpiro(true);
 }
 
 LPEFillBetweenMany::~LPEFillBetweenMany()

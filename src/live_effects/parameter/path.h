@@ -50,6 +50,7 @@ public:
     virtual void addCanvasIndicators(SPLPEItem const* lpeitem, std::vector<Geom::PathVector> &hp_vec);
 
     virtual void param_transform_multiply(Geom::Affine const& /*postmul*/, bool /*set*/);
+    void setFromOriginalD(bool from_original_d){ _from_original_d = from_original_d; };
 
     sigc::signal <void> signal_path_pasted;
     sigc::signal <void> signal_path_changed;
@@ -91,6 +92,7 @@ protected:
     gchar * defvalue;
 
 private:
+    bool _from_original_d;
     bool _edit_button;
     bool _copy_button;
     bool _paste_button;
