@@ -2942,6 +2942,7 @@ void ObjectSet::cloneOriginalPathLPE()
         {
             lpe_repr->setAttribute("effect", "fill_between_many");
             lpe_repr->setAttribute("linkedpaths", os.str());
+            lpe_repr->setAttribute("retain_original", "false");
             document()->getDefs()->getRepr()->addChild(lpe_repr, NULL); // adds to <defs> and assigns the 'id' attribute
         }
         std::string lpe_id_href = std::string("#") + lpe_repr->attribute("id");

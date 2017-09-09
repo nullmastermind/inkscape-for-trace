@@ -24,6 +24,8 @@ public:
 
 private:
     OriginalPathArrayParam linked_paths;
+    BoolParam original_visible;
+    BoolParam original_reversed;
     BoolParam fuse;
     BoolParam allow_transforms;
     BoolParam join;

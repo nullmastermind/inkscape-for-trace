@@ -20,12 +20,16 @@ namespace LivePathEffect {
 LPEFillBetweenMany::LPEFillBetweenMany(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
     linked_paths(_("Linked path:"), _("Paths from which to take the original path data"), "linkedpaths", &wr, this),
+    original_visible(_("Original path visible"), _("Original path visibled"), "original_visible", &wr, this, true),
+    original_reversed(_("Original path reversed"), _("Reverse original path"), "original_reversed", &wr, this, false),
     fuse(_("Fuse coincident points"), _("Fuse coincident points"), "fuse", &wr, this, false),
     allow_transforms(_("Allow transforms"), _("Allow transforms"), "allow_transforms", &wr, this, false),
     join(_("Join subpaths"), _("Join subpaths"), "join", &wr, this, true),
     close(_("Close"), _("Close path"), "close", &wr, this, true)
 {
     registerParameter(&linked_paths);
+    registerParameter(&original_visible);
+    registerParameter(&original_reversed);
     registerParameter(&fuse);
     registerParameter(&allow_transforms);
     registerParameter(&join);
@@ -43,9 +47,16 @@ void LPEFillBetweenMany::doEffect (SPCurve * curve)
 {
     Geom::PathVector res_pathv;
     SPItem * firstObj = NULL;
-    for (std::vector<PathAndDirection*>::iterator iter = linked_paths._vector.begin(); iter != linked_paths._vector.end(); ++iter) {
+    if (original_visible) {
+        Geom::PathVector original = curve->get_pathvector();
+        if (original_reversed) {
+            original = original.reversed();
+        }
+        res_pathv = original;
+    }
+    for (std::vector<PathAndDirectionAndVisible*>::iterator iter = linked_paths._vector.begin(); iter != linked_paths._vector.end(); ++iter) {
         SPObject *obj;
-        if ((*iter)->ref.isAttached() && (obj = (*iter)->ref.getObject()) && SP_IS_ITEM(obj) && !(*iter)->_pathvector.empty()) {
+        if ((*iter)->ref.isAttached() && (obj = (*iter)->ref.getObject()) && SP_IS_ITEM(obj) && !(*iter)->_pathvector.empty() && (*iter)->visibled) {
             Geom::Path linked_path;
             if ((*iter)->reversed) {
                 linked_path = (*iter)->_pathvector.front().reversed();
