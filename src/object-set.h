@@ -370,7 +370,7 @@ public:
     bool unlinkRecursive(const bool skip_undo = false);
     void relink();
     void cloneOriginal();
-    void cloneOriginalPathLPE();
+    void cloneOriginalPathLPE(bool allow_transforms = false);
     Inkscape::XML::Node* group();
     void popFromGroup();
     void ungroup();

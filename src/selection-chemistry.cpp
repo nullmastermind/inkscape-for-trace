@@ -2917,7 +2917,7 @@ void ObjectSet::cloneOriginal()
 /**
 * This creates a new path, applies the Original Path LPE, and has it refer to the selection.
 */
-void ObjectSet::cloneOriginalPathLPE()
+void ObjectSet::cloneOriginalPathLPE(bool allow_transforms)
 {
 
     Inkscape::SVGOStringStream os;
@@ -2930,7 +2930,7 @@ void ObjectSet::cloneOriginalPathLPE()
             } else {
                 firstItem = SP_ITEM(*i);
             }
-            os << '#' << SP_ITEM(*i)->getId() << ",0";
+            os << '#' << SP_ITEM(*i)->getId() << ",0,1";
         }
     }
     if (firstItem) {
@@ -2942,7 +2942,9 @@ void ObjectSet::cloneOriginalPathLPE()
         {
             lpe_repr->setAttribute("effect", "fill_between_many");
             lpe_repr->setAttribute("linkedpaths", os.str());
-            lpe_repr->setAttribute("retain_original", "false");
+            lpe_repr->setAttribute("original_visible", "false");
+            gchar const *allow_transforms_str = allow_transforms ? "true" : "false";
+            lpe_repr->setAttribute("allow_transforms", allow_transforms_str);
             document()->getDefs()->getRepr()->addChild(lpe_repr, NULL); // adds to <defs> and assigns the 'id' attribute
         }
         std::string lpe_id_href = std::string("#") + lpe_repr->attribute("id");

@@ -473,7 +473,7 @@ LivePathEffectEditor::onAdd()
                         item = NULL;
 
                         // run sp_selection_clone_original_path_lpe 
-                        sel->cloneOriginalPathLPE();
+                        sel->cloneOriginalPathLPE(true);
 
                         SPItem *new_item = sel->singleItem();
                         // Check that the cloning was successful. We don't want to change the ID of the original referenced path!
