@@ -212,7 +212,7 @@ void Box3DSide::set_shape() {
 
 Glib::ustring box3d_side_axes_string(Box3DSide *side)
 {
-    Glib::ustring result(Box3d::string_from_axes((Box3D::Axis) (side->dir1 ^ side->dir2)));
+    Glib::ustring result(Box3D::string_from_axes((Box3D::Axis) (side->dir1 ^ side->dir2)));
 
     switch ((Box3D::Axis) (side->dir1 ^ side->dir2)) {
         case Box3D::XY:
