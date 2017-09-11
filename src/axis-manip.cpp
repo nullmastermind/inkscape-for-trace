@@ -32,12 +32,12 @@ get_remaining_axes (Axis axis) {
     return std::make_pair (extract_first_axis_direction (plane), extract_second_axis_direction (plane));
 }
 
-char * string_from_axes (Box3D::Axis axis) {
-    GString *pstring = g_string_new("");
-    if (axis & Box3D::X) g_string_append_printf (pstring, "X");
-    if (axis & Box3D::Y) g_string_append_printf (pstring, "Y");
-    if (axis & Box3D::Z) g_string_append_printf (pstring, "Z");
-    return pstring->str;
+Glib::ustring string_from_axes (Box3D::Axis axis) {
+    Glib::ustring result;
+    if (axis & Box3D::X) result += "X";
+    if (axis & Box3D::Y) result += "Y";
+    if (axis & Box3D::Z) result += "Z";
+    return result;
 }
 
 } // namespace Box3D 
