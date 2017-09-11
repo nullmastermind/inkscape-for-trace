@@ -15,6 +15,7 @@
 #include <cassert>
 #include <string>
 #include <utility>
+#include <glibmm/ustring.h>
 
 namespace Proj {
 
