@@ -485,28 +485,25 @@ char* SPGuide::description(bool const verbose) const
 
         Inkscape::Util::Quantity x_q = Inkscape::Util::Quantity(this->point_on_line[X], "px");
         Inkscape::Util::Quantity y_q = Inkscape::Util::Quantity(this->point_on_line[Y], "px");
-        GString *position_string_x = g_string_new(x_q.string(namedview->display_units).c_str());
-        GString *position_string_y = g_string_new(y_q.string(namedview->display_units).c_str());
+        Glib::ustring position_string_x = x_q.string(namedview->display_units);
+        Glib::ustring position_string_y = y_q.string(namedview->display_units);
 
         gchar *shortcuts = g_strdup_printf("; %s", _("<b>Shift+drag</b> to rotate, <b>Ctrl+drag</b> to move origin, <b>Del</b> to delete"));
 
         if ( are_near(this->normal_to_line, Geom::Point(1., 0.)) ||
              are_near(this->normal_to_line, -Geom::Point(1., 0.)) ) {
-            descr = g_strdup_printf(_("vertical, at %s"), position_string_x->str);
+            descr = g_strdup_printf(_("vertical, at %s"), position_string_x.c_str());
         } else if ( are_near(this->normal_to_line, Geom::Point(0., 1.)) ||
                     are_near(this->normal_to_line, -Geom::Point(0., 1.)) ) {
-            descr = g_strdup_printf(_("horizontal, at %s"), position_string_y->str);
+            descr = g_strdup_printf(_("horizontal, at %s"), position_string_y.c_str());
         } else {
             double const radians = this->angle();
             double const degrees = Geom::deg_from_rad(radians);
             int const degrees_int = (int) round(degrees);
             descr = g_strdup_printf(_("at %d degrees, through (%s,%s)"), 
-                                    degrees_int, position_string_x->str, position_string_y->str);
+                                    degrees_int, position_string_x.c_str(), position_string_y.c_str());
         }
-
-        g_string_free(position_string_x, TRUE);
-        g_string_free(position_string_y, TRUE);
-
+        
         if (verbose) {
             gchar *oldDescr = descr;
             descr = g_strconcat(oldDescr, shortcuts, NULL);
