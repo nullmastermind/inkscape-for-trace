@@ -359,7 +359,7 @@ gchar* SPText::description() const {
     int unit = prefs->getInt("/options/font/unitType", SP_CSS_UNIT_PT);
     Inkscape::Util::Quantity q = Inkscape::Util::Quantity(style->font_size.computed, "px");
     q.quantity *= this->i2doc_affine().descrim();
-    GString *xs = g_string_new(q.string(sp_style_get_css_unit_string(unit)).c_str());
+    Glib::ustring xs = q.string(sp_style_get_css_unit_string(unit));
 
     char const *trunc = "";
     Inkscape::Text::Layout const *layout = te_get_layout((SPItem *) this);
@@ -369,8 +369,8 @@ gchar* SPText::description() const {
     }
 
     char *ret = ( SP_IS_TEXT_TEXTPATH(this)
-      ? g_strdup_printf(_("on path%s (%s, %s)"), trunc, n, xs->str)
-      : g_strdup_printf(_("%s (%s, %s)"),        trunc, n, xs->str) );
+      ? g_strdup_printf(_("on path%s (%s, %s)"), trunc, n, xs.c_str())
+      : g_strdup_printf(_("%s (%s, %s)"),        trunc, n, xs.c_str()) );
     return ret;
 }
 
