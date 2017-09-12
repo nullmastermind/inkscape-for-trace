@@ -529,7 +529,6 @@ void Box3dTool::drag(guint /*state*/) {
                 side->setAttribute("style", cur_style.data());
             } else {
                 // use default style 
-                GString *pstring = g_string_new("");
                 Glib::ustring tool_path = Glib::ustring::compose("/tools/shapes/3dbox/%1",
                         box3d_side_axes_string(side));
                 desktop->applyCurrentOrToolStyle (side, tool_path, false);
