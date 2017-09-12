@@ -559,14 +559,11 @@ Glib::ustring Handle::_getDragTip(GdkEventMotion */*event*/) const
     Inkscape::Util::Quantity x_q = Inkscape::Util::Quantity(dist[Geom::X], "px");
     Inkscape::Util::Quantity y_q = Inkscape::Util::Quantity(dist[Geom::Y], "px");
     Inkscape::Util::Quantity len_q = Inkscape::Util::Quantity(length(), "px");
-    GString *x = g_string_new(x_q.string(_desktop->namedview->display_units).c_str());
-    GString *y = g_string_new(y_q.string(_desktop->namedview->display_units).c_str());
-    GString *len = g_string_new(len_q.string(_desktop->namedview->display_units).c_str());
+    Glib::ustring x = x_q.string(_desktop->namedview->display_units);
+    Glib::ustring y = y_q.string(_desktop->namedview->display_units);
+    Glib::ustring len = len_q.string(_desktop->namedview->display_units);
     Glib::ustring ret = format_tip(C_("Path handle tip",
-        "Move handle by %s, %s; angle %.2f°, length %s"), x->str, y->str, angle, len->str);
-    g_string_free(x, TRUE);
-    g_string_free(y, TRUE);
-    g_string_free(len, TRUE);
+        "Move handle by %s, %s; angle %.2f°, length %s"), x.c_str(), y.c_str(), angle, len.c_str());
     return ret;
 }
 
@@ -1458,11 +1455,9 @@ Glib::ustring Node::_getDragTip(GdkEventMotion */*event*/) const
     
     Inkscape::Util::Quantity x_q = Inkscape::Util::Quantity(dist[Geom::X], "px");
     Inkscape::Util::Quantity y_q = Inkscape::Util::Quantity(dist[Geom::Y], "px");
-    GString *x = g_string_new(x_q.string(_desktop->namedview->display_units).c_str());
-    GString *y = g_string_new(y_q.string(_desktop->namedview->display_units).c_str());
-    Glib::ustring ret = format_tip(C_("Path node tip", "Move node by %s, %s"), x->str, y->str);
-    g_string_free(x, TRUE);
-    g_string_free(y, TRUE);
+    Glib::ustring x = x_q.string(_desktop->namedview->display_units);
+    Glib::ustring y = y_q.string(_desktop->namedview->display_units);
+    Glib::ustring ret = format_tip(C_("Path node tip", "Move node by %s, %s"), x.c_str(), y.c_str());
     return ret;
 }
 
