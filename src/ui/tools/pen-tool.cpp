@@ -1291,7 +1291,7 @@ void PenTool::_setAngleDistanceStatusMessage(Geom::Point const p, int pc_point_t
 
     Geom::Point rel = p - this->p[pc_point_to_compare];
     Inkscape::Util::Quantity q = Inkscape::Util::Quantity(Geom::L2(rel), "px");
-    GString *dist = g_string_new(q.string(desktop->namedview->display_units).c_str());
+    Glib::ustring dist = q.string(desktop->namedview->display_units);
     double angle = atan2(rel[Geom::Y], rel[Geom::X]) * 180 / M_PI;
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     if (prefs->getBool("/options/compassangledisplay/value", 0) != 0) {
@@ -1301,8 +1301,7 @@ void PenTool::_setAngleDistanceStatusMessage(Geom::Point const p, int pc_point_t
         }
     }
 
-    this->message_context->setF(Inkscape::IMMEDIATE_MESSAGE, message, angle, dist->str);
-    g_string_free(dist, false);
+    this->message_context->setF(Inkscape::IMMEDIATE_MESSAGE, message, angle, dist.c_str());
 }
 
 // this function changes the colors red, green and blue making them transparent or not, depending on if spiro is being used.
