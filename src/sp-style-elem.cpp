@@ -106,14 +106,14 @@ Inkscape::XML::Node* SPStyleElem::write(Inkscape::XML::Document* xml_doc, Inksca
 
 
 /** Returns the concatenation of the content of the text children of the specified object. */
-static GString *
+static Glib::ustring
 concat_children(Inkscape::XML::Node const &repr)
 {
-    GString *ret = g_string_sized_new(0);
-    // effic: 0 is just to catch bugs.  Increase to something reasonable.
+    Glib::ustring ret;
+    // effic: Initialising ret to a reasonable starting size could speed things up.
     for (Inkscape::XML::Node const *rch = repr.firstChild(); rch != NULL; rch = rch->next()) {
         if ( rch->type() == TEXT_NODE ) {
-            ret = g_string_append(ret, rch->content());
+            ret += rch->content();
         }
     }
     return ret;
@@ -376,9 +376,9 @@ void SPStyleElem::read_content() {
     ParseTmp *parse_tmp = reinterpret_cast<ParseTmp *>(sac_handler->app_data);
 
     //XML Tree being used directly here while it shouldn't be.
-    GString *const text = concat_children(*getRepr());
+    Glib::ustring const text = concat_children(*getRepr());
     CRStatus const parse_status =
-        cr_parser_parse_buf (parser, reinterpret_cast<guchar *>(text->str), text->len, CR_UTF_8);
+        cr_parser_parse_buf (parser, reinterpret_cast<const guchar *>(text.c_str()), text.bytes(), CR_UTF_8);
 
     // std::cout << "SPStyeElem::read_content: result:" << std::endl;
     // const gchar* string = cr_stylesheet_to_string (document->style_sheet);
