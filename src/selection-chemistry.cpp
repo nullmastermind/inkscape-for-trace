@@ -2915,7 +2915,7 @@ void ObjectSet::cloneOriginal()
 }
 
 /**
-* This creates a new path, applies the Original Path LPE, and has it refer to the selection.
+* This applies the Fill Between Many LPE, and has it refer to the selection.
 */
 void ObjectSet::cloneOriginalPathLPE(bool allow_transforms)
 {
@@ -2942,7 +2942,9 @@ void ObjectSet::cloneOriginalPathLPE(bool allow_transforms)
         {
             lpe_repr->setAttribute("effect", "fill_between_many");
             lpe_repr->setAttribute("linkedpaths", os.str());
-            lpe_repr->setAttribute("original_visible", "false");
+            lpe_repr->setAttribute("applied", "true");
+            gchar const *method_str = allow_transforms ? "all" : "partial";
+            lpe_repr->setAttribute("method", method_str);
             gchar const *allow_transforms_str = allow_transforms ? "true" : "false";
             lpe_repr->setAttribute("allow_transforms", allow_transforms_str);
             document()->getDefs()->getRepr()->addChild(lpe_repr, NULL); // adds to <defs> and assigns the 'id' attribute

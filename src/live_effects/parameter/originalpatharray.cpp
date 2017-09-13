@@ -326,28 +326,25 @@ OriginalPathArrayParam::on_link_button_click()
     if (pathsid.empty()) {
         return;
     }
+    bool foundOne = false;
     Inkscape::SVGOStringStream os;
+    for (std::vector<PathAndDirectionAndVisible*>::const_iterator iter = _vector.begin(); iter != _vector.end(); ++iter) {
+        if (foundOne) {
+            os << "|";
+        } else {
+            foundOne = true;
+        }
+        os << (*iter)->href << "," << ((*iter)->reversed ? "1" : "0") << "," << ((*iter)->visibled ? "1" : "0");
+    }
     for (auto i=pathsid.begin();i!=pathsid.end();++i) {
         Glib::ustring pathid = *i;
         // add '#' at start to make it an uri.
         pathid.insert(pathid.begin(), '#');
-        bool foundOne = false;
-        for (std::vector<PathAndDirectionAndVisible*>::const_iterator iter = _vector.begin(); iter != _vector.end(); ++iter) {
-            if (foundOne) {
-                os << "|";
-            } else {
-                foundOne = true;
-            }
-            os << (*iter)->href << "," << ((*iter)->reversed ? "1" : "0") << "," << ((*iter)->visibled ? "1" : "0");
-        }
-        
+
         if (foundOne) {
             os << "|";
         }
-        os << pathid.c_str() << ",0";
-        if (*i != *(--pathsid.end())) {
-            os << "|";
-        }
+        os << pathid.c_str() << ",0,1";
     }
     param_write_to_repr(os.str().c_str());
     DocumentUndo::done(param_effect->getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
@@ -363,7 +360,7 @@ void OriginalPathArrayParam::unlink(PathAndDirectionAndVisible* to)
     if (to->href) {
         g_free(to->href);
         to->href = NULL;
-    }    
+    }
 }
 
 void OriginalPathArrayParam::remove_link(PathAndDirectionAndVisible* to)
@@ -526,6 +523,14 @@ gchar * OriginalPathArrayParam::param_getSVGValue() const
     }
     gchar * str = g_strdup(os.str().c_str());
     return str;
+}
+
+void OriginalPathArrayParam::update()
+{
+    for (std::vector<PathAndDirectionAndVisible*>::iterator iter = _vector.begin(); iter != _vector.end(); ++iter) {
+        SPObject *linked_obj = (*iter)->ref.getObject();
+        linked_modified(linked_obj, SP_OBJECT_MODIFIED_FLAG, *iter);
+    }
 }
 
 } /* namespace LivePathEffect */

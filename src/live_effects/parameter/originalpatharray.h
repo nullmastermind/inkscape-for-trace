@@ -72,11 +72,11 @@ public:
     virtual void param_editOncanvas(SPItem * /*item*/, SPDesktop * /*dt*/) {};
     /** Disable the canvas indicators of parent class by overriding this method */
     virtual void addCanvasIndicators(SPLPEItem const* /*lpeitem*/, std::vector<Geom::PathVector> & /*hp_vec*/) {};
-    void setFromOriginalD(bool from_original_d){ _from_original_d = from_original_d; };
-    void allowOnlyBsplineSpiro(bool allow_only_bspline_spiro){ _allow_only_bspline_spiro = allow_only_bspline_spiro; };
+    void setFromOriginalD(bool from_original_d){ _from_original_d = from_original_d; update();};
+    void allowOnlyBsplineSpiro(bool allow_only_bspline_spiro){ _allow_only_bspline_spiro = allow_only_bspline_spiro; update();};
 
     std::vector<PathAndDirectionAndVisible*> _vector;
-    
+
 protected:
     bool _updateLink(const Gtk::TreeIter& iter, PathAndDirectionAndVisible* pd);
     bool _selectIndex(const Gtk::TreeIter& iter, int* i);
@@ -108,6 +108,7 @@ protected:
 private:
     bool _from_original_d;
     bool _allow_only_bspline_spiro;
+    void update();
     OriginalPathArrayParam(const OriginalPathArrayParam&);
     OriginalPathArrayParam& operator=(const OriginalPathArrayParam&);
 };

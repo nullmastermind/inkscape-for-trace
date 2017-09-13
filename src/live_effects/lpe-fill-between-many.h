@@ -10,27 +10,37 @@
  */
 
 #include "live_effects/effect.h"
+#include "live_effects/parameter/enum.h"
 #include "live_effects/parameter/originalpatharray.h"
+#include "live_effects/parameter/hidden.h"
 
 namespace Inkscape {
 namespace LivePathEffect {
+
+enum Filllpemethod {
+    FLM_NONE,
+    FLM_PARTIAL,
+    FLM_ALL,
+    FLM_END
+};
 
 class LPEFillBetweenMany : public Effect {
 public:
     LPEFillBetweenMany(LivePathEffectObject *lpeobject);
     virtual ~LPEFillBetweenMany();
+    virtual void doOnApply (SPLPEItem const* lpeitem);
     virtual void transform_multiply(Geom::Affine const& postmul, bool set);
     virtual void doEffect (SPCurve * curve);
 
 private:
     OriginalPathArrayParam linked_paths;
-    BoolParam original_visible;
-    BoolParam original_reversed;
+    EnumParam<Filllpemethod> method;
     BoolParam fuse;
     BoolParam allow_transforms;
     BoolParam join;
     BoolParam close;
-    bool transformmultiply;
+    HiddenParam applied;
+    Filllpemethod previous_method;
 private:
     LPEFillBetweenMany(const LPEFillBetweenMany&);
     LPEFillBetweenMany& operator=(const LPEFillBetweenMany&);
