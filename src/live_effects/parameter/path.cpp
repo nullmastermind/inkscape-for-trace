@@ -79,21 +79,24 @@ PathParam::PathParam( const Glib::ustring& label, const Glib::ustring& tip,
 PathParam::~PathParam()
 {
     remove_link();
-    using namespace Inkscape::UI;
-    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
-    if (desktop) {
-        if (tools_isactive(desktop, TOOLS_NODES)) {
-            SPItem * item = SP_ACTIVE_DESKTOP->getSelection()->singleItem();
-            if (item != NULL) {
-                Inkscape::UI::Tools::NodeTool *nt = static_cast<Inkscape::UI::Tools::NodeTool*>(desktop->event_context);
-                std::set<ShapeRecord> shapes;
-                ShapeRecord r;
-                r.item = item;
-                shapes.insert(r);
-                nt->_multipath->setItems(shapes);
-            }
-        }
-    }
+//TODO: Removed to fix a bug https://bugs.launchpad.net/inkscape/+bug/1716926
+//      Maybe wee need to resurrect, not know when this code is added, but seems also not working now in a few test I do.
+//      in the future and do a deeper fix in multi-path-manipulator
+//    using namespace Inkscape::UI;
+//    SPDesktop *desktop = SP_ACTIVE_DESKTOP;
+//    if (desktop) {
+//        if (tools_isactive(desktop, TOOLS_NODES)) {
+//            SPItem * item = SP_ACTIVE_DESKTOP->getSelection()->singleItem();
+//            if (item) {
+//                Inkscape::UI::Tools::NodeTool *nt = static_cast<Inkscape::UI::Tools::NodeTool*>(desktop->event_context);
+//                std::set<ShapeRecord> shapes;
+//                ShapeRecord r;
+//                r.item = item;
+//                shapes.insert(r);
+//                nt->_multipath->setItems(shapes);
+//            }
+//        }
+//    }
     g_free(defvalue);
 }
 
