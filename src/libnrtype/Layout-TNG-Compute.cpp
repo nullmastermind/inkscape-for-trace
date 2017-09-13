@@ -398,17 +398,28 @@ bool Layout::Calculator::_measureUnbrokenSpan(ParagraphInfo const &para,
         double char_width = 0.0;
         while (span->end_glyph_index < (unsigned)span->end.iter_span->glyph_string->num_glyphs
                && span->end.iter_span->glyph_string->log_clusters[span->end_glyph_index] <= (int)span->end.char_byte) {
+
+            PangoGlyphInfo *info = &(span->end.iter_span->glyph_string->glyphs[span->end_glyph_index]);
+            // double glyph_width    = font_size_multiplier * info->geometry.width;
+            // double glyph_x_offset = font_size_multiplier * info->geometry.x_offset;
+            // double glyph_y_offset = font_size_multiplier * info->geometry.y_offset;
+            // std::cout << "  glyph: " << info->glyph << "  width: " << glyph_width << "  x_offset: " << glyph_x_offset << "  y_offset: " << glyph_y_offset << std::endl;
+
             if (_block_progression == LEFT_TO_RIGHT || _block_progression == RIGHT_TO_LEFT) {
                 // Vertical text
 
                 if( text_source->style->text_orientation.computed == SP_CSS_TEXT_ORIENTATION_SIDEWAYS ||
                     (text_source->style->text_orientation.computed == SP_CSS_TEXT_ORIENTATION_MIXED &&
-                     para.pango_items[span->end.iter_span->pango_item_index].item->analysis.gravity == 0) ) {
+                     para.pango_items[span->end.iter_span->pango_item_index].item->analysis.gravity == PANGO_GRAVITY_SOUTH) ) {
                     // Sideways orientation
-                    char_width += span->start.iter_span->font_size * para.pango_items[span->end.iter_span->pango_item_index].font->Advance(span->end.iter_span->glyph_string->glyphs[span->end_glyph_index].glyph, false);
+                    char_width += span->start.iter_span->font_size * para.pango_items[span->end.iter_span->pango_item_index].font->Advance(info->glyph, false);
                 } else {
                     // Upright orientation
-                    char_width += span->start.iter_span->font_size * para.pango_items[span->end.iter_span->pango_item_index].font->Advance(span->end.iter_span->glyph_string->glyphs[span->end_glyph_index].glyph, true);
+                    guint32 c = *Glib::ustring::const_iterator(span->end.iter_span->input_stream_first_character.base() + span->end.char_byte);
+                    if (g_unichar_type (c) != G_UNICODE_NON_SPACING_MARK) {
+                        // Non-spacing marks should not contribute to width. Fonts may not report the correct advance, especially if the 'vmtx' table is missing.
+                        char_width += span->start.iter_span->font_size * para.pango_items[span->end.iter_span->pango_item_index].font->Advance(info->glyph, true);
+                    }
                 }
             } else {
                 // Horizontal text
@@ -416,6 +427,7 @@ bool Layout::Calculator::_measureUnbrokenSpan(ParagraphInfo const &para,
             }
             span->end_glyph_index++;
         }
+
         if (char_attributes.is_cursor_position)
             char_width += text_source->style->letter_spacing.computed * _flow.getTextLengthMultiplierDue();
         if (char_attributes.is_white)
@@ -434,6 +446,7 @@ bool Layout::Calculator::_measureUnbrokenSpan(ParagraphInfo const &para,
         if (is_soft_hyphen)
             soft_hyphen_glyph_width = char_width;
 
+        // Go to next character (resets end.char_byte to zero if at end)
         span->end.increment();
 
         // Width should not include letter_spacing (or word_spacing) after last letter at end of line.
@@ -662,8 +675,8 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
             new_span.block_progression = _block_progression;
             new_span.text_orientation = unbroken_span.text_orientation;
             if ((_flow._input_stream[unbroken_span.input_index]->Type() == TEXT_SOURCE) && (new_span.font = para.pango_items[unbroken_span.pango_item_index].font))
-                {
-	    new_span.font->Ref();
+            {
+                new_span.font->Ref();
                 new_span.font_size = unbroken_span.font_size;
                 new_span.direction = para.pango_items[unbroken_span.pango_item_index].item->analysis.level & 1 ? RIGHT_TO_LEFT : LEFT_TO_RIGHT;
                 new_span.input_stream_first_character = Glib::ustring::const_iterator(unbroken_span.input_stream_first_character.base() + it_span->start.char_byte);
@@ -750,10 +763,12 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                         new_glyph.vertical_scale = 1.0;
 
                     // Position glyph --------------------
-                    new_glyph.x = current_x + unbroken_span_glyph_info->geometry.x_offset * font_size_multiplier;
+                    new_glyph.x = current_x;
                     new_glyph.y =_y_offset;
 
-                    // y-coordinate is flipped between vertical and horizontal text... delta_y is common offset but applied with opposite sign
+                    // y-coordinate is flipped between vertical and horizontal text...
+                    // delta_y is common offset but applied with opposite sign
+                    double delta_x = unbroken_span_glyph_info->geometry.x_offset * font_size_multiplier;
                     double delta_y = unbroken_span_glyph_info->geometry.y_offset * font_size_multiplier + unbroken_span.baseline_shift;
                     SPCSSBaseline dominant_baseline = _flow._blockBaseline();
 
@@ -767,41 +782,50 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                             if( dominant_baseline == SP_CSS_BASELINE_AUTO ) dominant_baseline = SP_CSS_BASELINE_ALPHABETIC;
                         }
 
-                        new_glyph.y -= delta_y;
-
                         // TODO: Should also check 'glyph_orientation_vertical' if 'text-orientation' is unset...
                         if( new_span.text_orientation == SP_CSS_TEXT_ORIENTATION_SIDEWAYS ||
                             (new_span.text_orientation == SP_CSS_TEXT_ORIENTATION_MIXED &&
-                             para.pango_items[unbroken_span.pango_item_index].item->analysis.gravity == 0) ) {
+                             para.pango_items[unbroken_span.pango_item_index].item->analysis.gravity == PANGO_GRAVITY_SOUTH) ) {
 
                             // Sideways orientation (Latin characters, CJK punctuation), 90deg rotation done at output stage.
                             new_glyph.orientation = ORIENTATION_SIDEWAYS;
 
-                            new_glyph.y -= new_span.font_size * para.pango_items[unbroken_span.pango_item_index].font->GetBaselines()[ dominant_baseline ];
+                            new_glyph.x += delta_x;
+                            new_glyph.y -= delta_y;
+
+                            new_glyph.y    -= new_span.font_size * para.pango_items[unbroken_span.pango_item_index].font->GetBaselines()[ dominant_baseline ];
                             new_glyph.width = new_span.font_size * para.pango_items[unbroken_span.pango_item_index].font->Advance(unbroken_span_glyph_info->glyph, false);
 
                         } else {
                             // Upright orientation
 
-                            new_glyph.x +=  new_span.line_height.ascent;
+                            new_glyph.x += delta_x;
+                            new_glyph.y -= delta_y;
 
-                            // Glyph reference point is center  (shift: left edge to center glyph)
-                            new_glyph.y -= unbroken_span_glyph_info->geometry.width * 0.5 * font_size_multiplier;
+                            // Adjust for alignment point (top of em box, horizontal center).
+                            new_glyph.x += new_span.line_height.ascent;
                             new_glyph.y -= new_span.font_size * (para.pango_items[unbroken_span.pango_item_index].font->GetBaselines()[ dominant_baseline ] -
                                                                  para.pango_items[unbroken_span.pango_item_index].font->GetBaselines()[ SP_CSS_BASELINE_CENTRAL ] );
 
-                            new_glyph.width = new_span.font_size * para.pango_items[unbroken_span.pango_item_index].font->Advance(unbroken_span_glyph_info->glyph, true);
-                            if( new_glyph.width == 0 ) {
-                                new_glyph.width = unbroken_span_glyph_info->geometry.width * font_size_multiplier;
+                            static double shift_y = 0; // Save to use with non_spacing marks (should be shifted the same amount as previous glyph).
+                            if (g_unichar_type (*iter_source_text) == G_UNICODE_NON_SPACING_MARK) {
+                                new_glyph.width = 0;
+                                new_glyph.x += new_span.font_size; // Hack!
+                            } else {
+                                // Glyph reference point is center  (shift: left edge to center glyph)
+                                shift_y = unbroken_span_glyph_info->geometry.width * 0.5 * font_size_multiplier;
+                                new_glyph.width = new_span.font_size * para.pango_items[unbroken_span.pango_item_index].font->Advance(unbroken_span_glyph_info->glyph, true);
                             }
-
+                            new_glyph.y -= shift_y;
                         }
                     } else {
                         // Horizontal text
 
                         if( dominant_baseline == SP_CSS_BASELINE_AUTO ) dominant_baseline = SP_CSS_BASELINE_ALPHABETIC;
 
+                        new_glyph.x += delta_x;
                         new_glyph.y += delta_y;
+
                         new_glyph.y += new_span.font_size * para.pango_items[unbroken_span.pango_item_index].font->GetBaselines()[ dominant_baseline ];
                         
                         new_glyph.width = unbroken_span_glyph_info->geometry.width * font_size_multiplier;
@@ -809,7 +833,6 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                             new_glyph.width = new_span.font_size * para.pango_items[unbroken_span.pango_item_index].font->Advance(unbroken_span_glyph_info->glyph, false);
                             // for some reason pango returns zero width for invalid glyph characters (those empty boxes), so go to freetype for the info
                     }
-
 
                     if (new_span.direction == RIGHT_TO_LEFT) {
                         // pango wanted to give us glyphs in visual order but we refused, so we need to work
