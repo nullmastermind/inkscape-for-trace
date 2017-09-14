@@ -159,6 +159,7 @@ src/live_effects/parameter/bool.cpp
 src/live_effects/parameter/enum.h
 src/live_effects/parameter/fontbutton.cpp
 src/live_effects/parameter/item.cpp
+src/live_effects/parameter/originalitemarray.cpp
 src/live_effects/parameter/originalitem.cpp
 src/live_effects/parameter/originalpath.cpp
 src/live_effects/parameter/originalpatharray.cpp

@@ -322,7 +322,8 @@ OriginalPathArrayParam::on_link_button_click()
 {
     Inkscape::UI::ClipboardManager *cm = Inkscape::UI::ClipboardManager::get();
     std::vector<Glib::ustring> pathsid = cm->getElementsOfType(SP_ACTIVE_DESKTOP, "svg:path");
-
+    std::vector<Glib::ustring> textsid = cm->getElementsOfType(SP_ACTIVE_DESKTOP, "svg:text");
+    pathsid.insert(pathsid.end(), textsid.begin(), textsid.end());
     if (pathsid.empty()) {
         return;
     }
@@ -343,12 +344,14 @@ OriginalPathArrayParam::on_link_button_click()
 
         if (foundOne) {
             os << "|";
+        } else {
+            foundOne = true;
         }
         os << pathid.c_str() << ",0,1";
     }
     param_write_to_repr(os.str().c_str());
     DocumentUndo::done(param_effect->getSPDoc(), SP_VERB_DIALOG_LIVE_PATH_EFFECT,
-                       _("Link path parameter to path"));
+                       _("Link patharray parameter to path"));
 }
 
 void OriginalPathArrayParam::unlink(PathAndDirectionAndVisible* to)
@@ -443,8 +446,7 @@ void OriginalPathArrayParam::setPathVector(SPObject *linked_obj, guint /*flags*/
         } else {
             curve = SP_SHAPE(linked_obj)->getCurve();
         }
-    }
-    if (SP_IS_TEXT(linked_obj)) {
+    } else  if (SP_IS_TEXT(linked_obj)) {
         curve = SP_TEXT(linked_obj)->getNormalizedBpath();
     }
 

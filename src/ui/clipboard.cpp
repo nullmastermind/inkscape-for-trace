@@ -658,7 +658,7 @@ Glib::ustring ClipboardManagerImpl::getShapeOrTextObjectId(SPDesktop *desktop)
  * @return A vector containing all IDs or empty if no shape or text item was found.
  * type. Set to "*" to retrive all elements of the types vector inside, feel free to populate more
  */
-std::vector<Glib::ustring> ClipboardManagerImpl::getElementsOfType(SPDesktop *desktop, gchar const *type)
+std::vector<Glib::ustring> ClipboardManagerImpl::getElementsOfType(SPDesktop *desktop, gchar const* type)
 {
     std::vector<Glib::ustring> result;
     SPDocument *tempdoc = _retrieveClipboard(); // any target will do here
