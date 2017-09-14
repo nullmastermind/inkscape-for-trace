@@ -67,8 +67,8 @@ if [ -n "$err" ]; then warning "installed executable produces output on stderr:"
 INKSCAPE_DATADIR=../share bin/inkscape.exe -V >/dev/null || error "uninstalled executable won't run"
 err=$(INKSCAPE_DATADIR=../share bin/inkscape.exe -V 2>&1 >/dev/null)
 if [ -n "$err" ]; then warning "uninstalled executable produces output on stderr:"; echo "$err"; fi
-# run tests (don't fail yet as most tests SEGFAULT on exit)
-#ninja check || warning "tests failed" # disabled because of sporadic deadlocks :-(
+# run tests (don't fail yet as some need to be fixed first)
+ninja check || warning "tests failed"
 
 message "##### BUILD SUCCESSFULL #####\n\n"
 
