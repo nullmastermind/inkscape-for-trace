@@ -35,6 +35,7 @@ OriginalItemParam::OriginalItemParam( const Glib::ustring& label, const Glib::us
                       Effect* effect)
     : ItemParam(label, tip, key, wr, effect, "")
 {
+    _insensitive = false;
 }
 
 OriginalItemParam::~OriginalItemParam()
@@ -87,7 +88,7 @@ OriginalItemParam::param_newWidget()
 void
 OriginalItemParam::linked_modified_callback(SPObject *linked_obj, guint /*flags*/)
 {
-    if (!inverse) {
+    if (!_insensitive) {
         emit_changed();
         SP_OBJECT(param_effect->getLPEObj())->requestModified(SP_OBJECT_MODIFIED_FLAG);
     }

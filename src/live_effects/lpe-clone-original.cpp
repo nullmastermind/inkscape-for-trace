@@ -221,7 +221,7 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, bool live, co
 void
 LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){
     if (linkeditem.linksToItem()) {
-        linkeditem.setInverse(inverse);
+        linkeditem.setInsensitive(inverse);
         if ( preserve_position_changed != preserve_position ) {
             if (!preserve_position) {
                 sp_svg_transform_read(SP_ITEM(sp_lpe_item)->getAttribute("transform"), &preserve_affine);

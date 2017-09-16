@@ -2849,18 +2849,6 @@ void ObjectSet::cloneOriginal()
                 SPFlowtext *flowtext = dynamic_cast<SPFlowtext *>(item);
                 if (flowtext) {
                     original = flowtext->get_frame(NULL); // first frame only
-                } else {
-                    SPLPEItem *lpeItem = dynamic_cast<SPLPEItem *>(item);
-                    if (lpeItem) {
-                        // check if the applied LPE is Clone original, if so, go to the refered path
-                        Inkscape::LivePathEffect::Effect* lpe = lpeItem->getPathEffectOfType(Inkscape::LivePathEffect::CLONE_ORIGINAL);
-                        if (lpe) {
-                            Inkscape::LivePathEffect::Parameter *lpeparam = lpe->getParameter("linkedpath");
-                            if (Inkscape::LivePathEffect::OriginalPathParam *pathparam = dynamic_cast<Inkscape::LivePathEffect::OriginalPathParam *>(lpeparam)) {
-                                original = pathparam->getObject();
-                            }
-                        }
-                    }
                 }
             }
         }
