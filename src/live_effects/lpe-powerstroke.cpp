@@ -276,7 +276,7 @@ void LPEPowerStroke::doOnRemove(SPLPEItem const* lpeitem)
         }
 
         Inkscape::CSSOStringStream os;
-        os << offset_points.median_width() * 2;
+        os << std::abs(offset_points.median_width()) * 2;
         sp_repr_css_set_property (css, "stroke-width", os.str().c_str());
 
         sp_repr_css_set_property(css, "fill", "none");
