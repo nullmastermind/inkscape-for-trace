@@ -14,13 +14,17 @@ cd "$(cygpath ${APPVEYOR_BUILD_FOLDER})"
 mkdir build
 cd build
 
-# write an empty fonts.conf to speed up fc-cache
-export FONTCONFIG_FILE=/dummy-fonts.conf
-cat >"$FONTCONFIG_FILE" <<EOF
+# write custom fonts.conf to speed up fc-cache and use/download fonts required for tests
+export FONTCONFIG_FILE=$(cygpath -a fonts.conf)
+cat > "$FONTCONFIG_FILE" <<EOF
 <?xml version="1.0"?>
 <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
-<fontconfig></fontconfig>
+<fontconfig><dir>$(cygpath -aw fonts)</dir></fontconfig>
 EOF
+
+mkdir fonts
+wget -nv https://github.com/dejavu-fonts/dejavu-fonts/releases/download/version_2_37/dejavu-fonts-ttf-2.37.tar.bz2 \
+    && tar -xf dejavu-fonts-ttf-2.37.tar.bz2 --directory=fonts
 
 # install dependencies
 message "--- Installing dependencies"
@@ -67,8 +71,8 @@ if [ -n "$err" ]; then warning "installed executable produces output on stderr:"
 INKSCAPE_DATADIR=../share bin/inkscape.exe -V >/dev/null || error "uninstalled executable won't run"
 err=$(INKSCAPE_DATADIR=../share bin/inkscape.exe -V 2>&1 >/dev/null)
 if [ -n "$err" ]; then warning "uninstalled executable produces output on stderr:"; echo "$err"; fi
-# run tests (don't fail yet as some need to be fixed first)
-ninja check || warning "tests failed"
+# run tests
+ninja check || error "tests failed"
 
 message "##### BUILD SUCCESSFULL #####\n\n"
 
