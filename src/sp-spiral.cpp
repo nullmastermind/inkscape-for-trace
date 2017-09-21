@@ -436,6 +436,8 @@ Geom::Affine SPSpiral::set_transform(Geom::Affine const &xform)
 
     // Allow live effects
     if (hasPathEffect() && pathEffectsEnabled()) {
+        this->adjust_livepatheffect(xform);
+        this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
         return xform;
     }
 

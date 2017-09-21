@@ -10,15 +10,21 @@
  */
 #include <gtkmm/expander.h>
 #include "live_effects/effect.h"
+#include "live_effects/parameter/enum.h"
 #include "live_effects/parameter/originalitem.h"
-#include "live_effects/parameter/originalpath.h"
-#include "live_effects/parameter/parameter.h"
-#include "live_effects/parameter/point.h"
 #include "live_effects/parameter/text.h"
 #include "live_effects/lpegroupbbox.h"
 
 namespace Inkscape {
 namespace LivePathEffect {
+
+enum Clonelpemethod {
+    CLM_NONE,
+    CLM_ORIGINALD,
+    CLM_BSPLINESPIRO,
+    CLM_D,
+    CLM_END
+};
 
 class LPECloneOriginal : public Effect, GroupBBoxEffect {
 public:
@@ -27,29 +33,14 @@ public:
     virtual void doEffect (SPCurve * curve);
     virtual void doBeforeEffect (SPLPEItem const* lpeitem);
     virtual void transform_multiply(Geom::Affine const& postmul, bool set);
-    virtual Gtk::Widget * newWidget();
-    void onExpanderChanged();
-    void cloneAttrbutes(SPObject *origin, SPObject *dest, bool live, const char * attributes, const char * style_attributes, bool root);
+    void cloneAttrbutes(SPObject *origin, SPObject *dest, const char * attributes, const char * style_attributes);
 
 private:
-    OriginalItemParam  linkeditem;
-    ScalarParam scale;
-    BoolParam preserve_position;
-    BoolParam inverse;
-    BoolParam d;
-    BoolParam transform;
-    BoolParam fill;
-    BoolParam stroke;
-    BoolParam paintorder;
-    BoolParam opacity;
-    BoolParam filter;
+    OriginalItemParam linkeditem;
+    EnumParam<Clonelpemethod> method;
     TextParam attributes;
     TextParam style_attributes;
-    Geom::Point origin;
-    bool preserve_position_changed;
-    bool expanded;
-    Gtk::Expander * expander;
-    Geom::Affine preserve_affine;
+    BoolParam allow_transforms;
     LPECloneOriginal(const LPECloneOriginal&);
     LPECloneOriginal& operator=(const LPECloneOriginal&);
 };

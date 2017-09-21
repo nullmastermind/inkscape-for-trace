@@ -22,16 +22,16 @@ namespace Inkscape {
 namespace LivePathEffect {
 
 static const Util::EnumData<Filllpemethod> FilllpemethodData[] = {
-    { FLM_NONE, N_("Without LPE"), "none" }, 
-    { FLM_PARTIAL, N_("Spiro/BSpline"), "partial" },
-    { FLM_ALL, N_("All LPE"), "all" }
+    { FLM_ORIGINALD, N_("Without LPE's"), "originald" }, 
+    { FLM_BSPLINESPIRO, N_("With Spiro or BSpline"), "bsplinespiro" },
+    { FLM_D, N_("With LPE's"), "d" }
 };
 static const Util::EnumDataConverter<Filllpemethod> FLMConverter(FilllpemethodData, FLM_END);
 
 LPEFillBetweenMany::LPEFillBetweenMany(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
     linked_paths(_("Linked path:"), _("Paths from which to take the original path data"), "linkedpaths", &wr, this),
-    method(_("LPE's on linked:"), _("LPE's on linked"), "method", FLMConverter, &wr, this, FLM_PARTIAL),
+    method(_("LPE's on linked:"), _("LPE's on linked"), "method", FLMConverter, &wr, this, FLM_BSPLINESPIRO),
     fuse(_("Fuse coincident points"), _("Fuse coincident points"), "fuse", &wr, this, false),
     allow_transforms(_("Allow transforms"), _("Allow transforms"), "allow_transforms", &wr, this, false),
     join(_("Join subpaths"), _("Join subpaths"), "join", &wr, this, true),
@@ -104,10 +104,10 @@ void LPEFillBetweenMany::doOnApply (SPLPEItem const* lpeitem)
 void LPEFillBetweenMany::doEffect (SPCurve * curve)
 {
     if (previous_method != method) {
-        if (method == FLM_PARTIAL) {
+        if (method == FLM_BSPLINESPIRO) {
             linked_paths.allowOnlyBsplineSpiro(true);
             linked_paths.setFromOriginalD(false);
-        } else if(method == FLM_NONE) {
+        } else if(method == FLM_ORIGINALD) {
             linked_paths.allowOnlyBsplineSpiro(false);
             linked_paths.setFromOriginalD(true);
         } else {

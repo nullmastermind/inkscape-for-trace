@@ -73,7 +73,7 @@ OriginalPathArrayParam::OriginalPathArrayParam( const Glib::ustring& label,
         _vector(),
         _tree(),
         _text_renderer(),
-        _toggle_renderer(),
+        _toggle_reverse(),
         _toggle_visible(),
         _scroller()
 {    
@@ -85,20 +85,20 @@ OriginalPathArrayParam::OriginalPathArrayParam( const Glib::ustring& label,
     _tree.enable_model_drag_dest (Gdk::ACTION_MOVE);
     
     
-    Gtk::CellRendererToggle * _toggle_renderer = manage(new Gtk::CellRendererToggle());
-    int toggleColNum = _tree.append_column(_("Reverse"), *_toggle_renderer) - 1;
-    Gtk::TreeViewColumn* col = _tree.get_column(toggleColNum);
-    _toggle_renderer->set_activatable(true);
-    _toggle_renderer->signal_toggled().connect(sigc::mem_fun(*this, &OriginalPathArrayParam::on_reverse_toggled));
-    col->add_attribute(_toggle_renderer->property_active(), _model->_colReverse);
+    Gtk::CellRendererToggle * _toggle_reverse = manage(new Gtk::CellRendererToggle());
+    int reverseColNum = _tree.append_column(_("Reverse"), *_toggle_reverse) - 1;
+    Gtk::TreeViewColumn* col_reverse = _tree.get_column(reverseColNum);
+    _toggle_reverse->set_activatable(true);
+    _toggle_reverse->signal_toggled().connect(sigc::mem_fun(*this, &OriginalPathArrayParam::on_reverse_toggled));
+    col_reverse->add_attribute(_toggle_reverse->property_active(), _model->_colReverse);
     
 
     Gtk::CellRendererToggle * _toggle_visible = manage(new Gtk::CellRendererToggle());
-    int toggleColNum2 = _tree.append_column(_("Visible"), *_toggle_visible) - 1;
-    Gtk::TreeViewColumn* col2 = _tree.get_column(toggleColNum2);
+    int visibleColNum = _tree.append_column(_("Visible"), *_toggle_visible) - 1;
+    Gtk::TreeViewColumn* col_visible = _tree.get_column(visibleColNum);
     _toggle_visible->set_activatable(true);
     _toggle_visible->signal_toggled().connect(sigc::mem_fun(*this, &OriginalPathArrayParam::on_visible_toggled));
-    col2->add_attribute(_toggle_visible->property_active(), _model->_colVisible);
+    col_visible->add_attribute(_toggle_visible->property_active(), _model->_colVisible);
     
     _text_renderer = manage(new Gtk::CellRendererText());
     int nameColNum = _tree.append_column(_("Name"), *_text_renderer) - 1;

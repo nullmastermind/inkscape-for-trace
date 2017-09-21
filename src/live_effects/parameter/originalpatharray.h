@@ -93,7 +93,7 @@ protected:
     Glib::RefPtr<Gtk::TreeStore> _store;
     Gtk::TreeView _tree;
     Gtk::CellRendererText *_text_renderer;
-    Gtk::CellRendererToggle *_toggle_renderer;
+    Gtk::CellRendererToggle *_toggle_reverse;
     Gtk::CellRendererToggle *_toggle_visible;
     Gtk::TreeView::Column *_name_column;
     Gtk::ScrolledWindow _scroller;

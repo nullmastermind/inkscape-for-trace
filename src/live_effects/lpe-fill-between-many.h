@@ -18,9 +18,9 @@ namespace Inkscape {
 namespace LivePathEffect {
 
 enum Filllpemethod {
-    FLM_NONE,
-    FLM_PARTIAL,
-    FLM_ALL,
+    FLM_ORIGINALD,
+    FLM_BSPLINESPIRO,
+    FLM_D,
     FLM_END
 };
 

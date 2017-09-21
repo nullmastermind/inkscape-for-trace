@@ -206,9 +206,11 @@ LivePathEffectEditor::showParams(LivePathEffect::Effect& effect)
          if (defaultswidget) {
             Gtk::Expander * expander = NULL;
             std::vector<Gtk::Widget *> childs = dynamic_cast<Gtk::Box *> (effectwidget)->get_children();
-            std::vector<Gtk::Widget *> childs_default = dynamic_cast<Gtk::Box *> (childs[childs.size()-1])->get_children();
-            if ((expander = dynamic_cast<Gtk::Expander *>(childs_default[childs_default.size()-1]))){
-                expanderopen = expander->get_expanded();
+            if (childs.size()) {
+                std::vector<Gtk::Widget *> childs_default = dynamic_cast<Gtk::Box *> (childs[childs.size()-1])->get_children();
+                if ((expander = dynamic_cast<Gtk::Expander *>(childs_default[childs_default.size()-1]))){
+                    expanderopen = expander->get_expanded();
+                }
             }
         }
         effectcontrol_vbox.remove(*effectwidget);

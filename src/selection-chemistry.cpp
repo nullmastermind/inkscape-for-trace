@@ -2911,10 +2911,12 @@ void ObjectSet::cloneOriginalPathLPE(bool allow_transforms)
     Inkscape::SVGOStringStream os;
     SPObject * firstItem = NULL;
     auto items_= items();
+    bool multiple = false;
     for (auto i=items_.begin();i!=items_.end();++i){
         if (SP_IS_SHAPE(*i) || SP_IS_TEXT(*i)) {
             if (firstItem) {
                 os << "|";
+                multiple = true;
             } else {
                 firstItem = SP_ITEM(*i);
             }
@@ -2924,19 +2926,21 @@ void ObjectSet::cloneOriginalPathLPE(bool allow_transforms)
     if (firstItem) {
         Inkscape::XML::Document *xml_doc = document()->getReprDoc();
         SPObject *parent = firstItem->parent;
-
         // create the LPE
         Inkscape::XML::Node *lpe_repr = xml_doc->createElement("inkscape:path-effect");
-        {
+        if (multiple) {
             lpe_repr->setAttribute("effect", "fill_between_many");
             lpe_repr->setAttribute("linkedpaths", os.str());
             lpe_repr->setAttribute("applied", "true");
-            gchar const *method_str = allow_transforms ? "all" : "partial";
-            lpe_repr->setAttribute("method", method_str);
-            gchar const *allow_transforms_str = allow_transforms ? "true" : "false";
-            lpe_repr->setAttribute("allow_transforms", allow_transforms_str);
-            document()->getDefs()->getRepr()->addChild(lpe_repr, NULL); // adds to <defs> and assigns the 'id' attribute
+        } else {
+            lpe_repr->setAttribute("effect", "clone_original");
+            lpe_repr->setAttribute("linkeditem", ((Glib::ustring)"#" + (Glib::ustring)firstItem->getId()).c_str());
         }
+        gchar const *method_str = allow_transforms ?  "d" : "bsplinespiro";
+        lpe_repr->setAttribute("method", method_str);
+        gchar const *allow_transforms_str = allow_transforms ? "true" : "false";
+        lpe_repr->setAttribute("allow_transforms", allow_transforms_str);
+        document()->getDefs()->getRepr()->addChild(lpe_repr, NULL); // adds to <defs> and assigns the 'id' attribute
         std::string lpe_id_href = std::string("#") + lpe_repr->attribute("id");
         Inkscape::GC::release(lpe_repr);
 
@@ -2946,18 +2950,21 @@ void ObjectSet::cloneOriginalPathLPE(bool allow_transforms)
             clone->setAttribute("d", "M 0 0", false);
             // add the new clone to the top of the original's parent
             parent->appendChildRepr(clone);
+            // select the new object:
+            set(clone);
+            Inkscape::GC::release(clone);
             SPObject *clone_obj = document()->getObjectById(clone->attribute("id"));
             SPLPEItem *clone_lpeitem = dynamic_cast<SPLPEItem *>(clone_obj);
             if (clone_lpeitem) {
                 clone_lpeitem->addPathEffect(lpe_id_href, false);
             }
         }
+        if (multiple) {
+            DocumentUndo::done(document(), SP_VERB_EDIT_CLONE_ORIGINAL_PATH_LPE, _("Fill between many"));
+        } else {
+            DocumentUndo::done(document(), SP_VERB_EDIT_CLONE_ORIGINAL_PATH_LPE, _("Clone original"));
+        }
 
-        DocumentUndo::done(document(), SP_VERB_EDIT_CLONE_ORIGINAL_PATH_LPE, _("Fill between many"));
-        // select the new object:
-        set(clone);
-
-        Inkscape::GC::release(clone);
     } else {
         if(desktop())
             desktop()->messageStack()->flash(Inkscape::WARNING_MESSAGE, _("Select path(s) to fill."));

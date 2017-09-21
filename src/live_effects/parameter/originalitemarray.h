@@ -87,7 +87,7 @@ protected:
     Glib::RefPtr<Gtk::TreeStore> _store;
     Gtk::TreeView _tree;
     Gtk::CellRendererText *_text_renderer;
-    Gtk::CellRendererToggle *_toggle_renderer;
+    Gtk::CellRendererToggle *_toggle_active;
     Gtk::TreeView::Column *_name_column;
     Gtk::ScrolledWindow _scroller;
     
@@ -95,9 +95,10 @@ protected:
     void on_remove_button_click();
     void on_up_button_click();
     void on_down_button_click();
-    void on_active_toggled(const Glib::ustring& actived);
+    void on_active_toggled(const Glib::ustring& item);
     
 private:
+    void update();
     OriginalItemArrayParam(const OriginalItemArrayParam&);
     OriginalItemArrayParam& operator=(const OriginalItemArrayParam&);
 };

@@ -44,13 +44,13 @@ public:
     {
         add(_colObject);
         add(_colLabel);
-        add(_colActived);
+        add(_colActive);
     }
     virtual ~ModelColumns() {}
 
     Gtk::TreeModelColumn<ItemAndActive*> _colObject;
     Gtk::TreeModelColumn<Glib::ustring> _colLabel;
-    Gtk::TreeModelColumn<bool> _colActived;
+    Gtk::TreeModelColumn<bool> _colActive;
 };
 
 OriginalItemArrayParam::OriginalItemArrayParam( const Glib::ustring& label,
@@ -62,7 +62,7 @@ OriginalItemArrayParam::OriginalItemArrayParam( const Glib::ustring& label,
         _vector(),
         _tree(),
         _text_renderer(),
-        _toggle_renderer(),
+        _toggle_active(),
         _scroller()
 {    
     _model = new ModelColumns();
@@ -72,12 +72,12 @@ OriginalItemArrayParam::OriginalItemArrayParam( const Glib::ustring& label,
     _tree.set_reorderable(true);
     _tree.enable_model_drag_dest (Gdk::ACTION_MOVE);
     
-    Gtk::CellRendererToggle * _toggle_renderer = manage(new Gtk::CellRendererToggle());
-    int toggleColNum = _tree.append_column(_("Active"), *_toggle_renderer) - 1;
-    Gtk::TreeViewColumn* col = _tree.get_column(toggleColNum);
-    _toggle_renderer->set_activatable(true);
-    _toggle_renderer->signal_toggled().connect(sigc::mem_fun(*this, &OriginalItemArrayParam::on_active_toggled));
-    col->add_attribute(_toggle_renderer->property_active(), _model->_colActived);
+    Gtk::CellRendererToggle * _toggle_active = manage(new Gtk::CellRendererToggle());
+    int activeColNum = _tree.append_column(_("Active"), *_toggle_active) - 1;
+    Gtk::TreeViewColumn* col_active = _tree.get_column(activeColNum);
+    _toggle_active->set_activatable(true);
+    _toggle_active->signal_toggled().connect(sigc::mem_fun(*this, &OriginalItemArrayParam::on_active_toggled));
+    col_active->add_attribute(_toggle_active->property_active(), _model->_colActive);
     
     _text_renderer = manage(new Gtk::CellRendererText());
     int nameColNum = _tree.append_column(_("Name"), *_text_renderer) - 1;
@@ -113,8 +113,8 @@ void OriginalItemArrayParam::on_active_toggled(const Glib::ustring& item)
     Gtk::TreeModel::iterator iter = _store->get_iter(item);
     Gtk::TreeModel::Row row = *iter;
     ItemAndActive *w = row[_model->_colObject];
-    row[_model->_colActived] = !row[_model->_colActived];
-    w->actived = row[_model->_colActived];
+    row[_model->_colActive] = !row[_model->_colActive];
+    w->actived = row[_model->_colActive];
     
     gchar * full = param_getSVGValue();
     param_write_to_repr(full);
@@ -416,7 +416,7 @@ bool OriginalItemArrayParam::param_readSVGValue(const gchar* strvalue)
 
                 row[_model->_colObject] = w;
                 row[_model->_colLabel] = obj ? ( obj->label() ? obj->label() : obj->getId() ) : w->href;
-                row[_model->_colActived] = w->actived;
+                row[_model->_colActive] = w->actived;
                 g_strfreev (substrarray);
             }
         }
@@ -440,6 +440,14 @@ gchar * OriginalItemArrayParam::param_getSVGValue() const
     }
     gchar * str = g_strdup(os.str().c_str());
     return str;
+}
+
+void OriginalItemArrayParam::update()
+{
+    for (std::vector<ItemAndActive*>::iterator iter = _vector.begin(); iter != _vector.end(); ++iter) {
+        SPObject *linked_obj = (*iter)->ref.getObject();
+        linked_modified(linked_obj, SP_OBJECT_MODIFIED_FLAG, *iter);
+    }
 }
 
 } /* namespace LivePathEffect */
