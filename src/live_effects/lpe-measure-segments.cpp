@@ -50,7 +50,7 @@ static const Util::EnumDataConverter<OrientationMethod> OMConverter(OrientationM
 
 LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
-    unit(_("Unit"), _("Unit"), "unit", &wr, this, "px"),
+    unit(_("Unit"), _("Unit"), "unit", &wr, this, "mm"),
     fontbutton(_("Font"), _("Font Selector"), "fontbutton", &wr, this),
     orientation(_("Orientation"), _("Orientation method"), "orientation", OMConverter, &wr, this, OM_PARALLEL, false),
     precision(_("Precision"), _("Precision"), "precision", &wr, this, 2),
@@ -846,7 +846,7 @@ Gtk::Widget *LPEMeasureSegments::newWidget()
 
         ++it;
     }
-    expander = Gtk::manage(new Gtk::Expander(Glib::ustring(_("Show DIM CSS style override"))));
+    expander = Gtk::manage(new Gtk::Expander(Glib::ustring(_("CSS Style Override"))));
     expander->add(*vbox_expander);
     expander->set_expanded(expanded);
     expander->property_expanded().signal_changed().connect(sigc::mem_fun(*this, &LPEMeasureSegments::onExpanderChanged) );
@@ -855,14 +855,15 @@ Gtk::Widget *LPEMeasureSegments::newWidget()
 }
 
 void
+LPEMeasureSegments::transform_multiply(Geom::Affine const& postmul, bool set)
+{
+    sp_lpe_item_update_patheffect(sp_lpe_item, false, false);
+}
+
+void
 LPEMeasureSegments::onExpanderChanged()
 {
     expanded = expander->get_expanded();
-    if(expanded) {
-        expander->set_label (Glib::ustring(_("Hide DIM CSS style override")));
-    } else {
-        expander->set_label (Glib::ustring(_("Show DIM CSS style override")));
-    }
 }
 
 Geom::PathVector
