@@ -847,7 +847,7 @@ Effect::defaultParamSet()
             Gtk::Label *parameter_label = Gtk::manage(new Gtk::Label(value, Gtk::ALIGN_START));
             parameter_label->set_use_markup(true);
             parameter_label->set_use_underline(true);
-            Glib::ustring tooltip = Glib::ustring("<b>") + parameter_label->get_text () + Glib::ustring("</b>\n") + param->param_tooltip + Glib::ustring("\n");
+            Glib::ustring tooltip = Glib::ustring("<b>") + parameter_label->get_text () + Glib::ustring("</b>\n") + param->param_tooltip + Glib::ustring("\n\n");
             parameter_label->set_ellipsize(Pango::ELLIPSIZE_END);
             parameter_label->set_tooltip_markup((tooltip + def + ove + cur).c_str());
             vbox_param->pack_start(*parameter_label, true, true, 2);
