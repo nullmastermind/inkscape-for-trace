@@ -442,6 +442,11 @@ gchar * OriginalItemArrayParam::param_getSVGValue() const
     return str;
 }
 
+gchar * OriginalItemArrayParam::param_getDefaultSVGValue() const
+{
+    return "";
+}
+
 void OriginalItemArrayParam::update()
 {
     for (std::vector<ItemAndActive*>::iterator iter = _vector.begin(); iter != _vector.end(); ++iter) {

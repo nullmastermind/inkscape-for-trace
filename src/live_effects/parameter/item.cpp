@@ -104,6 +104,12 @@ ItemParam::param_getSVGValue() const
     return g_strdup(href);
 }
 
+gchar *
+ItemParam::param_getDefaultSVGValue() const
+{
+    return g_strdup(defvalue);
+}
+
 Gtk::Widget *
 ItemParam::param_newWidget()
 {

@@ -527,6 +527,11 @@ gchar * OriginalPathArrayParam::param_getSVGValue() const
     return str;
 }
 
+gchar * OriginalPathArrayParam::param_getDefaultSVGValue() const
+{
+    return "";
+}
+
 void OriginalPathArrayParam::update()
 {
     for (std::vector<PathAndDirectionAndVisible*>::iterator iter = _vector.begin(); iter != _vector.end(); ++iter) {

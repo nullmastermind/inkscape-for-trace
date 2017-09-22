@@ -59,6 +59,13 @@ ToggleButtonParam::param_getSVGValue() const
     return str;
 }
 
+gchar *
+ToggleButtonParam::param_getDefaultSVGValue() const
+{
+    gchar * str = g_strdup(defvalue ? "true" : "false");
+    return str;
+}
+
 void 
 ToggleButtonParam::param_update_default(bool default_value)
 {

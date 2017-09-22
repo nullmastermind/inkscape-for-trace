@@ -71,6 +71,15 @@ RandomParam::param_getSVGValue() const
     return str;
 }
 
+gchar *
+RandomParam::param_getDefaultSVGValue() const
+{
+    Inkscape::SVGOStringStream os;
+    os << defvalue << ';' << defseed;
+    gchar * str = g_strdup(os.str().c_str());
+    return str;
+}
+
 void
 RandomParam::param_set_default()
 {

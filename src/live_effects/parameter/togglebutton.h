@@ -41,6 +41,7 @@ public:
 
     virtual bool param_readSVGValue(const gchar * strvalue);
     virtual gchar * param_getSVGValue() const;
+    virtual gchar * param_getDefaultSVGValue() const;
 
     void param_setValue(bool newvalue);
     virtual void param_set_default();

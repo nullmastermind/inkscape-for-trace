@@ -38,6 +38,7 @@ public:
 
     virtual bool param_readSVGValue(const gchar * strvalue);
     virtual gchar * param_getSVGValue() const;
+    virtual gchar * param_getDefaultSVGValue() const;
 
     void param_setValue(Glib::ustring newvalue);
     void param_hide_canvas_text();

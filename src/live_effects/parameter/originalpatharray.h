@@ -66,6 +66,7 @@ public:
     virtual Gtk::Widget * param_newWidget();
     virtual bool param_readSVGValue(const gchar * strvalue);
     virtual gchar * param_getSVGValue() const;
+    virtual gchar * param_getDefaultSVGValue() const;
     virtual void param_set_default();
     virtual void param_update_default(const gchar * default_value){};
     /** Disable the canvas indicators of parent class by overriding this method */

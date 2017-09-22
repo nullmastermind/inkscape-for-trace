@@ -173,6 +173,12 @@ PathParam::param_getSVGValue() const
     }
 }
 
+gchar *
+PathParam::param_getDefaultSVGValue() const
+{
+    return g_strdup(defvalue);
+}
+
 void
 PathParam::set_buttons(bool edit_button, bool copy_button, bool paste_button, bool link_button)
 {
