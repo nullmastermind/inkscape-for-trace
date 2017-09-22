@@ -51,7 +51,7 @@ PROJECT_BRIEF          = "Vector Graphics Editor"
 # pixels and the maximum width should not exceed 200 pixels. Doxygen will copy
 # the logo to the output directory.
 
-PROJECT_LOGO           = /home/jtx/Development/inkscape/inkscape/share/branding/inkscape.svg
+PROJECT_LOGO           = ../share/branding/inkscape.svg
 
 # The OUTPUT_DIRECTORY tag is used to specify the (relative or absolute) path
 # into which the generated documentation will be written. If a relative path is
