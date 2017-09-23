@@ -3871,11 +3871,10 @@ void ObjectSet::setClipGroup()
     clone->setAttribute("inkscape:transform-center-x", inner->attribute("inkscape:transform-center-x"), false);
     clone->setAttribute("inkscape:transform-center-y", inner->attribute("inkscape:transform-center-y"), false);
 
-    const Geom::Affine maskTransform(Geom::Affine::identity());
     std::vector<Inkscape::XML::Node*> templist;
     templist.push_back(clone);
     // add the new clone to the top of the original's parent
-    gchar const *mask_id = SPClipPath::create(templist, doc, &maskTransform);
+    gchar const *mask_id = SPClipPath::create(templist, doc);
     
     
     outer->setAttribute("clip-path", g_strdup_printf("url(#%s)", mask_id));
@@ -3933,7 +3932,7 @@ void ObjectSet::setClipGroup()
     clear();
 
     // create a list of duplicates
-    std::vector<Inkscape::XML::Node*> mask_items;
+    std::vector<std::pair<Inkscape::XML::Node*, Geom::Affine>> mask_items;
     std::vector<SPItem*> apply_to_items;
     std::vector<SPItem*> items_to_delete;
     std::vector<SPItem*> items_to_select;
@@ -3953,12 +3952,8 @@ void ObjectSet::setClipGroup()
                 || (topmost && !apply_to_layer && *i == items_.back())
                 || apply_to_layer){
 
-            Geom::Affine oldtr=(*i)->transform;
-            oldtr *= SP_ITEM((*i)->parent)->i2doc_affine().inverse();
-            (*i)->doWriteTransform((*i)->i2doc_affine());
             Inkscape::XML::Node *dup = (*i)->getRepr()->duplicate(xml_doc);
-            (*i)->doWriteTransform(oldtr);
-            mask_items.push_back(dup);
+            mask_items.push_back(std::make_pair(dup, (*i)->i2doc_affine()));
 
             if (remove_original) {
                 items_to_delete.push_back(*i);
@@ -4003,11 +3998,15 @@ void ObjectSet::setClipGroup()
     gchar const *attributeName = apply_clip_path ? "clip-path" : "mask";
     for (std::vector<SPItem*>::const_reverse_iterator i = apply_to_items.rbegin(); i != apply_to_items.rend(); ++i) {
         SPItem *item = reinterpret_cast<SPItem *>(*i);
-        // inverted object transform should be applied to a mask object,
-        // as mask is calculated in user space (after applying transform)
+
         std::vector<Inkscape::XML::Node*> mask_items_dup;
-        for(std::vector<Inkscape::XML::Node*>::const_iterator it=mask_items.begin();it!=mask_items.end();++it)
-            mask_items_dup.push_back((*it)->duplicate(xml_doc));
+        std::map<Inkscape::XML::Node*, Geom::Affine> dup_transf;
+        for (auto it = mask_items.begin(); it != mask_items.end(); ++it) {
+            Inkscape::XML::Node *dup = ((*it).first)->duplicate(xml_doc);
+            mask_items_dup.push_back(dup);
+            dup_transf[dup] = (*it).second;
+        }
+
         Inkscape::XML::Node *current = SP_OBJECT(*i)->getRepr();
         // Node to apply mask to
         Inkscape::XML::Node *apply_mask_to = current;
@@ -4033,13 +4032,19 @@ void ObjectSet::setClipGroup()
             Inkscape::GC::release(group);
         }
 
-        Geom::Affine maskTransform(item->i2doc_affine().inverse());
-
         gchar const *mask_id = NULL;
         if (apply_clip_path) {
-            mask_id = SPClipPath::create(mask_items_dup, doc, &maskTransform);
+            mask_id = SPClipPath::create(mask_items_dup, doc);
         } else {
-            mask_id = sp_mask_create(mask_items_dup, doc, &maskTransform);
+            mask_id = sp_mask_create(mask_items_dup, doc);
+        }
+
+        // inverted object transform should be applied to a mask object,
+        // as mask is calculated in user space (after applying transform)
+        for (auto it = mask_items_dup.begin(); it != mask_items_dup.end(); ++it) {
+            SPItem *clip_item = SP_ITEM(doc->getObjectByRepr(*it));
+            clip_item->doWriteTransform(dup_transf[*it]);
+            clip_item->doWriteTransform(clip_item->transform * item->i2doc_affine().inverse());
         }
 
         apply_mask_to->setAttribute(attributeName, Glib::ustring("url(#") + mask_id + ')');

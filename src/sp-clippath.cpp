@@ -292,7 +292,7 @@ sp_clippath_view_list_remove(SPClipPathView *list, SPClipPathView *view)
 }
 
 // Create a mask element (using passed elements), add it to <defs>
-const gchar *SPClipPath::create (std::vector<Inkscape::XML::Node*> &reprs, SPDocument *document, Geom::Affine const* applyTransform)
+const gchar *SPClipPath::create (std::vector<Inkscape::XML::Node*> &reprs, SPDocument *document)
 {
     Inkscape::XML::Node *defsrepr = document->getDefs()->getRepr();
 
@@ -306,12 +306,7 @@ const gchar *SPClipPath::create (std::vector<Inkscape::XML::Node*> &reprs, SPDoc
 
     for (std::vector<Inkscape::XML::Node*>::const_iterator it = reprs.begin(); it != reprs.end(); ++it) {
         Inkscape::XML::Node *node = (*it);
-        SPItem *item = SP_ITEM(clip_path_object->appendChildRepr(node));
-
-        if (NULL != applyTransform) {
-            Geom::Affine transform (item->transform * (*applyTransform));
-            item->doWriteTransform(transform);
-        }
+        clip_path_object->appendChildRepr(node);
     }
 
     Inkscape::GC::release(repr);
