@@ -408,7 +408,7 @@ const gchar *SPPattern::produce(const std::vector<Inkscape::XML::Node *> &reprs,
             dup_transform = Geom::identity();
         dup_transform *= move;
 
-        copy->doWriteTransform(copy->getRepr(), dup_transform, NULL, false);
+        copy->doWriteTransform(dup_transform, NULL, false);
     }
 
     Inkscape::GC::release(repr);

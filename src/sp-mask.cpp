@@ -209,7 +209,7 @@ sp_mask_create (std::vector<Inkscape::XML::Node*> &reprs, SPDocument *document, 
         
         if (NULL != applyTransform) {
             Geom::Affine transform (item->transform * (*applyTransform));
-            item->doWriteTransform(item->getRepr(), transform);
+            item->doWriteTransform(transform);
         }
     }
 

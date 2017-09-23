@@ -714,7 +714,7 @@ Geom::Affine SPFlowtext::set_transform (Geom::Affine const &xform)
         SPRect *rect = dynamic_cast<SPRect *>(region->firstChild());
         if (rect) {
             rect->set_i2d_affine(xform * rect->i2dt_affine());
-            rect->doWriteTransform(rect->getRepr(), rect->transform, NULL, true);
+            rect->doWriteTransform(rect->transform, NULL, true);
         }
     }
 

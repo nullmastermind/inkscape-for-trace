@@ -643,7 +643,7 @@ sp_item_group_ungroup (SPGroup *group, std::vector<SPItem*> &children, bool do_d
         SPItem *item = static_cast<SPItem *>(doc->getObjectByRepr(repr));
 
         if (item) {
-            item->doWriteTransform(repr, item->transform, NULL, false);
+            item->doWriteTransform(item->transform, NULL, false);
             children.insert(children.begin(),item);
         } else {
             g_assert_not_reached();
@@ -785,7 +785,7 @@ void SPGroup::scaleChildItemsRec(Geom::Scale const &sc, Geom::Point const &p, bo
                            tAff[4] = 0.0;
                            tAff[5] = 0.0;
                         }
-                        item->doWriteTransform(item->getRepr(), tAff, NULL, true);
+                        item->doWriteTransform(tAff, NULL, true);
                     } else {
                         // used for other import
                         SPItem *sub_item = NULL;
@@ -793,16 +793,16 @@ void SPGroup::scaleChildItemsRec(Geom::Scale const &sc, Geom::Point const &p, bo
                             sub_item = dynamic_cast<SPItem *>(item->clip_ref->getObject()->firstChild());
                         }
                         if (sub_item != NULL) {
-                            sub_item->doWriteTransform(sub_item->getRepr(), sub_item->transform*sc, NULL, true);
+                            sub_item->doWriteTransform(sub_item->transform*sc, NULL, true);
                         }
                         sub_item = NULL;
                         if (item->mask_ref->getObject()) {
                             sub_item = dynamic_cast<SPItem *>(item->mask_ref->getObject()->firstChild());
                         }
                         if (sub_item != NULL) {
-                            sub_item->doWriteTransform(sub_item->getRepr(), sub_item->transform*sc, NULL, true);
+                            sub_item->doWriteTransform(sub_item->transform*sc, NULL, true);
                         }
-                        item->doWriteTransform(item->getRepr(), sc.inverse()*item->transform*sc, NULL, true);
+                        item->doWriteTransform(sc.inverse()*item->transform*sc, NULL, true);
                         group->scaleChildItemsRec(sc, p, false);
                     }
                 } else {
@@ -845,18 +845,18 @@ void SPGroup::scaleChildItemsRec(Geom::Scale const &sc, Geom::Point const &p, bo
                             item->transform = Geom::Affine();
                             // Apply scale
                             item->set_i2d_affine(item->i2dt_affine() * sc);
-                            item->doWriteTransform(item->getRepr(), item->transform, NULL, true);
+                            item->doWriteTransform(item->transform, NULL, true);
                             // Scale translation and restore original transform
                             tmp[4] *= sc[0];
                             tmp[5] *= sc[1];
-                            item->doWriteTransform(item->getRepr(), tmp, NULL, true);
+                            item->doWriteTransform(tmp, NULL, true);
                         } else if (dynamic_cast<SPUse *>(item)) {
                             // calculate the matrix we need to apply to the clone
                             // to cancel its induced transform from its original
                             Geom::Affine move = final.inverse() * item->transform * final;
-                            item->doWriteTransform(item->getRepr(), move, &move, true);
+                            item->doWriteTransform(move, &move, true);
                         } else {
-                            item->doWriteTransform(item->getRepr(), item->transform*sc, NULL, true);
+                            item->doWriteTransform(item->transform*sc, NULL, true);
                         }
                         
                         if (conn_type != NULL) {

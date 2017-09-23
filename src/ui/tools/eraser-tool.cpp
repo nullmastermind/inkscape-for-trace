@@ -780,7 +780,7 @@ void EraserTool::set_to_accumulated() {
                                         if (dup_clip) {
                                             SPItem * dup_clip_obj = SP_ITEM(item_repr->parent->appendChildRepr(dup_clip));
                                             if (dup_clip_obj) {
-                                                dup_clip_obj->doWriteTransform(dup_clip, item->transform);
+                                                dup_clip_obj->doWriteTransform(item->transform);
                                                 sp_object_ref(clip_path, 0);
                                                 clip_path->deleteObject(true);
                                                 sp_object_unref(clip_path);

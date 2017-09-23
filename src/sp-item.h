@@ -330,7 +330,7 @@ public:
      * stored optimized. Send _transformed_signal. Invoke _write method so that
      * the repr is updated with the new transform.
      */
-    void doWriteTransform(Inkscape::XML::Node *repr, Geom::Affine const &transform, Geom::Affine const *adv = NULL, bool compensate = true);
+    void doWriteTransform(Geom::Affine const &transform, Geom::Affine const *adv = NULL, bool compensate = true);
 
     /**
      * Sets item private transform (not propagated to repr), without compensating stroke widths,

@@ -442,7 +442,7 @@ void SPUse::move_compensate(Geom::Affine const *mp) {
             	if(item){
                     item->transform *= m;
                     Geom::Affine identity;
-                    item->doWriteTransform(clip.getRepr(),item->transform, &identity);
+                    item->doWriteTransform(item->transform, &identity);
             	}
             }
         }
@@ -452,7 +452,7 @@ void SPUse::move_compensate(Geom::Affine const *mp) {
             	if(item){
                     item->transform *= m;
                     Geom::Affine identity;
-                    item->doWriteTransform(mask.getRepr(),item->transform, &identity);
+                    item->doWriteTransform(item->transform, &identity);
             	}
             }
         }
@@ -482,7 +482,7 @@ void SPUse::move_compensate(Geom::Affine const *mp) {
         	if(item){
                 item->transform *= clone_move.inverse();
                 Geom::Affine identity;
-                item->doWriteTransform(clip.getRepr(),item->transform, &identity);
+                item->doWriteTransform(item->transform, &identity);
         	}
         }
     }
@@ -492,7 +492,7 @@ void SPUse::move_compensate(Geom::Affine const *mp) {
         	if(item){
                 item->transform *= clone_move.inverse();
                 Geom::Affine identity;
-                item->doWriteTransform(mask.getRepr(),item->transform, &identity);
+                item->doWriteTransform(item->transform, &identity);
         	}
         }
     }
@@ -500,7 +500,7 @@ void SPUse::move_compensate(Geom::Affine const *mp) {
 
     // commit the compensation
     this->transform *= clone_move;
-    this->doWriteTransform(this->getRepr(), this->transform, &advertized_move);
+    this->doWriteTransform(this->transform, &advertized_move);
     this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 
@@ -742,7 +742,7 @@ SPItem *SPUse::unlink() {
     {
         Geom::Affine nomove(Geom::identity());
         // Advertise ourselves as not moving.
-        item->doWriteTransform(item->getRepr(), t, &nomove);
+        item->doWriteTransform(t, &nomove);
     }
 
     return item;

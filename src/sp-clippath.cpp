@@ -310,7 +310,7 @@ const gchar *SPClipPath::create (std::vector<Inkscape::XML::Node*> &reprs, SPDoc
 
         if (NULL != applyTransform) {
             Geom::Affine transform (item->transform * (*applyTransform));
-            item->doWriteTransform(item->getRepr(), transform);
+            item->doWriteTransform(transform);
         }
     }
 

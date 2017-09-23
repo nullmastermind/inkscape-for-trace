@@ -455,7 +455,7 @@ const gchar *generate_marker(std::vector<Inkscape::XML::Node*> &reprs, Geom::Rec
             dup_transform = Geom::identity();
         dup_transform *= move;
 
-        copy->doWriteTransform(copy->getRepr(), dup_transform);
+        copy->doWriteTransform(dup_transform);
     }
 
     Inkscape::GC::release(repr);

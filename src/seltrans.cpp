@@ -558,7 +558,7 @@ void Inkscape::SelTrans::stamp()
                 new_affine = &original_item->transform;
             }
 
-            copy_item->doWriteTransform(copy_repr, *new_affine);
+            copy_item->doWriteTransform(*new_affine);
 
             if ( copy_item->isCenterSet() && _center ) {
                 copy_item->setCenter(*_center * _current_relative_affine);

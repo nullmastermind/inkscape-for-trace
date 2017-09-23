@@ -1666,7 +1666,7 @@ void ObjectSet::applyAffine(Geom::Affine const &affine, bool set_i2d, bool compe
                     for (auto& itm: region.children) {
                         SPUse *use = dynamic_cast<SPUse *>(&itm);
                         if ( use ) {
-                            use->doWriteTransform(use->getRepr(), item->transform.inverse(), NULL, compensate);
+                            use->doWriteTransform(item->transform.inverse(), NULL, compensate);
                         }
                     }
                 }
@@ -1710,13 +1710,13 @@ void ObjectSet::applyAffine(Geom::Affine const &affine, bool set_i2d, bool compe
 
                 if (prefs_parallel) {
                     Geom::Affine move = result * clone_move * t_inv;
-                    item->doWriteTransform(item->getRepr(), move, &move, compensate);
+                    item->doWriteTransform(move, &move, compensate);
 
                 } else if (prefs_unmoved) {
                     //if (dynamic_cast<SPUse *>(sp_use_get_original(dynamic_cast<SPUse *>(item))))
                     //    clone_move = Geom::identity();
                     Geom::Affine move = result * clone_move;
-                    item->doWriteTransform(item->getRepr(), move, &t, compensate);
+                    item->doWriteTransform(move, &t, compensate);
                 }
 
             } else if (transform_offset_with_source && (prefs_parallel || prefs_unmoved) && affine.isTranslation()){
@@ -1725,23 +1725,23 @@ void ObjectSet::applyAffine(Geom::Affine const &affine, bool set_i2d, bool compe
 
                 if (prefs_parallel) {
                     Geom::Affine move = result * offset_move * t_inv;
-                    item->doWriteTransform(item->getRepr(), move, &move, compensate);
+                    item->doWriteTransform(move, &move, compensate);
 
                 } else if (prefs_unmoved) {
                     Geom::Affine move = result * offset_move;
-                    item->doWriteTransform(item->getRepr(), move, &t, compensate);
+                    item->doWriteTransform(move, &t, compensate);
                 }
 
             } else {
                 // just apply the result
-                item->doWriteTransform(item->getRepr(), result, &t, compensate);
+                item->doWriteTransform(result, &t, compensate);
             }
 
         } else {
             if (set_i2d) {
                 item->set_i2d_affine(item->i2dt_affine() * (Geom::Affine)affine);
             }
-            item->doWriteTransform(item->getRepr(), item->transform, NULL, compensate);
+            item->doWriteTransform(item->transform, NULL, compensate);
         }
 
         if (adjust_transf_center) { // The transformation center should not be touched in case of pasting or importing, which is allowed by this if clause
@@ -3171,7 +3171,7 @@ void ObjectSet::toSymbol()
                 prefs->setInt("/options/clonecompensation/value", SP_CLONE_COMPENSATION_UNMOVED);
 
                 // Remove transform on group, updating clones.
-                the_group->doWriteTransform(object->getRepr(), Geom::identity());
+                the_group->doWriteTransform(Geom::identity());
 
                 // restore compensation setting
                 prefs->setInt("/options/clonecompensation/value", saved_compensation);
@@ -3483,7 +3483,7 @@ void ObjectSet::untile()
 
                 if (i) {
                     Geom::Affine transform( i->transform * pat_transform );
-                    i->doWriteTransform(i->getRepr(), transform);
+                    i->doWriteTransform(transform);
 
                     new_select.push_back(i);
                 } else {
@@ -3955,9 +3955,9 @@ void ObjectSet::setClipGroup()
 
             Geom::Affine oldtr=(*i)->transform;
             oldtr *= SP_ITEM((*i)->parent)->i2doc_affine().inverse();
-            (*i)->doWriteTransform((*i)->getRepr(), (*i)->i2doc_affine());
+            (*i)->doWriteTransform((*i)->i2doc_affine());
             Inkscape::XML::Node *dup = (*i)->getRepr()->duplicate(xml_doc);
-            (*i)->doWriteTransform((*i)->getRepr(), oldtr);
+            (*i)->doWriteTransform(oldtr);
             mask_items.push_back(dup);
 
             if (remove_original) {
@@ -4160,7 +4160,7 @@ void ObjectSet::unsetMask(const bool apply_clip_path, const bool skip_undo) {
             // transform mask, so it is moved the same spot where mask was applied
             Geom::Affine transform(mask_item->transform);
             transform *= (*it).second->transform;
-            mask_item->doWriteTransform(mask_item->getRepr(), transform);
+            mask_item->doWriteTransform(transform);
         }
 
         g_slist_free(items_to_move);

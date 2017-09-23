@@ -444,7 +444,7 @@ static void do_trace(bitmap_coords_info bci, guchar *trace_px, SPDesktop *deskto
 
         SPObject *reprobj = document->getObjectByRepr(pathRepr);
         if (reprobj) {
-            SP_ITEM(reprobj)->doWriteTransform(pathRepr, transform, NULL);
+            SP_ITEM(reprobj)->doWriteTransform(transform);
             
             // premultiply the item transform by the accumulated parent transform in the paste layer
             Geom::Affine local (SP_GROUP(desktop->currentLayer())->i2doc_affine());

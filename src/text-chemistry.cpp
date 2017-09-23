@@ -119,7 +119,7 @@ text_put_on_path()
         parent->appendChild(repr);
 
         SPItem *new_item = (SPItem *) desktop->getDocument()->getObjectByRepr(repr);
-        new_item->doWriteTransform(repr, text->transform);
+        new_item->doWriteTransform(text->transform);
         new_item->updateRepr();
 
         Inkscape::GC::release(repr);
@@ -505,7 +505,7 @@ flowtext_to_text()
         parent->addChild(repr, item->getRepr());
 
         SPItem *new_item = reinterpret_cast<SPItem *>(desktop->getDocument()->getObjectByRepr(repr));
-        new_item->doWriteTransform(repr, item->transform);
+        new_item->doWriteTransform(item->transform);
         new_item->updateRepr();
     
         Inkscape::GC::release(repr);

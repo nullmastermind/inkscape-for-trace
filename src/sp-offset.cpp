@@ -1065,7 +1065,7 @@ static void sp_offset_move_compensate(Geom::Affine const *mp, SPItem */*original
 
     // commit the compensation
     self->transform *= offset_move;
-    self->doWriteTransform(self->getRepr(), self->transform, &advertized_move);
+    self->doWriteTransform(self->transform, &advertized_move);
     self->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
 }
 

@@ -822,7 +822,7 @@ static void spdc_flush_white(FreehandBase *dc, SPCurve *gc)
             Inkscape::GC::release(repr);
             item->transform = SP_ITEM(desktop->currentLayer())->i2doc_affine().inverse();
             item->updateRepr();
-            item->doWriteTransform(item->getRepr(), item->transform, NULL, true);
+            item->doWriteTransform(item->transform, NULL, true);
             spdc_check_for_and_apply_waiting_LPE(dc, item, c, false);
             dc->selection->set(repr);
             if(previous_shape_type == BEND_CLIPBOARD){

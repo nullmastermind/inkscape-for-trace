@@ -120,7 +120,7 @@ static void sp_spray_rotate_rel(Geom::Point c, SPDesktop */*desktop*/, SPItem *i
     // Rotate item.
     item->set_i2d_affine(item->i2dt_affine() * affine);
     // Use each item's own transform writer, consistent with sp_selection_apply_affine()
-    item->doWriteTransform(item->getRepr(), item->transform);
+    item->doWriteTransform(item->transform);
     // Restore the center position (it's changed because the bbox center changed)
     if (item->isCenterSet()) {
         item->setCenter(c);
@@ -133,7 +133,7 @@ static void sp_spray_scale_rel(Geom::Point c, SPDesktop */*desktop*/, SPItem *it
 {
     Geom::Translate const s(c);
     item->set_i2d_affine(item->i2dt_affine() * s.inverse() * scale * s);
-    item->doWriteTransform(item->getRepr(), item->transform);
+    item->doWriteTransform(item->transform);
 }
 
 SprayTool::SprayTool()

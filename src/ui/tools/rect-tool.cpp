@@ -447,7 +447,7 @@ void RectTool::finishItem() {
         }
 
         this->rect->updateRepr();
-        this->rect->doWriteTransform(this->rect->getRepr(), this->rect->transform, NULL, true);
+        this->rect->doWriteTransform(this->rect->transform, NULL, true);
 
         this->desktop->canvas->endForcedFullRedraws();
 

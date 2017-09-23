@@ -867,7 +867,7 @@ void sp_selected_path_outline_add_marker( SPObject *marker_object, Geom::Affine 
         //There is a special group to markers whith this reverse the order in clussion
         m_repr->setPosition(0);
         SPItem *marker_item = (SPItem *) doc->getObjectByRepr(m_repr);
-        marker_item->doWriteTransform(m_repr, tr);
+        marker_item->doWriteTransform(tr);
         if (!legacy) {
             sp_item_path_outline(marker_item, desktop, legacy);
         }
@@ -1414,7 +1414,7 @@ sp_item_path_outline(SPItem *item, SPDesktop *desktop, bool legacy)
                 // restore title, description, id, transform
                 g_repr->setAttribute("id", id);
                 SPItem *newitem = (SPItem *) doc->getObjectByRepr(g_repr);
-                newitem->doWriteTransform(g_repr, transform);
+                newitem->doWriteTransform(transform);
                 if (title) {
                 	newitem->setTitle(title);
                 }
@@ -1768,7 +1768,7 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
 
     Geom::Affine const transform(item->transform);
 
-    item->doWriteTransform(item->getRepr(), Geom::identity());
+    item->doWriteTransform(Geom::identity());
 
     //XML Tree being used directly here while it shouldn't be...
     gchar *style = g_strdup(item->getRepr()->attribute("style"));
@@ -1869,7 +1869,7 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
         if ( updating ) {
 
 			//XML Tree being used directly here while it shouldn't be
-            item->doWriteTransform(item->getRepr(), transform);
+            item->doWriteTransform(transform);
             char const *id = item->getRepr()->attribute("id");
             char const *uri = g_strdup_printf("#%s", id);
             repr->setAttribute("xlink:href", uri);
@@ -1893,7 +1893,7 @@ void sp_selected_path_create_offset_object(SPDesktop *desktop, int expand, bool 
             const char *n_id = item->getRepr()->attribute("id");
             item->deleteObject(false);
             repr->setAttribute("id", n_id);
-            nitem->doWriteTransform(repr, transform);
+            nitem->doWriteTransform(transform);
         }
 
         // The object just created from a temporary repr is only a seed.
@@ -1961,7 +1961,7 @@ sp_selected_path_do_offset(SPDesktop *desktop, bool expand, double prefOffset)
 
         Geom::Affine const transform(item->transform);
 
-        item->doWriteTransform(item->getRepr(), Geom::identity());
+        item->doWriteTransform(Geom::identity());
 
         gchar *style = g_strdup(item->getRepr()->attribute("style"));
 
@@ -2103,7 +2103,7 @@ sp_selected_path_do_offset(SPDesktop *desktop, bool expand, double prefOffset)
             SPItem *newitem = (SPItem *) desktop->getDocument()->getObjectByRepr(repr);
 
             // reapply the transform
-            newitem->doWriteTransform(repr, transform);
+            newitem->doWriteTransform(transform);
 
             repr->setAttribute("id", id);
 
@@ -2173,7 +2173,7 @@ sp_selected_path_simplify_item(SPDesktop *desktop,
        this is necessary so that the item is transformed twice back and forth,
        allowing all compensations to cancel out regardless of the preferences
     */
-    item->doWriteTransform(item->getRepr(), Geom::identity());
+    item->doWriteTransform(Geom::identity());
 
     gchar *style = g_strdup(item->getRepr()->attribute("style"));
     gchar *mask = g_strdup(item->getRepr()->attribute("mask"));
@@ -2246,7 +2246,7 @@ sp_selected_path_simplify_item(SPDesktop *desktop,
     SPItem *newitem = (SPItem *) desktop->getDocument()->getObjectByRepr(repr);
 
     // reapply the transform
-    newitem->doWriteTransform(repr, transform);
+    newitem->doWriteTransform(transform);
 
     // restore title & description
     if (title) {

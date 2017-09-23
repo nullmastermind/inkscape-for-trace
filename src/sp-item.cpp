@@ -1422,9 +1422,8 @@ Geom::Affine SPItem::set_transform(Geom::Affine const &transform) {
 	return transform;
 }
 
-void SPItem::doWriteTransform(Inkscape::XML::Node *repr, Geom::Affine const &transform, Geom::Affine const *adv, bool compensate)
+void SPItem::doWriteTransform(Geom::Affine const &transform, Geom::Affine const *adv, bool compensate)
 {
-    g_return_if_fail(repr != NULL);
     // calculate the relative transform, if not given by the adv attribute
     Geom::Affine advertized_transform;
     if (adv != NULL) {
