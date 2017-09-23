@@ -689,9 +689,12 @@ font_instance *font_factory::Face(PangoFontDescription *descr, bool canFail)
                 pango_font_description_set_family(descr,"sans-serif");
                 res = Face(descr,false);
                 pango_font_description_free(descr);
+            } else {
+                g_critical("Could not load any face for font '%s'.", pango_font_description_to_string(descr));
             }
         }
 
+        if (res) {
         // Extract which OpenType tables are in the font. We'll make a list of all tables
         // regardless of which script and langauge they are in.  This Harfbuzz code replaces
         // an earlier Pango version as the Pango functions are deprecated.
@@ -836,6 +839,7 @@ font_instance *font_factory::Face(PangoFontDescription *descr, bool canFail)
 
         hb_face_destroy (face);
         g_free(scripts_hb);
+        }
     } else {
         // already here
         res = loadedFaces[descr];
