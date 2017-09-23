@@ -685,10 +685,10 @@ font_instance *font_factory::Face(PangoFontDescription *descr, bool canFail)
             // no match
             if ( canFail ) {
                 PANGO_DEBUG("falling back to 'sans-serif'\n");
-                descr = pango_font_description_new();
-                pango_font_description_set_family(descr,"sans-serif");
-                res = Face(descr,false);
-                pango_font_description_free(descr);
+                PangoFontDescription *new_descr = pango_font_description_new();
+                pango_font_description_set_family(new_descr, "sans-serif");
+                res = Face(new_descr, false);
+                pango_font_description_free(new_descr);
             } else {
                 g_critical("Could not load any face for font '%s'.", pango_font_description_to_string(descr));
             }
