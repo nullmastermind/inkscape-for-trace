@@ -405,6 +405,16 @@ bool Layout::Calculator::_measureUnbrokenSpan(ParagraphInfo const &para,
             // double glyph_y_offset = font_size_multiplier * info->geometry.y_offset;
             // std::cout << "  glyph: " << info->glyph << "  width: " << glyph_width << "  x_offset: " << glyph_x_offset << "  y_offset: " << glyph_y_offset << std::endl;
 
+            font_instance *font = para.pango_items[span->end.iter_span->pango_item_index].font;
+            double font_size = span->start.iter_span->font_size;
+            double glyph_h_advance = font_size * font->Advance(info->glyph, false);
+            double glyph_v_advance = font_size * font->Advance(info->glyph, true );
+            // std::cout << "    h_advance: " << glyph_h_advance << "  v_advance: " << glyph_v_advance << std::endl;
+            // Geom::OptRect  bbox = font->BBox(info->glyph);
+            // *bbox *= Geom::Scale(font_size);
+            // std::cout << "    bbox: " << *bbox <<  std::endl;
+            // std::cout << "    h_extent: " << bbox->width() << "  v_extent: " << bbox->height() << std::endl;
+
             if (_block_progression == LEFT_TO_RIGHT || _block_progression == RIGHT_TO_LEFT) {
                 // Vertical text
 
@@ -412,18 +422,18 @@ bool Layout::Calculator::_measureUnbrokenSpan(ParagraphInfo const &para,
                     (text_source->style->text_orientation.computed == SP_CSS_TEXT_ORIENTATION_MIXED &&
                      para.pango_items[span->end.iter_span->pango_item_index].item->analysis.gravity == PANGO_GRAVITY_SOUTH) ) {
                     // Sideways orientation
-                    char_width += span->start.iter_span->font_size * para.pango_items[span->end.iter_span->pango_item_index].font->Advance(info->glyph, false);
+                    char_width += glyph_h_advance;
                 } else {
                     // Upright orientation
                     guint32 c = *Glib::ustring::const_iterator(span->end.iter_span->input_stream_first_character.base() + span->end.char_byte);
                     if (g_unichar_type (c) != G_UNICODE_NON_SPACING_MARK) {
                         // Non-spacing marks should not contribute to width. Fonts may not report the correct advance, especially if the 'vmtx' table is missing.
-                        char_width += span->start.iter_span->font_size * para.pango_items[span->end.iter_span->pango_item_index].font->Advance(info->glyph, true);
+                        char_width += glyph_v_advance;
                     }
                 }
             } else {
                 // Horizontal text
-                char_width += font_size_multiplier * span->end.iter_span->glyph_string->glyphs[span->end_glyph_index].geometry.width;
+                char_width += font_size_multiplier * info->geometry.width;
             }
             span->end_glyph_index++;
         }
@@ -808,13 +818,16 @@ void Layout::Calculator::_outputLine(ParagraphInfo const &para,
                                                                  para.pango_items[unbroken_span.pango_item_index].font->GetBaselines()[ SP_CSS_BASELINE_CENTRAL ] );
 
                             static double shift_y = 0; // Save to use with non_spacing marks (should be shifted the same amount as previous glyph).
+                            static double shift_x = 0; // Subtract incorrect Pango inclusion of horizontal advance (https://bugzilla.gnome.org 787526)
                             if (g_unichar_type (*iter_source_text) == G_UNICODE_NON_SPACING_MARK) {
                                 new_glyph.width = 0;
-                                new_glyph.x += new_span.font_size; // Hack!
+                                new_glyph.x += shift_x; // Hack
+                                shift_x = 0;
                             } else {
                                 // Glyph reference point is center  (shift: left edge to center glyph)
                                 shift_y = unbroken_span_glyph_info->geometry.width * 0.5 * font_size_multiplier;
                                 new_glyph.width = new_span.font_size * para.pango_items[unbroken_span.pango_item_index].font->Advance(unbroken_span_glyph_info->glyph, true);
+                                shift_x =         new_span.font_size * para.pango_items[unbroken_span.pango_item_index].font->Advance(unbroken_span_glyph_info->glyph, false);
                             }
                             new_glyph.y -= shift_y;
                         }
