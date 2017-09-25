@@ -9,6 +9,7 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 #include "live_effects/lpe-measure-segments.h"
+#include "live_effects/lpeobject.h"
 #include <pangomm/fontdescription.h>
 #include "ui/dialog/livepatheffect-editor.h"
 #include <libnrtype/font-lister.h>
@@ -31,6 +32,7 @@
 #include "sp-shape.h"
 #include "sp-path.h"
 #include "document.h"
+#include "document-undo.h"
 #include <iomanip>
 #include <cmath>
 
@@ -51,8 +53,9 @@ static const Util::EnumDataConverter<OrientationMethod> OMConverter(OrientationM
 LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     Effect(lpeobject),
     unit(_("Unit"), _("Unit"), "unit", &wr, this, "mm"),
-    fontbutton(_("Font"), _("Font Selector"), "fontbutton", &wr, this),
     orientation(_("Orientation"), _("Orientation method"), "orientation", OMConverter, &wr, this, OM_PARALLEL, false),
+    coloropacity(_("Color and opacity"), _("Set color and opacity of the measurements"), "coloropacity", &wr, this, 0x000000ff),
+    fontbutton(_("Font"), _("Font Selector"), "fontbutton", &wr, this),
     precision(_("Precision"), _("Precision"), "precision", &wr, this, 2),
     fix_overlaps(_("Fix overlaps °"), _("Min angle where overlaps are fixed, 180° no fix"), "fix_overlaps", &wr, this, 0),
     position(_("Position"), _("Position"), "position", &wr, this, 5),
@@ -60,7 +63,9 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     text_right_left(_("Text right/left"), _("Text right/left"), "text_right_left", &wr, this, 0),
     helpline_distance(_("Helpline distance"), _("Helpline distance"), "helpline_distance", &wr, this, 0.0),
     helpline_overlap(_("Helpline overlap"), _("Helpline overlap"), "helpline_overlap", &wr, this, 2.0),
+    line_width(_("Line width"), _("Line width. DIM line group standar are 0.25 or 0.35"), "line_width", &wr, this, 0.25),
     scale(_("Scale"), _("Scaling factor"), "scale", &wr, this, 1.0),
+    
     format(_("Format"), _("Format the number ex:{measure} {unit}, return to save"), "format", &wr, this,"{measure}{unit}"),
     blacklist(_("Blacklist"), _("Optional segment index that exclude measure, comma limited, you can add more LPE like this to fill the holes"), "blacklist", &wr, this,""),
     whitelist(_("Inverse blacklist"), _("Blacklist as whitelist"), "whitelist", &wr, this, false),
@@ -68,19 +73,15 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     flip_side(_("Flip side"), _("Flip side"), "flip_side", &wr, this, false),
     scale_sensitive(_("Scale sensitive"), _("Costrained scale sensitive to transformed containers"), "scale_sensitive", &wr, this, true),
     local_locale(_("Local Number Format"), _("Local number format"), "local_locale", &wr, this, true),
-    line_group_05(_("Line Group 0.5"), _("Line Group 0.5, from 0.7"), "line_group_05", &wr, this, true),
     rotate_anotation(_("Rotate Anotation"), _("Rotate Anotation"), "rotate_anotation", &wr, this, true),
     hide_back(_("Hide if label over"), _("Hide DIN line if label over"), "hide_back", &wr, this, true),
-    dimline_format(_("CSS DIN line"), _("Override CSS to DIN line, return to save, empty to reset to DIM"), "dimline_format", &wr, this,""),
-    helperlines_format(_("CSS helpers"), _("Override CSS to helper lines, return to save, empty to reset to DIM"), "helperlines_format", &wr, this,""),
-    anotation_format(_("CSS anotation"), _("Override CSS to anotation text, return to save, empty to reset to DIM"), "anotation_format", &wr, this,""),
-    arrows_format(_("CSS arrows"), _("Override CSS to arrows, return to save, empty to reset DIM"), "arrows_format", &wr, this,""),
-    expanded(false)
+    message(_("Info Box"), _("Important messages"), "message", &wr, this, _("Use <b>\"Style Dialog\"</b> to more styling. Each meassure element has extra selectors..."))
 {
     //set to true the parameters you want to be changed his default values
     registerParameter(&unit);
-    registerParameter(&fontbutton);
     registerParameter(&orientation);
+    registerParameter(&coloropacity);
+    registerParameter(&fontbutton);
     registerParameter(&precision);
     registerParameter(&fix_overlaps);
     registerParameter(&position);
@@ -88,6 +89,7 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     registerParameter(&text_right_left);
     registerParameter(&helpline_distance);
     registerParameter(&helpline_overlap);
+    registerParameter(&line_width);
     registerParameter(&scale);
     registerParameter(&format);
     registerParameter(&blacklist);
@@ -96,13 +98,9 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     registerParameter(&flip_side);
     registerParameter(&scale_sensitive);
     registerParameter(&local_locale);
-    registerParameter(&line_group_05);
     registerParameter(&rotate_anotation);
     registerParameter(&hide_back);
-    registerParameter(&dimline_format);
-    registerParameter(&helperlines_format);
-    registerParameter(&anotation_format);
-    registerParameter(&arrows_format);
+    registerParameter(&message);
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
 
@@ -114,10 +112,6 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
 
     format.param_hide_canvas_text();
     blacklist.param_hide_canvas_text();
-    dimline_format.param_hide_canvas_text();
-    helperlines_format.param_hide_canvas_text();
-    anotation_format.param_hide_canvas_text();
-    arrows_format.param_hide_canvas_text();
     precision.param_set_range(0, 100);
     precision.param_set_increments(1, 1);
     precision.param_set_digits(0);
@@ -135,6 +129,9 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     text_top_bottom.param_set_range(-999999.0, 999999.0);
     text_top_bottom.param_set_increments(1, 1);
     text_top_bottom.param_set_digits(2);
+    line_width.param_set_range(-999999.0, 999999.0);
+    line_width.param_set_increments(1, 1);
+    line_width.param_set_digits(2);
     text_right_left.param_set_range(-999999.0, 999999.0);
     text_right_left.param_set_increments(1, 1);
     text_right_left.param_set_digits(2);
@@ -155,6 +152,14 @@ LPEMeasureSegments::createArrowMarker(const char * mode)
     if (!document) {
         return;
     }
+    Glib::ustring style;
+    gchar c[32];
+    unsigned const rgb24 = coloropacity.get_value() >> 8;
+    sprintf(c, "#%06x", rgb24);
+    style = Glib::ustring("fill:") + Glib::ustring(c);
+    Inkscape::SVGOStringStream os;
+    os << SP_RGBA32_A_F(coloropacity.get_value());
+    style = style + Glib::ustring(";fill-opacity:") + Glib::ustring(os.str());
     Inkscape::XML::Document *xml_doc = document->getReprDoc();
     SPObject *elemref = NULL;
     Inkscape::XML::Node *arrow = NULL;
@@ -165,24 +170,19 @@ LPEMeasureSegments::createArrowMarker(const char * mode)
             arrow->setAttribute("transform", NULL);
             Inkscape::XML::Node *arrow_data = arrow->firstChild();
             if (arrow_data) {
-                SPCSSAttr *css = sp_repr_css_attr_new();
-                sp_repr_css_set_property (css, "fill","#000000");
-                sp_repr_css_set_property (css, "stroke","none");
                 arrow_data->setAttribute("transform", NULL);
-                sp_repr_css_attr_add_from_string(css, arrows_format.param_getSVGValue());
-                Glib::ustring css_str;
-                sp_repr_css_write_string(css,css_str);
-                arrow_data->setAttribute("style", css_str.c_str());
+                arrow_data->setAttribute("style", style.c_str());
             }
         }
     } else {
         arrow = xml_doc->createElement("svg:marker");
         arrow->setAttribute("id", mode);
+        arrow->setAttribute("class", (Glib::ustring(sp_lpe_item->getId()) + Glib::ustring(" ") + Glib::ustring(this->lpeobj->getId()) + Glib::ustring(" measure-arrows")).c_str());
         arrow->setAttribute("inkscape:stockid", mode);
         arrow->setAttribute("orient", "auto");
         arrow->setAttribute("refX", "0.0");
         arrow->setAttribute("refY", "0.0");
-        arrow->setAttribute("style", "overflow:visible");
+
         arrow->setAttribute("sodipodi:insensitive", "true");
         /* Create <path> */
         Inkscape::XML::Node *arrow_path = xml_doc->createElement("svg:path");
@@ -197,13 +197,7 @@ LPEMeasureSegments::createArrowMarker(const char * mode)
         }
         
         arrow_path->setAttribute("id", Glib::ustring(mode).append("_path").c_str());
-        SPCSSAttr *css = sp_repr_css_attr_new();
-        sp_repr_css_set_property (css, "fill","#000000");
-        sp_repr_css_set_property (css, "stroke","none");
-        sp_repr_css_attr_add_from_string(css, arrows_format.param_getSVGValue());
-        Glib::ustring css_str;
-        sp_repr_css_write_string(css,css_str);
-        arrow_path->setAttribute("style", css_str.c_str());
+        arrow_path->setAttribute("style", style.c_str());
         arrow->addChild(arrow_path, NULL);
         Inkscape::GC::release(arrow_path);
         elemref = SP_OBJECT(document->getDefs()->appendChildRepr(arrow));
@@ -256,6 +250,7 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
         rtext = xml_doc->createElement("svg:text");
         rtext->setAttribute("xml:space", "preserve");
         rtext->setAttribute("id", id);
+        rtext->setAttribute("class", (Glib::ustring(sp_lpe_item->getId()) + Glib::ustring(" ") + Glib::ustring(this->lpeobj->getId()) + Glib::ustring(" measure-labels")).c_str());
         rtext->setAttribute("sodipodi:insensitive", "true");
         pos = pos - Point::polar(angle, text_right_left);
         sp_repr_set_svg_double(rtext, "x", pos[Geom::X]);
@@ -281,27 +276,25 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
     rtext->setAttribute("transform", transform);
     g_free(transform);
     SPCSSAttr *css = sp_repr_css_attr_new();
-    sp_repr_css_attr_add_from_string(css, anotation_format.param_getSVGValue());
     Inkscape::FontLister *fontlister = Inkscape::FontLister::get_instance();
     fontlister->fill_css(css, Glib::ustring(fontbutton.param_getSVGValue()));
     std::stringstream font_size;
     font_size.imbue(std::locale::classic());
     font_size <<  fontsize << "pt";
-    sp_repr_css_set_property (css, "font-size",font_size.str().c_str());
-    sp_repr_css_set_property (css, "line-height","125%");
-    sp_repr_css_set_property (css, "letter-spacing","0");
-    sp_repr_css_set_property (css, "word-spacing", "0");
-    sp_repr_css_set_property (css, "text-align", "center");
-    sp_repr_css_set_property (css, "text-anchor", "middle");
-    sp_repr_css_set_property (css, "fill", "#000000");
-    sp_repr_css_set_property (css, "fill-opacity", "1");
-    sp_repr_css_set_property (css, "stroke", "none");
-    sp_repr_css_attr_add_from_string(css, anotation_format.param_getSVGValue());
-    Glib::ustring css_str;
-    sp_repr_css_write_string(css,css_str);
+
+    gchar c[32];
+    unsigned const rgb24 = coloropacity.get_value() >> 8;
+    sprintf(c, "#%06x", rgb24);
+    sp_repr_css_set_property (css, "fill",c);
+    Inkscape::SVGOStringStream os;
+    os << SP_RGBA32_A_F(coloropacity.get_value());
+    sp_repr_css_set_property (css, "fill-opacity",os.str().c_str());
     if (!rtspan) {
         rtspan = rtext->firstChild();
     }
+    sp_repr_css_set_property (css, "font-size",font_size.str().c_str());
+    Glib::ustring css_str;
+    sp_repr_css_write_string(css,css_str);
     rtext->setAttribute("style", css_str.c_str());
     rtspan->setAttribute("style", NULL);
     rtspan->setAttribute("transform", NULL);
@@ -427,6 +420,12 @@ LPEMeasureSegments::createLine(Geom::Point start,Geom::Point end, const char * i
         }
         line = xml_doc->createElement("svg:path");
         line->setAttribute("id", id);
+        if (main) {
+            line->setAttribute("class", (Glib::ustring(sp_lpe_item->getId()) + Glib::ustring(" ") + Glib::ustring(this->lpeobj->getId()) + Glib::ustring(" measure-DIM-lines")).c_str());
+        } else {
+            line->setAttribute("class", (Glib::ustring(sp_lpe_item->getId()) + Glib::ustring(" ") + Glib::ustring(this->lpeobj->getId()) + Glib::ustring(" measure-helper-lines")).c_str());
+        }
+        line->setAttribute("class", (Glib::ustring(sp_lpe_item->getId()) + Glib::ustring(" ") + Glib::ustring(this->lpeobj->getId()) + Glib::ustring(" measure-line")).c_str());
         gchar * line_str = sp_svg_write_path( line_pathv );
         line->setAttribute("d" , line_str);
         g_free(line_str);
@@ -434,7 +433,7 @@ LPEMeasureSegments::createLine(Geom::Point start,Geom::Point end, const char * i
     line->setAttribute("sodipodi:insensitive", "true");
     line_pathv.clear();
         
-    Glib::ustring style = Glib::ustring("stroke:#000000;fill:none;");
+    Glib::ustring style;
     if (overflow && !arrows) {
         line->setAttribute("inkscape:label", "downline");
     } else if (main) {
@@ -449,22 +448,18 @@ LPEMeasureSegments::createLine(Geom::Point start,Geom::Point end, const char * i
     }
     std::stringstream stroke_w;
     stroke_w.imbue(std::locale::classic());
-    if (line_group_05) {
-        double stroke_width = Inkscape::Util::Quantity::convert(0.25 / doc_scale, "mm", display_unit.c_str());
-        stroke_w <<  stroke_width;
-        style = style + Glib::ustring("stroke-width:" + stroke_w.str());
-    } else {
-        double stroke_width = Inkscape::Util::Quantity::convert(0.35 / doc_scale, "mm", display_unit.c_str());
-        stroke_w <<  stroke_width;
-        style = style + Glib::ustring("stroke-width:" + stroke_w.str());
-    }
+    double stroke_width = Inkscape::Util::Quantity::convert(line_width / doc_scale, "mm", display_unit.c_str());
+    stroke_w <<  stroke_width;
+    style = style + Glib::ustring("stroke-width:" + stroke_w.str());
+    gchar c[32];
+    unsigned const rgb24 = coloropacity.get_value() >> 8;
+    sprintf(c, "#%06x", rgb24);
+    style = style + Glib::ustring(";stroke:") + Glib::ustring(c);
+    Inkscape::SVGOStringStream os;
+    os << SP_RGBA32_A_F(coloropacity.get_value());
+    style = style + Glib::ustring(";stroke-opacity:") + Glib::ustring(os.str());
     SPCSSAttr *css = sp_repr_css_attr_new();
     sp_repr_css_attr_add_from_string(css, style.c_str());
-    if (main) {
-        sp_repr_css_attr_add_from_string(css, dimline_format.param_getSVGValue());
-    } else {
-        sp_repr_css_attr_add_from_string(css, helperlines_format.param_getSVGValue());
-    }
     Glib::ustring css_str;
     sp_repr_css_write_string(css,css_str);
     line->setAttribute("style", css_str.c_str());
@@ -490,6 +485,56 @@ LPEMeasureSegments::doOnApply(SPLPEItem const* lpeitem)
         SPLPEItem * item = const_cast<SPLPEItem*>(lpeitem);
         item->removeCurrentPathEffect(false);
     }
+    SPDocument *document = SP_ACTIVE_DOCUMENT;
+    bool saved = DocumentUndo::getUndoSensitive(document);
+    DocumentUndo::setUndoSensitive(document, false);
+    Inkscape::XML::Node *styleNode = NULL;
+    Inkscape::XML::Node* textNode = NULL;
+    Inkscape::XML::Node *root = SP_ACTIVE_DOCUMENT->getReprRoot();
+    for (unsigned i = 0; i < root->childCount(); ++i) {
+        if (Glib::ustring(root->nthChild(i)->name()) == "svg:style") {
+
+            styleNode = root->nthChild(i);
+
+            for (unsigned j = 0; j < styleNode->childCount(); ++j) {
+                if (styleNode->nthChild(j)->type() == Inkscape::XML::TEXT_NODE) {
+                    textNode = styleNode->nthChild(j);
+                }
+            }
+
+            if (textNode == NULL) {
+                // Style element found but does not contain text node!
+                std::cerr << "StyleDialog::_getStyleTextNode(): No text node!" << std::endl;
+                textNode = SP_ACTIVE_DOCUMENT->getReprDoc()->createTextNode("");
+                styleNode->appendChild(textNode);
+                Inkscape::GC::release(textNode);
+            }
+        }
+    }
+
+    if (styleNode == NULL) {
+        // Style element not found, create one
+        styleNode = SP_ACTIVE_DOCUMENT->getReprDoc()->createElement("svg:style");
+        textNode  = SP_ACTIVE_DOCUMENT->getReprDoc()->createTextNode("");
+
+        styleNode->appendChild(textNode);
+        Inkscape::GC::release(textNode);
+
+        root->addChild(styleNode, NULL);
+        Inkscape::GC::release(styleNode);
+    }
+    Glib::ustring styleContent = Glib::ustring(textNode->content());
+    if (styleContent.find(".measure-arrows\n{\n") == -1) {
+        styleContent = styleContent + Glib::ustring("\n.measure-arrows") + Glib::ustring("\n{\nfill:#ff0000 !important;\nstroke:none;\n}");
+        styleContent = styleContent + Glib::ustring("\n.measure-labels") + Glib::ustring("\n{\nline-height:125%;\nletter-spacing:0;\nword-spacing:0;\ntext-align:center;\ntext-anchor:middle;\nfill:#000000;\nfill-opacity:1;\nstroke:none;\n}");
+        styleContent = styleContent + Glib::ustring("\n.measure-DIM-lines") + Glib::ustring("\n{\nstroke:#000000;\nfill:none;\n}");
+        styleContent = styleContent + Glib::ustring("\n.measure-helper-lines") + Glib::ustring("\n{\nstroke:#000000;\nfill:none;\n}");
+    }
+//    styleContent = styleContent + Glib::ustring("\n.") + Glib::ustring(lpeitem->getId()) + Glib::ustring("\n{}");
+//    styleContent = styleContent + Glib::ustring("\n.measure-labels.") + Glib::ustring(lpeitem->getId())  + Glib::ustring("\n{}\n");
+//    styleContent = styleContent + Glib::ustring("\n.measure-arrows.") + Glib::ustring(lpeitem->getId())  + Glib::ustring("\n{}\n");
+    textNode->setContent(styleContent.c_str());
+    DocumentUndo::setUndoSensitive(document, saved);
 }
 
 bool
@@ -736,12 +781,9 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                         createLine(sstart, prog_end, downline, true, overflow, false, false);
                     }
                     //LINE
-                    arrow_gap = 8 * Inkscape::Util::Quantity::convert(0.35 / doc_scale, "mm", display_unit.c_str());
-                    if (line_group_05) {
-                        arrow_gap = 8 * Inkscape::Util::Quantity::convert(0.25 / doc_scale, "mm", display_unit.c_str());
-                    }
+                    arrow_gap = 8 * Inkscape::Util::Quantity::convert(line_width / doc_scale, "mm", display_unit.c_str());
                     SPCSSAttr *css = sp_repr_css_attr_new();
-                    sp_repr_css_attr_add_from_string(css, dimline_format.param_getSVGValue());
+
                     char *oldlocale = g_strdup (setlocale(LC_NUMERIC, NULL));
                     setlocale (LC_NUMERIC, "C");
                     double width_line =  atof(sp_repr_css_property(css,"stroke-width","-1"));
@@ -807,63 +849,10 @@ LPEMeasureSegments::doOnRemove (SPLPEItem const* /*lpeitem*/)
     processObjects(LPE_ERASE);
 }
 
-Gtk::Widget *LPEMeasureSegments::newWidget()
-{
-    // use manage here, because after deletion of Effect object, others might
-    // still be pointing to this widget.
-    Gtk::VBox *vbox = Gtk::manage(new Gtk::VBox(Effect::newWidget()));
-
-    vbox->set_border_width(5);
-    vbox->set_homogeneous(false);
-    vbox->set_spacing(2);
-
-    std::vector<Parameter *>::iterator it = param_vector.begin();
-    Gtk::VBox * vbox_expander = Gtk::manage( new Gtk::VBox(Effect::newWidget()) );
-    vbox_expander->set_border_width(0);
-    vbox_expander->set_spacing(2);
-    while (it != param_vector.end()) {
-        if ((*it)->widget_is_visible) {
-            Parameter *param = *it;
-            Gtk::Widget *widg = dynamic_cast<Gtk::Widget *>(param->param_newWidget());
-            Glib::ustring *tip = param->param_getTooltip();
-            if (widg) {
-                if (param->param_key != "dimline_format" &&
-                    param->param_key != "helperlines_format" &&
-                    param->param_key != "arrows_format" &&
-                    param->param_key != "anotation_format") {
-                    vbox->pack_start(*widg, true, true, 2);
-                } else {
-                    vbox_expander->pack_start(*widg, true, true, 2);
-                }
-                if (tip) {
-                    widg->set_tooltip_text(*tip);
-                } else {
-                    widg->set_tooltip_text("");
-                    widg->set_has_tooltip(false);
-                }
-            }
-        }
-
-        ++it;
-    }
-    expander = Gtk::manage(new Gtk::Expander(Glib::ustring(_("CSS Style Override"))));
-    expander->add(*vbox_expander);
-    expander->set_expanded(expanded);
-    expander->property_expanded().signal_changed().connect(sigc::mem_fun(*this, &LPEMeasureSegments::onExpanderChanged) );
-    vbox->pack_start(*expander, true, true, 2);
-    return dynamic_cast<Gtk::Widget *>(vbox);
-}
-
 void
 LPEMeasureSegments::transform_multiply(Geom::Affine const& postmul, bool set)
 {
     sp_lpe_item_update_patheffect(sp_lpe_item, false, false);
-}
-
-void
-LPEMeasureSegments::onExpanderChanged()
-{
-    expanded = expander->get_expanded();
 }
 
 Geom::PathVector

@@ -156,6 +156,7 @@ src/live_effects/lpe-taperstroke.cpp
 src/live_effects/lpe-transform_2pts.cpp
 src/live_effects/lpe-vonkoch.cpp
 src/live_effects/parameter/bool.cpp
+src/live_effects/parameter/colorpicker.cpp
 src/live_effects/parameter/enum.h
 src/live_effects/parameter/fontbutton.cpp
 src/live_effects/parameter/item.cpp
