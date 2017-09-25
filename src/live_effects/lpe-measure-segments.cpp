@@ -421,11 +421,10 @@ LPEMeasureSegments::createLine(Geom::Point start,Geom::Point end, const char * i
         line = xml_doc->createElement("svg:path");
         line->setAttribute("id", id);
         if (main) {
-            line->setAttribute("class", (Glib::ustring(sp_lpe_item->getId()) + Glib::ustring(" ") + Glib::ustring(this->lpeobj->getId()) + Glib::ustring(" measure-DIM-lines")).c_str());
+            line->setAttribute("class", (Glib::ustring(sp_lpe_item->getId()) + Glib::ustring(" ") + Glib::ustring(this->lpeobj->getId()) + Glib::ustring(" measure-DIM-lines measure-lines")).c_str());
         } else {
-            line->setAttribute("class", (Glib::ustring(sp_lpe_item->getId()) + Glib::ustring(" ") + Glib::ustring(this->lpeobj->getId()) + Glib::ustring(" measure-helper-lines")).c_str());
+            line->setAttribute("class", (Glib::ustring(sp_lpe_item->getId()) + Glib::ustring(" ") + Glib::ustring(this->lpeobj->getId()) + Glib::ustring(" measure-helper-lines measure-lines")).c_str());
         }
-        line->setAttribute("class", (Glib::ustring(sp_lpe_item->getId()) + Glib::ustring(" ") + Glib::ustring(this->lpeobj->getId()) + Glib::ustring(" measure-line")).c_str());
         gchar * line_str = sp_svg_write_path( line_pathv );
         line->setAttribute("d" , line_str);
         g_free(line_str);
@@ -525,10 +524,9 @@ LPEMeasureSegments::doOnApply(SPLPEItem const* lpeitem)
     }
     Glib::ustring styleContent = Glib::ustring(textNode->content());
     if (styleContent.find(".measure-arrows\n{\n") == -1) {
-        styleContent = styleContent + Glib::ustring("\n.measure-arrows") + Glib::ustring("\n{\nfill:#ff0000 !important;\nstroke:none;\n}");
-        styleContent = styleContent + Glib::ustring("\n.measure-labels") + Glib::ustring("\n{\nline-height:125%;\nletter-spacing:0;\nword-spacing:0;\ntext-align:center;\ntext-anchor:middle;\nfill:#000000;\nfill-opacity:1;\nstroke:none;\n}");
-        styleContent = styleContent + Glib::ustring("\n.measure-DIM-lines") + Glib::ustring("\n{\nstroke:#000000;\nfill:none;\n}");
-        styleContent = styleContent + Glib::ustring("\n.measure-helper-lines") + Glib::ustring("\n{\nstroke:#000000;\nfill:none;\n}");
+        styleContent = styleContent + Glib::ustring("\n.measure-arrows") + Glib::ustring("\n{\n}");
+        styleContent = styleContent + Glib::ustring("\n.measure-labels") + Glib::ustring("\n{\nline-height:125%;\nletter-spacing:0;\nword-spacing:0;\ntext-align:center;\ntext-anchor:middle;\nstroke:none;\n}");
+        styleContent = styleContent + Glib::ustring("\n.measure-lines") + Glib::ustring("\n{\n}");
     }
 //    styleContent = styleContent + Glib::ustring("\n.") + Glib::ustring(lpeitem->getId()) + Glib::ustring("\n{}");
 //    styleContent = styleContent + Glib::ustring("\n.measure-labels.") + Glib::ustring(lpeitem->getId())  + Glib::ustring("\n{}\n");
