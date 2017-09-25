@@ -67,11 +67,6 @@ static void sp_repr_write_stream_element(Node *repr, Writer &out,
                                          gchar const *old_href_abs_base,
                                          gchar const *new_href_abs_base);
 
-#ifdef HAVE_LIBWMF
-static xmlDocPtr sp_wmf_convert (const char * file_name);
-static char * sp_wmf_image_name (void * context);
-#endif /* HAVE_LIBWMF */
-
 
 class XmlSource
 {
@@ -323,7 +318,7 @@ int XmlSource::close()
 }
 
 /**
- * Reads XML from a file, including WMF files, and returns the Document.
+ * Reads XML from a file, and returns the Document.
  * The default namespace can also be specified, if desired.
  */
 Document *sp_repr_read_file (const gchar * filename, const gchar *default_ns)
@@ -353,15 +348,6 @@ Document *sp_repr_read_file (const gchar * filename, const gchar *default_ns)
     g_return_val_if_fail( localFilename != NULL, NULL );
 
     Inkscape::IO::dump_fopen_call( filename, "N" );
-
-#ifdef HAVE_LIBWMF
-    if (strlen (localFilename) > 4) {
-        if ( (strcmp (localFilename + strlen (localFilename) - 4,".wmf") == 0)
-             || (strcmp (localFilename + strlen (localFilename) - 4,".WMF") == 0)) {
-            doc = sp_wmf_convert (localFilename);
-        }
-    }
-#endif // !HAVE_LIBWMF
 
     if ( !doc ) {
         XmlSource src;
