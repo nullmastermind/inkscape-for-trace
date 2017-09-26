@@ -755,6 +755,22 @@ std::set<ColorProfile::FilePlusHome> ColorProfile::getBaseProfileDirs() {
     sources.insert(FilePlusHome(path, true));
     g_free(path);
 
+    // search colord ICC store paths
+    // (see https://github.com/hughsie/colord/blob/fe10f76536bb27614ced04e0ff944dc6fb4625c0/lib/colord/cd-icc-store.c#L590)
+
+    // user store
+    path = g_build_filename(g_get_user_data_dir(), "icc", NULL);
+    sources.insert(FilePlusHome(path, true));
+    g_free(path);
+
+    path = g_build_filename(g_get_home_dir(), ".color", "icc", NULL);
+    sources.insert(FilePlusHome(path, true));
+    g_free(path);
+
+    // machine store
+    sources.insert(FilePlusHome("/var/lib/color/icc", false));
+    sources.insert(FilePlusHome("/var/lib/colord/icc", false));
+
     const gchar* const * dataDirs = g_get_system_data_dirs();
     for ( int i = 0; dataDirs[i]; i++ ) {
         gchar* path = g_build_filename(dataDirs[i], "color", "icc", NULL);
