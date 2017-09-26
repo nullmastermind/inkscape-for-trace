@@ -1787,7 +1787,7 @@ bool Layout::Calculator::calculate()
         // Vertical text, CJK
         pango_context_set_base_gravity(_pango_context, PANGO_GRAVITY_EAST);
 
-        if( _flow._blockTextOrientation() != SP_CSS_TEXT_ORIENTATION_MIXED ) {
+        if( _flow._blockTextOrientation() == SP_CSS_TEXT_ORIENTATION_UPRIGHT ) {
             pango_context_set_gravity_hint(_pango_context, PANGO_GRAVITY_HINT_STRONG);
         }
     } else {
