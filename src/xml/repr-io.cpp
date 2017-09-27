@@ -323,14 +323,13 @@ int XmlSource::close()
  */
 Document *sp_repr_read_file (const gchar * filename, const gchar *default_ns)
 {
-    // g_warning( "Reading file: %s", filename );
     xmlDocPtr doc = 0;
     Document * rdoc = 0;
 
     xmlSubstituteEntitiesDefault(1);
 
-    g_return_val_if_fail (filename != NULL, NULL);
-    if (!Inkscape::IO::file_test( filename, G_FILE_TEST_EXISTS )) {
+    g_return_val_if_fail(filename != NULL, NULL);
+    if (!Inkscape::IO::file_test(filename, G_FILE_TEST_EXISTS)) {
         g_warning("Can't open file: %s (doesn't exist)", filename);
         return NULL;
     }
@@ -343,36 +342,32 @@ Document *sp_repr_read_file (const gchar * filename, const gchar *default_ns)
     gsize bytesWritten = 0;
     GError* error = NULL;
     // TODO: need to replace with our own fopen and reading
-    gchar* localFilename = g_filename_from_utf8 ( filename,
-                                 -1,  &bytesRead,  &bytesWritten, &error);
-    g_return_val_if_fail( localFilename != NULL, NULL );
+    gchar* localFilename = g_filename_from_utf8(filename, -1, &bytesRead, &bytesWritten, &error);
+    g_return_val_if_fail(localFilename != NULL, NULL);
 
-    Inkscape::IO::dump_fopen_call( filename, "N" );
+    Inkscape::IO::dump_fopen_call(filename, "N");
 
-    if ( !doc ) {
-        XmlSource src;
+    XmlSource src;
 
-        if ( (src.setFile(filename) == 0) ) {
+    if (src.setFile(filename) == 0) {
+        doc = src.readXml();
+        rdoc = sp_repr_do_read(doc, default_ns);
+        // For some reason, failed ns loading results in this
+        // We try a system check version of load with NOENT for adobe
+        if (rdoc && strcmp(rdoc->root()->name(), "ns:svg") == 0) {
+            xmlFreeDoc(doc);
+            src.setFile(filename, true);
             doc = src.readXml();
-            rdoc = sp_repr_do_read( doc, default_ns );
-            // For some reason, failed ns loading results in this
-            // We try a system check version of load with NOENT for adobe
-            if(rdoc && strcmp(rdoc->root()->name(), "ns:svg") == 0) {
-                xmlFreeDoc( doc );
-                src.setFile(filename, true);
-                doc = src.readXml();
-                rdoc = sp_repr_do_read( doc, default_ns );
-            }
+            rdoc = sp_repr_do_read(doc, default_ns);
         }
     }
 
-
-    if ( doc ) {
-        xmlFreeDoc( doc );
+    if (doc) {
+        xmlFreeDoc(doc);
     }
 
-    if ( localFilename ) {
-        g_free( localFilename );
+    if (localFilename) {
+        g_free(localFilename);
     }
 
     return rdoc;
