@@ -71,10 +71,20 @@ FILE *Inkscape::IO::fopen_utf8name( char const *utf8name, char const *mode )
     gchar *filename = g_filename_from_utf8( utf8name, -1, NULL, NULL, NULL );
     if ( filename )
     {
+        // ensure we open the file in binary mode (not needed in POSIX but doesn't hurt either)
         Glib::ustring how( mode );
         if ( how.find("b") == Glib::ustring::npos )
         {
-            how.append("b"); // not needed in POSIX but doesn't hurt either
+            how.append("b");
+        }
+        // when opening a file for writing: create parent directories if they don't exist already
+        if ( how.find("w") != Glib::ustring::npos )
+        {
+            gchar *dirname = g_path_get_dirname(utf8name);
+            if (g_mkdir_with_parents(dirname, 0777)) {
+                g_warning("Could not create directory '%s'", dirname);
+            }
+            g_free(dirname);
         }
         fp = g_fopen(filename, how.c_str());
         g_free(filename);
