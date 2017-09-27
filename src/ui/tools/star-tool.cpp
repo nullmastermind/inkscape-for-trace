@@ -389,14 +389,12 @@ void StarTool::drag(Geom::Point p, guint state)
 
     /* status text */
     Inkscape::Util::Quantity q = Inkscape::Util::Quantity(r1, "px");
-    GString *rads = g_string_new(q.string(desktop->namedview->display_units).c_str());
+    Glib::ustring rads = q.string(desktop->namedview->display_units);
     this->message_context->setF(Inkscape::IMMEDIATE_MESSAGE,
                                ( this->isflatsided?
                                  _("<b>Polygon</b>: radius %s, angle %5g&#176;; with <b>Ctrl</b> to snap angle")
                                  : _("<b>Star</b>: radius %s, angle %5g&#176;; with <b>Ctrl</b> to snap angle") ),
-                               rads->str, sp_round((arg1) * 180 / M_PI, 0.0001));
-
-    g_string_free(rads, FALSE);
+                               rads.c_str(), sp_round((arg1) * 180 / M_PI, 0.0001));
 }
 
 void StarTool::finishItem() {

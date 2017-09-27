@@ -385,8 +385,8 @@ void ArcTool::drag(Geom::Point pt, guint state) {
 
     Inkscape::Util::Quantity rdimx_q = Inkscape::Util::Quantity(rdimx, "px");
     Inkscape::Util::Quantity rdimy_q = Inkscape::Util::Quantity(rdimy, "px");
-    GString *xs = g_string_new(rdimx_q.string(desktop->namedview->display_units).c_str());
-    GString *ys = g_string_new(rdimy_q.string(desktop->namedview->display_units).c_str());
+    Glib::ustring xs = rdimx_q.string(desktop->namedview->display_units);
+    Glib::ustring ys = rdimy_q.string(desktop->namedview->display_units);
 
     if (state & GDK_CONTROL_MASK) {
         int ratio_x, ratio_y;
@@ -399,13 +399,10 @@ void ArcTool::drag(Geom::Point pt, guint state) {
             ratio_y = (int) rint (rdimy / rdimx);
         }
 
-        this->message_context->setF(Inkscape::IMMEDIATE_MESSAGE, _("<b>Ellipse</b>: %s &#215; %s (constrained to ratio %d:%d); with <b>Shift</b> to draw around the starting point"), xs->str, ys->str, ratio_x, ratio_y);
+        this->message_context->setF(Inkscape::IMMEDIATE_MESSAGE, _("<b>Ellipse</b>: %s &#215; %s (constrained to ratio %d:%d); with <b>Shift</b> to draw around the starting point"), xs.c_str(), ys.c_str(), ratio_x, ratio_y);
     } else {
-        this->message_context->setF(Inkscape::IMMEDIATE_MESSAGE, _("<b>Ellipse</b>: %s &#215; %s; with <b>Ctrl</b> to make square or integer-ratio ellipse; with <b>Shift</b> to draw around the starting point"), xs->str, ys->str);
+        this->message_context->setF(Inkscape::IMMEDIATE_MESSAGE, _("<b>Ellipse</b>: %s &#215; %s; with <b>Ctrl</b> to make square or integer-ratio ellipse; with <b>Shift</b> to draw around the starting point"), xs.c_str(), ys.c_str());
     }
-
-    g_string_free(xs, FALSE);
-    g_string_free(ys, FALSE);
 }
 
 void ArcTool::finishItem() {

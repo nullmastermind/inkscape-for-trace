@@ -210,29 +210,28 @@ void Box3DSide::set_shape() {
     c->unref();
 }
 
-gchar *box3d_side_axes_string(Box3DSide *side)
+Glib::ustring box3d_side_axes_string(Box3DSide *side)
 {
-    GString *pstring = g_string_new("");
-    g_string_printf (pstring, "%s", Box3D::string_from_axes ((Box3D::Axis) (side->dir1 ^ side->dir2)));
+    Glib::ustring result(Box3D::string_from_axes((Box3D::Axis) (side->dir1 ^ side->dir2)));
 
     switch ((Box3D::Axis) (side->dir1 ^ side->dir2)) {
         case Box3D::XY:
-            g_string_append_printf (pstring, (side->front_or_rear == Box3D::FRONT) ? "front" : "rear");
+            result += ((side->front_or_rear == Box3D::FRONT) ? "front" : "rear");
             break;
 
         case Box3D::XZ:
-            g_string_append_printf (pstring, (side->front_or_rear == Box3D::FRONT) ? "top" : "bottom");
+            result += ((side->front_or_rear == Box3D::FRONT) ? "top" : "bottom");
             break;
 
         case Box3D::YZ:
-            g_string_append_printf (pstring, (side->front_or_rear == Box3D::FRONT) ? "right" : "left");
+            result += ((side->front_or_rear == Box3D::FRONT) ? "right" : "left");
             break;
 
         default:
             break;
     }
 
-    return pstring->str;
+    return result;
 }
 
 static void

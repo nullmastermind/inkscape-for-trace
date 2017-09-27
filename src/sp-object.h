@@ -803,7 +803,7 @@ private:
      * content except the tags).
      * Must not be used on anything except elements.
      */
-    char * textualContent() const;
+    Glib::ustring textualContent() const;
 
     /* Real handlers of repr signals */
 

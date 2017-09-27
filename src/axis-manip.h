@@ -15,6 +15,7 @@
 #include <cassert>
 #include <string>
 #include <utility>
+#include <glibmm/ustring.h>
 
 namespace Proj {
 
@@ -238,7 +239,7 @@ inline Box3D::Axis get_perpendicular_axis_direction (Box3D::Axis dirs) {
     return Box3D::NONE;
 }
 
-char * string_from_axes (Box3D::Axis axis);
+Glib::ustring string_from_axes (Box3D::Axis axis);
 std::pair <Axis, Axis> get_remaining_axes (Axis axis);
 
 } // namespace Box3D
