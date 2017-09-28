@@ -70,10 +70,10 @@ $ARCH-libyaml
 for arch in $(eval echo $ARCH); do
   case ${arch} in
     mingw-w64-i686)
-      pacman -U --needed --noconfirm https://downloads.sourceforge.net/project/msys2/REPOS/MINGW/i686/mingw-w64-i686-imagemagick-6.9.3.7-1-any.pkg.tar.xz
+      pacman -U --needed --noconfirm http://repo.msys2.org/mingw/i686/mingw-w64-i686-imagemagick-6.9.3.7-1-any.pkg.tar.xz
       ;;
     mingw-w64-x86_64)
-      pacman -U --needed --noconfirm https://downloads.sourceforge.net/project/msys2/REPOS/MINGW/x86_64/mingw-w64-x86_64-imagemagick-6.9.3.7-1-any.pkg.tar.xz
+      pacman -U --needed --noconfirm http://repo.msys2.org/mingw/x86_64/mingw-w64-x86_64-imagemagick-6.9.3.7-1-any.pkg.tar.xz
       ;;
   esac
 done
