@@ -51,7 +51,6 @@
 #include "sp-namedview.h"
 #include "sp-root.h"
 #include "helper/action.h"
-#include "helper/gnome-utils.h"
 #include "helper/window.h"
 #include "io/sys.h"
 #include "ui/dialog-events.h"
@@ -1339,12 +1338,13 @@ static void sp_ui_drag_leave( GtkWidget */*widget*/,
 static void
 sp_ui_import_files(gchar *buffer)
 {
-    GList *list = gnome_uri_list_extract_filenames(buffer);
-    if (!list)
-        return;
-    g_list_foreach(list, sp_ui_import_one_file_with_check, NULL);
-    g_list_foreach(list, (GFunc) g_free, NULL);
-    g_list_free(list);
+    gchar** l = g_uri_list_extract_uris(buffer);
+    for (int i = 0; i< g_strv_length (l); i++) {
+        gchar *f = g_filename_from_uri (l[i], NULL, NULL);
+        sp_ui_import_one_file_with_check(f, NULL);
+        g_free(f);
+    }
+    g_strfreev(l);
 }
 
 static void
