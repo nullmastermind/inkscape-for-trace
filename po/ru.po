@@ -15,14 +15,14 @@ msgstr ""
 "Project-Id-Version: Inkscape 0.92\n"
 "Report-Msgid-Bugs-To: inkscape-devel@lists.sourceforge.net\n"
 "POT-Creation-Date: 2017-07-30 23:09+0200\n"
-"PO-Revision-Date: 2017-07-31 01:44+0300\n"
-"Last-Translator: Alexandre Prokoudine <alexandre.prokoudine@gmail.com>\n"
+"PO-Revision-Date: 2017-09-29 02:34+0500\n"
+"Last-Translator: ashed <craysy@gmail.com>\n"
 "Language-Team: русский <>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Gtranslator 2.91.7\n"
+"X-Generator: Poedit 1.5.4\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 
@@ -704,7 +704,8 @@ msgstr "Чёрная дыра"
 #: ../share/filters/filters.svg.h:279 ../share/filters/filters.svg.h:835
 #: ../share/filters/filters.svg.h:839 ../share/filters/filters.svg.h:843
 #: ../src/extension/internal/filter/morphology.h:76
-#: ../src/extension/internal/filter/morphology.h:203 ../src/filter-enums.cpp:32
+#: ../src/extension/internal/filter/morphology.h:203
+#: ../src/filter-enums.cpp:32
 msgid "Morphology"
 msgstr "Морфология"
 
@@ -4521,12 +4522,12 @@ msgstr "<b>Направляющая</b>: %s"
 #: ../src/desktop.cpp:766
 #, fuzzy
 msgid "No previous transform."
-msgstr "Нет предыдущего масштаба."
+msgstr "Нет предыдущей трансформации."
 
 #: ../src/desktop.cpp:789
 #, fuzzy
 msgid "No next transform."
-msgstr "Нет следующего масштаба."
+msgstr "Нет следующей трансформации."
 
 #: ../src/display/canvas-axonomgrid.cpp:325 ../src/display/canvas-grid.cpp:683
 msgid "Grid _units:"
@@ -4685,7 +4686,7 @@ msgstr "Показывать точки в_место линий"
 
 #: ../src/display/canvas-grid.cpp:727
 msgid "If set, displays dots at gridpoints instead of gridlines"
-msgstr "Отображается ли сетка лишь точками пересечения ее линий"
+msgstr "Отображается ли сетка лишь точками пересечения её линий"
 
 #. TRANSLATORS: undefined target for snapping
 #: ../src/display/snap-indicator.cpp:72 ../src/display/snap-indicator.cpp:75
@@ -5086,7 +5087,8 @@ msgstr "Адаптивная постеризация"
 #: ../src/ui/widget/page-sizer.cpp:232
 #: ../src/widgets/calligraphy-toolbar.cpp:430
 #: ../src/widgets/eraser-toolbar.cpp:187 ../src/widgets/spray-toolbar.cpp:297
-#: ../src/widgets/tweak-toolbar.cpp:128 ../share/extensions/foldablebox.inx.h:2
+#: ../src/widgets/tweak-toolbar.cpp:128
+#: ../share/extensions/foldablebox.inx.h:2
 msgid "Width:"
 msgstr "Ширина:"
 
@@ -5902,7 +5904,8 @@ msgstr "Отменить"
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:88
 #: ../src/extension/internal/vsd-input.cpp:151
 #: ../src/extension/prefdialog.cpp:75 ../src/ui/dialog/guides.cpp:159
-#: ../src/ui/dialog/pixelartdialog.cpp:298 ../src/ui/dialog/tracedialog.cpp:820
+#: ../src/ui/dialog/pixelartdialog.cpp:298
+#: ../src/ui/dialog/tracedialog.cpp:820
 msgid "_OK"
 msgstr "_ОК:"
 
@@ -6588,13 +6591,15 @@ msgid "Transparency type:"
 msgstr "Тип прозрачности:"
 
 #: ../src/extension/internal/filter/bumps.h:353
-#: ../src/extension/internal/filter/morphology.h:176 ../src/filter-enums.cpp:91
+#: ../src/extension/internal/filter/morphology.h:176
+#: ../src/filter-enums.cpp:91
 msgid "Atop"
 msgstr "Сверху (atop)"
 
 #: ../src/extension/internal/filter/bumps.h:354
 #: ../src/extension/internal/filter/distort.h:70
-#: ../src/extension/internal/filter/morphology.h:174 ../src/filter-enums.cpp:89
+#: ../src/extension/internal/filter/morphology.h:174
+#: ../src/filter-enums.cpp:89
 msgid "In"
 msgstr "Вход"
 
@@ -7114,7 +7119,8 @@ msgid "Felt Feather"
 msgstr "Растушёвка"
 
 #: ../src/extension/internal/filter/distort.h:71
-#: ../src/extension/internal/filter/morphology.h:175 ../src/filter-enums.cpp:90
+#: ../src/extension/internal/filter/morphology.h:175
+#: ../src/filter-enums.cpp:90
 msgid "Out"
 msgstr "Выход"
 
@@ -7305,11 +7311,13 @@ msgstr "Скрыть изображение"
 msgid "Composite type:"
 msgstr "Составной тип:"
 
-#: ../src/extension/internal/filter/morphology.h:173 ../src/filter-enums.cpp:88
+#: ../src/extension/internal/filter/morphology.h:173
+#: ../src/filter-enums.cpp:88
 msgid "Over"
 msgstr "Над"
 
-#: ../src/extension/internal/filter/morphology.h:177 ../src/filter-enums.cpp:92
+#: ../src/extension/internal/filter/morphology.h:177
+#: ../src/filter-enums.cpp:92
 msgid "XOR"
 msgstr "Исключающее ИЛИ (XOR)"
 
@@ -7383,8 +7391,8 @@ msgstr "Заливка шумом"
 #: ../src/ui/dialog/tracedialog.cpp:745
 #: ../share/extensions/color_HSL_adjust.inx.h:2
 #: ../share/extensions/color_custom.inx.h:2
-#: ../share/extensions/color_randomize.inx.h:2 ../share/extensions/dots.inx.h:2
-#: ../share/extensions/dxf_input.inx.h:2
+#: ../share/extensions/color_randomize.inx.h:2
+#: ../share/extensions/dots.inx.h:2 ../share/extensions/dxf_input.inx.h:2
 #: ../share/extensions/dxf_outlines.inx.h:2
 #: ../share/extensions/gcodetools_area.inx.h:45
 #: ../share/extensions/gcodetools_engraving.inx.h:15
@@ -7985,13 +7993,15 @@ msgstr "Смещение по вертикали:"
 #: ../src/extension/internal/grid.cpp:209
 #: ../src/ui/dialog/inkscape-preferences.cpp:1512
 #: ../share/extensions/draw_from_triangle.inx.h:58
-#: ../share/extensions/eqtexsvg.inx.h:4 ../share/extensions/foldablebox.inx.h:9
-#: ../share/extensions/frame.inx.h:2 ../share/extensions/funcplot.inx.h:38
+#: ../share/extensions/eqtexsvg.inx.h:4
+#: ../share/extensions/foldablebox.inx.h:9 ../share/extensions/frame.inx.h:2
+#: ../share/extensions/funcplot.inx.h:38
 #: ../share/extensions/grid_cartesian.inx.h:23
 #: ../share/extensions/grid_isometric.inx.h:11
 #: ../share/extensions/grid_polar.inx.h:22
 #: ../share/extensions/guides_creator.inx.h:25
-#: ../share/extensions/hershey.inx.h:52 ../share/extensions/layout_nup.inx.h:35
+#: ../share/extensions/hershey.inx.h:52
+#: ../share/extensions/layout_nup.inx.h:35
 #: ../share/extensions/lindenmayer.inx.h:34
 #: ../share/extensions/nicechart.inx.h:45
 #: ../share/extensions/param_curves.inx.h:30
@@ -8187,7 +8197,7 @@ msgstr "Импорт PDF"
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:948
 #, fuzzy
 msgid "Portable Document Format (*.pdf)"
-msgstr "Adobe Portable Document Format"
+msgstr "Portable Document Format (*.pdf)"
 
 #: ../src/extension/internal/pdfinput/pdf-input.cpp:949
 #, fuzzy
@@ -8396,35 +8406,43 @@ msgstr "Невозможно определить формат файла. Фа�
 #: ../src/file-update.cpp:320
 #, fuzzy
 msgid "Convert legacy Inkscape file"
-msgstr "Преобразовать в инверсное скругление"
+msgstr "Преобразовать унаследованный Inkscape файл"
 
 #: ../src/file-update.cpp:325
 msgid ""
 "was created in an older version of Inkscape (90 DPI) and we need to make it "
 "compatible with newer versions (96 DPI). Tell us about this file:\n"
 msgstr ""
+"созданный в старой версии Inkscape (90 DPI) и сделать его совместимым с "
+"новыми версиями (96 DPI). Сообщите нам об этом файле:\n"
 
 #: ../src/file-update.cpp:333
 msgid ""
 "This file contains digital artwork for screen display. <b>(Choose if "
 "unsure.)</b>"
 msgstr ""
+"Этот файл содержит изображение для дисплея. <b>(Выберите если не уверены.)</"
+"b>"
 
 #: ../src/file-update.cpp:336
 msgid "This file is intended for physical output, such as paper or 3D prints."
-msgstr ""
+msgstr "Этот файл предназначен для физического вывода на бумагу или 3D-печати."
 
 #: ../src/file-update.cpp:338
 msgid ""
 "The appearance of elements such as clips, masks, filters, and clones\n"
 "is most important. <b>(Choose if unsure.)</b>"
 msgstr ""
+"Видимость элементов, таких как клипы, маски, фильтры и клоны\n"
+"наиболее важно. <b>(Выберите если не уверены.)</b>"
 
 #: ../src/file-update.cpp:342
 msgid ""
 "The accuracy of the physical unit size and position values of objects\n"
 "in the file is most important. (Experimental.)"
 msgstr ""
+"Точность физического размера и значений позиции объектов\n"
+"в файле наиболее важно. (Экспериментально.)"
 
 #: ../src/file-update.cpp:344
 #, fuzzy
@@ -8433,7 +8451,7 @@ msgstr "Создать бэкап в той же папке."
 
 #: ../src/file-update.cpp:345
 msgid "More details..."
-msgstr ""
+msgstr "Детальнее..."
 
 #: ../src/file-update.cpp:348
 msgid ""
@@ -8457,6 +8475,25 @@ msgid ""
 "More information about this change are available in the <a href='https://"
 "inkscape.org/en/learn/faq#todo-todo-todo'>Inkscape FAQ</a></small>"
 msgstr ""
+"<small>Мы обновили Inkscape для соответствия CSS стандарту 96 DPI для лучшей "
+"браузерной совместимости; ранее мы использовали 90 DPI. Цифровое изображение "
+"для экрана будет преобразовано в 96 DPI без масштабирования и не должно "
+"подвергаться воздействию. Художественное произведение, нарисованное на 90 "
+"DPI для определенного физического размера, будет слишком маленьким, если "
+"преобразовать его в 96 DPI без какого-либо масштабирования. Существует два "
+"метода масштабирования:\n"
+"\n"
+"<b> Масштабирование всего документа: </b> Метод с наименьшей погрешностью, "
+"сохраняет внешний вид графики, включая фильтры и положение масок и т. д. "
+"Масштабы графики относительно размера документа могут не быть точными.\n"
+"\n"
+"<b>Масштабирование отдельных элементов в графике:</b> Этот метод менее "
+"надёжен и может привести к изменению внешнего вида, но лучше для физического "
+"вывода, зависящего от точных размеров и позиций (например, для трехмерной "
+"печати).\n"
+"\n"
+"Более подробную информацию об этом изменении можно найти в <a href='https://"
+"inkscape.org/en/learn/faq#todo-todo-todo'>FAQ Inkscape</a></small>"
 
 #: ../src/file-update.cpp:391
 msgid "OK"
@@ -8707,7 +8744,8 @@ msgstr "Вращение тона"
 msgid "Luminance to Alpha"
 msgstr "Освещенность в альфа"
 
-#: ../src/filter-enums.cpp:87 ../share/extensions/jessyInk_mouseHandler.inx.h:3
+#: ../src/filter-enums.cpp:87
+#: ../share/extensions/jessyInk_mouseHandler.inx.h:3
 #: ../share/extensions/jessyInk_transitions.inx.h:7
 #: ../share/extensions/measure.inx.h:20 ../share/extensions/nicechart.inx.h:33
 msgid "Default"
@@ -9019,7 +9057,7 @@ msgstr "Коэффициент масштаба"
 
 #: ../src/inkview.cpp:105
 msgid "FILES/FOLDERS…"
-msgstr ""
+msgstr "ФАЙЛЫ/ПАПКИ..."
 
 #: ../src/inkview.cpp:120
 #, fuzzy
@@ -9041,16 +9079,20 @@ msgid ""
 "Quickly browse through a collection of .svg(z) files\n"
 "or show them as a slide show."
 msgstr ""
+"Быстрый просмотр коллекции файлов .svg(z)\n"
+"или показ их как слайд-шоу."
 
 #: ../src/inkview.cpp:180
 msgid ""
 "Example:\n"
 "  inkview -t 3 file1.svg file2.svgz series*.svg more_files"
 msgstr ""
+"Пример:\n"
+"  inkview -t 3 file1.svg file2.svgz series*.svg more_files"
 
 #: ../src/inkview.cpp:213
 msgid "No valid files to load."
-msgstr ""
+msgstr "Нет валидных файлов для загрузки."
 
 #: ../src/knot.cpp:343
 msgid "Node or handle drag canceled."
@@ -9228,7 +9270,7 @@ msgstr "Булева операция"
 
 #: ../src/live_effects/effect.cpp:130
 msgid "Embrodery stitch"
-msgstr ""
+msgstr "Вышивальная строчка"
 
 #: ../src/live_effects/effect.cpp:132
 msgid "doEffect stack test"
@@ -9333,7 +9375,7 @@ msgstr "Снять"
 
 #: ../src/live_effects/effect.cpp:852
 msgid "</b>: Set default parameters"
-msgstr ""
+msgstr "</b>: Установить умолчальные параметры"
 
 #: ../src/live_effects/effect.cpp:952
 #, c-format
@@ -9522,11 +9564,11 @@ msgstr "Булева операция"
 
 #: ../src/live_effects/lpe-bool.cpp:73
 msgid "Swap operands:"
-msgstr ""
+msgstr "Обменять операнды:"
 
 #: ../src/live_effects/lpe-bool.cpp:73
 msgid "Swap operands (useful e.g. for difference)"
-msgstr ""
+msgstr "Обменять операнды (полезно, например, для разницы)"
 
 #: ../src/live_effects/lpe-bool.cpp:74
 #, fuzzy
@@ -9538,6 +9580,8 @@ msgid ""
 "For cut operations: remove inner (non-contour) lines of cutting path to "
 "avoid invisible extra points"
 msgstr ""
+"Для операций обрезки: удалить внутренние (неконтурные) линии пути резания, "
+"чтобы избежать невидимых дополнительных точек"
 
 #: ../src/live_effects/lpe-bool.cpp:75
 #, fuzzy
@@ -9546,15 +9590,15 @@ msgstr "Все типы"
 
 #: ../src/live_effects/lpe-bool.cpp:75
 msgid "Fill type (winding mode) for this path"
-msgstr ""
+msgstr "Тип заполнения (режим намотки) для этого контура"
 
 #: ../src/live_effects/lpe-bool.cpp:76
 msgid "Fill type operand:"
-msgstr ""
+msgstr "Тип заполнения операнда:"
 
 #: ../src/live_effects/lpe-bool.cpp:76
 msgid "Fill type (winding mode) for operand path"
-msgstr ""
+msgstr "Тип заполнения (режим намотки) для операндного контура"
 
 #: ../src/live_effects/lpe-bounding-box.cpp:20
 #: ../src/live_effects/lpe-fill-between-many.cpp:22
@@ -9669,7 +9713,7 @@ msgstr "Инвертировать скругление"
 
 #: ../src/live_effects/lpe-clone-original.cpp:26
 msgid "Use LPE item as origin"
-msgstr ""
+msgstr "Исп-ть элемент LPE как источник"
 
 #: ../src/live_effects/lpe-clone-original.cpp:27
 msgid "Clone shape -d-"
@@ -9827,7 +9871,7 @@ msgstr "Масштабирование элементов"
 #: ../src/live_effects/lpe-copy_rotate.cpp:67
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:58
 msgid "Split elements, this allow gradients and other paints."
-msgstr ""
+msgstr "Разделять элементы, это разрешает градиенты и другие краски."
 
 #: ../src/live_effects/lpe-copy_rotate.cpp:335
 msgid "Reset styles"
@@ -9955,6 +9999,7 @@ msgstr ""
 msgid "traveling salesman 4-opt (seconds)"
 msgstr ""
 
+# maybe mistyping (miutes)
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:37
 msgid "traveling salesman 5-opt (miutes)"
 msgstr ""
@@ -9986,7 +10031,7 @@ msgstr "Тип ориентации"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:55
 msgid "Method used to order sub paths"
-msgstr ""
+msgstr "Метод для упорядочения субконтуров"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:56
 #, fuzzy
@@ -9995,7 +10040,7 @@ msgstr "Длина линии соединения"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:56
 msgid "Method to connect end points of sub paths"
-msgstr ""
+msgstr "Метод соединения конечных точек субконтуров"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:57
 #, fuzzy
@@ -10004,7 +10049,7 @@ msgstr "Длина контура"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:57
 msgid "If not 0, linearize path with given step length"
-msgstr ""
+msgstr "Если не 0, линеаризовать путь с заданной длиной шага"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:58
 #, fuzzy
@@ -10013,7 +10058,7 @@ msgstr "Макс. длина сегмента:"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:58
 msgid "Combine steps shorter than this [%]"
-msgstr ""
+msgstr "Объединить шаги короче [%]"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:59
 #, fuzzy
@@ -10022,7 +10067,7 @@ msgstr "Сшивающий контур"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:59
 msgid "Select between different stitch patterns"
-msgstr ""
+msgstr "Выбор между разными типами застрочки"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:60
 #, fuzzy
@@ -10033,18 +10078,20 @@ msgstr "Показать точки"
 msgid ""
 "Show stitches as small gaps (just for inspection - don't use for output)"
 msgstr ""
+"Показать строчки как небольшие промежутки (только для проверки - не для "
+"вывода)"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:61
 msgid "Show stitch gap"
-msgstr ""
+msgstr "Показать зазор между стежками"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:61
 msgid "Gap between stitches when showing stitches"
-msgstr ""
+msgstr "Разрыв между строчками при показе стежков"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:62
 msgid "Jump if longer"
-msgstr ""
+msgstr "Прыжок, если длиннее"
 
 #: ../src/live_effects/lpe-embrodery-stitch.cpp:62
 #, fuzzy
@@ -10178,7 +10225,7 @@ msgstr "Единица измерения"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:38
 msgid "Methods to calculate the fillet or chamfer"
-msgstr ""
+msgstr "Методы расчета желобка или фаски"
 
 #: ../src/live_effects/lpe-fillet-chamfer.cpp:40
 #, fuzzy
@@ -10982,7 +11029,7 @@ msgstr "Режим перемещения симметрии"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:54
 msgid "Gap on split"
-msgstr ""
+msgstr "Промежуток при разделении"
 
 #: ../src/live_effects/lpe-mirror_symmetry.cpp:55
 msgid "Discard original path"
@@ -11581,7 +11628,8 @@ msgstr "_Расстояние между метками:"
 msgid "Distance between successive ruler marks"
 msgstr "Расстояние между соседними метками линейки"
 
-#: ../src/live_effects/lpe-ruler.cpp:39 ../share/extensions/foldablebox.inx.h:7
+#: ../src/live_effects/lpe-ruler.cpp:39
+#: ../share/extensions/foldablebox.inx.h:7
 #: ../share/extensions/interp_att_g.inx.h:9
 #: ../share/extensions/layout_nup.inx.h:3
 #: ../share/extensions/printing_marks.inx.h:11
@@ -12075,7 +12123,8 @@ msgstr "Связать с контуром"
 
 #: ../src/live_effects/parameter/originalpatharray.cpp:81
 #: ../src/ui/dialog/inkscape-preferences.cpp:1546
-#: ../src/ui/widget/page-sizer.cpp:268 ../src/widgets/gradient-selector.cpp:140
+#: ../src/ui/widget/page-sizer.cpp:268
+#: ../src/widgets/gradient-selector.cpp:140
 #: ../src/widgets/sp-xmlview-attr-list.cpp:45
 msgid "Name"
 msgstr "Имя"
@@ -12566,11 +12615,11 @@ msgstr "Запустить Inkscape в интерактивном командн
 
 #: ../src/main.cpp:541
 msgid "Do not fix legacy (pre-0.92) files' text baseline spacing on opening."
-msgstr ""
+msgstr "Не править интерлиньяж унаследованных файлов (pre-0.92) при открытии."
 
 #: ../src/main.cpp:546
 msgid "Method used to convert pre-.92 document dpi, if needed."
-msgstr ""
+msgstr "Метод преобразования dpi в пре-.92 документах."
 
 #: ../src/main.cpp:865 ../src/main.cpp:1259
 msgid ""
@@ -12933,7 +12982,8 @@ msgstr "<b>Ничего</b> не удалено."
 #: ../src/ui/tools/text-tool.cpp:959 ../src/widgets/eraser-toolbar.cpp:145
 #: ../src/widgets/gradient-toolbar.cpp:1182
 #: ../src/widgets/gradient-toolbar.cpp:1196
-#: ../src/widgets/gradient-toolbar.cpp:1210 ../src/widgets/node-toolbar.cpp:399
+#: ../src/widgets/gradient-toolbar.cpp:1210
+#: ../src/widgets/node-toolbar.cpp:399
 msgid "Delete"
 msgstr "Удаление"
 
@@ -13609,7 +13659,7 @@ msgstr "Нарезка макета"
 
 #: ../src/sp-ellipse.cpp:388 ../src/widgets/arc-toolbar.cpp:378
 msgid "Chord"
-msgstr ""
+msgstr "Хорда"
 
 #: ../src/sp-ellipse.cpp:391
 msgid "Arc"
@@ -13852,8 +13902,8 @@ msgstr "Условная группа"
 
 #: ../src/sp-text.cpp:349 ../src/verbs.cpp:342
 #: ../share/extensions/lorem_ipsum.inx.h:8
-#: ../share/extensions/replace_font.inx.h:11 ../share/extensions/split.inx.h:10
-#: ../share/extensions/text_braille.inx.h:2
+#: ../share/extensions/replace_font.inx.h:11
+#: ../share/extensions/split.inx.h:10 ../share/extensions/text_braille.inx.h:2
 #: ../share/extensions/text_extract.inx.h:14
 #: ../share/extensions/text_flipcase.inx.h:2
 #: ../share/extensions/text_lowercase.inx.h:2
@@ -15834,7 +15884,8 @@ msgstr "_Удалить"
 msgid "Remove selected grid."
 msgstr "Удалить выделенную сетку"
 
-#: ../src/ui/dialog/document-properties.cpp:146 ../src/widgets/toolbox.cpp:1398
+#: ../src/ui/dialog/document-properties.cpp:146
+#: ../src/widgets/toolbox.cpp:1398
 msgid "Guides"
 msgstr "Направляющие"
 
@@ -16309,7 +16360,8 @@ msgstr "Информация"
 #: ../share/extensions/jitternodes.inx.h:12
 #: ../share/extensions/layout_nup.inx.h:24
 #: ../share/extensions/lindenmayer.inx.h:13
-#: ../share/extensions/lorem_ipsum.inx.h:6 ../share/extensions/measure.inx.h:33
+#: ../share/extensions/lorem_ipsum.inx.h:6
+#: ../share/extensions/measure.inx.h:33
 #: ../share/extensions/pathalongpath.inx.h:16
 #: ../share/extensions/pathscatter.inx.h:18
 #: ../share/extensions/restack.inx.h:25 ../share/extensions/split.inx.h:8
@@ -21083,6 +21135,8 @@ msgid ""
 "Set the relative size of tiles used to render the canvas. The larger the "
 "value, the bigger the tile size."
 msgstr ""
+"Установить относительный размер плиток для рендеринга холста. Чем больше "
+"значение, тем больше размер плитки."
 
 #. blur quality
 #. filter quality
@@ -21567,7 +21621,8 @@ msgstr "X наклон"
 msgid "Y tilt"
 msgstr "Y наклон"
 
-#: ../src/ui/dialog/input.cpp:1442 ../src/ui/widget/color-wheel-selector.cpp:25
+#: ../src/ui/dialog/input.cpp:1442
+#: ../src/ui/widget/color-wheel-selector.cpp:25
 msgid "Wheel"
 msgstr "Колесо"
 
@@ -22364,7 +22419,8 @@ msgstr "Kopf-Lischinski алгоритм"
 msgid "Output"
 msgstr "Вывод"
 
-#: ../src/ui/dialog/pixelartdialog.cpp:290 ../src/ui/dialog/tracedialog.cpp:812
+#: ../src/ui/dialog/pixelartdialog.cpp:290
+#: ../src/ui/dialog/tracedialog.cpp:812
 msgid "Reset all settings to defaults"
 msgstr "Сбросить значения всех параметров до исходных"
 
@@ -22374,11 +22430,13 @@ msgstr "Сбросить значения всех параметров до и�
 msgid "_Stop"
 msgstr "_Остановить"
 
-#: ../src/ui/dialog/pixelartdialog.cpp:295 ../src/ui/dialog/tracedialog.cpp:817
+#: ../src/ui/dialog/pixelartdialog.cpp:295
+#: ../src/ui/dialog/tracedialog.cpp:817
 msgid "Abort a trace in progress"
 msgstr "Прервать векторизацию"
 
-#: ../src/ui/dialog/pixelartdialog.cpp:299 ../src/ui/dialog/tracedialog.cpp:821
+#: ../src/ui/dialog/pixelartdialog.cpp:299
+#: ../src/ui/dialog/tracedialog.cpp:821
 msgid "Execute the trace"
 msgstr "Векторизовать"
 
@@ -22623,7 +22681,7 @@ msgstr "Добавить"
 
 #: ../src/ui/dialog/styledialog.cpp:888
 msgid "Invalid entry: Not an id (#), class (.), or element CSS selector."
-msgstr ""
+msgstr "Неверная запись:Не id (#), class (.), или элемент CSS селектора."
 
 #: ../src/ui/dialog/styledialog.cpp:1496
 #, fuzzy
@@ -22813,7 +22871,8 @@ msgstr "шрифт"
 msgid "Add font"
 msgstr "Добавить шрифт"
 
-#: ../src/ui/dialog/svg-fonts-dialog.cpp:1004 ../src/ui/dialog/text-edit.cpp:60
+#: ../src/ui/dialog/svg-fonts-dialog.cpp:1004
+#: ../src/ui/dialog/text-edit.cpp:60
 msgid "_Font"
 msgstr "_Шрифт"
 
@@ -22839,7 +22898,8 @@ msgid "Preview Text:"
 msgstr "Текст:"
 
 #: ../src/ui/dialog/swatches.cpp:195 ../src/ui/tools/gradient-tool.cpp:359
-#: ../src/ui/tools/gradient-tool.cpp:457 ../src/widgets/gradient-vector.cpp:765
+#: ../src/ui/tools/gradient-tool.cpp:457
+#: ../src/widgets/gradient-vector.cpp:765
 msgid "Add gradient stop"
 msgstr "Добавка опорной точки в градиент"
 
@@ -24088,7 +24148,8 @@ msgid "Rotate handle"
 msgstr "Рычаг вращения"
 
 #. We need to call MPM's method because it could have been our last node
-#: ../src/ui/tool/path-manipulator.cpp:1537 ../src/widgets/node-toolbar.cpp:395
+#: ../src/ui/tool/path-manipulator.cpp:1537
+#: ../src/widgets/node-toolbar.cpp:395
 msgid "Delete node"
 msgstr "Удалить узел"
 
@@ -28567,7 +28628,7 @@ msgstr "Вращение объектов"
 
 #: ../src/verbs.cpp:3016
 msgid "Reset canvas rotation to zero"
-msgstr ""
+msgstr "Сбросить поворот холста до нуля"
 
 #: ../src/verbs.cpp:3018
 #, fuzzy
@@ -28596,7 +28657,7 @@ msgstr "Зеркалирование сторон"
 
 #: ../src/verbs.cpp:3020
 msgid "Undo any flip"
-msgstr ""
+msgstr "Отменить любой флип"
 
 #. WHY ARE THE FOLLOWING ZoomVerbs???
 #. View
@@ -28795,7 +28856,7 @@ msgstr "Прототип…"
 
 #: ../src/verbs.cpp:3074
 msgid "Prototype Dialog"
-msgstr ""
+msgstr "Прототип диалог"
 
 #: ../src/verbs.cpp:3075
 msgid "P_references..."
@@ -29006,7 +29067,7 @@ msgstr "Стили CSS…"
 
 #: ../src/verbs.cpp:3131
 msgid "View Style Dialog"
-msgstr ""
+msgstr "Просмотр стиля диалог"
 
 #: ../src/verbs.cpp:3132
 #, fuzzy
@@ -29015,7 +29076,7 @@ msgstr "Диалоги"
 
 #: ../src/verbs.cpp:3133
 msgid "View Css Dialog"
-msgstr ""
+msgstr "Просмотр CSS диалог"
 
 #: ../src/verbs.cpp:3134
 msgid "Path E_ffects ..."
@@ -29825,7 +29886,7 @@ msgstr ""
 
 #: ../src/widgets/desktop-widget.cpp:600
 msgid "Rotation. (Also Ctrl+Shift+Scroll)"
-msgstr ""
+msgstr "Вращение. (Also Ctrl+Shift+Scroll)"
 
 #: ../src/widgets/desktop-widget.cpp:634
 msgid "Cursor coordinates"
@@ -30162,27 +30223,33 @@ msgstr "радиальный"
 msgid "Create radial (elliptic or circular) gradient"
 msgstr "Создать радиальный (эллиптический или круговой) градиент"
 
-#: ../src/widgets/gradient-toolbar.cpp:1045 ../src/widgets/mesh-toolbar.cpp:396
+#: ../src/widgets/gradient-toolbar.cpp:1045
+#: ../src/widgets/mesh-toolbar.cpp:396
 msgid "New:"
 msgstr "Создать:"
 
-#: ../src/widgets/gradient-toolbar.cpp:1068 ../src/widgets/mesh-toolbar.cpp:419
+#: ../src/widgets/gradient-toolbar.cpp:1068
+#: ../src/widgets/mesh-toolbar.cpp:419
 msgid "fill"
 msgstr "заливка"
 
-#: ../src/widgets/gradient-toolbar.cpp:1068 ../src/widgets/mesh-toolbar.cpp:419
+#: ../src/widgets/gradient-toolbar.cpp:1068
+#: ../src/widgets/mesh-toolbar.cpp:419
 msgid "Create gradient in the fill"
 msgstr "Создать градиент в заливке"
 
-#: ../src/widgets/gradient-toolbar.cpp:1072 ../src/widgets/mesh-toolbar.cpp:423
+#: ../src/widgets/gradient-toolbar.cpp:1072
+#: ../src/widgets/mesh-toolbar.cpp:423
 msgid "stroke"
 msgstr "обводка"
 
-#: ../src/widgets/gradient-toolbar.cpp:1072 ../src/widgets/mesh-toolbar.cpp:423
+#: ../src/widgets/gradient-toolbar.cpp:1072
+#: ../src/widgets/mesh-toolbar.cpp:423
 msgid "Create gradient in the stroke"
 msgstr "Создать градиент в обводке"
 
-#: ../src/widgets/gradient-toolbar.cpp:1075 ../src/widgets/mesh-toolbar.cpp:426
+#: ../src/widgets/gradient-toolbar.cpp:1075
+#: ../src/widgets/mesh-toolbar.cpp:426
 msgid "on:"
 msgstr "в:"
 
@@ -30281,7 +30348,8 @@ msgid "Link gradients to change all related gradients"
 msgstr ""
 "Связать градиенты, чтобы эта заливка обновлялась везде, где она использована"
 
-#: ../src/widgets/gradient-vector.cpp:289 ../src/widgets/paint-selector.cpp:917
+#: ../src/widgets/gradient-vector.cpp:289
+#: ../src/widgets/paint-selector.cpp:917
 #: ../src/widgets/paint-selector.cpp:1269
 #: ../src/widgets/stroke-marker-selector.cpp:149
 msgid "No document selected"
@@ -32155,7 +32223,7 @@ msgstr "Направление текста"
 #. Label
 #: ../src/widgets/text-toolbar.cpp:1963
 msgid "Text direction for normally horizontal text."
-msgstr ""
+msgstr "Направление текста для обычного горизонтального текста."
 
 #. Drop down menu
 #: ../src/widgets/text-toolbar.cpp:1989
@@ -33413,7 +33481,8 @@ msgid "Area is zero, cannot calculate Center of Mass"
 msgstr "Площадь равна нулю, невозможно вычислить центр масс"
 
 #: ../share/extensions/pathalongpath.py:207
-#: ../share/extensions/pathscatter.py:226 ../share/extensions/perspective.py:52
+#: ../share/extensions/pathscatter.py:226
+#: ../share/extensions/perspective.py:52
 msgid "This extension requires two selected paths."
 msgstr "Этому расширению нужно два контура в выделении."
 
@@ -33450,7 +33519,8 @@ msgstr ""
 "снова. На системах вроде Debian это делается командой sudo apt-get install "
 "python-numpy."
 
-#: ../share/extensions/perspective.py:60 ../share/extensions/summersnight.py:49
+#: ../share/extensions/perspective.py:60
+#: ../share/extensions/summersnight.py:49
 #, python-format
 msgid ""
 "The first selected object is of type '%s'.\n"
@@ -33459,12 +33529,14 @@ msgstr ""
 "Первый выбранный объект относится к типу «%s».\n"
 "Превратите его в контур командой «Контур > Оконтурить объект»."
 
-#: ../share/extensions/perspective.py:67 ../share/extensions/summersnight.py:57
+#: ../share/extensions/perspective.py:67
+#: ../share/extensions/summersnight.py:57
 msgid ""
 "This extension requires that the second selected path be four nodes long."
 msgstr "Второй выбранный контур должен содержать четыре узла."
 
-#: ../share/extensions/perspective.py:93 ../share/extensions/summersnight.py:90
+#: ../share/extensions/perspective.py:93
+#: ../share/extensions/summersnight.py:90
 msgid ""
 "The second selected object is a group, not a path.\n"
 "Try using the procedure Object->Ungroup."
@@ -33472,7 +33544,8 @@ msgstr ""
 "Второй выделенный объект является группой, а не контуром.\n"
 "Попробуйте выполнить команду »Объект > Разгруппировать»."
 
-#: ../share/extensions/perspective.py:95 ../share/extensions/summersnight.py:92
+#: ../share/extensions/perspective.py:95
+#: ../share/extensions/summersnight.py:92
 msgid ""
 "The second selected object is not a path.\n"
 "Try using the procedure Path->Object to Path."
@@ -33480,7 +33553,8 @@ msgstr ""
 "Второй выделенный объект не является контуром.\n"
 "Попробуйте выполнить команду »Контур > Оконтурить объект»."
 
-#: ../share/extensions/perspective.py:98 ../share/extensions/summersnight.py:95
+#: ../share/extensions/perspective.py:98
+#: ../share/extensions/summersnight.py:95
 msgid ""
 "The first selected object is not a path.\n"
 "Try using the procedure Path->Object to Path."
@@ -34867,7 +34941,7 @@ msgstr "Подразделения:"
 
 #: ../share/extensions/frame.inx.h:1
 msgid "Frame"
-msgstr ""
+msgstr "Рамка"
 
 #: ../share/extensions/funcplot.inx.h:1
 msgid "Function Plotter"
@@ -36401,12 +36475,14 @@ msgstr ""
 "на .plt, убедитесь, что установлен UniConvertor и откройте их снова."
 
 #: ../share/extensions/hpgl_input.inx.h:3
-#: ../share/extensions/hpgl_output.inx.h:4 ../share/extensions/plotter.inx.h:32
+#: ../share/extensions/hpgl_output.inx.h:4
+#: ../share/extensions/plotter.inx.h:32
 msgid "Resolution X (dpi):"
 msgstr "Разрешение по X (dpi)"
 
 #: ../share/extensions/hpgl_input.inx.h:4
-#: ../share/extensions/hpgl_output.inx.h:5 ../share/extensions/plotter.inx.h:33
+#: ../share/extensions/hpgl_output.inx.h:5
+#: ../share/extensions/plotter.inx.h:33
 msgid ""
 "The amount of steps the plotter moves if it moves for 1 inch on the X axis "
 "(Default: 1016.0)"
@@ -36415,12 +36491,14 @@ msgstr ""
 "оси Х (по умолчанию: 1016,0)"
 
 #: ../share/extensions/hpgl_input.inx.h:5
-#: ../share/extensions/hpgl_output.inx.h:6 ../share/extensions/plotter.inx.h:34
+#: ../share/extensions/hpgl_output.inx.h:6
+#: ../share/extensions/plotter.inx.h:34
 msgid "Resolution Y (dpi):"
 msgstr "Разрешение по Y (dpi):"
 
 #: ../share/extensions/hpgl_input.inx.h:6
-#: ../share/extensions/hpgl_output.inx.h:7 ../share/extensions/plotter.inx.h:35
+#: ../share/extensions/hpgl_output.inx.h:7
+#: ../share/extensions/plotter.inx.h:35
 msgid ""
 "The amount of steps the plotter moves if it moves for 1 inch on the Y axis "
 "(Default: 1016.0)"
@@ -36459,15 +36537,18 @@ msgstr ""
 "контуры. Используйте расширение плоттера (меню Extensions) для построения "
 "непосредственно через последовательный порт."
 
-#: ../share/extensions/hpgl_output.inx.h:3 ../share/extensions/plotter.inx.h:31
+#: ../share/extensions/hpgl_output.inx.h:3
+#: ../share/extensions/plotter.inx.h:31
 msgid "Plotter Settings "
 msgstr "Настройки плоттера"
 
-#: ../share/extensions/hpgl_output.inx.h:8 ../share/extensions/plotter.inx.h:36
+#: ../share/extensions/hpgl_output.inx.h:8
+#: ../share/extensions/plotter.inx.h:36
 msgid "Pen number:"
 msgstr "Номер ручки:"
 
-#: ../share/extensions/hpgl_output.inx.h:9 ../share/extensions/plotter.inx.h:37
+#: ../share/extensions/hpgl_output.inx.h:9
+#: ../share/extensions/plotter.inx.h:37
 msgid "The number of the pen (tool) to use (Standard: '1')"
 msgstr "Номер ручки (инструмента) для использования (Standard: '1')"
 
@@ -36814,11 +36895,13 @@ msgstr "Продублировать оконечные контуры"
 msgid "Interpolate style"
 msgstr "Интерполировать стиль"
 
-#: ../share/extensions/interp.inx.h:7 ../share/extensions/interp_att_g.inx.h:10
+#: ../share/extensions/interp.inx.h:7
+#: ../share/extensions/interp_att_g.inx.h:10
 msgid "Use Z-order"
 msgstr "Исп-ть Z-order"
 
-#: ../share/extensions/interp.inx.h:8 ../share/extensions/interp_att_g.inx.h:11
+#: ../share/extensions/interp.inx.h:8
+#: ../share/extensions/interp_att_g.inx.h:11
 msgid "Workaround for reversed selection order in Live Preview cycles"
 msgstr "Обходное решение для обратного порядка выделения в Live Preview циклах"
 
@@ -38460,7 +38543,8 @@ msgstr ""
 msgid "AutoCAD Plot Input"
 msgstr "Импорт файлов AutoCAD Plot (PLT)"
 
-#: ../share/extensions/plt_input.inx.h:2 ../share/extensions/plt_output.inx.h:2
+#: ../share/extensions/plt_input.inx.h:2
+#: ../share/extensions/plt_output.inx.h:2
 msgid "HP Graphics Language Plot file [AutoCAD] (UC) (*.plt)"
 msgstr "Файл HP Graphics Language [AutoCAD] (UC) (*.plt)"
 
@@ -38682,7 +38766,7 @@ msgstr "Средняя величина"
 
 #: ../share/extensions/prepare_file_save_as.inx.h:1
 msgid "Pre-Process File Save As..."
-msgstr ""
+msgstr "Препроцесс-файл Сохранить как..."
 
 #: ../share/extensions/prepare_print_win32_vector.inx.h:1
 #, fuzzy
@@ -39364,7 +39448,7 @@ msgstr ""
 #. this parameter is checked programatically in the extension to show a warning
 #: ../share/extensions/scour.inx.h:59
 msgid "Show warnings for older versions of Scour"
-msgstr ""
+msgstr "Показать предупреждения для старых версий Scour"
 
 #: ../share/extensions/scour.inx.h:60
 #, fuzzy
@@ -39373,7 +39457,7 @@ msgstr "Экспорт в оптимизированный SVG"
 
 #: ../share/extensions/scour.inx.h:61
 msgid "For details please refer to"
-msgstr ""
+msgstr "Для получения дополнительной информации см."
 
 #: ../share/extensions/scour.inx.h:62
 #, fuzzy
@@ -39439,7 +39523,8 @@ msgstr "Нижние выносные:"
 msgid "sK1 vector graphics files input"
 msgstr "Импорт документов sK1"
 
-#: ../share/extensions/sk1_input.inx.h:2 ../share/extensions/sk1_output.inx.h:2
+#: ../share/extensions/sk1_input.inx.h:2
+#: ../share/extensions/sk1_output.inx.h:2
 msgid "sK1 vector graphics files (UC) (*.sk1)"
 msgstr "Файлы редактора векторной графики sK1 (UC) (.sk1)"
 
@@ -40404,15 +40489,18 @@ msgstr "Наклон (°):"
 msgid "Hide lines behind the sphere"
 msgstr "Скрыть линии позади сферы"
 
-#: ../share/extensions/wmf_input.inx.h:1 ../share/extensions/wmf_output.inx.h:1
+#: ../share/extensions/wmf_input.inx.h:1
+#: ../share/extensions/wmf_output.inx.h:1
 msgid "Windows Metafile Input"
 msgstr "Импорт файлов Windows Metafile"
 
-#: ../share/extensions/wmf_input.inx.h:2 ../share/extensions/wmf_output.inx.h:2
+#: ../share/extensions/wmf_input.inx.h:2
+#: ../share/extensions/wmf_output.inx.h:2
 msgid "Windows Metafile (UC) (*.wmf)"
 msgstr "Файлы Windows Metafile (UC) (*.wmf)"
 
-#: ../share/extensions/wmf_input.inx.h:3 ../share/extensions/wmf_output.inx.h:3
+#: ../share/extensions/wmf_input.inx.h:3
+#: ../share/extensions/wmf_output.inx.h:3
 msgid "A popular graphics file format for clipart"
 msgstr "Популярный графический формат для клипарта"
 
