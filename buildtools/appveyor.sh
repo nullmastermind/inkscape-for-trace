@@ -9,6 +9,13 @@ error()   { echo -e "\e[1;31m\nError: ${1}\n\e[0m";  exit 1; }
 
 ### setup
 
+# reduce time required to install packages by disabling pacman's disk space checking
+sed -i 's/^CheckSpace/#CheckSpace/g' /etc/pacman.conf
+
+# update MSYS2-packages and MINGW-packages (but only for current architecture)
+pacman -Quq | grep -v mingw-w64- | xargs pacman -S --needed --noconfirm --noprogressbar
+pacman -Quq | grep ${MINGW_PACKAGE_PREFIX} | xargs pacman -S --needed --noconfirm --noprogressbar
+
 # do everything in /build
 cd "$(cygpath ${APPVEYOR_BUILD_FOLDER})"
 mkdir build
