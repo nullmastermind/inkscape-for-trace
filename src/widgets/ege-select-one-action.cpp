@@ -40,6 +40,8 @@
 /* Note: this file should be kept compilable as both .cpp and .c */
 
 #include <string.h>
+#include <vector>
+#include <gtkmm/checkmenuitem.h>
 
 #include <gtk/gtk.h>
 
@@ -843,9 +845,9 @@ void resync_active( EgeSelectOneAction* act, gint active, gboolean override )
         while ( proxies ) {
             if ( GTK_IS_TOOL_ITEM(proxies->data) ) {
                 /* Search for the things we built up in create_tool_item() */
-                GList* children = gtk_container_get_children( GTK_CONTAINER(proxies->data) );
-                if ( children && children->data ) {
-                    gpointer combodata = g_object_get_data( G_OBJECT(children->data), "ege-combo-box" );
+                std::vector<Gtk::Widget*> children = Glib::wrap(GTK_CONTAINER(proxies->data))->get_children();
+                if ( !children.empty() ) {
+                    gpointer combodata = g_object_get_data( G_OBJECT(children[0]->gobj()), "ege-combo-box" );
 
                     if ( GTK_IS_COMBO_BOX(combodata) ) {
                         GtkComboBox* combo = GTK_COMBO_BOX(combodata);
@@ -854,8 +856,8 @@ void resync_active( EgeSelectOneAction* act, gint active, gboolean override )
                         } else if ( gtk_combo_box_get_active(combo) != active ) {
                             gtk_combo_box_set_active( combo, active );
                         }
-                    } else if ( GTK_IS_BOX(children->data) ) {
-                        gpointer data = g_object_get_data( G_OBJECT(children->data), "ege-proxy_action-group" );
+                    } else if ( GTK_IS_BOX(children[0]->gobj()) ) {
+                        gpointer data = g_object_get_data( G_OBJECT(children[0]->gobj()), "ege-proxy_action-group" );
                         if ( data ) {
                             GSList* group = (GSList*)data;
                             GtkRadioAction* oneAction = GTK_RADIO_ACTION(group->data);
@@ -880,10 +882,9 @@ void resync_active( EgeSelectOneAction* act, gint active, gboolean override )
                 }
             } else if ( GTK_IS_MENU_ITEM(proxies->data) ) {
                 GtkWidget* subMenu = gtk_menu_item_get_submenu( GTK_MENU_ITEM(proxies->data) );
-                GList* children = gtk_container_get_children( GTK_CONTAINER(subMenu) );
-                if ( children && (g_list_length(children) > (guint)active) ) {
-                    gpointer data = g_list_nth_data( children, active );
-                    gtk_check_menu_item_set_active( GTK_CHECK_MENU_ITEM(data), TRUE );
+                std::vector<Gtk::Widget*> children = Glib::wrap(GTK_CONTAINER(subMenu))->get_children();
+                if ( children.size() > (guint)active ) {
+                    dynamic_cast<Gtk::CheckMenuItem*>(children[active])->set_active(true);
                 }
             }
 
@@ -900,14 +901,14 @@ void resync_sensitive( EgeSelectOneAction* act )
     while ( proxies ) {
         if ( GTK_IS_TOOL_ITEM(proxies->data) ) {
             /* Search for the things we built up in create_tool_item() */
-            GList* children = gtk_container_get_children( GTK_CONTAINER(proxies->data) );
-            if ( children && children->data ) {
-                gpointer combodata = g_object_get_data( G_OBJECT(children->data), "ege-combo-box" );
+            std::vector<Gtk::Widget*> children = Glib::wrap(GTK_CONTAINER(proxies->data))->get_children();
+            if ( !children.empty() ) {
+                gpointer combodata = g_object_get_data( G_OBJECT(children[0]->gobj()), "ege-combo-box" );
 
                 if ( GTK_IS_COMBO_BOX(combodata) ) {
                     /* Not implemented */
-                } else if ( GTK_IS_BOX(children->data) ) {
-                    gpointer data = g_object_get_data( G_OBJECT(children->data), "ege-proxy_action-group" );
+                } else if ( GTK_IS_BOX(children[0]->gobj()) ) {
+                    gpointer data = g_object_get_data( G_OBJECT(children[0]->gobj()), "ege-proxy_action-group" );
                     if ( data ) {
                         GSList* group = (GSList*)data;
                         // List is backwards in group as compared to GtkTreeModel, we better do matching.

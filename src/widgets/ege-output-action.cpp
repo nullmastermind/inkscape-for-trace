@@ -42,6 +42,8 @@
 #include <string.h>
 
 #include <gtk/gtk.h>
+#include <gtkmm/container.h>
+#include <gtkmm/label.h>
 
 #include "widgets/ege-output-action.h"
 
@@ -211,22 +213,23 @@ void fixup_labels( GObject *gobject, GParamSpec *arg1, gpointer user_data )
         GSList* proxies = gtk_action_get_proxies( GTK_ACTION(gobject) );
         gchar* str = 0;
         g_object_get( gobject, "label", &str, NULL );
+        Glib::ustring str2(str);
         (void)user_data;
         while ( proxies ) {
             if ( GTK_IS_TOOL_ITEM(proxies->data) ) {
                 /* Search for the things we built up in create_tool_item() */
-                GList* children = gtk_container_get_children( GTK_CONTAINER(proxies->data) );
-                if ( children && children->data ) {
-                    if ( GTK_IS_BOX(children->data) ) {
-                        children = gtk_container_get_children( GTK_CONTAINER(children->data) );
-                        if ( children && g_list_next(children) ) {
-                            GtkWidget* child = GTK_WIDGET( g_list_next(children)->data );
-                            if ( GTK_IS_LABEL(child) ) {
-                                GtkLabel* lbl = GTK_LABEL(child);
+                std::vector<Gtk::Widget*> children = Glib::wrap(GTK_CONTAINER(proxies->data))->get_children();
+                if ( !children.empty() ) {
+                    if ( GTK_IS_BOX(children[0]->gobj()) ) {
+                        children = dynamic_cast<Gtk::Container *>(children[0])->get_children();
+                        if ( children.size()>1 ) {
+                            Gtk::Widget *child = children[1];
+                            if ( GTK_IS_LABEL(child->gobj()) ) {
+                                Gtk::Label* lbl = dynamic_cast<Gtk::Label *>(child);
                                 if ( EGE_OUTPUT_ACTION(gobject)->private_data->useMarkup ) {
-                                    gtk_label_set_markup( lbl, str );
+                                    lbl->set_markup(str2);
                                 } else {
-                                    gtk_label_set_text( lbl, str );
+                                    lbl->set_text(str2);
                                 }
                             }
                         }

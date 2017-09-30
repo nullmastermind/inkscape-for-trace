@@ -22,6 +22,8 @@
 #include <glibmm/miscutils.h>
 #include <glibmm/markup.h>
 #include <gtkmm/main.h>
+#include <gtkmm/recentmanager.h>
+#include <gtkmm/recentinfo.h>
 
 #include "preferences.h"
 #include "verbs.h"
@@ -2057,21 +2059,15 @@ bool InkscapePreferences::PresentPage(const Gtk::TreeModel::iterator& iter)
 
 void InkscapePreferences::on_reset_open_recent_clicked()
 {
-    GtkRecentManager* manager = gtk_recent_manager_get_default();
-    GList* recent_list = gtk_recent_manager_get_items(manager);
-    GList* element;
-    GError* error;
+    Glib::RefPtr<Gtk::RecentManager> manager = Gtk::RecentManager::get_default();
+    std::vector< Glib::RefPtr< Gtk::RecentInfo > > recent_list = manager->get_items();
 
     //Remove only elements that were added by Inkscape
-    for (element = g_list_first(recent_list); element; element = g_list_next(element)){
-        error = NULL;
-        GtkRecentInfo* info = (GtkRecentInfo*) element->data;
-        if (gtk_recent_info_has_application(info, g_get_prgname())){
-            gtk_recent_manager_remove_item(manager, gtk_recent_info_get_uri(info), &error);
+    for (auto e : recent_list) {
+        if (e->has_application(g_get_prgname())) {
+            manager->remove_item(e->get_uri());
         }
-        gtk_recent_info_unref (info);
     }
-    g_list_free(recent_list);
 }
 
 void InkscapePreferences::on_pagelist_selection_changed()

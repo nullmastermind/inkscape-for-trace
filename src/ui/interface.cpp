@@ -1436,14 +1436,12 @@ sp_ui_menu_item_set_name(GtkWidget *data, Glib::ustring const &name)
             if (GTK_IS_LABEL(child)) {
                 gtk_label_set_markup_with_mnemonic(GTK_LABEL (child), name.c_str());
             } else if (GTK_IS_BOX(child)) {
-                GList *children = gtk_container_get_children(GTK_CONTAINER(child));
+                std::vector<Gtk::Widget*> children = Glib::wrap(GTK_CONTAINER(child))->get_children();
 
                 // Label is second child in list
-                GtkWidget *label = GTK_WIDGET(children->next->data);
-
-                gtk_label_set_markup_with_mnemonic(
-                GTK_LABEL (label),
-                name.c_str());
+                Gtk::Label *label = dynamic_cast<Gtk::Label*>(children[1]);
+                if(!label) return;
+                label->set_markup_with_mnemonic(name);
             }//else sp_ui_menu_append_item_from_verb has been modified and can set
             //a menu item in yet another way...
         }

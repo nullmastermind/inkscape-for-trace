@@ -2639,11 +2639,10 @@ void CloneTiler::reset_recursive(GtkWidget *w)
     }
 
     if (GTK_IS_CONTAINER(w)) {
-        GList *ch = gtk_container_get_children (GTK_CONTAINER(w));
-        for (GList *i = ch; i != NULL; i = i->next) {
-            reset_recursive (GTK_WIDGET(i->data));
+        std::vector<Gtk::Widget*> c = Glib::wrap(GTK_CONTAINER(w))->get_children();
+        for ( auto i : c ) {
+            reset_recursive(i->gobj());
         }
-        g_list_free (ch);
     }
 }
 

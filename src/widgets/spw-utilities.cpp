@@ -249,9 +249,9 @@ gpointer sp_search_by_data_recursive(GtkWidget *w, gpointer key)
 	if (r) return r;
 
 	if (GTK_IS_CONTAINER(w)) {
-		GList *ch = gtk_container_get_children (GTK_CONTAINER(w));
-		for (GList *i = ch; i != NULL; i = i->next) {
-			r = sp_search_by_data_recursive(GTK_WIDGET(i->data), key);
+            std::vector<Gtk::Widget*> children = Glib::wrap(GTK_CONTAINER(w))->get_children();
+		for (auto i:children) {
+			r = sp_search_by_data_recursive(GTK_WIDGET(i->gobj()), key);
 			if (r) return r;
 		}
 	}
@@ -272,9 +272,9 @@ GtkWidget *sp_search_by_value_recursive(GtkWidget *w, gchar *key, gchar *value)
 	if (r && !strcmp (r, value)) return w;
 
 	if (GTK_IS_CONTAINER(w)) {
-		GList *ch = gtk_container_get_children (GTK_CONTAINER(w));
-		for (GList *i = ch; i != NULL; i = i->next) {
-			GtkWidget *child = sp_search_by_value_recursive(GTK_WIDGET(i->data), key, value);
+                std::vector<Gtk::Widget*> children = Glib::wrap(GTK_CONTAINER(w))->get_children();
+		for (auto i:children) {
+			GtkWidget *child = sp_search_by_value_recursive(GTK_WIDGET(i->gobj()), key, value);
 			if (child) return child;
 		}
 	}
