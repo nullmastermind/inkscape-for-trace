@@ -368,7 +368,12 @@ sp_item_list_to_curves(const std::vector<SPItem*> &items, std::vector<SPItem*>& 
         { 
             continue;
         }
-
+        //TODO: decide if we want to unlink clones or not, for now keep previous functionality retaining clones as is
+        SPUse *use = dynamic_cast<SPUse *>(item);
+        if (use) {
+            continue;
+        }
+        
         SPPath *path = dynamic_cast<SPPath *>(item);
         if (path && !path->_curve_before_lpe) {
             // remove connector attributes
