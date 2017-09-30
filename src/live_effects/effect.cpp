@@ -873,7 +873,9 @@ Effect::defaultParamSet()
     expander->set_expanded(false);
     vbox->pack_start(*dynamic_cast<Gtk::Widget *> (expander), true, true, 2);
     if (has_params) {
-        return dynamic_cast<Gtk::Widget *>(vbox);
+        Gtk::Widget *vboxwidg = dynamic_cast<Gtk::Widget *>(vbox);
+        vboxwidg->set_margin_bottom(15);
+        return vboxwidg;
     } else {
         return NULL;
     }

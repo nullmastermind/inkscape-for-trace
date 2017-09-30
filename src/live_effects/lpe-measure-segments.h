@@ -46,7 +46,7 @@ public:
     virtual void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/);
     virtual void transform_multiply(Geom::Affine const& postmul, bool set);
     virtual Geom::PathVector doEffect_path(Geom::PathVector const &path_in);
-    void createLine(Geom::Point start,Geom::Point end, const char * id, bool main, bool overflow, bool remove, bool arrows = false);
+    void createLine(Geom::Point start,Geom::Point end, const char * id, bool main, bool remove, bool arrows = false);
     void createTextLabel(Geom::Point pos, size_t counter, double length, Geom::Coord angle, bool remove, bool valid);
     void createArrowMarker(const char * mode);
     bool hasMeassure (size_t i);
@@ -59,7 +59,6 @@ private:
     ScalarParam fix_overlaps;
     ScalarParam position;
     ScalarParam text_top_bottom;
-    ScalarParam text_right_left;
     ScalarParam helpline_distance;
     ScalarParam helpline_overlap;
     ScalarParam line_width;
