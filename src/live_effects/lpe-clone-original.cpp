@@ -181,7 +181,7 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const char * 
     g_strfreev (styleattarray);
     Glib::ustring css_str;
     sp_repr_css_write_string(css_dest,css_str);
-    dest->getRepr()->setAttribute("style", css_str.c_str());
+    dest->getRepr()->setAttribute("style", g_strdup(css_str.c_str()));
 }
 
 void
@@ -189,9 +189,9 @@ LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){
     if (linkeditem.linksToItem()) {
         Glib::ustring attr = "";
         if (method != CLM_NONE) {
-            attr.append("d,");
+            attr += Glib::ustring("d,");
         }
-        attr.append(Glib::ustring(attributes.param_getSVGValue()).append(","));
+        attr += Glib::ustring(attributes.param_getSVGValue()) + Glib::ustring(",");
         if (attr.size()  && !Glib::ustring(attributes.param_getSVGValue()).size()) {
             attr.erase (attr.size()-1, 1);
         }
@@ -199,7 +199,7 @@ LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){
         if (style_attr.size() && !Glib::ustring(style_attributes.param_getSVGValue()).size()) {
             style_attr.erase (style_attr.size()-1, 1);
         }
-        style_attr.append(Glib::ustring(style_attributes.param_getSVGValue()).append(","));
+        style_attr += Glib::ustring(style_attributes.param_getSVGValue()) + Glib::ustring(",");
 
         SPItem * origin =  SP_ITEM(linkeditem.getObject()); 
         SPItem * dest   =  SP_ITEM(sp_lpe_item); 
