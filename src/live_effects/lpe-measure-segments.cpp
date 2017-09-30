@@ -60,10 +60,9 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     fix_overlaps(_("Fix overlaps °"), _("Min angle where overlaps are fixed, 180° no fix"), "fix_overlaps", &wr, this, 0),
     position(_("Position"), _("Position"), "position", &wr, this, 5),
     text_top_bottom(_("Text top/bottom"), _("Text top/bottom"), "text_top_bottom", &wr, this, 0),
-    text_right_left(_("Text right/left"), _("Text right/left"), "text_right_left", &wr, this, 0),
     helpline_distance(_("Helpline distance"), _("Helpline distance"), "helpline_distance", &wr, this, 0.0),
     helpline_overlap(_("Helpline overlap"), _("Helpline overlap"), "helpline_overlap", &wr, this, 2.0),
-    line_width(_("Line width"), _("Line width. DIM line group standar are 0.25 or 0.35"), "line_width", &wr, this, 0.25),
+    line_width(_("Line width"), _("Line width. DIM line group standard are 0.25 or 0.35"), "line_width", &wr, this, 0.25),
     scale(_("Scale"), _("Scaling factor"), "scale", &wr, this, 1.0),
     
     format(_("Format"), _("Format the number ex:{measure} {unit}, return to save"), "format", &wr, this,"{measure}{unit}"),
@@ -86,7 +85,6 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     registerParameter(&fix_overlaps);
     registerParameter(&position);
     registerParameter(&text_top_bottom);
-    registerParameter(&text_right_left);
     registerParameter(&helpline_distance);
     registerParameter(&helpline_overlap);
     registerParameter(&line_width);
@@ -132,9 +130,6 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     line_width.param_set_range(-999999.0, 999999.0);
     line_width.param_set_increments(1, 1);
     line_width.param_set_digits(2);
-    text_right_left.param_set_range(-999999.0, 999999.0);
-    text_right_left.param_set_increments(1, 1);
-    text_right_left.param_set_digits(2);
     helpline_distance.param_set_range(-999999.0, 999999.0);
     helpline_distance.param_set_increments(1, 1);
     helpline_distance.param_set_digits(2);
@@ -177,7 +172,7 @@ LPEMeasureSegments::createArrowMarker(const char * mode)
     } else {
         arrow = xml_doc->createElement("svg:marker");
         arrow->setAttribute("id", mode);
-        arrow->setAttribute("class", (Glib::ustring(sp_lpe_item->getId()) + Glib::ustring(" ") + Glib::ustring(this->lpeobj->getId()) + Glib::ustring(" measure-arrows")).c_str());
+        arrow->setAttribute("class", (Glib::ustring(sp_lpe_item->getId()) + Glib::ustring(" ") + Glib::ustring(this->lpeobj->getId()) + Glib::ustring(" measure-arrows-marker")).c_str());
         arrow->setAttribute("inkscape:stockid", mode);
         arrow->setAttribute("orient", "auto");
         arrow->setAttribute("refX", "0.0");
@@ -193,9 +188,9 @@ LPEMeasureSegments::createArrowMarker(const char * mode)
         } else if (std::strcmp(mode, "ArrowDINout-start") == 0) {
             arrow_path->setAttribute("d", "M 0,0 -16,2.11 -16,0.5 -26,0.5 -26,-0.5 -16,-0.5 -16,-2.11 z");
         } else {
-            arrow_path->setAttribute("d", "M 0,0 16,2.11 16,0.5 26,0.5 26,-0.5 16,-0.5 16,-2.11 z");
+            arrow_path->setAttribute("d", "M 0,0 16,-2.11 16,-0.5 26,-0.5 26,0.5 16,0.5 16,2.11 z");
         }
-        
+        arrow_path->setAttribute("class", (Glib::ustring(sp_lpe_item->getId()) + Glib::ustring(" ") + Glib::ustring(this->lpeobj->getId()) + Glib::ustring(" measure-arrows")).c_str());
         arrow_path->setAttribute("id", Glib::ustring(mode).append("_path").c_str());
         arrow_path->setAttribute("style", style.c_str());
         arrow->addChild(arrow_path, NULL);
@@ -237,7 +232,6 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
             elemref->deleteObject();
             return;
         }
-        pos = pos - Point::polar(angle, text_right_left);
         rtext = elemref->getRepr();
         sp_repr_set_svg_double(rtext, "x", pos[Geom::X]);
         sp_repr_set_svg_double(rtext, "y", pos[Geom::Y]);
@@ -252,7 +246,6 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
         rtext->setAttribute("id", id);
         rtext->setAttribute("class", (Glib::ustring(sp_lpe_item->getId()) + Glib::ustring(" ") + Glib::ustring(this->lpeobj->getId()) + Glib::ustring(" measure-labels")).c_str());
         rtext->setAttribute("sodipodi:insensitive", "true");
-        pos = pos - Point::polar(angle, text_right_left);
         sp_repr_set_svg_double(rtext, "x", pos[Geom::X]);
         sp_repr_set_svg_double(rtext, "y", pos[Geom::Y]);
         rtspan = xml_doc->createElement("svg:tspan");
@@ -355,7 +348,7 @@ LPEMeasureSegments::createTextLabel(Geom::Point pos, size_t counter, double leng
 }
 
 void
-LPEMeasureSegments::createLine(Geom::Point start,Geom::Point end, const char * id, bool main, bool overflow, bool remove, bool arrows)
+LPEMeasureSegments::createLine(Geom::Point start,Geom::Point end, const char * id, bool main, bool remove, bool arrows)
 {
     SPDocument * document = SP_ACTIVE_DOCUMENT;
     if (!document) {
@@ -371,7 +364,10 @@ LPEMeasureSegments::createLine(Geom::Point start,Geom::Point end, const char * i
         end = end + Point::polar(angle, helpline_overlap );
     }
     Geom::PathVector line_pathv;
-    if (main && std::abs(text_top_bottom) < fontsize/1.5 && hide_back && !overflow){
+
+    if (main && 
+        std::abs(text_top_bottom) < fontsize/1.5 && 
+        hide_back){
         Geom::Path line_path;
         double k = 0;
         if (flip_side) {
@@ -433,9 +429,7 @@ LPEMeasureSegments::createLine(Geom::Point start,Geom::Point end, const char * i
     line_pathv.clear();
         
     Glib::ustring style;
-    if (overflow && !arrows) {
-        line->setAttribute("inkscape:label", "downline");
-    } else if (main) {
+    if (main) {
         line->setAttribute("inkscape:label", "dinline");
         if (arrows_outside) {
             style = style + Glib::ustring("marker-start:url(#ArrowDINout-start);marker-end:url(#ArrowDINout-end);");
@@ -528,9 +522,6 @@ LPEMeasureSegments::doOnApply(SPLPEItem const* lpeitem)
         styleContent = styleContent + Glib::ustring("\n.measure-labels") + Glib::ustring("\n{\nline-height:125%;\nletter-spacing:0;\nword-spacing:0;\ntext-align:center;\ntext-anchor:middle;\nstroke:none;\n}");
         styleContent = styleContent + Glib::ustring("\n.measure-lines") + Glib::ustring("\n{\n}");
     }
-//    styleContent = styleContent + Glib::ustring("\n.") + Glib::ustring(lpeitem->getId()) + Glib::ustring("\n{}");
-//    styleContent = styleContent + Glib::ustring("\n.measure-labels.") + Glib::ustring(lpeitem->getId())  + Glib::ustring("\n{}\n");
-//    styleContent = styleContent + Glib::ustring("\n.measure-arrows.") + Glib::ustring(lpeitem->getId())  + Glib::ustring("\n{}\n");
     textNode->setContent(styleContent.c_str());
     DocumentUndo::setUndoSensitive(document, saved);
 }
@@ -713,7 +704,7 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                     } else {
                         hstart = hstart - Point::polar(angle_cross, position);
                     }
-                    createLine(start, hstart, g_strdup(Glib::ustring("infoline-on-start-").append(Glib::ustring::format(counter) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str()), false, false, remove);
+                    createLine(start, hstart, g_strdup(Glib::ustring("infoline-on-start-").append(Glib::ustring::format(counter) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str()), false, remove);
 
                     if (fix_overlaps != 180 && end_angle_cross != 0) {
                         double position_turned = position / sin(end_angle_cross/2.0);
@@ -744,41 +735,15 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                     if (scale_sensitive) {
                         length *= parents_scale;
                     }
+                    if ((anotation_width/2) > Geom::distance(hstart,hend)/2.0) {
+                        pos = pos - Point::polar(angle_cross, position);
+                    }
                     if (scale_sensitive && !affinetransform.preservesAngles()) {
                         createTextLabel(pos, counter, length, angle, remove, false);
                     } else {
                         createTextLabel(pos, counter, length, angle, remove, true);
                     }
-                    bool overflow = false;
                     const char * downline = g_strdup(Glib::ustring("downline-").append(Glib::ustring::format(counter) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str());
-                    //delete residual lines if exist
-                    createLine(Geom::Point(),Geom::Point(), downline, true, overflow, true, false);
-                    //Create it 
-                    if ((anotation_width/2) + std::abs(text_right_left / doc_scale) > Geom::distance(hstart,hend)/2.0) {
-                        Geom::Point sstart = hend - Point::polar(angle_cross, position);
-                        Geom::Point send = hend - Point::polar(angle_cross, position);
-                        if ((text_right_left < 0 && flip_side) || (text_right_left > 0 && !flip_side)) {
-                            sstart = hstart - Point::polar(angle_cross, position);
-                            send = hstart - Point::polar(angle_cross, position);
-                        }
-                        Geom::Point prog_end = Geom::Point();
-                        if (std::abs(text_top_bottom / doc_scale) < fontsize/1.5 && hide_back) { 
-                            if (text_right_left > 0 ) {
-                                prog_end = sstart - Point::polar(angle, std::abs(text_right_left / doc_scale) - (anotation_width/1.9) - (Geom::distance(hstart,hend)/2.0));
-                            } else {
-                                prog_end = sstart + Point::polar(angle, std::abs(text_right_left / doc_scale) - (anotation_width/1.9) - (Geom::distance(hstart,hend)/2.0));
-                            }
-                        } else {
-                            if (text_right_left / doc_scale > 0 ) {
-                                prog_end = sstart - Point::polar(angle,(anotation_width/2) + std::abs(text_right_left / doc_scale) - (Geom::distance(hstart,hend)/2.0));
-                            } else {
-                                prog_end = sstart + Point::polar(angle,(anotation_width/2) + std::abs(text_right_left / doc_scale) - (Geom::distance(hstart,hend)/2.0));
-                            }
-                        }
-                        overflow = true;
-                        createLine(sstart, prog_end, downline, true, overflow, false, false);
-                    }
-                    //LINE
                     arrow_gap = 8 * Inkscape::Util::Quantity::convert(line_width / doc_scale, "mm", display_unit.c_str());
                     SPCSSAttr *css = sp_repr_css_attr_new();
 
@@ -793,18 +758,22 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
                     if(flip_side) {
                        arrow_gap *= -1;
                     }
-                    createLine(end, hend, g_strdup(Glib::ustring("infoline-on-end-").append(Glib::ustring::format(counter) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str()), false, false, remove);
+                    createLine(end, hend, g_strdup(Glib::ustring("infoline-on-end-").append(Glib::ustring::format(counter) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str()), false, remove);
                     if (!arrows_outside) {
                         hstart = hstart + Point::polar(angle, arrow_gap);
                         hend = hend - Point::polar(angle, arrow_gap );
                     }
-                    createLine(hstart, hend, g_strdup(Glib::ustring("infoline-").append(Glib::ustring::format(counter) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str()), true, overflow, remove, true);
+                    if ((anotation_width/2) < Geom::distance(hstart,hend)/2.0) {
+                        createLine(hstart, hend, g_strdup(Glib::ustring("infoline-").append(Glib::ustring::format(counter) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str()), true, remove, true);
+                    } else {
+                        createLine(hstart, hend, g_strdup(Glib::ustring("infoline-").append(Glib::ustring::format(counter) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str()), true, true, true);
+                    }
                 } else {
                     const char * downline = g_strdup(Glib::ustring("downline-").append(Glib::ustring::format(counter) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str());
-                    createLine(Geom::Point(),Geom::Point(), downline, true, true, true, true);
-                    createLine(Geom::Point(), Geom::Point(), g_strdup(Glib::ustring("infoline-").append(Glib::ustring::format(counter) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str()), true, true, true, true);
-                    createLine(Geom::Point(), Geom::Point(), g_strdup(Glib::ustring("infoline-on-start-").append(Glib::ustring::format(counter) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str()), true, true, true, true);
-                    createLine(Geom::Point(), Geom::Point(), g_strdup(Glib::ustring("infoline-on-end-").append(Glib::ustring::format(counter) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str()), true, true, true, true);
+                    createLine(Geom::Point(),Geom::Point(), downline, true, true, true);
+                    createLine(Geom::Point(), Geom::Point(), g_strdup(Glib::ustring("infoline-").append(Glib::ustring::format(counter) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str()), true, true, true);
+                    createLine(Geom::Point(), Geom::Point(), g_strdup(Glib::ustring("infoline-on-start-").append(Glib::ustring::format(counter) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str()), true, true, true);
+                    createLine(Geom::Point(), Geom::Point(), g_strdup(Glib::ustring("infoline-on-end-").append(Glib::ustring::format(counter) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str()), true, true, true);
                     const char * id = g_strdup(Glib::ustring("text-on-").append(Glib::ustring::format(counter) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str());
                     SPObject *elemref = NULL;
                     if ((elemref = document->getObjectById(id))) {
@@ -815,10 +784,10 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
         }
         for (size_t k = ncurves; k <= previous_size; k++) {
             const char * downline = g_strdup(Glib::ustring("downline-").append(Glib::ustring::format(counter) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str());
-            createLine(Geom::Point(),Geom::Point(), downline, true, true, true, true);
-            createLine(Geom::Point(), Geom::Point(), g_strdup(Glib::ustring("infoline-").append(Glib::ustring::format(k) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str()), true, true, true, true);
-            createLine(Geom::Point(), Geom::Point(), g_strdup(Glib::ustring("infoline-on-start-").append(Glib::ustring::format(k) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str()), true, true, true, true);
-            createLine(Geom::Point(), Geom::Point(), g_strdup(Glib::ustring("infoline-on-end-").append(Glib::ustring::format(k) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str()), true, true, true, true);
+            createLine(Geom::Point(),Geom::Point(), downline, true, true, true);
+            createLine(Geom::Point(), Geom::Point(), g_strdup(Glib::ustring("infoline-").append(Glib::ustring::format(k) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str()), true, true, true);
+            createLine(Geom::Point(), Geom::Point(), g_strdup(Glib::ustring("infoline-on-start-").append(Glib::ustring::format(k) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str()), true, true, true);
+            createLine(Geom::Point(), Geom::Point(), g_strdup(Glib::ustring("infoline-on-end-").append(Glib::ustring::format(k) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str()), true, true, true);
             const char * id = g_strdup(Glib::ustring("text-on-").append(Glib::ustring::format(k) + Glib::ustring("-")).append(this->getRepr()->attribute("id")).c_str());
             SPObject *elemref = NULL;
             if ((elemref = document->getObjectById(id))) {
