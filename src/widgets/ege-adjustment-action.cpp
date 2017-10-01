@@ -45,6 +45,7 @@
 #include <algorithm>
 
 #include <gtkmm/container.h>
+#include <gtkmm/radiomenuitem.h>
 #include <gdk/gdkkeysyms.h>
 
 #include "icon-size.h"
@@ -626,7 +627,7 @@ static void process_menu_action( GtkWidget* obj, gpointer data )
     }
 }
 
-static void create_single_menu_item( GCallback toggleCb, int val, GtkWidget* menu, EgeAdjustmentAction* act, GtkWidget** dst, GSList** group, gdouble num, gboolean active )
+static void create_single_menu_item( GCallback toggleCb, int val, GtkWidget* menu, EgeAdjustmentAction* act, GtkWidget** dst, Gtk::RadioMenuItem::Group *group, gdouble num, gboolean active )
 {
     char* str = 0;
     EgeAdjustmentDescr* marker = 0;
@@ -647,10 +648,8 @@ static void create_single_menu_item( GCallback toggleCb, int val, GtkWidget* men
                            ((marker && marker->descr) ? ": " : ""),
                            ((marker && marker->descr) ? marker->descr : ""));
 
-    *dst = gtk_radio_menu_item_new_with_label( *group, str );
-    if ( !*group) {
-        *group = gtk_radio_menu_item_get_group( GTK_RADIO_MENU_ITEM(*dst) );
-    }
+    auto rmi = new Gtk::RadioMenuItem(*group,Glib::ustring(str));
+    *dst = GTK_WIDGET(rmi->gobj());
     if ( active ) {
         gtk_check_menu_item_set_active( GTK_CHECK_MENU_ITEM(*dst), TRUE );
     }
@@ -669,7 +668,7 @@ static int flush_explicit_items( std::vector<EgeAdjustmentDescr*> descriptions,
                                     GtkWidget* menu,
                                     EgeAdjustmentAction* act,
                                     GtkWidget** dst,
-                                    GSList** group,
+                                    Gtk::RadioMenuItem::Group *group,
                                     gdouble num )
 {
     if(pos >= descriptions.size() || pos < 0) return pos;
@@ -693,7 +692,7 @@ static GtkWidget* create_popup_number_menu( EgeAdjustmentAction* act )
 {
     GtkWidget* menu = gtk_menu_new();
 
-    GSList* group = 0;
+    Gtk::RadioMenuItem::Group group;
     GtkWidget* single = 0;
     std::vector<EgeAdjustmentDescr*> list = act->private_data->descriptions;
     int addOns = list.size() - 1;

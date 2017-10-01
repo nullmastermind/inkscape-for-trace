@@ -1103,14 +1103,6 @@ void TagsPanel::setDesktop( SPDesktop* desktop )
             setDocument(_desktop, _desktop->doc());
         }
     }
-/*
-    GSList const *layers = _desktop->doc()->getResourceList( "layer" );
-    g_message( "layers list starts at %p", layers );
-    for ( GSList const *iter=layers ; iter ; iter = iter->next ) {
-        SPObject *layer=static_cast<SPObject *>(iter->data);
-        g_message("  {%s}   [%s]", layer->id, layer->label() );
-    }
-*/
     deskTrack.setBase(desktop);
 }
 

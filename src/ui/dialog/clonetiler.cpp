@@ -1993,18 +1993,16 @@ void CloneTiler::remove(bool do_undo/* = true*/)
     SPObject *parent = obj->parent;
 
 // remove old tiling
-    GSList *to_delete = NULL;
+    std::vector<SPObject *> to_delete;
     for (auto& child: parent->children) {
         if (is_a_clone_of (&child, obj)) {
-            to_delete = g_slist_prepend (to_delete, &child);
+            to_delete.push_back(&child);
         }
     }
-    for (GSList *i = to_delete; i; i = i->next) {
-        SPObject *obj = reinterpret_cast<SPObject *>(i->data);
+    for (auto obj:to_delete) {
         g_assert(obj != NULL);
         obj->deleteObject();
     }
-    g_slist_free (to_delete);
 
     change_selection (selection);
 

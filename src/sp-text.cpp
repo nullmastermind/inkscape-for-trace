@@ -150,24 +150,17 @@ void SPText::update(SPCtx *ctx, guint flags) {
     }
 
     // Create temporary list of children
-    GSList *l = NULL;
-
+    std::vector<SPObject *> l;
     for (auto& child: children) {
         sp_object_ref(&child, this);
-        l = g_slist_prepend (l, &child);
+        l.push_back(&child);
     }
 
-    l = g_slist_reverse (l);
-
-    while (l) {
-        SPObject *child = reinterpret_cast<SPObject*>(l->data); // We just built this list, so cast is safe.
-        l = g_slist_remove (l, child);
-
+    for (auto child:l) {
         if (childflags || (child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             /* fixme: Do we need transform? */
             child->updateDisplay(ctx, childflags);
         }
-
         sp_object_unref(child, this);
     }
 
@@ -230,23 +223,16 @@ void SPText::modified(guint flags) {
     }
 
     // Create temporary list of children
-    GSList *l = NULL;
-
+    std::vector<SPObject *> l;
     for (auto& child: children) {
         sp_object_ref(&child, this);
-        l = g_slist_prepend (l, &child);
+        l.push_back(&child);
     }
 
-    l = g_slist_reverse (l);
-
-    while (l) {
-        SPObject *child = reinterpret_cast<SPObject*>(l->data); // We just built this list, so cast is safe.
-        l = g_slist_remove (l, child);
-
+    for (auto child:l) {
         if (cflags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             child->emitModified(cflags);
         }
-
         sp_object_unref(child, this);
     }
 }
@@ -257,7 +243,7 @@ Inkscape::XML::Node *SPText::write(Inkscape::XML::Document *xml_doc, Inkscape::X
             repr = xml_doc->createElement("svg:text");
         }
 
-        GSList *l = NULL;
+        std::vector<Inkscape::XML::Node *> l;
 
         for (auto& child: children) {
             if (SP_IS_TITLE(&child) || SP_IS_DESC(&child)) {
@@ -273,14 +259,13 @@ Inkscape::XML::Node *SPText::write(Inkscape::XML::Document *xml_doc, Inkscape::X
             }
 
             if (crepr) {
-                l = g_slist_prepend (l, crepr);
+                l.push_back(crepr);
             }
         }
 
-        while (l) {
-            repr->addChild((Inkscape::XML::Node *) l->data, NULL);
-            Inkscape::GC::release((Inkscape::XML::Node *) l->data);
-            l = g_slist_remove (l, l->data);
+        for (auto i=l.rbegin();i!=l.rend();++i) {
+            repr->addChild(*i, NULL);
+            Inkscape::GC::release(*i);
         }
     } else {
         for (auto& child: children) {

@@ -298,15 +298,14 @@ g_print("\n row = %f     col = %f selection x= %f selection y = %f", total_row_h
     std::vector<SPItem*>::iterator it = sorted.begin();
     for (row_cnt=0; ((it != sorted.end()) && (row_cnt<NoOfRows)); ++row_cnt) {
 
-             GSList *current_row = NULL;
+             std::vector<SPItem *> current_row;
              col_cnt = 0;
              for(;it!=sorted.end()&&col_cnt<NoOfCols;++it) {
-                 current_row = g_slist_append (current_row, *it);
+                 current_row.push_back(*it);
                  col_cnt++;
              }
 
-             for (; current_row != NULL; current_row = current_row->next) {
-                 SPItem *item=SP_ITEM(current_row->data);
+             for (auto item:current_row) {
                  Inkscape::XML::Node *repr = item->getRepr();
                  Geom::OptRect b = item->documentVisualBounds();
                  Geom::Point min;
@@ -330,10 +329,9 @@ g_print("\n row = %f     col = %f selection x= %f selection y = %f", total_row_h
                  Geom::Affine const affine = Geom::Affine(Geom::Translate(move));
                  item->set_i2d_affine(item->i2dt_affine() * affine);
                  item->doWriteTransform(item->transform);
-                 SP_OBJECT (current_row->data)->updateRepr();
+                 item->updateRepr();
                  cnt +=1;
              }
-             g_slist_free (current_row);
     }
 
     DocumentUndo::done(desktop->getDocument(), SP_VERB_SELECTION_ARRANGE,

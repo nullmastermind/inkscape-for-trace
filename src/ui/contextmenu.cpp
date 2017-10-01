@@ -253,7 +253,7 @@ context_menu_item_on_my_deselect(void */*object*/, SPAction *action)
 
 
 // TODO: Update this to allow radio items to be used
-void ContextMenu::AppendItemFromVerb(Inkscape::Verb *verb)//, SPDesktop *view)//, bool radio, GSList *group)
+void ContextMenu::AppendItemFromVerb(Inkscape::Verb *verb)
 {
     SPAction *action;
     SPDesktop *view = _desktop;

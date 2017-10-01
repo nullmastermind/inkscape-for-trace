@@ -22,6 +22,7 @@
 #include <glibmm/i18n.h>
 #include <gtkmm/label.h>
 #include <gtkmm/notebook.h>
+#include <gtkmm/radiobutton.h>
 
 #include "preferences.h"
 #include "widgets/spw-utilities.h"
@@ -325,8 +326,8 @@ void ColorNotebook::_addPage(Page &page)
         _buttons[page_num] = gtk_radio_button_new_with_label(NULL, mode_name.c_str());
         gtk_toggle_button_set_mode(GTK_TOGGLE_BUTTON(_buttons[page_num]), FALSE);
         if (page_num > 0) {
-            GSList *group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(_buttons[0]));
-            gtk_radio_button_set_group(GTK_RADIO_BUTTON(_buttons[page_num]), group);
+            auto g = Glib::wrap(GTK_RADIO_BUTTON(_buttons[0]))->get_group();
+            Glib::wrap(GTK_RADIO_BUTTON(_buttons[page_num]))->set_group(g);
         }
         gtk_widget_show(_buttons[page_num]);
         gtk_box_pack_start(GTK_BOX(_buttonbox), _buttons[page_num], TRUE, TRUE, 0);

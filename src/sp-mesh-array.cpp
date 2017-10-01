@@ -936,31 +936,26 @@ void SPMeshNodeArray::write( SPMeshGradient *mg ) {
     }
 
     // First we must delete reprs for old mesh rows and patches.
-    GSList *descendant_reprs = NULL;
-    GSList *descendant_objects = NULL;
+    std::vector<SPObject*> descendant_objects;
+    std::vector<Inkscape::XML::Node *> descendant_reprs;
     for (auto& row: mg_array->children) {
-        descendant_reprs = g_slist_prepend (descendant_reprs, row.getRepr());
-        descendant_objects = g_slist_prepend (descendant_objects, &row);
+        descendant_reprs.push_back(row.getRepr());
+        descendant_objects.push_back(&row);
         for (auto& patch: row.children) {
-            descendant_reprs = g_slist_prepend (descendant_reprs, patch.getRepr());
-            descendant_objects = g_slist_prepend (descendant_objects, &patch);
+            descendant_reprs.push_back(patch.getRepr());
+            descendant_objects.push_back(&patch);
             for (auto& stop: patch.children) {
-                descendant_reprs = g_slist_prepend (descendant_reprs, stop.getRepr());
-                descendant_objects = g_slist_prepend (descendant_objects, &stop);
+                descendant_reprs.push_back(stop.getRepr());
+                descendant_objects.push_back(&stop);
             }
         }
     }
 
-    for ( GSList *i = descendant_objects; i != NULL; i = i->next ) {
-        SPObject *descendant = SP_OBJECT (i->data);
-        descendant->deleteObject();
-    }
+    for (auto i:descendant_objects)
+        i->deleteObject();
 
-    for ( GSList *i = descendant_reprs; i != NULL; i = i->next ) {
-        Inkscape::XML::Node *repr = (Inkscape::XML::Node *) i->data;
-        sp_repr_unparent( repr );
-    }
-
+    for (auto i:descendant_reprs)
+        sp_repr_unparent(i);
 
     // Now we build new reprs
     Inkscape::XML::Node *mesh = mg->getRepr();

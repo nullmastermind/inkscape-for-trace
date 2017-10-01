@@ -23,6 +23,7 @@
 
 #include <cstring>
 #include <string>
+#include <vector>
 
 #include "widgets/swatch-selector.h"
 #include "sp-pattern.h"
@@ -789,25 +790,23 @@ static void sp_psel_mesh_change(GtkWidget * /*widget*/, SPPaintSelector *psel)
 
 
 /**
- *  Returns a list of meshes in the defs of the given source document as a GSList object
- *  Returns NULL if there are no meshes in the document.
+ *  Returns a list of meshes in the defs of the given source document as a vector
  */
-static GSList *
+static std::vector<SPMeshGradient *>
 ink_mesh_list_get (SPDocument *source)
 {
+    std::vector<SPMeshGradient *> pl;
     if (source == NULL)
-        return NULL;
+        return pl;
 
-    GSList *pl = NULL;
+
     std::vector<SPObject *> meshes = source->getResourceList("gradient");
     for (std::vector<SPObject *>::const_iterator it = meshes.begin(); it != meshes.end(); ++it) {
         if (SP_IS_MESHGRADIENT(*it) &&
             SP_GRADIENT(*it) == SP_GRADIENT(*it)->getArray()) {  // only if this is a root mesh
-            pl = g_slist_prepend(pl, *it);
+            pl.push_back(SP_MESHGRADIENT(*it));
         }
     }
-
-    pl = g_slist_reverse(pl);
     return pl;
 }
 
@@ -815,14 +814,14 @@ ink_mesh_list_get (SPDocument *source)
  * Adds menu items for mesh list.
  */
 static void
-sp_mesh_menu_build (GtkWidget *combo, GSList *mesh_list, SPDocument */*source*/)
+sp_mesh_menu_build (GtkWidget *combo, std::vector<SPMeshGradient *> &mesh_list, SPDocument */*source*/)
 {
     GtkListStore *store = GTK_LIST_STORE(gtk_combo_box_get_model(GTK_COMBO_BOX(combo)));
     GtkTreeIter iter;
 
-    for (; mesh_list != NULL; mesh_list = mesh_list->next) {
+    for (auto i:mesh_list) {
 
-        Inkscape::XML::Node *repr = reinterpret_cast<SPItem *>(mesh_list->data)->getRepr();
+        Inkscape::XML::Node *repr = i->getRepr();
 
         gchar const *meshid = repr->attribute("id");
         gchar const *label  = meshid;
@@ -847,21 +846,8 @@ sp_mesh_menu_build (GtkWidget *combo, GSList *mesh_list, SPDocument */*source*/)
  */
 static void sp_mesh_list_from_doc(GtkWidget *combo, SPDocument * /*current_doc*/, SPDocument *source, SPDocument * /*mesh_doc*/)
 {
-    GSList *pl = ink_mesh_list_get(source);
-    GSList *clean_pl = NULL;
-
-    for (; pl != NULL; pl = pl->next) {
-        if (!SP_IS_MESHGRADIENT(pl->data)) {
-            continue;
-        }
-        // Add to the list of meshes we really do wish to show
-        clean_pl = g_slist_prepend (clean_pl, pl->data);
-    }
-
-    sp_mesh_menu_build (combo, clean_pl, source);
-
-    g_slist_free (pl);
-    g_slist_free (clean_pl);
+    std::vector<SPMeshGradient *> pl = ink_mesh_list_get(source);
+    sp_mesh_menu_build (combo, pl, source);
 }
 
 
@@ -1138,24 +1124,22 @@ static void sp_psel_pattern_change(GtkWidget * /*widget*/, SPPaintSelector *psel
 
 
 /**
- *  Returns a list of patterns in the defs of the given source document as a GSList object
- *  Returns NULL if there are no patterns in the document.
+ *  Returns a list of patterns in the defs of the given source document as a vector
  */
-static GSList *
+static std::vector<SPPattern*>
 ink_pattern_list_get (SPDocument *source)
 {
+    std::vector<SPPattern *> pl;
     if (source == NULL)
-        return NULL;
+        return pl;
 
-    GSList *pl = NULL;
     std::vector<SPObject *> patterns = source->getResourceList("pattern");
     for (std::vector<SPObject *>::const_iterator it = patterns.begin(); it != patterns.end(); ++it) {
         if (SP_PATTERN(*it) == SP_PATTERN(*it)->rootPattern()) {  // only if this is a root pattern
-            pl = g_slist_prepend(pl, *it);
+            pl.push_back(SP_PATTERN(*it));
         }
     }
 
-    pl = g_slist_reverse(pl);
     return pl;
 }
 
@@ -1163,14 +1147,14 @@ ink_pattern_list_get (SPDocument *source)
  * Adds menu items for pattern list - derived from marker code, left hb etc in to make addition of previews easier at some point.
  */
 static void
-sp_pattern_menu_build (GtkWidget *combo, GSList *pattern_list, SPDocument */*source*/)
+sp_pattern_menu_build (GtkWidget *combo, std::vector<SPPattern *> &pl, SPDocument */*source*/)
 {
     GtkListStore *store = GTK_LIST_STORE(gtk_combo_box_get_model(GTK_COMBO_BOX(combo)));
     GtkTreeIter iter;
 
-    for (; pattern_list != NULL; pattern_list = pattern_list->next) {
+    for (auto i=pl.rbegin(); i!=pl.rend(); ++i) {
 
-        Inkscape::XML::Node *repr = reinterpret_cast<SPItem *>(pattern_list->data)->getRepr();
+        Inkscape::XML::Node *repr = (*i)->getRepr();
 
         // label for combobox
         gchar const *label;
@@ -1200,22 +1184,8 @@ sp_pattern_menu_build (GtkWidget *combo, GSList *pattern_list, SPDocument */*sou
  */
 static void sp_pattern_list_from_doc(GtkWidget *combo, SPDocument * /*current_doc*/, SPDocument *source, SPDocument * /*pattern_doc*/)
 {
-    GSList *pl = ink_pattern_list_get(source);
-    GSList *clean_pl = NULL;
-
-    for (; pl != NULL; pl = pl->next) {
-        if (!SP_IS_PATTERN(pl->data)) {
-            continue;
-        }
-
-        // Add to the list of patterns we really do wish to show
-        clean_pl = g_slist_prepend (clean_pl, pl->data);
-    }
-
-    sp_pattern_menu_build (combo, clean_pl, source);
-
-    g_slist_free (pl);
-    g_slist_free (clean_pl);
+    std::vector<SPPattern *> pl = ink_pattern_list_get(source);
+    sp_pattern_menu_build (combo, pl, source);
 }
 
 

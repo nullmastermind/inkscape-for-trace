@@ -65,19 +65,14 @@ void SPFlowtext::update(SPCtx* ctx, unsigned int flags) {
     }
     childflags &= SP_OBJECT_MODIFIED_CASCADE;
 
-    GSList *l = NULL;
-
+    std::vector<SPObject *> l;
     for (auto& child: children) {
         sp_object_ref(&child);
-        l = g_slist_prepend(l, &child);
+        l.push_back(&child);
     }
 
-    l = g_slist_reverse(l);
-
-    while (l) {
-        SPObject *child = reinterpret_cast<SPObject *>(l->data);
+    for (auto child:l) {
         g_assert(child != NULL);
-        l = g_slist_remove(l, child);
 
         if (childflags || (child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             SPItem *item = dynamic_cast<SPItem *>(child);
@@ -216,7 +211,7 @@ Inkscape::XML::Node* SPFlowtext::write(Inkscape::XML::Document* doc, Inkscape::X
             repr = doc->createElement("svg:flowRoot");
         }
 
-        GSList *l = NULL;
+        std::vector<Inkscape::XML::Node *> l;
 
         for (auto& child: children) {
             Inkscape::XML::Node *c_repr = NULL;
@@ -226,14 +221,13 @@ Inkscape::XML::Node* SPFlowtext::write(Inkscape::XML::Document* doc, Inkscape::X
             }
 
             if ( c_repr ) {
-                l = g_slist_prepend(l, c_repr);
+                l.push_back(c_repr);
             }
         }
 
-        while ( l ) {
-            repr->addChild((Inkscape::XML::Node *) l->data, NULL);
-            Inkscape::GC::release((Inkscape::XML::Node *) l->data);
-            l = g_slist_remove(l, l->data);
+        for (auto i=l.rbegin();i!=l.rend();++i) {
+            repr->addChild(*i, NULL);
+            Inkscape::GC::release(*i);
         }
     } else {
         for (auto& child: children) {

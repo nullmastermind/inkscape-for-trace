@@ -711,19 +711,18 @@ Inkscape::XML::Node* SPItem::write(Inkscape::XML::Document *xml_doc, Inkscape::X
     // in the case of SP_OBJECT_WRITE_BUILD, the item should always be newly created,
     // so we need to add any children from the underlying object to the new repr
     if (flags & SP_OBJECT_WRITE_BUILD) {
-        GSList *l = NULL;
+        std::vector<Inkscape::XML::Node *>l;
         for (auto& child: object->children) {
             if (dynamic_cast<SPTitle *>(&child) || dynamic_cast<SPDesc *>(&child)) {
                 Inkscape::XML::Node *crepr = child.updateRepr(xml_doc, NULL, flags);
                 if (crepr) {
-                    l = g_slist_prepend (l, crepr);
+                    l.push_back(crepr);
                 }
             }
         }
-        while (l) {
-            repr->addChild((Inkscape::XML::Node *) l->data, NULL);
-            Inkscape::GC::release((Inkscape::XML::Node *) l->data);
-            l = g_slist_remove (l, l->data);
+        for (auto i = l.rbegin(); i!= l.rend(); ++i) {
+            repr->addChild(*i, NULL);
+            Inkscape::GC::release(*i);
         }
     } else {
         for (auto& child: object->children) {

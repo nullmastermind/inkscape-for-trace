@@ -59,19 +59,15 @@ void SPFlowregion::update(SPCtx *ctx, unsigned int flags) {
     }
     childflags &= SP_OBJECT_MODIFIED_CASCADE;
 
-    GSList *l = NULL;
+    std::vector<SPObject*>l;
 
     for (auto& child: children) {
         sp_object_ref(&child);
-        l = g_slist_prepend(l, &child);
+        l.push_back(&child);
     }
 
-    l = g_slist_reverse(l);
-
-    while (l) {
-        SPObject *child = reinterpret_cast<SPObject *>(l->data);
+    for (auto child:l) {
         g_assert(child != NULL);
-        l = g_slist_remove(l, child);
         SPItem *item = dynamic_cast<SPItem *>(child);
 
         if (childflags || (child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
@@ -114,19 +110,15 @@ void SPFlowregion::modified(guint flags) {
 
     flags &= SP_OBJECT_MODIFIED_CASCADE;
 
-    GSList *l = NULL;
+    std::vector<SPObject *>l;
 
     for (auto& child: children) {
         sp_object_ref(&child);
-        l = g_slist_prepend(l, &child);
+        l.push_back(&child);
     }
 
-    l = g_slist_reverse(l);
-
-    while (l) {
-        SPObject *child = reinterpret_cast<SPObject *>(l->data);
+    for (auto child:l) {
         g_assert(child != NULL);
-        l = g_slist_remove(l, child);
 
         if (flags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             child->emitModified(flags);
@@ -142,21 +134,20 @@ Inkscape::XML::Node *SPFlowregion::write(Inkscape::XML::Document *xml_doc, Inksc
             repr = xml_doc->createElement("svg:flowRegion");
         }
 
-        GSList *l = NULL;
+        std::vector<Inkscape::XML::Node *> l;
         for (auto& child: children) {
             if ( !dynamic_cast<SPTitle *>(&child) && !dynamic_cast<SPDesc *>(&child) ) {
                 Inkscape::XML::Node *crepr = child.updateRepr(xml_doc, NULL, flags);
 
                 if (crepr) {
-                    l = g_slist_prepend(l, crepr);
+                    l.push_back(crepr);
                 }
             }
         }
 
-        while (l) {
-            repr->addChild((Inkscape::XML::Node *) l->data, NULL);
-            Inkscape::GC::release((Inkscape::XML::Node *) l->data);
-            l = g_slist_remove(l, l->data);
+        for (auto i = l.rbegin(); i != l.rend(); ++i) {
+            repr->addChild(*i, NULL);
+            Inkscape::GC::release(*i);
         }
 
         for (auto& child: children) {
@@ -216,19 +207,15 @@ void SPFlowregionExclude::update(SPCtx *ctx, unsigned int flags) {
 
     flags &= SP_OBJECT_MODIFIED_CASCADE;
 
-    GSList *l = NULL;
+    std::vector<SPObject *> l;
 
     for (auto& child: children) {
         sp_object_ref(&child);
-        l = g_slist_prepend(l, &child);
+        l.push_back(&child);
     }
 
-    l = g_slist_reverse (l);
-
-    while (l) {
-        SPObject *child = reinterpret_cast<SPObject *>(l->data);
+    for(auto child:l) {
         g_assert(child != NULL);
-        l = g_slist_remove(l, child);
 
         if (flags || (child->uflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             SPItem *item = dynamic_cast<SPItem *>(child);
@@ -268,19 +255,15 @@ void SPFlowregionExclude::modified(guint flags) {
 
     flags &= SP_OBJECT_MODIFIED_CASCADE;
 
-    GSList *l = NULL;
+    std::vector<SPObject*> l;
 
     for (auto& child: children) {
         sp_object_ref(&child);
-        l = g_slist_prepend(l, &child);
+        l.push_back(&child);
     }
 
-    l = g_slist_reverse (l);
-
-    while (l) {
-        SPObject *child = reinterpret_cast<SPObject *>(l->data);
+    for (auto child:l) {
         g_assert(child != NULL);
-        l = g_slist_remove(l, child);
 
         if (flags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             child->emitModified(flags);
@@ -296,20 +279,19 @@ Inkscape::XML::Node *SPFlowregionExclude::write(Inkscape::XML::Document *xml_doc
             repr = xml_doc->createElement("svg:flowRegionExclude");
         }
 
-        GSList *l = NULL;
+        std::vector<Inkscape::XML::Node *> l;
 
         for (auto& child: children) {
             Inkscape::XML::Node *crepr = child.updateRepr(xml_doc, NULL, flags);
 
             if (crepr) {
-                l = g_slist_prepend(l, crepr);
+                l.push_back(crepr);
             }
         }
 
-        while (l) {
-            repr->addChild((Inkscape::XML::Node *) l->data, NULL);
-            Inkscape::GC::release((Inkscape::XML::Node *) l->data);
-            l = g_slist_remove(l, l->data);
+        for (auto i = l.rbegin(); i != l.rend(); ++i) { 
+            repr->addChild(*i, NULL);
+            Inkscape::GC::release(*i);
         }
 
     } else {

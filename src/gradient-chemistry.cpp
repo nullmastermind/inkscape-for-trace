@@ -955,43 +955,36 @@ void sp_item_gradient_reverse_vector(SPItem *item, Inkscape::PaintTarget fill_or
         sp_gradient_repr_set_link(gradient->getRepr(), vector);
     }
 
-    GSList *child_reprs = NULL;
-    GSList *child_objects = NULL;
+    std::vector<SPObject *> child_objects;
+    std::vector<Inkscape::XML::Node *>child_reprs;
     std::vector<double> offsets;
     double offset;
     for (auto& child: vector->children) {
-        child_reprs = g_slist_prepend (child_reprs, child.getRepr());
-        child_objects = g_slist_prepend (child_objects, &child);
+        child_reprs.push_back(child.getRepr());
+        child_objects.push_back(&child);
         offset=0;
         sp_repr_get_double(child.getRepr(), "offset", &offset);
         offsets.push_back(offset);
     }
 
-    GSList *child_copies = NULL;
-    for (GSList *i = child_reprs; i != NULL; i = i->next) {
-        Inkscape::XML::Node *repr = (Inkscape::XML::Node *) i->data;
+    std::vector<Inkscape::XML::Node *> child_copies;
+    for (auto repr:child_reprs) {
         Inkscape::XML::Document *xml_doc = vector->getRepr()->document();
-        child_copies = g_slist_append (child_copies, repr->duplicate(xml_doc));
+        child_copies.push_back(repr->duplicate(xml_doc));
     }
 
 
-    for (GSList *i = child_objects; i != NULL; i = i->next) {
-        SPObject *child = SP_OBJECT (i->data);
-        child->deleteObject();
+    for (auto i:child_objects) {
+        i->deleteObject();
     }
 
     std::vector<double>::iterator iter = offsets.end() - 1;
-    for (GSList *i = child_copies; i != NULL; i = i->next) {
-        Inkscape::XML::Node *copy = (Inkscape::XML::Node *) i->data;
+    for (auto copy:child_copies) {
         vector->appendChildRepr(copy);
         sp_repr_set_svg_double (copy, "offset", 1 - *iter);
         --iter;
         Inkscape::GC::release(copy);
     }
-
-    g_slist_free (child_reprs);
-    g_slist_free (child_copies);
-    g_slist_free (child_objects);
 }
 
 void sp_item_gradient_invert_vector_color(SPItem *item, Inkscape::PaintTarget fill_or_stroke)
