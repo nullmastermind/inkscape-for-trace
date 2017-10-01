@@ -18,6 +18,7 @@
  */
 
 #include <2geom/forward.h>
+#include <2geom/affine.h>
 #include <list>
 #include <sigc++/connection.h>
 
@@ -58,7 +59,8 @@ public:
 
     void add_pattern_knotholder();
 
-    const SPItem *getItem() { return item; }
+    void setEditTransform(Geom::Affine edit_transform);
+    Geom::Affine getEditTranform() const { return _edit_transform; }
 
     bool knot_mouseover() const;
 
@@ -82,6 +84,8 @@ protected:
     bool local_change; ///< if true, no need to recreate knotholder if repr was changed.
 
     bool dragging;
+
+    Geom::Affine _edit_transform;
 
 private:
     KnotHolder(); // declared but not defined

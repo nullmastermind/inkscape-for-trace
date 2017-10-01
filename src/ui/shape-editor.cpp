@@ -31,10 +31,12 @@ namespace UI {
 
 bool ShapeEditor::_blockSetItem = false;
 
-ShapeEditor::ShapeEditor(SPDesktop *dt) {
-    this->desktop = dt;
-    this->knotholder = NULL;
-    this->knotholder_listener_attached_for = NULL;
+ShapeEditor::ShapeEditor(SPDesktop *dt, Geom::Affine edit_transform) :
+    desktop(dt),
+    knotholder(nullptr),
+    knotholder_listener_attached_for(nullptr),
+    _edit_transform(edit_transform)
+{
 }
 
 ShapeEditor::~ShapeEditor() {
@@ -74,14 +76,6 @@ void ShapeEditor::decrement_local_change() {
     if (this->knotholder) {
         this->knotholder->local_change = FALSE;
     }
-}
-
-const SPItem *ShapeEditor::get_item() {
-    const SPItem *item = NULL;
-    if (this->has_knotholder()) {
-        item = this->knotholder->getItem();
-    }
-    return item;
 }
 
 void ShapeEditor::event_attr_changed(Inkscape::XML::Node * node, gchar const *name, gchar const *, gchar const *, bool, void *data)
@@ -129,6 +123,7 @@ void ShapeEditor::set_item(SPItem *item, bool keep_knotholder) {
             this->knotholder = createKnotHolder(item, desktop);
         }
         if (this->knotholder) {
+            this->knotholder->setEditTransform(_edit_transform);
             this->knotholder->update_knots();
             // setting new listener
             repr = this->knotholder->repr;

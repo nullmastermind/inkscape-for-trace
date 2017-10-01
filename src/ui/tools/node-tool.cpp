@@ -358,6 +358,7 @@ void NodeTool::set(const Inkscape::Preferences::Entry& value) {
 }
 
 /** Recursively collect ShapeRecords */
+static
 void gather_items(NodeTool *nt, SPItem *base, SPObject *obj, Inkscape::UI::ShapeRole role,
     std::set<Inkscape::UI::ShapeRecord> &s)
 {
@@ -437,7 +438,7 @@ void NodeTool::selection_changed(Inkscape::Selection *sel) {
         if ((SP_IS_SHAPE(r.item) || SP_IS_TEXT(r.item) || SP_IS_GROUP(r.item) || SP_IS_OBJECTGROUP(r.item)) &&
             this->_shape_editors.find(r.item) == this->_shape_editors.end())
         {
-            ShapeEditor *si = new ShapeEditor(this->desktop);
+            ShapeEditor *si = new ShapeEditor(this->desktop, r.edit_transform);
             si->set_item(r.item);
             this->_shape_editors.insert(const_cast<SPItem*&>(r.item), si);
         }
