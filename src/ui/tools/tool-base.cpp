@@ -71,6 +71,10 @@ static guint32 scroll_event_time = 0;
 static gdouble scroll_multiply = 1;
 static guint scroll_keyval = 0;
 
+// globals for key processing
+static bool latin_keys_group_valid = FALSE;
+static gint latin_keys_group;
+
 
 namespace Inkscape {
 namespace UI {
@@ -1159,8 +1163,36 @@ void sp_event_show_modifier_tip(Inkscape::MessageContext *message_context,
 }
 
 /**
- * Return the keyval corresponding to the key event in group 0, i.e.,
- * in the main (English) layout.
+ * Try to determine the keys group of Latin layout.
+ * Check available keymap entries for Latin 'a' key and find the minimal integer value.
+ */
+static void update_latin_keys_group() {
+    GdkKeymapKey* keys;
+    gint n_keys;
+
+    latin_keys_group_valid = FALSE;
+    if (gdk_keymap_get_entries_for_keyval(gdk_keymap_get_default(), GDK_KEY_a, &keys, &n_keys)) {
+        for (gint i = 0; i < n_keys; i++) {
+            if (!latin_keys_group_valid || keys[i].group < latin_keys_group) {
+                latin_keys_group = keys[i].group;
+                latin_keys_group_valid = TRUE;
+            }
+        }
+        g_free(keys);
+    }
+}
+
+/**
+ * Initialize Latin keys group handling.
+ */
+void init_latin_keys_group() {
+    g_signal_connect(G_OBJECT(gdk_keymap_get_default()),
+            "keys-changed", G_CALLBACK(update_latin_keys_group), NULL);
+    update_latin_keys_group();
+}
+
+/**
+ * Return the keyval corresponding to the key event in Latin group.
  *
  * Use this instead of simply event->keyval, so that your keyboard shortcuts
  * work regardless of layouts (e.g., in Cyrillic).
@@ -1168,10 +1200,11 @@ void sp_event_show_modifier_tip(Inkscape::MessageContext *message_context,
 guint get_group0_keyval(GdkEventKey const *event, guint *consumed_modifiers /*= NULL*/) {
     guint keyval = 0;
     GdkModifierType modifiers;
+    gint group = latin_keys_group_valid ? latin_keys_group : event->group;
 
     gdk_keymap_translate_keyboard_state(
             gdk_keymap_get_for_display(gdk_display_get_default()),
-            event->hardware_keycode, (GdkModifierType) event->state, 0 /*event->group*/,
+            event->hardware_keycode, (GdkModifierType) event->state, group,
             &keyval, NULL, NULL, &modifiers);
 
     if (consumed_modifiers) {
