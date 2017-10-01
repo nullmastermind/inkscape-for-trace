@@ -16,6 +16,9 @@
 # include <config.h>
 #endif
 
+#include <vector>
+#include <set>
+
 #include <gtkmm/box.h>
 #include <gtkmm/button.h>
 #include <gtkmm/buttonbox.h>
@@ -68,7 +71,7 @@ private:
     /**
      * Returns a list of all the text items in the SPObject
      */
-    GSList *allTextItems (SPObject *r, GSList *l, bool hidden, bool locked);
+    void allTextItems (SPObject *r, std::vector<SPItem *> &l, bool hidden, bool locked);
 
     /**
      * Is text inside the SPOject's tree
@@ -78,7 +81,7 @@ private:
     /**
      * Compare the visual bounds of 2 SPItems referred to by a and b
      */
-    static gint compareTextBboxes (gconstpointer a, gconstpointer b);
+    static bool compareTextBboxes (gconstpointer a, gconstpointer b);
     SPItem *getText (SPObject *root);
     void    nextText ();
 
@@ -165,12 +168,12 @@ private:
     /**
      * list of canvasitems (currently just rects) that mark misspelled things on canvas
      */
-    GSList *_rects;
+    std::vector<SPCanvasItem *> _rects;
 
     /**
      * list of text objects we have already checked in this session
      */
-    GSList *_seen_objects;
+    std::set<SPItem *> _seen_objects;
 
     /**
      *  the object currently being checked

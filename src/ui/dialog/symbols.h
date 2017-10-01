@@ -14,10 +14,10 @@
 #define INKSCAPE_UI_DIALOG_SYMBOLS_H
 
 #include "display/drawing.h"
-
 #include "ui/dialog/desktop-tracker.h"
-
 #include "ui/widget/panel.h"
+#include "sp-symbol.h"
+#include "sp-use.h"
 
 #include <vector>
 
@@ -85,10 +85,10 @@ private:
     void add_symbol( SPObject* symbol_document );
     SPDocument* symbols_preview_doc();
 
-    GSList* symbols_in_doc_recursive(SPObject *r, GSList *l);
-    GSList* symbols_in_doc( SPDocument* document );
-    GSList* use_in_doc_recursive(SPObject *r, GSList *l);
-    GSList* use_in_doc( SPDocument* document );
+    void symbols_in_doc_recursive(SPObject *r, std::vector<SPSymbol*> &l);
+    std::vector<SPSymbol*> symbols_in_doc( SPDocument* document );
+    void use_in_doc_recursive(SPObject *r, std::vector<SPUse*> &l);
+    std::vector<SPUse*> use_in_doc( SPDocument* document );
     gchar const* style_from_use( gchar const* id, SPDocument* document);
 
     Glib::RefPtr<Gdk::Pixbuf> draw_symbol(SPObject *symbol);

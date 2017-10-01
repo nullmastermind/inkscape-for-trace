@@ -27,6 +27,7 @@ namespace Extension {
 class Extension;
 
 
+
 // \brief  A class to represent a radiobutton parameter of an extension
 class ParamRadioButton : public Parameter {
 public:
@@ -63,7 +64,24 @@ private:
                 It is the value of the current selected string */
     gchar * _value;
     AppearanceMode _mode;
-    GSList * choices; /**< A table to store the choice strings  */
+
+    /* For internal use only.
+     	Note that value and text MUST be non-NULL. This is ensured by newing only at one location in the code where non-NULL checks are made. */
+    class optionentry {
+    public:
+        optionentry (Glib::ustring * val, Glib::ustring * txt) {
+            value = val;
+            text = txt;
+        }
+        ~optionentry() {
+            delete value;
+            delete text;
+        }
+        Glib::ustring * value;
+        Glib::ustring * text;
+    };
+
+    std::vector<optionentry*> choices; /**< A table to store the choice strings  */
 
 }; /* class ParamRadioButton */
 

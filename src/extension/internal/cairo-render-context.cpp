@@ -163,10 +163,10 @@ CairoRenderState* CairoRenderContext::getCurrentState(void) const
 CairoRenderState* CairoRenderContext::getParentState(void) const
 {
     // if this is the root node just return it
-    if (g_slist_length(_state_stack) == 1) {
+    if (_state_stack.size() == 1) {
         return _state;
     } else {
-        return static_cast<CairoRenderState *>(g_slist_nth_data(_state_stack, 1));
+        return _state_stack[_state_stack.size()-2];
     }
 }
 
@@ -975,7 +975,7 @@ void CairoRenderContext::pushState(void)
     CairoRenderState *new_state = _createState();
     // copy current state's transform
     new_state->transform = _state->transform;
-    _state_stack = g_slist_prepend(_state_stack, new_state);
+    _state_stack.push_back(new_state);
     _state = new_state;
 }
 
@@ -985,11 +985,11 @@ void CairoRenderContext::popState(void)
 
     cairo_restore(_cr);
 
-    g_free(_state_stack->data);
-    _state_stack = g_slist_remove_link(_state_stack, _state_stack);
-    _state = static_cast<CairoRenderState*>(_state_stack->data);
+    g_free(_state_stack.back());
+    _state_stack.pop_back();
 
-    g_assert( g_slist_length(_state_stack) > 0 );
+    g_assert( !_state_stack.empty());
+    _state = _state_stack.back();
 }
 
 static bool pattern_hasItemChildren(SPPattern *pat)

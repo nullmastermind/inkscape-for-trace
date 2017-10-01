@@ -133,7 +133,7 @@ public:
 
 /* Parameter Stuff */
 private:
-    GSList * parameters; /**< A table to store the parameters for this extension.
+    std::vector<Parameter *> parameters; /**< A table to store the parameters for this extension.
                               This only gets created if there are parameters in this
                               extension */
 
@@ -141,8 +141,7 @@ public:
     /** \brief  A function to get the number of parameters that
                 the extension has.
         \return The number of parameters. */
-    unsigned int param_count ( ) { return parameters == NULL ? 0 :
-                                              g_slist_length(parameters); };
+    unsigned int param_count ( ) { return parameters.size(); };
     /** \brief  A function to get the number of parameters that
                 are visible to the user that the extension has.
         \return The number of visible parameters.

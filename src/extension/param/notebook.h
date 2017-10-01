@@ -37,7 +37,34 @@ private:
      */
     gchar * _value;
 
-    GSList * pages; /**< A table to store the pages with parameters for this notebook.
+    /**
+     * A class to represent the pages of a notebookparameter of an extension.
+     */
+    class ParamNotebookPage : public Parameter {
+    private:
+        std::vector<Parameter *> parameters; /**< A table to store the parameters for this page.
+                              This only gets created if there are parameters on this
+                              page */
+
+    public:
+        static ParamNotebookPage * makepage (Inkscape::XML::Node * in_repr, Inkscape::Extension::Extension * in_ext);
+
+        ParamNotebookPage(const gchar * name,
+                      const gchar * text,
+                      const gchar * description,
+                      bool hidden,
+                      Inkscape::Extension::Extension * ext,
+                      Inkscape::XML::Node * xml);
+        ~ParamNotebookPage(void);
+
+        Gtk::Widget * get_widget(SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<void> * changeSignal);
+        void paramString (std::list <std::string> &list);
+        gchar * get_text (void) {return _text;};
+        Parameter * get_param (const gchar * name);
+    }; /* class ParamNotebookPage */
+
+
+    std::vector<ParamNotebookPage*> pages; /**< A table to store the pages with parameters for this notebook.
                               This only gets created if there are pages in this
                               notebook */
 public:

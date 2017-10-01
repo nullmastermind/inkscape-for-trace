@@ -9,7 +9,7 @@
  *
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
-
+#include <vector>
 #include <gtkmm/box.h>
 #include <gtkmm/combobox.h>
 #include <gtkmm/liststore.h>
@@ -20,6 +20,7 @@
 #include "document.h"
 #include "inkscape.h"
 #include "display/drawing.h"
+#include "sp-marker.h"
 
 namespace Gtk {
 class Container;
@@ -80,8 +81,8 @@ private:
     void init_combo();
     void set_history(Gtk::TreeModel::Row match_row);
     void sp_marker_list_from_doc(SPDocument *source,  gboolean history);
-    GSList *get_marker_list (SPDocument *source);
-    void add_markers (GSList *marker_list, SPDocument *source,  gboolean history);
+    std::vector <SPMarker*> get_marker_list (SPDocument *source);
+    void add_markers (std::vector<SPMarker *> const& marker_list, SPDocument *source,  gboolean history);
     void remove_markers (gboolean history);
     SPDocument *ink_markers_preview_doc ();
     Gtk::Image * create_marker_image(unsigned psize, gchar const *mname,

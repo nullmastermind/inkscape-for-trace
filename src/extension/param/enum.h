@@ -34,7 +34,23 @@ private:
                 been allocated in memory.  And should be free'd.
                 It is the value of the current selected string */
     gchar * _value;
-    GSList * choices; /**< A table to store the choice strings  */
+
+    /* For internal use only. 
+     * Note that value and text MUST be non-NULL. 
+     * This is ensured by newing only at one location in the code where non-NULL checks are made. 
+     */
+    class enumentry {
+    public:
+        enumentry (Glib::ustring &val, Glib::ustring &text) :
+            value(val),
+            text(text)
+        {}
+
+        Glib::ustring value;
+        Glib::ustring text;
+    };
+
+    std::vector<enumentry *> choices; /**< A table to store the choice strings  */
 
 public:
     ParamComboBox(const gchar * name,

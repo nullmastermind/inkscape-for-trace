@@ -121,13 +121,12 @@ CairoRenderer::createContext(void)
     CairoRenderContext *new_context = new CairoRenderContext(this);
     g_assert( new_context != NULL );
 
-    new_context->_state_stack = NULL;
     new_context->_state = NULL;
 
     // create initial render state
     CairoRenderState *state = new_context->_createState();
     state->transform = Geom::identity();
-    new_context->_state_stack = g_slist_prepend(new_context->_state_stack, state);
+    new_context->_state_stack.push_back(state);
     new_context->_state = state;
 
     return new_context;
@@ -517,20 +516,17 @@ static void sp_asbitmap_render(SPItem *item, CairoRenderContext *ctx)
 
     // Do the export
     SPDocument *document = item->document;
-    GSList *items = NULL;
-    items = g_slist_append(items, item);
 
     boost::scoped_ptr<Inkscape::Pixbuf> pb(
         sp_generate_internal_bitmap(document, NULL,
             bbox->min()[Geom::X], bbox->min()[Geom::Y], bbox->max()[Geom::X], bbox->max()[Geom::Y], 
-            width, height, res, res, (guint32) 0xffffff00, items ));
+            width, height, res, res, (guint32) 0xffffff00, item ));
 
     if (pb) {
         //TEST(gdk_pixbuf_save( pb, "bitmap.png", "png", NULL, NULL ));
 
         ctx->renderImage(pb.get(), t, item->style);
     }
-    g_slist_free (items);
 }
 
 

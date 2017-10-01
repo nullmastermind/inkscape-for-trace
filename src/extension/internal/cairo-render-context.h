@@ -198,7 +198,7 @@ protected:
     unsigned int _clip_rule : 8;
     unsigned int _clip_winding_failed : 1;
 
-    GSList *_state_stack;
+    std::vector<CairoRenderState *> _state_stack;
     CairoRenderState *_state;    // the current state
 
     CairoRenderer *_renderer;

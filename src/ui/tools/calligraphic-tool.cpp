@@ -421,10 +421,9 @@ void CalligraphicTool::cancel() {
     sp_canvas_item_ungrab(SP_CANVAS_ITEM(desktop->acetate), 0);
 
 	/* Remove all temporary line segments */
-	while (this->segments) {
-		sp_canvas_item_destroy(SP_CANVAS_ITEM(this->segments->data));
-		this->segments = g_slist_remove(this->segments, this->segments->data);
-	}
+    for (auto i:this->segments)
+        sp_canvas_item_destroy(SP_CANVAS_ITEM(i));
+    this->segments.clear();
 
 	/* reset accumulated curve */
 	this->accumulated->reset();
@@ -731,10 +730,9 @@ bool CalligraphicTool::root_handler(GdkEvent* event) {
             this->apply(motion_dt);
 
             /* Remove all temporary line segments */
-            while (this->segments) {
-                sp_canvas_item_destroy(SP_CANVAS_ITEM(this->segments->data));
-                this->segments = g_slist_remove(this->segments, this->segments->data);
-            }
+            for (auto i:this->segments)
+                sp_canvas_item_destroy(SP_CANVAS_ITEM(i));
+            this->segments.clear();
 
             /* Create object */
             this->fit_and_split(true);
@@ -1089,7 +1087,7 @@ void CalligraphicTool::fit_and_split(bool release) {
                     this->currentcurve->curveto(bp2[2], bp2[1], bp2[0]);
                 }
                 // FIXME: dc->segments is always NULL at this point??
-                if (!this->segments) { // first segment
+                if (this->segments.empty()) { // first segment
                     add_cap(this->currentcurve, b2[0], b1[0], this->cap_rounding);
                 }
                 this->currentcurve->closepath();
@@ -1143,8 +1141,8 @@ void CalligraphicTool::fit_and_split(bool release) {
             sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(cbp), 0x00000000, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
             /* fixme: Cannot we cascade it to root more clearly? */
             g_signal_connect(G_OBJECT(cbp), "event", G_CALLBACK(sp_desktop_root_handler), desktop);
-
-            this->segments = g_slist_prepend(this->segments, cbp);
+            
+            this->segments.push_back(cbp);
         }
 
         this->point1[0] = this->point1[this->npoints - 1];

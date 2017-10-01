@@ -437,10 +437,10 @@ void PencilTool::_cancel() {
 
     this->red_curve->reset();
     sp_canvas_bpath_set_bpath(SP_CANVAS_BPATH(this->red_bpath), NULL);
-    while (this->green_bpaths) {
-        sp_canvas_item_destroy(SP_CANVAS_ITEM(this->green_bpaths->data));
-        this->green_bpaths = g_slist_remove(this->green_bpaths, this->green_bpaths->data);
+    for (auto i:this->green_bpaths) {
+        sp_canvas_item_destroy(i);
     }
+    this->green_bpaths.clear();
     this->green_curve->reset();
     if (this->green_anchor) {
         this->green_anchor = sp_draw_anchor_destroy(this->green_anchor);
@@ -858,7 +858,7 @@ void PencilTool::_fitAndSplit() {
         }
         sp_canvas_bpath_set_stroke(SP_CANVAS_BPATH(cshape), this->green_color, 1.0, SP_STROKE_LINEJOIN_MITER, SP_STROKE_LINECAP_BUTT);
 
-        this->green_bpaths = g_slist_prepend(this->green_bpaths, cshape);
+        this->green_bpaths.push_back(cshape);
 
         this->red_curve_is_valid = false;
     }

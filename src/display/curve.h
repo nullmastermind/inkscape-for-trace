@@ -16,8 +16,7 @@
 #include <2geom/pathvector.h>
 #include <cstddef>
 #include <boost/optional.hpp>
-
-extern "C" { typedef struct _GSList GSList; }
+#include <list>
 
 /**
  * Wrapper around a Geom::PathVector object.
@@ -27,6 +26,7 @@ public:
     /* Constructors */
     explicit SPCurve();
     explicit SPCurve(Geom::PathVector const& pathv);
+    explicit SPCurve(std::list<SPCurve *> const& pathv);
     static SPCurve * new_from_rect(Geom::Rect const &rect, bool all_four_sides = false);
 
     virtual ~SPCurve();
@@ -78,8 +78,8 @@ public:
     SPCurve * append_continuous(SPCurve const *c1, double tolerance);
     SPCurve * create_reverse() const;
 
-    GSList * split() const;
-    static SPCurve * concat(GSList const *list);
+    std::list<SPCurve *> split() const;
+    static SPCurve * concat(std::list<SPCurve *> l);
 
 protected:
     size_t _refcount;

@@ -111,21 +111,19 @@ MarkerComboBox::refreshHistory()
 
     updating = true;
 
-    GSList *ml = get_marker_list(doc);
+    std::vector<SPMarker *> ml = get_marker_list(doc);
 
     /*
      * Seems to be no way to get notified of changes just to markers,
      * so listen to changes in all defs and check if the number of markers has changed here
      * to avoid unnecessary refreshes when things like gradients change
     */
-    if (markerCount != g_slist_length(ml)) {
+    if (markerCount != ml.size()) {
         const char *active = get_active()->get_value(marker_columns.marker);
         sp_marker_list_from_doc(doc, true);
         set_selected(active);
-        markerCount = g_slist_length(ml);
+        markerCount = ml.size();
     }
-
-    g_slist_free (ml);
 
     updating = false;
 }
@@ -295,45 +293,32 @@ void MarkerComboBox::set_selected(const gchar *name, gboolean retry/*=true*/) {
  */
 void MarkerComboBox::sp_marker_list_from_doc(SPDocument *source, gboolean history)
 {
-    GSList *ml = get_marker_list(source);
-    GSList *clean_ml = NULL;
-
-    for (; ml != NULL; ml = ml->next) {
-        if (!SP_IS_MARKER(ml->data))
-            continue;
-
-        // Add to the list of markers we really do wish to show
-        clean_ml = g_slist_prepend (clean_ml, ml->data);
-    }
+    std::vector<SPMarker *> ml = get_marker_list(source);
 
     remove_markers(history); // Seem to need to remove 2x
     remove_markers(history);
-    add_markers(clean_ml, source, history);
-
-    g_slist_free (ml);
-    g_slist_free (clean_ml);
-
+    add_markers(ml, source, history);
 }
 
 /**
- *  Returns a list of markers in the defs of the given source document as a GSList object
+ *  Returns a list of markers in the defs of the given source document as a vector
  *  Returns NULL if there are no markers in the document.
  */
-GSList *MarkerComboBox::get_marker_list (SPDocument *source)
+std::vector<SPMarker *> MarkerComboBox::get_marker_list (SPDocument *source)
 {
+    std::vector<SPMarker *> ml;
     if (source == NULL)
-        return NULL;
+        return ml;
 
-    GSList *ml   = NULL;
     SPDefs *defs = source->getDefs();
     if (!defs) {
-        return NULL;
+        return ml;
     }
 
     for (auto& child: defs->children)
     {
         if (SP_IS_MARKER(&child)) {
-            ml = g_slist_prepend (ml, &child);
+            ml.push_back(SP_MARKER(&child));
         }
     }
     return ml;
@@ -361,7 +346,7 @@ void MarkerComboBox::remove_markers (gboolean history)
 /**
  * Adds markers in marker_list to the combo
  */
-void MarkerComboBox::add_markers (GSList *marker_list, SPDocument *source, gboolean history)
+void MarkerComboBox::add_markers (std::vector<SPMarker *> const& marker_list, SPDocument *source, gboolean history)
 {
     // Do this here, outside of loop, to speed up preview generation:
     Inkscape::Drawing drawing;
@@ -388,9 +373,9 @@ void MarkerComboBox::add_markers (GSList *marker_list, SPDocument *source, gbool
         row[marker_columns.separator] = false;
     }
 
-    for (; marker_list != NULL; marker_list = marker_list->next) {
+    for (auto i:marker_list) {
 
-        Inkscape::XML::Node *repr = reinterpret_cast<SPItem *>(marker_list->data)->getRepr();
+        Inkscape::XML::Node *repr = i->getRepr();
         gchar const *markid = repr->attribute("inkscape:stockid") ? repr->attribute("inkscape:stockid") : repr->attribute("id");
 
         // generate preview

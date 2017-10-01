@@ -38,6 +38,15 @@ SPCurve::SPCurve(Geom::PathVector const& pathv)
     _pathv(pathv)
 {}
 
+//concat constructor
+SPCurve::SPCurve(std::list<SPCurve *> const& l) : _refcount(1)
+{
+    for (auto c:l) {
+        _pathv.insert( _pathv.end(), c->get_pathvector().begin(), c->get_pathvector().end() );
+    }
+}
+
+
 SPCurve *
 SPCurve::new_from_rect(Geom::Rect const &rect, bool all_four_sides)
 {
@@ -134,32 +143,24 @@ SPCurve::copy() const
  * Return new curve that is the concatenation of all curves in list.
  */
 SPCurve *
-SPCurve::concat(GSList const *list)
-{
-    SPCurve *new_curve = new SPCurve();
-
-    for (GSList const *l = list; l != NULL; l = l->next) {
-        SPCurve *c = static_cast<SPCurve *>(l->data);
-        new_curve->_pathv.insert( new_curve->_pathv.end(), c->get_pathvector().begin(), c->get_pathvector().end() );
-    }
-
-    return new_curve;
-}
+SPCurve::concat(std::list<SPCurve *> l){
+    return new SPCurve(l);
+};
 
 /**
  * Returns a list of new curves corresponding to the subpaths in \a curve.
  * 2geomified
  */
-GSList *
+std::list<SPCurve *>
 SPCurve::split() const
 {
-    GSList *l = NULL;
+    std::list<SPCurve *> l;
 
     for (Geom::PathVector::const_iterator path_it = _pathv.begin(); path_it != _pathv.end(); ++path_it) {
         Geom::PathVector newpathv;
         newpathv.push_back(*path_it);
         SPCurve * newcurve = new SPCurve(newpathv);
-        l = g_slist_prepend(l, newcurve);
+        l.push_back(newcurve);
     }
 
     return l;

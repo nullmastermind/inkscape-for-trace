@@ -34,9 +34,9 @@
 
 // TODO look for copy-n-paste duplication of this function:
 /**
- * Hide all items that are not listed in list, recursively, skipping groups and defs.
+ * Hide all items except @item, recursively, skipping groups and defs.
  */
-static void hide_other_items_recursively(SPObject *o, GSList *list, unsigned dkey)
+static void hide_other_items_recursively(SPObject *o, SPItem *i, unsigned dkey)
 {
     SPItem *item = dynamic_cast<SPItem *>(o);
     if ( item
@@ -44,15 +44,15 @@ static void hide_other_items_recursively(SPObject *o, GSList *list, unsigned dke
          && !dynamic_cast<SPRoot *>(item)
          && !dynamic_cast<SPGroup *>(item)
          && !dynamic_cast<SPUse *>(item)
-         && !g_slist_find(list, o) )
+         && (i != o) )
     {
         item->invoke_hide(dkey);
     }
 
     // recurse
-    if (!g_slist_find(list, o)) {
+    if (i != o) {
         for (auto& child: o->children) {
-            hide_other_items_recursively(&child, list, dkey);
+            hide_other_items_recursively(&child, i, dkey);
         }
     }
 }
@@ -65,11 +65,11 @@ static void hide_other_items_recursively(SPObject *o, GSList *list, unsigned dke
 bool sp_export_jpg_file(SPDocument *doc, gchar const *filename,
                         double x0, double y0, double x1, double y1,
                         unsigned width, unsigned height, double xdpi, double ydpi,
-                        unsigned long bgcolor, double quality,GSList *items)
+                        unsigned long bgcolor, double quality, SPItem* item)
 {
     boost::scoped_ptr<Inkscape::Pixbuf> pixbuf(
         sp_generate_internal_bitmap(doc, filename, x0, y0, x1, y1,
-            width, height, xdpi, ydpi, bgcolor, items));
+            width, height, xdpi, ydpi, bgcolor, item));
 
     gchar c[32];
     g_snprintf(c, 32, "%f", quality);
@@ -77,6 +77,7 @@ bool sp_export_jpg_file(SPDocument *doc, gchar const *filename,
  
     return saved;
 }
+
 
 /**
     generates a bitmap from given items
@@ -95,7 +96,7 @@ Inkscape::Pixbuf *sp_generate_internal_bitmap(SPDocument *doc, gchar const */*fi
                                        double x0, double y0, double x1, double y1,
                                        unsigned width, unsigned height, double xdpi, double ydpi,
                                        unsigned long /*bgcolor*/,
-                                       GSList *items_only)
+                                       SPItem *item_only)
 
 {
     if (width == 0 || height == 0) return NULL;
@@ -128,8 +129,8 @@ Inkscape::Pixbuf *sp_generate_internal_bitmap(SPDocument *doc, gchar const */*fi
 
     // We show all and then hide all items we don't want, instead of showing only requested items,
     // because that would not work if the shown item references something in defs
-    if (items_only) {
-        hide_other_items_recursively(doc->getRoot(), items_only, dkey);
+    if (item_only) {
+        hide_other_items_recursively(doc->getRoot(), item_only, dkey);
     }
 
     Geom::IntRect final_bbox = Geom::IntRect::from_xywh(0, 0, width, height);

@@ -76,13 +76,10 @@ FreehandBase::FreehandBase(gchar const *const *cursor_shape)
     , red_curve(NULL)
     , blue_bpath(NULL)
     , blue_curve(NULL)
-    , green_bpaths(NULL)
     , green_curve(NULL)
     , green_anchor(NULL)
     , green_closed(false)
     , white_item(NULL)
-    , white_curves(NULL)
-    , white_anchors(NULL)
     , overwrite_curve(NULL)
     , sa(NULL)
     , ea(NULL)
@@ -558,22 +555,20 @@ static void spdc_attach_selection(FreehandBase *dc, Inkscape::Selection */*sel*/
         SPCurve *norm = SP_PATH(item)->get_curve_for_edit();
         norm->transform((dc->white_item)->i2dt_affine());
         g_return_if_fail( norm != NULL );
-        dc->white_curves = g_slist_reverse(norm->split());
+        dc->white_curves = norm->split();
         norm->unref();
 
         // Anchor list
-        for (GSList *l = dc->white_curves; l != NULL; l = l->next) {
-            SPCurve *c;
-            c = static_cast<SPCurve*>(l->data);
+        for (auto c:dc->white_curves) {
             g_return_if_fail( c->get_segment_count() > 0 );
             if ( !c->is_closed() ) {
                 SPDrawAnchor *a;
                 a = sp_draw_anchor_new(dc, c, TRUE, *(c->first_point()));
                 if (a)
-                    dc->white_anchors = g_slist_prepend(dc->white_anchors, a);
+                    dc->white_anchors.push_back(a);
                 a = sp_draw_anchor_new(dc, c, FALSE, *(c->last_point()));
                 if (a)
-                    dc->white_anchors = g_slist_prepend(dc->white_anchors, a);
+                    dc->white_anchors.push_back(a);
             }
         }
         // fixme: recalculate active anchor?
@@ -645,10 +640,9 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
     // Green
     dc->green_curve = new SPCurve();
-    while (dc->green_bpaths) {
-        sp_canvas_item_destroy(SP_CANVAS_ITEM(dc->green_bpaths->data));
-        dc->green_bpaths = g_slist_remove(dc->green_bpaths, dc->green_bpaths->data);
-    }
+    for (auto i : dc->green_bpaths)
+        sp_canvas_item_destroy(i);
+    dc->green_bpaths.clear();
 
     // Blue
     c->append_continuous(dc->blue_curve, 0.0625);
@@ -698,8 +692,8 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
             c->unref();
             dc->overwrite_curve->closepath_current();
             if(dc->sa){
-                dc->white_curves = g_slist_remove(dc->white_curves, dc->sa->curve);
-                dc->white_curves = g_slist_append(dc->white_curves, dc->overwrite_curve);
+                dc->white_curves.erase(std::find(dc->white_curves.begin(),dc->white_curves.end(), dc->sa->curve));
+                dc->white_curves.push_back(dc->overwrite_curve);
             }
         }else{
             dc->sa->curve->append_continuous(c, 0.0625);
@@ -713,7 +707,7 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
     // Step C - test start
     if (dc->sa) {
         SPCurve *s = dc->sa->curve;
-        dc->white_curves = g_slist_remove(dc->white_curves, s);
+        dc->white_curves.erase(std::find(dc->white_curves.begin(),dc->white_curves.end(), s));
         if(prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 1 || 
             prefs->getInt(tool_name(dc) + "/freehand-mode", 0) == 2){
                 s = dc->overwrite_curve;
@@ -726,7 +720,7 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
         c = s;
     } else /* Step D - test end */ if (dc->ea) {
         SPCurve *e = dc->ea->curve;
-        dc->white_curves = g_slist_remove(dc->white_curves, e);
+        dc->white_curves.erase(std::find(dc->white_curves.begin(),dc->white_curves.end(), e));
         if (!dc->ea->start) {
             e = reverse_then_unref(e);
         }
@@ -766,11 +760,10 @@ void spdc_concat_colors_and_flush(FreehandBase *dc, gboolean forceclosed)
 static void spdc_flush_white(FreehandBase *dc, SPCurve *gc)
 {
     SPCurve *c;
-    if (dc->white_curves) {
+    if (! dc->white_curves.empty()) {
         g_assert(dc->white_item);
         c = SPCurve::concat(dc->white_curves);
-        g_slist_free(dc->white_curves);
-        dc->white_curves = NULL;
+        dc->white_curves.clear();
         if (gc) {
             c->append(gc, FALSE);
         }
@@ -856,8 +849,8 @@ SPDrawAnchor *spdc_test_inside(FreehandBase *dc, Geom::Point p)
         active = sp_draw_anchor_test(dc->green_anchor, p, TRUE);
     }
 
-    for (GSList *l = dc->white_anchors; l != NULL; l = l->next) {
-        SPDrawAnchor *na = sp_draw_anchor_test(static_cast<SPDrawAnchor*>(l->data), p, !active);
+    for (auto i:dc->white_anchors) {
+        SPDrawAnchor *na = sp_draw_anchor_test(i, p, !active);
         if ( !active && na ) {
             active = na;
         }
@@ -871,14 +864,12 @@ static void spdc_reset_white(FreehandBase *dc)
         // We do not hold refcount
         dc->white_item = NULL;
     }
-    while (dc->white_curves) {
-        reinterpret_cast<SPCurve *>(dc->white_curves->data)->unref();
-        dc->white_curves = g_slist_remove(dc->white_curves, dc->white_curves->data);
-    }
-    while (dc->white_anchors) {
-        sp_draw_anchor_destroy(static_cast<SPDrawAnchor*>(dc->white_anchors->data));
-        dc->white_anchors = g_slist_remove(dc->white_anchors, dc->white_anchors->data);
-    }
+    for (auto i: dc->white_curves)
+        i->unref();
+    dc->white_curves.clear();
+    for (auto i:dc->white_anchors)
+        sp_draw_anchor_destroy(i);
+    dc->white_anchors.clear();
 }
 
 static void spdc_free_colors(FreehandBase *dc)
@@ -902,10 +893,9 @@ static void spdc_free_colors(FreehandBase *dc)
     }
 
     // Green
-    while (dc->green_bpaths) {
-        sp_canvas_item_destroy(SP_CANVAS_ITEM(dc->green_bpaths->data));
-        dc->green_bpaths = g_slist_remove(dc->green_bpaths, dc->green_bpaths->data);
-    }
+    for (auto i : dc->green_bpaths)
+        sp_canvas_item_destroy(i);
+    dc->green_bpaths.clear();
     if (dc->green_curve) {
         dc->green_curve = dc->green_curve->unref();
     }
@@ -918,14 +908,12 @@ static void spdc_free_colors(FreehandBase *dc)
         // We do not hold refcount
         dc->white_item = NULL;
     }
-    while (dc->white_curves) {
-        reinterpret_cast<SPCurve *>(dc->white_curves->data)->unref();
-        dc->white_curves = g_slist_remove(dc->white_curves, dc->white_curves->data);
-    }
-    while (dc->white_anchors) {
-        sp_draw_anchor_destroy(static_cast<SPDrawAnchor *>(dc->white_anchors->data));
-        dc->white_anchors = g_slist_remove(dc->white_anchors, dc->white_anchors->data);
-    }
+    for (auto i: dc->white_curves)
+        i->unref();
+    dc->white_curves.clear();
+    for (auto i:dc->white_anchors)
+        sp_draw_anchor_destroy(i);
+    dc->white_anchors.clear();
 }
 
 void spdc_create_single_dot(ToolBase *ec, Geom::Point const &pt, char const *tool, guint event_state) {

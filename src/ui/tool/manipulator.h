@@ -98,16 +98,17 @@ public:
     bool empty() {
         return _mmap.empty();
     }
-    void setItems(GSList const *list) {
+    
+    void setItems(std::vector<gpointer> list) { // this function is not called anywhere ... delete ?
         std::set<void*> to_remove;
         for (typename MapType::iterator mi = _mmap.begin(); mi != _mmap.end(); ++mi) {
             to_remove.insert(mi->first);
         }
-        for (GSList *i = const_cast<GSList*>(list); i; i = i->next) {
-            if (_isItemType(i->data)) {
+        for (auto i:list) {
+            if (_isItemType(i)) {
                 // erase returns the number of items removed
                 // if nothing was removed, it means this item did not have a manipulator - add it
-                if (!to_remove.erase(i->data)) addItem(i->data);
+                if (!to_remove.erase(i)) addItem(i);
             }
         }
         typedef typename std::set<void*>::iterator RmIter;

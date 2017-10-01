@@ -237,13 +237,12 @@ ObjectSet::breakApart(bool skip_undo)
         item->deleteObject(false);
 
 
-        GSList *list = curve->split();
+        std::list<SPCurve *> list = curve->split();
 
         curve->unref();
 
         std::vector<Inkscape::XML::Node*> reprs;
-        for (GSList *l = list; l != NULL; l = l->next) {
-            curve = (SPCurve *) l->data;
+        for (auto curve:list) {
 
             Inkscape::XML::Node *repr = parent->document()->createElement("svg:path");
             repr->setAttribute("style", style);
@@ -266,7 +265,7 @@ ObjectSet::breakApart(bool skip_undo)
             repr->setPosition(pos > 0 ? pos : 0);
 
             // if it's the first one, restore id
-            if (l == list)
+            if (curve == *(list.begin()))
                 repr->setAttribute("id", id);
 
             reprs.push_back(repr);
@@ -275,7 +274,6 @@ ObjectSet::breakApart(bool skip_undo)
         }
         setReprList(reprs);
 
-        g_slist_free(list);
         g_free(style);
         g_free(path_effect);
     }

@@ -64,7 +64,6 @@ Extension::Extension (Inkscape::XML::Node * in_repr, Implementation::Implementat
     id = NULL;
     name = NULL;
     _state = STATE_UNLOADED;
-    parameters = NULL;
 
     if (in_imp == NULL) {
         imp = new Implementation::Implementation();
@@ -97,7 +96,7 @@ Extension::Extension (Inkscape::XML::Node * in_repr, Implementation::Implementat
                 Parameter * param;
                 param = Parameter::make(child_repr, this);
                 if (param != NULL)
-                    parameters = g_slist_append(parameters, param);
+                    parameters.push_back(param);
             } /* param || _param */
             if (!strcmp(chname, "dependency")) {
                 _deps.push_back(new Dependency(child_repr));
@@ -146,12 +145,9 @@ Extension::~Extension (void)
     /** \todo Need to do parameters here */
 
     // delete parameters:
-    for (GSList * list = parameters; list != NULL; list = g_slist_next(list)) {
-        Parameter * param = reinterpret_cast<Parameter *>(list->data);
+    for (auto param:parameters) {
         delete param;
     }
-    g_slist_free(parameters);
-
 
     for (unsigned int i = 0 ; i < _deps.size(); i++) {
         delete _deps[i];
@@ -402,14 +398,11 @@ Parameter *Extension::get_param(gchar const *name)
     if (name == NULL) {
         throw Extension::param_not_exist();
     }
-    if (this->parameters == NULL) {
-        // the list of parameters is empty
+    if (this->parameters.empty()) {
         throw Extension::param_not_exist();
     }
 
-    for (GSList * list = this->parameters; list != NULL; list =
-g_slist_next(list)) {
-        Parameter * param = static_cast<Parameter*>(list->data);
+    for( auto param:this->parameters) {
         if (!strcmp(param->name(), name)) {
             return param;
         } else {
@@ -730,8 +723,7 @@ Extension::autogui (SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<v
     agui->set_spacing(Parameter::GUI_BOX_SPACING);
 
     //go through the list of parameters to see if there are any non-hidden ones
-    for (GSList * list = parameters; list != NULL; list = g_slist_next(list)) {
-        Parameter * param = reinterpret_cast<Parameter *>(list->data);
+    for (auto param:parameters) {
         if (param->get_hidden()) continue; //Ignore hidden parameters
         Gtk::Widget * widg = param->get_widget(doc, node, changeSignal);
         gchar const * tip = param->get_tooltip();
@@ -751,8 +743,7 @@ Extension::autogui (SPDocument * doc, Inkscape::XML::Node * node, sigc::signal<v
 void
 Extension::paramListString (std::list <std::string> &retlist)
 {
-    for (GSList * list = parameters; list != NULL; list = g_slist_next(list)) {
-        Parameter * param = reinterpret_cast<Parameter *>(list->data);
+    for(auto param:parameters) {
         param->string(retlist);
     }
 
@@ -835,8 +826,7 @@ Extension::get_params_widget(void)
 unsigned int Extension::param_visible_count ( )
 {
     unsigned int _visible_count = 0;
-    for (GSList * list = parameters; list != NULL; list = g_slist_next(list)) {
-        Parameter * param = reinterpret_cast<Parameter *>(list->data);
+    for (auto param:parameters) {
         if (!param->get_hidden()) _visible_count++;
     }
     return _visible_count;
