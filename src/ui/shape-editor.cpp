@@ -20,14 +20,14 @@
 #include "sp-shape.h"
 #include "sp-path.h"
 #include "inkscape.h"
-#include "ui/object-edit.h"
 #include "ui/shape-editor.h"
 #include "xml/node-event-vector.h"
 
-//using Inkscape::createKnotHolder;
 
 namespace Inkscape {
 namespace UI {
+
+KnotHolder *createKnotHolder(SPItem *item, SPDesktop *desktop);
 
 bool ShapeEditor::_blockSetItem = false;
 
