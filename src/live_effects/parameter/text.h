@@ -42,6 +42,7 @@ public:
 
     void param_setValue(Glib::ustring newvalue);
     void param_hide_canvas_text();
+    void setTextParam(Inkscape::UI::Widget::RegisteredText *rsu);
     virtual void param_set_default();
     virtual void param_update_default(const gchar * default_value);
     void setPos(Geom::Point pos);
