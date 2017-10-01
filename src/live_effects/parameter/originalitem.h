@@ -23,7 +23,6 @@ public:
                 Inkscape::UI::Widget::Registry* wr,
                 Effect* effect);
     virtual ~OriginalItemParam();
-    void setInsensitive(bool insensitive) { insensitive = _insensitive; }
     bool linksToItem() const { return (href != NULL); }
     SPItem * getObject() const { return ref.getObject(); }
 
@@ -36,7 +35,6 @@ protected:
     void on_select_original_button_click();
 
 private:
-    bool _insensitive;
     OriginalItemParam(const OriginalItemParam&);
     OriginalItemParam& operator=(const OriginalItemParam&);
 };

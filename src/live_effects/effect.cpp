@@ -81,6 +81,7 @@
 #include "display/curve.h"
 #include <stdio.h>
 #include <string.h>
+#include <gtkmm/expander.h>
 
 namespace Inkscape {
 
