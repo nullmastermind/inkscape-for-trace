@@ -101,7 +101,10 @@ ItemParam::param_readSVGValue(const gchar * strvalue)
 gchar *
 ItemParam::param_getSVGValue() const
 {
-    return g_strdup(href);
+    if (href) {
+        return g_strdup(href);
+    }
+    return g_strdup("");
 }
 
 gchar *
