@@ -768,18 +768,12 @@ Inkscape::XML::Node* ObjectSet::group() {
 }
 
 
-static gint clone_depth_descending(gconstpointer a, gconstpointer b) {
+static bool clone_depth_descending(gconstpointer a, gconstpointer b) {
     SPUse *use_a = static_cast<SPUse *>(const_cast<gpointer>(a));
     SPUse *use_b = static_cast<SPUse *>(const_cast<gpointer>(b));
     int depth_a = use_a->cloneDepth();
     int depth_b = use_b->cloneDepth();
-    if (depth_a < depth_b) {
-        return 1;
-    } else if (depth_a == depth_b) {
-        return 0;
-    } else {
-        return -1;
-    }
+    return (depth_a==depth_b)?(a<b):(depth_a>depth_b);
 }
 
 void ObjectSet::popFromGroup(){
@@ -822,7 +816,7 @@ static void ungroup_impl(ObjectSet *set)
 
     // If any of the clones refer to the groups, unlink them and replace them with successors
     // in the items list.
-    GSList *clones_to_unlink = NULL;
+    std::vector<SPUse*> clones_to_unlink;
     for (std::vector<SPItem*>::const_iterator item = items.begin(); item != items.end(); ++item) {
         SPUse *use = dynamic_cast<SPUse *>(*item);
 
@@ -832,21 +826,19 @@ static void ungroup_impl(ObjectSet *set)
         }
 
         if (groups.find(original) !=  groups.end()) {
-            clones_to_unlink = g_slist_prepend(clones_to_unlink, *item);
+            clones_to_unlink.push_back(use);
         }
     }
 
     // Unlink clones beginning from those with highest clone depth.
     // This way we can be sure than no additional automatic unlinking happens,
     // and the items in the list remain valid
-    clones_to_unlink = g_slist_sort(clones_to_unlink, clone_depth_descending);
+    std::sort(clones_to_unlink.begin(),clones_to_unlink.end(),clone_depth_descending);
 
-    for (GSList *item = clones_to_unlink; item; item = item->next) {
-        SPUse *use = static_cast<SPUse *>(item->data);
-        std::vector<SPItem*>::iterator items_node = std::find(items.begin(),items.end(), item->data);
+    for (auto use:clones_to_unlink) {
+        std::vector<SPItem*>::iterator items_node = std::find(items.begin(),items.end(), use);
         *items_node = use->unlink();
     }
-    g_slist_free(clones_to_unlink);
 
     // do the actual work
     for (std::vector<SPItem*>::iterator item = items.begin(); item != items.end(); ++item) {
@@ -2380,7 +2372,7 @@ private:
 
 
 template <typename D>
-SPItem *next_item(SPDesktop *desktop, GSList *path, SPObject *root,
+SPItem *next_item(SPDesktop *desktop, std::vector<SPObject *> &path, SPObject *root,
                   bool only_in_viewport, PrefsSelectionContext inlayer, bool onlyvisible, bool onlysensitive)
 {
     typename D::Iterator children;
@@ -2388,11 +2380,12 @@ SPItem *next_item(SPDesktop *desktop, GSList *path, SPObject *root,
 
     SPItem *found=NULL;
 
-    if (path) {
-        SPObject *object=reinterpret_cast<SPObject *>(path->data);
+    if (!path.empty()) {
+        SPObject *object=path.back();
+        path.pop_back();
         g_assert(object->parent == root);
         if (desktop->isLayer(object)) {
-            found = next_item<D>(desktop, path->next, object, only_in_viewport, inlayer, onlyvisible, onlysensitive);
+            found = next_item<D>(desktop, path, object, only_in_viewport, inlayer, onlyvisible, onlysensitive);
         }
         iter = children = D::siblings_after(object);
     } else {
@@ -2403,7 +2396,8 @@ SPItem *next_item(SPDesktop *desktop, GSList *path, SPObject *root,
         SPObject *object=D::object(iter);
         if (desktop->isLayer(object)) {
             if (PREFS_SELECTION_LAYER != inlayer) { // recurse into sublayers
-                found = next_item<D>(desktop, NULL, object, only_in_viewport, inlayer, onlyvisible, onlysensitive);
+                std::vector<SPObject *> empt;
+                found = next_item<D>(desktop, empt, object, only_in_viewport, inlayer, onlyvisible, onlysensitive);
             }
         } else {
             SPItem *item = dynamic_cast<SPItem *>(object);
@@ -2440,19 +2434,19 @@ SPItem *next_item_from_list(SPDesktop *desktop, std::vector<SPItem*> const &item
         }
     }
 
-    GSList *path=NULL;
+    std::vector<SPObject *> path;
     while ( current != root ) {
-        path = g_slist_prepend(path, current);
+        path.push_back(current);
         current = current->parent;
     }
 
     SPItem *next;
     // first, try from the current object
     next = next_item<D>(desktop, path, root, only_in_viewport, inlayer, onlyvisible, onlysensitive);
-    g_slist_free(path);
 
     if (!next) { // if we ran out of objects, start over at the root
-        next = next_item<D>(desktop, NULL, root, only_in_viewport, inlayer, onlyvisible, onlysensitive);
+        std::vector<SPObject *> empt;
+        next = next_item<D>(desktop, empt, root, only_in_viewport, inlayer, onlyvisible, onlysensitive);
     }
 
     return next;

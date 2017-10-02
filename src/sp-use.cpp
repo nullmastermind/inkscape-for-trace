@@ -356,22 +356,21 @@ Geom::Affine SPUse::get_root_transform() {
     //track the ultimate source of a chain of uses
     SPObject *orig = this->child;
 
-    GSList *chain = NULL;
-    chain = g_slist_prepend(chain, this);
+    std::vector<SPItem*> chain;
+    chain.push_back(this);
 
     while (dynamic_cast<SPUse *>(orig)) {
-        chain = g_slist_prepend(chain, orig);
+        chain.push_back(dynamic_cast<SPItem *>(orig));
         orig = dynamic_cast<SPUse *>(orig)->child;
     }
 
-    chain = g_slist_prepend(chain, orig);
-
+    chain.push_back(dynamic_cast<SPItem *>(orig));
 
     // calculate the accummulated transform, starting from the original
     Geom::Affine t(Geom::identity());
 
-    for (GSList *i = chain; i != NULL; i = i->next) {
-        SPItem *i_tem = reinterpret_cast<SPItem *>(i->data);
+    for (auto i=chain.rbegin(); i!=chain.rend(); ++i) {
+        SPItem *i_tem = *i;
 
         // "An additional transformation translate(x,y) is appended to the end (i.e.,
         // right-side) of the transform attribute on the generated 'g', where x and y
@@ -385,8 +384,6 @@ Geom::Affine SPUse::get_root_transform() {
 
         t *= i_tem->transform;
     }
-
-    g_slist_free(chain);
     return t;
 }
 

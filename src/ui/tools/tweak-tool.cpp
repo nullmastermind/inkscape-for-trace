@@ -374,23 +374,20 @@ sp_tweak_dilate_recursive (Inkscape::Selection *selection, SPItem *item, Geom::P
     }
 
     if (dynamic_cast<SPGroup *>(item) && !dynamic_cast<SPBox3D *>(item)) {
-        GSList *children = NULL;
+        std::vector<SPItem *> children;
         for (auto& child: item->children) {
-            if (dynamic_cast<SPItem *>(static_cast<SPObject *>(&child))) {
-                children = g_slist_prepend(children, &child);
+            if (dynamic_cast<SPItem *>(&child)) {
+                children.push_back(dynamic_cast<SPItem *>(&child));
             }
         }
 
-        for (GSList *i = children; i; i = i->next) {
-            SPItem *child = dynamic_cast<SPItem *>(static_cast<SPObject *>(i->data));
+        for (auto i = children.rbegin(); i!= children.rend(); ++i) {
+            SPItem *child = *i; 
             g_assert(child != NULL);
             if (sp_tweak_dilate_recursive (selection, child, p, vector, mode, radius, force, fidelity, reverse)) {
                 did = true;
             }
         }
-
-        g_slist_free(children);
-
     } else {
         if (mode == TWEAK_MODE_MOVE) {
 

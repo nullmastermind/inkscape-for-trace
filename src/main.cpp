@@ -294,7 +294,7 @@ static void resetCommandlineGlobals() {
 #ifdef WIN32
 static bool replaceArgs( int& argc, char**& argv );
 #endif
-static GSList *sp_process_args(poptContext ctx);
+static std::vector<gchar *> sp_process_args(poptContext ctx);
 struct poptOption options[] = {
     {"version", 'V',
      POPT_ARG_NONE, NULL, SP_ARG_VERSION,
@@ -815,46 +815,19 @@ static void fixupSingleFilename( gchar **orig, gchar **spare )
 
 
 
-static GSList *fixupFilenameEncoding( GSList* fl )
+static void fixupFilenameEncoding( std::vector<gchar*> &filenames)
 {
-    GSList *newFl = NULL;
-    while ( fl ) {
-        gchar *fn = static_cast<gchar*>(fl->data);
-        fl = g_slist_remove( fl, fl->data );
+    for (int i=0; i<filenames.size(); ++i ) {
+        gchar *fn = filenames[i];
         gchar *newFileName = Inkscape::IO::locale_to_utf8_fallback(fn, -1, NULL, NULL, NULL);
         if ( newFileName ) {
-
-            if ( 0 )
-            {
-                gchar *safeFn = Inkscape::IO::sanitizeString(fn);
-                gchar *safeNewFn = Inkscape::IO::sanitizeString(newFileName);
-                GtkWidget *w = gtk_message_dialog_new( NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK,
-                                                       "Note: Converted '%s' to '%s'", safeFn, safeNewFn );
-                gtk_dialog_run (GTK_DIALOG (w));
-                gtk_widget_destroy (w);
-                g_free(safeNewFn);
-                g_free(safeFn);
-            }
-
             g_free( fn );
-            fn = newFileName;
-            newFileName = 0;
+            filenames[i] = newFileName;
         }
-        else
-            if ( 0 )
-        {
-            gchar *safeFn = Inkscape::IO::sanitizeString(fn);
-            GtkWidget *w = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_OK, "Error: Unable to convert '%s'", safeFn );
-            gtk_dialog_run (GTK_DIALOG (w));
-            gtk_widget_destroy (w);
-            g_free(safeFn);
-        }
-        newFl = g_slist_append( newFl, fn );
     }
-    return newFl;
 }
 
-static int sp_common_main( int argc, char const **argv, GSList **flDest )
+static int sp_common_main( int argc, char const **argv, std::vector<gchar*> *flDest )
 {
 #ifdef ENABLE_NLS
     // temporarily switch gettext encoding to locale, so that help messages can be output properly
@@ -866,7 +839,7 @@ static int sp_common_main( int argc, char const **argv, GSList **flDest )
     g_return_val_if_fail(ctx != NULL, 1);
 
     /* Collect own arguments */
-    GSList *fl = sp_process_args(ctx);
+    std::vector<gchar*> fl = sp_process_args(ctx);
     poptFreeContext(ctx);
    
 #ifdef ENABLE_NLS
@@ -877,7 +850,7 @@ static int sp_common_main( int argc, char const **argv, GSList **flDest )
     // Now let's see if the file list still holds up
     if ( needToRecodeParams )
     {
-        fl = fixupFilenameEncoding( fl );
+        fixupFilenameEncoding( fl );
     }
 
     // Check the globals for filename-fixup
@@ -916,12 +889,10 @@ static int sp_common_main( int argc, char const **argv, GSList **flDest )
 
     // Return the list if wanted, else free it up.
     if ( flDest ) {
-        *flDest = fl;
-        fl = 0;
+        flDest->insert(flDest->end(),fl.begin(),fl.end());
     } else {
-        while ( fl ) {
-            g_free( fl->data );
-            fl = g_slist_remove( fl, fl->data );
+        for (auto i:fl) {
+            g_free(i);
         }
     }
     return 0;
@@ -1020,7 +991,7 @@ sp_main_gui(int argc, char const **argv)
 {
     Gtk::Main main_instance (&argc, const_cast<char ***>(&argv));
 
-    GSList *fl = NULL;
+    std::vector<gchar *> fl;
     int retVal = sp_common_main( argc, argv, &fl );
     g_return_val_if_fail(retVal == 0, 1);
 
@@ -1036,11 +1007,10 @@ sp_main_gui(int argc, char const **argv)
     /// \todo FIXME BROKEN - non-UTF-8 sneaks in here.
     Inkscape::Application::create(argv[0], true);
 
-    while (fl) {
-        if (sp_file_open((gchar *)fl->data,NULL)) {
+    for (auto i:fl) {
+        if (sp_file_open(i,NULL)) {
             create_new=false;
         }
-        fl = g_slist_remove(fl, fl->data);
     }
     if (create_new) {
         sp_file_new_default();
@@ -1060,11 +1030,11 @@ sp_main_gui(int argc, char const **argv)
 /**
  * Process file list
  */
-static int sp_process_file_list(GSList *fl)
+static int sp_process_file_list(std::vector<gchar*> fl)
 {
     int retVal = 0;
 #ifdef WITH_DBUS
-    if (!fl) {
+    if (fl.empty()) {
         // If we've been asked to listen for D-Bus messages, enter a main loop here
         // The main loop may be exited by calling "exit" on the D-Bus application interface.
         if (sp_dbus_listen) {
@@ -1074,8 +1044,7 @@ static int sp_process_file_list(GSList *fl)
     }
 #endif // WITH_DBUS
 
-    while (fl) {
-        const gchar *filename = (gchar *)fl->data;
+    for (auto filename:fl) {
 
         SPDocument *doc = NULL;
         try {
@@ -1201,7 +1170,6 @@ static int sp_process_file_list(GSList *fl)
 
             delete doc;
         }
-        fl = g_slist_remove(fl, fl->data);
     }
     return retVal;
 }
@@ -1258,7 +1226,7 @@ static int sp_main_shell(char const* command_name)
                         poptContext ctx = poptGetContext(NULL, argc, const_cast<const gchar**>(argv), options, 0);
                         poptSetOtherOptionHelp(ctx, _("[OPTIONS...] [FILE...]\n\nAvailable options:"));
                         if ( ctx ) {
-                            GSList *fl = sp_process_args(ctx);
+                            std::vector<gchar *> fl = sp_process_args(ctx);
                             if (sp_process_file_list(fl)) {
                                 retval = -1;
                             }
@@ -1297,11 +1265,11 @@ int sp_main_console(int argc, char const **argv)
     char **argv2 = const_cast<char **>(argv);
     gtk_init_check( &argc, &argv2 );
 
-    GSList *fl = NULL;
+    std::vector<gchar*> fl;
     int retVal = sp_common_main( argc, argv, &fl );
     g_return_val_if_fail(retVal == 0, 1);
 
-    if (fl == NULL && !sp_shell
+    if (fl.empty() && !sp_shell
 #ifdef WITH_DBUS
         && !sp_dbus_listen
 #endif // WITH_DBUS
@@ -2131,10 +2099,10 @@ bool replaceArgs( int& argc, char**& argv )
 }
 #endif // WIN32
 
-static GSList *
+static std::vector<gchar *>
 sp_process_args(poptContext ctx)
 {
-    GSList *fl = NULL;
+    std::vector<gchar *> fl;
 
     gint a;
     while ((a = poptGetNextOpt(ctx)) != -1) {
@@ -2142,7 +2110,7 @@ sp_process_args(poptContext ctx)
             case SP_ARG_FILE: {
                 gchar const *fn = poptGetOptArg(ctx);
                 if (fn != NULL) {
-                    fl = g_slist_append(fl, g_strdup(fn));
+                    fl.push_back(g_strdup(fn));
                 }
                 break;
             }
@@ -2214,7 +2182,7 @@ sp_process_args(poptContext ctx)
     gchar const ** const args = poptGetArgs(ctx);
     if (args != NULL) {
         for (unsigned i = 0; args[i] != NULL; i++) {
-            fl = g_slist_append(fl, g_strdup(args[i]));
+            fl.push_back(g_strdup(args[i]));
         }
     }
 

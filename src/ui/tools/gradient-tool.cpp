@@ -219,7 +219,7 @@ sp_gradient_context_is_over_line (GradientTool *rc, SPItem *item, Geom::Point ev
 }
 
 static std::vector<Geom::Point>
-sp_gradient_context_get_stop_intervals (GrDrag *drag, GSList **these_stops, GSList **next_stops)
+sp_gradient_context_get_stop_intervals (GrDrag *drag, std::vector<SPStop *> &these_stops, std::vector<SPStop *> &next_stops)
 {
     std::vector<Geom::Point> coords;
 
@@ -285,15 +285,15 @@ sp_gradient_context_get_stop_intervals (GrDrag *drag, GSList **these_stops, GSLi
                 }
 
                 // if both adjacent draggers selected,
-                if (!g_slist_find(*these_stops, this_stop) && dnext && dnext->isSelected()) {
+                if ((std::find(these_stops.begin(),these_stops.end(),this_stop)==these_stops.end()) && dnext && dnext->isSelected()) {
 
                     // remember the coords of the future dragger to select it
                     coords.push_back(0.5*(dragger->point + dnext->point));
 
                     // do not insert a stop now, it will confuse the loop;
                     // just remember the stops
-                    *these_stops = g_slist_prepend (*these_stops, this_stop);
-                    *next_stops = g_slist_prepend (*next_stops, next_stop);
+                    these_stops.push_back(this_stop);
+                    next_stops.push_back(next_stop);
                 }
             }
         }
@@ -307,12 +307,12 @@ sp_gradient_context_add_stops_between_selected_stops (GradientTool *rc)
     SPDocument *doc = NULL;
     GrDrag *drag = rc->_grdrag;
 
-    GSList *these_stops = NULL;
-    GSList *next_stops = NULL;
+    std::vector<SPStop *> these_stops;
+    std::vector<SPStop *> next_stops;
 
-    std::vector<Geom::Point> coords = sp_gradient_context_get_stop_intervals (drag, &these_stops, &next_stops);
+    std::vector<Geom::Point> coords = sp_gradient_context_get_stop_intervals (drag, these_stops, next_stops);
 
-    if (g_slist_length(these_stops) == 0 && drag->numSelected() == 1) {
+    if (these_stops.empty() && drag->numSelected() == 1) {
         // if a single stop is selected, add between that stop and the next one
         GrDragger *dragger = *(drag->selected.begin());
         for (std::vector<GrDraggable *>::const_iterator j = dragger->draggables.begin(); j != dragger->draggables.end(); ++j) {
@@ -330,47 +330,42 @@ sp_gradient_context_add_stops_between_selected_stops (GradientTool *rc)
             if (this_stop) {
                 SPStop *next_stop = this_stop->getNextStop();
                 if (next_stop) {
-                    these_stops = g_slist_prepend (these_stops, this_stop);
-                    next_stops = g_slist_prepend (next_stops, next_stop);
+                    these_stops.push_back(this_stop);
+                    next_stops.push_back(next_stop);
                 }
             }
         }
     }
 
     // now actually create the new stops
-    GSList *i = these_stops;
-    GSList *j = next_stops;
-    GSList *new_stops = NULL;
+    auto i = these_stops.rbegin();
+    auto j = next_stops.rbegin();
+    std::vector<SPStop *> new_stops;
 
-    for (; i != NULL && j != NULL; i = i->next, j = j->next) {
-        SPStop *this_stop = (SPStop *) i->data;
-        SPStop *next_stop = (SPStop *) j->data;
+    for (;i != these_stops.rend() && j != next_stops.rend(); ++i, ++j ) {
+        SPStop *this_stop = *i;
+        SPStop *next_stop = *j;
         gfloat offset = 0.5*(this_stop->offset + next_stop->offset);
         SPObject *parent = this_stop->parent;
         if (SP_IS_GRADIENT (parent)) {
             doc = parent->document;
             SPStop *new_stop = sp_vector_add_stop (SP_GRADIENT (parent), this_stop, next_stop, offset);
-            new_stops = g_slist_prepend (new_stops, new_stop);
+            new_stops.push_back(new_stop);
             SP_GRADIENT(parent)->ensureVector();
         }
     }
 
-    if (g_slist_length(these_stops) > 0 && doc) {
+    if (!these_stops.empty() && doc) {
         DocumentUndo::done(doc, SP_VERB_CONTEXT_GRADIENT, _("Add gradient stop"));
         drag->updateDraggers();
         // so that it does not automatically update draggers in idle loop, as this would deselect
         drag->local_change = true;
 
         // select the newly created stops
-        for (GSList *s = new_stops; s != NULL; s = s->next) {
-            drag->selectByStop((SPStop *)s->data);
+        for (auto i:new_stops) {
+            drag->selectByStop(i);
         }
-
     }
-
-    g_slist_free (these_stops);
-    g_slist_free (next_stops);
-    g_slist_free (new_stops);
 }
 
 static double sqr(double x) {return x*x;}
@@ -381,26 +376,25 @@ sp_gradient_simplify(GradientTool *rc, double tolerance)
     SPDocument *doc = NULL;
     GrDrag *drag = rc->_grdrag;
 
-    GSList *these_stops = NULL;
-    GSList *next_stops = NULL;
+    std::vector<SPStop *> these_stops;
+    std::vector<SPStop *> next_stops;
 
-    std::vector<Geom::Point> coords = sp_gradient_context_get_stop_intervals (drag, &these_stops, &next_stops);
+    std::vector<Geom::Point> coords = sp_gradient_context_get_stop_intervals (drag, these_stops, next_stops);
 
-    GSList *todel = NULL;
+    std::set<SPStop *> todel;
 
-    GSList *i = these_stops;
-    GSList *j = next_stops;
-    for (; i != NULL && j != NULL; i = i->next, j = j->next) {
-        SPStop *stop0 = (SPStop *) i->data;
-        SPStop *stop1 = (SPStop *) j->data;
+    auto i = these_stops.begin();
+    auto j = next_stops.end();
+    for (; i != these_stops.end() && j != next_stops.end(); ++i, ++j) {
+        SPStop *stop0 = *i;
+        SPStop *stop1 = *j;
 
-        gint i1 = g_slist_index(these_stops, stop1);
-        if (i1 != -1) {
-            GSList *next_next = g_slist_nth (next_stops, i1);
-            if (next_next) {
-                SPStop *stop2 = (SPStop *) next_next->data;
+        auto i1 = std::find(these_stops.begin(), these_stops.end(), stop1);
+        if (i1 != these_stops.end()) {
+            if (next_stops.size()>(i1-these_stops.begin())) {
+                SPStop *stop2 = *(next_stops.begin() + (i1-these_stops.begin()));
 
-                if (g_slist_find(todel, stop0) || g_slist_find(todel, stop2))
+                if (todel.find(stop0)!=todel.end() || todel.find(stop2) != todel.end())
                     continue;
 
                 guint32 const c0 = stop0->get_rgba32();
@@ -416,28 +410,23 @@ sp_gradient_simplify(GradientTool *rc, double tolerance)
                     sqr(SP_RGBA32_A_F(c1) - SP_RGBA32_A_F(c1r));
 
                 if (diff < tolerance)
-                    todel = g_slist_prepend (todel, stop1);
+                    todel.insert(stop1);
             }
         }
     }
 
-    for (i = todel; i != NULL; i = i->next) {
-        SPStop *stop = (SPStop*) i->data;
+    for (auto stop : todel) {
         doc = stop->document;
         Inkscape::XML::Node * parent = stop->getRepr()->parent();
         parent->removeChild( stop->getRepr() );
     }
 
-    if (g_slist_length(todel) > 0) {
+    if (!todel.empty()) {
         DocumentUndo::done(doc, SP_VERB_CONTEXT_GRADIENT, _("Simplify gradient"));
         drag->local_change = true;
         drag->updateDraggers();
         drag->selectByCoords(coords);
     }
-
-    g_slist_free (todel);
-    g_slist_free (these_stops);
-    g_slist_free (next_stops);
 }
 
 
