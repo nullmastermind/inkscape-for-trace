@@ -267,19 +267,18 @@ Inkscape::XML::Node* SPFilter::write(Inkscape::XML::Document *doc, Inkscape::XML
             repr = doc->createElement("svg:filter");
         }
 
-        GSList *l = NULL;
+        std::vector<Inkscape::XML::Node *> l;
         for (auto& child: children) {
             Inkscape::XML::Node *crepr = child.updateRepr(doc, NULL, flags);
 
             if (crepr) {
-                l = g_slist_prepend (l, crepr);
+                l.push_back(crepr);
             }
         }
 
-        while (l) {
-            repr->addChild((Inkscape::XML::Node *) l->data, NULL);
-            Inkscape::GC::release((Inkscape::XML::Node *) l->data);
-            l = g_slist_remove (l, l->data);
+        for (auto i=l.rbegin();i!=l.rend();++i) {
+           repr->addChild(*i, NULL);
+            Inkscape::GC::release(*i);
         }
     } else {
         for (auto& child: children) {

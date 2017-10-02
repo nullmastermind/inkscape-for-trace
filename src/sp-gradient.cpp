@@ -561,23 +561,16 @@ void SPGradient::modified(guint flags)
     flags &= SP_OBJECT_MODIFIED_CASCADE;
 
     // FIXME: climb up the ladder of hrefs
-    GSList *l = NULL;
-
+    std::vector<SPObject *> l;
     for (auto& child: children) {
         sp_object_ref(&child);
-        l = g_slist_prepend(l, &child);
+        l.push_back(&child);
     }
-
-    l = g_slist_reverse(l);
-
-    while (l) {
-        SPObject *child = SP_OBJECT(l->data);
-        l = g_slist_remove(l, child);
-
+ 
+    for (auto child:l) {
         if (flags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             child->emitModified(flags);
         }
-
         sp_object_unref(child);
     }
 
@@ -621,20 +614,19 @@ Inkscape::XML::Node *SPGradient::write(Inkscape::XML::Document *xml_doc, Inkscap
     SPPaintServer::write(xml_doc, repr, flags);
 
     if (flags & SP_OBJECT_WRITE_BUILD) {
-        GSList *l = NULL;
+        std::vector<Inkscape::XML::Node *> l;
 
         for (auto& child: children) {
             Inkscape::XML::Node *crepr = child.updateRepr(xml_doc, NULL, flags);
 
             if (crepr) {
-                l = g_slist_prepend(l, crepr);
+                l.push_back(crepr);
             }
         }
 
-        while (l) {
-            repr->addChild((Inkscape::XML::Node *) l->data, NULL);
-            Inkscape::GC::release((Inkscape::XML::Node *) l->data);
-            l = g_slist_remove(l, l->data);
+        for (auto i=l.rbegin();i!=l.rend();++i) {
+            repr->addChild(*i, NULL);
+            Inkscape::GC::release(*i);
         }
     }
 
@@ -877,20 +869,19 @@ sp_gradient_repr_clear_vector(SPGradient *gr)
     Inkscape::XML::Node *repr = gr->getRepr();
 
     /* Collect stops from original repr */
-    GSList *sl = NULL;
+    std::vector<Inkscape::XML::Node *> l;
     for (Inkscape::XML::Node *child = repr->firstChild() ; child != NULL; child = child->next() ) {
         if (!strcmp(child->name(), "svg:stop")) {
-            sl = g_slist_prepend(sl, child);
+            l.push_back(child);
         }
     }
     /* Remove all stops */
-    while (sl) {
+    for (auto i=l.rbegin();i!=l.rend();++i) {
         /** \todo
          * fixme: This should work, unless we make gradient
          * into generic group.
          */
-        sp_repr_unparent((Inkscape::XML::Node *)sl->data);
-        sl = g_slist_remove(sl, sl->data);
+        sp_repr_unparent(*i);
     }
 }
 
@@ -908,7 +899,7 @@ sp_gradient_repr_write_vector(SPGradient *gr)
     Inkscape::XML::Node *repr = gr->getRepr();
 
     /* We have to be careful, as vector may be our own, so construct repr list at first */
-    GSList *cl = NULL;
+    std::vector<Inkscape::XML::Node *> l;
 
     for (guint i = 0; i < gr->vector.stops.size(); i++) {
         Inkscape::CSSOStringStream os;
@@ -919,17 +910,16 @@ sp_gradient_repr_write_vector(SPGradient *gr)
         os << "stop-color:" << gr->vector.stops[i].color.toString() << ";stop-opacity:" << gr->vector.stops[i].opacity;
         child->setAttribute("style", os.str().c_str());
         /* Order will be reversed here */
-        cl = g_slist_prepend(cl, child);
+        l.push_back(child);
     }
 
     sp_gradient_repr_clear_vector(gr);
 
     /* And insert new children from list */
-    while (cl) {
-        Inkscape::XML::Node *child = static_cast<Inkscape::XML::Node *>(cl->data);
+    for (auto i=l.rbegin();i!=l.rend();++i) {
+        Inkscape::XML::Node *child = *i;
         repr->addChild(child, NULL);
         Inkscape::GC::release(child);
-        cl = g_slist_remove(cl, child);
     }
 }
 

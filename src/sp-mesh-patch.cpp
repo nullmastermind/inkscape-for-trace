@@ -94,23 +94,16 @@ void SPMeshpatch::set(unsigned int key, const gchar* value) {
 void SPMeshpatch::modified(unsigned int flags) {
 
     flags &= SP_OBJECT_MODIFIED_CASCADE;
-    GSList *l = NULL;
-
+    std::vector<SPObject *> l;
     for (auto& child: children) {
         sp_object_ref(&child);
-        l = g_slist_prepend(l, &child);
+        l.push_back(&child);
     }
 
-    l = g_slist_reverse(l);
-
-    while (l) {
-        SPObject *child = SP_OBJECT(l->data);
-        l = g_slist_remove(l, child);
-
+    for (auto child:l) {
         if (flags || (child->mflags & (SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_CHILD_MODIFIED_FLAG))) {
             child->emitModified(flags);
         }
-
         sp_object_unref(child);
     }
 }

@@ -49,19 +49,17 @@ Inkscape::XML::Node *SPObjectGroup::write(Inkscape::XML::Document *xml_doc, Inks
             repr = xml_doc->createElement("svg:g");
         }
 
-        GSList *l = 0;
+        std::vector<Inkscape::XML::Node *> l;
         for (auto& child: children) {
             Inkscape::XML::Node *crepr = child.updateRepr(xml_doc, NULL, flags);
 
             if (crepr) {
-                l = g_slist_prepend(l, crepr);
+                l.push_back(crepr);
             }
         }
-
-        while (l) {
-            repr->addChild(static_cast<Inkscape::XML::Node *>(l->data), NULL);
-            Inkscape::GC::release(static_cast<Inkscape::XML::Node *>(l->data));
-            l = g_slist_remove(l, l->data);
+        for (auto i=l.rbegin();i!=l.rend();++i) {
+            repr->addChild(*i, NULL);
+            Inkscape::GC::release(*i);
         }
     } else {
         for (auto& child: children) {

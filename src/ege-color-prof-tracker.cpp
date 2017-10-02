@@ -40,6 +40,8 @@
 /* Note: this file should be kept compilable as both .cpp and .c */
 
 #include <string.h>
+#include <vector>
+#include <algorithm>
 
 #include <gtk/gtk.h>
 
@@ -63,14 +65,17 @@ enum {
 static void ege_color_prof_tracker_get_property( GObject* obj, guint propId, GValue* value, GParamSpec * pspec );
 static void ege_color_prof_tracker_set_property( GObject* obj, guint propId, const GValue *value, GParamSpec* pspec );
 
-typedef struct _ScreenTrack {
+class ScreenTrack {
+    public:
 #ifdef GDK_WINDOWING_X11
     gboolean zeroSeen;
     gboolean otherSeen;
 #endif /* GDK_WINDOWING_X11 */
-    GSList* trackers;
+    std::vector<EgeColorProfTracker *> *trackers;
     GPtrArray* profiles;
-} ScreenTrack;
+    ~ScreenTrack(){ delete trackers; }
+};
+
 
 #ifdef GDK_WINDOWING_X11
 GdkFilterReturn x11_win_filter(GdkXEvent *xevent, GdkEvent *event, gpointer data);
@@ -86,7 +91,7 @@ static guint signals[LAST_SIGNAL] = {0};
 // There is only one GdkScreen in Gtk+ 3
 static ScreenTrack *tracked_screen = nullptr;
 
-static GSList* abstract_trackers = 0;
+static std::vector<EgeColorProfTracker *> abstract_trackers;
 
 struct _EgeColorProfTrackerPrivate
 {
@@ -182,7 +187,7 @@ EgeColorProfTracker* ege_color_prof_tracker_new( GtkWidget* target )
         target_hierarchy_changed_cb( target, 0, obj );
         target_screen_changed_cb( target, 0, obj );
     } else {
-        abstract_trackers = g_slist_append( abstract_trackers, obj );
+        abstract_trackers.push_back(tracker);
 
         if(tracked_screen) {
             for ( gint monitor = 0; monitor < (gint)tracked_screen->profiles->len; monitor++ ) {
@@ -280,9 +285,8 @@ void track_screen( GdkScreen* screen, EgeColorProfTracker* tracker )
 {
     if ( tracked_screen ) {
         /* We found the screen already being tracked */
-        GSList* trackHook = g_slist_find( tracked_screen->trackers, tracker );
-        if ( !trackHook ) {
-            tracked_screen->trackers = g_slist_append( tracked_screen->trackers, tracker );
+        if ( std::find(tracked_screen->trackers->begin(),tracked_screen->trackers->end(),tracker)==tracked_screen->trackers->end() ) {
+            tracked_screen->trackers->push_back(tracker);
         }
     } else {
         tracked_screen = g_new(ScreenTrack, 1);
@@ -299,7 +303,8 @@ void track_screen( GdkScreen* screen, EgeColorProfTracker* tracker )
         tracked_screen->zeroSeen = FALSE;
         tracked_screen->otherSeen = FALSE;
 #endif /* GDK_WINDOWING_X11 */
-        tracked_screen->trackers = g_slist_append( 0, tracker );
+        tracked_screen->trackers= new std::vector<EgeColorProfTracker *>;
+        tracked_screen->trackers->push_back(tracker );
         tracked_screen->profiles = g_ptr_array_new();
         for ( int i = 0; i < numMonitors; i++ ) {
             g_ptr_array_add( tracked_screen->profiles, 0 );
@@ -323,15 +328,12 @@ void target_finalized( gpointer data, GObject* where_the_object_was )
 {
     (void)data;
     if ( tracked_screen ) {
-        GSList* trackHook = tracked_screen->trackers;
-        while ( trackHook ) {
-            if ( (void*)(((EgeColorProfTracker*)(trackHook->data))->private_data->_target) == (void*)where_the_object_was ) {
+        for (auto i = tracked_screen->trackers->begin(); i != tracked_screen->trackers->end(); ++i) {
+            if ( (void*)((*i)->private_data->_target) == (void*)where_the_object_was ) {
                 /* The tracked widget is now gone, remove it */
-                ((EgeColorProfTracker*)trackHook->data)->private_data->_target = 0;
-                tracked_screen->trackers = g_slist_remove( tracked_screen->trackers, trackHook );
-                trackHook = 0;
-            } else {
-                trackHook = g_slist_next( trackHook );
+                (*i)->private_data->_target = 0;
+                tracked_screen->trackers->erase(i);
+                break;
             }
         }
     }
@@ -578,14 +580,10 @@ void add_x11_tracking_for_screen(GdkScreen* screen)
 void fire(gint monitor)
 {
     if ( tracked_screen ) {
-        GSList* trackHook = tracked_screen->trackers;
-
-        while ( trackHook ) {
-            EgeColorProfTracker* tracker = (EgeColorProfTracker*)(trackHook->data);
+        for (auto tracker:(*(tracked_screen->trackers))) {
             if ( (monitor == -1) || (tracker->private_data->_monitor == monitor) ) {
                 g_signal_emit( G_OBJECT(tracker), signals[CHANGED], 0 );
             }
-            trackHook = g_slist_next(trackHook);
         }
     }
 }
@@ -609,8 +607,6 @@ static void clear_profile( guint monitor )
 static void set_profile( guint monitor, const guint8* data, guint len )
 {
     if ( tracked_screen ) {
-        GSList* abstracts = 0;
-
         for ( guint i = tracked_screen->profiles->len; i <= monitor; i++ ) {
             g_ptr_array_add( tracked_screen->profiles, 0 );
         }
@@ -627,8 +623,8 @@ static void set_profile( guint monitor, const guint8* data, guint len )
             tracked_screen->profiles->pdata[monitor] = 0;
         }
 
-        for ( abstracts = abstract_trackers; abstracts; abstracts = g_slist_next(abstracts) ) {
-            g_signal_emit( G_OBJECT(abstracts->data), signals[MODIFIED], 0, monitor );
+        for (auto i:abstract_trackers) {
+            g_signal_emit( G_OBJECT(i), signals[MODIFIED], 0, monitor );
         }
     }
 }

@@ -2093,8 +2093,6 @@ std::vector<SPItem*> sp_get_same_object_type(SPItem *sel, std::vector<SPItem*> &
     return matches;
 }
 
-GSList *sp_get_same_fill_or_stroke_color(SPItem *sel, GSList *src, SPSelectStrokeStyleType type);
-
 /*
  * Find all items in src list that have the same stroke style as sel by type
  * Return the list of matching items
@@ -2331,14 +2329,15 @@ typedef struct Forward {
 
     static Iterator children(SPObject *o) { return o->firstChild(); }
     static Iterator siblings_after(SPObject *o) { return o->getNext(); }
-    static void dispose(Iterator /*i*/) {}
+    static void dispose(Iterator i) {}
 
     static SPObject *object(Iterator i) { return i; }
     static Iterator next(Iterator i) { return i->getNext(); }
+    static bool isNull(Iterator i) {return (!i);}
 } Forward;
 
 typedef struct ListReverse {
-    typedef GSList *Iterator;
+    typedef std::list<SPObject *> *Iterator;
 
     static Iterator children(SPObject *o) {
         return make_list(o, NULL);
@@ -2347,23 +2346,24 @@ typedef struct ListReverse {
         return make_list(o->parent, o);
     }
     static void dispose(Iterator i) {
-        g_slist_free(i);
+        delete i;
     }
 
     static SPObject *object(Iterator i) {
-        return reinterpret_cast<SPObject *>(i->data);
+        return *(i->begin());
     }
-    static Iterator next(Iterator i) { return i->next; }
+    static Iterator next(Iterator i) { i->pop_front(); return i; }
+    
+    static bool isNull(Iterator i) {return i->empty();}
 
 private:
-    static GSList *make_list(SPObject *object, SPObject *limit) {
-        GSList *list = NULL;
+    static std::list<SPObject *> *make_list(SPObject *object, SPObject *limit) {
+        auto list = new std::list<SPObject *>;
         for (auto &child: object->children) {
             if (&child == limit) {
                 break;
             }
-            list = g_slist_prepend(list, &child);
-
+            list->push_front(&child);
         }
         return list;
     }
@@ -2392,7 +2392,7 @@ SPItem *next_item(SPDesktop *desktop, std::vector<SPObject *> &path, SPObject *r
         iter = children = D::children(root);
     }
 
-    while ( iter && !found ) {
+    while ( !D::isNull(iter) && !found ) {
         SPObject *object=D::object(iter);
         if (desktop->isLayer(object)) {
             if (PREFS_SELECTION_LAYER != inlayer) { // recurse into sublayers
@@ -2546,37 +2546,7 @@ void sp_selection_next_patheffect_param(SPDesktop * dt)
 void ObjectSet::editMask(bool /*clip*/)
 {
     return;
-    /*if (!dt) return;
-    using namespace Inkscape::UI;
-
-    Inkscape::Selection *selection = dt->getSelection();
-    if (!selection || selection->isEmpty()) return;
-
-    GSList const *items = selection->itemList();
-    bool has_path = false;
-    for (GSList *i = const_cast<GSList*>(items); i; i= i->next) {
-        SPItem *item = SP_ITEM(i->data);
-        SPObject *search = clip
-            ? (item->clip_ref ? item->clip_ref->getObject() : NULL)
-            : item->mask_ref ? item->mask_ref->getObject() : NULL;
-        has_path |= has_path_recursive(search);
-        if (has_path) break;
-    }
-    if (has_path) {
-        if (!tools_isactive(dt, TOOLS_NODES)) {
-            tools_switch(dt, TOOLS_NODES);
-        }
-        ink_node_tool_set_mode(INK_NODE_TOOL(dt->event_context),
-            clip ? NODE_TOOL_EDIT_CLIPPING_PATHS : NODE_TOOL_EDIT_MASKS);
-    } else if (clip) {
-        dt->messageStack()->flash(Inkscape::WARNING_MESSAGE,
-            _("The selection has no applied clip path."));
-    } else {
-        dt->messageStack()->flash(Inkscape::WARNING_MESSAGE,
-            _("The selection has no applied mask."));
-    }*/
 }
-
 
 
 
@@ -4083,7 +4053,7 @@ void ObjectSet::unsetMask(const bool apply_clip_path, const bool skip_undo) {
     std::vector<SPItem*> items_(items().begin(), items().end());
     clear();
 
-    GSList *items_to_ungroup = NULL;
+    std::vector<SPGroup *> items_to_ungroup;
     std::vector<SPItem*> items_to_select(items_);
 
 
@@ -4116,7 +4086,7 @@ void ObjectSet::unsetMask(const bool apply_clip_path, const bool skip_undo) {
 
                 // ungroup only groups we created when setting clip/mask
                 if (group->layerMode() == SPGroup::MASK_HELPER) {
-                    items_to_ungroup = g_slist_prepend(items_to_ungroup, group);
+                    items_to_ungroup.push_back(group);
                 }
 
         }
@@ -4125,7 +4095,7 @@ void ObjectSet::unsetMask(const bool apply_clip_path, const bool skip_undo) {
     // restore mask objects into a document
     for ( std::map<SPObject*,SPItem*>::iterator it = referenced_objects.begin() ; it != referenced_objects.end() ; ++it) {
         SPObject *obj = (*it).first; // Group containing the clipped paths or masks
-        GSList *items_to_move = NULL;
+        std::vector<Inkscape::XML::Node *> items_to_move;
         for (auto& child: obj->children) {
             // Collect all clipped paths and masks within a single group
             Inkscape::XML::Node *copy = child.getRepr()->duplicate(xml_doc);
@@ -4133,7 +4103,7 @@ void ObjectSet::unsetMask(const bool apply_clip_path, const bool skip_undo) {
             {
                 copy->setAttribute("d", copy->attribute("inkscape:original-d"));
             }
-            items_to_move = g_slist_prepend(items_to_move, copy);
+            items_to_move.push_back(copy);
         }
 
         if (!obj->isReferenced()) {
@@ -4146,8 +4116,8 @@ void ObjectSet::unsetMask(const bool apply_clip_path, const bool skip_undo) {
         gint pos = ((*it).second)->getRepr()->position();
 
         // Iterate through all clipped paths / masks
-        for (GSList *i = items_to_move; NULL != i; i = i->next) {
-            Inkscape::XML::Node *repr = static_cast<Inkscape::XML::Node *>(i->data);
+        for (auto i=items_to_move.rbegin();i!=items_to_move.rend();++i) {
+            Inkscape::XML::Node *repr = *i;
 
             // insert into parent, restore pos
             parent->appendChild(repr);
@@ -4161,13 +4131,11 @@ void ObjectSet::unsetMask(const bool apply_clip_path, const bool skip_undo) {
             transform *= (*it).second->transform;
             mask_item->doWriteTransform(transform);
         }
-
-        g_slist_free(items_to_move);
     }
 
     // ungroup marked groups added when setting mask
-    for (GSList *i = items_to_ungroup ; NULL != i ; i = i->next) {
-        SPGroup *group = dynamic_cast<SPGroup *>(static_cast<SPObject *>(i->data));
+    for (auto i=items_to_ungroup.rbegin();i!=items_to_ungroup.rend();++i) {
+        SPGroup *group = *i;
         if (group) {
             items_to_select.erase(std::remove(items_to_select.begin(), items_to_select.end(), group), items_to_select.end());
             std::vector<SPItem*> children;
@@ -4177,8 +4145,6 @@ void ObjectSet::unsetMask(const bool apply_clip_path, const bool skip_undo) {
             g_assert_not_reached();
         }
     }
-
-    g_slist_free(items_to_ungroup);
 
     // rebuild selection
     addList(items_to_select);

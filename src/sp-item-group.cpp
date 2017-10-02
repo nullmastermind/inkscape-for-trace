@@ -226,7 +226,7 @@ void SPGroup::modified(guint flags) {
 
 Inkscape::XML::Node* SPGroup::write(Inkscape::XML::Document *xml_doc, Inkscape::XML::Node *repr, guint flags) {
     if (flags & SP_OBJECT_WRITE_BUILD) {
-        GSList *l = NULL;
+        std::vector<Inkscape::XML::Node *> l;
 
         if (!repr) {
             if (dynamic_cast<SPSwitch *>(this)) {
@@ -236,22 +236,18 @@ Inkscape::XML::Node* SPGroup::write(Inkscape::XML::Document *xml_doc, Inkscape::
             }
         }
 
-        l = NULL;
-
         for (auto& child: children) {
             if ( !dynamic_cast<SPTitle *>(&child) && !dynamic_cast<SPDesc *>(&child) ) {
                 Inkscape::XML::Node *crepr = child.updateRepr(xml_doc, NULL, flags);
 
                 if (crepr) {
-                    l = g_slist_prepend (l, crepr);
+                    l.push_back(crepr);
                 }
             }
         }
-
-        while (l) {
-            repr->addChild((Inkscape::XML::Node *) l->data, NULL);
-            Inkscape::GC::release((Inkscape::XML::Node *) l->data);
-            l = g_slist_remove (l, l->data);
+        for (auto i=l.rbegin();i!=l.rend();++i) {
+            repr->addChild(*i, NULL);
+            Inkscape::GC::release(*i);
         }
     } else {
         for (auto& child: children) {
@@ -510,8 +506,8 @@ sp_item_group_ungroup (SPGroup *group, std::vector<SPItem*> &children, bool do_d
     group->removeAllPathEffects(false);
 
     /* Step 1 - generate lists of children objects */
-    GSList *items = NULL;
-    GSList *objects = NULL;
+    std::vector<Inkscape::XML::Node *> items;
+    std::vector<Inkscape::XML::Node *> objects;
     Geom::Affine const g(group->transform);
 
     for (auto& child: group->children) {
@@ -602,11 +598,11 @@ sp_item_group_ungroup (SPGroup *group, std::vector<SPItem*> &children, bool do_d
             }
             g_free(affinestr);
 
-            items = g_slist_prepend (items, nrepr);
+            items.push_back(nrepr);
 
         } else {
             Inkscape::XML::Node *nrepr = child.getRepr()->duplicate(prepr->document());
-            objects = g_slist_prepend (objects, nrepr);
+            objects.push_back(nrepr);
         }
     }
 
@@ -618,21 +614,20 @@ sp_item_group_ungroup (SPGroup *group, std::vector<SPItem*> &children, bool do_d
     group->deleteObject(true, false);
 
     /* Step 3 - add nonitems */
-    if (objects) {
+    if (!objects.empty()) {
         Inkscape::XML::Node *last_def = defs->getRepr()->lastChild();
-        while (objects) {
-            Inkscape::XML::Node *repr = (Inkscape::XML::Node *) objects->data;
+        for (auto i=objects.rbegin();i!=objects.rend();++i) {
+            Inkscape::XML::Node *repr = *i; 
             if (!sp_repr_is_meta_element(repr)) {
                 defs->getRepr()->addChild(repr, last_def);
             }
             Inkscape::GC::release(repr);
-            objects = g_slist_remove (objects, objects->data);
         }
     }
 
     /* Step 4 - add items */
-    while (items) {
-        Inkscape::XML::Node *repr = (Inkscape::XML::Node *) items->data;
+    for (auto i=items.rbegin();i!=items.rend();++i) {
+        Inkscape::XML::Node *repr = *i;
         // add item
         prepr->appendChild(repr);
         // restore position; since the items list was prepended (i.e. reverse), we now add
@@ -650,7 +645,6 @@ sp_item_group_ungroup (SPGroup *group, std::vector<SPItem*> &children, bool do_d
         }
 
         Inkscape::GC::release(repr);
-        items = g_slist_remove (items, items->data);
     }
 
     if (do_done) {
