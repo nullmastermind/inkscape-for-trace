@@ -46,7 +46,10 @@ LPECloneOriginal::LPECloneOriginal(LivePathEffectObject *lpeobject) :
         this->getRepr()->setAttribute("method", "bsplinespiro");
         this->getRepr()->setAttribute("allow_transforms", "false");
     };
-
+    is_updating = false;
+    listening = false;
+    previus_method = CLM_D;
+    linked = g_strdup(this->getRepr()->attribute("linkeditem"));
     registerParameter(&linkeditem);
     registerParameter(&method);
     registerParameter(&attributes);
@@ -183,9 +186,9 @@ LPECloneOriginal::cloneAttrbutes(SPObject *origin, SPObject *dest, const char * 
     sp_repr_css_write_string(css_dest,css_str);
     dest->getRepr()->setAttribute("style", g_strdup(css_str.c_str()));
 }
-
 void
 LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){
+    start_listening();
     if (linkeditem.linksToItem()) {
         Glib::ustring attr = "";
         if (method != CLM_NONE) {
@@ -201,18 +204,82 @@ LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){
         }
         style_attr += Glib::ustring(style_attributes.param_getSVGValue()) + Glib::ustring(",");
 
-        SPItem * origin =  SP_ITEM(linkeditem.getObject()); 
-        SPItem * dest   =  SP_ITEM(sp_lpe_item); 
-        cloneAttrbutes(origin, dest, g_strdup(attr.c_str()), g_strdup(style_attr.c_str()));
-        if (!allow_transforms) {
-            SP_ITEM(dest)->getRepr()->setAttribute("transform", SP_ITEM(origin)->getAttribute("transform"));
+        SPItem * orig =  SP_ITEM(linkeditem.getObject()); 
+        SPItem * dest =  SP_ITEM(sp_lpe_item); 
+        Geom::OptRect o_bbox = orig->geometricBounds();
+        Geom::OptRect d_bbox = dest->geometricBounds();
+        gchar * id = g_strdup(orig->getId());
+        if (allow_transforms && 
+            !linkeditem.last_transform.isIdentity() && 
+            linkeditem.last_transform.isTranslation() &&
+            method != CLM_NONE) 
+        {
+            Geom::Point expansion_dest = dest->transform.expansion();
+            Geom::Point expansion_orig = orig->transform.expansion();
+            dest->transform *= Geom::Scale(expansion_dest).inverse();
+            dest->transform *= Geom::Scale(expansion_orig);
+            dest->transform *= linkeditem.last_transform.inverse();
+            dest->transform *= Geom::Scale(expansion_orig).inverse();
+            dest->transform *= Geom::Scale(expansion_dest);
         }
+        if ((strcmp(id, linked) != 0 || (previus_method != method && previus_method == CLM_NONE )) &&
+             allow_transforms && 
+             o_bbox && 
+             d_bbox) 
+        {
+            dest->transform *= Geom::Translate((*o_bbox).corner(0) - (*d_bbox).corner(0)).inverse();
+        }
+        cloneAttrbutes(orig, dest, g_strdup(attr.c_str()), g_strdup(style_attr.c_str()));
+        if (allow_transforms &&
+            previus_method != method &&
+            method == CLM_NONE) 
+        {
+            dest->transform *= Geom::Translate((*d_bbox).corner(0) - (*o_bbox).corner(0)).inverse();
+        }
+        if (!allow_transforms) {
+            SP_ITEM(dest)->getRepr()->setAttribute("transform", SP_ITEM(orig)->getAttribute("transform"));
+        }
+        linked = g_strdup(id);
+        g_free(id);
+    } else {
+        linked = g_strdup("");
     }
+    previus_method = method;
+}
+
+void
+LPECloneOriginal::start_listening()
+{
+    if ( !sp_lpe_item || listening ) {
+        return;
+    }
+    quit_listening();
+    modified_connection = SP_OBJECT(sp_lpe_item)->connectModified(sigc::mem_fun(*this, &LPECloneOriginal::modified));
+    listening = true;
+}
+
+void
+LPECloneOriginal::quit_listening(void)
+{
+    modified_connection.disconnect();
+    listening = false;
+}
+
+void
+LPECloneOriginal::modified(SPObject */*obj*/, guint /*flags*/)
+{
+    if ( !sp_lpe_item || is_updating) {
+        is_updating = false;
+        return;
+    }
+    SP_OBJECT(this->getLPEObj())->requestModified(SP_OBJECT_MODIFIED_FLAG);
+    is_updating = true;
 }
 
 LPECloneOriginal::~LPECloneOriginal()
 {
-
+    quit_listening();
+    g_free(linked);
 }
 
 void

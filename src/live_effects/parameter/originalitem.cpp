@@ -35,7 +35,6 @@ OriginalItemParam::OriginalItemParam( const Glib::ustring& label, const Glib::us
                       Effect* effect)
     : ItemParam(label, tip, key, wr, effect, "")
 {
-    _insensitive = false;
 }
 
 OriginalItemParam::~OriginalItemParam()
@@ -88,17 +87,16 @@ OriginalItemParam::param_newWidget()
 void
 OriginalItemParam::linked_modified_callback(SPObject *linked_obj, guint /*flags*/)
 {
-    if (!_insensitive) {
-        emit_changed();
-        SP_OBJECT(param_effect->getLPEObj())->requestModified(SP_OBJECT_MODIFIED_FLAG);
-    }
+    emit_changed();
+    SP_OBJECT(param_effect->getLPEObj())->requestModified(SP_OBJECT_MODIFIED_FLAG);
+    last_transform = Geom::identity();
 }
 
 void
-OriginalItemParam::linked_transformed_callback(Geom::Affine const * /*rel_transf*/, SPItem * /*moved_item*/)
+OriginalItemParam::linked_transformed_callback(Geom::Affine const * rel_transf, SPItem *moved_item)
 {
-/** \todo find good way to compensate for referenced item transform, like done for normal clones.
- *        See sp-use.cpp: sp_use_move_compensate */
+    last_transform = *rel_transf;
+    SP_OBJECT(param_effect->getLPEObj())->requestModified(SP_OBJECT_MODIFIED_FLAG);
 }
 
 

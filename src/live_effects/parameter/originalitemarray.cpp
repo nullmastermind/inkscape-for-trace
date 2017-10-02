@@ -444,7 +444,7 @@ gchar * OriginalItemArrayParam::param_getSVGValue() const
 
 gchar * OriginalItemArrayParam::param_getDefaultSVGValue() const
 {
-    return "";
+    return g_strdup("");
 }
 
 void OriginalItemArrayParam::update()
