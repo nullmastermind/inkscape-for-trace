@@ -49,6 +49,8 @@ private:
     Clonelpemethod previus_method;
     bool listening;
     bool is_updating;
+    bool prev_allow_trans;
+    gchar * prev_affine;
     sigc::connection modified_connection;
     LPECloneOriginal(const LPECloneOriginal&);
     LPECloneOriginal& operator=(const LPECloneOriginal&);

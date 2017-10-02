@@ -48,13 +48,15 @@ LPECloneOriginal::LPECloneOriginal(LivePathEffectObject *lpeobject) :
     };
     is_updating = false;
     listening = false;
-    previus_method = CLM_D;
     linked = g_strdup(this->getRepr()->attribute("linkeditem"));
     registerParameter(&linkeditem);
     registerParameter(&method);
     registerParameter(&attributes);
     registerParameter(&style_attributes);
     registerParameter(&allow_transforms);
+    prev_allow_trans = allow_transforms;
+    previus_method = method;
+    prev_affine = g_strdup("");
     attributes.param_hide_canvas_text();
     style_attributes.param_hide_canvas_text();
 }
@@ -236,15 +238,27 @@ LPECloneOriginal::doBeforeEffect (SPLPEItem const* lpeitem){
         {
             dest->transform *= Geom::Translate((*d_bbox).corner(0) - (*o_bbox).corner(0)).inverse();
         }
+
         if (!allow_transforms) {
             SP_ITEM(dest)->getRepr()->setAttribute("transform", SP_ITEM(orig)->getAttribute("transform"));
+        } else {
+            SP_ITEM(dest)->getRepr()->setAttribute("transform", sp_svg_transform_write(dest->transform));
+            if (prev_allow_trans == allow_transforms) {
+                prev_affine = g_strdup(SP_ITEM(dest)->getAttribute("transform"));
+            }
         }
+
+        if (prev_allow_trans != allow_transforms && allow_transforms) {
+            SP_ITEM(dest)->getRepr()->setAttribute("transform", prev_affine);
+        }
+
         linked = g_strdup(id);
         g_free(id);
     } else {
         linked = g_strdup("");
     }
     previus_method = method;
+    prev_allow_trans = allow_transforms;
 }
 
 void
@@ -280,6 +294,7 @@ LPECloneOriginal::~LPECloneOriginal()
 {
     quit_listening();
     g_free(linked);
+    g_free(prev_affine);
 }
 
 void
