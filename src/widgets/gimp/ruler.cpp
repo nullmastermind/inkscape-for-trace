@@ -32,6 +32,7 @@
 #include <cstring>
 #include <cmath>
 #include <cstdio>
+#include <set>
 
 #include "ruler.h"
 #include <glibmm/i18n.h>
@@ -61,8 +62,9 @@ enum {
 /* All distances below are in 1/72nd's of an inch. (According to
  * Adobe, that's a point, but points are really 1/72.27 in.)
  */
-typedef struct
+class SPRulerPrivate
 {
+public:
   GtkOrientation   orientation;
   Inkscape::Util::Unit const *unit;
   gdouble          lower;
@@ -78,8 +80,8 @@ typedef struct
   PangoLayout     *layout;
   gdouble          font_scale;
 
-  GList           *track_widgets;
-} SPRulerPrivate;
+  std::set<GtkWidget*> *track_widgets;
+};
 
 #define SP_RULER_GET_PRIVATE(ruler) \
   G_TYPE_INSTANCE_GET_PRIVATE (ruler, SP_TYPE_RULER, SPRulerPrivate)
@@ -178,6 +180,7 @@ sp_ruler_class_init (SPRulerClass *klass)
 
   g_type_class_add_private (object_class, sizeof (SPRulerPrivate));
 
+
   g_object_class_install_property (object_class,
                                    PROP_ORIENTATION,
 				   g_param_spec_enum ("orientation",
@@ -269,6 +272,7 @@ sp_ruler_init (SPRuler *ruler)
   priv->pos_redraw_idle_id   = 0;
 
   priv->font_scale           = DEFAULT_RULER_FONT_SCALE;
+  priv->track_widgets        = new std::set<GtkWidget*>;
 }
 
 static void
@@ -277,14 +281,15 @@ sp_ruler_dispose (GObject *object)
   SPRuler        *ruler = SP_RULER (object);
   SPRulerPrivate *priv  = SP_RULER_GET_PRIVATE (ruler);
 
-  while (priv->track_widgets)
-    sp_ruler_remove_track_widget (ruler, GTK_WIDGET(priv->track_widgets->data));
+  for (auto i:*(priv->track_widgets))
+    sp_ruler_remove_track_widget (ruler, i);
 
   if (priv->pos_redraw_idle_id)
     {
       g_source_remove (priv->pos_redraw_idle_id);
       priv->pos_redraw_idle_id = 0;
     }
+  delete priv->track_widgets;
 
   G_OBJECT_CLASS (parent_class)->dispose (object);
 }
@@ -889,9 +894,10 @@ sp_ruler_add_track_widget (SPRuler   *ruler,
 
   priv = SP_RULER_GET_PRIVATE (ruler);
   
-  g_return_if_fail (g_list_find (priv->track_widgets, widget) == NULL);
+  g_return_if_fail (priv->track_widgets->find(widget)==priv->track_widgets->end());
 
-  priv->track_widgets = g_list_prepend (priv->track_widgets, widget);
+
+  priv->track_widgets->insert(widget);
 
   g_signal_connect (widget, "motion-notify-event",
 		    G_CALLBACK (sp_ruler_track_widget_motion_notify),
@@ -920,9 +926,9 @@ sp_ruler_remove_track_widget (SPRuler   *ruler,
 
   priv = SP_RULER_GET_PRIVATE (ruler);
 
-  g_return_if_fail (g_list_find (priv->track_widgets, widget) != NULL);
+  g_return_if_fail (priv->track_widgets->find(widget)!=priv->track_widgets->end());
 
-  priv->track_widgets = g_list_remove (priv->track_widgets, widget);
+  priv->track_widgets->erase(widget);
 
   g_signal_handlers_disconnect_by_func (widget,
 		                        (gpointer) G_CALLBACK (sp_ruler_track_widget_motion_notify),
