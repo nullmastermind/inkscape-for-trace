@@ -476,6 +476,7 @@ protected:
 
 private:
     BoolOpErrors pathBoolOp(bool_op bop, const bool skip_undo, const unsigned int verb = SP_VERB_NONE, const Glib::ustring description = "");
+    void _disconnect(SPObject* object);
 
 };
 
