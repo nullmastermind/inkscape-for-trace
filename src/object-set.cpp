@@ -124,11 +124,9 @@ void ObjectSet::_add(SPObject *object) {
 }
 
 void ObjectSet::_clear() {
-    MultiIndexContainer::iterator it = _container.begin();
-    while (it != _container.end()){
-        _disconnect(*it);
-        it = _container.erase(it);
-    }
+    for (auto object: _container)
+        _disconnect(object);
+    _container.clear();
 }
 
 SPObject *ObjectSet::_getMutualAncestor(SPObject *object) {
