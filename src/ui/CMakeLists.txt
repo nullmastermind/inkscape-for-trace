@@ -5,10 +5,10 @@ set(ui_SRC
 	dialog-events.cpp
 	draw-anchor.cpp
 	interface.cpp
-	object-edit.cpp
 	previewholder.cpp
 	selected-color.cpp
 	shape-editor.cpp
+	shape-editor-knotholders.cpp
 	tool-factory.cpp
 	tools-switch.cpp
 	uxmanager.cpp
@@ -185,7 +185,6 @@ set(ui_SRC
 	event-debug.h
 	icon-names.h
 	interface.h
-	object-edit.h
 	previewable.h
 	previewfillable.h
 	previewholder.h

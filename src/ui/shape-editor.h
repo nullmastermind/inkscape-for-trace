@@ -23,7 +23,7 @@ namespace UI {
 class ShapeEditor {
 public:
 
-    ShapeEditor(SPDesktop *desktop);
+    ShapeEditor(SPDesktop *desktop, Geom::Affine edit_transform = Geom::identity());
     ~ShapeEditor();
 
     void set_item(SPItem *item, bool keep_knotholder = false);
@@ -42,11 +42,11 @@ public:
                                    char const * /*new_value*/, bool /*is_interactive*/, void *data);
 private:
     void reset_item (bool keep_knotholder = true);
-    const SPItem *get_item();
     static bool _blockSetItem;
 
     SPDesktop *desktop;
     Inkscape::XML::Node *knotholder_listener_attached_for;
+    Geom::Affine _edit_transform;
 };
 
 } // namespace UI

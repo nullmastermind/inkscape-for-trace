@@ -56,7 +56,8 @@ KnotHolder::KnotHolder(SPDesktop *desktop, SPItem *item, SPKnotHolderReleasedFun
     sizeUpdatedConn(),
     released(relhandler),
     local_change(FALSE),
-    dragging(false)
+    dragging(false),
+    _edit_transform(Geom::identity())
 {
     if (!desktop || !item) {
         g_print ("Error! Throw an exception, please!\n");
@@ -77,6 +78,12 @@ KnotHolder::~KnotHolder() {
     }
     entity.clear(); // is this necessary?
     sizeUpdatedConn.disconnect();
+}
+
+void
+KnotHolder::setEditTransform(Geom::Affine edit_transform)
+{
+    _edit_transform = edit_transform;
 }
 
 void KnotHolder::updateControlSizes()
@@ -230,8 +237,8 @@ KnotHolder::knot_moved_handler(SPKnot *knot, Geom::Point const &p, guint state)
     for(std::list<KnotHolderEntity *>::iterator i = this->entity.begin(); i != this->entity.end(); ++i) {
         KnotHolderEntity *e = *i;
         if (e->knot == knot) {
-            Geom::Point const q = p * item->i2dt_affine().inverse();
-            e->knot_set(q, e->knot->drag_origin * item->i2dt_affine().inverse(), state);
+            Geom::Point const q = p * item->i2dt_affine().inverse() * _edit_transform.inverse();
+            e->knot_set(q, e->knot->drag_origin * item->i2dt_affine().inverse() * _edit_transform.inverse(), state);
             break;
         }
     }
