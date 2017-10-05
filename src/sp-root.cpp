@@ -40,8 +40,7 @@ SPRoot::SPRoot() : SPGroup(), SPViewBox()
     this->version.inkscape = zero_version;
     this->original.inkscape = zero_version;
 
-    this->x.unset(SVGLength::PERCENT, 0.0, 0.0); // Ignored for root SVG element
-    this->y.unset(SVGLength::PERCENT, 0.0, 0.0);
+    this->unset_x_and_y();
     this->width.unset(SVGLength::PERCENT, 1.0, 1.0);
     this->height.unset(SVGLength::PERCENT, 1.0, 1.0);
 
@@ -50,6 +49,12 @@ SPRoot::SPRoot() : SPGroup(), SPViewBox()
 
 SPRoot::~SPRoot()
 {
+}
+
+void SPRoot::unset_x_and_y()
+{
+    this->x.unset(SVGLength::PERCENT, 0.0, 0.0); // Ignored for root SVG element
+    this->y.unset(SVGLength::PERCENT, 0.0, 0.0);
 }
 
 void SPRoot::build(SPDocument *document, Inkscape::XML::Node *repr)
@@ -254,8 +259,7 @@ void SPRoot::update(SPCtx *ctx, guint flags)
         }
 
         // Ignore x, y values for root element
-        this->x.unset(SVGLength::PERCENT, 0.0, 0.0);
-        this->y.unset(SVGLength::PERCENT, 0.0, 0.0);
+        this->unset_x_and_y();
     }
 
     // Calculate x, y, width, height from parent/initial viewport
