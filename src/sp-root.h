@@ -65,6 +65,7 @@ public:
     virtual const char* displayName() const;
 private:
     void unset_x_and_y();
+    void setRootDimensions();
 };
 
 #endif /* !SP_ROOT_H_SEEN */
