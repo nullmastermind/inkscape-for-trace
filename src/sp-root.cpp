@@ -355,9 +355,7 @@ Inkscape::XML::Node *SPRoot::write(Inkscape::XML::Document *xml_doc, Inkscape::X
 
 Inkscape::DrawingItem *SPRoot::show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags)
 {
-    Inkscape::DrawingItem *ai = 0;
-
-    ai = SPGroup::show(drawing, key, flags);
+    Inkscape::DrawingItem *ai = SPGroup::show(drawing, key, flags);
 
     if (ai) {
         Inkscape::DrawingGroup *g = dynamic_cast<Inkscape::DrawingGroup *>(ai);
@@ -366,10 +364,10 @@ Inkscape::DrawingItem *SPRoot::show(Inkscape::Drawing &drawing, unsigned int key
 
     // Uncomment to print out XML tree
     // getRepr()->recursivePrintTree(0);
-    
+
     // Uncomment to print out SP Object tree
     // recursivePrintTree(0);
-    
+
     // Uncomment to print out Display Item tree
     // ai->recursivePrintTree(0);
 
