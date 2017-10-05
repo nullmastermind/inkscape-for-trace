@@ -602,7 +602,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
         int const key_scroll = prefs->getIntLimited("/options/keyscroll/value",
                 10, 0, 1000);
 
-        switch (get_group0_keyval(&event->key)) {
+        switch (get_latin_keyval(&event->key)) {
         // GDK insists on stealing these keys (F1 for no idea what, tab for cycling widgets
         // in the editing window). So we resteal them back and run our regular shortcut
         // invoker on them.
@@ -642,7 +642,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 int i = (int) floor(key_scroll * accelerate_scroll(event,
                         acceleration, desktop->getCanvas()));
 
-                gobble_key_events(get_group0_keyval(&event->key), GDK_CONTROL_MASK);
+                gobble_key_events(get_latin_keyval(&event->key), GDK_CONTROL_MASK);
                 this->desktop->scroll_relative(Geom::Point(i, 0));
                 ret = TRUE;
             } else {
@@ -657,7 +657,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 int i = (int) floor(key_scroll * accelerate_scroll(event,
                         acceleration, desktop->getCanvas()));
 
-                gobble_key_events(get_group0_keyval(&event->key), GDK_CONTROL_MASK);
+                gobble_key_events(get_latin_keyval(&event->key), GDK_CONTROL_MASK);
                 this->desktop->scroll_relative(Geom::Point(0, i));
                 ret = TRUE;
             } else {
@@ -672,7 +672,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 int i = (int) floor(key_scroll * accelerate_scroll(event,
                         acceleration, desktop->getCanvas()));
 
-                gobble_key_events(get_group0_keyval(&event->key), GDK_CONTROL_MASK);
+                gobble_key_events(get_latin_keyval(&event->key), GDK_CONTROL_MASK);
                 this->desktop->scroll_relative(Geom::Point(-i, 0));
                 ret = TRUE;
             } else {
@@ -687,7 +687,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
                 int i = (int) floor(key_scroll * accelerate_scroll(event,
                         acceleration, desktop->getCanvas()));
 
-                gobble_key_events(get_group0_keyval(&event->key), GDK_CONTROL_MASK);
+                gobble_key_events(get_latin_keyval(&event->key), GDK_CONTROL_MASK);
                 this->desktop->scroll_relative(Geom::Point(0, -i));
                 ret = TRUE;
             } else {
@@ -756,7 +756,7 @@ bool ToolBase::root_handler(GdkEvent* event) {
             gdk_window_set_cursor(gtk_widget_get_window (w), this->cursor);
         }
 
-        switch (get_group0_keyval(&event->key)) {
+        switch (get_latin_keyval(&event->key)) {
         case GDK_KEY_space:
             if (within_tolerance) {
                 // Space was pressed, but not panned
@@ -1142,7 +1142,7 @@ void sp_event_root_menu_popup(SPDesktop *desktop, SPItem *item, GdkEvent *event)
 void sp_event_show_modifier_tip(Inkscape::MessageContext *message_context,
         GdkEvent *event, gchar const *ctrl_tip, gchar const *shift_tip,
         gchar const *alt_tip) {
-    guint keyval = get_group0_keyval(&event->key);
+    guint keyval = get_latin_keyval(&event->key);
 
     bool ctrl = ctrl_tip && (MOD__CTRL(event) || (keyval == GDK_KEY_Control_L) || (keyval
             == GDK_KEY_Control_R));
@@ -1197,7 +1197,7 @@ void init_latin_keys_group() {
  * Use this instead of simply event->keyval, so that your keyboard shortcuts
  * work regardless of layouts (e.g., in Cyrillic).
  */
-guint get_group0_keyval(GdkEventKey const *event, guint *consumed_modifiers /*= NULL*/) {
+guint get_latin_keyval(GdkEventKey const *event, guint *consumed_modifiers /*= NULL*/) {
     guint keyval = 0;
     GdkModifierType modifiers;
     gint group = latin_keys_group_valid ? latin_keys_group : event->group;

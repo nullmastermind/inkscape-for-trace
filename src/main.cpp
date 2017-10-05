@@ -902,7 +902,7 @@ namespace Inkscape {
 namespace UI {
 namespace Tools {
 
-guint get_group0_keyval(GdkEventKey const* event, guint *consumed_modifiers = NULL);
+guint get_latin_keyval(GdkEventKey const* event, guint *consumed_modifiers = NULL);
 
 }
 }
@@ -960,7 +960,7 @@ snooper(GdkEvent *event, gpointer /*data*/) {
             alt_pressed = TRUE && (event->button.state & GDK_MOD1_MASK);
             break;
         case GDK_KEY_PRESS:
-            keyval = Inkscape::UI::Tools::get_group0_keyval(&event->key);
+            keyval = Inkscape::UI::Tools::get_latin_keyval(&event->key);
             if (keyval == GDK_KEY_Alt_L) altL_pressed = TRUE;
             if (keyval == GDK_KEY_Alt_R) altR_pressed = TRUE;
             alt_pressed = alt_pressed || altL_pressed || altR_pressed;
@@ -971,7 +971,7 @@ snooper(GdkEvent *event, gpointer /*data*/) {
                 event->key.state &= ~GDK_MOD1_MASK;
             break;
         case GDK_KEY_RELEASE:
-            keyval = Inkscape::UI::Tools::get_group0_keyval(&event->key);
+            keyval = Inkscape::UI::Tools::get_latin_keyval(&event->key);
             if (keyval == GDK_KEY_Alt_L) altL_pressed = FALSE;
             if (keyval == GDK_KEY_Alt_R) altR_pressed = FALSE;
             if (!altL_pressed && !altR_pressed)

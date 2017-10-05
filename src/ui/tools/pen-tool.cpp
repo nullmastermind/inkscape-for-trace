@@ -1062,7 +1062,7 @@ bool PenTool::_handleKeyPress(GdkEvent *event) {
         }
     }
 
-    switch (get_group0_keyval (&event->key)) {
+    switch (get_latin_keyval (&event->key)) {
         case GDK_KEY_Left: // move last point left
         case GDK_KEY_KP_Left:
             if (!MOD__CTRL(event)) { // not ctrl

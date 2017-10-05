@@ -455,7 +455,7 @@ void PencilTool::_cancel() {
 bool PencilTool::_handleKeyPress(GdkEventKey const &event) {
     bool ret = false;
 
-    switch (get_group0_keyval(&event)) {
+    switch (get_latin_keyval(&event)) {
         case GDK_KEY_Up:
         case GDK_KEY_Down:
         case GDK_KEY_KP_Up:
@@ -508,7 +508,7 @@ bool PencilTool::_handleKeyPress(GdkEventKey const &event) {
 bool PencilTool::_handleKeyRelease(GdkEventKey const &event) {
     bool ret = false;
 
-    switch (get_group0_keyval(&event)) {
+    switch (get_latin_keyval(&event)) {
         case GDK_KEY_Alt_L:
         case GDK_KEY_Alt_R:
         case GDK_KEY_Meta_L:

@@ -665,7 +665,7 @@ bool GradientTool::root_handler(GdkEvent* event) {
         break;
 
     case GDK_KEY_PRESS:
-        switch (get_group0_keyval (&event->key)) {
+        switch (get_latin_keyval (&event->key)) {
         case GDK_KEY_Alt_L:
         case GDK_KEY_Alt_R:
         case GDK_KEY_Control_L:
@@ -719,7 +719,7 @@ bool GradientTool::root_handler(GdkEvent* event) {
         case GDK_KEY_KP_4:
             if (!MOD__CTRL(event)) { // not ctrl
                 gint mul = 1 + gobble_key_events(
-                    get_group0_keyval(&event->key), 0); // with any mask
+                    get_latin_keyval(&event->key), 0); // with any mask
                 if (MOD__ALT(event)) { // alt
                     if (MOD__SHIFT(event)) {
                     	drag->selected_move_screen(mul*-10, 0); // shift
@@ -742,7 +742,7 @@ bool GradientTool::root_handler(GdkEvent* event) {
         case GDK_KEY_KP_8:
             if (!MOD__CTRL(event)) { // not ctrl
                 gint mul = 1 + gobble_key_events(
-                    get_group0_keyval(&event->key), 0); // with any mask
+                    get_latin_keyval(&event->key), 0); // with any mask
                 if (MOD__ALT(event)) { // alt
                     if (MOD__SHIFT(event)) {
                     	drag->selected_move_screen(0, mul*10); // shift
@@ -766,7 +766,7 @@ bool GradientTool::root_handler(GdkEvent* event) {
         case GDK_KEY_KP_6:
             if (!MOD__CTRL(event)) { // not ctrl
                 gint mul = 1 + gobble_key_events(
-                    get_group0_keyval(&event->key), 0); // with any mask
+                    get_latin_keyval(&event->key), 0); // with any mask
 
                 if (MOD__ALT(event)) { // alt
                     if (MOD__SHIFT(event)) {
@@ -791,7 +791,7 @@ bool GradientTool::root_handler(GdkEvent* event) {
         case GDK_KEY_KP_2:
             if (!MOD__CTRL(event)) { // not ctrl
                 gint mul = 1 + gobble_key_events(
-                    get_group0_keyval(&event->key), 0); // with any mask
+                    get_latin_keyval(&event->key), 0); // with any mask
 
                 if (MOD__ALT(event)) { // alt
                     if (MOD__SHIFT(event)) {
@@ -848,7 +848,7 @@ bool GradientTool::root_handler(GdkEvent* event) {
         break;
 
     case GDK_KEY_RELEASE:
-        switch (get_group0_keyval (&event->key)) {
+        switch (get_latin_keyval (&event->key)) {
         case GDK_KEY_Alt_L:
         case GDK_KEY_Alt_R:
         case GDK_KEY_Control_L:

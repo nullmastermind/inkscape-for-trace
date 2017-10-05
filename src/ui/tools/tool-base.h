@@ -252,7 +252,7 @@ void sp_event_show_modifier_tip(Inkscape::MessageContext *message_context, GdkEv
                                 gchar const *ctrl_tip, gchar const *shift_tip, gchar const *alt_tip);
 
 void init_latin_keys_group();
-guint get_group0_keyval(GdkEventKey const *event, guint *consumed_modifiers = NULL);
+guint get_latin_keyval(GdkEventKey const *event, guint *consumed_modifiers = NULL);
 
 SPItem *sp_event_context_find_item (SPDesktop *desktop, Geom::Point const &p, bool select_under, bool into_groups);
 SPItem *sp_event_context_over_item (SPDesktop *desktop, SPItem *item, Geom::Point const &p);
