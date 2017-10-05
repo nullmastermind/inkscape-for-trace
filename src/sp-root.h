@@ -18,6 +18,7 @@
 #include "svg/svg-length.h"
 #include "sp-item-group.h"
 #include "viewbox.h"
+#include "sp-dimensions.h"
 
 #define SP_ROOT(obj) (dynamic_cast<SPRoot*>((SPObject*)obj))
 #define SP_IS_ROOT(obj) (dynamic_cast<const SPRoot*>((SPObject*)obj) != NULL)
@@ -25,7 +26,7 @@
 class SPDefs;
 
 /** \<svg\> element */
-class SPRoot : public SPGroup, public SPViewBox {
+class SPRoot : public SPGroup, public SPViewBox, public SPDimensions {
 public:
 	SPRoot();
 	virtual ~SPRoot();
@@ -34,11 +35,6 @@ public:
         Inkscape::Version svg;
         Inkscape::Version inkscape;
     } version, original;
-
-    SVGLength x;
-    SVGLength y;
-    SVGLength width;
-    SVGLength height;
 
     char *onload;
 
