@@ -23,7 +23,7 @@ public:
     SVGLength y;
     SVGLength width;
     SVGLength height;
-    void calcDimsFromParentViewport(const SPItemCtx *ictx);
+    void calcDimsFromParentViewport(const SPItemCtx *ictx, bool assign_to_set = false);
 };
 
 #endif

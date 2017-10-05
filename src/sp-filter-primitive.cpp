@@ -139,25 +139,7 @@ void SPFilterPrimitive::update(SPCtx *ctx, guint flags) {
     SPFilter *parent = SP_FILTER(this->parent);
 
     if( parent->primitiveUnits == SP_FILTER_UNITS_USERSPACEONUSE ) {
-        if (this->x.unit == SVGLength::PERCENT) {
-            this->x._set = true;
-            this->x.computed = this->x.value * ictx->viewport.width();
-        }
-
-        if (this->y.unit == SVGLength::PERCENT) {
-            this->y._set = true;
-            this->y.computed = this->y.value * ictx->viewport.height();
-        }
-
-        if (this->width.unit == SVGLength::PERCENT) {
-            this->width._set = true;
-            this->width.computed = this->width.value * ictx->viewport.width();
-        }
-
-        if (this->height.unit == SVGLength::PERCENT) {
-            this->height._set = true;
-            this->height.computed = this->height.value * ictx->viewport.height();
-        }
+        this->calcDimsFromParentViewport(ictx, true);
     }
 
     SPObject::update(ctx, flags);

@@ -19,21 +19,26 @@
 #include "sp-dimensions.h"
 #include "sp-item.h"
 
-void SPDimensions::calcDimsFromParentViewport(const SPItemCtx *ictx)
+void SPDimensions::calcDimsFromParentViewport(const SPItemCtx *ictx, bool assign_to_set)
 {
+#define ASSIGN(field) { if (assign_to_set) { field._set = true; } }
     if (this->x.unit == SVGLength::PERCENT) {
+        ASSIGN(x);
         this->x.computed = this->x.value * ictx->viewport.width();
     }
 
     if (this->y.unit == SVGLength::PERCENT) {
+        ASSIGN(y);
         this->y.computed = this->y.value * ictx->viewport.height();
     }
 
     if (this->width.unit == SVGLength::PERCENT) {
+        ASSIGN(width);
         this->width.computed = this->width.value * ictx->viewport.width();
     }
 
     if (this->height.unit == SVGLength::PERCENT) {
+        ASSIGN(height);
         this->height.computed = this->height.value * ictx->viewport.height();
     }
 }
