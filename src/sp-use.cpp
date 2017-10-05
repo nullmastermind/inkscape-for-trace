@@ -43,11 +43,8 @@
 
 SPUse::SPUse()
     : SPItem(),
+      SPDimensions(),
       child(NULL),
-      x(),
-      y(),
-      width(),
-      height(),
       href(NULL),
       ref(new SPUseReference(this)),
       _delete_connection(),
@@ -581,21 +578,7 @@ void SPUse::update(SPCtx *ctx, unsigned flags) {
     childflags &= SP_OBJECT_MODIFIED_CASCADE;
 
     /* Set up child viewport */
-    if (this->x.unit == SVGLength::PERCENT) {
-        this->x.computed = this->x.value * ictx->viewport.width();
-    }
-
-    if (this->y.unit == SVGLength::PERCENT) {
-        this->y.computed = this->y.value * ictx->viewport.height();
-    }
-
-    if (this->width.unit == SVGLength::PERCENT) {
-        this->width.computed = this->width.value * ictx->viewport.width();
-    }
-
-    if (this->height.unit == SVGLength::PERCENT) {
-        this->height.computed = this->height.value * ictx->viewport.height();
-    }
+    this->calcDimsFromParentViewport(ictx);
 
     childflags &= ~SP_OBJECT_USER_MODIFIED_FLAG_B;
 
