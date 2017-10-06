@@ -156,13 +156,8 @@ double FilterBlend::complexity(Geom::Affine const &)
 
 bool FilterBlend::uses_background()
 {
-    if (_input == NR_FILTER_BACKGROUNDIMAGE || _input == NR_FILTER_BACKGROUNDALPHA ||
-        _input2 == NR_FILTER_BACKGROUNDIMAGE || _input2 == NR_FILTER_BACKGROUNDALPHA)
-    {
-        return true;
-    } else {
-        return false;
-    }
+    return (_input == NR_FILTER_BACKGROUNDIMAGE || _input == NR_FILTER_BACKGROUNDALPHA ||
+            _input2 == NR_FILTER_BACKGROUNDIMAGE || _input2 == NR_FILTER_BACKGROUNDALPHA);
 }
 
 void FilterBlend::set_input(int slot) {
