@@ -4,7 +4,6 @@
 #include "live_effects/lpe-powerclip.h"
 #include <2geom/path-intersection.h>
 #include <2geom/intersection-graph.h>
-#include "display/drawing-item.h"
 #include "display/curve.h"
 #include "helper/geom.h"
 #include "sp-clippath.h"
@@ -13,6 +12,9 @@
 #include "sp-item-group.h"
 #include "ui/tools-switch.h"
 #include "path-chemistry.h"
+#include "uri.h"
+#include "extract-uri.h"
+#include <bad-uri-exception.h>
 
 // TODO due to internal breakage in glibmm headers, this must be last:
 #include <glibmm/i18n.h>
@@ -22,19 +24,17 @@ namespace LivePathEffect {
 
 LPEPowerClip::LPEPowerClip(LivePathEffectObject *lpeobject)
     : Effect(lpeobject),
+    hide_clip(_("Hide clip"), _("Hide clip"), "hide_clip", &wr, this, false),
+    is_inverse("Store the last inverse apply", "", "is_inverse", &wr, this, "false", false),
+    uri("Store the uri of clip", "", "uri", &wr, this, "false", false),
     inverse(_("Inverse clip"), _("Inverse clip"), "inverse", &wr, this, false),
-    flatten(_("Flatten clip"), _("Flatten clip, see fill rule once convert to paths"), "flatten", &wr, this, false),
-    //loock(_("Lock clip"), _("Lock clip"), "lock", &wr, this, false),
-    //tooltip empty to no show in default param set
-    is_inverse("Store the last inverse apply", "", "is_inverse", &wr, this, "false", false)
+    flatten(_("Flatten clip"), _("Flatten clip, see fill rule once convert to paths"), "flatten", &wr, this, false)
 {
+    registerParameter(&uri);
     registerParameter(&inverse);
     registerParameter(&flatten);
+    registerParameter(&hide_clip);
     registerParameter(&is_inverse);
-    //registerParameter(&lock);
-    //lock.param_setValue(false);
-    is_clip = false;
-    hide_clip = false;
     convert_shapes = false;
 }
 
@@ -42,22 +42,48 @@ LPEPowerClip::~LPEPowerClip() {}
 
 void
 LPEPowerClip::doBeforeEffect (SPLPEItem const* lpeitem){
-    original_bbox(lpeitem);
-    SPClipPath *clip_path = SP_ITEM(lpeitem)->clip_ref->getObject();
-    Geom::Point topleft      = Geom::Point(boundingbox_X.min() - 5,boundingbox_Y.max() + 5);
-    Geom::Point topright     = Geom::Point(boundingbox_X.max() + 5,boundingbox_Y.max() + 5);
-    Geom::Point bottomright  = Geom::Point(boundingbox_X.max() + 5,boundingbox_Y.min() - 5);
-    Geom::Point bottomleft   = Geom::Point(boundingbox_X.min() - 5,boundingbox_Y.min() - 5);
-    clip_box.clear();
-    clip_box.start(topleft);
-    clip_box.appendNew<Geom::LineSegment>(topright);
-    clip_box.appendNew<Geom::LineSegment>(bottomright);
-    clip_box.appendNew<Geom::LineSegment>(bottomleft);
-    clip_box.close();
-    //clip_path *= sp_lpe_item->i2dt_affine();
+    SPObject * clip_path = SP_ITEM(sp_lpe_item)->clip_ref->getObject();
+    if(hide_clip && clip_path) {
+        SP_ITEM(sp_lpe_item)->clip_ref->detach();
+    } else if (!hide_clip && !clip_path && uri.param_getSVGValue()) {
+        try {
+            SP_ITEM(sp_lpe_item)->clip_ref->attach(Inkscape::URI(uri.param_getSVGValue()));
+        } catch (Inkscape::BadURIException &e) {
+            g_warning("%s", e.what());
+            SP_ITEM(sp_lpe_item)->clip_ref->detach();
+        }
+    }
+    clip_path = SP_ITEM(sp_lpe_item)->clip_ref->getObject();
     if (clip_path) {
-        is_clip = true;
-        const Glib::ustring uri = (Glib::ustring)sp_lpe_item->getRepr()->attribute("clip-path");
+        uri.param_setValue(Glib::ustring(extract_uri(sp_lpe_item->getRepr()->attribute("clip-path"))), true);
+        SP_ITEM(sp_lpe_item)->clip_ref->detach();
+        Geom::OptRect bbox = sp_lpe_item->visualBounds();
+        if(!bbox) {
+            return;
+        }
+        if (uri.param_getSVGValue()) {
+            try {
+                SP_ITEM(sp_lpe_item)->clip_ref->attach(Inkscape::URI(uri.param_getSVGValue()));
+            } catch (Inkscape::BadURIException &e) {
+                g_warning("%s", e.what());
+                SP_ITEM(sp_lpe_item)->clip_ref->detach();
+            }
+        } else {
+            SP_ITEM(sp_lpe_item)->clip_ref->detach();
+        }
+        Geom::Rect bboxrect = (*bbox);
+        bboxrect.expandBy(1);
+        Geom::Point topleft      = bboxrect.corner(0);
+        Geom::Point topright     = bboxrect.corner(1);
+        Geom::Point bottomright  = bboxrect.corner(2);
+        Geom::Point bottomleft   = bboxrect.corner(3);
+        clip_box.clear();
+        clip_box.start(topleft);
+        clip_box.appendNew<Geom::LineSegment>(topright);
+        clip_box.appendNew<Geom::LineSegment>(bottomright);
+        clip_box.appendNew<Geom::LineSegment>(bottomleft);
+        clip_box.close();
+        //clip_box *= sp_lpe_item->i2dt_affine();
         std::vector<SPObject*> clip_path_list = clip_path->childList(true);
         for ( std::vector<SPObject*>::const_iterator iter=clip_path_list.begin();iter!=clip_path_list.end();++iter) {
             SPObject * clip_data = *iter;
@@ -133,8 +159,6 @@ LPEPowerClip::doBeforeEffect (SPLPEItem const* lpeitem){
                 removeInverse(SP_ITEM(clip_data));
             }
         }
-    } else {
-        is_clip = false;
     }
 }
 
@@ -217,36 +241,6 @@ LPEPowerClip::removeInverse (SPItem * clip_data){
 }
 
 void
-LPEPowerClip::toggleClip() {
-    SPItem * item = SP_ITEM(sp_lpe_item);
-    if (item) {
-        SPClipPath *clip_path = item->clip_ref->getObject();
-        if (clip_path) {
-            hide_clip = !hide_clip;
-            if(hide_clip) {
-                SPItemView *v;
-                for (v = item->display; v != NULL; v = v->next) {
-                    clip_path->hide(v->arenaitem->key());
-                }
-            } else {
-                Geom::OptRect bbox = item->geometricBounds();
-                for (SPItemView *v = item->display; v != NULL; v = v->next) {
-                    if (!v->arenaitem->key()) {
-                        v->arenaitem->setKey(SPItem::display_key_new(3));
-                    }
-                    Inkscape::DrawingItem *ai = clip_path->show(
-                                                           v->arenaitem->drawing(),
-                                                           v->arenaitem->key());
-                    v->arenaitem->setClip(ai);
-                    clip_path->setBBox(v->arenaitem->key(), bbox);
-                }
-            }
-            clip_path->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG);
-        }
-    }
-}
-
-void
 LPEPowerClip::convertShapes() {
     convert_shapes = true;
     sp_lpe_item_update_patheffect(SP_LPE_ITEM(sp_lpe_item), false, false);
@@ -256,7 +250,7 @@ Gtk::Widget *
 LPEPowerClip::newWidget()
 {
     // use manage here, because after deletion of Effect object, others might still be pointing to this widget.
-    Gtk::VBox * vbox = Gtk::manage( new Gtk::VBox(Effect::newWidget()) );
+    Gtk::VBox * vbox = Gtk::manage( new Gtk::VBox(Effect::newWidget()));
 
     vbox->set_border_width(5);
     vbox->set_homogeneous(false);
@@ -281,17 +275,11 @@ LPEPowerClip::newWidget()
         ++it;
     }
     Gtk::HBox * hbox = Gtk::manage(new Gtk::HBox(false,0));
-    Gtk::Button * toggle_button = Gtk::manage(new Gtk::Button(Glib::ustring(_("Toggle clip visibiliy"))));
-    toggle_button->signal_clicked().connect(sigc::mem_fun (*this,&LPEPowerClip::toggleClip));
-    toggle_button->set_size_request(180,30);
-    vbox->pack_start(*hbox, true,true,2);
-    hbox->pack_start(*toggle_button, false, false,2);
-    Gtk::HBox * hbox2 = Gtk::manage(new Gtk::HBox(false,0));
     Gtk::Button * topaths_button = Gtk::manage(new Gtk::Button(Glib::ustring(_("Convert clips to paths, undoable"))));
     topaths_button->signal_clicked().connect(sigc::mem_fun (*this,&LPEPowerClip::convertShapes));
     topaths_button->set_size_request(220,30);
-    vbox->pack_start(*hbox2, true,true,2);
-    hbox2->pack_start(*topaths_button, false, false,2);
+    hbox->pack_start(*topaths_button, false, false,2);
+    vbox->pack_start(*hbox, true,true,2);
     return dynamic_cast<Gtk::Widget *>(vbox);
 }
 
@@ -301,7 +289,6 @@ LPEPowerClip::doOnRemove (SPLPEItem const* /*lpeitem*/)
     SPClipPath *clip_path = SP_ITEM(sp_lpe_item)->clip_ref->getObject();
     if(!keep_paths) {
         if(clip_path) {
-            is_clip = true;
             std::vector<SPObject*> clip_path_list = clip_path->childList(true);
             for ( std::vector<SPObject*>::const_iterator iter=clip_path_list.begin();iter!=clip_path_list.end();++iter) {
                 SPObject * clip_data = *iter;
@@ -313,7 +300,6 @@ LPEPowerClip::doOnRemove (SPLPEItem const* /*lpeitem*/)
     } else {
         if (flatten && clip_path) {
             clip_path->deleteObject();
-            sp_lpe_item->getRepr()->setAttribute("clip-path", NULL);
         }
     }
 }
@@ -321,7 +307,7 @@ LPEPowerClip::doOnRemove (SPLPEItem const* /*lpeitem*/)
 Geom::PathVector
 LPEPowerClip::doEffect_path(Geom::PathVector const & path_in){
     Geom::PathVector path_out = pathv_to_linear_and_cubic_beziers(path_in);
-    if (flatten && is_clip && isVisible()) {
+    if (!hide_clip && flatten && isVisible()) {
         SPClipPath *clip_path = SP_ITEM(sp_lpe_item)->clip_ref->getObject();
         if(clip_path) {
             std::vector<SPObject*> clip_path_list = clip_path->childList(true);
@@ -330,6 +316,7 @@ LPEPowerClip::doEffect_path(Geom::PathVector const & path_in){
                 flattenClip(SP_ITEM(clip_data), path_out);
             }
         }
+        SP_ITEM(sp_lpe_item)->clip_ref->detach();
     }
     return path_out;
 }
@@ -346,13 +333,13 @@ LPEPowerClip::doOnVisibilityToggled(SPLPEItem const* lpeitem)
 //{
 //    SPDocument * doc = SP_ACTIVE_DOCUMENT;
 //    SPClipPath *clip_path = SP_ITEM(sp_lpe_item)->clip_ref->getObject();
-//    if (is_clip && lock) {
+//    if (clip_path && lock) {
 //        std::vector<SPObject*> clip_path_list = clip_path->childList(true);
 //        Glib::ustring clip_id = (Glib::ustring)clip_path->getId();
 //        Glib::ustring box_id = clip_id + (Glib::ustring)"_box";
 //        for ( std::vector<SPObject*>::const_iterator iter=clip_path_list.begin();iter!=clip_path_list.end();++iter) {
 //            SPItem * clip_data = SP_ITEM(*iter);
-//            if(inverse && is_clip && lock) {
+//            if(inverse && lock) {
 //                removeInverse(clip_data);
 //            }
 //            if (lock) {
@@ -371,7 +358,7 @@ LPEPowerClip::doOnVisibilityToggled(SPLPEItem const* lpeitem)
 ////                    }
 ////                }
 //            }
-//            if(inverse && is_clip && lock) {
+//            if(inverse && lock) {
 //                doBeforeEffect(sp_lpe_item);
 //            }
 //        }
@@ -381,8 +368,8 @@ LPEPowerClip::doOnVisibilityToggled(SPLPEItem const* lpeitem)
 //        Parameter * param = *it;
 //        param->param_transform_multiply(postmul, set);
 //    }
-//    toggleClip();
-//    toggleClip();
+//    toggleClipVisibility();
+//    toggleClipVisibility();
 //}
 
 void
