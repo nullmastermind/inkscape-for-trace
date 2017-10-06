@@ -46,7 +46,7 @@ enum { // which property was queried (add when you need more)
     QUERY_STYLE_PROPERTY_PAINTORDER, // paint-order
     QUERY_STYLE_PROPERTY_FONT_SPECIFICATION, //-inkscape-font-specification
     QUERY_STYLE_PROPERTY_FONTFAMILY, // font-family
-    QUERY_STYLE_PROPERTY_FONTSTYLE, // font style 
+    QUERY_STYLE_PROPERTY_FONTSTYLE, // font style
     QUERY_STYLE_PROPERTY_FONTVARIANTS, // font variants (OpenType features)
     QUERY_STYLE_PROPERTY_FONTFEATURESETTINGS, // font feature settings (OpenType features)
     QUERY_STYLE_PROPERTY_FONTNUMBERS, // size, spacings
