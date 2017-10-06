@@ -55,6 +55,47 @@ FilterPrimitive * FilterBlend::create() {
 FilterBlend::~FilterBlend()
 {}
 
+static inline cairo_operator_t get_cairo_op(FilterBlendMode _blend_mode)
+{
+    switch (_blend_mode) {
+    case BLEND_MULTIPLY:
+        return CAIRO_OPERATOR_MULTIPLY;
+    case BLEND_SCREEN:
+        return CAIRO_OPERATOR_SCREEN;
+    case BLEND_DARKEN:
+        return CAIRO_OPERATOR_DARKEN;
+    case BLEND_LIGHTEN:
+        return CAIRO_OPERATOR_LIGHTEN;
+    // New in CSS Compositing and Blending Level 1
+    case BLEND_OVERLAY:
+        return CAIRO_OPERATOR_OVERLAY;
+    case BLEND_COLORDODGE:
+        return CAIRO_OPERATOR_COLOR_DODGE;
+    case BLEND_COLORBURN:
+        return CAIRO_OPERATOR_COLOR_BURN;
+    case BLEND_HARDLIGHT:
+        return CAIRO_OPERATOR_HARD_LIGHT;
+    case BLEND_SOFTLIGHT:
+        return CAIRO_OPERATOR_SOFT_LIGHT;
+    case BLEND_DIFFERENCE:
+        return CAIRO_OPERATOR_DIFFERENCE;
+    case BLEND_EXCLUSION:
+        return CAIRO_OPERATOR_EXCLUSION;
+    case BLEND_HUE:
+        return CAIRO_OPERATOR_HSL_HUE;
+    case BLEND_SATURATION:
+        return CAIRO_OPERATOR_HSL_SATURATION;
+    case BLEND_COLOR:
+        return CAIRO_OPERATOR_HSL_COLOR;
+    case BLEND_LUMINOSITY:
+        return CAIRO_OPERATOR_HSL_LUMINOSITY;
+
+    case BLEND_NORMAL:
+    default:
+        return CAIRO_OPERATOR_OVER;
+    }
+}
+
 void FilterBlend::render_cairo(FilterSlot &slot)
 {
     cairo_surface_t *input1 = slot.getcairo(_input);
@@ -82,59 +123,7 @@ void FilterBlend::render_cairo(FilterSlot &slot)
     // All of the blend modes are implemented in Cairo as of 1.10.
     // For a detailed description, see:
     // http://cairographics.org/operators/
-    switch (_blend_mode) {
-    case BLEND_MULTIPLY:
-        cairo_set_operator(out_ct, CAIRO_OPERATOR_MULTIPLY);
-        break;
-    case BLEND_SCREEN:
-        cairo_set_operator(out_ct, CAIRO_OPERATOR_SCREEN);
-        break;
-    case BLEND_DARKEN:
-        cairo_set_operator(out_ct, CAIRO_OPERATOR_DARKEN);
-        break;
-    case BLEND_LIGHTEN:
-        cairo_set_operator(out_ct, CAIRO_OPERATOR_LIGHTEN);
-        break;
-    // New in CSS Compositing and Blending Level 1
-    case BLEND_OVERLAY:
-        cairo_set_operator(out_ct, CAIRO_OPERATOR_OVERLAY);
-        break;
-    case BLEND_COLORDODGE:
-        cairo_set_operator(out_ct, CAIRO_OPERATOR_COLOR_DODGE);
-        break;
-    case BLEND_COLORBURN:
-        cairo_set_operator(out_ct, CAIRO_OPERATOR_COLOR_BURN);
-        break;
-    case BLEND_HARDLIGHT:
-        cairo_set_operator(out_ct, CAIRO_OPERATOR_HARD_LIGHT);
-        break;
-    case BLEND_SOFTLIGHT:
-        cairo_set_operator(out_ct, CAIRO_OPERATOR_SOFT_LIGHT);
-        break;
-    case BLEND_DIFFERENCE:
-        cairo_set_operator(out_ct, CAIRO_OPERATOR_DIFFERENCE);
-        break;
-    case BLEND_EXCLUSION:
-        cairo_set_operator(out_ct, CAIRO_OPERATOR_EXCLUSION);
-        break;
-    case BLEND_HUE:
-        cairo_set_operator(out_ct, CAIRO_OPERATOR_HSL_HUE);
-        break;
-    case BLEND_SATURATION:
-        cairo_set_operator(out_ct, CAIRO_OPERATOR_HSL_SATURATION);
-        break;
-    case BLEND_COLOR:
-        cairo_set_operator(out_ct, CAIRO_OPERATOR_HSL_COLOR);
-        break;
-    case BLEND_LUMINOSITY:
-        cairo_set_operator(out_ct, CAIRO_OPERATOR_HSL_LUMINOSITY);
-        break;
-
-    case BLEND_NORMAL:
-    default:
-        cairo_set_operator(out_ct, CAIRO_OPERATOR_OVER);
-        break;
-    }
+    cairo_set_operator(out_ct, get_cairo_op(_blend_mode));
 
     cairo_paint(out_ct);
     cairo_destroy(out_ct);
