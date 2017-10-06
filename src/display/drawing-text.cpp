@@ -91,12 +91,11 @@ unsigned DrawingGlyphs::_updateItem(Geom::IntRect const &/*area*/, UpdateContext
     if (_transform) {
         scale_bigbox /= _transform->descrim();
     }
-    
 
     /* Because there can be text decorations the bounding box must correspond in Y to a little above the glyph's ascend
     and a little below its descend.  This leaves room for overline and underline.  The left and right sides
-    come from the glyph's bounding box.  Note that the initial direction of ascender is positive down in Y, and 
-    this flips after the transform is applied.  So change the sign on descender. 1.1 provides a little extra space 
+    come from the glyph's bounding box.  Note that the initial direction of ascender is positive down in Y, and
+    this flips after the transform is applied.  So change the sign on descender. 1.1 provides a little extra space
     above and below the max/min y positions of the letters to place the text decorations.*/
 
     Geom::Rect b;
@@ -129,10 +128,10 @@ unsigned DrawingGlyphs::_updateItem(Geom::IntRect const &/*area*/, UpdateContext
         Geom::Rect pbigbox(Geom::Point(0.0, _asc*scale_bigbox*0.66),Geom::Point(_width*scale_bigbox, 0.0));
         pb = pbigbox * ctx.ctm;
     }
-    
+
 #if 0
     /* FIXME  if this is commented out then not even an approximation of pick on decorations */
-    /* adjust the pick box up or down to include the decorations.  
+    /* adjust the pick box up or down to include the decorations.
        This is only approximate since at this point we don't know how wide that line is, if it has
        an unusual offset, and so forth.  The selection point is set at what is roughly the center of
        the decoration (vertically) for the wide ones, like wavy and double line.
@@ -146,7 +145,7 @@ unsigned DrawingGlyphs::_updateItem(Geom::IntRect const &/*area*/, UpdateContext
         Geom::Rect padjbox(Geom::Point(0.0, top),Geom::Point(_width*scale_bigbox, bot));
         pb.unionWith(padjbox * ctx.ctm);
     }
-#endif   
+#endif
 
     if (ggroup->_nrstyle.stroke.type != NRStyle::PAINT_NONE) {
         // this expands the selection box for cases where the stroke is "thick"
@@ -263,8 +262,8 @@ DrawingText::_updateItem(Geom::IntRect const &area, UpdateContext const &ctx, un
 void DrawingText::decorateStyle(DrawingContext &dc, double vextent, double xphase, Geom::Point const &p1, Geom::Point const &p2, double thickness)
 {
     double wave[16]={
-        0.000000,  0.382499,  0.706825,  0.923651,   1.000000,  0.923651,  0.706825,  0.382499, 
-        0.000000, -0.382499, -0.706825, -0.923651,  -1.000000, -0.923651, -0.706825, -0.382499, 
+        0.000000,  0.382499,  0.706825,  0.923651,   1.000000,  0.923651,  0.706825,  0.382499,
+        0.000000, -0.382499, -0.706825, -0.923651,  -1.000000, -0.923651, -0.706825, -0.382499,
     };
     int dashes[16]={
         8,   7,   6,   5,
@@ -283,7 +282,7 @@ void DrawingText::decorateStyle(DrawingContext &dc, double vextent, double xphas
 
     /* For most spans draw the last little bit right to p2 or even a little beyond.
        This allows decoration continuity within the line, and does not step outside the clip box off the end
-       For the first/last section on the line though, stay well clear of the edge, or when the 
+       For the first/last section on the line though, stay well clear of the edge, or when the
        text is dragged it may "spray" pixels.
     */
     /* snap to nearest step in X */
@@ -329,7 +328,7 @@ void DrawingText::decorateStyle(DrawingContext &dc, double vextent, double xphas
             }
             i = 0;  // once in phase, it stays in phase
         }
-    } 
+    }
     else if(_nrstyle.text_decoration_style & TEXT_DECORATION_STYLE_DASHED){
         Geom::Point pv = ps;
         while(1){
@@ -354,7 +353,7 @@ void DrawingText::decorateStyle(DrawingContext &dc, double vextent, double xphas
             }
             i = 0;  // once in phase, it stays in phase
         }
-    } 
+    }
     else if(_nrstyle.text_decoration_style & TEXT_DECORATION_STYLE_WAVY){
         double   amp  = vextent/10.0;
         double   x    = ps[Geom::X];
@@ -375,10 +374,10 @@ void DrawingText::decorateStyle(DrawingContext &dc, double vextent, double xphas
            if(x <= ps[Geom::X])break;
         }
         dc.closePath();
-    }  
+    }
     else { // TEXT_DECORATION_STYLE_SOLID, also default in case it was not set for some reason
         dc.rectangle( Geom::Rect(ps + poff, pf - poff));
-    } 
+    }
 }
 
 /* returns scaled line thickness */
@@ -629,7 +628,7 @@ unsigned DrawingText::_renderItem(DrawingContext &dc, Geom::IntRect const &/*are
             {
                 Inkscape::DrawingContext::Save save(dc);
                 dc.transform(_ctm);  // Needed so that fill pattern rotates with text
-                
+
                 if (has_td_fill && fill_first) {
                     _nrstyle.applyTextDecorationFill(dc);
                     dc.fillPreserve();
