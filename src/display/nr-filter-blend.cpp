@@ -3,7 +3,7 @@
  *//*
  * "This filter composites two objects together using commonly used
  * imaging software blending modes. It performs a pixel-wise combination
- * of two input images." 
+ * of two input images."
  * http://www.w3.org/TR/SVG11/filters.html#feBlend
  *
  * Authors:
@@ -32,7 +32,18 @@
 namespace Inkscape {
 namespace Filters {
 
-FilterBlend::FilterBlend() 
+const std::set<FilterBlendMode> FilterBlend::_valid_modes {
+        BLEND_NORMAL,      BLEND_MULTIPLY,
+        BLEND_SCREEN,      BLEND_DARKEN,
+        BLEND_LIGHTEN,     BLEND_OVERLAY,
+        BLEND_COLORDODGE,  BLEND_COLORBURN,
+        BLEND_HARDLIGHT,   BLEND_SOFTLIGHT,
+        BLEND_DIFFERENCE,  BLEND_EXCLUSION,
+        BLEND_HUE,         BLEND_SATURATION,
+        BLEND_COLOR,       BLEND_LUMINOSITY
+        };
+
+FilterBlend::FilterBlend()
     : _blend_mode(BLEND_NORMAL),
       _input2(NR_FILTER_SLOT_NOT_SET)
 {}
@@ -85,7 +96,7 @@ void FilterBlend::render_cairo(FilterSlot &slot)
         cairo_set_operator(out_ct, CAIRO_OPERATOR_LIGHTEN);
         break;
     // New in CSS Compositing and Blending Level 1
-    case BLEND_OVERLAY:   
+    case BLEND_OVERLAY:
         cairo_set_operator(out_ct, CAIRO_OPERATOR_OVERLAY);
         break;
     case BLEND_COLORDODGE:
@@ -106,7 +117,7 @@ void FilterBlend::render_cairo(FilterSlot &slot)
     case BLEND_EXCLUSION:
         cairo_set_operator(out_ct, CAIRO_OPERATOR_EXCLUSION);
         break;
-    case BLEND_HUE:       
+    case BLEND_HUE:
         cairo_set_operator(out_ct, CAIRO_OPERATOR_HSL_HUE);
         break;
     case BLEND_SATURATION:
@@ -164,15 +175,7 @@ void FilterBlend::set_input(int input, int slot) {
 }
 
 void FilterBlend::set_mode(FilterBlendMode mode) {
-    if (mode == BLEND_NORMAL     || mode == BLEND_MULTIPLY   ||
-        mode == BLEND_SCREEN     || mode == BLEND_DARKEN     ||
-        mode == BLEND_LIGHTEN    || mode == BLEND_OVERLAY    ||
-        mode == BLEND_COLORDODGE || mode == BLEND_COLORBURN  ||
-        mode == BLEND_HARDLIGHT  || mode == BLEND_SOFTLIGHT  ||
-        mode == BLEND_DIFFERENCE || mode == BLEND_EXCLUSION  ||
-        mode == BLEND_HUE        || mode == BLEND_SATURATION ||
-        mode == BLEND_COLOR      || mode == BLEND_LUMINOSITY
-        )
+    if (_valid_modes.count(mode))
     {
         _blend_mode = mode;
     }
