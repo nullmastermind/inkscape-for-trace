@@ -685,11 +685,7 @@ void DrawingText::_clipItem(DrawingContext &dc, Geom::IntRect const &/*area*/)
 DrawingItem *
 DrawingText::_pickItem(Geom::Point const &p, double delta, unsigned flags)
 {
-    DrawingItem *picked = DrawingGroup::_pickItem(p, delta, flags);
-    if (picked) {
-        return this;
-    }
-    return NULL;
+    return DrawingGroup::_pickItem(p, delta, flags) ? this : NULL;
 }
 
 bool
