@@ -159,7 +159,7 @@ const std::string URI::getFullPath(std::string const &base) const {
         path = Glib::build_filename(base, path);
     }
     // Check the existance of the file
-    if(! g_file_test(path.c_str(), G_FILE_TEST_EXISTS) 
+    if(! g_file_test(path.c_str(), G_FILE_TEST_EXISTS)
       || g_file_test(path.c_str(), G_FILE_TEST_IS_DIR) ) {
         path.clear();
     }
@@ -207,13 +207,11 @@ URI URI::fromUtf8( gchar const* path ) {
             tmp += (gunichar)one;
         } else {
             gchar scratch[4];
-            g_snprintf( scratch, 4, "%c%02X", '%', one );
+            g_snprintf( scratch, 4, "%%%02X", one );
             tmp.append( scratch );
         }
     }
-    const gchar *uri = tmp.data();
-    URI result(uri);
-    return result;
+    return URI( tmp.data() );
 }
 
 /* TODO !!! proper error handling */

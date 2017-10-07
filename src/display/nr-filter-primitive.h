@@ -69,7 +69,7 @@ public:
     // returns cache score factor, reflecting the cost of rendering this filter
     // this should return how many times slower this primitive is that normal rendering
     virtual double complexity(Geom::Affine const &/*ctm*/) { return 1.0; }
-    
+
     virtual bool uses_background() {
         if (_input == NR_FILTER_BACKGROUNDIMAGE || _input == NR_FILTER_BACKGROUNDALPHA) {
             return true;
@@ -138,10 +138,7 @@ protected:
 } /* namespace Filters */
 } /* namespace Inkscape */
 
-
-
-
-#endif /* __NR_FILTER_PRIMITIVE_H__ */
+#endif /* SEEN_NR_FILTER_PRIMITIVE_H */
 /*
   Local Variables:
   mode:c++

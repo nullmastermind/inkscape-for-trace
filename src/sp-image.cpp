@@ -374,23 +374,8 @@ void SPImage::update(SPCtx *ctx, unsigned int flags) {
         }
     }
 
-
     // Calculate x, y, width, height from parent/initial viewport, see sp-root.cpp
-    if (this->x.unit == SVGLength::PERCENT) {
-        this->x.computed = this->x.value * ictx->viewport.width();
-    }
-
-    if (this->y.unit == SVGLength::PERCENT) {
-        this->y.computed = this->y.value * ictx->viewport.height();
-    }
-
-    if (this->width.unit == SVGLength::PERCENT) {
-        this->width.computed = this->width.value * ictx->viewport.width();
-    }
-
-    if (this->height.unit == SVGLength::PERCENT) {
-        this->height.computed = this->height.value * ictx->viewport.height();
-    }
+    this->calcDimsFromParentViewport(ictx);
 
     // Image creates a new viewport
     ictx->viewport= Geom::Rect::from_xywh( this->x.computed, this->y.computed,

@@ -14,6 +14,7 @@ set(sp_SRC
   sp-cursor.cpp
   sp-defs.cpp
   sp-desc.cpp
+  sp-dimensions.cpp
   sp-ellipse.cpp
   sp-factory.cpp
   sp-filter-primitive.cpp
@@ -97,6 +98,7 @@ set(sp_SRC
   sp-cursor.h
   sp-defs.h
   sp-desc.h
+  sp-dimensions.h
   sp-ellipse.h
   sp-factory.h
   sp-filter-primitive.h

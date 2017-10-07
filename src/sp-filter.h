@@ -16,6 +16,7 @@
 #include <map>
 
 #include "number-opt-number.h"
+#include "sp-dimensions.h"
 #include "sp-object.h"
 #include "sp-filter-units.h"
 #include "svg/svg-length.h"
@@ -38,7 +39,7 @@ struct ltstr {
     bool operator()(const char* s1, const char* s2) const;
 };
 
-class SPFilter : public SPObject {
+class SPFilter : public SPObject, public SPDimensions {
 public:
 	SPFilter();
 	virtual ~SPFilter();
@@ -47,14 +48,10 @@ public:
     unsigned int filterUnits_set : 1;
     SPFilterUnits primitiveUnits;
     unsigned int primitiveUnits_set : 1;
-    SVGLength x;
-    SVGLength y;
-    SVGLength width;
-    SVGLength height;
     NumberOptNumber filterRes;
     SPFilterReference *href;
     sigc::connection modified_connection;
-    
+
     guint getRefCount();
     guint _refcount;
 

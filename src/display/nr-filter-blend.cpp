@@ -3,7 +3,7 @@
  *//*
  * "This filter composites two objects together using commonly used
  * imaging software blending modes. It performs a pixel-wise combination
- * of two input images." 
+ * of two input images."
  * http://www.w3.org/TR/SVG11/filters.html#feBlend
  *
  * Authors:
@@ -32,7 +32,18 @@
 namespace Inkscape {
 namespace Filters {
 
-FilterBlend::FilterBlend() 
+const std::set<FilterBlendMode> FilterBlend::_valid_modes {
+        BLEND_NORMAL,      BLEND_MULTIPLY,
+        BLEND_SCREEN,      BLEND_DARKEN,
+        BLEND_LIGHTEN,     BLEND_OVERLAY,
+        BLEND_COLORDODGE,  BLEND_COLORBURN,
+        BLEND_HARDLIGHT,   BLEND_SOFTLIGHT,
+        BLEND_DIFFERENCE,  BLEND_EXCLUSION,
+        BLEND_HUE,         BLEND_SATURATION,
+        BLEND_COLOR,       BLEND_LUMINOSITY
+        };
+
+FilterBlend::FilterBlend()
     : _blend_mode(BLEND_NORMAL),
       _input2(NR_FILTER_SLOT_NOT_SET)
 {}
@@ -43,6 +54,47 @@ FilterPrimitive * FilterBlend::create() {
 
 FilterBlend::~FilterBlend()
 {}
+
+static inline cairo_operator_t get_cairo_op(FilterBlendMode _blend_mode)
+{
+    switch (_blend_mode) {
+    case BLEND_MULTIPLY:
+        return CAIRO_OPERATOR_MULTIPLY;
+    case BLEND_SCREEN:
+        return CAIRO_OPERATOR_SCREEN;
+    case BLEND_DARKEN:
+        return CAIRO_OPERATOR_DARKEN;
+    case BLEND_LIGHTEN:
+        return CAIRO_OPERATOR_LIGHTEN;
+    // New in CSS Compositing and Blending Level 1
+    case BLEND_OVERLAY:
+        return CAIRO_OPERATOR_OVERLAY;
+    case BLEND_COLORDODGE:
+        return CAIRO_OPERATOR_COLOR_DODGE;
+    case BLEND_COLORBURN:
+        return CAIRO_OPERATOR_COLOR_BURN;
+    case BLEND_HARDLIGHT:
+        return CAIRO_OPERATOR_HARD_LIGHT;
+    case BLEND_SOFTLIGHT:
+        return CAIRO_OPERATOR_SOFT_LIGHT;
+    case BLEND_DIFFERENCE:
+        return CAIRO_OPERATOR_DIFFERENCE;
+    case BLEND_EXCLUSION:
+        return CAIRO_OPERATOR_EXCLUSION;
+    case BLEND_HUE:
+        return CAIRO_OPERATOR_HSL_HUE;
+    case BLEND_SATURATION:
+        return CAIRO_OPERATOR_HSL_SATURATION;
+    case BLEND_COLOR:
+        return CAIRO_OPERATOR_HSL_COLOR;
+    case BLEND_LUMINOSITY:
+        return CAIRO_OPERATOR_HSL_LUMINOSITY;
+
+    case BLEND_NORMAL:
+    default:
+        return CAIRO_OPERATOR_OVER;
+    }
+}
 
 void FilterBlend::render_cairo(FilterSlot &slot)
 {
@@ -71,59 +123,7 @@ void FilterBlend::render_cairo(FilterSlot &slot)
     // All of the blend modes are implemented in Cairo as of 1.10.
     // For a detailed description, see:
     // http://cairographics.org/operators/
-    switch (_blend_mode) {
-    case BLEND_MULTIPLY:
-        cairo_set_operator(out_ct, CAIRO_OPERATOR_MULTIPLY);
-        break;
-    case BLEND_SCREEN:
-        cairo_set_operator(out_ct, CAIRO_OPERATOR_SCREEN);
-        break;
-    case BLEND_DARKEN:
-        cairo_set_operator(out_ct, CAIRO_OPERATOR_DARKEN);
-        break;
-    case BLEND_LIGHTEN:
-        cairo_set_operator(out_ct, CAIRO_OPERATOR_LIGHTEN);
-        break;
-    // New in CSS Compositing and Blending Level 1
-    case BLEND_OVERLAY:   
-        cairo_set_operator(out_ct, CAIRO_OPERATOR_OVERLAY);
-        break;
-    case BLEND_COLORDODGE:
-        cairo_set_operator(out_ct, CAIRO_OPERATOR_COLOR_DODGE);
-        break;
-    case BLEND_COLORBURN:
-        cairo_set_operator(out_ct, CAIRO_OPERATOR_COLOR_BURN);
-        break;
-    case BLEND_HARDLIGHT:
-        cairo_set_operator(out_ct, CAIRO_OPERATOR_HARD_LIGHT);
-        break;
-    case BLEND_SOFTLIGHT:
-        cairo_set_operator(out_ct, CAIRO_OPERATOR_SOFT_LIGHT);
-        break;
-    case BLEND_DIFFERENCE:
-        cairo_set_operator(out_ct, CAIRO_OPERATOR_DIFFERENCE);
-        break;
-    case BLEND_EXCLUSION:
-        cairo_set_operator(out_ct, CAIRO_OPERATOR_EXCLUSION);
-        break;
-    case BLEND_HUE:       
-        cairo_set_operator(out_ct, CAIRO_OPERATOR_HSL_HUE);
-        break;
-    case BLEND_SATURATION:
-        cairo_set_operator(out_ct, CAIRO_OPERATOR_HSL_SATURATION);
-        break;
-    case BLEND_COLOR:
-        cairo_set_operator(out_ct, CAIRO_OPERATOR_HSL_COLOR);
-        break;
-    case BLEND_LUMINOSITY:
-        cairo_set_operator(out_ct, CAIRO_OPERATOR_HSL_LUMINOSITY);
-        break;
-
-    case BLEND_NORMAL:
-    default:
-        cairo_set_operator(out_ct, CAIRO_OPERATOR_OVER);
-        break;
-    }
+    cairo_set_operator(out_ct, get_cairo_op(_blend_mode));
 
     cairo_paint(out_ct);
     cairo_destroy(out_ct);
@@ -145,13 +145,8 @@ double FilterBlend::complexity(Geom::Affine const &)
 
 bool FilterBlend::uses_background()
 {
-    if (_input == NR_FILTER_BACKGROUNDIMAGE || _input == NR_FILTER_BACKGROUNDALPHA ||
-        _input2 == NR_FILTER_BACKGROUNDIMAGE || _input2 == NR_FILTER_BACKGROUNDALPHA)
-    {
-        return true;
-    } else {
-        return false;
-    }
+    return (_input == NR_FILTER_BACKGROUNDIMAGE || _input == NR_FILTER_BACKGROUNDALPHA ||
+            _input2 == NR_FILTER_BACKGROUNDIMAGE || _input2 == NR_FILTER_BACKGROUNDALPHA);
 }
 
 void FilterBlend::set_input(int slot) {
@@ -164,15 +159,7 @@ void FilterBlend::set_input(int input, int slot) {
 }
 
 void FilterBlend::set_mode(FilterBlendMode mode) {
-    if (mode == BLEND_NORMAL     || mode == BLEND_MULTIPLY   ||
-        mode == BLEND_SCREEN     || mode == BLEND_DARKEN     ||
-        mode == BLEND_LIGHTEN    || mode == BLEND_OVERLAY    ||
-        mode == BLEND_COLORDODGE || mode == BLEND_COLORBURN  ||
-        mode == BLEND_HARDLIGHT  || mode == BLEND_SOFTLIGHT  ||
-        mode == BLEND_DIFFERENCE || mode == BLEND_EXCLUSION  ||
-        mode == BLEND_HUE        || mode == BLEND_SATURATION ||
-        mode == BLEND_COLOR      || mode == BLEND_LUMINOSITY
-        )
+    if (_valid_modes.count(mode))
     {
         _blend_mode = mode;
     }

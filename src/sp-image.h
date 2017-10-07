@@ -19,6 +19,7 @@
 #include "display/curve.h"
 #include "sp-item.h"
 #include "viewbox.h"
+#include "sp-dimensions.h"
 
 #define SP_IMAGE(obj) (dynamic_cast<SPImage*>((SPObject*)obj))
 #define SP_IS_IMAGE(obj) (dynamic_cast<const SPImage*>((SPObject*)obj) != NULL)
@@ -26,15 +27,10 @@
 #define SP_IMAGE_HREF_MODIFIED_FLAG SP_OBJECT_USER_MODIFIED_FLAG_A
 
 namespace Inkscape { class Pixbuf; }
-class SPImage : public SPItem, public SPViewBox {
+class SPImage : public SPItem, public SPViewBox, public SPDimensions {
 public:
     SPImage();
     virtual ~SPImage();
-
-    SVGLength x;
-    SVGLength y;
-    SVGLength width;
-    SVGLength height;
 
     Geom::Rect clipbox;
     double sx, sy;

@@ -3,7 +3,7 @@
 
 /** \file
  * SVG <inkscape:tag> implementation
- * 
+ *
  * Authors:
  *   Theodore Janeczko
  *
@@ -25,19 +25,19 @@ class SPTag : public SPObject {
 public:
     SPTag() {}
     virtual ~SPTag() {}
-    
+
     virtual void build(SPDocument * doc, Inkscape::XML::Node *repr);
     //virtual void release();
     virtual void set(unsigned key, const gchar* value);
     virtual void update(SPCtx * ctx, unsigned flags);
-    
+
     virtual Inkscape::XML::Node* write(Inkscape::XML::Document* doc, Inkscape::XML::Node* repr, guint flags);
-    
+
     bool expanded() const { return _expanded; }
     void setExpanded(bool isexpanded);
 
     void moveTo(SPObject *target, gboolean intoafter);
-    
+
 private:
     bool _expanded;
 };

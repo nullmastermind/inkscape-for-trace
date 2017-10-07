@@ -19,12 +19,13 @@
 #include <sigc++/sigc++.h>
 
 #include "svg/svg-length.h"
+#include "sp-dimensions.h"
 #include "sp-item.h"
 #include "enums.h"
 
 class SPUseReference;
 
-class SPUse : public SPItem {
+class SPUse : public SPItem, public SPDimensions {
 public:
 	SPUse();
 	virtual ~SPUse();
@@ -34,10 +35,6 @@ public:
     SPItem *child;
 
     // SVG attrs
-    SVGLength x;
-    SVGLength y;
-    SVGLength width;
-    SVGLength height;
     char *href;
 
     // the reference to the original object

@@ -40,8 +40,7 @@ SPRoot::SPRoot() : SPGroup(), SPViewBox()
     this->version.inkscape = zero_version;
     this->original.inkscape = zero_version;
 
-    this->x.unset(SVGLength::PERCENT, 0.0, 0.0); // Ignored for root SVG element
-    this->y.unset(SVGLength::PERCENT, 0.0, 0.0);
+    this->unset_x_and_y();
     this->width.unset(SVGLength::PERCENT, 1.0, 1.0);
     this->height.unset(SVGLength::PERCENT, 1.0, 1.0);
 
@@ -50,6 +49,12 @@ SPRoot::SPRoot() : SPGroup(), SPViewBox()
 
 SPRoot::~SPRoot()
 {
+}
+
+void SPRoot::unset_x_and_y()
+{
+    this->x.unset(SVGLength::PERCENT, 0.0, 0.0); // Ignored for root SVG element
+    this->y.unset(SVGLength::PERCENT, 0.0, 0.0);
 }
 
 void SPRoot::build(SPDocument *document, Inkscape::XML::Node *repr)
@@ -206,74 +211,63 @@ void SPRoot::remove_child(Inkscape::XML::Node *child)
     SPGroup::remove_child(child);
 }
 
+void SPRoot::setRootDimensions()
+{
+    /*
+     * This is the root SVG element:
+     *
+     * x, y, width, and height apply to positioning the SVG element inside a parent.
+     * For the root SVG in Inkscape there is no parent, thus special rules apply:
+     *   If width, height not set, width = 100%, height = 100% (as always).
+     *   If width and height are in percent, they are percent of viewBox width/height.
+     *   If width, height, and viewBox are not set... pick "random" width/height.
+     *   x, y are ignored.
+     *   initial viewport = (0 0 width height)
+     */
+    if( this->viewBox_set ) {
+
+        if( this->width._set ) {
+            // Check if this is necessary
+            if (this->width.unit == SVGLength::PERCENT) {
+                this->width.computed  = this->width.value  * this->viewBox.width();
+            }
+        } else {
+            this->width.set( SVGLength::PX, this->viewBox.width(),  this->viewBox.width()  );
+        }
+
+        if( this->height._set ) {
+            if (this->height.unit == SVGLength::PERCENT) {
+                this->height.computed = this->height.value * this->viewBox.height();
+            }
+        } else {
+            this->height.set(SVGLength::PX, this->viewBox.height(), this->viewBox.height() );
+        }
+
+    } else {
+
+        if( !this->width._set ) {
+            this->width.set(  SVGLength::PX, 100,  100 ); // Random default
+        }
+
+        if( !this->height._set ) {
+            this->height.set( SVGLength::PX, 100,  100 ); // Random default
+        }
+    }
+
+    // Ignore x, y values for root element
+    this->unset_x_and_y();
+}
+
 void SPRoot::update(SPCtx *ctx, guint flags)
 {
     SPItemCtx const *ictx = (SPItemCtx const *) ctx;
 
     if( !this->parent ) {
-
-        /*
-         * This is the root SVG element:
-         *
-         * x, y, width, and height apply to positioning the SVG element inside a parent.
-         * For the root SVG in Inkscape there is no parent, thus special rules apply:
-         *   If width, height not set, width = 100%, height = 100% (as always).
-         *   If width and height are in percent, they are percent of viewBox width/height.
-         *   If width, height, and viewBox are not set... pick "random" width/height.
-         *   x, y are ignored.
-         *   initial viewport = (0 0 width height)
-         */
-        if( this->viewBox_set ) {
-
-            if( this->width._set ) {
-                // Check if this is necessary
-                if (this->width.unit == SVGLength::PERCENT) {
-                    this->width.computed  = this->width.value  * this->viewBox.width();
-                }
-            } else {
-                this->width.set( SVGLength::PX, this->viewBox.width(),  this->viewBox.width()  );
-            }
-
-            if( this->height._set ) {
-                if (this->height.unit == SVGLength::PERCENT) {
-                    this->height.computed = this->height.value * this->viewBox.height();
-                }
-            } else {
-                this->height.set(SVGLength::PX, this->viewBox.height(), this->viewBox.height() );
-            }
-
-        } else {
-
-            if( !this->width._set ) {
-                this->width.set(  SVGLength::PX, 100,  100 ); // Random default
-            }
-
-            if( !this->height._set ) {
-                this->height.set( SVGLength::PX, 100,  100 ); // Random default
-            }
-        }
-
-        // Ignore x, y values for root element
-        this->x.unset(SVGLength::PERCENT, 0.0, 0.0);
-        this->y.unset(SVGLength::PERCENT, 0.0, 0.0);
+        this->setRootDimensions();
     }
 
     // Calculate x, y, width, height from parent/initial viewport
-    if (this->x.unit == SVGLength::PERCENT) {
-        this->x.computed = this->x.value * ictx->viewport.width();
-    }
-
-    if (this->y.unit == SVGLength::PERCENT) {
-        this->y.computed = this->y.value * ictx->viewport.height();
-    }
-
-    if (this->width.unit == SVGLength::PERCENT) {
-        this->width.computed = this->width.value * ictx->viewport.width();
-    }
-
-    if (this->height.unit == SVGLength::PERCENT) {
-        this->height.computed = this->height.value * ictx->viewport.height();
-    }
+    this->calcDimsFromParentViewport(ictx);
 
     // std::cout << "SPRoot::update: final:"
     //           << " x: " << x.computed
@@ -355,9 +349,7 @@ Inkscape::XML::Node *SPRoot::write(Inkscape::XML::Document *xml_doc, Inkscape::X
 
 Inkscape::DrawingItem *SPRoot::show(Inkscape::Drawing &drawing, unsigned int key, unsigned int flags)
 {
-    Inkscape::DrawingItem *ai = 0;
-
-    ai = SPGroup::show(drawing, key, flags);
+    Inkscape::DrawingItem *ai = SPGroup::show(drawing, key, flags);
 
     if (ai) {
         Inkscape::DrawingGroup *g = dynamic_cast<Inkscape::DrawingGroup *>(ai);
@@ -366,10 +358,10 @@ Inkscape::DrawingItem *SPRoot::show(Inkscape::Drawing &drawing, unsigned int key
 
     // Uncomment to print out XML tree
     // getRepr()->recursivePrintTree(0);
-    
+
     // Uncomment to print out SP Object tree
     // recursivePrintTree(0);
-    
+
     // Uncomment to print out Display Item tree
     // ai->recursivePrintTree(0);
 
