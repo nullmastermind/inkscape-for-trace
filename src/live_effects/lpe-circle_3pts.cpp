@@ -40,12 +40,18 @@ static void _circle3(Geom::Point const &A, Geom::Point const &B, Geom::Point con
 
     Point v = (B - A).ccw();
     Point w = (C - B).ccw();
+
     double det = -v[0] * w[1] + v[1] * w[0];
 
-    Point F = E - D;
-    double lambda = 1/det * (-w[1] * F[0] + w[0] * F[1]);
+    Point M;
+    if (!v.isZero()) {
+        Point F = E - D;
+        double lambda = det == 0 ? 0 : (-w[1] * F[0] + w[0] * F[1]) / det;
+        M = D + v * lambda;
+    } else {
+        M = E;
+    }
 
-    Point M = D + v * lambda;
     double radius = L2(M - A);
 
     Geom::Circle c(M, radius);
