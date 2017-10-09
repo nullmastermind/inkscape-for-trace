@@ -44,7 +44,7 @@ public:
     virtual void doOnRemove (SPLPEItem const* /*lpeitem*/);
     virtual void doEffect (SPCurve * curve){}; //stop the chain
     virtual void doOnVisibilityToggled(SPLPEItem const* /*lpeitem*/);
-    virtual void transform_multiply(Geom::Affine const& postmul, bool set);
+       virtual void transform_multiply(Geom::Affine const& postmul, bool set);
     virtual Geom::PathVector doEffect_path(Geom::PathVector const &path_in);
     void createLine(Geom::Point start,Geom::Point end, const char * id, bool main, bool remove, bool arrows = false);
     void createTextLabel(Geom::Point pos, size_t counter, double length, Geom::Coord angle, bool remove, bool valid);
@@ -79,6 +79,7 @@ private:
     double anotation_width;
     double previous_size;
     double arrow_gap;
+    Geom::Affine star_ellipse_fix;
     LPEMeasureSegments(const LPEMeasureSegments &);
     LPEMeasureSegments &operator=(const LPEMeasureSegments &);
 

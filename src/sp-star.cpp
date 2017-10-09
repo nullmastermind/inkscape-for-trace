@@ -20,7 +20,7 @@
 #include <cstring>
 #include <string>
 #include <glib.h>
-#include <glibmm/i18n.h>
+#include "live_effects/effect.h"
 
 #include "svg/svg.h"
 #include "attributes.h"
@@ -29,6 +29,7 @@
 #include "document.h"
 
 #include "sp-star.h"
+#include <glibmm/i18n.h>
 
 SPStar::SPStar() : SPPolygon() ,
 	sides(5),
@@ -511,15 +512,25 @@ void SPStar::snappoints(std::vector<Inkscape::SnapCandidatePoint> &p, Inkscape::
 Geom::Affine SPStar::set_transform(Geom::Affine const &xform)
 {
     bool opt_trans = (randomized == 0);
-    // Only set transform with proportional scaling
-    if (!xform.withoutTranslation().isUniformScale()) {
-        return xform;
-    }
-
-    // Allow live effects
-    if (hasPathEffect() && pathEffectsEnabled()) {
+    if (hasPathEffect() && pathEffectsEnabled() && 
+        (this->hasPathEffectOfType(Inkscape::LivePathEffect::CLONE_ORIGINAL) || 
+        this->hasPathEffectOfType(Inkscape::LivePathEffect::BEND_PATH) || 
+        this->hasPathEffectOfType(Inkscape::LivePathEffect::FILL_BETWEEN_MANY) ||
+        this->hasPathEffectOfType(Inkscape::LivePathEffect::FILL_BETWEEN_STROKES) ) )
+    {
+        // if path has this LPE applied, don't write the transform to the pathdata, but write it 'unoptimized'
+        // also if the effect is type BEND PATH to fix bug #179842
         this->adjust_livepatheffect(xform);
         this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+        return xform;
+    }
+    // Only set transform with proportional scaling
+    if (!xform.withoutTranslation().isUniformScale()) {
+        // Adjust livepatheffect
+        if (hasPathEffect() && pathEffectsEnabled()) {
+            this->adjust_livepatheffect(xform);
+            this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
+        }
         return xform;
     }
 
@@ -559,6 +570,9 @@ Geom::Affine SPStar::set_transform(Geom::Affine const &xform)
 
     // Adjust gradient fill
     this->adjust_gradient(xform * ret.inverse());
+
+    // Adjust livepatheffect
+    this->adjust_livepatheffect(xform);
 
     this->requestDisplayUpdate(SP_OBJECT_MODIFIED_FLAG | SP_OBJECT_STYLE_MODIFIED_FLAG);
 

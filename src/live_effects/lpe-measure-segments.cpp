@@ -31,6 +31,8 @@
 #include "sp-item.h"
 #include "sp-shape.h"
 #include "sp-path.h"
+#include "sp-star.h"
+#include "sp-spiral.h"
 #include "document.h"
 #include "document-undo.h"
 #include <iomanip>
@@ -136,6 +138,7 @@ LPEMeasureSegments::LPEMeasureSegments(LivePathEffectObject *lpeobject) :
     helpline_overlap.param_set_range(-999999.0, 999999.0);
     helpline_overlap.param_set_increments(1, 1);
     helpline_overlap.param_set_digits(2);
+    star_ellipse_fix = Geom::identity();
 }
 
 LPEMeasureSegments::~LPEMeasureSegments() {}
@@ -566,7 +569,7 @@ void
 LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
 {
     SPLPEItem * splpeitem = const_cast<SPLPEItem *>(lpeitem);
-    sp_lpe_item->parent = dynamic_cast<SPObject *>(splpeitem->parent);
+
     SPDocument * document = SP_ACTIVE_DOCUMENT;
     if (!document) {
         return;
@@ -589,12 +592,17 @@ LPEMeasureSegments::doBeforeEffect (SPLPEItem const* lpeitem)
         }
         Geom::Point start_stored;
         Geom::Point end_stored; 
-        Geom::Affine affinetransform = i2anc_affine(SP_OBJECT(lpeitem), SP_OBJECT(document->getRoot()));
+        Geom::Affine affinetransform = i2anc_affine(SP_OBJECT(lpeitem->parent), SP_OBJECT(document->getRoot()));
         Geom::PathVector pathvector =  pathv_to_linear_and_cubic_beziers(c->get_pathvector());
         c->unref();
         Geom::Affine writed_transform = Geom::identity();
         sp_svg_transform_read(splpeitem->getAttribute("transform"), &writed_transform );
-        pathvector *= writed_transform;
+        if (star_ellipse_fix != Geom::identity()) {
+            pathvector *= star_ellipse_fix;
+            star_ellipse_fix = Geom::identity();
+        } else {
+            pathvector *= writed_transform;
+        }
         if ((Glib::ustring(format.param_getSVGValue()).empty())) {
             format.param_setValue(Glib::ustring("{measure}{unit}"));
         }
@@ -819,7 +827,12 @@ LPEMeasureSegments::doOnRemove (SPLPEItem const* /*lpeitem*/)
 void
 LPEMeasureSegments::transform_multiply(Geom::Affine const& postmul, bool set)
 {
-    sp_lpe_item_update_patheffect(sp_lpe_item, false, false);
+    SPStar * star = dynamic_cast<SPStar *>(sp_lpe_item);
+    SPSpiral * spiral = dynamic_cast<SPSpiral *>(sp_lpe_item);
+    if((spiral || star) && !postmul.withoutTranslation().isUniformScale()) {
+        star_ellipse_fix = postmul;
+        sp_lpe_item_update_patheffect(sp_lpe_item, false, false);
+    }
 }
 
 Geom::PathVector
