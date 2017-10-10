@@ -481,7 +481,6 @@ if(WIN32)
   list(APPEND main_SRC
     registrytool.h
     registrytool.cpp
-    winmain.cpp
   )
 
   # Configure and add the platform specific resource files (enabling the app icon).
