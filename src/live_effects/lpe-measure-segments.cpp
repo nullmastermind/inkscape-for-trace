@@ -479,6 +479,7 @@ LPEMeasureSegments::doOnApply(SPLPEItem const* lpeitem)
         g_warning("LPE measure line can only be applied to shapes (not groups).");
         SPLPEItem * item = const_cast<SPLPEItem*>(lpeitem);
         item->removeCurrentPathEffect(false);
+        return;
     }
     SPDocument *document = SP_ACTIVE_DOCUMENT;
     bool saved = DocumentUndo::getUndoSensitive(document);
@@ -523,8 +524,8 @@ LPEMeasureSegments::doOnApply(SPLPEItem const* lpeitem)
         styleContent = styleContent + Glib::ustring("\n.measure-arrows") + Glib::ustring("\n{\n}");
         styleContent = styleContent + Glib::ustring("\n.measure-labels") + Glib::ustring("\n{\nline-height:125%;\nletter-spacing:0;\nword-spacing:0;\ntext-align:center;\ntext-anchor:middle;\nstroke:none;\n}");
         styleContent = styleContent + Glib::ustring("\n.measure-lines") + Glib::ustring("\n{\n}");
+        textNode->setContent(styleContent.c_str());
     }
-    textNode->setContent(styleContent.c_str());
     DocumentUndo::setUndoSensitive(document, saved);
 }
 
