@@ -370,8 +370,8 @@ LPEMeasureSegments::createLine(Geom::Point start,Geom::Point end, const char * i
 
     if (main && 
         std::abs(text_top_bottom) < fontsize/1.5 && 
-        hide_back){
-        Geom::Path line_path;
+        hide_back)
+    {
         double k = 0;
         if (flip_side) {
             k = (Geom::distance(start,end)/2.0) + arrow_gap - (anotation_width/2.0);
@@ -389,7 +389,7 @@ LPEMeasureSegments::createLine(Geom::Point start,Geom::Point end, const char * i
         //k = std::max(k , arrow_gap -1);
         Geom::Ray ray(end, start);
         Geom::Coord angle = ray.angle();
-        line_path.start(start);
+        Geom::Path line_path(start);
         line_path.appendNew<Geom::LineSegment>(start - Point::polar(angle, k));
         line_pathv.push_back(line_path);
         line_path.clear();
@@ -397,8 +397,7 @@ LPEMeasureSegments::createLine(Geom::Point start,Geom::Point end, const char * i
         line_path.appendNew<Geom::LineSegment>(end);
         line_pathv.push_back(line_path);
     } else {
-        Geom::Path line_path;
-        line_path.start(start);
+        Geom::Path line_path(start);
         line_path.appendNew<Geom::LineSegment>(end);
         line_pathv.push_back(line_path);
     }
