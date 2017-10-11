@@ -1669,7 +1669,7 @@ put_css_properties_in_props_list (CRPropList ** a_props, CRStatement * a_stmt)
                          *(unless the already selected declaration 
                          *has an UA origin)
                          */
-                        if (decl->important == TRUE
+                        if (decl->important == TRUE && cur_decl->important != TRUE
                             && decl->parent_statement->parent_sheet->origin
                             != ORIGIN_UA) {
                                 continue;
@@ -1708,7 +1708,7 @@ put_css_properties_in_props_list (CRPropList ** a_props, CRStatement * a_stmt)
                  */
                 if (a_stmt->specificity
                     >= decl->parent_statement->specificity) {
-                        if (decl->important == TRUE)
+                        if (decl->important == TRUE && cur_decl->important != TRUE)
                                 continue;
                         props = cr_prop_list_unlink (props, pair);
                         if (pair) {
