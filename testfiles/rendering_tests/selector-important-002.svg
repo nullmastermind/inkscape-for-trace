@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     width="480" height="360"
+     style="fill:orange !important">
+
+  <title>Style "!important" — 002</title>
+
+  <style type="text/css">
+
+    <!-- Later rule overrides same specificity previous rule. -->
+    #groupA use      { fill: red  !important;   }
+    #groupA use      { fill: blue !important;   }
+
+    #groupB .classB  { fill: red  !important;  }
+    #groupB .classB  { fill: blue !important;  }
+
+    #groupC #MyRectC { fill: red  !important;  }
+    #groupC #MyRectC { fill: blue !important;  }
+
+    #groupD          { fill: blue !important;  }
+    #classD          { fill: red  !important;  }
+
+    #groupE use      { fill: blue !important;  }
+    #groupE          { fill: red  !important;  }
+  </style>
+
+  <defs>
+    <rect id="MyRect" width="40" height="40"/>
+  </defs>
+
+  <!--
+  <text id="title" x="240" y="50" style="fill:black; font-size:24px; text-anchor:middle;">Style "!important" — 002</text>
+  <a href="https://svgwg.org/svg2-draft/stylling.html">
+    <text id="source" x="240" y="70" style="fill:black; font-size:12px; text-anchor:middle;">https://svgwg.org/svg2-draft/styling.html</text>
+  </a>
+  -->
+
+  <g id="groupA">
+    <use id="MyRectA"  class="classA"  x="20"  y="100" xlink:href="#MyRect" />
+  </g>
+
+  <g id="groupB">
+    <use id="MyRectB"  class="classB"  x="120" y="100" xlink:href="#MyRect" />
+  </g>
+
+  <g id="groupC">
+    <use id="MyRectC"  class="classC"  x="220" y="100" xlink:href="#MyRect" />
+  </g>
+
+  <g id="groupD">
+    <use id="MyRectD"  class="classD"  x="320" y="100" xlink:href="#MyRect" />
+  </g>
+
+  <g id="groupE">
+    <use id="MyRectE"  class="classE"  x="420" y="100" xlink:href="#MyRect" />
+  </g>
+
+</svg>
