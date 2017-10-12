@@ -700,10 +700,6 @@ main(int argc, char **argv)
         RegistryTool rt;
         rt.setPathInfo();
     }
-
-    // disable "client side decorations" as they prevent window borders and titlebars to be drawn with native theming
-    // see also https://bugzilla.gnome.org/show_bug.cgi?id=778791
-    g_setenv("GTK_CSD", "0", FALSE);
 #endif
     set_extensions_env();
 
