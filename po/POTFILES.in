@@ -276,7 +276,7 @@ src/ui/dialog/tracedialog.cpp
 src/ui/dialog/transformation.cpp
 src/ui/dialog/xml-tree.cpp
 src/ui/interface.cpp
-src/ui/object-edit.cpp
+src/ui/shape-editor-knotholders.cpp
 src/ui/tool/curve-drag-point.cpp
 src/ui/tool/multi-path-manipulator.cpp
 src/ui/tool/node.cpp

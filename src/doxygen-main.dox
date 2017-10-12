@@ -200,7 +200,7 @@ namespace XML {}
 
 /** \page ObjectTree Object Tree Classes and Files
  * Inkscape::ObjectHierarchy [\ref object-hierarchy.cpp, \ref object-hierarchy.h]
- * - SPObject [\ref sp-object.cpp, \ref sp-object.h, \ref object-edit.cpp, \ref sp-object-repr.cpp]
+ * - SPObject [\ref sp-object.cpp, \ref sp-object.h, \ref shape-editor-knotholders.cpp, \ref sp-object-repr.cpp]
  *   - SPDefs [\ref sp-defs.cpp, \ref sp-defs.h]
  *   - SPFlowline [\ref sp-flowdiv.cpp, \ref sp-flowdiv.h]
  *   - SPFlowregionbreak [\ref sp-flowdiv.cpp, \ref sp-flowdiv.h]

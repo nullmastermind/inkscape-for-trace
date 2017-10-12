@@ -192,7 +192,7 @@ void SPBox3D::update(SPCtx *ctx, guint flags) {
 
         /* FIXME?: Perhaps the display updates of box sides should be instantiated from here, but this
            causes evil update loops so it's all done from box3d_position_set, which is called from
-           various other places (like the handlers in object-edit.cpp, vanishing-point.cpp, etc. */
+           various other places (like the handlers in shape-editor-knotholders.cpp, vanishing-point.cpp, etc. */
 
     }
 
