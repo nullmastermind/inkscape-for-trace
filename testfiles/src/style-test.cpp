@@ -226,7 +226,27 @@ std::vector<StyleRead> getStyleData()
     StyleRead("paint-order:normal"),
     StyleRead("paint-order: markers stroke   fill", "paint-order:markers stroke fill"),
 
-  };
+    // !important  (in order of appearance in style-internal.h)
+    StyleRead("stroke-miterlimit:4 !important"),                     // SPIFloat
+    StyleRead("stroke-opacity:0.5 !important"),                      // SPIScale24
+    StyleRead("stroke-width:2px !important"),                        // SPILength
+    StyleRead("line-height:24px !important"),                        // SPILengthOrNormal
+    StyleRead("line-height:normal !important"),
+    StyleRead("font-stretch:condensed !important"),                  // SPIEnum
+    StyleRead("marker:url(#Arrow) !important"),                      // SPIString
+    StyleRead("color:#0000ff !important"),                           // SPIColor
+    StyleRead("fill:none !important"),                               // SPIPaint
+    StyleRead("fill:currentColor !important"),
+    StyleRead("fill:#ff00ff !important"),
+    StyleRead("paint-order:stroke !important"),                      // SPIPaintOrder
+    StyleRead("paint-order:normal !important"),
+    StyleRead("stroke-dasharray:0, 1, 0, 1 !important"),             // SPIDashArray
+    StyleRead("font-size:12px !important"),                          // SPIFontSize
+    StyleRead("baseline-shift:baseline !important"),                 // SPIBaselineShift
+    StyleRead("baseline-shift:sub !important"),
+    //StyleRead("text-decoration-line: underline !important"),         // SPITextDecorationLine
+
+ };
 
   size_t count = sizeof(all_style_data) / sizeof(all_style_data[0]);
   std::vector<StyleRead> vect(all_style_data, all_style_data + count);

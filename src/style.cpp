@@ -1153,9 +1153,16 @@ SPStyle::_mergeDecl(  CRDeclaration const *const decl, SPStyleSrc const &source 
          * convert to string. Alternatively, set from CRTerm directly rather
          * than converting to string.
          */
+
         guchar *const str_value_unsigned = cr_term_to_string(decl->value);
         gchar *const str_value = reinterpret_cast<gchar *>(str_value_unsigned);
-        readIfUnset( prop_idx, str_value, source );
+
+        // Add "!important" rule if necessary as this is not handled by cr_term_to_string().
+        gchar const * important = decl->important ? " !important" : "";
+        Inkscape::CSSOStringStream os;
+        os << str_value << important;
+
+        readIfUnset( prop_idx, os.str().c_str(), source );
         g_free(str_value);
     }
 }
