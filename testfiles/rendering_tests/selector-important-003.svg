@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     width="480" height="360">
+
+  <title>Style "!important" — 003</title>
+
+  <style type="text/css">
+
+    /* !important is not inherited. */
+    g #groupA        { fill: red !important; }
+    use              { fill: blue; }
+
+    /* Attributes cannot have !important. */
+    #MyRectB         { fill: blue; }
+
+    /* Inline can have !important. */
+    #MyRectC         { fill: red !important; }
+
+    /* Bad property shouldn't set !important. */
+    #MyRectD         { fill: XXX !important; }
+
+    /* Bad inline property shouldn't set !important. */
+    #MyRectE         { fill: blue; }
+  </style>
+
+  <defs>
+    <rect id="MyRect" width="40" height="40"/>
+  </defs>
+
+  <!--
+  <text id="title" x="240" y="50" style="fill:black; font-size:24px; text-anchor:middle;">Style "!important" — 003</text>
+  <a href="https://svgwg.org/svg2-draft/stylling.html">
+    <text id="source" x="240" y="70" style="fill:black; font-size:12px; text-anchor:middle;">https://svgwg.org/svg2-draft/styling.html</text>
+  </a>
+  -->
+
+  <g id="groupA">
+    <use id="MyRectA"  class="classA"  x="20"  y="100" xlink:href="#MyRect" />
+  </g>
+
+  <g id="groupB">
+    <use id="MyRectB"  class="classB"  x="120" y="100" xlink:href="#MyRect" fill="red !important"/>
+  </g>
+
+  <g id="groupC">
+    <use id="MyRectC"  class="classC"  x="220" y="100" xlink:href="#MyRect" style="fill: blue !important"/>
+  </g>
+
+  <g id="groupD">
+    <use id="MyRectD"  class="classD"  x="320" y="100" xlink:href="#MyRect" style="fill: blue"/>
+  </g>
+
+  <g id="groupE">
+    <use id="MyRectE"  class="classE"  x="420" y="100" xlink:href="#MyRect" style="fill: XXX !important"/>
+  </g>
+
+</svg>

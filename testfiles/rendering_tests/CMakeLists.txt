@@ -5,6 +5,7 @@ set(RENDERING_TESTS
     test-glyph-y-pos
     test-rtl-vertical
     selector-important-002
+    selector-important-003
 )
 
 
