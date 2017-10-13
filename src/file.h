@@ -86,13 +86,6 @@ void sp_file_revert_dialog ();
 ## S A V E
 ######################*/
 
-/*
- * Added to make only the remote savings.
- */
-
-bool file_save_remote(SPDocument *doc, const Glib::ustring &uri,
-		 Inkscape::Extension::Extension *key, bool saveas, bool official);
-
 /**
  *
  */

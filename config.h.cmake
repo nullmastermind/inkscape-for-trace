@@ -179,9 +179,6 @@
 /* Build in dbus */
 #cmakedefine WITH_DBUS 1
 
-/* Use gnome vfs file load functionality */
-#cmakedefine WITH_GNOME_VFS 1
-
 /* enable gtk spelling widget */
 #cmakedefine WITH_GTKSPELL 1
 

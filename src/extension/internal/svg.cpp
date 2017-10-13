@@ -17,20 +17,19 @@
 #ifdef HAVE_CONFIG_H
 # include <config.h>
 #endif
+
+#include <vector>
+#include <giomm/file.h>
+
 #include "sp-object.h"
 #include "svg.h"
 #include "file.h"
 #include "extension/system.h"
 #include "extension/output.h"
-#include <vector>
 #include "xml/attribute-record.h"
 #include "xml/simple-document.h"
 #include "sp-root.h"
 #include "document.h"
-
-#ifdef WITH_GNOME_VFS
-# include <libgnomevfs/gnome-vfs.h>
-#endif
 
 namespace Inkscape {
 namespace Extension {
@@ -157,49 +156,8 @@ Svg::init(void)
             "</output>\n"
         "</inkscape-extension>", new Svg());
 
-#ifdef WITH_GNOME_VFS
-    gnome_vfs_init();
-#endif
-
-
     return;
 }
-
-
-#ifdef WITH_GNOME_VFS
-#define BUF_SIZE 8192
-
-static gchar *
-_load_uri (const gchar *uri)
-{
-    GnomeVFSHandle   *handle = NULL;
-    GnomeVFSFileSize  bytes_read;
-
-        gsize bytesRead = 0;
-        gsize bytesWritten = 0;
-        GError* error = NULL;
-        gchar* uri_local = g_filename_from_utf8( uri, -1, &bytesRead, &bytesWritten, &error);
-
-        if ( uri_local == NULL ) {
-            g_warning( "Error converting filename to locale encoding.");
-        }
-
-    GnomeVFSResult result = gnome_vfs_open (&handle, uri_local, GNOME_VFS_OPEN_READ);
-
-    if (result != GNOME_VFS_OK) {
-        g_warning("%s", gnome_vfs_result_to_string(result));
-    }
-
-    std::vector<gchar> doc;
-    while (result == GNOME_VFS_OK) {
-        gchar buffer[BUF_SIZE];
-        result = gnome_vfs_read (handle, buffer, BUF_SIZE, &bytes_read);
-        doc.insert(doc.end(), buffer, buffer+bytes_read);
-    }
-
-    return g_strndup(&doc[0], doc.size());
-}
-#endif
 
 
 /**
@@ -207,30 +165,33 @@ _load_uri (const gchar *uri)
     \brief     This function takes in a filename of a SVG document and
                turns it into a SPDocument.
     \param     mod   Module to use
-    \param     uri   The path to the file (UTF-8)
+    \param     uri   The path or URI to the file (UTF-8)
 
     This function is really simple, it just calls sp_document_new...
 */
 SPDocument *
 Svg::open (Inkscape::Extension::Input */*mod*/, const gchar *uri)
 {
-#ifdef WITH_GNOME_VFS
-    if (!gnome_vfs_initialized() || gnome_vfs_uri_is_local(gnome_vfs_uri_new(uri))) {
-        // Use built-in loader instead of VFS for this
-        return SPDocument::createNewDoc(uri, TRUE);
-    }
-    gchar * buffer = _load_uri(uri);
-    if (buffer == NULL) {
-        g_warning("Error:  Could not open file '%s' with VFS\n", uri);
-        return NULL;
-    }
-    SPDocument * doc = SPDocument::createNewDocFromMem(buffer, strlen(buffer), 1);
+    auto file = Gio::File::create_for_uri(uri);
+    const auto path = file->get_path();
 
-    g_free(buffer);
-    return doc;
-#else
+    if (!file->get_uri_scheme().empty()) {
+        if (path.empty()) {
+            try {
+                char *contents;
+                gsize length;
+                file->load_contents(contents, length);
+                return SPDocument::createNewDocFromMem(contents, length, 1);
+            } catch (Gio::Error &e) {
+                g_warning("Could not load contents of non-local URI %s\n", uri);
+                return NULL;
+            }
+        } else {
+            uri = path.c_str();
+        }
+    }
+
     return SPDocument::createNewDoc(uri, TRUE);
-#endif
 }
 
 /**

@@ -178,13 +178,8 @@ namespace XML {}
  * <a href="http://developer.gnome.org/doc/API/2.0/gobject/index.html">GObject</a>
  * <a href="http://developer.gnome.org/doc/API/2.0/atk/index.html">atk</a>
  * <a href="http://developer.gnome.org/doc/API/2.0/pango/index.html">pango</a>
- * <a href="http://developer.gnome.org/doc/API/2.0/ORBit/index.html">ORBit</a>
- * <a href="http://developer.gnome.org/doc/API/2.0/libbonobo/index.html">bonobo</a>
- * <a href="http://developer.gnome.org/doc/API/2.0/bonobo-activation/index.html">bonobo-activation</a>
  * <a href="http://xmlsoft.org/XSLT/html/libxslt-lib.html#LIBXSLT-LIB">libxslt</a>
  * <a href="http://xmlsoft.org/html/index.html">libxml2</a>
- * Legacy:
- * <a href="http://developer.gnome.org/doc/API/2.0/gnome-vfs-2.0/">GnomeVFS</a>
  *
  * \subsection stdlinks External standards documentation
  *
