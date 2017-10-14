@@ -152,6 +152,14 @@ LPEBendPath::resetDefaults(SPItem const* item)
 }
 
 void
+LPEBendPath::transform_multiply(Geom::Affine const& postmul, bool set)
+{
+    if (sp_lpe_item) {
+        sp_lpe_item_update_patheffect(sp_lpe_item, false, false);
+    }
+}
+
+void
 LPEBendPath::addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec)
 {
     hp_vec.push_back(bp_helper_path);

@@ -505,9 +505,9 @@ Geom::Affine SPGenericEllipse::set_transform(Geom::Affine const &xform)
 {
     if (hasPathEffect() && pathEffectsEnabled() && 
         (this->hasPathEffectOfType(Inkscape::LivePathEffect::CLONE_ORIGINAL) || 
-        this->hasPathEffectOfType(Inkscape::LivePathEffect::BEND_PATH) || 
-        this->hasPathEffectOfType(Inkscape::LivePathEffect::FILL_BETWEEN_MANY) ||
-        this->hasPathEffectOfType(Inkscape::LivePathEffect::FILL_BETWEEN_STROKES) ) )
+         this->hasPathEffectOfType(Inkscape::LivePathEffect::BEND_PATH) || 
+         this->hasPathEffectOfType(Inkscape::LivePathEffect::FILL_BETWEEN_MANY) ||
+         this->hasPathEffectOfType(Inkscape::LivePathEffect::FILL_BETWEEN_STROKES) ) )
     {
         // if path has this LPE applied, don't write the transform to the pathdata, but write it 'unoptimized'
         // also if the effect is type BEND PATH to fix bug #179842

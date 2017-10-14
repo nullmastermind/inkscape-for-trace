@@ -967,11 +967,7 @@ sp_group_perform_patheffect(SPGroup *group, SPGroup *top_group, bool write)
                         }
                     }
                 }
-                //SPPath *sub_path = dynamic_cast<SPPath *>(sub_shape);
-                c = sub_shape->getCurveBeforeLPE();
-                if (!c || (sub_shape->getCurve() != c)) {
-                    c = sub_shape->getCurve();
-                }
+                c = sub_shape->getCurve();
                 bool success = false;
                 // only run LPEs when the shape has a curve defined
                 if (c) {

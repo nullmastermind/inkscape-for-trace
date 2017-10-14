@@ -43,6 +43,8 @@ public:
 
     virtual void resetDefaults(SPItem const* item);
 
+    virtual void transform_multiply(Geom::Affine const& postmul, bool set);
+
     void addCanvasIndicators(SPLPEItem const */*lpeitem*/, std::vector<Geom::PathVector> &hp_vec);
 
     virtual void addKnotHolderEntities(KnotHolder * knotholder, SPItem * item);

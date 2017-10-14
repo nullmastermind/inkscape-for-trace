@@ -1406,9 +1406,11 @@ void SPItem::adjust_livepatheffect (Geom::Affine const &postmul, bool set)
         for (PathEffectList::iterator it = effect_list.begin(); it != effect_list.end(); ++it)
         {
             LivePathEffectObject *lpeobj = (*it)->lpeobject;
-            if (lpeobj && lpeobj->get_lpe()) {
-                Inkscape::LivePathEffect::Effect * effect = lpeobj->get_lpe();
-                effect->transform_multiply(postmul, set);
+            if (lpeobj) {
+                Inkscape::LivePathEffect::Effect * lpe = lpeobj->get_lpe();
+                if (lpe && lpe->isReady()) {
+                    lpe->transform_multiply(postmul, set);
+                }
             }
         }
     }
