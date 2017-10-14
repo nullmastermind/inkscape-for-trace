@@ -1143,7 +1143,9 @@ static int sp_process_file_list(std::vector<gchar*> fl)
                     }
                     Inkscape::ObjectSet s(doc);
                     s.set(obj);
-                    s.fitCanvas(sp_export_margin ? true : false);
+                    if (!sp_export_area_page) {
+                        s.fitCanvas(sp_export_margin ? true : false);
+                    }
                 }
                 if (sp_export_svg) {
                     Inkscape::Extension::save(Inkscape::Extension::db.get("org.inkscape.output.svg.plain"), doc, sp_export_svg, false,
