@@ -354,7 +354,7 @@ struct poptOption options[] = {
 
     {"export-margin", 0,
      POPT_ARG_STRING, &sp_export_margin, SP_ARG_EXPORT_MARGIN,
-     N_("Only for PS/EPS/PDF, sets margin in mm around exported area (default 0)"),
+     N_("Sets margin around exported area (default 0) in units of page size for SVG and mm for PS/EPS/PDF"),
      N_("VALUE")},
 
     {"export-area-snap", 0,
@@ -1117,8 +1117,20 @@ static int sp_process_file_list(std::vector<gchar*> fl)
                     sp_item_list_to_curves(items, selected, to_select);
 
                 }
+                if (sp_export_margin) {
+                    gdouble margin = g_ascii_strtod(sp_export_margin, NULL);
+                    doc->ensureUpToDate();
+                    SPNamedView *nv;
+                    Inkscape::XML::Node *nv_repr;
+                    if ((nv = sp_document_namedview(doc, 0)) && (nv_repr = nv->getRepr())) {
+                        sp_repr_set_svg_double(nv_repr, "fit-margin-top", margin);
+                        sp_repr_set_svg_double(nv_repr, "fit-margin-left", margin);
+                        sp_repr_set_svg_double(nv_repr, "fit-margin-right", margin);
+                        sp_repr_set_svg_double(nv_repr, "fit-margin-bottom", margin);
+                    }
+                }
                 if(sp_export_area_drawing) {
-                    fit_canvas_to_drawing(doc, false);
+                    fit_canvas_to_drawing(doc, sp_export_margin ? true : false);
                 }
                 if(sp_export_id) {
                     doc->ensureUpToDate();
@@ -1131,7 +1143,7 @@ static int sp_process_file_list(std::vector<gchar*> fl)
                     }
                     Inkscape::ObjectSet s(doc);
                     s.set(obj);
-                    s.fitCanvas(false);
+                    s.fitCanvas(sp_export_margin ? true : false);
                 }
                 if (sp_export_svg) {
                     Inkscape::Extension::save(Inkscape::Extension::db.get("org.inkscape.output.svg.plain"), doc, sp_export_svg, false,
