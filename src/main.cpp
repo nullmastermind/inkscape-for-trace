@@ -182,6 +182,7 @@ enum {
 int sp_main_gui(int argc, char const **argv);
 int sp_main_console(int argc, char const **argv);
 static int sp_do_export_png(SPDocument *doc);
+static int do_export_svg(SPDocument* doc);
 static int do_export_ps_pdf(SPDocument* doc, gchar const* uri, char const *mime);
 static int do_export_emf(SPDocument* doc, gchar const* uri, char const *mime);
 static int do_export_wmf(SPDocument* doc, gchar const* uri, char const *mime);
@@ -1097,65 +1098,7 @@ static int sp_process_file_list(std::vector<gchar*> fl)
                 retVal |= sp_do_export_png(doc);
             }
             if (sp_export_svg || sp_export_inkscape_svg) {
-                if (sp_export_text_to_path) {
-                    std::vector<SPItem*> items;
-                    SPRoot *root = doc->getRoot();
-                    doc->ensureUpToDate();
-                    for (auto& iter: root->children) {
-                        SPItem* item = (SPItem*) &iter;
-                        if (! (SP_IS_TEXT(item) || SP_IS_FLOWTEXT(item) || SP_IS_GROUP(item))) {
-                            continue;
-                        }
-
-                        te_update_layout_now_recursive(item);
-                        items.push_back(item);
-                    }
-
-                    std::vector<SPItem*> selected;
-                    std::vector<Inkscape::XML::Node*> to_select;
-
-                    sp_item_list_to_curves(items, selected, to_select);
-
-                }
-                if (sp_export_margin) {
-                    gdouble margin = g_ascii_strtod(sp_export_margin, NULL);
-                    doc->ensureUpToDate();
-                    SPNamedView *nv;
-                    Inkscape::XML::Node *nv_repr;
-                    if ((nv = sp_document_namedview(doc, 0)) && (nv_repr = nv->getRepr())) {
-                        sp_repr_set_svg_double(nv_repr, "fit-margin-top", margin);
-                        sp_repr_set_svg_double(nv_repr, "fit-margin-left", margin);
-                        sp_repr_set_svg_double(nv_repr, "fit-margin-right", margin);
-                        sp_repr_set_svg_double(nv_repr, "fit-margin-bottom", margin);
-                    }
-                }
-                if(sp_export_area_drawing) {
-                    fit_canvas_to_drawing(doc, sp_export_margin ? true : false);
-                }
-                if(sp_export_id) {
-                    doc->ensureUpToDate();
-
-                    // "crop" the document to the specified object, cleaning as we go.
-                    SPObject *obj = doc->getObjectById(sp_export_id);
-                    if (sp_export_id_only) {
-                        // If -j then remove all other objects to complete the "crop"
-                        doc->getRoot()->cropToObject(obj);
-                    }
-                    Inkscape::ObjectSet s(doc);
-                    s.set(obj);
-                    if (!sp_export_area_page) {
-                        s.fitCanvas(sp_export_margin ? true : false);
-                    }
-                }
-                if (sp_export_svg) {
-                    Inkscape::Extension::save(Inkscape::Extension::db.get("org.inkscape.output.svg.plain"), doc, sp_export_svg, false,
-                                false, false, Inkscape::Extension::FILE_SAVE_METHOD_SAVE_COPY);
-                }
-                if (sp_export_inkscape_svg) {
-                    // Export as inkscape SVG.
-                    Inkscape::Extension::save(Inkscape::Extension::db.get("org.inkscape.output.svg.inkscape"), doc, sp_export_inkscape_svg, false,
-                                false, false, Inkscape::Extension::FILE_SAVE_METHOD_INKSCAPE_SVG);
-                }
+                retVal |= do_export_svg(doc);
             }
             if (sp_export_ps) {
                 retVal |= do_export_ps_pdf(doc, sp_export_ps, "image/x-postscript");
@@ -1615,6 +1558,77 @@ static int sp_do_export_png(SPDocument *doc)
     }
 
     return retcode;
+}
+
+/**
+ *  Perform an SVG export
+ *
+ *  \param doc Document to export.
+ */
+
+static int do_export_svg(SPDocument* doc)
+{
+    if (sp_export_text_to_path) {
+        std::vector<SPItem*> items;
+        SPRoot *root = doc->getRoot();
+        doc->ensureUpToDate();
+        for (auto& iter: root->children) {
+            SPItem* item = (SPItem*) &iter;
+            if (! (SP_IS_TEXT(item) || SP_IS_FLOWTEXT(item) || SP_IS_GROUP(item))) {
+                continue;
+            }
+
+            te_update_layout_now_recursive(item);
+            items.push_back(item);
+        }
+
+        std::vector<SPItem*> selected;
+        std::vector<Inkscape::XML::Node*> to_select;
+
+        sp_item_list_to_curves(items, selected, to_select);
+
+    }
+    if (sp_export_margin) {
+        gdouble margin = g_ascii_strtod(sp_export_margin, NULL);
+        doc->ensureUpToDate();
+        SPNamedView *nv;
+        Inkscape::XML::Node *nv_repr;
+        if ((nv = sp_document_namedview(doc, 0)) && (nv_repr = nv->getRepr())) {
+            sp_repr_set_svg_double(nv_repr, "fit-margin-top", margin);
+            sp_repr_set_svg_double(nv_repr, "fit-margin-left", margin);
+            sp_repr_set_svg_double(nv_repr, "fit-margin-right", margin);
+            sp_repr_set_svg_double(nv_repr, "fit-margin-bottom", margin);
+        }
+    }
+    if(sp_export_area_drawing) {
+        fit_canvas_to_drawing(doc, sp_export_margin ? true : false);
+    }
+    if(sp_export_id) {
+        doc->ensureUpToDate();
+
+        // "crop" the document to the specified object, cleaning as we go.
+        SPObject *obj = doc->getObjectById(sp_export_id);
+        if (sp_export_id_only) {
+            // If -j then remove all other objects to complete the "crop"
+            doc->getRoot()->cropToObject(obj);
+        }
+        Inkscape::ObjectSet s(doc);
+        s.set(obj);
+        if (!sp_export_area_page) {
+            s.fitCanvas(sp_export_margin ? true : false);
+        }
+    }
+
+    if (sp_export_svg) {
+        Inkscape::Extension::save(Inkscape::Extension::db.get("org.inkscape.output.svg.plain"), doc, sp_export_svg, false,
+                    false, false, Inkscape::Extension::FILE_SAVE_METHOD_SAVE_COPY);
+    }
+    if (sp_export_inkscape_svg) {
+        // Export as inkscape SVG.
+        Inkscape::Extension::save(Inkscape::Extension::db.get("org.inkscape.output.svg.inkscape"), doc, sp_export_inkscape_svg, false,
+                    false, false, Inkscape::Extension::FILE_SAVE_METHOD_INKSCAPE_SVG);
+    }
+    return 0;
 }
 
 /**
