@@ -107,8 +107,7 @@ static const GtkTargetEntry ui_drop_target_entries [] = {
     {"application/x-color", 0, APP_X_COLOR}
 };
 
-#define ENTRIES_SIZE(n) sizeof(n)/sizeof(n[0])
-static guint nui_drop_target_entries = ENTRIES_SIZE(ui_drop_target_entries);
+static guint nui_drop_target_entries = G_N_ELEMENTS(ui_drop_target_entries);
 
 /* convenience function */
 static Dialog::FillAndStroke *get_fill_and_stroke_panel(SPDesktop *desktop);
