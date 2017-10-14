@@ -1619,16 +1619,27 @@ static int do_export_svg(SPDocument* doc)
         }
     }
 
+    int ret = 0;
     if (sp_export_svg) {
-        Inkscape::Extension::save(Inkscape::Extension::db.get("org.inkscape.output.svg.plain"), doc, sp_export_svg, false,
-                    false, false, Inkscape::Extension::FILE_SAVE_METHOD_SAVE_COPY);
+        try {
+            Inkscape::Extension::save(Inkscape::Extension::db.get("org.inkscape.output.svg.plain"), doc, sp_export_svg, false,
+                        false, false, Inkscape::Extension::FILE_SAVE_METHOD_SAVE_COPY);
+        } catch (Inkscape::Extension::Output::save_failed &e) {
+            g_warning("Failed to save plain SVG to: %s", sp_export_svg);
+            ret = 1;
+        }
     }
     if (sp_export_inkscape_svg) {
         // Export as inkscape SVG.
-        Inkscape::Extension::save(Inkscape::Extension::db.get("org.inkscape.output.svg.inkscape"), doc, sp_export_inkscape_svg, false,
-                    false, false, Inkscape::Extension::FILE_SAVE_METHOD_INKSCAPE_SVG);
+        try {
+            Inkscape::Extension::save(Inkscape::Extension::db.get("org.inkscape.output.svg.inkscape"), doc, sp_export_inkscape_svg, false,
+                        false, false, Inkscape::Extension::FILE_SAVE_METHOD_INKSCAPE_SVG);
+        } catch (Inkscape::Extension::Output::save_failed &e) {
+            g_warning("Failed to save Inkscape SVG to: %s", sp_export_inkscape_svg);
+            ret = 1;
+        }
     }
-    return 0;
+    return ret;
 }
 
 /**
