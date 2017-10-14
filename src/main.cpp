@@ -181,7 +181,7 @@ enum {
 
 int sp_main_gui(int argc, char const **argv);
 int sp_main_console(int argc, char const **argv);
-static int sp_do_export_png(SPDocument *doc);
+static int do_export_png(SPDocument *doc);
 static int do_export_svg(SPDocument* doc);
 static int do_export_ps_pdf(SPDocument* doc, gchar const* uri, char const *mime);
 static int do_export_emf(SPDocument* doc, gchar const* uri, char const *mime);
@@ -1095,7 +1095,7 @@ static int sp_process_file_list(std::vector<gchar*> fl)
                 sp_print_document_to_file(doc, sp_global_printer);
             }
             if (sp_export_png || (sp_export_id && sp_export_use_hints)) {
-                retVal |= sp_do_export_png(doc);
+                retVal |= do_export_png(doc);
             }
             if (sp_export_svg || sp_export_inkscape_svg) {
                 retVal |= do_export_svg(doc);
@@ -1322,8 +1322,13 @@ do_query_all_recurse (SPObject *o)
     }
 }
 
+/**
+ *  Perform a PNG export
+ *
+ *  \param doc Document to export.
+ */
 
-static int sp_do_export_png(SPDocument *doc)
+static int do_export_png(SPDocument *doc)
 {
     Glib::ustring filename;
     bool filename_from_hint = false;
@@ -1532,12 +1537,10 @@ static int sp_do_export_png(SPDocument *doc)
         path = filename;
     }
 
-    int retcode = 0;
     //check if specified directory exists
-
     if (!Inkscape::IO::file_directory_exists(filename.c_str())) {
         g_warning("File path \"%s\" includes directory that doesn't exist.\n", filename.c_str());
-        retcode = 1;
+        return 1;
     } else {
         g_print("Background RRGGBBAA: %08x\n", bgcolor);
 
@@ -1551,13 +1554,15 @@ static int sp_do_export_png(SPDocument *doc)
                 g_print("Bitmap saved as: %s\n", filename.c_str());
             } else {
                 g_warning("Bitmap failed to save to: %s", filename.c_str());
+                return 1;
             }
         } else {
             g_warning("Calculated bitmap dimensions %lu %lu are out of range (1 - %lu). Nothing exported.", width, height, (unsigned long int)PNG_UINT_31_MAX);
+            return 1;
         }
     }
 
-    return retcode;
+    return 0;
 }
 
 /**
