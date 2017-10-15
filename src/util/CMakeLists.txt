@@ -10,7 +10,6 @@ set(util_SRC
 
 	# -------
 	# Headers
-	compose.hpp
 	copy.h
 	ege-appear-time-tracker.h
 	ege-tags.h
