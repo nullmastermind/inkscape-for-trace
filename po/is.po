@@ -8371,7 +8371,7 @@ msgid ""
 "printing.)\n"
 "\n"
 "More information about this change are available in the <a href='https://"
-"inkscape.org/en/learn/faq#todo-todo-todo'>Inkscape FAQ</a></small>"
+"inkscape.org/en/learn/faq#dpi_change'>Inkscape FAQ</a></small>"
 msgstr ""
 
 #: ../src/file-update.cpp:391
