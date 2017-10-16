@@ -515,9 +515,10 @@ enum SPAttributeEnum {
 
     /* SVG 2 Text Wrapping */
     SP_PROP_SHAPE_INSIDE,
-    SP_PROP_SHAPE_OUTSIDE,
+    SP_PROP_SHAPE_SUBTRACT,
     SP_PROP_SHAPE_PADDING,
     SP_PROP_SHAPE_MARGIN,
+    SP_PROP_INLINE_SIZE,
     
     /* Text Decoration */
     SP_PROP_TEXT_DECORATION,  // CSS 2/CSS3-Shorthand

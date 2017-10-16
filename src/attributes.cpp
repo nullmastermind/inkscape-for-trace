@@ -507,9 +507,10 @@ static SPStyleProp const props[] = {
 
     /* SVG 2 Text Wrapping */
     {SP_PROP_SHAPE_INSIDE,  "shape-inside"},
-    {SP_PROP_SHAPE_OUTSIDE, "shape-outside"},
+    {SP_PROP_SHAPE_SUBTRACT,"shape-subtract"},
     {SP_PROP_SHAPE_PADDING, "shape-padding"},
     {SP_PROP_SHAPE_MARGIN,  "shape-margin"},
+    {SP_PROP_INLINE_SIZE,   "inline-size"},
 
     /* Text Decoration */
     {SP_PROP_TEXT_DECORATION,       "text-decoration"},  // CSS 2/CSS3-Shorthand

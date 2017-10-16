@@ -166,9 +166,10 @@ public:
 
     /** SVG2 Text Wrapping */
     SPIString shape_inside;
-    // SPIString shape_outside;
+    SPIString shape_subtract;
     SPILength shape_padding;
-    // SPILength shape_margin;
+    SPILength shape_margin;
+    SPILength inline_size;
 
     /* Text Decoration ----------------------- */
 

@@ -51,7 +51,7 @@ std::vector<AttributeInfo> getKnownAttrs()
    attindex.html lacks attributeName, begin, additive, font, marker;
    I've added these manually.
 
-   SVG 2: white-space, shape-inside, shape-outside, shape-padding, shape-margin
+   SVG 2: white-space, shape-inside, shape-subtrace, shape-padding, shape-margin
 */
     AttributeInfo all_attrs[] = {
         AttributeInfo("attributeName", true),
@@ -174,6 +174,7 @@ std::vector<AttributeInfo> getKnownAttrs()
         AttributeInfo("image-rendering", true),
         AttributeInfo("in", true),
         AttributeInfo("in2", true),
+        AttributeInfo("inline-size", true),
         AttributeInfo("intercept", true),
         AttributeInfo("isolation", true),
         AttributeInfo("k", true),
@@ -274,7 +275,7 @@ std::vector<AttributeInfo> getKnownAttrs()
         AttributeInfo("seed", true),
         AttributeInfo("shape-inside", true),
         AttributeInfo("shape-margin", true),
-        AttributeInfo("shape-outside", true),
+        AttributeInfo("shape-subtract", true),
         AttributeInfo("shape-padding", true),
         AttributeInfo("shape-rendering", true),
         AttributeInfo("slope", true),

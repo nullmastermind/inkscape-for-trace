@@ -516,6 +516,8 @@
 
 "image-rendering" - "pattern","image","feImage","a","defs","glyph","g","marker","mask","missing-glyph","pattern","svg","switch","symbol","use"
 
+"inline-size" - "text"
+
 "isolation" - "a","defs","glyph","g","marker","mask","missing-glyph","pattern","svg","switch","symbol","use","circle","ellipse","image","line","path","polygon","polyline","rect","text","flowRoot","use"
 
 "kerning" - "altGlyph","textPath","text","tref","tspan","flowRoot","flowPara","flowSpan","a","defs","glyph","g","marker","mask","missing-glyph","pattern","svg","switch","symbol","use"
@@ -524,7 +526,7 @@
 
 "lighting-color" - "feDiffuseLighting","feSpecularLighting"
 
-"line-height" - "text","flowRoot","flowPara"
+"line-height" - "text","tspan","flowRoot","flowPara"
 
 "marker" - "path","line","polyline","polygon","a","defs","glyph","g","marker","mask","missing-glyph","pattern","svg","switch","symbol","use"
 
@@ -550,15 +552,15 @@
 
 "pointer-events" - "circle","ellipse","image","line","path","polygon","polyline","rect","text","flowRoot","use","a","defs","glyph","g","marker","mask","missing-glyph","pattern","svg","switch","symbol","use"
 
-"shape-inside" - "altGlyph","textPath","text","tref","tspan","flowRoot","flowPara","flowSpan"
+"shape-inside" - "text"
 
-"shape-margin" - "altGlyph","textPath","text","tref","tspan","flowRoot","flowPara","flowSpan"
+"shape-margin" - "text"
 
-"shape-outside" - "altGlyph","textPath","text","tref","tspan","flowRoot","flowPara","flowSpan"
-
-"shape-padding" - "altGlyph","textPath","text","tref","tspan","flowRoot","flowPara","flowSpan"
+"shape-padding" - "text"
 
 "shape-rendering" - "path","rect","circle","ellipse","line","polyline","polygon","a","defs","glyph","g","marker","mask","missing-glyph","pattern","svg","switch","symbol","use"
+
+"shape-subtract" - "text"
 
 "solid-color" - "a","defs","glyph","g","marker","mask","missing-glyph","pattern","svg","switch","symbol","use","circle","ellipse","image","line","path","polygon","polyline","rect","text","flowRoot","use"
 

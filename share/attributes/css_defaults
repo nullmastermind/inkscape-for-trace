@@ -78,6 +78,8 @@
 
 "image-rendering" - "auto" - "yes"
 
+"inline-size" - "0" - "no"
+
 "isolation" - "auto" - "no"
 
 "kerning" - "auto" - "yes"
@@ -116,11 +118,11 @@
 
 "shape-margin" - "0" - "no"
 
-"shape-outside" - "auto" - "no"
-
-"shape-padding" - "none" - "no"
+"shape-padding" - "0" - "no"
 
 "shape-rendering" - "auto" - "yes"
+
+"shape-subtract" - "auto" - "no"
 
 "solid-color" - "#000000" - "no"
 

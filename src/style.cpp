@@ -134,9 +134,10 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
 
     // SVG 2 Text Wrapping
     shape_inside(     "shape-inside"                         ), // SPIString
-    //shape_outside(    "shape-outside"                        ), // SPIString
+    shape_subtract(   "shape-subtract"                       ), // SPIString
     shape_padding(    "shape-padding",   0.0                 ), // SPILength for now
-    //shape_margin(     "shape-margin",    0.0                 ), // SPILength for now
+    shape_margin(     "shape-margin",    0.0                 ), // SPILength for now
+    inline_size(      "inline-size",     0.0                 ), // SPILength for now
 
     text_decoration(),
     text_decoration_line(),
@@ -252,6 +253,8 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     stroke_width.setStylePointer(      this );
     stroke_dashoffset.setStylePointer( this );
     shape_padding.setStylePointer(     this );
+    shape_margin.setStylePointer(      this );
+    inline_size.setStylePointer(       this );
 
     // Properties that depend on 'color'
     text_decoration_color.setStylePointer( this );
@@ -323,7 +326,10 @@ SPStyle::SPStyle(SPDocument *document_in, SPObject *object_in) :
     _properties.push_back( &white_space );
 
     _properties.push_back( &shape_inside );
+    _properties.push_back( &shape_subtract );
     _properties.push_back( &shape_padding );
+    _properties.push_back( &shape_margin );
+    _properties.push_back( &inline_size );
 
     _properties.push_back( &clip_rule );
     _properties.push_back( &display );
@@ -799,8 +805,17 @@ SPStyle::readIfUnset( gint id, gchar const *val, SPStyleSrc const &source ) {
         case SP_PROP_SHAPE_INSIDE:
             shape_inside.readIfUnset( val, source );
             break;
+        case SP_PROP_SHAPE_SUBTRACT:
+            shape_subtract.readIfUnset( val, source );
+            break;
         case SP_PROP_SHAPE_PADDING:
             shape_padding.readIfUnset( val, source );
+            break;
+        case SP_PROP_SHAPE_MARGIN:
+            shape_margin.readIfUnset( val, source );
+            break;
+        case SP_PROP_INLINE_SIZE:
+            inline_size.readIfUnset( val, source );
             break;
         case SP_PROP_DOMINANT_BASELINE:
             dominant_baseline.readIfUnset( val, source );
@@ -1153,7 +1168,6 @@ SPStyle::_mergeDecl(  CRDeclaration const *const decl, SPStyleSrc const &source 
          * convert to string. Alternatively, set from CRTerm directly rather
          * than converting to string.
          */
-
         guchar *const str_value_unsigned = cr_term_to_string(decl->value);
         gchar *const str_value = reinterpret_cast<gchar *>(str_value_unsigned);
 
@@ -1720,8 +1734,17 @@ sp_style_unset_property_attrs(SPObject *o)
     if (style->shape_inside.set) {
         repr->setAttribute("shape-inside", NULL);
     }
+    if (style->shape_subtract.set) {
+        repr->setAttribute("shape-subtract", NULL);
+    }
     if (style->shape_padding.set) {
         repr->setAttribute("shape-padding", NULL);
+    }
+    if (style->shape_margin.set) {
+        repr->setAttribute("shape-margin", NULL);
+    }
+    if (style->inline_size.set) {
+        repr->setAttribute("inline-size", NULL);
     }
     if (style->writing_mode.set) {
         repr->setAttribute("writing-mode", NULL);
@@ -1815,7 +1838,10 @@ sp_css_attr_unset_text(SPCSSAttr *css)
     sp_repr_css_set_property(css, "text-anchor", NULL);
     sp_repr_css_set_property(css, "white-space", NULL);
     sp_repr_css_set_property(css, "shape-inside", NULL);
+    sp_repr_css_set_property(css, "shape-subtract", NULL);
     sp_repr_css_set_property(css, "shape-padding", NULL);
+    sp_repr_css_set_property(css, "shape-margin", NULL);
+    sp_repr_css_set_property(css, "inline-size", NULL);
     sp_repr_css_set_property(css, "kerning", NULL); // not implemented yet
     sp_repr_css_set_property(css, "dominant-baseline", NULL); // not implemented yet
     sp_repr_css_set_property(css, "alignment-baseline", NULL); // not implemented yet
