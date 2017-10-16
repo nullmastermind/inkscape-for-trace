@@ -18,7 +18,6 @@
 #endif
 
 #include <gtkmm/buttonbox.h>
-#include <boost/scoped_ptr.hpp>
 
 #include <glibmm/i18n.h>
 #include <glibmm/timer.h>
