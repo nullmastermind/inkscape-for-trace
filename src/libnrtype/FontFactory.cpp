@@ -634,6 +634,7 @@ void extract_openTypeTables(font_instance *res) {
     // Empty map... bitmap fonts seem to be loaded multiple times.
     res->openTypeTables.clear();
 
+#ifndef USE_PANGO_WIN32
     auto const face = hb_ft_face_create(res->theFace, NULL);
 
     // First time to get size of array
@@ -771,6 +772,7 @@ void extract_openTypeTables(font_instance *res) {
 
     hb_face_destroy (face);
     g_free(scripts_hb);
+#endif // USE_PANGO_WIN32
 }
 
 font_instance *font_factory::Face(PangoFontDescription *descr, bool canFail)
