@@ -17,7 +17,6 @@
 #include <sigc++/sigc++.h>
 #include <glib.h>
 #include <gdk/gdk.h>
-#include <boost/shared_ptr.hpp>
 #include "ui/tools/tool-base.h"
 
 class SPDesktop;
@@ -76,14 +75,14 @@ template <typename T>
 class MultiManipulator : public PointManipulator {
 public:
     //typedef typename T::ItemType ItemType;
-    typedef typename std::pair<void*, boost::shared_ptr<T> > MapPair;
-    typedef typename std::map<void*, boost::shared_ptr<T> > MapType;
+    typedef typename std::pair<void*, std::shared_ptr<T> > MapPair;
+    typedef typename std::map<void*, std::shared_ptr<T> > MapType;
 
     MultiManipulator(SPDesktop *d, ControlPointSelection &sel)
         : PointManipulator(d, sel)
     {}
     void addItem(void *item) {
-        boost::shared_ptr<T> m(_createManipulator(item));
+        std::shared_ptr<T> m(_createManipulator(item));
         _mmap.insert(MapPair(item, m));
     }
     void removeItem(void *item) {

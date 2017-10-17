@@ -22,8 +22,6 @@
 #include <cstddef>
 #include <functional>
 
-#include <boost/enable_shared_from_this.hpp>
-#include <boost/shared_ptr.hpp>
 #include "ui/tool/selectable-control-point.h"
 #include "snapped-point.h"
 #include "ui/tool/node-types.h"
@@ -357,7 +355,7 @@ private:
     friend class NodeList;
 };
 
-class NodeList : ListNode, boost::noncopyable, public boost::enable_shared_from_this<NodeList> {
+class NodeList : ListNode, boost::noncopyable {
 public:
     typedef std::size_t size_type;
     typedef Node &reference;
@@ -465,9 +463,9 @@ private:
  * List of node lists. Represents an editable path.
  * Editable path composed of one or more subpaths.
  */
-class SubpathList : public std::list< boost::shared_ptr<NodeList> > {
+class SubpathList : public std::list< std::shared_ptr<NodeList> > {
 public:
-    typedef std::list< boost::shared_ptr<NodeList> > list_type;
+    typedef std::list< std::shared_ptr<NodeList> > list_type;
 
     SubpathList(PathManipulator &pm) : _path_manipulator(pm) {}
     PathManipulator &pm() { return _path_manipulator; }
