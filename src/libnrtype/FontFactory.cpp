@@ -89,26 +89,20 @@ font_factory::font_factory(void) :
     nbEnt(0), // Note: this "ents" cache only keeps fonts from being unreffed, does not speed up access
     maxEnt(32),
     ents(static_cast<font_entry*>(g_malloc(maxEnt*sizeof(font_entry)))),
-
 #ifdef USE_PANGO_WIN32
     fontServer(pango_win32_font_map_for_display()),
-    fontContext(pango_win32_get_context()),
     pangoFontCache(pango_win32_font_map_get_font_cache(fontServer)),
     hScreenDC(pango_win32_get_dc()),
 #else
     fontServer(pango_ft2_font_map_new()),
-    fontContext(0),
 #endif
+    fontContext(pango_font_map_create_context(fontServer)),
     fontSize(512),
     loadedPtr(new FaceMapType())
 {
-#ifdef USE_PANGO_WIN32
-#else
+#ifndef USE_PANGO_WIN32
     pango_ft2_font_map_set_resolution(PANGO_FT2_FONT_MAP(fontServer),
                                       72, 72);
-    
-    fontContext = pango_font_map_create_context(fontServer);
-
     pango_ft2_font_map_set_default_substitute(PANGO_FT2_FONT_MAP(fontServer),
                                               FactorySubstituteFunc,
                                               this,
