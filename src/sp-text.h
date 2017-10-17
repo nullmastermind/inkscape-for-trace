@@ -42,13 +42,9 @@ public:
     /** Completely recalculates the layout. */
     void rebuildLayout();
 
-//semiprivate:  (need to be accessed by the C-style functions still)
+    //semiprivate:  (need to be accessed by the C-style functions still)
     TextTagAttributes attributes;
     Inkscape::Text::Layout layout;
-
-    // SVG 2 Auto-wrapped text
-    SVGLength width;
-    SVGLength height;
 
     /** when the object is transformed it's nicer to change the font size
     and coordinates when we can, rather than just applying a matrix
