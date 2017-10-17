@@ -28,6 +28,7 @@
 #include <libnrtype/font-instance.h>
 
 #include <glibmm/i18n.h>
+#include <glibmm/regex.h>
 #include "svg/svg.h"
 #include "display/drawing-text.h"
 #include "attributes.h"
@@ -422,58 +423,81 @@ unsigned SPText::_buildLayoutInput(SPObject *root, Inkscape::Text::Layout::Optio
     int child_attrs_offset = 0;
     Inkscape::Text::Layout::OptionalTextTagAttrs optional_attrs;
 
-    // Test SVG 2 text in shape implementation
     // To do: follow SPItem clip_ref/mask_ref code
     if (style->shape_inside.set ) {
 
-        // Extract out id
-        Glib::ustring shape_url = style->shape_inside.value;
-        if ( shape_url.compare(0,5,"url(#") != 0 || shape_url.compare(shape_url.size()-1,1,")") != 0 ){
-            std::cerr << "SPText::_buildLayoutInput(): Invalid shape-inside value: " << shape_url << std::endl;
-        } else {
-            shape_url.erase(0,5);
-            shape_url.erase(shape_url.size()-1,1);
-            // std::cout << "SPText::_buildLayoutInput(): shape-inside: " << shape_url << std::endl;
-            SPShape *shape = dynamic_cast<SPShape *>(document->getObjectById( shape_url ));
-            if ( shape ) {
+        // Find union of all exclusion shapes
+        Shape *exclusion_shape;
+        if(style->shape_subtract.set) {
+            exclusion_shape = _buildExclusionShape();
+        }
 
-                // This code adapted from sp-flowregion.cpp: GetDest()
-                if (!(shape->_curve)) {
-                    shape->set_shape();
-                }
-                SPCurve *curve = shape->getCurve();
-
-                if ( curve ) {
-                    Path *temp = new Path;
-                    Path *padded = new Path;
-                    temp->LoadPathVector( curve->get_pathvector(), shape->transform, true );
-                    if( style->shape_padding.set ) {
-                        // std::cout << "  padding: " << style->shape_padding.computed << std::endl;
-                        temp->OutsideOutline ( padded, style->shape_padding.computed, join_round, butt_straight, 20.0 );
-                    } else {
-                        // std::cout << "  no padding" << std::endl;
-                        padded->Copy( temp );
-                    }
-                    padded->Convert( 0.25 );  // Convert to polyline
-                    Shape* sh = new Shape;
-                    padded->Fill( sh, 0 );
-                    // for( unsigned i = 0; i < temp->pts.size(); ++i ) {
-                    //   std::cout << " ........ " << temp->pts[i].p << std::endl;
-                    // }
-                    // std::cout << " ...... shape: " << sh->numberOfPoints() << std::endl;
-                    Shape *uncross = new Shape;
-                    uncross->ConvertToShape( sh );
-                    layout.appendWrapShape( uncross );
-
-                    delete temp;
-                    delete padded;
-                    delete sh;
-                    // delete uncross;
-                } else {
-                    std::cerr << "SPText::_buildLayoutInput(): Failed to get curve." << std::endl;
-                }
+        // Extract out shapes (a comma separated list of urls)
+        Glib::ustring shapeInside_value = style->shape_inside.value;
+        std::vector<Glib::ustring> shapes_url = Glib::Regex::split_simple(" ", shapeInside_value);
+        for (int i=0; i<shapes_url.size(); ++i) {
+            Glib::ustring shape_url = shapes_url.at(i);
+            if ( shape_url.compare(0,5,"url(#") != 0 || shape_url.compare(shape_url.size()-1,1,")") != 0 ){
+                std::cerr << "SPText::_buildLayoutInput(): Invalid shape-inside value: " << shape_url << std::endl;
             } else {
-                std::cerr << "SPText::_buildLayoutInput(): Failed to find shape." << std::endl;
+                shape_url.erase(0,5);
+                shape_url.erase(shape_url.size()-1,1);
+                std::cout << "SPText::_buildLayoutInput(): shape-inside: " << shape_url << std::endl;
+                SPShape *shape = dynamic_cast<SPShape *>(document->getObjectById( shape_url ));
+                if ( shape ) {
+
+                    // This code adapted from sp-flowregion.cpp: GetDest()
+                    if (!(shape->_curve)) {
+                        shape->set_shape();
+                    }
+                    SPCurve *curve = shape->getCurve();
+
+                    if ( curve ) {
+                        Path *temp = new Path;
+                        Path *padded = new Path;
+                        temp->LoadPathVector( curve->get_pathvector(), shape->transform, true );
+                        if( style->shape_padding.set ) {
+                            // std::cout << "  padding: " << style->shape_padding.computed << std::endl;
+                            temp->OutsideOutline ( padded, style->shape_padding.computed, join_round, butt_straight, 20.0 );
+                        } else {
+                            // std::cout << "  no padding" << std::endl;
+                            padded->Copy( temp );
+                        }
+                        padded->Convert( 0.25 );  // Convert to polyline
+                        Shape* sh = new Shape;
+                        padded->Fill( sh, 0 );
+                        // for( unsigned i = 0; i < temp->pts.size(); ++i ) {
+                        //   std::cout << " ........ " << temp->pts[i].p << std::endl;
+                        // }
+                        // std::cout << " ...... shape: " << sh->numberOfPoints() << std::endl;
+                        Shape *uncross = new Shape;
+                        uncross->ConvertToShape( sh );
+
+                        // Subtract exclusion shape
+                        if(style->shape_subtract.set) {
+                            Shape *copy = new Shape;
+                            if (exclusion_shape && exclusion_shape->hasEdges()) {
+                                copy->Booleen(uncross, const_cast<Shape*>(exclusion_shape), bool_op_diff);
+                            } else {
+                                copy->Copy(uncross);
+                            }
+                            layout.appendWrapShape( copy );
+                            //delete exclusion_shape;
+                            continue;
+                        }
+
+                        layout.appendWrapShape( uncross );
+
+                        delete temp;
+                        delete padded;
+                        delete sh;
+                        // delete uncross;
+                    } else {
+                        std::cerr << "SPText::_buildLayoutInput(): Failed to get curve." << std::endl;
+                    }
+                } else {
+                    std::cerr << "SPText::_buildLayoutInput(): Failed to find shape." << std::endl;
+                }
             }
         }
     }
@@ -565,6 +589,63 @@ unsigned SPText::_buildLayoutInput(SPObject *root, Inkscape::Text::Layout::Optio
     }
 
     return length;
+}
+
+Shape* SPText::_buildExclusionShape() const
+{
+    Shape *result = new Shape(); // Union of all exlusion shapes
+    Shape *shape_temp = new Shape();
+
+    Glib::ustring shapeSubtract_value = style->shape_subtract.value;
+
+    // Extract out shapes (a comma separated list of urls)
+    std::vector<Glib::ustring> shapes_url = Glib::Regex::split_simple(" ", shapeSubtract_value);
+
+    for(int i=0; i<shapes_url.size(); i++) {
+        Glib::ustring shape_url = shapes_url.at(i);
+        if ( shape_url.compare(0,5,"url(#") != 0 || shape_url.compare(shape_url.size()-1,1,")") != 0 ){
+                std::cerr << "SPText::_buildLayoutInput(): Invalid shape-inside value: " << shape_url << std::endl;
+        } else {
+            shape_url.erase(0,5);
+            shape_url.erase(shape_url.size()-1,1);
+            // std::cout << "SPText::_buildLayoutInput(): shape-inside: " << shape_url << std::endl;
+            SPShape *shape = dynamic_cast<SPShape *>(document->getObjectById( shape_url ));
+            if ( shape ) {
+                // This code adapted from sp-flowregion.cpp: GetDest()
+                if (!(shape->_curve)) {
+                    shape->set_shape();
+                }
+                SPCurve *curve = shape->getCurve();
+
+                if ( curve ) {
+                    Path *temp = new Path;
+                    Path *margin = new Path;
+                    temp->LoadPathVector( curve->get_pathvector(), shape->transform, true );
+
+                    if( shape->style->shape_margin.set ) {
+                        temp->OutsideOutline ( margin, -shape->style->shape_margin.computed, join_round, butt_straight, 20.0 );
+                    } else {
+                        margin->Copy( temp );
+                    }
+
+                    margin->Convert( 0.25 );  // Convert to polyline
+                    Shape* sh = new Shape;
+                    margin->Fill( sh, 0 );
+
+                    Shape *uncross = new Shape;
+                    uncross->ConvertToShape( sh );
+
+                    if (result->hasEdges()) {
+                        shape_temp->Booleen(result, uncross, bool_op_union);
+                        std::swap(result, shape_temp);
+                    } else {
+                        result->Copy(uncross);
+                    }
+                }
+            }
+        }
+    }
+    return result;
 }
 
 void SPText::rebuildLayout()

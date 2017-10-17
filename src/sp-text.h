@@ -68,6 +68,9 @@ private:
     that we don't get a spurious extra one at the end of the flow. */
     unsigned _buildLayoutInput(SPObject *root, Inkscape::Text::Layout::OptionalTextTagAttrs const &parent_optional_attrs, unsigned parent_attrs_offset, bool in_textpath);
 
+    /** Union all exlusion shapes. */
+    Shape* _buildExclusionShape() const;
+
 public:
     /** Optimize textpath text on next set_transform. */
     void optimizeTextpathText()
