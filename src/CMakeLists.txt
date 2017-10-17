@@ -325,7 +325,6 @@ set(inkscape_SRC
   guide-snapper.h
   help.h
   helper-fns.h
-  icon-size.h
   id-clash.h
   inkscape-version.h
   inkscape.h
