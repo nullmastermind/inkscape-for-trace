@@ -302,7 +302,7 @@ void NRStyle::set(SPStyle *style, SPStyle *context_style)
         text_decoration_stroke.set(&(style_td->stroke));
     }
 
-    if(text_decoration_line != TEXT_DECORATION_LINE_CLEAR){
+    if (text_decoration_line != TEXT_DECORATION_LINE_CLEAR) {
         phase_length           = style->text_decoration_data.phase_length;
         tspan_line_start       = style->text_decoration_data.tspan_line_start;
         tspan_line_end         = style->text_decoration_data.tspan_line_end;
@@ -310,13 +310,13 @@ void NRStyle::set(SPStyle *style, SPStyle *context_style)
         ascender               = style->text_decoration_data.ascender;
         descender              = style->text_decoration_data.descender;
         underline_thickness    = style->text_decoration_data.underline_thickness;
-        underline_position     = style->text_decoration_data.underline_position; 
+        underline_position     = style->text_decoration_data.underline_position;
         line_through_thickness = style->text_decoration_data.line_through_thickness;
         line_through_position  = style->text_decoration_data.line_through_position;
-        font_size              = style->font_size.computed; 
+        font_size              = style->font_size.computed;
     }
-    
-    text_direction = style->direction.computed;                                   
+
+    text_direction = style->direction.computed;
 
     update();
 }
