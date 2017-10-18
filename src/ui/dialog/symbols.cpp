@@ -202,6 +202,7 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   Gtk::Label* spacer = Gtk::manage(new Gtk::Label(""));
   tools->pack_start(* Gtk::manage(spacer));
   search = Gtk::manage(new Gtk::SearchEntry());  // Search
+  search->set_tooltip_text(_("Search trought all symbols. Use * to get all (slow)."));
   tools->pack_start(* search, Gtk::PACK_SHRINK);
   sigc::connection connSetSearch = search->signal_key_press_event().connect_notify(sigc::bind<0>(sigc::mem_fun(*this, &SymbolsDialog::find_symbols), search));
   
@@ -359,18 +360,24 @@ void SymbolsDialog::rebuild() {
   store->clear();
   Glib::ustring symbolSetString = symbolSet->get_active_text();
 
-  SPDocument* symbolDocument = symbolSets[symbolSetString];
-  if( !symbolDocument ) {
-    // Symbol must be from Current Document (this method of
-    // checking should be language independent).
-    symbolDocument = currentDocument;
-    addSymbol->set_sensitive( true );
-    removeSymbol->set_sensitive( true );
+  SPDocument* symbol_document = symbolSets[symbolSetString];
+  if( !symbol_document ) { 
+    get_symbols(symbolSetString);
+    symbolSetString = symbolSet->get_active_text();
+    symbol_document = symbolSets[symbolSetString];
+    // Symbol must be from Current Document (this method of checking should be language independent).
+    if( !symbol_document ) {
+      // Symbol must be from Current Document (this method of
+      // checking should be language independent).
+      symbol_document = currentDocument;
+      addSymbol->set_sensitive( true );
+      removeSymbol->set_sensitive( true );
+    }
   } else {
     addSymbol->set_sensitive( false );
     removeSymbol->set_sensitive( false );
   }
-  add_symbols( symbolDocument );
+  add_symbols( symbol_document );
 }
 
 void SymbolsDialog::insertSymbol() {
@@ -411,8 +418,8 @@ void SymbolsDialog::defsModified(SPObject * /*object*/, guint /*flags*/)
 
 void SymbolsDialog::selectionChanged(Inkscape::Selection *selection) {
   Glib::ustring symbol_id = selectedSymbolId();
-  SPDocument* symbolDocument = selectedSymbols();
-  SPObject* symbol = symbolDocument->getObjectById(symbol_id);
+  SPDocument* symbol_document = selectedSymbols();
+  SPObject* symbol = symbol_document->getObjectById(symbol_id);
 
   if(symbol && !selection->includes(symbol)) {
       iconView->unselect_all();
@@ -432,12 +439,17 @@ SPDocument* SymbolsDialog::selectedSymbols() {
   if (symbolSetString.empty()) {
     symbolSetString = symbolSet->get_active_text();
   }
-  SPDocument* symbolDocument = symbolSets[symbolSetString];
-  if( !symbolDocument ) {
+  SPDocument* symbol_document = symbolSets[symbolSetString];
+  if( !symbol_document ) {
+    get_symbols(symbolSetString);
+    symbolSetString = symbolSet->get_active_text();
+    symbol_document = symbolSets[symbolSetString];
     // Symbol must be from Current Document (this method of checking should be language independent).
-    return currentDocument;
+    if( !symbol_document ) {
+      return currentDocument;
+    }
   }
-  return symbolDocument;
+  return symbol_document;
 }
 
 Glib::ustring SymbolsDialog::selectedSymbolId() {
@@ -467,8 +479,8 @@ Glib::ustring SymbolsDialog::selectedSymbolDocTitle() {
 void SymbolsDialog::iconChanged() {
 
   Glib::ustring symbol_id = selectedSymbolId();
-  SPDocument* symbolDocument = selectedSymbols();
-  SPObject* symbol = symbolDocument->getObjectById(symbol_id);
+  SPDocument* symbol_document = selectedSymbols();
+  SPObject* symbol = symbol_document->getObjectById(symbol_id);
 
   if( symbol ) {
     // Find style for use in <use>
@@ -476,15 +488,15 @@ void SymbolsDialog::iconChanged() {
     gchar const* style = symbol->getAttribute("inkscape:symbol-style");
     if( !style ) {
       // If no default style in <symbol>, look in documents.
-      if( symbolDocument == currentDocument ) {
+      if( symbol_document == currentDocument ) {
         style = style_from_use( symbol_id.c_str(), currentDocument );
       } else {
-        style = symbolDocument->getReprRoot()->attribute("style");
+        style = symbol_document->getReprRoot()->attribute("style");
       }
     }
 
     ClipboardManager *cm = ClipboardManager::get();
-    cm->copySymbol(symbol->getRepr(), style, symbolDocument == currentDocument);
+    cm->copySymbol(symbol->getRepr(), style, symbol_document == currentDocument);
   }
 }
 
@@ -610,29 +622,68 @@ SPDocument* read_vss(Glib::ustring filename, Glib::ustring name ) {
 void SymbolsDialog::get_symbols() {
 
     using namespace Inkscape::IO::Resource;
-    SPDocument* symbol_doc = NULL;
     Glib::ustring title;
-
     for(auto &filename: get_filenames(SYMBOLS, {".svg", ".vss"})) {
         if(Glib::str_has_suffix(filename, ".svg")) {
-            symbol_doc = SPDocument::createNewDoc(filename.c_str(), FALSE);
-            if(symbol_doc) {
-                title = symbol_doc->getRoot()->title();
-                if(title.empty()) {
-                    title = _("Unnamed Symbols");
-                }
+            title = filename.erase(filename.rfind('.'));
+            if(title.empty()) {
+              title = _("Unnamed Symbols");
             }
-
+            symbolSets[title]= NULL;
+            symbolSet->append(title);
         }
 #ifdef WITH_LIBVISIO
         if(Glib::str_has_suffix(filename, ".vss")) {
-            Glib::ustring title = filename.erase(filename.rfind('.'));
+            title = filename.erase(filename.rfind('.'));
+            if(title.empty()) {
+              title = _("Unnamed Symbols");
+            }
+            symbolSets[title]= NULL;
+            symbolSet->append(title);
+        }
+#endif
+    }
+}
+
+/* Hunts preference directories for symbol files */
+void SymbolsDialog::get_symbols(Glib::ustring title) {
+
+    using namespace Inkscape::IO::Resource;
+    SPDocument* symbol_doc = NULL;
+    Glib::ustring new_title;
+    size_t i = 0;
+    for(auto &filename: get_filenames(SYMBOLS, {".svg", ".vss"})) {
+        if(filename == title + ".svg") {
+            symbol_doc = SPDocument::createNewDoc(filename.c_str(), FALSE);
+            if(symbol_doc) {
+                new_title = symbol_doc->getRoot()->title();
+                if(new_title.empty()) {
+                    new_title = _("Unnamed Symbols");
+                }
+            }
+        }
+        if(Glib::str_has_suffix(filename, ".svg")) {
+          i++;
+        }
+#ifdef WITH_LIBVISIO
+        if(Glib::str_has_suffix(filename, ".vss")) {
+          i++;
+        }
+        if(filename == title + ".vss") {
             symbol_doc = read_vss(filename, title);
+            if(symbol_doc) {
+                new_title = symbol_doc->getRoot()->title();
+                if(new_title.empty()) {
+                    new_title = _("Unnamed Symbols");
+                }
+            }
         }
 #endif
         if(symbol_doc) {
-            symbolSets[title]= symbol_doc;
-            symbolSet->append(title);
+            symbolSets.erase(title);   
+            symbolSets[new_title]= symbol_doc;
+            symbolSet->set_active(i);
+            symbolSet->set_active_text(new_title);
         }
     }
 }
@@ -655,11 +706,11 @@ void SymbolsDialog::symbols_in_doc_recursive (SPObject *r, std::vector<SPSymbol*
   }
 }
 
-std::vector<SPSymbol*> SymbolsDialog::symbols_in_doc( SPDocument* symbolDocument)
+std::vector<SPSymbol*> SymbolsDialog::symbols_in_doc( SPDocument* symbol_document)
 {
 
   std::vector<SPSymbol*> l;
-  symbols_in_doc_recursive (symbolDocument->getRoot(), l );
+  symbols_in_doc_recursive (symbol_document->getRoot(), l );
   return l;
 }
 
@@ -725,22 +776,27 @@ void SymbolsDialog::find_symbols(Gtk::SearchEntry* search, GdkEventKey* evt) {
   if (evt->keyval != GDK_KEY_Return || title.empty()) {
     return;
   }
-  symbolSet->set_active_text(_("Search"));
   for(auto const &symbol_document_map : symbolSets) {
     SPDocument* symbol_document = symbol_document_map.second;
+    if (!symbol_document) {
+      get_symbols(symbol_document_map.first);
+      Glib::ustring symbolSetString = symbolSet->get_active_text();
+      symbol_document = symbolSets[symbolSetString];
+    }
     std::vector<SPSymbol*> l = symbols_in_doc( symbol_document);
     for(auto symbol:l) {
       gchar const *symbol_title_char = symbol->title();
       if (symbol_title_char) {
         Glib::ustring symbol_title = Glib::ustring(symbol_title_char);
         auto pos = symbol_title.rfind(title);
-        if (symbol && pos != std::string::npos) {
+        if (title == "*" || symbol && pos != std::string::npos) {
           Glib::ustring doc_title = symbol_document_map.first; // From doc title element
           add_symbol( symbol, doc_title);
         }
       }
     }
   }
+  symbolSet->set_active_text(_("Search"));
 }
 
 void SymbolsDialog::add_symbol( SPObject* symbol, Glib::ustring doc_title) {

@@ -82,6 +82,7 @@ private:
     void iconDragDataGet(const Glib::RefPtr<Gdk::DragContext>& context, Gtk::SelectionData& selection_data, guint info, guint time);
 
     void get_symbols();
+    void get_symbols(Glib::ustring title);
     void add_symbols( SPDocument* symbol_document );
     void add_symbol( SPObject* symbol, Glib::ustring doc_title);
     SPDocument* symbols_preview_doc();
