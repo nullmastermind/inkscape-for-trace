@@ -84,11 +84,14 @@ public:
 
   Gtk::TreeModelColumn<Glib::ustring>                symbol_id;
   Gtk::TreeModelColumn<Glib::ustring>                symbol_title;
+  Gtk::TreeModelColumn<Glib::ustring>                symbol_doc_title;
   Gtk::TreeModelColumn< Glib::RefPtr<Gdk::Pixbuf> >  symbol_image;
+  
 
   SymbolColumns() {
     add(symbol_id);
     add(symbol_title);
+    add(symbol_doc_title);
     add(symbol_image);
   }
 };
@@ -182,7 +185,7 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   addSymbol->set_tooltip_text(_("Add Symbol from the current document."));
   addSymbol->set_relief( Gtk::RELIEF_NONE );
   addSymbol->set_focus_on_click( false );
-  addSymbol->signal_clicked().connect(sigc::mem_fun(*this, &SymbolsDialog::insertSymbol));
+  addSymbol->signal_activate().connect(sigc::mem_fun(*this, &SymbolsDialog::insertSymbol));
   tools->pack_start(* addSymbol, Gtk::PACK_SHRINK);
 
   auto removeSymbolImage = Gtk::manage(new Gtk::Image());
@@ -198,7 +201,10 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
 
   Gtk::Label* spacer = Gtk::manage(new Gtk::Label(""));
   tools->pack_start(* Gtk::manage(spacer));
-
+  search = Gtk::manage(new Gtk::SearchEntry());  // Search
+  tools->pack_start(* search, Gtk::PACK_SHRINK);
+  sigc::connection connSetSearch = search->signal_key_press_event().connect_notify(sigc::bind<0>(sigc::mem_fun(*this, &SymbolsDialog::find_symbols), search));
+  
   // Pack size (controls display area)
   pack_size = 2; // Default 32px
 
@@ -422,8 +428,10 @@ void SymbolsDialog::documentReplaced(SPDesktop *desktop, SPDocument *document)
 
 SPDocument* SymbolsDialog::selectedSymbols() {
   /* OK, we know symbol name... now we need to copy it to clipboard, bon chance! */
-  Glib::ustring symbolSetString = symbolSet->get_active_text();
-
+  Glib::ustring symbolSetString = selectedSymbolDocTitle();
+  if (symbolSetString.empty()) {
+    symbolSetString = symbolSet->get_active_text();
+  }
   SPDocument* symbolDocument = symbolSets[symbolSetString];
   if( !symbolDocument ) {
     // Symbol must be from Current Document (this method of checking should be language independent).
@@ -440,6 +448,18 @@ Glib::ustring SymbolsDialog::selectedSymbolId() {
     Gtk::TreeModel::Path const & path = *iconArray.begin();
     Gtk::ListStore::iterator row = store->get_iter(path);
     return (*row)[getColumns()->symbol_id];
+  }
+  return Glib::ustring("");
+}
+
+Glib::ustring SymbolsDialog::selectedSymbolDocTitle() {
+
+  auto iconArray = iconView->get_selected_items();
+
+  if( !iconArray.empty() ) {
+    Gtk::TreeModel::Path const & path = *iconArray.begin();
+    Gtk::ListStore::iterator row = store->get_iter(path);
+    return (*row)[getColumns()->symbol_doc_title];
   }
   return Glib::ustring("");
 }
@@ -635,7 +655,7 @@ void SymbolsDialog::symbols_in_doc_recursive (SPObject *r, std::vector<SPSymbol*
   }
 }
 
-std::vector<SPSymbol*> SymbolsDialog::symbols_in_doc( SPDocument* symbolDocument )
+std::vector<SPSymbol*> SymbolsDialog::symbols_in_doc( SPDocument* symbolDocument)
 {
 
   std::vector<SPSymbol*> l;
@@ -655,8 +675,7 @@ void SymbolsDialog::use_in_doc_recursive (SPObject *r, std::vector<SPUse*> &l)
   }
 }
 
-std::vector<SPUse*> SymbolsDialog::use_in_doc( SPDocument* useDocument ) {
-
+std::vector<SPUse*> SymbolsDialog::use_in_doc( SPDocument* useDocument) {
   std::vector<SPUse*> l;
   use_in_doc_recursive (useDocument->getRoot(), l);
   return l;
@@ -685,17 +704,46 @@ gchar const* SymbolsDialog::style_from_use( gchar const* id, SPDocument* documen
   return style;
 }
 
-void SymbolsDialog::add_symbols( SPDocument* symbolDocument ) {
-
-  std::vector<SPSymbol*> l = symbols_in_doc( symbolDocument );
-  for(auto symbol:l) {
-    if (symbol) {
-      add_symbol( symbol );
+void SymbolsDialog::add_symbols( SPDocument* symbol_document ) {
+  if (symbol_document) {
+    std::vector<SPSymbol*> l = symbols_in_doc( symbol_document );
+    Glib::ustring doc_title = "";
+    if (symbol_document->getRoot()->title()) {
+      doc_title = symbol_document->getRoot()->title();
+    }
+    for(auto symbol:l) {
+      if (symbol) {
+        add_symbol( symbol, doc_title);
+      }
     }
   }
 }
 
-void SymbolsDialog::add_symbol( SPObject* symbol ) {
+void SymbolsDialog::find_symbols(Gtk::SearchEntry* search, GdkEventKey* evt) {
+  store->clear();
+  Glib::ustring title = search->get_text();
+  if (evt->keyval != GDK_KEY_Return || title.empty()) {
+    return;
+  }
+  symbolSet->set_active_text(_("Search"));
+  for(auto const &symbol_document_map : symbolSets) {
+    SPDocument* symbol_document = symbol_document_map.second;
+    std::vector<SPSymbol*> l = symbols_in_doc( symbol_document);
+    for(auto symbol:l) {
+      gchar const *symbol_title_char = symbol->title();
+      if (symbol_title_char) {
+        Glib::ustring symbol_title = Glib::ustring(symbol_title_char);
+        auto pos = symbol_title.rfind(title);
+        if (symbol && pos != std::string::npos) {
+          Glib::ustring doc_title = symbol_document_map.first; // From doc title element
+          add_symbol( symbol, doc_title);
+        }
+      }
+    }
+  }
+}
+
+void SymbolsDialog::add_symbol( SPObject* symbol, Glib::ustring doc_title) {
 
   SymbolColumns* columns = getColumns();
 
@@ -704,6 +752,9 @@ void SymbolsDialog::add_symbol( SPObject* symbol ) {
   if( !title ) {
     title = id;
   }
+  if( doc_title.empty() ) {
+    return;
+  }
 
   Glib::RefPtr<Gdk::Pixbuf> pixbuf = draw_symbol( symbol );
 
@@ -711,6 +762,7 @@ void SymbolsDialog::add_symbol( SPObject* symbol ) {
     Gtk::ListStore::iterator row = store->append();
     (*row)[columns->symbol_id]    = Glib::ustring( id );
     (*row)[columns->symbol_title] = Glib::Markup::escape_text(Glib::ustring( g_dpgettext2(NULL, "Symbol", title) ));
+    (*row)[columns->symbol_doc_title] = Glib::Markup::escape_text(doc_title);
     (*row)[columns->symbol_image] = pixbuf;
   }
 
