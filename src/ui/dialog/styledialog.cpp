@@ -56,8 +56,8 @@ public:
     };
 
     virtual void notifyContentChanged(Inkscape::XML::Node &node,
-                                      Inkscape::Util::ptr_shared<char> old_content,
-                                      Inkscape::Util::ptr_shared<char> new_content);
+                                      Inkscape::Util::ptr_shared old_content,
+                                      Inkscape::Util::ptr_shared new_content);
 
     StyleDialog * _styleDialog;
 };
@@ -66,8 +66,8 @@ public:
 void
 StyleDialog::NodeObserver::notifyContentChanged(
     Inkscape::XML::Node &/*node*/,
-    Inkscape::Util::ptr_shared<char> /*old_content*/,
-    Inkscape::Util::ptr_shared<char> /*new_content*/ ) {
+    Inkscape::Util::ptr_shared /*old_content*/,
+    Inkscape::Util::ptr_shared /*new_content*/ ) {
 
 #ifdef DEBUG_STYLEDIALOG
     std::cout << "StyleDialog::NodeObserver::notifyContentChanged" << std::endl;
@@ -111,8 +111,8 @@ public:
 
     virtual void notifyAttributeChanged( Inkscape::XML::Node &node,
                                          GQuark qname,
-                                         Util::ptr_shared<char> /*old_value*/,
-                                         Util::ptr_shared<char> /*new_value*/ ) {
+                                         Util::ptr_shared /*old_value*/,
+                                         Util::ptr_shared /*new_value*/ ) {
         if ( _styleDialog && _repr ) {
 
             // For the moment only care about attributes that are directly used in selectors.

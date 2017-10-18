@@ -52,11 +52,11 @@ public:
     virtual void notifyChildOrderChanged(Inkscape::XML::Node &node, Inkscape::XML::Node &child,
                                          Inkscape::XML::Node *old_prev, Inkscape::XML::Node *new_prev);
     virtual void notifyContentChanged(Inkscape::XML::Node &node,
-                                      Inkscape::Util::ptr_shared<char> old_content,
-                                      Inkscape::Util::ptr_shared<char> new_content);
+                                      Inkscape::Util::ptr_shared old_content,
+                                      Inkscape::Util::ptr_shared new_content);
     virtual void notifyAttributeChanged(Inkscape::XML::Node &node, GQuark name,
-                                        Inkscape::Util::ptr_shared<char> old_value,
-                                        Inkscape::Util::ptr_shared<char> new_value);
+                                        Inkscape::Util::ptr_shared old_value,
+                                        Inkscape::Util::ptr_shared new_value);
     /////////////////////////////////////////////////////////////////////
 
 protected:
