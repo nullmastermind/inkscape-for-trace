@@ -26,7 +26,6 @@
 #include "util/units.h"
 #include "helper/png-write.h"
 #include "svg/svg-color.h"
-#include "io/sys.h"
 
 #include <glibmm/i18n.h>
 
@@ -52,7 +51,7 @@ static void draw_page(GtkPrintOperation *,
         std::string tmp_base = "inkscape-print-png-XXXXXX";
 
         int tmp_fd;
-        if ( (tmp_fd = Inkscape::IO::file_open_tmp (tmp_png, tmp_base)) >= 0) {
+        if ( (tmp_fd = Glib::file_open_tmp(tmp_png, tmp_base)) >= 0) {
             close(tmp_fd);
 
             guint32 bgcolor = 0x00000000;

@@ -16,13 +16,13 @@
 #include <config.h>
 #endif
 
+#include <glibmm/fileutils.h>
 #include "file.h"
 #include "xslt.h"
 #include "../extension.h"
 #include "../output.h"
 #include "extension/input.h"
 
-#include "io/sys.h"
 #include "io/resource.h"
 #include <unistd.h>
 #include <cstring>
@@ -175,7 +175,7 @@ void XSLT::save(Inkscape::Extension::Output *module, SPDocument *doc, gchar cons
     std::string tempfilename_out;
     int tempfd_out = 0;
     try {
-        tempfd_out = Inkscape::IO::file_open_tmp(tempfilename_out, "ink_ext_XXXXXX");
+        tempfd_out = Glib::file_open_tmp(tempfilename_out, "ink_ext_XXXXXX");
     } catch (...) {
         /// \todo Popup dialog here
         return;
