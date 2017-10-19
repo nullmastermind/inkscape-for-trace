@@ -125,6 +125,7 @@ void SPText::remove_child(Inkscape::XML::Node *rch) {
 
 
 void SPText::update(SPCtx *ctx, guint flags) {
+
     unsigned childflags = (flags & SP_OBJECT_MODIFIED_CASCADE);
     if (flags & SP_OBJECT_MODIFIED_FLAG) {
         childflags |= SP_OBJECT_PARENT_MODIFIED_FLAG;
@@ -161,6 +162,18 @@ void SPText::update(SPCtx *ctx, guint flags) {
         double const ex = 0.5 * em;  // fixme: get x height from pango or libnrtype.
 
         attributes.update( em, ex, w, h );
+
+        // Set inline_size computed value if necessary (i.e. if unit is %).
+        if (style->inline_size.set) {
+            if (style->inline_size.unit == SP_CSS_UNIT_PERCENT) {
+                if (style->writing_mode.computed == SP_CSS_WRITING_MODE_LR_TB ||
+                    style->writing_mode.computed == SP_CSS_WRITING_MODE_RL_TB) {
+                    style->inline_size.computed = style->inline_size.value * ictx->viewport.width();
+                } else {
+                    style->inline_size.computed = style->inline_size.value * ictx->viewport.height();
+                }
+            }
+        }
 
         /* fixme: It is not nice to have it here, but otherwise children content changes does not work */
         /* fixme: Even now it may not work, as we are delayed */
@@ -500,6 +513,56 @@ unsigned SPText::_buildLayoutInput(SPObject *root, Inkscape::Text::Layout::Optio
                 }
             }
         }
+    } else if (style->inline_size.set) {
+        // If both shape_inside and inline_size are set, shape_inside wins out.
+
+        // We construct a rectange with one dimension set by the computed value of 'inline-size'
+        // and the other dimension set to infinity. Text is layed out starting at the 'x' and 'y'
+        // attribute values. This is handled elsewhere.
+
+        double inline_size = style->inline_size.computed;
+        unsigned mode      = style->writing_mode.computed;
+        unsigned anchor    = style->text_anchor.computed;
+        unsigned direction = style->direction.computed;
+
+        Geom::Rect frame;
+        if (mode == SP_CSS_WRITING_MODE_LR_TB ||
+            mode == SP_CSS_WRITING_MODE_RL_TB) {
+            // horizontal
+            frame = Geom::Rect::from_xywh(attributes.firstXY()[Geom::X], -100000, inline_size, 200000);
+            if (anchor == SP_CSS_TEXT_ANCHOR_MIDDLE) {
+                frame *= Geom::Translate (-inline_size/2.0, 0 );
+            } else if ( (direction == SP_CSS_DIRECTION_LTR && anchor == SP_CSS_TEXT_ANCHOR_END  ) ||
+                        (direction == SP_CSS_DIRECTION_RTL && anchor == SP_CSS_TEXT_ANCHOR_START) ) {
+                frame *= Geom::Translate (-inline_size, 0);
+            }
+        } else {
+            // vertical
+            frame = Geom::Rect::from_xywh(-100000, attributes.firstXY()[Geom::Y], 200000, inline_size);
+            if (anchor == SP_CSS_TEXT_ANCHOR_MIDDLE) {
+                frame *= Geom::Translate (0, -inline_size/2.0);
+            } else if (anchor == SP_CSS_TEXT_ANCHOR_END) {
+                frame *= Geom::Translate (0, -inline_size);
+            }
+        }
+        // std::cout << " inline_size frame: " << frame << std::endl;
+
+        Shape *shape = new Shape;
+        shape->Reset();
+        int v0 = shape->AddPoint(frame.corner(0));
+        int v1 = shape->AddPoint(frame.corner(1));
+        int v2 = shape->AddPoint(frame.corner(2));
+        int v3 = shape->AddPoint(frame.corner(3));
+        shape->AddEdge(v0, v1);
+        shape->AddEdge(v1, v2);
+        shape->AddEdge(v2, v3);
+        shape->AddEdge(v3, v0);
+        Shape *uncross = new Shape;
+        uncross->ConvertToShape( shape );
+
+        layout.appendWrapShape( uncross );
+
+        delete shape;
     }
 
     if (SP_IS_TEXT(root)) {
@@ -507,6 +570,8 @@ unsigned SPText::_buildLayoutInput(SPObject *root, Inkscape::Text::Layout::Optio
 
         layout.strut.reset();
         if (style) {
+
+            // Strut
             font_instance *font = font_factory::Default()->FaceFromStyle( style );
             if (font) {
                 font->FontMetrics(layout.strut.ascent, layout.strut.descent, layout.strut.xheight);
@@ -522,6 +587,32 @@ unsigned SPText::_buildLayoutInput(SPObject *root, Inkscape::Text::Layout::Optio
                     layout.strut.computeEffective( style->line_height.computed/style->font_size.computed );
                 }
             }
+
+            // SVG 2 Text wrapping
+            if (style->shape_inside.set) {
+                // 'x' and 'y' attributes are always ignored.
+                optional_attrs.x.clear();
+                optional_attrs.y.clear();
+            }
+            else if (style->inline_size.set) {
+                // For horizontal text:
+                //   'x' is used to calculate the left/right edges of the rectangle but is not
+                //   needed later. If not deleted here, it will cause an incorrect positioning
+                //   of the first line.
+                //   'y' is used to determine where the first line box is located and is needed
+                //   during the output stage.
+                // For vertical text:
+                //   Follow above but exchange 'x' and 'y'.
+                if (style->writing_mode.computed == SP_CSS_WRITING_MODE_LR_TB ||
+                    style->writing_mode.computed == SP_CSS_WRITING_MODE_RL_TB) {
+                    // Horizontal text
+                    optional_attrs.x.clear();
+                } else {
+                    // Vertical text
+                    optional_attrs.y.clear();
+                }
+            }
+
         }
 
         // set textLength on the entire layout, see note in TNG-Layout.h
