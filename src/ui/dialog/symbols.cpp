@@ -17,14 +17,6 @@
 #include <locale>
 #include <sstream>
 
-#include <gtkmm/buttonbox.h>
-#include <gtkmm/label.h>
-#include <gtkmm/togglebutton.h>
-#include <gtkmm/grid.h>
-#include <gtkmm/scrolledwindow.h>
-#include <gtkmm/comboboxtext.h>
-#include <gtkmm/iconview.h>
-#include <gtkmm/liststore.h>
 #include <glibmm/regex.h>
 #include <glibmm/stringutils.h>
 #include <glibmm/markup.h>
@@ -202,7 +194,7 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   Gtk::Label* spacer = Gtk::manage(new Gtk::Label(""));
   tools->pack_start(* Gtk::manage(spacer));
   search = Gtk::manage(new Gtk::SearchEntry());  // Search
-  search->set_tooltip_text(_("Search trought all symbols. Use * to get all (slow)."));
+  search->set_tooltip_text(_("Return to start search. Use * to get all symbols (slow)."));
   tools->pack_start(* search, Gtk::PACK_SHRINK);
 
   search->signal_key_press_event().connect_notify(sigc::mem_fun(*this, &SymbolsDialog::find_symbols));
@@ -275,6 +267,7 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
 
   /**********************************************************/
   sensitive = true;
+  finded = false;
   currentDesktop  = SP_ACTIVE_DESKTOP;
   currentDocument = currentDesktop->getDocument();
 
@@ -798,36 +791,57 @@ void SymbolsDialog::update_search_box(gpointer data)
 }
 
 void SymbolsDialog::find_symbols_overload() {
-  store->clear();
   Glib::ustring title = search->get_text();
   if (title.empty()) {
     return;
   }
-  std::map<Glib::ustring, SPDocument*> symbolSetsCopy = symbolSets;
-  for(auto const &symbol_document_map : symbolSetsCopy) {
-    SPDocument* symbol_document = symbol_document_map.second;
-    Glib::ustring doc_title = symbol_document_map.first;
-    if (!symbol_document) {
-      doc_title = get_symbols(symbol_document_map.first);
-      symbol_document = symbolSets[doc_title];
+  if (!finded) {
+    Gtk::Dialog search_dialog(_("Slow process please read"));
+    search_dialog.set_border_width(10);
+    Gtk::Label explanation;
+    explanation.set_markup(_("First time search is slow, next searchs are fast"));
+    explanation.set_line_wrap(true);
+    Gtk::Box *content = search_dialog.get_content_area();
+    content->pack_start(explanation, false, false, 5);
+    Gtk::Button *ko_button = search_dialog.add_button(_("Cancel"), GTK_RESPONSE_CLOSE);
+    ko_button->grab_focus();
+    Gtk::Button *ok_button = search_dialog.add_button(_("Search"), GTK_RESPONSE_ACCEPT);
+    ok_button->grab_focus();
+    ko_button->grab_focus();
+    search_dialog.show_all_children();
+    int status = search_dialog.run();
+    if ( status == GTK_RESPONSE_ACCEPT ) {
+      finded = true;
     }
-    if (symbol_document) {
-      std::vector<SPSymbol*> l = symbols_in_doc(symbol_document);
-      for(auto symbol:l) {
-        gchar const *symbol_title_char = symbol->title();
-        if (symbol_title_char) {
-          Glib::ustring symbol_title = Glib::ustring(symbol_title_char);
-          auto pos = symbol_title.rfind(title);
-          if (symbol && (title == "*" || pos != std::string::npos)) {
-            add_symbol( symbol, doc_title);
+  }
+  if (finded) {
+    store->clear();
+    std::map<Glib::ustring, SPDocument*> symbolSetsCopy = symbolSets;
+    for(auto const &symbol_document_map : symbolSetsCopy) {
+      SPDocument* symbol_document = symbol_document_map.second;
+      Glib::ustring doc_title = symbol_document_map.first;
+      if (!symbol_document) {
+        doc_title = get_symbols(symbol_document_map.first);
+        symbol_document = symbolSets[doc_title];
+      }
+      if (symbol_document) {
+        std::vector<SPSymbol*> l = symbols_in_doc(symbol_document);
+        for(auto symbol:l) {
+          gchar const *symbol_title_char = symbol->title();
+          if (symbol_title_char) {
+            Glib::ustring symbol_title = Glib::ustring(symbol_title_char);
+            auto pos = symbol_title.rfind(title);
+            if (symbol && (title == "*" || pos != std::string::npos)) {
+              add_symbol( symbol, doc_title);
+            }
           }
         }
       }
     }
+    search->set_text(title);
+    symbolSet->set_active_text(_("Search"));
+    symbolSetsCopy.clear();
   }
-  search->set_text(title);
-  symbolSet->set_active_text(_("Search"));
-  symbolSetsCopy.clear();
 }
 
 void SymbolsDialog::add_symbol( SPObject* symbol, Glib::ustring doc_title) {
@@ -839,16 +853,18 @@ void SymbolsDialog::add_symbol( SPObject* symbol, Glib::ustring doc_title) {
   if( !title ) {
     title = id;
   }
-  if( doc_title.empty() ) {
-    return;
+  Glib::ustring symbol_title = Glib::Markup::escape_text(Glib::ustring( g_dpgettext2(NULL, "Symbol", title) ));
+  if (doc_title.empty()) {
+    symbol_title = symbol_title + Glib::Markup::escape_text(Glib::ustring(" [") +_("Current Document") + Glib::ustring("]"));
+  } else {
+    symbol_title = symbol_title + Glib::Markup::escape_text(Glib::ustring(" [") + doc_title + Glib::ustring("]"));
   }
-
   Glib::RefPtr<Gdk::Pixbuf> pixbuf = draw_symbol( symbol );
 
   if( pixbuf ) {
     Gtk::ListStore::iterator row = store->append();
     (*row)[columns->symbol_id]    = Glib::ustring( id );
-    (*row)[columns->symbol_title] = Glib::Markup::escape_text(Glib::ustring( g_dpgettext2(NULL, "Symbol", title) ));
+    (*row)[columns->symbol_title] = symbol_title;
     (*row)[columns->symbol_doc_title] = Glib::Markup::escape_text(doc_title);
     (*row)[columns->symbol_image] = pixbuf;
   }

@@ -12,13 +12,13 @@
 
 #ifndef INKSCAPE_UI_DIALOG_SYMBOLS_H
 #define INKSCAPE_UI_DIALOG_SYMBOLS_H
+#include <gtkmm.h>
 
 #include "display/drawing.h"
 #include "ui/dialog/desktop-tracker.h"
 #include "ui/widget/panel.h"
 #include "sp-symbol.h"
 #include "sp-use.h"
-#include <gtkmm/searchentry.h>
 #include <vector>
 
 class SPObject;
@@ -110,6 +110,7 @@ private:
     Glib::RefPtr<Gtk::ListStore> store;
     Gtk::ComboBoxText* symbolSet;
     bool sensitive;
+    bool finded;
     Gtk::SearchEntry* search;
     Gtk::IconView* iconView;
     Gtk::Button* addSymbol;
