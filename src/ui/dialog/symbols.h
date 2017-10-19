@@ -82,7 +82,7 @@ private:
     void iconDragDataGet(const Glib::RefPtr<Gdk::DragContext>& context, Gtk::SelectionData& selection_data, guint info, guint time);
 
     void get_symbols();
-    void get_symbols(Glib::ustring title);
+    Glib::ustring get_symbols(Glib::ustring title);
     void add_symbols( SPDocument* symbol_document );
     void add_symbol( SPObject* symbol, Glib::ustring doc_title);
     SPDocument* symbols_preview_doc();
@@ -91,7 +91,8 @@ private:
     std::vector<SPSymbol*> symbols_in_doc( SPDocument* document);
     void use_in_doc_recursive(SPObject *r, std::vector<SPUse*> &l);
     std::vector<SPUse*> use_in_doc( SPDocument* document);
-    void find_symbols(Gtk::SearchEntry* search, GdkEventKey* evt);
+    void find_symbols(GdkEventKey* evt);
+    void find_symbols_overload();
     gchar const* style_from_use( gchar const* id, SPDocument* document);
 
     Glib::RefPtr<Gdk::Pixbuf> draw_symbol(SPObject *symbol);
@@ -107,6 +108,7 @@ private:
 
     Glib::RefPtr<Gtk::ListStore> store;
     Gtk::ComboBoxText* symbolSet;
+    bool sensitive;
     Gtk::SearchEntry* search;
     Gtk::IconView* iconView;
     Gtk::Button* addSymbol;
