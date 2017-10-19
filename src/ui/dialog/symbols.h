@@ -75,7 +75,8 @@ private:
     void defsModified(SPObject *object, guint flags);
     void selectionChanged(Inkscape::Selection *selection);
     void documentReplaced(SPDesktop *desktop, SPDocument *document);
-    SPDocument* selectedSymbols();
+    SPDocument* selectedSymbols(bool ignorecurrent = false);
+    void update_search_box(gpointer data);
     Glib::ustring selectedSymbolId();
     Glib::ustring selectedSymbolDocTitle();
     void iconChanged();

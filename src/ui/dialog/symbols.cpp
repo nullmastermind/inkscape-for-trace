@@ -363,7 +363,7 @@ void SymbolsDialog::rebuild() {
   }
 
   store->clear();
-  SPDocument* symbol_document = selectedSymbols();
+  SPDocument* symbol_document = selectedSymbols(true);
   if( !symbol_document ) { 
       // Symbol must be from Current Document (this method of
       // checking should be language independent).
@@ -434,7 +434,7 @@ void SymbolsDialog::documentReplaced(SPDesktop *desktop, SPDocument *document)
   rebuild();
 }
 
-SPDocument* SymbolsDialog::selectedSymbols() {
+SPDocument* SymbolsDialog::selectedSymbols(bool ignorecurrent) {
   /* OK, we know symbol name... now we need to copy it to clipboard, bon chance! */
   Glib::ustring doc_title = selectedSymbolDocTitle();
   if (doc_title.empty()) {
@@ -446,6 +446,9 @@ SPDocument* SymbolsDialog::selectedSymbols() {
     symbol_document = symbolSets[doc_title];
     // Symbol must be from Current Document (this method of checking should be language independent).
     if( !symbol_document ) {
+      if (ignorecurrent) {
+        return NULL;
+      }
       return currentDocument;
     }
   }
@@ -769,16 +772,14 @@ gchar const* SymbolsDialog::style_from_use( gchar const* id, SPDocument* documen
 }
 
 void SymbolsDialog::add_symbols( SPDocument* symbol_document ) {
-  if (symbol_document) {
-    std::vector<SPSymbol*> l = symbols_in_doc( symbol_document );
-    Glib::ustring doc_title = "";
-    if (symbol_document->getRoot()->title()) {
-      doc_title = symbol_document->getRoot()->title();
-    }
-    for(auto symbol:l) {
-      if (symbol) {
-        add_symbol( symbol, doc_title);
-      }
+  std::vector<SPSymbol*> l = symbols_in_doc( symbol_document );
+  Glib::ustring doc_title = "";
+  if (symbol_document->getRoot()->title()) {
+    doc_title = symbol_document->getRoot()->title();
+  }
+  for(auto symbol:l) {
+    if (symbol) {
+      add_symbol( symbol, doc_title);
     }
   }
 }
@@ -788,6 +789,12 @@ void SymbolsDialog::find_symbols(GdkEventKey* evt) {
     return;
   }
   find_symbols_overload();
+}
+
+void SymbolsDialog::update_search_box(gpointer data)
+{
+    Glib::ustring doc_title = *reinterpret_cast<Glib::ustring *>(data);
+    search->set_text(doc_title);
 }
 
 void SymbolsDialog::find_symbols_overload() {
@@ -802,7 +809,6 @@ void SymbolsDialog::find_symbols_overload() {
     Glib::ustring doc_title = symbol_document_map.first;
     if (!symbol_document) {
       doc_title = get_symbols(symbol_document_map.first);
-      search->set_text(doc_title);
       symbol_document = symbolSets[doc_title];
     }
     if (symbol_document) {
