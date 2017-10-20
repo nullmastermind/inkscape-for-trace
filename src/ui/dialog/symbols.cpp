@@ -799,6 +799,8 @@ void SymbolsDialog::find_symbols_overloaded() {
   }
   store->clear();
   std::map<Glib::ustring, SPDocument*> symbolSetsCopy = symbolSets;
+  bool icons_found = false;
+  SPDocument* searchdoc;
   for(auto const &symbol_document_map : symbolSetsCopy) {
     SPDocument* symbol_document = symbol_document_map.second;
     Glib::ustring doc_title = symbol_document_map.first;
@@ -806,22 +808,42 @@ void SymbolsDialog::find_symbols_overloaded() {
       doc_title = get_symbols(symbol_document_map.first);
       symbol_document = symbolSets[doc_title];
     }
+    if (doc_title == "Search") {
+      searchdoc = symbol_document;
+      continue;
+    }
     if (symbol_document) {
       std::vector<SPSymbol*> l = symbols_in_doc(symbol_document);
       for(auto symbol:l) {
         gchar const *symbol_title_char = symbol->title();
+        gchar const *symbol_desc_char = symbol->description();
         if (symbol_title_char) {
+          bool found = false;
           Glib::ustring symbol_title = Glib::ustring(symbol_title_char).lowercase();
           auto pos = symbol_title.rfind(search_str);
-          if (symbol && (search_str == "*" || pos != std::string::npos)) {
+          if (pos != std::string::npos) {
+            found = true;
+          }
+          if (!found && symbol_desc_char) {
+            Glib::ustring symbol_desc = Glib::ustring(symbol_title_char).lowercase();
+            auto pos = symbol_desc.rfind(search_str);
+            if (pos != std::string::npos) {
+              found = true;
+            }
+          }
+          if (symbol && (search_str == "*" || found)) {
             add_symbol( symbol, doc_title);
+            icons_found = true;
           }
         }
       }
     }
   }
+  if (!icons_found) {
+    add_symbols(searchdoc);
+  }
+  symbolSet->set_active_text(_("Search"));  
   search->set_text(search_str);
-  symbolSet->set_active_text(_("Search"));
   symbolSetsCopy.clear();
 }
 
