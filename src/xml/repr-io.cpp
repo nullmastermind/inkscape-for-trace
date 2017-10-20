@@ -793,7 +793,7 @@ static void repr_write_comment( Writer &out, const gchar * val, bool addWhitespa
 namespace {
 
 typedef std::map<Glib::QueryQuark, gchar const *, Inkscape::compare_quark_ids> LocalNameMap;
-typedef std::map<Glib::QueryQuark, Inkscape::Util::ptr_shared<char>, Inkscape::compare_quark_ids> NSMap;
+typedef std::map<Glib::QueryQuark, Inkscape::Util::ptr_shared, Inkscape::compare_quark_ids> NSMap;
 
 gchar const *qname_local_name(Glib::QueryQuark qname) {
     static LocalNameMap local_name_map;
@@ -827,7 +827,7 @@ void add_ns_map_entry(NSMap &ns_map, Glib::QueryQuark prefix) {
                 g_warning("No namespace known for normalized prefix %s", g_quark_to_string(prefix));
             }
         } else {
-            ns_map.insert(NSMap::value_type(prefix, ptr_shared<char>()));
+            ns_map.insert(NSMap::value_type(prefix, ptr_shared()));
         }
     }
 }
@@ -886,7 +886,7 @@ static void sp_repr_write_stream_root_element(Node *repr, Writer &out,
     for ( NSMap::iterator iter=ns_map.begin() ; iter != ns_map.end() ; ++iter ) 
     {
         Glib::QueryQuark prefix=(*iter).first;
-        ptr_shared<char> ns_uri=(*iter).second;
+        ptr_shared ns_uri=(*iter).second;
 
         if (prefix.id()) {
             if ( prefix != xml_prefix ) {

@@ -27,7 +27,6 @@
 
 #include <signal.h>
 #include <errno.h>
-#include <boost/scoped_ptr.hpp>
 
 #include "libnrtype/Layout-TNG.h"
 #include <2geom/transforms.h>
@@ -517,7 +516,7 @@ static void sp_asbitmap_render(SPItem *item, CairoRenderContext *ctx)
     // Do the export
     SPDocument *document = item->document;
 
-    boost::scoped_ptr<Inkscape::Pixbuf> pb(
+    std::unique_ptr<Inkscape::Pixbuf> pb(
         sp_generate_internal_bitmap(document, NULL,
             bbox->min()[Geom::X], bbox->min()[Geom::Y], bbox->max()[Geom::X], bbox->max()[Geom::Y], 
             width, height, res, res, (guint32) 0xffffff00, item ));

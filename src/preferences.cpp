@@ -76,7 +76,7 @@ public:
         _filter(filter)
     {}
     virtual ~PrefNodeObserver() {}
-    virtual void notifyAttributeChanged(XML::Node &node, GQuark name, Util::ptr_shared<char>, Util::ptr_shared<char>);
+    virtual void notifyAttributeChanged(XML::Node &node, GQuark name, Util::ptr_shared, Util::ptr_shared);
 private:
     Observer &_observer;
     Glib::ustring const _filter;
@@ -561,7 +561,7 @@ Preferences::Observer::~Observer()
     prefs->removeObserver(*this);
 }
 
-void Preferences::PrefNodeObserver::notifyAttributeChanged(XML::Node &node, GQuark name, Util::ptr_shared<char>, Util::ptr_shared<char> new_value)
+void Preferences::PrefNodeObserver::notifyAttributeChanged(XML::Node &node, GQuark name, Util::ptr_shared, Util::ptr_shared new_value)
 {
     // filter out attributes we don't watch
     gchar const *attr_name = g_quark_to_string(name);

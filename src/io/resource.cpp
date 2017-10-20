@@ -113,10 +113,10 @@ gchar *_get_path(Domain domain, Type type, char const *filename)
     return path;
 }
 
-Util::ptr_shared<char> get_path(Domain domain, Type type, char const *filename)
+Util::ptr_shared get_path(Domain domain, Type type, char const *filename)
 {
     char *path = _get_path(domain, type, filename);
-    Util::ptr_shared<char> result=Util::share_string(path);
+    Util::ptr_shared result=Util::share_string(path);
     g_free(path);
     return result;
 }
