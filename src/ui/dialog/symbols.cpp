@@ -839,7 +839,7 @@ void SymbolsDialog::find_symbols_overloaded() {
             found = true;
           }
           if (!found && symbol_desc_char) {
-            Glib::ustring symbol_desc = Glib::ustring(symbol_title_char).lowercase();
+            Glib::ustring symbol_desc = Glib::ustring(symbol_desc_char).lowercase();
             auto pos = symbol_desc.rfind(search_str);
             if (pos != std::string::npos) {
               found = true;
