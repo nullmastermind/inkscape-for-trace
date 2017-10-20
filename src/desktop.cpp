@@ -322,7 +322,6 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *aCanvas, Inkscape::UI::View::EditWid
     // canvas_debug = sp_canvas_item_new (main, SP_TYPE_CANVAS_DEBUG, NULL);
 }
 
-
 void SPDesktop::destroy()
 {
     _destroy_signal.emit(this);
@@ -331,6 +330,7 @@ void SPDesktop::destroy()
         delete snapindicator;
         snapindicator = NULL;
     }
+
     if (temporary_item_list) {
         delete temporary_item_list;
         temporary_item_list = NULL;
@@ -355,12 +355,6 @@ void SPDesktop::destroy()
     g_signal_handlers_disconnect_by_func(G_OBJECT (acetate), (gpointer) G_CALLBACK(sp_desktop_root_handler), this);
     g_signal_handlers_disconnect_by_func(G_OBJECT (main), (gpointer) G_CALLBACK(sp_desktop_root_handler), this);
     g_signal_handlers_disconnect_by_func(G_OBJECT (drawing), (gpointer) G_CALLBACK(_arena_handler), this);
-
-    if (event_context) {
-        event_context->finish();
-    	delete event_context;
-    	event_context = NULL;
-    }
 
     delete layers;
 
