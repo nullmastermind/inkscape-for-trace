@@ -110,8 +110,7 @@ static GtkTargetEntry *completeDropTargets = 0;
 static int completeDropTargetsCount = 0;
 static bool temporarily_block_actions = false;
 
-#define ENTRIES_SIZE(n) sizeof(n)/sizeof(n[0])
-static guint nui_drop_target_entries = ENTRIES_SIZE(ui_drop_target_entries);
+static guint nui_drop_target_entries = G_N_ELEMENTS(ui_drop_target_entries);
 static void sp_ui_import_files(gchar *buffer);
 static void sp_ui_import_one_file(char const *filename);
 static void sp_ui_import_one_file_with_check(gpointer filename, gpointer unused);

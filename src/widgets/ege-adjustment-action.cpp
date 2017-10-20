@@ -48,7 +48,6 @@
 #include <gtkmm/radiomenuitem.h>
 #include <gdk/gdkkeysyms.h>
 
-#include "icon-size.h"
 #include "widgets/ege-adjustment-action.h"
 #include "gimp/gimpspinscale.h"
 #include "ui/icon-names.h"

@@ -15,7 +15,6 @@
 
 #include <glibmm/ustring.h>
 
-#include "icon-size.h"
 #include "preferences.h"
 
 #define TOOLBAR_SLIDER_HINT "full"

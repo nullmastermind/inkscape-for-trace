@@ -18,7 +18,6 @@
 
 #include <gtk/gtk.h>
 #include <sigc++/connection.h>
-#include "icon-size.h"
 
 struct SPAction;
 

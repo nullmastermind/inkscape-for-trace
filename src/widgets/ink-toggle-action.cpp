@@ -51,9 +51,9 @@ static void ink_toggle_action_class_init( InkToggleActionClass* klass )
                                          g_param_spec_int( "iconSize",
                                                            "Icon Size",
                                                            "The size the icon",
-                                                           (int)Inkscape::ICON_SIZE_MENU,
+                                                           GTK_ICON_SIZE_MENU,
                                                            (int)99,
-                                                           (int)Inkscape::ICON_SIZE_SMALL_TOOLBAR,
+                                                           GTK_ICON_SIZE_SMALL_TOOLBAR,
                                                            (GParamFlags)(G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT) ) );
 
         g_type_class_add_private( klass, sizeof(InkToggleActionClass) );

@@ -2,7 +2,6 @@
 #define SEEN_INK_ACTION
 
 #include <gtk/gtk.h>
-#include "icon-size.h"
 #include "attributes.h"
 
 /* Equivalent to GTK Actions of the same type, but can support Inkscape SVG icons */

@@ -23,7 +23,6 @@
 #include <glibmm/i18n.h>
 
 #include "inkscape.h"
-#include "icon-size.h"
 #include "ui/clipboard.h"
 #include "svg/svg.h"
 #include "svg/stringstream.h"

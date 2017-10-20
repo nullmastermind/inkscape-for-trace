@@ -32,7 +32,6 @@
 #include "extension/input.h"
 #include "extension/db.h"
 #include "inkscape.h"
-#include "io/sys.h"
 #include "io/resource.h"
 #include "preferences.h"
 #include "script.h"
@@ -398,7 +397,7 @@ ScriptDocCache::ScriptDocCache (Inkscape::UI::View::View * view) :
     _tempfd(0)
 {
     try {
-        _tempfd = Inkscape::IO::file_open_tmp(_filename, "ink_ext_XXXXXX.svg");
+        _tempfd = Glib::file_open_tmp(_filename, "ink_ext_XXXXXX.svg");
     } catch (...) {
         /// \todo Popup dialog here
         return;
@@ -462,7 +461,7 @@ Gtk::Widget *Script::prefs_output(Inkscape::Extension::Output *module)
     \param   filename File to open.
 
     First things first, this function needs a temporary file name.  To
-    create on of those the function g_file_open_tmp is used with
+    create on of those the function Glib::file_open_tmp is used with
     the header of ink_ext_.
 
     The extension is then executed using the 'execute' function
@@ -483,7 +482,7 @@ SPDocument *Script::open(Inkscape::Extension::Input *module,
     std::string tempfilename_out;
     int tempfd_out = 0;
     try {
-        tempfd_out = Inkscape::IO::file_open_tmp(tempfilename_out, "ink_ext_XXXXXX.svg");
+        tempfd_out = Glib::file_open_tmp(tempfilename_out, "ink_ext_XXXXXX.svg");
     } catch (...) {
         /// \todo Popup dialog here
         return NULL;
@@ -513,7 +512,7 @@ SPDocument *Script::open(Inkscape::Extension::Input *module,
         mydoc->changeUriAndHrefs(filenameArg);
     }
 
-    // make sure we don't leak file descriptors from g_file_open_tmp
+    // make sure we don't leak file descriptors from Glib::file_open_tmp
     close(tempfd_out);
 
     unlink(tempfilename_out.c_str());
@@ -539,7 +538,7 @@ SPDocument *Script::open(Inkscape::Extension::Input *module,
     do that eh?
 
     First things first, the document is saved to a temporary file that
-    is an SVG file.  To get the temporary filename g_file_open_tmp is used with
+    is an SVG file.  To get the temporary filename Glib::file_open_tmp is used with
     ink_ext_ as a prefix.  Don't worry, this file gets deleted at the
     end of the function.
 
@@ -558,7 +557,7 @@ void Script::save(Inkscape::Extension::Output *module,
     std::string tempfilename_in;
     int tempfd_in = 0;
     try {
-        tempfd_in = Inkscape::IO::file_open_tmp(tempfilename_in, "ink_ext_XXXXXX.svg");
+        tempfd_in = Glib::file_open_tmp(tempfilename_in, "ink_ext_XXXXXX.svg");
     } catch (...) {
         /// \todo Popup dialog here
         throw Inkscape::Extension::Output::save_failed();
@@ -587,7 +586,7 @@ void Script::save(Inkscape::Extension::Output *module,
         success = fileout.toFile(lfilename);
     }
 
-    // make sure we don't leak file descriptors from g_file_open_tmp
+    // make sure we don't leak file descriptors from Glib::file_open_tmp
     close(tempfd_in);
     // FIXME: convert to utf8 (from "filename encoding") and unlink_utf8name
     unlink(tempfilename_in.c_str());
@@ -609,7 +608,7 @@ void Script::save(Inkscape::Extension::Output *module,
 
     This function is a little bit trickier than the previous two.  It
     needs two temporary files to get it's work done.  Both of these
-    files have random names created for them using the g_file_open_temp function
+    files have random names created for them using the Glib::file_open_temp function
     with the ink_ext_ prefix in the temporary directory.  Like the other
     functions, the temporary files are deleted at the end.
 
@@ -667,7 +666,7 @@ void Script::effect(Inkscape::Extension::Effect *module,
     std::string tempfilename_out;
     int tempfd_out = 0;
     try {
-        tempfd_out = Inkscape::IO::file_open_tmp(tempfilename_out, "ink_ext_XXXXXX.svg");
+        tempfd_out = Glib::file_open_tmp(tempfilename_out, "ink_ext_XXXXXX.svg");
     } catch (...) {
         /// \todo Popup dialog here
         return;
@@ -740,7 +739,7 @@ void Script::effect(Inkscape::Extension::Effect *module,
 
     pump_events();
 
-    // make sure we don't leak file descriptors from g_file_open_tmp
+    // make sure we don't leak file descriptors from Glib::file_open_tmp
     close(tempfd_out);
 
     g_unlink(tempfilename_out.c_str());
