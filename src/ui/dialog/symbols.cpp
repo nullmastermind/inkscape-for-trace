@@ -20,7 +20,7 @@
 #include <glibmm/regex.h>
 #include <glibmm/stringutils.h>
 #include <glibmm/markup.h>
-#include <glibmm/i18n.h>
+
 #include "path-prefix.h"
 #include "io/sys.h"
 #include "io/resource.h"
@@ -63,6 +63,7 @@
 
 #include "verbs.h"
 #include "helper/action.h"
+#include <glibmm/i18n.h>
 
 namespace Inkscape {
 namespace UI {
@@ -109,7 +110,7 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
 {
 
   /********************    Table    *************************/
-  auto table = new Gtk::Grid();
+  table = new Gtk::Grid();
 
   // panel is a cloked Gtk::VBox
   _getContents()->pack_start(*Gtk::manage(table), Gtk::PACK_EXPAND_WIDGET);
@@ -152,13 +153,12 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
           sigc::mem_fun(*this, &SymbolsDialog::iconChanged));
   instanceConns.push_back(connIconChanged);
 
-  Gtk::ScrolledWindow *scroller = new Gtk::ScrolledWindow();
+  scroller = new Gtk::ScrolledWindow();
   scroller->set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_ALWAYS);
   scroller->add(*Gtk::manage(iconView));
   scroller->set_hexpand();
   scroller->set_vexpand();
   table->attach(*Gtk::manage(scroller),0,row,2,1);
-
   ++row;
 
   /******************** Tools *******************************/
@@ -266,6 +266,14 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
 
   ++row;
 
+  /******************** Progress *******************************/
+  progress    = new Gtk::HBox();
+  progressbar = Gtk::manage(new Gtk::ProgressBar()); 
+  table->attach(*Gtk::manage(progress),0,row, 2, 1);
+  progress->pack_start(* progressbar, Gtk::PACK_EXPAND_WIDGET);
+  progress->set_margin_top(5);
+  ++row;
+
   /**********************************************************/
   sensitive = true;
   currentDesktop  = SP_ACTIVE_DESKTOP;
@@ -289,7 +297,6 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   sigc::connection documentReplacedConn = currentDesktop->connectDocumentReplaced(
           sigc::mem_fun(*this, &SymbolsDialog::documentReplaced));
   instanceConns.push_back(documentReplacedConn);
-
   get_symbols();
   add_symbols( currentDocument ); /* Defaults to current document */
 
@@ -619,6 +626,7 @@ void SymbolsDialog::get_symbols() {
 
     using namespace Inkscape::IO::Resource;
     Glib::ustring title;
+    number_docs = 0;
     for(auto &filename: get_filenames(SYMBOLS, {".svg", ".vss"})) {
         if(Glib::str_has_suffix(filename, ".svg")) {
             //TODO: find a way to get real title without loading all SPDocument
@@ -630,6 +638,7 @@ void SymbolsDialog::get_symbols() {
             }
             symbolSets[title]= NULL;
             symbolSet->append(title);
+            ++number_docs;
         }
 #ifdef WITH_LIBVISIO
         if(Glib::str_has_suffix(filename, ".vss")) {
@@ -641,6 +650,7 @@ void SymbolsDialog::get_symbols() {
             }
             symbolSets[title]= NULL;
             symbolSet->append(title);
+            ++number_docs;
         }
 #endif
     }
@@ -788,9 +798,9 @@ void SymbolsDialog::prepare_find_symbols(GdkEventKey* evt) {
   if (evt->keyval != GDK_KEY_Return) {
     return;
   }
+  progressbar->set_fraction(0.0);
   search_str = search->get_text().lowercase();
   search->set_text(_("Loading..."));
-  
 }
 
 void SymbolsDialog::find_symbols_overloaded() {
@@ -801,7 +811,9 @@ void SymbolsDialog::find_symbols_overloaded() {
   std::map<Glib::ustring, SPDocument*> symbolSetsCopy = symbolSets;
   bool icons_found = false;
   SPDocument* searchdoc;
+  size_t counter = 0;
   for(auto const &symbol_document_map : symbolSetsCopy) {
+    ++counter;
     SPDocument* symbol_document = symbol_document_map.second;
     Glib::ustring doc_title = symbol_document_map.first;
     if (!symbol_document) {
@@ -813,6 +825,8 @@ void SymbolsDialog::find_symbols_overloaded() {
       continue;
     }
     if (symbol_document) {
+      progressbar->set_fraction(((100.0/number_docs) * counter)/100.0);
+      progressbar->set_text(doc_title);
       std::vector<SPSymbol*> l = symbols_in_doc(symbol_document);
       for(auto symbol:l) {
         gchar const *symbol_title_char = symbol->title();
@@ -845,6 +859,7 @@ void SymbolsDialog::find_symbols_overloaded() {
   symbolSet->set_active_text(_("Search"));  
   search->set_text(search_str);
   symbolSetsCopy.clear();
+  progressbar->set_fraction(1.0);
 }
 
 void SymbolsDialog::add_symbol( SPObject* symbol, Glib::ustring doc_title) {

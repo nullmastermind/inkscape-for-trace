@@ -107,9 +107,13 @@ private:
     // Scale factor
     int scale_factor;
 
+    bool sensitive;
+    size_t number_docs;
+
     Glib::RefPtr<Gtk::ListStore> store;
     Gtk::ComboBoxText* symbolSet;
-    bool sensitive;
+    Gtk::ProgressBar* progressbar;
+    Gtk::HBox* progress;
     Gtk::SearchEntry* search;
     Glib::ustring search_str;
     Gtk::IconView* iconView;
@@ -117,6 +121,8 @@ private:
     Gtk::Button* removeSymbol;
     Gtk::Button* zoomIn;
     Gtk::Button* zoomOut;
+    Gtk::Grid* table;
+    Gtk::ScrolledWindow *scroller;
     Gtk::ToggleButton* fitSymbol;
 
     void setTargetDesktop(SPDesktop *desktop);
