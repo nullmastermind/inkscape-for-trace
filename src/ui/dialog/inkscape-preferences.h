@@ -328,6 +328,8 @@ protected:
     UI::Widget::PrefCheckButton _font_dialog;
     UI::Widget::PrefCombo       _font_unit_type;
     UI::Widget::PrefCheckButton _font_output_px;
+    UI::Widget::PrefCheckButton _font_fontsdir_system;
+    UI::Widget::PrefCheckButton _font_fontsdir_user;
 
     UI::Widget::PrefCheckButton _misc_comment;
     UI::Widget::PrefCheckButton _misc_default_metadata;

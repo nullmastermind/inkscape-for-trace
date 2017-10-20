@@ -47,6 +47,7 @@
 #include "inkscape.h"
 #include "io/sys.h"
 #include "io/resource.h"
+#include "libnrtype/FontFactory.h"
 #include "message-stack.h"
 #include "path-prefix.h"
 #include "resource-manager.h"
@@ -429,6 +430,7 @@ Application::Application(const char* argv, bool use_gui) :
     _trackalt(FALSE),
     _use_gui(use_gui)
 {
+    using namespace Inkscape::IO::Resource;
     /* fixme: load application defaults */
 
     segv_handler = signal (SIGSEGV, Application::crash_handler);
@@ -499,6 +501,17 @@ Application::Application(const char* argv, bool use_gui) :
     Inkscape::Extension::init();
 
     autosave_init();
+    
+    /* Initialize font factory */
+    font_factory *factory = font_factory::Default();
+    if (prefs->getBool("/options/font/use_fontsdir_system", true)) {
+        char const *fontsdir = get_path(SYSTEM, FONTS);
+        factory->AddFontsDir(fontsdir);
+    }
+    if (prefs->getBool("/options/font/use_fontsdir_user", true)) {
+        char const *fontsdir = get_path(USER, FONTS);
+        factory->AddFontsDir(fontsdir);
+    }
 }
 
 Application::~Application()
