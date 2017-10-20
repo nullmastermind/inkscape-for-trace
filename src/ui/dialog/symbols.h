@@ -76,7 +76,6 @@ private:
     void selectionChanged(Inkscape::Selection *selection);
     void documentReplaced(SPDesktop *desktop, SPDocument *document);
     SPDocument* selectedSymbols(bool ignorecurrent = false);
-    void update_search_box(gpointer data);
     Glib::ustring selectedSymbolId();
     Glib::ustring selectedSymbolDocTitle();
     void iconChanged();
@@ -93,7 +92,8 @@ private:
     void use_in_doc_recursive(SPObject *r, std::vector<SPUse*> &l);
     std::vector<SPUse*> use_in_doc( SPDocument* document);
     void find_symbols(GdkEventKey* evt);
-    void find_symbols_overload();
+    void prepare_find_symbols(GdkEventKey* evt);
+    void find_symbols_overloaded();
     gchar const* style_from_use( gchar const* id, SPDocument* document);
 
     Glib::RefPtr<Gdk::Pixbuf> draw_symbol(SPObject *symbol);
@@ -110,8 +110,8 @@ private:
     Glib::RefPtr<Gtk::ListStore> store;
     Gtk::ComboBoxText* symbolSet;
     bool sensitive;
-    bool finded;
     Gtk::SearchEntry* search;
+    Glib::ustring search_str;
     Gtk::IconView* iconView;
     Gtk::Button* addSymbol;
     Gtk::Button* removeSymbol;
