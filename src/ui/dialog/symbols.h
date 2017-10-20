@@ -91,9 +91,9 @@ private:
     std::vector<SPSymbol*> symbols_in_doc( SPDocument* document);
     void use_in_doc_recursive(SPObject *r, std::vector<SPUse*> &l);
     std::vector<SPUse*> use_in_doc( SPDocument* document);
-    void find_symbols(GdkEventKey* evt);
     void prepare_find_symbols(GdkEventKey* evt);
-    void find_symbols_overloaded();
+    void find_symbols();
+    bool parse_documents();
     gchar const* style_from_use( gchar const* id, SPDocument* document);
 
     Glib::RefPtr<Gdk::Pixbuf> draw_symbol(SPObject *symbol);
@@ -108,6 +108,9 @@ private:
     int scale_factor;
 
     bool sensitive;
+    
+    bool processed;
+    
     size_t number_docs;
 
     Glib::RefPtr<Gtk::ListStore> store;

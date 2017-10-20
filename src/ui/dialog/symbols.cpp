@@ -198,7 +198,6 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   tools->pack_start(* search, Gtk::PACK_SHRINK);
 
   search->signal_key_press_event().connect_notify(sigc::mem_fun(*this, &SymbolsDialog::prepare_find_symbols));
-  search->signal_key_release_event().connect_notify(sigc::mem_fun(*this, &SymbolsDialog::find_symbols));
 
   // Pack size (controls display area)
   pack_size = 2; // Default 32px
@@ -276,6 +275,8 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
 
   /**********************************************************/
   sensitive = true;
+  processed = false;
+  search_str = "";
   currentDesktop  = SP_ACTIVE_DESKTOP;
   currentDocument = currentDesktop->getDocument();
 
@@ -303,7 +304,7 @@ SymbolsDialog::SymbolsDialog( gchar const* prefsPath ) :
   sigc::connection desktopChangeConn =
     deskTrack.connectDesktopChanged( sigc::mem_fun(*this, &SymbolsDialog::setTargetDesktop) );
   instanceConns.push_back( desktopChangeConn );
-
+  Glib::signal_idle().connect( sigc::mem_fun(*this, &SymbolsDialog::parse_documents) );
   deskTrack.connect(GTK_WIDGET(gobj()));
 }
 
@@ -375,7 +376,7 @@ void SymbolsDialog::rebuild() {
     removeSymbol->set_sensitive( false );
   }
   if (symbolSet->get_active_text() == "Search") {
-    find_symbols_overloaded();
+    find_symbols();
   } else {
     add_symbols( symbol_document );
   }
@@ -787,68 +788,76 @@ void SymbolsDialog::add_symbols( SPDocument* symbol_document ) {
   }
 }
 
-void SymbolsDialog::find_symbols(GdkEventKey* evt) {
-  if (evt->keyval != GDK_KEY_Return) {
-    return;
-  }
-  find_symbols_overloaded();
-}
-
 void SymbolsDialog::prepare_find_symbols(GdkEventKey* evt) {
   if (evt->keyval != GDK_KEY_Return) {
     return;
   }
   progressbar->set_fraction(0.0);
   search_str = search->get_text().lowercase();
-  search->set_text(_("Loading..."));
+  search->set_text(_("Searching..."));
+  if(processed) {
+    find_symbols();
+  }
 }
 
-void SymbolsDialog::find_symbols_overloaded() {
-  if (search_str.empty()) {
-    return;
+bool SymbolsDialog::parse_documents(){
+  if (search->get_text() != _("Searching...")) {
+      return true;
   }
-  store->clear();
-  std::map<Glib::ustring, SPDocument*> symbolSetsCopy = symbolSets;
+  size_t counter = 0;
+  for(auto const &symbol_document_map : symbolSets) {
+    ++counter;
+    SPDocument* symbol_document = symbol_document_map.second;
+    if (symbol_document) {
+      continue;
+    }
+    get_symbols(symbol_document_map.first);
+    progressbar->set_fraction(((100.0/number_docs) * counter)/100.0);
+    return true;
+  }
+  find_symbols();
+  processed = true;
+  progressbar->set_fraction(1.0);
+  return false;
+}
+
+void SymbolsDialog::find_symbols() {
   bool icons_found = false;
   SPDocument* searchdoc;
   size_t counter = 0;
-  for(auto const &symbol_document_map : symbolSetsCopy) {
+  store->clear();
+  for(auto const &symbol_document_map : symbolSets) {
     ++counter;
     SPDocument* symbol_document = symbol_document_map.second;
-    Glib::ustring doc_title = symbol_document_map.first;
     if (!symbol_document) {
-      doc_title = get_symbols(symbol_document_map.first);
-      symbol_document = symbolSets[doc_title];
+      return;
     }
+    Glib::ustring doc_title = symbol_document_map.first;
     if (doc_title == "Search") {
       searchdoc = symbol_document;
       continue;
     }
-    if (symbol_document) {
-      progressbar->set_fraction(((100.0/number_docs) * counter)/100.0);
-      progressbar->set_text(doc_title);
-      std::vector<SPSymbol*> l = symbols_in_doc(symbol_document);
-      for(auto symbol:l) {
-        gchar const *symbol_title_char = symbol->title();
-        gchar const *symbol_desc_char = symbol->description();
-        if (symbol_title_char) {
-          bool found = false;
-          Glib::ustring symbol_title = Glib::ustring(symbol_title_char).lowercase();
-          auto pos = symbol_title.rfind(search_str);
+    std::vector<SPSymbol*> l = symbols_in_doc(symbol_document);
+    for(auto symbol:l) {
+      gchar const *symbol_title_char = symbol->title();
+      gchar const *symbol_desc_char = symbol->description();
+      if (symbol_title_char) {
+        bool found = false;
+        Glib::ustring symbol_title = Glib::ustring(symbol_title_char).lowercase();
+        auto pos = symbol_title.rfind(search_str);
+        if (pos != std::string::npos) {
+          found = true;
+        }
+        if (!found && symbol_desc_char) {
+          Glib::ustring symbol_desc = Glib::ustring(symbol_desc_char).lowercase();
+          auto pos = symbol_desc.rfind(search_str);
           if (pos != std::string::npos) {
             found = true;
           }
-          if (!found && symbol_desc_char) {
-            Glib::ustring symbol_desc = Glib::ustring(symbol_desc_char).lowercase();
-            auto pos = symbol_desc.rfind(search_str);
-            if (pos != std::string::npos) {
-              found = true;
-            }
-          }
-          if (symbol && (search_str == "*" || found)) {
-            add_symbol( symbol, doc_title);
-            icons_found = true;
-          }
+        }
+        if (symbol && (search_str == "*" || found)) {
+          add_symbol( symbol, doc_title);
+          icons_found = true;
         }
       }
     }
@@ -858,8 +867,7 @@ void SymbolsDialog::find_symbols_overloaded() {
   }
   symbolSet->set_active_text(_("Search"));  
   search->set_text(search_str);
-  symbolSetsCopy.clear();
-  progressbar->set_fraction(1.0);
+  dynamic_cast<Gtk::Widget *>(progress)->hide();
 }
 
 void SymbolsDialog::add_symbol( SPObject* symbol, Glib::ustring doc_title) {
