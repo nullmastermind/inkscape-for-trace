@@ -199,7 +199,7 @@ typedef Debug::SimpleEvent<Debug::Event::REFCOUNT> BaseRefCountEvent;
 
 class RefCountEvent : public BaseRefCountEvent {
 public:
-    RefCountEvent(SPObject *object, int bias, Util::ptr_shared<char> name)
+    RefCountEvent(SPObject *object, int bias, Util::ptr_shared name)
     : BaseRefCountEvent(name)
     {
         _addProperty("object", Util::format("%p", object));

@@ -12,7 +12,6 @@
 #include <sigc++/signal.h>
 
 #include "live_effects/parameter/parameter.h"
-#include "icon-size.h"
 #include "ui/widget/registered-widget.h"
 
 namespace Inkscape {

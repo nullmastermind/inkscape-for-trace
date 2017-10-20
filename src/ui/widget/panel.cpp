@@ -24,7 +24,6 @@
 #include <glibmm/i18n.h>
 
 #include "panel.h"
-#include "icon-size.h"
 #include "preferences.h"
 #include "desktop.h"
 

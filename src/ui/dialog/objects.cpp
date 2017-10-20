@@ -148,8 +148,8 @@ public:
             _pnl->_objectsChanged( _obj );
         }
     }
-    virtual void notifyContentChanged( Node &/*node*/, Util::ptr_shared<char> /*old_content*/, Util::ptr_shared<char> /*new_content*/ ) {}
-    virtual void notifyAttributeChanged( Node &/*node*/, GQuark name, Util::ptr_shared<char> /*old_value*/, Util::ptr_shared<char> /*new_value*/ ) {
+    virtual void notifyContentChanged( Node &/*node*/, Util::ptr_shared /*old_content*/, Util::ptr_shared /*new_content*/ ) {}
+    virtual void notifyAttributeChanged( Node &/*node*/, GQuark name, Util::ptr_shared /*old_value*/, Util::ptr_shared /*new_value*/ ) {
         if ( _pnl && _obj ) {
             if ( name == _lockedAttr || name == _labelAttr || name == _highlightAttr || name == _groupAttr || name == _styleAttr || name == _clipAttr || name == _maskAttr ) {
                 _pnl->_updateObject(_obj, name == _highlightAttr);

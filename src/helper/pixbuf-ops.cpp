@@ -15,7 +15,6 @@
 #include <config.h>
 #endif
 
-#include <boost/scoped_ptr.hpp>
 #include <2geom/transforms.h>
 
 #include "ui/interface.h"
@@ -67,7 +66,7 @@ bool sp_export_jpg_file(SPDocument *doc, gchar const *filename,
                         unsigned width, unsigned height, double xdpi, double ydpi,
                         unsigned long bgcolor, double quality, SPItem* item)
 {
-    boost::scoped_ptr<Inkscape::Pixbuf> pixbuf(
+    std::unique_ptr<Inkscape::Pixbuf> pixbuf(
         sp_generate_internal_bitmap(doc, filename, x0, y0, x1, y1,
             width, height, xdpi, ydpi, bgcolor, item));
 

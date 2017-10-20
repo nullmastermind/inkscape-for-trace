@@ -4,7 +4,6 @@
 #include <gtk/gtk.h>
 
 #include "attributes.h"
-#include "icon-size.h"
 
 G_BEGIN_DECLS
 #define INK_TOGGLE_ACTION_TYPE                ( ink_toggle_action_get_type() )

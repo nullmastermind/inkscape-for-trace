@@ -12,7 +12,6 @@
 #ifndef SEEN_INKSCAPE_DISPLAY_DRAWING_SURFACE_H
 #define SEEN_INKSCAPE_DISPLAY_DRAWING_SURFACE_H
 
-#include <boost/shared_ptr.hpp>
 #include <cairo.h>
 #include <2geom/affine.h>
 #include <2geom/rect.h>

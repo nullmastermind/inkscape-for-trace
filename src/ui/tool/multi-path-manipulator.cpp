@@ -10,7 +10,6 @@
  * Released under GNU GPL, read the file 'COPYING' for more information
  */
 
-#include <boost/shared_ptr.hpp>
 #include "node.h"
 #include <glibmm/i18n.h>
 #include "desktop.h"
@@ -161,7 +160,7 @@ void MultiPathManipulator::setItems(std::set<ShapeRecord> const &s)
             if (sr.edit_transform != sr_new.edit_transform ||
                 sr.role != sr_new.role)
             {
-                boost::shared_ptr<PathManipulator> hold(i->second);
+                std::shared_ptr<PathManipulator> hold(i->second);
                 if (sr.edit_transform != sr_new.edit_transform)
                     hold->setControlsTransform(sr_new.edit_transform);
                 if (sr.role != sr_new.role) {
@@ -179,7 +178,7 @@ void MultiPathManipulator::setItems(std::set<ShapeRecord> const &s)
     for (std::set<ShapeRecord>::iterator i = shapes.begin(); i != shapes.end(); ++i) {
         ShapeRecord const &r = *i;
         if (!SP_IS_PATH(r.item) && !IS_LIVEPATHEFFECT(r.item)) continue;
-        boost::shared_ptr<PathManipulator> newpm(new PathManipulator(*this, (SPPath*) r.item,
+        std::shared_ptr<PathManipulator> newpm(new PathManipulator(*this, (SPPath*) r.item,
             r.edit_transform, _getOutlineColor(r.role, r.item), r.lpe_key));
         newpm->showHandles(_show_handles);
         // always show outlines for clips and masks

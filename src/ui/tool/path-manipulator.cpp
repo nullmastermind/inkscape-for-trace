@@ -68,7 +68,7 @@ public:
     }
 
     virtual void notifyAttributeChanged(Inkscape::XML::Node &/*node*/, GQuark attr,
-        Util::ptr_shared<char>, Util::ptr_shared<char>)
+        Util::ptr_shared, Util::ptr_shared)
     {
         // do nothing if blocked
         if (_blocked) return;

@@ -40,8 +40,8 @@ public:
     virtual void notifyChildAdded( Node &/*node*/, Node &/*child*/, Node */*prev*/ ) {}
     virtual void notifyChildRemoved( Node &/*node*/, Node &/*child*/, Node */*prev*/ ) {}
     virtual void notifyChildOrderChanged( Node &/*node*/, Node &/*child*/, Node */*old_prev*/, Node */*new_prev*/ ) {}
-    virtual void notifyContentChanged( Node &/*node*/, Util::ptr_shared<char> /*old_content*/, Util::ptr_shared<char> /*new_content*/ ) {}
-    virtual void notifyAttributeChanged( Node &/*node*/, GQuark name, Util::ptr_shared<char> /*old_value*/, Util::ptr_shared<char> /*new_value*/ ) {
+    virtual void notifyContentChanged( Node &/*node*/, Util::ptr_shared /*old_content*/, Util::ptr_shared /*new_content*/ ) {}
+    virtual void notifyAttributeChanged( Node &/*node*/, GQuark name, Util::ptr_shared /*old_value*/, Util::ptr_shared /*new_value*/ ) {
         if ( name == _lockedAttr || name == _labelAttr ) {
             if ( _mgr && _obj ) {
                 _mgr->_objectModified( _obj, 0 );
@@ -59,9 +59,9 @@ public:
 /*
 namespace {
 
-Util::ptr_shared<char> stringify_node(Node const &node);
+Util::ptr_shared stringify_node(Node const &node);
 
-Util::ptr_shared<char> stringify_obj(SPObject const &obj) {
+Util::ptr_shared stringify_obj(SPObject const &obj) {
     gchar *string;
 
     if (obj.id) {
@@ -70,7 +70,7 @@ Util::ptr_shared<char> stringify_obj(SPObject const &obj) {
         string = g_strdup_printf("SPObject(%p) repr(%p)", &obj, obj.repr);
     }
 
-    Util::ptr_shared<char> result=Util::share_string(string);
+    Util::ptr_shared result=Util::share_string(string);
     g_free(string);
     return result;
 
@@ -80,7 +80,7 @@ typedef Debug::SimpleEvent<Debug::Event::OTHER> DebugLayer;
 
 class DebugLayerNote : public DebugLayer {
 public:
-    DebugLayerNote(Util::ptr_shared<char> descr)
+    DebugLayerNote(Util::ptr_shared descr)
         : DebugLayer(Util::share_static_string("layer-note"))
     {
         _addProperty("descr", descr);
@@ -97,7 +97,7 @@ public:
 
 class DebugLayerObj : public DebugLayer {
 public:
-    DebugLayerObj(SPObject const& obj, Util::ptr_shared<char> name)
+    DebugLayerObj(SPObject const& obj, Util::ptr_shared name)
         : DebugLayer(name)
     {
         _addProperty("layer", stringify_obj(obj));
