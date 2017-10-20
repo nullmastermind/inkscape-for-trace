@@ -157,7 +157,7 @@ tools_switch(SPDesktop *dt, int num)
         dt->_tool_changed.emit(num);
     }
 
-    dt->set_event_context2(tool_names[num]);
+    dt->setEventContext(tool_names[num]);
     /* fixme: This is really ugly hack. We should bind and unbind class methods */
     /* First 4 tools use guides, first is undefined but we don't care */
     dt->activate_guides(num < 5);

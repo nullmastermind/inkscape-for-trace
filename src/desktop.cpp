@@ -228,7 +228,7 @@ SPDesktop::init (SPNamedView *nv, SPCanvas *aCanvas, Inkscape::UI::View::EditWid
     controls  = (SPCanvasGroup *) sp_canvas_item_new (main, SP_TYPE_CANVAS_GROUP, NULL);
 
     // Set the select tool as the active tool.
-    set_event_context2("/tools/select");
+    setEventContext("/tools/select");
 
     // display rect and zoom are now handled in sp_desktop_widget_realize()
 
@@ -656,34 +656,34 @@ SPDesktop::change_document (SPDocument *theDocument)
 }
 
 /**
- * Replaces the currently active tool with a new one.
+ * Replaces the currently active tool with a new one. Pass the empty string to
+ * unset and free the current tool.
  */
-void SPDesktop::set_event_context2(const std::string& toolName)
+void SPDesktop::setEventContext(const std::string& toolName)
 {
-    Inkscape::UI::Tools::ToolBase* old_tool = event_context;
-
-    if (old_tool) {
-        if (toolName.compare(old_tool->pref_observer->observed_path) != 0) {
-            //g_message("Old tool: %s", old_tool->pref_observer->observed_path.c_str());
-            //g_message("New tool: %s", toolName.c_str());
-            old_tool->finish();
-            delete old_tool;
+    if (event_context) {
+        if (toolName.compare(event_context->pref_observer->observed_path) != 0) {
+            event_context->finish();
+            delete event_context;
         } else {
             _event_context_changed_signal.emit(this, event_context);
             return;
         }
     }
-    
-    Inkscape::UI::Tools::ToolBase* new_tool = ToolFactory::createObject(toolName);
-    new_tool->desktop = this;
-    new_tool->message_context = new Inkscape::MessageContext(this->messageStack());
-    event_context = new_tool;
-    new_tool->setup();
 
-    // Make sure no delayed snapping events are carried over after switching tools
-    // (this is only an additional safety measure against sloppy coding, because each
-    // tool should take care of this by itself)
-    sp_event_context_discard_delayed_snap_event(event_context);
+    if (toolName.empty()) {
+        event_context = nullptr;
+    } else {
+        event_context = ToolFactory::createObject(toolName);
+        event_context->desktop = this;
+        event_context->message_context = new Inkscape::MessageContext(this->messageStack());
+        event_context->setup();
+
+        // Make sure no delayed snapping events are carried over after switching tools
+        // (this is only an additional safety measure against sloppy coding, because each
+        // tool should take care of this by itself)
+        sp_event_context_discard_delayed_snap_event(event_context);
+    }
 
     _event_context_changed_signal.emit(this, event_context);
 }

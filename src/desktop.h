@@ -310,10 +310,7 @@ public:
     void change_document (SPDocument *document);
 
 
-    void set_event_context2(const std::string& toolName);
-
-    //void set_event_context (GType type, const gchar *config);
-    //void push_event_context (GType type, const gchar *config, unsigned int key);
+    void setEventContext(const std::string& toolName);
 
     void set_coordinate_status (Geom::Point p);
     SPItem *getItemFromListAtPointBottom(const std::vector<SPItem*> &list, Geom::Point const &p) const;
