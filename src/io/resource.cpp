@@ -52,6 +52,7 @@ gchar *_get_path(Domain domain, Type type, char const *filename)
                 case APPICONS: temp = INKSCAPE_APPICONDIR; break;
                 case EXTENSIONS: temp = INKSCAPE_EXTENSIONDIR; break;
                 case FILTERS: temp = INKSCAPE_FILTERDIR; break;
+                case FONTS: temp = INKSCAPE_FONTSDIR; break;
                 case GRADIENTS: temp = INKSCAPE_GRADIENTSDIR; break;
                 case ICONS: temp = INKSCAPE_PIXMAPDIR; break;
                 case KEYS: temp = INKSCAPE_KEYSDIR; break;
@@ -87,6 +88,7 @@ gchar *_get_path(Domain domain, Type type, char const *filename)
             switch (type) {
                 case EXTENSIONS: name = "extensions"; break;
                 case FILTERS: name = "filters"; break;
+                case FONTS: name = "fonts"; break;
                 case GRADIENTS: name = "gradients"; break;
                 case ICONS: name = "icons"; break;
                 case KEYS: name = "keys"; break;
