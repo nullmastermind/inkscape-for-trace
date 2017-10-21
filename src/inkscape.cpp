@@ -23,6 +23,7 @@
 #include <map>
 
 #include <glibmm/fileutils.h>
+#include <glibmm/regex.h>
 
 #include <gtkmm/cssprovider.h>
 #include <gtkmm/icontheme.h>
@@ -511,6 +512,11 @@ Application::Application(const char* argv, bool use_gui) :
     if (prefs->getBool("/options/font/use_fontsdir_user", true)) {
         char const *fontsdir = get_path(USER, FONTS);
         factory->AddFontsDir(fontsdir);
+    }
+    Glib::ustring fontdirs_pref = prefs->getString("/options/font/custom_fontdirs");
+    std::vector<Glib::ustring> fontdirs = Glib::Regex::split_simple("\\|", fontdirs_pref);
+    for (auto &fontdir : fontdirs) {
+        factory->AddFontsDir(fontdir.c_str());
     }
 }
 

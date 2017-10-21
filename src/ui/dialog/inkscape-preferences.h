@@ -330,6 +330,7 @@ protected:
     UI::Widget::PrefCheckButton _font_output_px;
     UI::Widget::PrefCheckButton _font_fontsdir_system;
     UI::Widget::PrefCheckButton _font_fontsdir_user;
+    UI::Widget::PrefMultiEntry  _font_fontdirs_custom;
 
     UI::Widget::PrefCheckButton _misc_comment;
     UI::Widget::PrefCheckButton _misc_default_metadata;

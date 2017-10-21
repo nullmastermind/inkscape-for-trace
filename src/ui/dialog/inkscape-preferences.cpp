@@ -470,6 +470,9 @@ void InkscapePreferences::initPageTools()
     _page_text.add_line( true, "", _font_fontsdir_system, "", _("Load additional fonts from \"fonts\" directory located in Inkscape's global \"share\" directory"));
     _font_fontsdir_user.init( _("Use user's fonts directory"), "/options/font/use_fontsdir_user", true);
     _page_text.add_line( true, "", _font_fontsdir_user, "", _("Load additional fonts from \"fonts\" directory located in Inkscape's user configuration directory"));
+    _font_fontdirs_custom.init("/options/font/custom_fontdirs", 50);
+    _page_text.add_line(true, _("Additional font directories"), _font_fontdirs_custom, "", _("Load additional fonts from custom locations (one path per line)"), true);
+    
 
     this->AddNewObjectsStyle(_page_text, "/tools/text");
 
