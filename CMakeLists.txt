@@ -13,12 +13,6 @@ include(CMakeScripts/ConfigPaths.cmake)
 # -----------------------------------------------------------------------------
 # CMake Configuration
 # -----------------------------------------------------------------------------
-#Sometimes we need to force refresh resources update putting one new file reconfigure CMake
-#https://cmake.org/pipermail/cmake/2010-November/041072.html
-SET_SOURCE_FILES_PROPERTIES(
-      main.cpp PROPERTIES OBJECT_DEPENDS
-      ${CMAKE_CURRENT_SOURCE_DIR}/share/symbols/search.svg
-)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMakeScripts/Modules")
 

@@ -355,6 +355,7 @@ void SymbolsDialog::rebuild() {
   if (!sensitive) {
     return;
   }
+
   if( fitSymbol->get_active() ) {
     zoomIn->set_sensitive( false );
     zoomOut->set_sensitive( false );
@@ -789,19 +790,23 @@ void SymbolsDialog::add_symbols( SPDocument* symbol_document ) {
 }
 
 void SymbolsDialog::prepare_find_symbols(GdkEventKey* evt) {
-  if (evt->keyval != GDK_KEY_Return) {
+  search_str = search->get_text().lowercase();
+  if (evt->keyval != GDK_KEY_Return || search_str.empty()) {
     return;
   }
   progressbar->set_fraction(0.0);
-  search_str = search->get_text().lowercase();
   search->set_text(_("Searching..."));
+  search->set_sensitive(false);
   if(processed) {
     find_symbols();
+  } else {
+    dynamic_cast<Gtk::Widget *>(progressbar)->set_visible(true);
   }
 }
 
 bool SymbolsDialog::parse_documents(){
   if (search->get_text() != _("Searching...")) {
+      dynamic_cast<Gtk::Widget *>(progressbar)->set_visible(false);
       return true;
   }
   size_t counter = 0;
@@ -867,7 +872,8 @@ void SymbolsDialog::find_symbols() {
   }
   symbolSet->set_active_text(_("Search"));  
   search->set_text(search_str);
-  dynamic_cast<Gtk::Widget *>(progress)->hide();
+  search->set_sensitive(true);
+  dynamic_cast<Gtk::Widget *>(progressbar)->set_visible(false);
 }
 
 void SymbolsDialog::add_symbol( SPObject* symbol, Glib::ustring doc_title) {
@@ -1010,7 +1016,6 @@ SPDocument* SymbolsDialog::symbols_preview_doc()
 "  </defs>"
 "  <use id=\"the_use\" xlink:href=\"#the_symbol\"/>"
 "</svg>";
-
   return SPDocument::createNewDocFromMem( buffer, strlen(buffer), FALSE );
 }
 
