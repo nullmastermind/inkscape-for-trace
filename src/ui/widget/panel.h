@@ -70,7 +70,7 @@ public:
      * @param verb_num the dialog verb.
      */
     Panel(Glib::ustring const &label = "", gchar const *prefs_path = 0,
-          int verb_num = 0, Glib::ustring const &apply_label = "",
+          int verb_num = 0,
           bool menu_desired = false);
 
     virtual ~Panel();
@@ -83,7 +83,6 @@ public:
     void setLabel(Glib::ustring const &label);
     Glib::ustring const &getLabel() const;
     int const &getVerb() const;
-    Glib::ustring const &getApplyLabel() const;
 
     virtual void setOrientation(SPAnchorType how);
 
@@ -150,7 +149,6 @@ private:
     SPDesktop       *_desktop;
 
     Glib::ustring    _label;
-    Glib::ustring    _apply_label;
     int              _verb_num;
 
     Gtk::HBox        _top_bar;

@@ -56,13 +56,12 @@ void Panel::prep() {
 }
 
 Panel::Panel(Glib::ustring const &label, gchar const *prefs_path,
-             int verb_num, Glib::ustring const &apply_label,
+             int verb_num,
              bool menu_desired) :
     _prefs_path(prefs_path),
     _menu_desired(menu_desired),
     _desktop(SP_ACTIVE_DESKTOP),
     _label(label),
-    _apply_label(apply_label),
     _verb_num(verb_num),
     _temp_arrow(),
     _menu(0),
@@ -541,11 +540,6 @@ Glib::ustring const &Panel::getLabel() const
 int const &Panel::getVerb() const
 {
     return _verb_num;
-}
-
-Glib::ustring const &Panel::getApplyLabel() const
-{
-    return _apply_label;
 }
 
 void Panel::setDesktop(SPDesktop *desktop)

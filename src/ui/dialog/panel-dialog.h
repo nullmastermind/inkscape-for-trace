@@ -39,8 +39,7 @@ namespace Dialog {
  */
 class PanelDialogBase {
 public:
-    PanelDialogBase(UI::Widget::Panel &panel, char const */*prefs_path*/, int const /*verb_num*/,
-                    Glib::ustring const &/*apply_label*/) :
+    PanelDialogBase(UI::Widget::Panel &panel, char const */*prefs_path*/, int const /*verb_num*/) :
       _panel (panel) { }
 
     virtual void present() = 0;
@@ -77,8 +76,7 @@ public:
      * @param prefs_path characteristic path for loading/saving dialog position.
      * @param verb_num the dialog verb.
      */
-    PanelDialog(UI::Widget::Panel &contents, char const *prefs_path, int const verb_num,
-                Glib::ustring const &apply_label);
+    PanelDialog(UI::Widget::Panel &contents, char const *prefs_path, int const verb_num);
 
     virtual ~PanelDialog() {}
 
@@ -101,8 +99,7 @@ class PanelDialog<Behavior::FloatingBehavior> :
         public PanelDialogBase, public Inkscape::UI::Dialog::Dialog {
 
 public:
-    inline PanelDialog(UI::Widget::Panel &contents, char const *prefs_path, int const verb_num,
-                       Glib::ustring const &apply_label);
+    inline PanelDialog(UI::Widget::Panel &contents, char const *prefs_path, int const verb_num);
 
     virtual ~PanelDialog() {}
 
@@ -140,10 +137,9 @@ void PanelDialogBase::_propagateDesktopDeactivated(SPDesktop *desktop)
 
 
 template <typename B>
-PanelDialog<B>::PanelDialog(Widget::Panel &panel, char const *prefs_path, int const verb_num,
-                            Glib::ustring const &apply_label) :
-    PanelDialogBase(panel, prefs_path, verb_num, apply_label),
-    Dialog(&B::create, prefs_path, verb_num, apply_label)
+PanelDialog<B>::PanelDialog(Widget::Panel &panel, char const *prefs_path, int const verb_num) :
+    PanelDialogBase(panel, prefs_path, verb_num),
+    Dialog(&B::create, prefs_path, verb_num)
 {
     Gtk::Box *vbox = get_vbox();
     _panel.signalResponse().connect(sigc::mem_fun(*this, &PanelDialog::_handleResponse));
@@ -159,12 +155,8 @@ PanelDialog<B>::PanelDialog(Widget::Panel &panel, char const *prefs_path, int co
         desktop->connectDocumentReplaced(sigc::mem_fun(*this, &PanelDialog::_propagateDocumentReplaced));
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if (prefs->getBool("/dialogs/showclose") || !apply_label.empty()) {
+    if (prefs->getBool("/dialogs/showclose")) {
         // TODO: make the order of buttons obey the global preference
-        if (!apply_label.empty()) {
-            panel.addResponseButton(apply_label, Gtk::RESPONSE_APPLY);
-            panel.setDefaultResponse(Gtk::RESPONSE_APPLY);
-        }
         panel.addResponseButton(_("_Close"), Gtk::RESPONSE_CLOSE);
     }
 
@@ -175,7 +167,7 @@ template <typename B> template <typename P>
 PanelDialog<B> *PanelDialog<B>::create()
 {
     UI::Widget::Panel &panel = P::getInstance();
-    return new PanelDialog<B>(panel, panel.getPrefsPath(), panel.getVerb(), panel.getApplyLabel());
+    return new PanelDialog<B>(panel, panel.getPrefsPath(), panel.getVerb());
 }
 
 template <typename B>
@@ -191,9 +183,9 @@ void PanelDialog<B>::_presentDialog()
 }
 
 PanelDialog<Behavior::FloatingBehavior>::PanelDialog(UI::Widget::Panel &panel, char const *prefs_path,
-                                                     int const verb_num, Glib::ustring const &apply_label) :
-    PanelDialogBase(panel, prefs_path, verb_num, apply_label),
-    Dialog(&Behavior::FloatingBehavior::create, prefs_path, verb_num, apply_label)
+                                                     int const verb_num) :
+    PanelDialogBase(panel, prefs_path, verb_num),
+    Dialog(&Behavior::FloatingBehavior::create, prefs_path, verb_num)
 {
     Gtk::Box *vbox = get_vbox();
     _panel.signalResponse().connect(sigc::mem_fun(*this, &PanelDialog::_handleResponse));
@@ -208,12 +200,8 @@ PanelDialog<Behavior::FloatingBehavior>::PanelDialog(UI::Widget::Panel &panel, c
         desktop->connectDocumentReplaced(sigc::mem_fun(*this, &PanelDialog::_propagateDocumentReplaced));
 
     Inkscape::Preferences *prefs = Inkscape::Preferences::get();
-    if (prefs->getBool("/dialogs/showclose") || !apply_label.empty()) {
+    if (prefs->getBool("/dialogs/showclose")) {
         // TODO: make the order of buttons obey the global preference
-        if (!apply_label.empty()) {
-            panel.addResponseButton(apply_label, Gtk::RESPONSE_APPLY);
-            panel.setDefaultResponse(Gtk::RESPONSE_APPLY);
-        }
         panel.addResponseButton(_("_Close"), Gtk::RESPONSE_CLOSE);
     }
 
@@ -235,8 +223,7 @@ PanelDialog<Behavior::FloatingBehavior> *PanelDialog<Behavior::FloatingBehavior>
 {
     UI::Widget::Panel &panel = P::getInstance();
     PanelDialog<Behavior::FloatingBehavior> *instance =
-        new PanelDialog<Behavior::FloatingBehavior>(panel, panel.getPrefsPath(),
-                                                    panel.getVerb(), panel.getApplyLabel());
+        new PanelDialog<Behavior::FloatingBehavior>(panel, panel.getPrefsPath(), panel.getVerb());
 
     INKSCAPE.signal_activate_desktop.connect(
             sigc::mem_fun(*instance, &PanelDialog<Behavior::FloatingBehavior>::_propagateDesktopActivated)

@@ -547,7 +547,7 @@ SwatchesPanel& SwatchesPanel::getInstance()
  * Constructor
  */
 SwatchesPanel::SwatchesPanel(gchar const* prefsPath) :
-    Inkscape::UI::Widget::Panel("", prefsPath, SP_VERB_DIALOG_SWATCHES, "", true),
+    Inkscape::UI::Widget::Panel("", prefsPath, SP_VERB_DIALOG_SWATCHES, true),
     _holder(0),
     _clear(0),
     _remove(0),

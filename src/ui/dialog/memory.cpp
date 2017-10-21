@@ -20,6 +20,7 @@
 
 #include <gtkmm/liststore.h>
 #include <gtkmm/treeview.h>
+#include <gtkmm/dialog.h>
 
 #include "inkgc/gc-core.h"
 #include "debug/heap.h"
@@ -207,12 +208,14 @@ void Memory::Private::stop_update_task() {
 }
 
 Memory::Memory() 
-    : UI::Widget::Panel ("", "/dialogs/memory", SP_VERB_HELP_MEMORY, _("Recalculate")),
+    : UI::Widget::Panel ("", "/dialogs/memory", SP_VERB_HELP_MEMORY),
       _private(*(new Memory::Private())) 
 {
     _getContents()->pack_start(_private.view);
 
     _private.update();
+
+    addResponseButton(_("Recalculate"), Gtk::RESPONSE_APPLY);
 
     show_all_children();
 
